@@ -1490,7 +1490,7 @@ if ($level==2)
 								} else
 									$clause='';
 								if ($SEM_CLASS[$sem_create_data["sem_class"]]["only_inst_user"])									
-									$db->query ("SELECT username, Vorname, Nachname FROM user_inst LEFT JOIN auth_user_md5 USING (user_id) WHERE inst_perms = 'dozent' $clause AND (username LIKE '%$search_exp_doz%' OR Vorname LIKE '%$search_exp_doz%' OR Nachname LIKE '%$search_exp_doz%') ORDER BY Nachname");
+									$db->query ("SELECT DISTINCT username, Vorname, Nachname FROM user_inst LEFT JOIN auth_user_md5 USING (user_id) WHERE inst_perms = 'dozent' $clause AND (username LIKE '%$search_exp_doz%' OR Vorname LIKE '%$search_exp_doz%' OR Nachname LIKE '%$search_exp_doz%') ORDER BY Nachname");
 								else
 									$db->query ("SELECT username, Vorname, Nachname FROM auth_user_md5  WHERE perms = 'dozent' AND (username LIKE '%$search_exp_doz%' OR Vorname LIKE '%$search_exp_doz%' OR Nachname LIKE '%$search_exp_doz%') ORDER BY Nachname");								
 								if ($db->num_rows()) {
@@ -1558,7 +1558,7 @@ if ($level==2)
 								} else
 									$clause='';
 								if ($SEM_CLASS[$sem_create_data["sem_class"]]["only_inst_user"])
-									$db->query ("SELECT username, Vorname, Nachname FROM user_inst LEFT JOIN auth_user_md5 USING (user_id) WHERE inst_perms IN ('tutor', 'dozent') $clause AND (username LIKE '%$search_exp_tut%' OR Vorname LIKE '%$search_exp_tut%' OR Nachname LIKE '%$search_exp_tut%') ORDER BY Nachname");
+									$db->query ("SELECT DISTINCT username, Vorname, Nachname FROM user_inst LEFT JOIN auth_user_md5 USING (user_id) WHERE inst_perms IN ('tutor', 'dozent') $clause AND (username LIKE '%$search_exp_tut%' OR Vorname LIKE '%$search_exp_tut%' OR Nachname LIKE '%$search_exp_tut%') ORDER BY Nachname");
 								else
 									$db->query ("SELECT username, Vorname, Nachname FROM auth_user_md5 WHERE perms IN ('tutor', 'dozent') AND (username LIKE '%$search_exp_tut%' OR Vorname LIKE '%$search_exp_tut%' OR Nachname LIKE '%$search_exp_tut%') ORDER BY Nachname");								
 								if ($db->num_rows()) {

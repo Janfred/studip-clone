@@ -139,8 +139,10 @@ if ($delete_doz) {
 			$msg .= sprintf ("error§Die Veranstaltung muss wenigstens <b>einen</b> %s eingetragen haben! Tragen Sie zun&auml;chst einen anderen ein, um diesen zu l&ouml;schen.§", ($SEM_CLASS[$SEM_TYPE[$Status]["class"]]["workgroup_mode"]) ? "Leiter" : "Dozenten");
 		else {
 			$db2->query ("DELETE FROM seminar_user WHERE Seminar_id = '$s_id' AND user_id ='".get_userid($delete_doz)."' ");
-			if ($db2->affected_rows())
+			if ($db2->affected_rows()) {
 				$msg .= "msg§Der Nutzer <b>".htmlReady(get_fullname_from_uname($delete_doz))."</b> wurde aus der Veranstaltung gel&ouml;scht.§";
+				$user_deleted=TRUE;
+			}
 		}
 	} else
 		$msg .= "error§Sie haben keine Berechtigung diese Veranstaltung zu ver&auml;ndern.§";
@@ -149,8 +151,10 @@ if ($delete_doz) {
 if ($delete_tut) {
 	if (auth_check()) {
 		$db2->query ("DELETE FROM seminar_user WHERE Seminar_id = '$s_id' AND user_id ='".get_userid($delete_tut)."' ");
-		if ($db2->affected_rows())
+		if ($db2->affected_rows()) {
 			$msg .= "msg§Der Nutzer <b>".htmlReady(get_fullname_from_uname($delete_tut))."</b> wurde aus der Veranstaltung gel&ouml;scht.§";
+			$user_deleted=TRUE;
+		}
 
 		$db2->query ("SELECT user_id FROM seminar_user WHERE Seminar_id = '$s_id' AND status = 'dozent' ");
 		if ($db2->nf() == 0)
@@ -495,7 +499,7 @@ if (($s_id) && (auth_check())) {
 					<input <? if ($SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["bereiche"]) echo "onClick=\"checkdata('edit'); return false;\" "; ?> type="image" <? echo makeButton ("uebernehmen", "src") ?> border=0 name="s_edit" value=" Ver&auml;ndern ">
 				<input type="hidden" name="s_send" value="TRUE">
 				<?
-				if (($user_added) || ($reset_search_x) || ($search_exp_tut) || ($search_exp_doz))
+				if (($user_added) || ($user_deleted) || ($reset_search_x) || ($search_exp_tut) || ($search_exp_doz))
 					print "<a name=\"anker\"></a>";
 				?>
 				</td>
@@ -536,7 +540,7 @@ if (($s_id) && (auth_check())) {
 			</tr>
 			<tr>
 				<td class="<? echo $cssSw->getClass() ?>" >&nbsp;</td>
-				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <font color="#FF0000">Die Personendaten k&ouml;nnen Sie mit Ihrem Status (Tutor) nicht bearbeiten!</font></td>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <font color="#FF0000">Die Personendaten k&ouml;nnen Sie mit Ihrem Status nicht bearbeiten!</font></td>
 				<?
 				}
 			else
@@ -551,7 +555,7 @@ if (($s_id) && (auth_check())) {
 					$db4->query("SELECT seminar_user.user_id,status,username FROM seminar_user LEFT JOIN auth_user_md5 USING(user_id) WHERE Seminar_id = '$s_id' AND Status = 'dozent' ORDER BY Nachname");
 					if ($db4->nf()) {
 						while ($db4->next_record()) {
-							printf ("&nbsp; <a href=\"%s?delete_doz=%s&s_id=%s\"><img src=\"./pictures/trash.gif\" border=\"0\"></a>&nbsp; <font size=\"-1\"><b>%s, %s (%s)&nbsp; &nbsp; <br />", $PHP_SELF, $db4->f("username"), $s_id, htmlReady(get_nachname($db4->f("user_id"))), htmlReady(get_vorname($db4->f("user_id"))), $db4->f("username"));
+							printf ("&nbsp; <a href=\"%s?delete_doz=%s&s_id=%s#anker\"><img src=\"./pictures/trash.gif\" border=\"0\"></a>&nbsp; <font size=\"-1\"><b>%s, %s (%s)&nbsp; &nbsp; <br />", $PHP_SELF, $db4->f("username"), $s_id, htmlReady(get_nachname($db4->f("user_id"))), htmlReady(get_vorname($db4->f("user_id"))), $db4->f("username"));
 						}
 					} else {
 						printf ("<font size=\"-1\">&nbsp;  Keine %s gew&auml;hlt.</font><br >", ($SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["workgroup_mode"]) ? "LeiterIn" : "DozentIn");
@@ -562,16 +566,22 @@ if (($s_id) && (auth_check())) {
 					<?
 					$no_doz_found=TRUE;
 					if (($search_exp_doz) && ($search_doz_x)) {
-						if ((!$perm->have_perm("root")) && ($SEM_CLASS[$sem_create_data["sem_class"]]["only_inst_user"])) {
-							$clause="AND Institut_id IN ('".$sem_create_data["sem_inst_id"]."'";
-							if (is_array($sem_create_data["sem_bet_inst"]))
-								foreach($sem_create_data["sem_bet_inst"] as $val)
-									$clause.=",'$val'";
+						if ((!$perm->have_perm("root")) &&($SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["only_inst_user"])) {
+							$query3 = sprintf("SELECT institut_id FROM seminar_inst WHERE seminar_id = '%s'", $s_id);
+							$db3->query($query3);
+							$clause="AND Institut_id IN (";
+							$i=0;
+							while ($db3->next_record()) {
+								if ($i)
+									$clause.=", ";
+								$clause.=" '".$db3->f("institut_id")."' ";
+								$i++;
+							}
 							$clause.=")";
 						} else
 							$clause='';
-						if($SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["only_inst_user"]) 								
-							$db4->query ("SELECT username, Vorname, Nachname FROM user_inst LEFT JOIN auth_user_md5 USING (user_id) WHERE inst_perms = 'dozent' $clause AND (username LIKE '%$search_exp_doz%' OR Vorname LIKE '%$search_exp_doz%' OR Nachname LIKE '%$search_exp_doz%') ORDER BY Nachname");
+						if ($SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["only_inst_user"]) 								
+							$db4->query ("SELECT DISTINCT username, Vorname, Nachname FROM user_inst LEFT JOIN auth_user_md5 USING (user_id) WHERE inst_perms = 'dozent' $clause AND (username LIKE '%$search_exp_doz%' OR Vorname LIKE '%$search_exp_doz%' OR Nachname LIKE '%$search_exp_doz%') ORDER BY Nachname");
 						else
 							$db4->query ("SELECT username, Vorname, Nachname FROM auth_user_md5  WHERE perms = 'dozent' AND (username LIKE '%$search_exp_doz%' OR Vorname LIKE '%$search_exp_doz%' OR Nachname LIKE '%$search_exp_doz%') ORDER BY Nachname");								
 						if ($db4->num_rows()) {
@@ -612,7 +622,7 @@ if (($s_id) && (auth_check())) {
 					$db4->query("SELECT seminar_user.user_id,status,username FROM seminar_user LEFT JOIN auth_user_md5 USING(user_id) WHERE Seminar_id = '$s_id' AND Status = 'tutor' ORDER BY Nachname");
 					if ($db4->nf()) {
 						while ($db4->next_record()) {
-							printf ("&nbsp; <a href=\"%s?delete_tut=%s&s_id=%s\"><img src=\"./pictures/trash.gif\" border=\"0\"></a>&nbsp; <font size=\"-1\"><b>%s, %s (%s)&nbsp; &nbsp; <br />", $PHP_SELF, $db4->f("username"), $s_id, htmlReady(get_nachname($db4->f("user_id"))), htmlReady(get_vorname($db4->f("user_id"))), $db4->f("username"));
+							printf ("&nbsp; <a href=\"%s?delete_tut=%s&s_id=%s#anker\"><img src=\"./pictures/trash.gif\" border=\"0\"></a>&nbsp; <font size=\"-1\"><b>%s, %s (%s)&nbsp; &nbsp; <br />", $PHP_SELF, $db4->f("username"), $s_id, htmlReady(get_nachname($db4->f("user_id"))), htmlReady(get_vorname($db4->f("user_id"))), $db4->f("username"));
 						}
 					} else {
 						printf ("<font size=\"-1\">&nbsp;  %s gew&auml;hlt.</font><br >", ($SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["workgroup_mode"]) ? "Kein Mitarbeiter" : "Keine TutorIn");
@@ -623,17 +633,23 @@ if (($s_id) && (auth_check())) {
 					<?
 					$no_tut_found=TRUE;	
 					if (($search_exp_tut) && ($search_tut_x)) {
-						if ((!$perm->have_perm("root")) && ($SEM_CLASS[$sem_create_data["sem_class"]]["only_inst_user"])) {
-							$clause="AND Institut_id IN ('".$sem_create_data["sem_inst_id"]."'";
-							if (is_array($sem_create_data["sem_bet_inst"]))
-								foreach($sem_create_data["sem_bet_inst"] as $val)
-									$clause.=",'$val'";
+						if ((!$perm->have_perm("root")) &&($SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["only_inst_user"])) {
+							$query3 = sprintf("SELECT institut_id FROM seminar_inst WHERE seminar_id = '%s'", $s_id);
+							$db3->query($query3);
+							$clause="AND Institut_id IN (";
+							$i=0;
+							while ($db3->next_record()) {
+								if ($i)
+									$clause.=", ";
+								$clause.="'".$db3->f("institut_id")."'";
+								$i++;
+							}
 							$clause.=")";
 						} else
 							$clause='';
-						if ($SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["only_inst_user"]) 
-							$db4->query ("SELECT username, Vorname, Nachname FROM user_inst LEFT JOIN auth_user_md5 USING (user_id) WHERE inst_perms IN ('tutor', 'dozent') $clause AND (username LIKE '%$search_exp_tut%' OR Vorname LIKE '%$search_exp_tut%' OR Nachname LIKE '%$search_exp_tut%') ORDER BY Nachname");
-						else
+						if ($SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["only_inst_user"]) {
+							$db4->query ("SELECT DISTINCT username, Vorname, Nachname FROM user_inst LEFT JOIN auth_user_md5 USING (user_id) WHERE inst_perms IN ('tutor', 'dozent') $clause AND (username LIKE '%$search_exp_tut%' OR Vorname LIKE '%$search_exp_tut%' OR Nachname LIKE '%$search_exp_tut%') ORDER BY Nachname");
+						} else
 							$db4->query ("SELECT username, Vorname, Nachname FROM auth_user_md5 WHERE perms IN ('tutor', 'dozent') AND (username LIKE '%$search_exp_tut%' OR Vorname LIKE '%$search_exp_tut%' OR Nachname LIKE '%$search_exp_tut%') ORDER BY Nachname");								
 						if ($db4->num_rows()) {
 							$no_tut_found=FALSE;
