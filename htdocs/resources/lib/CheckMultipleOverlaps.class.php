@@ -69,8 +69,6 @@ class CheckMultipleOverlaps {
 	function setTimeRange($begin, $end) {
 		$this->begin = $begin;
 		$this->end = $end;
-		
-		echo $begin, " ", $end;
 	}
 
 	function setAutoTimeRange($assObjs) {
