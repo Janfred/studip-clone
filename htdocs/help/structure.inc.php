@@ -235,6 +235,10 @@ array	(	"name" => _("In der Veranstaltung: das Forum"),
 																				"text" => _("Bedienlogik, Ansichten, Postings verfassen"),
 																				"page" => "ix_forum1.htm"
 																			),
+																array	(	"name" => _("Neue Funktionen in der 0.9.5"),
+																				"text" => _("Erweiterungen zu den Grundfunktionen"),
+																				"page" => "ix_forumneu.htm"
+																			),
 																array	(	"name" => _("Einstellungen des Forums"),
 																				"text" => _("Schonen Sie Ihr Modem"),
 																				"page" => "iii_homepagef2.htm"
@@ -243,7 +247,7 @@ array	(	"name" => _("In der Veranstaltung: das Forum"),
 																				"text" => _("Was gibt´s Neues?"),
 																				"page" => "ix_forum2.htm"
 																			),
-																			array	(	"name" => _("Letzte 5 Beiträge"),
+																array	(	"name" => _("Letzte 5 Beiträge"),
 																				"text" => _("Was als letztes los war"),
 																				"page" => "ix_forum3.htm"
 																			),
