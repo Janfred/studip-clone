@@ -57,7 +57,7 @@ elseif ($perm->have_perm("admin"))
 	{
 		$file_parts = explode(".", $file);
 		$endung = $file_parts[ sizeof($file_parts)-1 ];
-		echo $endung;
+//		echo $endung;
 		if (filemtime($dirstr . "/" . $file) < (time() - 60*60 * 24) AND ($file != ".") AND ($file != "..") AND !is_dir($dirstr . "/" . $file) 
 		AND (in_array($endung, array("xml", "pdf", "fo", "htm", "html", "rtf"))) AND (strlen($file_parts[0]) == 32))
 		{
