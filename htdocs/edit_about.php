@@ -668,12 +668,12 @@ function checkusername(){
  var re_username = /^([a-zA-Z0-9_@-]*)$/;
  var checked = true;
  if (document.pers.new_username.value.length<4) {
-	alert("<?=_("Der Benutzername ist zu kurz \n- er sollte mindestens 4 Zeichen lang sein.")?>");
+	alert("<?=_("Der Benutzername ist zu kurz - er sollte mindestens 4 Zeichen lang sein.")?>");
 	 document.pers.new_username.focus();
 	checked = false;
 	}
  if (re_username.test(document.pers.new_username.value)==false) {
-	alert("<?=_("Der Benutzername enthält unzulässige Zeichen\n- er darf keine Sonderzeichen oder Leerzeichen enthalten.")?>");
+	alert("<?=_("Der Benutzername enthält unzulässige Zeichen - er darf keine Sonderzeichen oder Leerzeichen enthalten.")?>");
 	 document.pers.new_username.focus();
 	checked = false;
 	}
@@ -683,7 +683,7 @@ function checkusername(){
 function checkpassword(){
  var checked = true;
  if (document.pers.password.value.length<4) {
-	alert("<?=_("Das Passwort ist zu kurz \n- es sollte mindestens 4 Zeichen lang sein.")?>");
+	alert("<?=_("Das Passwort ist zu kurz - es sollte mindestens 4 Zeichen lang sein.")?>");
 	 document.pers.password.focus();
 	checked = false;
 	}
