@@ -458,12 +458,12 @@ if ($delete_tut) {
 	$level=2;	
 }
 
-if (($add_doz) && (!$reset_search_x)) {
+if (($send_doz_x) && (!$reset_search_x)) {
 	$sem_create_data["sem_doz"][get_userid($add_doz)]=TRUE;
 	$level=2;	
 }
 
-if (($add_tut) && (!$reset_search_x)) {
+if (($send_tut_x) && (!$reset_search_x)) {
 	$sem_create_data["sem_tut"][get_userid($add_tut)]=TRUE;
 	$level=2;	
 }
@@ -1689,7 +1689,7 @@ if ($level==2)
 								if ($db->num_rows()) {
 									print "<a name=\"anker\"></a>";
 									printf ("<font size=-1><b>%s</b> Nutzer gefunden:<br />", $db->num_rows());
-									print "<input type=\"IMAGE\" src=\"./pictures/move_left.gif\" ".tooltip("Den Benutzer hinzufügen")." border=\"0\" name=\"add_doz\" />";
+									print "<input type=\"IMAGE\" src=\"./pictures/move_left.gif\" ".tooltip(_("Den Benutzer hinzufügen"))." border=\"0\" name=\"send_doz\" />";
 									print "&nbsp; <select name=\"add_doz\">";
 									while ($db->next_record()) {
 										printf ("<option value=\"%s\">%s </option>", $db->f("username"), htmlReady(my_substr($db->f("fullname")." (".$db->f("username").")", 0, 30)));
@@ -1754,7 +1754,7 @@ if ($level==2)
 								if ($db->num_rows()) {
 									print "<a name=\"anker\"></a>";
 									printf ("<font size=-1><b>%s</b> Nutzer gefunden:<br />", $db->num_rows());
-									print "<input type=\"IMAGE\" src=\"./pictures/move_left.gif\" ".tooltip("Den Benutzer hinzufügen")." border=\"0\" name=\"add_tut\" />";
+									print "<input type=\"IMAGE\" src=\"./pictures/move_left.gif\" ".tooltip("Den Benutzer hinzufügen")." border=\"0\" name=\"send_tut\" />";
 									print "&nbsp; <select name=\"add_tut\">";
 									while ($db->next_record()) {
 										printf ("<option value=\"%s\">%s </option>", $db->f("username"), htmlReady(my_substr($db->f("fullname")." (".$db->f("username").")", 0, 30)));
@@ -2663,9 +2663,9 @@ if ($level==6)
 									if (sizeof($resources_booked) == 1)
 										printf ("<li>"._(" Der Raum %s wurde gebucht.")."<br /><br />", $rooms);
 									else
-										printf ("<li>"._("Die  R&auml;ume %s wurden gebucht."), "<br /><br />", $rooms);
+										printf ("<li>"._("Die R&auml;ume %s wurden gebucht."), "<br /><br />", $rooms);
 								}
-								if ($resources_booked) {
+								if ($resources_failed) {
 									$i=0;
 									$rooms='';
 									foreach ($resources_failed as $key=>$val) {
@@ -2676,7 +2676,7 @@ if ($level==6)
 									if (sizeof($resources_failed) == 1)
 										printf ("<li><font color=\"red\">"._("Der Raum %s konnte wegen &Uuml;berschneidungen nicht gebucht werden!")."</font><br /><br />", $rooms);
 									else
-										printf ("<li><font color=\"red\">"._("Die R&auml;aume %s konnte wegen &Uuml;berschneidungen nicht gebucht werden!")."</font><br /><br />", $rooms);
+										printf ("<li><font color=\"red\">"._("Die R&auml;ume %s konnten wegen &Uuml;berschneidungen nicht gebucht werden!")."</font><br /><br />", $rooms);
 								}
 							}
 								
