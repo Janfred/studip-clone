@@ -1,5 +1,5 @@
 12.10.2002 v 0.8.15 ;-)
-- neue Verwaltungsebene Funktionen / Gruppen, verwendbar für Einrichtungen und Veranstaltungen
+- neue Verwaltungsebene "Funktionen / Gruppen", verwendbar für Einrichtungen und Veranstaltungen
 - Anpassungen für die Funktionalität von Veranstaltungen als "Work Groups"
 - weitere Detailverbesserungen und Bugfixes
 
@@ -11,7 +11,7 @@
 - Umstrukturierung der Reiter im Adminbereich in logische Einheiten
 - neue Übersichtsseite "Meine Einrichtungen" für direkten Zugriff auf Einrichtungsobjekte eingebaut. 
 - Äusserst umfangreiche und flexible Funktionen zur Teilnehmerbegrenzung von Veranstaltungen. Veranstaltungen können
-  mit einem eigenen Losverfahren oder nach chronologischer Anmeldung mit unterschiedlichen Kontigenten für beliebig viele
+  mit einem eigenen Losverfahren oder nach chronologischer Anmeldung mit unterschiedlichen Kontingenten für beliebig viele
   Studiengänge begrenzt werden
 - Neue Ebene "Studienfach" eingebaut. Studenten können nun im System hinterlegen, welche Studienfächer sie
   studieren
@@ -22,10 +22,10 @@
 - Rundmails an alle Buddies können verschickt werden
 - neue Einrichtungssuche eingebaut
 - Selbstbezeichnung für Einrichtungen kann nun verändert werden
-- Einrichtungen können nun als eigenes Objekt betrachtet werden: Damit gibt es eigene Foren, Dateibereich, Mitarberlisten und
+- Einrichtungen können nun als eigenes Objekt betrachtet werden: Damit gibt es eigene Foren, Dateibereich, Mitarbeiterlisten und
   Veranstaltungsübersicht an jedem Institut innerhalb des Systems 
+- Geschwindigkeitsoptimierungen
 - weitere Detailverbesserungen und Bugfixes
-- Geschschwindigkeitsoptimierungen
 
 10.03.2002 v.0.7.5 release candidate 2
 - bessere Performance der Veranstaltungsübersicht
@@ -34,13 +34,12 @@
 - der Terminkalender wurde weiter verbessert, insbesondere das Handling von Ganztagsterminen
 - Zitierfunktion im Forum und SMS eingefügt
 - v 2.0 des Chats fertig gestellt: neue Funktionen: SMS aus dem Chat, private Nachrichten, alle Schnellformatierungen verfügbar,
-  Perforrmance optimiert
+  Performance optimiert
 - Druckansicht für das Stundenplanmodul eingefügt
-- umfangreiche Schnellformatierungen eingeführt. Dafür wird aus Sicherheitsgründen kein html.Code mehr akzeptiert
+- umfangreiche Schnellformatierungen eingeführt. Dafür wird aus Sicherheitsgründen kein html-Code mehr akzeptiert
 - Linkerkennung verbessert, Formatierungstag für Linknamen eingeführt
 - Smiley-Funktion überarbeitet: Neue Smileys, Smiley-Tag wird auf Alt-Tag eingeblendet, Smiley-Übersichtsseite als Link auf jedes Smiley
-- v 2.0 des SMS-Systems: Nachrichten werden nicht mehr sofort gelöscht, automatisches Löschen beim Logout auf Wunsch, Signatur für 
-  SMS
+- v 2.0 des SMS-Systems: Nachrichten werden nicht mehr sofort gelöscht, automatisches Löschen beim Logout auf Wunsch, Signatur für SMS
 - Messsenger verbessert
 - Buddylisten eingefüngt
 - neue Konfigurationsseite Messaging: Buddieverwaltung, Funktion zum automatischen Starten des Messengers, Einstellungen für 
@@ -53,14 +52,14 @@
 - Komplett neu geschriebener Terminkalender: Tages-, Monats-, Wochen- und Jahresansicht, flexible Wiederholungstermine, 
   farbliche Kennungen für Termine, freie Einbindung vom Veranstaltungsterminen, PIM-Optik, zahlreiche Optionen über
   MyStudip-Bereich frei konfigurierbar
-- verbessete Ablaufplanverwaltung: Optik an Fluid-Design angepasst, nachträgliches Anlegen von Datei und Forenordnern
+- verbesserte Ablaufplanverwaltung: Optik an Fluid-Design angepasst, nachträgliches Anlegen von Datei und Forenordnern
   nun möglich, verbesserte Bedienung
-- Veranstaltungsübersicht für Instituts-Admins durch Studenplanmodul realisiert
+- Veranstaltungsübersicht für Instituts-Admins durch Stundenplanmodul realisiert
 - Semesterauswahl für Stundenplan nun möglich
 - MyStud.IP Bereich als eingeständiges Modul erstellt und ausgebaut: Optionen für Forum, Stundenplan und Terminkalender 
   können hier zentral verwaltet werden.
 - Neuer Autologin, der html-Datei als Login Script an den Benutzer verschickt
-- v 2.0 der Newsverwaltung: Übersichtliches Auswählen von gewünschten Bereichen, verbesserte Bedienung, zahlreiche
+- v 3.0 der Newsverwaltung: Übersichtliches Auswählen von gewünschten Bereichen, verbesserte Bedienung, zahlreiche
   Detailverbesserungen
 - Aufteilung aller Veranstaltung in beliebig viele Kategorien, etwa Kultur und Lehre
 - TOP Listen bei der Veranstaltungsauswahl zeigen meistbesuchte, zuletzt angelegte, aktivste und teilnehmerstärkste
@@ -69,16 +68,16 @@
 - Persönliche Seite in der Bedienung verbessert: Einzelne Bereiche können direkt angesprungen werden
 - v 2.0 der Verwaltung eigener Kategorien
 - Optik der Startseite verbessert und differenzierte Startseiten für verschiedene Nutzergruppen realisiert
-- Adminbereich neustrukturiert: Auswahllisten für einzelne Bereiche sind indentisch im Aufbau, Veranstaltungen können vorge-
+- Adminbereich neustrukturiert: Auswahllisten für einzelne Bereiche sind identisch im Aufbau, Veranstaltungen können vorge-
   wählt werden, so dass das Verwalten mehrerer Aspekte einer Veranstaltung leicht fällt
 - Optik des Archivs verbessert, es kann auf selbst besuchte Veranstaltungen eingegrenzt werden
 - Der Download wurde verbessert: Download ist als ZIP-Archiv für alle Dateitypen möglich, MIME-Typen werden für die 
   wichtigsten Dateien erkannt
 - Aussagekräftigere Fehlermeldungen in vielen Bereichen umgesetzt
 - Geschlecht kann bei der Registrierung mit angegeben werden, Zeitpunkt der Erstanmeldung wird gespeichert
-- Übersichtliches Kennzeichnung von Veränderungen in besuchten Seminaren auf der Übersichtsseite
+- Übersichtliche Kennzeichnung von Veränderungen in besuchten Seminaren auf der Übersichtsseite
 - Verschieben ist im Forum möglich, etliche Detailverbesserungen im Forenbereich
-- Impresum neu strukturiert
+- Impressum neu strukturiert
 - Optik des Literaturbereichs verbessert
 - Handling von Sonderzeichen systemweit optimiert
 - weitere Detailverbesserungen und Bugfixes
@@ -123,7 +122,7 @@
 - automatisches Archivieren der Veranstaltungen
 - Bereichs- und Fachverwaltung
 - v.2.0 der Dateiverwaltung: Upload nun über grafische Oberfläche, orientiert am Explorerlook
-- automatisches Hilfesystem
+- kontextsensitives Hilfesystem
 - Gruppierung von "Meine Seminare" über Farbcodes
 - v.2.0 des Newssystems 
 - Facelifting beim Design: Neue Buttons, konsequenter Fensterlook
@@ -131,7 +130,7 @@
 19.03.2001 v.0.3.0 beta 1
 - erster Release bei Sourceforge
 - unzählige Buxfixes
-- alle Detail-Verbesserungen, die sich im laufenden Betrieb gezeit haben
+- alle Detail-Verbesserungen, die sich im laufenden Betrieb gezeigt haben
 - diese Version hat den Betrieb über ein Semester im Ernstfall am Zentrum für interdisziplinäre Medien-
   wissenschaft ohne Probleme überstanden 
 
@@ -154,7 +153,7 @@
 
 Sommer 2000
 - Die Konturen des Systems werden allmählich erkennbar. Seminarverwaltung, Rechtessystem, Personenverwaltung,
-  erweitertes Forensystem und einige weitere Seiten sind umgesetzt.
+  erweitertes Forensystem und einige weitere Seiten sind umgesetzt
 - André Noack stößt zu der Entwicklercrew
 - Der Name Stud.IP wird geboren. Es ist die Abkürzung für STUDentischer Internetsupport von 
   Präsenzlehre
@@ -165,18 +164,18 @@ Sommer 2000
   das personalisierte Forum zur Entwicklung von Drehbüchern
 
 07.01.2000
-- Umstellung auf Php-Lib und damit Einführung des Sessionmanagements
+- Umstellung auf PHP-Lib und damit Einführung des Sessionmanagements
 
 Dezember 1999
-- Die Arbeiten an Stud.IP beginnen. Noch ist der Name allerdings nicht erfunden.
+- Die Arbeiten an Stud.IP beginnen. Noch ist der Name allerdings nicht erfunden
 - Die Entwickler der ersten Stunde: Stefan Suchi (Core) und Ralf Stockmann (Forum)
-- Grundstein des Systems: Ein Forensystem, realisiert in Php
+- Grundstein des Systems: Ein Forensystem, realisiert in PHP
 
 03.12.1999
 - Der Stud.IP Server, der nach wie vor läuft, wird installiert
 
 27.11.1999
-- Die erste Projektentwürfe von Stud.IP entstehen. Es soll ein internetbasiertes System zur Unterstützung
+- Die ersten Projektentwürfe von Stud.IP entstehen. Es soll ein internetbasiertes System zur Unterstützung
   von Lehrveranstaltungen werden. Personalisiert, mit Seminarverwaltung, Dateiupload, Terminen, News,
   Forum und Literatur- und Linklisten
 - Das Konzept wird maßgeblich von der bis heute bestehenden Stud.IP-Crew Oliver Brakel, Cornelis Kater, Ralf 
