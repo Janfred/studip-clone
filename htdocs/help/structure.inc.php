@@ -489,7 +489,7 @@ array	(	"name" => "Veranstaltungen verwalten",
 );
 //show help for resources management, if available
 if ($GLOBALS["RESOURCES_ENABLE"]) {
-	$pages[] = array	(	"name" => "Modul: Ressourcenverwaltung",
+	$pages[] = array	(	"name" => "Ressourcenverwaltung",
 				"text" => "Verwaltung unterschiedlicher Ressourcen in Stud.IP",
 				"perm" =>	"user",
 				"kategorien" => array	(	
@@ -498,6 +498,23 @@ if ($GLOBALS["RESOURCES_ENABLE"]) {
 																array	(	"name" => "Einführung",
 																				"text" => "Was fange ich mit der Ressourcenverwaltung an?",
 																				"page" => "resources_intro.htm"
+																			)
+															)
+			);
+	
+}
+
+//show help for resources management, if available
+if ($GLOBALS["ILIAS_CONNECT_ENABLE"]) {
+	$pages[] = array	(	"name" => "ILIAS Lernmodule in Stud.IP",
+				"text" => "Einrichten und Nutzen von Lernmodulen aus ILIAS Open Source",
+				"perm" =>	"user",
+				"kategorien" => array	(	
+																
+																			
+																array	(	"name" => "Was ist ILIAS",
+																				"text" => "Was ist ILIAS und was sind ILIAS Lernmodule",
+																				"page" => "what_is_ilias.php"
 																			)
 															)
 			);
