@@ -261,7 +261,7 @@ if ($auth->auth["uid"] == "nobody") { ?>
 				($auth->auth["jscript"]) ? _("JavaScript eingeschaltet") : _("JavaScript ausgeschaltet"), $auth->auth["xres"], $auth->auth["yres"], $INSTALLED_LANGUAGES[$_language]["name"]);
 		
 
-		echo MakeToolbar("pictures/info_header.gif","#",mila($auth->auth["uname"],7),$infotext,68, "","left","TRUE");
+		echo MakeToolbar("pictures/info_header.gif","#",trim(mila($auth->auth["uname"],7)),$infotext,68, "","left","TRUE");
 ?>
 <?		
 		echo MakeToolbar("pictures/hilfe.gif","./help/index.php$help_query",_("Hilfe"),_("Hilfe zu dieser Seite"),40, "_new","right");
