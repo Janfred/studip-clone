@@ -311,13 +311,13 @@ function view_turnus ($seminar_id, $short = FALSE) {
 			if ($short)
 				$return_string= _("Termin: n. A.");
 			else
-				$return_string= _("unregelmässige Veranstaltung oder Blockveranstaltung. Die Termine stehen nicht fest.") . " ";
+				$return_string= _("unregelmäßige Veranstaltung oder Blockveranstaltung. Die Termine stehen nicht fest.") . " ";
 			}
 		else
 			if ($short)
 				$return_string= _("Termine am") . " ";
 			else
-				$return_string= _("unregelmässige Veranstaltung oder Blockveranstaltung am") . " ";
+				$return_string= _("unregelmäßige Veranstaltung oder Blockveranstaltung am") . " ";
 
 			while ($db2->next_record())
 				$dates[]=array("start_time"=>$db2->f("date"), "end_time"=>$db2->f("end_time"), "conjuncted"=>FALSE, "time_match"=>FALSE);

@@ -74,7 +74,7 @@ if ($auth->auth["uid"] == "nobody") { ?>
 				<tr>
 
 <?
-				echo MakeToolbar("pictures/home.gif","index.php",_("Start"),_("Zurück zur Startseite"),40,"_top","left");
+				echo MakeToolbar("pictures/home.gif","index.php",_("Start"),_("Zur Startseite"),40,"_top","left");
 				echo MakeToolbar("pictures/meinesem.gif","freie.php",_("Freie"),_("Freie Veranstaltungen"),40, "_top","left");
 				
 ?>				
@@ -138,7 +138,7 @@ if ($auth->auth["uid"] == "nobody") { ?>
 			<table class="toolbar" border="0" width="100%" cellspacing="0" cellpadding="0">
 			<tr>
 <?
-				echo MakeToolbar("pictures/home.gif","index.php",_("Start"),_("Zurück zur Startseite"),40,"_top");
+				echo MakeToolbar("pictures/home.gif","index.php",_("Start"),_("Zur Startseite"),40,"_top");
 				echo MakeToolbar("pictures/meinesem.gif","meine_seminare.php",_("Veranstaltungen"),_("Meine Veranstaltungen & Einrichtungen"),105, "_top","left");
 
 
@@ -169,7 +169,7 @@ if ($auth->auth["uid"] == "nobody") { ?>
 		
 		
 		if (!($perm->have_perm("admin") || $perm->have_perm("root"))) {
-			echo MakeToolbar("pictures/meinetermine.gif","./calendar.php",_("Planer"),_("Meine Termine und Kontakte"),40, "_top");
+			echo MakeToolbar("pictures/meinetermine.gif","./calendar.php",_("Planer"),_("Termine und Kontakte"),40, "_top");
 		}		
 
 		// wurde ich zum Chat eingeladen? Wenn nicht, nachsehen ob wer im Chat ist

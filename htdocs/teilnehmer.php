@@ -102,9 +102,9 @@ if ($cmd=="pain") {
 		$fullname = $db->f("fullname");
 		$db->query("UPDATE seminar_user SET status='autor' WHERE Seminar_id = '$id' AND user_id = '$userchange'");
 		if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
-			$msg = "msg§" . sprintf (_("Das Mitglied %s wurde entlassen und auf Autor zur&uuml;ckgestuft."), $fullname) . "§";
+			$msg = "msg§" . sprintf (_("Das Mitglied %s wurde entlassen und auf den Status 'Autor' zur&uuml;ckgestuft."), $fullname) . "§";
 		} else {
-			$msg = "msg§" . sprintf (_("Der Tutor %s wurde entlassen und auf Autor zur&uuml;ckgestuft."), $fullname) . "§";
+			$msg = "msg§" . sprintf (_("Der/die TutorIn %s wurde entlassen und auf den Status 'Autor' zur&uuml;ckgestuft."), $fullname) . "§";
 		}
 	}
 	else $msg ="error§" . _("Netter Versuch! vielleicht beim n&auml;chsten Mal!") . "§";
@@ -120,7 +120,7 @@ if ($cmd=="schreiben") {
 			$userchange=$db->f("user_id");
 			$fullname = $db->f("fullname");
 			$db->query("UPDATE seminar_user SET status='autor' WHERE Seminar_id = '$id' AND user_id = '$userchange'");
-			$msg = "msg§" . sprintf(_("Der User %s wurde als Autor in die Veranstaltung aufgenommen."), $fullname) . "§";
+			$msg = "msg§" . sprintf(_("User %s wurde als Autor in die Veranstaltung aufgenommen."), $fullname) . "§";
 		}
 		else $msg ="error§" . _("Netter Versuch! vielleicht beim n&auml;chsten Mal!") . "§";
 	}
@@ -137,9 +137,9 @@ if ($cmd=="lesen") {
 		$userchange=$db->f("user_id");
 		$fullname = $db->f("fullname");
 		$db->query("UPDATE seminar_user SET status='user' WHERE Seminar_id = '$id' AND user_id = '$userchange'");
-		$msg = "msg§" . sprintf(_("Der Autor %s wurde auf Leser zur&uuml;ckgestuft."), $fullname) . "§";
+		$msg = "msg§" . sprintf(_("Der/die AutorIn %s wurde auf den Status 'Leser' zur&uuml;ckgestuft."), $fullname) . "§";
 		$msg.= "info§" . _("Um jemanden permanent am Schreiben zu hindern, m&uuml;ssen Sie die Veranstaltung auf \"Schreiben nur mit Passwort\" setzen und ein Veranstaltungs-Passwort vergeben.") . "<br>\n"
-				. _("Dann k&ouml;nnen sich weitere Benutzer nur noch mit Kenntnis des Veranstaltungs-Passworts als Autor anmelden.") . "§";
+				. _("Dann k&ouml;nnen sich weitere BenutzerInnen nur noch mit Kenntnis des Veranstaltungs-Passworts als 'Autor' anmelden.") . "§";
 	}
 	else $msg ="error§" . _("Netter Versuch! vielleicht beim n&auml;chsten Mal!") . "§";
 }
@@ -157,9 +157,9 @@ if ($cmd=="raus") {
 		
 		setTempLanguage($userchange);
 		if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
-			$message= sprintf(_("Ihr Abonnement der Veranstaltung **%s** wurde von einem Leiter oder Administrator aufgehoben."), $SessSemName[0]);
+			$message= sprintf(_("Ihr Abonnement der Veranstaltung **%s** wurde von einem/r LeiterIn oder AdministratorIn aufgehoben."), $SessSemName[0]);
 		} else {
-			$message= sprintf(_("Ihr Abonnement der Veranstaltung **%s** wurde von einem Dozent oder Administrator aufgehoben."), $SessSemName[0]);
+			$message= sprintf(_("Ihr Abonnement der Veranstaltung **%s** wurde von einem/r DozentIn oder AdministratorIn aufgehoben."), $SessSemName[0]);
 		}
 		restoreLanguage();
 
@@ -171,9 +171,9 @@ if ($cmd=="raus") {
 		//Pruefen, ob es Nachruecker gibt
 		update_admission($id);
 
-		$msg = "msg§" . sprintf(_("Der Leser %s wurde aus der Veranstaltung entfernt."), $fullname) . "§";
+		$msg = "msg§" . sprintf(_("LeserIn %s wurde aus der Veranstaltung entfernt."), $fullname) . "§";
 		$msg.= "info§" . _("Um jemanden permanent am Lesen zu hindern, m&uuml;ssen Sie die Veranstaltung auf \"Lesen nur mit Passwort\" setzen und ein Veranstaltungs-Passwort vergeben.") . "<br>\n"
-				. _("Dann k&ouml;nnen sich weitere Benutzer nur noch mit Kenntnis des Veranstaltungs-Passworts anmelden.") . "§";
+				. _("Dann k&ouml;nnen sich weitere BenutzerInnen nur noch mit Kenntnis des Veranstaltungs-Passworts anmelden.") . "§";
 	}
 	else $msg ="error§" . _("Netter Versuch! vielleicht beim n&auml;chsten Mal!") . "§";
 }
@@ -190,9 +190,9 @@ if ($cmd=="admission_raus") {
 
 		setTempLanguage($userchange);
 		if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
-			$message= sprintf(_("Sie wurden vom einem Leiter oder Administrator von der Warteliste der Veranstaltung **%s** gestrichen und sind damit __nicht__ zugelassen worden."), $SessSemName[0]);
+			$message= sprintf(_("Sie wurden vom einem/r LeiterIn oder AdministratorIn von der Warteliste der Veranstaltung **%s** gestrichen und sind damit __nicht__ zugelassen worden."), $SessSemName[0]);
 		} else {
-			$message= sprintf(_("Sie wurden vom einem Dozent oder Administrator von der Warteliste der Veranstaltung **%s** gestrichen und sind damit __nicht__ zugelassen worden."), $SessSemName[0]);
+			$message= sprintf(_("Sie wurden vom einem/r DozentIn oder AdministratorIn von der Warteliste der Veranstaltung **%s** gestrichen und sind damit __nicht__ zugelassen worden."), $SessSemName[0]);
 		}
 		restoreLanguage();
 
@@ -201,7 +201,7 @@ if ($cmd=="admission_raus") {
 		//Warteliste neu sortieren
 		renumber_admission($id);
 		
-		$msg = "msg§" . sprintf(_("Der Leser %s wurde aus der Anmelde bzw. Warteliste entfernt."), $fullname) . "§";
+		$msg = "msg§" . sprintf(_("LeserIn %s wurde aus der Anmelde bzw. Warteliste entfernt."), $fullname) . "§";
 	}
 	else $msg ="error§" . _("Netter Versuch! vielleicht beim n&auml;chsten Mal!") . "§";
 }
@@ -226,9 +226,9 @@ if ((($cmd=="admission_rein") || ($cmd=="add_user")) && ($username)){
 		if ($db3->affected_rows()) {
 			setTempLanguage($userchange);
 			if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
-				$message= sprintf(_("Sie wurden vom einem Leiter oder Administrator aus der Warteliste in die Veranstaltung **%s** aufgenommen und sind damit zugelassen."), $SessSemName[0]);
+				$message= sprintf(_("Sie wurden vom einem/r LeiterIn oder AdministratorIn aus der Warteliste in die Veranstaltung **%s** aufgenommen und sind damit zugelassen."), $SessSemName[0]);
 			} else {
-				$message= sprintf(_("Sie wurden vom einem Dozent oder Administrator aus der Warteliste in die Veranstaltung **%s** aufgenommen und sind damit zugelassen."), $SessSemName[0]);
+				$message= sprintf(_("Sie wurden vom einem/r DozentIn oder AdministratorIn aus der Warteliste in die Veranstaltung **%s** aufgenommen und sind damit zugelassen."), $SessSemName[0]);
 			}
 			restoreLanguage();
 			$messaging->insert_sms ($username, $message, "____%system%____");
@@ -238,9 +238,9 @@ if ((($cmd=="admission_rein") || ($cmd=="add_user")) && ($username)){
 		renumber_admission($id);
 		
 		if ($cmd=="add_user")
-			$msg = "msg§" . sprintf(_("Der Nutzer %s wurde in die Veranstaltung eingetragen."), $fullname) . "§";
+			$msg = "msg§" . sprintf(_("NutzerIn %s wurde in die Veranstaltung eingetragen."), $fullname) . "§";
 		else
-			$msg = "msg§" . sprintf(_("Der Nutzer %s wurde aus der Anmelde bzw. Warteliste in die Veranstaltung eingetragen."), $fullname) . "§";
+			$msg = "msg§" . sprintf(_("NutzerIn %s wurde aus der Anmelde bzw. Warteliste in die Veranstaltung eingetragen."), $fullname) . "§";
 	} 
 	else $msg ="error§" . _("Netter Versuch! vielleicht beim n&auml;chsten Mal!") . "§";
 }
@@ -270,7 +270,7 @@ if (isset($add_tutor_x)) {
 						if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
 							$msg = "msg§" . sprintf (_("%s wurde zum Mitglied bef&ouml;rdert."), get_fullname($u_id)) . "§";
 						} else {
-							$msg = "msg§" . sprintf (_("%s wurde zum Tutor bef&ouml;rdert."), get_fullname($u_id)) . "§";
+							$msg = "msg§" . sprintf (_("%s wurde auf den Status 'Tutor' bef&ouml;rdert."), get_fullname($u_id)) . "§";
 						}
 						//kill from waiting user
 						$db2->query("DELETE FROM admission_seminar_user WHERE seminar_id = '$id' AND user_id = '$u_id'");
@@ -286,9 +286,9 @@ if (isset($add_tutor_x)) {
 					$group=select_group ($db3->f("start_time"), $u_id);
 					$db2->query("INSERT into seminar_user (Seminar_id, user_id, status, gruppe) values ('$id', '$u_id', 'tutor','$group' )");
 					if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
-						$msg = "msg§" . sprintf ("%s wurde als Mitglied in die Veranstaltung aufgenommen.", get_fullname($u_id));
+						$msg = "msg§" . sprintf (_("%s wurde als Mitglied in die Veranstaltung aufgenommen."), get_fullname($u_id));
 					} else {
-						$msg = "msg§" . sprintf ("%s wurde als Tutor in die Veranstaltung aufgenommen.", get_fullname($u_id));
+						$msg = "msg§" . sprintf (_("%s wurde als Tutor in die Veranstaltung aufgenommen."), get_fullname($u_id));
 					}
 					//kill from waiting user
 					$db2->query("DELETE FROM admission_seminar_user WHERE seminar_id = '$id' AND user_id = '$u_id'");
@@ -297,9 +297,9 @@ if (isset($add_tutor_x)) {
 
 					setTempLanguage($userchange);
 					if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
-						$message= sprintf(_("Sie wurden vom einem Leiter oder Administrator in die Veranstaltung **%s** aufgenommen."), $SessSemName[0]);
+						$message= sprintf(_("Sie wurden vom einem/r LeiterIn oder AdministratorIn in die Veranstaltung **%s** aufgenommen."), $SessSemName[0]);
 					} else {
-						$message= sprintf(_("Sie wurden vom einem Dozent oder Administrator in die Veranstaltung **%s** aufgenommen."), $SessSemName[0]);
+						$message= sprintf(_("Sie wurden vom einem/r DozentIn oder AdministratorIn in die Veranstaltung **%s** aufgenommen."), $SessSemName[0]);
 					}
 					restoreLanguage();
 					$messaging->insert_sms (get_username($u_id), $message, "____%system%____");

@@ -43,7 +43,7 @@ include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
 <tr>
 	<td class="topic" colspan=2><b>&nbsp;<img src="pictures/icon-lit.gif" align=absmiddle>&nbsp; <? echo $SessSemName["header_line"]; ?> - <?=_("Literatur und Links")?></b></td>
 </tr>
-	<td class="blank" width="100%"><blockquote><? printf ("%s", ($SessSemName["class"]=="inst") ? _("Hier finden Sie n&uuml;tzliche Literatur und Links zu der Einrichtung.") : _("Hier finden Sie die Literatur- und Linkliste der Veranstaltung."));?></td>
+	<td class="blank" width="100%"><blockquote><? printf ("%s", ($SessSemName["class"]=="inst") ? _("Hier finden Sie n&uuml;tzliche Literatur und Links zu dieser Einrichtung.") : _("Hier finden Sie die Literatur- und Linkliste der Veranstaltung."));?></td>
 	<td class="blank" align = right><img src="pictures/literatur.jpg" border="0"></td>
 </tr>
 <tr>

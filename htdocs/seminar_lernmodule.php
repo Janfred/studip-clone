@@ -105,7 +105,7 @@ if ($ILIAS_CONNECT_ENABLE)
 		array ("kategorie"  => _("Information:"),
 			"eintrag" => array	(	
 							array (	"icon" => "pictures/ausruf_small.gif",
-									"text"  => sprintf(_("Auf dieser Seite können Sie einer Veranstaltung Lernmodule zuordnen."), "<br><i>", "</i>")
+									"text"  => sprintf(_("Auf dieser Seite können Sie Lernmodule einer Veranstaltung zuordnen."), "<br><i>", "</i>")
 								 )
 							)
 			)

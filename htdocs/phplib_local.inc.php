@@ -328,7 +328,7 @@ class Seminar_Auth extends Auth {
 		// True when JS is disabled
 		if ($response == "") {
 			if (md5($password) != $pass) {       // md5 hash for non-JavaScript browsers
-				$this->error_msg= _("Das Paßwort ist falsch!") . "<br>";
+				$this->error_msg= _("Das Passwort ist falsch!") . "<br>";
 				return false;
 			} else {
 				$this->auth["perm"] = $perm;
@@ -340,7 +340,7 @@ class Seminar_Auth extends Auth {
 		
 		// Response is set, JS is enabled
 		if ($exspected_response != $response) {
-			$this->error_msg= _("Das Paßwort ist falsch!") . "<br>";
+			$this->error_msg= _("Das Passwort ist falsch!") . "<br>";
 			return false;
 		} else {
 			$this->auth["perm"] = $perm;
@@ -422,24 +422,24 @@ class Seminar_Register_Auth extends Seminar_Auth {
 		if (!isset($response) || $response=="")	{	// wir haben kein verschluesseltes Passwort
 			if (!$validator->ValidatePassword($password))
 			{
-				$this->error_msg=$this->error_msg. _("Das Paßwort ist zu kurz!") . "<br>";
+				$this->error_msg=$this->error_msg. _("Das Passwort ist zu kurz!") . "<br>";
 				return false;
 			}													// also können wir das unverschluesselte Passwort testen
 		}
 		
 		if (!$validator->ValidateName($Vorname))
 		{
-			$this->error_msg=$this->error_msg. _("Der Vorname fehlt, oder ist unsinnig!") . "<br>";
+			$this->error_msg=$this->error_msg. _("Der Vorname fehlt oder ist unsinnig!") . "<br>";
 			return false;
 		}			   // Vorname nicht korrekt oder fehlend
 		if (!$validator->ValidateName($Nachname))
 		{
-			$this->error_msg=$this->error_msg. _("Der Nachname fehlt, oder ist unsinnig!") . "<br>";
+			$this->error_msg=$this->error_msg. _("Der Nachname fehlt oder ist unsinnig!") . "<br>";
 			return false;			   // Nachname nicht korrekt oder fehlend
 		}
 		if (!$validator->ValidateEmailAddress($Email))
 		{
-			$this->error_msg=$this->error_msg. _("Die E-Mail Addresse fehlt, oder ist falsch geschrieben!") . "<br>";
+			$this->error_msg=$this->error_msg. _("Die E-Mail-Adresse fehlt oder ist falsch geschrieben!") . "<br>";
 			return false;
 		}			   // E-Mail syntaktisch nicht korrekt oder fehlend
 		
@@ -448,7 +448,7 @@ class Seminar_Register_Auth extends Seminar_Auth {
 		$Zeit=date("H:i:s, d.m.Y",time());
 		
 		if (!$validator->ValidateEmailHost($Email)) {     // Mailserver nicht erreichbar, ablehnen
-			$this->error_msg=$this->error_msg. _("Der Mailserver ist nicht erreichbar, bitte überprüfen Sie, ob Sie E-Mails mit der angegebenen Addresse verschicken können!") . "<br>";
+			$this->error_msg=$this->error_msg. _("Der Mailserver ist nicht erreichbar, bitte überprüfen Sie, ob Sie E-Mails mit der angegebenen Adresse verschicken und empfangen können!") . "<br>";
 			return false;
 		} else {					  // Server ereichbar
 			if (!$validator->ValidateEmailBox($Email)) {    // aber user unbekannt. Mail an abuse@puk!
@@ -458,7 +458,7 @@ class Seminar_Register_Auth extends Seminar_Auth {
 				$from, array($to),
 				array("From: $from", "To: $to", "Subject: Register"),
 				"Emailbox unbekannt\n\nUser: $username\nEmail: $Email\n\nIP: $REMOTE_ADDR\nZeit: $Zeit\n");
-				$this->error_msg=$this->error_msg. _("Die angegebene E-Mail Addresse ist nicht erreichbar, bitte überprüfen Sie Ihre Angaben!") . "<br>";
+				$this->error_msg=$this->error_msg. _("Die angegebene E-Mail-Adresse ist nicht erreichbar, bitte überprüfen Sie Ihre Angaben!") . "<br>";
 				return false;
 			} else {
 				;					     // Alles paletti, jetzt kommen die Checks gegen die Datenbank...
@@ -483,7 +483,7 @@ class Seminar_Register_Auth extends Seminar_Auth {
 		
 		while($this->db->next_record()) {
 			//error_log("E-Mail schon vorhanden", 0);
-			$this->error_msg=$this->error_msg. _("Die angegebene E-Mail Addresse wird bereits von einem anderen User verwendet. Sie müssen eine andere E-Mail Addresse angeben!") . "<br>";
+			$this->error_msg=$this->error_msg. _("Die angegebene E-Mail-Adresse wird bereits von einem anderen User verwendet. Sie müssen eine andere E-Mail-Adresse angeben!") . "<br>";
 			return false;				   // Email schon vorhanden
 		}
 		

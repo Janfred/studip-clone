@@ -66,10 +66,10 @@ if ($auth->auth["uid"]!="nobody"){
 			}
 		} else {
 			if (preg_match("/chat_with_me/i", $db->f("message")) && $online[$db->f("user_id_snd")]){
-				$new_msg[] = date("H:i",$db->f("mkdate")). sprintf(_(" Sie wurden von <b>%s</b> zum Chatten eingeladen!"),htmlReady(get_fullname_from_uname($db->f("user_id_snd"))));
+				$new_msg[] = date("H:i",$db->f("mkdate")). sprintf(_(" Sie wurden von <b>%s</b> zum chatten eingeladen!"),htmlReady(get_fullname_from_uname($db->f("user_id_snd"))));
 			} else {
 				if ($db->f("user_id_snd") == "____%system%____"){
-					$new_msg[]=date("H:i",$db->f("mkdate")) . sprintf(_(" Sie haben eine automatische <b>Systemnachricht</b> erhalten! %s[lesen]%s"),"<a href='$PHP_SELF?cmd=read&msg_nr=".$db->f("message_id")."'>","</a>");
+					$new_msg[]=date("H:i",$db->f("mkdate")) . sprintf(_(" Sie haben eine automatisch erzeugte <b>Systemnachricht</b> erhalten! %s[lesen]%s"),"<a href='$PHP_SELF?cmd=read&msg_nr=".$db->f("message_id")."'>","</a>");
 				} else {
 					$new_msg[]=date("H:i",$db->f("mkdate")). sprintf(_(" Sie haben eine Nachricht von <b>%s</b> erhalten! %s[lesen]%s"),htmlReady(get_fullname_from_uname($db->f("user_id_snd"))),"<a href='$PHP_SELF?cmd=read&msg_nr=".$db->f("message_id")."'>","</a>");
 				}
@@ -179,7 +179,7 @@ if ($cmd=="send_msg" AND $nu_msg AND $msg_rec) {
 if ($cmd=="read" AND $msg_text){
 	if ($msg_snd == "____%system%____")
 		echo"\n<tr><td class='blank' colspan='2' valign='middle'><font size=-1><b>"
-		. _("automatische Systemnachricht:") . " </b><hr>".quotes_decode(formatReady($msg_text))."</font></td></tr>";
+		. _("automatisch erzeugte Systemnachricht:") . " </b><hr>".quotes_decode(formatReady($msg_text))."</font></td></tr>";
 	else
 		echo"\n<tr><td class='blank' colspan='2' valign='middle'><font size=-1>"
 		. sprintf(_("Nachricht von: <b>%s</b>"),htmlReady(get_fullname_from_uname($msg_snd))) ."<hr>".quotes_decode(formatReady($msg_text))."</font></td></tr>";
