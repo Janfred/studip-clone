@@ -16,7 +16,7 @@
 \trbrdrr\brdrs\brdrw10 \trbrdrh\brdrs\brdrw10 \trbrdrv\brdrs\brdrw10 \clvertalt\clbrdrt\brdrs\brdrw10 \clbrdrl\brdrs\brdrw10 \clbrdrb\brdrs\brdrw10 \clbrdrr\brdrs\brdrw10 \cltxlrtb \cellx1839\clvertalt\clbrdrt\brdrs\brdrw10 \clbrdrl\brdrs\brdrw10 \clbrdrb
 \brdrs\brdrw10 \clbrdrr\brdrs\brdrw10 \cltxlrtb \cellx3748\clvertalt\clbrdrt\brdrs\brdrw10 \clbrdrl\brdrs\brdrw10 \clbrdrb\brdrs\brdrw10 \clbrdrr\brdrs\brdrw10 \cltxlrtb \cellx5657\clvertalt\clbrdrt\brdrs\brdrw10 \clbrdrl\brdrs\brdrw10 \clbrdrb
 \brdrs\brdrw10 \clbrdrr\brdrs\brdrw10 \cltxlrtb \cellx7566\clvertalt\clbrdrt\brdrs\brdrw10 \clbrdrl\brdrs\brdrw10 \clbrdrb\brdrs\brdrw10 \clbrdrr\brdrs\brdrw10 \cltxlrtb \cellx9475\pard\plain \nowidctlpar\intbl\adjustright \lang1031\cgrid 
-{\fs24\b Name\b0\cell\b Telefon\b0\cell\b Adresse\b0\cell\b E-Mail\b0\cell\b Veranstaltungsnummer\b0\cell }\pard \nowidctlpar\widctlpar\intbl\adjustright {\row }\pard</xsl:text>
+{\fs24\b Name\b0\cell\b Telefon\b0\cell\b Adresse\b0\cell\b E-Mail\b0\cell\b Kontingent\b0\cell }\pard \nowidctlpar\widctlpar\intbl\adjustright {\row }\pard</xsl:text>
 
 						<xsl:choose>
 							<xsl:when test="personen/gruppe">
