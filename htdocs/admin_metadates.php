@@ -433,7 +433,8 @@ if (($uebernehmen_x) && (!$errormsg)) {
 			<?
 			print "<b>"._("Zeiten der Veranstaltung bearbeiten")."</b><br /><br />";
 			print _("Sie k&ouml;nnen hier die allgemeinen Zeiten bearbeiten.")." <br />";
-			printf (_("Spezifische Termine zur Anzeige im Ablaufplan legen Sie unter dem Menupunkt %s Ablaufplan </a> fest."), "<a href=\"admin_dates.php?ebene=sem&range_id=".$term_metadata["sem_id"]."\">");
+			if ($modules["schedule"])
+				printf (_("Spezifische Termine zur Anzeige im Ablaufplan legen Sie unter dem Menupunkt %s Ablaufplan </a> fest."), "<a href=\"admin_dates.php?ebene=sem&range_id=".$term_metadata["sem_id"]."\">");
 			?>
 			</blockqoute>
 		</td>
