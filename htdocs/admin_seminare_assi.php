@@ -1108,22 +1108,18 @@ if (!$sem_create_data["sem_class"]) {
 			<td class="topic" colspan=2><b>&nbsp;Veranstaltungs-Assistent - Veranstaltungskategorie  ausw&auml;hlen</b>
 			</td>
 		</tr>
-		<tr>
-			<td class="blank" colspan=2>&nbsp;
-				<?
-				if ($errormsg) parse_msg($errormsg);
-				?>
-			</td>
-		</tr>
+		<?
+		if ($errormsg) parse_msg($errormsg);
+		?>
 		<tr>
 			<td class="blank" valign="top">
-				<blockquote>
+				<blockquote><br />
 				Willkommen beim Veranstaltungs-Assistenten. Der Veranstaltungs-Assistent wird Sie Schritt f&uuml;r Schritt durch die notwendigen Schritte zum Anlegen einer neuen Veranstaltung in Stud.IP leiten.<br><br>
 				Bitte geben Sie zun&auml;chst an, welche Art von Veranstaltung Sie neu anlegen m&ouml;chten:<br /<<br />
 				</blockqoute>
 			</td>
 			<td class="blank" align="right" valign="top" rowspan="2">
-				<img src="pictures/hands01.jpg" border="0">
+				<img src="pictures/assistent.jpg" border="0">
 			</td>
 		</tr>
 		<tr>
