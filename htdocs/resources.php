@@ -39,7 +39,7 @@ include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Sessio
 
 if ($RESOURCES_ENABLE) {
 	//Steuerung der Ressourcenverwaltung einbinden
-	include($RELATIVE_PATH_RESOURCES."/resourcesControl.inc.php");
+	include ("$RELATIVE_PATH_RESOURCES/resourcesControl.inc.php");
 } else {
 	// Start of Output
 	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
