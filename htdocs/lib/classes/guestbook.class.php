@@ -192,7 +192,7 @@ function guest_navi () {
 			$output .= "</font></b></td></tr>"
 				. "<tr><td class=\"steelgraulight\"><font size=\"-1\">".quotes_decode(formatready($db->f("content")))."</font><p align=\"right\">";
 			if ($this->rights == TRUE)
-				$addon = "<a href=\"".$PHP_SELF."?guestbook=delete&guestpage=$this->guestpage&deletepost=".$db->f("post_id")."&username=$this->username#guest\">" . makeButton("loeschen", "img") . "</a>";
+				$addon = "<a href=\"".$PHP_SELF."?guestbook=delete&guestpage=$this->guestpage&deletepost=".$db->f("post_id")."&username=$this->username&ticket=".get_ticket()."#guest\">" . makeButton("loeschen", "img") . "</a>";
 			else
 				$addon = "&nbsp;";
 			
@@ -215,7 +215,7 @@ function guest_navi () {
 		if ($cols < 28) $cols = 28;
 		$text = "<p align=\"center\">"._("Geben Sie hier Ihren Gästebuchbeitrag ein!")."</p>";
 	
-			$form =	"<form name=\"guestbook\" method=\"post\" action=\"".$PHP_SELF."#guest\">"
+			$form =	"<form name=\"guestbook\" method=\"post\" action=\"".$PHP_SELF."?ticket=".get_ticket()."#guest\">"
 			."<input type=hidden name=guestbook value='$this->user_id'>"
 			."<input type=hidden name=username value='$this->username'>"
 			.$text
@@ -230,26 +230,28 @@ function guest_navi () {
 		global $PHP_SELF;
 		$buttons = "";
 		if ($this->active == TRUE) {
-			$buttons .= "&nbsp;&nbsp;<a href=\"".$PHP_SELF."?guestbook=switch&username=$this->username&rnd=".rand()."#guest\">" . makeButton("deaktivieren", "img") . "</a>";
+			$buttons .= "&nbsp;&nbsp;<a href=\"".$PHP_SELF."?guestbook=switch&username={$this->username}&ticket=".get_ticket()."#guest\">" . makeButton("deaktivieren", "img") . "</a>";
 		} else {
-			$buttons .= "<a href=\"".$PHP_SELF."?guestbook=switch&username=$this->username#guest\">" . makeButton("aktivieren", "img") . "</a>";
+			$buttons .= "<a href=\"".$PHP_SELF."?guestbook=switch&username=$this->username&ticket=".get_ticket()."#guest\">" . makeButton("aktivieren", "img") . "</a>";
 		}
-		$buttons .= "&nbsp;&nbsp;<a href=\"".$PHP_SELF."?guestbook=erase&username=$this->username#guest\">" . makeButton("alleloeschen", "img") . "</a>";
+		$buttons .= "&nbsp;&nbsp;<a href=\"".$PHP_SELF."?guestbook=erase&username=$this->username&ticket=".get_ticket()."#guest\">" . makeButton("alleloeschen", "img") . "</a>";
 		return $buttons;	
 	}
 
-	function actionsGuestbook ($guestbook,$post="",$deletepost="") {
-		if ($this->rights == TRUE) {
-			if ($guestbook=="switch")
-				$this->msg_guest = $this->switchGuestbook();
-			if ($guestbook=="erase")
-				$this->msg_guest = $this->eraseGuestbook();
-			if ($guestbook=="delete")
-				$this->msg_guest = $this->deleteGuestbook($deletepost);
-		}
-		
-		if ($post) {
-			$msg = $this->addPostGuestbook($this->user_id,$post);
+	function actionsGuestbook ($guestbook,$post="",$deletepost="", $ticket) {
+		if (check_ticket($ticket)){
+			if ($this->rights == TRUE) {
+				if ($guestbook=="switch")
+					$this->msg_guest = $this->switchGuestbook();
+				if ($guestbook=="erase")
+					$this->msg_guest = $this->eraseGuestbook();
+				if ($guestbook=="delete")
+					$this->msg_guest = $this->deleteGuestbook($deletepost);
+			}
+			
+			if ($post) {
+				$msg = $this->addPostGuestbook($this->user_id,$post);
+			}
 		}
 		if ($guestbook != "close")
 			$this->openclose = "open";
