@@ -44,7 +44,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 	require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 	require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
 	require_once ("$ABSOLUTE_PATH_STUDIP/admission.inc.php");	//Funktionen der Teilnehmerbegrenzung	
-
+    $cssSw=new cssClassSwitcher;
 	include "header.php";   //hier wird der "Kopf" nachgeladen
 	include "links1.php";
 
@@ -341,6 +341,30 @@ else
 echo "</table>\n";
 
 echo "</td></tr>\n";  // Auflistung zuende
+
+// Warteliste
+
+$db->query ("SELECT admission_seminar_user.user_id, Vorname, Nachname, username, studiengaenge.name, position FROM admission_seminar_user LEFT JOIN studiengaenge USING (studiengang_id) LEFT JOIN auth_user_md5 ON (admission_seminar_user.user_id=auth_user_md5.user_id)  WHERE admission_seminar_user.seminar_id = '$SessionSeminar' GROUP by admission_seminar_user.user_id ORDER BY position");
+
+if ($db->num_rows()) { //Only if Users were found...
+	// die eigentliche Teil-Tabelle
+
+ 	echo "<td class=\"blank\" colspan=2>";
+	echo "<table width=\"99%\" border=\"0\"  cellpadding=\"2\" cellspacing=\"0\" align=\"center\">";
+    echo "<tr height=28>";
+	printf ("<td class=\"steel\" width=\"20%%\" align=\"left\"><img src=\"pictures/blank.gif\" width=1 height=20><font size=-1><b>%s</b></font></td>","in Warteposition");
+	printf ("<td class=\"steel\" width=\"20%%\" align=\"center\"><font size=-1><b>%s</b></font></td>","Position");
+	printf ("<td class=\"steel\" width=\"60%%\" align=\"center\"><font size=-1><b>%s</b></font></td></tr>","Studiengang");
+
+    WHILE ($db->next_record()) {
+       $cssSw->switchClass();
+       printf ("<tr><td class=\"%s\" align=left><font size=-1><a href=\"about.php?username=%s\">%s&nbsp;%s</a></font></td><td align=center class=\"%s\"><font size=-1>%s</font></td></td><td class=\"%s\"><font size=-1>%s</font></td></tr>",$cssSw->getClass(),$db->f("username"),$db->f("Vorname"), $db->f("Nachname"),$cssSw->getClass(), $db->f("position"),$cssSw->getClass(),$db->f("name"));
+    }
+}
+
+
+
+
 
 // Der Dozent braucht mehr Unterstuetzung, also Tutor aus dem Institut berufen...
 if ($rechte AND $SemUserStatus!="tutor") {
