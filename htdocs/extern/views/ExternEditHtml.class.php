@@ -243,9 +243,6 @@ class ExternEditHtml extends ExternEditGeneric {
 		$out .= "<td{$this->width_2} nowrap=\"nowrap\"><input type=\"text\" name=\"$form_name\" size=\"20\"";
 		$out .= " maxlength=\"20\" value=\"$value\" />&nbsp; &nbsp;\n";
 		
-		// It requires a 2nd parameter for the select, appending _select to the 1st.
-		// It's terrible, I know, but I don't know a better way at the moment...
-		$attribute = str_replace("']", "_select']", $attribute);
 		$out .= "<select name=\"_{$form_name}\" size=\"1\">\n";
 		foreach ($colors as $color_name => $color_value) {
 			if ($value == $color_value)
@@ -566,6 +563,21 @@ class ExternEditHtml extends ExternEditGeneric {
 		
 		return $this->editRadioGeneric($attribute, $title, $info, $values, $names);
 	}
+	
+	/**
+	* Prints out a form for entering the URL of a background picture for the hole document.
+	*
+	* @access	public
+	* @param	string attribute The name of the attribute (syntax: HTML-TAG_HTML-ATTRIBUTE).
+	* @return	string A complete table row includes a closed table with the form.
+	*/
+	function editBackground ($attribute) {
+		$info = _("Geben Sie die URL eines Bildes an, das als Hintergrundbild für die gesamte Seite dienen soll.");
+		$title = _("Hintergrundbild:");
+		
+		return $this->editTextfieldGeneric($attribute, $title, $info, 35, 150);
+	}
+	
 }
 	
 ?>
