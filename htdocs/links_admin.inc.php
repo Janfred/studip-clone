@@ -139,7 +139,7 @@ if ((!$links_admin_data["inst_id"]) && ($list) &&
 	if ($perm->have_perm("root"))
 		$db->query("SELECT Institut_id  FROM Institute ORDER BY Name");
 	else
-		$db->query("SELECT Institute.Institut_id FROM Institute LEFT JOIN user_inst USING(Institut_id) WHERE user_id = '$user->id' AND inst_perms = 'admin' ORDER BY Name");
+		$db->query("SELECT Institute.Institut_id FROM Institute LEFT JOIN user_inst USING(Institut_id) WHERE user_id = '$user->id' AND inst_perms IN ('admin', 'dozent', 'tutor') ORDER BY Name");
 
 	if (($db->num_rows() ==1) && (!$links_admin_data["inst_id"])) {
 		$db->next_record();
@@ -266,19 +266,32 @@ if (($links_admin_data["sem_id"]) || ($links_admin_data["inst_id"])) {
 		echo "zur ausgew&auml;hlten Veranstaltung&nbsp; &nbsp; </b></a><img src=\"pictures/reiter1.jpg\" align=absmiddle></td>";
 	}
 
+//Veranstaltungen...
 if ($perm->have_perm("tutor")) {
 	if (($i_page == "admin_news.php" AND $links_admin_data["view"]=="sem") OR $i_page == "admin_seminare1.php" OR $i_page == "admin_dates.php" OR ($i_page == "admin_literatur.php" AND $links_admin_data["view"]=="sem") OR $i_page == "admin_metadates.php" OR $i_page == "admin_admission.php" OR $i_page == "admin_seminare_assi.php" OR $i_page == "adminarea_start.php" OR $i_page == "archiv_assi.php") {?>  <td class="links1b" align=right nowrap><a  class="links1b" href="<? if ($links_admin_data["sem_id"]) echo "admin_seminare1.php"; else echo "adminarea_start.php?list=TRUE" ?>"><font color="#000000" size=2><b>&nbsp; &nbsp; Veranstaltungen&nbsp; &nbsp; </b></font></a><?
-		if ($perm->have_perm("admin")) {?><img src="pictures/reiter2.jpg" align=absmiddle></td><? }
-		ELSE {?><img src="pictures/reiter4.jpg" align=absmiddle></td><?} }
+		if ($perm->have_perm("tutor")) {
+			?><img src="pictures/reiter2.jpg" align=absmiddle></td><? }
+		ELSE {
+			?><img src="pictures/reiter4.jpg" align=absmiddle></td><?} 
+	}
 	ELSE {?>  <td class="links1" align=right nowrap><a  class="links1" href="<? if ($links_admin_data["sem_id"]) echo "admin_seminare1.php"; else echo "adminarea_start.php?list=TRUE" ?>"><font color="#000000" size=2><b>&nbsp; &nbsp; Veranstaltungen&nbsp; &nbsp; </b></font></a><img src="pictures/reiter1.jpg" align=absmiddle></td><?}
 }
 
-if ($perm->have_perm("admin")) {
-	if (($i_page == "admin_news.php" AND $links_admin_data["view"]=="inst") OR $i_page == "admin_institut.php" OR $i_page == "inst_admin.php" OR ($i_page == "admin_literatur.php" AND $links_admin_data["view"]=="inst")) {?>  <td class="links1b" align=right nowrap><a  class="links1b" href="admin_institut.php?list=TRUE"><font color="#000000" size=2><b>&nbsp; &nbsp; Einrichtungen&nbsp; &nbsp; </b></font></a><?
-		?><img src="pictures/reiter2.jpg" align=absmiddle></td><?
+//Einrichtungen...
+if ($perm->have_perm("tutor")) {
+	if (($i_page == "admin_news.php" AND $links_admin_data["view"]=="inst") OR $i_page == "admin_institut.php" OR $i_page == "inst_admin.php" OR ($i_page == "admin_literatur.php" AND $links_admin_data["view"]=="inst")) {
+		?> 
+		<td class="links1b" align=right nowrap><a  class="links1b" href="<? if ($perm->have_perm("admin")) echo "admin_institut.php?list=TRUE"; else echo "admin_literatur.php?list=true&view=inst"; ?>"><font color="#000000" size=2><b>&nbsp; &nbsp; Einrichtungen&nbsp; &nbsp; </b></font></a>
+		<? if ($perm->have_perm("admin")) {
+			?><img src="pictures/reiter2.jpg" align=absmiddle></td><? }
+		ELSE {
+			?><img src="pictures/reiter4.jpg" align=absmiddle></td><?} 
 	}
-	ELSE {?>  <td class="links1" align=right nowrap><a  class="links1" href="admin_institut.php?list=TRUE"><font color="#000000" size=2><b>&nbsp; &nbsp; Einrichtungen&nbsp; &nbsp; </b></font></a><img src="pictures/reiter1.jpg" align=absmiddle></td><?}
+	ELSE {?>  <td class="links1" align=right nowrap><a  class="links1" href="<? if ($perm->have_perm("admin")) echo "admin_institut.php?list=TRUE"; else echo "admin_literatur.php?list=true&view=inst"; ?>"><font color="#000000" size=2><b>&nbsp; &nbsp; Einrichtungen&nbsp; &nbsp; </b></font></a><img src="pictures/reiter1.jpg" align=absmiddle></td><?}
+}
 
+//gloabal settings
+if ($perm->have_perm("admin")) {
 	if (($i_page == "admin_news.php" AND $links_admin_data["view"]=="global") OR$i_page == "admin_fakultaet.php" OR $i_page == "admin_fach.php" OR $i_page == "admin_bereich.php" OR $i_page == "admin_studiengang.php" OR $i_page == "view_sessions.php" OR $i_page == "new_user_md5.php" OR $i_page == "admin_db_integrity.php") {?>  <td class="links1b" align=right nowrap><a  class="links1b" href="new_user_md5.php"><font color="#000000" size=2><b>&nbsp; &nbsp; globale Einstellungen&nbsp; &nbsp; </b></font></a><img src="pictures/reiter4.jpg" align=absmiddle></td><?}
 	ELSE {?>  <td class="links1" align=right nowrap><a  class="links1" href="new_user_md5.php"><font color="#000000" size=2><b>&nbsp; &nbsp; globale Einstellungen&nbsp; &nbsp; </b></font></a><img src="pictures/reiter1.jpg" align=absmiddle></td><?}
 }
@@ -330,17 +343,19 @@ if (($i_page == "admin_news.php" AND $links_admin_data["view"]=="sem") OR $i_pag
 if (($i_page == "admin_news.php" AND $links_admin_data["view"]=="inst") OR $i_page == "inst_admin.php" OR $i_page == "admin_institut.php" OR ($i_page == "admin_literatur.php" AND $links_admin_data["view"]=="inst"))
 {
 
-	IF (($i_page == "admin_institut.php") && ($i_view!="new")){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="admin_institut.php?list=TRUE">Grunddaten&nbsp; &nbsp; </a> <?}
-	ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="admin_institut.php?list=TRUE">Grunddaten&nbsp; &nbsp; </a> <?}
-
-	IF ($i_page == "inst_admin.php"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="inst_admin.php?list=TRUE">Mitarbeiter&nbsp; &nbsp; </a> <?}
-	ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="inst_admin.php?list=TRUE">Mitarbeiter&nbsp; &nbsp; </a> <?}
-
 	IF ($i_page == "admin_literatur.php"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="admin_literatur.php?view=inst&list=TRUE">Literatur/Links&nbsp; &nbsp; </a> <?}
 	ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="admin_literatur.php?view=inst&list=TRUE">Literatur/Links&nbsp; &nbsp; </a> <?}
 
 	IF ($i_page == "admin_news.php"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="admin_news.php?view=inst&list=TRUE">News&nbsp; &nbsp; </a> <?}
 	ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="admin_news.php?view=inst&list=TRUE">News&nbsp; &nbsp; </a> <?}
+
+	if ($perm->have_perm("admin")) {
+		IF (($i_page == "admin_institut.php") && ($i_view!="new")){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="admin_institut.php?list=TRUE">Grunddaten&nbsp; &nbsp; </a> <?}
+		ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="admin_institut.php?list=TRUE">Grunddaten&nbsp; &nbsp; </a> <?}
+
+		IF ($i_page == "inst_admin.php"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="inst_admin.php?list=TRUE">Mitarbeiter&nbsp; &nbsp; </a> <?}
+		ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="inst_admin.php?list=TRUE">Mitarbeiter&nbsp; &nbsp; </a> <?}
+	}
 
 	if ($perm->have_perm("root")) {
 		IF (($i_page == "admin_institut.php") && ($i_view=="new")) { ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="admin_institut.php?i_view=new"">neue Einrichtung&nbsp; &nbsp; </a> <?}
@@ -418,7 +433,7 @@ if ((!$links_admin_data["inst_id"]) && ($list) &&
 					if ($perm->have_perm("root"))
 						$db->query("SELECT Institut_id, Name  FROM Institute ORDER BY Name");
 					else
-						$db->query("SELECT Institute.Institut_id, Name FROM Institute LEFT JOIN user_inst USING(Institut_id) WHERE user_id = '$user->id' AND inst_perms = 'admin' ORDER BY Name");
+						$db->query("SELECT Institute.Institut_id, Name FROM Institute LEFT JOIN user_inst USING(Institut_id) WHERE user_id = '$user->id' AND inst_perms IN ('admin', 'dozent', 'tutor') ORDER BY Name");
 					
 					printf ("<option value=\"NULL\">-- bitte Einrichtung ausw&auml;hlen --</option>\n");
 					while ($db->next_record())

@@ -48,7 +48,10 @@ if ($entry_level=="inst") {
 	$structure["timetable"]=array (topKat=>"institut_main", name=>"Veranstaltungs-Timetable", link=>"mein_stundenplan.php?inst_id=$SessSemName[1]", active=>FALSE);
 	$structure["druckansicht_i"]=array (topKat=>"institut_main", name=>"Druckansicht", link=>"print_institut.php", target=>"_new", active=>FALSE);
 	if ($rechte)
-		$structure["administration_e"]=array (topKat=>"institut_main", name=>"Administration der Einrichtung", link=>"admin_institut.php?new_inst=TRUE&view=inst", active=>FALSE);
+		if ($perm->have_perm("admin"))
+			$structure["administration_e"]=array (topKat=>"institut_main", name=>"Administration der Einrichtung", link=>"admin_institut.php?new_inst=TRUE&view=inst", active=>FALSE);
+		else
+			$structure["administration_e"]=array (topKat=>"institut_main", name=>"Administration der Einrichtung", link=>"admin_literatur.php?new_inst=TRUE&view=inst", active=>FALSE);		
 } else {
 //
 	$structure["_seminar_main"]=array (topKat=>"seminar_main", name=>"Kurzinfo", link=>"seminar_main.php", active=>FALSE);

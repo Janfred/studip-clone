@@ -42,7 +42,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 	  $range_perm=get_perm($range_id);
 	  if (($ebene=="sem") && ($range_perm!="admin" && $range_perm!="dozent" && $range_perm!="tutor")) 
 			die;
-		if (($ebene=="inst") && ($range_perm!="admin")) 
+		if (($ebene=="inst") && ($range_perm!="admin" && $range_perm!="dozent" && $range_perm!="tutor"))
 			die;
 		if (($ebene=="fak") && ($range_perm!="admin")) 
 			die;
