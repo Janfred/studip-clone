@@ -228,7 +228,6 @@ IF ($cmd == "move" && $topic_id !="" && $rechte) {
 ?>		<table class="steel1" width="100%" cellpadding="0" cellspacing="0" border="0">
 			<tr>
 				<td class="steel2" colspan="2">
-					<form action="forum.php" method="POST">
 					&nbsp; <img src="pictures/move.gif" border="0">&nbsp;<b><font size="-1">Als Thema verschieben (zusammen mit <?echo $count;?> Antworten):</font></b>
 				</td>
 			</tr>
@@ -242,13 +241,14 @@ IF ($cmd == "move" && $topic_id !="" && $rechte) {
 				<td class="steel1" align="right" nowrap width="20%">
 					<font size="-1">in anderes Forum:</font>&nbsp; &nbsp; 
 				</td>
-				<td class="steel1" width="80%">					
+				<td class="steel1" width="80%">
+					<input type=image name="SUBMIT" value="Verschieben" src="pictures/move.gif" border=0 <?=tooltip("dahin verschieben")?>>&nbsp; 					
 					<SELECT Name="sem_id" size="1">
 			<?		while ($db->next_record()) {
 						$sem_name=htmlReady(substr($db->f("Name"), 0, 50));
 						printf ("<option %s value=\"%s\">%s\n", $db->f("Seminar_id") == $SessSemName[1] ? "selected" : "", $db->f("Seminar_id"), $sem_name);
 					}
-			?>		</select>&nbsp; <input type=image name="SUBMIT" value="Verschieben" src="pictures/move.gif" border=0 <?=tooltip("dahin verschieben")?>>
+			?>		</select>
 				</td>
 				<input type="HIDDEN" name="target" value="Seminar">
 				<input type="HIDDEN" name="topic_id" value="<?echo $topic_id;?>">
@@ -261,15 +261,16 @@ IF ($cmd == "move" && $topic_id !="" && $rechte) {
 			<tr>
 				<form action="forum.php" method="POST">
 				<td class="steel1" align="right" nowrap width="20%">
-			  		<font size="-1">in anderes Institut:</font>&nbsp; &nbsp; 
+			  		<font size="-1">in andere Einrichtung:</font>&nbsp; &nbsp; 
 			  	</td>
-				<td class="steel1" width="80%">					
+				<td class="steel1" width="80%">
+					<input type=image name="SUBMIT" value="Verschieben" src="pictures/move.gif" border=0 <?=tooltip("dahin verschieben")?>>&nbsp; 						
 			  		<SELECT Name="inst_id" size="1">
 			<?		while ($db2->next_record()) {
 						$inst_name=htmlReady(substr($db2->f("Name"), 0, 50));
 						printf ("<option value=\"%s\">%s\n", $db2->f("Institut_id"), $inst_name);
 					}
-			?>		</select>&nbsp; <input type=image name="SUBMIT" value="Verschieben" src="pictures/move.gif" border=0 <?=tooltip("dahin verschieben")?>>
+			?>		</select>
 				</td>
 				<input type="HIDDEN" name="target" value="Institut">
 				<input type="HIDDEN" name="topic_id" value="<?echo $topic_id;?>">
