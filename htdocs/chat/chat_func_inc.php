@@ -224,7 +224,7 @@ function chat_get_online_icon($user_id = false, $username = false, $pref_chat_id
 			.tooltip(($tmp_num_chats == 1) ? _("Dieser User befindet sich in einem Chatraum.") : sprintf(_("Dieser User befindet sich in %s Chaträumen"),$tmp_num_chats)) 
 			." border=\"0\"></a>";
 		} elseif (is_array($admin_chats)) {
-			$ret = "<a href=\"{$stud_path}sms.php?sms_source_page=$i_page&cmd=write_chatinv&rec_uname=$username";
+			$ret = "<a href=\"{$stud_path}sms_send.php?sms_source_page=$i_page&cmd=write_chatinv&rec_uname=$username";
 			if ($pref_chat_id && $admin_chats[$pref_chat_id]){
 				$ret .= "&selected_chat_id=$pref_chat_id";
 			}
