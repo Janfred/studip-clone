@@ -99,6 +99,7 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 } 
 
 if ($readingconfirmation) {
+	$sms_data['tmpreadsnd'] = "";
 	$query = "SELECT * FROM message WHERE message_id='".$readingconfirmation."'";
 	$db6->query($query);
 	$db6->next_record();
@@ -108,14 +109,12 @@ if ($readingconfirmation) {
 	$user_id = $user->id;
 	$user_fullname = get_fullname($user_id);
 	
-	$query = "
-		UPDATE message_user SET 
-			confirmed_read = '1' 
-			WHERE message_id = '".$readingconfirmation."'
-				AND user_id = '".$user_id."'";
+	$query = "UPDATE message_user SET confirmed_read = '1' WHERE message_id = '".$readingconfirmation."'AND user_id = '".$user_id."'";
 	if($db->query($query)) {
-		$subject = sprintf (_("Lesebestätigung von %s"), $user_fullname);
+		setTempLanguage(get_userid($rec_userid));
+		$subject = sprintf (_("Lesebestätigung von %s"), $user_fullname);		
 		$message = sprintf (_("Ihre Nachricht an %s mit dem Betreff: %s vom %s wurde gelesen."), "%%".$user_fullname."%%", "%%".$orig_subject."%%", "%%".$date."%%");
+		restoreLanguage();
 		$msging->insert_message($message, $uname_snd, "____%system%____", FALSE, FALSE, 1, FALSE, $subject);	
 	}
 }
