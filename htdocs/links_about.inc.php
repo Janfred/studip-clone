@@ -46,7 +46,7 @@ $structure["_daten"]=array (topKat=>"daten", name=>"Nutzerdaten bearbeiten", lin
 $structure["_karriere"]=array (topKat=>"karriere", name=>"universit&auml;re Daten", link=>"edit_about.php?view=Karriere&username=$username", active=>FALSE);
 if (!$perm->have_perm ("dozent")) {
 	$structure["studiengaenge"]=array (topKat=>"karriere", name=>"Zuordnung zu Studieng&auml;ngen", link=>"edit_about.php?view=Karriere&username=$username#studiengaenge", active=>FALSE);
-	$structure["einrichtungen"]=array (topKat=>"karriere", name=>"Zuordnung zu Einrichtungne", link=>"edit_about.php?view=Karriere&username=$username#einrichtungen", active=>FALSE);
+	$structure["einrichtungen"]=array (topKat=>"karriere", name=>"Zuordnung zu Einrichtungen", link=>"edit_about.php?view=Karriere&username=$username#einrichtungen", active=>FALSE);
 }
 $structure["_lebenslauf"]=array (topKat=>"lebenslauf", name=>"Lebenslauf", link=>"edit_about.php?view=Lebenslauf&username=$username", active=>FALSE);
 if ($perm->have_perm ("dozent")) {
