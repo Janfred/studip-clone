@@ -26,13 +26,12 @@
         require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");   //hier wird der "Kopf" nachgeladen
 ?>
 <body>
-<br>
 <table width="100%" border=0 cellpadding=0 cellspacing=0>
 <tr>
 	<td class="topic" colspan=2><img src="pictures/suchen.gif" border="0" align="texttop"><b>&nbsp;Stud.IP-Score</td>
 </tr>
 <tr>
-<td class="blank" align = left width="60%">&nbsp; <br><blockquote>
+<td class="blank" align = left valign="top" width="60%"><br /><blockquote>
 Auf dieser Seite k&ouml;nnen Sie abrufen, wie weit Sie in der Stud.IP-Score aufgestiegen sind. Je aktiver Sie sich im System verhalten, desto h&ouml;her klettern Sie!
 <?
 
@@ -85,9 +84,9 @@ if ($db->num_rows()) {
 		$kill = "";
 		$cssSw->switchClass();
 		IF ($db->f("user_id")==$user_id) $kill = "&nbsp; &nbsp; <a href='score.php?cmd=kill'>[l&ouml;schen]</a>";
-		echo "<tr><td class=\"".$cssSw->getClass()."\" width=1% class=steel1 nowrap align=right>".$rang.".<td class=\"".$cssSw->getClass()."\" width=10% class=steel1 nowrap>"
+		echo "<tr><td class=\"".$cssSw->getClass()."\" width=1% class=steel1 nowrap align=right>".$rang.".<td class=\"".$cssSw->getClass()."\" width=39% class=steel1 nowrap>"
 		."&nbsp; &nbsp; <a href='about.php?username=".$db->f("username")."'>".$db->f("Vorname")."&nbsp; ".$db->f("Nachname")."</a></td>"
-		."<td class=\"".$cssSw->getClass()."\" width=10% class=steel1>".$db->f("score")."</td><td class=\"".$cssSw->getClass()."\" width=10% class=steel1>".gettitel($db->f("score"))
+		."<td class=\"".$cssSw->getClass()."\" width=30% class=steel1>".$db->f("score")."</td><td class=\"".$cssSw->getClass()."\" width=30% class=steel1>".gettitel($db->f("score"))
 		.$kill
 		."</td></tr>";
 		$rang++;

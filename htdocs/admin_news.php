@@ -227,7 +227,6 @@ else
    }
 
 if ($this->news_query["user_id"]==$this->user_id) $this->modus="";
-echo "\n<tr><td width=\"99%\" align=\"center\" cellpadding=2 cellspacing=0 border=0>";
 echo "\n<form action=\"".$this->p_self("cmd=news_submit")."\" method=\"POST\">";
 echo "\n<input type=\"HIDDEN\" name=\"news_id\" value=\"".$this->news_query["news_id"]."\">";
 echo "\n<input type=\"HIDDEN\" name=\"user_id\" value=\"".$this->news_query["user_id"]."\">";
@@ -767,11 +766,11 @@ Newsverwaltung</b> <font size="-1">(gew&auml;hlter Bereich: <b><?=$news_range_na
 
           if ($perm->have_perm("tutor"))
              {
-             echo"\n<tr><td class=\"blank\"><br /><blockquote><b>Bereichsauswahl</b><blockquote></td></tr>\n";
+             echo"\n<tr><td class=\"blank\"><blockquote><br /><b>Bereichsauswahl</b><blockquote></td></tr>\n";
              if ($perm->have_perm("admin"))
               {
-              echo "<tr><td class=\"blank\"><blockquote> ";
-              echo "<table width=\"50%\" cellspacing=\"0\" cellpadding=\"2\" border=\"0\">";
+              echo "<tr><td class=\"blank\"><blockquote>";
+              echo "<table width=\"50%\" cellspacing=0 cellpadding=2 border=0>";
               echo "<form action=\"".$news->p_self("cmd=search")."\" method=\"POST\">";
               echo "<tr><td class=\"steel1\">";
               echo "&nbsp; <font size=-1>Geben Sie einen Suchbegriff ein, um weitere Bereiche zu finden!</font><br /><br />";
@@ -781,10 +780,9 @@ Newsverwaltung</b> <font size="-1">(gew&auml;hlter Bereich: <b><?=$news_range_na
               echo "</blockquote>";
                }
              else $news->search_range("blah");
-          echo "\n<tr><td class=\"blank\"><blockquote><b>";
-	  echo "<hr width=\"100%\"><br />verf&uuml;gbare Bereiche";	
+          echo "\n<tr><td class=\"blank\"><blockquote>";
+	  echo "<hr width=\"100%\"><br /><b>verf&uuml;gbare Bereiche";	
           echo "</b><blockquote></td></tr>\n ";
-          echo "<tr><td class=\"blank\"><blockquote> ";
           $typen = array("user"=>"Benutzer","sem"=>"Veranstaltung","inst"=>"Institut","fak"=>"Fakultät");
           $my_cols=4;
           if ($perm->have_perm("tutor")){
