@@ -1,7 +1,7 @@
 <?
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
-// html_head.inc.php
+// cssClassSwitcher.inc.php
 // Copyright (c) 2002 Andre Noack <noack@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -21,6 +21,8 @@
 /**
 * cssClassSwitcher.inc.php
 * 
+* class for handling zebra-tables
+* class for handling zebra-tables
 * class for handling zebra-tables
 *
 * @author		Andre Noack <noack@data-quest.de>
