@@ -45,7 +45,7 @@ function editarea($forumposting) {
 		$description="";
 	}
 	if ($user->id == "nobody") {  // nicht angemeldete muessen Namen angeben
-		$description =	"<b>" . _("Ihr Name:") . "</b>&nbsp; <input type=text size=50 name=nobodysname onchange=\"pruefe_name()\" value=\"" . _("unbekannt") . "\"><br><br><input type=hidden name=update value='".$write."'>"
+		$description =	"<b>" . _("Ihr Name:") . "</b>&nbsp; <input type=text size=50 name=nobodysname onchange=\"pruefe_name()\" value=\"" . _("unbekannt") . "\"><br><br><input type=hidden name=update value='".$forumposting["id"]."'>"
 				."<div align=center><textarea name=description cols=80 rows=12>"
 				.htmlReady($description)
 				.htmlReady($zitat)
@@ -337,8 +337,8 @@ function ForumGetName($id)
 	RETURN $name;
 }
 
-function ForumGetButtons($forumposting) {
-	global $rechte, $forum, $PHP_SELF;	
+function forum_get_buttons ($forumposting) {
+	global $rechte, $forum, $PHP_SELF, $user, $SessionSeminar;	
 
 	{ if (!(have_sem_write_perm())) { // nur mit Rechten...	
 		
@@ -360,13 +360,12 @@ function ForumGetButtons($forumposting) {
 		$db=new DB_Seminar;
 		$db->query("SELECT Seminar_id FROM seminare WHERE Seminar_id='$SessionSeminar' AND Schreibzugriff=0");
 		if ($db->num_rows())  {
-			if (!$anfang)
-				$edit = "<a href=\"".$PHP_SELF."?topic_id=".$forumposting["id"]."&open=".$r_topic_id."&davor=".$r_topic_id."&write=".$r_topic_id."&mehr=".$mehr."#anker\">&nbsp;" . makeButton("antworten", "img") . "</a>";
-				$edit .= "<a href=\"".$PHP_SELF."?topic_id=".$anfang."&zitat=".$r_topic_id."&open=".$r_topic_id."&davor=".$r_topic_id."&write=".$r_topic_id."&mehr=".$mehr."#anker\">&nbsp;" . makeButton("zitieren", "img") . "</a>";
-			} else
-				$edit=""; // war kein nobody Seminar
-		} else 	// nix mit Rechten
-			$edit = ""; 
+			$edit = "<a href=\"".$PHP_SELF."?answer_id=".$forumposting["id"]."&flatviewstartposting=$page#anker\">&nbsp;" . makeButton("antworten", "img") . "</a>";
+			$edit .= "<a href=\"".$PHP_SELF."?answer_id=".$forumposting["id"]."&zitat=TRUE&flatviewstartposting=$page#anker\">&nbsp;" . makeButton("zitieren", "img") . "</a>";
+		} else
+			$edit=""; // war kein nobody Seminar
+	} else 	// nix mit Rechten
+		$edit = ""; 
 	}
 	return $edit;
 }
@@ -506,7 +505,7 @@ function ForumStriche($forumposting) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function printposting ($forumposting) {
-	global $PHP_SELF,$forum,$view,$davor,$auth,$user;
+	global $PHP_SELF,$forum,$view,$davor,$auth,$user, $SessSemName, $loginfilelast;
 
   // Status des Postings holen
  	// auf- zugeklappt
@@ -577,8 +576,11 @@ function printposting ($forumposting) {
   		
   		if ($forumposting["newold"] == "new")
   			$new = TRUE;
-  		if ($forum["view"]=="tree" && $forumposting["type"] == "folder")
+  		if (($forum["view"]=="tree" || $forum["view"]=="mixed") && $forumposting["type"] == "folder") {
+  			if ($loginfilelast[$SessSemName[1]] < $forumposting["folderlast"])
+			 	$new = TRUE;		
   			$forumposting["mkdate"] = $forumposting["folderlast"];
+  		}
   		
   // Kopfzeile ausgeben 		
   		
@@ -602,7 +604,7 @@ function printposting ($forumposting) {
 			if ($forumposting["buttons"] == "no" || $forum["update"]) {
 				$edit = "<br>";
 			} else {
-				$edit = ForumGetButtons($forumposting);
+				$edit = forum_get_buttons($forumposting);
 			}
 		}
 		if (ereg("\[quote",$description) AND ereg("\[/quote\]",$description) AND (!$forum["zitat"]) AND $forumposting["writestatus"] == "none")
