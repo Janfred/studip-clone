@@ -199,7 +199,7 @@ if ($cmd=="kill") {
 	  
 	  	$db->query("SELECT Name FROM seminare WHERE Seminar_id = '$auswahl'");
 		  $db->next_record();
-		  $meldung = "msg§" . sprintf(_("Das Abonnement der Veranstaltung <b>%s</b> wurde aufgehoben. Sie sind nun nicht mehr als TeilnehmerIn dieser Veranstaltung im System registriert."), $db->f("Name"));
+		  $meldung = "msg§" . sprintf(_("Das Abonnement der Veranstaltung <b>%s</b> wurde aufgehoben. Sie sind nun nicht mehr als TeilnehmerIn dieser Veranstaltung im System registriert."), htmlReady($db->f("Name")));
 		}
 	}
 }
@@ -214,7 +214,7 @@ if ($cmd=="kill_admission") {
 	  
 	  $db->query("SELECT Name FROM seminare WHERE Seminar_id = '$auswahl'");
 	  $db->next_record();
-	  $meldung="msg§" . sprintf(_("Der Eintrag in der Anmelde- bzw. Warteliste der Veranstaltung <b>%s</b> wurde aufgehoben. Wenn Sie an der Veranstaltung teilnehmen wollen, m&uuml;ssen Sie sich erneut bewerben."), $db->f("Name"));
+	  $meldung="msg§" . sprintf(_("Der Eintrag in der Anmelde- bzw. Warteliste der Veranstaltung <b>%s</b> wurde aufgehoben. Wenn Sie an der Veranstaltung teilnehmen wollen, m&uuml;ssen Sie sich erneut bewerben."), htmlReady($db->f("Name")));
 	}
 }
 

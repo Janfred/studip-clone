@@ -159,9 +159,9 @@ if ($cmd=="raus") {
 		
 		setTempLanguage($userchange);
 		if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
-			$message= sprintf(_("Ihr Abonnement der Veranstaltung **%s** wurde von einem/r LeiterIn oder AdministratorIn aufgehoben."), $SessSemName[0]);
+			$message= sprintf(_("Ihr Abonnement der Veranstaltung **%s** wurde von einem/r LeiterIn oder AdministratorIn aufgehoben."), addslashes($SessSemName[0]));
 		} else {
-			$message= sprintf(_("Ihr Abonnement der Veranstaltung **%s** wurde von einem/r DozentIn oder AdministratorIn aufgehoben."), $SessSemName[0]);
+			$message= sprintf(_("Ihr Abonnement der Veranstaltung **%s** wurde von einem/r DozentIn oder AdministratorIn aufgehoben."), addslashes($SessSemName[0]));
 		}
 		restoreLanguage();
 
@@ -192,9 +192,9 @@ if ($cmd=="admission_raus") {
 
 		setTempLanguage($userchange);
 		if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
-			$message= sprintf(_("Sie wurden vom einem/r LeiterIn oder AdministratorIn von der Warteliste der Veranstaltung **%s** gestrichen und sind damit __nicht__ zugelassen worden."), $SessSemName[0]);
+			$message= sprintf(_("Sie wurden vom einem/r LeiterIn oder AdministratorIn von der Warteliste der Veranstaltung **%s** gestrichen und sind damit __nicht__ zugelassen worden."), addslashes($SessSemName[0]));
 		} else {
-			$message= sprintf(_("Sie wurden vom einem/r DozentIn oder AdministratorIn von der Warteliste der Veranstaltung **%s** gestrichen und sind damit __nicht__ zugelassen worden."), $SessSemName[0]);
+			$message= sprintf(_("Sie wurden vom einem/r DozentIn oder AdministratorIn von der Warteliste der Veranstaltung **%s** gestrichen und sind damit __nicht__ zugelassen worden."), addslashes($SessSemName[0]));
 		}
 		restoreLanguage();
 
@@ -228,9 +228,9 @@ if ((($cmd=="admission_rein") || ($cmd=="add_user")) && ($username)){
 		if ($db3->affected_rows()) {
 			setTempLanguage($userchange);
 			if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
-				$message= sprintf(_("Sie wurden vom einem/r LeiterIn oder AdministratorIn aus der Warteliste in die Veranstaltung **%s** aufgenommen und sind damit zugelassen."), $SessSemName[0]);
+				$message= sprintf(_("Sie wurden vom einem/r LeiterIn oder AdministratorIn aus der Warteliste in die Veranstaltung **%s** aufgenommen und sind damit zugelassen."), addslashes($SessSemName[0]));
 			} else {
-				$message= sprintf(_("Sie wurden vom einem/r DozentIn oder AdministratorIn aus der Warteliste in die Veranstaltung **%s** aufgenommen und sind damit zugelassen."), $SessSemName[0]);
+				$message= sprintf(_("Sie wurden vom einem/r DozentIn oder AdministratorIn aus der Warteliste in die Veranstaltung **%s** aufgenommen und sind damit zugelassen."), addslashes($SessSemName[0]));
 			}
 			restoreLanguage();
 			$messaging->insert_sms ($username, $message, "____%system%____");
@@ -299,9 +299,9 @@ if (isset($add_tutor_x)) {
 
 					setTempLanguage($userchange);
 					if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
-						$message= sprintf(_("Sie wurden vom einem/r LeiterIn oder AdministratorIn in die Veranstaltung **%s** aufgenommen."), $SessSemName[0]);
+						$message= sprintf(_("Sie wurden vom einem/r LeiterIn oder AdministratorIn in die Veranstaltung **%s** aufgenommen."), addslashes($SessSemName[0]));
 					} else {
-						$message= sprintf(_("Sie wurden vom einem/r DozentIn oder AdministratorIn in die Veranstaltung **%s** aufgenommen."), $SessSemName[0]);
+						$message= sprintf(_("Sie wurden vom einem/r DozentIn oder AdministratorIn in die Veranstaltung **%s** aufgenommen."), addslashes($SessSemName[0]));
 					}
 					restoreLanguage();
 					$messaging->insert_sms (get_username($u_id), $message, "____%system%____");
