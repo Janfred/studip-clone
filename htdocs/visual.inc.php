@@ -318,7 +318,6 @@ function quotes_encode ($description,$author) {
 
 // Hilfsfunktion für formatReady
 function format_help($what, $trim = TRUE, $extern = FALSE, $wiki = FALSE, $show_comments="icon") {
-	print "<p>Format help: show_comments=$show_comments"; // DEBUG
 
 	if (preg_match_all("'\[code\](.+)\[/code\]'isU", $what, $match_code)) {
 		$what = htmlReady($what, $trim, FALSE);
@@ -361,11 +360,10 @@ function format_help($what, $trim = TRUE, $extern = FALSE, $wiki = FALSE, $show_
 * @return       string
 */
 function formatReady ($what, $trim = TRUE, $extern = FALSE, $wiki = FALSE, $show_comments="icon") {
-	print "<p>FormatReady: show_comments=$show_comments"; // DEBUG
 
 	if (preg_match_all("'\[nop\](.+)\[/nop\]'isU", $what, $matches)) {
 		$what = preg_replace("'\[nop\].+\[/nop\]'isU", '{-*~*%}', $what);
-		$what = format_help($what, $trim, $extern, $wiki);
+		$what = format_help($what, $trim, $extern, $wiki, $show_comments);
 		$what = explode('{-*~*%}', $what);
 		$i = 0; $all = '';
 		foreach ($what as $w) {
@@ -394,7 +392,6 @@ function formatReady ($what, $trim = TRUE, $extern = FALSE, $wiki = FALSE, $show
 * @return       string
 */
 function wikiReady ($what, $trim = TRUE, $extern = FALSE, $show_comments="icon") {
-	print "<p>wikiReady: show_comments=$show_comments"; // DEBUG
 	return formatReady ($what, $trim, $extern, TRUE, $show_comments);
 }
 
@@ -407,7 +404,6 @@ function wikiReady ($what, $trim = TRUE, $extern = FALSE, $show_comments="icon")
 * @param	string	$show_comments	How to show comments
 */
 function wiki_format ($text, $show_comments) {
-	print "<p>wiki_format: show_comments=$show_comments"; // DEBUG
 	if ($show_comments=="icon" || $show_comments=="all") {
 		$text=preg_replace("#\[comment(=.*)?\](.*)\[/comment\]#emU","format_wiki_comment('\\2','\\1',$show_comments)",$text);
 	} else {
