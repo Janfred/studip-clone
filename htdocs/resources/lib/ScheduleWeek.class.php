@@ -197,34 +197,34 @@ class ScheduleWeek {
 		?>
 		<table <? if ($this->print_view) { ?> bgcolor="#eeeeee" <? } ?> width ="99%" align="center" cellspacing=1 cellpadding=0 border=0>
 			<tr>
-				<td width="10%" align="center" class="rahmen_steelgraulight" ><?=_("Zeit"):?>
+				<td width="10%" align="center" class="rahmen_steelgraulight" ><?=_("Zeit");?>
 				</td>
 				<? if ($this->show_days[1]) {?>
-				<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight"><?=_("Montag"):?>
+				<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight"><?=_("Montag");?>
 				<? if ($this->show_dates) print "<br /><font size=-1>".date("d.m.y", $this->start_date)."</font>" ?>
 				</td><?}
 				if ($this->show_days[2]) {?>
-				<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight"><?=_("Dienstag"):?>
+				<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight"><?=_("Dienstag");?>
 				<? if ($this->show_dates) print "<br /><font size=-1>".date("d.m.y", mktime (0,0,0,date("n",$this->start_date), date("j",$this->start_date)+1, date("Y",$this->start_date)))."</font>" ?>
 				</td><?}
 				if ($this->show_days[3]) {?>
-				<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight"><?=_("Mittwoch"):?>
+				<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight"><?=_("Mittwoch");?>
 				<? if ($this->show_dates) print "<br /><font size=-1>".date("d.m.y", mktime (0,0,0,date("n",$this->start_date), date("j",$this->start_date)+2, date("Y",$this->start_date)))."</font>" ?>
 				</td><?}
 				if ($this->show_days[4]) {?>
-				<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight"><?=_("Donnerstag"):?>
+				<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight"><?=_("Donnerstag");?>
 				<? if ($this->show_dates) print "<br /><font size=-1>".date("d.m.y", mktime (0,0,0,date("n",$this->start_date), date("j",$this->start_date)+3, date("Y",$this->start_date)))."</font>" ?>
 				</td><?}
 				if ($this->show_days[5]) {?>
-				<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight"><?=_("Freitag"):?>
+				<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight"><?=_("Freitag");?>
 				<? if ($this->show_dates) print "<br /><font size=-1>".date("d.m.y", mktime (0,0,0,date("n",$this->start_date), date("j",$this->start_date)+4, date("Y",$this->start_date)))."</font>" ?>
 				</td><?}
 				if ($this->show_days[6]) {?>
-				<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight"><?=_("Samstag"):?>
+				<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight"><?=_("Samstag");?>
 				<? if ($this->show_dates) print "<br /><font size=-1>".date("d.m.y", mktime (0,0,0,date("n",$this->start_date), date("j",$this->start_date)+5, date("Y",$this->start_date)))."</font>" ?>
 				</td><?}
 				if ($this->show_days[7]) {?>
-				<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight"><?=_("Sonntag"):?>
+				<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight"><?=_("Sonntag");?>
 				<? if ($this->show_dates) print "<br /><font size=-1>".date("d.m.y", mktime (0,0,0,date("n",$this->start_date), date("j",$this->start_date)+6, date("Y",$this->start_date)))."</font>" ?>
 				</td><?}?>
 			</tr>
