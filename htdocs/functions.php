@@ -1,4 +1,70 @@
 <?
+/**
+* function.php
+* 
+* The Stud.IP-Core function. Look to the descriptions to get further details
+* 
+*
+* @author		Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>, Ralf Stockmann <rstockm@gwdg.de>, André Noack André Noack <andre.noack@gmx.net>
+* @access		public
+* @modulegroup	system_core
+* @module		functions.php
+*/
+
+// +---------------------------------------------------------------------------+
+// This file is part of Stud.IP
+// functions.php
+// Stud.IP Kernfunktionen
+// Copyright (C) 2002 Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>, 
+// Ralf Stockmann <rstockm@gwdg.de>, André Noack André Noack <andre.noack@gmx.net>
+// +---------------------------------------------------------------------------+
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or any later version.
+// +---------------------------------------------------------------------------+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+// +---------------------------------------------------------------------------+
+
+
+/**
+* This function determines, which from whcih type an id is from.
+*
+* The function recognizes the following types at this moment:
+* Einrichtungen, Veranstaltungen and Fakultaeten
+* 
+* @param		string	seminar_id	the seminar_id of the seminar to calculate
+* @return		string	return "ins" (Institut), "sem" (Veranstaltung), "fak" (Fakultaeten)
+*
+*/
+
+function get_object_type($id) {
+	 $db=new DB_Seminar;
+	
+	$db->query("SELECT Seminar_id FROM seminare WHERE Seminar_id = '$id' ");
+	if ($db->next_record())
+		return "sem";
+
+	if (!$entry_level) {
+		$db->query("SELECT Institut_id FROM Institute WHERE Institut_id = '$id' ");
+		if ($db->next_record())
+			return "inst";
+	}
+
+	if (!$entry_level) {
+		$db->query("SELECT Fakultaets_id FROM fakultaeten WHERE Fakultaets_id = '$id' ");
+		if ($db->next_record())
+			return "fak";
+	}
+	return FALSE;
+}
+
 // functions.php - This file contains various functions
 // functions.php - author: studip crew
 // functions.php - version: $Id$
