@@ -293,7 +293,7 @@ class ExternEdit {
 		return $out;
 	}
 	
-	function editText ($text, $class = "") {
+	function editTextblock ($text, $class = "") {
 		if (!$class) {
 			$this->css->resetClass();
 			$this->css->switchClass();
