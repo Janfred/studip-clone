@@ -8,7 +8,7 @@ function export_form($range_id, $ex_type = "", $filename = "", $format = "")
 	$export_string .= "<table width=\"100%\"><tr><td>";
 
 	$export_string .= "<font size=\"-1\">"._("Daten exportieren: ") .  "</font>";
-	$export_string .= "</td><td>";
+	$export_string .= "</td><td align=\"center\">";
 	$export_string .= "<select name=\"format\">";
 	while (list($key, $val) = each($output_formats))
 	{
