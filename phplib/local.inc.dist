@@ -1,11 +1,10 @@
 <?php
-//$Id$
 /*basic settings for Stud.IP
 ----------------------------------------------------------------
 you find here the basic system settings. You shouldn't have to touch much of them...
 please note the CONFIG.INC.PHP in the system folder for the indivual settings of your installation!*/
 
-$UNI_NAME_CLEAN = "Stud.IP 1.1";	//the clean-name of your master-faculty (e.g. University of Goettingen), without html-entities (used for mail-system)
+$UNI_NAME_CLEAN = "Stud.IP 1.1.5";	//the clean-name of your master-faculty (e.g. University of Göttingen), without html-entities (used for mail-system)
 $AUTH_LIFETIME = 60;			//the length of a session in minutes, zero means unlimited lifetime
 
 
@@ -13,7 +12,6 @@ $AUTH_LIFETIME = 60;			//the length of a session in minutes, zero means unlimite
 ----------------------------------------------------------------
 please fill in your database connection settings.
 please note: Stud.IP uses the class DB_Seminar,
-DB_Institut is used for the SRI-System (external view of Stud.IP-Data,
 DB_Ilias is used to connect to an Ilias Database*/
 
 // default Stud.IP database (DB_Seminar)
@@ -39,6 +37,7 @@ $SCM_ENABLE = TRUE;									//enable Simple-Content functionality
 $SMILEYADMIN_ENABLE = TRUE;								//enable Smiley-administration
 $SMILEY_COUNTER = FALSE;								//enable Smiley-counter
 
+
 /*Stud.IP modules
 ----------------------------------------------------------------
 enable or disable the Stud.IP internal modules, set and basic settings*/
@@ -46,7 +45,7 @@ enable or disable the Stud.IP internal modules, set and basic settings*/
 $RESOURCES_ENABLE = TRUE;								//Stud.IP module: resource management
 
 $CALENDAR_ENABLE = TRUE;								//Stud.IP module: calendar 
-$CALENDAR_DRIVER = "MySQL"; 								/*calendar driver: database to use (MySQL in default installation)*/
+$CALENDAR_DRIVER = "MySQL"; 								//calendar driver: database to use (MySQL in default installation)*/
 
 $CHAT_ENABLE = TRUE;									//Stud.IP module: chat
 $CHAT_SERVER_NAME = "ChatShmServer";
@@ -58,10 +57,10 @@ $FOP_SH_CALL = "/usr/local/fop-0.20.5rc/fop.sh";    					//path to fop
 $JAVA_ENV_CALL = "/etc/profile.d/alljava.sh";     					//used to set environment for JRE
 
 $ILIAS_CONNECT_ENABLE = FALSE;								//Stud.IP module: ilias connect
-$ABSOLUTE_PATH_ILIAS = "http://<your.server.name>/ilias/";
+$ABSOLUTE_PATH_ILIAS = "http://<your.server.name/ilias/>";
 
 $EXTERN_ENABLE = TRUE;									//Stud.IP module: SRI-System
-$EXTERN_SERVER_NAME = "";								// define name, if you use special setup
+$EXTERN_SERVER_NAME = "";								//define name, if you use special setup
 $EXTERN_CONFIG_FILE_PATH = "/var/lib/studip/extern_config/";				//path to store configs (wwwrun needs write-perm there)		
 
 $SUPPORT_ENABLE = FALSE;								//Stud.IP module: SupportDB (not part of the main distribution)
@@ -115,27 +114,29 @@ $FAVICON = "http://www.studip.de/favicon.ico";						//the place where the favico
 ----------------------------------------------------------------
 to translate internal links (within Stud.IP) to the different
 domain names. To activate this feature uncomment these lines
-and add all used domain names.*/
+and add all used domain names. Below, two examples are given.*/
 
-//$STUDIP_DOMAINS[1] = "";
+//$STUDIP_DOMAINS[1] = "<your.server.name>"; 
+//$STUDIP_DOMAINS[2] = "<your.server.ip/studip>";
 
 
 /*mail settings
 ----------------------------------------------------------------
 leave blank if localhost is also the mailserver*/
 
-$MAIL_LOCALHOST = "";		// name of the mail sending machine (the web server) defaults to SERVER_NAME
-$MAIL_HOST_NAME = "";		// which mailserver should we use? (must allow mail-relaying from $MAIL_LOCALHOST, defaults to SERVER_NAME)
+$MAIL_LOCALHOST = "";			// name of the mail sending machine (the web server) defaults to SERVER_NAME
+$MAIL_HOST_NAME = "";			// which mailserver should we use? (must allow mail-relaying from $MAIL_LOCALHOST, defaults to SERVER_NAME)
 $MAIL_CHARSET = "";			//character set of mail body, defaults to ISO-8859-1
-$MAIL_ENV_FROM = "";		//sender mail adress, defaults to wwwrun @ $MAIL_LOCAHOST
+$MAIL_ENV_FROM = "";			//sender mail adress, defaults to wwwrun @ $MAIL_LOCAHOST
 $MAIL_FROM = "";			//name of sender, defaults to "Stud.IP"
 $MAIL_ABUSE = "";			//mail adress to reply to in case of abuse, defaults to abuse @  $MAIL_LOCAHOST
 
-$MAIL_VALIDATE_HOST = true;		//check for valid mail host when user enters email adress
-$MAIL_VALIDATE_BOX = true;		//check for valid mail account when user enters email adress; set to false if the webserver got no valid MX record
+$MAIL_VALIDATE_HOST = TRUE;		//check for valid mail host when user enters email adress
+$MAIL_VALIDATE_BOX = TRUE;		//check for valid mail account when user enters email adress; set to false if the webserver got no valid MX record
 
 $MESSAGING_FORWARD_AS_EMAIL = TRUE;	// enable to forward every internal message to the user-mail (the user is able to deactivate this function in his personal settings)
-$MESSAGING_FORWARD_DEFAULT = FALSE;	// the default setting: if TRUE, every message will be forwarded else the user has to switch it on (both only if above option is active)
+$MESSAGING_FORWARD_DEFAULT = FALSE;	// the default setting: if FALSE, the user has to switch it on; if "2", every message will be forwarded; if "3" every message will be forwarded on request of the sender
+
 
 /*advanced system settings
 ----------------------------------------------------------------
@@ -156,10 +157,12 @@ $BANNER_ADS_ENABLE = FALSE; 				//enable the Banner ads functions (config as roo
 							//you'll need an additional folder in the pictures folder named banner. The Webserver
 							//needs write accees for this folder.
 							
-$CONVERT_IDNA_URL = TRUE;				//if true, urls with umlauts are converted
+$CONVERT_IDNA_URL = TRUE;				//if true, urls with german "umlauts" are converted
+
 
 /*language settings
 ----------------------------------------------------------------*/
+
 $INSTALLED_LANGUAGES["de_DE"] = array ("path"=>"de", "picture"=>"lang_de.gif", "name"=>"Deutsch");
 $INSTALLED_LANGUAGES["en_GB"] =	array ("path"=>"en", "picture"=>"lang_en.gif", "name"=>"English");
 
@@ -307,10 +310,13 @@ $ALLOW_CHANGE_EMAIL = TRUE;				//if true, users are allowed to change their emai
 $ALLOW_CHANGE_NAME = TRUE;				//if true, users are allowed to change their name
 $ENABLE_SELF_REGISTRATION = TRUE;			//should it be possible for an user to register himself
 
+
 /*IDs of courses, in which users were entered when they are promoted to 'autor'
 -----------------------------------------------------------------*/
+
 //$AUTO_INSERT_SEM[1]="<seminar_id>";
 //further courses can be added with their IDs here
+
 
 /*format templates for LaTex renderer
 -----------------------------------------------------------------
@@ -337,9 +343,11 @@ $LATEX_FORMATS = array(
   		"arab" => array("tag" => "arab", "template" => "\documentclass[12pt]{article}\n \usepackage[latin1]{inputenc}\n \usepackage{arabtex,atrans}\n \pagestyle{empty}\n \begin{document}\n \begin{arabtext}%s\end{arabtext}\n \end{document}\n")
 */
 
+
 /*path generation 
 -----------------------------------------------------------------
 (end of user defined settings)*/
+
 
 //path generation
 if (substr($ABSOLUTE_PATH_STUDIP,-1) != "/"){
@@ -355,4 +363,7 @@ $UNI_NAME=htmlentities($UNI_NAME_CLEAN, ENT_QUOTES);
 
 
 require_once $ABSOLUTE_PATH_STUDIP . "/phplib_local.inc.php";
+
+
+//$Id$
 ?>
