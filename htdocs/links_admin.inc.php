@@ -232,7 +232,8 @@ $structure["zugang"]=array (topKat=>"veranstaltungen", name=>_("Zugangsberechtig
 if (($modules["participants"]) || (!$SessSemName[1]))
 	$structure["statusgruppe_sem"]=array (topKat=>"veranstaltungen", name=>_("Gruppen&nbsp;/&nbsp;Funktionen"), link=>"admin_statusgruppe.php?list=TRUE&view=statusgruppe_sem", active=>FALSE);
 $structure["news_sem"]=array (topKat=>"veranstaltungen", name=>_("News"), link=>"admin_news.php?view=news_sem", active=>FALSE);
-$structure["vote_sem"]=array (topKat=>"veranstaltungen", name=>_("Votes"), link=>"admin_vote.php?view=vote_sem", active=>FALSE);
+if ($EXPORT_ENABLE)
+	$structure["vote_sem"]=array (topKat=>"veranstaltungen", name=>_("Votes"), link=>"admin_vote.php?view=vote_sem", active=>FALSE);
 $structure["modules_sem"]=array (topKat=>"veranstaltungen", name=>_("Module"), link=>"admin_modules.php?list=TRUE&view=modules_sem", active=>FALSE);
 if ($perm->have_perm("admin")) 
 	$structure["archiv"]=array (topKat=>"veranstaltungen", name=>_("archivieren"), link=>"archiv_assi.php?list=TRUE&new_session=TRUE", active=>FALSE);
@@ -249,7 +250,8 @@ if (($modules["literature"]) || (!$SessSemName[1]))
 
 $structure["news_inst"]=array (topKat=>"einrichtungen", name=>_("News"), link=>"admin_news.php?view=news_inst", active=>FALSE);
 
-$structure["vote_inst"]=array (topKat=>"einrichtungen", name=>_("Votes"), link=>"admin_vote.php?view=vote_inst", active=>FALSE);
+if ($EXPORT_ENABLE)
+	$structure["vote_inst"]=array (topKat=>"einrichtungen", name=>_("Votes"), link=>"admin_vote.php?view=vote_inst", active=>FALSE);
 
 if ($perm->have_perm("admin"))
 	$structure["modules_inst"]=array (topKat=>"einrichtungen", name=>_("Module"), link=>"admin_modules.php?list=TRUE&view=modules_inst", active=>FALSE);
