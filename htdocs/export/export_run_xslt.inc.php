@@ -56,7 +56,7 @@ else
 	$xslt_process_file = "" . $PATH_EXPORT . "/" . $xslt_files[$choose]["file"];
 	if (xslt_process($xh, $xml_process_file , $xslt_process_file, $result) AND ($o_mode != "passthrough")) 
 	{
-		$export_msg .= sprintf(_("Die Daten wurden erfolgreich konvertiert. %s Sie k&ouml;nnen die Ausgabedatei jetzt ansehen oder herunterladen. %s"), "<br>", "<br>");
+		$export_msg .= sprintf(_("Die Daten wurden erfolgreich konvertiert. %s Sie k&ouml;nnen die Ausgabedatei jetzt herunterladen. %s"), "<br>", "<br>");
 		$xslt_info = _("Die Daten sind nun im gew&auml;hlten Format verf&uuml;gbar.");
 		$xslt_process = true;
 		$link1 = "<a href=\"" . $TMP_PATH . "/" . $result_file . "\">";
@@ -64,7 +64,7 @@ else
 	}
 	elseif ($o_mode != "passthrough") 
 	{
-		$export_error .= sprintf(_("Bei der Konvertierung ist ein Fehler aufgetreten. %sDer XSLT-Prozessor meldet den Fehler Nr. %s: %s %s>"), "<br>", xslt_error($xh), xslt_errno($xh), "<br>");
+		$export_error .= sprintf(_("Bei der Konvertierung ist ein Fehler aufgetreten. %sDer XSLT-Prozessor meldet den Fehler Nr. %s: %s %s"), "<br>", xslt_errno($xh), xslt_error($xh), "<br>");
 		$xslt_info = _("Bei der Konvertierung ist ein Fehler aufgetreten.");
 		$xslt_process = false;
 	}
@@ -85,9 +85,10 @@ else
 		{
 			$export_pagecontent .= "<center><table cellspacing=\"0\" cellpadding=\"0\" border=\"0\" width=\"30%\"><tr align=\"center\"><td>";
 			$export_pagecontent .= "<b>" . _("Ausgabe-Datei: ") . "</b>";
-			$export_pagecontent .= "</td><td>" . $result_file . "</td></tr><tr><td colspan=\"2\">";
-			$export_pagecontent .= "&nbsp;&nbsp;&nbsp;&nbsp; - &nbsp;&nbsp;" . $link1 . _("Datei &ouml;ffnen") . "</a></td></tr><tr><td colspan=\"2\">";
-			$export_pagecontent .= "&nbsp;&nbsp;&nbsp;&nbsp; - &nbsp;&nbsp;" . $link2 . _("Datei herunterladen") . "</a></td></tr>";
+			$export_pagecontent .= "</td><td>" . $link2 . $result_file . "</a>";
+//			$export_pagecontent .= "</td></tr><tr><td colspan=\"2\">";
+//			$export_pagecontent .= "&nbsp;&nbsp;&nbsp;&nbsp; - &nbsp;&nbsp;" . $link1 . _("Datei &ouml;ffnen") . "</a></td></tr><tr><td colspan=\"2\">";
+//			$export_pagecontent .= "&nbsp;&nbsp;&nbsp;&nbsp; - &nbsp;&nbsp;" . $link2 . _("Datei herunterladen") . "</a></td></tr>";
 			$export_pagecontent .= "</td></tr></table></center><br><br>";
 		}	
 
@@ -122,9 +123,6 @@ else
 		if ($xslt_process)
 		{
 			$infobox[1]["kategorie"] = "Aktionen:";
-				$infobox[1]["eintrag"][] = array (	"icon" => "pictures/einst.gif",
-											"text"  => sprintf(_("Um die Ausgabe-Datei in ihrem Browser anzusehen, klicken Sie %s hier %s."), $link1, "</a>")
-										);
 				$infobox[1]["eintrag"][] = array (	"icon" => "pictures/nachricht1.gif" ,
 											"text"  => sprintf(_("Um die Ausgabe-Datei herunterzuladen, klicken Sie %s hier %s."), $link2, "</a>")
 										);
