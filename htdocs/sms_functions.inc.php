@@ -417,8 +417,8 @@ function print_rec_message($prm) {
 	if($my_messaging_settings['show_sndpicture'] == 1) {
 		$tmp_snd_id = get_userid($prm['uname_snd']);
 		if(file_exists("user/".$tmp_snd_id.".jpg")) {
-			$content = "<table width=\"100%\" cellpadding=0 cellmargin=0><tr><td valign=\"top\"><font size=\"-1\">".$content."</font><td>";
-			$content .= "<td align=\"right\"><img src=\"user/".$tmp_snd_id.".jpg\" width=\"80\" border=0 alt=\"\">&nbsp;</td>";
+			$content = "<table width=\"100%\" cellpadding=0 cellmargin=0><tr><td valign=\"top\" width=\"99%\"><font size=\"-1\">".$content."</font><td>";
+			$content .= "<td align=\"right\" style=\"border-left: 1px dotted black;\">&nbsp;<img src=\"user/".$tmp_snd_id.".jpg\" width=\"80\" border=0 alt=\"\">&nbsp;</td>";
 			$content .= "</tr></table>";			
 		}
 
