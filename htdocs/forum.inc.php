@@ -174,7 +174,7 @@ function ForumOpenClose ($forumposting) {
 	global $forum, $openall, $open;
 	if (strstr($forum["openlist"],$forumposting["id"])!=TRUE
 	AND !($openall == "TRUE" && $forumposting["rootid"] == $open)
-	AND !(($forum["view"]=="flat" || $forum["view"]=="neue" || $forum["view"]=="flat" || $forum["view"]=="flatfolder") && $forum["flatallopen"]=="TRUE")
+	AND !(($forum["view"]=="flat" || $forum["view"]=="neue" || $forum["view"]=="flat" || $forum["view"]=="flatfolder" || $forum["view"]=="search") && $forum["flatallopen"]=="TRUE")
 	AND !($forumposting["newold"]=="new" && $forum["neuauf"]==1) 
 	AND ($forumposting["writestatus"]=="none")) {
 		$forumposting["openclose"] = "close";
@@ -224,7 +224,6 @@ function ForumGetParent($id) {  //Holt die ID des Parent-Postings (wird für Schr
 		$parent_id = $db->f("parent_id");
  	return $parent_id;
 }
-
 
 function ForumFreshPosting($id) {  //Sieht nach ob das Posting frisch angelegt ist (mkdate ist gleich chdate)
 	$db=new DB_Seminar;
@@ -313,9 +312,7 @@ function ForumIcon ($forumposting) {
 	return $forumposting;
 }
 
-
-function quote($zitat_id)  
-{
+function quote($zitat_id)  {
 // Hilfsfunktion, die sich den zu quotenden Text holt, encodiert und zurueckgibt.
 	$db=new DB_Seminar;
 	$db->query("SELECT description, author FROM px_topics WHERE topic_id='$zitat_id'");
@@ -327,8 +324,7 @@ function quote($zitat_id)
 	RETURN $zitat;
 }
 
-function ForumGetName($id)  
-{
+function ForumGetName($id)  {
 // Hilfsfunktion, die sich den Titel eines Beitrags holt
 	$db=new DB_Seminar;
 	$db->query("SELECT name FROM px_topics WHERE topic_id='$id'");
@@ -397,7 +393,11 @@ function ForumEmpty () {
 } 
 
 function ForumNoPostings () {
-	$text = _("In dieser Ansicht gibt es derzeit keine Beiträge.");
+	global $forum, $PHP_SELF;
+	if ($forum["view"] != "search")
+		$text = _("In dieser Ansicht gibt es derzeit keine Beiträge.");
+	else
+		$text = _("Zu Ihrem Suchbegriff gibt es keine Treffer.<br><a href=\"".$PHP_SELF."?view=search&reset=1\">Neue Suche</a>");
 	$empty = "<table width=\"100%\" border=0 cellpadding=0 cellspacing=0>";
 	$empty .= parse_msg("info§$text");
 	$empty .= "</table>";	
@@ -645,7 +645,7 @@ IF ($update) {  // Schreibmodus, also form einbauen
 	ELSE echo "<form name=forumwrite method=post action=\"".$PHP_SELF."#anker\">\n";
 }
 
-///////// Konstanten setzen bzw. zuweisen die für die ganze Seite gelten
+/////////////////////////////// Konstanten setzen bzw. zuweisen die für die ganze Seite gelten
 
 $forum["openlist"] = $open;
 $forum["zitat"] = $zitat;
@@ -659,45 +659,57 @@ if (!$flatviewstartposting) {
 	$forum["flatviewstartposting"] = $flatviewstartposting;
 }
 
-///////// Ausgabe für leeren Forenbereich
-
-
+/////////////////////////////// Abfrage der Postings
 
 $db = new DB_Seminar;
-
-///////// Abfrage der Postings
 
 if ($forum["view"]=="flatfolder") {
 	$folder_id = $forum["flatfolder"];
 	$addon = " AND x.root_id = '$folder_id'";
 	$order = "ASC";
-} else {
+} else
 	$order = "DESC";
-}
 
-if ($forum["view"]=="neue") {
+if ($forum["view"]=="search") {
+	if ($forum["search"]!="") {
+		$addon = $forum["search"];
+		$query = "SELECT x.topic_id, x.name , x.author , x.mkdate, y.name AS root_name, y.topic_id AS thema_id, x.description, x.Seminar_id, x.user_id, x.chdate, username FROM px_topics x LEFT JOIN auth_user_md5 USING(user_id), px_topics y WHERE x.root_id = y.topic_id AND x.seminar_id = '$SessionSeminar' AND ($addon) ORDER BY mkdate DESC ";
+		$addonlimit = " LIMIT $flatviewstartposting,$postingsperside";
+	} else {
+		echo forum_search_field()."<br><br>";
+		$nomsg="TRUE";
+	}
+} elseif ($forum["view"]=="neue") {
 	$datumtmp = $loginfilelast[$SessSemName[1]];
-	$db->query ("SELECT x.topic_id, x.name , x.author , x.mkdate, x.chdate , y.name AS root_name, x.description , x.Seminar_id, y.topic_id AS root_id, username FROM px_topics x LEFT JOIN auth_user_md5 USING(user_id), px_topics y WHERE x.root_id = y.topic_id AND x.chdate > '$datumtmp' AND x.Seminar_id = '$SessionSeminar' ORDER BY x.chdate ".$order);	
-} else 
-	$db->query("SELECT x.topic_id, x.name , x.author , x.mkdate, x.chdate, y.name AS root_name, x.description, x.Seminar_id, y.topic_id AS root_id, username FROM px_topics x LEFT JOIN auth_user_md5 USING(user_id), px_topics y WHERE x.root_id = y.topic_id AND x.seminar_id = '$SessionSeminar'".$addon." ORDER BY chdate ".$order);
-
+	$query = "SELECT x.topic_id, x.name , x.author , x.mkdate, x.chdate , y.name AS root_name, x.description , x.Seminar_id, y.topic_id AS root_id, username FROM px_topics x LEFT JOIN auth_user_md5 USING(user_id), px_topics y WHERE x.root_id = y.topic_id AND x.chdate > '$datumtmp' AND x.Seminar_id = '$SessionSeminar' ORDER BY x.chdate ".$order;	
+} else {
+	$query = "SELECT x.topic_id, x.name , x.author , x.mkdate, x.chdate, y.name AS root_name, x.description, x.Seminar_id, y.topic_id AS root_id, username FROM px_topics x LEFT JOIN auth_user_md5 USING(user_id), px_topics y WHERE x.root_id = y.topic_id AND x.seminar_id = '$SessionSeminar'".$addon." ORDER BY chdate ".$order;
+	$addonlimit = " LIMIT $flatviewstartposting,$postingsperside";
+}
+$db->query($query);
 if ($db->num_rows() > 0) {  // Forum ist nicht leer
 	$forum["forumsum"] = $db->num_rows();
 } else { // das Forum ist leer
-	echo ForumNoPostings();
+	if ($nomsg!="TRUE")
+		echo ForumNoPostings();
 	die;
 }
-if ($forum["view"]!="neue")
-	$db->query("SELECT x.topic_id, x.name , x.author , x.mkdate, x.chdate, y.name AS root_name, x.description, x.Seminar_id, y.topic_id AS root_id, username FROM px_topics x LEFT JOIN auth_user_md5 USING(user_id), px_topics y WHERE x.root_id = y.topic_id AND x.seminar_id = '$SessionSeminar'".$addon." ORDER BY chdate ".$order." LIMIT $flatviewstartposting,$postingsperside");
+$query .= $addonlimit;
+$db->query($query);
 
-///////// HTML und Navigation
+/////////////////////////////////////// HTML und Navigation
 
 ?>	
 <table border=0 width="100%" cellspacing="0" cellpadding="0" align="center"><tr>
-<td class="steelgraudunkel" valign= "top" align="left" width="45%">
+<td class="steelgraudunkel" align="left" width="45%">
 <?
 if ($forum["view"]=="flatfolder")
-	echo "<img src=\"pictures/cont_folder.gif\" align=\"baseline\"><font size=-1><b> Thema:</b> ".mila(ForumGetName($forum["flatfolder"]),40);
+	echo "<img src=\"pictures/cont_folder.gif\" align=\"baseline\"><font size=\"-1\"><b> Thema:</b> ".mila(ForumGetName($forum["flatfolder"]),40)." / ";
+if ($forum["search"]!="" && $forum["view"]=="search") {
+	$searchname = explode("%",$forum["search"]);
+	echo "<font size=\"-1\">&nbsp;Suchbegriff: '".$searchname["1"]."' / Anzahl der Treffer: ".$forum["forumsum"]."</font>";
+} else
+	echo "<font size=\"-1\">&nbsp;Anzahl der Postings: ".$forum["forumsum"]."</font>";
 echo "</td><td class=\"steelgraudunkel\" align=\"center\" width=\"10%\">";
 if ($forum["flatallopen"]=="TRUE")
 	echo "<a href=\"".$PHP_SELF
@@ -710,12 +722,9 @@ echo "</td><td class=\"steelgraudunkel\" align=\"right\" width=\"45%\">";
 echo forum_print_navi($forum)."&nbsp;&nbsp;&nbsp;";
 echo "</td></tr></table>";
 
-////////// Ausgabe der Postings
+/////////////////// Konstanten für das gerade auszugebene Posting und Posting ausgeben
 
 while($db->next_record()){
-
-// Konstanten für das gerade auszugebene Posting setzen
-
 	$forumposting["id"] = $db->f("topic_id");
 	$forumposting["name"] = $db->f("name");
 	$forumposting["description"] = $db->f("description");
@@ -725,12 +734,9 @@ while($db->next_record()){
 	$forumposting["rootname"] = $db->f("root_name");
 	$forumposting["mkdate"] = $db->f("mkdate");
 	$forumposting["chdate"] = $db->f("chdate");
-
 	
 	$forumposting = printposting($forumposting);
-	
-	// printposting($mehr,$show,$write,$db->f("chdate"),$zitat);
-	}
+}
 
 /////////// HTML für den Rest
 
@@ -754,7 +760,6 @@ echo "</td>";
 echo "</tr>";
 echo "</table><br>";
 
-
 /*
 echo DebugForum($forum);
 echo "<hr>";
@@ -764,10 +769,7 @@ echo DebugForum($forumposting);
 
 if ($update)
 	echo "</form>\n";
-
-//Stelle Form zu
 }
-
 
 /////////////////////////////////////////////////////////////////////////
 
@@ -915,4 +917,62 @@ function DisplayKids ($forumposting, $level=0) {
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function forum_search_field () {
+	global $PHP_SELF;
+$searchfield = "
+<table border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" align=\"center\">
+<tr>
+<td class=\"blank\" width=\"100%\" align=\"center\">
+   <table cellpadding=\"2\" cellspacing=\"0\" border=\"0\" valign=\"top\">
+	<form  name=\"search\" method=\"post\"  action=".$PHP_SELF."
+		<tr>
+			<td class=\"steel1\">
+				<b><font size=\"-1\">"._("Suchbegriff:")."</font></b>
+			</td>
+			<td class=\"steel1\">
+				<input  type=\"TEXT\" name=\"suchbegriff\">
+			</td>
+		</tr>
+	   	<tr>
+	   		<td class=\"steelgraulight\">
+	   			<b><font size=\"-1\">"._("Suchen in den Feldern:")."</font></b>
+	   		</td>
+	   		<td class=\"steelgraulight\">&nbsp;
+	   		</td>
+	   	</tr>
+		<tr>
+			<td class=\"steel1\">&nbsp;
+			</td>
+			<td class=\"steel1\">
+				<input name=\"check_author\" type=\"CHECKBOX\" value=\"on\" checked><font size=\"-1\"> "._("Autor")."
+			</td>
+		</tr>
+	     	<tr>
+	     		<td class=\"steelgraulight\">&nbsp;
+	     		</td>
+	     		<td class=\"steelgraulight\">
+	     			<input type=\"CHECKBOX\" name=\"check_name\" value=\"on\" checked><font size=\"-1\"> "._("Überschrift")." 
+	     		</td>
+	     	</tr>
+	     	<tr>
+	     		<td class=\"steel1\">&nbsp;
+		     	</td>
+		     	<td class=\"steel1\">
+		     		<input type=\"CHECKBOX\" name=\"check_cont\" value=\"on\" checked><font size=\"-1\"> "._("Inhalt")."
+		     	</td>
+		</tr> 
+		<tr>
+			<td class=\"steelgraulight\" colspan=\"2\" align=\"center\">
+				<input type=\"hidden\" name=\"view\" value=\"search\">
+				<br><input type=\"IMAGE\" ".makeButton("suchestarten", "src")."border=\"0\" value=\""._("Suche starten")."\"><br><br>
+			</td>
+		</tr>
+	</form>
+   </table>
+</td>
+</tr></table>";
+return $searchfield;
+}
+
 ?>

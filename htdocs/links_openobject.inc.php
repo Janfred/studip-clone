@@ -149,12 +149,12 @@ if ($modules["forum"]) {
 	$structure["_forum"]=array (topKat=>"forum", name=>_("Themenansicht"), link=>"forum.php?view=reset", active=>FALSE);
 	if ($user->id != "nobody") {
 		$structure["neue"]=array (topKat=>"forum", name=>_("neue Beiträge"), link=>"forum.php?view=neue", active=>FALSE);
-		$structure["flat"]=array (topKat=>"forum", name=>_("alle Beiträge"), link=>"forum.php?view=flat", active=>FALSE);
+		$structure["flat"]=array (topKat=>"forum", name=>_("letzte Beiträge"), link=>"forum.php?view=flat", active=>FALSE);
 	}
-	$structure["suchen"]=array (topKat=>"forum", name=>_("Suchen"), link=>"suchen.php", active=>FALSE);
+	$structure["search"]=array (topKat=>"forum", name=>_("Suchen"), link=>"forum.php?view=search&reset=1", active=>FALSE);
 	$structure["forum_export"]=array (topKat=>"forum", name=>_("Druckansicht"), link=>"forum_export.php", target=>"_new", active=>FALSE);
 	if (($rechte) || ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["topic_create_autor"]))
-		$structure["neues_thema"]=array (topKat=>"forum", name=>_("neues Thema anlegen"), link=>"forum.php?neuesthema=TRUE#anker", active=>FALSE);
+		$structure["neues_thema"]=array (topKat=>"forum", name=>_("neues Thema anlegen"), link=>"forum.php?view=tree&neuesthema=TRUE#anker", active=>FALSE);
 }
 //
 if (($SessSemName["class"]=="sem") && ($modules["schedule"])){
@@ -295,6 +295,9 @@ switch ($i_page) {
 			break;
 			case "flat":
 				$reiter_view="flat";
+			break;
+			case "search":
+				$reiter_view="search";
 			break;
 			default :
 				$reiter_view="forum";

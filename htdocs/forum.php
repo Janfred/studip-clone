@@ -68,6 +68,12 @@ function pruefe_name(){
 
 	checkObject();
 
+function getMsTime(){
+	$microtime = explode(' ', microtime());
+	return (double)($microtime[1].substr($microtime[0],1)); 
+}
+
+$stoppuhr=getMsTime();
 
 if ($view) {
 	if ($view=="reset") {
@@ -92,7 +98,28 @@ if ($forum["view"]=="flatfolder" && $view)
 $view = $forum["view"];
 
 	include "links_openobject.inc.php";
-	
+
+// Behandlung der Suche
+
+
+if ($suchbegriff!="") {
+	if($check_author) 
+		$search_exp="x.author LIKE '%$suchbegriff%'";
+	if ($check_name) {
+		if ($search_exp)
+			$search_exp.=" OR";
+		$search_exp.=" x.name LIKE '%$suchbegriff%'";
+	}
+	if ($check_cont) {
+		if ($search_exp)
+			$search_exp.=" OR";
+		$search_exp.=" x.description LIKE '%$suchbegriff%'";
+	}
+	$forum["search"] = $search_exp;	
+}
+
+if ($reset=="1")
+	$forum["search"] = "";	
 
 // Sind wir da wo wir hinwollen?
 
@@ -413,10 +440,12 @@ if ($flatallopen=="TRUE")
 if ($flatallopen=="FALSE")
 	$forum["flatallopen"] = "FALSE";
 
-if ($forum["view"]=="flat" || $forum["view"]=="neue" || $forum["view"]=="flatfolder")
+if ($forum["view"]=="flat" || $forum["view"]=="neue" || $forum["view"]=="flatfolder" || $forum["view"]=="search")
  	flatview ($open, $mehr, $show, $edit_id, $name, $description, $zitat);
 else
 	DisplayFolders ($open, $edit_id, $zitat);
+
+echo "Zeit:".(getMsTime()-$stoppuhr);
 
   // Save data back to database.
   page_close()
