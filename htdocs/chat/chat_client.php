@@ -39,11 +39,6 @@
 */
 define("CLOSE_ON_LOGIN_SCREEN",true);
 
-//disable output compression
-if(ini_get('zlib.output_compression')){
-      ini_set('zlib.output_compression', 'Off');
-}
-
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check("user");
 
@@ -397,7 +392,7 @@ function outputLoop($chatid){
 			echo _("<b>IDLE TIMEOUT</b> - Sie wurden aus dem Chat entfernt!<br>");
 			$chatServer->removeUser($user->id,$chatid);
 			echo "<a href=\"javascript:parent.location.href='chat_login.php?chatid=$chatid';\">"
-				._("Hier</a> k&oumlnnen Sie versuchen wieder einzusteigen.<br>");
+				._("Hier</a> k&ouml;nnen Sie versuchen wieder einzusteigen.<br>");
 			printJs("window.scrollBy(0, 500);");
 			flush();
 			break;
