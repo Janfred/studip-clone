@@ -1,23 +1,35 @@
 <?
-/*
-config_tools_semester.inc.php -Tool zum Bereistellen grundlegender Daten des 
-aktuellen und des folgenden Semesters
-Copyright (C) 2002 Cornelis Kater <ckater@gwdg.de>
-
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+/**
+* config_tools_semester.inc.php
+* 
+* create some constants for semester data
+* 
+* @access		public
+* @package		studip_core
+* @modulegroup	config
+* @module		config_tools_semester.inc.php
 */
+
+// +---------------------------------------------------------------------------+
+// This file is part of Stud.IP
+// config_tools_semester.inc.php
+// hier werden ein paar Semester-Konstanten errechnet
+// Copyright (C) 2003 Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>, 
+// +---------------------------------------------------------------------------+
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or any later version.
+// +---------------------------------------------------------------------------+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+// +---------------------------------------------------------------------------+
+
 
 //Checken ob es sich um vergangene Semester handelt + checken, welches das aktuelle Semester ist und Daten daraus verwenden
 $i=1;
