@@ -55,11 +55,14 @@ class StartupChecks {
 		$this->registered_checks["institutes"]["link"] = "admin_institut.php?i_view=new";
 		$this->registered_checks["institutes"]["link_name"] = _("neue Einrichtung anlegen");
 	
-		$this->registered_checks["institutesRange"]["msg"] = _("Sie m&uuml;ssen in der Veranstaltungshierarchie mindestens einen Studienbereich unterhalb der Fakult&auml;t, zu der die Einrichtung geh&ouml;rt, f&uuml;r die sie eine Veranstaltung anlegen wollen, anlegen. Nutzen sie daf&uuml;r die Veranstaltunghierarchie, um Studienbereiche zu verwalten.");
-		$this->registered_checks["institutesRange"]["link"] = "admin_sem_tree.php";
-		$this->registered_checks["institutesRange"]["link_name"] = _("Studienbereiche verwalten");
+		$this->registered_checks["institutesRange"]["msg_fak_admin"] = _("Es existieren keine Studienbereiche in der Veranstaltungshierarchie. Jede Fakult&auml;t sollte &uuml;ber mindestens einen Studienberereich verf&uuml;gen, damit Veranstaltungen angelegt werden k&ouml;nnen. Nutzen sie daf&uuml;r die Veranstaltunghierarchie, um Studienbereiche zu verwalten.");
+		$this->registered_checks["institutesRange"]["msg"] = _("Es existieren keine Studienbereiche in der Veranstaltungshierarchie. Jede Fakult&auml;t sollte &uuml;ber mindestens einen Studienberereich verf&uuml;gen, damit Veranstaltungen angelegt werden k&ouml;nnen. Bitte wenden Sie sich an einen der Administratoren des Systems.");
+		$this->registered_checks["institutesRange"]["link_fak_admin"] = "admin_sem_tree.php";
+		$this->registered_checks["institutesRange"]["link"] = "impressum.php?view=ansprechpartner";
+		$this->registered_checks["institutesRange"]["link_name_fak_admin"] = _("Studienbereiche verwalten");
+		$this->registered_checks["institutesRange"]["link_name"] = _("Kontakt zu den Administratoren");
 
-		$this->registered_checks["myInstituteRange"]["msg"] = _("Um Veranstaltungen anlegen zu k&ouml;nnen, muss der Einrichtung, f&uuml;r die Sie eine Veranstaltung anlegen m&ouml;chten, mindestens ein Studienbereich zugeordnet werden. Bitte wenden Sie sich an einen der Administratoren des Systems.");
+		$this->registered_checks["myInstituteRange"]["msg"] = _("Das Anlegen einer Veranstaltung ist nicht m&ouml;glich, da keine Studienbereiche an ihrer Fakult&auml;t existieren. Bitte wenden Sie sich an einen der Administratoren des Systems.");
 		$this->registered_checks["myInstituteRange"]["link"] = "impressum.php?view=ansprechpartner";
 		$this->registered_checks["myInstituteRange"]["link_name"] = _("Kontakt zu den Administratoren");
 
@@ -67,7 +70,7 @@ class StartupChecks {
 		$this->registered_checks["myAdminInstitute"]["link"] = "impressum.php?view=ansprechpartner";
 		$this->registered_checks["myAdminInstitute"]["link_name"] = _("Kontakt zu den Administratoren");
 
-		$this->registered_checks["dozent"]["msg"] = _("Sie ben&ouml;tigen mindestens einen Dozentenaccount, um Veranstaltungen anlegen zu k&ouml;nnen. Nutzen sie die globale Nutzerverwaltung, um einen neuen Nutzer mit dem Status Dozent anzulegen oder den Satus eines bestehenden Nutzers auf &raquo;dozent&laquo; zu setzen.");
+		$this->registered_checks["dozent"]["msg"] = _("Sie ben&ouml;tigen mindestens einen Dozentenaccount, um Veranstaltungen anlegen zu k&ouml;nnen. Nutzen sie die globale Nutzerverwaltung, um einen neuen Nutzer mit dem Status Dozent anzulegen oder den Status eines bestehenden Nutzers auf &raquo;dozent&laquo; zu setzen.");
 		$this->registered_checks["dozent"]["link"] = "new_user_md5";
 		$this->registered_checks["dozent"]["link_name"] = _("Dozentenaccount anlegen oder anderen Account hochstufen");
 
@@ -116,7 +119,8 @@ class StartupChecks {
 				}
 			}
 	
-			$clause = implode("', '", $tmp_inst_ids);
+			if (is_array($tmp_inst_ids))
+				$clause = implode("', '", $tmp_inst_ids);
 
 			$query = sprintf ("SELECT studip_object_id FROM user_inst LEFT JOIN Institute USING (Institut_id) LEFT JOIN sem_tree ON (Institute.fakultaets_id = sem_tree.studip_object_id) WHERE user_inst.Institut_id IN ('%s') AND studip_object_id IS NOT NULL ", $clause);
 		} else {
@@ -202,8 +206,9 @@ class StartupChecks {
 					}
 				}
 			}
-	
-			$clause = implode("', '", $tmp_inst_ids);
+			
+			if (is_array($tmp_inst_ids))	
+				$clause = implode("', '", $tmp_inst_ids);
 			
 			$query = sprintf ("SELECT user_id FROM user_inst WHERE inst_perms = 'dozent' AND Institut_id IN ('%s')", $clause);
 		} else {
