@@ -551,12 +551,16 @@ if ($delete_turnus_field)
 			$tmp_term_turnus_start_minute[]=$sem_create_data["term_turnus_start_minute"][$i]; 
 			$tmp_term_turnus_end_stunde[]=$sem_create_data["term_turnus_end_stunde"][$i]; 
 			$tmp_term_turnus_end_minute[]=$sem_create_data["term_turnus_end_minute"][$i]; 
+			$tmp_term_turnus_resource_id[]=$sem_create_data["term_turnus_resource_id"][$i]; 
+			$tmp_term_turnus_room[]=$sem_create_data["term_turnus_room"][$i]; 
 			}
 	$sem_create_data["term_turnus_date"]=$temp_term_turnus_date;
 	$sem_create_data["term_turnus_start_stunde"]=$tmp_term_turnus_start_stunde;
 	$sem_create_data["term_turnus_start_minute"]=$tmp_term_turnus_start_minute;
 	$sem_create_data["term_turnus_end_stunde"]=$tmp_term_turnus_end_stunde;
 	$sem_create_data["term_turnus_end_minute"]=$tmp_term_turnus_end_minute;
+	$sem_create_data["term_turnus_resource_id"]=$tmp_term_turnus_resource_id;
+	$sem_create_data["term_turnus_room"]=$tmp_term_turnus_room;
 	
 	$sem_create_data["turnus_count"]--;
 	$level=3;
@@ -573,6 +577,8 @@ if ($delete_term_field)
 			$tmp_term_start_minute[]=$sem_create_data["term_start_minute"][$i]; 
 			$tmp_term_end_stunde[]=$sem_create_data["term_end_stunde"][$i]; 
 			$tmp_term_end_minute[]=$sem_create_data["term_end_minute"][$i]; 
+			$tmp_term_resource_id[]=$sem_create_data["term_resource_id"][$i]; 
+			$tmp_term_room[]=$sem_create_data["term_room"][$i]; 
 			}
 	$sem_create_data["term_tag"]=$tmp_term_tag;
 	$sem_create_data["term_monat"]=$tmp_term_monat;
@@ -581,6 +587,8 @@ if ($delete_term_field)
 	$sem_create_data["term_start_minute"]=$tmp_term_start_minute;
 	$sem_create_data["term_end_stunde"]=$tmp_term_end_stunde;
 	$sem_create_data["term_end_minute"]=$tmp_term_end_minute;
+	$sem_create_data["term_resource_id"]=$tmp_term_resource_id;
+	$sem_create_data["term_room"]=$tmp_term_room;
 	
 	$sem_create_data["term_count"]--;
 	$level=3;
@@ -949,7 +957,7 @@ if ($cmd_f_x)
 			$Schreibzugriff = $Lesezugriff;
 		
 						
-		$query = "insert into seminare values('".
+		$query = "INSERT INTO seminare values('".
 				$sem_create_data["sem_id"]."', '".				//Feld Seminar_id 
 				$sem_create_data["sem_nummer"]."', '".		//Feld VeranstaltungsNummer
 				$sem_create_data["sem_inst_id"]."', '".			//Feld Institut_id 
@@ -1001,12 +1009,32 @@ if ($cmd_f_x)
     					$updateAssign = new VeranstaltungResourcesAssign($sem_create_data["sem_id"]);
     					$updateResult=$updateAssign->updateAssign();
 
-	    				//are there overlaps, in the meanwhile since the check at step 3?
-					if (is_array($updateResult)) {
+	    				//are there overlaps, in the meanwhile since the check at step 3? I case the sem is regular, we have to touch the metadata
+					if ((is_array($updateResult)) && ($sem_create_data["term_art"] != -1)) {
 						$overlaps_detected=FALSE;
 						foreach ($updateResult as $key=>$val)
-							if ($val["overlap_assigns"] == TRUE)
-//								echo "Yes!";
+							if ($val["overlap_assigns"] == TRUE) {
+								list($key2, $val2) = each($val["overlap_assigns"]);
+								$begin = $val2["begin"];
+								$end = $val2["end"];
+								$resource_id = $val["resource_id"];
+								foreach ($sem_create_data["metadata_termin"]["turnus_data"] as $key3 =>$val3) {
+									$day = date("w", $begin);
+									if (!$day )
+										$day = 7;
+									if (($val3["day"] == $day) && ($val3["start_stunde"] == date("G", $begin)) && ($val3["start_minute"] == date("i", $begin)) && ($val3["end_stunde"] == date("G", $end)) && ($val3["end_minute"] == date("i", $end)) && ($val["resource_id"] == $resource_id)) {
+										$sem_create_data["metadata_termin"]["turnus_data"][$key3]["resource_id"]='';
+										$sem_create_data["metadata_termin"]["turnus_data"][$key3]["room"]='';
+										$metadata_changed = TRUE;
+									}
+								}
+							}
+						//ok, we have a need to update the metadata again...
+						if ($metadata_changed) {
+							$serialized_metadata=mysql_escape_string(serialize($sem_create_data["metadata_termin"]));
+							$query = sprintf ("UPDATE seminare SET metadata_dates = '%s' WHERE Seminar_id = '%s' ", $serialized_metadata, $sem_create_data["sem_id"]);
+							$db->query($query);
+						}
 					}
     				}
 			}
@@ -1240,7 +1268,7 @@ if (!$sem_create_data["sem_class"]) {
 				</blockqoute>
 			</td>
 			<td class="blank" align="right" valign="top" rowspan="2">
-				<img src="pictures/assistent.jpg" border="0">
+				<img src="./locale/<?=$_language_path?>/LC_PICTURES/assistent.jpg" border="0">
 			</td>
 		</tr>
 		<tr>
@@ -1288,7 +1316,7 @@ elseif ((!$level) || ($level==1))
 				</blockqoute>
 			</td>
 			<td class="blank" align="right" valign="top">
-				<img src="pictures/hands01.jpg" border="0">
+				<img src="./locale/<?=$_language_path?>/LC_PICTURES/hands01.jpg" border="0">
 			</td>
 		</tr>
 		<tr>
@@ -1601,7 +1629,7 @@ if ($level==2)
 				</blockqoute>
 			</td>
 			<td class="blank" align="right" valign="top">
-				<img src="pictures/hands02.jpg" border="0">
+				<img src="./locale/<?=$_language_path?>/LC_PICTURES/hands02.jpg" border="0">
 			</td>
 		</tr>
 		<tr>
@@ -1954,7 +1982,7 @@ if ($level==3) {
 				</blockqoute>
 			</td>
 			<td class="blank" align="right" valign="top">
-				<img src="pictures/hands03.jpg" border="0">
+				<img src="./locale/<?=$_language_path?>/LC_PICTURES/hands03.jpg" border="0">
 			</td>
 		</tr>
 		<tr>
@@ -2220,7 +2248,7 @@ if ($level==4)
 				</blockqoute>
 			</td>
 			<td class="blank" align="right" valign="top">
-				<img src="pictures/hands04.jpg" border="0">
+				<img src="./locale/<?=$_language_path?>/LC_PICTURES/hands04.jpg" border="0">
 			</td>
 		</tr>
 		<tr>
@@ -2512,7 +2540,7 @@ if ($level==5)
 				</blockqoute>
 			</td>
 			<td class="blank" align="right" valign="top">
-				<img src="pictures/hands05.jpg" border="0">
+				<img src="./locale/<?=$_language_path?>/LC_PICTURES/hands05.jpg" border="0">
 			</td>
 		</tr>
 	</table>
@@ -2550,7 +2578,7 @@ if ($level==6)
 					</blockqoute>
 				</td>
 				<td class="blank" align="right">
-					<img src="pictures/hands05.jpg" border="0">
+					<img src="./locale/<?=$_language_path?>/LC_PICTURES/hands05.jpg" border="0">
 				</td>
 			</tr> <?
 			}
@@ -2567,7 +2595,7 @@ if ($level==6)
 					</blockqoute>
 				</td>
 				<td class="blank" align="right">
-					<img src="pictures/hands05.jpg" border="0">
+					<img src="./locale/<?=$_language_path?>/LC_PICTURES/hands05.jpg" border="0">
 				</td>
 			</tr> <?
 			}
@@ -2587,7 +2615,7 @@ if ($level==6)
 					</blockqoute>
 				</td>
 				<td class="blank" align="right" valign="top">
-					<img src="pictures/hands05.jpg" border="0">
+					<img src="./locale/<?=$_language_path?>/LC_PICTURES/hands05.jpg" border="0">
 				</td>
 			</tr>
 			<tr>
@@ -2616,6 +2644,42 @@ if ($level==6)
 								echo "<li><b>1</b> Bereich f&uuml;r die Veranstaltung eingetragen.<br><br>";
 							else
 								echo "<li><b>$count_bereich</b> Bereiche f&uuml;r die Veranstaltung eingetragen.<br><br>";
+							//Show the result from the resources system
+							if ($RESOURCES_ENABLE) {
+								foreach ($updateResult as $key=>$val) {
+									if ($val["overlap_assigns"] == TRUE)
+										$resources_failed[$val["resource_id"]]=TRUE;
+									else
+										$resources_booked[$val["resource_id"]]=TRUE;
+								}
+								if ($resources_booked) {
+									$i=0;
+									$rooms='';
+									foreach ($resources_booked as $key=>$val) {
+										if ($i)
+											$rooms.=", ";
+										$rooms.="<a target=\"new\" href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=no_nav&start_time=%s\">".htmlReady(getResourceObjectName($key))."</a>";
+									}
+									if (sizeof($resources_booked) == 1)
+										printf ("<li>"._(" Der Raum %s wurde gebucht.")."<br /><br />", $rooms);
+									else
+										printf ("<li>"._("Die  R&auml;ume %s wurden gebucht."), "<br /><br />", $rooms);
+								}
+								if ($resources_booked) {
+									$i=0;
+									$rooms='';
+									foreach ($resources_failed as $key=>$val) {
+										if ($i)
+											$rooms.=", ";
+										$rooms.="<a target=\"new\" href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=no_nav&start_time=%s\">".htmlReady(getResourceObjectName($key))."</a>";
+									}
+									if (sizeof($resources_failed) == 1)
+										printf ("<li><font color=\"red\">"._("Der Raum %s konnte wegen &Uuml;berschneidungen nicht gebucht werden!")."</font><br /><br />", $rooms);
+									else
+										printf ("<li><font color=\"red\">"._("Die R&auml;aume %s konnte wegen &Uuml;berschneidungen nicht gebucht werden!")."</font><br /><br />", $rooms);
+								}
+							}
+								
 							echo "</ul>";
 							?>
 							</td>
@@ -2657,7 +2721,7 @@ if ($level==7)
 				</blockqoute>
 			</td>
 			<td class="blank" align="right" valign="top">
-				<img src="pictures/hands06.jpg" border="0">
+				<img src="./locale/<?=$_language_path?>/LC_PICTURES/hands06.jpg" border="0">
 			</td>
 		</tr>
 		<tr>
