@@ -43,7 +43,7 @@ if ($entry_level=="inst") {
 //Bottomkats
 if ($entry_level=="inst") {
 	$structure["_institut_main"]=array (topKat=>"institut_main", name=>"Info", link=>"institut_main.php", active=>FALSE);
-	$structure["institut_mitarbeiter"]=array (topKat=>"institut_main", name=>"MitarbeiterInnen", link=>"institut_mitarbeiter.php", active=>FALSE);
+	$structure["institut_members"]=array (topKat=>"institut_main", name=>"MitarbeiterInnen", link=>"institut_members.php", active=>FALSE);
 	$structure["institut_veranstaltungen"]=array (topKat=>"institut_main", name=>"Veranstaltungen", link=>"show_bereich.php?level=s&id=$SessSemName[1]", active=>FALSE);
 	$structure["timetable"]=array (topKat=>"institut_main", name=>"Veranstaltungs-Timetable", link=>"mein_stundenplan.php?inst_id=$SessSemName[1]", active=>FALSE);
 	$structure["druckansicht_i"]=array (topKat=>"institut_main", name=>"Druckansicht", link=>"print_institut.php", target=>"_new", active=>FALSE);
@@ -108,6 +108,9 @@ switch ($i_page) {
 	break;
 	case "institut_main.php" : 
 		$reiter_view="institut_main"; 
+	break;
+	case "institut_members.php" :
+		$reiter_view = "institut_members";
 	break;
 	case "seminar_main.php" : 
 		$reiter_view="seminar_main"; 
