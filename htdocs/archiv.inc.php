@@ -483,7 +483,7 @@ function Export_Topic ($sem_id) {
 			$zusatz = "<b>".$count."</b> / ".date("d.m.Y - H:i", $last);
 			$zusatz = htmlReady($author)."&nbsp;/&nbsp; ".$zusatz;
 			$name = htmlReady($name);
-			$description = FixLinks(format(htmlReady($r_description, $trim, FALSE)));
+			$description = FixLinks(format(htmlReady($description, $trim, FALSE)));
 		        IF(ereg("\[quote\]",$description) AND ereg("\[/quote\]",$description) AND !$write)  $description = quotes_decode($description);
 			$forum_dumb.="<table class=blank width=\"100%\" border=0 cellpadding=5 cellspacing=0><tr><td><h3>".$name."</h3> " . _("von") . " ".$zusatz."</td></tr><tr><td class=blank>".$description. "</td></tr>";
 			$forum_dumb.=Export_Kids($r_topic_id, $level);
