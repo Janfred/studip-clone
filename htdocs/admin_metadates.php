@@ -306,7 +306,7 @@ if (($uebernehmen_x) && (!$errormsg))
 	<tr>
 		<td class="topic" colspan=2>&nbsp; <b>
 		<?
-		echo $SessSemName["header_line"]." -  "._("allgemeine Zeiten");
+		echo getHeaderLine($term_metadata["sem_id"])." -  "._("allgemeine Zeiten");
 		?>
 		</td>
 	</tr>
@@ -358,7 +358,7 @@ if (($uebernehmen_x) && (!$errormsg))
 			<td class="<? echo $cssSw->getClass() ?>"  colspan=2 align="left">
 				<font size=-1><b>&nbsp;<?= _("Allgemeine Zeiten:") ?></b><br /></font>
 				<font size=-1>&nbsp;<?= _("Sie k&ouml;nnen hier angeben, ob die Veranstaltung regelm&auml;&szlig;ig stattfindet oder die Termine unregelm&auml;&szlig;ig sind (etwa bei einer Blockveranstaltung).") ?><br /></font>
-				<br />&nbsp;<input type="IMAGE" name="open_ureg" <? if (!$term_metadata["art"]) print makeButton ("regelmaessig2", "src");  else print makeButton ("regelmaessig", "src") ?>border=0 value="regelmaessig">&nbsp; 
+				<br />&nbsp;<input type="IMAGE" name="open_ureg" <? if (!$term_metadata["art"]) print makeButton ("regelmaessig2", "src");  else print makeButton ("regelmaessig", "src") ?> border=0 value="regelmaessig">&nbsp; 
 				<input type="IMAGE" name="open_reg"  <? if (!$term_metadata["art"]) print makeButton ("unregelmaessig", "src");  else print makeButton ("unregelmaessig2", "src") ?> border=0 value="unregelmaessig">
 			</td>
 		</tr>
