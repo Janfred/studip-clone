@@ -158,6 +158,11 @@ $anonymous         = $_POST['anonymous'];
 $namesVisibility   = $_POST['namesVisibility'];
 $changeable        = $_POST['changeable'];
 
+if( !isset($_POST["changeable"]) && isset($_POST["title"]) )
+     $changeable = NO;
+if( !isset($_POST["namesVisibility"]) && isset($_POST["title"]) )
+     $namesVisibility = NO;
+
 if( !isset( $answers ) ) {
     $answers = $vote->getAnswers();
     if( $makeACopy ) {

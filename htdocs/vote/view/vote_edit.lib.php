@@ -781,7 +781,7 @@ function printProperties ( $multipleChoice,
     // anonymity
     $html .= "<tr><td align=right class=blank style=\"border-bottom:1px dotted black;\">";
     $html .= "<img src=\"".VOTE_PATH_PICTURES."info.gif\" align=middle "
-	. tooltip(_("'Anonym' bedeutet, dass niemandem angezeigt und nirgends gespeichert wird, welche Antwort ein Teilnehmer wählt. \n\n'Personalisiert' bedeutet, dass Sie sehen k&ouml;nnen, wer wof&uuml;r stimmt."), FALSE, TRUE)
+	. tooltip(_("'Anonym' bedeutet, dass niemandem angezeigt und nirgends gespeichert wird, welche Antwort ein Teilnehmer wählt. \n\n'Personalisiert' bedeutet, dass Sie sehen können, wer wofür stimmt."), FALSE, TRUE)
 	. " border=0>&nbsp;";
 
     $html .= "<font size=-1>";
