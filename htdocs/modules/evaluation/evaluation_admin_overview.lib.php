@@ -17,6 +17,8 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +--------------------------------------------------------------------------+
 
+// $Id$
+
 # Include all required files ================================================ #
 require_once($ABSOLUTE_PATH_STUDIP."modules/evaluation/evaluation.config.php");
 require_once (HTML);
@@ -810,7 +812,7 @@ class EvalOverview {
       $option->addAttr ("value", $rangeID);
       if (empty ($object["name"]))
          $object["name"] = " ";
-      $option->addHTMLContent ($object["name"]);
+      $option->addHTMLContent (htmlReady($object["name"]));
       $select->addContent ($option);
     }
     /* --------------------------------------------------------------------- */
