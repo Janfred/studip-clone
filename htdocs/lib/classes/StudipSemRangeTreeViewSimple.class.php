@@ -22,6 +22,7 @@
 // +---------------------------------------------------------------------------+
 require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/StudipRangeTree.class.php");
 require_once ($ABSOLUTE_PATH_STUDIP . "/lib/classes/RangeTreeObject.class.php");
+require_once($ABSOLUTE_PATH_STUDIP . "config.inc.php");
 
 /**
 * class to print out the range tree
@@ -46,7 +47,7 @@ class StudipSemRangeTreeViewSimple {
 	*/
 	function StudipSemRangeTreeViewSimple($start_item_id = "root", $sem_number = false, $sem_status = false){
 		$this->start_item_id = ($start_item_id) ? $start_item_id : "root";
-		$this->root_content = "Eine gaaaaaanz tolle Uni.";
+		$this->root_content = $GLOBALS['UNI_INFO'];
 		$args = null;
 		if ($sem_number !== false){
 			$args['sem_number'] = $sem_number;

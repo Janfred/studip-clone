@@ -22,6 +22,8 @@
 // +---------------------------------------------------------------------------+
 require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/StudipSemTree.class.php");
 require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/TreeView.class.php");
+require_once($ABSOLUTE_PATH_STUDIP . "config.inc.php");
+
 
 /**
 * class to print out the seminar tree
@@ -42,7 +44,7 @@ class StudipSemTreeView extends TreeView {
 	*/
 	function StudipSemTreeView($start_item_id = "root", $sem_number = null){
 		$this->start_item_id = ($start_item_id) ? $start_item_id : "root";
-		$this->root_content = "Eine gaaaaaanz tolle Uni.";
+		$this->root_content = $GLOBALS['UNI_INFO'];
 		$args = null;
 		if ($sem_number){
 			$args = array('sem_number' => $sem_number);

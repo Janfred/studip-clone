@@ -23,6 +23,8 @@
 require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/StudipSemTree.class.php");
 require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/TreeView.class.php");
 require_once($ABSOLUTE_PATH_STUDIP . "functions.php");
+require_once($ABSOLUTE_PATH_STUDIP . "config.inc.php");
+
 
 /**
 * class to print out the seminar tree (admin mode)
@@ -46,7 +48,7 @@ class StudipSemTreeViewAdmin extends TreeView {
 	function StudipSemTreeViewAdmin($start_item_id = "root"){
 		global $sess,$_marked_item,$_marked_sem;
 		$this->start_item_id = ($start_item_id) ? $start_item_id : "root";
-		$this->root_content = "Eine gaaaaaanz tolle Uni.";
+		$this->root_content = $GLOBALS['UNI_INFO'];
 		parent::TreeView("StudipSemTree"); //calling the baseclass constructor 
 		if (is_object($sess)){
 			if (!$sess->is_registered("_marked_item"))

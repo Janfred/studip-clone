@@ -23,6 +23,8 @@
 require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/StudipRangeTree.class.php");
 require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/TreeView.class.php");
 require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/RangeTreeObject.class.php");
+require_once($ABSOLUTE_PATH_STUDIP . "config.inc.php");
+
 /**
 * class to print out the admin view of the "range tree"
 *
@@ -63,7 +65,7 @@ class StudipRangeTreeViewAdmin extends TreeView{
 	*/
 	function StudipRangeTreeViewAdmin(){
 		global $sess,$_marked_item;
-		$this->root_content = "Eine gaaaaaanz tolle Uni.";
+		$this->root_content = $GLOBALS['UNI_INFO'];
 		parent::TreeView("StudipRangeTree"); //calling the baseclass constructor 
 		if (is_object($sess)){
 			$sess->register("_marked_item");

@@ -23,7 +23,7 @@
 require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/StudipRangeTree.class.php");
 require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/TreeView.class.php");
 require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/RangeTreeObject.class.php");
-
+require_once($ABSOLUTE_PATH_STUDIP . "config.inc.php");
 /**
 * class to print out the "range tree"
 *
@@ -42,7 +42,7 @@ class StudipRangeTreeView extends TreeView{
 	* @access public
 	*/
 	function StudipRangeTreeView(){
-		$this->root_content = "Eine gaaaaaanz tolle Uni.";
+		$this->root_content = $GLOBALS['UNI_INFO'];
 		parent::TreeView("StudipRangeTree"); //calling the baseclass constructor 
 	}
 	
