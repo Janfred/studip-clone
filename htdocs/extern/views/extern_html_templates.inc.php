@@ -115,9 +115,11 @@ function tablefooter () {
 *
 */
 function html_header ($title = "", $css_file = "", $attr_body = "") {
-	$out = "<html>\n<head>\n<title>";
-	$out .= $title;
-	$out .= "</title>\n";
+	$out = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n";
+	$out .= "<html>\n<head>\n";
+	$out .= "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=ISO-8859-1\">\n";
+	$out .= "<meta name=\"copyright\" content=\"Stud.IP-Crew (crew@studip.de)\">\n";
+	$out .= "<title>$title</title>\n";
 	if ($css_file)
 		$out .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"$css_file\">\n";
 	$out .= "</head>\n<body$attr_body>\n";
