@@ -524,18 +524,18 @@ if (($sem_browse_data["level"]=="s") || ($sem_browse_data["level"]=="sbb"))
 			
 		?> 
 			<tr align="center">
-					<td class="steel" align="left"><font size=-1>
-						<img src=\"pictures/blank.gif\" width=1 height=20 valign="top">
+					<td class="steel" align="left"><font size="-1">
+						<img src="pictures/blank.gif" width="1" height="20" valign="top">
 						<b><a href="<? echo $PHP_SELF;?>?sortby=Name">Name</a></b></font>
 					</td>
-					<td class="steel">
-						<font size=-1><b>Zeit</b></font>
+					<td class="steel" valign="bottom">
+						<font size="-1"><b>Zeit</b></font>
 					</td>
-					<td class="steel">
-						<font size=-1><b><a href="<? echo $PHP_SELF;?>?sortby=Institut">Einrichtungen</a></b></font>
+					<td class="steel" valign="bottom">
+						<font size="-1"><b><a href="<? echo $PHP_SELF;?>?sortby=Institut">Einrichtungen</a></b></font>
 					</td>
-					<td class="steel">
-						<font size=-1><b><a href="<? echo $PHP_SELF;?>?sortby=Nachname">DozentIn</a></b></font>
+					<td class="steel" valign="bottom">
+						<font size="-1"><b><a href="<? echo $PHP_SELF;?>?sortby=Nachname">DozentIn</a></b></font>
 					</td>
 		<?
 		if ($sem_browse_data["extend"]=="yes") {
