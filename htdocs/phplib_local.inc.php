@@ -56,6 +56,12 @@ reset($HTTP_GET_VARS);
 if (strstr( PHP_OS,"WIN") && $CHAT_ENABLE == true) 						//Attention: file based chat for windows installations (slow)
 	$CHAT_SERVER_NAME = "ChatFileServer";
 
+//Besser hier globale Variablen definieren...
+$_fullname_sql['full'] = "TRIM(CONCAT(title_front,' ',Vorname,' ',Nachname,IF(title_rear!='',CONCAT(', ',title_rear),'')))";
+$_fullname_sql['full_rev'] = "TRIM(CONCAT(Nachname,', ',Vorname,IF(title_front!='',CONCAT(', ',title_front),''),IF(title_rear!='',CONCAT(', ',title_rear),'')))";
+$_fullname_sql['no_title'] = "CONCAT(Vorname ,' ', Nachname)";
+$_fullname_sql['no_title_rev'] = "CONCAT(Nachname ,' ', Vorname)";
+
 	
 /*classes for database access
 ----------------------------------------------------------------
