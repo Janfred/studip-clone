@@ -78,7 +78,7 @@ class ExternElementMainPersons extends ExternElementMain {
 			"nameformat" => "no_title",
 			"repeatheadrow" => "",
 			"urlcss" => "",
-			"title" => _("Mitarbeiter"),
+			"title" => _("MitarbeiterInnen"),
 			"nodatatext" => "",
 			"config" => "",
 			"srilink" => ""
@@ -144,10 +144,10 @@ class ExternElementMainPersons extends ExternElementMain {
 				_("Dr. Peter Meyer"), _("Meyer, Peter, Dr."));
 		$table = $edit_form->editOptionGeneric("nameformat", $title, $info, $values, $names);
 		
-		$title = _("Spalten&uuml;berschriften<br>Wiederholen:");
+		$title = _("Spalten&uuml;berschriften<br>wiederholen:");
 		$info = _("Wiederholung der Spaltenüberschriften über oder unter der Gruppierungszeile.");
 		$values = array("above", "beneath", "");
-		$names = array(_("&uuml;ber"), _("unter Gruppierungszeile"), _("keine"));
+		$names = array(_("&uuml;ber"), _("unter Gruppenname"), _("keine"));
 		$table .= $edit_form->editRadioGeneric("repeatheadrow", $title, $info, $values, $names);
 		
 		$title = _("HTML-Header/Footer:");

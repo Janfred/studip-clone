@@ -83,7 +83,7 @@ $first_loop = TRUE;
 foreach ($group_data as $groups) {
 	$statusgruppe = $groups["group_name"];
 	
-	if ($grouping && $repeat_headrow == "above") {
+	if ($grouping && $repeat_headrow == "beneath") {
   	echo "<tr" . $this->config->getAttributes("TableGroup", "tr") . ">";
 		echo "<td colspan=\"{$group_colspan['1']}\"" . $this->config->getAttributes("TableGroup", "td") . ">\n";
   	echo "<font" . $this->config->getAttributes("TableGroup", "font") . ">";
@@ -120,7 +120,7 @@ foreach ($group_data as $groups) {
 		echo "</tr>\n";
 	}
 	
-	if ($grouping && $repeat_headrow != "above") {
+	if ($grouping && $repeat_headrow != "beneath") {
   	echo "<tr" . $this->config->getAttributes("TableGroup", "tr") . ">";
 		echo "<td colspan=\"{$group_colspan['1']}\"" . $this->config->getAttributes("TableGroup", "td") . ">\n";
   	echo "<font" . $this->config->getAttributes("TableGroup", "font") . ">";
@@ -151,8 +151,8 @@ foreach ($group_data as $groups) {
 			
 			"Email"       => sprintf("<a href=\"mailto:%s\"%s><font%s>%s</font></a>",
 												$data["email"],
-												$this->config->getAttributes("LinkIntern", "a"),
-												$this->config->getAttributes("LinkIntern", "font"),
+												$this->config->getAttributes("Link", "a"),
+												$this->config->getAttributes("Link", "font"),
 												$data["email"])
 		);
 		

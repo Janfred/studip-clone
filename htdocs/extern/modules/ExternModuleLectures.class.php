@@ -65,7 +65,7 @@ class ExternModuleLectures extends ExternModule {
 		$this->elements["SemLink"]->link_module_type = 4;
 		$this->elements["SemLink"]->real_name = _("Link zum Modul Veranstaltungsdetails");
 		$this->elements["LecturerLink"]->link_module_type = 2;
-		$this->elements["LecturerLink"]->real_name = _("Link zum Modul Mitarbeiterdetails");
+		$this->elements["LecturerLink"]->real_name = _("Link zum Modul MitarbeiterInnendetails");
 	}
 	
 	function checkRangeId ($range_id) {

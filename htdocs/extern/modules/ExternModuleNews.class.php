@@ -59,7 +59,7 @@ class ExternModuleNews extends ExternModule {
 	
 	function setup () {
 		$this->elements["LinkInternSimple"]->link_module_type = 2;
-		$this->elements["LinkInternSimple"]->real_name = _("Link zum Modul Mitarbeiterdetails");
+		$this->elements["LinkInternSimple"]->real_name = _("Link zum Modul MitarbeiterInnendetails");
 		$this->elements["TableRow"]->real_name = _("Datenzeilen, Schrift von Name und Datum");
 	}
 	

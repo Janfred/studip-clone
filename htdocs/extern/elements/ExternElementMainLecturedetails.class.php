@@ -39,7 +39,8 @@ require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."
 
 class ExternElementMainLecturedetails extends ExternElementMain {
 
-	var $attributes = array("name", "order", "visible", "aliases", "rangepathlevel", "studipinfo",
+	var $attributes = array("name", "order", "visible", "aliases", "aliaspredisc", 
+			"aliasfirstmeeting", "rangepathlevel", "studipinfo",
 			"studiplink", "wholesite", "nameformat", "urlcss", "title", "language");
 	var $edit_function = "editMainSettings";
 	
@@ -62,15 +63,17 @@ class ExternElementMainLecturedetails extends ExternElementMain {
 			"visible" => "|1|1|1|1|1|1|1|1|1|1|1|1|1",
 			"aliases" => "|"._("Untertitel:")."|"._("DozentIn:")."|"._("Veranstaltungsart:")
 				."|"._("Veranstaltungstyp:")."|"._("Beschreibung:")."|"._("Ort:")."|"._("Zeiten:")
-				."|"._("Teilnehmer:")."|"._("Voraussetzungen:")."|"._("Lernorganisation:")
+				."|"._("TeilnehmerInnen:")."|"._("Voraussetzungen:")."|"._("Lernorganisation:")
 				."|"._("Leistungsnachweis:")."|"._("Bereichseinordnung:")."|"._("Sonstiges:"),
+			"aliaspredisc" => _("Vorbesprechung:") . " ",
+			"aliasfirstmeeting" => _("Erster Termin:") . " ",
 			"rangepathlevel" => "1",
 			"studipinfo" => "1",
 			"studiplink" => "top",
 			"wholesite" => "",
 			"nameformat" => "no_title",
 			"urlcss" => "",
-			"title" => "",
+			"title" => _("Veranstaltungsdaten"),
 			"language" => "de_DE"
 		);
 		
@@ -104,6 +107,19 @@ class ExternElementMainLecturedetails extends ExternElementMain {
 		
 		$edit_function = $this->edit_function;
 		$table = $edit_form->$edit_function($this->field_names, "", array("sort", "width", "widthpp"));
+		
+		$content_table .= $edit_form->editContentTable($headline, $table);
+		$content_table .= $edit_form->editBlankContent();
+		
+		$headline = $edit_form->editHeadline(_("Textersetzungen"));
+		
+		$titles = _("Vorbesprechung:");
+		$info = _("Geben Sie eine alternative Bezeichnung ein.");
+		$table = $edit_form->editTextfieldGeneric("aliaspredisc", $titles, $info, 40, 150);
+		
+		$titles = _("Erster Termin:");
+		$info = _("Geben Sie eine alternative Bezeichnung ein.");
+		$table .= $edit_form->editTextfieldGeneric("aliasfirstmeeting", $titles, $info, 40, 150);
 		
 		$content_table .= $edit_form->editContentTable($headline, $table);
 		$content_table .= $edit_form->editBlankContent();

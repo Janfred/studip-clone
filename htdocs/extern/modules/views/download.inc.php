@@ -108,7 +108,7 @@ foreach($rf_download as $spalte){
 		echo "<th$set width=\"" . $breite_download[$spalte] . "$percent\">";
 		
 		if($alias_download[$spalte] == "")
-			echo "<b>&nbsp;</b>\n";
+			echo "&nbsp;\n";
 		else 
 			echo "<font" . $this->config->getAttributes("TableHeadrow", "font") . ">" . $alias_download[$spalte] . "</font>\n";
 	
@@ -175,7 +175,7 @@ else {
 		}
 		
 		if ($icon)
-			$picture_file = $GLOBALS["EXTERN_SERVER_NAME"] ."pictures/$icon";
+			$picture_file = "http://{$GLOBALS['EXTERN_SERVER_NAME']}pictures/$icon";
 	
 		$download_link = $CANONICAL_RELATIV_PATH_STUDIP;
 		$download_link .= sprintf("sendfile.php?type=0&file_id=%s&file_name=%s\"",
@@ -201,7 +201,7 @@ else {
 												, $this->config->getAttributes("TableRow", "font")
 												, strftime($this->config->getValue("Main", "dateformat"), $db->f("mkdate"))),
 			
-			"size"        => sprintf("<font%s>%s</font>"
+			"filesize"    => sprintf("<font%s>%s</font>"
 												, $this->config->getAttributes("TableRow", "font"),
 												$db->f("filesize") > 1048576 ? round($db->f("filesize") / 1048576, 1) . " MB"
 												: round($db->f("filesize") / 1024, 1) . " kB"),
@@ -238,7 +238,7 @@ else {
 			}
 		
 			if ($visible[$spalte]) {
-				if($db->f($this->data_fields[$spalte]) || $spalte == "icon")
+				if($db->f($this->data_fields[$spalte]) || $this->data_fields[$spalte] == "icon")
 					echo "<td$set>" . $daten[$this->data_fields[$spalte]] . "</td>\n";
 				else
 					echo "<td$set>&nbsp;</td>\n";

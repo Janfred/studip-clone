@@ -78,7 +78,7 @@ if ($this->config->getValue("Main", "addinfo")) {
 	echo "\n<tr" . $this->config->getAttributes("InfoCountSem", "tr") . ">";
 	echo "<td" . $this->config->getAttributes("InfoCountSem", "td") . ">";
 	echo "<font" . $this->config->getAttributes("InfoCountSem", "font") . ">&nbsp;";
-	echo "2 ";
+	echo "2";
 	echo $this->config->getValue("Main", "textlectures");
 	echo ", " . $this->config->getValue("Main", "textgrouping");
 	$group_by_name = $this->config->getValue("Main", "aliasesgrouping");

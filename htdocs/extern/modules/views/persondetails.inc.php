@@ -74,6 +74,41 @@ else {
 	$text_div_end = "";
 }
 
+$pic_max_width = $this->config->getValue("PersondetailsHeader", "img_width");
+$pic_max_height = $this->config->getValue("PersondetailsHeader", "img_height");
+
+// fit size of image
+if ($pic_max_width && $pic_max_height) {
+	$pic_size = @getimagesize($GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'] . "user/"
+			. $db->f("user_id") . ".jpg");
+	
+	if ($pic_size[0] > $pic_max_width || $pic_size[1] > $pic_max_height) {
+		$fak_width = $pic_size[0] / $pic_max_width;
+		$fak_height = $pic_size[1] / $pic_max_height;
+		if ($fak_width > $fak_height) {
+			$pic_width = (int) ($pic_size[0] / $fak_width);
+			$pic_height = (int) ($pic_size[1] / $fak_width);
+		}
+		else {
+			$pic_height = (int) ($pic_size[1] / $fak_height);
+			$pic_width = (int) ($pic_size[0] / $fak_height);
+		}
+	}
+	else {
+		$pic_width = $pic_size[0];
+		$pic_height = $pic_size[1];
+	}
+	$pic_max_width = $pic_width;
+	$pic_max_height = $pic_height;
+}
+else {
+	$pic_max_width = "";
+	$pic_max_height = "";
+}
+
+$this->config->config["PersondetailsHeader"]["img_width"] = $pic_max_width;
+$this->config->config["PersondetailsHeader"]["img_height"] = $pic_max_height;
+
 echo "<table" . $this->config->getAttributes("TableHeader", "table") . ">\n";
 
 $studip_link = "http://{$GLOBALS['EXTERN_SERVER_NAME']}edit_about.php";

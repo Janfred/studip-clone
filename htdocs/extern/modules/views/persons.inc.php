@@ -117,7 +117,7 @@ foreach ($visible_groups as $group_id => $group) {
 
 	if ($db->num_rows()) {
 	
-		if ($grouping && $repeat_headrow == "above") {
+		if ($grouping && $repeat_headrow == "beneath") {
   		echo "<tr" . $this->config->getAttributes("TableGroup", "tr") . ">";
 			echo "<td colspan=\"{$group_colspan['1']}\"" . $this->config->getAttributes("TableGroup", "td") . ">\n";
   		echo "<font" . $this->config->getAttributes("TableGroup", "font") . ">";
@@ -155,7 +155,7 @@ foreach ($visible_groups as $group_id => $group) {
 		}
 		
 		
-		if ($grouping && $repeat_headrow != "above") {
+		if ($grouping && $repeat_headrow != "beneath") {
   		echo "<tr" . $this->config->getAttributes("TableGroup", "tr") . ">";
 			echo "<td colspan=\"{$group_colspan['1']}\"" . $this->config->getAttributes("TableGroup", "td") . ">\n";
   		echo "<font" . $this->config->getAttributes("TableGroup", "font") . ">";
@@ -186,8 +186,8 @@ foreach ($visible_groups as $group_id => $group) {
 			
 			"Email"       => sprintf("<a href=\"mailto:%s\"%s><font%s>%s</font></a>",
 												$db->f("Email"),
-												$this->config->getAttributes("LinkIntern", "a"),
-												$this->config->getAttributes("LinkIntern", "font"),
+												$this->config->getAttributes("Link", "a"),
+												$this->config->getAttributes("Link", "font"),
 												$db->f("Email"))
 			);
 

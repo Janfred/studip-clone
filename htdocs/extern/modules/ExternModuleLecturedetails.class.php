@@ -69,7 +69,7 @@ class ExternModuleLecturedetails extends ExternModule {
 				_("Beschreibung"),
 				_("Ort"),
 				_("Zeiten"),
-				_("Teilnehmer"),
+				_("TeilnehmerInnen"),
 				_("Voraussetzungen"),
 				_("Lernorganisation"),
 				_("Leistungsnachweis"),

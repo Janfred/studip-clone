@@ -233,7 +233,7 @@ else {
 					echo $configuration["id"] . "#anker\">";
 					$tooltip = _("Standard zuweisen");
 					echo "<img src=\"" . $CANONICAL_RELATIVE_PATH_STUDIP;
-					echo "pictures/off_small.gif\" border=\"0\"" . tooltip($tooltip) . ">";
+					echo "pictures/off_small_blank.gif\" border=\"0\"" . tooltip($tooltip) . ">";
 				}
 				
 				echo "</a>\n</td>\n";
@@ -295,7 +295,7 @@ if ($configurations) {
 													array("icon" => "pictures/i.gif",
 																"text" => $info_further_info,
 													),
-													array("icon" => "pictures/off_small.gif",
+													array("icon" => "pictures/off_small_blank.gif",
 																"text" => $info_set_default
 													))
 									));

@@ -72,7 +72,7 @@ class ExternElementMainPersonDetails extends ExternElementMain {
 			"language" => "de_DE",
 			"studiplink" => "top",
 			"urlcss" => "",
-			"title" => _("Mitarbeiter"),
+			"title" => _("MitarbeiterInnen"),
 		);
 		
 		return $config;

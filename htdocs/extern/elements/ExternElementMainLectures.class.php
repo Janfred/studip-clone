@@ -69,8 +69,8 @@ class ExternElementMainLectures extends ExternElementMain {
 			"time" => "1",
 			"lecturer" => "1",
 			"semclasses" => "|1",
-			"textlectures" => _("Veranstaltungen"),
-			"textgrouping" => _("Gruppierung:"),
+			"textlectures" => " " . _("Veranstaltungen"),
+			"textgrouping" => _("Gruppierung:") . " ",
 			"textnogroups" => _("keine Studienbereiche eingetragen"),
 			"aliasesgrouping" => "|"._("Semester")."|"._("Bereich")."|"._("DozentIn")."|"
 					._("Typ")."|"._("Einrichtung"),
@@ -144,7 +144,7 @@ class ExternElementMainLectures extends ExternElementMain {
 		$names = "";
 		$table .= $edit_form->editCheckboxGeneric("time", $title, $info, $values, $names);
 		
-		$title = _("Dozenten anzeigen:");
+		$title = _("DozentInnen anzeigen:");
 		$info = _("Wählen Sie diese Option, wenn die Namen der Dozenten der Veranstaltung angezeigt werden sollen.");
 		$values = "1";
 		$names = "";

@@ -69,7 +69,7 @@ class ExternEditModule extends ExternEditHtml {
 		
 		$out = "<tr><td><table width=\"100%\" border=\"0\" cellpadding=\"2\" cellspacing=\"0\">\n";
 		$out .= "<tr" . $this->css->getFullClass() . ">\n";
-		$out .= "<td><font size=\"2\"><b>" . _("Spaltenname") . "</b></font></td>\n";
+		$out .= "<td><font size=\"2\"><b>" . _("Datenfeld") . "</b></font></td>\n";
 		$out .= "<td><font size=\"2\"><b>" . _("&Uuml;berschrift") . "</b></font></td>\n";
 		if (!in_array("width", $hide))
 			$out .= "<td><font size=\"2\"><b>" . _("Breite") . "</b></font></td>\n";
@@ -139,26 +139,26 @@ class ExternEditModule extends ExternEditHtml {
 				$out .= "<td valign=\"top\" nowrap=\"nowrap\">";
 				$out .= "<input type=\"image\" name=\"{$this->element_name}_move_left[$i]\" ";
 				$out .= "img src=\"" . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . "pictures/move_up.gif\"";
-				$out .= tooltip(_("nach links verschieben"));
+				$out .= tooltip(_("Datenfeld verschieben"));
 				$out .= "border=\"0\" align=\"bottom\">\n";
 				
 				// move right
 				$out .= "<input type=\"image\" name=\"{$this->element_name}_move_right[$i]\" ";
 				$out .= "img src=\"" . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . "pictures/move_down.gif\"";
-				$out .= tooltip(_("nach rechts verschieben"));
+				$out .= tooltip(_("Datenfeld verschieben"));
 				$out .= "border=\"0\" align=\"bottom\">\n&nbsp;";
 				
 				// visible
 				if ($visible[$order[$i]]) {
 					$out .= "<input type=\"image\" name=\"{$this->element_name}_hide[{$order[$i]}]\" ";
 					$out .= "img src=\"" . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . "pictures/on_small.gif\"";
-					$out .= tooltip(_("Spalte ausblenden"));
+					$out .= tooltip(_("Datenfeld ausblenden"));
 					$out .= "border=\"0\" align=\"middle\">\n";
 				}
 				else {
 					$out .= "<input type=\"image\" name=\"{$this->element_name}_show[{$order[$i]}]\" ";
-					$out .= "img src=\"" . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . "pictures/off_small.gif\"";
-					$out .= tooltip(_("Spalte einblenden"));
+					$out .= "img src=\"" . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . "pictures/off_small_blank.gif\"";
+					$out .= tooltip(_("Datenfeld anzeigen"));
 					$out .= "border=\"0\" align=\"middle\">\n</td>\n";
 				}
 			}
@@ -262,7 +262,7 @@ class ExternEditModule extends ExternEditHtml {
 			}
 			else {
 				$out .= "<td align=\"center\"><input type=\"image\" name=\"{$this->element_name}_show_group[$id]\" ";
-				$out .= "img src=\"" . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . "pictures/off_small.gif\"";
+				$out .= "img src=\"" . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . "pictures/off_small_blank.gif\"";
 				$out .= tooltip(_("Spalte einblenden"));
 				$out .= "border=\"0\" align=\"middle\">\n</td>\n";
 			}

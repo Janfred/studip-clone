@@ -141,6 +141,36 @@ foreach ($order as $position) {
 			$data_field($this, $data, $aliases_content[$position], $text_div, $text_div_end);
 	}
 }
+
+// fit size of image
+if ($pic_max_width && $pic_max_height) {
+	$pic_size = @getimagesize($GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'] . "user/"
+			. $db->f("user_id") . ".jpg");
+	
+	if ($pic_size[0] > $pic_max_width || $pic_size[1] > $pic_max_height) {
+		$fak_width = $pic_size[0] / $pic_max_width;
+		$fak_height = $pic_size[1] / $pic_max_height;
+		if ($fak_width > $fak_height) {
+			$pic_width = (int) ($pic_size[0] / $fak_width);
+			$pic_height = (int) ($pic_size[1] / $fak_width);
+		}
+		else {
+			$pic_height = (int) ($pic_size[1] / $fak_height);
+			$pic_width = (int) ($pic_size[0] / $fak_height);
+		}
+	}
+	else {
+		$pic_width = $pic_size[0];
+		$pic_height = $pic_size[1];
+	}
+	$pic_max_width = $pic_width;
+	$pic_max_height = $pic_height;
+}
+else {
+	$pic_max_width = "";
+	$pic_max_height = "";
+}
+
 if ($this->config->getValue("Main", "studiplink") == "bottom") {
 	$args = array("width" => "100%", "height" => "40", "link" => "");
 	echo "<tr><td width=\"100%\">\n";

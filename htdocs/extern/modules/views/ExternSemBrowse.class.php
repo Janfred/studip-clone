@@ -215,7 +215,7 @@ class ExternSemBrowse extends SemBrowse {
 				echo "\n<tr" . $this->config->getAttributes("InfoCountSem", "tr") . ">";
 				echo "<td" . $this->config->getAttributes("InfoCountSem", "td") . ">";
 				echo "<font" . $this->config->getAttributes("InfoCountSem", "font") . ">&nbsp;";
-				echo count($sem_data) ." ";
+				echo count($sem_data);
 				echo $this->config->getValue("Main", "textlectures");
 				echo ", " . $this->config->getValue("Main", "textgrouping");
 				$group_by_name = $this->config->getValue("Main", "aliasesgrouping");

@@ -111,8 +111,8 @@ class ExternElementContact extends ExternElement {
 		$attributes = array("fonttitle_face", "fonttitle_size", "fonttitle_color", "fonttitle_class",
 				"fonttitle_style", "fontcontent_face", "fontcontent_size", "fontcontent_color",
 				"fontcontent_class", "fontcontent_style");
-		$headlines = array("fonttitle" => _("Schriftformatierung Spaltentitel"),
-				"fontcontent" => _("Schriftformatierung Spalteninhalt"));
+		$headlines = array("fonttitle" => _("Schriftformatierung der &Uuml;berschrift"),
+				"fontcontent" => _("Schriftformatierung des Inhalts"));
 		$content_table .= $edit_form->getEditFormContent($attributes, $headlines);
 		$content_table .= $edit_form->editBlankContent();
 				

@@ -70,7 +70,7 @@ class ExternElementMainDownload extends ExternElementMain {
 			"lengthdesc" => "",
 			"nameformat" => "no_title",
 			"urlcss" => "",
-			"title" => "",
+			"title" => _("Download"),
 			"nodatatext" => _("Keine Dateien vorhanden"),
 			"dateformat" => "%d. %b. %Y",
 			"language" => "de_DE",
