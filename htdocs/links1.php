@@ -30,6 +30,7 @@ if (!$entry_level) {
 if ($entry_level=="inst") {
 	$structure["institut_main"]=array (topKat=>"", name=>"&Uuml;bersicht", link=>"institut_main.php", active=>FALSE);
 	$structure["forum"]=array (topKat=>"", name=>"Forum", link=>"forum.php", active=>FALSE);
+	$structure["personal"]=array (topKat=>"", name=>"Personal", link=>"institut_members.php", active=>FALSE);
 	$structure["folder"]=array (topKat=>"", name=>"Dateien", link=>"folder.php?cmd=tree", active=>FALSE);
 	$structure["literatur"]=array (topKat=>"", name=>"Literatur zur Einrichtung", link=>"literatur.php", active=>FALSE);
 } else {
@@ -44,7 +45,7 @@ if ($entry_level=="inst") {
 //Bottomkats
 if ($entry_level=="inst") {
 	$structure["_institut_main"]=array (topKat=>"institut_main", name=>"Info", link=>"institut_main.php", active=>FALSE);
-	$structure["institut_members"]=array (topKat=>"institut_main", name=>"MitarbeiterInnen", link=>"institut_members.php", active=>FALSE);
+	$structure["institut_members"]=array (topKat=>"personal", name=>"MitarbeiterInnen", link=>"institut_members.php", active=>FALSE);
 	$structure["institut_veranstaltungen"]=array (topKat=>"institut_main", name=>"Veranstaltungen", link=>"show_bereich.php?level=s&id=$SessSemName[1]", active=>FALSE);
 	$structure["timetable"]=array (topKat=>"institut_main", name=>"Veranstaltungs-Timetable", link=>"mein_stundenplan.php?inst_id=$SessSemName[1]", active=>FALSE);
 	// $structure["druckansicht_i"]=array (topKat=>"institut_main", name=>"Druckansicht", link=>"print_institut.php", target=>"_new", active=>FALSE);
@@ -64,10 +65,6 @@ if ($entry_level=="inst") {
 //
 
 $structure["_teilnehmer"]=array (topKat=>"teilnehmer", name=>"TeilnehmerInnen", link=>"teilnehmer.php", active=>FALSE);
-$structure["statusgruppen"]=array (topKat=>"teilnehmer", name=>"Statusgruppen", link=>"statusgruppen.php", active=>FALSE);
-if ($rechte)
-	$structure["Statusgruppen verwalten"]=array (topKat=>"teilnehmer", name=>"Statusgruppen verwalten", link=>"admin_statusgruppe.php?view=sem&new_sem=TRUE&range_id=".$SessSemName[1], active=>FALSE);
-
 $structure["_forum"]=array (topKat=>"forum", name=>"Themen", link=>"forum.php", active=>FALSE);
 $structure["neue"]=array (topKat=>"forum", name=>"neue Beitr&auml;ge", link=>"forum.php?view=neue", active=>FALSE);
 $structure["letzte"]=array (topKat=>"forum", name=>"letzte 5 Beitr&auml;ge", link=>"forum.php?view=letzte&mehr=1", active=>FALSE);
@@ -92,6 +89,21 @@ if ($entry_level=="sem")
 else
 	$structure["_literatur"]=array (topKat=>"literatur", name=>"Literatur und Links", link=>"literatur.php?view=inst", active=>FALSE);
 	
+
+if ($entry_level=="sem")
+	$structure["statusgruppen"]=array (topKat=>"teilnehmer", name=>"Statusgruppen", link=>"statusgruppen.php?view=sem", active=>FALSE);
+else
+	$structure["statusgruppen"]=array (topKat=>"personal", name=>"Statusgruppen", link=>"statusgruppen.php?view=inst", active=>FALSE);
+
+
+if ($rechte)
+	if ($entry_level=="sem")
+		$structure["Statusgruppen verwalten"]=array (topKat=>"teilnehmer", name=>"Statusgruppen verwalten", link=>"admin_statusgruppe.php?view=sem&new_sem=TRUE&range_id=".$SessSemName[1], active=>FALSE);
+	else
+		if ($perm->have_perm("admin"))
+			$structure["Statusgruppen verwalten"]=array (topKat=>"personal", name=>"Statusgruppen verwalten", link=>"admin_statusgruppe.php?view=inst&new_sem=TRUE&range_id=".$SessSemName[1], active=>FALSE);
+
+
 if ($rechte)
 	if ($entry_level=="sem")
 		$structure["admin_literatur"]=array (topKat=>"literatur", name=>"Literatur und Links bearbeiten", link=>"admin_literatur.php?view=sem&new_sem=TRUE&range_id=".$SessSemName[1], active=>FALSE);
