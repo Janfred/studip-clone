@@ -86,10 +86,6 @@ switch($referrer_page) {
 		$help_page = "auswahl_suche.html";
 		break;
 		
-		case "resources.php":
-		$help_page = "xii_suche_res.html";
-		break;
-		
 		case "institut_browse.php":
 		$help_page = "xii_suche_einr.htm";
 		break;
