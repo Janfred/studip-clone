@@ -24,32 +24,19 @@ $auth->login_if($again && ($auth->auth["uid"] == "nobody"));
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
-require_once "dates.inc.php"; //Funktionen zur Anzeige der Terminstruktur
-require_once "datei.inc.php";
-require_once "config.inc.php";
-require_once "visual.inc.php"; 
+require_once "$ABSOLUTE_PATH_STUDIP/dates.inc.php"; //Funktionen zur Anzeige der Terminstruktur
+require_once "$ABSOLUTE_PATH_STUDIP/datei.inc.php";
+require_once "$ABSOLUTE_PATH_STUDIP/config.inc.php";
+require_once "$ABSOLUTE_PATH_STUDIP/visual.inc.php"; 
+require_once "$ABSOLUTE_PATH_STUDIP/functions.php"; 
 
 // hier muessen Seiten-Initialisierungen passieren
-	if (isset($auswahl) && $auswahl!="") {
-		// dieses Ibstitut wurde gerade eben betreten
-		$SessionSeminar="$auswahl";
-		$db=new DB_Seminar;
-		$db->query ("SELECT Name, Institut_id, type FROM Institute WHERE Institut_id='$auswahl'");
-		while ($db->next_record()) {
-			$SessSemName[0] = $db->f("Name");
-			$SessSemName[1] = $db->f("Institut_id");
-			$SessSemName["art_generic"]="Einrichtung";
-			$SessSemName["art"]=$INST_TYPE[$db->f("type")]["name"];
-			if (!$SessSemName["art"])
-				$SessSemName["art"]=$SessSemName["art_generic"];
-			$SessSemName["class"]="inst";
-			$nr = $db->f("Institut_id");
-			$loginfilelast["$nr"] = $loginfilenow["$nr"];
-			$loginfilenow["$nr"] = time();
-		}
-	} else {
-		$auswahl=$SessSemName[1];
-	}
+if (isset($auswahl) && $auswahl!="") {
+	//just opened Einrichtung... here follows the init
+	openInst ($auswahl);
+} else {
+	$auswahl=$SessSemName[1];
+}
 
 	// gibt es eine Anweisung zur Umleitung?
 	if(isset($redirect_to) && $redirect_to != "") {
