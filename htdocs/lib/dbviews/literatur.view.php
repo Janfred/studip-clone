@@ -37,7 +37,9 @@ $GLOBALS['_views']["LIT_GET_CLIP_ELEMENTS"] = array("query" => "SELECT catalog_i
 $GLOBALS['_views']["LIT_GET_LIST_BY_RANGE"] = array("query" => "SELECT a.*," . $_fullname_sql['no_title_short'] . " AS fullname,username FROM lit_list a 
 													LEFT JOIN auth_user_md5  USING(user_id) LEFT JOIN user_info USING(user_id) WHERE range_id=? 
 													ORDER BY priority");
-											
+$GLOBALS['_views']["LIT_GET_LIST_COUNT_BY_RANGE"] = array("query" => "SELECT COUNT(IF(visibility=1,list_id,NULL)) AS visible_list, COUNT(IF(visibility=0,list_id,NULL)) AS invisible_list 
+													FROM lit_list WHERE range_id=? GROUP BY range_id
+													");
 $GLOBALS['_views']["LIT_GET_LIST"] = array("query" => "SELECT * FROM lit_list WHERE list_id=?");
 
 $GLOBALS['_views']["LIT_GET_LIST_CONTENT"] = array("query" => "SELECT a.*," . $GLOBALS['_views']['element_name_short_sql'] . " as short_name ,"
@@ -49,8 +51,8 @@ $GLOBALS['_views']["LIT_UPD_LIST_CONTENT"] = array("query" => "UPDATE lit_list_c
 $GLOBALS['_views']["LIT_INS_LIST_CONTENT"] = array("query" => "INSERT INTO lit_list_content (list_id,catalog_id,user_id,note,priority,chdate,mkdate,list_element_id) VALUES (?,?,?,?,?,UNIX_TIMESTAMP(),UNIX_TIMESTAMP(),?)");
 $GLOBALS['_views']["LIT_UPD_LIST"] = array("query" => "UPDATE lit_list SET range_id=?, name=?, user_id=?,format=?,priority=?,visibility=§, chdate=UNIX_TIMESTAMP() WHERE list_id=?");
 $GLOBALS['_views']["LIT_INS_LIST"] = array("query" => "INSERT INTO lit_list (range_id,name,user_id,format,priority,visibility,chdate,mkdate,list_id) VALUES (?,?,?,?,?,&,UNIX_TIMESTAMP(),UNIX_TIMESTAMP(),?)");
-$GLOBALS['_views']["LIT_DEL_LIST"] = array("query" => "DELETE FROM lit_list WHERE list_id=?");
-$GLOBALS['_views']["LIT_DEL_LIST_CONTENT_ALL"] = array("query" => "DELETE FROM lit_list_content WHERE list_id=?");
+$GLOBALS['_views']["LIT_DEL_LIST"] = array("query" => "DELETE FROM lit_list WHERE list_id IN(&)");
+$GLOBALS['_views']["LIT_DEL_LIST_CONTENT_ALL"] = array("query" => "DELETE FROM lit_list_content WHERE list_id IN(&)");
 $GLOBALS['_views']["LIT_DEL_LIST_CONTENT"] = array("query" => "DELETE FROM lit_list_content WHERE list_element_id=?");
 $GLOBALS['_views']["LIT_INS_HELPER"] = array("pk" => "list_element_id", "query" => "
 														SELECT MD5(CONCAT(list_element_id,?)) AS list_element_id,? AS list_id,catalog_id,
