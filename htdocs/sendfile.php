@@ -213,10 +213,11 @@ if ($disposition)
 //determine the type of the object we want to download a file from (only in type=0 mode!)
 $db->query("SELECT seminar_id AS object_id, filesize FROM dokumente WHERE dokument_id = '".$file_id."' ");
 $db->next_record();
+$object_id = $db->f('object_id');
 
 $skip_check=FALSE;
-if (!$type) {
-	$object_type = get_object_type($db->f("object_id"));
+if ($type == 0 || $type == 6) {
+	$object_type = get_object_type($object_id);
 	if ($object_type == "inst" || $object_type == "fak")
 		$skip_check=TRUE;
 }
@@ -234,7 +235,7 @@ if ($type == 5){
 }
 //permcheck
 if (($type != 2) && ($type != 3) && ($type != 4) && (!$skip_check)) { //if type 2, 3 or 4 we download from some tmp directory and skip permchecks
-	if (!$perm->have_perm ("user")) {
+	if (!$perm->have_perm("user")) {
 		if (!$type) {
 			$db->query("SELECT Lesezugriff FROM seminare LEFT JOIN dokumente USING (seminar_id) WHERE dokument_id = '".$file_id."' ");
 			$db->next_record();
@@ -244,47 +245,19 @@ if (($type != 2) && ($type != 3) && ($type != 4) && (!$skip_check)) { //if type 
 			$no_access=TRUE; //nobody darf nie an das Archiv
 		}
 	} elseif (!$perm->have_perm("root")) {
-		if ($type=="1") {
-			if ($perm->have_perm("admin") && !$perm->have_perm("root"))
-				$db->query ("SELECT archiv.seminar_id FROM archiv LEFT JOIN archiv_user USING (seminar_id) WHERE archiv_file_id = '".$file_id."' ");
-			else
-				$db->query ("SELECT archiv.seminar_id FROM archiv LEFT JOIN archiv_user USING (seminar_id) WHERE user_id = '".$user->id."' AND archiv_file_id = '".$file_id."' ");
-			if (!$db->next_record())
-				$no_access=TRUE;
-			if ($perm->have_perm("admin") && !$perm->have_perm("root")) {
-				$db2->query("SELECT archiv.seminar_id FROM archiv LEFT OUTER JOIN user_inst ON (heimat_inst_id = institut_id) WHERE user_inst.user_id = '".$user->id."' AND user_inst.inst_perms = 'admin'");
-				while ($db2->next_record())  {
-					if($db->f("seminar_id") == $db2->f("seminar_id"))
-						$admin=TRUE;
-					}
-				if ($admin)
-					$no_access=FALSE;
-				else {
-					$no_access=TRUE;
-				}
+		if ($type == 1) {
+			$db->query ("SELECT archiv.seminar_id FROM archiv LEFT JOIN archiv_user USING (seminar_id) WHERE archiv_file_id = '".$file_id."' ");
+			if (!$db->next_record()){
+				$no_access = TRUE;
+			} else {
+				$no_access = (archiv_check_perm($db->f("seminar_id")) ? FALSE : TRUE);
 			}
 		} else {
-			if ($perm->have_perm("admin") && !$perm->have_perm("root"))
-				$db->query ("SELECT Institut_id FROM dokumente LEFT JOIN seminare USING (seminar_id) WHERE dokument_id = '".$file_id."' ");
-			else
-				$db->query ("SELECT seminar_user.user_id, Institut_id FROM dokumente LEFT JOIN seminar_user USING (seminar_id) LEFT JOIN seminare USING (seminar_id) WHERE seminar_user.user_id = '".$user->id."' AND dokument_id = '".$file_id."' ");		
-			if (!$db->next_record()) 
-				$no_access=TRUE;
-			if ($perm->have_perm("admin") && !$perm->have_perm("root")) {
-				$db2->query("SELECT institut_id FROM user_inst  WHERE user_inst.user_id = '".$user->id."' AND user_inst.inst_perms = 'admin'");
-				while ($db2->next_record())  {
-					if($db->f("Institut_id") == $db2->f("institut_id"))
-						$admin=TRUE;
-					}
-				if ($admin)
-					$no_access=FALSE;
-				else
-					$no_accss=TRUE;
-				}
-			}
+			$no_access = ($perm->have_studip_perm('user', $object_id) ? FALSE : TRUE);
 		}
 	}
-	
+}
+
 //Nachricht bei verbotenem Download
 if ($no_access) {
 	if ($type)
@@ -325,7 +298,7 @@ if ($type == 6) {
 	if (!$filesize || $filesize==0)
 		$filesize = FALSE;
 } elseif ($type != 5){
-	$filesize = filesize($path_file);
+	$filesize = @filesize($path_file);
 } else {
 	$filesize = strlen($the_data);
 }
@@ -346,8 +319,8 @@ if ($filesize != FALSE)
 	header("Content-Length: $filesize");
 header("Content-disposition: $content_disposition; filename=\"$file_name\"");
 if ($type != 5){
-	readfile($path_file);
-	TrackAccess ($file_id);
+	@readfile($path_file);
+	TrackAccess($file_id);
 } else {
 	echo $the_data;
 }
