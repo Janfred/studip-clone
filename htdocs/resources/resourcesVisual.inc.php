@@ -137,7 +137,7 @@ class ShowList extends ShowTreeRow{
 				$edit.= "&nbsp;<a href=\"$PHP_SELF?create_object=$resObject->id\">".makeButton("neuesobjekt")."</a>";
 				$edit.= "&nbsp;&nbsp;&nbsp;&nbsp;";
 			} 
-			if ($SessSemName[1]) {
+			if (($SessSemName[1]) && ($resources_data["view_mode"] != "no_nav")){
 				if (($perms == "autor") || ($perms == "admin")) 
 					if ($resObject->getCategoryId())
 						$edit.= "<a href=\"$PHP_SELF?show_object=$resObject->id&view=openobject_schedule\">".makeButton("belegung")."</a>&nbsp;";
@@ -989,7 +989,8 @@ class EditObject extends cssClasses {
 	}
 
 	function showScheduleForms($assign_id='') {
-		global $PHP_SELF, $resources_data, $new_assign_object, $search_user, $search_string_search_user;
+		global $PHP_SELF, $perm, $resources_data, $new_assign_object, $search_user, $search_string_search_user,
+			$CANONICAl_RELATIVE_PATH_STUDIP, $RELATIVE_PATH_RESOURCES;
 
 		$killButton = TRUE;
 		
@@ -1066,11 +1067,23 @@ class EditObject extends cssClasses {
 						$this->db->next_record();
 					}
 					print "<br /><img src=\"pictures/ausruf_small2.gif\" align=\"absmiddle\" />&nbsp;<font size=-1>";
-					if ($resAssign->getOwnerType() == "sem")
-						printf (_("Diese Belegung ist ein regelm&auml;&szlig;iger Veranstaltungstermin, der in diesem Raum stattfindet.")."<br />"._("Die Zeiten dieser Belegung k&ouml;nnen Sie nur innerhalb der Veranstaltung %s bearbeiten!")."</font>", "<a href=\"seminar_main?auswahl=".$this->db->f("Seminar_id")."\">".htmlReady($this->db->f("Name"))."</a>");
-					elseif ($resAssign->getOwnerType() == "date")
-						printf (_("Diese Belegung ist ein Einzeltermin einer Veranstaltung, der in diesem Raum stattfindet.")."<br />"._(" Die Zeiten dieser Belegung k&ouml;nnen Sie nur innerhalb der Veranstaltung %s bearbeiten!")."</font>", "<a href=\"seminar_main?auswahl=".$this->db->f("Seminar_id")."\">".htmlReady($this->db->f("Name"))."</a>");
-					else
+					if ($resAssign->getOwnerType() == "sem") {
+						printf (_("Diese Belegung ist ein regelm&auml;&szlig;iger Termin der Veranstaltung %s, die in diesem Raum stattfindet."), 
+							($perm->have_studip_perm("user", $this->db->f("Seminar_id"))) ? 
+								"<a href=\"seminar_main.php?auswahl=".$this->db->f("Seminar_id")."\">".htmlReady($this->db->f("Name"))."</a>" : 
+								"<a href=\"details.php?&sem_id=".$this->db->f("Seminar_id")."\">".htmlReady($this->db->f("Name"))."</a>");
+						if ($perm->have_studip_perm("tutor", $this->db->f("Seminar_id")))
+							print "<br />"._("Um die Belegung zu ver&auml;ndern, &auml;ndern Sie bitte die Zeiten der Veranstaltung");
+						print "</font>";
+					} elseif ($resAssign->getOwnerType() == "date") {
+						printf (_("Diese Belegung ist ein Einzeltermin der Veranstaltung %s, die in diesem Raum stattfindet."), 
+							($perm->have_studip_perm("user", $this->db->f("Seminar_id"))) ? 
+								"<a href=\"seminar_main.php?auswahl=".$this->db->f("Seminar_id")."\">".htmlReady($this->db->f("Name"))."</a>" : 
+								"<a href=\"details.php?&sem_id=".$this->db->f("Seminar_id")."\">".htmlReady($this->db->f("Name"))."</a>");
+						if ($perm->have_studip_perm("tutor", $this->db->f("Seminar_id")))
+							print "<br />"._("Um die Belegung zu ver&auml;ndern, &auml;ndern Sie bitte den entsprechenden Termin in der Veranstaltung");
+						print "</font>";
+					} else
 						printf (_("Sie haben nicht die Berechtigung, diese Belegung zu bearbeiten."));
 				}
 				?>
