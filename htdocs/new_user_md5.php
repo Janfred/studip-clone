@@ -102,7 +102,7 @@ while ( is_array($HTTP_POST_VARS)
 		}
 
 		## Does the user already exist?
-		## NOTE: This should be a transaction, but it isn't...
+		## NOTE: This should be a transaction, but it is not...
 		$db->query("select * from auth_user_md5 where username='$username'");
 		if ($db->nf()>0) {
 			$msg .= "error§Benutzer <B>$username</B> ist schon vorhanden!§";
