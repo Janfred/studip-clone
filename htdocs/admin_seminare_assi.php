@@ -34,8 +34,6 @@ require_once "$ABSOLUTE_PATH_STUDIP/forum.inc.php";		//damit wir Themen anlegen 
 require_once "$ABSOLUTE_PATH_STUDIP/visual.inc.php";		//Aufbereitungsfunktionen
 require_once "$ABSOLUTE_PATH_STUDIP/dates.inc.php";		//Terminfunktionen
 
-
-echo $add_tut;
 // Get a database connection and Stuff
 $db = new DB_Seminar;
 $db2 = new DB_Seminar;
@@ -49,8 +47,12 @@ $errormsg='';
 $sess->register("sem_create_data");
 $sess->register("links_admin_data");
 
-//Assi-Modus an (Kopfzeile ignoiert evtl. gesetze Seminare un verwaltet nur angelegtes Seminar (ab erfolgreichem Schritt 5)
-$links_admin_data["assi"]=TRUE;
+//Assi-Modus an und gesetztes Object loeschen solange keine Veranstaltung angelegt
+if (!$sem_create_data["sem_entry"]) {
+	$links_admin_data["assi"]=TRUE;
+	closeObject();
+} else
+	$links_admin_data["assi"]=FALSE;
 
 if (((time() - $sem_create_data["timestamp"]) >$auth->lifetime*60) || ($new_session))
 	{
@@ -891,7 +893,9 @@ if ($cmd_f_x)
     				{
     				$successful_entry=1;
 				$sem_create_data["sem_entry"]=TRUE;
-				$links_admin_data["sem_id"]=$sem_create_data["sem_id"];
+				openSem($sem_create_data["sem_id"]); //open Veranstaltung to administrate in the admin-area
+				$links_admin_data["referred_from"]="assi";
+				$links_admin_data["assi"]=FALSE; //protected Assi-mode off
 				}
 			}
 		else
@@ -904,15 +908,15 @@ if ($cmd_f_x)
 			{
 			$self_included = FALSE;
 			$count_doz=0;
-			foreach ($sem_create_data["sem_doz"] as $tmp_array)
+			foreach ($sem_create_data["sem_doz"] as $key=>$val)
 				{
 				$group=select_group($temp_array, $sem_create_data["sem_start_time"]);
 				
-				if ($tmp_array == $user_id)
+				if ($key == $user_id)
 					$self_included=TRUE;
 				$query = "insert into seminar_user  values('".
 					$sem_create_data["sem_id"]."', '".
-					$tmp_array."', 'dozent', '$group', '', '".time()."')";
+					$key."', 'dozent', '$group', '', '".time()."')";
 				$db3->query($query);// Dozenten eintragen
 				if ($db3->affected_rows() >=1)
 					$count_doz++;
@@ -934,12 +938,12 @@ if ($cmd_f_x)
 		if (is_array($sem_create_data["sem_tut"]))  // alle ausgewählten Tutoren durchlaufen
 			{
 			$count_tut=0;
-			foreach ($sem_create_data["sem_tut"] as $tmp_array)
+			foreach ($sem_create_data["sem_tut"] as $key=>$val)
 				{
 				$group=select_group($temp_array, $sem_create_data["sem_start_time"]);
 				
 				$query = "SELECT user_id FROM seminar_user WHERE Seminar_id = '".
-					$sem_create_data["sem_id"]."' AND user_id ='$tmp_array'";
+					$sem_create_data["sem_id"]."' AND user_id ='$key'";
 				$db4->query($query);
 				if ($db4->next_record())	// User schon da, kann beim Anlegen nur als Dozent sein, also ignorieren
 					;
@@ -947,7 +951,7 @@ if ($cmd_f_x)
 					{
 					$query = "insert into seminar_user  values('".
 						$sem_create_data["sem_id"]."', '".
-						$tmp_array."', 'tutor', '$group', '', '".time()."')";
+						$key."', 'tutor', '$group', '', '".time()."')";
 					$db3->query($query);			     // Tutor eintragen
 						if ($db3->affected_rows() >= 1)
 							$count_tut++;
