@@ -568,7 +568,7 @@ if (($kill) && ($admin_dates_data["range_id"]))
 					}
 				?>
 				<img  src="./pictures/info.gif" 
-					onClick="alert('Der Ablaufplanassistent erstellt automatisch alle Termine des ersten oder aller Semesters, je nach Auswahl. Dabei werden soweit wie möglich Feiertage und Ferienzeiten übersprungen. Anschliessend können Sie jedem Termin einen Titel und eine Beschreibung geben.');" 
+					onClick="alert('Der Ablaufplanassistent erstellt automatisch alle Termine des ersten oder aller Semesters, je nach Auswahl. Dabei werden  - soweit wie möglich  - Feiertage und Ferienzeiten übersprungen. Anschliessend können Sie jedem Termin einen Titel und eine Beschreibung geben.');" 
 					alt="Der Ablaufplanassistent erstellt automatisch alle Termine des ersten oder aller Semesters, je nach Auswahl. Dabei werden soweit wir m&ouml;glich Feiertage und Ferienzeiten &uuml;bersprungen. Anschliessend k&ouml;nnen Sie jedem Termin einen Titel und eine Beschreibung geben.">
 				<hr>
 				<font size=-1>&nbsp; Sie k&ouml;nnen auch direkt zur Verwaltung der Termine springen und Termine manuell anlegen</font><br><br>
