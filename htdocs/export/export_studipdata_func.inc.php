@@ -213,15 +213,19 @@ function export_sem($inst_id, $ex_sem_id = "all")
 		while ( list($key, $val) = each($xml_names_lecture))
 		{
 			if ($val == "") $val = $key;
-			if ($key == "status") 
+			if ($SEM_TYPE[$db->f("status")]["class"] != 1)
+				; // Nur Lehre exportieren
+			elseif ($key == "status") 
 				$data_object .= xml_tag($val, $SEM_TYPE[$db->f($key)]["name"]);
-			elseif (($key == "bereich") AND (($SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["bereiche"])))
-			{
-				foreach (get_sem_tree_path($db->f("Seminar_id")) as $sem_tree_id => $path_name)
-					$data_object .= xml_tag($val, $path_name);
-			}
 			elseif ($key == "ort") 
 				$data_object .= xml_tag($val, getRoom($db->f("Seminar_id")));
+			elseif (($key == "bereich") AND (($SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["bereiche"])))
+			{
+				$group_string .= xml_open_tag($xml_groupnames_lecture["childgroup3"]);
+				foreach (get_sem_tree_path($db->f("Seminar_id")) as $sem_tree_id => $path_name)
+					$data_object .= xml_tag($val, $path_name);
+				$group_string .= xml_close_tag($xml_groupnames_lecture["childgroup3"]);
+			}
 			elseif ($key == "metadata_dates") 
 			{
 				$data_object .= xml_open_tag( $xml_groupnames_lecture["childgroup1"] );
