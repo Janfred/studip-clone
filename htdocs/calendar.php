@@ -23,23 +23,20 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check("user"); //Noch anpassen!!!
 
-include "seminar_open.php";
+include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+
+// -- here you have to put initialisations for the current page
 
 if ($CALENDAR_ENABLE)
 	//Kalenderfrontend einbinden
 	include($RELATIVE_PATH_CALENDAR."/calendar.inc.php");
 else {
-	include ("header.php");
 	require_once ($ABSOLUTE_PATH_STUDIP."msg.inc.php");
-	?>
-	<html>
-		<head>
-			<title>Stud.IP</title>
-			<link rel="stylesheet" href="style.css" type="text/css">
-		</head>
-		<body bgcolor="#FFFFFF">
-	<?
+	// Start of Output
+	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
+	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 	parse_window ("error§Der Terminkalender ist nicht eingebunden. Der Terminkalender wurde in den Systemeinstellungen nicht freigeschaltet. Wenden Sie sich bitte an den Administrator.", "§",
 				"Terminkalender nicht eingebunden");
+	print("</body></html>");
 }
 ?>
