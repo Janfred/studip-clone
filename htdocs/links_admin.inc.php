@@ -393,6 +393,9 @@ switch ($i_page) {
 	case "admin_modules_start.php": 
 		$reiter_view="modules"; 
 	break;
+	case "admin_range_tree.php": 
+		$reiter_view="range_tree"; 
+	break;
 }
 
 $reiter->create($structure, $reiter_view, $tooltip, $addText);

@@ -286,6 +286,11 @@ class AssignObject {
 		$this->user_free_name=$value;
 		$this->chng_flag=TRUE;
 	}
+	
+	function setAssignUserId($value) {
+		$this->assign_user_id=$value;
+		$this->chng_flag=TRUE;
+	}
 
 	function setBegin($value) {
 		$this->begin=$value;
@@ -388,7 +393,6 @@ class AssignObject {
 							 , $this->repeat_week_of_month, $this->repeat_day_of_week, $this->repeat_week
 							 , $this->id);
 			}
-			
 			$this->db->query($query);
 			if ($this->db->affected_rows()) {
 				$query = sprintf("UPDATE resources_assign SET chdate='%s' WHERE assign_id='%s' ", $chdate, $this->id);
