@@ -83,7 +83,11 @@ if (!isset($username) || $username == "")
 //3 zeilen wegen username statt id zum aufruf... in $user_id steht jetzt die user_id (sic)
  $db->query("SELECT * FROM auth_user_md5  WHERE username ='$username'");
  $db->next_record();
- $user_id=$db->f("user_id");
+ if (!$db->nf()) {
+	parse_window ("error§"._("Es wurde kein Nutzer unter dem angegebenen Nutzernamen gefunden!")."<br />"._(" Wenn Sie auf einen Link geklickt haben, kann es sein, dass sich der Username des gesuchten Nutzers ge&auml;ndert hat, oder der Nutzer gel&ouml;scht wurde.")."§", "§", _("Benutzer nicht gefunden"));
+	die;
+ } else
+	 $user_id=$db->f("user_id");
 
 //Wenn er noch nicht in user_info eingetragen ist, kommt er ohne Werte rein
  $db->query("SELECT * FROM user_info WHERE user_id ='$user_id'");
