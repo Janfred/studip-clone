@@ -1,4 +1,4 @@
-<?
+<?php
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // cssClassSwitcher.inc.php
@@ -17,20 +17,28 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
-
+define(PHPDOC_DUMMY,false);
 /**
 * cssClassSwitcher.inc.php
-* 
+*
 * class for handling zebra-tables
 * class for handling zebra-tables
 * class for handling zebra-tables
 *
+<<<<<<< cssClassSwitcher.inc.php
+* @access	public
+* @author	André Noack <noack@data-quest.de>
+* @version	$Id$
+* @package	studip_core
+=======
 * @author		Andre Noack <noack@data-quest.de>
 * @version		$Id$
 * @access		public
 * @package		studip_core
+>>>>>>> 1.5
 */
 class cssClassSwitcher {
+	
 	var $class = array("steelgraulight", "steel1");                 //Klassen
 	var $headerClass = "steel";
 	var $classcnt = 0;                //Counter
@@ -38,7 +46,17 @@ class cssClassSwitcher {
 	var $nohovercolor = array("#E2E2E2","#F2F2F2");
 	var $JSenabled = FALSE;
 	var $hoverenabled = FALSE;
-	
+	/**
+	* cssClassSwitcher constructor
+	* 
+	* class for handling zebra-tables
+	*
+	* @access	public
+	* @param	string
+	* @param	string
+	* @param	string
+	* @param	string
+	*/
 	function cssClassSwitcher($class = "",$headerClass = "",$hovercolor = "",$nohovercolor = ""){
 		if ($GLOBALS["auth"]->auth["jscript"]) $this->JSenabled = TRUE;
 		if (is_array($class)) $this->class = $class;
