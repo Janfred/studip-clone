@@ -104,7 +104,7 @@ function table_group ($element, $group_name) {
 *
 *
 */
-function tablefooter () {
+function table_footer () {
 	$out = "</table>";
 	
 	return $out;
@@ -114,19 +114,18 @@ function tablefooter () {
 *
 *
 */
-function html_header ($title = "", $css_file = "", $attr_body = "",
-		$copyright = "", $author = "") {
+function html_header (&$config) {
 	$out = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n";
 	$out .= "<html>\n<head>\n";
 	$out .= "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=ISO-8859-1\">\n";
-	if ($copyright)
+	if ($copyright = $config->getValue('Main', 'copyright'))
 		$out .= "<meta name=\"copyright\" content=\"$copyright\">\n";
-	if ($author)
+	if ($author = $config->getValue('Main', 'author'))
 		$out .= "<meta name=\"author\" content=\"$author\">\n";
-	$out .= "<title>$title</title>\n";
-	if ($css_file)
-		$out .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"$css_file\">\n";
-	$out .= "</head>\n<body$attr_body>\n";
+	$out .= '<title>' . $config->getValue('Main', 'title') . "</title>\n";
+	if ($urlcss = $config->getValue('Main', 'urlcss'))
+		$out .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"$urlcss\">\n";
+	$out .= "</head>\n" . $config->getTag('Body', 'body') . "\n";
 	
 	return $out;
 }
@@ -139,6 +138,5 @@ function html_footer () {
 
 	return "</body>\n</html>";
 }
-
 
 ?>
