@@ -60,15 +60,19 @@ function get_my_sem_values(&$my_sem) {
 			IF((chdate > b.loginfilenow AND user_id !='".$user->id."' AND (literatur !='' OR links != '')),1,0) AS neue 
 			FROM loginfilenow_".$user->id." b  LEFT JOIN literatur ON (range_id = b.Seminar_id)");
 	while($db2->next_record()) {
-		$my_sem[$db2->f("Seminar_id")]["neueliteratur"]=$db2->f("neue");
-		$my_sem[$db2->f("Seminar_id")]["literatur"]=$db2->f("literatur");
+		if ($my_sem[$db2->f("Seminar_id")]["modules"]["literature"]) {	
+			$my_sem[$db2->f("Seminar_id")]["neueliteratur"]=$db2->f("neue");
+			$my_sem[$db2->f("Seminar_id")]["literatur"]=$db2->f("literatur");
+		}
 	}
 
 	$db2->query("SELECT b.Seminar_id,count(termin_id) as count, count(IF((chdate > b.loginfilenow AND autor_id !='".$user->id."'),a.termin_id,NULL)) AS neue 
 				FROM loginfilenow_".$user->id." b  LEFT JOIN termine a ON (b.Seminar_id=range_id) GROUP BY b.Seminar_id");
 	while($db2->next_record()) {
-		$my_sem[$db2->f("Seminar_id")]["neuetermine"]=$db2->f("neue");
-		$my_sem[$db2->f("Seminar_id")]["termine"]=$db2->f("count");
+		if ($my_sem[$db2->f("Seminar_id")]["modules"]["schedule"]) {	
+			$my_sem[$db2->f("Seminar_id")]["neuetermine"]=$db2->f("neue");
+			$my_sem[$db2->f("Seminar_id")]["termine"]=$db2->f("count");
+		}
 	}
 	
 	return;
