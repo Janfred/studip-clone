@@ -60,19 +60,19 @@ class ExternModuleLecturedetails extends ExternModule {
 	*/
 	function ExternModuleLecturedetails () {
 		$this->field_names = array(
-				_("Untertitel:"),
-				_("DozentIn:"),
-				_("Veranstaltungsart:"),
-				_("Veranstaltungstyp:"),
-				_("Beschreibung:"),
-				_("Ort:"),
-				_("Zeiten:"),
-				_("Teilnehmer:"),
-				_("Voraussetzungen:"),
-				_("Lernorganisation:"),
-				_("Leistungsnachweis:"),
-				_("Bereichseinordnung:"),
-				_("Sonstiges:"));
+				_("Untertitel"),
+				_("DozentIn"),
+				_("Veranstaltungsart"),
+				_("Veranstaltungstyp"),
+				_("Beschreibung"),
+				_("Ort"),
+				_("Zeiten"),
+				_("Teilnehmer"),
+				_("Voraussetzungen"),
+				_("Lernorganisation"),
+				_("Leistungsnachweis"),
+				_("Bereichseinordnung"),
+				_("Sonstiges"));
 	}
 	
 	function setup () {
