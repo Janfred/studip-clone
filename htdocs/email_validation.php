@@ -105,7 +105,7 @@ require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
 		// Auto-Eintrag in Boards
 		if (is_array($AUTO_INSERT_SEM)){
 			foreach ($AUTO_INSERT_SEM as $a) {
-				$db->query("SELECT Name, Schreibzugriff FROM seminare WHERE Seminar_id = '$a'");
+				$db->query("SELECT Name, start_time, Schreibzugriff FROM seminare WHERE Seminar_id = '$a'");
 				if ($db->num_rows()) {
 					$db->next_record();
 					if ($db->f("Schreibzugriff") < 2) { // es gibt das Seminar und es ist kein Passwort gesetzt
@@ -118,9 +118,7 @@ require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
 								my_msg(sprintf(_("Ihnen wurden Schreibrechte in der Veranstaltung <b>%s</b> erteilt."), $db->f("Name")) . "\n");
 							}
 						} else {  // Benutzer ist noch nicht eingetragen
-							$db2->query("SELECT start_time FROM seminare WHERE Seminar_id = '$a'");
-							$db2->next_record();							
-							$group=select_group ($db2->f("start_time"),$user->id);							
+							$group=select_group ($db->f("start_time"),$user->id);							
 							$db2->query("INSERT into seminar_user (Seminar_id, user_id, status, gruppe) values ('$a', '$user->id', 'autor', '$group')");
 							my_msg(sprintf(_("Sie wurden automatisch in die Veranstaltung <b>%s</b> eingetragen."), $db->f("Name")) . "\n");
 						}
