@@ -188,7 +188,7 @@ class VoteDB extends StudipObject {
 		
      $result = array ();
      $query = "SELECT * FROM vote WHERE range_id=\"".$rangeID."\" AND ".
-       "state = \"stopvis\" OR state = \"stopinvis\" ORDER BY chdate DESC";
+       "(state = \"stopvis\" OR state = \"stopinvis\") ORDER BY chdate DESC";
      $this->db->query ($query);
      if ($this->db->nf() == 0) {
        $this->throwError (1, _("Es wurden keine gestoppten Votes in der Datenbank gefunden."),
