@@ -765,6 +765,7 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 
 	//..und alte Bearbeiten
 	$c=0;
+	$resource_id = FALSE;
 	while ($db->next_record()) {
 		//if persistent data exists, we use this...
 		if (is_array ($admin_dates_data["form_data"][$db->f("termin_id")])) {
@@ -781,7 +782,8 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 			$insert_topic = $admin_dates_data["form_data"][$db->f("termin_id")]["insert_topic"];
 			$insert_folder = $admin_dates_data["form_data"][$db->f("termin_id")]["insert_folder"];
 			$art = $admin_dates_data["form_data"][$db->f("termin_id")]["art"];
-			$resource_id = getDateAssigenedRoom($db->f("termin_id"));
+			if ($RESOURCES_ENABLE)
+				$resource_id = getDateAssigenedRoom($db->f("termin_id"));
 			$raum = $admin_dates_data["form_data"][$db->f("termin_id")]["raum"];
 			$kill_selected = $admin_dates_data["form_data"][$db->f("termin_id")]["kill_date"];
 		//otherwise, we use the saved state
@@ -797,7 +799,8 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 			$t_titel = $db->f("content");
 			$description = $db->f("description");
 			$art = $db->f("date_typ");
-			$resource_id = getDateAssigenedRoom($db->f("termin_id"));
+			if ($RESOURCES_ENABLE)
+				$resource_id = getDateAssigenedRoom($db->f("termin_id"));
 			$raum = $db->f("raum");
 			$kill_selected = FALSE;
 		}
