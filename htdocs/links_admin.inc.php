@@ -654,9 +654,9 @@ while ($db->next_record()) {
 		($db2->next_record()) ) {
 	
 	  	if ($c % 2)
-	  		$class="steelgraulight";
+	  		$class="steel1";
   		else
-  			$class="steel1"; 
+  			$class="steelgraulight"; 
   		$c++;
   		
   		//Titelzeile wenn erste Veranstaltung angezeigt werden soll
