@@ -57,11 +57,13 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 
 if ($cmd=="add_user") {
 	$msging->add_buddy ($add_uname);
+	$online[$add_uname]['is_buddy'] = true;
 }
 
-if ($cmd=="delete_user")
+if ($cmd=="delete_user"){
 	$msging->delete_buddy ($delete_uname);
-
+	$online[$delete_uname]['is_buddy'] = false;
+}
 ?>
 <table width="100%" border=0 cellpadding=0 cellspacing=0>
 <tr>
