@@ -156,7 +156,7 @@ $db3=new DB_Seminar;
 		if ((($institut_id == "all") || (!$institut_id)) && ($perm->have_perm("root")))
 		$query = "SELECT * FROM seminare WHERE admission_type > 0 OR admission_starttime > ". time() ."  OR admission_endtime_sem > -1 OR (admission_starttime <= ". time(). " AND admission_starttime > 0) OR (admission_prelim = 1) ORDER BY admission_group DESC, start_time DESC, Name";  
       else
-+       $query = "SELECT * FROM seminare LEFT JOIN seminar_inst USING (Institut_id) WHERE (admission_type > 0 OR admission_starttime > ".time()." OR admission_endtime_sem > -1 OR (admission_starttime <= ".time()." AND admission_starttime > 1) OR (admission_prelim = 1)) AND seminar_inst.institut_id = '$institut_id' GROUP BY seminare.Seminar_id ORDER BY admission_group DESC, start_time DESC, Name";
+	$query = "SELECT * FROM seminare LEFT JOIN seminar_inst USING (Institut_id) WHERE (admission_type > 0 OR admission_starttime > ".time()." OR admission_endtime_sem > -1 OR (admission_starttime <= ".time()." AND admission_starttime > 1) OR (admission_prelim = 1)) AND seminar_inst.institut_id = '$institut_id' GROUP BY seminare.Seminar_id ORDER BY admission_group DESC, start_time DESC, Name";
 
 		$db->query($query);
 		$tag = 0;
