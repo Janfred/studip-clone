@@ -158,6 +158,7 @@ class TestVote extends Vote {
 				$this->getCreationdate (),
 				$this->getChangedate (),
 				$this->getResultvisibility (),
+				$this->getNamesvisibility (),
 				$this->isMultiplechoice (),
 				$this->isAnonymous (),
 				$this->getAnswers (),
