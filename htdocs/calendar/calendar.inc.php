@@ -205,23 +205,17 @@ if ($source_page && ($cmd == 'edit' || $cmd == 'add' || $cmd == 'delete')) {
 // add an event to database *********************************************************
 
 if ($cmd == 'add') {
-	$atermin =& new DbCalendarEvent();
+//	$atermin =& new DbCalendarEvent($termin_id);
 	// Ueberpruefung der Formulareingaben
 	$err = check_form_values($calendar_sess_forms_data);
-	set_event_properties($calendar_sess_forms_data, $atermin, $calendar_sess_forms_data['mod_prv']);
-	// wenn alle Daten OK, dann Termin anlegen oder, wenn termin_id vorhanden,
-	// updaten
+//	set_event_properties($calendar_sess_forms_data, $atermin, $calendar_sess_forms_data['mod_prv']);
+	// wenn alle Daten OK, dann Termin anlegen, oder bei vorhandener
+	// termin_id updaten
 	if (empty($err) && $count_events < $CALENDAR_MAX_EVENTS) {
-		// wird eine termin_id uebergeben, wird ein update durchgefuehrt
-		if ($termin_id) {
-			$termin_old =& new DbCalendarEvent($termin_id);
-			$termin_old->update($atermin);
-			$termin_old->save();
-		}
-		else {
-			$atermin->save();
-			$atime = $atermin->getStart();
-		}
+		$atermin =& new DbCalendarEvent($termin_id);
+		set_event_properties($calendar_sess_forms_data, $atermin, $calendar_sess_forms_data['mod_prv']);
+		$atermin->save();
+		$atime = $atermin->getStart();
 				
 		if ($calendar_sess_control_data['source']) {
 			$destination = $calendar_sess_control_data['source'] . "#a";
@@ -599,7 +593,7 @@ function check_form_values (&$post_vars) {
 		case 'MONTHLY':
 			if ($post_vars['type_m'] == 'day') {
 				if (!preg_match("/^\d{1,2}$/", $post_vars['day_m']) || $post_vars['day_m'] > 31 || $post_vars['day_m'] < 1) {
-					$err['sinterval_m'] = TRUE;
+					$err['day_m'] = TRUE;
 					$err['set_recur'] = TRUE;
 				}
 				if (!preg_match("/^\d{1,3}$/", $post_vars['linterval_m1'])) {
@@ -616,7 +610,8 @@ function check_form_values (&$post_vars) {
 			break;
 		case 'YEARLY':
 			// Jahr 2000 als Schaltjahr
-			if (!check_date($post_vars['month_y1'], $post_vars['day_y'], 2000)) {
+			if (!check_date($post_vars['month_y1'], $post_vars['day_y'], 2000)
+					&& $post_vars['type_y'] == 'day') {
 				$err['day_y'] = TRUE;
 				$err['set_recur'] = TRUE;
 			}
@@ -719,7 +714,7 @@ function set_event_properties (&$post_vars, &$atermin, $mod) {
 			}
 			else {
 				$atermin->setRepeat(array('rtype' => 'MONTHLY', 'linterval' => $post_vars['linterval_m2'],
-						'sinterval' => $post_vars['sinterval_m'], 'wdays' => $post_vars['$wday_m'],
+						'sinterval' => $post_vars['sinterval_m'], 'wdays' => $post_vars['wday_m'],
 						'expire' => $expire, 'count' => $post_vars['exp_count']));
 			}
 			break;
@@ -819,6 +814,7 @@ function get_event_properties (&$post_vars, &$atermin) {
 				break;
 			case 'DAILY':
 				$post_vars['linterval_d'] = $repeat['linterval'];
+				$post_vars['type_d'] = 'daily';
 				break;
 			case 'WEEKLY':
 				$post_vars['linterval_w'] = $repeat['linterval'];
@@ -830,8 +826,7 @@ function get_event_properties (&$post_vars, &$atermin) {
 					$post_vars['type_m'] = 'wday';
 					$post_vars['linterval_m2'] = $repeat['linterval'];
 					$post_vars['sinterval_m'] = $repeat['sinterval'];
-					for ($i = 0;$i < strlen($repeat['wdays']);$i++)
-						$post_vars['wday_m'] = $repeat['wdays'];
+					$post_vars['wday_m'] = $repeat['wdays'];
 				}
 				else {
 					$post_vars['type_m'] = 'day';
