@@ -259,6 +259,17 @@ class AssignObject {
 			return "d";
 	}
 	
+	function getRepeatEndByQuantity() {
+		create_assigns($this, $this, -1, -1);
+		
+		$max_date = 0;
+		foreach ($this->events as $val) {
+			if ($val->getEnd() > $max_date)
+				$max_date = $val->getEnd();
+		}
+		return $max_date;
+	}
+	
 	function isNew() {
 		return $this->isNewObject;
 	}
@@ -284,7 +295,7 @@ class AssignObject {
 		//load the existing assigns for the given resource...
 		list_restore_assign($this, $this->resource_id, $start, $end);
 	
-		//...and add the planned assign to perform the checks ...
+		//...and add the actual assign to perform the checks ...
 		create_assigns($this, $this);
 		
 		//..so we have a  "virtual" set of assign-events in the given resource. Now we can check...
@@ -343,7 +354,7 @@ class AssignObject {
 		$this->chng_flag=TRUE;
 	}
 
-	function setRepeatEnd() {
+	function setRepeatEnd($value) {
 		$this->repeat_end=$value;
 		$this->chng_flag=TRUE;
 	}
