@@ -580,8 +580,10 @@ function printposting ($forumposting) {
   		else
   			$forumposting["rate"] = "?";
   		
-  		$time = (time() - $forumposting["mkdate"])/604800;
+  		$time = round((time() - $forumposting["mkdate"])/604800);
+  		if ($time < 1) $time = 1;
   		$relevanz = $objectviews / $time;
+  		
   		if ($forumposting["rate"]=="?")
   			$rtmp = 0;
   		else 
