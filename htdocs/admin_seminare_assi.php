@@ -1488,13 +1488,13 @@ if ($level==2)
 								if ($db->num_rows()) {
 									print "<a name=\"anker\"></a>";
 									printf ("<font size=-1><b>%s</b> Nutzer gefunden:<br />", $db->num_rows());
-									print "<select name=\"add_doz\">";
+									print "<input type=\"IMAGE\" src=\"./pictures/move_left.gif\" ".tooltip("Den Benutzer hinzufügen")." border=\"0\" name=\"add_doz\" />";
+									print "&nbsp; <select name=\"add_doz\">";
 									while ($db->next_record()) {
 										printf ("<option value=\"%s\">%s </option>", $db->f("username"), htmlReady(my_substr($db->f("Nachname").", ".$db->f("Vorname")." (".$db->f("username").")", 0, 30)));
 									}
 									print "</select></font>";
-									print "&nbsp; <input type=\"IMAGE\" src=\"./pictures/move_left.gif\" ".tooltip("Den Benutzer hinzufügen")." border=\"0\" name=\"add_doz\" />";
-									print "&nbsp; <input type=\"IMAGE\" src=\"./pictures/rewind.gif\" ".tooltip("Neue Suche starten")." border=\"0\" name=\"reset_search\" />";									
+									print "<input type=\"IMAGE\" src=\"./pictures/rewind.gif\" ".tooltip("Neue Suche starten")." border=\"0\" name=\"reset_search\" />";									
 								}
 							}
 							if ((!$search_exp_doz) || (($search_exp_doz) && (!$db->num_rows()))) {
@@ -1556,13 +1556,13 @@ if ($level==2)
 								if ($db->num_rows()) {
 									print "<a name=\"anker\"></a>";
 									printf ("<font size=-1><b>%s</b> Nutzer gefunden:<br />", $db->num_rows());
-									print "<select name=\"add_tut\">";
+									print "<input type=\"IMAGE\" src=\"./pictures/move_left.gif\" ".tooltip("Den Benutzer hinzufügen")." border=\"0\" name=\"add_tut\" />";
+									print "&nbsp; <select name=\"add_tut\">";
 									while ($db->next_record()) {
 										printf ("<option value=\"%s\">%s </option>", $db->f("username"), htmlReady(my_substr($db->f("Nachname").", ".$db->f("Vorname")." (".$db->f("username").")", 0, 30)));
 									}
 									print "</select></font>";
-									print "&nbsp; <input type=\"IMAGE\" src=\"./pictures/move_left.gif\" ".tooltip("Den Benutzer hinzufügen")." border=\"0\" name=\"add_tut\" />";
-									print "&nbsp; <input type=\"IMAGE\" src=\"./pictures/rewind.gif\" ".tooltip("neue Suche starten")." border=\"0\" name=\"reset_search\" />";									
+									print "<input type=\"IMAGE\" src=\"./pictures/rewind.gif\" ".tooltip("neue Suche starten")." border=\"0\" name=\"reset_search\" />";									
 								}
 							}
 							if ((!$search_exp_tut) || (($search_exp_tut) && (!$db->num_rows()))) {
@@ -1932,7 +1932,7 @@ if ($level==3)
 										?>
 										&nbsp; &nbsp; <input type="IMAGE" name="add_term_field" src="./pictures/buttons/feldhinzufuegen-button.gif" border=0 value="Feld hinzuf&uuml;gen">&nbsp; 
 										<img  src="./pictures/info.gif" 
-											<? echo tooltip("In diesem Feldern können Sie aller Termine ein, an denen die Veranstaltung stattfindet. Wenn Sie noch keine Termine wissen, dann klicken Sie auf »keine Termine speichern.'", TRUE, TRUE) ?>
+											<? echo tooltip("In diesem Feldern können Sie aller Termine ein, an denen die Veranstaltung stattfindet. Wenn Sie noch keine Termine wissen, dann lassen Sie die Felder einfach frei.'", TRUE, TRUE) ?>
 										>
 										<font color="red" size=+2>*</font>
 										<br>
