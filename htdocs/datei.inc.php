@@ -1279,7 +1279,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 								if ($type!=6)
 									$edit.= "&nbsp;&nbsp;&nbsp;<a href=\"$PHP_SELF?open=".$db3->f("dokument_id")."_c_#anker \">" . makeButton("bearbeiten", "img") . "</a>";
 								if ($type==6)
-									$edit.= "&nbsp;&nbsp;&nbsp;<a href=\"$PHP_SELF?open=".$db3->f("dokument_id")."_led_&rnd=".rand()."#anker \">" . makeButton("aktualisieren", "img") . "</a>";
+									$edit.= "&nbsp;&nbsp;&nbsp;<a href=\"$PHP_SELF?open=".$db3->f("dokument_id")."_led_&rnd=".rand()."#anker \">" . makeButton("bearbeiten", "img") . "</a>";
 								else
 									$edit.= "&nbsp;<a href=\"$PHP_SELF?open=".$db3->f("dokument_id")."_rfu_#anker \">" . makeButton("aktualisieren", "img") . "</a>";
 								$edit.= "&nbsp;<a href=\"$PHP_SELF?open=".$db3->f("dokument_id")."_m_#anker \">" . makeButton("verschieben", "img") . "</a>";	
