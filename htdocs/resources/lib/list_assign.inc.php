@@ -223,4 +223,3 @@ function isFiltered($filter, $mode) {
 }
 
 ?>
-
