@@ -34,7 +34,7 @@
 // +---------------------------------------------------------------------------+
 
 /*****************************************************************************
-ShowList, stellt Liste mit Hilfe von printThread dar
+Overview, Forms der Ueberblickdarstellung (Vertraege)
 /*****************************************************************************/
 require_once ($RELATIVE_PATH_SUPPORT."/views/ShowTreeRow.class.php");
 require_once ($RELATIVE_PATH_SUPPORT."/lib/ContractObject.class.php");
@@ -69,6 +69,7 @@ class Overview extends ShowTreeRow {
 		
 		if ((!$supportdb_data["con_opens"]) && (!$supportdb_data["user_action_con"]) && ($conObject->isOldestActive()) && ($conObject->getRemainingPoints() > 0)) {
 			$supportdb_data["con_opens"][$conObject->getId()] = TRUE;
+			$supportdb_data["actual_con"] = $conObject->getId();			
 		}
 
 		if ($supportdb_data["con_opens"][$conObject->getId()]) {
