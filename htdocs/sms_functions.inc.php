@@ -20,8 +20,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 function MessageIcon ($message_hovericon) {
-	global $my_messaging_settings, $PHP_SELF, $auth;
-	if ($auth->auth["jscript"] AND $message_hovericon["content"]!="" && $message_hovericon["openclose"]=="close" && $my_messaging_settings["hover"] == "1") {
+	global $my_messaging_settings, $PHP_SELF, $auth, $forum;
+	if ($auth->auth["jscript"] AND $message_hovericon["content"]!="" && $message_hovericon["openclose"]=="close" &&  $forum["jshover"] == "1") {
 		$hovericon = "<a href=\"javascript:void(0);\" "
 			."onMouseOver=\"return overlib('"
 			.JSReady($message_hovericon["content"], "forum")
@@ -188,14 +188,14 @@ function print_snd_message($psm) {
 		}
 		$zusatz .= sprintf(_("an %s, %s"), "</font><a href=\"about.php?username=".$tmp['username']."\"><font size=-1 color=\"#333399\">".$tmp['vorname']."&nbsp;".$tmp['nachname']."</font></a><font size=-1>", date("d.m.y, H:i",$psm['mkdate']));
 		$zusatz .= "&nbsp;";
-		if ($psm['folder'] != "all") {
+		if (!empty($my_messaging_settings["folder"][$sms_data["view"]])) {
 			$zusatz .= "<a href=\"".$PHP_SELF."?move_to_folder[1]=".$psm['message_id']."\"><img src=\"./pictures/cont_folder_sms_move.gif\" border=0 ".tooltip(_("Diese Nachricht in einen frei wählbaren Ordner verschieben."))."></a>";
 		}
 		$zusatz .= "<a href=\"".$PHP_SELF."?cmd=".$tmp_cmd."&sel_lock=".$psm['message_id']."#".$psm['message_id']."\"><img src=\"./pictures/".$tmp_picture.".gif\" border=0 ".$tmp_tooltip."></a><img src=\"./pictures/blank.gif\" width=\"2\">".$trash."<input type=\"checkbox\" name=\"sel_sms[]\" value=\"".$psm['message_id']."\" ".CheckChecked($cmd, "select_all").">";
 	} else if ($x >= "2") { // if more than one receiver
 		$zusatz .= sprintf(_("an %s Empf&auml;nger, %s"), $x, date("d.m.y, H:i",$psm['mkdate']));
 		$zusatz .= "&nbsp;";
-		if ($psm['folder'] != "all") {
+		if (!empty($my_messaging_settings["folder"][$sms_data["view"]])) {
 			$zusatz .= "<a href=\"".$PHP_SELF."?move_to_folder[1]=".$psm['message_id']."\"><img src=\"./pictures/cont_folder_sms_move.gif\" border=0 ".tooltip(_("Diese Nachricht in einen frei wählbaren Ordner verschieben."))."></a>";
 		}
 		$zusatz .= "<a href=\"".$PHP_SELF."?cmd=".$tmp_cmd."&sel_lock=".$psm['message_id']."#".$psm['message_id']."\"><img src=\"./pictures/".$tmp_picture.".gif\" border=0 ".$tmp_tooltip."></a><img src=\"./pictures/blank.gif\" width=\"2\">".$trash."<input type=\"checkbox\" name=\"sel_sms[]\" value=\"".$psm['message_id']."\" ".CheckChecked($cmd, "select_all").">";
@@ -220,7 +220,7 @@ function print_snd_message($psm) {
 
 	// buttons
 	$edit = "&nbsp;<a href=\"".$PHP_SELF."?cmd=delete_selected&sel_sms[1]=".$psm['message_id']."\" ".tooltip(_("Diese Nachricht löschen.")).">".makeButton("loeschen", "img")."</a>&nbsp;";
-	if ($psm['folder'] != "all") {
+	if (!empty($my_messaging_settings["folder"][$sms_data["view"]])) {
 		$edit .= "&nbsp;<a href=\"".$PHP_SELF."?move_to_folder[1]=".$psm['message_id']."\" ".tooltip(_("Diese Nachricht in einen frei wählbaren Ordner verschieben.")).">".makeButton("verschieben", "img")."</a><br><br>";
 	}
 
@@ -297,7 +297,7 @@ function print_rec_message($prm) {
 		$trash = "<a href=\"".$PHP_SELF."?cmd=delete_selected&sel_sms[1]=".$prm['message_id']."\"><img src=\"./pictures/trash2.gif\" border=0 ".tooltip(_("Diese Nachricht löschen."))."></a>";
 	}
 	// zusatz
-	if ($prm['folder'] != "all" && $sms_show['folder'][$sms_data['view']] != "new") {
+	if (!empty($my_messaging_settings["folder"][$sms_data["view"]])) {
 		$move_option = "<a href=\"".$PHP_SELF."?move_to_folder[1]=".$prm['message_id']."\"><img src=\"./pictures/cont_folder_sms_move.gif\" border=0 ".tooltip(_("Diese Nachricht in einen frei wählbaren Ordner verschieben."))."></a>";
 	}
 	$zusatz = "<font size=-1>";
@@ -330,7 +330,7 @@ function print_rec_message($prm) {
 		$edit .= "&nbsp;<a href=\"sms_send.php?cmd=write&quote=".$prm['message_id']."&rec_uname=".$prm['uname_snd']."\">".makeButton("zitieren", "img")."</a>";
 	}
 	$edit.= "&nbsp;<a href=\"".$PHP_SELF."?cmd=delete_selected&sel_sms[1]=".$prm['message_id']."\">".makeButton("loeschen", "img")."</a>";
-	if ($prm['folder'] != "all" && $sms_show['folder'][$sms_data['view']] != "new") {
+	if (!empty($my_messaging_settings["folder"][$sms_data["view"]])) {
 		$edit .= "&nbsp;<a href=\"".$PHP_SELF."?move_to_folder[1]=".$prm['message_id']."\" ".tooltip(_("Diese Nachricht in einen frei wählbaren Ordner verschieben.")).">".makeButton("verschieben", "img")."</a><br><br>";
 	}
 	// (hover) icon 
@@ -405,29 +405,6 @@ function print_messages() {
 		$srch_result = "info§<font size=-1><b>".$no_message_text."</b></font>";
 		parse_msg ($srch_result, "§", "steel1", 2, FALSE);
 		echo "</td></tr></table>";
-	}
-}
-
-function print_new_messages() {
-	global $user, $my_messaging_settings, $PHP_SELF, $sms_data, $sms_show, $db, $query_showfolder, $query_time_sort, $query_movetofolder, $query_time, $_fullname_sql, $srch_result, $no_message_text, $n, $count;
-	$db->query("SELECT message.*, message_user.*, auth_user_md5.* FROM message_user LEFT JOIN message USING (message_id) LEFT JOIN auth_user_md5 ON (autor_id=auth_user_md5.user_id) LEFT JOIN user_info USING(user_id) WHERE message_user.user_id = '".$user->id."' AND message_user.readed = '0' AND message_user.snd_rec = 'rec' AND message_user.deleted = '0'");		
-	while ($db->next_record()) {
-		$count = ($count-1);
-		if ($count == "-1") {
-			$prm['count'] == "";
-		} else {
-			$prm['count'] = $count;	
-		}	
-		$prm['user_id_snd'] = $db->f("autor_id");
-		$prm['mkdate'] = $db->f("mkdate");
-		$prm['message_id'] = $db->f("message_id");
-		$prm['message'] = $db->f("message");
-		$prm['vorname'] = $db->f("Vorname");
-		$prm['nachname'] = $db->f("Nachname");
-		$prm['readed'] = $db->f("readed");
-		$prm['dont_delete'] = $db->f("dont_delete");
-		$prm['uname_snd'] = $db->f("username");				
-		print_rec_message($prm);
 	}
 }
 

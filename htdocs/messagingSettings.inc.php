@@ -61,7 +61,6 @@ if ($messaging_cmd=="change_view_insert" && !$set_msg_default_x) {
 	$my_messaging_settings["timefilter"] = $timefilter;
 	$my_messaging_settings["openall"] = $openall;
 	$my_messaging_settings["opennew"] = $opennew;
-	$my_messaging_settings["hover"] = $hover;
 	$my_messaging_settings["logout_markreaded"] = $logout_markreaded;
 	$my_messaging_settings["addsignature"] = $addsignature;
 	$my_messaging_settings["changed"] = "TRUE";
@@ -176,15 +175,6 @@ function change_messaging_view() {
 					</td>
 					<td <?=$cssSw->getFullClass()?>>
 						<input type="checkbox" value="1" name="logout_markreaded"<? if ($my_messaging_settings["logout_markreaded"] == "1") echo " checked"; ?>>
-					</td>
-				</tr>	
-
-				<tr  <? $cssSw->switchClass() ?>>
-					<td  align="right" class="blank" style="border-bottom:1px dotted black;">
-						<font size="-1"><?print _("Nachrichten hovern");?></font>
-					</td>
-					<td <?=$cssSw->getFullClass()?>>
-						<input type="checkbox" value="1" name="hover"<? if ($my_messaging_settings["hover"] == "1") echo " checked"; ?>>
 					</td>
 				</tr>	
 
