@@ -15,7 +15,7 @@
 
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
-// ScheduleWeek.class.php
+// evaluate_values.php
 // Auswerten der Werte aus der Ressourcenverwaltung
 // Copyright (C) 2003 Cornelis Kater <ckater@gwdg.de>
 // +---------------------------------------------------------------------------+
@@ -277,7 +277,8 @@ if ($change_object_schedules) {
 		if ($kill_assign_x) {
 			$killAssign=new AssignObject($change_object_schedules);
 			$killAssign->delete();
-			$new_assign_object='';			
+			$new_assign_object='';
+			$msg ->addMsg(5);
 		} else {
 			if ($change_object_schedules == "NEW")
 				$change_schedule_id=FALSE;
