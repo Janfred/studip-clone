@@ -488,7 +488,7 @@ ELSEIF ($auth->auth["perm"]=="admin"){
 	   $sortby = "teilnehmer DESC";
 	   $db->query("SELECT Institute.Name AS Institut, seminare.*, COUNT(seminar_user.user_id) AS teilnehmer FROM user_inst LEFT JOIN Institute USING (Institut_id) LEFT JOIN seminare USING(Institut_id) LEFT OUTER JOIN seminar_user USING(Seminar_id) WHERE user_inst.inst_perms='admin' AND user_inst.user_id='$user->id' AND seminare.Institut_id is not NULL GROUP BY seminare.Seminar_id ORDER BY $sortby");
 	   $num_my_sem=$db->num_rows();
-	   if (!$num_my_sem) $meldung="msg§Sie haben keine Veranstaltungen!§".$meldung;
+	   if (!$num_my_sem) $meldung="msg§An ihren Einrichtungen sind zur Zeit keine Veranstaltungen angelegt.§".$meldung;
 	 ?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
 	<tr>
