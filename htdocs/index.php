@@ -187,7 +187,7 @@ unset($temp_language_key); unset($temp_language);
 			$db->next_record();
 			$anzahl = $db->f(0);
 			echo "<tr><td class=\"steelkante\"><font size=\"2\">&nbsp; "._("Aktive Veranstaltungen").":</font></td><td class=\"steelkante\" align=right><font size=\"2\">&nbsp; $anzahl&nbsp; </font></td><td class=\"blank\">&nbsp; &nbsp; </td></tr>"; 
-			$db->query("SELECT count(*) from auth_user_md5");
+			$db->query("SELECT count(*) from auth_user_md5 WHERE perms <> 'user'");
 			$db->next_record();
 			$anzahl = $db->f(0);			
 			echo "<tr><td class=\"steelgraulight\"><font size=\"2\">&nbsp; "._("Registrierte NutzerInnen").":</font></td><td class=\"steelgraulight\" align=right><font size=\"2\">&nbsp; $anzahl&nbsp; </font></td><td class=\"blank\">&nbsp; &nbsp; </td></tr>"; 
