@@ -1,11 +1,45 @@
 <?
+/**
+* ms_stundenplan.php
+* 
+* edit the settings for the personal schedule
+* 
+*
+* @author		Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
+* @version		$Id$
+* @access		public
+* @modulegroup	views
+* @module		ms_stundenplan.php
+* @package		studip_core
+*/
+
+// +---------------------------------------------------------------------------+
+// This file is part of Stud.IP
+// ms_stundenplan.inc.php
+// Settings fuer den Stundenplan einstellen
+// Copyright (c) 2003 Stefan Suchi <suchi@data-quest.de>
+// +---------------------------------------------------------------------------+
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or any later version.
+// +---------------------------------------------------------------------------+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+// +---------------------------------------------------------------------------+
+
 //Variable registrieren
 //$user->register("my_schedule_settings");
 
-require_once "config.inc.php";
-require_once "config_tools_semester.inc.php"; 
-require_once "functions.php";
-//require_once ("seminar_open.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/config_tools_semester.inc.php"); 
+require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/language.inc.php");
 
 //Funktion zum ueberpruefen der Einstellungen
 function check_schedule_settings() {
@@ -87,13 +121,13 @@ function change_schedule_view() {
 	?>
 	<table width ="100%" cellspacing=0 cellpadding=0 border=0>
 		<tr>
-			<td class="topic" colspan=2><img src="pictures/meinesem.gif" border="0" align="texttop"><b>&nbsp;Einstellungen f&uuml;r meinen Stundenplan anpassen</b>
+			<td class="topic" colspan=2><img src="pictures/meinesem.gif" border="0" align="texttop"><b>&nbsp;<?=_("Einstellungen f&uuml;r meinen Stundenplan anpassen") ?></b>
 			</td>
 	</tr>
 	<tr>
 		<td class="blank" colspan=2>&nbsp;
 			<blockquote>
-			Hier k&ouml;nnen Sie sie Ansicht ihres pers&ouml;nlichen Stundenplans nach Ihren Vorstellungen anpassen.<br>Sie k&ouml;nnen den Zeitraum, den der Stundenplan umfasst, und die Tage, die der Stundenplan anzeigt, bestimmen.
+			<?=_("Hier k&ouml;nnen Sie sie Ansicht ihres pers&ouml;nlichen Stundenplans nach Ihren Vorstellungen anpassen.")."<br>"._("Sie k&ouml;nnen den Zeitraum, den der Stundenplan umfasst, und die Tage, die der Stundenplan anzeigt, bestimmen.")?>
 			<br>
 			</blockquote>
 		</td>
@@ -104,9 +138,9 @@ function change_schedule_view() {
 			<table width ="99%" align="center" cellspacing=0 cellpadding=2 border=0>
 				<tr <? $cssSw->switchClass() ?>>
 					<td class="<? echo $cssSw->getClass() ?>" width="20%">
-					<blockquote><br><b>Zeitraum:</b></blockquote>
+					<blockquote><br><b><?=_("angezeigter Zeitraum:")?></b></blockquote>
 					</td>
-					<td class="<? echo $cssSw->getClass() ?>" width="80%">&nbsp; Stundenplanansicht von&nbsp; 
+					<td class="<? echo $cssSw->getClass() ?>" width="80%">&nbsp; <?=_("Anfangszeit:");?>&nbsp; 
 					<?	    
 			   		echo"<select name=\"beginn_zeit\">";
 	   					for ($i=0; $i<=23; $i++)
@@ -128,7 +162,7 @@ function change_schedule_view() {
 		  					}
 			    		echo"</select>";
 					?>
-					&nbsp;Uhr bis
+					&nbsp;<?=_("Uhr"). "<br /><br />&nbsp; "._("Endzeit:")?>
 					<?	    
 			   		echo"<select name=\"ende_zeit\">";
 	   					for ($i=0; $i<=23; $i++)
@@ -150,26 +184,26 @@ function change_schedule_view() {
 		  					}
 			    		echo"</select>";
 					?>
-					&nbsp;Uhr.
+					&nbsp;<?=_("Uhr")?>
 					</td>
 				</tr>
 				<tr <? $cssSw->switchClass() ?>>
 					<td class="<? echo $cssSw->getClass() ?>" width="20%">
-					<blockquote><br><b>Angezeigte Wochentage:</b></blockquote>
+					<blockquote><br><b><?=_("Angezeigte Wochentage:")?></b></blockquote>
 					</td>
 					<td class="<? echo $cssSw->getClass() ?>" width="80%">
-						&nbsp; <input type="CHECKBOX" name="mo" value="true" <?if ($my_schedule_settings ["glb_days"]["mo"]) echo "checked"?>>&nbsp; Montag <br>
-						&nbsp; <input type="CHECKBOX" name="di" value="true" <?if ($my_schedule_settings ["glb_days"]["di"]) echo "checked"?>>&nbsp; Dienstag <br>
-						&nbsp; <input type="CHECKBOX" name="mi" value="true" <?if ($my_schedule_settings ["glb_days"]["mi"]) echo "checked"?>>&nbsp; Mittwoch <br>
-						&nbsp; <input type="CHECKBOX" name="do" value="true" <?if ($my_schedule_settings ["glb_days"]["do"]) echo "checked"?>>&nbsp; Donnerstag <br>
-						&nbsp; <input type="CHECKBOX" name="fr" value="true" <?if ($my_schedule_settings ["glb_days"]["fr"]) echo "checked"?>>&nbsp; Freitag <br>
-						&nbsp; <input type="CHECKBOX" name="sa" value="true" <?if ($my_schedule_settings ["glb_days"]["sa"]) echo "checked"?>>&nbsp; Samstag <br>
-						&nbsp; <input type="CHECKBOX" name="so" value="true" <?if ($my_schedule_settings ["glb_days"]["so"]) echo "checked"?>>&nbsp; Sonntag <br>
+						&nbsp; <input type="CHECKBOX" name="mo" value="true" <?if ($my_schedule_settings ["glb_days"]["mo"]) echo "checked"?>>&nbsp; <?=_("Montag")?> <br>
+						&nbsp; <input type="CHECKBOX" name="di" value="true" <?if ($my_schedule_settings ["glb_days"]["di"]) echo "checked"?>>&nbsp; <?=_("Dienstag")?> <br>
+						&nbsp; <input type="CHECKBOX" name="mi" value="true" <?if ($my_schedule_settings ["glb_days"]["mi"]) echo "checked"?>>&nbsp; <?=_("Mittwoch")?> <br>
+						&nbsp; <input type="CHECKBOX" name="do" value="true" <?if ($my_schedule_settings ["glb_days"]["do"]) echo "checked"?>>&nbsp; <?=_("Donnerstag")?> <br>
+						&nbsp; <input type="CHECKBOX" name="fr" value="true" <?if ($my_schedule_settings ["glb_days"]["fr"]) echo "checked"?>>&nbsp; <?=_("Freitag")?> <br>
+						&nbsp; <input type="CHECKBOX" name="sa" value="true" <?if ($my_schedule_settings ["glb_days"]["sa"]) echo "checked"?>>&nbsp; <?=_("Samstag")?> <br>
+						&nbsp; <input type="CHECKBOX" name="so" value="true" <?if ($my_schedule_settings ["glb_days"]["so"]) echo "checked"?>>&nbsp; <?=_("Sonntag")?> <br>
 					</td>
 				</tr>
 				<tr <? $cssSw->switchClass() ?>>
 					<td class="<? echo $cssSw->getClass() ?>" width="20%">
-					<blockquote><br><b>Angezeigtes Semester:</b></blockquote>
+					<blockquote><br><b><?=_("Angezeigtes Semester:")?></b></blockquote>
 					</td>
 					<td class="<? echo $cssSw->getClass() ?>" width="80%">
 						<?
@@ -177,11 +211,11 @@ function change_schedule_view() {
 						if (!$my_schedule_settings ["glb_sem"]) {
 							if (time() > $VORLES_ENDE) {
 								echo "<option>$SEM_NAME</option>";
-								echo "<option selected value=$SEM_NAME_NEXT>aktuelles Semester ($SEM_NAME_NEXT)</option>";
+								echo "<option selected value=$SEM_NAME_NEXT>"._("aktuelles Semester")." ($SEM_NAME_NEXT)</option>";
 								$tmp_name=$SEM_NAME_NEXT;
 								}
 							else {
-								echo "<option selected value=$SEM_NAME>aktuelles Semester ($SEM_NAME)</option>";
+								echo "<option selected value=$SEM_NAME>"._("aktuelles Semester")." ($SEM_NAME)</option>";
 								$tmp_name=$SEM_NAME;
 								}
 							}
@@ -205,7 +239,7 @@ function change_schedule_view() {
 					?>
 				<tr <? $cssSw->switchClass() ?>>
 					<td class="<? echo $cssSw->getClass() ?>" width="20%">
-					<blockquote><br><b>Angezeigte Einrichtung:</b></blockquote>
+					<blockquote><br><b><?=_("Angezeigte Einrichtung:")?></b></blockquote>
 					</td>
 					<td class="<? echo $cssSw->getClass() ?>" width="80%">
 					<?
@@ -228,7 +262,7 @@ function change_schedule_view() {
 					<td class="<? echo $cssSw->getClass() ?>" width="20%">&nbsp;
 					</td>
 					<td class="<? echo $cssSw->getClass() ?>" width="80%"><br>	&nbsp; 				
-					<font size=-1><input type="IMAGE" src="pictures/buttons/uebernehmen-button.gif" border=0 value="&Auml;nderungen &uuml;bernehmen"></font>&nbsp; 
+					<font size=-1><input type="IMAGE" <?=makeButton("uebernehmen", "src") ?> border=0 value="<?=_("&Auml;nderungen &uuml;bernehmen")?>"></font>&nbsp; 
 					<input type="HIDDEN" name="view" value="Stundenplan">
 					</td>
 				</tr>
