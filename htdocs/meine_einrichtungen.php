@@ -165,7 +165,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("roo
 	 	if ($perm->have_perm("dozent"))
 	 		$meldung="info§Sie wurden noch keinen Einrichtungen zugeordnet. Bitte wenden Sie sich an einen der zust&auml;ndigen <a href=\"impressum.php?view=ansprechpartner\">Administratoren</a>.§".$meldung;
 	 	else
-			$meldung="info§Sie haben sich noch keinen Einrichtungen zugeordnet. Um sich Einrichtungen zuzuordnen, nutzen Sie bitte die entsprechende <a href=\"edit_about.php?view=Karriere#einrichtungen\">Option</a> unter \"universt&auml;re Daten\" in ihren pers&ouml;nlichen Einstellungen.§".$meldung;
+			$meldung="info§Sie haben sich noch keinen Einrichtungen zugeordnet. Um sich Einrichtungen zuzuordnen, nutzen Sie bitte die entsprechende <a href=\"edit_about.php?view=Karriere#einrichtungen\">Option</a> unter \"universit&auml;re Daten\" in ihren pers&ouml;nlichen Einstellungen.§".$meldung;
 	 ?>
 	 <table width="100%" border="0" cellpadding="0" cellspacing="0">
 	<tr>
