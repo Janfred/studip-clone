@@ -91,7 +91,7 @@ function MovePersonStatusgruppe ($range_id, $AktualMembers="", $InstitutMembers=
 { global $HTTP_POST_VARS;
 		while (list($key, $val) = each ($HTTP_POST_VARS)) {
 			$statusgruppe_id = substr($key, 0, -2);
-			echo $key."<br>";
+//			echo $key."<br>";
 		}
 //		echo $statusgruppe_id;
 //		echo "hallo";
@@ -353,6 +353,8 @@ function PrintInstitutMembers ($range_id)
 
 // Beginn Darstellungsteil
 
+
+
 // Anfang Edit-Bereich
 
 ?><table cellspacing="0" cellpadding="0" border="0" width="100%">
@@ -367,7 +369,14 @@ function PrintInstitutMembers ($range_id)
 <table class="blank" width="100%" border="0" cellspacing="0">
   <tr>
     <td align="right" width="50%" class="blank">
+    
 <?
+		while (list($key, $val) = each ($HTTP_POST_VARS)) {
+//			$statusgruppe_id = substr($key, 0, -2);
+			echo $key."<br>";
+		}
+
+
 	if ($cmd!="edit_statusgruppe") { // normale Anzeige
 ?>
 	 	<form action="<? echo $PHP_SELF ?>?cmd=move_old_statusgruppe" method="POST">
