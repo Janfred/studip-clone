@@ -1,7 +1,7 @@
 <?
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
-// admin_lernmodule.php
+// migration2studip.php
 //
 // Copyright (c) 2002 Arne Schroeder <schroeder@data-quest.de> 
 // Suchi & Berg GmbH <info@data-quest.de>
@@ -92,14 +92,17 @@ include_once ($ABSOLUTE_PATH_STUDIP."/msg.inc.php");
 if ($ILIAS_CONNECT_ENABLE)
 {
 
+	include_once ("$ABSOLUTE_PATH_STUDIP/$RELATIVE_PATH_LEARNINGMODULES" ."/lernmodul_config.inc.php"); // Konfigurationsdatei
 	include_once ("$ABSOLUTE_PATH_STUDIP/$RELATIVE_PATH_LEARNINGMODULES" ."/lernmodul_user_functions.inc.php"); // Funktionen f&uuml;r ILIAS-User
 
 	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+
+	include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
 ?>
 	<table cellspacing="0" cellpadding="0" border="0" width="100%">
 		<tr>
-			<td class="topic" colspan="2"><b>Migration von ILIAS-NutzerInnen-Accounts nach Stud.IP</b>
+			<td class="topic" colspan="2"><b><? echo _("Verbindung der Accounts von ILIAS- und Stud.IP-NutzerInnen");?></b>
 			</td>
 		</tr>
 		<tr>
@@ -109,6 +112,7 @@ if ($ILIAS_CONNECT_ENABLE)
 		<tr valign="top">
      			<td width="90%" class="blank">
 	<form method="POST" action="<? echo $PHP_SELF; ?>">
+	<table>
 <?
 	if (isset($back_x))
 		unset($mode);
@@ -116,21 +120,27 @@ if ($ILIAS_CONNECT_ENABLE)
 	{
 		$infobox = array	(array ("kategorie"  => _("Information:"),
 				"eintrag" => array	(array (	"icon" => "pictures/ausruf_small.gif",
-										"text"  => sprintf(_("Diese Seite organisiert die Verbindung zwischen BenutzerInnen von ILIAS und Stud.IP."), "<br><i>", "</i>") ) ) ) );
+										"text"  => sprintf(_("Diese Seite organisiert die Verbindung zwischen BenutzerInnen von ILIAS und Stud.IP. F&uuml;r die Benutzung von Lernmodulen muss je einem Stud.IP-Account ein ILIAS-Account zugeordnet sein."), "<br><i>", "</i>") ) ) ) );
 		$infobox[1]["kategorie"] = _("Aktionen:");
 			$infobox[1]["eintrag"][] = array (	"icon" => "pictures/icon-posting.gif" ,
 										"text"  => _("W&auml;hlen Sie eine Option.") );
-		echo "<br><b>" . _("W&auml;hlen Sie bitte eine der folgenden M&ouml;glichkeiten:") . "</b><br><br><br>";
-		echo "<input type=\"RADIO\" name=\"mode\" value=\"i2s\">&nbsp;";
-		echo _("Neuen Stud.IP-Account anlegen und einem bestehenden ILIAS-NutzerInnen-Account zuordnen") . "<br><br>";
+
+		if (get_ilias_user($auth->auth["uname"]) != false)
+			my_info( _("Ihrem Stud.IP-Account ist bereits ein ILIAS-Account zugeordnet. Diese Zuordnung k&ouml;nnen Sie nachtr&auml;glich noch &auml;ndern, dabei gehen allerdings die bereits in ILIAS gespeicherten Daten verloren.") );
+		else
+			my_info( _("<b>Ihr Stud.IP-Account ist bisher mit keinem ILIAS-Account verkn&uuml;pft</b>. Auf dieser Seite k&ouml;nnen Sie eine Zuordnung der Accounts herstellen. Die Zuordnung k&ouml;nnen Sie nachtr&auml;glich noch &auml;ndern, dabei gehen allerdings die bereits in ILIAS gespeicherten Daten verloren.") );
+		
+		echo "<tr><td><br><b>" . _("Sie k&ouml;nnen einen neuen Account anlegen oder einen bestehenden einbinden:") . "</b><br><br>";
+//		echo "<input type=\"RADIO\" name=\"mode\" value=\"i2s\">&nbsp;";
+//		echo _("Neuen Stud.IP-Account anlegen und einem bestehenden ILIAS-NutzerInnen-Account zuordnen") . "<br><br>";
 		echo "<input type=\"RADIO\" name=\"mode\" value=\"s2i\" checked>&nbsp;";
-		echo _("F&uuml;r den aktuellen Stud.IP-Account einen passenden ILIAS-Account anlegen") . "<br><br>";
+		echo _("F&uuml;r den aktuellen Stud.IP-Account einen passenden ILIAS-Account anlegen. Die Rechte des Stud.IP-Accounts werden analog nach ILIAS &uuml;bertragen.") . "<br><br>";
 		echo "<input type=\"RADIO\" name=\"mode\" value=\"connect\">&nbsp;";
-		echo _("Den aktuellen Stud.IP-Account mit einem bestehenden ILIAS-Account verbinden") . "<br><br>";
+		echo _("Den aktuellen Stud.IP-Account mit einem bestehenden ILIAS-Account verbinden. Gesetzte Rechte bleiben dabei bestehen und werden nicht mit synchronisiert.") . "<br><br>";
 	}
 	else 
 	{
-		echo "<input type=\"hidden\" name=\"mode\" value=\"$mode\">&nbsp;";
+		echo "<tr><td><input type=\"hidden\" name=\"mode\" value=\"$mode\">&nbsp;";
 		$infobox = array	(array ("kategorie"  => _("Information:"),
 				"eintrag" => array	(array (	"icon" => "pictures/ausruf_small.gif",
 										"text"  => sprintf(_("Diese Seite organisiert die Verbindung zwischen BenutzerInnen von ILIAS und Stud.IP."), "<br><i>", "</i>") ) ) ) );
@@ -143,23 +153,49 @@ if ($ILIAS_CONNECT_ENABLE)
 			case "i2s":
 				if (!check_ilias_auth()) 
 					ilias_auth_user();
+				echo "</td></tr>";
 				if ($auth_mode == true)
 				{
 					if (create_studip_user($ilias_uname))
-						echo _("Es wurde ein neuer Stud.IP-Account f&uuml;r Sie angelegt.");
+						my_msg( _("Es wurde ein neuer Stud.IP-Account f&uuml;r Sie angelegt."));
 					else
-						echo _("Beim Anlegen des Accounts ist ein Fehler aufgetreten.");
+						my_error( _("Beim Anlegen des Accounts ist ein Fehler aufgetreten."));
 				}
 			break;
 			case "s2i":
 //				if (!check_studip_auth()) 
 //					studip_auth_user();
+				echo "</td></tr>";
 				if ($auth_mode == true)
 				{
-					if (create_ilias_user($auth->auth["uname"] /*$studip_uname*/))
-						echo _("Es wurde ein neuer ILIAS-Account f&uuml;r Sie angelegt.");
+					if ((get_ilias_user($auth->auth["uname"]) != false) AND !isset($ja_x))
+					{	
+						my_info( _("Ihrem Stud.IP-Account wurde bereits ein ILIAS-Account zugeordnet. Wenn Sie fortfahren, wird diese Zuordnung &uuml;berschrieben und ein neuer Account angelegt. Soll die alte Zuordnung gel&ouml;scht werden?"));
+						?>
+						<tr><td><br><br><center>
+						<input type="IMAGE" <? echo makeButton("ja", "src"); ?> name="ja" value="<? echo _("Ja"); ?>">&nbsp;
+						<input type="IMAGE" <? echo makeButton("nein", "src"); ?> name="back" value="<? echo _("Nein"); ?>"></center>
+						<?
+					}
 					else
-						echo _("Beim Anlegen des Accounts ist ein Fehler aufgetreten.");
+					{	
+						if (isset($ja2_x))
+							if (delete_ilias_user(get_ilias_user($auth->auth["uname"])))
+								my_msg(_("Alter Account wurde gel&ouml;scht."));/**/
+						$creation_result = create_ilias_user($auth->auth["uname"]);
+						if ($creation_result === true)
+							my_msg( _("Es wurde ein neuer ILIAS-Account f&uuml;r Sie angelegt."));
+						else
+						{	
+							my_info( "<b>" . $creation_result . "</b>" ._(" Wenn Sie fortfahren, wird dieser Account &uuml;berschrieben und ein neuer Account angelegt. Soll der alte Account gel&ouml;scht werden?"));
+							?>
+							<tr><td><br><br><center>
+							<input type="IMAGE" <? echo makeButton("ja", "src"); ?> name="ja2" value="<? echo _("Ja"); ?>">&nbsp;
+							<input type="IMAGE" <? echo makeButton("nein", "src"); ?> name="back" value="<? echo _("Nein"); ?>"></center>
+							<input type="hidden" name="ja_x" value="dudelda">
+							<?
+						}
+					}
 				}
 			break;
 			case "connect":
@@ -167,25 +203,43 @@ if ($ILIAS_CONNECT_ENABLE)
 					ilias_auth_user();
 //				if (!check_studip_auth()) 
 //					studip_auth_user();
+				echo "</td></tr>";
 				if ($auth_mode == true)
 				{
-					if (connect_users($auth->auth["uname"] /*$studip_uname*/, $ilias_uname))
-						echo _("Die Accounts wurden verbunden.");
+					if (get_ilias_user($auth->auth["uname"]) == $ilias_uname+1)
+						my_info( _("Dieser ILIAS-Account ist Ihrem Stud.IP-Account bereits zugeordnet."));
+					elseif ((get_ilias_user($auth->auth["uname"]) != false) AND !isset($ja_x))
+					{	
+						my_info( _("Dem Stud.IP-Account wurde bereits ein ILIAS-Account zugeordnet. Wenn Sie fortfahren, wird diese Zuordnung von ihrer neuen Eingabe &uuml;berschrieben. Soll der alte Eintrag gel&ouml;scht werden?"));
+						?>
+						<tr><td><br><br><center>
+						<input type="IMAGE" <? echo makeButton("ja", "src"); ?> name="ja" value="<? echo _("Ja"); ?>">&nbsp;
+						<input type="IMAGE" <? echo makeButton("nein", "src"); ?> name="back" value="<? echo _("Nein"); ?>"></center>
+						<?
+					}
+					elseif (connect_users($auth->auth["uname"], $ilias_uname, $overwrite))
+						my_msg( _("Die Accounts wurden verbunden."));
 					else
-						echo _("Beim der Verbindung der Accounts ist ein Fehler aufgetreten.");
+						my_error( _("Beim Verbinden der Accounts ist ein Fehler aufgetreten."));
 				}
 			break;
 			default: $auth_mode = false;
 		}
 	}
 ?>
+		<tr><td>
 		<br>
 		<!--<input type="IMAGE" <? echo makeButton("zurueck", "src"); ?> name="back" value="<? echo _("Zur&uuml;ck"); ?>">-->
 		<? if ($auth_mode == false) { ?>
 		<input type="IMAGE" <? echo makeButton("weiter", "src"); ?> name="next" value="<? echo _("Weiter"); ?>">
-		<? } ?>
+		<? }
+		else
+		{
+			echo "&nbsp;<a href=\"./index.php\"><b>" . _("Zur&uuml;ck zu Stud.IP") . "</b></a>";
+		} ?>
 		<br>
 		<br>
+		</td></tr></table>
 		</td>
 		<td width="270" NOWRAP class="blank" align="center" valign="top">
 <?
