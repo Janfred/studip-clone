@@ -52,7 +52,7 @@ function url_ftp($url) {
 }
 */
 function parse_link($link) {
-	global $name, $the_file_name, $the_link;
+	global $name, $the_file_name, $the_link, $locationheader, $parsed_link;
 	if (substr($link,0,6) == "ftp://") {
 		// Parsing an FTF-Adress		
 		$url_parts = @parse_url( $link );
@@ -105,10 +105,9 @@ function parse_link($link) {
 	// Weg über einen Locationheader:
 	
 	if (($parsed_link["HTTP/1.1 302 Found"] || $parsed_link["HTTP/1.0 302 Found"]) && $parsed_link["Location"]) {
-		$url_parts = @parse_url( $parsed_link["Location"] );
-		$documentpath = $url_parts["path"];
 		$the_file_name = basename($url_parts["path"]);
 		$the_link = $parsed_link["Location"];
+		parse_link($parsed_link["Location"]);
 	}
 	return $parsed_link;
 	}
