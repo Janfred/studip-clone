@@ -40,13 +40,12 @@ include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");  //Linkleiste fuer admins
 	<tr><td class="blank" colspan=2><br><br>Unsch&ouml;n dass wir uns hier sehen... diese Seite ist das geheime Easteregg von Stud.IP. Wenn es jemand hierher geschafft hat, der nicht zum Team geh&ouml;rt, dann k&uuml;ndige ich.<br><br>
 	<i>Cornelis</i><br><br>
 	<?
-	$folder=opendir("$ABSOLUTE_PATH_STUDIP/user/");
+	$folder=opendir($ABSOLUTE_PATH_STUDIP."/user/");
 	$i=0;
 	while ($entry=readdir($folder))
 		{
-		//echo $entry;
 		$i++;
-		if (($entry<>"..") && ($entry<>".") && ($entry<>"")) $file[$i]=array("time"=>filemtime($entry), "file"=>$entry);
+		if (($entry!="..") && ($entry!=".") && ($entry!="")) $file[$i]=array("time"=>filemtime($ABSOLUTE_PATH_STUDIP."/user/".$entry), "file"=>$entry);
 		}
 	rsort ($file);
 	$i=5;
@@ -58,7 +57,8 @@ include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");  //Linkleiste fuer admins
 		$db->query("SELECT username FROM auth_user_md5 WHERE user_id='$usid'");
 		$db->next_record();
 		$usame=$db->f("username");
-		echo"<td class=\"angemeldet\" width=\"25%\" align=\"center\" valign=\"center\"><a href=\"about.php?username=", $usame, "\"><img border=0 src=\"user/", $file[$i-5]["file"],"\"></a></td>";
+		echo "<td class=\"angemeldet\" width=\"25%\" align=\"center\" valign=\"center\"><a href=\"about.php?username=", $usame, "\"><img border=0 src=\"user/", $file[$i-5]["file"],"\"></a><br />";
+		echo "<font size=-1>".get_fullname($usid)."<br/>".date("d.m.Y", $file [$i-5]["time"])."</font></td>";
 		if ((($i % 4) ==0)  && (!$i==0))  echo"</tr><tr>";
 		}
 	echo "</tr></table>";
