@@ -55,8 +55,8 @@ class StartupChecks {
 		$this->registered_checks["institutes"]["link"] = "admin_institut.php?i_view=new";
 		$this->registered_checks["institutes"]["link_name"] = _("neue Einrichtung anlegen");
 	
-		$this->registered_checks["institutesRange"]["msg_fak_admin"] = _("Es existieren keine Studienbereiche in der Veranstaltungshierarchie. Jede Fakult&auml;t sollte &uuml;ber mindestens einen Studienberereich verf&uuml;gen, damit Veranstaltungen angelegt werden k&ouml;nnen. Nutzen sie daf&uuml;r die Veranstaltunghierarchie, um Studienbereiche zu verwalten.");
-		$this->registered_checks["institutesRange"]["msg"] = _("Es existieren keine Studienbereiche in der Veranstaltungshierarchie. Jede Fakult&auml;t sollte &uuml;ber mindestens einen Studienberereich verf&uuml;gen, damit Veranstaltungen angelegt werden k&ouml;nnen. Bitte wenden Sie sich an einen der Administratoren des Systems.");
+		$this->registered_checks["institutesRange"]["msg_fak_admin"] = _("Es existieren keine Studienbereiche in der Veranstaltungshierarchie. Jede Fakult&auml;t sollte &uuml;ber mindestens einen Studienbereich verf&uuml;gen, damit Veranstaltungen angelegt werden k&ouml;nnen. Nutzen sie daf&uuml;r die Veranstaltunghierarchie, um Studienbereiche zu verwalten.");
+		$this->registered_checks["institutesRange"]["msg"] = _("Es existieren keine Studienbereiche in der Veranstaltungshierarchie. Jede Fakult&auml;t sollte &uuml;ber mindestens einen Studienbereich verf&uuml;gen, damit Veranstaltungen angelegt werden k&ouml;nnen. Bitte wenden Sie sich an einen der Administratoren des Systems.");
 		$this->registered_checks["institutesRange"]["link_fak_admin"] = "admin_sem_tree.php";
 		$this->registered_checks["institutesRange"]["link"] = "impressum.php?view=ansprechpartner";
 		$this->registered_checks["institutesRange"]["link_name_fak_admin"] = _("Studienbereiche verwalten");
