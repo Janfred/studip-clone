@@ -3,10 +3,10 @@
 	<xsl:output method="html" encoding="iso-8859-1"/>
 	<xsl:template match="/">
 <xsl:text>{\rtf1\ansi\ansicpg1252\deff0\deflang1031{\fonttbl{\f0\fnil\fcharset0 Times New Roman;}}
-\viewkind4\uc1\pard\par\</xsl:text>
+\viewkind4\uc1\pard\</xsl:text>
 
 		<xsl:for-each select="studip">
-				<xsl:text>\fs36 Veranstaltung: </xsl:text><xsl:value-of select="@range"/>
+				<xsl:text>\par\fs36 Veranstaltung: </xsl:text><xsl:value-of select="@range"/>
 			<xsl:for-each select="institut"><xsl:text>
 				\par</xsl:text>
 				<xsl:if test="personen">
@@ -37,11 +37,9 @@
 						</xsl:choose>
 					</xsl:if>
 <xsl:text>
-\par
-\par
 \page</xsl:text>
 				</xsl:for-each>
-\par\qr\fs24 Generiert von Stud.IP Version <xsl:value-of select="@version"/>
+\par\qr\fs16 Generiert von Stud.IP Version <xsl:value-of select="@version"/>
 			</xsl:for-each>
 		<xsl:text> }</xsl:text>
 	</xsl:template>
