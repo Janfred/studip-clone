@@ -397,7 +397,7 @@ class EvaluationObjectDB extends DatabaseObject {
       "      (b.stopdate IS NULL AND (b.startdate+b.timespan) <= ".time ().")".
       "     )";
 
-    $sql .= " ORDER BY mkdate DESC";
+    $sql .= " ORDER BY chdate DESC";
 
     if ($db->Debug)
        $sql .= " #eval->getEvaluationIDs ()";
