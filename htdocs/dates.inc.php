@@ -1055,21 +1055,22 @@ function isSchedule ($sem_id) {
 
 	//than we check, which ones matches to our metadates
 	while ($db->next_record()) {
-		foreach ($term_metadata["turnus_data"] as $val) {
-			//compense php sunday = 0 bullshit
-			if ($val["day"] == 7)
-				$t_day = 0;
-			else
-				$t_day = $val["day"];
-			
-			if ((date("w", $db->f("date")) == $t_day) &&
-				(date("G", $db->f("date")) == $val["start_stunde"]) &&
-				(date("i", $db->f("date")) == $val["start_minute"]) &&
-				(date("G", $db->f("end_time")) == $val["end_stunde"]) &&
-				(date("i", $db->f("end_time")) == $val["end_minute"]))
-				$matched_dates[$db->f("termin_id")] = TRUE;
+		if (is_array($term_metadata["turnus_data"]))
+			foreach ($term_metadata["turnus_data"] as $val) {
+				//compense php sunday = 0 bullshit
+				if ($val["day"] == 7)
+					$t_day = 0;
+				else
+					$t_day = $val["day"];
+				
+				if ((date("w", $db->f("date")) == $t_day) &&
+					(date("G", $db->f("date")) == $val["start_stunde"]) &&
+					(date("i", $db->f("date")) == $val["start_minute"]) &&
+					(date("G", $db->f("end_time")) == $val["end_stunde"]) &&
+					(date("i", $db->f("end_time")) == $val["end_minute"]))
+					$matched_dates[$db->f("termin_id")] = TRUE;
+			}
 		}
-	}
 
 	if (isset($matched_dates))
 		return TRUE;
