@@ -62,6 +62,10 @@ if ($group) {
 	$browse_data["sortby"]='';
 }
 
+if ($reset)
+	$browse_data='';
+
+
 ?>
 <body>
 <table width="100%" border=0 cellpadding=0 cellspacing=0>
@@ -192,6 +196,12 @@ if ($perm->have_perm("admin")):
 <?php
 endif;
 ?>
+<tr> 
+	<td class="steel1" align="left"width="100%" colspan=5>
+		<a href="<? echo $PHP_SELF ?>?reset=TRUE"><image src="./pictures/buttons/neuesuche-button.gif" border=0/></a></font>
+  	</td>
+</tr></form>
+
 
 </table>
 <br />
@@ -287,9 +297,9 @@ if (isset($query)):
 	$c=0;
   	while ($db->next_record()) {
 	  	if ($c % 2)
-			$class="steel1";
+			$class="steelgraulight";
 		else
-			$class="steelgraulight"; 
+			$class="steel1"; 
 		$c++;
 			switch ($browse_data["group"]) {
 				case "Seminar":
