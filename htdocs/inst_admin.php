@@ -257,11 +257,12 @@ else {
 					//ok, aber nur hochstufen (hat sich selbst schonmal gemeldet als Student an dem Inst)
 					if ($db->f("inst_perms") == "user")
 						$db2->query("UPDATE user_inst SET inst_perms='autor', Funktion='0' WHERE user_id='$u_id' AND Institut_id = '$ins_id' ");
-					// ok, als autor aufnehmen.
+					// ok, als das aufnehmen was er global ist aufnehmen.
 					else
-						$db2->query("INSERT into user_inst (user_id, Institut_id, inst_perms, Funktion) values ('$u_id', '$ins_id', 'autor', '0')");
+						$globalperms = get_global_perm($u_id);				
+						$db2->query("INSERT into user_inst (user_id, Institut_id, inst_perms, Funktion) values ('$u_id', '$ins_id', '$globalperms', '0')");
 					if ($db2->affected_rows())
-						my_msg("<b>$Fullname wurde als \"autor\" in die Einrichtung aufgenommen. Bitte verwenden Sie die untere Tabelle, um Rechte etc. zu &auml;ndern!</b>");
+						my_msg("<b>$Fullname wurde als \"$globalperms\" in die Einrichtung aufgenommen. Bitte verwenden Sie die untere Tabelle, um Rechte etc. zu &auml;ndern!</b>");
 					else
 						parse_msg ("error§<b>$Fullname konnte nicht in die Einrichtung aufgenommen werden!§");
 				}
