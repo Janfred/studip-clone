@@ -243,7 +243,7 @@ class messaging {
 		restoreLanguage();
 				
 		// Now, let us send the message
-		$smtp->SendMessage($smtp->env_from, array($to), array("From: ".$smtp->from, "To: \"$rec_fullname\" <$to>", "Reply-To: $reply_to", "Subject: $title"), $mailmessage);
+		$smtp->SendMessage($smtp->env_from, array($to), array("From: ".$smtp->from, "To: \"$rec_fullname\" <$to>", "Reply-To: $reply_to", "Subject: $title", "Content-Transfer-Encoding: 8bit"), $mailmessage);
 
 	}
 
