@@ -50,15 +50,12 @@ include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Sessio
 
 <?php
 
-###
-### Submit Handler
-###
 
-## Get a database connection
+// Get a database connection
 $db = new DB_Seminar;
 $db2 = new DB_Seminar;
 
-## Check if there was a submission
+// Check if there was a submission
 
 
 while ( is_array($HTTP_POST_VARS) 
@@ -66,27 +63,24 @@ while ( is_array($HTTP_POST_VARS)
   switch ($key) {
   
 
-  ## Neuer Studiengang
+  // Neuer Studiengang
   case "create":
-    ## Do we have all necessary data?
+    // Do we have all necessary data?
     if (empty($Name)) {
       my_error("<b>Bitte geben sie eine Bezeichnug f&uuml;r das Fach ein!</b>");
       break;
     }
     
-    ## Does the Studiengang already exist?
-    ## NOTE: This should be a transaction, but it isn't...
+    // Does the Studiengang already exist?
+    // NOTE: This should be a transaction, but it isn't...
     $db->query("SELECT * FROM studiengaenge WHERE name='$Name'");
     if ($db->nf()>0) {
       my_error(" <b>Der Studiengang \"".htmlReady(stripslashes($Name))."\" existiert bereits!");
       break;
     }
 
-    ## Create an id
+    // Create an id
     $i_id=md5(uniqid($hash_secret));
-
-		## Einfuegen des Faches
-
     $query = "INSERT INTO studiengaenge VALUES('$i_id','$Name','$Beschreibung', '".time()."', '".time()."') ";
     $db->query($query);
     if ($db->affected_rows() == 0) {
@@ -102,13 +96,13 @@ while ( is_array($HTTP_POST_VARS)
   ## Change Studiengangname
   case "i_edit":
 
-    ## Do we have all necessary data?
+    // Do we have all necessary data?
     if (empty($Name)) {
       my_error("<b>Bitte geben Sie eine Bezeichnug f&uuml;r den Studiengang ein!</b>");
       break;
     }
 		
-    ## Update Studiengang information.
+    // Update Studiengang information.
     $query = "UPDATE studiengaenge SET name='$Name', beschreibung='$Beschreibung' WHERE studiengang_id = '$i_id'";
     $db->query($query);
     if ($db->affected_rows() == 0) {
@@ -123,24 +117,31 @@ while ( is_array($HTTP_POST_VARS)
     unset($i_view);  // gibt keine Detailansicht
   break;
 
-  ## Delete the Studiengang
+  // Delete the Studiengang
   
   // diese Passage wäre zu diskutieren. Darf man Studiengänge löschen, denen sich Studis bereits zugeordnet haben?
   // Zur Vorsicht erst mal dringelassen.
 
   case "i_kill":
-    ## Studiengang in use?
-		$db->query("SELECT * FROM user_studiengang WHERE studiengang_id = '$i_id'");
-    if ($db->next_record()) {
-      my_error("<b>Dieser Studiengang kann nicht gel&ouml;scht werden, da sich noch Studierende zugeordnet haben!</b>");
-      break;
-    }
+    // sind dem Studengang noch veranstaltungen zugeordnet?
+	$db->query("SELECT * FROM admission_seminar_studiengang WHERE studiengang_id = '$i_id'");
+    	if ($db->next_record()) {
+      		my_error("<b>Dieser Studiengang kann nicht gel&ouml;scht werden, da noch Veranstaltungen zugeordnet sind!</b>");
+      		break;
+    	}
     
-    ## Delete that Fach
+// Loeschen des Studiengangs und eventuell noch daranhaengender user
+
     $query = "DELETE FROM studiengaenge WHERE studiengang_id='$i_id'";
     $db->query($query);
     if ($db->affected_rows() == 0) {
       my_error("<b>Datenbankoperation gescheitert: </b> $query</b>");
+      break;
+    }
+    $query = "DELETE FROM user_studiengang WHERE studiengang_id='$i_id'";
+    $db->query($query);
+    if ($db->affected_rows() == 0) {
+      my_error("<b>keine Nutzer betroffen</b>");
       break;
     }
     
@@ -158,7 +159,7 @@ while ( is_array($HTTP_POST_VARS)
 
 if ($i_view){
     if ($i_view<>"new") {
-      $db->query("SELECT studiengaenge.*, count(user_studiengang.user_id) AS number FROM studiengaenge LEFT JOIN user_studiengang USING(studiengang_id) WHERE studiengaenge.studiengang_id = '$i_view' GROUP BY studiengang_id");
+      $db->query("SELECT studiengaenge.*, count(admission_seminar_studiengang.seminar_id) AS number FROM studiengaenge LEFT JOIN admission_seminar_studiengang USING(studiengang_id) WHERE studiengaenge.studiengang_id = '$i_view' GROUP BY studiengang_id");
       $db->next_record();
     }
     $i_id= $db->f("studiengang_id");
@@ -191,13 +192,28 @@ if ($i_view){
 	<input type="hidden" name="i_view" value="<? echo $i_view; ?>">
   	</form></td></tr></table>
 	<br><br>
-
- 
 <?
+  	if ($i_view<>"new")
+		{
+ 		$db->query("SELECT Name, seminare.seminar_id FROM admission_seminar_studiengang LEFT JOIN seminare USING (seminar_id) WHERE studiengang_id = '$i_id'");
+ 		?>
+ 		<table border=0 align="center" width="80%" cellspacing=0 cellpadding=2>
+ <?
+        IF ($db->affected_rows() > 0) {?><tr><td width="100%" colspan=2><br>&nbsp;Diesem Studiengang sind folgende teilnahmebeschr&auml;nkte Veranstaltungen zugeordnet:<br><br></th></tr><?}
+        ELSE {?><tr><td width="100%" colspan=2><br>&nbsp;Diesem Bereich sind noch keine Veranstaltungen zugeordnet!<br><br></th></tr><?}
+?>
+ 		<tr><th width="100%" align="center">Name</th><tr>
+		<?
+ 		while ($db->next_record()) {
+ 			printf ("<tr><td class=\"%s\"><a href=\"admin_admission.php?seminar_id=%s\">&nbsp; %s</a></td></tr>", $cssSw->getClass(), $db->f("seminar_id"), htmlReady($db->f("Name")));
+	            	$cssSw->switchClass();
+    		}
+	echo "</table><br><br>";
+	}
 }
 
-### Output Studiengang administration forms, including all updated
-### information, if we come here after a submission...
+// Output Studiengang administration forms, including all updated
+// information, if we come here after a submission...
 
 if (!$i_view) {
 ?>
@@ -205,20 +221,18 @@ if (!$i_view) {
   <tr><td class="blank" colspan=2>
   <table align=center bg="#ffffff" width="80%" border=0 cellpadding=2 cellspacing=0>
   <tr valign=top align=middle>
-  <th width="80%"><a href="<?echo $PHP_SELF?>?sortby=name">Name des Studiengangs</a></th>
-  <th width="20%"><a href="<?echo $PHP_SELF?>?sortby=number">Anzahl der Studierenden</a></th>
+  <th width="80%">Name des Studiengangs</th>
+  <th width="20%">Veranstaltungen</th>
   </tr>
 <?  
-  ## nachsehen, ob wir ein Sortierkriterium haben, sonst nach Name
-  if (!isset($sortby) || $sortby=="") $sortby = "name";
-  ## Traverse the result set
-  $db->query("SELECT studiengaenge.*, count(user_studiengang.studiengang_id) AS number FROM studiengaenge LEFT JOIN user_studiengang USING(studiengang_id) GROUP BY studiengang_id ORDER BY $sortby");
+  
+  // Traverse the result set
+  $db->query("SELECT studiengaenge.*, count(admission_seminar_studiengang.seminar_id) AS count FROM studiengaenge LEFT JOIN admission_seminar_studiengang USING(studiengang_id) GROUP BY studiengang_id ORDER BY name");
   while ($db->next_record()) {        //Aufbauen der &Uuml;bersichtstabelle
-?>
-           <!-- existing Institut -->
+?>     
            <tr valign=middle align=left>
            <td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>"><a href="<?echo $PHP_SELF?>?i_view=<?$db->p("studiengang_id")?>">&nbsp;<?php echo htmlReady($db->f("name")) ?></a></td>
-           <td class="<? echo $cssSw->getClass() ?>" align=center>&nbsp;<?php $db->p("number") ?></td>
+           <td class="<? echo $cssSw->getClass() ?>" align=center>&nbsp;<?php $db->p("count") ?></td>
            </tr>
            <?php
   }
