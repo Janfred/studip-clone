@@ -212,85 +212,87 @@ $_is_fak = false;
 			$_lit_data[$db->f('catalog_id')] = $db->Record;
 		}
 	}
-	foreach ($_lit_data as $cid => $data){
-		$element->setValues($data);
-		if ($element->getValue('catalog_id')){
-			if ($_anker_id == $element->getValue('catalog_id')){
-				$icon = "<a name=\"anker\"><img src=\"pictures/cont_lit.gif\" border=\"0\" align=\"bottom\"></a>";
-			} else {
-				$icon = "<img src=\"pictures/cont_lit.gif\" border=\"0\" align=\"bottom\">";
-			}
-			$addon = '<input type="checkbox" name="_check_list[]" value="' . $element->getValue('catalog_id') . '">';
-			$open = isset($_open[$element->getValue('catalog_id')]) ? 'open' : 'close';
-			$link = $PHP_SELF . '?' . (isset($_open[$element->getValue('catalog_id')]) ? 'close' : 'open') . '_element=' . $element->getValue('catalog_id') . '#anker';
-			$titel = '<a href="' . $link . '" class="tree">' . htmlReady(my_substr($element->getShortName(),0,85)) . '</a>';
-			echo "\n<table width=\"99%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" align=\"center\"><tr>";
-			printhead(0,0,$link,$open,true,$icon,$titel,$addon);
-			echo "\n</tr></table>";
-			if ($open == 'open'){
-				$edit = "";
-				$content = "";
-				$estimated_p = 0;
-				$participants = 0;
-				$edit .= "<a href=\"$PHP_SELF?_catalog_id=" . $element->getValue("catalog_id") . "#anker\">"
-				. "<img " .makeButton("jetzttesten","src") . tooltip(_("Verfügbarkeit überprüfen"))
-				. " border=\"0\"></a>&nbsp;";
-				$edit .= "<a href=\"admin_lit_element.php?_catalog_id=" . $element->getValue("catalog_id") . "\">"
-				. "<img " .makeButton("details","src") . tooltip(_("Detailansicht dieses Eintrages ansehen."))
-				. " border=\"0\"></a>&nbsp;";
-				echo "\n<table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\">";
-				$content .= "<b>" . _("Titel:") ."</b>&nbsp;&nbsp;" . htmlReady($element->getValue("dc_title"),true,true) . "<br>";
-				$content .= "<b>" . _("Autor; weitere Beteiligte:") ."</b>&nbsp;&nbsp;" . htmlReady($element->getValue("authors"),true,true) . "<br>";
-				$content .= "<b>" . _("Erschienen:") ."</b>&nbsp;&nbsp;" . htmlReady($element->getValue("published"),true,true) . "<br>";
-				$content .= "<b>" . _("Identifikation:") ."</b>&nbsp;&nbsp;" . fixLinks(htmlReady($element->getValue("dc_identifier"),true,true)) . "<br>";
-				if ($element->getValue("lit_plugin") != "Studip"){
-					$content .= "<b>" . _("Externer Link:") ."</b>&nbsp;&nbsp;";
-					if (($link = $element->getValue("external_link"))){
-						$content.= formatReady(" [" . $element->getValue("lit_plugin"). "]" . $link);
-					} else {
-						$content .= _("(Kein externer Link vorhanden.)");
-					}
-					$content .= "<br>";
+	if (is_array($_lit_data)){
+		foreach ($_lit_data as $cid => $data){
+			$element->setValues($data);
+			if ($element->getValue('catalog_id')){
+				if ($_anker_id == $element->getValue('catalog_id')){
+					$icon = "<a name=\"anker\"><img src=\"pictures/cont_lit.gif\" border=\"0\" align=\"bottom\"></a>";
+				} else {
+					$icon = "<img src=\"pictures/cont_lit.gif\" border=\"0\" align=\"bottom\">";
 				}
-				$db2->query(str_replace('?', $element->getValue('catalog_id'), $sql2));
-				$content .= "<b>" . _("Veranstaltungen:") . "</b>&nbsp;&nbsp;";
-				while ($db2->next_record()){
-					$content .= '<a href="details.php?sem_id=' . $db2->f('Seminar_id') . '&send_from_search=1&send_from_search_page=' . $PHP_SELF . '">' . htmlReady(my_substr($db2->f("Name"),0,50)) . "</a>, ";
-					$estimated_p += $db2->f('admission_turnout');
-					$participants += $db2->f('participants');
-				}
-				$content = substr($content,0,-2);
-				$content .= "<br>";
-				$content .= "<b>" . _("Teilnehmeranzahl (erwartet/angemeldet):") . "</b>&nbsp;&nbsp;";
-				$content .= ($estimated_p ? $estimated_p : _("unbekannt"));
-				$content .= ' / ' . (int)$participants;
-				$content .= "<br>";
-				if ($_REQUEST['_catalog_id'] == $element->getValue('catalog_id') ){
-					$_lit_data[$cid]['check_accession'] = StudipLitSearch::CheckZ3950($element->getValue('accession_number'));
-				}
-				if (is_array($_lit_data[$cid]['check_accession'])){
-					$content .= "<div style=\"margin-top: 10px;border: 1px solid black;padding: 5px; width:96%;\"<b>" ._("Verf&uuml;gbarkeit in externen Katalogen:") . "</b><br>";
-					foreach ( $_lit_data[$cid]['check_accession'] as $plugin_name => $ret){
-						$content .= "<b>&nbsp;{$plugin_name}&nbsp;</b>";
-						if ($ret['found']){
-							$content .= _("gefunden") . "&nbsp;";
-							$element->setValue('lit_plugin', $plugin_name);
-							if (($link = $element->getValue("external_link"))){
-								$content.= formatReady(" [" . $element->getValue("lit_plugin"). "]" . $link);
-							} else {
-								$content .= _("(Kein externer Link vorhanden.)");
-							}
-						} elseif (count($ret['error'])){
-							$content .= '<span style="color:red;">' . htmlReady($ret['error'][0]['msg']) . '</span>';
+				$addon = '<input type="checkbox" name="_check_list[]" value="' . $element->getValue('catalog_id') . '">';
+				$open = isset($_open[$element->getValue('catalog_id')]) ? 'open' : 'close';
+				$link = $PHP_SELF . '?' . (isset($_open[$element->getValue('catalog_id')]) ? 'close' : 'open') . '_element=' . $element->getValue('catalog_id') . '#anker';
+				$titel = '<a href="' . $link . '" class="tree">' . htmlReady(my_substr($element->getShortName(),0,85)) . '</a>';
+				echo "\n<table width=\"99%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" align=\"center\"><tr>";
+				printhead(0,0,$link,$open,true,$icon,$titel,$addon);
+				echo "\n</tr></table>";
+				if ($open == 'open'){
+					$edit = "";
+					$content = "";
+					$estimated_p = 0;
+					$participants = 0;
+					$edit .= "<a href=\"$PHP_SELF?_catalog_id=" . $element->getValue("catalog_id") . "#anker\">"
+					. "<img " .makeButton("jetzttesten","src") . tooltip(_("Verfügbarkeit überprüfen"))
+					. " border=\"0\"></a>&nbsp;";
+					$edit .= "<a href=\"admin_lit_element.php?_catalog_id=" . $element->getValue("catalog_id") . "\">"
+					. "<img " .makeButton("details","src") . tooltip(_("Detailansicht dieses Eintrages ansehen."))
+					. " border=\"0\"></a>&nbsp;";
+					echo "\n<table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\">";
+					$content .= "<b>" . _("Titel:") ."</b>&nbsp;&nbsp;" . htmlReady($element->getValue("dc_title"),true,true) . "<br>";
+					$content .= "<b>" . _("Autor; weitere Beteiligte:") ."</b>&nbsp;&nbsp;" . htmlReady($element->getValue("authors"),true,true) . "<br>";
+					$content .= "<b>" . _("Erschienen:") ."</b>&nbsp;&nbsp;" . htmlReady($element->getValue("published"),true,true) . "<br>";
+					$content .= "<b>" . _("Identifikation:") ."</b>&nbsp;&nbsp;" . fixLinks(htmlReady($element->getValue("dc_identifier"),true,true)) . "<br>";
+					if ($element->getValue("lit_plugin") != "Studip"){
+						$content .= "<b>" . _("Externer Link:") ."</b>&nbsp;&nbsp;";
+						if (($link = $element->getValue("external_link"))){
+							$content.= formatReady(" [" . $element->getValue("lit_plugin"). "]" . $link);
 						} else {
-							$content .= _("<u>nicht</u> gefunden") . "&nbsp;";
+							$content .= _("(Kein externer Link vorhanden.)");
 						}
 						$content .= "<br>";
 					}
-					$content .= "</div>";
+					$db2->query(str_replace('?', $element->getValue('catalog_id'), $sql2));
+					$content .= "<b>" . _("Veranstaltungen:") . "</b>&nbsp;&nbsp;";
+					while ($db2->next_record()){
+						$content .= '<a href="details.php?sem_id=' . $db2->f('Seminar_id') . '&send_from_search=1&send_from_search_page=' . $PHP_SELF . '">' . htmlReady(my_substr($db2->f("Name"),0,50)) . "</a>, ";
+						$estimated_p += $db2->f('admission_turnout');
+						$participants += $db2->f('participants');
+					}
+					$content = substr($content,0,-2);
+					$content .= "<br>";
+					$content .= "<b>" . _("Teilnehmeranzahl (erwartet/angemeldet):") . "</b>&nbsp;&nbsp;";
+					$content .= ($estimated_p ? $estimated_p : _("unbekannt"));
+					$content .= ' / ' . (int)$participants;
+					$content .= "<br>";
+					if ($_REQUEST['_catalog_id'] == $element->getValue('catalog_id') ){
+						$_lit_data[$cid]['check_accession'] = StudipLitSearch::CheckZ3950($element->getValue('accession_number'));
+					}
+					if (is_array($_lit_data[$cid]['check_accession'])){
+						$content .= "<div style=\"margin-top: 10px;border: 1px solid black;padding: 5px; width:96%;\"<b>" ._("Verf&uuml;gbarkeit in externen Katalogen:") . "</b><br>";
+						foreach ( $_lit_data[$cid]['check_accession'] as $plugin_name => $ret){
+							$content .= "<b>&nbsp;{$plugin_name}&nbsp;</b>";
+							if ($ret['found']){
+								$content .= _("gefunden") . "&nbsp;";
+								$element->setValue('lit_plugin', $plugin_name);
+								if (($link = $element->getValue("external_link"))){
+									$content.= formatReady(" [" . $element->getValue("lit_plugin"). "]" . $link);
+								} else {
+									$content .= _("(Kein externer Link vorhanden.)");
+								}
+							} elseif (count($ret['error'])){
+								$content .= '<span style="color:red;">' . htmlReady($ret['error'][0]['msg']) . '</span>';
+							} else {
+								$content .= _("<u>nicht</u> gefunden") . "&nbsp;";
+							}
+							$content .= "<br>";
+						}
+						$content .= "</div>";
+					}
+					printcontent(0,0,$content,$edit);
+					echo "\n</table>";
 				}
-				printcontent(0,0,$content,$edit);
-				echo "\n</table>";
 			}
 		}
 	}
