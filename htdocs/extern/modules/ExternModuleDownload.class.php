@@ -74,7 +74,7 @@ class ExternModuleDownload extends ExternModule {
 		if ($this->config->getValue("Main", "wholesite")) {				
 			echo html_header($this->config->getValue("Main", "title"),
 					$this->config->getValue("Main", "urlcss"),
-					$this->config->getValue("Body", "body"));
+					$this->config->getAttributes("Body", "body"));
 		}
 		
 		include($GLOBALS["ABSOLUTE_PATH_STUDIP"] . $GLOBALS["RELATIVE_PATH_EXTERN"]
@@ -88,7 +88,7 @@ class ExternModuleDownload extends ExternModule {
 		if ($this->config->getValue("Main", "wholesite")) {
 			echo html_header($this->config->getValue("Main", "title"),
 					$this->config->getValue("Main", "urlcss"),
-					$this->config->getValue("Body", "body"));
+					$this->config->getAttributes("Body", "body"));
 		}
 		
 		include($GLOBALS["ABSOLUTE_PATH_STUDIP"] . $GLOBALS["RELATIVE_PATH_EXTERN"]
