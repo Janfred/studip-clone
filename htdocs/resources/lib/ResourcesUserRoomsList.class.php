@@ -57,9 +57,6 @@ class ResourcesUserRoomsList {
 		
 		$this->return_objects = $return_objects;
 		$this->only_rooms = $only_rooms;
-		if (!$this->return_objects)
-			$sort = FALSE;
-			
 		$this->category_id = $category_id;
 		$this->restore();
 		if($sort)
@@ -86,7 +83,7 @@ class ResourcesUserRoomsList {
 		$db->next_record();
 		$db->f("count");
 		
-		if  (($db->f("resource_id")) && (((isLockPeriod(time())) && (!$db->f("lockable"))) || (!isLockPeriod(time()) || (getGlobalsPerms($user->id) == "admin")))) {
+		if  (($db->f("resource_id")) && (((isLockPeriod(time())) && (!$db->f("lockable"))) || (!isLockPeriod(time()) || (getGlobalPerms($user->id) == "admin")))) {
 			if ($this->return_objects) {
 				$resource_object = new ResourceObject ($resource_id);
 				$this->resources[$resource_id] = $resource_object;
@@ -104,24 +101,24 @@ class ResourcesUserRoomsList {
 	
 	// private
 	function restore() {
-		global $perm;
+		global $perm, $user;
 		
 		$db = new DB_Seminar;
 		$db2 = new DB_Seminar;
 		
-		//if perm is root, load all rooms/objects
-		if ($perm->have_perm ("root")) {
+		//if perm is root or resources admin, load all rooms/objects
+		if (($perm->have_perm ("root")) || (getGlobalPerms($user->id) == "admin")) { //hier muss auch admin rein!! {
 			if ($this->only_rooms)
-				$query = sprintf ("SELECT resource_id FROM resources_categories LEFT JOIN resources_objects USING (category_id) WHERE resources_categories.is_room = '1' ");
+				$query = sprintf ("SELECT resource_id, resources_objects.name FROM resources_categories LEFT JOIN resources_objects USING (category_id) WHERE resources_categories.is_room = '1' ");
 			else
-				$query = sprintf ("SELECT resource_id FROM resources_objects ");			
+				$query = sprintf ("SELECT resource_id, resources_objects.name FROM resources_objects ");			
 			$db->query($query);
 			while ($db->next_record()) {
 				if ($this->return_objects) {
 					$resource_object = new ResourceObject ($db->f("resource_id"));
 					$this->resources[$db->f("resource_id")] = $resource_object;
 				} else {
-					$this->resources[$db->f("resource_id")] = TRUE;
+					$this->resources[$db->f("resource_id")] = array("name"=>$db->f("name"), "resource_id" =>$db->f("resource_id"));
 				}
 			}
 		//if tutor, dozent or admin, load all the rooms of all his administrable objects
@@ -197,6 +194,9 @@ class ResourcesUserRoomsList {
 	
 	function sort(){
 		if ($this->resources) 
-			usort($this->resources,"cmp_resources");
+			if ($return_objects)
+				usort($this->resources,"cmp_resources");
+			else
+				sort ($this->resources);
 	}
 } 

@@ -60,7 +60,7 @@ switch ($view) {
 								array	("icon" => "pictures/suchen.gif",
 									"text"  => (($resources_data["search_mode"] == "browse") || (!$resources_data["search_mode"]))? sprintf(_("Ressourcen &uuml;ber ihre %sEigenschaften%s suchen"), "<a href=\"$PHPSELF?quick_view=search&quick_view_mode=".$view_mode."&mode=properties\">", "</a>") :  sprintf(_("%sEbenen%s durchsuchen"), "<a href=\"$PHP_SELF?view=search&quick_view_mode=".$view_mode."&mode=browse\">", "</a>")),
 								array("icon" => "pictures/blank.gif",
-									"text"  => "<br /><a href=\"$PHP_SELF?qwuick_view=search&quick_view_mode=".$view_mode."&reset=TRUE\">".makeButton("neuesuche")."</a>"))));
+									"text"  => "<br /><a href=\"$PHP_SELF?quick_view=search&quick_view_mode=".$view_mode."&reset=TRUE\">".makeButton("neuesuche")."</a>"))));
 		$infopic = "pictures/rooms.jpg";
 		$clipboard = TRUE;
 	break;
@@ -123,7 +123,11 @@ switch ($view) {
 			$infobox[0]["eintrag"][] = array ("icon" => "pictures/link_intern.gif",
 									"text"  =>"<a href=\"$PHP_SELF?quick_view=search&quick_view_mode=".$view_mode."\">"._("zur&uuml;ck zur Suche")."</a>");
 
-		if (!($view_mode == "search")) {
+		if ($view_mode == "no_nav")
+			$infobox[0]["eintrag"][] = array ("icon" => "pictures/link_intern.gif",
+									"text"  =>"<a href=\"$PHP_SELF?quick_view=search&quick_view_mode=".$view_mode."\">"._("zur Ressourcensuche")."</a>");
+
+		if ($view_mode != "search" && $view_mode != "no_nav") {
 			if ($SessSemName["class"] == "sem")
 				$infobox[0]["eintrag"][] = array ("icon" => "pictures/link_intern.gif",
 										"text"  => "<a href=\"seminar_main.php\">"._("zur&uuml;ck zur Veranstaltung")."</a>");
@@ -213,7 +217,12 @@ switch ($view) {
 					$infobox[0]["eintrag"][] = array ("icon" => "pictures/link_intern.gif",
 											"text"  =>sprintf (_("Eine neue Belegung %serstellen%s"), ($view_mode == "oobj") ? "<a href=\"$PHP_SELF?quick_view=openobject_assign&quick_view_mode=".$view_mode."\">" : "<a href=\"$PHP_SELF?quick_view=edit_object_assign&quick_view_mode=".$view_mode."\">", "</a>"));
 			}
-			if (!($view_mode == "search")) {
+			
+			if ($view_mode == "no_nav")
+				$infobox[0]["eintrag"][] = array ("icon" => "pictures/link_intern.gif",
+									"text"  =>"<a href=\"$PHP_SELF?quick_view=search&quick_view_mode=".$view_mode."\">"._("zur Ressourcensuche")."</a>");
+
+			if ($view_mode != "search" && $view_mode != "no_nav") {
 				if ($SessSemName["class"] == "sem")
 					$infobox[0]["eintrag"][] = array ("icon" => "pictures/link_intern.gif",
 											"text"  => "<a href=\"seminar_main.php\">"._("zur&uuml;ck zur Veranstaltung")."</a>");

@@ -211,8 +211,6 @@ class RoomRequest {
 	}
 
 	function searchRooms($search_exp, $properties = FALSE, $limit = 0, $only_rooms = TRUE, $permitted_resources = FALSE) {
-	
-		print_r ($permitted_resources);
 		//create permitted resource clause
 		if (is_array($permitted_resources)) {
 			$permitted_resources_clause="AND resource_id IN ('".join("','",$permitted_resources)."')";

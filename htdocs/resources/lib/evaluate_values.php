@@ -113,7 +113,6 @@ if ((sizeof ($_REQUEST) == 3) && ($edit_assign_object) && (($view == "edit_objec
 	$new_assign_object=FALSE;
 }
 
-
 //send the user to index, if he want to use studip-object based modul but has no object set!
 if (($view=="openobject_main") || ($view=="openobject_details") || ($view=="openobject_assign") || ($view=="openobject_schedule"))
 	if (!$SessSemName[1]) {
@@ -308,6 +307,10 @@ edit/add assigns
 if ($change_object_schedules) {
 	require_once ($ABSOLUTE_PATH_STUDIP."calendar_functions.inc.php"); //needed for extended checkdate
 	require_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
+	require_once ($ABSOLUTE_PATH_STUDIP."/lib/classes/SemesterData.class.php");
+	
+	$semester = new SemesterData;
+	$all_semester = $semester->getAllSemesterData();
 
 	//load the object perms
 	$ObjectPerms = new ResourceObjectPerms($change_schedule_resource_id);
@@ -402,7 +405,7 @@ if ($change_object_schedules) {
 					$change_schedule_repeat_end=mktime(23, 59, 59, $change_schedule_repeat_end_month, $change_schedule_repeat_end_day, $change_schedule_repeat_end_year);
 
 			if ($change_schedule_repeat_sem_end)
-				foreach ($SEMESTER as $a)	
+				foreach ($all_semester as $a)	
 					if (($change_schedule_begin >= $a["beginn"]) && ($change_schedule_begin <= $a["ende"]))
 						$change_schedule_repeat_end=$a["vorles_ende"];
 			
@@ -1048,10 +1051,10 @@ if (($start_multiple_mode_x) || ($single_request)) {
 			$order = "seats DESC, complexity DESC";
 		if ($resolve_requests_order = "newest")
 			$order = "a.mkdate DESC";
-		if ($resolve_requests_order = "newest")
+		if ($resolve_requests_order = "oldest")
 			$order = "a.mkdate ASC";
 	
-		$query = sprintf ("SELECT a.request_id, a. resource_id, COUNT(b.property_id) AS complexity, MAX(d.state) AS seats
+		$query = sprintf ("SELECT a.request_id, a.resource_id, COUNT(b.property_id) AS complexity, MAX(d.state) AS seats
 				FROM resources_requests a 
 				LEFT JOIN resources_requests_properties b USING (request_id)
 				LEFT JOIN resources_properties c ON (b.property_id = c.property_id AND c.system = 2)
@@ -1128,7 +1131,7 @@ if ($save_state_x) {
 		}
 		
 		if ($no_perm)
-			$add_msg(25);
+			$msg->add_msg(25);
 		else {
 			//grouped multiple date mode
 			if ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["grouping"]) {

@@ -280,7 +280,7 @@ function getMyRoomRequests($user_id = '') {
 	if (!$user_id)
 		$user_id = $user->id;
 		
-	if ((getGlobalPerms($user_id) == "admin") && ($perm->have_perm("root"))) {
+	if ((getGlobalPerms($user_id) == "admin") || ($perm->have_perm("root"))) {
 		$query = sprintf("SELECT request_id, closed FROM resources_requests");
 		$db->query($query);
 		while ($db->next_record()) {

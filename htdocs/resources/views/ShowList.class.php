@@ -88,10 +88,14 @@ class ShowList extends ShowTreeRow{
 		
 		if (!$resObject->getId())
 			return FALSE;
-		
+
+		//link add for special view mode (own window)
+		if ($view_mode == "no_nav")
+			$link_add = "&quick_view=".$view."&quick_view_mode=".$view_mode;
+
 		if ($this->simple_list){
 			//create a simple list intead of printhead/printcontent-design
-			$return="<li><a href=\"$PHP_SELF?view=view_details&actual_object=".$resObject->getId()."\">".$resObject->getName()."</a></li>\n";
+			$return="<li><a href=\"$PHP_SELF?view=view_details&actual_object=".$resObject->getId().$link_add."\">".$resObject->getName()."</a></li>\n";
 			print $return;
 		} else {
 			//Daten vorbereiten
@@ -99,17 +103,17 @@ class ShowList extends ShowTreeRow{
 				$icon="<img src=\"pictures/cont_folder2.gif\" />";
 			else
 				$icon="<img src=\"$RELATIVE_PATH_RESOURCES/pictures/cont_res".$resObject->getCategoryIconnr().".gif\" />";
-	
+			
 			if ($resources_data["structure_opens"][$resObject->id]) {			
-				$link=$PHP_SELF."?structure_close=".$resObject->id."#a";
+				$link=$PHP_SELF."?structure_close=".$resObject->id.$link_add."#a";
 				$open="open";
 				if ($resources_data["actual_object"] == $resObject->id)
 					echo "<a name=\"a\"></a>";
 			} else {
-				$link=$PHP_SELF."?structure_open=".$resObject->id."#a";
+				$link=$PHP_SELF."?structure_open=".$resObject->id.$link_add."#a";
 				$open="close";
 			}
-	
+			
 			$titel='';
 			if ($resObject->getCategoryName())
 				$titel=$resObject->getCategoryName().": ";
@@ -132,9 +136,9 @@ class ShowList extends ShowTreeRow{
 			//clipboard in/out
 			if ((getGlobalPerms($user->id) == "admin") && (is_object($clipObj)))
 				if ($clipObj->isInClipboard($resObject->getId()))
-					$zusatz .= "<a href=\"".$PHP_SELF."?clip_out=".$resObject->getId()."\"><img src=\"pictures/forum_fav.gif\" border=\"0\" ".tooltip(_("Aus der Merkliste entfernen"))." /></a>";
+					$zusatz .= "<a href=\"".$PHP_SELF."?clip_out=".$resObject->getId().$link_add."\"><img src=\"pictures/forum_fav.gif\" border=\"0\" ".tooltip(_("Aus der Merkliste entfernen"))." /></a>";
 				else
-					$zusatz .= "<a href=\"".$PHP_SELF."?clip_in=".$resObject->getId()."\"><img src=\"pictures/forum_fav2.gif\" border=\"0\" ".tooltip(_("In Merkliste aufnehmen"))." /></a>";
+					$zusatz .= "<a href=\"".$PHP_SELF."?clip_in=".$resObject->getId().$link_add."\"><img src=\"pictures/forum_fav2.gif\" border=\"0\" ".tooltip(_("In Merkliste aufnehmen"))." /></a>";
 				
 			$new=TRUE;
 			if ($open=="open") {
@@ -167,14 +171,19 @@ class ShowList extends ShowTreeRow{
 							$edit.= "<a href=\"$PHP_SELF?show_object=$resObject->id&view=openobject_schedule\">".makeButton("belegung")."</a>&nbsp;";
 					$edit.= "<a href=\"$PHP_SELF?show_object=$resObject->id&view=openobject_details\">".makeButton("eigenschaften")."</a>";
 				} else {
-					echo $view_mode;
 					if (($perms == "autor") || ($perms == "admin") || ($perms == "tutor"))
 						if ($resObject->getCategoryId())
 							$edit.= sprintf ("<a href=\"%s?show_object=%s&%sview=view_schedule%s\">".makeButton("belegung")."</a>&nbsp;", $PHP_SELF, $resObject->id, ($view_mode == "no_nav") ? "quick_" : "", ($view_mode == "no_nav") ? "&quick_view_mode=$view_mode" : "");
 					$edit.= sprintf ("<a href=\"%s?show_object=%s&%sview=view_details%s\">".makeButton("eigenschaften")."</a>", $PHP_SELF, $resObject->id, ($view_mode == "no_nav") ? "quick_" : "", ($view_mode == "no_nav") ? "&quick_view_mode=$view_mode" : "");
 				}
+				
+				//clipboard in/out
+				if ((getGlobalPerms($user->id) == "admin") && (is_object($clipObj)))
+					if ($clipObj->isInClipboard($resObject->getId()))
+						$edit .= "&nbsp;<a href=\"".$PHP_SELF."?clip_out=".$resObject->getId().$link_add."\"><img ".makeButton("merkliste", "src")." border=\"0\" ".tooltip(_("Aus der Merkliste entfernen"))." align=\"absmiddle\"/></a>";
+					else
+						$edit .= "&nbsp;<a href=\"".$PHP_SELF."?clip_in=".$resObject->getId().$link_add."\"><img ".makeButton("merkliste", "src")." border=\"0\" ".tooltip(_("In Merkliste aufnehmen"))." align=\"absmiddle\"/></a>";
 			}
-	
 			//Daten an Ausgabemodul senden
 			$this->showRow($icon, $link, $titel, $zusatz, 0, 0, 0, $new, $open, $content, $edit);
 		}

@@ -95,7 +95,7 @@ class ResourcesBrowse {
 	
 	//private
 	function getHistory($id, $view = FALSE) {
-		global $PHP_SELF, $UNI_URL, $UNI_NAME, $view_mode;
+		global $PHP_SELF, $UNI_URL, $UNI_NAME, $view, $view_mode;
 		$top=FALSE;
 		$k=0;
 		while ((!$top) && ($id)) {

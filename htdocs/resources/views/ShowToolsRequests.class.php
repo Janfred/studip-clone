@@ -150,9 +150,9 @@ class ShowToolsRequests {
 								<font size="-1">
 								<?
 								print _("Art der Anfragen:");
-								print "<br /><br /><input type=\"RADIO\" name=\"resolve_requests_mode\" value=\"sem\" checked />&nbsp;"._("alle Anfragen");
-								print "<br /><input type=\"RADIO\" name=\"resolve_requests_mode\" value=\"res\" />&nbsp;"._("nur Anfragen von meinen Veranstaltungen");
-								print "<br /><input type=\"RADIO\" name=\"resolve_requests_mode\" value=\"all\" />&nbsp;"._("nur Anfragen auf meine R&auml;ume");
+								print "<br /><br /><input type=\"RADIO\" name=\"resolve_requests_mode\" value=\"all\" checked />&nbsp;"._("alle Anfragen");
+								print "<br /><input type=\"RADIO\" name=\"resolve_requests_mode\" value=\"sem\" />&nbsp;"._("nur Anfragen von meinen Veranstaltungen");
+								print "<br /><input type=\"RADIO\" name=\"resolve_requests_mode\" value=\"res\" />&nbsp;"._("nur Anfragen auf meine R&auml;ume");
 								?>
 								</font>
 							</td>
@@ -443,7 +443,7 @@ class ShowToolsRequests {
 										$percent_diff = "+".$percent_diff;
 									if ($percent_diff < 0)
 										$percent_diff = "-".$percent_diff;
-									print "<font style=\"font-size:10px;\">$percent_diff%</font>";
+									print "<font style=\"font-size:10px;\">".round($percent_diff)."%</font>";
 								}
 								?>
 							</td>
@@ -516,7 +516,7 @@ class ShowToolsRequests {
 										$percent_diff = "+".$percent_diff;
 									if ($percent_diff < 0)
 										$percent_diff = "-".$percent_diff;
-									print "<font style=\"font-size:10px;\">$percent_diff%</font>";
+									print "<font style=\"font-size:10px;\">".round($percent_diff)."%</font>";
 								}
 								?>
 							</td>
