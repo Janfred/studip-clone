@@ -1235,7 +1235,7 @@ function isSchedule ($sem_id, $presence_dates_only = TRUE, $clearcache = FALSE) 
 	$db->query($query);
 	
 	if ($term_metadata["art"] == 1) {
-		$cache[$sem_id] = $db->nf();
+		$cache[$sem_id] = 0;
 		return $cache[$sem_id];
 		
 	} else {
