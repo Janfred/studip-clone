@@ -97,7 +97,7 @@ else
 		$icon="&nbsp;<img src=\"./pictures/news-icon.gif\" border=0>";
 		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width='$width'><tr>";
 						
-	    $db2->query("SELECT username, " . $_fullname_sql['full'] ." AS fullname FROM auth_user_md5 LEFT JOIN user_info USING (user_id) WHERE user_id='".$db->f("user_id")."'");
+	    $db2->query("SELECT username, " . $_fullname_sql['full'] ." AS fullname FROM auth_user_md5 a LEFT JOIN user_info USING (user_id) WHERE a.user_id='".$db->f("user_id")."'");
 	  	$db2->next_record();
 		$link .= "&username=".$db2->f("username");
 		$zusatz="<a href=\"about.php?username=".$db2->f("username")."\"><font size=-1 color=\"#333399\">".$db2->f("fullname")."</font></a><font size=-1>&nbsp;".date("d.m.Y",$db->f("date"))."</font>";			
