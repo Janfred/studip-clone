@@ -100,7 +100,7 @@ class ScheduleWeek {
 		}
 	}
 	
-	
+	//private
 	function createCellAllocation() {
 		
 		if (is_array($this->events)) 
@@ -121,7 +121,7 @@ class ScheduleWeek {
 			}	
 	}
 	
-	
+	//private
 	function handleOverlaps() {
 		
 		$i=1;
@@ -166,7 +166,8 @@ class ScheduleWeek {
 			}
 		}	
 	}
-
+	
+	//private
 	function createHtmlOutput() {
 		$glb_colspan=0;
 		if ($this->show_days[1]) $glb_colspan++;
@@ -283,7 +284,7 @@ class ScheduleWeek {
 	</table>
 	<?
 	}
-
+	
 	function createSchedule($mode="html") {
 		$this->createCellAllocation();
 		$this->handleOverlaps();
