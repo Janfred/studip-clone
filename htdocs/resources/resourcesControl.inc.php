@@ -47,8 +47,8 @@ if ($view)
 	 $resources_data["view"]=$view;
 
 //If we start the admin mode, kill open objects
-if ($resources_data["view"] == "ressources")
-	close_object();
+if ($resources_data["view"] == "resources")
+	closeObject();
 
 //Beitrag aufklappen
 if ($structure_open)
@@ -449,29 +449,41 @@ if (($add_root_user) || ($delete_root_user_id)){
 }
 
 //evaluate the command from schedule navigator
-if ($navigate_to) {
-	$schedule_start_time=mktime (0,0,0,$schedule_begin_month, $schedule_begin_day, $schedule_begin_year);
-	if ($start_list_x) {
-		if ($schedule_start_time < 1)
-			$schedule_start_time = time();
-		switch ($schedule_length_unit) {
-			case "y" :
-				$schedule_end_time=mktime(23,59,59,date("n",$schedule_start_time), date("j", $schedule_start_time), date("Y",$schedule_start_time)+$schedule_length_factor);
-			break;
-			case "m" :
-				$schedule_end_time=mktime(23,59,59,date("n",$schedule_start_time)+$schedule_length_factor, date("j", $schedule_start_time), date("Y",$schedule_start_time));
-			break;
-			case "w" :
-				$schedule_end_time=mktime(23,59,59,date("n",$schedule_start_time), date("j", $schedule_start_time)+($schedule_length_factor * 7), date("Y",$schedule_start_time));
-			break;
-			case "d" :
-				$schedule_end_time=mktime(23,59,59,date("n",$schedule_start_time), date("j", $schedule_start_time)+$schedule_length_factor, date("Y",$schedule_start_time));
-			break;
-		}
-		if ($schedule_end_time < 1)
-			$schedule_end_time = time()+ (24 * 60 * 60);
-	} else
-		$schedule_end_time = $schedule_start_time + (7 * 24 * 60 * 60);
+if ($resources_data["view"]=="view_schedule" || $resources_data["view"]=="openobject_schedule") {
+	if ($next_week)
+		$resources_data["schedule_week_offset"]++;
+	if ($previous_week)
+		$resources_data["schedule_week_offset"]--;
+	if ($navigate) {
+		$resources_data["schedule_length_factor"] = $schedule_length_factor;
+		$resources_data["schedule_length_unit"] = $schedule_length_unit;
+		$resources_data["week_offset"] = 0;
+		$resources_data["schedule_start_time"] = mktime (0,0,0,$schedule_begin_month, $schedule_begin_day, $schedule_begin_year);
+		if ($start_list_x) {
+			if ($resources_data["schedule_start_time"] < 1)
+				$resources_data["schedule_start_time"] = mktime (0, 0, 0, date("n", time()), date("j", time()), date("Y", time()));
+			switch ($resources_data["schedule_length_unit"]) {
+				case "y" :
+					$resources_data["schedule_end_time"] =mktime(23,59,59,date("n",$resources_data["schedule_start_time"]), date("j", $resources_data["schedule_start_time"]), date("Y",$resources_data["schedule_start_time"])+$resources_data["schedule_length_factor"]);
+				break;
+				case "m" :
+					$resources_data["schedule_end_time"] =mktime(23,59,59,date("n",$resources_data["schedule_start_time"])+$resources_data["schedule_length_factor"], date("j", $resources_data["schedule_start_time"]), date("Y",$resources_data["schedule_start_time"]));
+				break;
+				case "w" :
+					$resources_data["schedule_end_time"] =mktime(23,59,59,date("n",$resources_data["schedule_start_time"]), date("j", $resources_data["schedule_start_time"])+($resources_data["schedule_length_factor"] * 7), date("Y",$resources_data["schedule_start_time"]));
+				break;
+				case "d" :
+					$resources_data["schedule_end_time"] =mktime(23,59,59,date("n",$resources_data["schedule_start_time"]), date("j", $resources_data["schedule_start_time"])+$resources_data["schedule_length_factor"], date("Y",$resources_data["schedule_start_time"]));
+				break;
+			}
+			if ($resources_data["schedule_end_time"]  < 1)
+				$resources_data["schedule_end_time"] = mktime (23, 59, 0, date("n", time()), date("j", time())+1, date("Y", time()));
+		} else
+			$resources_data["schedule_end_time"] = $resources_data["schedule_start_time"] + (7 * 24 * 60 * 60);
+	} else {
+		$resources_data["schedule_start_time"] = mktime (0, 0, 0, date("n", time()), date("j", time()), date("Y", time()));
+		$resources_data["schedule_end_time"] = mktime (23, 59, 0, date("n", time()), date("j", time())+7, date("Y", time()));
+	}
 }
 
 //handle commands from the search 'n' browse modul
@@ -684,13 +696,20 @@ if ($resources_data["view"]=="edit_perms") {
 }
 
 /*****************************************************************************
-Belegungen ausgeben, views: view_schedule
+Belegungen ausgeben, views: view_schedule, openobject_schedule
 /*****************************************************************************/
 if ($resources_data["view"]=="view_schedule" || $resources_data["view"]=="openobject_schedule") {
 	
 	$ViewSchedules=new ViewSchedules($resources_data["structure_open"]);
+	$ViewSchedules->setStartTime($resources_data["schedule_start_time"]);
+	$ViewSchedules->setEndTime($resources_data["schedule_end_time"]);
+	$ViewSchedules->setLengthFactor($resources_data["schedule_length_factor"]);
+	$ViewSchedules->setLengthUnit($resources_data["schedule_length_unit"]);	
+	$ViewSchedules->setWeekOffset($resources_data["schedule_week_offset"]);	
+
 	$ViewSchedules->navigator();
-	if (($schedule_start_time) && ($schedule_end_time))
+	
+	if (($resources_data["schedule_start_time"]) && ($resources_data["schedule_end_time"]))
 		if ($start_list_x) //view List
 			$ViewSchedules->create_schedule_list($schedule_start_time, $schedule_end_time);
 		else

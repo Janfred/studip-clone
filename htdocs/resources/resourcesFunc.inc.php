@@ -106,7 +106,7 @@ function get_objects ($search_string='', $user_id='') {
 			while ($db->next_record())
 					$my_objects[$db->f("user_id")]=array("name"=>$db->f("Nachname").", ".$db->f("Vorname")." (".$db->f("username").")", "art"=>"Personen");
 			//Alle Seminare...
-			$db->query("SELECT seminar_id, Name FROM seminare WHERE Name LIKE '%$search_string%' OR Untertitel = '%$search_string%' OR Seminar_id = '$search_string' ORDER BY Name");
+			$db->query("SELECT Seminar_id, Name FROM seminare WHERE Name LIKE '%$search_string%' OR Untertitel = '%$search_string%' OR Seminar_id = '$search_string' ORDER BY Name");
 			while ($db->next_record())
 				$my_objects[$db->f("Seminar_id")]=array("name"=>$db->f("Name"), "art"=>"Veranstaltungen");
 			//Alle Institute...
@@ -155,7 +155,7 @@ function get_objects ($search_string='', $user_id='') {
 		case "dozent": 
 			$my_objects[$user_id]=array("name"=>"aktueller Account"." (".get_username($user_id).")", "art"=>"Person");
 			//Alle meine Seminare
-			$db->query("SELECT seminare.Seminar_id FROM seminare LEFT JOIN seminar_user USING (seminar_id) WHERE (Name LIKE '%$search_string%' OR Untertitel LIKE '%$search_string%' OR seminare.Seminar_id = '$search_string') status IN ('tutor', 'dozent) ORDER BY Name");
+			$db->query("SELECT seminare.Seminar_id FROM seminare LEFT JOIN seminar_user USING (seminar_id) WHERE (Name LIKE '%$search_string%' OR Untertitel LIKE '%$search_string%' OR seminare.Seminar_id = '$search_string') status IN ('tutor', 'dozent') ORDER BY Name");
 			while ($db->next_record())
 				$my_objects[$db->f("Seminar_id")]=array("name"=>$db->f("Name"), "art"=>"Veranstaltungen");
 			//Alle meine Institute...
@@ -197,14 +197,14 @@ function create_search_form($name, $search_string='', $user_only=FALSE, $admins=
 				;
 		else //komplett in allen Objekten suchen, die ich verwalten darf
 				$my_objects=get_objects($search_string);
-				
+			
 		?>
 		<input type="HIDDEN" name="<? echo "search_string_".$name ?>" value="<? echo $search_string ?>" />
 		<select name="<? echo "submit_".$name ?>"><?
 		foreach ($my_objects as $key=>$val) {
 			if ($val["art"] != $old_art) {
 				?>			
-			<font size=-1><option value="FALSE"><? echo "---".$val["art"]."---"; ?></option></font>
+			<font size=-1><option value="FALSE"><? echo "-- ".$val["art"]." --"; ?></option></font>
 				<?
 			}
 			?>

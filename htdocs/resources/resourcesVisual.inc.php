@@ -868,7 +868,7 @@ class viewObject {
 					$this->db2->next_record();
 					switch ($this->db->f("type")) {
 						case "bool":
-							print htmlReady($this->db->f("options"));
+							printf ("%s", ($this->db2->f("state")) ?  htmlReady($this->db->f("options")) : " - ");
 						break;
 						case "num":
 						case "text";
@@ -1320,7 +1320,12 @@ class ViewSchedules extends cssClasses {
 	var $ressource_id;		//viewed ressource object
 	var $user_id;			//viewed user
 	var $range_id;			//viewed range
-	
+	var $start_time;		//time to start
+	var $end_time;		//time to end
+	var $length_factor;		//the used length factor for calculations, only used for viewing
+	var $length_unit;		//the used length unit for calculations, only used for viewing
+	var $week_offset;		//offset for the week view
+		
 	//Konstruktor
 	function ViewSchedules($resource_id='', $user_id='', $range_id='') {
 		$this->db=new DB_Seminar;
@@ -1328,48 +1333,91 @@ class ViewSchedules extends cssClasses {
 		$this->resource_id=$resource_id;
 		$this->user_id=$user_id;
 		$this->range_id=$range_id;
+
+	}
+	
+	function setLengthFactor ($value) {
+		$this->length_factor = $value;
+	}	
+	
+	function setLengthUnit ($value) {
+		$this->length_unit = $value;
+	}
+	
+	function setStartTime ($value) {
+		$this->start_time = $value;
+	}
+	
+	function setEndTime ($value) {
+		$this->end_time = $value;
+	}
+	
+	function setWeekOffset ($value) {
+		$this->week_offset = $value;
 	}
 	
 	function navigator () {
-		global $schedule_begin_day, $schedule_begin_month, $schedule_begin_year, $schedule_length_unit, $schedule_mode, $schedule_length_factor;
 		?>
 		<table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
-		<form method="POST" action="<?echo $PHP_SELF ?>?view=view_schedule&navigate_to=TRUE">
+		<form method="POST" action="<?echo $PHP_SELF ?>?view=view_schedule&navigate=TRUE">
 			<tr>
-				<td class="<? echo $this->getClass() ?>" width="4%">&nbsp;
+				<td class="<? $this->switchClass(); echo $this->getClass() ?>" width="4%">&nbsp;
 				</td>
-				<td class="<? echo $this->getClass() ?>" width="96%"><font size=-1>Zeitraum:</font><br />
-					<font size=-1>vom 
-					<input type="text" name="schedule_begin_day" size=2 maxlength=2 value="<? if (!$schedule_begin_day) echo date("d",time()); else echo $schedule_begin_day; ?>">.
-					<input type="text" name="schedule_begin_month" size=2 maxlength=2 value="<? if (!$schedule_begin_month) echo date("m",time()); else echo $schedule_begin_month; ?>">.
-					<input type="text" name="schedule_begin_year" size=4 maxlength=4 value="<? if (!$schedule_begin_year) echo date("Y",time()); else echo $schedule_begin_year; ?>"><br />
-					<input type="text" name="schedule_length_factor" size=2 maxlength=2 / value="<? if (!$schedule_length_factor) echo "1"; else echo $schedule_length_factor; ?>">
+				<td class="<? echo $this->getClass() ?>" width="96%" colspan="2"><font size=-1><b>Zeitraum:</b></font>
+				</td>
+			</tr>
+			<tr>
+				<td class="<? echo $this->getClass() ?>" width="4%" rowspan="2">&nbsp;
+				</td>
+				<td class="<? echo $this->getClass() ?>" width="30%" rowspan="2" valign="top"><font size=-1>
+					<font size=-1>Beginn:&nbsp; 
+					<input type="text" name="schedule_begin_day" size=2 maxlength=2 value="<? if (!$this->start_time) echo date("d",time()); else echo date("d",$this->start_time); ?>">.
+					<input type="text" name="schedule_begin_month" size=2 maxlength=2 value="<? if (!$this->start_time) echo date("m",time()); else echo date("m",$this->start_time); ?>">.
+					<input type="text" name="schedule_begin_year" size=4 maxlength=4 value="<? if (!$this->start_time) echo date("Y",time()); else echo date("Y",$this->start_time); ?>"><br /> 
+					&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; <input type="IMAGE" name="jump" border="0"<? echo makeButton("auswaehlen", "src") ?> /><br />
+				</td>
+				<td class="<? echo $this->getClass() ?>" width="66%" valign="top"><font size=-1>
+					<input type="text" name="schedule_length_factor" size=2 maxlength=2 / value="<? if (!$this->length_factor) echo "1"; else echo $this->length_factor; ?>">
 					&nbsp; <select name="schedule_length_unit">
-						<option <? if ($schedule_length_unit == "d") echo "selected" ?> value="d">Tag(e)</option>
-						<option <? if ($schedule_length_unit == "w") echo "selected" ?> value="w">Woche(n)</option>
-						<option <? if ($schedule_length_unit == "m") echo "selected" ?> value="m">Monat(e)</option>
-						<option <? if ($schedule_length_unit == "y") echo "selected" ?> value="y">Jahre(e)</option>
+						<option <? if ($this->length_unit  == "d") echo "selected" ?> value="d">Tag(e)</option>
+						<option <? if ($this->length_unit  == "w") echo "selected" ?> value="w">Woche(n)</option>
+						<option <? if ($this->length_unit  == "m") echo "selected" ?> value="m">Monat(e)</option>
+						<option <? if ($this->length_unit  == "y") echo "selected" ?> value="y">Jahre(e)</option>
 					</select>&nbsp; als Liste
 					&nbsp; <input type="IMAGE" name="start_list" src="pictures/buttons/ausgeben-button.gif" border=0 vallue="ausgeben" /><br />
+				</td>
+			</tr>
+			<tr>
+					<td class="<? echo $this->getClass() ?>" width="66%" valign="top"><font size=-1>
 					<i>oder</i>&nbsp;  eine Woche grafisch
 					&nbsp; <input type="IMAGE" name="start_graphical" src="pictures/buttons/ausgeben-button.gif" border=0 vallue="ausgeben" /><br />&nbsp; 
 				</td>
 			</tr>
 			</form>
+		</table>
 	<?
 	}
 
-	function create_schedule_list($start_time='', $end_time='') {
+	function create_schedule_list() {
 		global $PHP_SELF;
 
 		?>
+		<table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
 			<tr>
 				<td class="<? $this->switchClass(); echo $this->getClass() ?>" width="4%">&nbsp;
 				</td>
-				<td class="<? echo $this->getClass() ?>" width="96%"><font size=-1>Events:</font><br />
-					<? echo "<font size=-1><b>Anzeige vom ", date ("j.m.Y", $start_time), " bis ", date ("j.m.Y", $end_time)."</b></font><br />";
-					$assign_events=new AssignEventList ($start_time, $end_time, $this->resource_id, '', '', TRUE);
-					echo "<br /><font size=-1>Anzahl der Belegungen: ", $assign_events->numberOfEvents()."</font>";
+				<td class="<? echo $this->getClass() ?>" width="96%" align="center"><br />
+					<? echo "<b>Anzeige vom ", date ("j.m.Y", $this->start_time), " bis ", date ("j.m.Y", $this->end_time)."</b><br />";?>
+					<br />
+				</td>
+			</tr>
+			<tr>
+				<td class="<? $this->switchClass(); echo $this->getClass() ?>" width="4%">&nbsp;
+				</td>
+				<td class="<? echo $this->getClass() ?>" width="96%">
+					<?				
+					$assign_events=new AssignEventList ($this->start_time, $this->end_time, $this->resource_id, '', '', TRUE);
+					echo "<br /><font size=-1>Anzahl der Belegungen in diesem Zeitraum	: ", $assign_events->numberOfEvents()."</font>";
 					echo "<br /><br />";
 					while ($event=$assign_events->nextEvent()) {
 						echo "<a href=\"$PHP_SELF?view=edit_object_schedules&edit_assign_object=".$event->getAssignId()."\"><img src=\"pictures/buttons/bearbeiten-button.gif\" border=0></a>";
@@ -1384,21 +1432,47 @@ class ViewSchedules extends cssClasses {
 	<?
 	}
 
-	function create_schedule_graphical($start_time='', $end_time='') {
+	function create_schedule_graphical() {
 		global $RELATIVE_PATH_RESOURCES, $PHP_SELF;
 	 	
 	 	require_once ($RELATIVE_PATH_RESOURCES."/lib/ScheduleWeek.class.php");
 	 	
 	 	$schedule=new ScheduleWeek;
+	 	
+	 	//match start_time & end_time for a whole week
+	 	$dow = date ("w", $this->start_time);
+	 	if (date ("w", $this->start_time) >1)
+	 		$offset = 1 - date ("w", $this->start_time);
+	 	if (!date ("w", $this->start_time) >1)
+		 	$offset = -6;
+		 	
+ 		$start_time = mktime (0, 0, 0, date("n",$this->start_time), date("j", $this->start_time)+$offset+($this->week_offset*7), date("Y", $this->start_time));
+ 		$end_time = mktime (23, 59, 0, date("n",$this->start_time), date("j", $this->start_time)+7+($this->week_offset*7), date("Y", $this->start_time));
 		
 		?>
+		<table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
 			<tr>
 				<td class="<? $this->switchClass(); echo $this->getClass() ?>" width="4%">&nbsp;
 				</td>
-				<td class="<? echo $this->getClass() ?>" width="96%"><font size=-1>Events:</font><br />
-					<? echo "<font size=-1><b>Anzeige vom ", date ("j.m.Y", $start_time), " bis ", date ("j.m.Y", $end_time)."</b></font><br />";
+				<td class="<? echo $this->getClass() ?>"  width="10%" align="left">&nbsp;
+					<a href="<? echo $PHP_SELF ?>?previous_week=TRUE"><img src="pictures/forumrotlinks.gif" <? echo tooltip ("Vorherige Woche anzeigen") ?>border="0" /></a>
+				</td>
+				<td class="<? echo $this->getClass() ?>" width="76%" align="center"><br />
+					<a href="anker"></a>
+					<? echo "<b>Anzeige der Woche vom ", date ("j.m.Y", $start_time), " bis ", date ("j.m.Y", $end_time)."</b> (".strftime("%V", $start_time).". Woche)";?>
+					<br /><br />
+				</td>
+				<td class="<? echo $this->getClass() ?>" width="10%" align="center">&nbsp;
+					<a href="<? echo $PHP_SELF ?>?next_week=TRUE"><img src="pictures/forumrot.gif" <? echo tooltip ("Nächste Woche anzeigen") ?>border="0" /></a>
+				</td>
+			</tr>
+			<tr>
+				<td class="<? $this->switchClass(); echo $this->getClass() ?>" width="4%">&nbsp;
+				</td>
+				<td class="<? echo $this->getClass() ?>" width="96%" colspan="3">
+					<?						
 					$assign_events=new AssignEventList ($start_time, $end_time, $this->resource_id, '', '', TRUE);
-					echo "<br /><font size=-1>Anzahl der Belegungen: ", $assign_events->numberOfEvents()."</font>";
+					echo "<br /><font size=-1>Anzahl der Belegungen in diesem Zeitraum: ", $assign_events->numberOfEvents()."</font>";
 					echo "<br />&nbsp; ";
 					while ($event=$assign_events->nextEvent()) {
 						$schedule->addEvent($event->getName(), $event->getBegin(), $event->getEnd(), 

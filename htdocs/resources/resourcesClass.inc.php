@@ -209,8 +209,8 @@ class AssignObject {
 	}
 
 	function store($create=''){
-		// Natuerlich nur Speichern, wenn sich was geaendert hat oder das Object neu angelegt wird
-		if(($this->chng_flag) || ($create)) {
+		// Natuerlich nur Speichern, wenn sich was geaendert hat oder das Object neu angelegt wird und auch jemand die Ressource belegt
+		if ((($this->chng_flag) || ($create)) && (($this->assign_user_id) || ($this->user_free_name))) {
 			$chdate = time();
 			$mkdate = time();
 			if($create)
