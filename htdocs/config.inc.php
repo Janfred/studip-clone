@@ -56,6 +56,7 @@ $AUTO_INSERT_SEM[1]="28e888802838a57bc1fbac4e39f0b13a";
 $AUTO_INSERT_SEM[2]="07dfaf1c72df7e862367f1a15b33129c";
 $AUTO_INSERT_SEM[3]="33c5231502fa410bcefbd5c751d7210e";
 $AUTO_INSERT_SEM[4]="1bfe1b968b0a52f9e79e13fb2bc75a34";
+$AUTO_INSERT_SEM[5]="a70c45ca747f0ab2ea4acbb17398d370";
 //weitere Veranstaltungen koennen mit ihren IDs hier angefuegt werden
 
 
