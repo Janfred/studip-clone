@@ -1492,12 +1492,12 @@ EOT;
 		}
 		$jstxt .= '  if (ss2 != "")'. "\n";
 		$jstxt .= '    tx = tx + \'[<a href="javascript:set_sem_time(\' + t2 + \', \' + nn2 + \',\\\'\' + ss2 + \'\\\', \\\'\' + sm2 + \'\\\', \\\'\' + es2 + \'\\\', \\\'\' + em2 + \'\\\')" title="'._('zur&uuml;cksetzten auf').' \' + ss2 + \':\' + sm2 + \'&nbsp;-&nbsp;\' + es2 + \':\' + em2 + \'&nbsp;'. _('Uhr') .'">' . _('Reset') . "</a>]&nbsp;';\n";
-		$jstxt .= '  tx = tx + \'[<a href="javascript:openKalenderWindow(\' + t2 + \', \' + nn2 + \');" title="'. _('Kalenderfenster &ouml;ffnen').'">'._('Kalender').'</a>]\';'. "\n";
+		$jstxt .= '  tx = tx + \'[<a href="javascript:openKalenderWindow(\' + t2 + \', \' + nn2 + \', \' + DieserMonat + \', \' + DiesesJahr + \');" title="'. _('Kalenderfenster &ouml;ffnen').'">'._('Kalender').'</a>]\';'. "\n";
 		$jstxt .= '  tx = tx + "</font>";'. "\n";
 		$jstxt .= '  document.write( tx );'. "\n";
 		$jstxt .= '}' . "\n\n";
 
-		$jstxt .= 'function Kalender(t4, n4, Monat,Jahr) {' . "\n";
+		$jstxt .= 'function Kalender(t4, n4, Monat,Jahr, cc) {' . "\n";
 		$jstxt .= '  Monatsname = new Array' . "\n";
 		$jstxt .= '  ("' . _('Januar') . '","' . _('Februar') . '","' . _('M&auml;rz') . '","' . _('April') . '","' . _('Mai') . '","' . _('Juni') . '","' . _('Juli') . '",' . "\n";
 		$jstxt .= '  "' . _('August') . '","' . _('September') . '","' . _('Oktober') . '","' . _('November') . '","' . _('Dezember') .'");' . "\n";
@@ -1517,13 +1517,16 @@ EOT;
    if(Jahr%100==0) Stop--;
    if(Jahr%400==0) Stop++;
   }
-  txt1 = txt1 + '<table border="1" cellpadding="1" cellspacing="0"><tr>\\n';
-  txt1 = txt1 + '<td align="center" colspan="7" bgcolor="#5555AA"><font color="#FFFFFF" size="-1"><b>';
-  txt1 = txt1 + Monatsname[Monat-1] + " " + Jahr;
-  txt1 = txt1 + '</b></font></td></tr>\\n';
+  txt1 = txt1 + '<table border="0" cellpadding="1" cellspacing="2"><tr>\\n';
+  if (cc == 1 && !ms && !ns4) txt1 = txt1 + '<td bgcolor="#E0E0E0"><a href="javascript:prev_kalender();"><font color="#888888" size="-1"><b>&lt;&lt;</b></font></a></td>';
+  txt1 = txt1 + '<td align="center" colspan="'+((!ms && !ns4 && (cc == 1 || cc == 8))?6:7)+'" bgcolor="#E0E0E0"><font color="#888888" size="-1"><b>';
+  txt1 = txt1 +  Monatsname[Monat-1] + " " + Jahr
+  txt1 = txt1 + '</b></font></td>\\n';
+  if (cc == 8 && !ms && !ns4) txt1 = txt1 + '<td bgcolor="#E0E0E0"><a href="javascript:next_kalender();"><font color="#888888" size="-1"><b>&gt;&gt;</b></font></a></td>';
+  txt1 = txt1 + '</tr>\\n';
   txt1 = txt1 + '<tr align="center">';
   for(var i = 0; i <= 6; i++)
-    txt1 = txt1 + '<td bgcolor="#5555FF"><font color="#FFFFFF" size="-1">' + Tag[i] + '</font></td>\\n';
+    txt1 = txt1 + '<td bgcolor="#E0E0E0"><font color="#888888" size="-1">' + Tag[i] + '</font></td>\\n';
   txt1 = txt1 + '</tr>\\n';
   var Tageszahl = 1;
   for(var i = 0; i <= 5; i++) {
@@ -1531,16 +1534,16 @@ EOT;
     for(var j = 0; j <= 6; j++) {
       txt1 = txt1 + '<td bgcolor="';
       if((i == 0) && (j < Start))
-       txt1 = txt1 + '#FFFFFF"><font color="#000000" size="-1">&nbsp;</font>';
+       txt1 = txt1 + '#F7F7F7">&nbsp;';
       else {
         if(Tageszahl > Stop)
-          txt1 = txt1 + '#FFFFFF"><font color="#000000" size="-1">&nbsp;</font>';
+          txt1 = txt1 + '#F7F7F7">&nbsp;';
         else {
-          if((Jahr==DiesesJahr)&&(Monat==DieserMonat)&&(Tageszahl==DieserTag)) txt1 = txt1 + '#FFFF00">';
-          else txt1 = txt1 + '#FFFFFF">';
-          txt1 = txt1 + '<a href="javascript:set_date('+t4+','+n4+',\\''+Tageszahl+'\\',\\''+Monat+'\\', \\''+Jahr+'\\');">';
-          if (j == 6) txt1 = txt1 + '<font color="E00000" size="-1">';
-          else txt1 = txt1 + '<font color="#000000" size="-1">';
+          if((Jahr==DiesesJahr)&&(Monat==DieserMonat)&&(Tageszahl==DieserTag)) txt1 = txt1 + '#FFFF99">';
+          else txt1 = txt1 + '#E8E8E8">';
+          txt1 = txt1 + '<a href="javascript:set_date('+t4+','+n4+',\\''+Tageszahl+'\\',\\''+Monat+'\\', \\''+Jahr+'\\');" title="'+Tageszahl+'.'+Monat+'.'+Jahr+'">';
+          if (j == 6) txt1 = txt1 + '<font color="DD0000" size="-1">';
+          else txt1 = txt1 + '<font color="#3333DD" size="-1">';
           txt1 = txt1 + Tageszahl++;
           txt1 = txt1 + '</font></a>\\n';
          }
@@ -1553,7 +1556,7 @@ EOT;
   return txt1;
 }
 
-function openKalenderWindow(t3, n3){
+function openKalenderWindow(t3, n3, smon, sjahr){
 	if (!ns4 && window["tf"]) window["tf"].close();
 	var tt = "";
 EOT2;
@@ -1589,25 +1592,35 @@ EOT2;
 	tt = tt + '  opener.document.Formular.elements[feld_monat].value = (m < 10)? "0"+m:m;\\n ';
 	tt = tt + '  opener.document.Formular.elements[feld_jahr].value = j;\\n ';
 	tt = tt + '  window.close();\\n}\\n ';
+	tt = tt + 'function next_kalender(){\\n ';
+	tt = tt + '  var smon2 = ' + smon + ' + 8; var sjahr2 = ' + sjahr + ';\\n';
+	tt = tt + '  if (smon2 > 13) { smon2 = smon2 - 12; sjahr2++; }\\n';
+	tt = tt + '  opener.openKalenderWindow(' + t3 + ', ' + n3 + ', smon2, sjahr2 );\\n';
+	tt = tt + '}\\n';
+	tt = tt + 'function prev_kalender(){\\n ';
+	tt = tt + '  var smon2 = ' + smon + ' - 8; var sjahr2 = ' + sjahr + ';\\n';
+	tt = tt + '  if (smon2 < 1) { smon2 = smon2 + 12; sjahr2--; }\\n';
+	tt = tt + '  opener.openKalenderWindow(' + t3 + ', ' + n3 + ', smon2, sjahr2 );\\n';
+	tt = tt + '}\\n';
 	tt = tt + '</script>\\n';
 	tt = tt + '</head>\\n<body bgcolor="#FFFFFF">\\n';
 	tt = tt + '<table border="0"><tr valign="top">\\n';
-	var jmon = DieserMonat; var jjahr = DiesesJahr;
 	for (var ii = 1; ii < 9; ii++){
-		tt = tt + '<td>' + Kalender(t3, n3, jmon++,jjahr) + '</td>';
-		if (jmon > 12) {jmon = 1; jjahr++;}
+		tt = tt + '<td>' + Kalender(t3, n3, smon++, sjahr, ii) + '</td>';
+		if (smon > 12) {smon = 1; sjahr++;}
 		if (ii == 4) tt = tt + '</tr><tr valign="top">';
 	}
 	tt = tt + '</tr></table>\\n</body></html>\\n';
-
 	if (navigator.appName.indexOf("Konqueror") != -1 )
 		tf = window.open("", "Kalender", "dependent=yes,width=700,height=450");
 	else
 		tf = window.open("about:blank", "Kalender", "dependent=yes,width=560,height=380");
+
 	window["tf"].document.write(tt);
 	window["tf"].focus();
 }
   var ns4 = (navigator.appName.indexOf("Netscape")!= -1 && navigator.appVersion.substring(0,1) == "4")? 1 : 0;
+  var ms = (document.all && !window.opera)? 1 : 0;
   var jetzt = new Date();
   var DieserMonat = jetzt.getMonth() + 1;
   var DiesesJahr = jetzt.getYear();
