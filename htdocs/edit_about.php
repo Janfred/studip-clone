@@ -648,19 +648,21 @@ if ($cmd=="special_edit")
 
 //Veränderungen der pers. Daten
 if ($cmd=="edit_pers")
- {
-
-	$my_about->edit_pers($password,$check_pass,$response,$new_username,$vorname,$nachname,$email,$telefon,$anschrift,$home,$hobby,$geschlecht,$title_front,$title_front_chooser,$title_rear,$title_rear_chooser,$view);
-
-	if (($my_about->auth_user["username"] != $new_username) && $my_about->logout_user == TRUE) $my_about->get_auth_user($new_username);   //username wurde geändert!
-	 else $my_about->get_auth_user($username);
-	$username = $my_about->auth_user["username"];
+{
+	if (($my_about->auth_user["Email"] != $email) && ($response)) {
+	  $my_about->msg = $my_about->msg . "error§" . _("Bitte ändern Sie erst ihre E-Mail-Adresse und dann ihr Passwort!") . "§";
+	} else {
+		$my_about->edit_pers($password,$check_pass,$response,$new_username,$vorname,$nachname,$email,$telefon,$anschrift,$home,$hobby,$geschlecht,$title_front,$title_front_chooser,$title_rear,$title_rear_chooser,$view);
+		if (($my_about->auth_user["username"] != $new_username) && $my_about->logout_user == TRUE) $my_about->get_auth_user($new_username);   //username wurde geändert!
+		else $my_about->get_auth_user($username);
+		$username = $my_about->auth_user["username"];
 	}
+}
 
 if ($cmd=="edit_leben")  {
 	$my_about->edit_leben($lebenslauf,$schwerp,$publi,$view, $datafield_content, $datafield_id);
 	$my_about->get_auth_user($username);
-	}
+}
 
 // general settings from mystudip: language
 if ($cmd=="change_general") {
@@ -1058,24 +1060,23 @@ if ($view=="Daten") {
 }
 
 	
-
 if ($view=="Karriere") {
 	
 	if ($perm->have_perm("root") AND $username==$auth->auth["uname"]) {
 		echo "<tr><td align=\"left\" valign=\"top\" class=\"blank\"><blockquote><br><br>" . _("Als Root haben Sie bereits genug Karriere gemacht ;-)") . "<br><br>";
 	} else { 
-		if (($perm->have_perm("tutor")) && (!$perm->have_perm("dozent")))
+		if (($perm->have_perm("tutor")) && (!$perm->have_perm("dozent"))) {
 			echo "<tr><td align=\"left\" valign=\"top\" class=\"blank\"><blockquote><br>" . _("Hier können Sie Angaben &uuml;ber ihre Studienkarriere und Daten an Einrichtungen, an denen Sie arbeiten, machen.");
-		elseif ($perm->have_perm("dozent"))
+		} elseif ($perm->have_perm("dozent")) {
 			echo "<tr><td align=\"left\" valign=\"top\" class=\"blank\"><blockquote><br>" . _("Hier können Sie Angaben &uuml;ber Daten an Einrichtungen, in den Sie arbeiten, machen.");	
-		elseif ($ALLOW_SELFASSIGN_STUDYCOURSE)
+		} else {
+				if (!$ALLOW_SELFASSIGN_STUDYCOURSE) {
+					$message = "info§" . sprintf(formatReady(_("Sie haben keine Berechtigung diese Daten selbst zu ändern!")));
+				parse_msg($message, "§", "blank",3);
+			}		
 			echo "<tr><td align=\"left\" valign=\"top\" class=\"blank\"><blockquote><br>" . _("Hier können Sie Angaben &uuml;ber ihre Studienkarriere machen.");
-		else {
-			echo "<tr><td align=\"left\" valign=\"top\" class=\"blank\">";
-			$message = "info§" . sprintf(formatReady(_("Sie haben keine Berechtigung diese Daten selbst zu ändern!")));
-			parse_msg($message, "§", "blank",3);
 		}
-		
+
 		echo "<br />&nbsp; </td></tr>";
 
 		//Verändern von Raum, Sprechzeiten etc
@@ -1114,7 +1115,7 @@ if ($view=="Karriere") {
 	}
 
 	//Studiengänge die ich belegt habe
-	if (($my_about->auth_user["perms"]=="autor" || $my_about->auth_user["perms"]=="tutor") && $ALLOW_SELFASSIGN_STUDYCOURSE) { // nur für Autoren und Tutoren
+	if (($my_about->auth_user["perms"]=="autor" || $my_about->auth_user["perms"]=="tutor")) { // nur für Autoren und Tutoren
 		$cssSw->resetClass();
 		$cssSw->switchClass();
 		echo "<tr><td class=\"blank\">";
@@ -1150,12 +1151,11 @@ if ($view=="Karriere") {
 		echo "<input type=\"IMAGE\" " . makeButton("uebernehmen", "src") . " value=\"" . _("Änderungen übernehmen") . "\"></blockquote></td></tr>";
 		echo "</form>";
 	}
-	if ($ALLOW_SELFASSIGN_STUDYCOURSE)
-		echo "</td></tr></table>";
+	echo "</td></tr></table>";
 
 
 	//Institute, an denen studiert wird
-	if (($my_about->auth_user["perms"]=="autor" || $my_about->auth_user["perms"]=="tutor") && $ALLOW_SELFASSIGN_STUDYCOURSE) {
+	if (($my_about->auth_user["perms"]=="autor" || $my_about->auth_user["perms"]=="tutor")) {
 		$cssSw->resetClass();
 		$cssSw->switchClass();
 		echo "<tr><td class=\"blank\">";
@@ -1191,8 +1191,7 @@ if ($view=="Karriere") {
 		echo "<input type=\"IMAGE\" " . makeButton("uebernehmen", "src") . " value=\"" . _("Änderungen übernehmen") . "\"></blockquote></td></tr>";
 		echo "</form>";
 	}
-	if ($ALLOW_SELFASSIGN_STUDYCOURSE)
-		echo "</td></tr></table>";
+	echo "</td></tr></table>";
 }   
 
 if ($view=="Lebenslauf") {
@@ -1215,7 +1214,7 @@ if ($view=="Lebenslauf") {
 		echo "<textarea  name=\"publi\" style=\" width: 80%\" cols=".round($max_col/1.3)." rows=7 wrap=virtual>".htmlReady($my_about->user_info["publi"])."</textarea><a name=\"publikationen\"></a></td></tr>\n";
 	}
 	
-	//add the free adminstrable datafields
+	//add the free administrable datafields
 	$localFields = $DataFields->getLocalFields();
 
 	foreach ($localFields as $val) {
@@ -1225,8 +1224,15 @@ if ($view=="Lebenslauf") {
 			echo "<textarea  name=\"datafield_content[]\" style=\" width: 80%\" cols=".round($max_col/1.3)." rows=7 wrap=virtual>".htmlReady($val["content"])."</textarea><a name=\"publikationen\"></a></td></tr>\n";
 			echo "<input type=\"HIDDEN\" name=\"datafield_id[]\" value=\"".$val["datafield_id"]."\">";
 		} else {
-			echo formatReady($val["content"]);
-			echo "<br /><br /><hr><font size=\"-1\">"._("(Das Feld ist f&uuml;r die Bearbeitung gesperrt und kann nur durch einen Administrator ver&auml;ndert werden.)")."</font>";
+			$db->query("SELECT user_id FROM auth_user_md5 WHERE username = '$username'");
+			$db->next_record();	
+			$userid = $db->f("user_id");
+			if ($DataFields->checkPermission($perm,$val["view_perms"], $userid, $db->f("user_id"))) {
+				echo formatReady($val["content"]);
+				echo "<br /><br /><hr><font size=\"-1\">"._("(Das Feld ist f&uuml;r die Bearbeitung gesperrt und kann nur durch einen Administrator ver&auml;ndert werden.)")."</font>";
+			} else {
+				echo "<font size=\"-1\">"._("Sie dürfen dieses Feld weder einsehen noch bearbeiten.")."</font>";
+			}
 		}
  	}		
 
