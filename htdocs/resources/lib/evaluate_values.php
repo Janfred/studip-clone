@@ -239,6 +239,8 @@ if ($change_structure_object) {
 
 //Objektbelegung erstellen/aendern
 if ($change_object_schedules) {
+	require_once ("$RELATIVE_PATH_CALENDAR/calendar_func.inc.php"); //needed for extended checkdate
+
 	//load the perms
 	$ObjectPerms = new ResourcesObjectPerms($change_schedule_resource_id);
 	if (($ObjectPerms->getUserPerm () != "admin") && ($change_object_schedules != "NEW") || ($change_schedule_assign_user_id))
@@ -270,21 +272,33 @@ if ($change_object_schedules) {
 			//the user send infinity repeat (until date) as empty field, but it's -1 in the db
 			if (($change_schedule_repeat_quantity_infinity) && (!$change_schedule_repeat_quantity))
 				$change_schedule_repeat_quantity=-1;
+				
+			//check dates
+			$illegal_dates=FALSE;
+			if ((!check_date($change_schedule_month, $change_schedule_day, $change_schedule_year, $change_schedule_start_hour, $change_schedule_start_minute)) || 
+				(!check_date($change_schedule_month, $change_schedule_day, $change_schedule_year, $change_schedule_end_hour, $change_schedule_end_minute))) {
+				$illegal_dates=TRUE;
+				$msg -> addMsg(17);				
+			}
 
 			//create timestamps
-			if ($change_schedule_year) {
+			if (!$illegal_dates) {
 				$change_schedule_begin=mktime($change_schedule_start_hour, $change_schedule_start_minute, 0, $change_schedule_month, $change_schedule_day, $change_schedule_year);
 				$change_schedule_end=mktime($change_schedule_end_hour, $change_schedule_end_minute, 0, $change_schedule_month, $change_schedule_day, $change_schedule_year);
+				if ($change_schedule_begin > $change_schedule_end) {
+					$illegal_dates=TRUE;
+					$msg -> addMsg(20);				
+				}
 			}
 	
-			if ($change_schedule_repeat_end_year)
+			if (check_date($change_schedule_repeat_end_month, $change_schedule_repeat_end_day, $change_schedule_repeat_end_year))
 				$change_schedule_repeat_end=mktime(23, 59, 59, $change_schedule_repeat_end_month, $change_schedule_repeat_end_day, $change_schedule_repeat_end_year);
 
 			if ($change_schedule_repeat_sem_end)
 				foreach ($SEMESTER as $a)	
-					if (($change_schedule_begin >= $a["beginn"]) &&($change_schedule_begin <= $a["ende"]))
+					if (($change_schedule_begin >= $a["beginn"]) && ($change_schedule_begin <= $a["ende"]))
 						$change_schedule_repeat_end=$a["vorles_ende"];
-
+			
 			//create repeatdata
 
 			//repeat = none
@@ -383,7 +397,23 @@ if ($change_object_schedules) {
 				$change_schedule_repeat_day_of_week,
 				$change_schedule_repeat_week);
 
-			if (($change_object_schedules == "NEW") || ($new_assign_object)) {
+			//check repeat_end
+			if ($changeAssign->getRepeatMode() != "na") {
+				if (!check_date($change_schedule_repeat_end_month, $change_schedule_repeat_end_day, $change_schedule_repeat_end_year)) {
+					$illegal_dates=TRUE;
+					$msg -> addMsg(18);
+				}
+				if (!$illegal_dates) {
+					if ($change_schedule_end > $change_schedule_repeat_end) {
+						$illegal_dates=TRUE;
+						$msg -> addMsg(19);
+					}
+				}
+			}
+			
+			if ($illegal_dates) {
+				$new_assign_object=serialize($changeAssign);
+			} elseif (($change_object_schedules == "NEW") || ($new_assign_object)) {
 				if (($change_schedule_assign_user_id) || ($change_schedule_user_free_name))
 					$overlaps = $changeAssign->checkOverlap();
 				if (!$overlaps) {
