@@ -61,10 +61,12 @@ if ($SessSemName["class"]=="inst") {
 	$structure["institut_main"]=array (topKat=>"", name=>_("&Uuml;bersicht"), link=>"institut_main.php", active=>FALSE);
 	if ($modules["forum"])
 		$structure["forum"]=array (topKat=>"", name=>_("Forum"), link=>"forum.php", active=>FALSE);
-	$structure["personal"]=array (topKat=>"", name=>_("Personal"), link=>"institut_members.php", active=>FALSE);
+	if ($modules["personal"])
+		$structure["personal"]=array (topKat=>"", name=>_("Personal"), link=>"institut_members.php", active=>FALSE);
 	if ($modules["documents"])
 		$structure["folder"]=array (topKat=>"", name=>_("Dateien"), link=>"folder.php?cmd=tree", active=>FALSE);
-	$structure["literatur"]=array (topKat=>"", name=>_("Literatur zur Einrichtung"), link=>"literatur.php", active=>FALSE);
+	if ($modules["literature"])
+		$structure["literatur"]=array (topKat=>"", name=>_("Literatur zur Einrichtung"), link=>"literatur.php", active=>FALSE);
 
 	//topkats for resources management, if module is activated
 	if ($RESOURCES_ENABLE) {
@@ -76,13 +78,15 @@ if ($SessSemName["class"]=="inst") {
 	$structure["seminar_main"]=array (topKat=>"", name=>_("&Uuml;bersicht"), link=>"seminar_main.php", active=>FALSE);
 	if ($modules["forum"])
 		$structure["forum"]=array (topKat=>"", name=>_("Forum"), link=>"forum.php", active=>FALSE);
-	if (!is_array($AUTO_INSERT_SEM) || !in_array($SessSemName[1], $AUTO_INSERT_SEM) || $rechte) {
+	if ((!is_array($AUTO_INSERT_SEM) || !in_array($SessSemName[1], $AUTO_INSERT_SEM) || $rechte) && ($modules["participants"])){
 		$structure["teilnehmer"]=array (topKat=>"", name=>_("TeilnehmerInnen"), link=>"teilnehmer.php", active=>FALSE);
 	}
 	if ($modules["documents"])
 		$structure["folder"]=array (topKat=>"", name=>_("Dateien"), link=>"folder.php?cmd=tree", active=>FALSE);
-	$structure["dates"]=array (topKat=>"", name=>_("Ablaufplan"), link=>"dates.php", active=>FALSE);
-	$structure["literatur"]=array (topKat=>"", name=>_("Literatur"), link=>"literatur.php", active=>FALSE);
+	if ($modules["schedule"])
+		$structure["dates"]=array (topKat=>"", name=>_("Ablaufplan"), link=>"dates.php", active=>FALSE);
+	if ($modules["literature"])
+		$structure["literatur"]=array (topKat=>"", name=>_("Literatur"), link=>"literatur.php", active=>FALSE);
 
 	//topkats for resources management, if module is activated
 	if ($RESOURCES_ENABLE) {
@@ -112,7 +116,8 @@ if (($SUPPORT_ENABLE) && ($modules["support"])) {
 //Bottomkats
 if ($SessSemName["class"]=="inst") {
 	$structure["_institut_main"]=array (topKat=>"institut_main", name=>_("Info"), link=>"institut_main.php", active=>FALSE);
-	$structure["institut_members"]=array (topKat=>"personal", name=>_("MitarbeiterInnen"), link=>"institut_members.php", active=>FALSE);
+	if ($modules["personal"])	
+		$structure["institut_members"]=array (topKat=>"personal", name=>_("MitarbeiterInnen"), link=>"institut_members.php", active=>FALSE);
 	$structure["institut_veranstaltungen"]=array (topKat=>"institut_main", name=>_("Veranstaltungen"), link=>"show_bereich.php?level=s&id=$SessSemName[1]", active=>FALSE);
 	$structure["timetable"]=array (topKat=>"institut_main", name=>_("Veranstaltungs-Timetable"), link=>"mein_stundenplan.php?inst_id=$SessSemName[1]", active=>FALSE);
 	// $structure["druckansicht_i"]=array (topKat=>"institut_main", name=>"Druckansicht", link=>"print_institut.php", target=>"_new", active=>FALSE);
@@ -131,7 +136,7 @@ if ($SessSemName["class"]=="inst") {
 }
 //
 
-if (!is_array($AUTO_INSERT_SEM) || !in_array($SessSemName[1], $AUTO_INSERT_SEM)) {
+if ((!is_array($AUTO_INSERT_SEM) || !in_array($SessSemName[1], $AUTO_INSERT_SEM)) && ($modules["participants"])){
 	$structure["_teilnehmer"]=array (topKat=>"teilnehmer", name=>_("TeilnehmerInnen"), link=>"teilnehmer.php", active=>FALSE);
 }
 if ($modules["forum"]) {
@@ -144,7 +149,7 @@ if ($modules["forum"]) {
 		$structure["neues_thema"]=array (topKat=>"forum", name=>_("neues Thema"), link=>"forum.php?neuesthema=TRUE#anker", active=>FALSE);
 }
 //
-if ($SessSemName["class"]=="sem") {
+if (($SessSemName["class"]=="sem") && ($modules["schedule"])){
 	$structure["_dates"]=array (topKat=>"dates", name=>_("alle Termine"), link=>"dates.php", active=>FALSE);
 	$structure["sitzung"]=array (topKat=>"dates", name=>_("Sitzungstermine"), link=>"dates.php?show_not=sem", active=>FALSE);
 	$structure["andere_t"]=array (topKat=>"dates", name=>_("andere Termine"), link=>"dates.php?show_not=other", active=>FALSE);
@@ -157,25 +162,25 @@ if ($modules["documents"]) {
 	$structure["alle_dateien"]=array (topKat=>"folder", name=>_("Alle Dateien"), link=>"folder.php?cmd=all", active=>FALSE);
 }
 //
-if ($SessSemName["class"]=="sem")
-	$structure["_literatur"]=array (topKat=>"literatur", name=>_("Literatur und Links"), link=>"literatur.php?view=literatur_sem", active=>FALSE);
-else
-	$structure["_literatur"]=array (topKat=>"literatur", name=>_("Literatur und Links"), link=>"literatur.php?view=literatur_inst", active=>FALSE);
-	
+if ($modules["literature"]) {
+	if ($SessSemName["class"]=="sem")
+		$structure["_literatur"]=array (topKat=>"literatur", name=>_("Literatur und Links"), link=>"literatur.php?view=literatur_sem", active=>FALSE);
+	else
+		$structure["_literatur"]=array (topKat=>"literatur", name=>_("Literatur und Links"), link=>"literatur.php?view=literatur_inst", active=>FALSE);
+}
 
-if ($SessSemName["class"]=="sem" && (!is_array($AUTO_INSERT_SEM) || !in_array($SessSemName[1], $AUTO_INSERT_SEM)))
+if ($SessSemName["class"]=="sem" && $modules["participants"] && (!is_array($AUTO_INSERT_SEM) || !in_array($SessSemName[1], $AUTO_INSERT_SEM)))
 	$structure["statusgruppen"]=array (topKat=>"teilnehmer", name=>_("Funktionen / Gruppen"), link=>"statusgruppen.php?view=statusgruppe_sem", active=>FALSE);
 
 
 if ($rechte)
-	if ($SessSemName["class"]=="sem")
+	if (($SessSemName["class"]=="sem") && ($modules["participants"]))
 		$structure["Statusgruppen verwalten"]=array (topKat=>"teilnehmer", name=>_("Funktionen / Gruppen verwalten"), link=>"admin_statusgruppe.php?view=statusgruppe_sem&new_sem=TRUE&range_id=".$SessSemName[1], active=>FALSE);
-	else
-		if ($perm->have_perm("admin"))
+	elseif (($perm->have_perm("admin")) && ($modules["personal"]))
 			$structure["Statusgruppen verwalten"]=array (topKat=>"personal", name=>_("Funktionen / Gruppen verwalten"), link=>"admin_statusgruppe.php?view=statusgruppe_inst&new_sem=TRUE&range_id=".$SessSemName[1], active=>FALSE);
 
 
-if ($rechte)
+if (($rechte) && ($modules["literature"]))
 	if ($SessSemName["class"]=="sem")
 		$structure["admin_literatur"]=array (topKat=>"literatur", name=>_("Literatur und Links bearbeiten"), link=>"admin_literatur.php?view=literatur_sem&new_sem=TRUE&range_id=".$SessSemName[1], active=>FALSE);
 	else
