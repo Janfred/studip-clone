@@ -64,7 +64,7 @@ function search_modules($key, $area = 4)
 * This function returns information about the learning module specified by the given IDs
 *
 * @access	public        
-* @param		integer	ILIAS-Inst-ID
+* @param		integer	Ilias-Inst-ID
 * @param		integer	ILIAS-learning-module-ID
 * @return		array		returns array of string or false
 */
