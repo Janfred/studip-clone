@@ -290,7 +290,7 @@ if (isset($query)):
 		else
 			$class="steelgraulight"; 
 		$c++;
-			switch ($group) {
+			switch ($browse_data["group"]) {
 				case "Seminar":
 					printf("<tr valign=middle align=left><td class=\"$class\"><font size=-1> &nbsp;%s</font></td>", $db->f("Vorname"));
 					printf("<td class=\"$class\"><font size=-1><a href=\"about.php?username=%s\"> &nbsp;%s</a></font></td>", $db->f("username"), $db->f("Nachname"));
