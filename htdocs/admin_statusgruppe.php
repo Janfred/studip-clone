@@ -469,9 +469,9 @@ if ($db->num_rows()>0) {   // haben wir schon Gruppen? dann Anzeige
 ?>
 <table class="blank" width="100%" border="0" cellspacing="0">
 	<?
-	$msg = "info§" . _("Es sind noch keine Gruppen oder Funktionen angelegt.") 
-	. "<br>" . _("Bitte nutzen Sie die obere Zeile, um f&uuml;r diesen Bereich Gruppen oder Funktionen anzulegen!")
-	. "<br><br>" . _("Sie haben mit dem Feld 'Gruppengr&ouml;&szlig;e' die M&ouml;glichkeit, die Sollst&auml;rke f&uuml;r eine Gruppe festzulegen.")
+	$msg = "info§" . _("Es sind noch keine Gruppen oder Funktionen angelegt worden.") 
+	. "<br>" . _("Um f&uuml;r diesen Bereich Gruppen oder Funktionen anzulegen, nutzen Sie bitte die obere Zeile!")
+	. "<br><br>" . _("Mit dem Feld 'Gruppengr&ouml;&szlig;e' haben Sie die M&ouml;glichkeit, die Sollst&auml;rke f&uuml;r eine Gruppe festzulegen.")
 	. "<br>" . _("Wenn Sie Gruppen angelegt haben, k&ouml;nnen Sie diesen Personen zuordnen. Jeder Gruppe k&ouml;nnen beliebig viele Personen zugeordnet werden. Jede Person kann beliebig vielen Gruppen zugeordnet werden.")
 	. "<br><br>" . sprintf(_("Lesen Sie weitere Bedienungshinweise in der %sHilfe%s nach!"), "<a href=\"help/index.php?referrer_page=admin_statusgruppe.php\">", "</a>")
 	. "§";

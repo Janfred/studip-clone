@@ -638,7 +638,7 @@ elseif ($auth->auth["perm"]=="admin") {
 						<th width="10%"><a href="<? echo $PHP_SELF ?>?sortby=status"><?=_("Status")?></a></th>
 						<th width="15%"><b><?=_("DozentIn")?></b></th>
 						<th width="10%"><b><?=_("Inhalt")?></b></th>
-						<th width="10%"><a href="<? echo $PHP_SELF ?>?sortby=teilnehmer"><?=_("Teilnehmer")?></a></th>
+						<th width="10%"><a href="<? echo $PHP_SELF ?>?sortby=teilnehmer"><?=_("TeilnehmerInnen")?></a></th>
 						<th width="5%"><b>&nbsp; </b></th>
 					</tr>
 		<?

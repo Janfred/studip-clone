@@ -35,8 +35,8 @@ $db3=new DB_Seminar;
 $db4=new DB_Seminar;	
 
 //Defaults, die fuer DAUS (<admin) gesetzt werden
-$default_description= _("Bitte geben Sie hier nur optionale Angaben (genauere Terminbeschreibung, Referatsthemen usw.) ein.");
-$default_titel= _("Kurztitel, bitte ausfüllen");
+$default_description= _("Bitte geben Sie hier nur weiterführende Angaben (genauere Terminbeschreibung, Referatsthemen usw.) ein.");
+$default_titel= _("Kurztitel, bitte ausfüllen!");
 if (!$perm->have_perm ("admin")) {
 	$temp_default[1]= _("tt");
 	$temp_default[2]= _("mm");
@@ -104,7 +104,7 @@ $infobox = array(
 		array  ("kategorie"  => _("Information:"), 
 			"eintrag" => array (
 					array ("icon" => "pictures/ausruf_small.gif", 	
-						"text"  => ($admin_dates_data["assi"]) ? _("Sie k&ouml;nnen nun den Ablaufplan und weitere Termine f&uuml;r die neu angelegte Veranstaltung eingeben.") : _("Sie k&ouml;nnen hier den Ablaufplan und weitere Termine der Veranstaltung ver&auml;ndern.")))),
+						"text"  => ($admin_dates_data["assi"]) ? _("Sie k&ouml;nnen nun den Ablaufplan und weitere Termine f&uuml;r die neu angelegte Veranstaltung eingeben.") : _("Hier k&ouml;nnen Sie den Ablaufplan und weitere Termine der Veranstaltung ver&auml;ndern.")))),
 		array  ("kategorie" => _("Aktionen:"), 
 				"eintrag" => array (
 					array	("icon" => "pictures/meinetermine.gif",
@@ -188,7 +188,7 @@ if ($new) {
 		}
 			
 		if (($start_time < $sem_beginn) || ($start_time > $sem_ende))
-			$result.="info§" . _("Der eingegebene Termine liegt ausserhalb des Semesters, in dem die Veranstaltung stattfindet. Es wird empfohlen, den Termin anzupassen.") . "§";
+			$result.="info§" . _("Der eingegebene Termine liegt au&szligerhalb des Semesters, in dem die Veranstaltung stattfindet. Es wird empfohlen, den Termin anzupassen.") . "§";
 		
 		//Und dann noch auf regelmaessige Termine checken, wenn dieser Typ gewaehlt ist
 		if (!$term_data["art"]) {
@@ -378,9 +378,9 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 		
 	if ($rooms_booked) 
 		if ($i == 1)
-			$result.= sprintf ("msg§"._("Die Belegung des Raums %s wurde in die Ressourcenverwaltung eingetragen oder aktualisiert.")."§", $rooms_booked);
+			$result.= sprintf ("msg§"._("Die Belegung des Raumes %s wurde in die Ressourcenverwaltung &uuml;bernommen.")."§", $rooms_booked);
 		elseif ($i)
-			$result.= sprintf ("msg§"._("Die Belegung der R&auml;ume %s wurden in die Ressourcenverwaltung eingetragen oder aktualisiert.")."§", $rooms_booked);
+			$result.= sprintf ("msg§"._("Die Belegung der R&auml;ume %s wurden in die Ressourcenverwaltung &uuml;bernommen.")."§", $rooms_booked);
 }
 	
 
@@ -454,7 +454,7 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 	
 	if ($admin_dates_data["assi"]) {
 		print("<font size=\"-1\">");
-		print(_("Sie haben jederzeit die M&ouml;glichkeit, diesen Schritt des Veranstaltungs-Assistenten sp&auml;ter nachzuholen."));
+		print(_("Sie haben die M&ouml;glichkeit, diesen Schritt des Veranstaltungs-Assistenten jederzeit nachzuholen."));
 		print("</font><br>");
 	}
 		
@@ -472,22 +472,22 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 		<table border="0" cellpadding="6" cellspacing="0" width="80%">
 		<tr>
 			<td class="rahmen_steel">
-				<font size="-1"><b><?=_("Ablaufplanassistent")?></b><br /><br /></font>
+				<font size="-1"><b><?=_("Ablaufplan-Assistent")?></b><br /><br /></font>
 				<font size="-1"><?=_("generieren Sie automatisch Sitzungstermine mit folgenden Einstellungen:")?><br /></font>
 				&nbsp; &nbsp; <font size="-1"><input type="checkbox" name="pfad"> <?=_("Zu jedem Termin einen Themenordner im Forum der Veranstaltung anlegen.")?></font><br>
-				&nbsp; &nbsp; <font size="-1"><input type="checkbox" name="folder"> <?=_("Zu jedem Termin einen Dateiordner zum Upload anlegen.")?> </font>
+				&nbsp; &nbsp; <font size="-1"><input type="checkbox" name="folder"> <?=_("Zu jedem Termin einen Dateiordner f&uuml;r Dokumente anlegen.")?> </font>
 				<? if ($db->f("duration_time") != 0) {
 					?>
-					<br />&nbsp; &nbsp; <font size="-1"><input type="checkbox" name="full"> <?=_("Ablaufplan f&uuml;r alle Semester anlegen (wenn nicht gesetzt nur f&uuml;r das erste Semester)")?> </font>
+					<br />&nbsp; &nbsp; <font size="-1"><input type="checkbox" name="full"> <?=_("Ablaufplan f&uuml;r alle Semester anlegen (wenn nicht gesetzt: nur f&uuml;r das erste Semester)")?> </font>
 					<?
 					}
 					echo "<br /><br /><font size=\"-1\">";
-					printf(_("Assistent %s"), "<input type=\"IMAGE\" align=\"absmiddle\" name=\"make_dates\" " . makeButton("starten", "src") . " border=\"0\" value=\"" . _("Ablaufplanassistenten ausf&uuml;hren") . "\">");
+					printf(_("Assistent %s"), "<input type=\"IMAGE\" align=\"absmiddle\" name=\"make_dates\" " . makeButton("starten", "src") . " border=\"0\" value=\"" . _("Ablaufplan-Assistenten ausf&uuml;hren") . "\">");
 					?>
 					</font>
 					&nbsp; <img  src="./pictures/info.gif" 
-						onClick="alert('<?=_("Der Ablaufplanassistent erstellt automatisch alle Termine des ersten oder aller Semester, je nach Auswahl. Dabei werden  - soweit wie möglich  - Feiertage und Ferienzeiten übersprungen. Anschliessend können Sie jedem Termin einen Titel und eine Beschreibung geben.")?>');" 
-						<?=tooltip(_("Der Ablaufplanassistent erstellt automatisch alle Termine des ersten oder aller Semester, je nach Auswahl. Dabei werden soweit wie m&ouml;glich Feiertage und Ferienzeiten &uuml;bersprungen. Anschliessend k&ouml;nnen Sie jedem Termin einen Titel und eine Beschreibung geben."))?>>
+						onClick="alert('<?=_("Der Ablaufplan-Assistent erstellt automatisch alle Termine des ersten oder aller Semester, je nach Auswahl. Dabei werden - soweit wie möglich - Feiertage und Ferienzeiten übersprungen. Anschließend können Sie jedem Termin einen Titel und eine Beschreibung geben.")?>');" 
+						<?=tooltip(_("Der Ablaufplan-Assistent erstellt automatisch alle Termine des ersten oder aller Semester, je nach Auswahl. Dabei werden soweit wie m&ouml;glich Feiertage und Ferienzeiten &uuml;bersprungen. Anschlie&szligend k&ouml;nnen Sie jedem Termin einen Titel und eine Beschreibung geben."))?>>
 					<br /><br />
 					</td>
 			</tr>
@@ -495,7 +495,7 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 		<?
 		} else {
 		echo "<br /><br /><font size=\"-1\">";
-		print(_("Sie haben bislang noch keine Sitzungstermine eingegeben. Sie k&ouml;nnen an dieser Stelle den Ablaufplanassisten benutzen, wenn Sie f&uuml;r die Veranstaltung einen regelm&auml;&szlig;igen Turnus festlegen."));
+		print(_("Sie haben bislang noch keine Sitzungstermine eingegeben. Sie k&ouml;nnen an dieser Stelle den Ablaufplan-Assisten benutzen, wenn Sie f&uuml;r die Veranstaltung einen regelm&auml;&szlig;igen Turnus festlegen."));
 		echo "</font>";
 		}
 	} ?>

@@ -203,11 +203,11 @@ if ($s_send) {
 	//Checks for admission turnout (only important if an admission is set)
 	if ($db->f("admission_type")) {
 		if ($turnout < 1) {
-			$msg .= "error§" . _("Diese Veranstaltung ist teilnahmebeschr&auml;nkt. Daher m&uuml;ssen Sie wenigstens einen Teilnehmer zulassen!") . "§";
+			$msg .= "error§" . _("Diese Veranstaltung ist teilnahmebeschr&auml;nkt. Daher m&uuml;ssen Sie wenigstens einen Teilnehmenden zulassen!") . "§";
 			$run=FALSE;
 		}
 		if (($run) && ($turnout < $db->f("admission_turnout")))
-			$msg .= "info§" . _("Diese Veranstaltung ist teilnahmebeschr&auml;nkt. Wenn Sie die Teilnehmerzahl verringern, m&uuml;ssen Sie evtl. Nutzer, die bereits einen Platz in der Veranstaltung erhalten haben, manuell entfernen!") . "§";
+			$msg .= "info§" . _("Diese Veranstaltung ist teilnahmebeschr&auml;nkt. Wenn Sie die Anzahl der Teilnehmenden verringern, m&uuml;ssen Sie evtl. NutzerInnen, die bereits einen Platz in der Veranstaltung erhalten haben, manuell entfernen!") . "§";
 		if ($turnout > $db->f("admission_turnout"))
 			$do_update_admission=TRUE;
 	}
@@ -413,7 +413,7 @@ if (($s_id) && (auth_check())) {
 				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <input type="text" name="ects" size="6" maxlength="32" value="<?php echo htmlReady($db->f("ects")) ?>"></td>
 			</tr>
 			<tr>
-				<td class="<? echo $cssSw->getClass() ?>" align=right><? printf ("%s" . _("max. Teilnehmeranzahl") . "%s", ($db->f("admission_type")) ? "<b>" : "",  ($db->f("admission_type")) ? "</b>" : ""); ?></td>
+				<td class="<? echo $cssSw->getClass() ?>" align=right><? printf ("%s" . _("max. TeilnehmerInnenanzahl") . "%s", ($db->f("admission_type")) ? "<b>" : "",  ($db->f("admission_type")) ? "</b>" : ""); ?></td>
 				<td class="<? echo $cssSw->getClass() ?>"  align=left colspan=2>&nbsp; <input type="int" name="turnout" size=6 maxlength=4 value="<?php echo $db->f("admission_turnout") ?>"></td>
 			</tr>
 			<tr>
@@ -559,8 +559,8 @@ if (($s_id) && (auth_check())) {
 							$db4->query ("SELECT username, ". $_fullname_sql['full_rev'] ." AS fullname FROM auth_user_md5 LEFT JOIN user_info USING(user_id)  WHERE perms = 'dozent' AND (username LIKE '%$search_exp_doz%' OR Vorname LIKE '%$search_exp_doz%' OR Nachname LIKE '%$search_exp_doz%') ORDER BY Nachname");								
 						if ($db4->num_rows()) {
 							$no_doz_found=FALSE;
-							printf ("<font size=-1>" . _("<b>%s</b> Nutzer gefunden:") . "<br />", $db4->num_rows());
-							print "<input type=\"IMAGE\" src=\"./pictures/move_left.gif\" ".tooltip(_("Den Benutzer hinzufügen"))." border=\"0\" name=\"add_doz\" />";
+							printf ("<font size=-1>" . _("<b>%s</b> NutzerIn gefunden:") . "<br />", $db4->num_rows());
+							print "<input type=\"IMAGE\" src=\"./pictures/move_left.gif\" ".tooltip(_("NutzerIn hinzufügen"))." border=\"0\" name=\"add_doz\" />";
 							print "&nbsp; <select name=\"add_doz\">";
 							while ($db4->next_record()) {
 								printf ("<option value=\"%s\">%s </option>", $db4->f("username"), htmlReady(my_substr($db4->f("fullname") ." (" . $db4->f("username"). ")",  0, 30)));
@@ -572,7 +572,7 @@ if (($s_id) && (auth_check())) {
 					if ($no_doz_found) {
 						?>
 						<font size=-1>
-						<? printf ("%s %s", (($search_exp_doz) && ($no_doz_found)) ? _("Keinen Nutzer gefunden.") . " <a name=\"anker\"></a>" : "",   (!$search_exp_doz) ? (!$SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["workgroup_mode"]) ? _("DozentIn hinzuf&uuml;gen") : _("LeiterIn hinzuf&uuml;gen")  : "");?>
+						<? printf ("%s %s", (($search_exp_doz) && ($no_doz_found)) ? _("Keinen Nutzenden gefunden.") . " <a name=\"anker\"></a>" : "",   (!$search_exp_doz) ? (!$SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["workgroup_mode"]) ? _("DozentIn hinzuf&uuml;gen") : _("LeiterIn hinzuf&uuml;gen")  : "");?>
 						</font><br />
 						<input type="TEXT" size="30" maxlength="255" name="search_exp_doz" />&nbsp; 
 						<input type="IMAGE" src="./pictures/suchen.gif" <? echo tooltip(_("Suche starten")) ?> border="0" name="search_doz" /><br />
@@ -623,8 +623,8 @@ if (($s_id) && (auth_check())) {
 							$db4->query ("SELECT username, ". $_fullname_sql['full_rev'] ." AS fullname FROM auth_user_md5 LEFT JOIN user_info USING(user_id) WHERE perms IN ('tutor', 'dozent') AND (username LIKE '%$search_exp_tut%' OR Vorname LIKE '%$search_exp_tut%' OR Nachname LIKE '%$search_exp_tut%') ORDER BY Nachname");
 						if ($db4->num_rows()) {
 							$no_tut_found=FALSE;
-							printf ("<font size=-1>" . _("<b>%s</b> Nutzer gefunden:") . "<br />", $db4->num_rows());
-							print "<input type=\"IMAGE\" src=\"./pictures/move_left.gif\" ".tooltip(_("Den Benutzer hinzufügen"))." border=\"0\" name=\"add_tut\" />";
+							printf ("<font size=-1>" . _("<b>%s</b> NutzerIn gefunden:") . "<br />", $db4->num_rows());
+							print "<input type=\"IMAGE\" src=\"./pictures/move_left.gif\" ".tooltip(_("NutzerIn hinzufügen"))." border=\"0\" name=\"add_tut\" />";
 							print "&nbsp; <select name=\"add_tut\">";
 							while ($db4->next_record()) {
 								printf ("<option value=\"%s\">%s </option>", $db4->f("username"), htmlReady(my_substr($db4->f("fullname")." (".$db4->f("username").")", 0, 30)));
@@ -636,7 +636,7 @@ if (($s_id) && (auth_check())) {
 					if ($no_tut_found) {
 						?>
 						<font size=-1>
-						<? printf ("%s %s", (($search_exp_tut) && ($no_tut_found)) ? _("Keinen Nutzer gefunden.") . "<a name=\"anker\"></a>" : "",   (!$search_exp_tut) ? (!$SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["workgroup_mode"]) ? _("TutorIn hinzuf&uuml;gen") : _("Mitglied hinzuf&uuml;gen")  : "");?>
+						<? printf ("%s %s", (($search_exp_tut) && ($no_tut_found)) ? _("Keinen Nutzenden gefunden.") . "<a name=\"anker\"></a>" : "",   (!$search_exp_tut) ? (!$SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["workgroup_mode"]) ? _("TutorIn hinzuf&uuml;gen") : _("Mitglied hinzuf&uuml;gen")  : "");?>
 						</font><br />
 						<input type="TEXT" size="30" maxlength="255" name="search_exp_tut" />&nbsp; 
 						<input type="IMAGE" src="./pictures/suchen.gif" <? echo tooltip(_("Suche starten")) ?> border="0" name="search_tut" /><br />
@@ -687,7 +687,7 @@ if (($s_id) && (auth_check())) {
 				</td>
 
 			<tr <?$cssSw->switchClass() ?>>
-				<td class="<? echo $cssSw->getClass() ?>" align=right><?=_("Teilnehmer")?></td>
+				<td class="<? echo $cssSw->getClass() ?>" align=right><?=_("TeilnehmerInnen")?></td>
 				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <textarea name="teilnehmer" cols=58 rows=2><?php echo htmlReady($db->f("teilnehmer")) ?></textarea></td>
 			</tr>
 

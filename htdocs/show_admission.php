@@ -96,7 +96,7 @@ $db3=new DB_Seminar;
 			print ("<table width=\"90%\" border=0 cellspacing=0 cellpadding=2>");
 			print ("<tr>");		
 			echo "<th width=\"40%\">" . _("Veranstaltung") . "</th>";
-			echo "<th width=\"10%\">" . _("Teilnehmer") . "</th>";
+			echo "<th width=\"10%\">" . _("TeilnehmerInnen") . "</th>";
 			echo "<th width=\"10%\">" . _("Quota") . "</th>";
 			echo "<th width=\"10%\">" . _("Anmeldeliste") . "</th>";
 			echo "<th width=\"10%\">" . _("Warteliste") . "</th>";

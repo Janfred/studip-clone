@@ -42,10 +42,10 @@ if ($SessSemName[1]) {
 	<blockquote>
 	<?
 	if ($links_admin_data["referred_from"] == "sem") {
-		printf(_("Sie k&ouml;nnen hier direkt die Daten der Veranstaltung <b>%s</b> bearbeiten.") . "<br>", htmlReady($SessSemName[0]));
+		printf(_("Hier k&ouml;nnen Sie die Daten der Veranstaltung <b>%s</b> direkt bearbeiten.") . "<br>", htmlReady($SessSemName[0]));
 		print(_("Wenn Sie die Daten einer anderen Veranstaltung bearbeiten wollen, klicken Sie bitte auf das Schl&uuml;sselsymbol.") . "<br />&nbsp;"); 
 	} else {
-		printf(_("Sie haben die Veranstaltung <b>%s</b> vorgew&auml;hlt. Sie k&ouml;nnen nun direkt die einzelnen Bereiche dieser Veranstaltung bearbeiten, in dem Sie die entsprechenden Menupunkte w&auml;hlen.") . "<br>", htmlReady($SessSemName[0]));
+		printf(_("Sie haben die Veranstaltung <b>%s</b> vorgew&auml;hlt. Sie k&ouml;nnen nun direkt die einzelnen Bereiche dieser Veranstaltung bearbeiten, indem Sie die entsprechenden Men&uuml;punkte w&auml;hlen.") . "<br>", htmlReady($SessSemName[0]));
 		print(_("Wenn Sie eine andere Veranstaltung bearbeiten wollen, klicken Sie bitte auf das Schl&uuml;sselsymbol.") . "<br />&nbsp;"); 
 	}
 	?>

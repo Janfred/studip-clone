@@ -76,7 +76,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 	parse_msg($result);
 	
 	print ("<tr><td class=\"blank\" colspan=2><blockquote>");
-	print(_("Sie k&ouml;nnen hier die Literaturliste und Links bearbeiten. Im Feld Links k&ouml;nnen Sie Links normal eingeben, diese werden anschliessend automatisch als Hyperlinks dargestellt."));
+	print(_("Hier k&ouml;nnen Sie die Literaturliste und Links bearbeiten. Im Feld \"Links\" k&ouml;nnen Sie Links normal eingeben, diese werden anschlie&szlig;end automatisch als Hyperlinks dargestellt."));
 	print("</blockquote>");
 	print("<form action=\"$PHP_SELF\" method=\"POST\">");
 	?><table border="0" cellpadding="2" cellspacing="0" width="99%" align="center">

@@ -121,7 +121,7 @@ while ( is_array($HTTP_POST_VARS)
 	  
 		// Do we have all necessary data?
 		if (empty($Name)) {
-			$msg="error§<b>" . _("Bitte geben sie eine Bezeichnug f&uuml;r die Einrichtung ein!") . "</b>";
+			$msg="error§<b>" . _("Bitte geben Sie eine Bezeichnung f&uuml;r die Einrichtung ein!") . "</b>";
 			break;
 		}
 
@@ -177,7 +177,7 @@ while ( is_array($HTTP_POST_VARS)
 		$query = "DELETE FROM literatur WHERE range_id='$i_id'";
 		$db->query($query);
 		if (($db_ar = $db->affected_rows()) > 0) {
-			$msg.="msg§" . _("Literatur / Links gel&ouml;scht.") . "§";
+			$msg.="msg§" . _("Literatur/Links gel&ouml;scht.") . "§";
 		}
 	
 		// delete news-links
@@ -201,7 +201,7 @@ while ( is_array($HTTP_POST_VARS)
 		
 		// Statusgruppen entfernen
 		if ($db_ar = DeleteAllStatusgruppen($i_id) > 0) {
-			$msg .= "msg§" . sprintf(_("%s Funktionen / Gruppen gel&ouml;scht"), $db_ar) . ".§";
+			$msg .= "msg§" . sprintf(_("%s Funktionen/Gruppen gel&ouml;scht"), $db_ar) . ".§";
 		}
 		
 		// kill all the ressources that are assigned to the Veranstaltung (and all the linked or subordinated stuff!)
@@ -214,7 +214,7 @@ while ( is_array($HTTP_POST_VARS)
 		if ($EXTERN_ENABLE) {
 			$counts = delete_all_configs($i_id);
 			if ($counts["records"]) {
-				$msg .= "msg§" . sprintf(_("%s Konfigurations-Dateien gel&ouml;scht."), $counts["records"]);
+				$msg .= "msg§" . sprintf(_("%s Konfigurationsdateien gel&ouml;scht."), $counts["records"]);
 				$msg .= "§";
 			}
 		}

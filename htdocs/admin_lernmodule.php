@@ -113,7 +113,7 @@ if ($ILIAS_CONNECT_ENABLE)
 	$link = "<a href=\"./test.xml"."\">";
 	$infobox[1]["kategorie"] = _("Aktionen:");
 		$infobox[1]["eintrag"][] = array (	"icon" => "pictures/icon-posting.gif" ,
-									"text"  => _("Sie k&ouml;nnen ein Lernmodul bearbeiten, wenn Sie als Autor oder Co-Autor daf&uuml;r eingetragen sind.")
+									"text"  => _("Sie k&ouml;nnen ein Lernmodul bearbeiten, wenn Sie als AutorIn oder Co-AutorIn daf&uuml;r eingetragen sind.")
 								);
 		$infobox[1]["eintrag"][] = array (	"icon" => "pictures/trash.gif" ,
 									"text"  => _("Sie k&ouml;nnen ein Lernmodul l&ouml;schen, indem Sie den Kasten des Moduls &ouml;ffnen und auf 'l&ouml;schen' klicken.")
