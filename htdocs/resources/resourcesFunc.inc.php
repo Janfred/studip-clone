@@ -294,7 +294,7 @@ function getMyRoomRequests($user_id = '') {
 		//load all my seminars
 		$my_sems = search_administrable_seminars();
 		
-		if (is_array($my_res)) {
+		if (sizeof($my_res)) {
 			$in_resource_id =  "('".join("','",array_keys($my_res))."')";
 			$query_res = sprintf("SELECT request_id, closed FROM resources_requests WHERE resource_id IN %s", $in_seminar_id, $in_resource_id);
 			$db2->query($query_res);
@@ -303,7 +303,7 @@ function getMyRoomRequests($user_id = '') {
 				$requests [$db2->f("request_id")]["closed"] = $db2->f("closed");
 			}
 		}
-		if (is_array($my_sems)) {
+		if (sizeof($my_sems)) {
 			$in_seminar_id =  "('".join("','",array_keys($my_sems))."')";
 			$query_sem = sprintf("SELECT request_id, closed FROM resources_requests WHERE seminar_id IN %s", $in_seminar_id, $in_resource_id);
 			$db->query($query_sem);
