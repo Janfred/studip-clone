@@ -6,11 +6,10 @@
 * 
 *
 * @author		Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
-* @version		$Id$
+* @version		1.0
 * @access		public
-* @modulegroup		system_core
-* @module		system_core
-* @package		studip
+* @modulegroup	system_core
+* @module		admission.inc.php
 */
 
 // +---------------------------------------------------------------------------+
@@ -38,10 +37,15 @@ require_once ("$ABSOLUTE_PATH_STUDIP/messaging.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
 
 
-/*
-Die Funktion get_all_quota gibt die Anzahl der verbleibenden Plaetze fuer das Kontingent "alle" 
-unter Beruecksichtung der Berechnung fuer andere Kontingente (und der Rundungsfehler)
-zurueck..
+/**
+* This function calculate the remaining places for the "alle"-allocation 
+*
+* The function calculate the ramining places for the "alle"-allocation. It considers
+* the places in the other allocations to avoid rounding errors
+* 
+* @param		string	seminar_id	the seminar_id of the seminar to calculate
+* @return		integer	
+*
 */
 
 function get_all_quota($seminar_id) {
@@ -65,9 +69,16 @@ function get_all_quota($seminar_id) {
 	return $all_quota;
 }
 
-/*
-Die Funktion get_free_admission gibt die Anzahl an insgesamt freien Plaetzen zurueck. Dabei werden
-Rundungsfehler gegenueber der absoluten Platzanzahl beruecksichtigt.
+
+/**
+* This function calculate the remaining places for the complete seminar
+*
+* This function calculate the remaining places for the complete seminar. It considers all the allcations
+* and it avoids rounding errors
+* 
+* @param		string	seminar_id	the seminar_id of the seminar to calculate
+* @return		integer	
+*
 */
 
 function get_free_admission ($seminar_id) {
@@ -95,11 +106,16 @@ function get_free_admission ($seminar_id) {
 	return $count;
 }
 
-/*
-Die Funktion renumer_admission numeriert eine Warteliste neu. Anzuwenden wenn Personen
-von der Warteliste entfertnt wurden.
-Die Teilnehmer bekommen eine SMS wie sich die Position veraendert hat, wenn der Parameter
-gesetzt ist.
+/**
+* This function numbers a waiting list
+*
+* Use this functions, if a person was moved from the waiting list or there were other changes
+* to the waiting list. The User becomes a message, if the parameter is set and the position
+* on the waiting  list has changed.
+* 
+* @param		string	seminar_id		the seminar_id of the seminar to calculate
+* @param		boolean	send_message		should a system-message be send?
+*
 */
 
 function renumber_admission ($seminar_id, $send_message=TRUE) {
@@ -131,10 +147,15 @@ function renumber_admission ($seminar_id, $send_message=TRUE) {
 	}
 }
 
-/*
-Die Funktion update_admission ueberprueft, ob Teilnehmer nachruecken koennen
-Die Teilnehmer bekommen eine SMS wenn es geklappt hat, wenn der Parameter
-gesetzt ist.
+/**
+* This function updates an admission procedure
+*
+* The function checks, if user could be insert to the seminar.
+* The User becomes a message, if he is inserte to the seminar
+* 
+* @param		string	seminar_id		the seminar_id of the seminar to calculate
+* @param		boolean	send_message		should a system-message be send?
+*
 */
 
 function update_admission ($seminar_id, $send_message=TRUE) {
@@ -206,10 +227,15 @@ function update_admission ($seminar_id, $send_message=TRUE) {
 	}
 }
 
-/*
-Die Funktion check_admission ueberprueft, ob Veranstaltungen gelost oder das Kontingent geoefftnet
-werden muss. Die Teilnehmer bekommen eine SMS ob es geklappt hat oder nicht, wenn der Parameter
-gesetzt ist.
+
+/**
+* This function checks, if an admission procedure has to start
+*
+* The function will start a fortune procedure and ends the allocations. It will check ALL
+* seminars in the admission system, but it do not much if there are no seminars to handle.
+*
+* @param		boolean	send_message		should a system-message be send?
+*
 */
 
 function check_admission ($send_message=TRUE) {
