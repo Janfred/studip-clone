@@ -486,31 +486,38 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 		<tr>
 			<td class="rahmen_steel">
 				<font size="-1"><b><?=_("Ablaufplan-Assistent")?></b><br /><br /></font>
-				<font size="-1"><?=_("generieren Sie automatisch Sitzungstermine mit folgenden Einstellungen:")?><br /></font>
 				<?
-				//only, if the forum is active
-				if ($modules["forum"]) { ?>
-				&nbsp; &nbsp; <font size="-1"><input type="checkbox" name="pfad"> <?=_("Zu jedem Termin einen Themenordner im Forum der Veranstaltung anlegen.")?></font><br>
-				<? } 
-				//only, if the documents-folder is active
-				if ($modules["documents"]) { ?>
-				&nbsp; &nbsp; <font size="-1"><input type="checkbox" name="folder"> <?=_("Zu jedem Termin einen Dateiordner f&uuml;r Dokumente anlegen.")?> </font>
-				<?
-				} 
-				if ($db->f("duration_time") != 0) {
+				if (($modules["forum"]) && ($modules["documents"]) && ($db->f("duration_time") != 0)) {
 					?>
-					<br />&nbsp; &nbsp; <font size="-1"><input type="checkbox" name="full"> <?=_("Ablaufplan f&uuml;r alle Semester anlegen (wenn nicht gesetzt: nur f&uuml;r das erste Semester)")?> </font>
+					<font size="-1"><?=_("generieren Sie automatisch Sitzungstermine mit folgenden Einstellungen:")?><br /></font>
 					<?
+					//only, if the forum is active
+					if ($modules["forum"]) { 
+						?>
+						&nbsp; &nbsp; <font size="-1"><input type="checkbox" name="pfad"> <?=_("Zu jedem Termin einen Themenordner im Forum der Veranstaltung anlegen.")?></font><br>
+						<? 
+					} 
+					//only, if the documents-folder is active
+					if ($modules["documents"]) { 
+						?>
+						&nbsp; &nbsp; <font size="-1"><input type="checkbox" name="folder"> <?=_("Zu jedem Termin einen Dateiordner f&uuml;r Dokumente anlegen.")?> </font>
+						<?
+					} 
+					if ($db->f("duration_time") != 0) {
+						?>
+						<br />&nbsp; &nbsp; <font size="-1"><input type="checkbox" name="full"> <?=_("Ablaufplan f&uuml;r alle Semester anlegen (wenn nicht gesetzt: nur f&uuml;r das erste Semester)")?> </font>
+						<?
 					}
-					echo "<br /><br /><font size=\"-1\">";
-					printf(_("Assistent %s"), "<input type=\"IMAGE\" align=\"absmiddle\" name=\"make_dates\" " . makeButton("starten", "src") . " border=\"0\" value=\"" . _("Ablaufplan-Assistenten ausf&uuml;hren") . "\">");
-					?>
-					</font>
-					&nbsp; <img  src="./pictures/info.gif" 
-						onClick="alert('<?=_("Der Ablaufplan-Assistent erstellt automatisch alle Termine des ersten oder aller Semester, je nach Auswahl. Dabei werden - soweit wie möglich - Feiertage und Ferienzeiten übersprungen. Anschließend können Sie jedem Termin einen Titel und eine Beschreibung geben.")?>');" 
-						<?=tooltip(_("Der Ablaufplan-Assistent erstellt automatisch alle Termine des ersten oder aller Semester, je nach Auswahl. Dabei werden soweit wie m&ouml;glich Feiertage und Ferienzeiten &uuml;bersprungen. Anschlie&szligend k&ouml;nnen Sie jedem Termin einen Titel und eine Beschreibung geben."))?>>
-					<br /><br />
-					</td>
+				}
+				echo "<br /><br /><font size=\"-1\">";
+				printf(_("Assistent %s"), "<input type=\"IMAGE\" align=\"absmiddle\" name=\"make_dates\" " . makeButton("starten", "src") . " border=\"0\" value=\"" . _("Ablaufplan-Assistenten ausf&uuml;hren") . "\">");
+				?>
+				</font>
+				&nbsp; <img  src="./pictures/info.gif" 
+					onClick="alert('<?=_("Der Ablaufplan-Assistent erstellt automatisch alle Termine des ersten oder aller Semester, je nach Auswahl. Dabei werden - soweit wie möglich - Feiertage und Ferienzeiten übersprungen. Anschließend können Sie jedem Termin einen Titel und eine Beschreibung geben.")?>');" 
+					<?=tooltip(_("Der Ablaufplan-Assistent erstellt automatisch alle Termine des ersten oder aller Semester, je nach Auswahl. Dabei werden soweit wie m&ouml;glich Feiertage und Ferienzeiten &uuml;bersprungen. Anschlie&szligend k&ouml;nnen Sie jedem Termin einen Titel und eine Beschreibung geben."))?>>
+				<br /><br />
+				</td>
 			</tr>
 		</table>
 		<?
