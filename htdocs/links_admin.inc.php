@@ -492,8 +492,8 @@ $query.=" ORDER BY  ".$links_admin_data["sortby"];
 $db->query($query);
 
 ?>
-			<form name="links_admin_action" action="<? echo $PHP_SELF ?>" method="POST">
 			<table border=0  cellspacing=0 cellpadding=2 align=center width="99%">
+			<form name="links_admin_action" action="<? echo $PHP_SELF ?>" method="POST">
 <?
 
 $c=-1;
@@ -634,6 +634,7 @@ while ($db->next_record()) {
 			</table>
 		</td>
 	</tr>
+	</table>
 	</table>
 	</form>				
 	<?
