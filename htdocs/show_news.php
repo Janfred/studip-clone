@@ -101,7 +101,7 @@ if (!$db->num_rows()) {
 		$db2->query("SELECT username, " . $_fullname_sql['full'] ." AS fullname FROM auth_user_md5 a LEFT JOIN user_info USING (user_id) WHERE a.user_id='".$db->f("user_id")."'");
 		$db2->next_record();
 		$link .= "&username=".$db2->f("username");
-		$zusatz="<a href=\"about.php?username=".$db2->f("username")."\"><font size=-1 color=\"#333399\">".$db2->f("fullname")."</font></a><font size=-1>&nbsp;".date("d.m.Y",$db->f("date"))." | <font color=\"#005500\">".object_return_views($db->f("news_id"))."<font color=\"black\"> |</font>";			
+		$zusatz="<a href=\"about.php?username=".$db2->f("username")."\"><font size=-1 color=\"#333399\">".htmlReady($db2->f("fullname"))."</font></a><font size=-1>&nbsp;".date("d.m.Y",$db->f("date"))." | <font color=\"#005500\">".object_return_views($db->f("news_id"))."<font color=\"black\"> |</font>";			
 
 		if ($link)
 			$titel = "<a href=\"$link\" class=\"tree\" >".$titel."</a>";
