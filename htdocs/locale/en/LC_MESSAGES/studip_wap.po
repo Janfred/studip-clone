@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-10-08 19:31+0200\n"
+"POT-Creation-Date: 2003-10-16 10:46+0200\n"
 "PO-Revision-Date: 2003-10-01 13:49+0200\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
@@ -165,7 +165,7 @@ msgstr "%s new message."
 msgid "Keine neuen Kurznachrichten seit letztem Web-Besuch."
 msgstr "No new short messages since last web visit."
 
-#: wap/wap_adm.inc.php:230
+#: wap/wap_adm.inc.php:233
 msgid "Ihre Sitzung ist abgelaufen. Bitte erneut anmelden."
 msgstr "Your session is finished. Please logon again."
 

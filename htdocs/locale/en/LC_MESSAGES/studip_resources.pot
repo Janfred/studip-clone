@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-10-08 19:31+0200\n"
+"POT-Creation-Date: 2003-10-16 10:46+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -865,7 +865,7 @@ msgid ""
 msgstr ""
 
 #: resources/views/page_intros.inc.php:50
-#: resources/views/page_intros.inc.php:187
+#: resources/views/page_intros.inc.php:189
 msgid "&Uuml;bersicht der Ressourcen"
 msgstr ""
 
@@ -1061,28 +1061,28 @@ msgstr ""
 msgid "zur&uuml;ck zur &Uuml;bersicht"
 msgstr ""
 
-#: resources/views/page_intros.inc.php:163
+#: resources/views/page_intros.inc.php:164
 #, c-format
 msgid "%sBelegungsplan%s anzeigen"
 msgstr ""
 
-#: resources/views/page_intros.inc.php:166
+#: resources/views/page_intros.inc.php:167
 #, c-format
 msgid "Eine neue Belegung %serstellen%s"
 msgstr ""
 
-#: resources/views/page_intros.inc.php:171
+#: resources/views/page_intros.inc.php:173
 #, c-format
 msgid ""
 "Hier k&ouml;nnen Sie sich die Belegungszeiten der Ressource %s ausgeben "
 "lassen"
 msgstr ""
 
-#: resources/views/page_intros.inc.php:172
+#: resources/views/page_intros.inc.php:174
 msgid "Ressourcenbelegung"
 msgstr ""
 
-#: resources/views/page_intros.inc.php:176
+#: resources/views/page_intros.inc.php:178
 #, c-format
 msgid ""
 "Anzeigen der der Belegung der Ressource %s. Sie k&ouml;nnen die Belegung "
@@ -1090,17 +1090,17 @@ msgid ""
 "Belegung erstellen."
 msgstr ""
 
-#: resources/views/page_intros.inc.php:181
+#: resources/views/page_intros.inc.php:183
 #, c-format
 msgid "Vergeben von Rechten auf die Ressource %s"
 msgstr ""
 
-#: resources/views/page_intros.inc.php:182
+#: resources/views/page_intros.inc.php:184
 #, c-format
 msgid "Vergeben von Berechtigungen - Objekt%s"
 msgstr ""
 
-#: resources/views/page_intros.inc.php:186
+#: resources/views/page_intros.inc.php:188
 msgid ""
 "Sie befinden sich in der Ressourcenverwaltung von Stud.IP. Sie k&ouml;nnen "
 "hier R&auml;ume, Geb&auml;ude, Ger&auml;te und andere Ressourcen verwalten."

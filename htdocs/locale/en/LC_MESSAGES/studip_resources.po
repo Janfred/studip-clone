@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-10-08 19:31+0200\n"
+"POT-Creation-Date: 2003-10-16 10:46+0200\n"
 "PO-Revision-Date: 2003-07-25 16:17+0200\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
@@ -897,7 +897,7 @@ msgstr ""
 "have access, and administer resources."
 
 #: resources/views/page_intros.inc.php:50
-#: resources/views/page_intros.inc.php:187
+#: resources/views/page_intros.inc.php:189
 msgid "&Uuml;bersicht der Ressourcen"
 msgstr "Resources overview"
 
@@ -1116,28 +1116,28 @@ msgstr "Back to search"
 msgid "zur&uuml;ck zur &Uuml;bersicht"
 msgstr "Back to overview"
 
-#: resources/views/page_intros.inc.php:163
+#: resources/views/page_intros.inc.php:164
 #, c-format
 msgid "%sBelegungsplan%s anzeigen"
 msgstr "Show %sallocation plan%s."
 
-#: resources/views/page_intros.inc.php:166
+#: resources/views/page_intros.inc.php:167
 #, c-format
 msgid "Eine neue Belegung %serstellen%s"
 msgstr "%sCreate%s a new allocation"
 
-#: resources/views/page_intros.inc.php:171
+#: resources/views/page_intros.inc.php:173
 #, c-format
 msgid ""
 "Hier k&ouml;nnen Sie sich die Belegungszeiten der Ressource %s ausgeben "
 "lassen"
 msgstr "Here you can display the allocation times of the resource %s"
 
-#: resources/views/page_intros.inc.php:172
+#: resources/views/page_intros.inc.php:174
 msgid "Ressourcenbelegung"
 msgstr "Resources allocation"
 
-#: resources/views/page_intros.inc.php:176
+#: resources/views/page_intros.inc.php:178
 #, c-format
 msgid ""
 "Anzeigen der der Belegung der Ressource %s. Sie k&ouml;nnen die Belegung "
@@ -1148,17 +1148,17 @@ msgstr ""
 "access authorisations, you can also edit the allocation, or create a new "
 "one. "
 
-#: resources/views/page_intros.inc.php:181
+#: resources/views/page_intros.inc.php:183
 #, c-format
 msgid "Vergeben von Rechten auf die Ressource %s"
 msgstr "Assign access authorisation for the resource %s"
 
-#: resources/views/page_intros.inc.php:182
+#: resources/views/page_intros.inc.php:184
 #, c-format
 msgid "Vergeben von Berechtigungen - Objekt%s"
 msgstr "Assign authorisation - object%s"
 
-#: resources/views/page_intros.inc.php:186
+#: resources/views/page_intros.inc.php:188
 msgid ""
 "Sie befinden sich in der Ressourcenverwaltung von Stud.IP. Sie k&ouml;nnen "
 "hier R&auml;ume, Geb&auml;ude, Ger&auml;te und andere Ressourcen verwalten."
