@@ -1009,12 +1009,19 @@ switch ($skip_closed_requests) {
 //cancel an edit request session
 if ($cancel_edit_request_x) {
 	if (sizeof($resources_data["requests_open"]) < sizeof ($resources_data["requests_working_on"])) {
-		$msg->addMsg(40, array($PHP_SELF, $PHP_SELF));
-		//hmmm ???
-		//$resources_data["requests_working_on"] = FALSE;
-		//$resources_data["requests_open"] = false;
-		//$resources_data["requests_working_pos"] = 0;
-		$save_state_x = FALSE;
+		foreach ($resources_data["requests_working_on"] as $val) {
+			$request_ids[] = $val["request_id"];
+			$request_data[$val["request_id"]] = $val;
+		}
+		$in="('".join("','",$request_ids)."')";
+	
+		$query = sprintf ("SELECT request_id FROM resources_requests WHERE closed='1' AND request_id IN %s", $in);
+		$db->query($query);
+	
+		if ($db->nf()) {
+			$msg->addMsg(40, array($PHP_SELF, $PHP_SELF));
+			$save_state_x = FALSE;
+		}
 	}
 	$resources_data["view"] = "requests_start";
 	$view = "requests_start";
@@ -1094,7 +1101,6 @@ if (is_array($selected_resource_id)) {
 
 // save the assigments in db
 if ($save_state_x) {
-	// RECHTECHECK NICHT VERGESSEN!
 	require_once ($RELATIVE_PATH_RESOURCES."/lib/RoomRequest.class.php");
 	require_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
 	require_once ($ABSOLUTE_PATH_STUDIP."/lib/classes/Seminar.class.php");
@@ -1317,7 +1323,6 @@ if ($save_state_x) {
 			$resources_data["view"] = "requests_start";
 			$view = "requests_start";
 			$msg->addMsg(36, array($PHP_SELF, $PHP_SELF));
-			//$resources_data["requests_working_on"] = FALSE;
 			$save_state_x = FALSE;
 		} else  {
 			if ($resources_data["requests_working_pos"] == sizeof($resources_data["requests_working_on"])-1) {
@@ -1601,7 +1606,7 @@ if ($snd_closed_request_sms) {
 			if ($db2->nf()) {
 				while ($db2->next_record()) {
 					$resObj =& ResourceObject::Factory($request_data[$db->f("request_id")]["assign_objects"][$tmp_assign_ids[0]]["resource_id"]);
-					$message.= date("d.m.Y, H:i", $db2->f("date")).", ".(($db2->f("date") != $db2->f("end_time")) ? " - ".date("H:i", $db2->f("end_time")) : "").": ".$resObj->getName()."\n";
+					$message.= date("d.m.Y, H:i", $db2->f("date")).(($db2->f("date") != $db2->f("end_time")) ? " - ".date("H:i", $db2->f("end_time")) : "").": ".$resObj->getName()."\n";
 				}
 			}
 		}
@@ -1613,6 +1618,12 @@ if ($snd_closed_request_sms) {
 		$reqObj->setClosed(2);
 		$reqObj->store();
 	}
+}
+
+//unset, if all requests are edited and the set of requests should be resetted after
+if ($reset_set) {
+	unset($resources_data["requests_working_on"]);
+	unset($resources_data["requests_open"]);
 }
 
 

@@ -157,8 +157,8 @@ $this->msg[35] = array (
 $this->msg[36] = array (
 		"mode" => "info",
 		"msg"=> _("Sie haben alle Anfragen, die Sie ausgew&auml;hlt haben, bearbeitet. Wollen Sie jetzt Nachrichten zu allen aufgel&ouml;sten Anfragen versenden?")
-			."<br /><a href=\"%s?snd_closed_request_sms=1\">".makeButton("ja2")."</a>"
-			."&nbsp;<a href=\"%s\">".makeButton("nein")."</a>");
+			."<br /><a href=\"%s?snd_closed_request_sms=1&edit_all=1\">".makeButton("ja2")."</a>"
+			."&nbsp;<a href=\"%s&edit_all=1\">".makeButton("nein")."</a>");
 $this->msg[37] = array (
 		"mode" => "msg",
 		"msg"=> _("Die regelm&auml;&szlig;ige Belegung wurde in Einzeltermine umgewandelt und ein Ablaufplan angelegt."));
@@ -170,9 +170,8 @@ $this->msg[39] = array (
 		"msg"=> _("Die Belegung konnte nicht verschoben werden, da Sie sich in der gew&uuml;nschten Ressource einer anderen Belegung &uuml;berschneidet!"));
 $this->msg[40] = array (
 		"mode" => "info",
-		"msg"=> _("Sie haben bereits Anfragen, die Sie ausgew&auml;hlt haben, bearbeitet. Wollen Sie jetzt Nachrichten zu allen aufgel&ouml;sten Anfragen versenden?")
-			."<br /><a href=\"%s?snd_closed_request_sms=1\">".makeButton("ja2")."</a>"
-			."&nbsp;<a href=\"%s\">".makeButton("nein")."</a>");
+		"msg"=> _("Sie haben bereits Anfragen, die Sie ausgew&auml;hlt haben, bearbeitet. Klicken Sie auf &raquo;absenden&laquo;, um Nachrichten zu aufgel&ouml;sten Anfragen versenden.")
+			."&nbsp;<a href=\"%s?snd_closed_request_sms=1\">".makeButton("absenden")."</a>");
 $this->msg[41] = array (
 		"mode" => "info",
 		"msg"=> _("Mit den von ihnen ausgewählten Einstellungen sind keine Anfragen, die Sie auflösen könnten, vorhanden."));
