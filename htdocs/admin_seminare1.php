@@ -727,7 +727,7 @@ if (($s_id) && (auth_check())) {
 			</tr>
 			<?
 			//add the free adminstrable datafields
-			$localFields = $DataFields->getLocalFields($SessSemName[1], ($SessSemName["class"]) ? $SessSemName["class"] : "inst");
+			$localFields = $DataFields->getLocalFields($s_id);
 	
 			foreach ($localFields as $val) {
 			?>
