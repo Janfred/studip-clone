@@ -281,7 +281,13 @@ if (($uebernehmen_x) && (!$errormsg))
 	if ($db->affected_rows()) {
 		$errormsg.="msg§Die allgemeinen Termindaten wurden aktualisiert§";
 		$db->query ("UPDATE seminare SET chdate='".time()."' WHERE Seminar_id ='".$term_metadata["sem_id"]."'");
+		//If resource-management activ, update the assigned reources
+		if ($RESOURCES_ENABLE) {
+		 	require_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
+		 	$veranstAssign = new VeranstaltungResourcesAssign($term_metadata["sem_id"]);
+		 	$veranstAssign->updateAssign();
 		}
+	}
 	
 	//Save the current state as snapshot to compare with current data
 	$term_metadata["original"]=get_snapshot();

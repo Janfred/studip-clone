@@ -18,17 +18,27 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-	page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
-	$perm->check("tutor");
+page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
+$perm->check("tutor");
 	
-	include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
-// -- here you have to put initialisations for the current page
+$db=new DB_Seminar;
+$db2=new DB_Seminar;
+$db3=new DB_Seminar;	
+$db4=new DB_Seminar;	
 
-	$db=new DB_Seminar;
-	$db2=new DB_Seminar;
-	$db3=new DB_Seminar;	
-	$db4=new DB_Seminar;	
+/**
+* Helper functin: If resource-management activ, update the assigned reources
+*/
+function update_resources() {
+	global $RESOURCES_ENABLE, $RELATIVE_PATH_RESOURCES, $admin_dates_data;
+	if ($RESOURCES_ENABLE) {
+	 	require_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
+	 	$veranstAssign = new VeranstaltungResourcesAssign($admin_dates_data["range_id"]);
+	 	$veranstAssign->updateAssign();
+	}
+}
 
 	//Defaults, die fuer DAUS (<admin) gesetzt werden
 	$default_description="Bitte geben Sie hier nur optionale Angaben (genauere Terminbeschreibung, Referatsthemen usw.) ein.";
@@ -186,8 +196,9 @@ if ($make_dates)
 				else
 					$f_id='';
 				$db4->query("INSERT INTO termine SET termin_id='$t_id', range_id='".$admin_dates_data["range_id"]."', autor_id='$user->id', content='Kein Titel', date='$insert_termin_start[$i]', mkdate='$aktuell', chdate='$aktuell', date_typ='$date_typ', topic_id='$topic_id', end_time='$insert_termin_end[$i]', raum='".$db2->f("Ort")."'");
-				if ($db4->affected_rows())
+				if ($db4->affected_rows()) {
 					$made_dates++;
+					}
 				}
 			}
 
@@ -212,6 +223,8 @@ if ($make_dates)
 
 	$result="msg§Der Ablaufplan wurde erstellt. Es wurden ".$made_dates." Termine erstellt.§";
 	$admin_dates_data["manuel_edit"]=TRUE;
+	if ($made_dates)
+		update_resources();		
 	}
 
 if ($new)
@@ -314,6 +327,7 @@ if ($new)
 		if ($db->affected_rows()) {
 			$result.="msg§Ihr Termin wurde eingef&uuml;gt!§";
 			$admin_dates_data["termin_id"]=FALSE;
+			update_resources();		
 			}
 		}
 	else
@@ -388,6 +402,7 @@ if (($kill) && ($admin_dates_data["range_id"]))
 		else
 			$result="msg§$del_count Termine wurden gel&ouml;scht!";
 	$beschreibung='';
+	update_resources();		
 	}
 
 
