@@ -72,8 +72,12 @@ if (!(have_sem_write_perm()) OR $pass==TRUE) {
 				$name = $db->f("name");
 				echo"<td class=steel2 colspan=2>&nbsp; &nbsp; <b><font size=2>".htmlReady($name)."</font></b></td>";
 				echo "\n</tr><tr>";
-				$parent_description = formatReady($db->f("description"));
-	  		if (ereg("\[quote",$parent_description) AND ereg("\[/quote\]",$parent_description))
+				// $parent_description = formatReady($db->f("description"));
+				$parent_description = $db->f("description");
+				if (ereg("<admin_msg",$parent_description))
+					$parent_description = forum_parse_edit($parent_description);
+				$parent_description = formatReady($parent_description);
+				if (ereg("\[quote",$parent_description) AND ereg("\[/quote\]",$parent_description))
 					$parent_description = quotes_decode($parent_description);
 				printcontent ("100%","",$parent_description,"");
 				echo "\n</tr>";
