@@ -62,7 +62,7 @@ $voteID     								= $HTTP_POST_VARS['voteID'];
 $openID										= $HTTP_GET_VARS['openID'];
 	if(empty($openID))			$openID 	= $HTTP_GET_VARS['voteopenID'];
 	if(empty($openID))			$openID 	= NULL;
-$searchRange 								= htmlready($HTTP_POST_VARS['searchRange']);
+$searchRange 								= $HTTP_POST_VARS['searchRange'];
 	if(empty($searchRange))		$searchRange= NULL;
 $referer									= $HTTP_GET_VARS['referer'];
 
