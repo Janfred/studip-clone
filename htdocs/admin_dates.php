@@ -472,10 +472,16 @@ if ($SEM_TYPE[$db->f("status")]["name"] == $SEM_TYPE_MISC_NAME)
 	$tmp_typ = _("Veranstaltung"); 
 else
 	$tmp_typ = $SEM_TYPE[$db->f("status")]["name"];
+	
+$term_data=unserialize($db->f("metadata_dates"));
+$term_data["start_time"]=$db->f("start_time");
+$term_data["duration_time"]=$db->f("duration_time");
+						
 
 $db2->query("SELECT count(*) AS anzahl FROM termine WHERE range_id='".$admin_dates_data["range_id"]."' AND date_typ IN $typ_clause");
 $db2->next_record();
 
+//some messages
 if (($db2->f("anzahl") == 0) && (!$admin_dates_data["insert_id"])){
 	$result.= sprintf ("info§"._("Es sind keine Termine vorhanden.")."<br>"._("Einen neuen Termin %s")."§", "<a href=\"$PHP_SELF?insert_new=TRUE#anchor\">".makeButton("anlegen")."</a>");
 }
@@ -484,6 +490,10 @@ if ($admin_dates_data["assi"]) {
 	$result.= "info§"._("Sie haben die M&ouml;glichkeit, diesen Schritt des Veranstaltungs-Assistenten jederzeit nachzuholen.")."&nbsp;<a href=\"admin_seminare1.php\">".makeButton("abbrechen")."</a>§";
 }
 
+if (!sizeof($term_data["turnus_data"])) {
+	$result.= "info§"._("Sie haben bislang noch keine Sitzungstermine eingegeben. Sie k&ouml;nnen an dieser Stelle den Ablaufplan-Assisten benutzen, wenn Sie f&uuml;r die Veranstaltung einen regelm&auml;&szlig;igen Turnus festlegen.")."§";
+}
+						
 
 
 //Ab hier Ausgaben....
@@ -520,11 +530,7 @@ if ($admin_dates_data["assi"]) {
 					</table>				
 				
 					<?
-					//Anzeige, wenn wir aus dem Seminarassistenten kommen
-					$term_data=unserialize($db->f("metadata_dates"));
-					$term_data["start_time"]=$db->f("start_time");
-					$term_data["duration_time"]=$db->f("duration_time");
-						
+
 					print("<form method=\"POST\" action=\"$PHP_SELF\">");
 					//Fenster zum Starten des Terminassistenten einblenden
 					if ((!$term_data["art"]) && (!isSchedule($admin_dates_data["range_id"], TRUE, TRUE))) {
@@ -568,12 +574,9 @@ if ($admin_dates_data["assi"]) {
 							</tr>
 						</table>
 						<?
-						} else {
-						echo "<br /><br /><font size=\"-1\">";
-						print(_("Sie haben bislang noch keine Sitzungstermine eingegeben. Sie k&ouml;nnen an dieser Stelle den Ablaufplan-Assisten benutzen, wenn Sie f&uuml;r die Veranstaltung einen regelm&auml;&szlig;igen Turnus festlegen."));
-						echo "</font>";
 						}
-					} ?>
+					} 
+					?>
 					</form>
 					<?
 					//Vorhandene Termine holen und anzeigen und nach Bedarf bearbeiten
