@@ -1,4 +1,15 @@
 <?php
+
+/**
+* several functions and classes used for the systeminternal messages
+* 
+* @author				Nils K. Windisch <studip@nkwindisch.de>, Cornelis Kater <ckater@gwdg.de>
+* @access				public
+* @modulegroup	Messaging
+* @module				messaging.inc.php
+* @package			Stud.IP Core
+*/
+
 /*
 mesaging.inc.php - Funktionen fuer das Messaging
 Copyright (C) 2002 Cornelis Kater <ckater@gwdg.de>, Nils K. Windisch <info@nkwindisch.de>
@@ -168,7 +179,7 @@ class messaging {
 				$db5->query("SELECT smsforward_rec FROM user_info WHERE user_id='".$db4->f("user_id")."'");
 				$db5->next_record();
 				$snd_user_id = $user_id;
-				if ($my_messaging_settings["save_snd"] != "1") {
+				if ($sms_data["tmpsavesnd"] != "1") { // don't save save sms in outbox
 					$set_deleted = "1";
 				}
 				// personal-signatur
@@ -192,8 +203,12 @@ class messaging {
 			$db3->query("INSERT IGNORE message SET message_id='".$tmp_message_id."', mkdate='".$time."', message='".$message."', autor_id='".$snd_user_id."'");
 			
 			// insert snd
-			if (!$set_deleted) { 
-				$db3->query("INSERT IGNORE message_user SET message_id='".$tmp_message_id."', user_id='".$snd_user_id."', snd_rec='snd' ");
+			if (!$set_deleted) {
+				if($sms_data["tmp_save_snd_folder"]) {
+					$db3->query("INSERT IGNORE message_user SET message_id='".$tmp_message_id."', user_id='".$snd_user_id."', snd_rec='snd', folder='".$sms_data["tmp_save_snd_folder"]."' ");
+				} else {
+					$db3->query("INSERT IGNORE message_user SET message_id='".$tmp_message_id."', user_id='".$snd_user_id."', snd_rec='snd' ");
+				}
 			} else { // wenn als geloescht
 				$db3->query("INSERT IGNORE message_user SET message_id='".$tmp_message_id."', user_id='".$snd_user_id."', snd_rec='snd', deleted='1'");
 			}
