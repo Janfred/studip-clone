@@ -78,9 +78,11 @@ if ($_REQUEST['cmd']=="suche"){
 	<td class="blank" width="100%" align="left" valign="top">
 	<?
 if ($msg)	{
-	echo "\n<table width=\"100%\" border=\"0\" cellpadding=\"2\" cellspacing=\"0\">";
+	echo "\n<table width=\"99%\" border=\"0\" cellpadding=\"2\" cellspacing=\"0\">";
 	parse_msg ($msg,"§","blank",1,false);
 	echo "\n</table>";
+} else {
+	echo "<br><br>";
 }
 $the_tree->showTree();
 	?>
@@ -107,7 +109,7 @@ $infobox[1]["kategorie"] = "Suchen";
 $infobox[1]["eintrag"][] = array (	"icon" => "pictures/suchen.gif" ,
 									"text" => $such_form
 								);
-print_infobox ($infobox,"pictures/archiv.jpg");
+print_infobox ($infobox,"pictures/einrichtungen.jpg");
 
 ?>
 </td></tr>
