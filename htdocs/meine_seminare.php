@@ -384,9 +384,9 @@ else {  // es sind keine Veranstaltungen abboniert
 			ELSE $chance_color = dechex(255-($db->f("position")*6)); // da gibts vielleicht noch Hoffnung, also grün
 		}
 	
-	$cssSw->disableHover();
+	//$cssSw->disableHover();
 	$cssSw->switchClass();
-	printf ("<tr><td width=\"1%%\" bgcolor=\"#44%s44\"><img src='pictures/blank.gif' alt='Position oder Wahrscheinlichkeit' border=0 width=7 height=12></td>",$chance_color);
+	printf ("<tr".$cssSw->getHover()."><td width=\"1%%\" bgcolor=\"#44%s44\"><img src='pictures/blank.gif' alt='Position oder Wahrscheinlichkeit' border=0 width=7 height=12></td>",$chance_color);
 	printf ("<td width=\"1%%\" class=\"%s\">&nbsp;</td>",$cssSw->getClass());
 	printf ("<td width=\"55%%\" class=\"%s\">",$cssSw->getClass());
 	print "<a href=details.php?sem_id=".$db->f("seminar_id")."><font size=-1>".$db->f("Name")."</font></a></td>";
