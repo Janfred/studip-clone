@@ -76,7 +76,7 @@ class EvalTemplateGUI {
      $input->attr( "style", "vertical-align:middle;" );
 #     $input->stri( makeButton( "erstellen", "src" ) );
      $input->stri( tooltip( _("Neue Vorlage erstellen." ), TRUE ) );
-     $input->attr ("src", EVAL_PIC_ADD);
+     $input->attr ("src", EVAL_PIC_ADD_TEMPLATE);
 
      $td->addContent($input);
      $tr->addContent($td);
@@ -140,7 +140,7 @@ class EvalTemplateGUI {
      $input->attr( "style", "vertical-align:middle;" );
 #     $input->stri( makeButton( "erstellen", "src" ) );
      $input->stri( tooltip( _("Neue Vorlage erstellen." ), TRUE ) );
-     $input->attr ("src", EVAL_PIC_ADD);
+     $input->attr ("src", EVAL_PIC_ADD_TEMPLATE);
 
      $td->addContent($input);
      $tr->addContent($td);
@@ -203,7 +203,7 @@ class EvalTemplateGUI {
      $input->attr( "style", "vertical-align:middle;" );
 #     $input->stri( makeButton( "erstellen", "src" ) );
      $input->stri( tooltip( _("Neue Vorlage erstellen." ), TRUE ) );
-     $input->attr ("src", EVAL_PIC_ADD);
+     $input->attr ("src", EVAL_PIC_ADD_TEMPLATE);
 
      $td->addContent($input);
      $tr->addContent($td);
@@ -267,7 +267,7 @@ class EvalTemplateGUI {
     $input->attr( "style", "vertical-align:middle;" );
 #    $input->stri( makeButton( "erstellen", "src" ) );
     $input->stri( tooltip( _("Neue Vorlage erstellen." ), TRUE ) );
-    $input->attr ("src", EVAL_PIC_ADD);
+    $input->attr ("src", EVAL_PIC_ADD_TEMPLATE);
     $td->addContent($input);
     $tr->addContent($td);
     $table->addContent($tr);
@@ -618,12 +618,12 @@ class EvalTemplateGUI {
 	  $input->attr( "type", "image" );
 	  $input->attr( "name", "template_add_answers_button" );
 #$input->stri( makeButton( "hinzufuegen", "src" ) );
-     $input->addAttr ("src", EVAL_PIC_ADD);
+	  $input->addAttr ("src", EVAL_PIC_ADD);
 
 	  $input->attr( "border", "0" );
 	  $input->attr( "style", "vertical-align:middle;" );
-      $form->html("&nbsp;");
-      $form->cont( $input );
+	  $form->html("&nbsp;");
+	  $form->cont( $input );
 	  
 	  /* add number of answers - list ------------------ */
 	  $select = new HTM( "select" );
@@ -643,10 +643,10 @@ class EvalTemplateGUI {
 	  $input->attr( "type", "image" );
 	  $input->attr( "name", "template_delete_answers_button" );
 #       $input->stri( makeButton( "markierteloeschen", "src" ) );
-       $input->addAttr ("src", EVAL_PIC_REMOVE);       
+	  $input->addAttr ("src", EVAL_PIC_REMOVE);       
 	  $input->attr( "border", "0" );
 	  $input->attr( "style", "vertical-align:middle;" );
-     $form->html("&nbsp;");
+	  $form->html("&nbsp;");
 	  $form->cont( $input );
 	  $form->cont( $this->BR );
 	  

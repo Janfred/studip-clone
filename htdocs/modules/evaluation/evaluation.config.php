@@ -118,6 +118,7 @@ define ("EVAL_PIC_EXCLAIM",    PATH_PICTURES."icon-news.gif");
 define ("EVAL_PIC_DELETE_GROUP",    PATH_PICTURES."delete-group.gif");
 define ("EVAL_PIC_MOVE_BUTTON",    PATH_PICTURES."eval_move_button.gif");
 define ("EVAL_PIC_ADD",    PATH_PICTURES."add_right.gif");
+define ("EVAL_PIC_ADD_TEMPLATE", PATH_PICTURES."add_sheet.gif");
 define ("EVAL_PIC_REMOVE",    PATH_PICTURES."trash.gif");
 define ("EVAL_PIC_EDIT",    PATH_PICTURES."edit_transparent.gif");
 define ("EVAL_PIC_BACK",    PATH_PICTURES."link_intern.gif");
