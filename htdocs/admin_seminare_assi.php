@@ -1486,7 +1486,7 @@ if ($level==2)
 										$clause=$clause." OR user_inst.institut_id = '".$tmp_array."'";
 										}
 								// Anzeige der eigenen Faecher
-								$db3->query("SELECT DISTINCT bereiche.bereich_id, bereiche.name, bereich_fach.fach_id FROM bereiche LEFT JOIN bereich_fach USING(bereich_id) LEFT JOIN fach_inst USING (fach_id) LEFT JOIN user_inst USING (institut_id) WHERE ($clause)  AND user_inst.inst_perms !='user' AND user_inst.inst_perms !='autor' AND user_inst.inst_perms !='tutor' ORDER BY bereich_fach.fach_id");
+								$db3->query("SELECT DISTINCT bereiche.bereich_id, bereiche.name, bereich_fach.fach_id FROM bereiche LEFT JOIN bereich_fach USING(bereich_id) LEFT JOIN fach_inst USING (fach_id) LEFT JOIN user_inst USING (institut_id) WHERE ($clause)  AND user_inst.inst_perms !='user' AND user_inst.inst_perms !='autor' AND user_inst.inst_perms !='tutor' ORDER BY bereich_fach.fach_id, bereiche.name");
 								while ($db3->next_record())
 									{
 									IF ($fachtmp != $db3->f("fach_id"))
