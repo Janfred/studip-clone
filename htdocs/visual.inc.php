@@ -858,11 +858,12 @@ function printhead ($breite, $left, $link, $open, $new, $icon,
 		$titel = "<b>" . $titel . "</b>";
 	
 	if ($link) {
+		if ($index) $addon =  "($indikator: $index)";
 		if ($open == "close")
-			$print .= "pictures/forumgrau2.gif\"" . tooltip(_("Objekt aufklappen ($indikator: $index)"));
+			$print .= "pictures/forumgrau2.gif\"" . tooltip(_("Objekt aufklappen $addon"));
 	
 		if ($open == "open")
-			$print .= "pictures/forumgraurunt2.gif\"" . tooltip(_("Objekt zuklappen ($indikator: $index)"));
+			$print .= "pictures/forumgraurunt2.gif\"" . tooltip(_("Objekt zuklappen $addon"));
 	}
 	else {
 		if ($open == "close") {
