@@ -27,9 +27,9 @@ $reiter=new reiter;
 //Topkats
 $structure["meine_veranstaltungen"]=array (topKat=>"", name=>_("Meine Veranstaltungen"), link=>"meine_seminare.php", active=>FALSE);
 if (!$perm->have_perm("admin"))
-	$structure["veranstaltungen_suche"]=array (topKat=>"", name=>_("Veranstaltungen suchen / hinzuf&uuml;gen"), link=>"sem_portal.php?view=Alle", active=>FALSE);
+	$structure["veranstaltungen_suche"]=array (topKat=>"", name=>_("Veranstaltungen suchen / hinzuf&uuml;gen"), link=>"sem_portal.php?view=all", active=>FALSE);
 else
-	$structure["veranstaltungen_suche"]=array (topKat=>"", name=>_("Veranstaltungen suchen"), link=>"sem_portal.php?view=Alle", active=>FALSE);
+	$structure["veranstaltungen_suche"]=array (topKat=>"", name=>_("Veranstaltungen suchen"), link=>"sem_portal.php?view=all", active=>FALSE);
 
 $structure["meine_einrichtungen"]=array (topKat=>"", name=>_("Meine Einrichtungen"), link=>"meine_einrichtungen.php", active=>FALSE);
 
@@ -40,7 +40,7 @@ if (!$perm->have_perm("admin"))
 if ($perm->have_perm("admin"))
 	$structure["veranstaltungs_timetable"]=array (topKat=>"meine_veranstaltungen", name=>_("Veranstaltungs Timetable"), link=>"mein_stundenplan.php", active=>FALSE);
 //
-$structure["Alle"]=array (topKat=>"veranstaltungen_suche", name=>_("Alle"), link=>"sem_portal.php?view=Alle", active=>FALSE);
+$structure["all"]=array (topKat=>"veranstaltungen_suche", name=>_("Alle"), link=>"sem_portal.php?view=all", active=>FALSE);
 foreach ($SEM_CLASS as $key=>$val)  {
 	$structure["class_".$key]=array (topKat=>"veranstaltungen_suche", name=>$val["name"], link=>"sem_portal.php?view=$key&reset_all=TRUE&cmd=qs", active=>FALSE);
 }
@@ -67,8 +67,8 @@ switch ($i_page) {
 			$reiter_view="meine_einrichtungen"; 
 	break;
 	case "sem_portal.php" : 
-		if ($view=="Alle")
-			$reiter_view="Alle";
+		if ($view=="all")
+			$reiter_view="all";
 		else
 			$reiter_view="class_".$view;
 	break;
