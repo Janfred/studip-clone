@@ -974,11 +974,11 @@ class EditObject extends cssClasses {
 				$lockedAssign=TRUE;
 		}
 
-		if  ($resAssign->getId() && !$resAssign->isNewObject) {
+		if  ($resAssign->getAssignUserId() && !$resAssign->isNewObject) {
 			$ObjectPerms = new AssignObjectPerms($resAssign->getId());
-			if ($ObjectPerms->getUserPerm () == "admin")
+			if ($ObjectPerms->getUserPerm() == "admin")
 				$killButton=FALSE;
-			elseif ($ObjectPerms->getUserPerm () != "user")
+			elseif ($ObjectPerms->getUserPerm() != "autor")
 				$lockedAssign=TRUE;
 		}
 

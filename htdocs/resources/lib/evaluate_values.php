@@ -246,12 +246,18 @@ if ($change_structure_object) {
 if ($change_object_schedules) {
 	require_once ("$RELATIVE_PATH_CALENDAR/calendar_func.inc.php"); //needed for extended checkdate
 
-	//load the perms
+	//load the object perms
 	$ObjectPerms = new ResourcesObjectPerms($change_schedule_resource_id);
-	if (($ObjectPerms->getUserPerm () != "admin") && ($change_object_schedules != "NEW") || ($change_schedule_assign_user_id))
-		$ObjectPerms = new AssignObjectPerms($change_object_schedules);
 	
-	if ($ObjectPerms->getUserPerm () == "autor" || $ObjectPerms->getUserPerm () == "admin") {
+	//in some case, we load the perms from the assign object, if it has an owner
+	if (($ObjectPerms->getUserPerm() != "admin") && ($change_object_schedules != "NEW") && (!$new_assign_object)) {
+		//load the assign-object perms of a saved object
+		$SavedStateAssignObject = new AssignObject($change_object_schedules);
+		if ($SavedStateAssignObject->getAssignUserId())
+			$ObjectPerms = new AssignObjectPerms($change_object_schedules);
+	}
+	
+	if ($ObjectPerms->getUserPerm() == "autor" || $ObjectPerms->getUserPerm() == "admin") {
 		if ($kill_assign_x) {
 			$killAssign=new AssignObject($change_object_schedules);
 			$killAssign->delete();
@@ -266,12 +272,11 @@ if ($change_object_schedules) {
 
 			if (($send_search_user_x) && ($submit_search_user !="FALSE") && (!$reset_search_user_x)) {
 				//Check if this user is able to reach the resource (and this assign), to provide, that the owner of the resources foists assigns to others
-				$ForeignObjectPerms = new ResourcesObjectPerms($change_schedule_resource_id, $submit_search_user);
-				//echo 
+				$ForeignObjectPerms = new ResourcesObjectPerms($change_schedule_resource_id, $submit_search_user); 
 				if (($ForeignObjectPerms->getUserPerm() == "autor") || ($ForeignObjectPerms-> getUserPerm() == "admin"))
 					$change_schedule_assign_user_id=$submit_search_user;
 				else
-					$msg -> addMsg(2);
+					$msg ->addMsg(2);
 			}
 
 			//the user send infinity repeat (until date) as empty field, but it's -1 in the db
@@ -743,5 +748,4 @@ if ($edit_object) {
 	else
 		$resources_data["view"]="view_details";
 }
-
 ?>
