@@ -57,7 +57,7 @@ function forum_kill_edit ($description) {
 **/
 function forum_append_edit ($description) {
 	$edit = "<admin_msg autor=\"".get_fullname()."\" chdate=\"".time()."\">";
-	$description = forum_kill_edit2($description).$edit;
+	$description = forum_kill_edit($description).$edit;
 	return $description;
 }
 
