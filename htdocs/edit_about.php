@@ -1012,7 +1012,7 @@ if ($my_about->auth_user["perms"]=="autor" || $my_about->auth_user["perms"]=="tu
    echo "<tr><td class=\"blank\">";
    echo "<b>&nbsp; Ich bin in folgenden Studiengängen immatrikuliert:</b>";
    echo "<table width= \"99%\" align=\"center\" border=0 cellpadding=2 cellspacing=0>\n";
-   echo "<form action=\"$PHP_SELF?cmd=studiengang_edit&username=$username&view=$view\" method=\"POST\">";
+   echo "<form action=\"$PHP_SELF?cmd=studiengang_edit&username=$username&view=$view#studiengaenge\" method=\"POST\">";
    echo "<tr><td width=\"30%\" valign=\"top\"><table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"2\">";
    reset ($my_about->user_studiengang);
    $flag=FALSE;
@@ -1032,10 +1032,10 @@ if ($my_about->auth_user["perms"]=="autor" || $my_about->auth_user["perms"]=="tu
    $cssSw->switchClass();
    echo "</table></td><td class=\"".$cssSw->getClass()."\" width=\"70%\" align=\"left\" valign=\"top\"><blockquote><br />Wählen Sie die Studiengänge auf Ihrem Studierendenausweis aus der folgenden Liste aus:<br>";
    echo "<br><div align=\"center\">";
+   echo "<a name=\"studiengaenge\"></a>";   
    $my_about->select_studiengang();
    echo "</div><br></b>Wenn Sie einen Studiengang wieder ausgetragen möchten, markieren Sie die entsprechenden Felder in der linken Tabelle.<br>";
    echo "Mit einem Klick auf <b>&Uuml;bernehmen</b> werden die gewählten Änderungen durchgeführt.<br /><br /> ";
-   echo "<a name=\"studiengaenge\"></a>";
    echo "<input type=\"IMAGE\" src=\"pictures/buttons/uebernehmen-button.gif\" border=0 value=\"Änderungen übernehmen\"></blockquote></td></tr>";
    echo "</form>";
    }
@@ -1051,7 +1051,7 @@ if ($my_about->auth_user["perms"]=="autor" || $my_about->auth_user["perms"]=="tu
    echo "<tr><td class=\"blank\">";
    echo "<br><b>&nbsp; Ich studiere an folgenden Einrichtungen:</b>";
    echo "<table width= \"99%\" align=\"center\" border=0 cellpadding=2 cellspacing=0>\n";
-   echo "<form action=\"$PHP_SELF?cmd=inst_edit&username=$username&view=$view\" method=\"POST\">";
+   echo "<form action=\"$PHP_SELF?cmd=inst_edit&username=$username&view=$view#einrichtungen\" method=\"POST\">";
    echo "<tr><td width=\"30%\" valign=\"top\"><table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"2\">";
    reset ($my_about->user_inst);
    $flag=FALSE;
@@ -1073,10 +1073,10 @@ if ($my_about->auth_user["perms"]=="autor" || $my_about->auth_user["perms"]=="tu
    $cssSw->switchClass();    
    echo "</table></td><td class=\"".$cssSw->getClass()."\" width=\"70%\" align=\"left\" valign=\"top\"><blockquote><br />Um sich als Student einer Einrichtung zuzuordnen, wählen sie die entsprechende Einrichtung aus der folgenden Liste aus:<br>";
    echo "<br><div align=\"center\">";
+   echo "<a name=\"einrichtungen\"></a>";   
    $my_about->select_inst();
    echo "</div><br></b>Wenn sie aus Einrichtungen wieder ausgetragen werden möchten, markieren sie die entsprechenden Felder in der linken Tabelle.<br>";
    echo "Mit einem Klick auf <b>&Uuml;bernehmen</b> werden die gewählten Änderungen durchgeführt.<br /><br /> ";
-   echo "<a name=\"einrichtungen\"></a>";   
    echo "<input type=\"IMAGE\" src=\"pictures/buttons/uebernehmen-button.gif\" border=0 value=\"Änderungen übernehmen\"></blockquote></td></tr>";
    echo "</form>";
    }
