@@ -117,13 +117,15 @@ class studip_smtp_class extends smtp_class {
 	var $from = "";
 	var $env_from = "";
 	var $abuse = "";
+	var $url = "";
 	
 	function studip_smtp_class() {
 		$this->localhost = ($GLOBALS['MAIL_LOCALHOST'] == "") ? getenv("SERVER_NAME") : $GLOBALS['MAIL_LOCALHOST']; // name of the mail sending machine (the web server)
 		$this->host_name = ($GLOBALS['MAIL_HOST_NAME'] == "") ? getenv("SERVER_NAME") : $GLOBALS['MAIL_HOST_NAME']; // which mailserver should we use? (must allow mail-relaying from this->localhost)
-		$this->from="\"Stud.IP\" <wwwrun@".$this->localhost.">"; // From: Mailheader
-		$this->env_from="wwwrun@".$this->localhost; // Envelope-From:
-		$this->abuse="abuse@".$this->localhost; // Reply-To: Mailheader
+		$this->from = "\"Stud.IP\" <wwwrun@".$this->localhost.">"; // From: Mailheader
+		$this->env_from = "wwwrun@".$this->localhost; // Envelope-From:
+		$this->abuse = "abuse@".$this->localhost; // Reply-To: Mailheader
+		$this->url = "http://" . $this->localhost . $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']; // link to system
 	}
 }
 
