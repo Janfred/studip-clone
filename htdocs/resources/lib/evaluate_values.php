@@ -1,21 +1,7 @@
 <?
 /*****************************************************************************
-empfangene Werte auswerten und Befehle ausfuehren
+Functions...
 /*****************************************************************************/
-
-//get view
-if ($view)
-	 $resources_data["view"]=$view;
-
-//If we start the admin mode, kill open objects
-if ($resources_data["view"] == "resources")
-	closeObject();
-
-//Open a level/resource
-if ($structure_open) {
-	$resources_data["structure_opens"][$structure_open] =TRUE;
-	$resources_data["actual_object"]=$structure_open;
-}
 
 //a small helper function to close all the kids
 function closeStructure ($resource_id) {
@@ -30,10 +16,51 @@ function closeStructure ($resource_id) {
 	}
 }
 
+//a small helper function to update some data of the tree-structure (after move something)
+function updateStructure ($resource_id, $root_id, $level) {
+	$db = new DB_Seminar;
+	$query = sprintf ("UPDATE resources_objects SET root_id = '%s', level='%s' WHERE resource_id = '%s' ", $root_id, $level, $resource_id);
+	$db->query($query);
+	
+	$query = sprintf ("SELECT resource_id FROM resources_objects WHERE parent_id = '%s' ", $resource_id);
+	$db->query($query);
+	while ($db->next_record()) {
+		closeStructure ($db->f("resource_id"), $root_id, $level+1);
+	}
+}
+
+/*****************************************************************************
+empfangene Werte auswerten und Befehle ausfuehren
+/*****************************************************************************/
+
+//get view/view_mode
+if ($view)
+	 $resources_data["view"]=$view;
+else {
+	$resources_data["view"]="resources";
+	$resources_data["view_mode"]=FALSE;
+}
+if ($view_mode)	
+	$resources_data["view_mode"]=$view_mode;
+
+//If we start the admin mode, kill open objects
+if ($resources_data["view"] == "resources")
+	closeObject();
+
+//Open a level/resource
+if ($structure_open) {
+	$resources_data["structure_opens"][$structure_open] =TRUE;
+	$resources_data["actual_object"]=$structure_open;
+}
+
+//Select an object to work with
+if ($actual_object) {
+	$resources_data["actual_object"]=$actual_object;
+}
+
 //Close a level/resource
 if ($structure_close)
 	closeStructure ($structure_close);
-	
 
 //switch to move mode
 if ($pre_move_object) {
@@ -114,6 +141,12 @@ if ($target_object) {
 			}
 			if (!$target_is_child) {
 				$db->query ("UPDATE resources_objects SET parent_id='$target_object' WHERE resource_id = '".$resources_data["move_object"]."' ");
+				$db->query ("SELECT root_id, level FROM resources_objects WHERE resource_id = '$target_object'");
+				$db->next_record();
+				//set the correct root_id's and levels
+				updateStructure($resources_data["move_object"], $db->f("root_id"), $db->f("level")+1);
+				$resources_data["structure_opens"][$resources_data["move_object"]] =TRUE;
+				$resources_data["structure_opens"][$target_object] =TRUE;				
 				if ($db->nf()) {
 					$msg -> addMsg(9);
 				}
@@ -564,7 +597,9 @@ if ($show_object)
 //if ObjectPerms for actual user and actual object are not loaded, load them!
 if ($ObjectPerms) {
 	if (($ObjectPerms->getId() == $resources_data["actual_object"]) && ($ObjectPerms->getUserId()  == $user->id))
-		$ActualObjectPerms = $ObjectPerms;
+		$ActualObjectPerms = $ObjectPerms;	
+	 else
+		$ActualObjectPerms = new ResourcesObjectPerms($resources_data["actual_object"]);
 } else
 	$ActualObjectPerms = new ResourcesObjectPerms($resources_data["actual_object"]);
 ?>
