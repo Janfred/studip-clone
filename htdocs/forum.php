@@ -348,7 +348,7 @@ if ($update) {
 // Neues Thema wird angelegt
 //////////////////////////////////////////////////////////////////////////////////
 
-if ($neuesthema==TRUE && $rechte) {			// es wird ein neues Thema angelegt
+if ($neuesthema==TRUE && ($rechte || ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["topic_create_autor"])) {			// es wird ein neues Thema angelegt
 		$name = _("Name des Themas");
 		$author = get_fullname();
 		$edit_id = CreateTopic ($name, $author, "Beschreibung des Themas", "0", "0");

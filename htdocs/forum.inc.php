@@ -1294,7 +1294,7 @@ if ($update)
 *
 **/
 function DisplayFolders ($open=0, $update="", $zitat="") {
-	global $SessionSeminar,$SessSemName,$loginfilelast,$loginfilenow,$rechte,$i_page,$view, $write,$all,$forum,$cmd,$move_id,$auth,$user, $PHP_SELF, $shrinkopen;
+	global $SessionSeminar,$SessSemName,$loginfilelast,$loginfilenow,$rechte,$i_page,$view, $write,$all,$forum,$cmd,$move_id,$auth,$user, $PHP_SELF, $shrinkopen, $SEM_CLASS, $SEM_TYPE;
 
 //Zeigt im Treeview die Themenordner an
 
@@ -1389,7 +1389,7 @@ function DisplayFolders ($open=0, $update="", $zitat="") {
 	}
 	echo "<table class=blank border=0 cellpadding=0 cellspacing=0 width=\"100%\"><tr><td class='blank'><img src='pictures/forumleer.gif' border=0 height='4'></td></tr><tr>";
 	echo "<td align=center class=steelgraudunkel><img src='pictures/forumleer.gif' border=0 height='20' align=middle>";
-	if ($rechte)
+	if (($rechte) || ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["topic_create_autor"]))
 		echo "<a href='".$PHP_SELF."?neuesthema=TRUE#anker'><img src='pictures/forumgraurunt.gif' border=0 align=middle " . tooltip(_("Neues Thema anlegen")) . "><img src='pictures/cont_folder2.gif' " . tooltip(_("Neues Thema anlegen")) . " border=0 align=middle></a>";
 	echo "</td></tr><tr><td class=blank>&nbsp; <br>&nbsp; <br></td></tr></table>\n";
 
