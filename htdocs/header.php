@@ -47,12 +47,11 @@ if ($GLOBALS['CHAT_ENABLE']) {
 	$chatServer =& ChatServer::GetInstance($GLOBALS['CHAT_SERVER_NAME']);
 	$chatServer->caching = TRUE;
 	echo "\t\t<script type=\"text/javascript\">\n";
-	echo "\t\tfunction open_chat() {\n";
-	if ($chatServer->isActiveUser($user->id,"studip"))
-		printf ("alert('%s');\n", _("Sie sind bereits im Chat angemeldet!"));
-	else
-		echo "\t\t\tfenster=window.open(\"$RELATIVE_PATH_CHAT/chat_login.php?chatid=studip\",\"chat_studip_".$auth->auth["uid"]."\",\"scrollbars=no,width=640,height=480,resizable=yes\");\n";
-	echo "\t\t}\n";
+	echo "\t\tfunction open_chat(chatid) {\n";
+	echo "\t\t\tif(!chatid){\n";
+	printf ("\t\t\t\talert('%s');\n", _("Sie sind bereits in diesem Chat angemeldet!"));
+	echo "\t\t\t} else {\n\t\t\tfenster=window.open(\"". $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'] . $GLOBALS['RELATIVE_PATH_CHAT'] ."/chat_login.php?chatid=\" + chatid,\"chat_\" + chatid + \"_".$auth->auth["uid"]."\",\"scrollbars=no,width=640,height=480,resizable=yes\");\n";
+	echo "\t\t}\n}\n";
 	echo "\t\t</script>\n";
 }
 
@@ -179,15 +178,17 @@ if ($auth->auth["uid"] == "nobody") { ?>
 				echo MakeToolbar("pictures/chateinladung.gif","javascript:open_chat();",_("Chat"),_("Sie wurden zum Chatten eingeladen!"),30,"_top","left");
 			} else {
 		      	$chatter=$chatServer->getActiveUsers("studip");
-   			if ($chatter == 1)
-   		  	if ($chatServer->isActiveUser($user->id,"studip"))	
-						echo MakeToolbar("pictures/chat3.gif","javascript:open_chat();",_("Chat"),_("Sie sind alleine im Chat"),40,"_top","left");
+   			$is_active = $chatServer->isActiveUser($user->id,"studip");
+			$chat_jscript = "javascript:open_chat(" . (($is_active) ? "false" : "'studip'") . ");";
+			if ($chatter == 1)
+   		  	if ($is_active)	
+						echo MakeToolbar("pictures/chat3.gif",$chat_jscript,_("Chat"),_("Sie sind alleine im Chat"),40,"_top","left");
 					else
-						echo MakeToolbar("pictures/chat2.gif","javascript:open_chat();",_("Chat"),_("Es ist eine Person im Chat"),40,"_top","left");
+						echo MakeToolbar("pictures/chat2.gif",$chat_jscript,_("Chat"),_("Es ist eine Person im Chat"),40,"_top","left");
 				elseif ($chatter > 1)
-					echo MakeToolbar("pictures/chat2.gif","javascript:open_chat();",_("Chat"),sprintf(_("Es sind %s Personen im Chat"), $chatter),40,"_top","left");
+					echo MakeToolbar("pictures/chat2.gif",$chat_jscript,_("Chat"),sprintf(_("Es sind %s Personen im Chat"), $chatter),40,"_top","left");
       	else
-					echo MakeToolbar("pictures/chat1.gif","javascript:open_chat();",_("Chat"),_("Es ist niemand im Chat"),40,"_top","left");
+					echo MakeToolbar("pictures/chat1.gif",$chat_jscript,_("Chat"),_("Es ist niemand im Chat"),40,"_top","left");
 			}
 		} else {
 //			echo MakeToolbar("pictures/blank.gif","","","",40,"_top");
