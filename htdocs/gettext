@@ -8,7 +8,7 @@ for language in en;
 do {
 	# first handle files separate
 	mv locale/$language/LC_MESSAGES/studip_core.po locale/$language/LC_MESSAGES/studip_core.po.old
-	xgettext -C -n --keyword=_ -o locale/$language/LC_MESSAGES/studip_core.pot  *.* lib/classes/*.* lib/dbviews/*.*
+	xgettext -C -n --keyword=_ -o locale/$language/LC_MESSAGES/studip_core.pot  *.* lib/classes/*.* lib/dbviews/*.* help/*.*
 	msgmerge locale/$language/LC_MESSAGES/studip_core.po.old locale/$language/LC_MESSAGES/studip_core.pot --output-file=locale/$language/LC_MESSAGES/studip_core.po
 
 	mv locale/$language/LC_MESSAGES/studip_calendar.po locale/$language/LC_MESSAGES/studip_calendar.po.old
