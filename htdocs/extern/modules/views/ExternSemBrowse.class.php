@@ -138,6 +138,7 @@ class ExternSemBrowse extends SemBrowse {
 			if ($sem["beginn"] >= $now)
 				break;
 		}
+		$key--;
 		$semrange = $this->config->getValue("Main", "semrange");
 		switch ($semrange) {
 			case "current":
