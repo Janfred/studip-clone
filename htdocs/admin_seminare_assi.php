@@ -1497,7 +1497,7 @@ if (!$sem_create_data["sem_class"])
 	</script>
 <?
 //Before we start, let's decide the category (class) of the Veranstaltung
-if (!$sem_create_data["sem_class"]) {
+if ((!$sem_create_data["sem_class"]) && (!$level)){
 	?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
 		<tr>
