@@ -1,22 +1,37 @@
 <?php
-/*
-admin_metadates.php - Terminmetadatenverwaltung von Stud.IP
-Copyright (C) 2001 Cornelis Kater <ckater@gwdg.de>
-
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+/**
+* admin_metadates.php
+* 
+* edit the settings for generic dates from a Veranstaltung
+* 
+*
+* @author		Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
+* @version		$Id$
+* @access		public
+* @module		admin_metadates.php
+* @modulegroup	admin
+* @package		studip_core
 */
+
+// +---------------------------------------------------------------------------+
+// This file is part of Stud.IP
+// admin_metadates.php
+// Terminmetadatenverwaltung von Stud.IP
+// Copyright (C) 2002 Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
+// +---------------------------------------------------------------------------+
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or any later version.
+// +---------------------------------------------------------------------------+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+// +---------------------------------------------------------------------------+
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check("tutor");
@@ -43,6 +58,16 @@ $db2=new DB_Seminar;
 $cssSw=new cssClassSwitcher;
 $sess->register ("term_metadata");
 
+/**
+* This function creates a snapshot for all the values the admin_metadates script uses
+*
+* The function serializes all the data which is used on this page. So you can
+* compare an old and a new state of the whole set. It is used to inform the user,
+* that the data isn't saved yet.
+*
+* @param		string	all the data in serilized form
+*
+*/
 function get_snapshot() {
 	global $term_metadata;
 	return	serialize($term_metadata["turnus_data"]).
@@ -57,7 +82,8 @@ function get_snapshot() {
 }
 
 //wenn wir frisch reinkommen, werden die alten Metadaten eingelesen
-if (($seminar_id) && (!$uebernehmen_x) && (!$add_turnus_field_x) &&(!$delete_turnus_field)) {
+if (($seminar_id) && (!$uebernehmen_x) && (!$add_turnus_field_x) &&(!$delete_turnus_field) && !($open_ureg_x) && !($open_reg_x) && !($enter_start_termin_x) && !($nenter_start_termin_x)) {
+	echo lala; 
 	$db->query("SELECT metadata_dates, art, Name, start_time, duration_time, status FROM seminare WHERE Seminar_id = '$seminar_id'");
 	$db->next_record();
 	$term_metadata=unserialize($db->f("metadata_dates"));
