@@ -173,6 +173,10 @@ class CalendarEvent extends Event {
 									/ 86400) + 1;
 		if (!isset($r_rule['count']))
 			$r_rule['count'] = 0;
+		
+		if ($r_rule['rtype'] != 'SINGLE' && !$r_rule['linterval'])
+			$r_rule['linterval'] = 1;
+		
 		// Hier wird auch der 'genormte Timestamp' (immer 12.00 Uhr, ohne Sommerzeit) ts berechnet.
 		switch ($r_rule['rtype']) {
 		
@@ -197,16 +201,7 @@ class CalendarEvent extends Event {
 				
 			case 'WEEKLY':
 				// ts ist hier der Montag der ersten Wiederholungswoche 12:00:00 Uhr
-				if (!$r_rule['linterval'] && !$r_rule['wdays']) {
-					$ts = mktime(12, 0, 0, date('n', $start), date('j', $start) +
-							(7 - (strftime('%u', $start) - 1)), date('Y', $start), 0);
-					if ($r_rule['count']) {
-						$r_rule['expire'] = mktime(23, 59, 59, date('n', $start), date('j', $start) +
-								(7 * ($r_rule['count'] - 1)), date('Y', $start));
-					}
-					$rrule = array($ts, 1, 0, strftime('%u', $start), 0, 0, 'WEEKLY', $duration);
-				}
-				else if (!$r_rule['wdays']) {
+				if (!$r_rule['wdays']) {
 					$ts = mktime(12, 0, 0, date('n', $start), date('j', $start) +
 							($r_rule['linterval'] * 7 - (strftime('%u', $start) - 1)), date('Y', $start), 0);
 					if ($r_rule['count']) {
@@ -243,7 +238,7 @@ class CalendarEvent extends Event {
 			case 'MONTHLY':
 				if ($r_rule['month'])
 					return FALSE;
-				if (!$r_rule['linterval'] && !$r_rule['day'] && !$r_rule['sinterval'] && !$r_rule['wdays']) {
+				if (!$r_rule['day'] && !$r_rule['sinterval'] && !$r_rule['wdays']) {
 					$ts = mktime(12, 0, 0, date('n', $start) + 1, date('j', $start), date('Y', $start), 0);
 					$rrule = array($ts, 1, 0, '', 0, date('j', $start), 'MONTHLY', $duration);
 				}
