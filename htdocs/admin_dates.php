@@ -827,7 +827,7 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 			if (!$show_all) {
 				?>
 				<input type="IMAGE" name="mark_all" border=0 <?=makeButton("alleauswaehlen", "src")?> value="auswählen">&nbsp;
-				<input type="IMAGE" name="send" border=0 <?=makeButton("loeschen", "src")?> value="löschen">&nbsp; 
+				<input type="IMAGE" name="kill" border=0 <?=makeButton("loeschen", "src")?> value="löschen">&nbsp; 
 				<?
 			} else {
 				?>
