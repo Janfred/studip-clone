@@ -219,7 +219,7 @@ function show_seminar_modules($seminar_id, $status = 0)
 					$do_str = "do_open";
 				$printlink = "<a href=\"".$PHP_SELF . "?$do_str=" . $ph_key . "&view=edit&seminar_id=$seminar_id\" class=\"tree\">" . $module_info["title"] . "</a>";
 				$printimage = "<img src=\"pictures/icon-lern.gif\">";
-				$printcontent = $module_info["description"] . "<br><br><center><a href=\"$link_change\">" . makeButton("jedentag2", "img") . "</a>&nbsp;<a href=\"$link_del\">" . makeButton("entfernen", "img") . "</a></center>";
+				$printcontent = $module_info["description"] . "<br><br><center><a href=\"$link_change\">" . makeButton("verschieben", "img") . "</a>&nbsp;<a href=\"$link_del\">" . makeButton("entfernen", "img") . "</a></center>";
 				$mod_author = get_module_author($mod_array[$module_count]["inst"], $mod_array[$module_count]["id"]);
 				$mod_desc = "";
 				for ($i=0; $i<sizeof($mod_author); $i ++)
