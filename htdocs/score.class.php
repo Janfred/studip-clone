@@ -159,8 +159,8 @@ function gettitel($score, $gender=0) {
 	else
 		$logscore = 0;
 		
-	if ($logscore > 17)
-		$logscore = 17;
+	if ($logscore > 19)
+		$logscore = 19;
 		
 	$titel[0]  =	array(0 => _("Unbeschriebenes Blatt"), 1 => _("Unbeschriebenes Blatt"));
 	$titel[1]  =	array(0 => _("Unbeschriebenes Blatt"), 1 => _("Unbeschriebenes Blatt"));
@@ -174,12 +174,14 @@ function gettitel($score, $gender=0) {
 	$titel[9]  =	array(0 => _("Fortgeschrittener"), 1 => _("Fortgeschrittene"));
 	$titel[10] =	array(0 => _("Kenner"), 1 => _("Kennerin"));
 	$titel[11] =	array(0 => _("K&ouml;nner"), 1 => _("K&ouml;nnerin"));
-	$titel[12] =	array(0 => _("Experte"), 1 => _("Expertin"));
-	$titel[13] =	array(0 => _("Meister"), 1 => _("Meisterin"));
-	$titel[14] =	array(0 => _("Gro&szlig;meister"), 1 => _("Gro&szlig;meisterin"));
-	$titel[15] =	array(0 => _("Guru"), 1 => _("Hohepriesterin"));
-	$titel[16] =	array(0 => _("Lichtgestalt"), 1 => _("Lichtgestalt"));
-	$titel[17] =	array(0 => _("Gott"), 1 => _("G&ouml;ttin"));
+	$titel[12] =	array(0 => _("Profi"), 1 => _("Profi"));
+	$titel[13] =	array(0 => _("Experte"), 1 => _("Expertin"));
+	$titel[14] =	array(0 => _("Meister"), 1 => _("Meisterin"));
+	$titel[15] =	array(0 => _("Gro&szlig;meister"), 1 => _("Gro&szlig;meisterin"));
+	$titel[16] =	array(0 => _("Idol"), 1 => _("Idol"));
+	$titel[17] =	array(0 => _("Guru"), 1 => _("Hohepriesterin"));
+	$titel[18] =	array(0 => _("Lichtgestalt"), 1 => _("Lichtgestalt"));
+	$titel[19] =	array(0 => _("Gott"), 1 => _("G&ouml;ttin"));
 
 	return $titel[$logscore][$gender];
 }
