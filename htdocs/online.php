@@ -29,6 +29,7 @@ require_once ("msg.inc.php");
 require_once ("visual.inc.php");
 require_once ("messagingSettings.inc.php");
 require_once ("messaging.inc.php");
+require_once ("contact.inc.php");
 
 $msging=new messaging;
 $cssSw=new cssClassSwitcher;
@@ -49,8 +50,9 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 	die;
 	}
 
-if ($cmd=="add_user")
+if ($cmd=="add_user") {
 	$msging->add_buddy ($add_uname, 0);
+}
 
 if ($cmd=="delete_user")
 	$msging->delete_buddy ($delete_uname);
@@ -88,35 +90,41 @@ ob_end_flush();
 ob_start();
 	//Erzeugen der Liste aktiver und inaktiver Buddies
 	$different_groups=FALSE;
-		if ($my_buddies) {
-			foreach ($my_buddies as $a) {
-				if ($online[$a["username"]]) {
-					$active_buddies[]=array($a["group"], $online[$a["username"]]["name"],$online[$a["username"]]["last_action"],$a["username"]);
-					if ($a["group"])
-						$different_groups=TRUE;
-					} else {
-					$inactive_buddies[]=array(get_fullname_from_uname($a["username"]), $a["username"]);
+
+
+	$owner_id = $user->id;
+	$db=new DB_Seminar;
+	$db2=new DB_Seminar;
+
+	if (is_array ($online)) { // wenn jemand online ist
+		if (!$my_messaging_settings["show_only_buddys"]) {
+			foreach($online as $username=>$value) { //ale durchgehen die online sind
+				$user_id = get_userid($username);
+				$db->query ("SELECT contact_id FROM contact WHERE owner_id = '$owner_id' AND user_id = '$user_id' AND buddy = '1'");	
+				if ($db->next_record()) { // er ist auf jeden Fall als Buddy eingetragen
+					$db2->query ("SELECT name, statusgruppen.statusgruppe_id FROM statusgruppen LEFT JOIN statusgruppe_user USING(statusgruppe_id) WHERE range_id = '$owner_id' AND user_id = '$user_id'");	
+					if ($db2->next_record()) { // er ist auch einer Gruppe zugeordnet
+						$group_buddies[]=array($db2->f("name"), $online[$username]["name"],$online[$username]["last_action"],$username,$db2->f("statusgruppe_id"));
+					} else {	// buddy, aber keine Gruppe
+						$non_group_buddies[]=array($online[$username]["name"],$online[$username]["last_action"],$username);
+					}
+				} else { // online, aber kein buddy
+					$n_buddies[]=array($online[$username]["name"],$online[$username]["last_action"],$username);
 				}
 			}
 		}
+	}
 	
-	if ($different_groups==TRUE)
-		sort ($active_buddies);
 	
-	if (is_array($inactive_buddies))
-		sort ($inactive_buddies);
+if (is_array($group_buddies))
+	sort ($group_buddies);
 
-	if (is_array ($online)) {
-	//Erzeugen der Liste anderer Nutzer	
-	if (!$my_messaging_settings["show_only_buddys"]) {
-			foreach($online as $key=>$value){
-				if (!$my_buddies OR !$my_buddies[$key])
-					$n_buddies[]=array($value["name"],$value["last_action"],$key);
-			}
-	}
-	
-	}
-	
+if (is_array($non_group_buddies))
+	sort ($non_group_buddies);
+
+if (is_array($n_buddies))
+	sort ($n_buddies);
+
 	$cssSw->switchClass();
 	//Anzeige
 	echo "<table width=\"99%\" align=\"center\"cellspacing=0 border=0 cellpadding=2>\n";
@@ -129,21 +137,52 @@ ob_start();
 	echo "<tr>";
 
 	//Buddiespalte
-	if (!is_array($my_buddies)) {
+	$db->query ("SELECT contact_id FROM contact WHERE owner_id = '$owner_id' AND buddy = '1'");	
+	if (!$db->next_record()) { // Nutzer hat gar keine buddies buddies
 		echo "\n<td width=\"50%\" valign=\"top\">";
 		echo "\n<table width=\"100%\" cellspacing=0 cellpadding=1 border=0><tr>\n";
-		echo "\n<td class=\"steel1\" width=\"50%\" align=\"center\" colspan=5><font size=-1>Sie haben keine Buddies ausgew&auml;hlt. <br />Um neue Buddies aufzunehmen, klicken sie <a href=\"$PHP_SELF?change_view=TRUE#buddy_anker\">hier</a></font></td>";
+		echo "\n<td class=\"steel1\" width=\"50%\" align=\"center\" colspan=5><font size=-1>Sie haben keine Buddies ausgew&auml;hlt. <br />Zum Addressbuch (".GetSizeofBook()." Eintr&auml;ge) klicken Sie <a href=\"contact.php\">hier</a></font></td>";
 		echo "\n</tr></table></td>";
 		}
-	else {
+	else { // nutzer hat pronzipiell buddies
 		echo "\n<td width=\"50%\" valign=\"top\">";
 		echo "\n<table width=\"100%\" cellspacing=0 cellpadding=1 border=0>\n";
-		if (sizeof($active_buddies)) {
+		if (sizeof($group_buddies)) {
 			echo "\n<tr><td class=\"steelgraudunkel\" colspan=2 width=\"65%\"><font size=-1 color=\"white\"><b>Name</b></font></td><td class=\"steelgraudunkel\"  width=\"20%\" colspan=4><font size=-1 color=\"white\"><b>letztes Lebenszeichen</b></font></td></tr>"; 
-			reset ($active_buddies);
-			while (list($index)=each($active_buddies)) {
-				list($gruppe,$fullname,$zeit,$tmp_online_uname)=$active_buddies[$index];
-				printf("\n<tr><td  width=\"1%%\" class=\"gruppe%s\">&nbsp; </td><td class=\"".$cssSw->getClass()."\" width=\"64%%\"><a href=\"about.php?username=%s\"><font size=-1>&nbsp; %s </font></a></td><td class=\"".$cssSw->getClass()."\" width=\"20%%\"><font size=-1> %s:%s</font></td>", $gruppe, $tmp_online_uname, htmlReady($fullname), date("i",$zeit), date("s",$zeit));
+			reset ($group_buddies);
+			$lastgroup = "";
+			$groupcount = 0;
+			while (list($index)=each($group_buddies)) {
+				list($gruppe,$fullname,$zeit,$tmp_online_uname,$statusgruppe_id)=$group_buddies[$index];
+				if ($gruppe != $lastgroup) {// Ueberschrift fuer andere Gruppe
+					printf("\n<tr><td colspan=\"4\" align=\"middle\"><font size=\"2\"><a href=\"contact.php?view=gruppen&filter=%s\">%s</a></font></td></tr>",$statusgruppe_id,$gruppe);
+					$groupcount++;
+					if ($groupcount > 10) //irgendwann gehen uns die Farben aus
+						$groupcount = 1;  
+				}
+				$lastgroup = $gruppe;
+				printf("\n<tr><td  width=\"1%%\" class=\"gruppe%s\">&nbsp; </td><td class=\"".$cssSw->getClass()."\" width=\"64%%\"><a href=\"about.php?username=%s\"><font size=-1>&nbsp; %s </font></a></td><td class=\"".$cssSw->getClass()."\" width=\"20%%\"><font size=-1> %s:%s</font></td>", $groupcount, $tmp_online_uname, htmlReady($fullname), date("i",$zeit), date("s",$zeit));
+				echo "\n<td class=\"".$cssSw->getClass()."\" width=\"5%\" align=center>";
+				if ($CHAT_ENABLE) {
+					if ($chatServer->isActiveUser($chatServer->getIdFromNick("studip",$tmp_online_uname),"studip")) {
+						echo "<img src=\"pictures/chat2.gif\"".tooltip("Dieser User befindet sich im Chat")." border=\"0\"></td>";
+					} else {
+						echo "<a href=\"sms.php?sms_source_page=online.php&cmd=chatinsert&rec_uname=$tmp_online_uname\"><img src=\"pictures/chat1.gif\" ".tooltip("zum Chatten einladen")." border=\"0\"></a>";
+					}
+				} else {
+					echo "&nbsp;";
+				}
+				echo "\n</td><td class=\"".$cssSw->getClass()."\" width=\"5%\" align=center><a href=\"sms.php?sms_source_page=online.php&cmd=write&rec_uname=$tmp_online_uname\"><img src=\"pictures/nachricht1.gif\" ".tooltip("Nachricht an User verschicken")." border=\"0\"></a></td><td class=\"".$cssSw->getClass()."\" width=\"5%\" align=\"center\"><a href=\"$PHP_SELF?cmd=delete_user&delete_uname=$tmp_online_uname\"><img src=\"pictures/trash.gif\" ".tooltip("aus der Buddylist entfernen")." border=\"0\"></a></td></tr>";
+				$cssSw->switchClass();					
+			}
+		}
+
+		if (sizeof($non_group_buddies)) {
+			echo "\n<tr><td colspan=6 class=\"steelgraudunkel\" align=\"center\"><font size=-1 color=\"white\"><b>Buddies ohne Gruppenzuordnung:</b></font></td></tr>";
+			reset ($non_group_buddies);
+			while (list($index)=each($non_group_buddies)) {
+				list($fullname,$zeit,$tmp_online_uname)=$non_group_buddies[$index];
+				printf("\n<tr><td  width=\"1%%\" class=\"gruppe%s\">&nbsp; </td><td class=\"".$cssSw->getClass()."\" width=\"64%%\"><a href=\"about.php?username=%s\"><font size=-1>&nbsp; %s </font></a></td><td class=\"".$cssSw->getClass()."\" width=\"20%%\"><font size=-1> %s:%s</font></td>", 0, $tmp_online_uname, htmlReady($fullname), date("i",$zeit), date("s",$zeit));
 				echo "\n<td class=\"".$cssSw->getClass()."\" width=\"5%\" align=center>";
 				if ($CHAT_ENABLE) {
 					if ($chatServer->isActiveUser($chatServer->getIdFromNick("studip",$tmp_online_uname),"studip"))
@@ -155,20 +194,9 @@ ob_start();
 				echo "\n</td><td class=\"".$cssSw->getClass()."\" width=\"5%\" align=center><a href=\"sms.php?sms_source_page=online.php&cmd=write&rec_uname=$tmp_online_uname\"><img src=\"pictures/nachricht1.gif\" ".tooltip("Nachricht an User verschicken")." border=\"0\"></a></td><td class=\"".$cssSw->getClass()."\" width=\"5%\" align=\"center\"><a href=\"$PHP_SELF?cmd=delete_user&delete_uname=$tmp_online_uname\"><img src=\"pictures/trash.gif\" ".tooltip("aus der Buddylist entfernen")." border=\"0\"></a></td></tr>";
 				$cssSw->switchClass();					
 				}
-			}
-//		else
-//			echo "\n<tr><td class=\"steel1\" align=\"center\" colspan=6><font size=-1>Im Augenblick ist keiner ihrer Buddies online.</font></td></tr>";
-		if (sizeof($inactive_buddies)) {
-			echo "\n<tr><td colspan=6 class=\"steelgraudunkel\" align=\"center\"><font size=-1 color=\"white\"><b>Diese Buddies sind zur Zeit offline:</b></font></td></tr>";
-			reset ($inactive_buddies);
-			while (list($index)=each($inactive_buddies)) {
-				list($fullname, $tmp_online_uname)=$inactive_buddies[$index];
-				$cssSw->switchClass();				
-				echo "\n<tr><td class=\"".$cssSw->getClass()."\" colspan=3 width=\"85%\"><a href=\"about.php?username=$tmp_online_uname\"><font color=\"#666666\" size=-1>&nbsp; ".htmlReady($fullname)."</font></a></td><td class=\"".$cssSw->getClass()."\" width=\"5%\"align=center>&nbsp; </td><td class=\"".$cssSw->getClass()."\" width=\"5%\"align=center><a href=\"sms.php?sms_source_page=online.php&cmd=write&rec_uname=$tmp_online_uname\"><img src=\"pictures/nachricht1.gif\" ".tooltip("Nachricht an User verschicken")." border=\"0\"></a></td><td class=\"".$cssSw->getClass()."\" width=\"5%\" align=\"center\"><a href=\"$PHP_SELF?cmd=delete_user&delete_uname=$tmp_online_uname\"><img src=\"pictures/trash.gif\" ".tooltip("aus der Buddylist entfernen")." border=\"0\"></a></td></tr>";
-				}
 			$cssSw->switchClass();
 			}
-			echo "\n<td class=\"".$cssSw->getClass()."\" width=\"50%\" align=\"center\" colspan=6><font size=-1>Um weitere Buddies aufzunehmen, klicken sie <a href=\"$PHP_SELF?change_view=TRUE#buddy_anker\">hier</a></font></td>";
+			echo "\n<td class=\"".$cssSw->getClass()."\" width=\"50%\" align=\"center\" colspan=6><font size=-1>Zum Addressbuch (".GetSizeofBook()." Eintr&auml;ge) klicken Sie <a href=\"contact.php\">hier</a></font></td>";
 		echo "\n</tr></table></td>";
 		}
 

@@ -167,29 +167,13 @@ function delete_chatinv($username){
 
 //Buddy aus der Buddyliste loeschen        
 function delete_buddy ($username) {
-	global $my_buddies;
-
-	unset ($my_buddies[$username]);
-	if ((count($my_buddies)) == 0)
-		$my_buddies=FALSE;
-	return TRUE;
+	RemoveBuddy($username);
 	}
 
 //Buddy zur Buddyliste hinzufuegen
 function add_buddy ($username, $group) {
-	global $my_buddies;
-
-	if (!$my_buddies[$username]) {
-		$my_buddies[$username]=array("username"=>$username, "group"=>$group);
-
-		////
-		// Buddies auch ins Addressbuch (wenn Buddies umgestellt sind bleibt nur das stehen)		
-		////
 		AddNewContact (get_userid($username));
-		return TRUE;
-		}
-	else
-		return FALSE;
+		AddBuddy($username);
 	}
 }
 ?>
