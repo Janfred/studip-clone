@@ -314,13 +314,13 @@ $INST_FUNKTION[23]=array("name"=>"DozentIn institutsübergreifender Veranstaltung
 
 
 //Festlegen der Veranstaltungs Termin Typen
-$TERMIN_TYP[1]=array("name"=>"Sitzung", "sitzung"=>1); 		//dieser Termin Typ wird immer als Seminarsitzung verwendet und im Ablaufplan entsprechend markiert. Der Titel kann veraendert werden, Eintraege aus dem Seminar Assistenten und Terminverwaltung fuer Seminar-Sitzungsterrmine bekommen jedoch immer diesen Typ
-$TERMIN_TYP[2]=array("name"=>"Vorbesprechung", "sitzung"=>0); 	//dieser Termin Typ wird immer als Vorbesprechung verwendet. Der Titel kann veraendert werden, Eintraege aus dem Seminar Assistenten fuer Vorbesprechungen bekommen jedoch immer diesen Typ
-$TERMIN_TYP[3]=array("name"=>"Klausur", "sitzung"=>0);
-$TERMIN_TYP[4]=array("name"=>"Exkursion", "sitzung"=>0);
-$TERMIN_TYP[5]=array("name"=>"anderer Termin", "sitzung"=>0);
-$TERMIN_TYP[6]=array("name"=>"Sondersitzung", "sitzung"=>0);
-$TERMIN_TYP[7]=array("name"=>"Vorlesung", "sitzung"=>1);
+$TERMIN_TYP[1]=array("name"=>"Sitzung", "sitzung"=>1, "color"=>"#FF7F50"); 		//dieser Termin Typ wird immer als Seminarsitzung verwendet und im Ablaufplan entsprechend markiert. Der Titel kann veraendert werden, Eintraege aus dem Seminar Assistenten und Terminverwaltung fuer Seminar-Sitzungsterrmine bekommen jedoch immer diesen Typ
+$TERMIN_TYP[2]=array("name"=>"Vorbesprechung", "sitzung"=>0, "color"=>"#DC143C"); 	//dieser Termin Typ wird immer als Vorbesprechung verwendet. Der Titel kann veraendert werden, Eintraege aus dem Seminar Assistenten fuer Vorbesprechungen bekommen jedoch immer diesen Typ
+$TERMIN_TYP[3]=array("name"=>"Klausur", "sitzung"=>0, "color"=>"#FF0000");
+$TERMIN_TYP[4]=array("name"=>"Exkursion", "sitzung"=>0, "color"=>"#FFA500");
+$TERMIN_TYP[5]=array("name"=>"anderer Termin", "sitzung"=>0, "color"=>"#B8660B");
+$TERMIN_TYP[6]=array("name"=>"Sondersitzung", "sitzung"=>0, "color"=>"#FFA500");
+$TERMIN_TYP[7]=array("name"=>"Vorlesung", "sitzung"=>1, "color"=>"#FF7F50");
 //weitere Typen koennen hier angefuegt werden
 
 
