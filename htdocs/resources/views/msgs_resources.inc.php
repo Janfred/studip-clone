@@ -174,6 +174,6 @@ $this->msg[40] = array (
 			."<br /><a href=\"%s?snd_closed_request_sms=1\">".makeButton("ja2")."</a>"
 			."&nbsp;<a href=\"%s\">".makeButton("nein")."</a>");
 $this->msg[41] = array (
-		"mode" => "msg",
+		"mode" => "info",
 		"msg"=> _("Mit den von ihnen ausgewählten Einstellungen sind keine Anfragen, die Sie auflösen könnten, vorhanden."));
 ?>
