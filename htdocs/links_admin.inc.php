@@ -124,14 +124,22 @@ if ($i_view=="new")
 	$links_admin_data='';
 
 //here are all the pages/views listed, which require the search form for  Einrichtungen
-if (($list) && ($i_page == "admin_institut.php" OR ($i_page == "admin_statusgruppe.php" AND $links_admin_data["view"]=="statusgruppe_inst") OR ($i_page == "admin_literatur.php" AND $links_admin_data["view"]=="literatur_inst") OR $i_page == "inst_admin.php"))
-	$search_mode="inst";
+if ($i_page == "admin_institut.php" OR ($i_page == "admin_statusgruppe.php" AND $links_admin_data["view"]=="statusgruppe_inst") OR ($i_page == "admin_literatur.php" AND $links_admin_data["view"]=="literatur_inst") OR $i_page == "inst_admin.php" OR ($i_page == "admin_news.php" AND $links_admin_data["view"]=="news_inst"))
+	$view_mode="inst";
 //here are all the pages/views listed, which require the search form for Veranstaltungen
-if (($list) && ($i_page == "admin_seminare1.php" OR $i_page == "admin_dates.php" OR $i_page == "admin_metadates.php" OR $i_page == "admin_admission.php"  OR ($i_page == "admin_statusgruppe.php" AND $links_admin_data["view"]=="statusgruppe_sem") OR ($i_page == "admin_literatur.php" AND $links_admin_data["view"]=="literatur_sem") OR $i_page == "archiv_assi.php" OR $i_page == "adminarea_start.php"))
-	$search_mode="sem";
+if ($i_page == "admin_seminare1.php" OR $i_page == "admin_dates.php" OR $i_page == "admin_metadates.php" OR $i_page == "admin_admission.php"  OR ($i_page == "admin_statusgruppe.php" AND $links_admin_data["view"]=="statusgruppe_sem") OR ($i_page == "admin_literatur.php" AND $links_admin_data["view"]=="literatur_sem") OR $i_page == "archiv_assi.php" OR $i_page == "adminarea_start.php" OR ($i_page == "admin_news.php" AND $links_admin_data["view"]=="news_sem"))
+	$view_mode="sem";
+
+//remember the open topkat
+if ($view_mode=="sem")
+	$links_admin_data["topkat"]="sem";
+elseif ($view_mode=="inst")
+	$links_admin_data["topkat"]="inst";
+else
+	$links_admin_data["topkat"]="global";
 
 //Wenn nur ein Institut verwaltet werden kann, immer dieses waehlen (Auswahl unterdruecken)
-if ((!$SessSemName[1]) && ($list) && ($search_mode=="inst")) {
+if ((!$SessSemName[1]) && ($list) && ($view_mode=="inst")) {
 	if ($perm->have_perm("root"))
 		$db->query("SELECT Institut_id  FROM Institute ORDER BY Name");
 	else
@@ -254,19 +262,19 @@ $structure["ablaufplan"]=array (topKat=>"veranstaltungen", name=>"Ablaufplan", l
 $structure["literatur_sem"]=array (topKat=>"veranstaltungen", name=>"Literatur", link=>"admin_literatur.php?list=TRUE&view=literatur_sem", active=>FALSE);
 $structure["zugang"]=array (topKat=>"veranstaltungen", name=>"Zugangsberechtigungen", link=>"admin_admission.php?list=TRUE", active=>FALSE);
 $structure["statusgruppe_sem"]=array (topKat=>"veranstaltungen", name=>"Statusgruppen", link=>"admin_statusgruppe.php?list=TRUE&view=statusgruppe_sem", active=>FALSE);
+$structure["news_sem"]=array (topKat=>"veranstaltungen", name=>"News", link=>"admin_news.php?view=news_sem", active=>FALSE);
 if ($perm->have_perm("admin")) 
 	$structure["archiv"]=array (topKat=>"veranstaltungen", name=>"archivieren", link=>"archiv_assi.php?list=TRUE&new_session=TRUE", active=>FALSE);
 if ($perm->have_perm("dozent")) 
 	$structure["new_sem"]=array (topKat=>"veranstaltungen", name=>"neue Veranstaltung", link=>"admin_seminare_assi.php?new_session=TRUE", active=>FALSE);
-$structure["news_sem"]=array (topKat=>"veranstaltungen", name=>"News", link=>"admin_news.php?view=news_sem", active=>FALSE);
 //
-$structure["literatur_inst"]=array (topKat=>"einrichtungen", name=>"Literatur", link=>"admin_literatur.php?list=TRUE&view=literatur_inst", active=>FALSE);
-$structure["news_inst"]=array (topKat=>"einrichtungen", name=>"News", link=>"admin_news.php?view=news_inst", active=>FALSE);
 if ($perm->have_perm("admin")) {
 	$structure["grunddaten_inst"]=array (topKat=>"einrichtungen", name=>"Grunddaten", link=>"admin_institut.php?list=TRUE", active=>FALSE);
 	$structure["mitarbeiter"]=array (topKat=>"einrichtungen", name=>"Mitarbeiter", link=>"inst_admin.php?list=TRUE", active=>FALSE);
 	$structure["statusgruppe_inst"]=array (topKat=>"einrichtungen", name=>"Statusgruppen", link=>"admin_statusgruppe.php?list=TRUE&view=statusgruppe_inst", active=>FALSE);
-}
+}	
+$structure["literatur_inst"]=array (topKat=>"einrichtungen", name=>"Literatur", link=>"admin_literatur.php?list=TRUE&view=literatur_inst", active=>FALSE);
+$structure["news_inst"]=array (topKat=>"einrichtungen", name=>"News", link=>"admin_news.php?view=news_inst", active=>FALSE);
 if ($perm->have_perm("root"))
 	$structure["new_inst"]=array (topKat=>"einrichtungen", name=>"neue Einrichtung", link=>"admin_institut.php?i_view=new", active=>FALSE);
 //
@@ -308,66 +316,83 @@ if (($SessSemName["class"] == "sem") && (!$archive_kill) && (!$links_admin_data[
 	$addText=" <a href=\"adminarea_start.php?list=TRUE\"><img ".tooltip("Auswahl der Veranstaltung ".$db->f("Name")." aufheben")." align=\"absmiddle\" src=\"pictures/admin.gif\" border=0></a>";
 elseif ($SessSemName["class"] == "inst")
 	$addText=" <a href=\"adminarea_start.php?list=TRUE\"><img ".tooltip("Auswahl der Einrichtung ".$db->f("Name")." aufheben")." align=\"absmiddle\" src=\"pictures/admin.gif\" border=0></a>";
-					
+
 //View festlegen
-if ($view)
-	$reiter_view=$view;
-else
-	switch ($i_page) {
-		case "admin_admission.php" : 
-			$reiter_view="zugang"; 
-		break;
-		case "admin_bereich.php" : 
-			$reiter_view="bereich"; 
-		break;
-		case "admin_dates.php" : 
-			$reiter_view="ablaufplan"; 
-		break;
-		case "admin_db_integrity.php" :
-			$reiter_view = "integrity";
-		break;
-		case "admin_fach.php" : 
-			$reiter_view="fach"; 
-		break;
-		case "admin_fakultaet.php" : 
-			$reiter_view="fakultaet"; 
-		break;
-		case "admin_institut.php" : 
-			$reiter_view="grunddaten_inst"; 
-		break;
-		case "admin_metadates.php" : 
-			$reiter_view="zeiten"; 
-		break;
-		case "admin_seminare1.php": 
-			$reiter_view="grunddaten_sem"; 
-		break;
-		case "admin_seminare_assi.php": 
-			$reiter_view="new_sem"; 
-		break;
-		case "admin_studiengang.php": 
-			$reiter_view="studiengang"; 
-		break;
-		case "adminarea_start.php" : 
-			$reiter_view="(veranstaltungen)"; 
-		break;
-		case "archiv_assi.php": 
-			$reiter_view="archiv"; 
-		break;
-		case "new_user_md5.php": 
-			$reiter_view="new_user"; 
-		break;
-		case "view_sessions.php":
-			$reiter_view="sessions";
-		break;
-		case "inst_admin.php": 
-			$reiter_view="mitarbeiter"; 
-		break;	
+switch ($i_page) {
+	case "admin_admission.php" : 
+		$reiter_view="zugang"; 
+	break;
+	case "admin_bereich.php" : 
+		$reiter_view="bereich"; 
+	break;
+	case "admin_dates.php" : 
+		$reiter_view="ablaufplan"; 
+	break;
+	case "admin_db_integrity.php" :
+		$reiter_view = "integrity";
+	break;
+	case "admin_fach.php" : 
+		$reiter_view="fach"; 
+	break;
+	case "admin_fakultaet.php" : 
+		$reiter_view="fakultaet"; 
+	break;
+	case "admin_institut.php" : 
+		$reiter_view="grunddaten_inst"; 
+	break;
+	case "admin_literatur.php": 
+		if ($links_admin_data["topkat"] == "sem")
+			$reiter_view="literatur_sem"; 
+		else
+			$reiter_view="literatur_inst";
+	break;
+	case "admin_metadates.php" : 
+		$reiter_view="zeiten"; 
+	break;
+	case "admin_news.php": 
+		if ($links_admin_data["topkat"] == "sem")
+			$reiter_view="news_sem"; 
+		elseif ($links_admin_data["topkat"] == "inst")
+			$reiter_view="news_inst";
+		else
+			$reiter_view="news_global";
+	break;
+	case "admin_seminare1.php": 
+		$reiter_view="grunddaten_sem"; 
+	break;
+	case "admin_seminare_assi.php": 
+		$reiter_view="new_sem"; 
+	break;
+	case "admin_statusgruppe.php": 
+		if ($links_admin_data["topkat"] == "sem")
+			$reiter_view="statusgruppe_sem"; 
+		else
+			$reiter_view="statusgruppe_inst";
+	break;
+	case "admin_studiengang.php": 
+		$reiter_view="studiengang"; 
+	break;
+	case "adminarea_start.php" : 
+		$reiter_view="(veranstaltungen)"; 
+	break;
+	case "archiv_assi.php": 
+		$reiter_view="archiv"; 
+	break;
+	case "new_user_md5.php": 
+		$reiter_view="new_user"; 
+	break;
+	case "view_sessions.php":
+		$reiter_view="sessions";
+	break;
+	case "inst_admin.php": 
+		$reiter_view="mitarbeiter"; 
+	break;	
 }
 
 $reiter->create($structure, $reiter_view, $tooltip, $addText);
 
 //Einheitliches Auswahlmenu fuer Einrichtungen
-if ((!$SessSemName[1]) && ($list) && ($search_mode == "inst")) {
+if ((!$SessSemName[1]) && ($list) && ($view_mode == "inst")) {
 	?>
 	<table width="100%" cellspacing=0 cellpadding=0 border=0>
 	<tr valign=top align=middle>
@@ -428,7 +453,7 @@ if ((!$SessSemName[1]) && ($list) && ($search_mode == "inst")) {
 		}
 	
 //Einheitliches Seminarauswahlmenu, wenn kein Seminar gewaehlt ist
-if ((!$SessSemName[1]) && ($list) && ($search_mode == "sem")) {
+if ((!$SessSemName[1]) && ($list) && ($view_mode == "sem")) {
 	?>
 	<table width="100%" cellspacing=0 cellpadding=0 border=0>
 	<tr valign=top align=middle>
