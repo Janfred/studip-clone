@@ -206,7 +206,7 @@ echo "<a href=\"$PHP_SELF?cmd=new_entry\"><img border=\"0\" "
 if ($_catalog_id != "new_entry"){
 	echo "<img src=\"pictures/blank.gif\"  height=\"28\" width=\"15\" border=\"0\">";
 	echo "<a href=\"$PHP_SELF?cmd=check_entry&_catalog_id=$_catalog_id\">"
-	. "<img " .makeButton("jetzttesten","src") . tooltip(_("Verfügbarkeit überprüfen"))
+	. "<img " .makeButton("verfuegbarkeit","src") . tooltip(_("Verfügbarkeit überprüfen"))
 	. " border=\"0\"></a>";
 }
 if ($_catalog_id != "new_entry" && !$_the_clipboard->isInClipboard($_catalog_id)){
@@ -257,7 +257,7 @@ echo "<a href=\"$PHP_SELF?cmd=new_entry\"><img border=\"0\" "
 if ($_catalog_id != "new_entry"){
 	echo "<img src=\"pictures/blank.gif\"  height=\"28\" width=\"15\" border=\"0\">";
 	echo "<a href=\"$PHP_SELF?cmd=check_entry&_catalog_id=$_catalog_id\">"
-	. "<img " .makeButton("jetzttesten","src") . tooltip(_("Verfügbarkeit überprüfen"))
+	. "<img " .makeButton("verfuegbarkeit","src") . tooltip(_("Verfügbarkeit überprüfen"))
 	. " border=\"0\"></a>";
 }
 if ($_catalog_id != "new_entry" && !$_the_clipboard->isInClipboard($_catalog_id)){
