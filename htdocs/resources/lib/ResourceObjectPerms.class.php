@@ -65,9 +65,9 @@ class ResourceObjectPerms {
 		$is_room = $resObject->isRoom();
 		
 		if ($is_room)
-			$inheritance = get_config("RESOURCES_INHERITANCE_PERMS_ROOMS");
+			$inheritance = $GLOBALS["RESOURCES_INHERITANCE_PERMS_ROOMS"];
 		else
-			$inheritance = get_config("RESOURCES_INHERITANCE_PERMS");
+			$inheritance = $GLOBALS["RESOURCES_INHERITANCE_PERMS"];
 		
 		//check if user is root
 		if ($perm->have_perm("root")) {
