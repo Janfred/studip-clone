@@ -47,8 +47,9 @@ function MakeToolbar($icon,$URL,$text,$tooltip,$size,$target,$align="center")
 	$toolbar = "<td class=\"toolbar\" align=\"$align\">";
 	$toolbar .= "<img border=\"0\" src=\"pictures/blank.gif\" height=\"2\" width=\"50\"><br>"
 			  ."<a class=\"toolbar\" href=\"$URL\" target=\"$target\"><img border=\"0\" src=\"$icon\" ".tooltip($tooltip)."><br>"
+			  ."<img border=\"0\" src=\"pictures/blank.gif\" height=\"3\" width=\"50\"><br>"
 			  ."$text</a><br>"
-			  ."<img border=\"0\" src=\"pictures/blank.gif\" height=\"10\" width=\"50\">";
+			  ."<img border=\"0\" src=\"pictures/blank.gif\" height=\"7\" width=\"50\">";
 	$toolbar .= "</td>\n";
 	return $toolbar;
 }
