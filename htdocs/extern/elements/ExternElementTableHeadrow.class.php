@@ -60,12 +60,24 @@ class ExternElementTableHeadrow extends ExternElement {
 	function toString ($args = NULL) {
 		if (!$args["main_module"])
 			$args["main_module"] = "Main";
+		
+		$alias = $this->config->getValue($args["main_module"], "aliases");
+		$visible = $this->config->getValue($args["main_module"], "visible");
+		// if all visible aliases are empty return empty string
+		$al_empty = TRUE;
+		for ($i = 0; $i < sizeof($alias); $i++) {
+			if ($alias[$i] != '' && $visible[$i]) {
+				$al_empty = FALSE;
+				break;
+			}
+		}
+		if ($al_empty)
+			return '';
+		
 		$out = "<tr" . $this->config->getAttributes($this->name, "tr") . ">\n";
 		$i = 0;
 		$zebra = $this->config->getValue($this->name, "th_zebrath_");
-		$visible = $this->config->getValue($args["main_module"], "visible");
 		$order = $this->config->getValue($args["main_module"], "order");
-		$alias = $this->config->getValue($args["main_module"], "aliases");
 		$width = $this->config->getValue($args["main_module"], "width");
 		$attributes[0] = $this->config->getAttributes($this->name, "th", TRUE);
 		$attributes[1] = $this->config->getAttributes($this->name, "th", FALSE);

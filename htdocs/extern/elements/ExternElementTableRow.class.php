@@ -59,8 +59,8 @@ class ExternElementTableRow extends ExternElement {
 	}
 	
 	function toString ($args) {
-		static $i;
-		static $j;
+		static $i = 0;
+		static $j = 0;
 		
 		if ($args["color"] === 0 || $args["color"] === 1)
 			$i = $args["color"];
@@ -72,13 +72,14 @@ class ExternElementTableRow extends ExternElement {
 		$attributes[1] = $this->config->getAttributes($this->name, "td", TRUE);
 		$font = $this->config->getTag($this->name, "font", FALSE, TRUE);
 		$zebra = $this->config->getValue($this->name, "td_zebratd_");
+		$width = $this->config->getValue($args["main_module"], "width");
 		
 		// "horizontal zebra"
 		if ($zebra == "HORIZONTAL")
-			$set_td = $attributes[$i++ % 2];
+			$set_td = $attributes[$i % 2];
 		else
 			$set_td = $attributes[0];
-
+		
 		$out = "<tr" . $this->config->getAttributes($this->name, "tr") . ">";
 		
 		foreach ($order as $column) {
@@ -89,7 +90,10 @@ class ExternElementTableRow extends ExternElement {
 				
 				if (!$args["content"][$args["data_fields"][$column]])
 					$args["content"][$args["data_fields"][$column]] = "&nbsp;";
-				$out .= "<td$set_td>";
+				$out .= "<td$set_td";
+				if ($i == 0 && $width[$column] != '')
+					$out .= " width=\"$width[$column]\"";
+				$out .= '>';
 				if ($font)
 					$out .= $font . $args["content"][$args["data_fields"][$column]] . "</font>";
 				else
@@ -98,6 +102,7 @@ class ExternElementTableRow extends ExternElement {
 			}
 		}
 		$out .= "</tr>\n";
+		$i++;
 		
 		return $out;
 	}
