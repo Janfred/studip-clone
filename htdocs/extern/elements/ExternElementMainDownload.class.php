@@ -40,9 +40,8 @@ require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."
 class ExternElementMainDownload extends ExternElementMain {
 
 	var $attributes = array("name", "order", "visible", "aliases", "width", "width_pp", "sort",
-			"wholesite", "lengthdesc", "nameformat", "urlcss", "title", "bodystyle", "bodyclass", "nodatatext",
-			"iconpic", "icontxt", "iconpdf", "iconppt",
-			"iconxls", "iconrtf", "iconzip", "icondefault");
+			"wholesite", "lengthdesc", "nameformat", "urlcss", "title", "nodatatext",
+			"iconpic", "icontxt", "iconpdf", "iconppt", "iconxls", "iconrtf", "iconzip", "icondefault");
 	var $edit_function = "editMainSettings";
 	
 	/**
