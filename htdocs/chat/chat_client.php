@@ -46,6 +46,7 @@ if (!$CHAT_ENABLE) {
 	//page_close();
 	die;
 }
+include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
 require_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/ChatServer.class.php";
 //Studip includes
@@ -53,7 +54,6 @@ require_once $ABSOLUTE_PATH_STUDIP."msg.inc.php";
 require_once $ABSOLUTE_PATH_STUDIP."visual.inc.php";
 require_once $ABSOLUTE_PATH_STUDIP."messaging.inc.php";
 
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
 //Hilfsfunktion, druckt script tags
 function printJs($code){
@@ -71,6 +71,7 @@ function chatSystemMsg($msg){
 	$id = substr(strrchr ($msg[0],":"),1);
 	if (!$id) {
 		printJs("if (parent.frames['frm_nicklist'].location.href) parent.frames['frm_nicklist'].location.href = parent.frames['frm_nicklist'].location.href;");
+		printJs("if (parent.frames['frm_status'].location.href) parent.frames['frm_status'].location.href = parent.frames['frm_status'].location.href;");
 		$output = strftime("%T",floor($msg[2]))."<i> [chatbot] $msg[1]</i><br>";
 	} elseif ($user->id == $id){
 		$output = strftime("%T",floor($msg[2]))."<i> [chatbot] $msg[1]</i><br>";
@@ -260,6 +261,13 @@ function chatCommand_log($msgStr){
 				printJs("if (parent.frames['frm_dummy'].location.href) parent.frames['frm_dummy'].location.href = parent.frames['frm_dummy'].location.href;");
 			} else {
 				$chatServer->addMsg("system:$user->id",$chatid,_("Sie haben keine Aufzeichnug gestartet."));
+			}
+		} elseif ($cmd == "send"){
+			if ($chatServer->chatDetail[$chatid]['users'][$user->id]['log']){
+				$chatServer->addMsg("system:$user->id",$chatid,_("Ihre Aufzeichnug wird zu ihrem Browser geschickt."));
+				printJs("if (parent.frames['frm_dummy'].location.href) parent.frames['frm_dummy'].location.href = parent.frames['frm_dummy'].location.href;");
+			} else {
+				$chatServer->addMsg("system:$user->id",$chatid,_("Sie haben keine gespeicherte Aufzeichnug."));
 			}
 		} else {
 			$chatServer->addMsg("system:$user->id",$chatid,_("Fehler, falsche Kommandosyntax!"));

@@ -108,6 +108,6 @@ $chatCmd = array("quit" => _(" [msg] - Sie verlassen den Chat mit der Botschaft 
 			"lock" => _(" - Setzt ein zufälliges Paßwort und wirft alle Nutzer aus dem Chat, die nicht Chatadmins sind."),
 			"unlock" => _(" - Ein evetuell gesetztes Paßwort wird gelöscht, der Chat wird damit wieder frei zugänglich."),
 			"password" => _(" [password] - Setzt das Paßwort für den Chat, wenn [password] leer ist wird ein eventuell vorhandenes Paßwort gelöscht"),
-			"log" => _(" [start | stop] - Startet oder beendet eine Aufzeichnung, wenn sie Chatadmin sind"));
+			"log" => _(" [start | stop | send] - Startet,beendet oder versendet eine Aufzeichnung, wenn sie Chatadmin sind"));
 
 ?>

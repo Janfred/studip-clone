@@ -61,8 +61,8 @@ class ChatServer {
 		$this->that->store(&$this->chatDetail,CHAT_DETAIL_KEY);
 	}
 	
-	function addChat($rangeid, $chatname = "StudIP Global Chat",$password = false){
-		if ($this->isActiveChat($rangeid) && $this->getActiveUsers($rangeid)){
+	function addChat($rangeid, $chatname = "Stud.IP Global Chat",$password = false){
+		if ($this->isActiveChat($rangeid)){
 			return false;
 		}
 		$this->chatDetail[$rangeid]["name"] = $chatname;
@@ -83,6 +83,9 @@ class ChatServer {
 	
 	function isActiveChat($rangeid){
 		$this->restore();
+		if (!$this->getActiveUsers($rangeid)){
+			$this->removeChat($rangeid);
+		}
 		return $this->chatDetail[$rangeid]["name"];
 	}
 	

@@ -48,6 +48,8 @@ if (!$CHAT_ENABLE) {
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 require_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/ChatServer.class.php";
 //Studip includes
+require_once $ABSOLUTE_PATH_STUDIP."msg.inc.php";
+require_once $ABSOLUTE_PATH_STUDIP."visual.inc.php";
 
 $chatServer =& ChatServer::GetInstance($CHAT_SERVER_NAME);
 $chatServer->caching = true;
@@ -75,7 +77,21 @@ $chatServer->caching = true;
 		parent.frames['frm_input'].document.inputform.chatInput.value="/unlock";
 		parent.frames['frm_input'].document.inputform.submit();
 	}
-
+	
+	function doLogStart(){
+		parent.frames['frm_input'].document.inputform.chatInput.value="/log start";
+		parent.frames['frm_input'].document.inputform.submit();
+	}
+	
+	function doLogStop(){
+		parent.frames['frm_input'].document.inputform.chatInput.value="/log stop";
+		parent.frames['frm_input'].document.inputform.submit();
+	}
+	
+	function doLogSend(){
+		parent.frames['frm_input'].document.inputform.chatInput.value="/log send";
+		parent.frames['frm_input'].document.inputform.submit();
+	}
 
 </script>
 
@@ -95,15 +111,59 @@ if (!$chatServer->isActiveUser($user->id,$chatid)) {
 <div align="center">
 	<table width="98%" border="0" bgcolor="white" cellspacing="0" cellpadding="0" align="center">
 		<tr>
-			<td width="80%" align="left" class="topic" ><b>&nbsp;Chat -
-			<?=htmlReady($chatServer->chatDetail[$chatid]["name"])?></b></td>
+			<td width="80%" align="left" class="topic" >
+			<?
+			if ($chatServer->getPerm($user->id,$chatid)){
+				?>
+				<a href="javascript:<?=(($chatServer->chatDetail[$chatid]['password']) ? "doUnlock();" : "doLock();")?>">
+				<img src="<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/<?=(($chatServer->chatDetail[$chatid]['password']) ? "closelock.gif" : "openlock.gif")?>"
+					border="0" align="absmiddle" 
+					<?=tooltip(($chatServer->chatDetail[$chatid]['password']) ? _("Zugangsschutz für diesen Chat aufheben") : _("Diesen Chat absichern"))?>>
+				</a>
+				<?
+			} else {
+				?>
+				<img src="<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/<?=(($chatServer->chatDetail[$chatid]['password']) ? "closelock.gif" : "openlock.gif")?>"
+					border="0" align="absmiddle" 
+					<?=tooltip(($chatServer->chatDetail[$chatid]['password']) ? _("Dieser Chat ist zugangsbeschränkt.") : _("Dieser Chat ist nicht zugangsbeschränkt."))?>>
+				<?
+			}
+			if (count($chatServer->chatDetail[$chatid]['log'])){
+				?>
+				<img src="<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/logging.gif" border="0" align="absmiddle" 
+					<?=tooltip(_("Dieser Chat wird aufgezeichnet."))?>>
+				<?
+			}
+			?>
+			<b>Chat - <?=htmlReady($chatServer->chatDetail[$chatid]["name"])?></b>
+			</td>
 			<td width="20%" align="right" class="topic" >
+			<?
+			if ($chatServer->getPerm($user->id,$chatid)){
+				if ($chatServer->chatDetail[$chatid]['users'][$user->id]['log']){
+					?>
+					<a href="javascript:doLogSend();">
+					<img src="<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/file.gif"
+						border="0" hspace="5" align="absmiddle" 
+						<?=tooltip(_("Download des letzten Chatlogs"))?>>
+					</a>
+					<?
+				}
+				?>
+				<a href="javascript:<?=(($chatServer->chatDetail[$chatid]['log'][$user->id]) ? "doLogStop();" : "doLogStart();")?>">
+				<img src="<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/<?=(($chatServer->chatDetail[$chatid]['log'][$user->id]) ? "stop_log.gif" : "start_log.gif")?>"
+					border="0" hspace="5" align="absmiddle" 
+					<?=tooltip(($chatServer->chatDetail[$chatid]['log'][$user->id]) ? _("Die Aufzeichnung für diesen Chat beenden.") : _("Eine Aufzeichnung für diesen Chat starten."))?>>
+				</a>
+				<?
+			}
+			?>
 			<a href="javascript:printhelp();">
-			<img src="<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/hilfe.gif" border=0 align="texttop" <?=tooltip(_("Chat Kommandos einblenden"))?>>
-			</a>&nbsp; 
+			<img src="<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/hilfe.gif" border=0 hspace="5" align="texttop" <?=tooltip(_("Chat Kommandos einblenden"))?>>
+			</a> 
 			<a href="<?=$CANONICAL_RELATIVE_PATH_STUDIP?>show_smiley.php" target=new>
-			<img src="<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/smile/smile.gif" border=0 align="absmiddle" <?=tooltip(_("Alle verfügbaren Smileys anzeigen"))?>>
-			</a>&nbsp; </td>
+			<img src="<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/smile/smile.gif" hspace="5" border=0 align="absmiddle" <?=tooltip(_("Alle verfügbaren Smileys anzeigen"))?>>
+			</a></td>
 		</tr>
 	</table>
 </div>

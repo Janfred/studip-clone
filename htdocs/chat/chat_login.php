@@ -45,6 +45,7 @@ if (!$CHAT_ENABLE) {
 	page_close();
 	die;
 }
+include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
 require_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/ChatServer.class.php";
 //Studip includes
@@ -52,15 +53,77 @@ require_once $ABSOLUTE_PATH_STUDIP."msg.inc.php";
 require_once $ABSOLUTE_PATH_STUDIP."messaging.inc.php";
 require_once $ABSOLUTE_PATH_STUDIP."functions.php";
 require_once $ABSOLUTE_PATH_STUDIP."visual.inc.php";
-
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
-
+require_once $ABSOLUTE_PATH_STUDIP."contact.inc.php";
 
 $chatServer =& ChatServer::GetInstance($CHAT_SERVER_NAME);
 $chatServer->caching = true;
-$chatServer->addChat($chatid);
-if (!$chatServer->addUser($user->id,$chatid,$auth->auth["uname"],get_fullname(),$perm->have_perm("root"))){
-	?><html>
+$object_type = get_object_type($chatid);
+$chat_entry_level = "user";
+if (!$perm->have_perm("root")){;
+	switch($object_type){
+		case "user":
+		if ($chatid == $user->id){
+			$chat_entry_check = true;
+			$chat_entry_level = "admin";
+		} else {
+			$chat_entry_check = CheckBuddy($auth->auth['uname'], $chatid);
+		}
+		break;
+		
+		case "sem" :
+		$chat_entry_check = $perm->have_studip_perm("user",$chatid);
+		if ($perm->have_studip_perm("tutor",$chatid)){
+			$chat_entry_level = "admin";
+		}
+		break;
+		
+		case "inst" :
+		case "fak" :
+		$chat_entry_check = $perm->have_studip_perm("autor",$chatid);
+		if ($perm->have_studip_perm("admin",$chatid)){
+			$chat_entry_level = "admin";
+		}
+		break;
+		
+		default:
+		if ($chatid == "studip"){
+			$chat_entry_check = true;
+		}
+	}
+} else {
+	$chat_entry_check = true;
+	$chat_entry_level = "admin";
+}
+
+if ($chat_entry_level != "admin" && $chatServer->isActiveChat($chatid) && $chatServer->chatDetail[$chatid]["password"]){
+	$chat_entry_check = false;
+	if ($_REQUEST['chat_password']){
+		if ($chatServer->chatDetail[$chatid]['password'] == $_REQUEST['chat_password']){
+			$chat_entry_check = true;
+		} else {
+			$msg = "error§" . _("Das eingegebene Passwort ist falsch!") . "§";
+		}
+	}
+	if (!$chat_entry_check){
+		$msg .= "info§" . "<form name=\"chatlogin\" method=\"post\" action=\"$PHP_SELF?chatid=$chatid\"><b>" ._("Passwort erforderlich") 
+			. "</b><br><font size=\"-1\" color=\"black\">" . _("Um an diesem Chat teilnehmen zu k&ouml;nnen, m&uuml;ssen sie das Passwort eingeben.")
+			. "<br><input type=\"password\" style=\"vertical-align:middle;\" name=\"chat_password\">&nbsp;&nbsp;<input style=\"vertical-align:middle;\" type=\"image\" name=\"submit\""
+			. makeButton("absenden","src") . " border=\"0\" value=\"senden\"></font></form>§";
+			}
+}
+
+if ($chat_entry_check){
+	$chatServer->addChat($chatid);
+	if (!$chatServer->addUser($user->id,$chatid,$auth->auth["uname"],get_fullname(),(($chat_entry_level == "admin") ? true : false))){
+		$chat_entry_check = false;
+		$msg = "error§<b>" ._("Chatlogin nicht m&ouml;glich"). "</b><br/><font size=\"-1\" color=\"black\">"
+			. _("Vermutlich sind sie noch aus einer fr&uuml;heren Chat Session angemeldet. Es dauert ca. 3-5 s bis sie automatisch aus dem Chat entfernt werden. Versuchen sie es etwas sp&auml;ter noch einmal.")
+			. "</font>§";
+	}
+}
+if (!$chat_entry_check){
+	?>
+	<html>
 	<head>
 	 <title>Stud.IP</title>
 	<?php include $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_style.inc.php";?>
@@ -73,13 +136,14 @@ if (!$chatServer->addUser($user->id,$chatid,$auth->auth["uname"],get_fullname(),
 		</tr>
 		<tr><td class="blank">&nbsp;</td></tr>
 		<?
-		parse_msg ("error§Chatlogin nicht möglich <br/><font size=-1 color=black>Vermutlich sind sie noch aus einer früheren Chat Session angemeldet. Es dauert ca. 3-5 s bis sie automatisch aus dem Chat entfernt werden. Versuchen sie es etwas später noch einmal.</font>", "§", "blank", 1);
+		parse_msg ($msg, "§", "blank", 1);
 		?>
 		<tr><td class="blank"><font size=-1>&nbsp;Fenster <a href="javascript:window.close()"><b>schließen</b></a><br />&nbsp;</font>
 		</td></tr>
 	</table>
 	</body>
 	</html>
+	
 	<?
 	page_close();
 	die;
