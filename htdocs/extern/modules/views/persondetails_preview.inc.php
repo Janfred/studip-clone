@@ -308,7 +308,7 @@ function lehre (&$this, $data, $alias_content, $text_div, $text_div_end) {
 	$switch_time = mktime(0, 0, 0, date("m"),
 			date("d") + 7 * $this->config->getValue("PersondetailsLectures", "semswitch"), date("Y"));
 	// get current semester
-	$current_sem = get_sem_num($switch_time);
+	$current_sem = get_sem_num($switch_time) + 1;
 	
 	switch ($this->config->getValue("PersondetailsLectures", "semstart")) {
 		case "previous" :
