@@ -23,11 +23,12 @@
 // $Id$
 
 
-$GLOBALS["_views"]["AUTH_USER_UNAME"] = array("pk"=>"item_id","temp_table_type"=>"HEAP",
+$GLOBALS["_views"]["AUTH_USER_UNAME"] = array("pk"=>"user_id","temp_table_type"=>"HEAP",
 							"query"=>"SELECT * FROM auth_user_md5 WHERE username=? ");
-$GLOBALS["_views"]["AUTH_USER_UID"] = array("pk"=>"item_id","temp_table_type"=>"HEAP",
+$GLOBALS["_views"]["AUTH_USER_UID"] = array("pk"=>"user_id","temp_table_type"=>"HEAP",
 							"query"=>"SELECT * FROM auth_user_md5 WHERE user_id=? ");
-							
+$GLOBALS["_views"]["USER_DATA_UNAME"] = array("pk"=>"user_id","temp_table_type"=>"HEAP",
+							"query"=>"SELECT § FROM auth_user_md5 LEFT JOIN user_info USING(user_id) WHERE username=? ");
 $GLOBALS["_views"]["GENERIC_UPDATE"] = array("query" => "UPDATE § SET §=? WHERE user_id=?");
 $GLOBALS["_views"]["AUTH_USER_INSERT"] = array("query" => "INSERT INTO auth_user_md5 (user_id, username, perms, password, Vorname, Nachname, Email,auth_plugin) VALUES (?,?,?,?,?,?,?,?)");
 $GLOBALS["_views"]["USER_INFO_INSERT"] = array("query" => "INSERT INTO user_info (user_id, mkdate, chdate, preferred_language) VALUES (?,?,?,?)");

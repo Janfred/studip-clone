@@ -46,6 +46,7 @@ class StudipAuthStandard extends StudipAuthAbstract {
 	*/
 	var $md5_challenge_response = true;
 	
+	var $dbv_auth;
 	
 	/**
 	* Constructor
@@ -57,6 +58,7 @@ class StudipAuthStandard extends StudipAuthAbstract {
 	function StudipAuthStandard() {
 		//calling the baseclass constructor
 		parent::StudipAuthAbstract();
+		$this->dbv_auth = $this->dbv;
 	}
 	
 	/**
@@ -67,8 +69,8 @@ class StudipAuthStandard extends StudipAuthAbstract {
 	* 
 	*/
 	function isAuthenticated($username, $password, $jscript){
-		$this->dbv->params[] = $username;
-		$db = $this->dbv->get_query("view:AUTH_USER_UNAME");
+		$this->dbv_auth->params[] = $username;
+		$db = $this->dbv_auth->get_query("view:AUTH_USER_UNAME");
 		if (!$db->next_record()){
 			$this->error_msg= _("Dieser Username existiert nicht!") ;
 			return false;
@@ -104,8 +106,8 @@ class StudipAuthStandard extends StudipAuthAbstract {
 	}
 	
 	function isUsedUsername($username){
-		$this->dbv->params[] = $username;
-		$db = $this->dbv->get_query("view:AUTH_USER_UNAME");
+		$this->dbv_auth->params[] = $username;
+		$db = $this->dbv_auth->get_query("view:AUTH_USER_UNAME");
 		if (!$db->next_record()){
 			$this->error_msg = _("Der Username wurde nicht gefunden.");
 			return false;
