@@ -171,4 +171,6 @@ function restoreLanguage() {
 	bindtextdomain($_language_domain, "$ABSOLUTE_PATH_STUDIP/locale");
 	textdomain($_language_domain);
 }
+
+
 ?>

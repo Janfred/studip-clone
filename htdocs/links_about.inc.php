@@ -37,7 +37,7 @@ $structure["karriere"]=array (topKat=>"", name=>"universit&auml;re Daten", link=
 $structure["lebenslauf"]=array (topKat=>"", name=>"Lebenslauf", link=>"edit_about.php?view=Lebenslauf&username=$username", active=>FALSE);
 $structure["sonstiges"]=array (topKat=>"", name=>"Sonstiges", link=>"edit_about.php?view=Sonstiges&username=$username", active=>FALSE);
 if (!$perm->have_perm("admin"))
-	$structure["mystudip"]=array (topKat=>"", name=>"My Stud.IP", link=>"edit_about.php?view=Login&username=$username", active=>FALSE);
+	$structure["mystudip"]=array (topKat=>"", name=>"My Stud.IP", link=>"edit_about.php?view=allgemein&username=$username", active=>FALSE);
 
 //Bottomkats
 $structure["_alle"]=array (topKat=>"alle", name=>"Pers&ouml;nliche Homepage", link=>"about.php?username=$username", active=>FALSE);
@@ -54,11 +54,12 @@ if ($perm->have_perm ("dozent")) {
 	$structure["publikationen"]=array (topKat=>"lebenslauf", name=>"Publikationen", link=>"edit_about.php?view=Lebenslauf&username=$username#publikationen", active=>FALSE);
 }
 $structure["_sonstiges"]=array (topKat=>"sonstiges", name=>"eigene Kategorien bearbeiten", link=>"edit_about.php?view=Sonstiges&username=$username", active=>FALSE);
-$structure["login"]=array (topKat=>"mystudip", name=>"Login", link=>"edit_about.php?view=Login&username=$username", active=>FALSE);
+$structure["allgemein"]=array (topKat=>"mystudip", name=>"Allgemeines", link=>"edit_about.php?view=allgemein&username=$username", active=>FALSE);
 $structure["forum"]=array (topKat=>"mystudip", name=>"Forum", link=>"edit_about.php?view=Forum&username=$username", active=>FALSE);
 $structure["calendar"]=array (topKat=>"mystudip", name=>"Terminkalender", link=>"edit_about.php?view=calendar&username=$username", active=>FALSE);
 $structure["stundenplan"]=array (topKat=>"mystudip", name=>"Stundenplan", link=>"edit_about.php?view=Stundenplan&username=$username", active=>FALSE);
 $structure["messaging"]=array (topKat=>"mystudip", name=>"Messaging", link=>"edit_about.php?view=Messaging&username=$username", active=>FALSE);
+$structure["login"]=array (topKat=>"mystudip", name=>"Login", link=>"edit_about.php?view=Login&username=$username", active=>FALSE);
 
 
 //View festlegen
@@ -84,7 +85,10 @@ switch ($i_page) {
 				$reiter_view="sonstiges"; 
 			break;
 			case "Login":
-				$reiter_view="mystudip"; 
+				$reiter_view="login"; 
+			break;
+			case "allgemein":
+				$reiter_view="allgemein"; 
 			break;
 			case "Forum":
 				$reiter_view="forum"; 

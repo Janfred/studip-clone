@@ -633,6 +633,12 @@ if ($cmd=="edit_leben")  {
 	$my_about->get_auth_user($username);
 	}
 
+// general settings from mystudip: language
+if ($cmd=="change_general") {
+	$my_about->db->query("UPDATE user_info SET preferred_language = '$forced_language' WHERE user_id='" . $my_about->auth_user["user_id"] ."'");
+	$_language = $forced_language;
+}
+
 if ($my_about->logout_user)
  {
 	$sess->delete();  // User logout vorbereiten
@@ -794,7 +800,7 @@ if (!$cmd)
 include ("$ABSOLUTE_PATH_STUDIP/links_about.inc.php");  
 
 //Kopfzeile bei allen eigenen Modulen ausgeben
-if ($view!="Forum" AND $view!="calendar" AND $view!="Stundenplan" AND $view!="Messaging") {
+if ($view!="Forum" AND $view!="calendar" AND $view!="Stundenplan" AND $view!="Messaging" AND $view!= "allgemein") {
 	echo "<table class=\"blank\" cellspacing=0 cellpadding=0 border=0 width=\"100%\">";
 		
 	if ($username!=$auth->auth["uname"]) 
@@ -1111,6 +1117,31 @@ if ($view=="Sonstiges") {
 }
 
 // Ab hier die Views der MyStudip-Sektion
+if($view == "allgemein") {
+	require_once("mystudip.inc.php");
+	change_general_view();
+}
+
+if($view == "Forum") {
+	require_once("forumsettings.inc.php");
+}
+
+if ($view == "Stundenplan") {
+	require_once ("ms_stundenplan.inc.php");
+	check_schedule_default();
+	change_schedule_view();
+}
+	
+if($view == "calendar") {
+	require_once("$RELATIVE_PATH_CALENDAR/calendar_settings.inc.php");
+}
+
+if ($view == "Messaging") {
+	require_once ("messagingSettings.inc.php");
+	check_messaging_default();
+	change_messaging_view();
+}
+
 if ($view=="Login") {
 	if ($my_about->check=="user" && !$perm->have_perm("admin")) {
 		echo "<tr><td colspan=2 class=blank><blockquote>";
@@ -1125,33 +1156,13 @@ if ($view=="Login") {
 	}
 }	
 
-if($view == "Forum"){
-	require_once("forumsettings.inc.php");
-	}
-
-if ($view == "Stundenplan") {
-	require_once ("ms_stundenplan.inc.php");
-	check_schedule_default();
-	change_schedule_view();
-	}
-	
-if($view == "calendar"){
-	require_once("$RELATIVE_PATH_CALENDAR/calendar_settings.inc.php");
-	}
-
-if ($view == "Messaging") {
-	require_once ("messagingSettings.inc.php");
-	check_messaging_default();
-	change_messaging_view();
-	}
-
 ////////////////
 
 	echo "\n</table></td></tr></form>";
 	echo "\n</table>";
 	echo "</body>";
 	echo "</html>";
-	}
+}
 page_close();
 
 
