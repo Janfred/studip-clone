@@ -256,7 +256,7 @@ function export_sem($inst_id, $ex_sem_id = "all")
 				if ($key == "status") 
 					$data_object .= xml_tag($val, $SEM_TYPE[$db->f($key)]["name"]);
 				elseif ($key == "ort") 
-					$data_object .= xml_tag($val, html_entity_decode( getRoom($db->f("Seminar_id"), false) ) );
+					$data_object .= xml_tag($val, getRoom($db->f("Seminar_id"), false) ) );
 				elseif (($key == "bereich") AND (($SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["bereiche"])))
 				{
 					$data_object .= xml_open_tag($xml_groupnames_lecture["childgroup3"]);
