@@ -184,7 +184,7 @@ if ($admin_modules_data["range_id"]) {
 			<blockquote>
 			<b><?=_("Module konfigurieren") ?></b><br /><br />
 			<?=_("Sie k&ouml;nnen hier einzelne Module nachtr&auml;glich aktivieren oder deaktivieren.")?> <br />
-			<?=_("Mit &raquo;zur&uuml;cksetzten&laquo; k&ouml;nnen Sie die Ausgangs-Modulkonfiguartion wieder herstellen.")?> <br /><br />
+			<?=_("Mit &raquo;zur&uuml;cksetzten&laquo; k&ouml;nnen Sie die Ausgangs-Modulkonfiguration wieder herstellen.")?> <br /><br />
 			</blockqoute>
 		</td>
 		<td class="blank" align="right" valign="top"><img src="pictures/blank.gif" height="10" width="5" /><br />
