@@ -99,9 +99,9 @@ echo _("W&auml;hlen Sie den gew&uuml;nschen Bereich aus oder suchen Sie nach ein
 	<?
 	$db2=new DB_Seminar;
 	if ($perm->have_perm("admin"))
-		$db2->query("SELECT * FROM Institute WHERE name != '- - -' ORDER BY name");
+		$db2->query("SELECT * FROM Institute WHERE name != '- - -' AND (Institute.modules & 16) ORDER BY name");
 	else
-		$db2->query("SELECT * FROM user_inst LEFT JOIN Institute USING (institut_id) WHERE name != '- - -' AND user_id = '$user->id' ORDER BY name");
+		$db2->query("SELECT * FROM user_inst LEFT JOIN Institute USING (institut_id) WHERE name != '- - -' AND user_id = '$user->id'  AND (Institute.modules & 16) ORDER BY name");
 	if ($inst_id == "")
 		printf ("<option value=\"0\">- - -\n");
 	while ($db2->next_record())
@@ -182,6 +182,7 @@ echo _("W&auml;hlen Sie den gew&uuml;nschen Bereich aus oder suchen Sie nach ein
 if ($perm->have_perm("admin")):
 ?>
 <!-- alle Benutzer, ab global admin -->
+<!--deprecated, in big Installations this Options would be a killer - use the user management instead
 <form action="browse.php" method="POST">
 <tr> 
 	<td class="steel1" align="left"width="80%" colspan=4>
@@ -192,7 +193,7 @@ if ($perm->have_perm("admin")):
   		<input type="IMAGE" value="Anzeigen" <?=makeButton("anzeigen", "src")?> border=0>
 		<input type="HIDDEN" name="send" value="TRUE">  		
   	</td>
-</tr></form>
+</tr></form>-->
 <?php
 endif;
 ?>
