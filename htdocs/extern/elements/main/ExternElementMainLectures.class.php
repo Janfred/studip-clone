@@ -63,9 +63,9 @@ class ExternElementMainLectures extends ExternElementMain {
 		$config = array(
 			"name" => "",
 			"grouping" => "3",
-			"semstart" => "current",
-			"semrange" => "1",
-			"semswitch" => "0",
+			"semstart" => "",
+			"semrange" => "",
+			"semswitch" => "",
 			"allseminars" => "",
 			"rangepathlevel" => "1",
 			"addinfo" => "1",
@@ -77,9 +77,9 @@ class ExternElementMainLectures extends ExternElementMain {
 			"textnogroups" => _("keine Studienbereiche eingetragen"),
 			"aliasesgrouping" => "|"._("Semester")."|"._("Bereich")."|"._("DozentIn")."|"
 					._("Typ")."|"._("Einrichtung"),
-			"wholesite" => "0",
-			"nameformat" => "no_title_short",
-			"language" => "de_DE",
+			"wholesite" => "",
+			"nameformat" => "",
+			"language" => "",
 			"urlcss" => "",
 			"title" => _("Lehrveranstaltungen")
 		);
@@ -122,16 +122,16 @@ class ExternElementMainLectures extends ExternElementMain {
 		$info = _("Geben Sie das erste anzuzeigende Semester an. Die Angaben \"vorheriges\", \"aktuelles\" und \"nächstes\" beziehen sich immer auf das laufende Semester und werden automatisch angepasst.");
 		$current_sem = get_sem_num_sem_browse();
 		if ($current_sem === FALSE) {
-			$names = array(_("aktuelles"), _("n&auml;chstes"));
-			$values = array("current", "next");
+			$names = array(_("keine Auswahl"), _("aktuelles"), _("n&auml;chstes"));
+			$values = array("", "current", "next");
 		}
-		else if ($current === TRUE) {
-			$names = array(_("vorheriges"), _("aktuelles"));
-			$values = array("previous", "current");
+		else if ($current_sem === TRUE) {
+			$names = array(_("keine Auswahl"), _("vorheriges"), _("aktuelles"));
+			$values = array("", "previous", "current");
 		}
 		else {
-			$names = array(_("vorheriges"), _("aktuelles"), "n&auml;chstes");
-			$values = array("previous", "current", "next");
+			$names = array(_("keine Auswahl"), _("vorheriges"), _("aktuelles"), "n&auml;chstes");
+			$values = array("", "previous", "current", "next");
 		}
 		foreach ($SEMESTER as $sem_num => $sem) {
 			$names[] = $sem["name"];
@@ -141,8 +141,8 @@ class ExternElementMainLectures extends ExternElementMain {
 		
 		$title = _("Anzahl der anzuzeigenden Semester:");
 		$info = _("Geben Sie an, wieviele Semester (ab o.a. Startsemester) angezeigt werden sollen.");
-		$names = array();
-		$values = array();
+		$names = array(_("keine Auswahl"));
+		$values = array("");
 		$i = 1;
 		foreach ($SEMESTER as $sem_num => $sem) {
 			$names[] = $i++;
@@ -152,10 +152,10 @@ class ExternElementMainLectures extends ExternElementMain {
 		
 		$title = _("Umschalten des aktuellen Semesters:");
 		$info = _("Geben Sie an, wieviele Wochen vor Semesterende automatisch auf das nächste Semester umgeschaltet werden soll.");
-		$names = array(_("am Semesterende"), _("1 Woche vor Semesterende"));
+		$names = array(_("keine Auswahl"), _("am Semesterende"), _("1 Woche vor Semesterende"));
 		for ($i = 2; $i < 13; $i++)
 			$names[] = sprintf(_("%s Wochen vor Semesterende"), $i);
-		$values = array("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12");
+		$values = array("", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12");
 		$table .= $edit_form->editOptionGeneric("semswitch", $title, $info, $values, $names);
 		
 		$title = _("Veranstaltungen beteiligter Institute anzeigen:");
@@ -229,15 +229,15 @@ class ExternElementMainLectures extends ExternElementMain {
 		
 		$title = _("Namensformat:");
 		$info = _("Wählen Sie, wie Personennamen formatiert werden sollen.");
-		$values = array("no_title_short", "no_title", "no_title_rev", "full", "full_rev");
-		$names = array(_("Meyer, P."), _("Peter Meyer"), _("Meyer Peter"),
+		$values = array("", "no_title_short", "no_title", "no_title_rev", "full", "full_rev");
+		$names = array(_("keine Auswahl"), _("Meyer, P."), _("Peter Meyer"), _("Meyer Peter"),
 				_("Dr. Peter Meyer"), _("Meyer, Peter, Dr."));
 		$table = $edit_form->editOptionGeneric("nameformat", $title, $info, $values, $names);
 		
 		$title = _("Sprache:");
 		$info = _("Wählen Sie eine Sprache für die Datumsangaben aus.");
-		$values = array("de_DE", "en_GB");
-		$names = array(_("Deutsch"), _("Englisch"));
+		$values = array("", "de_DE", "en_GB");
+		$names = array(_("keine Auswahl"), _("Deutsch"), _("Englisch"));
 		$table .= $edit_form->editOptionGeneric("language", $title, $info, $values, $names);
 		
 		$title = _("HTML-Header/Footer:");
@@ -269,12 +269,12 @@ class ExternElementMainLectures extends ExternElementMain {
 		if ($attribute == "allseminars") {
 			// This is necessary for checkbox-values. If there is no checkbox
 			// checked, the variable is not declared and it is necessary to set the
-			// variable to 0.
+			// variable to "".
 			if (!isset($GLOBALS["HTTP_POST_VARS"][$this->name . "_" . $attribute])) {
-				$GLOBALS["HTTP_POST_VARS"][$this->name . "_" . $attribute] = 0;
+				$GLOBALS["HTTP_POST_VARS"][$this->name . "_" . $attribute] = "";
 				return FALSE;
 			}
-			return !($value == "1" || $value == "0");
+			return !($value == "1" || $value == "");
 		}
 		
 		return FALSE;

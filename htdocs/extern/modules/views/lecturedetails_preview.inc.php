@@ -34,6 +34,8 @@ switch ($this->config->getValue("Main", "nameformat")) {
 	case "full_rev" :
 		$data_sem["lecturer"] = _("Meyer, Peter, Dr.");
 		break;
+	default :
+		$data_sem["lecturer"] = _("Meyer, P.");
 }
 $data_sem["art"] = _("Testveranstaltung");
 $data_sem["semtype"] = 1;

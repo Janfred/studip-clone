@@ -66,9 +66,9 @@ class ExternElementMainPersondetails extends ExternElementMain {
 			"showcontact" => "1",
 			"showimage" => "right",
 			"wholesite" => "0",
-			"nameformat" => "no_title",
+			"nameformat" => "",
 			"dateformat" => "%d. %b. %Y",
-			"language" => "de_DE",
+			"language" => "",
 			"studiplink" => "top",
 			"urlcss" => "",
 			"title" => _("MitarbeiterInnen"),
@@ -127,8 +127,8 @@ class ExternElementMainPersondetails extends ExternElementMain {
 		
 		$title = _("Namensformat:");
 		$info = _("Wählen Sie, wie Personennamen formatiert werden sollen.");
-		$values = array("no_title_short", "no_title", "no_title_rev", "full", "full_rev");
-		$names = array(_("Meyer, P."), _("Peter Meyer"), _("Meyer Peter"),
+		$values = array("", "no_title_short", "no_title", "no_title_rev", "full", "full_rev");
+		$names = array(_("keine Auswahl"), _("Meyer, P."), _("Peter Meyer"), _("Meyer Peter"),
 				_("Dr. Peter Meyer"), _("Meyer, Peter, Dr."));
 		$table .= $edit_form->editOptionGeneric("nameformat", $title, $info, $values, $names);
 		
@@ -141,8 +141,8 @@ class ExternElementMainPersondetails extends ExternElementMain {
 		
 		$title = _("Sprache:");
 		$info = _("Wählen Sie eine Sprache für die Datumsangaben aus.");
-		$values = array("de_DE", "en_GB");
-		$names = array(_("Deutsch"), _("Englisch"));
+		$values = array("", "de_DE", "en_GB");
+		$names = array(_("keine Auswahl"), _("Deutsch"), _("Englisch"));
 		$table .= $edit_form->editOptionGeneric("language", $title, $info, $values, $names);
 		
 		$title = _("Stud.IP-Link:");

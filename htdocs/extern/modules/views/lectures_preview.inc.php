@@ -1,7 +1,7 @@
 <?
-global $ABSOLUTE_PATH_STUDIP;
-global $RELATIVE_PATH_CALENDAR;
-require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/SemBrowse.class.php");
+//global $ABSOLUTE_PATH_STUDIP;
+//global $RELATIVE_PATH_CALENDAR;
+//require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/SemBrowse.class.php");
 
 global $SEM_TYPE,$SEM_CLASS, $SEMESTER;
 
@@ -48,6 +48,9 @@ switch ($this->config->getValue("Main", "nameformat")) {
 		break;
 	case "full_rev" :
 		$data_sem[0]["lecturer"] = _("Meyer, Peter, Dr.");
+		break;
+	default :
+		$data_sem[0]["lecturer"] = _("Meyer, P.");
 		break;
 }
 $data_sem[1]["lecturer"] = $data_sem[0]["lecturer"];

@@ -34,12 +34,15 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
+global $ABSOLUTE_PATH_STUDIP, $RELATIVE_PATH_EXTERN;
 
-require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."/lib/ExternElement.class.php");
+require_once($ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_EXTERN."/lib/ExternElement.class.php");
+require_once($ABSOLUTE_PATH_STUDIP."dates.inc.php");
 
 class ExternElementPersondetailsLectures extends ExternElement {
 
-	var $attributes = array("semrange", "aliaswise", "aliassose", "aslist");
+	var $attributes = array("semstart", "semrange", "semswitch", "aliaswise",
+			"aliassose", "aslist");
 	
 	/**
 	* Constructor
@@ -61,7 +64,9 @@ class ExternElementPersondetailsLectures extends ExternElement {
 	function getDefaultConfig () {
 		
 		$config = array(
-			"semrange" => "three",
+			"semstart" => "",
+			"semrange" => "",
+			"semswitch" => "",
 			"aliaswise" => _("Wintersemester"),
 			"aliassose" => _("Sommersemester"),
 			"aslist" => "1"
@@ -76,6 +81,8 @@ class ExternElementPersondetailsLectures extends ExternElement {
 	function toStringEdit ($post_vars = "", $faulty_values = "",
 			$edit_form = "", $anker = "") {
 		
+		global $SEMESTER;
+		
 		$out = "";
 		$table = "";
 		if ($edit_form == "")
@@ -87,11 +94,45 @@ class ExternElementPersondetailsLectures extends ExternElement {
 		
 		$headline = $edit_form->editHeadline(_("Allgemeine Angaben"));
 		
-		$title = _("Semesterumfang:");
-		$info = _("Geben Sie an, aus welchen Semestern Lehrveranstaltungen angezeigt werden sollen.");
-		$names = array(_("nur aktuelles"), _("vorheriges, aktuelles, n&auml;chstes"), _("alle"));
-		$values = array("current", "three", "all");
-		$table = $edit_form->editRadioGeneric("semrange", $title, $info, $values, $names);
+		$title = _("Startsemester:");
+		$info = _("Geben Sie das erste anzuzeigende Semester an. Die Angaben \"vorheriges\", \"aktuelles\" und \"nächstes\" beziehen sich immer auf das laufende Semester und werden automatisch angepasst.");
+		$current_sem = get_sem_num_sem_browse();
+		if ($current_sem === FALSE) {
+			$names = array(_("keine Auswahl"), _("aktuelles"), _("n&auml;chstes"));
+			$values = array("", "current", "next");
+		}
+		else if ($current_sem === TRUE) {
+			$names = array(_("keine Auswahl"), _("vorheriges"), _("aktuelles"));
+			$values = array("", "previous", "current");
+		}
+		else {
+			$names = array(_("keine Auswahl"), _("vorheriges"), _("aktuelles"), "n&auml;chstes");
+			$values = array("", "previous", "current", "next");
+		}
+		foreach ($SEMESTER as $sem_num => $sem) {
+			$names[] = $sem["name"];
+			$values[] = $sem_num;
+		}
+		$table = $edit_form->editOptionGeneric("semstart", $title, $info, $values, $names);
+		
+		$title = _("Anzahl der anzuzeigenden Semester:");
+		$info = _("Geben Sie an, wieviele Semester (ab o.a. Startsemester) angezeigt werden sollen.");
+		$names = array(_("keine Auswahl"));
+		$values = array("");
+		$i = 1;
+		foreach ($SEMESTER as $sem_num => $sem) {
+			$names[] = $i++;
+			$values[] = $sem_num;
+		}
+		$table .= $edit_form->editOptionGeneric("semrange", $title, $info, $values, $names);
+		
+		$title = _("Umschalten des aktuellen Semesters:");
+		$info = _("Geben Sie an, wieviele Wochen vor Semesterende automatisch auf das nächste Semester umgeschaltet werden soll.");
+		$names = array(_("keine Auswahl"), _("am Semesterende"), _("1 Woche vor Semesterende"));
+		for ($i = 2; $i < 13; $i++)
+			$names[] = sprintf(_("%s Wochen vor Semesterende"), $i);
+		$values = array("", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12");
+		$table .= $edit_form->editOptionGeneric("semswitch", $title, $info, $values, $names);
 		
 		$title = _("Bezeichnung Sommersemester:");
 		$info = _("Alternative Bezeichnung für den Begriff \"Sommersemester\".");

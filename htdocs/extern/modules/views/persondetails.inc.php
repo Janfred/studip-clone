@@ -17,8 +17,11 @@ $sem_id = $args["seminar_id"];
 $db_inst =& new DB_Seminar();
 $db =& new DB_Seminar();
 
+if (!$nameformat = $this->config->getValue("Main", "nameformat"))
+	$nameformat = "full";
+
 $query_user_data = "SELECT i.Institut_id, i.Name, i.Strasse, i.Plz, i.url, ui.*, aum.*, "
-						. $_fullname_sql[$this->config->getValue("Main", "nameformat")] . " AS fullname,"
+						. $_fullname_sql[$nameformat] . " AS fullname,"
 						. "uin.user_id, uin.lebenslauf, uin.publi, uin.schwerp, uin.Home "
 						. "FROM Institute i LEFT JOIN user_inst ui USING(Institut_id) "
 	          . "LEFT JOIN auth_user_md5 aum USING(user_id) "
@@ -51,8 +54,8 @@ if(!$db_inst->num_rows() && $sem_id){
 // ist zwar global Dozent, aber an keinem Institut eingetragen
 if(!$db_inst->num_rows() && $sem_id){
 	$query = "SELECT aum.*, ";
-	$query .= $_fullname_sql[$this->config->getValue("Main", "nameformat")] . " AS fullname, ";
-	$query .= " FROM auth_user_md5 aum LEFT JOIN user_info USING(user_id) ";
+	$query .= $_fullname_sql[$nameformat] . " AS fullname ";
+	$query .= "FROM auth_user_md5 aum LEFT JOIN user_info USING(user_id) ";
 	$query .= "WHERE username = '$username' AND perms = 'dozent'";
 	$db->query($query);
 }
@@ -248,7 +251,7 @@ function kategorien (&$this, $db, $alias_content, $text_div, $text_div_end) {
 }
 
 function lehre (&$this, $db, $alias_content, $text_div, $text_div_end) {
-	global $attr_text_td, $end, $start;
+	global $attr_text_td, $end, $start, $SEMESTER;
 	$db1 = new DB_Seminar();
 	
 	if ($margin = $this->config->getValue("TableParagraphSubHeadline", "margin")) {
@@ -275,135 +278,81 @@ function lehre (&$this, $db, $alias_content, $text_div, $text_div_end) {
 	}
 	$types = implode("','", $types);
 	
-	$sem_range = $this->config->getValue("PersondetailsLectures", "semrange");
-	$now = time();
-	$i = 1;
-	$min = 0;
-	if ($sem_range == "current") {
-		foreach ($GLOBALS["SEMESTER"] as $key => $sem) {
-			if ($sem["beginn"] >= $now) {
-				$i = $key - 1;
-				break;
-			}
-		}
-		if ($i < 1)
-			return NULL;
+	$switch_time = mktime(0, 0, 0, date("m"),
+			date("d") + 7 * $this->config->getValue("PersondetailsLectures", "semswitch"), date("Y"));
+	// get current semester
+	$current_sem = get_sem_num($switch_time);
+	
+	switch ($this->config->getValue("PersondetailsLectures", "semstart")) {
+		case "previous" :
+			if (isset($SEMESTER[$current_sem - 1]))
+				$current_sem--;
+			break;
+		case "next" :
+			if (isset($SEMESTER[$current_sem + 1]))
+				$current_sem++;
+			break;
+		case "current" :
+			break;
+		default :
+			if (isset($SEMESTER[$this->config->getValue("PersondetailsLectures", "semstart")]))
+				$current_sem = $this->config->getValue("PersondetailsLectures", "semstart");
 	}
-	else if ($sem_range == "three") {
-		foreach ($GLOBALS["SEMESTER"] as $key => $sem) {
-			if ($sem["beginn"] >= $now) {
-				$i = $key;
-				$min = $key - 3;
-				break;
-			}
-		}
-		if ($i < 1)
-			return NULL;
-		if ($min < 0)
-			$min = 0;
-	}
-	else {
-		$i = sizeof($GLOBALS["SEMESTER"]);
-	}
+	
+	$last_sem = $current_sem + $this->config->getValue("PersondetailsLectures", "semrange") - 1;
+	if ($last_sem < $current_sem)
+		$last_sem = $current_sem;
+	if (!isset($SEMESTER[$last_sem]))
+		$last_sem = sizeof($SEMESTER);
 	
 	$lnk_sdet = $this->getModuleLink("Lecturedetails",
 			$this->config->getValue("LinkIntern", "config"), $this->config->getValue("LinkIntern", "srilink"));
 	$lnk_sdet .= "&seminar_id=";
 	
-	if ($sem_range != "current") {
-		$out = "";
-		for (;$min < $i; $i--) {
-			$start = $GLOBALS["SEMESTER"][$i]["beginn"];
-			$end = $GLOBALS["SEMESTER"][$i]["ende"];
-			$query = "SELECT * FROM seminar_user su LEFT JOIN seminare s USING(seminar_id) "
-		           ."WHERE user_id='".$db->f("user_id")."' AND "
-				       ."su.status LIKE 'dozent' AND ((start_time >= $start "
-				       ."AND start_time <= $end) OR (start_time <= $end "
-							 ."AND duration_time = -1)) AND s.status IN ('$types') "
-							 ."ORDER BY s.mkdate DESC";
-				
-			$db1->query($query);
-				
-			if ($db1->num_rows()) {
+	$out = "";
+	for (;$current_sem - 1 < $last_sem; $last_sem--) {
+		$query = "SELECT * FROM seminar_user su LEFT JOIN seminare s USING(seminar_id) "
+	           ."WHERE user_id='".$db->f("user_id")."' AND "
+			       ."su.status LIKE 'dozent' AND ((start_time >= {$SEMESTER[$last_sem]['beginn']} "
+			       ."AND start_time <= {$SEMESTER[$last_sem]['beginn']}) OR (start_time <= {$SEMESTER[$last_sem]['ende']} "
+						 ."AND duration_time = -1)) AND s.status IN ('$types') "
+						 ."ORDER BY s.mkdate DESC";
+			
+		$db1->query($query);
+			
+		if ($db1->num_rows()) {
+			if (!($this->config->getValue("PersondetailsLectures", "semstart") == "current"
+					&& $this->config->getValue("PersondetailsLectures", "semrange") == 1)) {
 				$out .= "<tr" . $this->config->getAttributes("TableParagraphSubHeadline", "tr") . ">";
 				$out .= "<td" . $this->config->getAttributes("TableParagraphSubHeadline", "td") . ">";
 				$out .= $subheadline_div;
 				$out .= "<font" . $this->config->getAttributes("TableParagraphSubHeadline", "font") . ">";
-				$month = date("n", $start);
+				$month = date("n", $SEMESTER[$last_sem]['beginn']);
 				if($month > 9) {
 					$out .= $this->config->getValue("PersondetailsLectures", "aliaswise");
-					$out .= date(" Y/", $start) . date("y",$end);
+					$out .= date(" Y/", $SEMESTER[$last_sem]['beginn']) . date("y", $SEMESTER[$last_sem]['ende']);
 				}
 				else if($month > 3 && $month < 10) {
 					$out .= $this->config->getValue("PersondetailsLectures", "aliassose");
-					$out .= date(" Y", $start);
+					$out .= date(" Y", $SEMESTER[$last_sem]['beginn']);
 				}
 				$out .= "</font>$subheadline_div_end</td></tr>\n";
-				$out .= "<tr" . $this->config->getAttributes("TableParagraphText", "tr") . ">";
-				$out .= "<td" . $this->config->getAttributes("TableParagraphText", "td") . ">";
-
-				if ($this->config->getValue("PersondetailsLectures", "aslist")) {
-					$out .= "$list_div<ul" . $this->config->getAttributes("List", "ul") . ">\n";
-					while ($db1->next_record()) {
-						$lnk = $lnk_sdet . $db1->f("Seminar_id");
-						$out .= "<li" . $this->config->getAttributes("List", "li") . ">";
-						$out .= "<font" . $this->config->getAttributes("LinkIntern", "font") . ">";
-						$out .= "<a href=\"$lnk\"" . $this->config->getAttributes("LinkIntern", "a") . ">";
-						$out .= htmlReady($db1->f("Name"), TRUE) . "</a></font>\n";
-						if ($db1->f("Untertitel") != "") {
-							$out .= "<font" . $this->config->getAttributes("TableParagraphText", "font") . "><br>";
-							$out .= htmlReady($db1->f("Untertitel"), TRUE) . "</font>\n";
-						}
-					}
-					$out .= "</ul>$list_div_end";
-				}
-				else {
-					$out .= $text_div;
-					$j = 0;
-					while ($db1->next_record()) {
-						if ($j) $out .= "<br><br>";
-						$lnk = $lnk_sdet . $db1->f("Seminar_id");
-						$out .= "<font" . $this->config->getAttributes("LinkIntern", "font") . ">";
-						$out .= "<a href=\"$lnk\"" . $this->config->getAttributes("LinkIntern", "a") . ">";
-						$out .= htmlReady($db1->f("Name"), TRUE) . "</a></font>\n";
-						if($db1->f("Untertitel") != "") {
-							$out .= "<font" . $this->config->getAttributes("TableParagraphText", "font") . ">";
-							$out .= "<br>" . htmlReady($db1->f("Untertitel"), TRUE) . "</font>\n";
-						}
-						$j = 1;
-					}
-					$out .= $text_div_end;
-				}
-				$out .= "</td></tr>\n";
 			}
-		}
-	}
-	else {
-		$start = $GLOBALS["SEMESTER"][$i]["beginn"];
-		$end = $GLOBALS["SEMESTER"][$i]["ende"];
-		$out = "";
-		$db1->query("SELECT * FROM seminar_user su LEFT JOIN seminare s USING(seminar_id) "
-		  	        ."WHERE user_id LIKE '".$db->f("user_id")."' AND "
-					      ."su.status LIKE 'dozent' AND ((start_time >= $start "
-				       	."AND start_time <= $end) OR (start_time <= $end "
-							 	."AND duration_time = -1)) AND s.status IN ('$types') "
-								."ORDER BY s.mkdate DESC");
-
-		if ($db1->num_rows()) {
+			
 			$out .= "<tr" . $this->config->getAttributes("TableParagraphText", "tr") . ">";
 			$out .= "<td" . $this->config->getAttributes("TableParagraphText", "td") . ">";
-			
+
 			if ($this->config->getValue("PersondetailsLectures", "aslist")) {
-				$out .= "$list_div<ul" . $this->config->getAttributes("List", "ul") . ">";
+				$out .= "$list_div<ul" . $this->config->getAttributes("List", "ul") . ">\n";
 				while ($db1->next_record()) {
 					$lnk = $lnk_sdet . $db1->f("Seminar_id");
 					$out .= "<li" . $this->config->getAttributes("List", "li") . ">";
 					$out .= "<font" . $this->config->getAttributes("LinkIntern", "font") . ">";
 					$out .= "<a href=\"$lnk\"" . $this->config->getAttributes("LinkIntern", "a") . ">";
 					$out .= htmlReady($db1->f("Name"), TRUE) . "</a></font>\n";
-					if($db1->f("Untertitel") != "") {
-						$out .= "<font" . $this->config->getAttributes("TableParagraphText", "font") . ">";
-						$out .= "<br>" . htmlReady($db1->f("Untertitel"), TRUE) . "</font>\n";
+					if ($db1->f("Untertitel") != "") {
+						$out .= "<font" . $this->config->getAttributes("TableParagraphText", "font") . "><br>";
+						$out .= htmlReady($db1->f("Untertitel"), TRUE) . "</font>\n";
 					}
 				}
 				$out .= "</ul>$list_div_end";
@@ -416,10 +365,10 @@ function lehre (&$this, $db, $alias_content, $text_div, $text_div_end) {
 					$lnk = $lnk_sdet . $db1->f("Seminar_id");
 					$out .= "<font" . $this->config->getAttributes("LinkIntern", "font") . ">";
 					$out .= "<a href=\"$lnk\"" . $this->config->getAttributes("LinkIntern", "a") . ">";
-					$out .= htmlReady($db1->f("Name"), TRUE) . "</a></font><br>\n";
+					$out .= htmlReady($db1->f("Name"), TRUE) . "</a></font>\n";
 					if($db1->f("Untertitel") != "") {
 						$out .= "<font" . $this->config->getAttributes("TableParagraphText", "font") . ">";
-						$out .= htmlReady($db1->f("Untertitel"), TRUE) . "</font>\n";
+						$out .= "<br>" . htmlReady($db1->f("Untertitel"), TRUE) . "</font>\n";
 					}
 					$j = 1;
 				}
@@ -428,6 +377,7 @@ function lehre (&$this, $db, $alias_content, $text_div, $text_div_end) {
 			$out .= "</td></tr>\n";
 		}
 	}
+	
 	if ($out) {
 		$out_title = "<tr><td width=\"100%\">\n";
 		$out_title .= "<table" . $this->config->getAttributes("TableParagraph", "table") . ">\n";

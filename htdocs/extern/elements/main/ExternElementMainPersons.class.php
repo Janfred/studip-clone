@@ -74,7 +74,7 @@ class ExternElementMainPersons extends ExternElementMain {
 			"groupsvisible" => $groups,
 			"grouping" => "1",
 			"wholesite" => "",
-			"nameformat" => "no_title",
+			"nameformat" => "",
 			"repeatheadrow" => "",
 			"urlcss" => "",
 			"title" => _("MitarbeiterInnen"),
@@ -141,8 +141,8 @@ class ExternElementMainPersons extends ExternElementMain {
 		
 		$title = _("Namensformat:");
 		$info = _("Wählen Sie, wie Personennamen formatiert werden sollen.");
-		$values = array("no_title_short", "no_title", "no_title_rev", "full", "full_rev");
-		$names = array(_("Meyer, P."), _("Peter Meyer"), _("Meyer Peter"),
+		$values = array("", "no_title_short", "no_title", "no_title_rev", "full", "full_rev");
+		$names = array(_("keine Auswahl"), _("Meyer, P."), _("Peter Meyer"), _("Meyer Peter"),
 				_("Dr. Peter Meyer"), _("Meyer, Peter, Dr."));
 		$table = $edit_form->editOptionGeneric("nameformat", $title, $info, $values, $names);
 		
@@ -181,12 +181,12 @@ class ExternElementMainPersons extends ExternElementMain {
 		if ($attribute == "grouping") {
 			// This is especially for checkbox-values. If there is no checkbox
 			// checked, the variable is not declared and it is necessary to set the
-			// variable to 0.
+			// variable to "".
 			if (!isset($GLOBALS["HTTP_POST_VARS"][$this->name . "_" . $attribute])) {
-				$GLOBALS["HTTP_POST_VARS"][$this->name . "_" . $attribute] = 0;
+				$GLOBALS["HTTP_POST_VARS"][$this->name . "_" . $attribute] = "";
 				return FALSE;
 			}
-			return !($value == "1" || $value == "0");
+			return !($value == "1" || $value == "");
 		}
 		
 		return FALSE;

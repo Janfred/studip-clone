@@ -84,7 +84,9 @@ class ExternModuleDownload extends ExternModule {
 					$this->config->getAttributes("Body", "body"));
 		}
 		
-		init_i18n($this->config->getValue("Main", "language"));
+		if (!$language = $this->config->getValue("Main", "language"))
+			$language = "de_DE";
+		init_i18n($language);
 		
 		echo $this->toString();
 		
@@ -97,7 +99,9 @@ class ExternModuleDownload extends ExternModule {
 				$this->config->getValue("Main", "urlcss"),
 				$this->config->getAttributes("Body", "body"));
 		
-		init_i18n($this->config->getValue("Main", "language"));
+		if (!$language = $this->config->getValue("Main", "language"))
+			$language = "de_DE";
+		init_i18n($language);
 		
 		echo $this->toStringPreview();
 		

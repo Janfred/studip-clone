@@ -68,9 +68,9 @@ class ExternElementMainNews extends ExternElementMain {
 			"sort" => "|1|0",
 			"wholesite" => "",
 			"studiplink" => "top",
-			"nameformat" => "no_title",
+			"nameformat" => "",
 			"dateformat" => "%d. %b. %Y",
-			"language" => "de_DE",
+			"language" => "",
 			"urlcss" => "",
 			"title" => _("News"),
 			"nodatatext" => _("Keine aktuellen News")
@@ -112,8 +112,8 @@ class ExternElementMainNews extends ExternElementMain {
 		
 		$title = _("Namensformat:");
 		$info = _("Wählen Sie, wie Personennamen formatiert werden sollen.");
-		$values = array("no_title_short", "no_title", "no_title_rev", "full", "full_rev", "last");
-		$names = array(_("Meyer, P."), _("Peter Meyer"), _("Meyer Peter"),
+		$values = array("", "no_title_short", "no_title", "no_title_rev", "full", "full_rev", "last");
+		$names = array(_("keine Auswahl"), _("Meyer, P."), _("Peter Meyer"), _("Meyer Peter"),
 				_("Dr. Peter Meyer"), _("Meyer, Peter, Dr."), _("Meyer"));
 		$table = $edit_form->editOptionGeneric("nameformat", $title, $info, $values, $names);
 		
@@ -126,8 +126,8 @@ class ExternElementMainNews extends ExternElementMain {
 		
 		$title = _("Sprache:");
 		$info = _("Wählen Sie eine Sprache für die Datumsangaben aus.");
-		$values = array("de_DE", "en_GB");
-		$names = array(_("Deutsch"), _("Englisch"));
+		$values = array("", "de_DE", "en_GB");
+		$names = array(_("keine Auswahl"), _("Deutsch"), _("Englisch"));
 		$table .= $edit_form->editOptionGeneric("language", $title, $info, $values, $names);
 		
 		$title = _("Stud.IP-Link:");

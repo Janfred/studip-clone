@@ -113,6 +113,7 @@ class ExternModuleGlobal extends ExternModule {
 				"TextGlobal",
 				"LinksGlobal"
 			);
+		
 		foreach ($element_names as $element_name) {
 			$registered_elements[$element_name] = $this->registered_elements[$element_name];
 			$elements[$element_name] = $this->elements[$element_name];
@@ -142,6 +143,8 @@ class ExternModuleGlobal extends ExternModule {
 	}
 	
 	function globalConfigMapping ($element_name = "", $values = "") {
+		$elements_map["PersondetailsLectures"][] = $this->elements["Main"];
+		
 		$elements_map["Body"][] = $this->elements["PageBodyGlobal"];
 		$elements_map["TableHeader"][] = $this->elements["MainTableHeaderGlobal"];
 		
@@ -150,6 +153,9 @@ class ExternModuleGlobal extends ExternModule {
 		
 		$elements_map["TableRow"][] = $this->elements["TableRowGlobal"];
 		$elements_map["TableRow"][] = $this->elements["TextGlobal"];
+		
+		$elements_map["TableGroup"][] = $this->elements["TableGrouprowGlobal"];
+		$elements_map["TableGroup"][] = $this->elements["Headline2TextGlobal"];
 		
 		$elements_map["Grouping"][] = $this->elements["TableGrouprowGlobal"];
 		$elements_map["Grouping"][] = $this->elements["Headline2TextGlobal"];

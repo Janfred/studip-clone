@@ -38,7 +38,6 @@ class ExternSemBrowse extends SemBrowse {
 		// get current semester
 		$current_sem = get_sem_num($switch_time);
 		
-		
 		switch ($this->config->getValue("Main", "semstart")) {
 			case "previous" :
 				if (isset($SEMESTER[$current_sem - 1]))
@@ -56,6 +55,8 @@ class ExternSemBrowse extends SemBrowse {
 		}
 		
 		$last_sem = $current_sem + $this->config->getValue("Main", "semrange") - 1;
+		if ($last_sem < $current_sem)
+			$last_sem = $current_sem;
 		if (!isset($SEMESTER[$last_sem]))
 			$last_sem = sizeof($SEMESTER);
 		
@@ -94,10 +95,13 @@ class ExternSemBrowse extends SemBrowse {
 			if (!$this->config->getValue("Main", "allseminars")) {
 				$sem_inst_query = " AND seminare.Institut_id='{$this->config->range_id}' ";
 			}
-			
+			if (!$nameformat = $this->config->getValue("Main", "nameformat"))
+				$nameformat = "no_title_short";
 			$query = "SELECT seminare.Seminar_id, seminare.status, seminare.Name, seminare.metadata_dates 
 				, Institute.Name AS Institut,Institute.Institut_id,
-				seminar_sem_tree.sem_tree_id AS bereich, " . $_fullname_sql['no_title_short'] ." AS fullname, auth_user_md5.username,
+				seminar_sem_tree.sem_tree_id AS bereich, "
+				. $_fullname_sql[$nameformat]
+				. " AS fullname, auth_user_md5.username,
 				" . $_views['sem_number_sql'] . " AS sem_number, " . $_views['sem_number_end_sql'] . " AS sem_number_end FROM seminare 
 				LEFT JOIN seminar_user ON (seminare.Seminar_id=seminar_user.Seminar_id AND seminar_user.status='dozent') 
 				LEFT JOIN auth_user_md5 USING (user_id) 

@@ -34,35 +34,35 @@ class ExternSemBrowseTable extends SemBrowse {
 			}
 		}
 		
-		// current semester
-		$now = time();
-		foreach ($SEMESTER as $key => $sem) {
-			if ($sem["beginn"] >= $now)
+		$switch_time = mktime(0, 0, 0, date("m"),
+				date("d") + 7 * $this->module->config->getValue("Main", "semswitch"), date("Y"));
+		// get current semester
+		$current_sem = get_sem_num($switch_time);
+		
+		switch ($this->module->config->getValue("Main", "semstart")) {
+			case "previous" :
+				if (isset($SEMESTER[$current_sem - 1]))
+					$current_sem--;
 				break;
+			case "next" :
+				if (isset($SEMESTER[$current_sem + 1]))
+					$current_sem++;
+				break;
+			case "current" :
+				break;
+			default :
+				if (isset($SEMESTER[$this->module->config->getValue("Main", "semstart")]))
+					$current_sem = $this->module->config->getValue("Main", "semstart");
 		}
-		$key--;
-		$semrange = $this->module->config->getValue("Main", "semrange");
-		switch ($semrange) {
-			case "current":
-			$this->sem_number[0] = $key;
-			break;
-			case "three":
-			if ($key == 1){
-				$this->sem_number[0] = 2;
-				$this->sem_number[1] = 1;
-			} elseif($key == count($SEMESTER)-1) {
-				$this->sem_number[0] = $key;
-				$this->sem_number[1] = $key-1;
-			} else {
-				$this->sem_number[0] = $key+1;
-				$this->sem_number[1] = $key;
-				$this->sem_number[2] = $key-1;
-			}
-			break;
-			case "all":
-			$this->sem_number = false;
-			break;
-		}
+		
+		$last_sem = $current_sem + $this->module->config->getValue("Main", "semrange") - 1;
+		if ($last_sem < $current_sem)
+			$last_sem = $current_sem;
+		if (!isset($SEMESTER[$last_sem]))
+			$last_sem = sizeof($SEMESTER);
+		
+		for ($i = $last_sem; $i >= $current_sem; $i--)
+			$this->sem_number[] = $i;
 		
 		$semclasses = $this->module->config->getValue("Main", "semclasses");
 		foreach ($SEM_TYPE as $key => $type) {
@@ -70,8 +70,7 @@ class ExternSemBrowseTable extends SemBrowse {
 				$this->sem_browse_data['sem_status'][] = $key;
 		}
 		
-		$this->get_sem_range_tree($start_item_id, true);
-				
+		$this->get_sem_range_tree($start_item_id, true);		
 	}
 	
 	function print_result () {
@@ -102,10 +101,12 @@ class ExternSemBrowseTable extends SemBrowse {
 			if (!$this->module->config->getValue("Main", "allseminars")){
 				$sem_inst_query = " AND seminar_inst.Institut_id='{$this->module->config->range_id}' ";
 			}
+			if (!$nameformat = $this->module->config->getValue("Main", "nameformat"))
+				$nameformat = "no_title_short";
 			
 			$query = ("SELECT seminare.* 
 				, Institute.Name AS Institut,Institute.Institut_id,
-				seminar_sem_tree.sem_tree_id AS bereich, " . $_fullname_sql['no_title_short'] ." AS fullname, auth_user_md5.username,
+				seminar_sem_tree.sem_tree_id AS bereich, " . $_fullname_sql[$nameformat] ." AS fullname, auth_user_md5.username,
 				" . $_views['sem_number_sql'] . " AS sem_number, " . $_views['sem_number_end_sql'] . " AS sem_number_end FROM seminare 
 				LEFT JOIN seminar_user ON (seminare.Seminar_id=seminar_user.Seminar_id AND seminar_user.status='dozent') 
 				LEFT JOIN auth_user_md5 USING (user_id) 
@@ -203,12 +204,16 @@ class ExternSemBrowseTable extends SemBrowse {
 	//		if ($generic_datafields = $this->module->config->getValue("Main", "genericdatafields"))
 		//		$datafields_obj =& new DataFields();
 			
-			$info = "&nbsp;" . count($sem_data);
-			$info .= $this->module->config->getValue("Main", "textlectures");
-			$info .= ", " . $this->module->config->getValue("Main", "textgrouping");
-			$group_by_name = $this->module->config->getValue("Main", "aliasesgrouping");
-			$info .= $group_by_name[$this->sem_browse_data['group_by']];
-			$out = $this->module->elements["InfoCountSem"]->toString(array("content" => $info));
+			if ($this->module->config->getValue("Main", "addinfo")) {
+				$info = "&nbsp;" . count($sem_data);
+				$info .= $this->module->config->getValue("Main", "textlectures");
+				$info .= ", " . $this->module->config->getValue("Main", "textgrouping");
+				$group_by_name = $this->module->config->getValue("Main", "aliasesgrouping");
+				$info .= $group_by_name[$this->sem_browse_data['group_by']];
+				$out = $this->module->elements["InfoCountSem"]->toString(array("content" => $info));
+			}
+			else
+				$out = "";
 			
 			$first_loop = TRUE;
 			$repeat_headrow = $this->module->config->getValue("Main", "repeatheadrow");
@@ -274,7 +279,10 @@ class ExternSemBrowseTable extends SemBrowse {
 							}
 							$data["content"]["dozent"] .= ") ";
 						}
-						$data["content"]["Name"] = htmlReady($sem_name);
+						
+						$data["content"]["Name"] = $this->module->elements["SemLink"]->toString(
+								array("module" => "Lecturedetails", "link_args" => "seminar_id=$seminar_id",
+								"content" => htmlReady($sem_name)));
 						$data["content"]["VeranstaltungsNummer"] =
 								htmlReady(key($sem_data[$seminar_id]["VeranstaltungsNummer"]));
 						$data["content"]["Untertitel"] = htmlReady(key($sem_data[$seminar_id]["Untertitel"]));

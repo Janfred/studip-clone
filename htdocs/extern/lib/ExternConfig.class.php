@@ -350,9 +350,13 @@ class ExternConfig {
 	function setGlobalConfig ($global_config, $registered_elements) {
 		$this->global_id = $global_config->getId();
 		
-		// the name of the global configuration has to be deleted to prevent
-		// overwriting the name of the main configuration
-		$global_config->config["Main"]["name"] = "";
+		// the name of the global configuration has to be overwritten by the
+		// the name of the main configuration
+		$global_config->config["Main"]["name"] = $this->config["Main"]["name"];
+		
+		// The Main-element is not a registered element, because it is part of every
+		// module. So register it now.
+		$registered_elements[] = "Main";
 		
 		foreach ($registered_elements as $name => $element) {
 			if ((is_int($name) || !$name) && $this->config[$element]) {
@@ -364,7 +368,7 @@ class ExternConfig {
 			else if ($this->config["name"]) {
 				foreach ($this->config[$name] as $attribute => $value) {
 					if ($value === "")
-						$this->config[$name] = $global_config->config[$element][$attribute];
+						$this->config[$name][$attribute] = $global_config->config[$element][$attribute];
 				}
 			}
 		}

@@ -39,9 +39,10 @@ require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."
 
 class ExternElementMainLecturedetails extends ExternElementMain {
 
-	var $attributes = array("name", "genericdatafields", "order", "visible", "aliases", "aliaspredisc", 
-			"aliasfirstmeeting", "headlinerow", "rangepathlevel", "studipinfo",
-			"studiplink", "wholesite", "nameformat", "urlcss", "title", "language");
+	var $attributes = array("name", "genericdatafields", "order", "visible", "aliases",
+			"aliaspredisc", "aliasfirstmeeting", "headlinerow", "rangepathlevel", "studipinfo" ,
+			"studiplink", "studiplinktarget", "wholesite", "nameformat", "urlcss", "title",
+			"language");
 	
 	/**
 	* Constructor
@@ -71,11 +72,12 @@ class ExternElementMainLecturedetails extends ExternElementMain {
 			"rangepathlevel" => "1",
 			"studipinfo" => "1",
 			"studiplink" => "top",
+			"studiplinktarget" => "admin",
 			"wholesite" => "",
-			"nameformat" => "no_title",
+			"nameformat" => "",
 			"urlcss" => "",
 			"title" => _("Veranstaltungsdaten"),
-			"language" => "de_DE"
+			"language" => ""
 		);
 		
 	//	get_default_generic_datafields($config, "sem");
@@ -153,6 +155,12 @@ class ExternElementMainLecturedetails extends ExternElementMain {
 		$names = array(_("oberhalb"), _("unterhalb der Tabelle"), _("ausblenden"));
 		$table .= $edit_form->editRadioGeneric("studiplink", $title, $info, $value, $names);
 		
+		$title = _("Stud.IP-Link-Ziel:");
+		$info = _("Ziel des Stud.IP-Links. Entweder direkter Einsprung auf die Startseite oder in den Administrationsbereich (nur für berechtigte Nutzer) der Veranstaltung");
+		$value = array("quickinfo", "admin");
+		$names = array(_("Startseite"), _("Administrationsbereich"));
+		$table .= $edit_form->editRadioGeneric("studiplinktarget", $title, $info, $value, $names);
+		
 		$title = _("HTML-Header/Footer:");
 		$info = _("Anwählen, wenn die Seite als komplette HTML-Seite ausgegeben werden soll, z.B. bei direkter Verlinkung oder in einem Frameset.");
 		$values = "1";
@@ -161,15 +169,15 @@ class ExternElementMainLecturedetails extends ExternElementMain {
 		
 		$title = _("Namensformat:");
 		$info = _("Wählen Sie, wie Personennamen formatiert werden sollen.");
-		$values = array("no_title_short", "no_title", "no_title_rev", "full", "full_rev");
-		$names = array(_("Meyer, P."), _("Peter Meyer"), _("Meyer Peter"),
+		$values = array("", "no_title_short", "no_title", "no_title_rev", "full", "full_rev");
+		$names = array(_("keine Auswahl"), _("Meyer, P."), _("Peter Meyer"), _("Meyer Peter"),
 				_("Dr. Peter Meyer"), _("Meyer, Peter, Dr."));
 		$table .= $edit_form->editOptionGeneric("nameformat", $title, $info, $values, $names);
 		
 		$title = _("Sprache:");
 		$info = _("Wählen Sie eine Sprache für die Datumsangaben aus.");
-		$values = array("de_DE", "en_GB");
-		$names = array(_("Deutsch"), _("Englisch"));
+		$values = array("", "de_DE", "en_GB");
+		$names = array(_("keine Auswahl"), _("Deutsch"), _("Englisch"));
 		$table .= $edit_form->editOptionGeneric("language", $title, $info, $values, $names);
 		
 		$title = _("Stylesheet-Datei:");
@@ -195,12 +203,12 @@ class ExternElementMainLecturedetails extends ExternElementMain {
 		if ($attribute == "studipinfo" || $attribute == "headlinerow") {
 			// This is especially for checkbox-values. If there is no checkbox
 			// checked, the variable is not declared and it is necessary to set the
-			// variable to 0.
+			// variable to "".
 			if (!isset($GLOBALS["HTTP_POST_VARS"][$this->name . "_" . $attribute])) {
-				$GLOBALS["HTTP_POST_VARS"][$this->name . "_" . $attribute] = 0;
+				$GLOBALS["HTTP_POST_VARS"][$this->name . "_" . $attribute] = "";
 				return FALSE;
 			}
-			return !($value == "1" || $value == "0");
+			return !($value == "1" || $value == "");
 		}
 		
 		return FALSE;

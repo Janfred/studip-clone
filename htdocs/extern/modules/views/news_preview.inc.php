@@ -44,6 +44,9 @@ for ($n = 0; $n < 3; $n++) {
 		case "last" :
 			$content_data[$n]["fullname"] = _("Meyer");
 			break;
+		default :
+			$content_data[$n]["fullname"] = _("Peter Meyer");
+			break;
 	}
 }
 

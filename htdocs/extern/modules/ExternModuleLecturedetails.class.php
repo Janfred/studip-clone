@@ -120,8 +120,9 @@ class ExternModuleLecturedetails extends ExternModule {
 					$this->config->getValue("Main", "urlcss"),
 					$this->config->getAttributes("Body", "body"));
 		}
-		
-		init_i18n($this->config->getValue("Main", "language"));
+		if (!$language = $this->config->getValue("Main", "language"))
+			$language = "de_DE";
+		init_i18n($language);
 		
 		echo $this->toString($args);
 		
@@ -131,14 +132,20 @@ class ExternModuleLecturedetails extends ExternModule {
 	
 	function printoutPreview () {
 		global $ABSOLUTE_PATH_STUDIP;
-		echo html_header($this->config->getValue("Main", "title"),
-				$this->config->getValue("Main", "urlcss"),
-				$this->config->getAttributes("Body", "body"));
+		if ($this->config->getValue("Main", "wholesite")) {
+			echo html_header($this->config->getValue("Main", "title"),
+					$this->config->getValue("Main", "urlcss"),
+					$this->config->getAttributes("Body", "body"));
+		}
+		if (!$language = $this->config->getValue("Main", "language"))
+			$language = "de_DE";
+		init_i18n($language);
 		
 		include($GLOBALS["ABSOLUTE_PATH_STUDIP"] . $GLOBALS["RELATIVE_PATH_EXTERN"]
 				. "/modules/views/lecturedetails_preview.inc.php");
-		
-		echo html_footer();
+				
+		if ($this->config->getValue("Main", "wholesite"))
+			echo html_footer();
 	}
 	
 	function toString ($args) {
@@ -404,7 +411,9 @@ class ExternModuleLecturedetails extends ExternModule {
 				$studip_link = "";
 			else {
 				$studip_link = "http://{$GLOBALS['EXTERN_SERVER_NAME']}seminar_main.php?&auswahl=";
-				$studip_link .= $this->seminar_id . "&redirect_to=admin_seminare1.php&login=true&new_sem=TRUE";
+				$studip_link .= $this->seminar_id;
+				if ($this->config->getValue("Main", "studiplinktarget") != "quickinfo")
+					$studip_link .= "&redirect_to=admin_seminare1.php&login=true&new_sem=TRUE";
 			}
 			if ($this->config->getValue("Main", "studiplink") == "top") {
 				$args = array("width" => "100%", "height" => "40", "link" => $studip_link);

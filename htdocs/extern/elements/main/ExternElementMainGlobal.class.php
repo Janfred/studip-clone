@@ -34,12 +34,15 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
+global $ABSOLUTE_PATH_STUDIP, $RELATIVE_PATH_EXTERN;
 
-require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."/lib/ExternElementMain.class.php");
+require_once($ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_EXTERN."/lib/ExternElementMain.class.php");
+require_once($ABSOLUTE_PATH_STUDIP."dates.inc.php");
 
 class ExternElementMainGlobal extends ExternElementMain {
 
-	var $attributes = array("name", "nameformat", "language", "wholesite", "urlcss");
+	var $attributes = array("name", "semstart", "semrange", "semswitch",
+			"nameformat", "language", "wholesite", "urlcss");
 	
 	/**
 	* Constructor
@@ -57,9 +60,12 @@ class ExternElementMainGlobal extends ExternElementMain {
 		
 		$config = array(
 			"name" => "",
+			"semstart" => "",
+			"semrange" => "",
+			"semswitch" => "",
 			"wholesite" => "",
-			"nameformat" => "no_title",
-			"language" => "de_DE",
+			"nameformat" => "",
+			"language" => "",
 			"urlcss" => "",
 		);
 				
@@ -71,6 +77,8 @@ class ExternElementMainGlobal extends ExternElementMain {
 	*/
 	function toStringEdit ($post_vars = "", $faulty_values = "",
 			$edit_form = "", $anker = "") {
+		
+		global $SEMESTER;
 		
 		$out = "";
 		$table = "";
@@ -87,19 +95,64 @@ class ExternElementMainGlobal extends ExternElementMain {
 		$content_table = $edit_form->editContentTable($headline, $table);
 		$content_table .= $edit_form->editBlankContent();
 		
+		$headline = $edit_form->editHeadline(_("Anzuzeigende Lehrveranstaltungen"));
+		
+		$title = _("Startsemester:");
+		$info = _("Geben Sie das erste anzuzeigende Semester an. Die Angaben \"vorheriges\", \"aktuelles\" und \"nächstes\" beziehen sich immer auf das laufende Semester und werden automatisch angepasst.");
+		$current_sem = get_sem_num_sem_browse();
+		if ($current_sem === FALSE) {
+			$names = array(_("keine Auswahl"), _("aktuelles"), _("n&auml;chstes"));
+			$values = array("", "current", "next");
+		}
+		else if ($current_sem === TRUE) {
+			$names = array(_("keine Auswahl"), _("vorheriges"), _("aktuelles"));
+			$values = array("", "previous", "current");
+		}
+		else {
+			$names = array(_("keine Auswahl"), _("vorheriges"), _("aktuelles"), "n&auml;chstes");
+			$values = array("", "previous", "current", "next");
+		}
+		foreach ($SEMESTER as $sem_num => $sem) {
+			$names[] = $sem["name"];
+			$values[] = $sem_num;
+		}
+		$table = $edit_form->editOptionGeneric("semstart", $title, $info, $values, $names);
+		
+		$title = _("Anzahl der anzuzeigenden Semester:");
+		$info = _("Geben Sie an, wieviele Semester (ab o.a. Startsemester) angezeigt werden sollen.");
+		$names = array(_("keine Auswahl"));
+		$values = array("");
+		$i = 1;
+		foreach ($SEMESTER as $sem_num => $sem) {
+			$names[] = $i++;
+			$values[] = $sem_num;
+		}
+		$table .= $edit_form->editOptionGeneric("semrange", $title, $info, $values, $names);
+		
+		$title = _("Umschalten des aktuellen Semesters:");
+		$info = _("Geben Sie an, wieviele Wochen vor Semesterende automatisch auf das nächste Semester umgeschaltet werden soll.");
+		$names = array(_("keine Auswahl"), _("am Semesterende"), _("1 Woche vor Semesterende"));
+		for ($i = 2; $i < 13; $i++)
+			$names[] = sprintf(_("%s Wochen vor Semesterende"), $i);
+		$values = array("", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12");
+		$table .= $edit_form->editOptionGeneric("semswitch", $title, $info, $values, $names);
+		
+		$content_table .= $edit_form->editContentTable($headline, $table);
+		$content_table .= $edit_form->editBlankContent();
+		
 		$headline = $edit_form->editHeadline(_("Weitere Angaben"));
 		
 		$title = _("Namensformat:");
 		$info = _("Wählen Sie, wie Personennamen formatiert werden sollen.");
-		$values = array("no_title_short", "no_title", "no_title_rev", "full", "full_rev");
-		$names = array(_("Meyer, P."), _("Peter Meyer"), _("Meyer Peter"),
+		$values = array("", "no_title_short", "no_title", "no_title_rev", "full", "full_rev");
+		$names = array(_("keine Auswahl"), _("Meyer, P."), _("Peter Meyer"), _("Meyer Peter"),
 				_("Dr. Peter Meyer"), _("Meyer, Peter, Dr."));
 		$table = $edit_form->editOptionGeneric("nameformat", $title, $info, $values, $names);
 		
 		$title = _("Sprache:");
 		$info = _("Wählen Sie eine Sprache für die Datumsangaben aus.");
-		$values = array("de_DE", "en_GB");
-		$names = array(_("Deutsch"), _("Englisch"));
+		$values = array("", "de_DE", "en_GB");
+		$names = array(_("keine Auswahl"), _("Deutsch"), _("Englisch"));
 		$table .= $edit_form->editOptionGeneric("language", $title, $info, $values, $names);
 		
 		$title = _("HTML-Header/Footer:");
@@ -123,8 +176,19 @@ class ExternElementMainGlobal extends ExternElementMain {
 		return $element_headline . $out;
 	}
 	
-	function checkValue ($attribute, $value) {}
-	
+	function checkFormValues () {
+		if ($fault = parent::checkFormValues()) {
+		
+			if ($HTTP_POST_VARS["Main_nameformat"] == ""
+					&& $fault["Main_nameformat"][0] == TRUE) {
+				$fault["Main_nameformat"][0] = FALSE;
+			}
+			
+			return $fault;
+		}
+		
+		return FALSE;
+	}	
 	
 }
 

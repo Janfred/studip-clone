@@ -83,7 +83,7 @@ class ExternModuleNewsticker extends ExternModule {
 		$db = new DB_Seminar();
 		$db->query("SELECT news.topic FROM news_range LEFT JOIN news USING(news_id) WHERE range_id LIKE '{$this->config->range_id}' AND date < $now AND (date+expire) > $now ORDER BY date DESC");
 		while ($db->next_record())
-			$topics = "'" . addslashes($db->f("topic")) . "'";
+			$topics[] = "'" . addslashes($db->f("topic")) . "'";
 		
 		if (!$db->num_rows())
 			$topics[] = "'" . $this->config->getValue("Main", "nodatatext") . "'";

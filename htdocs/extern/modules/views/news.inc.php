@@ -22,7 +22,8 @@ if ($query_order) {
 	$query_order = " ORDER BY " . implode(",", $query_order) . " DESC";
 }
 
-$nameformat = $this->config->getValue("Main", "nameformat");
+if (!$nameformat = $this->config->getValue("Main", "nameformat"))
+	$nameformat = "no_title";
 $now = time();
 if ($nametitel == "last") {
 	$query = "SELECT n.*, aum.Nachname AS name, aum.username FROM news_range nr LEFT JOIN "

@@ -96,6 +96,9 @@ foreach ($order as $position) {
 					case "full_rev" :
 						$data["fullname"] = _("Meyer, Peter, Dr.");
 						break;
+					default :
+						$data["fullname"] = _("Dr. Peter Meyer");
+						break;
 				}
 				$data["Name"] = _("Mustereinrichtung");
 				$data["Strasse"] = _("Musterstra&szlig;e");
@@ -108,9 +111,6 @@ foreach ($order as $position) {
 				$data["sprechzeiten"] = _("Mo. und Do. 12.00 - 13.00");
 				break;
 		}
-		
-		
-		
 			
 		if ($first_loop) {
 			echo "<table" . $this->config->getAttributes("TableHeader", "table") . ">\n";
@@ -123,22 +123,29 @@ foreach ($order as $position) {
 			$first_loop = FALSE;
 		}
 		
-		if (($data_field == "lebenslauf" || $data_field == "schwerp"
-				|| $data_field == "publi")) {
-			echo "\n<tr><td width=\"100%\">\n";
-			echo "<table" . $this->config->getAttributes("TableParagraph", "table") . ">\n";
-			echo "<tr" . $this->config->getAttributes("TableParagraphHeadline", "tr");
-			echo "><td" . $this->config->getAttributes("TableParagraphHeadline", "td");
-			echo "><font" . $this->config->getAttributes("TableParagraphHeadline", "font") . ">\n";
-			echo $aliases_content[$position] . "</font></td></tr>\n";
-			echo "<tr" . $this->config->getAttributes("TableParagraphText", "tr") . ">";
-			echo "<td" . $this->config->getAttributes("TableParagraphText", "td") . ">";
-			echo "$text_div<font" . $this->config->getAttributes("TableParagraphText", "font") . ">\n";
-			echo $data["content"];
-			echo "</font>$text_div_end</td></tr>\n</table>\n</td></tr>\n";
+		switch ($data_field) {
+			case "lebenslauf" :
+			case "schwerp" :
+			case "publi" :
+				echo "\n<tr><td width=\"100%\">\n";
+				echo "<table" . $this->config->getAttributes("TableParagraph", "table") . ">\n";
+				echo "<tr" . $this->config->getAttributes("TableParagraphHeadline", "tr");
+				echo "><td" . $this->config->getAttributes("TableParagraphHeadline", "td");
+				echo "><font" . $this->config->getAttributes("TableParagraphHeadline", "font") . ">\n";
+				echo $aliases_content[$position] . "</font></td></tr>\n";
+				echo "<tr" . $this->config->getAttributes("TableParagraphText", "tr") . ">";
+				echo "<td" . $this->config->getAttributes("TableParagraphText", "td") . ">";
+				echo "$text_div<font" . $this->config->getAttributes("TableParagraphText", "font") . ">\n";
+				echo $data["content"];
+				echo "</font>$text_div_end</td></tr>\n</table>\n</td></tr>\n";
+				break;
+			case "news" :
+			case "termine" :
+			case "kategorien" :
+			case "lehre" :
+			case "head" :
+				$data_field($this, $data, $aliases_content[$position], $text_div, $text_div_end);
 		}
-		else
-			$data_field($this, $data, $aliases_content[$position], $text_div, $text_div_end);
 	}
 }
 
@@ -269,7 +276,7 @@ function kategorien (&$this, $data, $alias_content, $text_div, $text_div_end) {
 }
 
 function lehre (&$this, $data, $alias_content, $text_div, $text_div_end) {
-	global $attr_text_td;
+	global $attr_text_td, $SEMESTER;
 	
 	if ($margin = $this->config->getValue("TableParagraphSubHeadline", "margin")) {
 		$subheadline_div = "<div style=\"margin-left:$margin;\">";
@@ -294,105 +301,66 @@ function lehre (&$this, $data, $alias_content, $text_div, $text_div_end) {
 	}
 	$types = implode("','", $types);
 	
-	$sem_range = $this->config->getValue("PersondetailsLectures", "semrange");
-	$now = time();
-	$i = 1;
-	$min = 0;
-	if ($sem_range == "current") {
-		foreach ($GLOBALS["SEMESTER"] as $key => $sem) {
-			if ($sem["beginn"] >= $now) {
-				$i = $key - 1;
-				break;
-			}
-		}
-		if ($i < 1)
-			return NULL;
-	}
-	else if ($sem_range == "three") {
-		foreach ($GLOBALS["SEMESTER"] as $key => $sem) {
-			if ($sem["beginn"] >= $now) {
-				$i = $key;
-				$min = $key - 3;
-				break;
-			}
-		}
-		if ($i < 1)
-			return NULL;
-		if ($min < 0)
-			$min = 0;
-	}
-	else {
-		$i = sizeof($GLOBALS["SEMESTER"]);
+	
+	$switch_time = mktime(0, 0, 0, date("m"),
+			date("d") + 7 * $this->config->getValue("PersondetailsLectures", "semswitch"), date("Y"));
+	// get current semester
+	$current_sem = get_sem_num($switch_time);
+	
+	switch ($this->config->getValue("PersondetailsLectures", "semstart")) {
+		case "previous" :
+			if (isset($SEMESTER[$current_sem - 1]))
+				$current_sem--;
+			break;
+		case "next" :
+			if (isset($SEMESTER[$current_sem + 1]))
+				$current_sem++;
+			break;
+		case "current" :
+			break;
+		default :
+			if (isset($SEMESTER[$this->config->getValue("PersondetailsLectures", "semstart")]))
+				$current_sem = $this->config->getValue("PersondetailsLectures", "semstart");
 	}
 	
-	if ($sem_range != "current") {
-		$out = "";
-		for (;$min < $i; $i--) {
-			$start = $GLOBALS["SEMESTER"][$i]["beginn"];
-			$end = $GLOBALS["SEMESTER"][$i]["ende"];
-				
-			$out .= "<tr" . $this->config->getAttributes("TableParagraphSubHeadline", "tr") . ">";
-			$out .= "<td" . $this->config->getAttributes("TableParagraphSubHeadline", "td") . ">";
+	$last_sem = $current_sem + $this->config->getValue("PersondetailsLectures", "semrange") - 1;
+	if ($last_sem < $current_sem)
+		$last_sem = $current_sem;
+	if (!isset($SEMESTER[$last_sem]))
+		$last_sem = sizeof($SEMESTER);
+	
+	$out = "";
+	for (;$current_sem - 1 < $last_sem; $last_sem--) {			
+		$out .= "<tr" . $this->config->getAttributes("TableParagraphSubHeadline", "tr") . ">";
+		$out .= "<td" . $this->config->getAttributes("TableParagraphSubHeadline", "td") . ">";
+		if (!($this->config->getValue("PersondetailsLectures", "semstart") == "current"
+				&& $this->config->getValue("PersondetailsLectures", "semrange") == 1)) {
 			$out .= $subheadline_div;
 			$out .= "<font" . $this->config->getAttributes("TableParagraphSubHeadline", "font") . ">";
-			$month = date("n", $start);
+			$month = date("n", $SEMESTER[$last_sem]["beginn"]);
 			if($month > 9) {
 				$out .= $this->config->getValue("PersondetailsLectures", "aliaswise");
-				$out .= date(" Y/", $start) . date("y",$end);
+				$out .= date(" Y/", $SEMESTER[$last_sem]["beginn"]) . date("y", $SEMESTER[$last_sem]["ende"]);
 			}
 			else if($month > 3 && $month < 10) {
 				$out .= $this->config->getValue("PersondetailsLectures", "aliassose");
-				$out .= date(" Y", $start);
+				$out .= date(" Y", $SEMESTER[$last_sem]["beginn"]);
 			}
 			$out .= "</font>$subheadline_div_end</td></tr>\n";
-			$out .= "<tr" . $this->config->getAttributes("TableParagraphText", "tr") . ">";
-			$out .= "<td" . $this->config->getAttributes("TableParagraphText", "td") . ">";
-			
-			if ($this->config->getValue("PersondetailsLectures", "aslist")) {
-				$out .= "$list_div<ul" . $this->config->getAttributes("List", "ul") . ">\n";
-				foreach ($data as $dat) {
-					$out .= "<li" . $this->config->getAttributes("List", "li") . ">";
-					$out .= "<font" . $this->config->getAttributes("LinkIntern", "font") . ">";
-					$out .= "<a href=\"\"" . $this->config->getAttributes("LinkIntern", "a") . ">";
-					$out .= $dat["name"] . "</a></font>\n";
-					$out .= "<font" . $this->config->getAttributes("TableParagraphText", "font") . "><br>";
-					$out .= $dat["untertitel"] . "</font>\n";
-				}
-				$out .= "</ul>$list_div_end";
-			}
-			else {
-				$out .= $text_div;
-				$j = 0;
-				foreach ($data as $dat) {
-					if ($j) $out .= "<br><br>";
-					$out .= "<font" . $this->config->getAttributes("LinkIntern", "font") . ">";
-					$out .= "<a href=\"$lnk\"" . $this->config->getAttributes("LinkIntern", "a") . ">";
-					$out .= $dat["name"] . "</a></font>\n";
-					$out .= "<font" . $this->config->getAttributes("TableParagraphText", "font") . ">";
-					$out .= "<br>" . $dat["untertitel"] . "</font>\n";
-					$j = 1;
-				}
-				$out .= $text_div_end;
-			}
-			$out .= "</td></tr>\n";
 		}
-	}
-	else{
-		$start = $GLOBALS["SEMESTER"][$i]["beginn"];
-		$end = $GLOBALS["SEMESTER"][$i]["ende"];
 		
 		$out .= "<tr" . $this->config->getAttributes("TableParagraphText", "tr") . ">";
 		$out .= "<td" . $this->config->getAttributes("TableParagraphText", "td") . ">";
 		
 		if ($this->config->getValue("PersondetailsLectures", "aslist")) {
-			$out .= "$list_div<ul" . $this->config->getAttributes("List", "ul") . ">";
+			$out .= "$list_div<ul" . $this->config->getAttributes("List", "ul") . ">\n";
 			foreach ($data as $dat) {
 				$out .= "<li" . $this->config->getAttributes("List", "li") . ">";
 				$out .= "<font" . $this->config->getAttributes("LinkIntern", "font") . ">";
 				$out .= "<a href=\"\"" . $this->config->getAttributes("LinkIntern", "a") . ">";
 				$out .= $dat["name"] . "</a></font>\n";
-				$out .= "<font" . $this->config->getAttributes("TableParagraphText", "font") . ">";
-				$out .= "<br>" . $dat["untertitel"] . "</font>\n";
+				$out .= "<font" . $this->config->getAttributes("TableParagraphText", "font") . "><br>";
+				$out .= $dat["untertitel"] . "</font>\n";
 			}
 			$out .= "</ul>$list_div_end";
 		}
@@ -402,10 +370,10 @@ function lehre (&$this, $data, $alias_content, $text_div, $text_div_end) {
 			foreach ($data as $dat) {
 				if ($j) $out .= "<br><br>";
 				$out .= "<font" . $this->config->getAttributes("LinkIntern", "font") . ">";
-				$out .= "<a href=\"\"" . $this->config->getAttributes("LinkIntern", "a") . ">";
-				$out .= $dat["name"] . "</a></font><br>\n";
+				$out .= "<a href=\"$lnk\"" . $this->config->getAttributes("LinkIntern", "a") . ">";
+				$out .= $dat["name"] . "</a></font>\n";
 				$out .= "<font" . $this->config->getAttributes("TableParagraphText", "font") . ">";
-				$out .= $dat["untertitel"] . "</font>\n";
+				$out .= "<br>" . $dat["untertitel"] . "</font>\n";
 				$j = 1;
 			}
 			$out .= $text_div_end;

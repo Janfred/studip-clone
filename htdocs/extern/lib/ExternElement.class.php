@@ -253,6 +253,8 @@ class ExternElement {
 			
 			case "show_group" :
 				$visible = $this->config->getValue($this->name, "groupsvisible");
+				if (!is_array($visible))
+					$visible = array();
 				if ($groups = get_all_statusgruppen($this->config->range_id)) {
 					$groups = array_keys($groups);
 					$visible = array_intersect($groups, $visible);
@@ -385,12 +387,12 @@ class ExternElement {
 					case "lecturer" :
 						// This is especially for checkbox-values. If there is no checkbox
 						// checked, the variable is not declared and it is necessary to set the
-						// variable to 0.
+						// variable to "".
 						if (!isset($HTTP_POST_VARS[$form_name])) {
-							$HTTP_POST_VARS[$form_name] = 0;
+							$HTTP_POST_VARS[$form_name] = "";
 							break;
 						}
-						$fault[$form_name][$i] = !($value[$i] == "1" || $value[$i] == "0" || !isset($value[$i]));
+						$fault[$form_name][$i] = !($value[$i] == "1" || $value[$i] == "" || !isset($value[$i]));
 						break;
 					case "name" :
 						$HTTP_POST_VARS[$form_name] = trim($HTTP_POST_VARS[$form_name]);
@@ -403,11 +405,15 @@ class ExternElement {
 					case "nameformat" :
 						$fault[$form_name][$i] = !($value[$i] == "no_title_short" || $value[$i] == "no_title"
 								|| $value[$i] == "no_title_rev" || $value[$i] == "full"
-								|| $value[$i] == "full_rev");
+								|| $value[$i] == "full_rev" || $value[$i] == "");
 						break;
 					case "dateformat" :
 						$fault[$form_name][$i] = !($value[$i] == "%d. %b. %Y" || $value[$i] == "%d.%m.%Y"
 								|| $value[$i] == "%d.%m.%y" || $value[$i] == "%d. %B %Y" || $value[$i] == "%m/%d/%y");
+						break;
+					case "language" :
+						$fault[$form_name][$i] = !($value[$i] == "de_DE" || $value[$i] == "en_GB"
+								|| $value[$i] == "");
 						break;
 					default :
 						$fault[$form_name][$i] = $this->checkValue($html_attribute, $value[$i]);

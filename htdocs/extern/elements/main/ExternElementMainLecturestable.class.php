@@ -69,7 +69,9 @@ class ExternElementMainLecturestable extends ExternElementMain {
 			"width" => "|0%|15%|0%|10%|15%|20%|25%|15%",
 			"widthpp" => "",
 			"grouping" => "3",
-			"semrange" => "three",
+			"semstart" => "",
+			"semrange" => "",
+			"semswitch" => "",
 			"allseminars" => "",
 			"rangepathlevel" => "1",
 			"addinfo" => "1",
@@ -82,9 +84,9 @@ class ExternElementMainLecturestable extends ExternElementMain {
 			"textnogroups" => _("keine Studienbereiche eingetragen"),
 			"aliasesgrouping" => "|"._("Semester")."|"._("Bereich")."|"._("DozentIn")."|"
 					._("Typ")."|"._("Einrichtung"),
-			"wholesite" => "0",
-			"nameformat" => "no_title_short",
-			"language" => "de_DE",
+			"wholesite" => "",
+			"nameformat" => "",
+			"language" => "",
 			"urlcss" => "",
 			"title" => _("Lehrveranstaltungen")
 		);
@@ -99,6 +101,7 @@ class ExternElementMainLecturestable extends ExternElementMain {
 	*/
 	function toStringEdit ($post_vars = "", $faulty_values = "",
 			$edit_form = "", $anker = "") {
+		global $SEMESTER;
 		
 	//	update_generic_datafields($this->config, $this->data_fields, $this->field_names, "sem");
 		$out = "";
@@ -133,11 +136,45 @@ class ExternElementMainLecturestable extends ExternElementMain {
 				_("Typ"), _("Einrichtung"));
 		$table = $edit_form->editOptionGeneric("grouping", $title, $info, $values, $names);
 		
-		$title = _("Semesterumfang:");
-		$info = _("Geben Sie an, aus welchen Semestern Lehrveranstaltungen angezeigt werden sollen.");
-		$names = array(_("nur aktuelles"), _("vorheriges, aktuelles, n&auml;chstes"), _("alle"));
-		$values = array("current", "three", "all");
-		$table .= $edit_form->editRadioGeneric("semrange", $title, $info, $values, $names);
+		$title = _("Startsemester:");
+		$info = _("Geben Sie das erste anzuzeigende Semester an. Die Angaben \"vorheriges\", \"aktuelles\" und \"nächstes\" beziehen sich immer auf das laufende Semester und werden automatisch angepasst.");
+		$current_sem = get_sem_num_sem_browse();
+		if ($current_sem === FALSE) {
+			$names = array(_("keine Auswahl"), _("aktuelles"), _("n&auml;chstes"));
+			$values = array("", "current", "next");
+		}
+		else if ($current_sem === TRUE) {
+			$names = array(_("keine Auswahl"), _("vorheriges"), _("aktuelles"));
+			$values = array("", "previous", "current");
+		}
+		else {
+			$names = array(_("keine Auswahl"), _("vorheriges"), _("aktuelles"), "n&auml;chstes");
+			$values = array("", "previous", "current", "next");
+		}
+		foreach ($SEMESTER as $sem_num => $sem) {
+			$names[] = $sem["name"];
+			$values[] = $sem_num;
+		}
+		$table .= $edit_form->editOptionGeneric("semstart", $title, $info, $values, $names);
+		
+		$title = _("Anzahl der anzuzeigenden Semester:");
+		$info = _("Geben Sie an, wieviele Semester (ab o.a. Startsemester) angezeigt werden sollen.");
+		$names = array(_("keine Auswahl"));
+		$values = array("");
+		$i = 1;
+		foreach ($SEMESTER as $sem_num => $sem) {
+			$names[] = $i++;
+			$values[] = $sem_num;
+		}
+		$table .= $edit_form->editOptionGeneric("semrange", $title, $info, $values, $names);
+		
+		$title = _("Umschalten des aktuellen Semesters:");
+		$info = _("Geben Sie an, wieviele Wochen vor Semesterende automatisch auf das nächste Semester umgeschaltet werden soll.");
+		$names = array(_("keine Auswahl"), _("am Semesterende"), _("1 Woche vor Semesterende"));
+		for ($i = 2; $i < 13; $i++)
+			$names[] = sprintf(_("%s Wochen vor Semesterende"), $i);
+		$values = array("", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12");
+		$table .= $edit_form->editOptionGeneric("semswitch", $title, $info, $values, $names);
 		
 		$title = _("Veranstaltungen beteiligter Institute anzeigen:");
 		$info = _("Wählen Sie diese Option, um Veranstaltungen anzuzeigen, bei denen diese Einrichtung als beteiligtes Institut eingetragen ist.");
@@ -156,18 +193,6 @@ class ExternElementMainLecturestable extends ExternElementMain {
 		$values = "1";
 		$names = "";
 		$table .= $edit_form->editCheckboxGeneric("addinfo", $title, $info, $values, $names);
-		
-		$title = _("Termine/Zeiten anzeigen:");
-		$info = _("Wählen Sie diese Option, wenn Termine und Zeiten der Veranstaltung unter dem Veranstaltungsnamen angezeigt werden sollen.");
-		$values = "1";
-		$names = "";
-		$table .= $edit_form->editCheckboxGeneric("time", $title, $info, $values, $names);
-		
-		$title = _("DozentInnen anzeigen:");
-		$info = _("Wählen Sie diese Option, wenn die Namen der Dozenten der Veranstaltung angezeigt werden sollen.");
-		$values = "1";
-		$names = "";
-		$table .= $edit_form->editCheckboxGeneric("lecturer", $title, $info, $values, $names);
 		
 		$title = _("Spalten&uuml;berschriften<br>wiederholen:");
 		$info = _("Wiederholung der Spaltenüberschriften über oder unter der Gruppierungszeile.");
@@ -219,15 +244,15 @@ class ExternElementMainLecturestable extends ExternElementMain {
 		
 		$title = _("Namensformat:");
 		$info = _("Wählen Sie, wie Personennamen formatiert werden sollen.");
-		$values = array("no_title_short", "no_title", "no_title_rev", "full", "full_rev");
-		$names = array(_("Meyer, P."), _("Peter Meyer"), _("Meyer Peter"),
+		$values = array("", "no_title_short", "no_title", "no_title_rev", "full", "full_rev");
+		$names = array(_("keine Auswahl"), _("Meyer, P."), _("Peter Meyer"), _("Meyer Peter"),
 				_("Dr. Peter Meyer"), _("Meyer, Peter, Dr."));
 		$table = $edit_form->editOptionGeneric("nameformat", $title, $info, $values, $names);
 		
 		$title = _("Sprache:");
 		$info = _("Wählen Sie eine Sprache für die Datumsangaben aus.");
-		$values = array("de_DE", "en_GB");
-		$names = array(_("Deutsch"), _("Englisch"));
+		$values = array("", "de_DE", "en_GB");
+		$names = array(_("keine Auswahl"), _("Deutsch"), _("Englisch"));
 		$table .= $edit_form->editOptionGeneric("language", $title, $info, $values, $names);
 		
 		$title = _("HTML-Header/Footer:");
@@ -259,12 +284,12 @@ class ExternElementMainLecturestable extends ExternElementMain {
 		if ($attribute == "allseminars") {
 			// This is especially for checkbox-values. If there is no checkbox
 			// checked, the variable is not declared and it is necessary to set the
-			// variable to 0.
+			// variable to "".
 			if (!isset($GLOBALS["HTTP_POST_VARS"][$this->name . "_" . $attribute])) {
-				$GLOBALS["HTTP_POST_VARS"][$this->name . "_" . $attribute] = 0;
+				$GLOBALS["HTTP_POST_VARS"][$this->name . "_" . $attribute] = "";
 				return FALSE;
 			}
-			return !($value == "1" || $value == "0");
+			return !($value == "1" || $value == "");
 		}
 		
 		return FALSE;

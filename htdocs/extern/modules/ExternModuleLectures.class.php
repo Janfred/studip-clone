@@ -84,8 +84,9 @@ class ExternModuleLectures extends ExternModule {
 					$this->config->getValue("Main", "urlcss"),
 					$this->config->getAttributes("Body", "body"));
 		}
-		
-		init_i18n($this->config->getValue("Main", "language"));
+		if (!$language = $this->config->getValue("Main", "language"))
+			$language = "de_DE";
+		init_i18n($language);
 		
 		$start_item_id = get_start_item_id($this->config->range_id);
 		$browser =& new ExternSemBrowse($this->config, $start_item_id);
@@ -96,14 +97,20 @@ class ExternModuleLectures extends ExternModule {
 	}
 	
 	function printoutPreview () {
-		echo html_header($this->config->getValue("Main", "title"),
+		if ($this->config->getValue("Main", "wholesite")) {
+			echo html_header($this->config->getValue("Main", "title"),
 					$this->config->getValue("Main", "urlcss"),
 					$this->config->getAttributes("Body", "body"));
+		}
+		if (!$language = $this->config->getValue("Main", "language"))
+			$language = "de_DE";
+		init_i18n($language);
 		
 		include($GLOBALS["ABSOLUTE_PATH_STUDIP"] . $GLOBALS["RELATIVE_PATH_EXTERN"]
 				. "/modules/views/lectures_preview.inc.php");
-				
-		echo html_footer();
+		
+		if ($this->config->getValue("Main", "wholesite"))
+			echo html_footer();
 	}
 	
 }

@@ -60,6 +60,9 @@ switch ($this->config->getValue("Main", "nameformat")) {
 	case "full_rev" :
 		$data_sem[0]["dozent"] = _("Meyer, Peter, Dr.");
 		break;
+	default :
+		$data_sem[0]["dozent"] = _("Meyer, P.");
+		break;
 }
 $data_sem[1]["dozent"] = $data_sem[0]["dozent"];
 $data_sem[2]["dozent"] = $data_sem[0]["dozent"];
