@@ -52,7 +52,7 @@ function pruefe_name(){
 
 }
 
-if ($forum["jshover"]==1 AND $auth->auth["jscript"]) { // JS an und erwuenscht?
+if ($auth->auth["jscript"]) { // JS an 
 	echo "<script language=\"JavaScript\">";
 	echo "var ol_textfont = \"Arial\"";
 	echo "</script>";
