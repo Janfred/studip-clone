@@ -73,9 +73,9 @@ echo "<table cellspacing=\"0\" border=\"0\" width=\"100%\">";
 if ($cmd == "change_userinfo") {
 	//first we have to check if he is really "Dozent" of this seminar
 	if ($rechte) {
-		$db->query("UPDATE admission_seminar_user SET admission_description = '$userinfo' WHERE seminar_id = '$id' AND user_id = '$user_id'");
-		$db->query("UPDATE seminar_user SET admission_description = '$userinfo' WHERE Seminar_id = '$id' AND user_id = '$user_id'");
-		$msg = "msg§" . _("Die Zusatzinformationen dieses Studenten wurden ge&auml;ndert.") . "§";
+		$db->query("UPDATE admission_seminar_user SET comment = '$userinfo' WHERE seminar_id = '$id' AND user_id = '$user_id'");
+		$db->query("UPDATE seminar_user SET comment = '$userinfo' WHERE Seminar_id = '$id' AND user_id = '$user_id'");
+		$msg = "msg§" . _("Die Zusatzinformationen wurden ge&auml;ndert.") . "§";
 	}
 }
 
@@ -252,12 +252,12 @@ if ((($cmd=="admission_rein") || ($cmd=="add_user")) && ($username)){
 		$group=select_group ($db2->f("start_time"),$db->f("user_id"));
 		$studiengang = "";	//part for temporarily accepted
 		if ($accepted) {	//as well
-			$db4->query("SELECT studiengang_id, admission_description FROM admission_seminar_user WHERE user_id = '$userchange' AND seminar_id = '$id'");
+			$db4->query("SELECT studiengang_id, comment FROM admission_seminar_user WHERE user_id = '$userchange' AND seminar_id = '$id'");
 			if ($db4->next_record()) {
 				$studiengang = "admission_studiengang_id = '".$db4->f("studiengang_id")."',";
 			}	
 		}
-		$query2 = sprintf("INSERT INTO seminar_user SET Seminar_id = '%s', user_id = '%s', status= '%s', admission_studiengang_id ='%s', admission_description ='%s', gruppe='%s' ", $id, $userchange, (!$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["only_inst_user"] && ($db->f("perms") == "tutor" || $db->f("perms") == "dozent")) ? "tutor" : "autor", $studiengang, $db4->f("admission_description"), $group);
+		$query2 = sprintf("INSERT INTO seminar_user SET Seminar_id = '%s', user_id = '%s', status= '%s', admission_studiengang_id ='%s', comment ='%s', gruppe='%s' ", $id, $userchange, (!$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["only_inst_user"] && ($db->f("perms") == "tutor" || $db->f("perms") == "dozent")) ? "tutor" : "autor", $studiengang, $db4->f("comment"), $group);
 		$db2->query($query2);
 		if ($db2->affected_rows())
 			$db3->query("DELETE FROM admission_seminar_user WHERE seminar_id = '$id' AND user_id = '$userchange'");
@@ -475,7 +475,7 @@ while (list ($key, $val) = each ($gruppe)) {
 		$tbl3 = "S";
 	}	
 
-	$db->query ("SELECT $tbl.mkdate, admission_description, $tbl.user_id, ". $_fullname_sql['full'] ." AS fullname, username, status, count(topic_id) AS doll,  studiengaenge.name, ".$tbl.".".$tbl2."studiengang_id AS studiengang_id FROM $tbl LEFT JOIN px_topics USING (user_id,".$tbl3."eminar_id) LEFT JOIN auth_user_md5 ON (".$tbl.".user_id=auth_user_md5.user_id) LEFT JOIN user_info USING (user_id) LEFT JOIN studiengaenge ON (".$tbl.".".$tbl2."studiengang_id = studiengaenge.studiengang_id) WHERE ".$tbl.".".$tbl3."eminar_id = '$SessionSeminar' AND status = '$key'  GROUP by ".$tbl.".user_id ORDER BY $sortby");
+	$db->query ("SELECT $tbl.mkdate, comment, $tbl.user_id, ". $_fullname_sql['full'] ." AS fullname, username, status, count(topic_id) AS doll,  studiengaenge.name, ".$tbl.".".$tbl2."studiengang_id AS studiengang_id FROM $tbl LEFT JOIN px_topics USING (user_id,".$tbl3."eminar_id) LEFT JOIN auth_user_md5 ON (".$tbl.".user_id=auth_user_md5.user_id) LEFT JOIN user_info USING (user_id) LEFT JOIN studiengaenge ON (".$tbl.".".$tbl2."studiengang_id = studiengaenge.studiengang_id) WHERE ".$tbl.".".$tbl3."eminar_id = '$SessionSeminar' AND status = '$key'  GROUP by ".$tbl.".user_id ORDER BY $sortby");
 
 	if ($db->num_rows()) { //Only if Users were found...
 	// die eigentliche Teil-Tabelle
@@ -689,7 +689,7 @@ while (list ($key, $val) = each ($gruppe)) {
 		
 		if (($cmd == "moreinfos") && ($user_id == $db->f("user_id"))) {
 			printf ("<tr><td class=\"%s\" colspan=9><form action=\"%s\" method=\"POST\">", $class, $PHPSELF);
-			printf("<table border=\"0\"><tr><td width=\"%s\"><font size=\"-1\">Bemerkungen:&nbsp;</font></td><td><TEXTAREA name=\"userinfo\" rows=3 cols=30>%s</TEXTAREA></td>", "10%", $db->f("admission_description"));
+			printf("<table border=\"0\"><tr><td width=\"%s\"><font size=\"-1\">Bemerkungen:&nbsp;</font></td><td><TEXTAREA name=\"userinfo\" rows=3 cols=30>%s</TEXTAREA></td>", "10%", $db->f("comment"));
 			printf ("<td>&nbsp;</td><td class=\"%s\" align=\"left\" valign=\"top\" width=\"%s\"><font size=-1>Anmeldedatum: %s</font></td>",$class, "50%", date("d.m. Y",$db->f("mkdate")));
 			echo "<td class=\"$class\" align=\"center\" width=\"20%\"><font size=\"-1\">&Auml;nderungen</font><br /><INPUT type=\"image\" ".makeButton("uebernehmen", "src").">";
 			echo "<INPUT type=\"hidden\" name=\"user_id\" value=\"".$db->f("user_id")."\">";
