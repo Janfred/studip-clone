@@ -250,11 +250,16 @@ function ShowUserInfo ($contact_id)
 		}
 
 		$userinstinfo = GetInstInfo($user_id);
-		if (is_array($userinstinfo)) {
-			while(list($key,$value) = each($userinstinfo)) {
+		for ($i=0; $i <sizeof($userinstinfo); $i++) {
+			$output .= "<tr><td class=\"steel1\" colspan=\"2\"><hr></td></tr>";
+			while(list($key,$value) = each($userinstinfo[$i])) {
 				$output .= "<tr><td class=\"steel1\" width=\"100\"><font size=\"2\">".$key.":</font></td><td class=\"steel1\" width=\"250\"><font size=\"2\">".$value."</font></td></tr>";
 			}
 		}
+		if (is_array($userinstinfo)) {
+			$output .= "<tr><td class=\"steel1\" colspan=\"2\"><hr></td></tr>";
+		}	
+
 
 		$extra = GetExtraUserinfo ($contact_id);
 		if (is_array($extra)) {
@@ -300,6 +305,14 @@ function ShowContact ($contact_id)
 					while(list($key,$value) = each($userinfo)) {
 //						$description .= "<tr><td class=\"steel1\" width=\"100\"><font size=\"2\">".$key.":</font></td><td class=\"steel1\" width=\"250\"><font size=\"2\">".$value."</font></td></tr>";
 						$description .= "<b>".FormatReady($key).":</b>       ".$value."\n";
+					}
+				}
+
+				$userinstinfo = GetInstInfo($db->f("user_id"));
+				for ($i=0; $i <sizeof($userinstinfo); $i++) {
+					$output .= "<tr><td class=\"steel1\" colspan=\"2\"><hr></td></tr>";
+					while(list($key,$value) = each($userinstinfo[$i])) {
+						$description .= "<b>".JSReady($key).":</b>      ".$value."\n";
 					}
 				}
 
