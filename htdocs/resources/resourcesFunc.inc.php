@@ -622,8 +622,8 @@ function search_administrable_objects($search_string='', $user_id='', $sem=TRUE)
 			$tmp_objects = search_administrable_objects(false,$user_id,false);
 			if (is_array($tmp_objects)){
 				foreach ($tmp_objects as $id => $detail){
-					if ($detail['inst_id']){
-						$my_inst_ids[$id] = true;
+					if ($detail['inst_perms']){
+						$my_inst_ids[$id] = $detail['inst_perms'];
 					}
 				}
 			}
@@ -660,29 +660,30 @@ function search_administrable_objects($search_string='', $user_id='', $sem=TRUE)
 			//Alle meine Institute (Suche)...
 			$db->query("SELECT Institute.Institut_id, Name, inst_perms FROM user_inst LEFT JOIN Institute USING (institut_id) WHERE ({$search_sql['institut']}) AND inst_perms = 'admin' AND user_inst.user_id='$user_id' ORDER BY Name");
 			while ($db->next_record()) {
-				$my_objects[$db->f("Institut_id")]=array("name"=>$db->f("Name"), "art"=>_("Einrichtungen"), "perms" => "admin", 'inst_id' => true);
-				$my_inst_ids[$db->f("Institut_id")] = true;
+				$my_objects[$db->f("Institut_id")]=array("name"=>$db->f("Name"), "art"=>_("Einrichtungen"), "perms" => "admin", 'inst_perms'=> 'admin');
+				$my_inst_ids[$db->f("Institut_id")] = 'admin';
 			}
 			$allowed_inst_perms = array('autor','tutor','dozent');
 			if ($perm->is_fak_admin($user_id)){
-				$db->query("SELECT Institut_id,Name FROM Institute WHERE ({$search_sql['institut']}) AND fakultaets_id IN('" . join("','" , array_keys($my_inst_ids)) ."')");
+				$db->query("SELECT Institut_id,Name FROM Institute WHERE ({$search_sql['institut']}) AND Institut_id!=fakultaets_id AND fakultaets_id IN('" . join("','" , array_keys($my_inst_ids)) ."')");
 				while($db->next_record()){
-					$my_objects[$db->f("Institut_id")]=array("name"=>$db->f("Name"), "art"=>_("Einrichtungen"), "perms" => "admin",'inst_id' => true);
-					$my_inst_ids[$db->f("Institut_id")] = true;
+					$my_objects[$db->f("Institut_id")]=array("name"=>$db->f("Name"), "art"=>_("Einrichtungen"), "perms" => "admin",'inst_perms' => 'fak_admin');
+					$my_inst_ids[$db->f("Institut_id")] = 'fak_admin';
 				}
 				$allowed_inst_perms[] = 'admin';
 			}
 			if (is_array($my_inst_ids)){
 				$inst_in = "('" . join("','" , array_keys($my_inst_ids)) ."')";
 				$inst_perms_in = "('" . join("','" , $allowed_inst_perms) ."')";
-				$db2->query("SELECT auth_user_md5.user_id, ". $_fullname_sql['full_rev'] ." AS fullname, username 
+				$db2->query("SELECT a.user_id, ". $_fullname_sql['full_rev'] ." AS fullname, username , a.Institut_id, inst_perms
 							FROM user_inst a 
 							LEFT JOIN auth_user_md5 USING (user_id) 
 							LEFT JOIN user_info USING (user_id) 
 							WHERE (({$search_sql['user']}))
-							AND a.inst_perms  IN $inst_perms_in AND  a.Institut_id IN $inst_in GROUP BY auth_user_md5.user_id ORDER BY Nachname");
+							AND a.inst_perms  IN $inst_perms_in AND  a.Institut_id IN $inst_in  ORDER BY Nachname");
 				while ($db2->next_record()) {
-					$my_objects[$db2->f("user_id")]=array("name"=>$db2->f("fullname")." (".$db2->f("username").")", "art"=>_("Personen"), "perms" => "admin");
+					if (!$perm->is_fak_admin($user_id) || !($my_inst_ids[$db2->f('Institut_id')] == 'admin' && $db2->f('inst_perms') == 'admin'))
+						$my_objects[$db2->f("user_id")]=array("name"=>$db2->f("fullname")." (".$db2->f("username").")", "art"=>_("Personen"), "perms" => "admin");
 				}
 				if ($sem) {
 					$db2->query("SELECT a.seminar_id, Name FROM  seminar_inst a
