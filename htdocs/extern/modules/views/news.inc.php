@@ -128,7 +128,7 @@ else {
 	$attr_font_body = $this->config->getAttributes("ContentNews", "fontbody");
 	
 	$link_persondetails = $this->getModuleLink("Persondetails",
-			$this->config->getValue("LinkIntern", "config"), $this->config->getValue("LinkIntern", "srilink"));
+			$this->config->getValue("LinkInternSimple", "config"), $this->config->getValue("LinkInternSimple", "srilink"));
 	
 	$set_1 = $this->config->getAttributes("TableRow", "td");
 	$set_2 = $this->config->getAttributes("TableRow", "td", TRUE);

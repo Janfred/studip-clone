@@ -114,8 +114,8 @@ foreach($rf_news as $spalte){
 echo "</tr>\n";
 
 $dateform = $this->config->getValue("Main", "dateformat");
-$attr_a = $this->config->getAttributes("Link", "a");
-$attr_font = $this->config->getAttributes("Link", "font");
+$attr_a = $this->config->getAttributes("LinkInternSimple", "a");
+$attr_font = $this->config->getAttributes("TableRow", "font");
 $attr_div_topic = $this->config->getAttributes("ContentNews", "divtopic");
 $attr_div_body = $this->config->getAttributes("ContentNews", "divbody");
 $attr_font_topic = $this->config->getAttributes("ContentNews", "fonttopic");
