@@ -135,7 +135,7 @@ function print_institut_content($instid,$my_inst_values) {
   elseif ($my_sem_values["wikiseiten"])
 		echo "&nbsp; <a href=\"seminar_main.php?auswahl=$semid&redirect_to=wiki.php\"><img src='pictures/icon-wiki.gif' border=0 ".tooltip(sprintf(_("%s WikiSeiten"), $my_sem_values["wikiseiten"]))."></a>";
   else
-		echo "&nbsp; <img src='pictures/icon-leer.gif' width=\"18\" height=\"20\" border=\"0\">";
+		echo "&nbsp; <img src='pictures/icon-leer.gif' width=\"20\" height=\"20\" border=\"0\">";
 
   echo "&nbsp;&nbsp;";
   
