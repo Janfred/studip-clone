@@ -774,7 +774,7 @@ function createVoteInfo (&$vote, $isAssociated = NO) {
 	 $html .= sprintf (_("Es haben insgesamt <b>%s</b> Personen teilgenommen"), $number);
       else
 	  $html .= $isAssociated
-	      ? sprintf (_("Sie waren der/die einzigste TeilnehmerIn"))
+	      ? sprintf (_("Sie waren der/die einzige TeilnehmerIn"))
 	      : sprintf (_("Es hat insgesamt <b>eine</b> Person teilgenommen"));
    }
    else {
@@ -782,7 +782,7 @@ function createVoteInfo (&$vote, $isAssociated = NO) {
 	 $html .= sprintf (_("Es haben bisher <b>%s</b> Personen teilgenommen"), $number);
       else
 	 $html .= $isAssociated
-	     ? sprintf (_("Sie waren bisher der/die einzigste TeilnehmerIn"))
+	     ? sprintf (_("Sie waren bisher der/die einzige TeilnehmerIn"))
 	     : sprintf (_("Es hat bisher insgesamt <b>eine</b> Person teilgenommen"));
    }
    /* ---------------------------------------------------------------------- */
