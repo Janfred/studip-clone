@@ -23,7 +23,7 @@ if ($perm->have_perm("user")) ;
 else
 	$my_messaging_settings["active_time"]=5;
 
-require_once "ChatShmServer.class.php";
+require_once ($ABSOLUTE_PATH_STUDIP . "ChatShmServer.class.php");
 //nur sinnvoll wenn chat eingeschaltet
 if ($CHAT_ENABLE) {
      $chatServer=new ChatShmServer;
