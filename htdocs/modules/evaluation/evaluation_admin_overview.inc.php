@@ -238,7 +238,7 @@ $line->addAttr ("size", "1");
 $line->addAttr ("noshade", "noshade");
 #$td->addContent ($line);
 $td->addContent (new HTMLempty ("br"));
-$headline = new HTML ("h2");
+$headline = new HTML ("h3");
 $headline->addContent(_("Evaluationen"));
 $td->addContent($headline);
 
