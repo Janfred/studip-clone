@@ -540,8 +540,15 @@ if (($sem_browse_data["level"]=="s") || ($sem_browse_data["level"]=="sbb"))
 	
 	$c=1;
 	$group=1;
-	while ($db->next_record() ){
-		
+	while ($db->next_record()) {
+		//This isn't a very good workaround to avoid duplicate entries in the sort-by-Nachname Query. Someone should fix this...
+		while ($temp_sem_browse_lastid == $db->f("Seminar_id")) {
+			$temp_sem_browse_lastid=$db->f("Seminar_id");
+			$db->next_record();
+		}
+		$temp_sem_browse_lastid=$db->f("Seminar_id");
+		if ($db->f("Seminar_id")) { //Workaround end. :-)
+
 		if ($c % 2)
 	  		$class="steel1";
 		else
@@ -632,13 +639,11 @@ if (($sem_browse_data["level"]=="s") || ($sem_browse_data["level"]=="sbb"))
 		}
 		echo"<td class=\"$class\" align=center><font size=-1>".$temp_turnus_string."</font></td>";
 		echo"<td class=\"$class\" align=center><font size=-1><a href=\"institut_main.php?auswahl=",$db->f("Institut_id"),"\">".htmlReady($db->f("Institut")),"&nbsp;</font></td>";
-		if ($sem_browse_data["sortby"] == "Nachname") // dann ist das einfach
-			{
-			$dozname = "<a href=\"about.php?username=".$db2->f("username")."\">".htmlReady($db2->f("Vorname"))." ".htmlReady($db2->f("Nachname"))."</a>";
+		if ($sem_browse_data["sortby"] == "Nachname") { // so it's easy
+			$dozname = "<a href=\"about.php?username=".$db->f("username")."\">".htmlReady($db->f("Vorname"))." ".htmlReady($db->f("Nachname"))."</a>";
 			if ($dozname == "") $dozname = "- - -";
-			}
-		else {
-			// Zusammenbasteln der Dozenten-Spalte
+		} else {
+			//Create Dozenten-field
 			$sem_id=$db->f("Seminar_id");
 			$dozname ="";
 			$i=0;
@@ -731,17 +736,19 @@ if (($sem_browse_data["level"]=="s") || ($sem_browse_data["level"]=="sbb"))
 			}
 			echo"</tr>";
 		}
-	echo "<tr><td class=\"steel1\" ";
-	if ($sem_browse_data["extend"]=="yes") 
-		echo "colspan=7"; 
-	else 
-		echo "colspan=4";
-	echo " align=\"center\"><font size=-1>&nbsp;";
-	if ((!$sem_browse_data["sset"]) && ($sem_browse_data["extern"] <> "yes"))
+	}
+	if ((!$sem_browse_data["sset"]) && ($sem_browse_data["extern"] <> "yes")) {
+		echo "<tr><td class=\"steel1\" ";
+		if ($sem_browse_data["extend"]=="yes") 
+			echo "colspan=7"; 
+		else 
+			echo "colspan=4";
+		echo " align=\"center\"><font size=-1>&nbsp;";
 		if ($sem_browse_data["level"]=="s")
 			echo"<a href=\"$PHP_SELF?level=i&id=".$sem_browse_data["oid"]."\">eine Ebene zur&uuml;ck</a>";
 		else
 			echo"<a href=\"$PHP_SELF?level=b&id=".$sem_browse_data["oid"]."&oid=".$sem_browse_data["oid2"]."\">eine Ebene zur&uuml;ck</a>";
+	}
 	echo"</font></td></tr><tr><td class=\"blank\">&nbsp;<br></td></tr>";
 	}
 
