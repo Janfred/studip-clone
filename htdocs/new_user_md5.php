@@ -196,6 +196,7 @@ if (isset($_GET['details'])) {
 				<td colspan=3 align=center>&nbsp;
 				<input type="IMAGE" name="create" <?=makeButton("anlegen", "src")?> value=" <?=_("Benutzer anlegen")?> ">&nbsp;
 				<input type="IMAGE" name="nothing" <?=makeButton("abbrechen", "src")?> value=" <?=_("Abbrechen")?> ">
+				<input type="hidden" name="ticket" value="<?=get_ticket();?>">
 				&nbsp;</td></tr>
 			</form></table>
 			
