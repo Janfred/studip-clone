@@ -37,14 +37,14 @@ ob_start();
 
 function convert(x, n, m, d)
    {
-      if (x == 0) return "0";
+      if (x == 0) return "00";
       var r = "";
       while (x != 0)
       {
          r = d.charAt((x & m)) + r;
          x = x >>> n;
       }
-      return r;
+      return (r.length%2) ? "0" + r : r;
    }
    
 function toHexString(x){
