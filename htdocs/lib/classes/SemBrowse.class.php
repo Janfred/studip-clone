@@ -60,6 +60,11 @@ class SemBrowse {
 		
 		if ($this->sem_browse_data['cmd'] == "xts"){
 			$this->sem_browse_data['level'] = "f";
+			if($this->search_obj->new_search_button_clicked){
+				$this->show_result = false;
+				$this->sem_browse_data['sset'] = false;
+				$this->sem_browse_data['search_result'] = array();
+			}
 		}
 		
 		if ($this->sem_browse_data['cmd'] == "qs"){
@@ -131,6 +136,11 @@ class SemBrowse {
 			$this->sem_browse_data['show_entries'] = (isset($tmp[1])) ? "sublevels" : "level";
 			$this->sem_browse_data['sset'] = false;
 		}
+		
+		if (isset($_REQUEST['do_show_class']) && count($this->sem_browse_data['sem_status'])){
+			$this->get_sem_class();
+		}
+	
 		/*
 		echo "<hr><pre>";
 		print_r($this->sem_browse_data);
@@ -138,6 +148,17 @@ class SemBrowse {
 		echo "</pre><hr>";
 		*/
 		
+	}
+	
+	function get_sem_class(){
+		$db = new DB_Seminar("SELECT Seminar_id from seminare WHERE seminare.status IN ('" . join("','", $this->sem_browse_data['sem_status']) . "')");
+		$snap = new DbSnapshot($db);
+		$sem_ids = $snap->getRows("Seminar_id");
+		if (is_array($sem_ids)){
+			$this->sem_browse_data['search_result'] = array_flip($sem_ids);
+		} 
+		$this->sem_browse_data['sset'] = true;
+		$this->show_result = true;
 	}
 	
 	function get_sem_range($item_id, $with_kids){

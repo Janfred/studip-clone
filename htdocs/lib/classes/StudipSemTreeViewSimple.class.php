@@ -72,9 +72,9 @@ class StudipSemTreeViewSimple {
 			echo "&nbsp;";
 		}
 		echo "</td></tr>";
-		echo "\n</tr><tr><td class=\"steel1\" colspan=\"2\" align=\"center\" valign=\"center\">";
+		echo "\n<tr><td class=\"steel1\" colspan=\"2\" align=\"center\" valign=\"center\">";
 		$this->showKids($this->start_item_id);
-		echo "\n</td><tr><td class=\"steelgraulight\" colspan=\"2\" align=\"left\" valign=\"center\">";
+		echo "\n</td></tr><tr><td class=\"steelgraulight\" colspan=\"2\" align=\"left\" valign=\"center\">";
 		$this->showContent($this->start_item_id);
 		echo "\n</td></tr></table>";
 	}
@@ -114,14 +114,14 @@ class StudipSemTreeViewSimple {
 	}
 	
 	function showContent($item_id){
-		echo "\n<div align=\"center\" style=\"margin-left:10px;margin-top:10px;font-size:10pt\">";
+		echo "\n<div align=\"center\" style=\"margin-left:10px;margin-top:10px;margin-bottom:10px;font-size:10pt\">";
 		if ($item_id != "root"){
 			if ($this->tree->hasKids($item_id) && ($num_entries = $this->tree->getNumEntries($this->start_item_id,true))){
 				if ($this->show_entries != "sublevels"){
 					echo "<a " . tooltip(_("alle Einträge in allen Unterebenen anzeigen")) ." href=\"" . $this->getSelf("cmd=show_sem_range&item_id={$this->start_item_id}_withkids") ."\">";
-					echo "<img src=\"pictures/forumrot.gif\" border=\0\">&nbsp;";
+					echo "<img src=\"pictures/forumrot.gif\" border=\"0\">&nbsp;";
 				} else {
-					echo "<img src=\"pictures/forumrotrunt.gif\" border=\0\">&nbsp;";
+					echo "<img src=\"pictures/forumrotrunt.gif\" border=\"0\">&nbsp;";
 				}
 				printf(_("<b>%s</b> Eintr&auml;ge in allen Unterebenen vorhanden"), $num_entries);
 				if ($this->show_entries != "sublevels"){
@@ -132,22 +132,21 @@ class StudipSemTreeViewSimple {
 			if ($num_entries = $this->tree->getNumEntries($item_id)){
 				if ($this->show_entries != "level"){
 					echo "<a " . tooltip(_("alle Einträge auf dieser Ebene anzeigen")) ." href=\"" . $this->getSelf("cmd=show_sem_range&item_id=$item_id") ."\">";
-					echo "<img src=\"pictures/forumrot.gif\" border=\0\">&nbsp;";
+					echo "<img src=\"pictures/forumrot.gif\" border=\"0\">&nbsp;";
 				} else {
-					echo "<img src=\"pictures/forumrotrunt.gif\" border=\0\">&nbsp;";
+					echo "<img src=\"pictures/forumrotrunt.gif\" border=\"0\">&nbsp;";
 				}
 				printf(_("<b>%s</b> Eintr&auml;ge auf dieser Ebene.&nbsp;"),$num_entries);
 				if ($this->show_entries != "level"){
 					echo "</a>";
 				}
 			} else {
-				echo _("Keine Eintr&auml;ge auf dieser Ebene vorhanden!");
+					echo _("Keine Eintr&auml;ge auf dieser Ebene vorhanden!");
 			}
-			
-			echo "</p>";
 		}
 		echo "\n</div>";
 	}
+	
 	function getSemPath(){
 		
 		if ($parents = $this->tree->getParents($this->start_item_id)){

@@ -178,12 +178,13 @@ class StudipSemTreeSearch {
 	}
 	
 	function getFormEnd(){
-		return "\n</form>";
+		
+		return "\n<input type=\"hidden\" name=\"{$this->form_name}_send\" value=\"1\">\n</form>";
 	}
 	
 	function doSearch(){
 		global $_REQUEST;
-		if (isset($_REQUEST[$this->form_name . "_do_search_x"])){
+		if (isset($_REQUEST[$this->form_name . "_do_search_x"]) || isset($_REQUEST[$this->form_name . "_send"])){
 			if(isset($_REQUEST[$this->form_name . "_search_field"]) && strlen($_REQUEST[$this->form_name . "_search_field"]) > 2){
 				$this->view->params[0] = "%" . $_REQUEST[$this->form_name . "_search_field"] . "%";
 				$this->view->params[1] = $this->sem_tree_ids;

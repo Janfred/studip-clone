@@ -89,12 +89,14 @@ class StudipSemSearch {
 		$this->form_name = $form_name;
 		$this->sem_dates = $GLOBALS['SEMESTER'];
 		$this->sem_dates[0] = array("name" => sprintf(_("vor dem %s"),$this->sem_dates[1]['name']));
-		if(isset($_REQUEST[$form_name . "_do_search_x"])){
-			$this->search_button_clicked = true;
+		if(isset($_REQUEST[$form_name . "_do_search_x"]) || isset($_REQUEST[$form_name . "_send"])){
 			if ($auto_search){
 				$this->doSearch();
 				$this->search_done = true;
 			}
+		}
+		if(isset($_REQUEST[$form_name . "_do_search_x"])){
+			$this->search_button_clicked = true;
 		}
 		if(isset($_REQUEST[$form_name . "_new_search_x"])){
 			$this->new_search_button_clicked = true;
@@ -201,7 +203,7 @@ class StudipSemSearch {
 		if ($this->search_fields['type']['class'] != 'all'){
 			$ret = "\n<input type=\"hidden\" name=\"{$this->form_name}_category\" value=\"{$this->search_fields['type']['class']}\">";
 		}
-		return $ret . "\n</form>";
+		return $ret . "\n<input type=\"hidden\" name=\"{$this->form_name}_send\" value=\"1\"></form>";
 	}
 	
 	function getHiddenField($name, $value = false){
