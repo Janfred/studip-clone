@@ -400,9 +400,13 @@ class SemBrowse {
 				}
 			}
 			echo "</table>";
-		} elseif($this->search_obj->search_button_clicked){
+		} elseif($this->search_obj->search_button_clicked && !$this->search_obj->new_search_button_clicked){
 			echo "\n<table border=\"0\" align=\"center\" cellspacing=0 cellpadding=2 width = \"99%\">\n";
-			echo "\n<tr><td class=\"steelgraulight\"><font size=\"-1\"><b>&nbsp;" . _("Ihre Suche ergab keine Treffer") . "</b></font></td></tr>";
+			echo "\n<tr><td class=\"steelgraulight\"><font size=\"-1\"><b>&nbsp;" . _("Ihre Suche ergab keine Treffer") ;
+			if ($this->search_obj->found_rows === false){
+				echo "<br>" . _("(Der Suchbegriff fehlt oder ist zu kurz)");
+			}
+			echo "</b></font></td></tr>";
 			echo "\n</table>";
 		}
 	}

@@ -90,14 +90,13 @@ class StudipSemSearch {
 		$this->sem_dates = $GLOBALS['SEMESTER'];
 		$this->sem_dates[0] = array("name" => sprintf(_("vor dem %s"),$this->sem_dates[1]['name']));
 		if(isset($_REQUEST[$form_name . "_do_search_x"]) || isset($_REQUEST[$form_name . "_send"])){
+			$this->search_button_clicked = true;
 			if ($auto_search){
 				$this->doSearch();
 				$this->search_done = true;
 			}
 		}
-		if(isset($_REQUEST[$form_name . "_do_search_x"])){
-			$this->search_button_clicked = true;
-		}
+		
 		if(isset($_REQUEST[$form_name . "_new_search_x"])){
 			$this->new_search_button_clicked = true;
 		}
