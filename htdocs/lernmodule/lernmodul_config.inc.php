@@ -8,7 +8,7 @@ $username_prefix = "studip_";
 // DEFAULT: 1 = Gast, 2 = Superuser, 3 = StudentIn, 4 = MitarbeiterIn
 $ilias_status = array(
 "user" => "1",
-"author" => "3",
+"autor" => "3",
 "tutor" => "3",
 "dozent" => "4",
 "admin" => "2",
@@ -19,7 +19,7 @@ $ilias_status = array(
 // DEFAULT: 1 = AdministratorIn, 2 = AutorIn, 3 = LernerIn, 4 = Gast
 $ilias_systemgroup = array(
 "user" => "4",
-"author" => "3",
+"autor" => "3",
 "tutor" => "3",
 "dozent" => "2",
 "admin" => "2",
