@@ -60,29 +60,23 @@ if (!$db->num_rows()) {
 	}
 } else {     	
 	$colspan=2;
-	$k=0;
+
+	//Ausgabe der Kopfzeile vor erster auszugebener News
+	echo"\n<table  border=\"0\" bgcolor=\"#FFFFFF\" cellspacing=\"0\" cellpadding=\"2\" align=\"center\" width=\"$width\" >";
+	echo"\n<tr><td class=\"topic\" colspan=\"2\" width=\"99%\"><img src=\"./pictures/news2.gif\" border=\"0\"". tooltip(_("Newsticker. Klicken Sie auf die Pfeile (rechts), um neue News in diesen Bereich einzustellen. Klicken Sie auf die Pfeile am linken Rand, um den ganzen Nachrichtentext zu lesen.")) . "align=\"texttop\"><b>&nbsp;" . _("News") . "</b></td>";
+	if ($show_admin) {
+		$colspan++;
+		echo"\n<td align = \"right\" class=\"topic\">";
+		printf ("&nbsp;<a href=\"admin_news.php?%s&modus=admin&cmd=show&range_id=$range_id&view=news_global\"><img src=\"./pictures/pfeillink.gif\" border=\"0\"" . tooltip(_("News bearbeiten")) . "></a>&nbsp;", ($SessSemName["class"]=="sem") ? "new_sem=TRUE&view=sem" : "new_inst=TRUE&view=inst");
+		echo"\n</td></tr>";
+	}
+	echo "\n<tr><td colspan=$colspan>";
      	
 	// Ausgabe der Daten
 	while ($db->next_record()) {
-		if(!$k) {
-			//Ausgabe der Kopfzeile vor erster auszugebener News
-			echo"\n<table  border=\"0\" bgcolor=\"#FFFFFF\" cellspacing=\"0\" cellpadding=\"2\" align=\"center\" width=\"$width\" >";
-			echo"\n<tr><td class=\"topic\" colspan=\"2\" width=\"99%\"><img src=\"./pictures/news2.gif\" border=\"0\"". tooltip(_("Newsticker. Klicken Sie auf die Pfeile (rechts), um neue News in diesen Bereich einzustellen. Klicken Sie auf die Pfeile am linken Rand, um den ganzen Nachrichtentext zu lesen.")) . "align=\"texttop\"><b>&nbsp;" . _("News") . "</b></td>";
-			if ($show_admin) {
-				$colspan++;
-				echo"\n<td align = \"right\" class=\"topic\">";
-				printf ("&nbsp;<a href=\"admin_news.php?%s&modus=admin&cmd=show&range_id=$range_id&view=news_global\"><img src=\"./pictures/pfeillink.gif\" border=\"0\"" . tooltip(_("News bearbeiten")) . "></a>&nbsp;", ($SessSemName["class"]=="sem") ? "new_sem=TRUE&view=sem" : "new_inst=TRUE&view=inst");
-				echo"\n</td></tr>";
-				echo"\n</td></tr>";
-			}
-			echo "</table>";
-		}
-		
-		$k++;
-		
 		$tmp_titel=htmlReady(mila($db->f("topic")));
 		$titel='';
-	  if ($open ==$db->f("news_id")) { 
+		if ($open ==$db->f("news_id")) { 
 			$link=$PHP_SELF."?nclose=true";
 			$titel=$tmp_titel."<a name='anker'>";
 		} else {
@@ -91,7 +85,6 @@ if (!$db->num_rows()) {
 		}
 
 		$icon="&nbsp;<img src=\"./pictures/news-icon.gif\" border=0>";
-		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"$width\"><tr>";
 						
 		$db2->query("SELECT username, " . $_fullname_sql['full'] ." AS fullname FROM auth_user_md5 a LEFT JOIN user_info USING (user_id) WHERE a.user_id='".$db->f("user_id")."'");
 		$db2->next_record();
@@ -102,6 +95,8 @@ if (!$db->num_rows()) {
 			$titel = "<a href=\"$link\" class=\"tree\" >".$titel."</a>";
 
 		$tempnew = ($db->f("date") >= $last_visited);
+
+		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" align=\"center\"><tr>";
 		if ($open == $db->f("news_id"))
 			printhead(0, 0, $link, "open", $tempnew, $icon, $titel, $zusatz, $db->f("date"));
 		else
@@ -129,10 +124,9 @@ if (!$db->num_rows()) {
 			printcontent(0,0, $content, $edit);
 			echo "</tr></table>	";
 		       	}
-		echo "</td></tr></table></td></tr></table>";
 	  	}
-	  }
-
+	}
+	echo "</td></tr></table>";
 
 return TRUE;
 

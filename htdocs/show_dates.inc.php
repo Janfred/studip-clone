@@ -98,8 +98,8 @@ function show_dates ($range_id, $date_start, $date_end, $show_not=0, $show_docs=
 	if ($db->num_rows()) {
 		
 		// Ausgabe der Kopfzeile
-		 $colspan=1;
-		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" align=\"center\">";
+		$colspan=1;
+		echo "\n<table border=\"0\" cellpadding=\"2\" cellspacing=\"0\" width=\"100%\" align=\"center\">";
 		if ($show_admin) {
 			$colspan++;
 			if (!$show_whole_time) {
@@ -252,7 +252,7 @@ function show_personal_dates ($range_id, $date_start, $date_end, $show_docs=FALS
 		
 		// Ausgabe der Kopfzeile
 		$colspan = 1;
-		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" align=\"center\">";
+		echo "\n<table border=\"0\" cellpadding=\"2\" cellspacing=\"0\" width=\"100%\" align=\"center\">";
 		if($show_admin){
 			$colspan++;
 			echo "\n<tr><td class=\"topic\" width=\"99%\">&nbsp;<img src=\"./pictures/meinetermine.gif\" border=\"0\" " . tooltip(_("Termine. Klicken Sie auf die Pfeile (rechts), um Termine in diesen Bereich zu bearbeiten. Klicken Sie auf den einfachen Pfeil, um die Terminbeschreibung zu lesen.")) . " align='absmiddle'><b>&nbsp;&nbsp;";
@@ -387,7 +387,7 @@ function show_all_dates ($date_start, $date_end, $show_docs=FALSE, $show_admin=T
 		echo "\n\n<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" class=\"blank\" width=\"70%\">";
 		echo "\n<tr><td>\n";
 		// Ausgabe der Kopfzeile
-		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" align=\"center\">";
+		echo "\n<table border=\"0\" cellpadding=\"2\" cellspacing=\"0\" width=\"100%\" align=\"center\">";
 		echo "\n<tr><td class=\"topic\" align=\"left\">\n";
 		echo "<img src=\"./pictures/meinetermine.gif\" border=\"0\" ";
 		echo tooltip(_("Termine. Klicken Sie auf die Pfeile (rechts), um Termine in diesen Bereich zu bearbeiten. Klicken Sie auf den einfachen Pfeil, um die Terminbeschreibung zu lesen."));
