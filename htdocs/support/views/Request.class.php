@@ -89,6 +89,11 @@ class Request extends ShowTreeRow {
 		//Daten vorbereiten
 		$icon="<img src=\"pictures/cont_folder2.gif\" />";
 		
+		if (!$supportdb_data["req_opens"]) {
+			$supportdb_data["req_opens"][$reqObject->getId()] = TRUE;
+			$supportdb_data["actual_req"] = $reqObject->getId();			
+		}
+		
 		if ($supportdb_data["req_opens"][$reqObject->getId()]) {
 			$link=$PHP_SELF."?req_close=".$reqObject->getId()."#a";
 			$open="open";
