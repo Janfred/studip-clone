@@ -31,6 +31,7 @@ include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php");   //wir brauchen die Auto-Eintrag-Seminare
 require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
+require_once("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");
 
 $sess->register("browse_data");
 
@@ -203,14 +204,14 @@ unset($query);
 
 // global
 if ($browse_data["group"]=="All" && $perm->have_perm("admin")){  // nur global admin darf alle Benutzer sehen
- 	$query = "SELECT * FROM auth_user_md5 ORDER BY ".$browse_data["sortby"];
+ 	$query = "SELECT " . $_fullname_sql['full_rev'] ." AS fullname,username,perms FROM auth_user_md5 LEFT JOIN user_info USING (user_id) ORDER BY ".$browse_data["sortby"];
 }
 
 // nach instituten
 if($browse_data["group"]=="Institut"){
 	$db2->query("SELECT Institut_id FROM user_inst WHERE Institut_id = '".$browse_data["inst_id"]."' AND user_id = '$user->id'");
 	if ($db2->num_rows() > 0 || $perm->have_perm("admin")){  // entweder wir gehoeren auch zum Institut oder sind global admin
-  	$query = "SELECT * FROM user_inst LEFT JOIN auth_user_md5 USING (user_id) WHERE Institut_id ='".$browse_data["inst_id"]."' ORDER BY ".$browse_data["sortby"];
+  	$query = "SELECT " . $_fullname_sql['full_rev'] ." AS fullname ,username,user_inst.inst_perms,user_inst.user_id,user_inst.Institut_id FROM user_inst LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE Institut_id ='".$browse_data["inst_id"]."' ORDER BY ".$browse_data["sortby"];
 	}
 } 
 
@@ -219,13 +220,13 @@ if($browse_data["group"]=="Seminar"){
 	$templist = "'" . implode ("', '", $AUTO_INSERT_SEM) . "'";
 	$db2->query("SELECT Seminar_id FROM seminar_user WHERE Seminar_id NOT IN ($templist) AND Seminar_id = '".$browse_data["sem_id"]."' AND user_id = '$user->id'");
 	if ($db2->num_rows() > 0 || $perm->have_perm("admin")){  // entweder wir gehoeren auch zum Seminar oder sind global admin
- 		$query = "SELECT * FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE Seminar_id ='".$browse_data["sem_id"]."' ORDER BY ".$browse_data["sortby"];
+ 		$query = "SELECT " . $_fullname_sql['full_rev'] ." AS fullname ,username,seminar_user.status FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE Seminar_id ='".$browse_data["sem_id"]."' ORDER BY ".$browse_data["sortby"];
 	}
 } 
 
 // freie Suche
 if($browse_data["group"]=="Search"){
- 	$query = "SELECT * FROM auth_user_md5 ";
+ 	$query = "SELECT " . $_fullname_sql['full_rev'] ." AS fullname,username,perms FROM auth_user_md5 LEFT JOIN user_info USING (user_id)";
 	$browse_data["Vorname"] = str_replace("%", "\%", $browse_data["Vorname"]);	// tss, tss, tss
 	$browse_data["Vorname"] = str_replace("_", "\_", $browse_data["Vorname"]);	
 	$browse_data["Nachname"] = str_replace("%", "\%", $browse_data["Nachname"]);	
@@ -260,23 +261,19 @@ if (isset($query)):
 // wir haben ein Ergebnis
 		switch ($browse_data["group"]) {
 			case "Seminar":
-				echo "<td class=\"steel\" nowrap valign=bottom width=\"25%\"><a href=\"browse.php?sortby=Vorname\"><b>Vorname</b></a></td>";
-				echo "<td class=\"steel\" nowrap valign=bottom width=\"25%\"><a href=\"browse.php?sortby=Nachname\"><b>Nachname</b></a></td>";
+				echo "<td class=\"steel\" nowrap valign=bottom width=\"50%\"><a href=\"browse.php?sortby=Nachname\"><b>Name</b></a></td>";
 				echo "<td class=\"steel\" nowrap valign=bottom width=\"25%\"><a href=\"browse.php?sortby=status\"><b>Status in der Veranstaltung</b></a></td>";
 			break;
 			case "Institut":
-				echo "<td class=\"steel\" nowrap valign=bottom width=\"22%\"><a href=\"browse.php?sortby=Vorname\"><b>Vorname</b></a></td>";
-				echo "<td class=\"steel\" nowrap valign=bottom width=\"22%\"><a href=\"browse.php?sortby=Nachname\"><b>Nachname</b></a></td>";
-				echo "<td class=\"steel\" nowrap valign=bottom width=\"22%\"><a href=\"browse.php?sortby=Funktion\"><b>Funktion an der Einrichtung</b></a></td>";
+				echo "<td class=\"steel\" nowrap valign=bottom width=\"44%\"><a href=\"browse.php?sortby=Nachname\"><b>Name</b></a></td>";
+				echo "<td class=\"steel\" nowrap valign=bottom width=\"22%\"><b>Funktion an der Einrichtung</b></td>";
 			break;
 			case "Search":
-				echo "<td class=\"steel\" valign=bottom nowrap width=\"25%\"><a href=\"browse.php?sortby=Vorname\"><b>Vorname</b></a></td>";
-				echo "<td class=\"steel\" valign=bottom nowrap width=\"25%\"><a href=\"browse.php?sortby=Nachname\"><b>Nachname</b></a></td>";
+				echo "<td class=\"steel\" valign=bottom nowrap width=\"50%\"><a href=\"browse.php?sortby=Nachname\"><b>Name</b></a></td>";
 				echo "<td class=\"steel\" valign=bottom nowrap width=\"25%\"><a href=\"browse.php?sortby=perms\"><b>globaler Status</b></a></td>";
 			break;
 			default:
-				echo "<td class=\"steel\" valign=bottom nowrap width=\"25%\"><a href=\"browse.php?sortby=Vorname\"><b>Vorname</b></a></td>";
-				echo "<td class=\"steel\" valign=bottom nowrap width=\"25%\"><a href=\"browse.php?sortby=Nachname\"><b>Nachname</b></a></td>";
+				echo "<td class=\"steel\" valign=bottom nowrap width=\"50%\"><a href=\"browse.php?sortby=Nachname\"><b>Name</b></a></td>";
 				echo "<td class=\"steel\" valign=bottom nowrap width=\"25%\"><a href=\"browse.php?sortby=perms\"><b>globaler Status</b></a></td>";
 			break;
 		}
@@ -293,21 +290,24 @@ if (isset($query)):
 		$c++;
 			switch ($browse_data["group"]) {
 				case "Seminar":
-					printf("<tr valign=middle align=left><td class=\"$class\"><font size=-1> &nbsp;%s</font></td>", $db->f("Vorname"));
-					printf("<td class=\"$class\"><font size=-1><a href=\"about.php?username=%s\"> &nbsp;%s</a></font></td>", $db->f("username"), $db->f("Nachname"));
+					print("<tr valign=middle align=left>");
+					printf("<td class=\"$class\"><font size=-1><a href=\"about.php?username=%s\"> &nbsp;%s</a></font></td>", $db->f("username"), htmlReady($db->f("fullname")));
 					printf("<td class=\"$class\"><font size=-1> &nbsp;%s</font></td>", htmlReady($db->f("status")));
 					break;
 				case "Institut":
-					printf("<tr valign=middle align=left><td class=\"$class\"><font size=-1> &nbsp;%s</font></td>", $db->f("Vorname"));
-					printf("<td class=\"$class\"><font size=-1><a href=\"about.php?username=%s\"> &nbsp;%s</a></font></td>", $db->f("username"), $db->f("Nachname"));
+					print("<tr valign=middle align=left>");
+					printf("<td class=\"$class\"><font size=-1><a href=\"about.php?username=%s\"> &nbsp;%s</a></font></td>", $db->f("username"), htmlReady($db->f("fullname")));
 					if ($db->f("inst_perms") == "user")
-						printf("<td class=\"$class\"><font size=-1> &nbsp;Studierender &nbsp;</font></td>");
-					else
-						($db->f("Funktion")) ? printf("<td class=\"$class\"><font size=-1> &nbsp;%s &nbsp;</font></td>", htmlReady($INST_FUNKTION[$db->f("Funktion")]["name"])) : printf("<td class=\"$class\"><font size=-1> &nbsp;keine Funktion &nbsp;</font></td>");
+						print("<td class=\"$class\"><font size=-1> &nbsp;Studierender &nbsp;</font></td>");
+					else {
+						//statusgruppen
+						$gruppen = GetStatusgruppen($db->f("Institut_id"),$db->f("user_id"));
+						(is_array($gruppen)) ? printf("<td class=\"$class\"><font size=-1> &nbsp;%s &nbsp;</font></td>", htmlReady(join(", ", array_values($gruppen)))) : printf("<td class=\"$class\"><font size=-1> &nbsp;keiner Funktion zugeordnet&nbsp;</font></td>");
+					}
 					break;
 				default:
-					printf("<tr valign=middle align=left><td class=\"$class\"><font size=-1> &nbsp;%s</font></td>", $db->f("Vorname"));
-					printf("<td class=\"$class\"><font size=-1><a href=\"about.php?username=%s\"> &nbsp;%s</a></font></td>", $db->f("username"), $db->f("Nachname"));
+					print("<tr valign=middle align=left>");
+					printf("<td class=\"$class\"><font size=-1><a href=\"about.php?username=%s\"> &nbsp;%s</a></font></td>", $db->f("username"), htmlReady($db->f("fullname")));
 					printf("<td class=\"$class\"><font size=-1> &nbsp;%s</font></td>", $db->f("perms"));
 					break;
 			}

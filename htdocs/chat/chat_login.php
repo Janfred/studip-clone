@@ -50,13 +50,12 @@ require_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/ChatShmServer.class.php
 //Studip includes
 require_once $ABSOLUTE_PATH_STUDIP."msg.inc.php";
 require_once $ABSOLUTE_PATH_STUDIP."messaging.inc.php";
+require_once $ABSOLUTE_PATH_STUDIP."functions.php";
 
 $chatServer = &new ChatShmServer;
 $chatServer->caching = true;
-$db=new DB_Seminar("SELECT CONCAT(Vorname,' ',Nachname) as fullname FROM auth_user_md5 WHERE user_id='$user->id'");
-$db->next_record();
 $chatServer->addChat($chatid);
-if (!$chatServer->addUser($user->id,$chatid,$auth->auth["uname"],$db->f("fullname"),$perm->have_perm("root"))){
+if (!$chatServer->addUser($user->id,$chatid,$auth->auth["uname"],get_fullname(),$perm->have_perm("root"))){
 	?><html>
 	<head>
 	 <title>Stud.IP</title>

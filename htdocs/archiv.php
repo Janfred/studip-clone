@@ -501,22 +501,22 @@ IF ($archiv_data["perform_search"]) {
 
        		 	if ($archiv_data["edit_grants"]) {
 				echo "<br /><br /><hr><b><font size=-1>Folgende Benutzer haben Zugriff auf die Daten der Veranstaltung (&Uuml;bersicht, Beitr&auml;ge und Dateiarchiv):</font></b><br /><br />";
-				$db2->query("SELECT Nachname, Vorname, archiv_user.status, username, archiv_user.user_id FROM archiv_user LEFT JOIN auth_user_md5 USING (user_id) WHERE seminar_id = '".$db->f("seminar_id")."' ORDER BY Nachname");
+				$db2->query("SELECT " . $_fullname_sql['full'] . " AS fullname , archiv_user.status, username, archiv_user.user_id FROM archiv_user LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE seminar_id = '".$db->f("seminar_id")."' ORDER BY Nachname");
 				while ($db2->next_record()) {
-					echo "<font size=-1>".$db2->f("Nachname"), ", ", $db2->f("Vorname"), " (Status: ", $db2->f("status"), ")</font>";
+					echo "<font size=-1>".$db2->f("fullname"). " (Status: ". $db2->f("status"). ")</font>";
 					if ($db2->f("status") != "dozent")
 						echo "<a href='$PHP_SELF?delete_user=".$db2->f("user_id")."&d_sem_id=".$db->f("seminar_id"),"#anker'><font size=-1>&nbsp;Zugriffsberechtigung entfernen</font> <img border=0 src=\"./pictures/trash.gif\" alt=\"Diesem Benutzer die Zugriffsberechtigung entziehen\"></a>";
 					echo "<br />";	
 					}		
 				if (($add_user) && (!$new_search)){
-					$db2->query("SELECT Vorname, Nachname, username, user_id FROM auth_user_md5 WHERE Vorname LIKE '%$search_exp%' OR Nachname LIKE '%$search_exp%' OR username LIKE '%$search_exp%' ORDER BY Nachname");
+					$db2->query("SELECT " . $_fullname_sql['full'] . " AS fullname, username, auth_user_md5.user_id FROM auth_user_md5 LEFT JOIN user_info USING (user_id) WHERE Vorname LIKE '%$search_exp%' OR Nachname LIKE '%$search_exp%' OR username LIKE '%$search_exp%' ORDER BY Nachname");
 					if ($db2->affected_rows()) {
 						echo "<form action=\"$PHP_SELF#anker\">";
 						echo "<hr><b><font size=-1>Benutzer Berechtigung erteilen: </font></b><br /><br />";
 						echo "<b><font size=-1>Es wurden ", $db2->affected_rows(), " Benutzer gefunden </font></b><br />";
 						echo "<font size=-1>Bitte w&auml;hlen Sie den Benutzer aus der Liste aus:</font>&nbsp;<br /><font size=-1><select name=\"add_user\">";
 						while ($db2->next_record()) {
-							echo "<option value=",$db2->f("user_id"),">",$db2->f("Nachname"),", ".$db2->f("Vorname"), ", (",$db2->f("username"),") </option>";
+							echo "<option value=\"".$db2->f("user_id")."\">".$db2->f("fullname"). " (".$db2->f("username").") </option>";
 						}
 						echo "</select></font>";
 						echo "<br /><font size=-1><input type=\"SUBMIT\"  name=\"do_add_user\" value=\"Diesen Benutzer hinzuf&uuml;gen\" /></font>";

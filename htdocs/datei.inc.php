@@ -569,7 +569,7 @@ function upload_item ($range_id, $create = FALSE, $echo = FALSE) {
 function display_folder_system ($folder_id, $level, $open, $lines, $change, $move, $upload, $all) {
 
 
-	global $SessionSeminar,$SessSemName,$loginfilelast,$loginfilenow, $rechte, $anfang, $PHP_SELF, $user, $SemSecLevelWrite, $SemUserStatus;
+	global $_fullname_sql,$SessionSeminar,$SessSemName,$loginfilelast,$loginfilenow, $rechte, $anfang, $PHP_SELF, $user, $SemSecLevelWrite, $SemUserStatus;
 
 	if (!$anfang)
 		$anfang = $folder_id;
@@ -578,7 +578,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 	$db2=new DB_Seminar;
 	$db3=new DB_Seminar;	
 	
-	$db->query("SELECT Vorname, Nachname, username, folder_id, range_id, folder.user_id, name, description, mkdate, chdate FROM folder LEFT JOIN auth_user_md5 USING (user_id)WHERE range_id = '$folder_id' ORDER BY mkdate");
+	$db->query("SELECT ". $_fullname_sql['full'] ." AS fullname , username, folder_id, range_id, a.user_id, name, description, a.mkdate, a.chdate FROM folder a LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE range_id = '$folder_id' ORDER BY a.mkdate");
 
 	$lines[$level] = $db->affected_rows();
 
@@ -609,10 +609,10 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 		
 		if (!$all) {
 			$db2->query("SELECT * FROM folder WHERE range_id = '".$db->f("folder_id")."' ORDER BY mkdate");		
-			$db3->query("SELECT Vorname, Nachname, username, dokumente.user_id, dokumente.* FROM dokumente  LEFT JOIN auth_user_md5 USING (user_id) WHERE range_id = '".$db->f("folder_id")."' ORDER BY mkdate DESC");
+			$db3->query("SELECT ". $_fullname_sql['full'] ." AS fullname, username, a.user_id, a.* FROM dokumente a LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE range_id = '".$db->f("folder_id")."' ORDER BY a.mkdate DESC");
 			}
 		else
-			$db3->query("SELECT Vorname, Nachname, username, dokumente.user_id, dokumente.* FROM dokumente  LEFT JOIN auth_user_md5 USING (user_id) WHERE seminar_id = '".$folder_id."' ORDER BY mkdate DESC");
+			$db3->query("SELECT ". $_fullname_sql['full'] ." AS fullname, username, a.user_id, a.* FROM dokumente a LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE seminar_id = '".$folder_id."' ORDER BY a.mkdate DESC");
 			
 		$letzter=$db2->num_rows(); 		// wenn $letzter = 0 ist gibt es keinen untergeordneten Ordner mehr
 		$dok_letzter=$db3->num_rows(); // wenn $dok_letzter = 0 ist gibt es keine Dokumente in dem Ordner
@@ -648,7 +648,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 				}
 			
 			//Zusatzangaben erstellen
-			$zusatz="<a href=\"about.php?username=".$db->f("username")."\"><font color=\"#333399\">".$db->f("Vorname")." ".$db->f("Nachname")."</font></a>&nbsp;".date("d.m.Y - H:i",$db->f("mkdate"))."";			
+			$zusatz="<a href=\"about.php?username=".$db->f("username")."\"><font color=\"#333399\">".$db->f("fullname")."</font></a>&nbsp;".date("d.m.Y - H:i",$db->f("mkdate"))."";			
 
 			
 			if ($loginfilelast[$SessSemName[1]] < $db->f("chdate")) 
@@ -765,7 +765,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 				$titel= $tmp_titel."&nbsp;&nbsp;(".round ($db3->f("filesize") / 1024)." kB)";
 				
 				//Zusatzangaben erstellen
-				$zusatz="<a href=\"about.php?username=".$db3->f("username")."\"><font color=\"#333399\">".$db3->f("Vorname")." ".$db3->f("Nachname")."</font></a>&nbsp;".date("d.m.Y - H:i",$db3->f("mkdate"));			
+				$zusatz="<a href=\"about.php?username=".$db3->f("username")."\"><font color=\"#333399\">".$db3->f("fullname")."</font></a>&nbsp;".date("d.m.Y - H:i",$db3->f("mkdate"));			
 
 				?><td class="blank" width="*">&nbsp;</td></tr></table><table width="100%" cellpadding=0 cellspacing=0 border=0><tr><?
 				
@@ -876,7 +876,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 				$titel= $tmp_titel;		
 
 			//Zusatzangaben erstellen
-			$zusatz="<a href=\"about.php?username=".$db->f("username")."\"><font color=\"#333399\">".$db->f("Vorname")." ".$db->f("Nachname")."</font></a>&nbsp;".date("d.m.Y - H:i",$db->f("mkdate"));
+			$zusatz="<a href=\"about.php?username=".$db->f("username")."\"><font color=\"#333399\">".$db->f("fullname")."</font></a>&nbsp;".date("d.m.Y - H:i",$db->f("mkdate"));
 			
 			
 			if ($loginfilelast[$SessSemName[1]] < $db->f("chdate")) 

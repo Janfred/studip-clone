@@ -21,6 +21,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 require_once $ABSOLUTE_PATH_STUDIP."datei.inc.php";  // benötigt zum Löschen von Dokumenten
 require_once $ABSOLUTE_PATH_STUDIP."config.inc.php";  //Daten 
+require_once $ABSOLUTE_PATH_STUDIP."functions.php";  //Daten 
+
 
 
 /*
@@ -675,10 +677,7 @@ function edit_dates($stunde,$minute,$monat,$tag,$jahr,$end_stunde, $end_minute, 
 		$db3=new DB_Seminar;
 		$db4=new DB_Seminar;
 
-		$tmp = $auth->auth["uname"];
-		$db->query ("SELECT Vorname , Nachname , username FROM auth_user_md5 WHERE username = '$tmp'");
-		$db->next_record();
-		$author=$db->f("Vorname")." " . $db->f("Nachname");
+		$author = get_fullname();
 
 		$titel=$titel;
 		$description=$description; 
