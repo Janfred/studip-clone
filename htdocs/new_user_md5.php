@@ -716,7 +716,7 @@ if (isset($details)) {
 
 	} else { // alten Benutzer bearbeiten
 	
-		$db->query("SELECT auth_user_md5.*, changed, title_rear, title_front, geschlecht FROM auth_user_md5 LEFT JOIN active_sessions ON auth_user_md5.user_id = sid LEFT JOIN user_info ON (auth_user_md5.user_id = user_info.user_id) WHERE username ='$details'");
+		$db->query("SELECT auth_user_md5.*, changed, mkdate, title_rear, title_front, geschlecht FROM auth_user_md5 LEFT JOIN active_sessions ON auth_user_md5.user_id = sid LEFT JOIN user_info ON (auth_user_md5.user_id = user_info.user_id) WHERE username ='$details'");
 		while ($db->next_record()) {
 			if ($db->f("changed") != "") {
 				$stamp = mktime(substr($db->f("changed"),8,2),substr($db->f("changed"),10,2),substr($db->f("changed"),12,2),substr($db->f("changed"),4,2),substr($db->f("changed"),6,2),substr($db->f("changed"),0,4));
@@ -792,7 +792,7 @@ if (isset($details)) {
 					<td class="steel1">&nbsp;<? echo $inactive ?></td>
 				</tr>
 				<tr>
-					<td colspan="2" class="steel1"><b>&nbsp;registriert seit</b></td>
+					<td colspan="2" class="steel1"><b>&nbsp;registriert seit:</b></td>
 					<td class="steel1">&nbsp;<? if ($db->f("mkdate")) echo date("d.m.y, G:i", $db->f("mkdate")); else echo "unbekannt"; ?></td>
 				</tr>
 				
