@@ -145,9 +145,7 @@ if ($auth->auth["uid"] == "nobody") { ?>
 			</td>
 <?
 
-				if (!($perm->have_perm("admin") || $perm->have_perm("root"))) {
-					echo MakeToolbar("pictures/meinetermine.gif","./calendar.php",_("Planer"),_("Meine Termine und Kontakte"),40, "_top");
-				}
+
 //Nachrichten anzeigen
 
 	if ((($altm) && (!$neum)) || ((($altm+$neum) >0) && ($i_page == "sms.php"))) {
@@ -171,8 +169,12 @@ if ($auth->auth["uid"] == "nobody") { ?>
 		$tip = "";
 		$text = "";
 	}
-	
 		echo MakeToolbar($icon,"sms.php",$text,$tip,40, "_top");
+		
+		
+		if (!($perm->have_perm("admin") || $perm->have_perm("root"))) {
+			echo MakeToolbar("pictures/meinetermine.gif","./calendar.php",_("Planer"),_("Meine Termine und Kontakte"),40, "_top");
+		}		
 
 		// wurde ich zum Chat eingeladen? Wenn nicht, nachsehen ob wer im Chat ist
           //Version für neuen Chat (vorläufig)
@@ -194,11 +196,7 @@ if ($auth->auth["uid"] == "nobody") { ?>
 		} else {
 //			echo MakeToolbar("pictures/blank.gif","","","",40,"_top");
 		}
-?>
-			<td class="toolbar">
-				<img border="0" src="pictures/blank.gif" height="7" width="6">
-			</td>
-<?
+
 		// Ist sonst noch wer da?
 		if (!count($online))
 			echo MakeToolbar("pictures/nutzer.gif","online.php",_("Online"),_("Nur Sie sind online"),60, "_top","left");
