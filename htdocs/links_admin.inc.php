@@ -476,6 +476,16 @@ if ($links_admin_data["srch_exp"]){
 	$query.="(seminare.Name LIKE '%".$links_admin_data["srch_exp"]."%' OR seminare.Untertitel LIKE '%".$links_admin_data["srch_exp"]."%' OR seminare.Beschreibung LIKE '%".$links_admin_data["srch_exp"]."%' OR auth_user_md5.Nachname LIKE '%".$links_admin_data["srch_exp"]."%') ";
 	$conditions++;
 	}
+//arrg Hotfix, bis sich mal jemand erbarmt...
+
+if (($auth->auth["perm"] =="tutor") || ($auth->auth["perm"] == "dozent")){
+	$query="SELECT  seminare.*, Institute.Name AS Institut FROM seminar_user LEFT JOIN seminare USING (Seminar_id) 
+		LEFT JOIN Institute USING (institut_id) 
+		WHERE seminar_user.status IN ('dozent','tutor') 
+		AND seminar_user.user_id='$user->id' ";
+		$conditions++;
+}
+// ende Hotfix
 
 //Extension to the query, if we want to show lectures which are archiveable
 if ($i_page== "archiv_assi.php"){
@@ -488,7 +498,7 @@ if ($i_page== "archiv_assi.php"){
 	}
 
 $query.=" ORDER BY  ".$links_admin_data["sortby"];	
-			
+		
 $db->query($query);
 
 ?>

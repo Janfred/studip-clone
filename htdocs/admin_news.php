@@ -576,7 +576,7 @@ function get_news_perm()
 {
 global $auth;
 $this->news_perm[$this->user_id]=array("name"=>$this->full_username,"perm"=>3);
-$query="SELECT seminare.Seminar_id AS id,seminar_user.status,Name FROM seminare LEFT JOIN seminar_user USING (Seminar_id) WHERE seminar_user.user_id='".$this->user_id."' AND seminar_user.status IN ('dozent','tutor')";
+$query="SELECT seminare.Seminar_id AS id,seminar_user.status,Name FROM seminar_user LEFT JOIN seminare USING (Seminar_id) WHERE seminar_user.user_id='".$this->user_id."' AND seminar_user.status IN ('dozent','tutor')";
 $this->db->query($query);
 while($this->db->next_record())
 	{
@@ -592,14 +592,14 @@ if ($auth->auth["perm"]=="admin")
           $this->news_perm[$this->db->f("id")]=array("name"=>$this->db->f("Name"),"perm"=>3);
           }
      }
-$query="SELECT Institute.Institut_id AS id,Name,user_inst.inst_perms AS status  FROM Institute LEFT JOIN user_inst USING (Institut_id) WHERE user_inst.user_id='".$this->user_id."' AND user_inst.inst_perms IN ('admin','dozent','tutor','autor')";
+$query="SELECT Institute.Institut_id AS id,Name,user_inst.inst_perms AS status  FROM user_inst LEFT JOIN Institute USING (Institut_id) WHERE user_inst.user_id='".$this->user_id."' AND user_inst.inst_perms IN ('admin','dozent','tutor','autor')";
 $this->db->query($query);
 while($this->db->next_record())
 	{
      if ($this->db->f("status")=="tutor" OR $this->db->f("status")=="autor" OR $this->db->f("status")=="dozent") $this->news_perm[$this->db->f("id")]=array("name"=>$this->db->f("Name"),"perm"=>2);
      if ($this->db->f("status")=="admin") $this->news_perm[$this->db->f("id")]=array("name"=>$this->db->f("Name"),"perm"=>3);
      }
-$query="SELECT Fakultaeten.fakultaets_id AS id,Name,fakultaet_user.status FROM Fakultaeten LEFT JOIN fakultaet_user USING (fakultaets_id) WHERE fakultaet_user.user_id='".$this->user_id."' AND fakultaet_user.status IN ('admin','autor')";
+$query="SELECT Fakultaeten.fakultaets_id AS id,Name,fakultaet_user.status FROM fakultaet_user LEFT JOIN Fakultaeten USING (fakultaets_id) WHERE fakultaet_user.user_id='".$this->user_id."' AND fakultaet_user.status IN ('admin','autor')";
 $this->db->query($query);
 while($this->db->next_record())
 	{

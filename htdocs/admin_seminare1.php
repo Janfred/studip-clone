@@ -694,17 +694,17 @@ if ($s_command) {
 				</td>
 				<td align=left colspan=3>
 				<?
-				$db3->query("SELECT * FROM auth_user_md5 WHERE perms = 'dozent' ORDER BY Nachname");
+				$db3->query("SELECT Vorname,Nachname FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE status = 'dozent' AND Seminar_id='$s_id' ORDER BY Nachname");
 				$i=0;
 				while ($db3->next_record()) {
-					$tempDozent_id = $db3->f("user_id");
-					$db4->query("SELECT * FROM seminar_user WHERE Seminar_id = '$s_id' AND user_id = '$tempDozent_id' AND Status = 'dozent'");
-					if ($db4->next_record()) {
+					//$tempDozent_id = $db3->f("user_id");
+					//$db4->query("SELECT * FROM seminar_user WHERE Seminar_id = '$s_id' AND user_id = '$tempDozent_id' AND Status = 'dozent'");
+					//if ($db4->next_record()) {
 						if ($i)
 							echo ", ";
 						echo "<b>", htmlReady($db3->f("Vorname")), " ", htmlReady($db3->f("Nachname")), "</b>";
 						$i++;						
-						}
+					//	}
 					}
 				?>
 			</tr>
@@ -713,17 +713,17 @@ if ($s_command) {
 				</td>
 				<td align=left colspan=3>
 				<?
-				$db3->query("SELECT * FROM auth_user_md5 WHERE perms = 'tutor' OR perms = 'dozent' ORDER BY Nachname");
+				$db3->query("SELECT Vorname,Nachname FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE status = 'tutor' AND Seminar_id='$s_id' ORDER BY Nachname");
 				$i=0;
 				while ($db3->next_record()) {
-					$tempTutor_id = $db3->f("user_id");
-					$db4->query("SELECT * FROM seminar_user WHERE Seminar_id = '$s_id' AND user_id = '$tempTutor_id' AND Status = 'tutor'");
-					if ($db4->next_record()) {
+					//$tempTutor_id = $db3->f("user_id");
+					//$db4->query("SELECT * FROM seminar_user WHERE Seminar_id = '$s_id' AND user_id = '$tempTutor_id' AND Status = 'tutor'");
+					//if ($db4->next_record()) {
 						if ($i)
 							echo ", ";
 						echo "<b>", htmlReady($db3->f("Vorname")), " ", htmlReady($db3->f("Nachname")), "</b>";
 						$i++;						
-						}
+					//	}
 					}
 				?>
 			</tr>
@@ -746,11 +746,13 @@ if ($s_command) {
 ?>
 				<td align=left colspan=3><select name="Dozenten[]" MULTIPLE SIZE=10>
 					<?php
+					$db4->query("SELECT seminar_user.user_id,status FROM seminar_user LEFT JOIN auth_user_md5 USING(user_id) WHERE Seminar_id = '$s_id' AND Status IN('dozent','tutor')");
+					while ($db4->next_record()){
+						$tempDozent_id[$db4->f("user_id")] = $db4->f("status");
+					}
 					$db3->query("SELECT * FROM auth_user_md5 WHERE perms = 'dozent' ORDER BY Nachname");
 					while ($db3->next_record()) {
-						$tempDozent_id = $db3->f("user_id");
-						$db4->query("SELECT * FROM seminar_user WHERE Seminar_id = '$s_id' AND user_id = '$tempDozent_id' AND Status = 'dozent'");
-						if ($db4->next_record()) {
+						if ($tempDozent_id[$db3->f("user_id")]=="dozent") {
 							printf ("<option selected> %s, %s (%s) - %s</option>", htmlReady($db3->f("Nachname")), htmlReady($db3->f("Vorname")), $db3->f("username"), $db3->f("perms"));
 						} else {
 							printf ("<option> %s, %s (%s) - %s</option>", htmlReady($db3->f("Nachname")), htmlReady($db3->f("Vorname")), $db3->f("username"), $db3->f("perms"));
@@ -765,9 +767,7 @@ if ($s_command) {
 					<?php
 					$db3->query("SELECT * FROM auth_user_md5 WHERE perms = 'tutor' OR perms = 'dozent' ORDER BY Nachname");
 					while ($db3->next_record()) {
-						$tempTutor_id = $db3->f("user_id");
-						$db4->query("SELECT * FROM seminar_user WHERE Seminar_id = '$s_id' AND user_id = '$tempTutor_id' AND Status = 'tutor'");
-						if ($db4->next_record()) {
+						if ($tempDozent_id[$db3->f("user_id")]=="tutor") {
 							printf ("<option selected> %s, %s (%s) - %s</option>", htmlReady($db3->f("Nachname")), htmlReady($db3->f("Vorname")), $db3->f("username"), $db3->f("perms"));
 						} else {
 							printf ("<option> %s, %s (%s) - %s</option>", htmlReady($db3->f("Nachname")), htmlReady($db3->f("Vorname")), $db3->f("username"), $db3->f("perms"));
