@@ -171,4 +171,5 @@ foreach ($visible_groups as $group_id => $group) {
 }
 	
 $this->elements["TableHeader"]->printout(array("content" => $out));
+
 ?>

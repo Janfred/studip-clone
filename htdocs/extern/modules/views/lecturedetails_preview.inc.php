@@ -254,5 +254,5 @@ if ($this->config->getValue("Main", "studiplink")) {
 	}
 	echo "</td></tr></table>\n";
 }
-?>
 
+?>

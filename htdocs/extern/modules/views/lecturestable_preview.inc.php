@@ -118,4 +118,5 @@ foreach ($data_group as $group) {
 	$first_loop = FALSE;
 }
 $this->elements["TableHeader"]->printout(array("content" => $out));
+
 ?>

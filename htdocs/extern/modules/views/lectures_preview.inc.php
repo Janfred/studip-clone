@@ -145,4 +145,5 @@ foreach ($data_sem as $dat) {
 	echo "</table></td></tr>\n";
 }
 echo "</table>";
+
 ?>

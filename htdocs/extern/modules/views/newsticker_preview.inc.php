@@ -51,4 +51,5 @@ echo "</textarea>\n</form>\n";
 
 if ($this->config->getValue("Main", "automaticstart"))
 	echo "<script type=\"text/javascript\">\n\tnewsticker();\n</script>\n";
+	
 ?>
