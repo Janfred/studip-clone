@@ -17,10 +17,23 @@ if ($structure_open) {
 	$resources_data["actual_object"]=$structure_open;
 }
 
-//Close a level/resource
-if ($structure_close) {
-	unset($resources_data["structure_opens"][$structure_close]);
+//a small helper function to close all the kids
+function closeStructure ($resource_id) {
+	global $resources_data;
+	$db = new DB_Seminar;
+	
+	unset($resources_data["structure_opens"][$resource_id]);
+	$query = sprintf ("SELECT resource_id FROM resources_objects WHERE parent_id = '%s' ", $resource_id);
+	$db->query($query);
+	while ($db->next_record()) {
+		closeStructure ($db->f("resource_id"));
+	}
 }
+
+//Close a level/resource
+if ($structure_close)
+	closeStructure ($structure_close);
+	
 
 //switch to move mode
 if ($pre_move_object) {
