@@ -191,7 +191,7 @@ switch( $command ) {
 	$answer->setText("");
 	$question->addChild ($answer);
      }
-     echo "Nummer: ".$question->getNumberChildren()."<br>";
+     #echo "Nummer: ".$question->getNumberChildren()."<br>";
      break;
 
    } elseif ($question->getType () == EVALQUESTION_TYPE_POL) {
