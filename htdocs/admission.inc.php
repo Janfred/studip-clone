@@ -267,7 +267,7 @@ function check_admission ($send_message=TRUE) {
 		$db2->query("UPDATE seminare SET admission_selection_take_place ='1' WHERE Seminar_id = '".$db->f("Seminar_id")."' ");
 
 		//evtl. verbliebene Plaetze auffuellen
-		update_admission($seminar_id, $send_message);
+		update_admission($db->f("Seminar_id"), $send_message);
 
 		//User benachrichten (nur bei Losverfahren, da Wartelist erst waehrend des Losens generiert wurde.
 		if (($send_message) && ($db->f("admission_type") == '1')) {
