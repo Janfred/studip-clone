@@ -76,7 +76,7 @@ $xml_names_person = array(
 	"Home"			=>		"homepage",
 	"name"			=>		"statusgruppe",
 	"privadr"			=>		"adresse",
-	"privatnr"			=>		"privatnummer"
+	"privatnr"			=>		"privatnummer",
 	"admission_studiengang_id"	=>		"studiengang"
 );
 ?>
