@@ -64,7 +64,7 @@ function dump_sem($sem_id) {
 	if (vorbesprechung($sem_id))
 		$dump.="<tr><td width=\"15%\"><b>" . _("Vorbesprechung:") . " </b></td><td>".vorbesprechung($sem_id)."</td></tr>\n";
 		
-	if ($db2->f('Ort')!="")  
+	if (getRoom($sem_id, FALSE))  
 		$dump.="<tr><td width=\"15%\"><b>" . _("Ort:") . " </b></td><td>".getRoom($sem_id, FALSE)."</td></tr>\n";
 
 	//wer macht den Dozenten?
