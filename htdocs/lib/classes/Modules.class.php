@@ -127,8 +127,38 @@ class Modules {
 		}
 		return $modules;
 	}
+	
+	function getDefaultDecValue($type, $range_id) {
+		return bindec($this->getDefaultBinValue($type, $range_id));
+	}
+	
+	function writeDefaultStatus($range_id) {
+		if (get_object_type($range_id) == "sem") {
+			$query = sprintf ("SELECT status AS type FROM seminare WHERE Seminar_id ='%s'", $range_id);
+		} else {
+			$query = sprintf ("SELECT type FROM Institute WHERE Institut_id ='%s'", $range_id);
+		}
+		$this->db->query($query);
+		$this->db->next_record();
+		
+		if (get_object_type($range_id) == "sem") {
+			$query = sprintf ("UPDATE seminare SET modules = '%s' WHERE Seminar_id ='%s'", $this->getDefaultDecValue($this->db->f("type"), $range_id), $range_id);
+			$this->db->query($query);
+			if ($this->db->affected_rows())
+				return TRUE;
+			else 
+				return FALSE;
+		} elseif (get_object_type($range_id) == "inst") {
+			$query = sprintf ("UPDATE Institute SET modules = '%s' WHERE Institut_id ='%s'", $thi->getDefaultDecValue($this->db->f("type"), $range_id), $range_id);
+			$this->db->query($query);
+			if ($this->db->affected_rows())
+				return TRUE;
+			else 
+				return FALSE;
+		}
+	}
 
-	function setStatus($modul, $range_id, $value) {
+	function writeStatus($modul, $range_id, $value) {
 		global $SEM_TYPE, $SEM_CLASS, $INST_MODULES;
 		
 		if (get_object_type($range_id) == "sem") {
