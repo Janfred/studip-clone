@@ -1,4 +1,8 @@
 31.08.2002 v 0.8 release candidate 3
+- verschieben von Postings in andere Einrichtungen nun möglich
+- neues Wartungstool um die Integrität der Datenbank zu testen und wiederherzustellen
+- beliebige Teilnehmer können nun von Berechtigten direkt berufen werden
+- neues Hovern von Tabellen eingebaut
 - Umstrukturierung der Reiter im Adminbereich in logische Einheiten
 - neue Übersichtsseite "Meine Einrichtungen" für direkten Zugriff auf Einrichtungsobjekte eingebaut. 
 - Äusserst umfangreiche und flexible Funktionen zur Teilnehmerbegrenzung von Veranstaltungen. Veranstaltungen können
