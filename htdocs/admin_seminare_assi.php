@@ -1652,7 +1652,7 @@ if ($level==2)
 						<td <? echo $cssSw->getFullClass() ?> width="50%">
 							<?
 							if (($search_exp_doz) && ($search_doz_x)) {
-								if ((!$perm->have_perm("root")) && ($SEM_CLASS[$sem_create_data["sem_class"]]["only_inst_user"])) {
+								if ($SEM_CLASS[$sem_create_data["sem_class"]]["only_inst_user"]) {
 									$clause="AND Institut_id IN ('".$sem_create_data["sem_inst_id"]."'";
 									if (is_array($sem_create_data["sem_bet_inst"]))
 										foreach($sem_create_data["sem_bet_inst"] as $val)
@@ -1720,7 +1720,7 @@ if ($level==2)
 						<td class="<? echo $cssSw->getClass() ?>" width="50%">
 							<?
 							if (($search_exp_tut) && ($search_tut_x)) {
-								if ((!$perm->have_perm("root")) && ($SEM_CLASS[$sem_create_data["sem_class"]]["only_inst_user"])) {
+								if ($SEM_CLASS[$sem_create_data["sem_class"]]["only_inst_user"]) {
 									$clause="AND Institut_id IN ('".$sem_create_data["sem_inst_id"]."'";
 									if (is_array($sem_create_data["sem_bet_inst"]))
 										foreach($sem_create_data["sem_bet_inst"] as $val)
