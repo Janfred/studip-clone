@@ -100,11 +100,13 @@ if ($presetview) {
 if (!$forum["presetview"])
 	$forum ["presetview"] = $forum["themeview"];
 
-if ($view)
+if ($view) {
 	if ($view=="reset")
 		$forum["view"] = $forum["presetview"];
 	else
 		$forum["view"] = $view;
+	echo "view gesetzt auf ".$view."<br>";
+}
 
 if (!$forum["view"]) {
 	$view = $forum["themeview"];
