@@ -91,8 +91,7 @@ $xslt_files["rtf-kommentar-2"]["veranstaltung"] = true;
 $xslt_files["rtf-teiln"]["name"] = _("TeilnehmerInnenliste");
 $xslt_files["rtf-teiln"]["desc"] = _("Modul zur Ausgabe von Personendaten als RTF-Datei. Es werden die Grunddaten der TeilnehmerInnen einer einzelnen Veranstaltung in eine Tabelle geschrieben. Die Ausgabe-Datei kann in einer Textverarbeitung bearbeitet werden.");
 $xslt_files["rtf-teiln"]["file"] = "rtf-t-1.xsl";
-$xslt_files["rtf-teiln"]["htm"] = true;
-$xslt_files["rtf-teiln"]["html"] = true;
+$xslt_files["rtf-teiln"]["rtf"] = true;
 
 
 
