@@ -255,8 +255,8 @@ function callSafeguard($voteaction, $voteID = "", $showrangeID = NULL, $search =
 			}
 			else{
 				$type
-				? $safeguard .= printSafeguard("ok", sprintf(_("Das Voting \"%s\" wurde beim Erstellen auf \"Der Teilnehmer sieht die (Zwischen-)Ergebnisse: Nie\" eingestellt.<br> Sollen die Endergebnisse jetzt trotzdem f&uuml;r die Teilnehmer sichtbar gemacht werden? (Wenn dieser Eintrag fortgesetzt werden sollte, werden die Ergebnisse nach Ablauf ohne weitere Nachfrage für die Teilnehmer sichtbar gemacht!)"),$votename),"NeverResultvisibility",$voteID, $showrangeID)
-				: $safeguard .= printSafeguard("ok", sprintf(_("Der Test \"%s\" wurde beim Erstellen auf \"Der Teilnehmer sieht die (Zwischen-)Ergebnisse: Nie\" eingestellt.<br> Sollen die Endergebnisse jetzt trotzdem f&uuml;r die Teilnehmer sichtbar gemacht werden? (Wenn dieser Eintrag fortgesetzt werden sollte, werden die Ergebnisse nach Ablauf ohne weitere Nachfrage für die Teilnehmer sichtbar gemacht!)"),$votename),"NeverResultvisibility",$voteID, $showrangeID);
+				? $safeguard .= printSafeguard("ausruf", sprintf(_("Das Voting \"%s\" wurde beim Erstellen auf \"Der Teilnehmer sieht die (Zwischen-)Ergebnisse: Nie\" eingestellt.<br> Sollen die Endergebnisse jetzt trotzdem f&uuml;r die Teilnehmer sichtbar gemacht werden? (Wenn dieser Eintrag fortgesetzt werden sollte, werden die Ergebnisse nach Ablauf ohne weitere Nachfrage für die Teilnehmer sichtbar gemacht!)"),$votename),"NeverResultvisibility",$voteID, $showrangeID)
+				: $safeguard .= printSafeguard("ausruf", sprintf(_("Der Test \"%s\" wurde beim Erstellen auf \"Der Teilnehmer sieht die (Zwischen-)Ergebnisse: Nie\" eingestellt.<br> Sollen die Endergebnisse jetzt trotzdem f&uuml;r die Teilnehmer sichtbar gemacht werden? (Wenn dieser Eintrag fortgesetzt werden sollte, werden die Ergebnisse nach Ablauf ohne weitere Nachfrage für die Teilnehmer sichtbar gemacht!)"),$votename),"NeverResultvisibility",$voteID, $showrangeID);
 			}
 			break;
 		case "setResultvisibility_confirmed":
@@ -402,7 +402,7 @@ function createVoteArray($mode){
 	$username = "";
 	$voteDB = &new VoteDB();
 	// request the right data from the db / all ranges
-  if (($rangemode == "root" ) || ($rangemode == "admin") || ($rangemode == "dozent")){
+//  if (($rangemode == "root" ) || ($rangemode == "admin") || ($rangemode == "dozent")){
 		switch ($mode){
 			case VOTE_STATE_NEW:
 					$votearrays = $voteDB->getNewVotes($showrangeID);
@@ -416,8 +416,8 @@ function createVoteArray($mode){
 			default:
 				break;
 		}
-	}
-  else{
+//	}
+//  else{
 /*	if ($showrangeID == "all_ranges"){
 		switch ($mode){
 			case VOTE_STATE_NEW:
@@ -451,7 +451,7 @@ function createVoteArray($mode){
 				break;
 		}
 //	}
-  }
+//  }
 
 	// create one array-row for each located voteID
 	foreach ($votearrays as $votearray) {
@@ -483,9 +483,10 @@ function createVoteArray($mode){
 			$username = $voteDB->getAuthorUsername ($authID);
 		}
 		else{
-			$rangetitle = $voteDB->getRangename($rangeID);
-			$username = $voteDB->getAuthorUsername ($authID);
-			if($rangeID == "studip") $rangetitle = _("Systemweite Votings/Tests");
+			$rangetitle = _("eigene Homepage");
+//			$rangetitle = $voteDB->getRangename($rangeID);
+//			$username = $voteDB->getAuthorUsername ($authID);
+//			if($rangeID == "studip") $rangetitle = _("Systemweite Votings/Tests");
 		}
 		$votemode = $votearray["type"];
 

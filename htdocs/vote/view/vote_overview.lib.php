@@ -47,11 +47,18 @@ function printSafeguard($sign,$text,$mode = NULL, $voteID = NULL, $showrangeID =
 */
 	$html = "   <table align=\"center\" width=99% class=blank border=0 cellpadding=2 cellspacing=0>\n"
 		  . "	<tr>\n"
-	 	  . "	 <td width=\"34\">\n";//style=\"vertical-align:top;\"
-	if ($sign != "")	$html .="	  <img src=\"".VOTE_PATH_PICTURES."$sign.gif\" alt=\"$sign.gif\">\n";
+	 	  . "	 <td width=\"34\" valign=\"middle\" style=\"vertical-align:middle;\">\n";//style=\"vertical-align:top;\"
+	$color = "";
+	if ($sign != ""){
+		$html .="	  <img src=\"".VOTE_PATH_PICTURES."$sign.gif\" alt=\"$sign.gif\" =\"middle\">\n";
+		if ($sign == "ausruf")
+			$color = VOTE_COLOR_ERROR;
+		elseif ($sign == "ok")
+			$color = VOTE_COLOR_SUCCESS;
+	}
 	$html .="	 </td>\n";
-	$html .="	 <td align=\"left\" style=\"vertical-align:bottom;\">\n";
-	$html .="	  <font size=\"-1\">$text</font><br><br>\n";
+	$html .="	 <td align=\"left\" valign=\"middle\" style=\"vertical-align:middle;\">\n";
+	$html .="	  <font size=\"-1\" color=\"$color\"><br>$text</font><br><br>\n";
 
 	if (($mode == "delete_request") || ($mode == "NeverResultvisibility")){
 		if ($mode == "delete_request"){
