@@ -110,7 +110,7 @@ if ($CHAT_ENABLE) {
 				<td class="header" width="33%" valign="bottom" background="pictures/fill1.gif">
 					&nbsp;<a href="index.php" target="_top"><img border="0" src="pictures/home.gif" <?=tooltip("zurück zur Startseite")?> width="24" height="21"></a>
 					&nbsp;<a href="./help/index.php<?echo $help_query?>" target="_new"><img border="0" src="pictures/hilfe.gif" <?=tooltip("Hilfe")?> width="24" height="21"></a>
-					&nbsp;<a href="meine_seminare.php"><img border="0" src="pictures/meinesem.gif" <?=tooltip("Meine Veranstaltungen")?> width="24" height="21"></a>
+					&nbsp;<a href="meine_seminare.php"><img border="0" src="pictures/meinesem.gif" <?=tooltip("Meine Veranstaltungen & Einrichtungen")?> width="24" height="21"></a>
 					&nbsp;&nbsp;&nbsp;
 
 
