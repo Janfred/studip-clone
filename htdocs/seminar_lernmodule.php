@@ -37,6 +37,7 @@ include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 
 checkObject();
+checkObjectMoudle("ilias_connect");
 
 if ($SessSemName[1] != "")
 {
@@ -56,7 +57,7 @@ if (isset($do_op) AND (($op_co_id == "") OR($op_co_inst == "") OR($seminar_id ==
 	die();
 }
 
-if (($ILIAS_CONNECT_ENABLE) && ($modules["ilias_connect"]))
+if ($ILIAS_CONNECT_ENABLE)
 {
 
 	$db = New DB_Seminar;
