@@ -306,7 +306,7 @@ edit/add assigns
 
 //Objektbelegung erstellen/aendern
 if ($change_object_schedules) {
-	require_once ("$RELATIVE_PATH_CALENDAR/calendar_func.inc.php"); //needed for extended checkdate
+	require_once ($ABSOLUTE_PATH_STUDIP."calendar_functions.inc.php"); //needed for extended checkdate
 
 	//load the object perms
 	$ObjectPerms = new ResourceObjectPerms($change_schedule_resource_id);
@@ -820,7 +820,7 @@ if ($edit_lock) {
 //edit locks
 if (($lock_sent_x)) {
 	if ($globalPerm == "admin") { //check for resources root or global root
-		require_once ("$RELATIVE_PATH_CALENDAR/calendar_func.inc.php"); //needed for extended checkdate
+		require_once ($ABSOLUTE_PATH_STUDIP."calendar_func.inc.php"); //needed for extended checkdate
 		
 		foreach ($lock_id as $key=>$id) {
 			$illegal_begin = FALSE;
