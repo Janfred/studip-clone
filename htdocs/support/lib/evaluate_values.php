@@ -293,7 +293,7 @@ if (($supporter) && ($evt_sent_x)) {
 		} else
 			$evt_end = mktime($evt_end_hour[$key],$evt_end_min[$key],0,$evt_end_month[$key], $evt_end_day[$key], $evt_end_year[$key]);
 		
-		if ((!$illegal_begin) && (!$illegal_end) && ($evt_begin <= $evt_end)) {
+		if ((!$illegal_begin) && (!$illegal_end) && ($evt_begin < $evt_end)) {
 			$changedEvt->setBegin($evt_begin);
 			$changedEvt->setEnd($evt_end);
 		} elseif ((!$illegal_begin) && ($evt_begin < $changedEvt->getEnd()))
