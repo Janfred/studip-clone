@@ -52,7 +52,7 @@ class ResourceObjectPerms {
 		if (is_object($object_pool[$user_id][$resource_id])){
 			return $object_pool[$user_id][$resource_id];
 		} else {
-			$object_pool[$user_id][$resource_id] =& new ResourceObjectPerms($resource_id, $user_id);
+			$object_pool[$user_id][$resource_id] = new ResourceObjectPerms($resource_id, $user_id);
 			return $object_pool[$user_id][$resource_id];
 		}
 	}
