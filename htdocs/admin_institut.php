@@ -232,8 +232,8 @@ if ($i_view == "new")
 //Output starts here
 
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-include "$ABSOLUTE_PATH_STUDIP/header.php";   //hier wird der "Kopf" nachgeladen 
-include "$ABSOLUTE_PATH_STUDIP/links_admin.inc.php";  //Linkleiste fuer admins
+include ("$ABSOLUTE_PATH_STUDIP/header.php");   //hier wird der "Kopf" nachgeladen 
+include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");  //Linkleiste fuer admins
 
 
 ?>
@@ -246,16 +246,7 @@ include "$ABSOLUTE_PATH_STUDIP/links_admin.inc.php";  //Linkleiste fuer admins
 	} elseif ($i_view == "delete"){
 		echo "Einrichtung gel&ouml;scht";
 	} else {
-		//$db->query ("SELECT Name, type FROM Institute WHERE Institut_id = '$i_view'");
-		//if ($db->next_record())
-		//$tmp_typ = $INST_TYPE[$db->f("type")]["name"];
-		//$tmp_name=$db->f("Name");
-		$tmp_typ = $SessSemName["art"];
-		$tmp_name = $SessSemName[0];
-		echo $tmp_typ, ": ", htmlReady(substr($tmp_name, 0, 60));
-		if (strlen($tmp_name) > 60)
-			echo "... ";
-		echo " -  Grunddaten";
+		print getHeaderLine($i_view)." -  Grunddaten";
 	}
 	?></b></td>
 </tr>
