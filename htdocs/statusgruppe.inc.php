@@ -200,18 +200,59 @@ function CheckStatusgruppe ($range_id, $name)
 * get all statusgruppen for one user and one range
 *
 * get all statusgruppen for one user and one range
+*
 * @access	public
 * @param	string	$range_id
 * @param	string	$user_id
 * @return	array	(structure statusgruppe_id => name)
 */
-function GetStatusgruppen($range_id, $user_id){
+function GetStatusgruppen ($range_id, $user_id) {
 	$db = new DB_Seminar();
 	$db->query("SELECT a.statusgruppe_id,a.name FROM statusgruppen a 
 				LEFT JOIN statusgruppe_user b USING(statusgruppe_id) WHERE user_id='$user_id' AND range_id='$range_id'");
-	while ($db->next_record()){
+	while ($db->next_record()) {
 		$ret[$db->f("statusgruppe_id")] = $db->f("name");
 	}
-	return (is_array($ret)) ? $ret : false;
+	return (is_array($ret)) ? $ret : FALSE;
 }
+
+/**
+* Returns the number of persons who are grouped in Statusgruppen for one range.
+* 
+* Persons who are members in more than one Statusgruppe will be count only once
+*
+* @access public
+* @param string $range_id The ID of a range with Statusgruppen
+* @return int The number of members
+*/
+function CountMembersStatusgruppen ($range_id) {
+	$db = new DB_Seminar();
+	$db->query("SELECT COUNT(DISTINCT user_id) AS count FROM statusgruppen
+							LEFT JOIN statusgruppe_user USING(statusgruppe_id)
+							WHERE range_id = '$range_id'");
+	$db->next_record();
+	return $db->f("count");
+}
+
+/**
+* Returns all statusgruppen for the given range.
+*
+* If there is no statusgruppe for the given range, it returns FALSE.
+*
+* @access	public
+* @param	string	$range_id
+* @param	string	$user_id
+* @return	array	(structure statusgruppe_id => name)
+*/
+function GetAllStatusgruppen ($range_id) {
+	$ret = "";
+	$db = new DB_Seminar();
+	$db->query("SELECT statusgruppe_id, name FROM statusgruppen
+							WHERE range_id='$range_id' ORDER BY position ASC");
+	while ($db->next_record()) {
+		$ret[$db->f("statusgruppe_id")] = $db->f("name");
+	}
+	return (is_array($ret)) ? $ret : FALSE;
+}
+
 ?>
