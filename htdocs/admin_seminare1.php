@@ -323,6 +323,9 @@ if ($s_send) {
 				if ($st_search->num_deleted){
 					$msg .= "msg§" . sprintf(_("%s Studienbereiche gel&ouml;scht."),$st_search->num_deleted) ."§";
 				}
+				if ($st_search->num_deleted || $st_search->num_inserted){
+					$st_search->init();
+				}
 			}
 		} else {
 			// nur alte Eintraege rauswerfen, falls voher Kategorie mit Bereichen gewaehlt war
@@ -686,7 +689,7 @@ if (($s_id) && (auth_check())) {
 					echo $st_search->getSearchButton(array('style' => 'vertical-align:middle;'));
 					echo "<br>&nbsp;&nbsp;<span style=\"font-size:10pt;\">" . _("Geben Sie zur Suche den Namen des Studienbereiches ein.");
 					if ($st_search->num_search_result !== false){
-						echo "<br>&nbsp;&nbsp;<b><a name=\"anker\">" . sprintf(_("Ihre Suche ergab %s Treffer."),$st_search->num_search_result) ."</a></b>";
+						echo "<br><a name=\"anker\">&nbsp;&nbsp;</a><b>" . sprintf(_("Ihre Suche ergab %s Treffer."),$st_search->num_search_result) . (($st_search->num_search_result) ? _(" (Suchergebnisse werden blau angezeigt)") : "") . "</b>";
 					}
 					echo "</span><br>&nbsp;";
 					echo $st_search->getChooserField(array('size' => 12, 'onChange' => 'checkbereich()'),70);
@@ -701,39 +704,7 @@ if (($s_id) && (auth_check())) {
 					<input <? if ($SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["bereiche"]) echo "onClick=\"checkdata('edit'); return false;\" "; ?> type="image" <? echo makeButton ("uebernehmen", "src") ?> border=0 name="s_edit" value=" Ver&auml;ndern ">
 				<input type="hidden" name="s_send" value="TRUE">
 				</td>
-			</tr>
-			<tr <?$cssSw->switchClass() ?>>
-				<td class="<? echo $cssSw->getClass() ?>" align=right>Zeit</td>
-				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <b><? echo htmlReady(view_turnus ($s_id)) ?></b>&nbsp; </td>
-			</td>
-			<tr>
-				<td class="<? echo $cssSw->getClass() ?>" align=right>Semester</td>
-				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <b><? echo get_semester ($s_id) ?></b>&nbsp; </td>
-			</td>
-			<tr>
-				<td class="<? echo $cssSw->getClass() ?>" align=right>Erster Termin</td>
-				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <b><? echo veranstaltung_beginn ($s_id) ?></b>&nbsp; </td>
-			</td>
-			</tr>
-			<?
-			if (vorbesprechung ($s_id)) {
-			?>
-			<tr>
-				<td class="<? echo $cssSw->getClass() ?>" align=right>Vorbesprechung</td>
-				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <b><? echo vorbesprechung ($s_id) ?></b>&nbsp; </td>
-			</td>
-			<?
-			}
-			?>
-			<tr>
-				<td class="<? echo $cssSw->getClass() ?>">&nbsp;</td>
-				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <font color="#FF0000">Bitte nutzen Sie den Menupunkt <? echo "<a href=\"admin_metadates.php?seminar_id=$s_id\"><b>Zeiten</b></a>" ?>, um diese Angaben zu ver&auml;ndern!</font></td>
-			<tr>   
-				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" align="center" colspan=3>
-					<input <? if ($SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["bereiche"]) echo "onClick=\"checkdata('edit'); return false;\" "; ?> type="image" <? echo makeButton ("uebernehmen", "src") ?> border=0 name="s_edit" value=" Ver&auml;ndern ">
-				<input type="hidden" name="s_send" value="TRUE">
-				</td>
-			</tr>
+
 			<tr <?$cssSw->switchClass() ?>>
 				<td class="<? echo $cssSw->getClass() ?>" align=right>Teilnehmer</td>
 				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <textarea name="teilnehmer" cols=58 rows=2><?php echo htmlReady($db->f("teilnehmer")) ?></textarea></td>

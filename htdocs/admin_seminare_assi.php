@@ -47,7 +47,7 @@ $db2 = new DB_Seminar;
 $db3 = new DB_Seminar;
 $db4 = new DB_Seminar;
 $cssSw = new cssClassSwitcher;
-$st_search = new StudipSemTreeSearch("dummy","sem_bereich");
+$st_search = new StudipSemTreeSearch("dummy","sem_bereich",false);
 if (is_array($sem_create_data["sem_bereich"])){
 		for ($i = 0; $i < count($sem_create_data["sem_bereich"]); $i++){
 			$st_search->selected[$sem_create_data["sem_bereich"][$i]] = true;
@@ -56,6 +56,7 @@ if (is_array($sem_create_data["sem_bereich"])){
 		}
 	}
 $st_search->institut_id = $sem_create_data["sem_inst_id"];
+$st_search->doSearch();
 $user_id = $auth->auth["uid"];
 $errormsg='';
 
@@ -145,7 +146,7 @@ if ($form==1)
 
 if ($form==2)
 	{
-	if(isset($sem_bereich_chooser)){
+	if(isset($sem_bereich_chooser) && !$st_search->search_done){
 		unset($st_search->sem_tree_ranges);
 		unset($st_search->sem_tree_ids);
 		for ($i = 0; $i < count($sem_bereich_chooser); $i++){
@@ -1805,7 +1806,7 @@ if ($level==2)
 							echo $st_search->getSearchButton(array('style' => 'vertical-align:middle;'));
 							echo "<br>&nbsp;&nbsp;<span style=\"font-size:10pt;\">" . _("Geben Sie zur Suche den Namen des Studienbereiches ein.");
 							if ($st_search->num_search_result !== false){
-								echo "<br>&nbsp;&nbsp;<b><a name=\"anker\">" . sprintf(_("Ihre Suche ergab %s Treffer."),$st_search->num_search_result) ."</a></b>";
+								echo "<br><a name=\"anker\">&nbsp;&nbsp;</a><b>" . sprintf(_("Ihre Suche ergab %s Treffer."),$st_search->num_search_result) . (($st_search->num_search_result) ? _(" (Suchergebnisse werden blau angezeigt)") : "") . "</b>";
 							}
 							echo "</span><br>&nbsp;";
 							echo $st_search->getChooserField(array('style' => 'width:70%','size' => 10),70);
