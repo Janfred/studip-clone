@@ -71,7 +71,7 @@ function delete_all_messages($user_id = FALSE) {
 		$user_id = $user->id;
 	}
 	
-	$query = "SELECT message_id FROM message_user WHERE user_id = '".$user_id."'";
+	$query = "SELECT message_id FROM message_user WHERE user_id = '".$user_id."' AND deleted='0'";
 	$db->query("$query");
 	while ($db->next_record()) {
 		$this->delete_message($db->f("message_id"));
