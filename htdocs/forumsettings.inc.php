@@ -23,7 +23,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 $cssSw=new cssClassSwitcher;	
 
 if ($forumsend=="bla"){
-	$forum["neuauf"]=$neuauf;
+	$forum["neuauf"] = $neuauf;
+	$forum["postingsperside"] = $postingsperside;
+	$forum["flatallopen"] = $flatallopen;
+	$forum["rateallopen"] = $rateallopen;
+	$forum["showimages"] = $showimages;
+	$forum["sortthemes"] = $sortthemes;
+	$forum["themeview"] = $themeview;
+	$forum["shrink"] = $shrink*604800; // Anzahl der Sekunden pro Woche
+	$forum["changed"] = "TRUE";
 }
 
 ?>
