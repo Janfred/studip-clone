@@ -86,7 +86,7 @@ $xml_groupnames_studiengaenge = array(
 );
 
 $xml_names_studiengaenge = array( 
-	"name"		=>		"studiengang",
+	"name"		=>		"name",
 	"count"		=>		"anzahl"
 );
 
