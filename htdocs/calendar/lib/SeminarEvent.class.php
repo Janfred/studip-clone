@@ -60,7 +60,7 @@ class SeminarEvent extends Event {
 	*/
 	function getCategoryName () {
 		global $TERMIN_TYP;
-		return _($TERMIN_TYP[$this->cat]["name"]);
+		return $TERMIN_TYP[$this->cat]["name"];
 	}
 	
 	function getColor () {
@@ -87,10 +87,10 @@ class SeminarEvent extends Event {
 	}
 	
 	function restore ($id = "") {
-		global $user, $TERMIN_TYP;
+		global $user;
 		if($id = "")
 			$id = $this->id;
-		$db = new DB_Seminar();
+		$db =& new DB_Seminar();
 		$query = "SELECT termine.*, seminar_user.*, seminare.Seminar_id, Name "
 						.	"FROM termine LEFT JOIN seminar_user ON (range_id=Seminar_id) "
 						. "LEFT JOIN seminare USING(Seminar_id) WHERE (termin_id='$id' "
