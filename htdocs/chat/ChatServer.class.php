@@ -216,9 +216,12 @@ class ChatServer {
 
 	function logoutUser($userid){
 		if(is_array($this->chatDetail)){
-			foreach($this->chatDetail as $chatid => $detail)
-				if ($this->removeUser($userid,$chatid))
-					$this->addMsg("system",$chatid,sprintf(_("%s hat sich aus StudIP ausgeloggt!"),htmlReady($this->getFullname($userid,$chatid) . " (".$this->getNick($userid,$chatid).")")));
+			foreach($this->chatDetail as $chatid => $detail){
+				$name = htmlReady($this->getFullname($userid,$chatid) . " (".$this->getNick($userid,$chatid).")");
+				if ($this->removeUser($userid,$chatid)){
+					$this->addMsg("system",$chatid,sprintf(_("%s hat sich aus StudIP ausgeloggt!"),$name));
+				}
+			}
 		}
 		return true;
 	}

@@ -196,6 +196,25 @@ function chatCommand_sms($msgStr){
 		$chatServer->addMsg("system:$user->id",$chatid,_("Fehler, ihre SMS konnte nicht &uuml;bermittelt werden!"));
 }
 
+function chatCommand_invite($msgStr){
+	global $user,$chatServer,$chatid;
+	if ($chatServer->getPerm($user->id,$chatid)){
+		$recUserName = trim(substr($msgStr." ",0,strpos($msgStr." "," ")));
+		$smsMsgStr = trim(strstr($msgStr," "));
+		if (!$recUserName){
+			$chatServer->addMsg("system:$user->id",$chatid,_("Fehler, falsche Kommandosyntax!"));
+			return;
+		}
+		$msging = new messaging();
+		if ($msging->insert_chatinv($recUserName,$chatid,$smsMsgStr))
+			$chatServer->addMsg("system:$user->id",$chatid,sprintf(_("Ihre Einladung an <b>%s</b> wurde &uuml;bermittelt."),$recUserName));
+		else
+			$chatServer->addMsg("system:$user->id",$chatid,_("Fehler, ihre Einladung konnte nicht &uuml;bermittelt werden!"));
+		} else {
+				$chatServer->addMsg("system:$user->id",$chatid,_("Sie d&uuml;rfen f&uuml;r diesen Chat keine Einladungen verschicken!"));
+	}
+}
+
 function chatCommand_password($msgStr){
 	global $user,$chatServer,$chatid;
 	$password = $msgStr;

@@ -57,6 +57,7 @@ require_once $ABSOLUTE_PATH_STUDIP."contact.inc.php";
 
 $chatServer =& ChatServer::GetInstance($CHAT_SERVER_NAME);
 $chatServer->caching = true;
+$sms = new messaging();
 $object_type = get_object_type($chatid);
 $chat_entry_level = "user";
 if (!$perm->have_perm("root")){;
@@ -101,11 +102,17 @@ if ($chat_entry_level != "admin" && $chatServer->isActiveChat($chatid) && $chatS
 		if ($chatServer->chatDetail[$chatid]['password'] == $_REQUEST['chat_password']){
 			$chat_entry_check = true;
 		} else {
-			$msg = "errorß" . _("Das eingegebene Passwort ist falsch!") . "ß";
+			$msg = "errorß<font size=\"-1\">". _("Das eingegebene Passwort ist falsch!") . "</font>ß";
+		}
+	} else {
+		if ($sms->check_chatinv($chatid)){
+				$chat_entry_check = true;
+		} else {
+				$msg = "errorß<font size=\"-1\">" . _("Es wurde keine g&uuml;ltige Einladung f&uuml;r diesen Chat gefunden!") . "</font>ß";
 		}
 	}
 	if (!$chat_entry_check){
-		$msg .= "infoß" . "<form name=\"chatlogin\" method=\"post\" action=\"$PHP_SELF?chatid=$chatid\"><b>" ._("Passwort erforderlich") 
+		$msg .= "infoß" . "<form name=\"chatlogin\" method=\"post\" onSubmit=\"doSubmit();return false;\"action=\"$PHP_SELF?chatid=$chatid\"><b>" ._("Passwort erforderlich") 
 			. "</b><br><font size=\"-1\" color=\"black\">" . _("Um an diesem Chat teilnehmen zu k&ouml;nnen, m&uuml;ssen sie das Passwort eingeben.")
 			. "<br><input type=\"password\" style=\"vertical-align:middle;\" name=\"chat_password\">&nbsp;&nbsp;<input style=\"vertical-align:middle;\" type=\"image\" name=\"submit\""
 			. makeButton("absenden","src") . " border=\"0\" value=\"senden\"></font></form>ß";
@@ -128,17 +135,30 @@ if (!$chat_entry_check){
 	 <title>Stud.IP</title>
 	<?php include $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_style.inc.php";?>
 	<script type="text/javascript" language="javascript" src="<?=$CANONICAL_RELATIVE_PATH_STUDIP?>/md5.js"></script>
+	<script type="text/javascript">
+	/**
+	* JavaScript 
+	*/
+	var chatuniqid = '<?=$chatServer->chatDetail[$chatid]["id"]?>';
+	function doSubmit() {
+		if (document.chatlogin.chat_password.value){
+			document.chatlogin.chat_password.value = md5(chatuniqid + ":" + document.chatlogin.chat_password.value);
+			document.chatlogin.submit();
+		}
+		return false;
+	}
+	</script>
 	</head>
 	<body>
 	<table border=0 bgcolor="#000000" align="center" cellspacing=0 cellpadding=0 width=70%>
 	<tr valign=top align=middle>
-		<td class="topic" align="left"><b>&nbsp;Zugriff verweigert</b></td>
+		<td class="topic" align="left"><b>&nbsp;<?=_("Zugriff verweigert")?></b></td>
 		</tr>
 		<tr><td class="blank">&nbsp;</td></tr>
 		<?
 		parse_msg ($msg, "ß", "blank", 1);
 		?>
-		<tr><td class="blank"><font size=-1>&nbsp;Fenster <a href="javascript:window.close()"><b>schlieﬂen</b></a><br />&nbsp;</font>
+		<tr><td class="blank"><font size=-1>&nbsp;<a href="javascript:window.close()"><?=_("Fenster schlieﬂen")?></a><br />&nbsp;</font>
 		</td></tr>
 	</table>
 	</body>
@@ -149,8 +169,7 @@ if (!$chat_entry_check){
 	die;
 }
 //evtl Chateinladungen lˆschen
-$sms=new messaging();
-$sms->delete_chatinv($auth->auth["uname"]);
+$sms->delete_chatinv();
 
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN">
