@@ -1101,6 +1101,10 @@ function dateAssi ($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full =
 			$corr = 0;
 		
 		$sem_begin = mktime(0, 0, 0, date("n",$term_data["start_termin"]), date("j",$term_data["start_termin"])+$corr,  date("Y",$term_data["start_termin"]));
+		foreach ($SEMESTER as $val)
+			if (($veranstaltung_start_time >= $val["beginn"]) AND ($veranstaltung_start_time <= $val["ende"])) {
+				$sem_end = $val["vorles_ende"];
+			}
 	}
 
 	//determine the last day as sem_end
@@ -1108,11 +1112,9 @@ function dateAssi ($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full =
 		foreach ($SEMESTER as $val)
 			if  ((($veranstaltung_start_time + $veranstaltung_duration_time + 1) >= $val["beginn"]) AND (($veranstaltung_start_time + $veranstaltung_duration_time +1) <= $val["ende"]))
 				$sem_end=$val["vorles_ende"];
-	else
-		$sem_end=$val["vorles_ende"];
 	
 	$interval = $term_data["turnus"] + 1;
-			
+
 	//create the dates
 	$affected_dates=0;
 	if (is_array($term_data["turnus_data"]))
@@ -1123,7 +1125,7 @@ function dateAssi ($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full =
 				//create new dates
 				$start_time = mktime ($val["start_stunde"], $val["start_minute"], 0, date("n", $sem_begin), date("j", $sem_begin) + ($val["day"] -1) + ($week * 7), date("Y", $sem_begin));
 				$end_time = mktime ($val["end_stunde"], $val["end_minute"], 0, date("n", $sem_begin), date("j", $sem_begin) + ($val["day"] -1) + ($week * 7), date("Y", $sem_begin));
-				
+
 				//check for HOLIDAY from config.inc.php. You should use it only for special holidays
 				foreach ($HOLIDAY as $val2)
 					if (($val2["beginn"] <= $start_time) && ($start_time <=$val2["ende"]))
