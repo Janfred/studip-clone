@@ -483,11 +483,11 @@ class CalendarParserICalendar extends CalendarParser {
 						break;
 						
 					case "COUNT" :
-						$r_rule["count"] = $match[2];
+						$r_rule["count"] = intval($match[2]);
 						break;
 					
 					case "INTERVAL" :
-						$r_rule["linterval"] = $match[2];
+						$r_rule["linterval"] = intval($match[2]);
 						break;
 					
 					case "BYSECOND" :
@@ -514,7 +514,7 @@ class CalendarParserICalendar extends CalendarParser {
 						break;
 					
 					case 'BYSETPOS':
-						$r_rule["sinterval"] = $match[2];
+						$r_rule["sinterval"] = intval($match[2]);
 						break;
 					
 					case "WKST" :
