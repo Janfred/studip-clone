@@ -152,7 +152,7 @@ class DataFields {
 
 			if ($object_class == "fak")
 				$object_class = "inst";
-
+			/* (das verstehe wer will :)
 			$query = sprintf ("SELECT datafield_id, name, NULL as content, edit_perms, view_perms FROM datafields WHERE object_type ='%s' AND (%s) ORDER BY object_class, priority", $object_class, $clause);
 
 			$this->db->query($query);
@@ -160,8 +160,8 @@ class DataFields {
 			while ($this->db->next_record()) {
 				$local_datafields[$this->db->f("datafield_id")] = $this->db->Record;
 			}
-			
-			$query2 = sprintf ("SELECT datafields.datafield_id, name, content, edit_perms, view_perms FROM datafields LEFT JOIN datafields_entries USING (datafield_id) WHERE range_id = '%s' AND object_type ='%s' AND (%s) ORDER BY object_class, priority", $range_id, $object_class, $clause);
+			*/
+			$query2 = sprintf ("SELECT a.datafield_id, name, content, edit_perms, view_perms FROM datafields a LEFT JOIN datafields_entries b ON (a.datafield_id=b.datafield_id AND range_id = '%s') WHERE  object_type ='%s' AND (%s) ORDER BY object_class, priority", $range_id, $object_class, $clause);
 
 			$this->db2->query($query2);
 
@@ -169,7 +169,6 @@ class DataFields {
 				$local_datafields[$this->db2->f("datafield_id")] = $this->db2->Record;
 			}
 		}
-		
 		return $local_datafields;		
 	}
 
