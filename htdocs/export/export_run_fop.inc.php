@@ -26,7 +26,6 @@ $FOP_ENABLE = true;
 if (($o_mode != "direct") AND ($o_mode != "passthrough")) 
 	$perm->check("tutor");
 
-require_once ("$ABSOLUTE_PATH_STUDIP$PATH_EXPORT/export_config.inc.php");   // Konfigurationsdatei
 
 function CheckParamRUN_FOP()
 {
@@ -70,9 +69,9 @@ else
 	escapeshellcmd ( $result_file );
 	escapeshellcmd ( $TMP_PATH );
 	$pdf_file = md5(uniqid(rand())) .".pdf";
-	$str = "/usr/local/fop-0.20.5rc/fop.sh $TMP_PATH/$result_file $TMP_PATH/$pdf_file ";
+	$str = "$FOP_SH_CALL $TMP_PATH/$result_file $TMP_PATH/$pdf_file ";
 //	$out = system( ( $str ) );
-	$out = exec( ( ". /etc/profile.d/alljava.sh && " . $str ) );
+	$out = exec( ( $JAVA_ENV_CALL . " && " . $str ) );
 //echo $str . "<br>" . $out . "<br>";
 /*
 	unlink( $TMP_PATH . "/" . $xml_file_id);

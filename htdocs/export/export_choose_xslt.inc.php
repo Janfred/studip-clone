@@ -23,7 +23,6 @@
 
 $perm->check("tutor");
 
-require_once ("$ABSOLUTE_PATH_STUDIP$PATH_EXPORT/export_config.inc.php");   // Konfigurationsdatei
 require_once ("$ABSOLUTE_PATH_STUDIP$PATH_EXPORT/export_xslt_vars.inc.php");   // Liste der XSLT-Skripts
 require_once ("$ABSOLUTE_PATH_STUDIP/dates.inc.php");   // Datumsfunktionen
 

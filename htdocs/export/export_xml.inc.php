@@ -30,7 +30,6 @@ require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/RangeTreeObject.class.php");   
 require_once ("$ABSOLUTE_PATH_STUDIP$PATH_EXPORT/export_xml_vars.inc.php");   // XML-Variablen
 require_once ("$ABSOLUTE_PATH_STUDIP$PATH_EXPORT/export_xml_func.inc.php");   // XML-Funktionen
 require_once ("$ABSOLUTE_PATH_STUDIP$PATH_EXPORT/export_studipdata_func.inc.php");   // Studip-Export-Funktionen
-require_once ("$ABSOLUTE_PATH_STUDIP$PATH_EXPORT/export_config.inc.php");   // Konfigurationsdatei
 require_once ("$ABSOLUTE_PATH_STUDIP/dates.inc.php");   // Datumsfunktionen
 
 function CheckParamXML()

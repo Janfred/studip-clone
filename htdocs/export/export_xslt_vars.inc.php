@@ -1,12 +1,4 @@
 <?
-$output_formats = array(
-	"html"		=>		"Hypertext (HTML)", 
-	"rtf"			=>		"Rich Text Format (RTF)", 
-	"txt"			=>		"Text (TXT)", 
-	"fo"			=>		"Adobe Postscript (PDF)" ,
-	"xml"		=>		"Extensible Markup Language (XML)"
-);
-
 
 $xslt_files["txt-standard"]["name"] = _("Standardmodul");
 $xslt_files["txt-standard"]["desc"] = _("Standardmodul zur Ausgabe von Personen- oder Veranstaltungsdaten im Textformat. Die Daten werden nur mit Tabulatoren und Bindestrichen formatiert. Die Ausgabe-Datei kann in einer Textverarbeitung bearbeitet werden.");
