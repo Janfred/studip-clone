@@ -141,9 +141,15 @@ class reiter {
 		$segment = 1;
 		$counter = 0;
 		$lettercounter = 0;
+		
+		//for nobodys, they dont have xres (or if we use this class in a non phpLib context)
+		if (!$auth->auth["xres"])
+			$xres = 800;
+		else
+			$xres = $auth->auth["xres"];
 			
 		if (strtolower($this->topkatBreakLineLimit) == "auto")
-			$topkatLetterBreakLineLimit = round($auth->auth["xres"] / 7.1);
+			$topkatLetterBreakLineLimit = round($xres / 7.1);
 		
 		foreach ($structure as $key=>$val) {
 			if (!$val["topKat"]) {
