@@ -44,6 +44,7 @@ require_once $ABSOLUTE_PATH_STUDIP.("messaging.inc.php");	// remove messages sen
 require_once $ABSOLUTE_PATH_STUDIP.("contact.inc.php");	// remove user from adressbooks
 require_once $ABSOLUTE_PATH_STUDIP.("lib/classes/DataFields.class.php");	// remove extra data of user
 require_once $ABSOLUTE_PATH_STUDIP.("lib/classes/auth_plugins/StudipAuthAbstract.class.php");
+require_once $ABSOLUTE_PATH_STUDIP.("object.inc.php");
 if ($RESOURCES_ENABLE) {
 	include_once ($ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_RESOURCES."/lib/DeleteResourcesUser.class.php");
 }
@@ -751,7 +752,8 @@ class UserManagement {
 		$this->db->query($query);
 		$query = "DELETE FROM user_info WHERE user_id= '" . $this->user_data['auth_user_md5.user_id'] . "'";
 		$this->db->query($query);
-			
+		object_kill_visits($this->user_data['auth_user_md5.user_id']);
+		
 		// delete picture
 		if(file_exists("./user/" . $this->user_data['auth_user_md5.user_id'] . ".jpg")) {
 			if (unlink("./user/" . $this->user_data['auth_user_md5.user_id'] . ".jpg"))
