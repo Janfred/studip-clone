@@ -48,7 +48,9 @@ TD.quote {border-style: solid; border-color: #000000;  border-width: 1px; font-s
 TD.nix {background-color: transparent;}
 TD.aufklapp {background-color : #FFFAEE;}
 
-BODY { background-color: white; background : url('pictures/bathtile.jpg'); font-family: Arial, Helvetica, sans-serif}
+BODY { background-color: #91A2B6; background : url('pictures/bathtile.jpg'); font-family: Arial, Helvetica, sans-serif}
+
+// the Body-Background color should be similar to A:link.toolbar and A:visited.toolbarfor best effect!!
 
 TABLE.blank {	background-color: white;}
 
