@@ -112,24 +112,17 @@ if (isset($details)) {
 			<tr <?$cssSw->switchClass() ?>>
 				<td class="<? echo $cssSw->getClass() ?>" ><b>&nbsp;Funktion in der Einrichtung:&nbsp;</b></td>
 				<td class="<? echo $cssSw->getClass() ?>" >
-				<select name="inst_funktion">
-				<?
-				if ($db->f("Funktion")=="0") 
-					echo "<option value=0 selected>keine Funktion</option>"; 
-				else
-					echo "<option value=0>keine Funktion</option>";	
-				$idx=0;		
-				foreach ($INST_FUNKTION as $funktion)
-					{
-					$idx++;
-					if ($db->f("Funktion")== $idx) 
-						echo "<option selected value=$idx>", $funktion["name"], "</option>";
-					else
-						echo "<option value=$idx>", $funktion["name"], "</option>";
-					}
-				
-				?>
-				</select></td>
+			<?	
+			$user_id = $db->f("user_id")	;
+			$query = "SELECT * FROM statusgruppe_user LEFT JOIN statusgruppen USING (statusgruppe_id) WHERE range_id ='$inst' AND user_id ='$user_id'";
+			$db2 ->query($query);	
+			while ($db2->next_record()) {
+				echo $db2->f("name")."&nbsp; ";
+			}
+			
+			
+			?>	
+			</td>
 			</tr>
 			<tr <?$cssSw->switchClass() ?>>
 				<td class="<? echo $cssSw->getClass() ?>" ><b>&nbsp;Raum:</b></td>
@@ -384,7 +377,7 @@ if ($inst_id != "" && $inst_id !="0") {
 			echo "<th width=\"15%\"><a href=\"inst_admin.php?sortby=Vorname&inst_id=$inst_id\">Vorname</a></th>";
 			echo "<th width=\"15%\"><a href=\"inst_admin.php?sortby=Nachname&inst_id=$inst_id\">Nachname</a></th>";
 			echo "<th width=\"15%\"><a href=\"inst_admin.php?sortby=inst_perms&inst_id=$inst_id\">Status </a></th>";
-			echo "<th width=\"15%\"><a href=\"inst_admin.php?sortby=Funktion&inst_id=$inst_id\">Funktion</a></th>";
+			echo "<th width=\"15%\">Funktion</th>";
 			echo "<th width=\"10%\"><a href=\"inst_admin.php?sortby=raum&inst_id=$inst_id\">Raum Nr.</a></th>";
 			echo "<th width=\"10%\"><a href=\"inst_admin.php?sortby=sprechzeiten&inst_id=$inst_id\">Sprechzeit</a></th>";
 			echo "<th width=\"10%\"><a href=\"inst_admin.php?sortby=Telefon&inst_id=$inst_id\">Telefon</a></th>";
@@ -394,6 +387,9 @@ if ($inst_id != "" && $inst_id !="0") {
 			//anfuegen der daten an tabelle in schleife...
 
 	  	while ($db->next_record()) {
+	  			$user_id = $db->f("user_id");
+	  			$query = "SELECT * FROM statusgruppe_user LEFT JOIN statusgruppen USING (statusgruppe_id) WHERE range_id ='$inst_id' AND user_id ='$user_id'";
+				$db2 ->query($query);
 	  			$cssSw->switchClass();
 				ECHO "<tr valign=middle align=left>";
 				
@@ -403,7 +399,16 @@ if ($inst_id != "" && $inst_id !="0") {
 					printf ("<td class=\"%s\">&nbsp;%s</td><td class=\"%s\">%s</td>", $cssSw->getClass(), $db->f("Vorname"), $cssSw->getClass(), $db->f("Nachname"));	 ?>
 	
 				<td class="<? echo $cssSw->getClass() ?>" >&nbsp;<?php echo $db->f("inst_perms"); ?></td>
-				<td class="<? echo $cssSw->getClass() ?>" >&nbsp;<?if ($db->f("Funktion") == 0) echo "keine Funktion"; else echo $INST_FUNKTION[$db->f("Funktion")]["name"];?>	</td>
+				<td class="<? echo $cssSw->getClass() ?>"  align="left"><?
+				
+				
+				while ($db2->next_record()) {
+					 echo $db2->f("name")."&nbsp; ";
+				}
+				?>
+				
+			
+				</td>
 				<td class="<? echo $cssSw->getClass() ?>" >&nbsp;<?php echo htmlReady($db->f("raum")); ?></td>
 				<td class="<? echo $cssSw->getClass() ?>" >&nbsp;<?php echo htmlReady($db->f("sprechzeiten")); ?></td>
 				<td class="<? echo $cssSw->getClass() ?>" >&nbsp;<?php echo htmlReady($db->f("Telefon")); ?></td>
