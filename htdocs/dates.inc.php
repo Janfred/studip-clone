@@ -358,8 +358,10 @@ function view_turnus ($seminar_id, $short = FALSE, $meta_data = false, $start_ti
 			{
 			if ($short)
 				$return_string= _("Termin: n. A.");
-			else
+			elseif (!$start_time)
 				$return_string= _("unregelmäßige Veranstaltung oder Blockveranstaltung. Die Termine stehen nicht fest.") . " ";
+			else
+				$return_string= _("unregelmäßige Veranstaltung oder Blockveranstaltung. Keine aktuellen oder zukünftigen Termine.") . " ";
 			}
 		else
 			if ($short)
