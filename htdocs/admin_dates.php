@@ -185,15 +185,15 @@ if ($kill_x)
 
 //Assistent zum automatischen generieren eines Ablaufplans
 if ($make_dates_x) {
-	$resultAssi = dateAssi ($admin_dates_data["range_id"], "insert", $pfad, $folder, $full);
-	$result="msg§" . sprintf(_("Der Ablaufplan wurde erstellt. Es wurden %s Termine erstellt."), $resultAssi["changed"]) . "§";
-
- 	//make an update, this will kill old metadate entries in the resources
+	//kill saved regularly dates
  	if ($RESOURCES_ENABLE) {
 		$insertAssign = new VeranstaltungResourcesAssign($admin_dates_data["range_id"]);
-		$insertAssign->dont_check = TRUE;
- 		$resources_result = array_merge ($resultAssi["resources_result"], $insertAssign->updateAssign());
-	}
+		$insertAssign->deleteAssignedRooms();
+	}	
+	
+	$resultAssi = dateAssi ($admin_dates_data["range_id"], "insert", $pfad, $folder, $full, FALSE, FALSE);
+	$result="msg§" . sprintf(_("Der Ablaufplan wurde erstellt. Es wurden %s Termine erstellt."), $resultAssi["changed"]) . "§";
+	$resources_result = $resultAssi["resources_result"];
 }
 
 if ($new) {
@@ -559,7 +559,7 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 	$db2->next_record();
 
 	//Fenster zum Starten des Terminassistenten einblenden
-	if ((!$term_data["art"]) && (!isSchedule($admin_dates_data["range_id"]))) {
+	if ((!$term_data["art"]) && (!isSchedule($admin_dates_data["range_id"], TRUE, TRUE))) {
 		if (sizeof($term_data["turnus_data"])) { //Ablaufplanassistent nur wenn allgemeine Zeiten vorhanden moeglich
 		?>
 		<br />
