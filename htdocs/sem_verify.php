@@ -105,7 +105,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 			if ($db->f("Lesezugriff") <= 1 && $perm->have_perm("autor")) {
 				$db->query("INSERT INTO seminar_user VALUES ('$SemIDtemp','$user->id','user','$group', '', '".time()."' )");
 				parse_msg ("msg§Sie wurden mit dem Status <b> user </b> in die Veranstaltung ".$db->f("Name")." eingetragen. ");
-				echo"<tr><td class=\"blank\" colspan=2><a href=\"seminar_main.php?auswahl=$SemIDtemp\">&nbsp; &nbsp; Hier </a>kommen sie zu der Veranstaltung";
+				echo"<tr><td class=\"blank\" colspan=2><a href=\"seminar_main.php?auswahl=$SemIDtemp\">&nbsp; &nbsp; Hier </a>kommen Sie zu der Veranstaltung";
 				if ($send_from_search)
 			    		echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">zur&uuml;ck zur Auswahl</a>";
 				echo "<br><br></td></tr></table>";
@@ -183,7 +183,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 						</td></tr></table>
 						<?
 					} else {
-						parse_msg ("info§Um in der Veranstaltung <b>$SeminarName</b> Schreibrechte zu bekommen, m&uuml;ssen sie zumindest auf die Registrierungsmail geantwortet haben!");
+						parse_msg ("info§Um in der Veranstaltung <b>$SeminarName</b> Schreibrechte zu bekommen, m&uuml;ssen Sie zumindest auf die Registrierungsmail geantwortet haben!");
 	   					echo"<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp;&nbsp; zur&uuml;ck zur Startseite</a>";
   						if ($send_from_search)
 						    	echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">zur&uuml;ck zur letzten Auswahl</a>";
@@ -203,7 +203,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 						page_close();
 						die;
 					} else {//wenn nicht, informieren
-						parse_msg("info§Sie sind nur mit der Berechtigung <b>$SemUserStatus</b> f&uuml;r die Veranstaltung <b>$SeminarName</b> freigeschaltet. Wenn sie auf die Registrierungsmail antworten, bekommen sie in dieser Veranstaltung Schreibrechte.");
+						parse_msg("info§Sie sind nur mit der Berechtigung <b>$SemUserStatus</b> f&uuml;r die Veranstaltung <b>$SeminarName</b> freigeschaltet. Wenn Sie auf die Registrierungsmail antworten, bekommen Sie in dieser Veranstaltung Schreibrechte.");
 						echo"<tr><td class=\"blank\" colspan=2>&nbsp; &nbsp; <a href=\"seminar_main.php?auswahl=$id\">weiter zu der Veranstaltung</a>";
 						if ($send_from_search)
 						    	echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">zur&uuml;ck zur letzten Auswahl</a>";
@@ -235,7 +235,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 						}
 					$db->query("SELECT studiengang_id FROM user_studiengang WHERE user_id = '$user->id' "); //Hat der Studie ueberhaupt Studiengaenge angegeben?					
 					if (!$db->num_rows()) { //Es sin gar keine vorhanden! Hinweis wie man das eintragen kann
-						parse_msg ("info§Die Veranstaltung <b>$SeminarName</b> ist teilnahmebeschr&auml;nkt. Um sich f&uuml;r teilnahmebeschr&auml;nkte Veranstaltungen eintragen zu k&ouml;nnen, m&uuml;ssen sie einmalig ihre Studienkombination angeben! <br> Bitte tragen sie ihre Studeng&auml;nge auf ihrer <a href=\"edit_about.php?view=Karriere#studiengaenge\">pers&ouml;nlichen Homepage</a> ein!");
+						parse_msg ("info§Die Veranstaltung <b>$SeminarName</b> ist teilnahmebeschr&auml;nkt. Um sich f&uuml;r teilnahmebeschr&auml;nkte Veranstaltungen eintragen zu k&ouml;nnen, m&uuml;ssen Sie einmalig ihre Studienkombination angeben! <br> Bitte tragen Sie ihre Studieng&auml;nge auf ihrer <a href=\"edit_about.php?view=Karriere#studiengaenge\">pers&ouml;nlichen Homepage</a> ein!");
 						echo "<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp;&nbsp; zur&uuml;ck zur Startseite</a>";
 						if ($send_from_search)
 				    			echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">zur&uuml;ck zur letzten Auswahl</a>";
@@ -367,7 +367,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 								$db5->query("SELECT position FROM admission_seminar_user WHERE seminar_id= '$id' ORDER BY position DESC");//letzte hoechste Position herausfinden
 								$db5->next_record();
 							 	$db4->query("INSERT INTO admission_seminar_user SET user_id = '$user->id', seminar_id = '$id', studiengang_id = '$sem_verify_suggest_studg', status='awaiting', mkdate='".time()."', position='".($db5->f("position")+1)."'  ");
-								parse_msg ("info§Es gibt zur Zeit keinen freien Platz in der teilnahmebeschr&auml;nkten Veranstaltung <b>$SeminarName</b>. Sie wurden jedoch auf Platz ".($db5->num_rows()+1)." auf die Warteliste gesetzt. <br /> Sie werden automatisch eingetragen, sobald ein Platz f&uuml;r sie frei wird.");
+								parse_msg ("info§Es gibt zur Zeit keinen freien Platz in der teilnahmebeschr&auml;nkten Veranstaltung <b>$SeminarName</b>. Sie wurden jedoch auf Platz ".($db5->num_rows()+1)." auf die Warteliste gesetzt. <br /> Sie werden automatisch eingetragen, sobald ein Platz f&uuml;r Sie frei wird.");
 								echo "<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp;&nbsp; zur&uuml;ck zur Startseite</a>";
 								if ($send_from_search)
 					    				echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">zur&uuml;ck zur letzten Auswahl</a>";
@@ -382,7 +382,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 								$db5->query("SELECT position FROM admission_seminar_user ORDER BY position DESC");//letzte hoechste Position heruasfinden
 								$db5->next_record();
 							 	$db4->query("INSERT INTO admission_seminar_user SET user_id = '$user->id', seminar_id = '$id', studiengang_id = '$sem_verify_suggest_studg', status='claiming', mkdate='".time()."', position='' ");
-								parse_msg ("info§Sie wurden auf die Anmeldeliste der Veranstaltung <b>$SeminarName</b> gesetzt. <br />Teilnehmer der Veranstaltung <b>$SeminarName</b> werden Sie, falls Sie im Losverfahren am ".date("d.m.Y, G:i", $db2->f("admission_endtime"))." Uhr ausgelost werden. Sollten sie nicht ausgelost werden, werden Sie auf die Warteliste gesetzt und werden vom System automatisch als Teilnehmer eingetragen, sobald ein Platz f&uuml;r Sie frei wird.");
+								parse_msg ("info§Sie wurden auf die Anmeldeliste der Veranstaltung <b>$SeminarName</b> gesetzt. <br />Teilnehmer der Veranstaltung <b>$SeminarName</b> werden Sie, falls Sie im Losverfahren am ".date("d.m.Y, G:i", $db2->f("admission_endtime"))." Uhr ausgelost werden. Sollten Sie nicht ausgelost werden, werden Sie auf die Warteliste gesetzt und werden vom System automatisch als Teilnehmer eingetragen, sobald ein Platz f&uuml;r Sie frei wird.");
 								echo "<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp;&nbsp; zur&uuml;ck zur Startseite</a>";
 								if ($send_from_search)
 						    			echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">zur&uuml;ck zur letzten Auswahl</a>";
@@ -408,7 +408,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 									$db5->query("SELECT position FROM admission_seminar_user WHERE seminar_id= '$id' ORDER BY position DESC");//letzte hoechste Position herausfinden
 									$db5->next_record();
 								 	$db4->query("INSERT INTO admission_seminar_user SET user_id = '$user->id', seminar_id = '$id', studiengang_id = '$sem_verify_suggest_studg', status='awaiting', mkdate='".time()."', position='".($db5->f("position")+1)."'  ");
-									parse_msg ("info§Es gibt zur Zeit keinen freien Platz in der teilnahmebeschr&auml;nkten Veranstaltung <b>$SeminarName</b>. Sie wurden jedoch auf Platz ".($db5->num_rows()+1)." auf die Warteliste gesetzt. <br /> Sie werden automatisch eingetragen, sobald ein Platz f&uuml;r sie frei wird.");
+									parse_msg ("info§Es gibt zur Zeit keinen freien Platz in der teilnahmebeschr&auml;nkten Veranstaltung <b>$SeminarName</b>. Sie wurden jedoch auf Platz ".($db5->num_rows()+1)." auf die Warteliste gesetzt. <br /> Sie werden automatisch eingetragen, sobald ein Platz f&uuml;r Sie frei wird.");
 									echo "<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp;&nbsp; zur&uuml;ck zur Startseite</a>";
 									if ($send_from_search)
 						    				echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">zur&uuml;ck zur letzten Auswahl</a>";
@@ -444,8 +444,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 				}
 				elseif ($SemSecLevelWrite==2) {//nur passwort fuer Schreiben, User koennte ohne Passwort als 'User' in das Seminar
 					echo "<tr><td class=\"blank\" colspan=2>&nbsp; &nbsp; Bitte Passwort f&uuml;r die Veranstaltung <b>$SeminarName</b> eingeben.<br><br></td></tr>";
-					echo "<tr><td class=\"blank\" colspan=2>&nbsp; &nbsp; Falls sie das Passwort jetzt noch nicht eingeben m&ouml;chten, k&ouml;nnen sie mit Leseberechtigung an der Veranstaltung teilnehmen.<br><br></td></tr>";
-					echo "<tr><td class=\"blank\" colspan=2>&nbsp; &nbsp; Bitte klicken sie dazu<a href=\"sem_verify.php?SemIDtemp=$id\"> hier</a>!<br><br></td></tr>";
+					echo "<tr><td class=\"blank\" colspan=2>&nbsp; &nbsp; Falls Sie das Passwort jetzt noch nicht eingeben m&ouml;chten, k&ouml;nnen Sie mit Leseberechtigung an der Veranstaltung teilnehmen.<br><br></td></tr>";
+					echo "<tr><td class=\"blank\" colspan=2>&nbsp; &nbsp; Bitte klicken Sie dazu<a href=\"sem_verify.php?SemIDtemp=$id\"> hier</a>!<br><br></td></tr>";
 					?>
 					</td></tr>					
 					<tr><td class="blank" colspan=2>
@@ -470,7 +470,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 				}
 			} else {//der User ist auch global 'User'
 				if ($SemSecLevelRead>0) {//Lesen duerfen nur Autoren, also wech hier
-					parse_msg ("info§Um an der Veranstaltung <b>$SeminarName</b> teilnehmen zu k&ouml;nnen, m&uuml;ssen sie zumindest auf die Registrierungsmail geantwortet haben!");
+					parse_msg ("info§Um an der Veranstaltung <b>$SeminarName</b> teilnehmen zu k&ouml;nnen, m&uuml;ssen Sie zumindest auf die Registrierungsmail geantwortet haben!");
 					echo "<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp;&nbsp; zur&uuml;ck zur Startseite</a>";
 					if ($send_from_search)
 					    	echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">zur&uuml;ck zur letzten Auswahl</a>";
@@ -500,7 +500,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 	}
 	
   if ($SemSecLevelRead==0) {//nur wenn das Seminar wirklich frei ist geht's hier weiter
-	echo"<tr><td class=\"blank\" colspan=2>&nbsp; &nbsp; Um zu der Veranstaltung <b>$SeminarName</b> zu gelangen, klicken sie bitte<a href=\"seminar_main.php?auswahl=$id\"> hier</a>!<br><br></td></tr></table>";
+	echo"<tr><td class=\"blank\" colspan=2>&nbsp; &nbsp; Um zu der Veranstaltung <b>$SeminarName</b> zu gelangen, klicken Sie bitte<a href=\"seminar_main.php?auswahl=$id\"> hier</a>!<br><br></td></tr></table>";
   }	else {//keine Rechte f&uuml;r das Seminar
 		parse_msg ("error§Sie habe nicht die erforderlichen Rechte, um an der Veranstaltung <b>$SeminarName</b> teilnehmen zu d&uuml;rfen!");
 		echo "<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp;&nbsp; zur&uuml;ck zur Startseite</a>";
