@@ -1095,11 +1095,11 @@ if ($save_state_x) {
 			foreach ($result as $key=>$val) {
 				if (!$val["overlap_assigns"]) {
 					$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$assign_ids[0]]["resource_id"] = $resObj->getId();			
-					$good_msg.="<br>".sprintf(_("%s, Belegungszeit1: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[0]->getFormattedShortInfo());
+					$good_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[0]->getFormattedShortInfo());
 					$succesful_assigned++;
 				} else {
 					$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$assign_ids[0]]["resource_id"] = FALSE;			
-					$bad_msg.="<br>".sprintf(_("%s, Belegungszeit1: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[0]->getFormattedShortInfo());
+					$bad_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[0]->getFormattedShortInfo());
 				}
 			}
 	
@@ -1109,9 +1109,9 @@ if ($save_state_x) {
 			foreach ($result as $key=>$val) {
 				$resObj = new ResourceObject($val["resource_id"]);
 				if (!$val["overlap_assigns"]) {
-					$good_msg.="<br>".sprintf(_("%s, Belegungszeit2: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[$result_termin_id[$i]]->getFormattedShortInfo());
+					$good_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[$result_termin_id[$i]]->getFormattedShortInfo());
 				} else {
-					$req_added_msg.="<br>".sprintf(_("%s, Belegungszeit2: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[$result_termin_id[$i]]->getFormattedShortInfo());
+					$req_added_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[$result_termin_id[$i]]->getFormattedShortInfo());
 					$copyReqObj = $reqObj;
 					$copyReqObj->copy();
 					$copyReqObj->setTerminId($val["termin_id"]);
@@ -1129,11 +1129,11 @@ if ($save_state_x) {
 				if (!$val["overlap_assigns"]) {
 					$semObj->setMetaDateValue($i, "resource_id", $resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][$i]);
 					$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$assign_ids[$i]]["resource_id"] = $resObj->getId();
-					$good_msg.="<br>".sprintf(_("%s, Belegungszeit3: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[$i]->getFormattedShortInfo());
+					$good_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[$i]->getFormattedShortInfo());
 					$succesful_assigned++;
 				} else {
 					$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$assign_ids[$i]]["resource_id"] = FALSE;				
-					$bad_msg.="<br>".sprintf(_("%s, Belegungszeit3: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[$i]->getFormattedShortInfo());
+					$bad_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[$i]->getFormattedShortInfo());
 				}
 				$i++;
 			}
@@ -1158,10 +1158,10 @@ if ($save_state_x) {
 			foreach ($assi_result["resources_result"] as $key=>$val) {
 				$resObj = new ResourceObject($val["resource_id"]);
 				if (!$val["overlap_assigns"]) {
-					$good_msg.="<br>".sprintf(_("%s, Belegungszeit4: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[$val["termin_id"]]->getFormattedShortInfo());
+					$good_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[$val["termin_id"]]->getFormattedShortInfo());
 					$succesful_assigned++;;
 				} else {
-					$req_added_msg.="<br>".sprintf(_("%s, Belegungszeit4: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[$val["termin_id"]]->getFormattedShortInfo());
+					$req_added_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[$val["termin_id"]]->getFormattedShortInfo());
 					$copyReqObj = $reqObj;
 					$copyReqObj->copy();
 					$copyReqObj->setTerminId($val["termin_id"]);
@@ -1177,10 +1177,10 @@ if ($save_state_x) {
 				$resObj = new ResourceObject($val["resource_id"]);
 				if (!$val["overlap_assigns"]) {
 					$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$assign_ids[$i]]["resource_id"] = $resObj->getId();							
-					$good_msg.="<br>".sprintf(_("%s, Belegungszeit5: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[$result_termin_id[$i]]->getFormattedShortInfo());
+					$good_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[$result_termin_id[$i]]->getFormattedShortInfo());
 				} else {
 					$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$assign_ids[$i]]["resource_id"] = FALSE;							
-					$bad_msg.="<br>".sprintf(_("%s, Belegungszeit5: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[$result_termin_id[$i]]->getFormattedShortInfo());
+					$bad_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[$result_termin_id[$i]]->getFormattedShortInfo());
 				}
 				$i++;
 			}
@@ -1304,11 +1304,11 @@ if (($inc_request_x) || ($dec_request_x) || ($start_single_mode_x) || ($marked_c
 			}
 			
 			//add the considered resources to the check-set
-			$multiOverlaps->deleteIndexes();
-			foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["considered_resources"] as $key => $val) {
-				$multiOverlaps->addResource($key);
+			if (is_array($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["considered_resources"])) {
+				foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["considered_resources"] as $key => $val) {
+					$multiOverlaps->addResource($key);
+				}
 			}
-			$multiOverlaps->setIndexes();
 			//do checks
 			$result = array();
 			if ((($semObj->getMetaDateType() == 0) && (!isSchedule($semObj->getId())))
@@ -1379,12 +1379,16 @@ if (($inc_request_x) || ($dec_request_x) || ($start_single_mode_x) || ($marked_c
 					}
 				}
 							
-				//count for every group			
-				foreach ($tmp_result_termin as $key=>$val) {
-					foreach ($val as $key2=>$val2) {
-						$result_termin[$key][$key2] = sizeof($val2);
+				//count for every group	
+				$result_termin = array();
+				if (is_array($tmp_result_termin)) {
+					foreach ($tmp_result_termin as $key=>$val) {
+						foreach ($val as $key2=>$val2) {
+							$result_termin[$key][$key2] = sizeof($val2);
+						}
 					}
 				}
+					
 				
 				foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["groups"] as $key=>$val) {
 					$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["groups"][$key]["events_count"] = sizeof($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["groups"][$key]["termin_ids"]);
