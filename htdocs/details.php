@@ -66,10 +66,10 @@ if ($sem_id) {
 	if ($perm->have_perm("admin")) {
 		$db->query("SELECT inst_perms FROM seminar_inst LEFT JOIN user_inst USING (institut_id) WHERE user_id ='$user->id' AND inst_perms = 'admin' AND Seminar_id = '$sem_id'");
 		$db->next_record();
-			if ($db->f("inst_perms") == "admin") {
-				$abo_msg="direkt zur Veranstaltung";
-				$skip_verify=TRUE;
-			}
+		if (($db->f("inst_perms") == "admin") || ($perm->have_perm("root"))) {
+			$abo_msg="direkt zur Veranstaltung";
+			$skip_verify=TRUE;
+		}
 	} elseif ($perm->have_perm("user")) { //Add lecture only if logged in	
 		$db->query("SELECT status FROM seminar_user WHERE user_id ='$user->id' AND Seminar_id = '$sem_id'");
 		$db->next_record();
@@ -244,7 +244,7 @@ print_infobox ($infobox,"pictures/details.jpg");
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" valign="top" width="45%">
 				<?
-				printf ("<font size=-1><b>	:</b></font><br /><font size=-1>%s</font>",veranstaltung_beginn($sem_id));
+				printf ("<font size=-1><b>	Erster Termin:</b></font><br /><font size=-1>%s</font>",veranstaltung_beginn($sem_id));
 				?>
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" valign="top" width="25%">
