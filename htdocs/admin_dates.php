@@ -22,11 +22,11 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" =>
 $perm->check("tutor");
 	
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
-require_once("$ABSOLUTE_PATH_STUDIP/dates.inc.php"); //ben&ouml;tigete Funktionen der Terminverwaltung
-require_once("$ABSOLUTE_PATH_STUDIP/functions.php");//*urgs* das brauchen wir leider auch
-require_once("$ABSOLUTE_PATH_STUDIP/forum.inc.php");//Was solls....
-require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");//was solls...^
-require_once("$RELATIVE_PATH_CALENDAR/calendar_func.inc.php");//was solls....
+require_once("$ABSOLUTE_PATH_STUDIP/dates.inc.php"); 
+require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
+require_once("$ABSOLUTE_PATH_STUDIP/forum.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
+require_once("$RELATIVE_PATH_CALENDAR/calendar_func.inc.php");
 
 $db=new DB_Seminar;
 $db2=new DB_Seminar;
@@ -59,7 +59,6 @@ foreach ($TERMIN_TYP as $key=>$val) {
 }
 $typ_clause .= ")";
 
-
 $sess->register("term_data");
 $sess->register("admin_dates_data");
 
@@ -90,6 +89,13 @@ if ($assi)
 	$admin_dates_data["assi"]=$assi;
 if ($show_id) 
 	$admin_dates_data["show_id"]=$show_id;
+if ($show_all) 
+	$admin_dates_data["show_all"]=TRUE;
+if ($show_nall) 
+	$admin_dates_data["show_all"]=FALSE;
+	
+if (($edit_x) && (!$admin_dates_data["show_all"]))
+	$admin_dates_data["show_id"]='';
 
 //Content of the Infobox
 $infobox = array(
@@ -128,7 +134,7 @@ if ($admin_dates_data["range_id"] && !$perm->have_perm("root"))
 
 //Bevor einen Termin loeschen uebernehmen wir Aenderungen, dann ist gleichzeitiges Aendern und Loeschen moeglich
 if ($kill_x)
-	$edit="yes";
+	$edit_x=TRUE;
 
 //Assistent zum automatischen generieren eines Ablaufplans
 if ($make_dates_x) {
@@ -368,8 +374,7 @@ if ($new)
 		}
 	}
 
-
-if (($edit) && (!$admin_dates_data["termin_id"]))
+if (($edit_x) && (!$admin_dates_data["termin_id"]))
 	{
 	if (is_array($termin_id))
 		{
@@ -377,7 +382,7 @@ if (($edit) && (!$admin_dates_data["termin_id"]))
 	 		{
 		 	$t_id=$termin_id[$i];
 			$f_id=md5(uniqid($hash_secret));
-			$tmp_result=edit_dates($stunde[$i],$minute[$i],$monat[$i], $tag[$i], $jahr[$i], $end_stunde[$i], $end_minute[$i], $t_id, $art[$t_id], $titel[$i],$description[$t_id], $topic_id[$i],$raum[$t_id], $resource_id[$t_id], $admin_dates_data["range_id"]);
+			$tmp_result=edit_dates($stunde[$i],$minute[$i],$monat[$i], $tag[$i], $jahr[$i], $end_stunde[$i], $end_minute[$i], $t_id, $art[$i], $titel[$i],$description[$i], $topic_id[$i],$raum[$i], $resource_id[$i], $admin_dates_data["range_id"]);
 		 	$result.=$tmp_result["msg"];
 		 	
 			$aktuell=time();
@@ -398,13 +403,13 @@ if (($edit) && (!$admin_dates_data["termin_id"]))
 				$tmp_titel=$titel[$i];
 
 		 	//nachtraegliches Anlegen von Ordner vornehmen
-		 	if ($insert_topic[$termin_id[$i]])  {
-				$tmp_topic_id=CreateTopic($TERMIN_TYP[$art[$t_id]]["name"].": ".$tmp_titel." am $tmp_datum", $author, "Hier kann zu diesem Termin diskutiert werden", 0, 0, $admin_dates_data["range_id"]);
+		 	if ($insert_topic[$i])  {
+				$tmp_topic_id=CreateTopic($TERMIN_TYP[$art[$i]]["name"].": ".$tmp_titel." am $tmp_datum", $author, "Hier kann zu diesem Termin diskutiert werden", 0, 0, $admin_dates_data["range_id"]);
 				$db3->query ("UPDATE termine SET topic_id = '$tmp_topic_id' WHERE termin_id = '$t_id'");
 				}
 			else $tmp_topic_id='';
-			if ($insert_folder[$termin_id[$i]]) { 
-				$titel_f=$TERMIN_TYP[$art[$t_id]]["name"].": $tmp_titel";
+			if ($insert_folder[$i]) { 
+				$titel_f=$TERMIN_TYP[$art[$i]]["name"].": $tmp_titel";
 				$titel_f.=" am $tmp_datum";
 				$titel_f=$titel_f;
 				$description_f="Ablage für Ordner und Dokumente zu diesem Termin";		
@@ -599,13 +604,13 @@ if (($kill_x) && ($admin_dates_data["range_id"]))
 			if (!$show_all)
 				{
 				?>
-				<a href="<? echo $PHP_SELF, "?range_id=".$admin_dates_data["range_id"]."&assi=".$admin_dates_data["assi"]."&show_all=yes"; ?>"><img src="pictures/forumgraurunt.gif"" alt="Alle Termine aufklappen" border=0></a>
+				<a href="<? echo $PHP_SELF, "?range_id=".$admin_dates_data["range_id"]."&show_all=TRUE"; ?>"><img src="pictures/forumgraurunt.gif"" alt="Alle Termine aufklappen" border=0></a>
 				<?
 				}
 			else
 				{
 				?>
-				<a href="<? echo $PHP_SELF, "?range_id=".$admin_dates_data["range_id"]."&assi=".$admin_dates_data["assi"].""; ?>"><img src="pictures/forumgraurauf.gif" alt="Alle Termine zuklappen"border=0></a>
+				<a href="<? echo $PHP_SELF, "?range_id=".$admin_dates_data["range_id"]."&show_nall=TRUE"; ?>"><img src="pictures/forumgraurauf.gif" alt="Alle Termine zuklappen"border=0></a>
 				<?
 				}
 				?>
@@ -626,7 +631,7 @@ if (($kill_x) && ($admin_dates_data["range_id"]))
 			}
 		if ($show_all) {
 			?>
-			<input type="IMAGE" name="send" border=0 src="pictures/buttons/termineaendern-button.gif" value="verändern">&nbsp; &nbsp; 
+			<input type="IMAGE" name="edit" border=0 src="pictures/buttons/termineaendern-button.gif" value="verändern">&nbsp; &nbsp; 
 			<?
 			}
 			?>
@@ -766,9 +771,9 @@ if (($kill_x) && ($admin_dates_data["range_id"]))
 		
 		//Link erstellen
 		if (($show_id  == $db->f("termin_id")) || ($show_all))
-			$link=$PHP_SELF."?range_id=".$admin_dates_data["range_id"]."&assi=".$admin_dates_data["assi"]."&show_id=";			
+			$link=$PHP_SELF."?range_id=".$admin_dates_data["range_id"]."&show_id=";			
 		else
-			$link=$PHP_SELF."?range_id=".$admin_dates_data["range_id"]."&assi=".$admin_dates_data["assi"]."&show_id=".$db->f("termin_id")."#anchor";
+			$link=$PHP_SELF."?range_id=".$admin_dates_data["range_id"]."&show_id=".$db->f("termin_id")."#anchor";
 			
 		//Icon erstellen
 		$icon="&nbsp;<img src=\"./pictures/termin-icon.gif\" border=0>";
@@ -839,7 +844,7 @@ if (($kill_x) && ($admin_dates_data["range_id"]))
 				echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"99%\" align=\"center\"><tr>";
 				
 				if (!$show_all)
-					$content.="<input type=\"IMAGE\" name=\"send\" border=0 src=\"pictures/buttons/terminaendern-button.gif\" value=\"verändern\"><br /><br />";
+					$content.="<input type=\"IMAGE\" name=\"edit\" border=0 src=\"pictures/buttons/terminaendern-button.gif\" value=\"verändern\"><br /><br />";
 				printcontent(0,1, $content, '');
 				}
 		
