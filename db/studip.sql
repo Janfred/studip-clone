@@ -3,17 +3,17 @@
 # http://www.phpmyadmin.net/ (download page)
 #
 # Host: localhost
-# Erstellungszeit: 20. August 2003 um 10:19
+# Erstellungszeit: 27. August 2003 um 11:42
 # Server Version: 4.0.12
 # PHP-Version: 4.3.1
-# Datenbank: `studip`
+# Datenbank: `studip` $Id$
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `active_sessions`
 #
-# Erzeugt am: 20. August 2003 um 09:14
-# Aktualisiert am: 20. August 2003 um 09:14
+# Erzeugt am: 20. August 2003 um 10:21
+# Aktualisiert am: 20. August 2003 um 10:21
 #
 
 CREATE TABLE `active_sessions` (
@@ -29,8 +29,8 @@ CREATE TABLE `active_sessions` (
 #
 # Tabellenstruktur für Tabelle `admission_seminar_studiengang`
 #
-# Erzeugt am: 20. August 2003 um 09:14
-# Aktualisiert am: 20. August 2003 um 09:14
+# Erzeugt am: 20. August 2003 um 10:21
+# Aktualisiert am: 20. August 2003 um 10:21
 #
 
 CREATE TABLE `admission_seminar_studiengang` (
@@ -44,8 +44,8 @@ CREATE TABLE `admission_seminar_studiengang` (
 #
 # Tabellenstruktur für Tabelle `admission_seminar_user`
 #
-# Erzeugt am: 20. August 2003 um 09:14
-# Aktualisiert am: 20. August 2003 um 09:14
+# Erzeugt am: 20. August 2003 um 10:21
+# Aktualisiert am: 20. August 2003 um 10:21
 #
 
 CREATE TABLE `admission_seminar_user` (
@@ -62,8 +62,8 @@ CREATE TABLE `admission_seminar_user` (
 #
 # Tabellenstruktur für Tabelle `archiv`
 #
-# Erzeugt am: 20. August 2003 um 09:17
-# Aktualisiert am: 20. August 2003 um 09:17
+# Erzeugt am: 20. August 2003 um 10:21
+# Aktualisiert am: 20. August 2003 um 10:21
 #
 
 CREATE TABLE `archiv` (
@@ -91,8 +91,8 @@ CREATE TABLE `archiv` (
 #
 # Tabellenstruktur für Tabelle `archiv_user`
 #
-# Erzeugt am: 20. August 2003 um 09:14
-# Aktualisiert am: 20. August 2003 um 09:14
+# Erzeugt am: 20. August 2003 um 10:21
+# Aktualisiert am: 20. August 2003 um 10:21
 #
 
 CREATE TABLE `archiv_user` (
@@ -107,8 +107,8 @@ CREATE TABLE `archiv_user` (
 #
 # Tabellenstruktur für Tabelle `auth_user_md5`
 #
-# Erzeugt am: 20. August 2003 um 09:15
-# Aktualisiert am: 20. August 2003 um 09:15
+# Erzeugt am: 20. August 2003 um 10:21
+# Aktualisiert am: 22. August 2003 um 16:51
 #
 
 CREATE TABLE `auth_user_md5` (
@@ -128,8 +128,8 @@ CREATE TABLE `auth_user_md5` (
 #
 # Tabellenstruktur für Tabelle `contact`
 #
-# Erzeugt am: 20. August 2003 um 09:14
-# Aktualisiert am: 20. August 2003 um 09:14
+# Erzeugt am: 20. August 2003 um 10:21
+# Aktualisiert am: 20. August 2003 um 10:21
 #
 
 CREATE TABLE `contact` (
@@ -147,8 +147,8 @@ CREATE TABLE `contact` (
 #
 # Tabellenstruktur für Tabelle `contact_userinfo`
 #
-# Erzeugt am: 20. August 2003 um 09:14
-# Aktualisiert am: 20. August 2003 um 09:14
+# Erzeugt am: 20. August 2003 um 10:21
+# Aktualisiert am: 20. August 2003 um 10:21
 #
 
 CREATE TABLE `contact_userinfo` (
@@ -166,9 +166,8 @@ CREATE TABLE `contact_userinfo` (
 #
 # Tabellenstruktur für Tabelle `datafields`
 #
-# Erzeugt am: 20. August 2003 um 09:23
-# Aktualisiert am: 20. August 2003 um 09:23
-# Letzter Check am: 20. August 2003 um 09:23
+# Erzeugt am: 20. August 2003 um 10:21
+# Aktualisiert am: 20. August 2003 um 10:21
 #
 
 CREATE TABLE `datafields` (
@@ -191,8 +190,8 @@ CREATE TABLE `datafields` (
 #
 # Tabellenstruktur für Tabelle `datafields_entries`
 #
-# Erzeugt am: 20. August 2003 um 09:21
-# Aktualisiert am: 20. August 2003 um 09:21
+# Erzeugt am: 20. August 2003 um 10:21
+# Aktualisiert am: 20. August 2003 um 10:21
 #
 
 CREATE TABLE `datafields_entries` (
@@ -208,8 +207,8 @@ CREATE TABLE `datafields_entries` (
 #
 # Tabellenstruktur für Tabelle `dokumente`
 #
-# Erzeugt am: 20. August 2003 um 09:14
-# Aktualisiert am: 20. August 2003 um 09:14
+# Erzeugt am: 20. August 2003 um 10:21
+# Aktualisiert am: 20. August 2003 um 10:21
 #
 
 CREATE TABLE `dokumente` (
@@ -235,8 +234,8 @@ CREATE TABLE `dokumente` (
 #
 # Tabellenstruktur für Tabelle `extern_config`
 #
-# Erzeugt am: 20. August 2003 um 09:14
-# Aktualisiert am: 20. August 2003 um 09:14
+# Erzeugt am: 20. August 2003 um 10:21
+# Aktualisiert am: 20. August 2003 um 10:21
 #
 
 CREATE TABLE `extern_config` (
@@ -254,8 +253,8 @@ CREATE TABLE `extern_config` (
 #
 # Tabellenstruktur für Tabelle `folder`
 #
-# Erzeugt am: 20. August 2003 um 09:14
-# Aktualisiert am: 20. August 2003 um 09:14
+# Erzeugt am: 20. August 2003 um 10:21
+# Aktualisiert am: 20. August 2003 um 10:21
 #
 
 CREATE TABLE `folder` (
@@ -276,8 +275,8 @@ CREATE TABLE `folder` (
 #
 # Tabellenstruktur für Tabelle `globalmessages`
 #
-# Erzeugt am: 20. August 2003 um 09:14
-# Aktualisiert am: 20. August 2003 um 09:14
+# Erzeugt am: 20. August 2003 um 10:21
+# Aktualisiert am: 20. August 2003 um 10:21
 #
 
 CREATE TABLE `globalmessages` (
@@ -298,9 +297,8 @@ CREATE TABLE `globalmessages` (
 #
 # Tabellenstruktur für Tabelle `institute`
 #
-# Erzeugt am: 20. August 2003 um 09:19
-# Aktualisiert am: 20. August 2003 um 09:19
-# Letzter Check am: 20. August 2003 um 09:19
+# Erzeugt am: 20. August 2003 um 10:21
+# Aktualisiert am: 20. August 2003 um 10:21
 #
 
 CREATE TABLE `institute` (
@@ -326,8 +324,8 @@ CREATE TABLE `institute` (
 #
 # Tabellenstruktur für Tabelle `kategorien`
 #
-# Erzeugt am: 20. August 2003 um 09:14
-# Aktualisiert am: 20. August 2003 um 09:14
+# Erzeugt am: 20. August 2003 um 10:21
+# Aktualisiert am: 20. August 2003 um 10:21
 #
 
 CREATE TABLE `kategorien` (
@@ -348,8 +346,8 @@ CREATE TABLE `kategorien` (
 #
 # Tabellenstruktur für Tabelle `literatur`
 #
-# Erzeugt am: 20. August 2003 um 09:14
-# Aktualisiert am: 20. August 2003 um 09:14
+# Erzeugt am: 20. August 2003 um 10:21
+# Aktualisiert am: 20. August 2003 um 10:21
 #
 
 CREATE TABLE `literatur` (
@@ -370,9 +368,8 @@ CREATE TABLE `literatur` (
 #
 # Tabellenstruktur für Tabelle `news`
 #
-# Erzeugt am: 20. August 2003 um 09:20
-# Aktualisiert am: 20. August 2003 um 09:20
-# Letzter Check am: 20. August 2003 um 09:20
+# Erzeugt am: 20. August 2003 um 10:21
+# Aktualisiert am: 20. August 2003 um 10:21
 #
 
 CREATE TABLE `news` (
@@ -391,8 +388,8 @@ CREATE TABLE `news` (
 #
 # Tabellenstruktur für Tabelle `news_range`
 #
-# Erzeugt am: 20. August 2003 um 09:14
-# Aktualisiert am: 20. August 2003 um 09:14
+# Erzeugt am: 20. August 2003 um 10:21
+# Aktualisiert am: 20. August 2003 um 10:21
 #
 
 CREATE TABLE `news_range` (
@@ -407,8 +404,8 @@ CREATE TABLE `news_range` (
 #
 # Tabellenstruktur für Tabelle `newsletter`
 #
-# Erzeugt am: 20. August 2003 um 09:14
-# Aktualisiert am: 20. August 2003 um 09:14
+# Erzeugt am: 20. August 2003 um 10:21
+# Aktualisiert am: 20. August 2003 um 10:21
 #
 
 CREATE TABLE `newsletter` (
@@ -422,23 +419,25 @@ CREATE TABLE `newsletter` (
 #
 # Tabellenstruktur für Tabelle `object_rate`
 #
-# Erzeugt am: 20. August 2003 um 10:17
-# Aktualisiert am: 20. August 2003 um 10:17
+# Erzeugt am: 27. August 2003 um 11:33
+# Aktualisiert am: 27. August 2003 um 11:33
+# Letzter Check am: 27. August 2003 um 11:33
 #
 
 CREATE TABLE `object_rate` (
   `object_id` varchar(32) NOT NULL default '',
   `rate` int(10) NOT NULL default '0',
   `mkdate` int(20) NOT NULL default '0',
-  PRIMARY KEY  (`object_id`)
+  KEY `object_id` (`object_id`),
+  KEY `rate` (`rate`)
 ) TYPE=MyISAM;
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `object_user`
 #
-# Erzeugt am: 20. August 2003 um 10:17
-# Aktualisiert am: 20. August 2003 um 10:17
+# Erzeugt am: 27. August 2003 um 11:33
+# Aktualisiert am: 27. August 2003 um 11:33
 #
 
 CREATE TABLE `object_user` (
@@ -446,15 +445,15 @@ CREATE TABLE `object_user` (
   `user_id` varchar(32) NOT NULL default '',
   `flag` varchar(32) NOT NULL default '',
   `mkdate` int(20) NOT NULL default '0',
-  PRIMARY KEY  (`object_id`,`user_id`)
+  PRIMARY KEY  (`object_id`,`user_id`,`flag`)
 ) TYPE=MyISAM;
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `object_views`
 #
-# Erzeugt am: 20. August 2003 um 09:24
-# Aktualisiert am: 20. August 2003 um 09:24
+# Erzeugt am: 20. August 2003 um 10:21
+# Aktualisiert am: 20. August 2003 um 10:21
 #
 
 CREATE TABLE `object_views` (
@@ -468,8 +467,8 @@ CREATE TABLE `object_views` (
 #
 # Tabellenstruktur für Tabelle `px_topics`
 #
-# Erzeugt am: 20. August 2003 um 09:14
-# Aktualisiert am: 20. August 2003 um 09:14
+# Erzeugt am: 20. August 2003 um 10:21
+# Aktualisiert am: 20. August 2003 um 10:21
 #
 
 CREATE TABLE `px_topics` (
@@ -497,8 +496,8 @@ CREATE TABLE `px_topics` (
 #
 # Tabellenstruktur für Tabelle `range_tree`
 #
-# Erzeugt am: 20. August 2003 um 09:14
-# Aktualisiert am: 20. August 2003 um 09:14
+# Erzeugt am: 20. August 2003 um 10:21
+# Aktualisiert am: 20. August 2003 um 10:21
 #
 
 CREATE TABLE `range_tree` (
@@ -519,8 +518,8 @@ CREATE TABLE `range_tree` (
 #
 # Tabellenstruktur für Tabelle `resources_assign`
 #
-# Erzeugt am: 20. August 2003 um 09:14
-# Aktualisiert am: 20. August 2003 um 09:14
+# Erzeugt am: 20. August 2003 um 10:21
+# Aktualisiert am: 20. August 2003 um 10:21
 #
 
 CREATE TABLE `resources_assign` (
@@ -548,8 +547,8 @@ CREATE TABLE `resources_assign` (
 #
 # Tabellenstruktur für Tabelle `resources_categories`
 #
-# Erzeugt am: 20. August 2003 um 09:14
-# Aktualisiert am: 20. August 2003 um 09:14
+# Erzeugt am: 20. August 2003 um 10:21
+# Aktualisiert am: 20. August 2003 um 10:21
 #
 
 CREATE TABLE `resources_categories` (
@@ -565,8 +564,8 @@ CREATE TABLE `resources_categories` (
 #
 # Tabellenstruktur für Tabelle `resources_categories_properties`
 #
-# Erzeugt am: 20. August 2003 um 09:14
-# Aktualisiert am: 20. August 2003 um 09:14
+# Erzeugt am: 20. August 2003 um 10:21
+# Aktualisiert am: 20. August 2003 um 10:21
 #
 
 CREATE TABLE `resources_categories_properties` (
@@ -580,8 +579,8 @@ CREATE TABLE `resources_categories_properties` (
 #
 # Tabellenstruktur für Tabelle `resources_objects`
 #
-# Erzeugt am: 20. August 2003 um 09:14
-# Aktualisiert am: 20. August 2003 um 09:14
+# Erzeugt am: 20. August 2003 um 10:21
+# Aktualisiert am: 20. August 2003 um 10:21
 #
 
 CREATE TABLE `resources_objects` (
@@ -606,8 +605,8 @@ CREATE TABLE `resources_objects` (
 #
 # Tabellenstruktur für Tabelle `resources_objects_properties`
 #
-# Erzeugt am: 20. August 2003 um 09:14
-# Aktualisiert am: 20. August 2003 um 09:14
+# Erzeugt am: 20. August 2003 um 10:21
+# Aktualisiert am: 20. August 2003 um 10:21
 #
 
 CREATE TABLE `resources_objects_properties` (
@@ -621,8 +620,8 @@ CREATE TABLE `resources_objects_properties` (
 #
 # Tabellenstruktur für Tabelle `resources_properties`
 #
-# Erzeugt am: 20. August 2003 um 09:14
-# Aktualisiert am: 20. August 2003 um 09:14
+# Erzeugt am: 20. August 2003 um 10:21
+# Aktualisiert am: 20. August 2003 um 10:21
 #
 
 CREATE TABLE `resources_properties` (
@@ -639,8 +638,8 @@ CREATE TABLE `resources_properties` (
 #
 # Tabellenstruktur für Tabelle `resources_user_resources`
 #
-# Erzeugt am: 20. August 2003 um 09:14
-# Aktualisiert am: 20. August 2003 um 09:14
+# Erzeugt am: 20. August 2003 um 10:21
+# Aktualisiert am: 20. August 2003 um 10:21
 #
 
 CREATE TABLE `resources_user_resources` (
@@ -654,8 +653,8 @@ CREATE TABLE `resources_user_resources` (
 #
 # Tabellenstruktur für Tabelle `sem_tree`
 #
-# Erzeugt am: 20. August 2003 um 09:14
-# Aktualisiert am: 20. August 2003 um 09:14
+# Erzeugt am: 20. August 2003 um 10:21
+# Aktualisiert am: 20. August 2003 um 10:21
 #
 
 CREATE TABLE `sem_tree` (
@@ -675,8 +674,8 @@ CREATE TABLE `sem_tree` (
 #
 # Tabellenstruktur für Tabelle `seminar_inst`
 #
-# Erzeugt am: 20. August 2003 um 09:14
-# Aktualisiert am: 20. August 2003 um 09:14
+# Erzeugt am: 20. August 2003 um 10:21
+# Aktualisiert am: 20. August 2003 um 10:21
 #
 
 CREATE TABLE `seminar_inst` (
@@ -689,8 +688,8 @@ CREATE TABLE `seminar_inst` (
 #
 # Tabellenstruktur für Tabelle `seminar_lernmodul`
 #
-# Erzeugt am: 20. August 2003 um 09:14
-# Aktualisiert am: 20. August 2003 um 09:14
+# Erzeugt am: 20. August 2003 um 10:21
+# Aktualisiert am: 20. August 2003 um 10:21
 #
 
 CREATE TABLE `seminar_lernmodul` (
@@ -706,8 +705,8 @@ CREATE TABLE `seminar_lernmodul` (
 #
 # Tabellenstruktur für Tabelle `seminar_sem_tree`
 #
-# Erzeugt am: 20. August 2003 um 09:14
-# Aktualisiert am: 20. August 2003 um 09:14
+# Erzeugt am: 20. August 2003 um 10:21
+# Aktualisiert am: 20. August 2003 um 10:21
 #
 
 CREATE TABLE `seminar_sem_tree` (
@@ -722,8 +721,8 @@ CREATE TABLE `seminar_sem_tree` (
 #
 # Tabellenstruktur für Tabelle `seminar_user`
 #
-# Erzeugt am: 20. August 2003 um 09:14
-# Aktualisiert am: 20. August 2003 um 09:14
+# Erzeugt am: 20. August 2003 um 10:21
+# Aktualisiert am: 20. August 2003 um 10:21
 #
 
 CREATE TABLE `seminar_user` (
@@ -742,8 +741,8 @@ CREATE TABLE `seminar_user` (
 #
 # Tabellenstruktur für Tabelle `seminare`
 #
-# Erzeugt am: 20. August 2003 um 09:14
-# Aktualisiert am: 20. August 2003 um 09:14
+# Erzeugt am: 20. August 2003 um 10:21
+# Aktualisiert am: 20. August 2003 um 10:21
 #
 
 CREATE TABLE `seminare` (
@@ -786,8 +785,8 @@ CREATE TABLE `seminare` (
 #
 # Tabellenstruktur für Tabelle `statusgruppe_user`
 #
-# Erzeugt am: 20. August 2003 um 09:14
-# Aktualisiert am: 20. August 2003 um 09:14
+# Erzeugt am: 20. August 2003 um 10:21
+# Aktualisiert am: 20. August 2003 um 10:21
 #
 
 CREATE TABLE `statusgruppe_user` (
@@ -800,8 +799,8 @@ CREATE TABLE `statusgruppe_user` (
 #
 # Tabellenstruktur für Tabelle `statusgruppen`
 #
-# Erzeugt am: 20. August 2003 um 09:14
-# Aktualisiert am: 20. August 2003 um 09:14
+# Erzeugt am: 20. August 2003 um 10:21
+# Aktualisiert am: 20. August 2003 um 10:21
 #
 
 CREATE TABLE `statusgruppen` (
@@ -821,8 +820,8 @@ CREATE TABLE `statusgruppen` (
 #
 # Tabellenstruktur für Tabelle `studiengaenge`
 #
-# Erzeugt am: 20. August 2003 um 09:14
-# Aktualisiert am: 20. August 2003 um 09:14
+# Erzeugt am: 20. August 2003 um 10:21
+# Aktualisiert am: 20. August 2003 um 10:21
 #
 
 CREATE TABLE `studiengaenge` (
@@ -838,8 +837,8 @@ CREATE TABLE `studiengaenge` (
 #
 # Tabellenstruktur für Tabelle `studip_ilias`
 #
-# Erzeugt am: 20. August 2003 um 09:14
-# Aktualisiert am: 20. August 2003 um 09:14
+# Erzeugt am: 20. August 2003 um 10:21
+# Aktualisiert am: 20. August 2003 um 10:21
 #
 
 CREATE TABLE `studip_ilias` (
@@ -854,8 +853,8 @@ CREATE TABLE `studip_ilias` (
 #
 # Tabellenstruktur für Tabelle `support_contract`
 #
-# Erzeugt am: 20. August 2003 um 09:14
-# Aktualisiert am: 20. August 2003 um 09:14
+# Erzeugt am: 20. August 2003 um 10:21
+# Aktualisiert am: 20. August 2003 um 10:21
 #
 
 CREATE TABLE `support_contract` (
@@ -875,8 +874,8 @@ CREATE TABLE `support_contract` (
 #
 # Tabellenstruktur für Tabelle `support_event`
 #
-# Erzeugt am: 20. August 2003 um 09:14
-# Aktualisiert am: 20. August 2003 um 09:14
+# Erzeugt am: 20. August 2003 um 10:21
+# Aktualisiert am: 20. August 2003 um 10:21
 #
 
 CREATE TABLE `support_event` (
@@ -896,8 +895,8 @@ CREATE TABLE `support_event` (
 #
 # Tabellenstruktur für Tabelle `support_request`
 #
-# Erzeugt am: 20. August 2003 um 09:14
-# Aktualisiert am: 20. August 2003 um 09:14
+# Erzeugt am: 20. August 2003 um 10:21
+# Aktualisiert am: 20. August 2003 um 10:21
 #
 
 CREATE TABLE `support_request` (
@@ -918,8 +917,8 @@ CREATE TABLE `support_request` (
 #
 # Tabellenstruktur für Tabelle `termine`
 #
-# Erzeugt am: 20. August 2003 um 09:14
-# Aktualisiert am: 20. August 2003 um 09:14
+# Erzeugt am: 20. August 2003 um 10:21
+# Aktualisiert am: 20. August 2003 um 10:21
 #
 
 CREATE TABLE `termine` (
@@ -950,8 +949,8 @@ CREATE TABLE `termine` (
 #
 # Tabellenstruktur für Tabelle `user_info`
 #
-# Erzeugt am: 20. August 2003 um 09:14
-# Aktualisiert am: 20. August 2003 um 09:14
+# Erzeugt am: 20. August 2003 um 10:21
+# Aktualisiert am: 22. August 2003 um 16:52
 #
 
 CREATE TABLE `user_info` (
@@ -978,8 +977,8 @@ CREATE TABLE `user_info` (
 #
 # Tabellenstruktur für Tabelle `user_inst`
 #
-# Erzeugt am: 20. August 2003 um 09:14
-# Aktualisiert am: 20. August 2003 um 09:14
+# Erzeugt am: 20. August 2003 um 10:21
+# Aktualisiert am: 20. August 2003 um 10:21
 #
 
 CREATE TABLE `user_inst` (
@@ -1000,8 +999,8 @@ CREATE TABLE `user_inst` (
 #
 # Tabellenstruktur für Tabelle `user_studiengang`
 #
-# Erzeugt am: 20. August 2003 um 09:14
-# Aktualisiert am: 20. August 2003 um 09:14
+# Erzeugt am: 20. August 2003 um 10:21
+# Aktualisiert am: 20. August 2003 um 10:21
 #
 
 CREATE TABLE `user_studiengang` (
@@ -1012,10 +1011,96 @@ CREATE TABLE `user_studiengang` (
 # --------------------------------------------------------
 
 #
+# Tabellenstruktur für Tabelle `vote`
+#
+# Erzeugt am: 27. August 2003 um 11:36
+# Aktualisiert am: 27. August 2003 um 11:36
+#
+
+CREATE TABLE `vote` (
+  `vote_id` varchar(32) NOT NULL default '',
+  `author_id` varchar(32) NOT NULL default '',
+  `range_id` varchar(32) NOT NULL default '',
+  `type` enum('vote','test') NOT NULL default 'vote',
+  `title` varchar(100) NOT NULL default '',
+  `question` varchar(255) NOT NULL default '',
+  `state` enum('new','active','stopvis','stopinvis') NOT NULL default 'new',
+  `startdate` int(20) default NULL,
+  `stopdate` int(20) default NULL,
+  `timespan` int(20) default NULL,
+  `mkdate` int(20) NOT NULL default '0',
+  `chdate` int(20) NOT NULL default '0',
+  `resultvisibility` enum('ever','delivery','end','never') NOT NULL default 'ever',
+  `multiplechoice` tinyint(1) NOT NULL default '0',
+  `anonymous` tinyint(1) NOT NULL default '1',
+  `changeable` tinyint(1) NOT NULL default '0',
+  `co_visibility` tinyint(1) default NULL,
+  PRIMARY KEY  (`vote_id`),
+  KEY `range_id` (`range_id`),
+  KEY `state` (`state`),
+  KEY `startdate` (`startdate`),
+  KEY `stopdate` (`stopdate`),
+  KEY `resultvisibility` (`resultvisibility`),
+  KEY `chdate` (`chdate`),
+  KEY `author_id` (`author_id`)
+) TYPE=MyISAM PACK_KEYS=1;
+# --------------------------------------------------------
+
+#
+# Tabellenstruktur für Tabelle `vote_user`
+#
+# Erzeugt am: 27. August 2003 um 11:36
+# Aktualisiert am: 27. August 2003 um 11:36
+#
+
+CREATE TABLE `vote_user` (
+  `vote_id` varchar(32) NOT NULL default '',
+  `user_id` varchar(32) NOT NULL default '',
+  `votedate` int(20) default NULL,
+  PRIMARY KEY  (`vote_id`,`user_id`)
+) TYPE=MyISAM PACK_KEYS=1;
+# --------------------------------------------------------
+
+#
+# Tabellenstruktur für Tabelle `voteanswers`
+#
+# Erzeugt am: 27. August 2003 um 11:36
+# Aktualisiert am: 27. August 2003 um 11:36
+#
+
+CREATE TABLE `voteanswers` (
+  `answer_id` varchar(32) NOT NULL default '',
+  `vote_id` varchar(32) NOT NULL default '',
+  `answer` varchar(255) NOT NULL default '',
+  `position` int(11) NOT NULL default '0',
+  `counter` int(11) NOT NULL default '0',
+  `correct` tinyint(1) default NULL,
+  PRIMARY KEY  (`answer_id`),
+  KEY `vote_id` (`vote_id`),
+  KEY `position` (`position`)
+) TYPE=MyISAM PACK_KEYS=1;
+# --------------------------------------------------------
+
+#
+# Tabellenstruktur für Tabelle `voteanswers_user`
+#
+# Erzeugt am: 27. August 2003 um 11:36
+# Aktualisiert am: 27. August 2003 um 11:36
+#
+
+CREATE TABLE `voteanswers_user` (
+  `answer_id` varchar(32) NOT NULL default '',
+  `user_id` varchar(32) NOT NULL default '',
+  `votedate` int(20) default NULL,
+  PRIMARY KEY  (`answer_id`,`user_id`)
+) TYPE=MyISAM PACK_KEYS=1;
+# --------------------------------------------------------
+
+#
 # Tabellenstruktur für Tabelle `wiki`
 #
-# Erzeugt am: 20. August 2003 um 09:23
-# Aktualisiert am: 20. August 2003 um 09:23
+# Erzeugt am: 20. August 2003 um 10:21
+# Aktualisiert am: 20. August 2003 um 10:21
 #
 
 CREATE TABLE `wiki` (
@@ -1034,8 +1119,8 @@ CREATE TABLE `wiki` (
 #
 # Tabellenstruktur für Tabelle `wiki_links`
 #
-# Erzeugt am: 20. August 2003 um 09:23
-# Aktualisiert am: 20. August 2003 um 09:23
+# Erzeugt am: 20. August 2003 um 10:21
+# Aktualisiert am: 20. August 2003 um 10:21
 #
 
 CREATE TABLE `wiki_links` (
@@ -1049,8 +1134,8 @@ CREATE TABLE `wiki_links` (
 #
 # Tabellenstruktur für Tabelle `wiki_locks`
 #
-# Erzeugt am: 20. August 2003 um 09:23
-# Aktualisiert am: 20. August 2003 um 09:23
+# Erzeugt am: 20. August 2003 um 10:21
+# Aktualisiert am: 20. August 2003 um 10:21
 #
 
 CREATE TABLE `wiki_locks` (
@@ -1062,7 +1147,4 @@ CREATE TABLE `wiki_locks` (
   KEY `user_id` (`user_id`),
   KEY `chdate` (`chdate`)
 ) TYPE=MyISAM;
-
-    
-
 
