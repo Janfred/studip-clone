@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
+//$Id$
 
 ob_start();
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
@@ -131,7 +132,7 @@ if (($rechte) || ($owner)) {
 		$db->query("SELECT filename, ". $_fullname_sql['full'] ." AS fullname, username FROM dokumente LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE dokument_id ='".substr($open, (strpos($open, "_fd_"))-32, (strpos($open, "_fd_")))."'");
 		$db->next_record();
 		if (getLinkPath(substr($open, (strpos($open, "_fd_"))-32, (strpos($open, "_fd_"))))) {
-			$msg="info§" . sprintf("Wollen sie die Verlinkung zu <b>%s</b> von %s wirklich löschen?", htmlentities(stripslashes($db->f("filename"))), "<a href=\"about.php?username=".htmlReady($db->f("username"))."\">".$db->f("fullname")."</a>") . "<br>";
+			$msg="info§" . sprintf("Wollen sie die Verlinkung zu <b>%s</b> von %s wirklich löschen?", htmlentities(stripslashes($db->f("filename"))), "<a href=\"about.php?username=".$db->f("username")."\">".htmlReady($db->f("fullname"))."</a>") . "<br>";
 			$msg.="<b><a href=\"$PHP_SELF?open=".substr($open, (strpos($open, "_fd_"))-32, (strpos($open, "_fd_")))."_rl_\">" . makeButton("ja2", "img") . "</a>&nbsp;&nbsp; <a href=\"$PHP_SELF\">" . makeButton("nein", "img") . "</a>§";
 		} else {
 			$msg="info§" . sprintf("Wollen sie die Datei <b>%s</b> von %s wirklich löschen?", htmlentities(stripslashes($db->f("filename"))), "<a href=\"about.php?username=".$db->f("username")."\">".htmlReady($db->f("fullname"))."</a>") . "<br>";
