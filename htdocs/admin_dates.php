@@ -121,9 +121,8 @@ if ($show_nall)
 if (($edit_x) && (!$admin_dates_data["show_all"]))
 	$admin_dates_data["show_id"]='';
 
-
 //save the edit-arrays (if sent from from) in a persistent varaiable
-if ((is_array ($termin_id)) || (is_array ($kill_termin))){
+if ((is_array ($termin_id)) || (is_array ($kill_date))){
 	$admin_dates_data["form_data"] = '';
 	if (is_array ($termin_id)) foreach ($termin_id as $key=>$val) {
 		$admin_dates_data["form_data"][$val]["termin_id"] = $termin_id[$key];
@@ -143,11 +142,10 @@ if ((is_array ($termin_id)) || (is_array ($kill_termin))){
 		$admin_dates_data["form_data"][$val]["resource_id"] = $resource_id[$key];
 		$admin_dates_data["form_data"][$val]["raum"] = $raum[$key];
 	}
-	if (is_array ($kill_termin)) foreach ($kill_termin as $key=>$val) {
-		$admin_dates_data["form_data"][$val]["kill_termin"] = $kill_termin[$key];
+	if (is_array ($kill_date)) foreach ($kill_date as $key=>$val) {
+		$admin_dates_data["form_data"][$val]["kill_date"] = TRUE;
 	}
 }	
-
 if ($reset_edit)
 	$admin_dates_data["form_data"] = '';
 
@@ -318,10 +316,9 @@ if (($save_changes_with_request) || ($delete_confirm)) {
 		$insert_folder[] = $val["insert_folder"];
 		$art[] = $val["art"];
 		$raum[] = $val["raum"];
-		$kill_termin[] = $val["kill_termin"];
+		$kill_date[] = $key;
 	}
 }
-
 
 if ((($edit_x) || ($save_changes_with_request)) && (!$admin_dates_data["termin_id"])) {
 	if (is_array($termin_id)) {
@@ -381,23 +378,27 @@ if ((($edit_x) || ($save_changes_with_request)) && (!$admin_dates_data["termin_i
 		$updateAssign->updateAssign();
 	}
 }  // end if ($edit_x)
+if ($kill_date)
+	$kill_termin = $kill_date;
 if ((($kill_x) || ($delete_confirm)) && ($admin_dates_data["range_id"])) {
-	if (is_array($kill_termin)) {
-		for ($i=0; $i < count($kill_termin); $i++) {		
-			$teile = explode("&",$kill_termin[$i]);
+	if (is_array($kill_date)) {
+		for ($i=0; $i < count($kill_date); $i++) {		
 			$do_delete = TRUE;
 			if (($RESOURCES_ALLOW_ROOM_REQUESTS) && (!$delete_confirm)){
-				if ($assigned_room = getDateAssigenedRoom($teile[0])) {
+				if ($assigned_room = getDateAssigenedRoom($kill_date[$i])) {
 					$resObjPrm =& ResourceObjectPerms::Factory($assigned_room);
 					if (!$resObjPrm->havePerm("autor")) {
-						$result .= "info§" . sprintf(_("Sie wollen einen Termin l&ouml;schen, dem ein Raum zugewiesen ist. Beim L&ouml;schen verlieren Sie diese Raumbuchung. Wollen Sie den Termin wirklich l&ouml;schen?"));
-						$result .= "<br /><a href=\"$PHP_SELF?delete_confirm=1\">".makeButton("ja2")."</a>&nbsp;<a href=\"$PHP_SELF?reset_edit=1\">".makeButton("nein")."</a>§";
+						if (!$just_informed) {
+							$result .= "info§" . sprintf(_("Sie wollen einen oder mehrere Termine l&ouml;schen, denen bereits ein Raum zugewiesen ist. Beim L&ouml;schen verlieren Sie diese Raumbuchungen. Wollen Sie diese Termine wirklich l&ouml;schen?"));
+							$result .= "<br /><a href=\"$PHP_SELF?delete_confirm=1\">".makeButton("ja2")."</a>&nbsp;<a href=\"$PHP_SELF?reset_edit=1\">".makeButton("nein")."</a>§";
+						}
 						$do_delete = FALSE;
+						$just_informed = TRUE;
 					}
 				}
 			}
 			if ($do_delete) {
-		 		delete_date($teile[0], $teile[1], TRUE, $admin_dates_data["range_id"]);
+		 		delete_date($kill_date[$i], TRUE, TRUE, $admin_dates_data["range_id"]);
 		 		$del_count++;
 		 	}
 		}
@@ -670,7 +671,7 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 	
 	//Wenn insert gesetzt, neuen Anlegen...
 	if ($admin_dates_data["insert_id"]) {
-		$kill_termin = '';
+		$kill_date = '';
 				
 		//Titel erstellen
 		$titel='';
@@ -776,7 +777,7 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 			$art = $admin_dates_data["form_data"][$db->f("termin_id")]["art"];
 			$resource_id = getDateAssigenedRoom($db->f("termin_id"));
 			$raum = $admin_dates_data["form_data"][$db->f("termin_id")]["raum"];
-			$kill_termin = $admin_dates_data["form_data"][$db->f("termin_id")]["kill_termin"];
+			$kill_selected = $admin_dates_data["form_data"][$db->f("termin_id")]["kill_date"];
 		//otherwise, we use the saved state
 		} else {
 			$topic_id = $db->f("topic_id");
@@ -792,6 +793,7 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 			$art = $db->f("date_typ");
 			$resource_id = getDateAssigenedRoom($db->f("termin_id"));
 			$raum = $db->f("raum");
+			$kill_selected = FALSE;
 		}
 
 		//Ermitteln, ob Ordner an diesem Termin haengt
@@ -810,7 +812,7 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 		
 		//Zusatz erstellen
 		if ((!$admin_dates_data["insert_id"]) && ($show_id  != $db->f("termin_id")) && (!$show_all))
-			$zusatz="<input type=\"CHECKBOX\" ".((($mark_all_x) || ($kill_termin)) ? "checked" : "")." name=\"kill_termin[]\" value=\"". $db->f("termin_id")."&". $db->f("topic_id")."\"><img src=\"pictures/trash.gif\" border=0 />";
+			$zusatz="<input type=\"CHECKBOX\" ".((($mark_all_x) || ($kill_selected)) ? "checked" : "")." name=\"kill_date[]\" value=\"". $db->f("termin_id")."". $db->f("topic_id")."\"><img src=\"pictures/trash.gif\" border=0 />";
 		else
 			$zusatz='';
 
