@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-10-02 12:13+0200\n"
+"POT-Creation-Date: 2003-10-06 13:02+0200\n"
 "PO-Revision-Date: 2003-10-01 13:49+0200\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
@@ -1559,19 +1559,19 @@ msgstr "Only <b>one</b> person has taken part."
 #: vote/view/vote_show.lib.php:782
 #, c-format
 msgid "Es haben bisher <b>%s</b> Personen teilgenommen"
-msgstr "To date <b>%s</b> people have taken part."
+msgstr "To date <b>%s</b> people have taken part"
 
 #: vote/view/vote_show.lib.php:785
 msgid "Sie waren bisher der/die einzigste TeilnehmerIn"
-msgstr "You are to date the only participant."
+msgstr "You are to date the only participant"
 
 #: vote/view/vote_show.lib.php:786
 msgid "Es hat bisher insgesamt <b>eine</b> Person teilgenommen"
-msgstr "To date only <b>one</b> person has taken part."
+msgstr "To date only <b>one</b> person has taken part"
 
 #: vote/view/vote_show.lib.php:795
 msgid ", Sie ebenfalls"
-msgstr ", including you."
+msgstr ", including you"
 
 #: vote/view/vote_show.lib.php:806
 #, c-format
@@ -1897,7 +1897,7 @@ msgstr "No description"
 msgid "Verwaltung der externen Anzeigemodule"
 msgstr "Administration of external display module."
 
-#: extern/admin_extern.inc.php:75
+#: extern/admin_extern.inc.php:79
 #, c-format
 msgid ""
 "Wollen Sie die Konfiguration <b>&quot;%s&quot;</b> des Moduls <b>%s</b> "
@@ -1906,20 +1906,20 @@ msgstr ""
 "Do you really want to delete the configuration <b>&quot;%s&quot;</b> of the "
 "module <b>%s</b>?"
 
-#: extern/admin_extern.inc.php:134
+#: extern/admin_extern.inc.php:138
 msgid "Übersicht über alle angelegten Konfigurationen."
 msgstr "Overview of all configurations created."
 
-#: extern/admin_extern.inc.php:154
+#: extern/admin_extern.inc.php:158
 msgid "Neue globale Konfiguration anlegen."
 msgstr "Create new global configuration."
 
-#: extern/admin_extern.inc.php:162
+#: extern/admin_extern.inc.php:166
 #, c-format
 msgid "Neue Konfiguration f&uuml;r Modul %s anlegen."
 msgstr "Create new configuration for module %s."
 
-#: extern/admin_extern.inc.php:169
+#: extern/admin_extern.inc.php:173
 msgid ""
 "Sie haben bereits für alle Module die maximale Anzahl von Konfigurationen "
 "angelegt. Um eine neue Konfiguration anzulegen, m&uuml;ssen Sie erst eine "
@@ -1929,46 +1929,46 @@ msgstr ""
 "modules. To create a new configuration, you must first delete an existing "
 "one in the selected module."
 
-#: extern/admin_extern.inc.php:178
+#: extern/admin_extern.inc.php:182
 msgid "Es wurden noch keine Konfigurationen angelegt."
 msgstr "No configurations have been created."
 
-#: extern/admin_extern.inc.php:184
+#: extern/admin_extern.inc.php:188
 msgid "Angelegte Konfigurationen"
 msgstr "Created configurations"
 
-#: extern/admin_extern.inc.php:220
+#: extern/admin_extern.inc.php:224
 msgid "weitere Informationen anzeigen"
 msgstr "Show further information"
 
-#: extern/admin_extern.inc.php:230
+#: extern/admin_extern.inc.php:234
 msgid "Standard entziehen"
 msgstr "Remove standard status"
 
-#: extern/admin_extern.inc.php:237
+#: extern/admin_extern.inc.php:241
 msgid "Standard zuweisen"
 msgstr "Set as standard"
 
-#: extern/admin_extern.inc.php:246
+#: extern/admin_extern.inc.php:250
 msgid "Konfiguration löschen"
 msgstr "Delete configuration"
 
-#: extern/admin_extern.inc.php:253
+#: extern/admin_extern.inc.php:257
 msgid "Konfiguration bearbeiten"
 msgstr "Edit configuration"
 
-#: extern/admin_extern.inc.php:275
+#: extern/admin_extern.inc.php:279
 #, c-format
 msgid "Sie können pro Modul maximal %s Konfigurationen anlegen."
 msgstr "You can create a maximum of %s configurations per module."
 
-#: extern/admin_extern.inc.php:279
+#: extern/admin_extern.inc.php:283
 msgid ""
 "Klicken Sie auf diesen Button, um eine Konfiguration zur Standard-"
 "Konfiguration zu erklären."
 msgstr "Click this button to set a configuration as standard configuration."
 
-#: extern/admin_extern.inc.php:280
+#: extern/admin_extern.inc.php:284
 msgid ""
 "Wenn Sie keine Konfiguration als Standard ausgew&auml;hlt haben, wird die "
 "Stud.IP-Konfiguration verwendet."
@@ -1976,7 +1976,7 @@ msgstr ""
 "If you have not selected a configuration as standard, the Stud.IP "
 "configuration will be used."
 
-#: extern/admin_extern.inc.php:281
+#: extern/admin_extern.inc.php:285
 msgid ""
 "Dieses Symbol kennzeichnet die Standard-Konfiguration, die zur Formatierung "
 "herangezogen wird, wenn sie beim Aufruf dieses Moduls keine Konfiguration "
@@ -1985,7 +1985,7 @@ msgstr ""
 "This symbol marks the standard configuration, that will be consulted for "
 "formatting if you do not give this module any configuration when requested."
 
-#: extern/admin_extern.inc.php:282
+#: extern/admin_extern.inc.php:286
 msgid ""
 "Klicken Sie auf diesen Button um weitere Informationen über diese "
 "Konfiguration zu erhalten. Hier finden Sie auch die Links, über die Sie die "
@@ -7883,7 +7883,7 @@ msgstr ""
 msgid "Benutzer nicht gefunden"
 msgstr "User not found"
 
-#: about.php:156 forum.inc.php:1095
+#: about.php:156 forum.inc.php:1096
 msgid "kein persönliches Bild vorhanden"
 msgstr "no personal photo is included"
 
@@ -8528,22 +8528,22 @@ msgid "Kurztitel, bitte ausfüllen!"
 msgstr "Short title, please fill out!"
 
 #: admin_dates.php:43 admin_metadates.php:186 admin_seminare_assi.php:408
-#: functions.php:760
+#: functions.php:776
 msgid "tt"
 msgstr "dd"
 
 #: admin_dates.php:44 admin_dates.php:47 admin_dates.php:49
-#: admin_metadates.php:185 admin_seminare_assi.php:407 functions.php:759
-#: functions.php:763
+#: admin_metadates.php:185 admin_seminare_assi.php:407 functions.php:775
+#: functions.php:779
 msgid "mm"
 msgstr "mm"
 
 #: admin_dates.php:45 admin_metadates.php:187 admin_seminare_assi.php:409
-#: functions.php:761
+#: functions.php:777
 msgid "jjjj"
 msgstr "yyyy"
 
-#: admin_dates.php:46 admin_dates.php:48 functions.php:762 functions.php:766
+#: admin_dates.php:46 admin_dates.php:48 functions.php:778 functions.php:782
 msgid "hh"
 msgstr "hh"
 
@@ -9403,7 +9403,7 @@ msgid "Markierte News löschen"
 msgstr "Delete selected news"
 
 #: admin_news.php:176 admin_news.php:226 contact.inc.php:419 contact.php:114
-#: forum.inc.php:1582 freie.php:169 meine_einrichtungen.php:265
+#: forum.inc.php:1583 freie.php:169 meine_einrichtungen.php:265
 #: meine_seminare.php:330 meine_seminare.php:703 my_archiv.php:94
 msgid "Inhalt"
 msgstr "Content"
@@ -9497,7 +9497,7 @@ msgstr "Here you can choose other areas to which you have access."
 
 #: admin_news.php:295 admin_news.php:748 admin_seminare1.php:592
 #: admin_seminare1.php:656 admin_seminare_assi.php:1740
-#: admin_seminare_assi.php:1807 archiv.php:517 forum.inc.php:1588
+#: admin_seminare_assi.php:1807 archiv.php:517 forum.inc.php:1589
 #: institut_browse.php:103 pers_browse.inc.php:136
 #: lib/classes/StudipSemSearch.class.php:217
 msgid "Suche starten"
@@ -12006,7 +12006,7 @@ msgstr "Please select a user from the list: "
 msgid "Diese Person hinzuf&uuml;gen"
 msgstr "Add this user "
 
-#: archiv.php:505 forum.inc.php:602
+#: archiv.php:505 forum.inc.php:603
 msgid "Neue Suche"
 msgstr "New search"
 
@@ -12610,7 +12610,7 @@ msgstr "Other Information:"
 msgid "Nachricht schreiben"
 msgstr "Write message"
 
-#: contact.inc.php:384 contact.inc.php:450 functions.php:453 functions.php:470
+#: contact.inc.php:384 contact.inc.php:450 functions.php:469 functions.php:486
 msgid "Fehler!"
 msgstr "Error!"
 
@@ -12659,11 +12659,11 @@ msgstr "1 entry"
 msgid "%d Eintr&auml;ge"
 msgstr "%d entries "
 
-#: contact.php:135 forum.inc.php:1251
+#: contact.php:135 forum.inc.php:1252
 msgid "Alle aufklappen"
 msgstr "Open all"
 
-#: contact.php:137 forum.inc.php:1248
+#: contact.php:137 forum.inc.php:1249
 msgid "Alle zuklappen"
 msgstr "Close all"
 
@@ -14261,7 +14261,7 @@ msgstr "Open all postings in the folder"
 msgid "Postings in diesen Ordner verschieben"
 msgstr "Move postings to this folder"
 
-#: forum.inc.php:580
+#: forum.inc.php:581
 msgid ""
 "In diesem Forum wurde noch kein Themenordner angelegt.<br>Sie k&ouml;nnen "
 "oben unter <b>neues Thema</b> einen Ordner anlegen."
@@ -14269,7 +14269,7 @@ msgstr ""
 "No topics have been entered in this forum.<br>You can add a new folder "
 "above, under <b>New topic</b>."
 
-#: forum.inc.php:583
+#: forum.inc.php:584
 msgid ""
 "In diesem Forum wurde noch kein Themenordner angelegt.<br>Kontaktieren Sie "
 "eine/n TutorIn oder eine/n DozentIn dieser Veranstaltung, um Ordner anlegen "
@@ -14278,7 +14278,7 @@ msgstr ""
 "As yet there are no topic folders in this forum. <br>Contact a tutor or "
 "lecturer responsible for this course in order to add a new folder."
 
-#: forum.inc.php:585
+#: forum.inc.php:586
 msgid ""
 "In diesem Forum wurde noch kein Themenordner angelegt.<br>Kontaktieren Sie "
 "den/die AdministratorIn der Einrichtung, um Ordner anlegen zu lassen."
@@ -14286,109 +14286,109 @@ msgstr ""
 "As yet there is no topic folder in this forum. <br>Contact an administrator "
 "at the institute in order to add a folder. "
 
-#: forum.inc.php:600
+#: forum.inc.php:601
 msgid "In dieser Ansicht gibt es derzeit keine Beiträge."
 msgstr "There are no postings in this view."
 
-#: forum.inc.php:602
+#: forum.inc.php:603
 msgid "Zu Ihrem Suchbegriff gibt es keine Treffer."
 msgstr "Your search did not reveal any matches."
 
-#: forum.inc.php:644
+#: forum.inc.php:645
 msgid "weiter"
 msgstr "Continue"
 
-#: forum.inc.php:691
+#: forum.inc.php:692
 msgid "Fehler beim Anlegen eines Postings."
 msgstr "Error while creating a posting."
 
-#: forum.inc.php:714
+#: forum.inc.php:715
 msgid "<p>Aktualisieren des Postings fehlgeschlagen</p>\n"
 msgstr "<p>Posting update aborted</p>\n"
 
-#: forum.inc.php:772
+#: forum.inc.php:773
 msgid "Indikator:"
 msgstr "Indicator:"
 
-#: forum.inc.php:798
+#: forum.inc.php:799
 msgid "Favoriten"
 msgstr "Favourites"
 
-#: forum.inc.php:800 forum.inc.php:1382
+#: forum.inc.php:801 forum.inc.php:1383
 msgid "Thema"
 msgstr "Topic"
 
-#: forum.inc.php:810
+#: forum.inc.php:811
 msgid "Sortierung durchführen"
 msgstr "Carry out sorting"
 
-#: forum.inc.php:812
+#: forum.inc.php:813
 msgid "Toolbar einfahren"
 msgstr "Roll in toolbar"
 
-#: forum.inc.php:821
+#: forum.inc.php:822
 msgid "Toolbar ausfahren"
 msgstr "Roll out tool bar"
 
-#: forum.inc.php:889
+#: forum.inc.php:890
 msgid "editiert von: "
 msgstr "Edited by:"
 
-#: forum.inc.php:903 links_about.inc.php:59 links_openobject.inc.php:63
+#: forum.inc.php:904 links_about.inc.php:59 links_openobject.inc.php:63
 #: links_openobject.inc.php:83 lib/classes/AdminModules.class.php:48
 msgid "Forum"
 msgstr "Forum"
 
-#: forum.inc.php:905
+#: forum.inc.php:906
 msgid "Look & Feel anpassen"
 msgstr "Customise Look & Feel"
 
-#: forum.inc.php:1016
+#: forum.inc.php:1017
 msgid "aus den Favoriten entfernen"
 msgstr "Remove from favourites"
 
-#: forum.inc.php:1019
+#: forum.inc.php:1020
 msgid "zu den Favoriten hinzufügen"
 msgstr "Add to favourites"
 
-#: forum.inc.php:1028
+#: forum.inc.php:1029
 msgid "Hier klicken um in einem neuen Fenster zu antworten"
 msgstr "Click here to reply in a new window"
 
-#: forum.inc.php:1391
+#: forum.inc.php:1392
 msgid "<b>Postings</b> / letzter Eintrag"
 msgstr "<b>Postings</b>/last posting"
 
-#: forum.inc.php:1420
+#: forum.inc.php:1421
 msgid "Neues Thema anlegen"
 msgstr "Add a new topic"
 
-#: forum.inc.php:1551
+#: forum.inc.php:1552
 msgid "Suchbegriff:"
 msgstr "Search keyword:"
 
-#: forum.inc.php:1559
+#: forum.inc.php:1560
 msgid "Suchen in den Feldern:"
 msgstr "Search in the fields:"
 
-#: forum.inc.php:1575
+#: forum.inc.php:1576
 msgid "Überschrift"
 msgstr "Headline "
 
-#: forum.inc.php:1642
+#: forum.inc.php:1643
 #, c-format
 msgid "Als Thema verschieben (zusammen mit %s Antworten):"
 msgstr "Moved as topic (together with %s replies):"
 
-#: forum.inc.php:1652
+#: forum.inc.php:1653
 msgid "in anderes Forum:"
 msgstr "In another forum:"
 
-#: forum.inc.php:1656 forum.inc.php:1678
+#: forum.inc.php:1657 forum.inc.php:1679
 msgid "dahin verschieben"
 msgstr "Move there"
 
-#: forum.inc.php:1674
+#: forum.inc.php:1675
 msgid "in andere Einrichtung:"
 msgstr "In another institute:"
 
@@ -14638,18 +14638,18 @@ msgstr ""
 msgid "Modul nicht verf&uuml;gbar"
 msgstr "Module not available."
 
-#: functions.php:410
+#: functions.php:426
 msgid ""
 "In dieser Veranstaltung ist ein Passwort f&uuml;r den Schreibzugriff n&ouml;"
 "tig."
 msgstr "A password for writing access is required for this course."
 
-#: functions.php:410
+#: functions.php:426
 #, c-format
 msgid "Zur %sPassworteingabe%s"
 msgstr "To %sEnter password%s "
 
-#: functions.php:414
+#: functions.php:430
 msgid ""
 "Sie müssen sich erneut für diese Veranstaltung anmelden, um Dateien "
 "hochzuladen und Beitr&auml;ge im Forum schreiben zu können!"
@@ -14657,20 +14657,20 @@ msgstr ""
 "You must register for this course again in order to up upload files and "
 "write postings for the forum!"
 
-#: functions.php:414
+#: functions.php:430
 #, c-format
 msgid "Hier kommen sie zur %sFreischaltung%s der Veranstaltung."
 msgstr "This takes you to the course %sregistration%s."
 
-#: functions.php:416
+#: functions.php:432
 msgid "Bitte folgen Sie den Anweisungen in der Registrierungsmail."
 msgstr "Please follow the directions in the registration mail."
 
-#: functions.php:418
+#: functions.php:434
 msgid "Bitte melden Sie sich an."
 msgstr "Please register."
 
-#: functions.php:418
+#: functions.php:434
 #, c-format
 msgid ""
 "Hier geht es zur %sRegistrierung%s wenn Sie noch keinen Account im System "
@@ -14679,12 +14679,12 @@ msgstr ""
 "This takes you to the %sRegistration%s if you do not yet have an account in "
 "the system."
 
-#: functions.php:425
+#: functions.php:441
 msgid ""
 "Dieser Fehler kann auch auftreten, wenn Sie zu lange inaktiv gewesen sind."
 msgstr "This error can also arise if you have been inactive for too long."
 
-#: functions.php:425
+#: functions.php:441
 #, c-format
 msgid ""
 "Wenn sie l&auml;nger als %s Minuten keine Aktion mehr ausgef&uuml;hrt haben, "
@@ -14692,115 +14692,115 @@ msgid ""
 msgstr ""
 "If you have been inactive for longer than %s minutes, you must login again."
 
-#: functions.php:615 functions.php:616 functions.php:617
+#: functions.php:631 functions.php:632 functions.php:633
 msgid "Unbeschriebenes Blatt"
 msgstr "Dark horse"
 
-#: functions.php:618
+#: functions.php:634
 msgid "Neuling"
 msgstr "Fledgling"
 
-#: functions.php:619
+#: functions.php:635
 msgid "Greenhorn"
 msgstr "Greenhorn"
 
-#: functions.php:620
+#: functions.php:636
 msgid "Anf&auml;nger"
 msgstr "Amateur"
 
-#: functions.php:620
+#: functions.php:636
 msgid "Anf&auml;ngerin"
 msgstr "Amateur "
 
-#: functions.php:621
+#: functions.php:637
 msgid "Einsteiger"
 msgstr "Climber"
 
-#: functions.php:621
+#: functions.php:637
 msgid "Einsteigerin"
 msgstr "Climber "
 
-#: functions.php:622
+#: functions.php:638
 msgid "Beginner"
 msgstr "Beginner"
 
-#: functions.php:622
+#: functions.php:638
 msgid "Beginnerin"
 msgstr "Beginner "
 
-#: functions.php:623
+#: functions.php:639
 msgid "Novize"
 msgstr "Novice"
 
-#: functions.php:623
+#: functions.php:639
 msgid "Novizin"
 msgstr "Novice "
 
-#: functions.php:624
+#: functions.php:640
 msgid "Fortgeschrittener"
 msgstr "Advancer "
 
-#: functions.php:624
+#: functions.php:640
 msgid "Fortgeschrittene"
 msgstr "Advancer "
 
-#: functions.php:625
+#: functions.php:641
 msgid "Kenner"
 msgstr "Aficionado"
 
-#: functions.php:625
+#: functions.php:641
 msgid "Kennerin"
 msgstr "Aficionado "
 
-#: functions.php:626
+#: functions.php:642
 msgid "K&ouml;nner"
 msgstr "Professional"
 
-#: functions.php:626
+#: functions.php:642
 msgid "K&ouml;nnerin"
 msgstr "Professional "
 
-#: functions.php:627
+#: functions.php:643
 msgid "Experte"
 msgstr "Expert"
 
-#: functions.php:627
+#: functions.php:643
 msgid "Expertin"
 msgstr "Expert "
 
-#: functions.php:628
+#: functions.php:644
 msgid "Meister"
 msgstr "Master"
 
-#: functions.php:628
+#: functions.php:644
 msgid "Meisterin"
 msgstr "Master "
 
-#: functions.php:629
+#: functions.php:645
 msgid "Gro&szlig;meister"
 msgstr "Grand master"
 
-#: functions.php:629
+#: functions.php:645
 msgid "Gro&szlig;meisterin"
 msgstr "Grand master "
 
-#: functions.php:630
+#: functions.php:646
 msgid "Guru"
 msgstr "Guru"
 
-#: functions.php:630
+#: functions.php:646
 msgid "Hohepriesterin"
 msgstr "High priestess"
 
-#: functions.php:631
+#: functions.php:647
 msgid "Lichtgestalt"
 msgstr "Light bearer"
 
-#: functions.php:632
+#: functions.php:648
 msgid "Gott"
 msgstr "God"
 
-#: functions.php:632
+#: functions.php:648
 msgid "G&ouml;ttin"
 msgstr "Goddess"
 
@@ -17294,7 +17294,7 @@ msgstr "You have already rated this object."
 msgid "Wer ist Online?"
 msgstr "Who is online?"
 
-#: online.php:69 sms.php:303
+#: online.php:69
 msgid "Einstellungen &auml;ndern"
 msgstr "Change settings"
 
@@ -17313,11 +17313,11 @@ msgstr "You can send these users a message %s or invite them to chat %s."
 msgid "Wenn Sie auf den Namen klicken, kommen Sie zur Homepage des Users."
 msgstr "When you click on a name, you will go to the user's homepage."
 
-#: online.php:89 sms_box.php:386 sms.php:173 sms.php:241 sms.php:322
+#: online.php:89 sms_box.php:386
 msgid "Zur&uuml;ck zur ausgew&auml;hlten Einrichtung"
 msgstr "Back to selected institute"
 
-#: online.php:91 sms_box.php:388 sms.php:175 sms.php:243 sms.php:324
+#: online.php:91 sms_box.php:388
 msgid "Zur&uuml;ck zur ausgew&auml;hlten Veranstaltung"
 msgstr "Back to selected course"
 
@@ -18705,16 +18705,16 @@ msgstr "automatic system message, sent at %s %s "
 msgid "gesendet von %s am %s %s"
 msgstr "Sent from %s at %s %s"
 
-#: sms_box.php:279 sms.php:58 sms.php:75
+#: sms_box.php:279
 msgid "Es wurde eine Nachricht gel&ouml;scht."
 msgstr "A message has been deleted."
 
-#: sms_box.php:281 sms.php:60 sms.php:77
+#: sms_box.php:281
 #, c-format
 msgid "Es wurden %s Nachrichten gel&ouml;scht."
 msgstr "%s messages have been deleted."
 
-#: sms_box.php:284 sms.php:80
+#: sms_box.php:284
 msgid "Es konnten keine Nachrichten gel&ouml;scht werden."
 msgstr "No messages could be deleted."
 
@@ -18808,6 +18808,11 @@ msgid ""
 msgstr ""
 "No internal system messages %s are available that are older than 30 days old."
 
+#: sms_box.php:432
+#, fuzzy
+msgid "Sie k&ouml;nnen die Anzeige der Nachrichten zeitlich eingrenzen."
+msgstr "You can restrict the selection of courses:"
+
 #: sms_box.php:433
 msgid "neue Nachrichten"
 msgstr "New messages"
@@ -18841,148 +18846,29 @@ msgstr "You have %s received and %s send messages."
 msgid "Anzeigezeitraum ausw&auml;hlen:"
 msgstr "Select display time period:"
 
-#: sms.php:62
-msgid "Es liegen keine Nachrichten zum L&ouml;schen vor."
-msgstr "No messages are available for deletion."
-
-#: sms.php:98 sms_send.php:93
+#: sms_send.php:93
 #, c-format
 msgid "Ihre Nachricht an %s wurde verschickt!"
 msgstr "Your message has been sent to %s!"
-
-#: sms.php:100
-#, c-format
-msgid "Die Nachricht wurde an alle %s Buddies verschickt!"
-msgstr "The message has been sent to all %s buddies!"
-
-#: sms.php:102
-#, c-format
-msgid "Die Nachricht wurde an %s Gruppenmitglieder verschickt!"
-msgstr "The message has been sent to %s group members!"
-
-#: sms.php:105 sms_send.php:100
-msgid ""
-"Ihre Nachricht konnte nicht gesendet werden. Die Nachricht enth&auml;lt "
-"keinen Text."
-msgstr "Your message could not be sent. The message does not contain any text."
-
-#: sms.php:107 sms_send.php:102
-msgid "Ihre Nachricht konnte nicht gesendet werden."
-msgstr "Your message could not be sent."
-
-#: sms.php:129
-#, c-format
-msgid "Ihre Einladung zum Chatten an %s in den Chatraum %s wurde verschickt."
-msgstr "Your invitation has been sent to %s to chat in the chat room %s."
-
-#: sms.php:131 sms.php:138
-#, c-format
-msgid "Ihre Einladung zum Chatten an %s konnte nicht verschickt werden"
-msgstr "Your invitation to chat could not be sent to %s."
-
-#: sms.php:133
-#, c-format
-msgid "Ihre Einladung zum Chatten wurde an %s Buddies verschickt!"
-msgstr "Your invitation to chat has been sent to %s buddies."
-
-#: sms.php:135
-msgid ""
-"Ihre Einladung zum Chatten konnte nicht an Ihre Buddies verschickt werden!"
-msgstr "Your invitation to chat could not be sent to your buddies!"
-
-#: sms.php:165 sms_send.php:167
-msgid "Systeminterne Nachricht schreiben"
-msgstr "Write internal system message"
-
-#: sms.php:171
-msgid "Schreiben Sie hier eine Nachricht an eine(n) anderen Benutzer(in):"
-msgstr "Write a message to another user here: "
-
-#: sms.php:196
-msgid "Nachricht schreiben an"
-msgstr "Write message to"
-
-#: sms.php:198
-#, c-format
-msgid "alle Mitglieder der Gruppe: %s (%s Person(en))"
-msgstr "all members of the group: %s (%s user(s))"
-
-#: sms.php:206
-msgid "Diese Nachricht (auch) an alle meine Buddies versenden"
-msgstr "Send this message to all my buddies (as well)."
-
-#: sms.php:233
-msgid "Chateinladung verschicken"
-msgstr "Send chat invitation "
-
-#: sms.php:239
-msgid ""
-"Schreiben Sie hier eine Chateinladung an eine(n) anderen Benutzer(in), der "
-"Nachrichtentext ist optional:"
-msgstr ""
-"Write a chat invitation to another user here, the message text is optional:"
-
-#: sms.php:255
-msgid "Chateinladung verschicken an"
-msgstr "Send chat invitation to"
-
-#: sms.php:258 sms_send.php:312
-msgid "Chatraum ausw&auml;hlen:"
-msgstr "Select chat room:"
-
-#: sms.php:271
-msgid "Diese Einladung (auch) an alle meine Buddies verschicken"
-msgstr "Send this invitation to all my buddies (as well)."
-
-#: sms.php:302
-msgid "Systeminterne Nachrichten anzeigen"
-msgstr "Show internal system messages"
-
-#: sms.php:318
-msgid ""
-"Sie sehen hier alle systeminternen Nachrichten (SMS), die an Sie verschickt "
-"wurden."
-msgstr ""
-"You can see here all the internal system messages (SMS) that you have "
-"received."
-
-#: sms.php:319
-msgid "Alle Nachrichten seit dem letzten Login erscheinen aufgeklappt."
-msgstr "All messages received since your last login are displayed opened."
-
-#: sms.php:330
-msgid "Nachrichten seit letztem Login nicht l&ouml;schen"
-msgstr "Don't delete messages received since last login."
-
-#: sms.php:351
-msgid "Einladung zum Chat"
-msgstr "Invitation to chat"
-
-#: sms.php:353
-msgid ""
-"Wenn Sie mit ihm Chatten wollen, betreten Sie den Chat über das Symbol in "
-"der Kopfzeile."
-msgstr ""
-"If you want to chat with him, enter the chat via the symbol on the header."
-
-#: sms.php:379
-#, c-format
-msgid "automatische Systemnachricht, gesendet am %s"
-msgstr "automatic system message sent to %s."
-
-#: sms.php:383
-#, c-format
-msgid "gesendet von %s am %s"
-msgstr "Sent from %s at %s."
-
-#: sms.php:444
-msgid "Im Augenblick liegen keine systeminternen Nachrichten f&uuml;r Sie vor."
-msgstr "At present there are no internal system messages for you."
 
 #: sms_send.php:96
 #, c-format
 msgid "Ihre Nachricht wurde an %s Empf&auml;nger verschickt!"
 msgstr "Your message has been sent to %s addressees!"
+
+#: sms_send.php:100
+msgid ""
+"Ihre Nachricht konnte nicht gesendet werden. Die Nachricht enth&auml;lt "
+"keinen Text."
+msgstr "Your message could not be sent. The message does not contain any text."
+
+#: sms_send.php:102
+msgid "Ihre Nachricht konnte nicht gesendet werden."
+msgstr "Your message could not be sent."
+
+#: sms_send.php:167
+msgid "Systeminterne Nachricht schreiben"
+msgstr "Write internal system message"
 
 #: sms_send.php:182
 msgid "aktuelle Empf&auml;ngerInnen"
@@ -19043,6 +18929,10 @@ msgstr "Add to addressee list"
 #: sms_send.php:293
 msgid "Chateinladung"
 msgstr "Chat invitation "
+
+#: sms_send.php:312
+msgid "Chatraum ausw&auml;hlen:"
+msgstr "Select chat room:"
 
 #: sms_send.php:346
 msgid "Empf&auml;nger hinzuf&uuml;gen:"
@@ -19581,15 +19471,15 @@ msgstr "%s wrote:"
 msgid "Zitat:"
 msgstr "Citation:"
 
-#: visual.inc.php:863
+#: visual.inc.php:827
 msgid "Objekt aufklappen $addon"
 msgstr "Open object $addon"
 
-#: visual.inc.php:866
+#: visual.inc.php:830
 msgid "Objekt zuklappen $addon"
 msgstr "Close object $addon"
 
-#: visual.inc.php:903
+#: visual.inc.php:867
 msgid "Bewertungsbereich öffnen"
 msgstr "Open rating area"
 
@@ -19599,7 +19489,7 @@ msgid ""
 "Neue Seiten oder Links werden einfach durch Eingeben von WikiNamen angelegt."
 msgstr ""
 "This Wiki is still empty. Edit!\n"
-"New pages or links will be added by simply entering Wiki names."
+"New pages or links will be added by simply entering WikiNames."
 
 #: wiki.inc.php:64
 msgid "Keine Änderung vorgenommen."
@@ -19626,7 +19516,7 @@ msgstr " (for %d minutes)"
 
 #: wiki.inc.php:351
 msgid "Version "
-msgstr "Version"
+msgstr "Version "
 
 #: wiki.inc.php:352
 #, c-format
@@ -23253,6 +23143,92 @@ msgid ""
 "eingetragen."
 msgstr ""
 "The allocation of rooms %s has been sent to the resources administration."
+
+#~ msgid "Es liegen keine Nachrichten zum L&ouml;schen vor."
+#~ msgstr "No messages are available for deletion."
+
+#~ msgid "Die Nachricht wurde an alle %s Buddies verschickt!"
+#~ msgstr "The message has been sent to all %s buddies!"
+
+#~ msgid "Die Nachricht wurde an %s Gruppenmitglieder verschickt!"
+#~ msgstr "The message has been sent to %s group members!"
+
+#~ msgid ""
+#~ "Ihre Einladung zum Chatten an %s in den Chatraum %s wurde verschickt."
+#~ msgstr "Your invitation has been sent to %s to chat in the chat room %s."
+
+#~ msgid "Ihre Einladung zum Chatten an %s konnte nicht verschickt werden"
+#~ msgstr "Your invitation to chat could not be sent to %s."
+
+#~ msgid "Ihre Einladung zum Chatten wurde an %s Buddies verschickt!"
+#~ msgstr "Your invitation to chat has been sent to %s buddies."
+
+#~ msgid ""
+#~ "Ihre Einladung zum Chatten konnte nicht an Ihre Buddies verschickt werden!"
+#~ msgstr "Your invitation to chat could not be sent to your buddies!"
+
+#~ msgid "Schreiben Sie hier eine Nachricht an eine(n) anderen Benutzer(in):"
+#~ msgstr "Write a message to another user here: "
+
+#~ msgid "Nachricht schreiben an"
+#~ msgstr "Write message to"
+
+#~ msgid "alle Mitglieder der Gruppe: %s (%s Person(en))"
+#~ msgstr "all members of the group: %s (%s user(s))"
+
+#~ msgid "Diese Nachricht (auch) an alle meine Buddies versenden"
+#~ msgstr "Send this message to all my buddies (as well)."
+
+#~ msgid "Chateinladung verschicken"
+#~ msgstr "Send chat invitation "
+
+#~ msgid ""
+#~ "Schreiben Sie hier eine Chateinladung an eine(n) anderen Benutzer(in), "
+#~ "der Nachrichtentext ist optional:"
+#~ msgstr ""
+#~ "Write a chat invitation to another user here, the message text is "
+#~ "optional:"
+
+#~ msgid "Chateinladung verschicken an"
+#~ msgstr "Send chat invitation to"
+
+#~ msgid "Diese Einladung (auch) an alle meine Buddies verschicken"
+#~ msgstr "Send this invitation to all my buddies (as well)."
+
+#~ msgid "Systeminterne Nachrichten anzeigen"
+#~ msgstr "Show internal system messages"
+
+#~ msgid ""
+#~ "Sie sehen hier alle systeminternen Nachrichten (SMS), die an Sie "
+#~ "verschickt wurden."
+#~ msgstr ""
+#~ "You can see here all the internal system messages (SMS) that you have "
+#~ "received."
+
+#~ msgid "Alle Nachrichten seit dem letzten Login erscheinen aufgeklappt."
+#~ msgstr "All messages received since your last login are displayed opened."
+
+#~ msgid "Nachrichten seit letztem Login nicht l&ouml;schen"
+#~ msgstr "Don't delete messages received since last login."
+
+#~ msgid "Einladung zum Chat"
+#~ msgstr "Invitation to chat"
+
+#~ msgid ""
+#~ "Wenn Sie mit ihm Chatten wollen, betreten Sie den Chat über das Symbol in "
+#~ "der Kopfzeile."
+#~ msgstr ""
+#~ "If you want to chat with him, enter the chat via the symbol on the header."
+
+#~ msgid "automatische Systemnachricht, gesendet am %s"
+#~ msgstr "automatic system message sent to %s."
+
+#~ msgid "gesendet von %s am %s"
+#~ msgstr "Sent from %s at %s."
+
+#~ msgid ""
+#~ "Im Augenblick liegen keine systeminternen Nachrichten f&uuml;r Sie vor."
+#~ msgstr "At present there are no internal system messages for you."
 
 #~ msgid "Formatierung des Links."
 #~ msgstr "Formatting the link."

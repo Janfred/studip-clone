@@ -1,12 +1,13 @@
 # translation of studip_vote.po to 
+# translation of studip_vote.po to
 # This file is distributed under the same license as the PACKAGE package.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER, 2003
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: studip_vote\n"
-"POT-Creation-Date: 2003-10-02 12:13+0200\n"
-"PO-Revision-Date: 2003-10-01 18:47+GMT\n"
+"POT-Creation-Date: 2003-10-06 13:02+0200\n"
+"PO-Revision-Date: 2003-10-06 13:00+GMT\n"
 "Last-Translator: \n"
 "Language-Team:  <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1372,19 +1373,19 @@ msgstr "Only <b>one</b> person has taken part."
 #: vote/view/vote_show.lib.php:782
 #, c-format
 msgid "Es haben bisher <b>%s</b> Personen teilgenommen"
-msgstr "To date <b>%s</b> people have taken part."
+msgstr "To date <b>%s</b> people have taken part"
 
 #: vote/view/vote_show.lib.php:785
 msgid "Sie waren bisher der/die einzigste TeilnehmerIn"
-msgstr "You are to date the only participant."
+msgstr "You are to date the only participant"
 
 #: vote/view/vote_show.lib.php:786
 msgid "Es hat bisher insgesamt <b>eine</b> Person teilgenommen"
-msgstr "To date only <b>one</b> person has taken part."
+msgstr "To date only <b>one</b> person has taken part"
 
 #: vote/view/vote_show.lib.php:795
 msgid ", Sie ebenfalls"
-msgstr ", including you."
+msgstr ", including you"
 
 #: vote/view/vote_show.lib.php:806
 #, c-format
