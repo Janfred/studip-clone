@@ -22,6 +22,7 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" =>
 $auth->login_if($again && ($auth->auth["uid"] == "nobody"));
 
 include($ABSOLUTE_PATH_STUDIP."seminar_open.php"); //hier werden die sessions initialisiert
+require_once($ABSOLUTE_PATH_STUDIP."language.inc.php");
 require_once($ABSOLUTE_PATH_STUDIP."config.inc.php");
 require_once($ABSOLUTE_PATH_STUDIP."visual.inc.php");
 require_once($ABSOLUTE_PATH_STUDIP."html_head.inc.php");
@@ -96,104 +97,104 @@ if ($institut_members_data["extend"] == "yes") {
 		case liste :
 			if ($perm->have_perm("admin")) {
 				$table_structure = array(
-												"name" => array("name" => "Name",
+												"name" => array("name" => _("Name"),
 														"link" => $PHP_SELF . "?sortby=Nachname&direction=" . $new_direction,
 														"width" => "30%"),
-												"statusgruppe" => array("name" => "Funktion",
+												"statusgruppe" => array("name" => _("Funktion"),
 														"width" => "15%"),
-												"status" => array("name" => "Status",
+												"status" => array("name" => _("Status"),
 														"link" => $PHP_SELF . "?sortby=inst_perms&direction=" . $new_direction,
 														"width" => "10"),
-												"raum" => array("name" => "Raum",
+												"raum" => array("name" => _("Raum"),
 														"width" => "10%"),
-												"sprechzeiten" => array("name" => "Sprechzeiten",
+												"sprechzeiten" => array("name" => _("Sprechzeiten"),
 														"width" => "10%"),
-												"telefon" => array("name" => "Telefon",
+												"telefon" => array("name" => _("Telefon"),
 														"width" => "10%"),
-												"email" => array("name" => "Email",
+												"email" => array("name" => _("E-Mail"),
 														"width" => "10%"),
-												"nachricht" => array("name" => "Nachricht&nbsp;",
+												"nachricht" => array("name" => _("Nachricht") . "&nbsp;",
 														"width" => "5%")
 												);
 			}
 			else {
 				$table_structure = array(
-												"name" => array("name" => "Name",
+												"name" => array("name" => _("Name"),
 														"link" => $PHP_SELF . "?sortby=Nachname&direction=" . $new_direction,
 														"width" => "30%"),
-												"statusgruppe" => array("name" => "Funktion",
+												"statusgruppe" => array("name" => _("Funktion"),
 														"width" => "10%"),
-												"raum" => array("name" => "Raum",
+												"raum" => array("name" => _("Raum"),
 														"width" => "10%"),
-												"sprechzeiten" => array("name" => "Sprechzeiten",
+												"sprechzeiten" => array("name" => _("Sprechzeiten"),
 														"width" => "10%"),
-												"telefon" => array("name" => "Telefon",
+												"telefon" => array("name" => _("Telefon"),
 														"width" => "10%"),
-												"email" => array("name" => "Email",
+												"email" => array("name" => _("E-Mail"),
 														"width" => "10%"),
-												"home" => array("name" => "externe Homepage",
+												"home" => array("name" => _("externe Homepage"),
 														"width" => "15%"),
-												"nachricht" => array("name" => "Nachricht&nbsp;",
+												"nachricht" => array("name" => _("Nachricht") . "&nbsp;",
 														"width" => "5%")
 												);
 			}
 			break;
 		case status :
 			$table_structure = array(
-												"name" => array("name" => "Name",
+												"name" => array("name" => _("Name"),
 														"link" => $PHP_SELF . "?sortby=Nachname&direction=" . $new_direction,
 														"width" => "30%"),
-												"statusgruppe" => array("name" => "Funktion",
+												"statusgruppe" => array("name" => _("Funktion"),
 														"width" => "15%"),
-												"raum" => array("name" => "Raum",
+												"raum" => array("name" => _("Raum"),
 														"width" => "10%"),
-												"sprechzeiten" => array("name" => "Sprechzeiten",
+												"sprechzeiten" => array("name" => _("Sprechzeiten"),
 														"width" => "15%"),
-												"telefon" => array("name" => "Telefon",
+												"telefon" => array("name" => _("Telefon"),
 														"width" => "10%"),
-												"email" => array("name" => "Email",
+												"email" => array("name" => _("E-Mail"),
 														"width" => "15%"),
-												"nachricht" => array("name" => "Nachricht&nbsp;",
+												"nachricht" => array("name" => _("Nachricht") . "&nbsp;",
 														"width" => "5%")
 												);
 			break;
 		default :
 			if ($perm->have_perm("admin")) {
 				$table_structure = array(
-												"name" => array("name" => "Name",
+												"name" => array("name" => _("Name"),
 														"link" => $PHP_SELF . "?sortby=Nachname&direction=" . $new_direction,
 														"width" => "30%"),
-												"status" => array("name" => "Status",
+												"status" => array("name" => _("Status"),
 														"link" => $PHP_SELF . "?sortby=inst_perms&direction=" . $new_direction,
 														"width" => "10"),
-												"raum" => array("name" => "Raum",
+												"raum" => array("name" => _("Raum"),
 														"width" => "15%"),
-												"sprechzeiten" => array("name" => "Sprechzeiten",
+												"sprechzeiten" => array("name" => _("Sprechzeiten"),
 														"width" => "15%"),
-												"telefon" => array("name" => "Telefon",
+												"telefon" => array("name" => _("Telefon"),
 														"width" => "15%"),
-												"email" => array("name" => "Email",
+												"email" => array("name" => _("E-Mail"),
 														"width" => "10%"),
-												"nachricht" => array("name" => "Nachricht&nbsp;",
+												"nachricht" => array("name" => _("Nachricht") . "&nbsp;",
 														"width" => "5%")
 												);
 			}
 			else {
 				$table_structure = array(
-												"name" => array("name" => "Name",
+												"name" => array("name" => _("Name"),
 														"link" => $PHP_SELF . "?sortby=Nachname&direction=" . $new_direction,
 														"width" => "30%"),
-												"raum" => array("name" => "Raum",
+												"raum" => array("name" => _("Raum"),
 														"width" => "15%"),
-												"sprechzeiten" => array("name" => "Sprechzeiten",
+												"sprechzeiten" => array("name" => _("Sprechzeiten"),
 														"width" => "10%"),
-												"telefon" => array("name" => "Telefon",
+												"telefon" => array("name" => _("Telefon"),
 														"width" => "15%"),
-												"email" => array("name" => "Email",
+												"email" => array("name" => _("E-Mail"),
 														"width" => "10%"),
-												"home" => array("name" => "externe Homepage",
+												"home" => array("name" => _("externe Homepage"),
 														"width" => "15%"),
-												"nachricht" => array("name" => "Nachricht&nbsp;",
+												"nachricht" => array("name" => _("Nachricht") . "&nbsp;",
 														"width" => "5%")
 												);
 			}
@@ -204,84 +205,84 @@ else {
 		case liste :
 			if ($perm->have_perm("admin")) {
 				$table_structure = array(
-												"name" => array("name" => "Name",
+												"name" => array("name" => _("Name"),
 														"link" => $PHP_SELF . "?sortby=Nachname&direction=" . $new_direction,
 														"width" => "35%"),
-												"statusgruppe" => array("name" => "Funktion",
+												"statusgruppe" => array("name" => _("Funktion"),
 														"width" => "15%"),
-												"status" => array("name" => "Status",
+												"status" => array("name" => _("Status"),
 														"link" => $PHP_SELF . "?sortby=inst_perms&direction=" . $new_direction,
 														"width" => "10"),
-												"raum" => array("name" => "Raum",
+												"raum" => array("name" => _("Raum"),
 														"width" => "20%"),
-												"telefon" => array("name" => "Telefon",
+												"telefon" => array("name" => _("Telefon"),
 														"width" => "15%"),
-												"nachricht" => array("name" => "Nachricht&nbsp;",
+												"nachricht" => array("name" => _("Nachricht") . "&nbsp;",
 														"width" => "5%")
 												);
 			}
 			else {
 				$table_structure = array(
-												"name" => array("name" => "Name",
+												"name" => array("name" => _("Name"),
 														"link" => $PHP_SELF . "?sortby=Nachname&direction=" . $new_direction,
 														"width" => "30%"),
-												"statusgruppe" => array("name" => "Funktion",
+												"statusgruppe" => array("name" => _("Funktion"),
 														"width" => "15%"),
-												"raum" => array("name" => "Raum",
+												"raum" => array("name" => _("Raum"),
 														"width" => "15%"),
-												"sprechzeiten" => array("name" => "Sprechzeiten",
+												"sprechzeiten" => array("name" => _("Sprechzeiten"),
 														"width" => "20%"),
-												"telefon" => array("name" => "Telefon",
+												"telefon" => array("name" => _("Telefon"),
 														"width" => "15%"),
-												"nachricht" => array("name" => "Nachricht&nbsp;",
+												"nachricht" => array("name" => _("Nachricht") . "&nbsp;",
 														"width" => "5%")
 												);
 			}
 			break;
 		case status :
 			$table_structure = array(
-												"name" => array("name" => "Name",
+												"name" => array("name" => _("Name"),
 														"link" => $PHP_SELF . "?sortby=Nachname&direction=" . $new_direction,
 														"width" => "40%"),
-												"statusgruppe" => array("name" => "Funktion",
+												"statusgruppe" => array("name" => _("Funktion"),
 														"width" => "20%"),
-												"raum" => array("name" => "Raum",
+												"raum" => array("name" => _("Raum"),
 														"width" => "20%"),
-												"telefon" => array("name" => "Telefon",
+												"telefon" => array("name" => _("Telefon"),
 														"width" => "15%"),
-												"nachricht" => array("name" => "Nachricht&nbsp;",
+												"nachricht" => array("name" => _("Nachricht") . "&nbsp;",
 														"width" => "5%")
 												);
 			break;
 		default :
 			if ($perm->have_perm("admin")) {
 				$table_structure = array(
-												"name" => array("name" => "Name",
+												"name" => array("name" => _("Name"),
 														"link" => $PHP_SELF . "?sortby=Nachname&direction=" . $new_direction,
 														"width" => "40%"),
-												"status" => array("name" => "Status",
+												"status" => array("name" => _("Status"),
 														"link" => $PHP_SELF . "?sortby=inst_perms&direction=" . $new_direction,
 														"width" => "15"),
-												"raum" => array("name" => "Raum",
+												"raum" => array("name" => _("Raum"),
 														"width" => "20%"),
-												"telefon" => array("name" => "Telefon",
+												"telefon" => array("name" => _("Telefon"),
 														"width" => "20%"),
-												"nachricht" => array("name" => "Nachricht&nbsp;",
+												"nachricht" => array("name" => _("Nachricht") . "&nbsp;",
 														"width" => "5%")
 												);
 			}
 			else {
 				$table_structure = array(
-												"name" => array("name" => "Name",
+												"name" => array("name" => _("Name"),
 														"link" => $PHP_SELF . "?sortby=Nachname&direction=" . $new_direction,
 														"width" => "40%"),
-												"raum" => array("name" => "Raum",
+												"raum" => array("name" => _("Raum"),
 														"width" => "20%"),
-												"sprechzeiten" => array("name" => "Sprechzeiten",
+												"sprechzeiten" => array("name" => _("Sprechzeiten"),
 														"width" => "20%"),
-												"telefon" => array("name" => "Telefon",
+												"telefon" => array("name" => _("Telefon"),
 														"width" => "15%"),
-												"nachricht" => array("name" => "Nachricht&nbsp;",
+												"nachricht" => array("name" => _("Nachricht") . "&nbsp;",
 														"width" => "5%")
 												);
 			}
@@ -302,7 +303,7 @@ else
 
 echo "<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">";
 printf("\n<tr><td class=\"topic\" colspan=\"2\"><b>&nbsp; %s</b></td></tr>",
-	$SessSemName["header_line"]." - Mitarbeiter der Einrichtung");
+	$SessSemName["header_line"]." - " . _("Mitarbeiter der Einrichtung"));
 	
 if ($sms_msg) {
 	echo "<tr><td class=\"blank\">";
@@ -313,9 +314,9 @@ if ($sms_msg) {
 echo "\n<tr><td class=\"blank\"><br /><blockquote>\n";
 
 if ($count > 0)
-	printf("%s <b>%s</b>", "Alle Mitarbeiter der Einrichtung", $SessSemName[0]);
+	printf("%s <b>%s</b>", _("Alle Mitarbeiter der Einrichtung"), $SessSemName[0]);
 else {
-	printf("Der Einrichtung <b>%s</b> wurden noch keine Mitarbeiter zugeordnet!", $SessSemName[0]);
+	printf(_("Der Einrichtung <b>%s</b> wurden noch keine Mitarbeiter zugeordnet!"), $SessSemName[0]);
 	echo "\n<br /><br /></blockquote>\n";
 	echo "</td></tr></table\n";
 	echo "</body></html>";
@@ -328,52 +329,56 @@ echo "</td></tr>\n<tr><td class=\"blank\">";
 echo "<img src=\"pictures/blank.gif\" width=\"1\" height=\"5\"></td></tr>\n";
 echo "<tr><td class=\"blank\">\n";
 
+if ($perm->have_perm("admin")) {
+	echo "<form action=\"./institut_members.php\" method=\"post\">\n";
+}
+
 echo "<table border=\"0\" width=\"99%\" cellpadding=\"4\" cellspacing=\"0\" align=\"center\">\n";
 echo "<tr>\n";
 echo "<td class=\"steel1\" width=\"60%\">\n";
 
 // Admins can choose between different grouping functions
 if ($perm->have_perm("admin")) {
-	echo "<form action=\"./institut_members.php\" method=\"post\">\n";
-	printf("<font size=\"-1\"><b>%s&nbsp;</b></font>\n", "Gruppierung:");
-	printf("<select name=\"show\"><option %svalue=\"funktion\">%s</option>\n",
-		($institut_members_data["show"] == "funktion" ? "selected " : ""), "Funktion");
+	printf("<font size=\"-1\"><b>%s&nbsp;</b></font>\n", _("Gruppierung:"));
+	printf("<select name=\"show\" style=vertical-align:middle><option %svalue=\"funktion\">%s</option>\n",
+		($institut_members_data["show"] == "funktion" ? "selected " : ""), _("Funktion"));
 	printf("<option %svalue=\"status\">%s</option>\n",
-		($institut_members_data["show"] == "status" ? "selected " : ""), "Status");
+		($institut_members_data["show"] == "status" ? "selected " : ""), _("Status"));
 	printf("<option %svalue=\"liste\">%s</option>\n",
-		($institut_members_data["show"] == "liste" ? "selected " : ""), "keine");
+		($institut_members_data["show"] == "liste" ? "selected " : ""), _("keine"));
 	echo "</select>\n";
-	echo "<input type=\"image\" border=\"0\" src=\"./pictures/buttons/uebernehmen-button.gif\" />";
-	echo "\n</form>\n";
+	echo "<input type=\"image\" border=\"0\" " . makeButton("uebernehmen", "src") . "style=vertical-align:middle />";
 }
 else {
 	if ($institut_members_data["show"] == "funktion") {
 		echo "&nbsp; &nbsp; &nbsp; <a href=\"./institut_members.php?show=liste\">";
-		printf("<font size=\"-1\"><b>%s</b></font></a>\n", "Alphabetische Liste anzeigen");
+		printf("<font size=\"-1\"><b>%s</b></font></a>\n", _("Alphabetische Liste anzeigen"));
 	}
 	else {
 		echo "&nbsp; &nbsp; &nbsp; <a href=\"./institut_members.php?show=funktion\">";
-		printf("<font size=\"-1\"><b>%s</b></font></a>\n", "Nach Funktion gruppiert anzeigen");
+		printf("<font size=\"-1\"><b>%s</b></font></a>\n", _("Nach Funktion gruppiert anzeigen"));
 	}
 }
-	
+
 echo "</td><td class=\"steel1\" width=\"30%\">\n";
-printf("<font size=\"-1\"><b>%s</b> %s</font>",
-	$count, "Mitarbeiter gefunden");
+printf("<font size=\"-1\">" . _("<b>%s</b> Mitarbeiter gefunden") . "</font>", $count);
 echo "</td><td class=\"steel1\" width=\"10%\">\n";
 
 if ($institut_members_data["extend"] == "yes") {
 	echo "<a href=\"./institut_members.php?extend=no\">";
-	echo "<img src=\"pictures/buttons/normaleansicht-button.gif\" border=\"0\">";
+	echo makeButton("normaleansicht", "img");
 }
 else {
 	echo "<a href=\"./institut_members.php?extend=yes\">";
-	echo "<img src=\"pictures/buttons/erweiterteansicht-button.gif\" border=\"0\">";
+	echo makeButton("erweiterteansicht", "img");
 }
 
 echo "</a>\n";
 echo "</td></tr></table>\n";
 
+if ($perm->have_perm("admin")) {
+	echo "\n</form>\n";
+}
 echo "<table border=\"0\" width=\"99%\" cellpadding=\"0\" cellspacing=\"0\" align=\"center\">\n";
 
 table_head($table_structure, $css_switcher);
@@ -407,7 +412,7 @@ if ($institut_members_data["show"] == "funktion") {
 				echo "<font size=\"-1\"><b>&nbsp;";
 				echo htmlReady($statusgruppe_name);
 				echo "<b></font></td></tr>\n";
-				table_boddy($db_institut_members, $auswahl, $table_structure, $css_switcher);
+				table_body($db_institut_members, $auswahl, $table_structure, $css_switcher);
 			}
 		}
 	}
@@ -437,13 +442,13 @@ if ($institut_members_data["show"] == "funktion") {
 			echo "<tr><td class=\"steelgroup1\" colspan=\"$colspan\" height=\"20\">";
 			echo "<font size=\"-1\"><b>&nbsp;";
 			echo _("keiner Funktion zugeordnet") . "<b></font></td></tr>\n";
-			table_boddy($db_residual, $auswahl, $table_structure, $css_switcher);
+			table_body($db_residual, $auswahl, $table_structure, $css_switcher);
 		}
 	}
 }
 elseif ($institut_members_data["show"] == "status") {
-	$inst_permissions = array("admin" => "Admin", "dozent" => "Dozent", "tutor" => "Tutor",
-														"autor" => "Autor", "user" => "User");
+	$inst_permissions = array("admin" => _("Admin"), "dozent" => _("Dozent"), "tutor" => _("Tutor"),
+														"autor" => _("Autor"), "user" => _("User"));
 	foreach ($inst_permissions as $key => $permission) {
 		$query = sprintf("SELECT ". $_fullname_sql['full_rev'] ." AS fullname, ui.raum, ui.sprechzeiten, ui.Telefon,
 											inst_perms, Email, auth_user_md5.user_id,
@@ -456,7 +461,7 @@ elseif ($institut_members_data["show"] == "status") {
 		if ($db_institut_members->num_rows() > 0) {
 			echo "<tr><td class=\"steelgroup1\" colspan=\"$colspan\" height=\"20\">";
 			echo "<font size=\"-1\"><b>&nbsp;$permission<b></font></td></tr>\n";
-			table_boddy($db_institut_members, $auswahl, $table_structure, $css_switcher);
+			table_body($db_institut_members, $auswahl, $table_structure, $css_switcher);
 		}
 	}
 }
@@ -502,7 +507,7 @@ else {
 	}
 	$db_institut_members->query($query);
 	if ($db_institut_members->num_rows() != 0)
-		table_boddy($db_institut_members, $auswahl, $table_structure, $css_switcher);
+		table_body($db_institut_members, $auswahl, $table_structure, $css_switcher);
 }
 
 echo "<tr><td class=\"blank\" colspan=\"$colspan\">&nbsp;</td></tr>\n";
@@ -543,7 +548,7 @@ function table_head ($structure, $css_switcher) {
 
 		
 
-function table_boddy ($db, $range_id, $structure, $css_switcher) {
+function table_body ($db, $range_id, $structure, $css_switcher) {
 	$css_switcher->enableHover();
 	
 	while ($db->next_record()) {
@@ -566,7 +571,7 @@ function table_boddy ($db, $range_id, $structure, $css_switcher) {
 					$css_switcher->getFullClass(), htmlReady(implode(", ", $statusgruppen)));
 			else
 				printf("<td%salign=\"center\"><font size=\"-1\">%s</font></td>\n",
-					$css_switcher->getFullClass(), "keine");
+					$css_switcher->getFullClass(), _("keine"));
 		}
 		
 		if ($structure["status"]) {
@@ -629,8 +634,8 @@ function table_boddy ($db, $range_id, $structure, $css_switcher) {
 			printf("<td%salign=\"center\">\n",$css_switcher->getFullClass());
 			printf("<a href=\"sms.php?sms_source_page=institut_members.php&cmd=write&rec_uname=%s\">",
 				$db->f("username"));
-			printf("<img src=\"pictures/nachricht1.gif\" alt=\"%s\" ", "Nachricht an User verschicken");
-			printf("title=\"%s\" border=\"0\" valign=\"baseline\"></a>", "Nachricht an User verschicken");
+			printf("<img src=\"pictures/nachricht1.gif\" alt=\"%s\" ", _("Nachricht an User verschicken"));
+			printf("title=\"%s\" border=\"0\" valign=\"baseline\"></a>", _("Nachricht an User verschicken"));
 			echo "\n</td>\n";
 		}
 		

@@ -95,31 +95,31 @@ if ($nclose)
 	$db->next_record();
 
 	if ($db->f("Strasse")) {
-		echo "<b>Strasse: </b>"; echo htmlReady($db->f("Strasse")); echo"<br>";
+		echo "<b>" . _("Strasse:") . " </b>"; echo htmlReady($db->f("Strasse")); echo"<br>";
 	}
 		
 	if ($db->f("Plz")) {
-		echo "<b>Ort: </b>"; echo htmlReady($db->f("Plz")); echo"<br>";
+		echo "<b>" . _("Ort:") . " </b>"; echo htmlReady($db->f("Plz")); echo"<br>";
 	}
 
 	if ($db->f("telefon")) {
-		echo "<b>Tel.: </b>"; echo htmlReady($db->f("telefon")); echo"<br>";
+		echo "<b>" . _("Tel.:") . " </b>"; echo htmlReady($db->f("telefon")); echo"<br>";
 	}
 
 	if ($db->f("fax")) {
-		echo "<b>Fax: </b>"; echo htmlReady($db->f("fax")); echo"<br>";
+		echo "<b>" . _("Fax:") . " </b>"; echo htmlReady($db->f("fax")); echo"<br>";
 	}
 
 	if ($db->f("url")) {
-		echo "<b>Homepage: </b>"; echo formatReady($db->f("url")); echo"<br>";
+		echo "<b>" . _("Homepage:") . " </b>"; echo formatReady($db->f("url")); echo"<br>";
 	}
 
 	if ($db->f("email")) {
-		echo "<b>Email: </b>"; echo htmlReady($db->f("email")); echo"<br>";
+		echo "<b>" . _("E-Mail:") . " </b>"; echo htmlReady($db->f("email")); echo"<br>";
 	}
 
 	if ($db->f("fakultaet_name")) {
-		echo "<b>Fakult&auml;t: </b>"; echo htmlReady($db->f("fakultaet_name")); echo"<br>";
+		echo "<b>" . _("Fakult&auml;t:") . " </b>"; echo htmlReady($db->f("fakultaet_name")); echo"<br>";
 	}
 		
 	?>
