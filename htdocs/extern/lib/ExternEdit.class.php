@@ -181,6 +181,7 @@ class ExternEdit {
 		$out .= "</td></tr>\n</table>\n";
 		
 		$this->css->resetClass();
+		$this->css->switchClass();
 		
 		return $out;
 	}
@@ -285,6 +286,21 @@ class ExternEdit {
 		
 		return $out;
 	}
+	
+	function editText ($text, $class = "") {
+		if (!$class) {
+			$this->css->resetClass();
+			$this->css->switchClass();
+			$class = $this->css->getClass();
+		}
+		
+		$out = "<tr><td>\n<table width=\"100%\" border=\"0\" cellpadding=\"5\" cellspacing=\"0\">\n";
+		$out .= "<tr><td class=\"$class\"><font size=\"2\"><b>$text<b></font></td></tr>\n";
+		$out .= "</table>\n</td></tr>\n";
+		
+		return $out;
+	}
+	
 }
 	
 ?>
