@@ -110,10 +110,12 @@ if ($form==1)
 	$sem_create_data["sem_desc"]=$sem_desc;
 	$sem_create_data["sem_inst_id"]=$sem_inst_id;
 	$sem_create_data["term_art"]=$term_art;
-	if ($sem_create_data["term_art"] == -1) {
-		$sem_create_data["sem_start_time"]=$SEM_BEGINN;
-		$sem_create_data["sem_duration_time"]=-1;
-	}
+	$sem_create_data["sem_start_time"]=$sem_start_time;
+	
+	if (($sem_duration_time == 0) || ($sem_duration_time == -1))
+		$sem_create_data["sem_duration_time"]=$sem_duration_time;
+	else
+		$sem_create_data["sem_duration_time"]=$sem_duration_time - $sem_start_time;
 
 	$sem_create_data["sem_turnout"]=$sem_turnout;	
 	//Anmeldeverfahren festlegen
@@ -150,7 +152,6 @@ if ($form==3)
 	{
 	$sem_create_data["term_start_woche"]=$term_start_woche;
 	$sem_create_data["term_turnus"]=$term_turnus;	
-	$sem_create_data["sem_start_time"]=$sem_start_time;
 
 	//The room for the prelimary discussion
 	$sem_create_data["sem_vor_raum"]=$vor_raum; 
@@ -159,11 +160,6 @@ if ($form==3)
 		$resObject=new ResourceObject($sem_create_data["sem_vor_resource_id"]);
 		$sem_create_data["sem_vor_raum"]=$resObject->getName();
 	}
-	
-	if (($sem_duration_time == 0) || ($sem_duration_time == -1))
-		$sem_create_data["sem_duration_time"]=$sem_duration_time;
-	else
-		$sem_create_data["sem_duration_time"]=$sem_duration_time - $sem_start_time;
 
 	if ($sem_create_data["term_art"]==0)
 		{
@@ -429,6 +425,11 @@ if ($form==7)
 //Check auf korrekte Eingabe und Sprung in naechste Level, hier auf Schritt 2
 if ($cmd_b_x)
 	{
+	if (($sem_create_data["sem_duration_time"]<0) && ($sem_create_data["sem_duration_time"] != -1))
+		{ 
+		$level=3;
+		$errormsg=$errormsg."error§Das Endsemester darf nicht vor dem Startsemester liegen, bitte &auml;ndern Sie die entsprechenden Einstellungen!§";
+		}
 	if (strlen($sem_create_data["sem_name"]) <3)
 		{
 		$level=1; //wir bleiben auf der ersten Seite
@@ -593,12 +594,6 @@ if ($delete_term_field)
 //Termin-Metaddaten-Check, wenn alles stimmt, Sprung auf Schritt 4
 if ($cmd_d_x)
 	{
-	if (($sem_create_data["sem_duration_time"]<0) && ($sem_create_data["sem_duration_time"] != -1))
-		{ 
-		$level=3;
-		$errormsg=$errormsg."error§Das Endsemester darf nicht vor dem Startsemester liegen, bitte &auml;ndern Sie die entsprechenden Einstellungen!§";
-		}
-
 	if ($sem_create_data["term_art"]==0)
 		{
 		for ($i=0; $i<$sem_create_data["turnus_count"]; $i++)
@@ -1278,35 +1273,6 @@ elseif ((!$level) || ($level==1))
 					</tr>						
 					<?
 					}
-					?>
-					<tr <? $cssSw->switchClass() ?>>
-						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
-							Turnus:
-						</td>
-						<td class="<? echo $cssSw->getClass() ?>" nowrap width="30%" colspan=3>
-							&nbsp; <select  name="term_art">
-							<?
-							if ($sem_create_data["term_art"] == 0) 
-								echo "<option selected value=\"0\">regelm&auml;&szlig;ig</option>";
-							else
-								echo "<option value=\"0\">regelm&auml;&szlig;ig</option>>";
-							if ($sem_create_data["term_art"] == 1) 
-								echo "<option selected value=\"1\">unregelm&auml;&szlig;ig oder Blockveranstaltung</option>";
-							else
-								echo "<option value=\"1\">unregelm&auml;&szlig;ig oder Blockveranstaltung</option>";
-							if ($sem_create_data["term_art"] == -1) 
-								echo "<option selected value=\"-1\">keine Termine eingeben</option>";
-							else
-								echo "<option value=\"-1\">keine Termine eingeben</option>";
-							?>
-							</select>
-							<img  src="./pictures/info.gif" 
-								<? echo tooltip("Bitte wählen Sie hier aus, ob die Veranstaltung regelmässig stattfindet, oder ob die Sitzungen nur an bestimmten Terminen stattfinden (etwa bei einem Blockseminar)", TRUE, TRUE) ?>
-							>
-							<font color="red" size=+2>*</font>									
-						</td>
-					</tr>
-					<?
 					if (!$SEM_CLASS[$sem_create_data["sem_class"]]["compact_mode"]) {
 					?>
 					<tr <? $cssSw->switchClass() ?>>
@@ -1348,6 +1314,91 @@ elseif ((!$level) || ($level==1))
 							>
 						</td>
 					</tr>
+					<tr <? $cssSw->switchClass() ?>>
+						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
+							Semester:
+						</td>
+						<td class="<? echo $cssSw->getClass() ?>" width="20%">
+							&nbsp;
+							<?
+							echo "<select name=\"sem_start_time\">";
+							for ($i=1; $i<=sizeof($SEMESTER); $i++)
+								if ((!$SEMESTER[$i]["past"]) && ($SEMESTER[$i]["vorles_ende"] > time()))
+									{
+									if ($sem_create_data["sem_start_time"] ==$SEMESTER[$i]["beginn"])
+										echo "<option value=".$SEMESTER[$i]["beginn"]." selected>", $SEMESTER[$i]["name"], "</option>";
+									else
+										echo "<option value=".$SEMESTER[$i]["beginn"].">", $SEMESTER[$i]["name"], "</option>";
+									}
+							echo "</select>";
+							?>
+							<img  src="./pictures/info.gif" 
+								<? echo tooltip("Bitte geben Sie hier ein, welchem Semester die Veranstaltung zugeordnet werden soll.", TRUE, TRUE) ?>
+							>
+							<font color="red" size=+2>*</font>
+						</td>
+						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
+							Dauer:
+						</td>
+						<td class="<? echo $cssSw->getClass() ?>" width="60%">
+							&nbsp; <select name="sem_duration_time">
+							<?
+								if ($sem_create_data["sem_duration_time"] == 0)
+									echo "<option value=0 selected>1 Semester</option>";
+								else
+									echo "<option value=0>1 Semester</option>";
+								$i=1;
+								for ($i; $i<=sizeof($SEMESTER); $i++)
+									if ((!$SEMESTER[$i]["past"]) && ($SEMESTER[$i]["name"] != $SEM_NAME) && (($SEMESTER[$i]["vorles_ende"] > time())))
+										{
+										if (($sem_create_data["sem_start_time"] + $sem_create_data["sem_duration_time"]) == $SEMESTER[$i]["beginn"])
+											{
+											if (!$sem_create_data["sem_duration_time"] == 0)
+												echo "<option value=",$SEMESTER[$i]["beginn"], " selected>bis ", $SEMESTER[$i]["name"], "</option>";
+											else
+												echo "<option value=",$SEMESTER[$i]["beginn"], ">bis ", $SEMESTER[$i]["name"], "</option>";
+											}
+										else
+											echo "<option value=",$SEMESTER[$i]["beginn"], ">bis ", $SEMESTER[$i]["name"], "</option>";
+										}
+								if ($sem_create_data["sem_duration_time"] == -1)
+									echo "<option value=-1 selected>unbegrenzt</option>";
+								else
+									echo "<option value=-1>unbegrenzt</option>";
+							?>
+							</select>
+							<img  src="./pictures/info.gif" 
+								<? echo tooltip("Falls die Veranstaltung mehrere Semester läuft, können Sie hier das Endsemester wählen. Dauerveranstaltung können über die entsprechende Einstellung markiert werden.", TRUE, TRUE) ?>
+							>
+						</td>
+					</tr>
+					<tr <? $cssSw->switchClass() ?>>
+						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
+							Turnus:
+						</td>
+						<td class="<? echo $cssSw->getClass() ?>" nowrap width="30%" colspan=3>
+							&nbsp; <select  name="term_art">
+							<?
+							if ($sem_create_data["term_art"] == 0) 
+								echo "<option selected value=\"0\">regelm&auml;&szlig;ig</option>";
+							else
+								echo "<option value=\"0\">regelm&auml;&szlig;ig</option>>";
+							if ($sem_create_data["term_art"] == 1) 
+								echo "<option selected value=\"1\">unregelm&auml;&szlig;ig oder Blockveranstaltung</option>";
+							else
+								echo "<option value=\"1\">unregelm&auml;&szlig;ig oder Blockveranstaltung</option>";
+							if ($sem_create_data["term_art"] == -1) 
+								echo "<option selected value=\"-1\">keine Termine eingeben</option>";
+							else
+								echo "<option value=\"-1\">keine Termine eingeben</option>";
+							?>
+							</select>
+							<img  src="./pictures/info.gif" 
+								<? echo tooltip("Bitte wählen Sie hier aus, ob die Veranstaltung regelmässig stattfindet, oder ob die Sitzungen nur an bestimmten Terminen stattfinden (etwa bei einem Blockseminar)", TRUE, TRUE) ?>
+							>
+							<font color="red" size=+2>*</font>									
+						</td>
+					</tr>					
 					<tr <? $cssSw->switchClass() ?>>
 						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
 							Heimat-Einrichtung:
@@ -1823,64 +1874,6 @@ if ($level==3)
 						</td>
 						<td class="<? echo $cssSw->getClass() ?>" width="90%" align="center" colspan=3>
 							&nbsp; <input type="IMAGE" src="./pictures/buttons/zurueck-button.gif" border=0 value="Weiter >>" name="cmd_b">&nbsp;<input type="IMAGE" src="./pictures/buttons/weiter-button.gif" border=0 value="Weiter >>" name="cmd_d">
-						</td>
-					</tr>
-					<tr <? $cssSw->switchClass() ?>>
-						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
-							Semester:
-						</td>
-						<td class="<? echo $cssSw->getClass() ?>" width="20%">
-							&nbsp;
-							<?
-							echo "<select name=\"sem_start_time\">";
-							for ($i=1; $i<=sizeof($SEMESTER); $i++)
-								if ((!$SEMESTER[$i]["past"]) && ($SEMESTER[$i]["vorles_ende"] > time()))
-									{
-									if ($sem_create_data["sem_start_time"] ==$SEMESTER[$i]["beginn"])
-										echo "<option value=".$SEMESTER[$i]["beginn"]." selected>", $SEMESTER[$i]["name"], "</option>";
-									else
-										echo "<option value=".$SEMESTER[$i]["beginn"].">", $SEMESTER[$i]["name"], "</option>";
-									}
-							echo "</select>";
-							?>
-							<img  src="./pictures/info.gif" 
-								<? echo tooltip("Bitte geben Sie hier ein, welchem Semester die Veranstaltung zugeordnet werden soll.", TRUE, TRUE) ?>
-							>
-							<font color="red" size=+2>*</font>
-						</td>
-						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
-							Dauer:
-						</td>
-						<td class="<? echo $cssSw->getClass() ?>" width="60%">
-							&nbsp; <select name="sem_duration_time">
-							<?
-								if ($sem_create_data["sem_duration_time"] == 0)
-									echo "<option value=0 selected>1 Semester</option>";
-								else
-									echo "<option value=0>1 Semester</option>";
-								$i=1;
-								for ($i; $i<=sizeof($SEMESTER); $i++)
-									if ((!$SEMESTER[$i]["past"]) && ($SEMESTER[$i]["name"] != $SEM_NAME) && (($SEMESTER[$i]["vorles_ende"] > time())))
-										{
-										if (($sem_create_data["sem_start_time"] + $sem_create_data["sem_duration_time"]) == $SEMESTER[$i]["beginn"])
-											{
-											if (!$sem_create_data["sem_duration_time"] == 0)
-												echo "<option value=",$SEMESTER[$i]["beginn"], " selected>bis ", $SEMESTER[$i]["name"], "</option>";
-											else
-												echo "<option value=",$SEMESTER[$i]["beginn"], ">bis ", $SEMESTER[$i]["name"], "</option>";
-											}
-										else
-											echo "<option value=",$SEMESTER[$i]["beginn"], ">bis ", $SEMESTER[$i]["name"], "</option>";
-										}
-								if ($sem_create_data["sem_duration_time"] == -1)
-									echo "<option value=-1 selected>unbegrenzt</option>";
-								else
-									echo "<option value=-1>unbegrenzt</option>";
-							?>
-							</select>
-							<img  src="./pictures/info.gif" 
-								<? echo tooltip("Falls die Veranstaltung mehrere Semester läuft, können Sie hier das Endsemester wählen. Dauerveranstaltung können über die entsprechende Einstellung markiert werden.", TRUE, TRUE) ?>
-							>
 						</td>
 					</tr>
 					<?
