@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: STUD.IP 0.9.0\n"
 "POT-Creation-Date: 2003-03-07 20:32+0100\n"
-"PO-Revision-Date: 2003-03-07 20:31+GMT\n"
+"PO-Revision-Date: 2003-03-09 17:11+GMT\n"
 "Last-Translator: \n"
 "Language-Team:  <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -242,8 +242,7 @@ msgstr ""
 "after the first course meeting on %s. Please change this date!"
 
 #: admin_admission.php:345
-msgid ""
-"Das Losdatum liegt in der Vergangenheit. Bitte &auml;ndern Sie das Losdatum!"
+msgid "Das Losdatum liegt in der Vergangenheit. Bitte &auml;ndern Sie das Losdatum!"
 msgstr ""
 "The date for the random selection procedure is in the past. Please change "
 "the random selection procedure date!"
@@ -285,8 +284,7 @@ msgstr ""
 "deactivated!"
 
 #: admin_admission.php:382
-msgid ""
-"Die Berechtigungseinstellungen f&uuml;r die Veranstaltung wurden aktualisiert"
+msgid "Die Berechtigungseinstellungen f&uuml;r die Veranstaltung wurden aktualisiert"
 msgstr "The authorization for this course has been updated."
 
 #: admin_admission.php:459
@@ -355,8 +353,7 @@ msgid "Berechtigungen:"
 msgstr "Authorization:"
 
 #: admin_admission.php:535
-msgid ""
-"Legen Sie hier fest, welche Teilnehmer Zugriff auf die Veranstaltung haben."
+msgid "Legen Sie hier fest, welche Teilnehmer Zugriff auf die Veranstaltung haben."
 msgstr "Define here which participants have access to the course."
 
 #: admin_admission.php:550 admin_admission.php:563 admin_admission.php:567
@@ -487,8 +484,7 @@ msgstr "Compulsory registration:"
 msgid ""
 "Bitte aktivieren sie diese Einstellung, wenn die Anmeldung f&uuml;r "
 "Veranstaltungen verbindlich erfolgen soll:"
-msgstr ""
-"Please activate this field if the registration for the course is compulsory:"
+msgstr "Please activate this field if the registration for the course is compulsory:"
 
 #: admin_admission.php:742
 msgid "Achtung:"
@@ -541,18 +537,15 @@ msgstr "Show room plan"
 
 #: admin_dates.php:390 admin_metadates.php:363 admin_seminare_assi.php:2613
 #, c-format
-msgid ""
-"Die Belegung des Raums %s wurde in die Ressourcenverwaltung eingetragen."
-msgstr ""
-"The allocation of room %s has been sent to the resources administrator."
+msgid "Die Belegung des Raums %s wurde in die Ressourcenverwaltung eingetragen."
+msgstr "The allocation of room %s has been sent to the resources administrator."
 
 #: admin_dates.php:392 admin_metadates.php:365
 #, c-format
 msgid ""
 "Die Belegung der R&auml;ume %s wurden in die Ressourcenverwaltung "
 "eingetragen."
-msgstr ""
-"The allocation of rooms %s has been sent to the resources administration."
+msgstr "The allocation of rooms %s has been sent to the resources administration."
 
 #: admin_lernmodule.php:73
 msgid "Neues Lernmodul anlegen"
@@ -588,8 +581,7 @@ msgstr ""
 msgid ""
 "Sie k&ouml;nnen ein Lernmodul l&ouml;schen, indem Sie auf die M&uuml;lltonne "
 "klicken."
-msgstr ""
-"You can delete a learning module by clicking on the waste paper basket."
+msgstr "You can delete a learning module by clicking on the waste paper basket."
 
 #: admin_lernmodule.php:118 migration2studip.php:288
 msgid ""
@@ -631,15 +623,13 @@ msgstr ""
 msgid ""
 "Sie haben eine ung&uuml;ltige Zeit eingegeben. Bitte &auml;ndern Sie die "
 "entsprechenden Angaben!"
-msgstr ""
-"You have entered an invalid time.  Please change the appropriate fields!"
+msgstr "You have entered an invalid time.  Please change the appropriate fields!"
 
 #: admin_metadates.php:222
 msgid ""
 "Der Endzeitpunkt der regul&auml;ren Termine muss nach dem jeweiligen "
 "Startzeitpunkt liegen!"
-msgstr ""
-"The end time of the regular course meeting must be after the start time!"
+msgstr "The end time of the regular course meeting must be after the start time!"
 
 #: admin_metadates.php:231
 msgid ""
@@ -910,8 +900,7 @@ msgstr "Enter the headline and contents of your news here."
 msgid ""
 "Im unteren Bereich k&ouml;nnen Sie ausw&auml;hlen, in welchen Bereichen Ihre "
 "News angezeigt wird."
-msgstr ""
-"In the area below you can choose in which areas your news will be shown."
+msgstr "In the area below you can choose in which areas your news will be shown."
 
 #: admin_news.php:224
 msgid "Klicken Sie danach hier, um die &Auml;nderungen zu &uuml;bernehmen."
@@ -1170,8 +1159,7 @@ msgstr ""
 "discussion!"
 
 #: admin_seminare_assi.php:320
-msgid ""
-"Bitte geben Sie ein g&uuml;ltiges Datum f&uuml;r die Vorbesprechung ein!"
+msgid "Bitte geben Sie ein g&uuml;ltiges Datum f&uuml;r die Vorbesprechung ein!"
 msgstr "Please enter a valid date for the preliminary discussion!"
 
 #: admin_seminare_assi.php:326
@@ -1187,8 +1175,7 @@ msgstr ""
 "the appropriate fields!"
 
 #: admin_seminare_assi.php:456
-msgid ""
-"Bitte geben Sie einen g&uuml;ltigen Namen f&uuml;r die Veranstaltung ein!"
+msgid "Bitte geben Sie einen g&uuml;ltigen Namen f&uuml;r die Veranstaltung ein!"
 msgstr "Please enter a valid name for the course!"
 
 #: admin_seminare_assi.php:461
@@ -1216,8 +1203,7 @@ msgstr ""
 msgid ""
 "Sie d&uuml;rfen dieselben DozentInnen nicht gleichzeitig als TutorInnen "
 "eintragen!"
-msgstr ""
-"You are not allowed to enter the same lecturer as also being the tutor!"
+msgstr "You are not allowed to enter the same lecturer as also being the tutor!"
 
 #: admin_seminare_assi.php:514
 msgid ""
@@ -1257,16 +1243,14 @@ msgstr ""
 "meetings!"
 
 #: admin_seminare_assi.php:635
-msgid ""
-"Sie haben eine ung&uuml;ltige Zeit eingegeben. Bitte korrigieren sie dies!"
+msgid "Sie haben eine ung&uuml;ltige Zeit eingegeben. Bitte korrigieren sie dies!"
 msgstr "You have entered an invalid time, please correct it!"
 
 #: admin_seminare_assi.php:640
 msgid ""
 "Der Endzeitpunkt eines regul&auml;ren Termins muss nach dem jeweiligen "
 "Startzeitpunkt liegen!"
-msgstr ""
-"The end time of the regular course meeting must be after the start time!"
+msgstr "The end time of the regular course meeting must be after the start time!"
 
 #: admin_seminare_assi.php:649
 msgid ""
@@ -1291,13 +1275,11 @@ msgid ""
 msgstr "You have entered an invalid date, please correct the date!"
 
 #: admin_seminare_assi.php:675
-msgid ""
-"Sie haben eine ung&uuml;ltige Zeit eingegeben, bitte korrigieren sie dies!"
+msgid "Sie haben eine ung&uuml;ltige Zeit eingegeben, bitte korrigieren sie dies!"
 msgstr "You have entered an invalid time, please correct it!"
 
 #: admin_seminare_assi.php:680
-msgid ""
-"Die Endzeitpunkt der Termine muss nach dem jeweiligen Startzeitpunkt liegen!"
+msgid "Die Endzeitpunkt der Termine muss nach dem jeweiligen Startzeitpunkt liegen!"
 msgstr ""
 "The end time of the course meetings must be after the corresponding start "
 "time!"
@@ -1331,8 +1313,7 @@ msgstr ""
 "place!"
 
 #: admin_seminare_assi.php:826
-msgid ""
-"Bitte geben Sie einen Termin f&uuml;r das Enddatum der Kontingentierung an!"
+msgid "Bitte geben Sie einen Termin f&uuml;r das Enddatum der Kontingentierung an!"
 msgstr ""
 "Please enter a date after which the contigent groups should no longer be "
 "considered!"
@@ -1368,8 +1349,7 @@ msgstr ""
 "groups are no longer considered! "
 
 #: admin_seminare_assi.php:845
-msgid ""
-"Das Losdatum liegt in der Vergangenheit. Bitte &auml;ndern sie das Losdatum!"
+msgid "Das Losdatum liegt in der Vergangenheit. Bitte &auml;ndern sie das Losdatum!"
 msgstr ""
 "The date for the random selection procedure is in the past. Please change "
 "the random selection procedure date!"
@@ -1563,7 +1543,7 @@ msgid ""
 "Sie ein Anmeldeverfahren starten, wenn Sie »Teilnahmebeschränkung: per "
 "Losverfahren / nach Anmeldereihenfolge« benutzen."
 msgstr ""
-"'Enter the expected number of participants here.  Stud.IP can start a "
+"Enter the expected number of participants here.  Stud.IP can start a "
 "registrations procedure if you select the » participant limititation: by "
 "random selection procedure / according to order of registration«."
 
@@ -1910,8 +1890,7 @@ msgstr "Regular course"
 msgid ""
 "Wenn Sie den Typ der Veranstaltung &auml;ndern m&ouml;chten, gehen Sie bitte "
 "auf die erste Seite zur&uuml;ck."
-msgstr ""
-"If you want to change the type of course, please go back to the first page."
+msgstr "If you want to change the type of course, please go back to the first page."
 
 #: admin_seminare_assi.php:1960
 msgid "erster Termin in der"
@@ -2071,8 +2050,7 @@ msgstr ""
 msgid ""
 "Sie k&ouml;nnen jedoch die Anzahl der Teilnehmer jederzeit unter "
 "<i>Grunddaten</i> anpassen."
-msgstr ""
-"You can enter the number of participants under <i>basic data</i> at any time."
+msgstr "You can enter the number of participants under <i>basic data</i> at any time."
 
 #: admin_seminare_assi.php:2370
 msgid "Teilnehmer- beschreibung:"
@@ -2111,8 +2089,7 @@ msgid "Leistungsnachweis:"
 msgstr "Performance accreditation:"
 
 #: admin_seminare_assi.php:2408
-msgid ""
-"Bitte geben Sie hier ein, welche Leistungsnachweise erbracht werden müssen."
+msgid "Bitte geben Sie hier ein, welche Leistungsnachweise erbracht werden müssen."
 msgstr "Please enter here which performance accreditation can be acheived."
 
 #: admin_seminare_assi.php:2417 details.php:394
@@ -2121,8 +2098,7 @@ msgstr "Miscellaneous:"
 
 #: admin_seminare_assi.php:2422
 msgid "Hier ist Platz für alle sonstigen Informationen zur Veranstaltung."
-msgstr ""
-"Here is space for all other miscellaneous information about the course."
+msgstr "Here is space for all other miscellaneous information about the course."
 
 #: admin_seminare_assi.php:2432
 msgid "erster Termin:"
@@ -2253,10 +2229,8 @@ msgstr "<b>%s</b> areas entered for the course."
 
 #: admin_seminare_assi.php:2615
 #, c-format
-msgid ""
-"Die Belegung der R&auml;ume %s wurde in die Ressourcenverwaltung eingetragen."
-msgstr ""
-"The reservations of rooms %s have been sent to the resource administrator."
+msgid "Die Belegung der R&auml;ume %s wurde in die Ressourcenverwaltung eingetragen."
+msgstr "The reservations of rooms %s have been sent to the resource administrator."
 
 #: admin_seminare_assi.php:2627
 #, c-format
@@ -2328,13 +2302,11 @@ msgstr "More than 50 courses have been found!  Please limit your search."
 
 #: admin_sem_tree.php:49
 #, c-format
-msgid ""
-"Es wurden %s Veranstaltungen gefunden, und in ihre Merkliste eingef&uuml;gt"
+msgid "Es wurden %s Veranstaltungen gefunden, und in ihre Merkliste eingef&uuml;gt"
 msgstr "%s courses were found and have been entered into your marked list."
 
 #: admin_sem_tree.php:56
-msgid ""
-"Es wurden keine Veranstaltungen die zu ihren Suchkriterien passen gefunden."
+msgid "Es wurden keine Veranstaltungen die zu ihren Suchkriterien passen gefunden."
 msgstr "No courses have been found matching your search criteria."
 
 #: admin_sem_tree.php:70
@@ -2605,8 +2577,7 @@ msgstr "Research"
 msgid ""
 "Hier finden Sie virtuelle Veranstaltungen zum Thema Forschung an der "
 "Universit&auml;t"
-msgstr ""
-"Here you can find virtual courses on research topics at the university."
+msgstr "Here you can find virtual courses on research topics at the university."
 
 #: config.inc.php:127
 msgid ""
@@ -2658,8 +2629,7 @@ msgid "Hier finden Sie verschiedene Arbeitsgruppen an der %s"
 msgstr "Here you will find different work groups at the %s."
 
 #: config.inc.php:166
-msgid ""
-"Verwenden Sie diese Kategorie, um unterschiedliche Arbeitsgruppen anzulegen."
+msgid "Verwenden Sie diese Kategorie, um unterschiedliche Arbeitsgruppen anzulegen."
 msgstr "Use this category to set up different work groups."
 
 #: config.inc.php:265
@@ -2959,8 +2929,7 @@ msgid "\"Benutze Style Sheets\""
 msgstr "\"Use Style Sheets\""
 
 #: crcloginform.ihtml:89 crcregister.ihtml:171
-msgid ""
-"\"Erlaube Cookies nur von dem Server, von dem die aktuelle Seite stammt\""
+msgid "\"Erlaube Cookies nur von dem Server, von dem die aktuelle Seite stammt\""
 msgstr "\"Enable cookies for the originating web site only\""
 
 #: crcloginform.ihtml:108
@@ -3071,8 +3040,7 @@ msgid "Megabyte"
 msgstr "Megabyte"
 
 #: datei.inc.php:177
-msgid ""
-"1. Klicken Sie auf <b>'Durchsuchen...'</b>, um eine Datei auszuw&auml;hlen."
+msgid "1. Klicken Sie auf <b>'Durchsuchen...'</b>, um eine Datei auszuw&auml;hlen."
 msgstr "2. Click on <b>'Browse...'</b> to select a file."
 
 #: datei.inc.php:179
@@ -3216,8 +3184,7 @@ msgid ""
 msgstr ""
 
 #: datei.inc.php:814
-msgid ""
-"Klicken Sie dieses Symbol, um diese Datei in einen anderen Ordner einzufügen"
+msgid "Klicken Sie dieses Symbol, um diese Datei in einen anderen Ordner einzufügen"
 msgstr "Click this symbol to paste these files into another folder"
 
 #: datei.inc.php:950
@@ -3231,8 +3198,7 @@ msgstr "The folder has been deleted"
 
 #: datei.inc.php:957
 #, c-format
-msgid ""
-"Probleme beim L&ouml;schen des Ordners. %s Dokumente wurden gel&ouml;scht"
+msgid "Probleme beim L&ouml;schen des Ordners. %s Dokumente wurden gel&ouml;scht"
 msgstr ""
 
 #: datei.inc.php:959
@@ -3388,8 +3354,7 @@ msgstr "Folder of deleted appointments"
 
 #: dates.inc.php:751
 msgid "Dieser Ordner enthält Dokumente und Termine eines gelöschten Termins"
-msgstr ""
-"This folder contains documents and appointments of deleted appointments"
+msgstr "This folder contains documents and appointments of deleted appointments"
 
 #: dates.inc.php:928
 msgid "Hier kann zu diesem Termin diskutiert werden"
@@ -3425,8 +3390,7 @@ msgstr "Here you can find all appointments associated with the course."
 msgid ""
 "Klicken sie auf ein Text-Icon, um zu den hochgeladenen Dateien des "
 "jeweiligen Termins zu gelangen."
-msgstr ""
-"Click on a text icon to upload files concerning the respective appointments."
+msgstr "Click on a text icon to upload files concerning the respective appointments."
 
 #: details.php:66
 msgid "direkt zur Veranstaltung"
@@ -3600,8 +3564,7 @@ msgstr ""
 #: details.php:485
 #, c-format
 msgid "Die Auswahl der Teilnehmenden erfolgt nach dem Losverfahren am %s Uhr."
-msgstr ""
-"Participants were chosen according to the random selection procedure at %s. "
+msgstr "Participants were chosen according to the random selection procedure at %s. "
 
 #: details.php:487
 #, c-format
@@ -3814,8 +3777,7 @@ msgstr ""
 msgid ""
 "Die angegebene E-Mail Adresse ist nicht erreichbar. Bitte &uuml;berpr&uuml;"
 "fen Sie Ihre Angaben!"
-msgstr ""
-"The given E-Mail address is not contactable.  Please check your information!"
+msgstr "The given E-Mail address is not contactable.  Please check your information!"
 
 #: edit_about.php:372
 #, c-format
@@ -3934,8 +3896,7 @@ msgid "Hochladen eines Bildes:"
 msgstr "Upload a photo:"
 
 #: edit_about.php:844
-msgid ""
-"1. Wählen sie mit <b>Durchsuchen</b> eine Bilddatei von ihrer Festplatte aus."
+msgid "1. Wählen sie mit <b>Durchsuchen</b> eine Bilddatei von ihrer Festplatte aus."
 msgstr "1. Select a photo from your hard disc with <b>Browse</b>."
 
 #: edit_about.php:846
@@ -4043,8 +4004,7 @@ msgstr "Please enter here the information contained in your student ID!"
 msgid ""
 "Wählen Sie die Studiengänge in Ihrem Studierendenausweis aus der folgenden "
 "Liste aus:"
-msgstr ""
-"Select the subject areas included in your student ID from the following list:"
+msgstr "Select the subject areas included in your student ID from the following list:"
 
 #: edit_about.php:1018
 msgid ""
@@ -5092,8 +5052,7 @@ msgstr ""
 msgid ""
 "Sie befinden sich in der Veranstaltung: %s, letzter Besuch: %s, Ihr Status "
 "in dieser Veranstaltung: %s"
-msgstr ""
-"You are in the course: %s, last visit: %s, your status in this course: %s"
+msgstr "You are in the course: %s, last visit: %s, your status in this course: %s"
 
 #: links_seminare.inc.php:28
 msgid "Meine&nbsp;Veranstaltungen"
@@ -5125,8 +5084,7 @@ msgstr "Administer&nbsp;institutes"
 
 #: literatur.php:46
 #, fuzzy
-msgid ""
-"Hier finden Sie n&uuml;tzliche Literatur und Links zu dieser Einrichtung."
+msgid "Hier finden Sie n&uuml;tzliche Literatur und Links zu dieser Einrichtung."
 msgstr "Here you will find useful literature and links for the institute"
 
 #: literatur.php:46
@@ -5406,8 +5364,7 @@ msgstr "In order to set up courses, please use the %sCourse assistant%s."
 
 #: meine_seminare.php:526
 #, c-format
-msgid ""
-"An der Einrichtung: <b>%s</b> sind zur Zeit keine Veranstaltungen angelegt."
+msgid "An der Einrichtung: <b>%s</b> sind zur Zeit keine Veranstaltungen angelegt."
 msgstr "At the institute: <b>%s</b> no courses are currently set up."
 
 #: meine_seminare.php:546
@@ -5511,8 +5468,7 @@ msgstr ""
 "saved in ILIAS will be lost."
 
 #: migration2studip.php:158
-msgid ""
-"Sie k&ouml;nnen einen neuen Account anlegen oder einen bestehenden einbinden:"
+msgid "Sie k&ouml;nnen einen neuen Account anlegen oder einen bestehenden einbinden:"
 msgstr "You can set up a new account or connect an existing one:"
 
 #: migration2studip.php:162
@@ -5822,8 +5778,7 @@ msgstr "That has many advantages:"
 
 #: register1.php:51
 msgid "Zugriff auf Ihre Daten von jedem internetf&auml;higen Rechner weltweit,"
-msgstr ""
-"access to all your data from every computer with internet access worldwide,"
+msgstr "access to all your data from every computer with internet access worldwide,"
 
 #: register1.php:52
 msgid "Anzeige neuer Mitteilungen oder Dateien seit Ihrem letzten Besuch,"
@@ -5844,8 +5799,7 @@ msgid "und vieles mehr."
 msgstr "and lots more."
 
 #: register1.php:57
-msgid ""
-"Mit der Anmeldung werden die nachfolgenden Nutzungsbedingungen akzeptiert:"
+msgid "Mit der Anmeldung werden die nachfolgenden Nutzungsbedingungen akzeptiert:"
 msgstr "By registering, the following terms of use are accepted:"
 
 #: register1.php:63
@@ -6056,15 +6010,13 @@ msgstr ""
 msgid ""
 "In dieser Kategorie sind keine Veranstaltungen angelegt.<br>Bitte w&auml;"
 "hlen Sie einen andere Kategorie!"
-msgstr ""
-"There are no courses in this category.<br>Please choose another category!"
+msgstr "There are no courses in this category.<br>Please choose another category!"
 
 #: sem_portal.php:164
 msgid ""
 "Um eine Veranstaltung zu abonnieren, klicken Sie auf den Namen der "
 "Veranstaltung."
-msgstr ""
-"In order to register for a course, please click on the name of the course."
+msgstr "In order to register for a course, please click on the name of the course."
 
 #: sem_portal.php:168
 msgid "Alle Veranstaltungen in dieser Kategorie anzeigen"
@@ -6129,8 +6081,7 @@ msgstr "Please choose a subject area to register for this course!"
 
 #: sem_verify.php:110
 #, c-format
-msgid ""
-"Sie wurden mit dem Status <b> Leser </b> in die Veranstaltung %s eingetragen."
+msgid "Sie wurden mit dem Status <b> Leser </b> in die Veranstaltung %s eingetragen."
 msgstr "You have been accepted as <b>Reader</b> in the course %s."
 
 #: sem_verify.php:111
@@ -6276,8 +6227,7 @@ msgstr ""
 #: sem_verify.php:299 sem_verify.php:347
 #, c-format
 msgid "Die Teilnehmerauswahl erfolgt nach dem Losverfahren am %s Uhr."
-msgstr ""
-"Participants were chosen according to the random selection procedure at %s."
+msgstr "Participants were chosen according to the random selection procedure at %s."
 
 #: sem_verify.php:302 sem_verify.php:350
 msgid "Die Teilnehmerauswahl erfolgte in der Reihenfolge der Anmeldung."
@@ -6300,8 +6250,7 @@ msgid ""
 msgstr ""
 
 #: sem_verify.php:318
-msgid ""
-"Bitte w&auml;hlen Sie das f&uuml;r Sie am besten geeignete Kontingent aus:"
+msgid "Bitte w&auml;hlen Sie das f&uuml;r Sie am besten geeignete Kontingent aus:"
 msgstr ""
 
 #: sem_verify.php:367
@@ -6327,8 +6276,7 @@ msgid ""
 msgstr ""
 
 #: sem_verify.php:392 sem_verify.php:433
-msgid ""
-"Sie werden automatisch eingetragen, sobald ein Platz f&uuml;r Sie frei wird."
+msgid "Sie werden automatisch eingetragen, sobald ein Platz f&uuml;r Sie frei wird."
 msgstr ""
 
 #: sem_verify.php:407
@@ -6376,8 +6324,7 @@ msgstr ""
 
 #: sem_verify.php:527
 #, c-format
-msgid ""
-"Um zu der Veranstaltung <b>%s</b> zu gelangen, klicken Sie bitte%s hier</a>!"
+msgid "Um zu der Veranstaltung <b>%s</b> zu gelangen, klicken Sie bitte%s hier</a>!"
 msgstr ""
 
 #: sem_verify.php:529
@@ -7058,8 +7005,7 @@ msgstr ""
 
 #: lib/classes/StudipRangeTreeViewAdmin.class.php:555
 #: lib/classes/StudipRangeTreeView.class.php:75
-msgid ""
-"Dieses Element ist keine Stud.IP-Einrichtung, es hat daher keine Grunddaten."
+msgid "Dieses Element ist keine Stud.IP-Einrichtung, es hat daher keine Grunddaten."
 msgstr ""
 
 #: lib/classes/StudipRangeTreeViewAdmin.class.php:557
@@ -7409,8 +7355,7 @@ msgstr ""
 
 #: lib/classes/StudipSemTreeView.class.php:152
 #, c-format
-msgid ""
-"Alle Veranstaltungen innerhalb dieses Bereiches in der %s&Uuml;bersicht%s"
+msgid "Alle Veranstaltungen innerhalb dieses Bereiches in der %s&Uuml;bersicht%s"
 msgstr ""
 
 #: lib/classes/TreeView.class.php:309
@@ -7439,3 +7384,4 @@ msgstr ""
 
 #~ msgid "Die E-Mail Addresse fehlt, oder ist falsch geschrieben!"
 #~ msgstr "The E-Mail address is missing, or is incorrectly written!"
+

@@ -296,16 +296,16 @@ if ($form==3)
 	if (($vor_jahr>0) && ($vor_jahr<100))
 		 $vor_jahr=$vor_jahr+2000;
 
-	if ($vor_monat == "mm") $vor_monat=0;
-	if ($vor_tag == "tt") $vor_tag=0;
-	if ($vor_jahr == "jjjj") $vor_jahr=0;	
-	if ($vor_stunde == "hh") $vor_stunde=0;
-	if ($vor_minute == "mm") $vor_minute=0;
-	if ($vor_end_stunde == "hh") $vor_end_stunde=0;
-	if ($vor_end_minute == "mm") $vor_end_minute=0;
+	if ($vor_monat == _("mm")) $vor_monat=0;
+	if ($vor_tag == _("tt")) $vor_tag=0;
+	if ($vor_jahr == _("jjjj")) $vor_jahr=0;	
+	if ($vor_stunde == _("hh")) $vor_stunde=0;
+	if ($vor_minute == _("mm")) $vor_minute=0;
+	if ($vor_end_stunde == _("hh")) $vor_end_stunde=0;
+	if ($vor_end_minute == _("mm")) $vor_end_minute=0;
 	
 	if (($vor_monat) && ($vor_tag) && ($vor_jahr))
-		if (($vor_stunde=="hh") && ($vor_end_stunde=="hh")) {
+		if (($vor_stunde== _("hh")) && ($vor_end_stunde== _("hh"))) {
 			$errormsg=$errormsg."error§"._("Bitte geben Sie g&uuml;ltige Zeiten f&uuml;r Start- und Endzeit der Vorbesprechung ein!")."§"; 
 			$check=FALSE;
 		} else
@@ -367,15 +367,15 @@ if ($form==4)
 	if (($adm_jahr>0) && ($adm_jahr<100))
 		 $adm_jahr=$adm_jahr+2000;
 	
-	if ($adm_monat == "mm") $adm_monat=0;
-	if ($adm_tag == "tt") $adm_tag=0;
-	if ($adm_jahr == "jjjj") $adm_jahr=0;	
-	if ($adm_stunde == "hh") $adm_stunde=0;
-	if ($adm_minute == "mm") $adm_minute=0;
+	if ($adm_monat == _("mm")) $adm_monat=0;
+	if ($adm_tag == _("tt")) $adm_tag=0;
+	if ($adm_jahr == _("jjjj")) $adm_jahr=0;	
+	if ($adm_stunde == _("hh")) $adm_stunde=0;
+	if ($adm_minute == _("mm")) $adm_minute=0;
 	
 
 	if (($adm_monat) && ($adm_tag) && ($adm_jahr))
-		if ($adm_stunde=="hh") {
+		if ($adm_stunde== _("hh")) {
 			if ($sem_create_data["sem_admission"] == 1)
 				$errormsg=$errormsg."error§"._("Bitte geben Sie g&uuml;ltige Werte f&uuml;r das Losdatum ein!")."§"; 
 			else
@@ -419,9 +419,9 @@ if ($form==4)
 	if (($jahr>0) && ($jahr<100))
 		 $jahr=$jahr+2000;
 
-	if ($monat == "mm") $monat=0;
-	if ($tag == "tt") $tag=0;
-	if ($jahr == "jjjj") $jahr=0;	
+	if ($monat == _("mm")) $monat=0;
+	if ($tag == _("tt")) $tag=0;
+	if ($jahr == _("jjjj")) $jahr=0;	
 
 	if (!checkdate($monat, $tag, $jahr) && ($monat) && ($tag) && ($jahr))
 		{
@@ -2071,7 +2071,7 @@ if ($level==3) {
 										<font size=-1>&nbsp; <?=_("Datum:");?> <input type="text" name="term_tag[]" size=2 maxlength=2 value="<? if ($sem_create_data["term_tag"][$i]) echo $sem_create_data["term_tag"][$i] ?>">.
 										<input type="text" name="term_monat[]" size=2 maxlength=2 value="<? if ($sem_create_data["term_monat"][$i]) echo $sem_create_data["term_monat"][$i] ?>">.
 										<input type="text" name="term_jahr[]" size=4 maxlength=4 value="<? if ($sem_create_data["term_jahr"][$i]) echo $sem_create_data["term_jahr"][$i] ?>">
-										&nbsp;um <input type="text" name="term_start_stunde[]" size=2 maxlength=2 value="<? if ($sem_create_data["term_start_stunde"][$i]) echo $sem_create_data["term_start_stunde"][$i] ?>"> :
+										&nbsp;<?=_("um")?> <input type="text" name="term_start_stunde[]" size=2 maxlength=2 value="<? if ($sem_create_data["term_start_stunde"][$i]) echo $sem_create_data["term_start_stunde"][$i] ?>"> :
 										<input type="text" name="term_start_minute[]" size=2 maxlength=2 value="<? if (($sem_create_data["term_start_minute"][$i]) && ($sem_create_data["term_start_minute"][$i] >0)) { if ($sem_create_data["term_start_minute"][$i] < 10) echo "0", $sem_create_data["term_start_minute"][$i]; else echo $sem_create_data["term_start_minute"][$i];  } elseif ($sem_create_data["term_start_stunde"][$i]) echo "00"; ?>">&nbsp;<?=_("Uhr bis");?>
 										<input type="text" name="term_end_stunde[]" size=2 maxlength=2 value="<? if ($sem_create_data["term_end_stunde"][$i]) echo $sem_create_data["term_end_stunde"][$i] ?>"> :
 										<input type="text" name="term_end_minute[]" size=2 maxlength=2 value="<? if (($sem_create_data["term_end_minute"][$i]) && ($sem_create_data["term_end_minute"][$i] >0)) { if ($sem_create_data["term_end_minute"][$i] < 10) echo "0", $sem_create_data["term_end_minute"][$i]; else echo $sem_create_data["term_end_minute"][$i];  } elseif ($sem_create_data["term_end_stunde"][$i]) echo "00"; ?>">&nbsp;<?=_("Uhr");?></font>
@@ -2119,7 +2119,7 @@ if ($level==3) {
 							<font size=-1><input type="text" name="vor_tag" size=2 maxlength=2 value="<? if ($sem_create_data["sem_vor_termin"]<>-1) echo date("d",$sem_create_data["sem_vor_termin"]); ?>">.
 							<input type="text" name="vor_monat" size=2 maxlength=2 value="<? if ($sem_create_data["sem_vor_termin"]<>-1) echo date("m",$sem_create_data["sem_vor_termin"]); ?>">.
 							<input type="text" name="vor_jahr" size=4 maxlength=4 value="<? if ($sem_create_data["sem_vor_termin"]<>-1) echo date("Y",$sem_create_data["sem_vor_termin"]); ?>">&nbsp;
-							um <input type="text" name="vor_stunde" size=2 maxlength=2 value="<? if ($sem_create_data["sem_vor_termin"]<>-1) echo date("H",$sem_create_data["sem_vor_termin"]); ?>"> :
+							<?=_("um")?> <input type="text" name="vor_stunde" size=2 maxlength=2 value="<? if ($sem_create_data["sem_vor_termin"]<>-1) echo date("H",$sem_create_data["sem_vor_termin"]); ?>"> :
 							<input type="text" name="vor_minute" size=2 maxlength=2 value="<? if ($sem_create_data["sem_vor_termin"]<>-1) echo date("i",$sem_create_data["sem_vor_termin"]); ?>">&nbsp;<?=_("Uhr bis");?>
 							<input type="text" name="vor_end_stunde" size=2 maxlength=2 value="<? if ($sem_create_data["sem_vor_end_termin"]<>-1) echo date("H",$sem_create_data["sem_vor_end_termin"]); ?>"> :
 							<input type="text" name="vor_end_minute" size=2 maxlength=2 value="<? if ($sem_create_data["sem_vor_end_termin"]<>-1) echo date("i",$sem_create_data["sem_vor_end_termin"]); ?>">&nbsp;<?=_("Uhr")?><br />
@@ -2263,9 +2263,9 @@ if ($level==4)
 											<font size=-1><? if ($sem_create_data["sem_admission"] == 1) echo _("Losdatum"); else echo _("Enddatum der Kontingentierung");?>:</font>
 										</td>
 										<td class="<? echo $cssSw->getClass() ?>" valign="top" width="45%">
-											<font size=-1>&nbsp; <input type="text" name="adm_tag" size=2 maxlength=2 value="<? if ($sem_create_data["sem_admission_date"]<>-1) echo date("d",$sem_create_data["sem_admission_date"]); else echo"tt" ?>">.
-											<input type="text" name="adm_monat" size=2 maxlength=2 value="<? if ($sem_create_data["sem_admission_date"]<>-1) echo date("m",$sem_create_data["sem_admission_date"]); else echo"mm" ?>">.
-											<input type="text" name="adm_jahr" size=4 maxlength=4 value="<? if ($sem_create_data["sem_admission_date"]<>-1) echo date("Y",$sem_create_data["sem_admission_date"]); else echo"jjjj" ?>"><?=_("um");?>&nbsp;</font><br />
+											<font size=-1>&nbsp; <input type="text" name="adm_tag" size=2 maxlength=2 value="<? if ($sem_create_data["sem_admission_date"]<>-1) echo date("d",$sem_create_data["sem_admission_date"]); else echo _("tt") ?>">.
+											<input type="text" name="adm_monat" size=2 maxlength=2 value="<? if ($sem_create_data["sem_admission_date"]<>-1) echo date("m",$sem_create_data["sem_admission_date"]); else echo _("mm") ?>">.
+											<input type="text" name="adm_jahr" size=4 maxlength=4 value="<? if ($sem_create_data["sem_admission_date"]<>-1) echo date("Y",$sem_create_data["sem_admission_date"]); else echo _("jjjj") ?>"><?=_("um");?>&nbsp;</font><br />
 											<font size=-1>&nbsp; <input type="text" name="adm_stunde" size=2 maxlength=2 value="<? if ($sem_create_data["sem_admission_date"]<>-1) echo date("H",$sem_create_data["sem_admission_date"]); else echo"23" ?>">:
 											<input type="text" name="adm_minute" size=2 maxlength=2 value="<? if ($sem_create_data["sem_admission_date"]<>-1) echo date("i",$sem_create_data["sem_admission_date"]); else echo"59" ?>">&nbsp;<?=_("Uhr");?></font>&nbsp; 
 											<? 
@@ -2433,9 +2433,9 @@ if ($level==4)
 							</td>
 							<td class="<? echo $cssSw->getClass() ?>" width="90%" colspan=3>
 								<font size=-1>&nbsp; <font size=-1><?=_("Sie haben angegeben, an einem anderen Zeitpunkt mit der Veranstaltung zu beginnen. Bitte geben Sie hier den ersten Termin ein."); ?></font><br><br>&nbsp; <?=_("Datum:"); ?> </font>
-								<font size=-1><input type="text" name="tag" size=2 maxlength=2 value="<? if ($sem_create_data["sem_start_termin"]<>-1) echo date("d",$sem_create_data["sem_start_termin"]); else echo"tt" ?>">.
-								<input type="text" name="monat" size=2 maxlength=2 value="<? if ($sem_create_data["sem_start_termin"]<>-1) echo date("m",$sem_create_data["sem_start_termin"]); else echo"mm" ?>">.
-								<input type="text" name="jahr" size=4 maxlength=4 value="<? if ($sem_create_data["sem_start_termin"]<>-1) echo date("Y",$sem_create_data["sem_start_termin"]); else echo"jjjj" ?>">&nbsp; </font>
+								<font size=-1><input type="text" name="tag" size=2 maxlength=2 value="<? if ($sem_create_data["sem_start_termin"]<>-1) echo date("d",$sem_create_data["sem_start_termin"]); else echo _("tt") ?>">.
+								<input type="text" name="monat" size=2 maxlength=2 value="<? if ($sem_create_data["sem_start_termin"]<>-1) echo date("m",$sem_create_data["sem_start_termin"]); else echo _("mm") ?>">.
+								<input type="text" name="jahr" size=4 maxlength=4 value="<? if ($sem_create_data["sem_start_termin"]<>-1) echo date("Y",$sem_create_data["sem_start_termin"]); else echo _("jjjj") ?>">&nbsp; </font>
 								<img  src="./pictures/info.gif" 
 									<? echo tooltip(_("Bitte geben Sie hier ein, wann der erste Termin der Veranstaltung stattfindet."), TRUE, TRUE) ?>
 								>
