@@ -134,6 +134,9 @@ $ALLOW_GROUPING_SEMINARS = TRUE;			// if true, administrators can group seminars
 $ALLOW_SELFASSIGN_STUDYCOURSE = TRUE; 			// if true, students aren't allowed to set or change 
 							// their studycourse (studiengang)
 
+$SHOW_TERMS_ON_FIRST_LOGIN = FALSE;			// if true, the user has to accept the terms on his first login
+							// (this feature makes only sense, if you use disable $ENABLE_SELF_REGISTRATION).
+
 
 /*language settings
 ----------------------------------------------------------------*/
