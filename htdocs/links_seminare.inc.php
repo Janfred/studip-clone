@@ -31,7 +31,7 @@ $structure["meine_einrichtungen"]=array (topKat=>"", name=>"Meine Einrichtungen"
 
 //Bottomkats
 $structure["_meine_veranstaltungen"]=array (topKat=>"meine_veranstaltungen", name=>"&Uuml;bersicht", link=>"meine_seminare.php", active=>FALSE);
-$structure["_meine_veranstaltungen_extendet"]=array (topKat=>"meine_veranstaltungen", name=>"Erweitert", link=>"meine_seminare.php?view=ext", active=>FALSE);
+$structure["_meine_veranstaltungen_extendet"]=array (topKat=>"meine_veranstaltungen", name=>"erweiterte &Uuml;bersicht", link=>"meine_seminare.php?view=ext", active=>FALSE);
 //
 $structure["Alle"]=array (topKat=>"veranstaltungen_suche", name=>"Alle", link=>"sem_portal.php?view=Alle", active=>FALSE);
 foreach ($SEM_CLASS as $key=>$val)  {
