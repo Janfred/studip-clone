@@ -65,7 +65,7 @@ class ExternModuleNewsticker extends ExternModule {
 	}
 	
 	function printoutPreview () {
-		echo html_header(_("Newsticker - Vorschau"), "", "");
+		echo html_header($this->config);
 				
 		echo $this->toStringPreview();
 		
