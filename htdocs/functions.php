@@ -35,6 +35,55 @@
 // +---------------------------------------------------------------------------+
 
 /**
+* This function creates the header line for studip-objects
+*
+* you will get a line like this "Veranstaltung: Name..."
+*
+* @param		string	the id of the Veranstaltung
+* @retunr		string	the header-line
+*
+*/
+
+function getHeaderLine ($id) {
+	global $SEM_TYPE;
+	
+	$db = new DB_Seminar;
+	
+	//header-line for Veranstaltungen
+	if (get_object_type($id) == "sem") {
+		$query = sprintf ("SELECT status, Name FROM seminare WHERE Seminar_id = '%s' ", $id);
+		$db->query($query);
+		$db->next_record();
+
+		if ($SEM_TYPE[$db->f("status")]["name"] == $SEM_TYPE_MISC_NAME)
+			$header_line = "Veranstaltung";
+		else
+			$header_line = $SEM_TYPE[$db->f("status")]["name"];
+		
+		$header_line.=": ". htmlReady(substr($db->f("Name"), 0, 60));
+		
+		if (strlen($db->f("Name")) > 60)
+			$header_line.= "... ";
+	
+	//header-line for Einrichtungen
+	} elseif(get_object_type($id) == "inst") {
+		$query = sprintf ("SELECT type, Name FROM Institute WHERE Institut_id = '%s' ", $id);
+		$db->query($query);
+		$db->next_record();		
+
+		$header_line = $INST_TYPE[$db->f("type")]["name"];
+		
+		$header_line.= ": ". htmlReady(substr($db->f("Name"), 0, 60));
+		
+		if (strlen($db->f("Name")) > 60)
+			$header_line.= "... ";
+	}
+	
+	return $header_line; 
+}
+
+
+/**
 * This function "opens" a Veranstaltung to work with it
 *
 * The following variables will bet set:
@@ -79,10 +128,7 @@ function openSem ($sem_id) {
 			$SessSemName["art"] = $SEM_TYPE[$db->f("status")]["name"];
 		$nr = $db->f("Seminar_id");
 		
-		//create the header-line for all the views
-		$SessSemName["header_line"] = $SessSemName["art"].": ".htmlReady(substr($SessSemName[0], 0, 60));
-		if (strlen($db->f("Name")) > 60)
-			$SessSemName["header_line"].= "... ";
+		$SessSemName["header_line"] = getHeaderLine ($sem_id);
 
 		$loginfilelast["$nr"] = $loginfilenow["$nr"];
 		$loginfilenow["$nr"] = time();
@@ -128,10 +174,7 @@ function openInst ($inst_id) {
 		$SessSemName["art_num"]=$db->f("type");
 		$nr = $db->f("Institut_id");
 		
-		//create the header-line for all the views
-		$SessSemName["header_line"] = $SessSemName["art"].": ".htmlReady(substr($SessSemName[0],  0, 60));
-		if (strlen($db->f("Name")) > 60)
-			$SessSemName["header_line"].= "... ";
+		$SessSemName["header_line"] = getHeaderLine ($inst_id);		
 
 		$loginfilelast["$nr"] = $loginfilenow["$nr"];
 		$loginfilenow["$nr"] = time();
