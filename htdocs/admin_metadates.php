@@ -87,7 +87,6 @@ if (($turnus_refresh) || ($term_refresh))
 	else
 		$term_metadata["sem_duration_time"]=$sem_duration_time - $sem_start_time;	
 	$term_metadata["sem_start_time"]=$sem_start_time;
-	$term_metadata["block_na"]=$block_na;
 	}
 
 if ($turnus_refresh)
@@ -172,7 +171,7 @@ if (($term_metadata["sem_duration_time"]<0) && ($term_metadata["sem_duration_tim
 	$errormsg=$errormsg."error§Das Endsemester darf nicht vor dem Startsemester liegen, bitte &auml;ndern Sie die entsprechenden Einstellungen!§";
 	}
 	
-if (($term_metadata["art"]==0) && (!$term_metadata["block_na"]))
+if ($term_metadata["art"]==0)
 	{
 	for ($i=0; $i<$term_metadata["turnus_count"]; $i++)
 		if ((($term_metadata["turnus_data"][$i]["start_stunde"]) || ($term_metadata["turnus_data"][$i]["end_stunde"])))
@@ -234,21 +233,17 @@ if (($uebernehmen_x) && (!$errormsg))
 	//indiziertes (=sortierbares) temporaeres Array erzeugen
 	if ($term_metadata["art"] == 0)
 		{
-		if (!$term_metadata["block_na"])		
-			{
-			for ($i=0; $i<$term_metadata["turnus_count"]; $i++)
-				if (($term_metadata["turnus_data"][$i]["start_stunde"])  && ($term_metadata["turnus_data"][$i]["end_stunde"]))
-					$tmp_metadata_termin["turnus_data"][]=array("idx"=>$term_metadata["turnus_data"][$i]["day"].$term_metadata["turnus_data"][$i]["start_stunde"].$term_metadata["turnus_data"][$i]["start_minute"], "day" => $term_metadata["turnus_data"][$i]["day"], "start_stunde" => $term_metadata["turnus_data"][$i]["start_stunde"], "start_minute" => $term_metadata["turnus_data"][$i]["start_minute"], "end_stunde" => $term_metadata["turnus_data"][$i]["end_stunde"], "end_minute" => $term_metadata["turnus_data"][$i]["end_minute"]);
+		for ($i=0; $i<$term_metadata["turnus_count"]; $i++)
+			if (($term_metadata["turnus_data"][$i]["start_stunde"])  && ($term_metadata["turnus_data"][$i]["end_stunde"]))
+				$tmp_metadata_termin["turnus_data"][]=array("idx"=>$term_metadata["turnus_data"][$i]["day"].$term_metadata["turnus_data"][$i]["start_stunde"].$term_metadata["turnus_data"][$i]["start_minute"], "day" => $term_metadata["turnus_data"][$i]["day"], "start_stunde" => $term_metadata["turnus_data"][$i]["start_stunde"], "start_minute" => $term_metadata["turnus_data"][$i]["start_minute"], "end_stunde" => $term_metadata["turnus_data"][$i]["end_stunde"], "end_minute" => $term_metadata["turnus_data"][$i]["end_minute"]);
 	
-			//sortieren
-			if (is_array($tmp_metadata_termin["turnus_data"])) {
-				sort ($tmp_metadata_termin["turnus_data"]);
-			
-				foreach ($tmp_metadata_termin["turnus_data"] as $tmp_array) {
-					$metadata_termin["turnus_data"][]=$tmp_array;
-				}
-			} else
-				$metadata_termin["turnus_data"][]=$tmp_array; 
+		//sortieren
+		if (is_array($tmp_metadata_termin["turnus_data"])) {
+			sort ($tmp_metadata_termin["turnus_data"]);
+		
+			foreach ($tmp_metadata_termin["turnus_data"] as $tmp_array) {
+				$metadata_termin["turnus_data"][]=$tmp_array;
+			}
 		}
 	}
 		
@@ -493,7 +488,7 @@ if (($uebernehmen_x) && (!$errormsg))
 					</tr>
 					<tr>
 						<td class="<? echo $cssSw->getClass() ?>" width="4%">
-							&nbsp;<font size=-1>Semester<br /></font>
+							&nbsp;<font size=-1>Semester</font>
 							<?
 							echo "&nbsp;<select name=\"sem_start_time\">";
 							for ($i=1; $i<=sizeof($SEMESTER); $i++)
@@ -506,7 +501,7 @@ if (($uebernehmen_x) && (!$errormsg))
 							echo "</select>";
 							?>
 						</td>
-						<td class="<? echo $cssSw->getClass() ?>" width="96%" >
+						<td class="<? echo $cssSw->getClass() ?>" width="96%" valign="bottom">
 							&nbsp;<font size=-1>Dauer<br /></font>
 							&nbsp;<select name="sem_duration_time">
 							<?
