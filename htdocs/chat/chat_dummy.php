@@ -69,10 +69,11 @@ for ($i = 0; $i < $log_count-2; ++$i){
 header("Content-type: application/octet-stream");
 header("Content-Disposition: attachment; filename=\"studip_chatlog_".date("d-m-Y_H-i").".log\"");
 header("Content-length: ".strlen($output));
-header("Expires: ".gmdate("D, d M Y H:i:s", mktime(date("H")+2, date("i"), date("s"), date("m"), date("d"), date("Y")))." GMT");
+header("Expires: 0");
 header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
-header("Cache-Control: no-cache, must-revalidate");
+header("Cache-Control: no-store,no-cache, must-revalidate");
 header("Pragma: no-cache");
+header("Cache-Control: private");
 echo $output;
 page_close();
 ?>
