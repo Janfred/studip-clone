@@ -51,7 +51,6 @@ if ($ILIAS_CONNECT_ENABLE)
 	require_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LERNMODUL ."/lernmodul_view_functions.inc.php");
 	require_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LERNMODUL ."/lernmodul_linking_functions.inc.php");
 
-
 ?><table cellspacing="0" cellpadding="0" border="0" width="100%">
 	<tr>
 		<td class="topic" colspan="2"><b>Administration von Lernmodulen</b>
@@ -64,6 +63,9 @@ if ($ILIAS_CONNECT_ENABLE)
 	<tr valign="top">
      		<td width="90%" class="blank">
 		<?
+	//neuen ILIAS-User anlegen, wenn noch nicht vorhanden.
+	create_ilias_user($auth->auth["uname"]);
+
 		echo "<a href=\"" . link_new_module() ."\">". _("Neues Lernmodul anlegen") ."</a><br><br>";
 
 		if ($perm->have_perm("admin"))  
