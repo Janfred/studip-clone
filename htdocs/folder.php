@@ -40,11 +40,10 @@ if ($folderzip) {
 }
 
 if ($download_selected_x) {
-	print_r($download_ids);
 	if (is_array($download_ids)) {
 		$zip_file_id = createSelectedZip($download_ids);
-		//header("Location: sendfile.php/?type=4&file_id=$zip_file_id&file_name=SelectedOrdner.zip");
-		//die;
+		header("Location: sendfile.php/?type=4&file_id=$zip_file_id&file_name=SelectedOrdner.zip");
+		die;
 		page_close();
 	}
 }
