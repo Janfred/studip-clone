@@ -146,7 +146,6 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 		echo "</tr></td></table>";
 		die;
 	}
-	
 	//Umschalter zwischen den Typen
 	if ($adm_null_x)
 		$admin_admission_data["admission_type"]=0;
@@ -161,13 +160,12 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 		$admin_admission_data["admission_binding"]=TRUE;
 	settype($admin_admission_data["admission_binding"], integer);
 		
-		
+	if (!$commit_no_admission_data)
+			$admin_admission_data["admission_turnout"]=$admission_turnout;	
+
 	if (!$admin_admission_data["admission_type"]) { 
 		$admin_admission_data["read_level"]=$read_level;
 		$admin_admission_data["write_level"]=$write_level;
-
-	if (!$commit_no_admission_data)
-			$admin_admission_data["admission_turnout"]=$admission_turnout;	
 		
 	//Alles was mit der Anmeldung zu tun hat ab hier
 	} elseif (!$delete_studg) { 
