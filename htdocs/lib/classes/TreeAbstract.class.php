@@ -78,6 +78,8 @@ class TreeAbstract {
 	*/
 	var $tree_num_childs = array();
 	
+	var $index_offset = 0;
+	
 	/**
 	* static method used to ensure that only one instance exists
 	*
@@ -136,7 +138,8 @@ class TreeAbstract {
 		$this->tree_childs = array();
 		$this->tree_num_childs = array();
 		$this->tree_data = array();
-		$this->tree_data['root'] = array('parent_id' => null, 'name' => $this->root_name);
+		$this->index_offset = 0;
+		$this->tree_data['root'] = array('parent_id' => null, 'name' => $this->root_name, 'index' => 0);
 	}
 	
 	/**
@@ -152,6 +155,7 @@ class TreeAbstract {
 	*/
 	
 	function storeItem($item_id,$parent_id,$name,$priority){
+		$this->tree_data[$item_id]["index"] = ++$this->index_offset; 
 		$this->tree_data[$item_id]["parent_id"] = $parent_id; 
 		$this->tree_data[$item_id]["priority"] = $priority;
 		$this->tree_data[$item_id]["name"] = $name;

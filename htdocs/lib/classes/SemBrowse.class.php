@@ -280,6 +280,7 @@ class SemBrowse {
 	}
 		
 	function print_level(){
+		ob_start();
 		global $PHP_SELF, $_language_path;
 		echo "\n<table border=\"0\" align=\"center\" cellspacing=0 cellpadding=0 width = \"99%\">\n";
 		if ($this->sem_browse_data['level'] == "f"){
@@ -308,24 +309,38 @@ class SemBrowse {
 			$this->range_tree->showSemRangeTree();
 		}
 		echo "</td></tr>\n</table>";
+		ob_end_flush();
 	}
 	
 	function print_result(){
 		ob_start();
 		global $_fullname_sql,$_views,$PHP_SELF,$SEM_TYPE,$SEM_CLASS;
+		
 		if (is_array($this->sem_browse_data['search_result']) && count($this->sem_browse_data['search_result'])) {
-			$query = ("SELECT seminare.Seminar_id, seminare.status, seminare.Name 
-				, Institute.Name AS Institut,Institute.Institut_id,sem_tree.parent_id,sem_tree.priority,
+			if ($this->sem_browse_data['group_by'] == 1){
+				if (!is_object($this->sem_tree)){
+						$the_tree =& TreeAbstract::GetInstance("StudipSemTree");
+					} else {
+						$the_tree =& $this->sem_tree->tree;
+					}
+				if ($this->sem_browse_data['level'] == "vv" || $this->sem_browse_data['level'] == "sbb"){
+					$allowed_ranges = $the_tree->getKidsKids($this->sem_browse_data['start_item_id']);
+					$allowed_ranges[] = $this->sem_browse_data['start_item_id'];
+					$sem_tree_query = " AND sem_tree_id IN('" . join("','", $allowed_ranges) . "') ";
+				}
+			}
+					
+			$query = ("SELECT seminare.Seminar_id, seminare.status, seminare.Name, seminare.metadata_dates 
+				, Institute.Name AS Institut,Institute.Institut_id,
 				seminar_sem_tree.sem_tree_id AS bereich, " . $_fullname_sql['no_title_short'] ." AS fullname, auth_user_md5.username,
 				" . $_views['sem_number_sql'] . " AS sem_number, " . $_views['sem_number_end_sql'] . " AS sem_number_end FROM seminare 
 				LEFT JOIN seminar_user ON (seminare.Seminar_id=seminar_user.Seminar_id AND seminar_user.status='dozent') 
 				LEFT JOIN auth_user_md5 USING (user_id) 
 				LEFT JOIN user_info USING (user_id) 
-				LEFT JOIN seminar_sem_tree ON (seminare.Seminar_id = seminar_sem_tree.seminar_id)
-				LEFT JOIN sem_tree USING (sem_tree_id)
+				LEFT JOIN seminar_sem_tree ON (seminare.Seminar_id = seminar_sem_tree.seminar_id $sem_tree_query)
 				LEFT JOIN seminar_inst ON (seminare.Seminar_id = seminar_inst.Seminar_id) 
 				LEFT JOIN Institute USING (Institut_id) 
-				WHERE seminare.Seminar_id IN('" . join("','", array_keys($this->sem_browse_data['search_result'])) . "') ORDER BY parent_id,priority");
+				WHERE seminare.Seminar_id IN('" . join("','", array_keys($this->sem_browse_data['search_result'])) . "')");
 			$db = new DB_Seminar($query);
 			$snap = new DbSnapShot($db);
 			$group_field = $this->group_by_fields[$this->sem_browse_data['group_by']]['group_field'];
@@ -377,7 +392,7 @@ class SemBrowse {
 					$name = str_replace("ü","ue",$name);
 					$group_by_data[$group_field]['Seminar_id'][$seminar_id] = $name;
 				}
-				uasort($group_by_data[$group_field]['Seminar_id'], 'strnatcasecmp');
+				uasort($group_by_data[$group_field]['Seminar_id'], 'strnatcmp');
 			}
 			
 			echo "\n<table border=\"0\" align=\"center\" cellspacing=0 cellpadding=2 width = \"99%\">\n";
@@ -386,11 +401,7 @@ class SemBrowse {
 				(($this->sem_browse_data['sset']) ? _("(Suchergebnis)") : ""),
 				$this->group_by_fields[$this->sem_browse_data['group_by']]['name']) 
 				. "</b></font></div></td></tr>";
-			if (!is_object($this->sem_tree)){
-				$the_tree =& TreeAbstract::GetInstance("StudipSemTree");
-			} else {
-				$the_tree =& $this->sem_tree->tree;
-			}
+			
 			
 			switch ($this->sem_browse_data["group_by"]){
 					case 0:
@@ -398,7 +409,10 @@ class SemBrowse {
 					break;
 					
 					case 1:
-							
+					uksort($group_by_data, create_function('$a,$b',
+							'$the_tree =& TreeAbstract::GetInstance("StudipSemTree");
+							return (int)($the_tree->tree_data[$a]["index"] - $the_tree->tree_data[$b]["index"]);
+							'));
 					break;
 					
 					case 3:
@@ -450,7 +464,7 @@ class SemBrowse {
 						echo"<td class=\"steel1\" width=\"66%\"><font size=-1><a href=\"{$this->target_url}?{$this->target_id}={$seminar_id}&send_from_search=1&send_from_search_page="
 						. $PHP_SELF. "?keep_result_set=1\">", htmlReady($sem_name), "</a><br>";
 						//create Turnus field
-						$temp_turnus_string=view_turnus($seminar_id, TRUE);
+						$temp_turnus_string = view_turnus($seminar_id, true, key($sem_data[$seminar_id]["metadata_dates"]));
 						//Shorten, if string too long (add link for details.php)
 						if (strlen($temp_turnus_string) >70) {
 							$temp_turnus_string = substr($temp_turnus_string, 0, strpos(substr($temp_turnus_string, 70, strlen($temp_turnus_string)), ",") +71);

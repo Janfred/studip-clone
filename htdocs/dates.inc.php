@@ -314,17 +314,26 @@ Bei regelmaessigen Veranstaltungen werden die einzelen Zeiten ausgegeben, bei zw
 Turnus mit dem enstprechenden Zusatz. Short verkuerzt die Ansicht nochmals.
 */
 
-function view_turnus ($seminar_id, $short = FALSE) {
+function view_turnus ($seminar_id, $short = FALSE, $meta_data = false) {
+	
+	static $turnus_cache;
+	
 	global $TERMIN_TYP;
-
+	
+	if ($turnus_cache[$seminar_id][$short]){
+		return $turnus_cache[$seminar_id][$short];
+	}
+	
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
 	
-	
-	$db->query("SELECT metadata_dates FROM seminare WHERE Seminar_id = '$seminar_id'");
-	$db->next_record();
-	
-	$term_data=unserialize($db->f("metadata_dates"));
+	if ($meta_data === false){
+		$db->query("SELECT metadata_dates FROM seminare WHERE Seminar_id = '$seminar_id'");
+		$db->next_record();
+		$term_data=unserialize($db->f("metadata_dates"));
+	} else {
+		$term_data = unserialize($meta_data);
+	}
 	
 	if ($term_data["art"] == 1)
 		{
@@ -483,6 +492,7 @@ function view_turnus ($seminar_id, $short = FALSE) {
 			if ($term_data["turnus"] == 1)
 				$return_string.= " " . _("(zweiwöchentlich)");
 		}
+	$turnus_cache[$seminar_id][$short] = $return_string;
 	return $return_string;
 	}
 

@@ -49,10 +49,13 @@ if (($SessSemName[1]) && ($SessSemName["class"] == "inst")) {
 	}
 	unset($_REQUEST['level']);
 	$save_me = $sem_browse_data;
+	unset($sem_browse_data);
 	$sem_browse_obj = new SemBrowse();
 	$sem_browse_obj->sem_browse_data['default_sem'] = "all";
+	$sem_browse_obj->sem_number = false;
 	$sem_browse_obj->target_url="details.php";	//teilt der nachfolgenden Include mit, wo sie die Leute hinschicken soll
 	$sem_browse_obj->target_id="sem_id"; 		//teilt der nachfolgenden Include mit, wie die id die &uuml;bergeben wird, bezeichnet werden soll
+	$sem_browse_obj->sem_browse_data['level'] = $show_bereich_data['level'];
 	switch ($show_bereich_data['level']) {
 		case "sbb": 
 			$the_tree =& TreeAbstract::GetInstance("StudipSemTree");
@@ -68,6 +71,7 @@ if (($SessSemName[1]) && ($SessSemName["class"] == "inst")) {
 			}
 			$sem_browse_obj->show_result = true;
 			$sem_browse_obj->sem_browse_data['sset'] = false;
+			$sem_browse_obj->sem_browse_data['start_item_id'] = $show_bereich_data["id"];
 			break;
 		case "s":
 			$bereich_typ=_("Einrichtung");

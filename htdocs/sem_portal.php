@@ -158,7 +158,7 @@ if (!$perm->have_perm("root")){
 </tr>
 <tr>	
 	<td class="blank" valign="top">
-	<table cellpadding="5" border="0" width="100%"><tr><td>
+	<table cellpadding="5" border="0" width="100%"><tr><td colspan="2">
 		<?
 		if ($sem_portal["bereich"] == "all")
 			print _("Sie k&ouml;nnen hier nach allen Veranstaltungen suchen, sich Informationen anzeigen lassen und Veranstaltungen abonnieren.<br>");
@@ -169,13 +169,17 @@ if (!$perm->have_perm("root")){
 		 elseif ($sem_portal["bereich"] != "all") 
 			print "<br>"._("In dieser Kategorie sind keine Veranstaltungen angelegt.<br>Bitte w&auml;hlen Sie einen andere Kategorie!");
 
-		echo "</td></tr><tr><td class=\"blank\" align=\"right\">";
+		echo "</td></tr><tr><td class=\"blank\" align=\"left\">";
 		if ($sem_browse_data['cmd'] == "xts"){
 			echo "<a href=\"$PHP_SELF?cmd=qs&level=f\"><img " . makeButton("schnellsuche", "src") . tooltip(_("Zur Schnellsuche zurückgehen")) ." border=0></a>";
 		} else {
 			echo "<a href=\"$PHP_SELF?cmd=xts&level=f\"><img " . makeButton("erweitertesuche","src") . tooltip(_("Erweitertes Suchformular aufrufen")) ." border=\"0\"></a>";
 		}
-		echo "&nbsp;</td></tr>\n";
+		echo "</td>\n";
+		echo "<td class=\"blank\" align=\"right\">";
+		echo "<a href=\"$PHP_SELF?reset_all=1\"><img " . makeButton("zuruecksetzen", "src") . tooltip(_("zurücksetzen")) ." border=0></a>";
+		echo "</td></tr>\n";
+		
 		
 ?>
 	
