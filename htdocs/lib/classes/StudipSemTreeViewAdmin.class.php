@@ -488,7 +488,7 @@ class StudipSemTreeViewAdmin extends TreeView {
 			$content .= "<tr><td class=\"steel1\" style=\"font-size:10pt;\" align=\"left\" colspan=\"3\"><b>" . _("Eintr&auml;ge auf dieser Ebene:");
 			$content .= "</b>\n</td></tr>";
 			$entries = $this->tree->getSemData($item_id);
-			$content .= $this->getSemDetails($entries->getGroupedResult("seminar_id"),$item_id);
+			$content .= $this->getSemDetails($entries,$item_id);
 		} else {
 			$content .= "\n<tr><td class=\"steel1\" style=\"font-size:10pt;\" colspan=\"3\">" . _("Keine Eintr&auml;ge auf dieser Ebene vorhanden!") . "</td></tr>";
 		}
@@ -496,54 +496,96 @@ class StudipSemTreeViewAdmin extends TreeView {
 			$content .= "<tr><td class=\"steel1\" align=\"left\" style=\"font-size:10pt;\" colspan=\"3\"><b>" . _("Nicht zugeordnete Veranstaltungen auf dieser Ebene:");
 			$content .= "</b>\n</td></tr>";
 			$entries = $this->tree->getLonelySemData($item_id);
-			$content .= $this->getSemDetails($entries->getGroupedResult("seminar_id"),$item_id,true);
+			$content .= $this->getSemDetails($entries,$item_id,true);
 		}
 		$content .= "</table>";
 		return $content;
 	}
 	
-	function getSemDetails($sem_data, $item_id, $lonely_sem = false){
+	function getSemDetails($snap, $item_id, $lonely_sem = false){
 		$form_name = DbView::get_uniqid();
 		$content = "<form name=\"$form_name\" action=\"" . $this->getSelf("cmd=MarkSem") ."\" method=\"post\">
 					<input type=\"hidden\" name=\"item_id\" value=\"$item_id\">";
-		$sem_number = -1;
-		foreach($sem_data as $seminar_id => $data){
-				if (key($data['sem_number']) != $sem_number){
-					$sem_number = key($data['sem_number']);
-					$content .= "\n<tr><td class=\"steelkante\" colspan=\"3\" style=\"font-size:10pt;\" >" . $this->tree->sem_dates[$sem_number]['name'] . "</td></tr>";
-				}
-				$sem_name = key($data["Name"]);
-				$sem_number_end = key($data["sem_number_end"]);
-				if ($sem_number != $sem_number_end){
-					$sem_name .= " (" . $this->tree->sem_dates[$sem_number]['name'] . " - ";
-					$sem_name .= (($sem_number_end == -1) ? _("unbegrenzt") : $this->tree->sem_dates[$sem_number_end]['name']) . ")";
-				}
-				$content .= "<tr><td class=\"steel1\" width=\"1%\"><input type=\"checkbox\" name=\"marked_sem[]\" value=\"$seminar_id\" style=\"vertical-align:middle\">
-							</td><td class=\"steel1\" style=\"font-size:10pt;\"><a href=\"details.php?sem_id=". $seminar_id 
-						."&send_from_search=true&send_from_search_page=" . rawurlencode($this->getSelf()) . "\">" . htmlReady($sem_name) . "</a>
-						 </td><td class=\"steel1\" align=\"right\" style=\"font-size:10pt;\">(";
-				for ($i = 0; $i < count($data["doz_name"]); ++$i){
-					$content .= "<a href=\"about.php?username=" . key($data["doz_uname"]) ."\">" . htmlReady(key($data["doz_name"])) . "</a>";
-					if($i != count($data["doz_name"])-1) {
-						$content .= ", ";
+		$group_by_data = $snap->getGroupedResult("sem_number", "seminar_id");
+		$sem_data = $snap->getGroupedResult("seminar_id");
+		$group_by_duration = $snap->getGroupedResult("sem_number_end", array("sem_number","seminar_id"));
+		foreach ($group_by_duration as $sem_number_end => $detail){
+			if ($sem_number_end != -1 && ($detail['sem_number'][$sem_number_end] && count($detail['sem_number']) == 1)){
+				continue;
+			} else {
+				foreach ($detail['seminar_id'] as $seminar_id => $foo){
+					$start_sem = key($sem_data[$seminar_id]["sem_number"]);
+					if ($sem_number_end == -1){
+						$sem_number_end = count($this->tree->sem_dates)-1;
 					}
-					next($data["doz_name"]);
-					next($data["doz_uname"]);
+					for ($i = $start_sem; $i <= $sem_number_end; ++$i){
+						if ($group_by_data[$i] && !$tmp_group_by_data[$i]){
+							foreach($group_by_data[$i]['seminar_id'] as $id => $bar){
+								$tmp_group_by_data[$i]['seminar_id'][$id] = key($sem_data[$id]["Name"]);
+							}
+						}
+						$tmp_group_by_data[$i]['seminar_id'][$seminar_id] = key($sem_data[$seminar_id]["Name"]);
+					}
 				}
-				$content .= ") </td></tr>";
 			}
-			$content .= "<tr><td class=\"steel1\" colspan=\"2\"><a href=\"#\" onClick=\"invert_selection('$form_name');return false;\">
-						<img " . makeButton("auswahlumkehr","src") . "border=\"0\" align=\"middle\" hspace=\"3\""
-						. tooltip(_("Auswahl umkehren")) . "></a></td><td class=\"steel1\" align=\"right\">
-						<select name=\"sem_aktion\" style=\"font-size:8pt;vertical-align:bottom;\" " . tooltip(_("Aktion auswählen"),true) . ">
-						<option value=\"mark\">" . _("in Merkliste &uuml;bernehmen") . "</option>";
-			if (!$lonely_sem && $this->isItemAdmin($item_id)){
-				$content .= "<option value=\"del_mark\">" . _("l&ouml;schen und in Merkliste &uuml;bernehmen") . "</option>
+		}
+		if (is_array($tmp_group_by_data)){
+			foreach ($tmp_group_by_data as $start_sem => $detail){
+				$group_by_data[$start_sem] = $detail;
+				uasort($group_by_data[$start_sem]['seminar_id'], 'strnatcasecmp');
+			}
+		}
+		krsort($group_by_data, SORT_NUMERIC);
+		
+		foreach ($group_by_data as $sem_number => $sem_ids){
+			$content .= "\n<tr><td class=\"steelkante\" colspan=\"3\" style=\"font-size:10pt;\" >" . $this->tree->sem_dates[$sem_number]['name'] . "</td></tr>";
+			if (is_array($sem_ids['seminar_id'])){
+				while(list($seminar_id,) = each($sem_ids['seminar_id'])){
+					$sem_name = key($sem_data[$seminar_id]["Name"]);
+					$sem_number_start = key($sem_data[$seminar_id]["sem_number"]);
+					$sem_number_end = key($sem_data[$seminar_id]["sem_number_end"]);
+					if ($sem_number_start != $sem_number_end){
+						$sem_name .= " (" . $this->tree->sem_dates[$sem_number_start]['name'] . " - ";
+						$sem_name .= (($sem_number_end == -1) ? _("unbegrenzt") : $this->tree->sem_dates[$sem_number_end]['name']) . ")";
+					}
+					$content .= "<tr><td class=\"steel1\" width=\"1%\"><input type=\"checkbox\" name=\"marked_sem[]\" value=\"$seminar_id\" style=\"vertical-align:middle\">
+								</td><td class=\"steel1\" style=\"font-size:10pt;\"><a href=\"details.php?sem_id=". $seminar_id 
+								."&send_from_search=true&send_from_search_page=" . rawurlencode($this->getSelf()) . "\">" . htmlReady($sem_name) . "</a>
+								</td><td class=\"steel1\" align=\"right\" style=\"font-size:10pt;\">(";
+					$doz_name = array_keys($sem_data[$seminar_id]['doz_name']);
+					$doz_uname = array_keys($sem_data[$seminar_id]['doz_uname']);
+					if (is_array($doz_name)){
+						uasort($doz_name, 'strnatcasecmp');
+						$i = 0;
+						foreach ($doz_name as $index => $value){
+							$content .= "<a href=\"about.php?username=" . $doz_uname[$index] ."\">" . htmlReady($value) . "</a>";
+							if($i != count($doz_name)-1){
+								$content .= ", ";
+							}
+							if ($i == 3){
+								$content .= "...&nbsp;<a href=\"details.php?sem_id=". $seminar_id 
+										."&send_from_search=true&send_from_search_page=" . rawurlencode($this->getSelf()) . "\">(mehr) </a>";
+								break;
+							}
+							++$i;
+						}
+					}
+					$content .= ") </td></tr>";
+				}
+			}
+		}
+		$content .= "<tr><td class=\"steel1\" colspan=\"2\"><a href=\"#\" onClick=\"invert_selection('$form_name');return false;\">
+					<img " . makeButton("auswahlumkehr","src") . "border=\"0\" align=\"middle\" hspace=\"3\""
+					. tooltip(_("Auswahl umkehren")) . "></a></td><td class=\"steel1\" align=\"right\">
+					<select name=\"sem_aktion\" style=\"font-size:8pt;vertical-align:bottom;\" " . tooltip(_("Aktion auswählen"),true) . ">
+					<option value=\"mark\">" . _("in Merkliste &uuml;bernehmen") . "</option>";
+		if (!$lonely_sem && $this->isItemAdmin($item_id)){
+			$content .= "<option value=\"del_mark\">" . _("l&ouml;schen und in Merkliste &uuml;bernehmen") . "</option>
 						<option value=\"del\">" . _("l&ouml;schen") . "</option>";
-			}
-			$content .= "</select><input border=\"0\" type=\"image\" " . makeButton("ok","src") . tooltip(_("Gewählte Aktion starten")) . " style=\"vertical-align:middle\" hspace=\"3\">
-						</td></tr> </form>";
-			return $content;
+		}
+		$content .= "</select><input border=\"0\" type=\"image\" " . makeButton("ok","src") . tooltip(_("Gewählte Aktion starten")) . " style=\"vertical-align:middle\" hspace=\"3\">
+					</td></tr> </form>";
+		return $content;
 	}
 	
 	function getEditItemContent(){

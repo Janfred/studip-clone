@@ -365,12 +365,12 @@ class SemBrowse {
 					}
 					foreach ($tmp_group_by_data as $start_sem => $detail){
 						$group_by_data[$start_sem] = $detail;
-						asort($group_by_data[$start_sem]['Seminar_id'], SORT_STRING);
+						uasort($group_by_data[$start_sem]['Seminar_id'], 'strnatcasecmp');
 					}
 				}
 				krsort($group_by_data, SORT_NUMERIC);
 			} else {
-				ksort($group_by_data, SORT_STRING);
+				uksort($group_by_data, 'strnatcasecmp');
 			}
 			echo "\n<table border=\"0\" align=\"center\" cellspacing=0 cellpadding=2 width = \"99%\">\n";
 			echo "\n<tr><td class=\"steelgraulight\" colspan=\"2\"><div style=\"margin-top:10px;margin-bottom:10px;\"><font size=\"-1\"><b>&nbsp;"
@@ -435,7 +435,7 @@ class SemBrowse {
 						$doz_name = array_keys($sem_data[$seminar_id]['fullname']);
 						$doz_uname = array_keys($sem_data[$seminar_id]['username']);
 						if (is_array($doz_name)){
-							asort($doz_name, SORT_STRING);
+							uasort($doz_name, 'strnatcasecmp');
 							$i = 0;
 							foreach ($doz_name as $index => $value){
 								echo "<a href=\"about.php?username=" . $doz_uname[$index] ."\">" . htmlReady($value) . "</a>";
