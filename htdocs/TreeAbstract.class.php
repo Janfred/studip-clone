@@ -71,7 +71,7 @@ class TreeAbstract {
 	/**
 	* array containing the number of direct childs of all items
 	*
-	* assoc. array, key is one from $tree_data, value is numeric array with keys from childs
+	* assoc. array, key is one from $tree_data
 	* @access private
 	* @var array	$tree_num_childs
 	*/

@@ -189,10 +189,8 @@ class TreeView {
 	}
 	$num_items = count($items);
 	for ($j = 0; $j < $num_items; ++$j){
-		ob_start();
 		$this->printLevelOutput($items[$j]);
 		$this->printItemOutput($items[$j]);
-		ob_end_flush();
 		if ($this->tree->hasKids($items[$j]) && $this->open_ranges[$items[$j]]){
 			$this->showTree($this->tree->tree_childs[$items[$j]]);
 		}
@@ -308,7 +306,7 @@ class TreeView {
 			$head .= "\"><img border=\"0\"  src=\"pictures/";
 			$head .= ($this->open_ranges[$item_id]) ? "cont_folder3.gif" : "cont_folder.gif";
 			$head .= "\" ";
-			$head .= (!$this->open_ranges[$item_id])? tooltip($this->tree->getNumKidsKids($item_id) . " " . _("Unterelement(e) öffnen")) : tooltip(_("Alle Unterelemente schliessen"));
+			$head .= (!$this->open_ranges[$item_id])? tooltip(_("Alle Unterelement öffnen")) : tooltip(_("Alle Unterelemente schliessen"));
 			$head .= "></a>";
 		} else { 
 			$head .= "<img src=\"pictures/";
