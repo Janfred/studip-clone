@@ -755,18 +755,18 @@ function FixLinks ($data = "", $fix_nl = TRUE, $nl_to_br = TRUE, $img = FALSE, $
 
 	$img = $img ? 'TRUE' : 'FALSE';
 	$extern = $extern ? 'TRUE' : 'FALSE';
-
 	// add protocol type and transform the domain names of links within Stud.IP
 	if (is_array($STUDIP_DOMAINS)) {
 		$domains = '';
 		foreach ($STUDIP_DOMAINS as $studip_domain)
 			$domains .= '|' . preg_quote($studip_domain);
 		$domains = substr($domains, 1);
-		$user_domain = preg_replace("'(https?\://($domains))(.*)'i", "\\1", $_SERVER['HTTP_REFERER']);
+		$user_domain = preg_replace("'($domains)(.*)'i", "\\1",
+				$_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
 		$pattern = array("/([ \t\]\n]|^)www\./i",
 					"/([ \t\]\n]|^)ftp\./i",
-					"'https?\://($domains)((/[^<\s]*[^\.\s<])*)'i");
-		$replace = array("\\1http://www.", "\\1ftp://ftp.", "$user_domain\\2");
+					"'http(s?)\://($domains)((/[^<\s]*[^\.\s<])*)'i");
+		$replace = array("\\1http://www.", "\\1ftp://ftp.", "http\\1://$user_domain\\3");
 	}
 	else {
 		$pattern = array("/([ \t\]\n]|^)www\./i", "/([ \t\]\n]|^)ftp\./i");
@@ -805,7 +805,7 @@ function preg_call_link ($params, $mod, $img, $extern = FALSE) {
 	if ($extern)
 		$link_pic = '';
 	else
-	$link_pic = "<img src=\"{$GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']}pictures/link_extern.gif\" border=\"0\" />";
+		$link_pic = "<img src=\"{$GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']}pictures/link_extern.gif\" border=\"0\" />";
 
 	if ($mod == 'LINK') {
 		if ($params[5] != 'img') {
@@ -816,15 +816,10 @@ function preg_call_link ($params, $mod, $img, $extern = FALSE) {
 			$tbr = '<a href="'.idna_link($params[4])."\" target=\"_blank\">$link_pic{$params[3]}</a>";
 		}
 		elseif ($img) {
-			if (is_array($STUDIP_DOMAINS)) {
-				$domains = '';
-				foreach ($STUDIP_DOMAINS as $studip_domain)
-					$domains .= '|' . preg_quote($studip_domain);
-				$domains = substr($domains, 1);
-				if (preg_match("'($domains)\/.+?\.php'i", $params[0]))
-					return $params[0];
-			}
-			if (!preg_match(':.+(\.jpg|\.jpeg|\.png|\.gif)$:i', $params[0]))
+			// Don't execute scripts
+			if (preg_match("'{$_SERVER['HTTP_HOST']}.*?\/.+?\.php'i", $params[4]))
+				return $params[0];
+			else if (!preg_match(':.+(\.jpg|\.jpeg|\.png|\.gif)$:i', $params[0]))
 				$tbr = $params[0];
 			else {
 				if ($params[2]) {
