@@ -358,5 +358,5 @@ $SYMBOL_SHORT = array( //use this shorts to insert an symbols (filename + ".gif"
 	"(="=>"symbol04" , 
 	"(c)"=>"symbol05" , 
 	"(r)"=>"symbol06" , 
-	" tm"=>"symbol08");
+	" tm "=>"symbol08");
 ?>
