@@ -234,38 +234,32 @@ echo "</blockquote></td></tr>"
 <?
 echo "<font size=\"-1\">&nbsp;"._("Besucher dieser Homepage:")."&nbsp;".object_return_views($user_id)."</font><br>";
 
-// Export dieses Users als Vcard
-echo "<font size=\"-1\">&nbsp;"._("User als vCard exportieren:")."&nbsp;<a href=\"contact_export.php?username=$username\"><img src=\"pictures/vcardexport.gif\" border=\"0\" ".tooltip(_("Als vCard exportieren"))."></a></font><br>";
-
-
-if ($username==$auth->auth["uname"]) {
-	if ($auth->auth["jscript"])
-		echo "<br>&nbsp; <a href='javascript:open_im();'>" . _("Stud.IP Messenger starten") . "</a>";
-} else {
-	echo "<br>&nbsp; " . _("Nachricht an User:") . " <a href=\"sms_send.php?sms_source_page=about.php&rec_uname=", $db->f("username"),"\"><img src=\"pictures/nachricht1.gif\" " . tooltip(_("Nachricht an User verschicken")) . " border=0 align=texttop></a>";
-	if (CheckBuddy($username)==FALSE)
-		echo "<br />&nbsp; <a href=\"$PHP_SELF?cmd=add_user&add_uname=$username&username=$username\">" . _("Zu Buddies hinzuf&uuml;gen") . "</a>";
-}
-
-
-/// Die Anzeige der Stud.Ip-Score
-
-
+// Die Anzeige der Stud.Ip-Score
 $score = new Score(get_userid($username));
 
 if ($score->IsMyScore()) {
-	echo "<br /><br />&nbsp; <a href=\"score.php\" " . tooltip(_("Zur Highscoreliste")) . ">" 
-		. _("Ihr Stud.IP-Score:") . " ".$score->ReturnMyScore()."<br>&nbsp; " 
-		. _("Ihr Rang:") . " ".$score->ReturnMyTitle()."</a>";
+	echo "&nbsp;<a href=\"score.php\" " . tooltip(_("Zur Highscoreliste")) . "><font size=\"-1\">" 
+		. _("Ihr Stud.IP-Score:") . " ".$score->ReturnMyScore()."<br>&nbsp;" 
+		. _("Ihr Rang:") . " ".$score->ReturnMyTitle()."</a></font><br />";
 } else {
 	$scoretmp = $score->GetScore(get_userid($username));
 	$title = $score->gettitel($scoretmp, $score->GetGender(get_userid($username)));
-	echo "<br /><br />&nbsp; <a href='score.php'>" 
-	. _("Stud.IP-Score:") . " ".$scoretmp."<br>&nbsp; " 
-	. _("Rang:") . " ".$title."</a>";
+	echo "&nbsp;<a href=\"score.php\"><font size=\"-1\">" 
+	. _("Stud.IP-Score:") . " ".$scoretmp."<br>&nbsp;" 
+	. _("Rang:") . " ".$title."</a></font><br />";
 }
 
+if ($username==$auth->auth["uname"]) {
+	if ($auth->auth["jscript"])
+		echo "<br>&nbsp;<font size=\"-1\"><a href='javascript:open_im();'>" . _("Stud.IP Messenger starten") . "</a></font>";
+} else {
+	echo "<br /><font size=\"-1\"> <a href=\"sms_send.php?sms_source_page=about.php&rec_uname=", $db->f("username"),"\">&nbsp;" . _("Nachricht an Nutzer") . "&nbsp;<img style=\"vertical-align:middle\" src=\"pictures/nachricht1.gif\" " . tooltip(_("Nachricht an Nutzer verschicken")) . " border=0 align=texttop></a></font>";
+	if (CheckBuddy($username)==FALSE)
+		echo "<br /><font size=\"-1\"><a href=\"$PHP_SELF?cmd=add_user&add_uname=$username&username=$username\">" . _("zu Buddies hinzuf&uuml;gen") . "</a></font>";
+}
 
+// Export dieses Users als Vcard
+echo "<br /><font size=\"-1\"><a href=\"contact_export.php?username=$username\">&nbsp;"._("vCard herunterladen")."&nbsp;<img style=\"vertical-align:middle\" src=\"pictures/vcardexport.gif\" border=\"0\" ".tooltip(_("als vCard exportieren"))."></a></font>";
 
 echo "<br>&nbsp; ";
 echo "</td>";
