@@ -351,17 +351,13 @@ function show_personal_dates ($range_id, $date_start, $date_end, $show_docs=FALS
 function show_all_dates ($date_start, $date_end, $show_docs=FALSE, $show_admin=TRUE, $open){
 	global $PHP_SELF, $RELATIVE_PATH_CALENDAR, $SessSemName, $user, $TERMIN_TYP;
 	global $PERS_TERMIN_KAT, $username, $CALENDAR_DRIVER, $LastLogin, $calendar_user_control_data;
-	
-//	$sess->register($calendar_user_control_data);
-	
+		
 	require_once($RELATIVE_PATH_CALENDAR . "/lib/DbCalendarEventList.class.php");
 	
 	setlocale ("LC_TIME","de_DE");
 	
-	if($show_admin){
-		$show_private = TRUE;
-		$admin_link = sprintf("<a href=\"./calendar.php?cmd=edit&source_page=%s\">", rawurlencode($PHP_SELF));
-	}
+	$show_private = TRUE;
+	$admin_link = sprintf("<a href=\"./calendar.php?cmd=edit&source_page=%s\">", rawurlencode($PHP_SELF));
 	
 	if	(is_array($calendar_user_control_data["bind_seminare"]))
 		$bind_seminare = array_keys($calendar_user_control_data["bind_seminare"], "TRUE");
@@ -372,23 +368,21 @@ function show_all_dates ($date_start, $date_end, $show_docs=FALSE, $show_admin=T
 	$list->bindSeminarEvents($bind_seminare);
 	
 	if($list->existEvent()){
-		
+	
+		echo "<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" class=\"blank\" width=\"70%\">";
+		echo "\n<tr><td>\n";
 		// Ausgabe der Kopfzeile
 		$colspan = 1;
 		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" align=\"center\">";
-		if($show_admin){
-			$colspan++;
-			echo "\n<tr><td class=\"topic\" width=\"99%\">\n";
-			echo "<img src=\"./pictures/meinetermine.gif\" border=\"0\" alt=\"";
-			echo "Termine. Klicken Sie rechts auf die Pfeile, um Termine in diesen Bereich zu bearbeiten. ";
-			echo "Klicken Sie auf den einfachen Pfeil, um die Terminbeschreibung zu lesen.";
-			echo "\" align=\"absmiddle\"><b>&nbsp;&nbsp;";
-			echo "Aktuelle Termine";
-			echo "</b></td>";
-			echo "\n<td align='right' class='topic'>&nbsp;$admin_link<img src='./pictures/pfeillink.gif' border='0' alt='Termine bearbeiten'></a>&nbsp;</td></tr>";
-		}
-		else
-			echo "\n<tr><td class='topic'>&nbsp;<img src='./pictures/meinetermine.gif' border='0' alt='Termine. Klicken Sie auf den einfachen Pfeil, um die Terminbeschreibung zu lesen.' align='absmiddle'><b>&nbsp;&nbsp;Termine für die Zeit vom ".strftime("%d. %B %Y", $list->getStart())." bis zum ".strftime("%d. %B %Y", $list->getEnd())."</b></td></tr>";
+		$colspan++;
+		echo "\n<tr><td class=\"topic\" width=\"99%\">\n";
+		echo "<img src=\"./pictures/meinetermine.gif\" border=\"0\" alt=\"";
+		echo "Termine. Klicken Sie rechts auf die Pfeile, um Termine in diesen Bereich zu bearbeiten. ";
+		echo "Klicken Sie auf den einfachen Pfeil, um die Terminbeschreibung zu lesen.";
+		echo "\" align=\"absmiddle\"><b>&nbsp;&nbsp;";
+		echo "Aktuelle Termine";
+		echo "</b></td>";
+		echo "\n<td align='right' class='topic'>&nbsp;$admin_link<img src='./pictures/pfeillink.gif' border='0' alt='Termine bearbeiten'></a>&nbsp;</td></tr>";
 		echo "\n";
 
 		// Ausgabe der Daten
@@ -502,10 +496,13 @@ function show_all_dates ($date_start, $date_end, $show_docs=FALSE, $show_admin=T
 				}
 		}
 		echo "</td></tr></table></td></tr></table>";
+		echo "\n</tr></td>\n</table>";
 		return TRUE;
 	}
 	
 	else if($show_admin){	// keine Termine da, aber die Moeglichkeit welche einzustellen
+		echo "<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" class=\"blank\" width=\"70%\">";
+		echo "\n<tr><td>\n";
 		echo "\n<table border=\"0\" cellpadding=\"1\" cellspacing=\"0\" width=\"100%\" align=\"center\">";
 		echo "\n<tr><td class='topic' width=\"99%\"><img src=\"./pictures/meinetermine.gif\" border=\"0\" align=\"texttop\"><b>&nbsp;&nbsp;Termine</b></td>";
 		echo "\n<td align = 'right' class='topic'>&nbsp;$admin_link<img src='./pictures/pfeillink.gif' border='0' alt='Termine einstellen'></a>&nbsp;</td></tr>";
@@ -513,6 +510,7 @@ function show_all_dates ($date_start, $date_end, $show_docs=FALSE, $show_admin=T
 		echo "Es sind keine aktuellen Termine vorhanden. Um neue Termine zu erstellen,";
 		echo " klicken Sie auf die Doppelpfeile.<br />&nbsp; </blockquote>";
 		echo "\n</td></tr></table>";
+		echo "\n</tr></td>\n</table>";
 		return TRUE;
 	}
 	
