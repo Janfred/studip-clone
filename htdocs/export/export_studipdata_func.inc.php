@@ -290,51 +290,62 @@ function export_teilis($inst_id, $ex_sem_id = "no")
 		}
 		$gruppe["no"] = _("keiner Funktion oder Gruppe zugeordnet");
 	}
-	elseif (!$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"])
-		$gruppe = array ("dozent" => _("DozentInnen"),
-			  "tutor" => _("TutorInnen"),
-			  "autor" => _("AutorInnen"),
-			  "user" => _("LeserInnen"));
 	else
-		$gruppe = array ("dozent" => _("LeiterInnen"),
-			  "tutor" => _("Mitglieder"),
-			  "autor" => _("AutorInnen"),
-			  "user" => _("LeserInnen"));
+	{	
+		$db->query ("SELECT name, studiengang_id FROM studiengang LEFT JOIN admission_seminar_studiengang USING(studiengang_id) WHERE seminar_id = '$ex_sem_id' ");
+		while ($db->next_record()) 
+		{
+			$studiengang[$db->f("studiengang_id")] = $db->f("name");
+		}
+		$studiengang["all"] = _("Alle Studieng&auml;nge");
+		if (!$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"])
+			$gruppe = array ("dozent" => _("DozentInnen"),
+				  "tutor" => _("TutorInnen"),
+				  "autor" => _("AutorInnen"),
+				  "user" => _("LeserInnen"));
+		else
+			$gruppe = array ("dozent" => _("LeiterInnen"),
+				  "tutor" => _("Mitglieder"),
+				  "autor" => _("AutorInnen"),
+				  "user" => _("LeserInnen"));
+	}
 
 	$data_object = xml_open_tag( $xml_groupnames_person["group"] );
 
 	while (list ($key1, $val1) = each ($gruppe)) 
 	{
-		if ($filter == "status")
+		if ($filter == "status") // Gruppierung nach Statusgruppen / Funktionen
 		{	
 			if ($key1 == "no")
 				$db->query ("SELECT * FROM user_info 
 					LEFT JOIN auth_user_md5 USING ( user_id ) 
 					LEFT JOIN seminar_user USING ( user_id ) 
-					WHERE seminar_id = '$ex_sem_id' ");
+					WHERE seminar_id = '$ex_sem_id' ORDER BY Nachname");
 			else	
 				$db->query ("SELECT DISTINCT * FROM statusgruppe_user  
 					LEFT JOIN user_info USING ( user_id ) 
 					LEFT JOIN auth_user_md5 USING ( user_id ) 
-					WHERE statusgruppe_id = '" . $key1 . "'");
+					WHERE statusgruppe_id = '" . $key1 . "'  ORDER BY Nachname");
 //					LEFT JOIN seminar_user USING ( user_id ) 
 		}
-		else
+		else // Gruppierung nach Status in der Veranstaltung / Einrichtung
 			$db->query ("SELECT * FROM seminar_user  
 				LEFT JOIN user_info USING(user_id) 
 				LEFT JOIN auth_user_md5 USING(user_id) 
-				WHERE seminar_id = '$ex_sem_id' AND seminar_user.status = '" . $key1 . "'");
+				WHERE seminar_id = '$ex_sem_id' AND seminar_user.status = '" . $key1 . "'  ORDER BY Nachname");
 		if ($db->num_rows())
 		{
 			$data_object .= xml_open_tag($xml_groupnames_person["subgroup1"], $val1);
 			while ($db->next_record()) 
-				if (($key1 != "no") OR ($person_out[$db->f("user_id")] != true)) // Nur Personen ausgeben, die entweder eine Gruppe angehoeren oder zu keiner Gruppe gehoeren und noch nicht ausgegeben wurden.
+				if (($key1 != "no") OR ($person_out[$db->f("user_id")] != true)) // Nur Personen ausgeben, die entweder einer Gruppe angehoeren oder zur Veranstaltung gehoeren und noch nicht ausgegeben wurden.
 				{
 					$object_counter++;
 					$data_object .= xml_open_tag($xml_groupnames_person["object"], $db->f("username"));
 					while ( list($key, $val) = each($xml_names_person))
 					{
 						if ($val == "") $val = $key;
+						if ($key == "admission_studiengang_id")
+							$val = $studiengang[$val];
 						if ($db->f($key) != "") 
 							$data_object .= xml_tag($val, $db->f($key));
 					}

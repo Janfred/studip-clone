@@ -43,14 +43,14 @@ $xml_names_lecture = array(
 	"Untertitel"		=>		"untertitel",
 	"status"			=>		"status",
 	"Beschreibung"	=>		"beschreibung",
-	"ort"			=>		"raum",
+	"ort"				=>		"raum",
 	"Sonstiges"		=>		"sonstiges",
 	"art"				=>		"art", 
 	"teilnehmer"		=>		"teilnehmer",
 	"vorrausetzungen"	=>		"voraussetzung",
 	"lernorga"		=>		"lernorga",
 	"leistungsnachweis"=>		"schein",
- 	"VeranstaltungsNummer"	=>	"veranstaltungsnummer",
+ 	"VeranstaltungsNummer"	=>		"veranstaltungsnummer",
  	"ects"			=>		"ects",
 	"bereich"			=>		"bereich",
 	"metadata_dates"	=>		array("vorbesprechung", "erstertermin", "termin")
@@ -77,5 +77,6 @@ $xml_names_person = array(
 	"name"			=>		"statusgruppe",
 	"privadr"			=>		"adresse",
 	"privatnr"			=>		"privatnummer"
+	"admission_studiengang_id"	=>		"studiengang"
 );
 ?>
