@@ -251,7 +251,9 @@ if ($cmd == "suppose_to_kill") {
 		$meldung.= "<a href=\"$PHP_SELF?cmd=kill&auswahl=$auswahl\">" . makeButton("ja2") . "</a>&nbsp; \n";
 		$meldung.= "<a href=\"$PHP_SELF\">" . makeButton("nein") . "</a>\n";
 	} else {
-		$cmd="kill";
+		$meldung = "info§" . sprintf(_("Wollen Sie das Abonnement der Veranstaltung <b>%s</b> wirklich aufheben?"), htmlReady($db->f("Name"))) . "<br />";
+		$meldung.= "<a href=\"$PHP_SELF?cmd=kill&auswahl=$auswahl\">" . makeButton("ja2") . "</a>&nbsp; \n";
+		$meldung.= "<a href=\"$PHP_SELF\">" . makeButton("nein") . "</a>\n";
 	}
 }
 
