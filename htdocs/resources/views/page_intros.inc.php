@@ -132,8 +132,8 @@ switch ($resources_data["view"]) {
 		$infobox = array(
 					array  ("kategorie" => _("Aktionen:"), 
 							"eintrag" => array (
-								array	("icon" => "pictures/suchen.gif",
-									"text"  => ($resources_data["view_mode"] == "no_nav") ? "<a href=\"$PHP_SELF?view=search\">"._("zur&uuml;ck zur Suche")."</a>" : "<a href=\"$PHP_SELF\">"._("zur&uuml;ck zur &Uuml;bersicht")."</a>"))));
+								array	("icon" => "pictures/forumrot.gif",
+									"text"  => (($resources_data["view_mode"] == "no_nav") || ($resources_data["search_array"])) ? "<a href=\"$PHP_SELF?view=search\">"._("zur&uuml;ck zur Suche")."</a>" : "<a href=\"$PHP_SELF?view=".(($SessSemName[1]) ? "openobject_main" : "resources")."\">"._("zur&uuml;ck zur &Uuml;bersicht")."</a>"))));
 		$infopic = "pictures/schedule.jpg";
 	break;
 	case "openobject_schedule":
