@@ -41,8 +41,12 @@ global $_fullname_sql;
 $range_id = $this->config->range_id;
 
 $all_groups = $this->config->getValue("Main", "groups");
-$visible_groups = get_statusgruppen_by_id($range_id,
-		$this->config->getValue("Main", "groupsvisible"));
+
+if (!$group_ids = $this->config->getValue("Main", "groupsvisible")) {
+	die($EXTERN_ERROR_MESSAGE);
+}
+	
+$visible_groups = get_statusgruppen_by_id($range_id, $group_ids));
 $aliases_groups = $this->config->getValue("Main", "groupsalias");
 
 $sort = $this->config->getValue("Main", "sort");
