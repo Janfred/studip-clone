@@ -375,6 +375,7 @@ function PrintInstitutMembers ($range_id)
 //			$statusgruppe_id = substr($key, 0, -2);
 			echo $key."<br>";
 		}
+		echo "hallo";
 
 
 	if ($cmd!="edit_statusgruppe") { // normale Anzeige
