@@ -192,7 +192,7 @@ function veranstaltung_beginn ($seminar_id='', $art='', $semester_start_time='',
 					$return_string.=" - ".date ("G:i", $end_termin);
 				}
 			else {
-				$return_string="nicht angegeben";
+				$return_string=_("nicht angegeben");
 				$return_int=-1; 
 			}
 		//anderer Startzeitpunkt gewaehlt
