@@ -390,11 +390,11 @@ class EvalShow {
          return $button;
    }
    
-   function createOverviewButton ($rangeID) {
+   function createOverviewButton ($rangeID, $evalID) {
          $button = new HTML ( "a" );
-         $button->addAttr ("href", EVAL_FILE_ADMIN."?rangeID=".$rangeID);
+         $button->addAttr ("href", EVAL_FILE_ADMIN."?rangeID=".$rangeID."&openID=".$evalID."#open");
          $img = new HTMpty( "img" );
-         $img->stri( makeButton( "erweiterteansicht", "src" ).tooltip(_("Evaluationsverwaltung.")) );
+         $img->stri( makeButton( "bearbeiten", "src" ).tooltip(_("Evaluationsverwaltung.")) );
          $img->addAttr( "border", "0" );
          $button->addContent ( $img );
          return $button;
