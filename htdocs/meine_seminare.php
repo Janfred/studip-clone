@@ -528,7 +528,6 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 	 
 	 ?>
 	 <tr>
-	 <tr>
 	 	<td class="blank" colspan="2">&nbsp; 
 	 	</td>
 	 </tr>
@@ -539,6 +538,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 			parse_msg($meldung);
 		}?>
 			</table>
+	
 <?			
 	}
 
@@ -607,9 +607,9 @@ if ( !$perm->have_perm("root")) {
 
 	if (!$num_my_inst)
 		if ($perm->have_perm("dozent"))
-			$meldung="info§" . sprintf(_("Sie wurden noch keinen Einrichtungen zugeordnet. Bitte wenden Sie sich an einen der zust&auml;ndigen %sAdministratoren%s."), "<a href=\"impressum.php?view=ansprechpartner\">", "</a>") . "§".$meldung;
+			$meldung = "info§" . sprintf(_("Sie wurden noch keinen Einrichtungen zugeordnet. Bitte wenden Sie sich an einen der zust&auml;ndigen %sAdministratoren%s."), "<a href=\"impressum.php?view=ansprechpartner\">", "</a>") . "§";
 		else
-			$meldung="info§" . sprintf(_("Sie haben sich noch keinen Einrichtungen zugeordnet. Um sich Einrichtungen zuzuordnen, nutzen Sie bitte die entsprechende %sOption%s unter \"universit&auml;re Daten\" auf Ihrer pers&ouml;nlichen Einstellungsseite."), "<a href=\"edit_about.php?view=Karriere#einrichtungen\">", "</a>") . "§".$meldung;
+			$meldung = "info§" . sprintf(_("Sie haben sich noch keinen Einrichtungen zugeordnet. Um sich Einrichtungen zuzuordnen, nutzen Sie bitte die entsprechende %sOption%s unter \"universit&auml;re Daten\" auf Ihrer pers&ouml;nlichen Einstellungsseite."), "<a href=\"edit_about.php?view=Karriere#einrichtungen\">", "</a>") . "§";
 
 	if ($num_my_inst) {
 	 ?>
@@ -683,22 +683,20 @@ if ( !$perm->have_perm("root")) {
 				echo "<td class=\"".$cssSw->getClass()."\" align=center><img width=\"19\" height=\"17\" src=\"pictures/blank.gif\" />&nbsp;</td>";
 				else
 				printf("<td class=\"".$cssSw->getClass()."\" align=center align=center><a href=\"$PHP_SELF?auswahl=%s&cmd=inst_kill\"><img src=\"pictures/logout_seminare.gif\" ".tooltip(_("aus der Einrichtung austragen"))." border=\"0\">&nbsp;</a></td>", $instid);
-				echo "</tr>\n";
+				echo "</tr></table>\n";
 			}
 		}
 	} else {
-	 ?>
-	 <tr>
-	 	<td class="blank" colspan="2">&nbsp; 
-	 	</td>
-	 </tr>
-	 <tr>
-		 <td valign="top" class="blank">
-			<table border="0" cellpadding="0" cellspacing="0" width="100%" align="center" class="blank">
-				<?
-				
+	?>
+		<table border="0" cellpadding="0" cellspacing="0" width="100%" align="center" class="blank">
+		<?
+		if ($meldung)	{
+			parse_msg($meldung);
+		}
+		?>
+		</table>
+		<?
 	}
-	echo "	</table></td>";
 }
 
 ////////////////////
