@@ -153,9 +153,9 @@ define ("VOTE_IMAGETYPE_BAR", 1);
 define ("VOTE_IMAGETYPE_LINE", 2);
 
 /**
- * Imagetype LINE-Graph
+ * max length of the title in a headline
  * @access public
- * @const  VOTE_IMAGETYPE_LINE
+ * @const  VOTE_SHOW_MAXTITLELENGTH
  */
 
 define ("VOTE_SHOW_MAXTITLELENGTH", 65);
