@@ -356,7 +356,6 @@ if ($change_object_schedules) {
 			$new_assign_object='';
 			$msg ->addMsg(5);
 		} elseif (!$return_schedule) {
-			echo gaga;
 			if ($change_object_schedules == "NEW")
 				$change_schedule_id=FALSE;
 			else
