@@ -61,6 +61,19 @@ $chatServer->caching = true;
 	<title>ChatInput</title>
 	<?php include $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_style.inc.php";?>
 <script type="text/javascript">
+	function strltrim() {
+		return this.replace(/^\s+/,'');
+	}
+	function strrtrim() {
+		return this.replace(/\s+$/,'');
+	}
+	function strtrim() {
+		return this.replace(/^\s+/,'').replace(/\s+$/,'');
+	}
+	
+	String.prototype.ltrim = strltrim;
+	String.prototype.rtrim = strrtrim;
+	String.prototype.trim = strtrim;
 /**
 * JavaScript 
 */
@@ -88,7 +101,23 @@ $chatServer->caching = true;
 		document.inputform.chatInput.value="/help";
 		document.inputform.submit();
 	}
- </script>
+/**
+* JavaScript 
+*/
+	function doCheck(){
+		var the_string = document.inputform.chatInput.value.trim();
+		if (the_string.substring(0,the_string.indexOf(" ")) == "/password"){
+			document.inputform.chatInput.value = "/password " + 
+				parent.MD5(parent.chatuniqid + ":" + the_string.substring(the_string.indexOf(" "),the_string.length).trim());
+			document.inputform.submit();
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	
+</script>
 
 </head>
 <body>
@@ -118,7 +147,7 @@ if ($chatInput) {
 }
 
 ?>
-<form method="post" action="<?=$PHP_SELF?>" name="inputform">
+<form method="post" action="<?=$PHP_SELF?>" name="inputform" onSubmit="return doCheck();">
 <input type="hidden" name="chatid" value="<?=$chatid?>">
 <div align="center">
 	<table width="98%" border="0" bgcolor="white" cellspacing="0" cellpadding="0" align="center">

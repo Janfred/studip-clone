@@ -185,10 +185,10 @@ function chatCommand_sms($msgStr){
 
 function chatCommand_password($msgStr){
 	global $user,$chatServer,$chatid;
-	$password = trim(substr($msgStr." ",0,strpos($msgStr," ")-1));
+	$password = $msgStr;
 	if ($chatServer->getPerm($user->id,$chatid)){
 		if ($password){
-			$chatServer->addMsg("system",$chatid,sprintf(_("Dieser Chat wurde soeben von <b>%s</b> mit einem Passwort gesichert."),htmlReady(fullNick($user->id))));
+			$chatServer->addMsg("system",$chatid,sprintf(_("Dieser Chat wurde soeben von <b>%s</b> mit einem Passwort gesichert.$password"),htmlReady(fullNick($user->id))));
 			$chatServer->chatDetail[$chatid]['password'] = $password;
 			$chatServer->store();
 		} elseif ($chatServer->chatDetail[$chatid]['password']){

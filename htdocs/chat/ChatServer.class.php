@@ -64,7 +64,7 @@ class ChatServer {
 	}
 	
 	function addChat($rangeid, $chatname = "StudIP Global Chat",$password = false){
-		if ($this->isActiveChat($rangeid)){
+		if ($this->isActiveChat($rangeid) && $this->getActiveUsers($range_id)){
 			return false;
 		}
 		$this->chatDetail[$rangeid]["name"] = $chatname;
