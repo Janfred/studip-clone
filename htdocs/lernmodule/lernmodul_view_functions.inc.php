@@ -1,5 +1,59 @@
 <?
 
+function show_these_modules($mod_array)
+{
+	global $PHP_SELF, $print_open_search, $SessSemName, $search_key;
+ 	if ($mod_array == false)
+ 	{
+		echo "<br><b>" . _("Es wurden keine Lernmodule zu diesem Suchbegriff gefunden.") . "</b><br /><br /><br />";
+ 		return false;
+ 	}
+ 	else
+ 	{
+		if (sizeof($mod_array)<2)
+			echo "<br><b>" . _("Es wurde ein Lernmodul gefunden:") . "</b><br /><br /><br />";
+		else
+			echo "<br><b>" . sprintf(_("%s Lernmodule wurden gefunden:"), sizeof($mod_array)) . "</b><br /><br /><br />";
+		
+		for ($i=0; $i<sizeof($mod_array); $i++) 
+		{	
+			$out_str = get_module_linkdata($mod_array[$i]);
+			
+			if ($print_open_search[$out_str["key"]] == true)
+				$do_str = "do_close";
+			else
+				$do_str = "do_open";
+			$printlink = "<a href=\"".$PHP_SELF . "?$do_str=" . $out_str["key"] . "&view=show&search_key=$search_key\" class=\"tree\">" . $out_str["link"] . "</a>";
+			$printimage = $out_str["image"];
+			$printcontent = $out_str["content"] . $out_str["button"];
+			$printdesc = $out_str["desc"];
+				
+				?>
+				<table cellspacing="0" cellpadding="0" border="0" width="100%">
+					<tr>
+						<?
+						if ($print_open_search[$out_str["key"]] == true)
+							printhead ("99%", FALSE, $PHP_SELF . "?do_close=" . $out_str["key"] . "&view=show&search_key=$search_key", "open", true, $printimage, $printlink, $printdesc);
+						else
+							printhead ("99%", FALSE, $PHP_SELF . "?do_open=" . $out_str["key"] . "&view=show&search_key=$search_key", "close", true, $printimage, $printlink, $printdesc);
+						?>
+					</tr>
+				</table>
+				<? if ($print_open_search[$out_str["key"]] == true) 
+				{ ?>
+				<table cellspacing="0" cellpadding="0" border="0" width="100%">
+					<tr>
+						<?
+						printcontent("99%", FALSE, $printcontent, "");
+						?>
+					</tr>
+				</table>
+				<? }
+			}
+	}
+	return true;
+}
+
 function show_user_modules($benutzername)
 {
 	global $print_open_admin;
