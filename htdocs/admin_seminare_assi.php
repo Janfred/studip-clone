@@ -502,10 +502,7 @@ if (($send_tut_x) && (!$reset_search_x)) {
 
 if (($search_doz_x) || ($search_tut_x) || ($reset_search_x) || $sem_bereich_do_search_x) {
 	$level=2;
-}
-
-//wenn alles stimmt, Sprung auf Schritt 3
-if (($form == 2) && ($jump_next_x))
+} elseif (($form == 2) && ($jump_next_x)) //wenn alles stimmt, Checks und Sprung auf Schritt 3
 	{
 	if (is_array($sem_create_data["sem_tut"]))
 		foreach ($sem_create_data["sem_tut"] as $key=>$val)
@@ -945,8 +942,7 @@ if (($form == 5) && ($jump_next_x))
       		$run = FALSE;
       		}
 
-      	if ($run)
-		{
+      	if ($run) {
 		//Seminar_id erzeugen und Seminar eintrag
 		$sem_create_data["sem_id"]=md5(uniqid($hash_secret));
     		
@@ -1062,163 +1058,164 @@ if (($form == 5) && ($jump_next_x))
 					}
     				}
 			}
+			
+			if (is_array($sem_create_data["sem_doz"]))  // alle ausgewählten Dozenten durchlaufen
+				{
+				$self_included = FALSE;
+				$count_doz=0;
+				foreach ($sem_create_data["sem_doz"] as $key=>$val)
+					{
+					$group=select_group($temp_array, $sem_create_data["sem_start_time"]);
+					
+					if ($key == $user_id)
+						$self_included=TRUE;
+					$query = "insert into seminar_user SET Seminar_id = '".
+						$sem_create_data["sem_id"]."', user_id = '".
+						$key."', status = 'dozent', gruppe = '$group', mkdate = '".time()."'";
+					$db3->query($query);// Dozenten eintragen
+					if ($db3->affected_rows() >=1)
+						$count_doz++;
+					}
+				}
+	
+			if (!$perm->have_perm("admin") && !$self_included) // wenn nicht admin, aktuellen Dozenten eintragen
+				{
+				$group=select_group($user_id, $sem_create_data["sem_start_time"]);
+	
+				$query = "insert into seminar_user SET Seminar_id = '".
+					$sem_create_data["sem_id"]."', user_id = '".
+					$user_id."', status = 'dozent', gruppe = '$group', mkdate = '".time()."'";
+				$db3->query($query);
+				if ($db3->affected_rows() >=1)
+					$count_doz++;
+				}
+	
+			if (is_array($sem_create_data["sem_tut"]))  // alle ausgewählten Tutoren durchlaufen
+				{
+				$count_tut=0;
+				foreach ($sem_create_data["sem_tut"] as $key=>$val)
+					{
+					$group=select_group($temp_array, $sem_create_data["sem_start_time"]);
+					
+					$query = "SELECT user_id FROM seminar_user WHERE Seminar_id = '".
+						$sem_create_data["sem_id"]."' AND user_id ='$key'";
+					$db4->query($query);
+					if ($db4->next_record())	// User schon da, kann beim Anlegen nur als Dozent sein, also ignorieren
+						;
+					else // User noch nicht da
+						{
+						$query = "insert into seminar_user SET Seminar_id = '".
+							$sem_create_data["sem_id"]."', user_id = '".
+							$key."', status = 'tutor', gruppe = '$group', mkdate = '".time()."'";
+						$db3->query($query);			     // Tutor eintragen
+							if ($db3->affected_rows() >= 1)
+								$count_tut++;
+						}
+					}
+				}
+	
+			//Eintrag der Studienbereiche
+			if (is_array($sem_create_data["sem_bereich"])) {
+				$st_search->seminar_id = $sem_create_data["sem_id"];
+				$st_search->selected = array();
+				$st_search->insertSelectedRanges($sem_create_data["sem_bereich"]);
+				$count_bereich = $st_search->num_inserted;
+				}
+				
+			//Eintrag der zugelassen Studiengänge
+			if ($sem_create_data["sem_admission"]) {
+				if (is_array($sem_create_data["sem_studg"]))
+					foreach($sem_create_data["sem_studg"] as $key=>$val)
+						if ($val["ratio"]) {
+							$query = "INSERT INTO admission_seminar_studiengang VALUES('".$sem_create_data["sem_id"]."', '$key', '".$val["ratio"]."' )";
+							$db3->query($query);// Studiengang eintragen
+						}
+				if ($sem_create_data["sem_all_ratio"]) {
+					$query = "INSERT INTO admission_seminar_studiengang VALUES('".$sem_create_data["sem_id"]."', 'all', '".$sem_create_data["sem_all_ratio"]."' )";
+					$db3->query($query);// Studiengang eintragen
+				}
+			}
+
+			//Eintrag der beteiligten Institute
+			if (is_array($sem_create_data["sem_bet_inst"])>0)
+				{
+				$count_bet_inst=0;
+				foreach ($sem_create_data["sem_bet_inst"] as $tmp_array) //Alle beteiligten Institute durchlaufen
+					{
+					$query = "INSERT INTO seminar_inst VALUES('".$sem_create_data["sem_id"]."', '$tmp_array')";
+					$db3->query($query);// Institut eintragen
+					if ($db3->affected_rows() >= 1)
+						$count_bet_inst++;
+					}
+				}
+	
+			//Heimat-Institut ebenfalls eintragen, wenn noch nicht da
+			$query = "INSERT IGNORE INTO seminar_inst values('".$sem_create_data["sem_id"]."', '".$sem_create_data["sem_inst_id"]."')";
+			$db3->query($query);
+	
+			//Standard Thema im Forum anlegen, damit Studis auch ohne Zutun des Dozenten diskutieren koennen
+			if ($sem_create_data["modules_list"]["forum"])
+				CreateTopic(_("Allgemeine Diskussionen"), get_fullname($user_id), _("Hier ist Raum für allgemeine Diskussionen"), 0, 0, $sem_create_data["sem_id"]);
+			
+			//Standard Ordner im Foldersystem anlegen, damit Studis auch ohne Zutun des Dozenten Uploaden k&ouml;nnen
+			if ($sem_create_data["modules_list"]["documents"])
+				$db3->query("INSERT INTO folder SET folder_id='".md5(uniqid("sommervogel"))."', range_id='".$sem_create_data["sem_id"]."', user_id='".$user_id."', name='"._("Allgemeiner Dateiordner")."', description='"._("Ablage für allgemeine Ordner und Dokumente der Veranstaltung")."', mkdate='".time()."', chdate='".time()."'");
+			
+			//Vorbesprechung, falls vorhanden, in Termintabelle eintragen
+			if ($sem_create_data["sem_vor_termin"] <>-1) {
+				$termin_id=md5(uniqid($hash_secret));
+				$mkdate=time();
+				
+				//if we have a resource_id, we flush the room name
+				if ($sem_create_data["sem_vor_resource_id"])
+					$sem_create_data["sem_vor_raum"]='';
+		
+				$db->query("INSERT INTO termine SET termin_id = '$termin_id', range_id='".$sem_create_data["sem_id"]."', autor_id='$user_id', content ='Vorbesprechung', date='".$sem_create_data["sem_vor_termin"]."', mkdate='$mkdate', chdate='$mkdate', date_typ='2', topic_id=0, end_time='".$sem_create_data["sem_vor_end_termin"]."', raum='".$sem_create_data["sem_vor_raum"]."'");
+		
+				//update/insert the assigned roomes
+				if ($RESOURCES_ENABLE && $db->affected_rows()) {
+					$updateAssign = new VeranstaltungResourcesAssign($sem_create_data["sem_id"]);
+					$updateResult = array_merge($updateResult, $updateAssign->insertDateAssign($termin_id, $sem_create_data["sem_vor_resource_id"]));
+				}
+			}
+			
+			//Wenn der Veranstaltungs-Termintyp Blockseminar ist, dann tragen wir diese Termine auch schon mal ein
+			if ($sem_create_data["term_art"] ==1) {
+				for ($i=0; $i<$sem_create_data["term_count"]; $i++)
+					if (($sem_create_data["term_tag"][$i]) && ($sem_create_data["term_monat"][$i]) && ($sem_create_data["term_jahr"][$i]) && ($sem_create_data["term_start_stunde"][$i]) && ($sem_create_data["term_end_stunde"][$i])) {
+						$termin_id=md5(uniqid($hash_secret));
+						$mkdate=time();
+						$date=mktime($sem_create_data["term_start_stunde"][$i], $sem_create_data["term_start_minute"][$i], 0, $sem_create_data["term_monat"][$i], $sem_create_data["term_tag"][$i], $sem_create_data["term_jahr"][$i]);
+						$end_time=mktime($sem_create_data["term_end_stunde"][$i], $sem_create_data["term_end_minute"][$i], 0, $sem_create_data["term_monat"][$i], $sem_create_data["term_tag"][$i], $sem_create_data["term_jahr"][$i]);
+						
+						//if we have a resource_id, we flush the room name
+						if ($sem_create_data["term_resource_id"][$i])
+							$sem_create_data["term_room"][$i]='';
+	
+						$db->query("INSERT INTO termine SET termin_id = '$termin_id', range_id='".$sem_create_data["sem_id"]."', autor_id='$user_id', content ='".($i+1).". Seminartermin (ohne Titel)', date='$date', mkdate='$mkdate', chdate='$mkdate', date_typ='1', topic_id=0, end_time='$end_time', raum='".$sem_create_data["term_room"][$i]."' ");
+			
+						//update/insert the assigned roomes
+						if ($RESOURCES_ENABLE && $db->affected_rows()) {
+							$updateAssign = new VeranstaltungResourcesAssign($sem_create_data["sem_id"]);
+							$updateResult = array_merge($updateResult, $updateAssign->insertDateAssign($termin_id, $sem_create_data["term_resource_id"][$i]));
+						}
+					}
+			}
+
+			//Store the additional datafields
+			if (is_array($sem_create_data["sem_datafields"])) {
+				foreach ($sem_create_data["sem_datafields"] as $key=>$val) {
+					$DataFields->storeContent($val, $key, $sem_create_data["sem_id"]);
+				}
+			}
+			//end of the seminar-creation process
 		} else {
 			$errormsg .= "error§"._("<b>Fehler:</b> Die Veranstaltung wurde schon eingetragen!")."§";
     			$successful_entry=2;			
 		}
-
-		if (is_array($sem_create_data["sem_doz"]))  // alle ausgewählten Dozenten durchlaufen
-			{
-			$self_included = FALSE;
-			$count_doz=0;
-			foreach ($sem_create_data["sem_doz"] as $key=>$val)
-				{
-				$group=select_group($temp_array, $sem_create_data["sem_start_time"]);
-				
-				if ($key == $user_id)
-					$self_included=TRUE;
-				$query = "insert into seminar_user SET Seminar_id = '".
-					$sem_create_data["sem_id"]."', user_id = '".
-					$key."', status = 'dozent', gruppe = '$group', mkdate = '".time()."'";
-				$db3->query($query);// Dozenten eintragen
-				if ($db3->affected_rows() >=1)
-					$count_doz++;
-				}
-			}
-
-		if (!$perm->have_perm("admin") && !$self_included) // wenn nicht admin, aktuellen Dozenten eintragen
-			{
-			$group=select_group($user_id, $sem_create_data["sem_start_time"]);
-
-			$query = "insert into seminar_user SET Seminar_id = '".
-				$sem_create_data["sem_id"]."', user_id = '".
-				$user_id."', status = 'dozent', gruppe = '$group', mkdate = '".time()."'";
-			$db3->query($query);
-			if ($db3->affected_rows() >=1)
-				$count_doz++;
-			}
-
-		if (is_array($sem_create_data["sem_tut"]))  // alle ausgewählten Tutoren durchlaufen
-			{
-			$count_tut=0;
-			foreach ($sem_create_data["sem_tut"] as $key=>$val)
-				{
-				$group=select_group($temp_array, $sem_create_data["sem_start_time"]);
-				
-				$query = "SELECT user_id FROM seminar_user WHERE Seminar_id = '".
-					$sem_create_data["sem_id"]."' AND user_id ='$key'";
-				$db4->query($query);
-				if ($db4->next_record())	// User schon da, kann beim Anlegen nur als Dozent sein, also ignorieren
-					;
-				else // User noch nicht da
-					{
-					$query = "insert into seminar_user SET Seminar_id = '".
-						$sem_create_data["sem_id"]."', user_id = '".
-						$key."', status = 'tutor', gruppe = '$group', mkdate = '".time()."'";
-					$db3->query($query);			     // Tutor eintragen
-						if ($db3->affected_rows() >= 1)
-							$count_tut++;
-					}
-				}
-			}
-
-		//Eintrag der Studienbereiche
-		if (is_array($sem_create_data["sem_bereich"])) {
-			$st_search->seminar_id = $sem_create_data["sem_id"];
-			$st_search->selected = array();
-			$st_search->insertSelectedRanges($sem_create_data["sem_bereich"]);
-			$count_bereich = $st_search->num_inserted;
-			}
-			
-		//Eintrag der zugelassen Studiengänge
-		if ($sem_create_data["sem_admission"]) {
-			if (is_array($sem_create_data["sem_studg"]))
-				foreach($sem_create_data["sem_studg"] as $key=>$val)
-					if ($val["ratio"]) {
-						$query = "INSERT INTO admission_seminar_studiengang VALUES('".$sem_create_data["sem_id"]."', '$key', '".$val["ratio"]."' )";
-						$db3->query($query);// Studiengang eintragen
-					}
-			if ($sem_create_data["sem_all_ratio"]) {
-				$query = "INSERT INTO admission_seminar_studiengang VALUES('".$sem_create_data["sem_id"]."', 'all', '".$sem_create_data["sem_all_ratio"]."' )";
-				$db3->query($query);// Studiengang eintragen
-			}
-		}
-
-		//Eintrag der beteiligten Institute
-		if (is_array($sem_create_data["sem_bet_inst"])>0)
-			{
-			$count_bet_inst=0;
-			foreach ($sem_create_data["sem_bet_inst"] as $tmp_array) //Alle beteiligten Institute durchlaufen
-				{
-				$query = "INSERT INTO seminar_inst VALUES('".$sem_create_data["sem_id"]."', '$tmp_array')";
-				$db3->query($query);// Institut eintragen
-				if ($db3->affected_rows() >= 1)
-					$count_bet_inst++;
-				}
-			}
-
-		//Heimat-Institut ebenfalls eintragen, wenn noch nicht da
-		$query = "INSERT IGNORE INTO seminar_inst values('".$sem_create_data["sem_id"]."', '".$sem_create_data["sem_inst_id"]."')";
-		$db3->query($query);
-
-		//Standard Thema im Forum anlegen, damit Studis auch ohne Zutun des Dozenten diskutieren koennen
-		if ($sem_create_data["modules_list"]["forum"])
-			CreateTopic(_("Allgemeine Diskussionen"), get_fullname($user_id), _("Hier ist Raum für allgemeine Diskussionen"), 0, 0, $sem_create_data["sem_id"]);
-		
-		//Standard Ordner im Foldersystem anlegen, damit Studis auch ohne Zutun des Dozenten Uploaden k&ouml;nnen
-		if ($sem_create_data["modules_list"]["documents"])
-			$db3->query("INSERT INTO folder SET folder_id='".md5(uniqid("sommervogel"))."', range_id='".$sem_create_data["sem_id"]."', user_id='".$user_id."', name='"._("Allgemeiner Dateiordner")."', description='"._("Ablage für allgemeine Ordner und Dokumente der Veranstaltung")."', mkdate='".time()."', chdate='".time()."'");
-		
-		//Vorbesprechung, falls vorhanden, in Termintabelle eintragen
-		if ($sem_create_data["sem_vor_termin"] <>-1) {
-			$termin_id=md5(uniqid($hash_secret));
-			$mkdate=time();
-			
-			//if we have a resource_id, we flush the room name
-			if ($sem_create_data["sem_vor_resource_id"])
-				$sem_create_data["sem_vor_raum"]='';
-	
-			$db->query("INSERT INTO termine SET termin_id = '$termin_id', range_id='".$sem_create_data["sem_id"]."', autor_id='$user_id', content ='Vorbesprechung', date='".$sem_create_data["sem_vor_termin"]."', mkdate='$mkdate', chdate='$mkdate', date_typ='2', topic_id=0, end_time='".$sem_create_data["sem_vor_end_termin"]."', raum='".$sem_create_data["sem_vor_raum"]."'");
-	
-			//update/insert the assigned roomes
-			if ($RESOURCES_ENABLE && $db->affected_rows()) {
-				$updateAssign = new VeranstaltungResourcesAssign($sem_create_data["sem_id"]);
-				$updateResult = array_merge($updateResult, $updateAssign->insertDateAssign($termin_id, $sem_create_data["sem_vor_resource_id"]));
-			}
-		}
-		
-		//Wenn der Veranstaltungs-Termintyp Blockseminar ist, dann tragen wir diese Termine auch schon mal ein
-		if ($sem_create_data["term_art"] ==1) {
-			for ($i=0; $i<$sem_create_data["term_count"]; $i++)
-				if (($sem_create_data["term_tag"][$i]) && ($sem_create_data["term_monat"][$i]) && ($sem_create_data["term_jahr"][$i]) && ($sem_create_data["term_start_stunde"][$i]) && ($sem_create_data["term_end_stunde"][$i])) {
-					$termin_id=md5(uniqid($hash_secret));
-					$mkdate=time();
-					$date=mktime($sem_create_data["term_start_stunde"][$i], $sem_create_data["term_start_minute"][$i], 0, $sem_create_data["term_monat"][$i], $sem_create_data["term_tag"][$i], $sem_create_data["term_jahr"][$i]);
-					$end_time=mktime($sem_create_data["term_end_stunde"][$i], $sem_create_data["term_end_minute"][$i], 0, $sem_create_data["term_monat"][$i], $sem_create_data["term_tag"][$i], $sem_create_data["term_jahr"][$i]);
-					
-					//if we have a resource_id, we flush the room name
-					if ($sem_create_data["term_resource_id"][$i])
-						$sem_create_data["term_room"][$i]='';
-
-					$db->query("INSERT INTO termine SET termin_id = '$termin_id', range_id='".$sem_create_data["sem_id"]."', autor_id='$user_id', content ='".($i+1).". Seminartermin (ohne Titel)', date='$date', mkdate='$mkdate', chdate='$mkdate', date_typ='1', topic_id=0, end_time='$end_time', raum='".$sem_create_data["term_room"][$i]."' ");
-		
-					//update/insert the assigned roomes
-					if ($RESOURCES_ENABLE && $db->affected_rows()) {
-						$updateAssign = new VeranstaltungResourcesAssign($sem_create_data["sem_id"]);
-						$updateResult = array_merge($updateResult, $updateAssign->insertDateAssign($termin_id, $sem_create_data["term_resource_id"][$i]));
-					}
-				}
-		}
-		
-		//Store the additional datafields
-		if (is_array($sem_create_data["sem_datafields"]))
-			foreach ($sem_create_data["sem_datafields"] as $key=>$val) {
-				$DataFields->storeContent($val, $key, $sem_create_data["sem_id"]);
-			}
-		}
-
-	$level=6;
 	}
+	$level=6;
+}
 
 
 //Nur der Form halber... es geht weiter zur SCM-Seite
@@ -1234,8 +1231,7 @@ if (($form == 6) && ($jump_next_x)) {
 }
 
 //Eintragen der Simple-Content Daten
-if (($form == 7) && ($jump_next_x))
-	{
+if (($form == 7) && ($jump_next_x)) {
 	if ($sem_create_data["sem_scm_content"]) { 
 		if ($sem_create_data["sem_scm_id"]) {
 			$db->query("UPDATE scm SET content='".$sem_create_data["sem_scm_content"]."', tab_name='".$sem_create_data["sem_scm_name"]."', chdate='".time()."' WHERE scm_id='".$sem_create_data["sem_scm_id"]."'");
@@ -1256,11 +1252,17 @@ if (($form == 7) && ($jump_next_x))
 			$errormsg .= "error§"._("Fehler! Der Eintrag konnte nicht erfolgreich vorgenommen werden!")."";
 			$level=7;
 			}
-		}
 	} else {
-		//if no content is created yet, we disable the module
+		//if no content is created yet, we disable the module and jump to the schedule (if activated)
 		$Modules->writeStatus("scm", $sem_create_data["sem_id"], FALSE);
+		if ($sem_create_data["modules_list"]["schedule"])
+			header ("Location: admin_dates.php?assi=yes&ebene=sem&range_id=".$sem_create_data["sem_id"]);
+		else
+			header ("Location: admin_seminare1.php");
+		page_close();
+		die;
 	}
+}
 	
 //Gibt den aktuellen View an, brauchen wir in der Hilfe
 $sem_create_data["level"]=$level;
@@ -1887,10 +1889,10 @@ if ($level==2)
 						<td class="<? echo $cssSw->getClass() ?>" width="90%" colspan=3>
 							<?
 							echo "\n<div align=\"left\" >&nbsp;";
-							echo $st_search->getSearchField(array('size' => 30 ,'style' => 'vertical-align:middle;'));
+							echo "&nbsp;<span style=\"font-size:10pt;\">" . _("Geben Sie zur Suche den Namen des Studienbereiches ein.")."<br>";
+							echo "&nbsp;".$st_search->getSearchField(array('size' => 30 ,'style' => 'vertical-align:middle;'));
 							echo "&nbsp;";
 							echo $st_search->getSearchButton(array('style' => 'vertical-align:middle;'));
-							echo "<br>&nbsp;&nbsp;<span style=\"font-size:10pt;\">" . _("Geben Sie zur Suche den Namen des Studienbereiches ein.");
 							if ($st_search->num_search_result !== false){
 								echo "<br><a name=\"anker\">&nbsp;&nbsp;</a><b>" . sprintf(_("Ihre Suche ergab %s Treffer."),$st_search->num_search_result) . (($st_search->num_search_result) ? _(" (Suchergebnisse werden blau angezeigt)") : "") . "</b>";
 							}
@@ -2712,7 +2714,7 @@ if ($level==6)
 					<?=_("Bitte korrigieren Sie die Daten."); ?>
 					<form method="POST" action="<? echo $PHP_SELF ?>">
 						<input type="HIDDEN" name="form" value=6>
-						<input type="IMAGE" <?=makeButton("zur&uuml;ck", "src"); ?> border=0 value="<?=_("<< zur&uuml;ck");?>" name="jump_back">
+						<input type="IMAGE" <?=makeButton("zurueck", "src"); ?> border=0 value="<?=_("<< zur&uuml;ck");?>" name="jump_back">
 					</form>
 					</blockqoute>
 				</td>
@@ -2959,9 +2961,7 @@ if ($level==7)
 						</td>
 						<td class="<? echo $cssSw->getClass() ?>" width="50%"  colspan=2>
 							&nbsp; <textarea name="sem_scm_content" cols=58 rows=10><? echo $sem_create_data["sem_scm_content"] ?></textarea>
-							<img  src="./pictures/info.gif" 
-								<? echo tooltip(_("In dieses Feld können Sie beliebigen Text zur Anzeige auf der Informationsseite eingeben."), TRUE, TRUE) ?>
-							>
+							
 						</td>
 						<td class="<? echo $cssSw->getClass() ?>" width="40%" valign="top">
 							<?
@@ -2969,6 +2969,10 @@ if ($level==7)
 							print "<br /><br /><a target=\"new\" href=\"help/index.php?help_page=ix_forum6.htm\">"._("Hilfe zur Formatierung von Texten")."</a>";
 							print "<br /><br />"._("Um eine geordnete Literaturliste zu erstellen, benutzen Sie bitte die Literaturverwaltung.")."</a></font>";
 							?>
+							<br />
+							<img  src="./pictures/info.gif" 
+								<? echo tooltip(_("In dieses Feld können Sie beliebigen Text zur Anzeige auf der Informationsseite eingeben."), TRUE, TRUE) ?>
+							>							
 						</td>
 					</tr>
 					<tr<? $cssSw->switchClass() ?>>
