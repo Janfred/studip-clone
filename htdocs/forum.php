@@ -121,6 +121,12 @@ if ($suchbegriff!="") {
 if ($reset=="1")
 	$forum["search"] = "";	
 
+if ($indikator)
+	$forum["indikator"] = $indikator;
+	
+if (!$forum["indikator"])
+	$forum["indikator"] = "age";
+
 // Sind wir da wo wir hinwollen?
 
 if ($topic_id AND !$update) {
@@ -300,7 +306,7 @@ if ($neuesthema==TRUE && $rechte) {			// es wird ein neues Thema angelegt
 //Titel-Zeile
 if (!$forumsend=="anpassen") {
 	echo "\n<table width=\"100%\" class=\"blank\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n";
-	echo "<tr><td class=\"topic\" width=\"50%\"><b>&nbsp;<img src='pictures/icon-posting.gif' align=absmiddle>&nbsp; ". $SessSemName["header_line"] ." - " . _("Forum") . "</b></td><td class=\"topic\" width=\"50%\" align=\"right\"><a href='forum.php?forumsend=anpassen'><img src='pictures/pfeillink.gif' border=0 " . tooltip(_("Look & Feel anpassen")) . ">&nbsp;</a></td></tr>\n";
+	echo "<tr><td class=\"topic\" width=\"50%\"><b>&nbsp;<img src='pictures/icon-posting.gif' align=absmiddle>&nbsp; ". $SessSemName["header_line"] ." - " . _("Forum") . "</b></td><td class=\"topic\" width=\"50%\" align=\"right\"><a href='forum.php?forumsend=anpassen'><img src='pictures/pfeillink.gif' border=0 " . tooltip(_("Look & Feel anpassen")) . ">&nbsp;</a></td></tr>";
 	
 	// Ausgabe für Zusatzinfos
 	if ($message=="kill") echo parse_msg("msg§" . sprintf(_("%s Posting(s) gel&ouml;scht"), $count));
@@ -309,14 +315,29 @@ if (!$forumsend=="anpassen") {
 		forum_move_navi ($topic_id);
 		
 	if (!$cmd && !$reset) {
-		echo "<tr><td class=\"blank\">&nbsp;";
+		echo "<tr><td class=\"blank\">";
 		?>
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font size=-1>Indikator: 
-		<img src="pictures/forumrot.gif">Alter &nbsp; 
-		<img src="pictures/forumgrau.gif">Views &nbsp;
-		<img src="pictures/forumgrau.gif">Bewertung &nbsp;
-		<img src="pictures/forumgrau.gif">Relevanz &nbsp;
-		</font></td><td class="blank" align="right"><font size="-1">Sortierung:&nbsp;&nbsp;</font>
+		<table cellpadding="0" cellspacing="0" border="0" class="blank"><tr><td class="steelgraulight"><img src="pictures/blank.gif" height="22" width="25"></td>
+		<td class="steelgraulight"><font size=-1>Indikator:&nbsp;
+		<?
+		if ($forum["indikator"] == "age")
+			echo "</td><td class=\"steelgraulight_shadow\" valign=\"middle\">&nbsp;<img src=\"pictures/forumrot_indikator.gif\" align=\"middle\"><font size=\"-1\">"._("Alter")." &nbsp;";
+		else
+			echo "</td><td class=\"steelgraulight\" valign=\"middle\">&nbsp;<a href=\"$PHP_SELF?indikator=age\"><img src=\"pictures/forum_indikator_grau.gif\" border=\"0\" align=\"middle\"><font size=\"-1\" color=\"#555555\">"._("Alter")."</a> &nbsp;";
+		if ($forum["indikator"] == "views")
+			echo "</td><td class=\"steelgraulight_shadow\" valign=\"middle\">&nbsp;<img src=\"pictures/forum_indikator_gruen.gif\" align=\"middle\"><font size=\"-1\">"._("Views")." &nbsp;";
+		else
+			echo "</td><td class=\"steelgraulight\" valign=\"middle\">&nbsp;<a href=\"$PHP_SELF?indikator=views\"><img src=\"pictures/forum_indikator_grau.gif\" border=\"0\" align=\"middle\"><font size=\"-1\" color=\"#555555\">"._("Views")."</a> &nbsp;";
+		if ($forum["indikator"] == "rate")
+			echo "</td><td class=\"steelgraulight_shadow\" valign=\"middle\">&nbsp;<img src=\"pictures/forumrot_indikator.gif\" align=\"middle\"><font size=\"-1\">"._("Bewertung")." &nbsp;";
+		else
+			echo "</td><td class=\"steelgraulight\" valign=\"middle\">&nbsp;<a href=\"$PHP_SELF?indikator=rate\"><img src=\"pictures/forum_indikator_grau.gif\" border=\"0\" align=\"middle\"><font size=\"-1\" color=\"#555555\">"._("Bewertung")."</a> &nbsp;";
+		if ($forum["indikator"] == "score")
+			echo "</td><td class=\"steelgraulight_shadow\" valign=\"middle\">&nbsp;<img src=\"pictures/forumrot_indikator.gif\" align=\"middle\"><font size=\"-1\">"._("Relevanz")." &nbsp;";
+		else
+			echo "</td><td class=\"steelgraulight\" valign=\"middle\">&nbsp;<a href=\"$PHP_SELF?indikator=score\"><img src=\"pictures/forum_indikator_grau.gif\" border=\"0\" align=\"middle\"><font size=\"-1\" color=\"#555555\">"._("Relevanz")."</a> &nbsp;";
+		?>
+		</td></tr></table></font></td><td class="blank" align="right"><font size="-1">Sortierung:&nbsp;&nbsp;</font>
 		<select name="username" size="1">
 		<option value="">Alter
 		<option value="">Views

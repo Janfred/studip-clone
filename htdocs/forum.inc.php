@@ -592,7 +592,7 @@ function printposting ($forumposting) {
   			echo "<table width=\"100%\" border=0 cellpadding=0 cellspacing=0 align=center><tr>";
   		if ($forum["anchor"] == $forumposting["id"])
   			echo "<a name='anker'></a>";
-		printhead ("100%","0",$link,$forumposting["openclose"],$new,$forumposting["icon"],$name,$zusatz,$forumposting["mkdate"]);
+		printhead ("100%","0",$link,$forumposting["openclose"],$new,$forumposting["icon"],$name,$zusatz,$forumposting["mkdate"],"TRUE",$objectviews,$forum["indikator"]);
 		if ($forumposting["intree"]==TRUE)
 			echo "<td class=\"blank\">&nbsp;&nbsp;&nbsp;</td>";
 		echo "</tr></table>\n";	
@@ -707,9 +707,9 @@ if ($forum["view"]=="flatfolder")
 	echo "<img src=\"pictures/cont_folder.gif\" align=\"baseline\"><font size=\"-1\"><b> Thema:</b> ".mila(ForumGetName($forum["flatfolder"]),40)." / ";
 if ($forum["search"]!="" && $forum["view"]=="search") {
 	$searchname = explode("%",$forum["search"]);
-	echo "<font size=\"-1\">&nbsp;Suchbegriff: '".$searchname["1"]."' / Anzahl der Treffer: ".$forum["forumsum"]."</font>";
+	echo "<font size=\"-1\">&nbsp;Suchbegriff: '".$searchname["1"]."' / Treffer: ".$forum["forumsum"]."</font>";
 } else
-	echo "<font size=\"-1\">&nbsp;Anzahl der Postings: ".$forum["forumsum"]."</font>";
+	echo "<font size=\"-1\">&nbsp;Postings: ".$forum["forumsum"]."</font>";
 echo "</td><td class=\"steelgraudunkel\" align=\"center\" width=\"10%\">";
 if ($forum["flatallopen"]=="TRUE")
 	echo "<a href=\"".$PHP_SELF

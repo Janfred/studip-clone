@@ -608,19 +608,38 @@ function mila ($titel, $size = 60) {
 
 //Ausgabe der Aufklapp-Kopfzeile
 function printhead ($breite, $left, $link, $open, $new, $icon,
-		$titel, $zusatz, $timestmp = 0, $printout = TRUE) {
+		$titel, $zusatz, $timestmp = 0, $printout = TRUE, $views="", $indikator="age") {
 
+		// Verzweigung was der PFeil anzeigen soll
+		
+	if ($indikator=="views") {
+		if ($views == "0") {
+			$timecolor = "#BBBBBB";
+		} else {
+			$tmp = $views;
+			if ($tmp > 68)
+				$tmp = 68;
+			$tmp = 68-$tmp;
+			$green = dechex(255 - $tmp);
+			$other = dechex(119 + ($tmp/1.5));
+			$timecolor= "#" . $other . $green . $other;
+		}
+	} else {
 		if ($timestmp == 0)
 			$timecolor = "#BBBBBB";
 		else {
-			$timediff = (int) log((time() - $timestmp) / 86400 + 1) * 15;
-			if ($timediff >= 68)
-				$timediff = 68;
-			
-			$red = dechex(255 - $timediff);
-			$other = dechex(119 + $timediff);
-			$timecolor= "#" . $red . $other . $other;
+			if ($new == TRUE)
+				$timecolor = "#FF0000";
+			else {
+				$timediff = (int) log((time() - $timestmp) / 86400 + 1) * 15;
+				if ($timediff >= 68)
+					$timediff = 68;
+				$red = dechex(255 - $timediff);
+				$other = dechex(119 + $timediff);
+				$timecolor= "#" . $red . $other . $other;
+			}
 		}
+	}
 
 	if ($open == "close") {
 		$print = "<td bgcolor=\"".$timecolor."\" class=\"printhead2\" nowrap width=\"1%\"";
@@ -639,33 +658,18 @@ function printhead ($breite, $left, $link, $open, $new, $icon,
 		$titel = "<b>" . $titel . "</b>";
 	
 	if ($link) {
-		if ($open == "close" AND $new != TRUE)
+		if ($open == "close")
 			$print .= "pictures/forumgrau2.gif\"" . tooltip(_("Objekt aufklappen"));
 	
-		if ($open == "open" AND $new != TRUE)
+		if ($open == "open")
 			$print .= "pictures/forumgraurunt2.gif\"" . tooltip(_("Objekt zuklappen"));
-		
-		if ($open == "close" AND $new == TRUE)
-			$print .= "pictures/forumrot.gif\"" . tooltip(_("Objekt aufklappen"));
-		
-		if ($open == "open" AND $new == TRUE)
-			$print .= "pictures/forumrotrunt.gif\"" . tooltip(_("Objekt zuklappen"));
-		
 	}
 	else {
 		if ($open == "close") {
-			if (!$new)
-				$print .= "pictures/forumgrau2.gif\"";
-			
-			if ($new)
-				$print .= "pictures/forumrot.gif\"";
+			$print .= "pictures/forumgrau2.gif\"";
 		}
 		else {
-			if (!$new)
-				$print .= "pictures/forumgraurunt2.gif\"";
-			
-			if ($new)
-				$print .= "pictures/forumrotrunt.gif\"";
+			$print .= "pictures/forumgraurunt2.gif\"";
 		}
 	}
 	
