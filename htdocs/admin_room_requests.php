@@ -166,6 +166,7 @@ if ((($seminar_id) || ($termin_id)) && (!$uebernehmen_x) && (!$search_room_x) &&
 		if ((!$admin_rooms_data["resRequest"]->getSettedPropertiesCount()) && (!$admin_rooms_data["resRequest"]->getResourceId()) && (!$perm->have_perm("admin"))) {
 			$errormsg.="error§"._("Die Anfrage konnte nicht gespeichert werden, da Sie mindestens einen Raum oder mindestens eine Eigenschaft (z.B. Anzahl der Sitzpl&auml;tze) angeben m&uuml;ssen!");
 		} else {
+			$admin_rooms_data["resRequest"]->setClosed(0);
 			if ($admin_rooms_data["resRequest"]->store()) {
 				$errormsg.="msg§"._("Die Raumanfragen und gew&uuml;nschte Raumeingenschaften wurden gespeichert");
 				$admin_rooms_data["original"] = get_snapshot();
@@ -177,8 +178,9 @@ if ((($seminar_id) || ($termin_id)) && (!$uebernehmen_x) && (!$search_room_x) &&
 //initiate the seminar-class
 $semObj = new Seminar($admin_rooms_data["sem_id"]);
 
-//load my request, se can see if user id the appropriciate admin too
-$my_requests = getMyRoomRequests();
+//load my request, if user is the appropriciate admin too
+if ($perm->have_perm("admin"))
+	$my_requests = getMyRoomRequests();
 
 	//Output & Forms
 	?>
@@ -209,8 +211,7 @@ $my_requests = getMyRoomRequests();
 			if ($my_requests[$admin_rooms_data["resRequest"]->getId()])
 				printf (_("Sie k&ouml;nnen diese Anfrage auch selbst %saufl&ouml;sen%s."), "<a href=\"resources.php?view=edit_request&single_request=".$admin_rooms_data["resRequest"]->getId()."\">&nbsp;<img src=\"pictures\link_intern.gif\" border=\"0\" />&nbsp;", "</a>");
 			else
-				print _("Diese Anfragen werden von den zust&auml;ndigen Raumadministratoren bearbeitet. Ihnen wird dann ein passender Raum f&uuml;r ihre Veranstaltung zugewiesen.");
-			?>
+				print _("Diese Anfragen werden von den zust&auml;ndigen Raumadministratoren bearbeitet. Ihnen wird ein passender Raum f&uuml;r ihre Veranstaltung zugewiesen.");			?>
 			<br />
 			</blockqoute>
 		</td>
@@ -223,7 +224,7 @@ $my_requests = getMyRoomRequests();
 	<form method="POST" name="room_requests" action="<? echo $PHP_SELF ?>#anker" >
 		<table width="99%" border=0 cellpadding=2 cellspacing=0 align="center">
 		<tr <? $cssSw->switchClass() ?>>
-			<td class="<? echo $cssSw->getClass() ?>" align="center" colspan=3>		
+			<td class="<? echo $cssSw->getClass() ?>" align="center" colspan=4>		
 				<input type="IMAGE" name="uebernehmen" <?=makeButton("uebernehmen", "src")?> border=0 value="uebernehmen">
 				<? if ($admin_rooms_data["original"] != get_snapshot()) {
 					?> <br /><img src="pictures/ausruf_small2.gif" align="absmiddle" />&nbsp;<font size=-1><?=_("Diese Daten sind noch nicht gespeichert.")?></font><br /> <?
@@ -235,7 +236,7 @@ $my_requests = getMyRoomRequests();
 			<td class="<? echo $cssSw->getClass() ?>" width="4%" align="right">
 				&nbsp;
 			</td>
-			<td class="<? echo $cssSw->getClass() ?>" width="96%">
+			<td class="<? echo $cssSw->getClass() ?>" width="96%" colspan="2">
 				<font size="-1">
 				<?
 				print _("Sie haben die M&ouml;glichkeit, gew&uuml;nschte Raumeigenschaften sowie einen konkreten Raum anzugeben. Diese Raumw&uuml;nsche werden von der zentralen Raumverwaltung bearbeitet.");
@@ -247,10 +248,17 @@ $my_requests = getMyRoomRequests();
 			<td class="<? echo $cssSw->getClass() ?>" width="4%" align="right">
 				&nbsp;
 			</td>
-			<td class="<? echo $cssSw->getClass() ?>" width="96%">
+			<td class="<? echo $cssSw->getClass() ?>" width="47%">
 				<font size="-1"><b><?=("Art des Wunsches:")?></b><br /><br />
 				<?
 				print (($admin_rooms_data["resRequest"]->getTerminId()) ? _("Einzeltermin ihrer Veranstaltung") : (($semObj->getMetaDateType() == 1) ?_("alle Ablaufplan-Termine der Veranstaltung (unregelm&auml;&szlig;ige Veranstaltung)") :_("alle Veranstaltungszeiten (regelm&auml;&szlig;ige Veranstaltung)")))."<br />";
+				
+				?>
+			</td>
+			<td class="<? echo $cssSw->getClass() ?>" width="49%">
+				<font size="-1"><b><?=("Bearbeitungsstatus:")?></b><br /><br />
+				<?
+				print ((!$admin_rooms_data["resRequest"]->getClosed()) ? _("Die Anfrage wurde noch nicht bearbeitet") : (($admin_rooms_data["resRequest"]->getClosed() == 3) ?_("Die Anfrage wurde bearbeitet und abgelehnt") :_("Die Anfrage wurde bearbeitet")))."<br />";
 				
 				?>
 			</td>
@@ -263,7 +271,7 @@ $my_requests = getMyRoomRequests();
 			<td class="<? echo $cssSw->getClass() ?>" width="4%" align="right">
 				&nbsp;
 			</td>
-			<td class="<? echo $cssSw->getClass() ?>" width="96%">
+			<td class="<? echo $cssSw->getClass() ?>" width="96%" colspan="2">
 				<font size="-1"><b><?=("gew&uuml;nschter Raum:")?></b><br /><br />
 					<?
 					print "<b>".htmlReady($resObject->getName())."</b>,&nbsp;"._("verantwortlich:")."&nbsp;<a href=\"".$resObject->getOwnerLink()."\">".htmlReady($resObject->getOwnerName())."</a>";
@@ -283,7 +291,7 @@ $my_requests = getMyRoomRequests();
 			<td class="<? echo $cssSw->getClass() ?>" width="4%" align="right">
 				&nbsp;
 			</td>
-			<td class="<? echo $cssSw->getClass() ?>" width="96%">
+			<td class="<? echo $cssSw->getClass() ?>" width="96%" colspan="2">
 				<table border="0" width="100%" cellspaceing="2" cellpadding="0">
 					<tr>
 						<td width="49%" valign="top">
@@ -442,7 +450,7 @@ $my_requests = getMyRoomRequests();
 			<td class="<? echo $cssSw->getClass() ?>" width="4%" align="right">
 				&nbsp;
 			</td>
-			<td class="<? echo $cssSw->getClass() ?>" width="96%">
+			<td class="<? echo $cssSw->getClass() ?>" width="96%" colspan="2">
 				<font size="-1"><b><?=("Nachricht an den Raumadministrator:")?></b><br /><br />
 					<?=_("Sie k&ouml;nnen hier eine Nachricht an den Raumadministrator verfassen, um weitere W&uuml;nsche oder Bermerkungen zur gew&uuml;nschten Raumbelegung anzugeben.")?> <br /><br />
 					<textarea name="comment" cols=58 rows=4><?=$admin_rooms_data["resRequest"]->getComment(); ?></textarea>
@@ -450,7 +458,7 @@ $my_requests = getMyRoomRequests();
 			</td>
 		</tr>
 		<tr <? $cssSw->switchClass() ?>>
-			<td class="<? echo $cssSw->getClass() ?>" align="center" colspan=3>		
+			<td class="<? echo $cssSw->getClass() ?>" align="center" colspan=4>		
 				<input type="IMAGE" name="uebernehmen" <?=makeButton("uebernehmen", "src")?> border=0 value="uebernehmen">
 			</td>
 		</tr>
