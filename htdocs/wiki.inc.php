@@ -272,27 +272,39 @@ $wiki_keyword_regex="(^|\s|\A|\>)(([A-Z]|&[AOU]uml;)([a-z0-9]|&[aou]uml;|&szlig;
 /**
 * Replace WikiWords with appropriate links in given string
 *
-* @param	string 	str	
+* @param	string 	str
 * @param 	string	page
 *
 **/
-function wikiLinks($str, $page) { 
+function wikiLinks($str, $page) {
 	global $wiki_keyword_regex;
 	// regex adapted from RoboWiki
 	// added > as possible start of WikiWord
 	// because htmlFormat converts newlines to <br>
-	return preg_replace("/$wiki_keyword_regex/e", "'\\1'.isKeyword('\\2', $page)", $str); 
+
+	// in [nop] und [code] Bereichen werden keine wikiLinks gesetzt
+	if (preg_match_all("'\<nowikilink\>(.+)\</nowikilink\>'isU", $str, $matches)) {
+		$str = preg_replace("'\<nowikilink\>.+\</nowikilink\>'isU", 'ö', $str);
+		$str = preg_replace("/$wiki_keyword_regex/e", "'\\1'.isKeyword('\\2', $page)", $str);
+		$str = explode('ö', $str);
+		$i = 0; $all = '';
+		foreach ($str as $w) $all .= $w .  $matches[1][$i++];
+		return $all;
+	}
+	return preg_replace("/$wiki_keyword_regex/e", "'\\1'.isKeyword('\\2', $page)", $str);
 }
 
 /**
 * Return list of WikiWord in given page body ($str)
 *
-* @param	string 	str	
+* @param	string 	str
 *
 **/
 function getWikiLinks($str) {
 	global $wiki_keyword_regex;
 	$str = wikiReady($str);
+	// [nop] und [code] Bereiche ausblenden ...
+	$str = preg_replace("'\<nowikilink\>.+\</nowikilink\>'isU", ' ', $str);
 	preg_match_all("/$wiki_keyword_regex/", $str, $out, PREG_PATTERN_ORDER);
 	return array_unique($out[2]);
 }
