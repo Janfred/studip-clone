@@ -186,17 +186,17 @@ function imaging($img,$img_size,$img_name) {
 			switch ($ext) {  //original Bild einlesen
 				case 'gif': //GIF
 				if (function_exists('ImageCreateFromGIF')){
-					$img_org = ImageCreateFromGIF($img);
+					$img_org = @ImageCreateFromGIF($img);
 				}
 				break;
 				case 'jpg': //JPG
 				if (function_exists('ImageCreateFromJPEG')){
-					$img_org = ImageCreateFromJPEG($img);
+					$img_org = @ImageCreateFromJPEG($img);
 				}
 				break;
 				case 'png': //PNG
 				if (function_exists('ImageCreateFromPNG')){
-					$img_org = ImageCreateFromPNG($img);
+					$img_org = @ImageCreateFromPNG($img);
 				}
 				break;
 				default:
@@ -204,8 +204,8 @@ function imaging($img,$img_size,$img_name) {
 			} // end switch
 		}
 		if (!$width && $img_org){
-			$width = ImageSX($img_org);
-			$height = ImageSY($img_org);
+			$width = @ImageSX($img_org);
+			$height = @ImageSY($img_org);
 		}
 		// Check picture size
 		$hscale = $height / $this->img_max_h;
@@ -238,16 +238,16 @@ function imaging($img,$img_size,$img_name) {
 			if ($ret_val){
 				if (function_exists('imagecopyresampled')){
 					// leeres Bild erzeugen
-					$img_res = ImageCreateTrueColor($newwidth, $newheight);
+					$img_res = @ImageCreateTrueColor($newwidth, $newheight);
 					if (!$img_org) {
 						$ret_val = true;
 					} else {
 						// resampeln und als jpg speichern
-						$ret_val = ImageCopyResampled ( $img_res, $img_org, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
-						$ret_val = ImageJPEG ( $img_res, $newfile , 70);
+						$ret_val = @ImageCopyResampled ( $img_res, $img_org, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
+						$ret_val = @ImageJPEG ( $img_res, $newfile , 70);
 						$ret_val = $ret_val ? false : true;
-						ImageDestroy ( $img_res);
-						ImageDestroy ( $img_org);
+						@ImageDestroy ( $img_res);
+						@ImageDestroy ( $img_org);
 					}
 				} else {
 					$ret_val = true; //still no luck, picture can not be resized
