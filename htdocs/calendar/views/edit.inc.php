@@ -490,17 +490,17 @@ if (isset($atermin) && $atermin->getSeminarId()) {
 		$info_content = array(	
 										array("kategorie" => _("Information:"),
 													"eintrag" => array(	
-													array("icon" => "/pictures/ausruf_small.gif",
+													array("icon" => "pictures/ausruf_small.gif",
 																"text" => $info_text_1
 																)
 													)
 										),
 										array("kategorie" => _("Aktion:"),
 		   										"eintrag" => array(	
-													array("icon" => "/pictures/meinesem.gif",
+													array("icon" => "pictures/meinesem.gif",
 																"text" => $info_text_2
 																),
-													array("icon" => "/pictures/admin.gif",
+													array("icon" => "pictures/admin.gif",
 																"text" => $info_text_3
 																)
 													)
@@ -511,14 +511,14 @@ if (isset($atermin) && $atermin->getSeminarId()) {
 		$info_content = array(	
 										array("kategorie" => "Information:",
 													"eintrag" => array(	
-													array("icon" => "/pictures/ausruf_small.gif",
+													array("icon" => "pictures/ausruf_small.gif",
 																"text" => $info_text_1
 																)
 													)
 										),
 										array("kategorie" => "Aktion:",
 		  											"eintrag" => array(	
-													array (	"icon" => "/pictures/meinesem.gif",
+													array (	"icon" => "pictures/meinesem.gif",
 																	"text" => $info_text_2
 																)
 													)
@@ -530,7 +530,7 @@ if (isset($atermin) && $atermin->getSeminarId()) {
 	echo "<td class=\"blank\" align=\"center\" rowspan=\"1\" valign=\"top\" width=\"20%\">\n";
 	echo "<table class=\"blank\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" valign=\"top\">\n";
 	echo "<tr><td class=\"blank\" align=\"center\" valign=\"top\">\n";
-	print_infobox($info_content, "/pictures/dates.jpg");
+	print_infobox($info_content, "pictures/dates.jpg");
 	echo "</td></tr>\n</table>\n<tr><td class=\"blank\">\n";
 	echo "</td></tr>\n";
 }
