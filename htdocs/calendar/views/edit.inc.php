@@ -75,7 +75,8 @@ $css_switcher->switchClass();
 if (!$set_recur_x) {
 	if (isset($atermin) && get_class($atermin) == "seminarevent") {
 		echo "<tr>\n<td class=\"" . $css_switcher->getClass() . "\" width=\"100%\">\n";
-		echo "<font size=\"-1\">Veranstaltung:&nbsp; " . htmlReady($atermin->getSemName());
+		echo "<font size=\"-1\">" . _("Veranstaltung") . ":&nbsp; ";
+		echo htmlReady($atermin->getSemName());
 		echo "</font></td>\n</tr>\n";
 		$css_switcher->switchClass();
 	}
