@@ -73,6 +73,12 @@ if ($dclose)
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");
 
+// Display banner ad
+if ($GLOBALS['BANNER_ADS_ENABLE'] && $auth->is_authenticated() && $user->id != "nobody") {
+	require_once("banner_show.inc.php");
+	banner_show();
+}
+
 //Anzeigemodul fuer studentische Startseite (nur wenn man angemeldet und nicht global dozent oder hoeher ist!)
 if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("dozent")) {
 
