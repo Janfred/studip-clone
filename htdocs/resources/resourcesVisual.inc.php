@@ -492,7 +492,7 @@ class editSettings extends cssClasses {
 			<form method="POST" action="<?echo $PHP_SELF ?>?add_root_user=TRUE">
 			<tr>
 				<td class="<? echo $this->getHeaderClass() ?>" width="4%">
-					<img src=\"pictures/blank.gif\" width=1 height=20>&nbsp; 
+					<img src=\"pictures\blank.gif\" width=1 height=20>&nbsp; 
 				</td>
 				<td class="<? echo $this->getHeaderClass() ?>" width="42%" align="left">
 					<font size=-1><b><?=_("Name")?></b></font>
@@ -504,7 +504,7 @@ class editSettings extends cssClasses {
 					<font size=-1><b><?=_("X")?></b></font>
 				</td>
 				<td class="<? echo $this->getHeaderClass() ?>" width="4%">
-					<img src=\"pictures/blank.gif\" width=1 height=20>&nbsp; 
+					<img src="pictures/blank.gif" width=1 height=20>&nbsp; 
 				</td>
 				<td class="<? echo $this->getHeaderClass() ?>" width="30%" align="center">
 					<font size=-1><b><?=_("Suchen/hinzuf&uuml;gen")?></b></font>
@@ -578,7 +578,7 @@ class editSettings extends cssClasses {
 		<table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
 			<tr>
 				<td class="<? echo $this->getHeaderClass() ?>" width="4%">
-					<img src=\"pictures/blank.gif\" width=1 height=20>&nbsp; 
+					<img src="pictures/blank.gif" width=1 height=20>&nbsp; 
 				</td>
 				<td class="<? echo $this->getHeaderClass() ?>" width="25%" align="left">
 					<font size=-1><b><?=_("Typ")?></b></font>
@@ -735,7 +735,7 @@ class editSettings extends cssClasses {
 		<table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
 			<tr>
 				<td class="<? echo $this->getHeaderClass() ?>" width="4%">
-					<img src=\"pictures/blank.gif\" width=1 height=20>&nbsp; 
+					<img src="pictures/blank.gif" width=1 height=20>&nbsp; 
 				</td>
 				<td class="<? echo $this->getHeaderClass() ?>" width="25%" align="left">
 					<font size=-1><b><?=_("Eigenschaft")?></b></font>
@@ -1759,7 +1759,7 @@ class ViewSchedules extends cssClasses {
 		<table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
 			<tr>
 				<td class="<? $this->switchClass(); echo $this->getClass() ?>" width="4%">
-					<img src="pictures\blank.gif" height="35" border="0"/>					
+					<img src="pictures/blank.gif" height="35" border="0"/>					
 				</td>
 				<td class="<? echo $this->getClass() ?>"  width="10%" align="left">&nbsp;
 					<a href="<? echo $PHP_SELF ?>?view=<?=$this->used_view?>&previous_week=TRUE"><img src="pictures/calendar_previous.gif" <? echo tooltip (_("Vorherige Woche anzeigen")) ?>border="0" /></a>
