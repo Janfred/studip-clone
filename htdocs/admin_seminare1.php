@@ -76,36 +76,12 @@ function checkdozent(){
  return checked;
 }
 
-function checkpassword(){
- var checked = true;
- if ((document.details.password.value.length<4) && (document.details.password.value.length != 0)) {
-    alert("Das Passwort ist zu kurz \n- es sollte mindestens 4 Zeichen lang sein.");
- 		document.details.password.focus();
-    checked = false;
-    }
- return checked;
-}
-
-function checkpassword2(){
- var checked = true;
-if (document.details.password.value != document.details.password2.value) {
-    alert("Das Passwort stimmt nicht mit dem Wiederholungspasswortt überein!");
-    		document.details.password2.focus();
-    checked = false;3
-    }
- return checked;
-}
-
 function checkdata(command){
  var checked = true;
  if (!checkname())
  	checked = false;
  if (!checkbereich())
  	checked = false;
-if (!checkpassword())
- 	checked = false;
-if (!checkpassword2())
- 	checked = false; 
 
 <? if ($perm->have_perm("admin"))  // bei Dozenten muessen wir das nicht testen, da sie automatisch selber eingetragen werden
 	echo "if (!checkdozent()) checked = false;";
@@ -114,11 +90,7 @@ if (!checkpassword2())
  if (checked) {
    document.details.method = "post";
    document.details.action = "<?php echo $PHP_SELF ?>";
-   document.details.hashpass.value = MD5(document.details.password.value);
-   document.details.hashpass2.value = MD5(document.details.password2.value);
-   document.details.password.value = "";   
-   document.details.password2.value = "";
-	 document.details.s_command.value = command;
+   document.details.s_command.value = command;
    document.details.submit();
  }
  return checked;
@@ -129,10 +101,6 @@ function checkdata_without_bereich(command){
  var checked = true;
  if (!checkname())
  	checked = false;
-if (!checkpassword())
- 	checked = false;
-if (!checkpassword2())
- 	checked = false; 	
 
 <? if ($perm->have_perm("admin"))  // bei Dozenten muessen wir das nicht testen, da sie automatisch selber eingetragen werden
 	echo "if (!checkdozent()) checked = false;";
@@ -141,11 +109,7 @@ if (!checkpassword2())
  if (checked) {
    document.details.method = "post";
    document.details.action = "<?php echo $PHP_SELF ?>";
-   document.details.hashpass.value = MD5(document.details.password.value);
-   document.details.hashpass2.value = MD5(document.details.password2.value);
-   document.details.password.value = "";   
-   document.details.password2.value = "";
-	 document.details.s_command.value = command;
+   document.details.s_command.value = command;
    document.details.submit();
  }
  return checked;
@@ -180,26 +144,6 @@ $db = new DB_Seminar;
 $db2 = new DB_Seminar;
 $db3 = new DB_Seminar;
 $db4 = new DB_Seminar;
-
-## Hash the password's if we need to
-if (empty($hashpass)) {							// javascript disabled
-  if(isset($password) && $password != "*******") {	// new password
-    $password = md5($password);
-    $password2 = md5($password2);
-  } else {									// password unchanged
-    $password = $oldpass;
-    $password2 = $oldpass;
-  }
-} else {										// javascript enabled
-	if ($hashpass == md5("*******")) {		 		// password unchanged
-		$password = $oldpass;
-		$password2 = $oldpass;
-	} else {									// new password
-	  $password = $hashpass;
-	  $password2 = $hashpass2;
-	}
-}
-
 
 $user_id = $auth->auth["uid"];
 $msg = "";
@@ -257,18 +201,6 @@ if (($s_command=="edit") && ($s_send)){
       $run = FALSE;
       }
      
-   if (($hashpass) && ($hashpass !=""))
-    	if ($hashpass != $hashpass2) {
-		$msg .= "error§Das Wiederholungspasswort stimmt nicht mit dem Passwort &uuml;berein!§";
-		$run = FALSE;
-   		}
-   else
-    	if ($password != $password2) {
-		$msg .= "error§Das Wiederholungspasswort stimmt nicht mit dem Passwort &uuml;berein!§";
-		$run = FALSE;
-   		}
-
-
 	if ($run) { // alle Angaben ok
     ## Create timestamps
     $start_time = mktime($stunde,$minute,0,$monat,$tag,$jahr);
@@ -283,7 +215,7 @@ if (($s_command=="edit") && ($s_send)){
 	$query .="Institut_id='$Institut', ";
     $query .= "Name='$Name', Untertitel='$Untertitel',
 			status='$Status', Beschreibung='$Beschreibung',  Ort='$Ort',
-			Sonstiges='$Sonstiges', Passwort='$password', Lesezugriff='$Lesezugriff', Schreibzugriff='$Schreibzugriff',
+			Sonstiges='$Sonstiges', Lesezugriff='$Lesezugriff', Schreibzugriff='$Schreibzugriff',
 			art='$art', teilnehmer='$teilnehmer', vorrausetzungen='$vorrausetzungen', lernorga='$lernorga',
 			leistungsnachweis='$leistungsnachweis', ects='$ects'
 			WHERE Seminar_id='$s_id'";
@@ -442,7 +374,7 @@ if ($s_command) {
 			echo "... ";
 		echo " - ";
 		if ($s_command=="edit")
-			echo "Bearbeiten der Veranstaltungsdaten</b></td>";
+			echo "Grunddaten</b></td>";
 		?>
 	</tr>
 	<tr><td class="blank" colspan=2><br>
@@ -467,7 +399,6 @@ if ($s_command) {
 	
 ?>
 			<input type="hidden" name="s_id"   value="<?php $db->p("Seminar_id") ?>">
-			<input type="hidden" name="oldpass" value="<?php $db->p("Passwort") ?>">
 
 			<tr>
 				<td align=right><b>Name der Veranstaltung</b> &nbsp;</td>
@@ -736,56 +667,9 @@ if ($s_command) {
 						}					
 				?>
 				</select></td>
-			<tr>
 			<?
 			}
 			?>
-				<td align=right>Lesezugriff &nbsp;</td>
-				<td align=left colspan=3>
-					<?php 
-					unset ($temp);
-					$temp = $db->f("Lesezugriff");
-					if (!isset($temp)) $temp = "1";	//Vorgabe: nur angemeldet
-					?>
-					<input type="radio" name="Lesezugriff" value="0" <?php print $temp == 0 ? "checked" : ""?>> freier Zugriff &nbsp;
-					<input type="radio" name="Lesezugriff" value="1" <?php print $temp == 1 ? "checked" : ""?>> in Stud.IP angemeldet &nbsp;
-					<input type="radio" name="Lesezugriff" value="2" <?php print $temp == 2 ? "checked" : ""?>> nur mit Passwort &nbsp;
-				</td>
-			</tr>
-
-			<tr>
-				<td align=right>Schreibzugriff &nbsp;</td>
-				<td align=left colspan=3>
-					<?php 
-					unset ($temp);
-					$temp = $db->f("Schreibzugriff");
-					if (!isset($temp)) $temp = "1";	//Vorgabe: nur angemeldet
-					if ($SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["write_access_nobody"]) {
-						?>
-					<input type="radio" name="Schreibzugriff" value="0" <?php print $temp == 0 ? "checked" : ""?>> freier Zugriff &nbsp;
-						<?
-						}
-					else {
-						?>
-					<font color=#BBBBBB>&nbsp; &nbsp; &nbsp;  freier Zugriff &nbsp;</font>
-						<?
-						}
-					
-					?>
-					<input type="radio" name="Schreibzugriff" value="1" <?php print $temp == 1 ? "checked" : ""?>> in Stud.IP angemeldet &nbsp;
-					<input type="radio" name="Schreibzugriff" value="2" <?php print $temp == 2 ? "checked" : ""?>> nur mit Passwort &nbsp;
-				</td>
-			</tr>
-
-			<tr>
-				<td align=right colspan=3>Passwort &nbsp;</td>
-				<td align=left>
-					<input type="password" name="password" size=12 maxlength=31 onchange="checkpassword()" value="<? if ($db->f("Passwort")) echo "*******"?>" >
-					&nbsp; &nbsp; &nbsp; Passwort-Wiederholung:&nbsp; 	
-					<input type="password" name="password2" size=12 maxlength=31 onchange="checkpassword2()" value="<? if ($db->f("Passwort")) echo "*******"?>">				
-				<td>
-				</td>
-			</tr>
 			<tr>
 				<td colspan=4><hr>
 				</td>
@@ -881,8 +765,6 @@ if ($s_command) {
 					endif;
 					?>
 				<a href="<? echo $PHP_SELF ?>?list=TRUE"><img src="pictures/buttons/abbrechen-button.gif" border=0>
-				<input type="hidden" name="hashpass" value="">
-				<input type="hidden" name="hashpass2" value="">				
 				<input type="hidden" name="s_command" value="<? echo $s_command ?>">
 				<input type="hidden" name="s_send" value="TRUE">
 				</td>
