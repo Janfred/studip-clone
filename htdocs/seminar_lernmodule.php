@@ -176,8 +176,6 @@ include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul
 // Lernmodule anzeigen und benutzen
 	else
 	{
-
-
 		$le_modules = get_seminar_modules($seminar_id);
 		if ($le_modules != false)
 			$le_anzahl = sizeof($le_modules);
@@ -203,6 +201,9 @@ include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul
 
 		$cssSw = new cssClassSwitcher;									// Klasse für Zebra-Design
 		show_seminar_modules_links($seminar_id);
+
+		if (get_connected_user_id($auth->auth["uid"]) != false)
+			echo "<br><br><a href=\"" . link_new_module() ."\" target=\"_blank\">". _("Neues Lernmodul anlegen") ."</a><br>";
 	}
 	?>
 	<br>
