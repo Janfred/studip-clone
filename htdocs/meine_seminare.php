@@ -177,7 +177,7 @@ function print_seminar_content($semid,$my_sem_values, $type="seminar") {
 	  elseif ($my_sem_values["wikiseiten"])
 			echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to=wiki.php\"><img src='pictures/icon-wiki.gif' border=0 ".tooltip(sprintf(_("%s WikiSeiten"), $my_sem_values["wikiseiten"]))."></a>";
 	  else
-			echo "&nbsp; <img src='pictures/icon-leer.gif' width=\"20\" height=\"20\" border=\"0\">";
+			echo "&nbsp; <img src='pictures/icon-leer.gif' width=\"20\" height=\"17\" border=\"0\">";
   }
 
   //votes
@@ -467,7 +467,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 			// delete Entry from List:
 
 			if (($values["status"]=="dozent") || ($values["status"]=="tutor")) 
-				echo "<td class=\"".$cssSw->getClass()."\"  align=center><img width=\"19\" width=\"17\" src=\"pictures/blank.gif\" /></td>";
+				echo "<td class=\"".$cssSw->getClass()."\"  align=center><img width=\"19\" height=\"17\" src=\"pictures/blank.gif\" />&nbsp;</td>";
 			elseif ($values["binding"]) //anderer Link und andere Tonne wenn Veranstaltungszuordnung bindend ist.
 				printf("<td class=\"".$cssSw->getClass()."\"  align=center nowrap><a href=\"$PHP_SELF?auswahl=%s&cmd=no_kill\"><img src=\"pictures/logout_seminare_no.gif\" ".tooltip(_("Das Abonnement ist bindend. Bitte wenden Sie sich an die Dozentin oder den Dozenten."))." border=\"0\"></a>&nbsp; </td>", $semid);
 			else
@@ -681,7 +681,7 @@ if ( !$perm->have_perm("root")) {
 
 			// delete Entry from List:
 			if (($values["status"]=="dozent") || ($values["status"]=="tutor") || ($values["status"]=="admin") || ($values["status"]=="autor"))
-				echo "<td class=\"".$cssSw->getClass()."\" align=center><img width=\"19\" width=\"17\" src=\"pictures/blank.gif\" /</td>";
+				echo "<td class=\"".$cssSw->getClass()."\" align=center><img width=\"19\" height=\"17\" src=\"pictures/blank.gif\" />&nbsp;</td>";
 			else
 				printf("<td class=\"".$cssSw->getClass()."\" align=center align=center><a href=\"$PHP_SELF?auswahl=%s&cmd=inst_kill\"><img src=\"pictures/logout_seminare.gif\" ".tooltip(_("aus der Einrichtung austragen"))." border=\"0\">&nbsp;</a></td>", $instid);
 		 	echo "</tr>\n";
