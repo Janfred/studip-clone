@@ -760,7 +760,6 @@ if (($kill_x) && ($admin_dates_data["range_id"]))
 			$titel.="<input type=\"HIDDEN\" name=\"topic_id[]\" value=\"".$db->f("topic_id")."\">";
 			}
 		else {
-			setlocale("LC_TIME", "ge");		
 			$titel .= substr(strftime("%a",$db->f("date")),0,2);		
 			$titel.= date (". d.m.Y, H:i", $db->f("date"));
 			if ($db->f("date") <$db->f("end_time"))

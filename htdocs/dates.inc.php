@@ -283,7 +283,6 @@ function view_turnus ($seminar_id, $short = FALSE) {
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
 	
-	setlocale ("LC_ALL", "de_DE");
 	
 	$db->query("SELECT metadata_dates FROM seminare WHERE Seminar_id = '$seminar_id'");
 	$db->next_record();
@@ -533,7 +532,6 @@ function seminartermin($seminar_id, $short = TRUE, $br = TRUE) {
 		 return $return_string;
 
 
-	//setlocale( ("LC_ALL", "de_DE");
 	if ($term_data["art"] == 1)
 		{
 		$db2->query("SELECT * FROM termine WHERE range_id='$seminar_id' AND date_typ IN $typ_clause  ORDER BY date");

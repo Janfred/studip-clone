@@ -55,8 +55,7 @@ function show_dates ($range_id, $date_start, $date_end, $show_not=0, $show_docs=
 		
 	$db = new DB_Seminar;
 	$db2=new DB_Seminar;
-	setlocale ("LC_TIME","de_DE");
-
+	
 	if ($show_not) {
 		//wenn Seminartermine angezeigt werden und show_not =sem zeigen wir nur als Sitzungen definierte Termine
 		if ($show_not=="sem") {
@@ -141,7 +140,6 @@ function show_dates ($range_id, $date_start, $date_end, $show_not=0, $show_docs=
 			}
 
 			
-			setlocale("LC_TIME", "ge");
 			$titel = substr(strftime("%a",$db->f("date")),0,2);
 			$titel .= date (". d.m.Y, H:i", $db->f("date"));
 			if ($db->f("date") <$db->f("end_time"))
@@ -228,7 +226,6 @@ function show_personal_dates ($range_id, $date_start, $date_end, $show_docs=FALS
 	
 	require_once($RELATIVE_PATH_CALENDAR . "/lib/DbCalendarEventList.class.php");
 	
-	setlocale ("LC_TIME","de_DE");
 	
 	//wenn persoenliche Termine angezeigt werden und nicht ich selber draufschau, dann die privaten ausblenden
 	if($username && $range_id != $user->id)
@@ -355,7 +352,6 @@ function show_all_dates ($date_start, $date_end, $show_docs=FALSE, $show_admin=T
 		
 	require_once($RELATIVE_PATH_CALENDAR . "/lib/DbCalendarEventList.class.php");
 	
-	setlocale ("LC_TIME","de_DE");
 	
 	$show_private = TRUE;
 	$admin_link = sprintf("<a href=\"./calendar.php?cmd=edit&source_page=%s\">", rawurlencode($PHP_SELF));

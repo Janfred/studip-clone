@@ -78,7 +78,6 @@ if ($change_view) {
 $db=new DB_Seminar;
 $db2=new DB_Seminar;
 $hash_secret="machomania";
-setlocale ("LC_TIME","de_DE");
 
 //Wert fuer colspan Ausrechnen
 $glb_colspan=0;

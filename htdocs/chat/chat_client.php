@@ -173,7 +173,6 @@ function outputLoop($chatid){
 	global $user,$chatServer,$userQuit;
 	$lastPingTime=0;
 	$lastMsgTime=time()-1;
-	setlocale ("LC_TIME", "de_DE");
 	set_time_limit(0);       //wir sind nicht zu stoppen...
 	ignore_user_abort(1);    //es sei denn wir werden brutal ausgebremst :)
 
