@@ -67,13 +67,13 @@ class VeranstaltungResourcesAssign {
 		while ($db->next_record()) {
 			$result = array_merge($result, $this->changeDateAssign($db->f("termin_id")));
 		}
-
 		//kill all assigned rooms (only roomes and only resources assigned directly to the Veranstaltung, not to a termin!) to create new ones
 		$this->deleteAssignedRooms();
 		
 		//if no schedule-date exits, we take the metadates (only in this case! else we take only the concrete dates from the termin table!)
-		if (!isSchedule($this->seminar_id))
+		if (!isSchedule($this->seminar_id,true,true)){
 			$result = array_merge($result, $this->changeMetaAssigns());
+		}
 		return $result;
 	}
 	
@@ -218,7 +218,6 @@ class VeranstaltungResourcesAssign {
 		if (!$assignObjects) {
 			$assignObjects =& $this->getMetaAssignObjects($term_data, $veranstaltung_start_time, $veranstaltung_duration_time);
 		}
-
 		//check and save the assigns
 		$i=0;
 		if (is_array($assignObjects))
