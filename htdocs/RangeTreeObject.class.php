@@ -197,8 +197,10 @@ class RangeTreeObject {
 	function initItemDetail(){
 		if ($type = $this->item_data['studip_object']){
 			$view = new DbView();
-			$rs = $view->get_query("view:TREE_OBJECT_DETAIL:".$this->tree->studip_objects[$type]['table'].",".
-			$this->tree->studip_objects[$type]['pk'].",".$this->item_data['studip_object_id']);
+			$view->params = array($this->tree->studip_objects[$type]['table'],
+								$this->tree->studip_objects[$type]['pk'],
+								$this->item_data['studip_object_id']);
+			$rs = $view->get_query("view:TREE_OBJECT_DETAIL");
 			if($rs->next_record()){
 				$i = 1;
 				foreach ($rs->Record as $key => $value) {
@@ -221,7 +223,8 @@ class RangeTreeObject {
 	*/
 	function getCategories(){
 		$view = new DbView();
-		$rs = $view->get_query("view:TREE_OBJECT_CAT:" . $this->tree_item_id );
+		$view->params[] = $this->tree_item_id;
+		$rs = $view->get_query("view:TREE_OBJECT_CAT");
 		if (is_object($rs)){
 			$this->item_data['categories'] =& new DbSnapshot($rs);
 			return true;

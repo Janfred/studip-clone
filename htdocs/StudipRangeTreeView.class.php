@@ -230,12 +230,8 @@ class StudipRangeTreeView {
 		if ($this->anchor == $item_id)
 			echo "</a>";
 		echo "\n</td><td class=\"printhead\" align=\"left\" width=\"100%\" nowrap valign=\"bottom\">";
-		echo "<a href=\"";
-		echo ($this->open_items[$item_id])? $this->getSelf("close_item={$item_id}") . "\"" . tooltip(_("Dieses Element schließen"),true)
-											: $this->getSelf("open_item={$item_id}") . "\"" . tooltip(_("Dieses Element öffnen"),true);
-		echo " >";
 		echo $this->getItemHead($item_id);
-		echo "</a></td></tr></table>";
+		echo "</td></tr></table>";
 		if ($this->open_items[$item_id])
 			$this->printItemDetails($item_id);
 		return;
@@ -278,11 +274,11 @@ class StudipRangeTreeView {
 	
 	function getItemHead($item_id){
 		$head = "";
-		if ($this->open_items[$item_id])
-			$head .= "<b>";
+		$head .= "<a class=\"tree\" href=\"";
+		$head .= ($this->open_items[$item_id])? $this->getSelf("close_item={$item_id}") . "\"" . tooltip(_("Dieses Element schließen"),true) . "><b>"
+											: $this->getSelf("open_item={$item_id}") . "\"" . tooltip(_("Dieses Element öffnen"),true) . ">";
 		$head .= htmlReady($this->tree->tree_data[$item_id]['name']);
-		if ($this->open_items[$item_id])
-			$head .= "</b>";
+		$head .= ($this->open_items[$item_id])? "</b></a>" : "<a/>";
 		return $head;
 	}
 	
@@ -290,7 +286,7 @@ class StudipRangeTreeView {
 		$content = "\n<table width=\"90%\" cellpadding=\"2\" cellspacing=\"2\" align=\"center\" style=\"font-size:10pt\">";
 		if ($item_id == "root"){
 			$content .= "\n<tr><td class=\"topic\" align=\"left\">" . htmlReady($this->tree->root_name) ." </td></tr>";
-			$content .= "\n<tr><td class=\"blank\" align=\"left\">" . $this->root_content ." </td></tr>";
+			$content .= "\n<tr><td class=\"blank\" align=\"left\">" . htmlReady($this->root_content) ." </td></tr>";
 			$content .= "\n</table>";
 			return $content;
 		}
