@@ -428,7 +428,7 @@ class editSettings extends cssClasses {
 				<td class="<? echo $this->getClass() ?>" width="4%">&nbsp; 
 				</td>
 				<td class="<? echo $this->getClass() ?>" width="30%" valign="top"><font size=-1>Nutzer hinzuf&uuml;gen</font><br />
-				<? showSearchForm("search_root_user", $search_string_search_root_user, TRUE, TRUE) ?>
+				<? showSearchForm("search_root_user", $search_string_search_root_user, TRUE, FALSE, TRUE) ?>
 				</td>
 			</tr>
 			<?
@@ -916,7 +916,7 @@ class EditObject extends cssClasses {
 				$lockedAssign=TRUE;
 		}
 
-		if  ($resAssign->getId()) {
+		if  ($resAssign->getId() && !$resAssign->isNewObject) {
 			$ObjectPerms = new AssignObjectPerms($resAssign->getId());
 			if ($ObjectPerms->getUserPerm () == "admin")
 				$killButton=FALSE;

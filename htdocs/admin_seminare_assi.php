@@ -638,7 +638,7 @@ if ($cmd_d_x)
 						$errormsg.="<br /><font size=\"-1\" color=\"black\">".htmlReady(getResourceObjectName($key)).": ";
 						//show the first overlap
 						list(, $val2) = each($val);
-						$errormsg.=date("d.m, h:i",$val2["begin"])." - ".date("h:i",$val2["end"]);
+						$errormsg.=date("d.m, H:i",$val2["begin"])." - ".date("H:i",$val2["end"]);
 						if (sizeof($val) >1)
 							$errormsg.=", ... ("._("und weitere").")";
 						$errormsg.=sprintf (", <a target=\"new\" href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=no_nav&start_time=%s\">"._("Raumplan anzeigen")."</a> ",$key, $val2["begin"]);
@@ -703,7 +703,7 @@ if ($cmd_d_x)
 					$errormsg.="<br /><font size=\"-1\" color=\"black\">".htmlReady(getResourceObjectName($key)).": ";
 					//show first overlap
 					list(, $val2) = each($val);
-					$errormsg.=date("d.m, h:i",$val2["begin"])." - ".date("h:i",$val2["end"]);
+					$errormsg.=date("d.m, H:i",$val2["begin"])." - ".date("H:i",$val2["end"]);
 					if (sizeof($val) >1)
 						$errormsg.=", ... ("._("und weitere").")";
 					$errormsg.=sprintf (", <a target=\"new\" href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=no_nav\">"._("Raumplan anzeigen")."</a> ",$key);
@@ -733,7 +733,7 @@ if ($cmd_d_x)
 					$errormsg.="<br /><font size=\"-1\" color=\"black\">".htmlReady(getResourceObjectName($key)).": ";
 					//show first overlap
 					list(, $val2) = each($val);
-					$errormsg.=date("d.m, h:i",$val2["begin"])." - ".date("h:i",$val2["end"]);
+					$errormsg.=date("d.m, H:i",$val2["begin"])." - ".date("H:i",$val2["end"]);
 					if (sizeof($val) >1)
 						$errormsg.=", ... ("._("und weitere").")";
 					$errormsg.=sprintf (", <a target=\"new\" href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=no_nav\">"._("Raumplan anzeigen")."</a> ",$key);
@@ -999,7 +999,15 @@ if ($cmd_f_x)
     				//update/insert the assigned roomes
     				if ($RESOURCES_ENABLE) {
     					$updateAssign = new VeranstaltungResourcesAssign($sem_create_data["sem_id"]);
-    					$updateAssign->updateAssign();
+    					$updateResult=$updateAssign->updateAssign();
+
+	    				//are there overlaps, in the meanwhile since the check at step 3?
+					if (is_array($updateResult)) {
+						$overlaps_detected=FALSE;
+						foreach ($updateResult as $key=>$val)
+							if ($val["overlap_assigns"] == TRUE)
+//								echo "Yes!";
+					}
     				}
 			}
 		} else {
@@ -2554,7 +2562,7 @@ if ($level==6)
 					Sie haben die Veranstaltung bereits angelegt und k&ouml;nnen nun mit der Literatur- und Linkverwaltung und dem Termin-Assistenten fortfahren oder an diesem Punkt abbrechen.<br><br><br>
 					<form method="POST" action="<? echo $PHP_SELF ?>">
 						<input type="HIDDEN" name="form" value=6>
-						<input type="IMAGE" src="./pictures/buttons/weiter-button.gif" border=0 value="Weiter >>" name="cmd_f">
+						<input type="IMAGE" src="./pictures/buttons/weiter-button.gif" border=0 value="Weiter >>" name="cmd_a">
 					</form>
 					</blockqoute>
 				</td>
