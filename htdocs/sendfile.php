@@ -56,8 +56,8 @@ if ($zip) {
 //Ersetzung von beim Speichern gefaehrlichen Zeichen. Ich weiss, es geht mit ereg_replace besser, hab ich aber grad keine Zeit, mir die Codes reinzuziehen :)
 $file_name=str_replace(":", "", rawurldecode($file_name));
 $file_name=str_replace(chr(92), "", rawurldecode($file_name));
-$file_name=str_replace("/", "", rawurldecode($file_name));
-$file_name=str_replace("\"", "", rawurldecode($file_name));
+$file_name=str_replace("/", "-", rawurldecode($file_name));
+$file_name=str_replace("\"", "-", rawurldecode($file_name));
 $file_name=str_replace("'", "", rawurldecode($file_name));
 $file_name=str_replace(">", "", rawurldecode($file_name));
 $file_name=str_replace("<", "", rawurldecode($file_name));
