@@ -12,7 +12,7 @@ function print_freie($username) {
 	echo "<tr><td align=\"left\" valign=\"top\" class=\"blank\"><blockquote><br>";
 	echo _("Hier können Sie beliebige eigene Kategorien anlegen. Diese Kategorien erscheinen auf Ihrer pers&ouml;nlichen Homepage. Mit den Pfeilsymbolen k&ouml;nnen sie die Reihenfolge, in der die Kategorien angezeigt werden, ver&auml;ndern.");
 	echo "<br>\n";
-	echo _("Wenn Sie die Option \"f&uuml;r andere unsichtbar\" verwenden, k&ouml;nnen sie Memos anlegen, die nur f&uuml;r Sie selbst auf der Homepage sichtbar werden - andere Nutzer k&ouml;nnen die Daten nicht einsehen.");
+	echo _("Verwenden Sie die Option \"f&uuml;r andere unsichtbar\", um Memos anzulegen, die nur f&uuml;r Sie selbst auf der Homepage sichtbar werden - andere Nutzer k&ouml;nnen diese Daten nicht einsehen.");
 	echo "\n<br><br></blockquote></td></tr>\n<tr><td class=blank><table width=100% class=blank border=0 cellpadding=0 cellspacing=0>";
 	echo "<form action=\"$PHP_SELF?freie=update_freie&username=$username&view=$view\" method=\"POST\" name=\"edit_freie\">";
 	if (!$db->num_rows())
@@ -40,12 +40,12 @@ function print_freie($username) {
 			if ($count){
 				echo "\n<a href=\"$PHP_SELF?freie=order_freie&direction=up&username=$username&view=$view&cat_id=" . $db->f("kategorie_id")
 				. "\"><img src=\"pictures/move_up.gif\" hspace=\"4\" width=\"13\" height=\"11\" border=\"0\" " 
-				. tooltip(_("Kategorie nach oben schieben")) ."></a>";
+				. tooltip(_("Kategorie nach oben verschieben")) ."></a>";
 			}
 			if (($count+$hidden_count) != ($db->num_rows()-1) ){
 				echo "\n<a href=\"$PHP_SELF?freie=order_freie&direction=down&username=$username&view=$view&cat_id=" . $db->f("kategorie_id")
 				. "\"><img src=\"pictures/move_down.gif\" hspace=\"4\" width=\"13\" height=\"11\" border=\"0\" " 
-				. tooltip(_("Kategorie nach unten schieben")) ."></a>";
+				. tooltip(_("Kategorie nach unten verschieben")) ."></a>";
 			}
 			echo "<br>&nbsp;</td></tr>";
 			// Breite für textarea

@@ -295,7 +295,7 @@ function edit_pers($password,$check_pass,$response,$new_username,$vorname,$nachn
 		// auf doppelte Vergabe wird weiter unten getestet.
 			if (!isset($response) || $response=="") { // wir haben kein verschluesseltes Passwort
 	 			if (!$validator->ValidatePassword($password)) {
-	 				$this->msg=$this->msg . "error§" . _("Das Paßwort ist nicht lang genug!") . "§";
+	 				$this->msg=$this->msg . "error§" . _("Das Passwort ist nicht lang genug!") . "§";
 	 				return false;
 	 			}
 				if ($check_pass != $password) {
@@ -1024,11 +1024,11 @@ if ($view=="Karriere") {
 		}
 		$cssSw->resetClass();
 		$cssSw->switchClass();
-		echo "</table></td><td class=\"".$cssSw->getClass()."\" width=\"70%\" align=\"left\" valign=\"top\"><blockquote><br />" . _("Wählen Sie die Studiengänge auf Ihrem Studierendenausweis aus der folgenden Liste aus:") . "<br>";
+		echo "</table></td><td class=\"".$cssSw->getClass()."\" width=\"70%\" align=\"left\" valign=\"top\"><blockquote><br />" . _("Wählen Sie die Studiengänge in Ihrem Studierendenausweis aus der folgenden Liste aus:") . "<br>";
 		echo "<br><div align=\"center\">";
 		echo "<a name=\"studiengaenge\"></a>";   
 		$my_about->select_studiengang();
-		echo "</div><br></b>" . _("Wenn Sie einen Studiengang wieder ausgetragen möchten, markieren Sie die entsprechenden Felder in der linken Tabelle.") . "<br>";
+		echo "</div><br></b>" . _("Wenn Sie einen Studiengang wieder austragen möchten, markieren Sie die entsprechenden Felder in der linken Tabelle.") . "<br>";
 		echo _("Mit einem Klick auf <b>&Uuml;bernehmen</b> werden die gewählten Änderungen durchgeführt.") . "<br /><br /> ";
 		echo "<input type=\"IMAGE\" " . makeButton("uebernehmen", "src") . " value=\"" . _("Änderungen übernehmen") . "\"></blockquote></td></tr>";
 		echo "</form>";
@@ -1064,11 +1064,11 @@ if ($view=="Karriere") {
 		}
 		$cssSw->resetClass();
 		$cssSw->switchClass();    
-		echo "</table></td><td class=\"".$cssSw->getClass()."\" width=\"70%\" align=\"left\" valign=\"top\"><blockquote><br />" . _("Um sich als Student einer Einrichtung zuzuordnen, wählen sie die entsprechende Einrichtung aus der folgenden Liste aus:") . "<br>";
+		echo "</table></td><td class=\"".$cssSw->getClass()."\" width=\"70%\" align=\"left\" valign=\"top\"><blockquote><br />" . _("Um sich als Student einer Einrichtung zuzuordnen, wählen Sie die entsprechende Einrichtung aus der folgenden Liste aus:") . "<br>";
 		echo "<br><div align=\"center\">";
 		echo "<a name=\"einrichtungen\"></a>";   
 		$my_about->select_inst();
-		echo "</div><br></b>" . _("Wenn sie aus Einrichtungen wieder ausgetragen werden möchten, markieren sie die entsprechenden Felder in der linken Tabelle.") . "<br>";
+		echo "</div><br></b>" . _("Wenn sie aus Einrichtungen wieder ausgetragen werden möchten, markieren Sie die entsprechenden Felder in der linken Tabelle.") . "<br>";
 		echo _("Mit einem Klick auf <b>&Uuml;bernehmen</b> werden die gewählten Änderungen durchgeführt.") . "<br /><br /> ";
 		echo "<input type=\"IMAGE\" " . makeButton("uebernehmen", "src") . " value=\"" . _("Änderungen übernehmen") . "\"></blockquote></td></tr>";
 		echo "</form>";
@@ -1135,10 +1135,10 @@ if ($view == "Messaging") {
 if ($view=="Login") {
 	if ($my_about->check=="user" && !$perm->have_perm("admin")) {
 		echo "<tr><td colspan=2 class=blank><blockquote>";
-		echo "<br><br>" . _("Um die automatische Anmeldung zu nutzen, m&uuml;ssen sie ihre pers&ouml;nliche Login-Datei auf ihren Rechner kopieren. Mit dem folgenden Link &ouml;ffnet sich ein Fenster, indem Sie ihr Passwort eingeben m&uuml;ssen.") . " ";
-		echo _("Dann wird die Datei erstellt und zu ihrem Rechner geschickt.") . "<br><br>";
+		echo "<br><br>" . _("Um die automatische Anmeldung zu nutzen, m&uuml;ssen Sie ihre pers&ouml;nliche Login-Datei auf ihren Rechner kopieren. Mit dem folgenden Link &ouml;ffnet sich ein Fenster, indem Sie ihr Passwort eingeben m&uuml;ssen.") . " ";
+		echo _("Dann wird die Datei erstellt und zu Ihrem Rechner geschickt.") . "<br><br>";
 		echo "<b><center><a href=\"javascript:oeffne();\">" . _("Auto-Login-Datei erzeugen") . "</a></b></center>";
-		echo "<br><br>" . _("<b>ACHTUNG!</b> Die automatische Anmeldung stellt eine große Sicherheitslücke dar. Jeder, der Zugriff auf ihren Rechner hat, kann sich damit unter Ihrem Namen in Stud.IP einloggen!");
+		echo "<br><br>" . _("<b>ACHTUNG!</b> Die automatische Anmeldung stellt eine große Sicherheitslücke dar. Jeder, der Zugriff auf Ihren Rechner hat, kann sich damit unter Ihrem Namen in Stud.IP einloggen!");
 		echo "</blockquote></td></tr>";
 	} else {
 		echo "<blockquote><br><br>" . _("Als Administrator d&uuml;rfen Sie dieses Feature nicht nutzen - Sie tragen Verantwortung!");

@@ -41,7 +41,7 @@ function change_general_view() {
 	echo "<td class=\"topic\" colspan=2><img src=\"pictures/einst.gif\" border=\"0\" align=\"texttop\"><b>&nbsp;" . _("Allgemeine Stud.IP-Einstellungen anpassen") . "</b></td></tr>\n";
 	echo "<tr><td class=\"blank\" colspan=2>&nbsp;\n";
 	echo "<blockquote><p>\n";
-	echo _("Hier k&ouml;nnen Sie die Ansicht von Stud.IP nach Ihren Vorstellungen anpassen.<br>Sie k&ouml;nnen z.B. Ihre individuell bevorzugte Sprache einstellen.");
+	echo _("Hier k&ouml;nnen Sie die Ansicht von Stud.IP nach Ihren Vorstellungen anpassen.<br>Sie k&ouml;nnen z.B. Ihre bevorzugte Sprache einstellen.");
 	echo "<br></blockquote></td></tr>\n";	
 	echo "<tr><td class=\"blank\" colspan=2>\n";
 	?>
