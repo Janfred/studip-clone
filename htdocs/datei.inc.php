@@ -1201,7 +1201,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 					if ($change == $db3->f("dokument_id"))
 						$titel= "<input style=\"{font-size:8 pt; width: 100%;}\" type=\"text\" size=20 maxlength=255 name=\"change_name\" value=\"".htmlReady($db3->f("name"))."\" />";
 					else {
-						$tmp_titel=mila($db3->f("t_name"));
+						$tmp_titel=htmlReady(mila($db3->f("t_name")));
 						
 						//create a link onto the titel, too
 						if ($link)
