@@ -50,7 +50,7 @@ ALTER TABLE `Institute` ADD `modules` INT UNSIGNED AFTER `type`;
 #
 
 ALTER TABLE `seminar_lernmodul` ADD `status` TINYINT NOT NULL;
-UPDATE `seminar_lernmodul` SET status = `1`;
+UPDATE `seminar_lernmodul` SET status = 1;
 
 # #7
 # add new tables for the WikiWikiWeb-module
