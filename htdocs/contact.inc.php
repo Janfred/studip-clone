@@ -563,7 +563,7 @@ function PrintAllContact($filter="")
 	} else {
 		$maxcolls = 1;
 		$maxwidth = 700;
-		$middle = ceil($db->num_rows()/2);
+		$middle[0] = ceil($db->num_rows()/2);
 	}
 
 	if ($db->num_rows() == 0) {
