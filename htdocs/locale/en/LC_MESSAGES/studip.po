@@ -1,20 +1,21 @@
 # translation of studip_eval.po to 
 # translation of studip_eval.po to
 # translation of studip_eval.po to
+# translation of studip_eval.po to
 # This file is distributed under the same license as the PACKAGE package.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER, 2004
-# 
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER, 2004.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: studip_eval\n"
-"POT-Creation-Date: 2004-08-24 12:42+0200\n"
-"PO-Revision-Date: 2004-03-31 18:28+GMT\n"
+"POT-Creation-Date: 2004-08-25 11:43+0200\n"
+"PO-Revision-Date: 2004-08-24 13:08+GMT\n"
 "Last-Translator: \n"
 "Language-Team:  <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.0.1\n"
+"X-Generator: KBabel 1.0.2\n"
 
 #: modules/evaluation/evaluation_admin_edit.inc.php:60
 #: modules/evaluation/evaluation_admin_overview.lib.php:1564
@@ -56,12 +57,12 @@ msgstr ""
 "A user has already participated in this evaluation. Thus no further changes "
 "are allowed."
 
-#: modules/evaluation/evaluation_admin_edit.inc.php:209 
+#: modules/evaluation/evaluation_admin_edit.inc.php:209
 msgid ""
 "Sie haben in einem Bereich, in welchem diese Evaluation hängt, nicht "
 "aussreichene Rechte, um diese Eval zu bearbeiten."
 msgstr ""
-"You do not have the necessary rights to make changes in all areas this "
+"You do not have the rights necessary to make changes in all areas this "
 "evaluation has been added to."
 
 #: modules/evaluation/evaluation_admin_edit.inc.php:211
@@ -650,12 +651,12 @@ msgstr ""
 "associated to. <br> Do you really want to delete the evaluation or do you "
 "want to move it to your private evaluation templates?"
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1418 
+#: modules/evaluation/evaluation_admin_overview.lib.php:1420
 msgid ""
 "Sie wollen die Evaluation aus einem Bereich aushängen für den sie keine "
 "Berechtigung besitzten.<br> Die Aktion wurde nicht ausgeführt."
 msgstr ""
-"You have tried to remove this evaluation from at least one area you are not "
+"You have tried to remove the evaluation from at least one area you are not "
 "allowed to modify. <br> Action has not been executed."
 
 #: modules/evaluation/evaluation_admin_overview.lib.php:1422
@@ -1677,9 +1678,8 @@ msgid "Veränderungen wurden gespeichert."
 msgstr "Changes have been saved."
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:1306
-#, fuzzy
 msgid "Fehler beim Einlesen (Block)"
-msgstr "Error while reading (question block)"
+msgstr "Error while reading (block)"
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:1331
 #, fuzzy
@@ -2105,12 +2105,11 @@ msgid "Die Fragen dieses Blocks müssen beantwortet werden (Pflichtfelder):"
 msgstr "All questions in this block must be answered (mandatory fields):"
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:2677
-#, fuzzy, c-format
+#, c-format
 msgid "Diesem Fragenblock ist die Antwortenvorlage <b>%s</b> zugewiesen."
 msgstr "This question block uses reply template <b>%s</b>."
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:2679
-#, fuzzy
 msgid ""
 "Das Zuweisen einer Antwortenvorlage ändert alle Antwortenmöglichkeiten der "
 "Fragen dieses Fragenblocks."
@@ -2155,7 +2154,6 @@ msgid "Diese Frage eine Position nach unten verschieben."
 msgstr "Move down this question by one position."
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:2929
-#, fuzzy
 msgid ""
 "Dieser Frage wurden noch keine Antwortenmöglichkeiten zugewiesen. Drücken "
 "sie auf den Doppelfpeil, um dies jetzt zu tun."
@@ -2164,17 +2162,14 @@ msgstr ""
 "arrow to do so."
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:2930
-#, fuzzy
 msgid "Dieser Frage Antwortenmöglichkeiten zuweisen."
 msgstr "Associate reply possibilities to this question."
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:2933
-#, fuzzy
 msgid "Dieser Frage wurden bereits folgende Antwortenmöglichkeiten zugewiesen:"
 msgstr "The following replies have already been associated to this question:"
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:2935
-#, fuzzy
 msgid "Die zugewiesenen Antwortenmöglichkeiten bearbeiten."
 msgstr "Modify the associated reply possibilities."
 
@@ -11274,6 +11269,10 @@ msgstr "Export data"
 msgid "Die Daten werden exportiert. %sBitte haben sie etwas Geduld!"
 msgstr "The data are being exported. %s Please be patient!"
 
+#: calendar/calendar.inc.php:300 calendar/calendar.inc.php:312 
+msgid "Keine Titel"
+msgstr "no title"
+
 #: calendar/views/bind.inc.php:70
 msgid "Gruppe ändern"
 msgstr "Change group"
@@ -11659,6 +11658,34 @@ msgstr "The synchronization could not be carried out!"
 #: calendar/views/export.inc.php:369
 msgid "Die Synchronisation wurde erfolgreich durchgef&uuml;hrt!"
 msgstr "The synchronization was successfully carried out!"
+
+#: calendar/views/insert_date_popup.php:51
+msgid "Ihr Systemverwalter hat leider keine Standardzeiten vorgegeben."
+msgstr ""
+
+#: calendar/views/insert_date_popup.php:147
+msgid "Kalender"
+msgstr ""
+
+#: teilnehmer.php:915
+msgid "eintragen"
+msgstr "Enter"
+
+#: calendar/views/insert_date_popup.php:242
+msgid "zurücksetzen auf"
+msgstr ""
+
+#: calendar/views/insert_date_popup.php:256
+#: calendar/views/insert_date_popup.php:257
+#, fuzzy
+msgid "Monate zurück"
+msgstr "one month back"
+
+#: calendar/views/insert_date_popup.php:263
+#: calendar/views/insert_date_popup.php:264
+#, fuzzy
+msgid "Monate vor"
+msgstr "Months"
 
 #: calendar/views/month.inc.php:259 calendar/views/month.inc.php:281
 #, c-format
@@ -12357,21 +12384,26 @@ msgid ""
 "das Schl&uuml;sselsymbol."
 msgstr "If you want to edit another course, please click the key symbol."
 
-#: admin_banner_ads.php:59 edit_about.php:162
+#: admin_banner_ads.php:29
+#, fuzzy
+msgid "Banner-Modul abgeschaltet."
+msgstr "Banner deleted"
+
+#: admin_banner_ads.php:59 edit_about.php:162 lib/classes/smiley.class.php:283
 msgid "Sie haben keine Datei zum Hochladen ausgewählt!"
 msgstr "You haven't selected any file to upload!"
 
 #: admin_banner_ads.php:70
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Der Dateityp der Bilddatei ist falsch (%s).<br>Es sind nur die "
 "Dateiendungen .gif, .png und .jpg erlaubt!"
 msgstr ""
 "The photo file is of the wrong file type (%s). <br> Only the file formats ."
-"gif and .jpg are allowed!"
+"gif, png and .jpg are allowed!"
 
 #: admin_banner_ads.php:80 edit_about.php:181 edit_about.php:212
-#: edit_about.php:226
+#: edit_about.php:226 lib/classes/smiley.class.php:317
 msgid ""
 "Es ist ein Fehler beim Kopieren der Datei aufgetreten. Das Bild wurde nicht "
 "hochgeladen!"
@@ -12408,10 +12440,42 @@ msgstr "Priority (probability)"
 msgid "Keine Banner vorhanden."
 msgstr "No banner available."
 
-#: admin_banner_ads.php:135 admin_banner_ads.php:420 admin_banner_ads.php:425
-#: admin_dates.php:46 admin_dates.php:48 functions.php:705
+#: admin_banner_ads.php:135 admin_banner_ads.php:364 admin_banner_ads.php:370
+#: admin_banner_ads.php:420 admin_banner_ads.php:425 admin_dates.php:46
+#: admin_dates.php:48 functions.php:705
 msgid "hh"
 msgstr "hh"
+
+#: admin_banner_ads.php:145
+#, fuzzy
+msgid "Es wurde kein Bild ausgewählt."
+msgstr "Still no picture selected"
+
+#: admin_banner_ads.php:148
+#, fuzzy
+msgid "Es wurde kein Verweisziel angegeben."
+msgstr "No course was found."
+
+#: admin_banner_ads.php:151
+#, fuzzy
+msgid "Bitte geben Sie einen gültiges Startdatum ein."
+msgstr "Please enter a valid date!"
+
+#: admin_banner_ads.php:156
+#, fuzzy
+msgid "Bitte geben Sie einen gültiges Enddatum ein."
+msgstr "Please enter a valid date!"
+
+#: admin_banner_ads.php:162
+msgid "Das Verweisziel muss eine gültige URL sein (incl. http://)."
+msgstr ""
+
+#: admin_banner_ads.php:168
+#, fuzzy
+msgid ""
+"Die angegebene Einrichtung existiert nicht. Bitte geben Sie eine gültige "
+"Einrichtungs-ID ein."
+msgstr "The given course does not exist. Please enter a valid course ID."
 
 #: admin_banner_ads.php:175
 msgid "Der angegebene Benutzername existiert nicht."
@@ -12423,6 +12487,11 @@ msgid ""
 "Veranstaltungs-ID ein."
 msgstr "The given course does not exist. Please enter a valid course ID."
 
+#: admin_banner_ads.php:186
+msgid ""
+"Der Verweistyp \"speziell\" wird in dieser Installation nicht unterstützt."
+msgstr ""
+
 #: admin_banner_ads.php:234
 msgid "Aktuelles Banner:"
 msgstr "Current banner:"
@@ -12431,11 +12500,11 @@ msgstr "Current banner:"
 msgid "noch kein Bild hochgeladen"
 msgstr "still no picture uploaded"
 
-#: admin_banner_ads.php:244
+#: admin_banner_ads.php:244 lib/classes/smiley.class.php:343
 msgid "1. Bilddatei auswählen:"
 msgstr "1. Select image file."
 
-#: admin_banner_ads.php:245
+#: admin_banner_ads.php:245 lib/classes/smiley.class.php:344
 msgid "2. Bilddatei hochladen:"
 msgstr "2. Upload image file"
 
@@ -12688,7 +12757,6 @@ msgid "Der Endzeitpunkt muss nach dem Startzeitpunkt liegen!"
 msgstr "The end time must be after the start time!"
 
 #: admin_dates.php:228
-#, fuzzy
 msgid ""
 "Sie wollen einen Sitzungstermin zu den regelm&auml;&szlig;igen "
 "Veranstaltungszeiten anlegen oder &auml;ndern. Bitte verwenden daf&uuml;r "
@@ -12696,7 +12764,7 @@ msgid ""
 "f&uuml;r den gesamten Veranstaltungszeitraum anzulegen."
 msgstr ""
 "You want to set a course date at the regular coursetimes. Please use first "
-"the flow diagram assistant in order toset the appropriate dates for the "
+"the flow diagram assistant in order to set the appropriate dates for the "
 "entire course period."
 
 #: admin_dates.php:230
@@ -12726,7 +12794,7 @@ msgid ""
 "Der eingegebene Termine liegt au&szlig;erhalb des Semesters, in dem die "
 "Veranstaltung stattfindet. Es wird empfohlen, den Termin anzupassen."
 msgstr ""
-"The given appointment lies outside the semester, in which course takes "
+"The given appointments lie outside the semester, in which course takes "
 "place. It is recommended that you change the appointment. "
 
 #: admin_dates.php:256 dates.inc.php:792
@@ -13012,7 +13080,7 @@ msgstr "%s data rows found"
 msgid "Folgende Bereiche der Datenbank k&ouml;nnen gepr&uuml;ft werden:"
 msgstr "The following areas of the data base can be verified:"
 
-#: admin_db_integrity.php:176
+#: admin_db_integrity.php:176 lib/classes/smiley.class.php:376
 msgid "Anzahl"
 msgstr "Number"
 
@@ -13058,6 +13126,16 @@ msgstr "You do not have the authorisation to create new faculties"
 #: admin_studiengang.php:89 admin_studiengang.php:140
 msgid "Datenbankoperation gescheitert:"
 msgstr "Data base operation aborted:"
+
+#: admin_institut.php:111 admin_seminare_assi.php:1388
+#: lib/classes/AdminModules.class.php:150
+msgid "Allgemeine Diskussionen"
+msgstr "General discussion"
+
+#: admin_institut.php:111 admin_seminare_assi.php:1388
+#: lib/classes/AdminModules.class.php:150
+msgid "Hier ist Raum für allgemeine Diskussionen"
+msgstr "Here is space for general discussion"
 
 #: admin_institut.php:112 admin_seminare_assi.php:1392 folder.php:107
 #: folder.php:295 lib/classes/AdminModules.class.php:204
@@ -14146,8 +14224,9 @@ msgid "Die Anfrage wurde noch nicht bearbeitet"
 msgstr "This new list has not been saved yet."
 
 #: admin_room_requests.php:276
+#, fuzzy
 msgid "Die Anfrage wurde bearbeitet und abgelehnt"
-msgstr ""
+msgstr "This posting is being edited at the moment."
 
 #: admin_room_requests.php:276
 #, fuzzy
@@ -14242,7 +14321,6 @@ msgid "Enddatum"
 msgstr "End date"
 
 #: admin_semester.inc.php:84 admin_semester.inc.php:551
-#, fuzzy
 msgid "Vorlesungsbeginn"
 msgstr "Course start"
 
@@ -14878,14 +14956,6 @@ msgstr "Please enter at least one lecturer for the course!"
 msgid "<b>Fehler:</b>"
 msgstr "<b>Error:</b> "
 
-#: admin_seminare_assi.php:1388 lib/classes/AdminModules.class.php:150
-msgid "Allgemeine Diskussionen"
-msgstr "General discussion"
-
-#: admin_seminare_assi.php:1388 lib/classes/AdminModules.class.php:150
-msgid "Hier ist Raum für allgemeine Diskussionen"
-msgstr "Here is space for general discussion"
-
 #: admin_seminare_assi.php:1392 lib/classes/AdminModules.class.php:204
 msgid "Ablage für allgemeine Ordner und Dokumente der Veranstaltung"
 msgstr "Clipboard for general folder and documents of the course"
@@ -15420,23 +15490,21 @@ msgid "Schritt 4: Raumangaben"
 msgstr "Step 4: Room data "
 
 #: admin_seminare_assi.php:2510
-#, fuzzy
 msgid ""
 "Bitte geben Sie hier ein, welche Angaben zu R&auml;umen gemacht werden, "
 "buchen Sie konkrete R&auml;ume oder stellen sie Raumw&uuml;nsche an die "
 "zentrale Raumverwaltung."
 msgstr ""
-"Please enter room data here, book concrete rooms or place requests "
-"forspecific room characteristics to the central room administartion."
+"Please enter room data here, book concrete rooms or place requests for "
+"specific room characteristics to the central room administration."
 
 #: admin_seminare_assi.php:2512
-#, fuzzy
 msgid ""
 "Bitte geben Sie hier ein, welche Angaben zu R&auml;umen gemacht werden oder "
 "stellen Sie Raumw&uuml;nsche an die zentrale Raumverwaltung."
 msgstr ""
-"Please enter room data here, or place requests for specific "
-"roomcharacteristics to the central room administartion."
+"Please enter room data here, or place requests for specific room "
+"characteristics to the central room administration."
 
 #: admin_seminare_assi.php:2514
 msgid ""
@@ -16138,6 +16206,11 @@ msgstr "Delete from clipboard"
 msgid "Gewählte Aktion starten"
 msgstr "Start selected action"
 
+#: admin_smileys.php:26 lib/classes/smiley.class.php:54
+#, fuzzy
+msgid "Smiley-Modul abgeschaltet."
+msgstr "Banner deleted"
+
 #: admin_smileys.php:65
 msgid "Verwaltung der Smileys"
 msgstr "Smileys administration"
@@ -16488,6 +16561,7 @@ msgid "&Auml;ndern der Sichtbarkeit von Veranstaltungen"
 msgstr "Change the visibility of courses"
 
 #: admin_visibility.php:93 links_admin.inc.php:804
+#: lib/classes/smiley.class.php:425
 msgid "Nr."
 msgstr "No."
 
@@ -18495,17 +18569,19 @@ msgstr "%s at %s"
 msgid "%s: %s am %s"
 msgstr "%s: %s at %s"
 
+#: dates.inc.php:1434
+msgid "Für eine Eingabehilfe zur einfacheren Terminwahl bitte hier klicken."
+msgstr ""
+
 #: dates.php:97
-#, fuzzy
 msgid "Informationen:"
-msgstr "Information "
+msgstr "Information:"
 
 #: dates.php:99
 msgid "Hier finden Sie alle Termine der Veranstaltung."
 msgstr "Here you can find all course appointments."
 
 #: dates.php:103
-#, fuzzy
 msgid "Einen neuen Termin anlegen"
 msgstr "Create new appointment"
 
@@ -19134,12 +19210,10 @@ msgid ""
 msgstr ""
 
 #: edit_about.php:1211
-#, fuzzy
 msgid "nach oben"
 msgstr "Element to top"
 
 #: edit_about.php:1217
-#, fuzzy
 msgid "nach unten"
 msgstr "Element to bottom"
 
@@ -19400,6 +19474,10 @@ msgstr "Export module is not connected"
 msgid "Dateiordner "
 msgstr "Document folder "
 
+#: folder.php:100
+msgid "Neuer Ordner"
+msgstr "New folder"
+
 #: folder.php:108
 #, c-format
 msgid "Ablage für allgemeine Ordner und Dokumente der %s"
@@ -19464,7 +19542,7 @@ msgid "Zuletzt editiert von "
 msgstr "Last edited by "
 
 #: forum.inc.php:108 links_admin.inc.php:309 write_topic.php:133
-#: lib/classes/guestbook.class.php:225
+#: lib/classes/guestbook.class.php:225 lib/classes/smiley.class.php:406
 msgid "Smileys"
 msgstr "Smilies "
 
@@ -19546,7 +19624,7 @@ msgstr "<p>Posting update aborted</p>\n"
 msgid "Indikator:"
 msgstr "Indicator:"
 
-#: forum.inc.php:818
+#: forum.inc.php:818 lib/classes/smiley.class.php:657
 msgid "Favoriten"
 msgstr "Favourites"
 
@@ -19581,16 +19659,15 @@ msgstr "Customise Look & Feel"
 
 #: forum.inc.php:957
 msgid "Bewertung: $rate <br>Zum Abstimmen bitte klicken."
-msgstr ""
+msgstr "Rating: $rate <br>Klick hier to rate."
 
 #: forum.inc.php:958
-#, fuzzy
 msgid "Bitte werten:"
-msgstr "Rating"
+msgstr "Please rate:"
 
 #: forum.inc.php:959
 msgid "Bewertung des Beitrags"
-msgstr ""
+msgstr "Rating of this posting"
 
 #: forum.inc.php:960
 #, fuzzy
@@ -19614,16 +19691,14 @@ msgid "Kein Zugriff auf dieses Element möglich."
 msgstr "No access to this element possible."
 
 #: forum.inc.php:1188
-#, fuzzy
 msgid "Bewertung: "
-msgstr "Rating"
+msgstr "Rating: "
 
 #: forum.inc.php:1193
 msgid "Noch nicht bewertet"
-msgstr ""
+msgstr "Not rated"
 
 #: forum.inc.php:1212
-#, fuzzy
 msgid "Sie haben diesen&nbsp;<br>&nbsp;&nbsp;Beitrag bewertet."
 msgstr "You have already rated this object."
 
@@ -20042,7 +20117,7 @@ msgstr "Imprint"
 msgid "Informationen über das System"
 msgstr "Information about the system"
 
-#: header.php:102 header.php:305
+#: header.php:102 header.php:305 index.php:90 index.php:240
 msgid "Hilfe"
 msgstr "Help"
 
@@ -20195,7 +20270,8 @@ msgstr "Logout of the system"
 msgid "zuletzt angelegt"
 msgstr "Most recently added"
 
-#: impressum.php:84
+#: impressum.php:84 lib/classes/RangeTreeObjectFak.class.php:48
+#: lib/classes/RangeTreeObjectInst.class.php:48
 msgid "Kontakt"
 msgstr "Contact"
 
@@ -20519,9 +20595,130 @@ msgstr ""
 "The system is continually being developed and customised to the wishes of "
 "our users - %sTell us your opinion!%s"
 
+#: index.php:79 meine_seminare.php:419 mystudip.inc.php:142
+#: help/structure.inc.php:197
+msgid "Meine Veranstaltungen"
+msgstr "My courses"
+
+#: index.php:80
+msgid "Veranstaltung hinzuf&uuml;gen"
+msgstr "Add course"
+
+#: index.php:81 mystudip.inc.php:145
+msgid "Mein Planer"
+msgstr "My planner"
+
+#: index.php:82 links_about.inc.php:70 links_sms.inc.php:44
+msgid "Terminkalender"
+msgstr "Appointment calendar"
+
+#: index.php:83 links_sms.inc.php:47
+msgid "Adressbuch"
+msgstr "Address book"
+
+#: index.php:84 links_about.inc.php:71 links_sms.inc.php:45
+#: links_sms.inc.php:70
+msgid "Stundenplan"
+msgstr "Time table"
+
+#: index.php:86
+msgid "individuelle Einstellungen"
+msgstr "Individual settings"
+
+#: index.php:88
+msgid "Personensuche"
+msgstr "User search"
+
+#: index.php:89
+msgid "Veranstaltungssuche"
+msgstr "Course search"
+
+#: index.php:91 help/structure.inc.php:98
+msgid "Schnelleinstieg"
+msgstr "Quick introduction"
+
+#: index.php:93 index.php:97
+msgid "Verwaltung von Veranstaltungen"
+msgstr "Course administration"
+
+#: index.php:94
+msgid "neue Veranstaltung anlegen"
+msgstr "Set up new courses"
+
+#: index.php:96 meine_seminare.php:857
+msgid "Veranstaltungen an meinen Einrichtungen"
+msgstr "Courses at my institutes"
+
+#: index.php:98
+msgid "Verwaltung von Einrichtungen"
+msgstr "Institute administration"
+
+#: index.php:99
+msgid "globale Benutzerverwaltung"
+msgstr "Global user administration"
+
+#: index.php:101
+msgid "Veranstaltungs&uuml;bersicht"
+msgstr "Course overview"
+
+#: index.php:102
+msgid "Verwaltung globaler Einstellungen"
+msgstr "Global settings administration"
+
+#: index.php:107
+msgid "Startseite f&uuml;r Root bei Stud.IP"
+msgstr "Start page for root at Stud.IP"
+
+#: index.php:116
+msgid "Startseite f&uuml;r AdministratorInnen bei Stud.IP"
+msgstr "Start page for administrators at Stud.IP"
+
+#: index.php:124
+msgid "Startseite f&uuml;r DozentInnen bei Stud.IP"
+msgstr "Start page for lecturers at Stud.IP"
+
+#: index.php:133 index.php:141
+msgid "Ihre pers&ouml;nliche Startseite bei Stud.IP"
+msgstr "Your personal start page at Stud.IP"
+
 #: index.php:151
 msgid "Bestätigungsgsmail beachten!"
 msgstr "Note confirmation email."
+
+#: index.php:157
+#, c-format
+msgid ""
+"Sie haben noch nicht auf Ihre %s Bestätigungsmail %s geantwortet.<br>Bitte "
+"holen Sie dies nach, um Stud.IP Funktionen wie das Belegen von "
+"Veranstaltungen nutzen zu können.<br>Bei Problemen wenden Sie Sich an: %s"
+msgstr ""
+"You have not answered your %s confirmation email%s.<br>Please do this now in "
+"order to use Stud.IP functions such as subscribing to courses.<br>In case of "
+"problems please contact: %s "
+
+#: index.php:236
+msgid "f&uuml;r registrierte NutzerInnen"
+msgstr "for registered users"
+
+#: index.php:238
+msgid "Registrieren"
+msgstr "Register"
+
+#: index.php:238
+msgid "um NutzerIn zu werden"
+msgstr "to become a user"
+
+#: index.php:239
+msgid "Freier Zugang"
+msgstr "Public access"
+
+#: index.php:239
+msgid "ohne Registrierung"
+msgstr "without registration"
+
+#: index.php:240
+msgid "zu Bedienung und Funktionsumfang"
+msgstr "to service and features"
 
 #: index.php:258
 msgid "Zur Portalseite"
@@ -20969,14 +21166,6 @@ msgstr "Votes and tests"
 msgid "Allgemeines"
 msgstr "General"
 
-#: links_about.inc.php:70 links_sms.inc.php:44
-msgid "Terminkalender"
-msgstr "Appointment calendar"
-
-#: links_about.inc.php:71 links_sms.inc.php:45 links_sms.inc.php:70
-msgid "Stundenplan"
-msgstr "Time table"
-
 #: links_about.inc.php:73
 msgid "Messaging"
 msgstr "Messaging"
@@ -21031,9 +21220,8 @@ msgid "Votes"
 msgstr "Votes"
 
 #: links_admin.inc.php:279
-#, fuzzy
 msgid "externe&nbsp;Seiten"
-msgstr "External pages"
+msgstr "External&nbsp;pages"
 
 #: links_admin.inc.php:281
 msgid "neue&nbsp;Einrichtung"
@@ -21081,9 +21269,8 @@ msgid "Sessions"
 msgstr "Sessions"
 
 #: links_admin.inc.php:304
-#, fuzzy
 msgid "DB&nbsp;Integrit&auml;t"
-msgstr "DB integrity"
+msgstr "DB&nbsp;integrity"
 
 #: links_admin.inc.php:306
 msgid "Werbebanner"
@@ -21348,10 +21535,6 @@ msgstr "Advanced&nbsp;overview"
 #: links_seminare.inc.php:41
 msgid "meine&nbsp;archivierten&nbsp;Veranstaltungen"
 msgstr "My&nbsp;archived&nbsp;courses"
-
-#: links_sms.inc.php:47
-msgid "Adressbuch"
-msgstr "Address book"
 
 #: links_sms.inc.php:48
 msgid "Nachrichten"
@@ -21638,10 +21821,6 @@ msgstr ""
 "part. Please use %s<b>course search / add<b/>%s in order to find a new "
 "course."
 
-#: meine_seminare.php:419 mystudip.inc.php:142 help/structure.inc.php:197
-msgid "Meine Veranstaltungen"
-msgstr "My courses"
-
 #: meine_seminare.php:471
 msgid ""
 "Versteckte Veranstaltungen können über die Suchfunktionen nicht gefunden "
@@ -21790,10 +21969,6 @@ msgid ""
 "An der Einrichtung: <b>%s</b> sind zur Zeit keine Veranstaltungen angelegt."
 msgstr "No courses are currently set up at the institute: <b>%s</b>."
 
-#: meine_seminare.php:857
-msgid "Veranstaltungen an meinen Einrichtungen"
-msgstr "Courses at my institutes"
-
 #: meine_seminare.php:874 show_admission.php:58
 msgid "Bitte w&auml;hlen Sie eine Einrichtung aus:"
 msgstr "Please choose an institute:"
@@ -21890,28 +22065,27 @@ msgstr ""
 msgid "Wochentag:"
 msgstr "Week day:"
 
-#: messaging.inc.php:201
-#, fuzzy
+#: messaging.inc.php:202
 msgid "[Stud.IP] "
-msgstr "My Stud.IP "
+msgstr "[Stud.IP] "
 
-#: messaging.inc.php:215
+#: messaging.inc.php:216
 msgid "Von: "
 msgstr "from:"
 
-#: messaging.inc.php:216
+#: messaging.inc.php:217
 msgid "An: "
 msgstr "To:"
 
-#: messaging.inc.php:217
-msgid "Betreff: "
-msgstr ""
-
 #: messaging.inc.php:218
+msgid "Betreff: "
+msgstr "Subject: "
+
+#: messaging.inc.php:219
 msgid "Datum: "
 msgstr "Date:"
 
-#: messaging.inc.php:222
+#: messaging.inc.php:223
 #, c-format
 msgid ""
 "Diese E-Mail ist eine Kopie einer systeminternen Nachricht, die in Stud.IP "
@@ -21920,18 +22094,17 @@ msgstr ""
 "This email is a copy of an internal system message, which wassent within "
 "Stud.IP %s."
 
-#: messaging.inc.php:223
+#: messaging.inc.php:224
 #, c-format
 msgid ""
 "Antworten Sie nicht auf diese E-Mail, sondern benutzen Sie Stud.IP unter %s"
 msgstr "Do not reply to this E-Mail, but use Stud.IP at %s"
 
-#: messaging.inc.php:268
-#, fuzzy
+#: messaging.inc.php:269
 msgid "Ohne Betreff"
-msgstr "New postings"
+msgstr "Without subject"
 
-#: messaging.inc.php:311
+#: messaging.inc.php:312
 msgid ""
 "Diese Nachricht wurde automatisch vom Stud.IP-System generiert. Sie können "
 "darauf nicht antworten."
@@ -21939,17 +22112,17 @@ msgstr ""
 "This message has been automatically generated by the Stud.IP system. You can "
 "not reply to it."
 
-#: messaging.inc.php:370
+#: messaging.inc.php:371
 #, c-format
 msgid "Sie haben eine Nachricht von <b>%s</b> erhalten!"
 msgstr "You have received a message from<b>%s</b>!"
 
-#: messaging.inc.php:637
+#: messaging.inc.php:638
 #, c-format
 msgid "Sie wurden von %s in den Chatraum %s eingeladen!"
 msgstr "%s has invited you into the chat room %s! "
 
-#: messaging.inc.php:667
+#: messaging.inc.php:668
 #, c-format
 msgid "Sie wurden von <b>%s</b> in den Chatraum <b>%s</b> eingeladen!"
 msgstr "<b>%s</b> has invited you into the chat room <b>%s</b>! "
@@ -22442,10 +22615,6 @@ msgstr ""
 "the login or autologin. If, for example, you regularly visit the page, "
 "&raquo;My courses&laquo;  after logging in, you can set this up as your "
 "start page."
-
-#: mystudip.inc.php:145
-msgid "Mein Planer"
-msgstr "My planner"
 
 #: new_user_md5.php:141
 msgid "Eingabe eines neuen Benutzer-Accounts"
@@ -23446,7 +23615,7 @@ msgid ""
 "Veranstaltung $s löschen."
 msgstr ""
 "You can only register yourself here when you delete yourself from the "
-"waiting list for the course $s.  %s ?????"
+"waiting list for the course $s."
 
 #: sem_verify.php:374
 #, c-format
@@ -24024,10 +24193,30 @@ msgstr "All smilies"
 msgid "Aktuelle Smiley Anzahl: "
 msgstr "Current smiley number:"
 
+#: show_smiley.php:61 lib/classes/smiley.class.php:496
+#: lib/classes/smiley.class.php:659
+msgid "Schreibweise"
+msgstr "Notation"
+
+#: show_smiley.php:61 lib/classes/smiley.class.php:429
+#: lib/classes/smiley.class.php:484 lib/classes/smiley.class.php:496
+msgid "Kürzel"
+msgstr "Short cut"
+
+#: show_smiley.php:86 show_smiley.php:104
+#, fuzzy
+msgid "Smiley-&Uuml;bersicht"
+msgstr "Overview"
+
+#: show_smiley.php:109
+#, fuzzy, c-format
+msgid "%s Smileys vorhanden - Auswahl:"
+msgstr "No smiley available."
+
 #: sms_box.php:115 sms_functions.inc.php:410
-#, c-format
+#, fuzzy, c-format
 msgid "Lesebestätigung von %s"
-msgstr ""
+msgstr "The confirmation mail"
 
 #: sms_box.php:116 sms_functions.inc.php:411
 #, c-format
@@ -24284,8 +24473,9 @@ msgid "Der Absender / Die Absenderin hat eine Lesebestätigung angefordert."
 msgstr ""
 
 #: sms_functions.inc.php:399
+#, fuzzy
 msgid "Klicken Sie hier um das Lesen der Nachricht zu bestätigen"
-msgstr ""
+msgstr "Do not delete this message."
 
 #: sms_functions.inc.php:535
 msgid "keine Nachrichten"
@@ -24446,39 +24636,47 @@ msgid "Klicken Sie das Icon um die Nachricht zu speichern."
 msgstr "Click on cancel to go back."
 
 #: sms_send.php:552
+#, fuzzy
 msgid "Klicken Sie hier um die Nachricht nicht (auch) als Email zu versenden."
-msgstr ""
+msgstr "Do not delete this message."
 
 #: sms_send.php:552
+#, fuzzy
 msgid ""
 "Klicken Sie das Icon um die Nachricht nicht (auch) als Email zu versenden."
-msgstr ""
+msgstr "Do not delete this message."
 
 #: sms_send.php:554
+#, fuzzy
 msgid "Klicken Sie hier um die Nachricht (auch) als Email zu versenden."
-msgstr ""
+msgstr "Do not delete this message."
 
 #: sms_send.php:554
+#, fuzzy
 msgid "Klicken Sie das Icon um die Nachricht (auch) als Email zu versenden."
-msgstr ""
+msgstr "Do not delete this message."
 
 #: sms_send.php:567
+#, fuzzy
 msgid ""
 "Klicken Sie hier um für diese Nachricht keine Lesebestätigung anzufordern."
-msgstr ""
+msgstr "Do not delete this message."
 
 #: sms_send.php:567
+#, fuzzy
 msgid "Klicken Sie das Icon um keine Lesebestätigung anzufordern."
-msgstr ""
+msgstr "Click on cancel to go back."
 
 #: sms_send.php:569
+#, fuzzy
 msgid ""
 "Klicken Sie hier um für diese Nachricht eine Lesebestätigung anzufordern."
-msgstr ""
+msgstr "Do not delete this message."
 
 #: sms_send.php:569
+#, fuzzy
 msgid "Klicken Sie das Icon um eine Lesebestätigung anzufordern."
-msgstr ""
+msgstr "Click on cancel to go back."
 
 #: sms_send.php:584
 msgid "Chatraum ausw&auml;hlen:"
@@ -24505,8 +24703,9 @@ msgid "Nachricht speichern"
 msgstr "Save message"
 
 #: sms_send.php:626
+#, fuzzy
 msgid "als Email senden"
-msgstr ""
+msgstr "send"
 
 #: sms_send.php:627 sms_send.php:892
 #, fuzzy
@@ -25140,10 +25339,6 @@ msgstr "Comments:"
 msgid "&Auml;nderungen"
 msgstr "Changes"
 
-#: teilnehmer.php:915
-msgid "eintragen"
-msgstr "Enter"
-
 #: teilnehmer.php:916
 msgid "entfernen"
 msgstr "Remove"
@@ -25488,8 +25683,9 @@ msgid "einblenden"
 msgstr "find appointments"
 
 #: wiki.inc.php:929
+#, fuzzy
 msgid "als Icons einblenden"
-msgstr ""
+msgstr "find appointments"
 
 #: wiki.inc.php:932
 #, fuzzy
@@ -25880,6 +26076,18 @@ msgstr "You have deleted one posting from the guest book!"
 msgid "Netter Versuch!"
 msgstr "Nice try!"
 
+#: lib/classes/RangeTreeObjectFak.class.php:47
+#: lib/classes/RangeTreeObjectInst.class.php:47
+#, fuzzy
+msgid "Straße"
+msgstr "Street: "
+
+#: lib/classes/RangeTreeObjectFak.class.php:47
+#: lib/classes/RangeTreeObjectInst.class.php:47
+#, fuzzy
+msgid "Tel."
+msgstr "Tel.:"
+
 #: lib/classes/score.class.php:151
 msgid "Gästebuch aktiviert mit 1 Eintrag"
 msgstr "Guest book activated with 1 entry"
@@ -26018,8 +26226,9 @@ msgid "Lichtgestalt"
 msgstr "Light bearer"
 
 #: lib/classes/score.class.php:233
+#, fuzzy
 msgid "Halbgott"
-msgstr ""
+msgstr "Goddess"
 
 #: lib/classes/score.class.php:233
 #, fuzzy
@@ -26058,6 +26267,207 @@ msgstr "(search results)"
 #: lib/classes/SemBrowse.class.php:503
 msgid "Ihre Suche ergab keine Treffer"
 msgstr "The search did not reveal any matches"
+
+#: lib/classes/smiley.class.php:96
+msgid ""
+"Fehler: Studip kann die neue Smiley-Tabelle nicht anlegen, bitte wenden Sie "
+"sich an Ihren Systembetreuer!"
+msgstr ""
+
+#: lib/classes/smiley.class.php:104
+msgid "Smiley-Tabelle angelegt, Tabelle \"user_info\" geändert."
+msgstr ""
+
+#: lib/classes/smiley.class.php:207
+#, fuzzy, c-format
+msgid "%d Zählerstände aktualisiert"
+msgstr "Update page"
+
+#: lib/classes/smiley.class.php:276
+#, fuzzy, c-format
+msgid "%d Smileys aktualisiert"
+msgstr "Update page"
+
+#: lib/classes/smiley.class.php:276
+#, fuzzy, c-format
+msgid "%d Smileys eingefügt"
+msgstr "Update page"
+
+#: lib/classes/smiley.class.php:276
+#, fuzzy, c-format
+msgid "%d Smileys gelöscht"
+msgstr "Delete selected news"
+
+#: lib/classes/smiley.class.php:298
+#, fuzzy, c-format
+msgid ""
+"Der Dateityp der Bilddatei ist falsch (%s).<br>Es ist nur die Dateiendung ."
+"gif erlaubt!"
+msgstr ""
+"The photo file is of the wrong file type (%s). <br> Only the file formats ."
+"gif and .jpg are allowed!"
+
+#: lib/classes/smiley.class.php:312
+#, fuzzy, c-format
+msgid "Es ist bereits eine Bildatei mit dem Namen \"%s\" vorhanden."
+msgstr "No categories exist at the moment."
+
+#: lib/classes/smiley.class.php:321
+#, fuzzy, c-format
+msgid "Die Bilddatei \"%s\" wurde erfolgreich ersetzt."
+msgstr "A new photo has been successfully uploaded."
+
+#: lib/classes/smiley.class.php:325
+#, fuzzy, c-format
+msgid "Die Bilddatei \"%s\" wurde erfolgreich hochgeladen."
+msgstr "A new photo has been successfully uploaded."
+
+#: lib/classes/smiley.class.php:341
+#, fuzzy
+msgid "Neues Smiley hochladen"
+msgstr "No smiley available."
+
+#: lib/classes/smiley.class.php:342
+#, fuzzy
+msgid "existierende Datei überschreiben:"
+msgstr "Write internal system message"
+
+#: lib/classes/smiley.class.php:375
+#, fuzzy
+msgid "1. Zeichen"
+msgstr "Times"
+
+#: lib/classes/smiley.class.php:393 lib/classes/smiley.class.php:485
+msgid "Top 20"
+msgstr ""
+
+#: lib/classes/smiley.class.php:394
+#, fuzzy
+msgid "benutzte"
+msgstr "User"
+
+#: lib/classes/smiley.class.php:395
+#, fuzzy
+msgid "nicht benutzte"
+msgstr "never used"
+
+#: lib/classes/smiley.class.php:396
+#, fuzzy
+msgid "nur mit Kürzel"
+msgstr "Short cut"
+
+#: lib/classes/smiley.class.php:399
+#, fuzzy
+msgid "Aktionen"
+msgstr "Actions:"
+
+#: lib/classes/smiley.class.php:400
+#, fuzzy
+msgid "Tabelle aktualisieren"
+msgstr "Update page"
+
+#: lib/classes/smiley.class.php:401
+#, fuzzy
+msgid "Smileys zählen"
+msgstr "Smilies "
+
+#: lib/classes/smiley.class.php:402
+#, fuzzy
+msgid "Smiley-Übersicht öffnen"
+msgstr "Overview"
+
+#: lib/classes/smiley.class.php:407
+#, fuzzy
+msgid "vorhanden:"
+msgstr "Templates:"
+
+#: lib/classes/smiley.class.php:408
+#, fuzzy
+msgid "davon benutzt:"
+msgstr "never used"
+
+#: lib/classes/smiley.class.php:409
+#, fuzzy
+msgid "insgesamt benutzt:"
+msgstr "never used"
+
+#: lib/classes/smiley.class.php:410
+#, fuzzy
+msgid "letzte Änderung:"
+msgstr "Last change"
+
+#: lib/classes/smiley.class.php:426 lib/classes/smiley.class.php:658
+#, fuzzy
+msgid "Smiley"
+msgstr "Smilies "
+
+#: lib/classes/smiley.class.php:427
+#, fuzzy
+msgid "Smileyname"
+msgstr "Smilies "
+
+#: lib/classes/smiley.class.php:447
+#, fuzzy, c-format
+msgid "Smiley %s löschen"
+msgstr "Delete selected news"
+
+#: lib/classes/smiley.class.php:452 lib/classes/smiley.class.php:534
+msgid "Keine Smileys vorhanden."
+msgstr "No smiley available."
+
+#: lib/classes/smiley.class.php:522
+#, fuzzy, c-format
+msgid "%s zu meinen Favoriten hinzufügen"
+msgstr "Add to favourites"
+
+#: lib/classes/smiley.class.php:553
+#, fuzzy, c-format
+msgid "Es existiert bereits eine Datei mit dem Namen \"%s\"."
+msgstr "No categories exist at the moment."
+
+#: lib/classes/smiley.class.php:560
+#, fuzzy, c-format
+msgid "Die Datei \"%s\" konnte nicht umbenannt werden."
+msgstr "The file could not be deleted"
+
+#: lib/classes/smiley.class.php:568
+msgid "Es wurde 1 Smiley umbenannt."
+msgstr "1 smiley was renamed."
+
+#: lib/classes/smiley.class.php:570
+#, c-format
+msgid "Es wurden %d Smileys umbenannt."
+msgstr "%d smiley was renamed."
+
+#: lib/classes/smiley.class.php:584
+#, fuzzy, c-format
+msgid "Smiley \"%s\" erfolgreich gelöscht."
+msgstr "Error, the list could not be deleted!"
+
+#: lib/classes/smiley.class.php:588
+#, fuzzy, c-format
+msgid "Fehler: Smiley \"%s\" konnte nicht gelöscht werden."
+msgstr "Error, the list could not be deleted!"
+
+#: lib/classes/smiley.class.php:646
+#, fuzzy, c-format
+msgid "%s  entfernen"
+msgstr "Remove"
+
+#: lib/classes/smiley.class.php:650
+#, fuzzy
+msgid "meine Smiley-Favoriten"
+msgstr "No smiley available."
+
+#: lib/classes/smiley.class.php:651
+msgid ""
+"Klicken Sie auf ein Smiley um es zu Ihren Favoriten hinzuzufügen. Wenn Sie "
+"auf einen Favoriten klicken, wird er wieder entfernt."
+msgstr ""
+
+#: lib/classes/smiley.class.php:651
+msgid "Sie können maximal 20 Smileys aussuchen."
+msgstr ""
 
 #: lib/classes/StartupChecks.class.php:54
 msgid ""
@@ -27512,13 +27922,197 @@ msgstr "This username was not found!"
 msgid "Bitte achten Sie auf korrekte Gro&szlig;-Kleinschreibung beim Username!"
 msgstr "Please use correct upper and lower cases for the username!"
 
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Erfurt.class.php:41
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginFHHIOpac.class.php:42
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Jena.class.php:41
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Nordhausen.class.php:41
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Schmalkalden.class.php:41
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginGvk.class.php:47
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginHAAB_Weimar.class.php:41
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginHSfMFL_Weimar.class.php:41
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginRkgoe.class.php:42
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginSUBGoeOpac.class.php:42
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginThULB_Jena.class.php:42
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginUB_Erfurt.class.php:41
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginUB_Ilmenau.class.php:41
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginUB_Weimar.class.php:41
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginWisoFak.class.php:42
 msgid "Basisindex [ALL]"
 msgstr "Basisindex [ALL]"
+
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Erfurt.class.php:42
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Jena.class.php:42
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Nordhausen.class.php:42
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Schmalkalden.class.php:42
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginHAAB_Weimar.class.php:42
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginHSfMFL_Weimar.class.php:42
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginThULB_Jena.class.php:43
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginUB_Erfurt.class.php:42
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginUB_Ilmenau.class.php:42
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginUB_Weimar.class.php:42
+#, fuzzy
+msgid "Titelstichw&ouml;rter [TIT]"
+msgstr "Title keyword [TIT]"
+
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Erfurt.class.php:43
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Jena.class.php:43
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Nordhausen.class.php:43
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Schmalkalden.class.php:43
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginHAAB_Weimar.class.php:43
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginHSfMFL_Weimar.class.php:43
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginThULB_Jena.class.php:44
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginUB_Erfurt.class.php:43
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginUB_Ilmenau.class.php:43
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginUB_Weimar.class.php:43
+#, fuzzy
+msgid "Serienstichw&ouml;rter [SER]"
+msgstr "Serial keywords [SER]"
+
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Erfurt.class.php:44
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginFHHIOpac.class.php:43
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Jena.class.php:44
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Nordhausen.class.php:44
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Schmalkalden.class.php:44
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginGvk.class.php:51
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginHAAB_Weimar.class.php:44
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginHSfMFL_Weimar.class.php:44
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginRkgoe.class.php:46
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginSUBGoeOpac.class.php:43
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginThULB_Jena.class.php:45
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginUB_Erfurt.class.php:44
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginUB_Ilmenau.class.php:44
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginUB_Weimar.class.php:44
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginWisoFak.class.php:43
+msgid "alle Klassifikationen [SYS]"
+msgstr "All classifications [SYS]"
+
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Erfurt.class.php:45
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginFHHIOpac.class.php:47
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Jena.class.php:45
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Nordhausen.class.php:45
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Schmalkalden.class.php:45
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginHAAB_Weimar.class.php:45
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginHSfMFL_Weimar.class.php:45
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginSUBGoeOpac.class.php:47
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginThULB_Jena.class.php:46
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginUB_Erfurt.class.php:45
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginUB_Ilmenau.class.php:45
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginUB_Weimar.class.php:45
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginWisoFak.class.php:47
+msgid "Signatur [SGN]"
+msgstr "Signature [SGN]"
+
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Erfurt.class.php:46
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginFHHIOpac.class.php:44
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Jena.class.php:46
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Nordhausen.class.php:46
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Schmalkalden.class.php:46
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginGvk.class.php:51
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginHAAB_Weimar.class.php:46
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginHSfMFL_Weimar.class.php:46
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginRkgoe.class.php:46
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginSUBGoeOpac.class.php:44
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginThULB_Jena.class.php:47
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginUB_Erfurt.class.php:46
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginUB_Ilmenau.class.php:46
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginUB_Weimar.class.php:46
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginWisoFak.class.php:44
+msgid "Person, Author [PER]"
+msgstr "Person, Author [PER]"
+
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Erfurt.class.php:47
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Jena.class.php:47
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Nordhausen.class.php:47
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Schmalkalden.class.php:47
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginHAAB_Weimar.class.php:47
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginHSfMFL_Weimar.class.php:47
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginThULB_Jena.class.php:48
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginUB_Erfurt.class.php:47
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginUB_Ilmenau.class.php:47
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginUB_Weimar.class.php:47
+#, fuzzy
+msgid "K&ouml;rperschaften [KOR]"
+msgstr "Corporation [KOR]"
+
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Erfurt.class.php:48
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginFHHIOpac.class.php:45
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Jena.class.php:48
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Nordhausen.class.php:48
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Schmalkalden.class.php:48
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginGvk.class.php:52
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginHAAB_Weimar.class.php:48
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginHSfMFL_Weimar.class.php:48
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginRkgoe.class.php:47
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginSUBGoeOpac.class.php:45
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginThULB_Jena.class.php:49
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginUB_Erfurt.class.php:48
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginUB_Ilmenau.class.php:48
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginUB_Weimar.class.php:48
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginWisoFak.class.php:45
+msgid "Kongresse [KON]"
+msgstr "Congress [KON]"
+
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Erfurt.class.php:49
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginFHHIOpac.class.php:45
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Jena.class.php:49
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Nordhausen.class.php:49
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Schmalkalden.class.php:49
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginGvk.class.php:53
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginHAAB_Weimar.class.php:49
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginHSfMFL_Weimar.class.php:49
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginRkgoe.class.php:48
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginSUBGoeOpac.class.php:45
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginThULB_Jena.class.php:50
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginUB_Erfurt.class.php:49
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginUB_Ilmenau.class.php:49
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginUB_Weimar.class.php:49
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginWisoFak.class.php:45
+msgid "alle Nummern [NUM]"
+msgstr "All numbers [NUM]"
+
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Erfurt.class.php:50
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Jena.class.php:50
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Nordhausen.class.php:50
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Schmalkalden.class.php:50
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginHAAB_Weimar.class.php:50
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginHSfMFL_Weimar.class.php:50
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginThULB_Jena.class.php:51
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginUB_Erfurt.class.php:50
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginUB_Ilmenau.class.php:50
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginUB_Weimar.class.php:50
+#, fuzzy
+msgid "Schlagw&ouml;rter [SLW]"
+msgstr "Keywords [SLW]"
+
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Erfurt.class.php:51
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Jena.class.php:51
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Nordhausen.class.php:51
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Schmalkalden.class.php:51
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginHAAB_Weimar.class.php:51
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginHSfMFL_Weimar.class.php:51
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginThULB_Jena.class.php:52
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginUB_Erfurt.class.php:51
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginUB_Ilmenau.class.php:51
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginUB_Weimar.class.php:51
+#, fuzzy
+msgid "alle Titelanf&auml;nge [TAF]"
+msgstr "All title beginnings [TAF]"
+
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Erfurt.class.php:52
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginFHHIOpac.class.php:47
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Jena.class.php:52
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Nordhausen.class.php:52
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Schmalkalden.class.php:52
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginHAAB_Weimar.class.php:52
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginHSfMFL_Weimar.class.php:52
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginSUBGoeOpac.class.php:47
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginThULB_Jena.class.php:53
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginUB_Erfurt.class.php:52
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginUB_Ilmenau.class.php:52
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginUB_Weimar.class.php:52
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginWisoFak.class.php:47
+msgid "Verlagsort, Verlag [PUB]"
+msgstr "Place of publication, publisher [PUB]"
 
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginFHHIOpac.class.php:42
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginGvk.class.php:48
@@ -27536,22 +28130,6 @@ msgstr "Title keyword [TIT]"
 msgid "Serienstichwörter [SER]"
 msgstr "Serial keywords [SER]"
 
-#: lib/classes/lit_search_plugins/StudipLitSearchPluginFHHIOpac.class.php:43
-#: lib/classes/lit_search_plugins/StudipLitSearchPluginGvk.class.php:51
-#: lib/classes/lit_search_plugins/StudipLitSearchPluginRkgoe.class.php:46
-#: lib/classes/lit_search_plugins/StudipLitSearchPluginSUBGoeOpac.class.php:43
-#: lib/classes/lit_search_plugins/StudipLitSearchPluginWisoFak.class.php:43
-msgid "alle Klassifikationen [SYS]"
-msgstr "All classifications [SYS]"
-
-#: lib/classes/lit_search_plugins/StudipLitSearchPluginFHHIOpac.class.php:44
-#: lib/classes/lit_search_plugins/StudipLitSearchPluginGvk.class.php:51
-#: lib/classes/lit_search_plugins/StudipLitSearchPluginRkgoe.class.php:46
-#: lib/classes/lit_search_plugins/StudipLitSearchPluginSUBGoeOpac.class.php:44
-#: lib/classes/lit_search_plugins/StudipLitSearchPluginWisoFak.class.php:44
-msgid "Person, Author [PER]"
-msgstr "Person, Author [PER]"
-
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginFHHIOpac.class.php:44
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginGvk.class.php:52
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginRkgoe.class.php:47
@@ -27559,22 +28137,6 @@ msgstr "Person, Author [PER]"
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginWisoFak.class.php:44
 msgid "Körperschaften [KOR]"
 msgstr "Corporation [KOR]"
-
-#: lib/classes/lit_search_plugins/StudipLitSearchPluginFHHIOpac.class.php:45
-#: lib/classes/lit_search_plugins/StudipLitSearchPluginGvk.class.php:52
-#: lib/classes/lit_search_plugins/StudipLitSearchPluginRkgoe.class.php:47
-#: lib/classes/lit_search_plugins/StudipLitSearchPluginSUBGoeOpac.class.php:45
-#: lib/classes/lit_search_plugins/StudipLitSearchPluginWisoFak.class.php:45
-msgid "Kongresse [KON]"
-msgstr "Congress [KON]"
-
-#: lib/classes/lit_search_plugins/StudipLitSearchPluginFHHIOpac.class.php:45
-#: lib/classes/lit_search_plugins/StudipLitSearchPluginGvk.class.php:53
-#: lib/classes/lit_search_plugins/StudipLitSearchPluginRkgoe.class.php:48
-#: lib/classes/lit_search_plugins/StudipLitSearchPluginSUBGoeOpac.class.php:45
-#: lib/classes/lit_search_plugins/StudipLitSearchPluginWisoFak.class.php:45
-msgid "alle Nummern [NUM]"
-msgstr "All numbers [NUM]"
 
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginFHHIOpac.class.php:46
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginSUBGoeOpac.class.php:46
@@ -27587,18 +28149,6 @@ msgstr "Keywords [SLW]"
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginWisoFak.class.php:46
 msgid "alle Titelanfänge [TAF]"
 msgstr "All title beginnings [TAF]"
-
-#: lib/classes/lit_search_plugins/StudipLitSearchPluginFHHIOpac.class.php:47
-#: lib/classes/lit_search_plugins/StudipLitSearchPluginSUBGoeOpac.class.php:47
-#: lib/classes/lit_search_plugins/StudipLitSearchPluginWisoFak.class.php:47
-msgid "Verlagsort, Verlag [PUB]"
-msgstr "Place of publication, publisher [PUB]"
-
-#: lib/classes/lit_search_plugins/StudipLitSearchPluginFHHIOpac.class.php:47
-#: lib/classes/lit_search_plugins/StudipLitSearchPluginSUBGoeOpac.class.php:47
-#: lib/classes/lit_search_plugins/StudipLitSearchPluginWisoFak.class.php:47
-msgid "Signatur [SGN]"
-msgstr "Signature [SGN]"
 
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginGvk.class.php:47
 msgid "Personennamen [PRS]"
@@ -27802,10 +28352,6 @@ msgstr "The start page"
 #: help/structure.inc.php:94
 msgid "Ihre Übersichtsseite nach jedem Login"
 msgstr "your overview page after every login"
-
-#: help/structure.inc.php:98
-msgid "Schnelleinstieg"
-msgstr "Quick introduction"
 
 #: help/structure.inc.php:99
 msgid "Das Wichtigste in Kürze"
@@ -28604,10 +29150,6 @@ msgid ""
 "Anfragen erstellen?"
 msgstr ""
 
-#: index.php:176 
-msgid "Registrieren"
-msgstr "Register"
-
 #: messaging.inc.php:307 
 #, fuzzy
 msgid "Von:"
@@ -28627,16 +29169,6 @@ msgstr "All unread messages have been saved as read."
 #: sms_box.php:529 
 msgid "Nachrichten filtern:"
 msgstr "Filter messages:"
-
-#: sms_send.php:410 
-#, fuzzy
-msgid "speichert die Nachricht nicht."
-msgstr "Do not delete this message."
-
-#: sms_send.php:426 
-#, fuzzy
-msgid "Nachricht wird nicht gespeichert."
-msgstr "Do not delete this message."
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:1331 
 msgid "Einer Frage wurden noch keine Antworten zugewiesen."
@@ -28927,10 +29459,6 @@ msgstr "You are the only participant."
 #: vote/view/vote_show.lib.php:785 
 msgid "Sie waren bisher der/die einzigste TeilnehmerIn"
 msgstr "You are to date the only participant"
-
-#: calendar/calendar.inc.php:300 calendar/calendar.inc.php:312 
-msgid "Keine Titel"
-msgstr "no title"
 
 #: calendar/calendar_settings.inc.php:249 
 #, fuzzy
@@ -31314,3 +31842,186 @@ msgstr ""
 #, fuzzy
 #~ msgid "Ressource anzeigen und bearbeiten"
 #~ msgstr "Display and edit allocations"
+
+#~ msgid ""
+#~ "Klicken Sie auf ein Text-Icon, um zu den hochgeladenen Dateien des "
+#~ "jeweiligen Termins zu gelangen."
+#~ msgstr ""
+#~ "Click on a text icon to acquire the uploaded files for appropriate "
+#~ "appointments. "
+
+#~ msgid "Diese Nachricht wurde automatisch an %s weitergeleitet."
+#~ msgstr "The message has automatically been forwarded to %s."
+
+#~ msgid "[Stud.IP] Eine Nachricht von "
+#~ msgstr "[Stud.IP] A message from"
+
+#~ msgid "Nachrichten k&ouml;nnen nicht an sich selbst gesandt werden."
+#~ msgstr "You can not send messages to yourself."
+
+#~ msgid "speichert die Nachricht nicht."
+#~ msgstr "Do not save this message."
+
+#~ msgid "Nachricht wird gespeichert."
+#~ msgstr "Message is saved."
+
+#, fuzzy
+#~ msgid "speichert die Nachricht im Postausgang."
+#~ msgstr "Save sent messages in outbox"
+
+#~ msgid "Nachricht wird nicht gespeichert."
+#~ msgstr "Message will not be saved."
+
+#~ msgid "Empf&auml;nger hinzuf&uuml;gen:"
+#~ msgstr "Add addressee:"
+
+#~ msgid ""
+#~ "Nutzen Sie die Adressbuch-Liste oder freie Suche um Empf&auml;ngerInnen "
+#~ "hinzuf&uuml;gen."
+#~ msgstr "Use the address book list or the free search to add addressees."
+
+#~ msgid "E-Mail an alle Gruppenmitglieder verschicken"
+#~ msgstr "Send E-mail to all group members"
+
+#~ msgid "von %02d%02d Uhr bis %02d:%02d Uhr"
+#~ msgstr "from %02d%02d o'clock to %02d:%02d o'clock"
+
+#, fuzzy
+#~ msgid "<b>Neue Sperrebene anlegen</b>"
+#~ msgstr "Create new appointment"
+
+#, fuzzy
+#~ msgid "name"
+#~ msgstr "Name"
+
+#, fuzzy
+#~ msgid "&nbsp;&auml;ndern"
+#~ msgstr "change "
+
+#, fuzzy
+#~ msgid "Neue Sperrebene eingeben"
+#~ msgstr "enter no dates"
+
+#, fuzzy
+#~ msgid "nicht gesperrt"
+#~ msgstr "Not entered"
+
+#, fuzzy
+#~ msgid "beteiligte Einrichtung"
+#~ msgstr "Participating institute:"
+
+#, fuzzy
+#~ msgid "Teilnehmerzahl"
+#~ msgstr "Number of participants"
+
+#, fuzzy
+#~ msgid "Personen und Einordnung"
+#~ msgstr "course participants"
+
+#, fuzzy
+#~ msgid "Heimateinrichtung"
+#~ msgstr "Home institute"
+
+#, fuzzy
+#~ msgid "Studienbereiche"
+#~ msgstr "Subject areas:"
+
+#, fuzzy
+#~ msgid "Teilnahmevoraussetzungen"
+#~ msgstr "Pre-requisites"
+
+#, fuzzy
+#~ msgid "Dauer (in Semestern)"
+#~ msgstr "Current semester"
+
+#, fuzzy
+#~ msgid "Aufhebung der Kontigentierung"
+#~ msgstr "Date after which the contingent groups will no longer be considered"
+
+#, fuzzy
+#~ msgid "Aufhebung der Kontingentierung"
+#~ msgstr "Date after which the contingent groups will no longer be considered"
+
+#, fuzzy
+#~ msgid "Verbindlichkeit der Anmeldung"
+#~ msgstr "Compulsory registration:"
+
+#, fuzzy
+#~ msgid "Typ des Anmeldeverfahrens"
+#~ msgstr "Registration procedure:"
+
+#, fuzzy
+#~ msgid "Zeit/Datum des Losverfahrens"
+#~ msgstr "random selection procedure"
+
+#, fuzzy
+#~ msgid "Vorl&auml;ufigkeit der Anmeldungen"
+#~ msgstr "Provisionally accepted participants."
+
+#, fuzzy
+#~ msgid "Hinweistext bei Anmeldungen"
+#~ msgstr "Text for provisional entries:"
+
+#, fuzzy
+#~ msgid "Lesezugriff"
+#~ msgstr "Reading access:"
+
+#, fuzzy
+#~ msgid "Schreibzugriff"
+#~ msgstr "Writing access:"
+
+#, fuzzy
+#~ msgid "Passwort"
+#~ msgstr "Password:"
+
+#, fuzzy
+#~ msgid "Bitte geben Sie einen Namen f&uuml;r die Sperrebene an!"
+#~ msgstr "Please enter a name for the course!"
+
+#, fuzzy
+#~ msgid "Einf&uuml;gen erfolgreich"
+#~ msgstr "Add"
+
+#, fuzzy
+#~ msgid "Die &Auml;nderung ist fehlgeschlagen"
+#~ msgstr "Login of %s was not successful."
+
+#, fuzzy
+#~ msgid "Die &Auml;nderung war erfolgreich!"
+#~ msgstr "Save changes"
+
+#, fuzzy
+#~ msgid "Die Sperrebene konnte nicht gel&ouml;scht werden!"
+#~ msgstr "The file could not be deleted"
+
+#, fuzzy
+#~ msgid "Die Sperrebene wurde gel&ouml;scht!"
+#~ msgstr "1 appointment has been deleted!"
+
+#, fuzzy
+#~ msgid "Wollen Sie die Sperrebene l&ouml;schen?"
+#~ msgstr "Do you really want to delete these elements?"
+
+#, fuzzy
+#~ msgid ""
+#~ "Sperrebenen k&ouml;nnen nur gel&ouml;scht werden, wenn sie nicht benutzt "
+#~ "werden!"
+#~ msgstr ""
+#~ "%s folder couldn't be deleted because it contains documents from other "
+#~ "users"
+
+#, fuzzy
+#~ msgid "Sperren von Veranstaltungen"
+#~ msgstr "Course administration"
+
+#, fuzzy
+#~ msgid "Sperrebene"
+#~ msgstr "Writing"
+
+#, fuzzy
+#~ msgid "Sperrebene der angezeigten Veranstaltungen"
+#~ msgstr "To newly created course"
+
+#, fuzzy
+#~ msgid "Bitte w&auml;hlen"
+#~ msgstr "Please select"
