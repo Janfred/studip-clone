@@ -18,9 +18,14 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+page_open(array("sess" => "Seminar_Session", "auth" => "Seminar", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
+$perm->check("user");
 
-        page_open(array("sess" => "Seminar_Session", "auth" => "Seminar", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
-				$perm->check("user");
+include "$ABSOLUTE_PATH_STUDIP/seminar_open.php"; //hier werden die sessions initialisiert
+
+
+require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php")
+
 ?>
 <html>
 <head>
@@ -29,15 +34,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 	<META HTTP-EQUIV="REFRESH" CONTENT="<?php print $auth->lifetime*60;?>; URL=logout.php">
 </head>
 
+<? echo "\n".cssClassSwitcher::GetHoverJSFunction()."\n";
 
-<?php
-        include "seminar_open.php"; //hier werden die sessions initialisiert
-?>
+include "$ABSOLUTE_PATH_STUDIP/header.php";   //hier wird der "Kopf" nachgeladen
 
-<!-- hier muessen Seiten-Initialisierungen passieren -->
-
-<?php
-        include "header.php";   //hier wird der "Kopf" nachgeladen
         if ($SessSemName[1]) {
         	include "links1.php";
        	}
