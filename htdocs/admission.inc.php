@@ -204,7 +204,7 @@ function renumber_admission ($seminar_id, $send_message=TRUE) {
 				setTempLanguage($db2->f("user_id"));
 				$message = sprintf(_("Sie sind in der Warteliste der Veranstaltung **%s (%s)** hochgestuft worden. Sie stehen zur Zeit auf Position %s."), $db->f("Name"), view_turnus($db->f("Seminar_id")), $position);
 				restoreLanguage();
-				$messaging->insert_message($message, $db4->f("username"), "____%system%____", FALSE, FALSE, "1");
+				$messaging->insert_message(addslashes($message), $db4->f("username"), "____%system%____", FALSE, FALSE, "1");
 			}
 			$position++;
 		}
