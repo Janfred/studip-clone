@@ -122,7 +122,7 @@ function editarea($write,$description,$nichtneu=FALSE,$zitat_id) {
 		$zusatz = "<a href=\"forum.php?cmd=really_kill&topic_id=$write&view=$view&nurneu=1&mehr=$mehr#anker\">" . makeButton("abbrechen", "img") . "</a>";
 	if ($write AND $write!=-1) {
 		if ($description=="Dieser Beitrag wird gerade bearbeitet.")
-			$description="Ihr Beitrag";
+			$description= _("Ihr Beitrag");
 		if ($user->id == "nobody") {  // nicht angemeldete muessen Namen angeben
 			if (ereg("%%\[editiert von",$description)) { // wurde schon mal editiert
 				$postmp = strpos($description,"%%[editiert von");
