@@ -149,10 +149,12 @@ function change_general_view() {
 					<td  <?=$cssSw->getFullClass()?> colspan=2 align="middle">
 						<font size=-1><input type="IMAGE" <?=makeButton("uebernehmen", "src") ?> border=0 value="<?_("&Auml;nderungen &uuml;bernehmen")?>"></font>&nbsp;	
 						<input type="HIDDEN" name="view" value="allgemein">
-						</form>						
 					</td>
 				</tr>
+				</form>									
 			</table>
+			<br />
+			<br />
 			</td>
 		</tr>
 	</table> 
