@@ -522,7 +522,7 @@ function export_pers($inst_id)
 		$data_object = "";
 	}
 
-	if ($do_group)
+	if (($do_group) AND ($group_string != ""))
 		$data_object .= xml_close_tag($xml_groupnames_person["subgroup1"]);
 
 	$data_object .= xml_close_tag( $xml_groupnames_person["group"]);
