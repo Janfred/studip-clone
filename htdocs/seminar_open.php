@@ -20,7 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // set default Values for messaging
 function check_messaging_default() {
-	global $my_messaging_settings, $ALLOW_SEND_AS_EMAIL;
+	global $my_messaging_settings;
 
 	if (!$my_messaging_settings['show_only_buddys'])
 		$my_messaging_settings['show_only_buddys'] = FALSE;
@@ -57,7 +57,7 @@ function check_messaging_default() {
 	if (!$my_messaging_settings['folder']['out'])
 		$my_messaging_settings['folder']['out'][0] = "dummy";
 	if (!isset($my_messaging_settings['send_as_email']))
-		$my_messaging_settings['send_as_email'] = TRUE;
+		$my_messaging_settings['send_as_email'] = $GLOBALS["MESSAGING_FORWARD_DEFAULT"];
 }
 	
 // set default Values for schedule (timetable)	
