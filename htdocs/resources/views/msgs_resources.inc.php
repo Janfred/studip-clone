@@ -37,7 +37,7 @@
 $this->msg[1] = array (
 		"mode" => "error",
 		"titel" => _("Fehlende Berechtigung"),
-		"msg"=> _("Sie haben leider keine Berechtigung, das Objekt zu bearbeiten"));
+		"msg"=> _("Sie haben leider keine Berechtigung, das Objekt zu bearbeiten!"));
 $this->msg[2] = array (
 		"mode" => "error",
 		"titel" => _("Nutzer hat keine Berechtigung")	,
@@ -115,5 +115,8 @@ $this->msg[23] = array (
 $this->msg[24] = array (
 		"mode" => "error",
 		"msg"=> _("Die t&auml;gliche Wiederholung darf maximal 30 Tage dauern!"));
-		
+$this->msg[25] = array (
+		"mode" => "error",
+		"titel" => _("Fehlende Berechtigung"),
+		"msg"=> _("Sie haben leider keine Berechtigung, diese Funktion zu benutzen!"));		
 ?>
