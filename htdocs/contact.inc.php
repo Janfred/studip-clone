@@ -95,7 +95,7 @@ function ShowUserInfo ($user_id)
 			if ($db->f("privadr")!="")
 				$userinfo["Addresse"] = $db->f("privadr");
 		}
-		$db->query ("SELECT sprechzeiten, raum, user_inst.telefon, user_inst.fax, Name, institute.Institut_id FROM user_inst LEFT JOIN institute USING(Institut_id) WHERE user_id = '$user_id' AND inst_perms != 'user'");	
+		$db->query ("SELECT sprechzeiten, raum, user_inst.telefon, user_inst.fax, Name, Institute.Institut_id FROM user_inst LEFT JOIN Institute USING(Institut_id) WHERE user_id = '$user_id' AND inst_perms != 'user'");	
 		while ($db->next_record()) {	
 			$userinfo["Institut"] = "<a href=\"institut_main.php?auswahl=".$db->f("Institut_id")."\">".$db->f("Name")."</a>";
 			if ($db->f("raum")!="")
