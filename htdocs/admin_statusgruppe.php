@@ -126,13 +126,13 @@ function PrintAktualStatusgruppen ($range_id, $view, $edit_id="")
 	while ($db->next_record()) {
 		$statusgruppe_id = $db->f("statusgruppe_id");
 		$size = $db->f("size");
-		echo "<table width=\"95%\" border=\"0\" cellpadding=\"2\" cellspacing=\"0\">
-			        <tr> 
-				          <td width=\"5%\">";
+		echo "\n<table width=\"95%\" border=\"0\" cellpadding=\"2\" cellspacing=\"0\">";
+		echo "\n\t<tr>";
+		echo "\n\t\t<td width=\"5%\">";
 		printf ("            	  <input type=\"IMAGE\" name=\"%s\" src=\"./pictures/move.gif\" border=\"0\" %s>&nbsp; </td>", $statusgruppe_id, tooltip("Markierte Personen dieser Gruppe zuordnen"));
-		printf ("	          <td width=\"95%%\" class=\"%s\">&nbsp; %s </td><td class=\"topic\" width=\"1%%\"><a href=\"$PHP_SELF?cmd=edit_statusgruppe&edit_id=%s&range_id=%s&view=%s\"><img src=\"./pictures/einst.gif\" border=\"0\" %s></a></td>",$edit_id == $statusgruppe_id?"topicwrite":"topic", htmlReady($db->f("name")),$statusgruppe_id, $range_id, $view, tooltip("Gruppennahme oder Anzahl anpassen"));
-		printf ( "	          <td width=\"4%%\"><a href=\"$PHP_SELF?cmd=remove_statusgruppe&statusgruppe_id=%s&range_id=%s&view=%s\"><img src=\"pictures/trash_att.gif\" width=\"11\" height=\"17\" border=\"0\" %s></a></td>",$statusgruppe_id, $range_id, $view, tooltip("Gruppe mit Personenzuordnung entfernen"));
-		echo 	"</tr>";
+		printf ("	          <td width=\"85%%\" class=\"%s\">&nbsp; %s </td><td class=\"topic\" width=\"5%%\"><a href=\"$PHP_SELF?cmd=edit_statusgruppe&edit_id=%s&range_id=%s&view=%s\"><img src=\"./pictures/einst.gif\" border=\"0\" %s></a></td>",$edit_id == $statusgruppe_id?"topicwrite":"topic", htmlReady($db->f("name")),$statusgruppe_id, $range_id, $view, tooltip("Gruppenname oder Anzahl anpassen"));
+		printf ( "	          <td width=\"5%%\"><a href=\"$PHP_SELF?cmd=remove_statusgruppe&statusgruppe_id=%s&range_id=%s&view=%s\"><img src=\"pictures/trash_att.gif\" width=\"11\" height=\"17\" border=\"0\" %s></a></td>",$statusgruppe_id, $range_id, $view, tooltip("Gruppe mit Personenzuordnung entfernen"));
+		echo 	"\n\t</tr>";
 
 		$db2->query ("SELECT statusgruppe_user.user_id, Vorname, Nachname, username FROM statusgruppe_user LEFT JOIN auth_user_md5 USING(user_id) WHERE statusgruppe_id = '$statusgruppe_id'");
 		$k = 1;
@@ -147,17 +147,16 @@ function PrintAktualStatusgruppen ($range_id, $view, $edit_id="")
 			} else {
 				$class="steelgraulight"; 
 			}
-			printf ("     <tr><td><font color=\"%s\">$k</font></td>", $farbe);
-			printf ("       <td class=\"%s\" colspan=\"2\"><font size=\"2\"> %s&nbsp; %s</font></td>",$class, $db2->f("Vorname"), $db2->f("Nachname"));
-			printf ( "	   <td width=\"5%%\"><a href=\"$PHP_SELF?cmd=remove_person&statusgruppe_id=%s&username=%s&range_id=%s&view=%s\"><img src=\"pictures/trash.gif\" width=\"11\" height=\"17\" border=\"0\" %s></a></td>", $statusgruppe_id, $db2->f("username"), $range_id, $view, tooltip("Person aus der Gruppe entfernen"));
-			echo "	</tr>";
+			printf ("\n\t<tr>\n\t\t<td><font color=\"%s\">$k</font></td>", $farbe);
+			printf ("<td class=\"%s\" colspan=\"2\"><font size=\"2\"> %s&nbsp; %s</font></td>",$class, $db2->f("Vorname"), $db2->f("Nachname"));
+			printf ("<td><a href=\"$PHP_SELF?cmd=remove_person&statusgruppe_id=%s&username=%s&range_id=%s&view=%s\"><img src=\"pictures/trash.gif\" width=\"11\" height=\"17\" border=\"0\" %s></a></td>", $statusgruppe_id, $db2->f("username"), $range_id, $view, tooltip("Person aus der Gruppe entfernen"));
+			echo "\n\t</tr>";
 			$k++;
 		}
 		while ($k <= $db->f("size")) {
-			echo "<tr><td><font color=\"#FF4444\">$k</font></td>";
-			printf ("<td class=\"blank\" width=\"95%%\">&nbsp; </td>");
-			printf ( "<td width=\"5%%\">&nbsp; </td>");
-			echo "</tr>";
+			echo "\n\t<tr>\n\t\t<td><font color=\"#FF4444\">$k</font></td>";
+			printf ("<td class=\"blank\" colspan=\"3\">&nbsp; </td>");
+			echo "\n\t</tr>";
 			$k++;
 		} 
 		$i++;
@@ -468,7 +467,7 @@ function SwapStatusgruppe ($statusgruppe_id)
 	 	echo"<input type=\"HIDDEN\" name=\"range_id\" value=\"$range_id\">&nbsp; ";
       	  	echo"<input type=\"HIDDEN\" name=\"view\" value=\"$view\"><font size=\"2\">Vorlagen:</font>&nbsp; ";
 		GetPresetGroups ($view,$veranstaltung_class); 
-		printf ("&nbsp; <input type=\"IMAGE\" src=\"./pictures/move.gif\" border=\"0\" %s>&nbsp;  ", tooltip("in Namesnsfeld uebernehmen"));
+		printf ("&nbsp; <input type=\"IMAGE\" src=\"./pictures/move.gif\" border=\"0\" %s>&nbsp;  ", tooltip("in Namensfeld übernehmen"));
 	        ?>
 	        </form>
 <?	}
@@ -528,14 +527,13 @@ function SwapStatusgruppe ($statusgruppe_id)
 
 $db->query ("SELECT name, statusgruppe_id, size FROM statusgruppen WHERE range_id = '$range_id' ORDER BY position ASC");
 if ($db->num_rows()>0) {   // haben wir schon Gruppen? dann Anzeige
-?><table width="100%" border="0" cellspacing="0">
-	 <form action="<? echo $PHP_SELF ?>?cmd=move_person" method="POST">
-		<?
-	  	  echo"<input type=\"HIDDEN\" name=\"range_id\" value=\"$range_id\">";
-	    	  echo"<input type=\"HIDDEN\" name=\"view\" value=\"$view\">";
-	?><tr>
+	?><table width="100%" border="0" cellspacing="0">
+<tr>
 	<?
-	printf ("<td class=\"steel1\" valign=\"top\" width=\"50%%\"><br>");
+	printf ("<td class=\"steel1\" valign=\"top\" width=\"50%%\"><br>\n");
+?>	<form action="<? echo $PHP_SELF ?>?cmd=move_person" method="POST">
+<? echo"<input type=\"HIDDEN\" name=\"range_id\" value=\"$range_id\">\n";
+	    	  echo"<input type=\"HIDDEN\" name=\"view\" value=\"$view\">\n";
 	if ($db->num_rows() > 0) {
 		$nogroups = 1;
 		if (get_object_type($range_id) == "sem" || get_object_type($range_id) == "inst") {
@@ -570,9 +568,9 @@ if ($db->num_rows()>0) {   // haben wir schon Gruppen? dann Anzeige
 	PrintAktualStatusgruppen ($range_id, $view, $edit_id);
 	?>
 	<br>&nbsp; 
-    </td>
-  </tr>
- </form>
+   </form>
+  </td>
+ </tr>
 </table>
 <?
 } else { // es sind noch keine Gruppen angelegt, daher Infotext
