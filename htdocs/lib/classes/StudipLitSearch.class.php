@@ -22,14 +22,6 @@
 
 require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/StudipForm.class.php");
 
-$_lit_search_plugins[] = array('name' => "Studip", 'link' => '');
-
-$_lit_search_plugins[] = array('name' => "SUBGoeOpac", 'link' => 'http://goopc4.sub.uni-goettingen.de:8080/DB=1/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
-$_lit_search_plugins[] = array('name' => "Rkgoe", 'link' => 'http://gso.gbv.de/DB=2.90/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
-$_lit_search_plugins[] = array('name' => "Gvk", 'link' => 'http://gso.gbv.de/DB=2.1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
-$_lit_search_plugins[] = array('name' => "WisoFak", 'link' => 'http://goopc4.sub.uni-goettingen.de:8080/DB=2/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
-//$_lit_search_plugins[] = array('name' => "FHHIOpac", 'link' => 'http://hidbs2.bib.uni-hildesheim.de:8080/DB=2/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
-
 /**
 *
 *
