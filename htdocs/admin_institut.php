@@ -60,7 +60,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 	require_once ("msg.inc.php"); //Funktionen f&uuml;r Nachrichtenmeldungen
 	require_once("visual.inc.php");
 	require_once("config.inc.php");
-
+	require_once("forum.inc.php");
+	require_once("datei.inc.php");
 ?>
 
 <table border=0 bgcolor="#000000" align="center" cellspacing=0 cellpadding=0 width=100%>
@@ -136,9 +137,13 @@ while ( is_array($HTTP_POST_VARS)
       my_error("<b>Datenbankoperation gescheitert: $query </b>");
       break;
     }
-    
+       ## Create default folder and discussion
+    CreateTopic('Allgemeine Diskussionen', " ", 'Hier ist Raum für allgemeine Diskussionen', 0, 0, $i_id, 0);
+    $db->query("INSERT INTO folder SET folder_id='".md5(uniqid(rand()))."', range_id='".$i_id."',name='Allgemeiner Dateiordner', description='Ablage für allgemeine Ordner und Dokumente der Einrichtung', mkdate='".time()."', chdate='".time()."'");
+ 
     my_msg("<b>Die Einrichtung \"".htmlReady(stripslashes($Name))."\" wurde angelegt.</b>");
-		$i_view = $i_id;
+   
+   $i_view = $i_id;
   break;
 
   ## Change Institut name
@@ -184,7 +189,18 @@ while ( is_array($HTTP_POST_VARS)
       break;
     }
     
-    my_msg("<b>Die Einrichtung \"".htmlReady(stripslashes($Name))."\" wurde gel&ouml;scht!");
+    ## delete folders and discussions
+    $query = "DELETE from px_topics where Seminar_id='$i_id'";
+    $db->query($query);
+    if (($db_ar = $db->affected_rows()) > 0) {
+      my_msg("$db_ar Postings aus dem Forum der Einrichtung gel&ouml;scht.");
+    }
+    $db_ar = recursiv_folder_delete($i_id);
+    if ($db_ar > 0)
+     my_msg("$db_ar Dokumente gel&ouml;scht.");
+
+
+    my_msg("Die Einrichtung \"".htmlReady(stripslashes($Name))."\" wurde gel&ouml;scht!");
   	unset($i_view);
 		break;
   
