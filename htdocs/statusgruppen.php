@@ -62,7 +62,7 @@ function groupmail($range_id)
 
 
 function PrintAktualStatusgruppen ()
-{	global $SessSemName, $PHP_SELF, $rechte;
+{	global $_fullname_sql,$SessSemName, $PHP_SELF, $rechte;
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
 	$db->query ("SELECT name, statusgruppe_id, size FROM statusgruppen WHERE range_id = '$SessSemName[1]' ORDER BY position ASC");
@@ -84,7 +84,7 @@ function PrintAktualStatusgruppen ()
 		printf ("	        </td>");
 		echo 	"</tr>";
 
-		$db2->query ("SELECT statusgruppe_user.user_id, Vorname, Nachname, username FROM statusgruppe_user LEFT JOIN auth_user_md5 USING(user_id) WHERE statusgruppe_id = '$statusgruppe_id'");
+		$db2->query ("SELECT statusgruppe_user.user_id, " . $_fullname_sql['full'] ." AS fullname, username FROM statusgruppe_user LEFT JOIN auth_user_md5 USING(user_id) LEFT JOIN user_info USING (user_id) WHERE statusgruppe_id = '$statusgruppe_id'");
 		$k = 1;
 		while ($db2->next_record()) {
 			if ($k % 2) {
@@ -93,7 +93,7 @@ function PrintAktualStatusgruppen ()
 				$class="steelgraulight"; 
 			}
 			printf ("     <tr>");
-			printf ("       <td width=\"95%%\" class=\"%s\"><font size=\"-1\"><a href = about.php?username=%s>%s&nbsp;%s</a></font></td>",$class, $db2->f("username"), htmlReady($db2->f("Vorname")), htmlReady($db2->f("Nachname")));
+			printf ("       <td width=\"95%%\" class=\"%s\"><font size=\"-1\"><a href = about.php?username=%s>%s</a></font></td>",$class, $db2->f("username"), htmlReady($db2->f("fullname")));
 			printf ("	   <td width=\"5%%\"class=\"$class\" align=\"center\">");
 			printf ("		<a href=\"sms.php?sms_source_page=teilnehmer.php&cmd=write&rec_uname=%s\"><img src=\"pictures/nachricht1.gif\" alt=\"Mail an alle GruppenmitgliederInnen verschicken\" border=\"0\"></a>", $db2->f("username")); 
 			printf ("	   </td>");
@@ -107,9 +107,10 @@ function PrintAktualStatusgruppen ()
 
 function PrintNonMembers ($range_id)
 {	
+	global $_fullname_sql;
 	$bereitszugeordnet = GetAllSelected($range_id);
 	$db=new DB_Seminar;
-	$query = "SELECT seminar_user.user_id, username, Nachname, Vorname, perms FROM seminar_user  LEFT JOIN auth_user_md5 USING(user_id)  WHERE Seminar_id = '$range_id' ORDER BY Nachname ASC";
+	$query = "SELECT seminar_user.user_id, username, " . $_fullname_sql['full'] ." AS fullname, perms FROM seminar_user  LEFT JOIN auth_user_md5 USING(user_id) LEFT JOIN user_info USING (user_id) WHERE Seminar_id = '$range_id' ORDER BY Nachname ASC";
 	$db->query ($query);
 	if ($db->num_rows() >sizeof($bereitszugeordnet)-1) { // there are non-grouped members
 		echo "<table width=\"99%\" cellpadding=\"1\" cellspacing=\"0\" align=\"center\" border=\"0\">
@@ -125,7 +126,7 @@ function PrintNonMembers ($range_id)
 					$class="steelgraulight"; 
 				}
 				printf ("     <tr>");
-				printf ("       <td width=\"95%%\" class=\"%s\"><font size=\"-1\"><a href = about.php?username=%s>%s&nbsp;%s</a></font></td>",$class, $db->f("username"), htmlReady($db->f("Vorname")), htmlReady($db->f("Nachname")));
+				printf ("       <td width=\"95%%\" class=\"%s\"><font size=\"-1\"><a href = about.php?username=%s>%s</a></font></td>",$class, $db->f("username"), htmlReady($db->f("fullname")));
 				printf ("	   <td width=\"5%%\"class=\"$class\" align=\"center\">");
 				printf ("		<a href=\"sms.php?sms_source_page=teilnehmer.php&cmd=write&rec_uname=%s\"><img src=\"pictures/nachricht1.gif\" alt=\"Nachricht an User verschicken\" border=\"0\"></a>", $db->f("username")); 
 				printf ("	   </td>");

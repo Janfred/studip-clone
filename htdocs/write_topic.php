@@ -112,9 +112,7 @@ print ("\" size=60>");
 print ("<input type=\"hidden\" name=\"author\" value = \"");
 $db=new DB_Seminar;
 $tmp = $auth->auth["uname"];
-$db->query ("SELECT Vorname , Nachname , username FROM auth_user_md5 WHERE username = '$tmp'");
-while ($db->next_record())
-	 echo $db->f("Vorname")." " . $db->f("Nachname");
+echo get_fullname();
 print ("\" size=\"20\"><br><br>");
 if  ($user->id == "nobody") {  // nicht angemeldete muessen Namen angeben
 		$description =	"<b>Ihr Name:</b>&nbsp; <input type=text size=50 name=nobodysname onchange=\"return pruefe_name()\" value='unbekannt'><br><br><input type=hidden name=update value='".$write."'>";

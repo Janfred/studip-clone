@@ -82,7 +82,7 @@ function delete_sms ($message_id) {
  
 //Geschriebene Nachricht einfuegen
 function insert_sms ($rec_uname, $message, $user_id='') {
-	global $user, $my_messaging_settings, $CHAT_ENABLE;
+	global $_fullname_sql,$user, $my_messaging_settings, $CHAT_ENABLE;
 
 	if (!$this->sig_string)
 		$this->sig_string="\n \n -- \n";
@@ -96,7 +96,7 @@ function insert_sms ($rec_uname, $message, $user_id='') {
 
 	if (!empty($message)) {
 		if ($user_id != "____%system%____") {
-			$db->query ("SELECT username,CONCAT(Vorname,' ',Nachname) AS fullname FROM auth_user_md5 WHERE user_id = '".$user_id."' ");
+			$db->query ("SELECT username," . $_fullname_sql['full'] ." AS fullname FROM auth_user_md5 LEFT JOIN user_info USING (user_id) WHERE user_id = '".$user_id."' ");
 			$db->next_record();
 			$snd_uname=$db->f("username");
 		} else
@@ -134,7 +134,7 @@ function insert_sms ($rec_uname, $message, $user_id='') {
 
 //Chateinladung absetzen
 function insert_chatinv ($rec_uname, $user_id='') {
-	global $user;
+	global $user,$_fullname_sql;
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
 	$db3=new DB_Seminar;
@@ -142,7 +142,7 @@ function insert_chatinv ($rec_uname, $user_id='') {
 	if (!$user_id)
 		$user_id = $user->id;
 
-	$db->query ("SELECT username,CONCAT(Vorname,' ',Nachname) AS fullname FROM auth_user_md5 WHERE user_id = '".$user_id."' ");
+	$db->query ("SELECT username," . $_fullname_sql['full'] ." AS fullname FROM auth_user_md5 LEFT JOIN user_info USING (user_id) WHERE user_id = '".$user_id."' ");
 	$db->next_record();
 
 	$db2->query ("SELECT user_id FROM auth_user_md5 WHERE username = '".$rec_uname."' ");

@@ -304,11 +304,11 @@ IF ($view=="ansprechpartner") {?>
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
 	
-	$db->query("SELECT * FROM auth_user_md5 WHERE perms='root' ORDER BY Nachname");
+	$db->query("SELECT " . $_fullname_sql['full'] ." AS fullname,Email FROM auth_user_md5 LEFT JOIN user_info USING (user_id) WHERE perms='root' ORDER BY Nachname");
 	if ($db->affected_rows() ==0) { echo"keine. Na sowas. Das kann ja eigentlich gar nicht sein..."; }
 	while ($db->next_record())
 		{
-		echo "<font size=\"-1\"><a href=\"about.php?username=".$db->f("username")."\">".$db->f("Vorname")." ".$db->f("Nachname")."</a>, eMail: <a href=\"mailto:".$db->f("Email")."\">".$db->f("Email")."</a></font ><br>";
+		echo "<font size=\"-1\"><a href=\"about.php?username=".$db->f("username")."\">".$db->f("fullname")."</a>, eMail: <a href=\"mailto:".$db->f("Email")."\">".$db->f("Email")."</a></font ><br>";
 		}
 	
 ?>
@@ -333,7 +333,7 @@ IF ($view=="ansprechpartner") {?>
 		
 <?
 
-	$db->query("SELECT auth_user_md5.*, Institute.Institut_id, Institute.Name FROM auth_user_md5 LEFT OUTER JOIN user_inst USING (user_id) LEFT JOIN Institute ON (user_inst.institut_id = Institute.Institut_id) WHERE user_inst.inst_perms='admin' AND Institute.Name NOT LIKE '%- - -%' ORDER BY Institute.Name, Nachname");
+	$db->query("SELECT " . $_fullname_sql['full'] ." AS fullname,auth_user_md5.Email,username, Institute.Institut_id, Institute.Name FROM user_inst LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) LEFT JOIN Institute ON (user_inst.institut_id = Institute.Institut_id) WHERE user_inst.inst_perms='admin' AND Institute.Name NOT LIKE '%- - -%' ORDER BY Institute.Name, Nachname");
 	$count=$db->affected_rows()-1;
 	$half=$db->affected_rows()/2;
 	$change=0;
@@ -350,7 +350,7 @@ IF ($view=="ansprechpartner") {?>
 			echo "<br><br><b><font size=\"-1\"><a href=\"institut_main.php?auswahl=".$db->f("Institut_id")."\">".htmlReady($db->f("Name"))."</a>:</font></b><br>";
 			}
 		$last_inst=$inst_id;
-		echo "<font size=\"-1\"><a href=\"about.php?username=".$db->f("username")."\">".$db->f("Vorname")." ".$db->f("Nachname")."</a>, eMail: <a href=\"mailto:".$db->f("Email")."\">".$db->f("Email")."</a></font><br>";
+		echo "<font size=\"-1\"><a href=\"about.php?username=".$db->f("username")."\">".$db->f("fullname")."</a>, eMail: <a href=\"mailto:".$db->f("Email")."\">".$db->f("Email")."</a></font><br>";
 		$count=$count-1;
 		}
 

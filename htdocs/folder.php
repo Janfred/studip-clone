@@ -107,9 +107,9 @@ if (($rechte) || ($owner)) {
 	
 	//wurde Code fuer Loeschen von Dateien ubermittelt (=id+"_fd_"), wird erstmal nachgefragt
 	if (strpos($open, "_fd_")) {
-		$db->query("SELECT filename, Vorname, Nachname, username FROM dokumente LEFT JOIN auth_user_md5 USING (user_id) WHERE dokument_id ='".substr($open, (strpos($open, "_fd_"))-32, (strpos($open, "_fd_")))."'");
+		$db->query("SELECT filename, ". $_fullname_sql['full'] ." AS fullname, username FROM dokumente LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE dokument_id ='".substr($open, (strpos($open, "_fd_"))-32, (strpos($open, "_fd_")))."'");
 		$db->next_record();
-		$msg="info§Wollen sie die Datei <b>".htmlentities(stripslashes($db->f("filename")))."</b> von <a href=\"about.php?username=".$db->f("username")."\">".$db->f("Vorname")." ".$db->f("Nachname")."</a> wirklich l&ouml;schen?<br>";
+		$msg="info§Wollen sie die Datei <b>".htmlentities(stripslashes($db->f("filename")))."</b> von <a href=\"about.php?username=".$db->f("username")."\">".$db->f("fullname")."</a> wirklich l&ouml;schen?<br>";
 		$msg.="<b><a href=\"$PHP_SELF?open=".substr($open, (strpos($open, "_fd_"))-32, (strpos($open, "_fd_")))."_rm_\"><img src=\"pictures/buttons/ja2-button.gif\" border=0></a>&nbsp;&nbsp; <a href=\"$PHP_SELF\"><img src=\"pictures/buttons/nein-button.gif\" border=0></a>§";
 		}
 

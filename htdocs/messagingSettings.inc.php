@@ -36,7 +36,7 @@ if (is_array($buddy_grp)) {
 
 //Anpassen der Ansicht
 function change_messaging_view() {
-	global $my_messaging_settings, $my_buddies, $PHP_SELF, $perm, $user, $search_exp, $add_user, $add_user_x, $do_add_user_x, $new_search_x, $i_page;
+	global $_fullname_sql,$my_messaging_settings, $my_buddies, $PHP_SELF, $perm, $user, $search_exp, $add_user, $add_user_x, $do_add_user_x, $new_search_x, $i_page;
 		
 	$db=new DB_Seminar;
 	$cssSw=new cssClassSwitcher;	
@@ -150,12 +150,12 @@ function change_messaging_view() {
 					<td class="<? echo $cssSw->getClass() ?>" width="80%">
 					<?
 					if ((!$new_search_x)){
-						$db->query("SELECT Vorname, Nachname, username, user_id FROM auth_user_md5 WHERE Vorname LIKE '%$search_exp%' OR Nachname LIKE '%$search_exp%' OR username LIKE '%$search_exp%' ORDER BY Nachname");
+						$db->query("SELECT " . $_fullname_sql['full_rev'] ." AS fullname, username, auth_user_md5.user_id FROM auth_user_md5 LEFT JOIN user_info USING (user_id) WHERE Vorname LIKE '%$search_exp%' OR Nachname LIKE '%$search_exp%' OR username LIKE '%$search_exp%' ORDER BY Nachname");
 						if ($db->affected_rows()) {
 							echo "<b><font size=-1>&nbsp; Es wurden ", $db->affected_rows(), " Benutzer gefunden </font><br /></b>";
 							echo "<font size=-1>&nbsp; Bitte w&auml;hlen Sie den Benutzer aus der Liste aus:</font>&nbsp;<font size=-1><select name=\"add_user\">";
 							while ($db->next_record()) {
-								echo "<option value=",$db->f("username"),">",$db->f("Nachname"),", ".$db->f("Vorname"), ", (",$db->f("username"),") </option>";
+								echo "<option value=",$db->f("username"),">",$db->f("fullname"), ", (",$db->f("username"),") </option>";
 							}
 							echo "</select></font>";
 							echo "<br /><br />&nbsp; <font size=-1><input type=\"IMAGE\"  src=\"pictures/buttons/hinzufuegen-button.gif\" border=0  name=\"do_add_user\" value=\"Diesen Benutzer hinzuf&uuml;gen\" /></font>&nbsp;";
@@ -195,7 +195,7 @@ function change_messaging_view() {
 						echo "</tr>";
 						$i=0;
 						foreach ($tmp_buddies as $a) {
-							$db->query("SELECT Vorname, Nachname, username FROM auth_user_md5 WHERE username = '".$a["username"]."' ");
+							$db->query("SELECT " . $_fullname_sql['full'] ." AS fullname, username FROM auth_user_md5 LEFT JOIN user_info USING (user_id) WHERE username = '".$a["username"]."' ");
 							$db->next_record();
 
 							if ($i % 2)
@@ -205,7 +205,7 @@ function change_messaging_view() {
 							
 							echo "<tr><td class=\"$class\" width=\"70%\">";
 							echo "<input type=\"HIDDEN\" name=\"buddy_key[]\" value=\"".$db->f("username")."\"/> ";
-							echo "<a href=\"about.php?username=",$db->f("username"),"\">",$db->f("Vorname")," ",$db->f("Nachname"), "</a></td>\n";
+							echo "<a href=\"about.php?username=",$db->f("username"),"\">",$db->f("fullname"), "</a></td>\n";
 							for ($k=0; $k<8; $k++) {
 								echo "<td class=\"$class\" width=\"1%\"><input type=\"RADIO\" name=\"buddy_grp[$i]\" value=$k ";
 								if ($a["group"]==$k)
