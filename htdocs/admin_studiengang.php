@@ -184,7 +184,7 @@ if ($i_view){
 
   ?>
     <tr><td class="blank" colspan=2>
-    <table border=0 bgcolor="#eeeeee" align="center" width="50%" cellspacing=0 cellpadding=5>
+    <table border=0 bgcolor="#eeeeee" align="center" width="50%" cellspacing=0 cellpadding=2>
 	<form method="POST" name="edit" action="<? echo $PHP_SELF?>">
 	<tr><td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>">Studiengangname: </td><td class="<? echo $cssSw->getClass() ?>"><input type="text" name="Name" size=60 maxlength=254 value="<?php echo htmlReady($db->f("name")) ?>"></td></tr>
 	<tr><td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>">Beschreibung: </td><td class="<? echo $cssSw->getClass() ?>"><textarea cols=50 ROWS=4 name="Beschreibung" value="<?php $db->p("beschreibung") ?>"><?php echo htmlReady($db->f("beschreibung")) ?></textarea></td></tr>
@@ -222,7 +222,7 @@ if (!$i_view) {
 ?>
   <tr><td class="blank" colspan=2><b><a href="<?echo $PHP_SELF?>?i_view=new">&nbsp;Neuen Studiengang anlegen</a><b><br><br></td></tr>
   <tr><td class="blank" colspan=2>
-  <table align=center bg="#ffffff" width="80%" border=0 cellpadding=2 cellspacing=1>
+  <table align=center bg="#ffffff" width="80%" border=0 cellpadding=2 cellspacing=0>
   <tr valign=top align=middle>
   <th width="80%"><a href="<?echo $PHP_SELF?>?sortby=name">Name des Studiengangs</a></th>
   <th width="20%"><a href="<?echo $PHP_SELF?>?sortby=number">Anzahl der Studierenden</a></th>
