@@ -118,14 +118,15 @@ $typen = array("user"=>_("Benutzer"),"sem"=>_("Veranstaltung"),"inst"=>_("Einric
 if ($rangemode == "root"){
 	$range[] = array("studip",_("Systemweite Votings/Tests"));
 	$range[] = array(get_username($userID),_("pers&ouml;nliche Homepage"));
-	if (($showrangeID != "studip") && ($showrangeID != $userID)
+	if (($showrangeID != "studip") && 
+	    ($showrangeID != get_username ($userID))
 		&& ($showrangeID != NULL))
 		$range[] = array($showrangeID,$voteDB->getRangename($showrangeID));
 }
 elseif ($rangemode == "admin"){
 //	$range[] = array("studip",_("Fak/InstSystemweite Votings/Tests"));
 	$range[] = array(get_username($userID),_("pers&ouml;nliche Homepage"));
-	if (($showrangeID != $userID)
+	if (($showrangeID != get_username ($userID))
 		&& ($showrangeID != NULL))
 		$range[] = array($showrangeID,$voteDB->getRangename($showrangeID));
 }
