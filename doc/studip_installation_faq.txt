@@ -1,0 +1,40 @@
+1. "Undefined function: _()"
+
+Q: Ich bekomme die Meldung Fatal error: Call to undefined function: _() in /srv/www/htdocs/studip/config.inc.php
+
+A: die Funktion _() ist die PHP-gettext-Funktion, die in Stud.IP für die Internationalisierung benutzt wird.
+Die obige Fehlermeldung deutet darauf hin, das Ihre PHP-Version ohne gettext-Unterstützung kompiliert wurde (Option 'with-gettext').
+Dies läßt sich mit der Ausgabe der phpinfo()-Funktion überprüfen, dort sollte oben unter "Configure Command" die Option auftauchen und unten unter dem Block "gettext" ein "GetTextSupport enabled" stehen.
+
+2. "undefined function: sem_get()"
+
+Q: Jetzt komme ich gerade mal bis zur Eingangs-Hintergrundgrafik. Der Fehler, den ich jetzt erhalte ist: Fatal error: Call to undefined function: sem_get() in /srv/www/htdocs/studip/chat/ShmHandler.class.php on line 88
+
+A: Die Fehlermeldung, die sie bekommen bedeutet, dass die Semaphoren Funktionen für den Zugriff auf gemeinsam genutzte Speicherbereiche nicht korrekt in PHP einkompiliert wurden. Diese Funktionen werden für den Chat benötigt. Überprüfen können sie das mit einem phpinfo(), in der Ausgabe sollte unter 'Additional Modules' (ziemlich weit unten) sysvshm (shared memory) und sysvsem (semaphores) angezeigt werden.
+Wenn sich der Fehler durch erneutes Konpilieren nicht beheben läßt, so haben sie die Möglichkeit, den Chat auf dateibasierte Speicherung umzustellen. Dazu müssen sie in der Datei local.inc im PHPLIB-Verzeichnis die Variable $CHAT_SERVER_NAME auf "ChatFileServer" umstellen. Dies führt aber u.U. zu einer erhöhten Belastung des Webservers, wenn mehrere Chaträume gleichzeitig aktiv sind. Alternativ können sie den Chat an dieser Stelle in der local.inc auch deaktivieren ($CHAT_ENABLE = FALSE)
+
+3. Die Startseite kommt immer wieder
+
+Q: Ich habe alles fertig installiert und bekomme die Startseite von Stud.IP zu sehen. Wenn ich mich jedoch einloggen möchte erhalte ich immer wieder nur die Startseite.
+
+A: In der PHP.INI muss "register_globals = On" stehen.
+
+3. TeX und Solaris
+
+Q: Wie bekomme ich das TeX-Modul unter Solaris zum laufen?
+
+A: Unser Problem war, dass in der latextrenderer.class.php innerhalb der Funktion renderLatex die Option "interaction=nonstopmode" angegeben war (Zeile 225). Die Solaris-Latex-Variante (teTeX) kam mit dieser Option nicht zurecht. Nachdem diese Option entfernt war, funkionierte der Teil dann.
+Das zweite Problem war der dvips-Befehl in Zeile 231. Die Solaris-Variante verlangt die Angabe der Ausgabedatei mit der Option "-o" usw. Nachdem diese auch angegeben war, funktionierte das Latex-Forum endlich
+
+4. Sortierung der Umlaute
+
+Q: Stud.IP sortiert Umlaute immer am Ende einer Liste ein, nicht da wo sie hingehören. Wie kann ich das ändern?
+
+A: Das ist kein Problem von Stud.IP, sondern von MySQL(?). Was helfen sollte:
+   - MySQL(?) runterfahren
+   - in die my.cnf folgende Zeile unter [mysqld] eintragen: "default-character-set=german1"
+   - in das Verzeichnis mit den Tabellen wechseln
+   - "myisamchk -r -q --set-character-set=german1 *.MYI" ausführen
+   - MySQL(?) wieder starten
+   
+   Vorher ein Backup der DB machen :)
