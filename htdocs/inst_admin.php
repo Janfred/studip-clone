@@ -183,8 +183,8 @@ else {
 	// haben wir was uebergeben bekommen?
 
 	if ( is_array($HTTP_POST_VARS) && list($key, $val) = each($HTTP_POST_VARS)) {
-    if ($perms!="") { //hoffentlich auch was Sinnvolles?
-		$db->query("SELECT Vorname, Nachname, perms FROM auth_user_md5 WHERE user_id = '$u_id'");
+    		if ($perms!="") { //hoffentlich auch was Sinnvolles?
+			$db->query("SELECT Vorname, Nachname, perms FROM auth_user_md5 WHERE user_id = '$u_id'");
 			while ($db->next_record()) {
 				$scherge=$db->f("perms");
 				$Fullname = $db->f("Vorname") . " " . $db->f("Nachname");
@@ -288,7 +288,7 @@ if ($inst_id != "" && $inst_id !="0") {
 	$db->query("SELECT Name FROM Institute WHERE Institut_id ='$inst_id'");
 	$db->next_record();
 	$inst_name=$db->f("Name");
-	if ($search_user_x)
+	if (isset($search_exp))
 		{
 		// Der Admin will neue Sklaven ins Institut berufen...
 			if (!$search_exp) //wenn leerer Suchaussruck, verwutzen (aus Datenschutzgruenden)
@@ -315,7 +315,7 @@ if ($inst_id != "" && $inst_id !="0") {
 						<td class="steel1"><select name="u_id" size="1">
 						<?
 						//Alle User auswaehlen, auf die der Suchausdruck passt und die im Institut nicht schon was sind. Selected werden hierdurch 
-						printf ("<option value=\"0\">-- bitte ausw&auml;hlen --\n");
+//						printf ("<option value=\"0\">-- bitte ausw&auml;hlen --\n");
 						while ($db->next_record())
 							printf ("<option value=\"%s\">%s, %s (%s) - %s\n", $db->f("user_id"), $db->f("Nachname"), $db->f("Vorname"), $db->f("username"), $db->f("perms"));
 							?>
