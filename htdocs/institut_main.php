@@ -104,11 +104,7 @@ if ($SessSemName[1] =="")
 	}
 		
 	if ($db->f("Plz")) {
-		echo "<b>Plz: </b>"; echo htmlReady($db->f("Plz")); echo"<br>";
-	}
-
-	if ($db->f("url")) {
-		echo "<b>Homepage: </b>"; echo formatReady($db->f("url")); echo"<br>";
+		echo "<b>Ort: </b>"; echo htmlReady($db->f("Plz")); echo"<br>";
 	}
 
 	if ($db->f("telefon")) {
@@ -117,6 +113,10 @@ if ($SessSemName[1] =="")
 
 	if ($db->f("fax")) {
 		echo "<b>Fax: </b>"; echo htmlReady($db->f("fax")); echo"<br>";
+	}
+
+	if ($db->f("url")) {
+		echo "<b>Homepage: </b>"; echo formatReady($db->f("url")); echo"<br>";
 	}
 
 	if ($db->f("email")) {
