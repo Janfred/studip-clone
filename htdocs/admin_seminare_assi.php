@@ -1098,8 +1098,8 @@ if ((!$level) || ($level==1))
 						<td class="<? echo $cssSw->getClass() ?>" width="90%"  colspan=3>
 							&nbsp; <input type="text" name="sem_name" size=58 maxlength=254 value="<? echo htmlReady(stripslashes($sem_create_data["sem_name"])) ?>">
 							<img  src="./pictures/info.gif" 
-									onClick="alert('Bitte geben Sie hier einen aussagekräftigen aber möglichst knappen Titel für die Veranstaltung ein. Dieser Eintrag erscheint innerhalb des Systems durchgehend zur Identifikation der Veranstaltung.');" 
-									alt="Bitte geben Sie hier einen aussagekr&auml;ftigen aber m&ouml;glichst knappen Titel f&uuml;r die Veranstaltung ein. Dieser Eintrag erscheint innerhalb des Systems durchgehend zur Identifikation der Veranstaltung.">
+								<? echo tooltip("Bitte geben Sie hie einen aussagekräftigen aber möglichst knappen Titel für die Veranstaltung ein. Dieser Eintrag erscheint innerhalb des Systems durchgehend zur Identifikation der Veranstaltung.", TRUE, TRUE) ?>
+							>
 							<font color="red" size=+2>*</font>
 						</td>
 					</tr>
@@ -1110,8 +1110,8 @@ if ((!$level) || ($level==1))
 						<td class="<? echo $cssSw->getClass() ?>" width="90%"  colspan=3>
 							&nbsp; <input type="text" name="sem_untert" size=58 maxlength=254 value="<? echo htmlReady(stripslashes($sem_create_data["sem_untert"]))?>">
 							<img  src="./pictures/info.gif" 
-									onClick="alert('Der Untertitel ermöglicht eine genauere Beschreibung der Veranstaltung.');" 
-									alt="Der Untertitel erm&ouml;glicht eine genauere Beschreibung der Veranstaltung.">
+								<? echo tooltip("Der Untertitel ermöglicht eine genauere Beschreibung der Veranstaltung.", TRUE, TRUE) ?>
+							>
 						</td>
 					</tr>
 					<tr <? $cssSw->switchClass() ?>>
@@ -1132,8 +1132,8 @@ if ((!$level) || ($level==1))
 							?>
 							</select>
 							<img  src="./pictures/info.gif" 
-									onClick="alert('Hier legen Sie fest, ob Sie eine Lehrveranstaltung anlegen möchten, oder ob die Veranstaltungen einer anderen Kategorie zugeordnet wird. Im Normalfall sollten sie eine Lehrveranstaltung anlegen.');" 
-									alt="Hier legen Sie fest, ob Sie eine Lehrveranstaltung anlegen möchten, oder ob die Veranstaltungen einer anderen Kategorie zugeordnet wird. Im Normalfall sollten sie eine Lehrveranstaltungen anlegen.">
+								<? echo tooltip("Hier legen Sie fest, ob Sie eine Lehrveranstaltung anlegen möchten, oder ob die Veranstaltungen einer anderen Kategorie zugeordnet wird. Im Normalfall sollten sie eine Lehrveranstaltung anlegen.", TRUE, TRUE) ?>
+							>
 						</td>
 					</tr>
 					<tr <? $cssSw->switchClass() ?>>
@@ -1143,8 +1143,8 @@ if ((!$level) || ($level==1))
 						<td class="<? echo $cssSw->getClass() ?>" nowrap width="30%" colspan=1>
 							&nbsp; <input type="text" name="sem_ort" size=20 maxlength=254 value="<? echo htmlReady(stripslashes($sem_create_data["sem_ort"]))  ?>">
 							<img  src="./pictures/info.gif" 
-									onClick="alert('Der Raum, in dem die Veranstaltung stattfindet.');" 
-									alt="Der Raum in dem die Veranstaltung stattfindet.">
+								<? echo tooltip("Der Raum, in dem die Veranstaltung stattfindet", TRUE, TRUE) ?>
+							>
 						</td>
 						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
 							Veranstaltungsnummer:
@@ -1152,8 +1152,8 @@ if ((!$level) || ($level==1))
 						<td class="<? echo $cssSw->getClass() ?>" width="60%">
 							&nbsp; <input type="int" name="sem_nummer" size=6 maxlength=6 value="<? echo  htmlReady(stripslashes($sem_create_data["sem_nummer"])) ?>">
 							<img  src="./pictures/info.gif" 
-									onClick="alert('Die von der Universität vergebene Veranstaltungsnummer');" 
-									alt="Die von der Universit&auml;t vergebene Veranstaltungsnummer">							
+								<? echo tooltip("Die von der Universität vergebene Veranstaltungsnummer.", TRUE, TRUE) ?>
+							>
 						</td>
 					</tr>
 					<tr <? $cssSw->switchClass() ?>>
@@ -1175,8 +1175,8 @@ if ((!$level) || ($level==1))
 							?>
 							</select>
 							<img  src="./pictures/info.gif" 
-									onClick="alert('Bitte wählen Sie hier aus, ob die Veranstaltung regelmässig stattfindet, oder ob die Sitzungen nur an bestimmten Terminen stattfinden (etwa bei einem Blockseminar)');" 
-									alt="Bitte w&auml;hlen Sie hier aus, ob die Veranstaltung regelm&auml;ssig stattfindet, oder ob die Sitzungen nur an bestimmten Terminen stattfinden (etwa bei einem Blockseminar)">
+								<? echo tooltip("Bitte wählen Sie hier aus, ob die Veranstaltung regelmässig stattfindet, oder ob die Sitzungen nur an bestimmten Terminen stattfinden (etwa bei einem Blockseminar)", TRUE, TRUE) ?>
+							>
 							<font color="red" size=+2>*</font>									
 						</td>
 						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
@@ -1185,8 +1185,8 @@ if ((!$level) || ($level==1))
 						<td class="<? echo $cssSw->getClass() ?>" width="60%">
 							&nbsp; <input type="int" name="sem_ects" size=6 maxlength=32 value="<? echo  htmlReady(stripslashes($sem_create_data["sem_ects"])) ?>">
 							<img  src="./pictures/info.gif" 
-									onClick="alert('ECTS-Kreditpunkte, die in dieser Veranstaltung vergeben werden.');" 
-									alt="ECTS-Kreditpunkte, die in dieser Veranstaltung vergeben werden.">
+								<? echo tooltip("ECTS-Kreditpunkte, die in dieser Veranstaltung vergeben werden.", TRUE, TRUE) ?>
+							>
 						</td>
 					</tr>
 					<tr <? $cssSw->switchClass() ?>>
@@ -1201,8 +1201,8 @@ if ((!$level) || ($level==1))
  							&nbsp; <input type="RADIO" name="sem_admission" value=1 <? if ($sem_create_data["sem_admission"]=="1") echo checked?>>
  							per Losverfahren&nbsp; 
  							<img  src="./pictures/info.gif" 
-									onClick="alert('Sie können die Teilnhmezahl in der Reihenfolgen der Anmeldung chronologisch vornehmen oder das Losverfahren benutzen. Sie können später Angaben über zugelassene Teilnehmer machen.');" 
-									alt="Sie k&ouml;nnen die Teilnhmezahl in der Reihenfolgen der Anmeldung chronologisch vornehmen oder das Losverfahren benutzen. Sie k&ouml;nnen sp&auml;ter Angaben &uuml;ber zugelassene Teilnehmer machen.">
+ 								<? echo tooltip("Sie können die Teilnhmezahl in der Reihenfolgen der Anmeldung chronologisch vornehmen oder das Losverfahren benutzen. Sie können später Angaben über zugelassene Teilnehmer machen.", TRUE, TRUE) ?>
+							>
 						</td>
 						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
 							maximale Teilnehmeranzahl:
@@ -1210,8 +1210,8 @@ if ((!$level) || ($level==1))
 						<td class="<? echo $cssSw->getClass() ?>" width="60%">
 							&nbsp; <input type="int" name="sem_turnout" size=6 maxlength=5 value="<? echo $sem_create_data["sem_turnout"] ?>">
 							<img  src="./pictures/info.gif" 
-									onClick="alert('Hier geben Sie die erwartete Teilnehmerzahl an. Stud.IP kann auf Wunsch für Sie ein Anmeldungsverfahren starten, wenn sie  »Anmeldebeschränkung benutzen«.');" 
-									alt="Hier geben Sie die erwartete Teilnehmerzahl an. Stud.IP kann auf Wunsch für Sie ein Anmeldungsverfahren starten, wenn sie  »Anmeldebeschr&auml;nkung benutzen">
+								<? echo tooltip("'Hier geben Sie die erwartete Teilnehmerzahl an. Stud.IP kann auf Wunsch für Sie ein Anmeldungsverfahren starten, wenn sie  »Anmeldebeschränkung benutzen«.", TRUE, TRUE) ?>
+							>
 						</td>
 						
 					</tr>
@@ -1223,8 +1223,8 @@ if ((!$level) || ($level==1))
 						<td class="<? echo $cssSw->getClass() ?>" width="90%" colspan=3>
 							&nbsp; <textarea name="sem_desc" cols=58 rows=6><? echo htmlReady(stripslashes($sem_create_data["sem_desc"])) ?></textarea>
 							<img  src="./pictures/info.gif" 
-									onClick="alert('Hier geben Sie bitte den eigentlichen Kommentartext der Veranstaltung ein.');" 
-									alt="Hier geben Sie bitte den eigentlichen Kommentartext der Veranstaltung ein.">
+								<? echo tooltip("Hier geben Sie bitte den eigentlichen Kommentartext der Veranstaltung ein.", TRUE, TRUE) ?>
+							>
 						</td>
 					</tr>
 					<tr <? $cssSw->switchClass() ?>>
@@ -1253,8 +1253,8 @@ if ((!$level) || ($level==1))
 							?>
 							</select>
 							<img  src="./pictures/info.gif" 
-									onClick="alert('Die Heimateinrichtung ist die Einrichtung, die offiziell f&uuml;r die Veranstaltung zuständig ist.');" 
-									alt="'Die Heimateinrichtung ist die Einrichtung, die offiziell f&uuml;r die Veranstaltung zust&auml;ndig ist.">
+								<? echo tooltip("Die Heimateinrichtung ist die Einrichtung, die offiziell f&uuml;r die Veranstaltung zuständig ist.", TRUE, TRUE) ?>
+							>
 							<font color="red" size=+2>*</font>
 						</td>
 					</tr>
@@ -1281,8 +1281,8 @@ if ((!$level) || ($level==1))
 							?>
 							</select>
 							<img  src="./pictures/info.gif" 
-									onClick="alert('Bitte markieren Sie hier alle Einrichtungen, an denen die Veranstaltung ebenfalls angeboten wird. Bitte beachten Sie: Sie können später nur DozentInnen aus den Einrichtungen auswählen, die entweder als Heimt- oder beteiligte Einrichtung markiert worden sind. Sie können mehrere Einträge markieren, indem sie die STRG bzw. APPLE Taste gedrückt halten.');" 
-									alt="Bitte markieren Sie hier alle Einrichtungen, an denen die Veranstaltung ebenfalls angeboten wird. Bitte beachten Sie: Sie k&ouml;nnen sp&auml;ter nur DozentInnen aus den Einrichtungen ausw&auml;hlen, die entweder als Heimt- oder beteiligte Einrichtung markiert worden sind. Sie k&ouml;nnen mehrere Eintr&auml;ge markieren, indem sie die STRG bzw. APPLE Taste gedr&uuml;ckt halten.">
+								<? echo tooltip("Bitte markieren Sie hier alle Einrichtungen, an denen die Veranstaltung ebenfalls angeboten wird. Bitte beachten Sie: Sie können später nur DozentInnen aus den Einrichtungen auswählen, die entweder als Heimt- oder beteiligte Einrichtung markiert worden sind. Sie können mehrere Einträge markieren, indem sie die STRG bzw. APPLE Taste gedrückt halten.", TRUE, TRUE) ?>
+							>
 						</td>
 					</tr>
 					<tr <? $cssSw->switchClass() ?>>
@@ -1388,8 +1388,8 @@ if ($level==2)
 							?>
 							</select>
 							<img  src="./pictures/info.gif" 
-									onClick="alert('Die Namen der DozentInnen, die die Veranstaltung leiten. Sie können mehrere Einträge markieren, indem sie die STRG bzw. APPLE Taste gedrückt halten.');" 
-									alt="Die Namen der DozentInnen, die die Veranstaltung leiten. Sie k&ouml;nnen mehrere Eintr&auml;ge markieren, indem sie die STRG bzw. APPLE Taste gedr&uuml;ckt halten.">
+								<? echo tooltip("Die Namen der DozentInnen, die die Veranstaltung leiten. Sie können mehrere Einträge markieren, indem sie die STRG bzw. APPLE Taste gedrückt halten.", TRUE, TRUE) ?>
+							>
 							<font color="red" size=+2>*</font>
 						</td>
 					</tr>
@@ -1427,8 +1427,8 @@ if ($level==2)
 							?>
 							</select>
 							<img  src="./pictures/info.gif" 
-									onClick="alert('Die Tutoren der Veranstaltung. Diese haben eingeschränkte Zugriffsrechte. Sie können mehrere Einträge markieren, indem sie die STRG bzw. APPLE Taste gedrückt halten.');" 
-									alt="Die Tutoren der Veranstaltung. Diese haben eingeschr&auml;nkte Zugriffsrechte. Sie k&ouml;nnen mehrere Eintr&auml;ge markieren, indem sie die STRG bzw. APPLE Taste gedr&uuml;ckt halten.">
+								<? echo tooltip("Die Tutoren der Veranstaltung. Diese haben eingeschränkte Zugriffsrechte. Sie können mehrere Einträge markieren, indem sie die STRG bzw. APPLE Taste gedrückt halten.", TRUE, TRUE) ?>
+							>
 						</td>
 					</tr>
 					<tr <? $cssSw->switchClass() ?>>
@@ -1445,8 +1445,8 @@ if ($level==2)
 							?>
 							</select> in der Kategorie <b><? echo $SEM_CLASS[$sem_create_data["sem_class"]]["name"] ?></b>
 							<img  src="./pictures/info.gif" 
-									onClick="alert('Über den Typ der Veranstaltung werden die Veranstaltungen innerhalb von Listen gruppiert.');" 
-									alt="&Uuml;ber den Typ der Veranstaltung werden die Veranstaltungen innerhalb von Listen gruppiert.">							
+								<? echo tooltip("Über den Typ der Veranstaltung werden die Veranstaltungen innerhalb von Listen gruppiert.", TRUE, TRUE) ?>
+							>
 							<font color="red" size=+2>*</font>
 						</td>
 					</tr>	
@@ -1458,8 +1458,8 @@ if ($level==2)
 							&nbsp; <input type="text" name="sem_art" size=30 maxlength=254 value="<? echo htmlReady(stripslashes($sem_create_data["sem_art"])) ?>">
 							<font size=-1>(eigene Beschreibung)</font>
 							<img  src="./pictures/info.gif" 
-									onClick="alert('Hier können Sie eine frei wählbare Bezeichnung für die Art der Veranstaltung wählen.');" 
-									alt="Hier k&ouml;nnen Sie eine frei w&auml;hlbare Bezeichnung f&uuml;r die Art der Veranstaltung w&auml;hlen.">
+								<? echo tooltip("Hier können Sie eine frei wählbare Bezeichnung für die Art der Veranstaltung wählen.", TRUE, TRUE) ?>
+							>								
 						</td>
 					</tr>
 									
@@ -1518,8 +1518,8 @@ if ($level==2)
 							?>
 							</select>
 							<img  src="./pictures/info.gif" 
-									onClick="alert('Hier k&ouml;nnen Sie die Studienbereiche, an denen die Veranstaltung angeboten wird, markieren. Sie können mehrere Einträge markieren, indem sie die STRG bzw. APPLE Taste gedrückt halten.');" 
-									alt="Hier k&ouml;nnen Sie die Studienbereiche, an denen die Veranstaltung angeboten wird, markieren. Sie k&ouml;nnen mehrere Eintr&auml;ge markieren, indem sie die STRG bzw. APPLE Taste gedr&uuml;ckt halten.">
+								<? echo tooltip("Hier k&ouml;nnen Sie die Studienbereiche, an denen die Veranstaltung angeboten wird, markieren. Sie können mehrere Einträge markieren, indem sie die STRG bzw. APPLE Taste gedrückt halten.", TRUE, TRUE) ?>
+							>
 							<font color="red" size=+2>*</font>
 						</td>
 					</tr>
@@ -1540,8 +1540,8 @@ if ($level==2)
 								<input type="radio" name="sem_sec_lese" value="1" <?php print $sem_create_data["sem_sec_lese"] == 1 ? "checked" : ""?>> in Stud.IP angemeldet &nbsp;
 								<input type="radio" name="sem_sec_lese" value="2" <?php print $sem_create_data["sem_sec_lese"] == 2 ? "checked" : ""?>> nur mit Passwort &nbsp;
 								<img  src="./pictures/info.gif" 
-									onClick="alert('Hier geben Sie an, ob der Lesezugriff auf das Veranstaltung frei (jeder), normal beschränkt (nur angemdeldet) oder nur mit einem speziellen Passwort möglich ist.');" 
-									alt="Hier geben Sie an, ob der Lesezugriff auf das Veranstaltung frei (jeder), normal beschr&auml;nkt (nur angemdeldet) oder nur mit einem speziellen Passwort m&ouml;glich ist.">
+									<? echo tooltip("Hier geben Sie an, ob der Lesezugriff auf das Veranstaltung frei (jeder), normal beschränkt (nur angemdeldet) oder nur mit einem speziellen Passwort möglich ist.", TRUE, TRUE) ?>
+								>								
 							<?
 							} else
 								print "&nbsp; <font size=-1>Leseberechtigung nach erfolgreichem Anmeldeprozess</font>"
@@ -1571,8 +1571,8 @@ if ($level==2)
 								<input type="radio" name="sem_sec_schreib" value="1" <?php print $sem_create_data["sem_sec_schreib"] == 1 ? "checked" : ""?>> in Stud.IP angemeldet &nbsp;
 								<input type="radio" name="sem_sec_schreib" value="2" <?php print $sem_create_data["sem_sec_schreib"] == 2 ? "checked" : ""?>> nur mit Passwort &nbsp;
 								<img  src="./pictures/info.gif" 
-									onClick="alert('Hier geben Sie an, ob der Schreibzugriff auf das Veranstaltung frei (jeder), normal beschränkt (nur angemdeldet) oder nur mit einem speziellen Passwort möglich ist.');" 
-									alt="Hier geben Sie an, ob der Schreibzugriff auf das Veranstaltung frei (jeder), normal beschr&auml;nkt (nur angemdeldet) oder nur mit einem speziellen Passwort m&ouml;glich ist.">
+									<? echo tooltip("Hier geben Sie an, ob der Schreibzugriff auf das Veranstaltung frei (jeder), normal beschränkt (nur angemdeldet) oder nur mit einem speziellen Passwort möglich ist.", TRUE, TRUE) ?>
+							>
 							<?
 							} else
 								print "&nbsp; <font size=-1>Schreibberechtigung nach erfolgreichem Anmeldeprozess</font>"
@@ -1734,15 +1734,15 @@ if ($level==3)
 										<? if ($sem_create_data["turnus_count"]>1) 
 											{
 											?>
-											&nbsp; <a href="<? echo $PHP_SELF?>?delete_turnus_field=<?echo $i+1?>"><img border=0 src="./pictures/trash.gif" alt="Dieses Feld aus der Auswahl l&ouml;schen"></a>
+											&nbsp; <a href="<? echo $PHP_SELF?>?delete_turnus_field=<?echo $i+1?>"><img border=0 src="./pictures/trash.gif" <? echo tooltip("Dieses Feld aus der Auswahl löschen", TRUE) ?> ></a>
 											<?
 											}
 										}
 										?>
 										&nbsp; &nbsp; <input type="IMAGE" name="add_turnus_field" src="./pictures/buttons/feldhinzufuegen-button.gif" border=0 value="Feld hinzuf&uuml;gen">&nbsp; 
 										<img  src="./pictures/info.gif" 
-											onClick="alert('Wenn es sich um eine zyklische Veranstaltung handelt, so können Sie hier genau angeben, an welchen Tagen und zu welchen Zeiten die Veranstaltung stattfindet. Wenn Sie noch keine Zeiten wissen, dann klicken Sie auf »keine Zeiten speichern«.');" 
-											alt="Wenn es sich um eine zyklische Veranstaltung handelt, so k&ouml;nnen Sie hier genau angeben, an welchen Tagen und zu welchen Zeiten die Veranstaltung stattfindet. Wenn Sie noch keine Zeiten wissen, dann klicken Sie auf »keine Zeiten speichern".">
+											<? echo tooltip("Wenn es sich um eine zyklische Veranstaltung handelt, so können Sie hier genau angeben, an welchen Tagen und zu welchen Zeiten die Veranstaltung stattfindet. Wenn Sie noch keine Zeiten wissen, dann klicken Sie auf »keine Zeiten speichern«.", TRUE, TRUE) ?>
+										>
 										<font color="red" size=+2>*</font>											
 										<br>
 								</td>
@@ -1777,15 +1777,15 @@ if ($level==3)
 										<? if ($sem_create_data["term_count"]>1) 
 											{
 											?>
-											&nbsp; <a href="<? echo $PHP_SELF?>?delete_term_field=<?echo $i+1?>"><img border=0 src="./pictures/trash.gif" alt="Dieses Feld aus der Auswahl l&ouml;schen"></a>
+											&nbsp; <a href="<? echo $PHP_SELF?>?delete_term_field=<?echo $i+1?>"><img border=0 src="./pictures/trash.gif" <? echo tooltip("Dieses Feld aus der Auswahl löschen", TRUE, TRUE) ?> ></a>
 											<?
 											}
 										}
 										?>
 										&nbsp; &nbsp; <input type="IMAGE" name="add_term_field" src="./pictures/buttons/feldhinzufuegen-button.gif" border=0 value="Feld hinzuf&uuml;gen">&nbsp; 
 										<img  src="./pictures/info.gif" 
-											onClick="alert('In diesem Feldern können Sie aller Termine ein, an denen die Veranstaltung stattfindet. Wenn Sie noch keine Termine wissen, dann klicken Sie auf »keine Termine speichern.');" 
-											alt="In diesem Feldern k&ouml;nnen Sie aller Termine ein, an denen die Veranstaltung stattfindet. Wenn Sie noch keine Termine wissen, dann klicken Sie auf »keine Termine speichern.">
+											<? echo tooltip("In diesem Feldern können Sie aller Termine ein, an denen die Veranstaltung stattfindet. Wenn Sie noch keine Termine wissen, dann klicken Sie auf »keine Termine speichern.'", TRUE, TRUE) ?>
+										>
 										<font color="red" size=+2>*</font>
 										<br>
 								</td>
@@ -1812,8 +1812,8 @@ if ($level==3)
 							echo "</select>";
 							?>
 							<img  src="./pictures/info.gif" 
-								onClick="alert('Bitte geben Sie hier ein, welchem Semester die Veranstaltung zugeordnet werden soll.');" 
-								alt="Bitte geben Sie hier ein, welchem Semester die Veranstaltung zugeordnet werden solll.">
+								<? echo tooltip("Bitte geben Sie hier ein, welchem Semester die Veranstaltung zugeordnet werden soll.", TRUE, TRUE) ?>
+							>
 							<font color="red" size=+2>*</font>
 						</td>
 						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
@@ -1847,8 +1847,8 @@ if ($level==3)
 							?>
 							</select>
 							<img  src="./pictures/info.gif" 
-								onClick="alert('Falls die Veranstaltung mehrere Semester läuft, können Sie hier das Endsemester wählen. Dauerveranstaltung können über die entsprechende Einstellung markiert werden.');" 
-								alt="Falls die Veranstaltung mehrere Semester l&auml;uft, k&ouml;nnen Sie hier das Endsemester w&auml;hlen. Dauerveranstaltung k&ouml;nnen &uuml;ber die entsprechende Einstellung markiert werden.">
+								<? echo tooltip("Falls die Veranstaltung mehrere Semester läuft, können Sie hier das Endsemester wählen. Dauerveranstaltung können über die entsprechende Einstellung markiert werden.", TRUE, TRUE) ?>
+							>
 						</td>
 					</tr>
 					<tr <? $cssSw->switchClass() ?>>
@@ -1866,8 +1866,8 @@ if ($level==3)
 							<input type="text" name="vor_end_minute" size=2 maxlength=2 value="<? if ($sem_create_data["sem_vor_end_termin"]<>-1) echo date("i",$sem_create_data["sem_vor_end_termin"]); else echo"hh" ?>">&nbsp;Uhr
 							&nbsp;Raum: <input type="text" name="vor_raum" size=10 maxlength=255 value="<? if ($sem_create_data["sem_vor_raum"]) echo  htmlReady(stripslashes($sem_create_data["sem_vor_raum"])); ?>"></font>
 							<img  src="./pictures/info.gif" 
-									onClick="alert('Dieses Feld müssen Sie nur ausfüllen, wenn es eine verbindliche Vorbesprechung zu der Veranstaltung gibt.');" 
-									alt="Dieses Feld m&uuml;ssen Sie nur ausf&uuml;llen, wenn es eine verbindliche Vorbesprechung zu der Veranstaltung gibt.">							
+								<? echo tooltip("Dieses Feld müssen Sie nur ausfüllen, wenn es eine verbindliche Vorbesprechung zu der Veranstaltung gibt.", TRUE, TRUE) ?>
+							>
 						</td>
 					</tr>
 					<tr <? $cssSw->switchClass() ?>>
@@ -1969,14 +1969,14 @@ if ($level==4)
 											if ($sem_create_data["sem_admission"] == 1) {
 											?>
 											<img  src="./pictures/info.gif" 
-												onClick="alert('Bitte geben Sie hier ein, wann die Anwärter auf der Anmeldeliste in die Veranstaltung gelost werden. Freigebliebene Plätze werden nach diesem Termin per Warteliste an andere interessierte Personen vergeben.');" 
-												alt="Bitte geben Sie hier ein, wann die Anw&auml;rter auf der Anmeldeliste in die Veranstaltung gelost werden. Freigebliebene Pl&auml;tze werden nach diesem Termin per Warteliste an andere interessierte Personen vergeben.">
+												<? echo tooltip("Bitte geben Sie hier ein, wann die Anwärter auf der Anmeldeliste in die Veranstaltung gelost werden. Freigebliebene Plätze werden nach diesem Termin per Warteliste an andere interessierte Personen vergeben.", TRUE, TRUE) ?>
+											>
 											<? 
 											} else {
 											?>
 											<img  src="./pictures/info.gif" 
-												onClick="alert('Bitte geben Sie hier ein, wann das Anmelderverfahren die Kontingentierung aufheben soll. Ab diesem Zeitpunkt werden freie Plätze an interessierten Personen aus der Warteliste vergeben.');" 
-												alt="'Bitte geben Sie hier ein, wann das Anmelderverfahren die Kontingentierung aufheben soll. Ab diesem Zeitpunkt werden freie Pl&auml;tze an interessierten Personen aus der Warteliste vergeben">
+												<? echo tooltip("Bitte geben Sie hier ein, wann das Anmelderverfahren die Kontingentierung aufheben soll. Ab diesem Zeitpunkt werden freie Plätze an interessierten Personen aus der Warteliste vergeben.", TRUE, TRUE) ?>
+											>
 											<?
 											}
 											?>
@@ -2000,7 +2000,7 @@ if ($level==4)
 										<?
 										printf ("<input type=\"HIDDEN\" name=\"sem_studg_ratio_old[]\" value=\"%s\" />", $val["ratio"]);
 										printf ("<input type=\"TEXT\" name=\"sem_studg_ratio[]\" size=5 maxlength=5 value=\"%s\" /><font size=-1> %%</font>", $val["ratio"]);
-										printf ("&nbsp; <a href=\"%s?sem_delete_studg=%s\"><img border=0 src=\"./pictures/trash.gif\" alt=\"Den Studiengang %s aus der Liste l&ouml;schen\" />", $PHP_SELF, $key, $val["name"]);
+										printf ("&nbsp; <a href=\"%s?sem_delete_studg=%s\"><img border=0 src=\"./pictures/trash.gif\" ".tooltip("Den Studiengang aus der Liste löschen", TRUE)." />", $PHP_SELF, $key);
 										?>
 										</td>
 										<td class="<? echo $cssSw->getClass() ?>" width="70%" colspan=2>&nbsp; 
@@ -2036,8 +2036,8 @@ if ($level==4)
 										<td class="<? echo $cssSw->getClass() ?>" width="25%">
 											<input type="IMAGE" src="./pictures/buttons/hinzufuegen-button.gif" name="add_studg" border=0 />&nbsp;
 											<img  src="./pictures/info.gif" 
-												onClick="alert('Bitte geben Sie hier ein, für welche Studiengänge die Veranstaltung mit welchen Kontingenten beschränkt sein soll und bis wann eine Anmeldung über das Stud.IP Anmeldeverfahren möglich ist.');" 
-												alt="'Bitte geben Sie hier ein, für welche Studieng&auml;nge die Veranstaltung mit welchen Kontingenten beschr&auml;nkt sein soll und bis wann eine Anmeldung &uuml;ber das Stud.IP Anmeldeverfahren m&ouml;glich ist.">
+												<? echo tooltip("Bitte geben Sie hier ein, für welche Studiengänge die Veranstaltung mit welchen Kontingenten beschränkt sein soll und bis wann eine Anmeldung über das Stud.IP Anmeldeverfahren möglich ist.", TRUE, TRUE) ?>
+											>
 										</td>
 										<td class="<? echo $cssSw->getClass() ?>" width="40%">&nbsp; 
 										</td>
@@ -2066,8 +2066,8 @@ if ($level==4)
 						<td class="<? echo $cssSw->getClass() ?>" width="90%"  colspan=3>
 							&nbsp; <textarea name="sem_teiln" cols=58 rows=4><? echo  htmlReady(stripslashes($sem_create_data["sem_teiln"])) ?></textarea>
 							<img  src="./pictures/info.gif" 
-									onClick="alert('Bitte geben Sie hier ein, für welchen Teilnehmerkreis die Veranstaltung geeignet ist.');" 
-									alt="Bitte geben Sie hier ein, f&uuml;r welchen Teilnehmerkreis die Veranstaltung geeignet ist.">
+								<? echo tooltip("Bitte geben Sie hier ein, für welchen Teilnehmerkreis die Veranstaltung geeignet ist.", TRUE, TRUE) ?>
+							>
 						</td>
 					</tr>
 					<tr <? $cssSw->switchClass() ?>>
@@ -2077,8 +2077,8 @@ if ($level==4)
 						<td class="<? echo $cssSw->getClass() ?>" width="90%"  colspan=3>
 							&nbsp; <textarea name="sem_voraus" cols=58 rows=4><? echo  htmlReady(stripslashes($sem_create_data["sem_voraus"])) ?></textarea>
 							<img  src="./pictures/info.gif" 
-									onClick="alert('Bitte geben Sie hier ein, welche Vorausetzungen für die Veranstaltung nötig sind.');" 
-									alt="Bitte geben Sie hier ein, welche Vorausetzungen für die Veranstaltung n&ouml;tig sind.">
+								<? echo tooltip("Bitte geben Sie hier ein, welche Vorausetzungen für die Veranstaltung nötig sind.", TRUE, TRUE) ?>
+							>
 						</td>
 					</tr>
 					<tr <? $cssSw->switchClass() ?>>
@@ -2088,8 +2088,8 @@ if ($level==4)
 						<td class="<? echo $cssSw->getClass() ?>" width="90%"  colspan=3>
 							&nbsp; <textarea name="sem_orga" cols=58 rows=4><? echo  htmlReady(stripslashes($sem_create_data["sem_orga"])) ?></textarea>
 							<img  src="./pictures/info.gif" 
-									onClick="alert('Bitte geben Sie hier ein, mit welcher Lernorganisation die Veranstaltung durchgeführt wird.');" 
-									alt="Bitte geben Sie hier ein, mit welcher Lernorganisation die Veranstaltung durchgef&uuml;hrt wird.">
+								<? echo tooltip("Bitte geben Sie hier ein, mit welcher Lernorganisation die Veranstaltung durchgeführt wird.", TRUE, TRUE) ?>
+							>
 						</td>
 					</tr>
 					<tr <? $cssSw->switchClass() ?>>
@@ -2099,8 +2099,8 @@ if ($level==4)
 						<td class="<? echo $cssSw->getClass() ?>" width="90%" colspan=3>
 							&nbsp; <textarea name="sem_leistnw" cols=58 rows=4><? echo  htmlReady(stripslashes($sem_create_data["sem_leistnw"])) ?></textarea>
 							<img  src="./pictures/info.gif" 
-									onClick="alert('Bitte geben Sie hier ein, welche Leistungsnachweise erbracht werden müssen.');" 
-									alt="Bitte geben Sie hier ein, welche Leistungsnachweise erbracht werden m&uuml;ssen.">
+								<? echo tooltip("Bitte geben Sie hier ein, welche Leistungsnachweise erbracht werden müssen.", TRUE, TRUE) ?>
+							>
 						</td>
 					</tr>
 					<tr <? $cssSw->switchClass() ?>>
@@ -2110,8 +2110,8 @@ if ($level==4)
 						<td class="<? echo $cssSw->getClass() ?>" width="90%" colspan=3>
 							&nbsp; <textarea name="sem_sonst" cols=58 rows=4><? echo  htmlReady(stripslashes($sem_create_data["sem_sonst"])) ?></textarea>
 							<img  src="./pictures/info.gif" 
-									onClick="alert('Hier ist Platz für alle sonstigen Informationen der Veranstaltung.');" 
-									alt="Hier ist Platz für alle sonstigen Informationen der Veranstaltung.">
+								<? echo tooltip("Hier ist Platz für alle sonstigen Informationen der Veranstaltung.", TRUE, TRUE) ?>
+							>
 						</td>
 					</tr>
 					<?
@@ -2130,8 +2130,8 @@ if ($level==4)
 										echo "<input type=\"password\" name=\"password\" size=12 maxlength=31> &nbsp; Passwort-Wiederholung:&nbsp; <input type=\"password\" name=\"password2\" size=12 maxlength=31>";
 								?>
 								<img  src="./pictures/info.gif" 
-										onClick="alert('Bitte geben Sie hier ein Passwort sowie ein einmaliges Wiederholungspasswort für die Veranstaltung ein. Dieses wird von den Teilnehmer benötigt, um die Veranstaltung abonnieren zu können.');" 
-										alt="Bitte geben Sie hier ein Passwort sowie  ein einmaliges Wiederholungspasswort für die Veranstaltung ein. Dieses wird von den Teilnehmer ben&ouml;tigt, um die Veranstaltung abonnieren zu k&ouml;nnen.">
+									<? echo tooltip("Bitte geben Sie hier ein Passwort sowie ein einmaliges Wiederholungspasswort für die Veranstaltung ein. Dieses wird von den Teilnehmer benötigt, um die Veranstaltung abonnieren zu können.", TRUE, TRUE) ?>
+								>
 							</td>
 						</tr>
 						<?
@@ -2149,8 +2149,8 @@ if ($level==4)
 								<input type="text" name="monat" size=2 maxlength=2 value="<? if ($sem_create_data["sem_start_termin"]<>-1) echo date("m",$sem_create_data["sem_start_termin"]); else echo"mm" ?>">.
 								<input type="text" name="jahr" size=4 maxlength=4 value="<? if ($sem_create_data["sem_start_termin"]<>-1) echo date("Y",$sem_create_data["sem_start_termin"]); else echo"jjjj" ?>">&nbsp; </font>
 								<img  src="./pictures/info.gif" 
-										onClick="alert('Bitte geben Sie hier ein, wann der erste Termin der Veranstaltung stattfindet.');" 
-										alt="Bitte geben Sie hier nach M&ouml;glichkeit ein, wann der erste Termin der Veranstaltung stattfindet.">
+									<? echo tooltip("Bitte geben Sie hier ein, wann der erste Termin der Veranstaltung stattfindet.", TRUE, TRUE) ?>
+								>
 							</td>
 						</tr>
 						<?
@@ -2368,8 +2368,8 @@ if ($level==7)
 						<td class="<? echo $cssSw->getClass() ?>" width="90%"  colspan=3>
 							&nbsp; <textarea name="sem_literat" cols=58 rows=10><? echo $sem_create_data["sem_literat"] ?></textarea>
 							<img  src="./pictures/info.gif" 
-									onClick="alert('In diesen Feld können Sie eine komplette Literaturliste einfügen.');" 
-									alt="In diesen Feld k&ouml;nnen Sie eine komplette Literaturliste einfügen.">
+								<? echo tooltip("In diesen Feld können Sie eine komplette Literaturliste einfügen.", TRUE, TRUE) ?>
+							>
 						</td>
 					</tr>
 					<tr <? $cssSw->switchClass() ?>>
@@ -2379,8 +2379,8 @@ if ($level==7)
 						<td class="<? echo $cssSw->getClass() ?>" class="<? echo $cssSw->getClass() ?>" width="90%"  colspan=3>
 							&nbsp; <textarea name="sem_links" cols=58 rows=10><? echo $sem_create_data["sem_links"] ?></textarea>
 							<img  src="./pictures/info.gif" 
-									onClick="alert('In diesen Feld können Sie eine komplette Linkliste einfügen. Alle Links werden später automatisch als Hyperlinks angezeigt.');" 
-									alt="In diesen Feld k&ouml;nnen Sie eine komplette Linkliste einfügen. Alle Links werden sp&auml;ter automatisch als Hyperlinks angezeigt.">
+								<? echo tooltip("In diesen Feld können Sie eine komplette Linkliste einfügen. Alle Links werden später automatisch als Hyperlinks angezeigt.", TRUE, TRUE) ?>
+							>
 						</td>
 					</tr>
 					<tr<? $cssSw->switchClass() ?>>
