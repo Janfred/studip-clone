@@ -21,6 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 if ($perm->have_perm("tutor")):	// Navigationsleiste ab status "Tutor"
 
 require_once "$ABSOLUTE_PATH_STUDIP/config.inc.php";
+require_once "$ABSOLUTE_PATH_STUDIP/config_tools_semester.inc.php";
 require_once "$ABSOLUTE_PATH_STUDIP/dates.inc.php";
 require_once "$ABSOLUTE_PATH_STUDIP/msg.inc.php";
 require_once "$ABSOLUTE_PATH_STUDIP/visual.inc.php";
@@ -601,7 +602,7 @@ if ((!$links_admin_data["sem_id"]) && ($list) &&
 					?>
 					<tr>
 						<td class="steel1" colspan=5>
-							<br />&nbsp;<font size=-1><input type="CHECKBOX" name="select_old" <? if ($links_admin_data["select_old"]) echo checked ?> />&nbsp;nur alte Veranstaltungen ausw&auml;hlen (Endsemester verstrichen) </font><br />
+							<br />&nbsp;<font size=-1><input type="CHECKBOX" name="select_old" <? if ($links_admin_data["select_old"]) echo checked ?> />&nbsp;nur archivierbare Veranstaltungen ausw&auml;hlen -  (letztes) Veranstaltungssemester verstrichen </font><br />
 							<!-- &nbsp;<font size=-1><input type="CHECKBOX" name="select_inactive" <? if ($links_admin_data["select_inactive"]) echo checked ?> />&nbsp;nur inaktive Veranstaltungen ausw&auml;hlen (letzte Aktion vor mehr als 6 Monaten) </font> -->
 						</td>
 					</tr>
@@ -691,7 +692,7 @@ if (($i_page== "archiv_assi.php") && ($links_admin_data["select_old"])) {
 		$query.="AND ";
 	else
 		$query.="WHERE ";
-	$query.="((seminare.start_time + seminare.duration_time < ".time().") AND seminare.duration_time != '-1') ";
+	$query.="((seminare.start_time + seminare.duration_time < ".$SEM_BEGINN_NEXT.") AND seminare.duration_time != '-1') ";
 	$conditions++;
 	}
 

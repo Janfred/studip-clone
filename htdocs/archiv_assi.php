@@ -112,10 +112,12 @@ if ($archive_kill) {
 	$tmp_name = $db2->f("Name");
 	if ($db2->f("duration_time") == -1) {
 		      $msg .= "error§Das Archivieren der Veranstaltung ist nicht m&ouml;glich, da diese Veranstaltung eine dauerhafte Veranstaltung ist. <br>Wenn Sie sie wirklich archivieren wollen, dann &auml;ndern Sie bitte die Semesterzurordnung &uuml;ber den Menupunkt <a href=\"admin_metadates.php?seminar_id=$s_id\"><b>Zeiten</b></a>.§";
+		      $wrong_semester=TRUE;
 		      $run = FALSE;
 		}
 	elseif (time() < ($db2->f("start_time") + $db2->f("duration_time"))) {
 		      $msg .= "error§Das Archivieren der Veranstaltung ist nicht m&ouml;glich, da diese Veranstaltung &uuml;ber mehrere Semester l&auml;uft und noch nicht abgeschlossen ist. <br>Wenn sie Sie wirklich archivieren wollen, dann &auml;ndern Sie bitte die Semesterzurordnung &uuml;ber den Menupunkt <a href=\"admin_metadates.php?seminar_id=$s_id\"><b>Zeiten</b></a>.§";
+		      $wrong_semester=TRUE;
 		      $run = FALSE;
 		}
 
@@ -224,7 +226,8 @@ if ($archive_kill) {
 
 //Outputs...
 if (($archiv_assi_data["sems"]) && (sizeof($archiv_assi_data["sem_check"])>0)){
-	$msg.="info§<font color=\"red\">Sie sind im Begriff, die untenstehende  Veranstaltung zu archivieren. Dieser Schritt kann nicht r&uuml;ckg&auml;ngig gemacht werden!";
+	if (!$wrong_semester)
+		$msg.="info§<font color=\"red\">Sie sind im Begriff, die untenstehende  Veranstaltung zu archivieren. Dieser Schritt kann nicht r&uuml;ckg&auml;ngig gemacht werden!";
 ?>
 <body>
 
@@ -421,6 +424,7 @@ if (($archiv_assi_data["sems"]) && (sizeof($archiv_assi_data["sem_check"])>0)){
 				</td>
 			</tr>
 		</table>
+		<br />
 	</td>
 	</tr>
 	</table>
@@ -430,14 +434,13 @@ elseif (($archiv_assi_data["sems"]) && (sizeof($archiv_assi_data["sem_check"])==
 	?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
 	<tr>
-		<td class="topic" colspan=2><b>&nbsp; Keine Veranstaltung zum Archivieren gew&auml;hlt</b>
+		<td class="topic" colspan=2><b>&nbsp; Die Veranstaltung wurde archiviert</b>
 		</td>
 	</tr>
 	<tr>
 		<td class="blank" colspan=2><b>&nbsp;
 		<?
-		if (!$links_admin_data["sem_id"])
-			parse_msg($msg."info§Sie haben alle ausgew&auml;hlten Veranstaltungen archiviert!");
+		parse_msg($msg."info§Sie haben alle ausgew&auml;hlten Veranstaltungen archiviert!");
 		?>
 		</td>
 	</tr>	
