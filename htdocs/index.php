@@ -144,23 +144,19 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("doz
 	<table cellspacing="20">
 		<tr>
 			<?
-
-			echo "<td class=\"steelkante\"><a href=\"index.php?again=yes\"><img src=\"./pictures/start.gif\" align=left border=\"0\">&nbsp; <font size=\"4\"><b>Login</b></font><br><font size=\"2\" color=#555555>&nbsp; f&uuml;r registrierte NutzerInnen</font></a>&nbsp; </td>";
+			echo "<td class=\"steelkante\"><a href=\"index.php?again=yes\"><img src=\"./pictures/start.gif\" align=left border=\"0\">&nbsp; <font size=\"4\"><b>"._("Login")."</b></font><br><font size=\"2\" color=#555555>&nbsp; "._("f&uuml;r registrierte NutzerInnen")."</font></a>&nbsp; </td>";
 			?>
-		</tr>
-		<tr>
+		</tr><tr>
 			<?
-			echo "<td class=\"steelkante\"><a href=\"register1.php\"><img src=\"./pictures/register.gif\" align=left border=\"0\">&nbsp; <font size=\"4\"><b>Registrieren</b></font><br><font size=\"2\" color=#555555>&nbsp; um NutzerIn zu werden</font></a>&nbsp; </td>";
+			echo "<td class=\"steelkante\"><a href=\"register1.php\"><img src=\"./pictures/register.gif\" align=left border=\"0\">&nbsp; <font size=\"4\"><b>"._("Registrieren")."</b></font><br><font size=\"2\" color=#555555>&nbsp; ".("um NutzerIn zu werden")."</font></a>&nbsp; </td>";
 			?>
-		</tr>
-				<tr>
+		</tr>	<tr>
 			<?
-			echo "<td class=\"steelkante\"><a href=\"freie.php\"><img src=\"./pictures/free.gif\" align=left border=\"0\">&nbsp; <font size=\"4\"><b>Freier Zugang</b></font><br><font size=\"2\" color=#555555>&nbsp; ohne Registrierung</font></a>&nbsp; </td>";
+			echo "<td class=\"steelkante\"><a href=\"freie.php\"><img src=\"./pictures/free.gif\" align=left border=\"0\">&nbsp; <font size=\"4\"><b>"._("Freier Zugang")."</b></font><br><font size=\"2\" color=#555555>&nbsp; "._("ohne Registrierung")."</font></a>&nbsp; </td>";
 			?>
-		</tr>
-				<tr>
+		</tr>	<tr>
 			<?
-			echo "<td class=\"steelkante\"><a href=\"help/index.php\"><img src=\"./pictures/help.gif\" align=left border=\"0\">&nbsp; <font size=\"4\"><b>Hilfe</b></font><br><font size=\"2\" color=#555555>&nbsp; zu Bedienung und Funktionsumfang&nbsp; &nbsp; </font></a>&nbsp; </td>";
+			echo "<td class=\"steelkante\"><a href=\"help/index.php\"><img src=\"./pictures/help.gif\" align=left border=\"0\">&nbsp; <font size=\"4\"><b>"._("Hilfe")."</b></font><br><font size=\"2\" color=#555555>&nbsp; "._("zu Bedienung und Funktionsumfang")."&nbsp; &nbsp; </font></a>&nbsp; </td>";
 			?>
 		</tr>
 	</table>
@@ -169,10 +165,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("doz
 <tr><td class="blank" colspan="3" align="right">
 <?
 
-// choose language
-foreach ($INSTALLED_LANGUAGES as $temp_language_key => $temp_language) {
-	printf ("&nbsp;&nbsp;<a href=\"%s?set_language=%s\"><img src=\"pictures/languages/%s\" %s border=\"0\"></a>", $PHP_SELF, $temp_language_key, $temp_language["picture"], tooltip($temp_language["name"]));
-}
+
 unset($temp_language_key); unset($temp_language);
 
 ?>
@@ -180,13 +173,39 @@ unset($temp_language_key); unset($temp_language);
 
 <tr>
 <td class="blank" nowrap align=left valign=bottom>
-	&nbsp; <a href="index.php?again=yes"><font size=2 color="#6699CC"><?=_("Login")?></font></a>&nbsp; 
-	<a href="register1.php"><font size=2 color="#6699CC"><?=_("Registrieren")?></font></a>&nbsp; 
+	&nbsp; 
 </td>
 <td class="blank" align=center><a href="http://www.studip.de"><img src="pictures/logoklein.gif" border=0 <?=tooltip(_("Zur Portalseite"))?>></a></td>
-<td class="blank" align=right nowrap valign=bottom>
-	<a href="freie.php"><font size=2 color="#6699CC"><?=_("Freier Zugang")?></font></a>&nbsp; 
-	<a href="help/index.php" target="_new"><font size=2 color="#6699CC"><?=_("Hilfe")?></font></a>&nbsp;
+<td class="blank" align=right nowrap valign=top>
+<?
+
+
+			//Statistics
+			$db=new DB_Seminar;
+			echo "<table cellspacing=\"0\" cellpadding=\"0\">";
+			$db->query("SELECT count(*) from seminare");
+			$db->next_record();
+			$anzahl = $db->f(0);
+			echo "<tr><td class=\"steelkante\"><font size=\"2\">&nbsp; "._("Aktive Veranstaltungen").":</font></td><td class=\"steelkante\" align=right><font size=\"2\">&nbsp; $anzahl&nbsp; </font></td><td class=\"blank\">&nbsp; &nbsp; </td></tr>"; 
+			$db->query("SELECT count(*) from auth_user_md5");
+			$db->next_record();
+			$anzahl = $db->f(0);			
+			echo "<tr><td class=\"steelgraulight\"><font size=\"2\">&nbsp; "._("Registrierte NutzerInnen").":</font></td><td class=\"steelgraulight\" align=right><font size=\"2\">&nbsp; $anzahl&nbsp; </font></td><td class=\"blank\">&nbsp; &nbsp; </td></tr>"; 
+			$now = time()-600; 
+			$db->query("SELECT count(*) FROM active_sessions WHERE changed > '".date("YmdHis",$now)."' AND active_sessions.name = 'Seminar_User'");
+			$db->next_record();
+			$anzahl = $db->f(0);			
+			echo "<tr><td class=\"steelgraulight\"><font size=\"2\">&nbsp; "._("Davon online").":</font></td><td class=\"steelgraulight\" align=right><font size=\"2\">&nbsp; $anzahl&nbsp; </font></td><td class=\"blank\">&nbsp; &nbsp; </td></tr>"; 
+			echo "<tr><td class=\"blank\">&nbsp; </td><td align= right class=\"blank\"><a href=\"./impressum.php?view=statistik\"><font size=\"2\" color=#888888>"._("mehr")."... </font></a></td><td class=\"blank\">&nbsp; &nbsp; </td></tr>";
+			echo "</table>";
+
+
+echo "<br>";
+// choose language
+foreach ($INSTALLED_LANGUAGES as $temp_language_key => $temp_language) {
+	printf ("&nbsp;&nbsp;<a href=\"%s?set_language=%s\"><img src=\"pictures/languages/%s\" %s border=\"0\"></a>", $PHP_SELF, $temp_language_key, $temp_language["picture"], tooltip($temp_language["name"]));
+}
+?>
 </td></tr></table>
 <DIV align=center>
 <?php
