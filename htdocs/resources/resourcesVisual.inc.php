@@ -595,7 +595,7 @@ class editSettings extends cssClasses {
 								?>
 								</tr>
 								<td class="<? echo $this->getClass() ?>" width="67%" colspan=2>
-									<input type="IMAGE" <?=makeButton("zuweisen", "src") ?> name="change_category_add_property_<?=$this->db->f("category_id")?>" border=0 /> 
+									<input type="IMAGE" <?=makeButton("zuweisen", "src") ?> name="change_category_add_property<?=$this->db->f("category_id")?>" border=0 /> 
 									&nbsp;<input type="IMAGE" name="change_types" <?=makeButton("uebernehmen", "src")?> border="0" /><br />
 								</select>
 							</td>
@@ -661,6 +661,7 @@ class editSettings extends cssClasses {
 				</td>
 			</tr>	
 			</form>
+			<form method="POST" action="<?echo $PHP_SELF ?>?change_properties=TRUE">
 			<? 
 			$this->selectProperties($dummy, TRUE);
 			while ($this->db2->next_record()) {
@@ -670,18 +671,17 @@ class editSettings extends cssClasses {
 				<td class="<? $this->switchClass(); echo $this->getClass() ?>" width="4%">&nbsp; 
 				</td>
 				<td class="<? echo $this->getClass() ?>" width="25%" valign="top">
-					<font size=-1><? echo $this->db2->f("name") ?></font><br />
+					<font size=-1><input type="TEXT" name="change_property_name[<?=$this->db2->f("property_id")?>]" value="<? echo $this->db2->f("name") ?>" size="20" maxlength="255" /></font><br />
 					<font size=-1>wird von <b><? echo  $depTyp ?></b> Typen verwendet</font><br />
 					<font size=-1><? ($this->db2->f("system")) ? print( "systemobjekt") :print("") ?></font><br />
 				</td>
 				<td class="<? echo $this->getClass() ?>" width="65%" valign="top">
 					<table border=0 celpadding=2 cellspacing=0 width="100%" align="center">
 					<tr>
-					<form method="POST" action="<?echo $PHP_SELF ?>?send_property_type_id=<? echo $this->db2->f("property_id")?>">
 						<td class="<? echo $this->getClass() ?>" width="50%">
 							<font size=-1>Art:</font>
 							<br />
-							<select name="send_property_type">
+							<select name="send_property_type[<?=$this->db2->f("property_id")?>]">
 								<font size=-1><option <? ($this->db2->f("type") == "bool") ? print "selected" : print "" ?> value="bool">Zustand</option></font>
 								<font size=-1><option <? ($this->db2->f("type") == "num") ? print "selected" : print "" ?> value="num">einzeiliges Textfeld</option></font>
 								<font size=-1><option <? ($this->db2->f("type") == "text") ? print "selected" : print "" ?> value="text">mehrzeilges Textfeld</option></font>
@@ -691,11 +691,11 @@ class editSettings extends cssClasses {
 							<?
 							if ($this->db2->f("type") == "bool") {
 								printf ("<font size=-1>Bezeichnung:</font><br />");
-								printf ("<font size=-1><input type=\"TEXT\" name=\"send_property_bool_desc\" value=\"%s\" size=30 maxlength=255 /></font><br />", ($this->db2->f("options")) ? $this->db2->f("options") : "vorhanden");
+								printf ("<font size=-1><input type=\"TEXT\" name=\"send_property_bool_desc[%s]\" value=\"%s\" size=30 maxlength=255 /></font><br />", $this->db2->f("property_id"), ($this->db2->f("options")) ? $this->db2->f("options") : "vorhanden");
 							}
 							if ($this->db2->f("type") == "select") {
 								printf ("<font size=-1>Optionen:</font><br />");
-								printf ("<font size=-1><input type=\"TEXT\" name=\"send_property_select_opt\" value=\"%s\" size=30 maxlength=255 /></font><br />", $this->db2->f("options"));
+								printf ("<font size=-1><input type=\"TEXT\" name=\"send_property_select_opt[%s]\" value=\"%s\" size=30 maxlength=255 /></font><br />", $this->db2->f("property_id"), $this->db2->f("options"));
 							}
 							?>
 							<font size=-1>Vorschau:</font>
@@ -726,7 +726,6 @@ class editSettings extends cssClasses {
 						 	<input type="IMAGE" name="_send_property_type" src="./pictures/buttons/uebernehmen-button.gif" border=0 />
 						 </td>
 					</tr>
-					</form>
 					</table>
 				</td>
 				<td class="<? echo $this->getClass() ?>" width="10%" valign="bottom"align="center">
@@ -744,6 +743,7 @@ class editSettings extends cssClasses {
 				</td>
 			</tr>
 			<? } ?>
+		</form>
 		</table>
 		<br /><br />
 		<?
