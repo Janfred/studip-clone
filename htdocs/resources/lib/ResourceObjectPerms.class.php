@@ -60,6 +60,10 @@ class ResourceObjectPerms {
 			$this->user_id=$user->id;
 		
 		$this->resource_id=$resource_id;
+		if (!$this->resource_id){
+			$this->perm = false;
+			return;
+		}
 		
 		$resObject= new ResourceObject($this->resource_id);
 		$is_room = $resObject->isRoom();
@@ -100,6 +104,7 @@ class ResourceObjectPerms {
 			$my_objects["all"]=TRUE;
 			$my_objects = array_merge($my_administrable_objects, $my_objects);
 			//check if one of my administrable (system) objects owner of the resourcen object, so that I am too...
+			
 			foreach ($my_objects as $key=>$val) {
 				$this->db->query("SELECT owner_id FROM resources_objects WHERE owner_id='$key' AND resource_id = '$this->resource_id' ");
 				if ($this->db->next_record())
@@ -134,12 +139,14 @@ class ResourceObjectPerms {
 
 		//if all the checks don't work, we have to take a look to the superordinated objects
 		if ($this->perm != "admin") {
+			
+			$query = sprintf ("SELECT parent_id FROM resources_objects WHERE resource_id = '%s' ", $this->resource_id);
+			$this->db->query($query);	
+			$this->db->next_record();
+			$superordinated_id=$this->db->f("parent_id");
+			
 			foreach ($my_objects as $key=>$val) {
-				$query = sprintf ("SELECT parent_id FROM resources_objects WHERE resource_id = '%s' ", $this->resource_id);
-				$this->db->query($query);	
-				$this->db->next_record();
-	
-				$superordinated_id=$this->db->f("parent_id");
+				
 				$top=FALSE;
 
 				while ((!$top) && ($k<10000) && ($superordinated_id)) {
