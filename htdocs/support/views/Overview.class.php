@@ -76,7 +76,7 @@ class Overview extends ShowTreeRow {
 			$link=$PHP_SELF."?con_open=".$conObject->getId()."#a";
 			$open="close";
 		}
-		
+
 		if ((!$supportdb_data["con_opens"]) && ($conObject->isOldestActive()) && ($conObject->getRemainingPoints() > 0)) 
 			$open="open";
 		
@@ -139,7 +139,7 @@ class Overview extends ShowTreeRow {
 				(($edit_con_object == $conObject->id) && ($supporter)) ? "<input type=\"TEXT\" name=\"con_given_points\" size=\"4\" maxlength=\"4\" value=\"".$conObject->getGivenPoints()."\" />" : $conObject->getGivenPoints());
 			$content .= sprintf ("<td width=\"20%%\"><b><font size=\"-1\">"._("Anfragen:")."</font></b></td><td width=\"10%%\" align=\"center\"><font size=\"-1\">%s</font></td><td width=\"20%%\">&nbsp;</td></tr>\n",  $conObject->getRequests());
 			$content .= sprintf ("<tr><td><b><font size=\"-1\">"._("verbrauchte Punkte:")."</font></b></td><td align=\"center\"><font size=\"-1\">%s</font></td><td>&nbsp;</td>\n",  $conObject->getUsedPoints());
-			$content .= sprintf ("<td width=\"20%%\"><b><font size=\"-1\">"._("Events:")."</font></b></td><td width=\"10%%\" align=\"center\"><font size=\"-1\">%s</font></td><td width=\"20%%\">&nbsp;</td></tr>\n",  $conObject->getEvents());
+			$content .= sprintf ("<td width=\"20%%\"><b><font size=\"-1\">"._("Bearbeitungen:")."</font></b></td><td width=\"10%%\" align=\"center\"><font size=\"-1\">%s</font></td><td width=\"20%%\">&nbsp;</td></tr>\n",  $conObject->getEvents());
 			$content .= "<tr><td colspan=\"2\" style=\"{background-image: url('pictures/line.gif')};\"><img src=\"pictures/blank.gif\" width =\"10\" height=\"1\"  /><td><td><img src=\"pictures/blank.gif\" width =\"10\" height=\"1\"  /></td></tr>\n";
 			$content .= sprintf ("<tr><td><b><font size=\"-1\">"._("verbleibende Punkte:")."</font></b></td><td align=\"center\"><font size=\"-1\">%s</font></td><td colspan=\"3\">&nbsp;</td></tr>\n",  $conObject->getRemainingPoints());
 			$content .= "</table>";
