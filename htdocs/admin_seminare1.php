@@ -40,13 +40,13 @@ include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");
 ?>
 
- <SCRIPT language="JavaScript">
+<SCRIPT language="JavaScript">
 <!--
 
 function checkname(){
  var checked = true;
  if (document.details.Name.value.length<3) {
-    alert("Bitte geben Sie einen Namen für die Veranstaltung ein!");
+    alert("<?=_("Bitte geben Sie einen Namen für die Veranstaltung ein!")?>");
  		document.details.Name.focus();
     checked = false;
     }
@@ -56,12 +56,12 @@ function checkname(){
 function checkbereich(){
  var checked = true;
  if (document.details["details_chooser[]"].selectedIndex < 0) {
-    alert("Bitte geben Sie mindestens einen Studienbereich für die Veranstaltung ein!");
+    alert("<?=_("Bitte geben Sie mindestens einen Studienbereich für die Veranstaltung ein!")?>");
  		document.details["details_chooser[]"].focus();
     checked = false;
  } else {
 		if (document.details["details_chooser[]"].options[document.details["details_chooser[]"].selectedIndex].value == 0) {
-			alert("Die Zeilen, die unterstrichen sind, dienen nur der Orientierung.\nBitte geben Sie einen gültigen Bereich ein!");
+			alert("<?=_("Die Zeilen, die unterstrichen sind, dienen nur der Orientierung.\\nBitte geben Sie einen gültigen Bereich ein!")?>");
  			document.details["details_chooser[]"].focus();
     	checked = false;
 		}
@@ -122,7 +122,7 @@ function auth_check() {
 
 //delete Tutoren/Dozenten
 if ($delete_doz) {
-	if (auth_check()) {
+	if ($perm->have_studip_perm("dozent",$s_id)) {
 		$db2->query ("SELECT user_id FROM seminar_user WHERE Seminar_id = '$s_id' AND status = 'dozent' ");
 		if (($auth->auth["perm"] == "dozent") && ($delete_doz == get_username($user_id)))
 			$msg .= "error§Sie d&uuml;rfen sich nicht selbst aus der Veranstaltung austragen.§";
@@ -141,7 +141,7 @@ if ($delete_doz) {
 }
 
 if ($delete_tut) {
-	if (auth_check()) {
+	if ($perm->have_studip_perm("dozent",$s_id)) {
 		$db2->query ("DELETE FROM seminar_user WHERE Seminar_id = '$s_id' AND user_id ='".get_userid($delete_tut)."' ");
 		if ($db2->affected_rows()) {
 			$msg .= "msg§Der Nutzer <b>".htmlReady(get_fullname_from_uname($delete_tut))."</b> wurde aus der Veranstaltung gel&ouml;scht.§";
@@ -253,7 +253,7 @@ if ($s_send) {
 	$temp_admin_seminare_start_time=$db->f("start_time");
 	
 	//a Dozent was added
-	if ($add_doz_x) {
+	if ($add_doz_x && $perm->have_studip_perm("dozent",$s_id)) {
 		$add_doz_id=get_userid($add_doz);
 		$group=select_group($temp_admin_seminare_start_time);
 		$query = "SELECT user_id FROM seminar_user WHERE Seminar_id = '$s_id' AND user_id = '$add_doz_id'";
@@ -267,7 +267,7 @@ if ($s_send) {
 	}
 	
 	//a Tutor was added
-	if ($add_tut_x) {
+	if ($add_tut_x && $perm->have_studip_perm("dozent",$s_id)) {
 		$add_tut_id=get_userid($add_tut);
 		$group=select_group($temp_admin_seminare_start_time);
 		$query = "SELECT user_id, status FROM seminar_user WHERE Seminar_id = '$s_id' AND user_id = '$add_tut_id'";
