@@ -35,17 +35,18 @@ $perm->check("tutor");
 	<script language="javascript">
 	<!--
 	function doCrypt() {
-		document.form_3.hashpass.value = MD5(document.form_3.password.value);
-		document.form_3.password.value = "";
-		document.form_3.password2.value = "";
+		document.admission.hashpass.value = MD5(document.admission.password.value);
+		document.admission.hashpass2.value = MD5(document.admission.password2.value);
+		document.admission.password.value = "";
+		document.admission.password2.value = "";
 		return true;
 	}
 	
 	function checkpassword(){
 		var checked = true;
-		if ((document.details.password.value.length<4) && (document.details.password.value.length != 0)) {
+		if ((document.admission.password.value.length<4) && (document.admission.password.value.length != 0)) {
 			alert("Das Passwort ist zu kurz \n- es sollte mindestens 4 Zeichen lang sein.");
-			document.details.password.focus();
+			document.admission.password.focus();
 			checked = false;
 		}
 		return checked;
@@ -53,9 +54,9 @@ $perm->check("tutor");
 
 	function checkpassword2(){
 	var checked = true;
-	if (document.details.password.value != document.details.password2.value) {
+	if (document.admission.password.value != document.admission.password2.value) {
 		alert("Das Passwort stimmt nicht mit dem Wiederholungspasswortt überein!");
-		document.details.password2.focus();
+		document.admission.password2.focus();
 		checked = false;
 		}
 		return checked;
@@ -240,9 +241,9 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 	} elseif ((!$adm_chrono_x) && (!$adm_los_x))  {
 		//max. Teilnehmerzahl checken
 		if ($uebernehmen_x)
-			if (($admin_admission_data["admission_turnout"] < 5) && ($admin_admission_data["admission_type"])) {
-				$errormsg=$errormsg."error§Wenn Sie sie die Teilnahmebeschr&auml;nkung benutzen wollen, m&uuml;ssen sie wenigsten 5 Teilnehmer zulassen.§";
-				$admin_admission_data["admission_turnout"] =5;
+			if (($admin_admission_data["admission_turnout"] < 1) && ($admin_admission_data["admission_type"])) {
+				$errormsg=$errormsg."error§Wenn Sie sie die Teilnahmebeschr&auml;nkung benutzen wollen, m&uuml;ssen sie wenigstens einen Teilnehmer zulassen.§";
+				$admin_admission_data["admission_turnout"] =1;
 			}
 	
 		//Prozentangabe checken/berechnen wenn neueer Studiengang, einer geloescht oder Seite abgeschickt
@@ -423,7 +424,9 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 	</tr>
 	<tr>
 	<td class="blank" colspan=2>
-	<form method="POST" action="<? echo $PHP_SELF ?>">
+	<form method="POST" name="admission" action="<? echo $PHP_SELF ?>"
+	<? if (!$admin_admission_data["admission_type"]) echo " onSubmit=\"return doCrypt();\" "; ?>
+	>
 		<table width="99%" border=0 cellpadding=2 cellspacing=0 align="center">
 		<tr <? $cssSw->switchClass() ?>>
 			<td class="<? echo $cssSw->getClass() ?>" align="center" colspan=3>		
@@ -478,7 +481,7 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 				<font size=-1>
 				<input type="radio" name="read_level" value="0" <?php print $admin_admission_data["read_level"] == 0 ? "checked" : ""?>> freier Zugriff &nbsp;<br />
 				<input type="radio" name="read_level" value="1" <?php print $admin_admission_data["read_level"] == 1 ? "checked" : ""?>> in Stud.IP angemeldet &nbsp;<br />
-				<input type="radio" name="read_level" value="2" <?php print $admin_admission_data["read_level"] == 2 ? "checked" : ""?>> nur mit Passwort &nbsp;<br />
+				<input type="radio" name="read_level" value="2" <?php print $admin_admission_data["read_level"] == 2 ? "checked" : ""?>> nur mit Passwort &nbsp;<br />				
 				</font>
 			</td>
 			<td class="<? echo $cssSw->getClass() ?>" width="76%" align="left">
@@ -515,6 +518,8 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 					else	
 						echo "<font size=-1><input type=\"password\" name=\"password\" onchange=\"checkpassword()\" size=12 maxlength=31> &nbsp; Passwort-Wiederholung:&nbsp; <input type=\"password\" name=\"password2\" onchange=\"checkpassword2()\" size=12 maxlength=31></font>";
 					?>
+					<input type="HIDDEN" name="hashpass" value="">
+					<input type="HIDDEN" name="hashpass2" value="">				
 				</td>
 			</tr>
 		<?
@@ -659,9 +664,6 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 					<? } ?>
 					</td>					
 			</tr>
-		<?
-		}
-		?>
 			<tr <? $cssSw->switchClass() ?>>
 				<td class="<? echo $cssSw->getClass() ?>" width="4%">
 					&nbsp; 
@@ -669,9 +671,13 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 				<td class="<? echo $cssSw->getClass() ?>" width="96%" colspan=2>
 					<font size=-1><b>verbindliche Anmeldung: </b></font><br />
 					<font size=-1>Bitte aktivieren sie diese Einstellung, wenn die Anmeldung f&uuml;r Veranstaltungem verbindlich erfolgen soll:</font><br />
-					<font size=-1 color="red"><b>Achtung:</b></font>&nbsp;<font size=-1>Verwenden Sie diese Option nur bei entsprechenden Bedarf, etwa zusammen mit einer Teilnehmerbeschr&auml;nkung!</font><br /><br />
+					<font size=-1 color="red"><b>Achtung:</b></font>&nbsp;<font size=-1>Verwenden Sie diese Option nur bei entsprechenden Bedarf, etwa nach erfolgter Teilnehmerauswahl durch Losen!</font><br /><br />
 					<font size=-1><input type="CHECKBOX" name="admission_binding" <? if ($admin_admission_data["admission_binding"]) echo "checked"; ?> />Anmeldung ist <u>verbindlich</u>. (Teilnehmer k&ouml;nnen sich nicht austragen.)</font>
 				</td>
+			</tr>
+		<?
+		}
+		?>
 		<tr <? $cssSw->switchClass() ?>>
 			<td class="<? echo $cssSw->getClass() ?>" align="center" colspan=3>		
 				<font size=-1>Diese Daten&nbsp; </font>

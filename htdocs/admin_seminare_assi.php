@@ -381,11 +381,11 @@ if ($cmd_b_x)
 		$level=1;
 		$errormsg=$errormsg."error§Da Ihr Account keiner Einrichtung zugeordnet ist, k&ouml;nnen Sie leider noch keine Veranstaltung anlegen. Bitte wenden Sie sich an den zust&auml;ndigen Administrator der Einrichtung oder einen der <a href=\"impressum.php\">Entwickler</a>!§";
 		}
-	if (($sem_create_data["sem_turnout"] < 5) && ($sem_create_data["sem_admission"]))
+	if (($sem_create_data["sem_turnout"] < 1) && ($sem_create_data["sem_admission"]))
  		{
 		$level=1;
-		$errormsg=$errormsg."error§Wenn Sie sie die Teilnahmebeschr&auml;nkung benutzen wollen, m&uuml;ssen sie wenigsten 5 Teilnehmer zulassen.§";
-		$sem_create_data["sem_turnout"] =5;
+		$errormsg=$errormsg."error§Wenn Sie sie die Teilnahmebeschr&auml;nkung benutzen wollen, m&uuml;ssen sie wenigstens einen Teilnehmer zulassen.§";
+		$sem_create_data["sem_turnout"] =1;
 		}
 	
 	if (!$errormsg)
@@ -1032,17 +1032,13 @@ $sem_create_data["level"]=$level;
 		<script language="javascript">
 		<!--
      		function doCrypt() {
-				document.form_3.hashpass.value = MD5(document.form_3.password.value);
-				document.form_3.password.value = "";
-				document.form_3.password2.value = "";
+				document.form_4.hashpass.value = MD5(document.form_4.password.value);
+				document.form_4.hashpass2.value = MD5(document.form_4.password2.value);
+				document.form_4.password.value = "";
+				document.form_4.password2.value = "";
 				return true;
 				}
 		
-		function termin() {
-			alert('Dieses Feld k&ouml;nnen Sie leerlassen, falls Sie das Datum noch nicht wissen. Wenn das Datum bekannt ist, wird durch dieses Datum die Veranstaltung eindeutig einem Semester zugeordnet');
-			return true;
-			}
-			
 		// -->
 		</script>
 	 </head>
@@ -1209,12 +1205,12 @@ if ((!$level) || ($level==1))
 									alt="Sie k&ouml;nnen die Teilnhmezahl in der Reihenfolgen der Anmeldung chronologisch vornehmen oder das Losverfahren benutzen. Sie k&ouml;nnen sp&auml;ter Angaben &uuml;ber zugelassene Teilnehmer machen.">
 						</td>
 						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
-							erwartete Teilnehmeranzahl:
+							maximale Teilnehmeranzahl:
 						</td>
 						<td class="<? echo $cssSw->getClass() ?>" width="60%">
 							&nbsp; <input type="int" name="sem_turnout" size=6 maxlength=5 value="<? echo $sem_create_data["sem_turnout"] ?>">
 							<img  src="./pictures/info.gif" 
-									onClick="alert('Hier geben Sie die erwartete Teilnehmerzahl an. Stud.IP kann auf Wunsch für Sie ein Anmeldungsverfahren starten, wenn sie  » Anmeldebeschränkung benutzen«.');" 
+									onClick="alert('Hier geben Sie die erwartete Teilnehmerzahl an. Stud.IP kann auf Wunsch für Sie ein Anmeldungsverfahren starten, wenn sie  »Anmeldebeschränkung benutzen«.');" 
 									alt="Hier geben Sie die erwartete Teilnehmerzahl an. Stud.IP kann auf Wunsch für Sie ein Anmeldungsverfahren starten, wenn sie  »Anmeldebeschr&auml;nkung benutzen">
 						</td>
 						
@@ -1924,7 +1920,8 @@ if ($level==4)
 	               <? if (($sem_create_data["sem_sec_lese"] ==2) ||  ($sem_create_data["sem_sec_schreib"] ==2)) echo " onSubmit=\"return doCrypt();\" "; ?>
                		>
 			<input type="HIDDEN" name="form" value=4>
-               		<input type="HIDDEN" name="hashpass" value="">
+			<input type="HIDDEN" name="hashpass" value="">
+			<input type="HIDDEN" name="hashpass2" value="">				
 				<table width ="99%" cellspacing=0 cellpadding=2 border=0 align="center">
 					<tr <? $cssSw->switchClass() ?>>
 						<td class="<? echo $cssSw->getClass() ?>" width="10%">
