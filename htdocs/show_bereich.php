@@ -114,7 +114,7 @@ $infobox[] = 	array(	"kategorie" => _("Anzeige gruppieren:"),
 						"eintrag" => array(array(	"icon" => "pictures/blank.gif",
 													"text" => $group_by_links))
 				);
-if (($EXPORT_ENABLE) AND ($show_bereich_data['level']) == "s"))
+if (($EXPORT_ENABLE) AND ($show_bereich_data['level'] == "s"))
 {
 	include_once($ABSOLUTE_PATH_STUDIP . $PATH_EXPORT . "/export_linking_func.inc.php");
 	$infobox[] = 	array(	"kategorie" => _("Daten ausgeben:"),
