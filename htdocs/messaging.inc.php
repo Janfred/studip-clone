@@ -503,7 +503,7 @@ class messaging {
 			if (is_array($active_chats)){
 				$clause = " AND chat_id NOT IN('" . join("','",$active_chats) . "')";
 			}
-			$this->db->query("SELECT message.message_id FROM message  LEFT JOIN message_user USING (message_id) WHERE message_user.user_id = '$user_id' AND snd_rec = 'rec' AND chat_id IS NOT NULL" . $clause);
+			$this->db->query("SELECT STRAIGHT_JOIN message.message_id FROM message  LEFT JOIN message_user USING (message_id) WHERE message_user.user_id = '$user_id' AND snd_rec = 'rec' AND chat_id IS NOT NULL" . $clause);
 			
 			while ($this->db->next_record()) {
 				$this->db2->query ("DELETE FROM message_user WHERE message_id ='".$this->db->f("message_id")."' ");
