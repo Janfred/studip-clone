@@ -304,8 +304,13 @@ if ($view=="statistik") {?>
 				$anzahl = $db->f(0);
 				echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("ILIAS-Lernmodule:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 	
 			}
-			
-			
+			if ($RESOURCES_ENABLE) {
+				$cssSw->switchClass();
+				$db->query("SELECT COUNT(*) from ressources_objects");
+				$db->next_record();
+				$anzahl = $db->f(0);
+				echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("Ressourcen-Objekte:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 	
+			}
 			
 			echo "</blockquote></table></td></tr>";
 	}
