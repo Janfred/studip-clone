@@ -30,8 +30,9 @@ require_once("$ABSOLUTE_PATH_STUDIP/datei.inc.php"); // Funktionen zum Loeschen 
 require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
 require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/admission.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");	//Funktionen der Statusgruppen
-require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipSemTreeSearch.class.php");
+require_once("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");	//Funktionen der Statusgruppen
+require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipSemTreeSearch.class.php");
+require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/DataFields.class.php"); 
 
 
 // Start of Output
@@ -116,7 +117,7 @@ if ($SessSemName[1])
 	$s_id=$SessSemName[1];
 
 $st_search = new StudipSemTreeSearch($s_id,"details");
-
+$DataFields = new DataFields($s_id);
 
 function auth_check() {
 	global $perm,$s_id;
@@ -305,6 +306,12 @@ if ($s_send) {
 		$query = "INSERT IGNORE INTO seminar_inst values('$s_id','$Institut')";
 		$db3->query($query);
 
+		//Update the additional data-fields
+		if (is_array($datafield_id)) {
+			foreach ($datafield_id as $key=>$val) {
+				$DataFields->storeContent($datafield_content[$key], $val);
+			}
+		}
 	}  // end if ($run)
 		
 	//Bereiche aendern
@@ -692,24 +699,53 @@ if (($s_id) && (auth_check())) {
 
 			<tr <?$cssSw->switchClass() ?>>
 				<td class="<? echo $cssSw->getClass() ?>" align=right><?=_("TeilnehmerInnen")?></td>
-				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <textarea name="teilnehmer" cols=58 rows=2><?php echo htmlReady($db->f("teilnehmer")) ?></textarea></td>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <textarea name="teilnehmer" cols=58 rows=3><?php echo htmlReady($db->f("teilnehmer")) ?></textarea></td>
 			</tr>
 
 			<tr>
 				<td class="<? echo $cssSw->getClass() ?>" align=right><?=_("Voraussetzungen")?></td>
-				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <textarea name="vorrausetzungen" cols=58 rows=2><?php echo htmlReady($db->f("vorrausetzungen")) ?></textarea></td>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <textarea name="vorrausetzungen" cols=58 rows=3><?php echo htmlReady($db->f("vorrausetzungen")) ?></textarea></td>
 			</tr>
 			<tr>
 				<td class="<? echo $cssSw->getClass() ?>" align=right><?=_("Lernorganisation")?></td>
-				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <textarea name="lernorga" cols=58 rows=2><?php echo htmlReady($db->f("lernorga")) ?></textarea></td>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <textarea name="lernorga" cols=58 rows=3><?php echo htmlReady($db->f("lernorga")) ?></textarea></td>
 			</tr>
 			<tr>
 				<td class="<? echo $cssSw->getClass() ?>" align=right><?=_("Leistungsnachweis")?></td>
-				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <textarea name="leistungsnachweis" cols=58 rows=2><?php echo htmlReady($db->f("leistungsnachweis")) ?></textarea></td>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <textarea name="leistungsnachweis" cols=58 rows=3><?php echo htmlReady($db->f("leistungsnachweis")) ?></textarea></td>
 			</tr>
+			<?
+			//add the free adminstrable datafields
+			$localFields = $DataFields->getLocalFields($SessSemName[1], ($SessSemName["class"]) ? $SessSemName["class"] : "inst");
+	
+			foreach ($localFields as $val) {
+			?>
+			<tr>
+				<td class="<? echo $cssSw->getClass() ?>" align=right>
+					<?=htmlReady($val["name"])?>
+				</td>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>
+					<?
+					if ($perm->have_perm($val["edit_perms"])) {
+					?>
+					&nbsp; <textarea name="datafield_content[]" cols=58 rows=3><?php echo htmlReady($val["content"]) ?></textarea>
+					<input type="HIDDEN" name="datafield_id[]" value="<?=$val["datafield_id"]?>" />
+					<?
+					} else {
+					?>
+					&nbsp; <?= ($val["content"]) ? htmlReady($val["content"]) : "<font size=\"-1\"><b><i>"._("keine Inhalte vorhanden")."</i></b></font>";?><br />
+					<font size="-1>">&nbsp; <?="<i>"._("(Das Feld ist f&uuml;r die Bearbeitung gesperrt und kann nur durch einen Administrator ver&auml;ndert werden.)")."</i>"?></font>
+					<?
+					}
+					?>
+				</td>
+			</tr>
+			<?
+			}
+			?>
 			<tr>
 				<td class="<? echo $cssSw->getClass() ?>" align=right><?=_("Sonstiges")?></td>
-				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <textarea name="Sonstiges" cols=58 rows=4><?php echo htmlReady($db->f("Sonstiges")) ?></textarea></td>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <textarea name="Sonstiges" cols=58 rows=3><?php echo htmlReady($db->f("Sonstiges")) ?></textarea></td>
 			</tr>
 			<?
 			$mkstring=date ("d.m.Y, G:i", $db->f("mkdate"));
