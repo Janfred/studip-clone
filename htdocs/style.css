@@ -66,6 +66,7 @@ h2.topic, h3.topic { font-family: Arial, Helvetica, sans-serif; color: #FFFFFF; 
 .steel {background-image: url('pictures/steelblau.jpg');	font-family: Arial, Helvetica, sans-serif;}
 .steelgraudunkel {background-image: url('pictures/steelgraudunkel.gif');	font-family: Arial, Helvetica, sans-serif;}
 .steelgraulight {background-image: url('pictures/steelgraulight.jpg');	font-family: Arial, Helvetica, sans-serif;}
+.steelkante {background-image: url('pictures/steelkante.jpg');	font-family: Arial, Helvetica, sans-serif;}
 .steel2 { background-color: #FFFFFF; background-image: url('pictures/steel2.jpg');	font-family: Arial, Helvetica, sans-serif;}
 .steel1 { background-color: #FFFFFF; background-image: url('pictures/steel1.jpg');	font-family: Arial, Helvetica, sans-serif;}
 .quote {margin-left: 20px; padding:3px; margin-right: 8em; border: 1px solid black; background: none; background-color: #EEEEEE;}	
