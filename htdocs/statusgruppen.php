@@ -46,6 +46,7 @@ function groupmail($range_id)
 		while ($db->next_record()) {
 			$mailpersons .= ";".$db->f("Email");
 		}
+		$mailpersons = substr($mailpersons,1);
 		return $mailpersons;
 	}
 	if ($type == "sem") {
@@ -54,6 +55,7 @@ function groupmail($range_id)
 		while ($db->next_record()) {
 			$mailpersons .= ";".$db->f("Email");
 		}
+		$mailpersons = substr($mailpersons,1);
 		return $mailpersons;
 	}
 }
@@ -74,7 +76,7 @@ function PrintAktualStatusgruppen ()
 			        <tr> ";
 		printf ("	        <td width=\"95%%\" class=\"topic\"><font size=\"-1\"><b>%s</b></font></td>",htmlReady($db->f("name")));
 		printf ("	   	<td width=\"5%%\"class=\"topic\" align=\"center\">");
-		printf ("		   <a href=\"mailto:%s\"><img src=\"pictures/mailnachricht.gif\" alt=\"Nachricht an User verschicken\" border=\"0\"></a>", $groupmails); 
+		printf ("		   <a href=\"mailto:%s?subject=%s \"><img src=\"pictures/mailnachricht.gif\" alt=\"Nachricht an User verschicken\" border=\"0\"></a>", $groupmails,htmlReady($SessSemName[0])); 
 		printf ("	        </td>");
 		echo 	"</tr>";
 
