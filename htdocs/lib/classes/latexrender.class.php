@@ -41,6 +41,8 @@ class LatexRender {
     var $_xsize_limit = 500;
     var $_ysize_limit = 500;
     var $_tmp_filename;
+	var $_format = ""; // no default format 
+	var $_template = ""; // no default template 
     // this most certainly needs to be extended. in the long term it is planned to use
     // a positive list for more security. this is hopefully enough for now. i'd be glad
     // to receive more bad tags !
@@ -59,15 +61,26 @@ class LatexRender {
      * @param string path where the rendered pictures should be stored
      * @param string same path, but from the httpd chroot
      */
-    function LatexRender($picture_path,$picture_path_httpd) {
+    function LatexRender($picture_path,$picture_path_httpd,$format="math") {
         $this->_picture_path = $picture_path;
         $this->_picture_path_httpd = $picture_path_httpd;
         $this->_tmp_filename = md5(rand());
+	$this->_format = $format;
     }
     
     // ====================================================================================
     // public functions
     // ====================================================================================
+
+    /**
+     * Format mutator function
+     *
+     * @param string sets the current format 
+     */
+    function setFormat($format, $template) {
+	$this->_format = $format;
+	$this->_template = $template;
+    }
 
     /**
      * Picture path Mutator function
@@ -161,19 +174,13 @@ class LatexRender {
      * @param string formula in LaTeX format
      * @returns minimalistic LaTeX document containing the given formula
      */
-    function wrap_formula($latex_formula) {
-        $string  = "\documentclass[12pt]{article}\n";
-        $string .= "\usepackage[latin1]{inputenc}\n";
-        $string .= "\usepackage{amsmath}\n";
-        $string .= "\usepackage{amsfonts}\n";
-        $string .= "\usepackage{amssymb}\n";
-        $string .= "\pagestyle{empty}\n";
-        $string .= "\begin{document}\n";
-        $string .= "$".$latex_formula."$\n";
-        $string .= "\end{document}\n";
+    function wrap_latex($latex_text) {
+	$string=sprintf($this->_template, $latex_text);
 
         return $string;
     }
+
+    /**
 
     /**
      * returns the dimensions of a picture file using 'identify' of the
@@ -209,8 +216,8 @@ class LatexRender {
      * @returns true if the picture has been successfully saved to the picture 
      *          cache directory
      */
-    function renderLatex($latex_formula) {
-        $latex_document = $this->wrap_formula($latex_formula);
+    function renderLatex($latex_text) {
+	$latex_document = $this->wrap_latex($latex_text);
 
         $current_dir = getcwd();
 
@@ -248,7 +255,7 @@ class LatexRender {
         }
 
         // copy temporary formula file to cahed formula directory
-        $latex_hash = md5($latex_formula);
+        $latex_hash = md5($latex_text);
         $filename = $this->getPicturePath()."/".$latex_hash.".png";
 
         $status_code = copy($this->_tmp_filename.".png",$filename);

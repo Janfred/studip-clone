@@ -359,9 +359,10 @@ function wiki_format ($text) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-function latex ($text) {
+
+function latex($text) {
 	global $ABSOLUTE_PATH_STUDIP,$CANONICAL_RELATIVE_PATH_STUDIP,$TEXCACHE_PATH,$LATEXRENDER_ENABLE;
-	global $LATEX_PATH,$DVIPS_PATH,$CONVERT_PATH,$IDENTIFY_PATH,$TMP_PATH;
+	global $LATEX_PATH,$DVIPS_PATH,$CONVERT_PATH,$IDENTIFY_PATH,$TMP_PATH, $LATEX_FORMATS;
 	
 	if ($LATEXRENDER_ENABLE) {
 		include_once($ABSOLUTE_PATH_STUDIP."/lib/classes/latexrender.class.php");
@@ -372,20 +373,29 @@ function latex ($text) {
 		$latex->_identify_path = $IDENTIFY_PATH;
 		$latex->_tmp_dir = $TMP_PATH;
 		
-		preg_match_all("#\[tex\](.*?)\[/tex\]#si",$text,$tex_matches);
+		// There can be many formatting tags that are
+		// handled by the latex renderer
+		// The tags and their LaTex templates are set in the
+		// vairable $LATEX_FORMATS (in config.inc.php)
+		//
+		foreach( $LATEX_FORMATS as $formatname => $format) {
+			$latex->setFormat($formatname, $format["template"]);
+			$to_match=sprintf("#\[%s\](.*?)\[/%s\]#si", $format["tag"], $format["tag"]);
+			preg_match_all($to_match,$text,$tex_matches);
 		
-		for ($i=0; $i < count($tex_matches[0]); $i++) {
-			$pos = strpos($text, $tex_matches[0][$i]);
-			$latex_formula = decodeHTML($tex_matches[1][$i]);
+			for ($i=0; $i < count($tex_matches[0]); $i++) {
+				$pos = strpos($text, $tex_matches[0][$i]);
+				$latex_formula = decodeHTML($tex_matches[1][$i]);
 			
-			$url = $latex->getFormulaURL($latex_formula);
+				$url = $latex->getFormulaURL($latex_formula);
 			
-			if ($url != false) {
-				$text = substr_replace($text, "<img src='".$url."'>",$pos,strlen($tex_matches[0][$i]));
-			} else {
-				$text = substr_replace($text, "[unparseable or potentially dangerous latex formula]",$pos,strlen($tex_matches[0][$i]));
-			}
-		}	
+				if ($url != false) {
+					$text = substr_replace($text, "<img src='".$url."'>",$pos,strlen($tex_matches[0][$i]));
+				} else {
+					$text = substr_replace($text, "[unparseable or potentially dangerous latex formula]",$pos,strlen($tex_matches[0][$i]));
+				}
+			}	
+		}
 	}
 	return $text;
 }
