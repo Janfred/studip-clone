@@ -605,8 +605,7 @@ class EditSettings {
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="96%" align="left">
 					<font size=-1><b><?=_("Zulassen von <i>Raum</i>w&uuml;nschen")?></b><br /><br />
-					&nbsp;&nbsp;&nbsp;<input type="CHECKBOX" name="allow_property_requests" <? print(get_config("RESOURCES_ALLOW_ROOM_PROPERTY_REQUESTS")) ? "checked" : ""; print ">&nbsp;"._("NutzerInnen k&ouml;nnen im Rahmen der Veranstaltungsverwaltung konkrete R&auml;ume w&uuml;nschen.")?><br />
-					&nbsp;&nbsp;&nbsp;<input type="CHECKBOX" name="allow_requests" <? print(get_config("RESOURCES_ALLOW_ROOM_REQUESTS")) ? "checked" : ""; print ">&nbsp;"._("NutzerInnen k&ouml;nnen im Rahmen der Veranstaltungsverwaltung Raumeigenschaften w&uuml;nschen.")?><br />
+					&nbsp;&nbsp;&nbsp;<input type="CHECKBOX" name="allow_requests" <? print(get_config("RESOURCES_ALLOW_ROOM_REQUESTS")) ? "checked" : ""; print ">&nbsp;"._("NutzerInnen k&ouml;nnen im Rahmen der Veranstaltungsverwaltung Raumeigenschaften und konkrete R&auml;ume w&uuml;nschen.")?><br />
 					<br />				
 				</td>
 			</tr>
