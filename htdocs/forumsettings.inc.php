@@ -87,7 +87,7 @@ echo "<form action=\"$PHP_SELF?view=$view\" method=\"POST\">";
 			<font size="-1">
 			<?print _("Bilder im Bewertungsbereich anzeigen");?></font>
 		</td>
-		<td class="steelgraulight">
+		<td>
 			<input type="CHECKBOX" name="showimages" value=TRUE<?if($forum["showimages"]==TRUE) echo " checked";?>>
 	</td>
 	</tr>	
@@ -95,7 +95,7 @@ echo "<form action=\"$PHP_SELF?view=$view\" method=\"POST\">";
 		<td align=right class=blank style="border-bottom:1px dotted black;">
 			<font size=-1><?echo _("Anzahl der Postings pro Seite im Flatview");?></font>
 		</td>
-		<td align=left >
+		<td class="steelgraulight" align=left >
 			<font size=-1>
 			&nbsp;<select name="postingsperside">
 			<?
@@ -112,7 +112,7 @@ echo "<form action=\"$PHP_SELF?view=$view\" method=\"POST\">";
 		<td align=right class=blank style="border-bottom:1px dotted black;">
 			<font size=-1><?echo _("Sortierung der Themenanzeige");?></font>
 		</td>
-		<td align=left class=steelgraulight>
+		<td align=left>
 			<font size=-1>
 			<input type=radio value="asc" name=sortthemes <?if ($forum["sortthemes"]=="asc") echo "checked"; echo "> "._("Alter des Ordners - neue unten");?><br>
 			<input type=radio value="desc" name=sortthemes <?if ($forum["sortthemes"]=="desc") echo "checked";echo "> "._("Alter des Ordners - neue oben");?><br>
@@ -133,7 +133,7 @@ echo "<form action=\"$PHP_SELF?view=$view\" method=\"POST\">";
 		<td align=right class=blank style="border-bottom:1px dotted black;">
 			<font size=-1><?echo _("Einsprungsseite des Forums");?></font>
 		</td>
-		<td align=left class=steelgraulight>
+		<td align=left>
 			<font size=-1>
 			<input type=radio value="theme" name=presetview <?if ($forum["presetview"]=="tree" || $forum["presetview"]=="mixed") echo "checked"; echo "> "._("Themenansicht");?><br>
 			<input type=radio value="neue" name=presetview <?if ($forum["presetview"]=="neue") echo "checked";echo "> "._("Neue Beiträge");?><br>
@@ -145,7 +145,7 @@ echo "<form action=\"$PHP_SELF?view=$view\" method=\"POST\">";
 		<td align=right class=blank style="border-bottom:1px dotted black;">
 			<font size=-1><?echo _("ForumAutoShrink(TM) Engine aktivieren");?></font>
 		</td>
-		<td align=left >
+		<td align=left class=steelgraulight>
 			<font size=-1>
 			&nbsp;<select name="shrink">
 			<?

@@ -263,9 +263,10 @@ function ForumIcon ($forumposting) {
 		else
 			$bild = "pictures/cont_folder2.gif";
 	} else {
-		if ($forumposting["shrink"] == TRUE && $forumposting["lonely"]==FALSE)
+		if ($forumposting["shrink"] == TRUE && $forumposting["lonely"]==FALSE) {
 			$bild = "pictures/forum_shrink.gif";
-		else
+			$addon = tooltip(_("koprimierter Thread mit ".$forumposting["shrinkcount"]." Postings"));
+		} else
 			$bild = "pictures/cont_blatt.gif";
 	}
 	
@@ -288,7 +289,7 @@ function ForumIcon ($forumposting) {
 		if ($forum["view"]=="tree" && $forumposting["type"]=="folder")
 			$forumposting["icon"] = "<a href=\"".$PHP_SELF."?open=".$forumposting["id"]."&openall=TRUE#anker\"><img src=\"".$bild."\" border=0 " . tooltip(_("Alle Postings im Ordner öffnen")) . "></a>";
 		else
-			$forumposting["icon"] =	"<img src=\"".$bild."\">";	
+			$forumposting["icon"] =	"<img src=\"".$bild."\" $addon>";	
 	}
 	
 	if ($cmd=="move" && $rechte)  // ein Beitrag wird verschoben, gelbe Pfeile davor
@@ -492,28 +493,28 @@ function forum_print_toolbar ($id="") {
 		if ($forum["toolbar"] == "open") {
 			$print .= "<form name=\"sortierung\" method=\"post\" action=\"".$PHP_SELF."\">";
 			$print .= "<table class=\"blank\" width=\"100%\" border=0 cellpadding=0 cellspacing=0><tr><td class=\"blank\">&nbsp;</td></tr><tr>";
-			$print .= "<td class=\"steelkante\"><img src=\"pictures/blank.gif\" height=\"22\" width=\"5\"></td>";
-			$print .= "<td class=\"steelkante\"><font size=\"-1\">Indikator:&nbsp;";
+			$print .= "<td class=\"steelkante2\"><img src=\"pictures/blank.gif\" height=\"22\" width=\"5\"></td>";
+			$print .= "<td class=\"steelkante2\"><font size=\"-1\">Indikator:&nbsp;";
 			
 			if ($forum["indikator"] == "age")
 				$print .=  "</td><td nowrap class=\"steelgraulight_shadow\" valign=\"middle\">&nbsp;<img src=\"pictures/forumrot_indikator.gif\" align=\"middle\"><font size=\"-1\">".$indexvars["age"]["name"]." &nbsp;";
 			else
-				$print .=  "</td><td nowrap class=\"steelkante\" valign=\"middle\">&nbsp;<a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&open=$open&indikator=age\"><img src=\"pictures/forum_indikator_grau.gif\" border=\"0\" align=\"middle\"><font size=\"-1\" color=\"#555555\">".$indexvars["age"]["name"]."</a> &nbsp;";
+				$print .=  "</td><td nowrap class=\"steelkante2\" valign=\"middle\">&nbsp;<a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&open=$open&indikator=age\"><img src=\"pictures/forum_indikator_grau.gif\" border=\"0\" align=\"middle\"><font size=\"-1\" color=\"#555555\">".$indexvars["age"]["name"]."</a> &nbsp;";
 			if ($forum["indikator"] == "viewcount")
 				$print .=  "</td><td nowrap class=\"steelgraulight_shadow\" valign=\"middle\">&nbsp;<img src=\"pictures/forum_indikator_gruen.gif\" align=\"middle\"><font size=\"-1\">".$indexvars["viewcount"]["name"]." &nbsp;";
 			else
-				$print .=  "</td><td nowrap class=\"steelkante\" valign=\"middle\">&nbsp;<a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&open=$open&indikator=viewcount\"><img src=\"pictures/forum_indikator_grau.gif\" border=\"0\" align=\"middle\"><font size=\"-1\" color=\"#555555\">".$indexvars["viewcount"]["name"]."</a> &nbsp;";
+				$print .=  "</td><td nowrap class=\"steelkante2\" valign=\"middle\">&nbsp;<a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&open=$open&indikator=viewcount\"><img src=\"pictures/forum_indikator_grau.gif\" border=\"0\" align=\"middle\"><font size=\"-1\" color=\"#555555\">".$indexvars["viewcount"]["name"]."</a> &nbsp;";
 			if ($forum["indikator"] == "rating")
 				$print .=  "</td><td nowrap class=\"steelgraulight_shadow\" valign=\"middle\">&nbsp;<img src=\"pictures/forum_indikator_gelb.gif\" align=\"middle\"><font size=\"-1\">".$indexvars["rating"]["name"]." &nbsp;";
 			else
-				$print .=  "</td><td nowrap class=\"steelkante\" valign=\"middle\">&nbsp;<a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&open=$open&indikator=rating\"><img src=\"pictures/forum_indikator_grau.gif\" border=\"0\" align=\"middle\"><font size=\"-1\" color=\"#555555\">".$indexvars["rating"]["name"]."</a> &nbsp;";
+				$print .=  "</td><td nowrap class=\"steelkante2\" valign=\"middle\">&nbsp;<a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&open=$open&indikator=rating\"><img src=\"pictures/forum_indikator_grau.gif\" border=\"0\" align=\"middle\"><font size=\"-1\" color=\"#555555\">".$indexvars["rating"]["name"]."</a> &nbsp;";
 			if ($forum["indikator"] == "score")
 				$print .=  "</td><td nowrap class=\"steelgraulight_shadow\" valign=\"middle\">&nbsp;<img src=\"pictures/forum_indikator_blau.gif\" align=\"middle\"><font size=\"-1\">".$indexvars["score"]["name"]." &nbsp;";
 			else
-				$print .=  "</td><td nowrap class=\"steelkante\" valign=\"middle\">&nbsp;<a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&open=$open&indikator=score\"><img src=\"pictures/forum_indikator_grau.gif\" border=\"0\" align=\"middle\"><font size=\"-1\" color=\"#555555\">".$indexvars["score"]["name"]."</a> &nbsp;";
+				$print .=  "</td><td nowrap class=\"steelkante2\" valign=\"middle\">&nbsp;<a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&open=$open&indikator=score\"><img src=\"pictures/forum_indikator_grau.gif\" border=\"0\" align=\"middle\"><font size=\"-1\" color=\"#555555\">".$indexvars["score"]["name"]."</a> &nbsp;";
 			
 			if ($forum["view"] != "tree" && $forum["view"] != "mixed") { // Anzeige der Sortierung nicht in der Themenansicht
-				$print .= "</td><td nowrap class=\"steelkante\" valign=\"bottom\">&nbsp;|&nbsp;&nbsp;<font size=\"-1\">Sortierung:&nbsp;&nbsp;</font>";
+				$print .= "</td><td nowrap class=\"steelkante2\" valign=\"bottom\">&nbsp;|&nbsp;&nbsp;<font size=\"-1\">Sortierung:&nbsp;&nbsp;</font>";
 				$print .= "<select name=\"sort\" size=\"1\">";
 				$tmp["age"] = "Alter";
 				$tmp["viewcount"] = $indexvars["viewcount"]["name"];
@@ -530,13 +531,13 @@ function forum_print_toolbar ($id="") {
 				}
 				$print .= "</select>&nbsp;&nbsp;";
 				$print .= "<input type=hidden name=flatviewstartposting value='".$flatviewstartposting."'>";
-				$print .= "<input type=image name=create value=\"abschicken\" src=\"pictures/haken_transparent.gif\" align=\"middle\" border=\"0\">";
+				$print .= "<input type=image name=create value=\"abschicken\" src=\"pictures/haken_transparent.gif\" align=\"middle\" border=\"0\"".tooltip(_("Sortierung durchführen")).">";
 			}
 			$print .= "&nbsp;&nbsp;|&nbsp;&nbsp;<a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&toolbar=close&open=$open\" ".tooltip(_("Toolbar einfahren"))."><img src=\"pictures/forumgrau3.gif\" align=\"middle\" border=\"0\"></a>&nbsp;";
 			$print .= "</td><td class=\"blank\" width=\"99%\"></td></tr><tr><td class=\"blank\" colspan=\"9\">&nbsp;</td></tr></table></form>";
 		} else {
-			$print .= "<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" class=\"blank\"><tr><td class=\"blank\"><img src=\"pictures/blank.gif\" height=\"22\" width=\"5\"></td>";
-			$print .= "<td class=\"blank\"><font size=\"-1\"><a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&toolbar=open&open=$open\"><img src=\"pictures/pfeillink.gif\" align=\"middle\" border=\"0\"".tooltip(_("Toolbar ausfahren"))."></a>";
+			$print .= "<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" class=\"blank\"><tr><td class=\"blank\"><img src=\"pictures/blank.gif\" height=\"22\" width=\"1\"></td>";
+			$print .= "<td class=\"blank\"><font size=\"-1\"><a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&toolbar=open&open=$open\"><img src=\"pictures/toolbar.gif\" align=\"middle\" border=\"0\"".tooltip(_("Toolbar ausfahren"))."></a>";
 			$print .= "</td></tr></table>";
 		}
 		if ($id) {  // Schreibmodus, also form einbauen
@@ -600,7 +601,7 @@ function printposting ($forumposting) {
 					
  // Kopfzeile zusammenbauen
   		
-  		// Link zusammenbauen
+  	// Link zusammenbauen
   		
   		if ($forum["view"] == "mixed") {		// etwas umständlich: Weg von der Themenansicht zum Folderflatview
   			$viewlink = "flatfolder";
@@ -625,7 +626,7 @@ function printposting ($forumposting) {
 				$link = ""; // zuklappen nur m&ouml;glich wenn neueimmerauf nicht gesetzt	
   		}
   		
-  		/// Indexe
+  	// Indexe
   		
   		if (!$objectviews)
   			$objectviews = $forumposting["viewcount"];
@@ -634,7 +635,7 @@ function printposting ($forumposting) {
   		
   		$forumposting["score"] = round($forumposting["score"],1);
   		
-  		// Anzahl der Postings in Ordnern
+  	// Anzahl der Postings in Ordnern
   		
   		if ($forumposting["foldercount"] && $forumposting["type"] == "folder" && $forumposting["openclose"] == "close")
   			$forumhead[] = "<b>".($forumposting["foldercount"]-1)."</b> / ";
@@ -644,18 +645,16 @@ function printposting ($forumposting) {
 			$forumhead[] = htmlReady($forumposting["author"]);
 		else
 			$forumhead[] = "<a class=\"printhead\" href=\"about.php?username=".$forumposting["username"]."\">". htmlReady($forumposting["author"]) ."&nbsp;</a>";
-  		  		
-  		
-  		// Alter ausgeben
+    		
+  	// Alter ausgeben
   		
   		if ($forumposting["type"] == "folder" && ($view=="tree" || $view=="mixed"))
   			$forumhead[] = 	"&nbsp;".date("d.m.Y - H:i", $forumposting["folderlast"])."&nbsp;";
   		else
   			$forumhead[] = 	"&nbsp;".date("d.m.Y - H:i", $forumposting["chdate"])."&nbsp;";
   		
-  		// Themennamen ausgeben (ausser Flatview)
-  		
-  		
+  	// Themennamen ausgeben (ausser Flatview)
+    		
   		if ($forum["view"] != "flatfolder")
   			$forumhead[] =	"<a href=\"".$PHP_SELF."?open=".$forumposting["id"]
 					."&openall=TRUE&view=tree"
@@ -674,13 +673,18 @@ function printposting ($forumposting) {
   		if ($printindex!= "") $forumhead[] = "| <font color=\"$color\">$printindex</font> | ";
 		
 		
-		// die Favoritenanzeige
+	// die Favoritenanzeige
 		
-		if ($forumposting["fav"]!="") $favicon = "pictures/forum_fav.gif";
-		else $favicon = "pictures/forum_fav2.gif";
-		$forumhead[] = "<a href=\"$PHP_SELF?fav=".$forumposting["id"]."&open=$open&flatviewstartposting=".$forum["flatviewstartposting"]."\"><img src=\"".$favicon."\" border=\"0\">&nbsp;</a>";
+		if ($forumposting["fav"]!="") {
+			$favicon = "pictures/forum_fav.gif";
+			$favtxt = _("aus den Favoriten entfernen");
+		} else {
+			$favicon = "pictures/forum_fav2.gif";
+			$favtxt = _("zu den Favoriten hinzufügen");
+		}
+		$forumhead[] = "<a href=\"$PHP_SELF?fav=".$forumposting["id"]."&open=$open&flatviewstartposting=".$forum["flatviewstartposting"]."\"><img src=\"".$favicon."\" border=\"0\" ".tooltip($favtxt).">&nbsp;</a>";
 		
-		// Antwort-Pfeil
+	// Antwort-Pfeil
 		
 		if (!(have_sem_write_perm())) 
 			$forumhead[] = "<a href=\"write_topic.php?write=1&root_id=".$forumposting["rootid"]."&topic_id=".$forumposting["id"]."\" target=\"_new\"><img src=\"pictures/antwortnew.gif\" border=0 " . tooltip(_("Hier klicken um in einem neuen Fenster zu antworten")) . "></a>"; 
@@ -701,11 +705,10 @@ function printposting ($forumposting) {
   		if (($forum["view"]=="tree" || $forum["view"]=="mixed") && $forumposting["type"] == "folder") {
   			if ($loginfilelast[$SessSemName[1]] < $forumposting["folderlast"])
 			 	$new = TRUE;		
-			
-  			$forumposting["mkdate"] = $forumposting["folderlast"];
+			$forumposting["mkdate"] = $forumposting["folderlast"];
   		}
   		
-  		// welcher Index liegt auf den Pfeilen?
+  	// welcher Index liegt auf den Pfeilen?
   		
   		if ($forum["indikator"] == "viewcount")
   			$index = $objectviews;
@@ -1126,7 +1129,7 @@ function DisplayKids ($forumposting, $level=0) {
 		if (strstr($forum["shrinkopenlist"],$forumposting["id"])!=TRUE && $forum["shrink"]!=0) {
 			$age = ForumCheckShrink($forumposting["id"]);
 			$age = explode(";",$age);
-			$count = sizeof($age)-1;
+			$forumposting["shrinkcount"] = sizeof($age)-1;
 			rsort($age);
 		} else {
 			$age[]=time();
@@ -1139,7 +1142,7 @@ function DisplayKids ($forumposting, $level=0) {
 			DisplayKids($forumposting, $level+1);
 		} else {
 			$forumposting["shrink"]=TRUE;
-			if ($count > 0) $forumposting["name"] = "($count) ".$forumposting["name"];
+			if ($forumposting["shrinkcount"] > 0) $forumposting["name"] = "(".$forumposting["shrinkcount"].") ".$forumposting["name"];
 			$forumposting = printposting($forumposting);
 			//DisplayKids($forumposting, $level+1);
 		}
