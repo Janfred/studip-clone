@@ -116,7 +116,7 @@ if ($view=="listall") {
 
 		// set lock
 		$db=new DB_Seminar;
-		$result=$db->query("INSERT INTO wiki_locks (user_id, range_id, keyword, version, chdate) VALUES ('$user->id', '$SessSemName[1]', '$keyword', '$wikiData[version]', '".time()."')");
+		$result=$db->query("REPLACE INTO wiki_locks (user_id, range_id, keyword, version, chdate) VALUES ('$user->id', '$SessSemName[1]', '$keyword', '$wikiData[version]', '".time()."')");
 
 		wikiSinglePageHeader($wikiData, $keyword);
     wikiEdit($keyword, $wikiData);
