@@ -2,10 +2,10 @@
 $EXPORT_ENABLE = true;
 
 $XSLT_ENABLE = true;
-$skip_page_3 = false;
+$skip_page_3 = true;
 $PATH_XSLT_PROCESS = $TMP_PATH;
 
-$export_o_modes = array("file","choose", "direct","processor","passthrough");
+$export_o_modes = array("start","file","choose", "direct","processor","passthrough");
 $export_ex_types = array("veranstaltung", "person", "forschung");
 
 $export_icon["xml"] = "xls-icon.gif";
