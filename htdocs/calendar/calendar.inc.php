@@ -19,15 +19,6 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-// bei Einsprung ohne $cmd wird im Header eine Erlaeuterung ausgegeben
-if(!$cmd && !$atime)
-	$intro = TRUE;
-
-// -- hier muessen Seiten-Initialisierungen passieren --
-// -- wir sind jetzt definitiv in keinem Seminar, also... --
-$SessSemName[0] = "";
-$SessSemName[1] = "";
-
 setlocale ("LC_TIME","de_DE");
 
 require_once("config.inc.php"); //Daten laden
@@ -35,6 +26,14 @@ require_once("visual.inc.php");
 require_once("functions.php");
 require($RELATIVE_PATH_CALENDAR . "/calendar_func.inc.php");
 require($RELATIVE_PATH_CALENDAR . "/calendar_visual.inc.php");
+
+// -- hier muessen Seiten-Initialisierungen passieren --
+// -- wir sind jetzt definitiv in keinem Seminar, also... --
+closeObject();
+
+// bei Einsprung ohne $cmd wird im Header eine Erlaeuterung ausgegeben
+if(!$cmd && !$atime)
+	$intro = TRUE;
 
 // Wird kein timestamp an das Skript uebergeben, benutze aktuellen
 if(!$atime && !$termin_id)
