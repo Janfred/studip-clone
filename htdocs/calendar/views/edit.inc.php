@@ -579,7 +579,7 @@ if ($termin_id) {
 	$info_box['export_link'] .= $atermin->getId();
 	if (get_class($atermin) == "seminarevent")
 		$info_box['export_link'] .= '&evtype=sem';
-	$info_box['export'] = array('icon' => '/pictures/vcardexport.gif',
+	$info_box['export'] = array('icon' => 'pictures/vcardexport.gif',
 			'text' => sprintf(_("Sie k&ouml;nnen diesen Termin einzeln %sexportieren%s."),
 			"<a href=\"{$info_box['export_link']}\">", "</a>"));
 }
