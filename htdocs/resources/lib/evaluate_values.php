@@ -1522,7 +1522,6 @@ if (($inc_request_x) || ($dec_request_x) || ($new_session_started) || ($marked_c
 		if (getGlobalPerms($user->id) != "admin")
 			$resList = new ResourcesUserRoomsList ($user->id, FALSE, FALSE);
 		$matching_resources = $reqObj->searchRooms(FALSE, TRUE, $resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_low"], $resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_high"], TRUE, (is_object($resList)) ? array_keys($resList->getRooms()) : FALSE);
-		echo $resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_low"], ",", $resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_high"];
 		if ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_high"]  > ($reqObj->last_search_result_count + $resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_low"]))
 			$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_high"] = $resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_low"] + $reqObj->last_search_result_count;
 		
