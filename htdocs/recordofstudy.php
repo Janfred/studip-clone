@@ -7,7 +7,7 @@
 
  * @author      Christian Bauer <alfredhitchcock@gmx.net>
 
- * @version     $Exp
+ * @version     $id$
 
  * @copyright   2003 Stud.IP-Project
 
@@ -37,15 +37,6 @@
 
 /* ************************************************************************** *
 /*																			  *
-/* Define constants													  		  *
-/*																			  *
-/* ************************************************************************* */
-define ("PDF_TEMPLATE", "http://" . getenv('SERVER_NAME') . $CANONICAL_RELATIVE_PATH_STUDIP . $PATH_EXPORT . "/recordofstudy_template.pdf");
-/* **END*of*Define*constants************************************************ */
-
-
-/* ************************************************************************** *
-/*																			  *
 /* initialise Stud.IP-Session												  *
 /*																			  *
 /* ************************************************************************* */
@@ -53,11 +44,14 @@ page_open (array ("sess" => "Seminar_Session", "auth" => "Seminar_Auth",
 		  "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check ("autor");
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php");
+require_once($ABSOLUTE_PATH_STUDIP . "config.inc.php");
 {
 // needed session-variables
 session_register("seminars");
 session_register("semestersAR");
+session_register("template");
 }
+
 /* **END*of*initialise*Stud.IP-Session*********************************** */
 
 /* ************************************************************************** *
@@ -102,7 +96,6 @@ else
 $infobox = createInfoxboxArray($mode);
 
 if ($mode == "new"){
-	
 	// collect the current seminars and concerning semesters from the archiv	
 	$semestersAR = getSemesters();
 }
@@ -110,6 +103,10 @@ elseif ($mode == "edit"){
 	global $UNI_NAME;
 	
 	// get the basic data
+	if ($_POST['template']){
+		$template = $_POST['template'];
+	};
+
 	$university = htmlReady($_POST['university']);
 	if (empty($university)) $university = $UNI_NAME;
 	$fieldofstudy = htmlReady($_POST['fieldofstudy']);
@@ -204,7 +201,7 @@ elseif($mode == "pdf_assortment"){
 			$runner = $seminare_max%10;
 		// $i is the current page-entry (0-9)
 		for($i=0;$i+1<=$runner;$i++){
-				// $y is the ruunning nummber from 0 -> last seminar
+				// $y is the running nummber from 0 -> last seminar
 				$y = $i+($j*10);
 				$seminars[$j][$i]["seminarnumber"] = $_POST['seminarnumber'.$y];
 				$seminars[$j][$i]["tutor"] = $_POST['tutor'.$y];
@@ -218,6 +215,8 @@ elseif($mode == "pdf_assortment"){
 	$seminars["numberofpages"] = $j;
 }
 elseif($mode == "create_pdf"){
+	global $record_of_study_templates;
+	$pdf_file = "http://" . getenv('SERVER_NAME') . $CANONICAL_RELATIVE_PATH_STUDIP . $PATH_EXPORT . "/".$record_of_study_templates[$template]["template"];
 	$fdfAR = createFdfAR($seminars);
 };
 
@@ -249,12 +248,8 @@ elseif ($mode == "pdf_assortment"){
 	printPdfAssortment($infobox, $seminars);
 }
 elseif ($mode == "create_pdf"){
-	printPDF(PDF_TEMPLATE,$fdfAR);
+	printPDF($pdf_file ,$fdfAR);
 }
-//	$semestersAR = qsort_multiarray($semestersAR,"beginn");
-//	print "<pre>";
-//	print_r($semestersAR);
-//	print "</pre><br>";
 
 page_close ();
 /* **END*of*displays*the*site*********************************************** */
@@ -275,7 +270,6 @@ page_close ();
  *
  */
 function createFdfAR($seminars){
-//	global $seminars;
 
 	$page = $_GET['page']-1;
 	$university = $seminars["university"];
@@ -361,7 +355,7 @@ function createInfoxboxArray($mode){
 			array ("kategorie"  => "Information:",
 				"eintrag" => array	(	
 						array	 (	"icon" => "pictures/ausruf_small.gif",
-								"text"  => _("Um eine Studienbuchseite zu erstellen, wählen Sie bitte zunächst das entsprechende Semester aus und engen gegebenenfalls ihre Suchabfrage ein.")
+								"text"  => _("Um eine Druckansicht ihrer Veranstlungen zu erstellen, wählen Sie bitte zunächst das entsprechende Semester aus und engen gegebenenfalls ihre Suchabfrage ein.")
 								),
 						)
 			),
@@ -382,7 +376,7 @@ function createInfoxboxArray($mode){
 								"text"  => _("Löschen sie nicht benötigte Veranstallungen mit Hilfe der Markierungsboxen und/oder fügen sie  beliebig viele neue Veranstallungen hinzu.")
 								),
 						array (	"icon" => "pictures/icon-disc.gif",
-								"text"  => _("Nachdem alle Informationen korrekt angezeigt werden, erstellen sie die Studienbuchseite mit Hilfe des Buttons 'Studienbuchseite erstellen'.")
+								"text"  => _("Nachdem alle Informationen korrekt angezeigt werden, erstellen sie ihre Veranstaltungsübersicht mit Hilfe des Buttons 'speichern'.")
 								),
 								)
 			),
@@ -393,7 +387,7 @@ function createInfoxboxArray($mode){
 			array  ("kategorie"  => "Information:",
 					"eintrag" =>	array (
 							array (	"icon" => "pictures/icon-posting.gif",
-									"text"  => _("Klicken sie auf die/den Link(s) zu ihrem Studienbuch, um ein PDF zu erstellen.")
+									"text"  => _("Über den/die Link(s) können sie sich ihre Veranstaltungsübersicht anzeigen lassen.")
 									),
 									)
 			)

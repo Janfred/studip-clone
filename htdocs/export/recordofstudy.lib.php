@@ -29,8 +29,8 @@ function printSiteTitle($semester = NULL){
    	$html = "<table border=0 class=blank align=center cellspacing=0 cellpadding=0 width=\"100%\">\n"
     	  . "	<tr valign=top align=center>\n"
     	  . "    <td class=topic align=left colspan=\"2\">\n"
-		  . "	  <img src=\"pictures/meinesem.gif\" alt=\"Studienbuch erstellen\" align=\"texttop\">\n"
-		  . "	  &nbsp;<b>Studienbuch erstellen:</b>\n"
+		  . "	  <img src=\"pictures/meinesem.gif\" alt=\""._("Veranstaltungsübersicht erstellen")."\" align=\"texttop\">\n"
+		  . "	  &nbsp;<b>"._("Veranstaltungsübersicht erstellen:")."</b>\n"
 		  . "	  <font size=\"-1\">$semester</font>\n"
     	  . "    </td>\n"
     	  . "   </tr>\n"
@@ -47,6 +47,7 @@ function printSiteTitle($semester = NULL){
  *
  */
 function printSelectSemester($infobox,$semestersAR){
+	global $record_of_study_templates;
 	$html = "<table border=\"0\" class=\"blank\" cellspacing=\"0\" cellpadding=\"0\" width=\"100%\">\n"
 		  . " <tr valign=\"top\">\n"
 		  . "  <td width=\"99%\" NOWRAP class=\"blank\">&nbsp;\n"
@@ -65,8 +66,17 @@ function printSelectSemester($infobox,$semestersAR){
 		  . "       <br><br>&nbsp;<select name=\"onlyseminars\" style=\"vertical-align:middle;\">\n"
 		  . "        <option value=\"1\" selected>"._("nur Lehrveranstaltungen")."</option>\n"
 		  . "        <option value=\"0\">"._("alle Veranstaltungen")."</option>\n"
-		  . "       </select>\n"
-		  . "      </form>\n"
+		  . "       </select>\n";
+	if(sizeof($record_of_study_templates)>1){
+		$html .="       <br><br>&nbsp;". _("Vorlage").": <select name=\"template\" style=\"vertical-align:middle;\">\n";
+		for ($i=1;$i<=sizeof($record_of_study_templates);$i++){
+			$html .="        <option value=\"".$i."\">".$record_of_study_templates[$i]["title"]."</option>\n";
+		}
+		$html .="       </select>\n";
+	} else {
+		$html .=" <input type=\"hidden\" name=\"template\" value=\"1\">\n";
+	}
+	$html .="      </form>\n"
 		  . "	  </font></td>\n"
 		  . "	  <td align=\"right\" width=\"250\" valign=\"top\">\n";
 	echo $html;
@@ -192,7 +202,7 @@ function printRecordOfStudies($infobox, $basicdata, $seminare, $notice = NULL){
 	print_infobox($infobox,"pictures/folders.jpg");
 	$html = "	   <br>\n"
 		  . createButton("speichern",_("Erstellt sie mit diesem Button ein PDF, wenn sie die benötigten Daten eingegeben haben."),"create_pdf")
-		  . createButton("zurueck",_("Abbrechen und eine Studienbuchseite für ein anderes Semester erstellen."),"select_new_semester")
+		  . createButton("zurueck",_("Abbrechen und eine Veranstaltungsübersicht für ein anderes Semester erstellen."),"select_new_semester")
 		  . "	  <br><br></td>\n"
 		  . "	 </tr>\n"
 		  . "	</table>\n"
@@ -212,16 +222,17 @@ function printRecordOfStudies($infobox, $basicdata, $seminare, $notice = NULL){
  *
  */
 function printPdfAssortment($infobox,$seminars){
+	global $record_of_study_templates, $template;
 	$html = "<table border=\"0\" class=\"blank\" cellspacing=\"0\" cellpadding=\"0\" width=\"100%\">\n"
 		  . " <tr valign=\"top\">\n"
 		  . "  <td width=\"99%\" NOWRAP class=\"blank\">&nbsp;\n"
 		  . "   <table align=\"center\" width=\"99%\" class=\"blank\" border=\"0\" cellpadding=\"0\" cellspacing=0>\n"
 		  . "	 <tr>\n"
 		  . "	  <td align=\"left\" valign=\"top\"><font size=\"-1\">\n"
-		  . sprintf(_("Sie haben %s Einträge für ihre Studienbuchseite ausgewählt. "),$seminars["numberofseminars"]);
+		  . sprintf(_("Sie haben %s Einträge für ihre Veranstaltungsübersicht ausgewählt. "),$seminars["numberofseminars"]);
 	$html .= ($seminars["numberofpages"]>1)
-		  ? sprintf(_("Deshalb werden ihre Einträge auf %s Studienbuchseiten verteilt."),$seminars["numberofpages"])."\n"
-		  : sprintf(_("Ihre Einträge können auf einer Studienbuchseite untergebracht werden."),$seminars["numberofseminars"])."\n";
+		  ? sprintf(_("Deshalb werden ihre Einträge auf %s Seiten verteilt."),$seminars["numberofpages"])."\n"
+		  : sprintf(_("Ihre Einträge können auf einer Seite untergebracht werden."),$seminars["numberofseminars"])."\n";
 	$html .="	  <br><br>\n"
 		  . _("Ihre Studiendaten:")."<br>\n"
 		  . "&nbsp;" . _("Hochschule: ") . $seminars["university"] . "<br>\n"
@@ -229,20 +240,22 @@ function printPdfAssortment($infobox,$seminars){
 		  . "&nbsp;" . _("Name (Vor- und Zuname): ") . $seminars["studentname"] . "<br>\n"
 		  . "&nbsp;" . _("Semester: ") . $seminars["semester"] . "<br>\n"
 		  . "&nbsp;" . _("Fachsemester: ") . $seminars["semesternumber"] . "<br>\n"
+		  . "<br>\n"
+		  . _("Vorlage:") ." ". $record_of_study_templates[$template]["title"] . "\n"
 		  . "<br><br>\n";
 
 	$html .= ($seminars["numberofpages"]>1)
-		  ? sprintf(_("Klicken sie nun auf die einzelnen Links, um ihre Studienbuchseiten zu erstellen."),$seminars["numberofpages"])."\n"
-		  : sprintf(_("Klicken sie nun auf den Link, um ihre Studienbuchseite zu erstellen."),$seminars["numberofseminars"])."\n";
+		  ? sprintf(_("Klicken sie nun auf die einzelnen Links, um ihre Veranstaltungsübersicht zu erstellen."),$seminars["numberofpages"])."\n"
+		  : sprintf(_("Klicken sie nun auf den Link, um ihre Veranstaltungsübersicht zu erstellen."),$seminars["numberofseminars"])."\n";
 
 	$html .="	  <br>\n";
 	if ($seminars["numberofpages"]>1)
-		$html .= _("Studienbuch: ");
+		$html .= _("Veranstaltungsübersicht: ");
 	for($i=1;$i<=$seminars["numberofpages"];$i++){
 		$html .="	  <a href=\"recordofstudy.php?create_pdf=1&page=$i\" target=\"_blank\">\n";
 		$html .= ($seminars["numberofpages"]>1)
 			  ? sprintf(_("Seite %s"),$i)
-			  : _("Studienbuch");
+			  : _("Veranstaltungsübersicht");
 		$html .=" </a>";
 	}
 
@@ -252,8 +265,11 @@ function printPdfAssortment($infobox,$seminars){
 	print_infobox($infobox,"pictures/folders.jpg");
 	$html = "	  <form action=\"$PHP_SELF\" method=post>"
 		  . "	  <center>\n"
+		  . "		<a href=\"recordofstudy.php\">\n"
+		  . "		 "._("Zurück zur Semesterauswahl")."\n"
+		  . "		</a>\n"
 // 		  . createButton("speichern",_("Erstellt sie mit diesem Button ein PDF, wenn sie die benötigten Daten eingegeben haben."),"create_pdf")
-		  . createButton("zurueck",_("Abbrechen und eine Studienbuchseite für ein anderes Semester erstellen."),"select_new_semester")
+//		  . createButton("zurueck",_("Abbrechen und eine Studienbuchseite für ein anderes Semester erstellen."),"select_new_semester")
 		  . "	  <br><br></center></form></td>\n"
 		  . "	 </tr>\n"
 		  . "	</table>\n"
