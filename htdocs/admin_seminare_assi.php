@@ -276,9 +276,9 @@ if ($form == 2)
 if ($form == 3)
 	{
 	$sem_create_data["term_start_woche"]=$term_start_woche;
-	$sem_create_data["term_turnus"]=$term_turnus;	
+	$sem_create_data["term_turnus"]=$term_turnus;
 
-	if ($sem_create_data["term_art"]==0)
+	if ($sem_create_data["term_art"] == 0)
 		{
 		//Arrays fuer Turnus loeschen
 		$sem_create_data["term_turnus_date"]='';
@@ -304,7 +304,6 @@ if ($form == 3)
 		
 		//Turnus-Metadaten-Array erzeugen
 		$sem_create_data["metadata_termin"]='';
-		$sem_create_data["metadata_termin"]["art"]=$sem_create_data["term_art"];
 		$sem_create_data["metadata_termin"]["start_termin"]=$sem_create_data["sem_start_termin"];
 		$sem_create_data["metadata_termin"]["start_woche"]=$sem_create_data["term_start_woche"];
 		$sem_create_data["metadata_termin"]["turnus"]=$sem_create_data["term_turnus"];
@@ -389,7 +388,10 @@ if ($form == 3)
 			}
 		}
 	}
-
+	
+	//set the term_art in every case...
+	$sem_create_data["metadata_termin"]["art"]=$sem_create_data["term_art"];	
+	
 	//Datum fuer Vobesprechung umwandeln. Checken muessen wir es auch leider direkt hier, da wir es sonst nicht umwandeln duerfen
 	if (!check_and_set_date($vor_tag, $vor_monat, $vor_jahr, $vor_stunde, $vor_minute, $sem_create_data, "sem_vor_termin") || !check_and_set_date($vor_tag, $vor_monat, $vor_jahr, $vor_end_stunde, $vor_end_minute, $sem_create_data, "sem_vor_end_termin")) {
 		$errormsg=$errormsg."error§"._("Bitte geben Sie g&uuml;ltige Zeiten f&uuml;r Start- und Endzeit der Vorbesprechung ein!")."§"; 
