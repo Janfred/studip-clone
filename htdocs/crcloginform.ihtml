@@ -97,7 +97,7 @@
 	?>
 	<table width=100% class=blank border=0 cellpadding=0 cellspacing=0><tr><td class=blank><blockquote>
 	<br>
-	Bitte identifizieren Sie sich mit Benutzername und Passwort:<br>	
+	Bitte identifizieren Sie sich mit Benutzername und Passwort:<br />&nbsp; 
 	
 	<?
 	if  (isset($this->auth["uname"]) && $this->error_msg):
@@ -119,7 +119,7 @@
 	<input type="hidden" name="response"  value="">
 	<input type="hidden" name="resolution"  value="">
 
-	<table border=0 bgcolor="#eeeeee" align="left" cellspacing=0 cellpadding=4>
+	<table border=0 class="steel1" align="left" cellspacing=0 cellpadding=4>
 
 		<tr valign=top align=left>
 			<td class="steel1">Benutzername: </td>
