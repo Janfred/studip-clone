@@ -239,7 +239,7 @@ function createErrorReport (&$object, $errortitle = "") {
 
    $html .= "<ul>\n";
    foreach ($object->getErrors () as $error) {
-      $html .= " <li>".$error["string"]."\n";
+      $html .= " <li><font size=\"-1\">".$error["string"]."</font>\n";
       if ($error["type"] == ERROR_CRITICAL) {
 	 $html .= "<ul>\n";
 	 $html .= "<li>"._("Datei: ")."<b>".$error["file"]."</b></li>\n";
