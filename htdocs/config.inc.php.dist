@@ -39,13 +39,13 @@ you find here the indivdual settings for your installation.
 please note the LOCAL.INC.PHP in the php-lib folder for the basic system settings!*/
 
 
-//Daten ueber die Uni
-    // der Name wird in der local.inc festgelegt
+//Some more basic data
+//Note: The the clean-name of your master-faculty ($UNI_NAME_CLEAN) is stored in the local.inc
 $UNI_URL = "http://www.studip.de";
 $UNI_LOGIN_ADD='';
 $UNI_LOGOUT_ADD=sprintf(_("Und hier geht's zur %sStud.IP Portalseite%s&nbsp;"), "<a href=\"http://www.studip.de\"><b>", "</b></a>");
 $UNI_CONTACT = "<please insert your generel contact mail-adress here>";
-$UNI_INFO = "Stud.IP 1.1 - Studienbegleitender Internetsupport von Präsenzlehre"; 
+$UNI_INFO = "Stud.IP 1.1.5 - Studienbegleitender Internetsupport von Pr&auml;äsenzlehre"; 
 
 
 //Festlegen der zulaessigen Typen fuer Veranstaltungen
@@ -252,8 +252,9 @@ $PERS_TERMIN_KAT[14]=array("name"=>_("Reise"), "color"=>"#18645C");
 $PERS_TERMIN_KAT[15]=array("name"=>_("Vorlesung"), "color"=>"#627C95");
 // weitere Kategorien können hier angefügt werden
 
+
 //standardtimes for date-begin and date-end 
-$TIME_PRESETS = array ( //starthour, startminute, endshour, endminute
+$TIME_PRESETS = array ( //starthour, startminute, endhour, endminute
 		array ('07','45','09','15'), // 07:45 - 09:15
 		array ('09','30','11','00'), // 09:30 - 11:00
 		array ('11','15','12','45'), // 11:15 - 12:45
@@ -263,6 +264,7 @@ $TIME_PRESETS = array ( //starthour, startminute, endshour, endminute
 		array ('18','45','20','15')  // 18:45 - 20:15
 		);
 //$TIME_PRESETS = false;
+
 
 //number of personal events each user can store in his calendar
 $CALENDAR_MAX_EVENTS = 1000;
