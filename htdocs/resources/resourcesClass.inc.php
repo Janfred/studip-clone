@@ -1163,6 +1163,14 @@ class AssignObjectPerms extends ResourcesPerms {
 	function getUserIsOwner () {
 		return $this->owner;
 	}
+	
+	function getId () {
+		return $this->assign_id;	
+	}
+
+	function getUserId () {
+		return $this->user_id;	
+	}
 }
 
 /*****************************************************************************
@@ -1279,6 +1287,17 @@ class ResourcesObjectPerms extends ResourcesPerms {
 		}
 	}
 	
+	function havePerm ($perm) {
+		if ($perm == "admin") {
+			if ($this->getUserPerm () == "admin")
+				return TRUE;
+		} elseif ($perm == "user") {
+			if (($this->getUserPerm () == "admin") || ($this->getUserPerm () == "user"))
+				return TRUE;
+		} else
+			return FALSE;
+	}
+
 	function getUserPerm () {
 		return $this->perm;
 	}
@@ -1286,6 +1305,15 @@ class ResourcesObjectPerms extends ResourcesPerms {
 	function getUserIsOwner () {
 		return $this->owner;
 	}
+
+	function getId () {
+		return $this->$this->resource_id;	
+	}
+
+	function getUserId () {
+		return $this->user_id;	
+	}
+	
 }
 
 /*****************************************************************************

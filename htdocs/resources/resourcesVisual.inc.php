@@ -773,7 +773,7 @@ class viewObject {
 				<font size=-1><? echo $this->resObject->getName()." (".$this->resObject->getCategoryName().")" ?>
 				</td>
 				<td class="<? echo $this->cssSw->getClass() ?>" width="60%" valign="top"><font size=-1><b>Besitzer:</b></font><br />
-				<font size=-1><? echo $this->resObject->getName()?><? echo $this->resObject->getOwnerName(TRUE);  ?></font>
+				<font size=-1><a href="<? echo $this->resObject->getOwnerLink()?>"><? echo $this->resObject->getOwnerName(TRUE);  ?></a></font>
 				</td>
 			</tr>
 			<tr>

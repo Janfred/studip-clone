@@ -546,5 +546,13 @@ if ($resources_data["view"]=="search") {
 //show object, this object will be edited or viewed
 if ($show_object)
 	$resources_data["actual_object"]=$show_object;
+	
+
+//if ObjectPerms for actual user and actual object are not loaded, load them!
+if ($ObjectPerms) {
+	if (($ObjectPerms->getId() == $resources_data["actual_object"]) && ($ObjectPerms->getUserId()  == $user->id))
+		$ActualObjectPerms = $ObjectPerms;
+} else
+	$ActualObjectPerms = new ResourcesObjectPerms($resources_data["actual_object"]);
 
 ?>

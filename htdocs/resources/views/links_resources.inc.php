@@ -26,8 +26,10 @@ $reiter=new reiter;
 
 //oberen Reiter 
 $structure["resources"]=array (topKat=>"", name=>"&Uuml;bersicht", link=>"resources.php?view=resources#a", active=>FALSE);
-$structure["lists"]=array (topKat=>"", name=>"Listen", link=>"resources.php?view=lists#a", active=>FALSE);
-$structure["objects"]=array (topKat=>"", name=>"Ressourcen", link=>"resources.php?view=objects", active=>FALSE);
+if ($resources_data["list_open"])
+	$structure["lists"]=array (topKat=>"", name=>"Liste", link=>"resources.php?view=lists#a", active=>FALSE);
+if ($resources_data["actual_object"])
+	$structure["objects"]=array (topKat=>"", name=>"Ressource", link=>"resources.php?view=objects", active=>FALSE);
 if (($my_perms->getGlobalPerms() == "admin") || ($perm->have_perm("root")))
 	$structure["settings"]=array (topKat=>"", name=>"Anpassen", link=>"resources.php?view=settings", active=>FALSE);
 
@@ -37,15 +39,27 @@ $structure["search"]=array (topKat=>"resources", name=>"Suchen", link=>"resource
 $structure["create_hierarchie"]=array (topKat=>"resources", name=>"Neue Hierarchieebene erzeugen", link=>"resources.php?view=create_hierarchie#a", active=>FALSE);
 
 //Reiter "Listen"
-$structure["_lists"]=array (topKat=>"lists", name=>"Listenausgabe", link=>"resources.php?view=_lists#a", active=>FALSE);
-//$structure["search_lists"]=array (topKat=>"lists", name=>"Suchen", link=>"resources.php?view=search_lists", active=>FALSE);
-//$structure["export_lists"]=array (topKat=>"lists", name=>"Listen exportieren", link=>"resources.php?view=export_lists", active=>FALSE);
+if ($resources_data["list_open"]) {
+	$structure["_lists"]=array (topKat=>"lists", name=>"Listenausgabe", link=>"resources.php?view=_lists#a", active=>FALSE);
+	//$structure["search_lists"]=array (topKat=>"lists", name=>"Suchen", link=>"resources.php?view=search_lists", active=>FALSE);
+	//$structure["export_lists"]=array (topKat=>"lists", name=>"Listen exportieren", link=>"resources.php?view=export_lists", active=>FALSE);
+}
 
 //Reiter "Objekt"
-$structure["edit_object_properties"]=array (topKat=>"objects", name=>"Eigenschaften bearbeiten", link=>"resources.php?view=edit_object_properties", active=>FALSE);
-$structure["edit_object_perms"]=array (topKat=>"objects", name=>"Rechte bearbeiten", link=>"resources.php?view=edit_object_perms", active=>FALSE);
-$structure["view_schedule"]=array (topKat=>"objects", name=>"Belegungsplan", link=>"resources.php?view=view_schedule", active=>FALSE);
-$structure["edit_object_assign"]=array (topKat=>"objects", name=>"Belegung bearbeiten", link=>"resources.php?view=edit_object_assign", active=>FALSE);
+if ($resources_data["actual_object"]) {
+	if ($ActualObjectPerms ->havePerm ("user")) {
+		if ($ActualObjectPerms ->havePerm ("admin")) {
+			$structure["edit_object_properties"]=array (topKat=>"objects", name=>"Eigenschaften bearbeiten", link=>"resources.php?view=edit_object_properties", active=>FALSE);
+			$structure["edit_object_perms"]=array (topKat=>"objects", name=>"Rechte bearbeiten", link=>"resources.php?view=edit_object_perms", active=>FALSE);
+		} else {
+			$structure["edit_object_properties"]=array (topKat=>"objects", name=>"Details", link=>"resources.php?view=openobject_details", active=>FALSE);
+		}
+		if (getResourceObjectCategory($resources_data["actual_object"])) {
+			$structure["view_schedule"]=array (topKat=>"objects", name=>"Belegungsplan", link=>"resources.php?view=view_schedule", active=>FALSE);
+			$structure["edit_object_assign"]=array (topKat=>"objects", name=>"Belegung bearbeiten", link=>"resources.php?view=edit_object_assign", active=>FALSE);
+		}
+	}
+ }
 
 //Reiter "Anpassen"
 if (($my_perms->getGlobalPerms() == "admin") || ($perm->have_perm("root"))){ //Grundlegende Einstellungen fuer alle Ressourcen Admins
