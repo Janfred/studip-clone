@@ -47,13 +47,13 @@ function list_restore_assign(&$this, $resource_id, $begin, $end, $user_id='', $r
 	$query = sprintf("SELECT assign_id, resource_id, begin, end, repeat_end, repeat_quantity, "
 				."repeat_interval, repeat_month_of_year, repeat_day_of_month, "
 				."repeat_week_of_month, repeat_day_of_week FROM resources_assign ");
-	if ($range_id) $query.= sprintf("LEFT JOIN  resources_user_resources USING resource_id ");
+	if ($range_id) $query.= sprintf("LEFT JOIN  resources_user_resources USING (resource_id) ");
 	$query.= "WHERE ";
 	if ($resource_id) $query.= sprintf("resources_assign.resource_id = '%s' AND ", $resource_id);
 	if ($user_id) $query.= sprintf("resources_assign.assign_user_id = '%s'  AND ", $user_id);
 	if ($range_id) $query.= sprintf("resources_user_resources.user_id = '%s'  AND ", $range_id);
-	$query .= sprintf("(begin BETWEEN %s AND %s OR (begin <= %s AND repeat_end > %s ))"
-				 . " ORDER BY begin ASC", $begin, $end, $end, $begin);
+	$query .= sprintf("(begin BETWEEN %s AND %s OR (begin <= %s AND (repeat_end > %s OR end > %s)))"
+				 . " ORDER BY begin ASC", $begin, $end, $end, $begin, $begin);
 
 	//send the query
 	$db->query($query);
