@@ -45,6 +45,9 @@ if ($GLOBALS['CHAT_ENABLE']){
 	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php"; 
 	$chatServer =& ChatServer::GetInstance($GLOBALS['CHAT_SERVER_NAME']);
 	$chatServer->caching = true;
+	if ($_REQUEST['kill_chat']){
+		chat_kill_chat($_REQUEST['kill_chat']);
+	}
 	$sms = new messaging();
 } else {
 	page_close();
@@ -82,7 +85,7 @@ include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 if (!$sess->is_registered("chat_online_id")){
 	$sess->register("chat_online_id");
 }
-if (!$_REQUEST['chat_id']){
+if (!$_REQUEST['chat_id'] && !$_REQUEST['kill_chat']){
 	$chat_online_id = null;
 } else {
 	$chat_online_id[$_REQUEST['chat_id']] = ($_REQUEST['cmd'] == "open") ? true : false;

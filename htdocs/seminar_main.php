@@ -28,7 +28,10 @@ require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
 if ($GLOBALS['CHAT_ENABLE']){
-        include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php"; 
+	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php";
+	if ($_REQUEST['kill_chat']){
+		chat_kill_chat($_REQUEST['kill_chat']);
+	}
 }
 
 if (isset($auswahl) && $auswahl!="") {

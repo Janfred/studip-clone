@@ -37,6 +37,16 @@ require_once $ABSOLUTE_PATH_STUDIP."messaging.inc.php";
 require_once $ABSOLUTE_PATH_STUDIP."functions.php";
 require_once $ABSOLUTE_PATH_STUDIP."contact.inc.php";
 
+function chat_kill_chat($chatid){
+	if ($GLOBALS['CHAT_ENABLE']){
+		if (chat_get_entry_level($chatid) == "admin"){ 
+			$chatServer =& ChatServer::GetInstance($GLOBALS['CHAT_SERVER_NAME']);
+			$chatServer->caching = false;
+			$chatServer->removeChat($chatid);
+			$chatServer->caching = true;
+		}
+	}
+}
 
 function chat_get_chat_icon($chatter,$chatinv,$is_active,$as_icon = false){
 	if ($GLOBALS['CHAT_ENABLE']){
@@ -147,7 +157,7 @@ function chat_get_content($chatid,$chatter,$chatinv,$password,$is_active,$chat_u
 	$pic_path = $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'] . "pictures/";
 	$ret = "\n<tr><td class=\"steel1\" colspan=\"2\" width=\"100%\">&nbsp;</td></tr>";
 	$ret .= "\n<tr><td class=\"steel1\" width=\"50%\" valign=\"center\"><blockquote><font size=\"-1\">";
-	if (chat_get_entry_level($chatid) || $chatinv){
+	if (($entry_level = chat_get_entry_level($chatid)) || $chatinv){
 		if (!$is_active){
 			$ret .= "<a href=\"#\" onClick=\"javascript:return open_chat('$chatid');\">";
 			$ret .= "<img border=\"0\" align=\"absmiddle\" src=\"$pic_path/chat1.gif\" " . tooltip(_("Diesen Chatraum betreten")) ." ></a>&nbsp;&nbsp;";
@@ -162,6 +172,11 @@ function chat_get_content($chatid,$chatter,$chatinv,$password,$is_active,$chat_u
 		if ($password){
 			$ret .= "<br><img border=\"0\" align=\"absmiddle\" src=\"$pic_path/closelock.gif\" >&nbsp;&nbsp;";
 			$ret .= _("Dieser Chatraum ist mit einem Passwort gesichert.");
+		}
+		if ($chatter && $entry_level == "admin"){
+			$ret .= "<br><a href=\"" . $GLOBALS['PHP_SELF'] . "?kill_chat=$chatid\">";
+			$ret .= "<img border=\"0\" align=\"absmiddle\" src=\"$pic_path/trash.gif\" " . tooltip(_("Diesen Chatraum leeren")) ." ></a>&nbsp;&nbsp;";
+			$ret .= sprintf(_("Diesen Chatraum %sleeren%s"),"<a href=\"" . $GLOBALS['PHP_SELF'] . "?kill_chat=$chatid\">","</a>");
 		}
 	} else {
 		$ret .= "<img border=\"0\" align=\"absmiddle\" src=\"$pic_path/nochat.gif\" >&nbsp;&nbsp;";
