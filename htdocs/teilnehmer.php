@@ -37,20 +37,6 @@ include ("$ABSOLUTE_PATH_STUDIP/links1.php");
 $messaging=new messaging;
 $cssSw=new cssClassSwitcher;
 
-//Hilfsfunktion, erzeugt eine Liste mit allen ids der einrichtungen
-function get_inst_list(){
-	global $SessSemName;
-	$db = new DB_Seminar("SELECT Institut_id FROM seminar_inst WHERE seminar_id='$SessSemName[1]'"); //beteiligte Einrichtungen
-	$value_list = "";
-	$result[] = $SessSemName[5]; //Heimatinstitut
-	if ($db->num_rows()){
-		while($db->next_record()) {
-			$result[] = $db->Record[0];
-		}
-	}
-	$value_list = "'".join("','",$result)."'";
-	return $value_list;
-}
 
 	
 if ($sms_msg)
@@ -239,11 +225,10 @@ if (isset($add_tutor_x)) {
 	if ($rechte AND $SemUserStatus!="tutor") {
 				// nur wenn wer ausgewaehlt wurde
 		if ($u_id != "0") {
-			$value_list = get_inst_list();
-			$query = "SELECT DISTINCT b.user_id, username, Vorname, Nachname, inst_perms FROM user_inst a ".
+			$query = "SELECT DISTINCT b.user_id, username, Vorname, Nachname, inst_perms, perms FROM seminar_inst d LEFT JOIN user_inst a USING(Institut_id) ".
 			"LEFT JOIN auth_user_md5  b USING(user_id) ".
 			"LEFT JOIN seminar_user c ON (c.user_id=a.user_id AND c.seminar_id='$SessSemName[1]')  ".
-			"WHERE a.Institut_id IN($value_list) AND a.inst_perms IN ('tutor','dozent') AND ISNULL(c.seminar_id)";
+			"WHERE d.seminar_id = '$SessSemName[1]' AND a.inst_perms IN ('tutor','dozent') AND ISNULL(c.seminar_id) ORDER BY Nachname";
 			$db->query($query);
 				// wer versucht denn da wen nicht zugelassenen zu berufen?
 			if ($db->next_record()) {
@@ -500,7 +485,7 @@ if ($db->num_rows()) { //Only if Users were found...
 			// zum Tutor befördern
 			if ($SemUserStatus!="tutor") {
 				if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["only_inst_user"]) 
-					$db2->query ("SELECT DISTINCT inst_perms, user_id, Institut_id FROM user_inst WHERE user_id = '$UID' AND Institut_id IN(".get_inst_list().") AND inst_perms!='user' AND inst_perms!='autor'");		
+					$db2->query ("SELECT DISTINCT user_id FROM seminar_inst LEFT JOIN user_inst USING(Institut_id) WHERE user_id = '$UID' AND seminar_id ='$SessSemName[1]' AND inst_perms!='user' AND inst_perms!='autor'");		
 				else
 					$db2->query ("SELECT user_id FROM auth_user_md5  WHERE perms IN ('tutor', 'dozent') AND user_id = '$UID' ");						
 				if ($db2->next_record()) {
@@ -613,11 +598,11 @@ if ($rechte) {
 // Der Dozent braucht mehr Unterstuetzung, also Tutor aus der(n) Einrichtung(en) berufen...
 //Note the option "only_inst_user" from the config.inc. If it is NOT setted, this Option is disabled (the functionality will do in this case do seachform below)
 if ($rechte AND $SemUserStatus!="tutor" AND $SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["only_inst_user"]) {
-	$value_list = get_inst_list();
-			$query = "SELECT DISTINCT b.user_id, username, Vorname, Nachname, inst_perms FROM user_inst a ".
-			"LEFT JOIN auth_user_md5  b USING(user_id) ".
-			"LEFT JOIN seminar_user c ON (c.user_id=a.user_id AND c.seminar_id='$SessSemName[1]')  ".
-			"WHERE a.Institut_id IN($value_list) AND a.inst_perms IN ('tutor','dozent') AND ISNULL(c.seminar_id) ORDER BY Nachname";
+	$query = "SELECT DISTINCT b.user_id, username, Vorname, Nachname, inst_perms, perms FROM seminar_inst d LEFT JOIN user_inst a USING(Institut_id) ".
+	"LEFT JOIN auth_user_md5  b USING(user_id) ".
+	"LEFT JOIN seminar_user c ON (c.user_id=a.user_id AND c.seminar_id='$SessSemName[1]')  ".
+	"WHERE d.seminar_id = '$SessSemName[1]' AND a.inst_perms IN ('tutor','dozent') AND ISNULL(c.seminar_id) ORDER BY Nachname";
+
 	$db->query($query); // ergibt alle berufbaren Personen
 	?>
 
