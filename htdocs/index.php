@@ -54,6 +54,7 @@ if ($auth->is_authenticated() && $user->id != "nobody") {
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 
 // -- hier muessen Seiten-Initialisierungen passieren --
 
@@ -90,23 +91,22 @@ if (($my_messaging_settings["start_messenger_at_startup"]) && ($auth->auth["jscr
 }
 
 
-//Anzeigemodul fuer persoenliche Startseite (nur wenn man angemeldet und nicht global root oder admin ist!)
-IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("dozent"))
-	{
+//Anzeigemodul fuer studentische Startseite (nur wenn man angemeldet und nicht global dozent oder hoeher ist!)
+if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("dozent")) {
 ?>
 
 <div align="center">
 <table width="70%" border=0 cellpadding=0 cellspacing=0 >
-<tr><td class="topic" colspan=3><img src="pictures/home.gif" border="0" align="texttop"><b>&nbsp;Ihre pers&ouml;nliche Startseite bei Stud.IP</b></td></tr>
+<tr><td class="topic" colspan=3><img src="pictures/home.gif" border="0" align="texttop"><b>&nbsp;<?=_("Ihre pers&ouml;nliche Startseite bei Stud.IP")?></b></td></tr>
 <tr>
 	<td width="5%" class="blank" valign="middle">&nbsp;</td>
 	<td width="90%" class="blank" valign="top">
 		<table cellpadding=4>
-		<tr><td class="blank"><a href="meine_seminare.php"><img src="pictures/forumrot.gif" border=0>&nbsp;Meine Veranstaltungen</a><br />&nbsp; &nbsp; <font size="-1"><a href="sem_portal.php">Veranstaltung hinzuf&uuml;gen</a></td></tr>
-		<tr><td class="blank"><a href="calendar.php"><img src="pictures/forumrot.gif" border=0>&nbsp;Terminkalender</a><br />&nbsp; &nbsp; <font size="-1"><a href="mein_stundenplan.php">pers&ouml;nlicher Stundenplan</a></td></tr>
-		<tr><td class="blank"><a href="about.php"><img src="pictures/forumrot.gif" border=0>&nbsp;pers&ouml;nliche Homepage</a><br />&nbsp; &nbsp; <font size="-1"><a href="edit_about.php?view=Daten">Benutzerdaten</a></td></tr>
-		<tr><td class="blank"><a href="auswahl_suche.php"><img src="pictures/forumrot.gif" border=0>&nbsp;Suchen</a><br />&nbsp; &nbsp; <font size="-1"><a href="browse.php">Personensuche</a>&nbsp;/&nbsp;<font size="-1"><a href="sem_portal.php">Veranstaltungsuche</a></td></tr>
-		<tr><td class="blank"><a href="help/index.php" target="_new"><img src="pictures/forumrot.gif" border=0>&nbsp;Hilfe</a></td></tr>
+		<tr><td class="blank"><a href="meine_seminare.php"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("Meine Veranstaltungen")?></a><br />&nbsp; &nbsp; <font size="-1"><a href="sem_portal.php"><?=_("Veranstaltung hinzuf&uuml;gen")?></a></td></tr>
+		<tr><td class="blank"><a href="calendar.php"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("Terminkalender")?></a><br />&nbsp; &nbsp; <font size="-1"><a href="mein_stundenplan.php"><?=_("pers&ouml;nlicher Stundenplan")?></a></td></tr>
+		<tr><td class="blank"><a href="about.php"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("pers&ouml;nliche Homepage")?></a><br />&nbsp; &nbsp; <font size="-1"><a href="edit_about.php?view=allgemein"><?=_("individuelle Einstellungen")?></a></td></tr>
+		<tr><td class="blank"><a href="auswahl_suche.php"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("Suchen")?></a><br />&nbsp; &nbsp; <font size="-1"><a href="browse.php"><?=_("Personensuche")?></a>&nbsp;/&nbsp;<font size="-1"><a href="sem_portal.php"><?=_("Veranstaltungsuche")?></a></td></tr>
+		<tr><td class="blank"><a href="help/index.php" target="_new"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("Hilfe")?></a></td></tr>
 		</table>
 	</td>
 	<td class="blank" align="right" valign="top" background="pictures/indexbild.jpg"><img src="pictures/blank.gif" width="235"></td>
@@ -123,11 +123,11 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("doz
 	$start = time();
 	$end = $start + 60 * 60 * 24 * 7;
 	show_all_dates($start, $end, FALSE, FALSE, $index_data["dopen"]);
-}
+
+
+} elseif (!$perm->have_perm("dozent")) {
 
 //Anzeigemodul fuer nobody)
-ELSEIF (!$perm->have_perm("dozent")){
-
 ?>
 
 <table class="blank" width="600" border=0 cellpadding=0 cellspacing=0 align=center>
@@ -156,35 +156,34 @@ unset($temp_language_key); unset($temp_language);
 
 <tr>
 <td class="blank" nowrap align=left valign=bottom>
-	&nbsp; <a href="index.php?again=yes"><font size=2 color="#6699CC">Login</font></a>&nbsp; 
-	<a href="register1.php"><font size=2 color="#6699CC">Registrieren</font></a>&nbsp; 
+	&nbsp; <a href="index.php?again=yes"><font size=2 color="#6699CC"><?=_("Login")?></font></a>&nbsp; 
+	<a href="register1.php"><font size=2 color="#6699CC"><?=_("Registrieren")?></font></a>&nbsp; 
 </td>
-<td class="blank" align=center><a href="http://www.studip.de"><img src="pictures/logoklein.gif" border=0 alt="Zur Portalseite"></a></td>
+<td class="blank" align=center><a href="http://www.studip.de"><img src="pictures/logoklein.gif" border=0 <?=tooltip(_("Zur Portalseite"))?>></a></td>
 <td class="blank" align=right nowrap valign=bottom>
-	<a href="freie.php"><font size=2 color="#6699CC">Freier Zugang</font></a>&nbsp; 
-	<a href="help/index.php" target="_new"><font size=2 color="#6699CC">Hilfe</font></a>&nbsp;
+	<a href="freie.php"><font size=2 color="#6699CC"><?=_("Freier Zugang")?></font></a>&nbsp; 
+	<a href="help/index.php" target="_new"><font size=2 color="#6699CC"><?=_("Hilfe")?></font></a>&nbsp;
 </td></tr></table>
 <DIV align=center>
 <?php
 		
-}
-ELSEIF ($auth->auth["perm"]=="dozent"){
+} elseif ($auth->auth["perm"]=="dozent") {
 
 //Startseite fuer Dozenten 
 ?>
 <div align="center">
 <table width="70%" border=0 cellpadding=0 cellspacing=0 >
-<tr><td class="topic" colspan=3><img src="pictures/home.gif" border="0" align="texttop"><b>&nbsp;Startseite f&uuml;r DozentInnen bei Stud.IP</b></td></tr>
+<tr><td class="topic" colspan=3><img src="pictures/home.gif" border="0" align="texttop"><b>&nbsp;<?=_("Startseite f&uuml;r DozentInnen bei Stud.IP")?></b></td></tr>
 <tr>
 	<td width="5%" class="blank" valign="middle">&nbsp;</td>
 	<td width="90%" class="blank" valign="top">
 		<table cellpadding=4>
-		<tr><td class="blank"><a href="meine_seminare.php"><img src="pictures/forumrot.gif" border=0>&nbsp;Meine Veranstaltungen</a></td></tr>
-		<tr><td class="blank"><a href="adminarea_start.php?list=TRUE"><img src="pictures/forumrot.gif" border=0>&nbsp;Verwaltung von Veranstaltungen</a><br />&nbsp; &nbsp; <font size="-1"><a href="admin_seminare_assi.php?new_session=TRUE">neue Veranstaltung anlegen</a></font></td></tr>
-		<tr><td class="blank"><a href="calendar.php"><img src="pictures/forumrot.gif" border=0>&nbsp;Terminkalender</a><br />&nbsp; &nbsp; <font size="-1"><a href="mein_stundenplan.php">pers&ouml;nlicher Stundenplan</a></font></td></tr>
-		<tr><td class="blank"><a href="about.php"><img src="pictures/forumrot.gif" border=0>&nbsp;pers&ouml;nliche Homepage</a><br />&nbsp; &nbsp; <font size="-1"><a href="edit_about.php?view=Daten">Benutzerdaten</a></font></td></tr>
-		<tr><td class="blank"><a href="auswahl_suche.php"><img src="pictures/forumrot.gif" border=0>&nbsp;Suchen</a><br />&nbsp; &nbsp; <font size="-1"><a href="browse.php">Personensuche</a>&nbsp;/&nbsp;<font size="-1"><a href="sem_portal.php">Veranstaltungsuche</a></font></td></tr>
-		<tr><td class="blank"><a href="help/index.php" target="_new"><img src="pictures/forumrot.gif" border=0>&nbsp;Hilfe</a></td></tr>
+		<tr><td class="blank"><a href="meine_seminare.php"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("Meine Veranstaltungen")?></a></td></tr>
+		<tr><td class="blank"><a href="adminarea_start.php?list=TRUE"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("Verwaltung von Veranstaltungen")?></a><br />&nbsp; &nbsp; <font size="-1"><a href="admin_seminare_assi.php?new_session=TRUE"><?=_("neue Veranstaltung anlegen")?></a></font></td></tr>
+		<tr><td class="blank"><a href="calendar.php"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("Terminkalender")?></a><br />&nbsp; &nbsp; <font size="-1"><a href="mein_stundenplan.php"><?=_("pers&ouml;nlicher Stundenplan")?></a></font></td></tr>
+		<tr><td class="blank"><a href="about.php"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("pers&ouml;nliche Homepage")?></a><br />&nbsp; &nbsp; <font size="-1"><a href="edit_about.php?view=allgemein"><?=_("individuelle Einstellungen")?></a></font></td></tr>
+		<tr><td class="blank"><a href="auswahl_suche.php"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("Suchen")?></a><br />&nbsp; &nbsp; <font size="-1"><a href="browse.php"><?=_("Personensuche")?></a>&nbsp;/&nbsp;<font size="-1"><a href="sem_portal.php"><?=_("Veranstaltungsuche")?></a></font></td></tr>
+		<tr><td class="blank"><a href="help/index.php" target="_new"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("Hilfe")?></a></td></tr>
 		</table>
 	</td>
 	<td class="blank" align="right" valign="top" background="pictures/indexbild.jpg"><img src="pictures/blank.gif" width="235"></td>
@@ -202,25 +201,26 @@ ELSEIF ($auth->auth["perm"]=="dozent"){
 	$start = time();
 	$end = $start + 60 * 60 * 24 * 7;
 	show_all_dates($start, $end, FALSE, FALSE, $index_data["dopen"]);
-}
 
 
-ELSEIF ($auth->auth["perm"]=="admin"){
+
+} elseif ($auth->auth["perm"]=="admin") {
 
 //Startseite fuer Inst-Admins
+
 ?>
 <div align="center">
 <table width="70%" border=0 cellpadding=0 cellspacing=0 >
-<tr><td class="topic" colspan=3><img src="pictures/home.gif" border="0" align="texttop"><b>&nbsp;Startseite f&uuml;r Administratoren bei Stud.IP</b></td></tr>
+<tr><td class="topic" colspan=3><img src="pictures/home.gif" border="0" align="texttop"><b>&nbsp;<?=_("Startseite f&uuml;r Administratoren bei Stud.IP")?></b></td></tr>
 <tr>
 	<td width="5%" class="blank" valign="middle">&nbsp;</td>
 	<td width="90%" class="blank" valign="top">
 		<table cellpadding=4>
-		<tr><td class="blank"><a href="meine_seminare.php"><img src="pictures/forumrot.gif" border=0>&nbsp;Veranstaltungen an meinen Einrichtungen</a></td></tr>
-		<tr><td class="blank"><a href="adminarea_start.php?list=TRUE"><img src="pictures/forumrot.gif" border=0>&nbsp;Verwaltung von Veranstaltungen</a></td></tr>
-		<tr><td class="blank"><a href="admin_institut.php?list=TRUE"><img src="pictures/forumrot.gif" border=0>&nbsp;Verwaltung von Einrichtungen</a></td></tr>
-		<tr><td class="blank"><a href="auswahl_suche.php"><img src="pictures/forumrot.gif" border=0>&nbsp;Suchen</a><br />&nbsp; &nbsp; <font size="-1"><a href="browse.php">Personensuche</a>&nbsp;/&nbsp;<a href="sem_portal.php">Veranstaltungsuche</a></font></td></tr>
-		<tr><td class="blank"><a href="new_user_md5.php"><img src="pictures/forumrot.gif" border=0>&nbsp;globale Benutzerverwaltung</a></td></tr>
+		<tr><td class="blank"><a href="meine_seminare.php"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("Veranstaltungen an meinen Einrichtungen")?></a></td></tr>
+		<tr><td class="blank"><a href="adminarea_start.php?list=TRUE"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("Verwaltung von Veranstaltungen")?></a></td></tr>
+		<tr><td class="blank"><a href="admin_institut.php?list=TRUE"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("Verwaltung von Einrichtungen")?></a></td></tr>
+		<tr><td class="blank"><a href="auswahl_suche.php"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("Suchen")?></a><br />&nbsp; &nbsp; <font size="-1"><a href="browse.php"><?=_("Personensuche")?></a>&nbsp;/&nbsp;<a href="sem_portal.php"><?=_("Veranstaltungsuche")?></a></font></td></tr>
+		<tr><td class="blank"><a href="new_user_md5.php"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("globale Benutzerverwaltung")?></a></td></tr>
 		</table>
 	</td>
 	<td class="blank" align="right" valign="top" background="pictures/indexbild.jpg"><img src="pictures/blank.gif" width="235"></td>
@@ -233,25 +233,26 @@ ELSEIF ($auth->auth["perm"]=="admin"){
 	include ('show_news.php');
 	if (show_news("studip", FALSE, 0, $index_data["nopen"], "70%", $LastLogin))
 		echo "<br />";
-}
 
 
-ELSEIF ($perm->have_perm("root")){
+
+} elseif ($perm->have_perm("root")) {
 
 //Startseite fuer root
+
 ?>
 <div align="center">
 <table width="70%" border=0 cellpadding=0 cellspacing=0>
-<tr><td class="topic" colspan=3><img src="pictures/home.gif" border="0" align="texttop"><b><b>&nbsp;Startseite f&uuml;r root bei Stud.IP</b></b></td></tr>
+<tr><td class="topic" colspan=3><img src="pictures/home.gif" border="0" align="texttop"><b><b>&nbsp;<?=_("Startseite f&uuml;r root bei Stud.IP")?></b></b></td></tr>
 <tr>
 	<td width="5%" class="blank" valign="middle">&nbsp;</td>
 	<td width="90%" class="blank" valign="top">
 		<table cellpadding=4>
-		<tr><td class="blank"><a href="meine_seminare.php"><img src="pictures/forumrot.gif" border=0>&nbsp;Veranstaltungs-&Uuml;bersicht</a></td></tr>
-		<tr><td class="blank"><a href="adminarea_start.php?list=TRUE"><img src="pictures/forumrot.gif" border=0>&nbsp;Verwaltung von Veranstaltungen</a></td></tr>
-		<tr><td class="blank"><a href="admin_institut.php?list=TRUE"><img src="pictures/forumrot.gif" border=0>&nbsp;Verwaltung von Einrichtungen</a></td></tr>
-		<tr><td class="blank"><a href="new_user_md5.php"><img src="pictures/forumrot.gif" border=0>&nbsp;Verwaltung globaler Einstellungen</a></td></tr>
-		<tr><td class="blank"><a href="auswahl_suche.php"><img src="pictures/forumrot.gif" border=0>&nbsp;Suchen</a><br />&nbsp; &nbsp; <font size="-1"><a href="browse.php">Personensuche</a>&nbsp;/&nbsp;<a href="sem_portal.php">Veranstaltungsuche</a></font></td></tr>
+		<tr><td class="blank"><a href="meine_seminare.php"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("Veranstaltungs-&Uuml;bersicht")?></a></td></tr>
+		<tr><td class="blank"><a href="adminarea_start.php?list=TRUE"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("Verwaltung von Veranstaltungen")?></a></td></tr>
+		<tr><td class="blank"><a href="admin_institut.php?list=TRUE"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("Verwaltung von Einrichtungen")?></a></td></tr>
+		<tr><td class="blank"><a href="new_user_md5.php"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("Verwaltung globaler Einstellungen")?></a></td></tr>
+		<tr><td class="blank"><a href="auswahl_suche.php"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("Suchen")?></a><br />&nbsp; &nbsp; <font size="-1"><a href="browse.php"><?=_("Personensuche")?></a>&nbsp;/&nbsp;<a href="sem_portal.php"><?=_("Veranstaltungsuche")?></a></font></td></tr>
 		</table>
 	</td>
 	<td class="blank" align="right" valign="top" background="pictures/indexbild.jpg"><img src="pictures/blank.gif" width="235"></td>
