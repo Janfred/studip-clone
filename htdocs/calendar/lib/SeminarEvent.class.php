@@ -44,6 +44,7 @@ class SeminarEvent extends Event {
 			$this->sem_id = $sem_id;
 		}
 		$this->properties['RRULE']['rtype'] = 'SINGLE';
+		$this->properties['UID'] = $this->getUid();
 	}
 	
 	/**
@@ -69,17 +70,13 @@ class SeminarEvent extends Event {
 		return FALSE;
 	}
 	
-	function getCategory () {		
-		return $this->properties['STUDIP_CATEGORY'];
-	}
-	
 	/**
 	* Returns the name of the category.
 	*
 	* @access public
 	* @return String the name of the category
 	*/
-	function getCategoryName () {
+	function toStringCategories () {
 		global $TERMIN_TYP;
 		
 		return $TERMIN_TYP[$this->getProperty('STUDIP_CATEGORY')]['name'];
@@ -164,9 +161,9 @@ class SeminarEvent extends Event {
 		return $this->sem_write_perm;
 	}
 	
-	function getUid ($id) {
+	function getUid () {
 	
-		return "Stud.IP-SEM-$id@{$_SERVER['SERVER_NAME']}";
+		return "Stud.IP-SEM-{$this->id}@{$_SERVER['SERVER_NAME']}";
 	}
 	
 	function getCategoryStyle ($image_size = 'small') {

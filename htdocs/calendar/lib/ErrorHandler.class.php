@@ -71,19 +71,51 @@ class ErrorHandler {
 		
 		if ($status === NULL)
 			return $this->status;
-		else
-			return $status & $this->status;
+			
+		return $status & $this->status;
 	}
 	
-	function getErrors () {
+	function getMaxStatus ($status) {
 	
-		return $this->errors;
+		if ($status <= $this->status)
+			return TRUE;
+		
+		return FALSE;
+	}
+	
+	function getMinStatus ($status) {
+		
+		if ($status >= $this->status)
+			return TRUE;
+		
+		return FALSE;
+	}
+	
+	function getErrors ($status = NULL) {
+		
+		if ($status === NULL)
+			return $this->errors;
+		
+		return $errors[$status];
+	}
+	
+	function nextError ($status) {
+		
+		if (is_array($this->errors[$status]) &&
+				list($key, $error) = each($this->errors[$status])) {
+			return $error;
+		}
+		
+		if(is_array($this->errors[$status]))
+			reset($this->errors[$status]);
+		return FALSE;
 	}
 	
 	function throwError ($status, $message, $file = '', $line = '') {
 		
-		$this->errors[] =& new Error($status, $message, $file, $line);
+		$this->errors[$status][] =& new Error($status, $message, $file, $line);
 		$this->status |= $status;
+		reset($this->errors[$status]);
 	}
 	
 }

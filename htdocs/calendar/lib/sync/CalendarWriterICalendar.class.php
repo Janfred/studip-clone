@@ -72,17 +72,28 @@ class CalendarWriteriCalendar extends CalendarWriter {
 	/**
 	 * Export this component as iCalendar format
 	 *
-	 * @param array $event The event to export.
-	 * @return String iCalendar format data
+	 * @param object $event The event to export.
+	 * @return String iCalendar formatted data
 	 */
-	function write ($properties) {
-
+	function write (&$event) {
+		
+		$match_pattern_1 = array('\\', '\n', ';', ',');
+		$replace_pattern_1 = array('\\\\', '\\n', '\;', '\,');
+		$match_pattern_2 = array('\\', '\n', ';');
+		$replace_pattern_2 = array('\\\\', '\\n', '\;');
+		
+		if ($event->properties["RRULE"]["rtype"] != "SINGLE")
+			$event->properties["RRULE"]["expire"] = $event->properties["EXPIRE"];
+		else
+			unset($event->properties["RRULE"]);
+		unset($event->properties["EXPIRE"]);
+		$event->properties['CATEGORIES'] = str_replace($match_pattern_2, $replace_pattern_2,
+				$event->toStringCategories());
+		unset($event->properties['STUDIP_CATEGORY']);
+		
 		$result	= "BEGIN:VEVENT" . $this->newline;
 		
-		$match_pattern = array('\\', '\n', ';', ',');
-		$replace_pattern = array('\\\\', '\\n', '\;', '\,');
-		
-		foreach ($properties as $name => $attribute) {
+		foreach ($event->properties as $name => $attribute) {
 			$name = $name;
 			$params = array();
 			$params_str = '';
@@ -95,11 +106,13 @@ class CalendarWriteriCalendar extends CalendarWriter {
 				// text fields
 				case 'SUMMARY':
 				case 'DESCRIPTION':
-				case 'CATEGORIES':
 				case 'LOCATION':
-					$value = str_replace($match_pattern, $replace_pattern, $value);
+					$value = str_replace($match_pattern_1, $replace_pattern_1, $value);
 					break;
-					
+				
+				case 'CATEGORIES':
+					break;
+				
 				// Date fields
 				case 'LAST-MODIFIED':
 				case 'CREATED':
@@ -128,6 +141,13 @@ class CalendarWriteriCalendar extends CalendarWriter {
 					}
 					break;
 
+				case 'EXDATE':
+					if (array_key_exists('VALUE', $params))
+						$value = $this->_exportExdate($value, $params['VALUE']);
+					else
+						$value = $this->_exportExdate($value, 'DATE-TIME');
+					break;
+					
 				case 'RDATE':
 					if (array_key_exists('VALUE', $params)) {
 						if ($params['VALUE'] == 'DATE') {
@@ -190,9 +210,6 @@ class CalendarWriteriCalendar extends CalendarWriter {
 				
 				case 'PRIORITY':
 					switch ($value) {
-						case 0:
-							$value = '0';
-							break;
 						case 1:
 							$value = '1';
 							break;
@@ -359,6 +376,9 @@ class CalendarWriteriCalendar extends CalendarWriter {
 		// Stud.IP calendar is 5, in iCalendar it is -1
 		if ($value['sinterval'] == 5)
 			$value['sinterval'] = -1;
+			
+		if ($value['count'])
+			unset($value['expire'];
 		
 		foreach ($value as $r_param => $r_value) {
 			if ($r_value) {
@@ -400,27 +420,44 @@ class CalendarWriteriCalendar extends CalendarWriter {
 					case 'month':
 						$rrule[] = 'BYMONTH=' . $r_value;
 						break;
+					case 'count':
+						$rrule[] = 'COUNT=' . $r_value;
+						break;
 				}
 			}
 		}
 				
-		return implode(";", $rrule);
+		return implode(';', $rrule);
 	}
 	
 	/**
 	* Return the Stud.IP calendar wdays attribute of a event recurrence
 	*/
 	function _exportWdays ($value) {
-		$wdays_map = array("1" => "MO", "2" => "TU", "3" => "WE", "4" => "TH", "5" => "FR",
-				"6" => "SA", "7" => "SU");
+		$wdays_map = array('1' => 'MO', '2' => 'TU', '3' => 'WE', '4' => 'TH', '5' => 'FR',
+				'6' => 'SA', '7' => 'SU');
 		$wdays = array();
 		preg_match_all('/(\d)/', $value, $matches);
 		foreach ($matches[1] as $match) {
 			$wdays[] = $wdays_map[$match];
 		}
 		
-		return implode(",", $wdays);
+		return implode(',', $wdays);
 	}
+	
+	function _exportExdate ($value, $param) {
+		$exdates = array();
+		$date_times = explode(',', $value);
+		foreach ($date_times as $date_time) {
+			if ($param == 'DATE-TIME')
+				$exdates[] = $this->_exportDateTime($date_time);
+			else
+				$exdates[] = $this->_exportDate($date_time);
+		}
+		
+		return implode(',', $exdates);
+	}
+			
 	
 	/**
 	* Return the folded version of a line

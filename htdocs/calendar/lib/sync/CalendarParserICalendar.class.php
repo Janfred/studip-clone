@@ -50,19 +50,15 @@ class CalendarParserICalendar extends CalendarParser {
 		$this->type = "iCalendar";
 	}
 	
-	function numberOfEvents ($data) {
+	function getCount ($data) {
 		global $_calendar_error;
-		static $number_of_events;
 		
-		if (!isset($number_of_events)) {
-			if (!preg_match_all('/^BEGIN:VEVENT$/', $data, $matches)) {
-				$_calendar_error->throwError(ERROR_MESSAGE,
-						_("Die Datei enthält keine Termine."));
-			}
-			$number_of_events = sizeof($matches);
+		if (!preg_match_all('/(BEGIN:VEVENT)/', $data, $matches)) {
+			$_calendar_error->throwError(ERROR_MESSAGE,
+					_("Die Datei enthält keine Termine."));
 		}
 		
-		return $number_of_events;
+		return sizeof($matches[1]);
 	}
 
 	/**
@@ -77,8 +73,6 @@ class CalendarParserICalendar extends CalendarParser {
 		
 		// UTF-8 decoding
 		$text = utf8_decode($text);
-	//////////////////////////////////////////////////////////////
-//		$text = implode('', file('./icalout.ics'));
 		if (!preg_match('/(BEGIN:VCALENDAR(\r\n|\r|\n))([\W\w]*)(END:VCALENDAR\r?\n?)/', $text, $matches)) {
 			$_calendar_error->throwError(ERROR_CRITICAL,
 					_("Die Datei ist keine g&uuml;ltige iCalendar-Datei!"));
@@ -97,8 +91,7 @@ class CalendarParserICalendar extends CalendarParser {
 		}
 		
 		foreach ($matches[0] as $v_event) {
-			//////////////////////////////////////////////////////////////////////////////////////////////
-	//		echo "<br><b>VEVENT:</b><br><pre>$v_event</pre><br><br>";
+			$properties['CLASS'] = 'PRIVATE';
 			// Parse the remain attributes
 			if (preg_match_all('/(.*):(.*)(\r|\n)+/', $v_event, $matches)) {
 				$properties = array();
@@ -107,8 +100,7 @@ class CalendarParserICalendar extends CalendarParser {
 					$tag = $parts[1];
 					$value = $parts[4];
 					$params = array();
-					//////////////////////////////////////////////////////////////////////////////////////////
-			//		echo "<b>PROPERTY: $tag</b><pre>$property</pre>";
+					
 					if (!empty($parts[2])) {
 						preg_match_all('/;(([^;=]*)(=([^;]*))?)/', $parts[2], $param_parts);
 						foreach ($param_parts[2] as $key => $param_name) {
@@ -152,8 +144,8 @@ class CalendarParserICalendar extends CalendarParser {
 							$properties[$tag] = $this->_parseDateTime($value);
 							break;
 	
-						case 'DTEND':
 						case 'DTSTART':
+						case 'DTEND':
 						case 'DUE':
 						case 'RECURRENCE-ID':
 							if (array_key_exists('VALUE', $params)) {
@@ -291,10 +283,6 @@ class CalendarParserICalendar extends CalendarParser {
 							$properties[$tag] = trim($value);
 							break;
 					}
-					///////////////////////////////////////////////////////////////////////////////////////////
-		//			echo "parsed value:<pre>";
-		//			print_r($properties[$tag]);
-		//			echo "</pre>";
 				}
 				
 				if (!$properties['RRULE']['rtype'])
@@ -305,6 +293,15 @@ class CalendarParserICalendar extends CalendarParser {
 		
 				if (!$properties['LAST-MODIFIED'])
 					$properties['LAST-MODIFIED'] = $properties['CREATED'];
+				
+				if (!$properties['DTSTART'] || ($properties['EXDATE'] && !$properties['RRULE'])) {
+					$_calendar_error->throwError(ERROR_CRITICAL,
+							_("Die Datei ist keine g&uuml;ltige iCalendar-Datei!"));
+					return FALSE;
+				}
+				
+				if (!$properties['DTEND'])
+					$properties['DTEND'] = $properties['DTSTART'];
 				
 				$this->components[] = $properties;
 			}
@@ -473,14 +470,6 @@ class CalendarParserICalendar extends CalendarParser {
 	*/
 	function _parseRecurrence ($text) {
 		if (preg_match_all('/([A-Za-z]*?)=([^;]*);?/', $text, $matches, PREG_SET_ORDER)) {
-			/////////////////////////////////////////////////////////////////////////////////////
-	//		echo "<pre>";
-	//		echo "|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||";
-	//		echo "|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||";
-	//		print_r($matches);
-	//		echo "</pre>";
-			// if there are any unsupported combinations of recurrence rules
-			$trouble_flag = FALSE;
 			$r_rule = array();
 			
 			foreach ($matches as $match) {
@@ -552,10 +541,6 @@ class CalendarParserICalendar extends CalendarParser {
 		$wdays = "";
 		$sinterval = NULL;
 		foreach ($matches as $match) {
-		////////////////////////////////////////////////////////////////////////////////////////////
-//		echo "<pre>";
-	//	print_r($match);
-		//echo "</pre>";
 			$wdays .= $wdays_map[$match[2]];
 			if ($match[1]) {
 				if (!$sinterval && ((int) $match[1]) > 0 || $match[1] == '-1') {
@@ -594,12 +579,5 @@ class CalendarParserICalendar extends CalendarParser {
 	}
 	
 }
-
-
-//////////////////////////////////////////////////////////////////////////////////
-//page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
-//$parser = new CalendarParserICalendar();
-//$parser->parse();
-//page_close();
 
 ?>

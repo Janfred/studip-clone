@@ -48,7 +48,7 @@ class CalendarImport {
 		init_error_handler('_calendar_error');
 	}
 	
-	function numberOfEvents () {
+	function getCount () {
 	
 	}
 	

@@ -46,18 +46,26 @@ class CalendarSynchronizer {
 	
 	var $_import;
 	var $_export;
+	var $count;
+	var $max_events;
 	
-	function CalendarSynchronizer (&$import, &$export) {
+	function CalendarSynchronizer (&$import, &$export, $max_events = 0) {
+		global $CALENDAR_MAX_EVENTS;
 		
 		// initialize error handling
 		init_error_handler('_calendar_error');
 		
 		$this->_import =& $import;
 		$this->_export =& $export;
+		
+		if ($max_events == 0)
+			$this->max_events = $CALENDAR_MAX_EVENTS;
+		else
+			$this->max_events = $max_events;
 	}
 	
 	function synchronize ($compare_fields = NULL) {
-		global $user, $_calendar_error;
+		global $_calendar_error;
 		
 		// export to extern CUA
 		$ext = array();
@@ -66,11 +74,11 @@ class CalendarSynchronizer {
 		
 		$this->_import->importIntoObjects();
 		$events = $this->_import->getObjects();
-	
+		$this->count = sizeof($events);
+		
 		// get events from database
 		$db =& new CalendarDriver();
-		$db->openDatabaseForReading($user->id, $start = 0, $end = 2114377200,
-			'CALENDAR_EVENTS');
+		$db->openDatabase('EVENTS', 'CALENDAR_EVENTS');
 		
 		$sentinel = '#';
 		$in_to_ext = TRUE;
@@ -93,7 +101,7 @@ class CalendarSynchronizer {
 				if (!$ex->properties['LAST-MODIFIED']) {
 					$_calendar_error->throwError(ERROR_CRITICAL,
 							_("Die Datei kann nicht mit dem Stud.IP-Terminkalender synchronisiert werden."));
-					return FALSE; //throw (fatal-)error object
+					return FALSE;
 				}
 				
 				// we are lucky, because we have the same UID and LAST-MODIFIED, easy...
@@ -133,20 +141,23 @@ class CalendarSynchronizer {
 		// every event left over in $events is not in Stud.IP, so import the rest
 		$int = array_merge($int, $events);
 		
-		// debug
-/*		echo "<br>importieren MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\n";
-		echo "<pre>";
-		print_r($int);
-		echo "exportieren MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\n";
-		print_r($ext);
-		echo "</pre>";
-		echo "<br><br>Durchl&auml;ufe: $d -------- ";
-*/
+		if (sizeof($int) > $this->max_events) {
+			$_calendar_error->throwError(ERROR_CRITICAL,
+					_("Die zu synchronisierende Datei enth&auml;lt zu viele Termine."));
+			return FALSE;
+		}
+		
+		$this->count += $db->getCount();
+		
 		// OK, work is done, import and export the events
 		$db->writeObjectsIntoDatabase($int, 'REPLACE');
 		$this->_export->exportFromObjects($ext);
 	}
 	
+	function getCount () {
+	
+		return $this->count;
+	}
 }
 
 ?>

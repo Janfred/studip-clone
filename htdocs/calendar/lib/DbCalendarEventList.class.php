@@ -95,7 +95,7 @@ class DbCalendarEventList {
 	}
 	
 	// public
-	function nextEvent() {
+	function nextEvent () {
 		if(list(,$ret) = each($this->events));
 			return $ret;
 		return FALSE;
@@ -139,7 +139,6 @@ class DbCalendarEventList {
 						'DESCRIPTION'   => $db->f('description'),
 						'CLASS'         => 'PRIVATE',
 						'SEMNAME'       => $db->f('Name'),
-						'UID'           => SeminarEvent::getUid($db->f('termin_id')),
 						'CREATED'       => $db->f('mkdate'),
 						'LAST-MODIFIED' => $db->f('chdate')),
 						$db->f('range_id'));

@@ -8,12 +8,12 @@ require_once($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR
 
 class DbCalendarEvent extends CalendarEvent {
 	
-	function DbCalendarEvent ($id, $properties = NULL) {
-	
+	function DbCalendarEvent ($id = '', $properties = NULL) {
 		global $user, $PERS_TERMIN_KAT, $TERMIN_TYP;
+		
 		$this->user_id = $user->id;
 				
-		if (!$properties) {
+		if ($id != '' && !$properties) {
 			$this->restore($id);
 		}
 		else {

@@ -43,6 +43,7 @@ class CalendarExport {
 	
 	var $_writer;
 	var $export;
+	var $count;
 	
 	function CalendarExport (&$writer) {
 		
@@ -51,21 +52,20 @@ class CalendarExport {
 		$this->_writer =& $writer;
 	}
 	
-	function exportFromDatabase ($range_id, $start = 0, $end = 2114377200,
-			$event_types = 'CALENDAR_EVENTS', $except = NULL) {
+	function exportFromDatabase ($range_id = '', $start = 0, $end = 2114377200,
+			$event_types = 'CALENDAR_EVENTS', $sem_id, $except = NULL) {
 		global $_calendar_error;
 		
 		$export_driver =& new CalendarDriver();
-		$export_driver->openDatabaseForReading($range_id, $start, $end, $event_types, $except);
+		$export_driver->openDatabase('EVENTS', $event_types, $start,
+				$end, $except, $range_id, $sem_id);
 		
 		$this->_export($this->_writer->writeHeader());
 		
-		while ($properties = $export_driver->nextProperties()) {
-			if ($properties['RRULE']['rtype'] == 'SINGLE')
-				unset($properties['RRULE']);
-						
-			$this->_export($this->_writer->write($properties));
+		while ($event = $export_driver->nextObject()) {		
+			$this->_export($this->_writer->write($event));
 		}
+		$this->count = $export_driver->getCount();
 		
 		if ($export_driver->getCount() == 0) {
 			$_calendar_error->throwError(ERROR_MESSAGE,
@@ -84,20 +84,12 @@ class CalendarExport {
 		
 		$this->_export($this->_writer->writeHeader());
 		
-		foreach ($events as $event) {
-			$properties = $event->getProperty();
-			
-			if ($properties["RRULE"]["rtype"] != "SINGLE")
-				$properties["RRULE"]["expire"] = $properties["EXPIRE"];
-			else
-				unset($properties["RRULE"]);
-			unset($properties["EXPIRE"]);
-			
-			$properties["LAST-MODIFIED"] = $event->getChangeDate();
-			$properties["UID"] = CalendarEvent::getUid($event->getId());
-			
-			$this->_export($this->_writer->write($properties));
+		$count = 0;
+		foreach ($events as $event) {			
+			$this->_export($this->_writer->write($event));
+			$count++;
 		}
+		$this->count = $count;
 		
 		if (!sizeof($events)) {
 			$_calendar_error->throwError(ERROR_MESSAGE,
@@ -119,6 +111,11 @@ class CalendarExport {
 	function _export ($string) {
 		
 		$this->export .= $string;
+	}
+	
+	function getCount () {
+	
+		return $this->count;
 	}
 	
 }

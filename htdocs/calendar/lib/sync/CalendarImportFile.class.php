@@ -124,9 +124,9 @@ class CalendarImportFile extends CalendarImport {
 	/**
 	*
 	*/
-	function numberOfEvents () {
+	function getCount () {
 	
-		return $this->_parser->numberOfEvents();
+		return $this->_parser->getCount($this->getContent());
 	}
 	
 	/**

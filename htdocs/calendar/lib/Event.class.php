@@ -44,6 +44,7 @@ class Event {
 			$this->setChangeDate($this->getMakeDate());
 			$this->chng_flag = TRUE;
 		}
+		$this->properties['DTSTAMP'] = time();
 	}
 	
 	function getProperty ($property_name = "") {
@@ -111,6 +112,13 @@ class Event {
 		return $this->properties['CATEGORIES'];
 	}
 	
+	/**
+	* Returns the Stud.IP build in category as integer value.
+	* See config.inc.php $PERS_TERMIN_KAT.
+	*
+	* @access public
+	* @return int the categories
+	*/
 	function getStudipCategory () {
 		return $this->properties['STUDIP_CATEGORY'];
 	}

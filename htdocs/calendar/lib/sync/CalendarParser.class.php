@@ -54,7 +54,7 @@ class CalendarParser {
 		init_error_handler('_calendar_error');
 	}
 	
-	function numberOfEvents () {
+	function getCount ($data) {
 	
 		return FALSE;
 	}
@@ -62,8 +62,12 @@ class CalendarParser {
 	function parseIntoDatabase ($data, $ignore) {
 	
 		$database =& new CalendarDriver();
-		$this->parseIntoObjects($data, $ignore);
-		$database->writeObjectsIntoDatabase($this->events, 'INSERT_IGNORE');
+		if ($this->parseIntoObjects($data, $ignore)) {
+			$database->writeObjectsIntoDatabase($this->events, 'INSERT_IGNORE');
+			return TRUE;
+		}
+		
+		return FALSE;
 	}
 	
 	function parseIntoObjects ($data, $ignore) {
@@ -72,11 +76,14 @@ class CalendarParser {
 		if ($this->parse($data, $ignore)) {
 			foreach ($this->components as $properties)
 				$this->events[] =& new CalendarEvent($properties);
+			
+			return TRUE;
 		}
-		else {
-			$_calendar_error->throwError(ERROR_FATAL,
-					_("Die Import-Datei konnte nicht verarbeitet werden!"), __FILE__, __LINE__);
-		}
+		
+		$_calendar_error->throwError(ERROR_FATAL,
+				_("Die Import-Datei konnte nicht verarbeitet werden!"), __FILE__, __LINE__);
+		
+		return FALSE;
 	}
 	
 	function getType () {

@@ -32,7 +32,7 @@ class CalendarEvent extends Event {
 	var $user_id;
 	var $dev = FALSE; // TRUE wenn Tagestermin (boolean)	
 	
-	function CalendarEvent ($properties, $id = "") {
+	function CalendarEvent ($properties, $id = '') {
 		global $user, $PERS_TERMIN_KAT, $TERMIN_TYP;
 		$this->user_id = $user->id;
 		
@@ -43,7 +43,7 @@ class CalendarEvent extends Event {
 		
 		$this->id = $id;
 		if (!$this->properties['UID'])
-			$this->properties['UID'] = $this->getUid($this->id);
+			$this->properties['UID'] = $this->getUid();
 		// privater Termin als Standard
 		if($this->properties['CLASS'] === '')
 			$this->properties['CLASS'] = 'PRIVATE';
@@ -55,26 +55,32 @@ class CalendarEvent extends Event {
 	}
 	
 	/**
-	* Returns the name of the category.
+	* Returns the names of the categories.
 	*
 	* @access public
 	* @return String the name of the category
 	*/
-	function getCategoryName () {
+	function toStringCategories () {
 		global $PERS_TERMIN_KAT;
 		
+		$categories = array();
 		if ($this->properties['STUDIP_CATEGORY'])
 			$categories[] = $PERS_TERMIN_KAT[$this->properties['STUDIP_CATEGORY']]['name'];
-		
+			
+		if ($this->properties['CATEGORIES']){
 		$ext_categories = explode(',', $this->properties['CATEGORIES']);
 		foreach ($ext_categories as $ext_category)
 			$categories[] = trim($ext_category);
+		}
+		if (sizeof($categories))
+			return implode(', ', $categories);
 		
-		return implode(', ', $categories);
+		return '';
 	}
 	
 	function isDayEvent () {
-		return $this->dev;
+		return ($this->dev || (date('His', $this->getStart()) == '000000' &&
+				date('Hi', $this->getEnd()) == '2359'));
 	}
 	
 	function setDayEvent ($is_dev) {
@@ -120,6 +126,32 @@ class CalendarEvent extends Event {
 			$this->chng_flag = TRUE;
 	}
 	
+	function toStringPriority () {
+		
+		switch ($this->properties['PRIORITY']) {
+			case 1:
+				return _("hoch");
+			case 2:
+				return _("mittel");
+			case 3:
+				return _("niedrig");
+			default:
+				return _("keine Angabe");
+		}
+	}
+	
+	function toStringAccessibility () {
+		
+		switch ($this->properties['CLASS']) {
+			case 'PUBLIC':
+				return _("&ouml;ffentlich");
+			case 'CONFIDENTIAL':
+				return _("vertraulich");
+			default:
+				return _("privat");
+		}
+	}
+	
 	function setRepeat ($r_rule) {
 	
 		$this->properties['RRULE'] = $this->createRepeat($r_rule,
@@ -139,7 +171,8 @@ class CalendarEvent extends Event {
 		$duration = (int) ((mktime(12, 0, 0, date('n', $end), date('j', $end), date('Y', $end), 0)
 									- mktime(12, 0, 0, date('n', $start), date('j', $start), date('Y', $start), 0))
 									/ 86400) + 1;
-		
+		if (!isset($r_rule['count']))
+			$r_rule['count'] = 0;
 		// Hier wird auch der 'genormte Timestamp' (immer 12.00 Uhr, ohne Sommerzeit) ts berechnet.
 		switch ($r_rule['rtype']) {
 		
@@ -154,7 +187,7 @@ class CalendarEvent extends Event {
 				$ts = mktime(12, 0, 0, date('n', $start), date('j', $start), date('Y', $start), 0);
 				if ($r_rule['count']) {
 					$r_rule['expire'] = mktime(23, 59, 59, date('n', $start), date('j', $start)
-							+ $r_rule['count'] * $r_rule['linterval'] + 1, date('Y', $start), 0);
+							+ ($r_rule['count'] - 1) * $r_rule['linterval'], date('Y', $start), 0);
 				}
 				if (!$r_rule['linterval'])
 					$rrule = array($ts, 1, 0, '', 0, 0, 'DAILY', $duration);
@@ -164,44 +197,44 @@ class CalendarEvent extends Event {
 				
 			case 'WEEKLY':
 				// ts ist hier der Montag der ersten Wiederholungswoche 12:00:00 Uhr
-				$ts_start = mktime(12, 0, 0, date('n', $start), date('j', $start), date('Y', $start), 0);
 				if (!$r_rule['linterval'] && !$r_rule['wdays']) {
-					$ts = $ts_start + (604800 - (strftime('%u', $start) - 1) * 86400);
+					$ts = mktime(12, 0, 0, date('n', $start), date('j', $start) +
+							(7 - (strftime('%u', $start) - 1)), date('Y', $start), 0);
 					if ($r_rule['count']) {
-						$r_rule['expire'] = $ts_start  + 604800 * ($r_rule['count'] - 1);
-						$r_rule['expire'] = mktime(23, 59, 59, date('n', $r_rule['expire']),
-								date('j', $r_rule['expire']), date('Y', $r_rule['expire']));
+						$r_rule['expire'] = mktime(23, 59, 59, date('n', $start), date('j', $start) +
+								(7 * ($r_rule['count'] - 1)), date('Y', $start));
 					}
 					$rrule = array($ts, 1, 0, strftime('%u', $start), 0, 0, 'WEEKLY', $duration);
 				}
 				else if (!$r_rule['wdays']) {
-					$ts = $ts_start + ($r_rule['linterval'] * 604800 - (strftime('%u', $start) - 1) * 86400);
+					$ts = mktime(12, 0, 0, date('n', $start), date('j', $start) +
+							($r_rule['linterval'] * 7 - (strftime('%u', $start) - 1)), date('Y', $start), 0);
 					if ($r_rule['count']) {
-						$r_rule['expire'] = $ts_start  + 604800 * ($r_rule['count'] - 1) * $r_rule['linterval'];
-						$r_rule['expire'] = mktime(23, 59, 59, date('n', $r_rule['expire']),
-								date('j', $r_rule['expire']), date('Y', $r_rule['expire']));
+						$r_rule['expire'] = mktime(23, 59, 59, date('n', $start), date('j', $start) +
+								($r_rule['linterval'] * 7 * ($r_rule['count'] - 1)), date('Y', $start));
 					}
 					$rrule = array($ts, $r_rule['linterval'], 0, strftime('%u', $start), 0, 0, 'WEEKLY', $duration);
 				}
 				else {
-					$r_rule['count'] = 4;
-					$ts = $ts_start + ($r_rule['linterval'] * 604800 - (strftime('%u', $start) - 1) * 86400);
+					$ts = mktime(12, 0, 0, date('n', $start), date('j', $start) +
+							($r_rule['linterval'] * 7 - (strftime('%u', $start) - 1)), date('Y', $start), 0);
 					if ($r_rule['count']) {
 						$diff = 0;
 						// last week day of the recurrence set
 						for ($i = 0; $i < strlen($r_rule['wdays']); $i++) {
 							$wdays[] = $r_rule['wdays']{$i};
-							if (intval($r_rule['wdays']{$i}) > strftime("%u", $start))
+							if (intval($r_rule['wdays']{$i}) >= intval(strftime("%u", $start)))
 								$diff++;
 						}
-						
 						sort($wdays, SORT_NUMERIC);
-						$last_wday = $wdays[sizeof($wdays) - ($r_rule['count'] % sizeof($wdays)) - 1];
-						$w = (round(($r_rule['count'] - $diff - 1) / sizeof($wdays))) * $r_rule['linterval'];
-						$r_rule['expire'] = $ts_start + 604800 * $w
-								+ ($last_wday - 1) * 86400;
-						$r_rule['expire'] = mktime(23, 59, 59, date('n', $r_rule['expire']),
-								date('j', $r_rule['expire']), date('Y', $r_rule['expire']));
+						
+						$count = $r_rule['count'] - $diff + 1;
+						$rest = $count % sizeof($wdays);
+						$faktor = ($count - $rest) / sizeof($wdays);
+						$offset = 7 * $faktor * $r_rule['linterval'] + $rest;
+						
+						$r_rule['expire'] = mktime(23, 59, 59, date('n', $ts),
+								date('j', $ts) + $offset, date('Y', $ts));
 					}
 					$rrule = array($ts, $r_rule['linterval'], 0, $r_rule['wdays'], 0, 0, 'WEEKLY', $duration);
 				}
@@ -261,6 +294,11 @@ class CalendarEvent extends Event {
 					$ts = $adate;
 					$rrule = array($ts, $r_rule['linterval'], $r_rule['sinterval'], $r_rule['wdays'], 0, 0, 'MONTHLY',$duration);
 				}
+				
+				if ($r_rule['count']) {
+					$r_rule['expire'] =  mktime(23, 59, 59, date('n', $ts) + $r_rule['linterval']
+							* ($r_rule['count'] - 1), date('j', $ts), date('Y', $ts));
+				}
 				break;
 				
 			case 'YEARLY':
@@ -297,16 +335,20 @@ class CalendarEvent extends Event {
 						$ts = mktime(12, 0, 0, $r_rule['month'], $aday, date('Y', $start) + 1, 0);
 					$rrule = array($ts, 1, $r_rule['sinterval'], $r_rule['wdays'], $r_rule['month'], 0, 'YEARLY', $duration);
 				}
+				
+				if ($r_rule['count']) {
+					$r_rule['expire'] =  mktime(23, 59, 59, date('n', $ts), date('j', $ts),
+							date('Y', $ts) + $r_rule['count'] - 1);
+				}
 				break;
 				
 			default :
 				$ts = mktime(12, 0, 0, date('n', $start), date('j', $start), date('Y', $start), 0);
 				$rrule = array($ts, 0, 0, '', 0, 0, 'SINGLE', $duration);
+				$r_rule['count'] = 0;
 		}
 		
-		if (!$r_rule['rtype'] == 'SINGLE')
-			$r_rule['expire'] = 0;
-		elseif (!$r_rule['expire'])
+		if (!$r_rule['expire'])
 			$r_rule['expire'] = 2114377200;
 		
 		return array(
@@ -318,12 +360,13 @@ class CalendarEvent extends Event {
 				'day' 			=> $rrule[5],
 				'rtype' 		=> $rrule[6],
 				'duration' 	=> $rrule[7],
+				'count'     => $r_rule['count'],
 				'expire'    => $r_rule['expire']);
 	}		
 	
-	function getUid ($id) {
+	function getUid () {
 	
-		return "Stud.IP-$id@{$_SERVER['SERVER_NAME']}";
+		return "Stud.IP-{$this->id}@{$_SERVER['SERVER_NAME']}";
 	}
 	
 	/**
@@ -470,6 +513,27 @@ class CalendarEvent extends Event {
 		}
 		
 		return $text;
+	}
+	
+	function getExceptions () {
+		
+		if ($this->properties['EXDATE'] != '') {
+			$exceptions = explode(',', $this->properties['EXDATE']);
+			if (is_array($exceptions)) {
+				sort($exceptions, SORT_NUMERIC);
+				return $exceptions;
+			}
+		}
+		
+		return array();
+	}
+	
+	function setExceptions ($exceptions) {
+		
+		if (is_array($exceptions)) {
+			sort(array_unique($exceptions), SORT_NUMERIC);
+			$this->properties['EXDATE'] = implode(',', $exceptions);
+		}
 	}
 	
 } // class Termin
