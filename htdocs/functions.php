@@ -498,14 +498,15 @@ function get_fullname($user_id = "", $format = "full" , $htmlready = true){
 	$author = _("unbekannt");
 	if (!($user_id)) $user_id=$user->id;
 	if (isset($cache[md5($user_id . $format)])){
-		return $cache[md5($user_id . $format)];
+		return ($htmlready ? htmlReady($cache[md5($user_id . $format)]) : $cache[md5($user_id . $format)]);
 	} else {
 		$db=new DB_Seminar;
 		$db->query ("SELECT " . $_fullname_sql[$format] . " AS fullname FROM auth_user_md5 a LEFT JOIN user_info USING(user_id) WHERE a.user_id = '$user_id'");
 		if ($db->next_record()){
-			$author = ($htmlready)? htmlReady($db->f('fullname')) : $db->f('fullname');
+			$author = $db->f('fullname');
 		}
-		return ($cache[md5($user_id . $format)] = $author);
+		$cache[md5($user_id . $format)] = $author;
+		return ($htmlready ? htmlReady($cache[md5($user_id . $format)]) : $cache[md5($user_id . $format)]);
 	}
  }
 
@@ -517,20 +518,21 @@ function get_fullname($user_id = "", $format = "full" , $htmlready = true){
 * @return		string
 *
 */
-function get_fullname_from_uname($uname = "", $format = "full"){
+function get_fullname_from_uname($uname = "", $format = "full", $htmlready = true){
 	static $cache;
 	global $auth,$_fullname_sql;
 	$author = _("unbekannt");
 	if (!$uname) $uname=$auth->auth["uname"];
 	if (isset($cache[md5($uname . $format)])){
-		return $cache[md5($uname . $format)];
+		return ($htmlready ? htmlReady($cache[md5($uname . $format)]) : $cache[md5($uname . $format)]);
 	} else {
 		$db=new DB_Seminar;
 		$db->query ("SELECT " . $_fullname_sql[$format] . " AS fullname FROM auth_user_md5 LEFT JOIN user_info USING(user_id) WHERE username = '$uname'");
 		if ($db->next_record()){
-			$author = htmlReady($db->f('fullname'));
+			$author = $db->f('fullname');
 		}
-		return ($cache[md5($uname . $format)] = $author);
+		$cache[md5($uname . $format)] = $author;
+		return ($htmlready ? htmlReady($cache[md5($uname . $format)]) : $cache[md5($uname . $format)]);
 	}
  }
  
