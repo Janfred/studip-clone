@@ -477,7 +477,7 @@ function ForumIcon ($forumposting) {
 			$forumposting["icon"] =	"<img src=\"".$bild."\" $addon>";	
 	}
 	
-	if ($cmd=="move" && $rechte)  // ein Beitrag wird verschoben, gelbe Pfeile davor
+	if ($cmd=="move" && $rechte && $topic_id != $forumposting["id"] )  // ein Beitrag wird verschoben, gelbe Pfeile davor
 		$forumposting["icon"] =	 "<a href=\"".$PHP_SELF."?target=Thema&move_id=".$topic_id."&parent_id=".$forumposting["id"]."\">"
 					."<img src=\"pictures/move.gif\" border=0 " . tooltip(_("Postings in diesen Ordner verschieben")) . "></a>"
 					.$forumposting["icon"];
@@ -1432,7 +1432,7 @@ function DisplayFolders ($open=0, $update="", $zitat="") {
 	
 			$forumposting = printposting($forumposting);
 		
-			if ($forum["view"] == "tree" && $forumposting["openclose"]=="open") {
+			if ($forum["view"] == "tree" && $forumposting["openclose"]=="open" && $cmd != "move") {
 				DisplayKids ($forumposting);
 			}
 		}
