@@ -180,7 +180,7 @@ function print_seminar_content($semid,$my_obj_values, $type="seminar") {
   
   // Termine
   if ($my_obj_values["neuetermine"])
-		echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to=dates.php\"><img src='pictures/icon-uhr2.gif' border=0 ".tooltip(sprintf(_("%s Termine, %s neue"), $my_obj_values["termine"], $my_obj_values["neuetermine"]))."></a>";
+		echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to=dates.php#a\"><img src='pictures/icon-uhr2.gif' border=0 ".tooltip(sprintf(_("%s Termine, %s neue"), $my_obj_values["termine"], $my_obj_values["neuetermine"]))."></a>";
   elseif ($my_obj_values["termine"])
 		echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to=dates.php\"><img src='pictures/icon-uhr.gif' border=0 ".tooltip(sprintf(_("%s Termine"), $my_obj_values["termine"]))."></a>";
   else
