@@ -193,15 +193,16 @@ class StudipRangeTree {
 	}
 	
 	/**
-	* checks if item is a kid (has a parent) :)
+	* checks if given item is a kid or kidkid...of given ancestor
 	*
-	* hmm, is this useful ? whatsoever...
+	* checks if given item is a kid or kidkid...of given ancestor
 	* @access	public
+	* @param	string	$ancestor_id
 	* @param	string	$item_id
 	* @return	boolean
 	*/
-	function isKid($item_id){
-		return ($this->tree_data[$item_id]['parent_id']) ? true : false;
+	function isChildOf($ancestor_id,$item_id){
+		return in_array($item_id,$this->getKidsKids($ancestor_id));
 	}
 	
 	/**

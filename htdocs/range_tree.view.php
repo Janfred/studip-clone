@@ -40,10 +40,14 @@ $_views["TREE_FAK_STATUS"] = array("pk"=>"","temp_table_type"=>"HEAP",
 $_views["TREE_UPD_PRIO"] = array("query" => "UPDATE range_tree SET priority=! WHERE item_id=?");
 $_views["TREE_INS_ITEM"] = array("query" => "INSERT INTO range_tree (item_id,parent_id,name,priority,studip_object,studip_object_id) VALUES (?,?,?,!,?,?)");
 $_views["TREE_UPD_ITEM"] = array("query" => "UPDATE range_tree SET name=?, studip_object=?, studip_object_id=? WHERE item_id=?");
+$_views["TREE_MOVE_ITEM"] = array("query" => "UPDATE range_tree SET parent_id=?, priority=! WHERE item_id=?");
 $_views["TREE_DEL_ITEM"] = array("query" => "DELETE FROM range_tree WHERE item_id IN (&)");
 
 $_views["TREE_SEARCH_INST"] = array("query" => "SELECT Name,Institut_id FROM Institute WHERE Name LIKE '%!%'");
 $_views["TREE_SEARCH_FAK"] = array("query" => "SELECT Name,Fakultaets_id FROM Fakultaeten WHERE Name LIKE '%!%'");
 
+$_views["CAT_UPD_PRIO"] = array("query" => "UPDATE kategorien SET priority=!,chdate=UNIX_TIMESTAMP() WHERE kategorie_id=?");
+$_views["CAT_UPD_CONTENT"] = array("query" => "UPDATE kategorien SET name=?, content=?, chdate=UNIX_TIMESTAMP() WHERE kategorie_id=?");
+$_views["CAT_INS_ALL"] = array("query" => "INSERT INTO kategorien (kategorie_id,range_id,name,content,priority,mkdate,chdate)VALUES (?,?,?,?,!,UNIX_TIMESTAMP(),UNIX_TIMESTAMP())");
 
 							?>
