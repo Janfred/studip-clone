@@ -214,7 +214,16 @@ class DbSnapshot {
 			$sortfunc = ($order=="ASC") ? "asort" : "arsort";
 			$sortfunc($sortfields,$stype);
 		} else {
-			uasort($sortfields, 'strnatcasecmp');
+			uasort($sortfields, create_function('$a,$b','
+					$a = strtolower($a);
+					$a = str_replace("ä","ae",$a);
+					$a = str_replace("ö","oe",$a);
+					$a = str_replace("ü","ue",$a);
+					$b = strtolower($b);
+					$b = str_replace("ä","ae",$b);
+					$b = str_replace("ö","oe",$b);
+					$b = str_replace("ü","ue",$b);
+					return strnatcasecmp($a,$b);'));
 			if ($order == "DESC"){
 				$sortfields = array_reverse($sortfields, TRUE);
 			}
