@@ -28,7 +28,7 @@ function link_seminar_modules($seminar_id)
 function link_use_module($co_inst, $co_id)
 {
 	global $ABSOLUTE_PATH_ILIAS;
-	return $ABSOLUTE_PATH_ILIAS . "course.php?co_id=$co_id&co_inst=$co_inst" . get_ilias_logindata();
+	return $ABSOLUTE_PATH_ILIAS . "studip2ilias.php?rdmode=use&co_id=$co_id&co_inst=$co_inst" . get_ilias_logindata();
 }
 
 function link_edit_module($co_inst, $co_id)

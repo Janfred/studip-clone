@@ -27,7 +27,7 @@ function get_ilias_logindata()
 {
 	global $auth, $username_prefix;
 //	return "&acct_name=" . $username_prefix . $auth->auth["uname"] . "&acct_pass=" . get_password_md5()."&SID=" . md5(uniqid(rand())) . "&USER_ENV=" . serialize(array("id" => get_ilias_user_id($auth->auth["uname"])));
-	return "&acct_name=" . $username_prefix . $auth->auth["uname"] . "&acct_pass=" . get_password_md5(). "&submitbtn=%20Login%20";
+	return "&acct_name=" . $username_prefix . $auth->auth["uname"] . "&u_id=" . get_ilias_user_id($auth->auth["uname"]). "&set_lang=de";
 }
 
 function new_ilias_user($benutzername, $passwort, $geschlecht, $vorname, $nachname, $title_front, $institution, $telefon, $email, $status, $preferred_language)
