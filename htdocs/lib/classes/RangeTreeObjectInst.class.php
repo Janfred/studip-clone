@@ -46,6 +46,7 @@ class RangeTreeObjectInst extends RangeTreeObject {
 		$this->initItemDetail();
 		$this->item_data_mapping = array('Strasse' => 'Straße', 'Plz' => 'Ort', 'telefon' => 'Tel.', 'fax' => 'Fax',
 										'url' => 'Homepage', 'email' => 'Kontakt');
+		$this->item_data['type_num'] = $this->item_data['type'];
 		$this->item_data['type'] = ($this->item_data['type']) ? $GLOBALS['INST_TYPE'][$this->item_data['type']]['name'] : $GLOBALS['INST_TYPE'][1]['name'];
 		
 	}
