@@ -24,32 +24,38 @@ $perm->check("user");
 ob_start(); //Outputbuffering für maximal Performance
 
 function get_my_sem_values(&$my_sem) {
-	 global $user;
-	 $db2 = new DB_seminar;
-// Postings
+	global $user;
+	
+	$db2 = new DB_seminar;
+
+	// Postings
 	$db2->query("SELECT b.Seminar_id,count(topic_id) as count, count(IF((chdate > b.loginfilenow AND user_id !='".$user->id."'),a.topic_id,NULL)) AS neue 
 				FROM loginfilenow_".$user->id." b  LEFT JOIN px_topics a USING (Seminar_id) GROUP BY b.Seminar_id");
 	while($db2->next_record()) {
-		$my_sem[$db2->f("Seminar_id")]["neuepostings"]=$db2->f("neue");
-		$my_sem[$db2->f("Seminar_id")]["postings"]=$db2->f("count");
+		if ($my_sem[$db2->f("Seminar_id")]["modules"]["forum"]) {
+			$my_sem[$db2->f("Seminar_id")]["neuepostings"]=$db2->f("neue");
+			$my_sem[$db2->f("Seminar_id")]["postings"]=$db2->f("count");
+		}
 	}
-
-//dokumente
+	
+	//dokumente
 	$db2->query("SELECT b.Seminar_id,count(dokument_id) as count, count(IF((chdate > b.loginfilenow AND user_id !='".$user->id."'),a.dokument_id,NULL)) AS neue 
 				FROM loginfilenow_".$user->id." b  LEFT JOIN dokumente a USING (Seminar_id) GROUP BY b.Seminar_id");
 	while($db2->next_record()) {
-		$my_sem[$db2->f("Seminar_id")]["neuedokumente"]=$db2->f("neue");
-		$my_sem[$db2->f("Seminar_id")]["dokumente"]=$db2->f("count");
+		if ($my_sem[$db2->f("Seminar_id")]["modules"]["documents"]) {
+			$my_sem[$db2->f("Seminar_id")]["neuedokumente"]=$db2->f("neue");
+			$my_sem[$db2->f("Seminar_id")]["dokumente"]=$db2->f("count");
+		}
 	}
 
-//News
+	//News
 	$db2->query("SELECT b.Seminar_id,count(IF(date < UNIX_TIMESTAMP(),range_id,NULL)) as count, count(IF((date < UNIX_TIMESTAMP() AND date > b.loginfilenow AND user_id !='".$user->id."'),range_id,NULL)) AS neue 
 				FROM loginfilenow_".$user->id." b  LEFT JOIN news_range ON (b.Seminar_id=range_id) LEFT JOIN news  USING(news_id) GROUP BY b.Seminar_id");
 	while($db2->next_record()) {
 		$my_sem[$db2->f("Seminar_id")]["neuenews"]=$db2->f("neue");
 		$my_sem[$db2->f("Seminar_id")]["news"]=$db2->f("count");
 	}
-// Literatur?
+	// Literatur?
 	$db2->query("SELECT b.Seminar_id,IF(literatur !='' OR links != '',1,0) AS literatur,
 			IF((chdate > b.loginfilenow AND user_id !='".$user->id."' AND (literatur !='' OR links != '')),1,0) AS neue 
 			FROM loginfilenow_".$user->id." b  LEFT JOIN literatur ON (range_id = b.Seminar_id)");
@@ -120,11 +126,12 @@ function print_seminar_content($semid,$my_sem_values) {
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
-require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php");			 // Klarnamen fuer den Veranstaltungsstatus
-require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");			 // htmlReady fuer die Veranstaltungsnamen
-require_once ("$ABSOLUTE_PATH_STUDIP/dates.inc.php");			 // Semester-Namen fuer Admins
-require_once ("$ABSOLUTE_PATH_STUDIP/admission.inc.php");		//Funktionen der Teilnehmerbegrenzung
-require_once $ABSOLUTE_PATH_STUDIP."messaging.inc.php";
+require_once ($ABSOLUTE_PATH_STUDIP."config.inc.php");			// Klarnamen fuer den Veranstaltungsstatus
+require_once ($ABSOLUTE_PATH_STUDIP."visual.inc.php");			// htmlReady fuer die Veranstaltungsnamen
+require_once ($ABSOLUTE_PATH_STUDIP."dates.inc.php");			// Semester-Namen fuer Admins
+require_once ($ABSOLUTE_PATH_STUDIP."admission.inc.php");		// Funktionen der Teilnehmerbegrenzung
+require_once ($ABSOLUTE_PATH_STUDIP."messaging.inc.php");
+require_once ($ABSOLUTE_PATH_STUDIP."/lib/classes/Modules.class.php");	// modul-config class
 
 if ($GLOBALS['CHAT_ENABLE']){
 	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php"; 
@@ -139,7 +146,7 @@ if ($GLOBALS['ILIAS_CONNECT_ENABLE']){
 $cssSw = new cssClassSwitcher;									// Klasse für Zebra-Design
 $cssSw->enableHover();
 $db = new DB_Seminar;
-
+$Modules = new Modules;
 
 // we are defintely not in an lexture or institute
 closeObject();
@@ -219,11 +226,10 @@ if ($cmd=="kill_admission") {
 }
 
 // Update der Gruppen
-
-	  if ($gruppesent=="1")
-	  {for ($gruppe; $key = key($gruppe); next($gruppe))
-			$db->query ("UPDATE seminar_user SET gruppe = '$gruppe[$key]' WHERE Seminar_id = '$key' AND user_id = '$user->id'");
-	}
+if ($gruppesent=="1"){
+	for ($gruppe; $key = key($gruppe); next($gruppe))
+		$db->query ("UPDATE seminar_user SET gruppe = '$gruppe[$key]' WHERE Seminar_id = '$key' AND user_id = '$user->id'");
+}
 
 
 //Anzeigemodul fuer eigene Seminare (nur wenn man angemeldet und nicht root oder admin ist!)
@@ -280,7 +286,8 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 		ob_start();
 		while ($db->next_record()) {
 			$my_sem[$db->f("Seminar_id")]=array("name" => $db->f("Name"),"status" => $db->f("status"),"gruppe" => $db->f("gruppe"),
-												"chdate" => $db->f("chdate"), "binding" => $db->f("admission_binding"));
+				"chdate" => $db->f("chdate"), "binding" => $db->f("admission_binding"), "modules" =>$Modules->getLocalModules($db->f("Seminar_id")));
+			
 			$value_list.="('".$db->f("Seminar_id")."',0".$loginfilenow[$db->f("Seminar_id")]."),";
 			if ($GLOBALS['CHAT_ENABLE']){
 				$chatter = $chatServer->isActiveChat($db->f("Seminar_id"));
@@ -311,7 +318,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 			echo $values["gruppe"];
 			echo "><a href='gruppe.php'><img src='pictures/blank.gif' ".tooltip(_("Gruppe ändern"))." border=0 width=7 height=12></a></td>";
 			echo "<td class=\"".$cssSw->getClass()."\">&nbsp; </td>";
-// Name-field		
+			// Name-field		
 			echo "<td class=\"".$cssSw->getClass()."\" ><a href=\"seminar_main.php?auswahl=$semid\">";
 			if ($lastVisit <= $values["chdate"])
 				print ("<font color=\"red\">");    // red color for new metadates
@@ -319,15 +326,15 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 			if ($lastVisit <= $values["chdate"])
 				print ("</font>");
 			print ("</a></td>");
-// Content-field
+			// Content-field
 			echo "<td class=\"".$cssSw->getClass()."\" align=\"left\" nowrap>";
 			print_seminar_content($semid, $values);
-			if ($GLOBALS['CHAT_ENABLE']){
+			if (($GLOBALS['CHAT_ENABLE']) && ($values["modules"]["chat"])){
 				echo "<a href=\"".((!$auth->auth["jscript"]) ? "chat_online.php" : "#")."\" onClick=\"return open_chat(" . (($chat_info[$semid]['is_active']) ? "false" : "'$semid'") . ");\">&nbsp;";
 				echo chat_get_chat_icon($chat_info[$semid]['chatter'], $chat_invs[$chat_info[$semid]['chatuniqid']], $chat_info[$semid]['is_active'],true);
 				echo "</a>&nbsp;";
 			}
-			if ($GLOBALS['ILIAS_CONNECT_ENABLE']) {
+			if (($GLOBALS['ILIAS_CONNECT_ENABLE']) && ($values["modules"]["ilias_connect"])) {
 				$mod_count = get_seminar_modules($semid);
 				if ($mod_count) {
 					echo "<a href=\"seminar_main.php?view=show&auswahl=$semid&redirect_to=seminar_lernmodule.php\">&nbsp;";
@@ -344,7 +351,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 			echo "</td>";
 
 
-// Extendet views:
+			// Extendet views:
 
 			// last visited-field
 			if ($view=="ext") {
@@ -363,7 +370,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 			}
 
 
-// delete Entry from List:
+			// delete Entry from List:
 
 			if (($values["status"]=="dozent") || ($values["status"]=="tutor")) 
 				echo "<td class=\"".$cssSw->getClass()."\"  align=center>&nbsp;</td>";
@@ -454,21 +461,21 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 	}	 // Ende Wartelisten
  
 
-//Info-field on the right side
+	//Info-field on the right side
 	?>
 
 	</td>
 	<td class="blank" width="270" align="right" valign="top">
 	<?
 
-// Berechnung der uebrigen Seminare
+	// Berechnung der uebrigen Seminare
 
 	$db->query("SELECT count(*) as count  FROM seminare");
 	$db->next_record(); 
 	$anzahltext = sprintf(_("Es sind noch %s weitere Veranstaltungen vorhanden."), ($db->f("count")-$num_my_sem));
 
 
-// View for Teachers
+	// View for Teachers
 	
 	if ($perm->have_perm("dozent")) {   
 		$infobox = array	(	
@@ -492,7 +499,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 		);
 	}	else {
 
-// View for Students
+	// View for Students
 
 		$infobox = array	(	
 			array  ("kategorie"  => _("Information:"),
@@ -644,12 +651,13 @@ elseif ($auth->auth["perm"]=="admin") {
 		<?
 	
 		while ($db->next_record()){
-		$my_sem[$db->f("Seminar_id")]=array(institut=>$db->f("Institut"),teilnehmer=>$db->f("teilnehmer"),name=>$db->f("Name"),status=>$db->f("status"),chdate=>$db->f("chdate"),start_time=>$db->f("start_time"), binding=>$db->f("admission_binding"));
+		$my_sem[$db->f("Seminar_id")]=array(institut=>$db->f("Institut"),teilnehmer=>$db->f("teilnehmer"),name=>$db->f("Name"),status=>$db->f("status"),chdate=>$db->f("chdate"),
+			start_time=>$db->f("start_time"), binding=>$db->f("admission_binding"), modules=>$Modules->getLocalModules($db->f("Seminar_id")));
 			$value_list.="('".$db->f("Seminar_id")."',0".$loginfilenow[$db->f("Seminar_id")]."),";
 		}
 		$value_list=substr($value_list,0,-1);
-		 $db->query("CREATE TEMPORARY TABLE IF NOT EXISTS  loginfilenow_".$user->id." ( Seminar_id varchar(32) NOT NULL PRIMARY KEY, loginfilenow int(11) NOT NULL DEFAULT 0 ) TYPE=HEAP");
-		 $ins_query="REPLACE INTO loginfilenow_".$user->id." (Seminar_id,loginfilenow) VALUES ".$value_list;
+		$db->query("CREATE TEMPORARY TABLE IF NOT EXISTS  loginfilenow_".$user->id." ( Seminar_id varchar(32) NOT NULL PRIMARY KEY, loginfilenow int(11) NOT NULL DEFAULT 0 ) TYPE=HEAP");
+		$ins_query="REPLACE INTO loginfilenow_".$user->id." (Seminar_id,loginfilenow) VALUES ".$value_list;
 		$db->query($ins_query);
 		get_my_sem_values(&$my_sem);
 		$db->query("DROP TABLE loginfilenow_".$user->id);
@@ -671,7 +679,7 @@ elseif ($auth->auth["perm"]=="admin") {
 			print ("</a></td>");
 	
 			echo "<td class=\"$class\" align=\"center\">&nbsp;" . $SEM_TYPE[$values["status"]]["name"] . "&nbsp;</td>";
-	// Dozenten
+			// Dozenten
 			$db2->query ("SELECT Nachname, username FROM  seminar_user LEFT JOIN auth_user_md5  USING (user_id) WHERE Seminar_id='$semid' AND status='dozent' ORDER BY Nachname ASC");
 			$temp = "";
 			while ($db2->next_record()) {
@@ -680,7 +688,7 @@ elseif ($auth->auth["perm"]=="admin") {
 			$temp = substr($temp, 0, -2);
 			print ("<td class=\"$class\" align=\"center\">&nbsp;$temp</td>");
 	
-	// Inhalt
+			// Inhalt
 			echo "<td class=\"$class\" align=\"left\" nowrap>";
 			print_seminar_content($semid, $values);
 			echo "</td>";
