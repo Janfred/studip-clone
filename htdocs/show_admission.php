@@ -98,6 +98,7 @@ $db3=new DB_Seminar;
 			printf("<table border=0 cellspacing=0 cellpadding=0 width=\"99%%\">");
 			if ($group == "group") {
 			  my_info(_("Beachten Sie, dass einE TeilnehmerIn bereits f&uuml;r mehrere der zu gruppierenden Veranstaltungen eingetragen sein kann. Das System nimmt daran keine &Auml;nderungen vor!"));
+				my_info(_("Beachtem Sie au&szlig;erdem, dass nur Veranstaltungen mit dem chronologischen Anmeldeverfahren gruppiert werden k&ouml;nnen."));
 			  my_info(_("Wollen Sie die ausgew&auml;hlten Veranstaltungen gruppieren?"));
 			} else {
 			  my_info(_("Beachten Sie, dass f&uuml;r bereits eingetragene / auf der Warteliste stehende TeilnehmerInnen keine &Auml;nderungen vorgenommen werden."));
@@ -120,11 +121,30 @@ $db3=new DB_Seminar;
 			//execute order
 			if ($group=="group") {
 				if (isset($_REQUEST['gruppe'])) {
-					//create group-id
-					$n_group = md5(uniqid($hash_secret));
-					foreach ($_REQUEST['gruppe'] as $element) {
-						$query = "UPDATE seminare SET admission_group='$n_group' WHERE Seminar_id = '$element'";
-						$db->query($query);
+					if (sizeof($_REQUEST['gruppe']) <= 1) {
+						printf("<table border=0 cellspacing=0 cellpadding=0 width=\"99%%\">");
+						my_error(_("Sie m&uuml;ssen mindestens zwei Veranstaltungen auswählen, wenn Sie eine Gruppe erstellen wollen!"));
+						printf("</table>");
+					} else {
+						$grouping = TRUE;
+						foreach ($_REQUEST['gruppe'] as $element) {
+							$db->query("SELECT admission_type, Name FROM seminare WHERE Seminar_id = '$element';");
+							$db->next_record();
+							if ($db->f("admission_type") != 2) {
+								printf("<table border=0 cellspacing=0 cellpadding=0 width=\"99%%\">");
+								my_error(sprintf(_("Die Veranstaltung *%s* muss auf chronologisches Anmeldeverfahren umgestellt werden, sonst ist keine Gruppierung möglich!"), $db->f("Name")));
+								printf("</table>");
+								$grouping = FALSE;
+							}
+						}
+						if ($grouping) {
+							//create group-id
+							$n_group = md5(uniqid($hash_secret));
+							foreach ($_REQUEST['gruppe'] as $element) {
+								$query = "UPDATE seminare SET admission_group='$n_group' WHERE Seminar_id = '$element'";
+								$db->query($query);
+							}
+						}
 					}
 				}
 			} elseif ($group=="ungroup") {

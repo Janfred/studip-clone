@@ -174,6 +174,15 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 		die;
 	}
 
+	//check, if seminar is grouped
+	$db->query("SELECT admission_group FROM seminare WHERE Seminar_id = '$seminar_id'");
+	$db->next_record();
+	if ($db->f("admission_group")) { //if so, do not allow to change admission_type
+		$is_grouped = TRUE;
+	} else {
+		$is_grouped = FALSE;
+	}
+
 	//check start / enddate
 	if (!check_and_set_date($adm_s_tag, $adm_s_monat, $adm_s_jahr, $adm_s_stunde, $adm_s_minute, $admin_admission_data, "sem_admission_start_date")) {
 		$errormsg=$errormsg."error§"._("Bitte geben Sie g&uuml;ltige Zeiten f&uuml;r das Startdatum ein!")."§";
@@ -192,9 +201,19 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 
 	//Umschalter zwischen den Typen
 	if ($adm_null_x)
-		$admin_admission_data["admission_type"]=0;
+		if ($is_grouped) {
+			$admin_admission_data["admission_type"]=2;
+			$errormsg=$errormsg."error§"._("Gruppierte Veranstaltungen m&uuml;ssen das chronologische Anmeldeverfahren haben! Bei gruppierten Veranstaltungen können Sie das Anmeldeverfahren nicht mehr ändern.")."§";
+		} else {
+			$admin_admission_data["admission_type"]=0;
+		}
 	if ($adm_los_x)
-		$admin_admission_data["admission_type"]=1;
+		if ($is_grouped) {
+			$admin_admission_data["admission_type"]=2;
+			$errormsg=$errormsg."error§"._("Gruppierte Veranstaltungen m&uuml;ssen das chronologische Anmeldeverfahren haben! Bei gruppierten Veranstaltungen können Sie das Anmeldeverfahren nicht mehr ändern.")."§";
+		} else {
+			$admin_admission_data["admission_type"]=1;
+		}
 	if ($adm_chrono_x)
 		$admin_admission_data["admission_type"]=2;
 
