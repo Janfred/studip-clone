@@ -378,7 +378,7 @@ function export_teilis($inst_id, $ex_sem_id = "no")
 					$DataFields = new DataFields($db->f("user_id"));
 					$localFields = $DataFields->getLocalFields();
 					foreach ($localFields as $val) 
-						if ($val["content"]) 
+						if ($val["content"] != "") 
 						{
 							if (!$d_fields)
 								$data_object .= xml_open_tag( $xml_groupnames_person["childgroup1"] );
