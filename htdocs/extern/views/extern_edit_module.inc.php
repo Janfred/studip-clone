@@ -49,8 +49,10 @@ if ($com == "new") {
 	foreach ($EXTERN_MODULE_TYPES as $key => $type) {
 		if ($type["module"] == $mod) {
 			$configurations = get_all_configurations($range_id, $key);
-			if (sizeof($configurations[$type["module"]]) < $EXTERN_MAX_CONFIGURATIONS)
+			if (sizeof($configurations[$type["module"]]) < $EXTERN_MAX_CONFIGURATIONS) {
+				require_once($ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_EXTERN."/modules/ExternModule$mod.class.php");
 				$module =& new ExternModule($range_id, $mod, "", "NEW");
+			}
 			else {
 				$message = sprintf(_("Es wurden bereits %s Konfigurationen angelegt. Sie k&ouml;nnen f&uuml;r dieses Module keine weiteren Konfigurationen anlegen.")
 						, $EXTERN_MAX_CONFIGURATIONS);
@@ -70,8 +72,7 @@ else {
 	foreach ($EXTERN_MODULE_TYPES as $type) {
 		if ($type["module"] == $mod) {
 			// Vorläufiger Bugfix
-			$class_name = "ExternModule" . $mod;
-			require_once($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_EXTERN . "/modules/$class_name.class.php");
+			require_once($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_EXTERN . "/modules/ExternModule$mod.class.php");
 			$module =& new ExternModule($range_id, $mod, $config_id);
 		}
 	}
