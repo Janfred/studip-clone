@@ -116,6 +116,14 @@ class StudipAuthAbstract {
 	*/
 	var $plugin_name;
 	
+	/**
+	* text, which precedes error message for the plugin
+	*
+	* 
+	* @access	public
+	* @var		string
+	*/
+	var $error_head;
 	
 	/**
 	* static method to instantiate and retrieve a reference to an object (singleton)
@@ -180,7 +188,7 @@ class StudipAuthAbstract {
 			if ($uid = $object->authenticateUser($username,$password,$jscript)){
 				return array('uid' => $uid,'error' => $error, 'is_new_user' => $object->is_new_user);
 			} else {
-				$error .= $object->plugin_name . ": " . $object->error_msg . "<br>";
+				$error .= (($object->error_head) ? ("<b>" . $object->error_head . ":</b> ") : "") . $object->error_msg . "<br>";
 			}
 		}
 		return array('uid' => $uid,'error' => $error);
@@ -204,7 +212,7 @@ class StudipAuthAbstract {
 			if ($found = $object->isUsedUsername($username)){
 				return array('found' => $found,'error' => $error);
 			} else {
-				$error .= "<b>" . $object->plugin_name . "</b>: " . $object->error_msg . "<br>";
+				$error .= (($object->error_head) ? ("<b>" . $object->error_head . ":</b> ") : "") . $object->error_msg . "<br>";
 			}
 		}
 		return array('found' => $found,'error' => $error);
@@ -313,13 +321,16 @@ class StudipAuthAbstract {
 	
 	
 	/**
-	* 
+	* initialize a new user
 	*
-	* 
-	* @access private
-	* 
+	* this method is invoked for one time, if a new user logs in ($this->is_new_user is true)
+	* place special treatment of new users here
+	* @access	private
+	* @param	string	the user id
+	* @return	bool
 	*/
 	function doNewUserInit($uid){
+		// auto insertion of new users, according to $AUTO_INSERT_SEM[] (defined in local.inc)
 		$permlist = array('autor','tutor','dozent');
 		$this->dbv->params[] = $uid;
 		$db = $this->dbv->get_query("view:AUTH_USER_UID");
@@ -337,11 +348,15 @@ class StudipAuthAbstract {
 	}
 	
 	/**
-	* 
+	* this method handles the data mapping
 	*
-	* 
-	* @access private
-	* 
+	* for each entry in $this->user_data_mapping the according callback will be invoked
+	* the return value of the callback method is then written to the db field, which is specified
+	* in the key of the array
+	*
+	* @access	private
+	* @param	string	the user_id
+	* @return	bool
 	*/
 	function doDataMapping($uid){
 		if (is_array($this->user_data_mapping)){
@@ -359,23 +374,27 @@ class StudipAuthAbstract {
 		}
 		return false;
 	}
+	
 	/**
-	* 
+	* method to check, if a given db field is mapped by the plugin
 	*
 	* 
-	* @access private
-	* 
+	* @access	private
+	* @param	string	the name of the db field (<table_name>.<field_name>)
+	* @return	bool	true if the field is mapped
 	*/
 	function isMappedField($name){
 		return isset($this->user_data_mapping[$name]);
 	}
 	
 	/**
-	* 
+	* method to check, if username is used 
 	*
+	* abstract MUST be realized
 	* 
-	* @access private
-	* 
+	* @access	private
+	* @param	string	the username
+	* @return	bool	true if the username exists
 	*/
 	function isUsedUsername($username){
 		$this->error = sprintf(_("Methode %s nicht implementiert!"),get_class($this) . "::isUsedUsername()");
@@ -383,17 +402,19 @@ class StudipAuthAbstract {
 	}
 	
 	/**
-	* 
+	* method to check the authentication of a given username and a given password
 	*
+	* abstract, MUST be realized
 	* 
 	* @access private
-	* 
+	* @param	string	the username
+	* @param	string	the password
+	* @param	bool	is javascript used to hash password ?
+	* @return	bool	true if authentication succeeds
 	*/
 	function isAuthenticated($username, $password, $jscript){
 		$this->error = sprintf(_("Methode %s nicht implementiert!"),get_class($this) . "::isAuthenticated()");
 		return false;
 	}
-	
-	
 }
 ?>
