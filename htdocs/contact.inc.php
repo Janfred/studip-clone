@@ -222,7 +222,7 @@ function ShowUserInfo ($contact_id)
 	$db->query ("SELECT Email, username FROM auth_user_md5 WHERE user_id = '$user_id'");	
 	if ($db->next_record()) {	
 		$basicinfo["Email"] = "<a href=\"mailto:".$db->f("Email")."\">".$db->f("Email")."</a>";
-		$basicinfo["Stud.IP"] = "<a href=\"about.php?username=".$db->f("username")."\">Home</a>";
+		$basicinfo["Stud.IP"] = "<a href=\"about.php?username=".$db->f("username")."\">".$db->f("username")."</a>";
 	}
 
 	// diese Infos hat jeder
@@ -317,7 +317,7 @@ function ShowContact ($contact_id)
 		} else {
 			$output = "";
 		}
-		$output .= "<table cellspacing=\"0\" width=\"350\" class=\"blank\">
+		$output .= "<table cellspacing=\"0\" width=\"280\" class=\"blank\">
 					<tr>
 						<td class=\"topic\" colspan=\"2\"><font size=\"2\"><b>"
 							.get_fullname($db->f("user_id"), $format = "full_rev" )."</b></font></td>"
@@ -482,7 +482,7 @@ function PrintEditContact($edit_id)
 }
 
 function PrintAllContact($filter="")
-{	global $user, $open, $filter, $contact;
+{	global $user, $open, $filter, $contact, $auth;
 	$i = 1;
 	$owner_id = $user->id;
 	$db=new DB_Seminar;
@@ -495,18 +495,28 @@ function PrintAllContact($filter="")
 		$db->query ("SELECT contact_id, nachname FROM contact LEFT JOIN auth_user_md5 using(user_id) WHERE owner_id = '$owner_id' ORDER BY nachname");		
 	if ($contact["view"]=="gruppen" && $filter!="") 
 		$db->query ("SELECT nachname, contact_id FROM contact LEFT JOIN statusgruppe_user USING(user_id) LEFT JOIN auth_user_md5 USING(user_id)  WHERE statusgruppe_id = '$filter' AND owner_id =  '$owner_id' ORDER BY nachname");		
-	$middle = round($db->num_rows()/2);
-	if ($middle == 0) {
-		echo "<table class=\"blank\" width=\"700\" align=center cellpadding=\"10\"><tr><td valign=\"top\" width=\"350\" class=\"blank\">"._("Keine Einträge in diesem Bereich")."";	
-		echo "</td><td valign=\"top\" width=\"350\" class=\"blank\">";
+	$middle = round($db->num_rows()/3);
+	$spalten = 0;
+	if ($auth->auth["xres"] > 800) {
+		$maxcolls = 2;
+		$maxwidth = 900;
 	} else {
-		echo "<table class=\"blank\" width=\"700\" align=center cellpadding=\"10\"><tr><td valign=\"top\" width=\"350\" class=\"blank\">";
+		$maxcolls = 1;
+		$maxwidth = 700;
+	}
+	if ($db->num_rows() == 0) {
+		echo "<table class=\"blank\" width=\"$maxwidth\" align=center cellpadding=\"10\"><tr><td valign=\"top\" width=\"300\" class=\"blank\">"._("Keine Einträge in diesem Bereich")."";	
+		echo "</td><td valign=\"top\" width=\"300\" class=\"blank\">";
+	} else {
+		echo "<table class=\"blank\" width=\"$maxwidth\" align=center cellpadding=\"10\"><tr><td valign=\"top\" width=\"280\" class=\"blank\">";
 		while ($db->next_record()) {
 			$contact_id = $db->f("contact_id");
 			echo ShowContact ($contact_id);
 			echo "<br>";
-			if ($i==$middle) { //Spaltenumbruch
-				echo "</td><td valign=\"top\" width=\"350\" class=\"blank\">";
+			if ($i==$middle && $spalten!=$maxcolls) { //Spaltenumbruch
+				echo "</td><td valign=\"top\" width=\"280\" class=\"blank\">";
+				$i = 0;
+				$spalten++;
 			}
 		$i++;
 		}
