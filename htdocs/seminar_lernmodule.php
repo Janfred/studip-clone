@@ -37,7 +37,7 @@ include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 
 checkObject();
-checkObjectMoudle("ilias_connect");
+checkObjectModule("ilias_connect");
 
 if ($SessSemName[1] != "")
 {
