@@ -38,3 +38,27 @@ A: Das ist kein Problem von Stud.IP, sondern von MySQL(?). Was helfen sollte:
    - MySQL(?) wieder starten
    
    Vorher ein Backup der DB machen :)
+   
+Q: Ich bekomme immer [potentially dangerous Latex formula] egal was ich zwischen den tex Tags eingebe?
+
+A: Überprüfen Sie, ob der Webserver Schreibrechte auf den Image Cache unter pictures/tex hat. Setzen Sie eine SuSE(?) Installation ein, stellen Sie sicher, dass das Paket "tetex" installiert ist.
+
+Q: Wie richte ich LDAP Authentifizierung ein ?
+Zur Authentifizierung gegen einen LDAP Server stehen im Release zwei Plugins zur Verfügung (in der local.inc als Ldap und LdapReader bezeichnet). Die entsprechenden Klassen befinden sich im Verzeichnis /studip-htdocs/lib/classes/auth_plugins und heissen dort StudipAuthLdap.class.php und StudipAuthLdapReader.class.php. Die Konfiguration dieser Plugins sollte in der local.inc vorgenommen werden. Hierzu muss der Name des Plugins in die Konfigurationsvariable $STUDIP_AUTH_PLUGIN[] eingetragen werden, normalerweise reicht das entfernen der Kommentarzeichen. Es kann mehr als ein Plugin aktiviert sein, die Reihenfolge, in der die Plugins bei einem Authentifizierungsvorgang abgearbeitet werden, kann hier auch vorgenommen werden. Unterhalb von $STUDIP_AUTH_PLUGIN[] müssen dann die Optionen für das ausgewählte Plugin konfiguriert werden ($STUDIP_AUTH_CONFIG_xxx). Für Ldap sind folgende Einstellungen nötig:
+
+    * host : Hostname des LDAP Servers, oder eine URL der Form ldap[s]://[hostname]:[port]
+    * protocol_version : LDAPv2 oder LDAPv3, für OpenLDAP 2.x.x besser 3
+    * base_dn : base DN, die Suchbasis unterhalb derer die Einträge zu finden sein müssen
+    * username_attribute : Attribut, welches den Nutzernamen enthält
+    * anonymous_bind : lässt der LDAP Server ein anonymes anmelden zu, so kann vor der eigentlichen Authentifizierung das Verzeichnis nach dem eingegebenen Nutzernamen durchsucht werden, um den korrekten Nutzer DN zu finden. Ist das anonyme Binden ausgeschaltet, muss die Suchbasis dem Zweig entsprechen, indem die Nutzerdaten zu finden sind, da der Nutzer DN in diesem Fall direkt aus der Suchbasis gebildet wird. Außerdem ist dann keine Möglichkeit gegeben eine Meldung über ein falsches Passwort zu geben.
+    * error_head : Präfix der Fehlermeldung bei fehlgeschlagener Anmeldung mit diesem Plugin
+    * user_data_mapping : in diesem Array werden die Zuordnungen von LDAP Attributen zu Stud.IP Datenbankeinträgen vorgenommen. Diese Zurodnungen werden bei jeder erfolgreichen Anmeldung in der Stud.IP Datenbank aktualisiert. Der Schlüssel eines Eintrages ist das Stud.IP Datenbankfeld in der Form <tabelle>.<feld>. Zu jedem Schlüssel sind zwei weitere Einträge nötig. In "callback" wird der Name der Methode im Plugin angegeben, die die Zuordnung vornehmen soll, "map_args" enthält die Argumente, die an die Methode übergeben werden. Der Eintrag dummy als callback nimmt keine Zuordnung vor, verhindert aber, dass die entsprechenden Felder im Stud.IP vom Nutzer verändert werden können, man sollte die default Einträge für username und password besser nicht verändern. Im LDAP PLugin existieren zwei simple mapping Methoden doLdapMap und doLdapMapVorname. Erstere erwartet als Argument den Namen des LDAP Attributes (z.B. sn für den Nachnamen) und gibt einfach den Inhalt zurück. Letztere nimmt zwei Argumente entgegen und versucht aus dem cn den Vornamen zu extrahieren (nur ein Beispiel). Benötigt man komplexere Mappings, so empfiehlt es sich ein eigenenes Plugin von AuthLdap abzuleiten und die entsprechenden Methoden dort zu realisieren.
+
+
+LdapReader authentifiziert nicht den Nutzer direkt gegen den LDAP Server, sondern benutzt einen konfigurierten LDAP Account mit Leserechten, um das Passwort des Nutzers aus dem Verzeichnis zu lesen und mit dem eingegebenen zu vergleichen. Anonymes Binden wird dazu nicht benötigt. Der Vorteil dieser Lösung ist, dass das JavaScript basierte challenge-response Verfahren zur verschlüsselten Übertragung des Passwortes in Stud.IP weiter genutzt werden kann (bei Verwendung von LdapAuth wird es automatisch deaktiviert). Im Verzeichnis aber muss das Passwort als MD5 Hash vorliegen (Standard ist meist CRYPT, es sollte aber unproblematisch sein ein zusätzliches Attribut einzuführen). Dieses Plugin ist als Beispiel gedacht, und sollte als Vorlage für eigene Plugins dienen.
+Einstellungen:
+
+    * user_password_attribute : das Attribut des Nutzerpasswortes (Passwort muss als MD5 Hash vorliegen!)
+    * reader_dn : der Nutzer DN des Accounts, der zum auslesen benutzt wird
+    * reader_password : das Passwort des Accounts, der zum auslesen benutzt wird
+	
