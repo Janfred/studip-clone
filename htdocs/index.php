@@ -189,12 +189,12 @@ unset($temp_language_key); unset($temp_language);
 			$db->next_record();
 			$anzahl = $db->f(0);			
 			echo "<tr><td class=\"steel1\"><font size=\"2\">&nbsp; "._("Davon online").":</font></td><td class=\"steel1\" align=right><font size=\"2\">&nbsp; $anzahl&nbsp; </font></td><td class=\"blank\">&nbsp; &nbsp; </td></tr>"; 
-			echo "<tr><td class=\"blank\">";
+			echo "<tr><td height=\"30\" class=\"blank\" valign=\"middle\">";
 			// choose language
 			foreach ($INSTALLED_LANGUAGES as $temp_language_key => $temp_language) {
 				printf ("&nbsp;&nbsp;<a href=\"%s?set_language=%s\"><img src=\"pictures/languages/%s\" %s border=\"0\"></a>", $PHP_SELF, $temp_language_key, $temp_language["picture"], tooltip($temp_language["name"]));
 			}
-			echo "</td><td align= right class=\"blank\"><a href=\"./impressum.php?view=statistik\"><font size=\"2\" color=#888888>"._("mehr")."... </font></a></td><td class=\"blank\">&nbsp; &nbsp; </td></tr>";
+			echo "</td><td align= right valign=\"top\" class=\"blank\"><a href=\"./impressum.php?view=statistik\"><font size=\"2\" color=#888888>"._("mehr")."... </font></a></td><td class=\"blank\">&nbsp; &nbsp; </td></tr>";
 			echo "</table>";
 
 
