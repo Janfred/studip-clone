@@ -60,12 +60,7 @@ function reset_all_data() {
 
 
 //a Veranstaltung was selected in the admin-search kann viellecht weg
-if (($i_page== "adminarea_start.php") && ($admin_sem_id)) {
-	reset_all_data();
-	closeObject();
-	openSem($admin_sem_id);
-//hmm... whats that
-} elseif ($select_sem_id) {
+if (($i_page== "adminarea_start.php") && ($select_sem_id)) {
 	reset_all_data();
 	closeObject();
 	openSem($select_sem_id);
@@ -302,11 +297,11 @@ if ($SessSemName["class"] == "inst") {
 $tooltip="Sie befinden sich im Administrationsbereich von Stud.IP. ";
 
 if (($SessSemName["class"] == "sem") && (!$archive_kill) && (!$links_admin_data["assi"]))
-	$tooltip.= " Ausgewählte Veranstaltung: ".$db->f("Name")." - Um die Auswahl aufzuheben, benutzen Sie bitte das Schlüsselsymbol.";
+	$tooltip.= "Ausgewählte Veranstaltung: ".$db->f("Name")." - Um die Auswahl aufzuheben, benutzen Sie bitte das Schlüsselsymbol.";
 elseif ($SessSemName["class"] == "inst")
-	$tooltip.= " Ausgewählte Einrichtung: ".$db->f("Name")." - Um die Auswahl aufzuheben, benutzen Sie bitte das Schlüsselsymbol.";		
+	$tooltip.= "Ausgewählte Einrichtung: ".$db->f("Name")." - Um die Auswahl aufzuheben, benutzen Sie bitte das Schlüsselsymbol.";		
 else
-	$tooltip.= " Keine Veranstaltung oder Einrichtung ausgewählt";
+	$tooltip.= "Keine Veranstaltung oder Einrichtung ausgewählt";
 
 //Additional Text erzeugen
 if (($SessSemName["class"] == "sem") && (!$archive_kill) && (!$links_admin_data["assi"]))
@@ -389,7 +384,7 @@ switch ($i_page) {
 $reiter->create($structure, $reiter_view, $tooltip, $addText);
 
 //Einheitliches Auswahlmenu fuer Einrichtungen
-if ((!$SessSemName[1]) && ($list) && ($view_mode == "inst")) {
+if (((!$SessSemName[1]) || ($SessSemName["class"] == "sem")) && ($list) && ($view_mode == "inst")) {
 	?>
 	<table width="100%" cellspacing=0 cellpadding=0 border=0>
 	<tr valign=top align=middle>
@@ -450,7 +445,7 @@ if ((!$SessSemName[1]) && ($list) && ($view_mode == "inst")) {
 		}
 	
 //Einheitliches Seminarauswahlmenu, wenn kein Seminar gewaehlt ist
-if ((!$SessSemName[1]) && ($list) && ($view_mode == "sem")) {
+if (((!$SessSemName[1]) || ($SessSemName["class"] == "inst")) && ($list) && ($view_mode == "sem")) {
 	?>
 	<table width="100%" cellspacing=0 cellpadding=0 border=0>
 	<tr valign=top align=middle>
