@@ -321,7 +321,8 @@ class AssignObject {
 					if ((($val_end > $val2_begin) && ($val_end < $val2_end))
 					|| (($val_begin > $val2_begin) && ($val_begin < $val2_end))
 					|| (($val2_end > $val_begin) && ($val2_end < $val_end))
-					|| (($val2_begin > $val_begin) && ($val2_begin < $val_end))) {
+					|| (($val2_begin > $val_begin) && ($val2_begin < $val_end))
+					|| (($val_begin == $val2_begin) && ($val_end == $val2_end))) {
 						if (($val2->getAssignId() != $this->getId()) && ($val->getAssignId() == $this->getId())) {
 							$overlaps[$val2->getAssignId()] = array("begin" =>$val_begin, "end"=>$val_end);
 						}
