@@ -196,7 +196,16 @@ if (!$tmp_sem_nr) {
 	$tmp_sem_beginn=$SEMESTER[$tmp_sem_nr]["beginn"];
 	$tmp_sem_ende=$SEMESTER[$tmp_sem_nr]["ende"];
 }
-	
+
+//Set the view (begin hour and and hour)
+if ($view=="inst") {
+	$global_start_time=8;
+	$global_end_time=20;
+} else {
+	$global_start_time=$my_schedule_settings["glb_start_time"];
+	$global_end_time=$my_schedule_settings["glb_end_time"];
+}
+
 //Array der Seminare erzeugen 
 while ($db->next_record())
 	{
@@ -232,9 +241,9 @@ while ($db->next_record())
 			settype ($data["start_minute"], "integer");
 					
 			//wichtiger Check, ob die Endzeit ueber den sichtbaren Bereich des Stundenplans hinauslaeuft, wenn ja wird row_span entsprechend angepasst
-			if ($data["end_stunde"] >=$my_schedule_settings["glb_end_time"])
+			if ($data["end_stunde"] >=$global_end_time)
 				{
-				$tmp_row_span = ((($my_schedule_settings["glb_end_time"] - $data["start_stunde"])+1) *4)-1;
+				$tmp_row_span = ((($global_end_time - $data["start_stunde"])+1) *4)-1;
 				$tmp_row_span = $tmp_row_span - ($data["start_minute"] / 15);
 				}
 			else 
@@ -258,9 +267,9 @@ if ((is_array($my_personal_sems)) && (!$inst_id))
 	foreach ($my_personal_sems as $mps)
 	{
 	//auch hier nochmal der Check
-	if (date("G", $mps["ende_time"]) >=$my_schedule_settings["glb_end_time"])
+	if (date("G", $mps["ende_time"]) >=$global_end_time)
 		{
-		$tmp_end_time = mktime($my_schedule_settings["glb_end_time"]+1, 00, 00, date ("n", $mps["start_time"]), date ("j", $mps["start_time"]), date ("Y", $mps["start_time"]));
+		$tmp_end_time = mktime($global_end_time+1, 00, 00, date ("n", $mps["start_time"]), date ("j", $mps["start_time"]), date ("Y", $mps["start_time"]));
 		$tmp_row_span = ($tmp_end_time - $mps["start_time"]) /15/60;
 		}
 	else $tmp_row_span = ($mps["ende_time"] - $mps["start_time"])/15/60;
@@ -298,8 +307,8 @@ foreach ($my_sems as $ms)
 $i=1;
 for ($i; $i<7; $i++)
 	{
-	$n=$my_schedule_settings["glb_start_time"];
-	for ($n; $n<$my_schedule_settings["glb_end_time"]+1; $n++)
+	$n=$global_start_time;
+	for ($n; $n<$global_end_time+1; $n++)
 		{
 		$l=0;
 		for ($l; $l<4; $l++)
@@ -440,9 +449,9 @@ ob_start();
 
 
 //Aufbauen der eigentlichen Tabelle
-$i=$my_schedule_settings["glb_start_time"];
+$i=$global_start_time;
 
-for ($i; $i<$my_schedule_settings["glb_end_time"]+1; $i++)
+for ($i; $i<$global_end_time+1; $i++)
 	{
 	$k=0;
 	for ($k; $k<4; $k++)
@@ -570,7 +579,7 @@ if ((!$print_view) && (!$inst_id)) {
 			Beginn: 
 			<?	    
 	   		echo"<select name=\"start_stunde\">";
-	   		for ($i=$my_schedule_settings["glb_start_time"]; $i<=$my_schedule_settings["glb_end_time"]; $i++)
+	   		for ($i=$global_start_time; $i<=$global_end_time; $i++)
 		  		{
 		  		if ($i==9) echo "<option selected value=".$i.">".$i."</option>";
 		       		else echo "<option value=".$i.">".$i."</option>";
@@ -587,7 +596,7 @@ if ((!$print_view) && (!$inst_id)) {
 			Ende:
 			<?	    
 	   		echo"<select name=\"ende_stunde\">";
-	   		for ($i=$my_schedule_settings["glb_start_time"]; $i<=$my_schedule_settings["glb_end_time"]; $i++)
+	   		for ($i=$global_start_time; $i<=$global_end_time; $i++)
 		  		{
 		  		if ($i==9) echo "<option selected value=".$i.">".$i."</option>";
 		       		else echo "<option value=".$i.">".$i."</option>";
