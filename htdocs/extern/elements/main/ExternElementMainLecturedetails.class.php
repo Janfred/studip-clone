@@ -156,9 +156,9 @@ class ExternElementMainLecturedetails extends ExternElementMain {
 		$table .= $edit_form->editRadioGeneric("studiplink", $title, $info, $value, $names);
 		
 		$title = _("Stud.IP-Link-Ziel:");
-		$info = _("Ziel des Stud.IP-Links. Entweder direkter Einsprung auf die Startseite oder in den Administrationsbereich (nur für berechtigte Nutzer) der Veranstaltung");
-		$value = array("quickinfo", "admin");
-		$names = array(_("Startseite"), _("Administrationsbereich"));
+		$info = _("Ziel des Stud.IP-Links. Entweder direkter Einsprung zur Anmeldeseite oder in den Administrationsbereich (nur für berechtigte Nutzer) der Veranstaltung");
+		$value = array("signin", "admin");
+		$names = array(_("Anmeldung"), _("Administrationsbereich"));
 		$table .= $edit_form->editRadioGeneric("studiplinktarget", $title, $info, $value, $names);
 		
 		$title = _("HTML-Header/Footer:");
