@@ -72,6 +72,7 @@ if ($o_mode != "direct")
 	if (!(is_dir( $TMP_PATH."/export" )))
 	{
 		mkdir($TMP_PATH . "/export");
+		chmod ($TMP_PATH . "/export", 0666);
 	}
 	$xml_file_id = md5(uniqid(rand())) . ".xml";
 	$xml_file = fopen($TMP_PATH."/export/" . $xml_file_id, "w");

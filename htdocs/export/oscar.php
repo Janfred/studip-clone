@@ -49,6 +49,7 @@ $dirstr = "" . $TMP_PATH . "/export";
 if (!(is_dir( $TMP_PATH."/export" )))
 {
 	mkdir($TMP_PATH . "/export");
+	chmod ($TMP_PATH . "/export", 0666);
 }
 
 if (!($handle=opendir( $dirstr )))
