@@ -748,7 +748,7 @@ function preg_call_link ($params, $mod, $img, $extern = FALSE) {
 			$tbr = "<a href=\"{$params[4]}\" target=\"_blank\">$link_pic{$params[3]}</a>";
 		}
 		elseif ($img) {
-			if (!preg_match(':.+(\.jpg|\.jpeg|\.png|\.gif)$:', $params[0]))
+			if (!preg_match(':.+(\.jpg|\.jpeg|\.png|\.gif)$:i', $params[0]))
 				$tbr = $params[0];
 			else {
 				if ($params[2]) {
