@@ -459,7 +459,7 @@ function FixLinks($data = "", $fix_nl = TRUE, $nl_to_br = TRUE) {
 	$replace = array("\\1http://www.", "\\1ftp://ftp.");
 	$fixed_text = preg_replace($pattern, $replace, $data);
 	
-	$pattern = array("'(\[([^\n\f\]]+)\])?(((http://)|(https://)|(ftp://([_a-z0-9-:]+@)?))[_a-z0-9-]+(\.[_a-z0-9-]+)+(/[_a-z0-9-~]*)*\.?\S*)'ie",
+	$pattern = array("'(\[([^\n\f\]]+)\])?(((http://)|(https://)|(ftp://([_a-z0-9-:]+@)?))[_a-z0-9-]+(\.[_a-z0-9-]+)+(/\S*)*(\.\S+)?)\b'ie",
 					"'(?<=\s)(\[([^\n\f\]]+)\])?([-a-z0-9_]+(\.[_a-z0-9-]+)*@([_a-z0-9-]+(\.[_a-z0-9-]+)+))'ie");
 	$replace = array("preg_call_link('\\2', '\\3', 'LINK')", "preg_call_link('\\2', '\\3', 'MAIL')");
 	$fixed_text = preg_replace($pattern, $replace, $fixed_text);
