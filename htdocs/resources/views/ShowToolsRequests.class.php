@@ -230,8 +230,11 @@ class ShowToolsRequests {
 				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" colspan="2" width="96%" valign="top">
-					<b><?=$semObj->getName()?></b> <br />
+					<a href="seminar_main.php?auswahl=<?=$semObj->getId()?>">
+						<b><?=htmlReady($semObj->getName())?></b>
+					</a>
 					<font size="-1">
+						<br />
 						<?
 						$this->selectSemInstituteNames($semObj->getInstitutId());
 						print "&nbsp;&nbsp;&nbsp;&nbsp;"._("Art der Anfrage:")." ".(($reqObj->getTerminId()) ? _("Einzeltermin einer Veranstaltung") : (($semObj->getMetaDateType() == 1) ?_("alle Termine einer unregelm&auml;&szlig;igen Veranstaltung") :_("regelm&auml;&szlig;ige Veranstaltungszeiten")))."<br />";
@@ -659,7 +662,7 @@ class ShowToolsRequests {
 				if ((($reqObj->getResourceId()) || (sizeof($matching_rooms)) || (sizeof($clipped_rooms))) &&
 					((is_array($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["groups"])) || ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"]))) {
 					print("&nbsp;<input type=\"IMAGE\" name=\"save_state\" ".makeButton("speichern", "src")." border=\"0\" />");
-					print("&nbsp;<input type=\"IMAGE\" name=\"decline_request\" ".makeButton("ablehnen", "src")." border=\"0\" />");
+					print("&nbsp;<input type=\"IMAGE\" name=\"suppose_decline_request\" ".makeButton("ablehnen", "src")." border=\"0\" />");
 				}
 				
 				// can we inc?
