@@ -195,7 +195,7 @@ function printTitleField ( $title = "" ) {
 	$title = stripslashes($title);
     
     $html = "<font size=-1><b>" . _("Titel:")	. "</b></font><br>"
-	. "<input type=text size=50 maxlength=100 name=\"title\" value=\"".$title."\" ".$js." tabindex=1>"
+	. "<input type=text size=50 maxlength=100 name=\"title\" value=\"".htmlReady($title)."\" ".$js." tabindex=1>"
 	. "<br><br>\n";
 
     echo $html;
@@ -224,7 +224,7 @@ function printQuestionField ( $question = "" ) {
     $html = "<font size=-1><b>" . _("Frage:")	. "</b></font><br>";
 
     if( $pageMode != MODE_RESTRICTED )
-	$html .= "<textarea cols=50 rows=2 style=\"width:100%;\" name=\"question\" ".$js." tabindex=2>".$question."</textarea>";
+	$html .= "<textarea cols=50 rows=2 style=\"width:100%;\" name=\"question\" ".$js." tabindex=2>".htmlReady($question)."</textarea>";
     else 
 	$html .= "<div class=steelgraulight style=\"width:100%; padding:2px;\">"
 	    . "<font size=-1>".formatReady($question)."</font>"
@@ -314,7 +314,7 @@ function printAnswerFields ( $answers ) {
 		$answers[$i]['text'] = stripslashes($answers[$i]['text']);
 
 	    $html .= "<input type=text size=60 style=\"width:100%;\" "
-	        . "name=\"answers[$i][text]\" value=\""	. $answers[$i]['text']."\" tabindex=".(3+$i).">"
+	        . "name=\"answers[$i][text]\" value=\""	. htmlReady($answers[$i]['text'])."\" tabindex=".(3+$i).">"
 		. "<input type=hidden name=\"answers[$i][answer_id]\" value=\"".$answers[$i]['answer_id']."\">"
 		. "<input type=hidden name=\"answers[$i][counter]\" value=\"".$answers[$i]['counter']."\">";
 	}
