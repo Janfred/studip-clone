@@ -1206,47 +1206,37 @@ elseif ((!$level) || ($level==1))
 							>
 						</td>
 					</tr>
+					<?
+					if (!$SEM_CLASS[$sem_create_data["sem_class"]]["compact_mode"]) {
+					?>
 					<tr <? $cssSw->switchClass() ?>>
-						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
-							Raum:
-						</td>
-						<td class="<? echo $cssSw->getClass() ?>" nowrap width="30%" colspan=1>
-							&nbsp; <input type="text" name="sem_ort" size=20 maxlength=254 value="<? echo htmlReady(stripslashes($sem_create_data["sem_ort"]))  ?>">
-							<img  src="./pictures/info.gif" 
-								<? echo tooltip("Der Raum, in dem die Veranstaltung stattfindet", TRUE, TRUE) ?>
-							>
-							<?
-							if ($RESOURCES_ENABLE) {
-								require_once ($RELATIVE_PATH_RESOURCES."/resourcesClass.inc.php");
-								$resList = new ResourcesUserRoomsList($user_id);
-								while ($resObject = $resList->nextEvent()) {
-									echo $resObject->getName();
-								}
-							}
-							?>
-						</td>
-						<?
-						if (!$SEM_CLASS[$sem_create_data["sem_class"]]["compact_mode"]) {
-						?>
 						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
 							Veranstaltungsnummer:
 						</td>
-						<td class="<? echo $cssSw->getClass() ?>" width="60%">
-							&nbsp; <input type="int" name="sem_nummer" size=6 maxlength=6 value="<? echo  htmlReady(stripslashes($sem_create_data["sem_nummer"])) ?>">
+						<td class="<? echo $cssSw->getClass() ?>" width="30%">
+							&nbsp; <input type="int" name="sem_nummer" size=20 maxlength=255 value="<? echo  htmlReady(stripslashes($sem_create_data["sem_nummer"])) ?>">
 							<img  src="./pictures/info.gif" 
-								<? echo tooltip("Die von der Universität vergebene Veranstaltungsnummer.", TRUE, TRUE) ?>
+								<? echo tooltip("Fall Sie eine eindeutige Veranstaltungsnummer für diese Veranstaltung kennen, geben Sie diese bitte hier ein.", TRUE, TRUE) ?>
 							>
 						</td>
-						<?
-						} else 
-							echo "<td ", $cssSw->getFullClass(), " colspan=\"2\">&nbsp; </td>";
-						?>
-					</tr>
+						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
+							ECTS-Punkte:
+						</td>
+						<td class="<? echo $cssSw->getClass() ?>" width="60%">
+							&nbsp; <input type="int" name="sem_ects" size=6 maxlength=32 value="<? echo  htmlReady(stripslashes($sem_create_data["sem_ects"])) ?>">
+							<img  src="./pictures/info.gif" 
+								<? echo tooltip("ECTS-Kreditpunkte, die in dieser Veranstaltung erreicht werden können.", TRUE, TRUE) ?>
+							>
+						</td>
+					</tr>						
+					<?
+					}
+					?>
 					<tr <? $cssSw->switchClass() ?>>
 						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
 							Turnus:
 						</td>
-						<td class="<? echo $cssSw->getClass() ?>" nowrap width="30%" colspan=1>
+						<td class="<? echo $cssSw->getClass() ?>" nowrap width="30%" colspan=3>
 							&nbsp; <select  name="term_art">
 							<?
 							if ($sem_create_data["term_art"] == 0) 
@@ -1268,23 +1258,6 @@ elseif ((!$level) || ($level==1))
 							>
 							<font color="red" size=+2>*</font>									
 						</td>
-						<?
-						if (!$SEM_CLASS[$sem_create_data["sem_class"]]["compact_mode"]) {
-						?>
-
-						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
-							ECTS-Punkte:
-						</td>
-						<td class="<? echo $cssSw->getClass() ?>" width="60%">
-							&nbsp; <input type="int" name="sem_ects" size=6 maxlength=32 value="<? echo  htmlReady(stripslashes($sem_create_data["sem_ects"])) ?>">
-							<img  src="./pictures/info.gif" 
-								<? echo tooltip("ECTS-Kreditpunkte, die in dieser Veranstaltung vergeben werden.", TRUE, TRUE) ?>
-							>
-						</td>
-						<?
-						} else 
-							echo "<td ", $cssSw->getFullClass(), " colspan=\"2\">&nbsp; </td>";
-						?>
 					</tr>
 					<?
 					if (!$SEM_CLASS[$sem_create_data["sem_class"]]["compact_mode"]) {
@@ -1307,13 +1280,12 @@ elseif ((!$level) || ($level==1))
 						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
 							maximale Teilnehmeranzahl:
 						</td>
-						<td class="<? echo $cssSw->getClass() ?>" width="60%">
+						<td class="<? echo $cssSw->getClass() ?>" width="50%">
 							&nbsp; <input type="int" name="sem_turnout" size=6 maxlength=5 value="<? echo $sem_create_data["sem_turnout"] ?>">
 							<img  src="./pictures/info.gif" 
 								<? echo tooltip("'Hier geben Sie die erwartete Teilnehmerzahl an. Stud.IP kann auf Wunsch für Sie ein Anmeldungsverfahren starten, wenn sie  »Anmeldebeschränkung benutzen«.", TRUE, TRUE) ?>
 							>
 						</td>
-						
 					</tr>
 					<?
 					}
@@ -1847,8 +1819,7 @@ if ($level==3)
 									<?
 									if (empty($sem_create_data["turnus_count"])) 
 										$sem_create_data["turnus_count"]=2;
-									for ($i=0; $i<$sem_create_data["turnus_count"]; $i++)
-										{
+									for ($i=0; $i<$sem_create_data["turnus_count"]; $i++) {
 										if ($i>0) echo "<br>";
 										?>&nbsp; <select name="term_turnus_date[<?echo $i?>]">
 										<?
@@ -1886,19 +1857,33 @@ if ($level==3)
 										<input type="text" name="term_turnus_start_minute[<?echo $i?>]" size=2 maxlength=2 value="<? if (($sem_create_data["term_turnus_start_minute"][$i]) && ($sem_create_data["term_turnus_start_minute"][$i] >0)) { if ($sem_create_data["term_turnus_start_minute"][$i] < 10) echo "0", $sem_create_data["term_turnus_start_minute"][$i]; else echo $sem_create_data["term_turnus_start_minute"][$i];  } elseif ($sem_create_data["term_turnus_start_stunde"][$i]) echo "00"; ?>">&nbsp;Uhr bis
 										&nbsp; <input type="text" name="term_turnus_end_stunde[<?echo $i?>]" size=2 maxlength=2 value="<? if ($sem_create_data["term_turnus_end_stunde"][$i]) echo $sem_create_data["term_turnus_end_stunde"][$i] ?>"> :
 										<input type="text" name="term_turnus_end_minute[<?echo $i?>]" size=2 maxlength=2 value="<? if (($sem_create_data["term_turnus_end_minute"][$i]) && ($sem_create_data["term_turnus_end_minute"][$i] >0)) { if ($sem_create_data["term_turnus_end_minute"][$i] < 10) echo "0", $sem_create_data["term_turnus_end_minute"][$i]; else echo $sem_create_data["term_turnus_end_minute"][$i];  } elseif ($sem_create_data["term_turnus_end_stunde"][$i]) echo "00"; ?>">&nbsp;Uhr</font>
-										<? if ($sem_create_data["turnus_count"]>1) 
-											{
+										<?
+										if ($sem_create_data["turnus_count"]>1) {
 											?>
 											&nbsp; <a href="<? echo $PHP_SELF?>?delete_turnus_field=<?echo $i+1?>"><img border=0 src="./pictures/trash.gif" <? echo tooltip("Dieses Feld aus der Auswahl löschen", TRUE) ?> ></a>
 											<?
-											}
 										}
 										?>
-										&nbsp; &nbsp; <input type="IMAGE" name="add_turnus_field" src="./pictures/buttons/feldhinzufuegen-button.gif" border=0 value="Feld hinzuf&uuml;gen">&nbsp; 
+										<br />&nbsp; <font size=-1>Raum:&nbsp; <input type="text" name="term_turnus_room[<?echo $i?>]" size="15" maxlength="255" value="<?= $sem_create_data["term_turnus_room"][$i] ?>"/></font>&nbsp; 
+										<?
+										if ($RESOURCES_ENABLE) {
+											require_once ($RELATIVE_PATH_RESOURCES."/resourcesClass.inc.php");
+											$resList = new ResourcesUserRoomsList($user_id);
+											if ($resList->numberOfEvents()) {
+												echo "&nbsp; <select name=\"term_turnus_resource[$i]\" onChange=\"document.form_3.term_turnus_room[$i].value=document.form_3.term_turnus_resource[$i].options[document.form_3.term_turnus_resource[$i].selectedIndex].text;\">";
+												while ($resObject = $resList->nextEvent()) {
+													printf ("<option %s value=\"%s\">%s</option>", ($sem_create_data["term_turnus_room"][$i]) == $resObject->getId() ? "selected" :"", $resObject->getId(), $resObject->getName());
+												}
+												print "</select>";
+											}
+										}
+										print "<br />";
+									}
+										?>
+										<br />&nbsp; <input type="IMAGE" name="add_turnus_field" src="./pictures/buttons/feldhinzufuegen-button.gif" border=0 value="Feld hinzuf&uuml;gen">&nbsp; 
 										<img  src="./pictures/info.gif" 
-											<? echo tooltip("Wenn es sich um eine zyklische Veranstaltung handelt, so können Sie hier genau angeben, an welchen Tagen und zu welchen Zeiten die Veranstaltung stattfindet. Wenn Sie noch keine Zeiten wissen, dann klicken Sie auf »keine Zeiten speichern«.", TRUE, TRUE) ?>
+											<? echo tooltip("Wenn es sich um eine regelmäßige Veranstaltung handelt, so können Sie hier genau angeben, an welchen Tagen, zu welchen Zeiten und in welchem Raum die Veranstaltung stattfindet. Wenn Sie noch keine Zeiten wissen, dann klicken Sie auf »keine Zeiten speichern«.", TRUE, TRUE) ?>
 										>
-										<font color="red" size=+2>*</font>											
 										<br>
 								</td>
 							</tr>

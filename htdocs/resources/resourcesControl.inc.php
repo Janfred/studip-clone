@@ -655,7 +655,6 @@ if ($resources_data["view"]=="openobject_details") {
 Objectberechtigungen bearbeiten, views: edit_object_perms
 /*****************************************************************************/
 if ($resources_data["view"]=="edit_object_perms") {
-
 	if ($resources_data["structure_open"]) {
 		$editObject=new editObject($resources_data["structure_open"]);
 		$editObject->create_perm_forms();

@@ -1,4 +1,5 @@
 <?
+
 $currentObject=new resourceObject($resources_data["structure_open"]);
 $currentObjectTitelAdd=$currentObject->getCategory();
 if ($currentObjectTitelAdd)
@@ -68,7 +69,11 @@ switch ($resources_data["view"]) {
 			$page_intro="Bearbeiten von Belegungen der Ressource <b>".$currentObject->getName()."</b> (".$currentObject->getCategory().").";
 		$title=$SessSemName["header_line"]." - Bearbeiten der Belegung";
 	break;
-	
+	case "edit_object_perms":
+		if ($resources_data["structure_open"])
+			$page_intro="Vergeben von Rechten auf die Ressource <b>".$currentObject->getName()."</b> (".$currentObject->getCategory().").";
+		$title=$SessSemName["header_line"]." - Vergeben von Berechtigungen";
+	break;
 	//default
 	default:
 		$resources_data["view"]="resources";

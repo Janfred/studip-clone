@@ -57,13 +57,6 @@ if ($perm->have_perm("root")) { //Rechtezuweisungen nur fuer Root
 $structure["edit_personal_settings"]=array (topKat=>"settings", name=>"pers&ouml;nliche Einstellungen", link=>"resources.php?view=edit_personal_settings", active=>FALSE);
 //
 
-//View festlegen
- 
-$currentObject=new resourceObject($resources_data["structure_open"]);
-$currentObjectTitelAdd=$currentObject->getCategory();
-if ($currentObjectTitelAdd)
-	$currentObjectTitelAdd=": ";
-$currentObjectTitelAdd=$currentObject->getName()."&nbsp;<font size=-1>(".$currentObject->getOwnerName().")</font>";
-
 $reiter->create($structure, $resources_data["view"]);
+
 ?>

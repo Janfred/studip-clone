@@ -67,13 +67,12 @@ function cmp_assign_events($a, $b){
 /*****************************************************************************
 sort function to sort the ResourceObject by name
 /*****************************************************************************/
-
 function cmp_resources($a, $b){
 	$name_a = $a->getName();
 	$name_b = $b->getName();
-	if($start_a == $start_b)
+	if($name_a == $name_b)
 		return 0;
-	if($start_a < $start_b)
+	if($name_a < $name_b)
 		return -1;
 	return 1;
 }

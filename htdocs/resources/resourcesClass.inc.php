@@ -348,6 +348,8 @@ class AssignEventList{
 	 	global $RELATIVE_PATH_RESOURCES, $SEMESTER, $SEM_ID, $user;
 	 	
 	 	require_once ($RELATIVE_PATH_RESOURCES."/lib/list_assign.inc.php");
+	 	require_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
+	 	
 	 	
 		if (!$start)
 			$start = $SEMESTER[$SEM_ID]["beginn"];
@@ -428,8 +430,10 @@ class ResourcesUserRoomsList {
 	var $resources;	// the results
 	
 	// Konstruktor
-	function ResourcesUserRoomsList ($user_id ='', $category = '', $sort= TRUE) {
+	function ResourcesUserRoomsList ($user_id ='', $sort= TRUE) {
 	 	global $RELATIVE_PATH_RESOURCES, $user;
+	 	
+	 	require_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
 
 		$this->user_id = $user_id;
 		if (!$this->user_id)
@@ -525,7 +529,7 @@ class ResourcesUserRoomsList {
 	}
 	
 	function sort(){
-		if($this->resources)
+		if ($this->resources) 
 			usort($this->resources,"cmp_resources");
 	}
 } 
