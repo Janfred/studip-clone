@@ -40,6 +40,7 @@ if (!$perm->have_perm("user"))
 
 require_once ($ABSOLUTE_PATH_STUDIP . "visual.inc.php");
 require_once ($ABSOLUTE_PATH_STUDIP . "functions.php");
+
 if ($GLOBALS['CHAT_ENABLE']){
 	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php"; 
 	$chatServer =& ChatServer::GetInstance($GLOBALS['CHAT_SERVER_NAME']);
@@ -138,7 +139,6 @@ if ($auth->auth["uid"] == "nobody") { ?>
 
 
 //Nachrichten anzeigen
-
 	if ((($altm) && (!$neum)) || ((($altm+$neum) >0) && ($i_page == "sms.php"))) {
 		$icon = "pictures/nachricht1.gif";
 		$text = _("Post");

@@ -59,7 +59,7 @@ if ($cmd=="delete_all") {
 	
 //Nachricht loeschen
 if ($cmd=="delete") {
-	$l=0;; 
+	$l=0;
 	if (is_array($delete_msg)) {
 		foreach ($delete_msg as $a) {
 			$count_deleted_sms=$msging->delete_sms ($a);
@@ -84,7 +84,7 @@ if ($cmd=="insert") {
 			$count=$msging->insert_sms($rec_uname, $message);
 	} elseif($group_id) {
 		$group_count+=$msging->circular_sms($message, "group", $group_id);
-	} else				
+	} else
 		$count=$msging->insert_sms($rec_uname, $message);
 	
 	if (($count) || ($buddy_count) || ($group_count)) {
