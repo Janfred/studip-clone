@@ -58,7 +58,8 @@ class CalendarWriteriCalendar extends CalendarWriter {
 		// Default values
 		$header = "BEGIN:VCALENDAR" . $this->newline;
 		$header .= "VERSION:2.0" . $this->newline;
-		$header .= "PRODID:-//Stud.IP//Stud.IP_iCalendar Library, Stud.IP 1.0-cvs //EN" . $this->newline;
+		$header .= "PRODID:-//Stud.IP//Stud.IP_iCalendar Library, Stud.IP ";
+		$header .= $GLOBAL['SOFTWARE_VERSION'] . " //EN" . $this->newline;
 		$header .= "METHOD:PUBLISH" . $this->newline;
 		
 		return $header;
@@ -130,6 +131,11 @@ class CalendarWriteriCalendar extends CalendarWriter {
 
 				case 'DTEND':
 				case 'DTSTART':
+					if ($event->isDayEvent()) {
+						$params['VALUE'] = 'DATE';
+						$params_str = ';VALUE=DATE';
+						$value++;
+					}
 				case 'DUE':
 				case 'RECURRENCE-ID':
 					if (array_key_exists('VALUE', $params)) {

@@ -95,6 +95,7 @@ class CalendarParserICalendar extends CalendarParser {
 			// Parse the remain attributes
 			if (preg_match_all('/(.*):(.*)(\r|\n)+/', $v_event, $matches)) {
 				$properties = array();
+				$check = array();
 				foreach ($matches[0] as $property) {
 					preg_match('/([^;^:]*)((;[^:]*)?):(.*)/', $property, $parts);
 					$tag = $parts[1];
@@ -103,24 +104,21 @@ class CalendarParserICalendar extends CalendarParser {
 					
 					if (!empty($parts[2])) {
 						preg_match_all('/;(([^;=]*)(=([^;]*))?)/', $parts[2], $param_parts);
-						foreach ($param_parts[2] as $key => $param_name) {
-							$param_value = $param_parts[4][$key];
-							
-							switch ($param_name) {
-								case 'ENCODING':
-									switch (strtoupper($param_value)) {
-										case 'QUOTED-PRINTABLE':
-											$value = $this->_qp_decode($value);
-											break;
+						foreach ($param_parts[2] as $key => $param_name)
+							$params[strtoupper($param_name)] = strtoupper($param_parts[4][$key]);
+						
+						if ($params['ENCODING']) {
+							switch ($params['ENCODING']) {
+								case 'QUOTED-PRINTABLE':
+									$value = $this->_qp_decode($value);
+									break;
 										
-										case 'BASE64':
-											$value = base64_decode($value);
-											break;
-									}
+								case 'BASE64':
+									$value = base64_decode($value);
 									break;
 							}
-							
 						}
+						
 					}
 										
 					switch ($tag) {
@@ -146,27 +144,17 @@ class CalendarParserICalendar extends CalendarParser {
 	
 						case 'DTSTART':
 						case 'DTEND':
+							// checking for day events
+							if ($params['VALUE'] == 'DATE')
+								$check['DAY_EVENT']++;
 						case 'DUE':
 						case 'RECURRENCE-ID':
-							if (array_key_exists('VALUE', $params)) {
-								if ($params['VALUE'] == 'DATE') {
-									$properties[$tag] = $this->_parseDate($value);
-								}
-								else {
-									$properties[$tag] = $this->_parseDateTime($value);
-								}
-							}
-							else {
-								$properties[$tag] = $this->_parseDateTime($value);
-							}
+							$properties[$tag] = $this->_parseDateTime($value);
 							break;
 	
 						case 'RDATE':
 							if (array_key_exists('VALUE', $params)) {
-								if ($params['VALUE'] == 'DATE') {
-									$properties[$tag] = $this->_parseDate($value);
-								}
-								else if ($params['VALUE'] == 'PERIOD') {
+								if ($params['VALUE'] == 'PERIOD') {
 									$properties[$tag] = $this->_parsePeriod($value);
 								}
 								else {
@@ -303,6 +291,10 @@ class CalendarParserICalendar extends CalendarParser {
 				if (!$properties['DTEND'])
 					$properties['DTEND'] = $properties['DTSTART'];
 				
+				// day events starts at 00:00:00 and ends at 23:59:59
+				if ($check['DAY_EVENT'])
+					$properties['DTEND']--;
+				
 				$this->components[] = $properties;
 			}
 			else {
@@ -360,7 +352,8 @@ class CalendarParserICalendar extends CalendarParser {
 			if (!$date = $this->_parseDate($text)) {
 				return $date;
 			}
-			return gmmktime (0, 0, 0, $date['month'], $date['mday'], $date['year']);
+			$date = $this->_parseDate($text);
+			return mktime(0, 0, 0, $date['month'], $date['mday'], $date['year']);
 		}
 
 		if (!$date = $this->_parseDate($dateParts[0])) {
@@ -371,11 +364,11 @@ class CalendarParserICalendar extends CalendarParser {
 		}
 
 		if ($time['zone'] == 'UTC') {
-			return gmmktime ($time['hour'], $time['minute'], $time['second'],
+			return gmmktime($time['hour'], $time['minute'], $time['second'],
 						$date['month'], $date['mday'], $date['year']);
 		}
 		else {
-			return mktime ($time['hour'], $time['minute'], $time['second'],
+			return mktime($time['hour'], $time['minute'], $time['second'],
 						$date['month'], $date['mday'], $date['year']);
 		}
 	}
@@ -392,7 +385,7 @@ class CalendarParserICalendar extends CalendarParser {
 				$time['zone'] = 'UTC';
 			}
 			else {
-				$time['zone'] = 'Local';
+				$time['zone'] = 'LOCAL';
 			}
 			return $time;
 		}
@@ -405,7 +398,7 @@ class CalendarParserICalendar extends CalendarParser {
 	* Parse a Date field
 	*/
 	function _parseDate ($text) {
-		if (strlen($text) != 8) {
+		if (strlen(trim($text)) != 8) {
 			return FALSE;
 		}
 
