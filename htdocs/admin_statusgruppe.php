@@ -164,7 +164,7 @@ function PrintAktualStatusgruppen ($range_id, $view, $edit_id="")
 		echo "\n\t<tr>";
 		echo "\n\t\t<td width=\"5%\">";
 		printf ("            	  <input type=\"IMAGE\" name=\"%s\" src=\"./pictures/move.gif\" border=\"0\" %s>&nbsp; </td>", $statusgruppe_id, tooltip("Markierte Personen dieser Gruppe zuordnen"));
-		printf ("	          <td width=\"85%%\" class=\"%s\">&nbsp; %s </td><td class=\"topic\" width=\"5%%\"><a href=\"$PHP_SELF?cmd=edit_statusgruppe&edit_id=%s&range_id=%s&view=%s\"><img src=\"./pictures/einst.gif\" border=\"0\" %s></a></td>",$edit_id == $statusgruppe_id?"topicwrite":"topic", htmlReady($db->f("name")),$statusgruppe_id, $range_id, $view, tooltip("Gruppenname oder Anzahl anpassen"));
+		printf ("	          <td width=\"85%%\" class=\"%s\">&nbsp; %s </td><td class=\"%s\" width=\"5%%\"><a href=\"$PHP_SELF?cmd=edit_statusgruppe&edit_id=%s&range_id=%s&view=%s\"><img src=\"./pictures/einst.gif\" border=\"0\" %s></a></td>",$edit_id == $statusgruppe_id?"topicwrite":"topic", htmlReady($db->f("name")), $edit_id == $statusgruppe_id?"topicwrite":"topic", $statusgruppe_id, $range_id, $view, tooltip("Gruppenname oder Anzahl anpassen"));
 		printf ( "	          <td width=\"5%%\"><a href=\"$PHP_SELF?cmd=remove_statusgruppe&statusgruppe_id=%s&range_id=%s&view=%s\"><img src=\"pictures/trash_att.gif\" width=\"11\" height=\"17\" border=\"0\" %s></a></td>",$statusgruppe_id, $range_id, $view, tooltip("Gruppe mit Personenzuordnung entfernen"));
 		echo 	"\n\t</tr>";
 
@@ -393,9 +393,9 @@ function PrintInstitutMembers ($range_id)
 	  	  echo"<input type=\"HIDDEN\" name=\"range_id\" value=\"$range_id\">";
   	      	  echo"<input type=\"HIDDEN\" name=\"view\" value=\"$view\">";
 	  	?>
-	        <font size="2">Name: </font>
+	        <font size="2">Gruppenname: </font>
 	        <input type="text" name="new_statusgruppe_name" value="<? echo htmlready(stripslashes($statusgruppe_name));?>">
-	        &nbsp; &nbsp; &nbsp; <font size="2">Anzahl:</font> 
+	        &nbsp; &nbsp; &nbsp; <font size="2">Gruppengr&ouml;&szlig;e:</font> 
 	        <input name="new_statusgruppe_size" type="text" value="" size="3">
 	        &nbsp; &nbsp; &nbsp; <b>Einf&uuml;gen</b>&nbsp; 
 	        <?
@@ -416,9 +416,9 @@ function PrintInstitutMembers ($range_id)
   	  	  echo"<input type=\"HIDDEN\" name=\"update_id\" value=\"$edit_id\">";
 	    	  echo"<input type=\"HIDDEN\" name=\"view\" value=\"$view\">";
 	  	?>
-	        <font size="2">Name: </font>
+	        <font size="2">neuer Gruppenname: </font>
 	        <input type="text" name="new_statusgruppe_name" value="<? echo htmlReady($gruppe_name);?>">
-	        &nbsp; &nbsp; &nbsp; <font size="2">Anzahl:</font> 
+	        &nbsp; &nbsp; &nbsp; <font size="2">neue Gruppengr&ouml;&szlig;e:</font> 
 	        <input name="new_statusgruppe_size" type="text" value="<? echo $gruppe_anzahl;?>" size="3">
 	        &nbsp; &nbsp; &nbsp; <b>&Auml;ndern</b>&nbsp; 
 	        <?
@@ -488,8 +488,8 @@ if ($db->num_rows()>0) {   // haben wir schon Gruppen? dann Anzeige
 ?>
 <table class="blank" width="100%" border="0" cellspacing="0">
     <?
-  	parse_msg("info§Es sind noch keine Statusgruppen angelegt. 
-  	<br>Bitte nutzen Sie die obere Zeile, um f&uuml;r diesen Bereich Statusgruppen anzulegen!
+  	parse_msg("info§Es sind noch keine Gruppen oder Funktionen angelegt. 
+  	<br>Bitte nutzen Sie die obere Zeile, um f&uuml;r diesen Bereich Gruppen oder Funktionen anzulegen!
   	<br><br>Sie haben mit dem Feld 'Anzahl' die M&ouml;glichkeit, sie Sollst&auml;rke f&uuml;r eine Gruppe festzulegen.
   	<br>Wenn Sie Gruppen angelegt haben, k&ouml;nnen Sie diesen Personen zuordnen. Jeder Gruppe k&ouml;nnen beliebig viele Personen zugeordnet werden. Jede Person kann beliebig vielen Gruppen zugeordnet werden.§");
     ?>
