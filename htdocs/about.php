@@ -18,42 +18,34 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-    page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
-    $perm->check("user");
+page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
+$perm->check("user");
 
+include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+
+// -- hier muessen Seiten-Initialisierungen passieren --
+
+require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
+require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/dates.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/messaging.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
+
+// Start  of Output
+include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 ?>
-<html>
-<head>
-<title>Stud.IP</title>
- <link rel="stylesheet" href="style.css" type="text/css">
 <script language="Javascript">
 function open_im()
 {
 fenster=window.open("studipim.php","im_<?=$user->id;?>","scrollbars=yes,width=400,height=300","resizable=no");
 }
 </script>
-</head>
-<!--
-// here i include my personal meta-tags; one of those might be useful:
-// <META HTTP-EQUIV="REFRESH" CONTENT="<?php print $auth->lifetime*60;?>; URL=logout.php">
--->
 <body bgcolor=white>
-
-<?php
- include "seminar_open.php"; //hier werden die sessions initialisiert
-?>
-
-<!-- hier muessen Seiten-Initialisierungen passieren -->
 
 <?php
 include ("$ABSOLUTE_PATH_STUDIP/header.php");
 include ("$ABSOLUTE_PATH_STUDIP/show_news.php");
 include ("$ABSOLUTE_PATH_STUDIP/show_dates.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
-require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/dates.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/messaging.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
 
 $sess->register("about_data");
 $msging=new messaging;

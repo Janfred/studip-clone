@@ -18,57 +18,46 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-	  page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
-	  $auth->login_if($again && ($auth->auth["uid"] == "nobody"));
+page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
+$auth->login_if($again && ($auth->auth["uid"] == "nobody"));
 
-?>
-
-<html>
- <head>
-<!--
-// here i include my personal meta-tags; one of those might be useful:
-// <META HTTP-EQUIV="REFRESH" CONTENT="<?php print $auth->lifetime*60;?>; URL=logout.php">
--->
-  <title>Stud.IP</title>
-	<link rel="stylesheet" href="style.css" type="text/css">
-
- </head>
-<body bgcolor="#ffffff">
-
-
-<?php
-	require_once "config.inc.php";
-	include "seminar_open.php"; //hier werden die sessions initialisiert
+require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php");
+include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
 // -- hier muessen Seiten-Initialisierungen passieren --
 // -- wir sind jetzt definitiv in keinem Seminar, also... --
 
-	$SessSemName[0] = "";
-	$SessSemName[1] = "";
+$SessSemName[0] = "";
+$SessSemName[1] = "";
 
-	include "header.php";   //hier wird der "Kopf" nachgeladen
+$sess->register("index_data");
 		
-	$sess->register("index_data");
-		
-  	//Auf und Zuklappen News
-  	if ($nopen)
-        	$index_data["nopen"]=$nopen;
-        
-        if ($nclose)
-        	$index_data["nopen"]='';
+//Auf und Zuklappen News
+if ($nopen)
+	$index_data["nopen"]=$nopen;
+       
+if ($nclose)
+	$index_data["nopen"]='';
 
+// Start  of Output
+include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
+
+print "<body>\n";
+
+if (($my_messaging_settings["start_messenger_at_startup"]) && ($auth->auth["jscript"]) && (!$index_data["im_loaded"])) {
+	?>
+	<script language="Javascript">
+	{fenster=window.open("studipim.php","im_<?=$user->id?>","scrollbars=yes,width=400,height=300","resizable=no");}
+	</script>
+	<?
+	$index_data["im_loaded"]=TRUE;
+}
+
+include ("$ABSOLUTE_PATH_STUDIP/header.php");
+		
 ?>
 <body>
 <?
-	if (($my_messaging_settings["start_messenger_at_startup"]) && ($auth->auth["jscript"]) && (!$index_data["im_loaded"])) {
-		?>
-		<script language="Javascript">
-		{fenster=window.open("studipim.php","im_<?=$user->id?>","scrollbars=yes,width=400,height=300","resizable=no");}
-		</script>
-		<?
-		$index_data["im_loaded"]=TRUE;
-		}
-
 $db=new DB_Seminar;
 $db2=new DB_Seminar;
 
