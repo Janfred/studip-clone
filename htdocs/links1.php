@@ -78,7 +78,10 @@ if ($entry_level=="sem") {
 $structure["_folder"]=array (topKat=>"folder", name=>"Ordneransicht", link=>"folder.php?cmd=tree", active=>FALSE);
 $structure["alle_dateien"]=array (topKat=>"folder", name=>"Alle Dateien", link=>"folder.php?cmd=all", active=>FALSE);
 //
-$structure["_literatur"]=array (topKat=>"literatur", name=>"Literatur und Links", link=>"literatur.php?view=sem", active=>FALSE);
+if ($entry_level=="sem")
+	$structure["_literatur"]=array (topKat=>"literatur", name=>"Literatur und Links", link=>"literatur.php?view=sem", active=>FALSE);
+else
+	$structure["_literatur"]=array (topKat=>"literatur", name=>"Literatur und Links", link=>"literatur.php?view=inst", active=>FALSE);
 	
 if ($rechte)
 	if ($entry_level=="sem")
