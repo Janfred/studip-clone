@@ -178,6 +178,7 @@ if ($cmd == "really_kill" && $topic_id !="") {
 		$mutter = suche_kinder($topic_id);
 		$mutter = explode (";",$mutter);
 		$count = sizeof($mutter)-2;
+		$theme = $db->f("root_id");
 		if ($rechte || (($db->f("user_id") == $user->id) && ($count == 0))) {  // noch mal checken ob alles o.k.
 			$count = 0;
 			delete_topic($topic_id, $count);
@@ -187,6 +188,7 @@ if ($cmd == "really_kill" && $topic_id !="") {
 				echo "<table class=\"blank\" cellspacing=0 cellpadding=0 border=0 width=\"100%\">";
 				parse_msg("msg§" . sprintf(_("%s Posting(s) gel&ouml;scht"), $count));
 				echo "</table>";
+				$topic_id = $theme;
 			}
 		}		
 	}
