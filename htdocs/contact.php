@@ -41,11 +41,18 @@ $cssSw->enableHover();
 
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+include ("$ABSOLUTE_PATH_STUDIP/calendar/calendar_links.inc.php");   // Output of Stud.IP head
 
 echo "\n" . $cssSw->GetHoverJSFunction() . "\n";
 $cssSw->switchClass();
 
 include "links_openobject.inc.php";
+?>
+<table width = "100%" cellspacing="0"><tr>
+	<td class="topic" width = "100%"><img src="pictures/nutzer.gif" border="0" align="texttop"><b>&nbsp; Mein Addressbuch</b>
+	</td>
+</tr><tr><td class="blank">&nbsp;</td></tr></table>
+<?
 
 // Aktionen
 
@@ -53,9 +60,7 @@ if ($cmd == "delete") {
 	echo DeleteContact ($contact_id);
 }
 
-echo "<table align=\"center\" class=\"blank\" width=\"100%\" cellpadding=\"10\"><tr><td class=\"blank\">";
-echo "<h3>Addressbuch</h3>";
-
+echo "<table align=\"center\" class=\"blank\" width=\"100%\" cellpadding=\"10\"><tr><td class=\"steelgraulight\">";
 echo "<a href=\"$PHP_SELF?open=all&filter=$filter\">Alle aufklappen</a>";
 
 // Buchstabenleiste
@@ -85,8 +90,11 @@ echo "</tr></table>";
 
 
 // Anzeige Treffer
-
-PrintAllContact($filter);
+if ($edit_id) {
+	PrintEditContact($edit_id);
+} else {
+	PrintAllContact($filter);
+}
 
 echo "</td></tr></table>";
 print("</body></html>");
