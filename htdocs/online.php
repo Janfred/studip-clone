@@ -110,7 +110,7 @@ ob_start();
 			$user_id = $value["userid"];
 			$db->query ("SELECT contact_id FROM contact WHERE owner_id = '$owner_id' AND user_id = '$user_id' AND buddy = '1'");	
 			if ($db->next_record()) { // er ist auf jeden Fall als Buddy eingetragen
-				$db2->query ("SELECT position, name, statusgruppen.statusgruppe_id FROM statusgruppen LEFT JOIN statusgruppe_user USING(statusgruppe_id) WHERE range_id = '$owner_id' AND user_id = '$user_id' ORDER BY position ASC");	
+				$db2->query ("SELECT statusgruppen.position, name, statusgruppen.statusgruppe_id FROM statusgruppen LEFT JOIN statusgruppe_user USING(statusgruppe_id) WHERE range_id = '$owner_id' AND user_id = '$user_id' ORDER BY statusgruppen.position ASC");	
 				if ($db2->next_record()) { // er ist auch einer Gruppe zugeordnet
 					$group_buddies[]=array($db2->f("position"), $db2->f("name"), $online[$username]["name"],$online[$username]["last_action"],$username,$db2->f("statusgruppe_id"),$user_id);
 				} else {	// buddy, aber keine Gruppe
