@@ -17,6 +17,8 @@ if ($SessSemName["class"]=="inst") {
 	$structure["personal"]=array (topKat=>"", name=>"Personal", link=>"institut_members.php", active=>FALSE);
 	$structure["folder"]=array (topKat=>"", name=>"Dateien", link=>"folder.php?cmd=tree", active=>FALSE);
 	$structure["literatur"]=array (topKat=>"", name=>"Literatur zur Einrichtung", link=>"literatur.php", active=>FALSE);
+	if ($RESOURCES_ENABLE)
+		$structure["resources"]=array (topKat=>"", name=>"Ressourcen", link=>"resources.php?view=openobject_main", active=>FALSE);
 } else {
 	$structure["seminar_main"]=array (topKat=>"", name=>"&Uuml;bersicht", link=>"seminar_main.php", active=>FALSE);
 	$structure["forum"]=array (topKat=>"", name=>"Forum", link=>"forum.php", active=>FALSE);
@@ -24,6 +26,8 @@ if ($SessSemName["class"]=="inst") {
 	$structure["folder"]=array (topKat=>"", name=>"Dateien", link=>"folder.php?cmd=tree", active=>FALSE);
 	$structure["dates"]=array (topKat=>"", name=>"Ablaufplan", link=>"dates.php", active=>FALSE);
 	$structure["literatur"]=array (topKat=>"", name=>"Literatur", link=>"literatur.php", active=>FALSE);
+	if ($RESOURCES_ENABLE)
+		$structure["resources"]=array (topKat=>"", name=>"Ressourcen", link=>"resources.php?view=openobject_main", active=>FALSE);
 }
 
 //Bottomkats
@@ -93,6 +97,16 @@ if ($rechte)
 		$structure["admin_literatur"]=array (topKat=>"literatur", name=>"Literatur und Links bearbeiten", link=>"admin_literatur.php?view=literatur_sem&new_sem=TRUE&range_id=".$SessSemName[1], active=>FALSE);
 	else
 		$structure["admin_literatur"]=array (topKat=>"literatur", name=>"Literatur und Links bearbeiten", link=>"admin_literatur.php?view=literatur_inst&new_inst=TRUE&range_id=".$SessSemName[1], active=>FALSE);
+
+if ($RESOURCES_ENABLE) {
+	$structure["resources_overview"]=array (topKat=>"resources", name=>"&Uuml;bersicht", link=>"resources.php?view=openobject_main", active=>FALSE);
+	$structure["resources_details"]=array (topKat=>"resources", name=>"Details", link=>"resources.php?view=openobject_details", active=>FALSE);
+	$structure["resources_schedule"]=array (topKat=>"resources", name=>"Belegung", link=>"resources.php?view=openobject_schedule", active=>FALSE);
+	$structure["resources_assign"]=array (topKat=>"resources", name=>"Neue Belegung", link=>"resources.php?view=openobject_assign", active=>FALSE);
+	if ($rechte)
+		$structure["resources_admin"]=array (topKat=>"resources", name=>"Ressourcen verwalten", link=>"resources.php?view=resources", active=>FALSE);
+}
+
 
 //Infofenstereintraege erzeugen
 if ($SessSemName["class"]=="inst") {
@@ -195,6 +209,25 @@ switch ($i_page) {
 	break;	
 	case "literatur.php": 
 		$reiter_view="literatur";
+	break;
+	case "resources.php": 
+		switch ($view) {
+			case "openobject_main":
+				$reiter_view="resources";
+			break;
+			case "openobject_details":
+				$reiter_view="resources_details";
+			break;
+			case "openobject_schedule":
+				$reiter_view="resources_schedule";
+			break;
+			case "openobject_assign":
+				$reiter_view="resources_assign";
+			break;
+			default :
+				$reiter_view="resources";
+			break;
+		}
 	break;
 	default :
 		if ($SessSemName["class"]=="inst")
