@@ -37,7 +37,7 @@
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 
 $perm->check("tutor");
-if (!$RESOURCES_ENABLE) //we need resources management!
+if ((!$RESOURCES_ENABLE) || (!$RESOURCES_ALLOW_ROOM_REQUESTS)) //we need resources management and room request ability
 	die;
 
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
