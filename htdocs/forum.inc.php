@@ -950,7 +950,7 @@ function print_rating($rate, $id, $username) {
 
   		if (object_check_user($id, "rate") == TRUE || get_username($user->id) == $username) { // already rated / my own posting
  			$ol_txt = "'<div align=center>Bewertung: $rate</div>', CSSOFF, LEFT, WIDTH, 100";
- 		 	$bar = '<a href="javascript:void(0);" onmouseover="return overlib('.$ol_txt.');" onmouseout="return nd();">' . $bar . '</a> | ';
+ 		 	$bar = '<a href="javascript:void(0);" onmouseover="return overlib('.$ol_txt.');" onmouseout="return nd();">' . $bar . '</a>&nbsp;';
  		 } else {
   		 	$random = rand();
     			$start = $forum["flatviewstartposting"];
@@ -967,7 +967,7 @@ function print_rating($rate, $id, $username) {
   			$ol_txt2 .= "<input type=hidden name=open value=$openorig><input type=hidden name=flatviewstartposting value=$start>";
  	 		$ol_txt2 .= "<input type=image name=sidebar value=$id src=./locale/de/LC_BUTTONS/bewerten-button.gif align=absmiddle border=0></form></font></div>";
   			$ol_txt2 .= "', CAPTION, '$txt2', CSSOFF, STICKY, LEFT, ABOVE, WIDTH, 200, HEIGHT, 100";
-  			$bar = '<a href="javascript:overlib('.$ol_txt2.'), void(0);" onmouseover="return overlib('.$ol_txt.');"  onmouseout="return nd();">' . $bar . '</a> | ';
+  			$bar = '<a href="javascript:overlib('.$ol_txt2.'), void(0);" onmouseover="return overlib('.$ol_txt.');"  onmouseout="return nd();">' . $bar . '</a>&nbsp;';
   		}
 	}
 //	$bar .= " | ";
