@@ -42,11 +42,10 @@ please note the LOCAL.INC.PHP in the php-lib folder for the basic system setting
 //Daten ueber die Uni
     // der Name wird in der local.inc festgelegt
 $UNI_URL = "http://www.studip.de";
-$UNI_LOGOUT_ADD=sprintf(_("Und hier geht's zur %sStud.IP Portalseite%s&nbsp;"), "<a href=\"http://www.studip.de\"><b>", "</b></a>");
-//$UNI_LOGIN_ADD=_('Herzlich willkommen!');
 $UNI_LOGIN_ADD='';
+$UNI_LOGOUT_ADD=sprintf(_("Und hier geht's zur %sStud.IP Portalseite%s&nbsp;"), "<a href=\"http://www.studip.de\"><b>", "</b></a>");
 $UNI_CONTACT = "<please insert your generel contact mail-adress here>";
-$UNI_INFO = "Stud.IP 1.0 - Studienbegleitender Internetsupport von Präsenzlehre"; 
+$UNI_INFO = "Stud.IP 1.1 - Studienbegleitender Internetsupport von Präsenzlehre"; 
 
 
 //Festlegen der zulaessigen Typen fuer Veranstaltungen
