@@ -89,22 +89,21 @@ if ($sms_inout) {
 	$sms_data["view"] = "in";
 }
 
-if ($show_folder || empty($sms_show['folder'][$sms_data['view']])) { // set choosen folder
-	if ($show_folder == "close") {
-		$sms_show['folder'][$sms_data['view']] = "close";
-	} else {
-		$sms_show['folder'][$sms_data['view']] = $show_folder;
-	}
-	if (empty($sms_show['folder'][$sms_data['view']])) {
-		$sms_show['folder'][$sms_data['view']] = "close";
-	}
+if (!$sms_show['folder'][$sms_data['view']]) {
+	$sms_show['folder'][$sms_data['view']] = $my_messaging_settings["folder"]['active'][$sms_data['view']];
+}
+if ($show_folder == "close") {
+	$sms_show['folder'][$sms_data['view']] = "close";
+} else if ($show_folder != "") {
+	$sms_show['folder'][$sms_data['view']] = $show_folder;
+	$my_messaging_settings["folder"]['active'][$sms_data['view']] = $sms_show['folder'][$sms_data['view']];
 }
 
 if (!empty($new_folder) && $new_folder_button_x) {
 	$my_messaging_settings["folder"][$in_out] = array_add_value($new_folder, $my_messaging_settings["folder"][$in_out]);
 }
 
-if (!empty($delete_folder) && $delete_folder_button_x) {
+if ($delete_folder && $delete_folder_button_x) {
 	if ($in_out == "in") {
 		$tmp_sndrec = "rec";
 	} else {
@@ -254,16 +253,7 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 						<input type="hidden" name="cmd" value="">
 						<input type="image" name="select" border="0" <?=makeButton("zurueck", "src")?> value="loeschen">
 						</form> <?
-					}
-						if ($cmd != "admin_folder") {?>
-							<form action="<?=$PHP_SELF?>" method="post" style="display: inline">
-							<input type="hidden" name="cmd" value="select_all">
-							<input type="image" name="select" border="0" <?=makeButton("alleauswaehlen", "src")?> value="loeschen">
-							</form>
-							<form action="<?=$PHP_SELF?>" method="post" style="display: inline">
-							<input type="hidden" name="cmd" value="delete_selected">
-							<input type="image" name="kill" border="0" <?=makeButton("markierteloeschen", "src")?> value="loeschen">
-					<? } ?>
+					} ?>
 				</td>
 			</tr>
 		</table><?
@@ -271,10 +261,11 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 			if (!$move_to_folder) { // wenn nicht verschieben
 				// neue-nachrichten-ordner
 				if ($sms_data['view'] == "in") { // zeige neue-nachrichten-ordner wenn im eingang ...
-					$count = count_messages_from_user($sms_data['view'], "AND deleted='0' AND readed='0'"); // neue nahrichten zaehlen
+					$count = count_messages_from_user($sms_data['view'], "AND deleted='0' AND readed='0'"); // neue nachrichten zaehlen
 					if ($count >= "1") { // nur zeigen, wenn auch neue nachrichten ...
 						$link = folder_makelink("new");
-						$titel = "<a href=\"".$link."\" class=\"tree\" >"._("Ungelesene Nachrichten")."&nbsp;(".$count.")</a>";
+						$titel = "<a href=\"".$link."\" class=\"tree\" >"._("Ungelesene Nachrichten")."</a>";
+						$zusatz = "(".$count.")&nbsp;"._("Nachrichten");
 						echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"99%\" align=\"center\"><tr>";
 						printhead(0, 0, $link, folder_openclose($sms_show['folder'][$sms_data['view']], "new"), FALSE, "<a href=\"".$link."&cmd_show=openall\"><img src=\"pictures/".showfoldericon("new", $count)."\" border=0></a>", $titel, $zusatz);
 						echo "</tr></table>";
@@ -284,14 +275,18 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 				// alle-nachrichten-ordner
 				$link = folder_makelink("all");
 				$count = count_messages_from_user($sms_data['view'], "AND deleted='0'");
-				$titel = "<a href=\"".$link."\" class=\"tree\" >"._("Alle Nachrichten")."&nbsp;(".$count.")</a>";
+				$count_timefilter = count_x_messages_from_user($sms_data['view'], "all", $query_time_sort);
+				$titel = "<a href=\"".$link."\" class=\"tree\" >"._("Alle Nachrichten")."</a>";
 				$symbol = "<a href=\"".$link."&cmd_show=openall\"><img src=\"pictures/".showfoldericon("all", $count)."\" border=0></a>";
 				echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"99%\" align=\"center\"><tr>";
+				$zusatz = sprintf(_("%s von %s Nachrichten"), $count_timefilter, $count);
+				#$zusatz = ." / ".$count."&nbsp;"._("Nachrichten (Ansicht / insgesamt)");
 				printhead(0, 0, $link, folder_openclose($sms_show['folder'][$sms_data['view']], "all"), FALSE, $symbol, $titel, $zusatz);
 				echo "</tr></table>";
 				$content_content = _("Dieser Ordner zeigt alle Nachrichten.")."<br>";
 				if ((folder_openclose($sms_show['folder'][$sms_data['view']], "all") == "open")) {
 					echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"99%\" align=\"center\"><tr>";
+					echo "<td class=\"printcontent\"><img src=\"./pictures/forumstrich.gif\" height=\"100%\" width=\"10px\"></td>";
 					printcontent("99%",0, $content_content, FALSE);
 					echo "</tr></table>	";		
 				}
@@ -301,6 +296,7 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 			if (!empty($my_messaging_settings["folder"][$sms_data['view']])) {
 				// unzugeordnete-nachrichten-ordner
 				$count = count_messages_from_user($sms_data['view'], "AND deleted='0' AND folder=''");
+				$count_timefilter = count_x_messages_from_user($sms_data['view'], "", $query_time_sort);
 				$open = folder_openclose($sms_show['folder'][$sms_data['view']], "free");
 				if ($move_to_folder && $open == "close") { // wenn in diesen ordner verschiebbar
 					$picture = "move.gif";
@@ -312,9 +308,10 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 					$link = folder_makelink("free");
 				}
 				$symbol = "<a href=\"".$link."&cmd_show=openall\"><img src=\"pictures/".$picture."\" border=0></a>";
-				$titel = "<a href=\"".$link."\" class=\"tree\" >"._("Unzugeordnet")."&nbsp;(".$count.")</a>";
+				$titel = "<a href=\"".$link."\" class=\"tree\" >"._("Unzugeordnet")."&nbsp;(".count_x_messages_from_user($sms_data['view'], "", $query_time_sort).")</a>";
+				$zusatz = sprintf(_("%s von %s Nachrichten"), $count_timefilter, $count);
 				echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"99%\" align=\"center\"><tr>";
-				printhead(0, 0, $link, $open, FALSE, $symbol, $titel, FALSE);
+				printhead(0, 0, $link, $open, FALSE, $symbol, $titel, $zusatz);
 				echo "</tr></table>	";
 				#$content_content = _("In diesem Ordner befinden sich alle nicht von Ihnen zugeordneten Nachrichten.");
 				#$content_content = "<div align=\"center\"><a href=\"".$PHP_SELF."?move_to_folder=".$prm['message_id']."\" ".tooltip(_("Diese Nachricht in einen frei wählbaren Ordner verschieben.")).">".makeButton("loeschen", "img")."</a>&nbsp;";
@@ -322,10 +319,14 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 				#$content_content .= "<a href=\"".$PHP_SELF."?move_to_folder=".$prm['message_id']."\" ".tooltip(_("Diese Nachricht in einen frei wählbaren Ordner verschieben.")).">".makeButton("neuerordner", "img")."</a><br></div>";
 				
 				$content_content = "<div align=\"center\">
+
 							<form action=\"".$PHP_SELF."\" method=\"post\" style=\"display: inline\">
-							<input type=\"hidden\" name=\"cmd\" value=\"select_all\">
-							<input type=\"image\" name=\"select\" border=\"0\" ".makeButton("ordnerloeschen", "src")." value=\"loeschen\">
+							<input type=\"hidden\" name=\"delete_folder_button_x\" value=\"1\">
+							<input type=\"hidden\" name=\"in_out\" value=\"".$sms_data['view']."\">
+							<input type=\"hidden\" name=\"delete_folder\" value=\"".$my_messaging_settings["folder"][$sms_data['view']][$x]."\">
+							<input type=\"image\" name=\"a\" border=\"0\" ".makeButton("ordnerloeschen", "src")." value=\"a\">
 							</form>
+
 							<form action=\"".$PHP_SELF."\" method=\"post\" style=\"display: inline\">
 							<input type=\"hidden\" name=\"cmd\" value=\"select_all\">
 							<input type=\"image\" name=\"select\" border=\"0\" ".makeButton("alleauswaehlen", "src")." value=\"loeschen\">
@@ -336,6 +337,7 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 				
 				if (($open == "open")) {
 					echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"99%\" align=\"center\"><tr>";
+					echo "<td class=\"printcontent\"><img src=\"./pictures/forumstrich.gif\" height=\"100%\" width=\"10px\"></td>";
 					printcontent("99%",0, $content_content, $edit);
 					echo "</tr></table>	";		
 				}
@@ -344,6 +346,7 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 				// persoenliche ordner
 				for($x="0";$x<sizeof($my_messaging_settings["folder"][$sms_data['view']]);$x++) {
 					$count = count_messages_from_user($sms_data['view'], "AND deleted='0' AND folder='".$my_messaging_settings["folder"][$sms_data['view']][$x]."'");
+					$count_timefilter = count_x_messages_from_user($sms_data['view'], $my_messaging_settings["folder"][$sms_data['view']][$x], $query_time_sort);
 					$open = folder_openclose($sms_show['folder'][$sms_data['view']], $my_messaging_settings["folder"][$sms_data['view']][$x]);
 					if ($move_to_folder && $open == "close") {
 						$picture = "move.gif";
@@ -352,32 +355,38 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 						$picture = showfoldericon($my_messaging_settings["folder"][$sms_data['view']][$x], $count);
 					}
 					if (!$move_to_folder) {
-						$zusatz = "<a href=\"".$PHP_SELF."?delete_folder=".$my_messaging_settings["folder"][$sms_data['view']][$x]."&delete_folder_button_x=1\"><img src=\"pictures/trash2.gif\" border=0></a>";
 						$link = folder_makelink($my_messaging_settings["folder"][$sms_data['view']][$x]);
 						$link_add = "&cmd_show=openall";
 					}
-					$titel = "<a href=\"".$link."\" class=\"tree\" >".$my_messaging_settings["folder"][$sms_data['view']][$x]."&nbsp;(".$count.")</a>";
+					$titel = "<a href=\"".$link."\" class=\"tree\" >".$my_messaging_settings["folder"][$sms_data['view']][$x]."</a>";
+					if ($count_timefilter == "0") {
+						$zusatz = _("keine Nachrichten zum anzeigen");
+					} else {
+						$zusatz = sprintf(_("%s von %s Nachrichten"), $count_timefilter, $count);
+					}
 					echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"99%\" align=\"center\"><tr>";
 					printhead(0, 0, $link, $open, FALSE, "<a href=\"".$link.$link_add."\"><img src=\"pictures/".$picture."\" border=0></a>", $titel, $zusatz);
 					echo "</tr></table>	";
 					$content_content = _("Ordner:")."&nbsp;".$sms_show['folder'][$sms_data['view']]."<br>";
 					if ($open == "open") {
-						
-					$content_content = "<div align=\"center\"><form action=\"".$PHP_SELF."\" method=\"post\" style=\"display: inline\">
-							<input type=\"hidden\" name=\"delete_folder\" value=\"".$my_messaging_settings['folder'][$sms_data['view']][$x]."\">
-							<input type=\"hidden\" name=\"delete_folder_button_x\" value=\"1\">
-							<input type=\"image\" name=\"x\" border=\"0\" ".makeButton("ordnerloeschen", "src")." value=\"dfg\">
+						$content_content = "<div align=\"center\">
+							<form action=\"".$PHP_SELF."\" method=\"post\" style=\"display: inline\">
+								<input type=\"hidden\" name=\"delete_folder_button_x\" value=\"1\">
+								<input type=\"hidden\" name=\"in_out\" value=\"".$sms_data['view']."\">
+								<input type=\"hidden\" name=\"delete_folder\" value=\"".$my_messaging_settings["folder"][$sms_data['view']][$x]."\">
+								<input type=\"image\" name=\"a\" border=\"0\" ".makeButton("ordnerloeschen", "src")." value=\"a\">
 							</form>
 							<form action=\"".$PHP_SELF."\" method=\"post\" style=\"display: inline\">
-							<input type=\"hidden\" name=\"cmd\" value=\"select_all\">
-							<input type=\"image\" name=\"select\" border=\"0\" ".makeButton("alleauswaehlen", "src")." value=\"loeschen\">
-							</form>
-							<form action=\"".$PHP_SELF."\" method=\"post\" style=\"display: inline\">
-							<input type=\"hidden\" name=\"cmd\" value=\"delete_selected\">
-							<input type=\"image\" name=\"kill\" border=\"0\" ".makeButton("markierteloeschen", "src")." value=\"loeschen\"><br></div>";						
-						
-						
+								<input type=\"hidden\" name=\"cmd\" value=\"select_all\">
+								<input type=\"image\" name=\"select\" border=\"0\" ".makeButton("alleauswaehlen", "src")." value=\"loeschen\">
+								</form>
+								<form action=\"".$PHP_SELF."\" method=\"post\" style=\"display: inline\">
+								<input type=\"hidden\" name=\"cmd\" value=\"delete_selected\">
+								<input type=\"image\" name=\"kill\" border=\"0\" ".makeButton("markierteloeschen", "src")." value=\"loeschen\"><br></div>";
 						echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"99%\" align=\"center\"><tr>";
+						if ($count_timefilter != "0") {
+							echo "<td class=\"printcontent\"><img src=\"./pictures/forumstrich.gif\" height=\"100%\" width=\"10px\"></td>";
+						}
 						printcontent("99%",0, $content_content, FALSE);
 						echo "</tr></table>	";		
 					}
