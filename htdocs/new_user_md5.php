@@ -279,7 +279,7 @@ while ( is_array($HTTP_POST_VARS)
 			if ($ILIAS_CONNECT_ENABLE) {
 				$this_ilias_id = get_connected_user_id($u_id);
 				if ($this_ilias_id != false) 
-					edit_ilias_user($this_ilias_id, $username, $geschlecht, $Vorname, $Nachname, $title_front, "Stud.IP", $Email, $permlist);
+					edit_ilias_user($this_ilias_id, $username, $geschlecht, $Vorname, $Nachname, $title_front, "Stud.IP", $Email, $permlist, $preferred_language);
 				}
 		}
 		
