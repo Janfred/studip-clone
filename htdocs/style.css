@@ -13,9 +13,9 @@ A:link.links1b { color: #000000; font-family: Arial, Helvetica, sans-serif; font
 A:visited.links1b { color: #000000; text-decoration : none; font-family: Arial, Helvetica, sans-serif; font-weight: bold;font-size:10pt;}
 A:hover.links1b {color: #FF3333;text-decoration: none;font-family: Arial, Helvetica, sans-serif;font-weight: bold;font-size:10pt;}
 
-A:link.index {	color: #444444; text-decoration: none;font-family: Arial, Helvetica, sans-serif; font-weight: bold; font-size:9pt;}
-A:visited.index {color: #444444; text-decoration: none;font-family: Arial, Helvetica, sans-serif; font-weight: bold; font-size:9pt;}
-A:hover.index {color: #FF3333;text-decoration: none;font-family: Arial, Helvetica, sans-serif;font-weight: bold;font-size:9pt;}
+A:link.index {	color: #444444; text-decoration: none;font-family: Arial, Helvetica, sans-serif; font-size:8pt;}
+A:visited.index {color: #444444; text-decoration: none;font-family: Arial, Helvetica, sans-serif; font-size:8pt;}
+A:hover.index {color: #FF3333;text-decoration: none;font-family: Arial, Helvetica, sans-serif ;font-size:8pt;}
 
 
 

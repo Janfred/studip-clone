@@ -144,19 +144,19 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("doz
 	<table cellspacing="20">
 		<tr>
 			<?
-			echo "<td class=\"steel1\"><a class=\"index\" href=\"index.php?again=yes\"><img src=\"./pictures/start.gif\" align=left border=\"0\">&nbsp; <font size=\"4\"><b>"._("Login")."</b></font><br><font size=\"1\" color=#555555>&nbsp; "._("f&uuml;r registrierte NutzerInnen")."</font></a>&nbsp; </td>";
+			echo "<td class=\"steel1\"><a class=\"index\" href=\"index.php?again=yes\"><img src=\"./pictures/start.gif\" align=left border=\"0\">&nbsp; <font size=\"4\"><b>"._("Login")."</b></font><br><font color=#555555>&nbsp; "._("f&uuml;r registrierte NutzerInnen")."</font></a>&nbsp; </td>";
 			?>
 		</tr><tr>
 			<?
-			echo "<td class=\"steel1\"><a class=\"index\" href=\"register1.php\"><img src=\"./pictures/register.gif\" align=left border=\"0\">&nbsp; <font size=\"4\"><b>"._("Registrieren")."</b></font><br><font size=\"1\" color=#555555>&nbsp; ".("um NutzerIn zu werden")."</font></a>&nbsp; </td>";
+			echo "<td class=\"steel1\"><a class=\"index\" href=\"register1.php\"><img src=\"./pictures/register.gif\" align=left border=\"0\">&nbsp; <font size=\"4\"><b>"._("Registrieren")."</b></font><br><font color=#555555>&nbsp; ".("um NutzerIn zu werden")."</font></a>&nbsp; </td>";
 			?>
 		</tr>	<tr>
 			<?
-			echo "<td class=\"steel1\"><a class=\"index\" href=\"freie.php\"><img src=\"./pictures/free.gif\" align=left border=\"0\">&nbsp; <font size=\"4\"><b>"._("Freier Zugang")."</b></font><br><font size=\"1\" color=#555555>&nbsp; "._("ohne Registrierung")."</font></a>&nbsp; </td>";
+			echo "<td class=\"steel1\"><a class=\"index\" href=\"freie.php\"><img src=\"./pictures/free.gif\" align=left border=\"0\">&nbsp; <font size=\"4\"><b>"._("Freier Zugang")."</b></font><br><font color=#555555>&nbsp; "._("ohne Registrierung")."</font></a>&nbsp; </td>";
 			?>
 		</tr>	<tr>
 			<?
-			echo "<td class=\"steel1\"><a class=\"index\" href=\"help/index.php\"><img src=\"./pictures/help.gif\" align=left border=\"0\">&nbsp; <font size=\"4\"><b>"._("Hilfe")."</b></font><br><font size=\"1\" color=#555555>&nbsp; "._("zu Bedienung und Funktionsumfang")."&nbsp; &nbsp; </font></a>&nbsp; </td>";
+			echo "<td class=\"steel1\"><a class=\"index\" href=\"help/index.php\"><img src=\"./pictures/help.gif\" align=left border=\"0\">&nbsp; <font size=\"4\"><b>"._("Hilfe")."</b></font><br><font color=#555555>&nbsp; "._("zu Bedienung und Funktionsumfang")."&nbsp; &nbsp; </font></a>&nbsp; </td>";
 			?>
 		</tr>
 	</table>
