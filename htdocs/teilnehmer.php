@@ -618,11 +618,15 @@ while (list ($key, $val) = each ($gruppe)) {
 	}
 	print "</td>";
 	printf("<td class=\"steel\" width=\"29%%\" align=\"left\"><img src=\"pictures/blank.gif\" width=\"1\" height=\"20\"><font size=\"-1\"><b>%s</b></font></td>", $val);
-	if ($key != dozent && $rechte)
+	if ($key != "dozent" && $rechte) {
 		printf("<td class=\"steel\" width=\"1%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>%s</b></font></td>", _("Anmeldedatum"));
+	} else if ($key == "dozent" && $rechte) {
+		printf("<td class=\"steel\" width=\"9%%\" align=\"center\" valign=\"bottom\">&nbsp;</td>");
+	}
 	printf("<td class=\"steel\" width=\"10%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>%s</b></font></td>", _("Postings"));
 	printf("<td class=\"steel\" width=\"10%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>%s</b></font></td>", _("Dokumente"));
 	printf("<td class=\"steel\" width=\"9%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>%s</b></font></td>", _("Nachricht"));
+
 
 	if ($rechte) {
 
@@ -757,8 +761,11 @@ while (list ($key, $val) = each ($gruppe)) {
 
 	printf ("<font size=\"-1\"><a href = about.php?username=%s>", $db->f("username"));
 	echo htmlReady($db->f("fullname")) ."</a></font></td>";
-	if ($key != "dozent" && $rechte)
+	if ($key != "dozent" && $rechte) {
 		echo "<td class=\"$class\" align=\"center\"><font size=\"-1\">".date("d.m.y,",$db->f("mkdate"))."&nbsp;".date("H:i:s",$db->f("mkdate"))."</font></td>";
+	} else if ($key == "dozent" && $rechte) {
+		echo "<td class=\"$class\" align=\"center\">&nbsp;</td>";
+	}
 	echo "<td class=\"$class\" align=\"center\"><font size=\"-1\">".$db->f("doll")."</font></td>";
 	echo "<td class=\"$class\" align=\"center\"><font size=\"-1\">".$Dokumente."</font></td>";
 
