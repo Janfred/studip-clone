@@ -15,6 +15,7 @@ else {
 	$query = "SELECT n.*, {$_fullname_sql[$nameformat]} AS name, ";
 	$query .= "aum.username FROM news_range nr LEFT JOIN ";
 	$query .= "news n USING(news_id) LEFT JOIN auth_user_md5 aum USING(user_id) ";
+	$query .= "LEFT JOIN user_info USING(user_id) ";
 	$query .= "WHERE range_id='{$this->config->range_id}'";
 }
 
