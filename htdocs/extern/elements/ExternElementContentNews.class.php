@@ -72,9 +72,10 @@ class ExternElementContentNews extends ExternElement {
 			"fonttopic_class", "fonttopic_style","divtopic_align", "divtopic_class",
 			"divtopic_style", "fontbody_size", "fontbody_face", "fontbody_color",
 			"fontbody_class", "fontbody_style", "divbody_align", "divbody_class", "divbody_style");
-		$headlines = array("fonttopic" => _("Schriftformatierung News-Titel"),
-				"divtopic" => _("Ausrichtung News-Titel"), "fontbody" => _("Schriftformatierung News-Beschreibung"),
-				"divbody" => _("Ausrichtung News-Beschreibung"));
+		$headlines = array("fonttopic" => _("Schriftformatierung News-Titel (HTML-Tag &lt;font&gt;)"),
+				"divtopic" => _("Ausrichtung News-Titel (HTML-Tag &lt;div&gt;)"),
+				"fontbody" => _("Schriftformatierung News-Beschreibung (HTML-Tag &lt;font&gt;)"),
+				"divbody" => _("Ausrichtung News-Beschreibung (HTML-Tag &lt;div&gt;)"));
 		$content_table = $edit_form->getEditFormContent($attributes, $headlines);
 		$content_table .= $edit_form->editBlankContent();
 		
