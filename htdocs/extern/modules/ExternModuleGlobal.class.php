@@ -63,6 +63,9 @@ class ExternModuleGlobal extends ExternModule {
 	*/
 	function ExternModuleGlobal () {}
 	
+	/**
+	*
+	*/
 	function setup () {
 		$this->elements["PageBodyGlobal"]->real_name = _("Seitenk&ouml;rper");
 		$this->elements["MainTableHeaderGlobal"]->real_name = _("Tabellenkopf Gesamttabelle");
@@ -94,45 +97,7 @@ class ExternModuleGlobal extends ExternModule {
 		$this->elements["TextGlobal"]->attributes = array("font_size", "font_face",
 				"font_color", "font_class", "font_style");
 		
-		$this->globalConfigMapping();
 	}
-	
-	function restoreRegisteredElements () {
-		$element_names = array
-			(
-				"Main",
-				"PageBodyGlobal",
-				"MainTableHeaderGlobal",
-				"InnerTableHeaderGlobal",
-				"MainTableHeadrowGlobal",
-				"TableGrouprowGlobal",
-				"TableRowGlobal",
-				"TableHeadrowTextGlobal",
-				"Headline1TextGlobal",
-				"Headline2TextGlobal",
-				"TextGlobal",
-				"LinksGlobal"
-			);
-		
-		foreach ($element_names as $element_name) {
-			$registered_elements[$element_name] = $this->registered_elements[$element_name];
-			$elements[$element_name] = $this->elements[$element_name];
-		}
-		
-		$this->registered_elements = $registered_elements;
-		$this->elements = $elements;
-	}
-	
-	/**
-	*
-	*/
-	function toStringEdit ($open_elements = "", $post_vars = "",
-			$faulty_values = "", $anker = "") {
-		
-		$this->restoreRegisteredElements();
-		return parent::toStringEdit ($open_elements, $post_vars, $faulty_values, $anker);
-	}
-		
 	
 	/**
 	*
@@ -142,7 +107,13 @@ class ExternModuleGlobal extends ExternModule {
 		parent::store($element_name, $values);
 	}
 	
+	/**
+	*
+	*/
 	function globalConfigMapping ($element_name = "", $values = "") {
+	
+		// mapping entire elements
+		
 		$elements_map["PersondetailsLectures"][] = $this->elements["Main"];
 		
 		$elements_map["Body"][] = $this->elements["PageBodyGlobal"];
@@ -164,37 +135,21 @@ class ExternModuleGlobal extends ExternModule {
 		$elements_map["LinkIntern"][] = $this->elements["LinksGlobal"];
 		$elements_map["LinkInternSimple"][] = $this->elements["LinksGlobal"];
 		$elements_map["LecturerLink"][] = $this->elements["LinksGlobal"];
+		
 		$elements_map["SemName"][] = $this->elements["Headline1TextGlobal"];
 		$elements_map["Headline"][] = $this->elements["Headline2TextGlobal"];
+		$elements_map["Headline"][] = $this->elements["TableGrouprowGlobal"];
 		$elements_map["Content"][] = $this->elements["TextGlobal"];
+		$elements_map["Content"][] = $this->elements["TableRowGlobal"];
+		
 		$elements_map["StudipLink"][] = $this->elements["LinksGlobal"];
 		$elements_map["SemLink"][] = $this->elements["LinksGlobal"];
 		
 		$elements_map["Contact"][] = $this->elements["InnerTableHeaderGlobal"];
-	/*	$elements_map["Contact"]->attributes["fonttitle_face"] =
-				$this->elements["TextGlobal"]->attributes["font_face"];
-		$elements_map["Contact"]->attributes["fonttitle_size"] =
-				$this->elements["TextGlobal"]->attributes["font_size"];
-		$elements_map["Contact"]->attributes["fonttitle_color"] =
-				$this->elements["TextGlobal"]->attributes["font_color"];
-		$elements_map["Contact"]->attributes["fonttitle_class"] =
-				$this->elements["TextGlobal"]->attributes["font_class"];
-		$elements_map["Contact"]->attributes["fonttitle_style"] =
-				$this->elements["TextGlobal"]->attributes["font_style"];
-		$elements_map["Contact"]->attributes["fontcontent_face"] =
-				$this->elements["TextGlobal"]->attributes["font_face"];
-		$elements_map["Contact"]->attributes["fontcontent_size"] =
-				$this->elements["TextGlobal"]->attributes["font_size"];
-		$elements_map["Contact"]->attributes["fontcontent_color"] =
-				$this->elements["TextGlobal"]->attributes["font_color"];
-		$elements_map["Contact"]->attributes["fontcontent_class"] =
-				$this->elements["TextGlobal"]->attributes["font_class"];
-		$elements_map["Contact"]->attributes["fontcontent_style"] =
-				$this->elements["TextGlobal"]->attributes["font_style"];*/
 		
-		$elements_map["TableParagraph"][] = $this->elements["MainTableHeaderGlobal"];
+		$elements_map["TableParagraph"][] = $this->elements["InnerTableHeaderGlobal"];
 		
-		$elements_map["TableParagraphHeadline"][] = $this->elements["TableRowGlobal"];
+		$elements_map["TableParagraphHeadline"][] = $this->elements["TableGrouprowGlobal"];
 		$elements_map["TableParagraphHeadline"][] = $this->elements["Headline2TextGlobal"];
 		
 		$elements_map["TableParagraphSubHeadline"][] = $this->elements["TableRowGlobal"];
@@ -202,24 +157,51 @@ class ExternModuleGlobal extends ExternModule {
 		
 		$elements_map["TableParagraphText"][] = $this->elements["TableRowGlobal"];
 		$elements_map["TableParagraphText"][] = $this->elements["TextGlobal"];
-	
+				
+		$elements_map["PersondetailsHeader"][] = $this->elements["Headline1TextGlobal"];
+		
 		foreach ($elements_map as $name => $elements) {
 			foreach ($elements as $element) {
-				foreach ($element->attributes as $attribute) {
-					if ($element->name == $element_name)
+				if ($element->name == $element_name) {
+					foreach ($element->attributes as $attribute)
 						$this->config->config[$name][$attribute] = $values[$element->name . "_" . $attribute];
-					else
-						$this->config->config[$name][$attribute] = $this->config->config[$element->name][$attribute];
-					$this->elements[$name]->attribute[] = $attribute;
 				}
-				$element->name = $name;
-				$this->elements[$name] = $element;
-				$this->registered_elements[] = $name;
 			}
 		}
 		
+		// mapping single attributes
+		
+		$this->config->config["PersondetailsHeader"]["headlinetd_align"]
+				= $this->config->config["MainTableHeadrowGlobal"]["th_align"];
+		$this->config->config["PersondetailsHeader"]["headlinetd_valign"]
+				= $this->config->config["MainTableHeadrowGlobal"]["th_valign"];
+		$this->config->config["PersondetailsHeader"]["headlinetd_bgcolor"]
+				= $this->config->config["MainTableHeadrowGlobal"]["th_bgcolor"];
+		$this->config->config["PersondetailsHeader"]["headlinetd_class"]
+				= $this->config->config["MainTableHeadrowGlobal"]["th_class"];
+		$this->config->config["PersondetailsHeader"]["headlinetd_style"]
+				= $this->config->config["MainTableHeadrowGlobal"]["th_style"];
+		
+		$this->config->config["SemName"]["td_align"]
+				= $this->config->config["MainTableHeadrowGlobal"]["th_align"];
+		$this->config->config["SemName"]["td_valign"]
+				= $this->config->config["MainTableHeadrowGlobal"]["th_valign"];
+		$this->config->config["SemName"]["td_bgcolor"]
+				= $this->config->config["MainTableHeadrowGlobal"]["th_bgcolor"];
+		$this->config->config["SemName"]["td_class"]
+				= $this->config->config["MainTableHeadrowGlobal"]["th_class"];
+		$this->config->config["SemName"]["td_style"]
+				= $this->config->config["MainTableHeadrowGlobal"]["th_style"];
+		
+		
+		
+		
+		
 	}
 	
+	/**
+	*
+	*/
 	function checkRangeId ($range_id) {
 		$range = get_object_type($range_id);
 		
@@ -229,9 +211,23 @@ class ExternModuleGlobal extends ExternModule {
 		return FALSE;
 	}
 	
-	function printout ($args) {}
+	/**
+	*
+	*/
+	function printout ($args) {
 	
-	function printoutPreview () {}
+	// nothing to print
+	
+	}
+	
+	/**
+	*
+	*/
+	function printoutPreview () {
+	
+	// nothing to print
+	
+	}
 	
 }
 ?> 
