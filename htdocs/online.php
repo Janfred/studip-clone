@@ -218,7 +218,7 @@ else
 			while (list($index)=each($n_buddies)) {
 				list($vor,$nach,$zeit,$tmp_online_uname)=$n_buddies[$index];
 				printf("<tr><td class=\"".$cssSw->getClass()."\" width=\"1%%\"><a href=\"$PHP_SELF?cmd=add_user&add_uname=$tmp_online_uname\"><img src=\"pictures/add_buddy.gif\" alt=\"zu den Buddies hinzuf&uuml;gen\" border=\"0\"></a></td><td class=\"".$cssSw->getClass()."\" width=\"69%%\" align=\"left\"><a href=\"about.php?username=%s\"><font size=-1>&nbsp; %s %s </font></a></td><td class=\"".$cssSw->getClass()."\" width=\"20%%\"><font size=-1> %s:%s</font></td>", $tmp_online_uname, htmlReady($vor), htmlReady($nach), date("i",$zeit), date("s",$zeit));
-				echo "<td width=\"5%\"align=center>";
+				echo "<td class=\"".$cssSw->getClass()."\" width=\"5%\"align=center>";
 				if ($CHAT_ENABLE){
 					if ($chatServer->isActiveUser($chatServer->getIdFromNick("studip",$tmp_online_uname),"studip"))
 				    		echo "<img src=\"pictures/chat2.gif\" alt=\"Dieser User befindet sich im Chat\" border=\"0\">";
