@@ -130,7 +130,7 @@ function export_inst($inst_id, $ex_sem_id = "all")
 		if ($ex_sem_id == "all")
 			export_pers($inst_id); 
 		elseif (($o_mode != "passthrough") AND ($o_mode != "direct"))
-			export_teilis($inst_id, $ex_sem_id); 
+			export_teilis($inst_id, $ex_sem_id, $filter); 
 		else
 			$data_object .= xml_tag("message", _("KEINE BERECHTIGUNG!"));
 		break;
@@ -275,13 +275,13 @@ function export_sem($inst_id, $ex_sem_id = "all")
 	$data_object = "";
 }
 
-function export_teilis($inst_id, $ex_sem_id = "no", $mode = "status")
+function export_teilis($inst_id, $ex_sem_id = "no")
 {
 	global $db, $db2, $range_id, $xml_file, $o_mode, $xml_names_person, $xml_groupnames_person, $object_counter, $filter, $SEM_CLASS, $SEM_TYPE, $SessSemName;
 
 	$db=new DB_Seminar;
 
-	if ($mode == "status")
+	if ($filter == "status")
 	{
 		$db->query ("SELECT name, statusgruppe_id FROM statusgruppen WHERE range_id = '$ex_sem_id' ORDER BY position ASC");
 		while ($db->next_record()) 
@@ -305,7 +305,7 @@ function export_teilis($inst_id, $ex_sem_id = "no", $mode = "status")
 
 	while (list ($key1, $val1) = each ($gruppe)) 
 	{
-		if ($mode == "status")
+		if ($filter == "status")
 		{	
 			if ($key1 == "no")
 				$db->query ("SELECT * FROM user_info 
