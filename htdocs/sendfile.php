@@ -184,6 +184,7 @@ switch (strtolower(getFileExtension ($file_name))) {
 //determine the type of the object we want to download a file from (only in type=0 mode!)
 $db->query("SELECT seminar_id AS object_id, filesize FROM dokumente WHERE dokument_id = '".$file_id."' ");
 $db->next_record();
+$filesize=$db->f("filesize");
 
 $skip_check=FALSE;
 if (!$type) {
@@ -271,7 +272,7 @@ header("Pragma: no-cache");
 header("Expires: 0");
 
 header("Content-type: $content_type; name=\"".rawurldecode($file_name)."\"");
-header("Content-length: ".$db->f("filesize"));
+header("Content-length: $filesize");
 header("Content-disposition: $content_disposition; filename=\"".rawurldecode($file_name)."\"");
 
 readfile($path_file);
