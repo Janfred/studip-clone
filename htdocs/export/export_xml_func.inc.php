@@ -1,7 +1,48 @@
 <?
+/**
+* Export xml-functions.
+* 
+* In this file there are several functions to generate xml-tags.
+*
+* @author		Arne Schroeder <schroeder@data.quest.de>
+* @version		$Id$
+* @access		public
+* @modulegroup	export_modules
+* @module		export_xml_functions
+* @package		Export
+*/
+// +---------------------------------------------------------------------------+
+// This file is part of Stud.IP
+// export_xml_func.inc.php
+//
+// Copyright (c) 2002 Arne Schroeder <schroeder@data-quest.de> 
+// Suchi & Berg GmbH <info@data-quest.de>
+// +---------------------------------------------------------------------------+
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or any later version.
+// +---------------------------------------------------------------------------+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+// +---------------------------------------------------------------------------+
 
 require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/SemesterData.class.php");
 
+/**
+* create xml_header
+*
+* This function creates a xml-header for output. 
+* Its contents are Name of University, Stud.IP-Version, Range of Export (e.g. "root"), and temporal range.
+*
+* @access	public        
+* @return		string	xml-header
+*/
 function xml_header()
 {
 global $UNI_NAME_CLEAN, $SEM_ID, $SOFTWARE_VERSION, $ABSOLUTE_PATH_STUDIP, $ex_type, $ex_sem, $range_name, $range_id;
@@ -21,6 +62,18 @@ global $UNI_NAME_CLEAN, $SEM_ID, $SOFTWARE_VERSION, $ABSOLUTE_PATH_STUDIP, $ex_t
 	return $xml_tag_string;
 }
 
+/**
+* create opening xml-tag
+*
+* This function creates an open xml-tag. 
+* The tag-name is defined by the given parameter $tag_name.
+* An optional parameter allows to set an attribute named "key".
+*
+* @access	public        
+* @param		string	tag name
+* @param		string	value for optional attribute "key"
+* @return		string	xml open tag
+*/
 function xml_open_tag($tag_name, $tag_key = "")
 {
 	if ($tag_key != "")  
@@ -29,12 +82,34 @@ function xml_open_tag($tag_name, $tag_key = "")
 	return $xml_tag_string;
 }
 
+/**
+* create closing xml-tag
+*
+* This function creates a closed xml-tag. 
+* The tag-name is defined by the given parameter $tag_name.
+*
+* @access	public        
+* @param		string	tag name
+* @return		string	xml close tag
+*/
 function xml_close_tag($tag_name)
 {
 	$xml_tag_string = "</" . $tag_name .  ">\n";
 	return $xml_tag_string;
 }
 
+/**
+* create xml-tag
+*
+* This function creates a xml-tag. 
+* The tag-name is defined by the given parameter $tag_name.
+* The given parameter tag_content is put between open tag and close tag.
+*
+* @access	public        
+* @param		string	tag name
+* @param		string	content for xml-tag
+* @return		string	xml tag
+*/
 function xml_tag($tag_name, $tag_content)
 {
 	$xml_tag_string = "<" . $tag_name . $xml_tag_string .  ">" 
@@ -43,6 +118,15 @@ function xml_tag($tag_name, $tag_content)
 	return $xml_tag_string;
 }
 
+/**
+* create xml-footer
+*
+* This function creates the footer for xml output, 
+* which is a closing "studip"-tag.
+*
+* @access	public        
+* @return		string	xml footer
+*/
 function xml_footer()
 {
 	$xml_tag_string = "</studip>";

@@ -2,7 +2,8 @@
 /**
 * Export-mainfile. Calls the submodules.
 * 
-* 
+* This file checks the given parameters and calls the requested
+* submodules for export in formats xml, rtf, html, pdf...
 *
 * @author		Arne Schroeder <schroeder@data.quest.de>
 * @version		$Id$
@@ -11,13 +12,6 @@
 * @module		export
 * @package		Export
 */
-/**
-* workaround for PHPDoc
-*
-* Use this if module contains no elements to document !
-* @const PHPDOC_DUMMY
-*/
-define("PHPDOC_DUMMY",true);
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // export.php
