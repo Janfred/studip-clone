@@ -55,8 +55,9 @@ if ($perm->have_perm("admin")) {
 		$structure["room_planning"]=array (topKat=>"", name=>_("Raumplanung"), link=>"resources.php?view=requests_start&cancel_edit_request_x=1", active=>FALSE);
 		$top_kat_tools = TRUE;
 	}
-
-	//$structure["settings"]=array (topKat=>"", name=>_("Anpassen"), link=>"resources.php?view=edit_types", active=>FALSE);
+}
+if ((getGlobalPerms($user->id) == "admin") || ($perm->have_perm("root"))){ //Grundlegende Einstellungen fuer alle Ressourcen Admins
+	$structure["settings"]=array (topKat=>"", name=>_("Anpassen"), link=>"resources.php?view=edit_types", active=>FALSE);
 }
 
 //Reiter "Uebersicht"
@@ -95,6 +96,7 @@ if ($top_kat_tools) {
 
 
 //Reiter "Anpassen"
+
 if ((getGlobalPerms($user->id) == "admin") || ($perm->have_perm("root"))){ //Grundlegende Einstellungen fuer alle Ressourcen Admins
 	$structure["edit_types"]=array (topKat=>"settings", name=>_("Typen&nbsp;verwalten"), link=>"resources.php?view=edit_types", active=>FALSE);
 	$structure["edit_properties"]=array (topKat=>"settings", name=>_("Eigenschaften&nbsp;verwalten"), link=>"resources.php?view=edit_properties", active=>FALSE);
@@ -105,7 +107,6 @@ if ($perm->have_perm("root")) { //Rechtezuweisungen nur fuer Root
 }
 //$structure["edit_personal_settings"]=array (topKat=>"settings", name=>_("pers&ouml;nliche&nbsp;Einstellungen"), link=>"resources.php?view=edit_personal_settings", active=>FALSE);
 //
-
 $reiter->create($structure, $view);
 
 ?>
