@@ -144,13 +144,12 @@ if ($make_dates_x) {
 	$result="msg§Der Ablaufplan wurde erstellt. Es wurden ".$resultAssi["changed"]." Termine erstellt.§";
 
  	//make an update, this will kill old metadate entries in the resources
- 	if ($RESOURCES_ENABLE)
+ 	if ($RESOURCES_ENABLE) {
 		$insertAssign = new VeranstaltungResourcesAssign($admin_dates_data["range_id"]);
 		$insertAssign->dont_check = TRUE;
  		$resources_result = array_merge ($resultAssi["resources_result"], $insertAssign->updateAssign());
 	}
-	
-//	echo print_r($resources_result);
+}
 
 if ($new)
 	{
