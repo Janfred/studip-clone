@@ -319,7 +319,7 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 		echo quotes_encode($tmp_sms_content, get_fullname_from_uname($rec_uname));
 	}
 	if ($message) {
-		echo $message;
+		echo stripslashes($message);
 	}
 	echo "</textarea><br><br>";	
 	if (sizeof($sms_data["p_rec"]) > "0") {
