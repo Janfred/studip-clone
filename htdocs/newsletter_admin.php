@@ -117,9 +117,9 @@ function SendMail($newsletter_id,$username,$Vorname,$Nachname,$Email)
 			return false;
 		} else {
 			// Newsletter los
-			$from="\"Stud.IP\" <crew@".$smtp->host_name.">";
-			$env_from="crew@".$smtp->host_name;
-			$abuse="crew@".$smtp->host_name;
+			$from="\"Stud.IP\" <".$newsletter[$newsletter_id]["return"].">";
+			$env_from= $newsletter[$newsletter_id]["return"];
+			$abuse= $newsletter[$newsletter_id]["return"];
 			$to=$Email;
 			$secret= md5("$username:$magic");
 			$url = "http://" . $smtp->host_name . $CANONICAL_RELATIVE_PATH_STUDIP . "newsletter.php?username=$username&cmd=remove&newsletter_id=$newsletter_id&secret=" . $secret;
