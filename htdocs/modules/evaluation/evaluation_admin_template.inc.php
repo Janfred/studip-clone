@@ -90,7 +90,6 @@ if( empty($template_answers) ) {
 
 if( $onthefly &&($command == "delete" || $command == "add_answers"
        || $command == "delete_answers" || $command == "save2")){
-   
    $question = &new EvaluationQuestion ($template_id,
 					NULL, EVAL_LOAD_ALL_CHILDREN);
    $question->setMultiplechoice($template_multiple);
@@ -199,12 +198,16 @@ switch( $command ) {
 
  /* delete answers ----------------------------------------------------- */
  case "delete_answers":
-   if(!$onthefly)
-      $question=save1($myuserid);
-   if(!$onthefly)
-      $question->setParentID($myuserid);
-   else
-      $question->setParentID($parentID);
+  if(!$onthefly){ 
+     $question=save1($myuserid);
+     $question->setParentID($myuserid);
+  }
+  //else{
+  //  echo "parentID: ".$parentID."<br>";
+  //  echo "parentID: ".$question->getParentID()."<br>";
+  //  $question->setParentID($parentID);
+  //  
+  //}
    //$question->setMultiplechoice($template_multiple);
    //$question->setText(trim($template_name), YES);
    //$question->setType($template_type);
@@ -228,12 +231,41 @@ switch( $command ) {
    $question=save1($myuserid);
  
     /* Check userinput ----------------------------------------------------- */
-
-   // todo: check bzgl. nicht eingegebener anderer Felder
-   // Differenzierte Betrauchtung: leere Antowroten bei polskala und freitext
-   // ignorieren, leere antworten bei anderen typen warnen
-   // if($question->getType==EVALQUESTION_TYPE_POL){
-   //echo "Type:".$question->getType."<br>";
+   if ($question->getType () == EVALQUESTION_TYPE_MC ||
+       $question->getType () == EVALQUESTION_TYPE_LIKERT) {
+      $nummer=$question->getNumberChildren();
+      //while($answer=$question->getChild()){
+	 //if(!$answer->getText()){
+	 //  $question->removeChildID ($answer->getObjectID());
+	 //  $answer->delete ();
+	 //  $nummer--;
+	 //}
+      //}
+     for ( $i=0; $i < count($template_answers); $i++ ) {
+	 $text     = $template_answers[$i]['text'];
+	 if($text==""){
+	    $question->removeChildID ($template_answers[$i]['answer_id']);
+	 $nummer--;
+	 }
+     }
+     
+      if($nummer==0){
+	 $report = 
+	    EvalCommon::createReportMessage(_("Dem Template wurden keine  ".
+					      "Antworten zugewiesen oder ".
+					      "keine der Antworten  enthielt ".
+					      "einen Text. Fügen Sie ". 
+					      "Antworten an, oder ".
+					      "löschen Sie das Template."),
+					    EVAL_PIC_ERROR,
+					    EVAL_CSS_ERROR);   
+	 $command = "continue_edit";
+	 break;
+      }
+   }
+  
+   if($question->getType() == EVALQUESTION_TYPE_POL ){ 
+  
       for ( $i=0; $i < count($template_answers); $i++ ) {
 	 $text     = $template_answers[$i]['text'];
 	 if($text==""){
@@ -249,11 +281,12 @@ switch( $command ) {
 	    break;
 	 }
       }
-      if($command == "continue_edit")
-	 break;
-  // }
-
-
+   
+   if($command == "continue_edit")
+      break;
+   }
+   
+   
    if ($template_residual && empty ($template_residual_text)) {
       $report = EvalCommon::createReportMessage(_("Geben Sie eine Ausweichant".
 						  "wort ein oder deaktivieren".
@@ -640,8 +673,8 @@ function save1($myuserid){
      /*Anzahl der Antworten bei Polskalen anpassen ------------------------*/
      if ($template_type == EVALQUESTION_TYPE_POL && $i == 0){
 	$answerdiff = $controlnumber - $template_add_num_answers ;
-	if($template_residual)
-	   $answerdiff++;
+	//if($template_residual)
+	//  $answerdiff++;
 	if($answerdiff > 0){
 	   /*differenz abziehen => answers überspringen*/
 	   $i=$i+$answerdiff;
