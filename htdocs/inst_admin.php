@@ -35,13 +35,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // -- hier muessen Seiten-Initialisierungen passieren --
 
 	include "header.php";   //hier wird der "Kopf" nachgeladen
-	
-	if (($SessSemName["class"]=="inst") || ($SessSemName["class"]=="fak")) {
-		$inst_id=$SessSemName[1];
-		include "links1.php";  //Linkleiste fuer geoffnetes Institut
-		}
-	else
-		include "links_admin.inc.php";  //Linkleiste fuer admins
+	include "links_admin.inc.php";  //Linkleiste fuer admins
 		
 	require_once("msg.inc.php"); //Ausgaberoutinen an den User
 	require_once("config.inc.php"); //Grunddaten laden

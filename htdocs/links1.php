@@ -41,9 +41,6 @@ if ($entry_level=="sem")
 
 $structure["literatur"]=array (topKat=>"", name=>"Literatur", link=>"literatur.php", active=>FALSE);
 
-if (($rechte) && ($entry_level=="inst"))
-	$structure["inst_admin"]=array (topKat=>"", name=>"Einrichtung verwalten", link=>"inst_admin.php", active=>FALSE);
-
 //Bottomkats
 if ($entry_level=="inst") {
 	$structure["_institut_main"]=array (topKat=>"institut_main", name=>"Info", link=>"institut_main.php", active=>FALSE);
@@ -82,12 +79,6 @@ $structure["alle_dateien"]=array (topKat=>"folder", name=>"Alle Dateien", link=>
 $structure["_literatur"]=array (topKat=>"literatur", name=>"Literatur und Links", link=>"literatur.php", active=>FALSE);
 if ($rechte)
 	$structure["admin_literatur"]=array (topKat=>"literatur", name=>"Literatur und Links bearbeiten", link=>"admin_literatur.php?new_sem=TRUE&range_id=".$SessSemName[1], active=>FALSE);
-//
-if (($rechte) && ($entry_level=="inst")) {
-	$structure["_inst_admin"]=array (topKat=>"inst_admin", name=>"Mitarbeiterliste bearbeiten", link=>"inst_admin.php", active=>FALSE);
-	$structure["admin_institut"]=array (topKat=>"inst_admin", name=>"Daten der Einrichtung bearbeiten", link=>"admin_institut.php", active=>FALSE);
-	$structure["admin_news"]=array (topKat=>"inst_admin", name=>"Newsverwaltung", link=>"admin_news.php", active=>FALSE);
-}
 
 //Infofenstereintraege erzeugen
 if ($entry_level=="inst") {
