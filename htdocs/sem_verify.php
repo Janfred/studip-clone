@@ -218,9 +218,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 					$db2->next_record();
 					if (!$sem_verify_suggest_studg) {//Wir wissen noch nicht mit welchem Studiengang der User rein will
 						$db->query("SELECT admission_seminar_studiengang.studiengang_id, name, quota FROM admission_seminar_studiengang LEFT JOIN studiengaenge USING (studiengang_id) LEFT JOIN user_studiengang USING (studiengang_id) WHERE seminar_id LIKE '$id' AND (user_id = '$user->id' OR admission_seminar_studiengang.studiengang_id = 'all')"); //Hat der Studi passende Studiengaenge ausgewaehlt?
-						if ($db->num_rows() ==1) //Nur einen passenden gefunden? Dann nehmen wir den
+						if ($db->num_rows() == 1) {//Nur einen passenden gefunden? Dann nehmen wir den
+							$db->next_record();
 							$sem_verify_suggest_studg=$db->f("studiengang_id");
-						elseif ($db->num_rows() >1) { //Mehrere gefunden, fragen welcher es denn sein soll
+						} elseif ($db->num_rows() >1) { //Mehrere gefunden, fragen welcher es denn sein soll
 							echo "<tr><td class=\"blank\" colspan=2>&nbsp; &nbsp; Die Veranstaltung <b>$SeminarName</b> ist teilnahmebeschr&auml;nkt.<br><br></td></tr>";
 							echo "<tr><td class=\"blank\" colspan=2>&nbsp; &nbsp; Sie k&ouml;nnen sich f&uuml;r <b>eines</b> der m&ouml;glichen Kontingente anmelden.<br/><br />&nbsp; &nbsp; Bitte w&auml;hlen Sie das f&uuml;r Sie am besten geeignete Kontingent aus: <br><br></td></tr>";
 							?>
@@ -246,7 +247,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 							echo "<br><br>";
 							?>
 							</td></tr></table>				
-							<?						
+							<?
+							page_close();
+							die;
 						} else { //Keine passenden Studeingaenge gefunden, abbruch
 							$db->query("SELECT studiengang_id FROM user_studiengang WHERE user_id = '$user->id' "); //Hat der Studie ueberhaupt Studiengaenge angegeben?
 							if ($db->num_rows() >=1) { //Es waren nur die falschen
@@ -275,7 +278,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 								$db5->query("SELECT position FROM admission_seminar_user ORDER BY position DESC");//letzte hoechste Position heruasfinden
 								$db5->next_record();
 							 	$db4->query("INSERT INTO admission_seminar_user SET user_id = '$user->id', seminar_id = '$id', studiengang_id = '$sem_verify_suggest_studg', status='claiming', mkdate='".time()."', position='' ");
-								parse_msg ("info§Sie wurden auf die Anmeldeliste der Veranstaltung <b>$SeminarName</b> gesetzt. Teilnehmer der Veranstaltung <b>$SeminarName</b> werden Sie, falls Sie im Losverfahren am ".date("d.m.Y, G:i", $db2->f("admission_endtime"))." Uhr ausgelost werden. Sollten sie nicht ausgelost werden, werden Sie auf die Warteliste gesetzt und werden vom System automatisch als Teilnehmer eingetragen, sobald ein Platz f&uuml;r Sie frei wird.");
+								parse_msg ("info§Sie wurden auf die Anmeldeliste der Veranstaltung <b>$SeminarName</b> gesetzt. <br />Teilnehmer der Veranstaltung <b>$SeminarName</b> werden Sie, falls Sie im Losverfahren am ".date("d.m.Y, G:i", $db2->f("admission_endtime"))." Uhr ausgelost werden. Sollten sie nicht ausgelost werden, werden Sie auf die Warteliste gesetzt und werden vom System automatisch als Teilnehmer eingetragen, sobald ein Platz f&uuml;r Sie frei wird.");
 								echo "<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp;&nbsp; zur&uuml;ck zur Startseite</a>";
 								if ($send_from_search)
 						    			echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">zur&uuml;ck zur letzten Auswahl</a>";
@@ -289,8 +292,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 						if (($db2->f("admission_type") == 2) || ($chrono_after_selection)) { //Variante chronologisches Eintragen oder Losverfahren nach dem Losen
 							$db->query("SELECT user_id FROM seminar_user WHERE admission_studiengang_id = '$sem_verify_suggest_studg'"); //Wieviel user sind schon in diesem Kontingent eingetragen
 							if ($db->num_rows() <= round ($db2->f("admission_turnout") * ($db->f("quota") / 100))) {//noch Platz in dem Kontingent --> direkt in seminar_user
-							 	$db4->query("INSERT INTO seminar_user SET user_id = '$user->id', Seminar_id = '$id', status='autor', gruppe='$group', admission_studiengang_id = '$sem_verify_suggest_studg', '".time()."' ");
-								parse_msg ("msg§Sie wurden mit dem Status <b>autor</b>in die Veranstaltung <b>$SeminarName</b> eingetragen und sind damit zugelassen..");
+							 	$db4->query("INSERT INTO seminar_user SET user_id = '$user->id', Seminar_id = '$id', status='autor', gruppe='$group', admission_studiengang_id = '$sem_verify_suggest_studg', mkdate='".time()."' ");
+								parse_msg ("msg§Sie wurden mit dem Status <b>autor</b> in die Veranstaltung <b>$SeminarName</b> eingetragen und sind damit zugelassen..");
 								echo"<tr><td class=\"blank\" colspan=2><a href=\"seminar_main.php?auswahl=$id\">&nbsp; &nbsp; Hier kommen Sie zu der Veranstaltung</a>";
 								if ($send_from_search)
 								    	echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">zur&uuml;ck zur letzten Auswahl</a>";
