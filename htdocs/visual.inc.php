@@ -301,7 +301,7 @@ function quotes_decode($description)
 			else ++$curr_pos;        
 			}
 		} 
-RETURN $description;
+	return $description;
 }
 
 ///////////
@@ -449,7 +449,7 @@ function FixLinks($data = "", $fix_nl = TRUE, $nl_to_br = FALSE){
 	$replace = array("\\1http://www.", "\\1ftp://ftp.");
 	$fixed_text = preg_replace($pattern, $replace, $data);
 	
-	$pattern = array("'(\[([^\n\f\]]+)\])?(((http://)|(https://)|(ftp://([_a-z0-9-]+@)?))[_a-z0-9-]+(\.[_a-z0-9-]+)+(/[_a-z0-9-]*)*\.?[_a-z0-9-]*)'ie",
+	$pattern = array("'(\[([^\n\f\]]+)\])?(((http://)|(https://)|(ftp://([_a-z0-9-]+@)?))[_a-z0-9-]+(\.[_a-z0-9-]+)+(/[_a-z0-9-~]*)*\.?[_a-z0-9-\?\&\=\;]*)'ie",
 					"'(?<=\s)(\[([^\n\f\]]+)\])?([-a-z0-9_]+(\.[_a-z0-9-]+)*@([_a-z0-9-]+(\.[_a-z0-9-]+)+))'ie");
 	$replace = array("preg_call_link('\\2', '\\3', 'LINK')", "preg_call_link('\\2', '\\3', 'MAIL')");
 	$fixed_text = preg_replace($pattern, $replace, $fixed_text);
@@ -463,10 +463,10 @@ function FixLinks($data = "", $fix_nl = TRUE, $nl_to_br = FALSE){
 // Hilfsfunktion für FixLinks()
 function preg_call_link($name, $link, $mod){
 	if($mod == "LINK"){
-		if($name != "")
-			$tbr = "<a href=\"$link\" target=\"_blank\">$name</a>";
-		else
-			$tbr = "<a href=\"$link\" target=\"_blank\">$link</a>";
+		if($name == "")
+			$name = $link;
+		$link = str_replace("&amp;", "&", $link);
+		$tbr = "<a href=\"$link\" target=\"_blank\">$name</a>";
 	}
 	else{
 		if($name != "")
