@@ -231,7 +231,8 @@ if ((!$sem_browse_data["extern"]) && ($sem_browse_data["sset"] || $sem_browse_da
 	echo "<tr><td class=\"steel1\" align=\"center\">";
 	echo "<a href=\"$PHP_SELF?reset_all=true\">".makeButton("neuesuche")."</a>\n";
 	echo "</table>\n";
-}
+} else
+	echo "<form action=\"$PHP_SELF\" method=\"POST\">\n";
 
 //Parser zur Auswertung des Suchstrings
 if (!$sem_browse_data["extern"]) {
