@@ -125,20 +125,22 @@ IF ($my_sem_values["literatur"]) {
 <body bgcolor="#ffffff">
 
 
-<?php
-		include "seminar_open.php"; //hier werden die sessions initialisiert
+<?
+
+include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php");		 //hier werden die sessions initialisiert
 
 // -- hier muessen Seiten-Initialisierungen passieren --
 // -- wir sind jetzt definitiv in keinem Seminar, also... --
 
-		$SessSemName[0] = "";
-		$SessSemName[1] = "";
-		$links_admin_data =''; 	//Auch im Adminbereich gesetzte Veranstaltungen muessen geloescht werden.
+$SessSemName[0] = "";
+$SessSemName[1] = "";
+$links_admin_data =''; 	//Auch im Adminbereich gesetzte Veranstaltungen muessen geloescht werden.
 
-		include "header.php";   //hier wird der "Kopf" nachgeladen
-		require_once "config.inc.php"; // Klarnamen fuer den Veranstaltungsstatus
-		require_once "visual.inc.php"; // htmlReady fuer die Veranstaltungsnamen
-		require_once "dates.inc.php"; // Semester-Namen fuer Admins
+include ("$ABSOLUTE_PATH_STUDIP/header.php");   			//hier wird der "Kopf" nachgeladen
+require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php"); 		// Klarnamen fuer den Veranstaltungsstatus
+require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php"); 		// htmlReady fuer die Veranstaltungsnamen
+require_once ("$ABSOLUTE_PATH_STUDIP/dates.inc.php"); 		// Semester-Namen fuer Admins
+require_once ("$ABSOLUTE_PATH_STUDIP/admission.inc.php");	//Funktionen der Teilnehmerbegrenzung
 ?>
 <body>
 
@@ -149,6 +151,9 @@ if ($cmd=="kill") {
 	$db->query("DELETE FROM seminar_user WHERE user_id='$user->id' AND Seminar_id='$auswahl'");
 	if ($db->affected_rows() == 0)  $meldung="error§Datenbankfehler!";
 	else {
+	  //Pruefen, ob es Nachruecker gibt
+	  update_admission($auswahl);
+	  
 	  $db->query("SELECT Name FROM seminare WHERE Seminar_id = '$auswahl'");
 	  $db->next_record();
 	  $meldung="msg§Das Abonnement der Veranstaltung <b>".$db->f("Name")."</b> wurde aufgehoben. Sie sind nun nicht mehr als Teilnehmer dieser Veranstaltung im System registriert.";
@@ -166,6 +171,9 @@ if ($cmd=="kill") {
 //Anzeigemodul fuer eigene Seminare (nur wenn man angemeldet und nicht root oder admin ist!)
 IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("admin")){
 
+     //Alle fuer das Losen anstehenden Veranstaltungen bearbeiten (wenn keine anstehen wird hier nahezu keine Performance verbraten!)
+     check_admission();
+     
      if (!isset($sortby)) $sortby="gruppe, Name";
      if ($sortby == "count")
      $sortby = "count DESC";
