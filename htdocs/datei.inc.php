@@ -36,10 +36,12 @@ function parse_header($header){
 	return $ret;
 }
 
-function parse_link($link,$level=0) {
-	global $name, $the_file_name, $the_link, $locationheader, $parsed_link;
+function parse_link($link, $level=0) {
+	global $name, $the_file_name, $the_link, $locationheader, $parsed_link, $link_update;
 	if ($level > 3)
 		return FALSE;
+	if ($link == "***" && $link_update)
+		$link = getLinkPath($link_update);
 	if (substr($link,0,6) == "ftp://") {
 		// Parsing an FTF-Adress	
 		$url_parts = @parse_url( $link );
@@ -227,18 +229,6 @@ function getFolderId($parent_id, $in_recursion = false){
 		}
 		return (!$in_recursion) ? $kidskids : null;
 	}
-/*
-function getFolderId(&$folders,$parent_id){
-	if(!$folders) $folders[]=$parent_id;
-	$db = new DB_Seminar;
-	$db->query ("SELECT folder_id FROM folder WHERE range_id='$parent_id'");
-		while ($db->next_record()) {
-			getFolderId($folders,$db->f("folder_id"));
-			$folders[]=$db->f("folder_id");
-		}
-	return;
-}
-*/
 
 function doc_count ($parent_id) {
 	$db=new DB_Seminar;
@@ -892,18 +882,6 @@ function link_item ($range_id, $create = FALSE, $echo = FALSE, $refresh = FALSE,
 	}
 }
 
-/*
-function linkcheck ($URL) {
-	$fp = @fopen($URL, "r");
-	if (!$fp) {
-		return FALSE;
-	} else {
-		fclose($fp);
-		return TRUE;
-	}
-}
-*/
-
 
 function link_form ($range_id, $updating=FALSE) {
 	global $SessSemName, $the_link, $protect, $description, $name, $folder_system_data, $user;
@@ -947,7 +925,7 @@ function link_form ($range_id, $updating=FALSE) {
 	$print.= "\n<tr>";
 	$print.= "\n<td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("Dateipfad:") . "&nbsp;</font><br />";
 	if ($hiddenurl)
-		$print.= "&nbsp;<INPUT NAME=\"the_link\" TYPE=\"password\"  style=\"width: 70%\" SIZE=\"30\" value=$the_link>&nbsp;</td></td>";
+		$print.= "&nbsp;<INPUT NAME=\"the_link\" TYPE=\"text\"  style=\"width: 70%\" SIZE=\"30\" value=\"***\">&nbsp;</td></td>";
 	else
 		$print.= "&nbsp;<INPUT NAME=\"the_link\" TYPE=\"text\"  style=\"width: 70%\" SIZE=\"30\" value=$the_link>&nbsp;</td></td>";
 	$print.= "\n</tr>";
