@@ -194,10 +194,6 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 			else
 				$admin_admission_data["admission_endtime"] = -1;
 		}
-		
-		//in Anmeldeverfahren beides immer auf '3'
-		$admin_admission_data["read_level"]=3;
-		$admin_admission_data["write_level"]=3;
 	}
 	
 	//Studiengang hinzufuegen
@@ -302,7 +298,12 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 
 	//Daten speichern
 	if (($uebernehmen_x) && (!$errormsg)) {
-		
+		//for admission it have to be always 3
+		if ($admin_admission_data["admission_type"]) {
+			$admin_admission_data["read_level"]=3;
+			$admin_admission_data["write_level"]=3;
+		}
+	
 		$db->query ("UPDATE seminare SET 
 				admission_turnout = '".$admin_admission_data["admission_turnout"]."' , 
 				admission_type = '".$admin_admission_data["admission_type"]."', 

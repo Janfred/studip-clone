@@ -1,4 +1,4 @@
-<?
+=3<?
 /*
 admin_seminare_assi.php - Seminar-Assisten von Stud.IP.
 Copyright (C) 2000 Stefan Suchi <suchi@gmx.de>, Ralf Stockmann <rstockm@gwdg.de>, Cornelis Kater <ckater@gwdg.de>
@@ -787,6 +787,12 @@ if ($cmd_f_x)
     		
 		//Termin-Metadaten-Array zusammenmatschen zum besseren speichern in der Datenbank
 		$serialized_metadata=serialize($sem_create_data["metadata_termin"]);
+
+		//for admission it have to always 3
+		if ($sem_create_data["sem_admission"]) {
+			$sem_create_data["sem_sec_lese"]=3;
+			$sem_create_data["sem_sec_schreib"]=3;
+		}
 
 		if ($Schreibzugriff < $Lesezugriff) // hier wusste ein Dozent nicht, was er tat
 			$Schreibzugriff = $Lesezugriff;
