@@ -77,7 +77,7 @@ function get_my_administrable_objects($user_id='') {
 
 
 /**
-* This function determines, which from whcih type an id is from.
+* This function determines, which from which type an id is from.
 *
 * The function recognizes the following types at this moment:
 * Einrichtungen, Veranstaltungen and Fakultaeten
@@ -299,6 +299,26 @@ if (!$author) {
 				 while ($db->next_record())
 					 $author=$db->f("fullname");
  }
+ if ($author=="") $author="unbekannt";
+
+ return $author;
+ }
+ // TABLES: auth_user_md5
+ 
+ //////////////////////////////////////////////////////////////////////////
+
+////
+// !Retrieves vorname for a given user_id
+// param:	string 	$user_id 	if omitted,current user_id is used
+// return:	string 	
+function get_vorname($user_id="")
+{
+ global $user;
+ if (!($user_id)) $user_id=$user->id;
+ $db=new DB_Seminar;
+ $db->query ("SELECT Vorname FROM auth_user_md5 WHERE user_id = '$user_id'");
+				 while ($db->next_record())
+					 $author=$db->f("Vorname");
  if ($author=="") $author="unbekannt";
 
  return $author;
