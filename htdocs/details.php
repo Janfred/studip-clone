@@ -65,16 +65,20 @@ if (($sem_id) && (!$perm->have_perm("admin"))) {
 	if ($perm->have_perm("user")) { //Add lecture only if logged in	
 		$db->query("SELECT status FROM seminar_user WHERE user_id ='$user->id' AND Seminar_id = '$sem_id'");
 		if (!$db->num_rows()) {
-			$msg="info§<font size=+1><b>Wenn sie diese Veranstaltung abonnieren m&ouml;chten, klicken sie bitte <a href=\"sem_verify.php?id=".$sem_id."&send_from_search=".$send_from_search."\">hier</a></b></font>§";
+			$abo_msg="Tragen Sie sich hier ein</a></b></font>";
 			}
 	 else {
 		    $db->next_record();
 		    if ($db->f("status") == "user") {
-			$msg="info§<font size=+1><b>Wenn sie Schreibrechte in diese Veranstaltung beantragen m&ouml;chten, klicken sie bitte <a href=\"sem_verify.php?id=".$sem_id."&send_from_search=".$send_from_search."\">hier</a></b></font>§";
+			$back_msg="Zur&uuml;ck zur letzten Auswahlinfo§<font size=+1><b>Wenn sie Schreibrechte in diese Veranstaltung beantragen m&ouml;chten, klicken sie bitte <a href=\"sem_verify.php?id=".$sem_id."&send_from_search=".$send_from_search."\">hier</a></b></font>§";
 	    		}
 		}
 	}
 }
+
+if ($send_from_search)
+    	$back_msg.="Zur&uuml;ck zur letzten Auswahl";
+
 
 //wenn Seminar gesetzt und kein externer Aufruf uebernahme der SessionVariable
 elseif (($SessSemName[1] <>"") && (!isset($sem_id)))
@@ -101,8 +105,6 @@ elseif (($SessSemName[1] <>"") && (!isset($sem_id)))
 	<tr><td class="topic" colspan=2><b>&nbsp;<? echo $art,": ",htmlReady($db2->f("Name"))." - Details"; ?>
 	</b></td></tr>
 	<?
-	if ($send_from_search)
-	    	$msg.="info§Um zur letzten Auswahl zur&uuml;ckzukehren, klicken Sie bitte <a href=\"$send_from_search_page\">hier</a>";
 
 	if ($msg)
 		{
@@ -113,28 +115,139 @@ elseif (($SessSemName[1] <>"") && (!isset($sem_id)))
 	<tr><td class="blank">
 		&nbsp; <br />
 		<table align="center" width="99%" border=0 cellpadding=2 cellspacing=0>
-			<? if ($db2->f("Untertitel") !="") {
-			?>
 			<tr>
 				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" valign="top" colspan=2 valign="top" width="96%">
 				<?
-				//Grunddaten des Seminars
-				printf ("<font size=-1><b>Untertitel:</b></font><br /><font size=-1>%s</font>",htmlReady($db2->f("Untertitel")));
+				//Titel und Untertitel der Veranstaltung
+				printf ("<b>%s</b><br />&nbsp; ",htmlReady($db2->f("Name")));
+				printf ("<font size=-1>%s</font>",htmlReady($db2->f("Untertitel")));
 				?>
 				</td>
+				<td class="angemeldet" width="26%" rowspan=4  valign="top">
+					<table "center" width="99%" border=0 cellpadding=2 cellspacing=0>
+					<tr>
+						<td width="100%" colspan=2>
+							<font size=-1><b><? print "Pers&ouml;nlicher Status" ?>:</b></font>
+							<?
+				
+				// Meinen Status ermitteln
+				$user_id = $auth->auth["uid"];
+				$db3->query("SELECT status FROM seminar_user WHERE Seminar_id = '$sem_id' AND user_id = '$user_id'");
+				if ($db3->next_record() ){
+					$mein_status = $db3->f("status");
+				} else {
+					unset ($mein_status);
+				}
+							?>
+						</td>
+					</tr>
+					<tr>
+						<td width="1%" valign="top">
+							<?printf ("%s", ($mein_status) ? "<img src=\"./pictures/haken.gif\" border=0>" : "<img src=\"./pictures/x2.gif\" border=0>");?>
+						</td>
+						<td width="99%">
+						<?
+
+						printf ("<font size=-1 %s>%s</font>", (!$mein_status) ? " color=\"red\"" : "", ($mein_status) ? "Sie sind als Teilnehmer der Veranstaltung eingetragen" : "Sie sind nicht als Teilnehmer der Veranstaltung eingetragen.");
+						?>
+						</td>
+					</tr>
+					<?
+					if ($abo_msg) {
+					?>
+					<tr>
+						<td width="1%" valign="top">
+							<? echo "<a href=\"sem_verify.php?id=".$sem_id."&send_from_search=".$send_from_search."\"><img src=\"./pictures/meinesem.gif\" border=0</a>"; ?>
+						</td>
+						<td width="99%">
+							<font size=-1><? echo "<a href=\"sem_verify.php?id=".$sem_id."&send_from_search=".$send_from_search."\">",$abo_msg, "</a>"; ?></font>
+						</td>					
+					</tr>
+					<? } 
+					if ($back_msg) {
+					?>
+					<tr>
+						<td width="1%" valign="top">
+							<? //echo "<a href=\"sem_verify.php?id=".$sem_id."&send_from_search=".$send_from_search."\"><img src=\"./pictures/meinesem.gif\" border=0</a>"; ?>
+						</td>
+						<td width="99%">
+							<font size=-1><? echo "<a href=\"$send_from_search_page\">",$back_msg, "</a>"; ?></font>
+						</td>					
+					</tr>
+					<? } ?>
+					<tr>
+						<td width="100%" colspan=2>
+							<font size=-1><b><? print  "Berechtigungen" ?>:</b><br /></font> 
+						</td>
+					</tr>
+					<tr>
+						<td width="1%">
+						</td>
+						<td width="99%">
+						<?
+
+				// Ampel-Schaltung
+				printf ("<font size=-1>Lesen:&nbsp;</font><font size=-1>%s </font>",$db3->f("anzahl"));
+				if ($mein_status) { // wenn ich im Seminar schon drin bin, darf ich auf jeden Fall lesen
+					echo"<img border=\"0\" src=\"pictures/ampel_gruen.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1></font>";
+				} else {
+					switch($db2->f("Lesezugriff")){
+						case 0 :
+							echo"<img border=\"0\" src=\"pictures/ampel_gruen.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1></font>";
+					break;
+						case 1 :
+							if ($perm->have_perm("autor"))
+								echo"<img border=\"0\" src=\"pictures/ampel_gruen.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1></font>";
+						else
+								echo"<img border=\"0\" src=\"pictures/ampel_rot.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>(Registrierungsmail beachten!)</font>";
+						break;
+						case 2 :
+							if ($perm->have_perm("autor"))
+								echo"<img border=\"0\" src=\"pictures/ampel_gelb.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>(mit Passwort)</font>";
+							else
+								echo"<img border=\"0\" src=\"pictures/ampel_rot.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>(Registrierungsmail beachten!)</font>";
+						break;
+					}
+				}
+				printf ("<font size=-1><br />Schreiben:&nbsp;</font><font size=-1>%s </font>",$db3->f("anzahl"));
+					if ($mein_status == "dozent" || $mein_status == "tutor" || $mein_status == "autor") { // in den Fällen darf ich auf jeden Fall schreiben
+					echo"<img border=\"0\" src=\"pictures/ampel_gruen.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>(bereits Teilnehmer)</font>";
+				} else {
+					switch($db2->f("Schreibzugriff")){
+						case 0 :
+							echo"<img border=\"0\" src=\"pictures/ampel_gruen.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1></font>";
+						break;
+						case 1 :
+							if ($perm->have_perm("autor"))
+								echo"<img border=\"0\" src=\"pictures/ampel_gruen.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1></font>";
+							else
+								echo"<img border=\"0\" src=\"pictures/ampel_rot.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>(Registrierungsmail beachten)</font>";
+						break;
+						case 2 :
+							if ($perm->have_perm("autor"))
+								echo"<img border=\"0\" src=\"pictures/ampel_gelb.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>(mit Passwort)</font>";
+							else
+								echo"<img border=\"0\" src=\"pictures/ampel_rot.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>(Registrierungsmail beachten)</font>";
+						break;
+					}
+				}
+						?>
+						</td>
+					</tr>
+				</table>
+				</td>
 			</tr>
-			<? } ?>
 			<tr>
 				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
 				</td>
-				<td class="<? echo $cssSw->getClass() ?>" valign="top" width="47%">
+				<td class="<? echo $cssSw->getClass() ?>" valign="top" width="35%">
 				<?
 				printf ("<font size=-1><b>Zeit:</b></font><br /><font size=-1>%s</font>",htmlReady(view_turnus($sem_id, FALSE)));
 				?>
 				</td>
-				<td class="<? echo $cssSw->getClass() ?>" valign="top" width="47%">
+				<td class="<? echo $cssSw->getClass() ?>" valign="top" width="35%">
 				<?
 				printf ("<font size=-1><b>Semester:</b></font><br /><font size=-1>%s</font>",get_semester($sem_id));
 				?>
@@ -143,12 +256,12 @@ elseif (($SessSemName[1] <>"") && (!isset($sem_id)))
 			<tr>
 				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
 				</td>
-				<td class="<? echo $cssSw->getClass() ?>" valign="top" width="47%">
+				<td class="<? echo $cssSw->getClass() ?>" valign="top" width="35%">
 				<?
 				printf ("<font size=-1><b>Erster Termin:</b></font><br /><font size=-1>%s</font>",veranstaltung_beginn($sem_id));
 				?>
 				</td>
-				<td class="<? echo $cssSw->getClass() ?>" valign="top" width="47%">
+				<td class="<? echo $cssSw->getClass() ?>" valign="top" width="35%">
 				<?
 				printf ("<font size=-1><b>Vorbesprechung:</b></font><br /><font size=-1>%s</font>", (vorbesprechung($sem_id)) ? vorbesprechung($sem_id) : "keine");
 				?>
@@ -157,29 +270,33 @@ elseif (($SessSemName[1] <>"") && (!isset($sem_id)))
 			<tr>
 				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
 				</td>
-				<td class="<? echo $cssSw->getClass() ?>" width="47%" valign="top">
+				<td class="<? echo $cssSw->getClass() ?>" width="35%" valign="top">
 				<?
 				printf ("<font size=-1><b>Veranstaltungsort:</b></font><br /><font size=-1>%s</font>",($db2->f("Ort")) ? $db2->f("Ort") : "nicht angegeben");
 				?>
 				</td>
-				<td class="<? echo $cssSw->getClass() ?>" width="47%" valign="top">
+				<td class="<? echo $cssSw->getClass() ?>" width="35%"  align="top">
 				<?
 				if ($db2->f("VeranstaltungsNummer"))
 					printf ("<font size=-1><b>Veranstaltungsnummer:</b></font><br /><font size=-1>%s</font>",$db2->f("VeranstaltungsNummer"));
+				else	
+					print "&nbsp; ";
 				?>
 				</td>
 			</tr>
 			<tr>
 				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
 				</td>
-				<td class="<? echo $cssSw->getClass() ?>" width="47%" valign="top">
+				<td class="<? echo $cssSw->getClass() ?>" width="35%" valign="top">
 				<?		
 			//wer macht den Dozenten?
 				$db->query ("SELECT Vorname, Nachname, seminar_user.user_id, username, status FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE seminar_user.Seminar_id = '$sem_id' AND status = 'dozent' ORDER BY Nachname");
 				if ($db->num_rows() > 1)
 					printf ("<font size=-1><b>DozentInnen:</b></font><br />");
-				else
+				elseif ($db->num_rows() == 1)
 					printf ("<font size=-1><b>DozentIn:</b></font><br />");
+				else	
+					print "&nbsp; ";
 				while ($db->next_record()) {
 					if ($db->num_rows() > 1)
 						print "<li>";
@@ -189,14 +306,16 @@ elseif (($SessSemName[1] <>"") && (!isset($sem_id)))
 				}
 				?>
 				</td>
-				<td class="<? echo $cssSw->getClass() ?>" width="47%" valign="top">
+				<td class="<? echo $cssSw->getClass() ?>"width="61%" colspan=2 valign="top">
 				<?		
 				//und wer ist Tutor?
 				$db->query ("SELECT seminar_user.user_id, Vorname, Nachname, username, status FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE seminar_user.Seminar_id = '$sem_id' AND status = 'tutor' ORDER BY Nachname");
 				if ($db->num_rows() > 1)
 					printf ("<font size=-1><b>TutorInnen:</b></font><br />");
-				else
+				elseif ($db->num_rows() == 1)
 					printf ("<font size=-1><b>TutorIn:</b></font><br />");
+				else	
+					print "&nbsp; ";
 				while ($db->next_record()) {
 					if ($db->num_rows() > 1)
 						print "<li>";
@@ -208,12 +327,6 @@ elseif (($SessSemName[1] <>"") && (!isset($sem_id)))
 				</td>
 			</tr>
 		</table>
-	</td>
-	<td valign="top" class="blank" align = right width="10%">
-		<img src="pictures/board2.jpg" border="0"></td>
-	</tr>
-	<tr>
-	<td colspan=2 class="blank">
 		<table align="center" width="99%" border=0 cellpadding=2 cellspacing=0>
 			<tr>
 				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
@@ -227,6 +340,8 @@ elseif (($SessSemName[1] <>"") && (!isset($sem_id)))
 				<?
 				if ($db2->f("art"))
 					printf ("<font size=-1><b>Art/Form:</b></font><br /><font size=-1>%s</font>",$db2->f("art"));
+				else	
+					print "&nbsp; ";
 				?>
 				</td>
 			</tr>
@@ -357,6 +472,8 @@ elseif (($SessSemName[1] <>"") && (!isset($sem_id)))
 					printf ("<font size=-1><b>beteiligte Einrichtung:</b></font><br />");
 				elseif ($db3->num_rows() >=2)
 					printf ("<font size=-1><b>beteiligte Einrichtungen:</b></font><br />");
+				else	
+					print "&nbsp; ";
 				while ($db3->next_record()) {
 					if ($db3->num_rows() >= 2)
 						print "<li>";
@@ -393,75 +510,8 @@ elseif (($SessSemName[1] <>"") && (!isset($sem_id)))
 				?>
 				</td>
 			</tr>
-			
-			<tr>
-				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
-				</td>
-				<td class="<? echo $cssSw->getClass() ?>" colspan=2 width="48%" valign="top">
-				<?
-				
-				// Meinen Status ermitteln
-				$user_id = $auth->auth["uid"];
-				$db3->query("SELECT status FROM seminar_user WHERE Seminar_id = '$sem_id' AND user_id = '$user_id'");
-				if ($db3->next_record() ){
-					$mein_status = $db3->f("status");
-				} else {
-					unset ($mein_status);
-				}
-
-				// Ampel-Schaltung
-				printf ("<font size=-1><b>Leseberechtigung:&nbsp;</b></font><font size=-1>%s </font>",$db3->f("anzahl"));
-				if ($mein_status) { // wenn ich im Seminar schon drin bin, darf ich auf jeden Fall lesen
-					echo"<img border=\"0\" src=\"pictures/ampel_gruen.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>(bereits Teilnehmer)</font>";
-				} else {
-					switch($db2->f("Lesezugriff")){
-						case 0 :
-							echo"<img border=\"0\" src=\"pictures/ampel_gruen.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>(jeder)</font>";
-					break;
-						case 1 :
-							if ($perm->have_perm("autor"))
-								echo"<img border=\"0\" src=\"pictures/ampel_gruen.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>(wenn in Stud.IP angemeldet)</font>";
-						else
-								echo"<img border=\"0\" src=\"pictures/ampel_rot.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>(Registrierungsmail beachten!)</font>";
-						break;
-						case 2 :
-							if ($perm->have_perm("autor"))
-								echo"<img border=\"0\" src=\"pictures/ampel_gelb.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>(mit Passwort)</font>";
-							else
-								echo"<img border=\"0\" src=\"pictures/ampel_rot.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>(Registrierungsmail beachten!)</font>";
-						break;
-					}
-				}
-				?>
-				</td>
-				<td class="<? echo $cssSw->getClass() ?>" colspan=2 width="48%">
-				<?
-				printf ("<font size=-1><b>Schreibberechtigung:&nbsp;</b></font><font size=-1>%s </font>",$db3->f("anzahl"));
-					if ($mein_status == "dozent" || $mein_status == "tutor" || $mein_status == "autor") { // in den Fällen darf ich auf jeden Fall schreiben
-					echo"<img border=\"0\" src=\"pictures/ampel_gruen.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>(bereits Teilnehmer)</font>";
-				} else {
-					switch($db2->f("Schreibzugriff")){
-						case 0 :
-							echo"<img border=\"0\" src=\"pictures/ampel_gruen.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>(jeder)</font>";
-						break;
-						case 1 :
-							if ($perm->have_perm("autor"))
-								echo"<img border=\"0\" src=\"pictures/ampel_gruen.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>(wenn in Stud.IP angemdeldet)</font>";
-							else
-								echo"<img border=\"0\" src=\"pictures/ampel_rot.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>(Registrierungsmail beachten)</font>";
-						break;
-						case 2 :
-							if ($perm->have_perm("autor"))
-								echo"<img border=\"0\" src=\"pictures/ampel_gelb.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>(mit Passwort)</font>";
-							else
-								echo"<img border=\"0\" src=\"pictures/ampel_rot.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>(Registrierungsmail beachten)</font>";
-						break;
-					}
-				}
-				?>
-				</td>
-			</tr>
 		</table>
+		<br />&nbsp; 
 	</td>
 	</tr>
 	</table>
