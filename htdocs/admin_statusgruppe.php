@@ -318,7 +318,13 @@ function PrintInstitutMembers ($range_id)
 
 	// zuordnen von Personen zu einer Statusgruppe
 	if ($cmd=="move_person" && ($AktualMembers !="" || $InstitutMembers !="---" || $Freesearch !=""))  {
-		MovePersonStatusgruppe ($range_id, $AktualMembers, $InstitutMembers, $Freesearch, $workgroup_mode);
+		
+		while (list($key, $val) = each ($HTTP_POST_VARS)) {
+			$statusgruppe_id = substr($key, 0, -2);
+		}
+		reset ($HTTP_POST_VARS);
+		if ($statusgruppe_id != "sear")
+			MovePersonStatusgruppe ($range_id, $AktualMembers, $InstitutMembers, $Freesearch, $workgroup_mode);
 	}
 
 	// Entfernen von Personen aus einer Statusgruppe
