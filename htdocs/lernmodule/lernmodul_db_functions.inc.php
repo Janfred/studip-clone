@@ -7,6 +7,7 @@ function get_module_info($co_inst, $co_id)
 			" WHERE meta.status='final' ".
 			" AND public = 'y' ".
 			" AND meta.typ = 'le' ".
+			" AND lerneinheit.deleted='0000-00-00 00:00:00'".
 			" AND lerneinheit.id = '$co_id' ".
 			" AND lerneinheit.inst = '$co_inst' ");
 	if ($ilias_db->next_record())
@@ -97,7 +98,7 @@ function get_seminar_modules($seminar_id)
 	$module_count = 0;
 	$db = New DB_Seminar;
 	$db -> query("SELECT co_inst, co_id FROM seminar_lernmodul WHERE seminar_id = '$seminar_id'");
-	while ($db->next_record())
+	while ($db->next_record() AND (get_module_info($db -> f("co_inst"), $db -> f("co_id")) != false))
 	{
 		$mod_array[$module_count]["inst"] = $db -> f("co_inst");
 		$mod_array[$module_count]["id"] = $db -> f("co_id");
