@@ -75,7 +75,7 @@ class StudipLitSearch {
 									);
 		$outer_form_buttons = array('search' => array('type' => 'suchen', 'info' => _("Suche starten")),
 									'reset' => array('type' => 'zuruecksetzen', 'info' => _("Suche zurücksetzen")),
-									'change' => array('type' => 'uebernehmen', 'info' => _("Anderen Katalog auswählen")),
+									'change' => array('type' => 'auswaehlen', 'info' => _("Anderen Katalog auswählen")),
 									'search_add' => array('type' => 'hinzufuegen', 'info' => _("Suchfeld hinzufügen")),
 									'search_sub' => array('type' => 'entfernen', 'info' => _("Suchfeld entfernen")));
 		
