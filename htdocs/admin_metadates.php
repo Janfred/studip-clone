@@ -301,7 +301,7 @@ if (($uebernehmen_x) && (!$errormsg))
 			<blockquote>
 			<b>Zeiten der Veranstaltung bearbeiten</b><br /><br />
 			Sie k&ouml;nnen hier die allgemeinen Zeiten bearbeiten. <br />
-			Spezifische Termine zur Anzeige im Ablaufplan legen Sie unter dem Menupunkt <a href="admin_dates.php?ebene=sem&range_id=<? echo $term_metadata["sem_id"] ?>">Ablaufpl&auml;ne</a> fest.
+			Spezifische Termine zur Anzeige im Ablaufplan legen Sie unter dem Menupunkt <a href="admin_dates.php?ebene=sem&range_id=<? echo $term_metadata["sem_id"] ?>">Ablaufplan</a> fest.
 			</blockqoute>
 		</td>
 		<td class="blank" align="right">
@@ -423,7 +423,7 @@ if (($uebernehmen_x) && (!$errormsg))
 		?>
 					<tr >
 						<td class="<? echo $cssSw->getClass() ?>" width="96%" colspan=2>
-							&nbsp;<font size=-1>Bitte geben Sie die einzelnen Sitzungstermine unter dem Menupunkt Ablaufpl&auml;ne ein!</font><br><br>
+							&nbsp;<font size=-1>Bitte geben Sie die einzelnen Sitzungstermine unter dem Menupunkt Ablaufplan ein!</font><br><br>
 							<input type="HIDDEN" name="term_refresh" value="TRUE">
 						</td>
 					</tr>
