@@ -19,36 +19,6 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-// Up- / Down-Navigation bei mehr als $max_step Terminen am Tag (Monatsansicht)
-function monthUpDown(&$month_obj, $i, $step, $max_step){
-	global $PHP_SELF, $atime;
-	if($atime == $i){
-	$spacer = TRUE;
-	$up = FALSE;
-	$a = $month_obj->numberOfEvents($i) - $step - $max_step;
-	if($month_obj->numberOfEvents($i) > $max_step && $step >= $max_step)
-		$up = TRUE;
-	if($a + $max_step > $max_step){
-		if($up)
-			echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-		else
-			echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-		echo '<a href="'.$PHP_SELF.'?cmd=showmonth&atime='.$i.'&step='.($step + $max_step).'"><img src="./pictures/forumrotrunt.gif" alt="noch '.$a.' Termine danach" border="0"></a>';
-		$spacer = FALSE;
-	}
-	if($up){
-		if($spacer)
-			echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-		echo '<a href="'.$PHP_SELF.'?cmd=showmonth&atime='.$i.'&step='.($step - $max_step).'"><img src="./pictures/forumrotrauf.gif" alt="noch '.$step.' Termine davor" border="0"></a>';
-		$month_obj->setPointer($atime, $step);
-	}
-	}
-	else if($month_obj->numberOfEvents($i) > $max_step){
-		echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-		echo '<a href="'.$PHP_SELF.'?cmd=showmonth&atime='.$i.'&step='.($max_step).'"><img src="./pictures/forumrotrunt.gif" alt="noch '.($month_obj->numberOfEvents($i) - $max_step).' Termine danach" border="0"></a>';
-	}
-}
-
 // Tabellenansicht der Termine eines Tages erzeugen
 function createDayTable($day_obj, $start = 6, $end = 19, $step = 900, $precol = TRUE,
                         $compact = TRUE, $link_edit = FALSE, $title_length = 70, $height = 20, $padding = 6, $spacing = 1){
@@ -87,7 +57,9 @@ function createDayTable($day_obj, $start = 6, $end = 19, $step = 900, $precol = 
 	// da die Anfangs- und Endzeiten zur korrekten Darstellung evtl. angepasst
 	// werden muessen
 	for($i = 0;$i < sizeof($day_obj->app);$i++){
-		if($day_obj->app[$i]->getEnd() > $day_obj->getStart() + $start){
+		if(($day_obj->app[$i]->getEnd() > $day_obj->getStart() + $start)
+				&& ($day_obj->app[$i]->getStart() < $day_obj->getStart() + $end + 3600)){
+			
 			$cloned_event = $day_obj->app[$i]->clone();
 			$end_corr = $cloned_event->getEnd() % $step;
 			if($end_corr > 0){
@@ -111,7 +83,8 @@ function createDayTable($day_obj, $start = 6, $end = 19, $step = 900, $precol = 
 	for($i = $start / $step;$i < $end / $step + 3600 / $step;$i++){
 		$spalte = 0;
 		$zeile = $i - $start / $step;
-		while($w < sizeof($tmp_event) && $tmp_event[$w]->getStart() >= $day_obj->getStart() + $i * $step && $tmp_event[$w]->getStart() < $day_obj->getStart() + ($i + 1) * $step){
+		while($w < sizeof($tmp_event) && $tmp_event[$w]->getStart() >= $day_obj->getStart() + $i * $step
+				&& $tmp_event[$w]->getStart() < $day_obj->getStart() + ($i + 1) * $step){
 				
 			$event = $tmp_event[$w];
 			$rows = ceil($event->getDuration() / $step);
@@ -314,7 +287,11 @@ function createDayTable($day_obj, $start = 6, $end = 19, $step = 900, $precol = 
 					$tab[$zeile] .= sprintf(' style="background-color:%s">', $term[$zeile][$j]->getColor());
 					$tab[$zeile] .= "\n<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"1\">\n";
 					if($rows == 1){
-						$title = fit_title($term[$zeile][$j]->getTitle(),$colsp[$zeile],$rows,$title_length - 6);
+						if ($term[$zeile][$j]->getType() == 1)
+							$title_out = $term[$zeile][$j]->getSemName();
+						else
+							$title_out = $term[$zeile][$j]->getTitle();
+						$title = fit_title($title_out,$colsp[$zeile],$rows,$title_length - 6);
 						// calculating the correct height of the event-cell if the cell has 1 row
 						$tab[$zeile] .= sprintf("<tr><td class=\"steel1\" height=\"%s\">\n"
 													, $height_event - $padding);
@@ -325,7 +302,11 @@ function createDayTable($day_obj, $start = 6, $end = 19, $step = 900, $precol = 
 						$tab[$zeile] .= "<td class=\"steel1\" align=\"right\">&nbsp;</td></tr>\n";
 					}
 					else{
-						$title = fit_title($term[$zeile][$j]->getTitle(),$colsp[$zeile],$rows - 1,$title_length);
+						if ($term[$zeile][$j]->getType() == 1)
+							$title_out = $term[$zeile][$j]->getSemName();
+						else
+							$title_out = $term[$zeile][$j]->getTitle();
+						$title = fit_title($title_out,$colsp[$zeile],$rows - 1,$title_length);
 						// calculating the correct height of the event-cell if the cell has _more_ than 1 row
 						$tab[$zeile] .= sprintf("<tr><td class=\"steel1\" height=\"%s\">\n"
 													, ($height_event * ($rows - 1) + $spacing * ($rows - 1) - (2 * $padding)));
