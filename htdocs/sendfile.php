@@ -220,11 +220,11 @@ if (!$type) {
 }
 
 // Rechteckeck
-
+/*
 if ($type == 6){
 	$skip_check = true;
 }
-
+*/
 //////////////
 
 if ($type == 5){
@@ -247,7 +247,7 @@ if (($type != 2) && ($type != 3) && ($type != 4) && (!$skip_check)) { //if type 
 			$no_access=TRUE; //nobody darf nie an das Archiv
 		}
 	} elseif (!$perm->have_perm("root")) {
-		if ($type) {
+		if ($type=="1") {
 			if ($perm->have_perm("admin") && !$perm->have_perm("root"))
 				$db->query ("SELECT archiv.seminar_id FROM archiv LEFT JOIN archiv_user USING (seminar_id) WHERE archiv_file_id = '".$file_id."' ");
 			else
@@ -262,11 +262,11 @@ if (($type != 2) && ($type != 3) && ($type != 4) && (!$skip_check)) { //if type 
 					}
 				if ($admin)
 					$no_access=FALSE;
-				else
-					$no_accss=TRUE;
+				else {
+					$no_access=TRUE;
 				}
 			}
-		else {
+		} else {
 			if ($perm->have_perm("admin") && !$perm->have_perm("root"))
 				$db->query ("SELECT Institut_id FROM dokumente LEFT JOIN seminare USING (seminar_id) WHERE dokument_id = '".$file_id."' ");
 			else
