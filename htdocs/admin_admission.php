@@ -195,18 +195,29 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 			if ($adm_stunde == "hh") $adm_stunde=0;
 			if ($adm_minute == "mm") $adm_minute=0;
 
-			if (!checkdate($adm_monat, $adm_tag, $adm_jahr) && ($adm_monat) && ($adm_tag) && ($adm_jahr)) {
+			if (($adm_monat) && ($adm_tag) && ($adm_jahr))
+				if ($adm_stunde=="hh")
+					{
+					$errormsg=$errormsg."error§Bitte geben Sie g&uuml;ltige Werte f&uuml;r das $end_date_name ein!§"; 
+					$check=FALSE;
+					}
+				else
+					$check=TRUE;
+
+			settype($adm_stunde, "integer");
+			settype($adm_minute, "integer");
+
+			if ((!checkdate($adm_monat, $adm_tag, $adm_jahr) && ($adm_monat) && ($adm_tag) && ($adm_jahr)) && ($check)) {
 				$errormsg=$errormsg."error§Bitte geben Sie ein g&uuml;ltiges Datum f&uuml;r das $end_date_name ein!§";
 				$check=FALSE;			
 			} else
 				$check=TRUE;
 
-			if (($adm_monat) && ($adm_tag) && ($adm_jahr))
-				if (!$adm_stunde) {
-					$errormsg=$errormsg."error§Bitte geben Sie g&uuml;ltige Werte f&uuml;r das $end_date_name ein!§"; 
-					$check=FALSE;
-				} else
-					$check=TRUE;
+			if ((($adm_stunde > 24) || ($adm_minute > 59)) && ($check)) {
+				$errormsg=$errormsg."error§Bitte geben Sie g&uuml;ltige Zeiten f&uuml;r das $end_date_name ein!§";
+				$check=FALSE;			
+			} else
+				$check=TRUE;
 
 			if ($check)
 				$admin_admission_data["admission_endtime"] = mktime($adm_stunde,$adm_minute,59,$adm_monat,$adm_tag,$adm_jahr);

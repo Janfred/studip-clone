@@ -251,19 +251,30 @@ if ($form==3)
 	if ($vor_minute == "mm") $vor_minute=0;
 	if ($vor_end_stunde == "hh") $vor_end_stunde=0;
 	if ($vor_end_minute == "mm") $vor_end_minute=0;
+	
+	if (($vor_monat) && ($vor_tag) && ($vor_jahr))
+		if (($vor_stunde=="hh") && ($vor_end_stunde=="hh")) {
+			$errormsg=$errormsg."error§Bitte geben Sie g&uuml;ltige Werte f&uuml;r Start- und Endzeit der Vorbesprechung ein!§"; 
+			$check=FALSE;
+		} else
+			$check=TRUE;
 
-	if (!checkdate($vor_monat, $vor_tag, $vor_jahr) && ($vor_monat) && ($vor_tag) && ($vor_jahr)) {
+	settype($vor_stunde, "integer");
+	settype($vor_minute, "integer");
+	settype($vor_end_stunde, "integer");
+	settype($vor_end_minute, "integer");
+
+	if ((!checkdate($vor_monat, $vor_tag, $vor_jahr) && ($vor_monat) && ($vor_tag) && ($vor_jahr)) && ($check)) {
 		$errormsg=$errormsg."error§Bitte geben Sie ein g&uuml;ltiges Datum f&uuml;r die Vorbesprechung ein!§";
 		$check=FALSE;			
 	} else
 		$check=TRUE;
-	
-	if (($vor_monat) && ($vor_tag) && ($vor_jahr))
-		if ((!$vor_stunde) && (!$vor_end_stunde)) {
-		$errormsg=$errormsg."error§Bitte geben Sie g&uuml;ltige Werte f&uuml;r Start- und Endzeit ein!§"; 
-			$check=FALSE;
-		} else
-			$check=TRUE;
+
+	if ((($vor_stunde > 24) || ($vor_end_stunde > 24) || ($vor_minute > 59) || ($vor_end_minute > 60)) && ($check)) {
+		$errormsg=$errormsg."error§Bitte geben Sie g&uuml;ltige Zeiten f&uuml;r die Vorbesprechung ein!§";
+		$check=FALSE;			
+	} else
+		$check=TRUE;
 
 	if ($check) {
 	 	$sem_create_data["sem_vor_termin"] = mktime($vor_stunde,$vor_minute,0,$vor_monat,$vor_tag,$vor_jahr);
@@ -314,23 +325,31 @@ if ($form==4)
 	if ($adm_jahr == "jjjj") $adm_jahr=0;	
 	if ($adm_stunde == "hh") $adm_stunde=0;
 	if ($adm_minute == "mm") $adm_minute=0;
-
-	if (!checkdate($adm_monat, $adm_tag, $adm_jahr) && ($adm_monat) && ($adm_tag) && ($adm_jahr))
-		{
-		$errormsg=$errormsg."error§Bitte geben Sie ein g&uuml;ltiges Datum f&uuml;r das $end_date_name ein!§";
-		$check=FALSE;			
-		}
-	else
-		$check=TRUE;
+	
 
 	if (($adm_monat) && ($adm_tag) && ($adm_jahr))
-		if (!$adm_stunde)
+		if ($adm_stunde=="hh")
 			{
 			$errormsg=$errormsg."error§Bitte geben Sie g&uuml;ltige Werte f&uuml;r das $end_date_name ein!§"; 
 			$check=FALSE;
 			}
 		else
 			$check=TRUE;
+
+	settype($adm_stunde, "integer");
+	settype($adm_minute, "integer");
+
+	if ((!checkdate($adm_monat, $adm_tag, $adm_jahr) && ($adm_monat) && ($adm_tag) && ($adm_jahr)) && ($check)) {
+		$errormsg=$errormsg."error§Bitte geben Sie ein g&uuml;ltiges Datum f&uuml;r das $end_date_name ein!§";
+		$check=FALSE;			
+	} else
+		$check=TRUE;
+
+	if ((($adm_stunde > 24) || ($adm_minute > 59)) && ($check)) {
+		$errormsg=$errormsg."error§Bitte geben Sie g&uuml;ltige Zeiten f&uuml;r das $end_date_name ein!§";
+		$check=FALSE;			
+	} else
+		$check=TRUE;
 
 	if ($check)
 		{
