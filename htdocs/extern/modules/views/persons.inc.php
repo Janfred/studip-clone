@@ -172,8 +172,8 @@ foreach ($visible_groups as $group_id => $group) {
 			$data = array(
 			"Nachname"     => sprintf("<a href=\"%s&username=%s\"%s><font%s>%s</font></a>",
 												$link_persondetails, $db->f("username"),
-												$this->config->getAttributes("Link", "a"),
-												$this->config->getAttributes("Link", "font"),
+												$this->config->getAttributes("LinkIntern", "a"),
+												$this->config->getAttributes("LinkIntern", "font"),
 												htmlReady($db->f("fullname"), TRUE)),
 												
 			"Telefon"      => sprintf("<font%s>%s</font>",
@@ -190,8 +190,8 @@ foreach ($visible_groups as $group_id => $group) {
 			
 			"Email"       => sprintf("<a href=\"mailto:%s\"%s><font%s>%s</font></a>",
 												$db->f("Email"),
-												$this->config->getAttributes("Link", "a"),
-												$this->config->getAttributes("Link", "font"),
+												$this->config->getAttributes("LinkIntern", "a"),
+												$this->config->getAttributes("LinkIntern", "font"),
 												$db->f("Email"))
 			);
 
