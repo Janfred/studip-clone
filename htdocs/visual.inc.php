@@ -509,65 +509,85 @@ function mila ($titel,$size=60){
 }
 
 //Ausgabe der Aufklapp-Kopfzeile
-function printhead ($breite,$left,$link,$open,$new,$icon,$titel,$zusatz,$timestmp=0) {
+function printhead($breite,$left,$link,$open,$new,$icon,$titel,$zusatz,$timestmp=0) {
 
-		IF ($timestmp==0) $timecolor = "#BBBBBB";
-		ELSE {
+		if ($timestmp==0) {
+			$timecolor = "#BBBBBB";
+		} else {
 			$timediff = log((time()-$timestmp)/86400 + 1) * 15;
-//             echo $timediff;
-			IF ($timediff >= 68) $timediff = 68;
+			if ($timediff >= 68) {
+				$timediff = 68;
+			}
 			$red = dechex(255-$timediff);
-		$other = dechex(119+$timediff);
-			// IF ($timediff >= 239) $timecolor = "0".$timecolor;
+			$other = dechex(119+$timediff);
 			$timecolor= "#".$red.$other.$other;
 		}
 
-	IF ($open=="close") $print = "<td bgcolor=\"".$timecolor."\" class=\"printhead2\" nowrap width=\"1%\" align=left valign=\"bottom\">";
-	ELSE $print = "<td class=\"printhead\" nowrap width=\"1%\" align=left valign=\"bottom\">";
-
-	if ($link)
-		$print.= "<a href=\"".$link."\">";
-	$print.="&nbsp;<img src=\"";
-	IF ($open=="open") $titel = "<b>".$titel."</b>";
-	if ($link) {
-		IF ($open=="close" AND $new!=TRUE)
-			$print.="pictures/forumgrau2.gif\" alt=\"Objekt aufklappen\"";
-		IF ($open=="open" AND $new!=TRUE)
-			$print.="pictures/forumgraurunt.gif\" alt=\"Objekt zuklappen\"";
-		IF ($open=="close" AND $new==TRUE)
-			$print.="pictures/forumrot.gif\" alt=\"Objekt aufklappen\"";
-		IF ($open=="open" AND $new==TRUE)
-			$print.="pictures/forumrotrunt.gif\" alt=\"Objekt zuklappen\"";
+	if ($open=="close") {
+		$print = "<td bgcolor=\"".$timecolor."\" class=\"printhead2\" nowrap width=\"1%\" align=left valign=\"bottom\">";
+	} else {
+		$print = "<td bgcolor=\"".$timecolor."\" class=\"printhead3\" nowrap width=\"1%\" align=left valign=\"bottom\">";
 	}
- else {
-		IF ($open=="close") {
-			if (!$new) $print.="pictures/forumgrau2.gif\"";
-			if ($new) $print.="pictures/forumrot.gif\"";
+
+	if ($link) {
+		$print.= "<a href=\"".$link."\">";
+	}
+	$print.="&nbsp;<img src=\"";
+	if ($open=="open") {
+		$titel = "<b>".$titel."</b>";
+	}
+	if ($link) {
+		if ($open=="close" AND $new!=TRUE) {
+			$print.="pictures/forumgrau2.gif\" alt=\"Objekt aufklappen\"";
+		}
+		if ($open=="open" AND $new!=TRUE) {
+			$print.="pictures/forumgraurunt2.gif\" alt=\"Objekt zuklappen\"";
+		}
+		if ($open=="close" AND $new==TRUE) {
+			$print.="pictures/forumrot.gif\" alt=\"Objekt aufklappen\"";
+		}
+		if ($open=="open" AND $new==TRUE) {
+			$print.="pictures/forumrotrunt.gif\" alt=\"Objekt zuklappen\"";
+		}
+	} else {
+		if ($open=="close") {
+			if (!$new) {
+				$print.="pictures/forumgrau2.gif\"";
+			}
+			if ($new) { 
+				$print.="pictures/forumrot.gif\"";
+			}
 		} else {
-			if (!$new) $print.="pictures/forumgraurunt.gif\"";
-			if ($new) $print.="pictures/forumrotrunt.gif\"";
+			if (!$new) {
+				$print.="pictures/forumgraurunt2.gif\"";
+			}
+			if ($new) {
+				$print.="pictures/forumrotrunt.gif\"";
+			}
 		}
 	}
 	
 	$print .=" border=0>";
-	if ($link)
+	if ($link) {
 		$print.= "</a>";
+	}
 	$print.="</td><td class=\"printhead\"nowrap width=\"1%\" valign=\"middle\">".$icon."</td>"."<td class=\"printhead\" align=\"left\" width=\"20%\" nowrap valign=\"bottom\">&nbsp;".$titel."</td>"."<td align=\"right\" class=\"printhead\" width=\"99%\" valign='bottom'>".$zusatz."&nbsp;</td>";
 	echo $print;
-	}
+}
 
 //Ausgabe des Contents einer aufgeklappten Kopfzeile
 function printcontent ($breite,$write=FALSE,$inhalt,$edit) {
 
 	$print.= "<td class=\"printcontent\" width=22>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td><td class=\"printcontent\" width=\"$breite\"><br>";
 	$print .= $inhalt;
-	if ($edit)
+	if ($edit) {
 		$print.= "<br><br><div align=\"center\">".$edit."</div>";
-	else
+	} else {
 		$print.= "<br>";
+	}
 	$print.="</td>";
 	echo $print;
-	}
+}
 
 
 /*****************************************************************************
