@@ -62,8 +62,8 @@ echo "<tr><td>\n";
 echo "<table width=\"100%\" border=\"0\" cellspacing=\"1\" cellpadding=\"1\">\n";
 echo "<tr>\n<td align=\"center\">";
 printf("&nbsp;<a href=\"%s?cmd=showmonth&atime=%s\">",
-	$PHP_SELF, mktime(12, 0, 0, date('n', $amonth->getStart()),
-			date('j', $amonth->getStart()), date('Y', $amonth->getStart()) + 1));
+	$PHP_SELF, mktime(12, 0, 0, $amonth->getMonth(),
+			date('j', $amonth->getStart()), date('Y', $amonth->getStart()) - 1));
 $tooltip = tooltip(_("ein Jahr zurück"));
 echo "<img border=\"0\" src=\"./pictures/calendar_previous_double.gif\" $tooltip></a>";
 printf("&nbsp; &nbsp; &nbsp; &nbsp;<a href=\"%s?cmd=showmonth&atime=%s\">",
@@ -79,8 +79,8 @@ printf("<td align=\"center\">&nbsp;<a href=\"%s?cmd=showmonth&atime=%s\">",
 $tooltip = tooltip(_("einen Monat vor"));
 echo "<img border=\"0\" src=\"./pictures/calendar_next.gif\" $tooltip></a>";
 printf("&nbsp; &nbsp; &nbsp; &nbsp;<a href=\"%s?cmd=showmonth&atime=%s\">",
-	$PHP_SELF, mktime(12, 0, 0, date('n', $amonth->getEnd()),
-			date('j', $amonth->getEnd()), date('Y', $amonth->getEnd()) - 1));
+	$PHP_SELF, mktime(12, 0, 0, $amonth->getMonth(),
+			date('j', $amonth->getStart()), date('Y', $amonth->getEnd()) + 1));
 $tooltip = tooltip(_("ein Jahr vor"));
 echo "<img border=\"0\" src=\"./pictures/calendar_next_double.gif\" $tooltip></a></td>\n";
 echo "</tr>\n<tr>\n";
