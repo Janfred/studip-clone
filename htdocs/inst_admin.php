@@ -122,6 +122,7 @@ if (isset($details)) {
 			
 			
 			?>	
+			&nbsp; 
 			</td>
 			</tr>
 			<tr <?$cssSw->switchClass() ?>>
@@ -405,9 +406,10 @@ if ($inst_id != "" && $inst_id !="0") {
 				while ($db2->next_record()) {
 					 echo $db2->f("name")."&nbsp; ";
 				}
+				
 				?>
 				
-			
+				&nbsp; 
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" >&nbsp;<?php echo htmlReady($db->f("raum")); ?></td>
 				<td class="<? echo $cssSw->getClass() ?>" >&nbsp;<?php echo htmlReady($db->f("sprechzeiten")); ?></td>
