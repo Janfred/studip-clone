@@ -1,6 +1,6 @@
 <?php
 /*
-smileys.class.php - Smiley-Verwaltung von Stud.IP.
+smiley.class.php - Smiley-Verwaltung von Stud.IP.
 Copyright (C) 2004 Tobias Thelen <tthelen@uos.de>
 Copyright (C) 2004 Jens Schmelzer <jens.schmelzer@fh-jena.de>
 
@@ -45,7 +45,6 @@ class smiley {
 		global $auth;
 		$this->msg = '';
 		$this->error = false;
-		$this->fc = (isset($_REQUEST['fc']))? $_REQUEST['fc']:'a';
 		$this->where = '';
 		$this->smiley_tab = array();
 		$this->my_smiley = array();
@@ -56,59 +55,37 @@ class smiley {
 		} else {
 			$this->SMILEY_COUNTER = (isset($GLOBALS['SMILEY_COUNTER']))? $GLOBALS['SMILEY_COUNTER']:false;
 			$this->db = new DB_Seminar;
-			if ($admin) { // im adminmodus brauchen wir etwas mehr
+
+			$dbsmile = &$this->db;
+			// smiley-table empty ?
+			$sql_test = 'SELECT Count(*) AS c FROM smiley;';
+			$dbsmile->query($sql_test);
+			$dbsmile->next_record();
+			$sc = ($dbsmile->f('c') == 0)? true : false;
+			if ($admin || $sc) { // init smiley-short-notation
 				$sa = $GLOBALS['SMILE_SHORT'];
 				$this->short_r = array_flip($sa);
 			}
-			// smiley-table already exists ?
-			$dbsmile = &$this->db;
-			$dbsmile->query('SHOW TABLES FROM '. $GLOBALS['DB_STUDIP_DATABASE'] .' LIKE "smiley";');
-			$no_table = ($dbsmile->next_record())? false:true;
-			if ($no_table) $this->error = true;
-			if ($no_table && $admin){ // create table
-$sql_create = <<< EOT
-CREATE TABLE smiley (
-  smiley_id bigint(20) NOT NULL auto_increment,
-  smiley_name varchar(50) NOT NULL default '',
-  smiley_width int(11) NOT NULL default '0',
-  smiley_height int(11) NOT NULL default '0',
-  short_name varchar(50) NOT NULL default '',
-  smiley_counter bigint(20) NOT NULL default '0',
-  short_counter bigint(20) NOT NULL default '0',
-  fav_counter bigint(20) NOT NULL default '0',
-  timestamp timestamp(14) NOT NULL,
-  PRIMARY KEY  (smiley_id),
-  UNIQUE KEY name (smiley_name),
-  KEY short (short_name)
-) TYPE=MyISAM AUTO_INCREMENT=1 ;
-EOT;
-
-$sql_alter = <<< EOT2
-ALTER TABLE user_info
-  ADD smiley_favorite VARCHAR(255) NOT NULL ,
-  ADD smiley_favorite_publish TINYINT(1) DEFAULT '0' NOT NULL ;
-EOT2;
-
-				$dbsmile->query($sql_create);
+			if ($sc){ // fill table
+				// read smiley-gif's from harddisc
+				$this->update_smiley_table();
 				// test again!!
-				$dbsmile->query('SHOW TABLES FROM '. $GLOBALS['DB_STUDIP_DATABASE'] .' LIKE "smiley";');
-				if (!$dbsmile->next_record()){ //error, no right to create table
-					$this->msg .= 'error§'. _("Fehler: Studip kann die neue Smiley-Tabelle nicht anlegen, bitte wenden Sie sich an Ihren Systembetreuer!"). '§';
-					$this->msg .= 'info§'.'<pre>'.$sql_create."\n\n".$sql_alter.'</pre>§';
-					$this->error = true;
-				} else { // ALTER TABLE user_info
-					$this->db->query('SHOW COLUMNS FROM user_info LIKE "smiley_favorite%"');
-					if (!$this->db->next_record()) {
-						$this->db->query($sql_alter);
-					}
-					$this->msg .= 'msg§'. _("Smiley-Tabelle angelegt, Tabelle \"user_info\" geändert."). '§';
-					$this->error = false;
-					// fill table smiley
-					$this->update_smiley_table();
+				$dbsmile->query($sql_test);
+				$dbsmile->next_record();
+				if ($dbsmile->f('c') > 0){
+					// search smileys in studip
 					$this->search_smileys();
+				} else {
+					$this->msg .= 'error§'. _("Fehler: Keine Smileys auf dem Server gefunden."). '§';
+					$this->error = true;
 				}
 			}
-
+			if (isset($_REQUEST['fc'])) {
+				$this->fc = $_REQUEST['fc'];
+			} else {
+				$dbsmile->query('SELECT LEFT(smiley_name, 1) AS fc FROM smiley ORDER BY smiley_name LIMIT 0, 1;');
+				$this->fc =  ($dbsmile->next_record())? $dbsmile->f('fc'):'a';
+			}
 		}
 	}
 
@@ -127,6 +104,7 @@ EOT2;
 					'short'=>$dbsmile->f('short_name'),
 					'count'=>$dbsmile->f('smiley_counter'),
 					'scount'=>$dbsmile->f('short_counter'),
+					'fcount'=>$dbsmile->f('fav_counter'),
 					'update'=>0,
 					'delete'=>$del );
 			if ($search){
@@ -178,9 +156,9 @@ EOT2;
 						if (isset($smiley_tab[$matches[2][$k]])) {
 							$smiley_tab[$matches[2][$k]]['new_count'] += 1;
 						} else {
-							$smiley_error[$matches[2][$k]]['count'] += 1;
-							$smiley_error[$matches[2][$k]]['short'] = '';
-							$smiley_error[$matches[2][$k]]['scount'] = 0;
+							if (isset($smiley_error[$matches[2][$k]]))
+								$smiley_error[$matches[2][$k]]['count'] += 1;
+							else	$smiley_error[$matches[2][$k]]['count'] = 1;
 						}
 					}
 				}
@@ -199,7 +177,7 @@ EOT2;
 		$anderungen = 0;
 		foreach($smiley_tab as $smiley_name => $smile ) {
 			if($smile['count'] != $smile['new_count'] || $smile['scount'] != $smile['new_scount'] ) {
-				$sql_smile = 'UPDATE smiley SET smiley_counter='.$smile['new_count'].', short_counter='.$smile['new_scount'].' WHERE smiley_id='.$smile['id'];
+				$sql_smile = 'UPDATE smiley SET smiley_counter='.$smile['new_count'].', short_counter='.$smile['new_scount'].', chdate=UNIX_TIMESTAMP() WHERE smiley_id='.$smile['id'];
 				$dbsmile->query($sql_smile);
 				$aenderungen++;
 			}
@@ -241,6 +219,7 @@ EOT2;
 									'short'=>"$short",
 									'count'=>0,
 									'scount'=>0,
+									'fcount'=>0,
 									'update'=>0,
 									'delete'=>0 );
 				}
@@ -255,10 +234,10 @@ EOT2;
 		foreach($smiley_tab as $smiley_name => $smile ) {
 			if(!$smile['id']) { // new smiley
 				if ($sql_smile_insert != '') $sql_smile_insert .= ',';
-				$sql_smile_insert .= '("'.$smiley_name.'", '.$smile['width'].', '. $smile['height'].', "'. $smile['short'].'", '.$smile['count'].', '.$smile['scount'].')';
+				$sql_smile_insert .= '("'.$smiley_name.'", '.$smile['width'].', '. $smile['height'].', "'. $smile['short'].'", '.$smile['count'].', '.$smile['scount'].', '.$smile['fcount'].', UNIX_TIMESTAMP(), UNIX_TIMESTAMP() )';
 				$c_insert++;
 			} elseif($smile['update'] == 1) { // new data for smiley
-				$sql_smile = 'UPDATE smiley SET short_name="'.$smile['short'].'", smiley_width='.$smile['width'].', smiley_height='.$smile['height'].' WHERE smiley_id='.$smile['id'];
+				$sql_smile = 'UPDATE smiley SET short_name="'.$smile['short'].'", smiley_width='.$smile['width'].', smiley_height='.$smile['height'].', chdate=UNIX_TIMESTAMP() WHERE smiley_id='.$smile['id'];
 				$dbsmile->query($sql_smile);
 				$c_update++;
 			} elseif($smile['delete'] == 1) { // smiley is erased...
@@ -267,7 +246,7 @@ EOT2;
 			}
 		}
 		if ($sql_smile_insert != '') {
-			$sql_smile_insert = 'INSERT INTO smiley (smiley_name, smiley_width, smiley_height, short_name, smiley_counter, short_counter) VALUES' . $sql_smile_insert;
+			$sql_smile_insert = 'INSERT INTO smiley (smiley_name, smiley_width, smiley_height, short_name, smiley_counter, short_counter, fav_counter, mkdate, chdate) VALUES' . $sql_smile_insert;
 			$dbsmile->query($sql_smile_insert);
 		}
 		if ($sql_smile_del != '') {
@@ -320,12 +299,12 @@ EOT2;
 		} elseif($smiley_id) {
 			$this->msg .= 'msg§' .sprintf( _("Die Bilddatei \"%s\" wurde erfolgreich ersetzt."), $img_name). '§';
 			$img = getImageSize($newfile);
-			$sql_smile = 'UPDATE smiley SET smiley_name="'.$smiley_name.'", smiley_width='.$img[0].' , smiley_height='.$img[1].' WHERE smiley_id = '.$smiley_id;
+			$sql_smile = 'UPDATE smiley SET smiley_name="'.$smiley_name.'", smiley_width='.$img[0].' , smiley_height='.$img[1].', chdate=UNIX_TIMESTAMP() WHERE smiley_id = '.$smiley_id;
 		} else {
 			$this->msg .= 'msg§' .sprintf( _("Die Bilddatei \"%s\" wurde erfolgreich hochgeladen."), $img_name). '§';
 			$img = getImageSize($newfile);
-			$sql_smile = 'INSERT INTO smiley (smiley_name, smiley_width, smiley_height, short_name, smiley_counter, short_counter) VALUES ';
-			$sql_smile .= '("'.$smiley_name.'", '.$img[0].', '. $img[1].', "", 0, 0)';
+			$sql_smile = 'INSERT INTO smiley (smiley_name, smiley_width, smiley_height, short_name, smiley_counter, short_counter, fav_counter, mkdate, chdate) VALUES ';
+			$sql_smile .= '("'.$smiley_name.'", '.$img[0].', '. $img[1].', "", 0, 0, 0, UNIX_TIMESTAMP(), UNIX_TIMESTAMP() )';
 		}
 		$this->db->query($sql_smile);
 		$this->fc = $smiley_name{0};
@@ -554,7 +533,7 @@ EOT2;
 						$this->msg .= 'error§' . sprintf( _("Es existiert bereits eine Datei mit dem Namen \"%s\"."),  urldecode($val). '.gif'). '§';
 					} else {
 						if ( rename($path.urldecode($matches[2]).'.gif', $path.urldecode($val).'.gif')) {
-							$sql_smile = 'UPDATE smiley SET smiley_name="'.urldecode($val).'" WHERE smiley_name = "'.urldecode($matches[2]).'"';
+							$sql_smile = 'UPDATE smiley SET smiley_name="'.urldecode($val).'", chdate=UNIX_TIMESTAMP() WHERE smiley_name = "'.urldecode($matches[2]).'"';
 							$this->db->query($sql_smile);
 							$count++;
 						} else {
@@ -607,9 +586,9 @@ EOT2;
 		$this->db->next_record();
 		$info['count_used'] = $this->db->f('c');
 		$info['sum'] = $this->db->f('s');
-		$this->db->query('SELECT UNIX_TIMESTAMP(MAX(timestamp)) AS t FROM smiley');
+		$this->db->query('SELECT chdate FROM smiley');
 		$this->db->next_record();
-		$info['last_change'] = $this->db->f('t');
+		$info['last_change'] = $this->db->f('chdate');
 		return $info;
 	}
 
@@ -618,7 +597,7 @@ EOT2;
 		$this->db->query('SHOW COLUMNS FROM user_info LIKE "smiley_favorite%"');
 		if (!$this->db->next_record()) return false;
 		$this->my_smiley = array();
-		$this->db->query('SELECT smiley_favorite FROM user_info WHERE user_id LIKE "'.$this->user_id.'"');
+		$this->db->query('SELECT smiley_favorite FROM user_info WHERE user_id = "'.$this->user_id.'"');
 		if ($this->db->next_record()){
 			$sm_list = $this->db->f('smiley_favorite');
 			if (strlen($sm_list) > 1) {
@@ -674,7 +653,7 @@ EOT2;
 			$img = (isset($_GET['img']))? intval($_GET['img']):0;
 			foreach($this->my_smiley as $smile=>$value)
 				if ($value['id'] != $img) $sm_list = ($sm_list)? $sm_list.','.$value['id']:$value['id'];
-			$this->db->query('UPDATE user_info SET smiley_favorite="'.$sm_list.'" WHERE user_id LIKE "'.$this->user_id.'"');
+			$this->db->query('UPDATE user_info SET smiley_favorite="'.$sm_list.'" WHERE user_id = "'.$this->user_id.'"');
 		} else return false;
 		return true;
 	}
@@ -692,7 +671,7 @@ EOT2;
 				$c--;
 			}
 			if ($add && $c > 0 && $img > 0) $sm_list = ($sm_list)? $sm_list.','.$img:$img;
-			$this->db->query('UPDATE user_info SET smiley_favorite="'.$sm_list.'" WHERE user_id LIKE "'.$this->user_id.'"');
+			$this->db->query('UPDATE user_info SET smiley_favorite="'.$sm_list.'" WHERE user_id = "'.$this->user_id.'"');
 		} else return false;
 		return true;
 	}
