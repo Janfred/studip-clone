@@ -235,7 +235,7 @@ class LatexRender {
         if (!$status_code) { $this->cleanTemporaryDirectory(); chdir($current_dir); return false; }
 
         // convert dvi file to postscript using dvips
-        $command = $this->_dvips_path." -E ".$this->_tmp_filename.".dvi";
+	$command = $this->_dvips_path." -E ".$this->_tmp_filename.".dvi -o ".$this->_tmp_filename.".ps";
         $status_code = exec($command);
 
         // imagemagick convert ps to png and trim picture
