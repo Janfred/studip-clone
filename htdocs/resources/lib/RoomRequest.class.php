@@ -1,5 +1,4 @@
-<?
-/**
+<?/**
 * RoomRequest.class.php
 * 
 * class for room requests and room-property requests
@@ -365,7 +364,7 @@ class RoomRequest {
 							 , $this->closed, $this->id);
 			}
 			$this->db->query($query);
-	
+			
 			$changed_prop = $this->storeProperties();
 			
 			if ($this->db->affected_rows()) {

@@ -117,7 +117,7 @@ class EditResourceData {
 		$resReq = new RoomRequest();
 
 		$killButton = TRUE;
-		
+			
 		if ($new_assign_object)
 			$resAssign = unserialize($new_assign_object);
 		else
@@ -178,7 +178,7 @@ class EditResourceData {
 				?>
 					<br />&nbsp;
 					<input type="IMAGE" align="absmiddle"  <?=makeButton("uebernehmen", "src") ?> border=0 name="submit" value="&Uuml;bernehmen">
-					&nbsp;<a href="<?=$PHP_SELF."?quick_view=".$this->used_view."&quick_view_mode=".$view_mode ?>"><?=makeButton("abbrechen", "img") ?></a>
+					&nbsp;<a href="<?=$PHP_SELF."?cancel_edit_assign=1&quick_view=".$this->used_view."&quick_view_mode=".$view_mode ?>"><?=makeButton("abbrechen", "img") ?></a>
 				<?
 				}
 				if ($killButton) {
@@ -433,7 +433,7 @@ class EditResourceData {
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" colspan=2 align="center"><br />&nbsp; 
 					<input type="IMAGE" align="absmiddle" <?=makeButton("uebernehmen", "src") ?> border=0 name="submit" value="<?=_("&Uuml;bernehmen")?>">
-					&nbsp;<a href="<?=$PHP_SELF."?quick_view=".$this->used_view."&quick_view_mode=".$view_mode?>"><?=makeButton("abbrechen", "img") ?></a>
+					&nbsp;<a href="<?=$PHP_SELF."?cancel_edit_assign=1&quick_view=".$this->used_view."&quick_view_mode=".$view_mode?>"><?=makeButton("abbrechen", "img") ?></a>
 				<?
 				if ($killButton) {
 					?>&nbsp;<input type="IMAGE" align="absmiddle" <?=makeButton("loeschen", "src") ?> border=0 name="kill_assign" value="<?=_("l&ouml;schen")?>"><?

@@ -49,7 +49,7 @@ if ($resources_data["list_open"])
 if ($resources_data["actual_object"])
 	$structure["objects"]=array (topKat=>"", name=>_("Ressource"), link=>"resources.php?view=view_details", active=>FALSE);
 
-if ((getGlobalPerms($user->id) == "admin") || ($perm->have_perm("root"))) {
+if ($perm->have_perm("admin")) {
 	$resList = new ResourcesUserRoomsList($user_id, TRUE, FALSE);
 	if (($resList->roomsExist()) && (get_config("RESOURCES_ALLOW_ROOM_REQUESTS"))) {
 		$structure["room_planning"]=array (topKat=>"", name=>_("Raumplanung"), link=>"resources.php?view=requests_start&cancel_edit_request_x=1", active=>FALSE);

@@ -211,7 +211,7 @@ class ShowToolsRequests {
 						<?
 						$this->selectSemInstituteNames($semObj->getInstitutId());
 						print "&nbsp;&nbsp;&nbsp;&nbsp;"._("Art der Anfrage:")." ".(($reqObj->getTerminId()) ? _("Einzeltermin einer Veranstalung") : (($semObj->getMetaDateType() == 1) ?_("alle Termine einer unregelm&auml;&szlig;igen Veranstaltung") :_("regelm&auml;&szlig;ige Veranstaltungszeiten")))."<br />";
-						print "&nbsp;&nbsp;&nbsp;&nbsp;"._("Erstellt von:")." ".htmlReady(get_fullname($reqObj->getUserId()))."<br />";
+						print "&nbsp;&nbsp;&nbsp;&nbsp;"._("Erstellt von:")." <a href=\"about.php?username=".get_username($reqObj->getUserId())."\">".htmlReady(get_fullname($reqObj->getUserId()))."</a><br />";
 						print "&nbsp;&nbsp;&nbsp;&nbsp;"._("verantwortliche Einrichtung:")." ".htmlReady($this->db->f("inst_name"))."<br />";
 						print "&nbsp;&nbsp;&nbsp;&nbsp;"._("verantwortliche Fakult&auml;t:")." ".htmlReady($this->db->f("fak_name"))."<br />&nbsp;";
 						?>
@@ -361,15 +361,17 @@ class ShowToolsRequests {
 							?>
 							<td width="29%" align="right">
 								<?
-								$seats = $resObj->getSeats();
-								$requested_seats = $reqObj->getSeats();
-								if ((is_numeric($seats)) && (is_numeric($requested_seats))) {
-									$percent_diff = (100 / $requested_seats) * $seats;
-									if ($percent_diff > 0)
-										$percent_diff = "+".$percent_diff;
-									if ($percent_diff < 0)
-										$percent_diff = "-".$percent_diff;
-									print "<font style=\"font-size:10px;\">".round($percent_diff)."%</font>";
+								if (is_object($resObj)) {
+									$seats = $resObj->getSeats();
+									$requested_seats = $reqObj->getSeats();
+									if ((is_numeric($seats)) && (is_numeric($requested_seats))) {
+										$percent_diff = (100 / $requested_seats) * $seats;
+										if ($percent_diff > 0)
+											$percent_diff = "+".$percent_diff;
+										if ($percent_diff < 0)
+											$percent_diff = "-".$percent_diff;
+										print "<font style=\"font-size:10px;\">".round($percent_diff)."%</font>";
+									}
 								}
 								?>
 							</td>
@@ -435,15 +437,17 @@ class ShowToolsRequests {
 							?>
 							<td width="29%" align="right">
 								<?
-								$seats = $resObj->getSeats();
-								$requested_seats = $reqObj->getSeats();
-								if ((is_numeric($seats)) && (is_numeric($requested_seats))) {
-									$percent_diff = (100 / $requested_seats) * $seats;
-									if ($percent_diff > 0)
-										$percent_diff = "+".$percent_diff;
-									if ($percent_diff < 0)
-										$percent_diff = "-".$percent_diff;
-									print "<font style=\"font-size:10px;\">".round($percent_diff)."%</font>";
+								if (is_object($resObj)) {
+									$seats = $resObj->getSeats();
+									$requested_seats = $reqObj->getSeats();
+									if ((is_numeric($seats)) && (is_numeric($requested_seats))) {
+										$percent_diff = (100 / $requested_seats) * $seats;
+										if ($percent_diff > 0)
+											$percent_diff = "+".$percent_diff;
+										if ($percent_diff < 0)
+											$percent_diff = "-".$percent_diff;
+										print "<font style=\"font-size:10px;\">".round($percent_diff)."%</font>";
+									}
 								}
 								?>
 							</td>
@@ -508,15 +512,17 @@ class ShowToolsRequests {
 							?>
 							<td width="29%">
 								<?
-								$seats = $resObj->getSeats();
-								$requested_seats = $reqObj->getSeats();
-								if ((is_numeric($seats)) && (is_numeric($requested_seats))) {
-									$percent_diff = (100 / $requested_seats) * $seats;
-									if ($percent_diff > 0)
-										$percent_diff = "+".$percent_diff;
-									if ($percent_diff < 0)
-										$percent_diff = "-".$percent_diff;
-									print "<font style=\"font-size:10px;\">".round($percent_diff)."%</font>";
+								if (is_object($resObj)) {
+									$seats = $resObj->getSeats();
+									$requested_seats = $reqObj->getSeats();
+									if ((is_numeric($seats)) && (is_numeric($requested_seats))) {
+										$percent_diff = (100 / $requested_seats) * $seats;
+										if ($percent_diff > 0)
+											$percent_diff = "+".$percent_diff;
+										if ($percent_diff < 0)
+											$percent_diff = "-".$percent_diff;
+										print "<font style=\"font-size:10px;\">".round($percent_diff)."%</font>";
+									}
 								}
 								?>
 							</td>
@@ -544,10 +550,10 @@ class ShowToolsRequests {
 						foreach ($properties as $key=>$val) {
 							?>
 							<tr>
-								<td width="50%">
+								<td width="70%">
 									<li><font size="-1"><?=htmlReady($val["name"])?></font></li>
 								</td>
-								<td width="50%"><font size="-1">
+								<td width="30%"><font size="-1">
 								<?
 								switch ($val["type"]) {
 									case "bool":
@@ -611,7 +617,10 @@ class ShowToolsRequests {
 					print("&nbsp;<input type=\"IMAGE\" name=\"dec_request\" ".makeButton("zurueck", "src")." border=\"0\" />");
 				} 
 				print("&nbsp;<input type=\"IMAGE\" name=\"cancel_edit_request\" ".makeButton("abbrechen", "src")." border=\"0\" />");
-				print("&nbsp;<input type=\"IMAGE\" name=\"save_state\" ".makeButton("speichern", "src")." border=\"0\" />");
+				if (($reqObj->getResourceId()) || (sizeof($matching_rooms)) || (sizeof($clipped_rooms))) {
+					print("&nbsp;<input type=\"IMAGE\" name=\"save_state\" ".makeButton("speichern", "src")." border=\"0\" />");
+					print("&nbsp;<input type=\"IMAGE\" name=\"decline_request\" ".makeButton("ablehnen", "src")." border=\"0\" />");
+				}
 				
 				// can we inc?
 				if ($resources_data["requests_working_pos"] < sizeof($resources_data["requests_working_on"])-1) {

@@ -160,7 +160,7 @@ switch ($view) {
 	
 	//Reiter Raumplanung
 	case "requests_start":
-		$page_intro=_("Auf dieser Seite wird Ihnen der Status der Anfragen aus Ihren Bereichen angezeigt. Sie k&ouml;nnen das Bearbeiten der Anfragen von hier aus starten. .");
+		$page_intro=_("Auf dieser Seite wird Ihnen der Status der Anfragen aus Ihren Bereichen angezeigt. Sie k&ouml;nnen das Bearbeiten der Anfragen von hier aus starten.");
 		$title=_("&Uuml;bersicht des Raumplanungs-Status");
 	break;
 	case "edit_request":

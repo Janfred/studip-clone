@@ -223,14 +223,14 @@ class ShowSchedules {
 
 	 	$schedule=new ScheduleWeek($start_hour, $end_hour, FALSE, TRUE, $start_time);
 	 	if ($ActualObjectPerms->havePerm("autor"))
-		 	$schedule->add_link = "resources.php?view=edit_object_assign&add_ts=";
+		 	$schedule->add_link = "resources.php?cancel_edit_assign=1&view=edit_object_assign&add_ts=";
 	 	
 		//fill the schedule
 		$assign_events=new AssignEventList ($start_time, $end_time, $this->resource_id, '', '', TRUE, $resources_data["show_repeat_mode"]);
 		while ($event=$assign_events->nextEvent()) {
 			$repeat_mode = $event->getRepeatMode(TRUE);
 			$schedule->addEvent($event->getName(), $event->getBegin(), $event->getEnd(), 
-						"$PHP_SELF?quick_view=$view&quick_view_mode=".$view_mode."&edit_assign_object=".$event->getAssignId(), FALSE, $categories[$repeat_mode]);
+						"$PHP_SELF?cancel_edit_assign=1&quick_view=$view&quick_view_mode=".$view_mode."&edit_assign_object=".$event->getAssignId(), FALSE, $categories[$repeat_mode]);
 		}
 		?>
 		<table border=0 celpadding=2 cellspacing=0 width="99%" align="center">

@@ -112,6 +112,10 @@ if ((sizeof ($_REQUEST) == 2) && (($view == "edit_object_assign") || ($view == "
 if ((sizeof ($_REQUEST) == 3) && ($edit_assign_object) && (($view == "edit_object_assign") || ($view == "openobject_assign"))) {
 	$new_assign_object=FALSE;
 }
+if ($cancel_edit_assign) {
+	$new_assign_object=FALSE;
+	$resources_data["actual_assign"]=FALSE;
+}
 
 //send the user to index, if he want to use studip-object based modul but has no object set!
 if (($view=="openobject_main") || ($view=="openobject_details") || ($view=="openobject_assign") || ($view=="openobject_schedule"))
@@ -1319,6 +1323,26 @@ if ($save_state_x) {
 	}
 }
 
+if ($decline_request_x) {
+	require_once ($RELATIVE_PATH_RESOURCES."/lib/RoomRequest.class.php");
+	
+	$reqObj = new RoomRequest($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["request_id"]);
+
+	$reqObj->setClosed(3);
+	$reqObj->store();
+	unset($resources_data["requests_open"][$reqObj->getId()]);
+	if (sizeof($resources_data["requests_open"]) == 0) {
+		$resources_data["view"] = "requests_start";
+		$view = "requests_start";
+
+	} else  {
+		if ($resources_data["requests_working_pos"] == sizeof($resources_data["requests_working_on"])-1) {
+			$auto_dec = TRUE;
+		} else {
+			$auto_inc = TRUE;
+		}
+	}
+}
 
 // inc if we have requests left in the upper
 if (($inc_request_x) || ($auto_inc))
@@ -1517,7 +1541,7 @@ if ($snd_closed_request_sms) {
 	}
 	$in="('".join("','",$request_ids)."')";
 	
-	$query = sprintf ("SELECT request_id, seminar_id FROM resources_requests WHERE closed = 1 AND request_id IN %s", $in);
+	$query = sprintf ("SELECT request_id, seminar_id FROM resources_requests WHERE closed 1 AND request_id IN %s", $in);
 	$db->query($query);
 	
 	while ($db->next_record()) {
