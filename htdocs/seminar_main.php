@@ -146,9 +146,11 @@ if ($nclose)
 	($rechte) ? $show_admin="admin_dates.php?range_id=$SessSemName[1]&ebene=sem&new_sem=TRUE" : $show_admin=FALSE;
 	if (show_dates($auswahl, $start_zeit, $end_zeit, 0, 0, $show_admin, $smain_data["dopen"]))
 		echo"<br>";
-	//show chat info	
-	if (chat_show_info($auswahl))
-		echo "<br>";
+	//show chat info
+	if ($GLOBALS['CHAT_ENABLE']){
+		if (chat_show_info($auswahl))
+			echo "<br>";
+	}
 
 ?>
 </body>

@@ -242,9 +242,12 @@ if ($msg)
 	if (show_personal_dates($user_id, $start_zeit, -1, FALSE, $show_admin, $about_data["dopen"]))
 		echo "<br>";
 
+
 // show chat info
-	if (chat_show_info($user_id))
-		echo "<br>";
+	if ($GLOBALS['CHAT_ENABLE']){
+		if (chat_show_info($user_id))
+			echo "<br>";
+	}
 
 // Hier wird der Lebenslauf ausgegeben:
 
