@@ -144,7 +144,7 @@ class EvalShow {
    */
   function createEvalMetaInfo( $eval, $votedNow = NO, $votedEarlier = NO ) {
       $html     = "";
-      $stopdate = $eval->getStopdate();
+      $stopdate = $eval->getRealStopdate();
       $number   = EvaluationDB::getNumberOfVotes( $eval->getObjectID() );
       $voted    = $votedNow || $votedEarlier;
 
@@ -186,7 +186,7 @@ class EvalShow {
 
 
   function getNumberOfVotesText( $eval, $voted ) {
-      $stopdate = $eval->getStopdate();
+      $stopdate = $eval->getRealStopdate();
       $number   = EvaluationDB::getNumberOfVotes( $eval->getObjectID() );
       $html = "";
 
@@ -217,7 +217,7 @@ class EvalShow {
   }
 
   function getStopdateText( $eval, $voted ) {
-      $stopdate = $eval->getStopdate();
+      $stopdate = $eval->getRealStopdate();
       $html = "";
 
       /* stopdate ------------------------------------------------------------- */
@@ -249,7 +249,7 @@ class EvalShow {
   }
 
   function getAnonymousText( $eval, $voted ) {
-      $stopdate = $eval->getStopdate();
+      $stopdate = $eval->getRealStopdate();
       $html = "";
 
       /* Is anonymous --------------------------------------------------------- */
