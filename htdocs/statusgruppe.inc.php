@@ -74,6 +74,19 @@ function AddNewStatusgruppe ($new_statusgruppe_name, $range_id, $new_statusgrupp
 	$db->query("INSERT INTO statusgruppen SET statusgruppe_id = '$statusgruppe_id', name = '$new_statusgruppe_name', range_id= '$range_id', position='$position', size = '$new_statusgruppe_size', mkdate = '$mkdate', chdate = '$chdate'");
 } 
 
+function GetAllSelected ($range_id)
+{	
+	$zugeordnet[] = "";
+  	$db3=new DB_Seminar;
+	$db3->query ("SELECT DISTINCT user_id FROM statusgruppe_user LEFT JOIN statusgruppen USING(statusgruppe_id) WHERE range_id = '$range_id'");
+	while ($db3->next_record()) {
+		if (!in_array($db3->f("user_id"), $zugeordnet)) {
+			$zugeordnet[] = $db3->f("user_id");
+		}
+	}
+	RETURN $zugeordnet;
+}
+
 function EditStatusgruppe ($new_statusgruppe_name, $new_statusgruppe_size, $edit_id)
 {
 	$chdate = time();
@@ -93,8 +106,6 @@ function InsertPersonStatusgruppe ($user_id, $statusgruppe_id)
 	}
 	return $writedone;
 }
-
-
 
 function RemovePersonStatusgruppe ($username, $statusgruppe_id)
 {
@@ -123,6 +134,16 @@ function DeleteStatusgruppe ($statusgruppe_id)
 		$statusgruppe_id = $db->f("statusgruppe_id");
 		$db2=new DB_Seminar;
 		$db2->query("UPDATE statusgruppen SET position =  '$new_position' WHERE statusgruppe_id = '$statusgruppe_id'");
+	}
+}
+
+function DeleteAllStatusgruppen ($range_id)
+{
+	$db=new DB_Seminar;
+	$db->query("SELECT statusgruppe_id FROM statusgruppen WHERE range_id = '$range_id'");
+	while ($db->next_record()) {
+		$statusgruppe_id = $db->f("statusgruppe_id");
+		DeleteStatusgruppe($statusgruppe_id);
 	}
 }
 
