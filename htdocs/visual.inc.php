@@ -692,7 +692,7 @@ function printcontent ($breite, $write = FALSE, $inhalt, $edit, $printout = TRUE
 	$print .= $inhalt;
 	
 	if ($edit)
-		$print .= "<br><br><div align=\"center\">$edit</div>";
+		$print .= "<br><br><div align=\"center\">$edit</div><img src=\"pictures/blank.gif\" height=\"6\" border=\"0\">";
 	else
 		$print .= "<br>";
 	
