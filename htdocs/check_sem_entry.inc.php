@@ -2,7 +2,7 @@
 /*
 check_sem_entry.inc.php - Script zur Ueberpruefung der Zugangsberechtigung zu einem Seminar,
 wird nur augefuert, wenn ein Seminar gewaehlt wurde.
-Copyright (C) 2000 André Noack <anoack@mcis.de>, Cornelis Kater <ckater@gwdg.de>, Stefan Suchi <suchi@gmx.de>
+Copyright (C) 2000 André Noack <andre.noack@gmx.net>, Cornelis Kater <ckater@gwdg.de>, Stefan Suchi <suchi@gmx.de>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -34,7 +34,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 		}
 
 		if (!$entry_level) {
-			$db->query("SELECT Fakultaets_id FROM fakultaeten WHERE Fakultaets_id = '$SessSemName[1]' ");
+			$db->query("SELECT Fakultaets_id FROM Fakultaeten WHERE Fakultaets_id = '$SessSemName[1]' ");
 			if ($db->next_record())
 				$entry_level="fak";
 		}
