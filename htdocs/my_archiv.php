@@ -112,7 +112,7 @@ if ($num_my_sem) {
 		echo "<td class=\"".$cssSw->getClass()."\" align=\"left\" nowrap>";
 		// postings-field
 		if ($db->f("forumdump"))
-			echo "<a href=\"archiv.php?forum_dump_id=".$db->f('seminar_id')."\" target=\"blank\">&nbsp; <img src=\"pictures/icon-posting.gif\"border=0 ".tooltip(_("Beitr&auml;ge des Forums der Veranstaltung"))."></a>";
+			echo "<a href=\"archiv.php?forum_dump_id=".$db->f('seminar_id')."\" target=\"blank\">&nbsp; <img src=\"pictures/icon-posting.gif\"border=0 ".tooltip(_("Beiträge des Forums der Veranstaltung"))."></a>";
 		else
 			echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
 		 //documents-field
