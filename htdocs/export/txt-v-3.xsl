@@ -30,8 +30,8 @@ Fax: <xsl:value-of select="fax"/>
 E-mail: <xsl:value-of select="email"/>
 </xsl:if>
 <xsl:if test="datenfelder">
-<xsl:for-each select="datenfelder/datenfeld">
-<xsl:value-of select="@key"/>: <xsl:value-of select="."/>
+<xsl:for-each select="datenfelder/datenfeld"><xsl:text>
+</xsl:text><xsl:value-of select="@key"/>: <xsl:value-of select="."/>
 </xsl:for-each>
 </xsl:if>
 <xsl:text>

@@ -33,7 +33,8 @@
 		</xsl:if>
 		<xsl:if test="datenfelder">
 		<xsl:for-each select="datenfelder/datenfeld">
-		<xsl:value-of select="@key"/>: <xsl:value-of select="."/>
+		<xsl:text>
+		</xsl:text><xsl:value-of select="@key"/>: <xsl:text>				</xsl:text><xsl:value-of select="."/>
 		</xsl:for-each>
 		</xsl:if>
 				
@@ -182,7 +183,7 @@
 		</xsl:if>
 		<xsl:if test="datenfelder">
 		<xsl:for-each select="datenfelder/datenfeld">
-					<xsl:value-of select="@key"/>: <xsl:value-of select="."/>
+<xsl:text>				</xsl:text><xsl:value-of select="@key"/>: <xsl:value-of select="."/>
 		</xsl:for-each>
 		</xsl:if>
 <xsl:text>
