@@ -42,6 +42,7 @@ class studip_news extends messaging
 	  var $full_username;
 	  var $news_perm=array();
 	  var $max_col;
+	  var $xres;
 
 function studip_news()
 {
@@ -54,6 +55,7 @@ function studip_news()
 	$this->max_col =  64 ; //default für 640x480
 	$this->xres=640;
    }
+   
  $this->user_id=$auth->auth["uid"];
  $this->db = new DB_Seminar;
  $this->db->query("SELECT CONCAT(vorname,' ',nachname) AS author FROM auth_user_md5 WHERE user_id='".$this->user_id."'");
@@ -783,7 +785,7 @@ Newsverwaltung</b> <font size="-1">(gew&auml;hlter Bereich: <b><?=$news_range_na
 			 {
 			 if ($perm->have_perm("admin"))
 			  {
-			  echo"\n<tr><td class=\"blank\"><blockquote><br /><b>Bereichsauswahl</b></blockquote></td></tr>\n";
+			  echo"\n<tr><td class=\"blank\"><blockquote><br /><b>Bereichsauswahl</b><br />&nbsp; </blockquote></td></tr>\n";
 			  echo "<tr><td class=\"blank\"><blockquote>";
 			  echo "<table width=\"50%\" cellspacing=0 cellpadding=2 border=0>";
 			  echo "<form action=\"".$news->p_self("cmd=search")."\" method=\"POST\">";
@@ -791,8 +793,8 @@ Newsverwaltung</b> <font size="-1">(gew&auml;hlter Bereich: <b><?=$news_range_na
 			  echo "&nbsp; <font size=-1>Geben Sie einen Suchbegriff ein, um weitere Bereiche zu finden!</font><br /><br />";
 			  echo "&nbsp; <INPUT TYPE=\"TEXT\"	 name=\"search\" size=\"20\">&nbsp;&nbsp;<input type=\"IMAGE\" name=\"submit\" src=\"pictures/buttons/suchestarten-button.gif\" border=0 value=\"Suche starten\">";
 			  echo "</td></tr></table>\n";
-			  echo "</form>";
 			  echo "</blockquote>";
+			  echo "</form>";
 			   }
 			 else $news->search_range("blah");
 		  echo "\n<tr><td class=\"blank\"><blockquote>";
@@ -816,8 +818,8 @@ Newsverwaltung</b> <font size="-1">(gew&auml;hlter Bereich: <b><?=$news_range_na
 			  echo "</blockquote></td></tr>";
 
 		  if ($news->search_result) {
-			echo "\n<tr><td class=\"blank\"><br /><blockquote>";
-			echo "<table width=\"".round(0.89*$this->xres)."\" cellspacing=\"0\" cellpadding=\"2\" border=\"0\">";
+			echo "\n<tr><td width=\"100%\" class=\"blank\"><br /><blockquote>";
+			echo "<table width=\"".round(0.89*$news->xres)."\" cellspacing=\"0\" cellpadding=\"2\" border=\"0\">";
 			$css = new CssClassSwitcher(array("steel1","steel1"));
 			$css->hoverenabled = TRUE;
 			$css->switchClass();
