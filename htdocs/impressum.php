@@ -113,7 +113,9 @@ $reiter->create($structure, $view);
 			<br><font size=-1><b>Arne Schröder</b>, E-Mail: <a href="mailto:23arne@web.de">schroeder@data-quest.de</a> <?=_("(Export-Schnittstellen, ILIAS-Anbindung)")?></font>
 			<br><font size=-1><b>Ralf Stockmann</b>, E-Mail: <a href="mailto:rstockm@gwdg.de">rstockm@uni-goettingen.de</a> <?=_("(Forensystem, pers&ouml;nliche Seiten, Adressbuch, Design)")?></font>
 			<br><font size=-1><b>Stefan Suchi</b>, E-Mail: <a href="mailto:suchi@data-quest.de">suchi@data-quest.de</a> <?=_("(Datenbankstruktur, Rechtesystem, Adminbereich, Internationalisierung)")?></font>
+			<br><font size=-1><b>Tobias Thelen</b>, E-Mail: <a href="mailto:tthelen@uni-osnabrueck.de">tthelen@uni-osnabrueck.de</a> <?=_("(WikiWeb)")?></font>
 			<br><font size=-1><b>Peter Thienel</b>, E-Mail: <a href="mailto:thienel@data-quest.de">thienel@data-quest.de</a> <?=_("(Externe Seiten, Terminkalender)")?></font>
+			<br><font size=-1><b>Nils Kolja Windisch</b>, E-Mail: <a href="mailto:info@nkwindisch.de">info@nkwindisch.de</a> <?=_("(Systeminterne Nachrichten)")?></font>
 			<br></blockquote>
 			&nbsp; &nbsp; <?=_("Sie erreichen uns auch &uuml;ber folgende <b>Mailinglisten:")?></b><br>
 			<blockquote>
