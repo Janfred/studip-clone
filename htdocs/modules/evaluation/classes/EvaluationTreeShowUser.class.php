@@ -41,7 +41,7 @@ define( "INDENT_PIXELS", 5 );
  * for the participation page
  * (based on /lib/classes/TreeView.class)
  *
- * @author	mcohrs
+ * @author	mcohrs <michael A7 cohrs D07 de>
  * @version	$Id$
  * @copyright   2004 Stud.IP-Project
  * @access	public
@@ -334,12 +334,12 @@ class EvaluationTreeShowUser {
 	$answerArray = $question->getChildren();
 	$hasResidual = NO;
 	$leftOutStyle = ( $group->isMandatory() &&
-			  (is_array($_POST["answers"]) || is_array($_POST["freetexts"])) &&
+#			  (is_array($_POST["answers"]) || is_array($_POST["freetexts"])) &&
+			  isset($_POST["voteButton_x"]) &&
 			  is_array( $GLOBALS["mandatories"] ) &&
 			  in_array( $question->getObjectID(), $GLOBALS["mandatories"] ) )
 #	    ? "background-image:url(".PATH_PICTURES."steelgraulight_hover.gif".")"
 	    ? "background-image:url(".PATH_PICTURES."steelgroup1.gif"."); border-left:3px solid red; border-right:3px solid red;"
-#	    ? "border:1px outset red"
 	    : "";
 
 	/* Skala (one row question) ---------------------------------------- */

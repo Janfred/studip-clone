@@ -2,7 +2,7 @@
 /**
  * the evaluation participation page :)
  *
- * @author      mcohrs
+ * @author      mcohrs <michael A7 cohrs D07 de>
  * @version     $Id$
  * @copyright   2004 Stud.IP-Project
  * @access      public
@@ -261,6 +261,7 @@ $dbg = "<pre class=\"steelgroup6\" style=\"font-size:10pt\">"
 #echo $debug;
 #echo "start_item_id = {$tree->start_item_id}\n".
 #print_r( $_POST );
+#echo "mandatories:\n";
 #print_r( $GLOBALS["mandatories"] );
 #print_r( $tree->tree->tree_data );
 
