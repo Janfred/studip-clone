@@ -825,33 +825,28 @@ function dateAssi ($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full =
 	
 	//load the ids from already created dates
 	if (($mode == "update") && (is_array($old_turnus))) {
-		$i=0;
-		$clause=" (";
-		foreach ($old_turnus as $val) {
-			if ($i)
-				$clause.=" OR";
 
-			if ($val["day"] == 7)
-				$t_day = 1;
-			else
-				$t_day = $val["day"] + 1;
-				
-			$clause.="(";
-			$clause.="DAYOFWEEK(FROM_UNIXTIME(date)) = '".$t_day."' AND ";
-			$clause.="HOUR(FROM_UNIXTIME(date)) = '".$val["start_stunde"]."' AND ";
-			$clause.="MINUTE(FROM_UNIXTIME(date)) = '".$val["start_minute"]."' AND ";
-			$clause.="HOUR(FROM_UNIXTIME(end_time)) = '".$val["end_stunde"]."' AND ";
-			$clause.="MINUTE(FROM_UNIXTIME(end_time)) = '".$val["end_minute"]."' ";
-			$clause.=")";
-			
-			$i++;
-		}
-		$clause.=" )";
-		
-		$query = sprintf("SELECT termin_id FROM termine WHERE range_id='%s' AND %s ORDER BY date", $sem_id, $clause);
+		//first, we load all dates that exists
+		$query = sprintf("SELECT termin_id, date, end_time FROM termine WHERE range_id='%s' ORDER BY date", $sem_id);
 		$db->query($query);
-		while ($db->next_record())
-			$saved_dates[] = $db->f("termin_id");
+	
+		//than we check, which ones matches to our metadates
+		while ($db->next_record()) {
+			foreach ($old_turnus as $val) {
+				//compense php sunday = 0 bullshit
+				if ($val["day"] == 7)
+					$t_day = 0;
+				else
+					$t_day = $val["day"];
+				
+				if ((date("w", $db->f("date")) == $t_day) &&
+					(date("G", $db->f("date")) == $val["start_stunde"]) &&
+					(date("i", $db->f("date")) == $val["start_minute"]) &&
+					(date("G", $db->f("end_time")) == $val["end_stunde"]) &&
+					(date("i", $db->f("end_time")) == $val["end_minute"]))
+					$saved_dates[] = $db->f("termin_id");
+			}
+		}
 	}
 
 	//determine first day of the start-week as sem_begin
@@ -988,7 +983,6 @@ function dateAssi ($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full =
 
 function isSchedule ($sem_id) {
 	$db = new DB_Seminar;
-	
 	$query = sprintf ("SELECT metadata_dates FROM seminare WHERE Seminar_id = '%s'", $sem_id);
 	
 	$db->query($query);
@@ -996,38 +990,31 @@ function isSchedule ($sem_id) {
 	
 	$term_metadata=unserialize($db->f("metadata_dates"));
 
-	//load the ids from already created dates
-	if (is_array($term_metadata["turnus_data"])) {
-		$i=0;
-		$clause=" (";
-		foreach ($term_metadata["turnus_data"] as $val) {
-			if ($i)
-				$clause.=" OR";
+	//first, we load all dates that exists
+	$query = sprintf("SELECT termin_id, date, end_time FROM termine WHERE range_id='%s' ORDER BY date", $sem_id);
+	$db->query($query);
 
+	//than we check, which ones matches to our metadates
+	while ($db->next_record()) {
+		foreach ($term_metadata["turnus_data"] as $val) {
+			//compense php sunday = 0 bullshit
 			if ($val["day"] == 7)
-				$t_day = 1;
+				$t_day = 0;
 			else
-				$t_day = $val["day"] + 1;
-				
-			$clause.="(";
-			$clause.="DAYOFWEEK(FROM_UNIXTIME(date)) = '".$t_day."' AND ";
-			$clause.="HOUR(FROM_UNIXTIME(date)) = '".$val["start_stunde"]."' AND ";
-			$clause.="MINUTE(FROM_UNIXTIME(date)) = '".$val["start_minute"]."' AND ";
-			$clause.="HOUR(FROM_UNIXTIME(end_time)) = '".$val["end_stunde"]."' AND ";
-			$clause.="MINUTE(FROM_UNIXTIME(end_time)) = '".$val["end_minute"]."' ";
-			$clause.=")";
+				$t_day = $val["day"];
 			
-			$i++;
+			if ((date("w", $db->f("date")) == $t_day) &&
+				(date("G", $db->f("date")) == $val["start_stunde"]) &&
+				(date("i", $db->f("date")) == $val["start_minute"]) &&
+				(date("G", $db->f("end_time")) == $val["end_stunde"]) &&
+				(date("i", $db->f("end_time")) == $val["end_minute"]))
+				$matched_dates[$db->f("termin_id")] = TRUE;
 		}
-		$clause.=" )";
-		
-		$query = sprintf("SELECT termin_id FROM termine WHERE range_id='%s' AND %s ORDER BY date", $sem_id, $clause);
-		$db->query($query);
-		
-		if ($db->num_rows())
-			return TRUE;
-		else
-			return FALSE;
 	}
+
+	if (isset($matched_dates))
+		return TRUE;
+	else
+		return FALSE;
 }
 ?>
