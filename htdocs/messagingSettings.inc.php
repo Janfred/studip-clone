@@ -2,12 +2,12 @@
 
 /**
 * displays editable personal messaging-settings
-* 
-* @author				Nils K. Windisch <studip@nkwindisch.de>
-* @access				public
-* @modulegroup	Messaging
-* @module				sms_box.php
-* @package			Stud.IP Core
+*
+* @author       Nils K. Windisch <studip@nkwindisch.de>
+* @access       public
+* @modulegroup  Messaging
+* @module       sms_box.php
+* @package      Stud.IP Core
 */
 
 /*
@@ -41,7 +41,6 @@ $db3=new DB_Seminar;
 
 ## ACTION ##
 
-
 // add forward_receiver
 if ($add_smsforward_rec_x) { 
 	$query = "UPDATE user_info SET smsforward_rec='".get_userid($smsforward_rec)."', smsforward_copy='1' WHERE user_id='".$user->id."'";
@@ -61,12 +60,19 @@ while ($db2->next_record()) {
 	$smsforward['rec'] = $db2->f("smsforward_rec");
 }
 
+// get email_forward
+$db2->query("SELECT email_forward FROM user_info WHERE user_id = '".$user->id."'");
+$db2->next_record();
+$email_forward = $db2->f("email_forward");
+
 //vorgenommene Anpassungen der Ansicht in Uservariablen schreiben
 if ($messaging_cmd=="change_view_insert" && !$set_msg_default_x && $newmsgset_x) {
 	if (!$send_as_email) {
-		$my_messaging_settings["send_as_email"] = FALSE;
+		$db2->query("UPDATE user_info SET email_forward = '-1' WHERE user_id = '".$user->id."'");
+		$email_forward = "-1";
 	} else {
-		$my_messaging_settings["send_as_email"] = TRUE;
+		$db2->query("UPDATE user_info SET email_forward = '1'  WHERE user_id = '".$user->id."'");
+		$email_forward = "1";
 	}
 	$my_messaging_settings["changed"] = TRUE;
 	$my_messaging_settings["show_only_buddys"] = $show_only_buddys;
@@ -119,7 +125,7 @@ if ($do_add_user_x)
 ## FUNCTION ##
 
 function change_messaging_view() {
-	global $_fullname_sql,$my_messaging_settings, $PHP_SELF, $perm, $user, $search_exp, $add_user, $add_user_x, $do_add_user_x, $new_search_x, $i_page, $search_exp, $gosearch_x, $smsforward, $reset_txt;
+	global $_fullname_sql,$my_messaging_settings, $PHP_SELF, $perm, $user, $search_exp, $add_user, $add_user_x, $do_add_user_x, $new_search_x, $i_page, $search_exp, $gosearch_x, $smsforward, $reset_txt, $email_forward;
 	$msging=new messaging;
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
@@ -204,14 +210,14 @@ function change_messaging_view() {
 				</tr>	
 
 				<? if ($GLOBALS["MESSAGING_FORWARD_AS_EMAIL"]) { ?>
-				<tr  <? $cssSw->switchClass() ?>>
-					<td  align="right" class="blank" style="border-bottom:1px dotted black;">
-						<font size="-1"><?print _("Eine Kopie aller eingehenden Nachrichten an eigene E-Mail-Adresse schicken");?></font>
-					</td>
-					<td <?=$cssSw->getFullClass()?>>
-						<input type="checkbox" value="1" name="send_as_email"<? if ($my_messaging_settings["send_as_email"] == "1") echo " checked"; ?>>
-					</td>
-				</tr>
+        <tr  <? $cssSw->switchClass() ?>>
+          <td  align="right" class="blank" style="border-bottom:1px dotted black;">
+            <font size="-1"><?print _("Eine Kopie aller eingehenden Nachrichten an eigene E-Mail-Adresse schicken");?></font>
+          </td>
+          <td <?=$cssSw->getFullClass()?>>
+            <input type="checkbox" value="1" name="send_as_email"<?=($email_forward == "1") ? " checked": "";?>>
+          </td>
+        </tr>
 				<? } ?>
 
 				<tr <? $cssSw->switchClass() ?>>
