@@ -261,9 +261,9 @@ function suche_kinder($topic_id)  //Sucht alle aufgeklappten Beitraege raus
 *
 **/
 function ForumOpenClose ($forumposting) {
-	global $forum, $openall, $open;
+	global $forum, $openall, $open, $folderopen;
 	if (strstr($forum["openlist"],$forumposting["id"])!=TRUE
-	AND !($openall == "TRUE" && $forumposting["rootid"] == $open)
+	AND !($openall == "TRUE" && $forumposting["rootid"] == $folderopen)
 	AND !(($forum["view"]=="flat" || $forum["view"]=="neue" || $forum["view"]=="flat" || $forum["view"]=="flatfolder" || $forum["view"]=="search") && $forum["flatallopen"]=="TRUE")
 	AND !($forumposting["newold"]=="new" && $forum["neuauf"]==1) 
 	AND ($forumposting["writestatus"]=="none")) {
@@ -462,7 +462,7 @@ function ForumIcon ($forumposting) {
 			." onMouseOut=\"nd();\"><img src=\"".$bild."\" border=0></a>";
 	} else {
 		if ($forum["view"]=="tree" && $forumposting["type"]=="folder")
-			$forumposting["icon"] = "<a href=\"".$PHP_SELF."?open=".$forumposting["id"]."&openall=TRUE#anker\"><img src=\"".$bild."\" border=0 " . tooltip(_("Alle Postings im Ordner öffnen")) . "></a>";
+			$forumposting["icon"] = "<a href=\"".$PHP_SELF."?open=".$forumposting["id"]."&folderopen=".$forumposting["id"]."&openall=TRUE#anker\"><img src=\"".$bild."\" border=0 " . tooltip(_("Alle Postings im Ordner öffnen")) . "></a>";
 		else
 			$forumposting["icon"] =	"<img src=\"".$bild."\" $addon>";	
 	}
@@ -994,6 +994,7 @@ function printposting ($forumposting) {
     		
   		if ($forum["view"] != "flatfolder")
   			$forumhead[] =	"<a href=\"".$PHP_SELF."?open=".$forumposting["id"]
+					."&folderopen=".$forumposting["rootid"]
 					."&openall=TRUE&view=tree"
 					."#anker\" class=\"printhead\">".htmlReady(mila($forumposting["rootname"],20))
 					."</a>"
