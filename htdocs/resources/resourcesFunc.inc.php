@@ -296,7 +296,7 @@ function getMyRoomRequests($user_id = '') {
 		
 		if (sizeof($my_res)) {
 			$in_resource_id =  "('".join("','",array_keys($my_res))."')";
-			$query_res = sprintf("SELECT request_id, closed FROM resources_requests WHERE resource_id IN %s", $in_seminar_id, $in_resource_id);
+			$query_res = sprintf("SELECT request_id, closed FROM resources_requests WHERE resource_id IN %s", $in_resource_id);
 			$db2->query($query_res);
 			while ($db2->next_record()) {
 				$requests [$db2->f("request_id")]["my_res"] = TRUE;
@@ -305,7 +305,7 @@ function getMyRoomRequests($user_id = '') {
 		}
 		if (sizeof($my_sems)) {
 			$in_seminar_id =  "('".join("','",array_keys($my_sems))."')";
-			$query_sem = sprintf("SELECT request_id, closed FROM resources_requests WHERE seminar_id IN %s", $in_seminar_id, $in_resource_id);
+			$query_sem = sprintf("SELECT request_id, closed FROM resources_requests WHERE seminar_id IN %s", $in_seminar_id);
 			$db->query($query_sem);
 			while ($db->next_record()) {
 				$requests [$db->f("request_id")]["my_sem"] = TRUE;
