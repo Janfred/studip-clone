@@ -47,10 +47,10 @@ if (!$CHAT_ENABLE) {
 	page_close();
 	die;
 }
-require "ChatShmServer.class.php";
+require_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/ChatShmServer.class.php";
 
 //Studip includes
-require "msg.inc.php";
+require_once $ABSOLUTE_PATH_STUDIP."msg.inc.php";
 
 $chatServer = &new ChatShmServer;
 $chatServer->caching = true;
@@ -59,9 +59,9 @@ $chatServer->caching = true;
 <html>
 <head>
        <title>Chat Nicklist</title>
-       <link rel="stylesheet" href="style.css" type="text/css">
+       <link rel="stylesheet" href="<?=$CANONICAL_RELATIVE_PATH_STUDIP?>style.css" type="text/css">
 </head>
-<body style="background-color:#EEEEEE;background-image:url('pictures/steel1.jpg');">
+<body style="background-color:#EEEEEE;background-image:url('<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/steel1.jpg');">
 <?
 //darf ich überhaupt hier sein ?
 if (!$chatServer->isActiveUser($user->id,$chatid)) {
@@ -85,7 +85,7 @@ if (!$chatServer->isActiveUser($user->id,$chatid)) {
                     if ($chatUserDetail[$chatid]["action"]){
                          echo "\n<tr><td><span style=\"font-size:10pt\">";
                          if ($chatUserDetail[$chatid]["perm"])  echo "<b>";
-                         echo "<a href=\"javascript:parent.coming_home('about.php?username=".$chatUserDetail[$chatid]["nick"]."')\">".$chatUserDetail[$chatid]["fullname"]."</a><br>(".$chatUserDetail[$chatid]["nick"].")";
+                         echo "<a href=\"javascript:parent.coming_home('{$CANONICAL_RELATIVE_PATH_STUDIP}about.php?username=".$chatUserDetail[$chatid]["nick"]."')\">".$chatUserDetail[$chatid]["fullname"]."</a><br>(".$chatUserDetail[$chatid]["nick"].")";
                          if ($chatUserDetail[$chatid]["perm"])  echo "</b>";
                          echo "</span></td></tr>";
                     }
@@ -98,3 +98,6 @@ if (!$chatServer->isActiveUser($user->id,$chatid)) {
 </div>
 </body>
 </html>
+<?
+page_close();
+?>

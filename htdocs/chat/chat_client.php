@@ -42,11 +42,11 @@ if (!$CHAT_ENABLE) {
 	die;
 }
 
-require "ChatShmServer.class.php";
+require_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/ChatShmServer.class.php";
 //Studip includes
-require "msg.inc.php";
-require "visual.inc.php";
-require "messaging.inc.php";
+require_once $ABSOLUTE_PATH_STUDIP."msg.inc.php";
+require_once $ABSOLUTE_PATH_STUDIP."visual.inc.php";
+require_once $ABSOLUTE_PATH_STUDIP."messaging.inc.php";
 
 //shutdown funktion, wird automatisch bei skriptende aufgerufen
 function chatLogout(){
@@ -56,7 +56,7 @@ function chatLogout(){
 
 //Hilfsfunktion, druckt script tags
 function printJs($code){
-     printf("<script type=\"text/Javascript\">%s</script>\n", $code);
+     echo "<script type=\"text/Javascript\">$code</script>\n";
 }
 //Hilfsfunktion, gibt vollen Namen inkl usernamen zurück
 //function fullNick($userid) {
@@ -115,7 +115,7 @@ function chatCommand_help($msgStr,&$output){
      global $user,$chatServer,$chatid,$chatCmd;
      $str="Mögliche Kommandos:";
      foreach($chatCmd as $cmd => $text)
-          $str.="<br><b>$cmd</b>$text";
+          $str.="<br><b>/$cmd</b>$text";
      $chatServer->addMsg("system:$user->id",$chatid,$str);
 }
 
@@ -258,11 +258,11 @@ $userQuit=false;
 <html>
 <head>
        <title>ChatAusgabe</title>
-       <link rel="stylesheet" href="style.css" type="text/css">
+       <link rel="stylesheet" href="<?=$CANONICAL_RELATIVE_PATH_STUDIP?>style.css" type="text/css">
 
 
 </head>
-<body style="background-color:#EEEEEE;background-image:url('pictures/steel1.jpg');font-size:10pt;">
+<body style="background-color:#EEEEEE;background-image:url('<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/steel1.jpg');font-size:10pt;">
 <?
 if (!$chatServer->isActiveUser($user->id,$chatid)) {
      ?><table width="100%"><tr><?
@@ -279,3 +279,4 @@ outputLoop($chatid);
 $userid=$user->id; //konservieren für shutdown_function
 page_close();
 ?>
+

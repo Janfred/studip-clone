@@ -42,10 +42,10 @@ if (!$CHAT_ENABLE) {
 	die;
 }
 
-require "ChatShmServer.class.php";
+require_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/ChatShmServer.class.php";
 //Studip includes
-require "msg.inc.php";
-require "messaging.inc.php";
+require_once $ABSOLUTE_PATH_STUDIP."msg.inc.php";
+require_once $ABSOLUTE_PATH_STUDIP."messaging.inc.php";
 
 $chatServer = &new ChatShmServer;
 $chatServer->caching = true;
@@ -56,7 +56,7 @@ if (!$chatServer->addUser($user->id,$chatid,$auth->auth["uname"],$db->f("fullnam
      ?><html>
      <head>
          <title>Stud.IP</title>
-	    <link rel="stylesheet" href="style.css" type="text/css">
+	    <link rel="stylesheet" href="<?=$CANONICAL_RELATIVE_PATH_STUDIP?>style.css" type="text/css">
      </head>
      <body>
      <table border=0 bgcolor="#000000" align="center" cellspacing=0 cellpadding=0 width=70%>
@@ -101,12 +101,11 @@ $sms->delete_chatinv($auth->auth["uname"]);
 	}
      </script>
 <frameset rows="83%,*" border=0>
-  <frameset cols="73%,*" border=0>
+  <frameset cols="75%,25%" border=0>
     <frame name="frm_chat" src="chat_client.php?chatid=<?=$chatid?>" marginwidth=1 marginheight=1 frameborder=0>
     <frame name="frm_nicklist" src="chat_nicklist.php?chatid=<?=$chatid?>"  marginwidth=1 marginheight=1 frameborder=0>
   </frameset>
 <frame name="frm_input" src="chat_input.php?chatid=<?=$chatid?>" marginwidth=1 marginheight=2 frameborder=0>
-  
 </frameset>
 </head>
 <body>

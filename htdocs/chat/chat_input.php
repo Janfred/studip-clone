@@ -40,10 +40,10 @@ if (!$CHAT_ENABLE) {
 	page_close();
 	die;
 }
-
-require "ChatShmServer.class.php";
+require_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/ChatShmServer.class.php";
 //Studip includes
-require "msg.inc.php";
+require_once $ABSOLUTE_PATH_STUDIP."msg.inc.php";
+require_once $ABSOLUTE_PATH_STUDIP."visual.inc.php";
 
 $chatServer = &new ChatShmServer;
 $chatServer->caching = true;
@@ -52,7 +52,7 @@ $chatServer->caching = true;
 <html>
 <head>
        <title>ChatInput</title>
-<link rel="stylesheet" href="style.css" type="text/css">
+<link rel="stylesheet" href="<?=$CANONICAL_RELATIVE_PATH_STUDIP?>style.css" type="text/css">
 <script type="text/javascript">
 /**
 * JavaScript 
@@ -85,7 +85,7 @@ $chatServer->caching = true;
  </script>
 
 </head>
-<body style="background-color:white;background-image:url('pictures/steel1.jpg');">
+<body style="background-color:white;background-image:url('<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/steel1.jpg');">
 <?
 //darf ich überhaupt hier sein ?
 if (!$chatServer->isActiveUser($user->id,$chatid)) {
@@ -116,10 +116,10 @@ if ($chatInput) {
 <form method="post" action="<?=$PHP_SELF?>" name="inputform">
 <input type="hidden" name="chatid" value="<?=$chatid?>">
 <div align="center">
-       <table width="100%" border="0" bgcolor="white" cellspacing="0" cellpadding="0" align="center">
+       <table width="98%" border="0" bgcolor="white" cellspacing="0" cellpadding="0" align="center">
           <tr>
-                  <td width="99%" align="left" class="topic" ><b>&nbsp;Chat -
-		  <?=$chatServer->chatDetail[$chatid]["name"]?></b></td><td width="1%" align="right" class="topic" ><a href="javascript:printhelp();"><img src="pictures/hilfe.gif" border=0 align="texttop" alt="zur Hilfe"></a>&nbsp; <a href="show_smiley.php" target=new><img src="pictures/smile/smile.gif" border=0 align="absmiddle" alt="Alle verf&uuml;gbaren Smileys anzeigen"></a>&nbsp; </td>
+                  <td width="80%" align="left" class="topic" ><b>&nbsp;Chat -
+		  <?=$chatServer->chatDetail[$chatid]["name"]?></b></td><td width="20%" align="right" class="topic" ><a href="javascript:printhelp();"><img src="<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/hilfe.gif" border=0 align="texttop" <?=tooltip("zur Hilfe")?>></a>&nbsp; <a href="<?=$CANONICAL_RELATIVE_PATH_STUDIP?>show_smiley.php" target=new><img src="<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/smile/smile.gif" border=0 align="absmiddle" <?=tooltip("Alle verfügbaren Smileys anzeigen")?>></a>&nbsp; </td>
            </tr>
            <tr>
                <td align="center" colspan=2 valign="center">
@@ -150,12 +150,10 @@ if ($chatInput) {
 			      </td>
 			      <td align="center" valign="center">
 			        <input type="IMAGE" name="Submit"
-				src="pictures/buttons/absenden-button.gif" alt="Nachricht senden"
-				border="0" 
-				value="senden">
+				src="<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/buttons/absenden-button.gif" <?=tooltip("Nachricht senden")?> border="0" value="senden">
                 		</td>
 				<td align="right" valign="center">
-                    		<a href="javascript:doQuit();"><img alt="Chat verlassen" src="pictures/buttons/abbrechen-button.gif" border="0"></a>
+                    		<a href="javascript:doQuit();"><img <?=tooltip("Chat verlassen")?> src="<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/buttons/abbrechen-button.gif" border="0"></a>
                    		</td>
                       </tr>
                     </table>
@@ -172,3 +170,4 @@ document.inputform.chatInput.focus();
 <?
 page_close();
 ?>
+
