@@ -290,7 +290,6 @@ if (($uebernehmen_x) && (!$errormsg)) {
 			$term_metadata["original_turnus"] = $metadata_termin["turnus_data"];
 			if ($result) {
 				$errormsg.= sprintf ("msg§"._("%s Termine des Ablaufplans aktualisiert.")."§", $result["changed"]);
-				$updateResult = $result["resources_result"];
 			}
 		}
 		
