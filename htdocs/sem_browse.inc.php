@@ -814,7 +814,7 @@ if (($sem_browse_data["level"]=="s") || ($sem_browse_data["level"]=="sbb")) {
 //Uebersicht ueber die Institute einer Fakultaet
 if (($sem_browse_data["level"]=="i") && (!$hide_bereich))
 	{
-	$db->query("SELECT Institute.Name, Institute.Institut_id, count(Seminar_id) AS number_seminare FROM Institute LEFT OUTER JOIN seminare USING (Institut_id) WHERE Institute.Name NOT LIKE '%- - -%' AND Institute.fakultaets_id = '".$sem_browse_data["id"]."' $class_query GROUP BY Institute.Name ORDER BY number_seminare DESC");
+	$db->query("SELECT Institute.Name, Institute.Institut_id, count(seminare.Seminar_id) AS number_seminare FROM Institute LEFT JOIN seminar_inst USING(Institut_id) LEFT JOIN seminare USING (Seminar_id) WHERE Institute.Name NOT LIKE '%- - -%' AND Institute.fakultaets_id = '".$sem_browse_data["id"]."' $class_query GROUP BY Institute.Institut_id ORDER BY number_seminare DESC");
 	
 	$i=0;
 	//echo "<tr><td class=\"blank\">&nbsp;<br></tr></td>";
@@ -845,7 +845,7 @@ if (($sem_browse_data["level"]=="i") && (!$hide_bereich))
 if (($sem_browse_data["level"]=="b")  && (!$hide_bereich))
 	{
 	
-	$db->query("SELECT bereiche.name, bereiche.bereich_id, count(seminare.Seminar_id) AS number_seminare FROM bereiche LEFT JOIN bereich_fach USING (bereich_id) LEFT JOIN seminar_bereich USING (bereich_id) LEFT JOIN seminare USING (seminar_id) LEFT JOIN Institute USING (institut_id) LEFT JOIN Fakultaeten USING (Fakultaets_id) WHERE bereich_fach.fach_id = '".$sem_browse_data["id"]."' AND Fakultaeten.Fakultaets_id = '".$sem_browse_data["oid"]."' $class_query GROUP BY bereiche.name ORDER BY number_seminare DESC");
+	$db->query("SELECT bereiche.name, bereiche.bereich_id, count(seminare.Seminar_id) AS number_seminare FROM Institute LEFT JOIN seminar_inst USING (Institut_id) LEFT JOIN seminare USING (Seminar_id) LEFT JOIN seminar_bereich USING (Seminar_id) LEFT JOIN bereich_fach USING (bereich_id) LEFT JOIN bereiche USING (bereich_id) WHERE Institute.Fakultaets_id = '".$sem_browse_data["oid"]."' AND bereich_fach.fach_id = '".$sem_browse_data["id"]."' $class_query GROUP BY bereiche.bereich_id ORDER BY number_seminare DESC");
 	
 	$i=0;
 	//echo "<tr><td class=\"blank\">&nbsp;<br></tr></td>";
@@ -876,7 +876,7 @@ if (($sem_browse_data["level"]=="b")  && (!$hide_bereich))
 if (($sem_browse_data["level"]=="sb") && (!$hide_bereich))
 	{
 	
-	$db->query("SELECT faecher.name, faecher.fach_id, count(seminare.Seminar_id) AS number_seminare FROM faecher LEFT JOIN bereich_fach USING (fach_id) LEFT JOIN seminar_bereich USING (bereich_id) LEFT JOIN seminare USING (seminar_id) LEFT JOIN Institute USING (institut_id) LEFT JOIN Fakultaeten USING (Fakultaets_id) WHERE Fakultaeten.Fakultaets_id = '".$sem_browse_data["id"]."' GROUP BY faecher.name $class_query ORDER BY number_seminare DESC");
+	$db->query("SELECT faecher.name, faecher.fach_id, count(seminare.Seminar_id) AS number_seminare FROM Institute LEFT JOIN seminar_inst USING (Institut_id) LEFT JOIN seminare USING (Seminar_id)  LEFT JOIN seminar_bereich USING (Seminar_id) LEFT JOIN bereich_fach USING (bereich_id) LEFT JOIN faecher USING (fach_id) WHERE Institute.Fakultaets_id = '".$sem_browse_data["id"]."' $class_query GROUP BY faecher.fach_id  ORDER BY number_seminare DESC");
 	
 	$i=0;
 	//echo "<tr><td class=\"blank\">&nbsp;<br></tr></td>";
@@ -923,9 +923,9 @@ if (($sem_browse_data["level"]=="sbi")  && (!$hide_bereich))
 //Uebersicht ueber alle Fakultaeten mit einigen Instituten
 if ((($sem_browse_data["level"]=="f") || (!isset($sem_browse_data["level"])))  && (!$hide_bereich))
 	{
-	$db->query("SELECT Fakultaeten.Name, Fakultaeten.Fakultaets_id, count(Seminar_id) AS number_seminare FROM Fakultaeten LEFT OUTER JOIN Institute ON (Institute.fakultaets_id=Fakultaeten.Fakultaets_id) LEFT OUTER JOIN seminare USING (Institut_id) WHERE Fakultaeten.Name NOT LIKE '%- - -%' $class_query GROUP BY Fakultaeten.Name  ORDER BY number_seminare DESC");
-	$db2->query("SELECT Institute.Name, Institute.Institut_id, Institute.fakultaets_id, count(Seminar_id) AS number_seminare FROM Institute LEFT OUTER JOIN seminare USING (Institut_id) WHERE Institute.Name NOT LIKE '%- - -%' $class_query GROUP BY Institute.Name ORDER BY number_seminare DESC");
-
+	$db->query("SELECT Fakultaeten.Name, Fakultaeten.Fakultaets_id, count(seminare.Seminar_id) AS number_seminare FROM Fakultaeten LEFT JOIN Institute ON (Institute.fakultaets_id=Fakultaeten.Fakultaets_id) LEFT JOIN seminar_inst USING (Institut_id) LEFT JOIN seminare USING (Seminar_id) WHERE Fakultaeten.Name NOT LIKE '%- - -%' $class_query GROUP BY Fakultaeten.Fakultaets_id ORDER BY number_seminare DESC");
+	$db2->query("SELECT Institute.Name, Institute.Institut_id, Institute.fakultaets_id, count(seminare.Seminar_id) AS number_seminare FROM Institute LEFT JOIN seminar_inst USING(Institut_id) LEFT JOIN seminare USING (Seminar_id) WHERE Institute.Name NOT LIKE '%- - -%' $class_query GROUP BY Institute.Institut_id ORDER BY number_seminare DESC");
+	
 	$i=0;
 	
 	while ($db->next_record())
