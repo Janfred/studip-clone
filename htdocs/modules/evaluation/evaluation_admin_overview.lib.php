@@ -605,7 +605,7 @@ class EvalOverview {
   /**
    *
    */
-  function createHeader ($safeguard, $templates, $foundTable = "") {
+  function createHeader ($safeguard, $templates = NULL, $foundTable = "") {
     $table = new HTML ("table");
     $table->addAttr ("border","0");
     $table->addAttr ("align", "center");
@@ -708,7 +708,7 @@ class EvalOverview {
     $td = new HTML ("td");
     $td->addAttr ("valign", "top");
     $td->addAttr ("class", "steel1");
-    $td->addContent ($templates);
+    $td->addContent ($templates ? $templates : " ");
     $tr->addContent ($td);
     $table->addContent($tr);
     /* -------------------------------------------------- end: show templates */
