@@ -37,6 +37,8 @@ require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/forum.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/datei.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
+
 	
 
 ###
@@ -159,27 +161,55 @@ while ( is_array($HTTP_POST_VARS)
       break;
     }
     
+	// delete users in user_inst
+	$query = "DELETE FROM user_inst WHERE Institut_id='$i_id'";
+	$db->query($query);
+	if (($db_ar = $db->affected_rows()) > 0) {
+		$msg.="msg§$db_ar Mitarbeiter gel&ouml;scht.§";
+	}
+	
+	// delete facher in fach_inst
+	$query = "DELETE FROM fach_inst WHERE Institut_id='$i_id'";
+	$db->query($query);
+	if (($db_ar = $db->affected_rows()) > 0) {
+		$msg.="msg§$db_ar Fachzuordnungen gel&ouml;scht.§";
+	}
+	
+	// delete literatur in literatur
+	$query = "DELETE FROM literatur WHERE range_id='$i_id'";
+	$db->query($query);
+	if (($db_ar = $db->affected_rows()) > 0) {
+		$msg.="msg§Literatur / Links gel&ouml;scht.§";
+	}
+	
+	//deleting news is done by the garbage collector in local.inc
+	
+	//updating range_tree
+	$query = "UPDATE range_tree SET name='$Name (in Stud.IP gelöscht)',studip_object='',studip_object_id='' WHERE studip_object_id='$i_id'";
+	$db->query($query);
+	if (($db_ar = $db->affected_rows()) > 0) {
+		$msg.="msg§$db_ar Bereiche im Bereichsbaum angepasst§";
+	}
     // Statusgruppen entfernen
     if ($db_ar = DeleteAllStatusgruppen($i_id) > 0) {
-				$msg .= "info§$db_ar Funktionen / Gruppen gel&ouml;scht.§";
+				$msg .= "msg§$db_ar Funktionen / Gruppen gel&ouml;scht.§";
 			}
     
     ## delete folders and discussions
     $query = "DELETE from px_topics where Seminar_id='$i_id'";
     $db->query($query);
     if (($db_ar = $db->affected_rows()) > 0) {
-      $msg.="msg$db_ar Postings aus dem Forum der Einrichtung gel&ouml;scht.";
+      $msg.="msg§$db_ar Postings aus dem Forum der Einrichtung gel&ouml;scht.§";
     }
     $db_ar = recursiv_folder_delete($i_id);
     if ($db_ar > 0)
-     $msg.="msg§$db_ar Dokumente gel&ouml;scht.";
+     $msg.="msg§$db_ar Dokumente gel&ouml;scht.§";
 
 
-    $msg.="msg§Die Einrichtung \"".htmlReady(stripslashes($Name))."\" wurde gel&ouml;scht!";
-  	unset($i_view);
-	//We deleted that intitute, so we have to unset the selection an switch to list
-	unset ($links_admin_data["inst_id"]);
-	$list=TRUE;
+    $msg.="msg§Die Einrichtung \"".htmlReady(stripslashes($Name))."\" wurde gel&ouml;scht!§";
+  	$i_view="delete";
+	//We deleted that intitute, so we have to unset the selection 
+	closeObject();
 	break;
 	
   default:
@@ -187,7 +217,10 @@ while ( is_array($HTTP_POST_VARS)
  }
 }
 
-
+//workaround
+if ($i_view == "new")
+	closeObject();
+	
 //Output starts here
 
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
@@ -195,23 +228,27 @@ include "$ABSOLUTE_PATH_STUDIP/header.php";   //hier wird der "Kopf" nachgeladen
 include "$ABSOLUTE_PATH_STUDIP/links_admin.inc.php";  //Linkleiste fuer admins
 
 
-$db->query ("SELECT Name, type FROM Institute WHERE Institut_id = '$i_view'");
-if ($db->next_record())
-	$tmp_typ = $INST_TYPE[$db->f("type")]["name"];
-$tmp_name=$db->f("Name");
-
 ?>
 <table border=0 bgcolor="#000000" align="center" cellspacing=0 cellpadding=0 width=100%>
 <tr valign=top align=middle>
 	<td class="topic"colspan=2 align="left"><b>&nbsp;<b>
 	<?
-	if ($i_view !="new") {
-		echo $tmp_typ, ": ", htmlReady(substr($tmp_name, 0, 60));
-			if (strlen($tmp_name) > 60)
-				echo "... ";
-			echo " -  Grunddaten";
-	} else
+	if ($i_view == "new") {
 		echo "Anlegen einer neuen Einrichtung";
+	} elseif ($i_view == "delete"){
+		echo "Einrichtung gel&ouml;scht";
+	} else {
+		//$db->query ("SELECT Name, type FROM Institute WHERE Institut_id = '$i_view'");
+		//if ($db->next_record())
+		//$tmp_typ = $INST_TYPE[$db->f("type")]["name"];
+		//$tmp_name=$db->f("Name");
+		$tmp_typ = $SessSemName["art"];
+		$tmp_name = $SessSemName[0];
+		echo $tmp_typ, ": ", htmlReady(substr($tmp_name, 0, 60));
+		if (strlen($tmp_name) > 60)
+			echo "... ";
+		echo " -  Grunddaten";
+	}
 	?></b></td>
 </tr>
 <?
@@ -219,7 +256,7 @@ if (isset($msg)) {
 ?>
 <tr> 
 	<td class="blank" colspan=2><br />
-		<?parse_msg($errormsg);?>
+		<?parse_msg($msg);?>
 	</td>
 </tr>
 <? } ?>
@@ -230,7 +267,16 @@ if (isset($msg)) {
 </tr>
 
 <?
-
+if ($i_view=="delete") {
+	echo "<tr><td class=\"blank\" colspan=\"2\"><table width=\"70%\" align=\"center\" class=\"steelgraulight\" >";
+	echo "<tr><td><br>Die ausgewählte Einrichtung wurde gel&ouml;scht.<br> Bitte wählen Sie über das Schlüsselsymbol ";
+	echo "<a href=\"adminarea_start.php?list=TRUE\"><img " . tooltip("Neue Auswahl") . " align=\"absmiddle\" src=\"pictures/admin.gif\" border=\"0\"></a>";
+	echo " eine andere Einrichtung aus.<br><br></td></tr></table><br><br></td></tr></table></html>";
+	page_close();
+	die;
+}
+	
+	
 if ($i_view)
 	{
 	$db->query("SELECT * FROM user_inst WHERE Institut_id ='$i_view' AND user_id = '$user->id' AND inst_perms = 'admin'");
