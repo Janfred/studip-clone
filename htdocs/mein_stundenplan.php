@@ -247,7 +247,6 @@ while ($db->next_record())
 			}
 		}
 	}
-echo sizeof ($my_sems);
 	
 //Daten aus der Sessionvariable hinzufuegen
 if ((is_array($my_personal_sems)) && (!$inst_id))
