@@ -1,7 +1,7 @@
 <?
 /*
 contact.php - 0.8
-Bindet Addressbuch ein.
+Bindet Adressbuch ein.
 Copyright (C) 2003 Ralf Stockmann <rstockm@uni-goettingen.de>
 
 This program is free software; you can redistribute it and/or

@@ -203,7 +203,7 @@ if (is_array($n_buddies))
 				echo "\n</td><td class=\"steel1\" width=\"5%\" align=center><a href=\"sms.php?sms_source_page=online.php&cmd=write&rec_uname=$tmp_online_uname\"><img src=\"pictures/nachricht1.gif\" ".tooltip(_("Nachricht an User verschicken"))." border=\"0\"></a></td><td class=\"steel1\" width=\"5%\" align=\"center\"><a href=\"$PHP_SELF?cmd=delete_user&delete_uname=$tmp_online_uname\"><img src=\"pictures/trash.gif\" ".tooltip(_("aus der Buddy-Liste entfernen"))." border=\"0\"></a></td></tr>";
 			}
 		}
-		echo "\n<tr><td class=\"blank\" width=\"50%\" align=\"center\" colspan=6><font size=-1><br>Zum Addressbuch (".GetSizeofBook()." Eintr&auml;ge) klicken Sie <a href=\"contact.php\">hier</a></font></td>";
+		echo "\n<tr><td class=\"blank\" width=\"50%\" align=\"center\" colspan=6><font size=-1><br>Zum Adressbuch (".GetSizeofBook()." Eintr&auml;ge) klicken Sie <a href=\"contact.php\">hier</a></font></td>";
 		echo "\n</tr></table></td>";
 	}
 

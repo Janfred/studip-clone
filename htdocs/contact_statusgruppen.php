@@ -178,7 +178,7 @@ function PrintAktualContacts ($range_id)
 {	
 	global $_fullname_sql,$_range_type;
 	$bereitszugeordnet = GetAllSelected($range_id);
-	echo "<font size=\"-1\">&nbsp; Personen im Addressbuch</font><br>";
+	echo "<font size=\"-1\">&nbsp; Personen im Adressbuch</font><br>";
 	$query = "SELECT contact.user_id, username, " . $_fullname_sql['full_rev'] ." AS fullname FROM contact LEFT JOIN auth_user_md5 USING(user_id) LEFT JOIN user_info USING (user_id)  WHERE owner_id = '$range_id' ORDER BY Nachname ASC";
 	echo "&nbsp; <select size=\"10\" name=\"AktualMembers[]\" multiple>";
 	$db=new DB_Seminar;
@@ -290,7 +290,7 @@ function PrintAktualContacts ($range_id)
 	  	  echo"<input type=\"HIDDEN\" name=\"range_id\" value=\"$range_id\">";
   	      	  echo"<input type=\"HIDDEN\" name=\"view\" value=\"$view\">";
 	  	?>
-	        <font size="2">Addressbuchgruppe anlegen: </font>
+	        <font size="2">Adressbuchgruppe anlegen: </font>
 	        <input type="text" name="new_statusgruppe_name" value="Gruppenname">
 	        &nbsp; &nbsp; &nbsp; <b>Einf&uuml;gen</b>&nbsp; 
 	        <?
@@ -348,7 +348,7 @@ if ($db->num_rows()>0) {   // haben wir schon Gruppen? dann Anzeige
 			PrintSearchResults($search_exp, $range_id);
 			printf ("<input type=\"IMAGE\" name=\"search\" src= \"./pictures/rewind.gif\" border=\"0\" value=\" Personen suchen\" %s>&nbsp;  ", tooltip("neue Suche"));
 		} else {
-			echo "<font size=\"-1\">&nbsp; freie Personensuche (wird in Addressbuch &uuml;bernommen)</font><br>";
+			echo "<font size=\"-1\">&nbsp; freie Personensuche (wird in Adressbuch &uuml;bernommen)</font><br>";
 			echo "&nbsp; <input type=\"text\" name=\"search_exp\" value=\"\">";
 			printf ("<input type=\"IMAGE\" name=\"search\" src= \"./pictures/suchen.gif\" border=\"0\" value=\" Personen suchen\" %s>&nbsp;  ", tooltip("Person suchen"));
 		} 

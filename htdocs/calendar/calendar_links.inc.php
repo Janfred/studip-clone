@@ -38,13 +38,13 @@ echo "<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n<tr>\n";
 	if ($i_page == "contact.php" || $i_page == "contact_statusgruppen.php") {
 		echo '<td class="links1b" align="right" nowrap>';
 		echo '<a class="links1b" href="contact.php">';
-		echo "&nbsp; &nbsp; " . _("Addressbuch") . "&nbsp; &nbsp; ";
+		echo "&nbsp; &nbsp; " . _("Adressbuch") . "&nbsp; &nbsp; ";
 		echo '</a><img src="pictures/reiter2.jpg" align="absmiddle"></td>';
 	}
 	else {
 		echo '<td class="links1" align="right" nowrap>';
 		echo '<a class="links1" href="contact.php">';
-		echo "&nbsp; &nbsp; " . _("Addressbuch") . "&nbsp; &nbsp; ";
+		echo "&nbsp; &nbsp; " . _("Adressbuch") . "&nbsp; &nbsp; ";
 		echo '</a><img src="pictures/reiter1.jpg" align="absmiddle"></td>';
 	}
 	
