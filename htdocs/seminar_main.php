@@ -168,7 +168,7 @@ $start_zeit=time();
 $end_zeit=$start_zeit+1210000;
 $name = rawurlencode($SessSemName[0]);
 ($rechte) ? $show_admin="admin_dates.php?range_id=$SessSemName[1]&ebene=sem&new_sem=TRUE" : $show_admin=FALSE;
-if (show_dates($auswahl, $start_zeit, $end_zeit, 0, 0, $show_admin, $smain_data["dopen"]))
+if (show_dates($auswahl, $start_zeit, $end_zeit, 0, TRUE, $show_admin, $smain_data["dopen"]))
 		echo"<br>";
 
 // show chat info
