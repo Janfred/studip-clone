@@ -141,7 +141,7 @@ echo "<td class=\"blank\" align=\"right\">";
 
 if ($search_exp) {
 	if (SearchResults($search_exp)) {
-		printf ("<input type=\"IMAGE\" name=\"search\" " . makeButton("eintragen", "src") . " border=\"0\" value=\"" . _("In Adressbuch eintragen") . "\" %s>&nbsp;  ", tooltip(_("In Adressbuch eintragen")));
+		printf ("<input type=\"IMAGE\" name=\"search\" src=\"pictures/move_down.gif\" border=\"0\" value=\"" . _("In Adressbuch eintragen") . "\" %s>&nbsp;  ", tooltip(_("In Adressbuch eintragen")));
 		echo SearchResults($search_exp);
 	} else {
 		echo "&nbsp; <font size=\"2\">"._("keine Treffer zum Suchbegriff:")."</font><b>&nbsp; $search_exp&nbsp; </b>";
@@ -214,7 +214,7 @@ if (($contact["view"])=="gruppen") {
 	}
 	$owner_id = $user->id;
 	$db=new DB_Seminar;
-	$db->query ("SELECT name, statusgruppe_id FROM statusgruppen WHERE range_id = '$owner_id'");	
+	$db->query ("SELECT name, statusgruppe_id FROM statusgruppen WHERE range_id = '$owner_id' ORDER BY position ASC");	
 	while ($db->next_record()) {
 		if ($filter==$db->f("statusgruppe_id")) {
 			$cssSw->switchClass();
