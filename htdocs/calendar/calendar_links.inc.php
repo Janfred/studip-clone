@@ -1,6 +1,6 @@
 <?
 /*
-calendar_links.inc.php 0.8-20020701
+calendar_links.inc.php 0.8-20020831
 Reiternavigation im Bereich 'Mein Terminkalender'
 und 'Mein Stundenplan' in Stud.IP.
 Copyright (C) 2001 Peter Thienel <pthien@gmx.de>
@@ -89,10 +89,10 @@ if($i_page == "calendar.php"){
 	}
 	
 	if ($cmd == "bind"){
-		?><img src="pictures/forumrot.gif" border="0"><a class="links1"  href="calendar.php?cmd=bind<? if($atime) echo "&atime=$atime" ?>"><font color="#000000" size="2"><b>Einbinden &nbsp;</b></font></a><?
+		?><img src="pictures/forumrot.gif" border="0"><a class="links1"  href="calendar.php?cmd=bind<? if($atime) echo "&atime=$atime" ?>"><font color="#000000" size="2"><b>Veranstaltungstermine &nbsp;</b></font></a><?
 	}
 	else{
-		?><img src="pictures/forumgrau.gif" border="0"><a class="links1"  href="calendar.php?cmd=bind<? if($atime) echo "&atime=$atime" ?>"><font color="#000000" size="2"><b>Einbinden &nbsp;</b></font></a><?
+		?><img src="pictures/forumgrau.gif" border="0"><a class="links1"  href="calendar.php?cmd=bind<? if($atime) echo "&atime=$atime" ?>"><font color="#000000" size="2"><b>Veranstaltungstermine &nbsp;</b></font></a><?
 	}
 	
 /*	if ($cmd == "import"){
