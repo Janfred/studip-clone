@@ -499,7 +499,7 @@ if (($uebernehmen_x) && (!$errormsg)) {
 								if ($term_metadata["turnus_data"][$i]["day"]==5)
 									echo "<option selected value=5>"._("Freitag")."</option>";
 								else
-									echo "<option value=5>"._("Freitag</option>")."</option>";
+									echo "<option value=5>"._("Freitag")."</option>";
 								if ($term_metadata["turnus_data"][$i]["day"]==6)
 									echo "<option selected value=6>"._("Samstag")."</option>";
 								else
