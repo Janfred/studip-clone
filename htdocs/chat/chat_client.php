@@ -271,10 +271,12 @@ page_close();
 function unsetSessionVariables(){
 	global $sess, $user;
 	foreach($sess->pt as $key){
-		unset($GLOBALS[$key]);
+		global $$key;
+		unset($$key);
 	}
 	foreach($user->pt as $key){
-		unset($GLOBALS[$key]);
+		global $$key;
+		unset($$key);
 	}
 }
 
