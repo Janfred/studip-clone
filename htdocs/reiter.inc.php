@@ -284,6 +284,8 @@ class reiter {
 			$this->bottomkatStart();
 			for ($i=0; $i<=$bottomKats; $i++) {
 				if ($a["topKat"]==$tmp_topKat) {
+					if ($a["newline"])
+						print "<br />";
 					if ($a["isolator"])
 						$this->bottomkatIsolator();
 					$this->bottomkat($a["name"], $a["link"], $a["active"], $a["target"], $a["disabled"]);
