@@ -339,7 +339,7 @@ class VeranstaltungResourcesAssign {
 				$killAssign =& AssignObject::Factory($this->db->f("assign_id"));
 				$killAssign->delete();
 			}
-			$query = sprintf("SELECT request_id FROM resources_requests WHERE termin_id = '%s' ", $this->range_id);
+			$query = sprintf("SELECT request_id FROM resources_requests WHERE termin_id = '%s' ", $termin_id);
 			$this->db->query($query);
 			while ($this->db->next_record()) {
 				$killRequest = new RoomRequest ($this->db->f("request_id"));
