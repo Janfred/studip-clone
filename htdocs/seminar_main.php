@@ -145,7 +145,7 @@ $quarter_year = 60 * 60 * 24 * 90;
 		<td class="blank" align="right" valign="top">
 			<img src="pictures/blank.gif" height="10" width="5" /><br />
 			<img src="pictures/seminare.jpg" border="0"><img src="pictures/blank.gif" height="10" width="10" /><br />
-			<img src="pictures/blank.gif" height="10" width="5" /><br />
+			<img src="pictures/blank.gif" height="10" width="5" />
 		</td>
 	</tr>
 	</table>
