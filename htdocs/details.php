@@ -62,6 +62,11 @@ if (($SessSemName[1] <>"") && (!isset($sem_id))) {
 
 $DataFields = new DataFields($sem_id);
 
+//load all the data
+$db2->query("SELECT * FROM seminare WHERE Seminar_id = '$sem_id'");
+$db2->next_record();
+
+
 // nachfragen, ob das Seminar abonniert werden soll
 if ($sem_id) {
 	if ($perm->have_studip_perm("admin",$sem_id)) {
@@ -70,31 +75,31 @@ if ($sem_id) {
 	} elseif ($perm->have_perm("user") && !$perm->have_perm("admin")) { //Add lecture only if logged in
 		$db->query("SELECT status FROM seminar_user WHERE user_id ='$user->id' AND Seminar_id = '$sem_id'");		
 		$db->next_record();
-		$db2->query("SELECT admission_starttime, admission_endtime_sem FROM seminare WHERE Seminar_id = '$sem_id'");
-		$db2->next_record();
 		if (($db2->f("admission_starttime") > time()) && (($db2->f("admission_endtime_sem") == "-1"))) {
 			$abo_msg = sprintf ("</A>"._("Tragen Sie sich hier ab %s um %s ein.")."<A>",date("d.m.Y",$db2->f("admission_starttime")),date("G:i",$db2->f("admission_starttime")));
 		} elseif (($db2->f("admission_starttime") > time()) && (($db2->f("admission_endtime_sem") != "-1"))) {
 			$abo_msg = sprintf ("</A>"._("Tragen Sie sich hier von %s bis %s ein.")."<A>",date("d.m.Y, G:i",$db2->f("admission_starttime")),date("d.m.Y, G:i",$db2->f("admission_endtime_sem")));
 		} elseif (($db2->f("admission_endtime_sem") < time()) && ($db2->f("admission_endtime_sem") != -1)) {
-			if (!$db->f("status") == "user") $abo_msg = "</A>" ._("Eintragen nicht mehr möglich!") . "<A>";
+			if (!$db->f("status") == "user") $info_msg = _("Eintragen nicht mehr möglich, der Anmeldezeitraum ist abgelaufen");
 		} else {
 			if (!$db->num_rows()) {
 				$db->query("SELECT status FROM admission_seminar_user WHERE user_id ='$user->id' AND seminar_id = '$sem_id'");
-				if (!$db->num_rows()) $abo_msg = _("Tragen Sie sich hier ein");
+				if (!$db->num_rows()) $abo_msg = _("Tragen Sie sich hier f&uuml;r die Veranstaltung ein");
 			} else {
 				if ($db->f("status") == "user") $abo_msg = _("Schreibrechte aktivieren");
 			}
 		}
 	}
+	if ($perm->have_studip_perm("user",$sem_id) && !$perm->have_studip_perm("tutor",$sem_id)) {
+		if ($db2->f("admission_binding"))
+			$info_msg = _("Das Austragen aus der Veranstaltung ist nicht mehr m&ouml;glich, da das Abonnement bindend ist.<br />Bitte wenden Sie sich an die DozentIn der Veranstaltung!");
+		else
+			$delete_msg = _("Tragen Sie sich hier aus der Veranstaltung aus");
+	}
 }
 
 if ($send_from_search)
 	$back_msg.=_("Zur&uuml;ck zur letzten Auswahl");
-
-//Namen holen
-$db2->query("SELECT * FROM seminare WHERE Seminar_id = '$sem_id'");
-$db2->next_record();
 
  //calculate a "quarter" year, to avoid showing dates that are older than a quarter year (only for irregular dates)
 $quarter_year = 60 * 60 * 24 * 90;
@@ -198,23 +203,34 @@ else
 		)
 	);
 
-if ($abo_msg || $back_msg) {
+if ($abo_msg || $back_msg || $delete_msg || $info_msg) {
 	$infobox[2]["kategorie"] = _("Aktionen:");
 	if (($abo_msg) && (!$skip_verify)) {
-		$infobox[2]["eintrag"][] = array (	"icon" => "./pictures/meinesem.gif" ,
+		$infobox[2]["eintrag"][] = array (	"icon" => "./pictures/link_intern.gif" ,
 									"text"	=> "<a href=\"sem_verify.php?id=".$sem_id."&send_from_search=$send_from_search&send_from_search_page=$send_from_search_page\">".$abo_msg. "</a>"
 								);
 	} elseif ($abo_msg) {
-		$infobox[2]["eintrag"][] = array (	"icon" => "./pictures/meinesem.gif" ,
+		$infobox[2]["eintrag"][] = array (	"icon" => "./pictures/link_intern.gif" ,
 									"text"	=> "<a href=\"seminar_main.php?auswahl=".$sem_id."\">".$abo_msg. "</a>"
 								);
 	}
+	if ($delete_msg) {
+		$infobox[2]["eintrag"][] = array (	"icon" => "./pictures/link_intern.gif" ,
+									"text"	=> "<a href=\"meine_seminare.php?auswahl=".$sem_id."&cmd=suppose_to_kill\">".$delete_msg."</a>"
+								);
+	}
 	if ($back_msg) {
-		$infobox[2]["eintrag"][] = array (	"icon" => "./pictures/suchen.gif" ,
+		$infobox[2]["eintrag"][] = array (	"icon" => "./pictures/link_intern.gif" ,
 									"text"	=> "<a href=\"$send_from_search_page\">".$back_msg. "</a>"
 								);
 	}
+	if ($info_msg) {
+		$infobox[2]["eintrag"][] = array (	"icon" => "./pictures/ausruf_small.gif" ,
+									"text"	=> $info_msg
+								);
+	}
 }
+
 
 if ($db2->f("admission_binding")) {
 	$infobox[count($infobox)]["kategorie"] = _("Information:");
