@@ -576,9 +576,9 @@ function in_archiv ($sem_id)
 
 	$db2->query("SELECT fakultaets_id FROM seminare LEFT JOIN Institute USING (Institut_id) WHERE seminare.Seminar_id = '$seminar_id'");
 	$db2->next_record();
-	$fakultaet_id=$db2->f("Fakultaets_id");
+	$fakultaet_id=$db2->f("fakultaets_id");
 
-	$db2->query("SELECT DISTINCT b.Name FROM seminar_inst a Institute LEFT JOIN Institute b ON(a.Institut_id=b.Institut_id AND a.Institut_id=b.fakultaets_id) WHERE a.seminar_id = '$sem_id'");
+	$db2->query("SELECT DISTINCT c.Name FROM seminar_inst a LEFT JOIN  Institute b USING(Institut_id) LEFT JOIN Institute c ON(c.Institut_id=b.fakultaets_id)  WHERE a.seminar_id = '$seminar_id'");
 	$db2->next_record();
 	$fakultaet=$db2->f("Name");
 	while ($db2->next_record())
