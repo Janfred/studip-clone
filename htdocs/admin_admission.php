@@ -137,18 +137,6 @@ if (isset($seminar_id) && (!$perm->have_perm("admin"))) {
 	$db6->next_record();
 	$lock_status = "attributes";
 	$lockdata = $lock_rules->getLockRule($db6->f("lock_rule"));
-	/*
-	if ($db6->f("lock_rule")==1) {
-		$error = "error§" . _("Sie d&uuml;rfen die Zugangsberechtigungen nicht ver&auml;ndern!");
-		
-		<table border=0 bgcolor="#000000" align="center" cellspacing=0 cellpadding=5 width=100%>
-<tr valign=top align=middle>
-	<td class="topic"colspan=2 align="left"><b>&nbsp;<?=_("Veranstaltung: ".$db6->f("Name")." - Zugangsberechtigungen")?></b></td>
-</tr>
-<tr><td class="blank" colspan=2>&nbsp;</td></tr><?
-		parse_msg($error);
-		die();
-	}*/
 }
 	
 //wenn wir frisch reinkommen, werden benoetigte Daten eingelesen
