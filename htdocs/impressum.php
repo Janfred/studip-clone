@@ -42,16 +42,16 @@ function write_toplist($rubrik,$query) {
 	if  ($db->affected_rows() > 0) {
 		echo "<tr><td class=links1>&nbsp; $rubrik</td></tr><tr><td class=steel1><ol type='1' start='1'>";
 		while ($db->next_record() ) {
-			echo"<font size=2><li><a href='details.php?sem_id=".$db->f("seminar_id")."&send_from_search=true&send_from_search_page=$tmp_link'>";
+			echo"<li><font size=2><a href='details.php?sem_id=".$db->f("seminar_id")."&send_from_search=true&send_from_search_page=$tmp_link'>";
 			echo "".htmlReady($db->f("name"))."</a>";
 			if ($rubrik== _("zuletzt angelegt") AND $db->f("count") >0) {
 				$count =  date("d.m.Y H:i:s",$db->f("count"));
 			} else
 				$count = $db->f("count");
 			if ($count>0) echo "&nbsp; (".$count.")";
-			echo "</li></font>";
+			echo "</font></li>";
 		}
-		echo "</ol><br></td></tr>";
+		echo "</ol><br></td></tr>\n";
 	}
 } 
 
@@ -64,16 +64,16 @@ function write_toplist_person($rubrik,$query) {
 	if  ($db->affected_rows() > 0) {
 		echo "<tr><td class=links1>&nbsp; $rubrik</td></tr><tr><td class=steel1><ol type='1' start='1'>";
 		while ($db->next_record() ) {
-			echo"<font size=2><li><a href='about.php?username=".$db->f("username")."'>";
+			echo"<li><font size=2><a href='about.php?username=".$db->f("username")."'>";
 			echo "".htmlReady($db->f("full_name"))."</a>";
 			if ($rubrik== _("zuletzt angelegt") AND $db->f("count") >0) {
 				$count =  date("d.m.Y H:i:s",$db->f("count"));
 			} else
 				$count = $db->f("count");
 			if ($count>0) echo "&nbsp; (".$count.")";
-			echo "</li></font>";
+			echo "</font></li>";
 		}
-		echo "</ol><br></td></tr>";
+		echo "</ol><br></td></tr>\n";
 	}
 } 
 
