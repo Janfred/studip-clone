@@ -1,6 +1,6 @@
 <?
 /**
-* resourcesControl.php
+* support.inc.php
 * 
 * the controlling body of the resource-management
 * 
@@ -15,7 +15,7 @@
 
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
-// resourcesControl.php
+// support.inc.php
 // zentrale Steuerung der Ressourcenverwaltung
 // Copyright (C) 2003 Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
@@ -43,11 +43,9 @@ require_once ($ABSOLUTE_PATH_STUDIP."visual.inc.php");
 require_once ($ABSOLUTE_PATH_STUDIP."config.inc.php");
 require_once ($ABSOLUTE_PATH_STUDIP."functions.php");
 require_once ($RELATIVE_PATH_SUPPORT."/views/Msg.class.php");
+require_once ($RELATIVE_PATH_SUPPORT."/views/Request.class.php");
+require_once ($RELATIVE_PATH_SUPPORT."/views/Overview.class.php");
 require_once ($RELATIVE_PATH_SUPPORT."/supportFunctions.inc.php");
-
-//We need a stud.ip object opened before
-checkObject();
-checkObjectModule("support");
 
 $sess->register("supportdb_data");
 
@@ -59,6 +57,10 @@ headers
 /*****************************************************************************/
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php");
 include ("$ABSOLUTE_PATH_STUDIP/header.php");
+
+//We need a stud.ip object opened before
+checkObject();
+checkObjectModule("support");
 
 
 /*****************************************************************************
@@ -119,8 +121,6 @@ include ("$RELATIVE_PATH_SUPPORT/views/page_intros.inc.php");
 overview, the contracts the customer has concluded
 /*****************************************************************************/
 if ($supportdb_data["view"] == "overview"){
-	require_once ("$RELATIVE_PATH_SUPPORT/views/Overview.class.php");
-
 	if ($edit_con_object) {
 		echo"<form method=\"POST\" action=\"$PHP_SELF\">";
 	}
@@ -137,14 +137,15 @@ if ($supportdb_data["view"] == "overview"){
 the single requests
 /*****************************************************************************/
 if ($supportdb_data["view"] == "requests") {
-	require_once ("$RELATIVE_PATH_SUPPORT/views/Request.class.php");
+	$request = new Request;
 
-	if (($edit_req_object) || ($supportdb_data["evt_edits"])) {
+	if (($edit_req_object) || ($supportdb_data["evt_edits"]) || ($request->getRequestsCount ($supportdb_data["actual_con"]) > 1)) {
 		echo"<form method=\"POST\" action=\"$PHP_SELF\">";
 	}
 
-	$request = new Request;
-	$request->ShowRequests($supportdb_data["actual_con"]);
+	if ($request->getRequestsCount ($supportdb_data["actual_con"]) > 10)
+		$request->showSearchForm($supportdb_data["req_search_exp"]);
+	$request->showRequests($supportdb_data["actual_con"], $supportdb_data["req_search_exp"], $show_all);
 	
 	if (($edit_req_object) || ($supportdb_data["evt_edits"])) {
 		echo"</form>";
