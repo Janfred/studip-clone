@@ -601,20 +601,25 @@ while (list ($key, $val) = each ($gruppe)) {
 		printf("<img src=\"pictures/blank.gif\" %s width=\"10\" heigth=\"10\"></td>", tooltip(_("Aktivität: ").round($aktivity_index_user)."%"));
 	}
 
-	if (($cmd == "moreinfos") && ($user_id == $db->f("user_id"))) {
-		$link = $PHPSELF."?cmd=lessinfos";
-		$img = "forumgraurunt.gif";
-	} else {
-		$link = $PHPSELF."?cmd=moreinfos&username=".$db->f("username")."#info";
-		$img = "forumgrau.gif";
+	if ($rechte) {
+		if (($cmd == "moreinfos") && ($user_id == $db->f("user_id"))) {
+			$link = $PHPSELF."?cmd=lessinfos";
+			$img = "forumgraurunt.gif";
+		} else {
+			$link = $PHPSELF."?cmd=moreinfos&username=".$db->f("username")."#info";
+			$img = "forumgrau.gif";
+		}
 	}
+	
 	printf ("<td class=\"%s\" nowrap><font size=\"-1\">&nbsp;%s.</td>", $class, $c);
 	printf ("<td class=\"%s\">", $class);
-	if ($perm->have_perm("dozent"))
-	if (($cmd == "moreinfos") && ($user_id == $db->f("user_id"))) echo "<A name=\"info\"></A>";
-	printf ("<A href=\"%s\"><img src=\"pictures/%s\" border=\"0\"", $link, $img);
-	echo tooltip(sprintf(_("Weitere Informationen über %s"), $db->f("username")));
-	echo ">&nbsp;</A>",
+	if ($rechte) {
+		if (($cmd == "moreinfos") && ($user_id == $db->f("user_id"))) 
+			echo "<a name=\"info\"></a>";
+		printf ("<a href=\"%s\"><img src=\"pictures/%s\" border=\"0\"", $link, $img);
+		echo tooltip(sprintf(_("Notizen zum Teilnehmerstatus des Nutzers erfassen/anzeigen")));
+		echo ">&nbsp;</a>";
+	}
 	printf ("<font size=\"-1\"><a href = about.php?username=%s>", $db->f("username"));
 	print (htmlReady($db->f("fullname")) ."</a>");
 	print ("</font></td><td class=\"$class\" align=\"center\"><font size=\"-1\">");
@@ -632,7 +637,7 @@ while (list ($key, $val) = each ($gruppe)) {
 
 	echo "</td>";
 
-// Befoerderungen und Degradierungen
+	// Befoerderungen und Degradierungen
 	$username=$db->f("username");
 	if ($rechte) {
 
@@ -692,14 +697,14 @@ while (list ($key, $val) = each ($gruppe)) {
 				printf ("<td width=\"10%%\" align=\"center\" class=\"%s\">&nbsp;</td>", $class);
 		}
 
-		if (($cmd == "moreinfos") && ($user_id == $db->f("user_id")) && $perm->have_perm("dozent")) {
+		if (($cmd == "moreinfos") && ($user_id == $db->f("user_id")) && $rechte) {
 			printf ("<tr><td class=\"%s\" colspan=9><form action=\"%s%s\" method=\"POST\">", $class, $PHPSELF, "#info");
-			printf("<table border=\"0\"><tr><td width=\"%s\"><font size=\"-1\">Bemerkungen:&nbsp;</font></td><td><TEXTAREA name=\"userinfo\" rows=3 cols=30>%s</TEXTAREA></td>", "10%", $db->f("comment"));
-			printf ("<td>&nbsp;</td><td class=\"%s\" align=\"left\" valign=\"top\" width=\"%s\"><font size=-1>Anmeldedatum: %s</font></td>",$class, "50%", date("d.m.Y",$db->f("mkdate")));
-			echo "<td class=\"$class\" align=\"center\" width=\"20%\"><font size=\"-1\">&Auml;nderungen</font><br /><INPUT type=\"image\" ".makeButton("uebernehmen", "src").">";
-			echo "<INPUT type=\"hidden\" name=\"user_id\" value=\"".$db->f("user_id")."\">";
-			echo "<INPUT type=\"hidden\" name=\"cmd\" value=\"change_userinfo\">";
-			echo "<INPUT type=\"hidden\" name=\"username\" value=\"".$db->f("username")."\">";
+			printf("<table border=\"0\"><tr><td width=\"%s\"><font size=\"-1\">"._("Bemerkungen:")."&nbsp;</font></td><td><textarea name=\"userinfo\" rows=3 cols=30>%s</textarea></td>", "10%", $db->f("comment"));
+			printf ("<td>&nbsp;</td><td class=\"%s\" align=\"left\" valign=\"top\" width=\"%s\"><font size=-1>"._("Anmeldedatum:")." %s</font></td>",$class, "50%", ($db->f("mkdate")) ? date("d.m.Y",$db->f("mkdate")) : _("unbekannt"));
+			echo "<td class=\"$class\" align=\"center\" width=\"20%\"><font size=\"-1\">"._("&Auml;nderungen")."</font><br /><input type=\"image\" ".makeButton("uebernehmen", "src").">";
+			echo "<input type=\"hidden\" name=\"user_id\" value=\"".$db->f("user_id")."\">";
+			echo "<input type=\"hidden\" name=\"cmd\" value=\"change_userinfo\">";
+			echo "<input type=\"hidden\" name=\"username\" value=\"".$db->f("username")."\">";
 			echo "</td></tr>";
 			echo "</table>";
 			echo "</form>";
