@@ -1411,7 +1411,7 @@ function DisplayFolders ($open=0, $update="", $zitat="") {
 *
 **/
 function DisplayKids ($forumposting, $level=0) {
-	global $SessionSeminar,$SessSemName,$loginfilelast,$loginfilenow, $anfang, $forum,$rechte,$view,$write,$all,$davor,$auth,$user, $age;
+	global $SessionSeminar,$SessSemName,$loginfilelast,$loginfilenow, $anfang, $forum,$rechte,$view,$write,$all,$davor,$auth,$user, $age, $openall;
 
 // stellt im Treeview alle Postings dar, die NICHT Thema sind
 
@@ -1470,7 +1470,7 @@ function DisplayKids ($forumposting, $level=0) {
 		
 		$age = "";
 		
-		if (strstr($forum["shrinkopenlist"],$forumposting["id"])!=TRUE && $forum["shrink"]!=0) {
+		if (strstr($forum["shrinkopenlist"],$forumposting["id"])!=TRUE && $forum["shrink"]!=0 && $openall != TRUE) {
 			$age = ForumCheckShrink($forumposting["id"]);
 			$age = explode(";",$age);
 			$forumposting["shrinkcount"] = sizeof($age)-1;
