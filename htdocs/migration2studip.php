@@ -225,7 +225,7 @@ if ($ILIAS_CONNECT_ENABLE)
 			case "connect":
 				$infobox[1]["kategorie"] = _("Aktionen:");
 					$infobox[1]["eintrag"][] = array (	"icon" => "pictures/icon-posting.gif" ,
-												"text"  => _("Geben Sie bitte ihre Logindaten ein.") );
+												"text"  => _("Geben Sie bitte Ihre Logindaten ein.") );
 				if (!check_ilias_auth()) 
 					ilias_auth_user();
 //				if (!check_studip_auth()) 
