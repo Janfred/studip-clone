@@ -113,7 +113,7 @@ class Vote extends StudipObject {
    /**
     * Defines whether a user can see the participants of the vote.
     * @access   private
-    * @var      integer    $resultvisibility
+    * @var      integer    $namesvisibility
     */
    var $namesvisibility;
    
@@ -202,7 +202,7 @@ class Vote extends StudipObject {
       $this->visible          = NO;
       $this->isInUse          = NO;
       $this->resultvisibility = VOTE_RESULTS_AFTER_VOTE;
-	  $this->namesvisibility  = NO;
+      $this->namesvisibility  = NO;
       $this->state            = VOTE_NEW;
       /* ------------------------------------------------------------------- */
 
@@ -473,7 +473,7 @@ class Vote extends StudipObject {
 	  $mode != VOTE_RESULTS_AFTER_END &&
 	  $mode != VOTE_RESULTS_ALWAYS &&
 	  $mode != VOTE_RESULTS_NEVER)
-	 return $this->throwError (1, _("Üngültige Ergebnissichtbarkeit. Siehe Konstanten VOTE_RESULTS_*."));
+	 return $this->throwError (1, _("Ungültige Ergebnissichtbarkeit. Siehe Konstanten VOTE_RESULTS_*."));
       
       $this->resultvisibility = $mode;
    }
@@ -488,24 +488,24 @@ class Vote extends StudipObject {
    }
 
    /**
-    * Sets the way how to show the results
+    * Defines whether the names of participants will be publicly visible
     * @access  public
-    * @param   boolean
+    * @param   boolean $namesvisibility YES if names shall be visible
     * @throws  error
     */
    function setNamesvisibility ($namesvisibility) {
       if ($namesvisibility == YES &&
 	  $this->resultvisibility != VOTE_RESULTS_NEVER)
-	 return $this->throwError (1, _("Üngültige Teilnehmersichtbarkeit: Der Teilnehmer sieht die (Zwischen-)Ergebnisse dar nicht auf \"nie\" stehen.");
+	 return $this->throwError (1, _("Ungültige Teilnehmersichtbarkeit: Der Teilnehmer sieht die (Zwischen-)Ergebnisse dar nicht auf \"nie\" stehen."));
       elseif ($namesvisibility == YES &&
-	  $this->isAnonymous ())
-	 return $this->throwError (1, _("Üngültige Teilnehmersichtbarkeit: Die Teilnahme darf nicht anonym sein."));
+	      $this->isAnonymous ())
+	 return $this->throwError (1, _("Ungültige Teilnehmersichtbarkeit: Die Teilnahme darf nicht anonym sein."));
       
       $this->namesvisibility = $namesvisibility;
    }
 
    /**
-    * Gets the way how to show the participants
+    * Gets whether the names of participants will be publicly visible
     * @access  public
     * @return  boolean
     */
