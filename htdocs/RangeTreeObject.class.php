@@ -244,6 +244,26 @@ class RangeTreeObject {
 		return $this->item_data['categories'];
 	}
 	
+	function fetchNumStaff(){
+		$view = new DbView();
+		if (!($view->params[0] = $this->item_data['studip_object_id']))
+			$view->params[0] = $this->tree_item_id;
+		$rs = $view->get_query("view:STATUS_COUNT");
+		if ($rs->next_record()){
+			$this->item_data['num_staff'] = $rs->f(0);
+			return true;
+		}
+		return false;
+	}
+	
+	function getNumStaff(){
+		if(!isset($this->item_data['num_staff'])){
+			$this->fetchNumStaff();
+		}
+		return $this->item_data['num_staff'];
+	}
+	
+	
 	/**
 	* transform numerical array into a comma separated string
 	*

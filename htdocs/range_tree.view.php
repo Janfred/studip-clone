@@ -61,4 +61,7 @@ $_views["CAT_UPD_CONTENT"] = array("query" => "UPDATE kategorien SET name=?, con
 $_views["CAT_INS_ALL"] = array("query" => "INSERT INTO kategorien (kategorie_id,range_id,name,content,priority,mkdate,chdate)VALUES (?,?,?,?,!,UNIX_TIMESTAMP(),UNIX_TIMESTAMP())");
 $_views["CAT_DEL"] = array("query" => "DELETE FROM kategorien WHERE kategorie_id IN (&)");
 $_views["CAT_DEL_RANGE"] = array("query" => "DELETE FROM kategorien WHERE range_id IN (&)");
+
+$_views["STATUS_COUNT"] = array("query"=>"SELECT count(DISTINCT user_id) AS anzahl FROM statusgruppen LEFT JOIN statusgruppe_user USING(statusgruppe_id) WHERE range_id=?");
+
 ?>
