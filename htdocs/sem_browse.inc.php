@@ -675,7 +675,7 @@ if (($sem_browse_data["level"]=="s") || ($sem_browse_data["level"]=="sbb")) {
 			$sem_id=$db->f("Seminar_id");
 			$einrichtungen ="";
 			$i=0;
-			$db2->query("SELECT Name FROM seminar_inst LEFT JOIN Institute USING (institut_id) WHERE Seminar_id = '$sem_id' ORDER BY Name");
+			$db2->query("SELECT a.institut_id ,Name FROM seminar_inst a LEFT JOIN Institute USING (institut_id) WHERE Seminar_id = '$sem_id' AND Name NOT LIKE '%- - -%' ORDER BY Name");
 			while (($db2->next_record()) && ($i<=3)) {
 				if ($i) $einrichtungen .= ", ";
 				$einrichtungen .= "<a href=\"institut_main.php?auswahl=".$db2->f("institut_id")."\">".htmlReady($db2->f("Name"))."</a>";
@@ -882,29 +882,38 @@ if (($sem_browse_data["level"]=="b")  && (!$hide_bereich))
 if (($sem_browse_data["level"]=="sb") && (!$hide_bereich))
 	{
 	
-	$db->query("SELECT faecher.name, faecher.fach_id, count(seminare.Seminar_id) AS number_seminare FROM Institute  LEFT JOIN fach_inst USING (Institut_id) LEFT JOIN faecher USING (fach_id) LEFT JOIN bereich_fach USING (fach_id) LEFT JOIN seminar_bereich USING (bereich_id) 
-				LEFT JOIN seminare USING (Seminar_id) WHERE Institute.Fakultaets_id = '".$sem_browse_data["id"]."' $class_query GROUP BY faecher.fach_id HAVING number_seminare > 0 ORDER BY number_seminare DESC");
+	//$db->query("SELECT faecher.name, faecher.fach_id, count(seminare.Seminar_id) AS number_seminare FROM Institute  LEFT JOIN fach_inst USING (Institut_id) LEFT JOIN faecher USING (fach_id) LEFT JOIN bereich_fach USING (fach_id) LEFT JOIN seminar_bereich USING (bereich_id) 
+	//			LEFT JOIN seminare USING (Seminar_id) WHERE Institute.Fakultaets_id = '".$sem_browse_data["id"]."' $class_query GROUP BY faecher.fach_id HAVING number_seminare > 0 ORDER BY number_seminare DESC");
 	
-	$i=0;
-	//echo "<tr><td class=\"blank\">&nbsp;<br></tr></td>";
-
-	while ($db->next_record())
-		if ($db->f("number_seminare") !="0")
-			if ($i % 2 == 0)
-				{
-				echo "<tr><td class=\"blank\" width=\"50%\" valign=\"_top\">";
-				echo "<a href=\"$PHP_SELF?level=b&id=", $db->f("fach_id"), "&oid=".$sem_browse_data["id"]."\"><b>", htmlReady($db->f("name")), "</b></a>&nbsp;<font size=-1>(", $db->f("number_seminare"), ")</font><br>";
-				$i++;
-				echo "</td>\n";
+	$db->query("SELECT fach_id FROM Institute  LEFT JOIN fach_inst USING (Institut_id) WHERE Institute.Fakultaets_id = '".$sem_browse_data["id"]."' AND NOT ISNULL(fach_id) GROUP BY fach_id");
+	while ($db->next_record()){
+		$_fach_list[] = $db->f('fach_id');
+	}
+	if (count($_fach_list)){
+		$db->query("SELECT faecher.name, faecher.fach_id, count(seminare.Seminar_id) AS number_seminare FROM faecher 
+					LEFT JOIN bereich_fach USING (fach_id) LEFT JOIN seminar_bereich USING (bereich_id) 
+					LEFT JOIN seminare USING (Seminar_id) WHERE faecher.fach_id IN('".join("','",$_fach_list)."')
+					GROUP BY faecher.fach_id HAVING number_seminare > 0 ORDER BY number_seminare DESC");
+		
+		$i=0;
+		//echo "<tr><td class=\"blank\">&nbsp;<br></tr></td>";
+		
+		while ($db->next_record()){
+			if ($db->f("number_seminare") !="0"){
+				if ($i % 2 == 0){
+					echo "<tr><td class=\"blank\" width=\"50%\" valign=\"_top\">";
+					echo "<a href=\"$PHP_SELF?level=b&id=", $db->f("fach_id"), "&oid=".$sem_browse_data["id"]."\"><b>", htmlReady($db->f("name")), "</b></a>&nbsp;<font size=-1>(", $db->f("number_seminare"), ")</font><br>";
+					$i++;
+					echo "</td>\n";
+				} else {
+					echo "<td class=\"blank\" width=\"50%\" valign=\"_top\">";
+					echo "<a href=\"$PHP_SELF?level=b&id=", $db->f("fach_id"), "&oid=".$sem_browse_data["id"]."\"><b>", htmlReady($db->f("name")), "	</b></a>&nbsp;<font size=-1>(", $db->f("number_seminare"), ")</font><br>";
+					$i++;
+					echo "</td></tr>\n";
 				}
-			else
-				{
-				echo "<td class=\"blank\" width=\"50%\" valign=\"_top\">";
-				echo "<a href=\"$PHP_SELF?level=b&id=", $db->f("fach_id"), "&oid=".$sem_browse_data["id"]."\"><b>", htmlReady($db->f("name")), "	</b></a>&nbsp;<font size=-1>(", $db->f("number_seminare"), ")</font><br>";
-				$i++;
-				echo "</td></tr>\n";
-				}
-			
+			}
+		}
+	}
 	echo "<tr><td class=\"steel1\" colspan=2 align=\"center\"><font size=-1>";
 	if (!$sem_browse_data["extern"]=="yes") echo "<a href=\"$PHP_SELF?level=sbi&id=".$sem_browse_data["id"]."\">eine Ebene zur&uuml;ck</a>";
 	echo "<br>Es werden nur Studienf&auml;cher angezeigt, zu denen Veranstaltungen in Stud.IP existieren.</font></td></tr><tr><td class=\"blank\">&nbsp;<br></td></tr>";
