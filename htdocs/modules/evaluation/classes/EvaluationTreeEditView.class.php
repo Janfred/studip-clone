@@ -189,8 +189,8 @@ function EvaluationTreeEditView ( $itemID = ROOT_BLOCK, $evalID = NULL ){
 	$this->itemInstance = $this->getInstance ($this->itemID);
 	$this->changed = false;
 
-	$this->tree = &TreeAbstract::GetInstance ( "EvaluationTree", $this->evalID,
-		EVAL_LOAD_ONLY_EVALGROUP);
+	$this->tree = &TreeAbstract::GetInstance ( "EvaluationTree", array('evalID' => $this->evalID,
+																		'load_mode' => EVAL_LOAD_FIRST_CHILDREN));
 
 	# filter out an old session itemID ======================================= #
 	if (is_array($this->tree->tree_data) && !is_null($itemID) ){
@@ -303,14 +303,14 @@ function showEvalTree(){
 	switch ($mode){
 
 		case ARRANGMENT_BLOCK:
-			$group = new EvaluationGroup ($this->moveItemID);
+			$group =& $this->tree->getGroupObject($this->moveItemID);
 			$title = htmlready ($group->getTitle());
 			$msg = sprintf(_("Sie haben den Gruppierungsblock <b>%s</b> zum Verschieben ausgewählt. Sie können ihn nun in einen leeren Gruppierungsblock, einen Gruppierungsblock ohne Frageblöcke oder in die oberste Ebene verschieben."),$title);
 			
 			break;
 			
 		case QUESTION_BLOCK:
-			$group = new EvaluationGroup ($this->moveItemID);
+			$group = &$this->tree->getGroupObject ($this->moveItemID);
 			$title = htmlready ($group->getTitle());
 			if (!$title)
 				$title = NO_QUESTION_GROUP_TITLE;
@@ -424,7 +424,7 @@ function showTree($itemID = ROOT_BLOCK, $start = NULL){
 			case ARRANGMENT_BLOCK:
 
 			case QUESTION_BLOCK:
-				$parentgroup = new EvaluationGroup ($itemID);
+				$parentgroup = &$this->tree->getGroupObject ($itemID);
 				$this->startItemID = $parentgroup->getObjectID ();
 				break;
 		}
@@ -452,7 +452,7 @@ function showTree($itemID = ROOT_BLOCK, $start = NULL){
 			
 			case QUESTION_BLOCK:
 
-				$group 		= new EvaluationGroup ($itemID);
+				$group 		= &$this->tree->getGroupObject ($itemID);
 				$parentID 	= $group->getParentID ();
 				
 				$mode = $this->getInstance ($parentID);
@@ -465,7 +465,7 @@ function showTree($itemID = ROOT_BLOCK, $start = NULL){
 				}
 				else {
 
-					$parentgroup = new EvaluationGroup ($parentID, NULL, EVAL_LOAD_FIRST_CHILDREN);
+					$parentgroup = &$this->tree->getGroupObject ($parentID, NULL, EVAL_LOAD_FIRST_CHILDREN);
 					while ($child = $parentgroup->getNextChild ())
 						$items2[] = $child->getObjectID ();
 				}
@@ -596,7 +596,7 @@ function getItemHeadPics ( $itemID ){
 		
 	case ARRANGMENT_BLOCK:
 
-		$group = new EvaluationGroup ($itemID, NULL, EVAL_LOAD_FIRST_CHILDREN);
+		$group = &$this->tree->getGroupObject($itemID);
 
 		$tooltip = ($group->getNumberChildren () == 0)
 			? _("Dieser Gruppierungsblock enthält keine Blöcke.")
@@ -611,7 +611,7 @@ function getItemHeadPics ( $itemID ){
 		
 	case QUESTION_BLOCK:
 
-		$group = new EvaluationGroup ($itemID, NULL, EVAL_LOAD_FIRST_CHILDREN);
+		$group = &$this->tree->getGroupObject($itemID);
 
 		$tooltip = ($group->getNumberChildren () == 0)
 			? _("Dieser Fragenblock enthält keine Fragen.")
@@ -697,7 +697,7 @@ function getItemContent($itemID){
 
 		$content .= $this->createTitleInput(ARRANGMENT_BLOCK);
 			
-			$group = new EvaluationGroup($itemID, NULL, EVAL_LOAD_FIRST_CHILDREN);
+			$group = &$this->tree->getGroupObject($itemID);
 			if ($children = $group->getChildren()){
 				if ($this->getInstance( $children[0]->getObjectID()) == ARRANGMENT_BLOCK)
 					$show = ARRANGMENT_BLOCK;
@@ -861,16 +861,17 @@ function createTreeItemDetails($item_id){
 			break;
 			
 		case ARRANGMENT_BLOCK:
-			$group = new EvaluationGroup ($item_id, NULL, EVAL_LOAD_FIRST_CHILDREN);
+			$group = &$this->tree->getGroupObject($item_id);
 			$hasKids = ($group->getNumberChildren() == 0)
 				? NO
 				: YES;
 				
 			$par = $this->getInstance ($group->getParentID ());
 			
-			$parent = ($par == ROOT_BLOCK)
-				? new Evaluation ($group->getParentID (), NULL, EVAL_LOAD_FIRST_CHILDREN)
-				: new EvaluationGroup ($group->getParentID (), NULL, EVAL_LOAD_FIRST_CHILDREN);
+			 if ($par == ROOT_BLOCK)
+				$parent =& new Evaluation ($group->getParentID (), NULL, EVAL_LOAD_FIRST_CHILDREN);
+			else
+				$parent =& $this->tree->getGroupObject($group->getParentID ());
 			
 			$isLastKid = ($parent->getNumberChildren() 
 				== $group->getPosition () + 1)
@@ -882,12 +883,11 @@ function createTreeItemDetails($item_id){
 
 			$hasKids = NO;
 
-			$group = new EvaluationGroup ($item_id);
+			$group =& $this->tree->getGroupObject($item_id);
 			$par = $this->getInstance ($group->getParentID ());
 
-			$parent = ($par == ROOT_BLOCK)
-				? new Evaluation ($group->getParentID (), NULL, EVAL_LOAD_FIRST_CHILDREN)
-				: new EvaluationGroup ($group->getParentID (), NULL, EVAL_LOAD_FIRST_CHILDREN);
+			 if ($par == ROOT_BLOCK) $parent = &new Evaluation ($group->getParentID (), NULL, EVAL_LOAD_FIRST_CHILDREN);
+			 else $parent = &$this->tree->getGroupObject($group->getParentID);
 			$isLastKid = ($parent->getNumberChildren() 
 				== $group->getPosition () + 1)
 				? YES
@@ -979,7 +979,7 @@ function getItemHead($itemID){
 
 		if ($mode == QUESTION_BLOCK){
 
-			$group = new EvaluationGroup($itemID);
+			$group = &$this->tree->getGroupObject($itemID);
 			$templateID = $group->getTemplateID();
 			if ($templateID){
 				$template = new EvaluationQuestion($templateID);
@@ -1046,7 +1046,7 @@ function getItemHead($itemID){
 		$move_mode = $this->getInstance ($this->moveItemID);
 		
 		if ($mode == ARRANGMENT_BLOCK){
-			$group = new EvaluationGroup ($itemID, NULL, EVAL_LOAD_FIRST_CHILDREN);
+			$group = &$this->tree->getGroupObject ($itemID);
 			if ($children = $group->getChildren()){
 				if ($this->getInstance( $children[0]->getObjectID()) == ARRANGMENT_BLOCK)
 					$move_type = ARRANGMENT_BLOCK;
@@ -1296,7 +1296,7 @@ function execCommandUpdateItem ( $no_delete = false ){
 		break;
 	 case ARRANGMENT_BLOCK:
 
-		$group = new EvaluationGroup($this->itemID);
+		$group = &$this->tree->getGroupObject($this->itemID);
 
 		$group->setTitle($title, QUOTED);
 		$group->setText($text, QUOTED);
@@ -1309,7 +1309,7 @@ function execCommandUpdateItem ( $no_delete = false ){
 		break;
 	 case QUESTION_BLOCK:
 
-		$group = &new EvaluationGroup($this->itemID, NULL, EVAL_LOAD_FIRST_CHILDREN);
+		$group = &$this->tree->getGroupObject($this->itemID);
 		$group->setTitle($title, QUOTED);
 		$group->setText($text, QUOTED);
 		$group->setMandatory($_REQUEST['mandatory']);
@@ -1319,7 +1319,7 @@ function execCommandUpdateItem ( $no_delete = false ){
 		$msg = $this->execCommandUpdateQuestions();
 		
 		$no_answers = 0;
-		$group = &new EvaluationGroup($this->itemID, NULL, EVAL_LOAD_ALL_CHILDREN);
+		$group = &$this->tree->getGroupObject($this->itemID);
 		// info about missing answers
 		if ($group->getChildren() && $group->getTemplateID() == NULL){
 			foreach ($group->getChildren() as $question){
@@ -1375,7 +1375,7 @@ function execCommandUpdateItem ( $no_delete = false ){
 function execCommandAssertDeleteItem(){
 	global $_REQUEST;
 
-	$group = new EvaluationGroup($this->itemID, NULL, EVAL_LOAD_FIRST_CHILDREN);
+	$group = &$this->tree->getGroupObject($this->itemID);
 	if ($group->getChildType() == "EvaluationQuestion")
 		$numberofchildren = $group->getNumberChildren();
 	else
@@ -1442,7 +1442,7 @@ function execCommandDeleteItem(){
 	$title = $this->tree->tree_data[$this->itemID]['name'];
 	$parentID = $this->tree->tree_data[$this->itemID]['parent_id'];
 
-	$group = &new EvaluationGroup($this->startItemID, NULL, EVAL_LOAD_FIRST_CHILDREN);
+	$group = &$this->tree->getGroupObject($this->startItemID);
 	if ($group->getChildType() == "EvaluationQuestion")
 		$numberofchildren = $group->getNumberChildren();
 	else
@@ -1501,7 +1501,7 @@ function execCommandAddGroup(){
 			. _("Ein neuer Gruppierungsblock wurde angelegt.");
 	}// group
 	elseif ($mode == ARRANGMENT_BLOCK){
-		$parentgroup = new EvaluationGroup($this->itemID, NULL, EVAL_LOAD_FIRST_CHILDREN);
+		$parentgroup = &$this->tree->getGroupObject($this->itemID);
 		$parentgroup->addChild($group);
 		$parentgroup->save();
 		if ($parentgroup->isError)
@@ -1562,7 +1562,7 @@ function execCommandAddQGroup(){
 			. _("Ein neuer Fragenblock wurde angelegt.");
 	}// group
 	elseif ($mode == ARRANGMENT_BLOCK){
-		$parentgroup = &new EvaluationGroup($this->itemID, NULL, EVAL_LOAD_FIRST_CHILDREN);
+		$parentgroup =& $this->tree->getGroupObject($this->itemID);
 		$parentgroup->addChild($group);
 		$parentgroup->save();
 		if ($parentgroup->isError)
@@ -1593,7 +1593,7 @@ function execCommandChangeTemplate(){
 	
 	$this->execCommandUpdateItem();
 	
-	$group = &new EvaluationGroup($this->itemID, NULL, EVAL_LOAD_ALL_CHILDREN);
+	$group = &$this->tree->getGroupObject($this->itemID);
 	$group->setTemplateID($_REQUEST["templateID"]);
 	$group->save();
 	
@@ -1632,7 +1632,7 @@ function execCommandUpdateQuestions ( $no_delete = false ){
 	// remove any empty questions
 	$deletecount = 0;
 
-	$qgroup = new EvaluationGroup($this->itemID, NULL, EVAL_LOAD_FIRST_CHILDREN);
+	$qgroup = &$this->tree->getGroupObject($this->itemID);
 	$questionsDB = $qgroup->getChildren();
 	
 	if (is_array($_REQUEST['cmd']))
@@ -1677,7 +1677,7 @@ function execCommandAddQuestions(){
 	
 	$addquestions = $_REQUEST['newQuestionFields'];
 	
-	$qgroup = &new EvaluationGroup ($this->itemID, NULL, EVAL_LOAD_ALL_CHILDREN);
+	$qgroup = &$this->tree->getGroupObject($this->itemID);
 	$templateID = $qgroup->getTemplateID();
 	
 	for ($i=1;$i<=$addquestions;$i++){
@@ -1874,7 +1874,7 @@ function execCommandMove(){
 	
 	$direction = $_REQUEST['direction'];
 
-	$group = new EvaluationGroup ($_REQUEST['groupID']);
+	$group = &$this->tree->getGroupObject($_REQUEST['groupID']);
 	$oldposition = $group->getPosition();
 	
 	$this->swapPosition($this->itemID, $_REQUEST['groupID'],
@@ -1938,7 +1938,7 @@ function execCommandMoveGroup(){
 		return false;
 	}
 	
-	$move_group = &new EvaluationGroup ($this->moveItemID, NULL, EVAL_LOAD_ALL_CHILDREN);
+	$move_group =&$this->tree->getGroupObject($this->moveItemID);
 	$move_group_title = htmlready ($move_group->getTitle ());
 	$oldparentID = $move_group->getParentID ();
 	
@@ -1969,7 +1969,7 @@ function execCommandMoveGroup(){
 						_("Fehler beim Verschieben eines Blocks."));
 			} else {
 
-				$oldparentgroup = &new EvaluationGroup ($oldparentID, NULL, EVAL_LOAD_FIRST_CHILDREN);
+				$oldparentgroup = &$this->tree->getGroupObject($oldparentID);
 				$grouptodelete = $oldparentgroup->getChild ($move_group->getObjectID());
 				$grouptodelete->delete ();
 				$oldparentgroup->save ();
@@ -1995,7 +1995,7 @@ function execCommandMoveGroup(){
 			
 		case ARRANGMENT_BLOCK:
 
-			$group = &new EvaluationGroup ($this->itemID, NULL, EVAL_LOAD_FIRST_CHILDREN);
+			$group = &$this->tree->getGroupObject($this->itemID);
 			if ($children = $group->getChildren()){
 				if ($this->getInstance( $children[0]->getObjectID()) != $move_mode){
 					$this->msg[$this->itemID] = "msg§"
@@ -2019,7 +2019,7 @@ function execCommandMoveGroup(){
 						_("Fehler beim Verschieben eines Blocks."));
 			} else {
 
-				$oldparentgroup = &new EvaluationGroup ($oldparentID, NULL, EVAL_LOAD_FIRST_CHILDREN);
+				$oldparentgroup = &$this->tree->getGroupObject($oldparentID);
 				$grouptodelete = $oldparentgroup->getChild ($move_group->getObjectID());
 				$grouptodelete->delete ();
 				$oldparentgroup->save ();
@@ -2049,7 +2049,7 @@ function execCommandMoveGroup(){
 		
 		case QUESTION_BLOCK:
 
-			$group = &new EvaluationGroup ($this->itemID, NULL, EVAL_LOAD_FIRST_CHILDREN);
+			$group = &$this->tree->getGroupObject($this->itemID);
 			
 			if ($children = $group->getChildren()){
 				if ($this->getInstance( $children[0]->getObjectID()) != $move_mode){
@@ -2072,7 +2072,7 @@ function execCommandMoveGroup(){
 					return false;
 			} else {
 			
-				$oldparent = &new EvaluationGroup ($oldparentID, NULL, EVAL_LOAD_FIRST_CHILDREN);
+				$oldparent = &$this->tree->getGroupObject($oldparentID);
 			}
 
 			$newgroup = $move_group->duplicate ();
@@ -2428,7 +2428,7 @@ function createTitleInput($mode = ROOT_BLOCK){
 			
 		case ARRANGMENT_BLOCK:
 			$title_label = _("Titel des Gruppierungsblocks");
-			$group 		 =  new EvaluationGroup($this->itemID);
+			$group 		 =  &$this->tree->getGroupObject($this->itemID);
 			$title 		 = htmlentities ($group->getTitle());
 			$text_label	 = _("Zusätzlicher Text");
 			$text 		 = htmlentities ($group->getText());
@@ -2437,7 +2437,7 @@ function createTitleInput($mode = ROOT_BLOCK){
 		case QUESTION_BLOCK:
 			$title_label = _("Titel des Fragenblocks");
 			$title_info	 = _("Die Angabe des Titels ist bei einem Fragenblock optional.");
-			$group 		 =  new EvaluationGroup($this->itemID);
+			$group 		 =  &$this->tree->getGroupObject($this->itemID);
 			$title 		 = htmlentities ($group->getTitle());
 			$text_label	 = _("Zusätzlicher Text");
 			$text 		 = htmlentities ($group->getText());
@@ -2603,7 +2603,7 @@ function createGlobalFeatures (){
 */
 function createQuestionFeatures(){
 	
-	$group 		= new EvaluationGroup($this->itemID);
+	$group 		= &$this->tree->getGroupObject($this->itemID);
 	$templateID = $group->getTemplateID();
 
 	if ($templateID){
@@ -2708,7 +2708,7 @@ function createQuestionFeatures(){
 */
 function createQuestionForm(){
 
-	$qgroup 	= new EvaluationGroup($this->itemID, NULL, EVAL_LOAD_ALL_CHILDREN);
+	$qgroup 	= &$this->tree->getGroupObject($this->itemID);
 	$questions 	= $qgroup->getChildren();
 	$templateID = $qgroup->getTemplateID();
 	
@@ -3375,8 +3375,10 @@ function getInstance ( $itemID ){
 	if ($itemID == ROOT_BLOCK || $itemID == $this->evalID)
 		return ROOT_BLOCK;
 	else {
-		$group = new EvaluationGroup ($itemID);
-		$childtype = $group->getChildType ();
+		$tree = &TreeAbstract::GetInstance ( "EvaluationTree", array('evalID' => $this->evalID,
+																		'load_mode' => EVAL_LOAD_FIRST_CHILDREN));
+		$group = &$tree->getGroupObject($itemID);
+		$childtype = $group->getChildType();
 		
 		if ($childtype == "EvaluationQuestion")
 			return QUESTION_BLOCK;
@@ -3400,9 +3402,8 @@ function swapPosition ( $parentID,
 					    $oldposition,
 					    $direction ){
 	
-	$group = ( $parentID == ROOT_BLOCK )
-		? $this->tree->eval
-		: new EvaluationGroup ( $parentID, NULL, EVAL_LOAD_FIRST_CHILDREN );
+	if ( $parentID == ROOT_BLOCK ) $group =  $this->tree->eval;
+	else $group =  &$this->tree->getGroupObject( $parentID);
 
 	$numberchildren = $group->getNumberChildren();
 	$instance = $group->instanceof();
@@ -3429,7 +3430,7 @@ function swapPosition ( $parentID,
 	      $group->getChildType () == "EvaluationQuestion")
 		$object = &new EvaluationQuestion ( $objectID );
 	else
-		$object = &new EvaluationGroup ( $objectID );
+		$object = &$this->tree->getGroupObject( $objectID );
 	$object->setPosition ( $newposition );
 	$object->save ();
 	

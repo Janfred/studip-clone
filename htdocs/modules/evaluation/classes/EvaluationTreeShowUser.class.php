@@ -82,7 +82,8 @@ class EvaluationTreeShowUser {
      */
     function EvaluationTreeShowUser( $evalID ) {
 
-	$this->tree =& TreeAbstract::GetInstance( "EvaluationTree", $evalID );
+	$this->tree =& TreeAbstract::GetInstance( "EvaluationTree", array('evalID' => $evalID,
+																	'load_mode' => EVAL_LOAD_ALL_CHILDREN));
 
     }
 	
@@ -163,7 +164,7 @@ class EvaluationTreeShowUser {
 	    return;
 
 #	$group = new EvaluationGroup( $group_id, NULL, EVAL_LOAD_ALL_CHILDREN );
-	$group = $this->tree->tree_data[$group_id]["object"];
+	$group = &$this->tree->getGroupObject($group_id);
 
 #	echo "<td>";
 #	echo ">";

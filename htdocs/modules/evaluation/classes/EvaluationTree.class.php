@@ -68,18 +68,17 @@ class EvaluationTree extends TreeAbstract {
   /**
     * Constructor
     * @access   public
-    * @param    string  the eval's ID (optional - if not given, it must be in $_REQUEST).
-    * @param    string  the load mode for the eval (optional).
+    * @param    array  the eval's ID (optional - if not given, it must be in $_REQUEST).
     */
-  function EvaluationTree( $evalID = null, $load_mode = EVAL_LOAD_ALL_CHILDREN ) {
-
-      if (isset($evalID))
-	  $this->evalID = $evalID;
-      else
-	  $this->evalID = $_REQUEST["evalID"];
+  function EvaluationTree( $args ) {
 	  
-      $this->load_mode = $load_mode;
-
+	  
+      if (isset($args['evalID']))
+	  	$this->evalID = $args['evalID'];
+      else
+	  	$this->evalID = $_REQUEST["evalID"];
+	  
+      $this->load_mode = ($args['load_mode'] ? $args['load_mode'] : EVAL_LOAD_NO_CHILDREN);
       if (empty($this->evalID)){
 	  print _("Fehler in EvaluationTree: Es wurde keine evalID übergeben");
 	  exit ();
@@ -142,6 +141,14 @@ class EvaluationTree extends TreeAbstract {
       $this->storeItem( $group->getObjectID(), $group->getParentID(),
 			$group->getTitle(), $group->getPosition() );
 
+  }
+  
+  function &getGroupObject($item_id){
+	  if (is_object($this->tree_data[$item_id]['object'])){
+		  return $this->tree_data[$item_id]['object'];
+	  } else {
+		  return new EvaluationGroup($item_id,null,$this->load_mode);
+	  }
   }
 
 # ===================================================== end: public functions #
