@@ -50,7 +50,7 @@ else
 echo "\n<tr>\n";
 echo "<th width=\"1%\" nowrap colspan=\"2\" align=\"center\">";
 echo "&nbsp;<a href=\"gruppe.php\">";
-$tooltip = tooltip(_("Gruppe &auml;ndern"));
+$tooltip = tooltip(_("Gruppe ändern"));
 echo "<img src=\"pictures/gruppe.gif\"{$tooltip}border=\"0\">";
 echo "</a></th>\n";
 echo "<th width=\"64%\" align=\"left\">";
