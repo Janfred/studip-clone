@@ -142,11 +142,11 @@ if (is_array($n_buddies))
 		echo "\n<td class=\"steel1\" width=\"50%\" align=\"center\" colspan=5><font size=-1>Sie haben keine Buddies ausgew&auml;hlt. <br />Zum Addressbuch (".GetSizeofBook()." Eintr&auml;ge) klicken Sie <a href=\"contact.php\">hier</a></font></td>";
 		echo "\n</tr></table></td>";
 		}
-	else { // nutzer hat pronzipiell buddies
+	else { // nutzer hat prinzipiell buddies
 		echo "\n<td width=\"50%\" valign=\"top\">";
 		echo "\n<table width=\"100%\" cellspacing=0 cellpadding=1 border=0>\n";
+		echo "\n<tr><td class=\"steelgraudunkel\" colspan=2 width=\"65%\"><font size=-1 color=\"white\"><b>Name</b></font></td><td class=\"steelgraudunkel\"  width=\"20%\" colspan=4><font size=-1 color=\"white\"><b>letztes Lebenszeichen</b></font></td></tr>"; 
 		if (sizeof($group_buddies)) {
-			echo "\n<tr><td class=\"steelgraudunkel\" colspan=2 width=\"65%\"><font size=-1 color=\"white\"><b>Name</b></font></td><td class=\"steelgraudunkel\"  width=\"20%\" colspan=4><font size=-1 color=\"white\"><b>letztes Lebenszeichen</b></font></td></tr>"; 
 			reset ($group_buddies);
 			$lastgroup = "";
 			$groupcount = 0;
