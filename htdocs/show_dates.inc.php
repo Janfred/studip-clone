@@ -282,10 +282,13 @@ function show_personal_dates ($range_id, $date_start, $date_end, $show_docs=FALS
 				$titel .= ", ".$tmp_titel;
 			}
 
-			if ($db->f("chdate") > $loginfilelast[$SessSemName[1]])
+			
+			//Diesen Teil habe ich erstmal auskommentiert, neue private Termine koennen nicht rot angezeigt werden,
+			//die Methode getChdate() wird daf&uuml;r npch benoetigt.
+			/*if ($termin->getChdate() > $loginfilelast[$SessSemName[1]])
 				$new=TRUE;
 			else
-				$new=FALSE;
+				$new=FALSE;*/
 
 			
 			// Zur Identifikation von auf- bzw. zugeklappten Terminen muss zusätzlich
@@ -300,9 +303,9 @@ function show_personal_dates ($range_id, $date_start, $date_end, $show_docs=FALS
 			echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr>";
 			
 			if ($open == $app_ident)
-				printhead(0, 0, $link, "open", $new, $icon, $titel, $zusatz, $db->f("mkdate"));
+				printhead(0, 0, $link, "open", $new, $icon, $titel, $zusatz); //Ebenso muss hier als letzer Parameter eine Methode getMkdate o.ae. angefuegt werden
 			else
-				printhead(0, 0, $link, "close", $new, $icon, $titel, $zusatz, $db->f("mkdate"));
+				printhead(0, 0, $link, "close", $new, $icon, $titel, $zusatz); //hier auch.....
 
 			echo "</tr></table>	";
 					
