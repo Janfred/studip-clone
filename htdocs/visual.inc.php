@@ -535,9 +535,9 @@ function printhead($breite,$left,$link,$open,$new,$icon,$titel,$zusatz,$timestmp
 		}
 
 	if ($open=="close") {
-		$print = "<td bgcolor=\"".$timecolor."\" class=\"printhead2\" nowrap width=\"1%\" align=left valign=\"bottom\">";
+		$print = "<td bgcolor=\"".$timecolor."\" class=\"printhead2\" nowrap width=\"1%\" align=left valign=\"top\">";
 	} else {
-		$print = "<td bgcolor=\"".$timecolor."\" class=\"printhead3\" nowrap width=\"1%\" align=left valign=\"bottom\">";
+		$print = "<td bgcolor=\"".$timecolor."\" class=\"printhead3\" nowrap width=\"1%\" align=left valign=\"top\">";
 	}
 
 	if ($link) {
