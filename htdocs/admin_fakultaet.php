@@ -49,6 +49,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 <?php
 require_once("visual.inc.php");
+$cssSw=new cssClassSwitcher;
 
 include "links_admin.inc.php";  //Linkleiste fuer admins
 ?>
@@ -121,7 +122,7 @@ while ( is_array($HTTP_POST_VARS)
     $query = "update Fakultaeten set Name='$Name' where Fakultaets_id = '$f_id'";
     $db->query($query);
     if ($db->affected_rows() == 0) {
-      	my_error("<b>Datenbankoperation gescheitert:</b> $query");
+      	my_msg("<b>keine Änderung an der Fakultät $Name vorgenommen.");
       	break;
     	}
     else
@@ -160,7 +161,7 @@ while ( is_array($HTTP_POST_VARS)
 
 ?>
 <tr><td class="blank" colspan=2>
-<table border=0  align="center" cellspacing=2 cellpadding=2 width="80%">
+<table border=0  align="center" cellspacing=0 cellpadding=2 width="80%">
  <tr valign=top align=middle>
   <th width="55%"><a href="admin_fakultaet.php?sortby=Name">Bezeichnung der Fakult&auml;t</a></th>
   <th width="15%"><a href="admin_fakultaet.php?sortby=number">Anzahl der Institute</a></th>
@@ -169,9 +170,9 @@ while ( is_array($HTTP_POST_VARS)
 
  <form name="add" method="post" action="<?php $sess->pself_url() ?>">
  <tr valign=middle align=left>
-  <td><input type="test" name="Name" size=50 maxlength=254 value="Bitte geben Sie hier einen Namen ein!"></td>
-  <td>&nbsp;</td>
-  <td align=center>
+  <td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>"><input type="test" name="Name" size=50 maxlength=254 value="Bitte geben Sie hier einen Namen ein!"></td>
+  <td class="<? echo $cssSw->getClass() ?>">&nbsp;</td>
+  <td class="<? echo $cssSw->getClass() ?>" align=center>
 		<input type="submit" name="create" value="Neu anlegen">
 	</td>
  </tr>
@@ -188,10 +189,10 @@ while ( is_array($HTTP_POST_VARS)
  <!-- existing Fakultaet -->
  <form name="edit" method="post" action="<?php $sess->pself_url() ?>">
  <tr valign=middle align=left>
-  <td><input type="text" name="Name" size=50 maxlength=254 value="<?php echo htmlReady($db->f("Name")) ?>"></td>
-  <td align=center><?php $db->p("number") ?></td>
+  <td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>"><input type="text" name="Name" size=50 maxlength=254 value="<?php echo htmlReady($db->f("Name")) ?>"></td>
+  <td class="<? echo $cssSw->getClass() ?>" align=center><?php $db->p("number") ?></td>
 
-  <td align=center>
+  <td class="<? echo $cssSw->getClass()?>" align=center>
    <input type="hidden" name="f_id"   value="<?php $db->p("Fakultaets_id") ?>">
 <?php if ($db->f("number") < 1):
 ?>

@@ -56,6 +56,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 	include "links_admin.inc.php";  //Linkleiste fuer admins
 	require_once ("msg.inc.php"); //Funktionen fuer Nachrichtenmeldungen
 	require_once ("visual.inc.php");
+	$cssSw=new cssClassSwitcher;
 ?>
 <table border=0 bgcolor="#000000" align="center" cellspacing=0 cellpadding=0 width=100%>
 <tr><td class="blank" colspan=2>&nbsp;</td></tr>
@@ -145,7 +146,7 @@ while ( is_array($HTTP_POST_VARS)
     $query = "UPDATE bereiche SET name='$Name' , beschreibung='$Beschreibung' WHERE bereich_id = '$i_id'";
     $db->query($query);
     if ($db->affected_rows() == 0) {
-	my_error("<b>Datenbankoperation gescheitert: $query</b>");
+	my_msg("<b>Keine Änderungen am Bereich $Name durchgeführt.</b>");
       	break;
     	}
     else 
@@ -196,11 +197,11 @@ if ($i_view)
 		
   ?>
   <tr><td class="blank" colspan=2>
-  <table border=0 bgcolor="#eeeeee" align="center" width="50%" cellspacing=2 cellpadding=2>
+  <table border=0 bgcolor="#eeeeee" align="center" width="50%" cellspacing=0 cellpadding=2>
 	<form method="POST" name="edit" action="<? echo $PHP_SELF?>">
-	<tr><td>Bereichname: </td><td><input type="text" name="Name" size=60 maxlength=254 value="<?php echo htmlReady($db->f("name")) ?>"></td></tr>
-	<tr><td>Beschreibung: </td><td><textarea cols=50 ROWS=4 name="Beschreibung" value="<?php $db->p("beschreibung") ?>"><?php echo htmlReady($db->f("beschreibung")) ?></textarea></td></tr>
-	<tr><td colspan=2 align="center">
+	<tr><td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>">Bereichname: </td><td class="<? echo $cssSw->getClass() ?>"><input type="text" name="Name" size=60 maxlength=254 value="<?php echo htmlReady($db->f("name")) ?>"></td></tr>
+	<tr><td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>">Beschreibung: </td><td class="<? echo $cssSw->getClass() ?>"><textarea cols=50 ROWS=4 name="Beschreibung" value="<?php $db->p("beschreibung") ?>"><?php echo htmlReady($db->f("beschreibung")) ?></textarea></td></tr>
+	<tr><td class="<? echo $cssSw->getClass() ?>" colspan=2 align="center">
 	
 	<? 
 	if ($i_view<>"new")
@@ -231,15 +232,19 @@ if ($i_view)
 		{
  		$db->query("SELECT * FROM seminare LEFT  JOIN seminar_bereich USING (seminar_id) WHERE bereich_id = '$i_id'");
  		?>
- 		<table border=0 align="center" width="80%" cellspacing=2 cellpadding=2>
- 		<tr><td width="100%" colspan=2><br>&nbsp;Diesem Bereich sind folgende Veranstaltungen zugeordnet:<br><br></th></tr>
+ 		<table border=0 align="center" width="80%" cellspacing=0 cellpadding=2>
+ <?
+        IF ($db->affected_rows() > 0) {?><tr><td width="100%" colspan=2><br>&nbsp;Diesem Bereich sind folgende Veranstaltungen zugeordnet:<br><br></th></tr><?}
+        ELSE {?><tr><td width="100%" colspan=2><br>&nbsp;Diesem Bereich sind noch keine Veranstaltungen zugeordnet!<br><br></th></tr><?}
+?>
  		<tr><th width="80%" align="center">Name</th><th width="20%" align="center">Aktion</th><tr>
 		<?
  		while ($db->next_record())
  			{
- 			echo"<tr><td>", htmlReady($db->f("Name")), "</td><td align=\"center\"><form method=\"POST\" name=\"kill_s\" action=", $PHP_SELF, "><input type=\"submit\" name=\"kill_sem\" value=\" Zuordnung aufheben\"><input type=\"hidden\" name=\"i_view\" value=\"", $i_id, "\"><input type=\"hidden\" name=\"seminar_id\" value=\"", $db->f("seminar_id"),"\"></td></form></tr>";
- 			}
- 		echo"<tr><td><form method=\"POST\" name=\"add_s\" action=", $PHP_SELF, "><select name=\"seminar_id\" size=1>";
+ 			echo"<tr><td class=\"".$cssSw->getClass()."\">", htmlReady($db->f("Name")), "</td><td align=center class=\"".$cssSw->getClass()."\"><form method=\"POST\" name=\"kill_s\" action=", $PHP_SELF, "><input type=\"submit\" name=\"kill_sem\" value=\" Zuordnung aufheben\"><input type=\"hidden\" name=\"i_view\" value=\"", $i_id, "\"><input type=\"hidden\" name=\"seminar_id\" value=\"", $db->f("seminar_id"),"\"></td></form></tr>";
+            $cssSw->switchClass();
+    			}
+ 		echo"<tr><td class=\"".$cssSw->getClass()."\"><form method=\"POST\" name=\"add_s\" action=", $PHP_SELF, "><select name=\"seminar_id\" size=1>";
  		$db2->query("SELECT Name, Seminar_id FROM seminare ORDER BY Name");
  		while ($db2->next_record())
  			{
@@ -248,7 +253,7 @@ if ($i_view)
 	 		IF (!$db->next_record())
 	 			echo "<option value=".$db2->f("Seminar_id").">", substr($db2->f("Name"),0,80);
  			}
- 		echo "</select></td><td align=\"center\"><input type=\"submit\" name=\"add_sem\" value=\" Zuordnen\"><input type=\"hidden\" name=\"i_view\" value=\"", $i_id, "\"></td></form></tr>";
+ 		echo "</select></td><td class=\"".$cssSw->getClass()."\" align=center><input type=\"submit\" name=\"add_sem\" value=\" Zuordnen\"><input type=\"hidden\" name=\"i_view\" value=\"", $i_id, "\"></td></form></tr>";
  		echo "</table><br><br>";
   		}
   	}
@@ -261,7 +266,7 @@ if (!$i_view)
 ?>
   <tr><td class="blank" colspan=2><b><a href="<?echo $PHP_SELF?>?i_view=new">&nbsp;Neuen Bereich anlegen</a><b><br><br></td></tr>	
 	<tr><td class="blank" colspan=2>
-  <table align=center bg="#ffffff" width="80%" border=0 cellpadding=2 cellspacing=2>
+  <table align=center bg="#ffffff" width="80%" border=0 cellpadding=2 cellspacing=0>
   <tr valign=top align=middle>
   <th width="80%"><a href="<?echo $PHP_SELF?>?sortby=name">Name des Bereichs</a></th>
   <th width="20%"><a href="<?echo $PHP_SELF?>?sortby=number">Anzahl der Veranstaltungen</a></th>
@@ -278,8 +283,8 @@ if (!$i_view)
 ?>
  <!-- existing Bereich -->
  <tr valign=middle align=left>
- <td><a href="<?echo $PHP_SELF?>?i_view=<?$db->p("bereich_id")?>">&nbsp;<?php echo htmlReady($db->f("name")) ?></a></td>
- <td align=center>&nbsp;<?php $db->p("number") ?></td>
+ <td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>"><a href="<?echo $PHP_SELF?>?i_view=<?$db->p("bereich_id")?>">&nbsp;<?php echo htmlReady($db->f("name")) ?></a></td>
+ <td class="<? echo $cssSw->getClass() ?>" align=center>&nbsp;<?php $db->p("number") ?></td>
 </tr>
  <?php
   endwhile;
