@@ -96,7 +96,7 @@ function GetAllSelected ()
 }
 
 function PrintAktualStatusgruppen ()
-{	global $range_id, $PHP_SELF, $cmd, $edit_id;
+{	global $range_id, $PHP_SELF, $cmd, $edit_id, $view;
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
 	$db->query ("SELECT name, statusgruppe_id, size FROM statusgruppen WHERE range_id = '$range_id' ORDER BY position ASC");
@@ -113,7 +113,7 @@ function PrintAktualStatusgruppen ()
 		);
 		echo "<br>";
 		// print the info_box
-		print_infobox ($infobox,"pictures/seminare.jpg");
+		print_infobox ($infobox,"pictures/blank.gif");
 	}
 	$i = 0;
 	while ($db->next_record()) {
@@ -123,8 +123,8 @@ function PrintAktualStatusgruppen ()
 			        <tr> 
 				          <td width=\"5%\">";
 		printf ("            	  <input type=\"IMAGE\" name=\"%s\" src=\"./pictures/move.gif\" border=\"0\" %s>&nbsp; </td>", $statusgruppe_id, tooltip("Markierte Personen dieser Gruppe zuordnen"));
-		printf ("	          <td width=\"95%%\" class=\"%s\">&nbsp; %s </td><td class=\"topic\" width=\"1%%\"><a href=\"$PHP_SELF?cmd=edit_statusgruppe&edit_id=%s&gruppe_name=%s&gruppe_anzahl=%s&range_id=%s\"><img src=\"./pictures/einst.gif\" border=\"0\" %s></a></td>",$cmd =="edit_statusgruppe"&&$edit_id == $statusgruppe_id?"topicwrite":"topic",$db->f("name"),$statusgruppe_id, $db->f("name"), $db->f("size"), $range_id, tooltip("Gruppennahme oder Anzahl anpassen"));
-		printf ( "	          <td width=\"4%%\"><a href=\"$PHP_SELF?cmd=remove_statusgruppe&statusgruppe_id=%s&range_id=%s\"><img src=\"pictures/lighttrash.gif\" width=\"11\" height=\"17\" border=\"0\" %s></a></td>",$statusgruppe_id, $range_id, tooltip("Gruppe mit Personenzuordnung entfernen"));
+		printf ("	          <td width=\"95%%\" class=\"%s\">&nbsp; %s </td><td class=\"topic\" width=\"1%%\"><a href=\"$PHP_SELF?cmd=edit_statusgruppe&edit_id=%s&gruppe_name=%s&gruppe_anzahl=%s&range_id=%s&view=%s\"><img src=\"./pictures/einst.gif\" border=\"0\" %s></a></td>",$cmd =="edit_statusgruppe"&&$edit_id == $statusgruppe_id?"topicwrite":"topic",$db->f("name"),$statusgruppe_id, $db->f("name"), $db->f("size"), $range_id, $view, tooltip("Gruppennahme oder Anzahl anpassen"));
+		printf ( "	          <td width=\"4%%\"><a href=\"$PHP_SELF?cmd=remove_statusgruppe&statusgruppe_id=%s&range_id=%s&view=%s\"><img src=\"pictures/lighttrash.gif\" width=\"11\" height=\"17\" border=\"0\" %s></a></td>",$statusgruppe_id, $range_id, $view, tooltip("Gruppe mit Personenzuordnung entfernen"));
 		echo 	"</tr>";
 
 		$db2->query ("SELECT statusgruppe_user.user_id, Vorname, Nachname, username FROM statusgruppe_user LEFT JOIN auth_user_md5 USING(user_id) WHERE statusgruppe_id = '$statusgruppe_id'");
@@ -142,7 +142,7 @@ function PrintAktualStatusgruppen ()
 			}
 			printf ("     <tr><td><font color=\"%s\">$k</font></td>", $farbe);
 			printf ("       <td class=\"%s\" colspan=\"2\"><font size=\"2\"> %s&nbsp; %s</font></td>",$class, $db2->f("Vorname"), $db2->f("Nachname"));
-			printf ( "	   <td width=\"5%%\"><a href=\"$PHP_SELF?cmd=remove_person&statusgruppe_id=%s&username=%s&range_id=%s\"><img src=\"pictures/trash.gif\" width=\"11\" height=\"17\" border=\"0\" %s></a></td>", $statusgruppe_id, $db2->f("username"), $range_id, tooltip("Person aus der Gruppe entfernen"));
+			printf ( "	   <td width=\"5%%\"><a href=\"$PHP_SELF?cmd=remove_person&statusgruppe_id=%s&username=%s&range_id=%s&view=%s\"><img src=\"pictures/trash.gif\" width=\"11\" height=\"17\" border=\"0\" %s></a></td>", $statusgruppe_id, $db2->f("username"), $range_id, $view, tooltip("Person aus der Gruppe entfernen"));
 			echo "	</tr>";
 			$k++;
 		}
@@ -157,8 +157,8 @@ function PrintAktualStatusgruppen ()
 		$i++;
 		echo "</table>";
 		if ($i < $AnzahlStatusgruppen) {
-			printf ("<p align=\"center\"><a href=\"$PHP_SELF?cmd=swap&statusgruppe_id=%s&range_id=%s\"><img src=\"pictures/move_up.gif\" width=\"13\" height=\"11\" border=\"0\" %s></a>",$statusgruppe_id, $range_id, tooltip("Gruppenreihenfolge tauschen")); 
-			printf ("&nbsp; &nbsp; &nbsp; <a href=\"$PHP_SELF?cmd=swap&statusgruppe_id=%s&range_id=%s\"><img src=\"pictures/move_down.gif\" width=\"13\" height=\"11\" border=\"0\" %s></a> </p>",$statusgruppe_id, $range_id, tooltip("Gruppenreihenfolge tauschen"));
+			printf ("<p align=\"center\"><a href=\"$PHP_SELF?cmd=swap&statusgruppe_id=%s&range_id=%s&view=%s\"><img src=\"pictures/move_up.gif\" width=\"13\" height=\"11\" border=\"0\" %s></a>",$statusgruppe_id, $range_id, $view, tooltip("Gruppenreihenfolge tauschen")); 
+			printf ("&nbsp; &nbsp; &nbsp; <a href=\"$PHP_SELF?cmd=swap&statusgruppe_id=%s&range_id=%s\&view=%s\"><img src=\"pictures/move_down.gif\" width=\"13\" height=\"11\" border=\"0\" %s></a> </p>",$statusgruppe_id, $range_id, $view, tooltip("Gruppenreihenfolge tauschen"));
 		}
 	}
 }
@@ -175,7 +175,7 @@ function PrintSearchResults ($search_exp)
 		} else {
 			$query = "SELECT DISTINCT auth_user_md5.user_id, Vorname, Nachname, username, perms ".
 			"FROM auth_user_md5 LEFT JOIN user_inst ON user_inst.user_id=auth_user_md5.user_id AND Institut_id = '$inst_id' ".
-			"WHERE perms !='root' AND (user_inst.inst_perms = 'user' OR user_inst.inst_perms IS NULL) ".
+			"WHERE perms !='root' AND perms !='admin' AND (user_inst.inst_perms = 'user' OR user_inst.inst_perms IS NULL) ".
 			"AND (Vorname LIKE '%$search_exp%' OR Nachname LIKE '%$search_exp%' OR username LIKE '%$search_exp%') ORDER BY Nachname ";
 		}
 		$db->query($query); // results all users which are not in the seminar
@@ -304,7 +304,12 @@ function PrintInstitutMembers ()
 					$db2->query("INSERT INTO statusgruppe_user SET statusgruppe_id = '$statusgruppe_id', user_id = '$user_id'");
 					if (get_object_type($range_id) == "sem") {
 						$db2->query("INSERT INTO seminar_user SET Seminar_id = '$range_id', user_id = '$user_id', status = 'autor', gruppe = '6' , mkdate = '$mkdate'");
-					} 
+					} elseif (get_object_type($range_id) == "inst") {
+						$globalperms = get_global_perm($user_id);
+						if (get_perm($range_id, $user_id) =="fehler!") {
+							$db2->query("INSERT INTO user_inst SET Institut_id = '$range_id', user_id = '$user_id', inst_perms = '$globalperms'");
+						}
+					}
 				}
 			}
 		}
@@ -360,6 +365,12 @@ function PrintInstitutMembers ()
 
 // Beginn Darstellungsteil
 
+	if (get_object_type($range_id) == "sem") {
+		$view = "statusgruppe_sem";
+	} elseif (get_object_type($range_id) == "inst") {
+		$view = "statusgruppe_inst";
+	}
+
 	$db=new DB_Seminar;
 	$db->query ("SELECT Name, status FROM seminare WHERE Seminar_id = '$range_id'");
 	if (!$db->next_record()) {
@@ -396,6 +407,7 @@ function PrintInstitutMembers ()
 	 	<form action="<? echo $PHP_SELF ?>?cmd=move_old_statusgruppe" method="POST">
 	 	<?
 	 	echo"<input type=\"HIDDEN\" name=\"range_id\" value=\"$range_id\">&nbsp; ";
+      	  	echo"<input type=\"HIDDEN\" name=\"view\" value=\"$view\">";
 		PrintAllStatusgruppen (); 
 		printf ("&nbsp; <input type=\"IMAGE\" src=\"./pictures/move.gif\" border=\"0\" %s>&nbsp;  ", tooltip("in Namesnsfeld uebernehmen"));
 	        ?>
@@ -410,6 +422,7 @@ function PrintInstitutMembers ()
 		<form action="<? echo $PHP_SELF ?>?cmd=add_new_statusgruppe" method="POST">
 		<?
 	  	  echo"<input type=\"HIDDEN\" name=\"range_id\" value=\"$range_id\">";
+  	      	  echo"<input type=\"HIDDEN\" name=\"view\" value=\"$view\">";
 	  	?>
 	        <font size="2">Name: </font>
 	        <input type="text" name="new_statusgruppe_name" value="<? echo $statusgruppe_name;?>">
@@ -427,6 +440,7 @@ function PrintInstitutMembers ()
 		<?
 	  	  echo"<input type=\"HIDDEN\" name=\"range_id\" value=\"$range_id\">";
   	  	  echo"<input type=\"HIDDEN\" name=\"edit_id\" value=\"$edit_id\">";
+	    	  echo"<input type=\"HIDDEN\" name=\"view\" value=\"$view\">";
 	  	?>
 	        <font size="2">Name: </font>
 	        <input type="text" name="new_statusgruppe_name" value="<? echo $gruppe_name;?>">
@@ -449,45 +463,52 @@ function PrintInstitutMembers ()
 // Ende Edit-Bereich
 
 // Anfang Personenbereich 
+
+
 ?>
 <table width="100%" border="0" cellspacing="0">
  <form action="<? echo $PHP_SELF ?>?cmd=move_person" method="POST">
 	<?
   	  echo"<input type=\"HIDDEN\" name=\"range_id\" value=\"$range_id\">";
+    	  echo"<input type=\"HIDDEN\" name=\"view\" value=\"$view\">";
   	?>
   <tr>
-    <td class="steel1" valign="top" width="50%">
-    	<br>
-	<?
-	if (get_object_type($range_id) == "sem" || get_object_type($range_id) == "inst") {
-		PrintAktualMembers ($range_id);
+<?
+	
+	
+	$db->query ("SELECT name, statusgruppe_id, size FROM statusgruppen WHERE range_id = '$range_id' ORDER BY position ASC");
+	printf ("<td class=\"%s\" valign=\"top\" width=\"50%%\"><br>",$db->num_rows()==0?"blank":"steel1");
+	if ($db->num_rows() > 0) {
+		$nogroups = 1;
+		if (get_object_type($range_id) == "sem" || get_object_type($range_id) == "inst") {
+			PrintAktualMembers ($range_id);
+		}
+		?>
+		<br><br>
+		<?
+		if (get_object_type($range_id) == "sem") {
+			PrintInstitutMembers ();
+		}
+		?>
+       	   <br><br>
+		<?
+		if ($search_exp) {
+			PrintSearchResults($search_exp);
+			printf ("<input type=\"IMAGE\" name=\"search\" src= \"./pictures/rewind.gif\" border=\"0\" value=\" Personen suchen\" %s>&nbsp;  ", tooltip("neue Suche"));
+		} else {
+			echo "<font size=\"-1\">&nbsp; freie Personensuche</font><br>";
+			echo "&nbsp; <input type=\"text\" name=\"search_exp\" value=\"\">";
+			printf ("<input type=\"IMAGE\" name=\"search\" src= \"./pictures/suchen.gif\" border=\"0\" value=\" Personen suchen\" %s>&nbsp;  ", tooltip("Person suchen"));
+		} 
 	}
-	?>
-	<br><br>
-	<?
-	if (get_object_type($range_id) == "sem") {
-		PrintInstitutMembers ();
-	}
-	?>
-          <br><br>
-	<?
-	if ($search_exp) {
-		PrintSearchResults($search_exp);
-		printf ("<input type=\"IMAGE\" name=\"search\" src= \"./pictures/rewind.gif\" border=\"0\" value=\" Personen suchen\" %s>&nbsp;  ", tooltip("neue Suche"));
-	} else {
-		echo "<font size=\"-1\">&nbsp; freie Personensuche</font><br>";
-		echo "&nbsp; <input type=\"text\" name=\"search_exp\" value=\"\">";
-		printf ("<input type=\"IMAGE\" name=\"search\" src= \"./pictures/suchen.gif\" border=\"0\" value=\" Personen suchen\" %s>&nbsp;  ", tooltip("Person suchen"));
-	} 
-	?>                            
+		?>                            
 	<br><br>
     </td>
 <? // Ende Personen-Bereich
 ?>   
 <? // Anfang Gruppenuebersicht
-?>    
-    <td class="blank" width="50%" align="center" valign="top"> 
-	<?
+    
+    printf ("<td class=\"blank\" width=\"50%%\" align=\"center\" valign=\"top\">");
 	PrintAktualStatusgruppen ();
 	?>
 	<br>&nbsp; 
