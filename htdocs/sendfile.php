@@ -334,6 +334,8 @@ if (substr($path_file,0,6) != "ftp://") {
 	} else {
 		echo $the_data;
 	}
+	echo "<hr>$path_file<hr>";
+	echo "<hr>$file_name<hr>";
 } else {
 	//Datei von FTP verschicken
 	$url_parts = @parse_url($path_file);
