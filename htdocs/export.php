@@ -152,7 +152,7 @@ if ($EXPORT_ENABLE)
 		$export_pagename = "Exportmodul - Fehler!";
 		$export_error = _("Fehlerhafter Seitenaufruf");
 		$infobox = array(			
-		array ("kategorie"  => "Information:",
+		array ("kategorie"  => _("Information:"),
 			"eintrag" => array	(	
 							array (	"icon" => "pictures/ausruf_small.gif",
 									"text"  => _("Die Parameter, mit denen diese Seite aufgerufen wurde, sind fehlerhaft.")

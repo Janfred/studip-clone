@@ -203,7 +203,7 @@ function GetUserInfo($user_id)
 		if ($db->f("Home")!="")
 			$userinfo[_("Homepage")] = "<a href=\"".$db->f("Home")."\">".$db->f("Home")."</a>";
 		if ($db->f("privatnr")!="")
-			$userinfo[_("Privat Tel.")] = $db->f("privatnr");
+			$userinfo[_("Tel. (privat)")] = $db->f("privatnr");
 		if ($db->f("privadr")!="")
 			$userinfo[_("Adresse")] = $db->f("privadr");
 	}
@@ -224,9 +224,9 @@ function GetinstInfo($user_id)
 		if ($db->f("sprechzeiten")!="")
 			$userinfo[$i][_("Sprechzeiten")] = FormatReady($db->f("sprechzeiten"));
 		if ($db->f("telefon")!="")
-			$userinfo[$i][_("Dienst Tel.")] =FormatReady($db->f("telefon"));			
+			$userinfo[$i][_("Tel. (dienstl.)")] =FormatReady($db->f("telefon"));			
 		if ($db->f("fax")!="")
-			$userinfo[$i][_("Dienst Fax")] = FormatReady($db->f("fax"));
+			$userinfo[$i][_("Fax (dienstl.)")] = FormatReady($db->f("fax"));
 		$i++;
 	}
 	return $userinfo;
@@ -316,7 +316,7 @@ function ShowContact ($contact_id)
 						.$buddy		
 						."<a href=\"$PHP_SELF?edit_id=$contact_id\"><img src=\"pictures/einst.gif\" border=\"0\" ".tooltip(_("Editieren"))."></a>&nbsp; "
 						."<a href=\"$PHP_SELF?cmd=delete&contact_id=$contact_id&open=$open\"><img src=\"pictures/trash.gif\" border=\"0\" ".tooltip(_("Kontakt löschen"))."></a></td></tr>"
-						."<tr><td colspan=\"2\" class=\"steelgraulight\" align=\"center\"><a href=\"$PHP_SELF?filter=$filter\"><img src=\"pictures/forumgraurauf.gif\" border=\"0\" ".tooltip(_("Kontakte schliessen"))."></a></td></tr>";
+						."<tr><td colspan=\"2\" class=\"steelgraulight\" align=\"center\"><a href=\"$PHP_SELF?filter=$filter\"><img src=\"pictures/forumgraurauf.gif\" border=\"0\" ".tooltip(_("Kontakte schließen"))."></a></td></tr>";
 		} else {
 			if ($forum["jshover"]==1 AND $auth->auth["jscript"]) { // Hovern
 				$description = "";	

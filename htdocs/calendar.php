@@ -62,7 +62,7 @@ else {
 	// Start of Output
 	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
-	$message = _("Der Terminkalender ist nicht eingebunden. Der Terminkalender wurde in den Systemeinstellungen nicht freigeschaltet. Wenden Sie sich bitte an den Administrator.");
+	$message = _("Der Terminkalender ist nicht eingebunden. Der Terminkalender wurde in den Systemeinstellungen nicht freigeschaltet. Wenden Sie sich bitte an die zust&auml;ndigen Administrierenden.");
 	parse_window ("error§$message", "§", _("Terminkalender ist nicht eingebunden!"));
 	print("</body></html>");
 }

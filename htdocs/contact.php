@@ -125,7 +125,7 @@ if ($existingowninfolabel) {
 
 ?>
 <table width = "100%" cellspacing="0" border="0" cellpadding="0"><tr>
-	<td class="topic" colspan="2" width = "100%"><img src="pictures/nutzer.gif" border="0" align="texttop"><b>&nbsp; <?echo _("Mein Addressbuch");?> <font size="2">(<?=(($size_of_book = GetSizeofBook()) == 1) ? _("1 Eintrag") : sprintf(_("%d Eintr&auml;ge"),$size_of_book);?>)</font></b>
+	<td class="topic" colspan="2" width = "100%"><img src="pictures/nutzer.gif" border="0" align="texttop"><b>&nbsp; <?echo _("Mein Adressbuch");?> <font size="2">(<?=(($size_of_book = GetSizeofBook()) == 1) ? _("1 Eintrag") : sprintf(_("%d Eintr&auml;ge"),$size_of_book);?>)</font></b>
 	</td>
 </tr><tr><td class="blank" align="left" valign="absmiddle">
 
@@ -141,7 +141,7 @@ echo "<td class=\"blank\" align=\"right\">";
 
 if ($search_exp) {
 	if (SearchResults($search_exp)) {
-		printf ("<input type=\"IMAGE\" name=\"search\" " . makeButton("eintragen", "src") . " border=\"0\" value=\"" . _("In Addressbuch eintragen") . "\" %s>&nbsp;  ", tooltip(_("In Addressbuch eintragen")));
+		printf ("<input type=\"IMAGE\" name=\"search\" " . makeButton("eintragen", "src") . " border=\"0\" value=\"" . _("In Adressbuch eintragen") . "\" %s>&nbsp;  ", tooltip(_("In Adressbuch eintragen")));
 		echo SearchResults($search_exp);
 	} else {
 		echo "&nbsp; <font size=\"2\">"._("keine Treffer zum Suchbegriff:")."</font><b>&nbsp; $search_exp&nbsp; </b>";
@@ -149,7 +149,7 @@ if ($search_exp) {
 	SearchResults($search_exp);
 	printf ("<input type=\"IMAGE\" name=\"search\" src= \"./pictures/rewind.gif\" border=\"0\" value=\"" . _("neue Suche") . "\" %s>&nbsp;  ", tooltip(_("neue Suche")));
 } else {
-	echo "<font size=\"2\" color=\"#555555\">". _("Person zum Eintrag in das Addressbuch suchen:")."</font>&nbsp; <input type=\"text\" name=\"search_exp\" value=\"\">";
+	echo "<font size=\"2\" color=\"#555555\">". _("Person zum Eintrag in das Adressbuch suchen:")."</font>&nbsp; <input type=\"text\" name=\"search_exp\" value=\"\">";
 	printf ("<input type=\"IMAGE\" name=\"search\" src= \"./pictures/suchen.gif\" border=\"0\" value=\"" . _("Personen suchen") . "\" %s>&nbsp;  ", tooltip(_("Person suchen")));
 } 
 echo "</form></td></tr>";

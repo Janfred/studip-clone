@@ -79,7 +79,7 @@ function PrintAktualStatusgruppen () {
 		printf ("<td width=\"90%%\" class=\"topic\"><font size=\"-1\"><b>&nbsp;%s</b></font></td>",htmlReady($db->f("name")));
 		printf ("<td width=\"10%%\"class=\"topic\" align=\"right\" nowrap>");
 		if ($rechte) {  // nicht alle duerfen Gruppenmails/Gruppensms verschicken
-			printf ("<a href=\"mailto:%s?subject=%s \"><img src=\"pictures/mailnachricht.gif\" " . tooltip(_("eMail an alle Gruppenmitglieder verschicken")) . " border=\"0\"></a>", $groupmails,rawurlencode($SessSemName[0])); 
+			printf ("<a href=\"mailto:%s?subject=%s \"><img src=\"pictures/mailnachricht.gif\" " . tooltip(_("E-Mail an alle Gruppenmitglieder verschicken")) . " border=\"0\"></a>", $groupmails,rawurlencode($SessSemName[0])); 
 			printf ("&nbsp;<a href=\"sms.php?sms_source_page=statusgruppen.php&cmd=write&group_id=%s \"><img src=\"pictures/nachricht1.gif\" " . tooltip(_("Systemnachricht an alle Gruppenmitglieder verschicken")) . " border=\"0\"></a>&nbsp;", $statusgruppe_id); 
 		} else {
 			echo "&nbsp;";
@@ -204,19 +204,19 @@ function PrintNonMembers ($range_id)
 	$link = "<a href=\"mailto:".groupmail($SessSemName[1])."?subject=".rawurlencode($SessSemName[0])."\">";
 	$infobox[1]["kategorie"] = _("Aktionen:");
 		$infobox[1]["eintrag"][] = array (	"icon" => "./pictures/nachricht1.gif" ,
-									"text"  => _("Um Personen eine systeminterne Kurznachricht zu senden, benutzen Sie das normale Briefsymbol.")
+									"text"  => _("Um Personen eine systeminterne Kurznachricht zu senden, benutzen Sie bitte das normale Briefsymbol.")
 								);
 	if ($rechte) {
 		$infobox[1]["eintrag"][] = array (	"icon" => "pictures/einst.gif",
-								"text"  => sprintf(_("Um Gruppen anzulegen und Personen zuzuordnen nutzen Sie %sFunktionen / Gruppen verwalten%s."), "<a href=\"admin_statusgruppe.php?view=statusgruppe_sem&new_sem=TRUE&range_id=$SessSemName[1]\">", "</a>")
+								"text"  => sprintf(_("Um Gruppen anzulegen und ihnen Personen zuzuordnen nutzen Sie %sFunktionen / Gruppen verwalten%s."), "<a href=\"admin_statusgruppe.php?view=statusgruppe_sem&new_sem=TRUE&range_id=$SessSemName[1]\">", "</a>")
 								);
 	if ($anzahltext > 0) {
 		$infobox[1]["eintrag"][] = array (	"icon" => "./pictures/mailnachricht.gif" ,
-									"text"  => _("Mit dem erweiterten Briefsymbol k&ouml;nnen Sie allen Gruppenmitgliedern eine Mail schicken.")
+									"text"  => _("Mit dem erweiterten Briefsymbol k&ouml;nnen Sie eine E-Mail an alle Gruppenmitglieder verschicken.")
 								);
 	}
 		$infobox[1]["eintrag"][] = array (	"icon" => "./pictures/ausruf_small.gif" ,
-									"text"  => sprintf(_("Um eine Mail an alle TeilnehmerInnen der Veranstaltung zu versenden, klicken Sie %shier%s."), $link, "</a>")
+									"text"  => sprintf(_("Um eine E-Mail an alle TeilnehmerInnen der Veranstaltung zu versenden, klicken Sie %shier%s."), $link, "</a>")
 								);
 	}
 

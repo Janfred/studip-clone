@@ -2821,7 +2821,7 @@ msgstr "no function allocated"
 
 #: browse.php:322
 msgid "Niemand gefunden!"
-msgstr "Noone found!"
+msgstr "None found!"
 
 #: calendar.php:65
 msgid ""
@@ -2938,7 +2938,7 @@ msgstr "Back to Stud.IP"
 #: config.inc.php:46
 #, c-format
 msgid "Und hier geht's direkt zum %sMensaplan%s&nbsp;;-)"
-msgstr "And this goes directly to the %s Mensa plan%s&nbsp;;-)"
+msgstr "And this goes directly to the %sMensa plan%s&nbsp;;-)"
 
 #: config.inc.php:75 config.inc.php:299
 msgid "Vorlesung"
@@ -8854,15 +8854,3 @@ msgstr "Open all sub-elements"
 #: lib/classes/TreeView.class.php:309
 msgid "Alle Unterelemente schlieﬂen"
 msgstr "Close all sub-elements"
-
-#~ msgid "Dozent"
-#~ msgstr "Lecturer"
-
-#~ msgid "Tutor"
-#~ msgstr "Tutor "
-
-#~ msgid "Kein Nutzer ist online."
-#~ msgstr "No user is online."
-
-#~ msgid "Sie wurden zum Chatten eingeladen!"
-#~ msgstr "You have been invited to the chat!"

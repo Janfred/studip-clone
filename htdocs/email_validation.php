@@ -42,7 +42,7 @@ require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");
 
 <table width="100%" border=0 cellpadding=0 cellspacing=0>
 <tr>
-	<td class="topic" colspan=2><b>&nbsp;<?=_("Best&auml;tigung der Email-Adresse")?></b></td>
+	<td class="topic" colspan=2><b>&nbsp;<?=_("Best&auml;tigung der E-Mail-Adresse")?></b></td>
 </tr>
 <tr><td class="blank" colspan=2 width="100%">&nbsp;</td></tr>
 
@@ -99,7 +99,7 @@ require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");
 	   }
 
 		my_msg(_("Ihr Status wurde erfolgreich auf <b>autor</b> gesetzt.<br>Damit d&uuml;rfen Sie in den meisten Veranstaltungen schreiben,<br>f&uuml;r die Sie sich anmelden.") . "\n");
-		my_info(_("Einige Veranstaltungen erfordern allerdings bei der Anmeldung<br>die Eingabe eines Passwortes.<br>Dieses Passwort erfahren Sie von dem Dozenten der Veranstaltung.") . "\n");
+		my_info(_("Einige Veranstaltungen erfordern allerdings bei der Anmeldung<br>die Eingabe eines Passwortes.<br>Dieses Passwort erfahren Sie von der Dozentin oder dem Dozenten der Veranstaltung.") . "\n");
 
 		// Auto-Eintrag in Boards
 		if (is_array($AUTO_INSERT_SEM)){
@@ -125,7 +125,7 @@ require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");
 			}
 		}
 		$auth->logout();	// einen Logout durchführen, um erneuten Login zu erzwingen
-		my_info(sprintf(_("Die Status-&Auml;nderung wird erst nach einem erneuten %sLogin%s wirksam!<br>Deshalb wurden Sie jetzt automatisch ausgeloggt."), "<a href=\"index.php?again=yes\"><b>", "</b></a>") . "\n");
+		my_info(sprintf(_("Die Status&auml;nderung wird erst nach einem erneuten %sLogin%s wirksam!<br>Deshalb wurden Sie jetzt automatisch ausgeloggt."), "<a href=\"index.php?again=yes\"><b>", "</b></a>") . "\n");
 		print "";
 	} else {
 		; // hier sollten wir nie hinkommen

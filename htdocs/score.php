@@ -19,7 +19,7 @@ require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 <tr>
 <td class="blank" align = left valign="top" width="60%"><br /><blockquote>
 <?
-echo _("Auf dieser Seite k&ouml;nnen Sie abrufen, wie weit Sie in der Stud.IP-Score aufgestiegen sind. Je aktiver Sie sich im System verhalten, desto h&ouml;her klettern Sie!");
+echo _("Auf dieser Seite k&ouml;nnen Sie abrufen, wie weit Sie im Stud.IP-Score aufgestiegen sind. Je aktiver Sie sich im System verhalten, desto h&ouml;her klettern Sie!");
 
 $score = getscore();
 $user_id=$user->id; //damit keiner schummelt...
@@ -54,8 +54,8 @@ echo "<br><br><a href=\"score.php?cmd=write\">" . _("Diesen Wert hier ver&ouml;f
 </tr>
 </table>
 <table width="100%" border="0" cellpadding="0" cellspacing="0"><tr><td class=blank>
-<br><br><blockquote>
-<?_("Hier sehen Sie die Score der Nutzer, die Ihre Werte ver&ouml;ffentlicht haben:")?>
+<br><blockquote>
+<?=_("Hier sehen Sie den Score der NutzerInnen, die Ihre Werte ver&ouml;ffentlicht haben:")?>
 </blockquote>&nbsp; </td></tr>
 <tr><td class="blank">
 <?

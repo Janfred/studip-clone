@@ -399,32 +399,32 @@ if (!$print_view) {
 		<blockquote>
 		<?
 		if ($view=="user")  { 
-			echo _("Der Stundenplan zeigt Ihnen alle regelm&auml;&szlig;igen Veranstaltungen eines Semesters. Um den Stundenplan auszudrucken, nutzen sie bitte die Druckfunktion ihres Browsers.") . "<br /><br />";
+			echo _("Der Stundenplan zeigt Ihnen alle regelm&auml;&szlig;igen Veranstaltungen eines Semesters. Um den Stundenplan auszudrucken, nutzen Sie bitte die Druckfunktion ihres Browsers.") . "<br /><br />";
 			echo "<font size=-1>";
 			printf(_("Wenn Sie weitere Veranstaltungen aus Stud.IP in ihren Stundenplan aufnehmen m&ouml;chten, nutzen Sie bitte die %sVeranstaltungssuche%s."), "<a href = \"sem_portal.php\">", "</a>");
 			echo "<br>";
 			if ($CALENDAR_ENABLE)
-				printf(_("Ihre pers&ouml;nlichen Termine finden sie im %sTerminkalender%s."), "<a href=\"calendar.php\">", "</a>");
+				printf(_("Ihre pers&ouml;nlichen Termine finden Sie im %sTerminkalender%s."), "<a href=\"calendar.php\">", "</a>");
 			echo "</font>";
 		} elseif ($view == "inst") { ?>
-		<?=_("In der Veranstaltungs-Timetable sehen Sie alle Veranstaltungen der Einrichtung eines Semesters.")?><br />
+		<?=_("Im Veranstaltungs-Timetable sehen Sie alle Veranstaltungen eines Semesters an der gew&auml;hlten Einrichtung.")?><br />
 		<br /><font size=-1><?=_("Angezeigtes Semester:")?>&nbsp; 
-			<select name="instview_sem">
+			<select name="instview_sem" style="vertical-align:middle">
 			<?
 				foreach ($SEMESTER as $key=>$val) {
 					printf ("<option %s value=\"%s\">%s</option>\n", ($tmp_sem_nr == $key) ? "selected" : "", $key, $val["name"]);
 				}
 			?>
 			</select>&nbsp; 
-			<input type="IMAGE" value="change_instview_sem" <? echo makeButton("uebernehmen", "src") ?> border=0 value="<?=_("&uuml;bernehmen")?>" />&nbsp; 
-			<input type="HIDDEN" name="inst_id" value="<? echo $inst_id ?>" />
+			<input type="IMAGE" value="change_instview_sem" <? echo makeButton("uebernehmen", "src") ?> border=0 align="absmiddle" value="<?=_("&uuml;bernehmen")?>" />&nbsp; 
+			<input type="HIDDEN" name="inst_id" value="<? echo $inst_id ?>" /><br>
 		<? } else { ?>
-		<?=_("In der Veranstaltungs-Timetable sehen Sie alle Veranstaltungen ihrer Einrichtung eines Semesters.")." <br /> "._("Sie k&ouml;nnen zus&auml;tzlich eigene Eintr&auml;ge anlegen.")?><br />
+		<?=_("Im Veranstaltungs-Timetable sehen Sie alle Veranstaltungen eines Semesters an der gew&auml;hlten Einrichtung.")." <br /> "._("Sie k&ouml;nnen zus&auml;tzlich eigene Eintr&auml;ge anlegen.")?><br />
 		<br />
 			<? 
 		}
 		if ($view !="user")
-			printf ("<font size=-1><a target=\"_new\" href=\"%s?print_view=TRUE%s\">"._("Druckansicht dieser Seite")."</a></font>", $PHP_SELF, ($inst_id) ? "&inst_id=".$inst_id : "");
+			printf ("<br><font size=-1><a target=\"_new\" href=\"%s?print_view=TRUE%s\">"._("Druckansicht dieser Seite (wird in einem neuen Browserfenster ge&ouml;ffnet).")."</a></font>", $PHP_SELF, ($inst_id) ? "&inst_id=".$inst_id : "");
 		?>
 		<br>
 		</blockquote>
@@ -583,7 +583,7 @@ if ((!$print_view) && (!$inst_id)) {
 <tr>
 	<td colspan=<? echo $glb_colspan+1?> class="steelgraulight">
 		<b>&nbsp;<?=_("Eigene Veranstaltung eintragen:")?></b><br>
-		<font size=-1>&nbsp;(<?=_("Hier k&ouml;nnen sie Veranstaltungen, die nicht im Stud.IP System existieren oder andere eigene Ereignisse eintragen")?>)</font><br>
+		<font size=-1>&nbsp;(<?=_("Hier k&ouml;nnen sie Veranstaltungen, die nicht im Stud.IP System existieren oder andere, eigene Ereignisse eintragen")?>)</font><br>
 		<form method="POST" action="<? echo $PHP_SELF ?>?cmd=insert">
 			&nbsp;<?_("Wochentag:")?>
 			<select name="tag">

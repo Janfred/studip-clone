@@ -75,11 +75,11 @@ if ($sms_msg)
 <tr>
 <td class="blank" align = left width="60%"><br /><blockquote>
 <?
-echo _("Hier k&ouml;nnen Sie die Homepages aller Nutzer abrufen, die im System registriert sind.") . "<br />";
-echo _("Sie erhalten auf den Nutzerhomepages von Mitarbeitern an Einrichtungen auch weiterf&uuml;hrende Informationen wie Sprechstunden und R&auml;ume.") . "<br />";
+echo _("Hier k&ouml;nnen Sie die Homepages aller NutzerInnen abrufen, die im System registriert sind.") . "<br />";
+echo _("Sie erhalten auf den Homepages von MitarbeiternInnen an Einrichtungen auch weiterf&uuml;hrende Informationen, wie Sprechstunden und Raumangaben.") . "<br />";
 echo _("W&auml;hlen Sie den gew&uuml;nschen Bereich aus oder suchen Sie nach einem Namen!");
 ?>
-<br><br><a href="score.php"><?=_("Zur Stud.IP Rangliste")?></a>
+<br><br><a href="score.php"><?=_("Zur Stud.IP-Rangliste")?></a>
 </blockquote></td>
 <td class="blank" align = right><img src="pictures/board2.jpg" border="0"></td>
 </tr>
@@ -181,7 +181,7 @@ if ($perm->have_perm("admin")):
 <form action="browse.php" method="POST">
 <tr> 
 	<td class="steel1" align="left"width="80%" colspan=4>
-		&nbsp;<b><font size=-1><?=_("Alle Benutzer")?></font></b>
+		&nbsp;<b><font size=-1><?=_("Alle NutzerInnen")?></font></b>
 	</td>
 	<td class="steel1" width="20%" align="left">
 		<input type="HIDDEN" name="group" value="All">

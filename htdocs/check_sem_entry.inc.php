@@ -38,9 +38,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 				$SemUserStatus="nobody";
 				if ($SemSecLevelRead>0){
 					echo "<table width=\"100%\" border=0 cellpadding=0 cellspacing=0>";
-					echo "<tr><td class=\"topic\" colspan=2>&nbsp;<b>" . _("Rechtecheck") . "</b></td></tr>";
+					echo "<tr><td class=\"topic\" colspan=2>&nbsp;<b>" . _("&Uuml;berpr&uuml;fung der Rechte") . "</b></td></tr>";
 					echo "<tr><td class=\"blank\" colspan=2>&nbsp<br></td></tr>";
-					parse_msg ("error§" . _("Sie haben keine Berechtigung, diese Veranstaltung zu betreten!"));
+					parse_msg ("error§" . _("Sie haben keine Berechtigung diese Veranstaltung zu betreten!"));
 					echo"<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp;&nbsp; " . _("zur&uuml;ck zur Startseite") . "</a>";
 					if ($send_from_search)
 					echo " | <a href=\"sem_portal.php\">" . _("zur&uuml;ck zur Suche") . "</a>";
