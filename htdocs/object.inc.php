@@ -34,6 +34,14 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
+
+function object_set_visit_module($type){
+	global $SessSemName;
+	if (object_get_visit($SessSemName[1], $type) <= object_get_visit($SessSemName[1], $SessSemName['class'])){
+		object_set_visit($SessSemName[1], $type);
+	}
+}
+
 /**
 * This function saves the actual time as last visitdate for the given object, user and type
 *
@@ -42,25 +50,17 @@
 * @param	string	the user who visited the object - if not given, the actual user is used
 *
 */
-function object_set_visit($object_id, $type, $mode = '', $time='', $user_id = '') {
+function object_set_visit($object_id, $type, $user_id = '') {
 	global $user;
-	
-	if (!$time)
-		$time = time();
-		
+	$now = time();
 	if (!$user_id)
 		$user_id = $user->id;
-		
-	if ($mode != "last")
-		$last_visit = object_get_visit($object_id, $type, FALSE, $user_id);
-	else {
-		$last_visit = $time;
-		$time = time();
-	}
+	
+	$last_visit = object_get_visit($object_id, $type, FALSE, $user_id);
 	
 	$db=new DB_Seminar;
 	$query = sprintf ("REPLACE INTO object_user_visits SET object_id = '%s', user_id ='%s', type='%s', visitdate='%s', last_visitdate = '%s'",
-				$object_id, $user_id, $type, $time, $last_visit);
+						$object_id, $user_id, $type, $now, $last_visit);
 	$db->query($query);
 	
 	return TRUE;
