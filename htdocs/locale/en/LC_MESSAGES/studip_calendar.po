@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-09-10 12:59+0200\n"
+"POT-Creation-Date: 2003-09-17 11:43+0200\n"
 "PO-Revision-Date: 2003-03-28 14:21+0100\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
@@ -255,7 +255,7 @@ msgstr "Change group"
 msgid "Name"
 msgstr "Name"
 
-#: calendar/views/bind.inc.php:59 calendar/views/navigation.inc.php:48
+#: calendar/views/bind.inc.php:59 calendar/views/navigation.inc.php:47
 msgid "Termine"
 msgstr "Appointments"
 
@@ -546,7 +546,7 @@ msgstr "still %s appointments to follow"
 msgid "noch %s Termine davor"
 msgstr "still %s appointments before"
 
-#: calendar/views/navigation.inc.php:55
+#: calendar/views/navigation.inc.php:54
 msgid ""
 "Dieser Terminkalender verwaltet Ihre Termine. Sie k&ouml;nnen Termine "
 "eintragen, &auml;ndern, gruppieren und sich &uuml;bersichtlich anzeigen "
