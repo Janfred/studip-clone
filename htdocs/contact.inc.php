@@ -113,8 +113,6 @@ function GetSizeofBook()
 	$db->query ("SELECT contact_id FROM contact WHERE owner_id = '$owner_id'");	
 	if ($db->next_record()) {
 		$size = $db->num_rows();
-	} else {
-		$size=_("keine");
 	}
 	return $size;
 }
