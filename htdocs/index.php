@@ -192,7 +192,7 @@ unset($temp_language_key); unset($temp_language);
 			$anzahl = $db->f(0);			
 			echo "<tr><td class=\"steelgraulight\"><font size=\"2\">&nbsp; "._("Registrierte NutzerInnen").":</font></td><td class=\"steelgraulight\" align=right><font size=\"2\">&nbsp; $anzahl&nbsp; </font></td><td class=\"blank\">&nbsp; &nbsp; </td></tr>"; 
 			$now = time()-600; 
-			$db->query("SELECT count(*) FROM active_sessions WHERE changed > '".date("YmdHis",$now)."' AND active_sessions.name = 'Seminar_User'");
+			$db->query("SELECT count(*) FROM active_sessions WHERE changed > '".date("YmdHis",$now)."' AND active_sessions.name = 'Seminar_User' AND sid != 'nobody'");
 			$db->next_record();
 			$anzahl = $db->f(0);			
 			echo "<tr><td class=\"steelgraulight\"><font size=\"2\">&nbsp; "._("Davon online").":</font></td><td class=\"steelgraulight\" align=right><font size=\"2\">&nbsp; $anzahl&nbsp; </font></td><td class=\"blank\">&nbsp; &nbsp; </td></tr>"; 
