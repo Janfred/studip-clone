@@ -52,7 +52,7 @@ require_once($ABSOLUTE_PATH_STUDIP . "language.inc.php");
 
 include($ABSOLUTE_PATH_STUDIP . "links_admin.inc.php");  //Linkleiste fuer admins
 
-//get ID from a open Institute
+//get ID from an open Institute
 if ($SessSemName[1])
 	$range_id = $SessSemName[1];
 
@@ -88,6 +88,7 @@ if ($com == "delete_sec") {
 	$message .= makeButton("nein") . "</a>";
 	my_info($message, "blank", 1);
 	print_footer();
+	page_close();
 	exit;
 }
 
@@ -95,8 +96,8 @@ $css_switcher =& new cssClassSwitcher();
 
 if ($com == "info") {
 	include($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_EXTERN . "/views/extern_info_module.inc.php");
-	
 	print_footer();
+	page_close();
 	exit;
 }
 
@@ -119,6 +120,7 @@ if ($com == "new" || $com == "edit" || $com == "open" ||
 	
 	require_once($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_EXTERN . "/views/extern_edit_module.inc.php");
 	print_footer();
+	page_close();
 	exit;	
 }
 
@@ -126,12 +128,14 @@ if ($com == "new" || $com == "edit" || $com == "open" ||
 // So it's better to use different commands to do the same job.
 if ($com == "set_default" || $com == "unset_default") {
 	if (!set_default_config($range_id, $config_id)) {
+		page_close();
 		exit;
 	}
 }
 
 if ($com == "delete") {
 	if (!delete_config($range_id, $config_id)) {
+		page_close();
 		exit;
 	}
 }
@@ -157,6 +161,9 @@ for ($i = 1; $i < sizeof($EXTERN_MODULE_TYPES); $i++) {
 	if ($configurations[$EXTERN_MODULE_TYPES[$i]["module"]])
 		$have_config = TRUE;
 }
+// check for global configurations
+if ($configurations[$EXTERN_MODULE_TYPES[0]["module"]])
+	$have_config = TRUE;
 
 echo "<blockquote><font size=\"2\">";
 echo _("Neue globale Konfiguration anlegen.");

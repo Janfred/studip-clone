@@ -296,7 +296,7 @@ class ExternEditGeneric extends ExternEdit {
 	* @param string title The title of this form with radio-buttons.
 	* @param string info The info text.
 	* @param array radio_values The values of the radio-buttons.
-	* @param array radio_names The names of the radio_names.
+	* @param array radio_names The names of the radio-buttons.
 	*/
 	function editRadioGeneric ($attribute, $title, $info, $radio_values, $radio_names) {
 		$form_name = $this->element_name . "_" . $attribute;
