@@ -701,12 +701,12 @@ function tooltip($text,$with_alt = TRUE,$with_popup = FALSE){
 * @return		string	html output of the button
 */
 function makeButton ($name, $mode="img") {
-	switch ($LANG) {
+	switch ($_language_path) {
 		case "de":
 			$path="./pictures/buttons";
 		break;
-		case "eng":
-			$path="./pictures/buttons/eng/";
+		case "en":
+			$path="./pictures/buttons/en/";
 		break;
 		default:
 			$path="./pictures/buttons";
