@@ -891,7 +891,7 @@ function dateAssi ($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full =
 			
 	
 	$interval = $term_data["turnus"] + 1;
-
+	
 	//create the dates
 	$affected_dates=0;
 	if (is_array($term_data["turnus_data"]))
@@ -917,8 +917,11 @@ function dateAssi ($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full =
 				
 				//check if corrected $sem_begin
 				if (($do) && ($sem_begin_uncorrected))
-					if ($start_time < $sem_begin_uncorrected)
+					if ($start_time < $sem_begin_uncorrected) {
 						$do = FALSE;
+						if ($term_data["turnus"])
+							$cor_interval = -1;
+					}
 
 				if (($do) && ($end_time <$sem_end)){
 					//ids
@@ -977,7 +980,11 @@ function dateAssi ($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full =
 				}
 			}
 			//inc the week
-			$week = $week + $interval;			
+			$week = $week + $interval + $cor_interval;
+
+			if ($cor_interval)
+				unset($cor_interval);
+
 		} while ($end_time <$sem_end);
 
 		//kill dates
