@@ -1032,23 +1032,15 @@ if ($links_admin_data["srch_on"] || $auth->auth["perm"] =="tutor" || $auth->auth
 		</tr>
 	</table>
 	</form>
-
-
-	</td>
-	</tr>
-	</table>
 	<?
-	page_close();
-	die;
-} else {
-	page_close();
-	die;
 }
 ?>
 </td>
 </tr>
 </table>			
 <?
+	page_close();
+	die;
 }
 }
 ?>
