@@ -36,13 +36,11 @@ require_once ("$ABSOLUTE_PATH_STUDIP/dates.inc.php");		//Terminfunktionen
 require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipSemTreeSearch.class.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/Modules.class.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/DataFields.class.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/SemesterData.class.php");
-
 
 if ($RESOURCES_ENABLE) {
-	include_once ($RELATIVE_PATH_RESOURCES."/resourcesClass.inc.php");
-	include_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
 	include_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
+	include_once ($RELATIVE_PATH_RESOURCES."/lib/ResourcesUserRoomsList.class.php");
+	include_once ($RELATIVE_PATH_RESOURCES."/lib/RoomRequest.class.php");
 	$resAssign = new VeranstaltungResourcesAssign();
 }
 
@@ -50,9 +48,6 @@ if ($RESOURCES_ENABLE) {
 if ($cancel_x) {
 	header ("Location: admin_seminare1.php?");
 }
-
-
-
 
 // Get a database connection and Stuff
 $db = new DB_Seminar;
@@ -65,6 +60,7 @@ $DataFields = new DataFields();
 $Modules = new Modules;
 $semester = new SemesterData;
 
+//initialisations for sem_tree
 if (is_array($sem_create_data["sem_bereich"])){
 		for ($i = 0; $i < count($sem_create_data["sem_bereich"]); $i++){
 			$st_search->selected[$sem_create_data["sem_bereich"][$i]] = true;
@@ -78,10 +74,19 @@ $st_search->doSearch();
 $user_id = $auth->auth["uid"];
 $errormsg='';
 
+//initialisations for room-requests
+if ($RESOURCES_ENABLE && get_config("RESOURCES_ALLOW_ROOM_REQUESTS") || get_config("RESOURCES_ALLOW_ROOM_PROPERTY_REQUESTS")) {
+	if (!$sem_create_data["resRequest"]) {
+		$sem_create_data["resRequest"] = new RoomRequest();
+	} else {
+		$sem_create_data["resRequest"] = unserialize($sem_create_data["resRequest"]);
+	}
+}		
+
+
 //Registrieren der Sessionvariablen
 $sess->register("sem_create_data");
 $sess->register("links_admin_data");
-
 if (isset($cmd) && ($cmd=="do_copy")) {
 	$sql = "SELECT * FROM seminare WHERE Seminar_id = '".$cp_id."'";
 	if (!$db->query($sql)) {
@@ -200,13 +205,12 @@ if ($start_level) { //create defaults
 		$sem_create_data["sem_doz"][$user->id]=TRUE;
 }
 
-if ($form==1)
+if ($form == 1)
 	{
 	$sem_create_data["sem_name"]=$sem_name;
 	$sem_create_data["sem_untert"]=$sem_untert;
 	$sem_create_data["sem_nummer"]=$sem_nummer;
 	$sem_create_data["sem_ects"]=$sem_ects;	
-	$sem_create_data["sem_ort"]=$sem_ort;
 	$sem_create_data["sem_desc"]=$sem_desc;
 	$sem_create_data["sem_inst_id"]=$sem_inst_id;
 	$sem_create_data["term_art"]=$term_art;
@@ -217,7 +221,12 @@ if ($form==1)
 	else
 		$sem_create_data["sem_duration_time"]=$sem_duration_time - $sem_start_time;
 
-	$sem_create_data["sem_turnout"]=$sem_turnout;	
+	$sem_create_data["sem_turnout"]=$sem_turnout;
+	
+	//save max. count of participants for room-request
+	if (($RESOURCES_ENABLE) && (is_object($sem_create_data["resRequest"])))
+		$sem_create_data["resRequest"]->setDefaultSeats($sem_turnout);
+
 	//Anmeldeverfahren festlegen
 	$sem_create_data["sem_admission"]=$sem_admission;
 
@@ -235,7 +244,7 @@ if ($form==1)
 	
 	}
 
-if ($form==2)
+if ($form == 2)
 	{
 
 	if(isset($sem_bereich_chooser) && !$st_search->search_done){
@@ -264,18 +273,10 @@ if ($form==2)
 	$sem_create_data["sem_art"]=$sem_art;
 	}
 
-if ($form==3)
+if ($form == 3)
 	{
 	$sem_create_data["term_start_woche"]=$term_start_woche;
 	$sem_create_data["term_turnus"]=$term_turnus;	
-
-	//The room for the prelimary discussion
-	$sem_create_data["sem_vor_raum"]=$vor_raum; 
-	$sem_create_data["sem_vor_resource_id"]=($vor_resource_id == "FALSE") ? FALSE : $vor_resource_id; 
-	if ($RESOURCES_ENABLE && $sem_create_data["sem_vor_resource_id"]) {
-		$resObject=new ResourceObject($sem_create_data["sem_vor_resource_id"]);
-		$sem_create_data["sem_vor_raum"]=$resObject->getName();
-	}
 
 	if ($sem_create_data["term_art"]==0)
 		{
@@ -293,12 +294,6 @@ if ($form==3)
 			$sem_create_data["term_turnus_start_minute"][$i]=$term_turnus_start_minute[$i]; 
 			$sem_create_data["term_turnus_end_stunde"][$i]=$term_turnus_end_stunde[$i]; 
 			$sem_create_data["term_turnus_end_minute"][$i]=$term_turnus_end_minute[$i]; 
-			$sem_create_data["term_turnus_room"][$i]=$term_turnus_room[$i]; 
-			$sem_create_data["term_turnus_resource_id"][$i]=($term_turnus_resource_id[$i] == "FALSE") ? FALSE : $term_turnus_resource_id[$i];
-			if ($RESOURCES_ENABLE && $sem_create_data["term_turnus_resource_id"][$i]) {
-				$resObject=new ResourceObject($sem_create_data["term_turnus_resource_id"][$i]);
-				$sem_create_data["term_turnus_room"][$i]=$resObject->getName();
-			}
 
 			//diese Umwandlung muessen hier passieren, damit Werte mit fuehrender Null nicht als String abgelegt werden und so spaeter Verwirrung stiften
 			settype($sem_create_data["term_turnus_start_stunde"][$i], "integer");
@@ -379,12 +374,6 @@ if ($form==3)
 			$sem_create_data["term_start_minute"][$i]=$term_start_minute[$i];
 			$sem_create_data["term_end_stunde"][$i]=$term_end_stunde[$i]; 
 			$sem_create_data["term_end_minute"][$i]=$term_end_minute[$i]; 
-			$sem_create_data["term_room"][$i]=$term_room[$i]; 
-			$sem_create_data["term_resource_id"][$i]=($term_resource_id[$i] == "FALSE") ? FALSE : $term_resource_id[$i];
-			if ($RESOURCES_ENABLE && $sem_create_data["term_resource_id"][$i]) {
-				$resObject=new ResourceObject($sem_create_data["term_resource_id"][$i]);
-				$sem_create_data["term_room"][$i]=$resObject->getName();
-			}
 
 			//diese Umwandlung muss hier sein, da fuehrende 0 bei Minutenangaben sonst nur Verwirrung stiftet...
 			settype($sem_create_data["term_start_stunde"][$i], "integer");
@@ -407,16 +396,81 @@ if ($form==3)
 	}
 }
 
-if ($form==4) {
-	
-	// create a timestamp for begin and end of the seminar
-	if (!check_and_set_date($adm_s_tag, $adm_s_monat, $adm_s_jahr, $adm_s_stunde, $adm_s_minute, $sem_create_data, "sem_admission_start_date")) {
-		$errormsg=$errormsg."error§"._("Bitte geben Sie ein g&uuml;ltiges Datum f&uuml;r den Start des Anmeldezeitraums ein!")."§";
+if ($form == 4) {
+	//The room for the prelimary discussion
+	$sem_create_data["sem_vor_raum"]=$vor_raum; 
+	$sem_create_data["sem_vor_resource_id"]=($vor_resource_id == "FALSE") ? FALSE : $vor_resource_id; 
+	if ($RESOURCES_ENABLE && $sem_create_data["sem_vor_resource_id"]) {
+		$resObject=new ResourceObject($sem_create_data["sem_vor_resource_id"]);
+		$sem_create_data["sem_vor_raum"]=$resObject->getName();
 	}
-	if (!check_and_set_date($adm_e_tag, $adm_e_monat, $adm_e_jahr, $adm_e_stunde, $adm_e_minute, $sem_create_data, "sem_admission_end_date")) {
-		$errormsg=$errormsg."error§"._("Bitte geben Sie ein g&uuml;ltiges Datum f&uuml;r das Ende des Anmeldezeitraums ein!")."§";
+	
+	if (($RESOURCES_ENABLE) && (is_object($sem_create_data["resRequest"]))) {
+		//Room-Requests 
+		if ($send_room_x)
+			$sem_create_data["resRequest"]->setResourceId($select_room);
+		if ($reset_resource_id_x)
+			$sem_create_data["resRequest"]->setResourceId(FALSE);
+		if ($send_room_type_x)
+			$sem_create_data["resRequest"]->setCategoryId($select_room_type);
+		if ($reset_room_type_x)
+			$sem_create_data["resRequest"]->setCategoryId(FALSE);
+			
+		$sem_create_data["resRequest"]->setComment($sem_room_comment);
+
+		//Property Requests
+		if ($sem_create_data["resRequest"]->getCategoryId()) {
+			foreach ($sem_create_data["resRequest"]->getAvailableProperties() as $key=>$val) {
+				if ($val["system"] == 2) { //it's the property for the seat/room-size! 
+					if ($seats_are_admission_turnout)
+						$sem_create_data["resRequest"]->setPropertyState($key, $sem_create_data["sem_turnout"]);
+					elseif (!$send_room_type_x)
+						$sem_create_data["resRequest"]->setPropertyState($key, $request_property_val[$key]);
+				} else {
+					$sem_create_data["resRequest"]->setPropertyState($key, $request_property_val[$key]);
+				}
+			}
+		}
 	}
 
+	if ($sem_create_data["term_art"]==0) {
+		//get incoming room-data
+
+		if (is_array($sem_create_data["metadata_termin"]["turnus_data"]))
+			foreach ($sem_create_data["metadata_termin"]["turnus_data"] as $key=>$val) {
+				//echo $term_turnus_room[$key], $term_turnus_resource_id[$key];
+	
+				$sem_create_data["metadata_termin"]["turnus_data"][$key]["room"] = $term_turnus_room[$key]; 
+				$sem_create_data["metadata_termin"]["turnus_data"][$key]["resource_id"] = ($term_turnus_resource_id[$key] == "FALSE") ? FALSE : $term_turnus_resource_id[$key];
+			
+				if ($RESOURCES_ENABLE && $sem_create_data["metadata_termin"]["turnus_data"][$key]["resource_id"]) {
+					$resObject=new ResourceObject($sem_create_data["metadata_termin"]["turnus_data"][$key]["resource_id"]);
+					$sem_create_data["metadata_termin"]["turnus_data"][$key]["room"]=$resObject->getName();
+				}
+			}
+	} else {
+		for ($i=0; $i<$sem_create_data["term_count"]; $i++) {
+			$sem_create_data["term_room"][$i]=$term_room[$i]; 
+			$sem_create_data["term_resource_id"][$i]=($term_resource_id[$i] == "FALSE") ? FALSE : $term_resource_id[$i];
+			//get incoming room-data
+			if ($RESOURCES_ENABLE && $sem_create_data["term_resource_id"][$i]) {
+				$resObject=new ResourceObject($sem_create_data["term_resource_id"][$i]);
+				$sem_create_data["term_room"][$i]=$resObject->getName();
+			}
+		}
+	}
+}
+
+if ($form == 5) {
+	$sem_create_data["sem_room"]=$sem_room; 
+	
+	// create a timestamp for begin and end of the seminar
+        if (!check_and_set_date($adm_s_tag, $adm_s_monat, $adm_s_jahr, $adm_s_stunde, $adm_s_minute, $sem_create_data, "sem_admission_start_date")) {
+        $errormsg=$errormsg."error§"._("Bitte geben Sie ein g&uuml;ltiges Datum f&uuml;r den Start des Anmeldezeitraums ein!")."§";
+	}
+        if (!check_and_set_date($adm_e_tag, $adm_e_monat, $adm_e_jahr, $adm_e_stunde, $adm_e_minute, $sem_create_data, "sem_admission_end_date")) {
+        $errormsg=$errormsg."error§"._("Bitte geben Sie ein g&uuml;ltiges Datum f&uuml;r das Ende des Anmeldezeitraums ein!")."§";
+	}
 	if ($sem_create_data["sem_admission_end_date"] != -1) {
 		if ($sem_create_data["sem_admission_end_date"] < time())
 		{
@@ -433,13 +487,13 @@ if ($form==4) {
 	$sem_create_data["sem_leistnw"]=$sem_leistnw;
 	$sem_create_data["sem_sonst"]=$sem_sonst;
 	$sem_create_data["sem_paytxt"]=$sem_paytxt;
-  $sem_create_data["sem_datafields"]='';
+  	$sem_create_data["sem_datafields"]='';
    
-  if (is_array($sem_datafield_id)) {
-	  foreach ($sem_datafield_id as $key=>$val) {
-    	 $sem_create_data["sem_datafields"][$val] = $sem_datafield_content[$key];
-    }
-  }
+	if (is_array($sem_datafield_id)) {
+		foreach ($sem_datafield_id as $key=>$val) {
+			$sem_create_data["sem_datafields"][$val] = $sem_datafield_content[$key];
+		}
+	}
 
 	//Hat der User an den automatischen Werte rumgepfuscht? Dann denkt er sich wohl was :) (und wir benutzen die Automatik spaeter nicht!)
 	if ($sem_all_ratio_old != $sem_all_ratio) {
@@ -488,10 +542,10 @@ if ($form==4) {
 		if ($RESOURCES_ENABLE) {
 			$checkResult = $resAssign->changeMetaAssigns($sem_create_data["metadata_termin"], $sem_create_data["sem_start_time"], $sem_create_data["sem_duration_time"],TRUE);
 		}
-	 }
-	}	 
+	}
+}	 
 
-if ($form==7)
+if ($form == 8)
 	{
 	$sem_create_data["sem_scm_content"]=$sem_scm_content;
 	if (!$sem_scm_name) {
@@ -502,23 +556,39 @@ if ($form==7)
 }
 
 //jump-logic
-if ($jump_back_x)
-	if ($form > 1)
-		if ($form == 4)
-			if ($sem_create_data["term_art"] == -1)
+if ($jump_back_x) {
+	if ($form > 1) {
+		//jump from form 4 (rooms and room-rewusts) back
+		if ($form == 4) {
+			if ($sem_create_data["term_art"] == -1) {
 				$level = 2;
-			else
+			} else {
 				$level = 3;
-		else
+			}
+		//jump from form 5 (admission and miscellanous) back
+		} elseif ($form == 5) {
+			if ($sem_create_data["term_art"] == -1) {
+				$level = 2;
+			} elseif ((is_array($sem_create_data["metadata_termin"]["turnus_data"])) || ($sem_create_data["term_first_date"]) || ($sem_create_data["sem_vor_termin"] > -1)) {
+				$level = 4; 
+			} else {
+				$level = 3;
+			}
+		//jump normal a form back
+		} else {
 			$level = $form - 1;
-			
-//not pressed any button? Send user to next page and checks...
-if ((!$jump_back_x) && (!$jump_next) && (!$add_doz) && (!$add_tut) && (!$delete_doz) && (!$delete_tut) && (!$add_turnus_field_x) 
-	&& (!$delete_turnus_field_x) && (!$send_doz_x) && (!$reset_search_x) && (!$add_term_field_x) && (!$delete_term_field_x)
-	&& (!$add_studg_x) && (!$delete_studg_x) && (!$search_doz_x) && (!$search_tut_x))
-	$jump_next_x=TRUE;
-	
+		}
+	}
+}
 
+//not pressed any button? Send user to next page and checks...
+if ((!$jump_back_x) && (!$jump_next_x) && (!$add_doz) && (!$add_tut) && (!$delete_doz) && (!$delete_tut) && (!$add_turnus_field_x) 
+	&& (!$delete_turnus_field_x) && (!$send_doz_x) && (!$reset_search_x) && (!$add_term_field_x) && (!$delete_term_field_x)
+	&& (!$add_studg_x) && (!$delete_studg_x) && (!$search_doz) && (!$search_tut) && (!$search_room_x) && (!$reset_room_search_x)
+	&& (!$send_room_x) && (!$search_properties_x) && (!$send_room_type_x) && (!$reset_room_type_x) 	&& (!$reset_resource_id_x))
+	$jump_next_x=TRUE;
+
+	
 //Check auf korrekte Eingabe und Sprung in naechste Level, hier auf Schritt 2
 if (($form == 1) && ($jump_next_x))
 	{
@@ -571,6 +641,7 @@ if (($send_tut_x) && (!$reset_search_x)) {
 
 if (($search_doz_x) || ($search_tut_x) || ($reset_search_x) || $sem_bereich_do_search_x) {
 	$level=2;
+	
 } elseif (($form == 2) && ($jump_next_x)) //wenn alles stimmt, Checks und Sprung auf Schritt 3
 	{
 	if (is_array($sem_create_data["sem_tut"]))
@@ -617,7 +688,10 @@ if (($search_doz_x) || ($search_tut_x) || ($reset_search_x) || $sem_bereich_do_s
 		}
 	if (!$errormsg) {
 		if ($sem_create_data["term_art"]== -1)
-			$level=4;
+			if (($RESOURCES_ENABLE) && ((get_config("RESOURCES_ALLOW_ROOM_REQUESTS")) || (get_config("RESOURCES_ALLOW_ROOM_PROPERTY_REQUESTS"))))
+				$level=4;
+			else
+				$level=5;
 		else
 			$level=3;
 	} else
@@ -723,11 +797,6 @@ if (($form == 3) && ($jump_next_x))
 						$errormsg=$errormsg."error§"._("Sie haben nicht alle Felder der regul&auml;ren Termine ausgef&uuml;llt. Bitte f&uuml;llen Sie alle Felder aus!")."§";
 						$just_informed4=TRUE;
 						}
-					
-			//check overlaps...
-			if ($RESOURCES_ENABLE) {
-				$checkResult = $resAssign->changeMetaAssigns($sem_create_data["metadata_termin"], $sem_create_data["sem_start_time"], $sem_create_data["sem_duration_time"],TRUE);
-			}
 		}
 	else {
 		for ($i=0; $i<$sem_create_data["term_count"]; $i++)
@@ -755,12 +824,6 @@ if (($form == 3) && ($jump_next_x))
 						$errormsg=$errormsg."error§"._("Die Endzeitpunkt der Termine muss nach dem jeweiligen Startzeitpunkt liegen!")."§";
 						$just_informed5=TRUE;				
 					}
-				//check overlaps
-				if ((!$errormsg) && ($RESOURCES_ENABLE)) {
-					$tmp_chk_date=mktime($sem_create_data["term_start_stunde"][$i], $sem_create_data["term_start_minute"][$i], 0, $sem_create_data["term_monat"][$i], $sem_create_data["term_tag"][$i], $sem_create_data["term_jahr"][$i]);
-					$tmp_chk_end_time=mktime($sem_create_data["term_end_stunde"][$i], $sem_create_data["term_end_minute"][$i], 0, $sem_create_data["term_monat"][$i], $sem_create_data["term_tag"][$i], $sem_create_data["term_jahr"][$i]);
-					$checkResult = array_merge($checkResult, $resAssign->insertDateAssign(FALSE, $sem_create_data["term_resource_id"][$i], $tmp_chk_date, $tmp_chk_end_time, TRUE));
-				}
 			}
 			elseif(!$just_informed4) 
 				if ((!$sem_create_data["term_tag"][$i]) && (!$sem_create_data["term_monat"][$i]) && (!$sem_create_data["term_jahr"][$i]) && (!$sem_create_data["term_start_stunde"][$i]) && (!$sem_create_data["term_start_minute"][$i]) && (!$sem_create_data["term_end_stunde"][$i]) && (!$sem_create_data["term_end_minute"][$i]))
@@ -775,7 +838,52 @@ if (($form == 3) && ($jump_next_x))
 	else {
 		if ((($vor_stunde) && (!$vor_end_stunde)) || ((!$vor_stunde) && ($vor_end_stunde)))
 			$errormsg=$errormsg."error§"._("Bitte f&uuml;llen Sie beide Felder f&uuml;r Start- und Endzeit der Vorbesprechung aus!")."§";	
+	}
+	
+	if (!$errormsg)
+		if ((!is_array($sem_create_data["metadata_termin"]["turnus_data"])) && (!$sem_create_data["term_first_date"]) && ($sem_create_data["sem_vor_termin"] == -1))
+			$level=5;
+		else
+			$level=4;
+	else
+		$level=3;
+	}
+	
+if (($search_room_x) ||($search_properties_x) || ($reset_room_search_x) || ($reset_room_type_x) || ($reset_resource_id_x)
+	|| ($send_room_x) || ($send_room_type_x)) {
+	$level=4;	
+}
 
+if (($form == 4) && ($jump_next_x)) {
+	//checks for room-request
+	if (is_object($sem_create_data["resRequest"])) {
+		if ((!$sem_create_data["resRequest"]->getSettedPropertiesCount()) && (!$sem_create_data["resRequest"]->getResourceId()) && (!$perm->have_perm("admin"))) {
+			$errormsg.="error§"._("Die Anfrage konnte nicht gespeichert werden, da Sie mindestens einen Raumwunsch oder eine gew&uuml;nschte Eigenschaft (z.B. Anzahl der Sitzpl&auml;tze) angeben m&uuml;ssen!");
+			$dont_anchor = TRUE;
+		}
+	}
+
+	//checks for direct ressources-assign
+	if ($sem_create_data["term_art"]==0) {
+		for ($i=0; $i<$sem_create_data["turnus_count"]; $i++) {
+			//check overlaps...
+			if ($RESOURCES_ENABLE) {
+				$checkResult = $resAssign->changeMetaAssigns($sem_create_data["metadata_termin"], $sem_create_data["sem_start_time"], $sem_create_data["sem_duration_time"],TRUE);
+			}
+		}
+	} else {
+		for ($i=0; $i<$sem_create_data["term_count"]; $i++) {
+			//check overlaps
+			if ((!$errormsg) && ($RESOURCES_ENABLE)) {
+				$tmp_chk_date=mktime($sem_create_data["term_start_stunde"][$i], $sem_create_data["term_start_minute"][$i], 0, $sem_create_data["term_monat"][$i], $sem_create_data["term_tag"][$i], $sem_create_data["term_jahr"][$i]);
+				$tmp_chk_end_time=mktime($sem_create_data["term_end_stunde"][$i], $sem_create_data["term_end_minute"][$i], 0, $sem_create_data["term_monat"][$i], $sem_create_data["term_tag"][$i], $sem_create_data["term_jahr"][$i]);
+				$checkResult = array_merge($checkResult, $resAssign->insertDateAssign(FALSE, $sem_create_data["term_resource_id"][$i], $tmp_chk_date, $tmp_chk_end_time, TRUE));
+			}
+		}
+	}
+
+	if ($sem_create_data["sem_vor_termin"] == -1);
+	else {
 		//check overlaps...
 		if ($RESOURCES_ENABLE) {
 			$checkResult = array_merge($checkResult, $resAssign->insertDateAssign(FALSE, $sem_create_data["sem_vor_resource_id"], $sem_create_data["sem_vor_termin"], $sem_create_data["sem_vor_end_termin"],TRUE));
@@ -809,10 +917,11 @@ if (($form == 3) && ($jump_next_x))
 	}
 	
 	if (!$errormsg)
-		$level=4;
+		$level=5;
 	else
-		$level=3;
-	}
+		$level=4;
+}
+
 
 //Neuen Studiengang zur Begrenzung aufnehmen
 if ($add_studg_x) {
@@ -821,17 +930,17 @@ if ($add_studg_x) {
 		$db->next_record();
 		$sem_create_data["sem_studg"][$sem_add_studg]=array("name"=>$db->f("name"), "ratio"=>$sem_add_ratio);
 	}
-	$level=4;
+	$level=5;
 }
 
 //Studiengang zur Begrenzung loeschen
 if ($sem_delete_studg) {
 	unset($sem_create_data["sem_studg"][$sem_delete_studg]);
-	$level=4;
+	$level=5;
 	}
 
 //Prozentangabe checken/berechnen wenn neuer Studiengang, einer geloescht oder Seite abgeschickt
-if ((($form == 4) && ($jump_next_x)) || ($add_studg_x) || ($sem_delete_studg)) {
+if ((($form == 5) && ($jump_next_x)) || ($add_studg_x) || ($sem_delete_studg)) {
 	if ($sem_create_data["sem_admission"]) {
 		if ((!$sem_create_data["sem_admission_ratios_changed"]) && (!$sem_add_ratio) && (!$jump_next) && (!$jump_back)) {//User hat nichts veraendert oder neuen Studiengang mit Wert geschickt, wir koennen automatisch rechnen
 			if (is_array($sem_create_data["sem_studg"]))
@@ -857,7 +966,7 @@ if ((($form == 4) && ($jump_next_x)) || ($add_studg_x) || ($sem_delete_studg)) {
 }
 
 //wenn alles stimmt, Sprung auf Schritt 5 (Anlegen)
-if (($form == 4) && ($jump_next_x))
+if (($form == 5) && ($jump_next_x))
 	{
 	if (($sem_create_data["sem_sec_lese"] ==2) ||  ($sem_create_data["sem_sec_schreib"] ==2))
 		{
@@ -882,13 +991,13 @@ if (($form == 4) && ($jump_next_x))
 		if (($sem_create_data["sem_pw"]=="") || ($sem_create_data["sem_pw"] == md5("")))
 	          	{
         	  	$errormsg=$errormsg."error§"._("Sie haben kein Passwort eingegeben! Bitte geben Sie ein Passwort ein!")."§";
-          		$level=4;
+          		$level=5;
 	          	}
         	  elseif (isset($check_pw) AND $sem_create_data["sem_pw"] != $check_pw)
      			{
 			$errormsg=$errormsg."error§"._("Das eingegebene Passwort und das Passwort zur Best&auml;tigung stimmen nicht &uuml;berein!")."§";
      			$sem_create_data["sem_pw"] = "";
-     			$level=4;
+     			$level=5;
 	          	}
 	}
 		
@@ -906,27 +1015,28 @@ if (($form == 4) && ($jump_next_x))
 					if ($sem_create_data["sem_admission"] == 1)
 						$errormsg.= sprintf ("error§"._("Das Losdatum liegt nach dem ersten Veranstaltungstermin am %s. Bitte &auml;ndern Sie das Losdatum!")."§", date ("d.m.Y", $tmp_first_date));
 					else
-				$level=4;$errormsg.= sprintf ("error§"._("Das Enddatum der Kontingentierung liegt nach dem ersten Veranstaltungstermin am %s. Bitte &auml;ndern Sie das Enddatum der Kontingentierung!")."§", date ("d.m.Y", $tmp_first_date));
+				$level=5;
+				$errormsg.= sprintf ("error§"._("Das Enddatum der Kontingentierung liegt nach dem ersten Veranstaltungstermin am %s. Bitte &auml;ndern Sie das Enddatum der Kontingentierung!")."§", date ("d.m.Y", $tmp_first_date));
 			}
 		} elseif (($sem_create_data["sem_admission_date"] > $sem_create_data["term_first_date"]) && ($sem_create_data["term_first_date"])) {
 				if ($sem_create_data["sem_admission"] == 1)
 					$errormsg.=sprintf ("error§"._("Das Losdatum liegt nach dem eingetragenen Veranstaltungsbeginn am %s. Bitte &auml;ndern Sie das Losdatum!")."§", date ("d.m.Y", $sem_create_data["term_first_date"]));	
 				else
 					$errormsg.=sprintf ("error§"._("Das Enddatum der Kontingentierung liegt nach dem eingetragenen Veranstaltungsbeginn am %s. Bitte &auml;ndern Sie das Enddatum der Kontingentierung!")."§", date ("d.m.Y", $sem_create_data["term_first_date"]));	
-				$level=4;
+				$level=5;
 		} 
 		if (($sem_create_data["sem_admission_date"] < time()) && ($sem_create_data["sem_admission_date"] != -1)) {
 				if ($sem_create_data["sem_admission"] == 1)
 					$errormsg.=sprintf ("error§"._("Das Losdatum liegt in der Vergangenheit. Bitte &auml;ndern sie das Losdatum!")."§");	
 				else
 					$errormsg.=sprintf ("error§"._("Das Enddatum der Kontingentierung liegt in der Vergangenheit. Bitte &auml;ndern Sie das Enddatum der Kontingentierung!")."§");					
-				$level=4;
+				$level=5;
 		} elseif (($sem_create_data["sem_admission_date"] < (time() + (24 * 60 *60))) && ($sem_create_data["sem_admission_date"] != -1)) {
 				if ($sem_create_data["sem_admission"] == 1)
 					$errormsg.=sprintf ("error§"._("Das Losdatum liegt zu nah am aktuellen Datum. Bitte &auml;ndern Sie das Losdatum!")."§");	
 				else
 					$errormsg.=sprintf ("error§"._("Das Enddatum der Kontingentierung liegt zu nah am aktuellen Datum. Bitte &auml;ndern sie das Enddatum der Kontingentierung!")."§");					
-				$level=4;
+				$level=5;
 		}
 	}
 
@@ -963,13 +1073,13 @@ if (($form == 4) && ($jump_next_x))
 	}
 
 	if (!$errormsg)
-		$level=5;
+		$level=6;
 	else
-		$level=4;
+		$level=5;
 	}
 	
 //OK, nun wird es ernst, wir legen das Seminar an.
-if (($form == 5) && ($jump_next_x))
+if (($form == 6) && ($jump_next_x))
 	{
 	$run = TRUE;
 
@@ -1011,7 +1121,7 @@ if (($form == 5) && ($jump_next_x))
       		$run = FALSE;
       		}
 
-		if ($run) {
+      	if ($run) {
 		//Seminar_id erzeugen und Seminar eintrag
 		$sem_create_data["sem_id"]=md5(uniqid($hash_secret));
     		
@@ -1042,7 +1152,7 @@ if (($form == 5) && ($jump_next_x))
 				Untertitel = '".			$sem_create_data["sem_untert"]."',
 				status = '".				$sem_create_data["sem_status"]."', 
 				Beschreibung = '".			$sem_create_data["sem_desc"]."', 
-				Ort = '".				$sem_create_data["sem_ort"]."', 
+				Ort = '".				$sem_create_data["sem_room"]."', 
 				Sonstiges = '".				$sem_create_data["sem_sonst"]."', 
 				Passwort= '".				$sem_create_data["sem_pw"]."', 
 				Lesezugriff = '".			$sem_create_data["sem_sec_lese"]."', 
@@ -1099,7 +1209,7 @@ if (($form == 5) && ($jump_next_x))
     					$updateAssign = new VeranstaltungResourcesAssign($sem_create_data["sem_id"]);
     					$updateResult=$updateAssign->updateAssign();
 
-	    				//are there overlaps, in the meanwhile since the check at step 3? In this case the sem is regular, we have to touch the metadata
+	    				//are there overlaps, in the meanwhile since the check at step 4? In the case the sem is regular, we have to touch the metadata
 					if ((is_array($updateResult)) && ($sem_create_data["term_art"] != -1)) {
 						$overlaps_detected=FALSE;
 						foreach ($updateResult as $key=>$val)
@@ -1126,170 +1236,176 @@ if (($form == 5) && ($jump_next_x))
 							$db->query($query);
 						}
 					}
+					
+					//store room-quests and room-property-requests
+					if (is_object($sem_create_data["resRequest"])) {
+						$sem_create_data["resRequest"]->setSeminarId($sem_create_data["sem_id"]);
+						$sem_create_data["resRequest"]->store();
+					}
     				}
 			}
-
-		if (is_array($sem_create_data["sem_doz"]))  // alle ausgewählten Dozenten durchlaufen
-			{
-			$self_included = FALSE;
-			$count_doz=0;
-			foreach ($sem_create_data["sem_doz"] as $key=>$val)
+			
+			if (is_array($sem_create_data["sem_doz"]))  // alle ausgewählten Dozenten durchlaufen
 				{
-				$group=select_group($temp_array, $sem_create_data["sem_start_time"]);
-				
-				if ($key == $user_id)
-					$self_included=TRUE;
+				$self_included = FALSE;
+				$count_doz=0;
+				foreach ($sem_create_data["sem_doz"] as $key=>$val)
+					{
+					$group=select_group($temp_array, $sem_create_data["sem_start_time"]);
+					
+					if ($key == $user_id)
+						$self_included=TRUE;
+					$query = "insert into seminar_user SET Seminar_id = '".
+						$sem_create_data["sem_id"]."', user_id = '".
+						$key."', status = 'dozent', gruppe = '$group', mkdate = '".time()."'";
+					$db3->query($query);// Dozenten eintragen
+					if ($db3->affected_rows() >=1)
+						$count_doz++;
+					}
+				}
+	
+			if (!$perm->have_perm("admin") && !$self_included) // wenn nicht admin, aktuellen Dozenten eintragen
+				{
+				$group=select_group($user_id, $sem_create_data["sem_start_time"]);
+	
 				$query = "insert into seminar_user SET Seminar_id = '".
 					$sem_create_data["sem_id"]."', user_id = '".
-					$key."', status = 'dozent', gruppe = '$group', mkdate = '".time()."'";
-				$db3->query($query);// Dozenten eintragen
+					$user_id."', status = 'dozent', gruppe = '$group', mkdate = '".time()."'";
+				$db3->query($query);
 				if ($db3->affected_rows() >=1)
 					$count_doz++;
 				}
-			}
-
-		if (!$perm->have_perm("admin") && !$self_included) // wenn nicht admin, aktuellen Dozenten eintragen
-			{
-			$group=select_group($user_id, $sem_create_data["sem_start_time"]);
-
-			$query = "insert into seminar_user SET Seminar_id = '".
-				$sem_create_data["sem_id"]."', user_id = '".
-				$user_id."', status = 'dozent', gruppe = '$group', mkdate = '".time()."'";
-			$db3->query($query);
-			if ($db3->affected_rows() >=1)
-				$count_doz++;
-			}
-
-		if (is_array($sem_create_data["sem_tut"]))  // alle ausgewählten Tutoren durchlaufen
-			{
-			$count_tut=0;
-			foreach ($sem_create_data["sem_tut"] as $key=>$val)
+	
+			if (is_array($sem_create_data["sem_tut"]))  // alle ausgewählten Tutoren durchlaufen
 				{
-				$group=select_group($temp_array, $sem_create_data["sem_start_time"]);
-				
-				$query = "SELECT user_id FROM seminar_user WHERE Seminar_id = '".
-					$sem_create_data["sem_id"]."' AND user_id ='$key'";
-				$db4->query($query);
-				if ($db4->next_record())	// User schon da, kann beim Anlegen nur als Dozent sein, also ignorieren
-					;
-				else // User noch nicht da
+				$count_tut=0;
+				foreach ($sem_create_data["sem_tut"] as $key=>$val)
 					{
-					$query = "insert into seminar_user SET Seminar_id = '".
-						$sem_create_data["sem_id"]."', user_id = '".
-						$key."', status = 'tutor', gruppe = '$group', mkdate = '".time()."'";
-					$db3->query($query);			     // Tutor eintragen
-						if ($db3->affected_rows() >= 1)
-							$count_tut++;
-					}
-				}
-			}
-
-		//Eintrag der Studienbereiche
-		if (is_array($sem_create_data["sem_bereich"])) {
-			$st_search->seminar_id = $sem_create_data["sem_id"];
-			$st_search->selected = array();
-			$st_search->insertSelectedRanges($sem_create_data["sem_bereich"]);
-			$count_bereich = $st_search->num_inserted;
-			}
-			
-		//Eintrag der zugelassen Studiengänge
-		if ($sem_create_data["sem_admission"]) {
-			if (is_array($sem_create_data["sem_studg"]))
-				foreach($sem_create_data["sem_studg"] as $key=>$val)
-					if ($val["ratio"]) {
-						$query = "INSERT INTO admission_seminar_studiengang VALUES('".$sem_create_data["sem_id"]."', '$key', '".$val["ratio"]."' )";
-						$db3->query($query);// Studiengang eintragen
-					}
-			if ($sem_create_data["sem_all_ratio"]) {
-				$query = "INSERT INTO admission_seminar_studiengang VALUES('".$sem_create_data["sem_id"]."', 'all', '".$sem_create_data["sem_all_ratio"]."' )";
-				$db3->query($query);// Studiengang eintragen
-			}
-		}
-
-		//Eintrag der beteiligten Institute
-		if (is_array($sem_create_data["sem_bet_inst"])>0)
-			{
-			$count_bet_inst=0;
-			foreach ($sem_create_data["sem_bet_inst"] as $tmp_array) //Alle beteiligten Institute durchlaufen
-				{
-				$query = "INSERT INTO seminar_inst VALUES('".$sem_create_data["sem_id"]."', '$tmp_array')";
-				$db3->query($query);// Institut eintragen
-				if ($db3->affected_rows() >= 1)
-					$count_bet_inst++;
-				}
-			}
-
-		//Heimat-Institut ebenfalls eintragen, wenn noch nicht da
-		$query = "INSERT IGNORE INTO seminar_inst values('".$sem_create_data["sem_id"]."', '".$sem_create_data["sem_inst_id"]."')";
-		$db3->query($query);
-
-		//Standard Thema im Forum anlegen, damit Studis auch ohne Zutun des Dozenten diskutieren koennen
-		if ($sem_create_data["modules_list"]["forum"])
-			CreateTopic(_("Allgemeine Diskussionen"), get_fullname($user_id), _("Hier ist Raum für allgemeine Diskussionen"), 0, 0, $sem_create_data["sem_id"]);
-		
-		//Standard Ordner im Foldersystem anlegen, damit Studis auch ohne Zutun des Dozenten Uploaden k&ouml;nnen
-		if ($sem_create_data["modules_list"]["documents"])
-			$db3->query("INSERT INTO folder SET folder_id='".md5(uniqid("sommervogel"))."', range_id='".$sem_create_data["sem_id"]."', user_id='".$user_id."', name='"._("Allgemeiner Dateiordner")."', description='"._("Ablage für allgemeine Ordner und Dokumente der Veranstaltung")."', mkdate='".time()."', chdate='".time()."'");
-		
-		//Vorbesprechung, falls vorhanden, in Termintabelle eintragen
-		if ($sem_create_data["sem_vor_termin"] <>-1) {
-			$termin_id=md5(uniqid($hash_secret));
-			$mkdate=time();
-			
-			//if we have a resource_id, we flush the room name
-			if ($sem_create_data["sem_vor_resource_id"])
-				$sem_create_data["sem_vor_raum"]='';
-	
-			$db->query("INSERT INTO termine SET termin_id = '$termin_id', range_id='".$sem_create_data["sem_id"]."', autor_id='$user_id', content ='Vorbesprechung', date='".$sem_create_data["sem_vor_termin"]."', mkdate='$mkdate', chdate='$mkdate', date_typ='2', topic_id=0, end_time='".$sem_create_data["sem_vor_end_termin"]."', raum='".$sem_create_data["sem_vor_raum"]."'");
-	
-			//update/insert the assigned roomes
-			if ($RESOURCES_ENABLE && $db->affected_rows()) {
-				$updateAssign = new VeranstaltungResourcesAssign($sem_create_data["sem_id"]);
-				$updateResult = array_merge($updateResult, $updateAssign->insertDateAssign($termin_id, $sem_create_data["sem_vor_resource_id"]));
-			}
-		}
-		
-		//Wenn der Veranstaltungs-Termintyp Blockseminar ist, dann tragen wir diese Termine auch schon mal ein
-		if ($sem_create_data["term_art"] ==1) {
-			for ($i=0; $i<$sem_create_data["term_count"]; $i++)
-				if (($sem_create_data["term_tag"][$i]) && ($sem_create_data["term_monat"][$i]) && ($sem_create_data["term_jahr"][$i]) && ($sem_create_data["term_start_stunde"][$i]) && ($sem_create_data["term_end_stunde"][$i])) {
-					$termin_id=md5(uniqid($hash_secret));
-					$mkdate=time();
-					$date=mktime($sem_create_data["term_start_stunde"][$i], $sem_create_data["term_start_minute"][$i], 0, $sem_create_data["term_monat"][$i], $sem_create_data["term_tag"][$i], $sem_create_data["term_jahr"][$i]);
-					$end_time=mktime($sem_create_data["term_end_stunde"][$i], $sem_create_data["term_end_minute"][$i], 0, $sem_create_data["term_monat"][$i], $sem_create_data["term_tag"][$i], $sem_create_data["term_jahr"][$i]);
+					$group=select_group($temp_array, $sem_create_data["sem_start_time"]);
 					
-					//if we have a resource_id, we flush the room name
-					if ($sem_create_data["term_resource_id"][$i])
-						$sem_create_data["term_room"][$i]='';
-
-					$db->query("INSERT INTO termine SET termin_id = '$termin_id', range_id='".$sem_create_data["sem_id"]."', autor_id='$user_id', content ='".($i+1).". Seminartermin (ohne Titel)', date='$date', mkdate='$mkdate', chdate='$mkdate', date_typ='1', topic_id=0, end_time='$end_time', raum='".$sem_create_data["term_room"][$i]."' ");
-		
-					//update/insert the assigned roomes
-					if ($RESOURCES_ENABLE && $db->affected_rows()) {
-						$updateAssign = new VeranstaltungResourcesAssign($sem_create_data["sem_id"]);
-						$updateResult = array_merge($updateResult, $updateAssign->insertDateAssign($termin_id, $sem_create_data["term_resource_id"][$i]));
+					$query = "SELECT user_id FROM seminar_user WHERE Seminar_id = '".
+						$sem_create_data["sem_id"]."' AND user_id ='$key'";
+					$db4->query($query);
+					if ($db4->next_record())	// User schon da, kann beim Anlegen nur als Dozent sein, also ignorieren
+						;
+					else // User noch nicht da
+						{
+						$query = "insert into seminar_user SET Seminar_id = '".
+							$sem_create_data["sem_id"]."', user_id = '".
+							$key."', status = 'tutor', gruppe = '$group', mkdate = '".time()."'";
+						$db3->query($query);			     // Tutor eintragen
+							if ($db3->affected_rows() >= 1)
+								$count_tut++;
+						}
 					}
 				}
-		}
+	
+			//Eintrag der Studienbereiche
+			if (is_array($sem_create_data["sem_bereich"])) {
+				$st_search->seminar_id = $sem_create_data["sem_id"];
+				$st_search->selected = array();
+				$st_search->insertSelectedRanges($sem_create_data["sem_bereich"]);
+				$count_bereich = $st_search->num_inserted;
+				}
+				
+			//Eintrag der zugelassen Studiengänge
+			if ($sem_create_data["sem_admission"]) {
+				if (is_array($sem_create_data["sem_studg"]))
+					foreach($sem_create_data["sem_studg"] as $key=>$val)
+						if ($val["ratio"]) {
+							$query = "INSERT INTO admission_seminar_studiengang VALUES('".$sem_create_data["sem_id"]."', '$key', '".$val["ratio"]."' )";
+							$db3->query($query);// Studiengang eintragen
+						}
+				if ($sem_create_data["sem_all_ratio"]) {
+					$query = "INSERT INTO admission_seminar_studiengang VALUES('".$sem_create_data["sem_id"]."', 'all', '".$sem_create_data["sem_all_ratio"]."' )";
+					$db3->query($query);// Studiengang eintragen
+				}
+			}
+
+			//Eintrag der beteiligten Institute
+			if (is_array($sem_create_data["sem_bet_inst"])>0)
+				{
+				$count_bet_inst=0;
+				foreach ($sem_create_data["sem_bet_inst"] as $tmp_array) //Alle beteiligten Institute durchlaufen
+					{
+					$query = "INSERT INTO seminar_inst VALUES('".$sem_create_data["sem_id"]."', '$tmp_array')";
+					$db3->query($query);// Institut eintragen
+					if ($db3->affected_rows() >= 1)
+						$count_bet_inst++;
+					}
+				}
+	
+			//Heimat-Institut ebenfalls eintragen, wenn noch nicht da
+			$query = "INSERT IGNORE INTO seminar_inst values('".$sem_create_data["sem_id"]."', '".$sem_create_data["sem_inst_id"]."')";
+			$db3->query($query);
+	
+			//Standard Thema im Forum anlegen, damit Studis auch ohne Zutun des Dozenten diskutieren koennen
+			if ($sem_create_data["modules_list"]["forum"])
+				CreateTopic(_("Allgemeine Diskussionen"), get_fullname($user_id), _("Hier ist Raum für allgemeine Diskussionen"), 0, 0, $sem_create_data["sem_id"]);
+			
+			//Standard Ordner im Foldersystem anlegen, damit Studis auch ohne Zutun des Dozenten Uploaden k&ouml;nnen
+			if ($sem_create_data["modules_list"]["documents"])
+				$db3->query("INSERT INTO folder SET folder_id='".md5(uniqid("sommervogel"))."', range_id='".$sem_create_data["sem_id"]."', user_id='".$user_id."', name='"._("Allgemeiner Dateiordner")."', description='"._("Ablage für allgemeine Ordner und Dokumente der Veranstaltung")."', mkdate='".time()."', chdate='".time()."'");
+			
+			//Vorbesprechung, falls vorhanden, in Termintabelle eintragen
+			if ($sem_create_data["sem_vor_termin"] <>-1) {
+				$termin_id=md5(uniqid($hash_secret));
+				$mkdate=time();
+				
+				//if we have a resource_id, we flush the room name
+				if ($sem_create_data["sem_vor_resource_id"])
+					$sem_create_data["sem_vor_raum"]='';
 		
-		//Store the additional datafields
-    if (is_array($sem_create_data["sem_datafields"]))
-       foreach ($sem_create_data["sem_datafields"] as $key=>$val) {
-         $DataFields->storeContent($val, $key, $sem_create_data["sem_id"]);
-       }
-		}
-		//end of the seminar-creation process
+				$db->query("INSERT INTO termine SET termin_id = '$termin_id', range_id='".$sem_create_data["sem_id"]."', autor_id='$user_id', content ='Vorbesprechung', date='".$sem_create_data["sem_vor_termin"]."', mkdate='$mkdate', chdate='$mkdate', date_typ='2', topic_id=0, end_time='".$sem_create_data["sem_vor_end_termin"]."', raum='".$sem_create_data["sem_vor_raum"]."'");
+		
+				//update/insert the assigned roomes
+				if ($RESOURCES_ENABLE && $db->affected_rows()) {
+					$updateAssign = new VeranstaltungResourcesAssign($sem_create_data["sem_id"]);
+					$updateResult = array_merge($updateResult, $updateAssign->insertDateAssign($termin_id, $sem_create_data["sem_vor_resource_id"]));
+				}
+			}
+			
+			//Wenn der Veranstaltungs-Termintyp Blockseminar ist, dann tragen wir diese Termine auch schon mal ein
+			if ($sem_create_data["term_art"] ==1) {
+				for ($i=0; $i<$sem_create_data["term_count"]; $i++)
+					if (($sem_create_data["term_tag"][$i]) && ($sem_create_data["term_monat"][$i]) && ($sem_create_data["term_jahr"][$i]) && ($sem_create_data["term_start_stunde"][$i]) && ($sem_create_data["term_end_stunde"][$i])) {
+						$termin_id=md5(uniqid($hash_secret));
+						$mkdate=time();
+						$date=mktime($sem_create_data["term_start_stunde"][$i], $sem_create_data["term_start_minute"][$i], 0, $sem_create_data["term_monat"][$i], $sem_create_data["term_tag"][$i], $sem_create_data["term_jahr"][$i]);
+						$end_time=mktime($sem_create_data["term_end_stunde"][$i], $sem_create_data["term_end_minute"][$i], 0, $sem_create_data["term_monat"][$i], $sem_create_data["term_tag"][$i], $sem_create_data["term_jahr"][$i]);
+						
+						//if we have a resource_id, we flush the room name
+						if ($sem_create_data["term_resource_id"][$i])
+							$sem_create_data["term_room"][$i]='';
+	
+						$db->query("INSERT INTO termine SET termin_id = '$termin_id', range_id='".$sem_create_data["sem_id"]."', autor_id='$user_id', content ='".($i+1).". Seminartermin (ohne Titel)', date='$date', mkdate='$mkdate', chdate='$mkdate', date_typ='1', topic_id=0, end_time='$end_time', raum='".$sem_create_data["term_room"][$i]."' ");
+			
+						//update/insert the assigned roomes
+						if ($RESOURCES_ENABLE && $db->affected_rows()) {
+							$updateAssign = new VeranstaltungResourcesAssign($sem_create_data["sem_id"]);
+							$updateResult = array_merge($updateResult, $updateAssign->insertDateAssign($termin_id, $sem_create_data["term_resource_id"][$i]));
+						}
+					}
+			}
+
+			//Store the additional datafields
+			if (is_array($sem_create_data["sem_datafields"])) {
+				foreach ($sem_create_data["sem_datafields"] as $key=>$val) {
+					$DataFields->storeContent($val, $key, $sem_create_data["sem_id"]);
+				}
+			}
+			//end of the seminar-creation process
 		} else {
 			$errormsg .= "error§"._("<b>Fehler:</b> Die Veranstaltung wurde schon eingetragen!")."§";
     			$successful_entry=2;			
 		}
-
-	$level=6;
 	}
+	$level=7;
+}
 
 
 //Nur der Form halber... es geht weiter zur SCM-Seite
-if (($form == 6) && ($jump_next_x)) {
+if (($form == 7) && ($jump_next_x)) {
 	if (!$sem_create_data["modules_list"]["scm"] && !$sem_create_data["modules_list"]["schedule"]) {
 		header ("Location: admin_seminare1.php");
 		die;
@@ -1297,12 +1413,11 @@ if (($form == 6) && ($jump_next_x)) {
 		header ("Location: admin_dates.php?assi=yes&ebene=sem&range_id=".$sem_create_data["sem_id"]);
 		die;
 	}
-	$level=7;
+	$level=8;
 }
 
 //Eintragen der Simple-Content Daten
-if (($form == 7) && ($jump_next_x))
-	{
+if (($form == 8) && ($jump_next_x)) {
 	if ($sem_create_data["sem_scm_content"]) { 
 		//if content is created, we enable the module again (it was turned off above) 
 		$Modules->writeStatus("scm", $sem_create_data["sem_id"], TRUE);	
@@ -1323,14 +1438,20 @@ if (($form == 7) && ($jump_next_x))
 		else
 			{
 			$errormsg .= "error§"._("Fehler! Der Eintrag konnte nicht erfolgreich vorgenommen werden!")."";
-			$level=7;
+			$level=8;
 			}
-		}
 	} else {
 		//if no content is created yet, we disable the module and jump to the schedule (if activated)
 		$Modules->writeStatus("scm", $sem_create_data["sem_id"], FALSE);
+		if ($sem_create_data["modules_list"]["schedule"])
+			header ("Location: admin_dates.php?assi=yes&ebene=sem&range_id=".$sem_create_data["sem_id"]);
+		else
+			header ("Location: admin_seminare1.php");
+		page_close();
+		die;
 	}
-	
+}
+
 //Gibt den aktuellen View an, brauchen wir in der Hilfe
 $sem_create_data["level"]=$level;
 
@@ -1348,10 +1469,10 @@ if (!$sem_create_data["sem_class"])
 	<script type="text/javascript" language="javascript">
 	<!--
    		function doCrypt() {
-			document.form_4.hashpass.value = MD5(document.form_4.password.value);
-			document.form_4.hashpass2.value = MD5(document.form_4.password2.value);
-			document.form_4.password.value = "";
-			document.form_4.password2.value = "";
+			document.form_5.hashpass.value = MD5(document.form_5.password.value);
+			document.form_5.hashpass2.value = MD5(document.form_5.password2.value);
+			document.form_5.password.value = "";
+			document.form_5.password2.value = "";
 			return true;
 			}
 	
@@ -1372,7 +1493,7 @@ if (!$sem_create_data["sem_class"]) {
 		<tr>
 			<td class="blank" valign="top">
 				<blockquote><br />
-				<?=_("Willkommen beim Veranstaltungs-Assistenten. Der Veranstaltungs-Assistent wird Sie Schritt f&uuml;r Schritt durch die notwendigen Schritte zum Anlegen einer neuen Veranstaltung in Stud.IP leiten"); ?><br><br>
+				<?=_("Willkommen beim Veranstaltungs-Assistenten. Der Veranstaltungs-Assistent wird Sie Schritt f&uuml;r Schritt durch die notwendigen Schritte zum Anlegen einer neuen Veranstaltung in Stud.IP leiten."); ?><br><br>
 				<?=_("Bitte geben Sie zun&auml;chst an, welche Art von Veranstaltung Sie neu anlegen m&ouml;chten:"); ?>
 				</blockquote>
 			</td>
@@ -1386,20 +1507,12 @@ if (!$sem_create_data["sem_class"]) {
 					<table cellpadding=0 cellspacing=2 width="90%" border="0">
 					<?
 					foreach ($SEM_CLASS as $key=>$val) {
-						echo "<tr><td width=\"3%\" class=\"blank\"><a href=\"admin_seminare_assi.php?start_level=TRUE&class=$key\"><img src=\"pictures/forumrot.gif\" border=0 /></a></td>";
-						echo "<td width=\"97%\" class=\"blank\"><a href=\"admin_seminare_assi.php?start_level=TRUE&class=$key\">".$val["name"]."</a></td></tr>";
-						echo "<tr><td width=\"3%\" class=\"blank\">&nbsp; </td>";
-						echo "<td width=\"97%\" class=\"blank\"><font size=-1>".$val["create_description"]."</font></td></tr>";
+						echo "<tr><td width=\"3%\" class=\"blank\"><a href=\"admin_seminare_assi.php?start_level=TRUE&class=$key\"><img src=\"pictures/forumrot.gif\" border=0 /></a><td>";
+						echo "<td width=\"97%\" class=\"blank\"><a href=\"admin_seminare_assi.php?start_level=TRUE&class=$key\">".$val["name"]."</a><td></tr>";
+						echo "<tr><td width=\"3%\" class=\"blank\">&nbsp; <td>";
+						echo "<td width=\"97%\" class=\"blank\"><font size=-1>".$val["create_description"]."</font><td></tr>";
 					}
 					?>
-					<tr>
-						<td width="3%" class="blank"><a href="admin_seminare_assi.php?cmd=copy"><img src="pictures/forumrot.gif" border=0 /></a></td>
-						<td width="97%" class="blank"><a href="copy_assi.php?list=TRUE&new_session=TRUE"><?=_("Vorhandene Veranstaltung kopieren")?></a></td>
-					</tr>
-					<tr>
-						<td width="3%" class="blank">&nbsp; </td>
-						<td width="97%" class="blank"><font size=-1><?=_("Es können die Daten einer vorhandenen Veranstaltung übernommen werden")?></font></td></tr>
-					</tr>
 					</table>
 				</blockquote>
 			</td>
@@ -1409,7 +1522,7 @@ if (!$sem_create_data["sem_class"]) {
 }
 
 //Level 1: Hier werden die Grunddaten abgefragt.
-elseif ((!$level) || ($level==1))
+elseif ((!$level) || ($level == 1))
 	{
 	?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
@@ -1736,7 +1849,7 @@ elseif ((!$level) || ($level==1))
 	}
 
 //Level 2: Hier werden weitere Einzelheiten (Personendaten und Zeiten) abgefragt
-if ($level==2)
+if ($level == 2)
 	{
 	?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
@@ -1969,8 +2082,8 @@ if ($level==2)
 						<td class="<? echo $cssSw->getClass() ?>" width="90%" colspan=3>
 							<?
 							echo "\n<div align=\"left\" >&nbsp;";
-							echo "<br>&nbsp;&nbsp;<span style=\"font-size:10pt;\">" . _("Geben Sie zur Suche den Namen des Studienbereiches ein.");
-							echo $st_search->getSearchField(array('size' => 30 ,'style' => 'vertical-align:middle;'));
+							echo "&nbsp;<span style=\"font-size:10pt;\">" . _("Geben Sie zur Suche den Namen des Studienbereiches ein.")."<br>";
+							echo "&nbsp;".$st_search->getSearchField(array('size' => 30 ,'style' => 'vertical-align:middle;'));
 							echo "&nbsp;";
 							echo $st_search->getSearchButton(array('style' => 'vertical-align:middle;'));
 							if ($st_search->num_search_result !== false){
@@ -2057,8 +2170,8 @@ if ($level==2)
 	<?
 	}
 
-//Level 3: Metadaten &uuml;ber Terminstruktur
-if ($level==3) {
+//Level 3: Metadaten ueber Terminstruktur
+if ($level == 3) {
 	if ($RESOURCES_ENABLE)
 		$resList = new ResourcesUserRoomsList($user_id);
 	?>
@@ -2192,22 +2305,6 @@ if ($level==3) {
 											&nbsp; <a href="<? echo $PHP_SELF?>?delete_turnus_field=<?echo $i+1?>"><img border=0 src="./pictures/trash.gif" <? echo tooltip(_("Dieses Feld aus der Auswahl löschen"), TRUE) ?> ></a>
 											<?
 										}
-										print "<br />&nbsp; "._("Raum:")."";
-										if ($RESOURCES_ENABLE) {
-											$resList->reset();
-											if ($resList->numberOfEvents()) {
-												print " &nbsp;<select name=\"term_turnus_resource_id[]\">";
-												printf ("<option %s value=\"FALSE\">["._("wie Eingabe")." -->]</option>", (!$sem_create_data["term_turnus_resource_id"][$i]) ? "selected" : "");												
-												while ($resObject = $resList->nextEvent()) {
-													printf ("<option %s value=\"%s\">%s</option>", ($sem_create_data["term_turnus_resource_id"][$i]) == $resObject->getId() ? "selected" :"", $resObject->getId(), htmlReady($resObject->getName()));
-												}
-												print "</select>";
-											}
-										}
-										?>
-										&nbsp; <input type="text" name="term_turnus_room[]" size="15" maxlength="255" value="<?= htmlReady($sem_create_data["term_turnus_room"][$i]) ?>"/></font>&nbsp; 
-										<?
-											print "<br />";
 									}
 										?>
 										<br />&nbsp; <input type="IMAGE" name="add_turnus_field" <?=makeButton("feldhinzufuegen", "src"); ?> border=0 value="Feld hinzuf&uuml;gen">&nbsp; 
@@ -2251,25 +2348,9 @@ if ($level==3) {
 											&nbsp; <a href="<? echo $PHP_SELF?>?delete_term_field=<?echo $i+1?>"><img border=0 src="./pictures/trash.gif" <? echo tooltip(_("Dieses Feld aus der Auswahl löschen"), TRUE) ?> ></a>
 											<?
 											}
-										print "<br /><font size=-1>&nbsp; "._("Raum:")." ";
-										if ($RESOURCES_ENABLE) {
-											$resList->reset();
-											if ($resList->numberOfEvents()) {
-												print "&nbsp;<select name=\"term_resource_id[]\">";
-												printf ("<option %s value=\"FALSE\">["._("wie Eingabe")." -->]</option>", (!$sem_create_data["term_resource_id"][$i]) ? "selected" : "");
-												while ($resObject = $resList->nextEvent()) {
-													printf ("<option %s value=\"%s\">%s</option>", ($sem_create_data["term_resource_id"][$i]) == $resObject->getId() ? "selected" :"", $resObject->getId(), htmlReady($resObject->getName()));
-												}
-												print "</select></font>";
-											}
 										}
 										?>
-										&nbsp; <font size=-1><input type="text" name="term_room[]" size="15" maxlength="255" value="<?= htmlReady($sem_create_data["term_room"][$i]) ?>"/></font>&nbsp; 
-										<?
-										print "<br />";
-										}
-										?>
-										&nbsp; <input type="IMAGE" name="add_term_field" <?=makeButton("feldhinzufuegen", "src"); ?> border=0 value="Feld hinzuf&uuml;gen">&nbsp; 
+										<br />&nbsp; <input type="IMAGE" name="add_term_field" <?=makeButton("feldhinzufuegen", "src"); ?> border=0 value="Feld hinzuf&uuml;gen">&nbsp; 
 										<img  src="./pictures/info.gif" 
 											<? echo tooltip(_("In diesem Feldern können Sie alle Veranstaltungstermine eingeben. Wenn die Termine noch nicht feststehen, lassen Sie die Felder einfach frei."), TRUE, TRUE) ?>
 										>
@@ -2292,22 +2373,7 @@ if ($level==3) {
 							<?=_("um")?> <input type="text" name="vor_stunde" size=2 maxlength=2 value="<? if ($sem_create_data["sem_vor_termin"]<>-1) echo date("H",$sem_create_data["sem_vor_termin"]); ?>"> :
 							<input type="text" name="vor_minute" size=2 maxlength=2 value="<? if ($sem_create_data["sem_vor_termin"]<>-1) echo date("i",$sem_create_data["sem_vor_termin"]); ?>">&nbsp;<?=_("Uhr bis");?>
 							<input type="text" name="vor_end_stunde" size=2 maxlength=2 value="<? if ($sem_create_data["sem_vor_end_termin"]<>-1) echo date("H",$sem_create_data["sem_vor_end_termin"]); ?>"> :
-							<input type="text" name="vor_end_minute" size=2 maxlength=2 value="<? if ($sem_create_data["sem_vor_end_termin"]<>-1) echo date("i",$sem_create_data["sem_vor_end_termin"]); ?>">&nbsp;<?=_("Uhr")?><br />
-							<?
-							print "<font size=-1>&nbsp; "._("Raum:")." ";
-							if ($RESOURCES_ENABLE) {
-								$resList->reset();
-								if ($resList->numberOfEvents()) {
-									print "&nbsp;<select name=\"vor_resource_id\">";
-									printf ("<option %s value=\"FALSE\">["._("wie Eingabe")." -->]</option>", (!$sem_create_data["sem_vor_resource_id"]) ? "selected" : "");
-									while ($resObject = $resList->nextEvent()) {
-										printf ("<option %s value=\"%s\">%s</option>", ($sem_create_data["sem_vor_resource_id"]) == $resObject->getId() ? "selected" :"", $resObject->getId(), htmlReady($resObject->getName()));
-									}
-									print "</select></font>";
-								}
-							}
-							?>
-							&nbsp; <input type="text" name="vor_raum" size=15 maxlength=255 value="<? if ($sem_create_data["sem_vor_raum"]) echo  htmlReady(stripslashes($sem_create_data["sem_vor_raum"])); ?>"></font>&nbsp; 
+							<input type="text" name="vor_end_minute" size=2 maxlength=2 value="<? if ($sem_create_data["sem_vor_end_termin"]<>-1) echo date("i",$sem_create_data["sem_vor_end_termin"]); ?>">&nbsp;<?=_("Uhr")?>
 							<img  src="./pictures/info.gif" 
 								<? echo tooltip(_("Dieses Feld müssen Sie nur ausfüllen, wenn es eine verbindliche Vorbesprechung zu der Veranstaltung gibt."), TRUE, TRUE) ?>
 							>
@@ -2332,15 +2398,431 @@ if ($level==3) {
 	<?
 	}
 
+//Level 4: Raumdaten
+if ($level == 4) {
+	if ($RESOURCES_ENABLE)
+		$resList = new ResourcesUserRoomsList($user_id);
+	?>
+	<table width="100%" border=0 cellpadding=0 cellspacing=0>
+		<tr>
+			<td class="topic" colspan=2><b>&nbsp;<?=_("Veranstaltungs-Assistent - Schritt 4: R&auml;ume"); ?></b>
+			</td>
+		</tr>
+		<tr>
+			<td class="blank" colspan=2>&nbsp;
+				<?
+				if ($errormsg) parse_msg($errormsg);
+				?>
+			</td>
+		</tr>
+		<tr>
+			<td class="blank" valign="top">
+				<blockquote>
+				<b><?=_("Schritt 4: Raumangaben"); ?></b><br><br>
+				<? if (((get_config("RESOURCES_ALLOW_ROOM_REQUESTS")) || (get_config("RESOURCES_ALLOW_ROOM_PROPERTY_REQUESTS"))) && ($RESOURCES_ENABLE)) {
+					if ($resList->roomsExist())
+						print _("Bitte geben Sie hier ein, welche Angaben zu R&auml;umen gemacht werden, buchen Sie konkrete R&auml;ume oder stellen sie Raumw&uuml;nsche an die zentrale Raumverweltung.")."<br><br>";
+					else
+						print _("Bitte geben Sie hier ein, welche Angaben zu R&auml;umen gemacht werden oder stellen Sie Raumw&uuml;nsche an die zentrale Raumverweltung.")."<br><br>";					
+				} elseif (($resList->roomsExist()) && ($RESOURCES_ENABLE))
+					print _("Bitte geben Sie hier ein, welche Angaben zu R&auml;umen gemacht werden oder buchen Sie konkrete R&auml;ume.")."<br><br>";
+				else
+					print _("Bitte geben Sie hier die, welche Angaben zu R&auml;umen gemacht werden.")."<br><br>";
+					
+				?>
+			</td>
+			<td class="blank" align="right" valign="top">
+				<img src="./locale/<?=$_language_path?>/LC_PICTURES/hands04.jpg" border="0">
+			</td>
+		</tr>
+		<tr>
+			<td class="blank" colspan=2>
+			<form method="POST" name="form_4" action="<? echo $PHP_SELF ?>#anker">
+			<input type="HIDDEN" name="form" value=4>
+				<table width ="99%" cellspacing=0 cellpadding=2 border=0 align="center">
+					<tr <? $cssSw->switchClass() ?>>
+						<td class="<? echo $cssSw->getClass() ?>" width="4%">
+							&nbsp;
+						</td>
+						<td class="<? echo $cssSw->getClass() ?>" width="96%" align="center" colspan=3>
+							&nbsp; <input type="IMAGE" <?=makeButton("zurueck", "src"); ?> border=0 value="<?=_("<< zur&uuml;ck");?>" name="jump_back">&nbsp;<input type="IMAGE" <?=makeButton("weiter", "src"); ?> border=0 value="<?=_("weiter >>");?>" name="jump_next">
+						</td>
+					</tr>
+					<?
+					if (((get_config("RESOURCES_ALLOW_ROOM_REQUESTS")) || (get_config("RESOURCES_ALLOW_ROOM_PROPERTY_REQUESTS"))) && ($RESOURCES_ENABLE) &&
+						((is_array($sem_create_data["metadata_termin"]["turnus_data"])) || ($sem_create_data["term_first_date"]))) {
+					?>
+					
+					<tr <? $cssSw->switchClass() ?>>
+						<td class="<? echo $cssSw->getClass() ?>" width="4%" align="right">
+							&nbsp;
+						</td>
+						<td class="<? echo $cssSw->getClass() ?>" width="96%">
+							<font size="-1"><b><?=_("Raumw&uuml;nsche"); ?></b><br /><br />
+							<?
+							print _("Sie haben die M&ouml;glichkeit, sich Raumeigenschaften sowie einen konkreten Raum zu w&uuml;nschen. Diese Raumw&uuml;nsche werden von der zentralen Raumverwaltung bearbeitet.");
+							print "<br />"._("<b>Achtung:</b> Um sp&auml;ter einen passenden Raum f&uuml;r Ihre Veranstaltung zu bekommen, geben Sie bitte <u>immer</u> die gew&uuml;nschten Eigenschaften mit an!");
+							?>
+						<td>
+					</tr>
+					<?
+					if ($request_resource_id = $sem_create_data["resRequest"]->getResourceId()) {
+						$resObject = new ResourceObject($request_resource_id);
+					?>
+					<tr>
+						<td class="<? echo $cssSw->getClass() ?>" width="4%" align="right">
+							&nbsp;
+						</td>
+						<td class="<? echo $cssSw->getClass() ?>" width="96%">
+							<br /><font size="-1"><b><?=("gew&uuml;nschter Raum:")?></b><br /><br />
+							<?
+							print "<b>".htmlReady($resObject->getName())."</b>,&nbsp;"._("verantwortlich:")."&nbsp;<a href=\"".$resObject->getOwnerLink()."\">".htmlReady($resObject->getOwnerName())."</a>";
+							print "&nbsp;&nbsp;<input type=\"IMAGE\" src=\"./pictures/rewind.gif\" ".tooltip(_("den ausgewählten Raum löschen"))." border=\"0\" name=\"reset_resource_id\" />";
+							?>
+							</font>
+						</td>
+					</tr>
+					<?
+					}
+					?>
+					<tr <? $cssSw->switchClass() ?>>
+						<td class="<? echo $cssSw->getClass() ?>" width="4%" align="right">
+							&nbsp;
+						</td>
+						<td class="<? echo $cssSw->getClass() ?>" width="96%">
+							<table border="0" width="100%" cellspaceing="2" cellpadding="0">
+								<tr>
+									<td width="49%" valign="top">
+										<font size="-1">
+										<?
+										//$sem_create_data["room_request_type"] = FALSE;
+										print "<b>"._("Raumeigenschaften angeben:")."</b><br /><br />";
+										if (!$dont_anchor)
+											print "<a name=\"anker\"></a>";
+										$query = sprintf("SELECT * FROM resources_categories  WHERE is_room = '1' ORDER BY name", $category_id);
+										$db->query($query);
+										
+										if (($db->nf() == 1) || ($sem_create_data["resRequest"]->getCategoryId())) {
+											$room_categories = $db->nf();
+											if ($db->nf() == 1) {
+												$db->next_record();
+												$category_id = $db->f("category_id");
+												$sem_create_data["resRequest"]->setCategoryId($category_id);
+											} else
+												$category_id = $sem_create_data["resRequest"]->getCategoryId();
+											
+											$query2 = sprintf("SELECT  b.*, c.name AS cat_name FROM resources_categories_properties a LEFT JOIN resources_properties b USING (property_id) LEFT JOIN resources_categories c ON (a.category_id = c.category_id) WHERE c.is_room = '1' AND a.requestable = '1' AND a.category_id = '%s' ORDER BY b.name", $category_id);
+											$db2->query($query2);
+							
+											$i=0;
+											while ($db2->next_record()) {
+												if (!$i) {
+													if ($room_categories> 1) {
+														print ("Gew&auml;hlter Raumtyp:");
+														print "&nbsp;<select name=\"select_room_type\">";
+														while ($db->next_record()) {
+															printf ("<option value=\"%s\" %s>%s </option>", $db->f("category_id"), ($category_id == $db->f("category_id")) ? "selected" : "", htmlReady(my_substr($db->f("name"), 0, 30)));
+														}
+														print "</select>";
+														print "&nbsp;<input type=\"IMAGE\" value=\""._("Raumtyp ausw&auml;hlen")."\" name=\"send_room_type\" src=\"pictures/haken_transparent.gif\" border=\"0\" ".tooltip(_("Raumtyp auswählen"))." />";
+														print "&nbsp;&nbsp;<input type=\"IMAGE\" src=\"./pictures/rewind.gif\" ".tooltip(_("alle Angaben zurücksetzen"))." border=\"0\" name=\"reset_room_type\" /><br /><br />";
+													}
 
-//Level 4: Hier wird der Rest abgefragt
-if ($level==4)
+													print _("Folgende Eigenschaften sind w&uuml;nschbar:")."<br /><br />";
+													print "<table border=\"0\" width=\"100%\" cellspaceing=\"2\" cellpadding=\"0\">";
+												}
+												?>
+												<tr>
+													<td width="30%" valign="top">
+														<font size="-1"><?=htmlReady($db2->f("name"))?></font>
+													</td>
+													<td width="70%" align ="left" valign="top">
+													<?
+													switch ($db2->f("type")) {
+														case "bool":
+															printf ("<input type=\"CHECKBOX\" name=\"request_property_val[%s]\" %s /><font size=-1>&nbsp;%s</font>", $db2->f("property_id"), ($sem_create_data["resRequest"]->getPropertyState($db2->f("property_id"))) ? "checked": "", htmlReady($db2->f("options")));
+														break;
+														case "num":
+															if ($db2->f("system") == 2) {
+																printf ("<input type=\"TEXT\" name=\"request_property_val[%s]\" value=\"%s\" size=5 maxlength=10 />", $db2->f("property_id"), htmlReady($sem_create_data["resRequest"]->getPropertyState($db2->f("property_id"))));
+																if ($sem_create_data["sem_turnout"]) {
+																	print "<font size=\"-1\">"._("max. Teilnehmeranzahl &uuml;bernehmen")."</font>";
+																	printf ("<br /><input type=\"CHECKBOX\" name=\"seats_are_admission_turnout\" %s />&nbsp;",  (($sem_create_data["resRequest"]->getPropertyState($db2->f("property_id")) == $sem_create_data["sem_turnout"]) && ($sem_create_data["sem_turnout"])>0) ? "checked" :"");
+																}
+																	
+															} else {
+																printf ("<input type=\"TEXT\" name=\"request_property_val[%s]\" value=\"%s\" size=30 maxlength=255 />", $db2->f("property_id"), htmlReady($sem_create_data["resRequest"]->getPropertyState($db2->f("property_id"))));
+															}
+														break;
+														case "text";
+															printf ("<textarea name=\"request_property_val[%s]\" cols=30 rows=2 >%s</textarea>", $db2->f("property_id"), htmlReady($sem_create_data["resRequest"]->getPropertyState($db2->f("property_id"))));
+														break;
+														case "select";
+															$options=explode (";",$db2->f("options"));
+															printf ("<select name=\"request_property_val[%s]\">", $db2->f("property_id"));
+															print	"<option value=\"\">--</option>";
+															foreach ($options as $a) {
+																printf ("<option %s value=\"%s\">%s</option>", ($sem_create_data["resRequest"]->getPropertyState($db2->f("property_id")) == $a) ? "selected":"", $a, htmlReady($a));
+															}
+															printf ("</select>");
+														break;
+													}
+													?>
+													</td>
+												</tr>
+												<?
+												$i++;
+												if ($i == $db2->nf()) {
+													print "</table>";
+												}
+											}								
+											
+										} elseif ($db->nf() > 0) {
+											print _("Bitte geben Sie zun&auml;chst einen Raumtyp an, der f&uuml;r Sie am besten geeignet ist:")."<br /><br />";
+											print "<select name=\"select_room_type\">";
+												while ($db->next_record()) {
+													printf ("<option value=\"%s\">%s </option>", $db->f("category_id"), htmlReady(my_substr($db->f("name"), 0, 30)));
+												}
+											print "</select></font>";
+											print "&nbsp;<input type=\"IMAGE\" value=\""._("Raumtyp ausw&auml;hlen")."\" name=\"send_room_type\" src=\"pictures/haken_transparent.gif\" border=\"0\" ".tooltip(_("Raumtyp auswählen"))." />";
+										}
+										?>
+										</font>
+									</td>
+									<td width="1px" align="center" valign="top" style="background-image: url('pictures/line2.gif');" nowrap>
+										&nbsp;&nbsp;
+									</td>
+									<td width="50%" valign="top">
+										<font size="-1">
+										<?
+										print "<b>"._("Raum suchen:")."</b><br />";
+										if ((($search_exp_room) && ($search_room_x)) || ($search_properties_x)) {
+											$result = $sem_create_data["resRequest"]->searchRooms($search_exp_room, ($search_properties_x) ? TRUE : FALSE);
+											if ($result) {
+												printf ("<br /><font size=-1><b>%s</b> ".((!$search_properties_x) ? _("R&auml;ume gefunden:") : _("passende R&auml;ume gefunden"))."<br /><br />", sizeof($result));
+												print "<select name=\"select_room\">";
+												foreach ($result as $key => $val) {
+													printf ("<option value=\"%s\">%s </option>", $key, htmlReady(my_substr($val, 0, 30)));
+												}
+												print "</select></font>";
+												print "&nbsp;<input type=\"IMAGE\" src=\"./pictures/haken_transparent.gif\" ".tooltip(_("Den Raum als Wunschraum auswählen"))." border=\"0\" name=\"send_room\" />";
+												print "&nbsp;&nbsp;<input type=\"IMAGE\" src=\"./pictures/rewind.gif\" ".tooltip(_("neue Suche starten"))." border=\"0\" name=\"reset_room_search\" />";
+												if ($search_properties_x)
+													print "<br /><br />"._("(Diese R&auml;ume erf&uuml;llen die Wunschkriterien, die Sie rechts angegeben haben.)");
+											}
+										}
+										if (((!$search_exp_room) && (!$search_properties_x)) || (($search_exp_room) && (!$result)) || (($search_properties_x) && (!$result))) {
+											?>
+											<font size=-1>
+											<? print ((($search_exp_room) || ($search_properties_x)) && (!$result)) ? _("<b>Keinen</b> Raum gefunden.") : "";?>
+											</font><br />
+											<font size=-1><?=_("Geben Sie zur Suche den Raumnamen ganz oder teilweise ein:"); ?></font>
+											<input type="TEXT" size="30" maxlength="255" name="search_exp_room" />&nbsp; 
+											<input type="IMAGE" src="./pictures/suchen.gif" <? echo tooltip(_("Suche starten")) ?> border="0" name="search_room" /><br />
+											<?
+										}										
+										?>
+										</font>
+									</td>									
+								</tr>
+								<?
+								if ($category_id) {
+								?>
+								<tr>
+									<td colspan="2" align="right">
+										<font size="-1"><?=("passende R&auml;ume suchen")?></font>
+										<input type="IMAGE" src="./pictures/move_right.gif" <? echo tooltip(_("passende Räume suchen")) ?> border="0" name="search_properties" />
+									</td>
+									<td>
+										&nbsp;
+									</td>									
+								</tr>
+								<?
+								}
+								?>
+							</table>
+							</font>
+							
+						</td>
+					</tr>
+					<tr <? $cssSw->switchClass() ?>>
+						<td class="<? echo $cssSw->getClass() ?>" width="4%" align="right">
+							&nbsp;
+						</td>
+						<td class="<? echo $cssSw->getClass() ?>" width="96%">
+							<font size="-1"><b><?=("Nachricht an den Raumadministrator:")?></b><br /><br />
+								<?=_("Sie k&ouml;nnen hier eine Nachricht an den Raumadministrator verfassen, um weitere W&uuml;nsche oder Bermerkungen zur gew&uuml;nschten Raumbelegung anzugeben.")?> <br /><br />
+								<textarea name="sem_room_comment" cols=58 rows=4><?=$sem_create_data["resRequest"]->getComment(); ?></textarea>
+							</font>
+						</td>
+					</tr>
+					<?	
+					}
+					if (($RESOURCES_ENABLE) && ($resList->roomsExist()) && 
+						(((is_array($sem_create_data["metadata_termin"]["turnus_data"])) && ($sem_create_data["term_art"] == 0))
+						|| (($sem_create_data["term_first_date"])) && ($sem_create_data["term_art"] == 1))
+						|| ($sem_create_data["sem_vor_termin"] > -1)) {
+					?>
+					<tr <? $cssSw->switchClass() ?>>
+						<td class="<? echo $cssSw->getClass() ?>" width="4%" align="right">
+							&nbsp;
+						</td>
+						<td class="<? echo $cssSw->getClass() ?>" width="96%" colspan=3>
+							<font size="-1"><b><?=_("Raumbuchungen"); ?></b></font><br /><br />
+							<table border="0" width="100%" cellspaceing="2" cellpadding="0">
+							<?
+								print "<font size=\"-1\">"._("Sie k&ouml;nnen zu jedem Termin einen Raum eintragen. Diese Eintragung wird beim Speichern der Veranstaltung in der Raumverwaltung gebucht.")."</font><br />";
+								if ($sem_create_data["term_art"] == 0) {
+									if (is_array($sem_create_data["metadata_termin"]["turnus_data"])) {
+										foreach ($sem_create_data["metadata_termin"]["turnus_data"] as $val) {
+											print "<tr><td width=\"50%\"><font size=\"-1\">";
+											switch ($val["day"]) {
+												case 1: print _("Montag"); break;
+												case 2: print _("Dienstag"); break;
+												case 3: print _("Mittwoch"); break;
+												case 4: print _("Donnerstag"); break;
+												case 5: print _("Freitag"); break;
+												case 6: print _("Sanstag"); break;
+												case 7: print _("Sonntag"); break;
+											}
+											printf (" "._("von %02d:%02d Uhr bis %02d:%02d Uhr"), $val["start_stunde"], $val["start_minute"],  $val["end_stunde"], $val["end_minute"]);
+											print "</font></td><td width=\"50%\"><font size=\"-1\">";
+											$resList->reset();
+											if ($resList->numberOfRooms()) {
+												print " &nbsp;<select name=\"term_turnus_resource_id[]\">";
+												printf ("<option %s value=\"FALSE\">["._("bitte ausw&auml;hlen")."]</option>", (!$val["resource_id"]) ? "selected" : "");												
+												while ($resObject = $resList->next()) {
+													printf ("<option %s value=\"%s\">%s</option>", ($val["resource_id"]) == $resObject->getId() ? "selected" :"", $resObject->getId(), htmlReady($resObject->getName()));
+												}
+												print "</select><br />";
+											}
+											print "</font></td></tr>\n";
+										}
+									}
+								} elseif ($sem_create_data["term_art"] == 1) {
+									for ($i=0; $i<$sem_create_data["term_count"]; $i++) {
+										if (($sem_create_data["term_tag"][$i]) && ($sem_create_data["term_monat"][$i]) && ($sem_create_data["term_jahr"][$i]) && ($sem_create_data["term_start_stunde"][$i]) && ($sem_create_data["term_end_stunde"][$i])) {
+											print "<tr><td width=\"50%\"><font size=\"-1\">";
+											printf (_("am %02d.%02d.%s von %02d:%02d Uhr bis %02d:%02d Uhr"), $sem_create_data["term_tag"][$i], $sem_create_data["term_monat"][$i], $sem_create_data["term_jahr"][$i], $sem_create_data["term_start_stunde"][$i], $sem_create_data["term_start_minute"][$i], $sem_create_data["term_end_stunde"][$i], $sem_create_data["term_end_minute"][$i]);
+											print "</font></td><td width=\"50%\"><font size=\"-1\">";
+											$resList->reset();
+											if ($resList->numberOfRooms()) {
+												printf (" &nbsp;<select name=\"term_resource_id[%s]\">", $i);
+												printf ("<option %s value=\"FALSE\">["._("bitte ausw&auml;hlen")."]</option>", (!$sem_create_data["term_resource_id"][$i]) ? "selected" : "");												
+												while ($resObject = $resList->next()) {
+													printf ("<option %s value=\"%s\">%s</option>", ($sem_create_data["term_resource_id"][$i]) == $resObject->getId() ? "selected" :"", $resObject->getId(), htmlReady($resObject->getName()));
+												}
+												print "</select><br />";
+											}
+											print "</font></td></tr>\n";										
+										}
+									}
+								}
+								if ($sem_create_data["sem_vor_termin"] > -1) {
+									print "<tr><td width=\"50%\"><font size=\"-1\">";
+									printf (" "._("Vorbesprechung am %s von %s Uhr bis %s Uhr"), date("d.m.Y", $sem_create_data["sem_vor_termin"]), date("H:i", $sem_create_data["sem_vor_termin"]), date("H:i", $sem_create_data["sem_vor_end_termin"]));
+									print "</font></td><td width=\"50%\"><font size=\"-1\">";
+									$resList->reset();
+									if ($resList->numberOfRooms()) {
+										print " &nbsp;<select name=\"vor_resource_id\">";
+										printf ("<option %s value=\"FALSE\">["._("bitte ausw&auml;hlen")."]</option>", (!$sem_create_data["sem_vor_resource_id"]) ? "selected" : "");												
+										while ($resObject = $resList->next()) {
+											printf ("<option %s value=\"%s\">%s</option>", ($sem_create_data["sem_vor_resource_id"]) == $resObject->getId() ? "selected" :"", $resObject->getId(), htmlReady($resObject->getName()));
+										}
+										print "</select><br />";
+									}
+									print "</font></td></tr>\n";
+								}
+								?>
+							</table>
+						</td>
+					</tr>
+					<?
+					}
+					if (((is_array($sem_create_data["metadata_termin"]["turnus_data"])) && ($sem_create_data["term_art"] == 0))
+						|| (($sem_create_data["term_first_date"]) && ($sem_create_data["term_art"] == 1))
+						|| ($sem_create_data["sem_vor_termin"] > -1)) {
+					?>
+					<tr <? $cssSw->switchClass() ?>>
+						<td class="<? echo $cssSw->getClass() ?>" width="4%" align="right">
+							&nbsp;
+						</td>
+						<td class="<? echo $cssSw->getClass() ?>" width="96%" colspan=3>
+							<font size="-1"><b><?=_("freie Angaben zu R&auml;umen"); ?></b></font><br /><br />
+							<table border="0" width="100%" cellspaceing="2" cellpadding="0">
+								<?
+								printf ("<font size=\"-1\">"._("%sSie k&ouml;nnen zu jedem Termin freie Angaben zu Raum bzw. Ort machen:")."</font><br />", (($resList->roomsExist()) && ($RESOURCES_ENABLE)) ? "<i><u>"._("oder:")."</u></i>&nbsp;" : "");
+								if ($sem_create_data["term_art"] == 0) {
+									if (is_array($sem_create_data["metadata_termin"]["turnus_data"])) {
+										foreach ($sem_create_data["metadata_termin"]["turnus_data"] as $val) {
+											print "<tr><td width=\"50%\"><font size=\"-1\">";
+											switch ($val["day"]) {
+												case 1: print _("Montag"); break;
+												case 2: print _("Dienstag"); break;
+												case 3: print _("Mittwoch"); break;
+												case 4: print _("Donnerstag"); break;
+												case 5: print _("Freitag"); break;
+												case 6: print _("Sanstag"); break;
+												case 7: print _("Sonntag"); break;
+											}
+											printf (" "._("von %02d%02d Uhr bis %02d:%02d Uhr"), $val["start_stunde"], $val["start_minute"],  $val["end_stunde"], $val["end_minute"]);
+											print "</font></td><td width=\"50%\"><font size=\"-1\">";
+											printf ("&nbsp;<input type=\"text\" name=\"term_turnus_room[]\" size=\"30\" maxlength=\"255\" value=\"%s\" /><br />", htmlReady($val["room"]));
+											print "</font></td></tr>\n";
+										}
+									}
+								} elseif ($sem_create_data["term_art"] == 1) {
+									for ($i=0; $i<$sem_create_data["term_count"]; $i++) {
+										if (($sem_create_data["term_tag"][$i]) && ($sem_create_data["term_monat"][$i]) && ($sem_create_data["term_jahr"][$i]) && ($sem_create_data["term_start_stunde"][$i]) && ($sem_create_data["term_end_stunde"][$i])) {
+											print "<tr><td width=\"50%\"><font size=\"-1\">";
+											printf (_("am %02d.%02d.%s von %02d:%02d Uhr bis %02d:%02d Uhr"), $sem_create_data["term_tag"][$i], $sem_create_data["term_monat"][$i], $sem_create_data["term_jahr"][$i], $sem_create_data["term_start_stunde"][$i], $sem_create_data["term_start_minute"][$i], $sem_create_data["term_end_stunde"][$i], $sem_create_data["term_end_minute"][$i]);
+											print "</font></td><td width=\"50%\"><font size=\"-1\">";
+											printf ("&nbsp;<input type=\"text\" name=\"term_room[%s]\" size=\"30\" maxlength=\"255\" value=\"%s\" />", $i, htmlReady($sem_create_data["term_room"][$i]));
+											print "</font></td></tr>\n";
+										}
+									}
+																			
+								}
+								if ($sem_create_data["sem_vor_termin"] > -1) {
+									print "<tr><td width=\"50%\"><font size=\"-1\">";
+									printf (" "._("Vorbesprechung am %s von %s Uhr bis %s Uhr"), date("d.m.Y", $sem_create_data["sem_vor_termin"]), date("H:i", $sem_create_data["sem_vor_termin"]), date("H:i", $sem_create_data["sem_vor_end_termin"]));
+									print "</font></td><td width=\"50%\"><font size=\"-1\">";
+									printf ("&nbsp;<input type=\"text\" name=\"vor_raum\" size=\"30\" maxlength=\"255\" value=\"%s\" /><br />", htmlReady($sem_create_data["sem_vor_raum"]));
+									print "</font></td></tr>\n";
+								}
+								?>
+							</table>
+						</td>
+					</tr>
+					<?
+					}
+					?>
+					<tr <? $cssSw->switchClass() ?>>
+						<td class="<? echo $cssSw->getClass() ?>" width="4%">
+							&nbsp;
+						</td>
+						<td class="<? echo $cssSw->getClass() ?>" width="96%" align="center" colspan=3>
+							&nbsp; <input type="IMAGE" <?=makeButton("zurueck", "src"); ?> border=0 value="<?=_("<< zur&uuml;ck");?>" name="jump_back">&nbsp;<input type="IMAGE" <?=makeButton("weiter", "src"); ?> border=0 value="<?=_("weiter >>");?>" name="jump_next">
+						</td>
+					</tr>
+				</table>
+			</form>
+			</td>
+		</tr>
+	</table>
+	<?
+	}
+
+
+//Level 5: Hier wird der Rest abgefragt
+if ($level == 5)
 	{
+
 
 	?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
 		<tr >
-			<td class="topic" colspan=2><b>&nbsp;<?=_("Veranstaltungs-Assistent - Schritt 4: Sonstige Daten"); ?></b>
+			<td class="topic" colspan=2><b>&nbsp;<?=_("Veranstaltungs-Assistent - Schritt 5: Sonstige Daten"); ?></b>
 			</td>
 		</tr>
 		<tr>
@@ -2353,20 +2835,20 @@ if ($level==4)
 		<tr>
 			<td class="blank" valign="top">
 				<blockquote>
-				<b><?=_("Schritt 4: Sonstige Daten zu der Veranstaltung"); ?></b><br><br>
+				<b><?=_("Schritt 5: Sonstige Daten zu der Veranstaltung"); ?></b><br><br>
 				<font size=-1><? printf (_("Alle mit einem Sternchen%smarkierten Felder <b>m&uuml;ssen</b> ausgef&uuml;llt werden, um eine Veranstaltung anlegen zu k&ouml;nnen.")."</font><br><br>", "&nbsp;</font><font color=\"red\" size=+1><b>*</b></font><font size=-1>&nbsp;");?>
 				</blockqoute>
 			</td>
 			<td class="blank" align="right" valign="top">
-				<img src="./locale/<?=$_language_path?>/LC_PICTURES/hands04.jpg" border="0">
+				<img src="./locale/<?=$_language_path?>/LC_PICTURES/hands05.jpg" border="0">
 			</td>
 		</tr>
 		<tr>
 			<td class="blank" colspan=2>
-			<form method="POST" name="form_4" action="<? echo $PHP_SELF ?>"
+			<form method="POST" name="form_5" action="<? echo $PHP_SELF ?>"
 	               <? if (($sem_create_data["sem_sec_lese"] ==2) ||  ($sem_create_data["sem_sec_schreib"] ==2)) echo " onSubmit=\"return doCrypt();\" "; ?>
                		>
-			<input type="HIDDEN" name="form" value=4>
+			<input type="HIDDEN" name="form" value=5>
 			<input type="HIDDEN" name="hashpass" value="">
 			<input type="HIDDEN" name="hashpass2" value="">				
 				<table width ="99%" cellspacing=0 cellpadding=2 border=0 align="center">
@@ -2397,25 +2879,26 @@ if ($level==4)
 										<font size=-1><? echo _("Startdatum f&uuml;r Anmeldungen");?>:</font>
 									</td>
 									<td class="<? echo $cssSw->getClass() ?>" valign="top" width="40%">
-										<font size=-1>&nbsp; <input type="text" name="adm_s_tag" size=2 maxlength=2 value="<? if ($sem_create_data["sem_admission_start_date"]<>-1) echo date("d",$sem_create_data["sem_admission_start_date"]); else echo "tt" ?>">.
-										<input type="text" name="adm_s_monat" size=2 maxlength=2 value="<? if ($sem_create_data["sem_admission_start_date"]<>-1) echo date("m",$sem_create_data["sem_admission_start_date"]); else echo "mm" ?>">.
-										<input type="text" name="adm_s_jahr" size=4 maxlength=4 value="<? if ($sem_create_data["sem_admission_start_date"]<>-1) echo date("Y",$sem_create_data["sem_admission_start_date"]); else echo "jjjj" ?>"><?=_("um");?>&nbsp;</font><br />
-										<font size=-1>&nbsp; <input type="text" name="adm_s_stunde" size=2 maxlength=2 value="<? if ($sem_create_data["sem_admission_start_date"]<>-1) echo date("H",$sem_create_data["sem_admission_start_date"]); else echo "hh" ?>">:
-										<input type="text" name="adm_s_minute" size=2 maxlength=2 value="<? if ($sem_create_data["sem_admission_start_date"]<>-1) echo date("i",$sem_create_data["sem_admission_start_date"]); else echo "mm" ?>">&nbsp;<?=_("Uhr");?></font>&nbsp; 
-										<img  src="./pictures/info.gif" 
+										<font size=-1>&nbsp; <input type="text" name="adm_s_tag" size=2 maxlength=2 value="<? if ($sem_create_data["sem_admission_start_date"]<>-1) echo date("d",$sem_create_data["sem_admission_start_date"]); else echo _("tt") ?>">.                   
+										<input type="text" name="adm_s_monat" size=2 maxlength=2 value="<? if ($sem_create_data["sem_admission_start_date"]<>-1) echo date("m",$sem_create_data["sem_admission_start_date"]); else echo _("mm") ?>">.
+										<input type="text" name="adm_s_jahr" size=4 maxlength=4 value="<? if ($sem_create_data["sem_admission_start_date"]<>-1) echo date("Y",$sem_create_data["sem_admission_start_date"]); else echo _("jjjj") ?>"><?=_("um");?>&nbsp;</font><br />
+										<font size=-1>&nbsp; <input type="text" name="adm_s_stunde" size=2 maxlength=2 value="<? if ($sem_create_data["sem_admission_start_date"]<>-1) echo date("H",$sem_create_data["sem_admission_start_date"]); else echo _("hh") ?>">:
+										<input type="text" name="adm_s_minute" size=2 maxlength=2 value="<? if ($sem_create_data["sem_admission_start_date"]<>-1) echo date("i",$sem_create_data["sem_admission_start_date"]); else echo _("mm") ?>">&nbsp;<?=_("Uhr");?></font>&nbsp;                     
+										<img  src="./pictures/info.gif"
 											<? echo tooltip(_("Teilnehmer dürfen sich erst ab diesem Datum in die Veranstaltung eintragen."), TRUE, TRUE) ?>
+                  
 										>
 									</td>
 									<td class="<? echo $cssSw->getClass() ?>" valign="top" align="right" width="10%">
 										<font size=-1><? echo _("Enddatum f&uuml;r Anmeldungen");?>:</font>
 									</td>
 									<td class="<? echo $cssSw->getClass() ?>" valign="top" width="40%">
-								       <font size=-1>&nbsp; <input type="text" name="adm_e_tag" size=2 maxlength=2 value="<? if ($sem_create_data["sem_admission_end_date"]<>-1) echo date("d",$sem_create_data["sem_admission_end_date"]); else echo _("tt") ?>">.
-                   <input type="text" name="adm_e_monat" size=2 maxlength=2 value="<? if ($sem_create_data["sem_admission_end_date"]<>-1) echo date("m",$sem_create_data["sem_admission_end_date"]); else echo _("mm") ?>">.
-                   <input type="text" name="adm_e_jahr" size=4 maxlength=4 value="<? if ($sem_create_data["sem_admission_end_date"]<>-1) echo date("Y",$sem_create_data["sem_admission_end_date"]); else echo _("jjjj") ?>"><?=_("um");?>&nbsp;</font><br />
-                   <font size=-1>&nbsp; <input type="text" name="adm_e_stunde" size=2 maxlength=2 value="<? if ($sem_create_data["sem_admission_end_date"]<>-1) echo date("H",$sem_create_data["sem_admission_end_date"]); else echo _("23") ?>">:
-                   <input type="text" name="adm_e_minute" size=2 maxlength=2 value="<? if ($sem_create_data["sem_admission_end_date"]<>-1) echo date("i",$sem_create_data["sem_admission_end_date"]); else echo _("59") ?>">&nbsp;<?=_("Uhr");?></font>&nbsp; 
-<img  src="./pictures/info.gif" 
+										<font size=-1>&nbsp; <input type="text" name="adm_e_tag" size=2 maxlength=2 value="<? if ($sem_create_data["sem_admission_end_date"]<>-1) echo date("d",$sem_create_data["sem_admission_end_date"]); else echo _("tt") ?>">.
+										<input type="text" name="adm_e_monat" size=2 maxlength=2 value="<? if ($sem_create_data["sem_admission_end_date"]<>-1) echo date("m",$sem_create_data["sem_admission_end_date"]); else echo _("mm") ?>">.
+										<input type="text" name="adm_e_jahr" size=4 maxlength=4 value="<? if ($sem_create_data["sem_admission_end_date"]<>-1) echo date("Y",$sem_create_data["sem_admission_end_date"]); else echo _("jjjj") ?>"><?=_("um");?>&nbsp;</font><br />
+										<font size=-1>&nbsp; <input type="text" name="adm_e_stunde" size=2 maxlength=2 value="<? if ($sem_create_data["sem_admission_end_date"]<>-1) echo date("H",$sem_create_data["sem_admission_end_date"]); else echo "23" ?>">:
+										<input type="text" name="adm_e_minute" size=2 maxlength=2 value="<? if ($sem_create_data["sem_admission_end_date"]<>-1) echo date("i",$sem_create_data["sem_admission_end_date"]); else echo "59" ?>">&nbsp;<?=_("Uhr");?></font>&nbsp; 
+										<img  src="./pictures/info.gif" 
 											<? echo tooltip(_("Teilnehmer dürfen sich nur bis zu diesem Datum in die Veranstaltung eintragen."), TRUE, TRUE) ?>
 										>
 									</td>
@@ -2589,9 +3072,9 @@ if ($level==4)
 							<? echo _("Hinweistext bei vorl&auml;ufigen Eintr&auml;gen:"); ?>
 						</td>
 						<td class="<? echo $cssSw->getClass() ?>" colspan=3>
-							&nbsp;&nbsp;<textarea name="sem_paytxt" cols=58 rows=4><?=htmlReady(stripslashes($sem_create_data["sem_paytxt"])) ?></textarea>
+							&nbsp;&nbsp;<textarea name="sem_paytxt" cols=58 rows=4><? echo htmlReady(stripslashes($sem_create_data["sem_paytxt"])) ?></textarea>
 							<img  src="./pictures/info.gif" 
-								<? echo tooltip(_("Dieser Hinweistext erläutert Ihren TeilnehmerInnen was sie tun müssen, um endgültig für di Veranstaltung zugelassen zu werden. ".
+								<? echo tooltip(_("Dieser Hinweistext erläutert Ihren TeilnehmerInnen was sie tun müssen, um endgültig für die Veranstaltung zugelassen zu werden. ".
 								"Beschreiben Sie genau, wie Beiträge zu entrichten sind, Leistungen nachgewiesen werden müssen, etc."), TRUE, TRUE) ?>
 							>
 						</td>
@@ -2646,6 +3129,19 @@ if ($level==4)
 							>
 						</td>
 					</tr>
+					<tr <? $cssSw->switchClass() ?>>
+						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
+							<?=_("Ort:"); ?>
+						</td>
+						<td class="<? echo $cssSw->getClass() ?>" width="90%"  colspan=3>
+							<font size="-1">
+							&nbsp; <textarea name="sem_room" cols=58 rows="4"><? echo  htmlReady(stripslashes($sem_create_data["sem_room"])) ?></textarea>
+							<img  src="./pictures/info.gif" 
+								<? echo tooltip(_("Sie können hier einen Ort eingeben, der nur angezeigt wird, wenn keine genaueren Angaben aus Zeiten oder Sitzungsterminen gemacht werden können oder Sitzungstermine bereits abgelaufen sind und aus diesem Grund nicht mehr angezeigt werden."), TRUE, TRUE) ?>
+							>
+							<br />&nbsp; <?=_("<b>Achtung:</b> Diese Ortsangabe wird nur angezeigt, wenn keine genaueren Angaben aus Zeiten oder Sitzungsterminen gemacht werden k&ouml;nnen.");?>
+						</td>
+					</tr>
 					<?
 					}
 					//add the free adminstrable datafields
@@ -2670,7 +3166,7 @@ if ($level==4)
 							<?
 							} else {
 							?>
-							&nbsp;<font size="-1"><?=_("Diese Daten werden von ihrem zuständigen Administrator erfasst.")?></font>
+							&nbsp;<font size="-1"><?=_("Diese Daten werden von ihrem zust&auml;ndigen Administrator erfasst.")?></font>
 							<img  src="./pictures/info.gif" 
 								<? echo tooltip(_("Diese Felder werden zentral durch die zuständigen Administratoren erfasst."), TRUE, TRUE) ?>
 							>
@@ -2730,13 +3226,13 @@ if ($level==4)
 	<?
 	}
 
-//Level 5: Seminar anlegen
-if ($level==5)
+//Level 6: Seminar anlegen
+if ($level == 6)
 	{
 	?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
 		<tr>
-			<td class="topic" colspan=2><b>&nbsp;<?=_("Veranstaltungs-Assistent - Schritt 5: Anlegen der Veranstaltung"); ?></b>
+			<td class="topic" colspan=2><b>&nbsp;<?=_("Veranstaltungs-Assistent - Schritt 6: Anlegen der Veranstaltung"); ?></b>
 			</td>
 		</tr>
 		<tr>
@@ -2749,16 +3245,16 @@ if ($level==5)
 		<tr>
 			<td class="blank" valign="top">
 				<blockquote>
-				<b><?=_("Schritt 5: Bereit zum Anlegen der Veranstaltung"); ?></b><br><br>
+				<b><?=_("Schritt 6: Bereit zum Anlegen der Veranstaltung"); ?></b><br><br>
 				<?=_("Sie haben nun alle n&ouml;tigen Daten zum Anlegen der Veranstaltung eingegeben. Wenn Sie auf &raquo;anlegen&laquo; klicken, wird die Veranstaltung in Stud.IP &uuml;bernommen. Wenn Sie sich nicht sicher sind, ob alle Daten korrekt sind, &uuml;berpr&uuml;fen Sie noch einmal Ihre Eingaben auf den vorhergehenden Seiten."); ?><br><br>
 				<form method="POST" action="<? echo $PHP_SELF ?>">
-					<input type="HIDDEN" name="form" value=5>
+					<input type="HIDDEN" name="form" value=6>
 					<input type="IMAGE" <?=makeButton("zurueck", "src"); ?> border=0 value="<?=_("<< zur&uuml;ck");?> >>" name="jump_back">&nbsp;<input type="IMAGE" <?=makeButton("anlegen", "src"); ?> border=0 value="<?=_("weiter >>");?>" name="jump_next">
 				</form>
 				</blockqoute>
 			</td>
 			<td class="blank" align="right" valign="top">
-				<img src="./locale/<?=$_language_path?>/LC_PICTURES/hands05.jpg" border="0">
+				<img src="./locale/<?=$_language_path?>/LC_PICTURES/hands06.jpg" border="0">
 			</td>
 		</tr>
 	</table>
@@ -2766,7 +3262,7 @@ if ($level==5)
 	}
 
 //Level 6:Statusmeldungen nach dem Anlegen und weiter zum den Einzelheiten
-if ($level==6)
+if ($level == 7)
 	{
 	?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
@@ -2796,7 +3292,7 @@ if ($level==6)
 					</blockqoute>
 				</td>
 				<td class="blank" align="right">
-					<img src="./locale/<?=$_language_path?>/LC_PICTURES/hands05.jpg" border="0">
+					<img src="./locale/<?=$_language_path?>/LC_PICTURES/hands06.jpg" border="0">
 				</td>
 			</tr> <?
 			}
@@ -2832,7 +3328,7 @@ if ($level==6)
 					</blockqoute>
 				</td>
 				<td class="blank" align="right">
-					<img src="./locale/<?=$_language_path?>/LC_PICTURES/hands05.jpg" border="0">
+					<img src="./locale/<?=$_language_path?>/LC_PICTURES/hands06.jpg" border="0">
 				</td>
 			</tr> <?
 			}
@@ -2870,7 +3366,7 @@ if ($level==6)
 					</blockqoute>
 				</td>
 				<td class="blank" align="right" valign="top">
-					<img src="./locale/<?=$_language_path?>/LC_PICTURES/hands05.jpg" border="0">
+					<img src="./locale/<?=$_language_path?>/LC_PICTURES/hands06.jpg" border="0">
 				</td>
 			</tr>
 			<tr>
@@ -2958,13 +3454,13 @@ if ($level==6)
 	<?
 	}
 
-//Level 7: Erstellen des Simple-Content-Bereichs
-if ($level==7)
+//Level 8: Erstellen des Simple-Content-Bereichs
+if ($level == 8)
 	{
 	?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
 		<tr>
-			<td class="topic" colspan=2><b>&nbsp;<?=_("Veranstaltungs-Assistent - Schritt 6: Freie Informatiosseite"); ?></b>
+			<td class="topic" colspan=2><b>&nbsp;<?=_("Veranstaltungs-Assistent - Schritt 7: Freie Informatiosseite"); ?></b>
 
 			</td>
 		</tr>
@@ -2978,7 +3474,7 @@ if ($level==7)
 		<tr>
 			<td class="blank" valign="top">
 				<blockquote>
-				<b><?=_("Schritt 6: Erstellen einer Informationsseite"); ?></b><br><br>
+				<b><?=_("Schritt 7: Erstellen einer Informationsseite"); ?></b><br><br>
 				<? printf (_("Sie k&ouml;nnen nun eine frei gestaltbare Infomationsseite f&uuml;r die eben angelegte Veranstaltung <b>%s</b> eingeben."), $sem_create_data["sem_name"]);
 				print "<br />"._("Sie k&ouml;nnen die Bezeichnug dieser Seite frei bestimmten. Nutzen sie Sie etwa, um ungeordnete Literaturlisten oder weitere Informationen anzugeben.");
 				if ($sem_create_data["modules_list"]["schedule"])
@@ -2988,13 +3484,13 @@ if ($level==7)
 				</blockqoute>
 			</td>
 			<td class="blank" align="right" valign="top">
-				<img src="./locale/<?=$_language_path?>/LC_PICTURES/hands06.jpg" border="0">
+				<img src="./locale/<?=$_language_path?>/LC_PICTURES/hands07.jpg" border="0">
 			</td>
 		</tr>
 		<tr>
 			<td class="blank" colspan=2>
-			<form method="POST" name="form_4" action="<? echo $PHP_SELF ?>">
-			<input type="HIDDEN" name="form" value=7>
+			<form method="POST" name="form_8" action="<? echo $PHP_SELF ?>">
+			<input type="HIDDEN" name="form" value=8>
 				<table width ="99%" cellspacing=0 cellpadding=2 border=0 align="center">
 					<tr<? $cssSw->switchClass() ?>>
 						<td class="<? echo $cssSw->getClass() ?>" width="10%">
@@ -3038,6 +3534,7 @@ if ($level==7)
 						</td>
 						<td class="<? echo $cssSw->getClass() ?>" width="50%"  colspan=2>
 							&nbsp; <textarea name="sem_scm_content" cols=58 rows=10><? echo $sem_create_data["sem_scm_content"] ?></textarea>
+							
 						</td>
 						<td class="<? echo $cssSw->getClass() ?>" width="40%" valign="top">
 							<?
@@ -3045,9 +3542,10 @@ if ($level==7)
 							print "<br /><br /><a target=\"new\" href=\"help/index.php?help_page=ix_forum6.htm\">"._("Hilfe zur Formatierung von Texten")."</a>";
 							print "<br /><br />"._("Um eine geordnete Literaturliste zu erstellen, benutzen Sie bitte die Literaturverwaltung.")."</a></font>";
 							?>
+							<br />
 							<img  src="./pictures/info.gif" 
 								<? echo tooltip(_("In dieses Feld können Sie beliebigen Text zur Anzeige auf der Informationsseite eingeben."), TRUE, TRUE) ?>
-							>
+							>							
 						</td>
 					</tr>
 					<tr<? $cssSw->switchClass() ?>>
@@ -3075,7 +3573,13 @@ if ($level==7)
 	</table>
 	<?
 	}
+//de-initialisations for room-requests
+if (is_object($sem_create_data["resRequest"])) {
+	$sem_create_data["resRequest"] = serialize ($sem_create_data["resRequest"]);
+}
 
+
+//save all the data back to database
 page_close();
 ?>
 </body>
