@@ -53,6 +53,7 @@ require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");//ja,ja,ja,ja auch die...
 if ($RESOURCES_ENABLE) {
 	require_once ($RELATIVE_PATH_RESOURCES."/resourcesClass.inc.php");
 	require_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
+	$resList = new ResourcesUserRoomsList($user_id);
 }
 
 $db=new DB_Seminar;
@@ -135,8 +136,8 @@ if ($turnus_refresh)
 		$term_metadata["turnus_data"][$i]["end_stunde"]=$turnus_end_stunde[$i]; 
 		$term_metadata["turnus_data"][$i]["end_minute"]=$turnus_end_minute[$i]; 
 		$term_metadata["turnus_data"][$i]["room"]=$turnus_room[$i]; 
-		$term_metadata["turnus_data"][$i]["resource_id"]=$turnus_resource_id[$i];
-		if ($RESOURCES_ENABLE && $term_metadata["turnus_data"][$i]["resource_id"] != "FALSE") {
+		$term_metadata["turnus_data"][$i]["resource_id"]=($turnus_resource_id[$i] == "FALSE") ? FALSE : $turnus_resource_id[$i];
+		if ($RESOURCES_ENABLE && $term_metadata["turnus_data"][$i]["resource_id"]) {
 			$resObject=new ResourceObject($term_metadata["turnus_data"][$i]["resource_id"]);
 			$term_metadata["turnus_data"][$i]["room"]=$resObject->getName();
 		}
@@ -182,22 +183,12 @@ if ($delete_turnus_field)
 	{
 	for ($i=0; $i<$term_metadata["turnus_count"]; $i++)
 		if ($i != ($delete_turnus_field-1))
-			{
-			$temp_term_turnus_date[]=$term_metadata["term_turnus_date"][$i];
-			$tmp_term_turnus_start_stunde[]=$term_metadata["term_turnus_start_stunde"][$i];
-			$tmp_term_turnus_start_minute[]=$term_metadata["term_turnus_start_minute"][$i]; 
-			$tmp_term_turnus_end_stunde[]=$term_metadata["term_turnus_end_stunde"][$i]; 
-			$tmp_term_turnus_end_minute[]=$term_metadata["term_turnus_end_minute"][$i]; 
-			}
-	$term_metadata["term_turnus_date"]=$temp_term_turnus_date;
-	$term_metadata["term_turnus_start_stunde"]=$tmp_term_turnus_start_stunde;
-	$term_metadata["term_turnus_start_minute"]=$tmp_term_turnus_start_minute;
-	$term_metadata["term_turnus_end_stunde"]=$tmp_term_turnus_end_stunde;
-	$term_metadata["term_turnus_end_minute"]=$tmp_term_turnus_end_minute;
-	
+			$tmp_term_turnus_data[]=$term_metadata["turnus_data"][$i];
+	$term_metadata["turnus_data"]=$tmp_term_turnus_data;
+
 	$term_metadata["turnus_count"]--;
 	}
-	
+
   
 //Checks performen
 if (($term_metadata["sem_duration_time"]<0) && ($term_metadata["sem_duration_time"] != -1))
@@ -233,9 +224,37 @@ if ($term_metadata["art"]==0)
 					$empty_fields++;
 				else
 					{
-					$errormsg=$errormsg."error§"._("Sie haben nicht alle Felder f&uuml;r regul&auml;ren Termine ausgef&uuml;llt. Bitte holen Sie dies nach!")."§";
+					$errormsg=$errormsg."error§"._("Sie haben nicht alle Felder f&uuml;r regul&auml;ren Termine ausgef&uuml;llt. bitte korrigieren sie dies!")."§";
 					$just_informed4=TRUE;
 					}
+	/*		//check overlaps...
+			if ($RESOURCES_ENABLE) {
+				$resAssign = new VeranstaltungResourcesAssign();
+				$checkResult = $resAssign->changeMetaAssigns($term_metadata, $term_metadata["sem_start_time"], $term_metadata["sem_duration_time"],TRUE);
+				if (is_array($checkResult)) {
+					$overlaps_detected=FALSE;
+					foreach ($checkResult as $key=>$val)
+						if ($val["overlap_assigns"] == TRUE)
+							$overlaps_detected[$val["resource_id"].$val["metadate_id"]] = $val["overlap_assigns"];
+					}
+				if ($overlaps_detected) {
+					$errormsg=$errormsg."error§"._("Folgende gew&uuml;nschte Raumbelegungen &uuml;berschneiden sich mit bereits vorhandenen Belegungen. Bitte &auml;ndern Sie die R&auml;ume oder Zeiten!");
+					$i=0;
+					foreach ($overlaps_detected as $key=>$val) {
+						$errormsg.="<br /><font size=\"-1\" color=\"black\">".htmlReady(getResourceObjectName($key)).": ";
+						//show the first overlap
+						list(, $val2) = each($val);
+						$errormsg.=date("d.m, H:i",$val2["begin"])." - ".date("H:i",$val2["end"]);
+						if (sizeof($val) >1)
+							$errormsg.=", ... ("._("und weitere").")";
+						$errormsg.=sprintf (", <a target=\"new\" href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=no_nav&start_time=%s\">"._("Raumplan anzeigen")."</a> ",$key, $val2["begin"]);
+						$i++;
+					}
+					$errormsg.="</font>§";
+				}
+				unset($checkResult);
+				unset($overlaps_detected);
+			}*/
 	}
 
 if (($term_metadata["start_termin"] == -1) && ($term_metadata["start_woche"] ==-1))
@@ -256,8 +275,7 @@ if ($nenter_start_termin_x)
 	$term_metadata["start_woche"]=0;
 
 //Daten speichern
-if (($uebernehmen_x) && (!$errormsg))
-	{
+if (($uebernehmen_x) && (!$errormsg)) {
 	//Termin-Metadaten-Array erzeugen
 	$metadata_termin["art"]=$term_metadata["art"];
 	$metadata_termin["start_termin"]=$term_metadata["start_termin"];
@@ -265,8 +283,7 @@ if (($uebernehmen_x) && (!$errormsg))
 	$metadata_termin["turnus"]=$term_metadata["turnus"];
 	
 	//indiziertes (=sortierbares) temporaeres Array erzeugen
-	if ($term_metadata["art"] == 0)
-		{
+	if ($term_metadata["art"] == 0) {
 		for ($i=0; $i<$term_metadata["turnus_count"]; $i++)
 			if (($term_metadata["turnus_data"][$i]["start_stunde"])  && ($term_metadata["turnus_data"][$i]["end_stunde"]))
 				$tmp_metadata_termin["turnus_data"][]=array("idx"=>$term_metadata["turnus_data"][$i]["day"].$term_metadata["turnus_data"][$i]["start_stunde"].$term_metadata["turnus_data"][$i]["start_minute"], "day" => $term_metadata["turnus_data"][$i]["day"], "start_stunde" => $term_metadata["turnus_data"][$i]["start_stunde"], "start_minute" => $term_metadata["turnus_data"][$i]["start_minute"], "end_stunde" => $term_metadata["turnus_data"][$i]["end_stunde"], "end_minute" => $term_metadata["turnus_data"][$i]["end_minute"], "room" => $term_metadata["turnus_data"][$i]["room"], "resource_id" => $term_metadata["turnus_data"][$i]["resource_id"]);
@@ -282,26 +299,85 @@ if (($uebernehmen_x) && (!$errormsg))
 	}
 		
 	//Termin-Metadaten-Array zusammenmatschen zum beseren speichern in der Datenbank
-	$serialized_metadata=serialize ($metadata_termin);
+	$serialized_metadata=mysql_escape_string(serialize ($metadata_termin));
 	
 	//speichern
 	$db->query ("UPDATE seminare SET metadata_dates='$serialized_metadata', start_time='".$term_metadata["sem_start_time"]."', duration_time='".$term_metadata["sem_duration_time"]."' WHERE Seminar_id ='".$term_metadata["sem_id"]."'");
 	if ($db->affected_rows()) {
-		$errormsg.="msg§"._("Die allgemeinen Termindaten wurden aktualisiert")."§";
+		$errormsg.="msg§"._("Die allgemeinen Termindaten wurden aktualisiert.")."§";
 		$db->query ("UPDATE seminare SET chdate='".time()."' WHERE Seminar_id ='".$term_metadata["sem_id"]."'");
 		
-		//If resource-management activ, update the assigned reources
+		//If resource-management activ, update the assigned reources and do the overlap checks.... not so easy!
 		if ($RESOURCES_ENABLE) {
 		 	$veranstAssign = new VeranstaltungResourcesAssign($term_metadata["sem_id"]);
-		 	$veranstAssign->updateAssign();
-		}
+    			$updateResult=$veranstAssign->updateAssign();
+
+			//are there overlaps, in the meanwhile since the regulat check? In this case the sem is regular, we have to touch the metadata
+			if ((is_array($updateResult)) && ($sem_create_data["term_art"] != -1)) {
+				$overlaps_detected=FALSE;
+				foreach ($updateResult as $key=>$val)
+					if ($val["overlap_assigns"] == TRUE) {
+						$overlaps_detected[$val["resource_id"].$val["metadate_id"]] = $val["overlap_assigns"];
+						list($key2, $val2) = each($val["overlap_assigns"]);
+						$begin = $val2["begin"];
+						$end = $val2["end"];
+						$resource_id = $val["resource_id"];
+						foreach ($metadata_termin["turnus_data"] as $key3 =>$val3) {
+							$day = date("w", $begin);
+							if (!$day )
+								$day = 7;
+							if (($val3["day"] == $day) && ($val3["start_stunde"] == date("G", $begin)) && ($val3["start_minute"] == date("i", $begin)) && ($val3["end_stunde"] == date("G", $end)) && ($val3["end_minute"] == date("i", $end)) && ($val["resource_id"] == $resource_id)) {
+								$metadata_termin["turnus_data"][$key3]["resource_id"]='';
+								$metadata_termin["turnus_data"][$key3]["room"]='';
+								$metadata_changed = TRUE;
+							}
+						}
+					}
+				//ok, we have a need to update the metadata again...
+				if ($metadata_changed) {
+					$serialized_metadata=mysql_escape_string(serialize ($metadata_termin));
+					$query = sprintf ("UPDATE seminare SET metadata_dates = '%s' WHERE Seminar_id = '%s' ", $serialized_metadata, $term_metadata["sem_id"]);
+					$db->query($query);
+				}
+			}
+			//create bad msg
+			if ($overlaps_detected) {
+				$errormsg=$errormsg."error§"._("Folgende gew&uuml;nschte Raumbelegungen &uuml;berschneiden sich mit bereits vorhandenen Belegungen und wurden <u>nicht</u> gebucht. Bitte &auml;ndern Sie die R&auml;ume oder Zeiten!");
+				$i=0;
+				foreach ($overlaps_detected as $key=>$val) {
+					$errormsg.="<br /><font size=\"-1\" color=\"black\">".htmlReady(getResourceObjectName($key)).": ";
+					//show the first overlap
+					list(, $val2) = each($val);
+					$errormsg.=date("d.m, H:i",$val2["begin"])." - ".date("H:i",$val2["end"]);
+					if (sizeof($val) >1)
+						$errormsg.=", ... ("._("und weitere").")";
+					$errormsg.=sprintf (", <a target=\"new\" href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=no_nav&start_time=%s\">"._("Raumplan anzeigen")."</a> ",$key, $val2["begin"]);
+					$i++;
+				}
+				$errormsg.="</font>§";
+			}
+			//create good msg
+			$i=0;
+			foreach ($updateResult as $key=>$val) {
+				if (!is_array($val["overlap_assigns"])) {
+					if ($i)
+						$rooms_booked.=", ";
+					$rooms_booked.="<a target=\"new\" href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=no_nav&start_time=%s\">".htmlReady(getResourceObjectName($val["resource_id"]))."</a>";
+					$i++;
+				}
+			}
+			if ($i == 1)
+				$errormsg.= sprintf ("msg§"._("Der Raum %s wurde gebucht.")."§", $rooms_booked);
+			elseif ($i)
+				$errormsg.= sprintf ("msg§"._("Die R&auml;ume %s wurden gebucht.")."§", $rooms_booked);
+  		}
 	}
 	
 	//Save the current state as snapshot to compare with current data
 	$term_metadata["original"]=get_snapshot();
 
 	$metadata_saved=TRUE;
-	}
+}
  
  if (($errormsg) && (($open_reg_x) || ($open_ureg_x) || ($enter_start_termin_x) || ($nenter_start_termin_x) || ($add_turnus_field_x) || ($delete_turnus_field)))
  	$errormsg='';	
@@ -439,15 +515,15 @@ if (($uebernehmen_x) && (!$errormsg))
 								<input type="text" name="turnus_end_minute[]" size=2 maxlength=2 value="<? if (($term_metadata["turnus_data"][$i]["end_minute"]) && ($term_metadata["turnus_data"][$i]["end_minute"] >0)) { if ($term_metadata["turnus_data"][$i]["end_minute"] < 10) echo "0", $term_metadata["turnus_data"][$i]["end_minute"]; else echo $term_metadata["turnus_data"][$i]["end_minute"];  } elseif ($term_metadata["turnus_data"][$i]["end_stunde"]) echo "00"; ?>"><?=_("Uhr")?>
 								<? if ($term_metadata["turnus_count"]>1)  {
 									?>
-									&nbsp; <a href="<? echo $PHP_SELF?>?delete_turnus_field=<?echo $i+1?>"><img border=0 src="./pictures/trash.gif" <? tooltip(_("Dieses Feld aus der Auswahl l&ouml;schen")) ?>></a>
+									&nbsp; <a href="<? echo $PHP_SELF?>?delete_turnus_field=<?echo $i+1?>"><img border=0 src="./pictures/trash.gif" <?= tooltip(_("Dieses Feld aus der Auswahl löschen")) ?>></a>
 									<?
 								}
-								print "<br />&nbsp;Raum:&nbsp; ";
+								print "<br />&nbsp;"._("Raum:")."&nbsp; ";
 								if ($RESOURCES_ENABLE) {
-									$resList = new ResourcesUserRoomsList($user_id);
+									$resList->reset();
 									if ($resList->numberOfEvents()) {
 										print "<font size=-1><select name=\"turnus_resource_id[]\"></font>";
-										printf ("<option %s value=\"FALSE\">--</option>", (!$term_metadata["turnus_data"][$i]["resource_id"]) ? "selected" : "");												
+										printf ("<option %s value=\"FALSE\">["._("wie Eingabe")." -->]</option>", (!$term_metadata["turnus_data"][$i]["resource_id"]) ? "selected" : "");												
 										while ($resObject = $resList->nextEvent()) {
 											printf ("<option %s value=\"%s\">%s</option>", ($term_metadata["turnus_data"][$i]["resource_id"]) == $resObject->getId() ? "selected" :"", $resObject->getId(), htmlReady($resObject->getName()));
 										}
