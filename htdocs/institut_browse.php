@@ -23,10 +23,10 @@
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 
+include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+
 require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipRangeTreeView.class.php");
-
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
 // Start of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
@@ -87,29 +87,27 @@ $the_tree->showTree();
 	</td>
 	<td class="blank" align = right valign=top>
 	<?
-$infobox = array(array("kategorie"  => "Information:",
+$infobox = array(array("kategorie"  => _("Information:"),
 						"eintrag" => array(array("icon" => "pictures/ausruf_small.gif",
 												"text"  => _("Sie k&ouml;nnen sich durch den Einrichtungsbaum klicken oder das Suchformular benutzen"))
 										)
 						)
 				);
-$such_form = "<form action=\"$PHP_SELF?cmd=suche\" method=\"post\">" . _("Bitte geben Sie hier Ihre Suchkriterien ein:") . "<br>
-			" . _("Name der Einrichtung:") . "<br>
-			<input type=\"text\" name=\"search_name\" style=\"width:95%;\"><br>
-			" . _("Einrichtung dieses Mitarbeiters:") . "<br>
-			<input type=\"text\" name=\"search_user\" style=\"width:95%;\"><br>
-			" . _("Einrichtung dieser Veranstaltung:") . "<br>
-			<input type=\"text\" name=\"search_sem\" style=\"width:95%;\">
-			<div align=\"right\" style=\"width:95%;\"><input type=\"image\" border=\"0\" " . makeButton("suchestarten","src") . tooltip(_("Suche starten")) . " vspace=\"3\" >
-			</div></form>
-			";
-$infobox[1]["kategorie"] = "Suchen";
+$such_form = "<form action=\"$PHP_SELF?cmd=suche\" method=\"post\">" . _("Bitte geben Sie hier Ihre Suchkriterien ein:") . "<br>"
+			. _("Name der Einrichtung:") . "<br>"
+			. "<input type=\"text\" name=\"search_name\" style=\"width:95%;\"><br>"
+			. _("Einrichtung dieses Mitarbeiters:") . "<br>"
+			. "<input type=\"text\" name=\"search_user\" style=\"width:95%;\"><br>"
+			. _("Einrichtung dieser Veranstaltung:") . "<br>"
+			. "<input type=\"text\" name=\"search_sem\" style=\"width:95%;\">"
+			. "<div align=\"right\" style=\"width:95%;\"><input type=\"image\" border=\"0\" " . makeButton("suchestarten","src") . tooltip(_("Suche starten")) . " vspace=\"3\" >"
+			. "</div></form>";
+$infobox[1]["kategorie"] = _("Suchen:");
 $infobox[1]["eintrag"][] = array (	"icon" => "pictures/suchen.gif" ,
 									"text" => $such_form
 								);
 print_infobox ($infobox,"pictures/einrichtungen.jpg");
 ?>
-</td></tr>
 </td></tr>
 </table>
 </body>
