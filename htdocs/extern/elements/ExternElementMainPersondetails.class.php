@@ -173,6 +173,18 @@ class ExternElementMainPersonDetails extends ExternElementMain {
 		return $element_headline . $out;
 	}
 	
+	function checkValue ($attribute, $value) {
+		if ($attribute == "showcontact") {
+			if (!isset($GLOBALS["HTTP_POST_VARS"]["Main_showcontact"])) {
+				$GLOBALS["HTTP_POST_VARS"]["Main_showcontact"] = 0;
+				return FALSE;
+			}
+				
+			return !($value == "1" || $value == "0");
+		}
+		return FALSE;
+	}
+	
 }
 
 ?>
