@@ -541,8 +541,8 @@ function DeleteAdressbook($owner_id) {
 		$i++;
 	}
 	$db->query ("DELETE FROM contact WHERE owner_id = '$owner_id'");
-	if ($db->next_record()) // remove all contacts 
-		$return = _("Guestbook mit $i Einträgen gelöscht.");
+	if ($db->affected_rows()) // remove all contacts 
+		$return = sprintf(_("Adressbuch mit %d Einträgen gelöscht."), $i);
 	else
 		$return = FALSE;
 	return $return;
