@@ -119,19 +119,33 @@ function isKeyword($str, $page){
 
 
 /**
-* Get lock information about page/version
-* Returns database record or NULL if no lock set.
-&nbsp;*
+* Get lock information about page
+* Returns displayable string containing lock information 
+* (Template: Username1 (seit x Minuten), Username2 (seit y Minuten), ...)
+* or NULL if no locks set.
+*
 * @param	string	WikiPage keyword
-* @param	int	WikiPage version
 *
 **/
-function getLock($keyword, $version) {
-	global $SessSemName;
+function getLock($keyword) {
+	global $SessSemName, $user_id;
 	$db=new DB_seminar;
-	$db->query("SELECT * FROM wiki_locks WHERE range_id='$SessSemName[1]' AND keyword='$keyword'"); // HACK: AND version='$version'" removed - all locks are considered
-	$db->next_record();
-	return $db->Record;
+	$result=$db->query("SELECT user_id, chdate FROM wiki_locks WHERE range_id='$SessSemName[1]' AND keyword='$keyword' AND user_id != '$user_id' ORDER BY chdate DESC"); 
+
+	$lockstring="";
+	$count=0;
+	$num=$db->nf();
+	while ($db->next_record()) {
+		if ($count>0 && $count==$num-1) {
+			$lockstring .= _(" und ");
+		} else if ($count>0) {
+			$lockstring .= ", ";
+		}
+		$lockstring .= get_fullname($db->f("user_id"));
+		$lockstring .= sprintf(_(" (seit %d Minuten)"), ceil((time()-$db->f("chdate"))/60));
+		$count++;
+	}
+	return $lockstring;
 }
 
 /**
@@ -159,7 +173,7 @@ function releaseLocks($keyword) {
 * @param	string	WikiPage keyword
 *
 **/
-function releasePageLock($keyword) {
+function releasePageLocks($keyword) {
 	global $SessSemName, $user_id;
 	$db=new DB_seminar;
 	$db->query("DELETE FROM wiki_locks WHERE range_id='$SessSemName[1]' AND keyword='$keyword' AND user_id='$user_id'");
@@ -308,11 +322,12 @@ function wikiSeminarHeader() {
 	global $SessSemName;
 	echo "\n<table width=\"100%\" class=\"blank\" border=0 cellpadding=0 cellspacing=0>\n";
 	echo "<tr>";
-	echo "<td class=\"topic\" width=\"95%\">";
+	echo "<td class=\"topic\" width=\"100%\">";
 	echo "<b>&nbsp;<img src=\"pictures/icon-wiki.gif\" align=absmiddle>&nbsp; ". $SessSemName["header_line"] ." - " .  _("Wiki") . "</b></td>";
-	echo "<td class=\"topic\" width=\"5%\" align=\"right\">";
-	echo "<a href =\"wiki.php?cmd=anpassen\">";
-	echo "<img src=\"pictures/pfeillink.gif\" border=0 " . tooltip(_("Look & Feel anpassen")) . ">&nbsp;</a></td></tr>\n";
+	//echo "<td class=\"topic\" width=\"5%\" align=\"right\">";
+	//echo "<a href =\"wiki.php?cmd=anpassen\">";
+	//echo "<img src=\"pictures/pfeillink.gif\" border=0 " . tooltip(_("Look & Feel anpassen")) . ">&nbsp;</a></td></tr>\n";
+	echo "</tr>";
 	echo "<tr><td class=\"blank\" colspan=2>&nbsp; </td></tr>\n";
 	echo "</table>";
 }
@@ -339,13 +354,11 @@ function wikiEdit($keyword, $wikiData, $backpage=NULL) {
 		$lastpage = "";
 	}
 	releaseLocks($keyword); // kill old locks 
-	$lock=getLock($keyword,$wikiData["version"]);
-	if ($lock && $lock["user_id"]!=$user_id) { 
-		$locktime=ceil((time()-$lock["chdate"])/60);
-		$lockuser=get_fullname($lock["user_id"]);
+	$locks=getLock($keyword);
+	if ($locks && $lock["user_id"]!=$user_id) { 
 		echo $begin_blank_table;
 		echo "<tr><td class=blank>&nbsp;</td></tr>";
-		parse_msg("info§" . sprintf(_("Die Seite wird evtl. von %s bearbeitet. (Seit %s Minuten)"), $lockuser, $locktime) . "<br>" . _("Wenn Sie die Seite trotzdem &auml;ndern, kann ein Versionskonflikt entstehen.") . "<br>" . _("Es werden dann beide Versionen eingetragen und m&uuml;ssen von Hand zusammengef&uuml;hrt werden."));
+		parse_msg("info§" . _("Die Seite wird eventuell bearbeitet von ") . $locks . ".<br>" . _("Wenn Sie die Seite trotzdem &auml;ndern, kann ein Versionskonflikt entstehen.") . "<br>" . _("Es werden dann beide Versionen eingetragen und m&uuml;ssen von Hand zusammengef&uuml;hrt werden.") . "<br>" . _("Klicken Sie auf Abbrechen, um zurückzukehren."));
 		echo $end_blank_table;
 	}
 

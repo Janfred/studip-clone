@@ -116,12 +116,13 @@ if ($view=="listall") {
 
 	// set lock
 	$db=new DB_Seminar;
-	$result=$db->query("REPLACE INTO wiki_locks (user_id, range_id, keyword, version, chdate) VALUES ('$user->id', '$SessSemName[1]', '$keyword', '$wikiData[version]', '".time()."')");
+	$result=$db->query("REPLACE INTO wiki_locks (user_id, range_id, keyword, chdate) VALUES ('$user->id', '$SessSemName[1]', '$keyword', '".time()."')");
 
 	wikiSinglePageHeader($wikiData, $keyword);
 	wikiEdit($keyword, $wikiData);
 
 } else if ($view=='editnew') { // edit a new page
+
 	if (!$perm->have_perm("autor")) {
 		echo $begin_blank_table;
 		parse_msg("error§" . _("Sie haben keine Berechtigung, Seiten zu editieren!"));
@@ -131,7 +132,7 @@ if ($view=="listall") {
 	}
 	// set lock
 	$db=new DB_Seminar;
-	$result=$db->query("REPLACE INTO wiki_locks (user_id, range_id, keyword, version, chdate) VALUES ('$user->id', '$SessSemName[1]', '$keyword', '0', '".time()."')");
+	$result=$db->query("REPLACE INTO wiki_locks (user_id, range_id, keyword, chdate) VALUES ('$user->id', '$SessSemName[1]', '$keyword', '".time()."')");
 	wikiSinglePageHeader($wikiData, $keyword);
 	wikiEdit($keyword, NULL, $lastpage);
 
@@ -181,7 +182,7 @@ if ($view=="listall") {
 	// Editing page was aborted
 	//
 	} else if ($cmd=="abortedit") { // Editieren abgebrochen
-		releasePageLock($keyword); // kill lock that was set when starting to edit
+		releasePageLocks($keyword); // kill lock that was set when starting to edit
 		if ($lastpage) { // if editing new page was aborted, display last page again
 			$keyword=$lastpage;
 		}
