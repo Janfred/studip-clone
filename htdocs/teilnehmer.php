@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
+// $Id$
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 
@@ -742,10 +743,10 @@ while (list ($key, $val) = each ($gruppe)) {
 
 	if ($rechte) {
 		if (is_opened($db->f("user_id"))) {
-			$link = $PHPSELF."?cmd=lessinfos&username=".$db->f("username")."#".$db->f("username");
+			$link = $PHP_SELF."?cmd=lessinfos&username=".$db->f("username")."#".$db->f("username");
 			$img = "forumgraurunt.gif";
 		} else {
-			$link = $PHPSELF."?cmd=moreinfos&username=".$db->f("username")."#".$db->f("username");
+			$link = $PHP_SELF."?cmd=moreinfos&username=".$db->f("username")."#".$db->f("username");
 			$img = "forumgrau.gif";
 		}
 	}
@@ -848,7 +849,7 @@ while (list ($key, $val) = each ($gruppe)) {
 		?>
 			<tr>
 				<td class=<?=$class?> colspan=9>
-					<form action="<?=$PHPSELF."#".$db->f("username")?>" method="POST">
+					<form action="<?=$PHP_SELF."#".$db->f("username")?>" method="POST">
 					<table border="0">
 						<tr>
 							<td width="25%">

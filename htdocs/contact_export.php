@@ -171,7 +171,7 @@ function printSelectGroup($infobox, $groups){
 		. "	 <tr>"
 		. "	  <td align=\"left\" valign=\"top\"><font size=\"-1\">\n"
 		. _("Bitte wählen sie ein Gruppe aus, deren Daten sie in eine vCard-Datei exportieren möchten:")."\n"
-		. "	   <form action=\"$PHPSELF\" method=post>\n"
+		. "	   <form action=\"".$_SERVER['PHP_SELF']."\" method=post>\n"
 		. "       &nbsp;<select name=\"groupid\" style=\"vertical-align:middle;\">\n";
 	// the groups
 	for ($i=0;$i<=sizeof($groups)-1;$i++){

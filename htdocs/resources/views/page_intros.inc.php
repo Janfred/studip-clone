@@ -58,9 +58,9 @@ switch ($view) {
 					array  ("kategorie" => _("Aktionen:"), 
 							"eintrag" => array (
 								array	("icon" => "pictures/suchen.gif",
-									"text"  => (($resources_data["search_mode"] == "browse") || (!$resources_data["search_mode"]))? sprintf(_("Gew&uuml;nschte Eigenschaften <br />%sangeben%s"), "<a href=\"$PHPSELF?quick_view=search&quick_view_mode=".$view_mode."&mode=properties\">", "</a>") :  sprintf(_("Gew&uuml;nschte Eigenschaften <br />%snicht angeben%s"), "<a href=\"$PHP_SELF?view=search&quick_view_mode=".$view_mode."&mode=browse\">", "</a>")),
+									"text"  => (($resources_data["search_mode"] == "browse") || (!$resources_data["search_mode"]))? sprintf(_("Gew&uuml;nschte Eigenschaften <br />%sangeben%s"), "<a href=\"$PHP_SELF?quick_view=search&quick_view_mode=".$view_mode."&mode=properties\">", "</a>") :  sprintf(_("Gew&uuml;nschte Eigenschaften <br />%snicht angeben%s"), "<a href=\"$PHP_SELF?view=search&quick_view_mode=".$view_mode."&mode=browse\">", "</a>")),
 								array	("icon" => "pictures/meinetermine.gif",
-									"text"  => (!$resources_data["check_assigns"])? sprintf(_("Gew&uuml;nschte Belegungszeit %sber&uuml;cksichtigen%s"), "<a href=\"$PHPSELF?quick_view=search&quick_view_mode=".$view_mode."&check_assigns=TRUE\">", "</a>") :  sprintf(_("Gew&uuml;nschte Belegungszeit <br />%snicht ber&uuml;cksichtigen%s"), "<a href=\"$PHP_SELF?view=search&quick_view_mode=".$view_mode."&check_assigns=FALSE\">", "</a>")),
+									"text"  => (!$resources_data["check_assigns"])? sprintf(_("Gew&uuml;nschte Belegungszeit %sber&uuml;cksichtigen%s"), "<a href=\"$PHP_SELF?quick_view=search&quick_view_mode=".$view_mode."&check_assigns=TRUE\">", "</a>") :  sprintf(_("Gew&uuml;nschte Belegungszeit <br />%snicht ber&uuml;cksichtigen%s"), "<a href=\"$PHP_SELF?view=search&quick_view_mode=".$view_mode."&check_assigns=FALSE\">", "</a>")),
 								array("icon" => "pictures/blank.gif",
 									"text"  => "<br /><a href=\"$PHP_SELF?quick_view=search&quick_view_mode=".$view_mode."&reset=TRUE\">".makeButton("neuesuche")."</a>"))));
 		$infopic = "pictures/rooms.jpg";
@@ -85,7 +85,7 @@ switch ($view) {
 					array  ("kategorie" => _("Aktionen:"), 
 							"eintrag" => array (
 								array	("icon" =>  (!$resources_data["list_recurse"]) ? "pictures/on_small.gif" : "pictures/off_small.gif",
-									"text"  => ($resources_data["list_recurse"]) ? sprintf(_("Ressourcen in untergeordneten Ebenen %snicht ausgeben%s."), "<a href=\"$PHPSELF?nrecurse_list=TRUE\">", "</a>") :  sprintf(_("Ressourcen in untergeordneten Ebenen %s(mit) ausgeben%s"), "<a href=\"$PHP_SELF?recurse_list=TRUE\">", "</a>")))));
+									"text"  => ($resources_data["list_recurse"]) ? sprintf(_("Ressourcen in untergeordneten Ebenen %snicht ausgeben%s."), "<a href=\"$PHP_SELF?nrecurse_list=TRUE\">", "</a>") :  sprintf(_("Ressourcen in untergeordneten Ebenen %s(mit) ausgeben%s"), "<a href=\"$PHP_SELF?recurse_list=TRUE\">", "</a>")))));
 		$infopic = "pictures/rooms.jpg";
 	break;
 
@@ -178,9 +178,9 @@ switch ($view) {
 								array	("icon" =>  "pictures/link_intern.gif" ,
 									"text"  =>  "<a href=\"javascript:void(null)\" onClick=\"window.open('resources.php?quick_view=search&quick_view_mode=no_nav','','scrollbars=yes,left=10,top=10,width=1000,height=680,resizable=yes')\" >"._("Ressourcen suchen")."</a>"),
 								array	("icon" =>  (!$resources_data["skip_closed_requests"]) ? "pictures/off_small.gif" : "pictures/on_small.gif",
-									"text"  => ($resources_data["skip_closed_requests"]) ? sprintf(_("Bearbeitete Anfragen %sanzeigen%s."), "<a href=\"$PHPSELF?skip_closed_requests=FALSE\">", "</a>") :  sprintf(_("Bearbeitete Anfragen %snicht anzeigen%s"), "<a href=\"$PHP_SELF?skip_closed_requests=TRUE\">", "</a>")),
+									"text"  => ($resources_data["skip_closed_requests"]) ? sprintf(_("Bearbeitete Anfragen %sanzeigen%s."), "<a href=\"$PHP_SELF?skip_closed_requests=FALSE\">", "</a>") :  sprintf(_("Bearbeitete Anfragen %snicht anzeigen%s"), "<a href=\"$PHP_SELF?skip_closed_requests=TRUE\">", "</a>")),
 								array	("icon" =>  "pictures/nachricht1.gif",
-									"text"  => sprintf(_("Nachrichten zu zugewiesenen Anfragen %sversenden%s."), "<a href=\"$PHPSELF?snd_closed_request_sms=TRUE\">", "</a>")))));
+									"text"  => sprintf(_("Nachrichten zu zugewiesenen Anfragen %sversenden%s."), "<a href=\"$PHP_SELF?snd_closed_request_sms=TRUE\">", "</a>")))));
 		$infopic = "pictures/rooms.jpg";
 		$clipboard = TRUE;
 	break;

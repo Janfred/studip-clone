@@ -8,7 +8,7 @@
 
  * @author      Christian Bauer <alfredhitchcock@gmx.net>
 
- * @version     $Exp
+ * @version     $Id$
 
  * @copyright   2003 Stud.IP-Project
 
@@ -55,7 +55,7 @@ function printSelectSemester($infobox,$semestersAR){
 		  . "	 <tr>"
 		  . "	  <td align=\"left\" valign=\"top\"><font size=\"-1\">\n"
 		  . _("Bitte wählen sie ein Semster aus:")."\n"
-		  . "	   <form action=\"$PHPSELF\" method=post>\n"
+		  . "	   <form action=\"".$_SERVER['PHP_SELF']."\" method=post>\n"
 		  . "       &nbsp;<select name=\"semesterid\" style=\"vertical-align:middle;\">\n";
 	// the semester
 	for ($i=0;$i<sizeof($semestersAR);$i++){
