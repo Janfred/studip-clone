@@ -687,7 +687,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 				$content.="<input type=\"hidden\" name=\"type\" value=1 />";
 				}
 			elseif ($db->f("description"))
-				$content= htmlReady($db->f("description"));
+				$content= htmlReady($db->f("description"), TRUE, TRUE);
 			else
 				$content= _("Keine Beschreibung vorhanden");
 			
@@ -821,7 +821,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 						}
 					else {
 						if ($db3->f("description"))
-							$content= htmlReady($db3->f("description"));
+							$content= htmlReady($db3->f("description"), TRUE, TRUE);
 						else
 							$content= _("Keine Beschreibung vorhanden");
 						$content.=  "<br />" . sprintf(_("Dateigr&ouml;&szlig;e: %s kB"), round ($db3->f("filesize") / 1024));	
