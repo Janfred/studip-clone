@@ -129,7 +129,7 @@ else
 				printf ("<font size=-1>%s</font>",htmlReady($db2->f("Untertitel")));
 				?>
 				</td>
-				<td class="blank" width="26%" rowspan=4  valign="top">
+				<td class="steel1" width="26%" rowspan=5  valign="top">
 				
 				<? // Infobox 
 				
@@ -399,7 +399,7 @@ print_infobox ($infobox,"pictures/seminare.jpg");
 				}
 				?>
 				</td>
-				<td class="<? echo $cssSw->getClass() ?>"width="61%" colspan=2 valign="top">
+				<td class="<? echo $cssSw->getClass() ?>"width="61%" colspan=1 valign="top">
 				<?		
 				//und wer ist Tutor?
 				$db->query ("SELECT seminar_user.user_id, Vorname, Nachname, username, status FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE seminar_user.Seminar_id = '$sem_id' AND status = 'tutor' ORDER BY Nachname");
