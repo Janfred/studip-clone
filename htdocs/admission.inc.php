@@ -37,6 +37,9 @@
 require_once ("$ABSOLUTE_PATH_STUDIP/messaging.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
 
+//set handling for script execution
+ignore_user_abort(TRUE);
+set_time_limit(0);
 
 /**
 * This function calculate the remaining places for the "alle"-allocation 
