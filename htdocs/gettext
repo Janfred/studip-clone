@@ -11,6 +11,14 @@ do {
 	xgettext -C -n --keyword=_ -o locale/$language/LC_MESSAGES/studip_core.pot  *.* lib/classes/*.* lib/dbviews/*.*
 	msgmerge locale/$language/LC_MESSAGES/studip_core.po.old locale/$language/LC_MESSAGES/studip_core.pot --output-file=locale/$language/LC_MESSAGES/studip_core.po
 
+	mv locale/$language/LC_MESSAGES/studip_calendar.po locale/$language/LC_MESSAGES/studip_calendar.po.old
+	xgettext -C -n --keyword=_ -o locale/$language/LC_MESSAGES/studip_calendar.pot  calendar/*.* calendar/lib/*.* calendar/views/*.* calendar/lib/driver/MySQL/*.*
+	msgmerge locale/$language/LC_MESSAGES/studip_calendar.po.old locale/$language/LC_MESSAGES/studip_calendar.pot --output-file=locale/$language/LC_MESSAGES/studip_calendar.po
+
+	mv locale/$language/LC_MESSAGES/studip_chat.po locale/$language/LC_MESSAGES/studip_chat.po.old
+	xgettext -C -n --keyword=_ -o locale/$language/LC_MESSAGES/studip_chat.pot  chat/*.*
+	msgmerge locale/$language/LC_MESSAGES/studip_chat.po.old locale/$language/LC_MESSAGES/studip_chat.pot --output-file=locale/$language/LC_MESSAGES/studip_chat.po
+
 	mv locale/$language/LC_MESSAGES/studip_resources.po locale/$language/LC_MESSAGES/studip_resources.po.old
 	xgettext -C -n --keyword=_ -o locale/$language/LC_MESSAGES/studip_resources.pot  resources/*.* resources/lib/*.* resources/views/*.*
 	msgmerge locale/$language/LC_MESSAGES/studip_resources.po.old locale/$language/LC_MESSAGES/studip_resources.pot --output-file=locale/$language/LC_MESSAGES/studip_resources.po
@@ -23,15 +31,12 @@ do {
 	xgettext -C -n --keyword=_ -o locale/$language/LC_MESSAGES/studip_lernmodule.pot  lernmodule/*.*
 	msgmerge locale/$language/LC_MESSAGES/studip_lernmodule.po.old locale/$language/LC_MESSAGES/studip_lernmodule.pot --output-file=locale/$language/LC_MESSAGES/studip_lernmodule.po
 
-	mv locale/$language/LC_MESSAGES/studip_chat.po locale/$language/LC_MESSAGES/studip_chat.po.old
-	xgettext -C -n --keyword=_ -o locale/$language/LC_MESSAGES/studip_chat.pot  chat/*.*
-	msgmerge locale/$language/LC_MESSAGES/studip_chat.po.old locale/$language/LC_MESSAGES/studip_chat.pot --output-file=locale/$language/LC_MESSAGES/studip_chat.po
-
 	# then merge into one file
 	msgcat locale/$language/LC_MESSAGES/studip_core.po locale/$language/LC_MESSAGES/studip.po --output-file=locale/$language/LC_MESSAGES/studip.po --use-first
+	msgcat locale/$language/LC_MESSAGES/studip_calendar.po locale/$language/LC_MESSAGES/studip.po --output-file=locale/$language/LC_MESSAGES/studip.po --use-first
+	msgcat locale/$language/LC_MESSAGES/studip_chat.po locale/$language/LC_MESSAGES/studip.po --output-file=locale/$language/LC_MESSAGES/studip.po --use-first
 	msgcat locale/$language/LC_MESSAGES/studip_resources.po locale/$language/LC_MESSAGES/studip.po --output-file=locale/$language/LC_MESSAGES/studip.po --use-first
 	msgcat locale/$language/LC_MESSAGES/studip_export.po locale/$language/LC_MESSAGES/studip.po --output-file=locale/$language/LC_MESSAGES/studip.po --use-first
 	msgcat locale/$language/LC_MESSAGES/studip_lernmodule.po locale/$language/LC_MESSAGES/studip.po --output-file=locale/$language/LC_MESSAGES/studip.po --use-first
-	msgcat locale/$language/LC_MESSAGES/studip_chat.po locale/$language/LC_MESSAGES/studip.po --output-file=locale/$language/LC_MESSAGES/studip.po --use-first
 } ;
 done
