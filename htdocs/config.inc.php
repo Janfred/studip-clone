@@ -42,9 +42,10 @@ $SOFTWARE_VERSION="0.9 rc 4";
 
 //Daten ueber die Uni
     // der Name wird in der local.inc festgelegt
-$UNI_URL="http://www.uni-goettingen.de";
+$UNI_URL = "http://www.uni-goettingen.de";
 $UNI_LOGOUT_ADD=sprintf(_("Und hier geht's direkt zum %sMensaplan%s&nbsp;;-)"), "<a href=\"http://studentenwerk.stud.uni-goettingen.de/mensa/mensen/alle_heute.php\"><b>", "</b></a>");
-$UNI_CONTACT="goettingen@studip.de";
+$UNI_CONTACT = "goettingen@studip.de";
+$UNI_INFO = "Kontakt:\nGeorg-August-Universität\nWilhelmsplatz 1 (Aula)\n37073 Göttingen\nTel. +49 (0)551 / 39-0\nFax +49 (0)551 / 39-4135\npoststelle@uni-goettingen.de"; 
 
 //die IDs der Veranstaltungen, die beim Hochstufen auf autor eingetragen werden
 $AUTO_INSERT_SEM[1]="3f43debe372cfd7d4da6afa4ca40616f";
