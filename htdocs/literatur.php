@@ -30,15 +30,12 @@ include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Sessio
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 
-if ($SessSemName[1] =="") {
-	parse_window ("error§" . _("Sie haben kein Objekt gew&auml;hlt.") . " <br /><font size=-1 color=black>" . _("Dieser Teil des Systems kann nur genutzt werden, wenn Sie vorher ein Objekt gew&auml;hlt haben.") . "<br /><br /> " . sprintf(_("Dieser Fehler tritt auch auf, wenn Ihre Session abgelaufen ist. Wenn sie sich länger als %s Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurück zur Anmeldung zu gelangen."), $AUTH_LIFETIME) . " </font>", "§",
-				_("Kein Objekt gew&auml;hlt"), 
-				sprintf(_("%sHier%s geht es wieder zur Anmeldung beziehungsweise Startseite."), "<a href=\"index.php\"><b>&nbsp;", "</b></a>") . "<br />&nbsp;");
-	die;
-} else {
-	include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
-	require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
-	require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
+require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
+
+checkObject(); // do we have an open object?
+
+include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
 	
 
 ?>
@@ -99,7 +96,6 @@ if ($db->num_rows()) {
 </body>
 </html>
 <?php
-}
   // Save data back to database.
   page_close()
  ?>

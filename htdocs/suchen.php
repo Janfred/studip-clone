@@ -20,11 +20,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 
-if (!isset($SessSemName[0]) || $SessSemName[0] == "") {
-	header("Location: index.php");
-	die;
-}
-
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
@@ -37,21 +32,15 @@ include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 <SCRIPT LANGUAGE="JavaScript" SRC="overlib.js"></SCRIPT>
 
 <?
-include "$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php";
 
 require_once "$ABSOLUTE_PATH_STUDIP/forum.inc.php";
 require_once "$ABSOLUTE_PATH_STUDIP/functions.php";
 require_once "$ABSOLUTE_PATH_STUDIP/visual.inc.php";
 require_once "$ABSOLUTE_PATH_STUDIP/suchen.inc.php";
 
-IF ($SessSemName[1] =="")
-	{
-	parse_window ("error§Sie haben kein Objekt gew&auml;hlt. <br /><font size=-1 color=black>Dieser Teil des Systems kann nur genutzt werden, wenn Sie vorher ein Objekt gew&auml;hlt haben.<br /><br /> Dieser Fehler tritt auch auf, wenn Ihre Session abgelaufen ist. Wenn sie sich länger als $AUTH_LIFETIME Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurück zur Anmeldung zu gelangen. </font>", "§",
-				"Kein Objekt gew&auml;hlt", 
-				"<a href=\"index.php\"><b>&nbsp;Hier</b></a> geht es wieder zur Anmeldung beziehungsweise Startseite.<br />&nbsp;");
-	die;
-	}
+checkObject();
 
+include "$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php";
 
 ?>
 <table width="100%" border=0 cellpadding=0 cellspacing=0>

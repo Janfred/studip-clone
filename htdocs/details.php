@@ -48,13 +48,8 @@ $db3=new DB_Seminar;
 
 
 //wenn kein Seminar gesetzt und auch kein externer Aufruf raus....
-if (($SessSemName[1] =="") && (!isset($sem_id))) {
-	parse_window ("error§" . _("Sie haben kein Objekt gew&auml;hlt.") . " <br><br><font size=-1 color=black>"
-				. _("Dieser Teil des Systems kann nur genutzt werden, wenn Sie vorher ein Objekt (Veranstaltung oder Einrichtung) gew&auml;hlt haben.") . "<br /><br /> "
-				. sprintf(_("Dieser Fehler tritt auch auf, wenn Ihre Session abgelaufen ist. Wenn sie sich länger als %s Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurück zur Anmeldung zu gelangen."), $AUTH_LIFETIME) . "</font>", "§",
-				_("Kein Objekt gew&auml;hlt"),
-				sprintf(_("%sHier%s geht es wieder zur Anmeldungs- bzw. Startseite."), "<a href=\"index.php\"><b>&nbsp;", "</b></a>") . "<br />&nbsp;");
-	die;
+if (!isset($sem_id)) {
+	checkObject();
 }
 	
 //wenn Seminar gesetzt und kein externer Aufruf uebernahme der SessionVariable
@@ -317,7 +312,7 @@ print_infobox ($infobox,"pictures/details.jpg");
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" colspan=2 width="51%" valign="top">
 				<?
-				printf ("<font size=-1><b>" . _("Veranstaltungstyp:") . "</b></font><br /><font size=-1>%s in der Kategorie %s</font>",$SEM_TYPE[$db2->f("status")]["name"], $SEM_CLASS[$SEM_TYPE[$db2->f("status")]["class"]]["name"]);
+				printf ("<font size=-1><b>" . _("Veranstaltungstyp:") . "</b></font><br /><font size=-1>" . _("%s in der Kategorie %s") . "</font>",$SEM_TYPE[$db2->f("status")]["name"], $SEM_CLASS[$SEM_TYPE[$db2->f("status")]["class"]]["name"]);
 				?>
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" colspan=2 width="48%" valign="top">

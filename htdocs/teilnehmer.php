@@ -33,6 +33,9 @@ require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php");		//We need the config for
 // Start  of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head	
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   //hier wird der "Kopf" nachgeladen
+
+checkObject();
+
 include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
 	
 $messaging=new messaging;
@@ -42,15 +45,6 @@ $cssSw=new cssClassSwitcher;
 	
 if ($sms_msg)
 	$msg=rawurldecode($sms_msg);
-
-if ($SessSemName[1] =="") {
-	parse_window ("error§" . _("Sie haben keine Veranstaltung gew&auml;hlt.") . " <br><br><font size=-1 color=black>"
-				. _("Dieser Teil des Systems kann nur genutzt werden, wenn Sie vorher eine Veranstaltung gew&auml;hlt haben.") . "<br /><br /> "
-				. sprintf(_("Dieser Fehler tritt auch auf, wenn Ihre Session abgelaufen ist. Wenn sie sich länger als %s Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurück zur Anmeldung zu gelangen."), $AUTH_LIFETIME) . "</font>", "§",
-				_("Kein Objekt gew&auml;hlt"),
-				sprintf(_("%sHier%s geht es wieder zur Anmeldung beziehungsweise Startseite."), "<a href=\"index.php\"><b>&nbsp;", "</b></a>") . "<br />&nbsp;");
-	die;
-}
 
 // Aenderungen nur in dem Seminar, in dem ich gerade bin...
 	$id=$SessSemName[1];

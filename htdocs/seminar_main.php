@@ -68,33 +68,28 @@ if(isset($redirect_to) && $redirect_to != "") {
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 
-if ($SessSemName[1] =="") {
-	parse_window ("error§" . _("Sie haben kein Objekt gew&auml;hlt.") . " <br><br><font size=-1 color=black>"
-				. _("Dieser Teil des Systems kann nur genutzt werden, wenn Sie vorher ein Objekt (Veranstaltung oder Einrichtung) gew&auml;hlt haben.") . "<br /><br /> "
-				. sprintf(_("Dieser Fehler tritt auch auf, wenn Ihre Session abgelaufen ist. Wenn sie sich länger als %s Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurück zur Anmeldung zu gelangen."), $AUTH_LIFETIME) . "</font>", "§",
-				_("Kein Objekt gew&auml;hlt"),
-				sprintf(_("%sHier%s geht es wieder zur Anmeldung beziehungsweise Startseite."), "<a href=\"index.php\"><b>&nbsp;", "</b></a>") . "<br />&nbsp;");
-	die;
-} else {
-	include "links_openobject.inc.php";
-	include "show_news.php";
-	include "show_dates.inc.php";
-	$sess->register("smain_data");
-	//Auf und Zuklappen Termine
-	if ($dopen)
-		$smain_data["dopen"]=$dopen;
+checkObject();
 
-	if ($dclose)
-		$smain_data["dopen"]='';
+include "links_openobject.inc.php";
+include "show_news.php";
+include "show_dates.inc.php";
 
-	//Auf und Zuklappen News
-	if ($nopen)
-		$smain_data["nopen"]=$nopen;
+$sess->register("smain_data");
+//Auf und Zuklappen Termine
+if ($dopen)
+	$smain_data["dopen"]=$dopen;
 
-	if ($nclose)
-		$smain_data["nopen"]='';
+if ($dclose)
+	$smain_data["dopen"]='';
 
-	?>
+//Auf und Zuklappen News
+if ($nopen)
+	$smain_data["nopen"]=$nopen;
+
+if ($nclose)
+	$smain_data["nopen"]='';
+
+?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
 	<tr><td class="topic" colspan=2><b>&nbsp;<? echo $SessSemName["header_line"]. " - " . _("Kurzinfo"); ?>
 	</b></td></tr>
@@ -150,12 +145,11 @@ if ($SessSemName[1] =="") {
 	($rechte) ? $show_admin="admin_dates.php?range_id=$SessSemName[1]&ebene=sem&new_sem=TRUE" : $show_admin=FALSE;
 	if (show_dates($auswahl, $start_zeit, $end_zeit, 0, 0, $show_admin, $smain_data["dopen"]))
 		echo"<br>";
-}
 ?>
 </body>
 </html>
 <?php
   // Save data back to database.
   page_close();
- ?>
+?>
 <!-- $Id$ -->
