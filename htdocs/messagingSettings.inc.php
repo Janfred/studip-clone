@@ -84,6 +84,7 @@ if ($messaging_cmd=="change_view_insert" && !$set_msg_default_x && $newmsgset_x)
 	} else {
 		$my_messaging_settings["opennew"] = $opennew;
 	}
+	$my_messaging_settings["show_sndpicture"] = $show_sndpicture;
 	$my_messaging_settings["logout_markreaded"] = $logout_markreaded;
 	$my_messaging_settings["addsignature"] = $addsignature;
 	$sms_data["sig"] = $addsignature;
@@ -296,7 +297,7 @@ function change_messaging_view() {
 				</tr>	
 
 				<tr <? $cssSw->switchClass() ?>>
-					<td align="right" class="blank">
+					<td align="right" class="blank" style="border-bottom:1px dotted black;">
 						<font size=-1><?echo _("Signatur gesendeten Nachrichten anhängen");?></font>
 					</td>
 					<td align="left" <?=$cssSw->getFullClass()?>>
@@ -304,6 +305,16 @@ function change_messaging_view() {
 						&nbsp;<textarea name="sms_sig" rows=3 cols=30><? echo htmlready($my_messaging_settings["sms_sig"]); ?></textarea>
 					</td>
 				</tr>
+				
+				<tr  <? $cssSw->switchClass() ?>>
+					<td  align="right" class="blank">
+						<font size="-1"><?print _("Bild des Absenders in Nachricht anzeigen");?></font>
+					</td>
+					<td <?=$cssSw->getFullClass()?>>
+						<input type="checkbox" value="1" name="show_sndpicture"<? if ($my_messaging_settings["show_sndpicture"] == "1") echo " checked"; ?>>
+					</td>
+				</tr>				
+				
 				<tr <? $cssSw->resetClass() ?>>
 					<td colspan="2" align="center" class="steelgraulight" style="border-bottom:1px dotted black;border-top:1px dotted black;"><font size="-1"><b><?=_("Stud.IP-Messenger")?></b></font></td>
 				</tr>
