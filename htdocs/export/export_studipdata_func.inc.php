@@ -186,79 +186,79 @@ function export_sem($inst_id, $ex_sem_id = "all")
 	$data_object .= xml_open_tag( $xml_groupnames_lecture["group"] );
 
 	while ($db->next_record()) 
-	{
-		$group_string = "";
-		if (($do_group) AND ($group != $db->f($group_tab_zelle)))
+		if ($SEM_TYPE[$db->f("status")]["class"] == 1)
+		// Nur Lehre exportieren
 		{
-			if ($group != "FIRSTGROUP")
-				$group_string .= xml_close_tag($xml_groupnames_lecture["subgroup1"]);
-			if ($group_tab_zelle == "status") 
-				$group_string .= xml_open_tag($xml_groupnames_lecture["subgroup1"], $SEM_TYPE[$db->f($group_tab_zelle)]["name"]);
-			else
-				$group_string .= xml_open_tag($xml_groupnames_lecture["subgroup1"], $db->f($group_tab_zelle));
-			$group = $db->f($group_tab_zelle);
-			if (($do_subgroup) AND ($subgroup == $db->f($subgroup_tab_zelle)))
-				$subgroup = "NEXTGROUP";
-		}
-		if (($do_subgroup) AND ($subgroup != $db->f($subgroup_tab_zelle)))
-		{
-			if ($subgroup != "FIRSTGROUP")
-				$group_string = xml_close_tag($xml_groupnames_lecture["subgroup2"]) . $group_string;
-			$group_string .= xml_open_tag($xml_groupnames_lecture["subgroup2"], $db->f($subgroup_tab_zelle));
-			$subgroup = $db->f($subgroup_tab_zelle);
-		}
-		$data_object .= $group_string;
-		$object_counter++;
-		$data_object .= xml_open_tag($xml_groupnames_lecture["object"], $db->f("Name"));
-		while ( list($key, $val) = each($xml_names_lecture))
-		{
-			if ($val == "") $val = $key;
-			if ($SEM_TYPE[$db->f("status")]["class"] != 1)
-				; // Nur Lehre exportieren
-			elseif ($key == "status") 
-				$data_object .= xml_tag($val, $SEM_TYPE[$db->f($key)]["name"]);
-			elseif ($key == "ort") 
-				$data_object .= xml_tag($val, getRoom($db->f("Seminar_id")));
-			elseif (($key == "bereich") AND (($SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["bereiche"])))
+			$group_string = "";
+			if (($do_group) AND ($group != $db->f($group_tab_zelle)))
 			{
-				$group_string .= xml_open_tag($xml_groupnames_lecture["childgroup3"]);
-				foreach (get_sem_tree_path($db->f("Seminar_id")) as $sem_tree_id => $path_name)
-					$data_object .= xml_tag($val, $path_name);
-				$group_string .= xml_close_tag($xml_groupnames_lecture["childgroup3"]);
+				if ($group != "FIRSTGROUP")
+					$group_string .= xml_close_tag($xml_groupnames_lecture["subgroup1"]);
+				if ($group_tab_zelle == "status") 
+					$group_string .= xml_open_tag($xml_groupnames_lecture["subgroup1"], $SEM_TYPE[$db->f($group_tab_zelle)]["name"]);
+				else
+					$group_string .= xml_open_tag($xml_groupnames_lecture["subgroup1"], $db->f($group_tab_zelle));
+				$group = $db->f($group_tab_zelle);
+				if (($do_subgroup) AND ($subgroup == $db->f($subgroup_tab_zelle)))
+					$subgroup = "NEXTGROUP";
 			}
-			elseif ($key == "metadata_dates") 
+			if (($do_subgroup) AND ($subgroup != $db->f($subgroup_tab_zelle)))
 			{
-				$data_object .= xml_open_tag( $xml_groupnames_lecture["childgroup1"] );
-				$vorb = vorbesprechung($db->f("Seminar_id"));
-				if ($vorb != false) 
-					$data_object .= xml_tag($val[0], $vorb);
-				$data_object .= xml_tag($val[1], veranstaltung_beginn($db->f("Seminar_id")));
-				$data_object .= xml_tag($val[2], view_turnus($db->f("Seminar_id")));
-				$data_object .= xml_close_tag( $xml_groupnames_lecture["childgroup1"] );
+				if ($subgroup != "FIRSTGROUP")
+					$group_string = xml_close_tag($xml_groupnames_lecture["subgroup2"]) . $group_string;
+				$group_string .= xml_open_tag($xml_groupnames_lecture["subgroup2"], $db->f($subgroup_tab_zelle));
+				$subgroup = $db->f($subgroup_tab_zelle);
 			}
-			elseif ($db->f($key) != "") 
-				$data_object .= xml_tag($val, $db->f($key));
+			$data_object .= $group_string;
+			$object_counter++;
+			$data_object .= xml_open_tag($xml_groupnames_lecture["object"], $db->f("Name"));
+			while ( list($key, $val) = each($xml_names_lecture))
+			{
+				if ($val == "") $val = $key;
+				if ($key == "status") 
+					$data_object .= xml_tag($val, $SEM_TYPE[$db->f($key)]["name"]);
+				elseif ($key == "ort") 
+					$data_object .= xml_tag($val, getRoom($db->f("Seminar_id")));
+				elseif (($key == "bereich") AND (($SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["bereiche"])))
+				{
+					$group_string .= xml_open_tag($xml_groupnames_lecture["childgroup3"]);
+					foreach (get_sem_tree_path($db->f("Seminar_id")) as $sem_tree_id => $path_name)
+						$data_object .= xml_tag($val, $path_name);
+					$group_string .= xml_close_tag($xml_groupnames_lecture["childgroup3"]);
+				}
+				elseif ($key == "metadata_dates") 
+				{
+					$data_object .= xml_open_tag( $xml_groupnames_lecture["childgroup1"] );
+					$vorb = vorbesprechung($db->f("Seminar_id"));
+					if ($vorb != false) 
+						$data_object .= xml_tag($val[0], $vorb);
+					$data_object .= xml_tag($val[1], veranstaltung_beginn($db->f("Seminar_id")));
+					$data_object .= xml_tag($val[2], view_turnus($db->f("Seminar_id")));
+					$data_object .= xml_close_tag( $xml_groupnames_lecture["childgroup1"] );
+				}
+				elseif ($db->f($key) != "") 
+					$data_object .= xml_tag($val, $db->f($key));
+			}
+			$db2->query('SELECT auth_user_md5.Vorname, auth_user_md5.Nachname, user_info.title_front, user_info.title_rear FROM seminar_user 
+						LEFT JOIN user_info USING(user_id) 
+						LEFT JOIN auth_user_md5 USING(user_id) 
+						WHERE (seminar_user.status = "dozent") AND (seminar_user.Seminar_id = "' . $db->f("Seminar_id") . '")');
+			$data_object .= "<" . $xml_groupnames_lecture["childgroup2"] . ">\n";
+			while ($db2->next_record()) 
+				{
+					$content_string = $db2->f("Vorname") . " " . $db2->f("Nachname");
+					if ($db2->f("title_front") != "") 
+						$content_string = $db2->f("title_front") . " " . $content_string;
+					if ($db2->f("title_rear") != "") 
+						$content_string = $content_string . ", " . $db2->f("title_rear");
+					$data_object .= xml_tag($xml_groupnames_lecture["childobject2"], $content_string);
+				}
+			$data_object .= xml_close_tag( $xml_groupnames_lecture["childgroup2"] );
+			$data_object .= xml_close_tag( $xml_groupnames_lecture["object"] );
+			reset($xml_names_lecture);
+			output_data($data_object, $o_mode);
+			$data_object = "";
 		}
-		$db2->query('SELECT auth_user_md5.Vorname, auth_user_md5.Nachname, user_info.title_front, user_info.title_rear FROM seminar_user 
-					LEFT JOIN user_info USING(user_id) 
-					LEFT JOIN auth_user_md5 USING(user_id) 
-					WHERE (seminar_user.status = "dozent") AND (seminar_user.Seminar_id = "' . $db->f("Seminar_id") . '")');
-		$data_object .= "<" . $xml_groupnames_lecture["childgroup2"] . ">\n";
-		while ($db2->next_record()) 
-			{
-				$content_string = $db2->f("Vorname") . " " . $db2->f("Nachname");
-				if ($db2->f("title_front") != "") 
-					$content_string = $db2->f("title_front") . " " . $content_string;
-				if ($db2->f("title_rear") != "") 
-					$content_string = $content_string . ", " . $db2->f("title_rear");
-				$data_object .= xml_tag($xml_groupnames_lecture["childobject2"], $content_string);
-			}
-		$data_object .= xml_close_tag( $xml_groupnames_lecture["childgroup2"] );
-		$data_object .= xml_close_tag( $xml_groupnames_lecture["object"] );
-		reset($xml_names_lecture);
-		output_data($data_object, $o_mode);
-		$data_object = "";
-	}
 
 	if (($do_subgroup) AND ($subgroup != "FIRSTGROUP"))
 		$data_object .= xml_close_tag($xml_groupnames_lecture["subgroup2"]);
