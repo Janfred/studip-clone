@@ -151,7 +151,7 @@ function guest_navi () {
 	$maxpages = $this->pages_total;
 	$ipage = ($this->guestpage / $this->perpage)+1;
 	if ($ipage != 1)
-		$navi .= "<a href=\"$SELF_PHP?guestpage=".($ipage-2)*$this->perpage."&guestbook=open&username=$this->username#guest\"><font size=-1>" . _("zurück") . "</a> | </font>";
+		$navi .= "<a href=\"$PHP_SELF?guestpage=".($ipage-2)*$this->perpage."&guestbook=open&username=$this->username#guest\"><font size=-1>" . _("zurück") . "</a> | </font>";
 	else
 		$navi .= "<font size=\"-1\">Seite: </font>";
 	while ($i <= $maxpages) {
@@ -161,7 +161,7 @@ function guest_navi () {
 				$space = 0;
 			}
 			if ($i != $ipage)
-				$navi .= "<a href=\"$SELF_PHP?guestpage=".($i-1)*$this->perpage."&guestbook=open&username=$this->username#guest\"><font size=-1>".$i."</a></font>";
+				$navi .= "<a href=\"$PHP_SELF?guestpage=".($i-1)*$this->perpage."&guestbook=open&username=$this->username#guest\"><font size=-1>".$i."</a></font>";
 			else
 				$navi .= "<font size=\"-1\"><b>".$i."</b></font>";
 			if ($maxpages != 1)
@@ -172,7 +172,7 @@ function guest_navi () {
 		$i++;	
 	}
 	if ($ipage != $maxpages)
-		$navi .= "<a href=\"$SELF_PHP?guestpage=".($ipage)*$this->perpage."&guestbook=open&username=$this->username#guest\"><font size=-1> " . _("weiter") . "</a></font>";
+		$navi .= "<a href=\"$PHP_SELF?guestpage=".($ipage)*$this->perpage."&guestbook=open&username=$this->username#guest\"><font size=-1> " . _("weiter") . "</a></font>";
 	return $navi;
 }
 	

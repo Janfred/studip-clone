@@ -631,7 +631,7 @@ function forum_print_navi ($forum) {
 	$maxpages = ceil($forum["forumsum"] / $forum["postingsperside"]);
 	$ipage = ($forum["flatviewstartposting"] / $forum["postingsperside"])+1;
 	if ($ipage != 1)
-		$navi .= "<a href=\"$SELF_PHP?flatviewstartposting=".($ipage-2)*$forum["postingsperside"]."\"><font size=-1>" . _("zurück") . "</a> | </font>";
+		$navi .= "<a href=\"$PHP_SELF?flatviewstartposting=".($ipage-2)*$forum["postingsperside"]."\"><font size=-1>" . _("zurück") . "</a> | </font>";
 	else
 		$navi .= "<font size=\"-1\">Seite: </font>";
 	while ($i <= $maxpages) {
@@ -641,7 +641,7 @@ function forum_print_navi ($forum) {
 				$space = 0;
 			}
 			if ($i != $ipage)
-				$navi .= "<a href=\"$SELF_PHP?flatviewstartposting=".($i-1)*$forum["postingsperside"]."\"><font size=-1>".$i."</a></font>";
+				$navi .= "<a href=\"$PHP_SELF?flatviewstartposting=".($i-1)*$forum["postingsperside"]."\"><font size=-1>".$i."</a></font>";
 			else
 				$navi .= "<font size=\"-1\"><b>".$i."</b></font>";
 			if ($maxpages != 1)
@@ -652,7 +652,7 @@ function forum_print_navi ($forum) {
 		$i++;	
 	}
 	if ($ipage != $maxpages)
-		$navi .= "<a href=\"$SELF_PHP?flatviewstartposting=".($ipage)*$forum["postingsperside"]."\"><font size=-1> " . _("weiter") . "</a></font>";
+		$navi .= "<a href=\"$PHP_SELF?flatviewstartposting=".($ipage)*$forum["postingsperside"]."\"><font size=-1> " . _("weiter") . "</a></font>";
 	return $navi;
 }
 
