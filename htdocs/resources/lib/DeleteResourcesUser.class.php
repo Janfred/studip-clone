@@ -55,11 +55,13 @@ class DeleteResourcesUser {
 	//private
 	function deleteForeignAssigns() {
 		//all assigns linked to resource
-		$query = sprintf("SELECT assign_id FROM resources_assign WHERE assign_user_id = '%s' ", $this->range_id);
-		$this->db->query($query);
-		while ($this->db->next_record()) {
-			$killAssign = new AssignObject ($this->db->f("assign_id"));
-			$killAssign->delete();
+		if ($this->range_id) {
+			$query = sprintf("SELECT assign_id FROM resources_assign WHERE assign_user_id = '%s' ", $this->range_id);
+			$this->db->query($query);
+			while ($this->db->next_record()) {
+				$killAssign = new AssignObject ($this->db->f("assign_id"));
+				$killAssign->delete();
+			}
 		}
 		if (get_object_type($this->range_id == "sem")) {
 			$query = sprintf("SELECT assign_id FROM termine LEFT JOIN resources_assign ON (resources_assign.assign_user_id = termine.termin_id) WHERE range_id = '%s' ", $this->range_id);
