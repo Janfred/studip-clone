@@ -351,9 +351,7 @@ function edit_pers($password,$check_pass,$response,$new_username,$vorname,$nachn
 
   if ($this->auth_user["Email"] != $email)
    {  //email wurde geändert!
-   $smtp=new smtp_class;       ## Einstellungen fuer das Verschicken der Mails
-   $smtp->host_name=getenv("SERVER_NAME");
-   $smtp->localhost="localhost";
+   $smtp=new studip_smtp_class;       ## Einstellungen fuer das Verschicken der Mails
    $REMOTE_ADDR=getenv("REMOTE_ADDR");
    $Zeit=date("H:i:s, d.m.Y",time());
 
@@ -369,9 +367,9 @@ function edit_pers($password,$check_pass,$response,$new_username,$vorname,$nachn
    $this->msg=$this->msg."error§Der Mailserver ist nicht erreichbar, bitte überprüfen Sie, ob Sie E-Mails mit der angegebenen Addresse verschicken können!§";
    return false;
 	} else {       ## Server ereichbar
-   if (!$validator->ValidateEmailBox($email)) {    ## aber user unbekannt. Mail an abuse@puk!
-	$from="wwwrun@".$smtp->host_name;
-	$to="abuse@".$smtp->host_name;
+   if (!$validator->ValidateEmailBox($email)) {    ## aber user unbekannt. Mail an abuse@localhost!
+	$from="wwwrun@".$smtp->localhost;
+	$to="abuse@".$smtp->localhost;
 	$smtp->SendMessage(
 	$from, array($to),
 	array("From: $from", "To: $to", "Subject: edit_about"),
@@ -389,16 +387,13 @@ function edit_pers($password,$check_pass,$response,$new_username,$vorname,$nachn
 	return false;
 	}
 
-	  //email ist ok, user bekommt neues Passwort an diese Addresse
+	//email ist ok, user bekommt neues Passwort an diese Addresse
 
-	  $newpass=$this->generate_password(6);
-	  $hashpass=md5($newpass);
-	  ## Mail abschicken...
-  $from="\"Stud.IP\" <wwwrun@".$smtp->host_name.">";
-  $env_from="wwwrun@".$smtp->host_name;
-  $abuse="abuse@".$smtp->host_name;
+	$newpass=$this->generate_password(6);
+	$hashpass=md5($newpass);
+	## Mail abschicken...
   $to=$email;
-  $url = "http://" . $smtp->host_name . $CANONICAL_RELATIVE_PATH_STUDIP;
+  $url = "http://" . $smtp->localhost . $CANONICAL_RELATIVE_PATH_STUDIP;
   $mailbody="Dies ist eine Informationsmail des Systems\n"
   ."\"Studienbegleitender Internetsupport Präsenzlehre\"\n"
 	."- $UNI_NAME_CLEAN -\n\n"
@@ -419,8 +414,8 @@ function edit_pers($password,$check_pass,$response,$new_username,$vorname,$nachn
 ;
 
   $smtp->SendMessage(
-  $env_from, array($to),
-  array("From: $from", "Reply-To: $abuse", "To: $to", "Subject: Passwort-Änderung Stud.IP"),
+  $smtp->env_from, array($to),
+  array("From: $smtp->from", "Reply-To: $smtp->abuse", "To: $to", "Subject: Passwort-Änderung Stud.IP"),
   $mailbody);
 
    $this->db->query("UPDATE auth_user_md5 SET Email='$email', password='$hashpass' WHERE user_id='".$this->auth_user["user_id"]."'");

@@ -72,9 +72,7 @@ $db = new DB_Seminar;
 $db2 = new DB_Seminar;
 $validator=new email_validation_class;	## Klasse zum Ueberpruefen der Eingaben
 $validator->timeout=10;									## Wie lange warten wir auf eine Antwort des Mailservers?
-$smtp=new smtp_class;									 ## Einstellungen fuer das Verschicken der Mails
-$smtp->host_name=getenv("SERVER_NAME");
-$smtp->localhost="localhost";
+$smtp=new studip_smtp_class;									 ## Einstellungen fuer das Verschicken der Mails
 $Zeit=date("H:i:s, d.m.Y",time());
 
 
@@ -152,11 +150,8 @@ while ( is_array($HTTP_POST_VARS)
 			$msg .= "msg§Benutzer \"$username\" angelegt.§";
 
 			## Mail abschicken...
-			$from="\"Stud.IP\" <wwwrun@".$smtp->host_name.">";
-			$env_from="wwwrun@".$smtp->host_name;
-			$abuse="abuse@".$smtp->host_name;
 			$to=$Email;
-			$url = "http://" . $smtp->host_name . $CANONICAL_RELATIVE_PATH_STUDIP;
+			$url = "http://" . $smtp->localhost . $CANONICAL_RELATIVE_PATH_STUDIP;
 			$mailbody="Dies ist eine Informationsmail des Systems\n"
 			."\"Studienbegleitender Internetsupport Präsenzlehre\"\n"
 			."- $UNI_NAME_CLEAN -\n\n"
@@ -183,8 +178,8 @@ while ( is_array($HTTP_POST_VARS)
 			."weiter (auch nicht an einen Administrator), damit nicht Dritte in ihrem\n"
 			."Namen Nachrichten in das System einstellen können!\n\n";
 			$smtp->SendMessage(
-			$env_from, array($to),
-			array("From: $from", "Reply-To: $abuse", "To: $to", "Subject: Anmeldung Stud.IP"),
+			$smtp->env_from, array($to),
+			array("From: $smtp->from", "Reply-To: $smtp->abuse", "To: $to", "Subject: Anmeldung Stud.IP"),
 			$mailbody);
 		}
 
@@ -269,11 +264,8 @@ while ( is_array($HTTP_POST_VARS)
 			$msg .= "msg§User \"$username\" ver&auml;ndert.§";
 
 			## Mail abschicken...
-			$from="\"Stud.IP\" <wwwrun@".$smtp->host_name.">";
-			$env_from="wwwrun@".$smtp->host_name;
-			$abuse="abuse@".$smtp->host_name;
 			$to=$Email;
-			$url = "http://" . $smtp->host_name . $CANONICAL_RELATIVE_PATH_STUDIP;
+			$url = "http://" . $smtp->localhost . $CANONICAL_RELATIVE_PATH_STUDIP;
 			$mailbody="Dies ist eine Informationsmail des Systems\n"
 			."\"Studienbegleitender Internetsupport Präsenzlehre\"\n"
 			."- $UNI_NAME_CLEAN -\n\n"
@@ -292,8 +284,8 @@ while ( is_array($HTTP_POST_VARS)
 			."$url\n\n"
 ;
 			$smtp->SendMessage(
-			$env_from, array($to),
-			array("From: $from", "Reply-To: $abuse", "To: $to", "Subject: Account-Änderung Stud.IP"),
+			$smtp->env_from, array($to),
+			array("From: $smtp->from", "Reply-To: $smtp->abuse", "To: $to", "Subject: Account-Änderung Stud.IP"),
 			$mailbody);
 
 			// Hochstufung auf admin oder root?
@@ -385,11 +377,8 @@ while ( is_array($HTTP_POST_VARS)
 			$msg .= "msg§Passwort von User \"$username\" neu gesetzt.§";
 
 			## Mail abschicken...
-			$from="\"Stud.IP\" <wwwrun@".$smtp->host_name.">";
-			$env_from="wwwrun@".$smtp->host_name;
-			$abuse="abuse@".$smtp->host_name;
 			$to=$Email;
-			$url = "http://" . $smtp->host_name . $CANONICAL_RELATIVE_PATH_STUDIP;
+			$url = "http://" . $smtp->localhost . $CANONICAL_RELATIVE_PATH_STUDIP;
 			$mailbody="Dies ist eine Informationsmail des Systems\n"
 			."\"Studienbegleitender Internetsupport Präsenzlehre\"\n"
 			."- $UNI_NAME_CLEAN -\n\n"
@@ -408,8 +397,8 @@ while ( is_array($HTTP_POST_VARS)
 			."$url\n\n"
 ;
 			$smtp->SendMessage(
-			$env_from, array($to),
-			array("From: $from", "Reply-To: $abuse", "To: $to", "Subject: Passwort-Änderung Stud.IP"),
+			$smtp->env_from, array($to),
+			array("From: $smtp->from", "Reply-To: $smtp->abuse", "To: $to", "Subject: Passwort-Änderung Stud.IP"),
 			$mailbody);
 		}
 
@@ -584,9 +573,6 @@ while ( is_array($HTTP_POST_VARS)
 				} else {
 					## Mail abschicken...
 					$permlist = addslashes(implode($perms,","));
-					$from="\"Stud.IP\" <wwwrun@".$smtp->host_name.">";
-					$env_from="wwwrun@".$smtp->host_name;
-					$abuse="abuse@".$smtp->host_name;
 					$to=$Email;
 					$mailbody="Dies ist eine Informationsmail des Systems\n"
 					."\"Studienbegleitender Internetsupport Präsenzlehre\"\n"
@@ -599,8 +585,8 @@ while ( is_array($HTTP_POST_VARS)
 					."Email-Adresse: $Email\n\n"
 					."wurde um $Zeit von einem der Administratoren gelöscht.\n";
 					$smtp->SendMessage(
-					$env_from, array($to),
-					array("From: $from", "Reply-To: $abuse", "To: $to", "Subject: Account-Löschung Stud.IP"),
+					$smtp->env_from, array($to),
+					array("From: $smtp->from", "Reply-To: $smtp->abuse", "To: $to", "Subject: Account-Löschung Stud.IP"),
 					$mailbody);
 				}
 			}

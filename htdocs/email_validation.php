@@ -76,13 +76,11 @@ require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");
 		print "<tr><td class=\"blank\" colspan=2 width=\"100%\"><b>&nbsp;Versuchen Sie es noch einmal!</b><br><br>\n";
 		print "</td></tr></table>";
     // Mail an abuse
-		$smtp=new smtp_class;
-		$smtp->host_name=getenv("SERVER_NAME");
-		$smtp->localhost="localhost";
+		$smtp=new studip_smtp_class;
 		$REMOTE_ADDR=getenv("REMOTE_ADDR");
 		$Zeit=date("H:i:s, d.m.Y",time());
-		$from="wwwrun@".$smtp->host_name;
-		$to="abuse@".$smtp->host_name;
+		$from="wwwrun@".$smtp->localhost;
+		$to="abuse@".$smtp->localhost;
 		$username = $auth->auth["uname"];
 		$smtp->SendMessage(
 		$from, array($to),

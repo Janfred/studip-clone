@@ -100,9 +100,7 @@ function SendMail($newsletter_id,$username,$Vorname,$Nachname,$Email)
 { global $newsletter,  $CANONICAL_RELATIVE_PATH_STUDIP, $UNI_NAME_CLEAN;
 
 		$magic     = "ddvedvgngda";  ## Challenge seed
-		$smtp=new smtp_class;		     ## Einstellungen fuer das Verschicken der Mails
-		$smtp->host_name=getenv("SERVER_NAME");
-		$smtp->localhost="localhost";
+		$smtp=new studip_smtp_class;		     ## Einstellungen fuer das Verschicken der Mails
 		$REMOTE_ADDR=getenv("REMOTE_ADDR");
 		$Zeit=date("H:i:s, d.m.Y",time());
 
@@ -122,7 +120,7 @@ function SendMail($newsletter_id,$username,$Vorname,$Nachname,$Email)
 			$abuse= $newsletter[$newsletter_id]["return"];
 			$to=$Email;
 			$secret= md5("$username:$magic");
-			$url = "http://" . $smtp->host_name . $CANONICAL_RELATIVE_PATH_STUDIP . "newsletter.php?username=$username&cmd=remove&newsletter_id=$newsletter_id&secret=" . $secret;
+			$url = "http://" . $smtp->localhost . $CANONICAL_RELATIVE_PATH_STUDIP . "newsletter.php?username=$username&cmd=remove&newsletter_id=$newsletter_id&secret=" . $secret;
 			$mailbody = $newsletter[$newsletter_id]["text"];
 			$mailbody.="\n---------------------------------------\n"
 			."Dies ist ein Newsletter des Systems\n"
