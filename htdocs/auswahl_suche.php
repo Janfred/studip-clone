@@ -35,7 +35,7 @@ include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 	<td class="topic" colspan=2><img src="pictures/suchen.gif" border="0" align="texttop"><b>&nbsp;Suchen in Stud.IP</b></td>
 </tr>
 <tr>
-<td class="blank" width=100%">
+<td class="blank" width="100%">
 <blockquote>
 	<br><a href="browse.php"><b>Suchen nach Personen</b></a></br>
 	<font size=-1>Hier k&ouml;nnen sie nach ihren in Stud.IP angemeldeten Kommiltonen und Dozenten suchen.</font>

@@ -606,7 +606,7 @@ if (($kill_x) && ($admin_dates_data["range_id"]))
 			if (!$show_all)
 				{
 				?>
-				<a href="<? echo $PHP_SELF, "?range_id=".$admin_dates_data["range_id"]."&show_all=TRUE"; ?>"><img src="pictures/forumgraurunt.gif"" alt="Alle Termine aufklappen" border=0></a>
+				<a href="<? echo $PHP_SELF, "?range_id=".$admin_dates_data["range_id"]."&show_all=TRUE"; ?>"><img src="pictures/forumgraurunt.gif" alt="Alle Termine aufklappen" border=0></a>
 				<?
 				}
 			else

@@ -91,7 +91,7 @@ while ( is_array($HTTP_POST_VARS)
     }
     
     ## Does the Bereich already exist?
-    ## NOTE: This should be a transaction, but it isn't...
+    ## NOTE: This should be a transaction, but it is not...
     $db->query("SELECT * FROM bereiche WHERE name='$Name'");
     if ($db->nf()>0) {
       my_error(" <b>Der Bereich \"".htmlReady(stripslashes($Name))."\" existiert bereits!");

@@ -88,7 +88,7 @@ while ( is_array($HTTP_POST_VARS)
     }
     
     ## Does the Institut already exist?
-    ## NOTE: This should be a transaction, but it isn't...
+    ## NOTE: This should be a transaction, but it is not...
     $db->query("select * from Institute where Name='$Name'");
     if ($db->nf()>0) {
       $msg="error§<b>Die Einrichtung \"".htmlReady(stripslashes($Name))."\" existiert bereits!";
@@ -313,8 +313,8 @@ if ($perm->have_studip_perm("admin",$i_view) || $i_view == "new") {
 		<?php
 		if ($perm->is_fak_admin() && ($perm->have_studip_perm("admin",$db->f("fakultaets_id")) || $i_view == "new")){
 			if ($_num_inst){
-				echo "\n<font size=\"-1\"><b>Diese Einrichtung hat den Status einer Fakult&auml;t.<br>
-				Es wurden bereits $_num_inst andere Einrichtungen zugeordnet.</b></font>";
+				echo "\n<font size=\"-1\"><b>Diese Einrichtung hat den Status einer Fakult&auml;t.<br>";
+				echo "Es wurden bereits $_num_inst andere Einrichtungen zugeordnet.</b></font>";
 				echo "\n<input type=\"hidden\" name=\"Fakultaet\" value=\"$i_id\">";
 			} else {
 				echo "\n<select name=\"Fakultaet\">";

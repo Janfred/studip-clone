@@ -45,7 +45,7 @@ if ($forumsend=="bla"){
 </td>
 </tr>
 <tr>
-<td class="blank" width=100%">
+<td class="blank" width="100%">
 
 
 <blockquote><br>Auf dieser Seite k&ouml;nnen Sie die Bedienung des Stud.IP Forensystems an Ihre Bed&uuml;rfnisse anpassen.

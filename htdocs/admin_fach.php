@@ -94,7 +94,7 @@ while ( is_array($HTTP_POST_VARS)
     }
     
     ## Does the Fach already exist?
-    ## NOTE: This should be a transaction, but it isn't...
+    ## NOTE: This should be a transaction, but it is not...
     $db->query("SELECT * FROM faecher WHERE name='$Name'");
     if ($db->nf()>0) {
       my_error(" <b>Das Fach \"".htmlReady(stripslashes($Name))."\" existiert bereits!");

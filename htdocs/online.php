@@ -82,7 +82,7 @@ if ($msg)
 		<td class="blank" align = right><img src="pictures/online.jpg" border="0"></td>
 	</tr>
 	<tr>
-		<td class="blank" colspan=2 width=100%">
+		<td class="blank" colspan=2 width="100%">
 	<?
 ob_end_flush();
 ob_start();
