@@ -142,7 +142,8 @@ function get_user_details() {
 				"Fax" => $this->db->f("Fax"),
 				"Name" => $this->db->f("Name"),
 				"externdefault" => $this->db->f("externdefault"),
-				"priority" => $this->db->f("priority"));
+				"priority" => $this->db->f("priority"),
+				"visible" => $this->db->f("visible"));
 		if ($this->db->f("inst_perms")!="user")
 			$this->special_user=TRUE;
 	}
@@ -288,12 +289,13 @@ function inst_edit($inst_delete,$new_inst) {
 	return;
 }
 
-function special_edit ($raum, $sprech, $tel, $fax, $name, $default_inst) {
+function special_edit ($raum, $sprech, $tel, $fax, $name, $default_inst, $visible) {
 	if (is_array($raum)) {
 		while (list($inst_id, $detail) = each($raum)) {
 			$query = "UPDATE user_inst SET raum='$detail', sprechzeiten='$sprech[$inst_id]', ";
 			$query .= "Telefon='$tel[$inst_id]', Fax='$fax[$inst_id]', externdefault=";
 			$query .= $default_inst == $inst_id ? '1' : '0';
+			$query .= ", visible=" . (isset($visible[$inst_id]) ? '0' : '1');
 			$query .= " WHERE Institut_id='$inst_id' AND user_id='" . $this->auth_user["user_id"] . "'";
 			$this->db->query($query);
 			if ($this->db->affected_rows()) {
@@ -736,7 +738,7 @@ if ($cmd == "inst_edit" && ($ALLOW_SELFASSIGN_STUDYCOURSE || $perm->have_perm("a
 //Veränderungen an Raum, Sprechzeit, etc
 if ($cmd == "special_edit")
  {
-	$my_about->special_edit($raum, $sprech, $tel, $fax, $name, $default_inst);
+ 	$my_about->special_edit($raum, $sprech, $tel, $fax, $name, $default_inst, $visible);
 	}
 
 // change order of institutes
@@ -1196,13 +1198,19 @@ if ($view=="Karriere") {
 	 				echo "<tr><td class=\"blank\" colspan=\"3\" width=\"100%\">&nbsp; </td></tr>";
 	 				echo "<tr><td class=\"" . $cssSw->getClass() . "\" align=\"left\">";
 					echo "&nbsp; <b>" . htmlReady($details["Name"]) . "</b></td>";
-					echo "<td class=\"" . $cssSw->getClass() . "\" width=\"30%\" align=\"left\">&nbsp; ";
+					echo "<td class=\"" . $cssSw->getClass() . "\" width=\"30%\" align=\"left\" nowrap=\"nowrap\">&nbsp; ";
 					echo _("Standard-Adresse:") . "&nbsp;<input type=\"radio\" name=\"default_inst\" ";
 					echo "value=\"$inst_id\"";
 					echo ($details['externdefault'] ? ' checked="checked"' : '') . ">&nbsp;";
 					echo "<img src=\"{$GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']}pictures/info.gif\"";
 					$info = _("Angaben, die im Adressbuch und auf den externen Seiten als Standard benutzt werden.");
-					echo tooltip($info, TRUE, TRUE) . "></td>\n";
+					echo tooltip($info, TRUE, TRUE) . ">&nbsp; &nbsp;";
+					echo _("Diese Einrichtung ausblenden:");
+					echo "<input type=\"checkbox\" name=\"visible[$inst_id]\" value=\"1\" ";
+					echo ($details['visible'] == '1' ? '' : ' checked="checked"') . ">&nbsp;";
+					echo "<img src=\"{$GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']}pictures/info.gif\"";
+					$info = _("Die Angaben zu dieser Einrichtung werden nicht auf Ihrer Homepage und in Adressbüchern ausgegeben.");
+					echo tooltip($info, TRUE, TRUE) . ">&nbsp; &nbsp;</td>\n";
 					echo "<td class=\"" . $cssSw->getClass() . "\" align=\"left\">";
 					if ($i != 1) {
 						echo "<a href=\"$PHP_SELF?view=Karriere&username=$username&cmd=move";

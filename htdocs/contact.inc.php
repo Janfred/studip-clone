@@ -216,7 +216,8 @@ function GetinstInfo ($user_id)
 	$i = 0;
 	$query = "SELECT sprechzeiten, raum, user_inst.telefon, user_inst.fax, Name, ";
 	$query .= "Institute.Institut_id FROM user_inst LEFT JOIN Institute USING(Institut_id) ";
-	$query .= "WHERE user_id = '$user_id' AND inst_perms != 'user' ORDER BY priority ASC";
+	$query .= "WHERE user_id = '$user_id' AND inst_perms != 'user' AND visible = 1 ";
+	$query .= "ORDER BY priority ASC";
 	$db->query($query);	
 	while ($db->next_record()) {	
 		$userinfo[$i][_("Einrichtung")] = "<a href=\"institut_main.php?auswahl=".$db->f("Institut_id")."\">".htmlReady($db->f("Name"))."</a>";

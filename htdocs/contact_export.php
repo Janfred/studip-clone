@@ -326,7 +326,7 @@ function getContactGroupData($exportID,$mode = "group"){
 				. "FROM user_inst a "
 				. "LEFT JOIN Institute b USING (Institut_id) "
 				. "WHERE user_id = '".$contacts[$i]["id"]."' AND inst_perms != 'user' "
-				. "AND externdefault = 1";
+				. "AND externdefault = 1 AND visible = 1";
 			$db2->query($query);
 			// if externdefault isn't set
 			if ($db2->num_rows() == 0) {
@@ -336,7 +336,7 @@ function getContactGroupData($exportID,$mode = "group"){
 				. "FROM user_inst a "
 				. "LEFT JOIN Institute b USING (Institut_id) "
 				. "WHERE user_id = '".$contacts[$i]["id"]."' AND inst_perms != 'user' "
-				. "ORDER BY priority ASC";
+				. "AND visible = 1 ORDER BY priority ASC";
 				$db2->query($query);
 			}
 			$j = 0;
