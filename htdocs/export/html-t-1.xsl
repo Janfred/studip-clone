@@ -33,6 +33,11 @@
 								</td>
 								<td bgcolor="#006699">
 									<b>
+										<font color="#FFFFFF">Adresse</font>
+									</b>
+								</td>
+								<td bgcolor="#006699">
+									<b>
 										<font color="#FFFFFF">E-Mail</font>
 									</b>
 								</td>
