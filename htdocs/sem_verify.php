@@ -88,6 +88,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 	//nobody darf sogar durch (wird spaeter schon abgefangen)
 	if ($perm->have_perm("user")) {
 
+	//Rueckgabe aus Studiengangsauswahl bearbeiten
+	if (is_array($sem_verify_suggest_arr))
+		foreach($sem_verify_suggest_arr as $key=>$val) {
+			if ($val=="on")
+				$sem_verify_suggest_studg=$sem_verify_suggest_arr[$key-1];
+		}
+
 		//Sonderfall, Passwort fuer Schreiben nicht eingegeben, Lesen aber erlaubt
 		if ($SemIDtemp<>"") {
 			$db->query("SELECT Lesezugriff, Name FROM seminare WHERE Seminar_id LIKE '$SemIDtemp'");
@@ -224,7 +231,18 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 						page_close();
 						die;
 						}
-					//Ok, es gibt also welche
+					//Wurden wir evtl. schon in die Veranstaltung als Wartender eingetragen?
+					$db->query("SELECT user_id FROM admission_seminar_user WHERE user_id = '$user->id' AND seminar_id = '$id' "); //Bin ich eingetragen?
+					if ($db->num_rows()) { //Es gibt einen Eintrag, da darf ich also nicht mehr rein
+						parse_msg ("info§Sie stehen schon aauf der Anmelde- bzw. Warteliste der Veranstaltung <b>$SeminarName</b>. <br />Wenn sich sich neu oder f&uuml;r ein anderes Kontingent eintragen wollen, dann l&ouml;schen Sie bitte vorher die Zuordnug auf der der &Uuml;bersicht ihrer Veranstaltungen.");
+						echo "<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp;&nbsp; zur&uuml;ck zur Startseite</a>";
+						if ($send_from_search)
+				    			echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">zur&uuml;ck zur letzten Auswahl</a>";
+						echo "<br	><br></td></tr></table>";
+						page_close();
+						die;
+						}
+					//Ok, es gibt also Studiengaenge und wie stehen noch nicht in der admission_seminar_user
 					$db2->query("SELECT admission_endtime, admission_turnout, admission_type, admission_selection_take_place FROM seminare WHERE Seminar_id LIKE '$id'"); //Wir brauchen in diesem Fall mehr Daten
 					$db2->next_record();
 					if (!$sem_verify_suggest_studg) {//Wir wissen noch nicht mit welchem Studiengang der User rein will
@@ -232,7 +250,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 						if ($db->num_rows() == 1) {//Nur einen passenden gefunden? Dann bieten wir nur den an. Info wird aber trotzdem gegeben
 							$db->next_record();
 							$sem_verify_possible_studg=$db->f("studiengang_id");
-							$db->query("SELECT admission_seminar_studiengang.studiengang_id, name, quota FROM admission_seminar_studiengang LEFT JOIN studiengaenge USING (studiengang_id)  WHERE seminar_id = '$id' "); //Alle theorethisch moeglichen Anziegen
+							$db->query("SELECT admission_seminar_studiengang.studiengang_id, name, quota FROM admission_seminar_studiengang LEFT JOIN studiengaenge USING (studiengang_id)  WHERE seminar_id = '$id' ORDER BY name"); //Alle theorethisch moeglichen Anziegen
 							echo "<tr><td class=\"blank\" colspan=2>&nbsp; &nbsp; Die Veranstaltung <b>$SeminarName</b> ist teilnahmebeschr&auml;nkt.<br><br></td></tr>";
 							echo "<tr><td class=\"blank\" colspan=2>&nbsp; &nbsp; Von den folgenden m&ouml;glichen Kontigenten kommt nur das <b>fett</b>  ausgegebene Kontingent f&uuml;r Sie in Frage. <br />&nbsp; &nbsp; Bitte best&auml;tigen Sie, wenn Sie sich in dieses Kontingent eintragen wollen: <br><br></td></tr>";
 							?>
@@ -269,17 +287,23 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 						} elseif ($db->num_rows() >1) { //Mehrere gefunden, fragen welcher es denn sein soll
 							echo "<tr><td class=\"blank\" colspan=2>&nbsp; &nbsp; Die Veranstaltung <b>$SeminarName</b> ist teilnahmebeschr&auml;nkt.<br><br></td></tr>";
 							echo "<tr><td class=\"blank\" colspan=2>&nbsp; &nbsp; Sie k&ouml;nnen sich f&uuml;r <b>eines</b> der m&ouml;glichen Kontingente anmelden.<br/><br />&nbsp; &nbsp; Bitte w&auml;hlen Sie das f&uuml;r Sie am besten geeignete Kontingent aus: <br><br></td></tr>";
+							$db->query("SELECT admission_seminar_studiengang.studiengang_id, name, quota FROM admission_seminar_studiengang LEFT JOIN studiengaenge USING (studiengang_id)  WHERE seminar_id = '$id' ORDER BY name"); //Alle theoretisch moeglichen auswaehlen
 							?>
 							</td></tr>
 							<tr><td class="blank" colspan=2>
 							<form action="<? echo $sess->pself_url(); ?>" method="POST" >
-							&nbsp; &nbsp; <select name="sem_verify_suggest_studg">
 							       <?
-								while ($db->next_record())
-									printf ("<option value=\"%s\">Kontingent f&uuml;r %s (%s Pl&auml;tze)</option>", $db->f("studiengang_id"), ($db->f("studiengang_id") == "all") ? "alle Studieng&auml;nge" : $db->f("name"), round ($db2->f("admission_turnout") * ($db->f("quota") / 100)));
+								while ($db->next_record()) {
+									printf ("<input type=\"HIDDEN\" name=\"sem_verify_suggest_arr[]\" value=\"%s\">", $db->f("studiengang_id"));
+									$db3->query("SELECT studiengang_id FROM user_studiengang WHERE studiengang_id = '".$db->f("studiengang_id")."' AND user_id = '$user->id' "); // Darf ich diesen auswaehlen?
+									$db3->next_record();
+									if (($db3->num_rows()) || ($db->f("studiengang_id") == "all"))
+										printf ("&nbsp; &nbsp; <input type=\"RADIO\" name=\"sem_verify_suggest_arr[]\">&nbsp; <font size=-1><b>Kontingent f&uuml;r %s (%s Pl&auml;tze)</font></b><br />", ($db->f("studiengang_id") == "all") ? "alle Studieng&auml;nge" : $db->f("name"), round ($db2->f("admission_turnout") * ($db->f("quota") / 100)));
+									else
+										printf ("&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<font size=-1 color=\"#888888\">Kontingent f&uuml;r %s (%s Pl&auml;tze)</font><br />", ($db->f("studiengang_id") == "all") ? "alle Studieng&auml;nge" : $db->f("name"), round ($db2->f("admission_turnout") * ($db->f("quota") / 100)));
+									}
 							       ?>
-							 </select>
-							&nbsp; <input type="IMAGE" src="./pictures/buttons/auswaehlen-button.gif" border=0 value="abschicken">
+							<br />&nbsp; &nbsp; <input type="IMAGE" src="./pictures/buttons/ok-button.gif" border=0 value="abschicken">
 							</for	m>
 							<?
 							if ($db2->f("admission_type") == 1)
