@@ -238,7 +238,7 @@ else {
 				$table_structure = array(
 												"name" => array("name" => "Name",
 														"link" => $PHP_SELF . "?sortby=Nachname&direction=" . $new_direction,
-														"width" => "30%"),
+														"width" => "35%"),
 												"funktion" => array("name" => "Funktion",
 														"link" => $PHP_SELF . "?sortby=Funktion&direction=" . $new_direction,
 														"width" => "15%"),
@@ -246,7 +246,7 @@ else {
 														"link" => $PHP_SELF . "?sortby=inst_perm&direction=" . $new_direction,
 														"width" => "10"),
 												"raum" => array("name" => "Raum",
-														"width" => "15%"),
+														"width" => "20%"),
 												"telefon" => array("name" => "Telefon",
 														"width" => "15%"),
 												"nachricht" => array("name" => "Nachricht&nbsp;",
@@ -276,12 +276,12 @@ else {
 			$table_structure = array(
 												"name" => array("name" => "Name",
 														"link" => $PHP_SELF . "?sortby=Nachname&direction=" . $new_direction,
-														"width" => "30%"),
+														"width" => "40%"),
 												"funktion" => array("name" => "Funktion",
 														"link" => $PHP_SELF . "?sortby=Funktion&direction=" . $new_direction,
-														"width" => "15%"),
+														"width" => "20%"),
 												"raum" => array("name" => "Raum",
-														"width" => "15%"),
+														"width" => "20%"),
 												"telefon" => array("name" => "Telefon",
 														"width" => "15%"),
 												"nachricht" => array("name" => "Nachricht&nbsp;",
@@ -293,25 +293,23 @@ else {
 				$table_structure = array(
 												"name" => array("name" => "Name",
 														"link" => $PHP_SELF . "?sortby=Nachname&direction=" . $new_direction,
-														"width" => "35%"),
+														"width" => "40%"),
 												"status" => array("name" => "Status",
 														"link" => $PHP_SELF . "?sortby=inst_perm&direction=" . $new_direction,
-														"width" => "10"),
+														"width" => "15"),
 												"raum" => array("name" => "Raum",
 														"width" => "20%"),
-												"sprechzeiten" => array("name" => "Sprechzeiten",
-														"width" => "20%"),
 												"telefon" => array("name" => "Telefon",
-														"width" => "15%"),
+														"width" => "20%"),
 												"nachricht" => array("name" => "Nachricht&nbsp;",
-														"width" => "10%")
+														"width" => "5%")
 												);
 			}
 			else {
 				$table_structure = array(
 												"name" => array("name" => "Name",
 														"link" => $PHP_SELF . "?sortby=Nachname&direction=" . $new_direction,
-														"width" => "35%"),
+														"width" => "40%"),
 												"raum" => array("name" => "Raum",
 														"width" => "20%"),
 												"sprechzeiten" => array("name" => "Sprechzeiten",
@@ -319,7 +317,7 @@ else {
 												"telefon" => array("name" => "Telefon",
 														"width" => "15%"),
 												"nachricht" => array("name" => "Nachricht&nbsp;",
-														"width" => "10%")
+														"width" => "5%")
 												);
 			}
 	} // switch
@@ -412,12 +410,20 @@ table_head($table_structure, $css_switcher);
 
 if ($institut_members_data["show"] == "funktion") {
 	foreach ($INST_FUNKTION_ORDER as $key => $function) {
-		$query = sprintf("SELECT Nachname, Vorname, raum, sprechzeiten, Telefon, inst_perms,
-											Email, auth_user_md5.user_id,
-											username FROM user_inst LEFT JOIN	auth_user_md5 USING(user_id)
-											WHERE user_inst.Institut_id = '%s' AND Funktion = '%s'
-											ORDER BY %s %s", $auswahl, $function,
-											$institut_members_data["sortby"], $institut_members_data["direction"]);
+		if ($institut_members_data["extend"] == "yes")
+			$query = sprintf("SELECT aum.Nachname, aum.Vorname, ui.raum, ui.sprechzeiten, ui.Telefon,
+												ui.inst_perms, aum.Email, aum.user_id,	aum.username, info.Home
+												FROM user_inst ui LEFT JOIN	auth_user_md5 aum USING(user_id) LEFT JOIN
+												user_info info USING(user_id) WHERE ui.Institut_id = '%s'
+												AND Funktion = '%s' ORDER BY %s %s", $auswahl, $function,
+												$institut_members_data["sortby"], $institut_members_data["direction"]);
+		else
+			$query = sprintf("SELECT Nachname, Vorname, raum, sprechzeiten, Telefon, inst_perms,
+												Email, auth_user_md5.user_id,
+												username FROM user_inst LEFT JOIN	auth_user_md5 USING(user_id)
+												WHERE user_inst.Institut_id = '%s' AND Funktion = '%s'
+												ORDER BY %s %s", $auswahl, $function,
+												$institut_members_data["sortby"], $institut_members_data["direction"]);
 		$db_institut_members->query($query);
 		if ($db_institut_members->num_rows() > 0) {
 			if ($function == 0)
