@@ -33,14 +33,11 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-function list_restore_assign(&$this, $resource_id, $user_id='', $range_id=''){
+function list_restore_assign(&$this, $resource_id, $begin, $end, $user_id='', $range_id=''){
 	$db = new DB_Seminar();
 
-	$end = $this->end;
-	$begin = $this->begin;
-
-	$year = date("Y", $this->start);
-	$month = date("n", $this->start);
+	$year = date("Y", $begin);
+	$month = date("n", $begin);
 	
 	//create the query
 	$query = sprintf("SELECT assign_id, resource_id, begin, end, repeat_end, repeat_quantity, "
@@ -60,11 +57,11 @@ function list_restore_assign(&$this, $resource_id, $user_id='', $range_id=''){
 	//handle the assigns und create all the repeated stuff
 	while($db->next_record()) {
 		$assign_object = new AssignObject($db->f("assign_id"));
-		create_assigns($assign_object, $this);
+		create_assigns($assign_object, $this, $begin, $end);
 	}
 }
 
-function create_assigns($assign_object, &$this) {
+function create_assigns($assign_object, &$this, $begin='', $end='') {
 	$year_offset=0;
 	$week_offset=0;
 	$month_offset=0;
@@ -72,14 +69,18 @@ function create_assigns($assign_object, &$this) {
 	$quantity=0;
 	$temp_ts=0;
 
-	$end = $this->end;
-	$begin = $this->begin;
-
 	if ($assign_object->getRepeatMode() == "na") {
 		// date without repeatation, we have to create only one event (object = event)
 		$this->events[] = new AssignEvent($assign_object->getId(), $assign_object->getBegin(), $assign_object->getEnd(),
 								$assign_object->getResourceId(), $assign_object->getAssignUserId(), 
 								$assign_object->getUserFreeName());
+	
+	//if no begin/enddate submitted, we create all the assigs from the given assin-object
+	if (!$begin)
+		$begin = $assign_object->getBegin();
+	if (!$end)
+		$end = $assign_object->getEnd();
+	
 	} elseif (($assign_object -> getRepeatEnd() >= $begin) && ($assign_object -> getBegin() <= $end))
 		do { 
 		//create a temp_ts to try every possible repeatation
