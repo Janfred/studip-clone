@@ -39,9 +39,6 @@ if ($auth->auth["uid"]!="nobody"){
 	$sess->register("messenger_data");
 	$sms= new messaging;
 	
-	if ($msg_rec)
-		$msg_rec = get_userid($msg_rec);
-	
 	$now = time(); // nach eingestellter Zeit (default = 5 Minuten ohne Aktion) zaehlt man als offline
 	$query = "SELECT " . $_fullname_sql['full'] . " AS full_name,($now-UNIX_TIMESTAMP(changed)) AS lastaction,a.username,a.user_id,contact_id 
 		FROM active_sessions LEFT JOIN auth_user_md5 a ON (a.user_id=sid) LEFT JOIN user_info USING(user_id) 
@@ -83,14 +80,14 @@ if ($auth->auth["uid"]!="nobody"){
 			if ($msg_id==$db->f("message_id")){
 				// "open" the message (display it in the messenger)
 				$msg_text=$db->f("message");
-				$msg_snd=$db->f("autor_id");
+				$msg_snd=get_username($db->f("autor_id"));
 			}
 		//this is a new msg, will be shown as new msg until the user wants to see it
 		if (!$db->f("readed") && $db->f("message_id")!=$msg_id) {
 			if ($db->f("autor_id") == "____%system%____"){
 				$new_msgs[]=date("H:i",$db->f("mkdate")) . sprintf(_(" <b>Systemnachricht</b> %s[lesen]%s"),"<a href='$PHP_SELF?cmd=read&msg_id=".$db->f("message_id")."'>","</a>");
 			} else {
-				$new_msgs[]=date("H:i",$db->f("mkdate")). sprintf(_(" von <b>%s</b> %s[lesen]%s"),htmlReady(get_fullname($db->f("autor_id"))),"<a href='$PHP_SELF?cmd=read&msg_id=".$db->f("message_id")."'>","</a>");
+				$new_msgs[]=date("H:i",$db->f("mkdate")). sprintf(_(" von <b>%s</b> %s[lesen]%s"),htmlReady(get_fullname_from_uname($db->f("autor_id"))),"<a href='$PHP_SELF?cmd=read&msg_id=".$db->f("message_id")."'>","</a>");
 			}
 		}
 		$refresh+=10;
@@ -192,9 +189,9 @@ if ($new_msg) {
 
 if ($cmd=="send_msg" AND $nu_msg AND $msg_rec) {
 	$nu_msg=trim($nu_msg);
-	if ($sms->insert_message ($nu_msg, get_username($msg_rec)))
+	if ($sms->insert_message ($nu_msg, $msg_rec))
 		echo"\n<tr><td class='blank' colspan='2' valign='middle'><font size=-1>"
-			. sprintf(_("Ihre Nachricht an <b>%s</b> wurde verschickt!"),get_fullname($msg_rec)) . "</font></td></tr>";
+			. sprintf(_("Ihre Nachricht an <b>%s</b> wurde verschickt!"),get_fullname_from_uname($msg_rec)) . "</font></td></tr>";
 	else 
 		echo"\n<tr><td class='blank' colspan='2' valign='middle'><font size=-1 color='red'><b>"
 			. _("Ihre Nachricht konnte nicht verschickt werden!") . "</b></font></td></tr>";
@@ -207,7 +204,7 @@ if ($cmd=="read" AND $msg_text){
 		. _("automatisch erzeugte Systemnachricht:") . " </b><hr>".quotes_decode(formatReady($msg_text))."</font></td></tr>";
 	else
 		echo"\n<tr><td class='blank' colspan='2' valign='middle'><font size=-1>"
-		. sprintf(_("Nachricht von: <b>%s</b>"),htmlReady(get_fullname($msg_snd))) ."<hr>".quotes_decode(formatReady($msg_text))."</font></td></tr>";
+		. sprintf(_("Nachricht von: <b>%s</b>"),htmlReady(get_fullname_from_uname($msg_snd))) ."<hr>".quotes_decode(formatReady($msg_text))."</font></td></tr>";
 	if ($msg_snd != "____%system%____")
 		echo"\n<tr><td class='blank' colspan='2' valign='middle' align='right'><font size=-1>"
 		. "<a href='$PHP_SELF?cmd=write&msg_rec=$msg_snd'><img " . makeButton("antworten","src") . tooltip(_("Diese Nachricht direkt beantworten")) . " border=0></a>"
@@ -216,7 +213,7 @@ if ($cmd=="read" AND $msg_text){
 
 if ($cmd=="write" AND $msg_rec){
 	echo"\n<tr><td class='blank' colspan='2' valign='middle'><font size=-1>"
-		. sprintf(_("Ihre Nachricht an <b>%s:</b>"),htmlReady(get_fullname($msg_rec))) . "</font></td></tr>";
+		. sprintf(_("Ihre Nachricht an <b>%s:</b>"),htmlReady(get_fullname_from_uname($msg_rec))) . "</font></td></tr>";
 	echo"\n<FORM  name='eingabe' action='$PHP_SELF?cmd=send_msg' method='POST'><INPUT TYPE='HIDDEN'  name='msg_rec' value='$msg_rec'>";
 	echo"\n<tr><td class='blank' colspan='2' valign='middle'><TEXTAREA  style=\"width: 100%\" name='nu_msg' rows='4' cols='44' wrap='virtual'></TEXTAREA></font><br>";
 	echo "<font size=-1><a target=\"_new\" href=\"show_smiley.php\">" . _("Smileys</a> k&ouml;nnen verwendet werden") . " </font>\n</td></tr>";
