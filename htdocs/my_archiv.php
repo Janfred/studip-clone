@@ -180,7 +180,7 @@ $infobox = array	(
 
 // print the info_box
 
-print_infobox ($infobox,"pictures/seminare.jpg");
+print_infobox ($infobox,"pictures/folders.jpg");
 
 ?>
 
