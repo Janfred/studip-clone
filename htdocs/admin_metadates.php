@@ -115,6 +115,24 @@ if (!$term_metadata["sem_id"]) {
 	die;
 }
 
+//Umschalter zwischen den Typen
+if ($enter_start_termin_x) {
+	$term_metadata["start_woche"]=-1;
+}
+
+if ($nenter_start_termin_x) {
+	$term_metadata["start_woche"]=0;
+}
+
+if ($open_reg_x) {
+	$term_metadata["art"]=0;
+}
+
+if ($open_ureg_x) {
+	$term_metadata["art"]=1;
+	$term_metadata["start_woche"]=0;
+}
+
 if (($turnus_refresh) || ($term_refresh))
 	{
 	if (($sem_duration_time == 0) || ($sem_duration_time == -1))
@@ -244,15 +262,6 @@ else
 		$errormsg=$errormsg."error§"._("Bitte f&uuml;llen Sie beide Felder f&uuml;r Start- und Endzeit des ersten Termins aus!")."§";	
 }
 
-//Umschalter zwischen den Typen
-if ($open_ureg_x)
-	$term_metadata["art"]=0;
-if ($open_reg_x)
-	$term_metadata["art"]=1;
-if ($enter_start_termin_x)
-	$term_metadata["start_woche"]=-1;
-if ($nenter_start_termin_x)
-	$term_metadata["start_woche"]=0;
 
 //Daten speichern
 if (($uebernehmen_x) && (!$errormsg)) {
@@ -456,8 +465,8 @@ if (($uebernehmen_x) && (!$errormsg)) {
 			<td class="<? echo $cssSw->getClass() ?>"  colspan=2 align="left">
 				<font size=-1><b>&nbsp;<?= _("Allgemeine Zeiten:") ?></b><br /></font>
 				<font size=-1>&nbsp;<?= _("Sie k&ouml;nnen hier angeben, ob die Veranstaltung regelm&auml;&szlig;ig stattfindet oder ob die Termine unregelm&auml;&szlig;ig sind (etwa bei einer Blockveranstaltung).") ?><br /></font>
-				<br />&nbsp;<input type="IMAGE" name="open_ureg" <? if (!$term_metadata["art"]) print makeButton ("regelmaessig2", "src");  else print makeButton ("regelmaessig", "src") ?> border=0 value="regelmaessig">&nbsp; 
-				<input type="IMAGE" name="open_reg"  <? if (!$term_metadata["art"]) print makeButton ("unregelmaessig", "src");  else print makeButton ("unregelmaessig2", "src") ?> border=0 value="unregelmaessig">
+				<br />&nbsp;<input type="IMAGE" name="open_reg" <? if (!$term_metadata["art"]) print makeButton ("regelmaessig2", "src");  else print makeButton ("regelmaessig", "src") ?> border=0 value="regelmaessig">&nbsp; 
+				<input type="IMAGE" name="open_ureg"  <? if (!$term_metadata["art"]) print makeButton ("unregelmaessig", "src");  else print makeButton ("unregelmaessig2", "src") ?> border=0 value="unregelmaessig">
 			</td>
 		</tr>
 		<?
