@@ -101,20 +101,6 @@ function PrintAktualStatusgruppen ()
 	$db2=new DB_Seminar;
 	$db->query ("SELECT name, statusgruppe_id, size FROM statusgruppen WHERE range_id = '$range_id' ORDER BY position ASC");
 	$AnzahlStatusgruppen = $db->num_rows();
-	if ($AnzahlStatusgruppen == 0) {
-		$infobox = array	(			
-		array  ("kategorie"  => "Information:",
-			"eintrag" => array	(	
-							array (	"icon" => "pictures/ausruf_small.gif",
-									"text"  => "Es sind noch keine Statusgruppen angelegt. Bitte nutzen Sie die obere Zeile, um f&uuml;r diesen Bereich Statusgruppen anzulegen!"
-									)
-			)
-		    )
-		);
-		echo "<br>";
-		// print the info_box
-		print_infobox ($infobox,"pictures/blank.gif");
-	}
 	$i = 0;
 	while ($db->next_record()) {
 		$statusgruppe_id = $db->f("statusgruppe_id");
@@ -123,7 +109,7 @@ function PrintAktualStatusgruppen ()
 			        <tr> 
 				          <td width=\"5%\">";
 		printf ("            	  <input type=\"IMAGE\" name=\"%s\" src=\"./pictures/move.gif\" border=\"0\" %s>&nbsp; </td>", $statusgruppe_id, tooltip("Markierte Personen dieser Gruppe zuordnen"));
-		printf ("	          <td width=\"95%%\" class=\"%s\">&nbsp; %s </td><td class=\"topic\" width=\"1%%\"><a href=\"$PHP_SELF?cmd=edit_statusgruppe&edit_id=%s&gruppe_name=%s&gruppe_anzahl=%s&range_id=%s&view=%s\"><img src=\"./pictures/einst.gif\" border=\"0\" %s></a></td>",$cmd =="edit_statusgruppe"&&$edit_id == $statusgruppe_id?"topicwrite":"topic",htmlReady($db->f("name")),$statusgruppe_id, $db->f("name"), $db->f("size"), $range_id, $view, tooltip("Gruppennahme oder Anzahl anpassen"));
+		printf ("	          <td width=\"95%%\" class=\"%s\">&nbsp; %s </td><td class=\"topic\" width=\"1%%\"><a href=\"$PHP_SELF?cmd=edit_statusgruppe&edit_id=%s&range_id=%s&view=%s\"><img src=\"./pictures/einst.gif\" border=\"0\" %s></a></td>",$cmd =="edit_statusgruppe"&&$edit_id == $statusgruppe_id?"topicwrite":"topic",htmlReady($db->f("name")),$statusgruppe_id, $range_id, $view, tooltip("Gruppennahme oder Anzahl anpassen"));
 		printf ( "	          <td width=\"4%%\"><a href=\"$PHP_SELF?cmd=remove_statusgruppe&statusgruppe_id=%s&range_id=%s&view=%s\"><img src=\"pictures/lighttrash.gif\" width=\"11\" height=\"17\" border=\"0\" %s></a></td>",$statusgruppe_id, $range_id, $view, tooltip("Gruppe mit Personenzuordnung entfernen"));
 		echo 	"</tr>";
 
@@ -391,8 +377,7 @@ function PrintInstitutMembers ()
 
 // Anfang Edit-Bereich
 
-	 ?>
-       	<table cellspacing="0" cellpadding="0" border="0" width="100%">
+?><table cellspacing="0" cellpadding="0" border="0" width="100%">
 	<tr><td class="topic" colspan=2>&nbsp;<b>
 	<?
 	echo $tmp_typ, ": ", htmlReady(substr($tmp_name, 0, 60));
@@ -410,7 +395,7 @@ function PrintInstitutMembers ()
 	 	<form action="<? echo $PHP_SELF ?>?cmd=move_old_statusgruppe" method="POST">
 	 	<?
 	 	echo"<input type=\"HIDDEN\" name=\"range_id\" value=\"$range_id\">&nbsp; ";
-      	  	echo"<input type=\"HIDDEN\" name=\"view\" value=\"$view\">";
+      	  	echo"<input type=\"HIDDEN\" name=\"view\" value=\"$view\"><font size=\"2\">Vorlagen:</font>&nbsp; ";
 		PrintAllStatusgruppen (); 
 		printf ("&nbsp; <input type=\"IMAGE\" src=\"./pictures/move.gif\" border=\"0\" %s>&nbsp;  ", tooltip("in Namesnsfeld uebernehmen"));
 	        ?>
@@ -441,6 +426,11 @@ function PrintInstitutMembers ()
 ?>       
 		<form action="<? echo $PHP_SELF ?>?cmd=edit_existing_statusgruppe" method="POST">
 		<?
+		$db->query ("SELECT name, size FROM statusgruppen WHERE statusgruppe_id = '$edit_id'");
+		if ($db->next_record()) {
+			$gruppe_name = $db->f("name");
+			$gruppe_anzahl = $db->f("size");
+		}
 	  	  echo"<input type=\"HIDDEN\" name=\"range_id\" value=\"$range_id\">";
   	  	  echo"<input type=\"HIDDEN\" name=\"edit_id\" value=\"$edit_id\">";
 	    	  echo"<input type=\"HIDDEN\" name=\"view\" value=\"$view\">";
@@ -460,27 +450,21 @@ function PrintInstitutMembers ()
       
       <br></td>
   </tr>
-</table>
-
-<?
+</table><?
 // Ende Edit-Bereich
 
 // Anfang Personenbereich 
 
-
-?>
-<table width="100%" border="0" cellspacing="0">
- <form action="<? echo $PHP_SELF ?>?cmd=move_person" method="POST">
+$db->query ("SELECT name, statusgruppe_id, size FROM statusgruppen WHERE range_id = '$range_id' ORDER BY position ASC");
+if ($db->num_rows()>0) {   // haben wir schon Gruppen? dann Anzeige
+?><table width="100%" border="0" cellspacing="0">
+	 <form action="<? echo $PHP_SELF ?>?cmd=move_person" method="POST">
+		<?
+	  	  echo"<input type=\"HIDDEN\" name=\"range_id\" value=\"$range_id\">";
+	    	  echo"<input type=\"HIDDEN\" name=\"view\" value=\"$view\">";
+	?><tr>
 	<?
-  	  echo"<input type=\"HIDDEN\" name=\"range_id\" value=\"$range_id\">";
-    	  echo"<input type=\"HIDDEN\" name=\"view\" value=\"$view\">";
-  	?>
-  <tr>
-<?
-	
-	
-	$db->query ("SELECT name, statusgruppe_id, size FROM statusgruppen WHERE range_id = '$range_id' ORDER BY position ASC");
-	printf ("<td class=\"%s\" valign=\"top\" width=\"50%%\"><br>",$db->num_rows()==0?"blank":"steel1");
+	printf ("<td class=\"steel1\" valign=\"top\" width=\"50%%\"><br>");
 	if ($db->num_rows() > 0) {
 		$nogroups = 1;
 		if (get_object_type($range_id) == "sem" || get_object_type($range_id) == "inst") {
@@ -519,8 +503,19 @@ function PrintInstitutMembers ()
   </tr>
  </form>
 </table>
-<p>&nbsp;</p>
 <?
+} else { // es sind noch keine Gruppen angelegt, daher Infotext
+?>
+<table class="blank" width="100%" border="0" cellspacing="0">
+    <?
+  	parse_msg("info§Es sind noch keine Statusgruppen angelegt. 
+  	<br>Bitte nutzen Sie die obere Zeile, um f&uuml;r diesen Bereich Statusgruppen anzulegen!
+  	<br><br>Sie haben mit dem Feld 'Anzahl' die M&ouml;glichkeit, sie Sollst&auml;rke f&uuml;r eine Gruppe festzulegen.
+  	<br>Wenn Sie Gruppen angelegt haben, k&ouml;nnen Sie diesen Personen zuordnen. Jeder Gruppe k&ouml;nnen beliebig viele Personen zugeordnet werden. Jede Person kann beliebig vielen Gruppen zugeordnet werden.§");
+    ?>
+  </table>
+<?
+}
 // Ende Gruppenuebersicht
 
 // Ende Darstellungsteil
