@@ -145,9 +145,12 @@ function doc_newest ($parent_id) {
 	$arr = getFolderId($parent_id);
 	$arr[] = $parent_id;
 	$in="('".join("','",$arr)."')";
-	$db->query ("SELECT max(mkdate) FROM dokumente WHERE range_id IN $in ");
+	$db->query ("SELECT max(chdate), max(mkdate) FROM dokumente WHERE range_id IN $in ");
 	$db->next_record();
-	return $db->Record[0];
+	if ($db->Record[0] > $db->Record[1])
+		return $db->Record[0];
+	else
+		return $db->Record[1];
 }
 
 function doc_challenge ($parent_id){
@@ -712,7 +715,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 	$lines[$level] = $check_folder[1];
 
 	if ($check_folder[1]){
-	$db->query("SELECT ". $_fullname_sql['full'] ." AS fullname , username, folder_id, range_id, a.user_id, name, description, a.mkdate, a.chdate FROM folder a LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE range_id = '$folder_id' ORDER BY a.name, a.mkdate");
+	$db->query("SELECT ". $_fullname_sql['full'] ." AS fullname , username, folder_id, range_id, a.user_id, name, description, a.mkdate, a.chdate FROM folder a LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE range_id = '$folder_id' ORDER BY a.name, a.chdate");
 	while ($db->next_record()) {	
 		if (!$all) {?><table border=0 cellpadding=0 cellspacing=0 width="100%"><tr><td class="blank" valign="top" heigth=21 nowrap><img src='pictures/forumleer.gif'><img src='pictures/forumleer.gif'><?}
 
@@ -780,13 +783,15 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 				else
 					$titel= $tmp_titel;		
 				}
-			
-			
+	
+			//Workaround for older data from previous versions (chdate is 0)
+			$chdate = (($db->f("chdate")) ? $db->f("chdate") : $db->f("mkdate"));
+		
 			//Zusatzangaben erstellen
-			$zusatz="<a href=\"about.php?username=".$db->f("username")."\"><font color=\"#333399\">".$db->f("fullname")."</font></a>&nbsp;".date("d.m.Y - H:i",$db->f("mkdate"))."";			
+			$zusatz="<a href=\"about.php?username=".$db->f("username")."\"><font color=\"#333399\">".$db->f("fullname")."</font></a>&nbsp;".date("d.m.Y - H:i",$chdate)."";			
 
 			
-			if ($loginfilelast[$SessSemName[1]] < $db->f("chdate")) 
+			if ($loginfilelast[$SessSemName[1]] < $chdate) 
 				$neuer_ordner = TRUE;
 			else
 				$neuer_ordner = FALSE;
@@ -866,10 +871,10 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 			
 			$s=0;
 			if ($all) {
-					$db3->query("SELECT ". $_fullname_sql['full'] ." AS fullname, username, a.user_id, a.*, IFNULL(a.name, a.filename) AS t_name FROM dokumente a LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE seminar_id = '".$folder_id."' ORDER BY a.mkdate DESC");
-					$documents_count = $db3->num_rows();
+				$db3->query("SELECT ". $_fullname_sql['full'] ." AS fullname, username, a.user_id, a.*, IFNULL(a.name, a.filename) AS t_name FROM dokumente a LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE seminar_id = '".$folder_id."' ORDER BY a.chdate DESC");
+				$documents_count = $db3->num_rows();
 			} else {
-				$db3->query("SELECT ". $_fullname_sql['full'] ." AS fullname, username, a.user_id, a.*, IFNULL(a.name, a.filename) AS t_name FROM dokumente a LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE range_id = '".$db->f("folder_id")."' ORDER BY t_name, a.mkdate DESC");
+				$db3->query("SELECT ". $_fullname_sql['full'] ." AS fullname, username, a.user_id, a.*, IFNULL(a.name, a.filename) AS t_name FROM dokumente a LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE range_id = '".$db->f("folder_id")."' ORDER BY t_name, a.chdate DESC");
 			}
 			//Hier wird der Ordnerinhalt (Dokumente) gelistet
 			if ($documents_count){
@@ -903,6 +908,9 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 					else
 					$link=$PHP_SELF."?open=".$db3->f("dokument_id")."#anker";
 					
+					//Workaround for older data from previous versions (chdate is 0)
+					$chdate = (($db3->f("chdate")) ? $db3->f("chdate") : $db3->f("mkdate"));
+					
 					//Titelbereich erstellen
 					if ($change == $db3->f("dokument_id"))
 					$titel= "<input style=\"{font-size:8 pt; width: 100%;}\" type=\"text\" size=20 maxlength=255 name=\"change_name\" value=\"".htmlReady($db3->f("name"))."\" />";
@@ -923,7 +931,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 						$titel .= " / ".(($db3->f("downloads") == 1) ? $db3->f("downloads")." "._("Download") : $db3->f("downloads")." "._("Downloads")).")";
 						
 						//Zusatzangaben erstellen
-						$zusatz="<a href=\"about.php?username=".$db3->f("username")."\"><font color=\"#333399\">".$db3->f("fullname")."</font></a>&nbsp;".date("d.m.Y - H:i",$db3->f("mkdate"));
+						$zusatz="<a href=\"about.php?username=".$db3->f("username")."\"><font color=\"#333399\">".$db3->f("fullname")."</font></a>&nbsp;".date("d.m.Y - H:i", $chdate);
 						if (($all) && (!$upload)){
 							$zusatz.=sprintf ("<input type=\"CHECKBOX\" %s name=\"download_ids[]\" value=\"%s\" />",($check_all) ? "checked" : "" , $db3->f("dokument_id"));
 						}
@@ -937,16 +945,16 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 					}
 					
 					//Neue Datei herausfinden
-					if ($loginfilelast[$SessSemName[1]] < $db3->f("mkdate")) 
-					$neue_datei = TRUE;
+					if ($loginfilelast[$SessSemName[1]] < $chdate)
+						$neue_datei = TRUE;
 					else
-					$neue_datei = FALSE;
+						$neue_datei = FALSE;
 					
 					//Dokumenttitelzeile ausgeben
 					if (strstr($open,$db3->f("dokument_id"))) 
-					printhead ("90%", 0, $link, "open", $neue_datei, $icon, $titel, $zusatz, $db3->f("mkdate"));
+					printhead ("90%", 0, $link, "open", $neue_datei, $icon, $titel, $zusatz, $chdate);
 					else
-					printhead ("90%", 0, $link, "close", $neue_datei, $icon, $titel, $zusatz, $db3->f("mkdate"));
+					printhead ("90%", 0, $link, "close", $neue_datei, $icon, $titel, $zusatz, $chdate);
 					
 					//Dokumentansicht aufgeklappt 
 					if (strstr($open,$db3->f("dokument_id"))) {  
@@ -1053,12 +1061,15 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 			//create a link onto the titel, too
 			if ($link)
 				$titel = "<a href=\"$link\" class=\"tree\" >$titel</a>";
+			
+			//Workaround for older data from previous versions (chdate is 0)
+			$chdate = (($db->f("chdate")) ? $db->f("chdate") : $db->f("mkdate"));
 
 			//Zusatzangaben erstellen
-			$zusatz="<a href=\"about.php?username=".$db->f("username")."\"><font color=\"#333399\">".$db->f("fullname")."</font></a>&nbsp;".date("d.m.Y - H:i",$db->f("mkdate"));
+			$zusatz="<a href=\"about.php?username=".$db->f("username")."\"><font color=\"#333399\">".$db->f("fullname")."</font></a>&nbsp;".date("d.m.Y - H:i",$chdate);
 			
 			
-			if ($loginfilelast[$SessSemName[1]] < $db->f("chdate")) 
+			if ($loginfilelast[$SessSemName[1]] < $chdate) 
 				$neuer_ordner = TRUE;
 			else
 				$neuer_ordner = FALSE;
