@@ -168,5 +168,10 @@ $this->msg[38] = array (
 $this->msg[39] = array (
 		"mode" => "error",
 		"msg"=> _("Die Belegung konnte nicht verschoben werden, da Sie sich in der gew&uuml;nschten Ressource einer anderen Belegung &uuml;berschneidet!"));
+$this->msg[40] = array (
+		"mode" => "info",
+		"msg"=> _("Sie haben bereits Anfragen, die Sie ausgew&auml;hlt haben, bearbeitet. Wollen Sie jetzt Nachrichten zu allen aufgel&ouml;sten Anfragen versenden?")
+			."<br /><a href=\"%s?snd_closed_request_sms=1\">".makeButton("ja2")."</a>"
+			."&nbsp;<a href=\"%s\">".makeButton("nein")."</a>");
 
 ?>
