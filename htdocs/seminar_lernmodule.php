@@ -41,7 +41,7 @@ if (isset($do_op) AND (($op_co_id == "") OR($op_co_inst == "") OR($seminar_id ==
 if ($ILIAS_CONNECT_ENABLE)
 {
 
-	if (($perm->have_perm("dozent")) AND ($view=="edit"))
+	if (($perm->have_studip_perm("dozent",$seminar_id)) AND ($view=="edit"))
 	{		
 		$db = New DB_Seminar;
 		if ($do_op == "clear")
@@ -58,6 +58,13 @@ if ($ILIAS_CONNECT_ENABLE)
 	     		else
 	     			$db->query("INSERT INTO seminar_lernmodul (seminar_id, co_id, co_inst) VALUES ('$seminar_id', '$op_co_id', '$op_co_inst')");
      		}
+	}
+	
+	if ((!$perm->have_studip_perm("dozent",$seminar_id)) AND ($view=="edit"))
+	{
+		parse_window ("error§" . _("Sie haben keine Berechtigung, die Lernmodul-Zuordnungen dieser Veranstaltung zu ver&auml;ndern."), "§",
+					_("Keine Berechtigung"));
+		die();
 	}
 
 	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
@@ -91,7 +98,7 @@ if ($ILIAS_CONNECT_ENABLE)
                 </td>
 		<td width="90%" class="blank">
 <?     				
-	if (($view == "edit") AND ($perm->have_perm("dozent")))
+	if (($perm->have_studip_perm("dozent",$seminar_id)) AND ($view=="edit"))
 	{
 		$infobox = array	(			
 		array ("kategorie"  => _("Information:"),
