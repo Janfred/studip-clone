@@ -59,7 +59,8 @@ switch($referrer_page) {
 		$help_page = "iv_chat.htm";
 		break;
 		
-	case "sms.php" :
+	case "sms_box.php" :
+	case "sms_snd.php" :
 		if ($change_view == TRUE)
 			$help_page = "iii_homepagef5.htm";
 		else

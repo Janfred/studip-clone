@@ -147,7 +147,7 @@ array	(	"name" => _("Interaktion"),
 																				"text" => _("Wie Sie herausfinden, wer ausser Ihnen gerade im System ist"),
 																				"page" => "iv_online.htm"
 																			),
-																array	(	"name" => _("Systeminterne SMS"),
+																array	(	"name" => _("Systeminterne Nachrichten"),
 																				"text" => _("Wie Sie Nachrichten an andere Nutzer schicken können"),
 																				"page" => "iv_sms.htm"
 																			),
