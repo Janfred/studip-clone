@@ -42,6 +42,7 @@ class ExternElement {
 	var $attributes;
 	var $real_name;
 	var $description;
+	var $headlines = array();
 
 	/**
 	* Constructor
