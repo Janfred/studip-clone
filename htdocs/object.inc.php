@@ -19,15 +19,20 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 function object_add_view ($object_id) {
+	global $object_cache;
 	$now = time();
 	$db=new DB_Seminar;
 	$db->query("SELECT * FROM object_views WHERE object_id = '$object_id'");
 	if ($db->next_record()) { // wurde schon mal angeschaut, also hochzählen
-		$views = $db->f("views")+1;
-		$query = "UPDATE object_views SET chdate='$now', views='$views' WHERE object_id='$object_id'";		
+		if (!in_array($object_id, $object_cache)) {
+			$views = $db->f("views")+1;
+			$query = "UPDATE object_views SET chdate='$now', views='$views' WHERE object_id='$object_id'";		
+			$object_cache[] = $object_id;
+		}
 	} else { // wird zum ersten mal angesehen, also counter anlegen
 		$views = 1;
-		$query = "INSERT INTO object_views (object_id,views,chdate) values ('$object_id', '$views', '$now')";	
+		$query = "INSERT INTO object_views (object_id,views,chdate) values ('$object_id', '$views', '$now')";
+		$object_cache[] = $object_id;
 	}
 	$db->query($query);
 	return $views;

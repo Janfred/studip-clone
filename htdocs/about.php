@@ -112,9 +112,8 @@ if (!$db->nf()) {
 
 
 // count views of Page
-if ($auth->auth["uid"]!=$user_id && $homepage_cache != $user_id) {
+if ($auth->auth["uid"]!=$user_id) {
 	object_add_view($user_id);
-	$homepage_cache = $user_id;
 }
 
 if ($auth->auth["uid"]==$user_id)
