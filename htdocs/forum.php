@@ -70,18 +70,13 @@ function pruefe_name(){
 
 if ($view)
 	$forum["view"] = $view;
-
 if (!$forum["view"]) {
 	$view = "tree";
 	$forum["view"] = $view;
 }
-
 if ($forum["view"]=="flatfolder" && $view)
 	$forum["flatfolder"] = $open;
-
 $view = $forum["view"];
-
-
 
 	include "links_openobject.inc.php";
 	
@@ -111,7 +106,7 @@ if ($topic_id AND !$update) {
 }
 
 // Rekursives Löschen von Postings, Warnung
-IF ($delete_id) {
+if ($delete_id) {
 	$db=new DB_Seminar;
 	$mutter = suche_kinder($delete_id);
 	$mutter = explode (";",$mutter);
@@ -158,18 +153,18 @@ IF ($delete_id) {
 
 // Verschieben von Postings
 
-IF ($cmd == "move" && $topic_id !="" && $rechte) {
+if ($cmd == "move" && $topic_id !="" && $rechte) {
 	$mutter = suche_kinder($topic_id);
 	$mutter = explode (";",$mutter);
 	$count = sizeof($mutter)-2;
 	
 	// wohin darf ich schieben? Abfragen je nach Rechten
 	
-	IF ($perm->have_perm("tutor") OR $perm->have_perm("dozent"))
+	if ($perm->have_perm("tutor") OR $perm->have_perm("dozent"))
 		$query = "SELECT DISTINCT seminare.Seminar_id, seminare.Name FROM seminar_user LEFT JOIN seminare USING(Seminar_id) WHERE user_id ='$user->id ' AND (seminar_user.status = 'tutor' OR seminar_user.status = 'dozent') ORDER BY Name";
-	IF ($perm->have_perm("admin"))
+	if ($perm->have_perm("admin"))
 		$query = "SELECT seminare.* FROM user_inst LEFT JOIN Institute USING (Institut_id) LEFT JOIN seminare USING(Institut_id) LEFT OUTER JOIN seminar_user USING(Seminar_id) WHERE user_inst.inst_perms='admin' AND user_inst.user_id='$user->id' AND seminare.Institut_id is not NULL GROUP BY seminare.Seminar_id ORDER BY seminare.Name";
-	IF ($perm->have_perm("root"))
+	if ($perm->have_perm("root"))
 		$query = "SELECT Seminar_id, Name FROM seminare ORDER BY Name";
 	$db=new DB_Seminar;
 	$db->query($query);
@@ -260,36 +255,20 @@ IF ($cmd == "move" && $topic_id !="" && $rechte) {
 if ($target =="Seminar"){ //Es soll in ein anderes Seminar verschoben werden 
 	$verschoben = 0;
 	move_topic($topic_id,$sem_id,$topic_id,$verschoben);
-	echo "<table class=blank width=\"100%\" border=0 cellpadding=0 cellspacing=0>";
-	parse_msg("msg§" . sprintf(_("%s Posting(s) verschoben."), $verschoben));
-	echo "</table>";
-	}
+	$messgae = "move";
+}
 	
 if ($target =="Institut"){ //Es soll in ein Institut verschoben werden 
 	$verschoben = 0;
 	move_topic($topic_id,$inst_id,$topic_id,$verschoben);
-	echo "<table class=blank width=\"100%\" border=0 cellpadding=0 cellspacing=0>";
-	parse_msg("msg§" . sprintf(_("%s Posting(s) verschoben."), $verschoben));
-	echo "</table>";
-	}
+	$messgae = "move";
+}
 
 if ($target =="Thema"){ //Es soll in ein anderes Thema verschoben werden 
 	$verschoben = 0;
 	move_topic2($move_id,$move_id,$verschoben,$parent_id);
-	echo "<table class=blank width=\"100%\" border=0 cellpadding=0 cellspacing=0>";
-	parse_msg("msg§" . sprintf(_("%s Posting(s) verschoben."), $verschoben));
-	echo "</table>";
-	}
-
-
-
-
-
-
-
-
-
-
+	$messgae = "move";
+}
 
 
 // Rekursives Löschen von Postings, jetzt definitiv!
@@ -307,10 +286,8 @@ if ($really_kill) {
 			$count = 0;
 			delete_topic($really_kill, $count);
 			$db->next_record();
-			IF ($nurneu!=1) { // es wurde wirklich was gel&ouml;scht und nicht nur ein Anlegen unterbrochen
-				echo "<table class=\"blank\" cellspacing=0 cellpadding=0 border=0 width=\"100%\">";
-				parse_msg("msg§" . sprintf(_("%s Posting(s) gel&ouml;scht"), $count));
-				echo "</table>";
+			if ($nurneu!=1) { // es wurde wirklich was gel&ouml;scht und nicht nur ein Anlegen unterbrochen
+				$message = "kill";
 			}
 			
 		}		
@@ -339,21 +316,21 @@ if ($zitat==TRUE)
 if ($edit_id) 
 	$open = $edit_id;
 
-IF ($update) {
+if ($update) {
 	$author = get_fullname();
 	$now = date ("d.m.y - H:i", time());
-	IF (ereg("%%\[editiert von",$description)) { // wurde schon mal editiert
+	if (ereg("%%\[editiert von",$description)) { // wurde schon mal editiert
 		$postmp = strpos($description,"editiert von");
 		$description = substr_replace($description,"editiert von ".$author." am ".$now."]%%",$postmp);
-	} ELSE {
-		IF (ForumFreshPosting($update)==FALSE) // editiert von nur dranhängen wenn nicht frisch erstellt
+	} else {
+		if (ForumFreshPosting($update)==FALSE) // editiert von nur dranhängen wenn nicht frisch erstellt
 			$description.="\n\n%%[editiert von ".$author." am ".$now."]%%";
 	}
 	UpdateTopic ($titel, $update, $description);
 	$open = $update; //gerade bearbeiteten Beitrag aufklappen
 }
 
-IF ($neuesthema==TRUE && $rechte) {			// es wird ein neues Thema angelegt
+if ($neuesthema==TRUE && $rechte) {			// es wird ein neues Thema angelegt
 		$name = _("Name des Themas");
 		$author = get_fullname();
 		$edit_id = CreateTopic ($name, $author, "Beschreibung des Themas", "0", "0");
@@ -368,6 +345,8 @@ IF ($neuesthema==TRUE && $rechte) {			// es wird ein neues Thema angelegt
 if (!$forumsend=="anpassen") {
 	echo "\n<table width=\"100%\" class=\"blank\" border=0 cellpadding=0 cellspacing=0>\n";
 	echo "<tr><td class=\"topic\" width=\"95%\"><b>&nbsp;<img src='pictures/icon-posting.gif' align=absmiddle>&nbsp; ". $SessSemName["header_line"] ." - " . _("Forum") . "</b></td><td class=\"topic\" width=\"5%\" align=\"right\"><a href='forum.php?forumsend=anpassen'><img src='pictures/pfeillink.gif' border=0 " . tooltip(_("Look & Feel anpassen")) . ">&nbsp;</a></td></tr>\n";
+	if ($message=="kill") echo parse_msg("msg§" . sprintf(_("%s Posting(s) gel&ouml;scht"), $count));
+	if ($message="move") echo parse_msg("msg§" . sprintf(_("%s Posting(s) verschoben."), $verschoben));
 	echo "<tr><td class=\"blank\" colspan=2>&nbsp;";
 	echo " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font size=-1>Indikator: 
 	<img src='pictures/forumrot.gif'> Alter 
@@ -389,7 +368,6 @@ if ($forum["view"]=="flat" || $forum["view"]=="neue" || $forum["view"]=="flatfol
  	flatview ($open, $mehr, $show, $edit_id, $name, $description, $zitat);
 else
 	DisplayFolders ($open, $edit_id, $zitat);
-
 
   // Save data back to database.
   page_close()
