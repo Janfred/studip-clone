@@ -257,6 +257,10 @@ function get_object_type($seminar_id) {
 	if ($db->next_record())
 		return "sem";
 
+	$db->query("SELECT statusgruppe_id FROM statusgruppen WHERE statusgruppe_id = '$seminar_id' ");
+	if ($db->next_record())
+		return "group";
+
 	if (!$entry_level) {
 		$db->query("SELECT Institut_id FROM Institute WHERE Institut_id = '$seminar_id' ");
 		if ($db->next_record())
