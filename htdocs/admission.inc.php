@@ -55,13 +55,14 @@ function check_admission ($send_message=TRUE) {
 			while ($db3->next_record())   {
 				$group = select_group ($db->f("start_time"), $db3->f("user_id"));			
 				$db4->query("INSERT INTO seminar_user SET Seminar_id = '".$db->f("Seminar_id")."', user_id = '".$db3->f("user_id")."', status= 'autor', gruppe = '$group', admission_studiengang_id = '".$db3->f("studiengang_id")."', mkdate = '".time()."' ");
-				if ($db4->affected_rows())
+				if ($db4->affected_rows()) {
 					$db5->query("DELETE FROM admission_seminar_user WHERE user_id ='".$db3->f("user_id")."' AND seminar_id = '".$db->f("Seminar_id")."' ");
 					//User benachrichten
 					if (($db5->affected_rows()) && ($send_message)) {
 						$message="Sie wurden als Teilnehmer der Veranstaltung **".$db->f("Name")."** ausgelost. Ab sofort finden Sie die Veranstaltung in der Übersicht ihrer Veranstaltungen. Damit sind sie auch als Teilnehmer der Präsenzveranstaltung zugelassen.";
 						$messaging->insert_sms ($db3->f("username"), $message, "____%system%____");
 					}
+				}
 			}
 			//Alle anderen Teilnehmer in der Warteliste losen
 			$db3->query("SELECT admission_seminar_user.user_id, username FROM admission_seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE seminar_id = '".$db->f("Seminar_id")."' ORDER BY RAND() ");
@@ -108,13 +109,14 @@ function update_admission ($seminar_id, $send_message=TRUE) {
 				while ($db4->next_record()) {
 					$group = select_group ($db->f("start_time"), $db4->f("user_id"));			
 					$db5->query("INSERT INTO seminar_user SET user_id = '".$db4->f("user_id")."', Seminar_id = '".$db->f("Seminar_id")."', status= 'autor', gruppe = '$group', admission_studiengang_id = '".$db2->f("studiengang_id")."', mkdate = '".time()."' ");
-					if ($db5->affected_rows())
+					if ($db5->affected_rows()) {
 						$db6->query("DELETE FROM admission_seminar_user WHERE user_id ='".$db4->f("user_id")."' AND seminar_id = '".$db->f("Seminar_id")."' ");
 						//User benachrichten
 						if (($db6->affected_rows()) && ($send_message)) {
 							$message="Sie sind als Teilnehmer der Veranstaltung **".$db->f("Name")."** eingetragen worden, da für Sie ein Platz frei geworden ist. Ab sofort finden Sie die Veranstaltung in der Übersicht ihrer Veranstaltungen. Damit sind sie auch als Teilnehmer der Präsenzveranstaltung zugelassen.";
 							$messaging->insert_sms ($db4->f("username"), $message, "____%system%____");
 						}
+					}
 				}
 			}
 		}
