@@ -56,6 +56,13 @@ include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 	<br>
 	<?
 	}
+	if ($ILIAS_CONNECT_ENABLE) {
+	?>
+	<br><a href="browse_lernmodule.php"><b><?=_("Suchen nach Lernmodulen")?></b></a></br>
+	<font size=-1><?=_("Hier finden Sie Lernmodule aus dem angebundenen ILIAS-System.")?></font>
+	<br>
+	<?
+	}
 	?>
 	<br><a href="archiv.php"><b><?=_("Suchen im Archiv")?></b></a></br>
 	<font size=-1><?=_("Hier finden Sie alle archivierten Veranstaltungen vergangener Semester.")?></font>
