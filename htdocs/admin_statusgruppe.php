@@ -30,9 +30,10 @@ include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");
 
-require_once ($ABSOLUTE_PATH_STUDIP . "/config.inc.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/admission.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");
 	
 //get ID, if a object is open
@@ -97,12 +98,12 @@ function MovePersonStatusgruppe ($range_id, $AktualMembers="", $InstitutMembers=
 				if ($workgroup_mode == TRUE) {
 					$globalperms = get_global_perm($user_id);
 					if ($globalperms == "tutor" || $globalperms == "dozent") {
-						$db->query("INSERT INTO seminar_user SET Seminar_id = '$range_id', user_id = '$user_id', status = 'tutor', gruppe = '6' , mkdate = '$mkdate'");
+						insert_seminar_user($range_id, $user_id, "tutor", FALSE);
 					} else {
-						$db->query("INSERT INTO seminar_user SET Seminar_id = '$range_id', user_id = '$user_id', status = 'autor', gruppe = '6' , mkdate = '$mkdate'");
+						insert_seminar_user($range_id, $user_id, "autor", FALSE);
 					}
 				} else {
-					$db->query("INSERT INTO seminar_user SET Seminar_id = '$range_id', user_id = '$user_id', status = 'autor', gruppe = '6' , mkdate = '$mkdate'");
+					insert_seminar_user($range_id, $user_id, "autor", FALSE);					
 				}
 			}
 		}
@@ -115,12 +116,12 @@ function MovePersonStatusgruppe ($range_id, $AktualMembers="", $InstitutMembers=
 						if ($workgroup_mode == TRUE) {
 							$globalperms = get_global_perm($user_id);
 							if ($globalperms == "tutor" || $globalperms == "dozent") {
-								$db2->query("INSERT INTO seminar_user SET Seminar_id = '$range_id', user_id = '$user_id', status = 'tutor', gruppe = '6' , mkdate = '$mkdate'");
+								insert_seminar_user($range_id, $user_id, "tutor", FALSE);					
 							} else {
-								$db2->query("INSERT INTO seminar_user SET Seminar_id = '$range_id', user_id = '$user_id', status = 'autor', gruppe = '6' , mkdate = '$mkdate'");
+								insert_seminar_user($range_id, $user_id, "autor", FALSE);					
 							}
 						} else {
-							$db2->query("INSERT INTO seminar_user SET Seminar_id = '$range_id', user_id = '$user_id', status = 'autor', gruppe = '6' , mkdate = '$mkdate'");
+							insert_seminar_user($range_id, $user_id, "autor", FALSE);					
 						}
 					} elseif ($_range_type == "inst" || $_range_type == "fak") {
 						$globalperms = get_global_perm($user_id);
