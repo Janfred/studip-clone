@@ -154,9 +154,9 @@ function SendLetter($newsletter_id)
 		if (CheckPersonNewsletter ($db->f("username"), $newsletter_id) == "removed") {
 			echo "<b>ausgetragen</b>";
 		} else {
-			echo "eingetragen";
+			echo "eingetragen&nbsp;";
+			SendMail($newsletter_id,$db->f("username"),$db->f("Vorname"),$db->f("Nachname"),$db->f("Email"));
 		}
-		SendMail($newsletter_id,$db->f("username"),$db->f("Vorname"),$db->f("Nachname"),$db->f("Email"));
 		echo "</td>";
 	}
 	
@@ -165,7 +165,11 @@ function SendLetter($newsletter_id)
 	$db->query ("SELECT auth_user_md5.* FROM newsletter LEFT JOIN auth_user_md5 USING(user_id) WHERE newsletter_id = '$newsletter_id' AND status = '1'");
 	while ($db->next_record()) {
 		$cssSw->switchClass(); 
-		printf ("<tr><td class=\"%s\">%s, %s</td><td class=\"%s\">%s (%s)</td><td class=\"%s\">%s</td><td class=\"%s\">Positivliste</td>", $cssSw->getClass(), $db->f("Nachname"), $db->f("Vorname"), $cssSw->getClass(), $db->f("username"), $db->f("perms"), $cssSw->getClass(), $db->f("Email"), $cssSw->getClass());
+		printf ("<tr><td class=\"%s\">%s, %s</td><td class=\"%s\">%s (%s)</td><td class=\"%s\">%s</td><td class=\"%s\">Positivliste&nbsp;", 
+			$cssSw->getClass(), $db->f("Nachname"), $db->f("Vorname"), $cssSw->getClass(),
+			$db->f("username"), $db->f("perms"), $cssSw->getClass(), $db->f("Email"), $cssSw->getClass());
+		SendMail($newsletter_id,$db->f("username"),$db->f("Vorname"),$db->f("Nachname"),$db->f("Email"));
+		print("</td></tr>");
 	}
 	echo "</table>";
 }
