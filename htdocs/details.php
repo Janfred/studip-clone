@@ -566,10 +566,16 @@ print_infobox ($infobox,"pictures/details.jpg");
 	if ($db2->f("admission_type")) {
 		if ($db2->f("admission_selection_take_place") == 1) {
 			if ($db2->f("admission_type") == 1) {
-				printf ("<font size=-1>" . _("Die Auswahl der Teilnehmenden wurde nach dem Losverfahren am %s Uhr festgelegt. Weitere Interessierte k&ouml;nnen per Warteliste einen Platz bekommen.") . "</font>", date("d.m.Y, G:i", $db2->f("admission_endtime")));
+				printf ("<font size=-1>" . _("Die Auswahl der Teilnehmenden wurde nach dem Losverfahren am %s Uhr festgelegt.") . "</font>", date("d.m.Y, G:i", $db2->f("admission_endtime")));
+				if (($db2->f("admission_endtime_sem") > time()) || ($db2->f("admission_endtime_sem") == -1)) {
+					echo "<font size=-1>" . _("Weitere Interessierte k&ouml;nnen per Warteliste einen Platz bekommen.") . "</font>";
+				}
 				echo "<br/>";
 			} else {
-				printf ("<font size=-1>" . _("Die Auswahl der Teilnehmenden erfolgt in der Reihenfolge der Anmeldung. Die Kontingentierung wurde am %s aufgehoben. Weitere Pl&auml;tze k&ouml;nnen noch &uuml;ber Wartelisten vergeben werden.") . "</font>", date("d.m.Y, G:i", $db2->f("admission_endtime")));
+				printf ("<font size=-1>" . _("Die Auswahl der Teilnehmenden erfolgt in der Reihenfolge der Anmeldung. Die Kontingentierung wurde am %s aufgehoben.") . "</font>", date("d.m.Y, G:i", $db2->f("admission_endtime")));
+				if (($db2->f("admission_endtime_sem") > time()) || ($db2->f("admission_endtime_sem") == -1)) {
+					echo "<font size=-1>" . _("Weitere Pl&auml;tze k&ouml;nnen noch &uuml;ber Wartelisten vergeben werden.") . "</font>";
+				}
 				echo "<br/>";
 			}	
 		} else {
