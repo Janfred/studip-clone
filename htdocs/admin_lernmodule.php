@@ -81,7 +81,7 @@ if ($ILIAS_CONNECT_ENABLE)
 			my_info(sprintf(_("Wenn Sie fortfahren, wird das Lernmodul mit dem Titel %s unwiderruflich gel&ouml;scht. Soll dieses Lernmodul wirklich gel&ouml;scht werden?"), "<b>" . $del_title . "</b>"));
 			echo "</table>";
 			?><br><center>
-			<a href="<? echo link_delete_module($del_inst, $del_id); ?>"><? echo makeButton("ja", "img"); ?>&nbsp;
+			<a href="<? echo link_delete_module($del_inst, $del_id); ?>" target="_blank"><? echo makeButton("ja", "img"); ?>&nbsp;
 			<a href="<? echo $PHP_SELF; ?>"><? echo makeButton("nein", "img"); ?></center>
 			<?
 		}
