@@ -1,7 +1,7 @@
 <?php
 /*
-newsletter.php - Newsletter-Verwaltung von Stud.IP.
-Copyright (C) 2002 Ralf Stockmann <rstockm@uni-goettingen.de>
+newsletter.php - Seite f&uuml;r nobody zum ein- austragen von Newsletter-Abbos
+Copyright (C) 2002 Ralf Stockmann <rstockm@gwdg.de>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -18,256 +18,76 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-  page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
-  $perm->check("root");
+page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
+$auth->login_if($again && ($auth->auth["uid"] == "nobody"));
 
-	include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+
+// -- here you have to put initialisations for the current page
+
+	$magic     = "ddvedvgngda";  ## Challenge seed
 
 // Start of Output
-	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
+include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 
-	require_once("visual.inc.php");
-	require_once("messaging.inc.php");
-	require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
-	require_once ("$ABSOLUTE_PATH_STUDIP/newsletter.inc.php");
-
-
-// Newsletter arrays
-
-	// Standard
-
-	$newsletter[0]["name"] = "Stud.IP Newsletter";
-	$newsletter[0]["SQL"] = "WHERE username = 'rstockm'";
-//		$newsletter[0]["SQL"] = "WHERE perms != 'user' AND perms != 'autor'";
-	$newsletter[0]["text"] = "Hallo dies ist ein Text";
-
-	// weitere
-
-	$newsletter[1]["name"] = "Stud.IP Admin-Newsletter";
-	$newsletter[1]["SQL"] = "WHERE perms = 'admin'";
-	$newsletter[1]["text"] = "Hallo dies ist ein noch ein Text";
-	
-// Hilfsfunktionen
-
-function PrintRemoveSearch ($search_exp, $newsletter_id)    // Funktion, mit der man innerhalb einer Newsletter-Personengruppe suchen kann
-{ global $newsletter;
-	$db=new DB_Seminar;
-	$query = "SELECT DISTINCT * ".
-		"FROM auth_user_md5 ".
-		$newsletter[$newsletter_id]["SQL"].
-		" AND (Vorname LIKE '%$search_exp%' OR Nachname LIKE '%$search_exp%' OR username LIKE '%$search_exp%') ORDER BY Nachname ";
-	$db->query($query); 
-	if (!$db->num_rows()) {
-		echo "&nbsp; keine Treffer&nbsp; ";
-	} else {
-		echo $db->num_rows()." Treffer:&nbsp; ";
-		echo "&nbsp; <select name=\"remove\">";
-		while ($db->next_record()) {
-			printf ("<option value=\"%s\">%s - %s\n", $db->f("username"), my_substr($db->f("Nachname").", ".$db->f("Vorname")." (".$db->f("username"),0,35).")", $db->f("perms"));
-		}
-		echo "</select>&nbsp; ";
-		printf ("<input type=\"IMAGE\" name=\"search\" src=\"./pictures/buttons/abschicken-button.gif\" border=\"0\" value=\" Personen austragen\" %s>&nbsp;  ", tooltip("Person austragen"));
-	}
-}
-
-function PrintAddSearch ($search_exp, $newsletter_id)    // Funktion, mit der man innerhalb einer Newsletter-Personengruppe suchen kann
-{ global $newsletter;
-	$db=new DB_Seminar;
-	$query = "SELECT DISTINCT * ".
-		"FROM auth_user_md5 WHERE".
-		" Vorname LIKE '%$search_exp%' OR Nachname LIKE '%$search_exp%' OR username LIKE '%$search_exp%' ORDER BY Nachname ";
-	$db->query($query); 
-	if (!$db->num_rows()) {
-		echo "&nbsp; keine Treffer&nbsp; ";
-	} else {
-		echo $db->num_rows()." Treffer:&nbsp; ";
-		echo "&nbsp; <select name=\"add\">";
-		while ($db->next_record()) {
-			printf ("<option value=\"%s\">%s - %s\n", $db->f("username"), my_substr($db->f("Nachname").", ".$db->f("Vorname")." (".$db->f("username"),0,35).")", $db->f("perms"));
-		}
-		echo "</select>&nbsp; ";
-		printf ("<input type=\"IMAGE\" name=\"search\" src=\"./pictures/buttons/abschicken-button.gif\" border=\"0\" value=\" Person eintragen\" %s>&nbsp;  ", tooltip("Person eintragen"));
-	}
-}
-
-function PrintExclusions($newsletter_id)
-{ global $newsletter, $cssSw, $PHP_SELF;
-	$db=new DB_Seminar;
-	$db->query ("SELECT status, auth_user_md5.* FROM newsletter LEFT JOIN auth_user_md5 USING(user_id)  WHERE newsletter_id = '$newsletter_id'");
-	echo "<table border=\"0\" cellspacing=\"0\" align= \"center\" cellpadding=\"0\" width=\"80%\">";
-	while ($db->next_record()) {
-		$cssSw->switchClass(); 
-		printf ("<tr><td class=\"%s\">%s, %s</td><td class=\"%s\">%s (%s)</td><td class=\"%s\">%s</td><td class=\"%s\">", $cssSw->getClass(), $db->f("Nachname"), $db->f("Vorname"), $cssSw->getClass(), $db->f("username"), $db->f("perms"), $cssSw->getClass(), $db->f("Email"), $cssSw->getClass());
-		if ($db->f("status") == "0") {
-			printf ("<a href=\"$PHP_SELF?add=%s\">wieder eintragen</a>",$db->f("username"));
-		} else {
-			printf ("<a href=\"$PHP_SELF?remove=%s\">Aus Liste austragen</a>",$db->f("username"));
-		}
-		echo "</td>";
-	}
-	echo "</table>";
-}
-
-function SendMail($newsletter_id,$username,$Vorname,$Nachname,$Email)
-{ global $newsletter,  $CANONICAL_RELATIVE_PATH_STUDIP, $UNI_NAME_CLEAN;
-
-		$magic     = "ddvedvgngda";  ## Challenge seed
-		$smtp=new smtp_class;		     ## Einstellungen fuer das Verschicken der Mails
-		$smtp->host_name=getenv("SERVER_NAME");
-		$smtp->localhost="localhost";
-		$REMOTE_ADDR=getenv("REMOTE_ADDR");
-		$Zeit=date("H:i:s, d.m.Y",time());
-
-		$validator=new email_validation_class;	## Klasse zum Ueberpruefen der Eingaben
-		$validator->timeout=10;									## Wie lange warten wir auf eine Antwort des Mailservers?
-
-		if (!$validator->ValidateEmailHost($Email)) {     ## Mailserver nicht erreichbar, ablehnen
-			echo "nicht versand";
-			return false;
-		} elseif (!$validator->ValidateEmailBox($Email)) {    ## aber user unbekannt. Mail an abuse@puk!
-			echo "nicht erreichbar";
-			return false;
-		} else {
-			// Newsletter los
-			$from="\"Stud.IP\" <wwwrun@".$smtp->host_name.">";
-			$env_from="wwwrun@".$smtp->host_name;
-			$abuse="abuse@".$smtp->host_name;
-			$to=$Email;
-			$secret= md5("$username:$magic");
-			$url = "http://" . $smtp->host_name . $CANONICAL_RELATIVE_PATH_STUDIP . "email_validation.php?username=$username&secret=" . $secret;
-			$mailbody="Dies ist ein Newsletter des Systems\n"
-			."\"Studienbegleitender Internetsupport Präsenzlehre\"\n"
-			."- $UNI_NAME_CLEAN -\n\n"
-			."Diese Mail wurde Ihnen zugesandt um sicherzustellen,\n"
-			."daß die angegebene Email-Adresse tatsächlich Ihnen gehört.\n\n"
-			."Wenn diese Angaben korrekt sind, dann öffnen Sie bitte den Link\n\n"
-			."$url\n\n"
-			."in Ihrem Browser.\n"
-			."Möglicherweise unterstützt ihr Mail-Programm ein einfaches Anklicken des Links.\n"
-			."damit der Eintrag aus der Datenbank gelöscht wird.\n";
-
-			$smtp->SendMessage(
-			$env_from, array($to),
-			array("From: $from", "Reply-To: $abuse", "To: $to", "Subject: Newsletter"),
-			$mailbody);
-		}
-}
-
-function SendLetter($newsletter_id)
-{ global $newsletter, $cssSw;
-	$db=new DB_Seminar;
-	$db->query ("SELECT * FROM auth_user_md5 ".$newsletter[$newsletter_id]["SQL"]."GROUP BY Email ORDER BY Nachname");
-	echo "<table border=\"0\" cellspacing=\"0\" align= \"center\" cellpadding=\"0\" width=\"80%\">";
-	while ($db->next_record()) {
-		$cssSw->switchClass(); 
-		printf ("<tr><td class=\"%s\">%s, %s</td><td class=\"%s\">%s (%s)</td><td class=\"%s\">%s</td><td class=\"%s\">", $cssSw->getClass(), $db->f("Nachname"), $db->f("Vorname"), $cssSw->getClass(), $db->f("username"), $db->f("perms"), $cssSw->getClass(), $db->f("Email"), $cssSw->getClass());
-		if (CheckPersonNewsletter ($db->f("username"), $newsletter_id) == "removed") {
-			echo "<b>ausgetragen</b>";
-		} else {
-			echo "eingetragen";
-		}
-		SendMail($newsletter_id,$db->f("username"),$db->f("Vorname"),$db->f("Nachname"),$db->f("Email"));
-		echo "</td>";
-	}
-	
-	// Positivliste
-	
-	$db->query ("SELECT auth_user_md5.* FROM newsletter LEFT JOIN auth_user_md5 USING(user_id) WHERE newsletter_id = '$newsletter_id' AND status = '1'");
-	while ($db->next_record()) {
-		$cssSw->switchClass(); 
-		printf ("<tr><td class=\"%s\">%s, %s</td><td class=\"%s\">%s (%s)</td><td class=\"%s\">%s</td><td class=\"%s\">Positivliste</td>", $cssSw->getClass(), $db->f("Nachname"), $db->f("Vorname"), $cssSw->getClass(), $db->f("username"), $db->f("perms"), $cssSw->getClass(), $db->f("Email"), $cssSw->getClass());
-	}
-	echo "</table>";
-}
-
-
-// Initialisierungen und Abfragen
-
-$cssSw=new cssClassSwitcher;
-if (!$newsletter_id) {    // keine Newsletter ausgewaehlt - auf Standard stellen
-	$newsletter_id = 0;
-}
-if ($remove) {
-	$msg = RemovePersonNewsletter($remove,$newsletter_id);
-}
-if ($add) {
-	$msg = AddPersonNewsletter($add,$newsletter_id);
-}
-
-
-// Ausgabeteil
+require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php"); 
+require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/newsletter.inc.php");
 
 ?>
+<br>
 
-<table border=0 bgcolor="#000000" align="center" cellspacing=0 cellpadding=0 width=100%>
-<tr valign=top align=middle>
-	<td class="topic"align="left"><b>&nbsp;Newsletter - Seite</b></td>
-</tr>
+<table width="100%" border=0 cellpadding=0 cellspacing=0>
+<tr><td class="blank" colspan=2 width=100%">&nbsp;</td></tr>
 <tr>
-	<td class="blank">
-		<blockquote><br>	
-		Auf dieser Seite wird der Stud.IP Newsletter organisiert.
-		</blockquote>
-	</td>
+	<td class="topic" colspan=2><b>&nbsp;Best&auml;tigung der Email-Adresse</b></td>
 </tr>
+<tr><td class="blank" colspan=2 width="100%">&nbsp;</td></tr>
+
 <?
-if ($msg) parse_msg($msg);
-?>
 
+//	So, wer bis hier hin gekommen ist gehoert zur Zielgruppe...
 
-<tr>
-	<td class="blank">
-		<blockquote><br>	
-		<table border=0 align="center" cellspacing=0 cellpadding=5 width=80%>
-			<tr>
-				<td class="steel1"><b>Aktiver Newsletter:</b>&nbsp; 
-<?				echo $newsletter[$newsletter_id]["name"]."<br><b>Abfrage:</b>&nbsp; "; 
-				echo $newsletter[$newsletter_id]["SQL"]."<br><b>Treffer:</b>&nbsp; "; 
-				$db=new DB_Seminar;
-				$db->query ("SELECT * FROM auth_user_md5 ".$newsletter[$newsletter_id]["SQL"]."GROUP BY Email ORDER BY Nachname");
-				echo $db->num_rows();
-?>				
-				</td>
-			</tr>
-		</table>
-		</blockquote>
-		<br>
-		<form action="<? echo $PHP_SELF ?>" method="POST">
-<?
-		if ($search_exp) {
-			PrintRemoveSearch($search_exp, $newsletter_id);
-		} else {
-			echo "<font size=\"-1\">&nbsp; Austragen</font><br>";
-			echo "&nbsp; <img src=\"./pictures/down.gif\">&nbsp; <input type=\"text\" name=\"search_exp\" value=\"\">";
-			printf ("<input type=\"IMAGE\" name=\"search\" src= \"./pictures/suchen.gif\" border=\"0\" value=\" Personen suchen\" %s>&nbsp;  ", tooltip("Person suchen"));
-		} 
-		echo "</form>";
-?>
-		<form action="<? echo $PHP_SELF ?>" method="POST">
-<?
-		if ($search_add) {
-			PrintAddSearch($search_add, $newsletter_id);
-		} else {
-			echo "<font size=\"-1\">&nbsp; Eintragen</font><br>";
-			echo "&nbsp; <img src=\"./pictures/up.gif\">&nbsp; <input type=\"text\" name=\"search_add\" value=\"\">";
-			printf ("<input type=\"IMAGE\" name=\"search\" src= \"./pictures/suchen.gif\" border=\"0\" value=\" Personen suchen\" %s>&nbsp;  ", tooltip("Person suchen"));
-		} 
-		echo "</form>";
+	if (!isset($secret) || $secret == "" || !isset($username) || $username== "" || !isset($newsletter_id)) {   // Volltrottel (oder abuse)
+		my_error("<b>Sie m&uuml;ssen den vollst&auml;ndigen Link aus der Best&auml;tigungsmail<br>\nin die Zeile \"Location\" oder \"URL\" Ihres Browsers kopieren.</b>\n");
+		print "<tr><td class=\"blank\" colspan=2 width=\"100%\"><b>&nbsp;Versuchen Sie es noch einmal!</b><br><br>\n";
+		print "</td></tr></table>";
+		page_close();
+		die;
+	}
 
-		echo "&nbsp; Ausnahmen:";
+	$hash = md5("$username:$magic");
+	// hier wird noch mal berechnet, welches secret in der Bestaetigungsmail uebergeben wurde
 
-		PrintExclusions($newsletter_id);
+	if ($secret != $hash) {   // abuse (oder Volltrottel)
+		my_error("<b>Der &uuml;bergebene \"Secret-Code\" ist nicht korrekt.</b>\n");
+		my_info("Sie m&uuml;ssen unter dem Benutzernamen eingeloggt sein,<br>\nf&uuml;r den Sie die Best&auml;tigungsmail erhalten haben.\n");
+		my_info("Und Sie m&uuml;ssen den vollst&auml;ndigen Link aus der Best&auml;tigungsmail<br>\nin die Zeile \"Location\" oder \"URL\" Ihres Browsers kopieren.\n");
+		print "<tr><td class=\"blank\" colspan=2 width=\"100%\"><b>&nbsp;Versuchen Sie es noch einmal!</b><br><br>\n";
+		print "</td></tr></table>";
+    // Mail an abuse
+		die;
+	}
 
-		echo "<br>&nbsp; Versandstatus:";
+	if ($secret == $hash) {   // alles paletti, Status ändern
+		$db = new DB_Seminar;
+	   $query = "update auth_user_md5 set perms='autor' where user_id='$user->id'";
+	   $db->query($query);
+	   if ($db->affected_rows() == 0) {
+	     my_error("<b>Changes failed:</b> $query");
+	     break;
+	   }
 
-		SendLetter($newsletter_id);
-?>		
-	</td>
-</tr>
-</table>
-<?
+		my_msg("<b>Ihr Status wurde erfolgreich auf \"autor\" gesetzt.<br>\nDamit d&uuml;rfen Sie in den meisten Veranstaltungen schreiben,<br>\nf&uuml;r die Sie sich anmelden.</b>\n");
+
+	} else {
+		; // hier sollten wir nie hinkommen
+	}
+
   page_close();
 ?>
 </body>
 </html>
+<!-- $Id$ -->
