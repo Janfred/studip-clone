@@ -62,8 +62,8 @@ class ExternElementPersondetailsLectures extends ExternElement {
 		
 		$config = array(
 			"semrange" => "three",
-			"aliaswise" => "WiSe",
-			"aliassose" => "SoSe",
+			"aliaswise" => _("Wintersemester"),
+			"aliassose" => _("Sommersemester"),
 			"aslist" => "1"
 		);
 		

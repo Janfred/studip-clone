@@ -62,7 +62,7 @@ class ExternElementMainNews extends ExternElementMain {
 			"name" => "",
 			"order" => "|0|1",
 			"visible" => "|1|1",
-			"aliases" => "|Datum|Nachricht",
+			"aliases" => "|"._("Datum")."|"._("Nachricht"),
 			"width" => "|10%|90%",
 			"widthpp" => "",
 			"sort" => "|1|0",
@@ -71,8 +71,8 @@ class ExternElementMainNews extends ExternElementMain {
 			"dateformat" => "%d. %b. %Y",
 			"datelanguage" => "de_DE",
 			"urlcss" => "",
-			"title" => "News",
-			"nodatatext" => "Keine aktuellen News"
+			"title" => _("News"),
+			"nodatatext" => _("Keine aktuellen News")
 		);
 		
 		return $config;

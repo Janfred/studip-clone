@@ -62,7 +62,8 @@ class ExternElementMainDownload extends ExternElementMain {
 			"name" => "",
 			"order" => "|0|1|2|3|4|5",
 			"visible" => "|TRUE|TRUE|TRUE|TRUE|TRUE|TRUE",
-			"aliases" => "||Name|Beschreibung|Upload am|Größe|Upload durch",
+			"aliases" => "||"._("Name"."|"._("Beschreibung")."|"._("Upload am")."|"
+					._("Gr&ouml;&szlig;e")."|"._("Upload durch"),
 			"width" => "|1%|20%|25%|15%|15%|24%",
 			"sort" => "|0|0|0|1|0|0",
 			"wholesite" => "",
@@ -70,7 +71,7 @@ class ExternElementMainDownload extends ExternElementMain {
 			"nameformat" => "no_title",
 			"urlcss" => "",
 			"title" => "",
-			"nodatatext" => "",
+			"nodatatext" => _("Keine Dateien vorhanden"),
 			"dateformat" => "%d. %b. %Y",
 			"datelanguage" => "de_DE",
 			"config" => "",

@@ -61,11 +61,12 @@ class ExternElementMainPersonDetails extends ExternElementMain {
 			"name" => "",
 			"order" => "|0|1|2|3|4|5|6",
 			"visible" => "|1|1|1|1|1|1|1",
-			"aliases" => "|Lebenslauf|Schwerpunkte|Lehrveranstaltungen|Aktuell|Termine|Publikationen",
+			"aliases" => "|"._("Lebenslauf")."|"._("Schwerpunkte")."|"._("Lehrveranstaltungen")."|"
+					._("Aktuell")."|"._("Termine")."|"._("Publikationen"),
 			"wholesite" => "0",
 			"nameformat" => "no_title",
 			"urlcss" => "",
-			"title" => "Personal",
+			"title" => _("Mitarbeiter"),
 		);
 		
 		return $config;

@@ -67,7 +67,7 @@ class ExternElementMainPersons extends ExternElementMain {
 			"name" => "",
 			"order" => "|0|1|2|3|4",
 			"visible" => "|1|1|1|1|1",
-			"aliases" => "|Name|Telefon|Raum|Email|Sprechzeiten",
+			"aliases" => "|"._("Name")."|"._("Telefon")."|"._("Raum")."|"._("Email")."|"._("Sprechzeiten"),
 			"width" => "|1%|20%|25%|15%|15%",
 			"widthpp" => "",
 			"sort" => "|0|0|0|1|0",
@@ -79,7 +79,7 @@ class ExternElementMainPersons extends ExternElementMain {
 			"nameformat" => "no_title",
 			"repeatheadrow" => "",
 			"urlcss" => "",
-			"title" => "Personal",
+			"title" => _("Mitarbeiter"),
 			"nodatatext" => "",
 			"config" => "",
 			"srilink" => ""
