@@ -47,7 +47,10 @@ function link_seminar_modules($seminar_id)
 					$link_str[$i]["button"] .= "<br><center><a href=\"" . link_edit_module($mod_array[$module_count]["inst"], $mod_array[$module_count]["id"]) . "\" target=\"_blank\">".
 					makeButton("bearbeiten", "img")."</center></a>";
 				}
-				$mod_desc[$i2] = "<a href=\"about.php?username=" . get_studip_user($mod_author[$i2]["id"]). "\">" . $mod_author[$i2]["fullname"] . "</a>";
+				if (get_studip_user($mod_author[$i2]["id"]) == false)
+					$mod_desc[$i2] = $mod_author[$i2]["fullname"];
+				else
+					$mod_desc[$i2] = "<a href=\"about.php?username=" . get_studip_user($mod_author[$i2]["id"]). "\">" . $mod_author[$i2]["fullname"] . "</a>";
 			}
 			$link_str[$i]["desc"] .= implode($mod_desc, ", ");
 		}
