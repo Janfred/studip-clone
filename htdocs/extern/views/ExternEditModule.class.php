@@ -276,6 +276,88 @@ class ExternEditModule extends ExternEditHtml {
 		return $out;
 	}
 	
+	function editSemTypes () {
+		global $SEM_TYPE, $SEM_CLASS;
+		// these two values are always necessary, even there is an error in the users inputs, so
+		// there arent transfered via HTTP_POST_VARS
+		$this->form_values[$this->element_name . "_order"]
+				= $this->config->getValue($this->element_name, "order");
+		
+		$order = $this->getValue("order");
+		$aliases = $this->getValue("aliases");
+		$sem_classes = $this->config->getValue("Main", "semclasses");
+		
+		$this->css->resetClass();
+		$this->css->switchClass();
+		
+		$out = "<tr><td><table width=\"100%\" border=\"0\" cellpadding=\"2\" cellspacing=\"0\">\n";
+		$out .= "<tr" . $this->css->getFullClass() . ">\n";
+		$out .= "<td><font size=\"2\"><b>" . _("Datenfeld") . "</b></font></td>\n";
+		$out .= "<td><font size=\"2\"><b>" . _("&Uuml;berschrift") . "</b></font></td>\n";
+		$out .= "<td><font size=\"2\"><b>" . _("Reihenfolge") . "</b></font></td>\n";
+		$out .= "</tr>\n";
+		$this->css->switchClass();
+		print_r($aliases);
+		//foreach ($order as $key => $position)
+			//$mapping[$position] = $key;
+			
+		$i = 0;
+		foreach ($sem_classes as $key_class) {
+			foreach ($SEM_TYPE as $key_type => $type) {
+				if ($type["class"] == $key_class)
+					$mapping[$key_type] = $i++;
+			}
+		}
+		
+		print_r($mapping);
+		//for ($i = 0; $i < sizeof($field_names); $i++) {
+		for ($i = 0; $i < sizeof($order); $i++) {
+		//	$position = $order[$i]--;
+			// name of column
+			$out .= "<tr" . $this->css->getFullClass() . ">\n";
+			$out .= "<td><font size=\"2\">&nbsp;";
+			if (strlen($SEM_TYPE[$order[$i]]["name"]) > 25) {
+				$out .= htmlReady(substr($SEM_TYPE[$order[$i]]["name"], 0, 22)
+						. "... ({$SEM_CLASS[$SEM_TYPE[$order[$i]]['class']]['name']})");
+			}
+			else {
+				$out .= htmlReady($SEM_TYPE[$order[$i]]["name"]
+						. " ({$SEM_CLASS[$SEM_TYPE[$order[$i]]['class']]['name']})");
+			}
+			$out .= "</font></td>";
+			
+			// column headline
+			$out .= "<td><input type=\"text\" name=\"{$this->element_name}_aliases[{$mapping[$order[$i]]}]\"";
+			$out .= "\" size=\"20\" maxlength=\"50\" value=\"";
+			if (isset($aliases[$mapping[$order[$i]]]))
+				$out .= $aliases[$mapping[$order[$i]]] . "\">";
+			else
+				$out .= $SEM_TYPE[$order[$i]]["name"] . "\">";
+			if ($this->faulty_values[$this->element_name . "_aliases"][$mapping[$order[$i]]])
+				$out .= $this->error_sign;
+			$out .= "</td>\n";
+						
+				// move left
+			$out .= "<td valign=\"top\" nowrap=\"nowrap\">";
+			$out .= "<input type=\"image\" name=\"{$this->element_name}_move_left[$i]\" ";
+			$out .= "img src=\"" . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . "pictures/move_up.gif\"";
+			$out .= tooltip(_("Datenfeld verschieben"));
+			$out .= "border=\"0\" align=\"bottom\">\n";
+			
+			// move right
+			$out .= "<input type=\"image\" name=\"{$this->element_name}_move_right[$i]\" ";
+			$out .= "img src=\"" . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . "pictures/move_down.gif\"";
+			$out .= tooltip(_("Datenfeld verschieben"));
+			$out .= "border=\"0\" align=\"bottom\">\n&nbsp;";
+			
+			$out .= "</tr>\n";
+			$this->css->switchClass();
+		}
+		
+		$out .= "</table>\n</td></tr>\n";
+		
+		return $out;
+	}
 }
 	
 ?>
