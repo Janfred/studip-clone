@@ -103,5 +103,17 @@ $this->msg[19] = array (
 $this->msg[20] = array (
 		"mode" => "error",
 		"msg"=> _("Die Startzeit darf nicht vor der Endzeit liegen!"));
+$this->msg[21] = array (
+		"mode" => "error",
+		"msg"=> _("Die j&auml;hrliche Wiederholung darf maximal 10 Jahre dauern!"));
+$this->msg[22] = array (
+		"mode" => "error",
+		"msg"=> _("Die monatliche Wiederholung darf maximal 12 Monate dauern!"));
+$this->msg[23] = array (
+		"mode" => "error",
+		"msg"=> _("Die w&ouml;chentliche Wiederholung darf maximal 50 Wochen dauern!"));
+$this->msg[24] = array (
+		"mode" => "error",
+		"msg"=> _("Die t&auml;gliche Wiederholung darf maximal 30 Tage dauern!"));
 		
 ?>
