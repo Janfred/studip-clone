@@ -85,7 +85,7 @@ if ($com == "delete_sec") {
 	exit;
 }
 
-$css_switcher = new cssClassSwitcher("", "topic");
+$css_switcher =& new cssClassSwitcher();
 
 if ($com == "info") {
 	include($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_EXTERN . "/views/extern_info_module.inc.php");
@@ -135,105 +135,131 @@ echo "<td class=\"blank\" colspan=\"0\">\n<blockquote>";
 echo _("Übersicht über alle angelegten Konfigurationen.");
 echo "</blockquote>\n</td></tr>\n";
 echo "<tr><td class=\"blank\">&nbsp;</td></tr>\n";
+echo "<tr><td class=\"blank\">&nbsp;</td></tr>\n";
+
+echo "<tr><td class=\"blank\">\n";
+echo "<blockquote><font size=\"2\">";
 
 $configurations = get_all_configurations($range_id);
 
-foreach ($EXTERN_MODULE_TYPES as $module_type) {
-	$css_switcher->resetClass();
-	$css_switcher->switchClass();
-	echo "<tr>\n<td class=\"" . $css_switcher->getHeaderClass() . "\" width=\"80%\">";
-	echo "<font size=\"2\"><b>&nbsp; ";
-	
-	if ($configurations[$module_type["module"]][$config_id])
-		echo "<a name=\"anker\">\n";
-	echo $module_type["name"];
-	if ($configurations[$module_type["module"]][$config_id])
-		echo "</a>\n";;
-		
-	echo "</b></font></td>\n</tr>\n<tr>\n<td" . $css_switcher->getFullClass() . ">\n";
-
-	if ($configurations[$module_type["module"]]) {
-		echo "<br><font size=\"2\">&nbsp; " . _("Vorhandene Konfigurationen:") . "</font>";
-		echo "<br><br>\n";
-		echo "<table class=\"steelgraudunkel\" border=\"0\" width=\"90%\" align=\"center\" ";
-		echo "cellspacing=\"2\" cellpadding=\"0\">\n<tr><td class=\"blank\">\n";
-		echo "<table class=\"blank\" border=\"0\" width=\"100%\" align=\"center\" ";
-		echo "cellspacing=\"0\" cellpadding=\"1\">\n";
-		
-		$css_switcher->resetClass();
-		
-		foreach ($configurations[$module_type["module"]] as $configuration) {
-			echo "<tr><td" . $css_switcher->getFullClass() . " width=\"65%\"><font size=\"2\">";
-			echo "&nbsp;" . $configuration["name"] . "</font></td>\n";
-			echo "<td" . $css_switcher->getFullClass() . " width=\"5%\">";
-			$tooltip = _("weitere Informationen anzeigen");
-			echo "<a href=\"$PHP_SELF?com=info&config_id=" . $configuration["id"];
-			echo "\"><img src=\"" . $CANONICAL_RELATIVE_PATH_STUDIP;
-			echo "pictures/i.gif\" border=\"0\"" . tooltip($tooltip) . "></a>\n</td>\n";
-			echo "<td" . $css_switcher->getFullClass() . " width=\"5%\">";
-			
-			// Switching for the is_default option. Read the comment above.
-			if ($configuration["is_default"]) {
-				echo "<a href=\"$PHP_SELF?list=TRUE&view=extern_inst&com=unset_default&config_id=";
-				echo $configuration["id"] . "#anker\">";
-				$tooltip = _("Standard entziehen");
-				echo "<img src=\"" . $CANONICAL_RELATIVE_PATH_STUDIP;
-				echo "pictures/on_small.gif\" border=\"0\"" . tooltip($tooltip) . ">\n";
-			}
-			else {
-				echo "<a href=\"$PHP_SELF?list=TRUE&view=extern_inst&com=set_default&config_id=";
-				echo $configuration["id"] . "#anker\">";
-				$tooltip = _("Standard zuweisen");
-				echo "<img src=\"" . $CANONICAL_RELATIVE_PATH_STUDIP;
-				echo "pictures/off_small.gif\" border=\"0\"" . tooltip($tooltip) . ">";
-			}
-			
-			echo "</a>\n</td>\n";
-			echo "<td" . $css_switcher->getFullClass() . " align=\"center\" width=\"5%\">\n";
-			echo "<a href=\"$PHP_SELF?com=delete_sec&config_id=" . $configuration["id"];
-			echo "#anker\"><img src=\"" . $CANONICAL_RELATIVE_PATH_STUDIP;
-			$tooltip = _("Konfiguration löschen");
-			echo "pictures/trash.gif\" border=\"0\"" . tooltip($tooltip) . "></a>\n</td>\n";
-			echo "<td" . $css_switcher->getFullClass() . " align=\"right\" width=\"20%\" ";
-			echo "nowrap=\"nowrap\">\n";
-			echo "<a href=\"$PHP_SELF?com=edit&mod=" . $module_type["module"];
-			echo "&config_id=" . $configuration["id"] . "\"><img ";
-			echo makeButton("bearbeiten", "src") . " border=\"0\"";
-			$tooltip = _("Konfiguration bearbeiten");
-			echo tooltip($tooltip) . "></a>&nbsp;\n</td></tr>\n";
-			
-			$css_switcher->switchClass();
-		}
-		
-		echo "</table>\n</td></tr>\n</table>\n";
+$choose_module_form = "";
+reset($EXTERN_MODULE_TYPES);
+foreach ($EXTERN_MODULE_TYPES as $module_types) {
+	if (sizeof($configurations[$module_types["module"]]) < $EXTERN_MAX_CONFIGURATIONS) {
+		$choose_module_form .= "<option value=\"{$module_types['module']}\">"
+				. $module_types['name'] . "</option>\n";
 	}
-	else
-		echo "<br><font size=\"2\">&nbsp; " . _("Keine Konfiguration vorhanden.") . "</font>";
-	
-	$css_switcher->resetClass();
-	$css_switcher->switchClass();
-	echo "</td></tr>\n<tr><td" . $css_switcher->getFullClass() . ">\n";
-	
-	if (sizeof($configurations[$module_type["module"]]) < $EXTERN_MAX_CONFIGURATIONS) {
-		echo "<font size=\"2\">&nbsp;</font></td></tr>\n";
-		echo "<tr><td" . $css_switcher->getFullClass() . "align=\"center\">\n";
-		echo "<a href=\"$PHP_SELF?com=new&mod=" . $module_type["module"] . "\">\n";
-		echo "<img " . makeButton("neuanlegen", "src") . " border=\"0\"";
-		$tooltip = _("Neue Konfiguration erstellen");
-		echo tooltip($tooltip) . "></a>\n";
-	}
-	else
-		echo "&nbsp;";
-	
-	echo "</td></tr>\n";
-	echo "<tr><td" . $css_switcher->getFullClass() . "><font size=\"2\">";
-	echo "&nbsp;</font></td></tr>\n";
-	echo "<tr><td class=\"blank\">&nbsp;</td></tr>\n";
-	
-	$css_switcher->switchClass();
+	if ($configurations[$module_types["module"]])
+		$have_config = TRUE;
 }
 
-echo "</table>\n</td>\n";
+if ($choose_module_form != "") {
+	echo "<form method=\"post\" action=\"$PHP_SELF?com=new\">\n";
+	$choose_module_form = "<select name=\"mod\">\n$choose_module_form</select>\n";
+	printf(_("Neue Konfiguration f&uuml;r Modul %s anlegen."), $choose_module_form);
+	echo "&nbsp; <input type=\"image\" " . makeButton("neuanlegen", "src") . "\">";
+	echo "</form>\n";
+}
+else
+	echo _("Sie haben bereits für alle Module die maximale Anzahl von Konfigurationen angelegt. Um eine neue Konfiguration anzulegen, m&uuml;ssen Sie erst eine bestehende im gew&uuml;nschten Modul l&ouml;schen.");
+
+echo "</font></blockquote>\n</td></tr>\n";
+echo "<tr><td class=\"blank\">&nbsp;</td></tr>\n";
+
+if (!$have_config) {
+	echo "<tr><td class=\"blank\">\n<blockquote>\n<font size=\"2\">";
+	echo _("Es wurden noch keine Konfigurationen angelegt.");
+	echo "</font>\n</blockquote>\n</td></tr>\n";
+}
+else {
+	echo "<tr><td class=\"". $css_switcher->getHeaderClass() . "\" height=\"20\" valign=\"bottom\">\n";
+	echo "<font size=\"2\"><b>&nbsp;";
+	echo _("Angelegte Konfigurationen");
+	echo "</b></font>\n</td></tr>\n";
+	echo "<tr><td" . $css_switcher->getFullClass() . ">&nbsp;</td></tr>\n";
+	echo "<tr><td" . $css_switcher->getFullClass() . " valign=\"top\">\n";
+	echo "<table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\n";
+	echo "<tr><td" . $css_switcher->getFullClass();
+	echo " width=\"22\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>\n";
+	echo "<td" . $css_switcher->getFullClass() . " width=\"100%\">\n";
+	
+	$css_switcher_2 =& new CssClassSwitcher("", "topic");
+
+	foreach ($EXTERN_MODULE_TYPES as $module_type) {
+		if ($configurations[$module_type["module"]]) {
+			$css_switcher_2->resetClass();
+			$css_switcher_2->switchClass();
+			echo "<table width=\"90%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\n";
+			echo "<tr>\n<td class=\"" . $css_switcher_2->getHeaderClass() . "\" width=\"100%\">";
+			echo "<font size=\"2\"><b>&nbsp; ";
+		
+			if ($configurations[$module_type["module"]][$config_id])
+				echo "<a name=\"anker\">\n";
+			echo $module_type["name"];
+			if ($configurations[$module_type["module"]][$config_id])
+				echo "</a>\n";;
+			
+			echo "</b></font>\n</td></tr>\n";
+			echo "<tr><td style=\"border-style:solid; border-width:1px; border-color:#000000;\">\n";
+			
+			echo "<table width=\"100%\" cellspacing=\"0\" cellpadding=\"2\" border=\"0\">\n";
+			$css_switcher_2->resetClass();
+			
+			foreach ($configurations[$module_type["module"]] as $configuration) {
+				echo "<tr><td" . $css_switcher_2->getFullClass() . " width=\"65%\"><font size=\"2\">";
+				echo "&nbsp;" . $configuration["name"] . "</font></td>\n";
+				echo "<td" . $css_switcher_2->getFullClass() . " width=\"5%\">";
+				$tooltip = _("weitere Informationen anzeigen");
+				echo "<a href=\"$PHP_SELF?com=info&config_id=" . $configuration["id"];
+				echo "\"><img src=\"" . $CANONICAL_RELATIVE_PATH_STUDIP;
+				echo "pictures/i.gif\" border=\"0\"" . tooltip($tooltip) . "></a>\n</td>\n";
+				echo "<td" . $css_switcher_2->getFullClass() . " width=\"5%\">";
+				
+				// Switching for the is_default option. Read the comment above.
+				if ($configuration["is_default"]) {
+					echo "<a href=\"$PHP_SELF?list=TRUE&view=extern_inst&com=unset_default&config_id=";
+					echo $configuration["id"] . "#anker\">";
+					$tooltip = _("Standard entziehen");
+					echo "<img src=\"" . $CANONICAL_RELATIVE_PATH_STUDIP;
+					echo "pictures/on_small.gif\" border=\"0\"" . tooltip($tooltip) . ">\n";
+				}
+				else {
+					echo "<a href=\"$PHP_SELF?list=TRUE&view=extern_inst&com=set_default&config_id=";
+					echo $configuration["id"] . "#anker\">";
+					$tooltip = _("Standard zuweisen");
+					echo "<img src=\"" . $CANONICAL_RELATIVE_PATH_STUDIP;
+					echo "pictures/off_small.gif\" border=\"0\"" . tooltip($tooltip) . ">";
+				}
+				
+				echo "</a>\n</td>\n";
+				echo "<td" . $css_switcher_2->getFullClass() . " align=\"center\" width=\"5%\">\n";
+				echo "<a href=\"$PHP_SELF?com=delete_sec&config_id=" . $configuration["id"];
+				echo "#anker\"><img src=\"" . $CANONICAL_RELATIVE_PATH_STUDIP;
+				$tooltip = _("Konfiguration löschen");
+				echo "pictures/trash.gif\" border=\"0\"" . tooltip($tooltip) . "></a>\n</td>\n";
+				echo "<td" . $css_switcher_2->getFullClass() . " align=\"right\" width=\"20%\" ";
+				echo "nowrap=\"nowrap\">\n";
+				echo "<a href=\"$PHP_SELF?com=edit&mod=" . $module_type["module"];
+				echo "&config_id=" . $configuration["id"] . "\"><img ";
+				echo makeButton("bearbeiten", "src") . " border=\"0\"";
+				$tooltip = _("Konfiguration bearbeiten");
+				echo tooltip($tooltip) . "></a>&nbsp;\n</td></tr>\n";
+				
+				$css_switcher_2->switchClass();
+			}
+			
+			echo "</table>\n";
+			echo "</td></tr>\n";
+			echo "</table>\n";
+		}
+		
+	}
+	echo "</td></tr>\n";
+	echo "</table>\n";
+	echo "<tr><td" . $css_switcher->getFullClass() . ">&nbsp;</td></tr>\n";
+}
+
+echo "</td></tr></table>\n</td>\n";
 echo "<td class=\"blank\" width=\"1%\" valign=\"top\">\n";
 
 $info_max_configs = sprintf(_("Sie können pro Modul maximal %s Konfigurationen anlegen."),
