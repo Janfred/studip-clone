@@ -125,7 +125,7 @@ if ($existingowninfolabel) {
 
 ?>
 <table width = "100%" cellspacing="0" cellpadding="0"><tr>
-	<td class="topic" colspan="2" width = "100%"><img src="pictures/nutzer.gif" border="0" align="texttop"><b>&nbsp; <?echo _("Mein Addressbuch");?> <font size="2">(<?echo $size_of_book = GetSizeofBook()." "._("Eintr&auml;ge");?>)</size></b>
+	<td class="topic" colspan="2" width = "100%"><img src="pictures/nutzer.gif" border="0" align="texttop"><b>&nbsp; <?echo _("Mein Addressbuch");?> <font size="2">(<?=(($size_of_book = GetSizeofBook()) == 1) ? _("1 Eintrag") : sprintf(_("%s Eintr&auml;ge"),$size_of_book);?>)</font></b>
 	</td>
 </tr><tr><td class="blank" align="left" valign="absmiddle">
 
