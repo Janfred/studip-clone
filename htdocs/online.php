@@ -178,7 +178,7 @@ if (is_array($n_buddies))
 		}
 
 		if (sizeof($non_group_buddies)) {
-			echo "\n<tr><td colspan=6 class=\"steelkante\" align=\"center\"><font size=-1 color=\"#555555\"><b><a href=\"contact.php?view=gruppen&filter=all\"><font size=-1 color=\"#555555\">"._("Buddies ohne Gruppenzuordnung").":</font></a></b></font></td></tr>";
+			echo "\n<tr><td colspan=6 class=\"steelkante\" align=\"center\"><font size=-1 color=\"#555555\"><a href=\"contact.php?view=gruppen&filter=all\"><font size=-1 color=\"#555555\">"._("Buddies ohne Gruppenzuordnung").":</font></a></font></td></tr>";
 			reset ($non_group_buddies);
 			while (list($index)=each($non_group_buddies)) {
 				list($fullname,$zeit,$tmp_online_uname)=$non_group_buddies[$index];
