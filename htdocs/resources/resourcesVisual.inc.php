@@ -963,7 +963,7 @@ class editObject extends cssClasses {
 					else
 						echo "<b>-- kein Stud.IP Nutzer eingetragen -- &nbsp;</b><br /><br /></font>"
 					?><font size=-1>einen <? if ($user_name) echo "anderen" ?> User (Nutzer, Veranstaltung oder Einrichtung) eintragen: <br /></font><font size=-1>
-					<?create_search_form("search_user", $search_string_search_user) ?> <br/>
+					<?create_search_form("search_user", $search_string_search_user, FALSE, TRUE) ?> <br/>
 					freie Eingabe zur Belegung:<br /></font>
 					<input name="change_schedule_user_free_name" value="<? echo $resAssign->getUserFreeName(); ?>" size=40 maxlength="255" />
 					<br /><font size=-1><b>Beachten Sie:</b> Wenn sie einen Nutzer des System eintragen, wird dieser Account mit der Belegung verkn&uuml;pft, dh. z.B. der Nutzer oder berechtigte Personen 
@@ -1043,29 +1043,6 @@ class editObject extends cssClasses {
 			<tr>
 				<td class="<? $this->switchClass(); echo $this->getClass() ?>" width="4%">&nbsp; 
 				</td>
-				<td class="<? echo $this->getClass() ?>" valign="top">&nbsp; 
-				</td>
-				<td class="<? echo $this->getClass() ?>" width="40%">
-					<? if ($resAssign->getRepeatMode() == "w") { ?>
-					<font size=-1>Wochentage:</font><br />
-						<input type="IMAGE" name="change_schedule_repeat_day1" src="./pictures/buttons/m<? printf (($resAssign->getRepeatDayOfWeek()=="1") ? "2" :"1") ?>-mini.gif" border=0 />
-						<input type="IMAGE" name="change_schedule_repeat_day2" src="./pictures/buttons/d<? printf (($resAssign->getRepeatDayOfWeek()=="2") ? "2" :"1") ?>-mini.gif" border=0 />
-						<input type="IMAGE" name="change_schedule_repeat_day3" src="./pictures/buttons/m<? printf (($resAssign->getRepeatDayOfWeek()=="3") ? "2" :"1") ?>-mini.gif" border=0 />
-						<input type="IMAGE" name="change_schedule_repeat_day4" src="./pictures/buttons/d<? printf (($resAssign->getRepeatDayOfWeek()=="4") ? "2" :"1") ?>-mini.gif" border=0 />
-						<input type="IMAGE" name="change_schedule_repeat_day5" src="./pictures/buttons/f<? printf (($resAssign->getRepeatDayOfWeek()=="5") ? "2" :"1") ?>-mini.gif" border=0 />
-						<input type="IMAGE" name="change_schedule_repeat_day6" src="./pictures/buttons/s<? printf (($resAssign->getRepeatDayOfWeek()=="6") ? "2" :"1") ?>-mini.gif" border=0 />
-						<input type="IMAGE" name="change_schedule_repeat_day7" src="./pictures/buttons/s<? printf (($resAssign->getRepeatDayOfWeek()=="7") ? "2" :"1") ?>-mini.gif" border=0 />
-					<font size=-1>
-					</font>
-					<? 
-					} else { 
-					?> &nbsp;  
-					<? } ?>
-				</td>
-			</tr>
-			<tr>
-				<td class="<? $this->switchClass(); echo $this->getClass() ?>" width="4%">&nbsp; 
-				</td>
 				<td class="<? echo $this->getClass() ?>" colspan=2 align="center"><br />&nbsp; <input type="IMAGE" <?=makeButton("uebernehmen", "src") ?> border=0 name="submit" value="Zuweisen">
 				<?
 				if ($killButton) {
@@ -1113,8 +1090,10 @@ class editObject extends cssClasses {
 						?>
 						</select><img src="./pictures/pfeiltransparent.gif" border=0><input type="IMAGE" name="assign" value="Zuweisen"src="./pictures/buttons/zuweisen-button.gif" border=0>
 					<?
-					} else
+					} else {
 						print "<b>".htmlReady($this->resObject->getCategoryName())."</b>";
+						printf ("<input type=\"HIDDEN\" name=\"change_category_id\" value=\"%s\" />", $this->db->f("category_id"));
+					}
 					?>
 				</td>
 			</tr>
