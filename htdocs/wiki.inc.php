@@ -284,6 +284,7 @@ function wikiLinks($str, $page) {
 **/
 function getWikiLinks($str) {
 	global $wiki_keyword_regex;
+	$str = wikiReady($str);
 	preg_match_all("/$wiki_keyword_regex/", $str, $out, PREG_PATTERN_ORDER);
 	return array_unique($out[2]);
 }
