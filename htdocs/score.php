@@ -69,10 +69,10 @@ if ($db->num_rows()) {
 		if ($db->f("user_id")==$user->id) {
 			$kill = "&nbsp; &nbsp; <a href=\"score.php?cmd=kill\">" . _("[löschen]") . "</a>";
 		}
-		echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"1%\" nowrap align=\"right\">".$rang.".</td><td class=\"".$cssSw->getClass()."\" width=\"39%\" nowrap>"
-		."&nbsp; &nbsp; <a href='about.php?username=".$db->f("username")."'>".$db->f("fullname")."</a></td>"
+		echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"1%\" nowrap align=\"right\"><font size=\"-1\">".$rang.".</td><td class=\"".$cssSw->getClass()."\" width=\"39%\" nowrap>"
+		."&nbsp; &nbsp; <a href='about.php?username=".$db->f("username")."'><font size=\"-1\">".$db->f("fullname")."</a></td>"
 		."<td class=\"".$cssSw->getClass()."\" width=\"10%\">".$score->GetScoreContent($db->f("user_id"))."</td>"
-		."<td class=\"".$cssSw->getClass()."\" width=\"20%\">".$db->f("score")."</td><td class=\"".$cssSw->getClass()."\" width=\"30%\">".$score->GetTitel($db->f("score"), $db->f("geschlecht"))
+		."<td class=\"".$cssSw->getClass()."\" width=\"20%\"><font size=\"-1\">".$db->f("score")."</td><td class=\"".$cssSw->getClass()."\" width=\"30%\"><font size=\"-1\">".$score->GetTitel($db->f("score"), $db->f("geschlecht"))
 		.$kill
 		."</td></tr>\n";
 		$rang++;

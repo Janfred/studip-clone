@@ -107,21 +107,40 @@ function CheckScore ($user_id) {
 function GetScoreContent($user_id) {
 	$username = get_username($user_id);
 	$db=new DB_Seminar;
+	
 	$db->query("SELECT count(post_id) as guestcount FROM guestbook LEFT JOIN user_info ON(range_id=user_info.user_id) WHERE range_id = '$user_id' AND guestbook='1' GROUP BY range_id");
 	if ($db->next_record()) {
 		$gaeste = $db->f("guestcount");
-		$content .= "<a href=\"about.php?username=$username\"><img src=\"pictures/nutzer.gif\" border=\"0\"".tooltip(_("Gästebuch aktiviert mit $gaeste Einträgen"))."></a>&nbsp;";
-	}
+		if ($gaeste == 1) 
+			$tmp = _("Gästebuch aktiviert mit 1 Eintrag");
+		else 
+			$tmp = _("Gästebuch aktiviert mit $gaeste Einträgen");
+		$content .= "<a href=\"about.php?username=$username\"><img src=\"pictures/icon-posting.gif\" border=\"0\"".tooltip("$tmp")."></a>&nbsp;";
+	} else {$content .= "<img src=\"pictures/blank.gif\" width=\"17\">";}
+	
 	$db->query("SELECT * FROM news_range WHERE range_id = '$user_id'");
 	if ($db->next_record()) {
 		$news = $db->num_rows();
 		$content .= "<a href=\"about.php?username=$username\"><img src=\"pictures/icon-news.gif\" border=\"0\"".tooltip(_("$news persönliche News"))."></a>&nbsp;";
-	}
+	} else {$content .= "<img src=\"pictures/blank.gif\" width=\"17\">";}
+	
 	$db->query("SELECT * FROM vote WHERE range_id = '$user_id'");
 	if ($db->next_record()) {
 		$vote = $db->num_rows();
-		$content .= "<a href=\"about.php?username=$username\"><img src=\"pictures/icon-vote.gif\" border=\"0\"".tooltip(_("$vote Umfragen"))."></a>&nbsp;";
-	}
+		if ($vote == 1)
+			$tmp = _("Umfrage");
+		else $tmp = _("Umfragen");
+		$content .= "<a href=\"about.php?username=$username\"><img src=\"pictures/icon-vote.gif\" border=\"0\"".tooltip("$vote $tmp")."></a>&nbsp;";
+	} else {$content .= "<img src=\"pictures/blank.gif\" width=\"17\">";}
+	
+	$db->query("SELECT * FROM calendar_events WHERE range_id = '$user_id' AND class = 'PUBLIC'");
+	if ($db->next_record()) {
+		$termin = $db->num_rows();
+		if ($termin == 1)
+			$tmp = _("Termin");
+		else $tmp = _("Termine");
+		$content .= "<a href=\"about.php?username=$username\"><img src=\"pictures/icon-uhr.gif\" border=\"0\"".tooltip("$termin $tmp")."></a>&nbsp;";
+	} else {$content .= "<img src=\"pictures/blank.gif\" width=\"17\">";}
 	return $content;
 }
 
