@@ -262,46 +262,6 @@ function lastActivity ($sem_id) {
 	return $timestamp;
 }
 
-/**
-* This function returns an array of all my administrable objects (sem, inst)
-*
-* All the Objects of the type Seminar and Einrichtung, which the 
-* specified user has the status 'admin'. The array contains the id as key
-* and the type as value (inst, sem). The function include NOT the root-perm-level
-* (because all objects and levels are administrable by root...)
-* 
-* @param		string	user_id the seminar_id of the seminar to calculate
-* @return		array		returns an array of my object_ids
-*
-*/
-function get_my_administrable_objects($user_id='') {
-	global $user, $perm;
-	
-	if (!$user_id)
-		$user_id=$user->id;
-	
-	$db=new DB_Seminar;
-	$db2=new DB_Seminar;
-	
-	if ($perm->have_perm("admin")) //check all the Seminare from all my Einrichtungen
-		$db->query("SELECT Seminar_id FROM user_inst LEFT JOIN seminar_inst USING (Institut_id)  WHERE user_id='$user_id' AND inst_perms = 'admin' ");
-	else //check all my Seminare
-		$db->query("SELECT Seminar_id FROM seminar_user WHERE user_id='$user_id' AND status IN ('dozent', 'tutor') ");
-			
-	while ($db->next_record()) {
-		$my_objects[$db->f("Seminar_id")]="sem";
-	}
-	
-	//check all my Einrichtungen
-	$db->query("SELECT Institut_id FROM user_inst WHERE user_id='$user_id' AND inst_perms IN ('admin', 'dozent', 'tutor') ");
-	
-	while ($db->next_record()) {
-		$my_objects[$db->f("Institut_id")]="inst";
-	}
-		
-	return $my_objects;
-}
-
 
 /**
 * This function determines, which from which type an id is from.
