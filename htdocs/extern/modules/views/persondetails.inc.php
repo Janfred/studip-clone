@@ -448,7 +448,7 @@ function head (&$this, $db, $a) {
 		if ($this->config->getValue("Main", "showimage")) {
 			echo "<td" . $this->config->getAttributes("PersondetailsHeader", "picturetd") . ">";
 			if (file_exists("{$GLOBALS['ABSOLUTE_PATH_STUDIP']}/user/" . $db->f("user_id").".jpg")) {
-				echo "<img src=\"{$GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']}user/";
+				echo "<img src=\"http://{$GLOBALS['EXTERN_SERVER_NAME']}user/";
 				echo $db->f("user_id") . ".jpg\" alt=\"Foto " . htmlReady(trim($db->f("fullname"))) . "\"";
 				echo $this->config->getAttributes("PersondetailsHeader", "img") . "></td>";
 			}
