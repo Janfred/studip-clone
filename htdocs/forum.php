@@ -17,19 +17,17 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
-page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
+	page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 
-include $ABSOLUTE_PATH_STUDIP."seminar_open.php"; // initialise Stud.IP-Session
-require_once $ABSOLUTE_PATH_STUDIP."functions.php";
-require_once $ABSOLUTE_PATH_STUDIP."visual.inc.php";
-require_once $ABSOLUTE_PATH_STUDIP."forum.inc.php";
-require_once $ABSOLUTE_PATH_STUDIP."msg.inc.php";
-require_once $ABSOLUTE_PATH_STUDIP."dates.inc.php"; 
+	include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+
+// -- here you have to put initialisations for the current page
 
 // Start of Output
-include $ABSOLUTE_PATH_STUDIP."html_head.inc.php"; // Output of html head
+	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
+	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 
-if ($user->id == "nobody") {  // nicht angemeldete muessen Namen angeben, dazu auch JS Check auf Name
+	if ($user->id == "nobody") {  // nicht angemeldete muessen Namen angeben, dazu auch JS Check auf Name
 ?>
 <SCRIPT language="JavaScript">
 <!--
@@ -53,35 +51,40 @@ function pruefe_name(){
 <?
 }
 
-if ($forum["jshover"]==1 AND $auth->auth["jscript"]) { // JS an und erwuenscht?
-	echo "<script language=\"JavaScript\">";
-	echo "var ol_textfont = \"Arial\"";
-	echo "</script>";
-	echo "<DIV ID=\"overDiv\" STYLE=\"position:absolute; visibility:hidden; z-index:1000;\"></DIV>";
-	echo "<SCRIPT LANGUAGE=\"JavaScript\" SRC=\"overlib.js\"></SCRIPT>";
+	if ($forum["jshover"]==1 AND $auth->auth["jscript"]) { // JS an und erwuenscht?
+		echo "<script language=\"JavaScript\">";
+		echo "var ol_textfont = \"Arial\"";
+		echo "</script>";
+		echo "<DIV ID=\"overDiv\" STYLE=\"position:absolute; visibility:hidden; z-index:1000;\"></DIV>";
+		echo "<SCRIPT LANGUAGE=\"JavaScript\" SRC=\"overlib.js\"></SCRIPT>";
+	}
+
+	require_once "functions.php";
+	require_once "visual.inc.php";
+	require_once "forum.inc.php";
+	require_once "msg.inc.php";
+	require_once "dates.inc.php"; 
+
+	checkObject();
+
+
+if ($view)
+	$forum["view"] = $view;
+
+if (!$forum["view"]) {
+	$view = "tree";
+	$forum["view"] = $view;
 }
 
-include $ABSOLUTE_PATH_STUDIP."header.php";   // Output of Stud.IP head
+if ($forum["view"]=="flatfolder" && $view)
+	$forum["flatfolder"] = $open;
 
-checkObject();
-checkObjectModule("forum");
+$view = $forum["view"];
 
-include $ABSOLUTE_PATH_STUDIP."links_openobject.inc.php";
+
+
+	include "links_openobject.inc.php";
 	
-////////////////////////////////////////////////////////////////////
-/*
-Variablen, die uebergeben werden:
-
-$view (tree, letzte5, neue)
-$mehr (nur in letzte 5)
-$topic_id (ID des Bretts - nur im tree)
-$open_id (welcher ist offen)
-$write_id (welcher wird geschrieben)
-#anker
-
-*/
-////////////////////////////////////////////////////////////////////
-
 
 // Sind wir da wo wir hinwollen?
 
@@ -107,22 +110,13 @@ if ($topic_id AND !$update) {
 	}
 }
 
-//Titel-Zeile
-if ($forumsend <> "anpassen") {
-	echo "\n<table width=\"100%\" class=\"blank\" border=0 cellpadding=0 cellspacing=0>\n";
-	echo "<tr><td class=\"topic\" width=\"95%\"><b>&nbsp;<img src='pictures/icon-posting.gif' align=absmiddle>&nbsp; ". $SessSemName["header_line"] ." - " . _("Forum") . "</b></td><td class=\"topic\" width=\"5%\" align=\"right\"><a href='forum.php?forumsend=anpassen'><img src='pictures/pfeillink.gif' border=0 " . tooltip(_("Look & Feel anpassen")) . ">&nbsp;</a></td></tr>\n";
-	echo "<tr><td class=\"blank\" colspan=2>&nbsp; </td></tr>\n";
-	echo "</table>\n";
-}
-
-
 // Rekursives Löschen von Postings, Warnung
-IF ($cmd == "kill" && $topic_id !="") {
+IF ($delete_id) {
 	$db=new DB_Seminar;
-	$mutter = suche_kinder($topic_id);
+	$mutter = suche_kinder($delete_id);
 	$mutter = explode (";",$mutter);
 	$count = sizeof($mutter)-2;
-	$db->query("SELECT * FROM px_topics WHERE topic_id='$topic_id' AND Seminar_id ='$SessSemName[1]'");
+	$db->query("SELECT * FROM px_topics WHERE topic_id='$delete_id' AND Seminar_id ='$SessSemName[1]'");
 	if ($db->num_rows()) { // wir sind im richtigen Seminar!
 		$db->next_record();
 		if ($rechte || (($db->f("user_id") == $user->id) && ($count == 0))) {  // noch mal checken ob alles o.k.
@@ -131,76 +125,46 @@ IF ($cmd == "kill" && $topic_id !="") {
 			$msg="info§" . sprintf(_("Wollen Sie das untenstehende Posting %s von %s wirklich l&ouml;schen?"), "<b>".htmlReady($db->f("name"))."</b>", "<b>".$db->f("author")."</b>") . "<br>\n";
 			if ($count)
 				$msg.= sprintf(_("Alle %s Antworten auf diesen Beitrag werden ebenfalls gel&ouml;scht!"), $count) . "<br />\n<br />\n";
-			$msg.="<a href=\"".$PHP_SELF."?cmd=really_kill&topic_id=$topic_id&view=$view&mehr=$mehr#anker\">" . makeButton("ja2", "img") . "</a>&nbsp; \n";
+			$msg.="<a href=\"".$PHP_SELF."?really_kill=$delete_id&view=$view#anker\">" . makeButton("ja2", "img") . "</a>&nbsp; \n";
 			$msg.="<a href=\"".$PHP_SELF."?topic_id=$root&open=$topic_id&view=$view&mehr=$mehr#anker\">" . makeButton("nein", "img") . "</a>\n";
 			parse_msg($msg, '§', 'blank', '1', FALSE);
 			echo "</table>";
 
 		// Darstellung des zu loeschenden Postings
 	
-			$parent_description = formatReady($db->f("description")); // erst mal die Anzeige des zu l&ouml;schenden Postings verschoenern...
-		  	IF (ereg("\[quote",$parent_description) AND ereg("\[/quote\]",$parent_description))
-				$parent_description = quotes_decode($parent_description);
 			echo "<table width=\"100%\" class=blank border=0 cellpadding=0 cellspacing=0 align=center><tr><td class=blank><br><br>";	
-			echo "<table width=\"80%\" border=0 cellpadding=0 cellspacing=0 align=center><tr>";	
-			$icon = NTForum("topic",$topic_id,"","",$neuer_beitrag,$db->f("root_id"));			
-			printhead ("100%","0","","close","",$icon,(mila(htmlReady($db->f("name")))),"");			
-			echo "</tr></table>\n";	
-			echo "<table width=\"80%\" border=0 cellpadding=0 cellspacing=0 align=center><tr>";	
-			printcontent ("100%","",$parent_description,"");
-			echo "</tr></table>\n<br><br></td></tr></table>";	
+			echo "<table width=\"80%\" class=blank border=0 cellpadding=0 cellspacing=0 align=center><tr>";	
+	
+			$forumposting["id"] = $db->f("topic_id");
+			$forumposting["name"] = $db->f("name");
+			$forumposting["description"] = $db->f("description");
+			$forumposting["author"] = $db->f("author");
+			$forumposting["username"] = $db->f("username");
+			$forumposting["rootid"] = $db->f("root_id");
+			$forumposting["rootname"] = $db->f("root_name");
+			$forumposting["mkdate"] = $db->f("mkdate");
+			$forumposting["chdate"] = $db->f("chdate");
+			$forumposting["buttons"] = "no";
+			printposting($forumposting);
+			echo "<br></td></tr></table>\n<br></td></tr></table>";	
 			page_close();
 			die;
 		}
 	}
+} else {
+	$forumposting["buttons"] = "yes";
 }
 
-// loeschen von nicht zuende getippten Postings
-
-if ($writemode!="" AND !isset($update)) {
-	$db=new DB_Seminar;
-	$db->query("SELECT * FROM px_topics WHERE topic_id='$writemode' AND Seminar_id ='$SessSemName[1]' and (description = 'Dieser Beitrag wird gerade bearbeitet.' OR description = 'Beschreibung des Themas')");
-	if ($db->num_rows()) { // wir sind im richtigen Seminar!
-		$count = 0;
-		delete_topic($writemode,$count);
-		$writemode="";
-	}
-}
-
-// Rekursives Löschen von Postings, jetzt definitiv!
-
-if ($cmd == "really_kill" && $topic_id !="") {
-	$db=new DB_Seminar;
-	$db->query("SELECT * FROM px_topics WHERE topic_id='$topic_id' AND Seminar_id ='$SessSemName[1]'");
-	if ($db->num_rows()) { // wir sind im richtigen Seminar!
-		$db->next_record();
-		$mutter = suche_kinder($topic_id);
-		$mutter = explode (";",$mutter);
-		$count = sizeof($mutter)-2;
-		$theme = $db->f("root_id");
-		if ($rechte || (($db->f("user_id") == $user->id) && ($count == 0))) {  // noch mal checken ob alles o.k.
-			$count = 0;
-			delete_topic($topic_id, $count);
-			$db->next_record();
-			$topic_id = $db->f("root_id");
-			IF ($nurneu!=1) { // es wurde wirklich was gel&ouml;scht und nicht nur ein Anlegen unterbrochen
-				echo "<table class=\"blank\" cellspacing=0 cellpadding=0 border=0 width=\"100%\">";
-				parse_msg("msg§" . sprintf(_("%s Posting(s) gel&ouml;scht"), $count));
-				echo "</table>";
-				$topic_id = $theme;
-			}
-		}		
-	}
-}
 
 // Verschieben von Postings
 
 IF ($cmd == "move" && $topic_id !="" && $rechte) {
-	$back = $open;
 	$mutter = suche_kinder($topic_id);
 	$mutter = explode (";",$mutter);
 	$count = sizeof($mutter)-2;
-	$open = $back;
+	
+	// wohin darf ich schieben? Abfragen je nach Rechten
+	
 	IF ($perm->have_perm("tutor") OR $perm->have_perm("dozent"))
 		$query = "SELECT DISTINCT seminare.Seminar_id, seminare.Name FROM seminar_user LEFT JOIN seminare USING(Seminar_id) WHERE user_id ='$user->id ' AND (seminar_user.status = 'tutor' OR seminar_user.status = 'dozent') ORDER BY Name";
 	IF ($perm->have_perm("admin"))
@@ -238,7 +202,7 @@ IF ($cmd == "move" && $topic_id !="" && $rechte) {
 					<font size="-1"><?=_("in anderes Forum:")?></font>&nbsp; &nbsp; 
 				</td>
 				<td class="steel1" width="80%">
-					<form action="forum.php" method="POST">
+			<? 		echo "<form action=\"".$PHP_SELF."\" method=\"POST\">"; ?>
 					<input type="image" name="SUBMIT" value="Verschieben" src="pictures/move.gif" border="0" <?=tooltip(_("dahin verschieben"))?>>&nbsp; 					
 					<select Name="sem_id" size="1">
 			<?		while ($db->next_record()) {
@@ -260,7 +224,7 @@ IF ($cmd == "move" && $topic_id !="" && $rechte) {
 			  		<font size="-1"><?=_("in andere Einrichtung:")?></font>&nbsp; &nbsp; 
 			  	</td>
 				<td class="steel1" width="80%">
-					<form action="forum.php" method="POST">
+			<? 		echo "<form action=\"".$PHP_SELF."\" method=\"POST\">"; ?>
 					<input type=image name="SUBMIT" value="Verschieben" src="pictures/move.gif" border=0 <?=tooltip(_("dahin verschieben"))?>>&nbsp; 						
 			  	<select Name="inst_id" size="1">
 			<?		while ($db2->next_record()) {
@@ -284,8 +248,7 @@ IF ($cmd == "move" && $topic_id !="" && $rechte) {
 				<td class="steel1" width="80%">					
 					<br>
 
-			  		<a href="forum.php?view=<?echo $view;?>"><?=makeButton("abbrechen", "img")?></a>
-
+			  	<? echo "<a href=\"".$PHP_SELF."?view=".$view.">".makeButton("abbrechen", "img")."</a>";?>
 		  		</td>
   			</tr>
   		</table>
@@ -318,80 +281,116 @@ if ($target =="Thema"){ //Es soll in ein anderes Thema verschoben werden
 	echo "</table>";
 	}
 
-// Einbau der Forumsetting-Ansicht
 
-if ($forumsend) {
-	
-	if ($forumsend=="bla"){
-		$forum=array(
-			"jshover"=>$jshover, 
-			"neuauf"=>$neuauf,
-			"changed"=>"TRUE"			
-			);
-	} ELSE
-		include("forumsettings.inc.php");
+
+
+
+
+
+
+
+
+
+
+// Rekursives Löschen von Postings, jetzt definitiv!
+
+if ($really_kill) {
+	$db=new DB_Seminar;
+	$db->query("SELECT * FROM px_topics WHERE topic_id='$really_kill' AND Seminar_id ='$SessSemName[1]'");
+	if ($db->num_rows()) { // wir sind im richtigen Seminar!
+		$db->next_record();
+		$mutter = suche_kinder($really_kill);
+		$mutter = explode (";",$mutter);
+		$count = sizeof($mutter)-2;
+		$open = $db->f("root_id");
+		if ($rechte || (($db->f("user_id") == $user->id) && ($count == 0))) {  // noch mal checken ob alles o.k.
+			$count = 0;
+			delete_topic($really_kill, $count);
+			$db->next_record();
+			IF ($nurneu!=1) { // es wurde wirklich was gel&ouml;scht und nicht nur ein Anlegen unterbrochen
+				echo "<table class=\"blank\" cellspacing=0 cellpadding=0 border=0 width=\"100%\">";
+				parse_msg("msg§" . sprintf(_("%s Posting(s) gel&ouml;scht"), $count));
+				echo "</table>";
+			}
+			
+		}		
+	}
 }
 
-// Anzeige der Topics
-if (!isset($topic_id) AND $view=="") {  // wir sind in der Themen-Auflistung
-	$topic_id = "0";
-	} 
-	
+// neuer Beitrag als Antwort wird eingeleitet
 
-// in $open wird alles reingepack, was aufgeklappt  ist:
-if (isset($open) AND !$write AND $view=="" AND $all!=TRUE){
-	$open=suche_kinder($open);
-	} 
-	
-
-IF ($write){			// es wird ein neuer Beitrag gepostet
+if ($answer_id) {
 	$db=new DB_Seminar;
-	$db->query("SELECT name, topic_id, root_id FROM px_topics WHERE topic_id = '$write'");
+	$db->query("SELECT name, topic_id, root_id FROM px_topics WHERE topic_id = '$answer_id'");
 	while($db->next_record()){
 		$name = $db->f("name");
+		if (substr($name,0,3)!="Re:")
+			$name = "Re: ".$name; // Re: vor Überschriften bei Antworten
 		$author = get_fullname();
-		$postinginhalt="Dieser Beitrag wird gerade bearbeitet.";
-		$open = CreateTopic (addslashes($name), $author, $postinginhalt, $write, $db->f("root_id"));
-		$write =$open;
-		$writemode=$open;
-		}
+		$postinginhalt = _("Dieser Beitrag wird gerade bearbeitet.");
+		$edit_id = CreateTopic (addslashes($name), $author, $postinginhalt, $answer_id, $db->f("root_id"));
+		$open = $edit_id;
 	}
-	
-IF ($neuesthema==TRUE){			// es wird ein neues Thema angelegt
-		$name = _("Name des Themas");
-		$author = get_fullname();
-		$open = CreateTopic ($name, $author, "Beschreibung des Themas", "0", "0");
-		$write =$open;
-		$writemode=$open;
-		$topic_id=$open;
-		}
-	
+}
 
-// Bearbeiten eines Beitrags
+if ($zitat==TRUE)
+	$zitat = $answer_id;
+	
+if ($edit_id) 
+	$open = $edit_id;
 
 IF ($update) {
-	IF ($nichtneu==TRUE) {
-		$author = get_fullname();
-		$now = date ("d.m.y - H:i", time());
-		IF (ereg("%%\[editiert von",$description)) { // wurde schon mal editiert
-			$postmp = strpos($description,"editiert von");
-			$description = substr_replace($description,"editiert von ".$author." am ".$now."]%%",$postmp);
-			}
-		ELSE $description.="\n\n%%[editiert von ".$author." am ".$now."]%%";
-		}
-	UpdateTopic ($titel, $update, $description);
-	$writemode="";
+	$author = get_fullname();
+	$now = date ("d.m.y - H:i", time());
+	IF (ereg("%%\[editiert von",$description)) { // wurde schon mal editiert
+		$postmp = strpos($description,"editiert von");
+		$description = substr_replace($description,"editiert von ".$author." am ".$now."]%%",$postmp);
+	} ELSE {
+		IF (ForumFreshPosting($update)==FALSE) // editiert von nur dranhängen wenn nicht frisch erstellt
+			$description.="\n\n%%[editiert von ".$author." am ".$now."]%%";
 	}
+	UpdateTopic ($titel, $update, $description);
+	$open = $update; //gerade bearbeiteten Beitrag aufklappen
+}
+
+IF ($neuesthema==TRUE && $rechte) {			// es wird ein neues Thema angelegt
+		$name = _("Name des Themas");
+		$author = get_fullname();
+		$edit_id = CreateTopic ($name, $author, "Beschreibung des Themas", "0", "0");
+		$open = $edit_id;
+}
+
+// Anker setzen
+
+	$forum["anchor"] = $open;
+
+//Titel-Zeile
+if (!$forumsend=="anpassen") {
+	echo "\n<table width=\"100%\" class=\"blank\" border=0 cellpadding=0 cellspacing=0>\n";
+	echo "<tr><td class=\"topic\" width=\"95%\"><b>&nbsp;<img src='pictures/icon-posting.gif' align=absmiddle>&nbsp; ". $SessSemName["header_line"] ." - " . _("Forum") . "</b></td><td class=\"topic\" width=\"5%\" align=\"right\"><a href='forum.php?forumsend=anpassen'><img src='pictures/pfeillink.gif' border=0 " . tooltip(_("Look & Feel anpassen")) . ">&nbsp;</a></td></tr>\n";
+	echo "<tr><td class=\"blank\" colspan=2>&nbsp;";
+	echo " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font size=-1>Indikator: 
+	<img src='pictures/forumrot.gif'> Alter 
+	<img src='pictures/forumgrau.gif'> Views 
+	<img src='pictures/forumgrau.gif'> Bewertung 
+	<img src='pictures/forumgrau.gif'> Relevanz 
+	</font></td></tr>\n";
+	echo "</table>\n";
+}
 
 // Verzweigung zu den drei Anzeigemodi 
 
-IF ($view=="letzte" OR $view=="neue"){
-	IF ($mehr<1) $mehr=1;
-	letzte5($open, $mehr, $show, $write, $update, $name, $description,$zitat);
-	}
-ELSE
-	DisplayTopic($datum,$topic_id,$open,0,0,$zitat);
-	
+if ($flatallopen=="TRUE")
+	$forum["flatallopen"] = "TRUE";
+if ($flatallopen=="FALSE")
+	$forum["flatallopen"] = "FALSE";
+
+if ($forum["view"]=="flat" || $forum["view"]=="neue" || $forum["view"]=="flatfolder")
+ 	flatview ($open, $mehr, $show, $edit_id, $name, $description, $zitat);
+else
+	DisplayFolders ($open, $edit_id, $zitat);
+
+
   // Save data back to database.
   page_close()
  ?>
