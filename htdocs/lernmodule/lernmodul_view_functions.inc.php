@@ -62,14 +62,15 @@ function show_seminar_modules($seminar_id)
 		echo "</table><br>";
 	}
 	else
-		echo "<b>" . _("Mit dieser Veranstaltung sind bisher keine ILIAS-Lernmodule verknüpft.") . "</b><br><br>";
+		echo "<b>" . _("Mit dieser Veranstaltung sind keine ILIAS-Lernmodule verknüpft.") . "</b><br><br>";
 }
 	
 function show_all_modules($seminar_id)
 {
 	global $cssSw;
 	$module_count = 0;
-	$mod_array = get_all_modules();
+	$hide_mod = get_seminar_modules($seminar_id);
+	$mod_array = get_all_modules($hide_mod);
 	if ($mod_array != false)
 	{	
 		echo "<b>" . _("Folgende Lernmodule können eingebunden werden:") . "</b><br><br>";
@@ -92,6 +93,8 @@ function show_all_modules($seminar_id)
 		}
 		echo "</table>";
 	}
+	elseif ($hide_mod != "")
+		echo "<b>" . _("Alle verf&uuml;gbaren Lernmodule sind der Veranstaltung zugeordnet.") . "</b><br><br>";
 	else
 		echo "<b>" . _("Es sind keine Lernmodule vorhanden.") . "</b><br><br>";
 }

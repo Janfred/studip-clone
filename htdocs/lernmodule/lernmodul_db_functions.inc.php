@@ -83,7 +83,7 @@ function get_seminar_modules($seminar_id)
 		return $mod_array;
 }
 
-function get_all_modules()
+function get_all_modules($hide_mod = false)
 {
 	$mod_array = false;
 	$module_count = 0;
@@ -101,6 +101,14 @@ function get_all_modules()
 		$mod_array[$module_count]["id"] = $ilias_db -> f("id");
 		$mod_array[$module_count]["title"] = $ilias_db -> f("title");
 		$mod_array[$module_count]["description"] = $ilias_db -> f("description");
+		if ($hide_mod != false)
+			for ($i=0; $i<sizeof($hide_mod); $i++)
+				if (($hide_mod[$module_count]["id"] == $mod_array[$module_count]["id"]) AND ($hide_mod[$module_count]["inst"] == $mod_array[$module_count]["inst"]))
+					{
+						unset($mod_array[$module_count]);
+						$module_count--;
+					}
+		
 		$module_count ++;
 	}
 	if ($module_count<1)
