@@ -63,24 +63,25 @@ else{
 // Benutzereinstellungen uebernehmen
 if($cmd_cal == "chng_cal_settings"){
 	$calendar_user_control_data = array(
-		"view"           => $cal_view,
-		"start"          => $cal_start,
-		"end"            => $cal_end,
-		"step_day"       => $cal_step_day,
-		"step_week"      => $cal_step_week,
-		"type_week"      => $cal_type_week,
-		"holidays"       => $cal_holidays,
-		"sem_data"       => $cal_sem_data,
-		"link_edit"      => $cal_link_edit,
-		"bind_seminare"  => $calendar_user_control_data["bind_seminare"]
+		"view"             => $cal_view,
+		"start"            => $cal_start,
+		"end"              => $cal_end,
+		"step_day"         => $cal_step_day,
+		"step_week"        => $cal_step_week,
+		"type_week"        => $cal_type_week,
+		"holidays"         => $cal_holidays,
+		"sem_data"         => $cal_sem_data,
+		"link_edit"        => $cal_link_edit,
+		"bind_seminare"    => $calendar_user_control_data["bind_seminare"],
+		"ts_bind_seminare" => $calendar_user_control_data["ts_bind_seminare"]
 	);
 }
-
 
 $db_bind_check = new DB_Seminar;
 $db_bind_check->query("SELECT Seminar_id, mkdate FROM seminar_user WHERE user_id='$user->id' ORDER BY mkdate DESC");
 while ($db_bind_check->next_record()
-			&& $db_bind_check->f("mkdate") > $calendar_user_control_data["ts_bind_seminare"]) {
+		&& ($db_bind_check->f("mkdate") > $calendar_user_control_data["ts_bind_seminare"]
+		|| $db_bind_check->f("mkdate") == 0)) {
 	$calendar_user_control_data["bind_seminare"][$db_bind_check->f("Seminar_id")] = "TRUE";
 }
 $calendar_user_control_data["ts_bind_seminare"] = time();
