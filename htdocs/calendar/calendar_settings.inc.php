@@ -250,22 +250,24 @@ $css_switcher->switchClass();
 					</td>
 					<td class="<? echo $css_switcher->getClass(); ?>">
 						<font size="-1">
-						<input type="radio" name="cal_delete" value="12"<?
-							if($calendar_user_control_data["delete"])
-								echo " selected";
-							echo ">&nbsp;" . _("12 Monate nach Ablauf") . "<br>"; ?>
-						<input type="radio" name="cal_delete" value="6"<?
-							if($calendar_user_control_data["delete"])
-								echo " selected";
-							echo ">&nbsp;" . _("6 Monate nach Ablauf") . "<br>"; ?>
-						<input type="radio" name="cal_delete" value="3"<?
-							if($calendar_user_control_data["delete"])
-								echo " selected";
-							echo ">&nbsp;" . _("3 Monate nach Ablauf") . "<br>"; ?>
-						<input type="radio" name="cal_delete" value="0"<?
-							if($calendar_user_control_data["delete"])
-								echo " selected";
-							echo ">&nbsp;" . _("nie"); ?>
+						<select name="cal_delete" size="1">
+							<option value="12"<?
+								if($calendar_user_control_data["delete"] == 12)
+									echo " selected";
+								echo ">" . _("12 Monate nach Ablauf") . "</option><br>"; ?>
+							<option value="6"<?
+								if($calendar_user_control_data["delete"] == 6)
+									echo " selected";
+								echo ">" . _("6 Monate nach Ablauf") . "</option><br>"; ?>
+							<option value="3"<?
+								if($calendar_user_control_data["delete"] == 3)
+									echo " selected";
+								echo ">" . _("3 Monate nach Ablauf") . "</option><br>"; ?>
+							<option value="0"<?
+								if($calendar_user_control_data["delete"] == 0)
+									echo " selected";
+								echo ">" . _("nie") . '</option>'; ?>
+						</select>
 						</font>
 					</td>
 				</tr>
