@@ -93,7 +93,7 @@ if ($dclose)
 					</td>
 					<td class="blank" width="270" align="center" valign="top">
 						<?
-						//Build an ifobox
+						//Build an infobox
 						$infobox[0]["kategorie"] = _("Informationen:");
 						$infobox[0]["eintrag"][] = array ("icon" => "pictures/ausruf_small.gif",
 							"text"  =>_("Hier finden Sie alle Termine der Veranstaltung."));
