@@ -22,6 +22,14 @@ function output_data($object_data, $output_mode = "file")
 
 function export_range($range_id)
 {
+global $tree_object;
+
+	$inst_array = $tree_object->GetInstKids();
+	
+	while (list($key, $inst_ids) = each($inst_array))
+	{
+		export_inst($inst_ids);
+	}
 
 }
 

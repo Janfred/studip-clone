@@ -3,6 +3,7 @@ $perm->check("dozent");
 
 $export_pagename = _("Datenexport");
 require_once ("$ABSOLUTE_PATH_STUDIP/config_tools_semester.inc.php");   // Aktuelles Semester
+require_once ("$ABSOLUTE_PATH_STUDIP/RangeTreeObject.class.php");   // Uni-Baum-Funktionen
 require_once ("$ABSOLUTE_PATH_STUDIP$PATH_EXPORT/export_xml_vars.inc.php");   // XML-Variablen
 require_once ("$ABSOLUTE_PATH_STUDIP$PATH_EXPORT/export_xml_func.inc.php");   // XML-Funktionen
 require_once ("$ABSOLUTE_PATH_STUDIP$PATH_EXPORT/export_studipdata_func.inc.php");   // Studip-Export-Funktionen
@@ -44,9 +45,12 @@ if ($o_mode != "direct")
 	$xml_file = fopen($TMP_PATH."/" . $xml_file_id, "w");
 }
 
+$tree_object = new RangeTreeObject($range_id);
+$range_name = $tree_object->item_data["name"];
+
 output_data ( xml_header(), $o_mode);
 
-export_inst( $range_id );
+export_range( $range_id );
 
 output_data ( xml_footer(), $o_mode);
 
