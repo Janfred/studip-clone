@@ -20,7 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 	require_once ("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
 
-	IF (isset($SessSemName) && ($SessSemName[1] != "")) {
+	if (isset($SessSemName) && ($SessSemName[1] != "")) {
 		$db=new DB_Seminar;
 		
 		$entry_level = ($SessSemName["is_fak"]) ? "fak" : $SessSemName["class"];
@@ -38,12 +38,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 				$SemUserStatus="nobody";
 				if ($SemSecLevelRead>0){
 					echo "<table width=\"100%\" border=0 cellpadding=0 cellspacing=0>";
-					echo "<tr><td class=\"topic\" colspan=2>&nbsp;<b>Rechtecheck</b></td></tr>";
+					echo "<tr><td class=\"topic\" colspan=2>&nbsp;<b>" . _("Rechtecheck") . "</b></td></tr>";
 					echo "<tr><td class=\"blank\" colspan=2>&nbsp<br></td></tr>";
-					parse_msg ("error§Sie haben keine Berechtigung, diese Veranstaltung zu betreten!");
-					echo"<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp;&nbsp; zur&uuml;ck zur Startseite</a>";
+					parse_msg ("error§" . _("Sie haben keine Berechtigung, diese Veranstaltung zu betreten!"));
+					echo"<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp;&nbsp; " . _("zur&uuml;ck zur Startseite") . "</a>";
 					if ($send_from_search)
-					echo " | <a href=\"sem_portal.php\">zur&uuml;ck zur Suche</a>";
+					echo " | <a href=\"sem_portal.php\">" . _("zur&uuml;ck zur Suche") . "</a>";
 					echo "<br /><br /></td></tr></table>";
 					die;
 				}
