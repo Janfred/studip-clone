@@ -37,7 +37,13 @@
 
 // this script is included in extern.inc.php
 
-$sri_page = implode("", file($page_url));
+if ($sri_file = @file($page_url))
+	$sri_page = implode("", $sri_file);
+else {
+	echo $EXTERN_ERROR_MESSAGE;
+	exit;
+}
+
 //echo $sri_page;
 $sri_pattern = "'(.*)(\<studip_remote_include\>.*\<\/studip_remote_include\>)(.*)'is";
 
