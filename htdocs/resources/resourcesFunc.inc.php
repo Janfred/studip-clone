@@ -663,21 +663,24 @@ function search_administrable_objects($search_string='', $user_id='', $sem=TRUE)
 				$my_objects[$db->f("Institut_id")]=array("name"=>$db->f("Name"), "art"=>_("Einrichtungen"), "perms" => "admin", 'inst_id' => true);
 				$my_inst_ids[$db->f("Institut_id")] = true;
 			}
+			$allowed_inst_perms = array('autor','tutor','dozent');
 			if ($perm->is_fak_admin($user_id)){
 				$db->query("SELECT Institut_id,Name FROM Institute WHERE ({$search_sql['institut']}) AND fakultaets_id IN('" . join("','" , array_keys($my_inst_ids)) ."')");
 				while($db->next_record()){
 					$my_objects[$db->f("Institut_id")]=array("name"=>$db->f("Name"), "art"=>_("Einrichtungen"), "perms" => "admin",'inst_id' => true);
 					$my_inst_ids[$db->f("Institut_id")] = true;
 				}
+				$allowed_inst_perms[] = 'admin';
 			}
 			if (is_array($my_inst_ids)){
 				$inst_in = "('" . join("','" , array_keys($my_inst_ids)) ."')";
+				$inst_perms_in = "('" . join("','" , $allowed_inst_perms) ."')";
 				$db2->query("SELECT auth_user_md5.user_id, ". $_fullname_sql['full_rev'] ." AS fullname, username 
 							FROM user_inst a 
 							LEFT JOIN auth_user_md5 USING (user_id) 
 							LEFT JOIN user_info USING (user_id) 
 							WHERE (({$search_sql['user']}))
-							AND a.inst_perms!='user' AND  a.Institut_id IN $inst_in GROUP BY auth_user_md5.user_id ORDER BY Nachname");
+							AND a.inst_perms  IN $inst_perms_in AND  a.Institut_id IN $inst_in GROUP BY auth_user_md5.user_id ORDER BY Nachname");
 				while ($db2->next_record()) {
 					$my_objects[$db2->f("user_id")]=array("name"=>$db2->f("fullname")." (".$db2->f("username").")", "art"=>_("Personen"), "perms" => "admin");
 				}
