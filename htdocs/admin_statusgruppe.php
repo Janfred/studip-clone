@@ -319,7 +319,7 @@ function PrintInstitutMembers ($range_id)
 	if ($cmd=="move_old_statusgruppe")  {
 		$statusgruppe_name = $move_old_statusgruppe;		
 	} else {
-		$statusgruppe_name = "Name der Gruppe";
+		$statusgruppe_name = "unbenannt";
 	}
 
 	// zuordnen von Personen zu einer Statusgruppe
