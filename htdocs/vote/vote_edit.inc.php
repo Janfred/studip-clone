@@ -57,17 +57,15 @@ include_once ($ABSOLUTE_PATH_STUDIP . "vote/view/visual.inc.php");
 global $auth, $perm;
 
 /* If there is no rights to edit ------------------------------------------- */
-if ($voteID) {
+if (isset($_REQUEST["voteID"])) {
    $vote = new Vote ($voteID);
    $rangeID = $vote->getRangeID ();
    // convert userID to username
    if ($id = get_username($rangeID))
 	$rangeID = $id;
 }
-if (!($perm->have_studip_perm ("tutor", $rangeID) OR
-      get_username($userID) == $rangeID)
-    ) {
 
+if ( ! ( $perm->have_studip_perm( "tutor", $rangeID ) || $auth->auth["uname"] == $rangeID ) ) {
     $reason = ( ! is_object($vote)
 		? _("Es macht wenig Sinn, die Editierseite aufzurufen, ohne den zu editierenden Vote anzugeben...")
 		: ( ! $vote->voteDB->isExistant($voteID)
