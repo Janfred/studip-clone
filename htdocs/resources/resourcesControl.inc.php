@@ -1,23 +1,39 @@
 <?
-/*
-resourcesControl.php - 0.8
-Steuerung fuer Ressourcenverwaltung von Stud.IP.
-Copyright (C) 2002 Cornelis Kater <ckater@gwdg.de>
-
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+/**
+* resourcesControl.php
+* 
+* the controlling body of the resource-management
+* 
+*
+* @author		Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
+* @version		$Id$
+* @access		public
+* @modulegroup	resources
+* @module		resourcesControl.php
+* @package		resources
 */
+
+// +---------------------------------------------------------------------------+
+// This file is part of Stud.IP
+// resourcesControl.php
+// zentrale Steuerung der Ressourcenverwaltung
+// Copyright (C) 2003 Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
+// +---------------------------------------------------------------------------+
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or any later version.
+// +---------------------------------------------------------------------------+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+// +---------------------------------------------------------------------------+
+
+
 
 /*****************************************************************************
 Requires & Registers
@@ -126,7 +142,7 @@ if ($resources_data["view"]=="resources" || $resources_data["view"]=="_resources
 		echo "<br />&nbsp;";			
 	} else {
 		echo "</td></tr>";
-		parse_msg ("info§Es sind es existieren Eintr&auml;ge, auf die Sie Zugriff haben. <br />Um Ressourcen anzulegen, erzeugen sie zun&auml;chst eine neue Ebene, indem sie \"Neue Hierarchie erzeugen\" anw&auml;hlen. <br />Anschliessend k&ouml;nnen sie in dieser Ebene Ressourcen anlegen.");
+		$msg->displayMsg(12);
 	}
 
 	if ($edit_structure_object) {
@@ -157,12 +173,12 @@ if ($resources_data["view"]=="lists" || $resources_data["view"]=="_lists" || $re
 	if ($resources_data["view"]=="openobject_main") {
 		if (!$list->showRangeList($SessSemName[1])) {
 			echo "</td></tr>";
-			parse_msg ("info§Es existieren keine Ressourcen, die Sie in dieser Veranstaltung belegen k&ouml;nnen.");
+			$msg->displayMsg(13);
 		}
 	} else {
 		if (!$list->showListObjects($resources_data["list_open"])) {
 			echo "</td></tr>";
-			parse_msg ("info§Sie haben keine Ebene ausgew&auml;hlt. Daher kann keine Liste erzeugt werden. <br />Benutzen Sie die Suchfunktion oder w&auml;hlen Sie unter \"&Uuml;bersicht\" einen Ebene bzw. Ressource in der Hierachie aus.");
+			$msg->displayMsg(14);
 		}
 	}
 	
@@ -181,7 +197,7 @@ if ($resources_data["view"]=="edit_object_properties" || $resources_data["view"]
 		$editObject->showPropertiesForms();
 	} else {
 		echo "</td></tr>";
-		parse_msg ("info§Sie haben keine Objekt zum Bearbeiten ausgew&auml;hlt. <br />Bitte w&auml;hlen Sie zun&auml;chst ein Objekt aus.");
+		$msg->displayMsg(15);
 	}
 }
 
@@ -196,7 +212,7 @@ if (($resources_data["view"]=="openobject_details")  || ($resources_data["view"]
 		$viewObject->view_properties();
 	} else {
 		echo "</td></tr>";
-		parse_msg ("info§Sie haben keine Objekt zum Anzeigen ausgew&auml;hlt. <br />Bitte w&auml;hlen Sie zun&auml;chst ein Objekt aus.");
+		$msg->displayMsg(16);
 	}
 }
 
@@ -209,7 +225,7 @@ if ($resources_data["view"]=="edit_object_perms") {
 		$editObject->showPermsForms();
 	} else {
 		echo "</td></tr>";
-		parse_msg ("info§Sie haben keine Objekt zum Bearbeiten ausgew&auml;hlt. <br />Bitte w&auml;hlen Sie zun&auml;chst ein Objekt aus.");
+		$msg->displayMsg(15);
 	}
 }
 
@@ -225,7 +241,7 @@ if ($resources_data["view"]=="edit_object_assign" || $resources_data["view"]=="o
 		$editObject->showScheduleForms($assign_id);
 	} else {
 		echo "</td></tr>";
-		parse_msg ("info§Sie haben keine Objekt zum Bearbeiten ausgew&auml;hlt. <br />Bitte w&auml;hlen Sie zun&auml;chst ein Objekt aus.");
+		$msg->displayMsg(15);
 	}
 }
 
@@ -279,7 +295,7 @@ if ($resources_data["view"]=="view_schedule" || $resources_data["view"]=="openob
 				$ViewSchedules->showScheduleGraphical($schedule_start_time, $schedule_end_time);
 	} else {
 		echo "</td></tr>";
-		parse_msg ("info§Sie haben keine Objekt zum Bearbeiten ausgew&auml;hlt. <br />Bitte w&auml;hlen Sie zun&auml;chst ein Objekt aus.");
+		$msg->displayMsg(15);
 	}
 }
 
