@@ -110,7 +110,7 @@ class ResourceObject {
 		if($argv && !is_array($argv)) {
 			$id = $argv;
 			$this->restore($id);
-		} else {
+		} elseif (count($argv) == 7) {
 			$this->name = $argv[0];
 			$this->description = $argv[1];
 			$this->parent_bind = $argv[2];
