@@ -21,7 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // set default Values for messaging
 function check_messaging_default() {
 	global $my_messaging_settings;
-	
+
 	if (!$my_messaging_settings) {
 		$my_messaging_settings=array(
 			"show_only_buddys"=>FALSE, 
@@ -29,7 +29,15 @@ function check_messaging_default() {
 			"start_messenger_at_startup"=>FALSE,
 			"active_time"=>5,
 			"default_setted"=>time(),
-			"last_login"=>0
+			"last_login"=>FALSE,
+			"timefilter"=>"all",
+			"opennew"=>1,
+			"logout_markreaded"=>FALSE,
+			"openall"=>FALSE,
+			"save_snd"=>1,
+			"hover"=>FALSE,
+			"addsignature"=>FALSE,
+			"sms_sig"=>FALSE
 			);
 		}			
 	}
