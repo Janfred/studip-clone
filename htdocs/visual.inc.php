@@ -404,72 +404,14 @@ function decodeHTML($string) {
 	return $string;
 }
 
-// ermöglicht einfache Formatierungen in Benutzereingaben
-
+/**
+* uses a special syntax to formatting text
+*
+* @access	public
+* @param	string	text to format
+* @return	string
+*/
 function format ($text) {
-	/*$text = preg_replace("'\n?\r\n?'", "\n", $text);
-	
-	$pattern = array("'(^|\n)\!([^!].*)$'m",     // Überschrift 4. Stufe
-					"'(^|\n)\!{2}([^!].*)$'m",           // Überschrift 3. Stufe
-					"'(^|\n)\!{3}([^!].*)$'m",           // Überschrift 2. Stufe
-					"'(^|\n)\!{4}([^!].*)$'m",           // Überschrift 1. Stufe
-					"'(^|\n)--+(?!=( |\w(\d?)(\n|$)'m"            // Trennlinie
-					);
-	$replace = array("<h4>\\2 </h4>",
-					"<h3> \\2 </h3>",
-					"<h2> \\2 </h2>",
-					"'<h1> \\2 </h1>",
-					"<hr noshade=\"noshade\" width=\"98%\" size=\"\\1\" align=\"center\" />"
-					);
-	$text = preg_replace($pattern, $replace, $text);
-	$text = preg_replace("'(\</h.\>)\n'", "\\1", $text);
-	
-	$pattern = array("'\[pre\](.+?)\[/pre\]'is",    // praeformatierter Text
-					"'(^|\s)%(?!%)(\S+%)+(?=(\s|$))'e",     // SL-kursiv
-					"'(^|\s)\*(?!\*)(\S+\*)+(?=(\s|$))'e",  // SL-fett
-					"'(^|\s)_(?!_)(\S+_)+(?=(\s|$))'e",     // SL-unterstrichen
-					"'(^|\s)#(?!#)(\S+#)+(?=(\s|$))'e",     // SL-diktengleich
-					"'(^|\s)\+(?!\+)(\S+\+)+(?=(\s|$))'e",  // SL-groesser
-			//		"'(^|\s)-(?!-)(\S+-)+(?=(\s|$))'e",     // SL-kleiner
-					"'(^|\s)&gt;(?!&gt;)(\S+&gt;)+(?=(\s|$))'ie",  // SL-hochgestellt
-					"'(^|\s)&lt;(?!&lt;)(\S+&lt;)+(?=(\s|$))'ie",  // SL-tiefgestellt
-					"'%%(\S|\S.*?\S)%%'s",               // ML-kursiv
-					"'\*\*(\S|\S.*?\S)\*\*'s",           // ML-fett
-					"'__(\S|\S.*?\S)__'s",                     // ML-unterstrichen
-					"'##(\S|\S.*?\S)##'s",                     // ML-diktengleich
-					"'\+\+(((\+\+)*)(\S|\S.*?\S)\\2)\+\+'se",  // ML-groesser
-				//	"'--(((--)*)(\S|\S.*?\S)\\2)--'se",        // ML-kleiner
-					"'&gt;&gt;(\S|\S.*?\S)&gt;&gt;'is",     // ML-hochgestellt
-					"'&lt;&lt;(\S|\S.*?\S)&lt;&lt;'is",     // ML-tiefgestellt
-					"'\n\n  (((\n\n)  )*(.+?))(\Z|\n\n(?! ))'se",   // Absatz eingerueckt
-					"'(\n|\A)(((-|=)+ .*\Z)*)'e"
-				//	"'(\n|\A)(((-|=)+ .*?(\n|\Z)))'se"
-					);
-	$replace = array("<pre>\\1</pre>",
-					"'\\1<i>'.substr(str_replace('%', ' ', '\\2'), 0, -1).'</i>'",
-					"'\\1<b>'.substr(str_replace('*', ' ', '\\2'), 0, -1).'</b>'",
-					"'\\1<u>'.substr(str_replace('_', ' ', '\\2'), 0, -1).'</u>'",
-					"'\\1<tt>'.substr(str_replace('#', ' ', '\\2'), 0, -1).'</tt>'",
-					"'\\1<big>'.substr(str_replace('+', ' ', '\\2'), 0, -1).'</big>'",
-				//	"'\\1<small>'.substr(str_replace('-', ' ', '\\2'), 0, -1).'</small>'",
-					"'\\1<sup>'.substr(str_replace('&gt;', ' ', '\\2'), 0, -1).'</sup>'",
-					"'\\1<sub>'.substr(str_replace('&lt;', ' ', '\\2'), 0, -1).'</sub>'",
-					"<i>\\1</i>",
-					"<b>\\1</b>",
-					"<u>\\1</u>",
-					"<tt>\\1</tt>",
-					"'<big>'.format('\\1').'</big>'",
-				//	"'<small>'.format('\\1').'</small>'",
-					"<sup>\\1</sup>",
-					"<sub>\\1</sub>",
-					"'<blockquote>'.format('\\1').'</blockquote>'",
-					"preg_call_format_list('\\2')"
-					);
-	$text = preg_replace($pattern, $replace, $text);
-	
-	return $text;*/
-	
-	
 	$text = preg_replace("'\n?\r\n?'", "\n", $text);
 	
 	$pattern = array("'(^|\n)\!([^!].*)$'m",     // Ueberschrift 4. Ordnung
@@ -477,7 +419,7 @@ function format ($text) {
 					"'(^|\n)\!{3}([^!].*)$'m",           // Ueberschrift 2. Ordnung
 					"'(^|\n)\!{4}([^!].*)$'m",           // Ueberschrift 1. Ordnung
 					"'(^|\n)--+(\d?)(\n|$)'m",           // Trennlinie
-					"'(\n|\A)(((-|=)+ .*(\n|\Z))+)'e"     // Listen
+					"'(\n|\A)(([-=]+ .+(\n|\Z))+)'e"     // Listen
 					);
 	$replace = array("<h4>\\2 </h4>",
 					"<h3> \\2 </h3>",
@@ -532,80 +474,93 @@ function format ($text) {
 	return $text;
 }
 
-// Hilfsfunktion für format() zur generierung von Listen
-function preg_call_format_list ($content_str) {
-	$print_li = TRUE;
+/**
+* callback function used by format() to generate html-lists
+*
+* @access	private
+* @param	string	string containing a list in quick-format-syntax
+* @return	string
+*/
+function preg_call_format_list ($content) {	
+	$items = array();
+	$lines = explode("\n", $content);
+	$level = 0;
 	$current_level = 0;
-	$lines = explode("\n", $content_str);
-	$end_tags = "";
-	for ($i = 0; $i < sizeof($lines); $i++) {
+	for ($i = 0; $i <= sizeof($lines); $i++) {
 		$line = $lines[$i];
-		if (preg_match("'^((-|=)+)\s*(.*)$'", $line, $matches)) {
-			preg_match("'^((-|=)+).*$'", $lines[$i+1], $matches2);
-			$next_level = strlen($matches2[1]);
-			$level = strlen($matches[1]);
-			if ($matches[1]{0} == "-")
-				$tag = "ul";
-			else
-				$tag = "ol";
-				
-			if ($i == 1)
-				$level_tag[1] = $tag;
+		if (preg_match("'^([-=]+) (.*)$'", $line, $matches)) {
 			
-			if ($level < $current_level) {
-				for (;$level < $current_level; $current_level--) {
-					$ret .= "</{$level_tag[$current_tag]}>";
-			//		unset($level_tag[$current_tag]);
-					if ($next_level <= $current_level)
-						$ret .= "</li>";
-				}
-			}
+			$matched_level = strlen($matches[1]);
+			if ($matched_level > $current_level)
+				$level++;
+			else if ($matched_level < $current_level)
+				$level = $matched_level;
 			
 			if ($level > $current_level) {
-				for (;$level > $current_level; $current_level++) {
-					
-					$level_tag[$current_tag] = $tag;
-					$ret .= "<$tag><li>";
-				}
-				$print_li = FALSE;
+				if ($matches[1]{0} == "-")
+					$list_tags[] = "ul";
+				else
+					$list_tags[] = "ol";
 			}
 			
-			if ($level == $current_level) {
-				if ($print_li)
-					$ret .= "<li>{$matches[3]}";
-				else {
-					$ret .= "{$matches[3]}";
-					$print_li = TRUE;
-				}
-			}
+			$items[$i]["level"] = $level - 1;
+			$items[$i]["content"] = $matches[2];
 			
-			if ($next_level <= $level)
-					$ret .= "</li>";
+			$current_level = $level;
 		}
 	}
 	
-	while ($current_level--) {
-		$end_tags .= "</li></ul>";
-	}
+	for ($i = 0;$i < sizeof($items); $i++) {
+		$level_diff = $items[$i]["level"] - $items[$i + 1]["level"];
+		
+		if ($i == 0)
+			$ret .= "<{$list_tags[$items[$i]['level']]}>";
+			
+		if ($level_diff > 0) {
+			$ret .= "<li>{$items[$i]['content']}</li></{$list_tags[$items[$i]['level']]}>";
+			for ($j = $items[$i]["level"] - 1; $j > $items[$i + 1]["level"]; $j--)
+					$ret .= "</li></" . $list_tags[$j] . ">";
+		}
+		else if ($level_diff < 0)
+			$ret .= "<li>{$items[$i]['content']}<" . $list_tags[$items[$i]['level'] + 1] . ">";
+		else if ($level_diff == 0)
+			$ret .= "<li>{$items[$i]['content']}";
+		
+		if ($level_diff >= 0)
+			$ret .= "</li>";
 	
-	return $ret . $end_tags;
+	}
+		
+	$ret .= "</{$list_tags[0]}>";	
+	
+	return $ret;
 }
 
-
-function preg_call_table_format($tbr){
-        return preg_replace("'\|(.+?)(\|\s*\n(?=\|)|\|\Z)'se", "'<tr><td>'.preg_
+/**
+* callback function used by format() to generate tables
+*
+* @access	private
+* @param	string	string containing a table in quick-format-syntax
+* @return	string
+*/
+function preg_call_table_format($content){
+	return preg_replace("'\|(.+?)(\|\s*\n(?=\|)|\|\Z)'se", "'<tr><td>'.preg_
 replace('/\|/','</td><td>','\\1').'</td></tr>'", $tbr);
 }
 
 
-// entfernt alle Schnellformatierungszeichen aus $text
-// zurückgegeben wird reiner Text (für HTML-Ausgabe (Druckansicht)
-// muss dieser noch durch nl2br() laufen
+/**
+* removes all characters used by quick-format-syntax
+*
+* @access	public
+* @param	string
+* @return	string
+*/
 function kill_format ($text) {
 	$text = preg_replace("'\n?\r\n?'", "\n", $text);
 	$pattern = array(
 					"'(^|\n)\!{1,4}(.+)$'m",      // Ueberschriften
-					"'(\n|\A)(-|=)+ (.+)$'m",           // Aufzaehlungslisten
+					"'(\n|\A)(-|=)+ (.+)$'m",     // Aufzaehlungslisten
 					"'(^|\s)%(?!%)(\S+%)+'e",     // SL-kursiv
 					"'(^|\s)\*(?!\*)(\S+\*)+'e",  // SL-fett
 					"'(^|\s)_(?!_)(\S+_)+'e",     // SL-unterstrichen
@@ -647,8 +602,15 @@ function kill_format ($text) {
 	return $text;
 }
 
-//////////////////////////////////////////////////////////////////////////
-
+/**
+* detects links in a given string and convert it into html-links
+*
+* @access	public
+* @param	string	text to convert
+* @param	string	TRUE if all forms of newlines have to be converted in single \n
+* @param	boolean	TRUE if newlines have to be converted into <br>
+* @return	string
+*/
 function FixLinks($data = "", $fix_nl = TRUE, $nl_to_br = TRUE) {
 	if (empty($data)) {
 		return $data;
@@ -661,12 +623,10 @@ function FixLinks($data = "", $fix_nl = TRUE, $nl_to_br = TRUE) {
 	$fixed_text = preg_replace($pattern, $replace, $data);
 	
 	 $pattern = array(
-	 				
-					"'(\[IMG\])(((https?://)|(ftp://([_a-z0-9-:]+@)?))[_a-z0-9-]+(\.[_a-z0-9-]+)+(/[^<\s]*[^\.\s<])*)'ie",
-					"'(\[([^\n\f\[]+)\])?(((https?://)|(ftp://([_a-z0-9-:]+@)?))[_a-z0-9-]+(\.[_a-z0-9-]+)+(/[^<\s]*[^\.\s<])*)'ie",
+					"'(\[([^\n\f\[]+)\])?(((https?://)|(ftp://([_a-z0-9-:]+@)?))[_a-z0-9-]+(\.[_a-z0-9-:]+)+(/[^<\s]*[^\.\s<])*)'ie",
 					"'(?<=\s|^)(\[([^\n\f\[]+)\])?([-a-z0-9_]+(\.[_a-z0-9-]+)*@([_a-z0-9-]+(\.[_a-z0-9-]+)+))'ie"
 					);
-	$replace = array("preg_call_link('\\1', '\\2', 'IMG')", "preg_call_link('\\2', '\\3', 'LINK')", "preg_call_link('\\2', '\\3', 'MAIL')");
+	$replace = array("preg_call_link('\\2', '\\3', 'LINK')", "preg_call_link('\\2', '\\3', 'MAIL')");
 	$fixed_text = preg_replace($pattern, $replace, $fixed_text);
 	
 	if ($nl_to_br)
@@ -675,16 +635,21 @@ function FixLinks($data = "", $fix_nl = TRUE, $nl_to_br = TRUE) {
 	return $fixed_text;
 }
 
-// Hilfsfunktion für FixLinks()
+/**
+* callback function used by FixLinks()
+*
+* @access	private
+* @param	string	link-text
+* @param	string	url
+* @param	string "LINK" if it is a normal url, "MAIL" if it is an email-address
+* @return	string
+*/
 function preg_call_link($name, $link, $mod) {
 	if ($mod == "LINK") {
 		if ($name == "")
 			$name = $link;
 		$link = str_replace("&amp;", "&", $link);
 		$tbr = "<a href=\"$link\" target=\"_blank\">$name</a>";
-	}
-	elseif ($mod == "IMG") {
-		$tbr = "bla";
 	}
 	else {
 		if ($name != "")
