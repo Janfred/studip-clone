@@ -67,3 +67,10 @@ td, th, input, select  { font-size: 0.8em; }
 .steelblau4 {
   background-image: url('../../pictures/steelblau4.jpg');
 }
+
+h3 {
+  font-size: 1.3em;
+  color: #000000;
+  font-weight: bold;
+  font-family: Arial, Helvetica, sans-serif;
+}
