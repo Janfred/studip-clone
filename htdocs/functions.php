@@ -35,6 +35,71 @@
 // +---------------------------------------------------------------------------+
 
 /**
+* This function returns the last activity in the Veranstaltung
+*
+* @param		string	the id of the Veranstaltung
+* @return		integer	unix timestamp
+*
+*/
+function lastActivity ($sem_id) {
+	$db=new DB_Seminar;
+	
+	//Veranstaltungs-data
+	$db->query("SELECT chdate FROM seminare WHERE Seminar_id = '$sem_id'");
+	$db->next_record();
+	$timestamp = $db->f("chdate");
+	
+	//Postings
+	$db->query("SELECT chdate FROM px_topics WHERE Seminar_id = '$sem_id'  ORDER BY chdate DESC LIMIT 1");
+	
+	$db->next_record();
+	if ($db->f("chdate") > $timestamp)
+		$timestamp = $db->f("chdate");
+
+	//Postings
+	$db->query("SELECT chdate FROM folder WHERE range_id = '$sem_id' ORDER BY chdate DESC LIMIT 1");
+	$db->next_record();
+	if ($db->f("chdate") > $timestamp)
+		$timestamp = $db->f("chdate");
+
+	//Dokuments
+	$db->query("SELECT chdate FROM dokumente WHERE seminar_id = '$sem_id' ORDER BY chdate DESC LIMIT 1");
+	$db->next_record();
+	if ($db->f("chdate") > $timestamp)
+		$timestamp = $db->f("chdate");
+
+	//Postings
+	$db->query("SELECT chdate FROM folder WHERE range_id = '$sem_id' ORDER BY chdate DESC LIMIT 1");
+	$db->next_record();
+	if ($db->f("chdate") > $timestamp)
+		$timestamp = $db->f("chdate");
+
+	//Literatur
+	$db->query("SELECT chdate FROM literatur WHERE range_id = '$sem_id' ORDER BY chdate DESC LIMIT 1");
+	$db->next_record();
+	if ($db->f("chdate") > $timestamp)
+		$timestamp = $db->f("chdate");
+
+	//Dates
+	$db->query("SELECT chdate FROM termine WHERE range_id = '$sem_id' ORDER BY chdate DESC LIMIT 1");
+	$db->next_record();
+	if ($db->f("chdate") > $timestamp)
+		$timestamp = $db->f("chdate");
+
+	//News
+	$db->query("SELECT date FROM news_range LEFT JOIN news USING (news_id)  WHERE range_id = '$sem_id' ORDER BY date LIMIT 1");
+	$db->next_record();
+	if ($db->f("date") > $timestamp)
+		$timestamp = $db->f("date");
+	
+	//correct the timestamp, if date in the future (news can be in the future!)
+	if ($timestamp > time())
+		$timestamp = time();
+		
+	return $timestamp;
+}
+
+/**
 * This function returns an array of all my administrable objects (sem, inst)
 *
 * All the Objects of the type Seminar and Einrichtung, which the 
