@@ -82,7 +82,7 @@ class DbView {
 	* @access	public
 	* @var		boolean	$debug
 	*/
-	var $debug = false;
+	var $debug = true;
 	
 	/**
 	* Constructor
@@ -177,7 +177,7 @@ class DbView {
 	function get_temp_table($sub_query) {
 		mt_srand((double)microtime()*1000000);
 		$id = md5(uniqid (mt_rand()));
-		$pk = ($this->pk)? "PRIMARY KEY($this->pk)" : "auto_".$id." NOT NULL AUTO_INCREMENT PRIMARY KEY";
+		$pk = ($this->pk)? "PRIMARY KEY($this->pk)" : "auto_".$id." INT NOT NULL AUTO_INCREMENT PRIMARY KEY";
 		$query = "CREATE TEMPORARY TABLE temp_$id ($pk)TYPE=$this->temp_table_type $sub_query";
 		$this->db->query($query);
 		return " temp_".$id." ";
@@ -279,3 +279,4 @@ class DbView {
 	}
 }
 ?>
+

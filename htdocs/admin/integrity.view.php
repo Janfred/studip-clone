@@ -102,16 +102,13 @@ $_views["TERMINE_USER"]= array("pk"=>"range_id","temp_table_type"=>"HEAP",
 $_views["TERMINE_SEM"]= array("pk"=>"range_id","temp_table_type"=>"HEAP",
 							"query"=>"SELECT DISTINCT range_id FROM termine  INNER JOIN  seminare  ON (range_id=Seminar_id)");
 
-
-//$_views["DOCS_FAK"]= array("pk"=>"dokument_id","temp_table_type"=>"HEAP",
-//							"query"=>"SELECT dokument_id FROM dokumente  INNER JOIN  Fakultaeten b ON (range_id=b.fakultaets_id)");
-//$_views["DOCS_USER"]= array("pk"=>"dokument_id","temp_table_type"=>"HEAP",
-//							"query"=>"SELECT dokument_id FROM dokumente  INNER JOIN  auth_user_md5 b ON (range_id=b.user_id)");
+//UNION dokumente
 $_views["DOCS_SEM"]= array("pk"=>"Seminar_id","temp_table_type"=>"HEAP",
 							"query"=>"SELECT DISTINCT a.Seminar_id from dokumente a INNER JOIN seminare USING(Seminar_id)");
 $_views["DOCS_INST"]= array("pk"=>"Seminar_id","temp_table_type"=>"HEAP",
 							"query"=>"SELECT DISTINCT a.Seminar_id from dokumente a INNER JOIN Institute b ON(a.Seminar_id=b.Institut_id)");
 
+//UNION folder
 $_views["FOLDER_SEM"]= array("pk"=>"range_id","temp_table_type"=>"HEAP",
 							"query"=>"SELECT DISTINCT a.range_id from folder a INNER JOIN seminare b ON(b.Seminar_id=a.range_id)");
 $_views["FOLDER_INST"]= array("pk"=>"range_id","temp_table_type"=>"HEAP",
