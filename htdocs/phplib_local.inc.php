@@ -60,6 +60,7 @@ $_fullname_sql['full'] = "TRIM(CONCAT(title_front,' ',Vorname,' ',Nachname,IF(ti
 $_fullname_sql['full_rev'] = "TRIM(CONCAT(Nachname,', ',Vorname,IF(title_front!='',CONCAT(', ',title_front),''),IF(title_rear!='',CONCAT(', ',title_rear),'')))";
 $_fullname_sql['no_title'] = "CONCAT(Vorname ,' ', Nachname)";
 $_fullname_sql['no_title_rev'] = "CONCAT(Nachname ,' ', Vorname)";
+$_fullname_sql['no_title_short'] = "CONCAT(Nachname,', ',UCASE(LEFT(TRIM(Vorname),1)),'.')";
 
 	
 /*classes for database access

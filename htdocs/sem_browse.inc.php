@@ -196,22 +196,15 @@ if ((!$sem_browse_data["extern"]) ) {
 		$search_obj->search_fields['type']['class'] = ($show_class) ? $show_class : "all";
 		echo "<table border=\"0\" align=\"center\" cellspacing=0 cellpadding=2 width = \"99%\">\n";
 		echo $search_obj->getFormStart("$PHP_SELF?send=yes");
-		echo "<tr><td height=\"40\" class=\"steel1\" align=\"center\" valign=\"middle\" >";
+		echo "<tr><td height=\"40\" class=\"steel1\" align=\"center\" valign=\"middle\" ><font size=\"-1\">";
 		echo _("Schnellsuche:") . "&nbsp;";
-		echo $search_obj->getSearchField("qs_choose",array('style' => 'vertical-align:middle;'));
-		echo "&nbsp;";
-		echo $search_obj->getSearchField("quick_search",array( 'style' => 'vertical-align:middle;','size' => 20));
-		echo $search_obj->getSearchButton(array('style' => 'vertical-align:middle'));
-		echo $search_obj->getNewSearchButton(array('style' => 'vertical-align:middle'), _("Suchergebnis löschen und neue Suche starten"));
-		echo "&nbsp;<a href=\"$PHP_SELF?cmd=xts";
-		echo "\"><img align=\"middle\" " . makeButton("erweitertesuche","src") . tooltip(_("Erweitertes Suchformular aufrufen")) ." border=\"0\"></a>";
+		echo $search_obj->getSearchField("qs_choose",array('style' => 'vertical-align:middle;font-size:9pt;'));
 		if ($sem_browse_data['level'] == "vv"){
 			$search_obj->sem_tree =& $sem_tree->tree; 
 			if ($sem_tree->start_item_id != 'root'){
 				$search_obj->search_scopes[] = $sem_tree->start_item_id;
 			}
-			echo "</td></tr><tr><td class=\"steel1\" align=\"center\" valign=\"center\">";
-			echo "&nbsp;" . _("Suchbereich:") . "&nbsp;" . $search_obj->getSearchField("scope_choose",array('style' => 'vertical-align:middle'),$sem_tree->start_item_id);
+			echo "&nbsp;" . _("in:") . "&nbsp;" . $search_obj->getSearchField("scope_choose",array('style' => 'vertical-align:middle;font-size:9pt;'),$sem_tree->start_item_id);
 			echo "\n<input type=\"hidden\" name=\"level\" value=\"vv\">";
 		}
 		if ($sem_browse_data['level'] == "ev"){
@@ -219,10 +212,17 @@ if ((!$sem_browse_data["extern"]) ) {
 			if ($range_tree->start_item_id != 'root'){
 				$search_obj->search_ranges[] = $range_tree->start_item_id;
 			}
-			echo "</td></tr><tr><td class=\"steel1\" align=\"center\" valign=\"center\">";
-			echo "&nbsp;" . _("Suchbereich:") . "&nbsp;" . $search_obj->getSearchField("range_choose",array('style' => 'vertical-align:middle'),$range_tree->start_item_id);
+			echo "&nbsp;" . _("in:") . "&nbsp;" . $search_obj->getSearchField("range_choose",array('style' => 'vertical-align:middle;font-size:9pt;'),$range_tree->start_item_id);
 			echo "\n<input type=\"hidden\" name=\"level\" value=\"ev\">";
 		}
+		echo "&nbsp;";
+		
+		echo $search_obj->getSearchField("quick_search",array( 'style' => 'vertical-align:middle;font-size:9pt;','size' => 20));
+		echo $search_obj->getSearchButton(array('style' => 'vertical-align:middle'));
+		//echo $search_obj->getNewSearchButton(array('style' => 'vertical-align:middle'), _("Suchergebnis löschen und neue Suche starten"));
+		//echo "&nbsp;<a href=\"$PHP_SELF?cmd=xts";
+		//echo "\"><img align=\"middle\" " . makeButton("erweitertesuche","src") . tooltip(_("Erweitertes Suchformular aufrufen")) ." border=\"0\"></a>";
+		
 		echo "</td></tr>";
 		echo $search_obj->getFormEnd();
 		echo "</table>\n";
@@ -488,7 +488,7 @@ if ($sem_browse_data['level'] != 'f' && ($sem_browse_data["level"]=="s" || $sem_
 				case "semester":
 				if ((($sem_browse_data["cmd"] != "qs") && ($sem_browse_data["s_sem"] == "alle")) || ($sem_browse_data["level"] == "s") || ($sem_browse_data["level"] == "sbb")|| ($sem_browse_data["level"]=="b")) {
 					if ($group_header_name != $search_obj->sem_dates[key($value['sem_number'])]['name']){
-						$group_header_name=$search_obj->sem_dates[key($value['sem_number'])]['name'];
+						$group_header_name = $search_obj->sem_dates[key($value['sem_number'])]['name'];
 						$group_header_class=$group;
 						$group++;
 						$print_header_name = true;
@@ -574,7 +574,6 @@ if ($sem_browse_data['level'] != 'f' && ($sem_browse_data["level"]=="s" || $sem_
 			printf ("<tr> <td class=\"steelgroup%s\" colspan=%s><font size=-1><b>&nbsp;%s</b></font></td></tr>", ($sem_browse_switch_headers) ? $group_header_class : "1", $rows, htmlReady($group_header_name));
 			//create name-field	
 			echo"<tr ".$cssSw->getHover()."><font size=-1>";
-			echo"<td class=\"".$cssSw->getClass()."\"><font size=-1><a href=\"", $target_url, "?", $target_id, "=", $seminar_id, "&send_from_search=true&send_from_search_page=" . rawurlencode($PHP_SELF . "?view=" . $view) . "\">", htmlReady(key($value["Name"])), "</a></font></td>";
 			
 			//----------------------
 			

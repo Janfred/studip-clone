@@ -25,11 +25,11 @@ include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Sessio
 
 // -- here you have to put initialisations for the current page
 require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipSemTree.class.php");
+require_once "$ABSOLUTE_PATH_STUDIP/lib/classes/SemBrowse.class.php";
+
 
 // Start of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-echo "\n".cssClassSwitcher::GetHoverJSFunction()."\n";
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 
 if (($SessSemName[1]) && ($SessSemName["class"] == "inst")) {
@@ -44,21 +44,30 @@ if (($SessSemName[1]) && ($SessSemName["class"] == "inst")) {
 		$show_bereich_data['level'] = $level;
 	}
 	
-	if (!$level){
-		$level=$show_bereich_data['level'];
+	if (!$_REQUEST['group_by']){
+		$_REQUEST['group_by'] = 0;
 	}
-	
-	switch ($level) {
+	unset($_REQUEST['level']);
+	$save_me = $sem_browse_data;
+	$sem_browse_obj = new SemBrowse();
+	$sem_browse_obj->sem_browse_data['default_sem'] = "all";
+	$sem_browse_obj->target_url="details.php";	//teilt der nachfolgenden Include mit, wo sie die Leute hinschicken soll
+	$sem_browse_obj->target_id="sem_id"; 		//teilt der nachfolgenden Include mit, wie die id die &uuml;bergeben wird, bezeichnet werden soll
+	switch ($show_bereich_data['level']) {
 		case "sbb": 
 			$the_tree =& TreeAbstract::GetInstance("StudipSemTree");
 			$bereich_typ = _("Studienbereich");
 			$head_text = "&nbsp; " . _("&Uuml;bersicht aller Veranstaltungen eines Studienbereichs");
 			$intro_text = sprintf(_("Alle Veranstaltungen, die dem Studienbereich: <br><b>%s</b><br> zugeordnet wurden."),
 							htmlReady($the_tree->getShortPath($show_bereich_data["id"])));
-			$_REQUEST['cmd'] = "show_sem_range";
-			$_REQUEST['item_id'] = $show_bereich_data["id"];
-			$sem_browse_data['default_sem'] = "all";
-			
+			$sem_ids = $the_tree->getSemIds($show_bereich_data["id"],false);
+			if (is_array($sem_ids)){
+				$sem_browse_obj->sem_browse_data['search_result'] = array_flip($sem_ids);
+			} else {
+				$sem_browse_obj->sem_browse_data['search_result'] = array();
+			}
+			$sem_browse_obj->show_result = true;
+			$sem_browse_obj->sem_browse_data['sset'] = false;
 			break;
 		case "s":
 			$bereich_typ=_("Einrichtung");
@@ -67,39 +76,55 @@ if (($SessSemName[1]) && ($SessSemName["class"] == "inst")) {
 			$head_text = "&nbsp;" . _("&Uuml;bersicht aller Veranstaltungen einer Einrichtung");
 			$intro_text = sprintf(_("Alle Veranstaltungen der Einrichtung <b>%s</b>"),$db->f("Name"));
 			$db->query("SELECT seminar_id FROM seminar_inst WHERE Institut_id='".$show_bereich_data["id"]."'");
-			$_marked_sem = array();
+			$sem_browse_obj->sem_browse_data['search_result'] = array();
 			while ($db->next_record()){
-				$_marked_sem[$db->f("seminar_id")] = true;
+				$sem_browse_obj->sem_browse_data['search_result'][$db->f("seminar_id")] = true;
 			}
-		break;
+			$sem_browse_obj->show_result = true;
+			break;
 	}
 
 ?>
 <body>
-<table width="100%" border=0 cellpadding=0 cellspacing=0>
+<table width="100%" border=0 cellpadding=2 cellspacing=0>
 <tr>
-	<td class="topic" colspan=2><b><? echo $head_text ?></td>
+	<td class="topic" colspan="2"><b><? echo $head_text ?></td>
 </tr>
 <tr>
-	<td class="blank" colspan=2><br /><blockquote><font size="-1"><? echo $intro_text ?></font></blockquote><br></td>
-</tr>
-
-<tr><td class="blank" colspan=2>
+	<td class="blank" valign="top"><br /><blockquote><font size="-1"><? echo $intro_text ?></font></blockquote><br>
 <?
-
-	$target_url="details.php";	//teilt der nachfolgenden Include mit, wo sie die Leute hinschicken soll
-	$target_id="sem_id"; 		//teilt der nachfolgenden Include mit, wie die id die &uuml;bergeben wird, bezeichnet werden soll
-
-	include "sem_browse.inc.php"; 		//der zentrale Seminarbrowser wird hier eingef&uuml;gt.
-
-	unset($sem_browse_data['default_sem']);
-
+$sem_browse_obj->print_result();
 ?>
-</td>
+</td><td class="blank" width="270" align="right" valign="top">
+<?
+$goup_by_links = "";
+for ($i = 0; $i < count($sem_browse_obj->group_by_fields); ++$i){
+	if($sem_browse_data['group_by'] != $i){
+		$group_by_links .= "<a href=\"$PHP_SELF?group_by=$i\"><img src=\"pictures/blank.gif\" width=\"10\" height=\"20\" border=\"0\">";
+	} else {
+		$group_by_links .= "<img src=\"pictures/forumrot.gif\" border=\"0\" align=\"bottom\">";
+	}
+	$group_by_links .= "&nbsp;" . $sem_browse_obj->group_by_fields[$i]['name'];
+	if($sem_browse_data['group_by'] != $i){
+		$group_by_links .= "</a>";
+	}
+	$group_by_links .= "<br>";
+}
+$infobox[] = 	array(	"kategorie" => _("Anzeige gruppieren:"),
+						"eintrag" => array(array(	"icon" => "pictures/blank.gif",
+													"text" => $group_by_links))
+				);
+print_infobox ($infobox,"pictures/browse.jpg");
+?>
+</tr>
+<tr>
+	<td class="blank" colspan="2">&nbsp;
+	</td>
 </tr>
 </table>
-</table>
+
 <?
+$sem_browse_data = $save_me;
 page_close()
 ?>
 </body>
