@@ -263,14 +263,14 @@ $UPLOAD_TYPES=array( 	"default" =>												//Name bezeichnet den zugehoerigen
 
 
 //Festlegen von zulaessigen Bezeichnungen fuer Einrichtungen (=Institute)
-$INST_TYPE[1]=array("name"=>_("Einrichtung"), "en"=>"Institute");
-$INST_TYPE[2]=array("name"=>_("Zentrum"), "en"=>"Center");
-$INST_TYPE[3]=array("name"=>_("Lehrstuhl"), "en"=>"Lehrstuhl");
-$INST_TYPE[4]=array("name"=>_("Abteilung"), "en"=>"Unit");
-$INST_TYPE[5]=array("name"=>_("Fachbereich"), "en"=>"Fachbereich");
-$INST_TYPE[6]=array("name"=>_("Seminar"), "en"=>"Seminar");
+$INST_TYPE[1]=array("name"=>_("Einrichtung"));
+$INST_TYPE[2]=array("name"=>_("Zentrum"));
+$INST_TYPE[3]=array("name"=>_("Lehrstuhl"));
+$INST_TYPE[4]=array("name"=>_("Abteilung"));
+$INST_TYPE[5]=array("name"=>_("Fachbereich"));
+$INST_TYPE[6]=array("name"=>_("Seminar"));
 $INST_TYPE[7]=array("name"=>_("Fakultät"));
-$INST_TYPE_FAKULTAET_DEFAULT = 7;
+$INST_TYPE[8]=array("name"=>_("Arbeitsgruppe"));
 //weitere Typen koennen hier angefuegt werden
 
 
