@@ -627,8 +627,8 @@ function createVoteResult ($vote, $preview = NO) {
    
    if ($revealNames) {
       $extraStyle = " style=\"padding-bottom:4px; padding-top:4px;\"";
-      $leftCellWidth = "\"1%\"";
-      $rightCellWidth = "\"99%\"";
+      $leftCellWidth = "\"2%\"";
+      $rightCellWidth = "\"98%\"";
    }
    else {
       $leftCellWidth = "\"25%\"";
