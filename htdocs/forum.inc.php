@@ -1,6 +1,6 @@
 <?
 /**
-* helper functions for handling the board 
+* helper functions for handling the board
 *
 * helper functions for handling boards
 *
@@ -706,9 +706,10 @@ function CreateTopic ($name="[no name]", $author="[no author]", $description="",
 		$root_id = $topic_id;
 		}
 	
-	$query = "INSERT INTO px_topics (topic_id,name,description, parent_id, root_id , author, author_host, Seminar_id, user_id, mkdate, chdate) values ('$topic_id', '$name', '$description', '$parent_id', '$root_id', '$author', '".getenv("REMOTE_ADDR")."', '$tmpSessionSeminar', '$user_id', '$mkdate', '$chdate') ";
+	$query = 'INSERT INTO px_topics (topic_id,name,description, parent_id, root_id , author, author_host, Seminar_id, user_id, mkdate, chdate) ';
+	$query .= "values ('$topic_id', '$name', '$description', '$parent_id', '$root_id', '".mysql_escape_string($author)."', '".getenv("REMOTE_ADDR")."', '$tmpSessionSeminar', '$user_id', '$mkdate', '$chdate') ";
 	$db=new DB_Seminar;
-	
+
 	if ($user->id == "nobody") { 	// darf Nobody hier schreiben?
 		$db->query("SELECT Seminar_id FROM seminare WHERE Seminar_id='$SessionSeminar' AND Schreibzugriff=0");
 		if (!$db->num_rows()) {
