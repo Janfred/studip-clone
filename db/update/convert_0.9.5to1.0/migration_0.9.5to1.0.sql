@@ -89,7 +89,7 @@ ALTER TABLE `statusgruppen` ADD `selfassign` TINYINT( 4 ) NOT NULL AFTER `size` 
 # >>>please use the script convert_statusgruppe_user.php at this point!
 #
 
-# #10
+# #9
 # changes for new simple-content-system
 #
 
@@ -105,11 +105,11 @@ UNIQUE KEY `range_id` (`range_id`),
 KEY `chdate` (`chdate`)
 ) TYPE=MyISAM;
 
-# #11
+# #10
 # >>>please use the script convert_literatur_to_scm.php at this point!
 #
 
-# #12
+# #11
 # new tables for new literature-system
 #
 
@@ -169,7 +169,7 @@ KEY `catalog_id` (`catalog_id`),
 KEY `priority` (`priority`)
 ) TYPE=MyISAM;
 
-# #13
+# #12
 # changes for new calendar functionalities
 #
 
@@ -206,20 +206,20 @@ KEY `range_id` (`range_id`),
 KEY `autor_id` (`autor_id`)
 ) TYPE=MyISAM;
 
-# #14
+# #13
 # >>>please use the script convert_termine_calendar_events.php at this point!
 #
 
-# #15
+# #14
 # changes for the record of study feature
 #
 
 ALTER TABLE `archiv` ADD `VeranstaltungsNummer` VARCHAR(32) NOT NULL;
 
-# #16
+# #15
 # >>>please use the script convert_archiv.php at this point!
 #
 
-# #17
+# #16
 # >>>please use the script convert_messaging.php at this point!
 #
