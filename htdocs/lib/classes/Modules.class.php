@@ -84,7 +84,7 @@ class Modules {
 
 		$this->db->query($query);
 		$this->db->next_record();
-		echo $query;
+
 		if ($this->db->nf()) {
 			if ($this->db->f("modules"))
 				$modules = decbin($this->db->f("modules"));
