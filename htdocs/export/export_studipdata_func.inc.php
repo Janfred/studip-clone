@@ -149,7 +149,7 @@ function export_inst($inst_id, $ex_sem_id = "all")
 
 function export_sem($inst_id, $ex_sem_id = "all")
 {
-	global $db, $db2, $range_id, $xml_file, $o_mode, $xml_names_lecture, $xml_groupnames_lecture, $object_counter, $SEM_TYPE, $SEM_CLASS, $filter, $SEMESTER, $ex_sem;
+	global $db, $db2, $range_id, $xml_file, $o_mode, $xml_names_lecture, $xml_groupnames_lecture, $object_counter, $SEM_TYPE, $SEM_CLASS, $filter, $SEMESTER, $ex_sem, $ex_class_array;
 
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
@@ -186,7 +186,7 @@ function export_sem($inst_id, $ex_sem_id = "all")
 	$data_object .= xml_open_tag( $xml_groupnames_lecture["group"] );
 
 	while ($db->next_record()) 
-		if ((!isset($ex_class_array)) OR ($ex_class_array[$SEM_TYPE[$db->f("status")]["class"]] == true))
+		if (($ex_class_array == "") OR ($ex_class_array[$SEM_TYPE[$db->f("status")]["class"]] == true))
 		// Nur gew&auml;hlte Veranstaltungsklassen exportieren
 		{
 			$group_string = "";
