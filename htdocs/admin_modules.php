@@ -204,9 +204,9 @@ if ($admin_modules_data["range_id"]) {
 			<td class="<? echo $cssSw->getClass() ?>" width="70%">
 				<font size=-1><?
 				if ($amodules->getModuleForumExistingItems($admin_modules_data["range_id"]))
-					print ($admin_modules_data["modules_list"]) ? printf("<font color=\"red\">"._("Achtung: Beim Deaktivieren des Forums werden <b>%s</b> Postings ebenfalls gel&ouml;scht!")."</font>", $amodules->getModuleForumExistingItems($admin_modules_data["range_id"])) : print _("Das Forum jederzeit aktiviert werden.");
+					print ($admin_modules_data["modules_list"]["forum"]) ? sprintf("<font color=\"red\">"._("Achtung: Beim Deaktivieren des Forums werden <b>%s</b> Postings ebenfalls gel&ouml;scht!")."</font>", $amodules->getModuleForumExistingItems($admin_modules_data["range_id"])) : _("Das Forum kann jederzeit aktiviert werden.");
 				else
-					print ($admin_modules_data["modules_list"]) ? printf(_("Das Forum kann jederzeit deaktiviert werden.")) : print _("Das Forum kann jederzeit aktiviert werden.");
+					print ($admin_modules_data["modules_list"]["forum"]) ? _("Das Forum kann jederzeit deaktiviert werden.") : _("Das Forum kann jederzeit aktiviert werden.");
 				?></font>
 			</td>
 		</tr>
@@ -228,9 +228,9 @@ if ($admin_modules_data["range_id"]) {
 			<td class="<? echo $cssSw->getClass() ?>" width="70%">
 				<font size=-1><?
 				if ($amodules->getModuleDocumentsExistingItems($admin_modules_data["range_id"]))
-					print ($admin_modules_data["modules_list"]) ? printf("<font color=\"red\">"._("Achtung: Beim Deaktivieren des Dateiordners werden <b>%s</b> Dateien ebenfalls gel&ouml;scht!")."</font>", $amodules->getModuleDocumentsExistingItems($admin_modules_data["range_id"])) : print _("Das Forum jederzeit aktiviert werden.");
+					print ($admin_modules_data["modules_list"]["documents"]) ? sprintf("<font color=\"red\">"._("Achtung: Beim Deaktivieren des Dateiordners werden <b>%s</b> Dateien ebenfalls gel&ouml;scht!")."</font>", $amodules->getModuleDocumentsExistingItems($admin_modules_data["range_id"])) : _("Das Forum jederzeit aktiviert werden.");
 				else
-					print ($admin_modules_data["modules_list"]) ? printf(_("Der Dateiordner kann jederzeit deaktiviert werden.")) : print _("Der Dateiordner kann jederzeit aktiviert werden.");
+					print ($admin_modules_data["modules_list"]["documents"]) ? _("Der Dateiordner kann jederzeit deaktiviert werden.") : _("Der Dateiordner kann jederzeit aktiviert werden.");
 				?></font>
 			</td>
 		</tr>
