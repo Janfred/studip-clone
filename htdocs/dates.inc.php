@@ -1,4 +1,4 @@
-<?php
+<?php
 
 /*
 dates.inc.php - basale Routinen zur Terminveraltung.
@@ -214,8 +214,8 @@ function veranstaltung_beginn ($seminar_id='', $art='', $semester_start_time='',
 				}
 				
 				//now create possible start dates and do checks for holidays or calculatable off-days			
+				$cycle=0;				
 				do {
-					$cycle=0;
 					foreach ($term_data["turnus_data"] as $turnus_arr) {
 						$date_ok = TRUE;
 
@@ -259,7 +259,7 @@ function veranstaltung_beginn ($seminar_id='', $art='', $semester_start_time='',
 							break;
 					}
 					$cycle ++;
-				} while (!$date_ok);
+				} while ((!$date_ok) || ($cycle>50));
 				
 				$return_string=date ("d.m.Y, G:i", $start_termin);
 				$return_int=$start_termin;
