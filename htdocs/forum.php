@@ -357,6 +357,17 @@ if (!$forumsend=="anpassen") {
 	echo "</table>\n";
 }
 
+if ($forumsend) {
+	if ($forumsend=="bla"){
+		$forum=array(
+			"jshover"=>$jshover, 
+			"neuauf"=>$neuauf,
+			"changed"=>"TRUE"			
+			);
+	} ELSE
+		include("forumsettings.inc.php");
+}
+
 // Verzweigung zu den drei Anzeigemodi 
 
 if ($flatallopen=="TRUE")
