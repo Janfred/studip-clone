@@ -488,7 +488,7 @@ for ($i; $i<$global_end_time+1; $i++)
 					$r++;
 					echo "<font size=-1 ";
 					if (!$print_view)
-						echo "color=\"FFFFFF\"";
+						echo "color=\"#FFFFFF\"";
 					echo ">", date ("H:i",  $my_sems[$cc["seminar_id"]]["start_time"]);
 					if  ($my_sems[$cc["seminar_id"]]["start_time"] <> $my_sems[$cc["seminar_id"]]["end_time"]) 
 						echo " - ",  date ("H:i",  $my_sems[$cc["seminar_id"]]["end_time"]);
@@ -515,9 +515,9 @@ for ($i; $i<$global_end_time+1; $i++)
 						echo "</font>";
 						}
 					if ($my_sems[$cc["seminar_id"]]["dozenten"]) echo "<br><div align=\"right\"><font size=-1>", $my_sems[$cc["seminar_id"]]["dozenten"], "</font></div>";
-					if ($my_sems[$cc["seminar_id"]]["personal_sem"]) echo "<div align=\"right\"><a href=\"",$PHP_SELF, "?cmd=delete&d_sem_id=",$my_sems[$cc["seminar_id"]]["seminar_id"], "\"><img border=0 src=\"./pictures/trash.gif\" alt=\"Dieses Feld aus der Auswahl l&ouml;schen\">&nbsp;</a></div>";
+					if ($my_sems[$cc["seminar_id"]]["personal_sem"]) echo "<div align=\"right\"><a href=\"",$PHP_SELF, "?cmd=delete&d_sem_id=",$my_sems[$cc["seminar_id"]]["seminar_id"], "\"><img border=0 src=\"./pictures/trash.gif\" alt=\"Diesen Termin l&ouml;schen\">&nbsp;</a></div>";
 					}
-				echo "</td></tr></table>";
+				echo "</td></tr></table></td>";
 				}
 			if (!$cell_sem[$idx])  echo "class=\"steel1\"></td>"; 
 			}
@@ -594,7 +594,7 @@ if ((!$print_view) && (!$inst_id)) {
 				echo"<select name=\"ende_minute\">";
 				for ($i=0; $i<=45; $i=$i+15)
 				{
-				if ($i==0) echo "<option selected value=".$i.">0".$i."</option>";
+				if ($i==0) echo "<option value=".$i.">0".$i."</option>";
 				elseif ($i==45) echo "<option selected value=".$i.">".$i."</option>";
 					else echo "<option value=".$i.">".$i."</option>";
 				}
