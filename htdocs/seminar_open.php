@@ -81,6 +81,9 @@ function check_calendar_default(){
 }
 
 
+require_once("$ABSOLUTE_PATH_STUDIP/language.inc.php");
+
+
 // user init starts here
 if ($auth->is_authenticated() && $user->id != "nobody") {
 	if ($SessionStart > $CurrentLogin) {      // just logged in
@@ -152,40 +155,18 @@ if ($SessionStart==0) {
 	$sess->register("SessionStart");
 	$sess->register("SessionSeminar");
 	$sess->register("SessSemName");
+
 	// Language Settings
 	$sess->register("_language");
-	// First set default value
-	$_language = $DEFAULT_LANGUAGE;
 	// try to get accepted languages from browser
-	$accepted_languages = explode(",", getenv("HTTP_ACCEPT_LANGUAGE"));
-	if (count($accepted_languages)) {
-		foreach ($accepted_languages as $temp_accepted_language) {
-			foreach ($INSTALLED_LANGUAGES as $temp_language => $temp_language_settings) {
-				if (substr(trim($temp_accepted_language), 0, 2) == substr($temp_language, 0, 2)) {
-					$_language = $temp_language;
-					break 2;
-				}
-			}
-		}
-		unset($temp_accepted_language);
-		unset($temp_language);
-		unset($temp_language_settings);
-	}
-	unset($accepted_languages);
-
+	$_language = get_accepted_languages();
+	if (!$_language)
+		$_language = $DEFAULT_LANGUAGE; // else use system default
 }		
 	
-// I18N functions
+// init of output via I18N
 
-if (isset($_language_domain) && isset($_language)) {
-	$_language_path = $INSTALLED_LANGUAGES[$_language]["path"];
-	if ($_language != "de_DE") { // German is the original language, so we need no I18N
-		putenv("LANG=$_language");
-		setlocale(LC_ALL, "");
-		bindtextdomain($_language_domain, "$ABSOLUTE_PATH_STUDIP/locale");
-		textdomain($_language_domain);
-	}
-}
+$_language_path = init_i18n($_language);
 
 // function to get the name of the current page in $i_page
 

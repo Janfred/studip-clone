@@ -48,9 +48,11 @@ if ($dclose)
 	
 // evaluate language clicks
 if (isset($set_language)) {
-$sess->register($set_language);
-$_language = $set_language;
+	$sess->register("forced_language");
+	$forced_language = $set_language;
+	$_language = $set_language;
 }
+
 
 // Start of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
