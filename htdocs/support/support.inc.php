@@ -47,6 +47,7 @@ require_once ($RELATIVE_PATH_SUPPORT."/supportFunctions.inc.php");
 
 //We need a stud.ip object opened before
 checkObject();
+checkObjectModule("support");
 
 $sess->register("supportdb_data");
 

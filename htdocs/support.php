@@ -37,7 +37,7 @@ $perm->check("user");
 
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
-if (($SUPPORT_ENABLE) && ($modules["support"])){
+if ($SUPPORT_ENABLE){
 	//Steuerung der SupportDB einbinden
 	include ("$RELATIVE_PATH_SUPPORT/support.inc.php");
 } else {
