@@ -338,6 +338,9 @@ function edit_pers($password,$check_pass,$response,$new_username,$vorname,$nachn
 	 }
 	$this->db->query("UPDATE auth_user_md5 SET username='$new_username' WHERE user_id='".$this->auth_user["user_id"]."'");
 	$this->msg=$this->msg."msg§Ihr Username wurde geändert!§";
+	//Hotfix, sms auf neuen usernamen umbiegen
+	$this->db->query("UPDATE globalmessages SET user_id_rec='$new_username' WHERE user_id_rec='".$this->auth_user["username"]."'");
+	$this->db->query("UPDATE globalmessages SET user_id_snd='$new_username' WHERE user_id_snd='".$this->auth_user["username"]."'");
 	$this->logout_user = TRUE;
 	}
 
@@ -1097,6 +1100,7 @@ IF ($view=="Sonstiges"){
 	IF ($freie=="create_freie") create_freie();
 	IF ($freie=="delete_freie") delete_freie($freie_id);
 	IF ($freie=="update_freie") update_freie();
+	if ($freie=="order_freie") order_freie($cat_id,$direction,$username);
 	print_freie($username);
 	}
 
@@ -1143,7 +1147,6 @@ if ($view == "Messaging") {
   echo "</body>";
   echo "</html>";
   }
-
 page_close();
 
 
