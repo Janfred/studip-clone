@@ -27,13 +27,13 @@ $reiter=new reiter;
 //oberen Reiter 
 $structure["resources"]=array (topKat=>"", name=>"&Uuml;bersicht", link=>"resources.php?view=resources#a", active=>FALSE);
 $structure["lists"]=array (topKat=>"", name=>"Listen", link=>"resources.php?view=lists#a", active=>FALSE);
-$structure["objects"]=array (topKat=>"", name=>"Objekt", link=>"resources.php?view=objects", active=>FALSE);
+$structure["objects"]=array (topKat=>"", name=>"Ressourcen", link=>"resources.php?view=objects", active=>FALSE);
 $structure["settings"]=array (topKat=>"", name=>"Anpassen", link=>"resources.php?view=settings", active=>FALSE);
 
 //Reiter "Uebersicht"
 $structure["_resources"]=array (topKat=>"resources", name=>"Struktur", link=>"resources.php?view=_resources#a", active=>FALSE);
-$structure["search"]=array (topKat=>"resources", name=>"Suchen", link=>"resources.php?view=search&new_search=TRUE", active=>FALSE);
-$structure["create_hierarchie"]=array (topKat=>"resources", name=>"Neue Hierarchieebene erzeugen", link=>"resources.php?view=create_hierarchie#a", active=>FALSE);
+//$structure["search"]=array (topKat=>"resources", name=>"Suchen", link=>"resources.php?view=search&new_search=TRUE", active=>FALSE);
+//$structure["create_hierarchie"]=array (topKat=>"resources", name=>"Neue Hierarchieebene erzeugen", link=>"resources.php?view=create_hierarchie#a", active=>FALSE);
 
 //Reiter "Listen"
 $structure["_lists"]=array (topKat=>"lists", name=>"Listenausgabe", link=>"resources.php?view=_lists#a", active=>FALSE);
