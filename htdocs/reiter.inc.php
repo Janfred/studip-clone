@@ -74,7 +74,7 @@ class reiter {
 	}
 	
 	function bottomkatStart() {
-		printf ("<table width=\"%s\" cellspacing=0 cellpadding=4 border=0>\n<tr><td class=\"%s\">&nbsp; &nbsp; ", "100%", $this->classActive);
+		printf ("<table width=\"100%%\" cellspacing=0 cellpadding=4 border=0>\n<tr><td class=\"%s\">&nbsp; &nbsp; ", $this->classActive);
 		return;
 	}
 
