@@ -142,7 +142,7 @@ if ($_REQUEST['cmd'] == 'user_form_send'){
 					++$num_added;
 				}
 			}
-			$_msg = "msg§" . sprintf(_("Es wurden %s Nutzer mit der Berechtigung '%s' erzeugt."), $num_added,$perm_add_user) ."§";
+			$_msg = "msg§" . sprintf(_("Es wurden %s NutzerInnen mit der Berechtigung '%s' erzeugt."), $num_added,$perm_add_user) ."§";
 		}
 	} elseif (isset($_REQUEST['user_kill_x'])){
 		$users_to_kill = $_REQUEST['kill_items'];
@@ -184,7 +184,7 @@ if ($_REQUEST['cmd'] == 'user_form_send'){
 				$db->query("DELETE FROM globalmessages WHERE user_id_rec='" . $db2->f("username") ."'");
 			}
 			$db->query("DELETE FROM auth_user_md5 WHERE user_id IN($kill_list)");
-			$_msg = "msg§" . sprintf(_("Es wurden %s Nutzer gelöscht."), $db->affected_rows()) ."§";
+			$_msg = "msg§" . sprintf(_("Es wurden %s NutzerInnen gelöscht."), $db->affected_rows()) ."§";
 		}
 	}
 }
@@ -245,7 +245,7 @@ if ($_REQUEST['cmd'] == 'user_course_send'){
 		if (($seminar_id = $_REQUEST['user_course_add_course']) && ($user_perm = $db->f(0))){
 			$db->query("INSERT INTO seminar_user (user_id,Seminar_id,status,mkdate) VALUES ('$user_id','$seminar_id','" . $user_perm ."',UNIX_TIMESTAMP())");
 			if ($db->affected_rows()){
-				$_msg = "msg§" . _("Nutzer wurde zugeordnet.") ."§";
+				$_msg = "msg§" . _("NutzerIn wurde zugeordnet.") ."§";
 			}
 		}
 	} elseif (isset($_REQUEST['user_course_kill_x'])){
@@ -281,7 +281,7 @@ if ($_msg)	{
 if ($_REQUEST['cmd'] == "user_course_change"){
 	$user_id = $_REQUEST['user_id'];
 	echo "\n<form name=\"user_course_form\" action=\"$PHP_SELF?cmd=user_course_send&user_id=$user_id\" method=\"post\"><br>";
-	echo "\n<div style=\"margin-left:10px;\"><b>" . _("Veranstaltungen des Nutzers") . "&nbsp;" . get_fullname($user_id) ."</b>";
+	echo "\n<div style=\"margin-left:10px;\"><b>" . _("Veranstaltungen des Nutzenden") . "&nbsp;" . get_fullname($user_id) ."</b>";
 	$db->query("SELECT a.Seminar_id,a.status,b.Name FROM seminar_user a LEFT JOIN seminare b USING (Seminar_id) WHERE a.user_id='$user_id' AND b.Institut_id='$_test_institut_id' ORDER BY Name");
 	$_user_course = new DbSnapshot($db);
 	if (!$_user_course->numRows){
@@ -312,7 +312,7 @@ if ($_REQUEST['cmd'] == "user_course_change"){
 		}
 	}
 	echo "</select>&nbsp;"
-	. _("Nutzer eintragen") . "&nbsp;<input name=\"user_course_add\" type=\"image\" align=\"absmiddle\" " 
+	. _("NutzerIn eintragen") . "&nbsp;<input name=\"user_course_add\" type=\"image\" align=\"absmiddle\" " 
 	. makeButton("ok","src") . "></form></div><div align=\"center\"><a href=\"$PHP_SELF\">" . makeButton("zurueck") . "</a></div>";
 	
 	
@@ -320,9 +320,9 @@ if ($_REQUEST['cmd'] == "user_course_change"){
 } else {
 	echo "\n<div style=\"margin-left:10px;margin-top:10px;font-size:10pt;\"><a href=\"admin_institut.php?admin_inst_id=$_test_institut_id\"><img " . makeButton("weiter","src")." hspace=\"5\" align=\"absmiddle\" border=\"0\"></a>" . _("zur Verwaltung der Einrichtung") . "</div>";
 	echo "\n<form name=\"user_form\" action=\"$PHP_SELF?cmd=user_form_send\" method=\"post\"><br>";
-	echo "\n<div style=\"margin-left:10px;\"><b>" . _("Nutzer") . "&nbsp({$_test_users->numRows})</b>";
+	echo "\n<div style=\"margin-left:10px;\"><b>" . _("NutzerIn") . "&nbsp({$_test_users->numRows})</b>";
 	if (!$_test_users->numRows){
-		echo "\n<br>" . _("Keine Nutzer gefunden.") ."<br>";
+		echo "\n<br>" . _("Keine NutzerInnen gefunden.") ."<br>";
 	} else {
 		echo "\n<table width=\"99%\" border=\"0\" cellpadding=\"2\" cellspacing=\"2\" style=\"font-size:10pt;\">";
 		echo "\n<tr><th>" . _("Name") . "</th><th>" . _("Status in der Einrichtung") . "</th><th>" . _("Anzahl Veranstaltungen") . "</th><th><a href=\"#\" onClick=\"return invert_selection('user_form');\" title=\"Auswahl umkehren\">" . _("L&ouml;schen") . "</a></th></tr>";

@@ -98,7 +98,7 @@ if ($archive_kill) {
 
 	//Admin sollte man schon sein
 	if (!$perm->have_perm("admin")) {
-		$msg .= "error§" . _("Sie haben keine Berechtigung Veranstaltungen zu archivieren.") . "§";
+		$msg .= "error§" . _("Sie haben keine Berechtigung zum archivieren von Veranstaltungen.") . "§";
 		$run = FALSE;
 	}
 
@@ -117,7 +117,7 @@ if ($archive_kill) {
     $query = "DELETE from seminar_user where Seminar_id='$s_id'";
     $db->query($query);
     if (($db_ar = $db->affected_rows()) > 0) {
-      $liste .= "<li>" . sprintf(_("%s Veranstaltungsteilnehmer, Dozenten oder Tutoren archiviert."), $db_ar) . "</li>";
+      $liste .= "<li>" . sprintf(_("%s VeranstaltungsteilnehmerInnen, DozentenInnen oder TutorenInnen archiviert."), $db_ar) . "</li>";
     }
 		## Alle Benutzer aus Wartelisten rauswerfen
     $query = "DELETE from admission_seminar_user where seminar_id='$s_id'";
@@ -194,7 +194,7 @@ if ($archive_kill) {
 		}
     
     //Successful archived, if we are here
-    $msg .= "msg§" . sprintf(_("Die Veranstaltung %s wurde erfolgreich archiviert und aus den aktiven Veranstaltungen gel&ouml;scht. Sie steht nun im Archiv zur Verf&uuml;gung."), "<b>".htmlReady(stripslashes($tmp_name))."</b>") . "§";
+    $msg .= "msg§" . sprintf(_("Die Veranstaltung %s wurde erfolgreich archiviert und aus der Liste der aktiven Veranstaltungen gel&ouml;scht. Sie steht nun im Archiv zur Verf&uuml;gung."), "<b>".htmlReady(stripslashes($tmp_name))."</b>") . "§";
 
     //unset the checker, lecture is now killed!
     unset($archiv_assi_data["sem_check"][$s_id]);
@@ -483,7 +483,7 @@ if (($archiv_assi_data["sems"]) && (sizeof($archiv_assi_data["sem_check"])>0)) {
 
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
 	<tr>
-		<td class="topic" colspan=2><b>&nbsp; <?=_("Die Veranstaltung wurde archiviert")?></b>
+		<td class="topic" colspan=2><b>&nbsp; <?=_("Die Veranstaltung wurde archiviert.")?></b>
 		</td>
 	</tr>
 	<tr>

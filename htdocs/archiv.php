@@ -111,7 +111,7 @@ $u_id = $user->id;
 if ($delete_id) {
    	$db->query("SELECT name FROM archiv WHERE seminar_id= '$delete_id'");
 	$db->next_record();
-	$msg="info§" . sprintf(_("Wollen Sie die Veranstaltung <b>%s</b> wirklich l&ouml;schen? S&auml;mtliche Daten und die mit der Veranstaltung archivierte Dateisammlung werden unwiederuflich gel&ouml;scht!"), htmlReady($db->f("name"))) . " <br />";
+	$msg="info§" . sprintf(_("Wollen Sie die Veranstaltung <b>%s</b> wirklich l&ouml;schen? S&auml;mtliche Daten und die mit der Veranstaltung archivierte Dateisammlung werden unwiderruflich gel&ouml;scht!"), htmlReady($db->f("name"))) . " <br />";
 	$msg.="<a href=\"".$PHP_SELF."?delete_really=TRUE&delete_id=$delete_id\">" . makeButton("ja2", "img") . "</a>&nbsp; \n";
 	$msg.="<a href=\"".$PHP_SELF."?back=TRUE\">" . makeButton("nein", "img") . "</a>\n";
 	
@@ -181,7 +181,7 @@ if (!empty($dump_id)) {
 			echo $db->f('dump');
 		}
 	} else {
-		echo _("netter Versuch, vielleicht beim n&auml;chsten Mal");
+		echo _("Netter Versuch, vielleicht beim n&auml;chsten Mal");
 	}
 }
 
@@ -198,7 +198,7 @@ elseif (!empty($forum_dump_id)) {
 			echo $db->f('forumdump');
 		}
 	} else {
-		echo _("netter Versuch, vielleicht beim n&auml;chsten Mal");
+		echo _("Netter Versuch, vielleicht beim n&auml;chsten Mal");
 	}
 }
 
@@ -482,26 +482,26 @@ if ($archiv_data["perform_search"]) {
 					echo "<br><br><li><font size=\"-1\">" . _("Die Veranstaltungsinhalte, Beitr&auml;ge im Forum und das Dateiarchiv sind nicht zug&auml;ngig, da Sie an dieser Veranstaltung nicht teilgenommen haben.") . "</font></li>";
 
 				if ($archiv_data["edit_grants"]) {
-					echo "<br /><br /><hr><b><font size=\"-1\">" . _("Folgende Benutzer haben Zugriff auf die Daten der Veranstaltung (&Uuml;bersicht, Beitr&auml;ge und Dateiarchiv):") . "</font></b><br /><br />";
+					echo "<br /><br /><hr><b><font size=\"-1\">" . _("Folgende Personen haben Zugriff auf die Daten der Veranstaltung (&Uuml;bersicht, Beitr&auml;ge und Dateiarchiv):") . "</font></b><br /><br />";
 					$db2->query("SELECT " . $_fullname_sql['full'] . " AS fullname , archiv_user.status, username, archiv_user.user_id FROM archiv_user LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE seminar_id = '".$db->f("seminar_id")."' ORDER BY Nachname");
 					while ($db2->next_record()) {
 						echo "<font size=\"-1\">".$db2->f("fullname"). " (" . _("Status:") . " ". $db2->f("status"). ")</font>";
 						if ($db2->f("status") != "dozent")
-							echo "<a href=\"$PHP_SELF?delete_user=".$db2->f("user_id")."&d_sem_id=".$db->f("seminar_id"),"#anker\"><font size=\"-1\">&nbsp;" . _("Zugriffsberechtigung entfernen") . "</font> <img border=0 src=\"./pictures/trash.gif\" " . tooltip(_("Diesem Benutzer die Zugriffsberechtigung entziehen")) . "></a>";
+							echo "<a href=\"$PHP_SELF?delete_user=".$db2->f("user_id")."&d_sem_id=".$db->f("seminar_id"),"#anker\"><font size=\"-1\">&nbsp;" . _("Zugriffsberechtigung entfernen") . "</font> <img border=0 src=\"./pictures/trash.gif\" " . tooltip(_("Dieser Person die Zugriffsberechtigung entziehen")) . "></a>";
 						echo "<br />";	
 					}		
 					if (($add_user) && (!$new_search)) {
 						$db2->query("SELECT " . $_fullname_sql['full'] . " AS fullname, username, auth_user_md5.user_id FROM auth_user_md5 LEFT JOIN user_info USING (user_id) WHERE Vorname LIKE '%$search_exp%' OR Nachname LIKE '%$search_exp%' OR username LIKE '%$search_exp%' ORDER BY Nachname");
 						if ($db2->affected_rows()) {
 							echo "<form action=\"$PHP_SELF#anker\">";
-							echo "<hr><b><font size=\"-1\">" . _("Benutzer Berechtigung erteilen:") . " </font></b><br /><br />";
-							echo "<b><font size=\"-1\">" . sprintf(_("Es wurden %s Benutzer gefunden"), $db2->affected_rows()) . " </font></b><br />";
-							echo "<font size=\"-1\">" . _("Bitte w&auml;hlen Sie den Benutzer aus der Liste aus:") . "</font>&nbsp;<br /><font size=\"-1\"><select name=\"add_user\">";
+							echo "<hr><b><font size=\"-1\">" . _("Person Berechtigung erteilen:") . " </font></b><br /><br />";
+							echo "<b><font size=\"-1\">" . sprintf(_("Es wurden %s Personen gefunden"), $db2->affected_rows()) . " </font></b><br />";
+							echo "<font size=\"-1\">" . _("Bitte w&auml;hlen Sie die Person aus der Liste aus:") . "</font>&nbsp;<br /><font size=\"-1\"><select name=\"add_user\">";
 							while ($db2->next_record()) {
 								echo "<option value=\"".$db2->f("user_id")."\">".$db2->f("fullname"). " (".$db2->f("username").") </option>";
 							}
 							echo "</select></font>";
-							echo "<br /><font size=\"-1\"><input type=\"SUBMIT\"  name=\"do_add_user\" value=\"" . _("Diesen Benutzer hinzuf&uuml;gen") . "\" /></font>";
+							echo "<br /><font size=\"-1\"><input type=\"SUBMIT\"  name=\"do_add_user\" value=\"" . _("Diese Person hinzuf&uuml;gen") . "\" /></font>";
 							echo "&nbsp;<font size=\"-1\"><input type=\"SUBMIT\"  name=\"new_search\" value=\"" . _("Neue Suche") . "\" /></font>";
 							echo "<input type=\"HIDDEN\"  name=\"a_sem_id\" value=\"",$db->f("seminar_id"), "\" />";
 							echo "</form>";
@@ -509,9 +509,9 @@ if ($archiv_data["perform_search"]) {
 					}
 					if ((($add_user) && (!$db2->affected_rows())) || (!$add_user) || ($new_search)) {
 						echo "<form action=\"$PHP_SELF#anker\">";
-						echo "<hr><b><font size=\"-1\">" . _("Benutzer Berechtigung erteilen:") . " </font></b><br />";
+						echo "<hr><b><font size=\"-1\">" . _("Person Berechtigung erteilen:") . " </font></b><br />";
 						if (($add_user) && (!$db2->affected_rows)  && (!$new_search))
-							echo "<br /><b><font size=\"-1\">" . _("Es wurde kein Benutzer zu dem eingegebenem Suchbegriff gefunden!") . "</font></b><br />";
+							echo "<br /><b><font size=\"-1\">" . _("Es wurde keine Person zu dem eingegebenem Suchbegriff gefunden!") . "</font></b><br />";
 						echo "<font size=\"-1\">" . _("Bitte Namen, Vornamen oder Usernamen eingeben:") . "</font>&nbsp; ";
 						echo "<br /><input type=\"TEXT\" size=20 maxlength=255 name=\"search_exp\" />";
 						echo "&nbsp;<font size=\"-1\"><br /><input type=\"SUBMIT\"  name=\"add_user\" value=\"" . _("Suche starten") . "\" /></font>";	

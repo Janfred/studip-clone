@@ -305,7 +305,7 @@ else
 
 echo "<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">";
 printf("\n<tr><td class=\"topic\" colspan=\"2\"><b>&nbsp; %s</b></td></tr>",
-	$SessSemName["header_line"]." - " . _("Mitarbeiter der Einrichtung"));
+	$SessSemName["header_line"]." - " . _("MitarbeiterInnen der Einrichtung"));
 	
 if ($sms_msg) {
 	echo "<tr><td class=\"blank\">";
@@ -316,9 +316,9 @@ if ($sms_msg) {
 echo "\n<tr><td class=\"blank\"><br /><blockquote>\n";
 
 if ($count > 0)
-	printf("%s <b>%s</b>", _("Alle Mitarbeiter der Einrichtung"), $SessSemName[0]);
+	printf("%s <b>%s</b>", _("Alle MitarbeiterInnen der Einrichtung"), $SessSemName[0]);
 else {
-	printf(_("Der Einrichtung <b>%s</b> wurden noch keine Mitarbeiter zugeordnet!"), $SessSemName[0]);
+	printf(_("Der Einrichtung <b>%s</b> wurden noch keine MitarbeiterInnen zugeordnet!"), $SessSemName[0]);
 	echo "\n<br /><br /></blockquote>\n";
 	echo "</td></tr></table\n";
 	echo "</body></html>";
@@ -363,7 +363,7 @@ else {
 }
 
 echo "</td><td class=\"steel1\" width=\"30%\">\n";
-printf("<font size=\"-1\">" . _("<b>%s</b> Mitarbeiter gefunden") . "</font>", $count);
+printf("<font size=\"-1\">" . _("<b>%s</b> MitarbeiterInnen gefunden") . "</font>", $count);
 echo "</td><td class=\"steel1\" width=\"10%\">\n";
 
 if ($institut_members_data["extend"] == "yes") {
@@ -449,8 +449,8 @@ if ($institut_members_data["show"] == "funktion") {
 	}
 }
 elseif ($institut_members_data["show"] == "status") {
-	$inst_permissions = array("admin" => _("Admin"), "dozent" => _("Dozent(in)"), "tutor" => _("Tutor(in)"),
-														"autor" => _("Autor"), "user" => _("User"));
+	$inst_permissions = array("admin" => _("Admin"), "dozent" => _("DozentIn"), "tutor" => _("TutorIn"),
+														"autor" => _("AutorIn"), "user" => _("User"));
 	foreach ($inst_permissions as $key => $permission) {
 		$query = sprintf("SELECT ". $_fullname_sql['full_rev'] ." AS fullname, ui.raum, ui.sprechzeiten, ui.Telefon,
 											inst_perms, Email, auth_user_md5.user_id,

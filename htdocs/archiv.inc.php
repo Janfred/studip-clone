@@ -121,7 +121,7 @@ function dump_sem($sem_id)
 		}
 	if ($db2->f("teilnehmer")!="")
 		{
-		$dump.="<tr><td width=\"15%\"><b>" . _("Teilnehmer:") . "&nbsp;</b></td><td align=left>";
+		$dump.="<tr><td width=\"15%\"><b>" . _("TeilnehmerInnen:") . "&nbsp;</b></td><td align=left>";
 		$dump.= htmlReady($db2->f("teilnehmer"),1,1)."</td></tr>\n";
 		}
 	if ($db2->f("vorrausetzungen")!="")
@@ -190,13 +190,13 @@ function dump_sem($sem_id)
 		$dump.="</td></tr>\n";
 
 	//Teilnehmeranzahl
-	$dump.= "<tr><td width=\"15%\"><b>" . _("max. Teilnehmeranzahl:") . "&nbsp;</b></td><td>".$db2->f("admission_turnout")."&nbsp;</td></tr>\n";
+	$dump.= "<tr><td width=\"15%\"><b>" . _("max. TeilnehmerInnenanzahl:") . "&nbsp;</b></td><td>".$db2->f("admission_turnout")."&nbsp;</td></tr>\n";
 
 	//Statistikfunktionen
 
 	$db3->query("SELECT count(*) as anzahl FROM seminar_user WHERE Seminar_id = '$sem_id'");
 	$db3->next_record();
-	$dump.= "<tr><td width=\"15%\"><b>" . _("Anzahl der angemeldeten Teilnehmer:") . "&nbsp;</b></td><td>".$db3->f("anzahl")."</td></tr>\n";
+	$dump.= "<tr><td width=\"15%\"><b>" . _("Anzahl der angemeldeten TeilnehmerInnen:") . "&nbsp;</b></td><td>".$db3->f("anzahl")."</td></tr>\n";
 
 	$db3->query("SELECT count(*) as anzahl FROM px_topics WHERE Seminar_id = '$sem_id'");
 	$db3->next_record();
@@ -355,7 +355,7 @@ function dump_sem($sem_id)
 		$gruppe = array ("dozent" => _("DozentInnen"),
 		  "tutor" => _("TutorInnen"),
 		  "autor" => _("AutorInnen"),
-		  "user" => _("Leser"));
+		  "user" => _("LeserInnen"));
 		$dump.="<br>";	  
 		while (list ($key, $val) = each ($gruppe)) {	  
 

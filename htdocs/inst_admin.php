@@ -104,7 +104,7 @@ if (isset($details)) {
 				</td>
 			</tr>
 			<tr <?$cssSw->switchClass() ?>>
-				<td class="<? echo $cssSw->getClass() ?>" ><b>&nbsp;<?=_("Gruppe / Funktion in der Einrichtung:")?>&nbsp;</b></td>
+				<td class="<? echo $cssSw->getClass() ?>" ><b>&nbsp;<?=_("Gruppe/Funktion in der Einrichtung:")?>&nbsp;</b></td>
 				<td class="<? echo $cssSw->getClass() ?>" >
 			<?	
 			$user_id = $db->f("user_id")	;
@@ -154,7 +154,7 @@ if (isset($details)) {
 			<? // links to everywhere
 			print "<tr><td  class=\"steel1\" colspan=2 align=\"center\">";
 				printf("&nbsp;" . _("pers&ouml;nliche Homepage") . " <a href=\"about.php?username=%s\"><img src=\"pictures/einst.gif\" border=0 alt=\"Zur pers&ouml;nlichen Homepage des Benutzers\" align=\"texttop\"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp", $db->f("username"));
-				printf("&nbsp;" . _("Nachricht an Benutzer") . " <a href=\"sms.php?cmd=write&rec_uname=%s\"><img src=\"pictures/nachricht1.gif\" alt=\"Nachricht an den Benutzer verschicken\" border=0 align=\"texttop\"></a>", $db->f("username"));
+				printf("&nbsp;" . _("Nachricht an BenutzerIn") . " <a href=\"sms.php?cmd=write&rec_uname=%s\"><img src=\"pictures/nachricht1.gif\" alt=\"Nachricht an den Benutzer verschicken\" border=0 align=\"texttop\"></a>", $db->f("username"));
 			print "</td></tr>";
 			?>
 			</form>
@@ -180,7 +180,7 @@ else {
 
 			if (isset($u_kill_x)) {
 				if (!($perm->have_perm("root") || (!$SessSemName["is_fak"] && $perm->have_studip_perm("admin",$SessSemName["fak"]))) && $scherge=='admin')
-					my_error("<b>" . _("Sie haben keine Berechtigung einen Administrator dieser Einrichtung zu l&ouml;schen.") . "</b>");
+					my_error("<b>" . _("Sie haben keine Berechtigung Administrierende dieser Einrichtung zu l&ouml;schen.") . "</b>");
 				else {
 					$db2->query("DELETE from user_inst WHERE Institut_id = '$ins_id' AND user_id = '$u_id'");
 					my_msg ("<b>" . sprintf(_("%s wurde aus der Einrichtung ausgetragen."), $Fullname) . "</b>");
@@ -191,26 +191,26 @@ else {
 
 			if (isset($u_edit_x)) {
 				if (!($perm->have_perm("root") || (!$SessSemName["is_fak"] && $perm->have_studip_perm("admin",$SessSemName["fak"]))) && $scherge=='admin' && $u_id != $auth->auth["uid"])
-					my_error("<b>" . _("Sie haben keine Berechtigung einen anderen Administrator dieser Einrichtung zu ver&auml;ndern.") . "</b>");
+					my_error("<b>" . _("Sie haben keine Berechtigung andere Administrierende dieser Einrichtung zu ver&auml;ndern.") . "</b>");
 
 				else {
 					if ($perms=='autor' AND $scherge=='user') {
-						my_error("<b>" . _("Sie k&ouml;nnen den User nicht auf AUTOR hochstufen, da er im gesamten System nur den Status USER hat. Wenn Sie dennoch an der Bef&ouml;rderung festhalten wollen, kontaktieren Sie bitte einen der Systemadministratoren.") . "</b>");
+						my_error("<b>" . _("Sie k&ouml;nnen den User nicht auf AUTORiN hochstufen, da er oder sie im gesamten System nur den Status USER hat. Wenn Sie dennoch an der Bef&ouml;rderung festhalten wollen, kontaktieren Sie bitte eineN der Systemadministrierenden.") . "</b>");
 					}
 					elseif ($perms=='tutor' AND ($scherge=='user' OR $scherge=='autor')) {
-						my_error("<b>" . sprintf(_("Sie k&ouml;nnen den User nicht auf TUTOR hochstufen, da er im gesamten System nur den Status %s hat. Wenn Sie dennoch an der Bef&ouml;rderung festhalten wollen, kontaktieren Sie bitte einen der Systemadministratoren."), $scherge) . "</b>");
+						my_error("<b>" . sprintf(_("Sie k&ouml;nnen den User nicht auf TUTORiN hochstufen, da er oder sie im gesamten System nur den Status %s hat. Wenn Sie dennoch an der Bef&ouml;rderung festhalten wollen, kontaktieren Sie bitte eineN der Systemadministrierenden."), $scherge) . "</b>");
 					}
 					elseif ($perms=='dozent' AND ($scherge=='user' OR $scherge=='autor' OR $scherge=='tutor')) {
-						my_error("<b>" . sprintf(_("Sie k&ouml;nnen den User nicht auf DOZENT hochstufen, da er im gesamten System nur den Status %s hat. Wenn Sie dennoch an der Bef&ouml;rderung festhalten wollen, kontaktieren Sie bitte einen der Systemadministratoren."), $scherge) . "</b>");
+						my_error("<b>" . sprintf(_("Sie k&ouml;nnen den User nicht auf DOZENTiN hochstufen, da er oder sie im gesamten System nur den Status %s hat. Wenn Sie dennoch an der Bef&ouml;rderung festhalten wollen, kontaktieren Sie bitte eineN der Systemadministrierenden."), $scherge) . "</b>");
 					}
 					elseif ($perms=='admin' AND ($scherge=='user' OR $scherge=='autor' OR $scherge=='tutor' OR $scherge=='dozent')) {
-						my_error("<b>" . sprintf(_("Sie k&ouml;nnen den User nicht auf ADMIN hochstufen, da er im gesamten System nur den Status %s hat. Wenn Sie dennoch an der Bef&ouml;rderung festhalten wollen, kontaktieren Sie bitte einen der Systemadministratoren."), $scherge) . "</b>");
+						my_error("<b>" . sprintf(_("Sie k&ouml;nnen den User nicht auf ADMIN hochstufen, da er oder sie im gesamten System nur den Status %s hat. Wenn Sie dennoch an der Bef&ouml;rderung festhalten wollen, kontaktieren Sie bitte eineN der Systemadministrierenden."), $scherge) . "</b>");
 					}
 					elseif ($perms=='root') {
 						my_error("<b>" . _("Sie k&ouml;nnen den User nicht auf ROOT hochstufen, dieser Status ist an einer Einrichtung nicht vorgesehen.") . "</b>");
 					}
 					elseif ($scherge == 'admin' && $perms != 'admin') {
-						my_error("<b>" . _("Globale Administratoren k&ouml;nnen auch an Einrichtung nur den Status \"admin\" haben.") . "</b>");
+						my_error("<b>" . _("Globale AdministratorInnen k&ouml;nnen auch an Einrichtung nur den Status \"admin\" haben.") . "</b>");
 					}
 					else { //na, dann muss es wohl sein (grummel)
 						$query = "UPDATE user_inst SET inst_perms='$perms', raum='$raum', Telefon='$Telefon', Fax='$Fax', sprechzeiten='$sprechzeiten' WHERE Institut_id = '$ins_id' AND user_id = '$u_id'";
@@ -245,7 +245,7 @@ else {
 					    $db2->query("INSERT into user_inst (user_id, Institut_id, inst_perms) values ('$u_id', '$ins_id', 'admin')");
 					    my_msg("<b>" . sprintf(_("%s wurde als \"admin\" in die Einrichtung aufgenommen."), $Fullname) . "</b>");
 					} else {
-					    my_error("<b>" . _("Sie haben keine Berechtigung einen admin zu berufen!") . "</b>");
+					    my_error("<b>" . _("Sie haben keine Berechtigung einen Admin zu berufen!") . "</b>");
 					}
 				} else {
 					$insert_perms = $db3->f("perms");				
@@ -292,7 +292,7 @@ if ($inst_id != "" && $inst_id !="0") {
 					<tr>
 						<td class="steel1">
 						<font size=-1><b><?=_("neue Person der Einrichtung zuordnen")?></b><br>
-						<? printf(_("es wurden %s Benutzer gefunden") . "<br>", $db->num_rows());
+						<? printf(_("es wurden %s Personen gefunden") . "<br>", $db->num_rows());
 						if ($db->num_rows()) {
 						echo _("bitte w&auml;hlen Sie die zu berufende Person aus der Liste aus.");
 						?></font>
@@ -419,13 +419,13 @@ if ($inst_id != "" && $inst_id !="0") {
 
 			//Link fuer tolle Rundmailfunktion wird hier gebastelt
 	
-			echo "</table><br><b>" . _("Rundmail an alle Mitarbeiter verschicken") . "</b><br><br>&nbsp;";
-			printf(_("Bitte hier %sklicken%s"), "<a href=\"mailto:" . join(",",$mail_list) . "?subject=" . urlencode(_("Mitarbeiter-Rundmail")) .  "\">", "</a>");
+			echo "</table><br><b>" . _("Rundmail an alle MitarbeiterInnen verschicken") . "</b><br><br>&nbsp;";
+			printf(_("Bitte hier %sklicken%s"), "<a href=\"mailto:" . join(",",$mail_list) . "?subject=" . urlencode(_("MitarbeiterInnen-Rundmail")) .  "\">", "</a>");
 			echo "<br /><br /></blockquote></td></tr>";
 
 			print("</table>");
 		} else { // wir haben kein Ergebnis
-			print("</table>" . _("Es wurde niemand gefunden! Bevor Sie die Mitarbeiterliste dieser Einrichtung bearbeiten k&ouml;nnen, m&uuml;ssen Sie der Einrichtung zuerst Mitarbeiter zuordnen.") . "<br /><br />");
+			print("</table>" . _("Es wurde niemand gefunden! Bevor Sie die MitarbeiterInnenliste dieser Einrichtung bearbeiten k&ouml;nnen, m&uuml;ssen Sie der Einrichtung zuerst MitarbeiterInnen zuordnen.") . "<br /><br />");
 		}
 	}	
 }
