@@ -77,7 +77,7 @@ if ($SessSemName[1] =="")
 				"<a href=\"index.php\"><b>&nbsp;Hier</b></a> geht es wieder zur Anmeldung beziehungsweise Startseite.<br />&nbsp;");
 	die;
 } else {
-	include "links1.php";
+	include "links_openobject.inc.php";
 	include "show_news.php";
   	
   	$sess->register("institut_main_data");
