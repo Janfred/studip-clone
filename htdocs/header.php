@@ -19,40 +19,34 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 ob_start();
 //Daten fuer Onlinefunktion einbinden
-if ($perm->have_perm("user")) ;
-else
+if (!$perm->have_perm("user")) ;
 	$my_messaging_settings["active_time"]=5;
 
 require_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/ChatShmServer.class.php";
 require_once ($ABSOLUTE_PATH_STUDIP . "visual.inc.php");
+
 //nur sinnvoll wenn chat eingeschaltet
 if ($CHAT_ENABLE) {
-     $chatServer=new ChatShmServer;
+	$chatServer=new ChatShmServer;
 	$chatServer->caching = TRUE;
-	 ?>
-     <script type="text/javascript">
-     function open_chat()
-     {
-     <?
-     if ($chatServer->isActiveUser($user->id,"studip")) echo "alert('Sie sind bereits im Chat angemeldet!');\n";
-     else echo "fenster=window.open(\"$RELATIVE_PATH_CHAT/chat_login.php?chatid=studip\",\"chat_studip_".$auth->auth["uid"]."\",\"scrollbars=no,width=640,height=480,resizable=yes\");\n";
-     ?>
-     }
-     </script>
-     
-<?}?>
+	echo "\t\t<script type=\"text/javascript\">\n";
+	echo "\t\tfunction open_chat() {\n";
+	if ($chatServer->isActiveUser($user->id,"studip"))
+		echo "alert('Sie sind bereits im Chat angemeldet!');\n";
+	else
+		echo "\t\t\tfenster=window.open(\"$RELATIVE_PATH_CHAT/chat_login.php?chatid=studip\",\"chat_studip_".$auth->auth["uid"]."\",\"scrollbars=no,width=640,height=480,resizable=yes\");\n";
+	echo "\t\t}\n";
+	echo "\t\t</script>\n";
+}
 
-<body>
-<?
-
-	// Initialisierung der Hilfe
-	$help_query = "?referrer_page=" . $i_page;
-	if (isset($i_query[0]) && $i_query[0] != "") {
-		for ($i = 0; $i < count($i_query); $i++) { // alle Parameter durchwandern
-			$help_query .= '&';
-			$help_query .= $i_query[$i];
-		}
+// Initialisierung der Hilfe
+$help_query = "?referrer_page=" . $i_page;
+if (isset($i_query[0]) && $i_query[0] != "") {
+	for ($i = 0; $i < count($i_query); $i++) { // alle Parameter durchwandern
+		$help_query .= '&';
+		$help_query .= $i_query[$i];
 	}
+}
 
   if ($auth->auth["uid"] == "nobody") { ?>
   
@@ -223,7 +217,7 @@ if ($CHAT_ENABLE) {
 <?
 	}
 
-	echo"<body><br>";
+	echo"<body><br>\n";
 	ob_end_flush();
 
 	include "check_sem_entry.inc.php"; //hier wird der Zugang zum Seminar ueberprueft

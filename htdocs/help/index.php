@@ -21,18 +21,21 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 	page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 ?>
 
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
-<head>
-
-<title>Stud.IP - Hilfe</title>
+	<head>
+		<meta http-equiv="REFRESH" CONTENT="<?php print $auth->lifetime*60;?>; URL=logout.php">
+		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+		<meta name="copyright" content="Stud.IP-Crew (crew@studip.de)">
+		<title>Stud.IP - Hilfe</title>
 <?
 if (!isset($druck))
-	print("<link rel=\"stylesheet\" href=\"help_style.css\" type=\"text/css\">");
+	print("\t\t<link rel=\"stylesheet\" href=\"help_style.css\" type=\"text/css\">\n");
 else
-	print("<link rel=\"stylesheet\" href=\"../style_print.css\" type=\"text/css\">");
+	print("\t\t<link rel=\"stylesheet\" href=\"../style_print.css\" type=\"text/css\">\n");
 ?>
-</head>
-<body bgcolor=white>
+	</head>
+	<body bgcolor=white>
 
 <?php
 //includes

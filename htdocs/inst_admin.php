@@ -18,33 +18,31 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-	page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
-	  $perm->check("admin");
-?>
-<html>
-<head>
-	<title>Stud.IP</title>
-	<link rel="stylesheet" href="style.css" type="text/css">
-	<META HTTP-EQUIV="REFRESH" CONTENT="<?php print $auth->lifetime*60;?>; URL=logout.php">
-</head>
-<body bgcolor=white>
+page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
+$perm->check("admin");
 
-<?php
-	include "seminar_open.php"; //hier werden die sessions initialisiert
+include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
-// -- hier muessen Seiten-Initialisierungen passieren --
+// -- here you have to put initialisations for the current page
 
-	include "header.php";   //hier wird der "Kopf" nachgeladen
-	include "links_admin.inc.php";  //Linkleiste fuer admins
+// Start of Output
+include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
+include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");  //Linkleiste fuer admins
 		
-	require_once("msg.inc.php"); //Ausgaberoutinen an den User
-	require_once("config.inc.php"); //Grunddaten laden
-	require_once("visual.inc.php"); //htmlReady
+require_once("msg.inc.php"); //Ausgaberoutinen an den User
+require_once("config.inc.php"); //Grunddaten laden
+require_once("visual.inc.php"); //htmlReady
 	
-	$db->query ("SELECT Name, type FROM Institute WHERE Institut_id = '$inst_id'");
-	if ($db->next_record())
-		$tmp_typ = $INST_TYPE[$db->f("type")]["name"];
-	$tmp_name=$db->f("Name");
+$db=new DB_Seminar;
+$db2=new DB_Seminar;
+$db3=new DB_Seminar;	
+
+$db->query ("SELECT Name, type FROM Institute WHERE Institut_id = '$inst_id'");
+if ($db->next_record())
+	$tmp_typ = $INST_TYPE[$db->f("type")]["name"];
+$tmp_name=$db->f("Name");
+
 
 function perm_select($name,$global_perm,$default)
 {
@@ -84,10 +82,6 @@ return;
 	</tr>
 
 <?
-
-	$db=new DB_Seminar;
-	$db2=new DB_Seminar;
-	$db3=new DB_Seminar;	
 
 //zeigen wir eine einzelne Person an?
 

@@ -52,4 +52,3 @@ unset ($_include_stylesheet);
 ?>
 	</head>
 	<body>
-	

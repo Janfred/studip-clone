@@ -52,9 +52,6 @@ if (($my_messaging_settings["start_messenger_at_startup"]) && ($auth->auth["jscr
 	$index_data["im_loaded"]=TRUE;
 }
 
-?>
-<body>
-<?
 $db=new DB_Seminar;
 $db2=new DB_Seminar;
 
