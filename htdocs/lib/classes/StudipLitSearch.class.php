@@ -23,7 +23,6 @@
 require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/StudipForm.class.php");
 $_lit_search_plugins = array(array('name' => "Studip", 'link' => ''),
 							array('name' => "SubGoeOpac", 'link' => 'http://goopc4.sub.uni-goettingen.de:8080/DB=1/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}'),
-							array('name' => "UniOsnabrueck", 'link' => 'http://osopc4.ub.uni-osnabrueck.de:8080/DB=1/LNG=DU/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}'),
 							array('name' => "Rkgoe", 'link' => 'http://gso.gbv.de/DB=2.90/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}'),
 							array('name' => "Gvk", 'link' => 'http://gso.gbv.de/DB=2.1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}'));
 /**

@@ -24,6 +24,8 @@ require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'] . "/lib/dbviews/literatur.view.php
 require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'] . "/lib/classes/TreeAbstract.class.php");
 require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'] . "/lib/classes/StudipLitCatElement.class.php");
 require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'] . "/functions.php");
+require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'] . "/config.inc.php");
+
 
 
 /**
@@ -40,6 +42,8 @@ class StudipLitList extends TreeAbstract {
 	
 	var $format_default = "**{authors}** - {dc_title} - %%{published}%%";
 	var $cat_element;
+	var $range_id;
+	var $range_type;
 	
 	/**
 	* constructor
@@ -48,6 +52,9 @@ class StudipLitList extends TreeAbstract {
 	* @access private
 	*/ 
 	function StudipLitList($range_id) {
+		if ($GLOBALS['LIT_LIST_FORMAT_TEMPLATE']){
+			$this->format_default = $GLOBALS['LIT_LIST_FORMAT_TEMPLATE'];
+		}
 		$this->range_id = $range_id;
 		$this->range_type = get_object_type($range_id);
 		if ($this->range_type == "user"){
@@ -356,26 +363,48 @@ class StudipLitList extends TreeAbstract {
 		return $list_ids;
 	}
 	
-	function GetFormattedListsByRange($range_id, $copy_link = true){
+	function GetFormattedListsByRange($range_id, $last_modified_since = false, $copy_link = true){
 		$ret = false;
 		$dbv = new DbView();
 		$tree =& TreeAbstract::GetInstance("StudipLitList", $range_id);
 		if ( ($lists = $tree->getVisibleListIds()) ){
 			for ($i = 0; $i < count($lists); ++$i){
-				$ret .= "<div align=\"left\"><b><u>" . htmlReady($tree->tree_data[$lists[$i]]['name']) . "</u></b></div>";
-				if ($copy_link){
-					$ret .= "<div align=\"right\" style=\"font-size:10pt\"><a href=\"admin_lit_list.php?cmd=CopyUserList&_range_id=self&user_list={$lists[$i]}#anchor\"><img src=\"pictures/link_intern.gif\" border=\"0\">"
-						. "&nbsp;Literaturliste kopieren</a></div>";
+				if ( ($tree->tree_data[$lists[$i]]['user_id'] != $GLOBALS['auth']->auth['uid'])
+				&& ($last_modified_since !== false)
+				&& ($tree->tree_data[$lists[$i]]['chdate'] > $last_modified_since) ){ 
+					$ret .= '<div align="left" style="color:red" title="' . htmlReady(sprintf(_("Letzte Änderung am %s von %s"),
+					date('d M Y H:i',$tree->tree_data[$lists[$i]]['chdate']),
+					$tree->tree_data[$lists[$i]]['fullname'])) . '">';
+					$ret .=  "<b><u>" . htmlReady($tree->tree_data[$lists[$i]]['name']) . "</u></b>\n<br>\n";
+					$ret .= '</div>';
+				} else {
+					$ret .= "\n<div align=\"left\"><b><u>" . htmlReady($tree->tree_data[$lists[$i]]['name']) . "</u></b></div>";
 				}
-				$ret .= "<span style=\"font-size:10pt\">";
+				if ($copy_link){
+					$ret .= "\n<div align=\"right\" style=\"font-size:10pt\"><a href=\"admin_lit_list.php?cmd=CopyUserList&_range_id=self&user_list={$lists[$i]}#anchor\"><img src=\"pictures/link_intern.gif\" border=\"0\">"
+						. "&nbsp;" . _("Literaturliste kopieren") . "</a></div>";
+				} else {
+					$ret .= "\n<br>\n";
+				}
+				$ret .= "\n<span style=\"font-size:10pt\">\n";
 				if ($tree->hasKids($lists[$i])){
 					$dbv->params[0] = $lists[$i];
 					$rs = $dbv->get_query("view:LIT_LIST_GET_ELEMENTS");
 					while ($rs->next_record()){
-						$ret .=  formatReady($tree->getFormattedEntry($rs->f('list_element_id'), $rs->Record)) . "<br>";
+						if ( ($tree->tree_data[$rs->f('list_element_id')]['user_id'] != $GLOBALS['auth']->auth['uid'])
+						&& ($last_modified_since !== false)
+						&& ($tree->tree_data[$rs->f('list_element_id')]['chdate'] > $last_modified_since) ){ 
+							$ret .= '<span style="color:red" title="' . htmlReady(sprintf(_("Letzte Änderung am %s von %s"),
+							date('d M Y H:i',$tree->tree_data[$rs->f('list_element_id')]['chdate']),
+							$tree->tree_data[$rs->f('list_element_id')]['fullname'])) . '">';
+							$ret .=  formatReady($tree->getFormattedEntry($rs->f('list_element_id'), $rs->Record), false, true) . "\n<br>\n";
+							$ret .= '</span>';
+						} else {
+							$ret .=  formatReady($tree->getFormattedEntry($rs->f('list_element_id'), $rs->Record), false, true) . "\n<br>\n";
+						}
 					}
 				}
-				$ret .= "</span><br>";
+				$ret .= "\n</span><br>";
 			}
 		}
 		return $ret;
