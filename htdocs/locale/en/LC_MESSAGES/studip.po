@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-04-04 13:43+0200\n"
-"PO-Revision-Date: 2003-04-04 12:17+0200\n"
+"POT-Creation-Date: 2003-04-04 19:13+0200\n"
+"PO-Revision-Date: 2003-04-04 14:57+0200\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
 "MIME-Version: 1.0\n"
@@ -101,7 +101,7 @@ msgid ""
 "angeben."
 msgstr ""
 "This symbol marks the standard configuration, that will be consulted for "
-"formatting, if you do not give this module any configuration when requested."
+"formatting if you do not give this module any configuration when requested."
 
 #: extern/admin_extern.inc.php:279
 msgid ""
@@ -123,8 +123,7 @@ msgstr "Staff member"
 msgid ""
 "Das Modul &quot;Personal&quot; gibt ein Mitarbeiterverzeichnis einer "
 "Einrichtung aus."
-msgstr ""
-"The module &quot;personal&quot; provides a staff index of an institute."
+msgstr "The module &quot;staff&quot; provides a staff index of an institute."
 
 #: extern/extern_config.inc.php:53
 msgid "Mitarbeiterdetails"
@@ -354,7 +353,7 @@ msgstr "Enter a CSS class name from your Stylesheet definition."
 
 #: extern/views/ExternEditHtml.class.php:499
 msgid "CSS-Klasse:"
-msgstr "CSS class"
+msgstr "CSS class:"
 
 #: extern/views/ExternEditHtml.class.php:512
 msgid "Geben Sie Style-Sheet-Angaben ein."
@@ -588,8 +587,8 @@ msgid ""
 "Diese Adresse k&ouml;nnen Sie in einen Link auf Ihrer Website integrieren, "
 "um auf die Ausgabe des Moduls zu verweisen."
 msgstr ""
-"You can integrate this address as a link in your website, to go to the "
-"module output."
+"You can integrate this address as a link in your website to go to the module "
+"output."
 
 #: extern/views/extern_info_module.inc.php:79
 msgid "Stud.IP-Remote-Include (SRI)  Schnittstelle"
@@ -625,7 +624,7 @@ msgstr "Link to SRI interface."
 
 #: extern/views/extern_info_module.inc.php:94
 msgid "Über diesen Link erreichen Sie die SRI-Schnittstelle:"
-msgstr "You will reach SRI interface by using this link."
+msgstr "You will reach SRI interface by using this link:"
 
 #: extern/views/extern_info_module.inc.php:96
 #, c-format
@@ -746,7 +745,7 @@ msgstr "Headings"
 
 #: extern/modules/ExternModuleLecturedetails.class.php:81
 msgid "Abs&auml;tze"
-msgstr ""
+msgstr "Paragraphs"
 
 #: extern/modules/ExternModuleLectures.class.php:64
 msgid "Zeile Zeiten(Termine)/Dozenten"
@@ -1073,7 +1072,7 @@ msgstr "Address add-on:"
 #: extern/elements/ExternElementContact.class.php:98
 msgid "Zusatz zur Adresse der Einrichtung, z.B. Universitätsname."
 msgstr ""
-"Additional address information for the institute, e.g. University name."
+"Additional address information for the institute, e.g. university name."
 
 #: extern/elements/ExternElementContact.class.php:114
 msgid "Schriftformatierung Spaltentitel"
@@ -1201,13 +1200,13 @@ msgstr "Properties of the numbered list. "
 #: extern/elements/ExternElementTableParagraphSubHeadline.class.php:77
 #: extern/elements/ExternElementTableParagraphText.class.php:77
 msgid "Einzug"
-msgstr ""
+msgstr "Indent"
 
 #: extern/elements/ExternElementList.class.php:75
 #: extern/elements/ExternElementTableParagraphSubHeadline.class.php:78
 #: extern/elements/ExternElementTableParagraphText.class.php:78
 msgid "Linker Einzug:"
-msgstr ""
+msgstr "Left indent:"
 
 #: extern/elements/ExternElementList.class.php:76
 msgid ""
@@ -1309,7 +1308,7 @@ msgstr "Name format:"
 #: extern/elements/ExternElementMainPersondetails.class.php:109
 #: extern/elements/ExternElementMainPersons.class.php:142
 msgid "Wählen Sie, wie Personennamen formatiert werden sollen."
-msgstr "Choose how people's names should be fomatted."
+msgstr "Select how people's names should be fomatted."
 
 #: extern/elements/ExternElementMainDownload.class.php:138
 #: extern/elements/ExternElementMainLecturedetails.class.php:139
@@ -1694,7 +1693,7 @@ msgstr "General information about page construction"
 
 #: extern/elements/ExternElementMainLectures.class.php:107
 msgid "Wählen Sie, wie die Veranstaltungen gruppiert werden sollen."
-msgstr "Choose how the courses should be grouped."
+msgstr "Select how the courses should be grouped."
 
 #: extern/elements/ExternElementMainLectures.class.php:113
 #: extern/elements/ExternElementPersondetailsLectures.class.php:90
@@ -1745,7 +1744,7 @@ msgid ""
 "Veranstaltungsnamen angezeigt werden sollen."
 msgstr ""
 "Choose this option if course appointments and times should be displayed "
-"under the course names.  "
+"under the course names."
 
 #: extern/elements/ExternElementMainLectures.class.php:131
 msgid "Dozenten anzeigen:"
@@ -1760,11 +1759,11 @@ msgstr ""
 
 #: extern/elements/ExternElementMainLectures.class.php:140
 msgid "Ausgabe bestimmter Veranstaltungsklassen"
-msgstr "Information of certain course classes."
+msgstr "Selection of course classes for output."
 
 #: extern/elements/ExternElementMainLectures.class.php:145
 msgid "Wählen Sie die anzuzeigenden Veranstaltungsklassen aus."
-msgstr ""
+msgstr "Select the course classes to be displayed."
 
 #: extern/elements/ExternElementMainLectures.class.php:156
 #: extern/elements/ExternElementStudipInfo.class.php:90
@@ -1897,7 +1896,7 @@ msgstr "Table cell name"
 
 #: extern/elements/ExternElementPersondetailsHeader.class.php:94
 msgid "Tabellenzelle Bild"
-msgstr "Table cell picture:"
+msgstr "Table cell picture"
 
 #: extern/elements/ExternElementPersondetailsHeader.class.php:95
 msgid "Tabellenzelle Kontakt"
@@ -1933,7 +1932,7 @@ msgstr "bottom-justified "
 
 #: extern/elements/ExternElementPersondetailsHeader.class.php:108
 msgid "Rahmenbreite:"
-msgstr "Border thickness: "
+msgstr "Border thickness:"
 
 #: extern/elements/ExternElementPersondetailsHeader.class.php:109
 msgid "Breite des Bildrahmens."
@@ -2083,7 +2082,8 @@ msgid ""
 "Geben Sie jeweils einen Text ein, der an der entsprechenden Stelle "
 "ausgegeben werden soll."
 msgstr ""
-"In each case, enter the text which will appear in the corresponding location."
+"In each case, enter the text which should appear in the corresponding "
+"location."
 
 #: extern/elements/ExternElementStudipInfo.class.php:95
 msgid "&Uuml;berschrift:"
@@ -2173,7 +2173,7 @@ msgstr "Header"
 
 #: extern/elements/ExternElementTableHeadrow.class.php:57
 msgid "Angaben, die die Kopfzeile einer Tabelle betreffen."
-msgstr "Information that concerns the header of a table."
+msgstr "Information concerning the header of a table."
 
 #: extern/elements/ExternElementTableParagraph.class.php:56
 msgid "Allgemeine Angaben zum Absatz"
@@ -2271,7 +2271,7 @@ msgstr "Link to higher levels."
 msgid ""
 "Formatierung des Link auf die &uuml;bergeordnete Ebene in einer Baum-"
 "Navigation."
-msgstr "Formatting of the link to the higher levels in a tree navigation."
+msgstr "Formatting of the link to higher levels in a tree navigation."
 
 #: extern/elements/ExternElementTreeBackLink.class.php:75
 msgid "Link-Text:"
@@ -2281,7 +2281,7 @@ msgstr "Link text:"
 msgid ""
 "Geben Sie den Text ein, der auf die &uuml;bergeordnete Ebene verweist (Link "
 "zur&uuml;ck)."
-msgstr "Enter the text which refers to the higher levels (link back)."
+msgstr "Enter the text which refers to higher levels (link back)."
 
 #: extern/elements/ExternElementTreeBackLink.class.php:79
 msgid "Link-Bild (URL):"
@@ -2292,16 +2292,16 @@ msgid ""
 "Geben Sie die URL eines Bildes ein, das als Link auf die &uuml;bergeordnete "
 "Ebene verweist (z.B. Back-Button)."
 msgstr ""
-"Enter the URL of a picture that should serve as link from the higher levels "
-"(e.g. back button)."
+"Enter the URL of a picture that should serve as link referring to higher "
+"levels (e.g. back button)."
 
 #: extern/elements/ExternElementTreeKids.class.php:57
 msgid "Ausgabe der Unterebenen"
-msgstr "Information about the lower levels."
+msgstr "Information about sub-levels"
 
 #: extern/elements/ExternElementTreeKids.class.php:58
 msgid "Formatierung der Unterebenen in einer Baum-Navigation."
-msgstr "Formatting of the lower levels in a tree navigation."
+msgstr "Formatting of sub-levels in a tree navigation."
 
 #: extern/elements/ExternElementTreePath.class.php:54
 msgid "Navigations-Pfad"

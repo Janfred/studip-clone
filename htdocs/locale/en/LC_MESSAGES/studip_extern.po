@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-04-04 13:43+0200\n"
+"POT-Creation-Date: 2003-04-04 19:13+0200\n"
 "PO-Revision-Date: 2003-04-04 14:57+0200\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
@@ -242,8 +242,10 @@ msgstr ""
 "field, or choose a colour from the drop down menu."
 
 #: extern/views/ExternEditHtml.class.php:161
-msgid "Diese Farbe wird als zweite Farbe bei aktiviertem Zebra-Effekt ausgegeben."
-msgstr "This colour will be used as the second colour when Zebra Effect is activated."
+msgid ""
+"Diese Farbe wird als zweite Farbe bei aktiviertem Zebra-Effekt ausgegeben."
+msgstr ""
+"This colour will be used as the second colour when Zebra Effect is activated."
 
 #: extern/views/ExternEditHtml.class.php:162
 msgid "2. Hintergrundf.:"
@@ -254,8 +256,10 @@ msgid "keine Auswahl"
 msgstr "no selection"
 
 #: extern/views/ExternEditHtml.class.php:271
-msgid "Geben Sie den Abstand zwischen Zelleninhalt und Zellenrand in Pixeln an."
-msgstr "Enter the distance, in pixels, between the cell contents and the cell border."
+msgid ""
+"Geben Sie den Abstand zwischen Zelleninhalt und Zellenrand in Pixeln an."
+msgstr ""
+"Enter the distance, in pixels, between the cell contents and the cell border."
 
 #: extern/views/ExternEditHtml.class.php:283
 msgid "Cellpadding:"
@@ -371,7 +375,8 @@ msgstr "Page title:"
 msgid ""
 "Aktivieren Sie einen vertikalen oder horizontalen Zebra-Effekt für "
 "Tabellenzeilen/-spalten. "
-msgstr "Activate a vertical or horizontal Zebra Effect for table rows / columns. "
+msgstr ""
+"Activate a vertical or horizontal Zebra Effect for table rows / columns. "
 
 #: extern/views/ExternEditHtml.class.php:542
 #: extern/views/ExternEditHtml.class.php:559
@@ -517,7 +522,8 @@ msgstr ""
 msgid ""
 "Die eingegebenen Werte wurden übernommen und der Name der Konfiguration "
 "geändert."
-msgstr "The given value has been accepted and the name of the configuration changed."
+msgstr ""
+"The given value has been accepted and the name of the configuration changed."
 
 #: extern/views/extern_edit_module.inc.php:132
 msgid "Die eingegebenen Werte wurden übernommen."
@@ -581,8 +587,8 @@ msgid ""
 "Diese Adresse k&ouml;nnen Sie in einen Link auf Ihrer Website integrieren, "
 "um auf die Ausgabe des Moduls zu verweisen."
 msgstr ""
-"You can integrate this address as a link in your website to go to the "
-"module output."
+"You can integrate this address as a link in your website to go to the module "
+"output."
 
 #: extern/views/extern_info_module.inc.php:79
 msgid "Stud.IP-Remote-Include (SRI)  Schnittstelle"
@@ -1065,7 +1071,8 @@ msgstr "Address add-on:"
 
 #: extern/elements/ExternElementContact.class.php:98
 msgid "Zusatz zur Adresse der Einrichtung, z.B. Universitätsname."
-msgstr "Additional address information for the institute, e.g. university name."
+msgstr ""
+"Additional address information for the institute, e.g. university name."
 
 #: extern/elements/ExternElementContact.class.php:114
 msgid "Schriftformatierung Spaltentitel"
@@ -1747,7 +1754,8 @@ msgstr "Show lecturers:"
 msgid ""
 "Wählen Sie diese Option, wenn die Namen der Dozenten der Veranstaltung "
 "angezeigt werden sollen."
-msgstr "Choose this option if the names of the course lecturers should be displayed."
+msgstr ""
+"Choose this option if the names of the course lecturers should be displayed."
 
 #: extern/elements/ExternElementMainLectures.class.php:140
 msgid "Ausgabe bestimmter Veranstaltungsklassen"
@@ -1845,7 +1853,8 @@ msgid "Spalten&uuml;berschriften<br>Wiederholen:"
 msgstr "Repeat column heading<br>"
 
 #: extern/elements/ExternElementMainPersons.class.php:149
-msgid "Wiederholung der Spaltenüberschriften über oder unter der Gruppierungszeile."
+msgid ""
+"Wiederholung der Spaltenüberschriften über oder unter der Gruppierungszeile."
 msgstr "Repeat the column heading above or under the grouping row."
 
 #: extern/elements/ExternElementMainPersons.class.php:151
@@ -2072,7 +2081,9 @@ msgstr "Number of documents in the Stud.IP download area:"
 msgid ""
 "Geben Sie jeweils einen Text ein, der an der entsprechenden Stelle "
 "ausgegeben werden soll."
-msgstr "In each case, enter the text which should appear in the corresponding location."
+msgstr ""
+"In each case, enter the text which should appear in the corresponding "
+"location."
 
 #: extern/elements/ExternElementStudipInfo.class.php:95
 msgid "&Uuml;berschrift:"
@@ -2281,8 +2292,8 @@ msgid ""
 "Geben Sie die URL eines Bildes ein, das als Link auf die &uuml;bergeordnete "
 "Ebene verweist (z.B. Back-Button)."
 msgstr ""
-"Enter the URL of a picture that should serve as link referring to higher levels "
-"(e.g. back button)."
+"Enter the URL of a picture that should serve as link referring to higher "
+"levels (e.g. back button)."
 
 #: extern/elements/ExternElementTreeKids.class.php:57
 msgid "Ausgabe der Unterebenen"
@@ -2347,4 +2358,3 @@ msgstr ""
 
 #~ msgid "Konfiguration Mitarbeiterdetails:"
 #~ msgstr "Staff details configuration:"
-
