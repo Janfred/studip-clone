@@ -50,7 +50,7 @@ if (!$perm->have_perm ("dozent")) {
 	$structure["einrichtungen"]=array (topKat=>"karriere", name=>_("Zuordnung zu Einrichtungen"), link=>"edit_about.php?view=Karriere&username=$username#einrichtungen", active=>FALSE);
 }
 $structure["_lebenslauf"]=array (topKat=>"lebenslauf", name=>_("Lebenslauf"), link=>"edit_about.php?view=Lebenslauf&username=$username", active=>FALSE);
-if ($perm->have_perm ("dozent")) {
+if ($auth->auth['perm'] == "dozent") {
 	$structure["schwerpunkte"]=array (topKat=>"lebenslauf", name=>_("Schwerpunkte"), link=>"edit_about.php?view=Lebenslauf&username=$username#schwerpunkte", active=>FALSE);
 	$structure["publikationen"]=array (topKat=>"lebenslauf", name=>_("Publikationen"), link=>"edit_about.php?view=Lebenslauf&username=$username#publikationen", active=>FALSE);
 }

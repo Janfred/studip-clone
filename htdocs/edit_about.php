@@ -798,7 +798,7 @@ if ($view!="Forum" AND $view!="calendar" AND $view!="Stundenplan" AND $view!="Me
 				echo _("Studienkarriere bearbeiten");
 		break;
 		case ("Lebenslauf") :
-			if ($perm->have_perm ("dozent"))
+			if ($auth->auth['perm'] == "dozent")
 				echo _("Lebenslauf, Arbeitsschwerpunkte und Publikationen bearbeiten");
 			else
 				echo _("Lebenslauf bearbeiten");
