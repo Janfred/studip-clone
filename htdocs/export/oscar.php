@@ -42,13 +42,13 @@ define("PHPDOC_DUMMY",true);
 //page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
 //$perm->check("dozent");
 
-require_once ("./export_xslt_vars.inc.php"); // 
+//require_once ("./export_xslt_vars.inc.php"); // 
 
 $dirstr = "" . $TMP_PATH;
 //$dirstr = "/apache/htdocs/studip/" . $TMP_PATH;
 if (!($handle=opendir( $dirstr )))
 	echo _("Das Verzeichnis existiert nicht!");
-else
+elseif ($perm->have_perm("admin"))  
 {
 //	echo _("Verzeichnis:") . "$handle<br>";
 //	echo _("Dateien:<br>");
@@ -59,7 +59,7 @@ else
 		$endung = $file_parts[ sizeof($file_parts)-1 ];
 		echo $endung;
 		if (filemtime($dirstr . "/" . $file) < (time() - 60*60 * 24) AND ($file != ".") AND ($file != "..") AND !is_dir($dirstr . "/" . $file) 
-		AND (in_array($endung, array("xml", "pdf", "fo", "htm", "html", "rtf"))))
+		AND (in_array($endung, array("xml", "pdf", "fo", "htm", "html", "rtf"))) AND (strlen($file) > 30))
 		{
 //			echo "<font color=\"FF0000#\">" . date("h:i d. m. y", filemtime($dirstr . "/" . $file)) . " $file</font><br>";
 			if (unlink($dirstr . "/" . $file)) 
