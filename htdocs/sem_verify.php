@@ -331,7 +331,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 							<?
 							page_close();
 							die;
-						} else { //Keine passenden Studiengaenge gefunden, abbruch
+						} else { //Keinen passenden Studiengaenge gefunden, abbruch
 							$db->query("SELECT studiengang_id FROM user_studiengang WHERE user_id = '$user->id' "); //Hat der Studie ueberhaupt Studiengaenge angegeben?
 							if ($db->num_rows() >=1) { //Es waren nur die falschen
 								parse_msg ("info§Sie belegen leider keinen passenden Studiengang, um an der teilnahmebeschr&auml;nkten Veranstaltung <b>$SeminarName</b> teilnehmen zu k&ouml;nnen.");
