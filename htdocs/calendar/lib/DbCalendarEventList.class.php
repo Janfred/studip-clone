@@ -96,7 +96,7 @@ class AppList{
 		if ($sem_ids == "")
 			$query = "SELECT t.*, su.status, s.Name FROM seminar_user su "
 						 . "LEFT JOIN seminare s USING(Seminar_id) LEFT JOIN termine t ON "
-						 . "seminare.Seminar_id=range_id WHERE user_id = '" . $this->user_id
+						 . "s.Seminar_id=range_id WHERE user_id = '" . $this->user_id
 						 . "' AND ((date BETWEEN " . $this->getStart() . " AND " . $this->getEnd()
 						 . ") OR (end_time BETWEEN " . $this->getStart() . " AND " . $this->getEnd()
 						 . "))";
