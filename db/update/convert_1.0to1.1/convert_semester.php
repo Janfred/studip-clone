@@ -35,7 +35,7 @@ if (semester_insert_into_semester_from_array($SEMESTER)) {
 	echo "<table border=1><tr>";
 	echo "<th></th><th>Name</th><th>Beginn</th><th>Ende</th>";
 	echo "</tr>";
-	for ($i=1;$i<count($SEMESTER);$i++) {
+	for ($i=1;$i<=count($SEMESTER);$i++) {
 		echo "<tr><td><b>".$i."</b></td><td>".$SEMESTER[$i]["name"]."</td><td>".date("d-m-Y",$SEMESTER[$i]["beginn"])."</td><td>".date("d-m-Y",$SEMESTER[$i]["ende"])."</td></tr>";
 	}
 	echo "</table>";
@@ -45,7 +45,7 @@ if (holiday_insert_into_semester_from_array($HOLIDAY)) {
 	echo "<table border=1><tr>";
 	echo "<th></th><th>Name</th><th>Beginn</th><th>Ende</th>";
 	echo "</tr>";
-	for ($i=1;$i<count($HOLIDAY);$i++) {
+	for ($i=1;$i<=count($HOLIDAY);$i++) {
 		echo "<tr><td><b>".$i."</b></td><td>".$HOLIDAY[$i]["name"]."</td><td>".date("d-m-Y",$HOLIDAY[$i]["beginn"])."</td><td>".date("d-m-Y",$HOLIDAY[$i]["ende"])."</td></tr>";
 	}
 	echo "</table>";
