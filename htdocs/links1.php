@@ -34,8 +34,8 @@ if ($entry_level=="inst") {
 	$structure["literatur"]=array (topKat=>"", name=>"Literatur zur Einrichtung", link=>"literatur.php", active=>FALSE);
 } else {
 	$structure["seminar_main"]=array (topKat=>"", name=>"&Uuml;bersicht", link=>"seminar_main.php", active=>FALSE);
-	$structure["teilnehmer"]=array (topKat=>"", name=>"TeilnehmerInnen", link=>"teilnehmer.php", active=>FALSE);
 	$structure["forum"]=array (topKat=>"", name=>"Forum", link=>"forum.php", active=>FALSE);
+	$structure["teilnehmer"]=array (topKat=>"", name=>"TeilnehmerInnen", link=>"teilnehmer.php", active=>FALSE);
 	$structure["folder"]=array (topKat=>"", name=>"Dateien", link=>"folder.php?cmd=tree", active=>FALSE);
 	$structure["dates"]=array (topKat=>"", name=>"Ablaufplan", link=>"dates.php", active=>FALSE);
 	$structure["literatur"]=array (topKat=>"", name=>"Literatur", link=>"literatur.php", active=>FALSE);
