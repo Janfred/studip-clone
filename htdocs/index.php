@@ -141,7 +141,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("doz
 		<table  cellspacing="0" cellpadding="0"border="0"><tr>
 		
 			<?
-			echo "<td class=\"steel1\"><a class=\"index\" href=\"register1.php\"><img src=\"./pictures/indexpfeil.gif\" align=left border=\"0\"><font size=\"4\"><b>"._("Registrieren")."</b></font><br><font color=#555555 size=\"1\">".("um NutzerIn zu werden")."</font></a>&nbsp; </td>";
+			echo "<td class=\"steel1\"><a class=\"index\" href=\"register1.php\"><img src=\"./pictures/indexpfeil.gif\" align=left border=\"0\"><font size=\"4\"><b>"._("Registrieren")."</b></font><br><font color=#555555 size=\"1\">"._("um NutzerIn zu werden")."</font></a>&nbsp; </td>";
 			?>
 		<td class="shadowver" width="3"><img src="pictures/blank.gif" width="3" border="0"></td>
 		</tr><tr><td class="shadowhor" width="280"><img src="pictures/blank.gif" width="10" height="3" border="0"></td>
