@@ -30,7 +30,7 @@ require_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_ADMIN_MODULES."/integrity.view
 * This class is meant to be abstract, don't use it directly, derive your plugins from it
 *
 * @access	private	
-* @author	André Noack <andre.noack@gmx.net>
+* @author	André Noack <noack@data-quest.de>
 * @version	$Id$
 * @package	Admin
 */
