@@ -229,7 +229,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 	 ?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
 		<tr>
-			<td class="topic" colspan="3>
+			<td class="topic" colspan="3">
 				<img src="pictures/meinesem.gif" border="0" align="texttop">&nbsp;<b>Meine Veranstaltungen</>
 			</td>
 		</tr>
