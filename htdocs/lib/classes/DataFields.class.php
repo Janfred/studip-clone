@@ -165,9 +165,15 @@ class DataFields {
 	function storeContent($content, $datafield_id, $range_id = '') {
 		if (!$range_id)
 			$range_id = $this->range_id;
+		$query = sprintf ("SELECT mkdate FROM datafields_entries WHERE datafield_id ='%s' AND range_id = '%s'", $datafield_id, $range_id);
+		$this->db->query($query);
+		$this->db->next_record();
+		if ($this->db->f("mkdate"))
+			$mkdate = $this->db->f("mkdate");
+		else
+			$mkdate = time();
 			
-		$query = sprintf ("REPLACE INTO datafields_entries SET content='%s', datafield_id ='%s', range_id = '%s', chdate ='%s' ", $content, $datafield_id, $range_id, time());
-		
+		$query = sprintf ("REPLACE INTO datafields_entries SET content='%s', datafield_id ='%s', range_id = '%s', mkdate = '%s', chdate ='%s' ", $content, $datafield_id, $range_id, $mkdate, time());
 		$this->db->query($query);
 		
 		if ($this->db->affected_rows())
@@ -190,12 +196,8 @@ class DataFields {
 			if (!$object_type)
 				$object_type = $this->db->f("object_type");
 				
-			if (!$object_class) {
+			if (!$object_class)
 				$object_class = $this->db->f("object_class");
-				if (!$object_class)
-					$object_class = "NULL";
-				
-			}
 			
 			if (!$edit_perms)
 				$edit_perms = $this->db->f("edit_perms");
@@ -205,7 +207,10 @@ class DataFields {
 		} else {
 			$datafield_id = md5(uniqid("life42"));
 		}
-		
+	
+		if (!$object_class)
+			$object_class = "NULL";
+			
 		$query = sprintf ("REPLACE INTO datafields SET datafield_id = '%s', name= '%s', object_type = '%s', object_class = %s, edit_perms = '%s', priority = '%s' ",
 				$datafield_id, $name, $object_type, $object_class, $edit_perms, $priority);
 
