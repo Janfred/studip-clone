@@ -12,6 +12,7 @@ global $_fullname_sql;
 
 $instituts_id = $this->config->range_id;
 $username = $args["username"];
+$sem_id = $args["seminar_id"];
 
 $db_inst =& new DB_Institut();
 $db =& new DB_Institut();

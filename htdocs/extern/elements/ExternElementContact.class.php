@@ -103,8 +103,8 @@ class ExternElementContact extends ExternElement {
 		
 		$attributes = array("table_width", "table_align",
 				"table_border", "table_bgcolor", "table_bordercolor", "table_cellpadding",
-				"table_cellspacing", "table_class", "table_style", "tr_height", "tr_class",
-				"tr_style", "td_align", "td_valign", "td_bgcolor", "td_class", "td_style");
+				"table_cellspacing", "table_class", "table_style", "tr_class", "tr_style",
+				"td_height", "td_align", "td_valign", "td_bgcolor", "td_class", "td_style");
 		$content_table .= $edit_form->getEditFormContent($attributes);
 		$content_table .= $edit_form->editBlankContent();
 		
