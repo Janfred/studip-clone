@@ -185,7 +185,7 @@ if (is_array($n_buddies))
 							.tooltip(($tmp_num_chats == 1) ? _("Dieser User befindet sich in einem Chatraum.") : sprintf(_("Dieser User befindet sich in %s Chaträumen"),$tmp_num_chats)) 
 							." border=\"0\"></a></td>";
 					} elseif (is_array($admin_chats)) {
-						echo "<a href=\"sms.php?sms_source_page=online.php&cmd=chatinsert&rec_uname=$tmp_online_uname\"><img src=\"pictures/chat1.gif\" ".tooltip(_("zum Chatten einladen"))." border=\"0\"></a>";
+						echo "<a href=\"sms.php?sms_source_page=online.php&cmd=write_chatinv&rec_uname=$tmp_online_uname\"><img src=\"pictures/chat1.gif\" ".tooltip(_("zum Chatten einladen"))." border=\"0\"></a>";
 					} else {
 						echo "<img src=\"pictures/chat1.gif\" border=\"0\">";
 					}
@@ -210,7 +210,7 @@ if (is_array($n_buddies))
 							.tooltip(($tmp_num_chats == 1) ? _("Dieser User befindet sich in einem Chatraum.") : sprintf(_("Dieser User befindet sich in %s Chaträumen"),$tmp_num_chats)) 
 							." border=\"0\"></a></td>";
 					} elseif (is_array($admin_chats)) {
-						echo "<a href=\"sms.php?sms_source_page=online.php&cmd=chatinsert&rec_uname=$tmp_online_uname\"><img src=\"pictures/chat1.gif\" ".tooltip(_("zum Chatten einladen"))." border=\"0\"></a>";
+						echo "<a href=\"sms.php?sms_source_page=online.php&cmd=write_chatinv&rec_uname=$tmp_online_uname\"><img src=\"pictures/chat1.gif\" ".tooltip(_("zum Chatten einladen"))." border=\"0\"></a>";
 					} else {
 						echo "<img src=\"pictures/chat1.gif\" border=\"0\">";
 					}
@@ -245,7 +245,7 @@ ob_start();
 							.tooltip(($tmp_num_chats == 1) ? _("Dieser User befindet sich in einem Chatraum.") : sprintf(_("Dieser User befindet sich in %s Chaträumen"),$tmp_num_chats)) 
 							." border=\"0\"></a></td>";
 					} elseif (is_array($admin_chats)) {
-						echo "<a href=\"sms.php?sms_source_page=online.php&cmd=chatinsert&rec_uname=$tmp_online_uname\"><img src=\"pictures/chat1.gif\" ".tooltip(_("zum Chatten einladen"))." border=\"0\"></a>";
+						echo "<a href=\"sms.php?sms_source_page=online.php&cmd=write_chatinv&rec_uname=$tmp_online_uname\"><img src=\"pictures/chat1.gif\" ".tooltip(_("zum Chatten einladen"))." border=\"0\"></a>";
 					} else {
 						echo "<img src=\"pictures/chat1.gif\" border=\"0\">";
 					}

@@ -248,6 +248,19 @@ class ChatServer {
 		return count($this->chatUser);
 	}
 	
+	function getAdminChats($user_id){
+		$this->restore();
+		$ret = false;
+		if(count($this->chatDetail)){
+			foreach($this->chatDetail as $chatid => $detail){
+				if ($detail['users'][$user_id]['perm']){
+					$ret[$chatid] = $detail['name'];
+				}
+			}
+		}
+		return $ret;
+	}
+		
 	function getMsTime(){
 		list($usec, $sec) = explode(" ",microtime()); 
 		return array((int)($usec*1000) ,(int)$sec);

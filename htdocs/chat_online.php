@@ -55,12 +55,15 @@ function print_chat_info($chatids){
 	global $chatServer,$auth,$_REQUEST,$sms,$chat_online_id;
 	for ($i = 0; $i < count($chatids); ++$i){
 		$chat_id = $chatids[$i];
+		if ($chatServer->isActiveUser($_REQUEST['search_user'],$chat_id)){
+			$chat_online_id[$chat_id] = true;
+		}
 		$chatter = $chatServer->isActiveChat($chat_id);
 		$chatinv = $sms->check_chatinv($chat_id);
 		$is_active = $chatServer->isActiveUser($auth->auth['uid'],$chat_id);
 		$chatname = ($chatter) ? $chatServer->chatDetail[$chat_id]['name'] : chat_get_name($chat_id);
 		$link = $PHP_SELF . "?chat_id=" . $chat_id . "&cmd=" . (($chat_online_id[$chat_id]) ? "close" : "open");
-		$link_name = "<a href=\"$link\">" . htmlReady($chatname) . "</a>";
+		$link_name = "<a class=\"tree\" href=\"$link\">" . htmlReady($chatname) . "</a>";
 		echo "\n<table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\"><tr>";
 		printhead(0,0,$link,(($chat_online_id[$chat_id])) ? "open" : "close",true,chat_get_chat_icon($chatter,$chatinv,$is_active),$link_name, "");
 		echo "\n</tr></table>";
@@ -88,10 +91,8 @@ $chatter = $chatServer->getAllChatUsers();
 $active_chats = count($chatServer->chatDetail);
 if ($active_chats){
 	$chatids = array_keys($chatServer->chatDetail);
-	unset($chatids['studip']);
-	unset($chatids[$auth->auth['uid']]);
 	if (count($chatids)){
-		$db = new DB_Seminar("SELECT user_id FROM auth_user_md5 WHERE user_id IN('" . join("','",$chatids) ."')");
+		$db = new DB_Seminar("SELECT user_id FROM auth_user_md5 WHERE user_id IN('" . join("','",$chatids) ."') AND user_id !='". $auth->auth['uid'] ."'");
 		while ($db->next_record()){
 			$active_user_chats[] = $db->f(0);
 		}

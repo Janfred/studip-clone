@@ -30,7 +30,12 @@ require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/messagingSettings.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/messaging.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");
-	
+if ($GLOBALS['CHAT_ENABLE']){
+	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php"; 
+	$chatServer =& ChatServer::GetInstance($GLOBALS['CHAT_SERVER_NAME']);
+	$chatServer->caching = true;
+	$admin_chats = $chatServer->getAdminChats($auth->auth['uid']);
+}
 $sess->register("sms_data");
 $msging=new messaging;
 
@@ -110,15 +115,31 @@ if ($cmd=="insert") {
 	}
 
 //Chateinladung absetzen
-if ($cmd=="chatinsert") {
-	$count=$msging->insert_chatinv ($rec_uname, $message);
-	if ($count)
-		$msg="msg§" . sprintf(_("Ihre Einladung zum Chatten an %s wurde verschickt."), get_fullname_from_uname($rec_uname));
-	else
-		$msg="error§" . sprintf(_("Ihre Einladung zum Chatten an %s konnte nicht verschickt werden"), get_fullname_from_uname($rec_uname));
-
-	$sms_msg=rawurlencode ($msg);
-
+if ($cmd == "chatinsert" && $GLOBALS['CHAT_ENABLE']) {
+	if ($admin_chats[$_REQUEST['chat_id']]){
+		if ($send_all_buddies) {
+			$buddy_count = $msging->buddy_chatinv($message,$_REQUEST['chat_id']);
+			if (!CheckBuddy($rec_uname)){
+				$count = $msging->insert_chatinv ($rec_uname, $_REQUEST['chat_id'],$message);
+			}
+		} else {
+			$count = $msging->insert_chatinv ($rec_uname, $_REQUEST['chat_id'],$message);
+		}
+		if ($count)
+			$msg="msg§" . sprintf(_("Ihre Einladung zum Chatten an %s in den Chatraum %s wurde verschickt."), htmlReady(get_fullname_from_uname($rec_uname)),htmlReady($admin_chats[$_REQUEST['chat_id']])). "§";
+		elseif (!$send_all_buddies)
+			$msg="error§" . sprintf(_("Ihre Einladung zum Chatten an %s konnte nicht verschickt werden"), htmlReady(get_fullname_from_uname($rec_uname))) ."§";
+		if ($buddy_count){
+			$msg .=  "msg§" . sprintf(_("Ihre Einladung zum Chatten wurde an %s Buddies verschickt!"), $buddy_count) ."§";
+		} elseif ($send_all_buddies) {
+			$msg .= "error§" . _("Ihre Einladung zum Chatten konnte nicht an Ihre Buddies verschickt werden!") ."§";
+		}
+	} else {
+		$msg="error§" . sprintf(_("Ihre Einladung zum Chatten an %s konnte nicht verschickt werden"), htmlReady(get_fullname_from_uname($rec_uname)));
+	}
+	
+	$sms_msg = rawurlencode ($msg);
+	
 	if ($sms_source_page) {
 		header ("Location: $sms_source_page?username=$username&sms_msg=$sms_msg");
 		die;
@@ -205,7 +226,68 @@ if ($cmd=="write") {
 	
 	echo"</form>\n";
 }
+//chateinladung schreiben
+if ($cmd == "write_chatinv" && $GLOBALS['CHAT_ENABLE']) {
+	 ?>
+	<table width="100%" border=0 cellpadding=0 cellspacing=0>
+	<tr>
+		<td class="topic" colspan=2><img src="pictures/chat1.gif" border="0" align="texttop"><b>&nbsp;<?=_("Chateinladung verschicken")?></b></td>
+	</tr>
+	<tr>
+		<td class="blank">
+		<blockquote>
+		<?
+		echo _("Schreiben Sie hier eine Chateinladung an eine(n) anderen Benutzer(in), der Nachrichtentext ist optional:");
+		if ($SessSemName[0] && $SessSemName["class"] == "inst")
+			echo "<br /><br /><a href=\"institut_main.php\">" . _("Zur&uuml;ck zur ausgew&auml;hlten Einrichtung") . "</a>";
+		elseif ($SessSemName[0])
+			echo "<br /><br /><a href=\"seminar_main.php\">" . _("Zur&uuml;ck zur ausgew&auml;hlten Veranstaltung") . "</a>";
+		?>
+		</blockquote>
+		</td>
+		<td class="blank" align = right><img src="pictures/brief.jpg" border="0"></td>
+	</tr>
+	<tr>
+		<td class="blank" colspan="2">
+	<?
+	$fullname = get_fullname_from_uname($rec_uname);
 
+	$icon="&nbsp;<img src=\"pictures/icon-chat1.gif\">";
+	$titel="</b>" . _("Chateinladung verschicken an") . " ";
+	$titel.="<a href=\"about.php?username=$rec_uname\"><font size=-1 color=\"#333399\">".$fullname."</font></a><b>";				
+	if (is_array($admin_chats)){
+		$content = _("Chatraum ausw&auml;hlen:") . "&nbsp;";
+		$content .= "<select name=\"chat_id\" style=\"vertical-align:middle;font-size:9pt;\">";
+		foreach($admin_chats as $chat_id => $chat_name){
+			$content .= "<option value=\"$chat_id\">" . htmlReady($chat_name) . "</option>";
+		}
+		$content .= "</select><br><br>";
+		$content .="<textarea  name=\"message\" style=\"width: 90%\" cols=80 rows=4 wrap=\"virtual\">";
+		$content.="</textarea><br />\n";
+		if (GetNumberOfBuddies())
+		$content.="<font size=-1><input style=\"vertical-align:middle;\" type=\"CHECKBOX\" name=\"send_all_buddies\" />&nbsp; " . _("Diese Einladung (auch) an alle meine Buddies verschicken") . "</font><br />\n";
+		$edit="<input type=\"IMAGE\" " . makeButton("abschicken", "src") . " border=0 align=\"absmiddle\">";
+		$edit.="&nbsp; <a href=\"$PHP_SELF\">" . makeButton("abbrechen", "img") . "</a><br>&nbsp;";	
+	} else {
+		$content = _("Sie haben in keinem aktiven Chatraum die Berechtigung andere NutzerInnen einzuladen!");
+		$edit = "<a href=\"$PHP_SELF\">" . makeButton("abbrechen", "img") . "</a><br>&nbsp;";	
+	}
+	echo"<form action=\"$PHP_SELF\" method=\"POST\">\n";
+	echo"<input type=\"HIDDEN\" name=\"rec_uname\" value=\"$rec_uname\">\n";
+	echo"<input type=\"HIDDEN\" name=\"cmd\" value=\"chatinsert\">\n";
+	echo"<input type=\"HIDDEN\" name=\"username\" value=\"$username\">\n";
+	echo"<input type=\"HIDDEN\" name=\"sms_source_page\" value=\"$sms_source_page\">\n";
+
+	echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" align=\"center\"><tr>";
+	printhead(0, 0, $link, TRUE,TRUE, $icon, $titel, $zusatz);
+	echo "</tr></table>	";
+
+	echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr>";
+	printcontent("99%",0, $content, $edit);
+	echo "</tr></table>";
+	
+	echo"</form>\n";
+}
 //Ausgabe von vorhandenen Nachrichten
 else {
 	$db->query("SELECT globalmessages.*, ". $_fullname_sql['full'] ." AS fullname  FROM globalmessages LEFT JOIN auth_user_md5 ON (username = user_id_snd) LEFT JOIN user_info USING(user_id) WHERE globalmessages.user_id_rec LIKE '".get_username($user->id)."' ORDER BY globalmessages.mkdate DESC");

@@ -132,7 +132,7 @@ function circular_sms ($message, $mode, $group_id=0) {
 	
 	switch ($mode) {
 		case "buddy" :
-			$query = sprintf ("SELECT user_id, username FROM contact LEFT JOIN auth_user_md5 USING (user_id) WHERE owner_id = '%s' AND buddy = '1' ", $user->id);
+			$query = sprintf ("SELECT contact.user_id, username FROM contact LEFT JOIN auth_user_md5 USING (user_id) WHERE owner_id = '%s' AND buddy = '1' ", $user->id);
 			$db->query ($query);
 
 			while ($db->next_record()) {
@@ -151,6 +151,15 @@ function circular_sms ($message, $mode, $group_id=0) {
 
 	return $count;
 } 
+
+function buddy_chatinv ($message, $chat_id) {
+	global $user;
+	$this->db->query("SELECT contact.user_id, username FROM contact LEFT JOIN auth_user_md5 USING (user_id) WHERE owner_id = '$user->id' AND buddy = '1' ");
+	while ($this->db->next_record()) {
+		$count += $this->insert_chatinv($this->db->f("username"),$chat_id, $message);
+	}
+	return $count;
+}
 
 //Chateinladung absetzen
 function insert_chatinv ($rec_uname, $chat_id, $msg = "", $user_id = false) {
