@@ -127,7 +127,14 @@ require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php"); 		// Klarnamen fuer den V
 require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php"); 		// htmlReady fuer die Veranstaltungsnamen
 require_once ("$ABSOLUTE_PATH_STUDIP/dates.inc.php"); 		// Semester-Namen fuer Admins
 require_once ("$ABSOLUTE_PATH_STUDIP/functions.php"); 		// Semester-Namen fuer Admins
+require_once $ABSOLUTE_PATH_STUDIP."messaging.inc.php";
 
+if ($GLOBALS['CHAT_ENABLE']){
+	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php"; 
+	$chatServer =& ChatServer::GetInstance($GLOBALS['CHAT_SERVER_NAME']);
+	$chatServer->caching = true;
+	$sms = new messaging();
+}
 $cssSw=new cssClassSwitcher;                          					// Klasse für Zebra-Design
 $cssSw->enableHover();
 $db=new DB_Seminar;
@@ -215,6 +222,14 @@ if ( !$perm->have_perm("root")) {
 		while ($db->next_record()) {
 			$my_inst[$db->f("Institut_id")]=array(name=>$db->f("Name"),status=>$db->f("inst_perms"),type=>($db->f("type")) ? $db->f("type") : 1);
 			$value_list.="('".$db->f("Institut_id")."',0".$loginfilenow[$db->f("Institut_id")]."),";
+			if ($GLOBALS['CHAT_ENABLE']){
+				$chatter = $chatServer->isActiveChat($db->f("Institut_id"));
+				$chat_info[$db->f("Institut_id")] = array("chatter" => $chatter, "chatuniqid" => $chatServer->chatDetail[$db->f("Institut_id")]["id"],
+												"is_active" => $chatServer->isActiveUser($user->id,$db->f("Institut_id")));
+				if ($chatter){
+					$active_chats[$chatServer->chatDetail[$db->f("Institut_id")]["id"]] = $db->f("Institut_id");
+				}
+			}
 			if ($db->f("is_fak") && $db->f("inst_perms") == "admin") {
 				$db2->query("SELECT a.Institut_id, a.Name, a.type FROM Institute a 
 					 WHERE fakultaets_id='" . $db->f("Institut_id") . "' AND a.Institut_id!='" .$db->f("Institut_id") . "' 
@@ -222,7 +237,14 @@ if ( !$perm->have_perm("root")) {
 				while($db2->next_record()) {
 					$my_inst[$db2->f("Institut_id")]=array(name=>$db2->f("Name"),status=>"admin",type=>($db2->f("type")) ? $db2->f("type") : 1);
 					$value_list.="('".$db2->f("Institut_id")."',0".$loginfilenow[$db2->f("Institut_id")]."),";
-			
+					if ($GLOBALS['CHAT_ENABLE']){
+						$chatter = $chatServer->isActiveChat($db2->f("Institut_id"));
+						$chat_info[$db2->f("Institut_id")] = array("chatter" => $chatter, "chatuniqid" => $chatServer->chatDetail[$db2->f("Institut_id")]["id"],
+						"is_active" => $chatServer->isActiveUser($user->id,$db2->f("Institut_id")));
+						if ($chatter){
+							$active_chats[$chatServer->chatDetail[$db2->f("Institut_id")]["id"]] = $db2->f("Institut_id");
+						}
+					}
 				}
 			}
 		}
@@ -232,7 +254,11 @@ if ( !$perm->have_perm("root")) {
 		$db->query($ins_query);
 		get_my_inst_values($my_inst);
 		$db->query("DROP TABLE loginfilenow_".$user->id);
-
+		if ($GLOBALS['CHAT_ENABLE']){
+			if (is_array($active_chats)){
+				$chat_invs = $sms->check_list_of_chatinv(array_keys($active_chats));
+			}
+		}
 		foreach ($my_inst as $instid=>$values) {
 
 			$cssSw->switchClass();
@@ -246,6 +272,11 @@ if ( !$perm->have_perm("root")) {
 // Content-field
 			echo "<td class=\"".$cssSw->getClass()."\"  align=\"left\" nowrap>";
 			print_institut_content($instid, $values);
+			if ($GLOBALS['CHAT_ENABLE']){
+				echo "<a href=\"#\" onClick=\"return open_chat(" . (($chat_info[$instid]['is_active']) ? "false" : "'$instid'") . ");\">&nbsp;";
+				echo chat_get_chat_icon($chat_info[$instid]['chatter'], $chat_invs[$chat_info[$instid]['chatuniqid']], $chat_info[$instid]['is_active'],true);
+				echo "</a>&nbsp;";
+			}
 			echo "</td>";
 
 // Extendet views:

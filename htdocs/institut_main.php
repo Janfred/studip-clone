@@ -136,13 +136,14 @@ if ($nclose)
 	<?php
 
 	
-	if (chat_show_info($auswahl))
-		echo "<br>";
 
 	// Anzeige von News
 	($rechte) ? $show_admin=TRUE : $show_admin=FALSE;
 	if (show_news($auswahl,$show_admin, 0, $institut_main_data["nopen"], "100%", $loginfilelast[$SessSemName[1]]))
 		echo"<br>";
+	//show chat info
+	if (chat_show_info($auswahl))
+		echo "<br>";
 
 ?>
 </body>

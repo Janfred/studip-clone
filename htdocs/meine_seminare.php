@@ -124,10 +124,18 @@ require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php");			 // Klarnamen fuer den 
 require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");			 // htmlReady fuer die Veranstaltungsnamen
 require_once ("$ABSOLUTE_PATH_STUDIP/dates.inc.php");			 // Semester-Namen fuer Admins
 require_once ("$ABSOLUTE_PATH_STUDIP/admission.inc.php");		//Funktionen der Teilnehmerbegrenzung
+require_once $ABSOLUTE_PATH_STUDIP."messaging.inc.php";
 
+if ($GLOBALS['CHAT_ENABLE']){
+	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php"; 
+	$chatServer =& ChatServer::GetInstance($GLOBALS['CHAT_SERVER_NAME']);
+	$chatServer->caching = true;
+	$sms = new messaging();
+}
 $cssSw = new cssClassSwitcher;									// Klasse für Zebra-Design
 $cssSw->enableHover();
 $db = new DB_Seminar;
+
 
 // we are defintely not in an lexture or institute
 closeObject();
@@ -267,10 +275,24 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 		ob_end_flush(); //Buffer leeren, damit der Header zu sehen ist
 		ob_start();
 		while ($db->next_record()) {
-			$my_sem[$db->f("Seminar_id")]=array(name=>$db->f("Name"),status=>$db->f("status"),gruppe=>$db->f("gruppe"),chdate=>$db->f("chdate"), binding=>$db->f("admission_binding"));
+			$my_sem[$db->f("Seminar_id")]=array("name" => $db->f("Name"),"status" => $db->f("status"),"gruppe" => $db->f("gruppe"),
+												"chdate" => $db->f("chdate"), "binding" => $db->f("admission_binding"));
 			$value_list.="('".$db->f("Seminar_id")."',0".$loginfilenow[$db->f("Seminar_id")]."),";
+			if ($GLOBALS['CHAT_ENABLE']){
+				$chatter = $chatServer->isActiveChat($db->f("Seminar_id"));
+				$chat_info[$db->f("Seminar_id")] = array("chatter" => $chatter, "chatuniqid" => $chatServer->chatDetail[$db->f("Seminar_id")]["id"],
+												"is_active" => $chatServer->isActiveUser($user->id,$db->f("Seminar_id")));
+				if ($chatter){
+					$active_chats[$chatServer->chatDetail[$db->f("Seminar_id")]["id"]] = $db->f("Seminar_id");
+				}
+			}
 		}
-		$value_list=substr($value_list,0,-1);
+		if ($GLOBALS['CHAT_ENABLE']){
+			if (is_array($active_chats)){
+				$chat_invs = $sms->check_list_of_chatinv(array_keys($active_chats));
+			}
+		}
+		$value_list = substr($value_list,0,-1);
 		$db->query("CREATE TEMPORARY TABLE IF NOT EXISTS loginfilenow_".$user->id." ( Seminar_id varchar(32) NOT NULL PRIMARY KEY, loginfilenow int(11) NOT NULL DEFAULT 0, INDEX(loginfilenow) ) TYPE=HEAP");
 		$ins_query="REPLACE INTO loginfilenow_".$user->id." (Seminar_id,loginfilenow) VALUES ".$value_list;
 		$db->query($ins_query);
@@ -296,6 +318,11 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 // Content-field
 			echo "<td class=\"".$cssSw->getClass()."\" align=\"left\" nowrap>";
 			print_seminar_content($semid, $values);
+			if ($GLOBALS['CHAT_ENABLE']){
+				echo "<a href=\"#\" onClick=\"return open_chat(" . (($chat_info[$semid]['is_active']) ? "false" : "'$semid'") . ");\">&nbsp;";
+				echo chat_get_chat_icon($chat_info[$semid]['chatter'], $chat_invs[$chat_info[$semid]['chatuniqid']], $chat_info[$semid]['is_active'],true);
+				echo "</a>&nbsp;";
+			}
 			echo "</td>";
 
 

@@ -135,8 +135,6 @@ if ($nclose)
 	<?php
 
 	// Anzeige von News
-	if (chat_show_info($auswahl))
-		echo "<br>";
 
 	($rechte) ? $show_admin=TRUE : $show_admin=FALSE;
 	if (show_news($auswahl,$show_admin, 0, $smain_data["nopen"], "100%", $loginfilelast[$SessSemName[1]]))
@@ -148,6 +146,10 @@ if ($nclose)
 	($rechte) ? $show_admin="admin_dates.php?range_id=$SessSemName[1]&ebene=sem&new_sem=TRUE" : $show_admin=FALSE;
 	if (show_dates($auswahl, $start_zeit, $end_zeit, 0, 0, $show_admin, $smain_data["dopen"]))
 		echo"<br>";
+	//show chat info	
+	if (chat_show_info($auswahl))
+		echo "<br>";
+
 ?>
 </body>
 </html>

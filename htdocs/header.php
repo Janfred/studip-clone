@@ -38,20 +38,20 @@ ob_start();
 if (!$perm->have_perm("user"))
 	$my_messaging_settings["active_time"]=5;
 
-require_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/ChatServer.class.php";
 require_once ($ABSOLUTE_PATH_STUDIP . "visual.inc.php");
 require_once ($ABSOLUTE_PATH_STUDIP . "functions.php");
-
-//nur sinnvoll wenn chat eingeschaltet
-if ($GLOBALS['CHAT_ENABLE']) {
+if ($GLOBALS['CHAT_ENABLE']){
+	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php"; 
 	$chatServer =& ChatServer::GetInstance($GLOBALS['CHAT_SERVER_NAME']);
-	$chatServer->caching = TRUE;
+	$chatServer->caching = true;
+	$sms = new messaging();
+	$sms->delete_chatinv();
 	echo "\t\t<script type=\"text/javascript\">\n";
 	echo "\t\tfunction open_chat(chatid) {\n";
 	echo "\t\t\tif(!chatid){\n";
 	printf ("\t\t\t\talert('%s');\n", _("Sie sind bereits in diesem Chat angemeldet!"));
 	echo "\t\t\t} else {\n\t\t\tfenster=window.open(\"". $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'] . $GLOBALS['RELATIVE_PATH_CHAT'] ."/chat_login.php?chatid=\" + chatid,\"chat_\" + chatid + \"_".$auth->auth["uid"]."\",\"scrollbars=no,width=640,height=480,resizable=yes\");\n";
-	echo "\t\t}\n}\n";
+	echo "\t\t}\nreturn false;\n}\n";
 	echo "\t\t</script>\n";
 }
 
@@ -112,21 +112,16 @@ if ($auth->auth["uid"] == "nobody") { ?>
 			$online[$db->f("username")] = array("name"=>$db->f("full_name"),"last_action"=>$db->f("lastaction"),"userid"=>$db->f("user_id"));      
 		}
 		
-		//Chatnachrichten zaehlen (wenn Sender Online)
 		$myuname=$auth->auth["uname"];
-		$db->query("SELECT *  FROM globalmessages WHERE user_id_rec LIKE '$myuname'");
-		$i=0;
-		$chatm=false;
-		while ($db->next_record()) {
-			if (preg_match("/chat_with_me/i", $db->f("message"))) {
-				if ($online[$db->f("user_id_snd")]) {
-					$chatm=true;
-				}
-			}
-			elseif ($my_messaging_settings["last_visit"] < $db->f("mkdate"))
-				$neum++; // das ist eine neue Nachricht.
-			else
-				$altm++;
+		
+		$db->query("SELECT COUNT(chat_id) AS chat_m, 
+					COUNT(IF(ISNULL(chat_id) AND mkdate>=" . $my_messaging_settings["last_visit"] . ",message_id ,NULL)) AS neu_m, 
+					COUNT(IF(ISNULL(chat_id) AND mkdate<=" . $my_messaging_settings["last_visit"] . ",message_id,NULL)) AS alt_m  
+					FROM globalmessages WHERE user_id_rec LIKE '$myuname' GROUP BY user_id_rec");
+		if ($db->next_record()) {
+			$chatm = $db->f("chat_m");
+			$neum = $db->f("neu_m"); // das ist eine neue Nachricht.
+			$altm = $db->f("alt_m");
 		}
 
 
@@ -171,27 +166,30 @@ if ($auth->auth["uid"] == "nobody") { ?>
 			echo MakeToolbar("pictures/meinetermine.gif","./calendar.php",_("Planer"),_("Termine und Kontakte"),40, "_top");
 		}		
 
-		// wurde ich zum Chat eingeladen? Wenn nicht, nachsehen ob wer im Chat ist
-          //Version für neuen Chat (vorläufig)
-  	if ($GLOBALS['CHAT_ENABLE']) {
-    	if (($chatm) && ($i_page != "sms.php") && (!$chatServer->isActiveUser($user->id,"studip"))) {
-				echo MakeToolbar("pictures/chateinladung.gif","javascript:open_chat();",_("Chat"),_("Sie wurden zum Chatten eingeladen!"),30,"_top","left");
+		if ($GLOBALS['CHAT_ENABLE']) {
+			$chatter = $chatServer->getAllChatUsers();
+			$active_chats = count($chatServer->chatDetail);
+			if (!$chatter){
+				$chat_tip = _("Es ist niemand im Chat");
+			} elseif ($chatter == 1){
+				$chat_tip =_("Es ist eine Person im Chat");
 			} else {
-		      	$chatter=$chatServer->getActiveUsers("studip");
-   			$is_active = $chatServer->isActiveUser($user->id,"studip");
-			$chat_jscript = "javascript:open_chat(" . (($is_active) ? "false" : "'studip'") . ");";
-			if ($chatter == 1)
-   		  	if ($is_active)	
-						echo MakeToolbar("pictures/chat3.gif",$chat_jscript,_("Chat"),_("Sie sind alleine im Chat"),40,"_top","left");
-					else
-						echo MakeToolbar("pictures/chat2.gif",$chat_jscript,_("Chat"),_("Es ist eine Person im Chat"),40,"_top","left");
-				elseif ($chatter > 1)
-					echo MakeToolbar("pictures/chat2.gif",$chat_jscript,_("Chat"),sprintf(_("Es sind %s Personen im Chat"), $chatter),40,"_top","left");
-      	else
-					echo MakeToolbar("pictures/chat1.gif",$chat_jscript,_("Chat"),_("Es ist niemand im Chat"),40,"_top","left");
+				$chat_tip = sprintf(_("Es sind %s Personen im Chat"), $chatter);
 			}
-		} else {
-//			echo MakeToolbar("pictures/blank.gif","","","",40,"_top");
+			if ($active_chats == 1){
+				$chat_tip .= ", " . _("ein aktiver Chatraum");
+			} elseif ($active_chats > 1){
+				$chat_tip .= ", " . sprintf(_("%s aktive Chaträume"), $active_chats);
+			}
+			if ($chatm){
+				echo MakeToolbar("pictures/chateinladung.gif","chat_online.php",_("Chat"),(($chatm == 1) ? _("Sie haben eine Chateinladung") : sprintf(_("Sie haben %s Chateinladungen"),$chatm)) . ", " . $chat_tip,30,"_top","left");
+			} elseif ($chatter) {
+				echo MakeToolbar("pictures/chat2.gif","chat_online.php",_("Chat"),$chat_tip,40,"_top","left");
+			} else {
+				echo MakeToolbar("pictures/chat1.gif","chat_online.php",_("Chat"),$chat_tip,40,"_top","left");
+			}
+			unset($chatter);
+			unset($active_chats);
 		}
 
 		// Ist sonst noch wer da?

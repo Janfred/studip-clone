@@ -231,6 +231,23 @@ function check_chatinv($chat_id, $user_id = false){
 	}
 }
 
+function check_list_of_chatinv($chat_uniqids, $user_id = false){
+	if ($GLOBALS['CHAT_ENABLE']){
+		$username = get_username($user_id);
+		if (!is_array($chat_uniqids)){
+			return false;	//no active chat
+		}
+		$ret = false;
+		$this->db->query("SELECT DISTINCT chat_id FROM globalmessages WHERE user_id_rec='$username' AND chat_id IN('" . join("','",$chat_uniqids)."')");
+		while ($this->db->next_record()){
+			$ret[$this->db->f("chat_id")] = true;
+		}
+		return $ret;
+	} else {
+		return false;
+	}
+}
+
 //Buddy aus der Buddyliste loeschen        
 function delete_buddy ($username) {
 	RemoveBuddy($username);

@@ -229,8 +229,6 @@ if ($msg)
 
 		echo "</tr></table><br>\n";
 
-	if (chat_show_info($user_id))
-		echo "<br>";
 // News zur person anzeigen!!!
 
 	($perm->have_perm("autor") AND $auth->auth["uid"]==$user_id) ? $show_admin=TRUE : $show_admin=FALSE;
@@ -242,6 +240,10 @@ if ($msg)
 	$start_zeit=time();
 	($perm->have_perm("autor") AND $auth->auth["uid"]==$user_id) ? $show_admin=TRUE : $show_admin=FALSE;
 	if (show_personal_dates($user_id, $start_zeit, -1, FALSE, $show_admin, $about_data["dopen"]))
+		echo "<br>";
+
+// show chat info
+	if (chat_show_info($user_id))
 		echo "<br>";
 
 // Hier wird der Lebenslauf ausgegeben:
