@@ -124,7 +124,7 @@ if ($existingowninfolabel) {
 
 
 ?>
-<table width = "100%" cellspacing="0" cellpadding="0"><tr>
+<table width = "100%" cellspacing="0" border="0" cellpadding="0"><tr>
 	<td class="topic" colspan="2" width = "100%"><img src="pictures/nutzer.gif" border="0" align="texttop"><b>&nbsp; <?echo _("Mein Addressbuch");?> <font size="2">(<?=(($size_of_book = GetSizeofBook()) == 1) ? _("1 Eintrag") : sprintf(_("%s Eintr&auml;ge"),$size_of_book);?>)</font></b>
 	</td>
 </tr><tr><td class="blank" align="left" valign="absmiddle">
@@ -162,11 +162,11 @@ if ($sms_msg)	{
 <?
 
 
-echo "<table align=\"center\" class=\"blank\" border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\"><tr><td align=\"middle\" class=\"steelgraulight\">";
+echo "<table align=\"center\" class=\"grey\" border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\"><tr><td align=\"middle\" class=\"lightgrey\">";
 
 
 if (($contact["view"])=="alpha") {
-	echo "<table class=\"blank\" align=\"center\" width=\"70%\"><tr>";
+	echo "<table align=\"center\" width=\"70%\"><tr>";
 	if (!$filter) {
 		$cssSw->switchClass();
 	}
@@ -184,6 +184,8 @@ if (($contact["view"])=="alpha") {
 		}
 		if ($size_of_book_by_letter[chr($i)]==0) {
 			$character = "<font color=\"#999999\">".chr($i)."</font>";
+		} elseif($filter==chr($i)) {
+			$character = "<font color=\"#FF0000\">".chr($i)."</font>";
 		} else {
 			$character = chr($i);
 		}
@@ -216,9 +218,12 @@ if (($contact["view"])=="gruppen") {
 	while ($db->next_record()) {
 		if ($filter==$db->f("statusgruppe_id")) {
 			$cssSw->switchClass();
+			$color = "color=\"#FF0000\"";
+		} else {
+			$color = "";
 		}
 		echo "<td ".$cssSw->getHover()." class=\"".$cssSw->getClass()."\">&nbsp; "
-		."<a href=\"$PHP_SELF?filter=".$db->f("statusgruppe_id")."\"><font size=\"2\">".htmlready($db->f("name"))."</font></a>"
+		."<a href=\"$PHP_SELF?filter=".$db->f("statusgruppe_id")."\"><font size=\"2\" $color>".htmlready($db->f("name"))."</font></a>"
 		."&nbsp; </td>";
 		if ($filter==$db->f("statusgruppe_id")) {
 			$cssSw->switchClass();

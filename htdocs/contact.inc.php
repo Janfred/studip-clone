@@ -360,7 +360,7 @@ function ShowContact ($contact_id)
 		} else {
 			$output = "";
 		}
-		$output .= "<table cellspacing=\"0\" width=\"280\" class=\"blank\">
+		$output .= "<table border=\"0\" cellspacing=\"0\" width=\"280\" class=\"blank\">
 					<tr>
 						<td class=\"topic\" width=\"99%\"><font size=\"2\"><b>"
 							.get_fullname($db->f("user_id"), $format = "full_rev" )."</b></font></td>"
@@ -370,7 +370,7 @@ function ShowContact ($contact_id)
 						</td>
 					</tr>
 				    </table>
-				    <table cellspacing=\"0\" width=\"280\" class=\"blank\">"
+				    <table border=\"0\" cellspacing=\"0\" width=\"280\" class=\"blank\">"
 						.ShowUserInfo ($contact_id)
 						. $lastrow
 				."</table>";
@@ -562,16 +562,16 @@ function PrintAllContact($filter="")
 	}
 
 	if ($db->num_rows() == 0) {
-		echo "<table class=\"blank\" width=\"$maxwidth\" align=center cellpadding=\"10\"><tr><td valign=\"top\" width=\"300\" class=\"blank\">"._("Keine Einträge in diesem Bereich")."";	
+		echo "<table class=\"blank\" width=\"$maxwidth\" align=center cellpadding=\"10\"><tr><td valign=\"top\" width=\"300\" class=\"white\">"._("Keine Einträge in diesem Bereich")."";	
 		echo "</td><td valign=\"top\" width=\"300\" class=\"blank\">";
 	} else {
-		echo "<table class=\"blank\" width=\"$maxwidth\" align=center cellpadding=\"10\"><tr><td valign=\"top\" width=\"280\" class=\"blank\">";
+		echo "<table class=\"blank\" width=\"$maxwidth\" align=center cellpadding=\"10\"><tr><td valign=\"top\" width=\"280\" class=\"white\">";
 		while ($db->next_record()) {
 			$contact_id = $db->f("contact_id");
 			echo ShowContact ($contact_id);
 			echo "<br>";
 			if ($i==$middle[$spalten] && $spalten!=$maxcolls) { //Spaltenumbruch
-				echo "</td><td valign=\"top\" width=\"280\" class=\"blank\">";
+				echo "</td><td valign=\"top\" width=\"280\" class=\"white\">";
 				$i = 0;
 				$spalten++;
 			}
