@@ -343,7 +343,7 @@ $PERS_TERMIN_KAT[14]=array("name"=>"Reise", "color"=>"#C71585");
 // weitere Kategorien können hier angefügt werden
 
 
-//Abkürzungen für Smileys
+//Shorts for Smiley
 $SMILE_SHORT = array( //diese Kuerzel fuegen das angegebene Smiley ein (Dateiname + ".gif")
 	":)"=>"smile" , 
 	":-)"=>"asmile" , 
@@ -352,4 +352,12 @@ $SMILE_SHORT = array( //diese Kuerzel fuegen das angegebene Smiley ein (Dateinam
 	":o"=>"redface" , 
 	":D"=>"biggrin", 
 	";-)"=>"wink");
+	
+//Shorts for symbols
+$SYMBOL_SHORT = array( //use this shorts to insert an symbols (filename + ".gif") 
+	"=)"=>"symbol03" , 
+	"(="=>"symbol04" , 
+	"(c)"=>"symbol05" , 
+	"(r)"=>"symbol06" , 
+	" tm"=>"symbol08");
 ?>
