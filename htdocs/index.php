@@ -206,7 +206,7 @@ foreach ($INSTALLED_LANGUAGES as $temp_language_key => $temp_language) {
 	printf ("&nbsp;&nbsp;<a href=\"%s?set_language=%s\"><img src=\"pictures/languages/%s\" %s border=\"0\"></a>", $PHP_SELF, $temp_language_key, $temp_language["picture"], tooltip($temp_language["name"]));
 }
 ?>
-</td></tr></table>
+&nbsp; &nbsp; </td></tr></table>
 <DIV align=center>
 <?php
 		
