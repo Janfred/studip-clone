@@ -75,8 +75,8 @@
 		$start_time = time();
 		$end_time   = $start_time + ($num_days * 86400);
 
-		$event_list = new AppList($session_user_id, TRUE, $start_time, $end_time);
-		$event_list-> bindSeminarEvents($bind_seminare);
+		$event_list = new EventList($session_user_id, TRUE, $start_time, $end_time);
+		$event_list->bindSeminarEvents($bind_seminare);
 
 		$num_events = $event_list-> numberOfEvents();
 		$num_pages  = ceil($num_events / DATES_PER_PAGE);
