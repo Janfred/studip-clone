@@ -276,7 +276,14 @@ function GetMyScore() {
 	$db->query("SELECT count(post_id) as guestcount FROM guestbook WHERE range_id = '$user_id' ");
 	$db->next_record();
 	$gaeste = $db->f("guestcount");
-	
+
+	$db->query("SELECT mkdate FROM user_info WHERE user_id = '$user_id' ");
+	$db->next_record();
+	$age = $db->f("mkdate");
+	if ($age == 0) $age = 1011275740;
+	$age = (time()-$age)/31536000;
+	if ($age <1) $age = 1;
+		
 	if ($GLOBALS['VOTE_ENABLE']) {
 		$db->query("SELECT count(*) FROM vote WHERE range_id = '$user_id'");
 		$db->next_record();
@@ -300,11 +307,12 @@ function GetMyScore() {
 
 ///////////////////////// Die HOCHGEHEIME Formel:
 
-	$score = (5*$postings) + (5*$news) + (20*$dokumente) + (2*$institut) + (5*($archiv+$seminare)) + (5*$gaeste) + (5*$vote) + (5*$wiki) + (3*$visits);
+	$score = (5*$postings) + (5*$news) + (20*$dokumente) + (2*$institut) + (5*($archiv+$seminare)) + (1*$gaeste) + (5*$vote) + (5*$wiki) + (3*$visits);
+	$score = round($score/$age);
 	if(file_exists("./user/".$user_id.".jpg"))
 		$score *=10;
 
-/// Schreiben wenn hoeher
+/// Schreiben des neuen Wertes
 
 	$query = "UPDATE user_info "
 		." SET score = '$score'"
