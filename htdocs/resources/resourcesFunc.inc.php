@@ -282,6 +282,7 @@ function getMyRoomRequests($user_id = '') {
 		
 	if ((getGlobalPerms($user_id) == "admin") || ($perm->have_perm("root"))) {
 		$query = sprintf("SELECT request_id, closed, LOCATE('s:11:\"turnus_data\";',metadata_dates) AS metatime,
+						(LOCATE('s:3:\"art\";s:1:\"1\";',metadata_dates) OR LOCATE('s:3:\"art\";i:1;',metadata_dates)) AS irregular,
 							rr.termin_id, COUNT(t.termin_id) as anzahl_termine
 							FROM resources_requests rr 
 							LEFT JOIN seminare s USING(seminar_id) 
@@ -289,7 +290,7 @@ function getMyRoomRequests($user_id = '') {
 		$db->query($query);
 		while ($db->next_record()) {
 			$requests [$db->f("request_id")] = array("my_sem"=>TRUE, "my_res"=>TRUE, "closed"=>$db->f("closed"));
-			$requests [$db->f("request_id")]["have_times"] = ($db->f("termin_id") || $db->f("metatime") || $db->f("anzahl_termine"));
+			$requests [$db->f("request_id")]["have_times"] = ($db->f("termin_id") || $db->f("metatime") || ($db->f("anzahl_termine") && $db->f("irregular")));
 		}
 	} else {
 		//load all my resources
@@ -311,6 +312,7 @@ function getMyRoomRequests($user_id = '') {
 		if (sizeof($my_sems)) {
 			$in_seminar_id =  "('".join("','",array_keys($my_sems))."')";
 			$query_sem = sprintf("SELECT request_id, closed, LOCATE('s:11:\"turnus_data\";',metadata_dates) AS metatime,
+								(LOCATE('s:3:\"art\";s:1:\"1\";',metadata_dates) OR LOCATE('s:3:\"art\";i:1;',metadata_dates)) AS irregular,
 								rr.termin_id, COUNT(t.termin_id) as anzahl_termine
 								FROM resources_requests rr 
 								INNER JOIN seminare USING(seminar_id)
@@ -319,7 +321,7 @@ function getMyRoomRequests($user_id = '') {
 			while ($db->next_record()) {
 				$requests [$db->f("request_id")]["my_sem"] = TRUE;
 				$requests [$db->f("request_id")]["closed"] = $db->f("closed");
-				$requests [$db->f("request_id")]["have_times"] = ($db->f("termin_id") || $db->f("metatime") || $db->f("anzahl_termine"));
+				$requests [$db->f("request_id")]["have_times"] = ($db->f("termin_id") || $db->f("metatime") || ($db->f("anzahl_termine") && $db->f("irregular")));
 			}
 		}
 	}
