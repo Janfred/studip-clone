@@ -97,20 +97,18 @@ ob_start();
 	$db2=new DB_Seminar;
 
 	if (is_array ($online)) { // wenn jemand online ist
-		if (!$my_messaging_settings["show_only_buddys"]) {
-			foreach($online as $username=>$value) { //ale durchgehen die online sind
-				$user_id = get_userid($username);
-				$db->query ("SELECT contact_id FROM contact WHERE owner_id = '$owner_id' AND user_id = '$user_id' AND buddy = '1'");	
-				if ($db->next_record()) { // er ist auf jeden Fall als Buddy eingetragen
-					$db2->query ("SELECT name, statusgruppen.statusgruppe_id FROM statusgruppen LEFT JOIN statusgruppe_user USING(statusgruppe_id) WHERE range_id = '$owner_id' AND user_id = '$user_id'");	
-					if ($db2->next_record()) { // er ist auch einer Gruppe zugeordnet
-						$group_buddies[]=array($db2->f("name"), $online[$username]["name"],$online[$username]["last_action"],$username,$db2->f("statusgruppe_id"));
-					} else {	// buddy, aber keine Gruppe
-						$non_group_buddies[]=array($online[$username]["name"],$online[$username]["last_action"],$username);
-					}
-				} else { // online, aber kein buddy
-					$n_buddies[]=array($online[$username]["name"],$online[$username]["last_action"],$username);
+		foreach($online as $username=>$value) { //ale durchgehen die online sind
+			$user_id = get_userid($username);
+			$db->query ("SELECT contact_id FROM contact WHERE owner_id = '$owner_id' AND user_id = '$user_id' AND buddy = '1'");	
+			if ($db->next_record()) { // er ist auf jeden Fall als Buddy eingetragen
+				$db2->query ("SELECT name, statusgruppen.statusgruppe_id FROM statusgruppen LEFT JOIN statusgruppe_user USING(statusgruppe_id) WHERE range_id = '$owner_id' AND user_id = '$user_id'");	
+				if ($db2->next_record()) { // er ist auch einer Gruppe zugeordnet
+					$group_buddies[]=array($db2->f("name"), $online[$username]["name"],$online[$username]["last_action"],$username,$db2->f("statusgruppe_id"));
+				} else {	// buddy, aber keine Gruppe
+					$non_group_buddies[]=array($online[$username]["name"],$online[$username]["last_action"],$username);
 				}
+			} else { // online, aber kein buddy
+				$n_buddies[]=array($online[$username]["name"],$online[$username]["last_action"],$username);
 			}
 		}
 	}
