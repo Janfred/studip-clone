@@ -11,4 +11,4 @@ msgmerge locale/en/LC_MESSAGES/studip_core.po.old locale/en/LC_MESSAGES/studip_c
 
 
 # then merge into one file
-msgmerge locale/en/LC_MESSAGES/studip_core.po locale/en/LC_MESSAGES/studip.po --output-file=locale/en/LC_MESSAGES/studip.po
+msgcat locale/en/LC_MESSAGES/studip_core.po locale/en/LC_MESSAGES/studip.po --output-file=locale/en/LC_MESSAGES/studip.po --use-first

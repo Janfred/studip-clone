@@ -5,14 +5,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-01-09 18:58+0100\n"
-"PO-Revision-Date: 2002-09-05 16:54+GMT\n"
+"POT-Creation-Date: 2003-01-09 20:18+0100\n"
+"PO-Revision-Date: 2003-01-09 19:42+GMT\n"
 "Last-Translator: \n"
 "Language-Team:  <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 0.8\n"
+"X-Generator: KBabel 0.9.6\n"
 
 #: admin_admission.php:208 admin_admission.php:212 admin_metadates.php:158
 msgid "mm"
@@ -857,27 +857,27 @@ msgstr ""
 
 #: freie.php:75
 msgid "Postings"
-msgstr ""
+msgstr "postings"
 
 #: freie.php:80
 msgid "Dokumente"
-msgstr ""
+msgstr "documents"
 
 #: freie.php:85
 msgid "News"
-msgstr ""
+msgstr "news"
 
 #: freie.php:91
 msgid "Zur Literatur und Linkliste"
-msgstr ""
+msgstr "go to literature and links"
 
 #: freie.php:96
 msgid "Termine"
-msgstr ""
+msgstr "appointments"
 
 #: freie.php:126
 msgid "Es gibt keine Veranstaltungen, die einen freien Zugriff erlauben!"
-msgstr ""
+msgstr "There are no courses allowing public access!"
 
 #: freie.php:130
 msgid "&Ouml;ffentliche Veranstaltungen"
@@ -1511,7 +1511,3 @@ msgstr ""
 #: StudipRangeTreeView.class.php:330
 msgid "in Stud.IP"
 msgstr ""
-
-#~ msgid ""
-#~ "Es gibt in dieser Installation keine &ouml;ffentlichen Veranstaltungen!"
-#~ msgstr "There are no public courses in this system!"
