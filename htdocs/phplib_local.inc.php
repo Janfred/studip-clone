@@ -125,7 +125,7 @@ class studip_smtp_class extends smtp_class {
 		$this->from = "\"Stud.IP\" <wwwrun@".$this->localhost.">"; // From: Mailheader
 		$this->env_from = "wwwrun@".$this->localhost; // Envelope-From:
 		$this->abuse = "abuse@".$this->localhost; // Reply-To: Mailheader
-		$this->url = "http://" . $this->localhost . $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']; // link to system
+		$this->url = "http://" . getenv("HTTP_HOST") . $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']; // link to system
 	}
 }
 
@@ -526,7 +526,7 @@ class Seminar_Register_Auth extends Seminar_Auth {
 		// Abschicken der Bestaetigungsmail
 		$to=$Email;
 		$secret= md5("$uid:$this->magic");
-		$url = "http://" . $smtp->localhost . $CANONICAL_RELATIVE_PATH_STUDIP . "email_validation.php?secret=" . $secret;
+		$url = $smtp->url . "email_validation.php?secret=" . $secret;
 
 		// include language-specific subject and mailbody
 		include_once("$ABSOLUTE_PATH_STUDIP"."locale/$_language_path/LC_MAILS/register_mail.inc.php");

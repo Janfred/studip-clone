@@ -171,7 +171,7 @@ while ( is_array($HTTP_POST_VARS)
 
 			// Mail abschicken...
 			$to=$Email;
-			$url = "http://" . $smtp->localhost . $CANONICAL_RELATIVE_PATH_STUDIP;
+			$url = $smtp->url;
 
 			// include language-specific subject and mailbody
 			$user_language = getUserLanguagePath($u_id); // user has been just created, so we will get $DEFAULT_LANGUAGE
@@ -288,7 +288,7 @@ while ( is_array($HTTP_POST_VARS)
 
 			// Mail abschicken...
 			$to=$Email;
-			$url = "http://" . $smtp->localhost . $CANONICAL_RELATIVE_PATH_STUDIP;
+			$url = $smtp->url;
 
 			// include language-specific subject and mailbody
 			$user_language = getUserLanguagePath($u_id);
@@ -421,7 +421,7 @@ while ( is_array($HTTP_POST_VARS)
 
 			// Mail abschicken...
 			$to=$Email;
-			$url = "http://" . $smtp->localhost . $CANONICAL_RELATIVE_PATH_STUDIP;
+			$url = $smtp->url;
 
 			// include language-specific subject and mailbody
 			$user_language = getUserLanguagePath($u_id);
