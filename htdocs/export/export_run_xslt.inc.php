@@ -51,9 +51,9 @@ else
 
 	// Process the document
 	$result_file = $xslt_filename . "." . $format;
-	$result = "" . $TMP_PATH . "/" . $result_file;
-	$xml_process_file = "" . $TMP_PATH . "/" . $xml_file_id;
-	$xslt_process_file = "" . $PATH_EXPORT . "/" . $xslt_files[$choose]["file"];
+	$result = "./htdocs/studip/" . $TMP_PATH . "/" . $result_file;
+	$xml_process_file = "./htdocs/studip/" . $TMP_PATH . "/" . $xml_file_id;
+	$xslt_process_file = "./htdocs/studip/" . $PATH_EXPORT . "/" . $xslt_files[$choose]["file"];
 	if (xslt_process($xh, $xml_process_file , $xslt_process_file, $result) AND ($o_mode != "passthrough")) 
 	{
 		$export_msg .= sprintf(_("Die Daten wurden erfolgreich konvertiert. %s Sie k&ouml;nnen die Ausgabedatei jetzt ansehen oder herunterladen. %s"), "<br>", "<br>");
@@ -74,9 +74,9 @@ else
 
 	if ($o_mode == "passthrough")
 	{
-		readfile($ABSOLUTE_PATH_STUDIP . $TMP_PATH . "/" . $result_file);
-//		unlink($ABSOLUTE_PATH_STUDIP . $TMP_PATH . "/" . $xml_file_id);
-		unlink($ABSOLUTE_PATH_STUDIP . $TMP_PATH . "/" . $result_file);
+		readfile( $TMP_PATH . "/" . $result_file);
+		unlink( $TMP_PATH . "/" . $xml_file_id);
+		unlink( $TMP_PATH . "/" . $result_file);
 	}
 	else
 	{
