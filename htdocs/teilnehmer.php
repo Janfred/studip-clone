@@ -29,7 +29,9 @@ require_once ("$ABSOLUTE_PATH_STUDIP/admission.inc.php");	//Funktionen der Teiln
 require_once ("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");	//Funktionen der Statusgruppen
 require_once ("$ABSOLUTE_PATH_STUDIP/messaging.inc.php");	//Funktionen des Nachrichtensystems
 require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php");		//We need the config for some parameters of the class of the Veranstaltung
-
+if ($GLOBALS['CHAT_ENABLE']){
+	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php"; 
+}
 // Start  of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head	
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   //hier wird der "Kopf" nachgeladen
@@ -518,9 +520,12 @@ while (list ($key, $val) = each ($gruppe)) {
 	print $Dokumente;
 	print("</font></td>");
 	
-	printf ("<td class=\"$class\" align=\"center\">");
+	echo "<td class=\"$class\" align=\"center\">";
+	if ($GLOBALS['CHAT_ENABLE']){
+		echo chat_get_online_icon($db->f("user_id"),$db->f("username"),$SessSemName[1]) . "&nbsp;";
+	}
 	printf ("<a href=\"sms.php?sms_source_page=teilnehmer.php&cmd=write&rec_uname=%s\"><img src=\"pictures/nachricht1.gif\" %s border=\"0\"></a>", $db->f("username"), tooltip(_("Nachricht an User verschicken"))); 
-	printf ("</td>");
+	echo "</td>";
 
 // Befoerderungen und Degradierungen
 	$username=$db->f("username");

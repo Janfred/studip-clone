@@ -34,7 +34,6 @@ if ($GLOBALS['CHAT_ENABLE']){
 	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php"; 
 	$chatServer =& ChatServer::GetInstance($GLOBALS['CHAT_SERVER_NAME']);
 	$chatServer->caching = true;
-	$admin_chats = $chatServer->getAdminChats($auth->auth['uid']);
 }
 $msging=new messaging;
 $cssSw=new cssClassSwitcher;
@@ -180,15 +179,7 @@ if (is_array($n_buddies))
 				printf("\n<tr><td  width=\"1%%\" class=\"gruppe%s\">&nbsp; </td><td class=\"steel1\" width=\"64%%\"><a href=\"about.php?username=%s\"><font size=-1>&nbsp; %s </font></a></td><td class=\"steel1\" width=\"20%%\"><font size=-1> %s:%s</font></td>", $groupcount, $tmp_online_uname, htmlReady($fullname), date("i",$zeit), date("s",$zeit));
 				echo "\n<td class=\"steel1\" width=\"5%\" align=center>";
 				if ($CHAT_ENABLE) {
-					if ($tmp_num_chats = $chatServer->chatUser[$tmp_user_id]) {
-						echo "<a href=\"chat_online.php?search_user={$tmp_user_id}\"><img src=\"pictures/chat2.gif\""
-							.tooltip(($tmp_num_chats == 1) ? _("Dieser User befindet sich in einem Chatraum.") : sprintf(_("Dieser User befindet sich in %s Chaträumen"),$tmp_num_chats)) 
-							." border=\"0\"></a></td>";
-					} elseif (is_array($admin_chats)) {
-						echo "<a href=\"sms.php?sms_source_page=online.php&cmd=write_chatinv&rec_uname=$tmp_online_uname\"><img src=\"pictures/chat1.gif\" ".tooltip(_("zum Chatten einladen"))." border=\"0\"></a>";
-					} else {
-						echo "<img src=\"pictures/chat1.gif\" border=\"0\">";
-					}
+					echo chat_get_online_icon($tmp_user_id,$tmp_online_uname);
 				} else {
 					echo "&nbsp;";
 				}
@@ -205,15 +196,7 @@ if (is_array($n_buddies))
 				printf("\n<tr><td  width=\"1%%\" class=\"steel1\">&nbsp; </td><td class=\"steel1\" width=\"64%%\"><a href=\"about.php?username=%s\"><font size=-1>&nbsp; %s </font></a></td><td class=\"steel1\" width=\"20%%\"><font size=-1> %s:%s</font></td>", $tmp_online_uname, htmlReady($fullname), date("i",$zeit), date("s",$zeit));
 				echo "\n<td class=\"steel1\" width=\"5%\" align=center>";
 				if ($CHAT_ENABLE) {
-					if ($tmp_num_chats = $chatServer->chatUser[$tmp_user_id]) {
-						echo "<a href=\"chat_online.php?search_user={$tmp_user_id}\"><img src=\"pictures/chat2.gif\""
-							.tooltip(($tmp_num_chats == 1) ? _("Dieser User befindet sich in einem Chatraum.") : sprintf(_("Dieser User befindet sich in %s Chaträumen"),$tmp_num_chats)) 
-							." border=\"0\"></a></td>";
-					} elseif (is_array($admin_chats)) {
-						echo "<a href=\"sms.php?sms_source_page=online.php&cmd=write_chatinv&rec_uname=$tmp_online_uname\"><img src=\"pictures/chat1.gif\" ".tooltip(_("zum Chatten einladen"))." border=\"0\"></a>";
-					} else {
-						echo "<img src=\"pictures/chat1.gif\" border=\"0\">";
-					}
+					echo chat_get_online_icon($tmp_user_id,$tmp_online_uname);
 				} else {
 					echo "&nbsp;";
 				}
@@ -240,15 +223,7 @@ ob_start();
 				printf("\n<tr><td class=\"".$cssSw->getClass()."\" width=\"1%%\"><a href=\"$PHP_SELF?cmd=add_user&add_uname=$tmp_online_uname\"><img src=\"pictures/add_buddy.gif\" ".tooltip(_("zu den Buddies hinzufügen"))." border=\"0\"></a></td><td class=\"".$cssSw->getClass()."\" width=\"67%%\" align=\"left\"><a href=\"about.php?username=%s\"><font size=-1>&nbsp; %s </font></a></td><td class=\"".$cssSw->getClass()."\" width=\"20%%\"><font size=-1> %s:%s</font></td>", $tmp_online_uname, htmlReady($fullname), date("i",$zeit), date("s",$zeit));
 				echo "\n<td class=\"".$cssSw->getClass()."\" width=\"6%\"align=center>";
 				if ($CHAT_ENABLE) {
-					if ($tmp_num_chats = $chatServer->chatUser[$tmp_user_id]) {
-						echo "<a href=\"chat_online.php?search_user={$tmp_user_id}\"><img src=\"pictures/chat2.gif\""
-							.tooltip(($tmp_num_chats == 1) ? _("Dieser User befindet sich in einem Chatraum.") : sprintf(_("Dieser User befindet sich in %s Chaträumen"),$tmp_num_chats)) 
-							." border=\"0\"></a></td>";
-					} elseif (is_array($admin_chats)) {
-						echo "<a href=\"sms.php?sms_source_page=online.php&cmd=write_chatinv&rec_uname=$tmp_online_uname\"><img src=\"pictures/chat1.gif\" ".tooltip(_("zum Chatten einladen"))." border=\"0\"></a>";
-					} else {
-						echo "<img src=\"pictures/chat1.gif\" border=\"0\">";
-					}
+					echo chat_get_online_icon($tmp_user_id,$tmp_online_uname);
 				} else {
 					echo "&nbsp;";
 				}

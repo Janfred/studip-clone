@@ -227,7 +227,7 @@ if ($cmd=="write") {
 	echo"</form>\n";
 }
 //chateinladung schreiben
-if ($cmd == "write_chatinv" && $GLOBALS['CHAT_ENABLE']) {
+elseif ($cmd == "write_chatinv" && $GLOBALS['CHAT_ENABLE']) {
 	 ?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
 	<tr>
@@ -259,13 +259,18 @@ if ($cmd == "write_chatinv" && $GLOBALS['CHAT_ENABLE']) {
 		$content = _("Chatraum ausw&auml;hlen:") . "&nbsp;";
 		$content .= "<select name=\"chat_id\" style=\"vertical-align:middle;font-size:9pt;\">";
 		foreach($admin_chats as $chat_id => $chat_name){
-			$content .= "<option value=\"$chat_id\">" . htmlReady($chat_name) . "</option>";
+			$content .= "<option value=\"$chat_id\"";
+			if ($_REQUEST['selected_chat_id'] == $chat_id){
+				$content .= " selected ";
+			}
+			$content .= ">" . htmlReady($chat_name) . "</option>";
 		}
 		$content .= "</select><br><br>";
 		$content .="<textarea  name=\"message\" style=\"width: 90%\" cols=80 rows=4 wrap=\"virtual\">";
 		$content.="</textarea><br />\n";
-		if (GetNumberOfBuddies())
-		$content.="<font size=-1><input style=\"vertical-align:middle;\" type=\"CHECKBOX\" name=\"send_all_buddies\" />&nbsp; " . _("Diese Einladung (auch) an alle meine Buddies verschicken") . "</font><br />\n";
+		if (GetNumberOfBuddies()){
+			$content.="<font size=-1><input style=\"vertical-align:middle;\" type=\"CHECKBOX\" name=\"send_all_buddies\" />&nbsp; " . _("Diese Einladung (auch) an alle meine Buddies verschicken") . "</font><br />\n";
+		}
 		$edit="<input type=\"IMAGE\" " . makeButton("abschicken", "src") . " border=0 align=\"absmiddle\">";
 		$edit.="&nbsp; <a href=\"$PHP_SELF\">" . makeButton("abbrechen", "img") . "</a><br>&nbsp;";	
 	} else {

@@ -24,14 +24,17 @@ include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Sessio
 
 // -- here you have to put initialisations for the current page
 
-// Start of Output
-include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
-
 require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php");   //wir brauchen die Auto-Eintrag-Seminare
 require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
 require_once("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");
+if ($GLOBALS['CHAT_ENABLE']){
+	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php"; 
+}
+
+// Start of Output
+include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
+include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 
 $sess->register("browse_data");
 
@@ -208,7 +211,7 @@ unset($query);
 
 // global
 if ($browse_data["group"]=="All" && $perm->have_perm("admin")){  // nur global admin darf alle Benutzer sehen
- 	$query = "SELECT " . $_fullname_sql['full_rev'] ." AS fullname,username,perms FROM auth_user_md5 LEFT JOIN user_info USING (user_id) ORDER BY ".$browse_data["sortby"];
+ 	$query = "SELECT " . $_fullname_sql['full_rev'] ." AS fullname,username,perms,auth_user_md5.user_id FROM auth_user_md5 LEFT JOIN user_info USING (user_id) ORDER BY ".$browse_data["sortby"];
 }
 
 // nach instituten
@@ -224,13 +227,13 @@ if($browse_data["group"]=="Seminar"){
 	$templist = "'" . implode ("', '", $AUTO_INSERT_SEM) . "'";
 	$db2->query("SELECT Seminar_id FROM seminar_user WHERE Seminar_id NOT IN ($templist) AND Seminar_id = '".$browse_data["sem_id"]."' AND user_id = '$user->id'");
 	if ($db2->num_rows() > 0 || $perm->have_perm("admin")){  // entweder wir gehoeren auch zum Seminar oder sind global admin
- 		$query = "SELECT " . $_fullname_sql['full_rev'] ." AS fullname ,username,seminar_user.status FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE Seminar_id ='".$browse_data["sem_id"]."' ORDER BY ".$browse_data["sortby"];
+ 		$query = "SELECT " . $_fullname_sql['full_rev'] ." AS fullname ,username,seminar_user.status,auth_user_md5.user_id FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE Seminar_id ='".$browse_data["sem_id"]."' ORDER BY ".$browse_data["sortby"];
 	}
 } 
 
 // freie Suche
 if($browse_data["group"]=="Search"){
- 	$query = "SELECT " . $_fullname_sql['full_rev'] ." AS fullname,username,perms FROM auth_user_md5 LEFT JOIN user_info USING (user_id)";
+ 	$query = "SELECT " . $_fullname_sql['full_rev'] ." AS fullname,username,perms,auth_user_md5.user_id FROM auth_user_md5 LEFT JOIN user_info USING (user_id)";
 	$browse_data["Vorname"] = str_replace("%", "\%", $browse_data["Vorname"]);	// tss, tss, tss
 	$browse_data["Vorname"] = str_replace("_", "\_", $browse_data["Vorname"]);	
 	$browse_data["Nachname"] = str_replace("%", "\%", $browse_data["Nachname"]);	
@@ -315,7 +318,11 @@ if (isset($query)):
 					printf("<td class=\"$class\"><font size=-1> &nbsp;%s</font></td>", $db->f("perms"));
 					break;
 			}
-			echo "<td class=\"$class\" align=\"center\"><a href=\"sms.php?sms_source_page=browse.php&cmd=write&rec_uname=", $db->f("username"),"\"><img src=\"pictures/nachricht1.gif\" " . tooltip(_("Nachricht an User verschicken")) . " border=0></a></td></tr>";
+			echo "<td class=\"$class\" align=\"center\">";
+			if ($GLOBALS['CHAT_ENABLE']){
+				echo chat_get_online_icon($db->f("user_id"),$db->f("username")) . "&nbsp;";
+			}
+			echo "<a href=\"sms.php?sms_source_page=browse.php&cmd=write&rec_uname=", $db->f("username"),"\"><img src=\"pictures/nachricht1.gif\" " . tooltip(_("Nachricht an User verschicken")) . " border=0></a></td></tr>";
 		}
 		print("</table><br /><br />");
 	else: // wir haben kein Ergebnis

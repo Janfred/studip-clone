@@ -28,7 +28,9 @@ require_once($ABSOLUTE_PATH_STUDIP."visual.inc.php");
 require_once($ABSOLUTE_PATH_STUDIP."html_head.inc.php");
 require_once($ABSOLUTE_PATH_STUDIP."statusgruppe.inc.php");
 require_once($ABSOLUTE_PATH_STUDIP."functions.php");
-
+if ($GLOBALS['CHAT_ENABLE']){
+	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php"; 
+}
 $css_switcher = new CssClassSwitcher();
 echo $css_switcher->GetHoverJSFunction();
 
@@ -632,6 +634,9 @@ function table_body ($db, $range_id, $structure, $css_switcher) {
 		
 		if ($structure["nachricht"]) {
 			printf("<td%salign=\"center\">\n",$css_switcher->getFullClass());
+			if ($GLOBALS['CHAT_ENABLE']){
+				echo chat_get_online_icon($db->f("user_id"),$db->f("username"),$GLOBALS['SessSemName'][1]) . "&nbsp;";
+			}
 			printf("<a href=\"sms.php?sms_source_page=institut_members.php&cmd=write&rec_uname=%s\">",
 				$db->f("username"));
 			printf("<img src=\"pictures/nachricht1.gif\" alt=\"%s\" ", _("Nachricht an User verschicken"));
