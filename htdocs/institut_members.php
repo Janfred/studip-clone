@@ -417,7 +417,9 @@ if ($institut_members_data["show"] == "funktion") {
 			$db_institut_members->query($query);
 			if ($db_institut_members->num_rows() > 0) {
 				echo "<tr><td class=\"steelgroup1\" colspan=\"$colspan\" height=\"20\">";
-				echo "<font size=\"-1\"><b>&nbsp;$statusgruppe_name<b></font></td></tr>\n";
+				echo "<font size=\"-1\"><b>&nbsp;"
+				echo htmlReady($statusgruppe_name);
+				echo "<b></font></td></tr>\n";
 				table_boddy($db_institut_members, $auswahl, $table_structure, $css_switcher);
 			}
 		}
