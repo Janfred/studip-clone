@@ -47,7 +47,7 @@ function get_my_inst_values(&$my_inst) {
 	}
 
 //News
-	$db2->query("SELECT b.Seminar_id,count(range_id) as count, count(if((date > b.loginfilenow AND user_id !='".$user->id."'),range_id,NULL)) AS neue 
+	$db2->query("SELECT b.Seminar_id,count(IF(date < UNIX_TIMESTAMP(),range_id,NULL)) as count, count(IF((date < UNIX_TIMESTAMP() AND date > b.loginfilenow AND user_id !='".$user->id."'),range_id,NULL)) AS neue 
 				FROM loginfilenow_".$user->id." b  LEFT JOIN news_range ON (b.Seminar_id=range_id) LEFT JOIN news  USING(news_id) GROUP BY b.Seminar_id");
 	while($db2->next_record()) {
 		$my_inst[$db2->f("Seminar_id")]["neuenews"]=$db2->f("neue");
