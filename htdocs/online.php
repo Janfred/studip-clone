@@ -75,9 +75,9 @@ if ($msg)
 		<td class="blank"><br><blockquote>Hier k&ouml;nnen Sie sehen, wer ausser Ihnen im Moment online ist. <p>Sie k&ouml;nnen den Usern eine Nachricht schicken <img src="pictures/nachricht1.gif" width="24" height="21" <?=tooltip("Nachricht an User verschicken")?> border="0"><br>oder ihn zum Chatten <img src="pictures/chat1.gif" width="24" height="21" <?=tooltip("zum Chatten einladen")?> border="0"> einladen. <br>Wenn Sie auf den Namen klicken, kommen Sie zu seiner Homepage.
 		<?
 		if ($SessSemName[0] && $SessSemName["class"] == "inst")
-			echo "<br /><br /><a href=\"institut_main.php\">Zur&uuml;ck zur Einrichtung</a>";
+			echo "<br /><br /><a href=\"institut_main.php\">Zur&uuml;ck zur ausgew&auml;hlten Einrichtung</a>";
 		elseif ($SessSemName[0])
-			echo "<br /><br /><a href=\"seminar_main.php\">Zur&uuml;ck zur Veranstaltung</a>";
+			echo "<br /><br /><a href=\"seminar_main.php\">Zur&uuml;ck zur ausgew&auml;hlten Veranstaltung</a>";
 		?>
 		<td class="blank" align = right><img src="pictures/online.jpg" border="0"></td>
 	</tr>
