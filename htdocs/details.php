@@ -213,7 +213,7 @@ elseif (($SessSemName[1] <>"") && (!isset($sem_id)))
 				}
 				printf ("<font size=-1><br />Schreiben:&nbsp;</font><font size=-1>%s </font>",$db3->f("anzahl"));
 					if ($mein_status == "dozent" || $mein_status == "tutor" || $mein_status == "autor") { // in den Fällen darf ich auf jeden Fall schreiben
-					echo"<img border=\"0\" src=\"pictures/ampel_gruen.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>(bereits Teilnehmer)</font>";
+					echo"<img border=\"0\" src=\"pictures/ampel_gruen.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1></font>";
 				} else {
 					switch($db2->f("Schreibzugriff")){
 						case 0 :
