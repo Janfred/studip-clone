@@ -68,18 +68,12 @@ class DataFields {
 	}
 
 	function checkPermission($perm, $view_perms, $watcher = "", $user = "") {
-		if (!$view_perms) return TRUE;
-		foreach ($this->perms_mask as $key => $val) {
-			if ($key == "self") {
-				if ($view_perms & $val) {
-					if (($watcher == "") | ($user == "")) return FALSE;
-					if ($user == $watcher) return TRUE; else return FALSE;
-				}
-			} else {
-				if ($perm->have_perm($key) && ($view_perms & $val)) return TRUE;
-			}
+		if ($view_perms == "all") return TRUE;	//everybody may see the information
+		if ($perm->have_perm($view_perms)) return TRUE;	//permission ist high enough
+		if (($watcher != "") && ($user != "")) {	//user may see his own data
+			if ($user == $watcher) return TRUE;
 		}
-		return FALSE;
+		return FALSE;	//nothing matched...
 	}
 
 	function getNumberUsedEntries($datafield_id) {
@@ -234,7 +228,7 @@ class DataFields {
 		if (!$view_perms)
 			$view_perms = "NULL";
 
-		$query = sprintf ("REPLACE INTO datafields SET datafield_id = '%s', name= '%s', object_type = '%s', object_class = %s, edit_perms = '%s', priority = '%s', view_perms = %s",
+		$query = sprintf ("REPLACE INTO datafields SET datafield_id = '%s', name= '%s', object_type = '%s', object_class = %s, edit_perms = '%s', priority = '%s', view_perms = '%s'",
 				$datafield_id, $name, $object_type, $object_class, $edit_perms, $priority, $view_perms);
 
 		$this->db->query($query);
