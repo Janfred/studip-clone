@@ -57,7 +57,7 @@ if ($sms_msg)
 
 IF ($SessSemName[1] =="")
 	{
-	parse_window ("error§Sie haben keine Veranstaltung gew&auml;hlt. <br /><font size=-1 color=black>Dieser Teil des Systems kann nur genutzt werden, wenn Sie vorher eine Veranstaltung gew&auml;hlt haben.<br /><br /> Dieser Fehler tritt auch auf, wenn Ihre Session abgelaufen ist. Wenn sie sich länger als $AUTH_LIFETIME Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurück zur Anmeldung zu gelangen. </font>", "§",
+	parse_window ("error§Sie haben keine Veranstaltung gew&auml;hlt. <br /><font size=\"-1\" color=\"black\">Dieser Teil des Systems kann nur genutzt werden, wenn Sie vorher eine Veranstaltung gew&auml;hlt haben.<br /><br /> Dieser Fehler tritt auch auf, wenn Ihre Session abgelaufen ist. Wenn sie sich länger als $AUTH_LIFETIME Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurück zur Anmeldung zu gelangen. </font>", "§",
 				"Keine Veranstaltung gew&auml;hlt", 
 				"<a href=\"index.php\"><b>&nbsp;Hier</b></a> geht es wieder zur Anmeldung beziehungsweise Startseite.<br />&nbsp;");
 	die;
@@ -70,8 +70,8 @@ $db=new DB_Seminar;
 $db2=new DB_Seminar;
 $db3=new DB_Seminar;
 
-echo "<table cellspacing=0 border=0 width=\"100%\">";
-echo "<tr><td class=blank colspan=2>&nbsp;</td></tr>";
+echo "<table cellspacing=\"0\" border=\"0\" width=\"100%\">";
+echo "<tr><td class=\"blank\" colspan=\"2\">&nbsp;</td></tr>";
 
 // Hier will jemand die Karriereleiter rauf...
 
@@ -277,17 +277,17 @@ $gruppe = array ("dozent" => "DozentInnen",
 ?>
 
 <tr>
-		<td class="topic" colspan=2><b>&nbsp;<? echo $SessSemName["art"],": ",htmlReady($SessSemName[0]); ?> - TeilnehmerInnen</b></td>
+		<td class="topic" colspan="2"><b>&nbsp;<? echo $SessSemName["art"],": ",htmlReady($SessSemName[0]); ?> - TeilnehmerInnen</b></td>
 </tr>
 	<tr>
-		<td class="blank" width="100%" colspan=2>&nbsp;
+		<td class="blank" width="100%" colspan="2">&nbsp;
 			<?
 			if ($msg) parse_msg($msg);
 			?>
 		</td>
 	</tr>
 <tr>
-	<td class="blank" colspan=2>
+	<td class="blank" colspan="2">
 	
 	<table width="99%" border="0"  cellpadding="2" cellspacing="0" align="center">
 
@@ -306,10 +306,10 @@ $db->query ("SELECT seminar_user.user_id, Vorname, Nachname, username, status, c
 if ($db->num_rows()) { //Only if Users were found...
 	// die eigentliche Teil-Tabelle
 	echo "<tr height=28>";
-	printf ("<td class=\"steel\" width=\"30%%\" align=\"left\"><img src=\"pictures/blank.gif\" width=1 height=20><font size=-1><b><a href=%s?sortby=Nachname>%s</a></b></font></td>", $PHP_SELF, $val);
-	printf ("<td class=\"steel\" width=\"10%%\" align=\"center\"><font size=-1><b><a href=%s>Postings</a></b></font></td>", $PHP_SELF);
-	echo "<td class=\"steel\" width=\"10%\" align=\"center\"><font size=-1><b>Dokumente</b></font></td>";
-	echo "<td class=\"steel\" width=\"10%\" align=\"center\"><font size=-1><b>Nachricht</b></font></td>";
+	printf ("<td class=\"steel\" width=\"30%%\" align=\"left\"><img src=\"pictures/blank.gif\" width=\"1\" height=\"20\"><font size=\"-1\"><b><a href=%s?sortby=Nachname>%s</a></b></font></td>", $PHP_SELF, $val);
+	printf ("<td class=\"steel\" width=\"10%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b><a href=%s>Postings</a></b></font></td>", $PHP_SELF);
+	echo "<td class=\"steel\" width=\"10%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>Dokumente</b></font></td>";
+	echo "<td class=\"steel\" width=\"10%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>Nachricht</b></font></td>";
 	//echo "<td class=\"steel\" width=\"10%\"><b>Literatur</b></td>";
 
 	if ($rechte) {
@@ -320,31 +320,31 @@ if ($db->num_rows()) { //Only if Users were found...
 			$width=20;
 						
 		if ($key == "dozent") {
-			echo"<td class=\"steel\" width=\"$width%\" align=center><b>&nbsp;</b></td>";
-			echo"<td class=\"steel\" width=\"$width%\" align=center><b>&nbsp;</b></td>";
+			echo"<td class=\"steel\" width=\"$width%\" align=\"center\"><b>&nbsp;</b></td>";
+			echo"<td class=\"steel\" width=\"$width%\" align=\"center\"><b>&nbsp;</b></td>";
 			if ($db3->f("admission_type"))
-				echo"<td class=\"steel\" width=\"10%\" align=center><b>&nbsp;</b></td>";
+				echo"<td class=\"steel\" width=\"10%\" align=\"center\"><b>&nbsp;</b></td>";
 		}
 
 		if ($key == "tutor") {
-			echo"<td class=\"steel\" width=\"$width%\" align=center><font size=-1><b>&nbsp;</b></font></td>";
-			echo"<td class=\"steel\" width=\"$width%\" align=center><font size=-1><b>TutorIn entlassen</b></font></td>";
+			echo"<td class=\"steel\" width=\"$width%\" align=\"center\"><font size=\"-1\"><b>&nbsp;</b></font></td>";
+			echo"<td class=\"steel\" width=\"$width%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>TutorIn entlassen</b></font></td>";
 			if ($db3->f("admission_type"))
-				echo"<td class=\"steel\" width=\"10%\" align=center><b>&nbsp;</b></td>";
+				echo"<td class=\"steel\" width=\"10%\" align=\"center\"><b>&nbsp;</b></td>";
 		}
 		
 		if ($key == "autor") {
-			echo"<td class=\"steel\" width=\"$width%\" align=center><font size=-1><b>als TutorIn eintragen</b></font></td>";
-			echo"<td class=\"steel\" width=\"$width%\" align=center><font size=-1><b>Schreibrecht entziehen</b></font></td>";
+			echo"<td class=\"steel\" width=\"$width%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>als TutorIn eintragen</b></font></td>";
+			echo"<td class=\"steel\" width=\"$width%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>Schreibrecht entziehen</b></font></td>";
 			if ($db3->f("admission_type"))
-				echo"<td class=\"steel\" width=\"10%\" align=center><font size=-1><b>Kontingent</b></font></td>";
+				echo"<td class=\"steel\" width=\"10%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>Kontingent</b></font></td>";
 		}
 
 		if ($key == "user") {
-			echo"<td class=\"steel\" width=\"$width%\" align=center><font size=-1><b>Schreibrecht erteilen</b></font></td>";
-			echo"<td class=\"steel\" width=\"$width%\" align=center><font size=-1><b>BenutzerIn entfernen</b></font></td>";
+			echo"<td class=\"steel\" width=\"$width%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>Schreibrecht erteilen</b></font></td>";
+			echo"<td class=\"steel\" width=\"$width%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>BenutzerIn entfernen</b></font></td>";
 			if ($db3->f("admission_type"))
-				echo"<td class=\"steel\" width=\"10%\" align=center><b>&nbsp;</b></td>";
+				echo"<td class=\"steel\" width=\"10%\" align=\"center\"><b>&nbsp;</b></td>";
 		}		
 	}
 	
@@ -359,11 +359,11 @@ if ($db->num_rows()) { //Only if Users were found...
 	$c++;
 
 	print("<tr><td class=\"$class\">");
-	print( "<font size=-1><a href = about.php?username=" . $db->f("username") . ">");
+	print( "<font size=\"-1\"><a href = about.php?username=" . $db->f("username") . ">");
 	print(htmlReady($db->f("Vorname")) ." ". htmlReady($db->f("Nachname")) ."</a>");
-	print("</font></td><td class=\"$class\" align=center><font size=-1>");
+	print("</font></td><td class=\"$class\" align=\"center\"><font size=\"-1\">");
 	print( $db->f("doll"));
-	print("</font></td><td class=\"$class\" align=center><font size=-1>");
+	print("</font></td><td class=\"$class\" align=\"center\"><font size=\"-1\">");
 
 	$Dokumente = 0;
 	$UID = $db->f("user_id");
@@ -374,7 +374,7 @@ if ($db->num_rows()) { //Only if Users were found...
 	print $Dokumente;
 	print("</font></td>");
 	
-	printf ("<td class=\"$class\" align=center>");
+	printf ("<td class=\"$class\" align=\"center\">");
 	printf ("<a href=\"sms.php?sms_source_page=teilnehmer.php&cmd=write&rec_uname=%s\"><img src=\"pictures/nachricht1.gif\" alt=\"Nachricht an User verschicken\" border=\"0\"></a>", $db->f("username")); 
 	printf ("</td>");
 
@@ -385,7 +385,7 @@ if ($db->num_rows()) { //Only if Users were found...
 		// Tutor entlassen	
 		if ($key == "tutor" AND $SemUserStatus!="tutor") {
 			echo "<td class=\"$class\">&nbsp</td>";
-			echo "<td class=\"$class\" align=center>";
+			echo "<td class=\"$class\" align=\"center\">";
 			echo "<a href=\"$PHP_SELF?cmd=pain&username=$username\"><img border=\"0\" src=\"pictures/down.gif\" width=\"21\" height=\"16\"></a></td>";
 		}
 
@@ -394,12 +394,12 @@ if ($db->num_rows()) { //Only if Users were found...
 			if ($SemUserStatus!="tutor") {
 				$db2->query ("SELECT DISTINCT inst_perms, user_id, Institut_id FROM user_inst WHERE user_id = '$UID' AND Institut_id IN(".get_inst_list().") AND inst_perms!='user' AND inst_perms!='autor'");		
 				if ($db2->next_record()) {
-					echo "<td class=\"$class\" align=center>";
+					echo "<td class=\"$class\" align=\"center\">";
 					echo "<a href=\"$PHP_SELF?cmd=pleasure&username=$username\"><img border=\"0\" src=\"pictures/up.gif\" width=\"21\" height=\"16\"></a></td>";
 				} else echo "<td class=\"$class\" >&nbsp;</td>";
 			} else echo "<td class=\"$class\">&nbsp;</td>";
 			// Schreibrecht entziehen
-			echo "<td class=\"$class\" align=center>";
+			echo "<td class=\"$class\" align=\"center\">";
 			echo "<a href=\"$PHP_SELF?cmd=lesen&username=$username\"><img border=\"0\" src=\"pictures/down.gif\" width=\"21\" height=\"16\"></a></td>";
 		}
 
@@ -407,11 +407,11 @@ if ($db->num_rows()) { //Only if Users were found...
 		elseif ($key == "user") {
 			$db2->query ("SELECT perms, user_id FROM auth_user_md5 WHERE user_id = '$UID' AND perms != 'user'");		
 			if ($db2->next_record()) { // Leute, die sich nicht zurueckgemeldet haben duerfen auch nicht schreiben!
-				echo "<td class=\"$class\" align=center>";
+				echo "<td class=\"$class\" align=\"center\">";
 				echo "<a href=\"$PHP_SELF?cmd=schreiben&username=$username\"><img border=\"0\" src=\"pictures/up.gif\" width=\"21\" height=\"16\"></a></td>";
 			} else echo "<td class=\"$class\">&nbsp;</td>";
 			// aus dem Seminar werfen
-			echo "<td class=\"$class\" align=center>";
+			echo "<td class=\"$class\" align=\"center\">";
 			echo "<a href=\"$PHP_SELF?cmd=raus&username=$username\"><img border=\"0\" src=\"pictures/down.gif\" width=\"21\" height=\"16\"></a></td>";
 		} 
 		
@@ -441,7 +441,7 @@ if ($rechte) {
 } else
 	$colspan=4;
 
-	echo "<tr><td class=blank colspan=\"$colspan\">&nbsp;</td></tr>";
+	echo "<tr><td class=\"blank\" colspan=\"$colspan\">&nbsp;</td></tr>";
 
 } // eine Gruppe zuende
 }
@@ -455,17 +455,17 @@ if ($rechte) {
 	if ($db->num_rows()) { //Only if Users were found...
 
 		// die eigentliche Teil-Tabelle
-		echo "<tr><td class=\"blank\" colspan=2>";
+		echo "<tr><td class=\"blank\" colspan=\"2\">";
 		echo "<table width=\"99%\" border=\"0\"  cellpadding=\"2\" cellspacing=\"0\" align=\"center\">";
-		echo "<tr height=28>";
-		printf ("<td class=\"steel\" width=\"%s%%\" align=\"left\"><img src=\"pictures/blank.gif\" width=1 height=20><font size=-1><b>%s</b></font></td>", ($db3->f("admission_type") == 1 && $db3->f("admission_selection_take_place") !=1) ? "40" : "30",  ($db3->f("admission_type") == 2 || $db3->f("admission_selection_take_place")==1) ? "Warteliste" : "Anmeldeliste");
+		echo "<tr height=\"28\">";
+		printf ("<td class=\"steel\" width=\"%s%%\" align=\"left\"><img src=\"pictures/blank.gif\" width=\"1\" height=\"20\"><font size=\"-1\"><b>%s</b></font></td>", ($db3->f("admission_type") == 1 && $db3->f("admission_selection_take_place") !=1) ? "40" : "30",  ($db3->f("admission_type") == 2 || $db3->f("admission_selection_take_place")==1) ? "Warteliste" : "Anmeldeliste");
 		if ($db3->f("admission_type") == 2 || $db3->f("admission_selection_take_place")==1)
-			printf ("<td class=\"steel\" width=\"10%%\" align=\"center\"><font size=-1><b>Position</b></font></td>");
+			printf ("<td class=\"steel\" width=\"10%%\" align=\"center\"><font size=\"-1\"><b>Position</b></font></td>");
 		printf ("<td class=\"steel\" width=\"10%%\" align=\"center\">&nbsp; </td>");
-		printf ("<td class=\"steel\" width=\"10%%\" align=\"center\"><font size=-1><b>Nachricht</b></font></td>");
-		printf ("<td class=\"steel\" width=\"15%%\" align=\"center\"><font size=-1><b>eintragen</b></font></td>");
-		printf ("<td class=\"steel\" width=\"15%%\" align=\"center\"><font size=-1><b>entfernen</b></font></td>");
-		printf ("<td class=\"steel\" width=\"10%%\" align=\"center\"><font size=-1><b>Kontingent</b></font></td></tr>\n");
+		printf ("<td class=\"steel\" width=\"10%%\" align=\"center\"><font size=\"-1\"><b>Nachricht</b></font></td>");
+		printf ("<td class=\"steel\" width=\"15%%\" align=\"center\"><font size=\"-1\"><b>eintragen</b></font></td>");
+		printf ("<td class=\"steel\" width=\"15%%\" align=\"center\"><font size=\"-1\"><b>entfernen</b></font></td>");
+		printf ("<td class=\"steel\" width=\"10%%\" align=\"center\"><font size=\"-1\"><b>Kontingent</b></font></td></tr>\n");
 		
 
 		WHILE ($db->next_record()) {
@@ -484,14 +484,14 @@ if ($rechte) {
 			}
 		
 			$cssSw->switchClass(); 
-			printf ("<tr><td width=\"%s%%\" class=\"%s\" align=left><font size=-1><a href=\"about.php?username=%s\">%s&nbsp;%s</a></font></td>",  ($db3->f("admission_type") == 1 && $db3->f("admission_selection_take_place") !=1) ? "40" : "30", $cssSw->getClass(), $db->f("username"), $db->f("Vorname"), $db->f("Nachname"));
+			printf ("<tr><td width=\"%s%%\" class=\"%s\" align=\"left\"><font size=\"-1\"><a href=\"about.php?username=%s\">%s&nbsp;%s</a></font></td>",  ($db3->f("admission_type") == 1 && $db3->f("admission_selection_take_place") !=1) ? "40" : "30", $cssSw->getClass(), $db->f("username"), $db->f("Vorname"), $db->f("Nachname"));
 			if ($db3->f("admission_type") == 2 || $db3->f("admission_selection_take_place")==1)
-				printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><font size=-1>%s</font></td>", $cssSw->getClass(), $db->f("position"));
+				printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><font size=\"-1\">%s</font></td>", $cssSw->getClass(), $db->f("position"));
 			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\">&nbsp; </td>", $cssSw->getClass());
 			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><a href=\"sms.php?sms_source_page=teilnehmer.php&cmd=write&rec_uname=%s\"><img src=\"pictures/nachricht1.gif\" alt=\"Nachricht an User verschicken\" border=\"0\"></a></td>",$cssSw->getClass(), $db->f("username")); 
 			printf ("<td width=\"15%%\" align=\"center\" class=\"%s\"><a href=\"$PHP_SELF?cmd=admission_rein&username=%s\"><img border=\"0\" src=\"pictures/up.gif\" width=\"21\" height=\"16\"></a></td>", $cssSw->getClass(), $db->f("username"));
 			printf ("<td width=\"15%%\" align=\"center\" class=\"%s\"><a href=\"$PHP_SELF?cmd=admission_raus&username=%s\"><img border=\"0\" src=\"pictures/down.gif\" width=\"21\" height=\"16\"></a></td>", $cssSw->getClass(), $db->f("username"));
-			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><font size=-1>%s</font></td></tr>\n", $cssSw->getClass(), ($db->f("studiengang_id") == "all") ? "alle Studieng&auml;nge" : $db->f("name"));
+			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><font size=\"-1\">%s</font></td></tr>\n", $cssSw->getClass(), ($db->f("studiengang_id") == "all") ? "alle Studieng&auml;nge" : $db->f("name"));
 		}
 		print "</table>";
 	}
@@ -513,10 +513,10 @@ if ($rechte AND $SemUserStatus!="tutor") {
 	</tr>
 	<tr><td class=blank colspan=2>
 
-	<table width="99%" border="0" cellpadding="2" cellspacing="0" border=0 align="center">
+	<table width="99%" border="0" cellpadding="2" cellspacing="0" border="0" align="center">
 	<form action="<? echo $PHP_SELF ?>" method="POST">
 	<tr>
-		<td class="steel1" width="40%" align="left">&nbsp; <font size=-1><b>MitarbeiterInnen der Einrichtung(en)</b></font></td>
+		<td class="steel1" width="40%" align="left">&nbsp; <font size="-1"><b>MitarbeiterInnen der Einrichtung(en)</b></font></td>
 		<td class="steel1" width="40%" align="left"><select name="u_id" size="1">
 		<?
 		printf ("<option value=\"0\">- -  bitte ausw&auml;hlen - -\n");
@@ -525,7 +525,7 @@ if ($rechte AND $SemUserStatus!="tutor") {
 		?>
 		</select></td>
 		<td class="steel1" width="20%" align="center"><font size=-1>als TutorIn</font><br />
-		<input type="IMAGE" name="add_tutor" src="./pictures/buttons/eintragen-button.gif" border=0 value=" Als TutorIn berufen "></td>
+		<input type="IMAGE" name="add_tutor" src="./pictures/buttons/eintragen-button.gif" border="0" value=" Als TutorIn berufen "></td>
 	</tr></form></table>
 <?
 
@@ -543,7 +543,7 @@ if ($rechte) {
 		?>
 
 	<tr>
-		<td class=blank colspan=2>&nbsp; 
+		<td class="blank" colspan="2">&nbsp; 
 		</td>
 	</tr>
 	<tr><td class=blank colspan=2>
