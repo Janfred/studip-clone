@@ -172,7 +172,7 @@ function imaging($img,$img_size,$img_name) {
 	}
 	//passende Endung ?
 	if ($ext != "jpg" && $ext != "gif" && $ext != "png") {
-		$this->msg = "errorß" . sprintf(_("Der Dateityp der Bilddatei ist falsch (%s).<br>Es sind nur die Dateiendungen .gif und .jpg erlaubt!"), $ext);
+		$this->msg = "errorß" . sprintf(_("Der Dateityp der Bilddatei ist falsch (%s).<br>Es sind nur die Dateiendungen .gif, .png und .jpg erlaubt!"), $ext);
 		return;
 	}
 	//na dann kopieren wir mal...
@@ -1039,7 +1039,8 @@ if ($view=="Bild") {
 	echo "&nbsp;&nbsp;<input name=\"imgfile\" type=\"file\" style=\"width: 80%\" cols=".round($max_col*0.7*0.8)."><br><br>";
 	echo _("2. Klicken sie auf <b>absenden</b>, um das Bild hochzuladen.") . "<br><br>";
 	echo "&nbsp;&nbsp;<input type=\"IMAGE\" " . makeButton("absenden", "src") . " border=0 value=\"" . _("absenden") . "\"><br><br>";
-	printf ("<b>ACHTUNG!</b><br>Die Bilddatei darf max. %s KB groﬂ sein, es sind nur Dateien mit den Endungen <b>.jpg</b> oder <b>.gif</b> erlaubt!", $my_about->max_file_size);
+	echo '<b>', _("ACHTUNG!"), '</b><br>';
+	printf (_("Die Bilddatei darf max. %s KB groﬂ sein, es sind nur Dateien mit den Endungen %s, %s oder %s erlaubt!"), $my_about->max_file_size, '<b>.jpg</b>', '<b>.png</b>', '<b>.gif</b>');
 	echo "</blockquote></td></tr>";
 }
 
