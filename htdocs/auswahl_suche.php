@@ -46,6 +46,15 @@ include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 	<br><a href="institut_browse.php"><b>Suchen nach Einrichtungen</b></a></br>
 	<font size=-1>Hier finden sie alle Einrichtungen in Stud.IP.</font>
 	<br>
+	<?
+	if ($RESOURCES_ENABLE) {
+	?>
+	<br><a href="resources.php?view=search&new_search=TRUE"><b>Suchen nach Ressourcen</b></a></br>
+	<font size=-1>Hier finden Ressourcen wie etwa R&auml;ume, Geb&auml;uder oder Ger&auml;te.</font>
+	<br>
+	<?
+	}
+	?>
 	<br><a href="archiv.php"><b>Suchen im Archiv</b></a></br>
 	<font size=-1>Hier finden sie alle Veranstaltungen vergangener Semester.</font>
 	<br>
