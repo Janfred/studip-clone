@@ -178,7 +178,6 @@ if (($view == "search") || ($view == "edit_request")) {
 
 	$clipObj = & ClipBoard::GetInstance("search");
 	$clipFormObj =& $clipObj->getFormObject();
-	
 	if ($view == "edit_request") {
 		$clipFormObj->form_fields['clip_cmd']['options'][] = array('name' => _("In aktueller Anfrage mit ber&uuml;cksichtigen"), 'value' => 'add');
 		
@@ -1377,7 +1376,7 @@ if (($dec_request_x) || ($auto_dec))
 	}
 
 //create the (overlap)data for all resources that should checked for a request
-if (($inc_request_x) || ($dec_request_x) || ($new_session_started) || ($marked_clip_ids) || ($save_state_x)) {
+if (($inc_request_x) || ($dec_request_x) || ($new_session_started) || ($marked_clip_ids) || ($save_state_x) || $auto_inc || $auto_dec) {
 	require_once ($RELATIVE_PATH_RESOURCES."/lib/RoomRequest.class.php");
 	require_once ($RELATIVE_PATH_RESOURCES."/lib/CheckMultipleOverlaps.class.php");
 	require_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
