@@ -58,17 +58,17 @@ $_views["SEM_SEMINST"]= array("pk"=>"Seminar_id","temp_table_type"=>"HEAP",
 
 //Institut
 $_views["INST_USER"]= array("pk"=>"Institut_id","temp_table_type"=>"HEAP",
-							"query"=>"SELECT   a.Institut_id FROM user_inst a LEFT JOIN institute b USING(Institut_id) WHERE ISNULL(b.Institut_id)");
+							"query"=>"SELECT   a.Institut_id FROM user_inst a LEFT JOIN Institute b USING(Institut_id) WHERE ISNULL(b.Institut_id)");
 $_views["INST_FACH"]= array("pk"=>"Institut_id","temp_table_type"=>"HEAP",
-							"query"=>"SELECT   a.Institut_id FROM fach_inst a LEFT JOIN institute b USING(Institut_id) WHERE ISNULL(b.Institut_id)");
+							"query"=>"SELECT   a.Institut_id FROM fach_inst a LEFT JOIN Institute b USING(Institut_id) WHERE ISNULL(b.Institut_id)");
 $_views["INST_SEM"]= array("pk"=>"Institut_id","temp_table_type"=>"HEAP",
-							"query"=>"SELECT   a.Institut_id FROM seminar_inst a LEFT JOIN institute b USING(Institut_id) WHERE ISNULL(b.Institut_id)");
+							"query"=>"SELECT   a.Institut_id FROM seminar_inst a LEFT JOIN Institute b USING(Institut_id) WHERE ISNULL(b.Institut_id)");
 
 //Fakultät
 $_views["FAK_USER"]= array("pk"=>"Fakultaets_id","temp_table_type"=>"HEAP",
-							"query"=>"SELECT   a.Fakultaets_id FROM fakultaet_user a LEFT JOIN fakultaeten b USING(Fakultaets_id) WHERE ISNULL(b.Fakultaets_id)");
+							"query"=>"SELECT   a.Fakultaets_id FROM fakultaet_user a LEFT JOIN Fakultaeten b USING(Fakultaets_id) WHERE ISNULL(b.Fakultaets_id)");
 $_views["FAK_INST"]= array("pk"=>"Fakultaets_id","temp_table_type"=>"HEAP",
-							"query"=>"SELECT   a.Fakultaets_id FROM institute a LEFT JOIN fakultaeten b USING(Fakultaets_id) WHERE ISNULL(b.Fakultaets_id)");
+							"query"=>"SELECT   a.Fakultaets_id FROM Institute a LEFT JOIN Fakultaeten b USING(Fakultaets_id) WHERE ISNULL(b.Fakultaets_id)");
 
 //Archiv
 $_views["ARCHIV_USER"]= array("pk"=>"Seminar_id","temp_table_type"=>"HEAP",
