@@ -45,7 +45,7 @@ require_once("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_CALENDAR/lib/sync/CalendarExpo
 require_once("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_CALENDAR/lib/sync/CalendarWriterICalendar.class.php");
 require_once("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_CALENDAR/lib/sync/CalendarSynchronizer.class.php");
 require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
-set_time_limit(0);
+
 if ($experiod != 'period') {
 	unset($exstartmonth);
 	unset($exstartday);
@@ -54,6 +54,9 @@ if ($experiod != 'period') {
 	unset($exendday);
 	unset($exendyear);
 }
+
+if (!isset($calendar_sess_export))
+	$sess->register('calendar_sess_export');
 
 $err = array();
 if ($experiod == 'period') {
@@ -86,47 +89,63 @@ if (($expmod != 'exp' && $expmod != 'imp' && $expmod != 'sync') || ($expmod == '
 		my_info($error_message, "blank", 2);
 	}
 	
-	$info = array (	
-		array ("kategorie"  => "Information:",
-			"eintrag" => array	(	
-				array (	"icon" => "pictures/ausruf_small.gif",
-					"text"  => _("Sie k&ouml;nnen Termindaten importieren, exportieren und synchronisieren.")
-				),
-			)
-		),
-	);
+	// print messages
+	if ($calendar_sess_export['msg'] != '') {
+		parse_msg($calendar_sess_export['msg']);
+		unset($calendar_sess_export['msg']);
+	}
 	
 	echo "<tr valign=\"top\">\n";
 	echo "<td width=\"99%\" nowrap class=\"blank\">\n";
 	echo "<table align=\"center\" width=\"100%\" class=\"blank\" border=\"0\" cellpadding=\"5\" cellspacing=0>\n";
 	
 	if ($expmod == 'syncrec') {
+	
+		$info = array();
+		if ($calendar_sess_export['count_synchronized']) {
+			$info['sync'] = sprintf(_("Stud.IP hat %s Termine synchronisiert."),
+								$calendar_sess_export['count_synchronized']);
+		}
+		else {
+			$info['sync'] = _("Ihr iCalendar-Datei enthielt keine Termine, die synchronisiert werden konnten.");
+		}
 		
-		$info = array (	
-			array ("kategorie"  => "Information:",
-				"eintrag" => array	(	
-					array (	"icon" => "pictures/ausruf_small.gif",
-						"text"  => _("Sie k&ouml;nnen Termindaten importieren, exportieren und synchronisieren.")
-					),
-				)
-			),
-		);
+		if ($calendar_sess_export['count_export']) {
+			$info['export'] = sprintf(_("Die zum Download zur Verf&uuml;gung stehende Datei enthält %s Termine."),
+								$calendar_sess_export['count_export']);
+		}
+		else {
+			$info['export'] = _("Ihr Stud.IP-Kalender enthält keine neueren Termine als die hochgeladene iCalendar-Datei. Es wurde keine Ausgabedatei erzeugt.");
+		}
 		
-		$send_sync = "{$CANONICAL_RELATIVE_PATH_STUDIP}sendfile.php"
-				. "?type=2&file_id=$tmpfile&file_name=$file&force_download=1";
+		$info['all'][0]['kategorie'] = _("Information:");
+		$info['all'][0]['eintrag'][] = array('icon' => 'pictures/ausruf_small.gif',
+				'text' => $info['sync']);
+		$info['all'][0]['eintrag'][] = array('icon' => 'pictures/blank.gif',
+				'text' => $info['export']);
+		
+		if ($calendar_sess_export['count_export']) {
+			$send_sync = "{$CANONICAL_RELATIVE_PATH_STUDIP}sendfile.php"
+					. "?type=2&file_id=$tmpfile&file_name=$file&force_download=1";
+			$params['content'] = _("Klicken Sie auf den Button, um die Datei mit den synchronisierten Kalenderdaten herunterzuladen.")
+					. _("Die Daten liegen ebenfalls in einer iCalendar-Datei vor, die Sie in Ihren lokalen Terminkalender (z.B. MS Outlook) importieren können.");
+			$params['button'] = "<input type=\"image\" " . makeButton("herunterladen", "src"). " border=\"0\">";
+		}
+		else {
+			$send_sync = "$PHP_SELF?cmd=export&atime=$atime";
+			$params['content'] = $info['export'];
+			$params['button'] = "<input type=\"image\" " . makeButton("zurueck", "src"). " border=\"0\">";
+		}
+		$params['form'] = "<form action=\"$send_sync\" method=\"post\">\n";
+		$send_file = "";
 		
 		echo "<tr><th align=\"left\" width=\"100%\">\n<font size=\"-1\">";
 		echo _("Herunterladen der synchronisierten Kalenderdaten")."</font>\n</th></tr>\n";
-		$send_file = "";
-		$params['form'] = "<form action=\"$send_sync\" method=\"post\">\n";
-		$params['content'] = _("Klicken Sie auf den Button, um die Datei mit den synchronisierten Kalenderdaten herunterzuladen.")
-				. _("Die Daten liegen ebenfalls in einer iCalendar-Datei vor, die Sie in Ihren lokalen Terminkalender (z.B. MS Outlook) importieren können.");
-		$params['button'] = "<input type=\"image\" " . makeButton("herunterladen", "src"). " border=\"0\">";
 		print_cell($params);
 		echo "</table\n</td>\n";
 		
 		echo "<td class=\"blank\" align=\"right\" valign=\"top\" width=\"1%\" valign=\"top\">\n";
-		print_infobox($info, "pictures/dates.jpg");
+		print_infobox($info['all'], "pictures/dates.jpg");
 	}
 	else {
 	
@@ -200,32 +219,29 @@ if (($expmod != 'exp' && $expmod != 'imp' && $expmod != 'sync') || ($expmod == '
 		$params['expmod'] = 'sync';
 		print_cell($params);
 		
-		/*
-		$info_content = array(
-											array("kategorie" => _("Information:"),
-														"eintrag" => array(	
-														array("icon" => "pictures/ausruf_small.gif",
-																	"text" => $info_text_1
-																	)
-														)
-											),
-											array("kategorie" => _("Aktion:"),
-			   										"eintrag" => array(	
-														array("icon" => "pictures/meinesem.gif",
-																	"text" => $info_text_2
-																	),
-														array("icon" => "pictures/admin.gif",
-																	"text" => $info_text_3
-																	)
-														)
-											)
-										);
+		if ($expmod == 'impdone') {
+			if ($calendar_sess_export['count_import']) {
+				$info['import'] = sprintf(_("Es wurden %s Termine importiert."),
+									$calendar_sess_export['count_import']);
+				unset($calendar_sess_export['count_import']);
+			}
+			else {
+				$info['import'] = _("Es wurden keine Termine importiert.");
+			}
 		
-		*/
+			$info['all'][0]['kategorie'] = _("Information:");
+			$info['all'][0]['eintrag'][] = array('icon' => 'pictures/ausruf_small.gif',
+					'text' => $info['import']);
+		}
+		else {
+			$info['all'][0]['kategorie'] = _("Information:");
+			$info['all'][0]['eintrag'][] = array('icon' => 'pictures/ausruf_small.gif',
+					'text' => _("Sie k&ouml;nnen Termindaten importieren, exportieren und synchronisieren."));
+		}
 		echo "</table\n</td>\n";
 		
 		echo "<td class=\"blank\" align=\"right\" valign=\"top\" width=\"1%\" valign=\"top\">\n";
-		print_infobox($info, "pictures/dates.jpg");
+		print_infobox($info['all'], "pictures/dates.jpg");
 	}
 	
 	echo "</td>\n";
@@ -239,24 +255,37 @@ if (($expmod != 'exp' && $expmod != 'imp' && $expmod != 'sync') || ($expmod == '
 }
 elseif ($expmod == 'exp' && empty($err)) {
 	
-	if ($experiod != 'period') {
-		$exstart = 0;
-		$exend = 2114377200;
-	}
-	
+	$sem_ids = '';
 	switch ($extype) {
 		case 'ALL':
 			$extype = 'ALL_EVENTS';
 			break;
 		case 'SEM':
 			$extype = 'SEMINAR_EVENTS';
+			$sem_ids = $bind_seminare;
 			break;
 		default:
 			$extype = 'CALENDAR_EVENTS';
 	}
 	
 	$export = new CalendarExportFile(new CalendarWriterICalendar());
-	$export->exportFromDatabase($user->id, $exstart, $exend, $extype);
+	if ($experiod != 'period')
+		$export->exportFromDatabase($user->id, 0, 2114377200, $extype, $sem_ids);
+	else
+		$export->exportFromDatabase($user->id, $exstart, $exend, $extype, $sem_ids);
+	
+	if ($_calendar_error->getMaxStatus(ERROR_CRITICAL)) {
+		$calendar_sess_export['msg'] = 'error§' . _("Der Export konnte nicht durchgef&uuml;hrt werden!");
+		while ($error = $_calendar_error->nextError(ERROR_CRITICAL))
+			$calendar_sess_export['msg'] .= '<br>' . $error->getMessage();
+		while ($error = $_calendar_error->nextError(ERROR_FATAL))
+			$calendar_sess_export['msg'] .= '<br>' . $error->getMessage();
+		
+		page_close();
+		header("Location: $PHP_SELF?cmd=export&atime=$atime&");
+		exit;
+	}
+	
 	$export->sendFile();
 
 }
@@ -265,23 +294,69 @@ elseif ($expmod == 'imp') {
 	$import =& new CalendarImportFile(new CalendarParserICalendar(),
 			$HTTP_POST_FILES["importfile"]);
 	
-	$import->importIntoDatabase();
+	$import_count = $import->getCount();
 	
-	header("Location: $PHP_SELF?cmd=export&atime=$atime&");
+	if ($import_count < ($CALENDAR_MAX_EVENTS - $count_events)) {
+	
+		$import->importIntoDatabase();
+
+		if ($_calendar_error->getMaxStatus(ERROR_CRITICAL)) {
+			$calendar_sess_export['count_import'] = 0;
+			$calendar_sess_export['msg'] = 'error§' . _("Der Import konnte nicht durchgef&uuml;hrt werden!");
+			while ($error = $_calendar_error->nextError(ERROR_CRITICAL))
+				$calendar_sess_export['msg'] .= '<br>' . $error->getMessage();
+			while ($error = $_calendar_error->nextError(ERROR_FATAL))
+				$calendar_sess_export['msg'] .= '<br>' . $error->getMessage();
+		}
+		else {
+			$calendar_sess_export['count_import'] = $import->getCount();
+			$calendar_sess_export['msg'] = 'msg§' . _("Der Import wurde erfolgreich durchgef&uuml;hrt!");
+		}
+	}
+	else {
+		$calendar_sess_export['msg'] = 'error§' . _("Der Import konnte nicht durchgef&uuml;hrt werden!");
+		$calendar_sess_export['msg'] .= '<br>' . _("Die zu importierende Datei enth&auml;lt zuviele Termine.");
+	}
+	
+	page_close();
+	header("Location: $PHP_SELF?cmd=export&expmod=impdone&atime=$atime");
+	exit;
 	
 }
 elseif ($expmod == 'sync') {
-
+	
 	$import =& new CalendarImportFile(new CalendarParserICalendar(),
 			$HTTP_POST_FILES["importfile"]);
-	
+		
 	$export =& new CalendarExportFile(new CalendarWriterICalendar());
 	
-	$synchronizer =& new CalendarSynchronizer($import, $export);
+	$synchronizer =& new CalendarSynchronizer($import, $export,
+			$CALENDAR_MAX_EVENTS - $count_events);
 	$synchronizer->synchronize();
-	$location = "Location: $PHP_SELF?cmd=export&expmod=syncrec&tmpfile="
+	
+	if ($_calendar_error->getMaxStatus(ERROR_CRITICAL)) {
+		unset($calendar_sess_export['count_import']);
+		unset($calendar_sess_export['count_export']);
+		unset($calendar_sess_export['count_synchronized']);
+		$calendar_sess_export['msg'] = 'error§' . _("Die Synchronisation konnte nicht durgef&uuml;hrt werden!");
+		while ($error = $_calendar_error->nextError(ERROR_CRITICAL))
+			$calendar_sess_export['msg'] .= '<br>' . $error->getMessage();
+		while ($error = $_calendar_error->nextError(ERROR_FATAL))
+			$calendar_sess_export['msg'] .= '<br>' . $error->getMessage();
+		$location = "Location: $PHP_SELF?cmd=export&atime=$atime";
+	}
+	else {
+		$calendar_sess_export['count_import'] = $import->getCount();
+		$calendar_sess_export['count_export'] = $export->getCount();
+		$calendar_sess_export['count_synchronized'] = $synchronizer->getCount();
+		$calendar_sess_export['msg'] = 'msg§' . _("Die Synchronisation wurde erfolgreich durchgef&uuml;hrt!");
+		$location = "Location: $PHP_SELF?cmd=export&expmod=syncrec&tmpfile="
 			. $export->getTempFileName() . "&file=" . $export->getFileName() . "&atime=$atime";
+	}
+	
+	page_close();
 	header($location);
+	exit;
 
 }
 

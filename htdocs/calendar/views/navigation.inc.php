@@ -48,13 +48,13 @@ if ($cmd != "changeview") {
 	echo "border=\"0\" align=\"absmiddle\" $tooltip><b>&nbsp;";
 	echo $title . "</b></td></tr>\n";
 
-	if ($intro) {
-	echo "<tr><td class=\"blank\"><font size=\"2\">&nbsp;</font>\n";
+/*	if ($intro) {
+	echo "<tr><td class=\"blank\">";//<font size=\"-3\">&nbsp;</font>\n";
 	echo "<blockquote>\n";
 	echo _("Dieser Terminkalender verwaltet Ihre Termine. Sie k&ouml;nnen Termine eintragen, &auml;ndern, gruppieren und sich &uuml;bersichtlich anzeigen lassen.");
-	echo "</blockquote>\n<font size=\"2\">&nbsp;</font></td></tr>\n";
+	echo "</blockquote>\n</td></tr>\n";
 	}
-	else
+	else*/
 		echo "<tr><td class=\"blank\" width=\"100%\">&nbsp;</td></tr>\n";
 		
 	echo "</table>\n";

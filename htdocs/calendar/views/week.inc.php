@@ -73,7 +73,7 @@ echo "<tr>\n";
 echo "<td align=\"center\" width=\"15%\"><a href=\"$PHP_SELF?cmd=showweek&atime=";
 echo $aweek->getStart() - 1 . "\">&nbsp;";
 echo "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calendar_previous.gif\" ";
-echo tooltip(_("zurück")) . ">&nbsp;</a></td>\n";
+echo tooltip(_("eine Woche zurück")) . ">&nbsp;</a></td>\n";
 echo "<td width=\"70%\" class=\"calhead\">";
 printf(_("%s. Woche vom %s bis %s"), strftime("%V", $aweek->getStart()),
 		strftime("%x", $aweek->getStart()), strftime("%x", $aweek->getEnd()));
@@ -81,7 +81,7 @@ echo "</td>\n";
 echo "<td align=\"center\" width=\"15%\"><a href=\"$PHP_SELF?cmd=showweek&atime=";
 echo $aweek->getEnd() + 259201 . "\">&nbsp;";
 echo "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calendar_next.gif\" ";
-echo tooltip(_("vor")) . ">&nbsp;</a></td>\n";
+echo tooltip(_("eine Woche vor")) . ">&nbsp;</a></td>\n";
 echo "</tr></table>\n</td></tr>\n";
 
 echo "<tr><td nowrap=\"nowrap\" align=\"center\" width=\"$width\"$colspan_1>";

@@ -40,8 +40,13 @@ define("PHPDOC_DUMMY",true);
 
 require("$ABSOLUTE_PATH_STUDIP/html_head.inc.php");
 
-echo '<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>';
-echo "<script language=\"JavaScript\" src=\"overlib.js\"></script>\n";
+if ($forum["jshover"]==1 AND $auth->auth["jscript"]) { // JS an und erwuenscht?
+	echo "<script language=\"JavaScript\">";
+	echo "var ol_textfont = \"Arial\"";
+	echo "</script>";
+	echo "<DIV ID=\"overDiv\" STYLE=\"position:absolute; visibility:hidden; z-index:1000;\"></DIV>";
+	echo "<SCRIPT LANGUAGE=\"JavaScript\" SRC=\"overlib.js\"></SCRIPT>";
+}
 
 require("$ABSOLUTE_PATH_STUDIP/header.php");
 require($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/views/navigation.inc.php");
@@ -50,15 +55,20 @@ require($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/views/navigation.inc
 echo "<table width=\"100%\" border=\"0\" cellpadding=\"5\" cellspacing=\"0\">\n";
 echo "<tr><td class=\"blank\" width=\"100%\">\n";
 echo "<table width=\"98%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" align=\"center\">\n";
-echo "<tr><td>&nbsp</td></tr>\n<tr><td>\n";
+echo "<tr><td>\n";
 echo "<table class=\"steelgroup0\" border=\"0\" cellspacing=\"1\" cellpadding=\"0\" align=\"center\">\n";
 echo "<tr><td>\n";
 
 echo "<table width=\"100%\" border=\"0\" cellspacing=\"1\" cellpadding=\"1\">\n";
-echo "<tr>\n";
-printf("<td align=\"center\">&nbsp;<a href=\"%s?cmd=showmonth&atime=%s\">",
+echo "<tr>\n<td align=\"center\">";
+printf("&nbsp;<a href=\"%s?cmd=showmonth&atime=%s\">",
+	$PHP_SELF, mktime(12, 0, 0, date('n', $amonth->getStart()),
+			date('j', $amonth->getStart()), date('Y', $amonth->getStart()) + 1));
+$tooltip = tooltip(_("ein Jahr zurück"));
+echo "<img border=\"0\" src=\"./pictures/calendar_previous_double.gif\" $tooltip></a>";
+printf("&nbsp; &nbsp; &nbsp; &nbsp;<a href=\"%s?cmd=showmonth&atime=%s\">",
 	$PHP_SELF, $amonth->getStart() - 1);
-$tooltip = tooltip(_("zurück"));
+$tooltip = tooltip(_("einen Monat zurück"));
 echo "<img border=\"0\" src=\"./pictures/calendar_previous.gif\" $tooltip></a>&nbsp;</td>\n";
 printf("<td colspan=%s class=\"calhead\">\n", $mod == "nokw" ? "5" : "6");
 echo "<font size=\"+2\">";
@@ -66,8 +76,13 @@ echo htmlentities(strftime("%B ", $amonth->getStart()), ENT_QUOTES) . $amonth->g
 echo "</font></td>\n";
 printf("<td align=\"center\">&nbsp;<a href=\"%s?cmd=showmonth&atime=%s\">",
 	$PHP_SELF, $amonth->getEnd() + 1);
-$tooltip = tooltip(_("vor"));
-echo "<img border=\"0\" src=\"./pictures/calendar_next.gif\" $tooltip></a>&nbsp;</td>\n";
+$tooltip = tooltip(_("einen Monat vor"));
+echo "<img border=\"0\" src=\"./pictures/calendar_next.gif\" $tooltip></a>";
+printf("&nbsp; &nbsp; &nbsp; &nbsp;<a href=\"%s?cmd=showmonth&atime=%s\">",
+	$PHP_SELF, mktime(12, 0, 0, date('n', $amonth->getEnd()),
+			date('j', $amonth->getEnd()), date('Y', $amonth->getEnd()) - 1));
+$tooltip = tooltip(_("ein Jahr vor"));
+echo "<img border=\"0\" src=\"./pictures/calendar_next_double.gif\" $tooltip></a></td>\n";
 echo "</tr>\n<tr>\n";
 
 $weekdays_german = array("MO", "DI", "MI", "DO", "FR", "SA", "SO");
@@ -188,7 +203,8 @@ echo "<tr><td class=\"blank\">&nbsp;";
 * @param int $day_timestamp unix timestamp of the day
 */
 function print_month_events ($month_obj, $max_events, $day_timestamp) {
-	global $PHP_SELF;
+	global $PHP_SELF, $auth, $forum;
+	
 	$count = 0;
 	while (($aterm = $month_obj->nextEvent($day_timestamp)) && $count < $max_events) {
 		if (get_class($aterm) == "seminarevent") {
@@ -202,18 +218,34 @@ function print_month_events ($month_obj, $max_events, $day_timestamp) {
 			$ev_type = "";
 		}
 		
-		$jscript_text = "'"
-									. ($aterm->getDescription() ? JSReady($aterm->getDescription()) : _("Keine Beschreibung"))
+		printf("<br><a class=\"inday\" href=\"%s?cmd=edit&termin_id=%s&atime=%s%s\"",
+				$PHP_SELF, $aterm->getId(), $day_timestamp, $ev_type);
+		
+		$jscript_text = array();
+		if ($forum["jshover"] == 1 AND $auth->auth["jscript"]) { // Hovern
+			if ($aterm->getDescription())
+				$jscript_text[] = '<b>' . _("Beschreibung:") . ' </b> ' . $aterm->getDescription();
+			if ($categories = $aterm->toStringCategories())
+				$jscript_text[] = '<b>' . _("Kategorie:") . " </b> $categories";
+			if ($aterm->getProperty('LOCATION'))
+				$jscript_text[] = '<b>' . _("Ort:") . ' </b> ' . $aterm->getProperty('LOCATION');
+			if (get_class($aterm) != 'seminarevent') {
+				$jscript_text[] = '<b>' . _("Priorit&auml;t:") . ' </b>' . $aterm->toStringPriority();
+				$jscript_text[] = '<b>' . _("Zugriff:") . ' </b>' . $aterm->toStringAccessibility();
+				$jscript_text[] = '<b>' . _("Wiederholung:") . ' </b>' . $aterm->toStringRecurrence();
+			}
+				
+			$jscript_text = "'" . JSReady(implode('<br />', $jscript_text), 'contact')
 									. "',CAPTION,'"
 									. strftime("%H:%M-",$aterm->getStart())
 									. strftime("%H:%M",$aterm->getEnd())
 									. "&nbsp; &nbsp; " . $jscript_title
 									. "',NOCLOSE,CSSOFF";
 			
-		printf("<br><a class=\"inday\" href=\"%s?cmd=edit&termin_id=%s&atime=%s%s\" ",
-			$PHP_SELF, $aterm->getId(), $day_timestamp, $ev_type);
-		echo "onmouseover=\"return overlib($jscript_text);\" ";
-		echo "onmouseout=\"return nd();\">";
+			echo " onmouseover=\"return overlib($jscript_text);\" ";
+			echo "onmouseout=\"return nd();\"";
+		}
+		echo '>';
 		$category_style = $aterm->getCategoryStyle();
 		printf("<font color=\"%s\">%s</font></a>", $category_style['color'], $html_title);
 		$count++;
