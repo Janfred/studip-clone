@@ -21,6 +21,21 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 /*****************************************************************************
+sort function to sort the AssignEvents
+/*****************************************************************************/
+
+function cmp_assign_events($a, $b){
+	$start_a = $a->getBegin();
+	$start_b = $b->getBegin();
+	if($start_a == $start_b)
+		return 0;
+	if($start_a < $start_b)
+		return -1;
+	return 1;
+}
+
+
+/*****************************************************************************
 get_admin_user sucht mit angegebenem Ausruck in den Admins
 (wird von create_search_form verwendet)
 /*****************************************************************************/
@@ -43,7 +58,7 @@ get_my_objects gibt alle Objekte zurueck auf die der User
 Zugriff hat (wird von create_search_form verwendet)
 /*****************************************************************************/
 
-function get_my_objects ($search_string='', $user_id='') {
+function get_objects ($search_string='', $user_id='') {
 	global $user, $perm, $auth;
 
 	$db=new DB_Seminar;
@@ -78,7 +93,7 @@ function get_my_objects ($search_string='', $user_id='') {
 					$my_objects_inst[$db->f("Institut_id")]=array("name"=>$db->f("Name"), "art"=>"Institute");
 				}
 			}
-			//Alle meine Institute (unabh&auml;ngig von Suche fuer Rechte)...
+			//Alle meine Institute (unabhaengig von Suche fuer Rechte)...
 			$db->query("SELECT Institute.Institut_id, Name, inst_perms FROM Institute LEFT JOIN user_inst USING (institut_id) WHERE Inst_perms IN ('tutor', 'dozent', 'admin')");
 			while ($db->next_record()) {
 				if ($db->f("inst_perms") == "admin") {

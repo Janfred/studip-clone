@@ -33,8 +33,15 @@ require_once ($RELATIVE_PATH_RESOURCES."/resourcesClass.inc.php");
 require_once ($RELATIVE_PATH_RESOURCES."/resourcesVisual.inc.php");
 
 $sess->register("resources_data");
-$my_perms=new resourcesPerms;
+$my_perms= new ResourcesPerms;
+$error = new ResourcesError;
 $db=new DB_Seminar;
+
+
+//temporaer der Kopf...
+include "html_head.inc.php";
+include "header.php";
+
 
 /*****************************************************************************
 empfangene Werte auswerten und Befehle ausfuehren
@@ -68,15 +75,15 @@ if ($resources_data["view"]=="create_hierarchie" || $create_hierachie_level) {
 		$newHiearchie=new resourceObject("Neue Hierachieebene", "Dieses Objekt kennzeichnet eine neue Hierachieebene und kann jederzeit in eine Ressource umgewandelt werden"
 						, '', '', $parent_Object->getRootId(), $create_hierachie_level, '', $user->id);
 	}
-	$newHiearchie->createObject();
+	$newHiearchie->create();
 	$edit_structure_object=$newHiearchie->id;
 	$resources_data["view"]="resources";
 	}
 
-//Neues Object anlegen
+//Neues Objekt anlegen
 if ($create_object) {
 	$parent_Object=new resourceObject($create_object);
-	$new_Object=new resourceObject("Neues Object", "Dieses Objekt wurde neu erstellt. Es wurden noch keine Eigenschaften zugewiesen."
+	$new_Object=new resourceObject("Neues Objekt", "Dieses Objekt wurde neu erstellt. Es wurden noch keine Eigenschaften zugewiesen."
 					, FALSE, FALSE, $parent_Object->getRootId(), $create_object, "0", $user->id);
 	$new_Object->create();
 	$resources_data["view"]="edit_object_properties";
@@ -91,11 +98,16 @@ if ($edit_object) {
 	
 //Object loeschen
 if ($kill_object) {
-	//hier muss noch ein Rechtecheck passieren!
-	$killObject=new resourceObject($kill_object);
-	if ($killObject->delete())
-	;
-	$resources_data["view"]="resources";
+	$ObjectPerms = new ResourcesObjectPerms($kill_object);
+	if ($ObjectPerms->getUserPerm () == "admin") {
+		$killObject=new resourceObject($kill_object);
+		if ($killObject->delete())
+		;
+		$resources_data["view"]="resources";
+	} else {
+		$error->displayMsg(1);
+		die;
+	}
 }
 
 //Name und Beschreibung aendern
@@ -120,11 +132,10 @@ if ($change_object_schedules) {
 
 	if ($reset_search_user)
 		$search_string_search_user=FALSE;
-	
-	if (($submit_search_user) && ($submit_search_user !="FALSE") && (!$reset_search_user)) 
+
+	if (($submit_search_user) && ($submit_search_user !="FALSE") && (!$reset_search_user))
 		$change_schedule_assign_user_id=$submit_search_user;
 	
-
 	//create timestamps
 	if ($change_schedule_year) {
 		$change_schedule_begin=mktime($change_schedule_start_hour, $change_schedule_start_minute, 0, $change_schedule_month, $change_schedule_day, $change_schedule_year);
@@ -219,7 +230,7 @@ if ($change_object_schedules) {
 		$change_schedule_repeat_day_of_week=7;
 			
 	//give data to the assignobject
-	$changeAssign=new resourceAssign(
+	$changeAssign=new AssignObject(
 		$change_schedule_id,
 		$change_schedule_resource_id,
 		$change_schedule_assign_user_id,
@@ -252,7 +263,6 @@ if ($change_object_properties) {
 	$changeObject=new resourceObject($change_object_properties);
 	$changeObject->setName($change_name);
 	$changeObject->setDescription($change_description);
-	$changeObject->setInventarNum($change_inventar_num);
 	$changeObject->setCategoryId($change_category_id);
 	$changeObject->setParentBind($change_parent_bind);
 	
@@ -388,21 +398,38 @@ if (($add_root_user) || ($delete_root_user_id)){
 		}
 }
 
+//evaluate the command from schedule navigator
+if ($navigate_to) {
+	$schedule_start_time=mktime (0,0,0,$schedule_begin_month, $schedule_begin_day, $schedule_begin_year);
+	if ($start_list_x) {
+		if ($schedule_start_time < 1)
+			$schedule_start_time = time();
+		switch ($schedule_length_unit) {
+			case "y" :
+				$schedule_end_time=mktime(23,59,59,date("n",$schedule_start_time), date("j", $schedule_start_time), date("Y",$schedule_start_time)+$schedule_length_factor);
+			break;
+			case "m" :
+				$schedule_end_time=mktime(23,59,59,date("n",$schedule_start_time)+$schedule_length_factor, date("j", $schedule_start_time), date("Y",$schedule_start_time));
+			break;
+			case "w" :
+				$schedule_end_time=mktime(23,59,59,date("n",$schedule_start_time), date("j", $schedule_start_time)+($schedule_length_factor * 7), date("Y",$schedule_start_time));
+			break;
+			case "d" :
+				$schedule_end_time=mktime(23,59,59,date("n",$schedule_start_time), date("j", $schedule_start_time)+$schedule_length_factor, date("Y",$schedule_start_time));
+			break;
+		}
+		if ($schedule_end_time < 1)
+			$schedule_end_time = time()+ (24 * 60 * 60);
+	} else
+		$schedule_end_time = $schedule_start_time + (7 * 24 * 60 * 60);
+}
 
+	
 /*****************************************************************************
 Kopf der Seite
 /*****************************************************************************/
 
-?>
-<html>
-	<head>
-		<title>Stud.IP</title>
-		<link rel="stylesheet" href="style.css" type="text/css">
-	</head>
-	<body bgcolor="#FFFFFF">
-<?
-
-include ("header.php");
+//soll spaeter nur hier hjn
 
 /*****************************************************************************
 Reitersystem 
@@ -420,20 +447,19 @@ $structure["settings"]=array (topKat=>"", name=>"Anpassen", link=>"resources.php
 
 //Reiter "Uebersicht"
 $structure["_resources"]=array (topKat=>"resources", name=>"Struktur", link=>"resources.php?view=_resources", active=>FALSE);
-$structure["create_hierarchie"]=array (topKat=>"resources", name=>"Neue Hierarchie erzeugen", link=>"resources.php?view=create_hierarchie#a", active=>FALSE);
-$structure["search_hierarchie"]=array (topKat=>"resources", name=>"In der Hierarchie suchen", link=>"resources.php?view=search_hierarchie", active=>FALSE);
+$structure["create_hierarchie"]=array (topKat=>"resources", name=>"Neue Hierarchieebene erzeugen", link=>"resources.php?view=create_hierarchie#a", active=>FALSE);
+$structure["search_hierarchie"]=array (topKat=>"resources", name=>"Hierarchieebene suchen", link=>"resources.php?view=search_hierarchie", active=>FALSE);
 
 //Reiter "Listen"
-$structure["_lists"]=array (topKat=>"lists", name=>"Listen", link=>"resources.php?view=_lists", active=>FALSE);
+$structure["_lists"]=array (topKat=>"lists", name=>"Listenausgabe", link=>"resources.php?view=_lists", active=>FALSE);
+$structure["search_lists"]=array (topKat=>"lists", name=>"Suchen", link=>"resources.php?view=search_lists", active=>FALSE);
 $structure["export_lists"]=array (topKat=>"lists", name=>"Listen exportieren", link=>"resources.php?view=export_lists", active=>FALSE);
-$structure["search_lists"]=array (topKat=>"lists", name=>"Suche als Liste", link=>"resources.php?view=export_lists", active=>FALSE);
 
 //Reiter "Objekt"
-$structure["edit_object_properties"]=array (topKat=>"objects", name=>"Objekteigenschaften bearbeiten", link=>"resources.php?view=edit_object_properties", active=>FALSE);
-$structure["edit_object_perms"]=array (topKat=>"objects", name=>"Rechte des Objekts bearbeiten", link=>"resources.php?view=edit_object_perms", active=>FALSE);
-$structure["edit_object_schedules"]=array (topKat=>"objects", name=>"Belegungen bearbeiten", link=>"resources.php?view=edit_object_schedules", active=>FALSE);
-$structure["view_schedules"]=array (topKat=>"objects", name=>"Anzeige des Ressourcenplans", link=>"resources.php?view=schedules", active=>FALSE);
-$structure["search_object"]=array (topKat=>"objects", name=>"Objekt Suchen", link=>"resources.php?view=search_object", active=>FALSE);
+$structure["view_schedule"]=array (topKat=>"objects", name=>"Belegung ausgeben", link=>"resources.php?view=view_schedule", active=>FALSE);
+$structure["edit_object_schedules"]=array (topKat=>"objects", name=>"Belegung bearbeiten", link=>"resources.php?view=edit_object_schedules", active=>FALSE);
+$structure["edit_object_properties"]=array (topKat=>"objects", name=>"Eigenschaften bearbeiten", link=>"resources.php?view=edit_object_properties", active=>FALSE);
+$structure["edit_object_perms"]=array (topKat=>"objects", name=>"Rechte bearbeiten", link=>"resources.php?view=edit_object_perms", active=>FALSE);
 
 //Reiter "Anpassen"
 if (($my_perms->getGlobalPerms() == "admin") || ($perm->have_perm("root"))){ //Grundlegende Einstellungen fuer alle Ressourcen Admins
@@ -480,10 +506,14 @@ switch ($resources_data["view"]) {
 	case "edit_object_perms":
 	case "edit_object_properties":
 	case "edit_object_schedules":
-	case "schedules":
+	case "view_schedule":
 	case "search_object":
 		$page_intro="Hier k&ouml;nnen Sie einzelen Objekte verwalten. Sie k&ouml;nnen Eigenschaften, Berechtigungen und Belegung verwalten.";
 		$title="Objekt bearbeiten: ".$currentObjectTitelAdd;
+	break;
+	case "view_schedule":
+		$page_intro="Hier k&ouml;nnen Sie sich den Belegungsplan des Objektes ausgeben lassen. Bitte w&auml;hlen Sie daf&uuml;r den Zeitraum aus.";
+		$title="Belegung ausgeben - Objekt: ".$currentObjectTitelAdd;
 	break;
 	
 	//Reiter "Anpassen"	
@@ -530,7 +560,7 @@ Treeview, die Strukturdarstellung, views: resources, _resources, make_hierarchie
 /*****************************************************************************/
 if ($resources_data["view"]=="resources" || $resources_data["view"]=="_resources") {
 
-	$resUser=new resourcesUser();
+	$resUser=new ResourcesUserRoots();
 	$thread=new getThread();
 	
 
@@ -611,6 +641,8 @@ if ($resources_data["view"]=="edit_object_schedules") {
 
 	if ($resources_data["structure_open"]) {
 		$editObject=new editObject($resources_data["structure_open"]);
+		if ($edit_assign_object)
+			$assign_id=$edit_assign_object;
 		$editObject->create_schedule_forms($assign_id);
 	} else {
 		echo "</td></tr>";
@@ -643,6 +675,29 @@ if ($resources_data["view"]=="edit_perms") {
 	
 	$editSettings=new editSettings;
 	$editSettings->create_perms_forms();
+}
+
+/*****************************************************************************
+Belegungen ausgeben, views: view_schedule
+/*****************************************************************************/
+if ($resources_data["view"]=="view_schedule") {
+	
+	$ViewSchedules=new ViewSchedules($resources_data["structure_open"]);
+	$ViewSchedules->navigator();
+	if (($schedule_start_time) && ($schedule_end_time))
+		if ($start_list_x) //view List
+			$ViewSchedules->create_schedule_list($schedule_start_time, $schedule_end_time);
+		else
+			$ViewSchedules->create_schedule_graphical($schedule_start_time, $schedule_end_time);
+}
+
+/*****************************************************************************
+persoenliche Einstellungen verwelten, views: edit_personal_settings
+/*****************************************************************************/
+if ($resources_data["view"]=="edit_personal_settings") {
+	
+	$editSettings=new editPersonalSettings;
+	$editSettings->create_personal_settings_forms();
 }
 
 /*****************************************************************************

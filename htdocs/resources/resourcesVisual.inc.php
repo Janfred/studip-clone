@@ -116,7 +116,7 @@ class getList extends printThread {
 		//Daten des Objects holen
 		$db->query("SELECT resource_id FROM resources_objects WHERE resource_id = '$start_id' ");
 		
-		//Wenn keine Liste ausgebene wird...
+		//Wenn keine Liste ausgeben wird...
 		if ((!$db->num_rows()) && ($level==0))
 			return FALSE;
 			
@@ -697,7 +697,16 @@ class editSettings extends cssClasses {
 		<?
 	}	
 	
-	
+	function create_pesonal_settings_forms() {
+		global $PHP_SELF;
+		
+		?>
+		<table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
+		<form method="POST" action="<?echo $PHP_SELF ?>">
+		</table>
+		<br /><br />
+		<?
+	}	
 }
 
 /*****************************************************************************
@@ -737,7 +746,7 @@ class editObject extends cssClasses {
 	function create_schedule_forms($assign_id='') {
 		global $PHP_SELF, $resources_data, $search_user, $search_string_search_user;
 
-		$resAssign=new resourceAssign($assign_id);
+		$resAssign=new AssignObject($assign_id);
 
 		?>
 		<table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
@@ -799,11 +808,20 @@ class editObject extends cssClasses {
 			<tr>
 				<td class="<? $this->switchClass(); echo $this->getClass() ?>" width="4%">&nbsp; 
 				</td>
-				<td class="<? echo $this->getClass() ?>" valign="top"><font size=-1>Nutzer:</font><br />
+				<td class="<? echo $this->getClass() ?>" valign="top"><font size=-1>eingetragen f&uuml;r die Belegung:</font><br />
 				<font size=-1>
-					<? create_search_form("search_user", $search_string_search_user) ?> <i>oder</i><br/>
-					freie Eingabe:<br />
-					<input name="change_schedule_user_free_name" value="<? echo $resAssign->getUserFreeName(); ?>" size=40 maxlength="255" /
+					<? $user_name=$resAssign->getUsername(FALSE);
+					if ($user_name)
+						echo "<b>$user_name&nbsp;</b><br /><br /></font>";
+					else
+						echo "<b>-- kein Stud.IP Nutzer eingetragen -- &nbsp;</b><br /><br /></font>"
+					?><font size=-1>einen <? if ($user_name) echo "anderen" ?> User (Nutzer, Veranstaltung oder Einrichtung) eintragen: <br /></font><font size=-1>
+					<?create_search_form("search_user", $search_string_search_user) ?> <br/>
+					freie Eingabe zur Belegung:<br /></font>
+					<input name="change_schedule_user_free_name" value="<? echo $resAssign->getUserFreeName(); ?>" size=40 maxlength="255" />
+					<br /><font size=-1><b>Beachten Sie:</b> Wenn sie einen Nutzer des System eintragen, wird dieser Account mit der Belegung verkn&uuml;pft, dh. z.B. der Nutzer oder berechtigte Personen 
+					k&ouml;nnen die Belegung selbstst&auml;ndig aufheben. Wenn es den Nutzer nicht gibt, k&ouml;nnen sie die Art der Belegung frei eingeben</font>
+					<input type ="HIDDEN" name="change_schedule_assign_user_id" value="<? echo $resAssign->getAssignUserId(); ?>" />
 				</font>
 				</td>
 				<td class="<? echo $this->getClass() ?>" valign="top">
@@ -916,9 +934,7 @@ class editObject extends cssClasses {
 			<tr>
 				<td class="<? $this->switchClass(); echo $this->getClass() ?>" width="4%">&nbsp; 
 				</td>
-				<td class="<? echo $this->getClass() ?>"><font size=-1>Inventarnummer:</font><br />
-				<font size=-1><input name="change_inventar_num" value="<? echo $this->resObject->getInventarNum() ?>" size=60 maxlength="255" />
-				</td>
+				<td class="<? echo $this->getClass() ?>">&nbsp; 
 				<td class="<? echo $this->getClass() ?>" width="40%" valign="top"><font size=-1>Vererbte Belegung:</font><br />
 				<font size=-1><input type="CHECKBOX" name="change_parent_bind" <? if ($this->resObject->getParentBind()) echo "checked" ?> >
 				Objekt &uuml;bernimmt Belegung von &uuml;bergeordnetem Objekt</font>
@@ -1065,5 +1081,105 @@ class editObject extends cssClasses {
 		<br /><br />
 		<?
 	}	
+}
+
+class ViewSchedules extends cssClasses {
+	var $ressource_id;		//viewed ressource object
+	var $user_id;			//viewed user
+	var $range_id;			//viewed range
+	
+	//Konstruktor
+	function ViewSchedules($resource_id='', $user_id='', $range_id='') {
+		$this->db=new DB_Seminar;
+		$this->db2=new DB_Seminar;
+		$this->resource_id=$resource_id;
+		$this->user_id=$user_id;
+		$this->range_id=$range_id;
+	}
+	
+	function navigator () {
+		global $schedule_begin_day, $schedule_begin_month, $schedule_begin_year, $schedule_length_unit, $schedule_mode, $schedule_length_factor;
+		?>
+		<table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
+		<form method="POST" action="<?echo $PHP_SELF ?>?view=view_schedule&navigate_to=TRUE">
+			<tr>
+				<td class="<? echo $this->getClass() ?>" width="4%">&nbsp;
+				</td>
+				<td class="<? echo $this->getClass() ?>" width="96%"><font size=-1>Zeitraum:</font><br />
+					<font size=-1>vom 
+					<input type="text" name="schedule_begin_day" size=2 maxlength=2 value="<? if (!$schedule_begin_day) echo date("d",time()); else echo $schedule_begin_day; ?>">.
+					<input type="text" name="schedule_begin_month" size=2 maxlength=2 value="<? if (!$schedule_begin_month) echo date("m",time()); else echo $schedule_begin_month; ?>">.
+					<input type="text" name="schedule_begin_year" size=4 maxlength=4 value="<? if (!$schedule_begin_year) echo date("Y",time()); else echo $schedule_begin_year; ?>"><br />
+					<input type="text" name="schedule_length_factor" size=2 maxlength=2 / value="<? if (!$schedule_length_factor) echo "1"; else echo $schedule_length_factor; ?>">
+					&nbsp; <select name="schedule_length_unit">
+						<option <? if ($schedule_length_unit == "d") echo "selected" ?> value="d">Tag(e)</option>
+						<option <? if ($schedule_length_unit == "w") echo "selected" ?> value="w">Woche(n)</option>
+						<option <? if ($schedule_length_unit == "m") echo "selected" ?> value="m">Monat(e)</option>
+						<option <? if ($schedule_length_unit == "y") echo "selected" ?> value="y">Jahre(e)</option>
+					</select>&nbsp; als Liste
+					&nbsp; <input type="IMAGE" name="start_list" src="pictures/buttons/ausgeben-button.gif" border=0 vallue="ausgeben" /><br />
+					<i>oder</i>&nbsp;  eine Woche grafisch
+					&nbsp; <input type="IMAGE" name="start_graphical" src="pictures/buttons/ausgeben-button.gif" border=0 vallue="ausgeben" /><br />&nbsp; 
+				</td>
+			</tr>
+			</form>
+	<?
+	}
+
+	function create_schedule_list($start_time='', $end_time='') {
+		global $PHP_SELF;
+
+		?>
+			<tr>
+				<td class="<? $this->switchClass(); echo $this->getClass() ?>" width="4%">&nbsp;
+				</td>
+				<td class="<? echo $this->getClass() ?>" width="96%"><font size=-1>Events:</font><br />
+					<? echo "<font size=-1><b>Anzeige vom ", date ("j.m.Y", $start_time), " bis ", date ("j.m.Y", $end_time)."</b></font><br />";
+					$assign_events=new AssignEventList ($start_time, $end_time, $this->resource_id, '', '', TRUE);
+					echo "<br /><font size=-1>Anzahl der Belegungen: ", $assign_events->numberOfEvents()."</font>";
+					echo "<br /><br />";
+					while ($event=$assign_events->nextEvent()) {
+						echo "<a href=\"$PHP_SELF?view=edit_object_schedules&edit_assign_object=".$event->getAssignId()."\"><img src=\"pictures/buttons/bearbeiten-button.gif\" border=0></a>";
+						echo "&nbsp; <font size=-1>Belegung ist von <b>", date("d.m.Y H:i", $event->getBegin()), "</b> bis <b>", date("j.m.Y H:i", $event->getEnd()), "</b></font>";
+						echo "&nbsp; <font size=-1>belegt von <b>".$event->getName()."</b></font><br />";
+					}
+					?>
+				</td>
+			</tr>
+		</table>
+		<br /><br />
+	<?
+	}
+
+	function create_schedule_graphical($start_time='', $end_time='') {
+		global $PHP_SELF;
+	 	
+	 	require_once ($RELATIVE_PATH_RESOURCES."/lib/ScheduleWeek.class.php");
+	 	
+	 	$schedule=new ScheduleWeek;
+		
+		?>
+			<tr>
+				<td class="<? $this->switchClass(); echo $this->getClass() ?>" width="4%">&nbsp;
+				</td>
+				<td class="<? echo $this->getClass() ?>" width="96%"><font size=-1>Events:</font><br />
+					<? echo "<font size=-1><b>Anzeige vom ", date ("j.m.Y", $start_time), " bis ", date ("j.m.Y", $end_time)."</b></font><br />";
+					$assign_events=new AssignEventList ($start_time, $end_time, $this->resource_id, '', '', TRUE);
+					echo "<br /><font size=-1>Anzahl der Belegungen: ", $assign_events->numberOfEvents()."</font>";
+					echo "<br />&nbsp; ";
+					while ($event=$assign_events->nextEvent()) {
+						$schedule->addEvent($event->getName(), $event->getBegin(), $event->getEnd(), 
+											"$PHP_SELF?view=edit_object_schedules&edit_assign_object=".$event->getAssignId());
+					}
+					$schedule->createSchedule("html");
+					echo "<br />&nbsp; ";
+					?>
+				</td>
+			</tr>
+		</table>
+		<br /><br />
+	<?
+	}
+	
 }
 ?>

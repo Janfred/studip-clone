@@ -1,8 +1,8 @@
 <?
 /*
-resourcesClasses.php - 0.8
+resourcesClass.php - 0.8
 Klassen fuer Ressourcenverwaltung von Stud.IP.
-Copyright (C) 2002 Cornelis Kater <ckater@gwdg.de>
+Copyright (C) 2002 Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -21,9 +21,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 
 /*****************************************************************************
-resourceAssign, zentrale Klasse Ressourcen Belegungen
+AssignObject, zentrale Klasse der Objecte der Belegung
 /*****************************************************************************/
-class resourceAssign {
+class AssignObject {
 	var $db;					//Datenbankanbindung;
 	var $id;					//Id des Belegungs-Objects
 	var $resource_id;			//resource_id des verknuepten Objects;
@@ -42,7 +42,7 @@ class resourceAssign {
 	var $repeat_week;			//najan
 
 	//Konstruktor
-	function resourceAssign($id='', $resource_id='', $assign_user_id='', $user_free_name='', $begin_ts='', $end_ts='', 
+	function AssignObject($id='', $resource_id='', $assign_user_id='', $user_free_name='', $begin_ts='', $end_ts='', 
 						$repeat_end_ts='', $repeat_quantity='', $repeat_interval='', $repeat_month_of_year='', $repeat_day_of_month='', 
 						$repeat_month='', $repeat_week_of_month='', $repeat_day_of_week='', $repeat_week='') {
 		global $user;
@@ -88,6 +88,15 @@ class resourceAssign {
 	
 	function getAssignUserId() {
 		return $this->assign_user_id;
+	}
+
+	function getUsername($use_free_name=TRUE) {
+		if ($this->assign_user_id) 
+			return resourceObject::getOwnerName(TRUE, $this->assign_user_id);
+		elseif ($use_free_name)
+			return $this->getUserFreeName();
+		else 
+			return FALSE;
 	}
 
 	function getResourceId() {
@@ -147,10 +156,6 @@ class resourceAssign {
 	
 	function getRepeatWeek() {
 		return $this->repeat_week;
-	}
-	
-	function getBeginTs() {
-		return $this->begin_ts;
 	}
 	
 	function getRepeatMode() {
@@ -246,6 +251,175 @@ class resourceAssign {
 	}
 
 }
+
+/*****************************************************************************
+AssignEvent, the assigned events 
+/*****************************************************************************/
+class AssignEvent {
+	var $db;					//Database
+	var $id;					//Id from mother AssignObject
+	var $resource_id;			//resource_id from mother AssignObject
+	var $assign_user_id;		//user_id of mother AssignObject
+	var $user_free_name;		//free owner-name of mother AssignObject
+	var $begin_ts;				//begin timestamp
+	var $end_ts;				//end timestamp
+
+	//Konstruktor
+	function AssignEvent($assign_id, $begin_ts, $end_ts, $resource_id, $assign_user_id, $user_free_name='') {
+		global $user;
+		$this->user_id = $user->id;
+		$this->db=new DB_Seminar;
+
+		$this->id=$assign_id;
+		$this->begin_ts=$begin_ts;
+		$this->end_ts=$end_ts;
+		$this->resource_id=$resource_id;
+		$this->assign_user_id=$assign_user_id;
+		$this->user_free_name=$user_free_name;
+	}
+
+	function getAssignId() {
+		return $this->id;
+	}
+	
+	function getAssignUserId() {
+		return $this->assign_user_id;
+	}
+
+	function getResourceId() {
+		return $this->resource_id;
+	}
+
+	function getUserFreeName() {
+		return $this->user_free_name;
+	}
+	
+	function getUsername($use_free_name=TRUE) {
+		if ($this->assign_user_id) 
+			return resourceObject::getOwnerName(TRUE, $this->assign_user_id);
+		elseif ($use_free_name)
+			return $this->getUserFreeName();
+		else 
+			return FALSE;
+	}
+	
+	function getName() {
+		return $this->getUsername();
+	}
+
+	function getBegin() {
+		if (!$this->begin_ts)
+			return time();
+		else
+			return $this->begin_ts;
+	}
+
+	function getEnd() {
+		if (!$this->end_ts)
+			return time()+3600;
+		else
+			return $this->end_ts;
+	}
+
+	function store($create='') {
+		// Noch fraglich, ob diese Methose existieren soll. Wenn ja muesste sie eine Splittung vornehmen
+	}
+
+	function delete() {
+		// Noch fraglich, ob diese Methose existieren soll. Wenn ja muesste sie eine Splittung vornehmen
+	}
+
+}
+
+/*****************************************************************************
+AssignEventList, creates a event-list for an assignobject
+/*****************************************************************************/
+
+class AssignEventList{
+
+	var $start;	// starttime as unix-timestamp
+	var $end;		// endtime as unix-timestamp
+	var $assign;	// ressources-assignements (Object[])
+	var $range_id;		// range_id (String)
+	var $user_id;    // userId from PhpLib (String)
+	
+	// Konstruktor
+	// if activated without timestamps, we take the current semester
+	function AssignEventList($start = -1, $end = -1, $resource_id='', $range_id='', $user_id='', $sort = TRUE){
+	 	global $SEMESTER, $SEM_ID, $user;
+	 	
+	 	require_once ($RELATIVE_PATH_RESOURCES."/lib/list_assign.inc.php");
+	 	
+		if(!$start)
+			$start = $SEMESTER[$SEM_ID]["beginn"];
+		if(!$end )
+			$end = $SEMESTER[$SEM_ID]["ende"];
+		
+		
+		$this->start = $start;
+		$this->end = $end;
+		$this->resource_id = $resource_id;
+		$this->range_id = $range_id;
+		$this->user_id = $user_id;
+		$this->restore();
+		if($sort)
+			$this->sort();
+	}
+	
+	// public
+	function getStart(){
+		return $this->start;
+	}
+	
+	// public
+	function getEnd(){
+		return $this->end;
+	}
+
+	// public
+	function getResourceId(){
+		return $this->resource_id;
+	}
+
+	// public
+	function getRangeId(){
+		return $this->range_id;
+	}
+
+	// public
+	function getUserId(){
+		return $this->$user_id;
+	}
+	
+	// private
+	function restore(){
+		list_restore_assign($this);
+	}
+	
+	// public
+	function numberOfEvents(){
+		return sizeof($this->events);
+	}
+	
+	function existEvent(){
+		return sizeof($this->events) > 0 ? TRUE : FALSE;
+	}
+	
+	// public
+	function nextEvent(){
+		if (is_array($this->events))
+			if(list(,$ret) = each($this->events));
+				return $ret;
+		return FALSE;
+	}
+	
+	function sort(){
+		if($this->events)
+			usort($this->events,"cmp_assign_events");
+	}
+	
+} // class AppList 
+
 
 /*****************************************************************************
 resourceObjeckt, zentrale Klasse der Ressourcen Objecte
@@ -409,8 +583,8 @@ class resourceObject {
 	function getOwnerName($explain=FALSE, $id='') {
 		if (!$id)
 			$id=$this->owner_id;
-		
-		switch ($this->getOwnerType($id)) {
+
+		switch (resourceObject::getOwnerType($id)) {
 			case "global":
 				return "Global";
 			break;
@@ -593,15 +767,15 @@ class resourceObject {
 }
 
 /*****************************************************************************
-resourcesPerms, stellt Perms zur Verfuegung
+ResourcesPerms, stellt globale Perms zur Verfuegung
 /*****************************************************************************/
 
-class resourcesPerms {
+class ResourcesPerms {
 	var $user_id;
 	var $db;
 	var $master_string="all";			//So wird der Ressourcen-Root abgelegt
 	
-	function resourcesPerms ($user_id='') {
+	function ResourcesPerms ($user_id='') {
 		global $user;
 		
 		$this->db=new DB_Seminar;
@@ -616,22 +790,139 @@ class resourcesPerms {
 		if ($this->db->next_record() && $this->db->f("perms")) 
 			return $this->db->f("perms");
 		else
-			return FALSE;
+			return "user";
 	}
-			
 }
 
 /*****************************************************************************
-resourcesUser, stellt Stamm-Ressourcen zur Verfuegung
+ResourcesObjectPerms, stellt Perms zum Ressourcen Objectzur 
+Verfuegung
 /*****************************************************************************/
 
-class resourcesUser {
+class ResourcesObjectPerms extends ResourcesPerms {
+	var $user_id;
+	var $db;
+	var $db2;
+	var $resource_id;
+	
+	function ResourcesObjectPerms ($resource_id, $user_id='') {
+		global $user, $perm;
+		
+		$this->db = new DB_Seminar;
+		$this->db2 = new DB_Seminar;
+		
+		if ($user_id)
+			$this->$user_id=$user_id;
+		else
+			$this->user_id=$user->id;
+		
+		$this->resource_id=$resource_id;
+		
+		//check if user is root
+		if ($perm->have_perm("root")) {
+			$this->perm="admin";
+		} else //check if resources admin
+			if ($this->getGlobalPerms() == "admin")
+				$this->perm="admin";
+		
+		//check if the user is owner of the object	
+		$this->db->query("SELECT owner_id FROM resources_objects WHERE owner_id='$this->user_id' AND resource_id = '$resource_object_id' ");
+		if ($this->db->next_record()) {
+			$this->owner=TRUE;
+			$this->perm="admin";
+		} else {
+			$this->owner=FALSE;
+		}
+		
+		/*
+		//else check if the user is privilged by additional setted perms
+		if ($this->perm != "admin") {
+			$this->db->query("SELECTperms FROM resources_user_resources WHERE user_id='$this->user_id' AND resource_id = '$resource_object_id' ");
+			$this->perm = $this->db->f("perms");
+		}
+		
+		//else check if a Seminar the user is dozent or tutor is owner or has addiotional perms
+		if ($this->perm != "admin") {
+			if ($perm->have_perm("admin")) //check all the Seminare from all my Einrichtungen
+				$this->db->query("SELECT Seminar_id FROM user_inst LEFT JOIN seminar_inst USING (Seminar_id)  WHERE user_id='$this->user_id' AND inst_perms = 'admin' ");
+			else //check all my Seminare
+				$this->db->query("SELECT Seminar_id FROM seminar_user WHERE user_id='$this->user_id' AND status IN ('dozent', 'tutor') ");
+			
+			while (($this->db->next_record()) && (!$this->perm == "admin")) {
+				$this->db2->query("SELECT user_id FROM resources_objects WHERE user_id='".$this->db->f("Seminar_id")."' AND resource_id = '$resource_object_id' ");
+				if ($this->db2->next_record()) { //one of my Seminare is the owner
+					$this->perm="admin";
+				}
+				if ($this->perm != "admin") { //one of my Seminare has additional perms
+					$this->db2->query("SELECT perms FROM resources_user_resources WHERE user_id='".$this->db->f("Seminar_id")."' AND resource_id = '$resource_object_id' ");
+					$this->perm = $this->db2->f("perms");
+				}
+			}
+		}
+		
+
+		//else check if a Einrichtung the user is dozent, tutor or admin or has addiotional perms
+		if ($this->perm != "admin") {
+			//checkall my Einrichtungen
+			$this->db->query("SELECT Institut_id FROM user_inst WHERE user_id='$this->user_id' AND inst_perms IN ('admin', 'dozent', 'tutor') ");
+			
+			while (($this->db->next_record()) && (!$this->perm == "admin")) {
+				$this->db2->query("SELECT user_id FROM resources_objects WHERE user_id='".$this->db->f("Institut_id")."' AND resource_id = '$resource_object_id' ");
+				if ($this->db2->next_record()) { //one of my Seminare is the owner
+					$this->perm="admin";
+				}
+				if ($this->perm != "admin") { //one of my Seminare has additional perms
+					$this->db2->query("SELECT perms FROM resources_user_resources WHERE user_id='".$this->db->f("Institut_id")."' AND resource_id = '$resource_object_id' ");
+					$this->perm = $this->db2->f("perms");
+				}
+			}
+		}
+		*/
+		//else check all the other possibilities
+		if ($this->perm != "admin") {
+			$my_objects=get_my_administrable_objects();
+			
+			//add the user_id
+			$my_objects[$this->user_id]="user"; //evtl. ueberfluessig wegen oben....
+			
+			foreach ($my_objects as $key=>$val) {
+				$this->db->query("SELECT owner_id FROM resources_objects WHERE owner_id='$key' AND resource_id = '$resource_object_id' ");
+				if ($this->db->next_record())
+					$this->perm="admin";
+				
+				if ($this->perm=="admin")
+					break;
+				
+				$this->db->query("SELECT perms FROM resources_user_resources  WHERE user_id='$key' AND resource_id = '$resource_object_id' ");
+				if ($this->db->next_record())
+					$this->perm=$this->db->f("perms");
+
+				if ($this->perm=="admin")
+					break;
+			}
+		}
+	}
+	
+	function getUserPerm () {
+		return $this->perm;
+	}
+	
+	function getUserIsOwner () {
+		return $this->owner;
+	}
+}
+
+/*****************************************************************************
+ResourcesUserRoots, stellt Stamm-Ressourcen zur Verfuegung
+/*****************************************************************************/
+
+class ResourcesUserRoots {
 	var $user_global_perm;			//Globaler Status des Users, fuer den Klasse initiert wird
 	var $user_id;					//User_id des Users;
 	var $my_roots;					//Alle meine Ressourcen-Staemme
 	
 	//Konstruktor
-	function resourcesUser($user_id='') {
+	function ResourcesUserRoots($user_id='') {
 		global $user, $perm, $auth;
 		
 		$db=new DB_Seminar;
@@ -744,4 +1035,35 @@ class resourcesUser {
 		return $this->my_roots;
 	}
 }
+
+/*****************************************************************************
+ResourcesError, class for all the errormsg stuff
+/*****************************************************************************/
+
+class ResourcesError {
+	var $msg;
+	var $codes;
+	
+	//Konstruktor
+	function ResourcesError() {
+		$this->msg[1] = array (
+				"mode" => "error",
+				"titel" => "Fehlende Berechtigung",
+				"msg"=> "Sie haben leider keine Berechtigung, das Objekt zu bearbeiten");
+	}
+				
+	function addMsg($msg_code) {
+		$this->codes[]=$msg_code;
+	}
+	
+	function displayAllMsg() {
+		parse_window($this->msg[$msg_code]["mode"]."§".$this->msg[$msg_code]["msg"], "§", $this->msg[$msg_code]["titel"], "zZ. NA");
+	}
+	
+	function displayMsg($msg_code) {
+		parse_window($this->msg[$msg_code]["mode"]."§".$this->msg[$msg_code]["msg"], "§", $this->msg[$msg_code]["titel"], "zZ. NA");
+	}
+}
+	
+	//Konstruktor
 ?>
