@@ -568,6 +568,13 @@ while ( is_array($HTTP_POST_VARS)
 		 	if (($db_ar = $db->affected_rows()) > 0) {
 			 	$msg .= "info§" . sprintf(_("%s Eintr&auml;ge aus dem Zugriffsberechtigungen f&uuml;r das Archiv gel&ouml;scht."), $db_ar) . "§";
 	 		}
+	 		// Delete all guestbook entrys
+			$query = "delete from guestbook where range_id='$u_id'";
+ 			$db->query($query);
+		 	if (($db_ar = $db->affected_rows()) > 0) {
+			 	$msg .= "info§" . sprintf(_("%s Eintr&auml;ge aus dem Gästebuch gel&ouml;scht."), $db_ar) . "§";
+	 		}
+	 		
 			// alle Daten des users löschen
 			$query = "delete from kategorien where range_id = '$u_id'";
 			$db->query($query);
