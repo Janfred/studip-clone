@@ -58,6 +58,22 @@ if ($experiod != 'period') {
 if (!isset($calendar_sess_export))
 	$sess->register('calendar_sess_export');
 
+// direct "one-button-export(tm)" of an event-object
+if ($expmod == 'exp_direct' && $termin_id) {
+	$export =& new CalendarExportFile(new CalendarWriterICalendar());
+	
+	if ($evtype == 'sem')
+		$exp_event = array(new SeminarEvent($termin_id));
+	else
+		$exp_event = array(new DbCalendarEvent($termin_id));
+	
+	$export->exportFromObjects($exp_event);
+	$export->sendFile();
+	
+	page_close();
+	exit;
+}
+
 $err = array();
 if ($experiod == 'period') {
 	if (!$exstart = check_date($exstartmonth, $exstartday, $exstartyear, 0, 0))

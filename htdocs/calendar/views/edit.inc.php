@@ -574,6 +574,13 @@ else{
 
 #######################################################################################
 
+$info_box['export_link'] = "$PHP_SELF?cmd=export&expmod=exp_direct&termin_id=";
+$info_box['export_link'] .= $atermin->getId();
+if (get_class($atermin) == 'seminarevent')
+	$info_box['export_link'] .= '&evtype=sem';
+$info_box['export'] = array('icon' => '/pictures/vcardexport.gif',
+		'text' => sprintf(_("Sie k&ouml;nnen diesen Termin einzeln %sexportieren%s."),
+				"<a href=\"{$info_box['export_link']}\">", "</a>"));
 	
 if (isset($atermin) && get_class($atermin) == "seminarevent") {
 	$db = new DB_Seminar();
@@ -613,6 +620,7 @@ if (isset($atermin) && get_class($atermin) == "seminarevent") {
 		$info_box['all'][1]['eintrag'][] = array("icon" => "pictures/meinesem.gif",
 				"text" => $info_box['sem2']);
 	}
+	$info_box['all'][1]['eintrag'][] = $info_box['export'];
 }
 else {
 	$css_switcher->switchClass();
@@ -663,6 +671,8 @@ else {
 	$info_box['all'][0]['kategorie'] = _("Information:");
 	$info_box['all'][0]['eintrag'][] = array("icon" => "pictures/ausruf_small.gif",
 			"text" => $info_box['count']);
+	$info_box['all'][1]['kategorie'] = _("Aktion:");
+	$info_box['all'][1]['eintrag'][] = $info_box['export'];
 }
 
 
