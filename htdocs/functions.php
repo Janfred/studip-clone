@@ -49,51 +49,45 @@ require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 *
 */
 
-function getHeaderLine ($id) {
-	global $SEM_TYPE,$INST_TYPE, $SEM_TYPE_MISC_NAME;
-	
-	$db = new DB_Seminar;
-	$object_type = get_object_type($id);
-	
-	//header-line for Veranstaltungen
-	if ($object_type == "sem") {
-		$query = sprintf ("SELECT status, Name FROM seminare WHERE Seminar_id = '%s' ", $id);
-		$db->query($query);
-		$db->next_record();
-		
-		if ($SEM_TYPE[$db->f("status")]["name"] == $SEM_TYPE_MISC_NAME)
-			$header_line = _("Veranstaltung");
-		else
-			$header_line = $SEM_TYPE[$db->f("status")]["name"];
-
-		if (!$header_line)
-			$header_line = _("Veranstaltung");
-		
-		$header_line.=": ". htmlReady(substr($db->f("Name"), 0, 60));
-		
-		if (strlen($db->f("Name")) > 60)
+function getHeaderLine($id) {
+	$object_name = get_object_name($id, get_object_type($id));
+	$header_line = $object_name['type'] . ": ". htmlReady(substr($object_name['name'], 0, 60));
+	if (strlen($object_name['name']) > 60)
 			$header_line.= "... ";
-	
-	//header-line for Einrichtungen
-	} elseif($object_type == "inst" || $object_type == "fak") {
-		$query = sprintf ("SELECT type, Name FROM Institute WHERE Institut_id = '%s' ", $id);
-		$db->query($query);
-		$db->next_record();		
-
-		$header_line = $INST_TYPE[$db->f("type")]["name"];
-
-		if (!$header_line)
-			$header_line = _("Einrichtung");
-		
-		$header_line.= ": ". htmlReady(substr($db->f("Name"), 0, 60));
-		
-		if (strlen($db->f("Name")) > 60)
-			$header_line.= "... ";
-	}
-	
 	return $header_line; 
 }
 
+function get_object_name($range_id, $object_type){
+	
+	global $SEM_TYPE,$INST_TYPE, $SEM_TYPE_MISC_NAME;
+	
+	$db = new DB_Seminar();
+	if ($object_type == "sem") {
+		$query = sprintf ("SELECT status, Name FROM seminare WHERE Seminar_id = '%s' ", $range_id);
+		$db->query($query);
+		$db->next_record();
+		if ($SEM_TYPE[$db->f("status")]["name"] == $SEM_TYPE_MISC_NAME){
+			$type = _("Veranstaltung");
+		} else {
+			$type = $SEM_TYPE[$db->f("status")]["name"];
+		}
+		if (!$type){
+			$type = _("Veranstaltung");
+		}
+		$name = $db->f("Name");
+	} else if ($object_type == "inst" || $object_type == "fak") {
+		$query = sprintf ("SELECT type, Name FROM Institute WHERE Institut_id = '%s' ", $range_id);
+		$db->query($query);
+		$db->next_record();		
+		$type = $INST_TYPE[$db->f("type")]["name"];
+		if (!$type){
+			$type = _("Einrichtung");
+		}
+		$name = $db->f("Name");
+	}
+		
+	return array('name' => $name, 'type' => $type);
+}
 
 /**
 * This function "opens" a Veranstaltung to work with it
