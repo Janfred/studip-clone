@@ -32,13 +32,29 @@ ob_start();
 </script>
 <script type="text/javascript">
 
+function convert(x, n, m, d)
+   {
+      if (x == 0) return "0";
+      var r = "";
+      while (x != 0)
+      {
+         r = d.charAt((x & m)) + r;
+         x = x >>> n;
+      }
+      return r;
+   }
+   
+function toHexString(x){
+	return convert(x, 4, 15, "0123456789abcdef");
+	}
+	
 function one_time_pad(text,key)
 {
 var geheim=""
  for(var i = 0; i < text.length; i++)
          {
          k=((text.charCodeAt(i))+(key.charCodeAt(i)))%256;
-         geheim=geheim + k.toString(16);
+         geheim=geheim + toHexString(k);
          }
  return(geheim);
 }
