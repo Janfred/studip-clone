@@ -688,8 +688,15 @@ if(!$news_range_id) {
 	$sess->register("news_range_id");
 	$sess->register("news_range_name");
 	}
+
+//take a settet seminar from the adminarea as startview
 if ($links_admin_data["sem_id"] AND !$range_id) {
 	$news_range_id=$links_admin_data["sem_id"];
+	}
+
+//take a settet institute from the adminarea as startview
+if ($links_admin_data["inst_id"] AND !$range_id) {
+	$news_range_id=$links_admin_data["inst_id"];
 	}
 
 elseif ($range_id) {
