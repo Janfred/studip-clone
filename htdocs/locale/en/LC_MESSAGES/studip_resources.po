@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-03-10 23:41+0100\n"
+"POT-Creation-Date: 2003-03-13 14:09+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,40 +15,40 @@ msgstr ""
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: resources/resourcesClass.inc.php:130 resources/resourcesClass.inc.php:959
-#: resources/resourcesVisual.inc.php:513
+#: resources/resourcesClass.inc.php:131 resources/resourcesClass.inc.php:964
+#: resources/resourcesVisual.inc.php:527
 msgid "NutzerIn"
 msgstr ""
 
-#: resources/resourcesClass.inc.php:139 resources/resourcesClass.inc.php:968
+#: resources/resourcesClass.inc.php:140 resources/resourcesClass.inc.php:973
 msgid "Einrichtung"
 msgstr ""
 
-#: resources/resourcesClass.inc.php:148 resources/resourcesClass.inc.php:977
+#: resources/resourcesClass.inc.php:149 resources/resourcesClass.inc.php:982
 msgid "Fakult&auml;t"
 msgstr ""
 
-#: resources/resourcesClass.inc.php:157 resources/resourcesClass.inc.php:986
+#: resources/resourcesClass.inc.php:158 resources/resourcesClass.inc.php:991
 msgid "Veranstaltung"
 msgstr ""
 
-#: resources/resourcesClass.inc.php:945
+#: resources/resourcesClass.inc.php:950
 msgid "jederR"
 msgstr ""
 
-#: resources/resourcesClass.inc.php:947
+#: resources/resourcesClass.inc.php:952
 msgid "jedeR (alle Nutzenden)"
 msgstr ""
 
-#: resources/resourcesClass.inc.php:951
+#: resources/resourcesClass.inc.php:956
 msgid "Global"
 msgstr ""
 
-#: resources/resourcesClass.inc.php:953
+#: resources/resourcesClass.inc.php:958
 msgid "Global (zentral verwaltet)"
 msgstr ""
 
-#: resources/resourcesClass.inc.php:1564 resources/resourcesClass.inc.php:1572
+#: resources/resourcesClass.inc.php:1569 resources/resourcesClass.inc.php:1577
 msgid "zur&uuml;ck"
 msgstr ""
 
@@ -75,259 +75,271 @@ msgstr ""
 msgid "jedeR"
 msgstr ""
 
+#: resources/resourcesFunc.inc.php:367
+msgid "diesen Eintrag übernehmen"
+msgstr ""
+
+#: resources/resourcesFunc.inc.php:368
+msgid "Suche zurücksetzen"
+msgstr ""
+
+#: resources/resourcesFunc.inc.php:373
+msgid "Starten Sie hier eine ihre Suche"
+msgstr ""
+
 #: resources/resourcesVisual.inc.php:112 resources/resourcesVisual.inc.php:114
-#: resources/resourcesVisual.inc.php:865
-#: resources/resourcesVisual.inc.php:1293
-#: resources/resourcesVisual.inc.php:1404
+#: resources/resourcesVisual.inc.php:879
+#: resources/resourcesVisual.inc.php:1336
+#: resources/resourcesVisual.inc.php:1447
 msgid "verantwortlich:"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:127 resources/resourcesVisual.inc.php:326
+#: resources/resourcesVisual.inc.php:127 resources/resourcesVisual.inc.php:340
 msgid "&Auml;nderungen speichern"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:285
+#: resources/resourcesVisual.inc.php:299
 msgid "Objekt in diese Ebene verschieben"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:334
+#: resources/resourcesVisual.inc.php:348
 #, c-format
 msgid ""
 "Dieses Objekt wurde zum Verschieben markiert. Bitte w&auml;hlen sie das "
 "Einf&uuml;gen-Symbol %s, um es in die gew&uuml;nschte Ebene zu verschieben."
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:334
+#: resources/resourcesVisual.inc.php:348
 msgid ""
 "Klicken Sie suf dieses Symbol, um dieses Objekt in eine andere Ebene zu "
 "verschieben"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:462
+#: resources/resourcesVisual.inc.php:476
 msgid "Name"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:465
+#: resources/resourcesVisual.inc.php:479
 msgid "Berechtigungen"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:468 resources/resourcesVisual.inc.php:554
-#: resources/resourcesVisual.inc.php:711
+#: resources/resourcesVisual.inc.php:482 resources/resourcesVisual.inc.php:568
+#: resources/resourcesVisual.inc.php:725
 msgid "X"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:474
+#: resources/resourcesVisual.inc.php:488
 msgid "Suchen/hinzuf&uuml;gen"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:481
+#: resources/resourcesVisual.inc.php:495
 msgid ""
 "Diese NutzerInnen sind als Ressourcen-Roots eingetragen, sie haben damit "
 "Zugriff auf alle globalen Ressourcen"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:489
+#: resources/resourcesVisual.inc.php:503
 msgid "NutzerInnen hinzuf&uuml;gen"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:548
+#: resources/resourcesVisual.inc.php:562
 msgid "Typ"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:551
+#: resources/resourcesVisual.inc.php:565
 msgid "zugeordnete Eigenschaften"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:562
+#: resources/resourcesVisual.inc.php:576
 msgid "neuer Typ:"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:583
+#: resources/resourcesVisual.inc.php:597
 #, c-format
 msgid "wird von <b>%s</b> Objekten verwendet"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:584 resources/resourcesVisual.inc.php:745
+#: resources/resourcesVisual.inc.php:598 resources/resourcesVisual.inc.php:759
 msgid "(systemobjekt)"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:610
+#: resources/resourcesVisual.inc.php:624
 msgid "Zustand Ja/Nein"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:613 resources/resourcesVisual.inc.php:756
+#: resources/resourcesVisual.inc.php:627 resources/resourcesVisual.inc.php:770
 msgid "mehrzeiliges Textfeld"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:616 resources/resourcesVisual.inc.php:755
+#: resources/resourcesVisual.inc.php:630 resources/resourcesVisual.inc.php:769
 msgid "einzeiliges Textfeld"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:619
+#: resources/resourcesVisual.inc.php:633
 msgid "definiertes Auswahlfeld"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:630
+#: resources/resourcesVisual.inc.php:644
 msgid "Eigenschaft löschen"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:635
+#: resources/resourcesVisual.inc.php:649
 msgid "Löschen der Eigenschaft nicht möglich, Systemobjekt!"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:705
+#: resources/resourcesVisual.inc.php:719
 msgid "Eigenschaft"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:708
+#: resources/resourcesVisual.inc.php:722
 msgid "Art der Eigenschaft"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:724 resources/resourcesVisual.inc.php:754
+#: resources/resourcesVisual.inc.php:738 resources/resourcesVisual.inc.php:768
 msgid "Zustand"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:725
+#: resources/resourcesVisual.inc.php:739
 msgid "einzeiligesTextfeld"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:726
+#: resources/resourcesVisual.inc.php:740
 msgid "mehrzeiligesTextfeld"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:727 resources/resourcesVisual.inc.php:757
+#: resources/resourcesVisual.inc.php:741 resources/resourcesVisual.inc.php:771
 msgid "Auswahlfeld"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:751
+#: resources/resourcesVisual.inc.php:765
 msgid "Art:"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:762
+#: resources/resourcesVisual.inc.php:776
 msgid "Bezeichnung:"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:766
+#: resources/resourcesVisual.inc.php:780
 msgid "Optionen:"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:802
+#: resources/resourcesVisual.inc.php:816
 msgid "diese Eigenschaft"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:862
-#: resources/resourcesVisual.inc.php:1257
+#: resources/resourcesVisual.inc.php:876
+#: resources/resourcesVisual.inc.php:1300
 msgid "Name:"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:863
+#: resources/resourcesVisual.inc.php:877
 #: resources/views/page_intros.inc.php:39
-#: resources/views/page_intros.inc.php:127
+#: resources/views/page_intros.inc.php:139
 msgid "Hierachieebene"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:872
-#: resources/resourcesVisual.inc.php:1289
+#: resources/resourcesVisual.inc.php:886
+#: resources/resourcesVisual.inc.php:1332
 msgid "Beschreibung:"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:882
+#: resources/resourcesVisual.inc.php:896
 msgid "Eigenschaften:"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1017
+#: resources/resourcesVisual.inc.php:1047
 msgid "Sie erstellen eine neue Belegung"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1030
+#: resources/resourcesVisual.inc.php:1060
 msgid ""
 "Diese Belegung ist ein regelm&auml;&szlig;iger Veranstaltungstermin, der in "
 "diesem Raum stattfindet."
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1030
+#: resources/resourcesVisual.inc.php:1060
 #, c-format
 msgid ""
 "Die Zeiten dieser Belegung k&ouml;nnen Sie nur innerhalb der Veranstaltung %"
 "s bearbeiten!"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1032
+#: resources/resourcesVisual.inc.php:1062
 msgid ""
 "Diese Belegung ist ein Einzeltermin einer Veranstaltung, der in diesem Raum "
 "stattfindet."
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1032
+#: resources/resourcesVisual.inc.php:1062
 #, c-format
 msgid ""
 " Die Zeiten dieser Belegung k&ouml;nnen Sie nur innerhalb der Veranstaltung %"
 "s bearbeiten!"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1034
+#: resources/resourcesVisual.inc.php:1064
 msgid "Sie haben nicht die Berechtigung, diese Belegung zu bearbeiten."
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1042
+#: resources/resourcesVisual.inc.php:1072
 msgid "Datum/erster Termin:"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1057
+#: resources/resourcesVisual.inc.php:1087
 msgid "Art der Wiederholung:"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1063
+#: resources/resourcesVisual.inc.php:1093
 msgid "zweiw&ouml;chentlich"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1065
+#: resources/resourcesVisual.inc.php:1095
 msgid "w&ouml;chentlich"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1067
+#: resources/resourcesVisual.inc.php:1097
 msgid "keine Wiederholung (Einzeltermin)"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1084
+#: resources/resourcesVisual.inc.php:1114
 msgid "Beginn/Ende:"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1092
-#: resources/resourcesVisual.inc.php:1094
+#: resources/resourcesVisual.inc.php:1122
+#: resources/resourcesVisual.inc.php:1124
 #: resources/lib/ScheduleWeek.class.php:243
 msgid "Uhr"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1102
+#: resources/resourcesVisual.inc.php:1132
 msgid "Wiederholung bis sp&auml;testens:"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1113
+#: resources/resourcesVisual.inc.php:1143
 msgid "Ende der Vorlesungszeit"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1127
+#: resources/resourcesVisual.inc.php:1157
 msgid "eingetragen f&uuml;r die Belegung:"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1134
+#: resources/resourcesVisual.inc.php:1164
 msgid "keinE Stud.IP NutzerIn eingetragen"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1138
+#: resources/resourcesVisual.inc.php:1168
 msgid "einen anderen User (NutzerIn oder Einrichtung) eintragen:"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1140
+#: resources/resourcesVisual.inc.php:1170
 msgid "einen User (NutzerIn oder Einrichtung) eintragen:"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1143
+#: resources/resourcesVisual.inc.php:1173
 msgid "freie Eingabe zur Belegung:"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1145
+#: resources/resourcesVisual.inc.php:1175
 msgid ""
 "<b>Beachten Sie:</b> Wenn Sie einen NutzerIn oder eine Einrichtung "
 "eintragen, kann diese NutzerIn oder berechtigte Personen die Belegung "
@@ -335,237 +347,234 @@ msgid ""
 "eingeben."
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1154
+#: resources/resourcesVisual.inc.php:1184
 msgid "Wiederholungsturnus:"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1160
+#: resources/resourcesVisual.inc.php:1194
 msgid "jeden Tag"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1161
+#: resources/resourcesVisual.inc.php:1195
 msgid "jeden zweiten Tag"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1162
+#: resources/resourcesVisual.inc.php:1196
 msgid "jeden dritten Tag"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1163
+#: resources/resourcesVisual.inc.php:1197
 msgid "jeden vierten Tag"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1164
+#: resources/resourcesVisual.inc.php:1198
 msgid "jeden f&uuml;nften Tag"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1165
+#: resources/resourcesVisual.inc.php:1199
 msgid "jeden sechsten Tag"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1169
+#: resources/resourcesVisual.inc.php:1203
 msgid "jede Woche"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1170
+#: resources/resourcesVisual.inc.php:1204
 msgid "jede zweite Woche"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1171
+#: resources/resourcesVisual.inc.php:1205
 msgid "jede dritte Woche"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1175
+#: resources/resourcesVisual.inc.php:1209
 msgid "jeden Monat"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1176
+#: resources/resourcesVisual.inc.php:1210
 msgid "jeden zweiten Monat"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1177
+#: resources/resourcesVisual.inc.php:1211
 msgid "jeden dritten Monat"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1178
+#: resources/resourcesVisual.inc.php:1212
 msgid "jeden vierten Monat"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1179
+#: resources/resourcesVisual.inc.php:1213
 msgid "jeden f&uuml;nften Monat"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1180
+#: resources/resourcesVisual.inc.php:1214
 msgid "jeden sechsten Monat"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1181
+#: resources/resourcesVisual.inc.php:1215
 msgid "jeden siebten Monat"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1182
+#: resources/resourcesVisual.inc.php:1216
 msgid "jeden achten Monat"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1183
+#: resources/resourcesVisual.inc.php:1217
 msgid "jeden neunten Monat"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1184
+#: resources/resourcesVisual.inc.php:1218
 msgid "jeden zehnten Monat"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1185
+#: resources/resourcesVisual.inc.php:1219
 msgid "jeden elften Monat"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1189
+#: resources/resourcesVisual.inc.php:1223
 msgid "jedes Jahr"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1190
+#: resources/resourcesVisual.inc.php:1224
 msgid "jedes zweite Jahr"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1191
+#: resources/resourcesVisual.inc.php:1225
 msgid "jedes dritte Jahr"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1192
+#: resources/resourcesVisual.inc.php:1226
 msgid "jedes vierte Jahr"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1193
+#: resources/resourcesVisual.inc.php:1227
 msgid "jedes f&uuml;nfte Jahr"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1206
+#: resources/resourcesVisual.inc.php:1244
 msgid "begrenzte Anzahl der Wiederholungen:"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1208
-msgid "Mal wiederholen"
+#: resources/resourcesVisual.inc.php:1248
+#: resources/resourcesVisual.inc.php:1252
+#, c-format
+msgid "max. %s Mal wiederholen"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1260
+#: resources/resourcesVisual.inc.php:1254
+msgid "unbegrenzt"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1303
 msgid "Typ des Objektes:"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1269
+#: resources/resourcesVisual.inc.php:1312
 msgid "nicht zugeordnet"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1313
+#: resources/resourcesVisual.inc.php:1356
 msgid "Eigenschaften"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1366
+#: resources/resourcesVisual.inc.php:1409
 msgid ""
 "Das Objekt wurde noch keinem Typ zugewiesen. Um Eigenschaften bearbeiten zu "
 "k&ouml;nnen, m&uuml;ssen Sie vorher einen Typ festlegen!"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1411
+#: resources/resourcesVisual.inc.php:1454
 msgid "verantworlicheN NutzerIn &auml;ndern:"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1414
+#: resources/resourcesVisual.inc.php:1457
 msgid "Sie k&ouml;nnen den/die verantwortlicheN NutzerIn nicht &auml;ndern."
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1422
+#: resources/resourcesVisual.inc.php:1465
 msgid "Berechtigungen:"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1423
+#: resources/resourcesVisual.inc.php:1466
 msgid "Berechtigung hinzuf&uuml;gen"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1452
+#: resources/resourcesVisual.inc.php:1495
 msgid "Berechtigung löschen"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1454
+#: resources/resourcesVisual.inc.php:1497
 msgid "Sie d&uuml;rfen diese Berechtigung leider nicht löschen"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1469
+#: resources/resourcesVisual.inc.php:1512
 msgid "Es sind keine weiteren Berechtigungen eingetragen"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1551
+#: resources/resourcesVisual.inc.php:1594
 msgid "Zeitraum:"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1567
+#: resources/resourcesVisual.inc.php:1610
 msgid "Tag(e)"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1568
+#: resources/resourcesVisual.inc.php:1611
 msgid "Woche(n)"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1569
+#: resources/resourcesVisual.inc.php:1612
 msgid "Monat(e)"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1570
+#: resources/resourcesVisual.inc.php:1613
 msgid "Jahre(e)"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1611
-#: resources/resourcesVisual.inc.php:1670
+#: resources/resourcesVisual.inc.php:1654
+#: resources/resourcesVisual.inc.php:1713
 msgid "Anzahl der Belegungen in diesem Zeitraum:"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1615
+#: resources/resourcesVisual.inc.php:1658
 #, c-format
 msgid "Belegung ist von <b>%s</b> bis <b>%s</b>, belegt von <b>%s</b>"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1654
+#: resources/resourcesVisual.inc.php:1697
 msgid "Vorherige Woche anzeigen"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1657
+#: resources/resourcesVisual.inc.php:1700
 msgid "Woche"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1661
+#: resources/resourcesVisual.inc.php:1704
 msgid "Nächste Woche anzeigen"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1738
-#: resources/resourcesVisual.inc.php:1740
-msgid "durchsuchen"
-msgstr ""
-
-#: resources/resourcesVisual.inc.php:1781
+#: resources/resourcesVisual.inc.php:1819
 msgid ""
 "folgende Eigenschaften soll die Ressource besitzen (leer bedeutet egal):"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1884
-msgid "Unterebenen vorhanden"
-msgstr ""
-
-#: resources/resourcesVisual.inc.php:1893
-msgid "Auf dieser Ebene existieren keine weiteren Unterebenen"
-msgstr ""
-
-#: resources/resourcesVisual.inc.php:1914
+#: resources/resourcesVisual.inc.php:1929
 msgid "eine Ebene zur&uuml;ck"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1922
-msgid "Eintr&auml;ge auf dieser Ebene:"
+#: resources/resourcesVisual.inc.php:1938
+msgid "Auf dieser Ebene existieren keine weiteren Unterebenen"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1935
+#: resources/resourcesVisual.inc.php:1963
+msgid "Ressourcen auf dieser Ebene:"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1977
 msgid "Es existieren keine Eintr&auml;ge auf dieser Ebene."
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1949
+#: resources/resourcesVisual.inc.php:1992
 msgid "Es wurden keine Eintr&auml;ge zu Ihren Suchkriterien gefunden."
 msgstr ""
 
@@ -832,15 +841,18 @@ msgid "Die j&auml;hrliche Wiederholung darf maximal 10 Jahre dauern!"
 msgstr ""
 
 #: resources/views/msgs_resources.inc.php:111
-msgid "Die monatliche Wiederholung darf maximal 12 Monate dauern!"
+msgid "Die monatliche Wiederholung darf maximal 10 Jahre dauern!"
 msgstr ""
 
 #: resources/views/msgs_resources.inc.php:114
-msgid "Die w&ouml;chentliche Wiederholung darf maximal 50 Wochen dauern!"
+msgid ""
+"Die w&ouml;chentliche Wiederholung darf maximal 50 Mal wiederholt "
+"stattfinden!"
 msgstr ""
 
 #: resources/views/msgs_resources.inc.php:117
-msgid "Die t&auml;gliche Wiederholung darf maximal 30 Tage dauern!"
+msgid ""
+"Die t&auml;gliche Wiederholung darf maximal 100 Mal wiederholt stattfinden!"
 msgstr ""
 
 #: resources/views/msgs_resources.inc.php:121
@@ -854,7 +866,7 @@ msgid ""
 msgstr ""
 
 #: resources/views/page_intros.inc.php:50
-#: resources/views/page_intros.inc.php:157
+#: resources/views/page_intros.inc.php:169
 msgid "&Uuml;bersicht der Ressourcen"
 msgstr ""
 
@@ -871,172 +883,182 @@ msgstr ""
 
 #: resources/views/page_intros.inc.php:63
 #, c-format
-msgid "Sie sehen alle Eintr&auml;ge in der Ebene <b>%s</b>"
+msgid "Ressourcen &uuml;ber ihre %sEigenschaften%s suchen"
 msgstr ""
 
-#: resources/views/page_intros.inc.php:64
-msgid "Bearbeiten und ausgeben von Listen"
-msgstr ""
-
-#: resources/views/page_intros.inc.php:66
-msgid "Ebene"
-msgstr ""
-
-#: resources/views/page_intros.inc.php:68
-#: resources/views/page_intros.inc.php:118
-msgid "Information:"
-msgstr ""
-
-#: resources/views/page_intros.inc.php:71
-msgid "Untergeordnete Ebenen werden ausgegeben."
-msgstr ""
-
-#: resources/views/page_intros.inc.php:71
-msgid "Untergeordnete Ebenen werden <u>nicht</u> ausgegeben."
+#: resources/views/page_intros.inc.php:63
+#, c-format
+msgid "%sEbenen%s durchsuchen"
 msgstr ""
 
 #: resources/views/page_intros.inc.php:75
+#, c-format
+msgid "Sie sehen alle Eintr&auml;ge in der Ebene <b>%s</b>"
+msgstr ""
+
+#: resources/views/page_intros.inc.php:76
+msgid "Bearbeiten und ausgeben von Listen"
+msgstr ""
+
+#: resources/views/page_intros.inc.php:78
+msgid "Ebene"
+msgstr ""
+
+#: resources/views/page_intros.inc.php:80
+#: resources/views/page_intros.inc.php:130
+msgid "Information:"
+msgstr ""
+
+#: resources/views/page_intros.inc.php:83
+msgid "Untergeordnete Ebenen werden ausgegeben."
+msgstr ""
+
+#: resources/views/page_intros.inc.php:83
+msgid "Untergeordnete Ebenen werden <u>nicht</u> ausgegeben."
+msgstr ""
+
+#: resources/views/page_intros.inc.php:87
 #, c-format
 msgid "Ressourcen in untergeordneten Ebenen %snicht ausgeben%s."
 msgstr ""
 
-#: resources/views/page_intros.inc.php:75
+#: resources/views/page_intros.inc.php:87
 #, c-format
 msgid "Ressourcen in untergeordneten Ebenen %s(mit) ausgeben%s"
 msgstr ""
 
-#: resources/views/page_intros.inc.php:82
+#: resources/views/page_intros.inc.php:94
 msgid "Hier k&ouml;nnen Sie Ressourcen-Belegungen bearbeiten und neue anlegen."
 msgstr ""
 
-#: resources/views/page_intros.inc.php:83
+#: resources/views/page_intros.inc.php:95
 msgid "Belegungen bearbeiten"
 msgstr ""
 
-#: resources/views/page_intros.inc.php:86
+#: resources/views/page_intros.inc.php:98
 msgid "Hier k&ouml;nnen Sie Ressourcen-Eigenschaften bearbeiten."
 msgstr ""
 
-#: resources/views/page_intros.inc.php:87
-#: resources/views/page_intros.inc.php:91
-#: resources/views/page_intros.inc.php:106
+#: resources/views/page_intros.inc.php:99
+#: resources/views/page_intros.inc.php:103
+#: resources/views/page_intros.inc.php:118
 msgid "Eigenschaften bearbeiten"
 msgstr ""
 
-#: resources/views/page_intros.inc.php:90
+#: resources/views/page_intros.inc.php:102
 msgid ""
 "Hier k&ouml;nnen Sie Berechtigungen f&uuml;r den Zugriff auf die Ressource "
 "vergeben."
 msgstr ""
 
-#: resources/views/page_intros.inc.php:90
+#: resources/views/page_intros.inc.php:102
 msgid ""
 "<b>Achtung:</b> Alle hier erteilten Berechtigungen gelten ebenfalls f&uuml;r "
 "die Ressourcen, die der gew&auml;hlten Ressource untergeordnet sind!"
 msgstr ""
 
-#: resources/views/page_intros.inc.php:94
+#: resources/views/page_intros.inc.php:106
 msgid ""
 "Hier k&ouml;nnen Sie sich die Belegungszeiten der Ressource anzeigen lassen "
 "und auf unterschiedliche Art darstellen lassen."
 msgstr ""
 
-#: resources/views/page_intros.inc.php:95
+#: resources/views/page_intros.inc.php:107
 msgid "Belegungszeiten ausgeben"
 msgstr ""
 
-#: resources/views/page_intros.inc.php:101
+#: resources/views/page_intros.inc.php:113
 msgid ""
 "Verwalten Sie auf dieser Seite die Ressourcen-Typen, wie etwa R&auml;ume, "
 "Ger&auml;te oder Geb&auml;ude. Sie k&ouml;nnen jedem Typ beliebig viele "
 "Eigenschaften zuordnen."
 msgstr ""
 
-#: resources/views/page_intros.inc.php:102
+#: resources/views/page_intros.inc.php:114
 msgid "Typen bearbeiten"
 msgstr ""
 
-#: resources/views/page_intros.inc.php:105
+#: resources/views/page_intros.inc.php:117
 msgid ""
 "Verwalten Sie auf dieser Seite die einzelnen Eigenschaften. Diese "
 "Eigenschaften k&ouml;nnen Sie beliebigen Ressourcen-Typen zuweisen."
 msgstr ""
 
-#: resources/views/page_intros.inc.php:109
+#: resources/views/page_intros.inc.php:121
 msgid ""
 "Verwalten Sie hier AdministratorInnen des Systems, die volle Rechte &uuml;"
 "ber alle Ressourcen erhalten."
 msgstr ""
 
-#: resources/views/page_intros.inc.php:110
+#: resources/views/page_intros.inc.php:122
 msgid "Ressourcen-AdministratorInnen bearbeiten"
 msgstr ""
 
-#: resources/views/page_intros.inc.php:115
+#: resources/views/page_intros.inc.php:127
 #, c-format
 msgid "Auf dieser Seite sehen sie alle der %s zugeordneten Ressourcen."
 msgstr ""
 
-#: resources/views/page_intros.inc.php:116
+#: resources/views/page_intros.inc.php:128
 msgid "Ressourcen&uuml;bersicht"
 msgstr ""
 
-#: resources/views/page_intros.inc.php:121
+#: resources/views/page_intros.inc.php:133
 msgid ""
 "Als Teilnehmer der Veranstaltung haben Sie die M&ouml;glichkeit, diese "
 "Ressourcen frei zu belegen oder den Belegungsplan einzusehen."
 msgstr ""
 
-#: resources/views/page_intros.inc.php:127
+#: resources/views/page_intros.inc.php:139
 #, c-format
 msgid "Hier sehen Sie detaillierte Informationen der Ressource %s"
 msgstr ""
 
-#: resources/views/page_intros.inc.php:129
+#: resources/views/page_intros.inc.php:141
 msgid "Ressourcendetails"
 msgstr ""
 
-#: resources/views/page_intros.inc.php:131
+#: resources/views/page_intros.inc.php:143
 msgid "Anzeige der Ressourceneigenschaften"
 msgstr ""
 
-#: resources/views/page_intros.inc.php:133
+#: resources/views/page_intros.inc.php:145
 msgid "Aktionen:"
 msgstr ""
 
-#: resources/views/page_intros.inc.php:136
+#: resources/views/page_intros.inc.php:148
 msgid "zur&uuml;ck zur Suche"
 msgstr ""
 
-#: resources/views/page_intros.inc.php:136
+#: resources/views/page_intros.inc.php:148
 msgid "zur&uuml;ck zur &Uuml;bersicht"
 msgstr ""
 
-#: resources/views/page_intros.inc.php:141
+#: resources/views/page_intros.inc.php:153
 #, c-format
 msgid "Hier k&ouml;nnen Sie sich die Belegungszeiten der Ressource %s"
 msgstr ""
 
-#: resources/views/page_intros.inc.php:142
+#: resources/views/page_intros.inc.php:154
 msgid "Ressourcenbelegung"
 msgstr ""
 
-#: resources/views/page_intros.inc.php:146
+#: resources/views/page_intros.inc.php:158
 #, c-format
 msgid "Bearbeiten von Belegungen der Ressource %s"
 msgstr ""
 
-#: resources/views/page_intros.inc.php:151
+#: resources/views/page_intros.inc.php:163
 #, c-format
 msgid "Vergeben von Rechten auf die Ressource %s"
 msgstr ""
 
-#: resources/views/page_intros.inc.php:152
+#: resources/views/page_intros.inc.php:164
 #, c-format
 msgid "Vergeben von Berechtigungen - Objekt%s"
 msgstr ""
 
-#: resources/views/page_intros.inc.php:156
+#: resources/views/page_intros.inc.php:168
 msgid ""
 "Sie befinden sich in der Ressourcenverwaltung von Stud.IP. Sie k&ouml;nnen "
 "hier R&auml;ume, Geb&auml;ude, Ger&auml;te und andere Ressourcen verwalten."

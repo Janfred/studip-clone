@@ -5,20 +5,20 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: STUD.IP 0.9.0\n"
-"POT-Creation-Date: 2003-03-10 23:41+0100\n"
-"PO-Revision-Date: 2003-03-10 18:16+0100\n"
-"Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
-"Language-Team: english\n"
+"POT-Creation-Date: 2003-03-13 14:09+0100\n"
+"PO-Revision-Date: 2003-03-11 23:42+GMT\n"
+"Last-Translator: \n"
+"Language-Team:  <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 0.9.6\n"
 
-#: about.php:87
+#: about.php:91
 msgid "Es wurde kein Nutzer unter dem angegebenen Nutzernamen gefunden!"
 msgstr "No user was found under the given username!"
 
-#: about.php:87
+#: about.php:91
 msgid ""
 " Wenn Sie auf einen Link geklickt haben, kann es sein, dass sich der "
 "Username des gesuchten Nutzers ge&auml;ndert hat, oder der Nutzer gel&ouml;"
@@ -27,111 +27,112 @@ msgstr ""
 "If you have clicked on a link, it could be that the username of the user you "
 "have searched for has changed, or the user has been deleted."
 
-#: about.php:87
+#: about.php:91
 msgid "Benutzer nicht gefunden"
 msgstr "User not found"
 
-#: about.php:138
+#: about.php:142
 msgid "kein persönliches Bild vorhanden"
 msgstr "no personal photo is included"
 
-#: about.php:147
+#: about.php:151
 msgid "E-mail:"
 msgstr "E-mail:"
 
-#: about.php:148
+#: about.php:152
 msgid "Telefon (privat):"
 msgstr "Home telephone number: "
 
-#: about.php:149
+#: about.php:153
 msgid "Adresse (privat):"
 msgstr "Home address:"
 
-#: about.php:153 edit_about.php:928 institut_main.php:114
+#: about.php:157 edit_about.php:928 institut_main.php:117
 msgid "Homepage:"
 msgstr "Homepage:"
 
-#: about.php:160
+#: about.php:164
 msgid "Wo ich studiere:"
 msgstr "Where I study:"
 
-#: about.php:170
+#: about.php:174
 msgid "Wo ich arbeite:"
 msgstr "Where I work:"
 
-#: about.php:184 admin_metadates.php:522 admin_seminare_assi.php:2026
+#: about.php:188 admin_metadates.php:522 admin_seminare_assi.php:2026
 #: admin_seminare_assi.php:2085 admin_seminare_assi.php:2127
 #: edit_about.php:972 show_dates.inc.php:141 show_dates.inc.php:496
 msgid "Raum:"
 msgstr "Room:"
 
-#: about.php:186 edit_about.php:974
+#: about.php:190 edit_about.php:974
 msgid "Sprechzeit:"
 msgstr "Office hours:"
 
-#: about.php:188 edit_about.php:924 edit_about.php:976
+#: about.php:192 edit_about.php:924 edit_about.php:976
 msgid "Telefon:"
 msgstr "Telephone:"
 
-#: about.php:190 edit_about.php:978 institut_main.php:110
+#: about.php:194 edit_about.php:978 institut_main.php:113
 msgid "Fax:"
 msgstr "Fax:"
 
-#: about.php:203
+#: about.php:207
 msgid "Stud.IP Messenger starten"
 msgstr "Start Stud.IP Messenger"
 
-#: about.php:205
+#: about.php:209
 msgid "Nachricht an User:"
 msgstr "Message to user:"
 
-#: about.php:205 institut_members.php:637 institut_members.php:638
-#: online.php:80 online.php:186 online.php:205 online.php:234 studipim.php:134
-#: teilnehmer.php:522 teilnehmer.php:642
+#: about.php:209 browse.php:318 institut_members.php:637
+#: institut_members.php:638 online.php:80 online.php:186 online.php:205
+#: online.php:234 studipim.php:134 teilnehmer.php:522 teilnehmer.php:642
 msgid "Nachricht an User verschicken"
 msgstr "Send message to user"
 
-#: about.php:207
+#: about.php:211
 msgid "Zu Buddies hinzuf&uuml;gen"
 msgstr "Add to Buddies"
 
-#: about.php:214
+#: about.php:218
 msgid "Zur Highscoreliste"
 msgstr "To high score list"
 
-#: about.php:214
+#: about.php:218
 msgid "Ihr Stud.IP-Score:"
 msgstr "Your Stud.IP score:"
 
-#: about.php:214
+#: about.php:218
 msgid "Ihr Rang:"
 msgstr "Your rank:"
 
-#: about.php:219
+#: about.php:223
 msgid "Stud.IP-Score:"
 msgstr "Stud.IP-Score:"
 
-#: about.php:219
+#: about.php:223
 msgid "Rang:"
 msgstr "Rank:"
 
-#: about.php:244 links_about.inc.php:37 links_about.inc.php:52
+#: about.php:250 links_about.inc.php:37 links_about.inc.php:52
 msgid "Lebenslauf"
 msgstr "CV"
 
-#: about.php:251
+#: about.php:257
 msgid "Hobbies"
 msgstr "Hobbies"
 
-#: about.php:258 links_about.inc.php:55
+#: about.php:264 links_about.inc.php:55
 msgid "Publikationen"
 msgstr "Publications"
 
-#: about.php:265
+#: about.php:271
 msgid "Arbeitsschwerpunkte"
 msgstr "Research interests"
 
-#: about.php:287 admin_news.php:491 header.php:142 links_openobject.inc.php:60
+#: about.php:293 admin_news.php:491 browse.php:123 header.php:141
+#: links_openobject.inc.php:60
 msgid "Veranstaltungen"
 msgstr "Courses"
 
@@ -487,6 +488,7 @@ msgstr "at"
 #: admin_admission.php:731 admin_metadates.php:516
 #: admin_seminare_assi.php:2019 admin_seminare_assi.php:2077
 #: admin_seminare_assi.php:2125 admin_seminare_assi.php:2270
+#: mein_stundenplan.php:485 mein_stundenplan.php:613 mein_stundenplan.php:631
 msgid "Uhr"
 msgstr "     "
 
@@ -569,10 +571,11 @@ msgstr ""
 msgid "Neues Lernmodul anlegen"
 msgstr "Add new learning module"
 
-#: admin_lernmodule.php:86 details.php:203 meine_einrichtungen.php:303
-#: meine_einrichtungen.php:325 meine_seminare.php:430 meine_seminare.php:453
-#: migration2studip.php:146 migration2studip.php:169 my_archiv.php:165
-#: seminar_lernmodule.php:105 seminar_lernmodule.php:160 sem_portal.php:237
+#: admin_lernmodule.php:86 details.php:203 institut_browse.php:90
+#: meine_einrichtungen.php:303 meine_einrichtungen.php:325
+#: meine_seminare.php:430 meine_seminare.php:453 migration2studip.php:146
+#: migration2studip.php:169 my_archiv.php:165 seminar_lernmodule.php:105
+#: seminar_lernmodule.php:160 sem_portal.php:237 statusgruppen.php:196
 msgid "Information:"
 msgstr "Information:"
 
@@ -583,7 +586,7 @@ msgstr "On this page you can administer learning modules. "
 #: admin_lernmodule.php:95 details.php:185 meine_einrichtungen.php:310
 #: meine_einrichtungen.php:332 meine_seminare.php:437 meine_seminare.php:460
 #: migration2studip.php:149 migration2studip.php:172 my_archiv.php:172
-#: seminar_lernmodule.php:113 seminar_lernmodule.php:168
+#: seminar_lernmodule.php:113 seminar_lernmodule.php:168 statusgruppen.php:205
 msgid "Aktionen:"
 msgstr "Actions:"
 
@@ -735,36 +738,43 @@ msgstr "Update schedule "
 
 #: admin_metadates.php:484 admin_metadates.php:486
 #: admin_seminare_assi.php:1987 admin_seminare_assi.php:1989 dates.inc.php:415
+#: mein_stundenplan.php:448 mein_stundenplan.php:590
 msgid "Montag"
 msgstr "Monday"
 
 #: admin_metadates.php:488 admin_metadates.php:490
 #: admin_seminare_assi.php:1991 admin_seminare_assi.php:1993 dates.inc.php:416
+#: mein_stundenplan.php:451 mein_stundenplan.php:591
 msgid "Dienstag"
 msgstr "Tuesday"
 
 #: admin_metadates.php:492 admin_metadates.php:494
 #: admin_seminare_assi.php:1995 admin_seminare_assi.php:1997 dates.inc.php:417
+#: mein_stundenplan.php:454 mein_stundenplan.php:592
 msgid "Mittwoch"
 msgstr "Wednesday"
 
 #: admin_metadates.php:496 admin_metadates.php:498
 #: admin_seminare_assi.php:1999 admin_seminare_assi.php:2001 dates.inc.php:418
+#: mein_stundenplan.php:457 mein_stundenplan.php:593
 msgid "Donnerstag"
 msgstr "Thursday"
 
 #: admin_metadates.php:500 admin_metadates.php:502
 #: admin_seminare_assi.php:2003 admin_seminare_assi.php:2005 dates.inc.php:419
+#: mein_stundenplan.php:460 mein_stundenplan.php:594
 msgid "Freitag"
 msgstr "Friday"
 
 #: admin_metadates.php:504 admin_metadates.php:506
 #: admin_seminare_assi.php:2007 admin_seminare_assi.php:2009 dates.inc.php:420
+#: mein_stundenplan.php:463 mein_stundenplan.php:595
 msgid "Samstag"
 msgstr "Saturday"
 
 #: admin_metadates.php:508 admin_metadates.php:510
 #: admin_seminare_assi.php:2011 admin_seminare_assi.php:2013 dates.inc.php:421
+#: mein_stundenplan.php:466 mein_stundenplan.php:596
 msgid "Sonntag"
 msgstr "Sunday"
 
@@ -823,7 +833,8 @@ msgstr "Please enter the date of the first meeting:"
 msgid "weitere Daten"
 msgstr "other dates"
 
-#: admin_metadates.php:619 sem_browse.inc.php:373 sem_browse.inc.php:451
+#: admin_metadates.php:619 archiv.php:254 archiv.php:406
+#: sem_browse.inc.php:373 sem_browse.inc.php:451
 msgid "Semester"
 msgstr "Semester"
 
@@ -867,17 +878,17 @@ msgstr "Delete selected news"
 msgid "Markierte News löschen"
 msgstr "Delete selected news"
 
-#: admin_news.php:170 admin_news.php:216
+#: admin_news.php:170 admin_news.php:216 suchen.inc.php:171
 msgid "&Uuml;berschrift"
 msgstr "Headline"
 
 #: admin_news.php:170 admin_news.php:220 freie.php:169
 #: meine_einrichtungen.php:203 meine_seminare.php:257 meine_seminare.php:586
-#: my_archiv.php:94
+#: my_archiv.php:94 suchen.inc.php:179
 msgid "Inhalt"
 msgstr "Content"
 
-#: admin_news.php:171 institut_members.php:451
+#: admin_news.php:171 institut_members.php:451 suchen.inc.php:163
 msgid "Autor"
 msgstr "Author"
 
@@ -987,7 +998,7 @@ msgid ""
 msgstr "Here you can choose other areas to which you have access."
 
 #: admin_news.php:288 admin_news.php:741 admin_seminare_assi.php:1681
-#: admin_seminare_assi.php:1749 institut_browse.php:103
+#: admin_seminare_assi.php:1749 archiv.php:517 institut_browse.php:103
 #: lib/classes/StudipSemSearch.class.php:216
 msgid "Suche starten"
 msgstr "Start search"
@@ -1055,7 +1066,7 @@ msgstr "The %s news was deleted!"
 msgid "Sie haben keine News zum l&ouml;schen ausgew&auml;hlt!"
 msgstr "You haven't selected any news to be deleted!"
 
-#: admin_news.php:492 sem_browse.inc.php:437
+#: admin_news.php:492 archiv.php:405 browse.php:92 sem_browse.inc.php:437
 msgid "Einrichtungen"
 msgstr "Institutes"
 
@@ -1500,7 +1511,7 @@ msgstr ""
 "All fields marked with a star%s <b>must</b> be filled out in order to set up "
 "a course."
 
-#: admin_seminare_assi.php:1308
+#: admin_seminare_assi.php:1308 archiv.php:238
 msgid "Name der Veranstaltung:"
 msgstr "Name of the course:"
 
@@ -1514,8 +1525,8 @@ msgstr ""
 "course. This entry appears throughout Stud.IP as identification for the "
 "course."
 
-#: admin_seminare_assi.php:1320 admin_sem_tree.php:143 sem_browse.inc.php:245
-#: seminar_main.php:100
+#: admin_seminare_assi.php:1320 admin_sem_tree.php:143 archiv.php:457
+#: sem_browse.inc.php:245 seminar_main.php:102
 msgid "Untertitel:"
 msgstr "Subtitle:"
 
@@ -2362,12 +2373,11 @@ msgid "</b> eingetragen.<br>"
 msgstr "</b> entered <br>"
 
 #: admin_sem_tree.php:100
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Der Verschiebemodus ist aktiviert. Bitte w&auml;hlen sie ein Einfügesymbol %"
 "s aus, um das Element <b>%s</b> zu verschieben.%s"
 msgstr ""
-"This element has been marked to move. Please select an insertion symbol %s."
 
 #: admin_sem_tree.php:101 lib/classes/StudipRangeTreeViewAdmin.class.php:503
 #: lib/classes/StudipSemTreeViewAdmin.class.php:433
@@ -2400,7 +2410,7 @@ msgstr "Commentary:"
 msgid "Dozent:"
 msgstr "Lecturer:"
 
-#: admin_sem_tree.php:152 sem_browse.inc.php:266
+#: admin_sem_tree.php:152 archiv.php:463 sem_browse.inc.php:266
 msgid "Bereich:"
 msgstr "Area:"
 
@@ -2474,25 +2484,376 @@ msgstr ""
 "waiting list. The system will automatically enter you as soon as a place "
 "becomes available for you. "
 
-#: archiv.php:128
+#: archiv.php:114
+#, c-format
+msgid ""
+"Wollen Sie die Veranstaltung <b>%s</b> wirklich l&ouml;schen? S&auml;mtliche "
+"Daten und die mit der Veranstaltung archivierte Dateisammlung werden "
+"unwiederuflich gel&ouml;scht!"
+msgstr ""
+
+#: archiv.php:127
 #, c-format
 msgid "Die Veranstaltung %s wurde aus dem Archiv gel&ouml;scht"
 msgstr "The course %s has been removed from the archive."
 
-#: archiv.php:132
+#: archiv.php:131
 msgid "Das Zip-Archiv der Veranstaltung wurde aus dem Archiv gel&ouml;scht."
 msgstr "The course zip achive has been deleted from the archive. "
 
-#: archiv.php:134
+#: archiv.php:133
 msgid ""
 "Das Zip-Archiv der Veranstaltung konnte nicht aus dem Archiv gel&ouml;scht "
 "werden."
 msgstr "The course zip achive could not be deleted from the archive."
 
-#: archiv.php:139
+#: archiv.php:138
 #, c-format
 msgid "Es wurden %s Zugriffsberechtigungen entfernt."
 msgstr "%s access authorisations have been deleted."
+
+#: archiv.php:141 archiv.php:153 archiv.php:165
+msgid "Netter Versuch"
+msgstr ""
+
+#: archiv.php:150
+#, fuzzy
+msgid "Zugriffsberechtigung entfernt"
+msgstr "%s access authorisations have been deleted."
+
+#: archiv.php:162
+#, fuzzy
+msgid "Zugriffsberechtigung erteilt"
+msgstr "Access authorisation"
+
+#: archiv.php:179 archiv.php:196
+msgid "Druckversion"
+msgstr ""
+
+#: archiv.php:184 archiv.php:201
+#, fuzzy
+msgid "netter Versuch, vielleicht beim n&auml;chsten Mal"
+msgstr "Nice try, perhaps next time!"
+
+#: archiv.php:213
+msgid "Suche im Archiv"
+msgstr ""
+
+#: archiv.php:233 institut_browse.php:96
+msgid "Bitte geben Sie hier Ihre Suchkriterien ein:"
+msgstr "Please enter your search criteria here:"
+
+#: archiv.php:233
+msgid ""
+"Wenn Sie keinen Suchbegriff angeben, werden alle Veranstaltungen angezeigt."
+msgstr ""
+
+#: archiv.php:246
+#, fuzzy
+msgid "DozentIn der Veranstaltung:"
+msgstr "Style of course:"
+
+#: archiv.php:259 archiv.php:280 lib/classes/StudipSemSearch.class.php:143
+#: lib/classes/StudipSemSearch.class.php:148
+#: lib/classes/StudipSemSearch.class.php:156
+msgid "alle"
+msgstr "All"
+
+#: archiv.php:275
+#, fuzzy
+msgid "Heimat-Einrichtung"
+msgstr "Home institute:"
+
+#: archiv.php:299 archiv.php:459 datei.inc.php:183 mein_stundenplan.php:632
+msgid "Beschreibung:"
+msgstr "Description:"
+
+#: archiv.php:307
+msgid "Suche &uuml;ber <b>alle</b> Felder:"
+msgstr ""
+
+#: archiv.php:319
+#, fuzzy
+msgid "Nur Veranstaltungen anzeigen, an denen ich teilgenommen habe"
+msgstr "There are no courses in the archive, in which you have taken part."
+
+#: archiv.php:397
+#, fuzzy, c-format
+msgid "Es wurden %s Veranstaltungen gefunden."
+msgstr "No course was found."
+
+#: archiv.php:403 browse.php:268 browse.php:272 browse.php:276 browse.php:280
+#: freie.php:166 institut_members.php:100 institut_members.php:122
+#: institut_members.php:144 institut_members.php:164 institut_members.php:184
+#: institut_members.php:208 institut_members.php:226 institut_members.php:244
+#: institut_members.php:260 institut_members.php:276
+#: meine_einrichtungen.php:202 meine_seminare.php:256 meine_seminare.php:362
+#: meine_seminare.php:583 my_archiv.php:93 online.php:158 online.php:221
+#: sem_browse.inc.php:428
+msgid "Name"
+msgstr "Name"
+
+#: archiv.php:404 details.php:276 meine_seminare.php:585
+#: sem_browse.inc.php:195 sem_browse.inc.php:375 seminar_main.php:116
+msgid "DozentIn"
+msgstr "Lecturer"
+
+#: archiv.php:407
+#, fuzzy
+msgid "Aktion"
+msgstr "Actions:"
+
+#: archiv.php:411 archiv.php:446 my_archiv.php:119
+#, fuzzy
+msgid "Dateisammlung"
+msgstr "Department"
+
+#: archiv.php:430
+#, fuzzy
+msgid "Zuklappen"
+msgstr "Close all"
+
+#: archiv.php:433
+#, fuzzy
+msgid "Aufklappen"
+msgstr "Open all"
+
+#: archiv.php:443
+msgid "Komplettansicht"
+msgstr ""
+
+#: archiv.php:449
+#, fuzzy
+msgid "Diese Veranstaltung aus dem Archiv entfernen"
+msgstr "The course %s has been removed from the archive."
+
+#: archiv.php:461 institut_main.php:125
+#, fuzzy
+msgid "Fakult&auml;t:"
+msgstr "Faculty"
+
+#: archiv.php:468
+#, fuzzy
+msgid "&Uuml;bersicht der Veranstaltungsinhalte"
+msgstr "Overview of the courses"
+
+#: archiv.php:470
+#, fuzzy
+msgid "Beitr&auml;ge des Forums"
+msgstr "Postings for the course forum"
+
+#: archiv.php:472
+msgid "Download der Dateisammlung"
+msgstr ""
+
+#: archiv.php:474
+#, fuzzy
+msgid "Diese Veranstaltung unwiderruflich aus dem Archiv entfernen"
+msgstr "The course %s has been removed from the archive."
+
+#: archiv.php:477
+#, fuzzy
+msgid "Zugriffsberechtigungen einblenden"
+msgstr "%s access authorisations have been deleted."
+
+#: archiv.php:479
+#, fuzzy
+msgid "Zugriffsberechtigungen ausblenden"
+msgstr "%s access authorisations have been deleted."
+
+#: archiv.php:482
+msgid ""
+"Die Veranstaltungsinhalte, Beitr&auml;ge im Forum und das Dateiarchiv sind "
+"nicht zug&auml;ngig, da Sie an dieser Veranstaltung nicht teilgenommen haben."
+msgstr ""
+
+#: archiv.php:485
+msgid ""
+"Folgende Benutzer haben Zugriff auf die Daten der Veranstaltung (&Uuml;"
+"bersicht, Beitr&auml;ge und Dateiarchiv):"
+msgstr ""
+
+#: archiv.php:488
+#, fuzzy
+msgid "Status:"
+msgstr "Status"
+
+#: archiv.php:490
+#, fuzzy
+msgid "Zugriffsberechtigung entfernen"
+msgstr "%s access authorisations have been deleted."
+
+#: archiv.php:490
+#, fuzzy
+msgid "Diesem Benutzer die Zugriffsberechtigung entziehen"
+msgstr "%s access authorisations have been deleted."
+
+#: archiv.php:497 archiv.php:512
+#, fuzzy
+msgid "Benutzer Berechtigung erteilen:"
+msgstr "No authorisation"
+
+#: archiv.php:498
+#, fuzzy, c-format
+msgid "Es wurden %s Benutzer gefunden"
+msgstr "No course was found."
+
+#: archiv.php:499
+#, fuzzy
+msgid "Bitte w&auml;hlen Sie den Benutzer aus der Liste aus:"
+msgstr "Please choose an institute:"
+
+#: archiv.php:504
+#, fuzzy
+msgid "Diesen Benutzer hinzuf&uuml;gen"
+msgstr "Enter user"
+
+#: archiv.php:505 suchen.inc.php:258
+#, fuzzy
+msgid "Neue Suche"
+msgstr "New search"
+
+#: archiv.php:514
+#, fuzzy
+msgid "Es wurde kein Benutzer zu dem eingegebenem Suchbegriff gefunden!"
+msgstr "No user was found under the given username!"
+
+#: archiv.php:515
+#, fuzzy
+msgid "Bitte Namen, Vornamen oder Usernamen eingeben:"
+msgstr "Please enter a forename, surname %s or username to search"
+
+#: archiv.php:527
+#, fuzzy
+msgid "Es wurde keine Veranstaltung gefunden."
+msgstr "No course was found."
+
+#: auswahl_suche.php:35
+#, fuzzy
+msgid "Suchen in Stud.IP"
+msgstr "in Stud.IP"
+
+#: auswahl_suche.php:40
+#, fuzzy
+msgid "Suchen nach Personen"
+msgstr "Search for institute"
+
+#: auswahl_suche.php:41
+msgid ""
+"Hier k&ouml;nnen sie nach ihren in Stud.IP angemeldeten Kommilitonen und "
+"Dozenten suchen."
+msgstr ""
+
+#: auswahl_suche.php:49
+#, fuzzy
+msgid "Suchen nach Veranstaltungen"
+msgstr "My courses"
+
+#: auswahl_suche.php:50
+#, fuzzy
+msgid "Hier finden sie alle Veranstaltungen in Stud.IP."
+msgstr "Here you can find all appointments associated with the course."
+
+#: auswahl_suche.php:52
+#, fuzzy
+msgid "Suchen nach Einrichtungen"
+msgstr "Search for institute"
+
+#: auswahl_suche.php:53
+#, fuzzy
+msgid "Hier finden sie alle Einrichtungen in Stud.IP."
+msgstr "Load this institute's homepage in Stud.IP"
+
+#: auswahl_suche.php:58
+#, fuzzy
+msgid "Suchen nach Ressourcen"
+msgstr "Search for institute"
+
+#: auswahl_suche.php:59
+msgid ""
+"Hier finden Ressourcen wie etwa R&auml;ume, Geb&auml;ude oder Ger&auml;te."
+msgstr ""
+
+#: auswahl_suche.php:64
+msgid "Suchen im Archiv"
+msgstr ""
+
+#: auswahl_suche.php:65
+#, fuzzy
+msgid "Hier finden sie alle archivierten Veranstaltungen vergangener Semester."
+msgstr "Here you will find virtual events concerning different topics"
+
+#: browse.php:62
+#, fuzzy
+msgid "Suche nach Personen"
+msgstr "Search for institute"
+
+#: browse.php:75
+msgid ""
+"Hier k&ouml;nnen Sie die Homepages aller Nutzer abrufen, die im System "
+"registriert sind."
+msgstr ""
+
+#: browse.php:76
+msgid ""
+"Sie erhalten auf den Nutzerhomepages von Mitarbeitern an Einrichtungen auch "
+"weiterf&uuml;hrende Informationen wie Sprechstunden und R&auml;ume."
+msgstr ""
+
+#: browse.php:77
+msgid ""
+"W&auml;hlen Sie den gew&uuml;nschen Bereich aus oder suchen Sie nach einem "
+"Namen!"
+msgstr ""
+
+#: browse.php:79
+#, fuzzy
+msgid "Zur Stud.IP Rangliste"
+msgstr "logged on in Stud.IP"
+
+#: browse.php:156
+#, fuzzy
+msgid "Vorname"
+msgstr "Forname:"
+
+#: browse.php:162
+#, fuzzy
+msgid "Nachname"
+msgstr "Surname:"
+
+#: browse.php:181
+#, fuzzy
+msgid "Alle Benutzer"
+msgstr "User"
+
+#: browse.php:269
+#, fuzzy
+msgid "Status in der Veranstaltung"
+msgstr "Style of course:"
+
+#: browse.php:273
+#, fuzzy
+msgid "Funktion an der Einrichtung"
+msgstr "In another institute:"
+
+#: browse.php:277 browse.php:281
+#, fuzzy
+msgid "globaler Status"
+msgstr "My Status"
+
+#: browse.php:284
+#, fuzzy
+msgid "Nachricht verschicken"
+msgstr "Send message to user"
+
+#: browse.php:309 institut_members.php:444
+msgid "keiner Funktion zugeordnet"
+msgstr "no function allocated"
+
+#: browse.php:322
+#, fuzzy
+msgid "Niemand gefunden!"
+msgstr "User found:"
 
 #: calendar.php:65
 msgid ""
@@ -2822,7 +3183,7 @@ msgstr "1 entry"
 msgid "%s Eintr&auml;ge"
 msgstr "%s entries"
 
-#: contact.php:135 forum.inc.php:775
+#: contact.php:135 forum.inc.php:775 suchen.inc.php:228
 msgid "Alle aufklappen"
 msgstr "Open all"
 
@@ -3054,7 +3415,7 @@ msgid "Geschlecht:"
 msgstr "Gender:"
 
 #: crcregister.ihtml:262 edit_about.php:872 edit_about.php:881
-#: institut_main.php:118
+#: institut_main.php:121
 msgid "E-Mail:"
 msgstr "E-mail:"
 
@@ -3090,10 +3451,6 @@ msgstr "File pass:"
 #: datei.inc.php:182
 msgid "2. Geben Sie eine kurze Beschreibung der Datei ein."
 msgstr "2. Enter a short description of the document."
-
-#: datei.inc.php:183
-msgid "Beschreibung:"
-msgstr "Description:"
 
 #: datei.inc.php:185
 msgid "3. Klicken Sie auf <b>'absenden'</b>, um die Datei hochzuladen"
@@ -3509,7 +3866,7 @@ msgstr "Writing:"
 msgid "Das Abonnement dieser Veranstaltung ist <u>bindend</u>!"
 msgstr "Subscription to this course is <u>binding</u>!"
 
-#: details.php:226 seminar_main.php:103
+#: details.php:226 seminar_main.php:105
 msgid "Zeit:"
 msgstr "Time:"
 
@@ -3521,23 +3878,18 @@ msgstr "First meeting:"
 msgid "Veranstaltungsort:"
 msgstr "Course location:"
 
-#: details.php:274 seminar_main.php:112 teilnehmer.php:325
+#: details.php:274 seminar_main.php:114 teilnehmer.php:325
 msgid "LeiterInnen"
 msgstr "Co-ordinators"
 
-#: details.php:274 sem_browse.inc.php:444 seminar_main.php:112
+#: details.php:274 sem_browse.inc.php:444 seminar_main.php:114
 #: teilnehmer.php:320
 msgid "DozentInnen"
 msgstr "Lecturers"
 
-#: details.php:276 seminar_main.php:114
+#: details.php:276 seminar_main.php:116
 msgid "LeiterIn"
 msgstr "Co-ordinator"
-
-#: details.php:276 meine_seminare.php:585 sem_browse.inc.php:195
-#: sem_browse.inc.php:375 seminar_main.php:114
-msgid "DozentIn"
-msgstr "Lecturer"
 
 #: details.php:293 teilnehmer.php:326
 msgid "Mitglieder"
@@ -3863,7 +4215,7 @@ msgstr ""
 "address, you must use the password which has been sent to this address! "
 "<br><br>Your current username is: <b>%s</b><br>"
 
-#: edit_about.php:546 header.php:96 index.php:133 links_about.inc.php:66
+#: edit_about.php:546 header.php:95 index.php:133 links_about.inc.php:66
 msgid "Login"
 msgstr "login"
 
@@ -4030,6 +4382,11 @@ msgstr "Here you can enter information about your educational career."
 #: edit_about.php:956
 msgid "Ich arbeite an folgenden Einrichtungen:"
 msgstr "I work at the following institutes:"
+
+#: edit_about.php:968
+#, fuzzy
+msgid "Funktion(en):"
+msgstr "Actions:"
 
 #: edit_about.php:991
 msgid "Ich bin in folgenden Studieng&auml;ngen eingeschrieben:"
@@ -4451,16 +4808,6 @@ msgid ""
 "Veranstaltungen an Inhalten vorhanden ist."
 msgstr "In the right-hand column you can see the content of every course."
 
-#: freie.php:166 institut_members.php:100 institut_members.php:122
-#: institut_members.php:144 institut_members.php:164 institut_members.php:184
-#: institut_members.php:208 institut_members.php:226 institut_members.php:244
-#: institut_members.php:260 institut_members.php:276
-#: meine_einrichtungen.php:202 meine_seminare.php:256 meine_seminare.php:362
-#: meine_seminare.php:583 my_archiv.php:93 online.php:158 online.php:221
-#: sem_browse.inc.php:428
-msgid "Name"
-msgstr "Name"
-
 #: freie.php:167
 msgid "Veranstaltungstyp"
 msgstr "Type of course"
@@ -4517,9 +4864,9 @@ msgid ""
 msgstr ""
 
 #: functions.php:392
-#, fuzzy, c-format
+#, c-format
 msgid "Hier kommen sie zur %sFreischaltung%s der Veranstaltung."
-msgstr "Here to enter the course"
+msgstr ""
 
 #: functions.php:394
 msgid "Bitte folgen Sie den Anweisungen in der Registrierungsmail."
@@ -4549,195 +4896,196 @@ msgid ""
 "m&uuml;ssen sie sich neu anmelden."
 msgstr ""
 
-#: functions.php:601
+#: functions.php:585
 msgid "Unbeschriebenes Blatt"
 msgstr ""
 
-#: functions.php:602
+#: functions.php:586
 #, fuzzy
 msgid "Neuling"
 msgstr "No"
 
-#: functions.php:603
+#: functions.php:587
 msgid "Greenhorn"
 msgstr ""
 
-#: functions.php:604
+#: functions.php:588
 #, fuzzy
 msgid "Anf&auml;nger"
 msgstr "change"
 
-#: functions.php:605
+#: functions.php:589
 #, fuzzy
 msgid "Einsteiger"
 msgstr "Miscellaneous"
 
-#: functions.php:606
+#: functions.php:590
 #, fuzzy
 msgid "Beginner"
 msgstr "User"
 
-#: functions.php:607
+#: functions.php:591
 msgid "Novize"
 msgstr ""
 
-#: functions.php:608
+#: functions.php:592
 msgid "Fortgeschrittener"
 msgstr ""
 
-#: functions.php:609
+#: functions.php:593
 msgid "Kenner"
 msgstr ""
 
-#: functions.php:610
+#: functions.php:594
 #, fuzzy
 msgid "K&ouml;nner"
 msgstr "change"
 
-#: functions.php:611
+#: functions.php:595
 msgid "Experte"
 msgstr ""
 
-#: functions.php:612
+#: functions.php:596
 #, fuzzy
 msgid "Meister"
 msgstr "Clipboard:"
 
-#: functions.php:613
+#: functions.php:597
 msgid "Gro&szlig;meister"
 msgstr ""
 
-#: functions.php:614
+#: functions.php:598
 #, fuzzy
 msgid "Guru"
 msgstr "Group"
 
-#: functions.php:615
+#: functions.php:599
 msgid "Lichtgestalt"
 msgstr ""
 
-#: functions.php:616
+#: functions.php:600
 #, fuzzy
 msgid "Gott"
 msgstr "dd"
 
 #: header.php:52
-msgid "Sie sind bereits im Chat angemeldet!"
+#, fuzzy
+msgid "Sie sind bereits in diesem Chat angemeldet!"
 msgstr "You have already entered the chat!"
 
-#: header.php:77 header.php:141
+#: header.php:76 header.php:140
 msgid "Start"
 msgstr "Start"
 
-#: header.php:77 header.php:141
+#: header.php:76 header.php:140
 msgid "Zur Startseite"
 msgstr "To the start page"
 
-#: header.php:78
+#: header.php:77
 msgid "Freie"
 msgstr "Public"
 
-#: header.php:78
+#: header.php:77
 msgid "Freie Veranstaltungen"
 msgstr "public courses"
 
-#: header.php:87 header.php:223
+#: header.php:86 header.php:224
 msgid "Impressum"
 msgstr "imprint"
 
-#: header.php:87 header.php:223
+#: header.php:86 header.php:224
 msgid "Informationen zu dieser Installation"
 msgstr "Information concerning this installation"
 
-#: header.php:95 header.php:257 index.php:101 index.php:162 index.php:231
+#: header.php:94 header.php:258 index.php:101 index.php:162 index.php:231
 msgid "Hilfe"
 msgstr "Help"
 
-#: header.php:95 header.php:257
+#: header.php:94 header.php:258
 msgid "Hilfe zu dieser Seite"
 msgstr "Help for this page"
 
-#: header.php:96
+#: header.php:95
 msgid "Am System anmelden"
 msgstr "Login to the system"
 
-#: header.php:142
+#: header.php:141
 msgid "Meine Veranstaltungen & Einrichtungen"
 msgstr "My courses and institutes"
 
-#: header.php:150 header.php:158
+#: header.php:149 header.php:157
 msgid "Post"
 msgstr "Post"
 
-#: header.php:152
+#: header.php:151
 #, c-format
 msgid "Sie haben %s alte Nachrichten!"
 msgstr "You have %s old messages!"
 
-#: header.php:154
+#: header.php:153
 msgid "Sie haben eine alte Nachricht!"
 msgstr "You have a new message!"
 
-#: header.php:160
+#: header.php:159
 #, c-format
 msgid "Sie haben %s neue Nachrichten!"
 msgstr "You have %s new messages!"
 
-#: header.php:162
+#: header.php:161
 msgid "Sie haben eine neue Nachricht!"
 msgstr "You have one old message!"
 
-#: header.php:172
+#: header.php:171
 msgid "Planer"
 msgstr "Planer"
 
-#: header.php:172
+#: header.php:171
 msgid "Termine und Kontakte"
 msgstr "Appointments and contacts"
 
-#: header.php:179 header.php:184 header.php:186 header.php:188 header.php:190
+#: header.php:178 header.php:185 header.php:187 header.php:189 header.php:191
 msgid "Chat"
 msgstr "Chat"
 
-#: header.php:179
+#: header.php:178
 msgid "Sie wurden zum Chatten eingeladen!"
 msgstr "You have been invited to the chat!"
 
-#: header.php:184
+#: header.php:185
 msgid "Sie sind alleine im Chat"
 msgstr "You are alone in the chat"
 
-#: header.php:186
+#: header.php:187
 msgid "Es ist eine Person im Chat"
 msgstr "There is one person in the chat"
 
-#: header.php:188
+#: header.php:189
 #, c-format
 msgid "Es sind %s Personen im Chat"
 msgstr "There are %s people in the chat"
 
-#: header.php:190
+#: header.php:191
 msgid "Es ist niemand im Chat"
 msgstr "There is no-one in the chat"
 
-#: header.php:198 header.php:201 header.php:203
+#: header.php:199 header.php:202 header.php:204
 msgid "Online"
 msgstr "Online"
 
-#: header.php:198
+#: header.php:199
 msgid "Nur Sie sind online"
 msgstr "No-one else is online"
 
-#: header.php:201
+#: header.php:202
 msgid "Außer Ihnen ist eine Person online"
 msgstr "There is one other user online"
 
-#: header.php:203
+#: header.php:204
 #, c-format
 msgid "Es sind außer Ihnen %s Personen online"
 msgstr "There are %s other users online"
 
-#: header.php:220
+#: header.php:221
 #, c-format
 msgid ""
 "Sie sind angemeldet als: %s mit der Berechtigung: %s. Beginn der Session: %"
@@ -4746,43 +5094,43 @@ msgstr ""
 "You are logged on as: %s with the authorisation: %s. Beginning of session: %"
 "s, last login: %s, %s, screen resolution: %sx%s, selected language: %s"
 
-#: header.php:222
+#: header.php:223
 msgid "JavaScript eingeschaltet"
 msgstr "JavaScript enabled"
 
-#: header.php:222
+#: header.php:223
 msgid "JavaScript ausgeschaltet"
 msgstr "JavaScript disabled"
 
-#: header.php:237
+#: header.php:238
 msgid "Homepage"
 msgstr "Homepage"
 
-#: header.php:237
+#: header.php:238
 msgid "Zu Ihrer Einstellungsseite"
 msgstr "To your preferences page"
 
-#: header.php:238
+#: header.php:239
 msgid "Suche"
 msgstr "Search"
 
-#: header.php:238
+#: header.php:239
 msgid "Im System suchen"
 msgstr "Search within system"
 
-#: header.php:242 institut_members.php:450
+#: header.php:243 institut_members.php:450
 msgid "Admin"
 msgstr "Admin"
 
-#: header.php:242
+#: header.php:243
 msgid "Zu Ihrer Administrationsseite"
 msgstr "To your administrative page"
 
-#: header.php:258
+#: header.php:259
 msgid "Logout"
 msgstr "Logout"
 
-#: header.php:258
+#: header.php:259
 msgid "Aus dem System abmelden"
 msgstr "Logout of the system"
 
@@ -4927,32 +5275,42 @@ msgid ""
 "Suchformular benutzen"
 msgstr "You can click through the institute tree or use the search form "
 
-#: institut_browse.php:96
-msgid "Bitte geben Sie hier Ihre Suchkriterien ein:"
-msgstr "Please enter your search criteria here:"
+#: institut_browse.php:97
+msgid "Name der Einrichtung:"
+msgstr ""
 
-#: institut_main.php:90 links_openobject.inc.php:70 seminar_main.php:94
+#: institut_browse.php:99
+#, fuzzy
+msgid "Einrichtung dieses Mitarbeiters:"
+msgstr "Edit institute heirarchy"
+
+#: institut_browse.php:101
+#, fuzzy
+msgid "Einrichtung dieser Veranstaltung:"
+msgstr "Administration of this course"
+
+#: institut_browse.php:105
+#, fuzzy
+msgid "Suchen:"
+msgstr "Search"
+
+#: institut_main.php:93 links_openobject.inc.php:70 seminar_main.php:96
 msgid "Kurzinfo"
 msgstr "Quick info"
 
-#: institut_main.php:98
+#: institut_main.php:101
 #, fuzzy
 msgid "Strasse:"
 msgstr "Language:"
 
-#: institut_main.php:102 seminar_main.php:106
+#: institut_main.php:105 seminar_main.php:108
 msgid "Ort:"
 msgstr "Place:"
 
-#: institut_main.php:106
+#: institut_main.php:109
 #, fuzzy
 msgid "Tel.:"
 msgstr "Title:"
-
-#: institut_main.php:122
-#, fuzzy
-msgid "Fakult&auml;t:"
-msgstr "Faculty"
 
 #: institut_members.php:103 institut_members.php:125 institut_members.php:147
 #: institut_members.php:211 institut_members.php:229 institut_members.php:247
@@ -5039,10 +5397,6 @@ msgstr ""
 #, fuzzy, c-format
 msgid "<b>%s</b> Mitarbeiter gefunden"
 msgstr "<b>%s</b> course found."
-
-#: institut_members.php:444
-msgid "keiner Funktion zugeordnet"
-msgstr "no function allocated"
 
 #: institut_members.php:450
 #, fuzzy
@@ -5240,6 +5594,7 @@ msgid "MitarbeiterInnen"
 msgstr "Staff"
 
 #: links_openobject.inc.php:61 links_seminare.inc.php:43
+#: mein_stundenplan.php:377 mein_stundenplan.php:388
 msgid "Veranstaltungs-Timetable"
 msgstr "Course time table"
 
@@ -5299,7 +5654,7 @@ msgstr "All documents"
 msgid "Literatur und Links"
 msgstr "Literature and links"
 
-#: links_openobject.inc.php:107
+#: links_openobject.inc.php:107 statusgruppen.php:158
 msgid "Funktionen / Gruppen"
 msgstr "Functions / Groups"
 
@@ -5689,14 +6044,189 @@ msgid ""
 "Suchfunktion aus."
 msgstr "In order to edit a course, choose via the search function."
 
-#: messagingSettings.inc.php:137
+#: mein_stundenplan.php:377 mein_stundenplan.php:388
+#, fuzzy
+msgid "Mein Stundenplan"
+msgstr "Time table"
+
+#: mein_stundenplan.php:379
+#, fuzzy
+msgid "Ansicht anpassen"
+msgstr "not entered"
+
+#: mein_stundenplan.php:402
+msgid ""
+"Der Stundenplan zeigt Ihnen alle regelm&auml;&szlig;igen Veranstaltungen "
+"eines Semesters. Um den Stundenplan auszudrucken, nutzen sie bitte die "
+"Druckfunktion ihres Browsers."
+msgstr ""
+
+#: mein_stundenplan.php:404
+#, fuzzy, c-format
+msgid ""
+"Wenn Sie weitere Veranstaltungen aus Stud.IP in ihren Stundenplan aufnehmen "
+"m&ouml;chten, nutzen Sie bitte die %sVeranstaltungssuche%s."
+msgstr ""
+"In order to add further courses to your favourites, please use the %ssearch "
+"function%s"
+
+#: mein_stundenplan.php:407
+#, fuzzy, c-format
+msgid "Ihre pers&ouml;nlichen Termine finden sie im %sTerminkalender%s."
+msgstr "Your personal data has been changed."
+
+#: mein_stundenplan.php:410
+#, fuzzy
+msgid ""
+"In der Veranstaltungs-Timetable sehen Sie alle Veranstaltungen der "
+"Einrichtung eines Semesters."
+msgstr "Here you will find virtual events concerning different topics"
+
+#: mein_stundenplan.php:411
+#, fuzzy
+msgid "Angezeigtes Semester:"
+msgstr "Semester:"
+
+#: mein_stundenplan.php:422
+#, fuzzy
+msgid ""
+"In der Veranstaltungs-Timetable sehen Sie alle Veranstaltungen ihrer "
+"Einrichtung eines Semesters."
+msgstr "Use the drop down menu to select the type of course ."
+
+#: mein_stundenplan.php:422
+msgid "Sie k&ouml;nnen zus&auml;tzlich eigene Eintr&auml;ge anlegen."
+msgstr ""
+
+#: mein_stundenplan.php:427
+#, fuzzy
+msgid "Druckansicht dieser Seite"
+msgstr "Print view"
+
+#: mein_stundenplan.php:551
+#, fuzzy
+msgid "Diesen Termin löschen"
+msgstr "Delete this element"
+
+#: mein_stundenplan.php:563
+#, c-format
+msgid "Erstellt am %s um %s  Uhr."
+msgstr ""
+
+#: mein_stundenplan.php:585
+#, fuzzy
+msgid "Eigene Veranstaltung eintragen:"
+msgstr "Enter user in the course"
+
+#: mein_stundenplan.php:586
+msgid ""
+"Hier k&ouml;nnen sie Veranstaltungen, die nicht im Stud.IP System existieren "
+"oder andere eigene Ereignisse eintragen"
+msgstr ""
+
+#: mein_stundenplan.php:588
+#, fuzzy
+msgid "Wochentag:"
+msgstr "Monday"
+
+#: messaging.inc.php:104
+msgid ""
+"Diese Nachricht wurde automatisch vom System generiert. Sie können darauf "
+"nicht antworten."
+msgstr ""
+
+#: messaging.inc.php:113
+#, c-format
+msgid "Du hast eine SMS von <b>%s</b> erhalten!"
+msgstr "You have received a message from <b>%s</b>!"
+
+#: messaging.inc.php:177
+#, c-format
+msgid "Du wurdest von %s in den Chatraum %s eingeladen !"
+msgstr ""
+
+#: messaging.inc.php:184
+#, fuzzy, c-format
+msgid "Du wurdest von <b>%s</b> in den Chatraum <b>%s</b> eingeladen !"
+msgstr ""
+"You have been entered with the status <b>%s</b> for the course <b>%s</b>."
+
+#: messagingSettings.inc.php:38
+#, fuzzy
+msgid "Einstellungen f&uuml;r das Stud.IP Messaging anpassen"
+msgstr "Customise the forum settings."
+
+#: messagingSettings.inc.php:44
+#, fuzzy
+msgid ""
+"Hier k&ouml;nnen Sie Ihre Einstellungen f&uuml;r das Stud.IP-Messaging &auml;"
+"ndern."
+msgstr "Here you can change your user data."
+
+#: messagingSettings.inc.php:55
+#, fuzzy
+msgid "Systeminterne Kurznachrichten (SMS)"
+msgstr "No new messages"
+
+#: messagingSettings.inc.php:61
+#, fuzzy
+msgid "automatisches L&ouml;schen:"
+msgstr "Delete"
+
+#: messagingSettings.inc.php:67
+msgid "Gelesene Nachrichten automatisch nach dem Logout l&ouml;schen"
+msgstr ""
+
+#: messagingSettings.inc.php:73
+#, fuzzy
+msgid "Signatur:"
+msgstr "Seminar"
+
+#: messagingSettings.inc.php:80
+#, fuzzy
+msgid "Stud.IP Messenger"
+msgstr "Start Stud.IP Messenger"
+
+#: messagingSettings.inc.php:86
+#, fuzzy
+msgid "Starten:"
+msgstr "Start"
+
+#: messagingSettings.inc.php:92
+#, fuzzy
+msgid "Stud.IP-Messenger automatisch nach dem Login starten"
+msgstr "Start Stud.IP Messenger"
+
+#: messagingSettings.inc.php:97
+#, fuzzy
+msgid "Buddies / Wer ist online"
+msgstr "No buddy is online."
+
+#: messagingSettings.inc.php:106
+#, fuzzy
+msgid "Anzeige:"
+msgstr "Display ?"
+
+#: messagingSettings.inc.php:112
+msgid "Nur Buddys in der &Uuml;bersicht der aktiven Benutzer anzeigen"
+msgstr ""
+
+#: messagingSettings.inc.php:121
+msgid "Dauer bis inaktiv:"
+msgstr ""
+
+#: messagingSettings.inc.php:135
+msgid "Anzahl der Minuten, nach denen ein Nutzer nicht mehr angezeigt wird"
+msgstr ""
+
+#: messagingSettings.inc.php:141
 msgid "Buddys verwalten:"
 msgstr "Administer buddies:"
 
-#: messagingSettings.inc.php:141
+#: messagingSettings.inc.php:145
 #, c-format
-msgid "Zum Verwalten Ihrer Buddies besuchen Sie bitte das %s Adressbuch."
-msgstr "To administer buddies, please take a look at the %s address book."
+msgid "Zum Verwalten Ihrer Buddies besuchen Sie bitte das %sAdressbuch%s."
+msgstr "To administer buddies, please take a look at the %saddress book%s."
 
 #: migration2studip.php:26
 msgid "Bitte geben Sie die Logindaten Ihres ILIAS-Accounts an!"
@@ -5854,6 +6384,16 @@ msgstr "An error has occurred while connecting the accounts."
 msgid "Zur&uuml;ck zu Stud.IP"
 msgstr "Back to Stud.IP"
 
+#: msg.inc.php:113
+#, fuzzy
+msgid "Fehler"
+msgstr "Error!"
+
+#: msg.inc.php:115
+#, c-format
+msgid "%sHier%s geht es zur&uuml;ck zur Startseite."
+msgstr "%sBack%s to the start page."
+
 #: my_archiv.php:71
 msgid ""
 "Es befinden sich zur Zeit keine Veranstaltungen im Archiv, an denen Sie "
@@ -5883,7 +6423,7 @@ msgid ""
 "Um Informationen &uuml;ber andere archivierte Veranstaltungen, anzuzeigen "
 "Nutzen sie die <br />%sSuche im Archiv</a>"
 msgstr ""
-"In order to display information about other archival courses, use <br/> %"
+"In order to display information about other archival courses, use <br> %"
 "sSearch archive</a>"
 
 #: mystudip.inc.php:41
@@ -5939,7 +6479,7 @@ msgstr "Accept changes"
 msgid "Wer ist Online?"
 msgstr ""
 
-#: online.php:64
+#: online.php:64 sms.php:217
 #, fuzzy
 msgid "Einstellungen &auml;ndern"
 msgstr "Customise the forum settings."
@@ -5950,22 +6490,22 @@ msgid "Hier k&ouml;nnen Sie sehen, wer ausser Ihnen im Moment online ist."
 msgstr "Here you can edit your curriculum vitae."
 
 #: online.php:80
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Sie k&ouml;nnen den Usern eine Nachricht schicken %s oder ihn zum Chatten %s "
 "einladen."
-msgstr "the possibility to send other users messages or to chat with them,"
+msgstr ""
 
 #: online.php:80 online.php:181 online.php:202 online.php:231
 #, fuzzy
 msgid "zum Chatten einladen"
 msgstr "You have been invited to the chat!"
 
-#: online.php:84
+#: online.php:84 sms.php:152 sms.php:236
 msgid "Zur&uuml;ck zur ausgew&auml;hlten Einrichtung"
 msgstr ""
 
-#: online.php:86
+#: online.php:86 sms.php:154 sms.php:238
 #, fuzzy
 msgid "Zur&uuml;ck zur ausgew&auml;hlten Veranstaltung"
 msgstr "Overview of the courses"
@@ -6550,7 +7090,7 @@ msgid ""
 "Dozentin oder den Dozenten der Veranstaltung."
 msgstr ""
 "As lecturer you may not register for this participant restricted course <b> %"
-"s</b>. <br />If you wish to take part in this course, please contact "
+"s </b>. <br />If you wish to take part in this course, please contact "
 "directly the lecturer responsible for the course."
 
 #: sem_verify.php:242
@@ -6676,7 +7216,7 @@ msgid ""
 "gesetzt."
 msgstr ""
 "At the moment there are no free places in the participant limited course <b>%"
-"s</b>. You have been placed at place %s on the waiting list."
+"s </b>. You have been placed at place %s on the waiting list."
 
 #: sem_verify.php:392 sem_verify.php:433
 msgid ""
@@ -6752,14 +7292,14 @@ msgstr ""
 "the course <b>%s<b>!"
 
 #: sendfile.php:251
-#, fuzzy, c-format
+#, c-format
 msgid "%sZur&uuml;ck%s zum Archiv"
-msgstr "back to start page "
+msgstr ""
 
 #: sendfile.php:253
-#, fuzzy, c-format
+#, c-format
 msgid "%sZur&uuml;ck%s zum Downloadbereich"
-msgstr "back to start page "
+msgstr ""
 
 #: sendfile.php:259
 #, fuzzy
@@ -6890,6 +7430,178 @@ msgstr ""
 msgid "News bearbeiten"
 msgstr "Edit news"
 
+#: sms.php:53 sms.php:70
+#, fuzzy
+msgid "Es wurde eine Nachricht gel&ouml;scht."
+msgstr "%s Subject areas deleted."
+
+#: sms.php:55 sms.php:72
+#, fuzzy, c-format
+msgid "Es wurden %s Nachrichten gel&ouml;scht."
+msgstr "The %s news was deleted!"
+
+#: sms.php:57
+#, fuzzy
+msgid "Es liegen keine Nachrichten vor, die gel&ouml;scht werden konnten."
+msgstr "Error, no areas could be deleted!"
+
+#: sms.php:75
+#, fuzzy
+msgid "Es konnten keine Nachrichten gel&ouml;scht werden."
+msgstr "Error, no areas could be deleted!"
+
+#: sms.php:93
+#, fuzzy, c-format
+msgid "Ihre Nachricht an %s wurde verschickt!"
+msgstr "Your message to <b>%s</b> has been sent!"
+
+#: sms.php:95
+#, fuzzy, c-format
+msgid "Die Nachricht wurde an alle %s Buddies verschickt!"
+msgstr "Your message to <b>%s</b> has been sent!"
+
+#: sms.php:97
+#, fuzzy, c-format
+msgid "Die Nachricht wurde an %s Gruppenmitglieder verschickt!"
+msgstr "Your message to <b>%s</b> has been sent!"
+
+#: sms.php:100
+#, fuzzy
+msgid ""
+"Ihre Nachricht konnte nicht gesendet werden, die Nachricht enth&auml;lt "
+"keinen Text."
+msgstr "Your message could not be sent!"
+
+#: sms.php:102
+#, fuzzy
+msgid "Ihre Nachricht konnte nicht gesendet werden."
+msgstr "Your message could not be sent!"
+
+#: sms.php:116
+#, fuzzy, c-format
+msgid "Ihre Einladung zum Chatten an %s wurde verschickt."
+msgstr "Your message to <b>%s</b> has been sent!"
+
+#: sms.php:118
+#, c-format
+msgid "Ihre Einladung zum Chatten an %s konnte nicht verschickt werden"
+msgstr ""
+
+#: sms.php:144
+#, fuzzy
+msgid "Systeminterne Nachricht schreiben"
+msgstr "Write message"
+
+#: sms.php:150
+msgid "Schreiben Sie hier eine Nachricht an einen anderen Benutzer:"
+msgstr ""
+
+#: sms.php:175
+#, fuzzy
+msgid "Nachricht schreiben an"
+msgstr "Write message"
+
+#: sms.php:177
+#, c-format
+msgid "alle Mitglieder der Gruppe: %s (%s Person(en))"
+msgstr ""
+
+#: sms.php:185
+msgid "Diese Nachricht (auch) an alle meine Buddies versenden"
+msgstr ""
+
+#: sms.php:216
+#, fuzzy
+msgid "Systeminterne Nachrichten anzeigen"
+msgstr "No new messages"
+
+#: sms.php:232
+msgid ""
+"Sie sehen hier alle systeminternen Nachrichten (SMS), die an Sie verschickt "
+"wurden."
+msgstr ""
+
+#: sms.php:233
+msgid "Alle Nachrichten seit dem letzten Login erscheinen aufgeklappt."
+msgstr ""
+
+#: sms.php:244
+msgid "Nachrichten seit letztem Login nicht l&ouml;schen"
+msgstr ""
+
+#: sms.php:290
+#, c-format
+msgid "automatische Systemnachricht, gesendet am %s"
+msgstr ""
+
+#: sms.php:294
+#, fuzzy, c-format
+msgid "gesendet von %s am %s"
+msgstr "Last changed on %s at %s"
+
+#: sms.php:352
+msgid "Im Augenblick liegen keine systeminternen Nachrichten f&uuml;r Sie vor."
+msgstr ""
+
+#: statusgruppen.php:82
+#, fuzzy
+msgid "eMail an alle Gruppenmitglieder verschicken"
+msgstr "Your message to <b>%s</b> has been sent!"
+
+#: statusgruppen.php:83
+#, fuzzy
+msgid "Systemnachricht an alle Gruppenmitglieder verschicken"
+msgstr "Your message to <b>%s</b> has been sent!"
+
+#: statusgruppen.php:101 statusgruppen.php:133
+#, fuzzy
+msgid "Systemnachricht an User verschicken"
+msgstr "Send message to user"
+
+#: statusgruppen.php:120
+#, fuzzy
+msgid "keiner Funktion oder Gruppe zugeordnet"
+msgstr "no function allocated"
+
+#: statusgruppen.php:179
+msgid "Nicht alle Personen sind einer Funktion / Gruppe zugeordnet."
+msgstr ""
+
+#: statusgruppen.php:182
+msgid "Alle Personen sind mindestens einer Funktion / Gruppe zugeordnet."
+msgstr ""
+
+#: statusgruppen.php:185
+#, fuzzy
+msgid "Niemand ist einer Funktion / Gruppe zugeordnet."
+msgstr "no function allocated"
+
+#: statusgruppen.php:207
+msgid ""
+"Um Personen eine systeminterne Kurznachricht zu senden, benutzen Sie das "
+"normale Briefsymbol."
+msgstr ""
+
+#: statusgruppen.php:211
+#, c-format
+msgid ""
+"Um Gruppen anzulegen und Personen zuzuordnen nutzen Sie %sFunktionen / "
+"Gruppen verwalten%s."
+msgstr ""
+
+#: statusgruppen.php:215
+msgid ""
+"Mit dem erweiterten Briefsymbol k&ouml;nnen Sie allen Gruppenmitgliedern "
+"eine Mail schicken."
+msgstr ""
+
+#: statusgruppen.php:219
+#, fuzzy, c-format
+msgid ""
+"Um eine Mail an alle TeilnehmerInnen der Veranstaltung zu versenden, klicken "
+"Sie %shier%s."
+msgstr "You have been entered as participant for this course "
+
 #: studipim.php:69
 #, c-format
 msgid " Sie wurden von <b>%s</b> zum chatten eingeladen!"
@@ -6985,6 +7697,43 @@ msgstr "Send message"
 #: studipim.php:199
 msgid "Vorgang abbrechen"
 msgstr "Cancel procedure"
+
+#: suchen.inc.php:132
+#, fuzzy
+msgid "Bitte geben Sie hier Ihren Suchbegriff ein:"
+msgstr "Please enter your search criteria here:"
+
+#: suchen.inc.php:144
+#, fuzzy
+msgid "Suchbegriff:"
+msgstr "Search area:"
+
+#: suchen.inc.php:152
+msgid "Suchen in den Feldern:"
+msgstr ""
+
+#: suchen.inc.php:200
+msgid "Ergebnis der Suche nach"
+msgstr ""
+
+#: suchen.inc.php:217
+#, fuzzy, c-format
+msgid "Ihre Suche ergab %s Treffer"
+msgstr "Your search revealed %s matches."
+
+#: suchen.inc.php:219
+#, fuzzy
+msgid "Ihre Suche ergab leider keine Treffer"
+msgstr "The search did not reveal with any matches!"
+
+#: suchen.inc.php:251
+msgid "zeig mir die Neuesten"
+msgstr ""
+
+#: suchen.inc.php:254
+#, fuzzy
+msgid "zeig mit alle Treffer"
+msgstr "no matches"
 
 #: teilnehmer.php:65
 msgid "Die Aktivit&auml;tsanzeige wurde aktiviert."
@@ -7604,12 +8353,6 @@ msgstr "AND"
 msgid "ODER"
 msgstr "OR"
 
-#: lib/classes/StudipSemSearch.class.php:143
-#: lib/classes/StudipSemSearch.class.php:148
-#: lib/classes/StudipSemSearch.class.php:156
-msgid "alle"
-msgstr "All"
-
 #: lib/classes/StudipSemSearch.class.php:178
 msgid "alles"
 msgstr "All"
@@ -7817,6 +8560,3 @@ msgstr "Open all sub-elements"
 #: lib/classes/TreeView.class.php:309
 msgid "Alle Unterelemente schließen"
 msgstr "Close all sub-elements"
-
-#~ msgid " um das Element zu verschieben."
-#~ msgstr "to move element."
