@@ -7,12 +7,12 @@ function print_freie($username) {
 
 	$cssSw->switchClass();
 	
-	$db->query("SELECT * FROM kategorien LEFT JOIN auth_user_md5 ON(range_id=user_id) WHERE username='$username' ORDER BY chdate DESC");
+	$db->query("SELECT * FROM auth_user_md5 LEFT JOIN kategorien ON(range_id=user_id) WHERE username='$username' AND NOT ISNULL(range_id) ORDER BY priority ");
 
         echo "<tr><td align=\"left\" valign=\"top\" class=\"blank\"><blockquote><br>Hier können Sie beliebige eigene Kategorien anlegen. Diese Kategorien erscheinen auf Ihrer pers&ouml;nlichen Homepage.<br>Wenn Sie die Option \"f&uuml;r andere unsichtbar\" verwenden, k&ouml;nnen Sie Memos anlegen, die nur f&uuml;r Sie selbst auf der Homepage sichtbar werden - andere Nutzer k&ouml;nnen die Daten nicht einsehen.";
   	echo "<br><br></td></tr>\n<tr><td class=blank><table width=100% class=blank border=0 cellpadding=0 cellspacing=0>";
      	echo "<form action=\"$PHP_SELF?freie=update_freie&username=$username&view=$view\" method=\"POST\" name=\"edit_freie\">";
-	if (!$db->affected_rows())
+	if (!$db->num_rows())
 		echo "<tr><td class=\"".$cssSw->getClass()."\"><font size=-1><b><blockquote>Es existieren zur Zeit keine eigenen Kategorien.</b></font></blockquote></td></tr>\n";
 	echo "<tr><td class=\"".$cssSw->getClass()."\"><blockquote>Kategorie&nbsp; <a href='$PHP_SELF?freie=create_freie&view=$view&username=$username'><img src='pictures/buttons/neuanlegen-button.gif' border=0 align=absmiddle></a></blockquote></td></tr>";
 	$count = 0;
@@ -29,15 +29,26 @@ function print_freie($username) {
 			if ($count)
 				echo "<br />";
 			echo "<input type=\"hidden\" name=\"freie_id[]\" value=\"".$db->f("kategorie_id")."\">\n";
-			echo "<blockquote><input type='text' name='freie_name[]' value='".htmlReady($db->f("name"))."' size=40>";
+			echo "<blockquote><input type='text' name='freie_name[]' style=\"width: 50%\" value='".htmlReady($db->f("name"))."' size=40>";
 			echo "&nbsp; &nbsp; &nbsp; <input type=checkbox name='freie_secret[$count]' value='1'";
 			IF ($db->f("hidden")=='1') 
 				echo " checked";
-			echo ">f&uuml;r andere unsichtbar<br />&nbsp; </td></tr>";
+			echo ">f&uuml;r andere unsichtbar&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;";
+			if ($count){
+				echo "\n<a href=\"$PHP_SELF?freie=order_freie&direction=up&username=$username&view=$view&cat_id=" . $db->f("kategorie_id")
+				. "\"><img src=\"pictures/move_up.gif\" hspace=\"4\" width=\"13\" height=\"11\" border=\"0\" " 
+				. tooltip(_("Kategorie nach oben schieben")) ."></a>";
+			}
+			if (($count+$hidden_count) != ($db->num_rows()-1) ){
+				echo "\n<a href=\"$PHP_SELF?freie=order_freie&direction=down&username=$username&view=$view&cat_id=" . $db->f("kategorie_id")
+				. "\"><img src=\"pictures/move_down.gif\" hspace=\"4\" width=\"13\" height=\"11\" border=\"0\" " 
+				. tooltip(_("Kategorie nach unten schieben")) ."></a>";
+			}
+			echo "<br>&nbsp;</td></tr>";
 			// Breite für textarea
 			$cols = $auth->auth["jscript"]?ceil($auth->auth["xres"]/13):50;
-			echo "<tr><td class=\"".$cssSw->getClass()."\"><blockquote><textarea  name='freie_content[]' style=\"width: 80%\" cols=\"$cols\" rows=7 wrap=virtual>".htmlReady($db->f("content"))."</textarea><br /><br />";
-			echo "<a href='$PHP_SELF?freie=delete_freie&freie_id=$id&view=$view&username=$username'><img src='pictures/buttons/loeschen-button.gif' border=0></a>";
+			echo "<tr><td class=\"".$cssSw->getClass()."\"><blockquote><textarea  name='freie_content[]' style=\"width: 90%\" cols=\"$cols\" rows=7 wrap=virtual>".htmlReady($db->f("content"))."</textarea>";
+			echo "<br><br><a href='$PHP_SELF?freie=delete_freie&freie_id=$id&view=$view&username=$username'><img src='pictures/buttons/loeschen-button.gif' border=0></a>";
 			echo "&nbsp;<input type='IMAGE' name='update' border=0 src='pictures/buttons/uebernehmen-button.gif' value='ver&auml;ndern'><br />&nbsp; </td></tr>";
 			$count++;
 			}
@@ -56,11 +67,12 @@ function create_freie()
 	$db2=new DB_Seminar;
 	$tmp = $username;
 	$now = time();
-	$kategorie_id=md5(uniqid($hash_secret));
-	$db->query ("SELECT user_id , username FROM auth_user_md5 WHERE username = '$tmp'");
-	WHILE ($db->next_record())
-		$user_id = $db->f("user_id");
-	$db2->query("INSERT INTO kategorien (kategorie_id,name, content, mkdate, chdate, range_id) VALUES ('$kategorie_id','neue Kategorie','Inhalt der Kategorie','$now','$now','$user_id')");
+	$kategorie_id=md5(uniqid("blablubburegds4"));
+	$db->query ("SELECT user_id FROM auth_user_md5 WHERE username = '$tmp'");
+	$db->next_record();
+	$user_id = $db->f("user_id");
+	$db->query("UPDATE kategorien SET priority=priority+1 WHERE range_id='$user_id'");
+	$db2->query("INSERT INTO kategorien (kategorie_id,name, content, mkdate, chdate, range_id,priority) VALUES ('$kategorie_id','neue Kategorie','Inhalt der Kategorie','$now','$now','$user_id',0)");
 	IF  ($db2->affected_rows() == 0){
 		parse_msg ("info§Anlegen fehlgeschlagen");
 		die;
@@ -99,6 +111,30 @@ function update_freie()
 		$db->query("UPDATE kategorien SET name='$name', content='$content', hidden='$secret', chdate='$now' WHERE kategorie_id='$id'");
 		}
 	parse_msg ("msg§Kategorien ge&auml;ndert!");
+}
+
+function order_freie($cat_id,$direction,$username){
+	$items_to_order = array();
+	$user_id = get_userid($username);
+	$db = new DB_Seminar("SELECT kategorie_id FROM kategorien WHERE range_id='$user_id' ORDER BY priority");
+	while($db->next_record()){
+		$items_to_order[] = $db->f("kategorie_id");
+	}
+	for ($i = 0; $i < count($items_to_order); ++$i){
+		if ($cat_id == $items_to_order[$i])
+			break;
+	}
+	if ($direction == "up" && isset($items_to_order[$i-1])){
+		$items_to_order[$i] = $items_to_order[$i-1];
+		$items_to_order[$i-1] = $cat_id;
+	} elseif (isset($items_to_order[$i+1])){
+		$items_to_order[$i] = $items_to_order[$i+1];
+		$items_to_order[$i+1] = $cat_id;
+	}
+	for ($i = 0; $i < count($items_to_order); ++$i){
+		$db->query("UPDATE kategorien SET priority=$i WHERE kategorie_id='$items_to_order[$i]'");
+	}
+	parse_msg("msg§Kategorien wurden neu geordnet");
 }
 
 //////////////////////////////////////////////////////////////////////////

@@ -258,7 +258,7 @@ if ($msg)
 
 // Ausgabe der eigenen Kategorien
 
-	$db2->query("SELECT * FROM kategorien WHERE range_id = '$user_id' ORDER BY chdate DESC");
+	$db2->query("SELECT * FROM kategorien WHERE range_id = '$user_id' ORDER BY priority");
 	while ($db2->next_record())  {
 		$head=$db2->f("name");
 		$body=$db2->f("content");
