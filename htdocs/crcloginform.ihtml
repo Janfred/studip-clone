@@ -7,8 +7,8 @@ if (!isset($_language))
 	$_language = get_accepted_languages();
 $_language_path = init_i18n($_language);
 
-
 ?>
+
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -30,7 +30,7 @@ $_language_path = init_i18n($_language);
     document.login.submit();
 	return false;
   }
-  
+
 <? if (CLOSE_ON_LOGIN_SCREEN === true) echo "self.close();";?>
 // -->
 </script>
@@ -149,8 +149,10 @@ $_language_path = init_i18n($_language);
 		</tr>
 
 		<tr>
-			<td class="steel1">&nbsp;</td>
-			<td align=right class="steel1"><input type="image"  name="submitbtn" <?=makeButton("login","src")?> border="0" alt="Login" title="Login" value=" Login "></td>
+			<td align="center" class="steel1" colspan="2">
+				<input type="image"  name="submitbtn" <?=makeButton("login","src")?> align="absmiddle" border="0" alt="Login" title="Login" value=" Login ">
+				&nbsp;<a href="index.php?order=cancel"><img <?=makeButton("abbrechen","src")?> align="absmiddle" border="0"></a>
+			</td>
 		</tr>
 
 	</table>
@@ -175,3 +177,4 @@ $_language_path = init_i18n($_language);
 // -->
 </script>
 </html>
+
