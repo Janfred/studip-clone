@@ -32,10 +32,25 @@ function getFolderId(&$folders,$parent_id){
 function doc_count ($parent_id) {
 	$db=new DB_Seminar;
 	getFolderId($arr,$parent_id);
-	if (count($arr)==1) $in="('$arr[0]')";
-        else $in="('".join("','",$arr)."')";
+	if (count($arr)==1) 
+		$in="('$arr[0]')";
+        else
+        	$in="('".join("','",$arr)."')";
 	$db->query ("SELECT count(*) as count FROM dokumente WHERE range_id IN $in");
 	$db->next_record();
+	return $db->Record[0];
+}
+
+function doc_newest ($parent_id) {
+	$db=new DB_Seminar;
+	getFolderId($arr,$parent_id);
+	if (count($arr)==1) 
+		$in="('$arr[0]')";
+        else 
+        	$in="('".join("','",$arr)."')";
+	$db->query ("SELECT mkdate FROM dokumente WHERE range_id IN $in ORDER BY mkdate DESC LIMIT 1");
+	$db->next_record();
+		
 	return $db->Record[0];
 }
 
@@ -591,13 +606,15 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 			
 		$letzter=$db2->num_rows(); 		// wenn $letzter = 0 ist gibt es keinen untergeordneten Ordner mehr
 		$dok_letzter=$db3->num_rows(); // wenn $dok_letzter = 0 ist gibt es keine Dokumente in dem Ordner
+		$documents_count = doc_count($db->f("folder_id"));
+		$newest_document = doc_newest($db->f("folder_id"));
 
 		//Ordner aufgeklappt
 		if ((strstr($open,$db->f("folder_id"))) || ($all)) { 
 			$content='';
 			
 			//Icon auswaehlen
-			if ($dok_letzter) //Dokumente und Dateien vorhanden
+			if ($documents_count) //Dokumente und Dateien vorhanden
 				$icon="<img src=\"pictures/cont_folder.gif\">";	
 			else
 				$icon="<img src=\"pictures/cont_folder2.gif\">";				
@@ -618,9 +635,9 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 				if ($link)
 					$tmp_titel = "<a href=\"$link\" class=\"tree\" >$tmp_titel</a>";
 
-				if ($dok_letzter > 1)
-					$titel= $tmp_titel."&nbsp;&nbsp;" . sprintf(_("(%s Dokumente)"), $dok_letzter);
-				elseif ($dok_letzter)
+				if ($documents_count > 1)
+					$titel= $tmp_titel."&nbsp;&nbsp;" . sprintf(_("(%s Dokumente)"), $documents_count);
+				elseif ($documents_count)
 					$titel= $tmp_titel." </b>&nbsp;&nbsp;" . _("(1 Dokument)");
 				else
 					$titel= $tmp_titel;		
@@ -637,7 +654,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 				$neuer_ordner = FALSE;
 			
 			//Objekttitelzeile ausgeben
-			if (!$all) printhead ("99%", 0, $link, "open", $neuer_ordner, $icon, $titel, $zusatz, $db->f("mkdate"));
+			if (!$all) printhead ("99%", 0, $link, "open", $neuer_ordner, $icon, $titel, $zusatz, $newest_document);
 					
 			//Striche erzeugen
 			$striche = "<td class=\"blank\" nowrap background='pictures/forumleer.gif'><img src='pictures/forumleer.gif'><img src='pictures/forumleer.gif'></td>";
@@ -846,7 +863,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 		else {
 
 			//Icon auswaehlen
-			if ($dok_letzter) //Dokumente und Dateien vorhanden
+			if ($documents_count) //Dokumente und Dateien vorhanden
 				$icon="<img src=\"pictures/cont_folder.gif\">";	
 			else
 				$icon="<img src=\"pictures/cont_folder2.gif\">";				
@@ -865,9 +882,9 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 			if ($link)
 				$tmp_titel = "<a href=\"$link\" class=\"tree\" >$tmp_titel</a>";
 			
-			if ($dok_letzter > 1)
-				$titel= $tmp_titel."&nbsp;&nbsp;" . sprintf(_("(%s Dokumente)"), $dok_letzter);
-			elseif ($dok_letzter)
+			if ($documents_count > 1)
+				$titel= $tmp_titel."&nbsp;&nbsp;" . sprintf(_("(%s Dokumente)"), $documents_count);
+			elseif ($documents_count)
 				$titel= $tmp_titel." &nbsp;&nbsp;" . _("(1 Dokument)");
 			else
 				$titel= $tmp_titel;
@@ -886,7 +903,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 				$neuer_ordner = FALSE;
 				
 			//Objekttitelzeile ausgeben
-			if (!$all) printhead ("90%", 0, $link, "close", $neuer_ordner, $icon, $titel, $zusatz, $db->f("mkdate"));
+			if (!$all) printhead ("90%", 0, $link, "close", $neuer_ordner, $icon, $titel, $zusatz, $newest_document);
 			if (!$all) echo "<td class=\"blank\">&nbsp;</td></tr></td></table>";
 			}
 
