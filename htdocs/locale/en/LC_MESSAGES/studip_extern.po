@@ -1,23 +1,26 @@
 # translation of studip_extern.po to 
+# translation of studip_extern.po to Deutsch
+# translation of studip_extern.po to
 # translation of studip_extern.po to
 # This file is distributed under the same license as the PACKAGE package.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER, 2003,2004
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER, 2003,2004.
+# shariful <shariful@math.uni-goettingen.de>, 2004.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: studip_extern\n"
-"POT-Creation-Date: 2004-09-23 21:40+0200\n"
-"PO-Revision-Date: 2004-04-01 13:29+GMT\n"
+"POT-Creation-Date: 2004-09-27 14:13+0200\n"
+"PO-Revision-Date: 2004-09-27 13:57+GMT\n"
 "Last-Translator: \n"
 "Language-Team:  <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.0.1\n"
+"X-Generator: KBabel 1.0.2\n"
 
 #: extern/admin_extern.inc.php:63
 msgid "Verwaltung der externen Anzeigemodule"
-msgstr "Administration of external display module."
+msgstr "Administration of the external indicator modules"
 
 #: extern/admin_extern.inc.php:83
 #, c-format
@@ -104,8 +107,8 @@ msgid ""
 "herangezogen wird, wenn sie beim Aufruf dieses Moduls keine Konfiguration "
 "angeben."
 msgstr ""
-"This symbol marks the standard configuration, that will be consulted for "
-"formatting if you do not give this module any configuration when requested."
+"This symbol marks the standard configuration, that will beapplied for "
+"formatting if you do not give this module anyconfiguration when requested."
 
 #: extern/admin_extern.inc.php:297
 msgid ""
@@ -203,14 +206,14 @@ msgstr ""
 
 #: extern/extern_config.inc.php:72
 msgid "Newsticker"
-msgstr "New sticker"
+msgstr "Newsticker"
 
 #: extern/extern_config.inc.php:73
 msgid ""
 "Das Modul &quot;Newsticker&quot; gibt alle News einer Einrichtung in einem "
 "Ticker aus."
 msgstr ""
-"The module &quot;News sticker&quot; provides all news from an institute in "
+"The module &quot;Newssticker&quot; provides all news from an institute in "
 "one ticker."
 
 #: extern/extern_config.inc.php:75
@@ -352,7 +355,7 @@ msgstr "Font colour:"
 msgid ""
 "Diese Farbe wird seitenweit für Verweise zu noch nicht besuchten Zielen "
 "benutzt."
-msgstr "This colour is used page-wide for links to not yet visited lines."
+msgstr "This colour is used page-wide for links to targets not visited yet."
 
 #: extern/views/ExternEditHtml.class.php:192
 msgid "Linkfarbe (nicht besucht):"
@@ -361,7 +364,7 @@ msgstr "Link colour (not visited):"
 #: extern/views/ExternEditHtml.class.php:206
 msgid ""
 "Diese Farbe wird seitenweit für Verweise zu bereits besuchten Zielen benutzt."
-msgstr "This colour is used page-wide for links to lines already used."
+msgstr "This colour is used page-wide for links to targets visited already."
 
 #: extern/views/ExternEditHtml.class.php:207
 msgid "Linkfarbe (besucht):"
@@ -668,7 +671,8 @@ msgid ""
 "Die eingegebenen Werte wurden übernommen und der Name der Konfiguration "
 "geändert."
 msgstr ""
-"The given value has been accepted and the name of the configuration changed."
+"The given value has been accepted and the name of the configuration is "
+"changed."
 
 #: extern/views/extern_edit_module.inc.php:139
 msgid "Die eingegebenen Werte wurden übernommen."
@@ -732,8 +736,8 @@ msgid ""
 "Diese Adresse k&ouml;nnen Sie in einen Link auf Ihrer Website integrieren, "
 "um auf die Ausgabe des Moduls zu verweisen."
 msgstr ""
-"You can integrate this address as a link in your website to go to the module "
-"output."
+"You can insert this address as a link in your website to referto the "
+"module's output."
 
 #: extern/views/extern_info_module.inc.php:80
 msgid "Stud.IP-Remote-Include (SRI)  Schnittstelle"
@@ -1156,7 +1160,7 @@ msgstr "Participants"
 #: extern/modules/ExternModuleLecturedetails.class.php:312
 #: extern/modules/views/lecturedetails_preview.inc.php:51
 msgid "Fakult&auml;t &gt; Studiengang &gt; Bereich"
-msgstr "faculty &gt, program of study &gt; area"
+msgstr "faculty &gt; program of study &gt; area"
 
 #: extern/modules/ExternModuleLecturedetails.class.php:492
 #: extern/modules/views/lecturedetails_preview.inc.php:226
@@ -1436,7 +1440,7 @@ msgstr "These are my publications."
 
 #: extern/modules/views/persondetails_preview.inc.php:46
 msgid "Das ist News Nr. 1"
-msgstr "That is new item nr. 1"
+msgstr "That is News Nr. 1"
 
 #: extern/modules/views/persondetails_preview.inc.php:47
 msgid "News Nr. 1"
@@ -1520,9 +1524,8 @@ msgid "Mustereinrichtung"
 msgstr "Sample institute"
 
 #: extern/modules/views/persondetails_preview.inc.php:106
-#, fuzzy
 msgid "Musterstra&szlig;e 23"
-msgstr "Sample street"
+msgstr "Sample street 23"
 
 #: extern/modules/views/persondetails_preview.inc.php:107
 msgid "12345 Musterstadt"
@@ -1651,9 +1654,8 @@ msgstr "Heading of the contact data"
 #: extern/elements/ExternElementContact.class.php:103
 #: extern/elements/main/ExternElementMainGlobal.class.php:166
 #: extern/elements/main/ExternElementMainPersons.class.php:162
-#, fuzzy
 msgid "Standard-Adresse:"
-msgstr "Set as standard"
+msgstr ""
 
 #: extern/elements/ExternElementContact.class.php:104
 #: extern/elements/main/ExternElementMainGlobal.class.php:167
@@ -1666,30 +1668,25 @@ msgid ""
 msgstr ""
 
 #: extern/elements/ExternElementContact.class.php:107
-#, fuzzy
 msgid "Personenname ausblenden:"
-msgstr "Hide data field"
+msgstr ""
 
 #: extern/elements/ExternElementContact.class.php:108
 msgid "Unterdrückt die Anzeige des Namens im Adressfeld."
 msgstr ""
 
 #: extern/elements/ExternElementContact.class.php:111
-#, fuzzy
 msgid "Funktionen anzeigen:"
-msgstr "Show lecturers: "
+msgstr ""
 
 #: extern/elements/ExternElementContact.class.php:112
-#, fuzzy
 msgid ""
 "Ausgabe der Funktionen der Mitarbeiterin/des Mitarbeiters in der Einrichtung."
 msgstr ""
-"The module &quot;staff member&quot; provides a staff index of an institute."
 
 #: extern/elements/ExternElementContact.class.php:115
-#, fuzzy
 msgid "Einrichtungsname:"
-msgstr "Institute"
+msgstr ""
 
 #: extern/elements/ExternElementContact.class.php:116
 msgid ""
@@ -1703,14 +1700,12 @@ msgid "nicht anzeigen"
 msgstr "Do not display"
 
 #: extern/elements/ExternElementContact.class.php:118
-#, fuzzy
 msgid "anzeigen"
-msgstr "Show picture:"
+msgstr ""
 
 #: extern/elements/ExternElementContact.class.php:118
-#, fuzzy
 msgid "als Link anzeigen"
-msgstr "Do not display"
+msgstr ""
 
 #: extern/elements/ExternElementContact.class.php:121
 msgid "Email und Hompage getrennt:"
@@ -1753,7 +1748,7 @@ msgstr "Font formatting for news title (HTML - Tag &lt;font&gt;)"
 
 #: extern/elements/ExternElementContentNews.class.php:76
 msgid "Ausrichtung News-Titel (HTML-Tag &lt;div&gt;)"
-msgstr "Arrangement of new title (HTML - Tag &lt;div&gt;)"
+msgstr "Arrangement of news title (HTML - Tag &lt;div&gt;)"
 
 #: extern/elements/ExternElementContentNews.class.php:77
 msgid "Schriftformatierung News-Beschreibung (HTML-Tag &lt;font&gt;)"
@@ -1917,14 +1912,12 @@ msgid "Angaben zur Gestaltung des Seitenkopfes."
 msgstr "Information for the configuration of the page header."
 
 #: extern/elements/ExternElementPersondetailsHeader.class.php:94
-#, fuzzy
 msgid "Allgemeine Angaben zum Element Seitenkopf/Bild"
-msgstr "General information about page construction"
+msgstr ""
 
 #: extern/elements/ExternElementPersondetailsHeader.class.php:96
-#, fuzzy
 msgid "&Uuml;berschrift (Name) ausblenden:"
-msgstr "Headings"
+msgstr ""
 
 #: extern/elements/ExternElementPersondetailsHeader.class.php:97
 msgid "Unterdrückt die Anzeige des Namens als Überschrift."
@@ -1932,11 +1925,11 @@ msgstr ""
 
 #: extern/elements/ExternElementPersondetailsHeader.class.php:111
 msgid "Tabelle Seitenkopf/Bild (HTML-Tag &lt;table&gt;)"
-msgstr "Table Top of page / picture (HTML - Tag &lt;table&gt;)"
+msgstr "Table page header/picture (HTML - Tag &lt;table&gt;)"
 
 #: extern/elements/ExternElementPersondetailsHeader.class.php:112
 msgid "Tabellenzeile Name (HTML-Tag &lt;tr&gt;)"
-msgstr "Table row (HTML - Tag &lt;tr&gt;)"
+msgstr "Table row name (HTML - Tag &lt;tr&gt;)"
 
 #: extern/elements/ExternElementPersondetailsHeader.class.php:113
 msgid "Tabellenzelle Name (HTML-Tag &lt;td&gt;)"
@@ -2050,7 +2043,7 @@ msgstr ""
 #: extern/elements/main/ExternElementMainLecturestable.class.php:156
 #: extern/elements/main/ExternElementMainLecturestable.class.php:160
 msgid "aktuelles"
-msgstr "only current"
+msgstr "current"
 
 #: extern/elements/ExternElementPersondetailsLectures.class.php:104
 #: extern/elements/main/ExternElementMainGlobal.class.php:112
@@ -2085,7 +2078,7 @@ msgid ""
 "Geben Sie an, wieviele Semester (ab o.a. Startsemester) angezeigt werden "
 "sollen."
 msgstr ""
-"Enter how many semesters should be displayed (starting with the given "
+"Enter the number of semesters to be displayed (starting with thegiven "
 "semester)."
 
 #: extern/elements/ExternElementPersondetailsLectures.class.php:132
@@ -2163,7 +2156,7 @@ msgstr "only text"
 #: extern/elements/ExternElementRangeTreeLevelContent.class.php:57
 #: extern/elements/ExternElementTreeLevelContent.class.php:57
 msgid "Inhalt der Ebene"
-msgstr "Content of the level"
+msgstr "Contents of the level"
 
 #: extern/elements/ExternElementRangeTreeLevelContent.class.php:58
 #: extern/elements/ExternElementTreeLevelContent.class.php:58
@@ -2570,7 +2563,7 @@ msgid ""
 "Anwählen, wenn die Seite als komplette HTML-Seite ausgegeben werden soll, z."
 "B. bei direkter Verlinkung oder in einem Frameset."
 msgstr ""
-"Select when the page should be display as complete HTML page, e.g., when "
+"Select when the page should be displayed as complete HTML page, e.g., when "
 "using a direct link or in a frameset."
 
 #: extern/elements/main/ExternElementMainDownload.class.php:134
@@ -2735,8 +2728,8 @@ msgid ""
 "Geben Sie hier den Titel der Seite ein. Der Titel wird bei der Anzeige im "
 "Web-Browser in der Titelzeile des Anzeigefensters angezeigt."
 msgstr ""
-"Enter here the title of the page. The title will be shown in the title row "
-"of the browser window when shown by a web-browser."
+"Enter here the title of the page. The title will be shown in thetitle bar of "
+"the browser window when shown by a web-browser."
 
 #: extern/elements/main/ExternElementMainDownload.class.php:166
 msgid "Keine Dateien:"
@@ -2774,6 +2767,8 @@ msgid ""
 "\"copyright\" ausgegeben, wenn Sie die Option \"HTML-Header/Footer\" "
 "angewählt haben."
 msgstr ""
+"Enter a copyright note here. This will be displayedin the Meta-Tag "
+"\"copyright\", provided you have selected the option\"HTML Header/Footer\"."
 
 #: extern/elements/main/ExternElementMainDownload.class.php:174
 #: extern/elements/main/ExternElementMainGlobal.class.php:184
@@ -2799,6 +2794,8 @@ msgid ""
 "\"author\" ausgegeben, wenn Sie die Option \"HTML-Header/Footer\" angewählt "
 "haben."
 msgstr ""
+"Enter the name of the page author here. This will be displayedin the Meta-"
+"Tag \"author\", provided you have selected the option\"HTML Header/Footer\"."
 
 #: extern/elements/main/ExternElementMainDownload.class.php:181
 msgid "Eigene Icons"
@@ -2849,31 +2846,31 @@ msgid ""
 "Geben Sie die URL eines Bildes ein, dass als Icon für Text-Dateien dienen "
 "soll. Erlaubte Formate: jpg, png, gif. "
 msgstr ""
-"Enter the URL of a picture that should serve as icon for text files. Formats "
-"allowed: jpg, png, gif."
+"Enter the URL of a picture that should serve as an icon for text files. "
+"Formats allowed: jpg, png, gif."
 
 #: extern/elements/main/ExternElementMainDownload.class.php:197
 msgid ""
 "Geben Sie die URL eines Bildes ein, dass als Icon für PDF-Dateien dienen "
 "soll. Erlaubte Formate: jpg, png, gif. "
 msgstr ""
-"Enter the URL of a picture that should serve as icon for PDF files. Formats "
-"allowed: jpg, png, gif."
+"Enter the URL of a picture that should serve as an icon for PDF files. "
+"Formats allowed: jpg, png, gif."
 
 #: extern/elements/main/ExternElementMainDownload.class.php:198
 msgid ""
 "Geben Sie die URL eines Bildes ein, dass als Icon für Powerpoint-Dateien "
 "dienen soll. Erlaubte Formate: jpg, png, gif. "
 msgstr ""
-"Enter the URL of a picture that should serve as icon for Powerpoint files. "
-"Formats allowed: jpg, png, gif."
+"Enter the URL of a picture that should serve as an icon for Powerpoint "
+"files. Formats allowed: jpg, png, gif."
 
 #: extern/elements/main/ExternElementMainDownload.class.php:199
 msgid ""
 "Geben Sie die URL eines Bildes ein, dass als Icon für Excel-Dateien dienen "
 "soll. Erlaubte Formate: jpg, png, gif. "
 msgstr ""
-"Enter the URL of a picture that should serve as icon for Excel files. "
+"Enter the URL of a picture that should serve as an icon for Excel files. "
 "Formats allowed: jpg, png, gif."
 
 #: extern/elements/main/ExternElementMainDownload.class.php:200
@@ -2881,23 +2878,23 @@ msgid ""
 "Geben Sie die URL eines Bildes ein, dass als Icon für RTF-Dateien dienen "
 "soll. Erlaubte Formate: jpg, png, gif. "
 msgstr ""
-"Enter the URL of a picture that should serve as icon for RTF files. Formats "
-"allowed: jpg, png, gif."
+"Enter the URL of a picture that should serve as an icon for RTF files. "
+"Formats allowed: jpg, png, gif."
 
 #: extern/elements/main/ExternElementMainDownload.class.php:201
 msgid ""
 "Geben Sie die URL eines Bildes ein, dass als Icon für komprimierte Dateien "
 "dienen soll. Erlaubte Formate: jpg, png, gif. "
 msgstr ""
-"Enter the URL of a picture that should serve as icon for compressed files. "
-"Formats allowed: jpg, png, gif."
+"Enter the URL of a picture that should serve as an icon for compressed "
+"files. Formats allowed: jpg, png, gif."
 
 #: extern/elements/main/ExternElementMainDownload.class.php:202
 msgid ""
 "Geben Sie die URL eines Bildes ein, dass als Icon für alle anderen "
 "Dateiformate dienen soll. "
 msgstr ""
-"Enter the URL of a picture that should serve as icon for all other file "
+"Enter the URL of a picture that should serve as an icon for all other file "
 "formats. "
 
 #: extern/elements/main/ExternElementMainDownload.class.php:204
@@ -3044,7 +3041,7 @@ msgstr "upper half"
 #: extern/elements/main/ExternElementMainNews.class.php:154
 #: extern/elements/main/ExternElementMainPersondetails.class.php:155
 msgid "unterhalb der Tabelle"
-msgstr "the second half of the table"
+msgstr "below the table"
 
 #: extern/elements/main/ExternElementMainLecturedetails.class.php:158
 #: extern/elements/main/ExternElementMainNews.class.php:154
@@ -3106,13 +3103,13 @@ msgid ""
 "Wählen Sie diese Option, um Veranstaltungen anzuzeigen, bei denen diese "
 "Einrichtung als beteiligtes Institut eingetragen ist."
 msgstr ""
-"Choose this option to display courses, which come from institutes which are "
-"entered as being a participating institute."
+"Choose this option to display courses at the instituteswhich are entered as "
+"being a participating institute."
 
 #: extern/elements/main/ExternElementMainLectures.class.php:180
 #: extern/elements/main/ExternElementMainLecturestable.class.php:200
 msgid "Anzahl Veranstaltungen/Gruppierung anzeigen:"
-msgstr "Number of courses/display grouping:"
+msgstr "Display number of courses/grouping:"
 
 #: extern/elements/main/ExternElementMainLectures.class.php:181
 #: extern/elements/main/ExternElementMainLecturestable.class.php:201
@@ -3149,7 +3146,7 @@ msgstr ""
 #: extern/elements/main/ExternElementMainLectures.class.php:201
 #: extern/elements/main/ExternElementMainLecturestable.class.php:215
 msgid "Ausgabe bestimmter Veranstaltungsklassen"
-msgstr "Selection of course classes for output."
+msgstr "Display of certain course classes"
 
 #: extern/elements/main/ExternElementMainLectures.class.php:205
 #: extern/elements/main/ExternElementMainLecturestable.class.php:220
@@ -3227,7 +3224,7 @@ msgstr "Repeat the column heading above or under the grouping row."
 #: extern/elements/main/ExternElementMainLecturestable.class.php:209
 #: extern/elements/main/ExternElementMainPersons.class.php:159
 msgid "&uuml;ber"
-msgstr "about"
+msgstr "above"
 
 #: extern/elements/main/ExternElementMainLecturestable.class.php:209
 msgid "unter Gruppierungszeile"
@@ -3239,9 +3236,8 @@ msgid "Keine aktuellen News"
 msgstr "No current news"
 
 #: extern/elements/main/ExternElementMainNews.class.php:114
-#, fuzzy
 msgid "Datum/Autor anzeigen:"
-msgstr "Date/Author"
+msgstr ""
 
 #: extern/elements/main/ExternElementMainNews.class.php:115
 msgid ""
@@ -3250,31 +3246,27 @@ msgid ""
 msgstr ""
 
 #: extern/elements/main/ExternElementMainNews.class.php:117
-#, fuzzy
 msgid "Datum und Autor"
-msgstr "Date/Author"
+msgstr ""
 
 #: extern/elements/main/ExternElementMainNews.class.php:117
-#, fuzzy
 msgid "nur Datum"
-msgstr "Date"
+msgstr ""
 
 #: extern/elements/main/ExternElementMainNews.class.php:120
 msgid "Autorenname nicht verlinken:"
 msgstr ""
 
 #: extern/elements/main/ExternElementMainNews.class.php:121
-#, fuzzy
 msgid ""
 "Wählen Sie diese Option, wenn der Autorenname nicht auf das Modul "
 "Personendetails verlinkt werden soll."
 msgstr ""
-"Choose this option if the names of the course lecturers should be displayed."
 
 #: extern/elements/main/ExternElementMainNews.class.php:171
 #: extern/elements/main/ExternElementMainNewsticker.class.php:115
 msgid "Keine News:"
-msgstr "No current news:"
+msgstr "No news:"
 
 #: extern/elements/main/ExternElementMainNews.class.php:172
 msgid ""
@@ -3298,7 +3290,7 @@ msgstr "Tick frequence:"
 
 #: extern/elements/main/ExternElementMainNewsticker.class.php:100
 msgid "Geben Sie an, wieviele Zeichen pro Sekunde ausgegeben werden sollen."
-msgstr "Enter how many symbols per second should be produced."
+msgstr "Enter how many symbols per second should be displayed."
 
 #: extern/elements/main/ExternElementMainNewsticker.class.php:103
 msgid "Pause zwischen News:"
@@ -3309,8 +3301,8 @@ msgid ""
 "Geben Sie an, wie lange der Ticker warten soll (in Millisekunden), bis er "
 "die nächste News ausgibt."
 msgstr ""
-"Enter how long the ticker should wait (in milliseconds) before it produces "
-"the next news."
+"Enter how long (in milliseconds) the ticker should wait beforedisplaying the "
+"next news."
 
 #: extern/elements/main/ExternElementMainNewsticker.class.php:107
 msgid "Text am Anfang der Ausgabe:"
@@ -3321,8 +3313,8 @@ msgid ""
 "Dieser Text wird ausgegeben, während die News in den Ticker geladen werden, "
 "also am Anfang des ersten Durchlaufs."
 msgstr ""
-"This text will be produced while the news is being loaded, i.e. at the "
-"beginning of the first run through."
+"This text will be displayed while the news is being loaded, i.e.at the start "
+"of the first cycle."
 
 #: extern/elements/main/ExternElementMainNewsticker.class.php:111
 msgid "Text am Ende der Ausgabe:"
@@ -3333,12 +3325,12 @@ msgid ""
 "Dieser Text wird ausgegeben, nachdem alle News angezeigt wurden, also am "
 "Ende jedes Durchlaufs."
 msgstr ""
-"This text will be produced after all the news has been displayed i.e. at the "
-"end of the final run through."
+"This text will be displayed after all the news have been displayed, i.e.at "
+"the end of the each cycle."
 
 #: extern/elements/main/ExternElementMainNewsticker.class.php:116
 msgid "Dieser Text wird ausgegeben, wenn keine News verfügbar sind."
-msgstr "This text will be produced when no news is available."
+msgstr "This text will be displayed when no news is available."
 
 #: extern/elements/main/ExternElementMainNewsticker.class.php:119
 msgid "Ticker sofort starten?"
@@ -3352,10 +3344,11 @@ msgid ""
 "geladen ist. Deaktivieren Sie dafür diese Option, und fügen Sie im <body>-"
 "Tag der Seite das Attribut onLoad=\"newsticker\" ein."
 msgstr ""
-"Choose this option when the ticker module should be started automatically. "
-"If a page takes a while to load it may make sense to start the ticker once "
-"the page has loaded completely. Deactivate this option and enter the "
-"attribute onLoad=\"newsticker\" into the <body>-tag on the page."
+"Choose this option if the ticker module should be started automatically.If a "
+"page where the ticker is integrated takes a while to be loaded thenit may "
+"make sense to start the ticker once the page has completely beenloaded. To "
+"this end, deactivate this option and enter the attributeonLoad=\"newsticker"
+"\" into the <body>-tag on the page."
 
 #: extern/elements/main/ExternElementMainNewsticker.class.php:123
 msgid "Nur JavaScript-Funktion ausgeben?"
@@ -3377,7 +3370,7 @@ msgstr "Information about HTML Tag &lt;textarea&gt;"
 
 #: extern/elements/main/ExternElementMainNewsticker.class.php:141
 msgid "Anzahl Zeilen im Ausgabefenster:"
-msgstr "Number rows in display window:"
+msgstr "Number of lines in the display window:"
 
 #: extern/elements/main/ExternElementMainNewsticker.class.php:142
 msgid ""
@@ -3423,8 +3416,8 @@ msgid ""
 "Wählen Sie, ob ein vom Nutzer in Stud.IP eingestelltes Bild links oder "
 "rechts neben den Kontaktdaten angezeigt werden soll."
 msgstr ""
-"Choose whether the pictures from users in Stud.IP should be displayedleft or "
-"right of the contact details."
+"Choose whether the pictures from users in Stud.IP should be displayed left "
+"or right of the contact details."
 
 #: extern/elements/main/ExternElementMainPersondetails.class.php:129
 msgid "links"
@@ -3432,7 +3425,7 @@ msgstr "Links "
 
 #: extern/elements/main/ExternElementMainPersondetails.class.php:129
 msgid "rechts"
-msgstr "right-justified "
+msgstr "right"
 
 #: extern/elements/main/ExternElementMainPersons.class.php:128
 msgid "Anzeige von Gruppen"
@@ -3447,16 +3440,16 @@ msgid ""
 "An dieser Einrichtung wurden noch keine Gruppen/Funktionen angelegt, oder es "
 "wurden diesen noch keine Personen zugeordnet."
 msgstr ""
-"No group / function has been created at this institute, or they have not "
-"been assigned any people."
+"At this institute no group / function has been created or there isn'tany "
+"person assigned to it."
 
 #: extern/elements/main/ExternElementMainPersons.class.php:139
 msgid ""
 "Das Modul gibt nur Daten von Personen aus, die einer Gruppe/Funktion "
 "zugeordnet sind."
 msgstr ""
-"The module will only display data about people, who are assigned to a "
-"group / function."
+"The module displays data about people only, who are assignedto a group / "
+"function."
 
 #: extern/elements/main/ExternElementMainPersons.class.php:152
 msgid "Meyer, Peter"

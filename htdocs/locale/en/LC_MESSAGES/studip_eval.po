@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: studip_eval\n"
-"POT-Creation-Date: 2004-09-23 21:40+0200\n"
+"POT-Creation-Date: 2004-09-27 14:13+0200\n"
 "PO-Revision-Date: 2004-09-23 21:31+GMT\n"
 "Last-Translator: \n"
 "Language-Team:  <de@li.org>\n"

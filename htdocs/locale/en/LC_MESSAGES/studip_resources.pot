@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2004-09-23 21:40+0200\n"
+"POT-Creation-Date: 2004-09-27 14:13+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,43 +15,71 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: resources/resourcesFunc.inc.php:472 resources/resourcesFunc.inc.php:488
-#: resources/resourcesFunc.inc.php:497 resources/resourcesFunc.inc.php:559
-#: resources/resourcesFunc.inc.php:597 resources/resourcesFunc.inc.php:610
-#: resources/resourcesFunc.inc.php:659 resources/resourcesFunc.inc.php:710
+#: resources/resourcesFunc.inc.php:248
+msgid ""
+"Folgende gew&uuml;nschte Raumbelegungen &uuml;berschneiden sich mit bereits "
+"vorhandenen Belegungen. Bitte &auml;ndern Sie die R&auml;ume oder Zeiten!"
+msgstr ""
+
+#: resources/resourcesFunc.inc.php:257
+#, c-format
+msgid "und %s weitere &Uuml;berschneidungen"
+msgstr ""
+
+#: resources/resourcesFunc.inc.php:258
+msgid "Raumplan anzeigen"
+msgstr ""
+
+#: resources/resourcesFunc.inc.php:281
+#, c-format
+msgid ""
+"Die Belegung des Raumes %s wurde in die Ressourcenverwaltung &uuml;bernommen."
+msgstr ""
+
+#: resources/resourcesFunc.inc.php:283
+#, c-format
+msgid ""
+"Die Belegung der R&auml;ume %s wurden in die Ressourcenverwaltung &uuml;"
+"bernommen."
+msgstr ""
+
+#: resources/resourcesFunc.inc.php:557 resources/resourcesFunc.inc.php:573
+#: resources/resourcesFunc.inc.php:582 resources/resourcesFunc.inc.php:644
+#: resources/resourcesFunc.inc.php:682 resources/resourcesFunc.inc.php:695
+#: resources/resourcesFunc.inc.php:744 resources/resourcesFunc.inc.php:795
 msgid "Veranstaltungen"
 msgstr ""
 
-#: resources/resourcesFunc.inc.php:543
+#: resources/resourcesFunc.inc.php:628
 #: resources/lib/ResourceObject.class.php:291
 msgid "Global"
 msgstr ""
 
-#: resources/resourcesFunc.inc.php:554 resources/resourcesFunc.inc.php:589
-#: resources/resourcesFunc.inc.php:619 resources/resourcesFunc.inc.php:682
-#: resources/resourcesFunc.inc.php:705
+#: resources/resourcesFunc.inc.php:639 resources/resourcesFunc.inc.php:674
+#: resources/resourcesFunc.inc.php:704 resources/resourcesFunc.inc.php:767
+#: resources/resourcesFunc.inc.php:790
 msgid "Personen"
 msgstr ""
 
-#: resources/resourcesFunc.inc.php:564 resources/resourcesFunc.inc.php:570
-#: resources/resourcesFunc.inc.php:576 resources/resourcesFunc.inc.php:615
-#: resources/resourcesFunc.inc.php:665 resources/resourcesFunc.inc.php:715
+#: resources/resourcesFunc.inc.php:649 resources/resourcesFunc.inc.php:655
+#: resources/resourcesFunc.inc.php:661 resources/resourcesFunc.inc.php:700
+#: resources/resourcesFunc.inc.php:750 resources/resourcesFunc.inc.php:800
 msgid "Einrichtungen"
 msgstr ""
 
-#: resources/resourcesFunc.inc.php:741
+#: resources/resourcesFunc.inc.php:826
 msgid "diesen Eintrag übernehmen"
 msgstr ""
 
-#: resources/resourcesFunc.inc.php:745
+#: resources/resourcesFunc.inc.php:830
 msgid "jedeR"
 msgstr ""
 
-#: resources/resourcesFunc.inc.php:760
+#: resources/resourcesFunc.inc.php:845
 msgid "Suche zurücksetzen"
 msgstr ""
 
-#: resources/resourcesFunc.inc.php:765
+#: resources/resourcesFunc.inc.php:850
 msgid "Starten Sie hier Ihre Suche"
 msgstr ""
 
@@ -71,127 +99,127 @@ msgstr ""
 msgid "Veranstaltung"
 msgstr ""
 
-#: resources/lib/AssignObject.class.php:401
+#: resources/lib/AssignObject.class.php:402
 #: resources/views/EditResourceData.class.php:376
 msgid "jeden Tag"
 msgstr ""
 
-#: resources/lib/AssignObject.class.php:402
+#: resources/lib/AssignObject.class.php:403
 #: resources/views/EditResourceData.class.php:377
 msgid "jeden zweiten Tag"
 msgstr ""
 
-#: resources/lib/AssignObject.class.php:403
+#: resources/lib/AssignObject.class.php:404
 #: resources/views/EditResourceData.class.php:378
 msgid "jeden dritten Tag"
 msgstr ""
 
-#: resources/lib/AssignObject.class.php:404
+#: resources/lib/AssignObject.class.php:405
 #: resources/views/EditResourceData.class.php:379
 msgid "jeden vierten Tag"
 msgstr ""
 
-#: resources/lib/AssignObject.class.php:405
+#: resources/lib/AssignObject.class.php:406
 #: resources/views/EditResourceData.class.php:380
 msgid "jeden f&uuml;nften Tag"
 msgstr ""
 
-#: resources/lib/AssignObject.class.php:406
+#: resources/lib/AssignObject.class.php:407
 #: resources/views/EditResourceData.class.php:381
 msgid "jeden sechsten Tag"
 msgstr ""
 
-#: resources/lib/AssignObject.class.php:410
+#: resources/lib/AssignObject.class.php:411
 #: resources/views/EditResourceData.class.php:385
 msgid "jede Woche"
 msgstr ""
 
-#: resources/lib/AssignObject.class.php:411
+#: resources/lib/AssignObject.class.php:412
 #: resources/views/EditResourceData.class.php:386
 msgid "jede zweite Woche"
 msgstr ""
 
-#: resources/lib/AssignObject.class.php:412
+#: resources/lib/AssignObject.class.php:413
 #: resources/views/EditResourceData.class.php:387
 msgid "jede dritte Woche"
 msgstr ""
 
-#: resources/lib/AssignObject.class.php:416
+#: resources/lib/AssignObject.class.php:417
 #: resources/views/EditResourceData.class.php:391
 msgid "jeden Monat"
 msgstr ""
 
-#: resources/lib/AssignObject.class.php:417
+#: resources/lib/AssignObject.class.php:418
 #: resources/views/EditResourceData.class.php:392
 msgid "jeden zweiten Monat"
 msgstr ""
 
-#: resources/lib/AssignObject.class.php:418
+#: resources/lib/AssignObject.class.php:419
 #: resources/views/EditResourceData.class.php:393
 msgid "jeden dritten Monat"
 msgstr ""
 
-#: resources/lib/AssignObject.class.php:419
+#: resources/lib/AssignObject.class.php:420
 #: resources/views/EditResourceData.class.php:394
 msgid "jeden vierten Monat"
 msgstr ""
 
-#: resources/lib/AssignObject.class.php:420
+#: resources/lib/AssignObject.class.php:421
 #: resources/views/EditResourceData.class.php:395
 msgid "jeden f&uuml;nften Monat"
 msgstr ""
 
-#: resources/lib/AssignObject.class.php:421
+#: resources/lib/AssignObject.class.php:422
 #: resources/views/EditResourceData.class.php:396
 msgid "jeden sechsten Monat"
 msgstr ""
 
-#: resources/lib/AssignObject.class.php:422
+#: resources/lib/AssignObject.class.php:423
 #: resources/views/EditResourceData.class.php:397
 msgid "jeden siebten Monat"
 msgstr ""
 
-#: resources/lib/AssignObject.class.php:423
+#: resources/lib/AssignObject.class.php:424
 #: resources/views/EditResourceData.class.php:398
 msgid "jeden achten Monat"
 msgstr ""
 
-#: resources/lib/AssignObject.class.php:424
+#: resources/lib/AssignObject.class.php:425
 #: resources/views/EditResourceData.class.php:399
 msgid "jeden neunten Monat"
 msgstr ""
 
-#: resources/lib/AssignObject.class.php:425
+#: resources/lib/AssignObject.class.php:426
 #: resources/views/EditResourceData.class.php:400
 msgid "jeden zehnten Monat"
 msgstr ""
 
-#: resources/lib/AssignObject.class.php:426
+#: resources/lib/AssignObject.class.php:427
 #: resources/views/EditResourceData.class.php:401
 msgid "jeden elften Monat"
 msgstr ""
 
-#: resources/lib/AssignObject.class.php:430
+#: resources/lib/AssignObject.class.php:431
 #: resources/views/EditResourceData.class.php:405
 msgid "jedes Jahr"
 msgstr ""
 
-#: resources/lib/AssignObject.class.php:431
+#: resources/lib/AssignObject.class.php:432
 #: resources/views/EditResourceData.class.php:406
 msgid "jedes zweite Jahr"
 msgstr ""
 
-#: resources/lib/AssignObject.class.php:432
+#: resources/lib/AssignObject.class.php:433
 #: resources/views/EditResourceData.class.php:407
 msgid "jedes dritte Jahr"
 msgstr ""
 
-#: resources/lib/AssignObject.class.php:433
+#: resources/lib/AssignObject.class.php:434
 #: resources/views/EditResourceData.class.php:408
 msgid "jedes vierte Jahr"
 msgstr ""
 
-#: resources/lib/AssignObject.class.php:434
+#: resources/lib/AssignObject.class.php:435
 #: resources/views/EditResourceData.class.php:409
 msgid "jedes f&uuml;nfte Jahr"
 msgstr ""
@@ -204,61 +232,61 @@ msgstr ""
 msgid "neu laden"
 msgstr ""
 
-#: resources/lib/evaluate_values.php:1261
-#: resources/lib/evaluate_values.php:1265
-#: resources/lib/evaluate_values.php:1275
-#: resources/lib/evaluate_values.php:1277
-#: resources/lib/evaluate_values.php:1295
-#: resources/lib/evaluate_values.php:1299
-#: resources/lib/evaluate_values.php:1324
-#: resources/lib/evaluate_values.php:1327
-#: resources/lib/evaluate_values.php:1343
-#: resources/lib/evaluate_values.php:1346
+#: resources/lib/evaluate_values.php:1262
+#: resources/lib/evaluate_values.php:1266
+#: resources/lib/evaluate_values.php:1276
+#: resources/lib/evaluate_values.php:1278
+#: resources/lib/evaluate_values.php:1296
+#: resources/lib/evaluate_values.php:1300
+#: resources/lib/evaluate_values.php:1325
+#: resources/lib/evaluate_values.php:1328
+#: resources/lib/evaluate_values.php:1344
+#: resources/lib/evaluate_values.php:1347
 #, c-format
 msgid "%s, Belegungszeit: %s"
 msgstr ""
 
-#: resources/lib/evaluate_values.php:1356
+#: resources/lib/evaluate_values.php:1357
 msgid "Belegungszeit:"
 msgstr ""
 
-#: resources/lib/evaluate_values.php:1357
+#: resources/lib/evaluate_values.php:1358
 msgid "Status:"
 msgstr ""
 
-#: resources/lib/evaluate_values.php:1357
+#: resources/lib/evaluate_values.php:1358
 msgid "noch nicht bearbeitet"
 msgstr ""
 
-#: resources/lib/evaluate_values.php:1357
+#: resources/lib/evaluate_values.php:1358
 msgid "bereits bearbeitet"
 msgstr ""
 
-#: resources/lib/evaluate_values.php:1683
+#: resources/lib/evaluate_values.php:1684
 #, c-format
 msgid "Ihre Raumanfrage zur Veranstaltung %s wurde bearbeitet."
 msgstr ""
 
-#: resources/lib/evaluate_values.php:1683
+#: resources/lib/evaluate_values.php:1684
 msgid "Für folgende Belegungszeiten wurde der jeweils angegebene Raum gebucht:"
 msgstr ""
 
-#: resources/lib/evaluate_values.php:1700
+#: resources/lib/evaluate_values.php:1701
 msgid "wöchentlich"
 msgstr ""
 
-#: resources/lib/evaluate_values.php:1702
+#: resources/lib/evaluate_values.php:1703
 #: resources/views/EditResourceData.class.php:269
 #: resources/views/ShowToolsRequests.class.php:276
 msgid "zweiw&ouml;chentlich"
 msgstr ""
 
-#: resources/lib/evaluate_values.php:1703
+#: resources/lib/evaluate_values.php:1704
 #: resources/views/ShowToolsRequests.class.php:277
 msgid "ab:"
 msgstr ""
 
-#: resources/lib/evaluate_values.php:1733
+#: resources/lib/evaluate_values.php:1734
 msgid "Raumanfrage bearbeitet"
 msgstr ""
 
