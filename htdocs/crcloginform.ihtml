@@ -1,7 +1,9 @@
 <?
 // first of all init I18N because seminar_open is not called here...
 require_once("$ABSOLUTE_PATH_STUDIP/language.inc.php");
-global $_language;
+global $_language, $_language_path;
+if (!isset($_language))
+	$_language = get_accepted_languages();
 $_language_path = init_i18n($_language);
 ?>
 <html>
@@ -130,7 +132,7 @@ $_language_path = init_i18n($_language);
 
 		<tr>
 			<td class="steel1">&nbsp;</td>
-			<td align=right class="steel1"><input type="image"  name="submitbtn" src="./pictures/buttons/login-button.gif" border="0" alt="Login" title="Login" value=" Login "></td>
+			<td align=right class="steel1"><input type="image"  name="submitbtn" <?=makeButton("login","src")?> border="0" alt="Login" title="Login" value=" Login "></td>
 		</tr>
 
 	</table>
