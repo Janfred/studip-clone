@@ -379,7 +379,7 @@ function outputLoop($chatid){
 //Allzulange rumidlen soll keiner
 		if ((!$chatServer->getPerm($user->id,$chatid) && (time()-$chatServer->getAction($user->id,$chatid)) > CHAT_IDLE_TIMEOUT) ||
 			($chatServer->getPerm($user->id,$chatid) && (time()-$chatServer->getAction($user->id,$chatid)) > CHAT_ADMIN_IDLE_TIMEOUT)){
-			echo _("<b>IDLE TIMOUT</b> - Sie wurden aus dem Chat entfernt!<br>");
+			echo _("<b>IDLE TIMEOUT</b> - Sie wurden aus dem Chat entfernt!<br>");
 			$chatServer->removeUser($user->id,$chatid);
 			echo "<a href=\"javascript:parent.location.href='chat_login.php?chatid=$chatid';\">"
 				._("Hier</a> k&oumlnnen Sie versuchen wieder einzusteigen.<br>");
