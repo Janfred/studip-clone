@@ -1,4 +1,4 @@
-<?php
+<?php
 /*
 admin_dates.php - Terminverwaltung von Stud.IP
 Copyright (C) 2000 André Noack <anoack@mcis.de>, Cornelis Kater <ckater@gwdg.de>
@@ -26,7 +26,7 @@ require_once("$ABSOLUTE_PATH_STUDIP/dates.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
 require_once("$ABSOLUTE_PATH_STUDIP/forum.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
-require_once("$RELATIVE_PATH_CALENDAR/calendar_func.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/calendar_functions.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/Modules.class.php");
 
 $db=new DB_Seminar;
