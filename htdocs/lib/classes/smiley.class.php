@@ -484,7 +484,7 @@ EOT2;
 		echo '<td align="center"',(($this->fc == 'short')? $style:''),'>&nbsp;<a href="', $GLOBALS['PHP_SELF'], '?fc=short">',_('Kürzel'),'</a>&nbsp;</td>',"\n";
 		if($this->SMILEY_COUNTER) echo '<td align="center"',(($this->fc == 'top20')? $style:''),'>&nbsp;<a href="', $GLOBALS['PHP_SELF'], '?fc=top20">',_('Top 20'),'</a>&nbsp;</td>',"\n";
 		if ($GLOBALS['auth']->auth['jscript'])
-			echo '<td class="smiley_th">&nbsp;<a href="javascript:window.close();">Fenster schließen</a>&nbsp;</td>';
+			echo '<td class="smiley_th">&nbsp;<a href="javascript:void(0);" onclick="window.close();">Fenster schließen</a>&nbsp;</td>';
 		echo '</tr></table>';
 	}
 
