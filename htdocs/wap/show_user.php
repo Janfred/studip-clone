@@ -79,12 +79,12 @@
         echo wap_txt_encode_to_wml($e_mail) . "<br/>";
         echo "</p>";
 
-        $q_string  = "SELECT institute.Name, institute.Institut_id ";
-        $q_string .= "FROM user_inst, institute ";
+        $q_string  = "SELECT Institute.Name, Institute.Institut_id ";
+        $q_string .= "FROM user_inst, Institute ";
         $q_string .= "WHERE user_inst.user_id = '$user_id'";
-        $q_string .= "AND user_inst.Institut_id = institute.Institut_id ";
+        $q_string .= "AND user_inst.Institut_id = Institute.Institut_id ";
         $q_string .= "AND user_inst.inst_perms != 'user' ";
-        $q_string .= "ORDER BY institute.Name";
+        $q_string .= "ORDER BY Institute.Name";
         $db-> query("$q_string");
 
         if ($private_nr || $private_adr)

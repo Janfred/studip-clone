@@ -57,7 +57,7 @@
 
         $db = new DB_Seminar;
         $q_string  = "SELECT Strasse, Plz ";
-        $q_string .= "FROM institute ";
+        $q_string .= "FROM Institute ";
         $q_string .= "WHERE Institut_id = \"$inst_id\"";
         $db-> query("$q_string");
         $db-> next_record();
