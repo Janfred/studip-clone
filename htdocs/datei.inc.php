@@ -657,7 +657,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 				$neuer_ordner = FALSE;
 			
 			//Objekttitelzeile ausgeben
-			if (!$all) printhead ("99%", 0, $link, "open", $neuer_ordner, $icon, $titel, $zusatz, $db->f("mkdate")));
+			if (!$all) printhead ("99%", 0, $link, "open", $neuer_ordner, $icon, $titel, $zusatz, $db->f("mkdate"));
 					
 			//Striche erzeugen
 			$striche = "<td class=\"blank\" nowrap background='pictures/forumleer.gif'><img src='pictures/forumleer.gif'><img src='pictures/forumleer.gif'></td>";
@@ -782,9 +782,9 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 				
 				//Dokumenttitelzeile ausgeben
 				if (strstr($open,$db3->f("dokument_id"))) 
-					printhead ("90%", 0, $link, "open", $neue_datei, $icon, $titel, $zusatz, $db3->f("mkdate")));
+					printhead ("90%", 0, $link, "open", $neue_datei, $icon, $titel, $zusatz, $db3->f("mkdate"));
 				else
-					printhead ("90%", 0, $link, "close", $neue_datei, $icon, $titel, $zusatz, $db3->f("mkdate")));
+					printhead ("90%", 0, $link, "close", $neue_datei, $icon, $titel, $zusatz, $db3->f("mkdate"));
 				
 				//Dokumentansicht aufgeklappt 
 				if (strstr($open,$db3->f("dokument_id"))) {  
@@ -885,7 +885,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 				$neuer_ordner = FALSE;
 				
 			//Objekttitelzeile ausgeben
-			if (!$all) printhead ("90%", 0, $link, "close", $neuer_ordner, $icon, $titel, $zusatz, $db->f("mkdate")));
+			if (!$all) printhead ("90%", 0, $link, "close", $neuer_ordner, $icon, $titel, $zusatz, $db->f("mkdate"));
 			if (!$all) echo "<td class=\"blank\">&nbsp;</td></tr></td></table>";
 			}
 
