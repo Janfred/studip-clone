@@ -115,7 +115,7 @@ function checkdata(){
 <tr><td class="blank">
 
 	<? 
-	global $HTTP_COOKIE_VARS, $username, $Vorname, $Nachname, $Email, $title, $ABSOLUTE_PATH_STUDIP;
+	global $HTTP_COOKIE_VARS, $username, $Vorname, $Nachname, $Email, $title_front, $title_rear, $ABSOLUTE_PATH_STUDIP;
 
 	require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
 	include("$ABSOLUTE_PATH_STUDIP/config.inc.php");
@@ -197,58 +197,71 @@ function checkdata(){
 <form name=login onsubmit="return checkdata()">
 <table border=0 bgcolor="#eeeeee" align="center" cellspacing=0 cellpadding=4>
  <tr valign=top align=left>
-  <td>Benutzername:</td>
+  <td colspan="2">Benutzername:</td>
   <td><input type="text" name="username" onchange="checkusername()" value="<?php print (isset($username) ? $username : "" ) ?>" size=32 maxlength=63></td>
  </tr>
 
  <tr valign=top align=left>
-  <td>Passwort:</td>
+  <td colspan="2">Passwort:</td>
   <td><input type="password" name="password" onchange="checkpassword()" size=32 maxlength=31></td>
  </tr>
  
  <tr valign=top align=left>
-  <td>Passwortbest&auml;tigung:</td>
+  <td colspan="2">Passwortbest&auml;tigung:</td>
   <td><input type="password" name="password2" onchange="checkpassword2()" size=32 maxlength=31></td>
  </tr>
 
  <tr valign=top align=left>
-  <td>Titel:&nbsp;&nbsp;&nbsp;<select name="title_chooser" onChange="document.login.title.value=document.login.title_chooser.options[document.login.title_chooser.selectedIndex].text;">
+  <td>Titel:&nbsp;</td><td align="right"><select name="title_chooser_front" onChange="document.login.title_front.value=document.login.title_chooser_front.options[document.login.title_chooser_front.selectedIndex].text;">
   <?
-  for($i = 0; $i < count($TITLE_TEMPLATE); ++$i){
+  for($i = 0; $i < count($TITLE_FRONT_TEMPLATE); ++$i){
 	  echo "\n<option";
-	  if($TITLE_TEMPLATE[$i] == $title)
+	  if($TITLE_FRONT_TEMPLATE[$i] == $title_front)
 	  	echo " selected ";
-	  echo ">$TITLE_TEMPLATE[$i]</option>";
+	  echo ">$TITLE_FRONT_TEMPLATE[$i]</option>";
   }
   ?>
   </select></td>
-  <td><input type="text" name="title" value="<?php print (isset($title) ? $title : "" ) ?>" size=32 maxlength=63></td>
+  <td><input type="text" name="title_front" value="<?php print (isset($title_front) ? $title_front : "" ) ?>" size=32 maxlength=63></td>
+ </tr>
+
+  <tr valign=top align=left>
+  <td>Titel nachgest.:&nbsp;</td><td align="right"><select name="title_chooser_rear" onChange="document.login.title_rear.value=document.login.title_chooser_rear.options[document.login.title_chooser_rear.selectedIndex].text;">
+  <?
+  for($i = 0; $i < count($TITLE_REAR_TEMPLATE); ++$i){
+	  echo "\n<option";
+	  if($TITLE_REAR_TEMPLATE[$i] == $title_rear)
+	  	echo " selected ";
+	  echo ">$TITLE_REAR_TEMPLATE[$i]</option>";
+  }
+  ?>
+  </select></td>
+  <td><input type="text" name="title_rear" value="<?php print (isset($title_rear) ? $title_rear : "" ) ?>" size=32 maxlength=63></td>
  </tr>
 
  
  <tr valign=top align=left>
-  <td>Vorname:</td>
+  <td colspan="2">Vorname:</td>
   <td><input type="text" name="Vorname" onchange="checkVorname()"  value="<?php print (isset($Vorname) ? $Vorname : "" ) ?>"size=32 maxlength=63></td>
  </tr>
 
  <tr valign=top align=left>
-  <td>Nachname:</td>
+  <td colspan="2">Nachname:</td>
   <td><input type="text" name="Nachname" onchange="checkNachname()"  value="<?php print (isset($Nachname) ? $Nachname : "" ) ?>"size=32 maxlength=63></td>
  </tr>
 
 <tr valign=top align=left>
-  <td>Geschlecht:</td>
+  <td colspan="2">Geschlecht:</td>
   <td><input type="RADIO" <? if (!$geschlecht) echo "checked" ?> name="geschlecht" value="0">m&auml;nnlich&nbsp; <input type="RADIO" name="geschlecht" <? if ($geschlecht) echo "checked" ?> value="1">weiblich</td>
  </tr>
 
  <tr valign=top align=left>
-  <td>E-Mail:</td>
+  <td colspan="2">E-Mail:</td>
   <td><input type="text" name="Email" onchange="checkEmail()"  value="<?php print (isset($Email) ? $Email : "" ) ?>"size=32 maxlength=63></td>
  </tr>
 
  <tr>
-  <td>&nbsp;</td>
-  <td align=right><input type="submit" name="submitbtn" value=" Registrieren "></td>
+  <td colspan="3" align=right><input type="submit" name="submitbtn" value=" Registrieren "></td>
  </tr>
 </table>
 <br /><br />

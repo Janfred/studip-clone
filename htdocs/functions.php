@@ -501,6 +501,11 @@ function get_perm($range_id,$user_id="")
  return $status;
 }
 
+
+$_fullname_sql['full'] = "TRIM(CONCAT(title_front,' ',Vorname,' ',Nachname,IF(title_rear!='',CONCAT(', ',title_rear),'')))";
+$_fullname_sql['full_rev'] = "TRIM(CONCAT(Nachname,', ',Vorname,IF(title_front!='',CONCAT(', ',title_front),''),IF(title_rear!='',CONCAT(' (',title_rear,')'),'')))";
+$_fullname_sql['no_title'] = "CONCAT(Vorname ,' ', Nachname)";
+
 /**
 * Retrieves the fullname for a given user_id
 *
@@ -512,14 +517,11 @@ function get_perm($range_id,$user_id="")
 */
 function get_fullname($user_id = "", $format = "full" )
 {
- global $user;
- $fullname_sql['full'] = "TRIM(CONCAT(title,' ',Vorname,' ',Nachname))";
- $fullname_sql['full_rev'] = "TRIM(CONCAT(Nachname,', ',Vorname,IF(title!='',CONCAT(', ',title),'')))";
- $fullname_sql['no_title'] = "CONCAT(Vorname ,' ', Nachname)";
+ global $user,$_fullname_sql;
  $author="unbekannt";
  if (!($user_id)) $user_id=$user->id;
  $db=new DB_Seminar;
- $db->query ("SELECT " . $fullname_sql[$format] . " AS fullname FROM auth_user_md5 a LEFT JOIN user_info USING(user_id) WHERE a.user_id = '$user_id'");
+ $db->query ("SELECT " . $_fullname_sql[$format] . " AS fullname FROM auth_user_md5 a LEFT JOIN user_info USING(user_id) WHERE a.user_id = '$user_id'");
 	 if ($db->next_record())
 			$author = $db->f("fullname");
  return $author;
@@ -535,14 +537,11 @@ function get_fullname($user_id = "", $format = "full" )
 */
 function get_fullname_from_uname($uname = "", $format = "full")
 {
- global $auth;
- $fullname_sql['full'] = "TRIM(CONCAT(title,' ',Vorname,' ',Nachname))";
- $fullname_sql['full_rev'] = "TRIM(CONCAT(Nachname,', ',Vorname,IF(title!='',CONCAT(', ',title),'')))";
- $fullname_sql['no_title'] = "CONCAT(Vorname ,' ', Nachname)";
+ global $auth,$_fullname_sql;
  $author = "unbekannt";
  if (!$uname) $uname=$auth->auth["uname"];
  $db=new DB_Seminar;
- $db->query ("SELECT " . $fullname_sql[$format] . " AS fullname FROM auth_user_md5 LEFT JOIN user_info USING(user_id) WHERE username = '$uname'");
+ $db->query ("SELECT " . $_fullname_sql[$format] . " AS fullname FROM auth_user_md5 LEFT JOIN user_info USING(user_id) WHERE username = '$uname'");
 	if ($db->next_record())
 		$author = $db->f("fullname");
  return $author;

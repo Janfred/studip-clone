@@ -1511,9 +1511,9 @@ if ($level==2)
 										foreach($sem_create_data["sem_bet_inst"] as $val)
 											$clause.=",'$val'";
 									$clause.=")";
-									$db->query ("SELECT DISTINCT username, TRIM(CONCAT(Nachname,', ',Vorname,IF(title!='',CONCAT(', ',title),''))) AS fullname FROM user_inst LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING(user_id) WHERE inst_perms = 'dozent' $clause AND (username LIKE '%$search_exp_doz%' OR Vorname LIKE '%$search_exp_doz%' OR Nachname LIKE '%$search_exp_doz%') ORDER BY Nachname");
+									$db->query ("SELECT DISTINCT username, ". $_fullname_sql['full_rev'] ." AS fullname FROM user_inst LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING(user_id) WHERE inst_perms = 'dozent' $clause AND (username LIKE '%$search_exp_doz%' OR Vorname LIKE '%$search_exp_doz%' OR Nachname LIKE '%$search_exp_doz%') ORDER BY Nachname");
 								} else
-									$db->query ("SELECT username, TRIM(CONCAT(Nachname,', ',Vorname,IF(title!='',CONCAT(', ',title),''))) AS fullname FROM auth_user_md5 LEFT JOIN user_info USING(user_id)  WHERE perms = 'dozent' AND (username LIKE '%$search_exp_doz%' OR Vorname LIKE '%$search_exp_doz%' OR Nachname LIKE '%$search_exp_doz%') ORDER BY Nachname");								
+									$db->query ("SELECT username, ". $_fullname_sql['full_rev'] ." AS fullname FROM auth_user_md5 LEFT JOIN user_info USING(user_id)  WHERE perms = 'dozent' AND (username LIKE '%$search_exp_doz%' OR Vorname LIKE '%$search_exp_doz%' OR Nachname LIKE '%$search_exp_doz%') ORDER BY Nachname");								
 								if ($db->num_rows()) {
 									print "<a name=\"anker\"></a>";
 									printf ("<font size=-1><b>%s</b> Nutzer gefunden:<br />", $db->num_rows());
@@ -1576,9 +1576,9 @@ if ($level==2)
 										foreach($sem_create_data["sem_bet_inst"] as $val)
 											$clause.=",'$val'";
 									$clause.=")";
-									$db->query ("SELECT DISTINCT username, TRIM(CONCAT(Nachname,', ',Vorname,IF(title!='',CONCAT(', ',title),''))) AS fullname FROM user_inst LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING(user_id) WHERE inst_perms IN ('tutor', 'dozent') $clause AND (username LIKE '%$search_exp_tut%' OR Vorname LIKE '%$search_exp_tut%' OR Nachname LIKE '%$search_exp_tut%') ORDER BY Nachname");
+									$db->query ("SELECT DISTINCT username, ". $_fullname_sql['full_rev'] ." AS fullname FROM user_inst LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING(user_id) WHERE inst_perms IN ('tutor', 'dozent') $clause AND (username LIKE '%$search_exp_tut%' OR Vorname LIKE '%$search_exp_tut%' OR Nachname LIKE '%$search_exp_tut%') ORDER BY Nachname");
 								} else
-									$db->query ("SELECT username, TRIM(CONCAT(Nachname,', ',Vorname,IF(title!='',CONCAT(', ',title),''))) AS fullname FROM auth_user_md5 LEFT JOIN user_info USING(user_id) WHERE perms IN ('tutor', 'dozent') AND (username LIKE '%$search_exp_tut%' OR Vorname LIKE '%$search_exp_tut%' OR Nachname LIKE '%$search_exp_tut%') ORDER BY Nachname");								
+									$db->query ("SELECT username, ". $_fullname_sql['full_rev'] ." AS fullname FROM auth_user_md5 LEFT JOIN user_info USING(user_id) WHERE perms IN ('tutor', 'dozent') AND (username LIKE '%$search_exp_tut%' OR Vorname LIKE '%$search_exp_tut%' OR Nachname LIKE '%$search_exp_tut%') ORDER BY Nachname");								
 								if ($db->num_rows()) {
 									print "<a name=\"anker\"></a>";
 									printf ("<font size=-1><b>%s</b> Nutzer gefunden:<br />", $db->num_rows());

@@ -261,15 +261,18 @@ function edit_leben($lebenslauf,$schwerp,$publi,$view)
    }
 
 
-function edit_pers($password,$check_pass,$response,$new_username,$vorname,$nachname,$email,$telefon,$anschrift,$home,$hobby,$geschlecht,$title,$title_chooser,$view)
+function edit_pers($password,$check_pass,$response,$new_username,$vorname,$nachname,$email,$telefon,$anschrift,$home,$hobby,$geschlecht,$title_front,$title_front_chooser,$title_rear,$title_rear_chooser,$view)
 {
 	global $UNI_NAME_CLEAN; 
  //erstmal die "unwichtigen" Daten
  if ($home==$this->default_url)
 	$home='';
- if($title == "")
-	$title = $title_chooser;
-  $this->db->query("UPDATE user_info SET privatnr='$telefon', privadr='$anschrift', Home='$home', hobby='$hobby', geschlecht='$geschlecht', title='$title',chdate='".time()."' WHERE user_id='".$this->auth_user["user_id"]."'");
+ if($title_front == "")
+	$title_front = $title_front_chooser;
+ if($title_rear == "")
+	$title_rear = $title_rear_chooser;
+  $this->db->query("UPDATE user_info SET privatnr='$telefon', privadr='$anschrift', Home='$home', hobby='$hobby', geschlecht='$geschlecht',
+  				title_front='$title_front',title_rear='$title_rear',chdate='".time()."' WHERE user_id='".$this->auth_user["user_id"]."'");
   if ($this->db->affected_rows())
 	   {
 	   $this->msg = $this->msg."msg§Ihre pers&ouml;nlichen Daten wurden ge&auml;ndert.§";
@@ -644,7 +647,7 @@ if ($cmd=="special_edit")
 if ($cmd=="edit_pers")
  {
 
-  $my_about->edit_pers($password,$check_pass,$response,$new_username,$vorname,$nachname,$email,$telefon,$anschrift,$home,$hobby,$geschlecht,$title,$title_chooser,$view);
+  $my_about->edit_pers($password,$check_pass,$response,$new_username,$vorname,$nachname,$email,$telefon,$anschrift,$home,$hobby,$geschlecht,$title_front,$title_front_chooser,$title_rear,$title_rear_chooser,$view);
 
   if (($my_about->auth_user["username"] != $new_username) && $my_about->logout_user == TRUE) $my_about->get_auth_user($new_username);   //username wurde geändert!
    else $my_about->get_auth_user($username);
@@ -921,15 +924,27 @@ IF ($view=="Daten"){
    $cssSw->switchClass();
    echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>Titel: </td>
    		<td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\">&nbsp;";
-	echo "\n<select name=\"title_chooser\" onChange=\"document.pers.title.value=document.pers.title_chooser.options[document.pers.title_chooser.selectedIndex].text;\">";
-	for($i = 0; $i < count($TITLE_TEMPLATE); ++$i){
+	echo "\n<select name=\"title_front_chooser\" onChange=\"document.pers.title_front.value=document.pers.title_front_chooser.options[document.pers.title_front_chooser.selectedIndex].text;\">";
+	for($i = 0; $i < count($TITLE_FRONT_TEMPLATE); ++$i){
 		echo "\n<option";
-		if($TITLE_TEMPLATE[$i] == $my_about->user_info['title'])
+		if($TITLE_FRONT_TEMPLATE[$i] == $my_about->user_info['title_front'])
 		echo " selected ";
-		echo ">$TITLE_TEMPLATE[$i]</option>";
+		echo ">$TITLE_FRONT_TEMPLATE[$i]</option>";
 	}	
 	echo "</select></td><td class=\"".$cssSw->getClass()."\" width=\"60%\" align=\"left\">&nbsp;&nbsp;";
-	echo "<input type=\"text\" size=\"".round($max_col*0.25)."\" name=\"title\" value=\"".$my_about->user_info['title']."\"></td></tr>\n";
+	echo "<input type=\"text\" size=\"".round($max_col*0.25)."\" name=\"title_front\" value=\"".$my_about->user_info['title_front']."\"></td></tr>\n";
+  $cssSw->switchClass();
+ echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\" nowrap><blockquote><b>Titel nachgest.: </td>
+		<td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\">&nbsp;";
+	echo "\n<select name=\"title_rear_chooser\" onChange=\"document.pers.title_rear.value=document.pers.title_rear_chooser.options[document.pers.title_rear_chooser.selectedIndex].text;\">";
+	for($i = 0; $i < count($TITLE_REAR_TEMPLATE); ++$i){
+		echo "\n<option";
+		if($TITLE_REAR_TEMPLATE[$i] == $my_about->user_info['title_rear'])
+		echo " selected ";
+		echo ">$TITLE_REAR_TEMPLATE[$i]</option>";
+	}	
+	echo "</select></td><td class=\"".$cssSw->getClass()."\" width=\"60%\" align=\"left\">&nbsp;&nbsp;";
+	echo "<input type=\"text\" size=\"".round($max_col*0.25)."\" name=\"title_rear\" value=\"".$my_about->user_info['title_rear']."\"></td></tr>\n";
   
    $cssSw->switchClass();
   echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>Geschlecht: </td><td class=\"".$cssSw->getClass()."\" colspan=2 nowrap width=\"80%\" align=\"left\"><font size=-1>&nbsp; m&auml;nnlich&nbsp; <input type=\"RADIO\" name=\"geschlecht\" value=0 ";

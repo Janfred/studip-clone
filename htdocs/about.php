@@ -98,7 +98,7 @@ if (!isset($username) || $username == "")
  else $admin_darf = FALSE;
 
 //Her mit den Daten...
- $db->query("SELECT user_info.* , auth_user_md5.* FROM auth_user_md5 LEFT JOIN user_info USING (user_id) WHERE auth_user_md5.user_id = '$user_id'");
+ $db->query("SELECT user_info.* , auth_user_md5.*,". $_fullname_sql['full'] . " AS fullname FROM auth_user_md5 LEFT JOIN user_info USING (user_id) WHERE auth_user_md5.user_id = '$user_id'");
  $db->next_record();
 
 //daten anzeigen
@@ -127,13 +127,13 @@ if ($msg)
 	if(!file_exists("./user/".$user_id.".jpg")) {
 		echo "&nbsp;<img src=\"./user/nobody.jpg\" width=\"200\" height=\"250\"" . tooltip("kein persönliches Bild vorhanden").">";
 	} else {
-		?>&nbsp;<img src="./user/<?echo $user_id; ?>.jpg" border=1 <?=tooltip(trim($db->f("title"). " " .$db->f("Vorname") . " " . $db->f("Nachname")));?> ></td><?
+		?>&nbsp;<img src="./user/<?echo $user_id; ?>.jpg" border=1 <?=tooltip($db->f("fullname"));?>"></td><?
 	}
     
 	// Hier der Teil fuer die Ausgabe der normalen Daten
 	?>
     <td class="steel1"  width="99%" valign ="top" rowspan=2><br><blockquote>
-    <? echo "<b><font size=7>".htmlReady(trim($db->f("title"). " " .$db->f("Vorname") . " " . $db->f("Nachname")))."</font></b><br><br>";?>
+    <? echo "<b><font size=7>".htmlReady($db->f("fullname"))."</font></b><br><br>";?>
     <? echo "<b>&nbsp;e-mail: </b><a href=\"mailto:". $db->f("Email")."\">".htmlReady($db->f("Email"))."</a><br>";
 		IF ($db->f("privatnr")!="") echo "<b>&nbsp;Telefon (privat): </b>". htmlReady($db->f("privatnr"))."<br>";
 		IF ($db->f("privadr")!="") echo "<b>&nbsp;Adresse (privat): </b>". htmlReady($db->f("privadr"))."<br>";

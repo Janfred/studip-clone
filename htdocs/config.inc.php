@@ -342,7 +342,13 @@ $PERS_TERMIN_KAT[14]=array("name"=>"Reise", "color"=>"#C71585");
 // weitere Kategorien können hier angefügt werden
 
 //Vorgaben für die Titelauswahl
-$TITLE_TEMPLATE = array("",_("Prof."),_("Prof. Dr."),_("Dr."),_("Dipl.Ing."),_("Dipl.Sozw."));
+$TITLE_FRONT_TEMPLATE = array("",_("Prof."),_("Prof. Dr."),_("Dr."),_("PD Dr."),_("Dr. des."),_("Dr. med."),_("Dr. rer. nat."),_("Dr. forest."),
+							_("Dr. sc. agr."),_("Dipl.-Biol."),_("Dipl.-Chem."),_("Dipl.-Ing."),_("Dipl.-Sozw."),_("Dipl.-Geogr."),
+							_("Dipl.-Geol."),_("Dipl.-Geophys."),_("Dipl.-Ing. agr."),_("Dipl.-Kfm."),_("Dipl.-Math."),_("Dipl.-Phys."),
+							_("Dipl.-Psych."),_("M. Sc"),_("B. Sc"));
+$TITLE_REAR_TEMPLATE = array("",_("M.A."),_("B.A."),_("M.S."),_("MBA"),_("Ph.D."),_("Dipl.-Biol."),_("Dipl.-Chem."),_("Dipl.-Ing."),_("Dipl.-Sozw."),_("Dipl.-Geogr."),
+							_("Dipl.-Geol."),_("Dipl.-Geophys."),_("Dipl.-Ing. agr."),_("Dipl.-Kfm."),_("Dipl.-Math."),_("Dipl.-Phys."),
+							_("Dipl.-Psych."),_("M. Sc"),_("B. Sc"));
 
 //Shorts for Smiley
 $SMILE_SHORT = array( //diese Kuerzel fuegen das angegebene Smiley ein (Dateiname + ".gif")

@@ -127,10 +127,13 @@ while ( is_array($HTTP_POST_VARS)
 			$permlist = addslashes(implode($perms,","));
 			$password = generate_password(6);
 			$hashpass = md5($password);
-			if (!$title)
-				$title = $title_chooser;
+			if (!$title_front)
+				$title_front = $title_front_chooser;
+			if (!$title_rear)
+				$title_rear = $title_rear_chooser;
+				
 			$query = "INSERT INTO auth_user_md5 (user_id, username, password, perms, Vorname, Nachname, Email) values('$u_id','$username','$hashpass','$permlist','$Vorname','$Nachname','$Email')";
-			$query2 = "INSERT INTO user_info SET user_id='$u_id', geschlecht='$geschlecht', title='$title', mkdate='".time()."', chdate='".time()."' ";			
+			$query2 = "INSERT INTO user_info SET user_id='$u_id', geschlecht='$geschlecht', title_front='$title_front',title_rear='$title_rear', mkdate='".time()."', chdate='".time()."' ";			
 			$db->query($query);
 			$db2->query($query2);
 
@@ -242,10 +245,12 @@ while ( is_array($HTTP_POST_VARS)
 		if ($run) { // E-Mail erreichbar
 			## Update user information.
 			$permlist = addslashes(implode($perms,","));
-			if (!$title)
-				$title = $title_chooser;
+			if (!$title_front)
+				$title_front = $title_front_chooser;
+			if (!$title_rear)
+				$title_rear = $title_rear_chooser;
 			$query = "UPDATE auth_user_md5 set username='$username', perms='$permlist', Vorname='$Vorname', Nachname='$Nachname', Email='$Email' where user_id='$u_id'";
-			$query2 = "UPDATE user_info SET geschlecht='$geschlecht', title='$title',chdate='".time()."' WHERE user_id = '$u_id' ";			
+			$query2 = "UPDATE user_info SET geschlecht='$geschlecht', title_front='$title_front',title_rear='$title_rear',chdate='".time()."' WHERE user_id = '$u_id' ";			
 			$db->query($query);
 			$db2->query($query2);
 
@@ -610,45 +615,59 @@ if (isset($details)) {
 			<table border=0 bgcolor="#eeeeee" align="center" cellspacing=0 cellpadding=2>
 			<form name="edit" method="post" action="<?php echo $PHP_SELF ?>">
 				<tr>
-					<td><b>&nbsp;Benutzername:</b></td>
+					<td colspan="2"><b>&nbsp;Benutzername:</b></td>
 					<td>&nbsp;<input type="text" name="username" size=24 maxlength=63 value=""></td>
 				</tr>
 				<tr>
-					<td><b>&nbsp;globaler Status:&nbsp;</b></td>
+					<td colspan="2"><b>&nbsp;globaler Status:&nbsp;</b></td>
 					<td>&nbsp;<? print $perm->perm_sel("perms", $db->f("perms")) ?></td>
 				</tr>
 				<tr>
-					<td><b>&nbsp;Vorname:</b></td>
+					<td colspan="2"><b>&nbsp;Vorname:</b></td>
 					<td>&nbsp;<input type="text" name="Vorname" size=24 maxlength=63 value=""></td>
 				</tr>
 				<tr>
-					<td><b>&nbsp;Nachname:</b></td>
+					<td colspan="2"><b>&nbsp;Nachname:</b></td>
 					<td>&nbsp;<input type="text" name="Nachname" size=24 maxlength=63 value=""></td>
 				</tr>
 				<tr>
 				<td><b>&nbsp;Titel:</b>
-				&nbsp;&nbsp;<select name="title_chooser" onChange="document.edit.title.value=document.edit.title_chooser.options[document.edit.title_chooser.selectedIndex].text;">
+				</td><td align="right"><select name="title_front_chooser" onChange="document.edit.title_front.value=document.edit.title_front_chooser.options[document.edit.title_front_chooser.selectedIndex].text;">
 				<?
-				 for($i = 0; $i < count($TITLE_TEMPLATE); ++$i){
+				 for($i = 0; $i < count($TITLE_FRONT_TEMPLATE); ++$i){
 					 echo "\n<option";
-					 if($TITLE_TEMPLATE[$i] == $title)
-					 echo " selected ";
-					 echo ">$TITLE_TEMPLATE[$i]</option>";
+					 //if($TITLE_FRONT_TEMPLATE[$i] == $title_front)
+					 //echo " selected ";
+					 echo ">$TITLE_FRONT_TEMPLATE[$i]</option>";
 				}
 				?>
 				</select></td>
-				<td>&nbsp;<input type="text" name="title" value="" size=24 maxlength=63></td>
+				<td>&nbsp;<input type="text" name="title_front" value="" size=24 maxlength=63></td>
 				</tr>
 				<tr>
-				<td><b>&nbsp;Geschlecht:</b></td>
+				<td><b>&nbsp;Titel nachgest.:</b>
+				</td><td align="right"><select name="title_rear_chooser" onChange="document.edit.title_rear.value=document.edit.title_rear_chooser.options[document.edit.title_rear_chooser.selectedIndex].text;">
+				<?
+				 for($i = 0; $i < count($TITLE_REAR_TEMPLATE); ++$i){
+					 echo "\n<option";
+					 //if($TITLE_REAR_TEMPLATE[$i] == $title_rear)
+					 //echo " selected ";
+					 echo ">$TITLE_REAR_TEMPLATE[$i]</option>";
+				}
+				?>
+				</select></td>
+				<td>&nbsp;<input type="text" name="title_rear" value="" size=24 maxlength=63></td>
+				</tr>
+				<tr>
+				<td colspan="2"><b>&nbsp;Geschlecht:</b></td>
 				<td><input type="RADIO" checked name="geschlecht" value="0">m&auml;nnlich&nbsp;
 				<input type="RADIO" name="geschlecht" value="1">weiblich</td>
 				</tr>
 				<tr>
-					<td><b>&nbsp;E-Mail:</b></td>
+					<td colspan="2"><b>&nbsp;E-Mail:</b></td>
 					<td>&nbsp;<input type="text" name="Email" size=48 maxlength=63 value="">&nbsp;</td>
 				</tr>
-				<td colspan=2 align=center>&nbsp;
+				<td colspan=3 align=center>&nbsp;
 				<input type="submit" name="create" value=" Benutzer anlegen ">&nbsp;
 				<input type="submit" name="nothing" value=" Abbrechen ">
 				&nbsp;</td></tr>
@@ -682,53 +701,67 @@ if (isset($details)) {
 			<table border=0 bgcolor="#eeeeee" align="center" cellspacing=0 cellpadding=2>
 			<form name="edit" method="post" action="<?php echo $PHP_SELF ?>">
 				<tr>
-					<td class="steel1"><b>&nbsp;Benutzername:</b></td>
+					<td colspan="2" class="steel1"><b>&nbsp;Benutzername:</b></td>
 					<td class="steel1">&nbsp;<input type="text" name="username" size=24 maxlength=63 value="<?php $db->p("username") ?>"></td>
 				</tr>
 				<tr>
-					<td class="steel1"><b>&nbsp;globaler Status:&nbsp;</b></td>
+					<td colspan="2" class="steel1"><b>&nbsp;globaler Status:&nbsp;</b></td>
 					<td class="steel1">&nbsp;<? print $perm->perm_sel("perms", $db->f("perms")) ?></td>
 				</tr>
 				<tr>
-					<td class="steel1"><b>&nbsp;Vorname:</b></td>
+					<td colspan="2" class="steel1"><b>&nbsp;Vorname:</b></td>
 					<td class="steel1">&nbsp;<input type="text" name="Vorname" size=24 maxlength=63 value="<?php $db->p("Vorname") ?>"></td>
 				</tr>
 				<tr>
-					<td class="steel1"><b>&nbsp;Nachname:</b></td>
+					<td colspan="2" class="steel1"><b>&nbsp;Nachname:</b></td>
 					<td class="steel1">&nbsp;<input type="text" name="Nachname" size=24 maxlength=63 value="<?php $db->p("Nachname") ?>"></td>
 				</tr>
 				<td class="steel1"><b>&nbsp;Titel:</b>
-				&nbsp;&nbsp;&nbsp;<select name="title_chooser" onChange="document.edit.title.value=document.edit.title_chooser.options[document.edit.title_chooser.selectedIndex].text;">
+				</td><td class="steel1" align="right"><select name="title_front_chooser" onChange="document.edit.title_front.value=document.edit.title_front_chooser.options[document.edit.title_front_chooser.selectedIndex].text;">
 				<?
-				 for($i = 0; $i < count($TITLE_TEMPLATE); ++$i){
+				 for($i = 0; $i < count($TITLE_FRONT_TEMPLATE); ++$i){
 					 echo "\n<option";
-					 if($TITLE_TEMPLATE[$i] == $db->f("title"))
+					 if($TITLE_FRONT_TEMPLATE[$i] == $db->f("title_front"))
 					 	echo " selected ";
-					 echo ">$TITLE_TEMPLATE[$i]</option>";
+					 echo ">$TITLE_FRONT_TEMPLATE[$i]</option>";
 				}
 				?>
 				</select></td>
-				<td class="steel1">&nbsp;<input type="text" name="title" value="<?=$db->f("title")?>" size=24 maxlength=63></td>
+				<td class="steel1">&nbsp;<input type="text" name="title_front" value="<?=$db->f("title_front")?>" size=24 maxlength=63></td>
 				</tr>
 				<tr>
-				<td class="steel1"><b>&nbsp;Geschlecht:</b></td>
+				<td class="steel1"><b>&nbsp;Titel nachgest.:</b>
+				</td><td class="steel1" align="right"><select name="title_rear_chooser" onChange="document.edit.title_rear.value=document.edit.title_rear_chooser.options[document.edit.title_rear_chooser.selectedIndex].text;">
+				<?
+				 for($i = 0; $i < count($TITLE_REAR_TEMPLATE); ++$i){
+					 echo "\n<option";
+					 if($TITLE_REAR_TEMPLATE[$i] == $db->f("title_rear"))
+					 	echo " selected ";
+					 echo ">$TITLE_REAR_TEMPLATE[$i]</option>";
+				}
+				?>
+				</select></td>
+				<td class="steel1">&nbsp;<input type="text" name="title_rear" value="<?=$db->f("title_rear")?>" size=24 maxlength=63></td>
+				</tr>
+				<tr>
+				<td colspan="2" class="steel1"><b>&nbsp;Geschlecht:</b></td>
 				<td class="steel1"><input type="RADIO" <? if (!$db->f("geschlecht")) echo "checked";?> name="geschlecht" value="0">m&auml;nnlich&nbsp;
 				<input type="RADIO" <? if ($db->f("geschlecht")) echo "checked";?> name="geschlecht" value="1">weiblich</td>
 				</tr>
 				<tr>
-					<td class="steel1"><b>&nbsp;E-Mail:</b></td>
+					<td colspan="2" class="steel1"><b>&nbsp;E-Mail:</b></td>
 					<td class="steel1">&nbsp;<input type="text" name="Email" size=48 maxlength=63 value="<?php $db->p("Email") ?>">&nbsp;</td>
 				</tr>
 				<tr>
-					<td class="steel1"><b>&nbsp;inaktiv seit:</b></td>
+					<td colspan="2" class="steel1"><b>&nbsp;inaktiv seit:</b></td>
 					<td class="steel1">&nbsp;<? echo $inactive ?></td>
 				</tr>
 				<tr>
-					<td class="steel1"><b>&nbsp;registriert seit</b></td>
+					<td colspan="2" class="steel1"><b>&nbsp;registriert seit</b></td>
 					<td class="steel1">&nbsp;<? if ($db->f("mkdate")) echo date("d.m.y, G:i", $db->f("mkdate")); else echo "unbekannt"; ?></td>
 				</tr>
 				
-				<td class="steel1" colspan=2 align=center>&nbsp;
+				<td class="steel1" colspan=3 align=center>&nbsp;
 				<input type="hidden" name="u_id"	 value="<?php $db->p("user_id") ?>">
 				<?
 				if ($perm->have_perm("root") || 
@@ -744,10 +777,10 @@ if (isset($details)) {
 				&nbsp;</td></tr>
 			</form>
 			
-			<tr><td colspan=2 class="blank">&nbsp;</td></tr>
+			<tr><td colspan=3 class="blank">&nbsp;</td></tr>
 			
 			<? // links to everywhere
-			print "<tr><td class=\"steelgraulight\" colspan=2 align=\"center\">";
+			print "<tr><td class=\"steelgraulight\" colspan=3 align=\"center\">";
 				printf("&nbsp;pers&ouml;nliche Homepage <a href=\"about.php?username=%s\"><img src=\"pictures/einst.gif\" border=0 alt=\"Zur pers&ouml;nlichen Homepage des Benutzers\" align=\"texttop\"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp", $db->f("username"));
 				printf("&nbsp;Nachricht an Benutzer <a href=\"sms.php?cmd=write&rec_uname=%s\"><img src=\"pictures/nachricht1.gif\" alt=\"Nachricht an den Benutzer verschicken\" border=0 align=\"texttop\"></a>", $db->f("username"));
 			print "</td></tr>";
@@ -758,12 +791,12 @@ if (isset($details)) {
 			else
 				$db2->query("SELECT Institute.Institut_id, Name FROM user_inst AS x LEFT JOIN user_inst AS y USING (Institut_id) LEFT JOIN Institute USING (Institut_id) WHERE x.user_id ='$temp_user_id' AND x.inst_perms != 'user' AND y.user_id = '$user->id' AND y.inst_perms = 'admin'");
 			if ($db2->num_rows()) {
-				print "<tr><td class=\"steel2\" colspan=2 align=\"center\">";
+				print "<tr><td class=\"steel2\" colspan=3 align=\"center\">";
 				print "<b>&nbsp;Link zur Mitarbeiter-Verwaltung&nbsp;</b>";
 				print "</td></tr>\n";
 			}
 			while ($db2->next_record()) {
-				print "<tr><td class=\"steel2\" colspan=2 align=\"center\">";
+				print "<tr><td class=\"steel2\" colspan=3 align=\"center\">";
 				printf ("&nbsp;%s <a href=\"inst_admin.php?details=%s&inst=%s\"><img src=\"pictures/admin.gif\" border=0 align=\"texttop\" alt=\"&Auml;ndern der Eintr&auml;ge des Benutzers in der jeweiligen Einrichtung\"></a>&nbsp;", htmlReady($db2->f("Name")), $db->f("username"), $db2->f("Institut_id"));
 				print "</td></tr>\n";
 			}	

@@ -506,7 +506,7 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 			<td class="<? echo $cssSw->getClass() ?>"  colspan=2 align="left">
 				<font size=-1><b><?=_("Anmeldeverfahren:")?></b><br /></font>
 				<? if (($admin_admission_data["admission_type_org"]) && (!$perm->have_perm("admin"))) {
-					$db->query("SELECT username, TRIM(CONCAT(title,' ',Vorname,' ',Nachname)) as fullname FROM user_inst LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING(user_id) WHERE institut_id ='".$admin_admission_data["heimat_inst_id"]."' AND perms = 'admin'");
+					$db->query("SELECT username, ". $_fullname_sql['full'] . "  as fullname FROM user_inst LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING(user_id) WHERE institut_id ='".$admin_admission_data["heimat_inst_id"]."' AND perms = 'admin'");
 					if  (!$db->num_rows())
 						printf ("<font size=-1>"._("Sie haben ein Anmeldeverfahren aktiviert. Dieser Schritt kann %s nicht %s r&uuml;ckg&auml;ngig gemacht werden! Bei Problemen wenden sie sich bitte an einen der Administratoren.")."<br /></font>", "</font><font size=-1 color=\"red\"><b>", "</b></font><font size=-1>");
 					else

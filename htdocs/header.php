@@ -24,6 +24,8 @@ if (!$perm->have_perm("user"))
 
 require_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/ChatShmServer.class.php";
 require_once ($ABSOLUTE_PATH_STUDIP . "visual.inc.php");
+require_once ($ABSOLUTE_PATH_STUDIP . "functions.php");
+
 
 //nur sinnvoll wenn chat eingeschaltet
 if ($CHAT_ENABLE) {
@@ -72,10 +74,10 @@ else {   // Benutzer angemeldet
 
 		// wer ist ausser mir online
 		$now = time(); // nach eingestellter Zeit (default = 5 Minuten ohne Aktion) zaehlt man als offline
-		$query = "SELECT CONCAT(Vorname,' ',Nachname) AS full_name,($now-UNIX_TIMESTAMP(changed)) AS lastaction,a.username,a.user_id,title FROM active_sessions LEFT JOIN auth_user_md5 a ON (a.user_id=sid) LEFT JOIN user_info USING(user_id) WHERE changed > '".date("YmdHis",$now - ($my_messaging_settings["active_time"] * 60))."' AND sid != 'nobody' AND sid != '".$auth->auth["uid"]."' AND active_sessions.name = 'Seminar_User' ORDER BY changed DESC";
+		$query = "SELECT " . $_fullname_sql['full'] . " AS full_name,($now-UNIX_TIMESTAMP(changed)) AS lastaction,a.username,a.user_id FROM active_sessions LEFT JOIN auth_user_md5 a ON (a.user_id=sid) LEFT JOIN user_info USING(user_id) WHERE changed > '".date("YmdHis",$now - ($my_messaging_settings["active_time"] * 60))."' AND sid != 'nobody' AND sid != '".$auth->auth["uid"]."' AND active_sessions.name = 'Seminar_User' ORDER BY changed DESC";
 		$db->query($query);
 		while ($db->next_record()){
-			$online[$db->f("username")] = array("name"=>$db->f("full_name"),"last_action"=>$db->f("lastaction"),"userid"=>$db->f("user_id"),"title"=>$db->f("title"));      
+			$online[$db->f("username")] = array("name"=>$db->f("full_name"),"last_action"=>$db->f("lastaction"),"userid"=>$db->f("user_id"));      
 		}
 		
 		//Chatnachrichten zaehlen (wenn Sender Online)
