@@ -640,7 +640,6 @@ if (($cmd_e_x) || ($add_studg_x) || ($sem_delete_studg)) {
 	}
 }
 
-
 //wenn alles stimmt, Sprung auf Schritt 5 (Anlegen)
 if ($cmd_e_x)
 	{
