@@ -37,20 +37,20 @@ if ($SessSemName["class"]=="inst") {
 	$structure["folder"]=array (topKat=>"", name=>_("Dateien"), link=>"folder.php?cmd=tree", active=>FALSE);
 	$structure["dates"]=array (topKat=>"", name=>_("Ablaufplan"), link=>"dates.php", active=>FALSE);
 	$structure["literatur"]=array (topKat=>"", name=>_("Literatur"), link=>"literatur.php", active=>FALSE);
-	if ($ILIAS_CONNECT_ENABLE) {
-		if (get_seminar_modules($SessSemName[1]) != false)
-			$structure["lernmodule"]=array (topKat=>"", name=>_("Lernmodule"), link=>"seminar_lernmodule.php?seminar_id=".$SessSemName[1], active=>FALSE);
-		elseif  ($perm->have_studip_perm("dozent",$SessSemName[1]))
-			$structure["lernmodule"]=array (topKat=>"", name=>_("Lernmodule"), link=>"seminar_lernmodule.php?view=edit&seminar_id=".$SessSemName[1], active=>FALSE);
-/*		else $nolink = true;
-		if (($nolink != true) AND (get_connected_user_id($auth->auth["uid"]) == false))
-			$structure["lernmodule"]=array (topKat=>"", name=>_("Lernmodule"), link=>"migration2studip.php", active=>FALSE);/**/
-	}
 	if ($RESOURCES_ENABLE) {
 		require_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
 		if (checkAvaiableResources ($SessSemName[1]))
 			$structure["resources"]=array (topKat=>"", name=>_("Ressourcen"), link=>"resources.php?view=openobject_main&view_mode=no_nav", active=>FALSE);
 	}
+}
+if ($ILIAS_CONNECT_ENABLE) {
+	if (get_seminar_modules($SessSemName[1]) != false)
+		$structure["lernmodule"]=array (topKat=>"", name=>_("Lernmodule"), link=>"seminar_lernmodule.php?seminar_id=".$SessSemName[1], active=>FALSE);
+	elseif  ($perm->have_studip_perm("dozent",$SessSemName[1]))
+		$structure["lernmodule"]=array (topKat=>"", name=>_("Lernmodule"), link=>"seminar_lernmodule.php?view=edit&seminar_id=".$SessSemName[1], active=>FALSE);
+/*		else $nolink = true;
+		if (($nolink != true) AND (get_connected_user_id($auth->auth["uid"]) == false))
+			$structure["lernmodule"]=array (topKat=>"", name=>_("Lernmodule"), link=>"migration2studip.php", active=>FALSE);/**/
 }
 
 //Bottomkats
@@ -125,22 +125,21 @@ if ($RESOURCES_ENABLE) {
 	$structure["resources_overview"]=array (topKat=>"resources", name=>_("&Uuml;bersicht"), link=>"resources.php?view=openobject_main", active=>FALSE);
 	$structure["resources_details"]=array (topKat=>"resources", name=>_("Details"), link=>"resources.php?view=openobject_details", active=>FALSE);
 	$structure["resources_schedule"]=array (topKat=>"resources", name=>_("Belegung"), link=>"resources.php?view=openobject_schedule", active=>FALSE);
-	if ($perm->have_studip_perm("autor", $SessSemName[1]))
-		$structure["resources_assign"]=array (topKat=>"resources", name=>_("Belegungen bearbeiten"), link=>"resources.php?view=openobject_assign", active=>FALSE);
+	$structure["resources_assign"]=array (topKat=>"resources", name=>_("Belegungen bearbeiten"), link=>"resources.php?view=openobject_assign", active=>FALSE);
 	if ($rechte)
 		$structure["resources_admin"]=array (topKat=>"resources", name=>_("Ressourcen verwalten"), link=>"resources.php", active=>FALSE);
 }
 
 if ($ILIAS_CONNECT_ENABLE) {
-//	if (get_connected_user_id($auth->auth["uid"]) != false)
-//	{
-		if (get_seminar_modules($SessSemName[1]) != false)
+	if (get_seminar_modules($SessSemName[1]) != false)
+	{
+		if ($SessSemName["class"]=="inst") 
 			$structure["lernmodule_show"]=array (topKat=>"lernmodule", name=>_("Lernmodule dieser Veranstaltung"), link=>"seminar_lernmodule.php?view=show&seminar_id=" . $SessSemName[1], active=>FALSE);
-		if  ($perm->have_studip_perm("dozent",$SessSemName[1]))
-			$structure["lernmodule_edit"]=array (topKat=>"lernmodule", name=>_("Lernmodule hinzuf&uuml;gen / entfernen"), link=>"seminar_lernmodule.php?view=edit&seminar_id=" . $SessSemName[1], active=>FALSE);
-//	}
-//	if  ($perm->have_perm("user"))
-//		$structure["lernmodule_user"]=array (topKat=>"lernmodule", name=>_("Mein ILIAS-Account"), link=>"migration2studip.php", active=>FALSE);
+		else		
+			$structure["lernmodule_show"]=array (topKat=>"lernmodule", name=>_("Lernmodule dieser Einrichtung"), link=>"seminar_lernmodule.php?view=show&seminar_id=" . $SessSemName[1], active=>FALSE);
+	}
+	if  ($perm->have_studip_perm("dozent",$SessSemName[1]))
+		$structure["lernmodule_edit"]=array (topKat=>"lernmodule", name=>_("Lernmodule hinzuf&uuml;gen / entfernen"), link=>"seminar_lernmodule.php?view=edit&seminar_id=" . $SessSemName[1], active=>FALSE);
 }
 
 
@@ -246,8 +245,8 @@ switch ($i_page) {
 	case "literatur.php": 
 		$reiter_view="literatur";
 	break;
-//	case "migration2studip.php": 
-//		$reiter_view="lernmodule_user";
+	case "migration2studip.php": 
+		$reiter_view="lernmodule_user";
 	break;
 	case "seminar_lernmodule.php": 
 		switch ($view) {
