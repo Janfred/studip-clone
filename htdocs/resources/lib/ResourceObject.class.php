@@ -46,7 +46,7 @@ class ResourceObject {
 		$argn = func_num_args();
 		if ($argn == 1){
 			if ( ($id = func_get_arg(0)) ){
-				if (is_object($ressource_object_pool[$id])){
+				if (is_object($ressource_object_pool[$id]) && $ressource_object_pool[$id]->getId() == $id){
 					return $ressource_object_pool[$id];
 				} else {
 					$ressource_object_pool[$id] =& new ResourceObject($id);
@@ -444,7 +444,7 @@ class ResourceObject {
 				$this->is_room = true;
 			}
 		}
-		return (!is_null($this->is_parent));
+		return (!is_null($this->is_room));
 	}
 	
 	function isLocked() {
