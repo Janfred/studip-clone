@@ -4,6 +4,8 @@ global $RELATIVE_PATH_CALENDAR;
 require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/SemBrowse.class.php");
 require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/DataFields.class.php");
 require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/SemesterData.class.php");
+require_once($ABSOLUTE_PATH_STUDIP . "dates.inc.php");
+
 
 class ExternSemBrowseTable extends SemBrowse {
 	
@@ -42,7 +44,7 @@ class ExternSemBrowseTable extends SemBrowse {
 		$switch_time = mktime(0, 0, 0, date("m"),
 				date("d") + 7 * $this->module->config->getValue("Main", "semswitch"), date("Y"));
 		// get current semester
-		$current_sem = get_sem_num($switch_time);
+		$current_sem = get_sem_num($switch_time) + 1;
 		
 		switch ($this->module->config->getValue("Main", "semstart")) {
 			case "previous" :
@@ -214,8 +216,8 @@ class ExternSemBrowseTable extends SemBrowse {
 			}
 			
 			// generic datafields
-	//		if ($generic_datafields = $this->module->config->getValue("Main", "genericdatafields"))
-		//		$datafields_obj =& new DataFields();
+			if ($generic_datafields = $this->module->config->getValue("Main", "genericdatafields"))
+				$datafields_obj =& new DataFields();
 			
 			if ($this->module->config->getValue("Main", "addinfo")) {
 				$info = "&nbsp;" . count($sem_data);
@@ -310,7 +312,7 @@ class ExternSemBrowseTable extends SemBrowse {
 						else {
 							$data["content"]["status"] =
 									htmlReady($SEM_TYPE[key($sem_data[$seminar_id]["status"])]["name"]
-									." (". $SEM_CLASS[$SEM_TYPE[key($sem_data[$seminar_id]["status"])]]["name"].")");
+									." (". $SEM_CLASS[$SEM_TYPE[key($sem_data[$seminar_id]["status"])]["class"]]["name"].")");
 						}
 						
 						$data["content"]["Ort"] = getRoom($seminar_id, FALSE, 0, "sem");
