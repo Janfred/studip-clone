@@ -59,7 +59,6 @@ include($ABSOLUTE_PATH_STUDIP . "links_admin.inc.php");  //Linkleiste fuer admin
 <?
 echo getHeaderLine($range_id) . " - ";
 echo _("Verwaltung der externen Anzeigemodule");
-reset($EXTERN_MODULE_TYPES);
 foreach ($EXTERN_MODULE_TYPES as $key => $type) {
 	if ($type["module"] == $mod) {
 		echo " ({$EXTERN_MODULE_TYPES[$key]['name']})";
@@ -99,17 +98,19 @@ if ($com == "info") {
 	exit;
 }
 
-$main_element_command = FALSE;
-$main_element_commands = array("show", "hide", "move_left", "move_right", "show_group", "hide_group");
-reset($main_element_commands);
-foreach ($main_element_commands as $element_command) {
-	if ($HTTP_POST_VARS[$element_command]) {
-		$pos_tmp = array_keys($HTTP_POST_VARS[$element_command]);
-		$pos = $pos_tmp[0];
-		$main_element_command = $element_command;
-		$com = "store";
+$element_command = FALSE;
+if ($edit) {
+	$element_commands = array("show", "hide", "move_left", "move_right", "show_group", "hide_group");
+	foreach ($element_commands as $element_command) {
+		$element_command_form = $edit . "_" . $element_command;
+		if ($HTTP_POST_VARS[$element_command_form]) {
+			$pos_tmp = array_keys($HTTP_POST_VARS[$element_command_form]);
+			$pos = $pos_tmp[0];
+			$execute_command = $element_command;
+			$com = "store";
+		}
 	}
-}	
+}
 
 if ($com == "new" || $com == "edit" || $com == "open" ||
 		$com == "close" || $com == "store") {
@@ -148,7 +149,6 @@ echo "<blockquote><font size=\"2\">";
 $configurations = get_all_configurations($range_id);
 
 $choose_module_form = "";
-reset($EXTERN_MODULE_TYPES);
 foreach ($EXTERN_MODULE_TYPES as $module_types) {
 	if (sizeof($configurations[$module_types["module"]]) < $EXTERN_MAX_CONFIGURATIONS) {
 		$choose_module_form .= "<option value=\"{$module_types['module']}\">"
@@ -211,6 +211,7 @@ else {
 			$css_switcher_2->resetClass();
 			
 			foreach ($configurations[$module_type["module"]] as $configuration) {
+				$css_switcher_2->switchClass();
 				echo "<tr><td" . $css_switcher_2->getFullClass() . " width=\"65%\"><font size=\"2\">";
 				echo "&nbsp;" . $configuration["name"] . "</font></td>\n";
 				echo "<td" . $css_switcher_2->getFullClass() . " width=\"5%\">";
@@ -249,8 +250,6 @@ else {
 				echo makeButton("bearbeiten", "src") . " border=\"0\"";
 				$tooltip = _("Konfiguration bearbeiten");
 				echo tooltip($tooltip) . "></a>&nbsp;\n</td></tr>\n";
-				
-				$css_switcher_2->switchClass();
 			}
 			
 			$css_switcher_2->resetClass();
