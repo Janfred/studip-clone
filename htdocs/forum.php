@@ -289,7 +289,9 @@ if ($delete_id) {
 			$forumposting["mkdate"] = $db->f("mkdate");
 			$forumposting["chdate"] = $db->f("chdate");
 			$forumposting["buttons"] = "no";
+			
 			printposting($forumposting);
+			
 			echo "<br></td></tr></table>\n<br></td></tr></table>";	
 			page_close();
 			die;

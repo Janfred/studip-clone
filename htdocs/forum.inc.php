@@ -261,11 +261,12 @@ function suche_kinder($topic_id)  //Sucht alle aufgeklappten Beitraege raus
 *
 **/
 function ForumOpenClose ($forumposting) {
-	global $forum, $openall, $open, $folderopen;
+	global $forum, $openall, $open, $folderopen, $delete_id;
 	if (strstr($forum["openlist"],$forumposting["id"])!=TRUE
 	AND !($openall == "TRUE" && $forumposting["rootid"] == $folderopen)
 	AND !(($forum["view"]=="flat" || $forum["view"]=="neue" || $forum["view"]=="flat" || $forum["view"]=="flatfolder" || $forum["view"]=="search") && $forum["flatallopen"]=="TRUE")
 	AND !($forumposting["newold"]=="new" && $forum["neuauf"]==1) 
+	AND !$delete_id
 	AND ($forumposting["writestatus"]=="none")) {
 		$forumposting["openclose"] = "close";
 	} else {
@@ -1021,12 +1022,12 @@ function printposting ($forumposting) {
 			$favtxt = _("zu den Favoriten hinzufügen");
 		}
 		$rand = "&random=".rand();
-		if ($user->id != "nobody") // Nobody kriegt keine Favoriten
+		if ($user->id != "nobody" && !$delete_id) // Nobody kriegt keine Favoriten, auch nicht in der Löschen-Ansicht
 			$forumhead[] = "<a href=\"$PHP_SELF?fav=".$forumposting["id"]."&open=$openorig".$rand."&flatviewstartposting=".$forum["flatviewstartposting"]."#anker\"><img src=\"".$favicon."\" border=\"0\" ".tooltip($favtxt).">&nbsp;</a>";
 		
 	// Antwort-Pfeil
 		
-		if (!(have_sem_write_perm())) 
+		if (!(have_sem_write_perm()) && !$delete_id) 
 			$forumhead[] = "<a href=\"write_topic.php?write=1&root_id=".$forumposting["rootid"]."&topic_id=".$forumposting["id"]."\" target=\"_new\"><img src=\"pictures/antwortnew.gif\" border=0 " . tooltip(_("Hier klicken um in einem neuen Fenster zu antworten")) . "></a>"; 
   		
   		$zusatz = ForumParseZusatz($forumhead);
@@ -1088,7 +1089,7 @@ function printposting ($forumposting) {
 
 	// Anzeigen der Sidebar /////////////
 		
-		if ($sidebar==$forumposting["id"] || $forum["rateallopen"]==TRUE) {  
+		if (($sidebar==$forumposting["id"] || $forum["rateallopen"]==TRUE) && !$delete_id) {  
 			
 			$addon = "<img src=\"pictures/blank.gif\" width=\"140\" height=\"5\">";
 			
@@ -1124,7 +1125,7 @@ function printposting ($forumposting) {
 					$addon .= "<font size=\"-1\">&nbsp;&nbsp;Sie haben diesen&nbsp;<br>&nbsp;&nbsp;Beitrag bewertet.";
 				}
 			}
-		} elseif ($user->id != "nobody")  // nur Aufklapppfeil
+		} elseif ($user->id != "nobody" && !$delete_id)  // nur Aufklapppfeil
 			$addon = "open:$PHP_SELF?open=".$forumposting["id"]."&flatviewstartposting=".$forum["flatviewstartposting"]."&sidebar=".$forumposting["id"]."#anker";		
   
   // Kontentzeile ausgeben
