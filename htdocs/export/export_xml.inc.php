@@ -101,7 +101,7 @@ if (($o_mode == "file") OR ($o_mode == "choose"))
 //		$export_info = _("Die Daten wurden in eine XML-Datei exportiert. <br>Wenn Sie die Datei in ein anderes Format konvertieren wollen, klicken Sie auf weiter.<br>Um die Datei herunterzuladen, klicken Sie auf den Dateinamen.");
 
 //		$export_weiter_button = "<br><br><center><a href=\"" . $PHP_SELF . "?xml_file_id=" . $xml_file_id . "&ex_type=" . $ex_type . "&o_mode=choose\">" . makeButton("weiter") . "</a></center>";
-
+		$export_weiter_button = "<br><br><center><input type=\"IMAGE\" " . makeButton("zurueck", "src") . " value=\"" . _("Zur&uuml;ck") . "\" name=\"back\">&nbsp;</center>";
 		$xml_printimage = "<a href=\"sendfile.php?type=2&file_id=$xml_file_id&file_name=$xml_filename\"><img src=\"./pictures/" . $export_icon["xml"] . "\" border=0></a>";
 		$xml_printlink = "<a href=\"sendfile.php?type=2&file_id=$xml_file_id&file_name=$xml_filename\" class=\"tree\">" . $xml_filename . "</a>";
 		$xml_printdesc = _("XML-Daten");
@@ -124,9 +124,9 @@ if (($o_mode == "file") OR ($o_mode == "choose"))
 			$infobox[1]["eintrag"][] = array (	"icon" => "pictures/icon-disc.gif" ,
 										"text"  => sprintf(_("Um die XML-Datei jetzt herunterzuladen klicken Sie %s hier %s."), $link, "</a>")
 									);
-			$infobox[1]["eintrag"][] = array (	"icon" => "pictures/forumgrau.gif" ,
-										"text"  => _("Wenn Sie die Daten in ein anderes Format konvertieren wollen, klicken Sie auf 'weiter'.")
-									);
+//			$infobox[1]["eintrag"][] = array (	"icon" => "pictures/forumgrau.gif" ,
+//										"text"  => _("Wenn Sie die Daten in ein anderes Format konvertieren wollen, klicken Sie auf 'weiter'.")
+//									);
 	}
 	
 }
