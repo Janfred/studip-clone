@@ -236,7 +236,7 @@ function quotes_encode($description,$author)
 ////////////////////////////////////////////////////////////////////////////////
 
 function formatReady($what, $trim = TRUE){
-	return smile(FixLinks(format(htmlReady($what, $trim, FALSE)), FALSE));
+	return symbol(smile(FixLinks(format(htmlReady($what, $trim, FALSE)), FALSE)));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -382,14 +382,27 @@ function preg_call_link($name, $link, $mod) {
 	return $tbr;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////
-
+/**
+* create smileys
+*
+* This functions converts the smileys codes (":name:") notation an the shorts, 
+* located in the config.inc into the assigned pictures. 
+* On every smiley a link to show_smiley.php overview is given. A tooltip which 
+* shows the smiley code is given, too.
+*
+* @access	public        
+* @param		string	the text to convert
+* @return		string	convertet text
+*/
 function smile ($text= "") {
 	global $SMILE_SHORT, $SMILE_PATH, $CANONICAL_RELATIVE_PATH_STUDIP;
 	if(empty($text)) {
 		return $text;
 	}
+	//smileys in the ":name:" notation
 	$text=preg_replace("'(\>|^|\s):([_a-zA-Z][_a-z0-9A-Z-]*):($|\<|\s)'m","\\1<a href=\"{$CANONICAL_RELATIVE_PATH_STUDIP}show_smiley.php\" target=\"_blank\"><img alt=\"\\2\" title=\"\\2\" border=\"0\" src=\"$CANONICAL_RELATIVE_PATH_STUDIP$SMILE_PATH/\\2.gif\"></a>\\3",$text);
+	
+	//smileys in short notation
 	reset($SMILE_SHORT);
 	WHILE (list($key,$value) = each($SMILE_SHORT)) {
 		$text=str_replace($key,"<a href=\"{$CANONICAL_RELATIVE_PATH_STUDIP}show_smiley.php\" target=\"_blank\"><img ".tooltip($value)." border=\"0\" src=\"$CANONICAL_RELATIVE_PATH_STUDIP$SMILE_PATH/$value.gif\"></a>",$text);
@@ -397,6 +410,33 @@ function smile ($text= "") {
 	return $text;
 }
 
+
+/**
+* create symbols from the shorts
+*
+* This functions converts the short, locatet in the config.inc
+* into the assigned pictures. It uses a different directory
+* as the smile-function, becauso symbols should not be shown in
+* the smiley and so, no link is given onto the picture. A tooltip which 
+* shows the symbol code is given, too.
+*
+* @access	public        
+* @param		string	the text to convert
+* @return		string	convertet text
+*/
+function symbol ($text= "") {
+	global $SYMBOL_SHORT, $SYMBOL_PATH, $CANONICAL_RELATIVE_PATH_STUDIP;
+	if(empty($text)) {
+		return $text;
+	}
+
+	//symbols in short notation
+	reset($SYMBOL_SHORT);
+	WHILE (list($key,$value) = each($SYMBOL_SHORT)) {
+		$text=str_replace($key,"<img ".tooltip($key)." border=\"0\" src=\"$CANONICAL_RELATIVE_PATH_STUDIP$SYMBOL_PATH/$value.gif\">",$text);
+	}
+	return $text;
+}
 
 //Beschneidungsfunktion fuer alle printhead Ausgaben
 function mila ($titel,$size=60){
