@@ -374,7 +374,7 @@ class ExternElement {
 						$fault[$form_name][$i] = !preg_match("/^(-|\+)*(1|2|3|4|5|6|7)$/", $value[$i]);
 						break;
 					case "face" :
-						$fault[$form_name][$i] = !preg_match("/^(Verdana,Arial,Helvetica,sans-serif|"
+						$fault[$form_name][$i] = !preg_match("/^(Arial,Helvetica,sans-serif|"
 								. "Times,Times New Roman,serif|Courier,Courier New,monospace)$/", $value[$i]);
 						break;
 					case "background" :
@@ -424,13 +424,12 @@ class ExternElement {
 		if (in_array(TRUE, $fault))
 			return $fault;
 		
-		// these two values are included in every "main"-element
-		$HTTP_POST_VARS["Main_order"] = $this->config["Main"]["order"];
-		$HTTP_POST_VARS["Main_visible"] = $this->config["Main"]["visible"];
-		
 		return FALSE;
 	}
 	
-	function checkValue ($attribute, $value) {}
+	function checkValue ($attribute, $value) {
+	
+		return FALSE;
+	}
 	
 }
