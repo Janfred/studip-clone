@@ -835,7 +835,6 @@ if (($form == 3) && ($jump_next_x))
 		//check for room management: we dont allow the preliminary discussion matches a turnus date (in this case, a schedule schoudl be used!)
 		if ((!$sem_create_data["term_art"]) && ($RESOURCES_ENABLE)) {
 			$tmp_vor_day = date("w", $sem_create_data["sem_vor_termin"]);
-			echo $tmp_vor_day;
 			if ($tmp_vor_day == 0)
 				$tmp_vor_day = 7;
 			for ($i=0; $i<$sem_create_data["turnus_count"]; $i++) {
