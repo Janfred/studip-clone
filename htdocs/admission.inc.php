@@ -103,8 +103,10 @@ function update_admission ($seminar_id, $send_message=TRUE) {
 	$db5=new DB_Seminar;
 	$messaging=new messaging;
 	
+	echo checkpoint0;
 	//Daten holen / Abfrage ob ueberhaupt begrenzt
 	$db->query("SELECT Seminar_id, Name, admission_endtime, admission_turnout, admission_type, start_time FROM seminare WHERE Seminar_id = '$seminar_id' AND admission_selection_take_place = '1' ");
+	echo checkpoint1;
 	if ($db->next_record()) {
 		//anzahl der freien Plaetze holen
 		$count=get_free_admission($seminar_id);
