@@ -227,8 +227,10 @@ class ChatServer {
 	}
 	
 	function getMsTime(){
-			$microtime = explode(' ', microtime());
-			return (double)($microtime[1].substr($microtime[0],1));
+			//$microtime = explode(' ', microtime());
+			//return (double)($microtime[1].substr($microtime[0],1));
+			list($usec, $sec) = explode(" ",microtime()); 
+			return ((float)$usec + (float)$sec);
 	}
 
 
