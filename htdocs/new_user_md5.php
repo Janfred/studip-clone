@@ -534,9 +534,9 @@ while ( is_array($HTTP_POST_VARS)
 			$db->query($query);
 			$query = "delete from active_sessions where sid = '$u_id'";
 			$db->query($query);
-			$query = "delete from globalmessages where user_id_rec = '$u_id'";
+			$query = "delete from globalmessages where user_id_rec = '$username'";
 			$db->query($query);
-			$query = "delete from globalmessages where user_id_snd = '$u_id'";
+			$query = "delete from globalmessages where user_id_snd = '$username'";
 			$db->query($query);
 			$query = "delete from user_info where user_id= '$u_id'";
 			$db->query($query);
