@@ -20,7 +20,7 @@ if ($SessSemName["class"]=="inst") {
 	if ($RESOURCES_ENABLE) {
 		require_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
 		if (checkAvaiableResources ($SessSemName[1]))
-			$structure["resources"]=array (topKat=>"", name=>"Ressourcen", link=>"resources.php?view=openobject_main", active=>FALSE);
+			$structure["resources"]=array (topKat=>"", name=>"Ressourcen", link=>"resources.php?view=openobject_main&view_mode=oobj", active=>FALSE);
 	}
 } else {
 	$structure["seminar_main"]=array (topKat=>"", name=>"&Uuml;bersicht", link=>"seminar_main.php", active=>FALSE);
@@ -32,7 +32,7 @@ if ($SessSemName["class"]=="inst") {
 	if ($RESOURCES_ENABLE) {
 		require_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
 		if (checkAvaiableResources ($SessSemName[1]))
-			$structure["resources"]=array (topKat=>"", name=>"Ressourcen", link=>"resources.php?view=openobject_main", active=>FALSE);
+			$structure["resources"]=array (topKat=>"", name=>"Ressourcen", link=>"resources.php?view=openobject_main&view_mode=oobj", active=>FALSE);
 	}
 }
 

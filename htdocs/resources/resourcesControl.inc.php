@@ -51,8 +51,12 @@ include ("$RELATIVE_PATH_RESOURCES/lib/evaluate_values.php");
 
 
 //Create Reitersystem
-if ($SessSemName[1])
+
+//load correct nav
+if ($resources_data["view_mode"] == "oobj")
 	include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
+elseif ($resources_data["view_mode"] == "res")
+	;
 else
 	include ("$RELATIVE_PATH_RESOURCES/views/links_resources.inc.php");
 
