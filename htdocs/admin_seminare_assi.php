@@ -2505,16 +2505,17 @@ if ($level == 4) {
 			<td class="blank" valign="top">
 				<blockquote>
 				<b><?=_("Schritt 4: Raumangaben"); ?></b><br><br>
-				<? if (($RESOURCES_ALLOW_ROOM_REQUESTS) && ($RESOURCES_ENABLE)) {
-					if ($resList->roomsExist())
-						print _("Bitte geben Sie hier ein, welche Angaben zu R&auml;umen gemacht werden, buchen Sie konkrete R&auml;ume oder stellen sie Raumw&uuml;nsche an die zentrale Raumverwaltung.")."<br><br>";
-					else
-						print _("Bitte geben Sie hier ein, welche Angaben zu R&auml;umen gemacht werden oder stellen Sie Raumw&uuml;nsche an die zentrale Raumverwaltung.")."<br><br>";					
-				} elseif (($resList->roomsExist()) && ($RESOURCES_ENABLE))
-					print _("Bitte geben Sie hier ein, welche Angaben zu R&auml;umen gemacht werden oder buchen Sie konkrete R&auml;ume.")."<br><br>";
-				else
+				<? 
+				if ($RESOURCES_ENABLE) {
+					if ($RESOURCES_ALLOW_ROOM_REQUESTS) {
+						if ($resList->roomsExist())
+							print _("Bitte geben Sie hier ein, welche Angaben zu R&auml;umen gemacht werden, buchen Sie konkrete R&auml;ume oder stellen sie Raumw&uuml;nsche an die zentrale Raumverwaltung.")."<br><br>";
+						else
+							print _("Bitte geben Sie hier ein, welche Angaben zu R&auml;umen gemacht werden oder stellen Sie Raumw&uuml;nsche an die zentrale Raumverwaltung.")."<br><br>";					
+					} elseif ($resList->roomsExist()
+						print _("Bitte geben Sie hier ein, welche Angaben zu R&auml;umen gemacht werden oder buchen Sie konkrete R&auml;ume.")."<br><br>";
+				} else
 					print _("Bitte geben Sie hier die, welche Angaben zu R&auml;umen gemacht werden.")."<br><br>";
-					
 				?>
 			</td>
 			<td class="blank" align="right" valign="top">
