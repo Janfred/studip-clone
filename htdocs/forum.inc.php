@@ -1390,11 +1390,10 @@ function DisplayFolders ($open=0, $update="", $zitat="") {
 		echo "<a href='".$PHP_SELF."?neuesthema=TRUE#anker'><img src='pictures/forumgraurunt.gif' border=0 align=middle " . tooltip(_("Neues Thema anlegen")) . "><img src='pictures/cont_folder2.gif' " . tooltip(_("Neues Thema anlegen")) . " border=0 align=middle></a>";
 	echo "</td></tr><tr><td class=blank>&nbsp; <br>&nbsp; <br></td></tr></table>\n";
 	
-	/*
 	echo DebugForum($forum);
 	echo "<hr>";
 	echo DebugForum($forumposting);
-	*/
+	
 	
 	if ($update)
 		echo "</form>\n";
