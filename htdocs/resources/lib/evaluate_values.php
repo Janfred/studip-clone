@@ -1047,7 +1047,7 @@ if ($save_state_x) {
 	elseif (is_array ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"])) {
 		$i=0;
 		//check, if one assignment should assigned to a room, which is only particularly free - so we have treat every single date
-		if (($semObj->getMetaDateType == 0) && (!isSchedule($semObj->getId()))) {
+		if (($semObj->getMetaDateType == 0) && (!isSchedule($semObj->getId(), FALSE))) {
 			foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"] as $key=>$val) {
 				if ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][$i]) {
 					$overlap_events_count = $val["overlap_events_count"][$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][$i]];
@@ -1060,7 +1060,7 @@ if ($save_state_x) {
 			}
 		}
 	
-		if (($semObj->getMetaDateType() == 1) || (isSchedule($semObj->getId()))) {
+		if (($semObj->getMetaDateType() == 1) || (isSchedule($semObj->getId(), FALSE))) {
 			$assignObjects = $semResAssign->getDateAssignObjects(TRUE);
 		} else {
 			$assignObjects = $semResAssign->getMetaAssignObjects();
@@ -1086,7 +1086,7 @@ if ($save_state_x) {
 			$semObj->store();
 			
 		//normal metadate mode
-		} elseif (($semObj->getMetaDateType() == 0) && (!isSchedule($semObj->getId()))) {
+		} elseif (($semObj->getMetaDateType() == 0) && (!isSchedule($semObj->getId(), FALSE))) {
 			foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"] as $key=>$val) {
 				$assignObjects[$key]->setResourceId($val);
 				if (!$particular_free) {
@@ -1100,7 +1100,7 @@ if ($save_state_x) {
 			$result = $semResAssign->changeDateAssign($reqObj->getTerminId(), $resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][0]);
 		
 		//multiple dates mode
-		} elseif (($semObj->getMetaDateType() == 1) || (isSchedule($semObj->getId()))) {
+		} elseif (($semObj->getMetaDateType() == 1) || (isSchedule($semObj->getId(), FALSE))) {
 			foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"] as $key=>$val){
 				$result = array_merge($result, $semResAssign->changeDateAssign($key, $resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][$key]));
 				$result_termin_id[] = $key;
@@ -1143,7 +1143,7 @@ if ($save_state_x) {
 			}
 		
 		//create msgs, normal metadate mode, and update the matadata (we save the resource there too), if no overlaps detected and create msg's
-		} elseif (($semObj->getMetaDateType() == 0) && (!$particular_free) && (!isSchedule($semObj->getId()))) {
+		} elseif (($semObj->getMetaDateType() == 0) && (!$particular_free) && (!isSchedule($semObj->getId(), FALSE))) {
 			$i=0;
 			$assign_ids = array_keys($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"]);
 			foreach ($result as $key=>$val) {
@@ -1210,7 +1210,7 @@ if ($save_state_x) {
 		
 		//update seminar-date (save the new resource_ids)
 		if ($succesful_assigned) {
-			if (($semObj->getMetaType == 0) && (!isSchedule($semObj->getId())))
+			if (($semObj->getMetaType == 0) && (!isSchedule($semObj->getId(), FALSE)))
 				$semObj->store();
 		}
 		
@@ -1319,7 +1319,7 @@ if (($inc_request_x) || ($dec_request_x) || ($start_single_mode_x) || ($marked_c
 		$assignObjects = array();
 		if ($reqObj->getTerminId()) {
 			$assignObjects[] = $semResAssign->getDateAssignObject($reqObj->getTerminId());
-		} elseif (($semObj->getMetaDateType() == 1) || (isSchedule($semObj->getId(), TRUE)))
+		} elseif (($semObj->getMetaDateType() == 1) || (isSchedule($semObj->getId(), FALSE, TRUE)))
 			$assignObjects = $semResAssign->getDateAssignObjects(TRUE);
 		else
 			$assignObjects = $semResAssign->getMetaAssignObjects();
@@ -1327,7 +1327,7 @@ if (($inc_request_x) || ($dec_request_x) || ($start_single_mode_x) || ($marked_c
 		$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"]=array();
 		if (is_array($assignObjects)) {
 			//set the time range to check;
-			if (($semObj->getMetaDateType() == 1) || ($reqObj->getTerminId()) || (isSchedule($semObj->getId()))) {
+			if (($semObj->getMetaDateType() == 1) || ($reqObj->getTerminId()) || (isSchedule($semObj->getId(), FALSE))) {
 				$multiOverlaps->setAutoTimeRange($assignObjects);
 			} else {
 				$multiOverlaps->setTimeRange($semObj->getSemesterStartTime(), $all_semester[get_sem_num($semObj->getSemesterStartTime())]["ende"]); //!!!!!
@@ -1341,8 +1341,8 @@ if (($inc_request_x) || ($dec_request_x) || ($start_single_mode_x) || ($marked_c
 			}
 			//do checks
 			$result = array();
-			if ((($semObj->getMetaDateType() == 0) && (!isSchedule($semObj->getId())))
-				|| (($semObj->getMetaDateType() == 1) && (isSchedule($semObj->getId()) < $GLOBALS["RESOURCES_ALLOW_SINGLE_DATE_GROUPING"]))
+			if ((($semObj->getMetaDateType() == 0) && (!isSchedule($semObj->getId(), FALSE)))
+				|| (($semObj->getMetaDateType() == 1) && (isSchedule($semObj->getId(), FALSE) < $GLOBALS["RESOURCES_ALLOW_SINGLE_DATE_GROUPING"]))
 				|| ($reqObj->getTerminId())) {
 				//in this cases, we handle it assin-object based (every column in the tool is one assign-object)
 				$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["grouping"] = FALSE;
