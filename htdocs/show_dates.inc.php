@@ -22,11 +22,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA	02111-1307, USA.
 require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/dates.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
+
 if ($GLOBALS["CALENDAR_ENABLE"])
 	require_once($RELATIVE_PATH_CALENDAR . "/lib/DbCalendarEventList.class.php");
 	
 function show_dates ($date_start, $date_end, $open, $range_id = "", $show_not = 0,
-		$show_docs = TRUE, $show_admin = FALSE, $full_width = TRUE) { 
+		$show_docs = TRUE, $show_admin = FALSE, $full_width = TRUE, $show_as_window = TRUE) { 
 	global $PHP_SELF, $SessSemName, $user, $TERMIN_TYP, $username;	
 	
 	// wenn man keinen Start und Endtag angibt, soll wohl alles angezeigt werden
@@ -123,31 +125,33 @@ function show_dates ($date_start, $date_end, $open, $range_id = "", $show_not = 
 			echo "\n<tr><td>";
 		}
 		echo "\n<table border=\"0\" cellpadding=\"2\" cellspacing=\"0\" width=\"100%\" align=\"center\">";
-		if ($show_admin) {
-			$colspan++;
-			if (!$show_whole_time) {
-				printf("\n<tr><td class=\"topic\" width=\"99%%\">&nbsp;<img src=\"./pictures/meinetermine.gif\" border=\"0\" %s align=\"texttop\"><b>&nbsp;&nbsp;", tooltip(_("Termine. Klicken Sie auf die Pfeile (rechts), um Termine in diesen Bereich zu bearbeiten. Klicken Sie auf den einfachen Pfeil, um die Terminbeschreibung zu lesen.")));
-				printf(_("Termine für die Zeit vom %s bis zum %s"), strftime("%d. %B %Y", $date_start), strftime("%d. %B %Y", $date_end));
-				printf("</b></td>\n<td align = \"right\" class=\"topic\">&nbsp;$admin_link<img src=\"./pictures/pfeillink.gif\" border=\"0\" %s ></a>&nbsp;</td></tr>", tooltip(_("Neuen Termin anlegen")));
-				} 
-			else {
-				printf("\n<tr><td class=\"topic\" width=\"99%%\">&nbsp;<img src=\"./pictures/meinetermine.gif\" border=\"0\" %s align=\"texttop\"><b>&nbsp;&nbsp;", tooltip(_("Termine. Klicken Sie auf die Pfeile (rechts), um Termine in diesen Bereich zu bearbeiten. Klicken Sie auf den einfachen Pfeil, um die Terminbeschreibung zu lesen.")));
-				printf(_("Termine"));
-				printf("</b></td>\n<td align = \"right\" class=\"topic\">&nbsp;$admin_link<img src=\"./pictures/pfeillink.gif\" border=\"0\" %s ></a>&nbsp;</td></tr>", tooltip(_("Neuen Termin anlegen")));
+		if ($show_as_window) {
+			if ($show_admin) {
+				$colspan++;
+				if (!$show_whole_time) {
+					printf("\n<tr><td class=\"topic\" width=\"99%%\">&nbsp;<img src=\"./pictures/meinetermine.gif\" border=\"0\" %s align=\"texttop\"><b>&nbsp;&nbsp;", tooltip(_("Termine. Klicken Sie auf die Pfeile (rechts), um Termine in diesen Bereich zu bearbeiten. Klicken Sie auf den einfachen Pfeil, um die Terminbeschreibung zu lesen.")));
+					printf(_("Termine für die Zeit vom %s bis zum %s"), strftime("%d. %B %Y", $date_start), strftime("%d. %B %Y", $date_end));
+					printf("</b></td>\n<td align = \"right\" class=\"topic\">&nbsp;$admin_link<img src=\"./pictures/pfeillink.gif\" border=\"0\" %s ></a>&nbsp;</td></tr>", tooltip(_("Neuen Termin anlegen")));
+					} 
+				else {
+					printf("\n<tr><td class=\"topic\" width=\"99%%\">&nbsp;<img src=\"./pictures/meinetermine.gif\" border=\"0\" %s align=\"texttop\"><b>&nbsp;&nbsp;", tooltip(_("Termine. Klicken Sie auf die Pfeile (rechts), um Termine in diesen Bereich zu bearbeiten. Klicken Sie auf den einfachen Pfeil, um die Terminbeschreibung zu lesen.")));
+					printf(_("Termine"));
+					printf("</b></td>\n<td align = \"right\" class=\"topic\">&nbsp;$admin_link<img src=\"./pictures/pfeillink.gif\" border=\"0\" %s ></a>&nbsp;</td></tr>", tooltip(_("Neuen Termin anlegen")));
+					}
 				}
-			}
-		else
-			if (!$show_whole_time) {
-				printf("\n<tr valign=\"baseline\"><td class=\"topic\">&nbsp;<img src=\"./pictures/meinetermine.gif\" border=\"0\" %s align=\"texttop\"><b>&nbsp;&nbsp;", tooltip(_("Termine. Klicken Sie auf den Pfeil, um eine Beschreibung des Termins anzuzeigen.")));
-				printf(_("Termine für die Zeit vom %s bis zum %s"), strftime("%d. %B %Y", $date_start), strftime("%d. %B %Y", $date_end));
-				print("</b></td></tr>");
-			} else {
-				printf("\n<tr valign=\"baseline\"><td class=\"topic\">&nbsp;<img src=\"./pictures/meinetermine.gif\" border=\"0\" %s align=\"texttop\"><b>&nbsp;&nbsp;", tooltip(_("Termine. Klicken Sie auf den Pfeil, um eine Beschreibung des Termins anzuzeigen.")));
-				printf(_("Termine"));
-				print("</b></td></tr>");
-			}
-		echo "\n";
-
+			else
+				if (!$show_whole_time) {
+					printf("\n<tr valign=\"baseline\"><td class=\"topic\">&nbsp;<img src=\"./pictures/meinetermine.gif\" border=\"0\" %s align=\"texttop\"><b>&nbsp;&nbsp;", tooltip(_("Termine. Klicken Sie auf den Pfeil, um eine Beschreibung des Termins anzuzeigen.")));
+					printf(_("Termine für die Zeit vom %s bis zum %s"), strftime("%d. %B %Y", $date_start), strftime("%d. %B %Y", $date_end));
+					print("</b></td></tr>");
+				} else {
+					printf("\n<tr valign=\"baseline\"><td class=\"topic\">&nbsp;<img src=\"./pictures/meinetermine.gif\" border=\"0\" %s align=\"texttop\"><b>&nbsp;&nbsp;", tooltip(_("Termine. Klicken Sie auf den Pfeil, um eine Beschreibung des Termins anzuzeigen.")));
+					printf(_("Termine"));
+					print("</b></td></tr>");
+				}
+			echo "\n";
+		}
+	
 		// Ausgabe der Daten
 		echo "\n<tr><td class=\"blank\" colspan=$colspan>";
 		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" align=\"center\"><tr><td class=\"blank\">";
@@ -210,8 +214,6 @@ function show_dates ($date_start, $date_end, $open, $range_id = "", $show_not = 
 				}			
 			}
 			
-			
-			
 			if ($open != $db->f("termin_id"))
 				$link=$PHP_SELF."?dopen=".$db->f("termin_id").$add_to_link."#a";
 			else
@@ -230,7 +232,6 @@ function show_dates ($date_start, $date_end, $open, $range_id = "", $show_not = 
 				printhead(0, 0, $link, "close", $new, $icon, $titel, $zusatz, $db->f("chdate"));
 
 			echo "</tr></table>	";
-					
 			if ($open == $db->f("termin_id")) {
 				echo "<a name=\"a\"></a>";
 			
@@ -241,8 +242,12 @@ function show_dates ($date_start, $date_end, $open, $range_id = "", $show_not = 
 					$content.=_("Keine Beschreibung vorhanden") . "<br /><br />";
 
 				$content.="<b>" . _("Art des Termins:") . "</b> ".$TERMIN_TYP[$db->f("date_typ")]["name"].",&nbsp;";
-
 				$content.="<b>" . _("angelegt von:") . "</b> ".get_fullname($db->f("autor_id"))."<br />";
+	
+				if ($show_admin)
+					$content .= sprintf("<br /><div align=\"center\"><a href=\"./admin_dates.php?show_id=%s#anchor\">"
+							. makeButton("terminaendern", "img")
+							. "</a></div>", $db->f("termin_id"));
 
 				echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr>";
 				printcontent(0,0, $content, $edit);
@@ -255,7 +260,7 @@ function show_dates ($date_start, $date_end, $open, $range_id = "", $show_not = 
 		return TRUE;
 	}
 	
-	else if ($show_admin) {	// keine Termine da, aber die Moeglichkeit welche einzustellen
+	elseif (($show_admin) && ($show_as_window)) {	//no dates, but the possibility to create one (only, if show_dates is used in window-style)
 		if (!$full_width) {
 			echo "\n<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" class=\"blank\" width=\"70%\">";
 			echo "\n<tr><td>";
@@ -270,7 +275,21 @@ function show_dates ($date_start, $date_end, $open, $range_id = "", $show_not = 
 			echo "</td></tr></table>\n";
 		return TRUE;
 	}
-	
+
+	elseif (!$show_as_window) {
+		if (!$full_width) {
+			echo "\n<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" class=\"blank\" width=\"70%\">";
+			echo "\n<tr><td>";
+		}
+		print("\n<table border=\"0\" cellpadding=\"1\" cellspacing=\"0\" width=\"100%\" align=\"center\">");
+		print("\n<tr><td class=\"blank\" colspan=\"2\"><blockquote><br /><font size=-1>");
+		parse_msg ("info§"._("Es sind keine aktuellen Termine vorhanden."));
+		print("\n</td></tr></table>\n");
+		if (!$full_width)
+			echo "</td></tr></table>\n";
+		return TRUE;
+	}
+
 	else {
 		return FALSE;
 	}
