@@ -40,7 +40,7 @@ define("PHPDOC_DUMMY",true);
 
 require("$ABSOLUTE_PATH_STUDIP/html_head.inc.php");
 
-if ($forum["jshover"]==1 AND $auth->auth["jscript"]) { // JS an und erwuenscht?
+if ($forum["jshover"] == 1 AND $auth->auth["jscript"]) { // JS an und erwuenscht?
 	echo "<script language=\"JavaScript\">";
 	echo "var ol_textfont = \"Arial\"";
 	echo "</script>";
@@ -221,31 +221,7 @@ function print_month_events ($month_obj, $max_events, $day_timestamp) {
 		printf("<br><a class=\"inday\" href=\"%s?cmd=edit&termin_id=%s&atime=%s%s\"",
 				$PHP_SELF, $aterm->getId(), $day_timestamp, $ev_type);
 		
-		$jscript_text = array();
-		if ($forum["jshover"] == 1 AND $auth->auth["jscript"]) { // Hovern
-			if ($aterm->getDescription())
-				$jscript_text[] = '<b>' . _("Beschreibung:") . ' </b> ' . $aterm->getDescription();
-			if ($categories = $aterm->toStringCategories())
-				$jscript_text[] = '<b>' . _("Kategorie:") . " </b> $categories";
-			if ($aterm->getProperty('LOCATION'))
-				$jscript_text[] = '<b>' . _("Ort:") . ' </b> ' . $aterm->getProperty('LOCATION');
-			if (get_class($aterm) != 'seminarevent') {
-				$jscript_text[] = '<b>' . _("Priorit&auml;t:") . ' </b>' . $aterm->toStringPriority();
-				$jscript_text[] = '<b>' . _("Zugriff:") . ' </b>' . $aterm->toStringAccessibility();
-				$jscript_text[] = '<b>' . _("Wiederholung:") . ' </b>' . $aterm->toStringRecurrence();
-			}
-				
-			$jscript_text = "'" . JSReady(implode('<br />', $jscript_text), 'contact')
-									. "',CAPTION,'"
-									. strftime("%H:%M-",$aterm->getStart())
-									. strftime("%H:%M",$aterm->getEnd())
-									. "&nbsp; &nbsp; " . $jscript_title
-									. "',NOCLOSE,CSSOFF";
-			
-			echo " onmouseover=\"return overlib($jscript_text);\" ";
-			echo "onmouseout=\"return nd();\"";
-		}
-		echo '>';
+		echo js_hover($aterm) . '>';
 		$category_style = $aterm->getCategoryStyle();
 		printf("<font color=\"%s\">%s</font></a>", $category_style['color'], $html_title);
 		$count++;

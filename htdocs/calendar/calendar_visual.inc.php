@@ -180,9 +180,10 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 		foreach ($tmp_day_event as $day_event) {
 			$category_style = $day_event->getCategoryStyle($bg_image);
 			$title = fit_title($day_event->getTitle(), 1, 1, $title_length);
-			$title_str = sprintf("<a style=\"color: #FFFFFF; font-size:10px;\" href=\"$PHP_SELF?cmd=edit&termin_id=%s&atime=%s%s\">"
+			$title_str = sprintf("<a style=\"color: #FFFFFF; font-size:10px;\" href=\"$PHP_SELF?cmd=edit&termin_id=%s&atime=%s%s\" %s>"
 													, $day_event->getId(), $day_event->getStart()
-													, get_class($term[$zeile][$j]) == "seminarevent" ? "&evtype=sem" : "");
+													, get_class($term[$zeile][$j]) == "seminarevent" ? "&evtype=sem" : ""
+													, js_hover($day_event));
 			$title_str .= $title . '</a>';
 			$day_event_row[0] .= "<tr><td height=\"20\" valign=\"top\" style=\"border-style:solid; border-width:1px; border-color:";
 			$day_event_row[0] .= $category_style['color'] . "; background-image:url(";
@@ -355,10 +356,11 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 					if ($rows == 1) {
 						$title = fit_title($title_out, $colsp[$zeile], $rows, $title_length - 6);
 						
-						$tab[$zeile] .= sprintf("<a style=\"color: #FFFFFF;\" href=\"$PHP_SELF?cmd=edit&termin_id=%s&atime=%d%s\">"
+						$tab[$zeile] .= sprintf("<a style=\"color: #FFFFFF;\" href=\"$PHP_SELF?cmd=edit&termin_id=%s&atime=%d%s\" %s>"
 													, $term[$zeile][$j]->getId()
 													, ($day_obj->getStart() + $term[$zeile][$j]->getStart() % 86400)
-													, get_class($term[$zeile][$j]) == "seminarevent" ? "&evtype=sem" : "");
+													, get_class($term[$zeile][$j]) == "seminarevent" ? "&evtype=sem" : ""
+													, js_hover($term[$zeile][$j]));
 						$tab[$zeile] .= $title . "</a>";
 					}
 					else {
@@ -367,10 +369,11 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 						$tab[$zeile] .= $category_style['color'];
 						$tab[$zeile] .= ";\">" . date('H.i-', $day_obj->events[$mapping[$zeile][$j]]->getStart());
 						$tab[$zeile] .= date('H.i', $day_obj->events[$mapping[$zeile][$j]]->getEnd()) . "</div>\n";
-						$tab[$zeile] .= sprintf("<a style=\"color: #FFFFFF;\" href=\"$PHP_SELF?cmd=edit&termin_id=%s&atime=%d%s\">"
+						$tab[$zeile] .= sprintf("<a style=\"color: #FFFFFF;\" href=\"$PHP_SELF?cmd=edit&termin_id=%s&atime=%d%s\" %s>"
 													, $term[$zeile][$j]->getId()
 													, ($day_obj->getStart() + $term[$zeile][$j]->getStart() % 86400)
-													, get_class($term[$zeile][$j]) == "seminarevent" ? "&evtype=sem" : "");
+													, get_class($term[$zeile][$j]) == "seminarevent" ? "&evtype=sem" : ""
+													, js_hover($term[$zeile][$j]));
 						$tab[$zeile] .= $title . "</a>";
 					}
 					if ($term[$zeile][$j]->getRepeat('rtype') != 'SINGLE') {
@@ -720,5 +723,39 @@ function fit_title ($title, $cols, $rows, $max_length, $end_str = "...", $pad = 
 	return $new_title;
 }	
 
-
+function js_hover ($aterm) {
+	global $forum, $auth;
+	
+	if ($forum["jshover"] == 1 AND $auth->auth["jscript"]) { // Hovern
+		$jscript_text = array();
+		
+		if (get_class($aterm) == "seminarevent")
+			$jscript_title = JSReady($aterm->getSemName());
+		else
+			$jscript_title = JSReady($aterm->getTitle());
+		
+		if ($aterm->getDescription())
+			$jscript_text[] = '<b>' . _("Beschreibung:") . ' </b> ' . $aterm->getDescription();
+		if ($categories = $aterm->toStringCategories())
+			$jscript_text[] = '<b>' . _("Kategorie:") . " </b> $categories";
+		if ($aterm->getProperty('LOCATION'))
+			$jscript_text[] = '<b>' . _("Ort:") . ' </b> ' . $aterm->getProperty('LOCATION');
+		if (get_class($aterm) != 'seminarevent') {
+			$jscript_text[] = '<b>' . _("Priorit&auml;t:") . ' </b>' . $aterm->toStringPriority();
+			$jscript_text[] = '<b>' . _("Zugriff:") . ' </b>' . $aterm->toStringAccessibility();
+			$jscript_text[] = '<b>' . _("Wiederholung:") . ' </b>' . $aterm->toStringRecurrence();
+		}
+			
+		$jscript_text = "'" . JSReady(implode('<br />', $jscript_text), 'contact')
+								. "',CAPTION,'"
+								. strftime("%H:%M-",$aterm->getStart())
+								. strftime("%H:%M",$aterm->getEnd())
+								. "&nbsp; &nbsp; ". $jscript_title
+								. "',NOCLOSE,CSSOFF";
+		
+		return " onmouseover=\"return overlib($jscript_text);\" onmouseout=\"return nd();\"";
+	}
+	
+	return "";
+}
 ?>

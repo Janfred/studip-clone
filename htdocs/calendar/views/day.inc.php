@@ -39,6 +39,15 @@ define("PHPDOC_DUMMY",true);
 // +---------------------------------------------------------------------------+
 
 require("$ABSOLUTE_PATH_STUDIP/html_head.inc.php");
+
+if ($forum["jshover"] == 1 AND $auth->auth["jscript"]) { // JS an und erwuenscht?
+	echo "<script language=\"JavaScript\">";
+	echo "var ol_textfont = \"Arial\"";
+	echo "</script>";
+	echo "<DIV ID=\"overDiv\" STYLE=\"position:absolute; visibility:hidden; z-index:1000;\"></DIV>";
+	echo "<SCRIPT LANGUAGE=\"JavaScript\" SRC=\"overlib.js\"></SCRIPT>";
+}
+
 require("$ABSOLUTE_PATH_STUDIP/header.php");
 require($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/views/navigation.inc.php");
 
