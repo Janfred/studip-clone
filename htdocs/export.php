@@ -1,28 +1,50 @@
 <?
-/*
-
-Copyright (C) 2002 
-
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+/**
+* Export-mainfile. Calls the submodules.
+* 
+* 
+*
+* @author		Arne Schroeder <schroeder@data.quest.de>
+* @version		$Id$
+* @access		public
+* @modulegroup	export_modules
+* @module		export
+* @package		Export
 */
+/**
+* workaround for PHPDoc
+*
+* Use this if module contains no elements to document !
+* @const PHPDOC_DUMMY
+*/
+define("PHPDOC_DUMMY",true);
+// +---------------------------------------------------------------------------+
+// This file is part of Stud.IP
+// export.php
+//
+// Copyright (c) 2002 Arne Schroeder <schroeder@data-quest.de> 
+// Suchi & Berg GmbH <info@data-quest.de>
+// +---------------------------------------------------------------------------+
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or any later version.
+// +---------------------------------------------------------------------------+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+// +---------------------------------------------------------------------------+
+
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
 $perm->check("dozent");
 
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
-$i_page = "meine_seminare.php";
+//$i_page = "meine_seminare.php";
 $EXPORT_ENABLE = true;
 $XSLT_ENABLE = false;
 $PATH_EXPORT = "export";
@@ -60,6 +82,9 @@ if ($EXPORT_ENABLE)
 			$xslt_process_done = true;
 	}
 	
+	if (($export_error_num < 1) AND ($xslt_process_done) AND ($format == "fo"))
+		include($ABSOLUTE_PATH_STUDIP ."" . $PATH_EXPORT . "/export_run_fop.inc.php");
+
 	if (($export_error_num < 1) AND (!$xml_output_done) AND (!$xslt_choose_done) AND (!$xslt_process_done))
 	{
 		$export_pagename = "Exportmodul - Fehler!";

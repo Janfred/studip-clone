@@ -1,4 +1,26 @@
 <?
+// +---------------------------------------------------------------------------+
+// This file is part of Stud.IP
+// export_run_xslt.inc.php
+// Integration of xslt-processor
+// 
+// Copyright (c) 2002 Arne Schroeder <schroeder@data-quest.de> 
+// Suchi & Berg GmbH <info@data-quest.de>
+// +---------------------------------------------------------------------------+
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or any later version.
+// +---------------------------------------------------------------------------+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+// +---------------------------------------------------------------------------+
+
 $perm->check("dozent");
 
 require_once ("$ABSOLUTE_PATH_STUDIP$PATH_EXPORT/export_config.inc.php");   // Konfigurationsdatei
@@ -35,7 +57,7 @@ $export_pagename = _("Download der Ausgabedatei");
 if (!CheckParamRUN()) 
 {
 	$infobox = array(			
-	array ("kategorie"  => "Information:",
+	array ("kategorie"  => _("Information:"),
 		"eintrag" => array	(	
 						array (	"icon" => "pictures/ausruf_small.gif",
 								"text"  => _("Die Parametern, mit denen diese Seite aufgerufen wurde, sind fehlerhaft.")
@@ -112,7 +134,7 @@ else
 
 
 		$infobox = array	(			
-		array ("kategorie"  => "Information:",
+		array ("kategorie"  => _("Information:"),
 			"eintrag" => array	(	
 							array (	"icon" => "pictures/ausruf_small.gif",
 									"text"  => $xslt_info
@@ -122,8 +144,8 @@ else
 		);
 		if ($xslt_process)
 		{
-			$infobox[1]["kategorie"] = "Aktionen:";
-				$infobox[1]["eintrag"][] = array (	"icon" => "pictures/nachricht1.gif" ,
+			$infobox[1]["kategorie"] = _("Aktionen:");
+				$infobox[1]["eintrag"][] = array (	"icon" => "pictures/icon-disc.gif" ,
 											"text"  => sprintf(_("Um die Ausgabe-Datei herunterzuladen, klicken Sie %s hier %s."), $link2, "</a>")
 										);
 		}

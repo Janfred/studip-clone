@@ -1,4 +1,26 @@
 <?
+// +---------------------------------------------------------------------------+
+// This file is part of Stud.IP
+// export_choose_xslt.inc.php
+// pages for choosing an xslt-script
+// 
+// Copyright (c) 2002 Arne Schroeder <schroeder@data-quest.de> 
+// Suchi & Berg GmbH <info@data-quest.de>
+// +---------------------------------------------------------------------------+
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or any later version.
+// +---------------------------------------------------------------------------+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+// +---------------------------------------------------------------------------+
+
 $perm->check("dozent");
 
 require_once ("$ABSOLUTE_PATH_STUDIP$PATH_EXPORT/export_config.inc.php");   // Konfigurationsdatei
@@ -46,7 +68,7 @@ if (!CheckParamXSLT())
 {
 	$export_pagename .= _("Es ist ein Fehler aufgetreten ");
 	$infobox = array(			
-	array ("kategorie"  => "Information:",
+	array ("kategorie"  => _("Information:"),
 		"eintrag" => array	(	
 						array (	"icon" => "pictures/ausruf_small.gif",
 								"text"  => _("Die Parameter, mit denen diese Seite aufgerufen wurde, sind fehlerhaft oder unvollständig.")
@@ -65,7 +87,7 @@ elseif (!isset($page) or ($page == 0)) // Seite 1 : Auswahl des Dateiformats
 
 	$export_pagecontent .= "<form method=\"POST\" action=\"" . $PHP_SELF . "\">";
 	
-	$export_pagecontent .= "<br><br><br>";
+	$export_pagecontent .= "<br><br>";
 	$export_pagecontent .= _("Ausgabeformat:") .  "<select name=\"format\">";
 
 	while (list($key, $val) = each($output_formats))
@@ -97,8 +119,8 @@ elseif (!isset($page) or ($page == 0)) // Seite 1 : Auswahl des Dateiformats
 	);
 	$link = "<a href=\"./test.xml"."\">";
 	$infobox[1]["kategorie"] = _("Aktionen:");
-		$infobox[1]["eintrag"][] = array (	"icon" => "pictures/nachricht1.gif" ,
-									"text"  => _("Bitte wählen Sie das Dateiformat, in dem ihre Daten ausgegeben werden sollen.")
+		$infobox[1]["eintrag"][] = array (	"icon" => "pictures/forumgrau.gif" ,
+									"text"  => _("Bitte wählen Sie das Dateiformat, in dem ihre Daten ausgegeben werden sollen. Klicken Sie anschließend auf 'weiter'.")
 								);
 }
 
@@ -110,7 +132,7 @@ elseif ($page == 1) // Seite 2 : Auswahl des XSLT-Scripts
 	$export_info = _("Wählen Sie bitte eine der folgenden XSLT-Dateien und klicken Sie auf 'weiter'");
 
 	$export_pagecontent .= "<form method=.\"POST\" action=\"" . $PHP_SELF . "\">";
-	$export_pagecontent .= "<br><br>";
+	$export_pagecontent .= "";
 	$export_pagecontent .= "<table cellspacing=\"0\" cellpadding=\"1\" border=\"0\" width=\"100%\">";
 	$export_pagecontent .= "<tr align=\"center\" valign=\"top\">";
 	$export_pagecontent .= "<th width=\"5%\"><b>&nbsp;</b></th>";
@@ -158,8 +180,8 @@ elseif ($page == 1) // Seite 2 : Auswahl des XSLT-Scripts
 	);
 	$link = "<a href=\"./test.xml"."\">";
 	$infobox[1]["kategorie"] = _("Aktionen:");
-		$infobox[1]["eintrag"][] = array (	"icon" => "pictures/nachricht1.gif" ,
-									"text"  => _("Wählen Sie bitte eins der zur Verfügung stehenden Ausgabemodule")
+		$infobox[1]["eintrag"][] = array (	"icon" => "pictures/forumgrau.gif" ,
+									"text"  => _("Wählen Sie bitte eines der zur Verfügung stehenden Ausgabemodule. Klicken Sie dann auf 'weiter'.")
 								);
 }
 
@@ -211,12 +233,12 @@ elseif ($page == 2)  // Seite 3 : Download der Dateien
 	);
 	$link = "<a href=\"./test.xml"."\">";
 	$infobox[1]["kategorie"] = _("Aktionen:");
-		$infobox[1]["eintrag"][] = array (	"icon" => "pictures/nachricht1.gif" ,
-									"text"  => _("Sie können nun XML-Daten und  Ausgabemodul herunterladen.")
+		$infobox[1]["eintrag"][] = array (	"icon" => "pictures/icon-disc.gif" ,
+									"text"  => _("Sie können sich die XML-Daten und das XSLT-Skript herunterladen.")
 								);
 	if ($XSLT_ENABLE) 
 	{
-		$infobox[1]["eintrag"][] = array (	"icon" => "pictures/nachricht1.gif" ,
+		$infobox[1]["eintrag"][] = array (	"icon" => "pictures/forumgrau.gif" ,
 									"text"  => _("Wenn Sie auf 'weiter' klicken, wird mit dem installierten XSLT-Prozessor die Ausgabedatei erzeugt.")
 								);
 	}

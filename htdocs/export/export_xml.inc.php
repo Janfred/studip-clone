@@ -1,4 +1,26 @@
 <?
+// +---------------------------------------------------------------------------+
+// This file is part of Stud.IP
+// export_xml.inc.php
+// XML-functions for the Stud.IP database
+// 
+// Copyright (c) 2002 Arne Schroeder <schroeder@data-quest.de> 
+// Suchi & Berg GmbH <info@data-quest.de>
+// +---------------------------------------------------------------------------+
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or any later version.
+// +---------------------------------------------------------------------------+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+// +---------------------------------------------------------------------------+
+
 $perm->check("dozent");
 
 $export_pagename = _("Datenexport");
@@ -26,7 +48,7 @@ global $range_id, $ex_type, $xml_file_id, $o_mode, $export_error, $export_error_
 if (!CheckParamXML()) 
 {
 	$infobox = array(			
-	array ("kategorie"  => "Information:",
+	array ("kategorie"  => _("Information:"),
 		"eintrag" => array	(	
 						array (	"icon" => "pictures/ausruf_small.gif",
 								"text"  => _("Die Parametern, mit denen diese Seite aufgerufen wurde, sind fehlerhaft.")
@@ -99,11 +121,11 @@ if ($o_mode == "file")
 	{
 		$link = "<a href=\"sendfile.php?type=2&file_id=$xml_file_id&file_name=$xml_filename\">";
 		$infobox[1]["kategorie"] = _("Aktionen:");
-			$infobox[1]["eintrag"][] = array (	"icon" => "pictures/" . $export_icon["xml"] ,
+			$infobox[1]["eintrag"][] = array (	"icon" => "pictures/icon-disc.gif" ,
 										"text"  => sprintf(_("Um die XML-Datei jetzt herunterzuladen klicken Sie %s hier %s."), $link, "</a>")
 									);
-			$infobox[1]["eintrag"][] = array (	"icon" => "pictures/file.gif" ,
-										"text"  => _("Wenn Sie die Daten konvertieren wollen, klicken Sie auf 'weiter'.")
+			$infobox[1]["eintrag"][] = array (	"icon" => "pictures/forumgrau.gif" ,
+										"text"  => _("Wenn Sie die Daten in ein anderes Format konvertieren wollen, klicken Sie auf 'weiter'.")
 									);
 	}
 	

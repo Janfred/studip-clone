@@ -1,4 +1,26 @@
 <?
+// +---------------------------------------------------------------------------+
+// This file is part of Stud.IP
+// export_studipdata_func.inc.php
+// exportfunctions for the Stud.IP database
+// 
+// Copyright (c) 2002 Arne Schroeder <schroeder@data-quest.de> 
+// Suchi & Berg GmbH <info@data-quest.de>
+// +---------------------------------------------------------------------------+
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or any later version.
+// +---------------------------------------------------------------------------+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+// +---------------------------------------------------------------------------+
+
 function string_to_unicode ($xml_string) 
 {
 	for ($x=0; $x<strlen($xml_string); $x++) 
@@ -101,7 +123,7 @@ function export_inst($inst_id, $ex_sem_id = "all")
 		break;
 	default: 
 		echo "</td></tr>";
-		my_error("Der gew&auml;hlte Exportmodus wird nicht unterst&uuml;tzt.");
+		my_error(_("Der gewählte Exportmodus wird nicht unterstützt."));
 		echo "</table></td></tr></table>";
 		die();
 	}
