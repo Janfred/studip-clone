@@ -17,37 +17,25 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
-//$Id$
-	page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
-	$perm->check("user");
-?>
-<html>
-<head>
-<title>Stud.IP</title>
-	<link rel="stylesheet" href="style.css" type="text/css">
-</head>
-<!--
-// here i include my personal meta-tags; one of those might be useful:
-// <META HTTP-EQUIV="REFRESH" CONTENT="<?php print $auth->lifetime*60;?>; URL=logout.php">
--->
-<body bgcolor=white>
+page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
+$perm->check("user");
 
-<?
-	
-	
-	include "seminar_open.php"; //hier werden die sessions initialisiert
+include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
-// -- hier muessen Seiten-Initialisierungen passieren --
+// -- here you have to put initialisations for the current page
 
-	require_once ("functions.php");
-	require_once ("msg.inc.php");
-	require_once ("visual.inc.php");
-	require_once ("messagingSettings.inc.php");
-	require_once ("messaging.inc.php");
+require_once ("functions.php");
+require_once ("msg.inc.php");
+require_once ("visual.inc.php");
+require_once ("messagingSettings.inc.php");
+require_once ("messaging.inc.php");
 
-	$msging=new messaging;
-	$cssSw=new cssClassSwitcher;
-	include "header.php";   //hier wird der "Kopf" nachgeladen
+$msging=new messaging;
+$cssSw=new cssClassSwitcher;
+
+// Start of Output
+include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
+include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 
 ob_start();
 
@@ -220,4 +208,4 @@ ob_start();
 ob_end_flush();
   // Save data back to database.
 page_close();
- ?>
+?>

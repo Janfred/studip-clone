@@ -1,32 +1,41 @@
 <?php 
-	page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
-?>
+/*
+register1.php - Benutzerregistrierung in Stud.IP, Part I
+Copyright (C) 2000 Stefan Suchi <suchi@gmx.de>, Oliver Brakel <obrakel@gwdg.de>
 
-<html>
- <head>
-<!--
-// here i include my personal meta-tags; one of those might be useful:
-// <META HTTP-EQUIV="REFRESH" CONTENT="<?php print $auth->lifetime*60;?>; URL=logout.php">
--->
-  <title>Stud.IP</title>
-	<link rel="stylesheet" href="style.css" type="text/css">
- </head>
-<body bgcolor="#ffffff">
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
 
-<?php
-	include "seminar_open.php"; //hier werden die sessions initialisiert
-	include "header.php";   //hier wird der "Kopf" nachgeladen 
-	require_once "msg.inc.php";
-?>
-<body>
-	
-<?php
-	if ($auth->is_authenticated() && $user->id != "nobody") {
-		parse_window ("error§Sie sind schon als Benutzer am System angemeldet!", "§",
-					"Bereits angemeldet", 
-					"<a href=\"index.php\"><b>&nbsp;Hier</b></a> geht es zur Startseite.<br />&nbsp;");
-	} else { 
-		$auth->logout();
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+*/
+
+page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
+
+include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+
+// -- here you have to put initialisations for the current page
+
+// Start of Output
+include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
+include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+
+require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
+
+if ($auth->is_authenticated() && $user->id != "nobody") {
+	parse_window ("error§Sie sind schon als Benutzer am System angemeldet!", "§",
+				"Bereits angemeldet", 
+				"<a href=\"index.php\"><b>&nbsp;Hier</b></a> geht es zur Startseite.<br />&nbsp;");
+} else { 
+	$auth->logout();
 ?>
 
 <table width="80%" align="center" border=0 cellpadding=0 cellspacing=0>

@@ -18,26 +18,22 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-	page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
-?>
+page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 
-<html>
-<head>
-<?IF (!isset($SessSemName[1]) || $SessSemName[1] == "") {
-    echo "<META HTTP-EQUIV=\"refresh\" CONTENT=\"0; URL=index.php\">";
-    echo "</head></html>";
-    die;
+if (!isset($SessSemName[0]) || $SessSemName[0] == "") {
+	header("Location: index.php");
+	die;
 }
-?>
 
-	<title>Stud.IP</title>
-	<link rel="stylesheet" href="style_print.css" type="text/css">
-</head>
-<body bgcolor=white>
+include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
-<?php
-	include "seminar_open.php"; //hier werden die sessions initialisiert
-	require_once("archiv.inc.php");
+// -- here you have to put initialisations for the current page
+$_include_stylesheet = "style_print.css"; // use special stylesheet for printing
+
+// Start of Output
+include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
+
+require_once("$ABSOLUTE_PATH_STUDIP/archiv.inc.php");
 	
 print (dump_sem($SessSemName[1]));
 

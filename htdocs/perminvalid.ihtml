@@ -7,8 +7,6 @@ require_once $ABSOLUTE_PATH_STUDIP."msg.inc.php";
 require_once $ABSOLUTE_PATH_STUDIP."config.inc.php";
 ?>
 
- <body>
-
 <table border=0 bgcolor="#000000" align="center" cellspacing=0 cellpadding=0 width=70%>
 <tr valign=top align=middle>
 	<td class="topic" align="left"><b>&nbsp;Zugriff verweigert</b></td>
