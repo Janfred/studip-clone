@@ -351,17 +351,17 @@ class ExternConfig {
 		global $HTTP_POST_VARS;
 		$fault = array();
 		
-		// Check for an alternative input field. All names of alternative input
-		// fields begin with an underscore. The alternative input field overwrites
-		// the input field having the same name but without the leading underscore.
-		$form_values = $HTTP_POST_VARS;
-		foreach ($form_values as $form_name => $value) {
-			if ($form_name{0} == "_" && $value != "")
-				$HTTP_POST_VARS[substr($form_name, 1)] = $value;
-		}
-		
 		foreach ($attributes as $attribute) {
 			$form_name = $element_name . "_" . $attribute;
+			
+			// Check for an alternative input field. All names of alternative input
+			// fields begin with an underscore. The alternative input field overwrites
+			// the input field having the same name but without the leading underscore.
+			if (isset($HTTP_POST_VARS["_$form_name"])) {
+				if ($HTTP_POST_VARS[$form_name] == $this->config[$element_name][$attribute]
+						&& $HTTP_POST_VARS["_$form_name"] != "")
+					$HTTP_POST_VARS[$form_name] = $HTTP_POST_VARS["_$form_name"];
+			}
 			
 			if (is_array($HTTP_POST_VARS[$form_name]))
 				$value = $HTTP_POST_VARS[$form_name];
@@ -376,7 +376,7 @@ class ExternConfig {
 			else
 				$html_attribute = $splitted_attribute[1] . $splitted_attribute[2];
 			
-			for ($i = 0; $i < sizeof($value); $i++) { //foreach ($value as $value[$i] {
+			for ($i = 0; $i < sizeof($value); $i++) {
 			
 				// Don't accept strings longer than 200 characters!
 				if (strlen($value[$i]) > 200) {
@@ -431,6 +431,7 @@ class ExternConfig {
 					case "title" :
 					case "urlcss" :
 					case "nodatatext" :
+					case "groupsalias":
 						$fault[$form_name] = ($value[$i] != ""
 								&& preg_match("/(<|>|\"|script|php)/i", $value[$i]));
 						break;
@@ -472,7 +473,7 @@ class ExternConfig {
 			}
 			
 		}
-	
+		
 		if (in_array(TRUE, $fault))
 			return $fault;
 		
