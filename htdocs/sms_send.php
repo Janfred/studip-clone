@@ -365,18 +365,17 @@ function show_msgform() {
 
 function show_previewform() {
 	global $sms_data, $message, $signature, $my_messaging_settings;
-	$tmp = "<input type=\"image\" name=\"refresh_message\" src=\"./pictures/rewind3.gif\" border=\"0\" ".tooltip(_("fügt der aktuellen Nachricht eine Signatur an.")).">&nbsp;"._("Vorschau erneuern.")."<br><br>";
+	$tmp = "<input type=\"image\" name=\"refresh_message\" src=\"./pictures/rewind3.gif\" border=\"0\" ".tooltip(_("aktualisiert die Vorschau der aktuellen Nachricht.")).">&nbsp;"._("Vorschau erneuern.")."<br><br>";
 
-		$tmp .= quotes_decode(formatReady(stripslashes($message)));
-		if ($sms_data["sig"] == "1") {
-			$tmp .= "<br><br>--<br>";
-			if ($signature) {
-				$tmp .= quotes_decode(formatReady(stripslashes($signature)));
-			} else {
-				$tmp .= quotes_decode(formatReady(stripslashes($my_messaging_settings["sms_sig"])));
-			}
+	$tmp .= quotes_decode(formatReady(stripslashes($message)));
+	if ($sms_data["sig"] == "1") {
+		$tmp .= "<br><br>--<br>";
+		if ($signature) {
+			$tmp .= quotes_decode(formatReady(stripslashes($signature)));
+		} else {
+			$tmp .= quotes_decode(formatReady(stripslashes($my_messaging_settings["sms_sig"])));
 		}
-	$tmp = "<font size=\"-1\">".$tmp."</font>";
+	}
 	return $tmp;
 }
 
