@@ -179,7 +179,7 @@ if(!$_REQUEST['plugin']) {
 		$plugin_name = "IntegrityCheck".$_integrity_plugins[$i];
 		$plugin_obj = new $plugin_name;
 		echo "\n<tr><td ".$_csw->getFullClass().">&nbsp; ".$_integrity_plugins[$i]."</td>";
-		echo "\n<td ".$_csw->getFullClass()." style=\"font-size:smaller\">" . _("Testet Tabelle:") . " <b>".$plugin_obj->getCheckMasterTable()
+		echo "\n<td ".$_csw->getFullClass()." style=\"font-size:smaller\">" . _("&Uuml;berpr&uuml;ft Tabelle:") . " <b>".$plugin_obj->getCheckMasterTable()
 			."</b> " . _("gegen") . " <i>".join(", ",$plugin_obj->getCheckDetailList())."</i></td>";
 		echo "\n<td align=\"center\" ".$_csw->getFullClass().">".$plugin_obj->getCheckCount()."</td>";
 		echo "\n<td align=\"center\" ".$_csw->getFullClass()."><a href=$PHP_SELF?plugin=".$_integrity_plugins[$i]

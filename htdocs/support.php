@@ -45,7 +45,7 @@ if ($SUPPORT_ENABLE){
 	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 	require_once ($ABSOLUTE_PATH_STUDIP."msg.inc.php");
-	parse_window ("error§" . _("Das SupportDB-Modul ist nicht eingebunden. Bitte aktivieren Sie es in den Systemeinstellungen oder wenden Sie sich an die Systemadministratoren."), "§",
+	parse_window ("error§" . _("Das SupportDB-Modul ist nicht eingebunden. Bitte aktivieren Sie es in den Systemeinstellungen oder wenden Sie sich an eine Person mit administrativen Rechten im System."), "§",
 				_("SupportDB nicht eingebunden"));
 }
 ?>

@@ -540,7 +540,7 @@ if (((!$SessSemName[1]) || ($SessSemName["class"] == "inst")) && ($list) && ($vi
 					<?
 					if (($perm->have_perm("admin")) && (!$perm->have_perm("root"))) {
 						?>
-						<font size=-1><?=_("Dozent:")?></font><br />
+						<font size=-1><?=_("DozentIn:")?></font><br />
 						<select name="srch_doz">
 						<option value=0><?=_("alle")?></option>
 						<?

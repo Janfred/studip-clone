@@ -343,7 +343,7 @@ if ($_REQUEST['cmd'] == "user_course_change"){
 	}
 	echo "<input type=\"text\" size=\"2\" value=\"1\" name=\"num_add_user\" style=\"vertical-align:middle\">&nbsp;"
 	."<select name=\"perm_add_user\" style=\"vertical-align:middle\"><option>autor</option><option>tutor</option><option>dozent</option></select>&nbsp;"
-	. "<span style=\"font-size:10pt;\">" . _("Nutzer neu anlegen") . "</span>&nbsp;<input name=\"user_add\" type=\"image\" align=\"absmiddle\" " 
+	. "<span style=\"font-size:10pt;\">" . _("NutzerIn neu anlegen") . "</span>&nbsp;<input name=\"user_add\" type=\"image\" align=\"absmiddle\" " 
 	. makeButton("anlegen","src") . "></form></div>"; 
 	
 	echo "\n<form name=\"course_form\" action=\"$PHP_SELF?cmd=course_form_send\" method=\"post\"><br>";
@@ -352,7 +352,7 @@ if ($_REQUEST['cmd'] == "user_course_change"){
 		echo "\n<br>" . _("Keine Veranstaltungen gefunden.") . "<br>";
 	} else {
 		echo "\n<table width=\"99%\" border=\"0\" cellpadding=\"2\" cellspacing=\"2\" style=\"font-size:10pt;\">";
-		echo "\n<tr><th>" . _("Name") . "</th><th>" . _("angelegt am") . "</th><th>" . _("Anzahl Nutzer") . "</th><th><a href=\"#\" onClick=\"return invert_selection('course_form');\" title=\"Auswahl umkehren\">" . _("L&ouml;schen") . "</a></th></tr>";
+		echo "\n<tr><th>" . _("Name") . "</th><th>" . _("angelegt am") . "</th><th>" . _("Anzahl Nutzende") . "</th><th><a href=\"#\" onClick=\"return invert_selection('course_form');\" title=\"Auswahl umkehren\">" . _("L&ouml;schen") . "</a></th></tr>";
 		while ($_test_courses->nextRow()){
 			echo "\n<tr><td class=\"steel1\"><a href=\"seminar_main?auswahl=" . $_test_courses->getField('Seminar_id') ."\">" 
 			. htmlReady($_test_courses->getField('Name'))

@@ -69,7 +69,7 @@ while ( is_array($HTTP_POST_VARS)
   case "create_x":
     // Do we have all necessary data?
     if (empty($Name)) {
-      my_error("<b>" . _("Bitte geben sie eine Bezeichnug f&uuml;r das Fach ein!") . "</b>");
+      my_error("<b>" . _("Bitte geben Sie eine Bezeichnung f&uuml;r das Fach ein!") . "</b>");
       break;
     }
     
@@ -100,7 +100,7 @@ while ( is_array($HTTP_POST_VARS)
 
     // Do we have all necessary data?
     if (empty($Name)) {
-      my_error("<b>" . _("Bitte geben Sie eine Bezeichnug f&uuml;r den Studiengang ein!") . "</b>");
+      my_error("<b>" . _("Bitte geben Sie eine Bezeichnung f&uuml;r den Studiengang ein!") . "</b>");
       break;
     }
 		
@@ -143,7 +143,7 @@ while ( is_array($HTTP_POST_VARS)
     $query = "DELETE FROM user_studiengang WHERE studiengang_id='$i_id'";
     $db->query($query);
     if ($db->affected_rows() == 0) {
-      my_msg("<b>" . _("keine Nutzer betroffen") . "</b>");
+      my_msg("<b>" . _("keine Nutzenden betroffen") . "</b>");
     }
     
     unset($i_view);  // gibt keine Detailansicht
@@ -167,9 +167,9 @@ if ($i_view) {
 
   ?>
 	<tr><td class="blank" colspan=2>
-	<table border=0 bgcolor="#eeeeee" align="center" width="50%" cellspacing=0 cellpadding=2>
+	<table border=0 bgcolor="#eeeeee" align="center" width="75%" cellspacing=0 cellpadding=2>
 	<form method="POST" name="edit" action="<? echo $PHP_SELF?>">
-	<tr><td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>"><?=_("Studiengangname:")?> </td><td class="<? echo $cssSw->getClass() ?>"><input type="text" name="Name" size=60 maxlength=254 value="<?php echo htmlReady($db->f("name")) ?>"></td></tr>
+	<tr><td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>"><?=_("Name des Studienganges:")?> </td><td class="<? echo $cssSw->getClass() ?>"><input type="text" name="Name" size=60 maxlength=254 value="<?php echo htmlReady($db->f("name")) ?>"></td></tr>
 	<tr><td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>"><?=_("Beschreibung:")?> </td><td class="<? echo $cssSw->getClass() ?>"><textarea cols=50 ROWS=4 name="Beschreibung" value="<?php $db->p("beschreibung") ?>"><?php echo htmlReady($db->f("beschreibung")) ?></textarea></td></tr>
 	<tr><td class="<? echo $cssSw->getClass() ?>"colspan=2 align="center">
 	
@@ -196,7 +196,7 @@ if ($i_view) {
 	if ($i_view<>"new") {
 		$db->query("SELECT Name, seminare.seminar_id FROM admission_seminar_studiengang LEFT JOIN seminare USING (seminar_id) WHERE studiengang_id = '$i_id'");
  		?>
- 		<table border=0 align="center" width="80%" cellspacing=0 cellpadding=2>
+ 		<table border=0 align="center" width="75%" cellspacing=0 cellpadding=2>
 		<?
 		if ($db->affected_rows() > 0) {?><tr><td width="100%" colspan=2><br>&nbsp;<?=_("Diesem Studiengang sind folgende teilnahmebeschr&auml;nkte Veranstaltungen zugeordnet:")?><br><br></th></tr><?}
 		else {?><tr><td width="100%" colspan=2><br>&nbsp;<?=_("Diesem Bereich sind noch keine Veranstaltungen zugeordnet!")?><br><br></th></tr><?}

@@ -44,16 +44,16 @@ $search_obj = new StudipSemSearch();
 
 if ($search_obj->search_done){
 	if ($search_obj->search_result->numRows > 50){
-		$_msg = "error§" . _("Es wurden mehr als 50 Veranstaltungen gefunden! Bitte schr&auml;nken sie ihre Suche weiter ein.");
+		$_msg = "error§" . _("Es wurden mehr als 50 Veranstaltungen gefunden! Bitte schr&auml;nken Sie Ihre Suche weiter ein.");
 	} elseif ($search_obj->search_result->numRows > 0){
-		$_msg = "msg§" .sprintf(_("Es wurden %s Veranstaltungen gefunden, und in ihre Merkliste eingef&uuml;gt"),$search_obj->search_result->numRows);
+		$_msg = "msg§" .sprintf(_("Es wurden %s Veranstaltungen gefunden, und in Ihre Merkliste eingef&uuml;gt"),$search_obj->search_result->numRows);
 		if (is_array($_marked_sem) && count($_marked_sem)){
 			$_marked_sem = array_merge($_marked_sem,$search_obj->search_result->getDistinctRows("seminar_id"));
 		} else {
 			$_marked_sem = $search_obj->search_result->getDistinctRows("seminar_id");
 		}
 	} else {
-		$_msg = "info§" . _("Es wurden keine Veranstaltungen die zu ihren Suchkriterien passen gefunden.");
+		$_msg = "info§" . _("Es wurden keine Veranstaltungen gefunden, auf die Ihre Suchkriterien zutreffen.");
 	}
 }
 
@@ -67,7 +67,7 @@ if ($_REQUEST['cmd'] == "MarkList"){
 					unset($_marked_sem[$_REQUEST['sem_mark_list'][$i]]);
 				}
 			}
-			$_msg .= "msg§" . sprintf(_("%s Veranstaltung(en) wurde(n) aus der Merkliste entfernt."),$count_del);
+			$_msg .= "msg§" . sprintf(_("%s Veranstaltung(en) wurde(n) aus Ihrer Merkliste entfernt."),$count_del);
 		} else {
 			$tmp = explode("_",$_REQUEST['mark_list_aktion']);
 			$item_ids[0] = $tmp[1];
@@ -97,7 +97,7 @@ if ($the_tree->mode == "MoveItem"){
 	if ($_msg){
 		$_msg .= "§";
 	}
-	$_msg .= "info§" . sprintf(_("Der Verschiebemodus ist aktiviert. Bitte w&auml;hlen sie ein Einfügesymbol %s aus, um das Element <b>%s</b> zu verschieben.%s"),
+	$_msg .= "info§" . sprintf(_("Der Verschiebemodus ist aktiviert. Bitte w&auml;hlen Sie ein Einfügesymbol %s aus, um das Element <b>%s</b> an diese Stelle zu verschieben.%s"),
 								"<img src=\"pictures/move.gif\" border=\"0\" " .tooltip(_("Einfügesymbol")) . ">",
 								htmlReady($the_tree->tree->tree_data[$the_tree->move_item_id]['name']),
 								"<div align=\"right\"><a href=\"" . $the_tree->getSelf("cmd=Cancel&item_id=$the_tree->move_item_id") . "\">"
@@ -146,7 +146,7 @@ $the_tree->showSemTree();
 	<td><span style="font-size:10pt"><?=_("Kommentar:")?></span></td><td style="font-size:10pt"><?=$search_obj->getSearchField("comment")?></td>
 	</tr>
 	<tr>
-	<td><span style="font-size:10pt"><?=_("Dozent:")?></span></td><td style="font-size:10pt"><?=$search_obj->getSearchField("lecturer")?></td>
+	<td><span style="font-size:10pt"><?=_("DozentIn:")?></span></td><td style="font-size:10pt"><?=$search_obj->getSearchField("lecturer")?></td>
 	</tr>
 	<tr>
 	<td><span style="font-size:10pt"><?=_("Bereich:")?></span></td><td style="font-size:10pt"><?=$search_obj->getSearchField("scope")?></td>
