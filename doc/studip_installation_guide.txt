@@ -49,23 +49,23 @@ Für Stud.IP werden folgende Programme benötigt:
 
 Basiskomponenten
 
-- Apache Webserver (Version 1.3.9 oder besser)
-- MySQL-Datenbankserver (Version 3.23 oder besser)
-- PHP-Apache Modul (Version 4.2.1 oder besser)
+- Apache Webserver (Version 1.3.9 oder besser) (http://httpd.apache.org)
+- MySQL-Datenbankserver (Version 3.23 oder besser) (http://www.mysql.com)
+- PHP-Apache Modul (Version 4.2.1 oder besser) (http://www.php.net)
 
 Tools
 
 Für die Grundfunktionalität werden folgende Tools benötigt:
-- zip
-- giftopnm
-- pnmscale
-- djpeg
-- cjpeg 
+- zip      (http://www.info-zip.org/pub/infozip/)
+- giftopnm (http://download.sourceforge.net/netpbm/)
+- pnmscale (http://download.sourceforge.net/netpbm/)
+- djpeg    (ftp://ftp.uu.net/graphics/jpeg)
+- cjpeg    (ftp://ftp.uu.net/graphics/jpeg)
 
 Benötigt für den optionalen LaTeX-Renderer:
-- vollständig konfiguriertes LaTeX-System
-- dvips
-- ImageMagick
+- vollständig konfiguriertes LaTeX-System (http://www.tug.org/teTeX/)
+- dvips (http://www.radicaleye.com/dvips.html)
+- ImageMagick (http://www.imagemagick.org/)
 
 PHP-Module
 
@@ -82,8 +82,8 @@ Um den Chat zu nutzen, werden folgende Module benötigt:
 Um das Export-Tool zu nutzen, werden zusätzlich folgende Module benötigt:
 - xml
 - xslt 
-Zudem muß der FOP (Formating Objects Processor) und die Java Runtine Environment,
-JRE, installiert sein.
+Zudem muß der FOP (Formating Objects Processor)(http://xml.apache.org/fop/) und die Java Runtine Environment,
+JRE (http://java.sun.com) , installiert sein.
 (näheres im Abschnitt 1.8 "Konfiguration der Stud.IP Module")
 
 Die Installation des eigentlichen LAMP-System wird vorausgesetzt - geeignete 
@@ -92,7 +92,7 @@ Die korrekte Funktionsfähigkeit von PHP im Zusammenspiel mit dem Apache und
 MySQL  läßt sich mit einem einfachen Script feststellen:
 
 <?
-php phpinfo() 
+phpinfo();
 ?>
 
 Dabei werden alle einkompilierten Module angezeigt und es können die Einstellungen 
@@ -110,7 +110,6 @@ Kurzübersicht der im Paket vorhandenen Verzeichnisse:
 - studip-db		SQL-Dumps für mysql-Datenbankeinrichtung und 
 			Dumps mit Demo-Daten.
 - studip-doc		Dokumentation zur Installation
-- install		Installations-Skript, getestet mit SuSe 8.0
 - studip-config		Default-Konfigurationsdateien (local.inc, config.inc.php)
 - studip-htdocs		Der Stud.IP-Kern, später sichtbar für Webserver
 - studip-phplib		Angepasste phplib-Version für Stud.IP
@@ -137,12 +136,12 @@ Folgende Dateien wurden verändert:
 Die angepasste Version befindet sich im Verzeichnis studip-phplib 
 des Installations-Paketes und sollte in das Apache-Root-Verzeichnis kopiert
 werden. Ist dies z.B. /usr/local/httpd, dann sind die Dateien folglich nach 
-/usr/local/httpd/php zu kopieren. 
+/usr/local/httpd/php zu kopieren. Für debian-Linux 3.0 ist z.B. das Verzeichnis /usr/lib/apache eine gute Wahl.
+
 ACHTUNG: Bitte dieses Include-Verzeichnis nicht unterhalb des Document-Root 
 des Webservers einfügen, da hier u.a. die Datenbankpasswörter gespeichert
 werden!
 Seit SuSE 8.1 befindet sich das Root-Verzeichnis des Webservers in /srv/www .
-Für debian-Linux 3.0 ist z.B. das Verzeichnis /usr/lib/apache eine gute Wahl.
 
 1.3.1 Anpassen der local.inc
 
@@ -220,13 +219,13 @@ Um Stud.IP ordnungegemäß zum laufen zu bringen, müssen einige der Werte der php.
 angepasst werden. Dabei sind drei unterschiedliche Varianten möglich:
 - Setzen Sie direkt die entsprechenden Werte in der php.ini. Wenn Sie auf dem Server
   Stud.IP als einizige PHP-Software einsetzen, ist dies eine gute Wahl.
-- Sie können die Werte auch direkt in der httpd.conf des Apache per <Directory>
-  Anweisung setzen. Auf diese Weise werden umsetzen lassen. Das hat den Vorteil, 
-  dass verschiedene PHP-Programme nebeneinander installiert werden können und 
-  verschiedene Einstellungen der php.ini-Optionen je nach Verzeichnis gelten.
+- Sie können die Werte auch direkt in der httpd.conf des Apache per <Directory>-
+  Anweisung setzen. Das hat den Vorteil, dass verschiedene PHP-Programme nebeneinander 
+  installiert werden können und verschiedene Einstellungen der php.ini-Optionen je 
+  nach Verzeichnis gelten.
 - Schließlich können Sie auch die Werte direkt in einer .htaccess Datei ablegen und 
   damit direkt im Verzeichnis der Software die Einstellungen setzen. Diese Variante
-  hat den Vorteil, dass die keinen Zugriff auf den Webserbenötigen - etwa bei einer 
+  hat den Vorteil, dass die keinen Zugriff auf den Webserverbenötigen - etwa bei einer 
   Installation auf dem Rechner eines externen Providers.
 
 ACHTUNG: Sie müssen eine der beiden letzten Varianten wählen, um Stud.IP un ILIAS auf 
@@ -329,9 +328,10 @@ mysql -e "create database studip"
 
 und die entsprechenden Tabellen hinzugefügt werden.
 
-mysql studip < studip-db/studip_x.sql
+mysql studip < studip-db/studip.sql
 
 Im Verzeichnis /studip-db werden folgende Datenbankdumps mitgeliefert:
+(Bitte stellen Sie die Dumps in der hier vorgegbenen Reihenfolge ein!)
 
 - studip.sql: Enthält die Grundstruktur aller benötigten Tabellen. 
   Dieser Dump muss installiert werden.
@@ -341,17 +341,22 @@ Im Verzeichnis /studip-db werden folgende Datenbankdumps mitgeliefert:
   Password: testing
   ACHTUNG: Das Passwort sollte, wenn das System erfolgreich aufgesetzt wurde, 
   sofort geändert werden!
-- studip_demo_data.sql: Mit diesem Dump werden einige Demonstrations-Daten ins
-  Systen eimgespielt. Das Einspielen dieses Dumps ist obligatorisch, zum Betrieb 
-  ist er nicht notwendig.
   
-Zwei weitere Dumps müssen bzw. können nur eingespielt werden, wenn die 
-Ressourcenverwaltung genutzt werden soll:
+Ein weiterer Dump muss eingespielt werden, wenn die Ressourcenverwaltung 
+genutzt werden soll:
 
 - studip_resources_default_data.sql: Dieser Dumo enthält notwendige Defaults für
   die Ressourcenverwaltung. Er ist zum Betrieb notwendig.
-- studip_resources_demo_data.sql: Demonstrationsdaten für die Ressourcenverwaltung.
-  Das Einspielen ist ebenfalls obligatorisch.
+
+Wenn Sie das System zunächst testen wollen, können Sie die folgenden Demo-Daten
+einspielen:
+
+- studip_demo_data.sql: Mit diesem Dump werden einige Demonstrations-Daten ins
+  Systen eimgespielt. Das Einspielen dieses Dumps ist obligatorisch, zum Betrieb 
+  ist er nicht notwendig.
+  Enthalten sind folgenden Testaccounts:
+  test_admin, test_dozent, test_tutor und test_autor. Bei allen Accounts ist 
+  das Passwort ebenfalls testing.
 
 Zudem muss ein Datenbankbenutzer für studip angelegt werden.
 In der phplib Datei local.inc, die auf Stud.IP angepasst wurde, muss
