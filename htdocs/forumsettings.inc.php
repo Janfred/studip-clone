@@ -108,35 +108,18 @@ echo "<form action=\"$PHP_SELF?view=$view\" method=\"POST\">";
 			</select>
 		</td>
 	</tr>	
-	
-	
-<?
-/*	
-
 	<tr>
 		<td align=right class=blank style="border-bottom:1px dotted black;">
-			<font size=-1>Die Auswahl mehrerer Antworten ist erlaubt <i>(Multiple Choice)</i>:</font>&nbsp;&nbsp;
-		</td>
-		<td align=left>
-			<font size=-1>
-			<input type=radio value="0" name=multipleChoice checked> nein<br>
-			<input type=radio value="1" name=multipleChoice > ja</font>
-		</td>
-	</tr>
-	<tr>
-		<td align=right class=blank style="border-bottom:1px dotted black;">
-			<font size=-1>Der Teilnehmer sieht die (Zwischen-)Ergebnisse:</font>&nbsp;&nbsp;
+			<font size=-1>Sortierung der Themenanzeige</font>&nbsp;&nbsp;
 		</td>
 		<td align=left class=steelgraulight>
 			<font size=-1>
-			<input type=radio value=ever name=resultVisibility > immer<br>
-			<input type=radio value=delivery name=resultVisibility checked> erst nachdem er seine Stimme(n) abgegeben hat<br>
-			<input type=radio value=end name=resultVisibility > erst nach Ablauf des Votings<br>
-			<input type=radio value=never name=resultVisibility > nie</font>
+			<input type=radio value="asc" name=sortthemes <?if ($forum["sortthemes"]=="asc") echo "checked";?>> Alter des Ordners - neue unten<br>
+			<input type=radio value="desc" name=sortthemes <?if ($forum["sortthemes"]=="desc") echo "checked";?>> Alter des Ordners - neue oben<br>
+			<input type=radio value="last" name=sortthemes <?if ($forum["sortthemes"]=="last") echo "checked";?>> Alter des neuesten Beitrags - neue oben<br>
 		</td>
 	</tr>
-	
-*/?>
+
 	<input type="HIDDEN" name="forumsend" value="bla">
 	<tr  <? $cssSw->switchClass() ?>>
 	<td  class="steel1" colspan=2 align="middle"><br />

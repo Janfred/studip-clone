@@ -344,6 +344,7 @@ if ($forumsend) {
 		$forum["flatallopen"] = $flatallopen;
 		$forum["rateallopen"] = $rateallopen;
 		$forum["showimages"] = $showimages;
+		$forum["sortthemes"] = $sortthemes;
 		$forum["changed"] = "TRUE";
 		$txt = _("Anpassungen durchgeführt.");
 	} else

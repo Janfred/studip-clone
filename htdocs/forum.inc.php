@@ -937,6 +937,12 @@ function DisplayFolders ($open=0, $update="", $zitat="") {
 		, "chdate", "user_id");
 	$query = "select distinct ";
 	$comma = "";
+	
+	if ($forum["sortthemes"] == "last")
+		$order = "last DESC";
+	else
+		$order = "t.mkdate ".$forum["sortthemes"];
+	
 	WHILE (list($key,$val)=each($fields)) {
 		$query .= $comma."t.".$val;
 		$comma = ", ";
@@ -949,7 +955,7 @@ function DisplayFolders ($open=0, $update="", $zitat="") {
 	."FROM px_topics t LEFT JOIN px_topics s USING(root_id) "
 	."LEFT JOIN object_views ON(object_views.object_id=t.topic_id) LEFT JOIN object_rate ON(object_rate.object_id=t.topic_id) "
 	."LEFT OUTER JOIN object_user ON(object_user.object_id=t.root_id AND object_user.user_id='$user->id' AND flag='fav') "
-	."WHERE t.topic_id = t.root_id AND t.Seminar_id = '$SessionSeminar' GROUP BY t.root_id  ORDER BY t.mkdate";
+	."WHERE t.topic_id = t.root_id AND t.Seminar_id = '$SessionSeminar' GROUP BY t.root_id  ORDER BY $order";
 	$db=new DB_Seminar;
 	$db->query($query);
 	if ($db->num_rows()==0) {  // Das Forum ist leer
