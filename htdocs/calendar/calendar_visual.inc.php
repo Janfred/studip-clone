@@ -46,6 +46,11 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 	$width_precol_1 = 5;
 	$width_precol_2 = 4;
 	$day_event_row = "";
+	// one extra column for link
+	if ($link_edit)
+		$link_edit_column = 1;
+	else
+		$link_edit_column = 0;
 	
 	if ($precol) {
 		if ($step >= 3600) {
@@ -159,21 +164,22 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 	else
 		$day_event_row[0] = "<td class=\"steel1\"";
 	
-	if ($link_edit) {
+/*	if ($link_edit) {
 		if ($max_spalte  > 0)
 			$day_event_row[0] .= " colspan=\"".($max_spalte + 1)."\"";
-	}
-	else {
-		if ($max_spalte > 1)
-			$day_event_row[0] .= " colspan=\"".$max_spalte."\"";
-	}
+	
+	else {*/
+		if ($max_spalte > 0)
+			$day_event_row[0] .= " colspan=\"" . ($max_spalte + $link_edit_column) . "\"";
+	//}
 	
 	if ($tmp_day_event) {
+		
 		if ($link_edit) {
 			$tooltip = tooltip(_("neuer Tagestermin"));
 			$link_edit_str = "<td class=\"steel1\" align=\"right\"><a href=\"$PHP_SELF?cmd=edit&atime=";
 			$link_edit_str .= $day_obj->getTs();
-		$link_edit_str .= "\"><img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/cal-link.gif\" ";
+			$link_edit_str .= "\"><img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/cal-link.gif\" ";
 			$link_edit_str .= "border=\"0\" $tooltip></a></td>\n";
 		}
 			
@@ -313,7 +319,7 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 						}
 						$cspan += $sp;
 					}
-					
+						
 					$rows = ceil($term[$zeile][$j]->getDuration() / $step);
 					$tab[$zeile] .= '<td';
 					
@@ -373,14 +379,14 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 				}
 				
 				elseif ($term[$zeile][$j] == "#") {
-					$csp = 0;
+					$csp = $link_edit_column;
 					while ($term[$zeile][$j] == "#") {
 						$csp += $cspan;
 						$j++;
 					}
 					if ($csp > 1)
 						$colspan_attr = " colspan=\"$csp\"";
-					elseif ($csp == 1)
+					else
 						$colspan_attr = "";
 						
 					if ($link_edit) {
@@ -400,12 +406,10 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 				}
 				
 				elseif ($term[$zeile][$j] == "") {
-					$csp = $max_spalte - $j;
-					if ($link_edit)
-						$csp++;
+					$csp = $max_spalte - $j + $link_edit_column;
 					if ($csp > 1)
 						$colspan_attr = " colspan=\"$csp\"";
-					elseif ($csp == 1)
+					else
 						$colspan_attr = "";
 					
 					if ($link_edit) {
@@ -413,7 +417,7 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 						$tab[$zeile] .= sprintf("<a href=\"$PHP_SELF?cmd=edit&atime=%s\">"
 															, $day_obj->getStart() + $i * $step);
 						$tab[$zeile] .= "<img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/cal-link.gif\" ";
-						$tab[$zeile] .= "border=\"0\" $link_edit_tooltip\">";
+						$tab[$zeile] .= "border=\"0\" $link_edit_tooltip>";
 						$tab[$zeile] .= "</a></td>\n";
 					}
 					else {
@@ -471,7 +475,7 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 
 function maxValue ($term, $st) {
 	$max_value = 0;
-	for ($i = 0;$i < sizeof($term);$i++) {
+	for ($i = 0; $i < sizeof($term); $i++) {
 		if (is_object($term[$i]))
 			$max = ceil($term[$i]->getDuration() / $st);
 		elseif ($term[$i] == "#")
@@ -481,6 +485,7 @@ function maxValue ($term, $st) {
 		if ($max > $max_value)
 			$max_value = $max;
 	}
+	
 	return $max_value;
 }
 
@@ -495,12 +500,12 @@ function createWeekTable ($week_obj, $start = 6, $end = 21, $step = 3600,
 	// calculating the maximum title length
 	$length = ceil(125 / $week_obj->getType());
 	
-	for ($i = 0;$i < $week_obj->type;$i++)
+	for ($i = 0; $i < $week_obj->getType(); $i++)
 		$tab_arr[$i] = createDayTable($week_obj->wdays[$i], $start, $end, $step, FALSE,
 												FALSE, $link_edit, $length, 20, 4, 1);
 		
 	// weekday and date as title for each column
-	for ($i = 0;$i < $week_obj->getType();$i++) {
+	for ($i = 0; $i < $week_obj->getType(); $i++) {
 		// add up all colums of each day
 		$max_columns += $tab_arr[$i]["max_columns"];
 		$dtime = $week_obj->wdays[$i]->getTs();
@@ -521,7 +526,7 @@ function createWeekTable ($week_obj, $start = 6, $end = 21, $step = 3600,
 	for ($i = 1;$i < $rows + 2;$i++){
 		if ($compact)
 			$tab[$i] .= "<tr>";
-		for ($j = 0;$j < $week_obj->type;$j++){
+		for ($j = 0; $j < $week_obj->getType(); $j++){
 			$tab[$i] .= $tab_arr[$j]["table"][$i - 1];
 		}
 		if ($compact)
