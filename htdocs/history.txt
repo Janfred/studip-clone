@@ -1,5 +1,5 @@
 31.08.2002 v 0.8 release candidate 3
-- verschieben von Postings in andere Einrichtungen nun möglich
+- Verschieben von Postings in andere Einrichtungen nun möglich
 - neues Wartungstool um die Integrität der Datenbank zu testen und wiederherzustellen
 - beliebige Teilnehmer können nun von Berechtigten direkt berufen werden
 - neues Hovern von Tabellen eingebaut
