@@ -135,13 +135,6 @@ function createFolderZip ($folder_id) {
 	exec ("mkdir $TMP_PATH/$zip_file_id");
 	$tmp_full_path="$TMP_PATH/$zip_file_id";
 	
-	//check for linked files
-	$linkinfo = createLinkInfo ();
-	if ($linkinfo) {
-	// build info-file	
-
-	}
-	
 	//create folder comntent
 	createTempFolder ($folder_id, $tmp_full_path);
 
