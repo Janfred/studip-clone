@@ -632,8 +632,8 @@ function in_archiv ($sem_id) {
 		$folder = 0;
 		while ($db->next_record()) {
 			$folder++;
-			exec ("mkdir $tmp_full_path/[$folder] ".prepareFilename($db->f("name"), FALSE));
-			createTempFolder ($folder_id,$tmp_full_path."/[$folder] ".prepareFilename($db->f("name"), FALSE));
+			exec ("mkdir '$tmp_full_path/[$folder] ".prepareFilename($db->f("name"), FALSE)."' ");
+			createTempFolder ($db->f("folder_id"), $tmp_full_path."/[$folder] ".prepareFilename($db->f("name"), FALSE), FALSE);
 		}
 		
 		//zip all the stuff

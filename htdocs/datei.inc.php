@@ -18,7 +18,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-function createSelectedZip ($file_ids) {
+function createSelectedZip ($file_ids, $perm_check = TRUE) {
 	global $TMP_PATH, $UPLOAD_PATH, $ZIP_PATH, $SessSemName;
 	$db = new DB_Seminar();
 		
@@ -30,7 +30,8 @@ function createSelectedZip ($file_ids) {
 	
 	//create folder content
 	$in="('".join("','",$file_ids)."')";	
-	$db->query("SELECT dokument_id, filename FROM dokumente WHERE dokument_id IN $in AND seminar_id = '".$SessSemName[1]."' ORDER BY name, filename");
+	$query = sprintf ("SELECT dokument_id, filename FROM dokumente WHERE dokument_id IN %s %s ORDER BY name, filename", $in, ($perm_check) ? "AND seminar_id = '".$SessSemName[1]."'" : "");
+	$db->query($query);
 	while ($db->next_record()) {
 		$docs++;
 		exec ("cp '$UPLOAD_PATH/".$db->f("dokument_id")."' '$tmp_full_path/[".($docs)."] ".$db->f("filename") ."'");
@@ -64,12 +65,13 @@ function createFolderZip ($folder_id) {
  	return $zip_file_id;
 }
 
-function createTempFolder ($folder_id,$tmp_full_path) {
+function createTempFolder ($folder_id, $tmp_full_path, $perm_check = TRUE) {
 	global $UPLOAD_PATH, $SessSemName;
 	$db = new DB_Seminar();
 
 	//copy all documents from this folder to the temporary folder
-	$db->query("SELECT dokument_id, filename FROM dokumente WHERE range_id = '$folder_id' AND seminar_id = '".$SessSemName[1]."' ORDER BY name, filename");
+	$query = sprintf ("SELECT dokument_id, filename FROM dokumente WHERE range_id = '%s' %s ORDER BY name, filename", $folder_id, ($perm_check) ? "AND seminar_id = '".$SessSemName[1]."'" : "");
+	$db->query($query);
 	while ($db->next_record()) {
 		$docs++;
 		exec ("cp '$UPLOAD_PATH/".$db->f("dokument_id")."' '$tmp_full_path/[".($docs)."] ".$db->f("filename") ."'");
@@ -79,7 +81,7 @@ function createTempFolder ($folder_id,$tmp_full_path) {
 		$folders++;
 		$tmp_sub_full_path = $tmp_full_path."/[".$folders."] ".prepareFilename($db->f("name"), FALSE);
 		exec ("mkdir '$tmp_sub_full_path' ");
-		createTempFolder($db->f("folder_id"),$tmp_sub_full_path);
+		createTempFolder($db->f("folder_id"), $tmp_sub_full_path, $perm_check);
 	}
 	return TRUE;
 }
