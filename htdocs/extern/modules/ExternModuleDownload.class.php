@@ -42,9 +42,11 @@ require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . "visual.inc.php");
 class ExternModuleDownload extends ExternModule {
 
 	var $field_names = array();
-	var $data_fields = array("icon", "filename", "description", "mkdate", "filesize", "fullname");
+	var $data_fields = array("icon", "filename", "description", "mkdate",
+	                         "filesize", "fullname");
 	var $registered_elements = array("Body", "TableHeader", "TableHeadrow",
 																	 "TableRow", "Link", "LinkIntern", "TableFooter");
+	var $args = array('seminar_id');
 
 	/**
 	*
@@ -71,37 +73,28 @@ class ExternModuleDownload extends ExternModule {
 	function checkRangeId ($range_id) {
 		$range = get_object_type($range_id);
 		
-		if ($range == "inst" || $range == "fak")
-			return TRUE;
+		if ($range == 'inst' || $range == 'fak')
+			return $range;
 			
 		return FALSE;
 	}
 	
 	function printout ($args) {
-		if ($this->config->getValue("Main", "wholesite")) {				
-			echo html_header($this->config->getValue("Main", "title"),
-					$this->config->getValue("Main", "urlcss"),
-					$this->config->getAttributes("Body", "body"),
-					$this->config->getValue("Main", "copyright"),
-					$this->config->getValue("Main", "author"));
-		}
+		if ($this->config->getValue("Main", "wholesite"))		
+			echo html_header($this->config);
 		
 		if (!$language = $this->config->getValue("Main", "language"))
 			$language = "de_DE";
 		init_i18n($language);
 		
-		echo $this->toString();
+		echo $this->toString($args);
 		
 		if ($this->config->getValue("Main", "wholesite"))
 			echo html_footer();
 	}
 	
 	function printoutPreview () {
-		echo html_header($this->config->getValue("Main", "title"),
-				$this->config->getValue("Main", "urlcss"),
-				$this->config->getAttributes("Body", "body"),
-				$this->config->getValue("Main", "copyright"),
-				$this->config->getValue("Main", "author"));
+		echo html_header($this->config);
 		
 		if (!$language = $this->config->getValue("Main", "language"))
 			$language = "de_DE";
@@ -116,11 +109,22 @@ class ExternModuleDownload extends ExternModule {
 		$db = new DB_Seminar();
 		$error_message = "";
 		
-		// test for valid range_id
-		$query = "SELECT Name FROM Institute WHERE Institut_id='{$this->config->range_id}'";
-		$db->query($query);
-		if(!$db->next_record())
+		// check for valid range_id
+		$range = $this->checkRangeId($this->config->range_id);
+		if($range != 'inst')
 			$error_message = $GLOBALS["EXTERN_ERROR_MESSAGE"];
+		// if $args['seminar_id'] is given, check for free access
+		else if ($args['seminar_id']) {
+			$seminar_id = $args['seminar_id'];
+			$query = "SELECT Lesezugriff FROM seminare s LEFT JOIN seminar_inst si ";
+			$query .= "USING(seminar_id) WHERE s.seminar_id='$seminar_id' ";
+			$query .= "AND si.institut_id='{$this->config->range_id}'";
+			$db->query($query);
+			if (!($db->next_record() && $db->f('Lesezugriff') == 0))
+				$error_message = $GLOBALS["EXTERN_ERROR_MESSAGE"];
+		}
+		else
+			$seminar_id = $this->config->range_id;
 		
 		$sort = $this->config->getValue("Main", "sort");
 		$query_order = "";
@@ -139,7 +143,7 @@ class ExternModuleDownload extends ExternModule {
 		$query .= $GLOBALS["_fullname_sql"][$nameformat];
 		$query .= "AS fullname, username FROM dokumente d LEFT JOIN user_info USING (user_id) ";
 		$query .= "LEFT JOIN auth_user_md5 USING (user_id) WHERE ";
-		$query .= "Seminar_id='{$this->config->range_id}'$query_order";
+		$query .= "seminar_id='$seminar_id'$query_order";
 		
 		$db->query($query);
 		
@@ -148,7 +152,6 @@ class ExternModuleDownload extends ExternModule {
 		
 		$out = $this->elements["TableHeadrow"]->toString();
 		
-		// if there are no files present or other shit has happened
 		if ($error_message)
 			$out = $this->elements["TableRow"]->toString(array("content" => $error_message));
 		else {
@@ -201,7 +204,7 @@ class ExternModuleDownload extends ExternModule {
 				if ($icon)
 					$picture_file = "http://{$GLOBALS['EXTERN_SERVER_NAME']}pictures/$icon";
 						
-				$download_link = $CANONICAL_RELATIV_PATH_STUDIP;
+				$download_link = "http://{$GLOBALS['EXTERN_SERVER_NAME']}";
 				$download_link .= sprintf("sendfile.php?type=0&file_id=%s&file_name=%s\"",
 						$db->f("dokument_id"), $db->f("filename"));
 			
@@ -209,7 +212,7 @@ class ExternModuleDownload extends ExternModule {
 				$table_row_data["content"] = array(
 					"icon"        => sprintf("<a href=\"%s\"><img border=\"0\" src=\"%s\"></a>"
 														, $download_link, $picture_file),
-														 
+																			 
 					"filename"    => $this->elements["Link"]->toString(array("content" =>
 														htmlReady($db->f("filename")), "link" => $download_link)),
 														 
@@ -349,4 +352,5 @@ class ExternModuleDownload extends ExternModule {
 
 	
 }
-?> 
+
+?>
