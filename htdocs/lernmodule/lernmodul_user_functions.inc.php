@@ -24,6 +24,18 @@ function get_studip_user($ilias_id)
 		return false;
 }
 
+function is_created_user($studip_id)
+{
+	global $auth, $username_prefix;
+	$db = New DB_Seminar;
+	$query_string = "SELECT is_created FROM studip_ilias WHERE studip_user_id = '$studip_id'";
+	$db->query($query_string);
+	if ($db->next_record())
+		return $db->f("is_created");
+	else
+		return false;
+}
+
 function get_connected_user_id($studip_id)
 {
 	global $auth, $username_prefix;
@@ -145,7 +157,7 @@ function create_ilias_user($studip_id)
 
 		if ($creation_result === true)
 		{
-			connect_users($studip_id, get_ilias_user_id($username_prefix . $db->f("username")));
+			connect_users($studip_id, get_ilias_user_id($username_prefix . $db->f("username")), 1);
 			return true;
 		}
 	}
@@ -166,20 +178,20 @@ function create_studip_user($benutzername)
 	return false;
 }
 /**/
-function connect_users($studip_id, $ilias_id)
+function connect_users($studip_id, $ilias_id, $is_created = 0)
 {
 	$db = new DB_Seminar;
 	$query_string = "SELECT * FROM studip_ilias WHERE studip_user_id = '$studip_id'";
 	$db->query($query_string);
 	if ($db->next_record())
-		$query_string = "UPDATE studip_ilias SET studip_user_id = '$studip_id', ilias_user_id = '$ilias_id' WHERE studip_user_id = '$studip_id'";
+		$query_string = "UPDATE studip_ilias SET studip_user_id = '$studip_id', ilias_user_id = '$ilias_id', is_created = '$is_created' WHERE studip_user_id = '$studip_id'";
 	else
-		$query_string = "INSERT INTO studip_ilias (studip_user_id, ilias_user_id) VALUES ('$studip_id', '$ilias_id')";
+		$query_string = "INSERT INTO studip_ilias (studip_user_id, ilias_user_id, is_created) VALUES ('$studip_id', '$ilias_id', '$is_created')";
 	$db->query($query_string);
 	return true;
 }
 
-function edit_ilias_user ($u_id, $benutzername, $passwort, $geschlecht, $vorname, $nachname, $title_front, $institution, $telefon, $email, $status, $preferred_language)
+function edit_ilias_user ($u_id, $benutzername, $geschlecht, $vorname, $nachname, $title_front, $institution, /*$telefon,*/ $email, $status, $preferred_language)
 {
 	global $ilias_status, $ilias_systemgroup, $username_prefix;
 	$ilias_db = New DB_Ilias;
@@ -200,11 +212,13 @@ function edit_ilias_user ($u_id, $benutzername, $passwort, $geschlecht, $vorname
 	$passwort = (crypt($passwort,substr($passwort,0,2)));
 	$atitel = $title_front;
 	$u_status = $ilias_status[$status];
+	if ($preferred_language == "")
+		$u_lang = "en";
 
 // Datenbankzugriff: BENUTZER
 	$query_string = "UPDATE benutzer ".
-			"SET benutzername='" . $username_prefix . $benutzername . "',".
-				"passwort='$passwort',".
+			"SET benutzername='" . $benutzername . "',".
+//				"passwort='$passwort',".
 				"anrede='$anrede',".
 				"vorname='$vorname',".
 				"nachname='$nachname',".
