@@ -183,52 +183,51 @@ if ($i_view) {
 	<form method="POST" name="edit" action="<? echo $PHP_SELF?>">
 	<tr><td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>"><?=_("Name des Studienganges:")?> </td><td class="<? echo $cssSw->getClass() ?>"><input type="text" name="Name" size=60 maxlength=254 value="<?php echo htmlReady($db->f("name")) ?>"></td></tr>
 	<tr><td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>"><?=_("Beschreibung:")?> </td><td class="<? echo $cssSw->getClass() ?>"><textarea cols=50 ROWS=4 name="Beschreibung" value="<?php $db->p("beschreibung") ?>"><?php echo htmlReady($db->f("beschreibung")) ?></textarea></td></tr>
-	<tr><td class="<? echo $cssSw->getClass() ?>"colspan=2 align="center">
-	&nbsp;&nbsp;
   	<?
 	if ($i_view <> "new") {
-		if ($db->f("number") < 1):
+		if ($db->f("number") < 1) {
 			?>
-			<input type="IMAGE" name="i_kill" value=" <?=_("L&ouml;schen")?> " <?=makeButton("loeschen", "src")?>>
+		<tr>
+			<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" align="center">
+				&nbsp;
+			</td>
+			<td class="<? echo $cssSw->getClass() ?>">
+				<font size="-1"><?=_("Wenn die dem Studiengang zugeordneten Studierenden beim L&ouml;schen einem anderen Studiengang zugeordnet werden sollen, w&auml;hlen Sie ihn bitte hier aus:") ?></font><br /><br />			<?
+				$db2->query("SELECT * FROM studiengaenge WHERE studiengang_id  != '".$db->f("studiengang_id")."' ORDER BY name");
+				$db2->next_record();
+				print "<select name=\"move_user_stdg_id\">";
+				print "<option value=\"\">"._("&lt;keinem anderen Studiengang zuordnen - direkt l&ouml;schen&gt;")."</option>";
+				while ($db2->next_record()) {
+					printf ("<option value=\"%s\">%s</option>", $db2->f("studiengang_id"), my_substr($db2->f("name"), 0, 50));
+				}
+				print "</select><br />";
+				?>
+			</td>
+		</tr>
 			<?
-		endif;
+		}
 		?>
-		<input type="IMAGE" name="i_edit" value=" <?=_("Ver&auml;ndern")?> " <?=makeButton("uebernehmen", "src")?>>
-		<input type="hidden" name="i_id"   value="<?php $db->p("studiengang_id") ?>">
+		<tr>
+			<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>">
+				&nbsp;
+			</td>
+			<td class="<?= $cssSw->getClass()?>">
+			<?
+			if (!$db->f("number"))
+				print "<input type=\"IMAGE\"  border=\"0\" name=\"i_kill\" value=\""._("L&ouml;schen")."\" ".makeButton("loeschen", "src")." />";
+			?>
+				<input type="IMAGE"  border="0" name="i_edit" value=" <?=_("Ver&auml;ndern")?> " <?=makeButton("uebernehmen", "src")?>>
+				<input type="hidden" name="i_id"   value="<?php $db->p("studiengang_id") ?>">
 		<?
 	} else {
 		echo "<input type=\"IMAGE\" name=\"create\" value=\" " . _("Anlegen") . " \" " . makeButton("anlegen", "src") . ">";
 	}
 	?>
-	<input type="IMAGE" name="cancel" value=" <?=_("abbrechen")?> " <?=makeButton("abbrechen", "src")?>>
-	<input type="hidden" name="i_view" value="<? echo $i_view; ?>">
-	</td></tr>
-	<?
-	if (!$db->f("number")) {
-	?>
-	<tr>
-		<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>">
-		&nbsp;
-		</td>
-		<td class="<? echo $cssSw->getClass() ?>">
-			<font size="-1"><?=_("Wenn die dem Studiengang zugeordneten Studierenden beim L&ouml;schen einem anderen Studiengang zugeordnet werden sollen, w&auml;hlen Sie ihn bitte hier aus:") ?></font><br /><br />			<?
-			$db2->query("SELECT * FROM studiengaenge WHERE studiengang_id  != '".$db->f("studiengang_id")."' ORDER BY name");
-			$db2->next_record();
-			print "<select name=\"move_user_stdg_id\">";
-			print "<option value=\"\">"._("&lt;keinem anderen Studiengang zuordnen - direkt l&ouml;schen&gt;")."</option>";
-			while ($db2->next_record()) {
-				printf ("<option value=\"%s\">%s</option>", $db2->f("studiengang_id"), my_substr($db2->f("name"), 0, 50));
-			}
-			print "</select><br />";
-			?>
-		&nbsp;
+		<input type="IMAGE" name="cancel" border="0" value=" <?=_("abbrechen")?> " <?=makeButton("abbrechen", "src")?>>
+		<input type="hidden" name="i_view" value="<? echo $i_view; ?>">
 		</td>
 	</tr>
-	<?
-	}
-	?>
 	</form></table>
-	<br><br>
 	<?
 	if ($i_view<>"new") {
 		$db->query("SELECT Name, seminare.seminar_id FROM admission_seminar_studiengang INNER JOIN seminare USING (seminar_id) WHERE studiengang_id = '$i_id'");
@@ -236,10 +235,10 @@ if ($i_view) {
  		<table border=0 align="center" width="75%" cellspacing=0 cellpadding=2>
 		<?
 		if ($db->affected_rows() > 0) {
-			?><tr><td width="100%" colspan=2><br>&nbsp;<?=_("Diesem Studiengang sind folgende teilnahmebeschr&auml;nkte Veranstaltungen zugeordnet:")?><br><br></th></tr>
+			?><tr><td width="100%" colspan=2><br><?=_("Diesem Studiengang sind folgende teilnahmebeschr&auml;nkte Veranstaltungen zugeordnet:")?><br><br></th></tr>
 	 		<tr><th width="100%" align="center"><?=_("Name")?></th><tr><?
 		} else {
-			?><tr><td width="100%" colspan=2><br>&nbsp;<?=_("Diesem Bereich sind noch keine Veranstaltungen zugeordnet!")?><br><br></th></tr><?}
+			?><tr><td width="100%" colspan=2><br><?=_("Diesem Bereich sind noch keine Veranstaltungen zugeordnet!")?><br><br></th></tr><?}
  		while ($db->next_record()) {
  			printf ("<tr><td class=\"%s\"><a href=\"admin_admission.php?seminar_id=%s\">&nbsp; %s</a></td></tr>", $cssSw->getClass(), $db->f("seminar_id"), htmlReady($db->f("Name")));
 			$cssSw->switchClass();
