@@ -393,9 +393,10 @@ table_head($table_structure, $css_switcher);
 // if you have the right question you will get the right answer ;-)
 if ($institut_members_data["show"] == "funktion") {
 	$all_statusgruppen = GetAllStatusgruppen($auswahl);
-	foreach ($all_statusgruppen as $statusgruppe_id => $statusgruppe_name) {
-		if ($institut_members_data["extend"] == "yes")
-			$query = sprintf("SELECT aum.Nachname, aum.Vorname, ui.inst_perms, ui.raum,
+	if ($all_statusgruppen) {
+		foreach ($all_statusgruppen as $statusgruppe_id => $statusgruppe_name) {
+			if ($institut_members_data["extend"] == "yes")
+				$query = sprintf("SELECT aum.Nachname, aum.Vorname, ui.inst_perms, ui.raum,
 								ui.sprechzeiten, ui.Telefon, ui.inst_perms, aum.Email, aum.user_id,
 								aum.username, info.Home, statusgruppe_id
 								FROM user_inst ui LEFT JOIN	auth_user_md5 aum USING(user_id) LEFT JOIN
@@ -403,8 +404,8 @@ if ($institut_members_data["show"] == "funktion") {
 								WHERE ui.Institut_id = '%s' AND ui.inst_perms != 'user'
 								AND statusgruppe_id = '%s' ORDER BY %s %s", $auswahl, $statusgruppe_id,
 								$institut_members_data["sortby"], $institut_members_data["direction"]);
-		else
-			$query = sprintf("SELECT Nachname, Vorname, raum, sprechzeiten, Telefon, inst_perms,
+			else
+				$query = sprintf("SELECT Nachname, Vorname, raum, sprechzeiten, Telefon, inst_perms,
 								Email, auth_user_md5.user_id, username, statusgruppe_id
 								FROM user_inst LEFT JOIN	auth_user_md5 USING(user_id)
 								LEFT JOIN statusgruppe_user USING(user_id)
@@ -412,11 +413,12 @@ if ($institut_members_data["show"] == "funktion") {
 								AND inst_perms != 'user' ORDER BY %s %s", $auswahl, $statusgruppe_id,
 								$institut_members_data["sortby"], $institut_members_data["direction"]);
 								
-		$db_institut_members->query($query);
-		if ($db_institut_members->num_rows() > 0) {
-			echo "<tr><td class=\"steelgroup1\" colspan=\"$colspan\" height=\"20\">";
-			echo "<font size=\"-1\"><b>&nbsp;$statusgruppe_name<b></font></td></tr>\n";
-			table_boddy($db_institut_members, $auswahl, $table_structure, $css_switcher);
+			$db_institut_members->query($query);
+			if ($db_institut_members->num_rows() > 0) {
+				echo "<tr><td class=\"steelgroup1\" colspan=\"$colspan\" height=\"20\">";
+				echo "<font size=\"-1\"><b>&nbsp;$statusgruppe_name<b></font></td></tr>\n";
+				table_boddy($db_institut_members, $auswahl, $table_structure, $css_switcher);
+			}
 		}
 	}
 	if ($perm->have_perm("admin")) {
