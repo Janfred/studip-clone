@@ -160,6 +160,10 @@ if ($links_admin_data["sem_id"]) {
 		case "admin_news.php": 
 			$range_id=$links_admin_data["sem_id"];
 		break;
+		case "archiv_assi.php": 
+			$archiv_sem[]="_id_".$links_admin_data["sem_id"];
+			$archiv_sem[]="on";
+		break;
 		case "admin_seminare1.php": 
 			$s_id=$links_admin_data["sem_id"];
 			if (!$s_command)
@@ -432,7 +436,7 @@ if ((!$links_admin_data["inst_id"]) && ($list) &&
 		}
 	
 //Einheitliches Seminarauswahlmenu, wenn kein Seminar gewaehlt ist
-if ((!$links_admin_data["sem_id"] || ($i_page == "archiv_assi.php")) && ($list) &&
+if ((!$links_admin_data["sem_id"]) && ($list) &&
 	(( $i_page == "admin_seminare1.php" OR $i_page == "admin_dates.php" OR $i_page == "admin_metadates.php" OR $i_page == "admin_admission.php"  OR ($i_page == "admin_literatur.php" AND $links_admin_data["view"]=="sem") OR $i_page == "archiv_assi.php" OR $i_page == "adminarea_start.php"))) {
 
 	//Umfangreiches Auswahlmenu nur ab Admin, alles darunter sollte eine uberschaubare Anzahl von Seminaren haben
@@ -714,8 +718,7 @@ while ($db->next_record()) {
 					</td>
 					<td class="<? echo $cssSw->getClass() ?>" colspan=2 align="right">
 						<? if ($auth->auth["jscript"]) {?>
-						<font size=-1><image src="./pictures/buttons/alleauswaehlen-button.gif" onclick="selectAll(links_admin_action,0);" />&nbsp; 
-						<font size=-1><image src="./pictures/buttons/auswahlumkehr-button.gif" onclick="selectAll(links_admin_action,1);" />
+						<font size=-1><a href="<? echo $PHP_SELF ?>?select_all=TRUE&list=TRUE"><image src="./pictures/buttons/alleauswaehlen-button.gif" border=0/></a></font>
 						<? } ?>&nbsp; 
 					</td>
 				</tr>
@@ -776,7 +779,7 @@ while ($db->next_record()) {
 				if ($perm->have_perm("admin")){
 				?>
 				<input type="HIDDEN" name="archiv_sem[]" value="_id_<? echo $seminar_id ?>" />
-				<input type="CHECKBOX" name="archiv_sem[]" checked />
+				<input type="CHECKBOX" name="archiv_sem[]" <? if ($select_all) echo checked; ?> />
 				<?
 				}
 			break;
