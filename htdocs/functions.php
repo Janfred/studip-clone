@@ -810,6 +810,22 @@ function get_seminar_dozent($seminar_id) {
 	return $dozent;
 }
 
+function get_seminar_tutor($seminar_id) {
+	$db = new DB_Seminar;
+	$sql = "SELECT user_id FROM seminar_user WHERE Seminar_id='".$seminar_id."' AND status='tutor'";
+	if (!$db->query($sql)) {
+		echo "Fehler bei DB-Abfrage in get_seminar_user!";
+		return 0;
+	}
+	if (!$db->num_rows()) {
+		return null;
+	}
+	while ($db->next_record()) {
+		$tutor[$db->f("user_id")] = TRUE;
+	}
+	return $tutor;
+}
+
 function get_seminar_sem_tree_entries($seminar_id) {
 	// get sem_tree_entries for copy 
 	$db = new DB_Seminar;
