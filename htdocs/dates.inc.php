@@ -1039,16 +1039,34 @@ function dateAssi($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full = 
 			foreach ($old_turnus as $val) {
 				//compense php sunday = 0 bullshit
 				if ($val["day"] == 7)
-					$t_day = 0;
+				$t_day = 0;
 				else
-					$t_day = $val["day"];
+				$t_day = $val["day"];
 				
 				if ((date("w", $db->f("date")) == $t_day) &&
-					(date("G", $db->f("date")) == $val["start_stunde"]) &&
-					(date("i", $db->f("date")) == $val["start_minute"]) &&
-					(date("G", $db->f("end_time")) == $val["end_stunde"]) &&
-					(date("i", $db->f("end_time")) == $val["end_minute"]))
-					$saved_dates[] = $db->f("termin_id");
+				(date("G", $db->f("date")) == $val["start_stunde"]) &&
+				(date("i", $db->f("date")) == $val["start_minute"]) &&
+				(date("G", $db->f("end_time")) == $val["end_stunde"]) &&
+				(date("i", $db->f("end_time")) == $val["end_minute"])){
+					foreach ($term_data['turnus_data'] as $val2){
+						if ($val['start_stunde'] == $val2['start_stunde']
+						&& 	$val['start_minute'] == $val2['start_minute']
+						&& 	$val['end_stunde'] == $val2['end_stunde']
+						&& 	$val['end_minute'] == $val2['end_minute']
+						&& 	$val['day'] == $val2['day']){
+							$saved_dates[md5($db->f('date').$db->f('end_time'))] = $db->f("termin_id");
+							break;
+						}
+					}
+					if ($saved_dates[md5($db->f('date').$db->f('end_time'))]) break;
+					else $kill_dates[] = $db->f('termin_id');
+				}
+			}
+			
+		}
+		if (is_array($kill_dates)){
+			foreach($kill_dates as $one_kill_date){
+				delete_date($one_kill_date, true, true, $sem_id);
 			}
 		}
 	}
@@ -1056,9 +1074,10 @@ function dateAssi($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full = 
 	//determine first day of the start-week as sem_begin
 	$all_semester = $semester->getAllSemesterData();
 	if ($term_data["start_woche"] >= 0) {
-		foreach ($all_semester as $val)
+		foreach ($all_semester as $key => $val)
 			if (($veranstaltung_start_time >= $val["beginn"]) AND ($veranstaltung_start_time <= $val["ende"])) {
 				$sem_begin = mktime(0, 0, 0, date("n",$val["vorles_beginn"]), date("j",$val["vorles_beginn"])+($term_data["start_woche"] * 7),  date("Y",$val["vorles_beginn"]));
+				$first_sem_key = $key;
 			}
 	} else
 		$sem_begin = $term_data["start_termin"];
@@ -1088,14 +1107,20 @@ function dateAssi($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full = 
 	if ($full)
 		if ($veranstaltung_duration_time == -1) {
 			$last_sem = array_pop($all_semester);
-			$sem_end=$last_sem["vorles_ende"];
+			$sem_end = $last_sem["vorles_ende"];
+			$last_sem_key = count($all_semester)-1;
 		} else
 			foreach ($all_semester as $val)
-				if  ((($veranstaltung_start_time + $veranstaltung_duration_time + 1) >= $val["beginn"]) AND (($veranstaltung_start_time + $veranstaltung_duration_time +1) <= $val["ende"]))
-					$sem_end=$val["vorles_ende"];
-			
+			if  ((($veranstaltung_start_time + $veranstaltung_duration_time + 1) >= $val["beginn"]) AND (($veranstaltung_start_time + $veranstaltung_duration_time +1) <= $val["ende"])){
+				$sem_end = $val["vorles_ende"];
+				$last_sem_key = $key;
+			}
 	
 	$interval = $term_data["turnus"] + 1;
+	
+	// get all holidays from db
+	
+	$all_holiday = $holiday->getAllHolidays(); // fetch all Holidays
 	
 	//create the dates
 	$affected_dates=0;
@@ -1103,13 +1128,24 @@ function dateAssi($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full = 
 		do {
 			foreach ($term_data["turnus_data"] as $val) {
 				$do = TRUE;
-
+				$old_turnus_key = false;
+				if (is_array($old_turnus)){
+					foreach ($old_turnus as $old_key => $old_val){
+						if (	$old_val['start_stunde'] == $val['start_stunde']
+							&& 	$old_val['start_minute'] == $val['start_minute']
+							&& 	$old_val['end_stunde'] == $val['end_stunde']
+							&& 	$old_val['end_minute'] == $val['end_minute']
+							&& 	$old_val['day'] == $val['day']){
+							$old_turnus_key = $old_key;
+							break;
+						}
+					}
+				}
+				
 				//create new dates
 				$start_time = mktime ($val["start_stunde"], $val["start_minute"], 0, date("n", $sem_begin), date("j", $sem_begin) + ($val["day"] -1) + ($week * 7), date("Y", $sem_begin));
 				$end_time = mktime ($val["end_stunde"], $val["end_minute"], 0, date("n", $sem_begin), date("j", $sem_begin) + ($val["day"] -1) + ($week * 7), date("Y", $sem_begin));
 
-				$all_holiday = $holiday->getAllHolidays(); // fetch all Holidays
-				// get all holidays from db
 				foreach ($all_holiday as $val2)
 					if (($val2["beginn"] <= $start_time) && ($start_time <=$val2["ende"]))
 						$do = FALSE;
@@ -1120,6 +1156,15 @@ function dateAssi($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full = 
 					if ($holy_type["col"] == 3)
 						$do = FALSE;
 				}
+				if ($do && $full){
+					for ($i = $first_sem_key; $i <= $last_sem_key; ++$i){
+						if ( ($all_semester[$i]['beginn'] <= $start_time && $start_time <= $all_semester[$i]['vorles_beginn'])
+							|| ($all_semester[$i]['vorles_ende'] <= $start_time && $start_time <= $all_semester[$i]['ende'])){
+							$do = false;
+							break;
+						}
+					}
+				}
 				
 				//check if corrected $sem_begin
 				if (($do) && ($sem_begin_uncorrected))
@@ -1129,10 +1174,10 @@ function dateAssi($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full = 
 							$cor_interval = -1;
 					}
 
-				if (($do) && ($end_time <$sem_end)){
+				if (($do) && ($end_time < $sem_end)){
 					//ids
-					$date_id=md5(uniqid("lisa"));
-					$folder_id=md5(uniqid("alexandra"));
+					$date_id=md5(uniqid("lisa",1));
+					$folder_id=md5(uniqid("alexandra",1));
 					$aktuell=time();
 
 					//if we have a resource_id, we take the room name from resource_id
@@ -1142,55 +1187,46 @@ function dateAssi($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full = 
 						$room = $val["room"];
 						
 					//create topic
-					if (($topic) && (!$saved_dates[$affected_dates]))
+					if (($topic) && (!$saved_dates[md5($start_time.$end_time)]))
 						$topic_id=CreateTopic($TERMIN_TYP[$date_typ]["name"]." " . _("am") . " ".date("d.m.Y", $start_time), $author, _("Hier kann zu diesem Termin diskutiert werden"), 0, 0, $sem_id);
 		
 					//create folder
-					if (($folder) && (!$saved_dates[$affected_dates])) {
+					if (($folder) && (!$saved_dates[md5($start_time.$end_time)])) {
 						$titel = sprintf (_("%s am %s"), $TERMIN_TYP[$date_typ]["name"], date("d.m.Y", $start_time));
 						$description= _("Ablage für Ordner und Dokumente zu diesem Termin");
 						$db2->query("INSERT INTO folder SET folder_id='$folder_id', range_id='$date_id', description='$description', user_id='$user->id', name='$titel', mkdate='$aktuell', chdate='$aktuell'");
 					} else
 						$folder_id='';
 					
+					$action = '';
 					//insert/update dates
-					if ($saved_dates[$affected_dates]) 
-						$query2 = "UPDATE termine SET date='$start_time', chdate='$aktuell', end_time='$end_time', raum='$room' WHERE termin_id = '".$saved_dates[$affected_dates]."' ";
-					else
+					if (!$saved_dates[md5($start_time.$end_time)]) {
 						$query2 = "INSERT INTO termine SET termin_id='$date_id', range_id='$sem_id', autor_id='$user->id', content='" . _("Kein Titel") . "', date='$start_time', mkdate='$aktuell', chdate='$aktuell', date_typ='$date_typ', topic_id='$topic_id', end_time='$end_time', raum='$room' ";
-					$db2->query($query2);
-					if ($db2->affected_rows()) {
-						//insert an entry for the linked resource, if resource management activ
-						if ($RESOURCES_ENABLE) {
-							$insertAssign->dont_check = $dont_check_overlaps;
-							//only if we get a resource_id, we update assigns...
-							if (($val["resource_id"]) && ($update_resources)){
-								if ($saved_dates[$affected_dates]) {
-									$resources_result = array_merge($resources_result, $insertAssign->changeDateAssign($saved_dates[$affected_dates], $val["resource_id"], FALSE, FALSE, FALSE, $check_locks));
-								} else {
-									$resources_result = array_merge($resources_result, $insertAssign->insertDateAssign($date_id, $val["resource_id"], FALSE, FALSE, FALSE, $check_locks));
-								}
-							//...if no resource_id (but assign, if ressource was set but is no more), kill assign
-							} elseif ($saved_dates[$affected_dates]) {
-								$insertAssign->killDateAssign($saved_dates[$affected_dates]);
+						$db2->query($query2);
+						$action = 'insert';
+					} else {
+						$action = 'update';
+						$query2 = "UPDATE termine SET chdate='$aktuell', raum='$room' WHERE termin_id='".$saved_dates[md5($start_time.$end_time)]."'";
+						$db2->query($query2);
+					}
+					//insert an entry for the linked resource, if resource management activ
+					if ($RESOURCES_ENABLE) {
+						$insertAssign->dont_check = $dont_check_overlaps;
+						//only if we get a resource_id, we update assigns...
+						if ($val["resource_id"]){
+							if ($action == 'update' && $val['resource_id'] != $old_turnus[$old_turnus_key]['resource_id'] ) {
+								$resources_result = array_merge($resources_result, $insertAssign->changeDateAssign($saved_dates[md5($start_time.$end_time)], $val["resource_id"], FALSE, FALSE, FALSE, $check_locks));
+							} elseif ($action == 'insert') {
+								$resources_result = array_merge($resources_result, $insertAssign->insertDateAssign($date_id, $val["resource_id"], FALSE, FALSE, FALSE, $check_locks));
 							}
+						} elseif ($action == 'update'){
+							$insertAssign->killDateAssign($saved_dates[md5($start_time.$end_time)]);
 						}
-						$affected_dates++;
 					}
-					
-					//update topic & folder
-					if ($saved_dates[$affected_dates-1]) {
-						//load topic- and folder_id
-						$db->query("SELECT topic_id, content FROM termine WHERE termin_id = '".$saved_dates[$affected_dates-1]."' ");
-						$db->next_record();
-						
-						//change topic
-						$db2->query("UPDATE px_topics SET name='". mysql_escape_string($TERMIN_TYP[$date_typ]["name"].": ".$db->f("content")." " . _("am") . " ".date("d.m.Y ", $start_time)) ."', chdate='$aktuell' WHERE topic_id='".$db->f("topic_id")." '");
-					
-						//change folder
-						$titel = mysql_escape_string(sprintf (_("%s: %s am %s"), $TERMIN_TYP[$date_typ]["name"], $db->f("content"), date("d.m.Y", $start_time)));
-						$db2->query("UPDATE folder SET name='$titel', chdate='$aktuell' WHERE range_id = '".$saved_dates[$affected_dates-1]."' ");
+					if ($action == 'update'){
+						unset($saved_dates[md5($start_time.$end_time)]);
 					}
+					$affected_dates++;
 				}
 			}
 			//inc the week
@@ -1202,13 +1238,11 @@ function dateAssi($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full = 
 		} while ($end_time <$sem_end);
 
 		//kill dates
-		if (sizeof($saved_dates) >$affected_dates)
-			for ($i=$affected_dates; $i<sizeof($saved_dates); $i++) {
-				$query2 = "SELECT topic_id FROM termine WHERE termin_id = '".$saved_dates[$i]."' ";
-				$db2->query($query2);
-				$db2->next_record();
-				delete_date ($saved_dates[$i], $db2->f("topic_id"), TRUE, $range_id);
-			}
+		if (is_array($saved_dates) && count($saved_dates)) {
+				foreach ($saved_dates as $one_date) {
+					delete_date($one_date, true, true, $sem_id);
+				}
+		}
 
 	$result_a["changed"]=$affected_dates;
 	$result_a["resources_result"]=$resources_result;
