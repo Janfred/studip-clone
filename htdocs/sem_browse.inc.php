@@ -171,7 +171,7 @@ if ((!$sem_browse_data["extern"]) ) {
 			echo "&nbsp;" . _("Suchbereich:") . "&nbsp;" . $search_obj->getSearchField("scope_choose",array('style' => 'vertical-align:middle'),$sem_tree->start_item_id);
 			echo "\n<input type=\"hidden\" name=\"start_item_id\" value=\"{$sem_tree->start_item_id}\">";
 		}
-		echo "</td></tr><tr><td class=\"steel1\"  align=\"center\"><hr></td></tr>";
+		echo "</td></tr><tr><td class=\"steel1\"  align=\"center\"></td></tr>";
 		echo $search_obj->getFormEnd();
 		echo "</table>\n";
 	}
@@ -222,7 +222,7 @@ if ((!$sem_browse_data["extern"]) ) {
 		echo $search_obj->getNewSearchButton();
 		echo "</td><td class=\"steel1\">&nbsp;</td><td class=\"steel1\"><a href=\"$PHP_SELF?cmd=qs";
 		echo  "\"><img " . makeButton("schnellsuche", "src") . tooltip(_("Zur Schnellsuche zurückgehen")) ." border=0></a></td></tr>\n";
-		echo "<tr><td class=\"steel1\" colspan=4 align=\"center\"><hr></td></tr>";
+		echo "<tr><td class=\"steel1\" colspan=4 align=\"center\"></td></tr>";
 		echo "</table>\n";
 		echo $search_obj->getFormEnd();
 	}
@@ -674,14 +674,14 @@ if (($sem_browse_data["level"]=="s") || ($sem_browse_data['sset'])) {
 	} elseif ($search_obj->search_button_clicked) {
 		echo "<tr><td class=\"blank\" colspan=2><font size=-1><b>" . _("Es wurden keine Veranstaltungen gefunden."); 
 		if ($search_obj->found_rows === false){
-			echo "<br>" . _("(Der Suchbegriff fehlt, oder ist zu kurz.)");
+			echo "<br>" . _("(Der Suchbegriff fehlt oder ist zu kurz)");
 		}
 		echo "</b></font></td></tr>";		
 	}
 echo "</form></table>";
 } elseif ($sem_browse_data['level'] == "f"){
 	echo "\n<table border=0 align=\"center\" cellspacing=0 cellpadding=2 width = \"99%\">\n";
-	echo "\n<tr><td align=\"center\">";
+	echo "\n<tr><td align=\"center\"><br />";
 	printf(_("Suche im %sEinrichtungsverzeichnis%s"),"<a href=\"$PHP_SELF?level=ev&cmd=qs\">","</a>");
 	if (!$hide_bereich){
 		printf(_(" / %sVorlesungsverzeichnis%s"),"<a href=\"$PHP_SELF?level=vv&cmd=qs&view=1&reset_all=1\">","</a>");
