@@ -609,13 +609,6 @@ function printposting ($forumposting) {
   		
   		$forumposting["score"] = round($forumposting["score"],1);
   		
-  		// $forumhead[] = "<font color=\"#007700\">".$objectviews."</font> / ";
-  		// $forumhead[] = "<font color=\"#AA8800\">".$forumposting["rating"]."</font> / ";
-  		// $forumhead[] = "<font color=\"#000077\">".round($relevanz,1)."</font> / ";
-  		
-  		/// Ende Indexe
-  		
-  		
   		if ($forumposting["foldercount"] && $forumposting["type"] == "folder" && $forumposting["openclose"] == "close")
   			$forumhead[] = "<b>".($forumposting["foldercount"]-1)."</b> / ";
   		
@@ -745,7 +738,7 @@ function printposting ($forumposting) {
 					$addon .= "<input type=hidden name=open value='".$forumposting["id"]."'><input type=hidden name=sidebar value='".$forumposting["id"]."'>";
 					$addon .= "<input type=hidden name=flatviewstartposting value='".$forum["flatviewstartposting"]."'>";
 					$addon .= "<input type=image name=create value=\"abschicken\" " . makeButton("abschicken", "src") . " align=\"absmiddle\" border=0>";
-					$addon .= "</form>";
+				//	$addon .= "</form>";
 				} else {
 					$addon .= "<font size=\"-1\">&nbsp;&nbsp;Sie haben diesen&nbsp;<br>&nbsp;&nbsp;Beitrag bewertet.";
 				}
