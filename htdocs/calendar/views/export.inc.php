@@ -182,7 +182,7 @@ if (($expmod != 'exp' && $expmod != 'imp' && $expmod != 'sync') || ($expmod == '
 						. "<input type=\"text\" name=\"exstartmonth\" size=\"2\" maxlength=\"2\" value=\""
 						. ($exstartmonth ? $exstartmonth : date("m", time())) . "\">.&nbsp;\n"
 						. "<input type=\"text\" name=\"exstartyear\" size=\"4\" maxlength=\"4\" value=\""
-						. ($exstartyear ? $exstartyear : date("Y", time()) - 1) . "\">"
+						. ($exstartyear ? $exstartyear : date("Y", time())) . "\">"
 						. ($err['exstart'] ? $error_sign : '')
 						. "&nbsp &nbsp; \n")
 				. " &nbsp; <input type=\"text\" name=\"exendday\" size=\"2\" maxlength=\"2\" value=\""
