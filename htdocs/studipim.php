@@ -40,12 +40,12 @@ if ($auth->auth["uid"]!="nobody"){
 	$sms= new messaging;
 	
 	$now = time(); // nach eingestellter Zeit (default = 5 Minuten ohne Aktion) zaehlt man als offline
-	$query = "SELECT " . $_fullname_sql['full'] . " AS full_name,($now-UNIX_TIMESTAMP(mkdate)) AS lastaction,a.username,a.user_id,contact_id 
-	FROM active_sessions LEFT JOIN auth_user_md5 a ON (a.user_id=sid) LEFT JOIN user_info USING(user_id) 
-	LEFT JOIN contact ON (owner_id='".$auth->auth["uid"]."' AND contact.user_id=a.user_id AND buddy=1)
-	WHERE mkdate > '".($now - ($my_messaging_settings["active_time"] * 60))."' 
-	AND sid != 'nobody' AND sid != '".$auth->auth["uid"]."' 
-	AND active_sessions.name = 'Seminar_User' ORDER BY mkdate DESC";
+	$query = "SELECT " . $_fullname_sql['full'] . " AS full_name,($now-UNIX_TIMESTAMP(changed)) AS lastaction,a.username,a.user_id,contact_id 
+		FROM active_sessions LEFT JOIN auth_user_md5 a ON (a.user_id=sid) LEFT JOIN user_info USING(user_id) 
+		LEFT JOIN contact ON (owner_id='".$auth->auth["uid"]."' AND contact.user_id=a.user_id AND buddy=1)
+		WHERE changed > '".date("YmdHis",$now - ($my_messaging_settings["active_time"] * 60))."' 
+		AND sid != 'nobody' AND sid != '".$auth->auth["uid"]."' 
+		AND active_sessions.name = 'Seminar_User' ORDER BY changed DESC";
 	$db->query($query);
 	while ($db->next_record()){
 		$online[$db->f("username")] = array("name"=>$db->f("full_name"),"last_action"=>$db->f("lastaction"),"userid"=>$db->f("user_id"),"is_buddy" => $db->f("contact_id"));      
@@ -126,26 +126,26 @@ setTimeout('again_and_again();',<? print($refresh*1000);?>);
 $c=0;
 $owner_id = $user->id;
 
-	if (is_array ($online)) { // wenn jemand online ist
-		foreach($online as $username=>$value) { //ale durchgehen die online sind
-			$user_id = get_userid($username);
-			$db->query ("SELECT contact_id FROM contact WHERE owner_id = '$owner_id' AND user_id = '$user_id' AND buddy = '1'");	
-			if ($db->next_record()) { // er ist auf jeden Fall als Buddy eingetragen
-				$non_group_buddies[]=array($online[$username]["name"],$online[$username]["last_action"],$username);
-			} 
+if (is_array ($online)) { // wenn jemand online ist
+	foreach($online as $username=>$value) { //ale durchgehen die online sind
+		$user_id = get_userid($username);
+		$db->query ("SELECT contact_id FROM contact WHERE owner_id = '$owner_id' AND user_id = '$user_id' AND buddy = '1'");	
+		if ($db->next_record()) { // er ist auf jeden Fall als Buddy eingetragen
+			$buddies[]=array($online[$username]["name"],$online[$username]["last_action"],$username);
 		}
 	}
+}
 
-if ((is_array($online)) && (is_array ($non_group_buddies))) {
-	while (list($index)=each($non_group_buddies)) {
-		list($fullname,$zeit,$tmp_online_uname)=$non_group_buddies[$index];
-		printf ("<tr><td class=\"blank\" colspan=2 align=\"left\"><font size=-1><b>Buddies:</b></td></tr>");					
+if ((is_array($online)) && (is_array ($buddies))) {
+	printf ("<tr><td class=\"blank\" colspan=2 align=\"left\"><font size=-1><b>Buddies:</b></td></tr>");					
+	while (list($index)=each($buddies)) {
+		list($fullname,$zeit,$tmp_online_uname)=$buddies[$index];
 		echo "<tr><td class='blank' width='90%' align='left'><font size=-1><a href=\"javascript:coming_home('about.php?username=$tmp_online_uname');\">".$fullname."</a></font></td>\n";
 		echo "<td  class='blank' width='10%' align='middle'><font size=-1><a href='$PHP_SELF?cmd=write&msg_rec=$tmp_online_uname'><img src=\"pictures/nachricht1.gif\" ".tooltip("Nachricht an User verschicken")." border=\"0\" width=\"24\" height=\"21\"></a></font></td></tr>";
 		$c++;
 	}
  } else {
-	echo "<tr><td class='blank' colspan='2' align='left'><font size=-1>" . _("Kein Nutzer ist online.") . "</font>";
+	echo "<tr><td class='blank' colspan='2' align='left'><font size=-1>" . _("Kein Buddy ist online.") . "</font><br />&nbsp; ";
 }
 
 if (!$my_messaging_settings["show_only_buddys"]) {
