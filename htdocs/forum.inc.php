@@ -648,6 +648,8 @@ function printposting ($forumposting) {
   		
   		$forumposting["score"] = round($forumposting["score"],1);
   		
+  		// Anzahl der Postings in Ordnern
+  		
   		if ($forumposting["foldercount"] && $forumposting["type"] == "folder" && $forumposting["openclose"] == "close")
   			$forumhead[] = "<b>".($forumposting["foldercount"]-1)."</b> / ";
   		
@@ -657,7 +659,10 @@ function printposting ($forumposting) {
 		else
 			$forumhead[] = "<a class=\"printhead\" href=\"about.php?username=".$forumposting["username"]."\">". htmlReady($forumposting["author"]) ."&nbsp;</a>";
   		  		
-  		$forumhead[] = 	"&nbsp;".date("d.m.Y - H:i", $forumposting["chdate"])."&nbsp;";
+  		if ($forumposting["type"] == "folder")
+  			$forumhead[] = 	"&nbsp;".date("d.m.Y - H:i", $forumposting["folderlast"])."&nbsp;";
+  		else
+  			$forumhead[] = 	"&nbsp;".date("d.m.Y - H:i", $forumposting["chdate"])."&nbsp;";
   		
   		if ($forum["view"] != "flatfolder")
   			$forumhead[] =	"<a href=\"".$PHP_SELF."?open=".$forumposting["id"]
