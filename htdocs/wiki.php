@@ -50,10 +50,9 @@ if ($view=="wikiprint") {
 // Start of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
-
 checkObject(); // do we have an open object?
 checkObjectModule("wiki"); //are we allowed to use this module here?
-object_set_visit($SessSemName[1], "wiki", "last", object_get_visit($SessSemName[1], "sem"));
+object_set_visit_module("wiki");
 
 
 include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");

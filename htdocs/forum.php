@@ -69,7 +69,7 @@ require_once ("$ABSOLUTE_PATH_STUDIP/dates.inc.php");
 
 checkObject();
 checkObjectModule("forum");
-object_set_visit($SessSemName[1], "forum", "last", object_get_visit($SessSemName[1], "sem"));
+object_set_visit_module("forum");
 
 //////////////////////////////////////////////////////////////////////////////////
 // Debug Funktion zur Zeitmessung

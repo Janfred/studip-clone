@@ -38,8 +38,7 @@ require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 
 checkObject();
 checkObjectModule("schedule");
-object_set_visit($SessSemName[1], "schedule", "last", object_get_visit($SessSemName[1], "sem"));
-
+object_set_visit_module("schedule");
 
 include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
 	
