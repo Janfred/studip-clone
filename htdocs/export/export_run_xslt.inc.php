@@ -167,9 +167,9 @@ else
 											"text"  => sprintf(_("Um die Ausgabe-Datei herunterzuladen, klicken Sie %shier%s."), $link2, "</a>")
 										);
 		}
+		
+		include_once ("$ABSOLUTE_PATH_STUDIP$PATH_EXPORT/oscar.php");
 	}
 
 }
-include_once ("$ABSOLUTE_PATH_STUDIP$PATH_EXPORT/oscar.php");
-
 ?>
