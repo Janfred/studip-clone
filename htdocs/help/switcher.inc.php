@@ -231,7 +231,7 @@ switch($referrer_page) {
 		
 	case "admin_news.php" :
 	if ($perm->have_perm("tutor"))
-		$help_page = "x_admin_news.htm";
+		$help_page = "iii_homepageg.htm";
 		break;
 	
 	case "logout.php" :
@@ -301,10 +301,6 @@ switch($referrer_page) {
 		$help_page = "iii_homevote.htm";
 		break;
 	
-	case "admin_news.php": 
-		$help_page = "iii_homenews.htm";
-		break;
-	
 	
 	
 	case "admin_dates.php" :
@@ -313,7 +309,8 @@ switch($referrer_page) {
 		else
 			$help_page = "x_ablauf.htm";
 		break;
-	admin_lit_list adminvote
+		
+	
 	case "display_topic.php" :
 		if ($perm->have_perm("tutor"))
 		    $help_page = "x_themen.htm";
