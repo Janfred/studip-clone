@@ -196,7 +196,7 @@ function update_admission ($seminar_id, $send_message=TRUE) {
 		}
 
 		//Warteposition der restlichen User neu eintragen
-		renumber_admission($seminar_id, $send_message);
+		renumber_admission($seminar_id, FALSE);
 		
 	//Nachruecken in einzelnen Kontingenten veranlassen (nur bei chronologischer Anmeldung)
 	} elseif ($db->f("admission_type") == 2) {
@@ -252,7 +252,7 @@ function check_admission ($send_message=TRUE) {
 	$messaging=new messaging;
 	
 	//Daten holen / Abfrage ob ueberhaupt begrenzt
-	$db->query("SELECT Seminar_id, Name, admission_endtime, admission_turnout, admission_type, start_time FROM seminare WHERE admission_endtime <= '".time()."' AND admission_selection_take_place = '0' ");
+	$db->query("SELECT Seminar_id, Name, admission_endtime, admission_turnout, admission_type, start_time FROM seminare WHERE admission_endtime <= '".time()."' AND admission_type > 0 AND (admission_selection_take_place = '0' OR admission_selection_take_place IS NULL) ");
 	while ($db->next_record()) {
 		if ($db->f("admission_type") == '1') { //nur Losveranstaltungen losen 
 			//Check, if locked
@@ -299,7 +299,7 @@ function check_admission ($send_message=TRUE) {
 			}
 		}
 
-		//Veranstaltung lock aufheben und erfolgreichen Losvorgang einragen bzw. vertreichen der Kontingentierungsfrist notieren
+		//Veranstaltung lock aufheben und erfolgreichen Losvorgang eintragen bzw. vertreichen der Kontingentierungsfrist notieren
 		$db2->query("UPDATE seminare SET admission_selection_take_place ='1' WHERE Seminar_id = '".$db->f("Seminar_id")."' ");
 
 		//evtl. verbliebene Plaetze auffuellen
