@@ -198,8 +198,6 @@ if ($modules["documents"]) {
 //
 if ($modules["scm"]) {
 	$structure["_scm"]=array (topKat=>"scm", name=>scm_tab_name(), link=>"scm.php", active=>FALSE);
-	if ($rechte)
-		$structure["scm_admin"]=array (topKat=>"scm", name=>_("Administration"), link=>"admin_scm.php", active=>FALSE);
 }
 //
 if ($modules["literature"]) {
