@@ -93,24 +93,29 @@ class VeranstaltungResourcesAssign {
 		//determine first day of the start-week as sem_begin
 		if ($term_data["start_woche"] >= 0) {
 			foreach ($SEMESTER as $val)
-				if (($veranstaltung_start_time >= $val["beginn"]) AND ($veranstaltung_start_time <= $val["ende"]))
+				if (($veranstaltung_start_time >= $val["beginn"]) AND ($veranstaltung_start_time <= $val["ende"])) {
 					$sem_begin = mktime(0, 0, 0, date("n",$val["vorles_beginn"]), date("j",$val["vorles_beginn"])+($term_data["start_woche"] * 7),  date("Y",$val["vorles_beginn"]));
-
-		} else  {
-			$dow = date("w", $term_data["start_termin"]);
-			//calculate corrector to get first day of the week
-			if ($dow <= 5)
-				$corr = ($dow -1) * -1;
-			elseif ($dow == 6)
-				$corr = 2;
-			elseif ($dow == 0)
-				$corr = 1;
-			else
-				$corr = 0;
+				}
+		} else
+			$sem_begin = $term_data["start_termin"];
 			
-			$sem_begin = mktime(0, 0, 0, date("n",$term_data["start_termin"]), date("j",$term_data["start_termin"])+$corr,  date("Y",$term_data["start_termin"]));
-		}
-
+		$dow = date("w", $sem_begin);
+	
+		if ($dow <= 5)
+			$corr = ($dow -1) * -1;
+		elseif ($dow == 6)
+			$corr = 2;
+		elseif ($dow == 0)
+			$corr = 1;
+		else
+			$corr = 0;
+		
+		if ($corr)
+			$sem_begin_uncorrected = $sem_begin;
+			
+		$sem_begin = mktime(0, 0, 0, date("n",$sem_begin), date("j",$sem_begin)+$corr,  date("Y",$sem_begin));
+	
+	
 		//determine the last day as sem_end
 		foreach ($SEMESTER as $val)
 			if  ((($veranstaltung_start_time + $veranstaltung_duration_time + 1) >= $val["beginn"]) AND (($veranstaltung_start_time + $veranstaltung_duration_time +1) <= $val["ende"])) {
@@ -124,8 +129,12 @@ class VeranstaltungResourcesAssign {
 		if (is_array($term_data["turnus_data"]))
 			foreach ($term_data["turnus_data"] as $val) {
 				if ($val["resource_id"]) {
-					$start_time = mktime ($val["start_stunde"], $val["start_minute"], 0, date("n", $sem_begin), date("j", $sem_begin) + ($val["day"] -1), date("Y", $sem_begin));
+					$start_time = mktime ($val["start_stunde"], $val["start_minute"], 0, date("n", $sem_begin), date("j", $sem_begin) + ($val["day"] -1) + ($corr_week * 7), date("Y", $sem_begin));
 					$end_time = mktime ($val["end_stunde"], $val["end_minute"], 0, date("n", $sem_begin), date("j", $sem_begin) + ($val["day"] -1), date("Y", $sem_begin));
+				
+					//check if we have to correct $start_time for a whole week (in special cases, sem_beginn is not a Monday but the assig is)
+					if (($sem_begin_uncorrected) && ($start_time < $sem_begin_uncorrected) && ($term_data["turnus"]))
+						$start_time = mktime (date("G", $start_time), date("i", $start_time), 0, date("n", $start_time), date("j", $start_time) +  7, date("Y", $start_time));
 				
 					$day_of_week = date("w", $start_time);
 					if ($day_of_week == 0)
