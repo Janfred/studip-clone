@@ -300,24 +300,6 @@ function export_teilis($inst_id, $ex_sem_id = "no")
 	}
 	else
 	{	
-		$db->query ("SELECT name, studiengaenge.studiengang_id FROM studiengaenge LEFT JOIN user_studiengang USING(studiengang_id) LEFT JOIN seminar_user USING(user_id) WHERE seminar_id = '$ex_sem_id' ");
-		while ($db->next_record()) 
-		{
-			$studiengang_count[$db->f("name")] ++;
-		}
-		if (isset($studiengang_count))
-		{
-			$data_object .= xml_open_tag($xml_groupnames_studiengaenge["group"]);
-			for ($i2 = 0; $i2 < sizeof( $studiengang_count); $i2 ++)
-			while (list ($key, $val) = each ($studiengang_count)) 
-			{
-				$data_object .= xml_open_tag($xml_groupnames_studiengaenge["object"]);
-				$data_object .= xml_tag($xml_names_studiengaenge["name"], $key);
-				$data_object .= xml_tag($xml_names_studiengaenge["count"], $val);
-				$data_object .= xml_close_tag($xml_groupnames_studiengaenge["object"]);
-			}
-			$data_object .= xml_close_tag($xml_groupnames_studiengaenge["group"]);
-		}
 		$db->query ("SELECT name, studiengaenge.studiengang_id FROM studiengaenge LEFT JOIN admission_seminar_studiengang USING(studiengang_id) WHERE seminar_id = '$ex_sem_id' ");
 		while ($db->next_record()) 
 		{
@@ -384,6 +366,29 @@ function export_teilis($inst_id, $ex_sem_id = "no")
 	}
 
 	$data_object .= xml_close_tag( $xml_groupnames_person["group"]);
+
+	if ($filter != "status")
+	{
+		$db->query ("SELECT name, studiengaenge.studiengang_id FROM studiengaenge LEFT JOIN user_studiengang USING(studiengang_id) LEFT JOIN seminar_user USING(user_id) WHERE seminar_id = '$ex_sem_id' ");
+		while ($db->next_record()) 
+		{
+			$studiengang_count[$db->f("name")] ++;
+		}
+		if (isset($studiengang_count))
+		{
+			$data_object .= xml_open_tag($xml_groupnames_studiengaenge["group"]);
+			for ($i2 = 0; $i2 < sizeof( $studiengang_count); $i2 ++)
+			while (list ($key, $val) = each ($studiengang_count)) 
+			{
+				$data_object .= xml_open_tag($xml_groupnames_studiengaenge["object"]);
+				$data_object .= xml_tag($xml_names_studiengaenge["name"], $key);
+				$data_object .= xml_tag($xml_names_studiengaenge["count"], $val);
+				$data_object .= xml_close_tag($xml_groupnames_studiengaenge["object"]);
+			}
+			$data_object .= xml_close_tag($xml_groupnames_studiengaenge["group"]);
+		}
+	}
+	
 	output_data($data_object, $o_mode);
 	$data_object = "";
 }
