@@ -38,15 +38,16 @@ require_once $ABSOLUTE_PATH_STUDIP.("config.inc.php");
 
 class Modules {
 	var $registered_modules = array (
-		"forum" => array("id" => 0, "const" => ""),
-		"documents" => array("id" => 1, "const" => ""),
-		"schedule" => array("id" => 2, "const" => ""),
-		"participants" => array("id" => 3, "const" => ""),
-		"literature" => array("id" => 4, "const" => ""),
-		"ilias_connect" => array("id" => 5, "const" => "ILIAS_CONNECT_ENABLE"),
-		"chat" => array("id" => 6, "const" => "CHAT_ENABLE"),
-		"support" => array("id" => 7, "const" => "SUPPORT_ENABLE"),
-		"wikki" => array("id" => 8, "const" => "WIKKI_ENABLE")
+		"forum" => array("id" => 0, "const" => "", "sem" => TRUE, "inst" => TRUE),
+		"documents" => array("id" => 1, "const" => "", "sem" => TRUE, "inst" => TRUE),
+		"schedule" => array("id" => 2, "const" => "", "sem" => TRUE, "inst" => FALSE),
+		"participants" => array("id" => 3, "const" => "", "sem" => TRUE, "inst" => FALSE),
+		"personal" => array("id" => 4, "const" => "", "sem" => FALSE, "inst" => TRUE),
+		"literature" => array("id" => 5, "const" => "", "sem" => TRUE, "inst" => TRUE),
+		"ilias_connect" => array("id" => 6, "const" => "ILIAS_CONNECT_ENABLE", "sem" => TRUE, "inst" => TRUE),
+		"chat" => array("id" => 7, "const" => "CHAT_ENABLE", "sem" => TRUE, "inst" => TRUE),
+		"wiki" => array("id" => 8, "const" => "WIKKI_ENABLE", "sem" => TRUE, "inst" => TRUE),
+		"support" => array("id" => 9, "const" => "SUPPORT_ENABLE", "sem" => TRUE, "inst" => FALSE)
 	);
 	var $db;
 	
@@ -76,7 +77,7 @@ class Modules {
 			$db->next_record();
 			$modules = $db->f("modules");
 		}
-		if (!$modules){
+		if ($modules === null){
 			$modules = $this->getDefaultBinValue($range_id, $range_type);	
 		}
 
@@ -139,10 +140,10 @@ class Modules {
 		$db->next_record();
 
 		if ($db->nf()) {
-			if ($db->f("modules"))
-				$bitmask = $db->f("modules");
-			else
+			if ($db->f("modules") === null)
 				$bitmask = $this->getDefaultBinValue($range_id, $range_type);
+			else
+				$bitmask = $db->f("modules");
 		}
 
 		return $bitmask;
@@ -280,12 +281,12 @@ class Modules {
 		$this->db->next_record();
 		
 		if ($range_type == "sem") {
-			if ($this->checkGlobal($modul))
+			if (($this->checkGlobal($modul)) && ($this->registered_modules[$modul]["sem"] == TRUE))
 				return TRUE;
 			else
 				return FALSE;
 		} else {
-			if ($this->checkGlobal($modul))
+			if (($this->checkGlobal($modul))  && ($this->registered_modules[$modul]["inst"] == TRUE))
 				return TRUE;
 			else
 				return FALSE;
