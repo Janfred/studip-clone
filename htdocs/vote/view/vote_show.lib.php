@@ -102,7 +102,7 @@ function createFormFooter (&$vote, $userID, $perm, $rangeID) {
    
    /* Submitbutton --------------------------------------------------------- */
    if ( ! ($isAssociated || $isPreview || $isStopped)
-	|| $changeAnswer ) {
+	|| ($changeAnswer && !$isPreview)) {
       $html .= 
 	 "<input type=\"image\" style=\"vertical-align:middle;\" " .
 	 "name=\"voteButton\" border=\"0\" " .
@@ -113,7 +113,8 @@ function createFormFooter (&$vote, $userID, $perm, $rangeID) {
    /* ---------------------------------------------------------------------- */
 
    /* Viewbutton ----------------------------------------------------------- */
-   if ( (! ($isAssociated || $isPreview || $isStopped) || $changeAnswer) &&
+   if ( (! ($isAssociated || $isPreview || $isStopped)
+	 || ($changeAnswer && !$isPreview)) &&
 	($vote->getResultvisibility() == VOTE_RESULTS_ALWAYS || $haveFullPerm)
 	) {
       $html .= 
@@ -188,7 +189,7 @@ function createFormFooter (&$vote, $userID, $perm, $rangeID) {
 	       || $vote->getResultVisibility() == VOTE_RESULTS_NEVER)
 	      && $vote->isActive() && !$haveFullPerm)
 	&& $haveFullPerm
-	&& ! $changeAnswer
+	&& (! $changeAnswer || $isPreview)
 	)
        {
        $link_reveal = $link."&sortAnswers=".($_GET["sortAnswers"] ? YES : NO);
