@@ -150,7 +150,7 @@ IF ( !$perm->have_perm("root")){
 	 if (!isset($sortby)) $sortby="Name";
 	 if ($sortby == "count")
 	 $sortby = "count DESC";
-	$db->query ("SELECT b.Name, b.Institut_id, user_inst.inst_perms,IF(b.Institut_id=b.fakultaets_id,1,0) AS is_fak FROM user_inst LEFT JOIN Institute b USING (Institut_id) WHERE user_inst.user_id = '$user->id' GROUP BY Institut_id ORDER BY $sortby");
+	$db->query ("SELECT b.Name, b.Institut_id,b.type, user_inst.inst_perms,IF(b.Institut_id=b.fakultaets_id,1,0) AS is_fak FROM user_inst LEFT JOIN Institute b USING (Institut_id) WHERE user_inst.user_id = '$user->id' GROUP BY Institut_id ORDER BY $sortby");
 	$num_my_inst=$db->num_rows();
 	 if (!$num_my_inst)
 	 	if ($perm->have_perm("dozent"))
@@ -198,14 +198,14 @@ IF ( !$perm->have_perm("root")){
 	ob_end_flush(); //Buffer leeren, damit der Header zu sehen ist
 	ob_start();
 	 while ($db->next_record()){
-			$my_inst[$db->f("Institut_id")]=array(name=>$db->f("Name"),status=>$db->f("inst_perms"));
+			$my_inst[$db->f("Institut_id")]=array(name=>$db->f("Name"),status=>$db->f("inst_perms"),type=>($db->f("type")) ? $db->f("type") : 1);
 			$value_list.="('".$db->f("Institut_id")."',0".$loginfilenow[$db->f("Institut_id")]."),";
 			if ($db->f("is_fak") && $db->f("inst_perms") == "admin"){
-				$db2->query("SELECT a.Institut_id, a.Name FROM Institute a 
+				$db2->query("SELECT a.Institut_id, a.Name, a.type FROM Institute a 
 					 WHERE fakultaets_id='" . $db->f("Institut_id") . "' AND a.Institut_id!='" .$db->f("Institut_id") . "' 
 					 ORDER BY $sortby");
 				while($db2->next_record()){
-					$my_inst[$db2->f("Institut_id")]=array(name=>$db2->f("Name"),status=>"admin");
+					$my_inst[$db2->f("Institut_id")]=array(name=>$db2->f("Name"),status=>"admin",type=>($db2->f("type")) ? $db2->f("type") : 1);
 					$value_list.="('".$db2->f("Institut_id")."',0".$loginfilenow[$db2->f("Institut_id")]."),";
 			
 				}
@@ -226,7 +226,7 @@ IF ( !$perm->have_perm("root")){
 		ECHO "<td class=\"".$cssSw->getClass()."\">&nbsp; </td>";
 // Name-field		
 		ECHO "<td class=\"".$cssSw->getClass()."\"><a href=\"institut_main.php?auswahl=$instid\">";
-		ECHO "<font size=-1>".htmlReady($values["name"])."</font>";
+		ECHO "<font size=-1>".htmlReady($INST_TYPE[$values["type"]]["name"] . ": " . $values["name"])."</font>";
 		print ("</a></td>");
 // Content-field
 		echo "<td class=\"".$cssSw->getClass()."\"  align=\"left\" nowrap>";
