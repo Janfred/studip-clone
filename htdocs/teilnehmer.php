@@ -72,6 +72,25 @@ $db3=new DB_Seminar;
 
 echo "<table cellspacing=\"0\" border=\"0\" width=\"100%\">";
 
+
+// Aktivitaetsanzeige an_aus
+
+if ($cmd=="showscore") {
+	//erst mal sehen, ob er hier wirklich Dozent ist...
+	if ($rechte) {
+		$db->query("UPDATE seminare SET showscore = '1' WHERE Seminar_id = '$id'");
+		$msg = "msg§Die Aktivit&auml;tsanzeige wurde aktiviert.§";
+	}
+}
+
+if ($cmd=="hidescore") {
+	//erst mal sehen, ob er hier wirklich Dozent ist...
+	if ($rechte) {
+		$db->query("UPDATE seminare SET showscore = '0' WHERE Seminar_id = '$id'");
+		$msg = "msg§Die Aktivit&auml;tsanzeige wurde deaktiviert.§";
+	}
+}
+
 // Hier will jemand die Karriereleiter rauf...
 
 if ($cmd=="pleasure") {
@@ -276,7 +295,21 @@ $gruppe = array ("dozent" => "DozentInnen",
 ?>
 
 <tr>
-		<td class="topic" colspan="2"><b>&nbsp;<? echo $SessSemName["art"],": ",htmlReady($SessSemName[0]); ?> - TeilnehmerInnen</b></td>
+		<td class="topic" ><b>&nbsp;<? echo $SessSemName["art"],": ",htmlReady($SessSemName[0]); ?> - TeilnehmerInnen</b>
+		</td>
+		<td align="right" class="topic"> <?
+		$db3->query ("SELECT showscore  FROM seminare WHERE Seminar_id = '$SessionSeminar'");
+		while ($db3->next_record()) {
+			if ($db3->f("showscore") == 1) {
+				printf ("<a href=\"$PHP_SELF?cmd=hidescore\"><img src=\"pictures/showscore1.gif\" border=\"0\" %s>&nbsp; &nbsp; </a>", tooltip("Aktivitaetsanzeige eingeschaltet. Klicken zum Ausschalten."));
+				$showscore = TRUE;
+			} else {
+				printf ("<a href=\"$PHP_SELF?cmd=showscore\"><img src=\"pictures/showscore0.gif\" border=\"0\" %s>&nbsp; &nbsp; </a>", tooltip("Aktivitaetsanzeige ausgeschaltet. Klicken zum Einschalten."));
+				$showscore = FALSE;
+			}
+		}
+		?>
+		</td>
 </tr>
 	<tr>
 		<td class="blank" width="100%" colspan="2">&nbsp;
@@ -319,7 +352,7 @@ $db->query ("SELECT seminar_user.user_id, Vorname, Nachname, username, status, c
 if ($db->num_rows()) { //Only if Users were found...
 	// die eigentliche Teil-Tabelle
 	echo "<tr height=28>";
-	echo "<td class=\"steel\" width=\"1%\" align=\"center\" valign=\"bottom\"><font size=\"-1\">&nbsp; </td>";
+	if ($showscore==TRUE)  echo "<td class=\"steel\" width=\"2%\">&nbsp; </td>";
 	printf ("<td class=\"steel\" width=\"30%%\" align=\"left\"><img src=\"pictures/blank.gif\" width=\"1\" height=\"20\"><font size=\"-1\"><b><a href=%s?sortby=Nachname>%s</a></b></font></td>", $PHP_SELF, $val);
 	printf ("<td class=\"steel\" width=\"10%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b><a href=%s>Postings</a></b></font></td>", $PHP_SELF);
 	echo "<td class=\"steel\" width=\"10%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>Dokumente</b></font></td>";
@@ -387,36 +420,42 @@ if ($db->num_rows()) { //Only if Users were found...
 
 // Aktivitaet berechnen
 
-	$aktivity_index_user =  (($postings_user + (5 * $Dokumente)) / $aktivity_index_seminar) * 100;
-	if ($aktivity_index_user > 100) {
-		$offset = $aktivity_index_user / 4;
-		if ($offset < 0) {
-			$offset = 0;
-		} elseif ($offset > 200) {
-			$offset = 200;
-		}
-		$red = dechex(200-$offset) ;
-		$green = dechex(200);
-		$blue = dechex(200-$offset) ;
-		if ($offset > 184)  {
-			$red = "0".$red;
-			$blue = "0".$blue;
-		}
-	} else {
-		$red = dechex(200);
-		$green = dechex($aktivity_index_user * 2) ;
-		$blue = dechex($aktivity_index_user * 2) ;
-		if ($aktivity_index_user < 8)  {
-			$green = "0".$green;
-			$blue = "0".$blue;
+	if ($showscore == TRUE) {
+		$aktivity_index_user =  (($postings_user + (5 * $Dokumente)) / $aktivity_index_seminar) * 100;
+		if ($aktivity_index_user > 100) {
+			$offset = $aktivity_index_user / 4;
+			if ($offset < 0) {
+				$offset = 0;
+			} elseif ($offset > 200) {
+				$offset = 200;
+			}
+			$red = dechex(200-$offset) ;
+			$green = dechex(200);
+			$blue = dechex(200-$offset) ;
+			if ($offset > 184)  {
+				$red = "0".$red;
+				$blue = "0".$blue;
+			}
+		} else {
+			$red = dechex(200);
+			$green = dechex($aktivity_index_user * 2) ;
+			$blue = dechex($aktivity_index_user * 2) ;
+			if ($aktivity_index_user < 8)  {
+				$green = "0".$green;
+				$blue = "0".$blue;
+			}
 		}
 	}
 
+
 // Anzeige der eigentlichen Namenzeilen
 
-	printf("<tr><td nowrap bgcolor=\"#%s%s%s\" class=\"%s\">", $red, $green,$blue, $class2);
-	printf("<img src=\"pictures/blank.gif\" %s width=\"10\" heigth=\"10\"></td><td class=\"%s\">", tooltip("Aktivitaet: ".round($aktivity_index_user)."%"), $class);
-	print( "<font size=\"-1\"><a href = about.php?username=" . $db->f("username") . ">");
+	echo "<tr>";
+	if ($showscore == TRUE) {
+		printf("<td bgcolor=\"#%s%s%s\" class=\"%s\">", $red, $green,$blue, $class2);
+		printf("<img src=\"pictures/blank.gif\" %s width=\"10\" heigth=\"10\"></td>", tooltip("Aktivitaet: ".round($aktivity_index_user)."%"));
+	}
+	printf("<td class=\"%s\"><font size=\"-1\"><a href = about.php?username=" . $db->f("username") . ">", $class);
 	print(htmlReady($db->f("Vorname")) ." ". htmlReady($db->f("Nachname")) ."</a>");
 	print("</font></td><td class=\"$class\" align=\"center\"><font size=\"-1\">");
 	print( $db->f("doll"));
@@ -472,7 +511,7 @@ if ($db->num_rows()) { //Only if Users were found...
 		
 		if ($db3->f("admission_type")) {
 			if ($key== "autor" || $key== "user")
-				printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><font size=-1>%s%s</font></td>", $class, ($db->f("studiengang_id") == "all") ? "alle Studieng&auml;nge" : $db->f("name"), (!$db->f("name") && !$db->f("studiengang_id") == "all") ?  "&nbsp; ": "");
+				printf ("<td width=\"80%%\" align=\"center\" class=\"%s\"><font size=-1>%s%s</font></td>", $class, ($db->f("studiengang_id") == "all") ? "alle Studieng&auml;nge" : $db->f("name"), (!$db->f("name") && !$db->f("studiengang_id") == "all") ?  "&nbsp; ": "");
 			else
 				printf ("<td width=\"10%%\" align=\"center\" class=\"%s\">&nbsp;</td>", $class);
 		}
@@ -490,6 +529,9 @@ if ($rechte) {
 		$colspan=6;
 } else
 	$colspan=4;
+
+if ($showscore==TRUE)
+	$colspan++;
 
 	echo "<tr><td class=\"blank\" colspan=\"$colspan\">&nbsp;</td></tr>";
 
