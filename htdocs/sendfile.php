@@ -273,6 +273,7 @@ header("Content-type: $content_type; name=\"".rawurldecode($file_name)."\"");
 header("Content-disposition: $content_disposition; filename=\"".rawurldecode($file_name)."\"");
 
 readfile($path_file);
+TrackAccess ($file_id);
 
 //temporare Datein fuer zippen loeschen
 if ($zip) {

@@ -273,7 +273,7 @@ function lastActivity ($sem_id) {
 * Einrichtungen, Veranstaltungen, Statusgruppen and Fakultaeten
 * 
 * @param		string	id	the id of the object
-* @return		string	return "ins" (Einrichtung), "sem" (Veranstaltung), "fak" (Fakultaeten), "group" (Statusgruppe)
+* @return		string	return "ins" (Einrichtung), "sem" (Veranstaltung), "fak" (Fakultaeten), "group" (Statusgruppe), "dokument" (Dateien)
 *
 */
 function get_object_type($id) {
@@ -302,6 +302,10 @@ function get_object_type($id) {
 	$db->query("SELECT statusgruppe_id FROM statusgruppen WHERE statusgruppe_id = '$id' ");
 	if ($db->next_record())
 		return "group";
+
+	$db->query("SELECT dokument_id FROM dokumente WHERE dokument_id = '$id' ");
+	if ($db->next_record())
+		return "dokument";
 
 	return FALSE;
 }
@@ -705,4 +709,26 @@ $db->query($query);
 	
 RETURN $score;
 }
+
+
+/**
+* This function tracks user acces to several Data (only dokuments by now, to be extended)
+*
+*
+* @param		string	the id of of the object to track
+*
+*/
+function TrackAccess ($id) {
+
+	switch (get_object_type($id)) { 		// what kind ob object shall we track
+		case "dokument": 				// the object is a dokument, so downloads will be increased
+			$db=new DB_Seminar;
+			$db->query ("SELECT downloads FROM dokumente WHERE dokument_id = '$id'");
+			$db->next_record();
+			$newcount=$db->f("downloads")+1;
+			$db->query ("UPDATE dokumente SET downloads = '$newcount' WHERE dokument_id = '$id'");
+			break;
+	}
+}
+
 ?>
