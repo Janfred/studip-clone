@@ -42,6 +42,11 @@ require_once ("$RELATIVE_PATH_SUPPORT/supportConfig.inc.php");
 empfangene Werte auswerten und Befehle ausfuehren
 /*****************************************************************************/
 
+//is the user a supporter?
+if (($SemUserStatus == "dozent") || ($SemUserStatus == "dozent") || ($SemUserStatus == "dozent"))
+	$supporter = TRUE;
+
+
 //got a fresh session?
 if ((sizeof ($_REQUEST) == 1) && (!$view)) {
 	$supportdb_data='';
@@ -100,7 +105,7 @@ if ($con_close) {
 }
 
 //create a new con
-if (($rechte) && ($create_con)) {
+if (($supporter) && ($create_con)) {
 	$con_end = mktime(23,59,59, date("m", time()), date("d", time()), (date("Y", time())+1));
 	
 	$createCon = new ContractObject('', FALSE, $SessSemName[1], 50, time(), $con_end);
@@ -112,7 +117,7 @@ if (($rechte) && ($create_con)) {
 }
 
 //cancel a just created con
-if (($rechte) && ($cancel_edit_con)) {
+if (($supporter) && ($cancel_edit_con)) {
 	$killCon = new ContractObject($cancel_edit_con);
 	if ($killCon->isUnchanged()) {
 		$killCon->delete();
@@ -125,7 +130,7 @@ if (($rechte) && ($cancel_edit_con)) {
 
 
 //kill a new con
-if (($rechte) && ($kill_con)) {
+if (($supporter) && ($kill_con)) {
 	$killCon = new ContractObject($kill_con);
 	if ($killCon->isDeleteable ())
 		if ($killCon->delete())
@@ -137,7 +142,7 @@ if (($rechte) && ($kill_con)) {
 }
 
 //changes for a contract are coming in...
-if (($rechte) && ($sent_con_id)) {
+if (($supporter) && ($sent_con_id)) {
 	require_once ("$RELATIVE_PATH_CALENDAR/calendar_func.inc.php"); //needed for extended checkdate
 	$changedCon = new ContractObject($sent_con_id);
 	$changedCon->restore();
@@ -177,7 +182,7 @@ if (($rechte) && ($sent_con_id)) {
 }
 
 //create a new request
-if (($rechte) && ($create_req)) {
+if (($supporter) && ($create_req)) {
 	$req_date = time();
 	
 	$createdReq = new RequestObject('', $supportdb_data["actual_con"], '', $req_date, '', '', '');
@@ -196,7 +201,7 @@ if (($rechte) && ($create_req)) {
 }
 
 //cancel a just created request
-if (($rechte) && ($cancel_edit_req)) {
+if (($supporter) && ($cancel_edit_req)) {
 	$killReq = new RequestObject($cancel_edit_req);
 	if ($killReq->isUnchanged()) {
 		$killReq->delete();
@@ -208,7 +213,7 @@ if (($rechte) && ($cancel_edit_req)) {
 }
 
 //kill a request
-if (($rechte) && ($kill_req)) {
+if (($supporter) && ($kill_req)) {
 	$killReq = new RequestObject($kill_req);
 	if ($killReq->isDeleteable())
 		if ($killReq->delete())
@@ -220,7 +225,7 @@ if (($rechte) && ($kill_req)) {
 }
 
 //changes for a request are coming in...
-if (($rechte) && ($sent_req_id)) {
+if (($supporter) && ($sent_req_id)) {
 	require_once ("$RELATIVE_PATH_CALENDAR/calendar_func.inc.php"); //needed for extended checkdate
 	$changedReq = new RequestObject($sent_req_id);
 	$changedReq->restore();
@@ -242,7 +247,7 @@ if (($rechte) && ($sent_req_id)) {
 	}
 
 //create a new event
-if (($rechte) && ($create_evt)) {
+if (($supporter) && ($create_evt)) {
 	$evt_end = mktime(date("H", time()),(date("i", time())+30),0, date("m", time()), date("d", time()), date("Y", time()));
 
 	$createdEvt = new EventObject('', $create_evt, time(), $evt_end, '', '');
@@ -252,12 +257,12 @@ if (($rechte) && ($create_evt)) {
 }
 
 //edit a new event
-if (($rechte) && ($edit_evt)) {
+if (($supporter) && ($edit_evt)) {
 	$supportdb_data["evt_edits"][$edit_evt] = TRUE;
 }
 
 //changes for one ore more events coming in...
-if (($rechte) && ($evt_sent_x)) {
+if (($supporter) && ($evt_sent_x)) {
 	require_once ("$RELATIVE_PATH_CALENDAR/calendar_func.inc.php"); //needed for extended checkdate
 	
 	foreach ($evt_id as $key=>$id) {
@@ -301,7 +306,7 @@ if (($rechte) && ($evt_sent_x)) {
 }
 
 //kill an events
-if (($rechte) && ($kill_evt)) {
+if (($supporter) && ($kill_evt)) {
 	$killEvt = new EventObject($kill_evt);
 	$killEvt->delete();
 

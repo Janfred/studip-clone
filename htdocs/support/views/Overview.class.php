@@ -59,7 +59,7 @@ class Overview extends ShowTreeRow {
 
 	//private
 	function showListObject ($contract_id) {
-		global $supportdb_data, $edit_con_object, $RELATIVE_PATH_SUPPORT, $PHP_SELF, $rechte, $perm;
+		global $supportdb_data, $edit_con_object, $RELATIVE_PATH_SUPPORT, $PHP_SELF, $supporter, $perm, $user;
 	
 		//Object erstellen
 		$conObject=new ContractObject($contract_id);
@@ -81,7 +81,7 @@ class Overview extends ShowTreeRow {
 			$open="open";
 		
 
-		if (($edit_con_object == $conObject->id) && ($rechte)){
+		if (($edit_con_object == $conObject->id) && ($supporter)){
 			echo "<a name=\"a\"></a>";
 			$titel = _("Laufzeit: ");
 			$titel .= "<input style=\"{font-size:8 pt;}\" type=\"text\"size=\"2\" maxlength=\"2\" name=\"con_begin_day\" value=\"".date("d", $conObject->getContractBegin())."\" />.";
@@ -102,9 +102,13 @@ class Overview extends ShowTreeRow {
 		if ($edit_con_object == $conObject->id) {
 			$zusatz =  "<select name=\"con_institut_id\" style=\"{font-size:8 pt;};\">\n";
 			if ($perm->have_perm("root"))
-				$this->db->query("SELECT Name,Institut_id,1 AS is_fak,'admin' AS inst_perms FROM Institute WHERE Institut_id=fakultaets_id ORDER BY Name");
+				$query = "SELECT Name,Institut_id,1 AS is_fak,'admin' AS inst_perms FROM Institute WHERE Institut_id=fakultaets_id ORDER BY Name";
 			elseif ($perm->have_perm("admin"))
-				$this->db->query("SELECT Name,a.Institut_id,IF(a.Institut_id=fakultaets_id,1,0) AS is_fak,inst_perms FROM user_inst  a LEFT JOIN Institute USING (institut_id) WHERE (user_id = '$user->id' AND inst_perms = 'admin') ORDER BY is_fak,Name");
+				$query = "SELECT Name,a.Institut_id,IF(a.Institut_id=fakultaets_id,1,0) AS is_fak,inst_perms FROM user_inst  a LEFT JOIN Institute USING (institut_id) WHERE (user_id = '$user->id' AND inst_perms = 'admin') ORDER BY is_fak,Name";
+			else
+				$query = "SELECT Name,a.Institut_id,IF(a.Institut_id=fakultaets_id,1,0) AS is_fak,inst_perms FROM user_inst  a LEFT JOIN Institute USING (institut_id) WHERE (user_id = '$user->id' AND inst_perms = 'dozent') ORDER BY is_fak,Name";
+			
+			$this->db->query($query);
 
 			while ($this->db->next_record()) {
 				$zusatz .= sprintf ("<option %s style=\"%s\" value=\"%s\"> %s</option>\n", $this->db->f("Institut_id") == $conObject->getInstitutId() ? "selected" : "",
@@ -127,12 +131,12 @@ class Overview extends ShowTreeRow {
 			$zusatz = sprintf("<a href=\institut_main.php?auswahl=%s\"><font color=\"#333399\">%s</font></a>", $conObject->getInstitutId(), htmlReady($this->db->f("Name")));
 			$zusatz .= sprintf("&nbsp;(%s / %s)", $conObject->getRemainingPoints(), $conObject->getGivenPoints());
 		}
-
+		
 		$new=TRUE;
 		if ($open == "open") {
 			$content = "<table border=\"0\" cellspacing=\"2\" cellpadding=\"0\" width=\"100%\">\n";
 			$content .= sprintf ("<tr><td width=\"20%%\"><b><font size=\"-1\">"._("Punkte in diesem Vertrag:")."</font></b></td><td width=\"10%%\" align=\"center\"><font size=\"-1\">%s</font></td><td width=\"20%%\">&nbsp;</td>\n",  
-				(($edit_con_object == $conObject->id) && ($rechte)) ? "<input type=\"TEXT\" name=\"con_given_points\" size=\"4\" maxlength=\"4\" value=\"".$conObject->getGivenPoints()."\" />" : $conObject->getGivenPoints());
+				(($edit_con_object == $conObject->id) && ($supporter)) ? "<input type=\"TEXT\" name=\"con_given_points\" size=\"4\" maxlength=\"4\" value=\"".$conObject->getGivenPoints()."\" />" : $conObject->getGivenPoints());
 			$content .= sprintf ("<td width=\"20%%\"><b><font size=\"-1\">"._("Anfragen:")."</font></b></td><td width=\"10%%\" align=\"center\"><font size=\"-1\">%s</font></td><td width=\"20%%\">&nbsp;</td></tr>\n",  $conObject->getRequests());
 			$content .= sprintf ("<tr><td><b><font size=\"-1\">"._("verbrauchte Punkte:")."</font></b></td><td align=\"center\"><font size=\"-1\">%s</font></td><td>&nbsp;</td>\n",  $conObject->getUsedPoints());
 			$content .= sprintf ("<td width=\"20%%\"><b><font size=\"-1\">"._("Events:")."</font></b></td><td width=\"10%%\" align=\"center\"><font size=\"-1\">%s</font></td><td width=\"20%%\">&nbsp;</td></tr>\n",  $conObject->getEvents());
@@ -141,8 +145,8 @@ class Overview extends ShowTreeRow {
 			$content .= "</table>";
 			$content .= sprintf ("<input type=\"HIDDEN\" name=\"sent_con_id\" value=\"%s\" />", $conObject->id);
 		}
-		if ($rechte) {
-			if ((($edit_con_object == $conObject->id) && ($rechte))) {
+		if ($supporter) {
+			if ($edit_con_object == $conObject->id) {
 				$edit = "<br />&nbsp;<input type=\"IMAGE\" ".makeButton("uebernehmen", "src")." />";
 				$edit .= "&nbsp;<a href=\"$PHP_SELF?cancel_edit_con=$conObject->id\">".makeButton("abbrechen")."</a>&nbsp;&nbsp;&nbsp;&nbsp;";
 			}

@@ -59,7 +59,7 @@ class Request extends ShowTreeRow {
 
 	//private
 	function showListObject ($request_id) {
-		global $supportdb_data, $edit_req_object, $RELATIVE_PATH_SUPPORT, $PHP_SELF, $SessSemName, $rechte, $perm, $user, $_fullname_sql;
+		global $supportdb_data, $edit_req_object, $RELATIVE_PATH_SUPPORT, $PHP_SELF, $SessSemName, $supporter, $perm, $user, $_fullname_sql;
 	
 		//Object erstellen
 		$reqObject=new RequestObject($request_id);
@@ -89,7 +89,7 @@ class Request extends ShowTreeRow {
 			$titel = "<a href=\"$link\" class=\"tree\" >$titel</a>";
 		
 		//request user
-		if (($edit_req_object == $reqObject->id) && ($rechte)) {
+		if (($edit_req_object == $reqObject->id) && ($supporter)) {
 			$this->db->query("SELECT " . $_fullname_sql['no_title_rev'] . ", auth_user_md5.user_id FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING(user_id) WHERE status IN ('tutor','autor')  AND Seminar_id='".$SessSemName[1]."' ORDER BY Nachname");
 			if ($this->db->nf()) {
 				$zusatz =  _("von:")." <select name=\"req_user_id\" style=\"{font-size:8 pt;};\">\n";
@@ -107,8 +107,8 @@ class Request extends ShowTreeRow {
 		$new=TRUE;
 		if ($open == "open") {
 			$content = "<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" width=\"100%\">\n";
-			$content .= sprintf ("<tr><td width=\"10%%\"><b><font size=\"-1\">"._("Kanal:")."</font></b></td><td width=\"10%%\" align=\"left\"><font size=\"-1\">");
-			if (($edit_req_object == $reqObject->id) && ($rechte)) {
+			$content .= sprintf ("<tr><td width=\"10%%\"><b><font size=\"-1\">"._("Medium:")."</font></b></td><td width=\"10%%\" align=\"left\"><font size=\"-1\">");
+			if (($edit_req_object == $reqObject->id) && ($supporter)) {
 				$content .= "<select style=\"{font-size:8 pt;}\" name=\"req_channel\">";
 				$content .= sprintf ("<option %s value=\"FALSE\">"._("unbekannt")."</option>", (!$reqObject->getChannel()) ? "selected" : "");
 				$content .= sprintf ("<option %s value=\"1\">"._("eMail")."</option>", ($reqObject->getChannel() == 1) ? "selected" : "");
@@ -136,7 +136,7 @@ class Request extends ShowTreeRow {
 				}
 			$content .= "</font></td><td width=\"10%\">&nbsp;</td>";
 			$content .= sprintf("<td width=\"10%%\"><b><font size=\"-1\">"._("Datum:")."</font></b></td><td width=\"40%%\" align=\"left\"><font size=\"-1\">");
-			if (($edit_req_object == $reqObject->id) && ($rechte)) {
+			if (($edit_req_object == $reqObject->id) && ($supporter)) {
 				$content .= "<input style=\"{font-size:8 pt;}\" type=\"text\"size=\"2\" maxlength=\"2\" name=\"req_day\" value=\"".date("d", $reqObject->getDate())."\" />.";
 				$content .= "<input style=\"{font-size:8 pt;}\" type=\"text\"size=\"2\" maxlength=\"2\" name=\"req_month\" value=\"".date("m", $reqObject->getDate())."\" />.";
 				$content .= "<input style=\"{font-size:8 pt;}\" type=\"text\"size=\"4\" maxlength=\"4\" name=\"req_year\" value=\"".date("Y", $reqObject->getDate())."\" />";
@@ -151,7 +151,7 @@ class Request extends ShowTreeRow {
 			$content .="<tr><td colspan=\"5\"><img src=\"pictures/blank.gif\" width =\"10\" height=\"3\"  /></td></tr>\n";
 
 			//Topic assignment
-			if (($edit_req_object == $reqObject->id) && ($rechte)) {
+			if (($edit_req_object == $reqObject->id) && ($supporter)) {
 				$content .= sprintf ("<tr><td width=\"20%%\"><b><font size=\"-1\">"._("Beitrag im Forum:")."</font></b></td><td width=\"80%%\" align=\"left\" colspan=\"4\"><font size=\"-1\">");
 					
 				$query = sprintf("SELECT px_topics.name, px_topics.topic_id, date FROM px_topics LEFT OUTER JOIN support_request USING (topic_id) WHERE (support_request.topic_id IS NULL AND seminar_id = '%s' AND parent_id ='0') OR px_topics.topic_id = '%s'", $SessSemName[1], $reqObject->getTopicId());
@@ -248,8 +248,8 @@ class Request extends ShowTreeRow {
 			}
 			$content .= "<a href=\"$PHP_SELF?create_evt=$reqObject->id\"><img src=\"pictures/add_right.gif\" border=\"0\" ".tooltip ("Bearbeitungszeit hinzufügen")."/></a>";
 		}
-		if ($rechte) {
-			if ((($edit_req_object == $reqObject->id) && ($rechte))) {
+		if ($supporter) {
+			if ($edit_req_object == $reqObject->id) {
 				$edit = "<br />&nbsp;<input type=\"IMAGE\" ".makeButton("uebernehmen", "src")." />";
 				$edit .= "&nbsp;<a href=\"$PHP_SELF?cancel_edit_req=$reqObject->id\">".makeButton("abbrechen")."</a>&nbsp;&nbsp;&nbsp;&nbsp;";
 			}
