@@ -284,19 +284,19 @@ function get_config_info ($range_id, $config_id) {
 		$level = $GLOBALS["EXTERN_MODULE_TYPES"][$db->f("config_type")]["level"];
 		$make = strftime("%x", $db->f("mkdate"));
 		$change = strftime("%x", $db->f("chdate"));
-		$sri = "&lt;studip_remote_include&gt;\n\tmodule=$module_name\n\tconfig_id=$config_id";
-		$sri .= "\n\trange_id=$range_id\n&lt;/studip_remote_include&gt;";
+		$sri = "&lt;studip_remote_include&gt;\n\tmodule = $module_name\n\tconfig_id = $config_id";
+		$sri .= "\n\trange_id = $range_id\n&lt;/studip_remote_include&gt;";
 		$link_sri = "http://" .getenv("SERVER_NAME") . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"];
 		$link_sri .= "extern.php?page_url=" . _("URL_DER_INCLUDE_SEITE");
 		
 		if ($level == 1) {
-			$link = "http://localhost" /*. $GLOBALS["SERVER_NAME"] */. $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"];
+			$link = "http://" . $GLOBALS["EXTERN_SERVER_NAME"] . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"];
 			$link .= "extern.php?module=$module_name&config_id=$config_id&range_id=$range_id";
-			$link_structure = $link . "&view=structure";
-			$sri_structure = "&lt;studip_remote_include&gt;\n\tmodule=$module_name\n\t";
-			$sri_structure = "config_id=$config_id\n\trange_id=$range_id";
-			$sri_structure .= "\n\tview=structure\n&lt;/studip_remote_include&gt;";
-			$link_br = "http://localhost" /*. $GLOBALS["SERVER_NAME"] */. $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"];
+			$link_structure = $link . "&view=tree";
+			$sri_structure = "&lt;studip_remote_include&gt;\n\tmodule = $module_name\n\t";
+			$sri_structure = "config_id = $config_id\n\trange_id=$range_id";
+			$sri_structure .= "\n\tview = tree\n&lt;/studip_remote_include&gt;";
+			$link_br = "http:" . $GLOBALS["EXTERN_SERVER_NAME"] . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"];
 			$link_br .= "extern.php?module=$module_name<br>&config_id=$config_id&range_id=$range_id";
 			
 			$info = array("module_type" => $module_type, "module_name" => $module_name,
