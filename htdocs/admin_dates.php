@@ -414,7 +414,7 @@ if ((($kill_x) || ($delete_confirm)) && ($admin_dates_data["range_id"])) {
 				if ($room_request->getClosed()){
 					$room_request->setClosed(0);
 					$room_request->store();
-					$result .= sprintf ("info§"._("Die Raumanfrage zu den regelm&auml;&szlib;igen Zeiten der Veranstaltung wurde reaktiviert. Um die Anfrage einzusehen oder zu bearbeiten, gehen Sie auf %sRaumanfragen%s.")."§", "<a href=\"admin_room_requests.php?seminar_id=\"".$admin_dates_data["range_id"]."\">", "</a>");
+					$result .= sprintf ("info§"._("Die Raumanfrage zu den regelm&auml;&szlig;igen Zeiten der Veranstaltung wurde reaktiviert. Um die Anfrage einzusehen oder zu bearbeiten, gehen Sie auf %sRaumanfragen%s.")."§", "<a href=\"admin_room_requests.php?seminar_id=\"".$admin_dates_data["range_id"]."\">", "</a>");
 				}
 			} else {
 				//there is no room request, maybe the user should know that...
