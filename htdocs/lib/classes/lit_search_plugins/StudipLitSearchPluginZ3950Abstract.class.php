@@ -134,6 +134,7 @@ class StudipLitSearchPluginZ3950Abstract extends StudipLitSearchPluginAbstract{
 			$cat_element = new StudipLitCatElement();
 			$cat_element->setValue("user_id", $GLOBALS['auth']->auth['uid']);
 			$cat_element->setValue("catalog_id", $this->sess_var_name . "__" . $rn );
+			$cat_element->setValue("lit_plugin", $this->getPluginName());
 			$lines = explode("\n", $record);
 			for ($i = 0; $i < count($lines); ++$i){
 				$data = trim($lines[$i]);
