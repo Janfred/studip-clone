@@ -323,7 +323,12 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 		 echo "</tr>\n";
 		}
 // 	echo "</table>";
-	 }
+	 }?>
+	<tr>
+		<td class="blank" colspan=2>&nbsp;
+		</td>
+	</tr>
+	<?
 
 // Anzeige der Wartelisten
 
@@ -385,7 +390,6 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 	</tr>
 	<tr>
 		<td class="blank" colspan=2>&nbsp;
-			
 		</td>
 	</tr>
 <?	
@@ -446,7 +450,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 										<img src="./pictures/admin.gif">
 									</td>
 									<td class="blank" width="100%">
-										<? echo "<font size=-1>Wenn Sie selbst eine weitere Veranstaltungen anlegen m&ouml;chten, nutzen Sie bitte den <a href=\"admin_seminare_assi.php?new_session=TRUE\">Veranstaltungs-Assistenten</a> zum Anlegen neuer Veranstaltungen.</font><br><br>";?>
+										<? echo "<font size=-1>Um Veranstaltungen anzulegen, nutzen Sie bitte den <a href=\"admin_seminare_assi.php?new_session=TRUE\">Veranstaltungs-Assistenten</a>.</font><br><br>";?>
 									</td>
 								</tr>  
 							 <? }  ?>
