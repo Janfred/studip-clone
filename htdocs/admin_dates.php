@@ -66,8 +66,7 @@ $sess->register("term_data");
 $sess->register("admin_dates_data");
 
 if ($RESOURCES_ENABLE) {
-	include_once ($RELATIVE_PATH_RESOURCES."/resourcesClass.inc.php");
-	include_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
+	include_once ($RELATIVE_PATH_RESOURCES."/lib/ResourcesUserRoomsList.class.php");
 	include_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
 	$resList = new ResourcesUserRoomsList($user_id);
 }
@@ -641,10 +640,10 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 		}
 		if ($RESOURCES_ENABLE) {
 			$resList -> reset();
-			if ($resList->numberOfEvents()) {
+			if ($resList->numberOfRooms()) {
 				$content.= "<br /><font size=-1>&nbsp;<select name=\"resource_id\"></font>";
 				$content.= ("<option value=\"FALSE\">" . _("[eingeben oder aus Liste]") . "</option>");												
-				while ($resObject = $resList->nextEvent())
+				while ($resObject = $resList->next())
 					$content.= sprintf("<option %s value=\"%s\">%s</option>", ($new_date_resource_id == $resObject->getId()) ? "selected" : "", $resObject->getId(), htmlReady($resObject->getName()));
 				$content.= "</select></font>";
 			}
@@ -774,10 +773,10 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 				if ($RESOURCES_ENABLE) {
 					$assigned_resource_id = getDateAssigenedRoom($db->f("termin_id"));
 					$resList -> reset();
-					if ($resList->numberOfEvents()) {
+					if ($resList->numberOfRooms()) {
 						$content.= "<br /><font size=-1>&nbsp;<select name=\"resource_id[]\"></font>";
 						$content.= sprintf("<option %s value=\"FALSE\">" . _("[eingeben oder aus Liste]") . "</option>", (!$assigned_resource_id) ? "selected" : "");												
-						while ($resObject = $resList->nextEvent())
+						while ($resObject = $resList->next())
 							$content.= sprintf("<option %s value=\"%s\">%s</option>", ($assigned_resource_id) == $resObject->getId() ? "selected" :"", $resObject->getId(), htmlReady($resObject->getName()));
 						$content.= "</select></font>";
 					}
