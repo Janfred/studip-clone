@@ -1,7 +1,6 @@
 <?php
 /*
-sem_verify.php - Script zum Anmelden zu einem Seminar mit Ueberpruef
- aller Rechte.
+sem_verify.php - Script zum Anmelden zu einem Seminar mit Ueberpruefung aller Rechte.
 Copyright (C) 2002 André Noack <anoack@mcis.de>, Cornelis Kater <ckater@gwdg.de>, Stefan Suchi <suchi@gmx.de>
 
 This program is free software; you can redistribute it and/or
@@ -243,7 +242,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 					//Wurden wir evtl. schon in die Veranstaltung als Wartender eingetragen?
 					$db->query("SELECT user_id FROM admission_seminar_user WHERE user_id = '$user->id' AND seminar_id = '$id' "); //Bin ich eingetragen?
 					if ($db->num_rows()) { //Es gibt einen Eintrag, da darf ich also nicht mehr rein
-						parse_msg ("info§Sie stehen schon aauf der Anmelde- bzw. Warteliste der Veranstaltung <b>$SeminarName</b>. <br />Wenn sich sich neu oder f&uuml;r ein anderes Kontingent eintragen wollen, dann l&ouml;schen Sie bitte vorher die Zuordnug auf der der &Uuml;bersicht ihrer Veranstaltungen.");
+						parse_msg ("info§Sie stehen schon auf der Anmelde- bzw. Warteliste der Veranstaltung <b>$SeminarName</b>. <br />Wenn sich sich neu oder f&uuml;r ein anderes Kontingent eintragen wollen, dann l&ouml;schen Sie bitte vorher die Zuordnug auf der der &Uuml;bersicht ihrer Veranstaltungen.");
 						echo "<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp;&nbsp; zur&uuml;ck zur Startseite</a>";
 						if ($send_from_search)
 				    			echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">zur&uuml;ck zur letzten Auswahl</a>";
