@@ -32,16 +32,31 @@ require_once ($ABSOLUTE_PATH_STUDIP."/visual.inc.php");
 require_once ($ABSOLUTE_PATH_STUDIP."/functions.php");
 require_once ($ABSOLUTE_PATH_STUDIP."/msg.inc.php");
 
+include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
+include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+
+if ($SessSemName[1] != "")
+{
+	$seminar_id = $SessSemName[1];
+}
+else
+{
+	parse_window ("error§Sie haben kein Objekt gew&auml;hlt. <br /><font size=-1 color=black>Dieser Teil des Systems kann nur genutzt werden, wenn Sie vorher ein Objekt gew&auml;hlt haben.<br /><br /> Dieser Fehler tritt auch auf, wenn Ihre Session abgelaufen ist. Wenn sie sich länger als $AUTH_LIFETIME Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurück zur Anmeldung zu gelangen. </font>", "§",
+				"Keine Objekt gew&auml;hlt", 
+				"<a href=\"index.php\"><b>&nbsp;Hier</b></a> geht es wieder zur Anmeldung beziehungsweise Startseite.<br />&nbsp;");
+	die;
+}
 if (isset($do_op) AND (($op_co_id == "") OR($op_co_inst == "") OR($seminar_id == "")))
 {
 	parse_window ("error§" . _("Die Seite wurde mit fehlerhaften Parametern aufgerufen. Bitte wenden Sie sich an den/die AdministratorIn."), "§",
 				_("Fehlerhafte Parameter"));
 	die();
 }
+
 if ($ILIAS_CONNECT_ENABLE)
 {
 
-	if (($perm->have_studip_perm("dozent",$seminar_id)) AND ($view=="edit"))
+	if (($perm->have_studip_perm("tutor",$seminar_id)) AND ($view=="edit"))
 	{		
 		$db = New DB_Seminar;
 		if ($do_op == "clear")
@@ -64,15 +79,12 @@ if ($ILIAS_CONNECT_ENABLE)
      		}
 	}
 	
-	if ((!$perm->have_studip_perm("dozent",$seminar_id)) AND ($view=="edit"))
+	if ((!$perm->have_studip_perm("tutor",$seminar_id)) AND ($view=="edit"))
 	{
 		parse_window ("error§" . _("Sie haben keine Berechtigung, die Lernmodul-Zuordnungen dieser Veranstaltung zu ver&auml;ndern."), "§",
 					_("Keine Berechtigung"));
 		die();
 	}
-
-	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 
 	include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
 
@@ -103,6 +115,7 @@ if ($ILIAS_CONNECT_ENABLE)
                 </td>
 		<td width="90%" class="blank">
 <?     				
+echo $auswahl;
 include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_user_functions.inc.php");
 
 		if ($seminar_id != $print_open["id"])
