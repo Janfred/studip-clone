@@ -105,11 +105,11 @@ while ($db->next_record()) {
 	$changed = $db->f("changed");
 	$test->user_id = $db->f("sid");
 	$test->microwaveIt();
-	$my_array = $test->getVariable("my_messaging_settings");
+	$my_array =& $test->getVariable("my_messaging_settings");
 	echo ++$i . " : " . $db->f("sid") . " ";
 	if (is_array($my_array)) {
 		if ($my_array["sms_sig"])
-			$my_array["addsignature"]=1
+			$my_array["addsignature"]=1;
 		
 		$test->freezeIt();
 		$db2->query("UPDATE active_sessions set changed='$changed' WHERE name='Seminar_user' AND sid='".$db->f("sid")."'");
