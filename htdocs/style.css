@@ -124,7 +124,6 @@ td.printcontent {background-image: url('pictures/steel1.jpg');  font-family: Ari
 a.day {color: #3333DD; font-weight: bold;}
 a.sday {color :#DD0000; font-weight: bold;}
 a.hday {color :#DD5555; font-weight: bold;}
-a.kw {color: #000000; font-weight: bold;}
 a.daymin {color: #3333DD; font-size: 10pt; font-weight: bold;}
 a.sdaymin {color: #DD0000; font-size: 10pt; font-weight: bold;}
 a.hdaymin {color: #DD5555; font-size: 10pt; font-weight: bold;}
@@ -135,14 +134,19 @@ a.lighthday {color: #DDAAAA; font-weight: bold;}
 a.lightdaymin {color: #8888DD; font-size: 10pt; font-weight: bold;}
 a.lightsdaymin {color: #DDAAAA; font-size: 10pt; font-weight: bold;}
 a.lighthdaymin {color: #DDAAAA; font-size: 10pt; font-weight: bold;}
-.inday {font-size: 10pt;}
-th.cal {font-size: 16pt;}
-th.precol1 {font-size: 12pt;}
+.inday {font-size: 8pt;}
+.precol1w {font-size: 12pt; font-weight: bold; color: #AAAAAA; text-align: center;}
+.precol2w {font-size: 8pt; font-weight: bold; color: #AAAAAA; text-align: center;}
+td.calhead {font-size: 18pt; font-weight: bold; color: #AAAAAA; text-align: center;}
+A:link.calhead {color: #8888DD; text-decoration: none;font-family: Arial, Helvetica, sans-serif;}
+A:visited.calhead {color: #8888DD; text-decoration: none;font-family: Arial, Helvetica, sans-serif;}
+A:hover.calhead {color: #FF3333;text-decoration: none;font-family: Arial, Helvetica, sans-serif;}
+.celltoday {background-image: url('pictures/steelgroup2.gif');}
 th.inccal {font-size: 10pt;}
-a.precol1 {font-size: 10pt;}
-a.precol2 {font-size: 8pt; font-weight: normal;}
-td.weekend {background-image: url('pictures/steelgroup0.gif');}
+.precol1 {font-size: 14pt; font-weight: bold; text-align: center;}
+.precol2 {font-size: 10pt; font-weight: bold; text-align: left;}
+td.weekend {background-image: url('pictures/steelcal.jpg');}
 td.weekday {background-image: url('pictures/steel1.jpg');	font-family: Arial, Helvetica, sans-serif;}
 td.current {border-width: 2px; border-style: solid; border-color: #DD0000;}
-td.month {background-image: url('pictures/steelgroup0.gif');}
+td.month {background-image: url('pictures/steelcal.jpg');}
 td.lightmonth{background-image: url('pictures/steel1.jpg');	font-family: Arial, Helvetica, sans-serif;}
