@@ -341,10 +341,10 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 	 </tr>
 		 <td valign="top" class="blank">
 			<table border="0" cellpadding="0" cellspacing="0" width="100%" align="center" class="blank">
-				<?
-				if ($meldung)	{
-					parse_msg($meldung);
-				}?>
+		<?
+		if ($meldung)	{
+			parse_msg($meldung);
+		}?>
 			</table>
 <?			
 	}
@@ -354,123 +354,122 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
   $db->query("SELECT admission_seminar_user.*, seminare.Name, seminare.admission_endtime, seminare.admission_turnout, quota FROM admission_seminar_user LEFT JOIN seminare USING(seminar_id) LEFT JOIN admission_seminar_studiengang ON (admission_seminar_user.studiengang_id = admission_seminar_studiengang.studiengang_id AND seminare.seminar_id = admission_seminar_studiengang.seminar_id) WHERE user_id = '$user->id' ORDER BY admission_type, name");
   if ($db->num_rows()) {
 
-		echo "<b><div align=\"left\">&nbsp;" . "Anmelde- und Wartelisteneintr&auml;ge:" . "</div>&nbsp;"; 
+		echo "<b><div align=\"left\">&nbsp;" . _("Anmelde- und Wartelisteneintr&auml;ge:") . "</div>&nbsp;"; 
 
-		ECHO "<table border=\"0\" cellpadding=\"2\" cellspacing=\"0\" width=\"98%\" align=\"center\" class=\"blank\">";
-		ECHO "<tr>";
-			ECHO "<th width=\"2%\" nowrap colspan=2>&nbsp</th>";
-			ECHO "<th width=\"65%\" align=\"left\"><b>Name</b></th>";
-			ECHO "<th width=\"10%\"><b>Datum</b></th>";
-			ECHO "<th width=\"10%\" nowrap><b>Position/Chance</b></th>";
-			ECHO "<th width=\"10%\"><b>Art</b></th>";
-			ECHO "<th width=\"3%\">X&nbsp; </tr></th>";
+		echo "<table border=\"0\" cellpadding=\"2\" cellspacing=\"0\" width=\"98%\" align=\"center\" class=\"blank\">";
+		echo "<tr>";
+		echo "<th width=\"2%\" nowrap colspan=2>&nbsp</th>";
+		echo "<th width=\"65%\" align=\"left\"><b>" . _("Name") . "</b></th>";
+		echo "<th width=\"10%\"><b>" . _("Datum") . "</b></th>";
+		echo "<th width=\"10%\" nowrap><b>" . _("Position/Chance") . "</b></th>";
+		echo "<th width=\"10%\"><b>" . _("Art") . "</b></th>";
+		echo "<th width=\"3%\">X&nbsp; </tr></th>";
 			
-	$cssSw->resetClass();
+		$cssSw->resetClass();
 	
-	WHILE ($db->next_record()) {
-		IF ($db->f("status") == "claiming") { // wir sind in einer Anmeldeliste und brauchen Prozentangaben
-				 $db2=new DB_Seminar;
-				 $admission_studiengang_id = $db->f("studiengang_id");
-				 $admission_seminar_id = $db->f("seminar_id");
-				 $plaetze = round ($db->f("admission_turnout") * ($db->f("quota") / 100));  // Anzahl der Plaetze in dem Studiengang in den ich will
-				 $db2->query("SELECT count(*) AS wartende FROM admission_seminar_user WHERE seminar_id = '$admission_seminar_id' AND studiengang_id = '$admission_studiengang_id'");
-				 IF ($db2->next_record()) {
+		while ($db->next_record()) {
+			if ($db->f("status") == "claiming") { // wir sind in einer Anmeldeliste und brauchen Prozentangaben
+				$db2=new DB_Seminar;
+				$admission_studiengang_id = $db->f("studiengang_id");
+				$admission_seminar_id = $db->f("seminar_id");
+				$plaetze = round ($db->f("admission_turnout") * ($db->f("quota") / 100));  // Anzahl der Plaetze in dem Studiengang in den ich will
+				$db2->query("SELECT count(*) AS wartende FROM admission_seminar_user WHERE seminar_id = '$admission_seminar_id' AND studiengang_id = '$admission_studiengang_id'");
+				if ($db2->next_record()) {
 					$wartende = ($db2->f("wartende"));   // Anzahl der Personen die auch in diesem Studiengang auf einen Platz lauern
-				 }
-				 IF ($plaetze >= $wartende) $admission_chance = 100;   // ich komm auf jeden Fall rein
-				 ELSE $admission_chance = round (($plaetze / $wartende) * 100); // mehr Bewerber als Plaetze
-				 $chance_color = dechex(255-(200-($admission_chance*2)));  // Gruen der Farbe nimmt mit Wahrscheinlichkeit ab
-		}
-		ELSE {  // wir sind in einer Warteliste
-			IF ($db->f("position") >= 30) $chance_color = 44; // das wird wohl nix mehr mit nachrücken
-			ELSE $chance_color = dechex(255-($db->f("position")*6)); // da gibts vielleicht noch Hoffnung, also grün
-		}
+				}
+				if ($plaetze >= $wartende)
+					$admission_chance = 100;   // ich komm auf jeden Fall rein
+				else
+					$admission_chance = round (($plaetze / $wartende) * 100); // mehr Bewerber als Plaetze
+				$chance_color = dechex(255-(200-($admission_chance*2)));  // Gruen der Farbe nimmt mit Wahrscheinlichkeit ab
+			} else {  // wir sind in einer Warteliste
+				if ($db->f("position") >= 30)
+					$chance_color = 44; // das wird wohl nix mehr mit nachrücken
+				else
+					$chance_color = dechex(255-($db->f("position")*6)); // da gibts vielleicht noch Hoffnung, also grün
+			}
 	
-	//$cssSw->disableHover();
-	$cssSw->switchClass();
-	printf ("<tr".$cssSw->getHover()."><td width=\"1%%\" bgcolor=\"#44%s44\"><img src='pictures/blank.gif' alt='Position oder Wahrscheinlichkeit' border=0 width=7 height=12></td>",$chance_color);
-	printf ("<td width=\"1%%\" class=\"%s\">&nbsp;</td>",$cssSw->getClass());
-	printf ("<td width=\"55%%\" class=\"%s\">",$cssSw->getClass());
-	print "<a href=details.php?sem_id=".$db->f("seminar_id")."&send_from_search_page=meine_seminare.php&send_from_search=TRUE><font size=-1>".$db->f("Name")."</font></a></td>";
-	printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><font size=-1>%s</font></td>", $cssSw->getClass(), ($db->f("status") == "claiming") ? date("d.m.", $db->f("admission_endtime")) : "-");
-	printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><font size=-1>%s %s</font></td>",$cssSw->getClass(), ($db->f("status") == "claiming") ? $admission_chance : $db->f("position"), ($db->f("status") == "claiming") ? "%" : "");
-	printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><font size=-1>%s</font></td>", $cssSw->getClass(),  ($db->f("status") == "claiming") ? "Los" : "Wartel.");
-	printf("<td width=\"3%%\" class=\"%s\" align=\"center\"><a href=\"$PHP_SELF?auswahl=%s&cmd=%skill_admission\"><img src=\"pictures/trash.gif\" ".tooltip("aus der Veranstaltung abmelden")." border=\"0\"></a>&nbsp; </td></tr>", $cssSw->getClass(), $db->f("seminar_id"), ($db->f("status") == "awaiting") ? "suppose_to_" : "");
-	}
-	print "</table>";
-?>
+			//$cssSw->disableHover();
+			$cssSw->switchClass();
+			printf ("<tr".$cssSw->getHover()."><td width=\"1%%\" bgcolor=\"#44%s44\"><img src='pictures/blank.gif' " . tooltip(_("Position oder Wahrscheinlichkeit")) . " border=0 width=7 height=12></td>",$chance_color);
+			printf ("<td width=\"1%%\" class=\"%s\">&nbsp;</td>",$cssSw->getClass());
+			printf ("<td width=\"55%%\" class=\"%s\">",$cssSw->getClass());
+			print "<a href=details.php?sem_id=".$db->f("seminar_id")."&send_from_search_page=meine_seminare.php&send_from_search=TRUE><font size=-1>".htmlReady($db->f("Name"))."</font></a></td>";
+			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><font size=-1>%s</font></td>", $cssSw->getClass(), ($db->f("status") == "claiming") ? date("d.m.", $db->f("admission_endtime")) : "-");
+			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><font size=-1>%s %s</font></td>",$cssSw->getClass(), ($db->f("status") == "claiming") ? $admission_chance : $db->f("position"), ($db->f("status") == "claiming") ? "%" : "");
+			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><font size=-1>%s</font></td>", $cssSw->getClass(),  ($db->f("status") == "claiming") ? _("Los") : _("Wartel."));
+			printf("<td width=\"3%%\" class=\"%s\" align=\"center\"><a href=\"$PHP_SELF?auswahl=%s&cmd=%skill_admission\"><img src=\"pictures/trash.gif\" ".tooltip(_("aus der Veranstaltung abmelden"))." border=\"0\"></a>&nbsp; </td></tr>", $cssSw->getClass(), $db->f("seminar_id"), ($db->f("status") == "awaiting") ? "suppose_to_" : "");
+		}
+		print "</table>";
+		?>
 
-<br><br></td>
+		<br><br></td>
 
-<?	
-}	
- // Ende Wartelisten
+		<?	
+	}	 // Ende Wartelisten
  
 
 //Info-field on the right side
-?>
+	?>
 
-		</td>
-		<td class="blank" width="270" align="right" valign="top">
-<?
+	</td>
+	<td class="blank" width="270" align="right" valign="top">
+	<?
 
 // Berechnung der uebrigen Seminare
 
- $db->query("SELECT count(*) as count  FROM seminare");
- $db->next_record(); 
- 	$anzahltext = "Es sind noch "
- 				.($db->f("count")-$num_my_sem)
- 				." weitere Veranstaltungen vorhanden.";
+	$db->query("SELECT count(*) as count  FROM seminare");
+	$db->next_record(); 
+	$anzahltext = sprintf(_("Es sind noch %s weitere Veranstaltungen vorhanden."), ($db->f("count")-$num_my_sem));
 
 
 // View for Teachers
 	
-IF ($perm->have_perm("dozent")) {   
-$infobox = array	(	
-	array  ("kategorie"  => "Information:",
-		"eintrag" => array	(	
-						array (	"icon" => "pictures/ausruf_small.gif",
-								"text"  => $anzahltext
-								)
+	if ($perm->have_perm("dozent")) {   
+		$infobox = array	(	
+			array  ("kategorie"  => _("Information:"),
+				"eintrag" => array	(	
+					array (	"icon" => "pictures/ausruf_small.gif",
+									"text"  => $anzahltext
+					)
+				)
+			),
+			array  ("kategorie" => _("Aktionen:"),
+				"eintrag" => array	(	
+					array	 (	"icon" => "pictures/suchen.gif",
+										"text"  => sprintf(_("Um weitere Veranstaltungen in Ihre pers&ouml;nliche Auswahl aufzunehmen, nutzen Sie bitte die %sSuchfunktion</a>"), "<a href=\"sem_portal.php?view=Alle&reset_all=TRUE\">")
+					),
+					array	 (	"icon" => "pictures/admin.gif",
+										"text"  => sprintf(_("Um Veranstaltungen anzulegen, nutzen Sie bitte den %sVeranstaltungs-Assistenten</a>"), "<a href=\"admin_seminare_assi.php?new_session=TRUE\">")
+					)
+				)
 			)
-		),
-	array  ("kategorie" => "Aktionen:",
-	       "eintrag" => array	(	
-						array	 (	"icon" => "pictures/suchen.gif",
-								"text"  => "Um weitere Veranstaltungen in Ihre pers&ouml;nliche Auswahl aufzunehmen, nutzen Sie bitte die <a href=\"sem_portal.php?view=Alle&reset_all=TRUE\">Suchfunktion</a>"
-								),
-						array	 (	"icon" => "pictures/admin.gif",
-								"text"  => "Um Veranstaltungen anzulegen, nutzen Sie bitte den <a href=\"admin_seminare_assi.php?new_session=TRUE\">Veranstaltungs-Assistenten</a>"
-								)
-			)
-		)
-	);
-}
+		);
+	}	else {
 
 // View for Students
 
-ELSE {
-	$infobox = array	(			
-	array  ("kategorie"  => "Information:",
-		"eintrag" => array	(	
-						array (	"icon" => "pictures/ausruf_small.gif",
-								"text"  => $anzahltext
-								)
-		)
-	),
-	array  ("kategorie" => "Aktionen:",
-	       "eintrag" => array	(	
-						array	 (	"icon" => "pictures/suchen.gif",
-								"text"  => "Um weitere Veranstaltungen in Ihre pers&ouml;nliche Auswahl aufzunehmen, nutzen Sie bitte die <a href=\"sem_portal.php?view=Alle&reset_all=TRUE\">Suchfunktion</a>"
-								)
+		$infobox = array	(	
+			array  ("kategorie"  => _("Information:"),
+				"eintrag" => array	(	
+					array (	"icon" => "pictures/ausruf_small.gif",
+									"text"  => $anzahltext
+					)
+				)
+			),
+			array  ("kategorie" => _("Aktionen:"),
+				"eintrag" => array	(	
+					array	 (	"icon" => "pictures/suchen.gif",
+										"text"  => sprintf(_("Um weitere Veranstaltungen in Ihre pers&ouml;nliche Auswahl aufzunehmen, nutzen Sie bitte die %sSuchfunktion</a>"), "<a href=\"sem_portal.php?view=Alle&reset_all=TRUE\">")
+					)
+				)
 			)
-		)
-	);
-}
+		);
+	}
 
 // print the info_box
 
-print_infobox ($infobox,"pictures/seminare.jpg");
+	print_infobox ($infobox,"pictures/seminare.jpg");
 	
 ?>
 
@@ -485,7 +484,7 @@ print_infobox ($infobox,"pictures/seminare.jpg");
 }
 
 
-ELSEIF ($auth->auth["perm"]=="admin"){
+elseif ($auth->auth["perm"]=="admin") {
 
 	$db2=new DB_Seminar();
 
@@ -580,11 +579,11 @@ ELSEIF ($auth->auth["perm"]=="admin"){
 		<td class="blank" >
 			<table border="0" cellpadding="0" cellspacing="0" width="99%" align="center" class=blank>
 				<tr valign"top" align="center">
-					<th width="50%" colspan=2><a href="<? echo $PHP_SELF ?>?sortby=Name">Name</a></th>
-					<th width="10%"><a href="<? echo $PHP_SELF ?>?sortby=status">Status</a></th>
-					<th width="15%"><b>Dozent</b></th>
-					<th width="10%"><b>Inhalt</b></th>
-					<th width="10%"><a href="<? echo $PHP_SELF ?>?sortby=teilnehmer">Teilnehmer</a></th>
+					<th width="50%" colspan=2><a href="<? echo $PHP_SELF ?>?sortby=Name"><?=_("Name")?></a></th>
+					<th width="10%"><a href="<? echo $PHP_SELF ?>?sortby=status"><?=_("Status")?></a></th>
+					<th width="15%"><b><?=_("Dozent")?></b></th>
+					<th width="10%"><b><?=_("Inhalt")?></b></th>
+					<th width="10%"><a href="<? echo $PHP_SELF ?>?sortby=teilnehmer"><?=_("Teilnehmer")?></a></th>
 					<th width="5%"><b>&nbsp; </b></th>
 				</tr>
 	<?
@@ -607,16 +606,16 @@ ELSEIF ($auth->auth["perm"]=="admin"){
 		$lastVisit = $loginfilenow[$semid];
 		
 		echo "<tr ".$cssSw->getHover()."><td class=\"$class\">&nbsp;&nbsp;</td>";
-		ECHO "<td class=\"$class\"><a href=\"seminar_main.php?auswahl=$semid\">";
+		echo "<td class=\"$class\"><a href=\"seminar_main.php?auswahl=$semid\">";
 		if ($lastVisit <= $values["chdate"])
 			print ("<font color=\"red\">");
-		ECHO htmlReady($values["name"]);
+		echo htmlReady($values["name"]);
 		echo " (" . get_sem_name($values["start_time"]) .")";
 		if ($lastVisit <= $values["chdate"])
 			print ("</font>");
 		print ("</a></td>");
 
-		ECHO "<td class=\"$class\" align=\"center\">&nbsp;" . $SEM_TYPE[$values["status"]]["name"] . "&nbsp;</td>";
+		echo "<td class=\"$class\" align=\"center\">&nbsp;" . $SEM_TYPE[$values["status"]]["name"] . "&nbsp;</td>";
 // Dozenten
 		$db2->query ("SELECT Nachname, username FROM  seminar_user LEFT JOIN auth_user_md5  USING (user_id) WHERE Seminar_id='$semid' AND status='dozent' ORDER BY Nachname ASC");
 		$temp = "";
@@ -632,7 +631,7 @@ ELSEIF ($auth->auth["perm"]=="admin"){
 		echo "</td>";
 
 		echo "<td class=\"$class\" align=\"center\" nowrap>". $values["teilnehmer"]."&nbsp;</td>";
-		printf("<td class=\"$class\" align=center align=center><a href=\"seminar_main.php?auswahl=$semid&redirect_to=adminarea_start.php&new_sem=TRUE\"><img src=\"pictures/admin.gif\" ".tooltip("Veranstaltungsdaten bearbeiten")." border=\"0\"></a></td>", $semid);
+		printf("<td class=\"$class\" align=center align=center><a href=\"seminar_main.php?auswahl=$semid&redirect_to=adminarea_start.php&new_sem=TRUE\"><img src=\"pictures/admin.gif\" ".tooltip(_("Veranstaltungsdaten bearbeiten"))." border=\"0\"></a></td>", $semid);
 		 echo "</tr>\n";
 		}
 	echo "		</table>
@@ -656,11 +655,11 @@ ELSEIF ($perm->have_perm("root")){
 	?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
 		<tr>
-			<td class="topic" colspan=2><img src="pictures/meinesem.gif" border="0" align="texttop"><b>&Uuml;bersicht &uuml;ber Veranstaltungen</></td>
+			<td class="topic" colspan=2><img src="pictures/meinesem.gif" border="0" align="texttop"><b><?=_("&Uuml;bersicht &uuml;ber Veranstaltungen")?></></td>
 		</tr>
 		<tr>
 			<td class="blank" align = left colspan=2><br /><blockquote>
-				Um eine Veranstaltung zu bearbeiten, w&auml;hlen Sie sie &uuml;ber die Suchfunktion aus.
+				<?=_("Um eine Veranstaltung zu bearbeiten, w&auml;hlen Sie sie &uuml;ber die Suchfunktion aus.")?>
 			</blockquote>
 			</td>
 		</tr>
