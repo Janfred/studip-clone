@@ -65,7 +65,7 @@ if (!isset($sortby))
 if ($sortby == "count")
 	$sortby = "count DESC";
 	
-$db->query ("SELECT archiv.name, archiv.seminar_id, archiv_user.status, archiv.semester, archiv.archiv_file_id, archiv.forumdump FROM archiv_user LEFT JOIN archiv  USING (seminar_id) WHERE archiv_user.user_id = '$user->id' GROUP BY seminar_id ORDER BY semester, $sortby");
+$db->query ("SELECT archiv.name, archiv.seminar_id, archiv_user.status, archiv.semester, archiv.archiv_file_id, archiv.forumdump FROM archiv_user LEFT JOIN archiv  USING (seminar_id) WHERE archiv_user.user_id = '$user->id' GROUP BY seminar_id ORDER BY start_time, $sortby");
 $num_my_sem=$db->num_rows();
 if (!$num_my_sem)
 	$meldung.= "info§" . _("Es befinden sich zur Zeit keine Veranstaltungen im Archiv, an denen Sie teilgenommen haben.");
