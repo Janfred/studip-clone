@@ -132,7 +132,7 @@ class EventObject {
 			return FALSE;
 	}
 	
-	//private, works as ceil, but if the output is o, it will be converted to 1
+	//private, works as ceil, but if the output is 0, it will be converted to 1
 	function myCeil ($number) {
 		$result = ceil ($number);
 
@@ -171,23 +171,25 @@ class EventObject {
 				$tmp_day = date("w", $tmp_begin);
 			
 			foreach ($POINTS[$tmp_day] as $val) {
-				if ($CHANGE_RATE) {
-					$tmp_seperating_start = $tmp_begin;
-					$tmp_seperating_end = $tmp_end;
-				} else {
-					$tmp_seperating_start = mktime ($val["begin_hour"], $val["begin_min"], 0, date("m", $tmp_begin), date("j", $tmp_begin), date("Y", $tmp_begin));
-					$tmp_seperating_end = mktime ($val["end_hour"], $val["end_min"], 0, date("m", $tmp_begin), date("j", $tmp_begin), date("Y", $tmp_begin));
-				}
-				$i++;				
-				
-				if (($tmp_seperating_start <= $tmp_begin) && ($tmp_seperating_end >= $tmp_begin))
-					if ($tmp_seperating_end >= $tmp_end){
-						$points = $points + ($this->myCeil($this->myCeil(($tmp_end - $tmp_begin) / 60) / $val["min"]) * $val["ratio"]);
-						unset ($tmp_end);
+				if ($tmp_begin != $tmp_end) {
+					if ($CHANGE_RATE) {
+						$tmp_seperating_start = $tmp_begin;
+						$tmp_seperating_end = $tmp_end;
 					} else {
-						$points = $points + ($this->myCeil($this->myCeil(($tmp_seperating_end - $tmp_begin) / 60) / $val["min"]) * $val["ratio"]);
-						$tmp_begin = $tmp_seperating_end + 60;
+						$tmp_seperating_start = mktime ($val["begin_hour"], $val["begin_min"], 0, date("m", $tmp_begin), date("j", $tmp_begin), date("Y", $tmp_begin));
+						$tmp_seperating_end = mktime ($val["end_hour"], $val["end_min"], 0, date("m", $tmp_begin), date("j", $tmp_begin), date("Y", $tmp_begin));
 					}
+					$i++;				
+					
+					if (($tmp_seperating_start <= $tmp_begin) && ($tmp_seperating_end >= $tmp_begin))
+						if ($tmp_seperating_end >= $tmp_end){
+							$points = $points + ($this->myCeil($this->myCeil(($tmp_end - $tmp_begin) / 60) / $val["min"]) * $val["ratio"]);
+							unset ($tmp_end);
+						} else {
+							$points = $points + ($this->myCeil($this->myCeil(($tmp_seperating_end - $tmp_begin) / 60) / $val["min"]) * $val["ratio"]);
+							$tmp_begin = $tmp_seperating_end + 60;
+						}
+				}
 			}
 		}
 		

@@ -173,7 +173,7 @@ if (($supporter) && ($sent_con_id)) {
 	} else
 		$con_end = mktime(23,59,59,$con_end_month, $con_end_day, $con_end_year);
 		
-	if ((!$illegal_begin) && (!$illegal_end) && ($con_begin < $con_end)) {
+	if ((!$illegal_begin) && (!$illegal_end) && ($con_begin <= $con_end)) {
 		$changedCon->setContractBegin($con_begin);
 		$changedCon->setContractEnd($con_end);
 	} elseif ((!$illegal_begin) && ($con_begin < $changedCon->getContractEnd()))
