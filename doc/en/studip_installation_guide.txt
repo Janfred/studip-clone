@@ -240,7 +240,7 @@ This value influences the maximum execution time of a php-script. A higher
 value proved to be a good choice here.
 
 1.4.2 Changing values in php.ini using a <Directory>-directive (recommended)
-
+---------------------------------------------------------------------------
 This variant allows the installation to coexist with other php programs 
 ithout disturbing them and is therefore the recommended variant. 
 You can find in /studip-config a file studip-httpd.conf which contains 
@@ -248,7 +248,7 @@ all necessary settings. Just copy it into your http.conf or use an include
 directive. Remember to check the paths!
 
 1.4.3 Changing values in php.ini using an .htaccess file
-
+--------------------------------------------------------
 This is similar to 1.4.2, but has the advantage that you don't need to have 
 access to the configuration file of the webserver.
 To make it work the setting
@@ -353,7 +353,7 @@ Access to the system's temp directory (by default /tmp) must be ensured as well.
 
 1.7.2 config.inc.php
 --------------------
-Rename the file config.inc.dist to config.inc.php.
+Rename the file config.inc.php.dist to config.inc.php.
 
 Set $UNI_URL, $UNI_LOGOUT_ADD, $UNI_CONTACT and $UNI_INFO according to your 
 needs. All other values can normally be left like they are. You can adapt 
@@ -364,7 +364,7 @@ except the ones mentioned above as otherwise inconsistencies in the database
 may arise.
 
 1.8 Configuration of the Stud.IP of modules and optional feature
-
+----------------------------------------------------------------
 Besides the basic system there are some Stud.IP modules which need which 
 have additional requirements and need to be configured in advance.
 Some of them are enabled in the distribution so check which of them you 
@@ -413,7 +413,7 @@ Further modules such as the calendar, the resource management, the Wiki-
 or the Vote and Survey-modules require no specific configuration or optional software.
 
 2 The first start of Stud.IP
-
+----------------------------
 http://localhost/studip should present you with the starting page of Stud.IP 
 by now. If you have imported studip_root_user.sql, a root user has been already created: 
 User name:	root@studip
