@@ -51,9 +51,11 @@ function show_dates ($range_id, $date_start, $date_end, $show_not=0, $show_docs=
 			$admin_link="<a href=\"calendar.php?cmd=edit\">";
 		else {
 			$admin_link="<a href=\"admin_dates.php?new_sem=TRUE&ebene=sem&range_id=".$range_id."\">";
-			$range_typ = "sem";
 		}
-		}
+	}
+	
+	$range_typ = ($range_id != $user->id) ? "sem" : "user";
+		
 		
 	$db = new DB_Seminar;
 	$db2=new DB_Seminar;
