@@ -178,8 +178,8 @@ switch (strtolower(getFileExtension ($file_name))) {
 if (!$type) {
 	$db->query("SELECT seminar_id AS object_id FROM dokumente WHERE dokument_id = '".$file_id."' ");
 	$db->next_record();
-	echo $db->f("object_id");
 	$object_type = get_object_type($db->f("object_id"));
+	echo $object_type;
 	if ($object_type == "inst")
 		$skip_check=TRUE;
 }
