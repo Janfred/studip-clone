@@ -55,12 +55,6 @@ $msg = new Msg;
 $db=new DB_Seminar;
 $db2=new DB_Seminar;
 
-/*****************************************************************************
-Kopf der Ausgabe
-/*****************************************************************************/
-include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php");
-if ($quick_view_mode != "no_nav")
-	include ("$ABSOLUTE_PATH_STUDIP/header.php");
 
 /*****************************************************************************
 empfangene Werte auswerten und Befehle ausfuehren
@@ -70,6 +64,13 @@ include ("$RELATIVE_PATH_RESOURCES/lib/evaluate_values.php");
 
 //load content, text, pictures and stuff
 include ("$RELATIVE_PATH_RESOURCES/views/page_intros.inc.php");
+
+/*****************************************************************************
+Kopf der Ausgabe
+/*****************************************************************************/
+include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php");
+if ($quick_view_mode != "no_nav")
+	include ("$ABSOLUTE_PATH_STUDIP/header.php");
 
 //load correct nav
 if ($view_mode == "oobj")
@@ -284,8 +285,8 @@ if ($view == "edit_object_assign" || $view == "openobject_assign") {
 		$editObject=new EditResourceData($resources_data["actual_object"]);
 		$editObject->setUsedView($view);
 		if ($edit_assign_object)
-			$assign_id=$edit_assign_object;
-		$editObject->showScheduleForms($assign_id);
+			$resources_data["actual_assign"]=$edit_assign_object;
+		$editObject->showScheduleForms($resources_data["actual_assign"]);
 	} else {
 		echo "</td></tr>";
 		$msg->displayMsg(15);
