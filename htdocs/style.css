@@ -141,12 +141,13 @@ td.calhead {font-size: 18pt; font-weight: bold; color: #AAAAAA; text-align: cent
 A:link.calhead {color: #8888DD; text-decoration: none;font-family: Arial, Helvetica, sans-serif;}
 A:visited.calhead {color: #8888DD; text-decoration: none;font-family: Arial, Helvetica, sans-serif;}
 A:hover.calhead {color: #FF3333;text-decoration: none;font-family: Arial, Helvetica, sans-serif;}
-.celltoday {background-image: url('pictures/steelgroup2.gif');}
+.celltoday {background-image: url('pictures/celltoday.gif');}
 th.inccal {font-size: 10pt;}
 .precol1 {font-size: 14pt; font-weight: bold; text-align: center;}
 .precol2 {font-size: 10pt; font-weight: bold; text-align: left;}
 td.weekend {background-image: url('pictures/steelcal.jpg');}
 td.weekday {background-image: url('pictures/steel1.jpg');	font-family: Arial, Helvetica, sans-serif;}
-td.current {border-width: 2px; border-style: solid; border-color: #DD0000;}
+td.current {border-width: 2px; border-style: solid; border-color: #DD0000; background-image: url('pictures/steelcal.jpg');}
+td.currenttoday {border-width: 2px; border-style: solid; border-color: #DD0000; background-image: url('pictures/celltoday.gif');}
 td.month {background-image: url('pictures/steelcal.jpg');}
 td.lightmonth{background-image: url('pictures/steel1.jpg');	font-family: Arial, Helvetica, sans-serif;}
