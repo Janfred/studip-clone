@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-03-24 13:37+0100\n"
+"POT-Creation-Date: 2003-03-24 18:08+0100\n"
 "PO-Revision-Date: 2003-03-24 17:27+0100\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
@@ -110,7 +110,8 @@ msgstr "This chat has just been secured with a password by <b>%s</b>."
 msgid ""
 "Der Passwortschutz f&uuml;r diesen Chat wurde soeben von <b>%s</b> "
 "aufgehoben."
-msgstr "The password security for this chat has just been removed by <b>%s</b>. "
+msgstr ""
+"The password security for this chat has just been removed by <b>%s</b>. "
 
 #: chat/chat_client.php:231
 msgid "Dieser Chat ist nicht mit einem Passwort gesichert."
@@ -204,11 +205,14 @@ msgstr " [colorcode] - Your font colour is set at  [colorcode] "
 
 #: chat/chat_config.php:103
 msgid " [msg] - Ihr Name wird zusammen mit [msg] vom Chatbot ausgegeben"
-msgstr " [msg] - Your name will be printed together with [msg] from the Chatbot"
+msgstr ""
+" [msg] - Your name will be printed together with [msg] from the Chatbot"
 
 #: chat/chat_config.php:104
-msgid " [username][msg] - Die Botschaft [msg] wird geheim an [username] übermittelt"
-msgstr "[username][msg] - The message [msg] will be sent secretly to [username] "
+msgid ""
+" [username][msg] - Die Botschaft [msg] wird geheim an [username] übermittelt"
+msgstr ""
+"[username][msg] - The message [msg] will be sent secretly to [username] "
 
 #: chat/chat_config.php:105
 msgid " - Zeigt diesen Hilfetext"
@@ -223,7 +227,8 @@ msgstr ""
 "with / kick all throw all other users out of the chat"
 
 #: chat/chat_config.php:107
-msgid " [username][msg] - Verschickt eine systeminterne SMS [msg] an [username]"
+msgid ""
+" [username][msg] - Verschickt eine systeminterne SMS [msg] an [username]"
 msgstr "[username] [msg] - Send an internal system SMS [msg] to [username]"
 
 #: chat/chat_config.php:108
@@ -262,7 +267,8 @@ msgstr ""
 msgid ""
 " [start | stop | send] - Startet, beendet oder versendet eine Aufzeichnung, "
 "wenn sie Chat-Admin sind"
-msgstr " [start | stop | send] - start, end or send a recording if you are chat-admin"
+msgstr ""
+" [start | stop | send] - start, end or send a recording if you are chat-admin"
 
 #: chat/chat_dummy.php:61
 msgid "Chat: "
@@ -329,7 +335,8 @@ msgid "Dieser Chatraum ist mit einem Passwort gesichert."
 msgstr "This chat room is secured with a password."
 
 #: chat/chat_func_inc.php:168
-msgid "Um diesen Chatraum zu betreten, brauchen sie eine g&uuml;ltige Einladung."
+msgid ""
+"Um diesen Chatraum zu betreten, brauchen sie eine g&uuml;ltige Einladung."
 msgstr "You need a valid invitation in order to enter this chat room."
 
 #: chat/chat_func_inc.php:172
@@ -476,4 +483,3 @@ msgstr "Show chat commands"
 #: chat/chat_status.php:165
 msgid "Alle verfügbaren Smileys anzeigen"
 msgstr "Show all available smileys"
-
