@@ -215,7 +215,7 @@ if (!$type) {
 }
 if ($type == 5){
 	$skip_check = true;
-	if (!($range_id == $user->id) && !$perm->have_studip_perm($range_id, 'tutor')){
+	if (!($range_id == $user->id) && !$perm->have_studip_perm('tutor', $range_id)){
 		$no_access = true;
 	} else {
 		$the_data = StudipLitList::GetTabbedList($range_id, $list_id);
