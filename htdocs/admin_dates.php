@@ -382,7 +382,7 @@ if ((($kill_x) || ($delete_confirm)) && ($admin_dates_data["range_id"])) {
 	if (is_array($kill_date)) {
 		for ($i=0; $i < count($kill_date); $i++) {		
 			$do_delete = TRUE;
-			if (($RESOURCES_ALLOW_ROOM_REQUESTS) && (!$delete_confirm)){
+			if (($RESOURCES_ENABLE) && (!$delete_confirm)){
 				if ($assigned_room = getDateAssigenedRoom($kill_date[$i])) {
 					$resObjPrm =& ResourceObjectPerms::Factory($assigned_room);
 					if (!$resObjPrm->havePerm("autor")) {
@@ -405,7 +405,22 @@ if ((($kill_x) || ($delete_confirm)) && ($admin_dates_data["range_id"])) {
 	//after every change, we have to do this check (and we create the msgs...)
 	if ($RESOURCES_ENABLE) {
 		$updateAssign = new VeranstaltungResourcesAssign($admin_dates_data["range_id"]);
-		$updateAssign->updateAssign();
+		$resources_result = array_merge ($resources_result, $updateAssign->updateAssign());
+		
+		if ($updateAssign->turnus_cleared && $RESOURCES_ALLOW_ROOM_REQUESTS){
+			$request_id = getSeminarRoomRequest($admin_dates_data["range_id"]);
+			if ($request_id){		//reactivate room request if there is one
+				$room_request = new RoomRequest($request_id);
+				if ($room_request->getClosed()){
+					$room_request->setClosed(0);
+					$room_request->store();
+					$result .= sprintf ("info§"._("Die Raumanfrage zu den regelm&auml;&szlib;igen Zeiten der Veranstaltung wurde reaktiviert. Um die Anfrage einzusehen oder zu bearbeiten, gehen Sie auf %sRaumanfragen%s.")."§", "<a href=\"admin_room_requests.php?seminar_id=\"".$admin_dates_data["range_id"]."\">", "</a>");
+				}
+			} else {
+				//there is no room request, maybe the user should know that...
+				$result .= sprintf ("info§"._("Um R&auml;ume f&uuml;r Ihre Veranstaltung zu bekommen, m&uuml;ssen Sie eine %sRaumanfrage%s erstellen.")."§", "<a href=\"admin_room_requests.php?seminar_id=\"".$admin_dates_data["range_id"]."\">", "</a>");
+ 			}
+		}
 	}
 	
 	if ($del_count)
@@ -415,6 +430,7 @@ if ((($kill_x) || ($delete_confirm)) && ($admin_dates_data["range_id"])) {
 			$result.="msg§" . sprintf(_("%s Termine wurden gel&ouml;scht!"), $del_count). "§";
 	$beschreibung='';
 
+
 }  // end if ($kill_x)
 
 //result from the resource management
@@ -422,7 +438,6 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 	$result.=getFormattedResult($resources_result, "booth");
 	}
 	
-
 //Bereich wurde ausgewaehlt (aus linksadmin) oder wir kommen aus dem Seminar Assistenten
 $db->query("SELECT metadata_dates, Name, start_time, duration_time, status, Seminar_id FROM seminare WHERE Seminar_id = '".$admin_dates_data["range_id"]."'");
 $db->next_record();
