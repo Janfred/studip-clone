@@ -56,16 +56,29 @@ function get_my_sem_values(&$my_sem) {
 	 $my_sem[$db2->f("range_id")]["news"]=$db2->f("count");
 	 }
 // Literatur?
-	 $db2->query ("SELECT range_id,chdate,user_id FROM literatur WHERE range_id IN ".$my_semids);
+	$db2->query("SELECT range_id,count(list_id) as count FROM  lit_list WHERE  range_id IN $my_semids AND visibility=1 GROUP BY range_id");
 	while($db2->next_record()) {
-	 $my_sem[$db2->f("range_id")]["literatur"]=TRUE;
+	 $my_sem[$db2->f("range_id")]["literatur"]=$db2->f("count");
 	 }
 //termine
 	 $db2->query ("SELECT range_id,count(*) as count FROM termine WHERE range_id IN ".$my_semids." GROUP BY range_id");
 	 while($db2->next_record()) {
 	 $my_sem[$db2->f("range_id")]["termine"]=$db2->f("count");
 	 }
+	 if ($GLOBALS['WIKI_ENABLE']) {
+		$db2->query("SELECT range_id, COUNT(DISTINCT keyword) as count FROM wiki  WHERE range_id IN ".$my_semids." GROUP BY range_id");
+		while($db2->next_record()) {
+			$my_sem[$db2->f("range_id")]["wiki"]=$db2->f("count");
+		}
+	 }
+	 if ($GLOBALS['VOTE_ENABLE']) {
+       	$db2->query("SELECT range_id,count(vote_id) as count FROM vote 	WHERE state IN('active','stopvis') AND range_id IN ".$my_semids." GROUP BY range_id");
+		while($db2->next_record()) {
+			$my_sem[$db2->f("range_id")]["votes"]=$db2->f("count");
+		}
+	 }
 	 return;
+	 
 }  // Ende function get_my_sem_values
 
 
@@ -87,8 +100,8 @@ function print_seminar_content($semid,$my_sem_values) {
 		echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
   //Literatur
   if ($my_sem_values["literatur"]) {
-    echo "<a href=\"seminar_main.php?auswahl=$semid&redirect_to=literatur.php\">";
-		printf ("&nbsp; <img src=\"pictures/icon-lit.gif\" border=0 %s></a>", tooltip(_("Zur Literatur- und Linkliste")));
+    echo "&nbsp; <a href=\"seminar_main.php?auswahl=$semid&redirect_to=literatur.php\">";
+		printf ("<img src=\"pictures/icon-lit.gif\" border=0 %s></a>", tooltip(sprintf(_("%s Literaturlisten"), $my_sem_values["literatur"])));
   }
   else echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
   // Termine
@@ -97,6 +110,22 @@ function print_seminar_content($semid,$my_sem_values) {
   else
 		echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
 
+  if ($GLOBALS['WIKI_ENABLE']) {  
+	  if ($my_sem_values["wiki"])
+			echo "&nbsp; <a href=\"seminar_main.php?auswahl=$semid&redirect_to=wiki.php\"><img src='pictures/icon-wiki.gif' border=0 ".tooltip(sprintf(_("%s WikiSeiten"), $my_sem_values["wiki"]))."></a>";
+	  else
+			echo "&nbsp; <img src='pictures/icon-leer.gif' width=\"20\" height=\"17\" border=\"0\">";
+  }
+
+  //votes
+  if ($GLOBALS['VOTE_ENABLE']) {
+	  if ($my_sem_values["votes"])
+			echo "&nbsp; <a href=\"seminar_main.php?auswahl=$semid#vote\"><img src='pictures/icon-vote.gif' border=0 ".tooltip(sprintf(_("%s Votes"), $my_sem_values["votes"]))."></a>";
+	  else
+			echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
+  }
+  
+  
   echo "&nbsp;&nbsp;";
 
 } // Ende function print_seminar_content
@@ -207,5 +236,5 @@ if ($num_my_sem){
 <?php
   // Save data back to database.
   page_close()
- ?>
+?>
 <!-- $Id$ -->
