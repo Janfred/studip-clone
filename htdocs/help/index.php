@@ -18,7 +18,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-	page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
+page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 ?>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -39,8 +39,10 @@ else
 
 <?php
 //includes
-require_once ("../config.inc.php");
-require_once ("../seminar_open.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/seminar_open.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
+
 
 // -- hier wird die Struktur geladen --
 require_once("structure.inc.php");
@@ -79,9 +81,9 @@ if (isset($help_page)) { // ok, eine normale Hilfeseite ausgeben
 		print("<ol>");
 		for ($i = 0; $i < count($pages); $i++) {
 			if ($pages[$i]["perm"] == "" || $perm->have_perm($pages[$i]["perm"])) {
-			printf("<li><a href=\"%s?help_page=%s\"><b>%s</b></a><br><i>%s</i><ul>\n",$PHP_SELF, $pages[$i]["kategorien"][0]["page"], $pages[$i]["name"], $pages[$i]["text"]);
+			printf("<li><a href=\"%s?help_page=%s\"><b>%s</b></a><br><i>%s</i><ul>\n",$PHP_SELF, $pages[$i]["kategorien"][0]["page"], htmlReady($pages[$i]["name"]), htmlReady($pages[$i]["text"]));
 				for ($j = 0; $j < count($pages[$i]["kategorien"]); $j++) {
-					printf("<li><a href=\"%s?help_page=%s\">%s</a><br><i>%s</i></li>\n",$PHP_SELF, $pages[$i]["kategorien"][$j]["page"], $pages[$i]["kategorien"][$j]["name"], $pages[$i]["kategorien"][$j]["text"]);
+					printf("<li><a href=\"%s?help_page=%s\">%s</a><br><i>%s</i></li>\n",$PHP_SELF, $pages[$i]["kategorien"][$j]["page"], htmlReady($pages[$i]["kategorien"][$j]["name"]), htmlReady($pages[$i]["kategorien"][$j]["text"]));
 				}
 			print("</ul></li><br>");
 			}
@@ -95,10 +97,10 @@ if (isset($help_page)) { // ok, eine normale Hilfeseite ausgeben
 		print("<div align=\"center\"><font size=\"+2\"><b>Inhaltsverzeichnis</b></font></div><br><br>\n");
 		for ($i = 0; $i < count($pages); $i++) {
 			if ($pages[$i]["perm"] == "" || $perm->have_perm($pages[$i]["perm"])) {
-			printf("\n<a href=\"#%d\"><font size=\"+1\"><b>%d. %s</b></font></a><br>\n<i>%s</i><br>\n", $i+1, $i+1,$pages[$i]["name"], $pages[$i]["text"]);
+			printf("\n<a href=\"#%d\"><font size=\"+1\"><b>%d. %s</b></font></a><br>\n<i>%s</i><br>\n", $i+1, $i+1, htmlReady($pages[$i]["name"]), htmlReady($pages[$i]["text"]));
 			print("<blockquote>");
 				for ($j = 0; $j < count($pages[$i]["kategorien"]); $j++) {
-					printf("<br><a href=\"#%d.%d\"><b>%d.%d %s</b></a><br>\n<i>%s</i><br>\n", $i+1, $j+1, $i+1, $j+1, $pages[$i]["kategorien"][$j]["name"], $pages[$i]["kategorien"][$j]["text"]);
+					printf("<br><a href=\"#%d.%d\"><b>%d.%d %s</b></a><br>\n<i>%s</i><br>\n", $i+1, $j+1, $i+1, $j+1, htmlReady($pages[$i]["kategorien"][$j]["name"]), htmlReady($pages[$i]["kategorien"][$j]["text"]));
 					$temp_page = $pages[$i]["kategorien"][$j]["page"];
 				}
 			print("</blockquote><br>");
@@ -109,9 +111,9 @@ if (isset($help_page)) { // ok, eine normale Hilfeseite ausgeben
 		for ($i = 0; $i < count($pages); $i++) {
 			if ($pages[$i]["perm"] == "" || $perm->have_perm($pages[$i]["perm"])) {
 				print("<br><hr><br>\n");
-				printf("\n<a name=\"%d\"><div align=\"center\"><br><br><font size=\"+2\"><b>%d. %s</b></font><br>\n<i>%s</i><br></div>\n", $i+1, $i+1, $pages[$i]["name"], $pages[$i]["text"]);
+				printf("\n<a name=\"%d\"><div align=\"center\"><br><br><font size=\"+2\"><b>%d. %s</b></font><br>\n<i>%s</i><br></div>\n", $i+1, $i+1, htmlReady($pages[$i]["name"]), htmlReady($pages[$i]["text"]));
 				for ($j = 0; $j < count($pages[$i]["kategorien"]); $j++) {
-					printf("<a name=\"%d.%d\"><div align=\"center\"><br><br><font size=\"+1\"><b>%d.%d %s</b></font><br>\n<i>%s</i><br><br></div>\n", $i+1, $j+1, $i+1, $j+1, $pages[$i]["kategorien"][$j]["name"], $pages[$i]["kategorien"][$j]["text"]);
+					printf("<a name=\"%d.%d\"><div align=\"center\"><br><br><font size=\"+1\"><b>%d.%d %s</b></font><br>\n<i>%s</i><br><br></div>\n", $i+1, $j+1, $i+1, $j+1, htmlReady($pages[$i]["kategorien"][$j]["name"]), htmlReady($pages[$i]["kategorien"][$j]["text"]));
 					$temp_page = $pages[$i]["kategorien"][$j]["page"];
 					include("pages/$temp_page");
 				}

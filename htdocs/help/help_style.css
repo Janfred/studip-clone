@@ -1,22 +1,17 @@
-A:visited {	color: blue;	text-decoration : none;	font-family: Arial, Helvetica, sans-serif;}
-A:link {	color: Blue;	text-decoration : none;	font-family: Arial, Helvetica, sans-serif;}
-A:hover {	color: #FF7733;	text-decoration : none;	font-family: Arial, Helvetica, sans-serif;}
-A:active {color: #FF7733; text-decoration : none; font-family: Arial, Helvetica, sans-serif;}
+A:visited {	color:#3333BB; text-decoration : none;	font-family: Arial, Helvetica, sans-serif;}
+A:link {	color:#3333BB; text-decoration : none;	font-family: Arial, Helvetica, sans-serif;} 
+A:hover {	color: #FF3333; text-decoration : none;	font-family: Arial, Helvetica, sans-serif;}
+A:active {color: #FF3333; text-decoration : none; font-family: Arial, Helvetica, sans-serif;}
 
 TABLE.links1 {	background-color: #FFFFFF;}
 
-A:link.links1 {	color: white; font-family: Arial, Helvetica, sans-serif; font-weight: bold;}
-A:visited.links1 {color: white; font-family: Arial, Helvetica, sans-serif; font-weight: bold;}
-A:hover.links1 {color: #FF7733;text-decoration: none;font-family: Arial, Helvetica, sans-serif;font-weight: bold;}
+A:link.links1 {	color: #000000; text-decoration: none;font-family: Arial, Helvetica, sans-serif; font-weight: bold; font-size:10pt;}
+A:visited.links1 {color: #000000; text-decoration: none;font-family: Arial, Helvetica, sans-serif; font-weight: bold; font-size:10pt;}
+A:hover.links1 {color: #FF3333;text-decoration: none;font-family: Arial, Helvetica, sans-serif;font-weight: bold;font-size:10pt;}
 
-TABLE.links2 {	background-color: transparent;}
-
-A:link.links2 { text-decoration: none; color: #555555;font-weight: bold;}
-A:visited.links2 {text-decoration: none; color: #555555; font-weight: bold;}
-A:hover.links2 { text-decoration: none; color: #FF7733; font-weight: bold;}
-
-a:link.links1b { color: #FF0000; font-family: Arial, Helvetica, sans-serif; font-weight: bold;}
-a:visited.links1b {	color: #FF0000;	text-decoration : none; font-family: Arial, Helvetica, sans-serif; font-weight: bold;}
+A:link.links1b { color: #000000; font-family: Arial, Helvetica, sans-serif; font-weight: bold;font-size:10pt;}
+A:visited.links1b { color: #000000; text-decoration : none; font-family: Arial, Helvetica, sans-serif; font-weight: bold;font-size:10pt;}
+A:hover.links1b {color: #FF3333;text-decoration: none;font-family: Arial, Helvetica, sans-serif;font-weight: bold;font-size:10pt;}
 
 TD.links1b {background : url(../pictures/kaverl1b.jpg);}
 TD.links1 {background: url(../pictures/fill2.gif);}

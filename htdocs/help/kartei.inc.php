@@ -18,6 +18,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
+
 if (!isset($druck)) {  // Kopfzeile anzeigen
 	?>
 	
@@ -55,16 +57,13 @@ if (isset($help_page) && !isset($druck)) {  // wir zeigen das Kartei-System
 	}
 
 	// Reiter ausgeben
-	printf("<td class=\"links1b\">&nbsp; <b><img align=\"absmiddle\" src=\"../pictures/info.gif\" alt=\"Dieser Abschnitt der Hilfe erkl&auml;rt: %s\"",
-			$pages[$topkat]["text"]);
-	if ($auth->auth["jscript"])
-	printf(" onClick=\"alert('Dieser Abschnitt der Hilfe erkl&auml;rt: %s');\" ",
-			$pages[$topkat]["text"]);
+	$tooltip = "Dieser Abschnitt der Hilfe erklärt: " . $pages[$topkat]["text"];
+	printf("<td class=\"links1b\">&nbsp; <img align=\"absmiddle\" src=\"../pictures/info.gif\" %s ", tooltip($tooltip, TRUE, $auth->auth["jscript"]));
 	printf("border=\"0\"></b>&nbsp; <img src=\"../pictures/reiter1.jpg\" align=\"absmiddle\"></td>");
 	
-	printf("<td class=\"links1b\" align=\"right\" nowrap><a class=\"links1b\" href=\"$PHP_SELF?help_page=%s\"><font color=\"#000000\" size=2><b>&nbsp; &nbsp; %s&nbsp; &nbsp; </b></font></a><img src=\"../pictures/reiter4.jpg\" align=absmiddle></td>\n",
+	printf("<td class=\"links1b\" align=\"right\" nowrap><a class=\"links1b\" href=\"$PHP_SELF?help_page=%s\">&nbsp; &nbsp; %s&nbsp; &nbsp; </a><img src=\"../pictures/reiter4.jpg\" align=absmiddle></td>\n",
 			$pages[$topkat]["kategorien"][0]["page"],
-			$pages[$topkat]["name"]);
+			htmlReady($pages[$topkat]["name"]));
 
 	print("</tr></table>");
 
@@ -81,10 +80,10 @@ if (isset($help_page) && !isset($druck)) {  // wir zeigen das Kartei-System
 
 		// Unterpunkte ausgeben, wenn ich die Rechte habe oder auf der Seite stehe
 		if ($pages[$topkat]["perm"] == "" || $perm->have_perm($pages[$topkat]["perm"]) || $pages[$topkat]["kategorien"][$i]["page"] == $help_page) {
-			printf("<img src=\"%s\" border=\"0\"><a href=\"$PHP_SELF?help_page=%s\"><font color=\"#000000\" size=2><b>%s&nbsp; &nbsp; </font></a>\n",
+			printf("<img src=\"%s\" border=\"0\"><a class=\"links1b\" href=\"$PHP_SELF?help_page=%s\">%s&nbsp; &nbsp; </a>\n",
 					$picture,
 					$pages[$topkat]["kategorien"][$i]["page"],
-					$pages[$topkat]["kategorien"][$i]["name"]);
+					htmlReady($pages[$topkat]["kategorien"][$i]["name"]));
 		}
 				
 	}
@@ -107,10 +106,10 @@ if (isset($help_page) && isset($druck)) {  // wir zeigen nur den Titel der Seite
 		}
 	}
 
-	printf("\n<font size=\"+2\"><b>%s</b></font><br>\n", $pages[$topkat]["name"]);
-	printf("\n<i>%s</i><br><br>\n", $pages[$topkat]["text"]);
-	printf("\n<font size=\"+1\"><b>%s</b></font><br>\n", $pages[$topkat]["kategorien"][$secondkat]["name"]);
-	printf("\n<i>%s</i><br><br>\n", $pages[$topkat]["kategorien"][$secondkat]["text"]);
+	printf("\n<font size=\"+2\"><b>%s</b></font><br>\n", htmlReady($pages[$topkat]["name"]));
+	printf("\n<i>%s</i><br><br>\n", htmlReady($pages[$topkat]["text"]));
+	printf("\n<font size=\"+1\"><b>%s</b></font><br>\n", htmlReady($pages[$topkat]["kategorien"][$secondkat]["name"]));
+	printf("\n<i>%s</i><br><br>\n", htmlReady($pages[$topkat]["kategorien"][$secondkat]["text"]));
 
 }  // Ende Titel
 
