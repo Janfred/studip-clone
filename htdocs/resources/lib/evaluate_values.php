@@ -1403,6 +1403,7 @@ if (($inc_request_x) || ($dec_request_x) || ($new_session_started) || ($marked_c
 			}
 			//do checks
 			$result = array();
+			$first_event = FALSE;
 			if ((($semObj->getMetaDateType() == 0) && (!isSchedule($semObj->getId(), FALSE)))
 				|| (($semObj->getMetaDateType() == 1) && (isSchedule($semObj->getId(), FALSE) < $GLOBALS["RESOURCES_ALLOW_SINGLE_DATE_GROUPING"]))
 				|| ($reqObj->getTerminId())) {
@@ -1412,6 +1413,8 @@ if (($inc_request_x) || ($dec_request_x) || ($new_session_started) || ($marked_c
 					$events = array();
 					foreach ($assObj->getEvents() as $evtObj) {
 						$events[$evtObj->getId()] = $evtObj;
+						if (($evtObj->getBegin() < $first_event) || (!$first_event))
+							$first_event = $evtObj->getBegin();
 					}
 					
 					$multiOverlaps->checkOverlap($events, &$result, "assign_id");
@@ -1450,6 +1453,8 @@ if (($inc_request_x) || ($dec_request_x) || ($new_session_started) || ($marked_c
 				foreach ($assignObjects as $assObj) {
 					foreach ($assObj->getEvents() as $evtObj) {
 						$events[$evtObj->getId()] = $evtObj;
+						if (($evtObj->getBegin() < $first_event) || (!$first_event))
+							$first_event = $evtObj->getBegin();
 					}
 				}
 				$multiOverlaps->checkOverlap($events, &$result, "assign_user_id");
@@ -1488,7 +1493,7 @@ if (($inc_request_x) || ($dec_request_x) || ($new_session_started) || ($marked_c
 				}
 			}
 			$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["detected_overlaps"] = $result;
-			//die;
+			$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["first_event"] = $first_event;
 		}
 	}
 }
