@@ -279,7 +279,11 @@ if ($msg)	{
 		else {
 			//Kopfzeile erstellen
 			$icon="&nbsp;<img src=\"pictures/cont_nachricht.gif\">";
-			$zusatz="<font size=-1>gesendet von </font><a href=\"about.php?username=".$db->f("user_id_snd")."\"><font size=-1 color=\"#333399\">".$db->f("Vorname")." ".$db->f("Nachname")."</font></a><font size=-1> am ".date("d.m.Y, H:i",$db->f("mkdate"))."<font size=-1>&nbsp;"."</font>";				
+			if ($db->f("user_id_snd") == "____%system%____")
+				$zusatz="<font size=-1>automatische Systemnachricht, gesendet";
+			else
+				$zusatz="<font size=-1>gesendet von </font><a href=\"about.php?username=".$db->f("user_id_snd")."\"><font size=-1 color=\"#333399\">".$db->f("Vorname")." ".$db->f("Nachname")."</font></a><font size=-1>";
+			$zusatz.=" am ".date("d.m.Y, H:i",$db->f("mkdate"))."<font size=-1>&nbsp;"."</font>";
 			if (strpos($db->f("message"),$msging->sig_string))
 				$titel=mila(kill_format(substr($db->f("message"), 0, strpos($db->f("message"),$msging->sig_string))));
 			else

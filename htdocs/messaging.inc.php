@@ -77,7 +77,7 @@ function delete_sms ($message_id) {
  
 //Geschriebene Nachricht einfuegen
 function insert_sms ($rec_uname, $message, $user_id='') {
-	global $user, $my_messaging_settings;
+	global $user, $my_messaging_settings, $CHAT_ENABLE;
 
 	if (!$this->sig_string)
 		$this->sig_string="\n \n -- \n";
@@ -86,41 +86,46 @@ function insert_sms ($rec_uname, $message, $user_id='') {
 	$db2=new DB_Seminar;
 	$db3=new DB_Seminar;
 
-	if (!$user_id)
+	if ((!$user_id) && ($user_id != "____%system%____"))
 		$user_id = $user->id;
 
 	if (!empty($message)) {
-		$db->query ("SELECT username,CONCAT(Vorname,' ',Nachname) AS fullname FROM auth_user_md5 WHERE user_id = '".$user_id."' ");
-		$db->next_record();
+		if ($user_id != "____%system%____") {
+			$db->query ("SELECT username,CONCAT(Vorname,' ',Nachname) AS fullname FROM auth_user_md5 WHERE user_id = '".$user_id."' ");
+			$db->next_record();
+			$snd_uname=$db->f("username");
+		} else
+			$snd_uname="____%system%____";			
 
 		$db2->query ("SELECT user_id FROM auth_user_md5 WHERE username = '".$rec_uname."' ");
 		$db2->next_record();
 
 		if ($db2->num_rows()){
-		$m_id=md5(uniqid("voyeurism"));
-		if ($my_messaging_settings["sms_sig"])
-			$message.=$this->sig_string.$my_messaging_settings["sms_sig"];
-		$db3->query("INSERT INTO globalmessages SET message_id='$m_id', user_id_rec='$rec_uname', user_id_snd='".$db->f("username")."', mkdate='".time()."', message='$message' ");
+			$m_id=md5(uniqid("voyeurism"));
+			if ($my_messaging_settings["sms_sig"])
+				if ($user_id != "____%system%____")
+					$message.=$this->sig_string.$my_messaging_settings["sms_sig"];
+				else
+					$message.=$this->sig_string."Diese Nachricht wurde autoamtisch vom System generiert. Sie können darauf nicht antworten.";
+			$db3->query("INSERT INTO globalmessages SET message_id='$m_id', user_id_rec='$rec_uname', user_id_snd='$snd_uname', mkdate='".time()."', message='$message' ");
 		
-//Benachrichtigung in alle Chaträume schicken
-          $chatServer=new ChatShmServer;
-          $myUser=$chatServer->chatUser[$db2->f("user_id")];
-          $chatMsg="Du hast eine SMS von <b>".$db->f("fullname")." (".$db->f("username").")</b> erhalten!<br></i>";
-          $chatMsg.=formatReady(stripslashes($message))."<i>";
-          if (is_array($myUser))
-          	foreach($myUser as $chatid =>$wert)
-	               if ($chatid["action"])
-        	            $chatServer->addMsg("system:".$db2->f("user_id"),$chatid,$chatMsg);
-
-		
-		return $db3->affected_rows();
-        	}
-        	else return false;
-        }
-        
-        else
+			//Benachrichtigung in alle Chaträume schicken
+			if ($CHAT_ENABLE) {
+				$chatServer=new ChatShmServer;
+        			$myUser=$chatServer->chatUser[$db2->f("user_id")];
+	        		$chatMsg="Du hast eine SMS von <b>".$db->f("fullname")." (".$db->f("username").")</b> erhalten!<br></i>";
+		        	$chatMsg.=formatReady(stripslashes($message))."<i>";
+		        	if (is_array($myUser))
+        				foreach($myUser as $chatid =>$wert)
+						if ($chatid["action"])
+							$chatServer->addMsg("system:".$db2->f("user_id"),$chatid,$chatMsg);
+			}
+			return $db3->affected_rows();
+		} else 
+       			return false;
+	} else
 		return -1;
-	}
+}
 
 //Chateinladung absetzen
 function insert_chatinv ($rec_uname, $user_id='') {
@@ -141,21 +146,22 @@ function insert_chatinv ($rec_uname, $user_id='') {
 	$m_id=md5(uniqid("voyeurism"));
 	$db3->query ("INSERT INTO globalmessages SET message_id='$m_id', user_id_rec='$rec_uname', user_id_snd='".$db->f("username")."', mkdate='".time()."', message='chat_with_me' ");
 
-     //Benachrichtigung in alle Chaträume schicken, noch nicht so sinnvoll :)
-          $chatServer=new ChatShmServer;
-          $myUser=$chatServer->chatUser[$db2->f("user_id")];
-          $chatMsg="Du wurdest von <b>".$db->f("fullname")." (".$db->f("username").")</b> in den Chat eingeladen !";
-          if (is_array($myUser))        
-	          foreach($myUser as $chatid=>$wert)
-        	       if ($chatid["action"])
-                	    $chatServer->addMsg("system:".$db2->f("user_id"),$chatid,$chatMsg);
-
-
+	//Benachrichtigung in alle Chaträume schicken, noch nicht so sinnvoll :)
+	if ($CHAT_ENABLE) {
+		$chatServer=new ChatShmServer;
+		$myUser=$chatServer->chatUser[$db2->f("user_id")];
+		$chatMsg="Du wurdest von <b>".$db->f("fullname")." (".$db->f("username").")</b> in den Chat eingeladen !";
+		if (is_array($myUser))        
+			foreach($myUser as $chatid=>$wert)
+			if ($chatid["action"])
+				$chatServer->addMsg("system:".$db2->f("user_id"),$chatid,$chatMsg);
+	}
+	
 	if ($db3->affected_rows())
 		return TRUE;
 	else
 		return FALSE;
-        }
+}
 
 function delete_chatinv($username){
     $this->db->query("DELETE FROM globalmessages WHERE user_id_rec='$username' AND message LIKE '%chat_with_me%'");
