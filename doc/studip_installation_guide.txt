@@ -1,0 +1,157 @@
+Stud.IP Installation Guide
+
+
+1 Installation
+
+Stud.IP setzt auf LAMP (Linux - Apache - MySQL - PHP). Die folgende
+Anleitung versteht sich selber als QuickstartGuide.
+
+WICHTIGER HINWEIS: Dieser >>Quick Installation Guide<< setzt root Rechte
+bezüglich des Webservers (inclusive PHP Interpreter) und der MySQL
+Datenbank voraus.
+
+VERY IMPORTANT NOTE: This is a quick installation guide to get you
+started if you have an installation where you control the web server,
+PHP interpreter and database server completely. They are not suitable
+for a web hosting setup where you have only limited to no control
+over the installation.
+
+1.1 Konfiguration von Apache und PHP
+
+Für Stud.IP werden der Apache Webserver in der Version 1.3.9 oder höher
+und die Apache Module für PHP4 benötigt. Die Funktionsfähigkeit von
+php läßt sich mit einem einfachen <?php phpinfo() ?> Skript feststellen.
+
+
+1.2 phplib - studip-phplib
+
+Stud.IP verwendet die phplib-7.2d mit leichten Modifikationen. Das orginal
+ist unter http://phplib.sourceforge.net/ zu finden.
+
+
+
+  folgende Dateien wurden hinzugefügt:
+
+  - email-validation.inc (check von Email-Adressen und anderen Angaben)
+
+  - smtp.inc (versenden von Mails auf einem Linux-System)
+
+
+
+  folgende Dateien wurden verändert:
+
+  - prepend.php (autoinclude der beiden obigen)
+
+  - perminvalid.ihtml (etwas verschönert)
+
+
+
+Die Datei local.inc ist komplett auf unser System zugeschnitten und
+muss so übernommen werden! (Benutzername und Passwort sollten natürlich angepasst
+werden ;-)
+
+Die angepasst Version der phplib befindet sich im Verzeichnis /php
+und sollte ins Root Verzeichnis des Webservers kopiert werden. Ist
+dies z.B. /usr/local/httpd, dann sind die Dateien folglich nach /usr/local/httpd/php
+zu kopieren. Bitte dieses include Verzeichnis nicht unterhalb des
+document root des Webservers einfügen!
+Seit SuSE 8.1 befindet sich das Root-Verzeichnis des Webservers in /srv/www .
+
+Jetzt muss nur noch der php.ini file angepasst werden, der sich nach
+der Installation von php in /etc/httpd/ (bzw. bei SuSE ab 7.2 in /etc) befinden sollte.
+
+Dabei muss auto_prepend_file auf prepend.php zeigen:
+
+; automatically add files before or after any PHP document
+
+auto_prepend_file       =       /usr/local/httpd/php/prepend.php
+
+Und der include_path muss das soeben kopierte php Verzeichnis enthalten.
+In unserem Beispiel also:
+
+; Paths and Directories ;
+
+include_path            =       /usr/local/httpd/php
+
+Desweiteren sollte track_vars auf ON stehen und magic_quotes_gpc ebenfals.
+
+Damit das Registrierungsmodul von Stud.IP funktioniert ist noch ein
+Blick auf sendmail_path nötig. Damit aus dem Stud.IP Programm E-Mails
+verschickt werden können, muss der sendmail_path angepasst werden.
+Auf den meisten Systemen sollte /usr/lib/sendmail -t funktionieren.
+
+1.3 Anlegen der MySQL Datenbank >>studip<<
+
+Stud.IP setzt eine installierte MySQL Datenbank in der Version 3.22.30
+oder höher voraus (Eigentlich sollte es ab 3.17 funktionieren ;-).
+Zur in Betriebnahme von Stud.IP muss eine Datenbank, der Einfachheit
+halber nennen wir sie 'studip', angelegt werden.
+
+mysql -e "create database studip"
+
+und die entsprechenden Tabellen hinzugefügt werden
+
+mysql studip < db/studip.sql
+
+mysql studip < db/studip-root_user.sql
+(hiermit wird der Admin-Acount für studip angelegt: root@studip ; password: testing .
+
+Desweiteren muss ein Datenbankbenutzer für studip angelegt werden.
+In der phplib Datei local.inc, die auf Stud.IP angepasst wurde, ist
+dieser als user = www mit dem password = www eingetragen
+und sollte auch erstmal so angelegt werden (später aber auf alle Fälle
+ändern!). Dieser Datenbankbenutzer benötigt SELECT, INSERT, UPDATE
+und DELETE zugriff.
+
+Die Datei db/DefaultValues.sql enthält legt ein BeispielSeminar (FAQ
+- StudIP). Wer Lust hat, kann diese importieren und so bereits auf
+Inhalte treffen ;-)
+
+Nicht vergessen, die MySQL Datenbank neu zu starten (reload!).
+
+Als einfach zu bediente Tools hat sich bei uns kmysqladmin und phpMyAdmin
+(http://www.phpwizard.net/projects/phpMyAdmin/) bewährt.
+
+1.4 Konfiguration von Stud.IP
+
+Die Dateien von Stud.IP befinden sich im Verzeichnis /studip. Dieses
+sollten ins DocumentRoot Verzeichnis des Apache Webservers kopiert
+werden. In unserem Beispiel also nach /usr/local/httpd/htdocs/studip.
+Wer einen anderen Verzeichnisnamen als /studip benutzt, muss daran denken in der
+local.inc $RELATIVE_PATH_STUDIP = "studip"; auch zu ändern.
+
+Die Verzeichnisse studip/archiv; studip/tmp ; studip/user ; studip/upload_doc
+müssen mit den Rechten des Webserver-User versehen werden. Zumeist
+ist das wwwrun.nogroup, zur Sicherheit am besten in der httpd.conf
+nachsehen. Mit der Version 0.7.5 können die Verzeichniss upload_doc und archiv auch ausserhalb
+des DocumentRoot angelegt werden. Die Konfiguration in der local.inc erwartet diese beiden
+Verzeichnisse in '/var/lib/studip'.
+
+1.5 Benötigte Libaries und sonstige Packete
+In der local.inc (php/local.inc) sind weitergehende Libaries dokumentiert, die für Stud.IP
+notwendig sind.
+
+2 Start Stud.IP
+
+Unter http://localhost/studip sollte jetzt die Startseite von StudIP
+erreichbar sein. Mit dem Import von studip.sql ist auch ein root für
+das Stud.IP System angelegt worden.
+Benutzername: 	root@studip
+Password: 	testing
+
+Also einfach auf login, Benutzername und Passwort des root eingeben
+...
+
+Zum Anlegen neuer BenutzerInnen auf der Startseite >>Registrierung<<
+auswählen. Die zu registrierende BenutzerIn wird zunächst mit der
+Berechtigung ``user'' angelegt, abgeschlossen wird der Registrierungsprozeß
+erst durch eine Bestätigungsmail (und das setzt einen zumindest local
+laufenden Mail-Server voraus!), wodurch die BenutzerIn die Berechtigung
+>>author<< und damit auch weitergehende Lese/Schreibrechte erhält.
+
+
+
+- The Stud.IP Crew <crew@studip.de>
+
+
+
