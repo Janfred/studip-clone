@@ -17,17 +17,19 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
-	page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
+page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 
-	include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
-
-// -- here you have to put initialisations for the current page
+include $ABSOLUTE_PATH_STUDIP."seminar_open.php"; // initialise Stud.IP-Session
+require_once $ABSOLUTE_PATH_STUDIP."functions.php";
+require_once $ABSOLUTE_PATH_STUDIP."visual.inc.php";
+require_once $ABSOLUTE_PATH_STUDIP."forum.inc.php";
+require_once $ABSOLUTE_PATH_STUDIP."msg.inc.php";
+require_once $ABSOLUTE_PATH_STUDIP."dates.inc.php"; 
 
 // Start of Output
-	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+include $ABSOLUTE_PATH_STUDIP."html_head.inc.php"; // Output of html head
 
-	if ($user->id == "nobody") {  // nicht angemeldete muessen Namen angeben, dazu auch JS Check auf Name
+if ($user->id == "nobody") {  // nicht angemeldete muessen Namen angeben, dazu auch JS Check auf Name
 ?>
 <SCRIPT language="JavaScript">
 <!--
@@ -51,23 +53,20 @@ function pruefe_name(){
 <?
 }
 
-	if ($forum["jshover"]==1 AND $auth->auth["jscript"]) { // JS an und erwuenscht?
-		echo "<script language=\"JavaScript\">";
-		echo "var ol_textfont = \"Arial\"";
-		echo "</script>";
-		echo "<DIV ID=\"overDiv\" STYLE=\"position:absolute; visibility:hidden; z-index:1000;\"></DIV>";
-		echo "<SCRIPT LANGUAGE=\"JavaScript\" SRC=\"overlib.js\"></SCRIPT>";
-	}
+if ($forum["jshover"]==1 AND $auth->auth["jscript"]) { // JS an und erwuenscht?
+	echo "<script language=\"JavaScript\">";
+	echo "var ol_textfont = \"Arial\"";
+	echo "</script>";
+	echo "<DIV ID=\"overDiv\" STYLE=\"position:absolute; visibility:hidden; z-index:1000;\"></DIV>";
+	echo "<SCRIPT LANGUAGE=\"JavaScript\" SRC=\"overlib.js\"></SCRIPT>";
+}
 
-	require_once "functions.php";
-	require_once "visual.inc.php";
-	require_once "forum.inc.php";
-	require_once "msg.inc.php";
-	require_once "dates.inc.php"; 
+include $ABSOLUTE_PATH_STUDIP."header.php";   // Output of Stud.IP head
 
-	checkObject();
+checkObject();
+checkObjectModule("forum");
 
-	include "links_openobject.inc.php";
+include $ABSOLUTE_PATH_STUDIP."links_openobject.inc.php";
 	
 ////////////////////////////////////////////////////////////////////
 /*

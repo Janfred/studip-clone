@@ -27,7 +27,7 @@ require_once("$ABSOLUTE_PATH_STUDIP/dates.inc.php"); //Funktionen zur Anzeige de
 require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
-if ($GLOBALS['CHAT_ENABLE']){
+if (($GLOBALS['CHAT_ENABLE']) && ($modules["forum"])){
 	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php";
 	if ($_REQUEST['kill_chat']){
 		chat_kill_chat($_REQUEST['kill_chat']);
@@ -150,7 +150,7 @@ if ($nclose)
 		if (show_dates($auswahl, $start_zeit, $end_zeit, 0, 0, $show_admin, $smain_data["dopen"]))
 				echo"<br>";
 		//show chat info
-		if ($GLOBALS['CHAT_ENABLE']){
+		if (($GLOBALS['CHAT_ENABLE']) && ($modules["forum"])){
 				if (chat_show_info($auswahl))
 						echo "<br>";
 		}

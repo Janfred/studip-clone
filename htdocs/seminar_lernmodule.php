@@ -36,6 +36,8 @@ require_once ($ABSOLUTE_PATH_STUDIP."/msg.inc.php");
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 
+checkObject();
+
 if ($SessSemName[1] != "")
 {
 	$seminar_id = $SessSemName[1];
@@ -54,7 +56,7 @@ if (isset($do_op) AND (($op_co_id == "") OR($op_co_inst == "") OR($seminar_id ==
 	die();
 }
 
-if ($ILIAS_CONNECT_ENABLE)
+if (($ILIAS_CONNECT_ENABLE) && ($modules["ilias-connect"]))
 {
 
 	$db = New DB_Seminar;
@@ -314,8 +316,6 @@ include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul
 else 
 {
 	// Start of Output
-	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 	parse_window ("error§" . _("Das Verbindungsmodul für ILIAS-Lernmodule ist nicht eingebunden. Damit Lernmodule verwendet werden können, muss die Verbindung zu einer ILIAS-Installation in den Systemeinstellungen hergestellt werden. Wenden Sie sich bitte an den/die AdministratorIn."), "§",
 				_("Lernmodule nicht eingebunden"));
 }
