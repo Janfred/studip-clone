@@ -66,13 +66,15 @@ $output .= str_repeat("-",80) . "\r\n";
 for ($i = 0; $i < $log_count-2; ++$i){
 	$output .= decodeHTML(preg_replace ("'<[\/\!]*?[^<>]*?>'si", "", $chatServer->chatDetail[$chatid]['users'][$user->id]['log'][$i])) . "\r\n";
 }
-header("Content-type: application/octet-stream");
+header("Content-type: text/plain");
 header("Content-Disposition: attachment; filename=\"studip_chatlog_".date("d-m-Y_H-i").".log\"");
 header("Content-length: ".strlen($output));
-header("Expires: 0");
-header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
-header("Cache-Control: no-store,no-cache, must-revalidate");
-header("Pragma: no-cache");
+header("Expires: Mon, 12 Dec 2001 08:00:00 GMT");
+header("Last-Modified: " . gmdate ("D, d M Y H:i:s") . " GMT");
+if ($_SERVER['HTTPS'] == "on")
+	header("Pragma: public");
+else
+	header("Pragma: no-cache");
 header("Cache-Control: private");
 echo $output;
 page_close();
