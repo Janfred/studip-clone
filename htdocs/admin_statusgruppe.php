@@ -182,7 +182,7 @@ function PrintAktualStatusgruppen ($range_id, $view, $edit_id="")
 				$class="steelgraulight"; 
 			}
 			printf ("\n\t<tr>\n\t\t<td><font color=\"%s\">$k</font></td>", $farbe);
-			printf ("<td class=\"%s\" colspan=\"2\"><font size=\"2\"> %s&nbsp; %s</font></td>",$class, $db2->f("Vorname"), $db2->f("Nachname"));
+			printf ("<td class=\"%s\" colspan=\"2\"><font size=\"2\"> %s&nbsp;%s</font></td>",$class, $db2->f("Vorname"), $db2->f("Nachname"));
 			printf ("<td><a href=\"$PHP_SELF?cmd=remove_person&statusgruppe_id=%s&username=%s&range_id=%s&view=%s\"><img src=\"pictures/trash.gif\" width=\"11\" height=\"17\" border=\"0\" %s></a></td>", $statusgruppe_id, $db2->f("username"), $range_id, $view, tooltip("Person aus der Gruppe entfernen"));
 			echo "\n\t</tr>";
 			$k++;
