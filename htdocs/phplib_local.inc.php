@@ -237,9 +237,8 @@ class Seminar_Auth extends Auth {
 		//load the lifetime from the settings
 		global $AUTH_LIFETIME;
 
-		if ($AUTH_LIFETIME)
-			$this->lifetime = $AUTH_LIFETIME;
-	}	
+		$this->lifetime = $AUTH_LIFETIME;
+	}
 	
 	function login_if($ok){
 		if ($ok){
