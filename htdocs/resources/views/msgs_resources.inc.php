@@ -102,7 +102,7 @@ $this->msg[19] = array (
 		"msg"=> _("Das Ende der Wiederholung darf nicht vor dem ersten Termin der Wiederholung liegen!"));
 $this->msg[20] = array (
 		"mode" => "error",
-		"msg"=> _("Die Startzeit darf nicht vor der Endzeit liegen!"));
+		"msg"=> _("Die Endzeit darf nicht vor der Startzeit liegen!"));
 $this->msg[21] = array (
 		"mode" => "error",
 		"msg"=> _("Die j&auml;hrliche Wiederholung darf maximal 10 Jahre dauern!"));
@@ -183,4 +183,9 @@ $this->msg[43] = array (
 		"msg"=> _("Wollen Sie die Anfrage wirklich ablehnen?")
 			."<br /><a href=\"%s?decline_request=1\">".makeButton("ja2")."</a>"
 			."&nbsp;<a href=\"%s\">".makeButton("nein")."</a>");
+$this->msg[44] = array (
+		"mode" => "error",
+		"msg"=> _("Die Belegungen konnte nicht gespeichert werden, da sie mit folgenden Sperrzeiten kollidiert:")
+			."<br><font size=\"-1\" color=\"black\">%s</font>");
+			
 ?>
