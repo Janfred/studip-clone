@@ -41,7 +41,7 @@ function get_free_admission ($seminar_id) {
 	$count=0;
 	while ($db2->next_record())
 		$count=$count+ round($db->f("admission_turnout") * ($db2->f("quota") / 100));
-
+	echo checkpoint2, $count
 	//Wiieviel Teilnehmer koennen noch eingetragen werden?
 	$db3->query("SELECT user_id FROM seminar_user WHERE Seminar_id = '".$db->f("Seminar_id")."' AND status= 'autor' ");
 		if ($count - $db3->num_rows() > 0)
@@ -105,7 +105,6 @@ function update_admission ($seminar_id, $send_message=TRUE) {
 	
 	//Daten holen / Abfrage ob ueberhaupt begrenzt
 	$db->query("SELECT Seminar_id, Name, admission_endtime, admission_turnout, admission_type, start_time FROM seminare WHERE Seminar_id = '$seminar_id' AND admission_selection_take_place = '1' ");
-	echo checkpoint1;
 	if ($db->next_record()) {
 		//anzahl der freien Plaetze holen
 		$count=get_free_admission($seminar_id);
