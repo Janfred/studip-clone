@@ -2,6 +2,7 @@
 
 require_once($ABSOLUTE_PATH_STUDIP."config.inc.php");
 
+
 /*****************************************************************************
 get_ampel_write, waehlt die geeignete Grafik in der Ampel Ansicht 
 (fuer Berechtigungen) aus. Benoetigt den Status in der Veranstaltung
@@ -666,10 +667,6 @@ $print .= "
 echo $print;
 }
 
-
-
-
-
 /**
 * Returns a given text as html tooltip
 *
@@ -689,5 +686,37 @@ function tooltip($text,$with_alt = TRUE,$with_popup = FALSE){
 		$ret .= " alt=\"$text\"";
 	$ret .= " title=\"$text\" ";
 	return $ret;
+}
+
+
+/**
+* create the img tag for graphic buttons
+*
+* This function creates the html text for a button. Supposed to decides, which button (folder)
+* is used for international buttons, later...
+*
+* @access	public        
+* @param		name	the (german) button name
+* @param		mode	if mode = img, the functions return the full tag, if mode = src, it return only the src-part (for graphic submits)
+* @return		tring		html output of the button
+*/
+function makeButton ($name, $mode="img") {
+	switch ($LANG) {
+		case "de":
+			$path="./pictures/buttons";
+		break;
+		case "eng":
+			$path="./pictures/buttons/eng/";
+		break;
+		default:
+			$path="./pictures/buttons";
+		break;
+	}
+	if ($mode == "img")
+		$tag = sprintf ("<img src=\"%s/%s-button.gif\" border=\"0\" />", $path, $name);
+	else
+		$tag = sprintf ("src=\"%s/%s-button.gif\"", $path, $name);
+
+	return $tag;
 }
 ?>
