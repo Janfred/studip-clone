@@ -324,7 +324,7 @@ class StudipLitCatElement {
 				break;
 				case "authors":
 				if ( ($ret = $this->getValue("dc_contributor")) ){
-					$ret = ";" . $ret;
+					$ret = "; " . $ret;
 				}
 				$ret = $this->getValue("dc_creator") . $ret;
 				break;
@@ -373,13 +373,4 @@ class StudipLitCatElement {
 		return $autor . "(" . $year . ")-" . $this->getValue("dc_title");
 	}
 }
-/*
-//test
-page_open(array("sess" => "Seminar_Session"));
-$_language = $DEFAULT_LANGUAGE;
-$_language_path = $INSTALLED_LANGUAGES[$_language]["path"];
-$test = new StudipLitCatElement(md5("lit"));
-echo "<pre>";
-print_R($test->getFormObject());
-*/
 ?>
