@@ -159,7 +159,8 @@ if ($SessionStart==0) {
 	// Language Settings
 	$sess->register("_language");
 	// try to get accepted languages from browser
-	$_language = get_accepted_languages();
+	if (!isset($_language))
+		$_language = get_accepted_languages();
 	if (!$_language)
 		$_language = $DEFAULT_LANGUAGE; // else use system default
 }		
