@@ -198,7 +198,7 @@ class messaging {
 			
 		setTempLanguage($db4->f("user_id"));	
 			
-		$title = _("[Stud.IP] Eine Nachricht von ");
+		$title = _("[Stud.IP] ").stripslashes(kill_format($subject));
 				
 		if ($snd_user_id != "____%system%____") {
 			$snd_fullname = get_fullname($snd_user_id);
@@ -210,7 +210,7 @@ class messaging {
 			$reply_to = $GLOBALS["UNI_CONTACT"];
 		}
 
-		$title = $smtp->QuotedPrintableEncode($title . $snd_fullname, 1);
+		$title = $smtp->QuotedPrintableEncode($title, 1);
 		// Generate "Header" of the message
 		$mailmessage = _("Von: ")."$snd_fullname\n";
 		$mailmessage .= _("An: ")."$rec_fullname\n";
