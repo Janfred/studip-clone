@@ -285,9 +285,12 @@ if ($s_send) {
 		}
 	
 		// delete all old participating institutions, then write new list
-		if (isset($b_institute)) {
+		if (($b_institute) || ($Institut)) {
 			$query = "DELETE from seminar_inst where Seminar_id='$s_id'";
 			$db3->query($query);
+		}
+		
+		if ($b_institute) {
 			while (list($key,$val) = each($b_institute)) {       // alle ausgewählten beteiligten Institute durchlaufen
 				$query = "INSERT INTO seminar_inst values('$s_id','$val')";
 				$db3->query($query);			     // Institut eintragen
