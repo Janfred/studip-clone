@@ -39,62 +39,71 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-    /**
-    * workaround for PHPDoc
-    *
-    * Use this if module contains no elements to document!
-    * @const PHPDOC_DUMMY
-    */
-    define("PHPDOC_DUMMY", TRUE);
+/**
+* workaround for PHPDoc
+*
+* Use this if module contains no elements to document!
+* @const PHPDOC_DUMMY
+*/
+define("PHPDOC_DUMMY", TRUE);
 
-	include_once("wap_adm.inc.php");
-	include_once("wap_txt.inc.php");
-	include_once("wap_buttons.inc.php");
+include_once("wap_adm.inc.php");
+include_once("wap_txt.inc.php");
+include_once("wap_buttons.inc.php");
 
-	wap_adm_start_card();
+wap_adm_start_card();
 
-        $db = new DB_Seminar;
-        $q_string  = "SELECT privatnr, privadr ";
-        $q_string .= "FROM auth_user_md5 LEFT JOIN user_info ";
-        $q_string .= "USING (user_id) WHERE username = \"$user_name\"";
-        $db-> query("$q_string");
-        $db-> next_record();
+$db = new DB_Seminar;
+$q_string  = "SELECT privatnr, privadr ";
+$q_string .= "FROM auth_user_md5 LEFT JOIN user_info ";
+$q_string .= "USING (user_id) WHERE username = \"$user_name\"";
+$db-> query("$q_string");
+$db-> next_record();
 
-        $private_nr  = $db-> f("privatnr");
-        $private_adr = $db-> f("privadr");
+$private_nr  = $db-> f("privatnr");
+$private_adr = $db-> f("privadr");
 
-        echo "<p align=\"left\">\n";
+echo "<p align=\"left\">\n";
 
-        if ($private_adr)
-            echo wap_txt_encode_to_wml($private_adr) . "<br/>\n";
+if ($private_adr)
+	echo wap_txt_encode_to_wml($private_adr) . "<br/>\n";
 
-        if ($private_nr)
-        {
-            echo wap_txt_encode_to_wml(_("Tel:")) . "&#32;";
-            echo wap_txt_encode_to_wml($private_nr) . "<br/>\n";
-        }
+if ($private_nr)
+{
+	echo wap_txt_encode_to_wml(_("Tel:")) . "&#32;";
+	echo wap_txt_encode_to_wml($private_nr) . "<br/>\n";
+}
 
-        echo "</p>\n";
+if ($back_to == "show_sms") {
+	$postfields_back_to = "		<postfield name=\"sms_id\" value=\"$sms_id\"/>\n";
+	$postfields_back_to .= "		<postfield name=\"no_search_link\" value=\"1\"/>\n";
+}
+else
+	$postfields_back_to = "		<postfield name=\"directory_search_pc\" value=\"$directory_search_pc\"/>\n";
 
-        echo "<p align=\"right\">\n";
-        echo "<anchor>" . wap_buttons_back() . "\n";
-        echo "    <go method=\"post\" href=\"show_user.php\">\n";
-        echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
-        echo "        <postfield name=\"first_name\" value=\"$first_name\"/>\n";
-        echo "        <postfield name=\"last_name\" value=\"$last_name\"/>\n";
-        echo "        <postfield name=\"user_name\" value=\"$user_name\"/>\n";
-        echo "        <postfield name=\"directory_search_pc\" value=\"$directory_search_pc\"/>\n";
-        echo "    </go>\n";
-        echo "</anchor><br/>\n";
+echo "</p>\n";
 
-        echo "<anchor>" . wap_buttons_new_search() . "\n";
-        echo "    <go method=\"post\" href=\"directory.php\">\n";
-        echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
-        echo "    </go>\n";
-        echo "</anchor><br/>\n";
+echo "<p align=\"right\">\n";
+echo "<anchor>" . wap_buttons_back() . "\n";
+echo "	<go method=\"post\" href=\"show_user.php\">\n";
+echo "		<postfield name=\"session_id\" value=\"$session_id\"/>\n";
+echo "		<postfield name=\"first_name\" value=\"$first_name\"/>\n";
+echo "		<postfield name=\"last_name\" value=\"$last_name\"/>\n";
+echo "		<postfield name=\"user_name\" value=\"$user_name\"/>\n";
+echo $postfields_back_to;
+echo "	</go>\n";
+echo "</anchor><br/>\n";
 
-        wap_buttons_menu_link ($session_id);
-        echo "</p>\n";
+if (!$no_search_link) {
+	echo "<anchor>" . wap_buttons_new_search() . "\n";
+	echo "	<go method=\"post\" href=\"directory.php\">\n";
+	echo "		<postfield name=\"session_id\" value=\"$session_id\"/>\n";
+	echo "	</go>\n";
+	echo "</anchor><br/>\n";
+}
 
-    wap_adm_end_card();
+wap_buttons_menu_link ($session_id);
+echo "</p>\n";
+
+wap_adm_end_card();
 ?>

@@ -198,13 +198,13 @@ if (!$session_expired)
 					$q_string .= "auth_user_md5.Vorname = \"$first_name\" ";
 	
 				$q_string .= "AND auth_user_md5.perms NOT IN ('root', 'admin') ";
-					$q_string .= "AND user_inst.inst_perms IN ('autor', 'tutor', 'dozent')";
+				$q_string .= "AND user_inst.inst_perms IN ('autor', 'tutor', 'dozent')";
 				$q_string .= "AND user_inst.user_id IS NOT NULL ";
 				$q_string .= "ORDER BY auth_user_md5.Nachname ";
 				$q_string .= "LIMIT $progress_counter, " . RESULTS_PER_PAGE;
 			}
 			$db-> query("$q_string");
-			$num_entries   = $db-> nf();
+			$num_entries = $db->nf();
 			$progress_limit = $progress_counter + $num_entries;
 	
 			while ($db-> next_record() && $progress_counter < $progress_limit)
