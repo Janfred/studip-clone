@@ -58,7 +58,7 @@ function printSelectSemester($infobox,$semestersAR){
 		  . "	   <form action=\"$PHPSELF\" method=post>\n"
 		  . "       &nbsp;<select name=\"semesterid\" style=\"vertical-align:middle;\">\n";
 	// the semester
-	for ($i=1;$i<=sizeof($semestersAR);$i++){
+	for ($i=0;$i<sizeof($semestersAR);$i++){
 		$html .= "        <option value=\"".$semestersAR[$i]["id"]."\">".$semestersAR[$i]["name"]."</option>\n";
 	}
 	$html .="       </select>\n"

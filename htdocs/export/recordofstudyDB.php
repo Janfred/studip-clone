@@ -33,7 +33,7 @@ function getSemesters(){
 	$semester = new SemesterData;
 	$all_semester = $semester->getAllSemesterData();
 	// creating the list of avaible semester
-	for ($i=1;$i<=sizeof($all_semester); $i++){
+	for ($i=0;$i<sizeof($all_semester); $i++){
 //		$position = sizeof($all_semester)+1-$i;
 		$semestersAR[$i]["beginn"] = $all_semester[$i]["beginn"];
 		$semestersAR[$i]["id"] = $i;
@@ -48,10 +48,9 @@ function getSemesters(){
 		. "JOIN archiv  USING (seminar_id) "
 		. "WHERE archiv_user.user_id = '".$user->id."' "
 		. "GROUP BY archiv.semester ORDER BY start_time DESC");
-
 	while ($db->next_record()) {
 		$found = 0;
-		for ($j=1; $j<=sizeof($all_semester); $j++){
+		for ($j=0; $j<sizeof($all_semester); $j++){
 			if (in_array($db->f("semester"), $all_semester[$j],1))
 				$found++;
 		}
