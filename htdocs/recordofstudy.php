@@ -230,7 +230,7 @@ elseif($mode == "create_pdf"){
 
 if ($mode == "new"){
 	printSiteTitle();
-	printSelectSemester($infobox,sortSemestersArray($semestersAR,"beginn"));
+	printSelectSemester($infobox,$semestersAR);
 }
 elseif ($mode == "edit"){
 	printSiteTitle($basicdata["semester"]);
