@@ -178,23 +178,26 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("roo
 	 ?>
 	 <table width="100%" border=0 cellpadding=0 cellspacing=0>
 	<tr>
-		<td class="topic" colspan="2"><img src="pictures/meinesem.gif" border="0" align="texttop">&nbsp;<b>Meine Einrichtungen</></td>
+		<td class="topic" colspan="3">
+			<img src="pictures/meinesem.gif" border="0" align="texttop">&nbsp;<b>Meine Einrichtungen</>
+		</td>
 	</tr>
-	<?
-	if ($meldung) parse_msg($meldung);
-	?>
 	 <?
 	 if ($num_my_inst){
 	 ?>
 	 	<tr>
 	 		<td valign="top" class="blank">
 				<table border="0" cellpadding="0" cellspacing="0" width="100%" align="center" class="blank">
-					<tr valign="top" align="center">
-						<td align="center">
+					<tr align="center">
+						<td valign="top" align="center">
 							<table border="0" cellpadding="1" cellspacing="0" width="98%" align="center" class="blank">
+								<? if ($meldung) {
+									echo "<tr><td>&nbsp; </td></tr>";
+									parse_msg($meldung);
+								}
+								?>
 								<tr>
 									<td class="blank" colspan="2">&nbsp;
-									
 									</td>
 								</tr>
 								<tr valign="top" align="center">
@@ -266,9 +269,8 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("roo
 			<table border="0" cellpadding="0" cellspacing="0" width="100%" align="center" class="blank">
 				<?
 				if ($meldung)	{
-					echo "<tr><td><br />";
+					echo "<tr><td>&nbsp; </td></tr>";
 					parse_msg($meldung);
-					echo "</td></tr>"; 
 				}
 	}
 
@@ -281,12 +283,6 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("roo
 			</td>
 			<td class="blank" width="240" valign="top">
 				<table "center" width="100%" border=0 cellpadding=0 cellspacing=0>
-					<? if ($meldung) {
-						echo "<tr><td><br />";
-						parse_msg($meldung);
-						echo "</td></tr>"; 
-					}
-					?>
 					<tr>
 						<td class="blank" width="100%" align="right" colspan=2>
 							<img src="pictures/einrichtungen.jpg">

@@ -230,7 +230,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
 		<tr>
 			<td class="topic" colspan="3">
-				<img src="pictures/meinesem.gif" border="0" align="texttop">&nbsp;<b>Meine Veranstaltungen</>
+				<img src="pictures/meinesem.gif" border="0" align="texttop">&nbsp;<b>Meine Veranstaltungen</b>
 			</td>
 		</tr>
 	<?
@@ -240,9 +240,8 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 			 <td valign="top" class="blank">
 				<table border="0" cellpadding="0" cellspacing="0" width="100%" align="center" class="blank">
 					<? if ($meldung) {
-						echo "<tr><td><br />";
-						parse_msg($meldung);
-						echo "</td></tr>"; 
+						echo "<tr><td>&nbsp; </td></tr>";
+						parse_msg($meldung, "§", "blank", 1);
 					}
 					?>
 					<tr align="center">
@@ -338,9 +337,8 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 			<table border="0" cellpadding="0" cellspacing="0" width="100%" align="center" class="blank">
 				<?
 				if ($meldung)	{
-					echo "<tr><td><br />";
+					echo "<tr><td>&nbsp; </td></tr>";
 					parse_msg($meldung);
-					echo "</td></tr>"; 
 				}
 	}
 	?>
