@@ -370,7 +370,7 @@ function showSearchForm($name, $search_string='', $user_only=FALSE, $administrab
 	} else {
 		?>
 		<font size=-1><input type="TEXT" name="<? echo "search_string_".$name ?>" size=30 maxlength=255 /></font>
-		<font size=-1><input type="IMAGE" name="<? echo "do_".$name ?>" <?=makeButton("suchestarten", "src") ?> border=0 value="<?=_("suchen")?>" /></font>
+		<font size=-1><input type="IMAGE" align="absmiddle" name="<? echo "do_".$name ?>" <?=makeButton("suchestarten", "src") ?> border=0 value="<?=_("suchen")?>" /></font>
 		<?
 	}
 }
