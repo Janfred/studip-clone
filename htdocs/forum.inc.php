@@ -1520,14 +1520,23 @@ function DisplayKids ($forumposting, $level=0) {
 		echo "</td>";
 		
 		$age = "";
+		$forumposting["newold"] = "";
 		
 		// wird geshrinkt?
 		
-		if (strstr($forum["shrinkopenlist"],$forumposting["id"])!=TRUE && strstr($forum["openlist"],$forumposting["id"])!=TRUE && $forum["shrink"]!=0 && $openall != TRUE) {
-			$age = ForumCheckShrink($forumposting["id"]);
-			$age = explode(";",$age);
-			$forumposting["shrinkcount"] = sizeof($age)-1;
-			rsort($age);
+		if ($forum["shrink"]!=0 && $forum["neuauf"] ==1) {
+			$forumposting = ForumNewPosting($forumposting);
+			//echo $forumposting["newold"];
+		}
+		
+		if (strstr($forum["shrinkopenlist"],$forumposting["id"])!=TRUE 
+			&& strstr($forum["openlist"],$forumposting["id"])!=TRUE 
+			&& $forum["shrink"]!=0 && $openall != TRUE
+			&& !($forum["neuauf"] == 1 && $forumposting["newold"] == "new")) {
+				$age = ForumCheckShrink($forumposting["id"]);
+				$age = explode(";",$age);
+				$forumposting["shrinkcount"] = sizeof($age)-1;
+				rsort($age);
 		} else {
 			$age[]=time();
 		}
