@@ -128,19 +128,6 @@ function MovePersonStatusgruppe ($range_id, $AktualMembers="", $InstitutMembers=
 		}
 }
 
-function GetAllSelected ($range_id)
-{	
-	$zugeordnet[] = "";
-  	$db3=new DB_Seminar;
-	$db3->query ("SELECT DISTINCT user_id FROM statusgruppe_user LEFT JOIN statusgruppen USING(statusgruppe_id) WHERE range_id = '$range_id'");
-	while ($db3->next_record()) {
-		$zugeordnet[] = $db3->f("user_id");
-	}
-	RETURN $zugeordnet;
-}
-
-
-
 
 // Funktionen zur reinen Augabe von Statusgruppendaten
 
