@@ -142,10 +142,10 @@ $PERS_TERMIN_KAT[14]=array("name"=>"Reise", "color"=>"#C71585");
 $UPLOAD_TYPES=array( 	"default" =>												//Name bezeichnet den zugehoerigen SEM_TYPE, name "1" waere entsprechend die Definition der Dateiendungen fuer SEM_TYPE[1]; default wird verwendet, wenn es keine spezielle Definition fuer einen SEM_TYPE gibt
 						array(	"type"=>"deny", 									//Type bezeichnet den grundsetzlichen Typ der Deklaration: deny verbietet alles ausser den angegebenen file_types, allow erlaubt alle ausser den angegebenen file_types
 								"file_types" => array ("rtf", "xls", "ppt", "zip", "pdf", "txt"),	//verbotene bzw. erlaubte Dateitypen
-								"file_sizes" => array (	"root" => 15 * 1048576,			//Erlaubte Groesse je nach Rechtestufe
-													"admin" => 15 * 1048576,
-													"dozent" => 15 * 1048576,
-													"tutor" => 15 * 1048576,
+								"file_sizes" => array (	"root" => 7 * 1048576,			//Erlaubte Groesse je nach Rechtestufe
+													"admin" => 7 * 1048576,
+													"dozent" => 7 * 1048576,
+													"tutor" => 7 * 1048576,
 													"autor" => 1.38 * 1048576,
 													"nobody" => 1.38 * 1048576													
 												)
@@ -153,22 +153,22 @@ $UPLOAD_TYPES=array( 	"default" =>												//Name bezeichnet den zugehoerigen
 						"7" =>													//Kommentar: Leider wird der Sem_type noch immer alphanumerisch gespeichert, daher 
 						array(	"type"=>"allow", 									//Bezeichnung ueber Namen und nicht ueber die jeweilige Nummer.... muss mal angepasst werden!
 								"file_types" => array ("exe"),
-								"file_sizes" => array (	"root" => 15 * 1048576,			
-													"admin" => 15 * 1048576,
-													"dozent" => 15 * 1048576,
-													"tutor" => 15 * 1048576,													
-													"autor" => 15 * 1048576,
+								"file_sizes" => array (	"root" => 7 * 1048576,			
+													"admin" => 7 * 1048576,
+													"dozent" => 7 * 1048576,
+													"tutor" => 7 * 1048576,													
+													"autor" => 7 * 1048576,
 													"nobody" => 1.38 * 1048576													
 												)
 							),
 						"8" =>									
 						array(	"type"=>"allow",
 								"file_types" => array ("exe"),
-								"file_sizes" => array (	"root" => 15 * 1048576,			
-													"admin" => 15 * 1048576,
-													"dozent" => 15 * 1048576,													
-													"tutor" => 15 * 1048576,
-													"autor" => 15 * 1048576,
+								"file_sizes" => array (	"root" => 7 * 1048576,			
+													"admin" => 7 * 1048576,
+													"dozent" => 7 * 1048576,													
+													"tutor" => 7 * 1048576,
+													"autor" => 7 * 1048576,
 													"nobody" => 1.38 * 1048576													
 												)
 							)
