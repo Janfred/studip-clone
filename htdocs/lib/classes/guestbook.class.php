@@ -29,6 +29,7 @@ class Guestbook {
 	var $openclose; // open/close status
 	var $perpage;	// count of entrys per guestbook-site
 	var $guestpage;	// page of guestbook currently displayed
+	var $pages_total; // count of guestbook pages of the user
 
 	// Konstruktor
 	
@@ -44,6 +45,7 @@ class Guestbook {
 		$this->openclose = "close";
 		$this->perpage = 10;
 		$this->guestpage = $guestpage;
+		$this->pages_total = ceil($this->number / $this->perpage);
 	}
 	
 	function checkGuestbook () {
@@ -105,7 +107,7 @@ class Guestbook {
 		//
 		$titel = "<a href=\"$link\" class=\"tree\" >".$this->number."&nbsp;"._(" Einträge")."</a>";
 		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr>";
-		if ($this->active == TRUE)
+		if ($this->active == TRUE && $this->pages_total>1)
 			$zusatz .= $this->guest_navi();
 		printhead ("100%","0",$link,$this->openclose,$new,"<img src=\"pictures/icon-guest.gif\">",$titel,$zusatz,$forumposting["chdate"],"TRUE",$index,$forum["indikator"]);	
 			
@@ -146,7 +148,7 @@ class Guestbook {
 function guest_navi () {
 	global $PHP_SELF;
 	$i = 1;
-	$maxpages = ceil($this->number / $this->perpage);
+	$maxpages = $this->pages_total;
 	$ipage = ($this->guestpage / $this->perpage)+1;
 	if ($ipage != 1)
 		$navi .= "<a href=\"$SELF_PHP?guestpage=".($ipage-2)*$this->perpage."&guestbook=open&username=$this->username#guest\"><font size=-1>" . _("zurück") . "</a> | </font>";
