@@ -1,7 +1,7 @@
 <?
 /*
 archiv.php - Suchmaske fuer das Archiv
-Copyright (C) 2001 Ralf Stockmann <rstockm@gwdg.de>
+Copyright (C) 2001 Ralf Stockmann <rstockm@gwdg.de>, Cornelis Kater <ckater@gwdg.de>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
