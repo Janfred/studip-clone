@@ -42,24 +42,6 @@ require_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/ChatShmServer.class.php
 require_once ($ABSOLUTE_PATH_STUDIP . "visual.inc.php");
 require_once ($ABSOLUTE_PATH_STUDIP . "functions.php");
 
-function MakeToolbar($icon,$URL,$text,$tooltip,$size,$target="_top",$align="center",$toolwindow="FALSE")
-{
-	if ($toolwindow == "FALSE") {
-		$tool = tooltip($tooltip);
-	} else {
-		$tool = tooltip($tooltip,TRUE,TRUE);
-	}
-	$toolbar = "<td class=\"toolbar\" align=\"$align\">";
-
-	$toolbar .= "<img border=\"0\" src=\"pictures/blank.gif\" height=\"1\" width=\"45\"><br>"
-			  ."<a class=\"toolbar\" href=\"$URL\" target=\"$target\"><img border=\"0\" src=\"$icon\" ".$tool."><br>"
-			  ."<img border=\"0\" src=\"pictures/blank.gif\" height=\"6\" width=\"$size\"><br>"
-			  ."<b><font size=\"2\">".$text."</font></b></a><br>"
-			  ."<img border=\"0\" src=\"pictures/blank.gif\" height=\"7\" width=\"30\">";
-	$toolbar .= "</td>\n";
-	return $toolbar;
-}
-
 //nur sinnvoll wenn chat eingeschaltet
 if ($CHAT_ENABLE) {
 	$chatServer=new ChatShmServer;
@@ -85,17 +67,36 @@ if (isset($i_query[0]) && $i_query[0] != "") {
 
 if ($auth->auth["uid"] == "nobody") { ?>
 
-		<table class="header" border="0" width="100%" background="pictures/fill1.gif" cellspacing="0" cellpadding="0" bordercolor="#999999" height="25">
+		<table class="toolbar" border="0" width="100%" cellspacing="0" cellpadding="0" height="25">
 			<tr>
-				<td class="header" width="33%" valign="bottom" align="left" background="pictures/fill1.gif">
-					&nbsp;<a href="index.php" target="_top"><img border="0" src="pictures/home.gif" <?=tooltip(_("Zurück zur Startseite"))?>></a>
-					&nbsp;<a href="./help/index.php<?echo $help_query?>" target="_new"><img border="0" src="pictures/hilfe.gif" <?=tooltip(_("Hilfe"))?> width="24" height="21"></a>
-					&nbsp;<a href="freie.php"><img border="0" src="pictures/meinesem.gif" <?=tooltip(_("Freie Veranstaltungen"))?> width="24" height="21"></a></td>
-				<td class="angemeldet" width="20%" nowrap bgcolor="#C0C0C0" align="center" valign="middle" background="pictures/kaverl1b.jpg">
-					<font color="#000080"><? echo _("Sie sind nicht angemeldet") ?></font></td>
-				<td class="header" width="33%" nowrap valign="bottom" align="right" background="pictures/fill1.gif">
-					&nbsp;&nbsp;<a href="impressum.php"><img border="0" src="pictures/logo2.gif" <?=tooltip(_("Impressum"))?>></a>
-					&nbsp;&nbsp;<a href="index.php?again=yes"><img border="0" src="pictures/login.gif" <?=tooltip(_("Am System anmelden"))?>></a>&nbsp;</td>
+			<td class="toolbar" align="left">
+				<table class="toolbar" align="left" border="0" width="100%" cellspacing="0" cellpadding="0" height="25">
+				<tr>
+
+<?
+				echo MakeToolbar("pictures/home.gif","index.php",_("Start"),_("Zurück zur Startseite"),40,"_top","left");
+				echo MakeToolbar("pictures/meinesem.gif","freie.php",_("Freie"),_("Freie Veranstaltungen"),40, "_top","left");
+				
+?>				
+				</td></tr></table></td>
+			<td class="toolbar" align="center" width=100%">											
+				<table class="toolbar" border="0" width="100%" cellspacing="0" cellpadding="0" height="25">
+				<tr>
+
+
+<?				echo MakeToolbar("pictures/logo2.gif","impressum.php",_("Impressum"),_("Informationen zu dieser Installation"),40,"_top");
+?>
+				</td></tr></table></td>
+			<td class="toolbar" align="right">											
+				<table class="toolbar" border="0" width="100%" cellspacing="0" cellpadding="0" height="25">
+				<tr>
+
+
+<?				echo MakeToolbar("pictures/hilfe.gif","./help/index.php$help_query",_("Hilfe"),_("Hilfe zu dieser Seite"),40, "_new","right");
+				echo MakeToolbar("pictures/login.gif","index.php?again=yes",_("Login"),_("Am System anmelden"),40,"_top","right");
+
+?>
+				</td></tr></table></td>
 			</tr>
 		</table>
 
@@ -267,9 +268,6 @@ if ($auth->auth["uid"] == "nobody") { ?>
 
 	}
 	
-	if ($auth->auth["uid"] == "nobody") { 
-		echo "<br><br>";
-	}
 	echo"<body>\n";
 	ob_end_flush();
 
