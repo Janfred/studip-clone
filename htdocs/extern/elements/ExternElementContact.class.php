@@ -154,7 +154,7 @@ class ExternElementContact extends ExternElement {
 	
 	function checkValue ($attribute, $value) {
 		if ($attribute == 'hidepersname' || $attribute == 'separatelinks'
-				|| $attribute == 'defaultadr') {
+				|| $attribute == 'defaultadr' || $attribute == 'showinstgroup') {
 			if (!isset($GLOBALS['HTTP_POST_VARS']["Contact_$attribute"])) {
 				$GLOBALS['HTTP_POST_VARS']["Contact_$attribute"] = 0;
 				return FALSE;
