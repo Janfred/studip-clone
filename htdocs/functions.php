@@ -46,7 +46,7 @@
 */
 
 function getHeaderLine ($id) {
-	global $SEM_TYPE,$INST_TYPE;
+	global $SEM_TYPE,$INST_TYPE, $SEM_TYPE_MISC_NAME;
 	
 	$db = new DB_Seminar;
 	$object_type = get_object_type($id);
@@ -56,7 +56,7 @@ function getHeaderLine ($id) {
 		$query = sprintf ("SELECT status, Name FROM seminare WHERE Seminar_id = '%s' ", $id);
 		$db->query($query);
 		$db->next_record();
-
+		
 		if ($SEM_TYPE[$db->f("status")]["name"] == $SEM_TYPE_MISC_NAME)
 			$header_line = "Veranstaltung";
 		else
