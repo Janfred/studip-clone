@@ -220,30 +220,38 @@ while ($db->next_record())
 		
 		$i=0;
 		foreach 	($term_data["turnus_data"] as $data)
-			{
-			//Patch fuer Problem mit alten Versionwn <=0.7 (Typ war falsch gesetzt), wird nur fuer rueckwaerts-Kompatibilitaet benoetigt
-			settype ($data["start_stunde"], "integer");
-			settype ($data["end_stunde"], "integer");
-			settype ($data["start_minute"], "integer");
-			settype ($data["start_minute"], "integer");
+			if ($data["end_stunde"] >= $global_start_time) {
+				//Patch fuer Problem mit alten Versionwn <=0.7 (Typ war falsch gesetzt), wird nur fuer rueckwaerts-Kompatibilitaet benoetigt
+				settype ($data["start_stunde"], "integer");
+				settype ($data["end_stunde"], "integer");
+				settype ($data["start_minute"], "integer");
+				settype ($data["start_minute"], "integer");
 					
-			//wichtiger Check, ob die Endzeit ueber den sichtbaren Bereich des Stundenplans hinauslaeuft, wenn ja wird row_span entsprechend angepasst
-			if ($data["end_stunde"] >=$global_end_time)
-				{
-				$tmp_row_span = ((($global_end_time - $data["start_stunde"])+1) *4)-1;
-				$tmp_row_span = $tmp_row_span - (int)($data["start_minute"] / 15);
+				//Check, ob die Endzeit ueber den sichtbaren Bereich des Stundenplans hinauslaeuft, wenn ja wird row_span entsprechend angepasst
+				if ($data["end_stunde"] >$global_end_time) {
+					$tmp_row_span = ((($global_end_time - $data["start_stunde"])+1) *4);
+					$tmp_row_span = $tmp_row_span - (int)($data["start_minute"] / 15);
+				} else 
+					$tmp_row_span = (($data["end_stunde"] - $data["start_stunde"]) * 4) + (int)(($data["end_minute"]-1) / 15);
+
+				//Check, ob die Startzeit ueber den Sichtbaren Bereich hinauslaeuft, wenn ja wird row_span und der index entsprechend frisiert
+				if ($data["start_stunde"] < $global_start_time) {
+					$tmp_row_span = $tmp_row_span - (($global_start_time - $data["start_stunde"]) *4);
+					$tmp_row_span = $tmp_row_span + (int)($data["start_minute"] / 15);
+					$idx_corr_h = $global_start_time - $data["start_stunde"];
+					$idx_corr_m = (0 - $data["start_minute"]) ;
+				} else {
+					$idx_corr_h = 0;
+					$idx_corr_m = 0;
 				}
-			else 
-				$tmp_row_span = (($data["end_stunde"] - $data["start_stunde"]) * 4) + (int)($data["end_minute"] / 15);
-			
-			
-			//Dummy-Timestamps erzeugen. Der 5.8.2001 (ein Sonntag) wird als Grundlage verwendet.
-			$start_time=mktime($data["start_stunde"], $data["start_minute"], 0, 8, (5+$data["day"]), 2001);
-			$end_time=mktime($data["end_stunde"], $data["end_minute"], 0, 8, (5+$data["day"]), 2001);			
+				
+				//Dummy-Timestamps erzeugen. Der 5.8.2001 (ein Sonntag) wird als Grundlage verwendet.
+				$start_time=mktime($data["start_stunde"], $data["start_minute"], 0, 8, (5+$data["day"]), 2001);
+				$end_time=mktime($data["end_stunde"], $data["end_minute"], 0, 8, (5+$data["day"]), 2001);			
 
-			$i++; //<pfusch>$i (fuer alle einzelnen Objekte eines Seminars) wird hier zur Kennzeichnung der einzelen Termine eines Seminars untereinander verwendet. Unten wird die letzte Stelle jeweils weggelassen. </pfusch>
-
-			$my_sems[$db->f("Seminar_id").$i]=array("start_time_idx"=>$data["start_stunde"].(int)($data["start_minute"] / 15).$data["day"], "start_time"=>$start_time, "end_time"=>$end_time, "name"=>htmlReady($db->f("Name")), "seminar_id"=>$db->f("Seminar_id").$i,  "ort"=>$db->f("Ort"), "row_span"=>$tmp_row_span, "dozenten"=>$dozenten, "personal_sem"=>FALSE);
+				$i++; //<pfusch>$i (fuer alle einzelnen Objekte eines Seminars) wird hier zur Kennzeichnung der einzelen Termine eines Seminars untereinander verwendet. Unten wird die letzte Stelle jeweils weggelassen. </pfusch>
+				
+				$my_sems[$db->f("Seminar_id").$i]=array("start_time_idx"=>$data["start_stunde"]+$idx_corr_h.(int)(($data["start_minute"]+$idx_corr_m) / 15).$data["day"], "start_time"=>$start_time, "end_time"=>$end_time, "name"=>htmlReady($db->f("Name")), "seminar_id"=>$db->f("Seminar_id").$i,  "ort"=>$db->f("Ort"), "row_span"=>$tmp_row_span, "dozenten"=>$dozenten, "personal_sem"=>FALSE);
 			}
 		}
 	}
@@ -251,21 +259,31 @@ while ($db->next_record())
 //Daten aus der Sessionvariable hinzufuegen
 if ((is_array($my_personal_sems)) && (!$inst_id))
 	foreach ($my_personal_sems as $mps)
-	{
-	//auch hier nochmal der Check
-	if (date("G", $mps["ende_time"]) >=$global_end_time)
-		{
-		$tmp_end_time = mktime($global_end_time+1, 00, 00, date ("n", $mps["start_time"]), date ("j", $mps["start_time"]), date ("Y", $mps["start_time"]));
-		$tmp_row_span = (int)(($tmp_end_time - $mps["start_time"]) /15/60);
-		}
-	else $tmp_row_span = (int)(($mps["ende_time"] - $mps["start_time"])/15/60);
+		if (date("G", $mps["ende_time"]) >= $global_start_time) {
+			//auch hier nochmal der Check
+			if (date("G", $mps["ende_time"]) > $global_end_time) {
+				$tmp_end_time = mktime($global_end_time+1, 00, 00, date ("n", $mps["start_time"]), date ("j", $mps["start_time"]), date ("Y", $mps["start_time"]));
+				$tmp_row_span = (int)(($tmp_end_time - $mps["start_time"]) /15/60);
+			} else 
+				$tmp_row_span = (int)(($mps["ende_time"] - $mps["start_time"])/15/60);
+		
+			//und der andere
+			if (date("G", $mps["start_time"]) < $global_start_time) {
+				$tmp_start_time = mktime($global_start_time, 00, 00, date ("n", $mps["start_time"]), date ("j", $mps["start_time"]), date ("Y", $mps["start_time"]));
+				$tmp_row_span = (int)(($tmp_end_time - $tmp_start_time) /15/60);
+				$idx_corr_h = $global_start_time - date("G", $mps["start_time"]);
+				$idx_corr_m = (0 - date("i", $mps["start_time"]));
+			} else {
+				$idx_corr_h = 0;
+				$idx_corr_m = 0;
+			}
 
-	//aus Sonntag=0 wird Sonntag=7, damit laesst's sich besser arbeiten *g
-	$tmp_day=date("w", $mps["start_time"]);
-	if ($tmp_day==0) $tmp_day=7;
-	
-	$my_sems[$mps["seminar_id"]]=array("start_time_idx"=>date("G", $mps["start_time"]).(int)(date("i", $mps["start_time"]) / 15).$tmp_day, "start_time"=>$mps["start_time"], "end_time"=>$mps["ende_time"], "name"=>$mps["beschreibung"], "seminar_id"=>$mps["seminar_id"],  "ort"=>"", "row_span"=>$tmp_row_span, "dozenten"=>"", "personal_sem"=>TRUE);
-	}
+			//aus Sonntag=0 wird Sonntag=7, damit laesst's sich besser arbeiten *g
+			$tmp_day=date("w", $mps["start_time"]);
+			if ($tmp_day==0) $tmp_day=7;
+		
+			$my_sems[$mps["seminar_id"]]=array("start_time_idx"=>date("G", $mps["start_time"])+$idx_corr_h.(int)((date("i", $mps["start_time"])+$idx_corr_m) / 15).$tmp_day, "start_time"=>$mps["start_time"], "end_time"=>$mps["ende_time"], "name"=>$mps["beschreibung"], "seminar_id"=>$mps["seminar_id"],  "ort"=>"", "row_span"=>$tmp_row_span, "dozenten"=>"", "personal_sem"=>TRUE);
+		}
 
 //Array der Zellenbelegungen erzeugen
 if (is_array($my_sems)) 
@@ -286,7 +304,6 @@ foreach ($my_sems as $ms)
 	else
 		$cell_sem[$idx_tmp][$ms["seminar_id"]] = TRUE;
 	}
-
 
 //Alle Seminare, die sich ueberschneiden, zusammenfassen
 $i=1;
