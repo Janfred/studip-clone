@@ -91,7 +91,7 @@ elseif ((($SessSemName[1]) && ($new_sem)) || ($SessSemName[1] && !$links_admin_d
 	$archiv_assi_data='';
 	$term_metadata='';	
 	}
-//neue Admin-Institut-Sitzung, ich komme aus einem Institut rein ($new_inst==TRUE) 
+//neue Admin-Institut-Sitzung, ich komme aus einem Institut rein ($new_inst==TRUE)
 elseif ((($SessSemName[1]) && ($new_inst)) || ($SessSemName[1] && !$links_admin_data["inst_id"]  && $new_inst)) {
 	$links_admin_data='';
 	$links_admin_data["inst_id"]=$SessSemName[1];
@@ -128,6 +128,10 @@ if ($srch_send) {
 //if the user selected the information field at institute-selection....
 if ($admin_inst_id == "NULL")
 	$list=TRUE;
+
+//user wants to create a new 
+if ($i_view=="new")
+	$links_admin_data='';
 
 //Wenn nur ein Institut verwaltet werden kann, immer dieses waehlen (Auswahl unterdruecken)
 if ((!$links_admin_data["inst_id"]) && ($list) &&
