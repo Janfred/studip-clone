@@ -240,8 +240,8 @@ if ($db->num_rows()) { //Only if Users were found...
 		}
 
 		if ($key == "user") {
-			echo"<td width=\"20%\" align=center><b><font size=-1>Schreibrecht erteilen</b></font></td>";
-			echo"<td width=\"20%\" align=center><b><font size=-1>Benutzer entfernen</b></font></td>";
+			echo"<td class=\"steel\" width=\"20%\" align=center><font size=-1><b>Schreibrecht erteilen</b></font></td>";
+			echo"<td class=\"steel\" width=\"20%\" align=center><font size=-1><b>Benutzer entfernen</b></font></td>";
 		}		
 	}
 	
@@ -274,23 +274,6 @@ if ($db->num_rows()) { //Only if Users were found...
 	printf ("<td class=\"$class\" align=center>");
 	printf ("<a href=\"sms.php?sms_source_page=teilnehmer.php&cmd=write&rec_uname=%s\"><img src=\"pictures/nachricht1.gif\" alt=\"Nachricht an User verschicken\" border=\"0\"></a>", $db->f("username")); 
 	printf ("</td>");
-/*
-	print("<td align=center>");
-
-	$Literatur = 0;
-	$db2->query ("SELECT count(literatur_id) AS doll FROM termine LEFT JOIN literatur ON termine.termin_id = literatur.range_id WHERE termine.range_id = '$SessionSeminar' AND literatur.user_id = '$UID' GROUP by termine.range_id");
-	while ($db2->next_record()) {
-		$Literatur += $db2->f("doll");
-	}
-	$db2->query ("SELECT count(literatur_id) AS doll FROM literatur WHERE literatur.range_id = '$SessionSeminar' AND literatur.user_id = '$UID' GROUP by literatur.range_id");
-	while ($db2->next_record()) {
-		$Literatur += $db2->f("doll");
-	}
-	print $Literatur;
-
-	print("</td>");
-	
-*/
 
 // Befoerderungen und Degradierungen
 	$username=$db->f("username");
