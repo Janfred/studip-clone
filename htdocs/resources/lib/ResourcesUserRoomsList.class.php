@@ -44,9 +44,10 @@ class ResourcesUserRoomsList {
 	var $user_id;    	// userId from PhpLib (String)
 	var $resources;		// the results
 	var $return_objects;	// should the complete objects be returned?
+	var $only_rooms;	// we can do this stuff for rooms ar for all resources
 	
 	// Konstruktor
-	function ResourcesUserRoomsList ($user_id ='', $sort= TRUE, $return_objects = TRUE) {
+	function ResourcesUserRoomsList ($user_id ='', $sort= TRUE, $return_objects = TRUE, $only_rooms = TRUE) {
 	 	global $RELATIVE_PATH_RESOURCES, $user;
 	 	require_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
 
@@ -55,6 +56,7 @@ class ResourcesUserRoomsList {
 			$this->user_id = $user->id;
 		
 		$this->return_objects = $return_objects;
+		$this->only_rooms = $only_rooms;
 		if (!$this->return_objects)
 			$sort = FALSE;
 			
@@ -74,7 +76,10 @@ class ResourcesUserRoomsList {
 		$db=new DB_Seminar;	
 		$db2=new DB_Seminar;
 		
-		$query = sprintf ("SELECT COUNT(resource_id) AS count FROM resources_categories LEFT JOIN resources_objects USING (category_id) WHERE resources_categories.is_room = '1' AND resources_objects.resource_id = '%s' ", $resource_id);
+		if ($this->only_rooms)
+			$query = sprintf ("SELECT COUNT(resource_id) AS count FROM resources_categories LEFT JOIN resources_objects USING (category_id) WHERE resources_categories.is_room = '1' AND resources_objects.resource_id = '%s' ", $resource_id);
+		else
+			$query = sprintf ("SELECT COUNT(resource_id) AS count FROM resources_objects WHERE resources_objects.resource_id = '%s' ", $resource_id);		
 		$db->query($query);
 		$db->next_record();
 		$db->f("count");
@@ -102,9 +107,12 @@ class ResourcesUserRoomsList {
 		$db = new DB_Seminar;
 		$db2 = new DB_Seminar;
 		
-		//if perm is root, load all rooms
+		//if perm is root, load all rooms/objects
 		if ($perm->have_perm ("root")) {
-			$query = sprintf ("SELECT resource_id FROM resources_categories LEFT JOIN resources_objects USING (category_id) WHERE resources_categories.is_room = '1' ");
+			if ($this->only_rooms)
+				$query = sprintf ("SELECT resource_id FROM resources_categories LEFT JOIN resources_objects USING (category_id) WHERE resources_categories.is_room = '1' ");
+			else
+				$query = sprintf ("SELECT resource_id FROM resources_objects ");			
 			$db->query($query);
 			while ($db->next_record()) {
 				if ($this->return_objects) {
