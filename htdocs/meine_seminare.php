@@ -548,7 +548,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 		print "</table>";
 		?>
 
-		<br><br></td>
+		<br><br>
 
 		<?	
 	}	 // Ende Wartelisten
