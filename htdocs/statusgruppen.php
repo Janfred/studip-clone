@@ -87,7 +87,7 @@ function PrintAktualStatusgruppen ()
 				$class="steelgraulight"; 
 			}
 			printf ("     <tr>");
-			printf ("       <td width=\"95%%\" class=\"%s\"><font size=\"-1\"><a href = about.php?username=%s>%s&nbsp; %s</a></font></td>",$class, $db2->f("username"), htmlReady($db2->f("Vorname")), htmlReady($db2->f("Nachname")));
+			printf ("       <td width=\"95%%\" class=\"%s\"><font size=\"-1\"><a href = about.php?username=%s>%s&nbsp;%s</a></font></td>",$class, $db2->f("username"), htmlReady($db2->f("Vorname")), htmlReady($db2->f("Nachname")));
 			printf ("	   <td width=\"5%%\"class=\"$class\" align=\"center\">");
 			printf ("		<a href=\"sms.php?sms_source_page=teilnehmer.php&cmd=write&rec_uname=%s\"><img src=\"pictures/nachricht1.gif\" alt=\"Mail an alle GruppenmitgliederInnen verschicken\" border=\"0\"></a>", $db2->f("username")); 
 			printf ("	   </td>");
@@ -119,7 +119,7 @@ function PrintNonMembers ($range_id)
 					$class="steelgraulight"; 
 				}
 				printf ("     <tr>");
-				printf ("       <td width=\"95%%\" class=\"%s\"><font size=\"-1\"><a href = about.php?username=%s>%s&nbsp; %s</a></font></td>",$class, $db->f("username"), htmlReady($db->f("Vorname")), htmlReady($db->f("Nachname")));
+				printf ("       <td width=\"95%%\" class=\"%s\"><font size=\"-1\"><a href = about.php?username=%s>%s&nbsp;%s</a></font></td>",$class, $db->f("username"), htmlReady($db->f("Vorname")), htmlReady($db->f("Nachname")));
 				printf ("	   <td width=\"5%%\"class=\"$class\" align=\"center\">");
 				printf ("		<a href=\"sms.php?sms_source_page=teilnehmer.php&cmd=write&rec_uname=%s\"><img src=\"pictures/nachricht1.gif\" alt=\"Nachricht an User verschicken\" border=\"0\"></a>", $db->f("username")); 
 				printf ("	   </td>");
@@ -130,12 +130,12 @@ function PrintNonMembers ($range_id)
 	echo "</table><br><br>";
 	}
 	if ($k > 1) {
-		$Memberstatus = "Nicht alle Personen sind einer Funktion / Gruppe zugeordnet.";
+		$Memberstatus = 1;
 	} else {
-		$Memberstatus = "Alle Personen sind mindestens einer Funktion / Gruppe zugeordnet.";
+		$Memberstatus = 2;
 	}
 	if (sizeof($bereitszugeordnet) < 2) {
-		$Memberstatus = "Niemand ist einer Funktion / Gruppe zugeordnet.";
+		$Memberstatus = 0;
 	}
 	return $Memberstatus;
 }
@@ -157,32 +157,47 @@ function PrintNonMembers ($range_id)
      		<td width="90%" NOWRAP class="blank">
 			<? PrintAktualStatusgruppen (); ?>
 			<?
-			$anzahltext = PrintNonMembers($SessSemName[1]); ?>
+			$anzahltext = PrintNonMembers($SessSemName[1]); 
+			
+			if ($anzahltext == 1) {
+				$Memberstatus = "Nicht alle Personen sind einer Funktion / Gruppe zugeordnet.";
+			}
+			if ($anzahltext == 2) {
+				$Memberstatus = "Alle Personen sind mindestens einer Funktion / Gruppe zugeordnet.";
+			}
+			if ($anzahltext == 0) {
+				$Memberstatus = "Niemand ist einer Funktion / Gruppe zugeordnet.";
+			}
+			?>
 		</td>
 		<td width="270" NOWRAP class="blank" align="center" valign="top">
-
 		
 <?
 	$infobox = array	(			
 	array  ("kategorie"  => "Information:",
 		"eintrag" => array	(	
 						array (	"icon" => "pictures/ausruf_small.gif",
-								"text"  => $anzahltext
+								"text"  => $Memberstatus
 								)
+			)
 		)
-	)
 	);
-	
-if ($rechte) {
+
 	$link = "<a href=\"mailto:".groupmail($SessSemName[1])."\">";
 	$infobox[1]["kategorie"] = "Aktionen:";
+		$infobox[1]["eintrag"][] = array (	"icon" => "./pictures/nachricht1.gif" ,
+									"text"  => "Um Personen eine systeminterne Kurznachricht zu senden, benutzen Sie das normale Briefsymbol."
+								);
+if ($rechte) {
 		$infobox[1]["eintrag"][] = array (	"icon" => "pictures/einst.gif",
 								"text"  => "Um Gruppen anzulegen und Personen zuzuordnen nutzen Sie <a href=\"admin_statusgruppe.php?view=statusgruppe_sem&new_sem=TRUE&range_id=$SessSemName[1]\">Funktionen / Gruppen verwalten</a>."
 								);
-		$infobox[1]["eintrag"][] = array (	"icon" => "./pictures/nachricht1.gif" ,
-									"text"  => "Um Personen oder Gruppen eine systeminterne Kurznachricht zu senden, benutzen Sie das normale Briefsymbol."
-								);
+	if ($anzahltext > 0) {
 		$infobox[1]["eintrag"][] = array (	"icon" => "./pictures/mailnachricht.gif" ,
+									"text"  => "Mit dem erweiterten Briefsymbol k&ouml;nnen Sie allen Gruppenmitgliedern eine Mail schicken."
+								);
+	}
+		$infobox[1]["eintrag"][] = array (	"icon" => "./pictures/ausruf_small.gif" ,
 									"text"  => "Um eine Mail an alle TeilnehmerInnen der Veranstaltung zu versenden, klicken Sie $link hier</a>."
 								);
 }
