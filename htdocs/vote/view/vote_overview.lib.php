@@ -47,7 +47,7 @@ function printSafeguard($sign,$text,$mode = NULL, $voteID = NULL, $showrangeID =
 */
 	$html = "   <table align=\"center\" width=99% class=blank border=0 cellpadding=2 cellspacing=0>\n"
 		  . "	<tr>\n"
-	 	  . "	 <td width=\"34\" style=\"vertical-align:top;\">\n";		  
+	 	  . "	 <td width=\"34\">\n";//style=\"vertical-align:top;\"
 	if ($sign != "")	$html .="	  <img src=\"".VOTE_PATH_PICTURES."$sign.gif\" alt=\"$sign.gif\">\n";
 	$html .="	 </td>\n";
 	$html .="	 <td align=\"left\" style=\"vertical-align:bottom;\">\n";
@@ -172,7 +172,7 @@ function printSelections($range,$sarchRange = "",$safeguard = NULL){
 	$arraysize = count($range);
 
 	$bgimage = "	 <td class=\"blank\" width=\"270\" rowspan=\"4\" align=\"center\" valign=\"top\" style=\"vertical-align:top;\">"
-	 	 . "	  <img src=\"".VOTE_PATH_PICTURES."/voting.jpg\" alt=\"".$label["sitetitle_title"]."\" border=\"0\">\n"
+	 	 . "	  <img src=\"".VOTE_PATH_PICTURES."/voting.jpg\" alt=\"".$label["sitetitle_title"]."\" align=\"middle\" border=\"0\">\n"
 		 . "	 </td>\n";
 	
 	$html = "<table border=\"0\" class=\"blank\" cellspacing=\"0\" cellpadding=\"0\" width=\"100%\">\n"
@@ -344,7 +344,7 @@ function printVoteTable($mode, $votes = NULL, $openID = NULL){
 		   . "	 <td class=$displayclass width=\"18\" align=\"center\">\n"
 		   . "	  <img src=\"";
 	  ($votes[$counter]["type"] == INSTANCEOF_VOTE) ? $html.= VOTE_ICON_VOTE : $html.= VOTE_ICON_TEST;
-	  $html.="\" align=\"middle\" style=\"vertical-align:middle;\" width=\"18\" alt=\"".INSTANCEOF_VOTE."\">\n"
+	  $html.="\" align=\"middle\" width=\"18\" alt=\"".INSTANCEOF_VOTE."\">\n"//style=\"vertical-align:middle;\" 
 		   . "	 </td>\n";        
 
 	  $html.="	 <td class=$displayclass width=\"\" align=\"left\">\n";
@@ -752,7 +752,7 @@ function makeArrow($timestmp,$open,$displayclass,$mode,$voteID = NULL){
 		$html.= "\" title=\"".$label["arrow_closethis"]."\">\n";
 	
 
-	$html.= "	  <img src=\"pictures/forum".$icon.".gif\" border=\"0\" align=\"middle\" style=\"vertical-align:middle;\" alt=\"";
+	$html.= "	  <img src=\"pictures/forum".$icon.".gif\" border=\"0\" align=\"middle\" alt=\"";//style=\"vertical-align:middle;\" 
 	if ($open == "closed")
 		$html.= $label["arrow_openthis"];
 	else
