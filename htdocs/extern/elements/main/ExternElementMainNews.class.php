@@ -41,7 +41,7 @@ class ExternElementMainNews extends ExternElementMain {
 
 	var $attributes = array("name", "order", "visible", "aliases", "width",
 			"width_pp", "sort", "studiplink", "wholesite", "nameformat", "dateformat", "language",
-			"urlcss", "title", "nodatatext", "copyright", "author");
+			"urlcss", "title", "nodatatext", "copyright", "author", "showdateauthor", "notauthorlink");
 	var $edit_function = "editMainSettings";
 	
 	/**
@@ -76,7 +76,9 @@ class ExternElementMainNews extends ExternElementMain {
 			"nodatatext" => _("Keine aktuellen News"),
 			"copyright" => htmlentities($GLOBALS['UNI_NAME_CLEAN']
 					. " ({$GLOBALS['UNI_CONTACT']})", ENT_QUOTES),
-			"author" => ""
+			"author" => "",
+			"showdateauthor" => "0",
+			"notauthorlink" => ""
 		);
 		
 		return $config;
@@ -107,6 +109,19 @@ class ExternElementMainNews extends ExternElementMain {
 		
 		$edit_function = $this->edit_function;
 		$table = $edit_form->$edit_function($this->field_names, array());
+		$edit_form->css->switchClass();
+		
+		$title = _("Datum/Autor anzeigen:");
+		$info = _("Anzeige von Datum und Autor, nur Datum oder nur Autor in der Spalte Datum/Autor.");
+		$values = array("0", "date", "author");
+		$names = array(_("Datum und Autor"), _("nur Datum"), ("nur Autor"));
+		$table .= $edit_form->editRadioGeneric("showdateauthor", $title, $info, $values, $names);
+		
+		$title = _("Autorenname nicht verlinken:");
+		$info = _("Wählen Sie diese Option, wenn der Autorenname nicht auf das Modul Personendetails verlinkt werden soll.");
+		$values = "1";
+		$names = "";
+		$table .= $edit_form->editCheckboxGeneric("notauthorlink", $title, $info, $values, $names);
 		
 		$content_table .= $edit_form->editContentTable($headline, $table);
 		$content_table .= $edit_form->editBlankContent();
@@ -122,10 +137,10 @@ class ExternElementMainNews extends ExternElementMain {
 		
 		$title = _("Datumsformat:");
 		$info = _("Wählen Sie, wie Datumsangaben formatiert werden sollen.");
-		$nametitle_values = array("%d. %b. %Y", "%d.%m.%Y", "%d.%m.%y", "%d. %B %Y", "%m/%d/%y");
-		$nametitle_names = array(_("25. Nov. 2003"), "25.11.2003", "25.11.03",
+		$values = array("%d. %b. %Y", "%d.%m.%Y", "%d.%m.%y", "%d. %B %Y", "%m/%d/%y");
+		$names = array(_("25. Nov. 2003"), "25.11.2003", "25.11.03",
 				_("25. November 2003"), "11/25/03");
-		$table .= $edit_form->editOptionGeneric("dateformat", $title, $info, $nametitle_values, $nametitle_names);
+		$table .= $edit_form->editOptionGeneric("dateformat", $title, $info, $values, $names);
 		
 		$title = _("Sprache:");
 		$info = _("Wählen Sie eine Sprache für die Datumsangaben aus.");
@@ -135,15 +150,15 @@ class ExternElementMainNews extends ExternElementMain {
 		
 		$title = _("Stud.IP-Link:");
 		$info = _("Ausgabe eines Links, der direkt zum Stud.IP-Administrationsbereich verweist.");
-		$value = array("top", "bottom", "0");
+		$values = array("top", "bottom", "0");
 		$names = array(_("oberhalb"), _("unterhalb der Tabelle"), _("ausblenden"));
-		$table .= $edit_form->editRadioGeneric("studiplink", $title, $info, $value, $names);
+		$table .= $edit_form->editRadioGeneric("studiplink", $title, $info, $values, $names);
 		
 		$title = _("HTML-Header/Footer:");
 		$info = _("Anwählen, wenn die Seite als komplette HTML-Seite ausgegeben werden soll, z.B. bei direkter Verlinkung oder in einem Frameset.");
-		$wholesite_values = "1";
-		$wholesite_names = "";
-		$table .= $edit_form->editCheckboxGeneric("wholesite", $title, $info, $wholesite_values, $wholesite_names);
+		$values = "1";
+		$names = "";
+		$table .= $edit_form->editCheckboxGeneric("wholesite", $title, $info, $values, $names);
 		
 		$title = _("Stylesheet-Datei:");
 		$info = _("Geben Sie hier die URL Ihrer Stylesheet-Datei an.");
@@ -174,6 +189,19 @@ class ExternElementMainNews extends ExternElementMain {
 		$out .= $edit_form->editBlank();
 		
 		return $element_headline . $out;
+	}
+	
+	function checkValue ($attribute, $value) {
+		if ($attribute == 'notauthorlink') {
+			if (!isset($GLOBALS["HTTP_POST_VARS"]["Main_$attribute"])) {
+				$GLOBALS["HTTP_POST_VARS"]["Main_$attribute"] = 0;
+				return FALSE;
+			}
+				
+			return !($value == "1" || $value == "0");
+		}
+		
+		return FALSE;
 	}
 	
 }
