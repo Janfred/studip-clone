@@ -97,8 +97,7 @@ function check_calendar_default(){
 			"link_edit"        => FALSE,
 			"bind_seminare"    => "",
 			"ts_bind_seminare" => 0,
-			"number_of_events" => 0,
-			"delete"           => 6
+			"delete"           => 0
 		);
 	}
 }
