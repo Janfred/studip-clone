@@ -86,29 +86,17 @@ if(!$grouping){
 	$visible_groups = array("");
 }
 
+// generic data fields
+if ($generic_datafields = $this->config->getValue("Main", "genericdatafields")) {
+	$datafields_obj =& new DataFields();
+}
+
 $repeat_headrow = $this->config->getValue("Main", "repeatheadrow");
-$width = $this->config->getValue("Main", "width");
-$alias = $this->config->getValue("Main", "aliases");
-$visible = $this->config->getValue("Main", "visible");
-if ($this->config->getValue("TableHeader", "width_pp") == "PERCENT")
-	$percent = "%";
-else
-	$percent = "";
-$group_colspan = array_count_values($visible);
-
-$set_1 = $this->config->getAttributes("TableHeadrow", "th");
-$set_2 = $this->config->getAttributes("TableHeadrow", "th", TRUE);
-$zebra = $this->config->getValue("TableHeadrow", "th_zebrath_");
-
-$set_td_1 = $this->config->getAttributes("TableRow", "td");
-$set_td_2 = $this->config->getAttributes("TableRow", "td", TRUE);
-$zebra_td = $this->config->getValue("TableRow", "td_zebratd_");
-
 $link_persondetails = $this->getModuleLink("Persondetails",
 		$this->config->getValue("LinkIntern", "config"), $this->config->getValue("LinkIntern", "srilink"));
+$data["data_fields"] = $this->data_fields;
 
-echo "<table" . $this->config->getAttributes("TableHeader", "table") . ">\n";
-
+$out = "";
 $first_loop = TRUE;
 foreach ($visible_groups as $group_id => $group) {
 	if($grouping){
@@ -126,122 +114,41 @@ foreach ($visible_groups as $group_id => $group) {
 	}
 
 	if ($db->num_rows()) {
-	
-		if ($grouping && $repeat_headrow == "beneath") {
-  		echo "<tr" . $this->config->getAttributes("TableGroup", "tr") . ">";
-			echo "<td colspan=\"{$group_colspan['1']}\"" . $this->config->getAttributes("TableGroup", "td") . ">\n";
-  		echo "<font" . $this->config->getAttributes("TableGroup", "font") . ">";
-			echo htmlReady($group) . "</font>\n</td></tr>\n";
-		}
 		
-		if($repeat_headrow || $first_loop){
-			echo "<tr" . $this->config->getAttributes("TableHeadrow", "tr") . ">\n";
-			$i = 0;
-			reset($order);
-			foreach ($order as $column) {
+		if ($grouping && $repeat_headrow == "beneath")
+			$out .= $this->elements["TableGroup"]->toString(array("content" => htmlReady($group)));
 		
-				// "zebra-effect" in head-row
-				if ($zebra) {
-					if ($i % 2)
-						$set = $set_2;
-					else
-						$set = $set_1;
-				}
-				else
-					$set = $set_1;
-			
-				if ($visible[$column]) {
-  				echo "<th$set width=\"" . $width[$column] . $percent . "\">\n";
-					echo "<font" . $this->config->getAttributes("TableHeadrow", "font") . ">";
-					if ($alias[$column])
-						echo $alias[$column];
-					else
-						echo "&nbsp;";
-					echo "</font>\n</th>\n";
-				}
-				$i++;
-			}
-			echo "</tr>\n";
-		}
+		if($repeat_headrow || $first_loop)
+			$out .= $this->elements["TableHeadrow"]->toString();
 		
 		
-		if ($grouping && $repeat_headrow != "beneath") {
-  		echo "<tr" . $this->config->getAttributes("TableGroup", "tr") . ">";
-			echo "<td colspan=\"{$group_colspan['1']}\"" . $this->config->getAttributes("TableGroup", "td") . ">\n";
-  		echo "<font" . $this->config->getAttributes("TableGroup", "font") . ">";
-			echo $group . "</font>\n</td></tr>\n";
-		}
+		if ($grouping && $repeat_headrow != "beneath")
+			$out .= $this->elements["TableGroup"]->toString(array("content" => htmlReady($group)));
 
-		$i = 0;
 		while($db->next_record()){
 		
-			$data = array(
-			"Nachname"     => sprintf("<a href=\"%s&username=%s\"%s><font%s>%s</font></a>",
-												$link_persondetails, $db->f("username"),
-												$this->config->getAttributes("LinkIntern", "a"),
-												$this->config->getAttributes("LinkIntern", "font"),
-												htmlReady($db->f("fullname"), TRUE)),
+			$data["content"] = array(
+				"Nachname"			=> $this->elements["LinkIntern"]->toString(array("content" =>
+														htmlReady($db->f("fullname")), "module" => "Persondetails",
+														"link_args" => "username=" . $db->f("username"))),
 												
-			"Telefon"      => sprintf("<font%s>%s</font>",
-												$this->config->getAttributes("TableRow", "font"),
-												htmlReady($db->f("Telefon"), TRUE)),
+				"Telefon"				=> htmlReady($db->f("Telefon")),
 			
-			"sprechzeiten" => sprintf("<font%s>%s</font>",
-												$this->config->getAttributes("TableRow", "font"),
-												htmlReady($db->f("sprechzeiten"), TRUE)),
+				"sprechzeiten"	=> htmlReady($db->f("sprechzeiten")),
 			
-			"raum"         => sprintf("<font%s>%s</font>",
-												$this->config->getAttributes("TableRow", "font"),
-												htmlReady($db->f("raum"), TRUE)),
+				"raum"					=> htmlReady($db->f("raum")),
 			
-			"Email"       => sprintf("<a href=\"mailto:%s\"%s><font%s>%s</font></a>",
-												$db->f("Email"),
-												$this->config->getAttributes("Link", "a"),
-												$this->config->getAttributes("Link", "font"),
-												$db->f("Email"))
+				"Email"					=> $this->elements["Link"]->toString(array("content" =>
+														$db->f("Email"), "link" => "mailto:" . $db->f("Email")))
 			);
-
-			// "horizontal zebra"
-			if ($zebra_td == "HORIZONTAL") {
-				if ($i % 2)
-					$set_td = $set_td_2;
-				else
-					$set_td = $set_td_1;
-			}
-			else
-				$set_td = $set_td_1;
-		
-			echo "<tr" . $this->config->getAttributes("TableRow", "tr") . ">";
 			
+			// include generic datafields
 			
-			$j = 0;
-			foreach ($order as $column) {
-				if ($visible[$column]) {
-				
-					// "vertical zebra"
-					if ($zebra_td == "VERTICAL") {
-						if ($j % 2)
-							$set_td = $set_td_2;
-						else
-							$set_td = $set_td_1;
-					}
-			
-					echo "<td$set_td>";
-					if ($db->f($this->data_fields[$column]) || $this->data_fields[$column] == "Nachname")
-   					echo $data[$this->data_fields[$column]];
-					else
-						echo "&nbsp";
-					echo "</td>\n";
-					$j++;
-				}
-			}
-			$i++;
-			echo "</tr>\n";
+			$out .= $this->elements["TableRow"]->toString($data);
 		}
 		$first_loop = FALSE;
 	}
 }
 	
-echo "</table>\n";
-
+$this->elements["TableHeader"]->printout(array("content" => $out));
 ?>
