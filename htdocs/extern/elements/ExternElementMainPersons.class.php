@@ -41,7 +41,7 @@ class ExternElementMainPersons extends ExternElementMain {
 
 	var $attributes = array("name", "order", "visible", "aliases", "width",
 			"width_pp", "sort", "groups", "groupsalias", "groupsvisible", "grouping", "wholesite",
-			"nameformat", "repeatheadrow", "urlcss", "title", "bodystyle", "bodyclass", "nodatatext");
+			"nameformat", "repeatheadrow", "urlcss", "title", "bodystyle", "bodyclass");
 	var $edit_function = "editMainSettings";
 	
 	/**
@@ -163,10 +163,6 @@ class ExternElementMainPersons extends ExternElementMain {
 		$title = _("Seitentitel:");
 		$info = _("Geben Sie hier den Titel der Seite ein. Der Titel wird bei der Anzeige im Web-Browser in der Titelzeile des Anzeigefensters angezeigt.");
 		$table .= $edit_form->editTextfieldGeneric("title", $title, $info, 50, 200);
-		
-		$title = _("Keine Dateien:");
-		$info = _("Dieser Text wird an Stelle der Tabelle ausgegeben, wenn keine Dateien zum Download verfügbar sind.");
-		$table .= $edit_form->editTextareaGeneric("nodatatext", $title, $info, 3, 50);
 		
 		$content_table .= $edit_form->editContentTable($headline, $table);
 		$content_table .= $edit_form->editBlankContent();
