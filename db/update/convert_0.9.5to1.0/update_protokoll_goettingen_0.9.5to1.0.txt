@@ -2,8 +2,8 @@ Updateprotokoll (Göttingen)
 
 Datum: 05.10.03
 Server: www.goettingen.studip.de
-Ursprungsversion: 0.9.0
-Zielversion: 0.9.5 (cvs vom 05.10.03)
+Ursprungsversion: 0.9.5
+Zielversion: 1.0.0 (cvs vom 29.12.03)
 siehe migration.sql für SQL Befehle / Ablauf
 
 Anmerkungen:
@@ -51,7 +51,7 @@ Migrationsscripts):
   Script: convert_statusgruppe_user.php (#8)
 * Tabellen für das Simple-Content-System anlegen (#9)
 * Inhalte aus der alten Literaturverwaltung in die Simple-Content-Management kopieren
-  Script: convert_literatur.php (#10)
+  Script: convert_literatur_to_scm.php (#10)
 * Tabellen für neue Literaturverwaltung anlegen (#11)
 * neue Tabelle für alle privaten Termine des Terminkalenders (#12)
 * Termine aus alter Tabellen (termine) in neuen Tabelle (evetnts) kopieren
