@@ -630,7 +630,7 @@ class AssignEventList{
 
 	// public
 	function getUserId(){
-		return $this->$user_id;
+		return $this->user_id;
 	}
 	
 	// private
@@ -663,7 +663,7 @@ class AssignEventList{
 } 
 
 /*****************************************************************************
-ResourcesInstituteList, creates a list for all resources for one user
+ResourcesUserRoomsList, creates a list for all resources for one user
 /*****************************************************************************/
 
 class ResourcesUserRoomsList {
@@ -1297,7 +1297,7 @@ class AssignObjectPerms extends ResourcesPerms {
 		$this->db2 = new DB_Seminar;
 		
 		if ($user_id)
-			$this->$user_id=$user_id;
+			$this->user_id=$user_id;
 		else
 			$this->user_id=$user->id;
 		
@@ -1367,7 +1367,7 @@ class ResourcesObjectPerms extends ResourcesPerms {
 		$this->db2 = new DB_Seminar;
 		
 		if ($user_id)
-			$this->$user_id=$user_id;
+			$this->user_id=$user_id;
 		else
 			$this->user_id=$user->id;
 		
@@ -1652,6 +1652,4 @@ class ResourcesMsg {
 			parse_msg($this->msg[$msg_code]["mode"]."§".$this->msg[$msg_code]["msg"], "§", "blank", 1, FALSE);
 	}
 }
-	
-	//Konstruktor
 ?>
