@@ -128,7 +128,7 @@ function getRoom ($range_id, $link=TRUE, $start_time = 0, $range_typ = false) {
 						if ($tmp_room)
 							$ret .= date ("d.m", $db->f("date")).": ".$tmp_room;
 						elseif ($db->f("raum"))
-							$ret .= date ("d.m", $db->f("date")).": ".htmlReady();
+							$ret .= date ("d.m", $db->f("date")).": ".htmlReady($db->f("raum"));
 					}
 					if ($ret)
 						return $ret;
