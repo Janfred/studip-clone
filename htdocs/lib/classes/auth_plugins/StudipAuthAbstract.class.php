@@ -252,16 +252,22 @@ class StudipAuthAbstract {
 			}
 		}
 		$this->dbv = new DbView();
-		//$challenge is a global set by PhpLib
+		//$challenge is a global set by PhpLib, contains a random md5 hash which is sent to the client and used as seed
 		$this->challenge = $GLOBALS['challenge'];
 	}
 	
 	/**
-	* 
+	* authentication method
 	*
-	* 
+	* this method authenticates the passed username, it is used by StudipAuthAbstract::CheckAuthentication()
+	* if authentication succeeds it calls StudipAuthAbstract::doDataMapping() to map data fields
+	* if the authenticated user logs in for the first time it calls StudipAuthAbstract::doNewUserInit() to
+	* initialize the new user
 	* @access private
-	* 
+	* @param	string	the username to check
+	* @param	string	the password to check
+	* @param	bool	indicates if javascript was enabled/disabled during the login process
+	* @return	string	if authentication succeeds the Stud.IP user id, else false
 	*/
 	function authenticateUser($username, $password, $jscript = false){
 		if ($this->isAuthenticated($username, $password, $jscript)){
@@ -277,11 +283,12 @@ class StudipAuthAbstract {
 	}
 	
 	/**
-	* 
+	* method to retrieve the Stud.IP user id to a given username
 	*
 	* 
-	* @access private
-	* 
+	* @access	private
+	* @param	string	the username
+	* @return	string	the Stud.IP user id or false if an error occurs
 	*/
 	function getStudipUserid($username){
 		$this->dbv->params[] = $username;
