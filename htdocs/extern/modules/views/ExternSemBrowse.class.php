@@ -43,7 +43,7 @@ class ExternSemBrowse extends SemBrowse {
 		$switch_time = mktime(0, 0, 0, date("m"),
 				date("d") + 7 * $this->config->getValue("Main", "semswitch"), date("Y"));
 		// get current semester
-		$current_sem = get_sem_num($switch_time);
+		$current_sem = get_sem_num($switch_time) + 1;
 		
 		switch ($this->config->getValue("Main", "semstart")) {
 			case "previous" :
