@@ -41,7 +41,7 @@ class ExternEditGeneric extends ExternEdit {
 	
 	function ExternEditGeneric (&$config, $form_values = "", $faulty_values = "",
 			 $edit_element = "") {
-		ExternEdit::ExternEdit(&$config, $form_values, $faulty_values, $edit_element);
+		parent::ExternEdit(&$config, $form_values, $faulty_values, $edit_element);
 	}
 	
 	/**
@@ -216,24 +216,60 @@ class ExternEditGeneric extends ExternEdit {
 		else
 			$error_sign = "";
 		
-		$out = "<tr><td><table width=\"100%\" border=\"0\" cellpadding=\"4\" cellspacing=\"0\">\n";
-		$out .= "<tr" . $this->css->getFullClass() . "><td$width_1 nowrap=\"nowrap\"><font size=\"2\">";
-		$out .= "$title</font></td>\n";
-		$out .= "<td$width_2 nowrap=\"nowrap\">";
 		$size = sizeof($check_values);
-			
-		for ($i = 0; $i < $size; $i++) {
-			$out .= "<input type=\"checkbox\" name=\"$form_name\" value=\"{$check_values[$i]}\"";
-			if ($value == $check_values[$i])
+		$out .= "<tr><td><table width=\"100%\" border=\"0\" cellpadding=\"4\" cellspacing=\"0\">\n";
+		
+		if ($size > 1) {
+			$form_name .= "[]";
+			if (is_array($title)) {
+				for ($i = 0; $i < $size; $i++) {
+					$out .= "<tr" . $this->css->getFullClass() . "><td$width_1 nowrap=\"nowrap\"><font size=\"2\">";
+					$out .= "$title[$i]</font></td>\n";
+					$out .= "<td$width_2 nowrap=\"nowrap\">";
+					$out .= "<input type=\"checkbox\" name=\"$form_name\" value=\"{$check_values[$i]}\"";
+					if (is_array($value) && in_array($check_values[$i], $value))
+						$out .= " checked";
+					if ($size == 1)
+						$out .= "></td></tr>\n";
+					else
+						$out .= "><font size=\"2\">{$check_names[$i]}&nbsp; &nbsp;</font>";
+					$out .= "<img src=\"" . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . "pictures/info.gif\"";
+					$out .= tooltip($info, TRUE, TRUE) . ">$error_sign</td></tr>\n";
+					$this->css->switchClass();
+				}
+			}
+			else {
+				$out .= "<tr" . $this->css->getFullClass() . "><td$width_1 nowrap=\"nowrap\"><font size=\"2\">";
+				$out .= "$title</font></td>\n";
+				$out .= "<td$width_2 nowrap=\"nowrap\">";
+				for ($i = 0; $i < $size; $i++) {
+					$out .= "<input type=\"checkbox\" name=\"$form_name\" value=\"{$check_values[$i]}\"";
+					if (is_array($value) && in_array($check_values[$i], $value))
+						$out .= " checked";
+					if ($size == 1)
+						$out .= "> &nbsp;\n";
+					else
+						$out .= "><font size=\"2\">{$check_names[$i]}&nbsp; &nbsp;</font>\n";
+				}
+				$out .= "<img src=\"" . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . "pictures/info.gif\"";
+				$out .= tooltip($info, TRUE, TRUE) . ">$error_sign</td></tr>\n";
+			}
+		}
+		else {
+			$out .= "<tr" . $this->css->getFullClass() . "><td$width_1 nowrap=\"nowrap\"><font size=\"2\">";
+			$out .= "$title</font></td>\n";
+			$out .= "<td$width_2 nowrap=\"nowrap\">";
+			$out .= "<input type=\"checkbox\" name=\"$form_name\" value=\"$check_values\"";
+			if ($value == $check_values)
 				$out .= " checked";
-			if ($size == 1)
-				$out .= "> &nbsp;\n";
-			else
-				$out .= "><font size=\"2\">{$check_names[$i]}&nbsp; &nbsp;</font>\n";
+			$out .= "> &nbsp;\n";
+			$out .= "<img src=\"" . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . "pictures/info.gif\"";
+			$out .= tooltip($info, TRUE, TRUE) . ">$error_sign</td></tr>\n";
 		}
 		
-		$out .= "<img src=\"" . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . "pictures/info.gif\"";
-		$out .= tooltip($info, TRUE, TRUE) . ">$error_sign</td></tr>\n</table>\n</td></tr>\n";
+	//	$out .= "<img src=\"" . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . "pictures/info.gif\"";
+	//	$out .= tooltip($info, TRUE, TRUE) . ">$error_sign</td></tr>\n</table>\n</td></tr>\n";
+		$out .= "</table>\n</td></tr>\n";
 		$this->css->switchClass();
 		
 		return $out;
