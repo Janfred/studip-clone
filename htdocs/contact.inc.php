@@ -204,6 +204,8 @@ function GetinstInfo($user_id)
 	$db->query ("SELECT sprechzeiten, raum, user_inst.telefon, user_inst.fax, Name, Institute.Institut_id FROM user_inst LEFT JOIN Institute USING(Institut_id) WHERE user_id = '$user_id' AND inst_perms != 'user'");	
 	while ($db->next_record()) {	
 		$userinfo[$i]["Einrichtung"] = "<a href=\"institut_main.php?auswahl=".$db->f("Institut_id")."\">".htmlReady($db->f("Name"))."</a>";
+		if ($gruppen = GetStatusgruppen($db->f("Institut_id"), $user_id))
+			$userinfo[$i]["Funktion"] = htmlReady(join(", ", array_values($gruppen)));
 		if ($db->f("raum")!="")
 			$userinfo[$i]["Raum"] = FormatReady($db->f("raum"));
 		if ($db->f("sprechzeiten")!="")
@@ -216,6 +218,11 @@ function GetinstInfo($user_id)
 	}
 	return $userinfo;
 }
+
+
+
+
+
 
 function ShowUserInfo ($contact_id)
 { 	// Show the standard userinfo
@@ -230,7 +237,7 @@ function ShowUserInfo ($contact_id)
 	$db->query ("SELECT Email, username FROM auth_user_md5 WHERE user_id = '$user_id'");	
 	if ($db->next_record()) {	
 		$basicinfo["Email"] = "<a href=\"mailto:".$db->f("Email")."\">".$db->f("Email")."</a>";
-		$basicinfo["Stud.IP"] = "<a href=\"about.php?username=".$db->f("username")."\">".$db->f("username")."</a>";
+		$basicinfo["Stud.IP"] = "<a href=\"about.php?username=".$db->f("username")."\">".$db->f("username")." (".get_global_perm($user_id).")</a>";
 	}
 
 	// diese Infos hat jeder
