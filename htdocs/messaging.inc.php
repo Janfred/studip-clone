@@ -209,8 +209,8 @@ function delete_chatinv($user_id = false){
 		if (is_array($active_chats)){
 			$clause = " AND chat_id NOT IN('" . join("','",$active_chats) . "')";
 		}
-		$this->db->query("DELETE FROM globalmessages WHERE user_id_rec='$username'  AND chat_id IS NOT NULL" . $clause);
-		return $this->db->affected_rows();
+		//$this->db->query("DELETE FROM globalmessages WHERE user_id_rec='$username'  AND chat_id IS NOT NULL" . $clause);
+		//return $this->db->affected_rows();
 	} else {
 		return false;
 	}
