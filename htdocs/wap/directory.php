@@ -9,7 +9,7 @@
 * </code>
 *
 * @author		Florian Hansen <f1701h@gmx.net>
-* @version		0.1
+* @version		0.11	10.09.2003	21:22:29
 * @access		public
 * @modulegroup	wap_modules
 * @module		directory.php
@@ -54,27 +54,27 @@
         echo "<b>" . _("Suche") . "</b>";
         echo "</p>";
 
-        echo "<p align=\"left\">";
+        echo "<p align=\"left\">\n";
         $t = _("Nachname:");
-        echo wap_txt_encode_to_wml($t) . "<br/>";
-        echo "<input type=\"text\" name=\"last_name\" emptyok=\"false\"/><br/>";
+        echo wap_txt_encode_to_wml($t) . "<br/>\n";
+        echo "<input type=\"text\" name=\"last_name\" emptyok=\"false\"/><br/>\n";
 
         $t = _("Vorname:");
-        echo wap_txt_encode_to_wml($t) . "<br/>";
-        echo "<input type=\"text\" name=\"first_name\" emptyok=\"false\"/><br/>";
-        echo "</p>";
+        echo wap_txt_encode_to_wml($t) . "<br/>\n";
+        echo "<input type=\"text\" name=\"first_name\" emptyok=\"false\"/><br/>\n";
+        echo "</p>\n";
 
-        echo "<p align=\"right\">";
-        echo "<anchor>" . wap_buttons_search();
-        echo "<go method=\"post\" href=\"directory_search.php\">";
-        echo    "<postfield name=\"last_name\" value=\"\$(last_name)\"/>";
-        echo    "<postfield name=\"first_name\" value=\"\$(first_name)\"/>";
-        echo    "<postfield name=\"session_id\" value=\"$session_id\"/>";
-        echo "</go>";
-        echo "</anchor><br/>";
+        echo "<p align=\"right\">\n";
+        echo "<anchor>" . wap_buttons_search() . "\n";
+        echo "    <go method=\"post\" href=\"directory_search.php\">\n";
+        echo "        <postfield name=\"last_name\" value=\"\$(last_name)\"/>\n";
+        echo "        <postfield name=\"first_name\" value=\"\$(first_name)\"/>\n";
+        echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
+        echo "    </go>\n";
+        echo "</anchor><br/>\n";
 
         wap_buttons_menu_link ($session_id);
-        echo "</p>";
+        echo "</p>\n";
     }
     wap_adm_end_card();
 ?>

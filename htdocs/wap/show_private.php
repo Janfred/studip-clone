@@ -12,7 +12,7 @@
 * </code>
 *
 * @author		Florian Hansen <f1701h@gmx.net>
-* @version		0.1
+* @version		0.11	10.09.2003	21:25:25
 * @access		public
 * @modulegroup	wap_modules
 * @module		show_private.php
@@ -63,38 +63,38 @@
         $private_nr  = $db-> f("privatnr");
         $private_adr = $db-> f("privadr");
 
-        echo "<p align=\"left\">";
+        echo "<p align=\"left\">\n";
 
         if ($private_adr)
-            echo wap_txt_encode_to_wml($private_adr) . "<br/>";
+            echo wap_txt_encode_to_wml($private_adr) . "<br/>\n";
 
         if ($private_nr)
         {
             echo wap_txt_encode_to_wml(_("Tel:")) . "&#32;";
-            echo wap_txt_encode_to_wml($private_nr) . "<br/>";
+            echo wap_txt_encode_to_wml($private_nr) . "<br/>\n";
         }
 
-        echo "</p>";
+        echo "</p>\n";
 
-        echo "<p align=\"right\">";
-        echo "<anchor>" . wap_buttons_back();
-        echo    "<go href=\"show_user.php\">";
-        echo        "<postfield name=\"session_id\" value=\"$session_id\"/>";
-        echo        "<postfield name=\"first_name\" value=\"$first_name\"/>";
-        echo        "<postfield name=\"last_name\" value=\"$last_name\"/>";
-        echo        "<postfield name=\"user_id\" value=\"$user_id\"/>";
-        echo        "<postfield name=\"directory_search_pc\" value=\"$directory_search_pc\"/>";
-        echo    "</go>";
-        echo "</anchor><br/>";
+        echo "<p align=\"right\">\n";
+        echo "<anchor>" . wap_buttons_back() . "\n";
+        echo "    <go method=\"post\" href=\"show_user.php\">\n";
+        echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
+        echo "        <postfield name=\"first_name\" value=\"$first_name\"/>\n";
+        echo "        <postfield name=\"last_name\" value=\"$last_name\"/>\n";
+        echo "        <postfield name=\"user_id\" value=\"$user_id\"/>\n";
+        echo "        <postfield name=\"directory_search_pc\" value=\"$directory_search_pc\"/>\n";
+        echo "    </go>\n";
+        echo "</anchor><br/>\n";
 
-        echo "<anchor>" . wap_buttons_new_search();
-        echo    "<go href=\"directory.php\">";
-        echo        "<postfield name=\"session_id\" value=\"$session_id\"/>";
-        echo    "</go>";
-        echo "</anchor><br/>";
+        echo "<anchor>" . wap_buttons_new_search() . "\n";
+        echo "    <go method=\"post\" href=\"directory.php\">\n";
+        echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
+        echo "    </go>\n";
+        echo "</anchor><br/>\n";
 
         wap_buttons_menu_link ($session_id);
-        echo "</p>";
+        echo "</p>\n";
 
     wap_adm_end_card();
 ?>

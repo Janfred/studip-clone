@@ -14,7 +14,7 @@
 * </code>
 *
 * @author		Florian Hansen <f1701h@gmx.net>
-* @version		0.1
+* @version		0.11	10.09.2003	21:25:15
 * @access		public
 * @modulegroup	wap_modules
 * @module		show_news.php
@@ -84,82 +84,82 @@
         if ($page_counter == 0)
         {
 	        echo "<p align=\"center\">";
-	        echo "<b>" . wap_txt_encode_to_wml($short_title) . "</b><br/>";
-	        echo wap_txt_encode_to_wml(_("Vom")) . " $news_date";
-	        echo "</p>";
+	        echo "<b>" . wap_txt_encode_to_wml($short_title) . "</b><br/>\n";
+	        echo wap_txt_encode_to_wml(_("Vom")) . " $news_date\n";
+	        echo "</p>\n";
     	}
 
-        echo "<p align=\"left\">";
-        echo wap_txt_encode_to_wml($news_part);
-        echo "</p>";
+        echo "<p align=\"left\">\n";
+        echo wap_txt_encode_to_wml($news_part) . "\n";
+        echo "</p>\n";
 
-        echo "<p align=\"right\">";
+        echo "<p align=\"right\">\n";
         if ($num_pages > 0)
         {
             if ($page_counter < $num_pages)
             {
                 $page_counter_v = $page_counter + 1;
-                echo "<anchor>" . wap_buttons_forward_part($page_counter_v, $num_pages + 1);
-                echo    "<go href=\"show_news.php\">";
-                echo        "<postfield name=\"session_id\" value=\"$session_id\"/>";
-                echo        "<postfield name=\"news_id\" value=\"$news_id\"/>";
-                echo        "<postfield name=\"show_news_pc\" value=\"$page_counter_v\"/>";
+                echo "<anchor>" . wap_buttons_forward_part($page_counter_v, $num_pages + 1) . "\n";
+                echo "    <go method=\"post\" href=\"show_news.php\">\n";
+                echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
+                echo "        <postfield name=\"news_id\" value=\"$news_id\"/>\n";
+                echo "        <postfield name=\"show_news_pc\" value=\"$page_counter_v\"/>\n";
                 if ($event_id)
                 {
-		            echo    "<postfield name=\"event_id\" value=\"$event_id\"/>";
-        		    echo    "<postfield name=\"events_pc\" value=\"$events_pc\"/>";
-		            echo    "<postfield name=\"event_news_pc\" value=\"$event_news_pc\"/>";
+		            echo "        <postfield name=\"event_id\" value=\"$event_id\"/>\n";
+        		    echo "        <postfield name=\"events_pc\" value=\"$events_pc\"/>\n";
+		            echo "        <postfield name=\"event_news_pc\" value=\"$event_news_pc\"/>\n";
                 }
                 else
                 {
-		            echo    "<postfield name=\"news_pc\" value=\"$news_pc\"/>";
+		            echo "        <postfield name=\"news_pc\" value=\"$news_pc\"/>\n";
 		        }
-                echo    "</go>";
-                echo "</anchor><br/>";
+                echo "    </go>\n";
+                echo "</anchor><br/>\n";
             }
             if ($page_counter > 0)
             {
                 $page_counter_v = $page_counter - 1;
-                echo "<anchor>" . wap_buttons_back_part($page_counter_v, $num_pages + 1);
-                echo    "<go href=\"show_news.php\">";
-                echo        "<postfield name=\"session_id\" value=\"$session_id\"/>";
-                echo        "<postfield name=\"news_id\" value=\"$news_id\"/>";
-                echo        "<postfield name=\"show_news_pc\" value=\"$page_counter_v\"/>";
+                echo "<anchor>" . wap_buttons_back_part($page_counter_v, $num_pages + 1) . "\n";
+                echo "    <go method=\"post\" href=\"show_news.php\">\n";
+                echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
+                echo "        <postfield name=\"news_id\" value=\"$news_id\"/>\n";
+                echo "        <postfield name=\"show_news_pc\" value=\"$page_counter_v\"/>\n";
                 if ($event_id)
                 {
-		            echo    "<postfield name=\"event_id\" value=\"$event_id\"/>";
-        		    echo    "<postfield name=\"events_pc\" value=\"$events_pc\"/>";
-		            echo    "<postfield name=\"event_news_pc\" value=\"$event_news_pc\"/>";
+		            echo "        <postfield name=\"event_id\" value=\"$event_id\"/>\n";
+        		    echo "        <postfield name=\"events_pc\" value=\"$events_pc\"/>\n";
+		            echo "        <postfield name=\"event_news_pc\" value=\"$event_news_pc\"/>\n";
                 }
                 else
                 {
-		            echo    "<postfield name=\"news_pc\" value=\"$news_pc\"/>";
+		            echo "        <postfield name=\"news_pc\" value=\"$news_pc\"/>\n";
 		        }
-                echo    "</go>";
-                echo "</anchor><br/>";
+                echo "    </go>\n";
+                echo "</anchor><br/>\n";
             }
         }
-        echo "<anchor>" . wap_buttons_back();
+        echo "<anchor>" . wap_buttons_back() . "\n";
         if ($event_id)
         {
-            echo "<go href=\"event_news.php\">";
-            echo    "<postfield name=\"session_id\" value=\"$session_id\"/>";
-            echo    "<postfield name=\"event_id\" value=\"$event_id\"/>";
-            echo    "<postfield name=\"events_pc\" value=\"$events_pc\"/>";
-            echo    "<postfield name=\"event_news_pc\" value=\"$event_news_pc\"/>";
-            echo "</go>";
+            echo "<go method=\"post\" href=\"event_news.php\">\n";
+            echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
+            echo "        <postfield name=\"event_id\" value=\"$event_id\"/>\n";
+            echo "        <postfield name=\"events_pc\" value=\"$events_pc\"/>\n";
+            echo "        <postfield name=\"event_news_pc\" value=\"$event_news_pc\"/>\n";
+            echo "</go>\n";
         }
         else
         {
-            echo "<go href=\"news.php\">";
-            echo    "<postfield name=\"session_id\" value=\"$session_id\"/>";
-            echo    "<postfield name=\"news_pc\" value=\"$news_pc\"/>";
-            echo "</go>";
+            echo "    <go method=\"post\" href=\"news.php\">\n";
+            echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
+            echo "        <postfield name=\"news_pc\" value=\"$news_pc\"/>\n";
+            echo "    </go>\n";
         }
-        echo "</anchor><br/>";
+        echo "</anchor><br/>\n";
 
         wap_buttons_menu_link($session_id);
-        echo "</p>";
+        echo "</p>\n";
     }
 	wap_adm_end_card();
 ?>

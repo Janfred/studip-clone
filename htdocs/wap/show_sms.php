@@ -11,7 +11,7 @@
 * </code>
 *
 * @author		Florian Hansen <f1701h@gmx.net>
-* @version		0.1
+* @version		0.11	10.09.2003	21:25:32
 * @access		public
 * @modulegroup	wap_modules
 * @module		show_sms.php
@@ -84,50 +84,50 @@
             echo "<b>" . wap_txt_encode_to_wml(_("Von")) . "&#32;";
             echo wap_txt_encode_to_wml($short_sender) . "</b><br/>";
             echo "$sms_date";
-            echo "</p>";
+            echo "</p>\n";
         }
 
-        echo "<p align=\"left\">";
-        echo wap_txt_encode_to_wml($message_part);
-        echo "</p>";
+        echo "<p align=\"left\">\n";
+        echo wap_txt_encode_to_wml($message_part) . "\n";
+        echo "</p>\n";
 
-        echo "<p align=\"right\">";
+        echo "<p align=\"right\">\n";
         if ($num_pages > 0)
         {
             if ($page_counter < $num_pages)
             {
                 $page_counter_v = $page_counter + 1;
-                echo "<anchor>" . wap_buttons_forward_part($page_counter_v, $num_pages + 1);
-                echo    "<go href=\"show_sms.php\">";
-                echo        "<postfield name=\"session_id\" value=\"$session_id\"/>";
-                echo        "<postfield name=\"sms_id\" value=\"$sms_id\"/>";
-                echo        "<postfield name=\"sms_pc\" value=\"$sms_pc\"/>";
-                echo        "<postfield name=\"show_sms_pc\" value=\"$page_counter_v\"/>";
-                echo    "</go>";
-                echo "</anchor><br/>";
+                echo "<anchor>" . wap_buttons_forward_part($page_counter_v, $num_pages + 1) . "\n";
+                echo "    <go method=\"post\" href=\"show_sms.php\">\n";
+                echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
+                echo "        <postfield name=\"sms_id\" value=\"$sms_id\"/>\n";
+                echo "        <postfield name=\"sms_pc\" value=\"$sms_pc\"/>\n";
+                echo "        <postfield name=\"show_sms_pc\" value=\"$page_counter_v\"/>\n";
+                echo "    </go>\n";
+                echo "</anchor><br/>\n";
             }
             if ($page_counter > 0)
             {
                 $page_counter_v = $page_counter - 1;
-                echo "<anchor>" . wap_buttons_back_part($page_counter_v, $num_pages + 1);
-                echo    "<go href=\"show_sms.php\">";
-                echo        "<postfield name=\"session_id\" value=\"$session_id\"/>";
-                echo        "<postfield name=\"sms_id\" value=\"$sms_id\"/>";
-                echo        "<postfield name=\"sms_pc\" value=\"$sms_pc\"/>";
-                echo        "<postfield name=\"show_sms_pc\" value=\"$page_counter_v\"/>";
-                echo    "</go>";
-                echo "</anchor><br/>";
+                echo "<anchor>" . wap_buttons_back_part($page_counter_v, $num_pages + 1) . "\n";
+                echo "    <go method=\"post\" href=\"show_sms.php\">\n";
+                echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
+                echo "        <postfield name=\"sms_id\" value=\"$sms_id\"/>\n";
+                echo "        <postfield name=\"sms_pc\" value=\"$sms_pc\"/>\n";
+                echo "        <postfield name=\"show_sms_pc\" value=\"$page_counter_v\"/>\n";
+                echo "    </go>\n";
+                echo "</anchor><br/>\n";
             }
         }
-        echo "<anchor>" . wap_buttons_back();
-        echo    "<go href=\"sms.php\">";
-        echo        "<postfield name=\"session_id\" value=\"$session_id\"/>";
-        echo        "<postfield name=\"sms_pc\" value=\"$sms_pc\"/>";
-        echo    "</go>";
-        echo "</anchor><br/>";
+        echo "<anchor>" . wap_buttons_back() . "\n";
+        echo "    <go method=\"post\" href=\"sms.php\">\n";
+        echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
+        echo "        <postfield name=\"sms_pc\" value=\"$sms_pc\"/>\n";
+        echo "    </go>\n";
+        echo "</anchor><br/>\n";
 
         wap_buttons_menu_link($session_id);
-        echo "</p>";
+        echo "</p>\n";
     }
 	wap_adm_end_card();
 ?>

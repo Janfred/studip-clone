@@ -13,7 +13,7 @@
 * </code>
 *
 * @author		Florian Hansen <f1701h@gmx.net>
-* @version		0.11	04.09.2003	19:34:56
+* @version		0.12	10.09.2003	21:24:59
 * @access		public
 * @modulegroup	wap_modules
 * @module		show_institute.php
@@ -77,57 +77,60 @@
         $user_cons_time = $db-> f("sprechzeiten");
         $user_groups    = GetStatusgruppen ($inst_id, $user_id);
 
-        echo "<p align=\"left\">";
+        echo "<p align=\"left\">\n";
         if ($user_groups)
-            echo join(", ", array_values($user_groups)) . "<br/>";
+            echo join(", ", array_values($user_groups)) . "<br/>\n";
 
         if ($user_phone)
         {
             echo wap_txt_encode_to_wml(_("Tel:")) . "&#32;";
-            echo wap_txt_encode_to_wml($user_phone) . "<br/>";
+            echo wap_txt_encode_to_wml($user_phone) . "<br/>\n";
         }
 
         if ($user_fax)
         {
             echo wap_txt_encode_to_wml(_("Fax:")) . "&#32;";
-            echo wap_txt_encode_to_wml($user_fax) . "<br/>";
+            echo wap_txt_encode_to_wml($user_fax) . "<br/>\n";
         }
 
-        echo wap_txt_encode_to_wml($inst_street) . ", ";
-        echo wap_txt_encode_to_wml($inst_post)   . "<br/>";
+        if ($inst_street)
+        	echo wap_txt_encode_to_wml($inst_street) . "<br/>\n";
+
+        if ($inst_post)
+        	echo wap_txt_encode_to_wml($inst_post) . "<br/>\n";
 
         if ($user_room)
         {
             echo wap_txt_encode_to_wml(_("Raum")) . "&#32;";
-            echo wap_txt_encode_to_wml($user_room) . "<br/>";
+            echo wap_txt_encode_to_wml($user_room) . "<br/>\n";
         }
 
 		if ($user_cons_time)
 		{
-            echo wap_txt_encode_to_wml(_("Sprechzeiten:")) . "<br/>";
+            echo wap_txt_encode_to_wml(_("Sprechzeiten:")) . "<br/>\n";
             echo wap_txt_encode_to_wml($user_cons_time);
         }
-        echo "</p>";
+        echo "</p>\n";
 
-        echo "<p align=\"right\">";
-        echo "<anchor>" . wap_buttons_back();
-        echo    "<go href=\"show_user.php\">";
-        echo        "<postfield name=\"session_id\" value=\"$session_id\"/>";
-        echo        "<postfield name=\"first_name\" value=\"$first_name\"/>";
-        echo        "<postfield name=\"last_name\" value=\"$last_name\"/>";
-        echo        "<postfield name=\"user_id\" value=\"$user_id\"/>";
-        echo        "<postfield name=\"directory_search_pc\" value=\"$directory_search_pc\"/>";
-        echo    "</go>";
-        echo "</anchor><br/>";
+        echo "<p align=\"right\">\n";
+        echo "<anchor>" . wap_buttons_back() . "\n";
+        echo "    <go method=\"post\" href=\"show_user.php\">\n";
+        echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
+        echo "        <postfield name=\"first_name\" value=\"$first_name\"/>\n";
+        echo "        <postfield name=\"last_name\" value=\"$last_name\"/>\n";
+        echo "        <postfield name=\"user_id\" value=\"$user_id\"/>\n";
+        echo "        <postfield name=\"directory_search_pc\" value=\"$directory_search_pc\"/>\n";
+        echo "    </go>\n";
+        echo "</anchor><br/>\n";
 
-        echo "<anchor>" . wap_buttons_new_search();
-        echo    "<go href=\"directory.php\">";
-        echo        "<postfield name=\"session_id\" value=\"$session_id\"/>";
-        echo    "</go>";
-        echo "</anchor><br/>";
+        echo "<anchor>" . wap_buttons_new_search() . "\n";
+        echo "    <go method=\"post\" href=\"directory.php\">\n";
+        echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
+        echo "    </go>\n";
+        echo "</anchor><br/>\n";
 
         wap_buttons_menu_link ($session_id);
-        echo "</p>";
+        echo "</p>\n";
 
     wap_adm_end_card();
 ?>

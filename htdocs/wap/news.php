@@ -11,7 +11,7 @@
 * </code>
 *
 * @author		Florian Hansen <f1701h@gmx.net>
-* @version		0.1
+* @version		0.11	10.09.2003	21:24:21
 * @access		public
 * @modulegroup	wap_modules
 * @module		news.php
@@ -107,15 +107,15 @@
                     $new_sign = "";
 
                 $short_topic = wap_txt_shorten_text($entry_topic, WAP_TXT_LINK_LENGTH);
-                echo "<p align=\"left\">";
-                echo "<anchor>$new_sign" . wap_txt_encode_to_wml($short_topic);
-                echo    "<go href=\"show_news.php\">";
-                echo        "<postfield name=\"session_id\" value=\"$session_id\"/>";
-                echo        "<postfield name=\"news_id\" value=\"$entry_id\"/>";
-                echo        "<postfield name=\"news_pc\" value=\"$page_counter\"/>";
-                echo    "</go>";
-                echo "</anchor>";
-                echo "</p>";
+                echo "<p align=\"left\">\n";
+                echo "<anchor>$new_sign" . wap_txt_encode_to_wml($short_topic) . "\n";
+                echo "    <go method=\"post\" href=\"show_news.php\">\n";
+                echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
+                echo "        <postfield name=\"news_id\" value=\"$entry_id\"/>\n";
+                echo "        <postfield name=\"news_pc\" value=\"$page_counter\"/>\n";
+                echo "    </go>\n";
+                echo "</anchor>\n";
+                echo "</p>\n";
 
                 if ($progress_counter == $progress_limit)
                 {
@@ -123,24 +123,24 @@
                     if ($progress_counter < $num_news)
                     {
                         $page_counter_v = $page_counter + 1;
-                        echo "<anchor>" . wap_buttons_forward_page($page_counter_v, $num_pages);
-                        echo    "<go href=\"news.php\">";
-                        echo        "<postfield name=\"session_id\" value=\"$session_id\"/>";
-                        echo        "<postfield name=\"news_pc\" value=\"$page_counter_v\"/>";
-                        echo    "</go>";
-                        echo "</anchor><br/>";
+                        echo "<anchor>" . wap_buttons_forward_page($page_counter_v, $num_pages) . "\n";
+                        echo "    <go method=\"post\" href=\"news.php\">\n";
+                        echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
+                        echo "        <postfield name=\"news_pc\" value=\"$page_counter_v\"/>\n";
+                        echo "    </go>\n";
+                        echo "</anchor><br/>\n";
                     }
                     if ($page_counter > 0)
                     {
                         $page_counter_v = $page_counter - 1;
-                        echo "<anchor>" . wap_buttons_back_page($page_counter_v, $num_pages);
-                        echo    "<go href=\"news.php\">";
-                        echo        "<postfield name=\"session_id\" value=\"$session_id\"/>";
-                        echo        "<postfield name=\"news_pc\" value=\"$page_counter_v\"/>";
-                        echo    "</go>";
-                        echo "</anchor><br/>";
+                        echo "<anchor>" . wap_buttons_back_page($page_counter_v, $num_pages) . "\n";
+                        echo "    <go method=\"post\" href=\"news.php\">\n";
+                        echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
+                        echo "        <postfield name=\"news_pc\" value=\"$page_counter_v\"/>\n";
+                        echo "    </go>\n";
+                        echo "</anchor><br/>\n";
                     }
-                    echo "</p>";
+                    echo "</p>\n";
                 }
             }
         }
@@ -149,12 +149,12 @@
             echo "<p align=\"left\">";
             $t = _("Keine News vorhanden.");
             echo "? " . wap_txt_encode_to_wml($t) . " &#191;";
-            echo "</p>";
+            echo "</p>\n";
         }
 
-        echo "<p align=\"right\">";
+        echo "<p align=\"right\">\n";
         wap_buttons_menu_link($session_id);
-        echo "</p>";
+        echo "</p>\n";
     }
 	wap_adm_end_card();
 ?>

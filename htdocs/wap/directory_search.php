@@ -13,7 +13,7 @@
 * </code>
 *
 * @author		Florian Hansen <f1701h@gmx.net>
-* @version		0.11	08.09.2003	19:41:23
+* @version		0.12	10.09.2003	21:22:41
 * @access		public
 * @modulegroup	wap_modules
 * @module		directory_search.php
@@ -215,93 +215,93 @@
                 $eintrag .= $db-> f("Vorname");
                 $user_id  = $db-> f("user_id");
 
-                echo "<p align=\"left\">";
-                echo "<anchor>" . wap_txt_encode_to_wml($eintrag);
-                echo    "<go href=\"show_user.php\">";
-                echo        "<postfield name=\"session_id\" value=\"$session_id\"/>";
-                echo        "<postfield name=\"first_name\" value=\"$first_name\"/>";
-                echo        "<postfield name=\"last_name\" value=\"$last_name\"/>";
-                echo        "<postfield name=\"user_id\" value=\"$user_id\"/>";
-                echo        "<postfield name=\"directory_search_pc\" value=\"$page_counter\"/>";
-                echo    "</go>";
-                echo "</anchor>";
-                echo "</p>";
+                echo "<p align=\"left\">\n";
+                echo "<anchor>" . wap_txt_encode_to_wml($eintrag) . "\n";
+                echo "    <go method=\"post\" href=\"show_user.php\">\n";
+                echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
+                echo "        <postfield name=\"first_name\" value=\"$first_name\"/>\n";
+                echo "        <postfield name=\"last_name\" value=\"$last_name\"/>\n";
+                echo "        <postfield name=\"user_id\" value=\"$user_id\"/>\n";
+                echo "        <postfield name=\"directory_search_pc\" value=\"$page_counter\"/>\n";
+                echo "    </go>\n";
+                echo "</anchor>\n";
+                echo "</p>\n";
 
                 if ($progress_counter == $progress_limit)
                 {
-                    echo "<p align=\"right\">";
+                    echo "<p align=\"right\">\n";
                     if ($progress_counter < $num_all_results)
                     {
                         $page_counter_v = $page_counter + 1;
-                        echo "<anchor>" . wap_buttons_forward_page($page_counter_v, $num_pages);
-                        echo    "<go href=\"directory_search.php\">";
-                        echo        "<postfield name=\"session_id\" value=\"$session_id\"/>";
-                        echo        "<postfield name=\"first_name\" value=\"$first_name\"/>";
-                        echo        "<postfield name=\"last_name\" value=\"$last_name\"/>";
-                        echo        "<postfield name=\"directory_search_pc\" value=\"$page_counter_v\"/>";
-                        echo    "</go>";
-                        echo "</anchor><br/>";
+                        echo "<anchor>" . wap_buttons_forward_page($page_counter_v, $num_pages) . "\n";
+                        echo "    <go method=\"post\" href=\"directory_search.php\">\n";
+                        echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
+                        echo "        <postfield name=\"first_name\" value=\"$first_name\"/>\n";
+                        echo "        <postfield name=\"last_name\" value=\"$last_name\"/>\n";
+                        echo "        <postfield name=\"directory_search_pc\" value=\"$page_counter_v\"/>\n";
+                        echo "    </go>\n";
+                        echo "</anchor><br/>\n";
                     }
 
                     if ($page_counter > 0)
                     {
                         $page_counter_v = $page_counter - 1;
-                        echo "<anchor>" . wap_buttons_back_page($page_counter_v, $num_pages);
-                        echo    "<go href=\"directory_search.php\">";
-                        echo        "<postfield name=\"session_id\" value=\"$session_id\"/>";
-                        echo        "<postfield name=\"first_name\" value=\"$first_name\"/>";
-                        echo        "<postfield name=\"last_name\" value=\"$last_name\"/>";
-                        echo        "<postfield name=\"directory_search_pc\" value=\"$page_counter_v\"/>";
-                        echo    "</go>";
-                        echo "</anchor><br/>";
+                        echo "<anchor>" . wap_buttons_back_page($page_counter_v, $num_pages) . "\n";
+                        echo "    <go method=\"post\" href=\"directory_search.php\">\n";
+                        echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
+                        echo "        <postfield name=\"first_name\" value=\"$first_name\"/>\n";
+                        echo "        <postfield name=\"last_name\" value=\"$last_name\"/>\n";
+                        echo "        <postfield name=\"directory_search_pc\" value=\"$page_counter_v\"/>\n";
+                        echo "    </go>\n";
+                        echo "</anchor><br/>\n";
                     }
-                    echo "</p>";
+                    echo "</p>\n";
                 }
             }
         }
         elseif ($num_all_results > NUM_MAX_RESULTS)
         {
-            echo "<p align=\"left\">";
+            echo "<p align=\"left\">\n";
             $t = sprintf(_("Mehr als %s Einträge."), NUM_MAX_RESULTS);
-            echo wap_txt_encode_to_wml($t) . "<br/>";
+            echo wap_txt_encode_to_wml($t) . "<br/>\n";
             $t = _("Bitte suchen Sie genauer.");
             echo wap_txt_encode_to_wml($t);
-            echo "</p>";
+            echo "</p>\n";
         }
         else
         {
             echo "<p align=\"left\">";
             $t = _("Keinen Eintrag gefunden.");
             echo "? " . wap_txt_encode_to_wml($t) . " &#191;";
-            echo "</p>";
+            echo "</p>\n";
         }
 
-        echo "<p align=\"right\">";
-        echo "<anchor>" . wap_buttons_new_search();
-        echo    "<go href=\"directory.php\">";
-        echo        "<postfield name=\"session_id\" value=\"$session_id\"/>";
-        echo    "</go>";
-        echo "</anchor><br/>";
+        echo "<p align=\"right\">\n";
+        echo "<anchor>" . wap_buttons_new_search() . "\n";
+        echo "    <go method=\"post\" href=\"directory.php\">\n";
+        echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
+        echo "    </go>\n";
+        echo "</anchor><br/>\n";
 
         wap_buttons_menu_link($session_id);
-        echo "</p>";
+        echo "</p>\n";
     }
     else
     {
         echo "<p align=\"left\">";
         $t = _("Bitte Vor- und/oder Nachnamen eingeben.");
         echo wap_txt_encode_to_wml($t) . "<br/>";
-        echo "</p>";
+        echo "</p>\n";
 
-        echo "<p align=\"right\">";
-        echo "<anchor>" . wap_buttons_back();
-        echo    "<go href=\"directory.php\">";
-        echo        "<postfield name=\"session_id\" value=\"$session_id\"/>";
-        echo    "</go>";
-        echo "</anchor><br/>";
+        echo "<p align=\"right\">\n";
+        echo "<anchor>" . wap_buttons_back() . "\n";
+        echo "    <go method=\"post\" href=\"directory.php\">\n";
+        echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
+        echo "    </go>\n";
+        echo "</anchor><br/>\n";
 
         wap_buttons_menu_link($session_id);
-        echo "</p>";
+        echo "</p>\n";
     }
     } // session_expired
     wap_adm_end_card();

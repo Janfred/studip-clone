@@ -12,7 +12,7 @@
 * </code>
 *
 * @author		Florian Hansen <f1701h@gmx.net>
-* @version		0.1
+* @version		0.11	10.09.2003	21:21:58
 * @access		public
 * @modulegroup	wap_modules
 * @module		dates_search.php
@@ -116,44 +116,44 @@
 					$event_sem_name = FALSE;
 
 				$short_title = wap_txt_shorten_text($event_title, WAP_TXT_LINK_LENGTH);
-				echo "<p align=\"left\">";
-				echo "<anchor>" . wap_txt_encode_to_wml($short_title);
-				echo    "<go href=\"show_date.php\">";
-				echo        "<postfield name=\"session_id\" value=\"$session_id\"/>";
-				echo        "<postfield name=\"date_id\" value=\"$event_id\"/>";
-				echo        "<postfield name=\"num_days\" value=\"$num_days\"/>";
-				echo        "<postfield name=\"event_sem_name\" value=\"$event_sem_name\"/>";
-				echo        "<postfield name=\"dates_search_pc\" value=\"$page_counter\"/>";
-				echo    "</go>";
-				echo "</anchor>";
-				echo "</p>";
+				echo "<p align=\"left\">\n";
+				echo "<anchor>" . wap_txt_encode_to_wml($short_title) . "\n";
+				echo "    <go method=\"post\" href=\"show_date.php\">\n";
+				echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
+				echo "        <postfield name=\"date_id\" value=\"$event_id\"/>\n";
+				echo "        <postfield name=\"num_days\" value=\"$num_days\"/>\n";
+				echo "        <postfield name=\"event_sem_name\" value=\"$event_sem_name\"/>\n";
+				echo "        <postfield name=\"dates_search_pc\" value=\"$page_counter\"/>\n";
+				echo "    </go>\n";
+				echo "</anchor>\n";
+				echo "</p>\n";
 
 				if ($progress_counter == $progress_limit)
 				{
-                    echo "<p align=\"right\">";
+                    echo "<p align=\"right\">\n";
                     if ($progress_counter < $num_events)
                     {
                         $page_counter_v = $page_counter + 1;
-                        echo "<anchor>" . wap_buttons_forward_page($page_counter_v, $num_pages);
-                        echo    "<go href=\"dates_search.php\">";
-                        echo        "<postfield name=\"session_id\" value=\"$session_id\"/>";
-                        echo        "<postfield name=\"num_days\" value=\"$num_days\"/>";
-                        echo        "<postfield name=\"dates_search_pc\" value=\"$page_counter_v\"/>";
-                        echo    "</go>";
-                        echo "</anchor><br/>";
+                        echo "<anchor>" . wap_buttons_forward_page($page_counter_v, $num_pages) . "\n";
+                        echo "    <go method=\"post\" href=\"dates_search.php\">\n";
+                        echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
+                        echo "        <postfield name=\"num_days\" value=\"$num_days\"/>\n";
+                        echo "        <postfield name=\"dates_search_pc\" value=\"$page_counter_v\"/>\n";
+                        echo "    </go>\n";
+                        echo "</anchor><br/>\n";
                     }
                     if ($page_counter > 0)
                     {
                         $page_counter_v = $page_counter - 1;
-                        echo "<anchor>" . wap_buttons_back_page($page_counter_v, $num_pages);
-                        echo    "<go href=\"dates_search.php\">";
-                        echo        "<postfield name=\"session_id\" value=\"$session_id\"/>";
-                        echo        "<postfield name=\"num_days\" value=\"$num_days\"/>";
-                        echo        "<postfield name=\"dates_search_pc\" value=\"$page_counter_v\"/>";
-                        echo    "</go>";
-                        echo "</anchor><br/>";
+                        echo "<anchor>" . wap_buttons_back_page($page_counter_v, $num_pages) . "\n";
+                        echo "    <go method=\"post\" href=\"dates_search.php\">\n";
+                        echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
+                        echo "        <postfield name=\"num_days\" value=\"$num_days\"/>\n";
+                        echo "        <postfield name=\"dates_search_pc\" value=\"$page_counter_v\"/>\n";
+                        echo "    </go>\n";
+                        echo "</anchor><br/>\n";
                     }
-                    echo "</p>";
+                    echo "</p>\n";
                 }
             }
         }
@@ -164,25 +164,25 @@
             echo wap_txt_encode_to_wml($t) . "<br/>";
             $t = _("Bitte den Zeitraum einschränken.");
             echo wap_txt_encode_to_wml($t);
-            echo "</p>";
+            echo "</p>\n";
         }
         else
         {
             echo "<p align=\"left\">";
             $t = _("Keine Termine vorhanden.");
             echo "? " . wap_txt_encode_to_wml($t) . " &#191;";
-            echo "</p>";
+            echo "</p>\n";
         }
 
-        echo "<p align=\"right\">";
-        echo "<anchor>" . wap_buttons_time();
-        echo    "<go href=\"dates.php\">";
-        echo        "<postfield name=\"session_id\" value=\"$session_id\"/>";
-        echo    "</go>";
-        echo "</anchor><br/>";
+        echo "<p align=\"right\">\n";
+        echo "<anchor>" . wap_buttons_time() . "\n";
+        echo "    <go method=\"post\" href=\"dates.php\">\n";
+        echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
+        echo "    </go>\n";
+        echo "</anchor><br/>\n";
 
         wap_buttons_menu_link($session_id);
-        echo "</p>";
+        echo "</p>\n";
 	}
 	wap_adm_end_card();
 ?>

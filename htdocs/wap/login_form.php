@@ -8,7 +8,7 @@
 * </code>
 *
 * @author		Florian Hansen <f1701h@gmx.net>
-* @version		0.1
+* @version		0.11	10.09.2003	21:23:59
 * @access		public
 * @modulegroup	wap_modules
 * @module		login_form.php
@@ -51,30 +51,30 @@
 
 		echo "<p align=\"center\">";
 		echo "<b>" . _("Login") . "</b>";
-		echo "</p>";
+		echo "</p>\n";
 
-		echo "<p align=\"left\">";
+		echo "<p align=\"left\">\n";
 
 		echo wap_txt_encode_to_wml(_("Username:")) . "<br/>";
 		echo "<input type=\"text\" name=\"user_name\" ";
 		echo "emptyok=\"false\" value=\"" . stripslashes($user_name);
-		echo "\"/><br/>";
+		echo "\"/><br/>\n";
 
 		echo wap_txt_encode_to_wml(_("Passwort:")) . "<br/>";
 		echo "<input type=\"password\" name=\"user_pass\" ";
-		echo " emptyok=\"false\"/><br/>";
-		echo "</p>";
+		echo "emptyok=\"false\"/><br/>\n";
+		echo "</p>\n";
 
-		echo "<p align=\"right\">";
-        echo "<anchor>" . wap_buttons_login();
-        echo 	"<go href=\"login_index.php\" method=\"post\">";
-        echo		"<postfield name=\"user_name\" value=\"\$(user_name)\"/>";
-        echo		"<postfield name=\"user_pass\" value=\"\$(user_pass)\"/>";
-        echo	"</go>";
-        echo "</anchor><br/>";
+		echo "<p align=\"right\">\n";
+        echo "<anchor>" . wap_buttons_login() . "\n";
+        echo "    <go method=\"post\" href=\"login_index.php\">\n";
+        echo "        <postfield name=\"user_name\" value=\"\$(user_name)\"/>\n";
+        echo "        <postfield name=\"user_pass\" value=\"\$(user_pass)\"/>\n";
+        echo "    </go>\n";
+        echo "</anchor><br/>\n";
 
         wap_buttons_menu_link(FALSE);
-		echo "</p>";
+		echo "</p>\n";
 
 	wap_adm_end_card();
 ?>

@@ -10,7 +10,7 @@
 * </code>
 *
 * @author		Florian Hansen <f1701h@gmx.net>
-* @version		0.1
+* @version		0.11	10.09.2003	21:21:47
 * @access		public
 * @modulegroup	wap_modules
 * @module		dates.php
@@ -53,25 +53,25 @@
 		echo "<p align=\"center\">";
 		$t = _("Termine");
 		echo "<b>" . wap_txt_encode_to_wml($t) . "</b>";
-		echo "</p>";
+		echo "</p>\n";
 
-		echo "<p>";
+		echo "<p>\n";
 		$t = _("Für die nächsten Tage:");
-		echo wap_txt_encode_to_wml($t) . "&#32;";
+		echo wap_txt_encode_to_wml($t) . "&#32;\n";
 		echo "<input type=\"text\" name=\"num_days\" emptyok=\"false\" ";
-		echo "format=\"*N\" maxlength=\"3\" value=\"" . NUM_DAYS_PRESET . "\"/>";
-		echo "</p>";
+		echo "format=\"*N\" maxlength=\"3\" value=\"" . NUM_DAYS_PRESET . "\"/>\n";
+		echo "</p>\n";
 
-		echo "<p align=\"right\">";
-		echo "<anchor>" . wap_buttons_show();
-		echo 	"<go method=\"post\" href=\"dates_search.php\">";
-		echo		"<postfield name=\"session_id\" value=\"$session_id\"/>";
-		echo		"<postfield name=\"num_days\" value=\"\$(num_days)\"/>";
-		echo 	"</go>";
-		echo "</anchor><br/>";
+		echo "<p align=\"right\">\n";
+		echo "<anchor>" . wap_buttons_show() . "\n";
+		echo "    <go method=\"post\" href=\"dates_search.php\">\n";
+		echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
+		echo "        <postfield name=\"num_days\" value=\"\$(num_days)\"/>\n";
+		echo "    </go>\n";
+		echo "</anchor><br/>\n";
 
 		wap_buttons_menu_link($session_id);
-		echo "</p>";
+		echo "</p>\n";
 	}
 	wap_adm_end_card();
 ?>

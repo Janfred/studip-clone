@@ -10,7 +10,7 @@
 * </code>
 *
 * @author		Florian Hansen <f1701h@gmx.net>
-* @version		0.1
+* @version		0.11	10.09.2003	21:23:48
 * @access		public
 * @modulegroup	wap_modules
 * @module		index.php
@@ -57,18 +57,18 @@
 
 			echo "<p align=\"center\">";
 			echo "<b>StudIP WAP</b>";
-			echo "</p>";
+			echo "</p>\n";
 
-			echo "<p align=\"center\">";
-			echo "<anchor>" . wap_txt_encode_to_wml(_("Verzeichnis"));
-			echo	"<go href=\"directory.php\"/>";
-			echo "</anchor><br/>";
+			echo "<p align=\"center\">\n";
+			echo "<anchor>" . wap_txt_encode_to_wml(_("Verzeichnis")) . "\n";
+			echo "    <go href=\"directory.php\"/>\n";
+			echo "</anchor><br/>\n";
 
 
-			echo "<anchor>" . wap_txt_encode_to_wml(_("Login"));
-			echo	"<go href=\"login_form.php\"/>";
-			echo "</anchor>";
-			echo "</p>";
+			echo "<anchor>" . wap_txt_encode_to_wml(_("Login")) . "\n";
+			echo "    <go href=\"login_form.php\"/>\n";
+			echo "</anchor>\n";
+			echo "</p>\n";
 
 	wap_adm_end_card();
 ?>

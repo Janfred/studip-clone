@@ -3,7 +3,7 @@
 * Administrative functions for session management
 *
 * @author		Florian Hansen <f1701h@gmx.net>
-* @version		0.1
+* @version		0.11	10.09.2003	21:26:09
 * @access		public
 * @modulegroup	wap_modules
 * @module		wap_adm.inc.php
@@ -185,10 +185,14 @@
 		$session_expired = FALSE;
 
 		header("Content-Type: text/vnd.wap.wml;charset=iso-8859-1");
-		echo '<?xml version="1.0"?>';
-		echo '<!DOCTYPE wml PUBLIC "-//WAPFORUM//DTD WML 1.1//EN" "http://www.wapforum.org/DTD/wml_1.1.xml">';
-		echo "<wml>";
-		echo "<card newcontext=\"true\">";
+		echo '<?xml version="1.0"?>' . "\n";
+		echo '<!DOCTYPE wml PUBLIC "-//WAPFORUM//DTD WML 1.1//EN" ';
+		echo '"http://www.wapforum.org/DTD/wml_1.1.xml">' . "\n";
+		echo "<wml>\n";
+		echo "<head>\n";
+		echo "    <meta http-equiv=\"Cache-Control\" content=\"no-store\" forua=\"true\"/>\n";
+		echo "</head>\n";
+		echo "<card newcontext=\"true\">\n\n";
 
 		if (!$session_id)
 		{
@@ -224,17 +228,17 @@
 
 			echo "<p>";
 			echo _("Ihre Sitzung ist abgelaufen. Bitte erneut anmelden.") . "<br/>";
-			echo "</p>";
+			echo "</p>\n";
 
-            echo "<p align=\"right\">";
-            echo "<anchor>" . wap_buttons_login();
-            echo	"<go href=\"login_form.php\">";
-            echo		"<postfield name=\"user_name\" value=\"$user_name\"/>";
-            echo	"</go>";
-            echo "</anchor><br/>";
+            echo "<p align=\"right\">\n";
+            echo "<anchor>" . wap_buttons_login() . "\n";
+            echo "    <go method=\"post\" href=\"login_form.php\">\n";
+            echo "        <postfield name=\"user_name\" value=\"$user_name\"/>\n";
+            echo "    </go>\n";
+            echo "</anchor><br/>\n";
 
             wap_buttons_menu_link(FALSE);
-        	echo "</p>";
+        	echo "</p>\n";
 
 			$session_expired = TRUE;
 			return FALSE;
@@ -261,7 +265,8 @@
 	*/
 	function wap_adm_end_card()
 	{
-		echo "</card>";
-		echo "</wml>";
+		echo "\n";
+		echo "</card>\n";
+		echo "</wml>\n";
 	}
 ?>

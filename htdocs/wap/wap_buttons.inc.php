@@ -6,7 +6,7 @@
 * They each return the appropriate description-string.
 *
 * @author		Florian Hansen <f1701h@gmx.net>
-* @version		0.11	05.09.2003	15:37:19
+* @version		0.12	10.09.2003	21:26:31
 * @access		public
 * @modulegroup	wap_modules
 * @module		wap_buttons.inc.php
@@ -103,7 +103,8 @@
 	* @author			Florian Hansen <f1701h@gmx.net>
 	* @version			0.11	09.09.2003	14:56:35
 	* @access			public
-	* @	* @param	string	The total number of parts
+	* @param	string	The current part
+	* @param	string	The total number of parts
 	* @return	string	The text-button
 	*/
 	 function wap_buttons_back_part($part, $num_parts)
@@ -247,17 +248,17 @@
 	{
 		global $_language_path;
 
-		echo "<anchor>&#215; " . wap_txt_encode_to_wml(_("Menü"));
+		echo "<anchor>&#215; " . wap_txt_encode_to_wml(_("Menü")) . "\n";
         if ($session_id)
         {
-			echo "<go href=\"login_index.php\">";
-			echo	"<postfield name=\"session_id\" value=\"$session_id\"/>";
-			echo "</go>";
+			echo "    <go method=\"post\" href=\"login_index.php\">\n";
+			echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
+			echo "    </go>\n";
       	}
        	else
        	{
-			echo "<go href=\"index.php\"/>";
+			echo "    <go href=\"index.php\"/>\n";
        	}
-        echo "</anchor>";
+        echo "</anchor>\n";
     }
 ?>

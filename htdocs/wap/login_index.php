@@ -10,7 +10,7 @@
 * </code>
 *
 * @author		Florian Hansen <f1701h@gmx.net>
-* @version		0.1
+* @version		0.11	10.09.2003	21:24:09
 * @access		public
 * @modulegroup	wap_modules
 * @module		login_index.php
@@ -65,61 +65,61 @@
 		echo "<b>" . wap_txt_encode_to_wml(_("Menü")) . "</b>";
 		echo "</p>";
 
-		echo "<p align=\"center\">";
-		echo "<anchor>" . wap_txt_encode_to_wml(_("Verzeichnis"));
-		echo 	"<go href=\"directory.php\">";
-		echo		"<postfield name=\"session_id\" value=\"$session_id\"/>";
-		echo	"</go>";
-		echo "</anchor><br/>";
+		echo "<p align=\"center\">\n";
+		echo "<anchor>" . wap_txt_encode_to_wml(_("Verzeichnis")) . "\n";
+		echo "    <go method=\"post\" href=\"directory.php\">\n";
+		echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
+		echo "    </go>\n";
+		echo "</anchor><br/>\n";
 
-		echo "<anchor>" . wap_txt_encode_to_wml(_("Termine"));
-		echo 	"<go href=\"dates.php\">";
-		echo		"<postfield name=\"session_id\" value=\"$session_id\"/>";
-		echo	"</go>";
-		echo "</anchor><br/>";
+		echo "<anchor>" . wap_txt_encode_to_wml(_("Termine")) . "\n";
+		echo "    <go method=\"post\" href=\"dates.php\">\n";
+		echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
+		echo "    </go>\n";
+		echo "</anchor><br/>\n";
 
-		echo "<anchor>" . wap_txt_encode_to_wml(_("News"));
-		echo 	"<go href=\"news.php\">";
-		echo		"<postfield name=\"session_id\" value=\"$session_id\"/>";
-		echo	"</go>";
-		echo "</anchor><br/>";
+		echo "<anchor>" . wap_txt_encode_to_wml(_("News")) . "\n";
+		echo "    <go method=\"post\" href=\"news.php\">\n";
+		echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
+		echo "    </go>\n";
+		echo "</anchor><br/>\n";
 
-		echo "<anchor>" . wap_txt_encode_to_wml(_("Veranstaltungen"));
-		echo 	"<go href=\"events.php\">";
-		echo		"<postfield name=\"session_id\" value=\"$session_id\"/>";
-		echo	"</go>";
-		echo "</anchor><br/>";
+		echo "<anchor>" . wap_txt_encode_to_wml(_("Veranstaltungen")) . "\n";
+		echo "    <go method=\"post\" href=\"events.php\">\n";
+		echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
+		echo "    </go>\n";
+		echo "</anchor><br/>\n";
 
-		echo "<anchor>" . wap_txt_encode_to_wml(_("Kurznachrichten"));
-		echo 	"<go href=\"sms.php\">";
-		echo		"<postfield name=\"session_id\" value=\"$session_id\"/>";
-		echo	"</go>";
-		echo "</anchor><br/>";
-		echo "</p>";
+		echo "<anchor>" . wap_txt_encode_to_wml(_("Kurznachrichten")) . "\n";
+		echo "    <go method=\"post\" href=\"sms.php\">\n";
+		echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
+		echo "    </go>\n";
+		echo "</anchor><br/>\n";
+		echo "</p>\n";
 
-		echo "<p align=\"right\">";
-		echo "<anchor>" . wap_buttons_logout();
-		echo 	"<go href=\"index.php\">";
-		echo		"<postfield name=\"session_id\" value=\"$session_id\"/>";
-		echo	"</go>";
-		echo "</anchor><br/>";
-		echo "</p>";
+		echo "<p align=\"right\">\n";
+		echo "<anchor>" . wap_buttons_logout() . "\n";
+		echo "    <go method=\"post\" href=\"index.php\">\n";
+		echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
+		echo "    </go>\n";
+		echo "</anchor><br/>\n";
+		echo "</p>\n";
 	}
 	elseif ($wrong_user_data)
 	{
 		echo "<p>";
-		echo _("Username oder Passwort nicht korrekt.") . "<br/>";
+		echo _("Username oder Passwort nicht korrekt.");
 		echo "</p>";
 
-		echo "<p align=\"right\">";
-		echo "<anchor>" . wap_buttons_login();
-		echo	"<go href=\"login_form.php\">";
-		echo		"<postfield name=\"user_name\" value=\"$user_name\"/>";
-		echo	"</go>";
-		echo "</anchor><br/>";
+		echo "<p align=\"right\">\n";
+		echo "<anchor>" . wap_buttons_login() . "\n";
+		echo "    <go method=\"post\" href=\"login_form.php\">\n";
+		echo "        <postfield name=\"user_name\" value=\"$user_name\"/>\n";
+		echo "    </go>\n";
+		echo "</anchor><br/>\n";
 
 		wap_buttons_menu_link(FALSE);
-		echo "</p>";
+		echo "</p>\n";
 	}
 	wap_adm_end_card();
 ?>

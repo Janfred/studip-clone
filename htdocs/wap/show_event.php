@@ -10,7 +10,7 @@
 * </code>
 *
 * @author		Florian Hansen <f1701h@gmx.net>
-* @version		0.1
+* @version		0.11	10.09.2003	21:24:46
 * @access		public
 * @modulegroup	wap_modules
 * @module		show_event.php
@@ -85,53 +85,53 @@
         $event_name = $db-> f("Name");
         $short_name = wap_txt_shorten_text($event_name, WAP_TXT_LINE_LENGTH);
 
-        echo "<p align=\"center\">";
-        echo "<b>" . wap_txt_encode_to_wml($short_name) . "</b><br/>";
-        echo view_turnus($event_id, TRUE) . "<br/>";
-        echo "</p>";
+        echo "<p align=\"center\">\n";
+        echo "<b>" . wap_txt_encode_to_wml($short_name) . "</b><br/>\n";
+        echo view_turnus($event_id, TRUE) . "<br/>\n";
+        echo "</p>\n";
 
-        echo "<p align=\"left\">";
+        echo "<p align=\"left\">\n";
         if ($num_news == 0 && $num_dates == 0)
         {
             echo "? ";
             $t = _("Keine neuen News oder Termine seit letztem Web-Besuch.");
-            echo wap_txt_encode_to_wml($t) . " &#191;";
+            echo wap_txt_encode_to_wml($t) . " &#191;\n";
         }
         else
         {
             if ($num_news > 0)
             {
-                echo "<anchor>" . wap_txt_encode_to_wml(_("News"));
-                echo    "<go href=\"event_news.php\">";
-                echo        "<postfield name=\"session_id\" value=\"$session_id\"/>";
-                echo        "<postfield name=\"event_id\" value=\"$event_id\"/>";
-                echo        "<postfield name=\"events_pc\" value=\"$events_pc\"/>";
-                echo    "</go>";
-                echo "</anchor><br/>";
+                echo "<anchor>" . wap_txt_encode_to_wml(_("News")) . "\n";
+                echo "    <go method=\"post\" href=\"event_news.php\">\n";
+                echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
+                echo "        <postfield name=\"event_id\" value=\"$event_id\"/>\n";
+                echo "        <postfield name=\"events_pc\" value=\"$events_pc\"/>\n";
+                echo "    </go>\n";
+                echo "</anchor><br/>\n";
             }
             if ($num_dates > 0)
             {
-                echo "<anchor>" . wap_txt_encode_to_wml(_("Termine"));
-                echo    "<go href=\"event_dates.php\">";
-                echo        "<postfield name=\"session_id\" value=\"$session_id\"/>";
-                echo        "<postfield name=\"event_id\" value=\"$event_id\"/>";
-                echo        "<postfield name=\"events_pc\" value=\"$events_pc\"/>";
-                echo    "</go>";
-                echo "</anchor><br/>";
+                echo "<anchor>" . wap_txt_encode_to_wml(_("Termine")) . "\n";
+                echo "    <go method=\"post\" href=\"event_dates.php\">\n";
+                echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
+                echo "        <postfield name=\"event_id\" value=\"$event_id\"/>\n";
+                echo "        <postfield name=\"events_pc\" value=\"$events_pc\"/>\n";
+                echo "    </go>\n";
+                echo "</anchor><br/>\n";
             }
         }
-        echo "</p>";
+        echo "</p>\n";
 
-        echo "<p align=\"right\">";
-        echo "<anchor>" . wap_buttons_back();
-        echo    "<go href=\"events.php\">";
-        echo        "<postfield name=\"session_id\" value=\"$session_id\"/>";
-        echo        "<postfield name=\"events_pc\" value=\"$events_pc\"/>";
-        echo    "</go>";
-        echo "</anchor><br/>";
+        echo "<p align=\"right\">\n";
+        echo "<anchor>" . wap_buttons_back() . "\n";
+        echo "    <go method=\"post\" href=\"events.php\">\n";
+        echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
+        echo "        <postfield name=\"events_pc\" value=\"$events_pc\"/>\n";
+        echo "    </go>\n";
+        echo "</anchor><br/>\n";
 
         wap_buttons_menu_link($session_id);
-        echo "</p>";
+        echo "</p>\n";
     }
 	wap_adm_end_card();
 ?>

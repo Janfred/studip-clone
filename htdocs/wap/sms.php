@@ -11,7 +11,7 @@
 * </code>
 *
 * @author		Florian Hansen <f1701h@gmx.net>
-* @version		0.1
+* @version		0.11	10.09.2003	21:25:51
 * @access		public
 * @modulegroup	wap_modules
 * @module		dates_search.php
@@ -54,7 +54,7 @@
     {
         echo "<p align=\"center\">";
         echo "<b>" . wap_txt_encode_to_wml(_("Kurznachrichten")) . "</b>";
-        echo "</p>";
+        echo "</p>\n";
 
         if ($sms_pc)
         {
@@ -96,9 +96,12 @@
             if (!isset($sms_pc))
             {
                 echo "<p align=\"center\">";
-                $t = sprintf(_("%s neue Nachricht(en)."), $num_sms);
+                if ($num_sms > 1)
+                	$t = sprintf(_("%s neue Nachrichten."), $num_sms);
+                else
+                	$t = sprintf(_("%s neue Nachricht."), $num_sms);
                 echo wap_txt_encode_to_wml($t);
-                echo "</p>";
+                echo "</p>\n";
             }
 
             while ($db-> next_record() && $progress_counter < $progress_limit)
@@ -108,41 +111,41 @@
                 $entry_id     = $db-> f("message_id");
 
                 $short_sender = wap_txt_shorten_text($entry_sender, WAP_TXT_LINK_LENGTH - 3);
-                echo "<p align=\"left\">";
+                echo "<p align=\"left\">\n";
                 echo "<anchor>" . sprintf ("%02d ", $progress_counter);
-                echo wap_txt_encode_to_wml($short_sender);
-                echo    "<go href=\"show_sms.php\">";
-                echo        "<postfield name=\"session_id\" value=\"$session_id\"/>";
-                echo        "<postfield name=\"sms_id\" value=\"$entry_id\"/>";
-                echo        "<postfield name=\"sms_pc\" value=\"$page_counter\"/>";
-                echo    "</go>";
-                echo "</anchor>";
-                echo "</p>";
+                echo wap_txt_encode_to_wml($short_sender) . "\n";
+                echo "    <go method=\"post\" href=\"show_sms.php\">\n";
+                echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
+                echo "        <postfield name=\"sms_id\" value=\"$entry_id\"/>\n";
+                echo "        <postfield name=\"sms_pc\" value=\"$page_counter\"/>\n";
+                echo "    </go>\n";
+                echo "</anchor>\n";
+                echo "</p>\n";
 
                 if ($progress_counter == $progress_limit)
                 {
-                    echo "<p align=\"right\">";
+                    echo "<p align=\"right\">\n";
                     if ($progress_counter < $num_sms)
                     {
                         $page_counter_v = $page_counter + 1;
-                        echo "<anchor>" . wap_buttons_forward_page($page_counter_v, $num_pages);
-                        echo    "<go href=\"sms.php\">";
-                        echo        "<postfield name=\"session_id\" value=\"$session_id\"/>";
-                        echo        "<postfield name=\"sms_pc\" value=\"$page_counter_v\"/>";
-                        echo    "</go>";
-                        echo "</anchor><br/>";
+                        echo "<anchor>" . wap_buttons_forward_page($page_counter_v, $num_pages) . "\n";
+                        echo "    <go method=\"post\" href=\"sms.php\">\n";
+                        echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
+                        echo "        <postfield name=\"sms_pc\" value=\"$page_counter_v\"/>\n";
+                        echo "    </go\n>";
+                        echo "</anchor><br/>\n";
                     }
                     if ($page_counter > 0)
                     {
                         $page_counter_v = $page_counter - 1;
-                        echo "<anchor>" . wap_buttons_back_page($page_counter_v, $num_pages);
-                        echo    "<go href=\"sms.php\">";
-                        echo        "<postfield name=\"session_id\" value=\"$session_id\"/>";
-                        echo        "<postfield name=\"sms_pc\" value=\"$page_counter_v\"/>";
-                        echo    "</go>";
-                        echo "</anchor><br/>";
+                        echo "<anchor>" . wap_buttons_back_page($page_counter_v, $num_pages) . "\n";
+                        echo "    <go method=\"post\" href=\"sms.php\">\n";
+                        echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
+                        echo "        <postfield name=\"sms_pc\" value=\"$page_counter_v\"/>\n";
+                        echo "    </go>\n";
+                        echo "</anchor><br/>\n";
                     }
-                    echo "</p>";
+                    echo "</p>\n";
                 }
             }
         }
@@ -152,12 +155,12 @@
             echo "? ";
             $t = _("Keine neuen Kurznachrichten seit letztem Web-Besuch.");
             echo wap_txt_encode_to_wml($t) . " &#191;";
-            echo "</p>";
+            echo "</p>\n";
         }
 
-        echo "<p align=\"right\">";
+        echo "<p align=\"right\">\n";
         wap_buttons_menu_link($session_id);
-        echo "</p>";
+        echo "</p>\n";
     }
 	wap_adm_end_card();
 ?>

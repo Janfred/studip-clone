@@ -3,7 +3,7 @@
 * Text-functions for use with WML.
 *
 * @author		Florian Hansen <f1701h@gmx.net>
-* @version		0.11	05.09.2003	12:00:48
+* @version		0.11	10.09.2003	21:21:28
 * @access		public
 * @modulegroup	wap_modules
 * @module		wap_txt.inc.php

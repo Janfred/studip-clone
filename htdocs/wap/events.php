@@ -9,7 +9,7 @@
 * </code>
 *
 * @author		Florian Hansen <f1701h@gmx.net>
-* @version		0.11	05.09.2003	14:56:07
+* @version		0.12	10.09.2003	21:23:36
 * @access		public
 * @modulegroup	wap_modules
 * @module		events.php
@@ -52,7 +52,7 @@
     {
         echo "<p align=\"center\">";
         echo "<b>" . _("Veranstaltungen") . "</b>";
-        echo "</p>";
+        echo "</p>\n";
 
         if ($events_pc)
         {
@@ -134,41 +134,41 @@
                 $entry_id   = key($event_array[$progress_counter]);
                 $entry_name = $event_array[$progress_counter][$entry_id];
                 $short_name = wap_txt_shorten_text($entry_name, WAP_TXT_LINK_LENGTH);
-                echo "<p align=\"left\">";
-                echo "<anchor>" . wap_txt_encode_to_wml($short_name);
-                echo    "<go href=\"show_event.php\">";
-                echo        "<postfield name=\"session_id\" value=\"$session_id\"/>";
-                echo        "<postfield name=\"event_id\" value=\"$entry_id\"/>";
-                echo        "<postfield name=\"events_pc\" value=\"$page_counter\"/>";
-                echo    "</go>";
-                echo "</anchor>";
-                echo "</p>";
+                echo "<p align=\"left\">\n";
+                echo "<anchor>" . wap_txt_encode_to_wml($short_name) . "\n";
+                echo "    <go method=\"post\" href=\"show_event.php\">\n";
+                echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
+                echo "        <postfield name=\"event_id\" value=\"$entry_id\"/>\n";
+                echo "        <postfield name=\"events_pc\" value=\"$page_counter\"/>\n";
+                echo "    </go>\n";
+                echo "</anchor>\n";
+                echo "</p>\n";
                 $progress_counter ++;
 
                 if ($progress_counter == $progress_limit)
                 {
-                    echo "<p align=\"right\">";
+                    echo "<p align=\"right\">\n";
                     if ($progress_counter < $num_events)
                     {
                         $page_counter_v = $page_counter + 1;
-                        echo "<anchor>" . wap_buttons_forward_page($page_counter_v, $num_pages);
-                        echo    "<go href=\"events.php\">";
-                        echo        "<postfield name=\"session_id\" value=\"$session_id\"/>";
-                        echo        "<postfield name=\"events_pc\" value=\"$page_counter_v\"/>";
-                        echo    "</go>";
-                        echo "</anchor><br/>";
+                        echo "<anchor>" . wap_buttons_forward_page($page_counter_v, $num_pages) . "\n";
+                        echo "    <go method=\"post\" href=\"events.php\">\n";
+                        echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
+                        echo "        <postfield name=\"events_pc\" value=\"$page_counter_v\"/>\n";
+                        echo "    </go>\n";
+                        echo "</anchor><br/>\n";
                     }
                     if ($page_counter > 0)
                     {
                         $page_counter_v = $page_counter - 1;
-                        echo "<anchor>" . wap_buttons_back_page($page_counter_v, $num_pages);
-                        echo    "<go href=\"events.php\">";
-                        echo        "<postfield name=\"session_id\" value=\"$session_id\"/>";
-                        echo        "<postfield name=\"events_pc\" value=\"$page_counter_v\"/>";
-                        echo    "</go>";
-                        echo "</anchor><br/>";
+                        echo "<anchor>" . wap_buttons_back_page($page_counter_v, $num_pages) . "\n";
+                        echo "    <go method=\"post\" href=\"events.php\">\n";
+                        echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
+                        echo "        <postfield name=\"events_pc\" value=\"$page_counter_v\"/>\n";
+                        echo "    </go>\n";
+                        echo "</anchor><br/>\n";
                     }
-                    echo "</p>";
+                    echo "</p>\n";
                 }
             }
         }
@@ -177,12 +177,12 @@
             echo "<p align=\"left\">";
             $t = _("Keine Veranstaltungen abonniert.");
             echo "? " . wap_txt_encode_to_wml($t) . " &#191;";
-            echo "</p>";
+            echo "</p>\n";
         }
 
-        echo "<p align=\"right\">";
+        echo "<p align=\"right\">\n";
         wap_buttons_menu_link($session_id);
-        echo "</p>";
+        echo "</p>\n";
     }
 	wap_adm_end_card();
 ?>
