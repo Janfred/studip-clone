@@ -1732,7 +1732,6 @@ if ($level==2)
 									echo tooltip(_("Die Namen der Mitglieder der Veranstaltung. Nutzen Sie die Suchfunktion (Lupensymbol), um weitere Eintragungen vorzunehmen oder das Mülltonnensymbol, um Einträge zu löschen."), TRUE, TRUE);
 								?>
 							>
-							<font color="red" size=+2>*</font>
 						</td>
 						<td class="<? echo $cssSw->getClass() ?>" width="50%">
 							<?
