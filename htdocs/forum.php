@@ -80,8 +80,11 @@ if ($forum["view"]=="mixed" && $open) {
 	$forum["flatfolder"] = $open;
 }
 
+
+/*
 if ($view) {
 	if ($view=="reset") {
+				
 		if ($forum["view"]=="tree" || $forum["view"]=="mixed")
 			$view = $forum["view"];
 		elseif ($forum["view"]=="flatfolder") {
@@ -91,11 +94,36 @@ if ($view) {
 			$view = "tree";
 			$forum["view"]="tree";
 		}
+		
+		
+	
 	} else
 		$forum["view"] = $view;
 }
+*/
+
+
+if (!$forum["themeview"])
+	$forum["themeview"]="tree";
+	
+if ($presetview) {
+	if ($presetview == "theme")
+		$forum["presetview"]=$forum["themeview"];
+	else
+		$forum["presetview"] = $presetview;
+}
+
+if (!$forum["presetview"])
+	$forum ["presetview"] = $forum["themeview"];
+
+if ($view)
+	if ($view=="reset")
+		$forum["view"] = $forum["presetview"];
+	else
+		$forum["view"] = $view;
+
 if (!$forum["view"]) {
-	$view = "tree";
+	$view = $forum["themeview"];
 	$forum["view"] = $view;
 }
 
@@ -345,6 +373,7 @@ if ($forumsend) {
 		$forum["rateallopen"] = $rateallopen;
 		$forum["showimages"] = $showimages;
 		$forum["sortthemes"] = $sortthemes;
+		$forum["themeview"] = $themeview;
 		$forum["shrink"] = $shrink*604800; // Anzahl der Sekunden pro Woche
 		$forum["changed"] = "TRUE";
 		$txt = _("Anpassungen durchgeführt.");

@@ -80,7 +80,7 @@ if ($SessSemName["class"]=="inst") {
 } else {
 	$structure["seminar_main"]=array (topKat=>"", name=>_("&Uuml;bersicht"), link=>"seminar_main.php", active=>FALSE);
 	if ($modules["forum"])
-		$structure["forum"]=array (topKat=>"", name=>_("Forum"), link=>"forum.php", active=>FALSE);
+		$structure["forum"]=array (topKat=>"", name=>_("Forum"), link=>"forum.php?view=reset", active=>FALSE);
 	if ((!is_array($AUTO_INSERT_SEM) || !in_array($SessSemName[1], $AUTO_INSERT_SEM) || $rechte) && ($modules["participants"])){
 		$structure["teilnehmer"]=array (topKat=>"", name=>_("TeilnehmerInnen"), link=>"teilnehmer.php", active=>FALSE);
 	}
@@ -146,15 +146,15 @@ if ((!is_array($AUTO_INSERT_SEM) || !in_array($SessSemName[1], $AUTO_INSERT_SEM)
 	$structure["_teilnehmer"]=array (topKat=>"teilnehmer", name=>_("TeilnehmerInnen"), link=>"teilnehmer.php", active=>FALSE);
 }
 if ($modules["forum"]) {
-	$structure["_forum"]=array (topKat=>"forum", name=>_("Themenansicht"), link=>"forum.php?view=reset", active=>FALSE);
+	$structure["_forum"]=array (topKat=>"forum", name=>_("Themenansicht"), link=>"forum.php?view=".$forum["themeview"], active=>FALSE);
 	if ($user->id != "nobody") {
-		$structure["neue"]=array (topKat=>"forum", name=>_("neue Beiträge"), link=>"forum.php?view=neue", active=>FALSE);
-		$structure["flat"]=array (topKat=>"forum", name=>_("letzte Beiträge"), link=>"forum.php?view=flat", active=>FALSE);
+		$structure["neue"]=array (topKat=>"forum", name=>_("neue Beiträge"), link=>"forum.php?view=neue&sort=age", active=>FALSE);
+		$structure["flat"]=array (topKat=>"forum", name=>_("letzte Beiträge"), link=>"forum.php?view=flat&sort=age", active=>FALSE);
 	}
 	$structure["search"]=array (topKat=>"forum", name=>_("Suchen"), link=>"forum.php?view=search&reset=1", active=>FALSE);
 	$structure["forum_export"]=array (topKat=>"forum", name=>_("Druckansicht"), link=>"forum_export.php", target=>"_new", active=>FALSE);
 	if (($rechte) || ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["topic_create_autor"]))
-		$structure["neues_thema"]=array (topKat=>"forum", name=>_("neues Thema anlegen"), link=>"forum.php?view=tree&neuesthema=TRUE#anker", active=>FALSE);
+		$structure["neues_thema"]=array (topKat=>"forum", name=>_("neues Thema anlegen"), link=>"forum.php?view=".$forum["themeview"]."&neuesthema=TRUE#anker", active=>FALSE);
 }
 //
 if (($SessSemName["class"]=="sem") && ($modules["schedule"])){

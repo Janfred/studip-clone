@@ -110,15 +110,37 @@ echo "<form action=\"$PHP_SELF?view=$view\" method=\"POST\">";
 	</tr>	
 	<tr>
 		<td align=right class=blank style="border-bottom:1px dotted black;">
-			<font size=-1>Sortierung der Themenanzeige</font>
+			<font size=-1><?echo _("Sortierung der Themenanzeige");?></font>
 		</td>
 		<td align=left class=steelgraulight>
 			<font size=-1>
-			<input type=radio value="asc" name=sortthemes <?if ($forum["sortthemes"]=="asc") echo "checked";?>> Alter des Ordners - neue unten<br>
-			<input type=radio value="desc" name=sortthemes <?if ($forum["sortthemes"]=="desc") echo "checked";?>> Alter des Ordners - neue oben<br>
-			<input type=radio value="last" name=sortthemes <?if ($forum["sortthemes"]=="last") echo "checked";?>> Alter des neuesten Beitrags - neue oben<br>
+			<input type=radio value="asc" name=sortthemes <?if ($forum["sortthemes"]=="asc") echo "checked"; echo "> "._("Alter des Ordners - neue unten");?><br>
+			<input type=radio value="desc" name=sortthemes <?if ($forum["sortthemes"]=="desc") echo "checked";echo "> "._("Alter des Ordners - neue oben");?><br>
+			<input type=radio value="last" name=sortthemes <?if ($forum["sortthemes"]=="last") echo "checked";echo "> "._("Alter des neuesten Beitrags - neue oben");?><br>
 		</td>
 	</tr>
+	<tr>
+		<td align=right class=blank style="border-bottom:1px dotted black;">
+			<font size=-1><?echo _("Anzeigemodus der Themenanzeige");?></font>
+		</td>
+		<td align=left class=steelgraulight>
+			<font size=-1>
+			<input type=radio value="tree" name=themeview <?if ($forum["themeview"]=="tree") echo "checked"; echo "> "._("Treeview");?><br>
+			<input type=radio value="mixed" name=themeview <?if ($forum["themeview"]=="mixed") echo "checked";echo "> "._("Flatview");?><br>
+		</td>
+	</tr>
+	<tr>
+		<td align=right class=blank style="border-bottom:1px dotted black;">
+			<font size=-1><?echo _("Einsprungsseite des Forums");?></font>
+		</td>
+		<td align=left class=steelgraulight>
+			<font size=-1>
+			<input type=radio value="theme" name=presetview <?if ($forum["presetview"]=="tree" || $forum["presetview"]=="mixed") echo "checked"; echo "> "._("Themenansicht");?><br>
+			<input type=radio value="neue" name=presetview <?if ($forum["presetview"]=="neue") echo "checked";echo "> "._("Neue Beiträge");?><br>
+			<input type=radio value="flat" name=presetview <?if ($forum["presetview"]=="flat") echo "checked";echo "> "._("Letzte Beiträge");?><br>
+		</td>
+	</tr>
+
 	<tr>
 		<td align=right class=blank style="border-bottom:1px dotted black;">
 			<font size=-1><?echo _("ForumAutoShrink(TM) Engine aktivieren");?></font>
