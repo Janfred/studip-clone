@@ -117,9 +117,11 @@ if (isset($details)) {
 			$user_id = $db->f("user_id")	;
 			
 			if ($gruppen = GetStatusgruppen($inst, $user_id)){
+					echo "<a href=\"admin_statusgruppe.php?list=TRUE&view=statusgruppe_inst\">";
 					echo htmlReady(join(", ", array_values($gruppen)));
+					echo "</a>";
 				} else 
-					echo "&nbsp;";
+					echo "<a href=\"admin_statusgruppe.php?list=TRUE&view=statusgruppe_inst\">bisher keiner zugeordnet</a>";
 			?>	
 			</td>
 			</tr>
