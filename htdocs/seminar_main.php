@@ -63,9 +63,9 @@ if(isset($redirect_to) && $redirect_to != "") {
 						$take_it ++;
 				}
 		}
-		header("Location: $new_query");
 		unset($redirect_to);
 		page_close();
+		header("Location: $new_query");
 		die;
 }
 

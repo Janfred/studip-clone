@@ -67,9 +67,9 @@ if (isset($auswahl) && $auswahl!="") {
 			}
 
 		}
-		header("Location: $new_query");
 		unset($redirect_to);
 		page_close();
+		header("Location: $new_query");
 		die;
 	}
 
