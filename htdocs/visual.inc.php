@@ -632,7 +632,7 @@ function FixLinks ($data = "", $fix_nl = TRUE, $nl_to_br = TRUE) {
 	$fixed_text = preg_replace($pattern, $replace, $data);
 	
 	 $pattern = array(
-					"'(\[([^\n\f\[]+)\])?(((https?://)|(ftp://([_a-z0-9-:]+@)?))[_a-z0-9-]+(\.[_a-z0-9-:]+)+(/[^<\s]*[^\.\s<])*)'ie",
+					"'(\[([^\n\f\[]+)\])?(((https?://|ftp://)([_a-z0-9-:]+@)?)[_a-z0-9-]+(\.[_a-z0-9-:]+)+(/[^<\s]*[^\.\s<])*)'ie",
 					"'(?<=\s|^)(\[([^\n\f\[]+)\])?([-a-z0-9_]+(\.[_a-z0-9-]+)*@([_a-z0-9-]+(\.[_a-z0-9-]+)+))'ie"
 					);
 	$replace = array("preg_call_link('\\2', '\\3', 'LINK')", "preg_call_link('\\2', '\\3', 'MAIL')");
@@ -760,10 +760,10 @@ function mila ($titel, $size = 60) {
 
 //Ausgabe der Aufklapp-Kopfzeile
 function printhead ($breite, $left, $link, $open, $new, $icon,
-		$titel, $zusatz, $timestmp = 0, $printout = TRUE, $index="", $indikator="age") {
+		$titel, $zusatz, $timestmp = 0, $printout = TRUE, $index = "", $indikator = "age") {
 		// Verzweigung was der PFeil anzeigen soll
 		
-	if ($indikator=="viewcount") {
+	if ($indikator == "viewcount") {
 		if ($index == "0") {
 			$timecolor = "#BBBBBB";
 		} else {
