@@ -311,17 +311,17 @@ function get_config_info ($range_id, $config_id) {
 		$sri = "&lt;studip_remote_include&gt;\n\t&lt;module name=\"$module\" /&gt;";
 		$sri .= "\n\t&lt;config id=\"$config_id\" /&gt;\n\t&lt;range id=\"$range_id\" /&gt;";
 		$sri .= "\n&lt;/studip_remote_include&gt;";
-		$link_sri = "http://" . $GLOBALS["EXTERN_SERVER_NAME"] . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"];
+		$link_sri = "http://" . $GLOBALS["EXTERN_SERVER_NAME"];
 		$link_sri .= "extern.php?page_url=" . _("URL_DER_INCLUDE_SEITE");
 		
-		if ($level == 1) {
-			$link = "http://" . $GLOBALS["EXTERN_SERVER_NAME"] . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"];
+		if ($level) {
+			$link = "http://" . $GLOBALS["EXTERN_SERVER_NAME"];
 			$link .= "extern.php?module=$module&config_id=$config_id&range_id=$range_id";
 			$link_structure = $link . "&view=tree";
 			$sri_structure = "&lt;studip_remote_include&gt;\n\tmodule = $module\n\t";
 			$sri_structure = "config_id = $config_id\n\trange_id=$range_id";
 			$sri_structure .= "\n\tview = tree\n&lt;/studip_remote_include&gt;";
-			$link_br = "http://" . $GLOBALS["EXTERN_SERVER_NAME"] . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"];
+			$link_br = "http://" . $GLOBALS["EXTERN_SERVER_NAME"];
 			$link_br .= "extern.php?module=$module<br>&config_id=$config_id<br>&range_id=$range_id";
 			
 			$info = array("module_type" => $module_type, "module_name" => $module,
