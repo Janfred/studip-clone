@@ -778,7 +778,7 @@ function FixLinks ($data = "", $fix_nl = TRUE, $nl_to_br = TRUE, $img = FALSE, $
 	$fixed_text = preg_replace($pattern, $replace, $data);
 
 	$pattern = array(
-					'#((\[(img)(\=([^\n\f\[:]+))?(:(\d{1,3}%?))?(:(center|right))?(:([^\]]+))?\]|\[(?!img)([^\n\f\[]+)\])?(((https?://|ftp://)(['.$chars.':]+@)?)['.$chars.']+(\.['.$chars.':]+)*(/[^<\s]*[^\.\s<])*))#ie',
+					'#((\[(img)(\=([^\n\f\[:]+))?(:(\d{1,3}%?))?(:(center|right))?(:([^\]]+))?\]|\[(?!img)([^\n\f\[]+)\])?(((https?://|ftp://)(['.$chars.':]+@)?)['.$chars.']+(\.['.$chars.':]+)*/?([^<\s]*[^\.\s<])*))#ie',
 					'#(?<=\s|^)(\[([^\n\f\[]+)\])?(['.$chars.']+(\.['.$chars.']+)*@(['.$chars.']+(\.['.$chars.']+)+))#ie'
 					);
 	$replace = array(
@@ -869,7 +869,7 @@ function preg_call_link ($params, $mod, $img, $extern = FALSE) {
 * @return	string  link in punycode
 */
 function idna_link($link, $mail = false){
-	if (!$GLOBALS['CONVERT_IDNA_URL']) return decodeHTML($link);
+	if (!$GLOBALS['CONVERT_IDNA_URL']) return $link; 
 	if (preg_match('/&\w+;/i',$link)) { //umlaute?  (html-coded)
 		$IDN = new idna_convert();
 		$out = false;
