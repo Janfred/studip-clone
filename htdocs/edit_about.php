@@ -312,7 +312,7 @@ function edit_leben($lebenslauf,$schwerp,$publi,$view, $datafield_content, $data
 
 function edit_pers($password,$check_pass,$response,$new_username,$vorname,$nachname,$email,$telefon,$anschrift,$home,$hobby,$geschlecht,$title_front,$title_front_chooser,$title_rear,$title_rear_chooser,$view) {
 	global $UNI_NAME_CLEAN, $_language_path, $auth; 
-	global $ALLOW_CHANGE_USERNAME, $ALLOW_CHANGE_EMAIL, $ALLOW_ADMIN_USERACCESS;
+	global $ALLOW_CHANGE_USERNAME, $ALLOW_CHANGE_EMAIL, $ALLOW_ADMIN_USERACCESS, $ALLOW_CHANGE_NAME;
   
 	//erstmal die "unwichtigen" Daten
 	if ($home == $this->default_url)
@@ -385,22 +385,25 @@ function edit_pers($password,$check_pass,$response,$new_username,$vorname,$nachn
 		}
 		
 		if (!StudipAuthAbstract::CheckField("auth_user_md5.Vorname", $this->auth_user['auth_plugin']) && $vorname!=$this->auth_user["Vorname"]) { //Vornamen verändert ?
-			if (!$validator->ValidateName($vorname)) {
-				$this->msg=$this->msg . "error§" . _("Der Vorname fehlt oder ist unsinnig!") . "§";
-				return false;
-			}   // Vorname nicht korrekt oder fehlend
-			$this->db->query("UPDATE auth_user_md5 SET Vorname='$vorname' WHERE user_id='".$this->auth_user["user_id"]."'");
-			$this->msg=$this->msg . "msg§" . _("Ihr Vorname wurde ge&auml;ndert!") . "§";
+			if ($ALLOW_CHANGE_NAME) {
+				if (!$validator->ValidateName($vorname)) {
+					$this->msg=$this->msg . "error§" . _("Der Vorname fehlt oder ist unsinnig!") . "§";
+					return false;
+				}   // Vorname nicht korrekt oder fehlend
+				$this->db->query("UPDATE auth_user_md5 SET Vorname='$vorname' WHERE user_id='".$this->auth_user["user_id"]."'");
+				$this->msg=$this->msg . "msg§" . _("Ihr Vorname wurde ge&auml;ndert!") . "§";
+			}
 		}
 		
 		if (!StudipAuthAbstract::CheckField("auth_user_md5.Nachname", $this->auth_user['auth_plugin']) && $nachname!=$this->auth_user["Nachname"]) { //Namen verändert ?
-			if (!$validator->ValidateName($nachname)) {
-				$this->msg=$this->msg . "error§" . _("Der Nachname fehlt oder ist unsinnig!") . "§";
-				return false;      
-			}   // Nachname nicht korrekt oder fehlend
-			$this->db->query("UPDATE auth_user_md5 SET Nachname='$nachname' WHERE user_id='".$this->auth_user["user_id"]."'");
-			$this->msg=$this->msg . "msg§" . _("Ihr Nachname wurde ge&auml;ndert!") . "§";
-
+			if ($ALLOW_CHANGE_NAME) {
+				if (!$validator->ValidateName($nachname)) {
+					$this->msg=$this->msg . "error§" . _("Der Nachname fehlt oder ist unsinnig!") . "§";
+					return false;
+				}   // Nachname nicht korrekt oder fehlend
+				$this->db->query("UPDATE auth_user_md5 SET Nachname='$nachname' WHERE user_id='".$this->auth_user["user_id"]."'");
+				$this->msg=$this->msg . "msg§" . _("Ihr Nachname wurde ge&auml;ndert!") . "§";
+			}
 		}
 		
 
@@ -982,13 +985,13 @@ if ($view=="Daten") {
 
 	$cssSw->switchClass();
 	echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><blockquote><b>" . _("Name:") . " </td><td class=\"".$cssSw->getClass()."\" nowrap align=\"left\"><font size=-1>&nbsp; " . _("Vorname:") . "</font><br />";
-	if (StudipAuthAbstract::CheckField("auth_user_md5.Vorname", $my_about->auth_user['auth_plugin'])) {
+	if ((!$ALLOW_CHANGE_NAME) || StudipAuthAbstract::CheckField("auth_user_md5.Vorname", $my_about->auth_user['auth_plugin'])) {
         	echo "&nbsp; <font size=\"-1\">" . $my_about->auth_user["Vorname"]."</font>";
 	} else {
         	echo "&nbsp; <input type=\"text\" size=\"".round($max_col*0.25)."\" name=\"vorname\" value=\"".$my_about->auth_user["Vorname"]."\">&nbsp; <font color=\"red\" size=+2>*</font>";
 	}
 	echo "</td><td class=\"".$cssSw->getClass()."\" nowrap align=\"left\"><font size=-1>&nbsp; " . _("Nachname:") . "</font><br />";
-	if (StudipAuthAbstract::CheckField("auth_user_md5.Nachname", $my_about->auth_user['auth_plugin'])) {
+	if ((!$ALLOW_CHANGE_NAME) || StudipAuthAbstract::CheckField("auth_user_md5.Nachname", $my_about->auth_user['auth_plugin'])) {
 		echo "&nbsp; <font size=\"-1\">" . $my_about->auth_user["Nachname"]."</font>";
 	} else {
 		echo "&nbsp; <input type=\"text\" size=\"".round($max_col*0.25)."\" name=\"nachname\" value=\"".$my_about->auth_user["Nachname"]."\">&nbsp; <font color=\"red\" size=+2>*</font>";
