@@ -66,6 +66,11 @@ if (!isset($_include_stylesheet))  // if not set, use default stylesheet
 	$_include_stylesheet ="style.css";
 if ($_include_stylesheet != "")  // if empty, use no stylesheet
 	printf("\t\t<link rel=\"stylesheet\" href=\"%s\" type=\"text/css\">\n", $_include_stylesheet);
+
+if (isset ($_include_extra_stylesheet))
+	printf("\t\t<link rel=\"stylesheet\" href=\"%s\" type=\"text/css\">\n", $_include_extra_stylesheet);
+
+unset ($_include_extra_stylesheet);
 unset ($_include_stylesheet);
 unset ($_html_head_title);
 ?>
