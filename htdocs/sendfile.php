@@ -308,13 +308,6 @@ if ($no_access) {
 if (substr($path_file,0,6) != "ftp://") {
 	//Datei per HTTP verschicken
 	
-	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
-	parse_window("error§" . _("Sie haben keine Zugriffsberechtigung f&uuml;r diesen Download!"), "§", _("Download nicht m&ouml;glich"), $pathfile);
-	page_close();
-	echo "</body>";
-	die;
-	
 	if ($type != 5 && $type != 6){
 		$filesize = filesize($path_file);
 	} else {
@@ -332,8 +325,8 @@ if (substr($path_file,0,6) != "ftp://") {
 	header("Expires: 0");
 
 	header("Content-type: $content_type; name=\"".rawurldecode($file_name)."\"");
-	if ($type != 6)
-		header("Content-length: $filesize");
+	// if ($type != 6)
+		// header("Content-length: $filesize");
 	header("Content-disposition: $content_disposition; filename=\"".rawurldecode($file_name)."\"");
 	if ($type != 5){
 		readfile($path_file);
