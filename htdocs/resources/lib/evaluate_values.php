@@ -218,7 +218,7 @@ if ($change_object_schedules) {
 			if (get_object_type($change_schedule_assign_user_id) == "sem") {
 			 	require_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
 		 		$veranstAssign = new VeranstaltungResourcesAssign($change_schedule_assign_user_id);
-				$created_ids = $veranstAssign->changeAssign($change_schedule_resource_id, $change_schedule_user_free_name);
+				$created_ids = $veranstAssign->updateAssign($change_schedule_resource_id, $change_schedule_user_free_name);
 
 				//after a succesful insert show the first (maybe the only) assign-object
 				if (is_array($created_ids))
@@ -343,21 +343,31 @@ if ($change_object_schedules) {
 					$change_schedule_repeat_week);
 
 				if (($change_object_schedules == "NEW") || ($new_assign_object)) {
-					if ($changeAssign->create()) {
-						$assign_id=$changeAssign->getId();
-						$msg->addMsg(3);
-						$new_assign_object='';
-					} else {
-						if ((!$do_search_user_x) && (!$reset_search_user_x))
-							$msg->addMsg(10);					
-						$new_assign_object=serialize($changeAssign);
-					}
-				} else {
-					$changeAssign->chng_flag=TRUE;
-					if ($changeAssign->store()) {
-						$msg->addMsg(4);
+					if (($change_schedule_assign_user_id) || ($change_schedule_user_free_name))
+						$overlaps = $changeAssign->checkOverlap();
+					if (!$overlaps) {
+						if ($changeAssign->create()) {
+							$assign_id=$changeAssign->getId();
+							$msg->addMsg(3);
+							$new_assign_object='';
+						} else {
+							if ((!$do_search_user_x) && (!$reset_search_user_x))
+								$msg->addMsg(10);					
+							$new_assign_object=serialize($changeAssign);
 						}
-					$assign_id=$changeAssign->getId();
+					} else
+						$msg->addMsg(11);
+				} else {
+					if (($change_schedule_assign_user_id) || ($change_schedule_user_free_name))
+						$overlaps = $changeAssign->checkOverlap();
+					if (!$overlaps) {
+						$changeAssign->chng_flag=TRUE;
+						if ($changeAssign->store()) {
+							$msg->addMsg(4);
+							}
+						$assign_id=$changeAssign->getId();
+					} else
+						$msg->addMsg(11);
 				}
 			}
 		}
