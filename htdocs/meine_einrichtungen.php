@@ -83,7 +83,7 @@ function get_my_inst_values(&$my_inst) {
 
 function print_institut_content($instid,$my_inst_values) {
   // Postings
-  IF ($my_inst_values["neuepostings"])  ECHO "<a href=\"institut_main.php?auswahl=$instid&redirect_to=forum.php&view=neue\">&nbsp; <img src='pictures/icon-posting2.gif' border=0 ".tooltip($my_inst_values["postings"]."></a>";
+  IF ($my_inst_values["neuepostings"])  ECHO "<a href=\"institut_main.php?auswahl=$instid&redirect_to=forum.php&view=neue\">&nbsp; <img src='pictures/icon-posting2.gif' border=0 ".tooltip($my_inst_values["postings"]." Postings, ".$my_inst_values["neuepostings"]." Neue")."></a>";
   ELSEIF ($my_inst_values["postings"]) ECHO "<a href=\"institut_main.php?auswahl=$instid&redirect_to=forum.php\">&nbsp; <img src='pictures/icon-posting.gif' border=0 ".tooltip($my_inst_values["postings"]." Postings")."></a>";
   ELSE ECHO "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
   //Dokumente
