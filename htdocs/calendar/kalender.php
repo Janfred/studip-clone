@@ -35,19 +35,19 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 		echo "<script language=\"JavaScript\" src=\"overlib.js\"></script>\n";
 	}
 	
-	include "seminar_open.php";
+	include($ABSOLUTE_PATH_STUDIP . "seminar_open.php");
 	// -- hier muessen Seiten-Initialisierungen passieren --
 	// -- wir sind jetzt definitiv in keinem Seminar, also... --
 	$SessSemName[0] = "";
 	$SessSemName[1] = "";
 
-	include "header.php";   //hier wird der "Kopf" nachgeladen
-	require_once "config.inc.php"; //Daten laden
-	require_once "visual.inc.php";
-	require_once "functions.php";
-	include "kalenderFunc.inc.php";
-	include "kalenderClass.inc.php";
-	include "kalenderVisual.inc.php";
+	include($ABSOLUTE_PATH_STUDIP . "header.php");   //hier wird der "Kopf" nachgeladen
+	require_once($ABSOLUTE_PATH_STUDIP . "config.inc.php"); //Daten laden
+	require_once($ABSOLUTE_PATH_STUDIP . "visual.inc.php");
+	require_once($ABSOLUTE_PATH_STUDIP . "functions.php");
+	include("kalenderFunc.inc.php)";
+	include("./lib/kalenderClass.inc.php");
+	include("kalenderVisual.inc.php");
 		
 	// bei Einsprung ohne $cmd wird weiter unten eine Erlaeuterung ausgegeben
 	if(!$cmd && !$atime)
@@ -363,7 +363,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 		}
 	}
 	
-	include "kalenderLinks.php";
+	include("kalenderLinks.php");
 	
 	if($cmd != "changeview"){
 	?>
@@ -1423,7 +1423,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 	
 	// Ansicht anpassen **********************************************************
 	if($cmd == "changeview"){
-		include "kalenderSettings.inc.php";
+		include("kalenderSettings.inc.php");
 	}
 	
 	// Save data back to database.
