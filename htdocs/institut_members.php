@@ -486,7 +486,7 @@ else {
 							FROM statusgruppen LEFT JOIN statusgruppe_user USING(statusgruppe_id)
 							LEFT JOIN user_inst ui USING(user_id) LEFT JOIN auth_user_md5 aum USING(user_id)
 							LEFT JOIN user_info info USING(user_id)
-							WHERE range_id = '%s' HAVING Institut_id = '%s'
+							WHERE range_id = '%s' AND Institut_id = '%s' GROUP BY user_id
 							ORDER BY %s %s", $auswahl, $auswahl, $institut_members_data["sortby"],
 							$institut_members_data["direction"]);
 	}
@@ -501,9 +501,9 @@ else {
 		else
 			$query = sprintf("SELECT ui.raum, ui.sprechzeiten, ui.Telefon,
 							aum.user_id, aum.Nachname, aum.Vorname, aum.username, Institut_id
-							FROM statusgruppen LEFT JOIN statusgruppe_user USING(statusgruppe_id)
+							FROM statusgruppen LEFT JOIN statusgruppe_user su USING(statusgruppe_id)
 							LEFT JOIN user_inst ui USING(user_id) LEFT JOIN auth_user_md5 aum USING(user_id)
-							WHERE range_id = '%s' HAVING Institut_id = '%s'
+							WHERE range_id = '%s' AND Institut_id = '%s' GROUP BY user_id
 							ORDER BY %s %s", $auswahl, $auswahl, $institut_members_data["sortby"],
 							$institut_members_data["direction"]);
 	}
