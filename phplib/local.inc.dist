@@ -7,7 +7,7 @@ please note the CONFIG.INC.PHP in the system folder for the indivual settings of
 //the name of your master-faculty (e.g. "University of Göttingen")
 
 // (without html-entities, used for mail-system!)
-$UNI_NAME_CLEAN = "Studip 0.9";
+$UNI_NAME_CLEAN = "Studip 0.9.5";
 //create the html-version
 $UNI_NAME=htmlentities($UNI_NAME_CLEAN, ENT_QUOTES);
 //the length of a session in seconds
@@ -180,6 +180,7 @@ $STUDIP_AUTH_CONFIG_LDAPREADER = array(	"host" => "localhost",
 										"user_password_attribute" => "userpassword",
 										"reader_dn" => "uid=reader,dc=studip,dc=de",
 										"reader_password" => "<password>",
+										"error_head" =>	"LDAP reader plugin",
 										"user_data_mapping" =>
 										array(	"auth_user_md5.username" => array("callback" => "dummy", "map_args" => ""),
 												"auth_user_md5.password" => array("callback" => "dummy", "map_args" => ""));
@@ -189,6 +190,7 @@ $STUDIP_AUTH_CONFIG_LDAP = array(	"host" => "localhost",
 										"protocol_version" => 3,
 										"username_attribute" => "uid",
 										"anonymous_bind" => true,
+										"error_head" =>	"LDAP plugin",
 										"user_data_mapping" =>
 										array(	"auth_user_md5.username" => array("callback" => "dummy", "map_args" => ""),
 												"auth_user_md5.password" => array("callback" => "dummy", "map_args" => ""));
@@ -197,6 +199,7 @@ $STUDIP_AUTH_CONFIG_STANDARDEXTERN = array(	"db_host" => "localhost",
 											"db_username" => "extern",
 											"db_name" => "extern_studip",
 											"db_password" => "<password>",
+											"error_head" =>	"Stud.IP extern plugin",
 											"user_data_mapping" =>
 											array(	"auth_user_md5.username" => array("callback" => "dummy", "map_args" => ""),
 													"auth_user_md5.password" => array("callback" => "dummy", "map_args" => ""),
