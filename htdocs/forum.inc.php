@@ -712,14 +712,27 @@ function printposting ($forumposting) {
 		if (ereg("\[quote",$description) AND ereg("\[/quote\]",$description) AND $forumposting["writestatus"] == "none")
 			$description = quotes_decode($description);
 
-		if ($sidebar==$forumposting["id"]) {
-			$addon = "<font size=\"-1\" color=\"555555\"><br>&nbsp;&nbsp;Views: $objectviews<br>&nbsp;&nbsp;Relevanz: $relevanz<br>&nbsp;&nbsp;Bewertung: ".$forumposting["rate"]."<br>";
+		// Anzeigen der Sidebar /////////////
+		
+		if ($sidebar==$forumposting["id"] || $forum["rateallopen"]==TRUE) {  
+			
+			$addon = "<img src=\"pictures/blank.gif\" width=\"140\" height=\"5\">";
+			
+			if ($forum["showimages"]==TRUE) { // es werden Porträts angezeigt
+				if(!file_exists("./user/".$forumposting["userid"].".jpg")) {
+					$addon .= "<br><div align=\"center\"><img border=1 src=\"./user/nobody.jpg\" width=\"80\" " .tooltip(_("kein persönliches Bild vorhanden"))."></div>";
+				} else {
+					$addon .= "<br><div align=\"center\"><img src=\"./user/".$forumposting["userid"].".jpg\" border=\"1\" ".tooltip($forumposting["author"])."></div>";
+				}
+			}
+						
+			$addon .= "<font size=\"-1\" color=\"555555\"><br>&nbsp;&nbsp;Views: $objectviews<br>&nbsp;&nbsp;Relevanz: $relevanz<br>&nbsp;&nbsp;Bewertung: ".$forumposting["rate"]."<br>";
 			$rate = object_print_rates_detail($forumposting["id"]);
 			while(list($key,$value) = each($rate)) 
 				$addon .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$key: $value<br>";
 					
 			if (get_username($user->id) == $forumposting["username"]) {
-				$addon .= "<font size=\"-1\">&nbsp;&nbsp;Sie können sich nicht&nbsp;<br>&nbsp;&nbsp;selbst bewerten.";
+				$addon .= "<font size=\"-1\">&nbsp;&nbsp;Sie können sich&nbsp;<br>&nbsp;&nbsp;nicht selbst bewerten.&nbsp;";
 			} else {
 				if (object_check_user($forumposting["id"], "rate") == FALSE) {  // wenn er noch nicht bewertet hat
 					$addon .= "<div align=\"center\"><font size=\"-1\">Dieser Beitrag war<br><font size=\"-2\">(Schulnote)</font><br><form method=post action=$PHP_SELF>";
@@ -737,7 +750,7 @@ function printposting ($forumposting) {
 					$addon .= "<font size=\"-1\">&nbsp;&nbsp;Sie haben diesen&nbsp;<br>&nbsp;&nbsp;Beitrag bewertet.";
 				}
 			}
-		} else 
+		} else  // nur Aufklapppfeil
 			$addon = "open:$PHP_SELF?open=".$forumposting["id"]."&flatviewstartposting=".$forum["flatviewstartposting"]."&sidebar=".$forumposting["id"]."#anker";		
   
   // Kontentzeile ausgeben
@@ -765,8 +778,9 @@ function flatview ($open=0, $mehr=1, $show=0, $update="", $name="", $description
 $forum["openlist"] = $open;
 $forum["zitat"] = $zitat;
 $forum["update"] = $update;
-$forum["postingsperside"] = 15;
-$postingsperside = 15;
+if (!$forum["postingsperside"])
+	$forum["postingsperside"] = 15;
+$postingsperside = $forum["postingsperside"];
 if (!$flatviewstartposting) {
 	$forum["flatviewstartposting"] = 0;
 	$flatviewstartposting = 0;
@@ -896,8 +910,9 @@ echo "</td>";
 echo "</tr>";
 echo "</table><br>";
 
-/*
+
 echo DebugForum($forum);
+/*
 echo "<hr>";
 echo DebugForum($forumposting);
 */

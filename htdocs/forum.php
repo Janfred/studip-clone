@@ -337,9 +337,24 @@ if ($rate && $open) {
 	$forum["anchor"] = $open;
 
 //Titel-Zeile
-if (!$forumsend=="anpassen") {
+
+if ($forumsend) {
+	if ($forumsend=="bla"){
+		$forum["neuauf"] = $neuauf;
+		$forum["postingsperside"] = $postingsperside;
+		$forum["flatallopen"] = $flatallopen;
+		$forum["rateallopen"] = $rateallopen;
+		$forum["showimages"] = $showimages;
+		$forum["changed"] = "TRUE";
+		$txt = _("Anpassungen durchgeführt.");
+	} else
+		include("forumsettings.inc.php");
+}
+
+if ($forumsend!="anpassen") {
+
 	echo "\n<table width=\"100%\" class=\"blank\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n";
-	echo "<tr><td class=\"topic\" width=\"50%\"><b>&nbsp;<img src='pictures/icon-posting.gif' align=absmiddle>&nbsp; ". $SessSemName["header_line"] ." - " . _("Forum") . "</b></td><td class=\"topic\" width=\"50%\" align=\"right\"><a href='forum.php?forumsend=anpassen'><img src='pictures/pfeillink.gif' border=0 " . tooltip(_("Look & Feel anpassen")) . ">&nbsp;</a></td></tr>";
+	echo "<tr><td class=\"topic\" width=\"50%\"><b>&nbsp;<img src='pictures/icon-posting.gif' align=absmiddle>&nbsp; ". $SessSemName["header_line"] ." - " . _("Forum") . "</b></td><td class=\"topic\" width=\"50%\" align=\"right\"><a href='forum.php?forumsend=anpassen&view=$view'><img src='pictures/pfeillink.gif' border=0 " . tooltip(_("Look & Feel anpassen")) . ">&nbsp;</a></td></tr>";
 	
 	// Ausgabe für Zusatzinfos
 	if ($message=="kill") echo parse_msg("msg§" . sprintf(_("%s Posting(s) gel&ouml;scht"), $count));
@@ -354,16 +369,7 @@ if (!$forumsend=="anpassen") {
 	echo "\n</table>\n";
 }
 
-if ($forumsend) {
-	if ($forumsend=="bla"){
-		$forum=array(
-			"jshover"=>$jshover, 
-			"neuauf"=>$neuauf,
-			"changed"=>"TRUE"			
-			);
-	} ELSE
-		include("forumsettings.inc.php");
-}
+
 
 if ($fav) {  // zu den Favoriten hinzufügen/entfernen
 	$fav = object_switch_fav($fav);
