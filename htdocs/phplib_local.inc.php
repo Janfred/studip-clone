@@ -261,13 +261,14 @@ class Seminar_Auth extends Auth {
 		$check_auth = StudipAuthAbstract::CheckAuthentication($auto_user,$expected_response,$this->auth['jscript']);
 		if ($check_auth['uid']){
 			$uid = $check_auth['uid'];
-			$this->db->query(sprintf("select perms,auth_plugin from %s where user_id = '%s'",$this->database_table,$uid));
+			$this->db->query(sprintf("select username,perms,auth_plugin from %s where user_id = '%s'",$this->database_table,$uid));
 			$this->db->next_record();
-			$this->auth["perm"]  = $this->db->f("perms");
-			if ($this->auth["perm"] == "root" || $this->auth["perm"] == "admin"){
+			if ($this->db->f("perms") == "root" || $this->db->f("perms") == "admin"){
 				$this->error_msg= sprintf(_("Autologin ist mit dem Status: %s nicht möglich!"), $this->auth["perm"]);
 				return false;
 			}
+			$this->auth["perm"]  = $this->db->f("perms");
+			$this->auth["uname"] = $this->db->f("username");
 			$this->auth["auth_plugin"]  = $this->db->f("auth_plugin");
 			$this->auth_set_user_settings($uid);
 			return $uid;
@@ -313,9 +314,10 @@ class Seminar_Auth extends Auth {
 		$check_auth = StudipAuthAbstract::CheckAuthentication($username,$password,$this->auth['jscript']);
 		if ($check_auth['uid']){
 			$uid = $check_auth['uid'];
-			$this->db->query(sprintf("select perms,auth_plugin from %s where user_id = '%s'",$this->database_table,$uid));
+			$this->db->query(sprintf("select username,perms,auth_plugin from %s where user_id = '%s'",$this->database_table,$uid));
 			$this->db->next_record();
 			$this->auth["perm"]  = $this->db->f("perms");
+			$this->auth["uname"] = $this->db->f("username");
 			$this->auth["auth_plugin"]  = $this->db->f("auth_plugin");
 			$this->auth_set_user_settings($uid);
 			return $uid;
