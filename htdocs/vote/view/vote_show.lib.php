@@ -864,7 +864,8 @@ function sortBySurname ($a, $b) {
 //     $surname_a = strstr( $db->getAuthorRealname($a), ' ');
 //     $surname_b = strstr( $db->getAuthorRealname($b), ' ');
     
-    return strcmp( get_nachname($a), get_nachname($b) );
+    return strcmp( strtolower (get_nachname ($a)),
+		   strtolower (get_nachname ($b)));
 }
 
 ?>
