@@ -126,8 +126,11 @@ if ($visible[$i++])
 
 if ($this->config->getValue("Main", "studiplink")) {
 	echo "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" ";
-	echo "width=\"" . $this->config->getValue("TableHeader", "table_width");
-	echo "\" align=\"" . $this->config->getValue("TableHeader", "table_align") . "\">\n";
+	if ($studiplink_width = $this->config->getValue("TableHeader", "table_width"))
+		echo " width=\"$studiplink_width\"";
+	if ($studiplink_align = $this->config->getValue("TableHeader", "table_align"))
+		echo " align=\"$studiplink_align\">\n";
+
 
 	if ($this->config->getValue("Main", "studiplink") == "top") {
 		$args = array("width" => "100%", "height" => "40", "link" => "");

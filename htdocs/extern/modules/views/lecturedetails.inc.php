@@ -128,9 +128,11 @@ if ($db->next_record()) {
 		$data["ects"] = htmlReady($db->f("ects"));
 	
 	if ($this->config->getValue("Main", "studiplink")) {
-		echo "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" ";
-		echo "width=\"" . $this->config->getValue("TableHeader", "table_width");
-		echo " align=\"" . $this->config->getValue("TableHeader", "table_align") . "\">\n";
+		echo "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\"";
+		if ($studiplink_width = $this->config->getValue("TableHeader", "table_width"))
+			echo " width=\"$studiplink_width\"";
+		if ($studiplink_align = $this->config->getValue("TableHeader", "table_align"))
+			echo " align=\"$studiplink_align\">\n";
 
 		$studip_link = "http://{$GLOBALS['EXTERN_SERVER_NAME']}seminar_main.php?&auswahl=";
 		$studip_link .= $seminar_id . "&redirect_to=admin_seminare1.php&login=true&new_sem=TRUE";
