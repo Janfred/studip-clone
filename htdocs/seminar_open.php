@@ -125,7 +125,11 @@ if ($SessionStart==0) {
 				}
 			}
 		}
+		unset($temp_accepted_language);
+		unset($temp_language);
+		unset($temp_language_settings);
 	}
+	unset($accepted_languages);
 }		
 	
 // I18N functions
@@ -152,7 +156,7 @@ unset($url); unset($i_page_array);
 	
 // Funktion, um die übergebenen Parameter der Seite zu bekommen:
 
-	$i_query = explode('&',getenv("QUERY_STRING"));
+$i_query = explode('&',getenv("QUERY_STRING"));
 
 // steht jetzt lesbar im Array $i_query
 	
