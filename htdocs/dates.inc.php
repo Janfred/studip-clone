@@ -798,7 +798,7 @@ function delete_range_of_dates ($range_id, $topics = FALSE) {
 }
 
 
-
+//Erstellt automatisch einen Ablaufplan oder aktualisiert ihn
 function dateAssi ($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full = FALSE, $old_turnus = FALSE) {
 	global $RESOURCES_ENABLE, $RELATIVE_PATH_RESOURCES, $SEMESTER, $HOLIDAY, $TERMIN_TYP, $user;
 	
@@ -877,9 +877,14 @@ function dateAssi ($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full =
 
 	//determine the last day as sem_end
 	if ($full)
-		foreach ($SEMESTER as $val)
-			if  ((($veranstaltung_start_time + $veranstaltung_duration_time + 1) >= $val["beginn"]) AND (($veranstaltung_start_time + $veranstaltung_duration_time +1) <= $val["ende"]))
-				$sem_end=$val["vorles_ende"];
+		if ($veranstaltung_duration_time == -1) {
+			$last_sem = array_pop($SEMESTER);
+			$sem_end=$last_sem["vorles_ende"];
+		} else
+			foreach ($SEMESTER as $val)
+				if  ((($veranstaltung_start_time + $veranstaltung_duration_time + 1) >= $val["beginn"]) AND (($veranstaltung_start_time + $veranstaltung_duration_time +1) <= $val["ende"]))
+					$sem_end=$val["vorles_ende"];
+			
 	
 	$interval = $term_data["turnus"] + 1;
 
@@ -981,6 +986,7 @@ function dateAssi ($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full =
 	return ($result_a);
 }
 
+//Checkt, ob Ablaufplantermine zu gespeicherten Metadaten vorliegen
 function isSchedule ($sem_id) {
 	$db = new DB_Seminar;
 	$query = sprintf ("SELECT metadata_dates FROM seminare WHERE Seminar_id = '%s'", $sem_id);
@@ -1013,6 +1019,29 @@ function isSchedule ($sem_id) {
 	}
 
 	if (isset($matched_dates))
+		return TRUE;
+	else
+		return FALSE;
+}
+
+//Checkt, ob bereist angelegte Termine ueber mehrere Semester laufen
+function isDatesMultiSem ($sem_id) {
+	$db = new DB_Seminar;
+
+	//we load the first date
+	$query = sprintf("SELECT date FROM termine WHERE range_id='%s' ORDER BY date LIMIT 1", $sem_id);
+	$db->query($query);
+	$db->next_record();
+	$first = $db->f("date");
+
+	//we load the last date
+	$query = sprintf("SELECT date FROM termine WHERE range_id='%s' ORDER BY date DESC LIMIT 1", $sem_id);
+	$db->query($query);
+	$db->next_record();
+	$last = $db->f("date");
+
+	//than we check, if they are in the same semester
+	if (get_sem_name ($first) != get_sem_name ($last))
 		return TRUE;
 	else
 		return FALSE;

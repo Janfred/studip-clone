@@ -285,7 +285,8 @@ if (($uebernehmen_x) && (!$errormsg)) {
 		
 		//update the dates....
 		if ($term_metadata["update_dates"] ) {
-			$result = dateAssi($term_metadata["sem_id"], $mode="update", FALSE, FALSE, FALSE, $term_metadata["original_turnus"]);
+			$multisem = isDatesMultiSem($term_metadata["sem_id"]);
+			$result = dateAssi($term_metadata["sem_id"], $mode="update", FALSE, FALSE, $multisem, $term_metadata["original_turnus"]);
 			$term_metadata["original_turnus"] = $metadata_termin["turnus_data"];
 			if ($result) {
 				$errormsg.= sprintf ("msg§"._("%s Termine des Ablaufplans aktualisiert.")."§", $result["changed"]);

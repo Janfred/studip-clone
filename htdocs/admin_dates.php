@@ -495,18 +495,18 @@ if (($kill_x) && ($admin_dates_data["range_id"])) {
 				<font size="-1">generieren Sie automatisch Sitzungstermine mit folgenden Einstellungen:<br /></font>
 				&nbsp; &nbsp; <font size=-1><input type="checkbox" name="pfad"> Zu jedem Termin einen Themenordner im Forum der Veranstaltung anlegen.</font><br>
 				&nbsp; &nbsp; <font size=-1><input type="checkbox" name="folder"> Zu jedem Termin einen Dateiordner zum Upload anlegen. </font>
-				<? if ($db->f("duration_time") >0) {
+				<? if ($db->f("duration_time") != 0) {
 					?>
 					<br />&nbsp; &nbsp; <font size=-1><input type="checkbox" name="full"> Ablaufplan f&uuml;r alle Semester anlegen (wenn nicht gesetzt nur f&uuml;r das erste Semester) </font>
 					<?
 					}
 					?>
-					<img  src="./pictures/info.gif" 
+					<br /><br /><font size=-1>Assistent <input type="IMAGE" align ="absmiddle" name="make_dates" <?=makeButton("starten", "src")?> border="0" value="Ablaufplanassistenten ausf&uuml;hren >> "></font>
+					&nbsp; <img  src="./pictures/info.gif" 
 						onClick="alert('Der Ablaufplanassistent erstellt automatisch alle Termine des ersten oder aller Semester, je nach Auswahl. Dabei werden  - soweit wie möglich  - Feiertage und Ferienzeiten übersprungen. Anschliessend können Sie jedem Termin einen Titel und eine Beschreibung geben.');" 
 						alt="Der Ablaufplanassistent erstellt automatisch alle Termine des ersten oder aller Semester, je nach Auswahl. Dabei werden soweit wir m&ouml;glich Feiertage und Ferienzeiten &uuml;bersprungen. Anschliessend k&ouml;nnen Sie jedem Termin einen Titel und eine Beschreibung geben.">
 					<br /><br />
-					<font size=-1>Assistent <input type="IMAGE" align ="absmiddle" name="make_dates" <?=makeButton("starten", "src")?> border="0" value="Ablaufplanassistenten ausf&uuml;hren >> "></font><br>
-				</td>
+					</td>
 			</tr>
 		</table>
 		<?
