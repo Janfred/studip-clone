@@ -192,11 +192,7 @@ class ExternModuleGlobal extends ExternModule {
 				= $this->config->config["MainTableHeadrowGlobal"]["th_class"];
 		$this->config->config["SemName"]["td_style"]
 				= $this->config->config["MainTableHeadrowGlobal"]["th_style"];
-		
-		
-		
-		
-		
+	
 	}
 	
 	/**
@@ -230,4 +226,5 @@ class ExternModuleGlobal extends ExternModule {
 	}
 	
 }
+
 ?> 
