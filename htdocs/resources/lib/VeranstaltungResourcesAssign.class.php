@@ -37,6 +37,7 @@
 require_once $ABSOLUTE_PATH_STUDIP."dates.inc.php";
 require_once $ABSOLUTE_PATH_STUDIP."config.inc.php";
 require_once $RELATIVE_PATH_RESOURCES."/lib/AssignObject.class.php";
+require_once $RELATIVE_PATH_RESOURCES."/lib/RoomRequest.class.php";
 require_once $ABSOLUTE_PATH_STUDIP."lib/classes/SemesterData.class.php";
 
 class VeranstaltungResourcesAssign {
@@ -338,6 +339,12 @@ class VeranstaltungResourcesAssign {
 				$killAssign=new AssignObject($this->db->f("assign_id"));
 				$killAssign->delete();
 			}
+			$query = sprintf("SELECT request_id FROM resources_requests WHERE termin_id = '%s' ", $this->range_id);
+			$this->db->query($query);
+			while ($this->db->next_record()) {
+				$killRequest = new RoomRequest ($this->db->f("request_id"));
+				$killRequest->delete();
+			}			
 		}
 	}
 	
