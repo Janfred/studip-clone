@@ -1,8 +1,8 @@
 <?
 /**
-* ExternElementTable.class.php
+* ExternElementTableRow.class.php
 * 
-* This class defines the HTML-element from type "table"
+* 
 * 
 *
 * @author		Peter Thienel <pthienel@web.de>, Suchi & Berg GmbH <info@data-quest.de>
@@ -15,7 +15,7 @@
 
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
-// ExternElementTable.class.php
+// ExternElementTableRow.class.php
 // 
 // Copyright (C) 2003 Peter Thienel <pthienel@web.de>,
 // Suchi & Berg GmbH <info@data-quest.de>
@@ -39,7 +39,7 @@ require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."
 
 class ExternElementTableRow extends ExternElement {
 
-	var $attributes = array("tr_height", "tr_class", "tr_style","td_align",
+	var $attributes = array("tr_height", "tr_class", "tr_style", "td_align",
 			"td_valign", "td_bgcolor", "td_bgcolor2_", "td_zebratd_",
 			"td_class", "td_style", "font_face", "font_size", "font_color",
 			"font_class", "font_style");
@@ -55,7 +55,7 @@ class ExternElementTableRow extends ExternElement {
 		
 		$this->name = "TableRow";
 		$this->real_name = _("Datenzeile");
-		$this->description = -("Angaben zur Formatierung einer Datenzeile.");
+		$this->description = _("Angaben zur Formatierung einer Datenzeile.");
 	}
 
 }
