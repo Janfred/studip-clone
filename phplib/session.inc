@@ -22,7 +22,8 @@ class Session {
 
   var $cookie_domain = "";            ## If set, the domain for which the
                                       ## session cookie is set.
-
+  var $cookie_path = "/";
+  
   var $gc_time  = 1440;               ## Purge all session data older than 1440 minutes.
   var $gc_probability = 1;            ## Garbage collect probability in percent
 
@@ -116,10 +117,10 @@ class Session {
     switch ($this->mode) {
       case "cookie":
         if ( $newid && ( 0 == $this->lifetime ) ) {
-          SetCookie($this->name, $id, 0, "/", $this->cookie_domain);
+          SetCookie($this->name, $id, 0, $this->cookie_path, $this->cookie_domain);
         }
         if ( 0 < $this->lifetime ) {
-          SetCookie($this->name, $id, time()+$this->lifetime*60, "/", $this->cookie_domain);
+          SetCookie($this->name, $id, time()+$this->lifetime*60, $this->cookie_path, $this->cookie_domain);
         }
       break;
       case "get":
@@ -156,7 +157,7 @@ class Session {
       break;
  
       default:
-            SetCookie($this->name, "", 0, "/", $this->cookie_domain);
+            SetCookie($this->name, "", 0, $this->cookie_path, $this->cookie_domain);
             $HTTP_COOKIE_VARS[$this->name] = "";
       break;
     }
