@@ -434,23 +434,30 @@ if ($change_object_perms) {
 }
 
 //Typen bearbeiten
-if (($add_type) || ($delete_type) || ($add_type_property_id) || ($delete_type_property_id)) {
+if (($add_type) || ($delete_type) || ($delete_type_property_id) || ($change_categories)) {
 	//if ($ObjectPerms->getUserPerm () == "admin") { --> da muss der Ressourcen Root check hin °
 		if ($delete_type) {
 			$db->query("DELETE FROM resources_categories WHERE category_id ='$delete_type'");
 		}
 	
 		if (($add_type) && ($_add_type_x)) {
-			$id=md5(uniqid("Sommer2002"));	
+			$id=md5(uniqid("Sommer2002"));
 			$db->query("INSERT INTO resources_categories SET category_id='$id', name='$add_type', description='$insert_type_description' ");
-		}
-	
-		if (($add_type_property_id) && ($add_type_category_id)) {	
-			$db->query("INSERT INTO resources_categories_properties SET category_id='$add_type_category_id', property_id='$add_type_property_id' ");
+			if ($db->affected_rows())
+				$created_category_id=$id;
 		}
 	
 		if ($delete_type_property_id) {
 			$db->query("DELETE FROM resources_categories_properties WHERE category_id='$delete_type_category_id' AND property_id='$delete_type_property_id' ");
+		}
+
+		if (is_array($change_category_name)) foreach 	($change_category_name as $key=>$val) {
+			$query = sprintf ("UPDATE  resources_categories SET name='%s', iconnr='%s' WHERE category_id = '%s'", $change_category_name[$key], $change_category_iconnr[$key], $key);
+			$db->query($query);
+
+			if (${"change_category_add_property_".$key."_x"}) {
+				$db->query("INSERT INTO resources_categories_properties SET category_id='$key', property_id='$add_type_property_id[$key]' ");
+			}
 		}
 	/*} else {
 		$msg->displayMsg(1);

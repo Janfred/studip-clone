@@ -474,7 +474,10 @@ class editSettings extends cssClasses {
 	}
 
 	function showTypesForms() {
-		global $PHP_SELF;
+		global $PHP_SELF, $RELATIVE_PATH_RESOURCES, $created_category_id;
+		
+		//the avaiable object-icons for every category
+		$avaiableIcons = array (1=>"cont_res1.gif",2=> "cont_res2.gif",3=> "cont_res3.gif", 4=>"cont_res4.gif",5=> "cont_res5.gif");
 			
 		?>
 		<table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
@@ -492,7 +495,7 @@ class editSettings extends cssClasses {
 					<font size=-1><b>X</b></font>
 				</td>
 			</tr>
-			<form method="POST" action="<?echo $PHP_SELF ?>?add_type_category_id=<? echo $this->db2->f("category_id")?>">
+			<form method="POST" action="<?echo $PHP_SELF ?>#a">
 			<tr>
 				<td class="<? echo $this->getClass() ?>" width="4%">&nbsp; 
 				</td>
@@ -505,18 +508,28 @@ class editSettings extends cssClasses {
 				</td>
 			</tr>	
 			</form>
+			<form method="POST" action="<?echo $PHP_SELF ?>?change_categories=TRUE">
 			<? 
 			$this->selectTypes();
 			while ($this->db->next_record()) {
 				$depRes=$this->getDependingResources($this->db->f("category_id"));
+				if ($created_category_id == $this->db->f("category_id"))
+					print "<a name=\"a\"></a>";
 				?>
 			<tr>
 				<td class="<? $this->switchClass(); echo $this->getClass() ?>" width="4%">&nbsp; 
 				</td>
 				<td class="<? echo $this->getClass() ?>" width="25%" valign="top">
-					<font size=-1><? echo $this->db->f("name") ?></font><br />
+					<font size=-1><input type="TEXT" name="change_category_name[<?=$this->db->f("category_id")?>]" value="<? echo $this->db->f("name") ?>" size="20" maxlength="255" /></font><br />
 					<font size=-1>wird von <b><? echo  $depRes ?></b> Objekten verwendet</font><br />
-					<font size=-1><? ($this->db->f("system")) ? print( "systemobjekt") :print("") ?></font><br />
+					<font size=-1><? ($this->db->f("system")) ? print( "systemobjekt<br />") :print("") ?></font>
+					
+					<?
+					foreach ($avaiableIcons as $key => $val) {
+						printf ("<input type=\"RADIO\" name=\"change_category_iconnr[%s]\" %s value=\"%s\"><img src=\"%s/pictures/%s\" />&nbsp; ", $this->db->f("category_id"), ($this->db->f("iconnr") == $key) ? "checked" : "", $key, $RELATIVE_PATH_RESOURCES, $val);
+					}
+					?>
+					<input type="HIDDEN" name="change_properties_id[]" value="<?=$this->db->f("category_id")?>" />
 				</td>
 				<td class="<? echo $this->getClass() ?>" width="65%" valign="top">
 					<table border=0 celpadding=2 cellspacing=0 width="100%" align="center">
@@ -557,13 +570,12 @@ class editSettings extends cssClasses {
 							</td>
 						</tr>
 						<? } ?>
-						<form method="POST" action="<?echo $PHP_SELF ?>?add_type_category_id=<? echo $this->db->f("category_id")?>">
 						<tr>
 							<td class="<? echo $this->getClass() ?>" width="33%">
-								<select name="add_type_property_id">
+								<select name="add_type_property_id[<?=$this->db->f("category_id")?>]">
 								<?
 								$this->selectProperties($this->db->f("category_id"), TRUE);
-								//Noch nicht vergebene Propertys zum Vergeben anbieten
+								//Noch nicht vergebene Properties zum Vergeben anbieten
 								while ($this->db2->next_record()) {
 									if (is_array($tmp_resvis))
 										if (!in_array($this->db2->f("property_id"), $tmp_resvis)) 
@@ -583,11 +595,11 @@ class editSettings extends cssClasses {
 								?>
 								</tr>
 								<td class="<? echo $this->getClass() ?>" width="67%" colspan=2>
-									<input type="IMAGE" src="pictures/buttons/zuweisen-button.gif" border=0 /> 
+									<input type="IMAGE" <?=makeButton("zuweisen", "src") ?> name="change_category_add_property_<?=$this->db->f("category_id")?>" border=0 /> 
+									&nbsp;<input type="IMAGE" name="change_types" <?=makeButton("uebernehmen", "src")?> border="0" /><br />
 								</select>
 							</td>
 						</tr>
-						</form>
 					</table>
 				</td>
 				<td class="<? echo $this->getClass() ?>" width="10%" valign="bottom"align="center">
@@ -605,6 +617,7 @@ class editSettings extends cssClasses {
 				</td>
 			</tr>
 			<? } ?>
+			</form>
 		</table>
 		<br /><br />
 		<?
