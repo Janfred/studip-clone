@@ -66,22 +66,30 @@ if ($voteID) {
 if (!($perm->have_studip_perm ("tutor", $rangeID) OR
       get_username($userID) == $rangeID)
     ) {
+
+    $reason = ( ! is_object($vote)
+		? _("Es macht wenig Sinn, die Editierseite aufzurufen, ohne den zu editierenden Vote anzugeben...")
+		: ( ! $vote->voteDB->isExistant($voteID)
+		    ? _("Angegebener Vote existiert nicht (mehr?) ...")
+		    : ($vote->instanceof() == INSTANCEOF_TEST
+		       ? sprintf(_("Sie haben keine Berechtigung den Test '%s' zu editieren."), $vote->getTitle())
+		       : sprintf(_("Sie haben keine Berechtigung das Voting '%s' zu editieren."), $vote->getTitle())
+		       )
+		    )
+		);
+
+    echo "<br>";
     parse_window( "error§" .
 		  _("Zugriff verweigert.").
 		  "<br /><font size=-1 color=black>".
-		  ($vote->instanceof() == INSTANCEOF_TEST
-		   ? sprintf(_("Sie haben keine Berechtigung den Test '%s' zu editieren."), $vote->getTitle())
-		   : sprintf(_("Sie haben keine Berechtigung das Voting '%s' zu editieren."), $vote->getTitle())).
+		  $reason.
 		  "</font>",
 		  "§", _("Zugriff auf Editierseite verweigert"), 
 		  "<br />&nbsp;"
 		  );
-
-#   echo createReportMessage (_("Sie haben keine Berechtigung in ".
-#			       "diesem Bereich"), VOTE_ICON_ERROR, 
-#			     VOTE_COLOR_ERROR);
-   page_close ();
-   exit;
+    
+    page_close ();
+    exit;
 }
 /* ------------------------------------------------------------------------- */
 
