@@ -264,6 +264,22 @@ if (($uebernehmen_x) && (!$errormsg)) {
 			if (($term_metadata["turnus_data"][$i]["start_stunde"])  && ($term_metadata["turnus_data"][$i]["end_stunde"]))
 				$tmp_metadata_termin["turnus_data"][]=array("idx"=>$term_metadata["turnus_data"][$i]["day"].(($term_metadata["turnus_data"][$i]["start_stunde"] <10) ?  "0" : "").$term_metadata["turnus_data"][$i]["start_stunde"].(($term_metadata["turnus_data"][$i]["start_minute"]< 10) ?  "0" : "").$term_metadata["turnus_data"][$i]["start_minute"], "day" => $term_metadata["turnus_data"][$i]["day"], "start_stunde" => $term_metadata["turnus_data"][$i]["start_stunde"], "start_minute" => $term_metadata["turnus_data"][$i]["start_minute"], "end_stunde" => $term_metadata["turnus_data"][$i]["end_stunde"], "end_minute" => $term_metadata["turnus_data"][$i]["end_minute"], "room" => $term_metadata["turnus_data"][$i]["room"], "resource_id" => $term_metadata["turnus_data"][$i]["resource_id"]);
 	
+		//check for dublettes
+		$tmp_array_assi = $tmp_metadata_termin["turnus_data"];
+		foreach ($tmp_array_assi as $key1=>$val1)  {
+			foreach ($tmp_metadata_termin["turnus_data"] as $key2=>$val2) {
+				if (($val1["day"] == $val2["day"]) &&
+					($val1["start_stunde"] == $val2["start_stunde"]) &&
+					($val1["start_minute"] == $val2["start_minute"]) &&
+					($val1["end_stunde"] == $val2["end_stunde"]) &&
+					($val1["end_minute"] == $val2["end_minute"]) &&
+					($val1["room"] == $val2["room"]) &&
+					($val1["ressource_id"] == $val2["ressource_id"]) &&
+					($key1 != $key2))
+					unset ($tmp_metadata_termin["turnus_data"][$key1]);
+			}
+		}
+
 		//sortieren
 		if (is_array($tmp_metadata_termin["turnus_data"])) {
 			sort ($tmp_metadata_termin["turnus_data"]);

@@ -236,9 +236,25 @@ if ($form==3)
 						$tmp_idx.="0";
 					$tmp_idx.=$sem_create_data["term_turnus_start_minute"][$i];						
 					$tmp_metadata_termin["turnus_data"][]=array("idx"=>$tmp_idx, "day" => $sem_create_data["term_turnus_date"][$i], "start_stunde" => $sem_create_data["term_turnus_start_stunde"][$i], "start_minute" => $sem_create_data["term_turnus_start_minute"][$i], "end_stunde" => $sem_create_data["term_turnus_end_stunde"][$i], "end_minute" => $sem_create_data["term_turnus_end_minute"][$i], "room"=>$sem_create_data["term_turnus_room"][$i], "resource_id"=>$sem_create_data["term_turnus_resource_id"][$i],);
-				}	
+				}
+				
 			if (is_array($tmp_metadata_termin["turnus_data"])) {
-
+				//check for dublettes
+				$tmp_array_assi = $tmp_metadata_termin["turnus_data"];
+				foreach ($tmp_array_assi as $key1=>$val1)  {
+					foreach ($tmp_metadata_termin["turnus_data"] as $key2=>$val2) {
+						if (($val1["day"] == $val2["day"]) &&
+							($val1["start_stunde"] == $val2["start_stunde"]) &&
+							($val1["start_minute"] == $val2["start_minute"]) &&
+							($val1["end_stunde"] == $val2["end_stunde"]) &&
+							($val1["end_minute"] == $val2["end_minute"]) &&
+							($val1["room"] == $val2["room"]) &&
+							($val1["ressource_id"] == $val2["ressource_id"]) &&
+							($key1 != $key2))
+							unset ($tmp_metadata_termin["turnus_data"][$key1]);
+					}
+				}
+			
 				//sortieren
 				sort ($tmp_metadata_termin["turnus_data"]);
 			
@@ -650,6 +666,7 @@ if ($cmd_d_x)
 						$errormsg=$errormsg."error§"._("Sie haben nicht alle Felder der regul&auml;ren Termine ausgef&uuml;llt. Bitte f&uuml;llen Sie alle Felder aus!")."§";
 						$just_informed4=TRUE;
 						}
+					
 			//check overlaps...
 			if ($RESOURCES_ENABLE) {
 				$checkResult = $resAssign->changeMetaAssigns($sem_create_data["metadata_termin"], $sem_create_data["sem_start_time"], $sem_create_data["sem_duration_time"],TRUE);
@@ -718,7 +735,7 @@ if ($cmd_d_x)
 	
 	//generate bad msg if overlaps exists
 	if ($overlaps_detected) {
-		$errormsg=$errormsg."error§"._("Folgende gew&uuml;nschte Raumbelegungen &uuml;berschneiden sich mit bereits vorhandenen Belegungen. Bitte &auml;ndern Sie die R&auml;ume oder Zeiten!")."§";
+		$errormsg=$errormsg."error§"._("Folgende gew&uuml;nschte Raumbelegungen &uuml;berschneiden sich mit bereits vorhandenen Belegungen. Bitte &auml;ndern Sie die R&auml;ume oder Zeiten!");
 		$i=0;
 		foreach ($overlaps_detected as $val) {
 			$errormsg.="<br /><font size=\"-1\" color=\"black\">".htmlReady(getResourceObjectName($val["resource_id"])).": ";
