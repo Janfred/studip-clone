@@ -35,10 +35,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 	require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 	require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
-		
+	
 // Rechtecheck
-
-
 
 	if ($range_id && !$perm->have_perm("root")) {
 		//Sicherheitscheck
@@ -121,12 +119,12 @@ function PrintAktualStatusgruppen ()
 	while ($db->next_record()) {
 		$statusgruppe_id = $db->f("statusgruppe_id");
 		$size = $db->f("size");
-		echo "<table width=\"95%\" border=\"0\">
+		echo "<table width=\"95%\" border=\"0\" cellpadding=\"2\" cellspacing=\"0\">
 			        <tr> 
 				          <td width=\"5%\">";
-		printf ("            	  <input type=\"IMAGE\" name=\"%s\" src=\"./pictures/move.gif\" border=\"0\">&nbsp; </td>", $statusgruppe_id);
+		printf ("            	  <input type=\"IMAGE\" name=\"%s\" src=\"./pictures/move.gif\" border=\"0\" %s>&nbsp; </td>", $statusgruppe_id, tooltip("Markierte Personen dieser Gruppe zuordnen"));
 		printf ("	          <td width=\"95%%\" class=\"topic\">&nbsp; %s</td>",$db->f("name"));
-		printf ( "	          <td width=\"5%%\"><a href=\"$PHP_SELF?cmd=remove_statusgruppe&statusgruppe_id=%s&range_id=%s\"><img src=\"pictures/lighttrash.gif\" width=\"11\" height=\"17\" border=\"0\"></a></td>",$statusgruppe_id, $range_id);
+		printf ( "	          <td width=\"5%%\"><a href=\"$PHP_SELF?cmd=remove_statusgruppe&statusgruppe_id=%s&range_id=%s\"><img src=\"pictures/lighttrash.gif\" width=\"11\" height=\"17\" border=\"0\" %s></a></td>",$statusgruppe_id, $range_id, tooltip("Gruppe mit Personenzuordnung entfernen"));
 		echo 	"</tr>";
 
 		$db2->query ("SELECT statusgruppe_user.user_id, Vorname, Nachname, username FROM statusgruppe_user LEFT JOIN auth_user_md5 USING(user_id) WHERE statusgruppe_id = '$statusgruppe_id'");
@@ -137,9 +135,14 @@ function PrintAktualStatusgruppen ()
 			} else {
 				$farbe = "#000000";
 			}
+			if ($k % 2) {
+				$class="steel1";
+			} else {
+				$class="steelgraulight"; 
+			}
 			printf ("     <tr><td><font color=\"%s\">$k</font></td>", $farbe);
-			printf ("       <td class=\"steel1\">%s&nbsp; %s</td>",$db2->f("Vorname"), $db2->f("Nachname"));
-			printf ( "	   <td width=\"5%%\"><a href=\"$PHP_SELF?cmd=remove_person&statusgruppe_id=%s&username=%s&range_id=%s\"><img src=\"pictures/trash.gif\" width=\"11\" height=\"17\" border=\"0\"></a></td>", $statusgruppe_id, $db2->f("username"), $range_id);
+			printf ("       <td class=\"%s\"><font size=\"2\"> %s&nbsp; %s</font></td>",$class, $db2->f("Vorname"), $db2->f("Nachname"));
+			printf ( "	   <td width=\"5%%\"><a href=\"$PHP_SELF?cmd=remove_person&statusgruppe_id=%s&username=%s&range_id=%s\"><img src=\"pictures/trash.gif\" width=\"11\" height=\"17\" border=\"0\" %s></a></td>", $statusgruppe_id, $db2->f("username"), $range_id, tooltip("Person aus der Gruppe entfernen"));
 			echo "	</tr>";
 			$k++;
 		}
@@ -154,8 +157,8 @@ function PrintAktualStatusgruppen ()
 		$i++;
 		echo "</table>";
 		if ($i < $AnzahlStatusgruppen) {
-			printf ("<p align=\"center\"><a href=\"$PHP_SELF?cmd=swap&statusgruppe_id=%s&range_id=%s\"><img src=\"pictures/move_up.gif\" width=\"13\" height=\"11\" border=\"0\"></a>",$statusgruppe_id, $range_id); 
-			printf ("&nbsp; &nbsp; &nbsp; <a href=\"$PHP_SELF?cmd=swap&statusgruppe_id=%s&range_id=%s\"><img src=\"pictures/move_down.gif\" width=\"13\" height=\"11\" border=\"0\"></a> </p>",$statusgruppe_id, $range_id);
+			printf ("<p align=\"center\"><a href=\"$PHP_SELF?cmd=swap&statusgruppe_id=%s&range_id=%s\"><img src=\"pictures/move_up.gif\" width=\"13\" height=\"11\" border=\"0\" %s></a>",$statusgruppe_id, $range_id, tooltip("Gruppenreihenfolge tauschen")); 
+			printf ("&nbsp; &nbsp; &nbsp; <a href=\"$PHP_SELF?cmd=swap&statusgruppe_id=%s&range_id=%s\"><img src=\"pictures/move_down.gif\" width=\"13\" height=\"11\" border=\"0\" %s></a> </p>",$statusgruppe_id, $range_id, tooltip("Gruppenreihenfolge tauschen"));
 		}
 	}
 }
@@ -399,8 +402,8 @@ function PrintInstitutMembers ()
             &nbsp;
 	<? 
 	PrintAllStatusgruppen (); 
-	?>
-    	<input type="IMAGE" name="move_old_statusgruppe" src="./pictures/move.gif" border=0 value="Statusgruppe uebernehmen">&nbsp;  
+	printf ("&nbsp; <input type=\"IMAGE\" name=\"move_old_statusgruppe\" src=\"./pictures/move.gif\" border=\"0\" value=\"Statusgruppe uebernehmen\" %s>&nbsp;  ", tooltip("in Namesnsfeld uebernehmen"));
+        ?>
         </form><br></td>
     <td align="right" width="50%" NOWRAP class="blank">
 	<form action="<? echo $PHP_SELF ?>?cmd=add_new_statusgruppe" method="POST">
@@ -412,7 +415,9 @@ function PrintInstitutMembers ()
         &nbsp; &nbsp; &nbsp; <font size="2">Anzahl:</font> 
         <input name="new_statusgruppe_size" type="text" value="" size="3">
         &nbsp; &nbsp; &nbsp; <b>Einf&uuml;gen</b>&nbsp; 
-    	<input type="IMAGE" name="add_new_statusgruppe" src="./pictures/move_down.gif" border=0 value=" neue Statusgruppe ">&nbsp;  &nbsp; &nbsp; 
+        <?
+    	printf ("<input type=\"IMAGE\" name=\"add_new_statusgruppe\" src=\"./pictures/move_down.gif\" border=\"0\" value=\" neue Statusgruppe \" %s>&nbsp;  &nbsp; &nbsp; ", tooltip("neue Gruppe anlegen"));
+    	?>
       </form><br></td>
   </tr>
 </table>
@@ -439,11 +444,11 @@ function PrintInstitutMembers ()
 	<?
 	if ($search_exp) {
 		PrintSearchResults($search_exp);
-		echo "<input type=\"IMAGE\" name=\"search\" src= \"./pictures/rewind.gif\" border=\"0\" value=\" Personen suchen\">&nbsp;  ";
+		printf ("<input type=\"IMAGE\" name=\"search\" src= \"./pictures/rewind.gif\" border=\"0\" value=\" Personen suchen\" %s>&nbsp;  ", tooltip("neue Suche"));
 	} else {
 		echo "<font size=\"-1\">&nbsp; freie Personensuche</font><br>";
 		echo "&nbsp; <input type=\"text\" name=\"search_exp\" value=\"\">";
-		echo "<input type=\"IMAGE\" name=\"search\" src= \"./pictures/suchen.gif\" border=\"0\" value=\" Personen suchen\">&nbsp;  ";
+		printf ("<input type=\"IMAGE\" name=\"search\" src= \"./pictures/suchen.gif\" border=\"0\" value=\" Personen suchen\" %s>&nbsp;  ", tooltip("Person suchen"));
 	} 
 	?>                            
 	<br><br>
