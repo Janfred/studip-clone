@@ -298,11 +298,13 @@ class ResourceObject {
 	}
 	
 	function getFormattedLink($javaScript = TRUE, $target_new = TRUE, $quick_view = FALSE, $view ="view_schedule", $view_mode = "no_nav") {
+		global $auth;
+		
 		if ($this->id) {
-			if (!$javaScript)
+			if ((!$javaScript) || (!$auth->auth["jscript"]))
 				return "<a ".(($target_new) ? "target=\"_new\"" : "")." href=\"".$this->getLink($quick_view, $view, $view_mode)."\">".$this->getName()."</a>";
 			else
-				return "<a href=\"".$PHP_SELF."#\" onClick=\"javascript:window.open('".$this->getLink($quick_view, $view, $view_mode)."','"._("Ressource anzeigen und bearbeiten")."','scrollbars=yes,width=1000,height=700,resizable=yes');\" >".$this->getName()."</a>";
+				return "<a href=\"javascript:void(null)\" onClick=\"window.open('".$this->getLink($quick_view, $view, $view_mode)."','','scrollbars=yes,left=10,top=10,width=1000,height=680,resizable=yes')\" >".$this->getName()."</a>";
 		} else
 			return FALSE;
 	}
