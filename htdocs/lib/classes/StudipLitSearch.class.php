@@ -21,10 +21,15 @@
 // +---------------------------------------------------------------------------+
 
 require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/StudipForm.class.php");
-$_lit_search_plugins = array(array('name' => "Studip", 'link' => ''),
-							array('name' => "SubGoeOpac", 'link' => 'http://goopc4.sub.uni-goettingen.de:8080/DB=1/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}'),
-							array('name' => "Rkgoe", 'link' => 'http://gso.gbv.de/DB=2.90/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}'),
-							array('name' => "Gvk", 'link' => 'http://gso.gbv.de/DB=2.1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}'));
+
+$_lit_search_plugins[] = array('name' => "Studip", 'link' => '');
+
+$_lit_search_plugins[] = array('name' => "SUBGoeOpac", 'link' => 'http://goopc4.sub.uni-goettingen.de:8080/DB=1/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
+$_lit_search_plugins[] = array('name' => "Rkgoe", 'link' => 'http://gso.gbv.de/DB=2.90/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
+$_lit_search_plugins[] = array('name' => "Gvk", 'link' => 'http://gso.gbv.de/DB=2.1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
+$_lit_search_plugins[] = array('name' => "WisoFak", 'link' => 'http://goopc4.sub.uni-goettingen.de:8080/DB=2/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
+//$_lit_search_plugins[] = array('name' => "FHHIOpac", 'link' => 'http://hidbs2.bib.uni-hildesheim.de:8080/DB=2/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
+
 /**
 *
 *
@@ -66,8 +71,18 @@ class StudipLitSearch {
 															'caption' => _("Verknüpfung") ,'separator' => "&nbsp;", 'default_value' => "AND")
 									);
 		$search_plugins = $this->getAvailablePlugins();
-		for ($i = 0; $i < count($search_plugins); ++$i){
-			$search_plugin_options[] = array('name' => $search_plugins[$i], 'value' => $i);
+		$preferred_plugin = $this->getPreferredPlugin();
+		$i = 0;
+		if ($preferred_plugin && in_array($preferred_plugin, $search_plugins)){
+			$search_plugin_options[] = array('name' => $preferred_plugin, 'value' => $i++);
+		}
+		foreach ($search_plugins as $plugin_name){
+			if ($preferred_plugin != $plugin_name){
+				$search_plugin_options[] = array('name' => $plugin_name, 'value' => $i++);
+			} else {
+				array_splice($search_plugins, $i-1,1);
+				array_unshift($search_plugins,$plugin_name);
+			}
 		}
 		$outer_form_fields = array('search_plugin' => array('type' => 'select', 'caption' => _("Welchen Katalog durchsuchen ?"),
 															'options' => $search_plugin_options, 'default_value' => 0),
@@ -144,6 +159,14 @@ class StudipLitSearch {
 		return $search_values;
 	}
 	
+	function getPreferredPlugin(){
+		$dbv = new DbView();
+		$dbv->params[0] = $GLOBALS['user']->id;
+		$rs = $dbv->get_query("view:LIT_GET_FAK_LIT_PLUGIN");
+		$rs->next_record();
+		return $rs->f('lit_plugin_name');
+	}
+	
 	function GetAvailablePlugins(){
 		global $_lit_search_plugins;
 		for ($i = 0; $i < count($_lit_search_plugins); ++$i){
@@ -164,6 +187,26 @@ class StudipLitSearch {
 		return $ret;
 	}
 	
+	function CheckZ3950($accession_number, $one_plugin_name = false){
+		global $_lit_search_plugins, $ABSOLUTE_PATH_STUDIP;
+		static $plugin_list;
+		if (!is_array($plugin_list)){
+			foreach ($_lit_search_plugins as $plugin){
+				if ( $plugin['name'] != 'Studip' && ($one_plugin_name === false || $plugin['name'] == $one_plugin_name) ){
+					$plugin_name = "StudipLitSearchPlugin" . $plugin['name'];
+					include_once("$ABSOLUTE_PATH_STUDIP/lib/classes/lit_search_plugins/{$plugin_name}.class.php");
+					$plugin_list[$plugin['name']] =& new $plugin_name();
+				}
+			}
+		}
+		foreach($plugin_list as $plugin_name => $plugin_obj){
+			$found = $plugin_obj->doCheckAccession($accession_number);
+			$error = $plugin_obj->getError();
+			$ret[$plugin_name]['error'] = $error;
+			$ret[$plugin_name]['found'] = $found;
+		}
+		return $ret;
+	}
 }
 
 //test
