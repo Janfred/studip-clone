@@ -18,10 +18,13 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-require_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/ChatServer.class.php"; //wird für Nachrichten im chat benötigt
 require_once ("$ABSOLUTE_PATH_STUDIP/language.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/contact.inc.php");
+if ($GLOBALS['CHAT_ENABLE']){
+	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/ChatServer.class.php"; //wird für Nachrichten im chat benötigt
+}
+
 
 class messaging {
 	var $db;							//Datenbankanbindung
@@ -37,22 +40,19 @@ function messaging () {
 }
 
 //alle Nachrichten loeschen
-function delete_all_sms  ($user_id, $delete_unread) { 
-	global $LastLogin, $user;
+function delete_all_sms  ($user_id = false, $delete_until = false) { 
+	global $user;
 	$db=new DB_Seminar;
 	
 	if (!$user_id)
 		$user_id = $user->id;
-	
+	if ($delete_until){
+		$clause = " AND mkdate < $delete_until ";
+	}
 	$db->query ("SELECT username FROM auth_user_md5 WHERE user_id = '".$user_id."' ");
 	$db->next_record();
 	$tmp_sms_username=$db->f("username");
-	
-	if (!$delete_unread)
-		$db->query("DELETE FROM globalmessages WHERE user_id_rec = '$tmp_sms_username' ");
-	else
-		$db->query("DELETE FROM globalmessages WHERE mkdate < ".$LastLogin ." AND user_id_rec = '$tmp_sms_username' ");
-
+	$db->query("DELETE FROM globalmessages WHERE user_id_rec = '$tmp_sms_username' AND ISNULL(chat_id) $clause");
 	return $db->affected_rows();
 	}
 
@@ -110,9 +110,9 @@ function insert_sms ($rec_uname, $message, $user_id='') {
 			if ($CHAT_ENABLE) {
 				$chatServer =& ChatServer::GetInstance($GLOBALS['CHAT_SERVER_NAME']);
 				setTempLanguage($db2->f("user_id"));
-				$chatMsg = sprintf(_("Du hast eine SMS von <b>%s</b> erhalten!"), $db->f("fullname")." (".$db->f("username").")") . "<br></i>";
+				$chatMsg = sprintf(_("Du hast eine SMS von <b>%s</b> erhalten!"),htmlReady($db->f("fullname")." (".$db->f("username").")"));
 				restoreLanguage();
-				$chatMsg .= formatReady(stripslashes($message))."<i>";
+				$chatMsg .= "<br></i>" . formatReady(stripslashes($message))."<i>";
 				foreach($chatServer->chatDetail as $chatid => $wert)
 					if ($wert['users'][$db2->f("user_id")])
 						$chatServer->addMsg("system:".$db2->f("user_id"),$chatid,$chatMsg);
@@ -153,46 +153,83 @@ function circular_sms ($message, $mode, $group_id=0) {
 } 
 
 //Chateinladung absetzen
-function insert_chatinv ($rec_uname, $user_id='') {
-	global $user,$_fullname_sql;
-	$db=new DB_Seminar;
-	$db2=new DB_Seminar;
-	$db3=new DB_Seminar;
-
-	if (!$user_id)
-		$user_id = $user->id;
-
-	$db->query ("SELECT username," . $_fullname_sql['full'] ." AS fullname FROM auth_user_md5 a LEFT JOIN user_info USING (user_id) WHERE a.user_id = '".$user_id."' ");
-	$db->next_record();
-
-	$db2->query ("SELECT user_id FROM auth_user_md5 WHERE username = '".$rec_uname."' ");
-	$db2->next_record();
-
-	$m_id=md5(uniqid("voyeurism"));
-	$db3->query ("INSERT INTO globalmessages SET message_id='$m_id', user_id_rec='$rec_uname', user_id_snd='".$db->f("username")."', mkdate='".time()."', message='chat_with_me' ");
-
-	//Benachrichtigung in alle Chaträume schicken, noch nicht so sinnvoll :)
-	if ($CHAT_ENABLE) {
+function insert_chatinv ($rec_uname, $chat_id, $msg = "", $user_id = false) {
+	global $user,$_fullname_sql,$CHAT_ENABLE;
+	if ($CHAT_ENABLE){
 		$chatServer =& ChatServer::GetInstance($GLOBALS['CHAT_SERVER_NAME']);
+		$db=new DB_Seminar;
+		$db2=new DB_Seminar;
+		$db3=new DB_Seminar;
+		
+		if (!$user_id){
+			$user_id = $user->id;
+		}
+		$chat_uniqid = $chatServer->chatDetail[$chat_id]['id'];
+		if (!$chat_uniqid){
+			return false;	//no active chat
+		}
+		$db->query ("SELECT username," . $_fullname_sql['full'] ." AS fullname FROM auth_user_md5 a LEFT JOIN user_info USING (user_id) WHERE a.user_id = '".$user_id."' ");
+		$db->next_record();
+		
+		$db2->query ("SELECT user_id FROM auth_user_md5 WHERE username = '".$rec_uname."' ");
+		$db2->next_record();
 		setTempLanguage($db2->f("user_id"));
-		$chatMsg= sprintf(_("Du wurdest von <b>%s</b> in den Chat eingeladen!"), $db->f("fullname")." (".$db->f("username").")");
+		$message = sprintf(_("Du wurdest von %s in den Chatraum %s eingeladen !"),$db->f("fullname")." (".$db->f("username").")",$chatServer->chatDetail[$chat_id]['name']) 
+			. "\n - - - \n" . stripslashes($msg);
+		
+		$m_id = md5(uniqid("voyeurism"));
+		$db3->query ("INSERT INTO globalmessages SET message_id='$m_id', user_id_rec='$rec_uname', user_id_snd='".$db->f("username")."', mkdate='".time()."', message='" . mysql_escape_string($message) . "', chat_id='$chat_uniqid' ");
+		
+		//Benachrichtigung in alle Chaträume schicken
+		$chatMsg = sprintf(_("Du wurdest von <b>%s</b> in den Chatraum <b>%s</b> eingeladen !"),htmlReady($db->f("fullname")." (".$db->f("username").")"),htmlReady($chatServer->chatDetail[$chat_id]['name']));
+		$chatMsg .= "<br></i>" . formatReady(stripslashes($msg))."<i>";
 		restoreLanguage();
-		foreach($chatServer->chatDetail as $chatid => $wert)
-			if ($wert['users'][$db2->f("user_id")])
+		foreach($chatServer->chatDetail as $chatid => $wert){
+			if ($wert['users'][$db2->f("user_id")]){
 				$chatServer->addMsg("system:".$db2->f("user_id"),$chatid,$chatMsg);
+			}
+		}
+		if ($db3->affected_rows()){
+			return TRUE;
+		} else {
+			return FALSE;
+		}
+	} else {
+		return false;
 	}
-	
-	if ($db3->affected_rows())
-		return TRUE;
-	else
-		return FALSE;
 }
 
-function delete_chatinv($username){
-    $this->db->query("DELETE FROM globalmessages WHERE user_id_rec='$username' AND message LIKE '%chat_with_me%'");
-    return $this->db->affected_rows();
+function delete_chatinv($user_id = false){
+	if ($GLOBALS['CHAT_ENABLE']){
+		$username = get_username($user_id);
+		$chatServer =& ChatServer::GetInstance($GLOBALS['CHAT_SERVER_NAME']);
+		foreach($chatServer->chatDetail as $chatid => $wert){
+			$active_chats[] = $wert['id'];
+		}
+		if (is_array($active_chats)){
+			$clause = " AND chat_id NOT IN('" . join("','",$active_chats) . "')";
+		}
+		$this->db->query("DELETE FROM globalmessages WHERE user_id_rec='$username'" . $clause);
+		return $this->db->affected_rows();
+	} else {
+		return false;
+	}
 }
 
+function check_chatinv($chat_id, $user_id = false){
+	if ($GLOBALS['CHAT_ENABLE']){
+		$username = get_username($user_id);
+		$chatServer =& ChatServer::GetInstance($GLOBALS['CHAT_SERVER_NAME']);
+		$chat_uniqid = $chatServer->chatDetail[$chat_id]['id'];
+		if (!$chat_uniqid){
+			return false;	//no active chat
+		}
+		$this->db->query("SELECT message_id FROM globalmessages WHERE user_id_rec='$username' AND chat_id='$chat_uniqid' LIMIT 1");
+		return $this->db->next_record();
+	} else {
+		return false;
+	}
+}
 
 //Buddy aus der Buddyliste loeschen        
 function delete_buddy ($username) {
