@@ -91,10 +91,11 @@ function MovePersonStatusgruppe ($range_id, $AktualMembers="", $InstitutMembers=
 { global $HTTP_POST_VARS;
 		while (list($key, $val) = each ($HTTP_POST_VARS)) {
 			$statusgruppe_id = substr($key, 0, -2);
+			echo $key."<br>";
 		}
-		echo $statusgruppe_id;
-		echo "hallo";
-		echo $AktualMembers[0];
+//		echo $statusgruppe_id;
+//		echo "hallo";
+//		echo $AktualMembers[0];
 		$db=new DB_Seminar;
 		$db2=new DB_Seminar;
 		$mkdate = time();
