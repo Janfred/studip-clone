@@ -23,7 +23,7 @@ $perm->check("user");
 
 ob_start(); //Outputbuffering für maximal Performance
 
-function get_my_sem_values(&$my_sem) {
+function get_my_obj_values(&$my_obj) {
 	global $user;
 	
 	$db2 = new DB_seminar;
@@ -32,9 +32,9 @@ function get_my_sem_values(&$my_sem) {
 	$db2->query("SELECT b.Seminar_id,count(topic_id) as count, count(IF((chdate > b.loginfilenow AND chdate >= mkdate AND user_id !='".$user->id."'),a.topic_id,NULL)) AS neue 
 	FROM loginfilenow_".$user->id." b  LEFT JOIN px_topics a USING (Seminar_id) GROUP BY b.Seminar_id");
 	while($db2->next_record()) {
-		if ($my_sem[$db2->f("Seminar_id")]["modules"]["forum"]) {
-			$my_sem[$db2->f("Seminar_id")]["neuepostings"]=$db2->f("neue");
-			$my_sem[$db2->f("Seminar_id")]["postings"]=$db2->f("count");
+		if ($my_obj[$db2->f("Seminar_id")]["modules"]["forum"]) {
+			$my_obj[$db2->f("Seminar_id")]["neuepostings"]=$db2->f("neue");
+			$my_obj[$db2->f("Seminar_id")]["postings"]=$db2->f("count");
 		}
 	}
 	
@@ -42,9 +42,9 @@ function get_my_sem_values(&$my_sem) {
 	$db2->query("SELECT b.Seminar_id,count(dokument_id) as count, count(IF((chdate > b.loginfilenow AND user_id !='".$user->id."'),a.dokument_id,NULL)) AS neue 
 	FROM loginfilenow_".$user->id." b  LEFT JOIN dokumente a USING (Seminar_id) GROUP BY b.Seminar_id");
 	while($db2->next_record()) {
-		if ($my_sem[$db2->f("Seminar_id")]["modules"]["documents"]) {
-			$my_sem[$db2->f("Seminar_id")]["neuedokumente"]=$db2->f("neue");
-			$my_sem[$db2->f("Seminar_id")]["dokumente"]=$db2->f("count");
+		if ($my_obj[$db2->f("Seminar_id")]["modules"]["documents"]) {
+			$my_obj[$db2->f("Seminar_id")]["neuedokumente"]=$db2->f("neue");
+			$my_obj[$db2->f("Seminar_id")]["dokumente"]=$db2->f("count");
 		}
 	}
 
@@ -52,8 +52,8 @@ function get_my_sem_values(&$my_sem) {
 	$db2->query("SELECT b.Seminar_id,count(IF(date < UNIX_TIMESTAMP(),range_id,NULL)) as count, count(IF((date < UNIX_TIMESTAMP() AND date > b.loginfilenow AND user_id !='".$user->id."'),range_id,NULL)) AS neue 
 				FROM loginfilenow_".$user->id." b  LEFT JOIN news_range ON (b.Seminar_id=range_id) LEFT JOIN news  USING(news_id) GROUP BY b.Seminar_id");
 	while($db2->next_record()) {
-		$my_sem[$db2->f("Seminar_id")]["neuenews"]=$db2->f("neue");
-		$my_sem[$db2->f("Seminar_id")]["news"]=$db2->f("count");
+		$my_obj[$db2->f("Seminar_id")]["neuenews"]=$db2->f("neue");
+		$my_obj[$db2->f("Seminar_id")]["news"]=$db2->f("count");
 	}
 	
 	// scm?
@@ -61,9 +61,9 @@ function get_my_sem_values(&$my_sem) {
 			IF((chdate > b.loginfilenow AND user_id !='".$user->id."' AND content !=''),1,0) AS scmcontentneu 
 			FROM loginfilenow_".$user->id." b  LEFT JOIN scm ON (range_id = b.Seminar_id)");
 	while($db2->next_record()) {
-		if ($my_sem[$db2->f("Seminar_id")]["modules"]["scm"]) {	
-			$my_sem[$db2->f("Seminar_id")]["neuscmcontent"]=$db2->f("scmcontentneu");
-			$my_sem[$db2->f("Seminar_id")]["scmcontent"]=$db2->f("scmcontent");
+		if ($my_obj[$db2->f("Seminar_id")]["modules"]["scm"]) {	
+			$my_obj[$db2->f("Seminar_id")]["neuscmcontent"]=$db2->f("scmcontentneu");
+			$my_obj[$db2->f("Seminar_id")]["scmcontent"]=$db2->f("scmcontent");
 		}
 	}
 	
@@ -71,9 +71,9 @@ function get_my_sem_values(&$my_sem) {
 	$db2->query("SELECT b.Seminar_id,count(list_id) as count, count(IF((chdate > b.loginfilenow AND user_id !='".$user->id."'),list_id,NULL)) AS neue 
 				FROM loginfilenow_".$user->id." b  LEFT JOIN lit_list  ON (b.Seminar_id=range_id AND visibility=1) GROUP BY b.Seminar_id");
 	while($db2->next_record()) {
-		if ($my_sem[$db2->f("Seminar_id")]["modules"]["literature"]) {	
-			$my_sem[$db2->f("Seminar_id")]["neuelitlist"]=$db2->f("neue");
-			$my_sem[$db2->f("Seminar_id")]["litlist"]=$db2->f("count");
+		if ($my_obj[$db2->f("Seminar_id")]["modules"]["literature"]) {	
+			$my_obj[$db2->f("Seminar_id")]["neuelitlist"]=$db2->f("neue");
+			$my_obj[$db2->f("Seminar_id")]["litlist"]=$db2->f("count");
 		}
 	}
 	
@@ -81,9 +81,9 @@ function get_my_sem_values(&$my_sem) {
 	$db2->query("SELECT b.Seminar_id,count(termin_id) as count, count(IF((chdate > b.loginfilenow AND autor_id !='".$user->id."'),a.termin_id,NULL)) AS neue 
 				FROM loginfilenow_".$user->id." b  LEFT JOIN termine a ON (b.Seminar_id=range_id) GROUP BY b.Seminar_id");
 	while($db2->next_record()) {
-		if ($my_sem[$db2->f("Seminar_id")]["modules"]["schedule"]) {	
-			$my_sem[$db2->f("Seminar_id")]["neuetermine"]=$db2->f("neue");
-			$my_sem[$db2->f("Seminar_id")]["termine"]=$db2->f("count");
+		if ($my_obj[$db2->f("Seminar_id")]["modules"]["schedule"]) {	
+			$my_obj[$db2->f("Seminar_id")]["neuetermine"]=$db2->f("neue");
+			$my_obj[$db2->f("Seminar_id")]["termine"]=$db2->f("count");
 		}
 	}
 	
@@ -92,9 +92,9 @@ function get_my_sem_values(&$my_sem) {
 		$db2->query("SELECT b.Seminar_id, COUNT(DISTINCT keyword) as count, count(IF((chdate > b.loginfilenow AND user_id !='".$user->id."'),a.keyword,NULL)) AS neue 
 				FROM loginfilenow_".$user->id." b  LEFT JOIN wiki a ON (b.Seminar_id=range_id) GROUP BY b.Seminar_id");
 		while($db2->next_record()) {
-			if ($my_sem[$db2->f("Seminar_id")]["modules"]["wiki"]) {	
-				$my_sem[$db2->f("Seminar_id")]["neuewikiseiten"]=$db2->f("neue");
-				$my_sem[$db2->f("Seminar_id")]["wikiseiten"]=$db2->f("count");
+			if ($my_obj[$db2->f("Seminar_id")]["modules"]["wiki"]) {	
+				$my_obj[$db2->f("Seminar_id")]["neuewikiseiten"]=$db2->f("neue");
+				$my_obj[$db2->f("Seminar_id")]["wikiseiten"]=$db2->f("count");
 			}
 		}
 	}
@@ -105,8 +105,8 @@ function get_my_sem_values(&$my_sem) {
 				FROM loginfilenow_".$user->id." b  LEFT JOIN vote a ON (a.range_id = b.Seminar_id )
 				WHERE a.state IN('active','stopvis') GROUP BY b.Seminar_id");
 		while($db2->next_record()) {
-				$my_sem[$db2->f("Seminar_id")]["neuevotes"]=$db2->f("neue");
-				$my_sem[$db2->f("Seminar_id")]["votes"]=$db2->f("count");
+				$my_obj[$db2->f("Seminar_id")]["neuevotes"]=$db2->f("neue");
+				$my_obj[$db2->f("Seminar_id")]["votes"]=$db2->f("count");
 		}
 	}
 
@@ -116,36 +116,36 @@ function get_my_sem_values(&$my_sem) {
 }
 
 
-function print_seminar_content($semid,$my_sem_values, $type="seminar") {
+function print_seminar_content($semid,$my_obj_values, $type="seminar") {
   $link = $type."_main.php";
   
   // Postings
-  if ($my_sem_values["neuepostings"])
-		echo "<a href=\"$link?auswahl=$semid&redirect_to=forum.php&view=neue&sort=age\">&nbsp; <img src='pictures/icon-posting2.gif' border=0 ".tooltip(sprintf(_("%s Postings, %s neue"), $my_sem_values["postings"], $my_sem_values["neuepostings"]))."></a>";
-  elseif ($my_sem_values["postings"])
-		echo "<a href=\"$link?auswahl=$semid&redirect_to=forum.php&view=reset&sort=age\">&nbsp; <img src='pictures/icon-posting.gif' border=0 ".tooltip(sprintf(_("%s Postings"), $my_sem_values["postings"]))."></a>";
+  if ($my_obj_values["neuepostings"])
+		echo "<a href=\"$link?auswahl=$semid&redirect_to=forum.php&view=neue&sort=age\">&nbsp; <img src='pictures/icon-posting2.gif' border=0 ".tooltip(sprintf(_("%s Postings, %s neue"), $my_obj_values["postings"], $my_obj_values["neuepostings"]))."></a>";
+  elseif ($my_obj_values["postings"])
+		echo "<a href=\"$link?auswahl=$semid&redirect_to=forum.php&view=reset&sort=age\">&nbsp; <img src='pictures/icon-posting.gif' border=0 ".tooltip(sprintf(_("%s Postings"), $my_obj_values["postings"]))."></a>";
   else
 		echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
   //Dokumente
-  if ($my_sem_values["neuedokumente"])
-		echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to=folder.php&cmd=all\"><img src='pictures/icon-disc2.gif' border=0 ".tooltip(sprintf(_("%s Dokumente, %s neue"), $my_sem_values["dokumente"], $my_sem_values["neuedokumente"]))."></a>";
-  elseif ($my_sem_values["dokumente"])
-		echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to=folder.php&cmd=tree\"><img src='pictures/icon-disc.gif' border=0 ".tooltip(sprintf(_("%s Dokumente"), $my_sem_values["dokumente"]))."></a>";
+  if ($my_obj_values["neuedokumente"])
+		echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to=folder.php&cmd=all\"><img src='pictures/icon-disc2.gif' border=0 ".tooltip(sprintf(_("%s Dokumente, %s neue"), $my_obj_values["dokumente"], $my_obj_values["neuedokumente"]))."></a>";
+  elseif ($my_obj_values["dokumente"])
+		echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to=folder.php&cmd=tree\"><img src='pictures/icon-disc.gif' border=0 ".tooltip(sprintf(_("%s Dokumente"), $my_obj_values["dokumente"]))."></a>";
   else
 		echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
 
   //News
-  if ($my_sem_values["neuenews"])
-		echo "&nbsp; <a href=\"$link?auswahl=$semid\"><img src='pictures/icon-news2.gif' border=0 ".tooltip(sprintf(_("%s News, %s neue"), $my_sem_values["news"], $my_sem_values["neuenews"]))."></a>";
-  elseif ($my_sem_values["news"])
-		echo "&nbsp; <a href=\"$link?auswahl=$semid\"><img src='pictures/icon-news.gif' border=0 ".tooltip(sprintf(_("%s News"), $my_sem_values["news"]))."></a>";
+  if ($my_obj_values["neuenews"])
+		echo "&nbsp; <a href=\"$link?auswahl=$semid\"><img src='pictures/icon-news2.gif' border=0 ".tooltip(sprintf(_("%s News, %s neue"), $my_obj_values["news"], $my_obj_values["neuenews"]))."></a>";
+  elseif ($my_obj_values["news"])
+		echo "&nbsp; <a href=\"$link?auswahl=$semid\"><img src='pictures/icon-news.gif' border=0 ".tooltip(sprintf(_("%s News"), $my_obj_values["news"]))."></a>";
   else
 		echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
 
   //SCM
-  if ($my_sem_values["scmcontent"]) {
+  if ($my_obj_values["scmcontent"]) {
 		echo "<a href=\"$link?auswahl=$semid&redirect_to=scm.php\">";
-		if ($my_sem_values["neuscmcontent"])
+		if ($my_obj_values["neuscmcontent"])
 	  	echo "&nbsp; <img src=\"pictures/icon-cont2.gif\" border=0 ".tooltip(_("Zur freien Kursseite (geändert)"))."></a>";
 		else
 		  echo "&nbsp; <img src=\"pictures/icon-cont.gif\" border=0 ".tooltip(_("Zur freien Kursseite"))."></a>";
@@ -154,38 +154,38 @@ function print_seminar_content($semid,$my_sem_values, $type="seminar") {
 		echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
 	
 	// Literaturlisten
-  if ($my_sem_values["neuelitlist"])
-		echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to=literatur.php\"><img src='pictures/icon-lit2.gif' border=0 ".tooltip(sprintf(_("%s Literaturlisten, %s neue"), $my_sem_values["litlist"], $my_sem_values["neuelitlist"]))."></a>";
-  elseif ($my_sem_values["litlist"])
-		echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to=literatur.php\"><img src='pictures/icon-lit.gif' border=0 ".tooltip(sprintf(_("%s Literaturlisten"), $my_sem_values["litlist"]))."></a>";
+  if ($my_obj_values["neuelitlist"])
+		echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to=literatur.php\"><img src='pictures/icon-lit2.gif' border=0 ".tooltip(sprintf(_("%s Literaturlisten, %s neue"), $my_obj_values["litlist"], $my_obj_values["neuelitlist"]))."></a>";
+  elseif ($my_obj_values["litlist"])
+		echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to=literatur.php\"><img src='pictures/icon-lit.gif' border=0 ".tooltip(sprintf(_("%s Literaturlisten"), $my_obj_values["litlist"]))."></a>";
   else
 		echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
   
   // Termine
-  if ($my_sem_values["neuetermine"])
-		echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to=dates.php\"><img src='pictures/icon-uhr2.gif' border=0 ".tooltip(sprintf(_("%s Termine, %s neue"), $my_sem_values["termine"], $my_sem_values["neuetermine"]))."></a>";
-  elseif ($my_sem_values["termine"])
-		echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to=dates.php\"><img src='pictures/icon-uhr.gif' border=0 ".tooltip(sprintf(_("%s Termine"), $my_sem_values["termine"]))."></a>";
+  if ($my_obj_values["neuetermine"])
+		echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to=dates.php\"><img src='pictures/icon-uhr2.gif' border=0 ".tooltip(sprintf(_("%s Termine, %s neue"), $my_obj_values["termine"], $my_obj_values["neuetermine"]))."></a>";
+  elseif ($my_obj_values["termine"])
+		echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to=dates.php\"><img src='pictures/icon-uhr.gif' border=0 ".tooltip(sprintf(_("%s Termine"), $my_obj_values["termine"]))."></a>";
   else
 		echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
 	
 
   // Wikiseiten
   if ($GLOBALS['WIKI_ENABLE']) {  
-	  if ($my_sem_values["neuewikiseiten"])
-			echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to=wiki.php&view=listnew\"><img src='pictures/icon-wiki2.gif' border=0 ".tooltip(sprintf(_("%s WikiSeiten, %s Änderungen"), $my_sem_values["wikiseiten"], $my_sem_values["neuewikiseiten"]))."></a>";
-	  elseif ($my_sem_values["wikiseiten"])
-			echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to=wiki.php\"><img src='pictures/icon-wiki.gif' border=0 ".tooltip(sprintf(_("%s WikiSeiten"), $my_sem_values["wikiseiten"]))."></a>";
+	  if ($my_obj_values["neuewikiseiten"])
+			echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to=wiki.php&view=listnew\"><img src='pictures/icon-wiki2.gif' border=0 ".tooltip(sprintf(_("%s WikiSeiten, %s Änderungen"), $my_obj_values["wikiseiten"], $my_obj_values["neuewikiseiten"]))."></a>";
+	  elseif ($my_obj_values["wikiseiten"])
+			echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to=wiki.php\"><img src='pictures/icon-wiki.gif' border=0 ".tooltip(sprintf(_("%s WikiSeiten"), $my_obj_values["wikiseiten"]))."></a>";
 	  else
 			echo "&nbsp; <img src='pictures/icon-leer.gif' width=\"20\" height=\"17\" border=\"0\">";
   }
 
   //votes
   if ($GLOBALS['VOTE_ENABLE']) {
-  	if ($my_sem_values["neuevotes"])
-			echo "&nbsp; <a href=\"$link?auswahl=$semid#vote\"><img src='pictures/icon-vote2.gif' border=0 ".tooltip(sprintf(_("%s Votes, %s neue"), $my_sem_values["votes"], $my_sem_values["neuevotes"]))."></a>";
-	  elseif ($my_sem_values["votes"])
-			echo "&nbsp; <a href=\"$link?auswahl=$semid#vote\"><img src='pictures/icon-vote.gif' border=0 ".tooltip(sprintf(_("%s Votes"), $my_sem_values["votes"]))."></a>";
+  	if ($my_obj_values["neuevotes"])
+			echo "&nbsp; <a href=\"$link?auswahl=$semid#vote\"><img src='pictures/icon-vote2.gif' border=0 ".tooltip(sprintf(_("%s Votes, %s neue"), $my_obj_values["votes"], $my_obj_values["neuevotes"]))."></a>";
+	  elseif ($my_obj_values["votes"])
+			echo "&nbsp; <a href=\"$link?auswahl=$semid#vote\"><img src='pictures/icon-vote.gif' border=0 ".tooltip(sprintf(_("%s Votes"), $my_obj_values["votes"]))."></a>";
 	  else
 			echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
   }
@@ -335,12 +335,81 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 	if ($sortby == "count")
 		$sortby = "count DESC";
 		
+	
 	$db->query ("SELECT seminare.Name, seminare.Seminar_id, seminare.status as sem_status, seminar_user.status, seminar_user.gruppe, seminare.chdate, admission_binding,modules FROM seminar_user LEFT JOIN seminare  USING (Seminar_id) WHERE seminar_user.user_id = '$user->id' GROUP BY Seminar_id ORDER BY $sortby");
-	$num_my_sem=$db->num_rows();
+	$num_my_sem = $db->num_rows();
+	
 	if (!$num_my_sem)
 		$meldung = "info§" . sprintf(_("Sie haben zur Zeit keine Veranstaltungen abonniert, an denen Sie teilnehmen k&ouml;nnen. Bitte nutzen Sie %s<b>Veranstaltung suchen / hinzuf&uuml;gen</b>%s um neue Veranstaltungen aufzunehmen."), "<a href=\"sem_portal.php\">", "</a>") . "§" . $meldung;
 
-	 ?>
+	
+	while ($db->next_record()) {
+			$my_obj[$db->f("Seminar_id")]=array("name" => $db->f("Name"),"status" => $db->f("status"),"gruppe" => $db->f("gruppe"),
+				"chdate" => $db->f("chdate"), "binding" => $db->f("admission_binding"), "modules" =>$Modules->getLocalModules($db->f("Seminar_id"),"sem",$db->f("modules"),$db->f("sem_status")), 
+				"obj_type" => "sem", "sem_status" => $db->f("sem_status"));
+			$value_list.="('".$db->f("Seminar_id")."',0".$loginfilenow[$db->f("Seminar_id")]."),";
+			if (($GLOBALS['CHAT_ENABLE']) && ($my_obj[$db->f("Seminar_id")]["modules"]["chat"])) {
+				$chatter = $chatServer->isActiveChat($db->f("Seminar_id"));
+				$chat_info[$db->f("Seminar_id")] = array("chatter" => $chatter, "chatuniqid" => $chatServer->chatDetail[$db->f("Seminar_id")]["id"],
+												"is_active" => $chatServer->isActiveUser($user->id,$db->f("Seminar_id")));
+				if ($chatter){
+					$active_chats[$chatServer->chatDetail[$db->f("Seminar_id")]["id"]] = $db->f("Seminar_id");
+				}
+			}
+		}
+	
+	$sortby="Name";
+	if ($sortby == "count")
+		$sortby = "count DESC";
+	$db->query ("SELECT b.Name, b.Institut_id,b.type, user_inst.inst_perms,if(b.Institut_id=b.fakultaets_id,1,0) AS is_fak,modules FROM user_inst LEFT JOIN Institute b USING (Institut_id) WHERE user_inst.user_id = '$user->id' GROUP BY Institut_id ORDER BY $sortby");
+	$num_my_inst=$db->num_rows();
+	while ($db->next_record()) {
+			$my_obj[$db->f("Institut_id")]= array("name" => $db->f("Name"),"status" => $db->f("inst_perms"), 
+												"type" =>($db->f("type")) ? $db->f("type") : 1, "modules" => $Modules->getLocalModules($db->f("Institut_id"),"inst",$db->f("modules"),($db->f("type") ? $db->f("type") : 1)),
+												"obj_type" => "inst");
+			$value_list.="('".$db->f("Institut_id")."',0".$loginfilenow[$db->f("Institut_id")]."),";
+			if (($GLOBALS['CHAT_ENABLE']) && ($my_obj[$db->f("Institut_id")]["modules"]["chat"])) {
+				$chatter = $chatServer->isActiveChat($db->f("Institut_id"));
+				$chat_info[$db->f("Institut_id")] = array("chatter" => $chatter, "chatuniqid" => $chatServer->chatDetail[$db->f("Institut_id")]["id"],
+												"is_active" => $chatServer->isActiveUser($user->id,$db->f("Institut_id")));
+				if ($chatter){
+					$active_chats[$chatServer->chatDetail[$db->f("Institut_id")]["id"]] = $db->f("Institut_id");
+				}
+			}
+			if ($db->f("is_fak") && $db->f("inst_perms") == "admin") {
+				$db2->query("SELECT a.Institut_id, a.Name, a.type FROM Institute a 
+					 WHERE fakultaets_id='" . $db->f("Institut_id") . "' AND a.Institut_id!='" .$db->f("Institut_id") . "' 
+					 ORDER BY $sortby");
+				while($db2->next_record()) {
+					$my_obj[$db->f("Institut_id")]= array("name" => $db->f("Name"),"status" => $db->f("inst_perms"), 
+												"type" =>($db->f("type")) ? $db->f("type") : 1, "modules" => $Modules->getLocalModules($db->f("Institut_id"),"inst",$db->f("modules"),($db->f("type") ? $db->f("type") : 1)),
+												"obj_type" => "inst");
+					$value_list.="('".$db2->f("Institut_id")."',0".$loginfilenow[$db2->f("Institut_id")]."),";
+					if ($GLOBALS['CHAT_ENABLE'] && ($my_obj[$db->f("Institut_id")]["modules"]["chat"])){
+						$chatter = $chatServer->isActiveChat($db2->f("Institut_id"));
+						$chat_info[$db2->f("Institut_id")] = array("chatter" => $chatter, "chatuniqid" => $chatServer->chatDetail[$db2->f("Institut_id")]["id"],
+						"is_active" => $chatServer->isActiveUser($user->id,$db2->f("Institut_id")));
+						if ($chatter){
+							$active_chats[$chatServer->chatDetail[$db2->f("Institut_id")]["id"]] = $db2->f("Institut_id");
+						}
+					}
+				}
+			}
+		}
+		$value_list = substr($value_list,0,-1);
+		$db->query("CREATE  TEMPORARY TABLE if NOT EXISTS loginfilenow_".$user->id." ( Seminar_id varchar(32) NOT NULL PRIMARY KEY, loginfilenow int(11) NOT NULL DEFAULT 0, INDEX(loginfilenow) ) TYPE=HEAP");
+		$ins_query="REPLACE INTO loginfilenow_".$user->id." (Seminar_id, loginfilenow) VALUES ".$value_list;
+		$db->query($ins_query);
+		get_my_obj_values($my_obj);
+		$db->query("DROP TABLE loginfilenow_".$user->id);
+	
+	if ($GLOBALS['CHAT_ENABLE']){
+		if (is_array($active_chats)){
+			$chat_invs = $sms->check_list_of_chatinv(array_keys($active_chats));
+		}
+	}
+		
+	?>
 	<table width="100%" border="0" cellpadding="0" cellspacing="0">
 		<tr>
 			<td class="topic" colspan="2">
@@ -375,35 +444,11 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 							</tr>
 		<?
 		ob_end_flush(); //Buffer leeren, damit der Header zu sehen ist
+
 		ob_start();
-		while ($db->next_record()) {
-			$my_sem[$db->f("Seminar_id")]=array("name" => $db->f("Name"),"status" => $db->f("status"),"gruppe" => $db->f("gruppe"),
-				"chdate" => $db->f("chdate"), "binding" => $db->f("admission_binding"), "modules" =>$Modules->getLocalModules($db->f("Seminar_id"), "sem",$db->f("modules"),$db->f("sem_status")));
-			
-			$value_list.="('".$db->f("Seminar_id")."',0".$loginfilenow[$db->f("Seminar_id")]."),";
-			if (($GLOBALS['CHAT_ENABLE']) && ($my_sem[$db->f("Seminar_id")]["modules"]["chat"])) {
-				$chatter = $chatServer->isActiveChat($db->f("Seminar_id"));
-				$chat_info[$db->f("Seminar_id")] = array("chatter" => $chatter, "chatuniqid" => $chatServer->chatDetail[$db->f("Seminar_id")]["id"],
-												"is_active" => $chatServer->isActiveUser($user->id,$db->f("Seminar_id")));
-				if ($chatter){
-					$active_chats[$chatServer->chatDetail[$db->f("Seminar_id")]["id"]] = $db->f("Seminar_id");
-				}
-			}
-		}
-		if ($GLOBALS['CHAT_ENABLE']){
-			if (is_array($active_chats)){
-				$chat_invs = $sms->check_list_of_chatinv(array_keys($active_chats));
-			}
-		}
-		$value_list = substr($value_list,0,-1);
-		$db->query("CREATE TEMPORARY TABLE IF NOT EXISTS loginfilenow_".$user->id." ( Seminar_id varchar(32) NOT NULL PRIMARY KEY, loginfilenow int(11) NOT NULL DEFAULT 0, INDEX(loginfilenow) ) TYPE=HEAP");
-		$ins_query="REPLACE INTO loginfilenow_".$user->id." (Seminar_id,loginfilenow) VALUES ".$value_list;
-		$db->query($ins_query);
-		get_my_sem_values($my_sem);
-		$db->query("DROP TABLE loginfilenow_".$user->id);
-
-	  foreach ($my_sem as $semid=>$values) {
-
+		
+	  foreach ($my_obj as $semid=>$values) {
+		  if ($values['obj_type'] == "sem"){
 			$cssSw->switchClass();
 			$lastVisit = $loginfilenow[$semid];
 			echo "<tr ".$cssSw->getHover()."><td class=gruppe";
@@ -474,7 +519,8 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 				printf("<td class=\"".$cssSw->getClass()."\"  align=center nowrap><a href=\"$PHP_SELF?auswahl=%s&cmd=suppose_to_kill\"><img src=\"pictures/logout_seminare.gif\" ".tooltip(_("aus der Veranstaltung abmelden"))." border=\"0\"></a>&nbsp;</td>", $semid);
 			echo "</tr>\n";
 		}
-		echo "</table><br><br>";
+	  }
+	echo "</table><br><br>";
 
 
 	} else {  // es sind keine Veranstaltungen abboniert
@@ -558,13 +604,6 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 //This view is only for users up to admin
 if ( !$perm->have_perm("root")) {
 
-	// if (!isset($sortby))
-	$sortby="Name";
-	$value_list = "";
-	if ($sortby == "count")
-		$sortby = "count DESC";
-	$db->query ("SELECT b.Name, b.Institut_id,b.type, user_inst.inst_perms,if(b.Institut_id=b.fakultaets_id,1,0) AS is_fak,modules FROM user_inst LEFT JOIN Institute b USING (Institut_id) WHERE user_inst.user_id = '$user->id' GROUP BY Institut_id ORDER BY $sortby");
-	$num_my_inst=$db->num_rows();
 	if (!$num_my_inst)
 		if ($perm->have_perm("dozent"))
 			$meldung="info§" . sprintf(_("Sie wurden noch keinen Einrichtungen zugeordnet. Bitte wenden Sie sich an einen der zust&auml;ndigen %sAdministratoren%s."), "<a href=\"impressum.php?view=ansprechpartner\">", "</a>") . "§".$meldung;
@@ -588,103 +627,63 @@ if ( !$perm->have_perm("root")) {
 									<th width="3%"><b>&nbsp;&nbsp;</b></th>
 								</tr>
 		<?
-		ob_end_flush(); //Buffer leeren, damit der Header zu sehen ist
-		ob_start();
-		while ($db->next_record()) {
-			$my_inst[$db->f("Institut_id")]=array(name=>$db->f("Name"),status=>$db->f("inst_perms"),type=>($db->f("type")) ? $db->f("type") : 1, modules =>$Modules->getLocalModules($db->f("Institut_id"), "inst",$db->f("modules"),($db->f("type") ? $db->f("type") : 1)));
-			$value_list.="('".$db->f("Institut_id")."',0".$loginfilenow[$db->f("Institut_id")]."),";
-			if (($GLOBALS['CHAT_ENABLE']) && ($my_inst[$db->f("Institut_id")]["modules"]["chat"])) {
-				$chatter = $chatServer->isActiveChat($db->f("Institut_id"));
-				$chat_info[$db->f("Institut_id")] = array("chatter" => $chatter, "chatuniqid" => $chatServer->chatDetail[$db->f("Institut_id")]["id"],
-												"is_active" => $chatServer->isActiveUser($user->id,$db->f("Institut_id")));
-				if ($chatter){
-					$active_chats[$chatServer->chatDetail[$db->f("Institut_id")]["id"]] = $db->f("Institut_id");
-				}
-			}
-			if ($db->f("is_fak") && $db->f("inst_perms") == "admin") {
-				$db2->query("SELECT a.Institut_id, a.Name, a.type FROM Institute a 
-					 WHERE fakultaets_id='" . $db->f("Institut_id") . "' AND a.Institut_id!='" .$db->f("Institut_id") . "' 
-					 ORDER BY $sortby");
-				while($db2->next_record()) {
-					$my_inst[$db2->f("Institut_id")]=array(name=>$db2->f("Name"),status=>"admin",type=>($db2->f("type")) ? $db2->f("type") : 1,modules =>$Modules->getLocalModules($db->f("Institut_id"), "inst",$db->f("modules"),($db->f("type") ? $db->f("type") : 1)));
-					$value_list.="('".$db2->f("Institut_id")."',0".$loginfilenow[$db2->f("Institut_id")]."),";
-					if ($GLOBALS['CHAT_ENABLE'] && ($my_inst[$db->f("Institut_id")]["modules"]["chat"])){
-						$chatter = $chatServer->isActiveChat($db2->f("Institut_id"));
-						$chat_info[$db2->f("Institut_id")] = array("chatter" => $chatter, "chatuniqid" => $chatServer->chatDetail[$db2->f("Institut_id")]["id"],
-						"is_active" => $chatServer->isActiveUser($user->id,$db2->f("Institut_id")));
-						if ($chatter){
-							$active_chats[$chatServer->chatDetail[$db2->f("Institut_id")]["id"]] = $db2->f("Institut_id");
-						}
-					}
-				}
-			}
-		}
-		$value_list=substr($value_list,0,-1);
-		$db->query("CREATE  TEMPORARY TABLE if NOT EXISTS loginfilenow_".$user->id." ( Seminar_id varchar(32) NOT NULL PRIMARY KEY, loginfilenow int(11) NOT NULL DEFAULT 0, INDEX(loginfilenow) ) TYPE=HEAP");
-		$ins_query="REPLACE INTO loginfilenow_".$user->id." (Seminar_id, loginfilenow) VALUES ".$value_list;
-		$db->query($ins_query);
-		get_my_sem_values($my_inst);
-		$db->query("DROP TABLE loginfilenow_".$user->id);
-		if ($GLOBALS['CHAT_ENABLE']){
-			if (is_array($active_chats)){
-				$chat_invs = $sms->check_list_of_chatinv(array_keys($active_chats));
-			}
-		}
-		foreach ($my_inst as $instid=>$values) {
-
-			$cssSw->switchClass();
-			$lastVisit = $loginfilenow[$instid];
-			echo "<tr ".$cssSw->getHover().">";
-			echo "<td class=\"".$cssSw->getClass()."\">&nbsp; </td>";
-			// Name-field		
-			echo "<td class=\"".$cssSw->getClass()."\"><a href=\"institut_main.php?auswahl=$instid\">";
-			echo "<font size=-1>".htmlReady($INST_TYPE[$values["type"]]["name"] . ": " . $values["name"])."</font>";
-			print ("</a></td>");
-			// Content-field
-			echo "<td class=\"".$cssSw->getClass()."\"  align=\"left\" nowrap>";
-			print_seminar_content($instid, $values, "institut");
-			if (($GLOBALS['CHAT_ENABLE']) && ($values["modules"]["chat"])) {
-				echo "<a href=\"".((!$auth->auth["jscript"]) ? "chat_online.php" : "#")."\" onClick=\"return open_chat(" . (($chat_info[$instid]['is_active']) ? "false" : "'$instid'") . ");\">&nbsp;";
-				echo chat_get_chat_icon($chat_info[$instid]['chatter'], $chat_invs[$chat_info[$instid]['chatuniqid']], $chat_info[$instid]['is_active'],true);
-				echo "</a>&nbsp;";
-			} else
+				
+		foreach ($my_obj as $instid=>$values) {
+			if ($values['obj_type'] == "inst"){
+				$cssSw->switchClass();
+				$lastVisit = $loginfilenow[$instid];
+				echo "<tr ".$cssSw->getHover().">";
+				echo "<td class=\"".$cssSw->getClass()."\">&nbsp; </td>";
+				// Name-field		
+				echo "<td class=\"".$cssSw->getClass()."\"><a href=\"institut_main.php?auswahl=$instid\">";
+				echo "<font size=-1>".htmlReady($INST_TYPE[$values["type"]]["name"] . ": " . $values["name"])."</font>";
+				print ("</a></td>");
+				// Content-field
+				echo "<td class=\"".$cssSw->getClass()."\"  align=\"left\" nowrap>";
+				print_seminar_content($instid, $values, "institut");
+				if (($GLOBALS['CHAT_ENABLE']) && ($values["modules"]["chat"])) {
+					echo "<a href=\"".((!$auth->auth["jscript"]) ? "chat_online.php" : "#")."\" onClick=\"return open_chat(" . (($chat_info[$instid]['is_active']) ? "false" : "'$instid'") . ");\">&nbsp;";
+					echo chat_get_chat_icon($chat_info[$instid]['chatter'], $chat_invs[$chat_info[$instid]['chatuniqid']], $chat_info[$instid]['is_active'],true);
+					echo "</a>&nbsp;";
+				} else
 				echo "&nbsp; <img src='pictures/icon-leer.gif' width=\"15\" height=\"17\" border=0>";
 				
-			if (($GLOBALS['ILIAS_CONNECT_ENABLE']) && ($values["modules"]["ilias_connect"])) {
-				$mod_count = get_seminar_modules($instid);
-				if ($mod_count) {
-					echo "<a href=\"institut_main.php?view=show&auswahl=$instid&redirect_to=seminar_lernmodule.php\">&nbsp;";
-					echo "<img src=\"pictures/icon-lern.gif\" ";
-					if (sizeof($mod_count) == 1)
+				if (($GLOBALS['ILIAS_CONNECT_ENABLE']) && ($values["modules"]["ilias_connect"])) {
+					$mod_count = get_seminar_modules($instid);
+					if ($mod_count) {
+						echo "<a href=\"institut_main.php?view=show&auswahl=$instid&redirect_to=seminar_lernmodule.php\">&nbsp;";
+						echo "<img src=\"pictures/icon-lern.gif\" ";
+						if (sizeof($mod_count) == 1)
 						echo tooltip(sprintf(_("Die Einrichtung ist mit %s ILIAS-Lernmodul verbunden."), sizeof($mod_count)))."border=\"0\">";
-					else
+						else
 						echo tooltip(sprintf(_("Die Einrichtung ist mit %s ILIAS-Lernmodulen verbunden."), sizeof($mod_count)))."border=\"0\">";
-					echo "</a>&nbsp;";
-				}
-				else
+						echo "</a>&nbsp;";
+					}
+					else
 					echo "&nbsp;<img src=\"pictures/icon-leer.gif\" width=\"18\" height=\"20\" border=\"0\">";
-			}
-			echo "</td>";
-
-			// Extendet views:
-
-			// last visited-field
-			if ($view=="ext") {
-				if ($loginfilenow[$instid]==0) {
-					echo "<td class=\"".$cssSw->getClass()."\" align=\"center\" nowrap><font size=-1>n.b.</font></td>";
-				} else  {
-				 	echo "<td class=\"".$cssSw->getClass()."\"align=\"center\" nowrap><font size=-1>", date("d.m.", $loginfilenow[$instid]),"</font></td>";
 				}
-			// Status-field
-			echo "<td class=\"".$cssSw->getClass()."\" align=\"center\" nowrap><font size=-1>". $values["status"]."&nbsp;</font></td>";
-			}
-
-			// delete Entry from List:
-			if (($values["status"]=="dozent") || ($values["status"]=="tutor") || ($values["status"]=="admin") || ($values["status"]=="autor"))
+				echo "</td>";
+				
+				// Extendet views:
+				
+				// last visited-field
+				if ($view=="ext") {
+					if ($loginfilenow[$instid]==0) {
+						echo "<td class=\"".$cssSw->getClass()."\" align=\"center\" nowrap><font size=-1>n.b.</font></td>";
+					} else  {
+						echo "<td class=\"".$cssSw->getClass()."\"align=\"center\" nowrap><font size=-1>", date("d.m.", $loginfilenow[$instid]),"</font></td>";
+					}
+					// Status-field
+					echo "<td class=\"".$cssSw->getClass()."\" align=\"center\" nowrap><font size=-1>". $values["status"]."&nbsp;</font></td>";
+				}
+				
+				// delete Entry from List:
+				if (($values["status"]=="dozent") || ($values["status"]=="tutor") || ($values["status"]=="admin") || ($values["status"]=="autor"))
 				echo "<td class=\"".$cssSw->getClass()."\" align=center><img width=\"19\" height=\"17\" src=\"pictures/blank.gif\" />&nbsp;</td>";
-			else
+				else
 				printf("<td class=\"".$cssSw->getClass()."\" align=center align=center><a href=\"$PHP_SELF?auswahl=%s&cmd=inst_kill\"><img src=\"pictures/logout_seminare.gif\" ".tooltip(_("aus der Einrichtung austragen"))." border=\"0\">&nbsp;</a></td>", $instid);
-		 	echo "</tr>\n";
+				echo "</tr>\n";
+			}
 		}
 	} else {
 	 ?>
@@ -918,7 +917,7 @@ elseif ($auth->auth["perm"]=="admin") {
 		$db->query("CREATE TEMPORARY TABLE IF NOT EXISTS  loginfilenow_".$user->id." ( Seminar_id varchar(32) NOT NULL PRIMARY KEY, loginfilenow int(11) NOT NULL DEFAULT 0 ) TYPE=HEAP");
 		$ins_query="REPLACE INTO loginfilenow_".$user->id." (Seminar_id,loginfilenow) VALUES ".$value_list;
 		$db->query($ins_query);
-		get_my_sem_values(&$my_sem);
+		get_my_obj_values(&$my_sem);
 		$db->query("DROP TABLE loginfilenow_".$user->id);
 		$cssSw->enableHover();
 		foreach ($my_sem as $semid=>$values){
