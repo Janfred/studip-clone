@@ -27,7 +27,9 @@ require_once("$ABSOLUTE_PATH_STUDIP/dates.inc.php"); //Funktionen zur Anzeige de
 require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
-
+if ($GLOBALS['CHAT_ENABLE']){
+	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php"; 
+}
 
 if (isset($auswahl) && $auswahl!="") {
 	//just opened Veranstaltung... here follows the init
@@ -133,7 +135,8 @@ if ($nclose)
 	<?php
 
 	// Anzeige von News
-
+	if (chat_show_info($auswahl))
+		echo "<br>";
 
 	($rechte) ? $show_admin=TRUE : $show_admin=FALSE;
 	if (show_news($auswahl,$show_admin, 0, $smain_data["nopen"], "100%", $loginfilelast[$SessSemName[1]]))

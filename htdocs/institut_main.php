@@ -30,6 +30,9 @@ require_once "$ABSOLUTE_PATH_STUDIP/config.inc.php";
 require_once "$ABSOLUTE_PATH_STUDIP/visual.inc.php"; 
 require_once "$ABSOLUTE_PATH_STUDIP/functions.php"; 
 
+if ($GLOBALS['CHAT_ENABLE']){
+	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php"; 
+}
 // hier muessen Seiten-Initialisierungen passieren
 if (isset($auswahl) && $auswahl!="") {
 	//just opened Einrichtung... here follows the init
@@ -132,9 +135,11 @@ if ($nclose)
 
 	<?php
 
+	
+	if (chat_show_info($auswahl))
+		echo "<br>";
+
 	// Anzeige von News
-	
-	
 	($rechte) ? $show_admin=TRUE : $show_admin=FALSE;
 	if (show_news($auswahl,$show_admin, 0, $institut_main_data["nopen"], "100%", $loginfilelast[$SessSemName[1]]))
 		echo"<br>";

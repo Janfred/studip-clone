@@ -31,6 +31,10 @@ require_once("$ABSOLUTE_PATH_STUDIP/dates.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/messaging.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");
+if ($GLOBALS['CHAT_ENABLE']){
+	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php"; 
+}
+
 
 // Start  of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
@@ -225,6 +229,8 @@ if ($msg)
 
 		echo "</tr></table><br>\n";
 
+	if (chat_show_info($user_id))
+		echo "<br>";
 // News zur person anzeigen!!!
 
 	($perm->have_perm("autor") AND $auth->auth["uid"]==$user_id) ? $show_admin=TRUE : $show_admin=FALSE;
