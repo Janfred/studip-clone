@@ -156,12 +156,12 @@ elseif (($SessSemName[1] <>"") && (!isset($sem_id)))
 						</td>
 						<td width="99%">
 						<?
-						if (($mein_status) || ($admission_status))
+						if (($mein_status) || ($admission_status)) {
 							if ($mein_status)
 								$tmp_text="Sie sind als Teilnehmer der Veranstaltung eingetragen";
 							elseif ($admission_status)
 								$tmp_text=sprintf ("Sie sind in die %s der Veranstaltung eingetragen", ($admission_status=="claiming")  ? "Anmeldeliste" : "Warteliste");
-						elseif (!$perm->have_perm("admin"))
+						} elseif (!$perm->have_perm("admin"))
 							$tmp_text="Sie sind nicht als Teilnehmer der Veranstaltung eingetragen.";
 						else
 							$tmp_text="Sie sind Administrator und k&ouml;nnen die Veranstaltung nicht abonnieren.";
