@@ -371,7 +371,6 @@ if (($uebernehmen_x) && (!$errormsg)) {
 		$foreign_resource = FALSE;
 		$update_resources = FALSE;
 		$update_dates_kill_resources = TRUE;
-		
 		//check if change inside regular times
 		if (is_array($metadates_changed)) {
 			foreach ($metadates_changed as $key=>$val) {

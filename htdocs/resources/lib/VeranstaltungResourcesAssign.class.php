@@ -239,7 +239,7 @@ class VeranstaltungResourcesAssign {
 	}
 
 	//this method saves the assigns and does overlap checks;
-	function changeMetaAssigns($term_data='', $veranstaltung_start_time='', $veranstaltung_duration_time='', $check_only = FALSE, $assignObjects = FALSE) {
+	function changeMetaAssigns($term_data='', $veranstaltung_start_time='', $veranstaltung_duration_time='', $check_only = FALSE, $assignObjects = FALSE, $check_locks = TRUE) {
 		if (func_num_args() == 1)
 			$assignObjects = func_get_arg(0);
 		
@@ -254,7 +254,7 @@ class VeranstaltungResourcesAssign {
 				if ($obj->getResourceId()) {
 					//check if there are overlaps (resource isn't free!)
 					if (!$this->dont_check)
-						$overlaps = $obj->checkOverlap();
+						$overlaps = $obj->checkOverlap($check_locks);
 					
 					if ($overlaps)
 						$result[$obj->getId()]=array("overlap_assigns"=>$overlaps, "resource_id"=>$obj->getResourceId());
@@ -270,23 +270,36 @@ class VeranstaltungResourcesAssign {
 		return $result;
 	}
 	
-	function changeDateAssign($termin_id, $resource_id='', $begin='', $end='', $check_only=FALSE) {
-		if (!$begin) {
-			$query = sprintf("SELECT date, content, end_time, assign_id FROM termine LEFT JOIN resources_assign ON (assign_user_id = termin_id) WHERE termin_id = '%s' ORDER BY date, content", $termin_id);
-			$this->db->query($query);
-			if ($this->db->next_record()) {
+	function changeDateAssign($termin_id, $resource_id='', $begin='', $end='', $check_only=FALSE, $check_locks = TRUE) {
+		//load data from termin and assign object
+		$query = sprintf("SELECT date, content, end_time, assign_id, resources_assign.begin AS assign_begin, resources_assign.end AS assign_end, resources_assign.resource_id AS assign_resource_id FROM termine LEFT JOIN resources_assign ON (assign_user_id = termin_id) WHERE termin_id = '%s' ORDER BY date, content", $termin_id);
+		$this->db->query($query);
+		if ($this->db->next_record()) {
+			if (!$begin) {
 				$assign_id=$this->db->f("assign_id");
 				$begin=$this->db->f("date");
 				$end=$this->db->f("end_time");
+			} else {
+				if (!$end)
+					$end=$begin;
 			}
-		} else {
-			if (!$end)
-				$end=$begin;
-		}
+			
+			if (!$resource_id)
+				$resource_id=$this->db->f("assign_resource_id");
+				
+			$assign_begin = $this->db->f("assign_begin");
+			$assign_end = $this->db->f("assign_end");
+			$assign_resource_id = $this->db->f("assign_resource_id");
+		} else
+			return FALSE;
 		
-		if ((!$assign_id) && (!$check_only))
-			 $result = $this->insertDateAssign($termin_id, $resource_id);
-		else {
+		//check the saved assign-object-times against the planned times - if the same, no update is needed.
+		if (($assign_begin == $begin) && ($assign_end == $end) && (($assign_resource_id == $resource_id))) {
+			return TRUE;
+		}			
+		if ((!$assign_id) && (!$check_only)) {
+			$result = $this->insertDateAssign($termin_id, $resource_id);
+		} else {
 			$changeAssign =& AssignObject::Factory($assign_id);
 			if ($resource_id)
 				$changeAssign->setResourceId($resource_id);
@@ -307,7 +320,7 @@ class VeranstaltungResourcesAssign {
 			
 			//check if there are overlaps (resource isn't free!)
 			if (!$this->dont_check)
-				$overlaps = $changeAssign->checkOverlap();
+				$overlaps = $changeAssign->checkOverlap($check_locks);
 
 			if ($overlaps) {
 				$result[$changeAssign->getId()]=array("overlap_assigns"=>$overlaps, "resource_id"=>$resource_id, "termin_id"=>$termin_id);
@@ -322,7 +335,7 @@ class VeranstaltungResourcesAssign {
 		return $result;
 	}
 	
-	function insertDateAssign($termin_id, $resource_id, $begin='', $end='', $check_only=FALSE) {
+	function insertDateAssign($termin_id, $resource_id, $begin='', $end='', $check_only=FALSE, $check_locks = TRUE) {
 		if ($resource_id) {
 			if (!$begin) {
 				$query = sprintf("SELECT date, content, end_time FROM termine WHERE termin_id = '%s'", $termin_id);
@@ -342,7 +355,7 @@ class VeranstaltungResourcesAssign {
 											0, 0, 0, 0, 0, 0);
 				//check if there are overlaps (resource isn't free!)
 				if (!$this->dont_check)
-					$overlaps = $createAssign->checkOverlap();
+					$overlaps = $createAssign->checkOverlap($check_locks);
 					
 				if ($overlaps)
 					$result[$createAssign->getId()]=array("overlap_assigns"=>$overlaps, "resource_id"=>$resource_id, "termin_id"=>$termin_id);

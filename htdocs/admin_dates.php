@@ -643,7 +643,7 @@ if (!sizeof($term_data["turnus_data"])) {
 							//room
 							$content.="<td class=\"steel1\" width=\"30%\" valign=\"top\" rowspan=\"2\">\n";
 							$content.="<font size=-1><b>" . _("Raum:") . "</b></font>";
-							//load the defaul from metatdata (regular times) (deprecated at the moment)
+							//load the default from metatdata (regular times) (deprecated at the moment)
 							/*if ((is_array($term_data["turnus_data"])) && (sizeof($term_data["turnus_data"]) == 1)) {
 								$new_date_resource_id = $term_data["turnus_data"][0]["resource_id"];
 								$new_date_room = $term_data["turnus_data"][0]["room"];
@@ -845,8 +845,9 @@ if (!sizeof($term_data["turnus_data"])) {
 												$content.= "<option value=\"FALSE\">["._("kein gebuchter Raum") ."]</option>";
 											while ($res = $resList->next())
 												$content.= sprintf("<option value=\"%s\">%s</option>", $res["resource_id"], my_substr(htmlReady($res["name"]), 0, 25));
-											$content.= "</select>";
-										}
+											$content.= "</select><br>";
+										} else
+											$content.="<input type=\"HIDDEN\" name=\"resource_id[$c]\" value=\"NULL\">";
 									}
 						
 									//the free field for room-information
