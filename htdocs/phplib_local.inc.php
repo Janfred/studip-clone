@@ -110,8 +110,7 @@ $db = new DB_Seminar;
 $query = ("SELECT * FROM config");
 $db->query($query);
 while ($db->next_record()) {
-	$variable_key = $db->f("key");
-	$$variable_key = $db->f("value");
+	$GLOBALS[$db->f("key")] = $db->f("value");
 }
 unset ($db);
 
