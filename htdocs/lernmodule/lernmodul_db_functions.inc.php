@@ -1,4 +1,40 @@
 <?
+function search_modules($key, $area = 4)
+{
+	switch($area)
+	{
+		case "1": $add_query = " AND meta.title LIKE '%" . $key . "%' "; break;
+		case "2": $add_query = " AND meta.description LIKE '%" . $key . "%' "; break;
+		case "3": $add_query = " AND (meta_author.author_firstname LIKE '%" . $key . "%' OR meta_author.author_surname LIKE '%" . $key . "%') "; break;
+		default: $add_query = " AND (meta.title LIKE '%" . $key . "%' OR meta.description LIKE '%" . $key . "%' OR (meta_author.author_firstname LIKE '%" . $key . "%' OR meta_author.author_surname LIKE '%" . $key . "%')) ";
+	}
+	$mod_array = false;
+	$ilias_db = New DB_Ilias;
+	$module_count = 0;
+	if (trim($key) <>"")
+	{
+		$ilias_db -> query("SELECT DISTINCT lerneinheit.id, lerneinheit.inst, meta.title, meta.description".
+			" FROM lerneinheit LEFT JOIN meta USING(inst, id)  LEFT JOIN meta_author USING(inst, id, typ) ".
+			" WHERE meta.status='final' ".
+			" AND public = 'y' ".
+			" AND meta.typ = 'le' " .
+			" AND lerneinheit.deleted='0000-00-00 00:00:00'". $add_query);
+		while ($ilias_db->next_record())
+		{
+			$mod_array[$module_count]["inst"] = $ilias_db -> f("inst");
+			$mod_array[$module_count]["id"] = $ilias_db -> f("id");
+			$mod_array[$module_count]["title"] = $ilias_db -> f("title");
+			$mod_array[$module_count]["description"] = $ilias_db -> f("description");
+			$module_count ++;
+		}
+	}
+	if ($module_count<1)
+		return false;
+	else
+		return $mod_array;
+}
+
+
 function get_module_info($co_inst, $co_id)
 {
 	$ilias_db = New DB_Ilias;
