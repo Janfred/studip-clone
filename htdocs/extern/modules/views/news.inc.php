@@ -49,7 +49,7 @@ if (!$db->num_rows())
 if ($this->config->getValue("Main", "studiplink")) {
 	echo "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" ";
 	echo "width=\"" . $this->config->getValue("TableHeader", "table_width");
-	echo " align=\"" . $this->config->getValue("TableHeader", "table_align") . "\">\n";
+	echo "\" align=\"" . $this->config->getValue("TableHeader", "table_align") . "\">\n";
 
 	$studip_link = "http://{$GLOBALS['EXTERN_SERVER_NAME']}institut_main.php?auswahl=" . $this->config->range_id;
 	$studip_link .= "&redirect_to=admin_news.php&cmd=new_entry&view=inst&new_inst=TRUE&range_id=";
