@@ -51,11 +51,11 @@ function MakeToolbar($icon,$URL,$text,$tooltip,$size,$target="_top",$align="cent
 	}
 	$toolbar = "<td class=\"toolbar\" align=\"$align\">";
 
-	$toolbar .= "<img border=\"0\" src=\"pictures/blank.gif\" height=\"1\" width=\"50\"><br>"
+	$toolbar .= "<img border=\"0\" src=\"pictures/blank.gif\" height=\"1\" width=\"30\"><br>"
 			  ."<a class=\"toolbar\" href=\"$URL\" target=\"$target\"><img border=\"0\" src=\"$icon\" ".$tool."><br>"
-			  ."<img border=\"0\" src=\"pictures/blank.gif\" height=\"4\" width=\"50\"><br>"
+			  ."<img border=\"0\" src=\"pictures/blank.gif\" height=\"4\" width=\"30\"><br>"
 			  ."<b>$text</b></a><br>"
-			  ."<img border=\"0\" src=\"pictures/blank.gif\" height=\"7\" width=\"50\">";
+			  ."<img border=\"0\" src=\"pictures/blank.gif\" height=\"7\" width=\"30\">";
 	$toolbar .= "</td>\n";
 	return $toolbar;
 }
