@@ -418,15 +418,13 @@ function format ($text) {
 					"'(^|\n)\!{2}([^!].*)$'m",           // Ueberschrift 3. Ordnung
 					"'(^|\n)\!{3}([^!].*)$'m",           // Ueberschrift 2. Ordnung
 					"'(^|\n)\!{4}([^!].*)$'m",           // Ueberschrift 1. Ordnung
-					"'(^|\n)--+(\d?)(\n|$)'m",           // Trennlinie
-					"'(\n|\A)(([-=]+ .+(\n|\Z))+)'e"     // Listen
+					"'^--+(\d?)$'m"           // Trennlinie
 					);
 	$replace = array("<h4>\\2 </h4>",
 					"<h3> \\2 </h3>",
 					"<h2> \\2 </h2>",
 					"<h1> \\2 </h1>",
-					"<hr noshade=\"noshade\" width=\"98%\" size=\"\\1\" align=\"center\" />",
-					"preg_call_format_list('\\2')"
+					"<hr noshade=\"noshade\" width=\"98%\" size=\"\\1\" align=\"center\" />"
 					);
 	$text = preg_replace($pattern, $replace, $text);
 	$text = preg_replace("'(\</h.\>)\n'", "\\1", $text);
@@ -440,6 +438,7 @@ function format ($text) {
 					"'(^|\s)-(?!-)(\S+-)+(?=(\s|$))'e",     // SL-kleiner
 					"'(^|\s)&gt;(?!&gt;)(\S+&gt;)+(?=(\s|$))'ie",  // SL-hochgestellt
 					"'(^|\s)&lt;(?!&lt;)(\S+&lt;)+(?=(\s|$))'ie",  // SL-tiefgestellt
+					"'(\n|\A)(([-=]+ .+(\n|\Z))+)'e",     // Listen
 					"'%%(\S|\S.*?\S)%%'s",               // ML-kursiv
 					"'\*\*(\S|\S.*?\S)\*\*'s",           // ML-fett
 					"'__(\S|\S.*?\S)__'s",                     // ML-unterstrichen
@@ -459,6 +458,7 @@ function format ($text) {
 					"'\\1<small>'.substr(str_replace('-', ' ', '\\2'), 0, -1).'</small>'",
 					"'\\1<sup>'.substr(str_replace('&gt;', ' ', '\\2'), 0, -1).'</sup>'",
 					"'\\1<sub>'.substr(str_replace('&lt;', ' ', '\\2'), 0, -1).'</sub>'",
+					"preg_call_format_list('\\2')",
 					"<i>\\1</i>",
 					"<b>\\1</b>",
 					"<u>\\1</u>",
@@ -577,9 +577,8 @@ function kill_format ($text) {
 					"'--(((--)*)(\S|\S.*?\S)?\\2)--'s",        // ML-kleiner
 					"'>>(\S|\S.*?\S)>>'is",  // ML-hochgestellt
 					"'<<(\S|\S.*?\S)<<'is",  // ML-tiefgestellt
-					"'\n\n\t(((\n\n)\t)*(.+?))(\Z|\n\n(?!\t))'s",  // Absatz eingerueckt
+					"'\n\n  (((\n\n)  )*(.+?))(\Z|\n\n(?! ))'s",  // Absatz eingerueckt
 					"'(?<=\n|^)--+(\d?)(\n|$|(?=<))'m", // Trennlinie
-					"'\n((-(.+?)(\n|\Z))+?)(\n|\Z)'s",  // Aufzaehlungsliste
 					"'\[pre\](.+?)\[/pre\]'is" ,        // praeformatierter Text
 					"'\[.+?\](((http://|https://|ftp://)?([^/\s]+)(.[^/\s]+){2,})|([-a-z0-9_]+(\.[_a-z0-9-]+)*@([a-z0-9-]+(\.[a-z0-9-]+)+)))'i",
 					"'\[quote=.+?quote\]'is",
@@ -596,7 +595,7 @@ function kill_format ($text) {
 					"'\\1'.substr(str_replace('&gt;', ' ', '\\2'), 0, -1)",
 					"'\\1'.substr(str_replace('&lt;', ' ', '\\2'), 0, -1)",
 					"\\1", "\\1", "\\1", "\\1", "\\1", "\\1",
-					"\\1", "\\1", "\n\\1\n", "", "\\1", "\\1", "", "");
+					"\\1", "\\1", "\n\\1\n", "", "\\1", "", "", "");
 	
 	$text = preg_replace($pattern, $replace, $text);
 	return $text;
