@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2003-10-01 13:55+0200\n"
-"PO-Revision-Date: 2003-10-01 13:42+0200\n"
+"PO-Revision-Date: 2003-10-01 15:38+0200\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
 "MIME-Version: 1.0\n"
@@ -61,7 +61,7 @@ msgstr "Start date lies after the end date."
 
 #: vote/Vote.class.php:367
 msgid "Das Stoppdatum ist leider ungültig."
-msgstr "Unfortunetly the stop date is invalid."
+msgstr "Unfortunately the stop date is invalid."
 
 #: vote/Vote.class.php:369 vote/Vote.class.php:428
 msgid "Es ist nur eine Zeitspanne oder ein Enddatum erlaubt."
@@ -89,7 +89,7 @@ msgid ""
 "Ergebnissichtbarkeit nicht auf \"nie\" stehen."
 msgstr ""
 "If the name of the participant should be made visible, the result visibility "
-"should not be set to \"no\"."
+"should not be set to \"never\"."
 
 #: vote/Vote.class.php:502
 msgid ""
@@ -105,8 +105,7 @@ msgstr "You are not allowed to change the report options afterwards!"
 
 #: vote/Vote.class.php:546
 msgid "Antwortaenderung ist mit der Option 'anonym' leider nicht moeglich."
-msgstr ""
-"Answer editing is unfortunetly not possible with the option 'anonymous'."
+msgstr "Answer editing is unfortunately not possible with the option 'anonymous'."
 
 #: vote/Vote.class.php:715
 msgid "Sie haben keine Antwort ausgewählt."
@@ -114,7 +113,7 @@ msgstr "You have not chosen an answer."
 
 #: vote/Vote.class.php:718
 msgid "Ungültiger Aufruf: Wert ist kein Array."
-msgstr ""
+msgstr "illegal call: Value is not an array."
 
 #: vote/Vote.class.php:722
 msgid "Mehrfachantworten sind nicht erlaubt!"
@@ -146,11 +145,11 @@ msgstr "Only a terminated object can be made (in)visible!"
 
 #: vote/Vote.class.php:1000
 msgid "Erstellzeit leider ungültig."
-msgstr "Creation time unfortuneltly invalid."
+msgstr "Creation time unfortunately invalid."
 
 #: vote/Vote.class.php:1013
 msgid "Änderungsdatum leider ungültig."
-msgstr "Edition date unfortunetly invalid."
+msgstr "Edition date unfortunately invalid."
 
 #: vote/Vote.class.php:1036
 msgid "Objekt besitzt keine ID!"
@@ -202,7 +201,7 @@ msgstr "Running vote has no start date!"
 
 #: vote/Vote.class.php:1090
 msgid "Startdatum des Votes ist vor Enddatum!"
-msgstr "The vote's start date is before the end date!"
+msgstr "The vote start date is before the end date!"
 
 #: vote/VoteDB.class.php:100 vote/VoteDB.class.php:132
 msgid "Es wurden keine aktiven Votes in der Datenbank gefunden."
@@ -227,7 +226,7 @@ msgstr "No votes were found with the given ID."
 
 #: vote/VoteDB.class.php:548 vote/vote_overview.inc.php:139
 msgid "Systemweite Votings/Tests"
-msgstr "System-wide votings / tests"
+msgstr "System-wide votes / tests"
 
 #: vote/VoteDB.class.php:570
 msgid "Keinen User mit der ID gefunden"
@@ -254,7 +253,7 @@ msgid ""
 "Sie haben mehrmals auf 'Speichern' gedr&uuml;ckt. Das Voting bzw. der Test "
 "wurde bereits in die Datenbank geschrieben."
 msgstr ""
-"You have repeatedly pressed on 'Save'. The voting (i.e. the test) is already "
+"You have repeatedly pressed on 'Save'. The vote (or the test) is already "
 "written in the data base."
 
 #: vote/VoteDB.class.php:1015
@@ -289,7 +288,7 @@ msgstr "You do not have any authorisation to edit the test '%s'."
 #: vote/vote_edit.inc.php:73
 #, c-format
 msgid "Sie haben keine Berechtigung das Voting '%s' zu editieren."
-msgstr "You do not have any authorisation to edit the voting '%s'."
+msgstr "You do not have any authorisation to edit the vote '%s'."
 
 #: vote/vote_edit.inc.php:80
 msgid "Zugriff verweigert."
@@ -328,14 +327,13 @@ msgid ""
 "nicht. Es werden Votings und Tests ihrer persönlichen Homepage angezeigt."
 msgstr ""
 "You do not have any authorisation for this area or the area does not exist. "
-"Votings and tests will be shown on your homepage."
+"Votes and tests will be shown on your homepage."
 
 #: vote/vote_overview.inc.php:111
 msgid ""
 "Kein Bereich ausgewählt. Es werden Votings und Tests ihrer persönlichen "
 "Homepage angezeigt."
-msgstr ""
-"No area selected. Votings and Tests will be shown on your personal homepage."
+msgstr "No area selected. Votes and Tests will be shown on your personal homepage."
 
 #: vote/vote_overview.inc.php:136
 msgid "Benutzer"
@@ -364,7 +362,7 @@ msgstr " on your personal homepage"
 
 #: vote/vote_overview.inc.php:190
 msgid "Fehler beim starten der wartenden Votings und Tests."
-msgstr "Error by starting the waiting votings and tests."
+msgstr "Error by starting the waiting votes and tests."
 
 #: vote/vote_overview.inc.php:254
 #, c-format
@@ -372,13 +370,13 @@ msgid ""
 "Das Voting \"%s\" ist einem Bereich zugeordnet für den Sie keine "
 "Veränderungsrechte besitzen. Die Aktion wurde nicht ausgeführt."
 msgstr ""
-"The voting \"%s\" is allocated to an area where you have no editing rights. "
+"The vote \"%s\" is allocated to an area where you have no editing rights. "
 "The action has not been carried out."
 
 #: vote/vote_overview.inc.php:264
 #, c-format
 msgid "Das Voting \"%s\" wurde für die Teilnehmer unsichtbar gemacht."
-msgstr "The voting \"%s\" has been made invisible for the participant."
+msgstr "The vote \"%s\" has been made invisible for the participant."
 
 #: vote/vote_overview.inc.php:265
 #, c-format
@@ -388,7 +386,7 @@ msgstr "The test \"%s\" has been made invisible for the participant."
 #: vote/vote_overview.inc.php:275
 #, c-format
 msgid "Das Voting \"%s\" wurde für die Teilnehmer sichtbar gemacht."
-msgstr "The voting \"%s\" has been made visible for the participant."
+msgstr "The vote \"%s\" has been made visible for the participant."
 
 #: vote/vote_overview.inc.php:276
 #, c-format
@@ -404,8 +402,8 @@ msgid ""
 "Eintrag fortgesetzt werden sollte, werden die Ergebnisse nach Ablauf ohne "
 "weitere Nachfrage für die Teilnehmer sichtbar gemacht!)"
 msgstr ""
-"When created, the voting \"%s\" was set with the settings \"The participant "
-"sees the (intermediate) results: No\". <br>Should the final results now be "
+"When created, the vote \"%s\" was set with the settings \"The participant "
+"sees the (intermediate) results: Never\". <br>Should the final results now be "
 "made visible for the participant despite this? (If this action should be "
 "carried out, the results will be made visible for the participant following "
 "this action, no further questions asked!)"
@@ -420,7 +418,7 @@ msgid ""
 "weitere Nachfrage für die Teilnehmer sichtbar gemacht!)"
 msgstr ""
 "When created, the test \"%s\" was set with the settings \"The participant "
-"sees the (intermediate) results: No\". <br>Should the final results now be "
+"sees the (intermediate) results: Never\". <br>Should the final results now be "
 "made visible for the participant despite this? (If this action should be "
 "carried out, the results will be made visible for the participant following "
 "this action, no further questions asked!)"
@@ -428,7 +426,7 @@ msgstr ""
 #: vote/vote_overview.inc.php:302
 #, c-format
 msgid "Das Voting \"%s\" wurde jetzt f&uuml;r die Teilnehmer sichtbar gemacht."
-msgstr "The voting \"%s\" has now been made visible for the participant."
+msgstr "The vote \"%s\" has now been made visible for the participant."
 
 #: vote/vote_overview.inc.php:303
 #, c-format
@@ -438,7 +436,7 @@ msgstr "The test \"%s\" has now been made visible for the participant."
 #: vote/vote_overview.inc.php:308
 #, c-format
 msgid "Das Voting \"%s\" wurde f&uuml;r die Teilnehmer nicht sichtbar gemacht."
-msgstr "The voting \"%s\" has been made invisible for the participant."
+msgstr "The vote \"%s\" has been made invisible for the participant."
 
 #: vote/vote_overview.inc.php:309
 #, c-format
@@ -448,7 +446,7 @@ msgstr "The test \"%s\" has been made invisible for the participant."
 #: vote/vote_overview.inc.php:320
 #, c-format
 msgid "Das Voting \"%s\" wurde gestartet."
-msgstr "The voting \"%s\" has been started."
+msgstr "The vote \"%s\" has been started."
 
 #: vote/vote_overview.inc.php:321
 #, c-format
@@ -458,7 +456,7 @@ msgstr "The test \"%s\" has been started."
 #: vote/vote_overview.inc.php:333
 #, c-format
 msgid "Das Voting \"%s\" wurde gestoppt."
-msgstr "The voting \"%s\" has been stopped."
+msgstr "The vote \"%s\" has been stopped."
 
 #: vote/vote_overview.inc.php:334
 #, c-format
@@ -468,7 +466,7 @@ msgstr "The test \"%s\" has been stopped."
 #: vote/vote_overview.inc.php:346
 #, c-format
 msgid "Das Voting \"%s\" wurde fortgesetzt."
-msgstr "The voting \"%s\" has been continued."
+msgstr "The vote \"%s\" has been continued."
 
 #: vote/vote_overview.inc.php:347
 #, c-format
@@ -478,7 +476,7 @@ msgstr "The test \"%s\" has been continued."
 #: vote/vote_overview.inc.php:359
 #, c-format
 msgid "Das Voting \"%s\" wurde zur&uuml;ckgesetzt."
-msgstr "The voting \"%s\" has been re-set."
+msgstr "The vote \"%s\" has been re-set."
 
 #: vote/vote_overview.inc.php:360
 #, c-format
@@ -488,7 +486,7 @@ msgstr "The test \"%s\" has been re-set."
 #: vote/vote_overview.inc.php:365
 #, c-format
 msgid "Das Voting \"%s\" wirklich l&ouml;schen?"
-msgstr "Do you really want to delete the voting \"%s\" ?"
+msgstr "Do you really want to delete the vote \"%s\" ?"
 
 #: vote/vote_overview.inc.php:366
 #, c-format
@@ -498,7 +496,7 @@ msgstr "Do you really want to delete the test \"%s\"?"
 #: vote/vote_overview.inc.php:377
 #, c-format
 msgid "Das Voting \"%s\" wurde gel&ouml;scht."
-msgstr "The voting \"%s\" has been deleted."
+msgstr "The vote \"%s\" has been deleted."
 
 #: vote/vote_overview.inc.php:378
 #, c-format
@@ -508,7 +506,7 @@ msgstr "The test \"%s\" has been deleted."
 #: vote/vote_overview.inc.php:383
 #, c-format
 msgid "Das Voting \"%s\" wurde nicht gel&ouml;scht."
-msgstr "The voting \"%s\" has not been deleted."
+msgstr "The vote \"%s\" has not been deleted."
 
 #: vote/vote_overview.inc.php:384
 #, c-format
@@ -518,7 +516,7 @@ msgstr "The test \"%s\" has not been deleted."
 #: vote/vote_overview.inc.php:388
 #, c-format
 msgid "Das Voting \"%s\" wurde angelegt."
-msgstr "The voting \"%s\" has been created."
+msgstr "The vote \"%s\" has been created."
 
 #: vote/vote_overview.inc.php:389
 #, c-format
@@ -528,7 +526,7 @@ msgstr "The test \"%s\" has been created."
 #: vote/vote_overview.inc.php:393
 #, c-format
 msgid "Das Voting \"%s\" wurde mit den Ver&auml;nderungen gespeichert."
-msgstr "The voting \"%s\" has been saved with the changes."
+msgstr "The vote \"%s\" has been saved with the changes."
 
 #: vote/vote_overview.inc.php:394
 #, c-format
@@ -552,7 +550,7 @@ msgstr "Test"
 
 #: vote/vote_overview.inc.php:408
 msgid "Voting"
-msgstr "Voting"
+msgstr "Vote"
 
 #: vote/vote_overview.inc.php:510
 msgid "eigene Homepage"
@@ -560,7 +558,7 @@ msgstr "Own homepage"
 
 #: vote/vote_overview.inc.php:572
 msgid "Voting-Verwaltung"
-msgstr "Voting administration"
+msgstr "Vote administration"
 
 #: vote/vote_overview.inc.php:575
 msgid "Zum vorherigen Bereich zur&uuml;ckkehren."
@@ -568,7 +566,7 @@ msgstr "Go back to the previous area"
 
 #: vote/vote_overview.inc.php:578
 msgid "Ein neues Voting"
-msgstr "A new voting"
+msgstr "A new vote"
 
 #: vote/vote_overview.inc.php:579
 msgid "Einen neuen Test"
@@ -580,7 +578,7 @@ msgstr "in"
 
 #: vote/vote_overview.inc.php:582
 msgid "Voting oder Test erstellen."
-msgstr "Create voting or test"
+msgstr "Create vote or test"
 
 #: vote/vote_overview.inc.php:583
 msgid "Votings/Tests aus "
@@ -840,7 +838,7 @@ msgstr "Question:"
 
 #: vote/view/vote_edit.lib.php:268
 msgid "Antwortm&ouml;glichkeiten:"
-msgstr "Answer possibilites:"
+msgstr "Answer possibilities:"
 
 #: vote/view/vote_edit.lib.php:277
 msgid "Richtig"
@@ -898,8 +896,7 @@ msgstr "Someone has already taken part in this vote!"
 msgid ""
 "Sie k&ouml;nnen daher nur noch den Titel, den Endzeitpunkt und die "
 "Ergebnissichtbarkeit ver&auml;ndern."
-msgstr ""
-"Therefore you can only change the title, end date and the result visibility."
+msgstr "Therefore you can only change the title, end date and the result visibility."
 
 #: vote/view/vote_edit.lib.php:414
 msgid ""
@@ -907,17 +904,15 @@ msgid ""
 "Ergebnissichtbarkeit und die Revidierbarkeit ver&auml;ndern."
 msgstr ""
 "Therefore you can only change the title, the end date, the result visibility "
-"and the revisability."
+"and the possibility to edit."
 
 #: vote/view/vote_edit.lib.php:421
-msgid ""
-"Sie k&ouml;nnen diesen Test noch ver&auml;ndern, solange niemand abstimmt."
-msgstr "You can edit this test as long as noone has voted."
+msgid "Sie k&ouml;nnen diesen Test noch ver&auml;ndern, solange niemand abstimmt."
+msgstr "You can edit this test as long as no-one has voted."
 
 #: vote/view/vote_edit.lib.php:422
-msgid ""
-"Sie k&ouml;nnen dieses Voting noch ver&auml;ndern, solange niemand abstimmt."
-msgstr "You can edit this vote so long as noone has voted."
+msgid "Sie k&ouml;nnen dieses Voting noch ver&auml;ndern, solange niemand abstimmt."
+msgstr "You can edit this vote so long as no-one has voted."
 
 #: vote/view/vote_edit.lib.php:425
 msgid "Ver&auml;ndern Sie links die Frage und die Antworten Ihres Tests. "
@@ -936,8 +931,7 @@ msgid "Auf dieser Seite k&ouml;nnen Sie ein neues Voting anlegen."
 msgstr "You can create a new vote on this page."
 
 #: vote/view/vote_edit.lib.php:437
-msgid ""
-"Geben Sie links die Frage und die m&ouml;glichen Antworten Ihres Tests ein. "
+msgid "Geben Sie links die Frage und die m&ouml;glichen Antworten Ihres Tests ein. "
 msgstr ""
 "Enter the question and the possible answers for your test on the left hand "
 "side."
@@ -946,12 +940,10 @@ msgstr ""
 msgid ""
 "Geben Sie links die Frage und die m&ouml;glichen Antworten Ihres Votings "
 "ein. "
-msgstr ""
-"Enter the question and possible answers for your vote on the left hand side."
+msgstr "Enter the question and possible answers for your vote on the left hand side."
 
 #: vote/view/vote_edit.lib.php:443
-msgid ""
-"Im unteren Bereich k&ouml;nnen Sie weitere spezielle Einstellungen vornehmen."
+msgid "Im unteren Bereich k&ouml;nnen Sie weitere spezielle Einstellungen vornehmen."
 msgstr "In the area below you can deal with further specific settings."
 
 #: vote/view/vote_edit.lib.php:444
@@ -984,7 +976,7 @@ msgstr "Cancel all changes and back!"
 
 #: vote/view/vote_edit.lib.php:557
 msgid "Einstellungen zur Laufzeit:"
-msgstr "Settings for the duration:"
+msgstr "Settings for the vote duration:"
 
 #: vote/view/vote_edit.lib.php:560
 msgid ""
@@ -1012,116 +1004,118 @@ msgstr "Start manually later"
 
 #: vote/view/vote_edit.lib.php:577
 msgid "Startzeitpunkt:"
-msgstr ""
+msgstr "Start time:"
 
 #: vote/view/vote_edit.lib.php:581 vote/view/vote_edit.lib.php:616
 #, c-format
 msgid "um %s Uhr"
-msgstr ""
+msgstr "at %s "
 
 #: vote/view/vote_edit.lib.php:588 vote/view/vote_edit.lib.php:773
 msgid "sofort"
-msgstr ""
+msgstr "immediately"
 
 #: vote/view/vote_edit.lib.php:596
 #, c-format
 msgid "Startzeitpunkt war der <b>%s</b> um <b>%s</b> Uhr."
-msgstr ""
+msgstr "Start time was the <b>%s</b> at <b>%s</b>."
 
 #: vote/view/vote_edit.lib.php:606
 msgid "Ende"
-msgstr ""
+msgstr "End"
 
 #: vote/view/vote_edit.lib.php:608
 msgid "manuell beenden"
-msgstr ""
+msgstr "Manually terminate"
 
 #: vote/view/vote_edit.lib.php:611
 msgid "Endzeitpunkt:"
-msgstr ""
+msgstr "Termination date:"
 
 #: vote/view/vote_edit.lib.php:622
 msgid "Zeitspanne"
-msgstr ""
+msgstr "Time period"
 
 #: vote/view/vote_edit.lib.php:632
 #, c-format
 msgid "%s Woche"
-msgstr ""
+msgstr "%s week"
 
 #: vote/view/vote_edit.lib.php:632
 #, c-format
 msgid "%s Wochen"
-msgstr ""
+msgstr "%s weeks"
 
 #: vote/view/vote_edit.lib.php:646
 msgid "Endzeitpunkt neu berechnen."
-msgstr ""
+msgstr "Calculate termination date again"
 
 #: vote/view/vote_edit.lib.php:648
 #, c-format
 msgid " (<b>%s</b> um <b>%s</b> Uhr)"
-msgstr ""
+msgstr "(<b>%s</b> at <b>%s</b>)"
 
 #: vote/view/vote_edit.lib.php:685
 msgid "Weitere Eigenschaften:"
-msgstr ""
+msgstr "Further properties:"
 
 #: vote/view/vote_edit.lib.php:690
 msgid "Option"
-msgstr ""
+msgstr "Option"
 
 #: vote/view/vote_edit.lib.php:691
 msgid "Auswahl"
-msgstr ""
+msgstr "Selection"
 
 #: vote/view/vote_edit.lib.php:697
 msgid "Die Auswahl mehrerer Antworten ist erlaubt <i>(Multiple Choice)</i>:"
-msgstr ""
+msgstr "The selection of multiple answers is allowed <i>(Multiple Choice)</i>"
 
 #: vote/view/vote_edit.lib.php:710 vote/view/vote_edit.lib.php:826
 #: vote/view/vote_edit.lib.php:855
 msgid "nein"
-msgstr ""
+msgstr "no"
 
 #: vote/view/vote_edit.lib.php:711 vote/view/vote_edit.lib.php:825
 #: vote/view/vote_edit.lib.php:856
 msgid "ja"
-msgstr ""
+msgstr "yes"
 
 #: vote/view/vote_edit.lib.php:719
 msgid ""
 "Bedenken Sie, dass die Einstellung 'immer', also eine Voransicht des "
 "Zwischenstands, bei einem Test nicht unbedingt sinnvoll ist."
 msgstr ""
+"Be aware that the setting 'always', an ongoing view of the intermediate results, does not "
+"always make sense."
 
 #: vote/view/vote_edit.lib.php:725
 msgid "Der Teilnehmer sieht die (Zwischen-)Ergebnisse:"
-msgstr ""
+msgstr "The participant sees the (intermediate) results:"
 
 #: vote/view/vote_edit.lib.php:746
 msgid "immer"
-msgstr ""
+msgstr "always"
 
 #: vote/view/vote_edit.lib.php:747
 msgid "erst nachdem er seine Stimme(n) abgegeben hat"
-msgstr ""
+msgstr "only after he/she has voted."
 
 #: vote/view/vote_edit.lib.php:748 vote/view/vote_edit.lib.php:774
 msgid "erst nach Ablauf des Tests"
-msgstr ""
+msgstr "only after the test is terminated"
 
 #: vote/view/vote_edit.lib.php:748
 msgid "erst nach Ablauf des Votings"
-msgstr ""
+msgstr "only after the end of the vote"
 
 #: vote/view/vote_edit.lib.php:749
 msgid "nie"
-msgstr ""
+msgstr "never"
 
 #: vote/view/vote_edit.lib.php:757
 msgid "Der Teilnehmer sieht, ob seine Antwort(en) richtig war(en):"
-msgstr ""
+msgstr "The participant sees whether his/her answer(s) was/were correct:"
 
 #: vote/view/vote_edit.lib.php:784
 msgid ""
@@ -1130,38 +1124,44 @@ msgid ""
 "\n"
 "'Personalisiert' bedeutet, dass Sie sehen können, wer wofür stimmt."
 msgstr ""
+"'Anonymous' means that no-one sees nor is it saved anywhere which answers were given "
+"by which participant.\n"
+"\n"
+"'Personalised' means that you can see who voted for what."
 
 #: vote/view/vote_edit.lib.php:789
 msgid "Die Auswertung des Tests l&auml;uft:"
-msgstr ""
+msgstr "Test reporting runs:"
 
 #: vote/view/vote_edit.lib.php:790
 msgid "Die Auswertung des Votings l&auml;uft:"
-msgstr ""
+msgstr "Vote reporting runs:"
 
 #: vote/view/vote_edit.lib.php:803
 msgid "anonym"
-msgstr ""
+msgstr "anonymous"
 
 #: vote/view/vote_edit.lib.php:804
 msgid "personalisiert"
-msgstr ""
+msgstr "personalised"
 
 #: vote/view/vote_edit.lib.php:811
 msgid ""
 "Diese Option ist nur möglich, wenn Sie die Auswertung auf 'personalisiert' "
 "schalten, und wenn die Ergebnissichtbarkeit nicht auf 'nie' steht. "
 msgstr ""
+"This option is only possible if you have selected 'personalised' reporting, "
+"and when the result visibility is not set to 'never'."
 
 #: vote/view/vote_edit.lib.php:816
 msgid "Die Namen der Teilnehmer werden &ouml;ffentlich sichtbar gemacht:"
-msgstr ""
+msgstr "The names of the participants will be made publicly visible:"
 
 #: vote/view/vote_edit.lib.php:834
 msgid ""
 "Diese Option ist nur möglich, wenn Sie die Auswertung auf 'personalisiert' "
 "schalten. "
-msgstr ""
+msgstr "This option is only possible, if you have selected 'personalised' reporting."
 
 #: vote/view/vote_edit.lib.php:836
 msgid ""
@@ -1170,113 +1170,115 @@ msgid ""
 "Beachten Sie außerdem, dass das Einschalten dieser Option in Kombination mit "
 "'Richtigkeits-Anzeige: sofort' keinen Sinn macht."
 msgstr ""
+"\n"
+"\n"
+"Also be aware that selecting this option in combination with "
+"'show accuracy: immediately' does not make sense."
 
 #: vote/view/vote_edit.lib.php:842
-msgid ""
-"Der Teilnehmer darf seine gegebene(n) Antwort(en) beliebig oft revidieren:"
-msgstr ""
+msgid "Der Teilnehmer darf seine gegebene(n) Antwort(en) beliebig oft revidieren:"
+msgstr "The participant my edit his/her given answer:"
 
 #: vote/view/vote_show.lib.php:110
 msgid "Geben Sie hier Ihre Stimme ab!"
-msgstr ""
+msgstr "Enter your vote here!"
 
 #: vote/view/vote_show.lib.php:124
 msgid "Hier können Sie sich die Ergebnisse im Voraus ansehen."
-msgstr ""
+msgstr "You can see the results here before vote termination."
 
 #: vote/view/vote_show.lib.php:140
 msgid "Hier können Sie Ihre Antwort nochmal ändern."
-msgstr ""
+msgstr "Here you can change your answer again."
 
 #: vote/view/vote_show.lib.php:152
 msgid "Zurück zum Abstimmen."
-msgstr ""
+msgstr "Back to vote."
 
 #: vote/view/vote_show.lib.php:177
 msgid "Antworten wieder in Ihrer ursprünglichen Reihenfolge darstellen."
-msgstr ""
+msgstr "Present answers in their original order."
 
 #: vote/view/vote_show.lib.php:178
 msgid "Antworten nach Stimmenanzahl sortieren."
-msgstr ""
+msgstr "Sort votes according to answers."
 
 #: vote/view/vote_show.lib.php:209
 msgid "Zurück zur normalen Ansicht."
-msgstr ""
+msgstr "Back to normal view."
 
 #: vote/view/vote_show.lib.php:215
 msgid "Zeigen, wer welche Antwort gewählt hat."
-msgstr ""
+msgstr "Show who chose which answer."
 
 #: vote/view/vote_show.lib.php:236
 msgid "Diesen Test bearbeiten."
-msgstr ""
+msgstr "Edit this test."
 
 #: vote/view/vote_show.lib.php:237
 msgid "Dieses Voting bearbeiten."
-msgstr ""
+msgstr "Edit this vote."
 
 #: vote/view/vote_show.lib.php:248
 msgid "Diesen Test stoppen."
-msgstr ""
+msgstr "Terminate this test."
 
 #: vote/view/vote_show.lib.php:249
 msgid "Dieses Voting stoppen."
-msgstr ""
+msgstr "Terminate this vote."
 
 #: vote/view/vote_show.lib.php:260
 msgid "Diesen Test löschen."
-msgstr ""
+msgstr "Delete this test."
 
 #: vote/view/vote_show.lib.php:261
 msgid "Dieses Voting löschen."
-msgstr ""
+msgstr "Delete this vote."
 
 #: vote/view/vote_show.lib.php:342
 msgid "Alle Votings und Tests öffnen!"
-msgstr ""
+msgstr "Open all votes and tests!"
 
 #: vote/view/vote_show.lib.php:351
 msgid "Alle Votings und Tests schließen!"
-msgstr ""
+msgstr "Close all votes and tests!"
 
 #: vote/view/vote_show.lib.php:427
 msgid "Abgelaufene Votings und Tests"
-msgstr ""
+msgstr "Finished votes and tests"
 
 #: vote/view/vote_show.lib.php:511
 #, c-format
 msgid "Die Ergebnisse werden Ihnen ab dem <b>%s</b>, %s Uhr angezeigt."
-msgstr ""
+msgstr "You can see the results from the <b>%s</b>, %s."
 
 #: vote/view/vote_show.lib.php:517
 msgid ""
 "Die Ergebnisse werden Ihnen angezeigt, sobald der Test vom Ersteller beendet "
 "worden ist."
-msgstr ""
+msgstr "You can see the results as soon as the test is terminated by the creator."
 
 #: vote/view/vote_show.lib.php:518
 msgid ""
 "Die Ergebnisse werden Ihnen angezeigt, sobald das Voting vom Ersteller "
 "beendet worden ist."
-msgstr ""
+msgstr "You can see the results as soon as the vote has been terminated by the creator."
 
 #: vote/view/vote_show.lib.php:526
 msgid ""
 "Die Ergebnisse werden Ihnen nicht angezeigt, da dies vom Ersteller nicht "
 "erwünscht ist."
-msgstr ""
+msgstr "You are not allowed to see the results because the creator wants it that way."
 
 #: vote/view/vote_show.lib.php:549
 #, c-format
 msgid "Leider haben Sie keine der %s richtigen Antwort(en) gew&auml;hlt."
-msgstr ""
+msgstr "Unfortunately you have not selected any of the %s correct answer(s)."
 
 #: vote/view/vote_show.lib.php:556
 #, c-format
-msgid ""
-"Gl&uuml;ckwunsch! Sie haben alle der %s richtigen Antwort(en) gew&auml;hlt."
-msgstr ""
+msgid "Gl&uuml;ckwunsch! Sie haben alle der %s richtigen Antwort(en) gew&auml;hlt."
+msgstr "Well done! You have selected all %s correct answers."
 
 #: vote/view/vote_show.lib.php:562
 #, c-format
@@ -1284,147 +1286,149 @@ msgid ""
 "Sie haben von %s richtigen Antwort(en) %s gefunden und dar&uuml;ber hinaus %"
 "s falsche Antwort(en) gegeben."
 msgstr ""
+"From a possible %s correct answers, you have found %s and "
+"therefore have given %s incorrect answers."
 
 #: vote/view/vote_show.lib.php:569
 #, c-format
 msgid "Sie haben von %s richtigen Antwort(en) %s gefunden."
-msgstr ""
+msgstr "From a possible %s correct answers you have found %s."
 
 #: vote/view/vote_show.lib.php:578
 msgid "Gl&uuml;ckwunsch! Ihre Antwort war richtig."
-msgstr ""
+msgstr "Well done! Your answer was correct."
 
 #: vote/view/vote_show.lib.php:582
 msgid "Ihre Antwort war leider falsch."
-msgstr ""
+msgstr "Your answer was unfortunately incorrect."
 
 #: vote/view/vote_show.lib.php:587
 msgid "Ihre Antwort wurde registriert."
-msgstr ""
+msgstr "Your answer has been documented."
 
 #: vote/view/vote_show.lib.php:593
 msgid "Ihre Stimme wurde gez&auml;hlt."
-msgstr ""
+msgstr "Your vote has been counted."
 
 #: vote/view/vote_show.lib.php:647
 msgid "An diesem Test hat noch niemand teilgenommen."
-msgstr ""
+msgstr "No-one has taken part in this test yet."
 
 #: vote/view/vote_show.lib.php:648
 msgid "Bei diesem Voting hat noch niemand abgestimmt."
-msgstr ""
+msgstr "No-one has voted in this vote yet."
 
 #: vote/view/vote_show.lib.php:699
 msgid "Richtige Antwort"
-msgstr ""
+msgstr "Correct answer"
 
 #: vote/view/vote_show.lib.php:700
 msgid "Falsche Antwort"
-msgstr ""
+msgstr "Incorrect answer"
 
 #: vote/view/vote_show.lib.php:709
 msgid "Stimme"
-msgstr ""
+msgstr "Vote"
 
 #: vote/view/vote_show.lib.php:709
 msgid "Stimmen"
-msgstr ""
+msgstr "Votes"
 
 #: vote/view/vote_show.lib.php:765
 msgid "Sie konnten mehrere Antworten ausw&auml;hlen."
-msgstr ""
+msgstr "You could have selected more than one answer."
 
 #: vote/view/vote_show.lib.php:766
 msgid "Sie k&ouml;nnen mehrere Antworten ausw&auml;hlen."
-msgstr ""
+msgstr "You can select more than one answer."
 
 #: vote/view/vote_show.lib.php:774
 #, c-format
 msgid "Es haben insgesamt <b>%s</b> Personen teilgenommen"
-msgstr ""
+msgstr "A total of <b>%s</b> people have taken part."
 
 #: vote/view/vote_show.lib.php:777
 msgid "Sie waren der/die einzigste TeilnehmerIn"
-msgstr ""
+msgstr "You are the only participant."
 
 #: vote/view/vote_show.lib.php:778
 msgid "Es hat insgesamt <b>eine</b> Person teilgenommen"
-msgstr ""
+msgstr "Only <b>one</b> person has taken part."
 
 #: vote/view/vote_show.lib.php:782
 #, c-format
 msgid "Es haben bisher <b>%s</b> Personen teilgenommen"
-msgstr ""
+msgstr "To date <b>%s</b> people have taken part."
 
 #: vote/view/vote_show.lib.php:785
 msgid "Sie waren bisher der/die einzigste TeilnehmerIn"
-msgstr ""
+msgstr "You are to date the only participant."
 
 #: vote/view/vote_show.lib.php:786
 msgid "Es hat bisher insgesamt <b>eine</b> Person teilgenommen"
-msgstr ""
+msgstr "To date only <b>one</b> person has taken part."
 
 #: vote/view/vote_show.lib.php:795
 msgid ", Sie ebenfalls"
-msgstr ""
+msgstr ", including you."
 
 #: vote/view/vote_show.lib.php:806
 #, c-format
 msgid "Der Test wurde beendet am <b>%s</b> um <b>%s</b> Uhr."
-msgstr ""
+msgstr "The test was terminated on <b>%s</b> at <b>%s</b>."
 
 #: vote/view/vote_show.lib.php:809
 #, c-format
 msgid "Das Voting wurde beendet am <b>%s</b> um <b>%s</b> Uhr."
-msgstr ""
+msgstr "The vote was terminated on <b>%s</b> at <b>%s</b>."
 
 #: vote/view/vote_show.lib.php:816
 #, c-format
-msgid ""
-"Sie k&ouml;nnen Ihre Antwort &auml;ndern bis zum <b>%s</b> um <b>%s</b> Uhr."
-msgstr ""
+msgid "Sie k&ouml;nnen Ihre Antwort &auml;ndern bis zum <b>%s</b> um <b>%s</b> Uhr."
+msgstr "You may change your answer until <b>%s</b> at <b>%s</b>."
 
 #: vote/view/vote_show.lib.php:822
 #, c-format
 msgid "Der Test wird voraussichtlich beendet am <b>%s</b> um <b>%s</b> Uhr."
-msgstr ""
+msgstr "The test will probably be terminated on <b>%s</b> at <b>%s</b>."
 
 #: vote/view/vote_show.lib.php:825
 #, c-format
 msgid "Das Voting wird voraussichtlich beendet am <b>%s</b> um <b>%s</b> Uhr."
-msgstr ""
+msgstr "The vote will probably be terminated on <b>%s</b> at <b>%s</b>."
 
 #: vote/view/vote_show.lib.php:831
 #, c-format
 msgid "Sie k&ouml;nnen abstimmen bis zum <b>%s</b> um <b>%s</b> Uhr."
-msgstr ""
+msgstr "You can vote until the <b>%s</b> at <b>%s</b>."
 
 #: vote/view/vote_show.lib.php:839
 msgid "Der Endzeitpunkt dieses Tests steht noch nicht fest."
-msgstr ""
+msgstr "The termination date for this test has not yet been decided on."
 
 #: vote/view/vote_show.lib.php:840
 msgid "Der Endzeitpunkt dieses Votings steht noch nicht fest."
-msgstr ""
+msgstr "The termination date for this vote has not yet been decided on."
 
 #: vote/view/vote_show.lib.php:848
 msgid "Die Teilnahme war anonym."
-msgstr ""
+msgstr "Participation was anonymous."
 
 #: vote/view/vote_show.lib.php:849
 msgid "Die Teilnahme war <b>nicht</b> anonym."
-msgstr ""
+msgstr "Participation was <b>not</b> anonymous."
 
 #: vote/view/vote_show.lib.php:852
 msgid "Die Teilnahme ist anonym."
-msgstr ""
+msgstr "Participation is anonymous."
 
 #: vote/view/vote_show.lib.php:853
 msgid "Die Teilnahme ist <b>nicht</b> anonym."
-msgstr ""
+msgstr "Participation is <b>not</b> anonymous."
 
 #: vote/view/vote_show.lib.php:873
 msgid ""
 "Es sind keine aktuellen Votes vorhanden. Um neue Votes zu erstellen, klicken "
 "Sie auf die Doppelpfeile."
-msgstr ""
+msgstr "No current votes are available. In order to create new votes, please click on the double arrow."
+
