@@ -31,6 +31,15 @@
 // +---------------------------------------------------------------------------+
 
 
+
+function forum_kill_edit ($description) {
+	if (ereg("%%\[edit-",$description)) { // wurde schon mal editiert
+		$postmp = strpos($description,"%%[edit-");
+		$description = substr_replace($description,"",$postmp);
+	}
+	return $description;
+}
+
 /**
 * Builds the edit-Area for created postings or postings being re-editet
 *
@@ -53,11 +62,9 @@ function editarea($forumposting) {
 	} else {
 		$description = $forumposting["description"];  // bereits bestehender Text 
 	}
+		
+	$description = forum_kill_edit($description);
 	
-	if (ereg("%%\[edit-",$forumposting["description"])) { // wurde schon mal editiert
-		$postmp = strpos($forumposting["description"],"%%[edit-");
-		$description = substr_replace($forumposting["description"]," ",$postmp);
-	}
 	if ($forum["zitat"]!="") {
 		$zitat = quote($forum["zitat"]);
 		$description="";
@@ -443,6 +450,7 @@ function quote($zitat_id)  {
 			$description = $db->f("description");
 			$author = $db->f("author");
 			}
+	$description = forum_kill_edit($description);
 	$zitat = quotes_encode($description,$author);
 	return $zitat;
 }
@@ -1148,7 +1156,7 @@ $query = "SELECT x.topic_id, x.name , x.author , x.mkdate, x.chdate as age, y.na
 	."LEFT OUTER JOIN object_user ON(object_user.object_id=x.topic_id AND object_user.user_id='$user->id' AND flag='fav') , px_topics y "
 	."WHERE x.root_id = y.topic_id AND x.seminar_id = '$SessionSeminar' AND (x.chdate>=x.mkdate OR x.user_id='$user->id')".$addon." "
 	."GROUP by x.topic_id ORDER BY ".$forum["sort"]." ".$order
-	." LIMIT $flatviewstartposting,$postingsperside";
+	." ,age DESC LIMIT $flatviewstartposting,$postingsperside";
 
 $db->query($query);
 
