@@ -42,7 +42,7 @@
 */
 define("PHPDOC_DUMMY",true);
 
-$EXTERN_SERVER_NAME = "test.studip.de";
+$EXTERN_SERVER_NAME = "test.studip.de/studip/";
 
 $EXTERN_CONFIG_FILE_PATH = "/var/lib/studip/extern_config/";
 
