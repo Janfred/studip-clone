@@ -200,7 +200,7 @@ class StudipLitCatElement {
 			}
 		}
 		$form_fields['catalog_id'] = array('type' => 'hidden', 'default_value' => $this->fields['catalog_id']['value']);
-		$form_buttons = array('send' => array('type' => 'uebernehmen', 'info' => _("Änderungen übernehmen")),
+		$form_buttons = array('send' => array('type' => 'speichern', 'info' => _("Änderungen speichern")),
 							'reset' => array('type' => 'zuruecksetzen', 'info' => _("Änderungen zurücksetzen")),
 							'delete' => array('type' => 'loeschen', 'info' => _("Eintrag löschen"))
 					);
