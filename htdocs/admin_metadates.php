@@ -304,6 +304,7 @@ if (($uebernehmen_x) && (!$errormsg)) {
 	//check if change of mode
 	if (($term_metadata["original_art"] != $term_metadata["art"]) && ($RESOURCES_ENABLE)) {
 		$art_changed = TRUE;
+		//determine, if the resources are owned by the user
 		if (is_array($term_metadata["original_turnus"])) {
 			foreach ($term_metadata["original_turnus"] as $key=>$val) {
 				if ($term_metadata["original_turnus"][$key]["resource_id"]) {
@@ -369,6 +370,8 @@ if (($uebernehmen_x) && (!$errormsg)) {
 	if (($RESOURCES_ENABLE) && ($metadates_changed) || ($art_changed)) {
 		$foreign_resource = FALSE;
 		$update_resources = FALSE;
+		$update_dates_kill_resources = TRUE;
+		
 		//check if change inside regular times
 		if (is_array($metadates_changed)) {
 			foreach ($metadates_changed as $key=>$val) {
@@ -384,6 +387,7 @@ if (($uebernehmen_x) && (!$errormsg)) {
 		//ok, what do we here? If foreign requests and the ability to create a room request, do this. Else (no requests available or rights on the resource), we try so save the assign.
 		if (($foreign_resources) && ($RESOURCES_ALLOW_ROOM_REQUESTS) && (!$change_metadates_open_request)) {
 			$update_resources = FALSE;
+			$update_dates_kill_resources = TRUE;
 			$create_request = TRUE;
 
 			if ($art_changed) 
@@ -419,8 +423,8 @@ if (($uebernehmen_x) && (!$errormsg)) {
 		$errormsg.="msg§"._("Die allgemeinen Termindaten wurden aktualisiert.")."§";
 		$db->query ("UPDATE seminare SET chdate='".time()."' WHERE Seminar_id ='".$term_metadata["sem_id"]."'");
 		
-		//update the dates.... (we update if NOT update_resources is set to kill the actual assigns.... ok ;-) ??)
-		if (($term_metadata["update_dates"]) && (!$update_resources)) {
+		//update the dates in the assi.... (we update if user wants to or the changes to times/rooms/request-system causes killing all the date-assigns)
+		if (($term_metadata["update_dates"]) || ($update_dates_kill_resources)) {
 			$multisem = isDatesMultiSem($term_metadata["sem_id"]);
 			$result = dateAssi($term_metadata["sem_id"], $mode="update", FALSE, FALSE, $multisem, $term_metadata["original_turnus"], TRUE, $update_resources);
 			$term_metadata["original_turnus"] = $metadata_termin["turnus_data"];
