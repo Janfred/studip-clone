@@ -67,6 +67,9 @@ if ($SessSemName["class"]=="inst") {
 		$structure["folder"]=array (topKat=>"", name=>_("Dateien"), link=>"folder.php?cmd=tree", active=>FALSE);
 	if ($modules["literature"])
 		$structure["literatur"]=array (topKat=>"", name=>_("Literatur zur Einrichtung"), link=>"literatur.php", active=>FALSE);
+	if ($modules["wiki"]){
+	  	$structure["wiki"]=array (topKat=>"", name=>_("Wiki"), link=>"wiki.php", active=>FALSE);
+	}
 
 	//topkats for resources management, if module is activated
 	if ($RESOURCES_ENABLE) {
@@ -87,6 +90,9 @@ if ($SessSemName["class"]=="inst") {
 		$structure["dates"]=array (topKat=>"", name=>_("Ablaufplan"), link=>"dates.php", active=>FALSE);
 	if ($modules["literature"])
 		$structure["literatur"]=array (topKat=>"", name=>_("Literatur"), link=>"literatur.php", active=>FALSE);
+	if ($modules["wiki"]){
+	  	$structure["wiki"]=array (topKat=>"", name=>_("Wiki"), link=>"wiki.php", active=>FALSE);
+	}
 
 	//topkats for resources management, if module is activated
 	if ($RESOURCES_ENABLE) {
@@ -185,6 +191,13 @@ if (($rechte) && ($modules["literature"]))
 		$structure["admin_literatur"]=array (topKat=>"literatur", name=>_("Literatur und Links bearbeiten"), link=>"admin_literatur.php?view=literatur_sem&new_sem=TRUE&range_id=".$SessSemName[1], active=>FALSE);
 	else
 		$structure["admin_literatur"]=array (topKat=>"literatur", name=>_("Literatur und Links bearbeiten"), link=>"admin_literatur.php?view=literatur_inst&new_inst=TRUE&range_id=".$SessSemName[1], active=>FALSE);
+
+if ($modules["wiki"]) {
+	$structure["_wiki"]=array (topKat=>"wiki", name=>_("Start Seite"), link=>"wiki.php", active=>FALSE);
+	$structure["wiki_listnew"]=array (topKat=>"wiki", name=>_("Neue Seiten"), link=>"wiki.php?view=listnew", active=>FALSE);
+	$structure["wiki_listall"]=array (topKat=>"wiki", name=>_("Alle Seiten"), link=>"wiki.php?view=listall", active=>FALSE); 
+}
+		
 
 //bottomkats for resources-management, if modul is activated
 if ($RESOURCES_ENABLE) {

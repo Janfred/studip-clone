@@ -55,6 +55,7 @@ function get_my_sem_values(&$my_sem) {
 		$my_sem[$db2->f("Seminar_id")]["neuenews"]=$db2->f("neue");
 		$my_sem[$db2->f("Seminar_id")]["news"]=$db2->f("count");
 	}
+	
 	// Literatur?
 	$db2->query("SELECT b.Seminar_id,IF(literatur !='' OR links != '',1,0) AS literatur,
 			IF((chdate > b.loginfilenow AND user_id !='".$user->id."' AND (literatur !='' OR links != '')),1,0) AS neue 
@@ -65,7 +66,8 @@ function get_my_sem_values(&$my_sem) {
 			$my_sem[$db2->f("Seminar_id")]["literatur"]=$db2->f("literatur");
 		}
 	}
-
+	
+	//Termine?
 	$db2->query("SELECT b.Seminar_id,count(termin_id) as count, count(IF((chdate > b.loginfilenow AND autor_id !='".$user->id."'),a.termin_id,NULL)) AS neue 
 				FROM loginfilenow_".$user->id." b  LEFT JOIN termine a ON (b.Seminar_id=range_id) GROUP BY b.Seminar_id");
 	while($db2->next_record()) {
@@ -74,6 +76,17 @@ function get_my_sem_values(&$my_sem) {
 			$my_sem[$db2->f("Seminar_id")]["termine"]=$db2->f("count");
 		}
 	}
+	
+	//Wiki-Eintraege?
+	$db2->query("SELECT b.Seminar_id, COUNT(DISTINCT keyword) as count, count(IF((chdate > b.loginfilenow AND user_id !='".$user->id."'),a.keyword,NULL)) AS neue 
+				FROM loginfilenow_".$user->id." b  LEFT JOIN wiki a ON (b.Seminar_id=range_id) GROUP BY b.Seminar_id");
+	while($db2->next_record()) {
+		if ($my_sem[$db2->f("Seminar_id")]["modules"]["wiki"]) {	
+			$my_sem[$db2->f("Seminar_id")]["neuewikiseiten"]=$db2->f("neue");
+			$my_sem[$db2->f("Seminar_id")]["wikiseiten"]=$db2->f("count");
+		}
+	}
+
 	
 	return;
 }
@@ -122,7 +135,15 @@ function print_seminar_content($semid,$my_sem_values) {
   else
 		echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
 
-  echo "&nbsp;";
+  // Wikiseiten
+  if ($my_sem_values["neuewikiseiten"])
+		echo "&nbsp; <a href=\"seminar_main.php?auswahl=$semid&redirect_to=wiki.php\"><img src='pictures/icon-wiki2.gif' border=0 ".tooltip(sprintf(_("%s WikiSeiten, %s neue"), $my_sem_values["wikiseiten"], $my_sem_values["neuewikiseiten"]))."></a>";
+  elseif ($my_sem_values["wikiseiten"])
+		echo "&nbsp; <a href=\"seminar_main.php?auswahl=$semid&redirect_to=wiki.php\"><img src='pictures/icon-wiki.gif' border=0 ".tooltip(sprintf(_("%s WikiSeiten"), $my_sem_values["wikiseiten"]))."></a>";
+  else
+		echo "&nbsp; <img src='pictures/icon-leer.gif' width=\"18\" height=\"20\" border=\"0\">";
+
+  echo "&nbsp;";  
 
 } // Ende function print_seminar_content
 

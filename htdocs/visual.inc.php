@@ -240,10 +240,44 @@ function quotes_encode($description,$author)
 	RETURN $description;
 }
 
-////////////////////////////////////////////////////////////////////////////////
 
+/**
+* universal an very usable functions to get all the special stud.ip formattings
+*
+* 
+* @access       public        
+* @param        string $what		what to format
+* @param        string $trim		should the output trimmed?
+* @return       string
+*/
 function formatReady($what, $trim = TRUE){
 	return symbol(smile(FixLinks(format(latex(htmlReady($what, $trim, FALSE))), FALSE)));
+}
+
+
+/**
+* the special version of formatReady for Wiki-Webs
+*
+* 
+* @access       public        
+* @param        string $what		what to format
+* @param        string $trim		should the output trimmed?
+* @return       string
+*/
+function wikiReady($what, $trim = TRUE){
+	return symbol(smile(FixLinks(wiki_format(format(latex(htmlReady($what, $trim, FALSE))), FALSE))));
+}
+
+
+/**
+* a special wiki formatting routine (unused the moment)
+*
+* 
+* @access       public        
+* @param        string $text		what to format
+*/
+function wiki_format($text) {
+	return $text;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
