@@ -389,11 +389,11 @@ function PrintInstitutMembers ($range_id)
 $db->query ("SELECT name, statusgruppe_id, size FROM statusgruppen WHERE range_id = '$range_id' ORDER BY position ASC");
 if ($db->num_rows()>0) {   // haben wir schon Gruppen? dann Anzeige
 	?><table width="100%" border="0" cellspacing="0">
+	<form action="<? echo $PHP_SELF ?>?cmd=move_person" method="POST">
 <tr>
 	<?
 	printf ("<td class=\"steel1\" valign=\"top\" width=\"50%%\"><br>\n");
-?>	<form action="<? echo $PHP_SELF ?>?cmd=move_person" method="POST">
-<? echo"<input type=\"HIDDEN\" name=\"range_id\" value=\"$range_id\">\n";
+	echo"<input type=\"HIDDEN\" name=\"range_id\" value=\"$range_id\">\n";
 	    	  echo"<input type=\"HIDDEN\" name=\"view\" value=\"$view\">\n";
 	if ($db->num_rows() > 0) {
 		$nogroups = 1;
@@ -429,9 +429,10 @@ if ($db->num_rows()>0) {   // haben wir schon Gruppen? dann Anzeige
 	PrintAktualStatusgruppen ($range_id, $view, $edit_id);
 	?>
 	<br>&nbsp; 
-   </form>
+
   </td>
  </tr>
+  </form>
 </table>
 <?
 } else { // es sind noch keine Gruppen angelegt, daher Infotext
