@@ -129,7 +129,6 @@ class VeranstaltungResourcesAssign {
 			$day_of_week = date("w", $start_time);
 			if ($day_of_week == 0)
 				$day_of_week = 7;
-			echo lala, $val["resource_id"];
 			
 			$createAssign=new AssignObject(FALSE, $val["resource_id"], $this->seminar_id, $user_free_name, 
 										$start_time, $end_time, $sem_end,
