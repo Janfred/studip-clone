@@ -64,6 +64,7 @@ while ($db2->next_record()) {
 $db2->query("SELECT email_forward FROM user_info WHERE user_id = '".$user->id."'");
 $db2->next_record();
 $email_forward = $db2->f("email_forward");
+if ($email_forward == "0") $email_forward = $GLOBALS["MESSAGING_FORWARD_DEFAULT"];
 
 //vorgenommene Anpassungen der Ansicht in Uservariablen schreiben
 if ($messaging_cmd=="change_view_insert" && !$set_msg_default_x && $newmsgset_x) {
