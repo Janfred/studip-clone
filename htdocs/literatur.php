@@ -31,9 +31,9 @@ include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 
 if ($SessSemName[1] =="") {
-	parse_window ("error§Sie haben kein Objekt gew&auml;hlt. <br /><font size=-1 color=black>Dieser Teil des Systems kann nur genutzt werden, wenn Sie vorher ein Objekt gew&auml;hlt haben.<br /><br /> Dieser Fehler tritt auch auf, wenn Ihre Session abgelaufen ist. Wenn sie sich länger als $AUTH_LIFETIME Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurück zur Anmeldung zu gelangen. </font>", "§",
-				"Kein Objekt gew&auml;hlt", 
-				"<a href=\"index.php\"><b>&nbsp;Hier</b></a> geht es wieder zur Anmeldung beziehungsweise Startseite.<br />&nbsp;");
+	parse_window ("error§" . _("Sie haben kein Objekt gew&auml;hlt.") . " <br /><font size=-1 color=black>" . _("Dieser Teil des Systems kann nur genutzt werden, wenn Sie vorher ein Objekt gew&auml;hlt haben.") . "<br /><br /> " . sprintf(_("Dieser Fehler tritt auch auf, wenn Ihre Session abgelaufen ist. Wenn sie sich länger als %s Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurück zur Anmeldung zu gelangen."), $AUTH_LIFETIME) . " </font>", "§",
+				_("Kein Objekt gew&auml;hlt"), 
+				sprintf(_("%sHier%s geht es wieder zur Anmeldung beziehungsweise Startseite."), "<a href=\"index.php\"><b>&nbsp;", "</b></a>") . "<br />&nbsp;");
 	die;
 } else {
 	include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
@@ -44,9 +44,9 @@ if ($SessSemName[1] =="") {
 ?>
 <table width="100%" border=0 cellpadding=0 cellspacing=0>
 <tr>
-	<td class="topic" colspan=2><b>&nbsp;<img src="pictures/icon-lit.gif" align=absmiddle>&nbsp; <? echo $SessSemName["header_line"]; ?> - Literatur und Links</b></td>
+	<td class="topic" colspan=2><b>&nbsp;<img src="pictures/icon-lit.gif" align=absmiddle>&nbsp; <? echo $SessSemName["header_line"]; ?> - <?=_("Literatur und Links")?></b></td>
 </tr>
-	<td class="blank" width="100%"><blockquote><? printf ("%s", ($SessSemName["class"]=="inst") ? "Hier finden Sie n&uuml;tzliche Literatur und Links zu der Einrichtung." : "Hier finden Sie die Literatur- und Linkliste der Veranstaltung.");?></td>
+	<td class="blank" width="100%"><blockquote><? printf ("%s", ($SessSemName["class"]=="inst") ? _("Hier finden Sie n&uuml;tzliche Literatur und Links zu der Einrichtung.") : _("Hier finden Sie die Literatur- und Linkliste der Veranstaltung."));?></td>
 	<td class="blank" align = right><img src="pictures/literatur.jpg" border="0"></td>
 </tr>
 <tr>
@@ -64,13 +64,13 @@ if ($db->num_rows()) {
 	$literatur=$db->f("literatur");
 	$links=$db->f("links");
 	
-	$zusatz="<font size=-1>Zuletzt ge&auml;ndert von </font><a href=\"about.php?username=".get_username ($db->f("user_id"))."\"><font size=-1 color=\"#333399\">".get_fullname ($db->f("user_id"))."</font></a><font size=-1> am ".date("d.m.Y, H:i",$db->f("chdate"))."<font size=-1>&nbsp;"."</font>";				
+	$zusatz="<font size=-1>" . sprintf(_("Zuletzt ge&auml;ndert von %s am %s"), "</font><a href=\"about.php?username=".get_username ($db->f("user_id"))."\"><font size=-1 color=\"#333399\">".get_fullname ($db->f("user_id"))."</font></a><font size=-1>", date("d.m.Y, H:i",$db->f("chdate"))."<font size=-1>&nbsp;"."</font>");				
 	$icon="&nbsp;<img src=\"pictures/cont_lit.gif\">";
 	
 	//Literatur
 	if ($literatur) {
 		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr>";
-		printhead(0, 0, $link, "open", FALSE, $icon, "Literatur", $zusatz);
+		printhead(0, 0, $link, "open", FALSE, $icon, _("Literatur"), $zusatz);
 		echo "</tr></table>	";
 	
 		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr>";
@@ -81,7 +81,7 @@ if ($db->num_rows()) {
 	//Links
 	if ($links) {
 		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr>";
-		printhead(0, 0, $link, "open", FALSE, $icon, "Links", $zusatz);
+		printhead(0, 0, $link, "open", FALSE, $icon, _("Links"), $zusatz);
 		echo "</tr></table>	";
 	
 		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr>";
@@ -90,7 +90,7 @@ if ($db->num_rows()) {
 		}
 	}
 	if ((!$literatur) && (!$links)) {
-		parse_msg("info§<font size=-1><b>In dieser ".$SessSemName["art_generic"]." wurden keine Literatur oder Links erfasst</b></font>", "§", "steel1", 
+		parse_msg("info§<font size=-1><b>" . sprintf(_("In dieser %s wurden keine Literatur oder Links erfasst"), $SessSemName["art_generic"]) . "</b></font>", "§", "steel1", 
 		2, FALSE);
 		}
 	echo "</td></tr></table></td></tr></table>";
