@@ -254,7 +254,7 @@ function export_sem($inst_id, $ex_sem_id = "all")
 				{
 				elseif (($key == "admission_turnout") AND ($db->f($key) != "0"))
 				{
-					$data_object .= xml_open_tag($val, $db->f("admission_type")) ? _("max.") : _("erw."));
+					$data_object .= xml_open_tag($val, sprintf ("%s", $db->f("admission_type")) ? _("max.") : _("erw.")));
 					$data_object .= $db->f($key);
 					$data_object .= xml_close_tag($val);
 				}
