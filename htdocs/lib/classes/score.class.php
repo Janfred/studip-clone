@@ -208,8 +208,8 @@ function gettitel($score, $gender=0) {
 	else
 		$logscore = 0;
 		
-	if ($logscore > 19)
-		$logscore = 19;
+	if ($logscore > 20)
+		$logscore = 20;
 		
 	$titel[0]  =	array(0 => _("Unbeschriebenes Blatt"), 1 => _("Unbeschriebenes Blatt"));
 	$titel[1]  =	array(0 => _("Unbeschriebenes Blatt"), 1 => _("Unbeschriebenes Blatt"));
@@ -230,7 +230,8 @@ function gettitel($score, $gender=0) {
 	$titel[16] =	array(0 => _("Idol"), 1 => _("Idol"));
 	$titel[17] =	array(0 => _("Guru"), 1 => _("Hohepriesterin"));
 	$titel[18] =	array(0 => _("Lichtgestalt"), 1 => _("Lichtgestalt"));
-	$titel[19] =	array(0 => _("Gott"), 1 => _("G&ouml;ttin"));
+	$titel[19] =	array(0 => _("Halbgott"), 1 => _("Halbg&ouml;ttin"));
+	$titel[20] =	array(0 => _("Gott"), 1 => _("G&ouml;ttin"));
 
 	return $titel[$logscore][$gender];
 }
