@@ -22,6 +22,11 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" =>
 $perm->check("tutor");
 	
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+require_once("$ABSOLUTE_PATH_STUDIP/dates.inc.php"); //ben&ouml;tigete Funktionen der Terminverwaltung
+require_once("$ABSOLUTE_PATH_STUDIP/functions.php");//*urgs* das brauchen wir leider auch
+require_once("$ABSOLUTE_PATH_STUDIP/forum.inc.php");//Was solls....
+require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");//was solls...^
+require_once("$RELATIVE_PATH_CALENDAR/calendar_func.inc.php");//was solls....
 
 $db=new DB_Seminar;
 $db2=new DB_Seminar;
@@ -41,15 +46,22 @@ if ((!$perm->have_perm ("admin")) && (!$perm->have_perm ("root"))) {
 	$temp_default[7]="mm";
 }
 
+//Load all TERMIN_TYPs that are "Sitzungstermine" and build query-clause
+$i=0;
+$typ_clause = "(";
+foreach ($TERMIN_TYP as $key=>$val) {
+	if ($val["sitzung"]) {
+		if ($i)
+			$typ_clause .= ", ";
+		$typ_clause .= "'".$key."' ";
+		$i++;
+	}
+}
+$typ_clause .= ")";
+
 
 $sess->register("term_data");
 $sess->register("admin_dates_data");
-	
-require_once("$ABSOLUTE_PATH_STUDIP/dates.inc.php"); //ben&ouml;tigete Funktionen der Terminverwaltung
-require_once("$ABSOLUTE_PATH_STUDIP/functions.php");//*urgs* das brauchen wir leider auch
-require_once("$ABSOLUTE_PATH_STUDIP/forum.inc.php");//Was solls....
-require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");//was solls...^
-require_once("$RELATIVE_PATH_CALENDAR/calendar_func.inc.php");//was solls....
 
 if ($RESOURCES_ENABLE) {
 	require_once ($RELATIVE_PATH_RESOURCES."/resourcesClass.inc.php");
@@ -88,7 +100,7 @@ $infobox = array(
 		array  ("kategorie" => "Aktionen:", 
 				"eintrag" => array (
 					array	("icon" => "pictures/meinetermine.gif",
-						"text"  => sprintf(_("Um die allgemeinen Zeiten der Veranstaltung zu &auml;ndern, nutzen Sie bitte den Menupunkt %s Zeiten %s"), "<a href=\"admin_metadates.php?$seminar_id".$admin_dates_data["range_id"]."\">", "</a>")))));
+						"text"  => sprintf(_("Um die allgemeinen Zeiten der Veranstaltung zu &auml;ndern, nutzen Sie bitte den Menupunkt %s Zeiten %s"), "<a href=\"admin_metadates.php?seminar_id=".$admin_dates_data["range_id"]."\">", "</a>")))));
 
 
 
@@ -115,7 +127,7 @@ if ($admin_dates_data["range_id"] && !$perm->have_perm("root"))
 	}
 
 //Bevor einen Termin loeschen uebernehmen wir Aenderungen, dann ist gleichzeitiges Aendern und Loeschen moeglich
-if ($kill)
+if ($kill_x)
 	$edit="yes";
 
 //Assistent zum automatischen generieren eines Ablaufplans
@@ -406,7 +418,7 @@ if (($edit) && (!$admin_dates_data["termin_id"]))
 		}
 	}
 
-if (($kill) && ($admin_dates_data["range_id"]))
+if (($kill_x) && ($admin_dates_data["range_id"]))
 	{
 	if (is_array($kill_termin))
 		{
@@ -513,7 +525,7 @@ if (($kill) && ($admin_dates_data["range_id"]))
 		<form method="POST" action="<? echo $PHP_SELF?>">
 		<font size=-1>Einen neuen Termin <a href="admin_dates.php?insert_new=TRUE#anchor"><img <?=makeButton("anlegen", "src")?> align="absmiddle" border=0 valign="middle" alt="Neuen Termin anlegen"></a><br><?
 
-		$db2->query("SELECT count(*) AS anzahl FROM termine WHERE range_id='".$admin_dates_data["range_id"]."' AND date_typ ='1'");
+		$db2->query("SELECT count(*) AS anzahl FROM termine WHERE range_id='".$admin_dates_data["range_id"]."' AND date_typ IN $typ_clause");
 		$db2->next_record();
 
 		$default_room=$db->f("Ort");
@@ -545,15 +557,13 @@ if (($kill) && ($admin_dates_data["range_id"]))
 			</tr>
 		</table>
 		<?
-		}
-	} else {
+		} else {
 		?>
 		<br /><br />
 		<font size="-1">Sie haben bislang noch keine Sitzungstermine eingegeben.  Sie k&ouml;nnen an dieser Stelle den Ablaufplanassisten benutzen, wenn Sie f&uuml;r die Veranstaltung einen regelm&auml;&szlig;igen Turnus festlegen.
 		<?
 		}
-	
-	?>
+	} ?>
 									</form>
 									</blockquote>
 									</td>
@@ -610,7 +620,7 @@ if (($kill) && ($admin_dates_data["range_id"]))
 				if (!$show_all) {
 				?>
 				<input type="IMAGE" name="mark_all" border=0 src="pictures/buttons/alleauswaehlen-button.gif" value="löschen">&nbsp;
-				<input type="IMAGE" name="send" border=0 src="pictures/buttons/loeschen-button.gif" value="löschen">&nbsp; 
+				<input type="IMAGE" name="kill" border=0 src="pictures/buttons/loeschen-button.gif" value="löschen">&nbsp; 
 				<?
 				}
 			}
@@ -621,10 +631,8 @@ if (($kill) && ($admin_dates_data["range_id"]))
 			}
 			?>
 			<input type="HIDDEN" name="show_id" value="<? echo $db->f("termin_id");?>">
-			<input type="HIDDEN" name="name" value="<? echo $name ?>">
 			<input type="HIDDEN" name="show_id" value="<? echo $show_id ?>">
 			<input type="HIDDEN" name="show_all" value="<? echo $show_all ?>">
-			<input type="HIDDEN" name="kill" value="<? if ($admin_dates_data["termin_id"]) echo "TRUE"; else echo "FALSE" ?>">
 		</td>
 		</tr>
 	</table>
@@ -789,7 +797,6 @@ if (($kill) && ($admin_dates_data["range_id"]))
 				
 				if (!$show_all) {
 					$content.="<input type=\"HIDDEN\" name=\"show_id\" value=\"". $db->f("termin_id")."\">";
-					$content.="<input type=\"HIDDEN\" name=\"kill\" value=\"yes\">";
 				}
 				
 				$content.="<font size=-1>Titel:</font><br /><input type=\"TEXT\" name=\"titel[]\" maxlength=255 size=".round($max_col*0.45)." value=\"".htmlReady($db->f("content"))."\"><br />";
