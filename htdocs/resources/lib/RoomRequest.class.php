@@ -268,8 +268,6 @@ class RoomRequest {
 		}
 
 		$this->db->query($query);
-		
-		echo $query;
 
 		if ($this->db->affected_rows()) {
 			while ($this->db->next_record()) {
