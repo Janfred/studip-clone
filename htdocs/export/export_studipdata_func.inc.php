@@ -292,7 +292,7 @@ function export_teilis($inst_id, $ex_sem_id = "no")
 	}
 	else
 	{	
-		$db->query ("SELECT name, studiengang_id FROM studiengaenge LEFT JOIN admission_seminar_studiengang USING(studiengang_id) WHERE seminar_id = '$ex_sem_id' ");
+		$db->query ("SELECT name, studiengaenge.studiengang_id FROM studiengaenge LEFT JOIN admission_seminar_studiengang USING(studiengang_id) WHERE seminar_id = '$ex_sem_id' ");
 		while ($db->next_record()) 
 		{
 			$studiengang[$db->f("studiengang_id")] = $db->f("name");
