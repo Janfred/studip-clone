@@ -215,12 +215,10 @@ function update_admission ($seminar_id, $send_message=TRUE) {
 	$messaging=new messaging;
 
 	//Daten holen / Abfrage ob ueberhaupt begrenzt
-	$db->query("SELECT Seminar_id, Name, admission_endtime, admission_turnout, admission_type, start_time, admission_selection_take_place FROM seminare WHERE Seminar_id = '$seminar_id' ");
+	$db->query("SELECT Seminar_id, Name, admission_endtime, admission_turnout, admission_type, start_time, admission_selection_take_place, admission_prelim FROM seminare WHERE Seminar_id = '$seminar_id' ");
 	$db->next_record();
 
-	$db2->query("SELECT Name,admission_prelim FROM seminare WHERE Seminar_id='".$db->f("Seminar_id")."'");
-	$db2->next_record();
-	if ($db2->f("admission_prelim") == 1)
+	if ($db->f("admission_prelim") == 1)
 		$sem_preliminary = TRUE;
 	else
 		$sem_preliminary = FALSE;
