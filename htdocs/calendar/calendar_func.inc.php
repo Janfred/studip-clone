@@ -1,7 +1,7 @@
 <?
 
 /*
-kalenderFunc.inc.php - 0.7.5-20020309
+kalenderFunc.inc.php - 0.8-20020701
 Grundlegende Terminkalenderfunktionen fuer
 persoenlichen Terminkalender in Stud.IP.
 Copyright (C) 2001 Peter Thienel <pthien@gmx.de>

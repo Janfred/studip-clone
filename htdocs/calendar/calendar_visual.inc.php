@@ -1,6 +1,6 @@
 <?
 /*
-kalenderVisual.inc 0.7.5-20020311
+kalenderVisual.inc 0.8-20020701
 Persoenlicher Terminkalender in Stud.IP.
 Copyright (C) 2001 Peter Thienel <pthien@gmx.de>
 

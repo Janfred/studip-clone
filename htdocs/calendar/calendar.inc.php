@@ -42,7 +42,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 	require_once("visual.inc.php");
 	require_once("functions.php");
 	include($RELATIVE_PATH_CALENDAR . "/calendar_func.inc.php");
-//	include($RELATIVE_PATH_CALENDAR . "/lib/kalenderClass.inc.php");
 	include($RELATIVE_PATH_CALENDAR . "/calendar_visual.inc.php");
 		
 	// bei Einsprung ohne $cmd wird weiter unten eine Erlaeuterung ausgegeben
@@ -53,6 +52,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 	if(!$atime && !$termin_id)
 		$atime = time();
 		
+	if(isset($mod_s_x)) $mod = "keine";
+	if(isset($mod_d_x)) $mod = "taeglich";
+	if(isset($mod_w_x)) $mod = "woechentlich";
+	if(isset($mod_m_x)) $mod = "monatlich";
+	if(isset($mod_y_x)) $mod = "jaehrlich";
+	
 	if($mod)
 		$cmd = "edit";
 		
@@ -69,8 +74,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 		$jmp_y = date("Y", $atime);
 	}
 	
-	// User-Variablen initialisieren, updaten oder Standardwerte setzen
-	$user->register("calendar_user_control_data");
 	// Benutzereinstellungen uebernehmen
 	if($cmd_cal == "chng_cal_settings"){
 		$calendar_user_control_data = array(
@@ -84,21 +87,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 			"sem_data"       => $cal_sem_data,
 			"link_edit"      => $cal_link_edit,
 			"bind_seminare"  => $calendar_user_control_data["bind_seminare"]
-		);
-	}
-	// Default-Werte speichern
-	if(empty($calendar_user_control_data["view"])){
-		$calendar_user_control_data = array(
-			"view"           => "showweek",
-			"start"          => 9,
-			"end"            => 20,
-			"step_day"       => 900,
-			"step_week"      => 3600,
-			"type_week"      => "LONG",
-			"holidays"       => TRUE,
-			"sem_data"       => TRUE,
-			"link_edit"      => FALSE,
-			"bind_seminare"  => ""
 		);
 	}
 	
@@ -130,13 +118,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 		if(!isset($calendar_sess_forms_data))
 			$sess->register("calendar_sess_forms_data");
 		if(!empty($HTTP_POST_VARS)){
-			if($calendar_sess_control_data["mod"])
+		/*	if($calendar_sess_control_data["mod"])
 				$mod_prv = $calendar_sess_control_data["mod"];
 			else
 				$mod_prv = "keine";
 				
 			if($mod)
-				$calendar_sess_control_data["mod"] = $mod;
+				$calendar_sess_control_data["mod"] = $mod; */
+			
+			
 				
 			// Formulardaten uebernehmen
 			$accepted_vars = array("start_m", "start_h", "start_day", "start_month", "start_year", "end_m",
@@ -211,11 +201,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 				require_once($RELATIVE_PATH_CALENDAR . "/lib/CalendarEvent.class.php");
 				$atermin = new CalendarEvent($termin_id);
 				$repeat = $atermin->getRepeat();
-				$translate = array("SINGLE"=>"keine", "DAYLY"=>"t&auml;glich", "WEEKLY"=>"w&ouml;chentlich",
-					                 "MONTHLY"=>"monatlich", "YEARLY"=>"j&auml;hrlich");
+				$translate = array("SINGLE"=>"keine", "DAYLY"=>"taeglich", "WEEKLY"=>"woechentlich",
+					                 "MONTHLY"=>"monatlich", "YEARLY"=>"jaehrlich");
 				$mod = $translate[$repeat["type"]];
-				if(empty($HTTP_POST_VARS))
-					$calendar_sess_control_data["mod"] = $mod;
+			//	if(empty($HTTP_POST_VARS))
+				//	$calendar_sess_control_data["mod"] = $mod;
 			}
 			if($termin_id)
 				$title = "Mein pers&ouml;nlicher Terminkalender - Termin bearbeiten";
@@ -225,13 +215,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 			switch($mod){
 				case "keine":
 					break;
-				case "t&auml;glich":
+				case "taeglich":
 					if($type == "wdayly")
 						$lintervall_d = "";
 					break;
-				case "w&ouml;chentlich":
+				case "woechentlich":
 				case "monatlich":
-				case "j&auml;hrlich":
+				case "jaehrlich":
 					break;
 			}
 			break;
@@ -265,11 +255,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 			$err["titel"] = TRUE;
 		
 		switch($mod_prv){
-			case "t&auml;glich":
+			case "taeglich":
 				if(!preg_match("/^\d{1,3}$/", $lintervall_d))
 					$err["lintervall_d"] = TRUE;
 				break;
-			case "w&ouml;chentlich":
+			case "woechentlich":
 				if(!preg_match("/^\d{1,3}$/", $lintervall_w))
 					$err["lintervall_w"] = TRUE;
 				break;
@@ -284,7 +274,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 					if(!preg_match("/^\d{1,3}$/", $lintervall_m2))
 						$err["lintervall_m2"] = TRUE;
 				break;
-			case "j&auml;hrlich":
+			case "jaehrlich":
 				// Jahr 2000 als Schaltjahr
 				if(!check_date($month_y1, $day_y, 2000))
 					$err["day_y"] = TRUE;
@@ -303,7 +293,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 		
 		// wenn alle Daten OK, dann Termin anlegen		
 		if(empty($err)){
-			require_once($RELATIVE_PATH_CALENDAR . "/lib/DbCalendarEvent.class.php");
+			require_once($RELATIVE_PATH_CALENDAR . "/lib/CalendarEvent.class.php");
 			$atermin = new CalendarEvent($start,$end,$txt,$exp,$cat,$priority,$loc);		
 			$atermin->setDescription($content);
 			if($vue == "public")
@@ -315,13 +305,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 				case "einzel":
 					$atermin->setRepeat("SINGLE");
 					break;
-				case "t&auml;glich":
+				case "taeglich":
 					if($type_d == "dayly")
 						$atermin->setRepeat("DAYLY", $lintervall_d);
 					else if($type_d == "wdayly")
 						$atermin->setRepeat("WEEKLY", 1, "12345");
 					break;
-				case "w&ouml;chentlich":
+				case "woechentlich":
 					if(empty($wdays))
 						$atermin->setRepeat("WEEKLY", $lintervall_w);
 					else{
@@ -335,7 +325,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 					else
 						$atermin->setRepeat("MONTHLY", $lintervall_m2, $sintervall_m, $wday_m);
 					break;
-				case "j&auml;hrlich":
+				case "jaehrlich":
 					if($type_y == "day")
 						$atermin->setRepeat("YEARLY", $month_y1, $day_y);
 					else
@@ -408,48 +398,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 		$aday->bindSeminarTermine($bind_seminare);
 		$tab = createDayTable($aday, $st, $et, $calendar_user_control_data["step_day"], TRUE, TRUE);
 		
-?>
-<table width="100%" border="0" cellpadding="5" cellspacing="0">
-	<tr><td class="blank" width="50%">
-	<table width="100%" class="blank" border="0" cellpadding="0" cellspacing="0">
-	<tr><td class="blank" width="100%">
-		<table width="100%" border="0" cellpadding="0" cellspacing="0"><tr>
-			<th width="10%" height="40"><a href="<? echo $PHP_SELF; ?>?cmd=showday&atime=<? echo $atime - 86400 ?>"><img border="0" src="./pictures/forumrotlinks.gif" alt="zur&uuml;ck"></a></th>
-			<th width="80%" class="cal"><b>
-		<?
-			echo $aday->toString("LONG") . ", " . $aday->getDate();
-			// event. Feiertagsnamen ausgeben
-			if($hday = holiday($atime))
-				echo '<br>' . $hday["name"];
-		?>
-			</b></th>
-			<th width="10%"><a href="<? echo $PHP_SELF; ?>?cmd=showday&atime=<? echo $atime + 86400 ?>"><img border="0" src="./pictures/forumrot.gif" alt="vor"></a></th>
-			</tr>
-		<?
-			if($st > 0)
-				echo '<tr><th colspan="3"><a href="'.$PHP_SELF.'?cmd=showday&atime='.($atime - ($at - $st + 1) * 3600).'"><img border="0" src="./pictures/forumgraurauf.gif" alt="zeig davor"></a></th></tr>';
-		?>
-		</table>
-	</td></tr>
-	<tr><td class="blank">
-		<table width="100%" border="0" cellpadding="3" cellspacing="1">
-<?
-		echo $tab["table"];
-		if($et < 23)
-			echo '<tr><th colspan="'.$tab["max_columns"].'"><a href="'.$PHP_SELF.'?cmd=showday&atime='.($atime + ($et - $at + 1) * 3600).'"><img border="0" src="./pictures/forumgraurunt.gif" alt="zeig danach"></a></th></tr>';
-		else
-			echo '<tr><th colspan="'.$tab["max_columns"].'">&nbsp;</th></tr>';
-		echo '</table></td></tr></table><td width="50%" valign="top" class="blank">';
-		echo '<table width="100%" border="0" cellpadding="0" cellspacing="0">';
-		echo "<tr><td>\n";
-		echo '<table width="100%" border="0" cellpadding="0" cellspacing="0">';
-		jumpTo($jmp_m, $jmp_d, $jmp_y);
-		echo "</table></td></tr>\n";
-		$link = "./$PHP_SELF?cmd=showday&atime=";
-		echo "<tr><td align=\"center\">".includeMonth($atime, $link)."</td></tr>\n";
-		echo "<tr><td>&nbsp;</td></tr>\n";
-		echo "</table>\n";
-		echo "</td></tr><tr><td class=\"blank\" width=\"100%\" colspan=\"2\">&nbsp;";
+		require($RELATIVE_PATH_CALENDAR . "/views/day.inc.php");
+
 	}
 
 	// Wochenuebersicht anzeigen **************************************************
@@ -496,93 +446,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 			$colspan_2 = $tab["max_columns"] + 2;
 		}
 		
-?>
-<table width="100%" border="0" cellpadding="5" cellspacing="0" align="center">
-	<tr><td class="blank" width="100%" align="center">
-	<table border="0" width="100%" cellspacing="1" cellpadding="2">
-		<tr><th colspan="<? echo $colspan_2; ?>"><table width="100%" border="0" cellpadding="2" cellspacing="0" align="center"><tr>
-			<th width="15%"><a href="<? echo $PHP_SELF; ?>?cmd=showweek&atime=<? echo $aweek->getStart() - 1; ?>">&nbsp;<img border="0" src="./pictures/forumrotlinks.gif" alt="zur&uuml;ck">&nbsp;</a></th>
-			<th width="70%" class="cal"><? echo strftime("%V. Woche vom ", $aweek->getStart()).date("d.m.Y", $aweek->getStart()); ?> bis <? echo date("d.m.Y", $aweek->getEnd()); ?></th>
-			<th width="15%"><a href="<? echo $PHP_SELF; ?>?cmd=showweek&atime=<? echo $aweek->getEnd() + 259201; ?>">&nbsp;<img border="0" src="./pictures/forumrot.gif" alt="vor">&nbsp;</a></th>
-			</tr></table></th>
-		</tr>
-		
-<?
-		printf('<tr><th width="4%%"%s>', $colspan_1);
-		if($st > 0){
-			echo '<a href="calendar.php?cmd=showweek&atime='.$atime.'&wtime='.($st - 1).'">';
-			echo '<img border="0" src="./pictures/forumgraurauf.gif" alt="zeig davor"></a>';
-		}
-		else
-			echo "&nbsp";
-		echo '</th>'.$tab["table"][0];
-		printf('<th width="4%%"%s>', $colspan_1);
-		if($st > 0){
-			echo '<a href="calendar.php?cmd=showweek&atime='.$atime.'&wtime='.($st - 1).'">';
-			echo '<img border="0" src="./pictures/forumgraurauf.gif" alt="zeig davor"></a>';
-		}
-		else
-			echo "&nbsp;";
-		echo '</th></tr>';
-		
-		// Zeile mit Tagesterminen ausgeben
-		printf('</tr><th%s>Tag</th>%s<th%s>Tag</th></tr>', $colspan_1, $tab["table"][1], $colspan_1);
-		
-		
-		$j = $st;
-		for($i = 2;$i < sizeof($tab["table"]);$i++){
-			echo "<tr>";
-			
-			if($i % $rowspan == 0){
-				if($rowspan == 1)
-					echo "<th".$height.">".$j."</th>";
-				else
-					echo "<th rowspan=\"$rowspan\">".$j."</th>";
-			}
-			if($rowspan > 1){
-				$minutes = (60 / $rowspan) * ($i % $rowspan);
-				if($minutes == 0)
-					$minutes = "00";
-				echo "<th".$height."><font size=\"-2\">".$minutes."</font></th>";
-			}
-			
-			echo $tab["table"][$i];
-			
-			if($rowspan > 1)
-				echo '<th><font size="-2">'.$minutes.'</font></th>';
-			if($i % $rowspan == 0){
-				if($rowspan == 1)
-					echo "<th>".$j."</th>";
-				else
-					echo "<th rowspan=\"$rowspan\">".$j."</th>";
-				$j = $j + ceil($calendar_user_control_data["step_week"] / 3600);
-			}
-			
-			echo "</tr>\n";
-		}
-		echo '<tr><th colspan="'.$colspan_2."\">\n";
-		echo '<table width="100%" cellspacing="0" cellpadding="0" border="0">';
-		echo '<tr><th width="4%">';
-		if($et < 23){
-			echo '<a href="calendar.php?cmd=showweek&atime='.$atime.'&wtime='.($et + 1).'">';
-			echo '<img border="0" src="./pictures/forumgraurunt.gif" alt="zeig danach"></a>';
-		}
-		else
-			echo "&nbsp";
-		echo '</th><th width="92%">&nbsp;</th>';
-		echo '<th width="4%">';
-		if($et < 23){
-			echo '<a href="calendar.php?cmd=showweek&atime='.$atime.'&wtime='.($et + 1).'">';
-			echo '<img border="0" src="./pictures/forumgraurunt.gif" alt="zeig danach"></a>';
-		}
-		else
-			echo "&nbsp;";
-		echo "</th></tr></table>\n";
-		echo "</th></tr></table>\n";
-		echo '<table width="100%" border="0" cellpadding="0" cellspacing="0" align="center">';
-		jumpTo($jmp_m, $jmp_d, $jmp_y);
-		echo "</table>\n";
-		echo "<tr><td class=\"blank\">&nbsp;";
+		require($RELATIVE_PATH_CALENDAR . "/views/week.inc.php");
+
 	}
 
 	// Monatsuebersicht anzeigen **************************************************
@@ -607,136 +472,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 			$height = "80";
 		}
 		
-?>
-<table width="100%" border="0" cellpadding="5" cellspacing="0">
-	<tr><td class="blank" width="100%">
-	<table width="98%" border="0" cellspacing="0" cellpadding="0" align="center">
-	<tr><td>&nbsp</td></tr><tr><td>
-	<table class="blank" border="0" cellspacing="1" cellpadding="0" align="center">
-	<tr><th>
-	<table width="100%" border="0" cellspacing="1" cellpadding="1">
-		<tr>
-			<th>&nbsp;<a href="<? echo $PHP_SELF; ?>?cmd=showmonth&atime=<? echo $amonth->getStart()-1; ?>"><img border="0" src="./pictures/forumrotlinks.gif" alt="zur&uuml;ck"></a>&nbsp;</th>
-			<th colspan=<? if($mod == "nokw") echo "5"; else echo "6"; ?> class="cal">
-			<? echo month($amonth->getStart())." ".$amonth->getYear(); ?></th>
-			<th>&nbsp;<a href="<? echo $PHP_SELF; ?>?cmd=showmonth&atime=<? echo $amonth->getEnd()+1; ?>"><img border="0" src="./pictures/forumrot.gif" alt="vor"></a>&nbsp;</th>
-		</tr>
-		<tr>
-		<? echo "<th width=$width>Mo</th><th width=$width>Di</th><th width=$width>Mi</th><th width=$width>Do</th>
-						<th width=$width>Fr</th><th width=$width>Sa</th><th width=$width>So</th>";
-			 if($mod != "nokw")
-			  echo "<th width=$width>KW</th>";
-		?>
-		</tr>
-	</table></th></tr>
-		<tr><td class="blank">
-		<table class="blank" border="0" cellspacing="1" cellpadding="1">
+		require($RELATIVE_PATH_CALENDAR . "/views/month.inc.php");
 		
-<?
-		// Im Kalenderblatt ist links oben immer Montag. Das muss natuerlich nicht der
-		// Monatserste sein. Es muessen evtl. noch Tage des vorangegangenen Monats
-		// am Anfang und des folgenden Monats am Ende angefuegt werden.
-		
-		$adow = strftime("%u", $amonth->getStart()) - 1;
-		
-		$first_day = $amonth->getStart() - $adow * 86400 + 43200;
-		// Ist erforderlich, um den Maerz richtig darzustellen
-		// Ursache ist die Sommer-/Winterzeit-Umstellung
-		$cor = 0;
-		if($amonth->getMonth() == 3)
-			$cor = 1;
-			
-		$last_day = ((42 - ($adow + date("t",$amonth->getStart()))) % 7 + $cor) * 86400
-	  	        + $amonth->getEnd() - 43199;
-							
-		for($i = $first_day, $j = 0;$i <= $last_day;$i += 86400, $j++){
-			$aday = date("j", $i);
-			// Tage des vorangehenden und des nachfolgenden Monats erhalten andere
-			// style-sheets
-			$style = "";
-			if(($aday - $j - 1 > 0) || ($j - $aday  > 6))
-				$style = "light";
-			
-			// Feiertagsueberpruefung
-			if($mod != "compact" && $mod != "nokw")
-				$hday = holiday($i);
-			
-			// wenn Feiertag dann nur 4 Termine pro Tag ausgeben, sonst wird zu eng
-			if($hday["col"] > 0)
-				$max_apps = 4;
-			else
-				$max_apps = 5;
-				
-			if($j % 7 == 0)
-				echo '<tr>';
-			echo '<td class="'.$style.'month" valign=top width='.$width.' height='.$height.'>&nbsp;';
-			
-			if(($j + 1) % 7 == 0){
-				echo '<a class="' . $style . 'sday" href="'.$PHP_SELF.'?cmd=showday&atime=' . $i . '">'
-					  	   . $aday . "</a>";
-				monthUpDown($amonth, $i, $step, $max_apps);
-				if($hday["name"] != "")
-					echo '<br><font class="inday">' . $hday["name"] . '</font>';
-				$count = 0;
-				while(($aterm = $amonth->nextTermin($i)) && $count < $max_apps){
-					$html_txt = fit_title($aterm->getTitle(),1,1,15);
-					$jscript_txt = "'',CAPTION,'".JSReady($aterm->getTitle())."',NOCLOSE,CSSOFF";
-					echo '<br><a class="inday" href="'.$PHP_SELF.'?cmd=edit&termin_id='.$aterm->getId().'" onmouseover="return overlib('.$jscript_txt
-					     .');" onmouseout="nd();"><font color="'.$aterm->getColor().'">'
-							 .$html_txt."</font><a>\n";
-					$count++;
-				}
-				echo "</td>";
-				if($mod != "nokw")
-					echo '<td align=center width='.$width.' height='.$height.'><a class="kw" href="'.$PHP_SELF.'?cmd=showweek&atime=' . $i . '">'
-							 	 . strftime("%V", $i)."</a></td>";
-				echo "</tr>\n";
-			}
-			else{
-				// unterschiedliche Darstellung je nach Art des Tages (Rang des Feiertages)
-				switch($hday["col"]){
-					case 1:
-						echo '<a class="'.$style.'day" href="'.$PHP_SELF.'?cmd=showday&atime='.$i.'">'.$aday."</a>\n";
-						monthUpDown($amonth, $i, $step, $max_apps);
-						echo '<br><font class="inday">'.$hday["name"].'</font>';
-						break;
-					case 2:
-						echo '<a class="'.$style.'hday" href="'.$PHP_SELF.'?cmd=showday&atime='.$i.'">'.$aday."</a>\n";
-						monthUpDown($amonth, $i, $step, $max_apps);
-						echo '<br><font class="inday">'.$hday["name"].'</font>';
-						break;
-					case 3;
-						echo '<a class="'.$style.'hday" href="'.$PHP_SELF.'?cmd=showday&atime='.$i.'">'.$aday."</a>\n";
-						monthUpDown($amonth, $i, $step, $max_apps);
-						echo '<br><font class="inday">' . $hday["name"] . '</font>';
-						break;
-					default:
-						echo '<a class="'.$style.'day" href="'.$PHP_SELF.'?cmd=showday&atime='.$i.'">'.$aday."</a>\n";
-						monthUpDown($amonth, $i, $step, $max_apps);
-				}
-				
-				$count = 0;
-				while(($aterm = $amonth->nextTermin($i)) && $count < $max_apps){
-					$html_txt = fit_title($aterm->getTitle(),1,1,15);
-					$jscript_txt = "'',CAPTION,'".JSReady($aterm->getTitle()).'&nbsp;&nbsp;&nbsp;&nbsp;'.strftime("%H:%M-",$aterm->getStart()).strftime("%H:%M",$aterm->getEnd())."',NOCLOSE,CSSOFF";
-					echo '<br><a class="inday" href="'.$PHP_SELF.'?cmd=edit&termin_id='.$aterm->getId().'&atime='.$i.'" onmouseover="return overlib('.$jscript_txt
-					     .');" onmouseout="return nd();"><font color="'.$aterm->getColor().'">'
-							 .$html_txt."</font></a>";
-					$count++;
-				}
-				
-				echo "</td>";
-				
-			}
-		}
-?>
-		</td></tr></table></td></tr>
-		<tr><th>&nbsp;</th></tr>
-<?
-		echo '</table></td></table><table width="98%" border="0" cellpadding="0" cellspacing="0" align="center">';
-		jumpTo($jmp_m, $jmp_d, $jmp_y);
-		echo "</table>\n";
-		echo "<tr><td class=\"blank\">&nbsp;";
 	}
 	
 	// Jahresuebersicht ***********************************************************
@@ -748,111 +485,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 		$ayear = new DbCalendarYear($atime);
 		$ayear->bindSeminarTermine($bind_seminare);
 		
-?>
-<table width="100%" border="0" cellpadding="5" cellspacing="0">
-	<tr><td class="blank" width="100%">
-		<table class="blank" border=0 width="98%" cellpadding="0" cellspacing="0" align="center">
-		<tr><td class="blank"><table width="100%" border=0 cellpadding=0 cellspacing=0><tr>
-			<th align="center" width="10%"><a href="<? echo $PHP_SELF; ?>?cmd=showyear&atime=<? echo $ayear->getStart() - 1; ?>"><img border="0" src="./pictures/forumrotlinks.gif" alt="zur&uuml;ck">&nbsp;</a></th>
-			<th class="cal" align="center" width="80%"><font size="+2"><b><? echo $ayear->getYear(); ?></b></font></th>
-			<th align="center" width="10%"><a href="<? echo $PHP_SELF; ?>?cmd=showyear&atime=<? echo $ayear->getEnd() + 1; ?>"><img border="0" src="./pictures/forumrot.gif" alt="vor">&nbsp;</a></th>
-			</tr></table></td>
-		</tr>
-		<tr><td class="blank"><table width="100%" border=0 cellpadding=2 cellspacing=1>
-<?
-	
-		$days_per_month = array(31,31,28,31,30,31,30,31,31,30,31,30,31);											
-		if(date("L", $ayear->getStart()))
-			$days_per_month[2] = 29;
-		
-		echo '<tr>';
-		for($i = 1;$i < 13;$i++){
-			$ts_month += ($days_per_month[$i] - 1) * 86400;
-			echo '<th width="8%"><a class="precol1" href="'.$PHP_SELF.'?cmd=showmonth&atime='.($ayear->getStart() + $ts_month).'">'.month($ts_month).'</a></th>';
-		}
-		echo '</tr>';
-		
-		for($i = 1;$i < 32;$i++){
-			echo '<tr>';
-			for($month = 1;$month < 13;$month++){
-				$aday = mktime(12,0,0,$month,$i,$ayear->getYear());
-				
-				if($i <= $days_per_month[$month]){
-					$wday = date("w", $aday);
-					if($wday == 0 || $wday == 6)
-						$weekend = ' class="weekend"';
-					else
-						$weekend = "";
-						
-					if($month == 1)
-						echo "<td" . $weekend . ' height="25">';
-					else
-						echo "<td" . $weekend . ">";
-					
-					if($apps = $ayear->numberOfApps($aday))
-						echo '<table width="100%" cellspacing=0 cellpadding=0><tr><td' . $weekend . '>';
-						
-					// noch wird nicht nach Wichtigkeit bestimmter Feiertage unterschieden
-					$hday = holiday($aday);
-					switch($hday["col"]){
-					
-						case "1":
-							if(date("w", $aday) == "0"){
-								echo '<a class="sday" href="'.$PHP_SELF.'?cmd=showday&atime='.$aday
-								    .'"><b>'.$i.'</b></a> '.wday($aday, "SHORT");
-								$count++;
-								}
-							else
-								echo '<a class="day" href="'.$PHP_SELF.'?cmd=showday&atime='.$aday
-								    .'"><b>'.$i.'</b></a> '.wday($aday, "SHORT");
-							break;
-						case "2":
-						case "3":
-							if(date("w", $aday) == "0"){
-								echo '<a class="sday" href="'.$PHP_SELF.'?cmd=showday&atime='.$aday
-								    .'"><b>'.$i.'</b></a> '.wday($aday, "SHORT");
-								$count++;
-							}
-							else
-								echo '<a class="hday" href="'.$PHP_SELF.'?cmd=showday&atime='.$aday
-								    .'"><b>'.$i.'</b></a> '.wday($aday, "SHORT");
-							break;
-						default:
-							if(date("w", $aday) == "0"){
-								echo '<a class="sday" href="'.$PHP_SELF.'?cmd=showday&atime='.$aday
-								    .'"><b>'.$i.'</b></a> '.wday($aday, "SHORT");
-								$count++;
-								}
-							else
-								echo '<a class="day" href="'.$PHP_SELF.'?cmd=showday&atime='.$aday
-								    .'"><b>'.$i.'</b></a> '.wday($aday, "SHORT");
-					}
-					
-					if($apps){
-						if($apps > 1)
-							echo '</td><td' . $weekend . ' align="right"><img src="pictures/icon-uhr.gif" alt="'.$apps.' Termine"></td></table>';
-						else
-							echo '</td><td' . $weekend . ' align="right"><img src="pictures/icon-uhr.gif" alt="1 Termin"></td></table>';
-					}
-					
-					echo '</td>';
-				}
-				else
-					echo '<td>&nbsp;</td>';
-			}
-			echo "</tr>\n";
-			
-		}
-		echo '<tr>';
-		$ts_month = 0;
-		for($i = 1;$i < 13;$i++){
-			$ts_month += ($days_per_month[$i] - 1) * 86400;
-			echo '<th width="8%"><a class="precol1" href="'.$PHP_SELF.'?cmd=showmonth&atime='.($ayear->getStart() + $ts_month).'">'.month($ts_month).'</a></th>';
-		}
-		echo '</tr></table></td></tr>';
-		jumpTo($jmp_m, $jmp_d, $jmp_y);
-		echo "</table>\n</td></tr>";
-		echo "<tr><td class=\"blank\" width=\"100%\">&nbsp;";
+		require($RELATIVE_PATH_CALENDAR . "/views/year.inc.php");
 		
 	}
 	
@@ -1114,7 +747,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 					</p>
 <?
 	switch($mod){
-		case "t&auml;glich":
+		case "taeglich":
 			?>
 			<table width="100%" border="0" cellpadding="2" cellspacing="2">
 				<tr><td width="30%"><input type="radio" name="type_d" value="dayly"<?if($type_d == "dayly" || $type_d == "") echo " checked"; ?>>&nbsp;<b>Alle</b>&nbsp;
@@ -1124,7 +757,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 			</table>
 			<?
 			break;
-		case "w&ouml;chentlich":
+		case "woechentlich":
 			if(!$wdays)
 				$wdays = array();
 			?>
@@ -1176,7 +809,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 			</table>
 			<?
 			break;
-		case "j&auml;hrlich":
+		case "jaehrlich":
 			if(!$month_y1)
 				$month_y1 = $start_month;
 			if(!$month_y2)
@@ -1296,40 +929,41 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 			<tr><td class="steel1" align="center"><b>Wiederholung</b></td></tr>
 			<tr><td class="steel1" valign="middle">
 			<? if($repeat["type"] == "SINGLE" || $mod == "keine")
-					echo '<img src="./pictures/forumgrau.gif" border="0" alt="Dieser Termin ist ein Einzeltermin">';
+					echo '<input type="image" name="mod_s" value="keine" src="./pictures/buttons/keine2-button.gif" border="0">';
 				 else
-					echo '<img src="./pictures/forumleer.gif" border="0" alt="">'; ?>
-				<input type="submit" name="mod" value="keine" border="0"></td></tr>
+					echo '<input type="image" name="mod_s" value="keine" src="./pictures/buttons/keine-button.gif" border="0">'; ?>
+			</td></tr>
 			<tr><td class="steel1" valign="middle">
-			<? if($repeat["type"] == "DAYLY" || $mod == "t&auml;glich")
-					echo '<img src="./pictures/forumgrau.gif" border="0" alt="Dieser Termin wird t&auml;glich wiederholt">';
+			<? if($repeat["type"] == "DAYLY" || $mod == "taeglich")
+					echo '<input type="image" name="mod_d" value="keine" src="./pictures/buttons/jedentag2-button.gif" border="0">';
 				 else
-					echo '<img src="./pictures/forumleer.gif" border="0" align="absmiddle" alt="">'; ?>
-				<input type="submit" name="mod" value="t&auml;glich" border="0"></td></tr>
+					echo '<input type="image" name="mod_d" value="keine" src="./pictures/buttons/jedentag-button.gif" border="0">'; ?>
+			</td></tr>
 			<tr><td class="steel1" valign="middle">
-			<? if($repeat["type"] == "WEEKLY" || $mod == "w&ouml;chentlich")
-					echo '<img src="./pictures/forumgrau.gif" border="0" alt="Dieser Termin wird w&ouml;chentlich wiederholt">';
+			<? if($repeat["type"] == "WEEKLY" || $mod == "woechentlich")
+					echo '<input type="image" name="mod_w" value="keine" src="./pictures/buttons/jedewoche2-button.gif" border="0">';
 				 else
-					echo '<img src="./pictures/forumleer.gif" border="0" alt="">'; ?>
-				<input type="submit" name="mod" value="w&ouml;chentlich" border="0"></td></tr>
+					echo '<input type="image" name="mod_w" value="keine" src="./pictures/buttons/jedewoche-button.gif" border="0">'; ?>
+			</td></tr>
 			<tr><td class="steel1" valign="middle">
 			<? if($repeat["type"] == "MONTHLY" || $mod == "monatlich")
-					echo '<img src="./pictures/forumgrau.gif" border="0" alt="Dieser Termin wird monatlich wiederholt">';
+					echo '<input type="image" name="mod_m" value="keine" src="./pictures/buttons/jedenmonat2-button.gif" border="0">';
 				 else
-					echo '<img src="./pictures/forumleer.gif" border="0" alt="">'; ?>
-				<input type="submit" name="mod" value="monatlich" border="0"></td></tr>
+					echo '<input type="image" name="mod_m" value="keine" src="./pictures/buttons/jedenmonat-button.gif" border="0">'; ?>
+			</td></tr>
 			<tr><td class="steel1" valign="middle">
-			<? if($repeat["type"] == "YEARLY" || $mod == "j&auml;hrlich")
-					echo '<img src="./pictures/forumgrau.gif" border="0" alt="Dieser Termin wird j&auml;hrlich wiederholt">';
+			<? if($repeat["type"] == "YEARLY" || $mod == "jaehrlich")
+					echo '<input type="image" name="mod_y" value="keine" src="./pictures/buttons/jedesjahr2-button.gif" border="0">';
 				 else
-					echo '<img src="./pictures/forumleer.gif" border="0" alt="">'; ?>
-				<input type="submit" name="mod" value="j&auml;hrlich" border="0"></td></tr>
+					echo '<input type="image" name="mod_y" value="keine" src="./pictures/buttons/jedesjahr-button.gif" border="0">'; ?>
+			</td></tr>
 			<tr><td class="steel1"><br>&nbsp;<br></td></tr>
 <?
 	if($atime && !$termin_id){?>
 		<tr><td class="steel1" align="center">
 			<input type="hidden" name="atime" value="<? echo $atime; ?>">
 			<input type="hidden" name="mod_err" value="<? echo $mod_err; ?>">
+			<input type="hidden" name="mod_prv" value="<? echo $mod; ?>">
 			<input type="hidden" name="cmd" value="add">
 			<input type="image" src="./pictures/buttons/terminspeichern-button.gif" border="0"></td>
 		</tr>
@@ -1340,6 +974,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 			<input type="hidden" name="termin_id" value="<? echo $termin_id; ?>">
 			<input type="hidden" name="atime" value="<? echo $atime; ?>">
 			<input type="hidden" name="mod_err" value="<? echo $mod_err; ?>">
+			<input type="hidden" name="mod_prv" value="<? echo $mod; ?>">
 			<input type="hidden" name="cmd" value="add">
 			<input type="image" src="./pictures/buttons/terminaendern-button.gif" border="0"></td>
 		</tr>
