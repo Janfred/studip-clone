@@ -158,34 +158,14 @@ while ( is_array($HTTP_POST_VARS)
 			## Mail abschicken...
 			$to=$Email;
 			$url = "http://" . $smtp->localhost . $CANONICAL_RELATIVE_PATH_STUDIP;
-			$mailbody="Dies ist eine Informationsmail des Systems\n"
-			."\"Studienbegleitender Internetsupport Präsenzlehre\"\n"
-			."- $UNI_NAME_CLEAN -\n\n"
-			."Sie wurden um $Zeit mit folgenden Angaben von einem\n"
-			."der Administratoren ins System eingetragen:\n\n"
-			."Benutzername: $username\n"
-			."Passwort: $password\n"
-			."Status: $permlist\n"
-			."Vorname: $Vorname\n"
-			."Nachname: $Nachname\n"
-			."Email-Adresse: $Email\n\n"
-			."Diese Mail wurde Ihnen zugesandt um Ihnen den Benutzernamen\n"
-			."und das Passwort mitzuteilen, mit dem Sie sich am System anmelden.\n\n"
-			."Sie finden die Startseite des Systems unter folgender URL:\n\n"
-			."$url\n\n"
-			."Möglicherweise unterstützt ihr Mail-Programm ein einfaches Anklicken des Links.\n"
-			."Ansonsten müssen sie Ihren Browser öffnen und den Link komplett in die Zeile\n"
-			."\"Location\" oder \"URL\" kopieren.\n\n"
-			."Um Zugang auf die nichtöffentlichen Bereiche des Systems zu bekommen\n"
-			."müssen Sie sich unter \"Login\" oben rechts auf der Seite anmelden.\n"
-			."Geben Sie bitte unter Benutzername \"$username\" und unter\n"
-			."Passwort \"$password\" ein.\n\n"
-			."Das Passwort ist nur Ihnen bekannt. Bitte geben Sie es an niemanden\n"
-			."weiter (auch nicht an einen Administrator), damit nicht Dritte in ihrem\n"
-			."Namen Nachrichten in das System einstellen können!\n\n";
+
+			// include language-specific subject and mailbody
+			$user_language = getUserLanguagePath($u_id); // user has been just created, so we will get $DEFAULT_LANGUAGE
+			include_once("$ABSOLUTE_PATH_STUDIP"."locale/$user_language/LC_MAILS/create_mail.inc.php");
+
 			$smtp->SendMessage(
 			$smtp->env_from, array($to),
-			array("From: $smtp->from", "Reply-To: $smtp->abuse", "To: $to", "Subject: Anmeldung Stud.IP"),
+			array("From: $smtp->from", "Reply-To: $smtp->abuse", "To: $to", "Subject: $subject"),
 			$mailbody);
 		}
 
@@ -289,26 +269,14 @@ while ( is_array($HTTP_POST_VARS)
 			## Mail abschicken...
 			$to=$Email;
 			$url = "http://" . $smtp->localhost . $CANONICAL_RELATIVE_PATH_STUDIP;
-			$mailbody="Dies ist eine Informationsmail des Systems\n"
-			."\"Studienbegleitender Internetsupport Präsenzlehre\"\n"
-			."- $UNI_NAME_CLEAN -\n\n"
-			."Ihr Account wurde um $Zeit von einem der Administratoren verändert.\n"
-			."Die aktuellen Angaben lauten:\n\n"
-			."Benutzername: $username\n"
-			."Status: $permlist\n"
-			."Vorname: $Vorname\n"
-			."Nachname: $Nachname\n"
-			."Email-Adresse: $Email\n\n"
-			."Ihr Passwort hat sich nicht verändert.\n\n"
-			."Diese Mail wurde Ihnen zugesandt um Sie über die Änderungen zu informieren.\n\n"
-			."Wenn Sie Einwände gegen die Änderungen haben, wenden Sie sich bitte an\n"
-			."$abuse. Sie können einfach auf diese Mail antworten.\n\n"
-			."Hier kommen Sie direkt ins System:\n"
-			."$url\n\n"
-;
+
+			// include language-specific subject and mailbody
+			$user_language = getUserLanguagePath($u_id);
+			include_once("$ABSOLUTE_PATH_STUDIP"."locale/$user_language/LC_MAILS/change_mail.inc.php");
+
 			$smtp->SendMessage(
 			$smtp->env_from, array($to),
-			array("From: $smtp->from", "Reply-To: $smtp->abuse", "To: $to", "Subject: Account-Änderung Stud.IP"),
+			array("From: $smtp->from", "Reply-To: $smtp->abuse", "To: $to", "Subject: $subject"),
 			$mailbody);
 
 			// Hochstufung auf admin oder root?
@@ -405,26 +373,14 @@ while ( is_array($HTTP_POST_VARS)
 			## Mail abschicken...
 			$to=$Email;
 			$url = "http://" . $smtp->localhost . $CANONICAL_RELATIVE_PATH_STUDIP;
-			$mailbody="Dies ist eine Informationsmail des Systems\n"
-			."\"Studienbegleitender Internetsupport Präsenzlehre\"\n"
-			."- $UNI_NAME_CLEAN -\n\n"
-			."Ihr Passwort wurde um $Zeit von einem der Administratoren neu gesetzt.\n"
-			."Die aktuellen Angaben lauten:\n\n"
-			."Benutzername: $username\n"
-			."Passwort: $password\n"
-			."Status: $permlist\n"
-			."Vorname: $Vorname\n"
-			."Nachname: $Nachname\n"
-			."Email-Adresse: $Email\n\n"
-			."Das Passwort ist nur Ihnen bekannt. Bitte geben Sie es an niemanden\n"
-			."weiter (auch nicht an einen Administrator), damit nicht Dritte in ihrem\n"
-			."Namen Nachrichten in das System einstellen können!\n"
-			."Hier kommen Sie direkt ins System:\n"
-			."$url\n\n"
-;
+
+			// include language-specific subject and mailbody
+			$user_language = getUserLanguagePath($u_id);
+			include_once("$ABSOLUTE_PATH_STUDIP"."locale/$user_language/LC_MAILS/password_mail.inc.php");
+
 			$smtp->SendMessage(
 			$smtp->env_from, array($to),
-			array("From: $smtp->from", "Reply-To: $smtp->abuse", "To: $to", "Subject: Passwort-Änderung Stud.IP"),
+			array("From: $smtp->from", "Reply-To: $smtp->abuse", "To: $to", "Subject: $subject"),
 			$mailbody);
 		}
 
@@ -607,19 +563,14 @@ while ( is_array($HTTP_POST_VARS)
 					## Mail abschicken...
 					$permlist = addslashes(implode($perms,","));
 					$to=$Email;
-					$mailbody="Dies ist eine Informationsmail des Systems\n"
-					."\"Studienbegleitender Internetsupport Präsenzlehre\"\n"
-					."- $UNI_NAME_CLEAN -\n\n"
-					."Ihr Account\n\n"
-					."Benutzername: $username\n"
-					."Status: $permlist\n"
-					."Vorname: $Vorname\n"
-					."Nachname: $Nachname\n"
-					."Email-Adresse: $Email\n\n"
-					."wurde um $Zeit von einem der Administratoren gelöscht.\n";
+
+					// include language-specific subject and mailbody
+					$user_language = getUserLanguagePath($u_id);
+					include_once("$ABSOLUTE_PATH_STUDIP"."locale/$user_language/LC_MAILS/delete_mail.inc.php");
+
 					$smtp->SendMessage(
 					$smtp->env_from, array($to),
-					array("From: $smtp->from", "Reply-To: $smtp->abuse", "To: $to", "Subject: Account-Löschung Stud.IP"),
+					array("From: $smtp->from", "Reply-To: $smtp->abuse", "To: $to", "Subject: $subject"),
 					$mailbody);
 				}
 			}
