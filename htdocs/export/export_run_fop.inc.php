@@ -74,7 +74,7 @@ else
 	$str = "/usr/local/fop-0.20.5rc/fop.sh $TMP_PATH/$result_file $TMP_PATH/$pdf_file ";
 //	$out = system( ( $str ) );
 	$out = exec( ( $str ) );
-echo $str . "<br>" . $out . "<br>";
+//echo $str . "<br>" . $out . "<br>";
 /*
 	unlink( $TMP_PATH . "/" . $xml_file_id);
 	unlink( $TMP_PATH . "/" . $result_file);

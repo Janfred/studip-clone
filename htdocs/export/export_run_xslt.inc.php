@@ -74,7 +74,7 @@ else
 	$xh = xslt_create();
 
 	// Process the document
-	$result_file = $xslt_filename . "." . $format;
+	$result_file = md5(uniqid(rand())) . "." . $format;
 	$result = "" . $TMP_PATH . "/" . $result_file;
 	$xml_process_file = "" . $TMP_PATH . "/" . $xml_file_id;
 	$xslt_process_file = "" . $PATH_EXPORT . "/" . $xslt_files[$choose]["file"];
