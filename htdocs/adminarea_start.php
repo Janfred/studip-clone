@@ -35,32 +35,26 @@ require_once"$ABSOLUTE_PATH_STUDIP/visual.inc.php";
 	
 if ($SessSemName[1]) {
 	?>
-      	<table cellspacing="0" cellpadding="0" border="0" width="100%">
-	<tr><td class="topic" colspan=2><img src="pictures/blank.gif" width="5" height="5" border="0"><b>Veranstaltung vorgew&auml;hlt</b></td></tr>
+	<table cellspacing="0" cellpadding="0" border="0" width="100%">
+	<tr><td class="topic" colspan=2><img src="pictures/blank.gif" width="5" height="5" border="0"><b><?=_("Veranstaltung vorgew&auml;hlt")?></b></td></tr>
 	<tr><td class="blank" colspan=2>&nbsp;</td></tr>
 	<tr><td class="blank" colspan=2>
-		<blockquote>
-		<?
-		if ($links_admin_data["referred_from"] == "sem") {
-		?>
-		Sie k&ouml;nnen hier direkt die Daten der Veranstaltung <b><? echo htmlReady($SessSemName[0]) ?></b> bearbeiten.<br>
-		Wenn Sie die Daten einer anderen Veranstaltung bearbeiten wollen, klicken Sie bitte auf das Schl&uuml;sselsymbol.<br />&nbsp; 
-		<?
-		} else {
-		?>
-		Sie haben die Veranstaltung <b><? echo htmlReady($SessSemName[0]) ?></b> vorgew&auml;hlt. Sie k&ouml;nnen nun direkt die einzelnen Bereiche dieser Veranstaltung bearbeiten, in dem Sie die entsprechenden Menupunkte w&auml;hlen.<br>
-		Wenn Sie eine andere Veranstaltung bearbeiten wollen, klicken Sie bitte auf das Schl&uuml;sselsymbol.<br />&nbsp; 
-		<?
-		}
-		?>
-		</blockquote>
-		</td>
-	</tr>
-</table>
+	<blockquote>
+	<?
+	if ($links_admin_data["referred_from"] == "sem") {
+		printf(_("Sie k&ouml;nnen hier direkt die Daten der Veranstaltung <b>%s</b> bearbeiten.") . "<br>", htmlReady($SessSemName[0]));
+		print(_("Wenn Sie die Daten einer anderen Veranstaltung bearbeiten wollen, klicken Sie bitte auf das Schl&uuml;sselsymbol.") . "<br />&nbsp;"); 
+	} else {
+		printf(_("Sie haben die Veranstaltung <b>%s</b> vorgew&auml;hlt. Sie k&ouml;nnen nun direkt die einzelnen Bereiche dieser Veranstaltung bearbeiten, in dem Sie die entsprechenden Menupunkte w&auml;hlen.") . "<br>", htmlReady($SessSemName[0]));
+		print(_("Wenn Sie eine andere Veranstaltung bearbeiten wollen, klicken Sie bitte auf das Schl&uuml;sselsymbol.") . "<br />&nbsp;"); 
+	}
+	?>
+	</blockquote>
+	</td></tr>
+	</table>
 <?		
 }
 page_close();
- ?>
- </tr></td></table>
+?>
 </body>
 </html>
