@@ -166,8 +166,6 @@ if ($auth->is_authenticated() && $user->id != "nobody") {
 		// register all user variables
 		$LastLogin=$CurrentLogin;
 		$CurrentLogin=$SessionStart;
-		$user->register("loginfilelast");
-		$user->register("loginfilenow");
 		$user->register("CurrentLogin");
 		$user->register("LastLogin");
 		$user->register("forum");
@@ -178,28 +176,7 @@ if ($auth->is_authenticated() && $user->id != "nobody") {
 		$user->register("my_studip_settings");
 		$user->register("homepage_cache_own");
 		
-		//garbage collect for user variables
-		// loginfilenow und loginfilelast
-		$db = new DB_Seminar();
-		if (is_array($loginfilenow)){
-			$tmp_sem_inst = array();
-			$db->query("SELECT Seminar_id FROM seminare WHERE Seminar_id IN('" . join("','",array_keys($loginfilenow)) . "')");
-			while ($db->next_record()){
-				$tmp_sem_inst[$db->f(0)] = true;
-			}
-			$db->query("SELECT Institut_id FROM Institute WHERE Institut_id IN('" . join("','",array_keys($loginfilenow)) . "')");
-			while ($db->next_record()){
-				$tmp_sem_inst[$db->f(0)] = true;
-			}
-			foreach ($loginfilenow as $key => $value){
-				if(!isset($tmp_sem_inst[$key])){
-					unset($loginfilenow[$key]);
-					unset($loginfilelast[$key]);
-				}
-			}
-			unset($tmp_sem_inst);
-		}
-		
+				
 		// call default functions
 		check_messaging_default();
 		check_schedule_default();
