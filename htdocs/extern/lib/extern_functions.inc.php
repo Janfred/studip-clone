@@ -35,7 +35,8 @@
 // +---------------------------------------------------------------------------+
 
 
-require_once($ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_EXTERN."/extern_config.inc.php");
+require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."/extern_config.inc.php");
+require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . "/lib/classes/DataFields.class.php");
 
 /**
 * Returns all statusgruppen for the given range.
@@ -48,7 +49,7 @@ require_once($ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_EXTERN."/extern_config.inc.php
 */
 function get_all_statusgruppen ($range_id) {
 	$ret = "";
-	$db = new DB_Institut();
+	$db =& new DB_Seminar();
 	$db->query("SELECT statusgruppe_id, name FROM statusgruppen
 							WHERE range_id='$range_id' ORDER BY position ASC");
 	while ($db->next_record()) {
@@ -76,7 +77,7 @@ function get_statusgruppen_by_name ($range_id, $names, $hidden = FALSE) {
 	$ret = "";
 	if ($hidden)
 		$not = " NOT";
-	$db =& new DB_Institut();
+	$db =& new DB_Seminar();
 	$db->query("SELECT statusgruppe_id, name FROM statusgruppen
 							WHERE range_id='$range_id' AND name$not IN ($names)
 							ORDER BY position ASC");
@@ -107,7 +108,7 @@ function get_statusgruppen_by_id ($range_id, $ids, $hidden = FALSE) {
 		$ids = "'" . implode("','", $ids) . "'";
 	if ($hidden)
 		$not = " NOT";
-	$db =& new DB_Institut();
+	$db =& new DB_Seminar();
 	$db->query("SELECT statusgruppe_id, name FROM statusgruppen
 							WHERE range_id='$range_id' AND statusgruppe_id$not IN ($ids)
 							ORDER BY position ASC");
@@ -121,7 +122,7 @@ function get_all_configurations ($range_id, $type = "") {
 	$db =& new DB_Seminar();
 	$query = "SELECT * FROM extern_config WHERE range_id='$range_id' ";
 	
-	if ($type)
+	if ($type !== "")
 		$query .= "AND config_type=$type ";
 		
 	$query .= "ORDER BY name ASC";
@@ -299,30 +300,42 @@ function get_config_info ($range_id, $config_id) {
 	$query = "SELECT * FROM extern_config WHERE config_id='$config_id' ";
 	$query .= " AND range_id='$range_id'";
 	
-	
 	$db->query($query);
 	
 	if ($db->next_record()) {
+		$global_config = get_global_config($range_id);
 		$module_type = $db->f("config_type");
 		$module = $GLOBALS["EXTERN_MODULE_TYPES"][$db->f("config_type")]["module"];
 		$level = $GLOBALS["EXTERN_MODULE_TYPES"][$db->f("config_type")]["level"];
 		$make = strftime("%x", $db->f("mkdate"));
 		$change = strftime("%x", $db->f("chdate"));
 		$sri = "&lt;studip_remote_include&gt;\n\t&lt;module name=\"$module\" /&gt;";
-		$sri .= "\n\t&lt;config id=\"$config_id\" /&gt;\n\t&lt;range id=\"$range_id\" /&gt;";
+		$sri .= "\n\t&lt;config id=\"$config_id\" /&gt;\n\t";
+		if ($global_config)
+			$sri .= "&lt;global id=\"$global_config\" /&gt;\n\t";
+		$sri .= "&lt;range id=\"$range_id\" /&gt;";
 		$sri .= "\n&lt;/studip_remote_include&gt;";
 		$link_sri = "http://" . $GLOBALS["EXTERN_SERVER_NAME"];
 		$link_sri .= "extern.php?page_url=" . _("URL_DER_INCLUDE_SEITE");
 		
 		if ($level) {
-			$link = "http://" . $GLOBALS["EXTERN_SERVER_NAME"];
-			$link .= "extern.php?module=$module&config_id=$config_id&range_id=$range_id";
+			$link = "http://" . $GLOBALS["EXTERN_SERVER_NAME"] . "extern.php?module=$module";
+			if ($global_config)
+				$link .= "&config_id=$config_id&global_id=$global_config&range_id=$range_id";
+			else
+				$link .= "&config_id=$config_id&range_id=$range_id";
 			$link_structure = $link . "&view=tree";
 			$sri_structure = "&lt;studip_remote_include&gt;\n\tmodule = $module\n\t";
-			$sri_structure = "config_id = $config_id\n\trange_id=$range_id";
+			$sri_structure = "config_id = $config_id\n\t";
+			if ($global_config)
+				$sri_structure .= "global_id = $global_config\n\t";
+			$sri_structure .= "range_id=$range_id";
 			$sri_structure .= "\n\tview = tree\n&lt;/studip_remote_include&gt;";
-			$link_br = "http://" . $GLOBALS["EXTERN_SERVER_NAME"];
-			$link_br .= "extern.php?module=$module<br>&config_id=$config_id<br>&range_id=$range_id";
+			$link_br = "http://" . $GLOBALS["EXTERN_SERVER_NAME"] . "extern.php?module=$module<br>";
+			if ($global_config)
+				$link_br .= "&config_id=$config_id<br>&global_id=$global_config<br>&range_id=$range_id";
+			else
+				$link_br .= "&config_id=$config_id<br>&range_id=$range_id";
 			
 			$info = array("module_type" => $module_type, "module_name" => $module,
 				"name" => $db->f("name"), "make_date" => $make,
@@ -340,6 +353,19 @@ function get_config_info ($range_id, $config_id) {
 	}
 	
 	return FALSE;	
+}
+
+function get_global_config ($range_id) {
+	$db =& new DB_Seminar();
+	$query = "SELECT config_id FROM extern_config WHERE range_id = '$range_id' ";
+	$query .= "AND config_type = 0 AND is_standard = 1";
+	
+	$db->query($query);
+	
+	if ($db->next_record())
+		return ($db->f("config_id"));
+	
+	return FALSE;
 }
 
 function change_config_name ($range_id, $module_type, $config_id, $old_name, $new_name) {
