@@ -25,6 +25,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // -- here you have to put initialisations for the current page
 
 require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
 
 // Start of Output
 	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
@@ -35,37 +37,45 @@ require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 
 // Hilfsfunktionen
 
+function groupmail($range_id) 
+{
+	$type = get_object_type($range_id);
+	if ($type == "group") {
+		$db=new DB_Seminar;
+		$db->query ("SELECT Email FROM auth_user_md5 LEFT JOIN statusgruppe_user USING(user_id) WHERE statusgruppe_id = '$range_id'");
+		while ($db->next_record()) {
+			$mailpersons .= ";".$db->f("Email");
+		}
+		return $mailpersons;
+	}
+	if ($type == "sem") {
+		$db=new DB_Seminar;
+		$db->query ("SELECT Email FROM auth_user_md5 LEFT JOIN seminar_user USING(user_id) WHERE Seminar_id = '$range_id'");
+		while ($db->next_record()) {
+			$mailpersons .= ";".$db->f("Email");
+		}
+		return $mailpersons;
+	}
+}
+
+
 function PrintAktualStatusgruppen ()
 {	global $SessSemName, $PHP_SELF;
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
 	$db->query ("SELECT name, statusgruppe_id, size FROM statusgruppen WHERE range_id = '$SessSemName[1]' ORDER BY position ASC");
 	$AnzahlStatusgruppen = $db->num_rows();
-	$tmptxt ="Es sind noch keine Statusgruppen angelegt.";
-	if ($rechte) {
-		$tmptxt .= "Nutzen Sie oben den Link 'Statusgruppen verwalten' wenn Sie welche anlegen m&ouml;chten!";
-	} 
-	if ($AnzahlStatusgruppen == 0) {
-		$infobox = array	(			
-		array  ("kategorie"  => "Information:",
-			"eintrag" => array	(	
-							array (	"icon" => "pictures/ausruf_small.gif",
-									"text"  => $tmptxt
-									)
-			)
-		    )
-		);
-		echo "<br>";
-		// print the info_box
-		print_infobox ($infobox,"pictures/seminare.jpg");
-	}
 	$i = 0;
 	while ($db->next_record()) {
 		$statusgruppe_id = $db->f("statusgruppe_id");
 		$size = $db->f("size");
+		$groupmails = groupmail($statusgruppe_id);
 		echo "<table width=\"99%\" cellpadding=\"1\" cellspacing=\"0\" align=\"center\" border=\"0\">
-			        <tr height=28> ";
-		printf ("	          <td width=\"100%%\" colspan=\"2\" class=\"steel\"><font size=\"-1\"><b>%s</b></font><img src=\"pictures/blank.gif\"height=\"22\"></td>",htmlReady($db->f("name")));
+			        <tr> ";
+		printf ("	        <td width=\"95%%\" class=\"topic\"><font size=\"-1\"><b>%s</b></font></td>",htmlReady($db->f("name")));
+		printf ("	   	<td width=\"5%%\"class=\"topic\" align=\"center\">");
+		printf ("		   <a href=\"mailto:%s\"><img src=\"pictures/mailnachricht.gif\" alt=\"Nachricht an User verschicken\" border=\"0\"></a>", $groupmails); 
+		printf ("	        </td>");
 		echo 	"</tr>";
 
 		$db2->query ("SELECT statusgruppe_user.user_id, Vorname, Nachname, username FROM statusgruppe_user LEFT JOIN auth_user_md5 USING(user_id) WHERE statusgruppe_id = '$statusgruppe_id'");
@@ -79,7 +89,7 @@ function PrintAktualStatusgruppen ()
 			printf ("     <tr>");
 			printf ("       <td width=\"95%%\" class=\"%s\"><font size=\"-1\"><a href = about.php?username=%s>%s&nbsp; %s</a></font></td>",$class, $db2->f("username"), htmlReady($db2->f("Vorname")), htmlReady($db2->f("Nachname")));
 			printf ("	   <td width=\"5%%\"class=\"$class\" align=\"center\">");
-			printf ("		<a href=\"sms.php?sms_source_page=teilnehmer.php&cmd=write&rec_uname=%s\"><img src=\"pictures/nachricht1.gif\" alt=\"Nachricht an User verschicken\" border=\"0\"></a>", $db2->f("username")); 
+			printf ("		<a href=\"sms.php?sms_source_page=teilnehmer.php&cmd=write&rec_uname=%s\"><img src=\"pictures/nachricht1.gif\" alt=\"Mail an alle GruppenmitgliederInnen verschicken\" border=\"0\"></a>", $db2->f("username")); 
 			printf ("	   </td>");
 			echo "	</tr>";
 			$k++;
@@ -89,6 +99,46 @@ function PrintAktualStatusgruppen ()
 	}
 }
 
+function PrintNonMembers ($range_id)
+{	
+	$bereitszugeordnet = GetAllSelected($range_id);
+	$db=new DB_Seminar;
+	$query = "SELECT seminar_user.user_id, username, Nachname, Vorname, perms FROM auth_user_md5 LEFT JOIN seminar_user USING(user_id)  WHERE Seminar_id = '$range_id' ORDER BY Nachname ASC";
+	$db->query ($query);
+	if ($db->num_rows() >sizeof($bereitszugeordnet)-1) { // there are non-grouped members
+		echo "<table width=\"99%\" cellpadding=\"1\" cellspacing=\"0\" align=\"center\" border=\"0\">
+			        <tr> ";
+		print ("	      <td width=\"100%%\" colspan=\"2\" class=\"steel\"><font size=\"-1\"><b>keiner Funktion oder Gruppe zugeordnet</b></font><img src=\"pictures/blank.gif\" height=\"22\"></td>");
+		echo 	"</tr>";
+		$k = 1;
+		while ($db->next_record()) {
+			if (!in_array($db->f("user_id"), $bereitszugeordnet)) {
+				if ($k % 2) {
+					$class="steel1";
+				} else {
+					$class="steelgraulight"; 
+				}
+				printf ("     <tr>");
+				printf ("       <td width=\"95%%\" class=\"%s\"><font size=\"-1\"><a href = about.php?username=%s>%s&nbsp; %s</a></font></td>",$class, $db->f("username"), htmlReady($db->f("Vorname")), htmlReady($db->f("Nachname")));
+				printf ("	   <td width=\"5%%\"class=\"$class\" align=\"center\">");
+				printf ("		<a href=\"sms.php?sms_source_page=teilnehmer.php&cmd=write&rec_uname=%s\"><img src=\"pictures/nachricht1.gif\" alt=\"Nachricht an User verschicken\" border=\"0\"></a>", $db->f("username")); 
+				printf ("	   </td>");
+				echo "	</tr>";
+				$k++;
+			}
+		}
+	echo "</table><br><br>";
+	}
+	if ($k > 1) {
+		$Memberstatus = "Nicht alle Personen sind einer Funktion / Gruppe zugeordnet.";
+	} else {
+		$Memberstatus = "Alle Personen sind mindestens einer Funktion / Gruppe zugeordnet.";
+	}
+	if (sizeof($bereitszugeordnet) < 2) {
+		$Memberstatus = "Niemand ist einer Funktion / Gruppe zugeordnet.";
+	}
+	return $Memberstatus;
+}
 
 // Beginn Darstellungsteil
 
@@ -96,17 +146,54 @@ function PrintAktualStatusgruppen ()
 
 <table cellspacing="0" cellpadding="0" border="0" width="100%">
 	<tr>
-		<td class="topic"><b>&nbsp;<? echo $SessSemName["art"],": ",htmlReady($SessSemName[0]); ?> - Statusgruppen</b>
+		<td class="topic" colspan="2"><b>&nbsp;<? echo $SessSemName["art"],": ",htmlReady($SessSemName[0]); ?> - Funktion / Gruppen</b>
 		</td>
 	</tr>
 	<tr>
-		<td class="blank">&nbsp; 
+		<td class="blank" colspan="2">&nbsp; 
 		</td>
 	</tr>
+	<tr valign="top">
+     		<td width="90%" NOWRAP class="blank">
+			<? PrintAktualStatusgruppen (); ?>
+			<?
+			$anzahltext = PrintNonMembers($SessSemName[1]); ?>
+		</td>
+		<td width="270" NOWRAP class="blank" align="center" valign="top">
+
+		
+<?
+	$infobox = array	(			
+	array  ("kategorie"  => "Information:",
+		"eintrag" => array	(	
+						array (	"icon" => "pictures/ausruf_small.gif",
+								"text"  => $anzahltext
+								)
+		)
+	)
+	);
+	
+if ($rechte) {
+	$link = "<a href=\"mailto:".groupmail($SessSemName[1])."\">";
+	$infobox[1]["kategorie"] = "Aktionen:";
+		$infobox[1]["eintrag"][] = array (	"icon" => "pictures/einst.gif",
+								"text"  => "Um Gruppen anzulegen und Personen zuzuordnen nutzen Sie <a href=\"admin_statusgruppe.php?view=statusgruppe_sem&new_sem=TRUE&range_id=$SessSemName[1]\">Funktionen / Gruppen verwalten</a>."
+								);
+		$infobox[1]["eintrag"][] = array (	"icon" => "./pictures/nachricht1.gif" ,
+									"text"  => "Um Personen oder Gruppen eine systeminterne Kurznachricht zu senden, benutzen Sie das normale Briefsymbol."
+								);
+		$infobox[1]["eintrag"][] = array (	"icon" => "./pictures/mailnachricht.gif" ,
+									"text"  => "Um eine Mail an alle TeilnehmerInnen der Veranstaltung zu versenden, klicken Sie $link hier</a>."
+								);
+}
+
+print_infobox ($infobox,"pictures/einrichtungen.jpg");
+
+?>		
+		</td>		
+	</tr>
 	<tr>
-     		<td width="100%" NOWRAP class="blank">
-			<?PrintAktualStatusgruppen (); ?>
-			<br>&nbsp; 
+		<td class="blank" colspan="2">&nbsp; 
 		</td>
 	</tr>
 </table>
