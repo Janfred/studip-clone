@@ -108,7 +108,7 @@ if (($sem_browse_data["cmd"]=="qs") || ($sem_browse_data["cmd"]=="") || (!isset(
 	echo "<a href=\"$PHP_SELF?cmd=xts";
 	if (isset($sem_browse_data["sset"])) echo "&sset=", $sem_browse_data["sset"];
 	echo "\"><img src=\"pictures/buttons/erweitertesuche-button.gif\" border=0></a></td></tr>";
-	echo "<tr><td class=\"steel1\" align=\"center\"><hr></td></tr>";
+	echo "<tr><td class=\"steel1\" colspan=2 align=\"center\"><hr></td></tr>";
 	echo "</form></table>\n";
 	}
 	
