@@ -229,29 +229,25 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 	 ?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
 		<tr>
-			<td class="topic" colspan="3">
+			<td class="topic" colspan="2">
 				<img src="pictures/meinesem.gif" border="0" align="texttop">&nbsp;<b>Meine Veranstaltungen</b>
 			</td>
 		</tr>
 	<?
 	if ($num_my_sem){
 	?>
+		<tr>
+			<td class="blank" colspan="2">&nbsp;
+			</td>
+		</tr>
+		<? if ($meldung) { 
+			parse_msg($meldung, "§", "blank", 2);
+			}
+		?>
 		 <tr>
-			 <td valign="top" class="blank">
-				<table border="0" cellpadding="0" cellspacing="0" width="100%" align="center" class="blank">
-					<? if ($meldung) {
-						echo "<tr><td>&nbsp; </td></tr>";
-						parse_msg($meldung, "§", "blank", 1);
-					}
-					?>
-					<tr align="center">
-						<td align="center">
-							<table border="0" cellpadding="1" cellspacing="0" width="98%" align="center" class="blank">
-								<tr>
-									<td class="blank" colspan="4">&nbsp;
-									</td>
-								</tr>
-								<tr align="center">
+			 <td valign="top" class="blank" align="center">
+					<table border="0" cellpadding="1" cellspacing="0" width="98%" align="center" class="blank">
+						<tr align="center">
 									<th width="2%" colspan=2 nowrap align="center">&nbsp;<a href="gruppe.php"><img src="pictures/gruppe.gif" <? echo tooltip("Gruppe ändern") ?> border="0"></a></th>
 									<th width="85%" align="left"><a href="<? echo $PHP_SELF ?>?sortby=Name">Name</a></th>
 									<th width="10%"><b>Inhalt</b></th>
@@ -329,7 +325,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 			printf("<td class=\"".$cssSw->getClass()."\"  align=center nowrap><a href=\"$PHP_SELF?auswahl=%s&cmd=suppose_to_kill\"><img src=\"pictures/trash.gif\" ".tooltip("aus der Veranstaltung abmelden")." border=\"0\"></a>&nbsp; </td>", $semid);			
 		 echo "</tr>\n";
 		}
-	 echo "</table></td></tr>";
+	 echo "</table><br><br>";
 	 } else {
 	 ?>
 	 <tr>
@@ -341,25 +337,15 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 					parse_msg($meldung);
 				}
 	}
-	?>
-	<tr>
-		<td class="blank">&nbsp;
-		</td>
-	</tr>
-	<?
 
 // Anzeige der Wartelisten
 
 	  $db->query("SELECT admission_seminar_user.*, seminare.Name, seminare.admission_endtime, seminare.admission_turnout, quota FROM admission_seminar_user LEFT JOIN seminare USING(seminar_id) LEFT JOIN admission_seminar_studiengang ON (admission_seminar_user.studiengang_id = admission_seminar_studiengang.studiengang_id AND seminare.seminar_id = admission_seminar_studiengang.seminar_id) WHERE user_id = '$user->id' ORDER BY admission_type, name");
 	  IF ($db->num_rows()) {
 		?>
-	<tr>
-		<td class="blank">
-			<b><br>&nbsp; Anmelde- und Wartelisteneintr&auml;ge:</b><br />&nbsp; 
-		</td>
-	</tr>
-	<tr>
-		<td valign="top" class="blank" align="center">
+
+			<b><div align="left">&nbsp; Anmelde- und Wartelisteneintr&auml;ge:</div>&nbsp; 
+
 		<?
 		ECHO "<table border=\"0\" cellpadding=\"2\" cellspacing=\"0\" width=\"98%\" align=\"center\" class=\"blank\">";
 		ECHO "<tr>";
@@ -400,16 +386,11 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 	printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><font size=-1>%s</font></td>", $cssSw->getClass(),  ($db->f("status") == "claiming") ? "Los" : "chronolg.");
 	printf("<td width=\"3%%\" class=\"%s\" align=\"center\"><a href=\"$PHP_SELF?auswahl=%s&cmd=%skill_admission\"><img src=\"pictures/trash.gif\" ".tooltip("aus der Veranstaltung abmelden")." border=\"0\"></a>&nbsp; </td></tr>", $cssSw->getClass(), $db->f("seminar_id"), ($db->f("status") == "awaiting") ? "suppose_to_" : "");
 	}
-	print "</table></td>";
+	print "</table>";
 ?>
-		<td class="blank">
-			&nbsp;&nbsp;
-		</td>
-	</tr>
-	<tr>
-		<td class="blank" colspan=2>&nbsp;
-		</td>
-	</tr>
+
+<br><br></td>
+
 <?	
 }	
  // Ende Wartelisten
@@ -417,72 +398,71 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 
 //Info-field on the right side
 ?>
-		</table>
-			</td>
-			<td class="blank">
-				&nbsp;&nbsp;
-			</td>
-			<td class="blank" width="240" valign="top">
-				<table align="center" width="100%" border=0 cellpadding=0 cellspacing=0>
-					<tr>
-						<td class="blank" width="100%" align="right" colspan=2>
-							<img src="pictures/seminare.jpg">
-						</td>
-					</tr>
-					<tr>
-						<td class="angemeldet" width="100%" colspan=2>
-							<table align="center" width="99%" border=0 cellpadding=4 cellspacing=0>
-								<tr>
-									<td class="blank" width="100%" colspan=2>
-										<font size=-1><b><? print "Information" ?>:</b></font>
-										<br>
-									</td>
-								</tr>
-								<tr>
-									<td width="1%" valign="top">
-										<img src="./pictures/ausruf_small.gif">
-									</td>
-									<td class="blank" width="100%">
-										 <? $db->query("SELECT count(*) as count  FROM seminare");
-										$db->next_record(); ?>
-										<font size=-1>Es sind noch <? echo ($db->f("count")-$num_my_sem) ?> weitere Veranstaltungen vorhanden.</font><br>
-									</td>
-								</tr>
-								<tr>
-									<td class="blank" width="100%" colspan=2>
-										<font size=-1><b><? print "Aktionen" ?>:</b></font>
-										<br>
-									</td>
-								</tr>
-								<tr>
-									<td width="1%" valign="top">
-										<img src="./pictures/suchen.gif">
-									</td>
-									<td class="blank" width="100%">
-										<font size=-1>Um weitere Veranstaltungen in Ihre pers&ouml;nliche Auswahl aufzunehmen, nutzen Sie bitte die <a href="sem_portal.php?view=Alle&reset_all=TRUE">Suchfunktion.</a></font>
-									</td>
-								</tr>
-							<?  if ($perm->have_perm("dozent")) {  ?>
-								<tr>
-									<td width="1%" valign="top">
-										<img src="./pictures/admin.gif">
-									</td>
-									<td class="blank" width="100%">
-										<? echo "<font size=-1>Um Veranstaltungen anzulegen, nutzen Sie bitte den <a href=\"admin_seminare_assi.php?new_session=TRUE\">Veranstaltungs-Assistenten</a>.</font><br><br>";?>
-									</td>
-								</tr>  
-							 <? }  ?>
-							</table>
-						</td>
-					</tr>
-				</table>
-				<br />
-			</td>
-		</tr>
-	  </table>
+			<td class="blank" width="270" align="right" valign="top">
+<?
+
+// Berechnung der uebrigen Seminare
+
+ $db->query("SELECT count(*) as count  FROM seminare");
+ $db->next_record(); 
+ 	$anzahltext = "Es sind noch "
+ 				.($db->f("count")-$num_my_sem)
+ 				." weitere Veranstaltungen vorhanden.";
+
+
+// View for Teachers
+	
+IF ($perm->have_perm("dozent")) {   
+$infobox = array	(	
+	array  ("kategorie"  => "Information:",
+		"eintrag" => array	(	
+						array (	"icon" => "pictures/ausruf_small.gif",
+								"text"  => $anzahltext
+								)
+			)
+		),
+	array  ("kategorie" => "Aktionen:",
+	       "eintrag" => array	(	
+						array	 (	"icon" => "pictures/suchen.gif",
+								"text"  => "Um weitere Veranstaltungen in Ihre pers&ouml;nliche Auswahl aufzunehmen, nutzen Sie bitte die <a href=\"sem_portal.php?view=Alle&reset_all=TRUE\">Suchfunktion"
+								),
+						array	 (	"icon" => "pictures/admin.gif",
+								"text"  => "Um Veranstaltungen anzulegen, nutzen Sie bitte den <a href=\"admin_seminare_assi.php?new_session=TRUE\">Veranstaltungs-Assistenten"
+								)
+			)
+		)
+	);
+}
+
+// View for Students
+
+ELSE {
+	$infobox = array	(			
+	array  ("kategorie"  => "Information:",
+		"eintrag" => array	(	
+						array (	"icon" => "pictures/ausruf_small.gif",
+								"text"  => $anzahltext
+								)
+		)
+	),
+	array  ("kategorie" => "Aktionen:",
+	       "eintrag" => array	(	
+						array	 (	"icon" => "pictures/suchen.gif",
+								"text"  => "Um weitere Veranstaltungen in Ihre pers&ouml;nliche Auswahl aufzunehmen, nutzen Sie bitte die <a href=\"sem_portal.php?view=Alle&reset_all=TRUE\">Suchfunktion"
+								)
+			)
+		)
+	);
+}
+
+// print the info_box
+
+print_infobox ("pictures/seminare.jpg",$infobox);
+	
+?>
+
      </td>
     </tr>
-
 
 <?
 }
@@ -579,7 +559,8 @@ ELSEIF ($auth->auth["perm"]=="admin"){
 
 ?>
 	<tr>
-	<td class="blank" colspan=2>&nbsp;</td>
+		<td class="blank" colspan=2>&nbsp;
+		</td>
 	</tr>
 <?
 }
