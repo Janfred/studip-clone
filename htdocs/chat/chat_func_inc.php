@@ -156,7 +156,7 @@ function chat_show_info($chatid){
 				}
 			} else {
 				echo "<img border=\"0\" align=\"absmiddle\" src=\"$pic_path/nochat.gif\" >&nbsp;&nbsp;";
-				echo _("Um diesen Chatraum zu betreten, brauchen sie eine g&uuml;tige Einladung.");
+				echo _("Um diesen Chatraum zu betreten, brauchen sie eine g&uuml;ltige Einladung.");
 			}
 			echo "\n</font></blockquote></td><td class=\"steel1\" width=\"50%\"><blockquote><font size=\"-1\">";
 			if (!$chatter){

@@ -113,10 +113,10 @@ if ($auth->auth["uid"] == "nobody") { ?>
 		}
 		
 		$myuname=$auth->auth["uname"];
-		
+		$tmp_last_visit = ($my_messaging_settings["last_visit"]) ?  $my_messaging_settings["last_visit"] : time();
 		$db->query("SELECT COUNT(chat_id) AS chat_m, 
-					COUNT(IF(ISNULL(chat_id) AND mkdate>=" . $my_messaging_settings["last_visit"] . ",message_id ,NULL)) AS neu_m, 
-					COUNT(IF(ISNULL(chat_id) AND mkdate<=" . $my_messaging_settings["last_visit"] . ",message_id,NULL)) AS alt_m  
+					COUNT(IF(ISNULL(chat_id) AND mkdate>=" . $tmp_last_visit . ",message_id ,NULL)) AS neu_m, 
+					COUNT(IF(ISNULL(chat_id) AND mkdate<=" . $tmp_last_visit . ",message_id,NULL)) AS alt_m  
 					FROM globalmessages WHERE user_id_rec LIKE '$myuname' GROUP BY user_id_rec");
 		if ($db->next_record()) {
 			$chatm = $db->f("chat_m");
