@@ -99,7 +99,7 @@ function init_i18n($_language) {
 * @param		string	if mode = img, the functions return the full tag, if mode = src, it return only the src-part (for graphic submits)
 * @return		string	html output of the button
 */
-function makeButton ($name, $mode="img") {
+function makeButton ($name, $mode = "img") {
 	global $_language_path;
 	$path = "./locale/$_language_path/LC_BUTTONS";
 	if ($mode == "img")
@@ -110,4 +110,65 @@ function makeButton ($name, $mode="img") {
 	return $tag;
 }
 
+
+/**
+* switch i18n to different language
+*
+* This function switches i18n system to a different language.
+* Should be called before writing strings to other users into database.
+* Use restoreLanguage() to switch back.
+*
+* @access	public        
+* @param		string	the user_id of the recipient (function will try to get preferred language from database)
+* @param		string	explicit temporary language (set $uid to FALSE to switch to this language)
+*/
+function setTempLanguage ($uid = FALSE, $temp_language = "") {
+	global $_language_domain, $DEFAULT_LANGUAGE, $ABSOLUTE_PATH_STUDIP;
+	
+	if ($uid) {
+		// try to get preferred language from user
+		$db=new DB_Seminar;
+		$db->query("SELECT preferred_language FROM user_info WHERE user_id='$uid'");
+		if ($db->next_record()) {
+			if ($db->f("preferred_language") != NULL && $db->f("preferred_language") != "") {
+				// we found a stored setting for preferred language
+				$temp_language = $db->f("preferred_language");
+			} else {
+				// no preferred language, use system default
+				$temp_language = $DEFAULT_LANGUAGE;
+			}
+		} else {
+			// should never be reached, best we can do is to set system default
+			$temp_language = $DEFAULT_LANGUAGE;
+		}
+	}
+	
+	if ($temp_language == "") {
+		// we got no arguments, best we can do is to set system default
+		$temp_language = $DEFAULT_LANGUAGE;
+	}
+
+	putenv("LANG=$temp_language");
+	setlocale(LC_ALL, "");
+	bindtextdomain($_language_domain, "$ABSOLUTE_PATH_STUDIP/locale");
+	textdomain($_language_domain);
+}
+
+
+/**
+* switch i18n back to original language
+*
+* This function switches i18n system back to the original language.
+* Should be called after writing strings to other users via setTempLanguage().
+*
+* @access	public        
+*/
+function restoreLanguage() {
+	global $_language_domain, $_language, $ABSOLUTE_PATH_STUDIP;
+
+	putenv("LANG=$_language");
+	setlocale(LC_ALL, "");
+	bindtextdomain($_language_domain, "$ABSOLUTE_PATH_STUDIP/locale");
+	textdomain($_language_domain);
+}
 ?>
