@@ -39,6 +39,8 @@ class StudipRangeTreeViewAdmin extends StudipRangeTreeView{
 	
 	var $mode;
 	
+	var $edit_item_id;
+	
 	/**
 	* constructor
 	*
@@ -126,7 +128,28 @@ class StudipRangeTreeViewAdmin extends StudipRangeTreeView{
 		}
 		return true;
 	}
-		
+	
+	function execCommandNewItem(){
+		global $_REQUEST;
+		$item_id = $_REQUEST['item_id'];
+		if ($this->isItemAdmin($item_id)){
+			$level_items = $this->tree->getKids($item_id);
+			$new_item_id = DbView::get_uniqid();
+			if (!is_array($level_items)){
+				$level_items[0] = $new_item_id;
+			} else {
+				$level_items[] = $new_item_id;
+			}
+			$this->tree->tree_childs[$item_id] = $level_items;
+			$this->tree->tree_data[$new_item_id] = array('parent_id' => $item_id, 'name' => _("Neues Element"), 'priority' => (count($level_items)-1));
+			$this->mode = "NewItem";
+			$this->anchor = $new_item_id;
+			$this->edit_item_id = $new_item_id;
+			$this->open_ranges[$item_id] = true;
+			$this->open_items[$new_item_id] = true;
+		}
+		return false;
+	}
 		
 	function isItemAdmin($item_id){
 		return ($this->tree_status[$this->tree->getAdminRange($item_id)] == 1) ? true :false;
@@ -136,10 +159,73 @@ class StudipRangeTreeViewAdmin extends StudipRangeTreeView{
 			return ($this->tree_status[$this->tree->getAdminRange($this->tree->tree_data[$item_id]['parent_id'])] == 1) ? true : false;
 	}
 	
+	function getItemContent($item_id){
+		
+		if ($item_id == $this->edit_item_id && $this->isItemAdmin($item_id))
+			return $this->getEditItemContent();
+			
+		$content = "\n<table width=\"90%\" cellpadding=\"2\" cellspacing=\"2\" align=\"center\" style=\"font-size:10pt\">";
+		if ($this->isItemAdmin($item_id)){
+			$content .= "\n<tr><td align=\"center\">";
+			$content .= "<a href=\"" . $this->getSelf("cmd=NewItem&item_id=$item_id") . "\">"
+						. "<img " .makeButton("neuesobjekt","src") . tooltip(_("Innerhalb dieser Ebene ein neues Element einfügen"))
+						. " border=\"0\"></a>&nbsp;";
+			if ($item_id != "root"){
+				$content .= "<a href=\"" . $this->getSelf("cmd=EditItem&item_id=$item_id") . "\">"
+				. "<img " .makeButton("bearbeiten","src") . tooltip(_("Dieses Element bearbeiten"))
+				. " border=\"0\"></a>&nbsp;";
+			}
+			if ($this->isParentAdmin($item_id) && $item_id !=$this->start_item_id){
+				$content .= "<a href=\"" . $this->getSelf("cmd=DeleteItem&item_id=$item_id") . "\">"
+				. "<img " .makeButton("loeschen","src") . tooltip(_("Dieses Element löschen"))
+				. " border=\"0\"></a>&nbsp;";
+				$content .= "<a href=\"" . $this->getSelf("cmd=MoveItem&item_id=$item_id") . "\">"
+				. "<img " .makeButton("verschieben","src") . tooltip(_("Dieses Element in eine andere Ebene verschieben"))
+				. " border=\"0\"></a>&nbsp;";
+			}
+			$content .= "<br>&nbsp;</td></tr></table>";
+		}
+		$content .= "\n<table width=\"90%\" cellpadding=\"2\" cellspacing=\"2\" align=\"center\" style=\"font-size:10pt\">";
+		if ($item_id == "root"){
+			$content .= "\n<tr><td class=\"topic\" align=\"left\">" . htmlReady($this->tree->root_name) ." </td></tr>";
+			$content .= "\n</table>";
+			return $content;
+		}
+		$range_object =& RangeTreeObject::GetInstance($item_id);
+		$name = ($range_object->item_data['type']) ? $range_object->item_data['type'] . ": " : "";
+		$name .= $range_object->item_data['name'];
+		$content .= "\n<tr><td class=\"topic\" align=\"left\">" . htmlReady($name) ." </td></tr>";
+		if (is_array($range_object->item_data_mapping)){
+			$content .= "\n<tr><td class=\"blank\" align=\"left\">";
+			foreach ($range_object->item_data_mapping as $key => $value){
+				$content .= "<b>" . htmlReady($value) . ":</b>&nbsp;";
+				$content .= fixLinks(htmlReady($range_object->item_data[$key])) . "&nbsp; ";
+			}
+			$content .= "</td></tr>";
+		} elseif (!$range_object->item_data['studip_object']){
+			$content .= "\n<tr><td class=\"blank\" align=\"left\">" .
+						_("Dieses Element ist keine Stud.IP Einrichtung, es hat daher keine Grunddaten.") . "</td></tr>";
+		} else {
+			$content .= "\n<tr><td class=\"blank\" align=\"left\">" . _("Keine Grunddaten vorhanden!") . "</td></tr>";
+		}
+		$content .= "\n<tr><td>&nbsp;</td></tr>";
+		$kategorien =& $range_object->item_data['categories'];
+		if ($kategorien->numRows){
+			while($kategorien->nextRow()){
+				$content .= "\n<tr><td class=\"topic\">" . htmlReady($kategorien->getField("name")) . "</td></tr>";
+				$content .= "\n<tr><td class=\"blank\">" . htmlReady($kategorien->getField("content")) . "</td></tr>";
+			}
+		} else {
+			$content .= "\n<tr><td class=\"blank\">" . _("Keine weiteren Daten vorhanden!") . "</td></tr>";
+		}
+		$content .= "</table>";
+		return $content;
+	}
+	
 	function getItemHead($item_id){
 		$head = "";
 		$head .= "<b>" . htmlReady($this->tree->tree_data[$item_id]['name']) . "</b>";
-		if ($item_id != $this->start_item_id && $this->isParentAdmin($item_id)){
+		if ($item_id != $this->start_item_id && $this->isParentAdmin($item_id) && $item_id != $this->edit_item_id){
 			$head .= "</td><td align=\"rigth\" valign=\"bottom\" class=\"printhead\">";
 			if (!$this->tree->isFirstKid($item_id)){
 				$head .= "<a href=\"". $this->getSelf("cmd=OrderItem&direction=up&item_id=$item_id") .
@@ -156,6 +242,39 @@ class StudipRangeTreeViewAdmin extends StudipRangeTreeView{
 		return $head;
 	}
 	
+	function getEditItemContent(){
+		$content = "\n<form action=\"" . $this->getSelf("cmd=InsertItem") . "\" method=\"POST\">";
+		$content .= "\n<table width=\"90%\" border =\"0\" style=\"border-style: solid; border-color: #000000;  border-width: 1px;font-size: 10pt;\" cellpadding=\"2\" cellspacing=\"2\" align=\"center\" style=\"font-size:10pt\">";
+		$content .= "\n<tr><td colspan=\"2\" class=\"steelgraudunkel\" ><b>". _("Element editieren") . "</b></td></tr>";
+		$content .= "\n<tr><td class=\"steel1\" width=\"60%\">". _("Name des Elements:") . "&nbsp;"
+				. "<input type=\"TEXT\" name=\"edit_name\" size=\"50\" value=\"" . $this->tree->tree_data[$this->edit_item_id]['name']
+				. "\"></td><td class=\"steel1\" align=\"left\"><input type=\"image\" "
+				. makeButton("absenden","src") . tooltip("Einstellungen übernehmen") . "></td></tr>";
+		$content .= "\n<tr><td colspan=\"2\" class=\"steelgraudunkel\"><b>". _("Element mit Stud.IP Einrichtung verlinken") . "</b></td></tr>";
+		$content .= "\n<tr><td colspan=\"2\" class=\"steel1\">" . _("Stud.IP Einrichtung:") . "&nbsp;";
+		$content .= "\n<select>";
+		if ($this->tree->tree_data[$this->edit_item_id]['studip_object']){
+			$content .= "\n<option selected value=\"".$this->tree->tree_data[$this->edit_item_id]['studip_object_id']
+					. "\">" . $this->tree->tree_data[$this->edit_item_id]['name'] ."</option>";
+		}
+		$content .= "</select></td></tr></form>";
+		$content .= "\n<form action=\"" . $this->getSelf("cmd=SearchStudIP") . "\" method=\"POST\"><tr><td class=\"steel1\">" . _("Stud.IP Einrichtung suchen:") . "&nbsp;";
+		$content .= "\n<input type=\"TEXT\" name=\"edit_name\" size=\"30\"></td><td class=\"steel1\" align=\"left\"><input type=\"image\" "
+				. makeButton("suchen","src") . tooltip("Einrichtung suchen") . "></td></tr>";
+		$content .= "\n</table>";
+		
+		return $content;
+	}
+	
+	function getSelf($param){
+		$url = $GLOBALS['PHP_SELF'];
+		if ($this->mode)
+			$url .= "?mode=" . $this->mode;
+		if ($param)
+			$url .= ($this->mode) ? "&" : "?";
+		$url .= $param . "#anchor";
+	return $url;
+	}
 }
 //test
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
