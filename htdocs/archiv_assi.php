@@ -445,11 +445,8 @@ elseif (($archiv_assi_data["sems"]) && (sizeof($archiv_assi_data["sem_check"])==
 	<tr>
 		<td class="blank" colspan=2><b>&nbsp;
 		<?
-		if ($links_admin_data["sem_id"])
-			parse_msg($msg."info§Sie haben die ausgew&auml;hlte Veranstaltungen archiviert!");
-		else
+		if (!$links_admin_data["sem_id"])
 			parse_msg($msg."info§Sie haben alle ausgew&auml;hlten Veranstaltungen archiviert!");
-			
 		?>
 		</td>
 	</tr>	
@@ -470,9 +467,7 @@ elseif (!$list) {
 	<tr>
 		<td class="blank" colspan=2><b>&nbsp;
 		<?
-		if ($links_admin_data["sem_id"])
-			parse_msg("info§Sie haben die ausgew&auml;hlte Veranstaltungen archiviert!");
-		else		
+		if (!$links_admin_data["sem_id"])
 			parse_msg("info§Sie haben keine Veranstaltung zum Archivieren gew&auml;hlt.");
 		?>
 		</td>
