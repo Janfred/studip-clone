@@ -147,6 +147,11 @@ function show_dates ($range_id, $date_start, $date_end, $show_not=0, $show_docs=
 				$tmp_titel=htmlReady(mila($db->f("content"))); //Beschneiden des Titels			
 				$titel.=", ".$tmp_titel;
 				}
+			
+			if ($db->f("chdate") > $loginfilelast[$SessSemName[1]])
+				$new=TRUE;
+			else
+				$new=FALSE;
 
 			if ($num_docs) {
 				$db2->query("SELECT folder_id FROM folder WHERE range_id ='".$db->f("termin_id")."' ");
@@ -276,6 +281,12 @@ function show_personal_dates ($range_id, $date_start, $date_end, $show_docs=FALS
 				$tmp_titel = htmlReady(mila($termin->getTitle())); //Beschneiden des Titels			
 				$titel .= ", ".$tmp_titel;
 			}
+
+			if ($db->f("chdate") > $loginfilelast[$SessSemName[1]])
+				$new=TRUE;
+			else
+				$new=FALSE;
+
 			
 			// Zur Identifikation von auf- bzw. zugeklappten Terminen muss zusätzlich
 			// die Startzeit überprüft werden, da die Wiederholung eines Termins die

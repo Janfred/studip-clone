@@ -666,7 +666,7 @@ if (($kill) && ($admin_dates_data["range_id"]))
 		</td>
 		</tr>
 	</table>
-	<table border="0" cellpadding="0" cellspacing="2" width="100%" align="center">
+	<table border="0" cellpadding="0" cellspacing="2" width="99%" align="center">
 	<?	
 	
 	//Wenn insert gesetzt, neuen Anlegen...
@@ -687,7 +687,7 @@ if (($kill) && ($admin_dates_data["range_id"]))
 		$icon="&nbsp;<img src=\"./pictures/termin-icon.gif\" border=0>";
 		$link=$PHP_SELF."?cancel=TRUE";
 
-		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr>";
+		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"99%\" align=\"center\"><tr>";
 		printhead(0, 0, $link, "open", TRUE, $icon, $titel, $zusatz);
 		echo "</tr></table>	";
 		
@@ -724,7 +724,7 @@ if (($kill) && ($admin_dates_data["range_id"]))
 		$content.="<input type=\"IMAGE\" name=\"send\" border=0 src=\"pictures/buttons/terminspeichern-button.gif\" value=\"speichern\">&nbsp;";
 		$content.="<a href=\"$PHP_SELF?cancel=TRUE\"><img  border=0 src=\"pictures/buttons/abbrechen-button.gif\"><br /><br />";
 
-		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr>";
+		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"99%\" align=\"center\"><tr>";
 		printcontent(0,1, $content, '');
 		echo "</tr></table>	";
 
@@ -789,8 +789,14 @@ if (($kill) && ($admin_dates_data["range_id"]))
 			
 		//Icon erstellen
 		$icon="&nbsp;<img src=\"./pictures/termin-icon.gif\" border=0>";
+		
+		if ($db->f("chdate") > $loginfilelast[$SessSemName[1]])
+			$neuer_termin=TRUE;
+		else
+			$neuer_termin=FALSE;
 
-		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr>";
+
+		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"99%\" align=\"center\"><tr>";
 		
 		if (($show_id  == $db->f("termin_id")) || ($show_all))
 			printhead(0, 0, $link, "open", $neuer_termin, $icon, $titel, $zusatz, $db->f("mkdate"));
@@ -839,7 +845,7 @@ if (($kill) && ($admin_dates_data["range_id"]))
 				
 				$content.="</tr></td></table></td></tr>\n<tr><td class=\"steel1\" align=\"center\" colspan=2>";
 
-				echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr>";
+				echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"99%\" align=\"center\"><tr>";
 				
 				if (!$show_all)
 					$content.="<input type=\"IMAGE\" name=\"send\" border=0 src=\"pictures/buttons/terminaendern-button.gif\" value=\"verändern\"><br /><br />";
