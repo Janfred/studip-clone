@@ -91,5 +91,17 @@ class StudipLitSearchPluginAbstract {
 		$this->error_msg[] = array('type' => $type, 'msg' => $msg);
 		return true;
 	}
+	
+	function getPluginName(){
+		global $_lit_search_plugins;
+		$ret = false;
+		for ($i = 0; $i < count($_lit_search_plugins); ++$i){
+			if (substr(strtolower($this->class_name),21) == strtolower($_lit_search_plugins[$i]['name'])){
+				$ret = $_lit_search_plugins[$i]['name'];
+				break;
+			}
+		}
+		return $ret;
+	}
 }
 ?>
