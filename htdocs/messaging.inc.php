@@ -96,10 +96,11 @@ class messaging {
 	function insert_message($message, $rec_uname, $user_id='', $time='', $tmp_message_id='', $set_deleted='', $signature='') {
 		global $_fullname_sql, $user, $my_messaging_settings, $sms_data;
 
-		$db=new DB_Seminar;
-		$db2=new DB_Seminar;
-		$db3=new DB_Seminar;
-		$db4=new DB_Seminar;
+		$db = new DB_Seminar;
+		$db2 = new DB_Seminar;
+		$db3 = new DB_Seminar;
+		$db4 = new DB_Seminar;
+		$db5 = new DB_Seminar;
 		
 		if (!$time) {
 			$time = time();
@@ -113,42 +114,56 @@ class messaging {
 			$user_id = $user->id;
 		}
 
-		$db4->query("SELECT user_id FROM auth_user_md5 WHERE username = '".$rec_uname."'");
-		$db4->next_record();
-			
 		if (!empty($message)) {
 
+			$db4->query("SELECT user_id FROM auth_user_md5 WHERE username = '".$rec_uname."'");
+			$db4->next_record();
+
 			if ($user_id != "____%system%____")  {
+				
+				$db5->query("SELECT smsforward_active, smsforward_rec FROM user_info WHERE user_id='".$db4->f("user_id")."'");
+				$db5->next_record();
 
 				$snd_user_id = $user_id;
 				if ($my_messaging_settings["save_snd"] != "1") {
 					$set_deleted = "1";
 				}
-
-				if ($sms_data["sig"] == "1") {
+				// personal-signatur
+				if ($sms_data["sig"] == "1") { 
 					$message .= $this->sig_string.$signature;
 				}
-
-			} else {
-
+			} else { 
+				// system-signatur
 				$snd_user_id = "____%system%____";		
-
 				setTempLanguage($db4->f("user_id"));
 				$message .= $this->sig_string. _("Diese Nachricht wurde automatisch vom Stud.IP-System generiert. Sie können darauf nicht antworten.");
 				restoreLanguage();
-
 			}
-
+			
+			if ($db5->f("smsforward_active") == "1") {
+				$message .= $this->sig_string.sprintf(_("Weiterleitung: Die automatische Nachrichten-Weiterleitung von %s hat diese Nachricht an %s weitergeleitet."), get_fullname($db4->f("user_id")), get_fullname($db5->f("smsforward_rec")));
+			}
+			
+			// insert message
 			$db3->query("INSERT IGNORE message SET message_id='".$tmp_message_id."', mkdate='".$time."', message='".$message."', autor_id='".$snd_user_id."'");
+			
+	
+			
+			// insert link snd
 			if (!$set_deleted) {
 				$db3->query("INSERT IGNORE message_user SET message_id='".$tmp_message_id."', user_id='".$snd_user_id."', snd_rec='snd' ");
 			} else {
 				$db3->query("INSERT IGNORE message_user SET message_id='".$tmp_message_id."', user_id='".$snd_user_id."', snd_rec='snd', deleted='1'");
 			}
+			
+			if ($db5->f("smsforward_active") == "1") {
+				$db3->query("INSERT IGNORE message_user SET message_id='".$tmp_message_id."', user_id='".$db5->f("smsforward_rec")."', snd_rec='rec' ");
+			}
 
-			$db4->query("SELECT user_id FROM auth_user_md5 WHERE username = '".$rec_uname."'");
-			$db4->next_record();
+			// insert link rec
 			$db3->query("INSERT IGNORE message_user SET message_id='".$tmp_message_id."', user_id='".$db4->f("user_id")."', snd_rec='rec' ");
+
+
 
 			//Benachrichtigung in alle Chaträume schicken	 
 			$snd_name = ($user_id != "____%system%____") ? get_fullname($user_id) . " (" . get_username($user_id). ")" : "Stud.IP-System";
@@ -164,15 +179,10 @@ class messaging {
 					}	 
 				}	 
 			}
-
 			return 1;
-
 		} else {
-
 			return 0;
-
 		}
-
 	}
 
 
