@@ -1,7 +1,7 @@
 <?
 // first of all init I18N because seminar_open is not called here...
 require_once("$ABSOLUTE_PATH_STUDIP/language.inc.php");
-global $_language;
+global $_language,$_language_path;
 $_language_path = init_i18n($_language);
 ?>
 <html>
@@ -116,7 +116,7 @@ function checkdata(){
 <body bgcolor="#ffffff">
 <blockquote>
 <table width="80%" align=center border=0 cellpadding=0 cellspacing=0>
-<tr><td class="topic"><b>&nbsp;Stud.IP - Registrierung</b></td></tr>
+<tr><td class="topic"><b>&nbsp;<?=_("Stud.IP - Registrierung")?></b></td></tr>
 <tr><td class="blank">&nbsp;</td></tr>
 <tr><td class="blank">
 
@@ -264,7 +264,10 @@ function checkdata(){
  </tr>
 
  <tr>
-  <td colspan="3" align=right><input type="submit" name="submitbtn" value=" <?=_("Registrieren")?> "></td>
+  <td colspan="3" align=right>
+  <input type="image"  name="submitbtn" <?=makeButton("uebernehmen","src")?> align="absmiddle" border="0" >
+  &nbsp;<a href="index.php?cancel_login=1"><img <?=makeButton("abbrechen","src")?> align="absmiddle" border="0"></a>
+  </td>
  </tr>
 </table>
 <br /><br />
