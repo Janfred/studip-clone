@@ -222,7 +222,6 @@ if ($new) {
 	
 	//check, if a single date should be created when it is forbidden (no single dates corresponding to metadates are allowed when using resources, only a whole schedule creating with date-assi is fine...!)
 	if ($GLOBALS["RESOURCES_ENABLE"]) {
-		echo $termin_id;
 		if ((isMetadateCorrespondingDate($termin_id, $start_time, $end_time, $admin_dates_data["range_id"])) && (!$term_data["art"]) && (!isSchedule($admin_dates_data["range_id"]))) {
 			$do = FALSE;
 				if ($TERMIN_TYP[$art]["sitzung"])
