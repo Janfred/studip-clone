@@ -2503,7 +2503,7 @@ if ($level==6)
 					<table width ="60%" cellspacing=1 cellpadding=1>
 						<tr>
 							<td width="10%" class="blank">&nbsp; </td>
-							<td width="90%" class="steel1">
+							<td width="90%" class="rahmen_steel">
 							<?
 							echo "<br><br><ul><li>Veranstaltung \"<b>".htmlReady(stripslashes($sem_create_data["sem_name"]))."</b>\"erfolgreich angelgt.<br><br>";
 							if ($count_bet_inst==1)
