@@ -511,17 +511,19 @@ function edit_pers($password,$check_pass,$response,$new_username,$vorname,$nachn
 					}
 				}
 				
+				$this->db->query("SELECT Email,Vorname,Nachname FROM auth_user_md5 WHERE Email='$email'") ;
+				if ($this->db->next_record()) {
+					$this->msg=$this->msg . "error§" . sprintf(_("Die angegebene E-Mail-Adresse wird bereits von einem anderen User (%s %s) verwendet. Bitte geben Sie eine andere E-Mail-Adresse an."), $this->db->f("Vorname"), $this->db->f("Nachname")) . "§";
+					return false;
+				}
+				
 				if (!StudipAuthAbstract::CheckField("auth_user_md5.password", $this->auth_user['auth_plugin'])){
-					$this->db->query("SELECT Email,Vorname,Nachname FROM auth_user_md5 WHERE Email='$email'") ;
-					if ($this->db->next_record()) {
-						$this->msg=$this->msg . "error§" . sprintf(_("Die angegebene E-Mail-Adresse wird bereits von einem anderen User (%s %s) verwendet. Bitte geben Sie eine andere E-Mail-Adresse an."), $this->db->f("Vorname"), $this->db->f("Nachname")) . "§";
-						return false;
 						//email ist ok, user bekommt neues Passwort an diese Addresse, falls Passwort in Stud.IP DB
 						$newpass=$this->generate_password(6);
 						$hashpass=md5($newpass);
 						// Mail abschicken...
 						$to=$email;
-						$url = "http://" . $smtp->localhost . $CANONICAL_RELATIVE_PATH_STUDIP;
+						$url = $smtp->url;
 					
 						// include language-specific subject and mailbody
 						include_once("$ABSOLUTE_PATH_STUDIP"."locale/$_language_path/LC_MAILS/change_self_mail.inc.php");
@@ -534,13 +536,9 @@ function edit_pers($password,$check_pass,$response,$new_username,$vorname,$nachn
 						$this->msg = $this->msg . "msg§" . _("Ihre E-Mail-Adresse wurde ge&auml;ndert!") . "§info§" . _("ACHTUNG!<br>Aus Sicherheitsgr&uuml;nden wurde auch ihr Passwort ge&auml;ndert. Es wurde an die neue E-Mail-Adresse geschickt!") . "§";
 						$this->db->query("UPDATE auth_user_md5 SET Email='$email', password='$hashpass' WHERE user_id='".$this->auth_user["user_id"]."'");
 					} else {
-						$this->msg = $this->msg . "msg§" . _("Die E-Mail-Adresse wurde ge&auml;ndert!") . "§";
+						$this->msg = $this->msg . "msg§" . _("Ihre E-Mail-Adresse wurde ge&auml;ndert!") . "§";
 						$this->db->query("UPDATE auth_user_md5 SET Email='$email' WHERE user_id='".$this->auth_user["user_id"]."'");
 					}
-				} else {
-					$this->db->query("UPDATE auth_user_md5 SET Email='$email' WHERE user_id='".$this->auth_user["user_id"]."'");
-					$this->msg = $this->msg . "msg§" . _("Ihre E-Mail-Adresse wurde ge&auml;ndert!") . "§";
-				}
 			}
 		}
 	}
