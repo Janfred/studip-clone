@@ -43,7 +43,8 @@ include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Sessio
  * @param	$sem_name	Seminar-name
  * @param	$user_id		User-Id
  */
-function temporaly_accepted($sem_name, $user_id, $sem_id, $ask = "TRUE", $studiengang_id, $url) {
+ function temporaly_accepted($sem_name, $user_id, $sem_id, $ask = "TRUE", $studiengang_id, $url) {
+  	global $pass, $hashpass;
 	$db = new DB_Seminar;
 
 	if ($ask == "TRUE") {
@@ -58,6 +59,8 @@ function temporaly_accepted($sem_name, $user_id, $sem_id, $ask = "TRUE", $studie
 		echo "<br/><br/>\n";
 
 		printf("<form action=\"%s\" method=\"post\">\n",$url);
+		printf("<input type=\"hidden\" name=\"pass\" value=\"$pass\">");
+		printf("<input type=\"hidden\" name=\"hashpass\" value=\"$hashpass\">");
 		printf("<input %s %s type=\"image\" border=\"0\" style=\"vertical-align:middle;\">\n", makeButton("eintragen","src"),tooltip(_("In diese Veranstaltung eintragen")));
 		print("<input type=\"hidden\" name=\"ask\" value=\"FALSE\">\n");
 		printf ("<input type=\"HIDDEN\" name=\"sem_verify_suggest_studg\" value=\"%s\">\n", $studiengang_id);
