@@ -76,7 +76,7 @@ if (((time() - $sem_create_data["timestamp"]) >$auth->lifetime*60) || ($new_sess
 	{
 	$sem_create_data='';
 	$links_admin_data='';
-	//$sem_create_data["sem_start_termin"]=-1;
+	$sem_create_data["sem_start_termin"]=-1;
 	$sem_create_data["sem_vor_termin"]=-1;
 	$sem_create_data["sem_vor_end_termin"]=-1;
 	$sem_create_data["sem_admission_date"]=-1;
@@ -91,7 +91,7 @@ else
 if (($sem_create_data["sem_entry"]) && (!$form)) 
 	{
 	$sem_create_data='';
-	//$sem_create_data["sem_start_termin"]=-1;
+	$sem_create_data["sem_start_termin"]=-1;
 	$sem_create_data["sem_vor_termin"]=-1;
 	$sem_create_data["sem_vor_end_termin"]=-1;	
 	}	
@@ -447,6 +447,11 @@ if ($form==4)
 		}
 	else {
 	 	$sem_create_data["sem_start_termin"] = mktime($stunde,$minute,0,$monat,$tag,$jahr);
+		$sem_create_data["metadata_termin"]["start_termin"] = $sem_create_data["sem_start_termin"];
+		//check overlaps...
+		if ($RESOURCES_ENABLE) {
+			$checkResult = $resAssign->changeMetaAssigns($sem_create_data["metadata_termin"], $sem_create_data["sem_start_time"], $sem_create_data["sem_duration_time"],TRUE);
+		}
 	 }
 	}	 
 
@@ -877,6 +882,33 @@ if ($cmd_e_x)
 	else
 		if ((($stunde) && (!$end_stunde)) || ((!$stunde) && ($end_stunde)))
 			$errormsg=$errormsg."error§"._("Bitte f&uuml;llen Sie beide Felder f&uuml;r Start- und Endzeit des ersten Termins aus!")."§";	
+
+	//create overlap array
+	if (is_array($checkResult)) {
+		$overlaps_detected=FALSE;
+		foreach ($checkResult as $key=>$val)
+			if ($val["overlap_assigns"] == TRUE)
+					$overlaps_detected[] = array("resource_id"=>$val["resource_id"], "overlap_assigns"=>$val["overlap_assigns"]);
+	}
+	
+	//generate bad msg if overlaps exists
+	if ($overlaps_detected) {
+		$errormsg=$errormsg."error§"._("Folgende gew&uuml;nschte Raumbelegungen &uuml;berschneiden sich mit bereits vorhandenen Belegungen. Bitte &auml;ndern Sie die R&auml;ume oder Zeiten!");
+		$i=0;
+		foreach ($overlaps_detected as $val) {
+			$errormsg.="<br /><font size=\"-1\" color=\"black\">".htmlReady(getResourceObjectName($val["resource_id"])).": ";
+			//show the first overlap
+			list(, $val2) = each($val["overlap_assigns"]);
+			$errormsg.=date("d.m, H:i",$val2["begin"])." - ".date("H:i",$val2["end"]);
+			if (sizeof($val) >1)
+				$errormsg.=", ... ("._("und weitere").")";
+			$errormsg.=sprintf (", <a target=\"new\" href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=no_nav&start_time=%s\">"._("Raumplan anzeigen")."</a> ",$val["resource_id"], $val2["begin"]);
+			$i++;
+		}
+		$errormsg.="</font>§";
+		unset($overlaps_detected);		
+	}
+
 
 	if (!$errormsg)
 		$level=5;
@@ -2611,10 +2643,12 @@ if ($level==6)
 							if ($RESOURCES_ENABLE) {
 								if (is_array($updateResult))
 									foreach ($updateResult as $key=>$val) {
-										if ($val["overlap_assigns"] == TRUE)
-											$resources_failed[$val["resource_id"]]=TRUE;
-										else
-											$resources_booked[$val["resource_id"]]=TRUE;
+										if ($val["resource_id"]) {
+											if ($val["overlap_assigns"] == TRUE)
+												$resources_failed[$val["resource_id"]]=TRUE;
+											else
+												$resources_booked[$val["resource_id"]]=TRUE;
+										}
 									}
 								if ($resources_booked) {
 									$i=0;
