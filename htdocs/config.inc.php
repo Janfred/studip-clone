@@ -1,5 +1,6 @@
 <?php
 
+
 // Einstellungen der Systemwerte fuer Stud.IP
 //----------------------------------------------------------------
 //grundlegende Einstellungen finden sich in der local.inc im Verzeichnis
@@ -8,7 +9,7 @@
 //Generische Systemeinstellungen
 $AUTH_LIFETIME=30;						//Zeit bis zu einem automatischem Logout in Minuten (wird zur Zeit nur zu Anzeigezwecken verwendet...)
 $SOFTWARE_VERSION="0.8 rc 3";
-	
+
 
 //Daten ueber die Uni
     // der Name wird in der local.inc festgelegt
@@ -27,6 +28,8 @@ $HOLIDAY[1]=array("beginn"=>mktime(0,0,0,12,22,2001), "ende"=>mktime (23,59,59,1
 $HOLIDAY[2]=array("beginn"=>mktime(0,0,0,5,20,2002), "ende"=>mktime (23,59,59,5,26,2002));		# Beginn und Ende der Pfingstferien 2002
 $HOLIDAY[3]=array("beginn"=>mktime(0,0,0,12,23,2002), "ende"=>mktime (23,59,59,1,5,2003));		# Beginn und Ende der Weihnachtsferien 2002
 $HOLIDAY[4]=array("beginn"=>mktime(0,0,0,6,9,2003), "ende"=>mktime (23,59,59,6,15,2003));		# Beginn und Ende der Pfingstferien 2003
+$HOLIDAY[5]=array("beginn"=>mktime(0,0,0,12,23,2002), "ende"=>mktime (23,59,59,1,5,2003));		# Beginn und Ende der Weihnachtsferien 2002
+$HOLIDAY[6]=array("beginn"=>mktime(0,0,0,6,9,2003), "ende"=>mktime (23,59,59,6,15,2003));		# Beginn und Ende der Pfingstferien 2003
 //weitere Feiertage und Ferien koennen hier angefuegt werden
 
 
@@ -70,6 +73,9 @@ $SEM_TYPE[15]=array("name"=>"sonstige", "en"=>"Miscellaneous", "class"=>4);
 $SEM_TYPE[16]=array("name"=>"Praktikum", "en"=>"Practical course", "class"=>1); 
 $SEM_TYPE[17]=array("name"=>"Lehrveranstaltung nach PVO-Lehr I", "en"=>"", "class"=>1); 
 $SEM_TYPE[18]=array("name"=>"Anleitung zu selbständigen wissenschaftlichen Arbeiten", "en"=>"", "class"=>1); 
+$SEM_TYPE[19]=array("name"=>"Sprachkurs", "en"=>"Language Course", "class"=>1);
+$SEM_TYPE[20]=array("name"=>"Fachdidaktik", "en"=>"Didactics", "class"=>1);
+$SEM_TYPE[21]=array("name"=>"Übung", "en"=>"Exercise Course", "class"=>1);
 //weitere Typen koennen hier angefuegt werden
 
 
@@ -103,6 +109,10 @@ $INST_FUNKTION[16]=array("name"=>"sonstiges", "en"=>"Miscellaneous");
 $INST_FUNKTION[17]=array("name"=>"Doktorand", "en"=>"Doctoral Candidate");
 $INST_FUNKTION[18]=array("name"=>"Diplomand", "en"=>"Graduand");
 $INST_FUNKTION[19]=array("name"=>"freier Mitarbeiter", "en"=>"assoziated member");
+$INST_FUNKTION[20]=array("name"=>"Bibliothek", "en"=>"Library");
+$INST_FUNKTION[21]=array("name"=>"Emeriti", "en"=>"Emeriti");
+$INST_FUNKTION[22]=array("name"=>"ausserdem am Institut tätig", "en"=>"assoziated member");
+$INST_FUNKTION[23]=array("name"=>"Dozent institutsübergreifender Veranstaltungen", "en"=>"Lecturer of interinstitutional courses");
 //weitere Funktionen koennen hier angefuegt werden
 
 
