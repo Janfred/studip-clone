@@ -338,10 +338,10 @@ if ($msg)	{
 			}
 		}
 	if (!$n) {
-		echo "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" align=\"center\">";
+		echo "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"99%\" align=\"center\">";
 		$srch_result="info§<font size=-1><b>Im Augenblick liegen keine systeminternen Nachrichten f&uuml;r Sie vor. ";
 		parse_msg ($srch_result, "§", "steel1", 2, FALSE);
-		echo "</td></tr></table";
+		echo "</td></tr></table><br />";
 		}
 		
 	//letzte Besuchszeit ablegen
