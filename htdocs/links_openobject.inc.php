@@ -1,13 +1,54 @@
-<?php
-//diese Datei enthält die links der Kopfzeile, besser nur anzeigen wenn ein Objekt ausgewählt wurde
+<?
+/**
+* links_openobject.inc.php
+* 
+* links for the Stud.IP objects (institutes and Veranstaltungen)
+* 
+*
+* @author		Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
+* @version		$Id$
+* @access		public
+* @modulegroup		views
+* @module		links_openobject.inc.php
+* @package		studip_core
+*/
+
+// +---------------------------------------------------------------------------+
+// This file is part of Stud.IP
+// links_openobject.inc.php
+// Links fuer Stud.IP Objekte
+// Copyright (C) 2003 Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
+// +---------------------------------------------------------------------------+
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or any later version.
+// +---------------------------------------------------------------------------+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+// +---------------------------------------------------------------------------+
+
+//only if there's an open object
+
 if (isset($SessSemName) && $SessSemName[0] != "") {
+
 require_once ($ABSOLUTE_PATH_STUDIP."visual.inc.php");
 require_once ($ABSOLUTE_PATH_STUDIP."reiter.inc.php");
 require_once ($ABSOLUTE_PATH_STUDIP."functions.php");
+require_once ($ABSOLUTE_PATH_STUDIP."/lib/classes/Modules.class.php");
 
 $db=new DB_Seminar;
 $reiter=new reiter;
-		
+$Modules=new Modules;
+
+//load list of used modules
+$modules = $Modules->getLocalModules($SessSemName[1]);
+print_r ($modules);
 //Reitersytem erzeugen
 
 if ($ILIAS_CONNECT_ENABLE) {
@@ -18,9 +59,11 @@ if ($ILIAS_CONNECT_ENABLE) {
 //Topkats
 if ($SessSemName["class"]=="inst") {
 	$structure["institut_main"]=array (topKat=>"", name=>_("&Uuml;bersicht"), link=>"institut_main.php", active=>FALSE);
-	$structure["forum"]=array (topKat=>"", name=>_("Forum"), link=>"forum.php", active=>FALSE);
+	if ($modules["forum"])
+		$structure["forum"]=array (topKat=>"", name=>_("Forum"), link=>"forum.php", active=>FALSE);
 	$structure["personal"]=array (topKat=>"", name=>_("Personal"), link=>"institut_members.php", active=>FALSE);
-	$structure["folder"]=array (topKat=>"", name=>_("Dateien"), link=>"folder.php?cmd=tree", active=>FALSE);
+	if ($modules["documents"])
+		$structure["folder"]=array (topKat=>"", name=>_("Dateien"), link=>"folder.php?cmd=tree", active=>FALSE);
 	$structure["literatur"]=array (topKat=>"", name=>_("Literatur zur Einrichtung"), link=>"literatur.php", active=>FALSE);
 
 	//topkats for resources management, if module is activated
@@ -31,11 +74,13 @@ if ($SessSemName["class"]=="inst") {
 	}
 } else {
 	$structure["seminar_main"]=array (topKat=>"", name=>_("&Uuml;bersicht"), link=>"seminar_main.php", active=>FALSE);
-	$structure["forum"]=array (topKat=>"", name=>_("Forum"), link=>"forum.php", active=>FALSE);
+	if ($modules["forum"])
+		$structure["forum"]=array (topKat=>"", name=>_("Forum"), link=>"forum.php", active=>FALSE);
 	if (!is_array($AUTO_INSERT_SEM) || !in_array($SessSemName[1], $AUTO_INSERT_SEM) || $rechte) {
 		$structure["teilnehmer"]=array (topKat=>"", name=>_("TeilnehmerInnen"), link=>"teilnehmer.php", active=>FALSE);
 	}
-	$structure["folder"]=array (topKat=>"", name=>_("Dateien"), link=>"folder.php?cmd=tree", active=>FALSE);
+	if ($modules["documents"])
+		$structure["folder"]=array (topKat=>"", name=>_("Dateien"), link=>"folder.php?cmd=tree", active=>FALSE);
 	$structure["dates"]=array (topKat=>"", name=>_("Ablaufplan"), link=>"dates.php", active=>FALSE);
 	$structure["literatur"]=array (topKat=>"", name=>_("Literatur"), link=>"literatur.php", active=>FALSE);
 
@@ -48,7 +93,7 @@ if ($SessSemName["class"]=="inst") {
 }
 
 //topkats for Ilias-learningmodules, if module is activated
-if ($ILIAS_CONNECT_ENABLE) {
+if (($ILIAS_CONNECT_ENABLE) && ($modules["ilias_connect"])) {
 	if (get_seminar_modules($SessSemName[1]) != false)
 		$structure["lernmodule"]=array (topKat=>"", name=>_("Lernmodule"), link=>"seminar_lernmodule.php?seminar_id=".$SessSemName[1], active=>FALSE);
 	elseif  ($perm->have_studip_perm("tutor",$SessSemName[1]))
@@ -59,7 +104,7 @@ if ($ILIAS_CONNECT_ENABLE) {
 }
 
 //topkats for SupportDB, if module is activated
-if ($SUPPORT_ENABLE) {
+if (($SUPPORT_ENABLE) && ($modules["support"])) {
 	$structure["support"]=array (topKat=>"", name=>_("SupportDB"), link=>"support.php?view=overview", active=>FALSE);
 }
 
@@ -89,13 +134,15 @@ if ($SessSemName["class"]=="inst") {
 if (!is_array($AUTO_INSERT_SEM) || !in_array($SessSemName[1], $AUTO_INSERT_SEM)) {
 	$structure["_teilnehmer"]=array (topKat=>"teilnehmer", name=>_("TeilnehmerInnen"), link=>"teilnehmer.php", active=>FALSE);
 }
-$structure["_forum"]=array (topKat=>"forum", name=>_("Themen"), link=>"forum.php", active=>FALSE);
-$structure["neue"]=array (topKat=>"forum", name=>_("neue Beitr&auml;ge"), link=>"forum.php?view=neue", active=>FALSE);
-$structure["letzte"]=array (topKat=>"forum", name=>_("letzte 5 Beitr&auml;ge"), link=>"forum.php?view=letzte&mehr=1", active=>FALSE);
-$structure["suchen"]=array (topKat=>"forum", name=>_("Suchen"), link=>"suchen.php", active=>FALSE);
-$structure["forum_export"]=array (topKat=>"forum", name=>_("Druckansicht"), link=>"forum_export.php", target=>"_new", active=>FALSE);
-if (($rechte) || ($SEM_CLASS[$SEM_TYPE[$Status]["class"]]["topic_create_autor"]))
-	$structure["neues_thema"]=array (topKat=>"forum", name=>_("neues Thema"), link=>"forum.php?neuesthema=TRUE#anker", active=>FALSE);
+if ($modules["forum"]) {
+	$structure["_forum"]=array (topKat=>"forum", name=>_("Themen"), link=>"forum.php", active=>FALSE);
+	$structure["neue"]=array (topKat=>"forum", name=>_("neue Beitr&auml;ge"), link=>"forum.php?view=neue", active=>FALSE);
+	$structure["letzte"]=array (topKat=>"forum", name=>_("letzte 5 Beitr&auml;ge"), link=>"forum.php?view=letzte&mehr=1", active=>FALSE);
+	$structure["suchen"]=array (topKat=>"forum", name=>_("Suchen"), link=>"suchen.php", active=>FALSE);
+	$structure["forum_export"]=array (topKat=>"forum", name=>_("Druckansicht"), link=>"forum_export.php", target=>"_new", active=>FALSE);
+	if (($rechte) || ($SEM_CLASS[$SEM_TYPE[$Status]["class"]]["topic_create_autor"]))
+		$structure["neues_thema"]=array (topKat=>"forum", name=>_("neues Thema"), link=>"forum.php?neuesthema=TRUE#anker", active=>FALSE);
+}
 //
 if ($SessSemName["class"]=="sem") {
 	$structure["_dates"]=array (topKat=>"dates", name=>_("alle Termine"), link=>"dates.php", active=>FALSE);
@@ -105,8 +152,10 @@ if ($SessSemName["class"]=="sem") {
 		$structure["admin_dates"]=array (topKat=>"dates", name=>_("Ablaufplan bearbeiten"), link=>"admin_dates.php?new_sem=TRUE&range_id=".$SessSemName[1], active=>FALSE);
 }
 //
-$structure["_folder"]=array (topKat=>"folder", name=>_("Ordneransicht"), link=>"folder.php?cmd=tree", active=>FALSE);
-$structure["alle_dateien"]=array (topKat=>"folder", name=>_("Alle Dateien"), link=>"folder.php?cmd=all", active=>FALSE);
+if ($modules["documents"]) {
+	$structure["_folder"]=array (topKat=>"folder", name=>_("Ordneransicht"), link=>"folder.php?cmd=tree", active=>FALSE);
+	$structure["alle_dateien"]=array (topKat=>"folder", name=>_("Alle Dateien"), link=>"folder.php?cmd=all", active=>FALSE);
+}
 //
 if ($SessSemName["class"]=="sem")
 	$structure["_literatur"]=array (topKat=>"literatur", name=>_("Literatur und Links"), link=>"literatur.php?view=literatur_sem", active=>FALSE);
@@ -143,7 +192,7 @@ if ($RESOURCES_ENABLE) {
 }
 
 //bottomkats for Ilias-connect, if modul is activated
-if ($ILIAS_CONNECT_ENABLE) {
+if (($ILIAS_CONNECT_ENABLE) && ($modules["ilias_connect"])){
 	if (get_seminar_modules($SessSemName[1]) != false)
 	{
 		if ($SessSemName["class"]=="inst") 
@@ -156,7 +205,7 @@ if ($ILIAS_CONNECT_ENABLE) {
 }
 
 //bottomkats for SupportDB, if modul is activated
-if ($SUPPORT_ENABLE) {
+if (($SUPPORT_ENABLE) && ($modules["support"])){
 	$structure["support_overview"]=array (topKat=>"support", name=>_("&Uuml;bersicht"), link=>"support.php?view=overview", active=>FALSE);
 	$structure["support_requests"]=array (topKat=>"support", name=>_("Anfragen"), link=>"support.php?view=requests", active=>FALSE);
 	if ($rechte)
