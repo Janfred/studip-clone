@@ -204,30 +204,32 @@ class VeranstaltungResourcesAssign {
 	}
 	
 	function insertDateAssign($termin_id, $resource_id, $begin='', $end='', $check_only=FALSE) {
-		if (!$begin) {
-			$query = sprintf("SELECT date, content, end_time FROM termine WHERE termin_id = '%s'", $termin_id);
-			$this->db->query($query);
-			if ($this->db->next_record()) {
-				$begin=$this->db->f("date");
-				$end=$this->db->f("end_time");
+		if ($resource_id) {
+			if (!$begin) {
+				$query = sprintf("SELECT date, content, end_time FROM termine WHERE termin_id = '%s'", $termin_id);
+				$this->db->query($query);
+				if ($this->db->next_record()) {
+					$begin=$this->db->f("date");
+					$end=$this->db->f("end_time");
+				}
+			} else {
+				if (!$end)
+					$end=$begin;
 			}
-		} else {
-			if (!$end)
-				$end=$begin;
-		}
-		if ($begin) {
-			$createAssign=new AssignObject(FALSE, $resource_id, $termin_id, '', 
-										$begin, $end, $end,
-										0, 0, 0, 0, 0, 0, 0, 0);
-
-			//check if there are overlaps (resource isn't free!)
-			$overlaps = $createAssign->checkOverlap();
-			if ($overlaps)
-				$created_id[$createAssign->getId()]=array("overlap_assigns"=>$overlaps, "resource_id"=>$resource_id);
-
-			if ((!$check_only) && (!$overlaps)) {
-				$createAssign->create();
-				$created_id[$createAssign->getId()]=array("overlap_assigns"=>FALSE, "resource_id"=>$resource_id);
+			if ($begin) {
+				$createAssign=new AssignObject(FALSE, $resource_id, $termin_id, '', 
+											$begin, $end, $end,
+											0, 0, 0, 0, 0, 0, 0, 0);
+	
+				//check if there are overlaps (resource isn't free!)
+				$overlaps = $createAssign->checkOverlap();
+				if ($overlaps)
+					$created_id[$createAssign->getId()]=array("overlap_assigns"=>$overlaps, "resource_id"=>$resource_id);
+	
+				if ((!$check_only) && (!$overlaps)) {
+					$createAssign->create();
+					$created_id[$createAssign->getId()]=array("overlap_assigns"=>FALSE, "resource_id"=>$resource_id);
+				}
 			}
 		}
 		return $created_id;
