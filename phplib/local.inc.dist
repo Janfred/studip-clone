@@ -4,7 +4,7 @@
 you find here the basic system settings. You shouldn't have to touch much of them...
 please note the CONFIG.INC.PHP in the system folder for the indivual settings of your installation!*/
 
-$UNI_NAME_CLEAN = "Stud.IP 1.0 beta";	//the clean-name of your master-faculty (e.g. University of Goettingen), without html-entities (used for mail-system)
+$UNI_NAME_CLEAN = "Stud.IP 1.0";	//the clean-name of your master-faculty (e.g. University of Goettingen), without html-entities (used for mail-system)
 $AUTH_LIFETIME = 60;			//the length of a session in minutes, zero means unlimited lifetime
 
 
@@ -26,12 +26,6 @@ $DB_ILIAS_HOST = "localhost";
 $DB_ILIAS_USER = "<username>";
 $DB_ILIAS_PASSWORD = "<password>";
 $DB_ILIAS_DATABASE = "ilias";
-
-//additional class, used for SRI-System  (DB_Institut)
-$DB_INSTITUT_HOST = "localhost";
-$DB_INSTITUT_USER = "<username>";
-$DB_INSTITUT_PASSWORD = "<password>";
-$DB_INSTITUT_DATABASE = "studip"; 
 
 
 /*system functions
