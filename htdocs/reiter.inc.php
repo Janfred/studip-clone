@@ -24,8 +24,9 @@ require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 class reiter {
 	//Classes
 	var $classActive = "links1c";				//Klasse fuer Zellen, die Aktiv (=im Vordergrund) sind
-	var $classInactive="links1";				//Klasse fuer Zellen, die Inaktiv (=im Hintegrund) sind
+	var $classInactive="links1a";				//Klasse fuer Zellen, die Inaktiv (=im Hintegrund) sind
 	var $class2nd = "links1b";				//Klasse fuer Zellen in der zweiten Reiterebene
+	var $classInfo = "linksinfo";				//Klasse fuer Zellen in der zweiten Reiterebene
 	//Pics
 	var $infoPic="pictures/info.gif";			//Bild das als Info Click/Alt-Text verwendet wird
 	var $toActiveTopkatPic="pictures/reiter1.jpg";		//Trenner fuer Reiter
@@ -51,11 +52,11 @@ class reiter {
 	}
 	
 	function info($tooltip,$addText,$closeToActive=FALSE) {
-		printf ("<td class=\"%s\" %s nowrap>&nbsp; ", $this->classActive, ($this->infoWidth) ? "width=\"$this->infoWidth\"" : "");
+		printf ("<td class=\"%s\" %s nowrap>&nbsp; ", $this->classInfo, ($this->infoWidth) ? "width=\"$this->infoWidth\"" : "");
 		if ($tooltip)
 			printf ("<img align=\"absmiddle\" src=\"%s\" %s border=\"0\">&nbsp;", $this->infoPic, tooltip($tooltip, TRUE, TRUE));
 		if ($addText)
-			printf ("<font class=\"%s\">%s</font>", $this->classActive, $addText);
+			printf ("<font class=\"%s\">%s</font>", $this->classInfo, $addText);
 		if (($closeToActive) && ($this->toActiveTopkatPic))
 			printf ("&nbsp; <img src=\"%s\" align=absmiddle>", $this->toActiveTopkatPic);
 		elseif ($this->toInactiveTopkatPic)

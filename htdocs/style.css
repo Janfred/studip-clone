@@ -11,6 +11,10 @@ A:link.links1b { color: #000000; font-family: Arial, Helvetica, sans-serif; font
 A:visited.links1b { color: #000000; text-decoration : none; font-family: Arial, Helvetica, sans-serif; font-weight: bold;font-size:10pt;}
 A:hover.links1b {color: #FF3333;text-decoration: none;font-family: Arial, Helvetica, sans-serif;font-weight: bold;font-size:10pt;}
 
+A:link.links1a { color: #000000; font-family: Arial, Helvetica, sans-serif; font-weight: bold;font-size:10pt;}
+A:visited.links1a { color: #000000; text-decoration : none; font-family: Arial, Helvetica, sans-serif; font-weight: bold;font-size:10pt;}
+A:hover.links1a {color: #FF3333;text-decoration: none;font-family: Arial, Helvetica, sans-serif;font-weight: bold;font-size:10pt;}
+
 A:link.links1c { color: #000000; font-family: Arial, Helvetica, sans-serif; font-weight: bold;font-size:10pt;}
 A:visited.links1c { color: #000000; text-decoration : none; font-family: Arial, Helvetica, sans-serif; font-weight: bold;font-size:10pt;}
 A:hover.links1c {color: #FF3333;text-decoration: none;font-family: Arial, Helvetica, sans-serif;font-weight: bold;font-size:10pt;}
@@ -31,6 +35,8 @@ TD.shadowcor {background-image: url('pictures/shadowcor.gif');}
 TD.links1b {background-image: url('pictures/steelblau4.jpg');}
 TD.links1c {background-image: url('pictures/steel1c.jpg');}
 TD.links1 {background-image: url('pictures/fill2.gif');}
+TD.linksinfo {background-image: url('pictures/steel1info.jpg');}
+TD.links1a {background-image: url('pictures/fill3.gif');}
 TD.reiterunten {background-image: url('pictures/reiter3.jpg');}
 
 table.header { background-image: url('pictures/fill1.gif');}
