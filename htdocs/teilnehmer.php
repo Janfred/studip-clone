@@ -387,27 +387,32 @@ if ($db->num_rows()) { //Only if Users were found...
 
 // Aktivitaet berechnen
 
-	$red = "BB";
-	$green = "00";
 	$aktivity_index_user =  (($postings_user + (10 * $Dokumente)) / $aktivity_index_seminar) * 100;
-	if ($aktivity_index_user > 255) {
-		$green = "FF";
-		$red = "55";
-	} else {
-		if ($aktivity_index_user<16) {
-			$green = "0".dechex($aktivity_index_user);
-		} else {
-			$green = dechex($aktivity_index_user);
+	if ($aktivity_index_user > 100) {
+		$offset = $aktivity_index_user / 4;
+		if ($offset < 0) {
+			$offset = 0;
 		}
-		
-	}
-	if ($aktivity_index_user == 0) {
-		$red = "99";
+		$red = dechex(200-$offset) ;
+		$green = dechex(200);
+		$blue = dechex(200-$offset) ;
+		if ($offset > 184)  {
+			$red = "0".$red;
+			$blue = "0".$blue;
+		}
+	} else {
+		$red = dechex(200);
+		$green = dechex($aktivity_index_user * 2) ;
+		$blue = dechex($aktivity_index_user * 2) ;
+		if ($aktivity_index_user < 8)  {
+			$green = "0".$green;
+			$blue = "0".$blue;
+		}
 	}
 
 // Anzeige der eigentlichen Namenzeilen
 
-	printf("<tr><td nowrap bgcolor=\"#%s%s00\" class=\"%s\">", $red, $green,$class2);
+	printf("<tr><td nowrap bgcolor=\"#%s%s%s\" class=\"%s\">", $red, $green,$blue, $class2);
 	printf("<img src=\"pictures/blank.gif\" %s width=\"10\" heigth=\"10\"></td><td class=\"%s\">", tooltip("Aktivitaet: ".round($aktivity_index_user)."%"), $class);
 	print( "<font size=\"-1\"><a href = about.php?username=" . $db->f("username") . ">");
 	print(htmlReady($db->f("Vorname")) ." ". htmlReady($db->f("Nachname")) ."</a>");
