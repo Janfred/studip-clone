@@ -652,7 +652,7 @@ if ($cmd=="edit_pers")
 	if (($my_about->auth_user["Email"] != $email) && ($response)) {
 	  $my_about->msg = $my_about->msg . "error§" . _("Bitte ändern Sie erst ihre E-Mail-Adresse und dann ihr Passwort!") . "§";
 	} else {
-		$my_about->edit_pers($password,$check_pass,$response,$new_username,$vorname,$nachname,$email,$telefon,$anschrift,$home,$hobby,$geschlecht,$title_front,$title_front_chooser,$title_rear,$title_rear_chooser,$view);
+	$my_about->edit_pers($password,$check_pass,$response,$new_username,$vorname,$nachname,$email,$telefon,$anschrift,$home,$hobby,$geschlecht,$title_front,$title_front_chooser,$title_rear,$title_rear_chooser,$view);
 		if (($my_about->auth_user["username"] != $new_username) && $my_about->logout_user == TRUE) $my_about->get_auth_user($new_username);   //username wurde geändert!
 		else $my_about->get_auth_user($username);
 		$username = $my_about->auth_user["username"];
@@ -693,7 +693,7 @@ if ($cmd) {
 		setTempLanguage($my_about->auth_user["user_id"]);
 		$priv_msg = _("Ihre persönliche Seite wurde von einer Administratorin oder einem Administrator verändert.\n Folgende Veränderungen wurden vorgenommen:\n \n").$my_about->priv_msg;
 		restoreLanguage();
-		$my_about->insert_sms($my_about->auth_user["username"], $priv_msg);
+		$my_about->insert_message($priv_msg, $my_about->auth_user["username"], "____%system%____", FALSE, FALSE, "1");
 	}
 	$msg = rawurlencode($my_about->msg);
 	header("Location: $PHP_SELF?username=$username&msg=$msg&view=$view");  //Seite neu aufrufen, um Parameter loszuwerden

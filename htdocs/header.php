@@ -122,10 +122,12 @@ if ($auth->auth["uid"] == "nobody") { ?>
 		
 		$myuname=$auth->auth["uname"];
 		$tmp_last_visit = ($my_messaging_settings["last_visit"]) ?  $my_messaging_settings["last_visit"] : time();
-		$db->query("SELECT COUNT(chat_id) AS chat_m, 
-					COUNT(IF(ISNULL(chat_id) AND mkdate>=" . $tmp_last_visit . ",message_id ,NULL)) AS neu_m, 
-					COUNT(IF(ISNULL(chat_id) AND mkdate<=" . $tmp_last_visit . ",message_id,NULL)) AS alt_m  
-					FROM globalmessages WHERE user_id_rec LIKE '$myuname' GROUP BY user_id_rec");
+		$db->query("
+					SELECT COUNT(m.chat_id) AS chat_m, 
+					COUNT(IF(m_u.readed = '0', m_u.message_id, NULL)) AS neu_m, 
+					COUNT(IF(m_u.readed = '1', m_u.message_id, NULL)) AS alt_m 
+					FROM message_user AS m_u LEFT JOIN message AS m USING (message_id ) WHERE m_u.user_id='".$user->id."' AND deleted = '0' AND m_u.snd_rec = 'rec'
+					");
 		if ($db->next_record()) {
 			$chatm = $db->f("chat_m");
 			$neum = $db->f("neu_m"); // das ist eine neue Nachricht.
@@ -146,29 +148,28 @@ if ($auth->auth["uid"] == "nobody") { ?>
 
 
 //Nachrichten anzeigen
-	if ((($altm) && (!$neum)) || ((($altm+$neum) >0) && ($i_page == "sms.php"))) {
-		$icon = "pictures/nachricht1.gif";
-		$text = _("Post");
-		if ($altm > 1) {
-			$tip = sprintf(_("Sie haben %s alte Nachrichten!"), $altm);
-		} else {
-			$tip = _("Sie haben eine alte Nachricht!");
-		}
-	} elseif (($neum) && ($i_page != "sms.php")) {
+	$text = _("Post");
+	$link = "sms_box.php";
+	if ($neum) {
 		$icon = "pictures/nachricht2.gif";		
-		$text = _("Post");
 		if ($neum > 1) {
 			$tip = sprintf(_("Sie haben %s neue Nachrichten!"), $neum);
 		} else {
 			$tip = _("Sie haben eine neue Nachricht!");
 		}
-	} else {
-		$noicon="TRUE";
+		$link .= "?sms_inout=in";
+	} else if (!$neum) {
+		$icon = "pictures/nachricht1.gif";
+		if ($altm > "1") {
+			$tip = sprintf(_("Sie haben %s alte empfangene Nachrichten."), $altm);
+		} else if ($altm == "1") {
+			$tip = _("Sie haben eine alte empfangene Nachricht.");
+		} else {
+			$tip = _("Sie keine alten empfangenen Nachrichten.");
+		}
 	}
-		if (!$noicon) 
-			echo MakeToolbar($icon,"sms.php",$text,$tip,40, "_top");
-		
-		
+	echo MakeToolbar($icon,$link,$text,$tip,40, "_top");
+
 		if (!($perm->have_perm("admin") || $perm->have_perm("root"))) {
 			echo MakeToolbar("pictures/meinetermine.gif","./calendar.php?caluserid=self",_("Planer"),_("Termine und Kontakte"),40, "_top");
 		}		

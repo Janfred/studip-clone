@@ -322,7 +322,7 @@ if (isset($query)):
 			if ($GLOBALS['CHAT_ENABLE']){
 				echo chat_get_online_icon($db->f("user_id"),$db->f("username")) . "&nbsp;";
 			}
-			echo "<a href=\"sms.php?sms_source_page=browse.php&cmd=write&rec_uname=", $db->f("username"),"\"><img src=\"pictures/nachricht1.gif\" " . tooltip(_("Nachricht an User verschicken")) . " border=0></a></td></tr>";
+			echo "<a href=\"sms_send.php?sms_source_page=browse.php&rec_uname=", $db->f("username"),"\"><img src=\"pictures/nachricht1.gif\" " . tooltip(_("Nachricht an User verschicken")) . " border=0></a></td></tr>";
 		}
 		print("</table><br /><br />");
 	else: // wir haben kein Ergebnis

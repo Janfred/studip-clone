@@ -629,13 +629,12 @@ class studip_news {
 	}
 
 	function send_sms() {
-		$admin_name="____%system%____";
 		$msg_object = new messaging();
 		while (list($user_id,$msg) = each($this->sms)) {
 			$this->db->query("SELECT username FROM auth_user_md5 WHERE user_id='$user_id'");
 			$this->db->next_record();
 			$user_name=$this->db->f("username");
-			$msg_object->insert_sms($user_name, mysql_escape_string($msg), $admin_name);
+			$msg_object->insert_message(mysql_escape_string($msg), $user_name, "____%system%____", FALSE, FALSE, "1")
 		}
 	}
 

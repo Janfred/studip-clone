@@ -643,7 +643,7 @@ function table_body ($db, $range_id, $structure, $css_switcher) {
 			if ($GLOBALS['CHAT_ENABLE']){
 				echo chat_get_online_icon($db->f("user_id"),$db->f("username"),$GLOBALS['SessSemName'][1]) . "&nbsp;";
 			}
-			printf("<a href=\"sms.php?sms_source_page=institut_members.php&cmd=write&rec_uname=%s\">",
+			printf("<a href=\"sms_send.php?sms_source_page=institut_members.php&rec_uname=%s\">",
 				$db->f("username"));
 			printf("<img src=\"pictures/nachricht1.gif\" alt=\"%s\" ", _("Nachricht an User verschicken"));
 			printf("title=\"%s\" border=\"0\" valign=\"baseline\"></a>", _("Nachricht an User verschicken"));

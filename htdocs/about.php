@@ -220,7 +220,7 @@ if ($username==$auth->auth["uname"]) {
 	if ($auth->auth["jscript"])
 		echo "<br>&nbsp; <a href='javascript:open_im();'>" . _("Stud.IP Messenger starten") . "</a>";
 } else {
-	echo "<br>&nbsp; " . _("Nachricht an User:") . " <a href=\"sms.php?sms_source_page=about.php&username=$username&cmd=write&rec_uname=", $db->f("username"),"\"><img src=\"pictures/nachricht1.gif\" " . tooltip(_("Nachricht an User verschicken")) . " border=0 align=texttop></a>";
+	echo "<br>&nbsp; " . _("Nachricht an User:") . " <a href=\"sms_send.php?sms_source_page=about.php&rec_uname=", $db->f("username"),"\"><img src=\"pictures/nachricht1.gif\" " . tooltip(_("Nachricht an User verschicken")) . " border=0 align=texttop></a>";
 	if (CheckBuddy($username)==FALSE)
 		echo "<br />&nbsp; <a href=\"$PHP_SELF?cmd=add_user&add_uname=$username&username=$username\">" . _("Zu Buddies hinzuf&uuml;gen") . "</a>";
 }

@@ -190,10 +190,14 @@ function chatCommand_sms($msgStr){
 		return;
 	}
 	$msging = new messaging();
-	if ($msging->insert_sms($recUserName,$smsMsgStr))
-		$chatServer->addMsg("system:$user->id",$chatid,sprintf(_("Ihre SMS an <b>%s</b> wurde verschickt."),$recUserName));
-	else
-		$chatServer->addMsg("system:$user->id",$chatid,_("Fehler: Ihre SMS konnte nicht verschickt werden!"));
+	if ($recUserName != get_username($user->id)) {
+		if ($msging->insert_message($smsMsgStr, $recUserName))
+			$chatServer->addMsg("system:$user->id",$chatid,sprintf(_("Ihre Nachricht an <b>%s</b> wurde verschickt."),$recUserName));
+		else
+			$chatServer->addMsg("system:$user->id",$chatid,_("Fehler: Ihre Nachricht konnte nicht verschickt werden!"));
+	} else {
+		$chatServer->addMsg("system:$user->id",$chatid,_("Fehler: Es macht keinen Sinn, sich selbst Nachrichten zu schicken!"));
+	}
 }
 
 function chatCommand_invite($msgStr){
@@ -206,12 +210,14 @@ function chatCommand_invite($msgStr){
 			return;
 		}
 		$msging = new messaging();
-		if ($msging->insert_chatinv($recUserName,$chatid,$smsMsgStr))
+		echo $msging->insert_chatinv($recUserName, $chatid, $smsMsgStr);
+		if ($msging->insert_chatinv($recUserName, $chatid, $smsMsgStr)) {
 			$chatServer->addMsg("system:$user->id",$chatid,sprintf(_("Ihre Einladung an <b>%s</b> wurde verschickt."),$recUserName));
-		else
-			$chatServer->addMsg("system:$user->id",$chatid,_("Fehler: Ihre Einladung konnte nicht verschickt werden!"));
 		} else {
-				$chatServer->addMsg("system:$user->id",$chatid,_("Sie d&uuml;rfen f&uuml;r diesen Chat keine Einladungen verschicken!"));
+			$chatServer->addMsg("system:$user->id",$chatid,_("Fehler: Ihre Einladung konnte nicht verschickt werden!"));
+		}
+	} else {
+		$chatServer->addMsg("system:$user->id",$chatid,_("Sie d&uuml;rfen f&uuml;r diesen Chat keine Einladungen verschicken!"));
 	}
 }
 

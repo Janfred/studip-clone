@@ -38,11 +38,11 @@ if ($auth->auth["uid"]!="nobody") {   //nur wenn wir angemeldet sind sollten wir
 		$chatServer->logoutUser($user->id);
 	}
 	
-	//Wenn Option dafuer gewaehlt, vorliegende SMS loeschen
+	//Wenn Option dafuer gewaehlt, vorliegende Nachrichen loeschen
 	if ($my_messaging_settings["delete_messages_after_logout"]) {
-		$sms->delete_all_sms($user->id,$my_messaging_settings["last_visit"]);
+		$sms->delete_all_messages();
 	}
- 
+	
 	$logout_user=$user->id;
 	$logout_language = $_language;
 	//Logout aus dem Sessionmanagement

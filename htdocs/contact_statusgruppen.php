@@ -34,8 +34,8 @@ require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");
-include ("$ABSOLUTE_PATH_STUDIP/calendar/calendar_links.inc.php");   // Output of Stud.IP head
-
+#include ("$ABSOLUTE_PATH_STUDIP/calendar/calendar_links.inc.php");   
+include("$ABSOLUTE_PATH_STUDIP/links_sms.inc.php");
 $cssSw = new cssClassSwitcher;									// Klasse für Zebra-Design
 $cssSw->enableHover();
 

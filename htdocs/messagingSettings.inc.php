@@ -52,21 +52,25 @@ function change_messaging_view() {
 			<table width ="99%" align="center" cellspacing=0 cellpadding=2 border=0>
 				<tr <? $cssSw->switchClass() ?>>
 					<td class="<? echo $cssSw->getClass() ?>" colspan=2>
-					&nbsp; &nbsp; <b><?=_("Systeminterne Kurznachrichten (SMS)")?></b>
+					&nbsp; &nbsp; <b><?=_("Systeminterne Kurznachrichten")?></b>
 					</td>
 				</tr>
+
 				<tr <? $cssSw->switchClass() ?>>
 					<td class="<? echo $cssSw->getClass() ?>" width="30%">
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					<?=_("automatisches L&ouml;schen:")?>
 					</td>
+					
 					<td class="<? echo $cssSw->getClass() ?>" width="70%">&nbsp; 
 					<input type="CHECKBOX" 
 					<? if ($my_messaging_settings["delete_messages_after_logout"]) echo " checked"; ?>
 					 name="delete_messages_after_logout">
-					&nbsp;<font size=-1> <?=_("Gelesene Nachrichten automatisch nach dem Logout l&ouml;schen")?></font>
+					&nbsp;<font size=-1> <?=_("Alle Nachrichten automatisch nach dem Logout l&ouml;schen")?></font>
 					</td>
+					
 				</tr>
+
 				<tr <? $cssSw->switchClass() ?>>
 					<td class="<? echo $cssSw->getClass() ?>">
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

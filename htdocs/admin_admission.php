@@ -433,8 +433,8 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 			if ($db2->affected_rows()) {
 				while ($db->next_record()) {
 					$message="Ihr Abonnement der Veranstaltung **".$admin_admission_data["name"]."** wurde aufgehoben, da die Veranstaltung mit einem teilnahmebeschränkten Anmeldeverfahren versehen wurde. \nWenn Sie einen Platz in der Veranstaltung bekommen wollen, melden Sie sich bitte erneut an.";
-					$messaging->insert_sms ($db->f("username"), addslashes($message), "____%system%____");
-					}
+					$messaging->insert_message (addslashes($message), $db->f("username"), "____%system%____", FALSE, FALSE, "1");
+				}
 			}
 
 			//Kill old data
@@ -451,7 +451,7 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 				$group=select_group ($admin_admission_data["start_time"], $db->f("user_id"));		
 				$db2->query("INSERT INTO seminar_user SET user_id = '".$db->f("user_id")."', Seminar_id = '".$admin_admission_data["sem_id"]."', status='autor', gruppe='$group', mkdate ='".time()."' ");
 				$message="Sie wurden in die Veranstaltung **".$admin_admission_data["name"]."** eingetragen, da das Anmeldeverfahren aufgehoben wurde. Damit sind Sie als Teilnehmer der Präsenzveranstaltung zugelassen.";
-				$messaging->insert_sms ($db->f("username"), addslashes($message), "____%system%____");
+				$messaging->insert_message(addslashes($message), $db->f("username"), "____%system%____", FALSE, FALSE, "1")
 			}
 			if ($db->num_rows())
 				$db2->query("DELETE FROM admission_seminar_user  WHERE seminar_id ='".$admin_admission_data["sem_id"]."' ");

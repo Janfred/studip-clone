@@ -74,7 +74,7 @@ if ($contact["view"]=="alpha" && strlen($filter) > 3)
 if ($contact["view"]=="gruppen" && strlen($filter) < 4)
 	$filter="";
 
-include ("$ABSOLUTE_PATH_STUDIP/calendar/calendar_links.inc.php");   // Output of Stud.IP head
+include ("$ABSOLUTE_PATH_STUDIP/links_sms.inc.php");
 
 // Aktionen //////////////////////////////////////
 
@@ -219,7 +219,7 @@ if (($contact["view"])=="gruppen") {
 		if ($filter==$db->f("statusgruppe_id")) {
 			$cssSw->switchClass();
 			$color = "color=\"#FF0000\"";
-			$maillink = "&nbsp; <a href=\"sms.php?sms_source_page=contact.php&cmd=write&group_id=$filter\"><img src=\"pictures/nachrichtsmall.gif\" valign=\"bottom\" border=\"0\"".tooltip(_("Nachricht an alle Personen dieser Gruppe schicken"))."></a>";
+			$maillink = "&nbsp; <a href=\"sms_send.php?sms_source_page=contact.php&group_id=$filter\"><img src=\"pictures/nachrichtsmall.gif\" valign=\"bottom\" border=\"0\"".tooltip(_("Nachricht an alle Personen dieser Gruppe schicken"))."></a>";
 		} else {
 			$color = "";
 			$maillink ="";

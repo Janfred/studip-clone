@@ -81,6 +81,8 @@ function print_chat_info($chatids){
 // Start of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+include ("$ABSOLUTE_PATH_STUDIP/links_sms.inc.php");
+
 
 if (!$sess->is_registered("chat_online_id")){
 	$sess->register("chat_online_id");

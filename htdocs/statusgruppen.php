@@ -81,7 +81,7 @@ function PrintAktualStatusgruppen () {
 		printf ("<td width=\"10%%\"class=\"topic\" align=\"right\" nowrap>");
 		if ($rechte) {  // nicht alle duerfen Gruppenmails/Gruppensms verschicken
 			printf ("<a href=\"mailto:%s?subject=%s \"><img src=\"pictures/mailnachricht.gif\" " . tooltip(_("E-Mail an alle Gruppenmitglieder verschicken")) . " border=\"0\"></a>", $groupmails,rawurlencode($SessSemName[0])); 
-			printf ("&nbsp;<a href=\"sms.php?sms_source_page=statusgruppen.php&cmd=write&group_id=%s \"><img src=\"pictures/nachricht1.gif\" " . tooltip(_("Systemnachricht an alle Gruppenmitglieder verschicken")) . " border=\"0\"></a>&nbsp;", $statusgruppe_id); 
+			printf ("&nbsp;<a href=\"sms_send.php?sms_source_page=statusgruppen.php&group_id=%s \"><img src=\"pictures/nachricht1.gif\" " . tooltip(_("Systemnachricht an alle Gruppenmitglieder verschicken")) . " border=\"0\"></a>&nbsp;", $statusgruppe_id); 
 		} else {
 			echo "&nbsp;";
 		}
@@ -99,7 +99,7 @@ function PrintAktualStatusgruppen () {
 			printf ("<tr>");
 			printf ("<td width=\"90%%\" class=\"%s\"><font size=\"-1\"><a href = about.php?username=%s>&nbsp;%s</a></font></td>",$class, $db2->f("username"), htmlReady($db2->f("fullname")));
 			printf ("<td width=\"10%%\"class=\"$class\" align=\"right\">");
-			printf ("<a href=\"sms.php?sms_source_page=teilnehmer.php&cmd=write&rec_uname=%s\"><img src=\"pictures/nachricht1.gif\" " . tooltip(_("Systemnachricht an User verschicken")) . " border=\"0\"></a>", $db2->f("username")); 
+			printf ("<a href=\"sms_send.php?sms_source_page=teilnehmer.php&rec_uname=%s\"><img src=\"pictures/nachricht1.gif\" " . tooltip(_("Systemnachricht an User verschicken")) . " border=\"0\"></a>", $db2->f("username")); 
 			printf ("&nbsp;</td>");
 			echo "</tr>";
 			$k++;
@@ -131,7 +131,7 @@ function PrintNonMembers ($range_id)
 				printf ("<tr>");
 				printf ("<td width=\"90%%\" class=\"%s\"><font size=\"-1\"><a href = about.php?username=%s>&nbsp;%s</a></font></td>",$class, $db->f("username"), htmlReady($db->f("fullname")));
 				printf ("<td width=\"10%%\"class=\"$class\" align=\"right\">");
-				printf ("<a href=\"sms.php?sms_source_page=teilnehmer.php&cmd=write&rec_uname=%s\"><img src=\"pictures/nachricht1.gif\" " . tooltip(_("Systemnachricht an User verschicken")) . " border=\"0\"></a>", $db->f("username")); 
+				printf ("<a href=\"sms_send.php?sms_source_page=teilnehmer.php&rec_uname=%s\"><img src=\"pictures/nachricht1.gif\" " . tooltip(_("Systemnachricht an User verschicken")) . " border=\"0\"></a>", $db->f("username")); 
 				printf ("&nbsp;</td>");
 				echo "	</tr>";
 				$k++;
@@ -164,7 +164,7 @@ function PrintNonMembers ($range_id)
 		</td>
 	</tr>
 	<tr>
-		<td class="blank">
+		<td class="blank" valign="top">
 		<table cellspacing="0" cellpadding="0" border="0" width="100%">
 	<?
 	if ($sms_msg)

@@ -63,9 +63,11 @@ if (!$print_view) {
 	if ($inst_id) //Links if we show in the instiute-object-view
 		include "$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php";
 	elseif (!$perm->have_perm("admin")) //if not in the adminview, it's the user view!
-		include "$RELATIVE_PATH_CALENDAR/calendar_links.inc.php";
+		# include "$RELATIVE_PATH_CALENDAR/calendar_links.inc.php";
+		include ("$ABSOLUTE_PATH_STUDIP/links_sms.inc.php");
 	else
-		include "$ABSOLUTE_PATH_STUDIP/links_seminare.inc.php";	
+		# include "$ABSOLUTE_PATH_STUDIP/links_seminare.inc.php";	
+		include ("$ABSOLUTE_PATH_STUDIP/links_sms.inc.php");
 	}
 
 if ($change_view) {

@@ -30,13 +30,12 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" =>
 	require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
 	require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php");
 	require_once ("$ABSOLUTE_PATH_STUDIP/messaging.inc.php");
-	
+
 if ($auth->auth["uid"]!="nobody"){
-	
 	($cmd=="write") ? $refresh=0 : $refresh=30;
 	
-	
 	$db = new DB_Seminar;
+	$db2 = new DB_Seminar;
 	$sess->register("messenger_data");
 	$sms= new messaging;
 	
@@ -59,30 +58,51 @@ if ($auth->auth["uid"]!="nobody"){
 	while ($db->next_record()){
 		$online[$db->f("username")] = array("name"=>$db->f("full_name"),"last_action"=>$db->f("lastaction"),"userid"=>$db->f("user_id"),"is_buddy" => $db->f("contact_id"));      
 	}
-	$query =  "SELECT message_id,mkdate,user_id_snd,message,user_id_snd FROM globalmessages WHERE user_id_rec='".$auth->auth["uname"]."'";
+
+	//set a msg to readed
+	if ($cmd=="read") {
+		$query2 = sprintf ("UPDATE message_user SET readed = '1' WHERE message_id = '%s' AND user_id ='%s'", $msg_id, $user->id);
+		$db2->query($query2);
+	}
+
+	//Count new and old msg's
+	$query =  "SELECT COUNT(IF(readed = '0', message.message_id, NULL)) AS new_msg,
+		   COUNT(IF(readed = '1', message.message_id, NULL)) AS old_msg
+		   FROM message_user LEFT JOIN message USING (message_id)
+		   WHERE deleted = '0' AND snd_rec = 'rec' AND message_user.user_id ='".$user->id."'";
+
 	$db->query($query);
-	$old_msg = 0;
-        $new_msgs = FALSE;
-	
+	$db->next_record();
+	$old_msg = $db->f("old_msg");
+        $new_msg = $db->f("new_msg");
+
+	//load the data from new messages
+	$query =  "SELECT message.message_id,mkdate,autor_id,message 
+		   FROM message_user LEFT JOIN message USING (message_id)
+		   WHERE deleted = '0' AND (readed = '0' OR message.message_id = '".$msg_id."' )AND snd_rec = 'rec' AND message_user.user_id ='".$user->id."' 
+		   ORDER BY mkdate";
+	$db->query($query);
+		
 	while ($db->next_record()){
-		if ($cmd=="read" AND $msg_nr==$db->f("message_id")){
-			$msg_text=$db->f("message");
-			$msg_snd=$db->f("user_id_snd");
-                        $messenger_data["read_new_msgs"][$db->f("message_id")]=TRUE;
-			
-		}
-                if (($db->f("mkdate") > $messenger_data["messenger_start"]) && (!$messenger_data["read_new_msgs"][$db->f("message_id")])) {
-			//this is a new msg, will be shown as new msg until the user wants to see it
-			if ($db->f("user_id_snd") == "____%system%____"){
-				$new_msgs[]=date("H:i",$db->f("mkdate")) . sprintf(_(" <b>Systemnachricht</b> %s[lesen]%s"),"<a href='$PHP_SELF?cmd=read&msg_nr=".$db->f("message_id")."'>","</a>");
-			} else {
-				$new_msgs[]=date("H:i",$db->f("mkdate")). sprintf(_(" von <b>%s</b> %s[lesen]%s"),htmlReady(get_fullname_from_uname($db->f("user_id_snd"))),"<a href='$PHP_SELF?cmd=read&msg_nr=".$db->f("message_id")."'>","</a>");
+		if ($cmd=="read")
+			if ($msg_id==$db->f("message_id")){
+				// "open" the message (display it in the messenger
+				$msg_text=$db->f("message");
+				$msg_snd=$db->f("autor_id");
 			}
-			$refresh+=10;
-		} else
-                	$old_msg++;
+		//this is a new msg, will be shown as new msg until the user wants to see it
+		if (!$db->f("readed") && $db->f("message_id")!=$msg_id) {
+			if ($db->f("autor_id") == "____%system%____"){
+				$new_msgs[]=date("H:i",$db->f("mkdate")) . sprintf(_(" <b>Systemnachricht</b> %s[lesen]%s"),"<a href='$PHP_SELF?cmd=read&msg_id=".$db->f("message_id")."'>","</a>");
+			} else {
+				$new_msgs[]=date("H:i",$db->f("mkdate")). sprintf(_(" von <b>%s</b> %s[lesen]%s"),htmlReady(get_fullname_from_uname($db->f("user_id_snd"))),"<a href='$PHP_SELF?cmd=read&msg_id=".$db->f("message_id")."'>","</a>");
+			}
+		}
+		$refresh+=10;
 	}
 }
+
+
 // Start of Output
 $_html_head_title = "Stud.IP IM (" . $auth->auth["uname"] . ")";
 $messenger_started = true; //html_head should NOT try to open us again!
@@ -109,9 +129,9 @@ function coming_home(url)
 
 function again_and_again()
 	{
-<? if ($cmd!="write")
-	($cmd) ? print("location.replace('$PHP_SELF');\n") : print("location.reload();\n"); ?>
-     }
+	<? if ($cmd!="write")
+		($cmd) ? print("location.replace('$PHP_SELF');\n") : print("location.reload();\n"); ?>
+	}
 
 
 setTimeout('again_and_again();',<? print($refresh*1000);?>);
@@ -159,14 +179,14 @@ if (!$my_messaging_settings["show_only_buddys"]) {
 </td></tr></table></td><td class="blank" width="50%" valign="top"><br><font size=-1>
 <?
 if ($old_msg) 
-	printf(_("%s alte Nachricht(en)&nbsp;%s[lesen]%s"),$old_msg,"<a href=\"javascript:coming_home('sms.php')\">","</a><br>");
-elseif (!is_array($new_msgs))
+	printf(_("%s alte Nachricht(en)&nbsp;%s[lesen]%s"),$old_msg,"<a href=\"javascript:coming_home('sms_box.php?sms_inout=in')\">","</a><br>");
+elseif (!$new_msg)
 	print (_("Keine Nachrichten") . "<br>");
 else
 	print (_("Keine alten Nachrichten") . "<br>");
 
-if (is_array($new_msgs)) {
-	print ("<br /><b>"._("neue Nachrichten:") . "</b><br />");
+if ($new_msg) {
+	printf ("<br /><b>"._("%s neue Nachrichten:") . "</b><br />", $new_msg);
 	foreach ($new_msgs as $val)
         	print "<br />".$val;
 }
@@ -177,9 +197,9 @@ if (is_array($new_msgs)) {
 
 if ($cmd=="send_msg" AND $nu_msg AND $msg_rec) {
 	$nu_msg=trim($nu_msg);
-	if ($sms->insert_sms ($msg_rec, $nu_msg))
+	if ($sms->insert_message ($nu_msg, get_username($msg_rec)))
 		echo"\n<tr><td class='blank' colspan='2' valign='middle'><font size=-1>"
-			. sprintf(_("Ihre Nachricht an <b>%s</b> wurde verschickt!"),get_fullname_from_uname($msg_rec)) . "</font></td></tr>";
+			. sprintf(_("Ihre Nachricht an <b>%s</b> wurde verschickt!"),get_fullname($msg_rec)) . "</font></td></tr>";
 	else 
 		echo"\n<tr><td class='blank' colspan='2' valign='middle'><font size=-1 color='red'><b>"
 			. _("Ihre Nachricht konnte nicht verschickt werden!") . "</b></font></td></tr>";
@@ -194,18 +214,19 @@ if ($cmd=="read" AND $msg_text){
 		echo"\n<tr><td class='blank' colspan='2' valign='middle'><font size=-1>"
 		. sprintf(_("Nachricht von: <b>%s</b>"),htmlReady(get_fullname_from_uname($msg_snd))) ."<hr>".quotes_decode(formatReady($msg_text))."</font></td></tr>";
 	if ($msg_snd != "____%system%____")
-		echo"\n<tr><td class='blank' colspan='2' valign='middle' align='right'><font size=-1><a href='$PHP_SELF?cmd=write&msg_rec=$msg_snd'>"
-		. "<img " . makeButton("antworten","src") . tooltip(_("Diese Nachricht direkt beantworten")) . " border=0></a></td></tr>";
+		echo"\n<tr><td class='blank' colspan='2' valign='middle' align='right'><font size=-1>"
+		. "<a href='$PHP_SELF?cmd=write&msg_rec=$msg_snd'><img " . makeButton("antworten","src") . tooltip(_("Diese Nachricht direkt beantworten")) . " border=0></a>"
+		. "&nbsp;<a href='$PHP_SELF?cmd=cancel'><img " . makeButton("abbrechen","src") . tooltip(_("Vorgang abbrechen")) . " border=0></a></td></tr>";
 }
 
 if ($cmd=="write" AND $msg_rec){
 	echo"\n<tr><td class='blank' colspan='2' valign='middle'><font size=-1>"
-		. sprintf(_("Ihre Nachricht an <b>%s:</b>"),htmlReady(get_fullname_from_uname($msg_rec))) . "</font></td></tr>";
+		. sprintf(_("Ihre Nachricht an <b>%s:</b>"),htmlReady(get_fullname($msg_rec))) . "</font></td></tr>";
 	echo"\n<FORM  name='eingabe' action='$PHP_SELF?cmd=send_msg' method='POST'><INPUT TYPE='HIDDEN'  name='msg_rec' value='$msg_rec'>";
 	echo"\n<tr><td class='blank' colspan='2' valign='middle'><TEXTAREA  style=\"width: 100%\" name='nu_msg' rows='4' cols='44' wrap='virtual'></TEXTAREA></font><br>";
 	echo "<font size=-1><a target=\"_new\" href=\"show_smiley.php\">" . _("Smileys</a> k&ouml;nnen verwendet werden") . " </font>\n</td></tr>";
 	echo"\n<tr><td class='blank' colspan='2' valign='middle' align='right'><font size=-1>&nbsp;<INPUT TYPE='IMAGE' name='none' "
-		. makeButton("absenden","src") . tooltip(_("Nachricht versenden")) . " border=0 value='senden'>&nbsp; <a href=\"$PHP_SELF\"><img "
+		. makeButton("absenden","src") . tooltip(_("Nachricht versenden")) . " border=0 value='senden'>&nbsp;<a href=\"$PHP_SELF?cmd=cancel\"><img "
 		. makeButton("abbrechen","src") . tooltip(_("Vorgang abbrechen")) . " border=0 /></a></FORM></font></td></tr>";
 	echo"\n<script language=\"JavaScript\">\n<!--\ndocument.eingabe.nu_msg.focus();\n//-->\n</script>";
 }

@@ -1,7 +1,7 @@
 <?php
 /*
 mesaging.inc.php - Funktionen fuer das Messaging
-Copyright (C) 2002 Cornelis Kater <ckater@gwdg.de>
+Copyright (C) 2002 Cornelis Kater <ckater@gwdg.de>, Nils K. Windisch <info@nkwindisch.de>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -27,52 +27,50 @@ if ($GLOBALS['CHAT_ENABLE']){
 
 
 class messaging {
-	var $db;							//Datenbankanbindung
-	var $sig_string;					//String, der Signaturen vom eigentlichen Text abgrenzt
+	var $db;	//Datenbankanbindung
+	var $sig_string; //String, der Signaturen vom eigentlichen Text abgrenzt
 
 
 //Konstruktor
 function messaging () {
-	
 	$this->sig_string="\n \n -- \n";
-		
 	$this->db = new DB_Seminar;
 }
 
-//alle Nachrichten loeschen
-function delete_all_sms  ($user_id = false, $delete_until = false) {
-	global $user;
-	$db=new DB_Seminar;
-	
-	if (!$user_id)
-		$user_id = $user->id;
-	if ($delete_until){
-		$clause = " AND mkdate < $delete_until ";
-	}
-	$db->query ("SELECT username FROM auth_user_md5 WHERE user_id = '".$user_id."' ");
-	$db->next_record();
-	$tmp_sms_username=$db->f("username");
-	$db->query("DELETE FROM globalmessages WHERE user_id_rec = '$tmp_sms_username' AND ISNULL(chat_id) $clause");
-	return $db->affected_rows();
-	}
-
 //Nachricht loeschen
-function delete_sms ($message_id) {
+function delete_message($message_id) {
 	global $user;
 	$db=new DB_Seminar;
+	$db2=new DB_Seminar;
 
-	$db->query ("SELECT username FROM auth_user_md5 WHERE user_id = '".$user->id."' ");
-	$db->next_record();
-	$tmp_sms_username=$db->f("username");
-		
-	$db->query("DELETE FROM globalmessages WHERE message_id = '$message_id' AND user_id_rec = '$tmp_sms_username' ");
-	if ($db->affected_rows())
+	$db->query("UPDATE message_user SET deleted = '1' WHERE message_id = '".$message_id."' AND user_id = '".$user->id."'");
+	$db2->query("SELECT message_id from message_user WHERE message_id = '".$message_id."' AND deleted = '0'");
+	if (!$db2->num_rows()) {
+		$db2->query("DELETE FROM message WHERE message_id = '".$message_id."'");
+		$db2->query("DELETE FROM message_user WHERE message_id = '".$message_id."'");
+	}
+	if ($db->affected_rows()) {
 		return TRUE;
-	else
+	} else {
 		return FALSE;
 	}
- 
-//Geschriebene Nachricht einfuegen
+}
+
+// delete all messages from user
+function delete_all_messages() {
+	global $user;
+	$user_id = $user->id;
+	$db=new DB_Seminar;
+	$query = "SELECT message_id FROM message_user WHERE user_id = '".$user_id."'";
+	$db->query("$query");
+	while ($db->next_record()) {
+		$this->delete_message($db->f("message_id"));
+	}
+}
+
+
+/*
+// insert written message
 function insert_sms ($rec_uname, $message, $user_id='') {
 	global $_fullname_sql,$user, $my_messaging_settings, $CHAT_ENABLE;
 
@@ -80,32 +78,37 @@ function insert_sms ($rec_uname, $message, $user_id='') {
 	$db2=new DB_Seminar;
 	$db3=new DB_Seminar;
 
-	if (!$user_id)
+	if (!$user_id) {
 		$user_id = $user->id;
-
+	}
 	if (!empty($message)) {
 		if ($user_id != "____%system%____") {
 			$db->query ("SELECT username," . $_fullname_sql['full'] ." AS fullname FROM auth_user_md5 a LEFT JOIN user_info USING (user_id) WHERE a.user_id = '".$user_id."' ");
 			$db->next_record();
-			$snd_uname=$db->f("username");
-		} else
-			$snd_uname="____%system%____";			
-
+			$snd_uname = $db->f("username");
+		} else {
+			$snd_uname = "____%system%____";			
+		}
 		$db2->query ("SELECT user_id FROM auth_user_md5 WHERE username = '".$rec_uname."' ");
 		$db2->next_record();
 
-		if ($db2->num_rows()){
-			$m_id=md5(uniqid("voyeurism"));
-			if ($user_id != "____%system%____")  {
-				if ($my_messaging_settings["sms_sig"])
-					$message.=$this->sig_string.$my_messaging_settings["sms_sig"];
-			} else {
+		if ($db2->num_rows()) {
+			if ($user_id != "____%system%____")  { // wenn nicht vom system signatur anhaengen
+				if ($my_messaging_settings["sms_sig"]) {
+					$message .= $this->sig_string.$my_messaging_settings["sms_sig"];
+				}
+			} else { // wenn vom system dies anhaengen
 				setTempLanguage($db2->f("user_id"));
-				$message.=$this->sig_string. _("Diese Nachricht wurde automatisch vom Stud.IP-System generiert. Sie können darauf nicht antworten.");
+				$message .= $this->sig_string. _("Diese Nachricht wurde automatisch vom Stud.IP-System generiert. Sie können darauf nicht antworten.");
 				restoreLanguage();
 			}
-			$db3->query("INSERT INTO globalmessages SET message_id='$m_id', user_id_rec='$rec_uname', user_id_snd='$snd_uname', mkdate='".time()."', message='$message' ");
+			
+			$m_id = md5(uniqid("voyeurism"));
 
+			$db3->query("INSERT IGNORE message SET message_id='$m_id', mkdate='".time()."', message='$message'");
+			$db3->query("INSERT IGNORE message_user SET message_id='$m_id', user_id='$snd_uname', snd_rec='snd' ");
+			$db3->query("INSERT IGNORE message_user SET message_id='$m_id', user_id='$rec_uname', snd_rec='rec' ");
+			
 			//Benachrichtigung in alle Chaträume schicken
 			if ($CHAT_ENABLE) {
 				$chatServer =& ChatServer::GetInstance($GLOBALS['CHAT_SERVER_NAME']);
@@ -113,17 +116,74 @@ function insert_sms ($rec_uname, $message, $user_id='') {
 				$chatMsg = sprintf(_("Sie haben eine SMS von <b>%s</b> erhalten!"),htmlReady($db->f("fullname")." (".$db->f("username").")"));
 				restoreLanguage();
 				$chatMsg .= "<br></i>" . formatReady(stripslashes($message))."<i>";
-				foreach($chatServer->chatDetail as $chatid => $wert)
-					if ($wert['users'][$db2->f("user_id")])
+				foreach($chatServer->chatDetail as $chatid => $wert) {
+					if ($wert['users'][$db2->f("user_id")]) {
 						$chatServer->addMsg("system:".$db2->f("user_id"),$chatid,$chatMsg);
+					}
+				}
 			}
 			return $db3->affected_rows();
-		} else 
+		} else {
 			return false;
-	} else
+		}
+	} else {
 		return -1;
+	}
+}
+*/
+
+function insert_message($message, $rec_uname, $user_id='', $time='', $tmp_message_id='', $set_deleted='') {
+	global $_fullname_sql, $user, $my_messaging_settings;
+
+	$db=new DB_Seminar;
+	$db2=new DB_Seminar;
+	$db3=new DB_Seminar;
+	$db4=new DB_Seminar;
+	
+	if (!$time) {
+		$time = time();
+	}
+
+	if (!$tmp_message_id) {
+		$tmp_message_id = md5(uniqid("321losgehtes"));
+	}
+
+	if (!$user_id) {
+		$user_id = $user->id;
+	}
+
+	if (!empty($message)) {
+		if ($user_id != "____%system%____") {
+			$snd_user_id = $user_id;
+		} else {
+			$snd_user_id = "____%system%____";			
+		}
+		if ($user_id != "____%system%____")  {
+			if ($my_messaging_settings["sms_sig"]) {
+				$message .= $this->sig_string.$my_messaging_settings["sms_sig"];
+			}
+		} else {
+			setTempLanguage($snd_user_id);
+			$message .= $this->sig_string. _("Diese Nachricht wurde automatisch vom Stud.IP-System generiert. Sie können darauf nicht antworten.");
+			restoreLanguage();
+		}
+		$db3->query("INSERT IGNORE message SET message_id='".$tmp_message_id."', mkdate='".$time."', message='".$message."', autor_id='".$snd_user_id."'");
+		if (!$set_deleted) {
+			$db3->query("INSERT IGNORE message_user SET message_id='".$tmp_message_id."', user_id='".$snd_user_id."', snd_rec='snd' ");
+		} else {
+			$db3->query("INSERT IGNORE message_user SET message_id='".$tmp_message_id."', user_id='".$snd_user_id."', snd_rec='snd', deleted='1'");
+		}
+		
+		$db4->query("SELECT user_id FROM auth_user_md5 WHERE username = '".$rec_uname."'");
+		$db4->next_record();
+		$db3->query("INSERT IGNORE message_user SET message_id='".$tmp_message_id."', user_id='".$db4->f("user_id")."', snd_rec='rec' ");
+		return 1;
+	} else {
+		return 0;
+	}
 }
 
+/*
 //send mail to a group of users
 function circular_sms ($message, $mode, $group_id=0) {
 	global $user;
@@ -148,9 +208,9 @@ function circular_sms ($message, $mode, $group_id=0) {
 			}
 		break;
 	}
-
 	return $count;
 } 
+*/
 
 function buddy_chatinv ($message, $chat_id) {
 	global $user;
@@ -162,19 +222,20 @@ function buddy_chatinv ($message, $chat_id) {
 }
 
 //Chateinladung absetzen
-function insert_chatinv ($rec_uname, $chat_id, $msg = "", $user_id = false) {
+function insert_chatinv($rec_uname, $chat_id, $msg = "", $user_id = false) {
 	global $user,$_fullname_sql,$CHAT_ENABLE;
 	if ($CHAT_ENABLE){
 		$chatServer =& ChatServer::GetInstance($GLOBALS['CHAT_SERVER_NAME']);
 		$db=new DB_Seminar;
 		$db2=new DB_Seminar;
 		$db3=new DB_Seminar;
+		$db4=new DB_Seminar;
 		
-		if (!$user_id){
+		if (!$user_id) {
 			$user_id = $user->id;
 		}
 		$chat_uniqid = $chatServer->chatDetail[$chat_id]['id'];
-		if (!$chat_uniqid){
+		if (!$chat_uniqid) {
 			return false;	//no active chat
 		}
 		$db->query ("SELECT username," . $_fullname_sql['full'] ." AS fullname FROM auth_user_md5 a LEFT JOIN user_info USING (user_id) WHERE a.user_id = '".$user_id."' ");
@@ -189,7 +250,11 @@ function insert_chatinv ($rec_uname, $chat_id, $msg = "", $user_id = false) {
 			. "\n - - - \n" . stripslashes($msg);
 		
 		$m_id = md5(uniqid("voyeurism"));
-		$db3->query ("INSERT INTO globalmessages SET message_id='$m_id', user_id_rec='$rec_uname', user_id_snd='".$db->f("username")."', mkdate='".time()."', message='" . mysql_escape_string($message) . "', chat_id='$chat_uniqid' ");
+		
+		$db4->query ("INSERT INTO message SET message_id='$m_id', autor_id='".$user_id."', mkdate='".time()."', message='".mysql_escape_string($message)."', chat_id='$chat_uniqid' ");
+		
+		$db3->query ("INSERT IGNORE INTO message_user SET message_id='$m_id', user_id='".get_userid($rec_uname)."', snd_rec='rec'");
+		$db3->query ("INSERT IGNORE INTO message_user SET message_id='$m_id', user_id='".get_userid($rec_uname)."', snd_rec='snd', deleted='1'");
 		
 		//Benachrichtigung in alle Chaträume schicken
 		$chatMsg = sprintf(_("Sie wurden von <b>%s</b> in den Chatraum <b>%s</b> eingeladen!"),htmlReady($db->f("fullname")." (".$db->f("username").")"),htmlReady($chatServer->chatDetail[$chat_id]['name']));
@@ -200,13 +265,15 @@ function insert_chatinv ($rec_uname, $chat_id, $msg = "", $user_id = false) {
 				$chatServer->addMsg("system:".$db2->f("user_id"),$chatid,$chatMsg);
 			}
 		}
-		if ($db3->affected_rows()){
+		
+		if ($db4->affected_rows()){
 			return TRUE;
 		} else {
 			return FALSE;
 		}
+		
 	} else {
-		return false;
+		return FALSE;
 	}
 }
 
