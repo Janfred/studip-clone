@@ -72,8 +72,14 @@ if (($_the_tree->range_type == "sem" && !$perm->have_studip_perm("tutor", $_rang
 		die;
 }
 
-$_the_treeview->open_ranges['root'] = true;
 $_the_treeview->parseCommand();
+
+//always show existing lists
+$_the_treeview->open_ranges['root'] = true;
+//if there are no lists always open root element
+if (!$_the_tree->hasKids('root')){
+	$_the_treeview->open_items['root'] = true;
+}
 $_the_clipboard =& StudipLitClipBoard::GetInstance();
 $_the_clip_form =& $_the_clipboard->getFormObject();
 
@@ -103,7 +109,7 @@ if ($_the_clip_form->isClicked("clip_ok")){
 $_msg .= $_the_clipboard->msg;
 if (is_array($_the_treeview->msg)){
 	foreach ($_the_treeview->msg as $t_msg){
-		if (!$_msg || ($_msg && strpos($t_msg, $_msg)) === false){
+		if (!$_msg || ($_msg && (strpos($t_msg, $_msg) === false))){
 			$_msg .= $t_msg . "§";
 		}
 	}
@@ -172,7 +178,6 @@ $infobox[1]["eintrag"][] = array("icon" => "pictures/link_intern.gif","text"  =>
 $infobox[1]["eintrag"][] = array("icon" => "pictures/link_intern.gif","text"  => "<a href=\"admin_lit_element.php?_range_id=new_entry\">" . _("Neue Literatur anlegen") . "</a>" );
 
 print_infobox ($infobox,"pictures/literaturelist.jpg");
-
 ?>
 </td>
 </tr>
