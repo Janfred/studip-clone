@@ -140,6 +140,14 @@ class RoomRequest {
 		return $count;
 	}
 	
+	function getSeats() {
+		foreach ($this->properties as $val) {
+			if ($val["system"] == 2)
+				return $val["state"];
+		}
+		return FALSE;
+	}
+	
 	function isNew() {
 		return $this->isNewObject;
 	}
@@ -202,7 +210,7 @@ class RoomRequest {
 		$this->default_seats=($value);
 	}
 
-	function searchRooms($search_exp, $properties = FALSE) {
+	function searchRooms($search_exp, $properties = FALSE, $limit = 0) {
 		//create the query
 		if ($search_exp && !$properties)
 			$query = sprintf ("SELECT b.resource_id, b.name FROM resources_categories a LEFT JOIN resources_objects b USING (category_id) WHERE is_room = '1' AND b.name LIKE '%%%s%%' ORDER BY b.name", $search_exp);
@@ -252,7 +260,7 @@ class RoomRequest {
 			if ($setted_properties)
 				$query.= sprintf (" GROUP BY a.resource_id  HAVING resource_id_count = '%s' ", $i);
 			
-			$query.= sprintf ("ORDER BY b.name");
+			$query.= sprintf ("ORDER BY b.name %s", ($limit) ? "LIMIT 0, ".$limit : "");
 		}
 
 		$this->db->query($query);
@@ -283,10 +291,10 @@ class RoomRequest {
 			$this->closed = $this->db->f("closed");
 			$this->chdate = $this->db->f("chdate");
 			
-			$query = sprintf("SELECT a.*, b.type, b.name, b.options FROM resources_requests_properties a LEFT JOIN resources_properties b USING (property_id) WHERE a.request_id='%s' ", $this->id);
+			$query = sprintf("SELECT a.*, b.type, b.name, b.options, b.system FROM resources_requests_properties a LEFT JOIN resources_properties b USING (property_id) WHERE a.request_id='%s' ", $this->id);
 			$this->db->query($query);
 			while ($this->db->next_record()) {
-				$this->properties[$this->db->f("property_id")] = array("state"=>$this->db->f("state"), "type"=>$this->db->f("type"), "name"=>$this->db->f("name"), "options"=>$this->db->f("options"), "mkdate"=>$this->db->f("mkdate"), "chdate"=>$this->db->f("chdate"));
+				$this->properties[$this->db->f("property_id")] = array("state"=>$this->db->f("state"), "type"=>$this->db->f("type"), "name"=>$this->db->f("name"), "options"=>$this->db->f("options"), "system"=>$this->db->f("system"), "mkdate"=>$this->db->f("mkdate"), "chdate"=>$this->db->f("chdate"));
 			}
 			return TRUE;
 		}

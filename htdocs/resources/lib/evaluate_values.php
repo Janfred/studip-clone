@@ -1295,7 +1295,7 @@ if (($inc_request_x) || ($dec_request_x) || ($start_single_mode_x) || ($marked_c
 			$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["considered_resources"][$reqObj->getResourceId()] = array("type"=>"requested");
 	
 		//add the matching ressources to selection
-		$machting_resources = $reqObj->searchRooms(FALSE, TRUE);
+		$machting_resources = $reqObj->searchRooms(FALSE, TRUE, 10);
 		foreach ($machting_resources as $key => $val) {
 			if (!$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["considered_resources"][$key])
 				$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["considered_resources"][$key] = array("type"=>"matching");

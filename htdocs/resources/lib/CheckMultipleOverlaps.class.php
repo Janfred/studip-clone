@@ -36,6 +36,7 @@
 // +---------------------------------------------------------------------------+
 
 require_once $RELATIVE_PATH_RESOURCES."/lib/AssignEventList.class.php";
+require_once $RELATIVE_PATH_RESOURCES."/lib/ResourceObject.class.php";
 
 class CheckMultipleOverlaps {
 	var $begin;
@@ -80,11 +81,14 @@ class CheckMultipleOverlaps {
 		$this->resource_ids[] = $resource_id;
 		$query = sprintf ("DELETE FROM resources_temporary_events WHERE resource_id = '%s'", $resource_id);
 		$this->db->query($query);
-		$assEvt = new AssignEventList($this->begin, $this->end, $resource_id, FALSE, FALSE, FALSE);
-		while ($event = $assEvt->nextEvent()) {
-			$query = sprintf ("INSERT INTO resources_temporary_events SET event_id = '%s', resource_id = '%s', assign_id = '%s', begin = '%s', end = '%s', mkdate = '%s'",
-						md5(uniqid("tempo")), $resource_id, $event->getAssignId(), $event->getBegin(), $event->getEnd(), time());
-			$this->db->query($query);
+		$resObject = new ResourceObject($resource_id);
+		if (!$resObject->getMultipleAssign()) { //when multiple assigns are allowed, we need no check...		
+			$assEvt = new AssignEventList($this->begin, $this->end, $resource_id, FALSE, FALSE, FALSE);
+			while ($event = $assEvt->nextEvent()) {
+				$query = sprintf ("INSERT INTO resources_temporary_events SET event_id = '%s', resource_id = '%s', assign_id = '%s', begin = '%s', end = '%s', mkdate = '%s'",
+							md5(uniqid("tempo")), $resource_id, $event->getAssignId(), $event->getBegin(), $event->getEnd(), time());
+				$this->db->query($query);
+			}
 		}
 	}
 	

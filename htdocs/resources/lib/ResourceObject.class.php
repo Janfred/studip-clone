@@ -353,6 +353,17 @@ class ResourceObject {
 		return $plain_properties;
 	}
 	
+
+	function getSeats() {
+		$query = sprintf("SELECT a.state FROM resources_objects_properties a LEFT JOIN resources_properties b USING (property_id) LEFT JOIN resources_categories_properties c USING (property_id) WHERE resource_id = '%s' AND c.category_id = '%s' AND b.system = 2 ORDER BY b.name", $this->id, $this->category_id);
+		$this->db->query($query);
+		
+		if ($this->db->next_record()) {
+			return $this->db->f("state");
+		} else
+			return FALSE;
+	}
+
 	function isUnchanged() {
 		if ($this->mkdate == $this->chdate)
 			return TRUE;
