@@ -183,7 +183,7 @@ else {
 			"icon"        => sprintf("<a href=\"%s\"><img border=\"0\" src=\"%s\"></a>"
 												, $download_link, $picture_file),
 												 
-			"filename"    => sprintf("<font%s><a%s href=\"%s\"%s>%s</a></font>"
+			"filename"    => sprintf("<font%s><a%s href=\"%s\">%s</a></font>"
 												, $this->config->getAttributes("Link", "font")
 												, $this->config->getAttributes("Link", "a")
 												, $download_link
