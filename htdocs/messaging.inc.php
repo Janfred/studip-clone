@@ -360,5 +360,14 @@ class messaging {
 		AddNewContact (get_userid($username));
 		AddBuddy($username);
 	}
+
+	function check_newmsgfoldername($foldername) {
+		if ($new_folder[0] == "new" || $new_folder[0] == "all" || $new_folder[0] == "free") {
+			return FALSE;
+		} else {
+			return TRUE;	
+		}	
+	}
+
 }
 ?>
