@@ -141,6 +141,8 @@ $SessSemName[1] = "";
 $links_admin_data =''; 	//Auch im Adminbereich gesetzte Veranstaltungen muessen geloescht werden.
 
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   			//hier wird der "Kopf" nachgeladen
+include ("$ABSOLUTE_PATH_STUDIP/links_seminare.inc.php");   	//hier wird die Navigation nachgeladen
+
 require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php"); 		// Klarnamen fuer den Veranstaltungsstatus
 require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php"); 		// htmlReady fuer die Veranstaltungsnamen
 require_once ("$ABSOLUTE_PATH_STUDIP/dates.inc.php"); 		// Semester-Namen fuer Admins
@@ -259,23 +261,6 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("roo
 	<tr>
 	<td class="blank" colspan=2>&nbsp;</td>
 	</tr>
-	</table><table border="0" cellpadding="0" cellspacing="0" width="100%" align="center" class="blank"><tr>
-	<td class="blank" align = left width="90%"><blockquote>
-<?
-      $db->query("SELECT count(*) as count  FROM seminare");
-	$db->next_record();
-	echo "Um weitere Veranstaltungen in Ihre pers&ouml;nliche Auswahl aufzunehmen, nutzen Sie bitte die\n";
-	echo "<a href=\"sem_portal.php?view=Alle\">Veranstaltungssuche</a><br>\n";
-	echo "<br><font size=-1>Es sind noch ".($db->f("count")-$num_my_inst)." weitere Veranstaltungen vorhanden</font><br>\n";
-	if ($perm->have_perm("dozent")) {
-	    echo "<br>Um eine neue Veranstaltung anzulegen, benutzen Sie bitte den<br>\n";
-	    echo "<a href=\"admin_seminare_assi.php?new_session=TRUE\">Veranstaltungs-Assistenten</a><br>\n";
-	}
-	echo"</blockquote></td>";
-?>
-	<td class="blank" align = right><img src="pictures/board1.jpg" width="266" height="173" border="0"></td>
-	</tr>
-
 <?
 
 }
