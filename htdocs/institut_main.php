@@ -105,7 +105,7 @@ if ($SessSemName[1] =="")
 	?>
 
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
-	<tr><td class="topic" colspan=2><b>&nbsp;<? echo $SessSemName["art"],": ",htmlReady($SessSemName[0]); ?>
+	<tr><td class="topic" colspan=2><b>&nbsp; <? echo $SessSemName["art"],": ",htmlReady($SessSemName[0]); ?>
 	</b></td></tr>
 	<tr><td class="blank">
 	<br><blockquote><?
