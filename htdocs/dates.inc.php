@@ -1394,8 +1394,225 @@ function getPresenceTypeClause() {
 		}
 	}
 	$typ_clause .= ")";
-	
+
 	return $typ_clause;
+}
+
+
+/**
+* Javascript für Eingabehilfe und popup-Kalender
+*
+* Beim ersten Aufruf werden alle benötigten js Funktionen
+* und die Linkzeile zurückgegeben. Bei allen weiteren Aufrufen enthält
+* der Rückgabewert nur noch die Linkzeile.
+*
+* @param	int	Werte von 1 bis 6, bestimmt welche Formularfeldnamen verwendet werden
+* @param	int	counter wenn mehrere Termin Zeilen auf einer Seite
+* @param	string	ursprüngliche Startstunde (Wert für ESC Taste)
+* @param	string	ursprüngliche Startminute (Wert für ESC Taste)
+* @param	string	ursprüngliche Endstunde (Wert für ESC Taste)
+* @param	string	ursprüngliche Endminute (Wert für ESC Taste)
+* @return	string	JavaScriptCode
+*
+*/
+function Kalender_Termine_javascript ($t = 0, $n = 0, $ss = '', $sm = '', $es = '', $em = '') {
+	static $first = 1;
+	$zz = array (
+		array ('07','45','09','15'),
+		array ('09','30','11','00'),
+		array ('11','15','12','45'),
+		array ('13','30','15','00'),
+		array ('15','15','16','45'),
+		array ('17','00','18','30'),
+		array ('18','45','20','15')
+	);
+	if (!isset($zz) || count($zz) == 0) return '';
+	$jstxt = "\n<script type=\"text/javascript\">\n<!--\n";
+	if ($first == 1) {
+		$jstxt .= <<<EOT
+function set_sem_time(t, nn, ss,sm,es,em){
+ switch (t){
+  case 1:
+   feld_ss = "stunde";
+   feld_sm = "minute";
+   feld_es = "end_stunde";
+   feld_em = "end_minute";
+   break;
+  case 2:
+   feld_ss = "stunde["+nn+"]";
+   feld_sm = "minute["+nn+"]";;
+   feld_es = "end_stunde["+nn+"]";
+   feld_em = "end_minute["+nn+"]";
+   break;
+  case 3:
+   feld_ss = "turnus_start_stunde["+nn+"]";
+   feld_sm = "turnus_start_minute["+nn+"]";
+   feld_es = "turnus_end_stunde["+nn+"]";
+   feld_em = "turnus_end_minute["+nn+"]";
+   break;
+  case 4:
+   feld_ss = "term_turnus_start_stunde["+nn+"]";
+   feld_sm = "term_turnus_start_minute["+nn+"]";
+   feld_es = "term_turnus_end_stunde["+nn+"]";
+   feld_em = "term_turnus_end_minute["+nn+"]";
+   break;
+  case 5:
+   feld_ss = "term_start_stunde["+nn+"]";
+   feld_sm = "term_start_minute["+nn+"]";
+   feld_es = "term_end_stunde["+nn+"]";
+   feld_em = "term_end_minute["+nn+"]";
+   break;
+  case 6:
+   feld_ss = "vor_stunde";
+   feld_sm = "vor_minute";
+   feld_es = "vor_end_stunde";;
+   feld_em = "vor_end_minute";
+   break;
+ }
+ document.Formular.elements[feld_ss].value = ss;
+ document.Formular.elements[feld_sm].value = sm;
+ document.Formular.elements[feld_es].value = es;
+ document.Formular.elements[feld_em].value = em;
+}
+
+
+function write_js_zeile(t2, nn2, ss2, sm2, es2, em2){
+  var tx = '';
+EOT;
+		for($z = 0; $z < count($zz); $z++) {
+			$jszeit =  $zz[$z][0].':'.$zz[$z][1].'&nbsp;-&nbsp;'.$zz[$z][2].':'.$zz[$z][3] .'&nbsp;' . _('Uhr') . '&nbsp;' . _('eintragen');
+			$jstxt .= '  tx = tx + \'<a href="javascript:set_sem_time(\' + t2 + \', \' + nn2 + \',\\\''.$zz[$z][0].'\\\', \\\''.$zz[$z][1].'\\\', \\\''.$zz[$z][2].'\\\', \\\''.$zz[$z][3]. '\\\')" title="'. $jszeit .'">[ '. ($z + 1)  .". ]</a>&nbsp;';\n";
+		}
+		$jstxt .= '  if (ss2 != "")'. "\n";
+		$jstxt .= '    tx = tx + \'<a href="javascript:set_sem_time(\' + t2 + \', \' + nn2 + \',\\\'\' + ss2 + \'\\\', \\\'\' + sm2 + \'\\\', \\\'\' + es2 + \'\\\', \\\'\' + em2 + \'\\\')" title="'._('zur&uuml;cksetzten auf').' \' + ss2 + \':\' + sm2 + \'&nbsp;-&nbsp;\' + es2 + \':\' + em2 + \'&nbsp;'. _('Uhr') .'">[ ' . _('Esc') . " ]</a>';\n";
+		$jstxt .= '  document.write(\' <font size="-1"><tt>&lt;&#8212;</tt> \' + tx + \' <a href="javascript:openKalenderWindow(\' + t2 + \', \' + nn2 + \');" title="'. _('Kalenderfenster &ouml;ffnen').'">[Kalender]</a></font>\');'. "\n";
+		$jstxt .= '}' . "\n\n";
+
+		$jstxt .= 'function Kalender(t4, n4, Monat,Jahr) {' . "\n";
+		$jstxt .= '  Monatsname = new Array' . "\n";
+		$jstxt .= '  ("' . _('Januar') . '","' . _('Februar') . '","' . _('M&auml;rz') . '","' . _('April') . '","' . _('Mai') . '","' . _('Juni') . '","' . _('Juli') . '",' . "\n";
+		$jstxt .= '  "' . _('August') . '","' . _('September') . '","' . _('Oktober') . '","' . _('November') . '","' . _('Dezember') .'");' . "\n";
+		$jstxt .= '  Tag = new Array ("' . _('Mo') . '","' . _('Di') . '","' . _('Mi') . '","' . _('Do') . '","' . _('Fr') . '","' . _('Sa') . '","' . _('So') . '");' . "\n";
+
+		$jstxt .= <<<EOT2
+  var txt1 = '';
+  var Zeit = new Date(Jahr,Monat-1,1);
+  var Start = Zeit.getDay();
+  if(Start > 0) Start--;
+  else Start = 6;
+  var Stop = 31;
+  if(Monat==4 ||Monat==6 || Monat==9 || Monat==11 ) --Stop;
+  if(Monat==2) {
+   Stop = Stop - 3;
+   if(Jahr%4==0) Stop++;
+   if(Jahr%100==0) Stop--;
+   if(Jahr%400==0) Stop++;
+  }
+  txt1 = txt1 + '<table border="1" cellpadding="1" cellspacing="0"><tr>\\n';
+  txt1 = txt1 + '<td align="center" colspan="7" bgcolor="#5555AA"><font color="#FFFFFF" size="-1"><b>';
+  txt1 = txt1 + Monatsname[Monat-1] + " " + Jahr;
+  txt1 = txt1 + '</b></font></td></tr>\\n';
+  txt1 = txt1 + '<tr align="center">';
+  for(var i = 0; i <= 6; i++)
+    txt1 = txt1 + '<td bgcolor="#5555FF"><font color="#FFFFFF" size="-1">' + Tag[i] + '</font></td>\\n';
+  txt1 = txt1 + '</tr>\\n';
+  var Tageszahl = 1;
+  for(var i = 0; i <= 5; i++) {
+    txt1 = txt1 + '<tr align="center">';
+    for(var j = 0; j <= 6; j++) {
+      txt1 = txt1 + '<td bgcolor="';
+      if((i == 0) && (j < Start))
+       txt1 = txt1 + '#FFFFFF"><font color="#000000" size="-1">&nbsp;</font>';
+      else {
+        if(Tageszahl > Stop)
+          txt1 = txt1 + '#FFFFFF"><font color="#000000" size="-1">&nbsp;</font>';
+        else {
+          if((Jahr==DiesesJahr)&&(Monat==DieserMonat)&&(Tageszahl==DieserTag)) txt1 = txt1 + '#FFFF00">';
+          else txt1 = txt1 + '#FFFFFF">';
+          txt1 = txt1 + '<a href="javascript:set_date('+t4+','+n4+',\\''+Tageszahl+'\\',\\''+Monat+'\\', \\''+Jahr+'\\');">';
+          if (j == 6) txt1 = txt1 + '<font color="E00000" size="-1">';
+          else txt1 = txt1 + '<font color="#000000" size="-1">';
+          txt1 = txt1 + Tageszahl++;
+          txt1 = txt1 + '</font></a>\\n';
+         }
+       }
+       txt1 = txt1 + '</td>\\n';
+    }
+     txt1 = txt1 + '</tr>\\n';
+  }
+  txt1 = txt1 + '</table>\\n';
+  return txt1;
+}
+
+function openKalenderWindow(t3, n3){
+	if (navigator.appName.indexOf("Netscape")== -1 && window["tf"]) window["tf"].close();
+	var tt = "";
+EOT2;
+		$jstxt .= "	tt = tt + '<html><head><title>"._('Kalender')."</title>\\n';";
+		$jstxt .= <<<EOT3
+	tt = tt + '<script type="text/javascript">\\n';
+	tt = tt + 'window.setTimeout("window.close()", 120000);\\n';
+	tt = tt + 'function set_date(t5, n5, t,m,j){\\n ';
+	tt = tt + '  switch (t5){\\n';
+	tt = tt + '    case 1:\\n';
+	tt = tt + '      feld_tag   = "tag";\\n';
+	tt = tt + '      feld_monat = "monat";\\n';
+	tt = tt + '      feld_jahr  = "jahr";\\n';
+	tt = tt + '      break;\\n';
+	tt = tt + '    case 2:\\n';
+	tt = tt + '      feld_tag   = "tag["+n5+"]";\\n';
+	tt = tt + '      feld_monat = "monat["+n5+"]";\\n';
+	tt = tt + '      feld_jahr  = "jahr["+n5+"]";\\n';
+	tt = tt + '      break;\\n';
+	tt = tt + '    case 5:\\n';
+	tt = tt + '      feld_tag   = "term_tag["+n5+"]";\\n';
+	tt = tt + '      feld_monat = "term_monat["+n5+"]";\\n';
+	tt = tt + '      feld_jahr  = "term_jahr["+n5+"]";\\n';
+	tt = tt + '      break;\\n';
+	tt = tt + '    case 6:\\n';
+	tt = tt + '      feld_tag   = "vor_tag";\\n';
+	tt = tt + '      feld_monat = "vor_monat";\\n';
+	tt = tt + '      feld_jahr  = "vor_jahr";\\n';
+	tt = tt + '      break;\\n';
+	tt = tt + '  }\\n';
+
+	tt = tt + '  opener.document.Formular.elements[feld_tag].value = (t < 10)? "0"+t:t;\\n ';
+	tt = tt + '  opener.document.Formular.elements[feld_monat].value = (m < 10)? "0"+m:m;\\n ';
+	tt = tt + '  opener.document.Formular.elements[feld_jahr].value = j;\\n ';
+	tt = tt + '  window.close();\\n}\\n ';
+	tt = tt + '</script>\\n';
+	tt = tt + '</head>\\n<body bgcolor="#FFFFFF">\\n';
+	tt = tt + '<table border="0"><tr valign="top">\\n';
+	var jmon = DieserMonat; var jjahr = DiesesJahr;
+	for (var ii = 1; ii < 9; ii++){
+		tt = tt + '<td>' + Kalender(t3, n3, jmon++,jjahr) + '</td>';
+		if (jmon > 12) {jmon = 1; jjahr++;}
+		if (ii == 4) tt = tt + '</tr><tr valign="top">';
+	}
+	tt = tt + '</tr></table>\\n</body></html>\\n';
+
+	if (navigator.appName.indexOf("Konqueror") != -1 )
+		tf = window.open("", "Kalender", "dependent=yes,width=700,height=450");
+	else
+		tf = window.open("about:blank", "Kalender", "dependent=yes,width=560,height=380");
+	window["tf"].document.write(tt);
+	window["tf"].focus();
+}
+
+  var jetzt = new Date();
+  var DieserMonat = jetzt.getMonth() + 1;
+  var DiesesJahr = jetzt.getYear();
+  if(DiesesJahr < 999) DiesesJahr+=1900;
+  var DieserTag = jetzt.getDate();
+EOT3;
+
+		$first = 0;
+	}
+
+	$jstxt .= 'write_js_zeile("'.$t.'", "'.$n.'", "'.$ss.'", "'.$sm.'", "'.$es.'", "'.$em. '");'. "\n";
+	$jstxt .= '//-->' . "\n";
+	$jstxt .= '</script>' . "\n";
+	return $jstxt;
 }
 
 ?>

@@ -640,7 +640,7 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 			}
 				?>
 			</td>
-		<form method="POST" action="<? echo $PHP_SELF; ?>#anchor">
+		<form method="POST" name="Formular" action="<? echo $PHP_SELF; ?>#anchor">
 
 			<?
 		if (!$admin_dates_data["insert_id"]) {
@@ -683,20 +683,20 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 		$titel.="<input type=\"TEXT\" style=\"font-size:8 pt;\" name=\"end_stunde\" maxlength=2 size=2 value=\"".$temp_default[6]."\"><font size=-1> :</font>";
 		$titel.="<input type=\"TEXT\" style=\"font-size:8 pt;\" name=\"end_minute\" maxlength=2 size=2 value=\"".$temp_default[7]."\"><font size=-1> " . _("Uhr") . ".</font>";
 		$titel.="<input type=\"HIDDEN\" name=\"termin_id\" value=\"".$admin_dates_data["insert_id"]."\">";
-		
+		$titel .= Kalender_Termine_javascript(1,0);
 		$icon="&nbsp;<img src=\"./pictures/termin-icon.gif\" border=0>";
 		$link=$PHP_SELF."?cancel=TRUE";
 
 		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"99%\" align=\"center\"><tr>";
 		printhead(0, 0, $link, "open", TRUE, $icon, $titel, $zusatz);
 		echo "</tr></table>	";
-		
+
 		//Contentbereich
 		$content='';
-		
+
 		$content.="<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" align=\"left\" width=\"100%\"><tr>\n";
 		$content.="<td class=\"steel1\" width=\"70%\" valign=\"top\">\n";
-	    	$content.="<input type=\"HIDDEN\" name=\"new\" value=\"TRUE\">";		
+	    	$content.="<input type=\"HIDDEN\" name=\"new\" value=\"TRUE\">";
 		$content.="<font size=-1><b>" . _("Titel:") . "</b></font><br /><input type=\"TEXT\" name=\"titel\" maxlength=255 size=".round($max_col*0.45)." value=\"";
 		if (!$perm->have_perm ("admin"))
 			$content.=$default_titel;
@@ -714,7 +714,7 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 		//only, if the docuements-folder is active
 		if ($modules["documents"])
 			$content.="<input type=\"CHECKBOX\" name=\"folder\"/><font size=-1>" . _("Dateiordner anlegen") . "</font>\n";
-		
+
 		$content.="</td>\n";
 		$content.="<td class=\"steel1\" width=\"30%\" valign=\"top\">\n";
 		$content.="<font size=-1>&nbsp;<b>" . _("Raum:") . "</b></font>";
@@ -726,7 +726,7 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 			$resList -> reset();
 			if ($resList->numberOfRooms()) {
 				$content.= "<br /><font size=-1>&nbsp;<select name=\"resource_id\"></font>";
-				$content.= ("<option value=\"FALSE\">[" . _("ausw&auml;hlen oder wie Eingabe") . "]</option>");												
+				$content.= ("<option value=\"FALSE\">[" . _("ausw&auml;hlen oder wie Eingabe") . "]</option>");
 				while ($res = $resList->next())
 					$content.= sprintf("<option %s value=\"%s\">%s</option>", ($new_date_resource_id && $new_date_resource_id == $res["resource_id"]) ? "selected" : "", $res["resource_id"], my_substr(htmlReady($res["name"]), 0, 30));
 				$content.= "</select></font>";
@@ -734,19 +734,19 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 		}
 		$content.="<br />&nbsp;<input type=\"TEXT\" name=\"raum\" maxlength=255 size=30 value=\"".htmlReady($new_date_room)."\"><br>\n";
 		$content.="&nbsp;<font size=-1><b>" . _("Art:") . "</b></font><br>&nbsp;<select name=\"art\">\n";
-		
+
 		for ($i=1; $i<=sizeof($TERMIN_TYP); $i++)
 			if ($db->f("date_typ") == $i)
 				$content.= "<option value=$i selected>".$TERMIN_TYP[$i]["name"]."</option>";
 			else
 				$content.= "<option value=$i>".$TERMIN_TYP[$i]["name"]."</option>";
 		$content.="</select><br><br>\n";
-				
+
 		$content.="</tr></td></table></td></tr>\n<tr><td class=\"steel1\" align=\"center\" colspan=2>";
 		$content.="<input type=\"IMAGE\" name=\"send\" border=0 " . makeButton("uebernehmen", "src") . " align=\"absmiddle\" value=\"speichern\">&nbsp;";
 		$content.="<a href=\"$PHP_SELF?cancel=TRUE\">" . makeButton("abbrechen", "img") . "</a><br /><br />";
 	 	$content.= "<a name=\"anchor\"></a>";
-		
+
 
 		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"99%\" align=\"center\"><tr>";
 		printcontent(0,1, $content, '');
@@ -754,9 +754,9 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 
 		?>
 		</form>
-		<?	
+		<?
 	}
-	
+
 	//..und alte Bearbeiten
 	$c=0;
 	while ($db->next_record()) {
@@ -797,19 +797,18 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 		}
 
 		//Ermitteln, ob Ordner an diesem Termin haengt
-		$c++;
 		$db2->query("SELECT folder_id FROM folder WHERE range_id='".$db->f("termin_id")."'");
 		if ($db2->num_rows())
 			$folder=TRUE;
 		else
 			$folder=FALSE;
-			
+
 		if (($show_id  == $db->f("termin_id")) || ($show_all)) {
 			print "<a name=\"#anchor\"></a>";
 			$edit=TRUE;
-		} else	
+		} else
 			$edit=FALSE;
-		
+
 		//Zusatz erstellen
 		if ((!$admin_dates_data["insert_id"]) && ($show_id  != $db->f("termin_id")) && (!$show_all))
 			$zusatz="<input type=\"CHECKBOX\" ".((($mark_all_x) || ($kill_selected)) ? "checked" : "")." name=\"kill_date[]\" value=\"". $db->f("termin_id")."". $db->f("topic_id")."\"><img src=\"pictures/trash.gif\" border=0 />";
@@ -818,39 +817,40 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 
 		//Link erstellen
 		if (($show_id  == $db->f("termin_id")) || ($show_all))
-			$link=$PHP_SELF."?range_id=".$admin_dates_data["range_id"]."&show_id=";			
+			$link=$PHP_SELF."?range_id=".$admin_dates_data["range_id"]."&show_id=";
 		else
 			$link=$PHP_SELF."?range_id=".$admin_dates_data["range_id"]."&show_id=".$db->f("termin_id")."#anchor";
-		
+
 		//Titel erstellen
 		$titel='';
 		if ($edit) {
-			$titel.="&nbsp;<input type=\"TEXT\" style=\"font-size:8 pt;\" name=\"tag[]\" maxlength=2 size=2 value=\"".$tag."\"><font size=-1>.</font>";
-			$titel.="<input type=\"TEXT\" style=\"font-size:8 pt;\" name=\"monat[]\" maxlength=2 size=2 value=\"".$monat."\"><font size=-1>.</font>";
-			$titel.="<input type=\"TEXT\" style=\"font-size:8 pt;\" name=\"jahr[]\" maxlength=4 size=4  value=\"".$jahr."\"><font size=-1>&nbsp;" . _("von") . "&nbsp;</font>";
-			$titel.="<input type=\"TEXT\" style=\"font-size:8 pt;\" name=\"stunde[]\" maxlength=2 size=2 value=\"".$stunde."\"><font size=-1> :</font>";
-			$titel.="<input type=\"TEXT\" style=\"font-size:8 pt;\" name=\"minute[]\" maxlength=2 size=2 value=\"".$minute."\"><font size=-1>&nbsp;" . _("bis") . "&nbsp;</font>";
-			$titel.="<input type=\"TEXT\" style=\"font-size:8 pt;\" name=\"end_stunde[]\" maxlength=2 size=2 value=\"".$end_stunde."\"><font size=-1> :</font>";
-			$titel.="<input type=\"TEXT\" style=\"font-size:8 pt;\" name=\"end_minute[]\" maxlength=2 size=2 value=\"".$end_minute."\"><font size=-1> " . _("Uhr") . ".</font>";
-		    	$titel.="<input type=\"HIDDEN\" name=\"termin_id[]\" value=\"".$db->f("termin_id")."\">";
-			$titel.="<input type=\"HIDDEN\" name=\"topic_id[]\" value=\"".$topic_id."\">";
+			$titel.="&nbsp;<input type=\"TEXT\" style=\"font-size:8 pt;\" name=\"tag[$c]\" maxlength=2 size=2 value=\"".sprintf('%02d',$tag)."\"><font size=-1>.</font>";
+			$titel.="<input type=\"TEXT\" style=\"font-size:8 pt;\" name=\"monat[$c]\" maxlength=2 size=2 value=\"".sprintf('%02d',$monat)."\"><font size=-1>.</font>";
+			$titel.="<input type=\"TEXT\" style=\"font-size:8 pt;\" name=\"jahr[$c]\" maxlength=4 size=4  value=\"".sprintf('%04d',$jahr)."\"><font size=-1>&nbsp;" . _("von") . "&nbsp;</font>";
+			$titel.="<input type=\"TEXT\" style=\"font-size:8 pt;\" name=\"stunde[$c]\" maxlength=2 size=2 value=\"".sprintf('%02d',$stunde)."\"><font size=-1> :</font>";
+			$titel.="<input type=\"TEXT\" style=\"font-size:8 pt;\" name=\"minute[$c]\" maxlength=2 size=2 value=\"".sprintf('%02d',$minute)."\"><font size=-1>&nbsp;" . _("bis") . "&nbsp;</font>";
+			$titel.="<input type=\"TEXT\" style=\"font-size:8 pt;\" name=\"end_stunde[$c]\" maxlength=2 size=2 value=\"".sprintf('%02d',$end_stunde)."\"><font size=-1> :</font>";
+			$titel.="<input type=\"TEXT\" style=\"font-size:8 pt;\" name=\"end_minute[$c]\" maxlength=2 size=2 value=\"".sprintf('%02d',$end_minute)."\"><font size=-1> " . _("Uhr") . ".</font>";
+		    	$titel.="<input type=\"HIDDEN\" name=\"termin_id[$c]\" value=\"".$db->f("termin_id")."\">";
+			$titel.="<input type=\"HIDDEN\" name=\"topic_id[$c]\" value=\"".$topic_id."\">";
+			$titel .= Kalender_Termine_javascript(2,$c,sprintf('%02d',$stunde),sprintf('%02d',$minute),sprintf('%02d',$end_stunde),sprintf('%02d',$end_minute));
 		} else {
-			$titel .= substr(strftime("%a",$db->f("date")),0,2);		
+			$titel .= substr(strftime("%a",$db->f("date")),0,2);
 			$titel.= date (". d.m.Y, H:i", $db->f("date"));
 			if ($db->f("date") <$db->f("end_time"))
 				$titel.= " - ".date ("H:i", $db->f("end_time"));
 			if ($db->f("content")) {
-				$tmp_titel=htmlReady(mila($db->f("content"))); //Beschneiden des Titels			
+				$tmp_titel=htmlReady(mila($db->f("content"))); //Beschneiden des Titels
 				$titel.=", ".$tmp_titel;
 			}
 			$titel = "<a class=\"tree\" href=\"".$link."\">".$titel."</a>";
 		}
 		if (($show_id  == $db->f("termin_id")) && (!$result))
 		 	$titel.= "<a name=\"anchor\"></a>";
-		
+
 		//Icon erstellen
 		$icon="&nbsp;<img src=\"./pictures/termin-icon.gif\" border=0>";
-		
+
 		if ($db->f("chdate") > $loginfilelast[$SessSemName[1]])
 			$neuer_termin=TRUE;
 		else
@@ -858,52 +858,52 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 
 
 		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"99%\" align=\"center\"><tr>";
-		
+
 		if (($show_id  == $db->f("termin_id")) || ($show_all))
 			printhead(0, 0, $link, "open", $neuer_termin, $icon, $titel, $zusatz, $db->f("mkdate"));
 		else
 			printhead(0, 0, $link, "close", $neuer_termin, $icon, $titel, $zusatz, $db->f("mkdate"));
 
 		echo "</tr></table>	";
-		
+
 		//Contentbereich
 		if (($show_id  == $db->f("termin_id")) || ($show_all)) {
-			$content='';		
+			$content='';
 			if ($edit) {
 				$content.="<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" align=\"left\"width=\"100%\"><tr>\n";
 				$content.="<td class=\"steel1\" width=\"70%\" valign=\"top\">\n";
-				
+
 				if (!$show_all) {
 					$content.="<input type=\"HIDDEN\" name=\"show_id\" value=\"". $db->f("termin_id")."\">";
 				}
-				
-				$content.="<font size=-1><b>" . _("Titel:") . "</b><br /><input type=\"TEXT\" name=\"titel[]\" maxlength=255 size=".round($max_col*0.45)." value=\"".htmlReady($t_titel)."\"><br />";
-				$content.="<b>"._("Beschreibung:") . "</b><br><textarea style=\"width:98%\" cols=\"". round($max_col*0.45)."\" rows=3 name=\"description[]\"  wrap=\"virtual\">".htmlReady($description)."</textarea>\n";
-				
+
+				$content.="<font size=-1><b>" . _("Titel:") . "</b><br /><input type=\"TEXT\" name=\"titel[$c]\" maxlength=255 size=".round($max_col*0.45)." value=\"".htmlReady($t_titel)."\"><br />";
+				$content.="<b>"._("Beschreibung:") . "</b><br><textarea style=\"width:98%\" cols=\"". round($max_col*0.45)."\" rows=3 name=\"description[$c]\"  wrap=\"virtual\">".htmlReady($description)."</textarea>\n";
+
 				if (($modules["forum"]) || ($modules["documents"]))
 					$content.="<font size=-1><b>" . _("Verkn&uuml;pfungen mit diesem Termin:") . "</b><br />";
 
 				//only, if the forum is active
 				if ($modules["forum"]) {
-					if ($topic_id) 
+					if ($topic_id)
 						$content.= _("Forenthema vorhanden") . "<br>";
 					else
-						$content.= sprintf ("<input type=\"CHECKBOX\" name=\"insert_topic[] %s \"/>" . _("Thema im Forum anlegen") . "<br />\n", ($insert_topic) ? TRUE : FALSE);
+						$content.= sprintf ("<input type=\"CHECKBOX\" name=\"insert_topic[$c] %s \"/>" . _("Thema im Forum anlegen") . "<br />\n", ($insert_topic) ? TRUE : FALSE);
 				}
-	
+
 				//only, if the documents-folder is active
 				if ($modules["documents"]) {
 					if ($folder)
 						$content.= _("Dateiordner vorhanden");
 					else
-						$content.= sprintf ("<input type=\"CHECKBOX\" name=\"insert_folder[] %s \"/>" . _("Dateiordner anlegen") . "\n", ($insert_folder) ? TRUE : FALSE);
+						$content.= sprintf ("<input type=\"CHECKBOX\" name=\"insert_folder[$c] %s \"/>" . _("Dateiordner anlegen") . "\n", ($insert_folder) ? TRUE : FALSE);
 				}
 
 				$content.="</font></td>\n";
 				$content.="<td class=\"steel1\" width=\"30%\" valign=\"top\">\n";
-				
+
 				//type of date
-				$content.="<font size=-1>&nbsp;<b>" . _("Art:") . "</b><br>&nbsp;<select name=\"art[]\">\n";
+				$content.="<font size=-1>&nbsp;<b>" . _("Art:") . "</b><br>&nbsp;<select name=\"art[$c]\">\n";
 				for ($i=1; $i<=sizeof($TERMIN_TYP); $i++)
 					if ($art == $i)
 						$content.= "<option value=$i selected>".$TERMIN_TYP[$i]["name"]."</option>";
@@ -911,15 +911,15 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 						$content.= "<option value=$i>".$TERMIN_TYP[$i]["name"]."</option>";
 				$content.="</select><br><br>\n";
 
-				
+
 				//room
 				$content.="<font size=-1><b>&nbsp;" . _("Raum:")."</b>";
-				
+
 				//show list of rooms, the user has perms on
 				if ($RESOURCES_ENABLE) {
 					$resList -> reset();
 					if ($resList->numberOfRooms()) {
-						$content.= "<br />&nbsp;<select name=\"resource_id[]\">";
+						$content.= "<br />&nbsp;<select name=\"resource_id[$c]\">";
 						$content.= sprintf("<option %s value=\"NULL\">[" . (($resource_id) ? _("gebuchter Raum oder ausw&auml;hlen") : _("ausw&auml;hlen oder wie Eingabe")) . "]</option>", (!$resource_id) ? "selected" : "");
 						if ($resource_id)
 							$content.= "<option value=\"FALSE\">["._("kein gebuchter Raum") ."]</option>";
@@ -928,9 +928,9 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 						$content.= "</select>";
 					}
 				}
-				
+
 				//the free field for room-information
-				$content.="<br />&nbsp;<input type=\"TEXT\"  name=\"raum[]\" maxlength=255 size=30 value=\"". htmlReady($raum)."\">\n";
+				$content.="<br />&nbsp;<input type=\"TEXT\"  name=\"raum[$c]\" maxlength=255 size=30 value=\"". htmlReady($raum)."\">\n";
 
 				//show the booked room
 				if ($RESOURCES_ENABLE) {
@@ -941,34 +941,36 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 					} else
 						$content.="&nbsp;"._("kein gebuchter Raum")."\n";
 				}
-				
+
 				//link to admin_room_requests.php
 				if ($RESOURCES_ENABLE && $RESOURCES_ALLOW_ROOM_REQUESTS) {
 					if (getDateRoomRequest($db->f("termin_id")))
 						$content.="<br /><br />&nbsp;<img src=\"pictures/link_intern.gif\" border=\"0\" />&nbsp;<a href=\"admin_room_requests.php?seminar_id=".$admin_dates_data["range_id"]."&termin_id=".$db->f("termin_id")."\">"._("Raumanfrage <b>bearbeiten</b>")."</a><br>\n";
 					else
-						$content.="<br /><br />&nbsp;<img src=\"pictures/link_intern.gif\" border=\"0\" />&nbsp;<a href=\"admin_room_requests.php?seminar_id=".$admin_dates_data["range_id"]."&termin_id=".$db->f("termin_id")."\">"._("Raumanfrage <b>erstellen<b/b>")."</a><br>\n";					
+						$content.="<br /><br />&nbsp;<img src=\"pictures/link_intern.gif\" border=\"0\" />&nbsp;<a href=\"admin_room_requests.php?seminar_id=".$admin_dates_data["range_id"]."&termin_id=".$db->f("termin_id")."\">"._("Raumanfrage <b>erstellen<b/b>")."</a><br>\n";
 				}
-				
+
 				$content.="</font></td></tr></table></td></tr>\n<tr><td class=\"steel1\" align=\"center\" colspan=2>";
 
 				echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"99%\" align=\"center\"><tr>";
-				
+
 				if (!$show_all)
 					$content.="<input type=\"IMAGE\" name=\"edit\" border=0 " . makeButton("uebernehmen", "src") . " align=\"absmiddle\" value=\"verändern\"><br /><br />";
 				printcontent(0,1, $content, '');
+				$c++;
 			}
-		
+
 			echo "</td></tr></table>";
 		}
+
 	}
 	?>
 	<table border="0" cellpadding="2" cellspacing="0" width="99%" align="center">
 		<tr>
-			<td class="blank" >	&nbsp; 
+			<td class="blank" >	&nbsp;
 			</td>
 		</tr>
-	<?	
+	<?
 	if ((!$admin_dates_data["insert_id"]) && (($show_all) || ($c>10))) {
 		?>
 		<tr align="left" height="22">
