@@ -189,7 +189,7 @@ if ($close) {
 ?>
 
 <table cellspacing="0" cellpadding="0" border="0" width="100%">
-<tr><td class="topic" colspan="2"><b>&nbsp;<img src="pictures/icon-disc.gif" align=absmiddle>&nbsp; <? echo htmlReady($SessSemName["art"]) . ": ", htmlReady($SessSemName[0]) .  " - Dateien"; ?></b></td></tr>
+<tr><td class="topic" colspan="2"><b>&nbsp;<img src="pictures/icon-disc.gif" align=absmiddle>&nbsp; <? echo htmlReady($SessSemName["header_line"]) . ": ", htmlReady($SessSemName[0]) .  " - Dateien"; ?></b></td></tr>
 
 		<tr>
 			<td class="blank" colspan=2>&nbsp;

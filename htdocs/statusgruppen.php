@@ -153,7 +153,7 @@ function PrintNonMembers ($range_id)
 
 <table cellspacing="0" cellpadding="0" border="0" width="100%">
 	<tr>
-		<td class="topic" colspan="2"><b>&nbsp;<? echo $SessSemName["art"],": ",htmlReady($SessSemName[0]); ?> - Funktion / Gruppen</b>
+		<td class="topic" colspan="2"><b>&nbsp;<? echo $SessSemName["header_line"],": ",htmlReady($SessSemName[0]); ?> - Funktion / Gruppen</b>
 		</td>
 	</tr>
 	<tr>
