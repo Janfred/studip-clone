@@ -28,6 +28,15 @@ TD.links1 {background-image: url('pictures/fill2.gif');}
 TD.reiterunten {background: url('pictures/reiter3.jpg');}
 
 table.header { background-image: url('pictures/fill1.gif');}
+
+table.toolbar { background-image: url('pictures/toolbarbg.gif');}
+TD.toolbar {background: url('pictures/toolbarbg.gif');}
+
+A:link.toolbar {color: #91A2B6; text-decoration: none;font-family: Arial, Helvetica, sans-serif; font-size:9pt;}
+A:visited.toolbar {color: #91A2B6; text-decoration: none;font-family: Arial, Helvetica, sans-serif; font-size:9pt;}
+A:hover.toolbar {color: #EEEEEE;text-decoration: none;font-family: Arial, Helvetica, sans-serif ;font-size:9pt;}
+
+
 TD.topic {border:0px solid #000000; background: url('pictures/fill1.gif'); color:#FFFFFF; font-family:Arial, Helvetica, sans-serif; background-color:#4A5681  }
 TD.topicwrite {border:0px solid #000000; background: url('pictures/fill1write.gif'); color:#FFFFFF; font-family:Arial, Helvetica, sans-serif; background-color:#4A5681  }
 TD.header {background: url('pictures/fill1.gif');}

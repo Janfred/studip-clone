@@ -42,6 +42,15 @@ require_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/ChatShmServer.class.php
 require_once ($ABSOLUTE_PATH_STUDIP . "visual.inc.php");
 require_once ($ABSOLUTE_PATH_STUDIP . "functions.php");
 
+function MakeToolbar($icon,$URL,$text,$tooltip,$size,$target,$align="center")
+{
+	$toolbar = "<td class=\"toolbar\" align=\"$align\">";
+	$toolbar .= "<img border=\"0\" src=\"pictures/blank.gif\" height=\"2\" width=\"50\"><br>"
+			  ."<a class=\"toolbar\" href=\"$URL\" target=\"$target\"><img border=\"0\" src=\"$icon\" ".tooltip($tooltip)."><br>"
+			  ."$text</a>";
+	$toolbar .= "</td>\n";
+	return $toolbar;
+}
 
 //nur sinnvoll wenn chat eingeschaltet
 if ($CHAT_ENABLE) {
@@ -112,112 +121,122 @@ if ($auth->auth["uid"] == "nobody") { ?>
 				$altm++;
 		}
 
-		//Nachrichten auf Wunsch anzeigen
+
 		?>
-
-		<table class="header" border="0" width="100%" background="pictures/fill1.gif" cellspacing="0" cellpadding="0" bordercolor="#999999" height="25">
+		<table class="toolbar" border="0" width="100%" cellspacing="0" cellpadding="0">
+		<tr>
+		<td width="40%">
+			<table class="toolbar" border="0" width="100%" cellspacing="0" cellpadding="0">
 			<tr>
-				<td class="header" width="33%" valign="bottom" background="pictures/fill1.gif">
-					&nbsp;<a href="index.php" target="_top"><img border="0" src="pictures/home.gif" <?=tooltip(_("Zurück zur Startseite"))?> width="24" height="21"></a>
-					&nbsp;<a href="./help/index.php<?echo $help_query?>" target="_new"><img border="0" src="pictures/hilfe.gif" <?=tooltip(_("Hilfe"))?> width="24" height="21"></a>
-					&nbsp;<a href="meine_seminare.php"><img border="0" src="pictures/meinesem.gif" <?=tooltip(_("Meine Veranstaltungen & Einrichtungen"))?> width="24" height="21"></a>
-				<?
+<?
+				echo MakeToolbar("pictures/home.gif","index.php","Start",_("Zurück zur Startseite"),40,"_top");
+				echo MakeToolbar("pictures/meinesem.gif","meine_seminare.php","Veranstaltungen",_("Meine Veranstaltungen & Einrichtungen"),40, "_top","left");
+
+
 				if (!($perm->have_perm("admin") || $perm->have_perm("root"))) {
-					echo "&nbsp;<a href=\"./calendar.php\">";
-					echo "<img border=\"0\" src=\"pictures/meinetermine.gif\" ";
-					echo tooltip(_("Meine Terminverwaltung")) . "width=\"24\" height=\"21\"></a>";
+					echo MakeToolbar("pictures/meinetermine.gif","./calendar.php","Planer",_("Meine Termine und Kontakte"),40, "_top");
 				}
-				?>
-					&nbsp;&nbsp;&nbsp;
+//Nachrichten anzeigen
 
-
-<?	if ((($altm) && (!$neum)) || ((($altm+$neum) >0) && ($i_page == "sms.php")))
-			if ($altm > 1)
-				echo "&nbsp;<a href=\"sms.php\" ><img border='0' src='pictures/nachricht1.gif' ".tooltip(sprintf(_("Sie haben %s alte Nachrichten!"), $altm))."></a>&nbsp;&nbsp;&nbsp;";
-			else
-				echo "&nbsp;<a href=\"sms.php\" ><img border='0' src='pictures/nachricht1.gif' ".tooltip(_("Sie haben eine alte Nachricht!"))."></a>&nbsp;&nbsp;&nbsp;";
-		elseif (($neum) && ($i_page != "sms.php"))
-			if ($neum > 1)
-				echo "&nbsp;<a href=\"sms.php\" ><img border='0' src='pictures/nachricht2.gif' ".tooltip(sprintf(_("Sie haben %s neue Nachrichten!"), $neum))."></a>&nbsp;&nbsp;&nbsp;";
-			else
-				echo "&nbsp;<a href=\"sms.php\" ><img border='0' src='pictures/nachricht2.gif' ".tooltip(_("Sie haben eine neue Nachricht!"))."></a>&nbsp;&nbsp;&nbsp;";
-		else
-			echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+	if ((($altm) && (!$neum)) || ((($altm+$neum) >0) && ($i_page == "sms.php"))) {
+		$icon = "pictures/nachricht1.gif";
+		$text = "Post";
+		if ($altm > 1) {
+			$tip = sprintf(_("Sie haben %s alte Nachrichten!"), $altm);
+		} else {
+			$tip = _("Sie haben eine alte Nachricht!");
+		}
+	} elseif (($neum) && ($i_page != "sms.php")) {
+		$icon = "pictures/nachricht2.gif";		
+		$text = "Nachrichten";
+		if ($neum > 1) {
+			$tip = sprintf(_("Sie haben %s neue Nachrichten!"), $neum);
+		} else {
+			$tip = _("Sie haben eine neue Nachricht!");
+		}
+	} else {
+		$icon = "pictures/blank.gif";
+		$tip = "";
+		$text = "";
+	}
+	
+		echo MakeToolbar($icon,"sms.php",$text,$tip,40, "_top");
 
 		// wurde ich zum Chat eingeladen? Wenn nicht, nachsehen ob wer im Chat ist
           //Version für neuen Chat (vorläufig)
   	if ($CHAT_ENABLE) {
     	if (($chatm) && ($i_page != "sms.php") && (!$chatServer->isActiveUser($user->id,"studip"))) {
-				echo "<a href=\"javascript:open_chat();\"><img border='0' src='pictures/chateinladung.gif' ".tooltip(_("Sie wurden zum Chatten eingeladen!"))."></a>\n";
+				echo MakeToolbar("pictures/chateinladung.gif","javascript:open_chat();","Chat",_("Sie wurden zum Chatten eingeladen!"),40,"_top");
 			} else {
       	$chatter=$chatServer->getActiveUsers("studip");
    			if ($chatter == 1)
    		  	if ($chatServer->isActiveUser($user->id,"studip"))	
-						printf ("<a href=\"javascript:open_chat();\"><img border='0' src='pictures/chat3.gif' ".tooltip(_("Sie sind alleine im Chat"))."></a>");
+						echo MakeToolbar("pictures/chat3.gif","javascript:open_chat();","Chat",_("Sie sind alleine im Chat"),40,"_top");
 					else
-						printf ("<a href=\"javascript:open_chat();\"><img border='0' src='pictures/chat2.gif' ".tooltip(_("Es ist eine Person im Chat"))."></a>");
+						echo MakeToolbar("pictures/chat2.gif","javascript:open_chat();","Chat",_("Es ist eine Person im Chat"),40,"_top");
 				elseif ($chatter > 1)
-					print ("<a href=\"javascript:open_chat();\"><img border='0' src='pictures/chat2.gif' ".tooltip(sprintf(_("Es sind %s Personen im Chat"), $chatter))."></a>");
+					echo MakeToolbar("pictures/chat2.gif","javascript:open_chat();","Chat",sprintf(_("Es sind %s Personen im Chat"), $chatter),40,"_top");
       	else
-					echo "<a href=\"javascript:open_chat();\"><img border='0' src='pictures/chat1.gif' ".tooltip(_("Es ist niemand im Chat"))."></a>";
+					echo MakeToolbar("pictures/chat1.gif","javascript:open_chat();","Chat",_("Es ist niemand im Chat"),40,"_top");
 			}
 		} else {
-			echo "&nbsp;&nbsp;";
+//			echo MakeToolbar("pictures/blank.gif","","","",40,"_top");
 		}
-
-
-		echo "&nbsp;&nbsp;&nbsp;";
 
 		// Ist sonst noch wer da?
 		if (!count($online))
-			print "<a href=\"online.php\"><img src='pictures/nutzer.gif' ".tooltip(_("Nur Sie sind online"))." border='0'></a>";
+			echo MakeToolbar("pictures/nutzer.gif","online.php","Online",_("Nur Sie sind online"),40, "_top");
 		else {
-			if (count($online)==1) print "<a href=\"online.php\"><img src='pictures/nutzeronline.gif' ".tooltip(_("Außer Ihnen ist eine Person online"))." border='0'></a>";
-			else {
-				print("<a href=\"online.php\"><img src=\"pictures/nutzeronline.gif\" " . tooltip(sprintf(_("Es sind außer Ihnen %s Personen online"), count($online))) . " border='0'></a>");
+			if (count($online)==1) {
+				echo MakeToolbar("pictures/nutzeronline.gif","online.php","Online",_("Außer Ihnen ist eine Person online"),40, "_top");
+			} else {
+				echo MakeToolbar("pictures/nutzeronline.gif","online.php","Online",sprintf(_("Es sind außer Ihnen %s Personen online"), count($online)),40, "_top");
 			}
 		}
 
 ?>
-		</td>
-
-		<td class="angemeldet" width="20%" nowrap bgcolor="#C0C0C0" valign="middle" align="center" background="pictures/kaverl1b.jpg">
-			<font color="#000080">
-<?		printf(_("angemeldet als %s"), $auth->auth["uname"]);
-?>
-			<img border="0" src="pictures/info.gif"
-			<? //create (javascript) info tooltip/window
+	</tr>
+	</table>
+	</td>
+	<td width="20%" align="center">
+		<table class="toolbar" border="0" width="100%" cellspacing="0" cellpadding="0">
+		<tr align="center">
+<? //create (javascript) info tooltip/window
 				$infotext = sprintf (_("Sie sind angemeldet als: %s mit der Berechtigung: %s. Beginn der Session: %s,  letztes Login: %s, %s,  Auflösung: %sx%s, eingestellte Sprache: %s"),
 								$auth->auth["uname"], $auth->auth["perm"], date ("d. M Y, H:i:s", $SessionStart), date ("d. M Y, H:i:s", $LastLogin),
 								($auth->auth["jscript"]) ? _("JavaScript eingeschaltet") : _("JavaScript ausgeschaltet"), $auth->auth["xres"], $auth->auth["yres"], $INSTALLED_LANGUAGES[$_language]["name"]);
-				print tooltip($infotext, TRUE, TRUE);
-			?>
-			>
-			</font>
-		</td>
-
-		<td class="header" width="33%" nowrap valign="bottom" align="right" background="pictures/fill1.gif">
-
+				echo MakeToolbar("pictures/logo2.gif","Impressum.php",_("Impressum"),$infotext,40, "_top");
+?>
+	</tr>
+	</table>
+	</td>
+	<td width="40%" align="right">
+		<table class="toolbar" border="0" width="100%" cellspacing="0" cellpadding="0">
+		<tr>
 <?
+
 		if ($perm->have_perm("autor")) {
-			echo"&nbsp;<a href=\"about.php\"><img border='0' src='pictures/einst.gif' ".tooltip(_("Zu Ihrer Einstellungsseite"))."></a>\n";
-			echo"&nbsp;<a href=\"auswahl_suche.php\"><img border='0' src='pictures/suchen.gif' ".tooltip(_("Im System suchen"))."></a>\n";
+			echo MakeToolbar("pictures/einst.gif","about.php",_("Homepage"),_("Zu Ihrer Einstellungsseite"),40, "_top");
+			echo MakeToolbar("pictures/suchen.gif","auswahl_suche.php",_("Suche"),_("Im System suchen"),40, "_top");
 		}
 
 		if ($perm->have_perm("tutor")) {
-			echo"&nbsp;<a href=\"adminarea_start.php?list=TRUE\"><img border='0' src='pictures/admin.gif' ".tooltip(_("Zu Ihrer Administrationsseite"))."></a>\n";
+			echo MakeToolbar("pictures/admin.gif","adminarea_start.php?list=TRUE",_("Admin"),_("Zu Ihrer Administrationsseite"),40, "_top");
 		}
+
+		echo MakeToolbar("pictures/hilfe.gif","./help/index.php$help_query","Hilfestellung",_("Hilfe zu dieser Seite"),40, "_new","right");
+		echo MakeToolbar("pictures/logout.gif","logout.php",_("Logout"),_("Aus dem System abmelden"),40, "_top");
+
 ?>
-
-			&nbsp;&nbsp;<a href="impressum.php"><img border="0" src="pictures/logo2.gif" <?=tooltip(_("Impressum"))?>></a>
-			&nbsp;&nbsp;<a href="logout.php"><img border="0" src="pictures/logout.gif" <?=tooltip(_("Aus dem System abmelden"))?>></a>&nbsp;
-
-		</td>
 	</tr>
 </table>
-<?
-	}
+</td>
+</tr>
+</table>
 
+<?
+
+	}
 	echo"<body><br>\n";
 	ob_end_flush();
 
