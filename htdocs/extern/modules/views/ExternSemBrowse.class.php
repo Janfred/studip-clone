@@ -113,7 +113,6 @@ class ExternSemBrowse extends SemBrowse {
 				WHERE seminare.Seminar_id IN('" . join("','", array_keys($this->sem_browse_data['search_result']))
 				 . "')$sem_inst_query";
 				 
-			echo "<br>$query<br>";
 			$db = new DB_Seminar($query);
 			$snap = new DbSnapShot($db);
 			$group_field = $this->group_by_fields[$this->sem_browse_data['group_by']]['group_field'];
@@ -239,11 +238,6 @@ class ExternSemBrowse extends SemBrowse {
 				echo $group_by_name[$this->sem_browse_data['group_by']];
 				echo "</font></td></tr>";
 			}
-			
-			echo "<pre>";
-			print_r($group_by_data);
-			echo "</pre>";
-			
 			
 			foreach ($group_by_data as $group_field => $sem_ids) {
 				echo "\n<tr" . $this->config->getAttributes("Grouping", "tr") . ">";
