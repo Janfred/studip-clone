@@ -350,7 +350,7 @@ function forum_get_buttons ($forumposting) {
 			$edit .= "&nbsp;<a href=\"".$PHP_SELF."?delete_id=".$forumposting["id"]."&view=".$forum["view"]."&flatviewstartposting=".$forum["flatviewstartposting"]."\">"
 			. makeButton("loeschen", "img") . "</a>";
 		if ($rechte)  // ich darf verschieben
-			$edit .= "&nbsp;<a href=\"".$PHP_SELF."?cmd=move&topic_id=".$forumposting["id"]."&view=".$forum["view"]."\">"
+			$edit .= "&nbsp;<a href=\"".$PHP_SELF."?cmd=move&topic_id=".$forumposting["id"]."&view=tree\">"
 			. makeButton("verschieben", "img") . "</a>";
 	} elseif ($user->id == "nobody") { 	// darf Nobody hier schreiben?
 		$db=new DB_Seminar;
@@ -818,11 +818,11 @@ function DisplayFolders ($open=0, $update="", $zitat="") {
 		}
 		echo "</td></tr><tr>";
 		echo "<td class=\"steelgraudunkel\" width=\"33%\"><b><font size=\"-1\">&nbsp;" . _("Thema") . "</font></b></td>";
-		echo "<td class=\"steelgraudunkel\" width=\"33%\"align=\"center\"><font size=\"-1\">";
+		echo "<td class=\"steelgraudunkel\" width=\"33%\" align=\"center\"><font size=\"-1\">&nbsp;&nbsp;";
 		if ($forum["view"] == "tree")
-			echo "treeview / <a href=\"".$PHP_SELF."?view=mixed\">flatview</a>";
+			echo "<a href=\"".$PHP_SELF."?view=mixed\"><img src=\"pictures/forumtree.gif\" border=\"0\" align=\"top\"></a>";
 		else
-			echo "<a href=\"".$PHP_SELF."?view=tree\">treeview</a> / flatview";
+			echo "<a href=\"".$PHP_SELF."?view=tree\"><img src=\"pictures/forumflat.gif\" border=\"0\" align=\"top\"></a>";
 		echo "</font><img src=\"pictures/forumleer.gif\" border=0 height=\"20\" align=\"middle\"></td>";
 		echo "<td class=\"steelgraudunkel\" width=\"33%\"align=\"right\"><font size=\"-1\">" . _("<b>Postings</b> / letzter Eintrag") . "&nbsp;&nbsp;</font></td></tr></table>\n";
 		while ($db->next_record()) {
@@ -974,5 +974,104 @@ $searchfield = "
 </tr></table>";
 return $searchfield;
 }
+	
+function forum_move_navi ($topic_id) {
+	global $perm, $user, $forum, $view, $PHP_SELF;
+	
+	$mutter = suche_kinder($topic_id);
+	$mutter = explode (";",$mutter);
+	$count = sizeof($mutter)-2;
+	
+	// wohin darf ich schieben? Abfragen je nach Rechten
+	
+	if ($perm->have_perm("tutor") OR $perm->have_perm("dozent"))
+		$query = "SELECT DISTINCT seminare.Seminar_id, seminare.Name FROM seminar_user LEFT JOIN seminare USING(Seminar_id) WHERE user_id ='$user->id ' AND (seminar_user.status = 'tutor' OR seminar_user.status = 'dozent') ORDER BY Name";
+	if ($perm->have_perm("admin"))
+		$query = "SELECT seminare.* FROM user_inst LEFT JOIN Institute USING (Institut_id) LEFT JOIN seminare USING(Institut_id) LEFT OUTER JOIN seminar_user USING(Seminar_id) WHERE user_inst.inst_perms='admin' AND user_inst.user_id='$user->id' AND seminare.Institut_id is not NULL GROUP BY seminare.Seminar_id ORDER BY seminare.Name";
+	if ($perm->have_perm("root"))
+		$query = "SELECT Seminar_id, Name FROM seminare ORDER BY Name";
+	$db=new DB_Seminar;
+	$db->query($query);
+
+	if ($perm->have_perm("tutor") OR $perm->have_perm("dozent") OR $perm->have_perm("admin")) {
+		$query2 = "SELECT Institute.Institut_id, Name FROM user_inst LEFT JOIN Institute USING(Institut_id) WHERE user_id = '$user->id' AND (inst_perms = 'tutor' OR inst_perms = 'dozent' OR inst_perms = 'admin') ORDER BY Name";	
+		$db2=new DB_Seminar;
+		$db2->query($query2);
+	}
+	if ($perm->have_perm("root")) {
+		$query2 = "SELECT Institut_id, Name FROM Institute ORDER BY Name";
+		$db2=new DB_Seminar;
+		$db2->query($query2);
+	}
+
+?>	
+			<tr><td class="blank" colspan="2"><table border="0" cellpadding="0" cellspacing="0"><tr>
+				<td class="steel2" colspan="2">
+					&nbsp; <img src="pictures/move.gif" border="0">&nbsp;<b><font size="-1"><?=sprintf(_("Als Thema verschieben (zusammen mit %s Antworten):"), $count)?></font></b>
+				</td>
+			</tr>
+			<tr>
+				<td class="steel1" colspan="2">
+					&nbsp; 
+				</td>
+			</tr>
+			<tr>
+				<td class="steel1" align="right" nowrap width="20%" valign="baseline">
+					<font size="-1"><?=_("in anderes Forum:")?></font>&nbsp; &nbsp; 
+				</td>
+				<td class="steel1" width="80%">
+			<? 		echo "<form action=\"".$PHP_SELF."\" method=\"POST\">"; ?>
+					<input type="image" name="SUBMIT" value="Verschieben" src="pictures/move.gif" border="0" <?=tooltip(_("dahin verschieben"))?>>&nbsp; 					
+					<select Name="sem_id" size="1">
+			<?		while ($db->next_record()) {
+						$sem_name=htmlReady(substr($db->f("Name"), 0, 50));
+						printf ("<option %s value=\"%s\">%s\n", $db->f("Seminar_id") == $SessSemName[1] ? "selected" : "", $db->f("Seminar_id"), $sem_name);
+					}
+			?>	</select>
+					<input type="HIDDEN" name="target" value="Seminar">
+					<input type="HIDDEN" name="topic_id" value="<?echo $topic_id;?>">
+					<input type="HIDDEN" name="view" value="<?echo $view;?>">
+		  		</form>
+				</td>
+			</tr>
+			<?
+		if ($db2->num_rows()) {   // Es kann auch in Institute verschoben werden
+		?>
+			<tr>
+				<td class="steel1" align="right" nowrap width="20%" valign="baseline">
+			  		<font size="-1"><?=_("in andere Einrichtung:")?></font>&nbsp; &nbsp; 
+			  	</td>
+				<td class="steel1" width="80%">
+			<? 		echo "<form action=\"".$PHP_SELF."\" method=\"POST\">"; ?>
+					<input type=image name="SUBMIT" value="Verschieben" src="pictures/move.gif" border=0 <?=tooltip(_("dahin verschieben"))?>>&nbsp; 						
+			  	<select Name="inst_id" size="1">
+			<?		while ($db2->next_record()) {
+						$inst_name=htmlReady(substr($db2->f("Name"), 0, 50));
+						printf ("<option value=\"%s\">%s\n", $db2->f("Institut_id"), $inst_name);
+					}
+			?>	</select>
+					<input type="HIDDEN" name="target" value="Institut">
+					<input type="HIDDEN" name="topic_id" value="<?echo $topic_id;?>">
+					<input type="HIDDEN" name="view" value="<?echo $view;?>">
+		  		</form>
+				</td>
+			</tr>
+		<?
+		}
+		?>
+			<tr valign="middle">
+				<td class="steel1" align="right" nowrap width="20%">
+					&nbsp; 
+				</td>
+				<td class="steel1" width="80%">	
+				<br>
+			  	<? echo "<a href=\"".$PHP_SELF."?view=$view\">".makeButton("abbrechen", "img")."</a>";?>
+		  		</td>
+  			</tr>
+  		</table></td></tr>
+<?		
+}
+
+
 
 ?>

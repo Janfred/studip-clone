@@ -205,123 +205,22 @@ if ($delete_id) {
 }
 
 
-// Verschieben von Postings
-
-if ($cmd == "move" && $topic_id !="" && $rechte) {
-	$mutter = suche_kinder($topic_id);
-	$mutter = explode (";",$mutter);
-	$count = sizeof($mutter)-2;
-	
-	// wohin darf ich schieben? Abfragen je nach Rechten
-	
-	if ($perm->have_perm("tutor") OR $perm->have_perm("dozent"))
-		$query = "SELECT DISTINCT seminare.Seminar_id, seminare.Name FROM seminar_user LEFT JOIN seminare USING(Seminar_id) WHERE user_id ='$user->id ' AND (seminar_user.status = 'tutor' OR seminar_user.status = 'dozent') ORDER BY Name";
-	if ($perm->have_perm("admin"))
-		$query = "SELECT seminare.* FROM user_inst LEFT JOIN Institute USING (Institut_id) LEFT JOIN seminare USING(Institut_id) LEFT OUTER JOIN seminar_user USING(Seminar_id) WHERE user_inst.inst_perms='admin' AND user_inst.user_id='$user->id' AND seminare.Institut_id is not NULL GROUP BY seminare.Seminar_id ORDER BY seminare.Name";
-	if ($perm->have_perm("root"))
-		$query = "SELECT Seminar_id, Name FROM seminare ORDER BY Name";
-	$db=new DB_Seminar;
-	$db->query($query);
-
-	if ($perm->have_perm("tutor") OR $perm->have_perm("dozent") OR $perm->have_perm("admin")) {
-		$query2 = "SELECT Institute.Institut_id, Name FROM user_inst LEFT JOIN Institute USING(Institut_id) WHERE user_id = '$user->id' AND (inst_perms = 'tutor' OR inst_perms = 'dozent' OR inst_perms = 'admin') ORDER BY Name";	
-		$db2=new DB_Seminar;
-		$db2->query($query2);
-	}
-	if ($perm->have_perm("root")) {
-		$query2 = "SELECT Institut_id, Name FROM Institute ORDER BY Name";
-		$db2=new DB_Seminar;
-		$db2->query($query2);
-	}
-
-
-?>	<table class="steel1" width="100%" cellpadding="0" cellspacing="0" border="0">
-			<tr>
-				<td class="steel2" colspan="2">
-					&nbsp; <img src="pictures/move.gif" border="0">&nbsp;<b><font size="-1"><?=sprintf(_("Als Thema verschieben (zusammen mit %s Antworten):"), $count)?></font></b>
-				</td>
-			</tr>
-			<tr>
-				<td class="steel1" colspan="2">
-					&nbsp; 
-				</td>
-			</tr>
-			<tr>
-				<td class="steel1" align="right" nowrap width="20%" valign="baseline">
-					<font size="-1"><?=_("in anderes Forum:")?></font>&nbsp; &nbsp; 
-				</td>
-				<td class="steel1" width="80%">
-			<? 		echo "<form action=\"".$PHP_SELF."\" method=\"POST\">"; ?>
-					<input type="image" name="SUBMIT" value="Verschieben" src="pictures/move.gif" border="0" <?=tooltip(_("dahin verschieben"))?>>&nbsp; 					
-					<select Name="sem_id" size="1">
-			<?		while ($db->next_record()) {
-						$sem_name=htmlReady(substr($db->f("Name"), 0, 50));
-						printf ("<option %s value=\"%s\">%s\n", $db->f("Seminar_id") == $SessSemName[1] ? "selected" : "", $db->f("Seminar_id"), $sem_name);
-					}
-			?>	</select>
-					<input type="HIDDEN" name="target" value="Seminar">
-					<input type="HIDDEN" name="topic_id" value="<?echo $topic_id;?>">
-					<input type="HIDDEN" name="view" value="<?echo $view;?>">
-		  		</form>
-				</td>
-			</tr>
-			<?
-		if ($db2->num_rows()) {   // Es kann auch in Institute verschoben werden
-		?>
-			<tr>
-				<td class="steel1" align="right" nowrap width="20%" valign="baseline">
-			  		<font size="-1"><?=_("in andere Einrichtung:")?></font>&nbsp; &nbsp; 
-			  	</td>
-				<td class="steel1" width="80%">
-			<? 		echo "<form action=\"".$PHP_SELF."\" method=\"POST\">"; ?>
-					<input type=image name="SUBMIT" value="Verschieben" src="pictures/move.gif" border=0 <?=tooltip(_("dahin verschieben"))?>>&nbsp; 						
-			  	<select Name="inst_id" size="1">
-			<?		while ($db2->next_record()) {
-						$inst_name=htmlReady(substr($db2->f("Name"), 0, 50));
-						printf ("<option value=\"%s\">%s\n", $db2->f("Institut_id"), $inst_name);
-					}
-			?>	</select>
-					<input type="HIDDEN" name="target" value="Institut">
-					<input type="HIDDEN" name="topic_id" value="<?echo $topic_id;?>">
-					<input type="HIDDEN" name="view" value="<?echo $view;?>">
-		  		</form>
-				</td>
-			</tr>
-		<?
-		}
-		?>
-			<tr valign="middle">
-				<td class="steel1" align="right" nowrap width="20%">
-					&nbsp; 
-				</td>
-				<td class="steel1" width="80%">					
-					<br>
-
-			  	<? echo "<a href=\"".$PHP_SELF."?view=".$view.">".makeButton("abbrechen", "img")."</a>";?>
-		  		</td>
-  			</tr>
-  		</table>
-<?		
-	}
-	
-
-	
 if ($target =="Seminar"){ //Es soll in ein anderes Seminar verschoben werden 
 	$verschoben = 0;
 	move_topic($topic_id,$sem_id,$topic_id,$verschoben);
-	$messgae = "move";
+	$message = "move";
 }
 	
 if ($target =="Institut"){ //Es soll in ein Institut verschoben werden 
 	$verschoben = 0;
 	move_topic($topic_id,$inst_id,$topic_id,$verschoben);
-	$messgae = "move";
+	$message = "move";
 }
 
 if ($target =="Thema"){ //Es soll in ein anderes Thema verschoben werden 
 	$verschoben = 0;
 	move_topic2($move_id,$move_id,$verschoben,$parent_id);
-	$messgae = "move";
+	$message = "move";
 }
 
 
@@ -400,26 +299,34 @@ if ($neuesthema==TRUE && $rechte) {			// es wird ein neues Thema angelegt
 
 //Titel-Zeile
 if (!$forumsend=="anpassen") {
-	echo "\n<table width=\"100%\" class=\"blank\" border=0 cellpadding=0 cellspacing=0>\n";
+	echo "\n<table width=\"100%\" class=\"blank\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n";
 	echo "<tr><td class=\"topic\" width=\"50%\"><b>&nbsp;<img src='pictures/icon-posting.gif' align=absmiddle>&nbsp; ". $SessSemName["header_line"] ." - " . _("Forum") . "</b></td><td class=\"topic\" width=\"50%\" align=\"right\"><a href='forum.php?forumsend=anpassen'><img src='pictures/pfeillink.gif' border=0 " . tooltip(_("Look & Feel anpassen")) . ">&nbsp;</a></td></tr>\n";
+	
+	// Ausgabe für Zusatzinfos
 	if ($message=="kill") echo parse_msg("msg§" . sprintf(_("%s Posting(s) gel&ouml;scht"), $count));
 	if ($message=="move") echo parse_msg("msg§" . sprintf(_("%s Posting(s) verschoben."), $verschoben));
-	echo "<tr><td class=\"blank\">&nbsp;";
-	?>
-	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font size=-1>Indikator: 
-	<img src="pictures/forumrot.gif">Alter &nbsp; 
-	<img src="pictures/forumgrau.gif">Views &nbsp;
-	<img src="pictures/forumgrau.gif">Bewertung &nbsp;
-	<img src="pictures/forumgrau.gif">Relevanz &nbsp;
-	</font></td><td class="blank" align="right"><font size="-1">Sortierung:&nbsp;&nbsp;</font>
-	<select name="username" size="1">
-	<option value="">Alter
-	<option value="">Views
-	<option value="">Bewertungen
-	<option value="">Relevanz
-	</select>&nbsp;<img src="pictures/forumgraurunt.gif">&nbsp;
-	<?
-	echo "</td></tr>\n</table>\n";
+	if ($cmd == "move" && $topic_id !="" && $rechte)
+		forum_move_navi ($topic_id);
+		
+	if (!$cmd) {
+		echo "<tr><td class=\"blank\">&nbsp;";
+		?>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font size=-1>Indikator: 
+		<img src="pictures/forumrot.gif">Alter &nbsp; 
+		<img src="pictures/forumgrau.gif">Views &nbsp;
+		<img src="pictures/forumgrau.gif">Bewertung &nbsp;
+		<img src="pictures/forumgrau.gif">Relevanz &nbsp;
+		</font></td><td class="blank" align="right"><font size="-1">Sortierung:&nbsp;&nbsp;</font>
+		<select name="username" size="1">
+		<option value="">Alter
+		<option value="">Views
+		<option value="">Bewertungen
+		<option value="">Relevanz
+		</select>&nbsp;<img src="pictures/forumgraurunt.gif">&nbsp;
+		<?
+		echo "</td></tr>";
+	}	
+	echo "\n</table>\n";
 }
 
 if ($forumsend) {
