@@ -96,8 +96,8 @@ if ((($i_page == "adminarea_start.php") && ($list)) || ($quit)) {
 	$list=TRUE;
 
 
-if ($sortby) {
-	$links_admin_data["sortby"]=$sortby;
+if ($adminarea_sortby) {
+	$links_admin_data["sortby"]=$adminarea_sortby;
 	$list=TRUE;
 } else
 	$links_admin_data["sortby"]="Name";
@@ -669,74 +669,42 @@ if ($links_admin_data["srch_on"] || $auth->auth["perm"] =="tutor" || $auth->auth
 	// Creation of Seminar-Query
 	if ($links_admin_data["srch_on"]) {
 
-		$query="SELECT DISTINCT seminare.*, Institute.Name AS Institut FROM seminare LEFT JOIN Institute USING (institut_id) LEFT JOIN seminar_user ON (seminare.Seminar_id=seminar_user.Seminar_id AND seminar_user.status='dozent') LEFT JOIN auth_user_md5 USING (user_id)";
+		$query="SELECT DISTINCT seminare.*, Institute.Name AS Institut FROM seminar_user LEFT JOIN seminare USING (seminar_id) LEFT JOIN Institute USING (institut_id) LEFT JOIN auth_user_md5 ON (seminar_user.user_id = auth_user_md5.user_id) WHERE seminar_user.status = 'dozent' ";
 		$conditions=0;
 
 		if ($links_admin_data["srch_sem"]) {
 			$i=0;
 			for ($i; $i <=sizeof($SEMESTER); $i++) {
 				if ($SEMESTER[$i]["name"] == $links_admin_data["srch_sem"]) {
-					$query.="WHERE seminare.start_time <=".$SEMESTER[$i]["beginn"]." AND (".$SEMESTER[$i]["beginn"]." <= (seminare.start_time + seminare.duration_time) OR seminare.duration_time = -1) ";
-					$conditions++;
+					$query.="AND seminare.start_time <=".$SEMESTER[$i]["beginn"]." AND (".$SEMESTER[$i]["beginn"]." <= (seminare.start_time + seminare.duration_time) OR seminare.duration_time = -1) ";
 				}
 			}
 		}
 
 		if (is_array($my_inst) && $auth->auth["perm"] != "root") {
-			if ($conditions)
-				$query.="AND ";
-			else
-				$query.="WHERE ";
-			$query.="Institute.Institut_id IN ('".join("','",$my_inst)."') ";
-			$conditions++;
+			$query.="AND Institute.Institut_id IN ('".join("','",$my_inst)."') ";
 		}
 
 		if ($links_admin_data["srch_inst"]) {
-			if ($conditions)
-				$query.="AND ";
-			else
-				$query.="WHERE ";
-			$query.="Institute.Institut_id ='".$links_admin_data["srch_inst"]."' ";
-			$conditions++;
+			$query.="AND Institute.Institut_id ='".$links_admin_data["srch_inst"]."' ";
 		}
 	
 
 		if ($links_admin_data["srch_fak"]) {
-			if ($conditions)
-				$query.="AND ";
-			else
-				$query.="WHERE ";
-			$query.="fakultaets_id ='".$links_admin_data["srch_fak"]."' ";
-			$conditions++;
+			$query.="AND fakultaets_id ='".$links_admin_data["srch_fak"]."' ";
 		}
 
-
 		if ($links_admin_data["srch_doz"]) {
-			if ($conditions)
-				$query.="AND ";
-			else
-				$query.="WHERE ";
-			$query.="seminar_user.user_id ='".$links_admin_data["srch_doz"]."' ";
-			$conditions++;
+			$query.="AND seminar_user.user_id ='".$links_admin_data["srch_doz"]."' ";
 		}
 
 		if ($links_admin_data["srch_exp"]) {
-			if ($conditions)
-				$query.="AND ";
-			else
-				$query.="WHERE ";
-			$query.="(seminare.Name LIKE '%".$links_admin_data["srch_exp"]."%' OR seminare.Untertitel LIKE '%".$links_admin_data["srch_exp"]."%' OR seminare.Beschreibung LIKE '%".$links_admin_data["srch_exp"]."%' OR auth_user_md5.Nachname LIKE '%".$links_admin_data["srch_exp"]."%') ";
-			$conditions++;
+			$query.="AND (seminare.Name LIKE '%".$links_admin_data["srch_exp"]."%' OR seminare.Untertitel LIKE '%".$links_admin_data["srch_exp"]."%' OR seminare.Beschreibung LIKE '%".$links_admin_data["srch_exp"]."%' OR auth_user_md5.Nachname LIKE '%".$links_admin_data["srch_exp"]."%') ";
 		}
 
 		//Extension to the query, if we want to show lectures which are archiveable
 		if (($i_page== "archiv_assi.php") && ($links_admin_data["select_old"])) {
-			if ($conditions)
-				$query.="AND ";
-			else
-				$query.="WHERE ";
-			$query.="((seminare.start_time + seminare.duration_time < ".$SEM_BEGINN_NEXT.") AND seminare.duration_time != '-1') ";
-			$conditions++;
+			$query.="AND ((seminare.start_time + seminare.duration_time < ".$SEM_BEGINN_NEXT.") AND seminare.duration_time != '-1') ";
 		}
 
 	// tutors and dozents only have a plain list
@@ -766,13 +734,13 @@ if ($links_admin_data["srch_on"] || $auth->auth["perm"] =="tutor" || $auth->auth
 		<tr height=28>
 			<td width="60%" class="steel" valign=bottom>
 				<img src="pictures/blank.gif" width=1 height=20>
-				&nbsp; <a href="<? echo $PHP_SELF ?>?sortby=Name"><b><?=_("Name")?></b></a>
+				&nbsp; <a href="<? echo $PHP_SELF ?>?adminarea_sortby=Name"><b><?=_("Name")?></b></a>
 			</td>
 			<td width="15%" align="center" class="steel" valign=bottom>
 				<b><?=_("DozentIn")?></b>
 			</td>
 			<td width="25%"align="center" class="steel" valign=bottom>
-				<a href="<? echo $PHP_SELF ?>?sortby=status"><b><?=_("Status")?></b></a>
+				<a href="<? echo $PHP_SELF ?>??adminarea_sortby=status"><b><?=_("Status")?></b></a>
 			</td>
 			<td width="10%" align="center" class="steel" valign=bottom>
 				<b><? printf ("%s", ($i_page=="archiv_assi.php") ?  _("Archivieren") : _("Aktion")) ?></b> 
