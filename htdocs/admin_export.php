@@ -184,7 +184,7 @@ if ($export_page  == 0)
 	?>
 	<br>
 	<br>
-	Institut: <select name="instituts_id">
+	Einrichtung: <select name="instituts_id">
 	<?
 	if ($perm->have_perm("root")) 
 		$db->query("select * from Institute ORDER BY Name");
@@ -278,7 +278,7 @@ elseif ($export_page == 1)
 		if ($sem_nr == 0)
 		{
 			echo "</td></tr>";
-			my_error("Es sind keine Veranstaltungen f&uuml;r dieses Institut eingetragen.");
+			my_error("Es sind keine Veranstaltungen f&uuml;r diese Einrichtung eingetragen.");
 			echo "<tr><td class=\"blank\" colspan=2 align=\"center\">";
 		}
 		else

@@ -18,12 +18,21 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+//Settings for the Script
+
+/*If you want to switch the colors of the header of each different group
+(e.g. Semester or Dozent) set this to TRUE. If it it not set, the color is
+always a light red */
+$sem_browse_switch_headers=FALSE;
+
+//includes
 require_once "config.inc.php";
 require_once "config_tools_semester.inc.php"; 
 require_once "dates.inc.php";
 require_once "visual.inc.php";
 require_once "functions.php";
 
+//init classes
 $db=new DB_Seminar;
 $db2=new DB_Seminar;
 $db3=new DB_Seminar;
@@ -465,14 +474,14 @@ if (($sem_browse_data["level"]=="s") || ($sem_browse_data["level"]=="sbb"))
 		print ("</font></td>");
 		//Show how many items were found
 		printf ("<td class=\"steel1\" colspan=%s>", ($sem_browse_data["extend"] == "yes") ? "2" : "1");
-		echo "<font size=-1>&nbsp;<b>", $db->affected_rows(), " </b>Veranstaltungen gefunden.</td>";
+		echo "<font size=-1>&nbsp;<b>", $db->num_rows(), " </b>Veranstaltungen gefunden.</td>";
 		printf ("<td class=\"steel1\" align=\"right\" colspan=%s>", ($sem_browse_data["extend"] == "yes") ? "2" : "1");
 		echo"<a href=\"", $PHP_SELF; if ($sem_browse_data["extend"]<>"yes") { echo "?extend=yes\"><img src=\"pictures/buttons/erweiterteansicht-button.gif\" border=0>"; } else {echo "?extend=no\"><img src=\"pictures/buttons/normaleansicht-button.gif\" border=0>"; } echo "</a></font></td></form></tr>";
 		}
 
- 	//initialisieren der Spalten. Hab mal was neues ausprobiert, das Tag soll laut Self Html besser sein, wenn der Browser lange Tabellen aufbauen muss (er zeigt die Tabellen schon vor dem kompletten laden)
-	if ($sem_browse_data["extend"]=="yes")
-		{
+ 	//init the cols
+ 	if ($db->num_rows()) {
+		if ($sem_browse_data["extend"]=="yes") {
 		?>
    		<colgroup>
        			<col width="30%">
@@ -484,9 +493,7 @@ if (($sem_browse_data["level"]=="s") || ($sem_browse_data["level"]=="sbb"))
        			<col width="10%">
        		</colgroup>
        		<?
-       		}
-       	else
-		{
+       		} else {
 		?>
    		<colgroup>
        			<col width="45%">
@@ -497,37 +504,39 @@ if (($sem_browse_data["level"]=="s") || ($sem_browse_data["level"]=="sbb"))
        		<?
        		}
      		
-	?> 
-        <tr align="center">
-                <td class="steel" align="left"><font size=-1>
-                	<img src=\"pictures/blank.gif\" width=1 height=20 valign="top">
-                	<b><a href="<? echo $PHP_SELF;?>?sortby=Name">Name</a></b></font>
-                </td>
-                <td class="steel">
-                	<font size=-1><b>Zeit</b></font>
-                </td>
-                <td class="steel">
-                	<font size=-1><b><a href="<? echo $PHP_SELF;?>?sortby=Institut">Einrichtungen</a></b></font>
-                </td>
-                <td class="steel">
-                	<font size=-1><b><a href="<? echo $PHP_SELF;?>?sortby=Nachname">DozentIn</a></b></font>
-                </td>
-   	<?
-   	if ($sem_browse_data["extend"]=="yes")
-   		{
-   		?>
-		<td class="steel">
-			<font size=-1><b><a href="<? echo $PHP_SELF;?>?sortby=art">Typ</a></b></font>
-		</td>
-                <td class="steel">
-                	<font size=-1><b><a href="<? echo $PHP_SELF;?>?sortby=Lesezugriff">Lesen</a></b> / <b><font size=-1><a href="<? echo $PHP_SELF;?>?sortby=Schreibzugriff">Schreiben</a></b></font>
-                </td>
-                <td class="steel">
-                	<font size=-1><b>Mein Status</b></font>
-                </td>
-                <?
+		?> 
+        	<tr align="center">
+	                <td class="steel" align="left"><font size=-1>
+        	        	<img src=\"pictures/blank.gif\" width=1 height=20 valign="top">
+                		<b><a href="<? echo $PHP_SELF;?>?sortby=Name">Name</a></b></font>
+	                </td>
+        	        <td class="steel">
+                		<font size=-1><b>Zeit</b></font>
+	                </td>
+        	        <td class="steel">
+                		<font size=-1><b><a href="<? echo $PHP_SELF;?>?sortby=Institut">Einrichtungen</a></b></font>
+                	</td>
+        	        <td class="steel">
+	                	<font size=-1><b><a href="<? echo $PHP_SELF;?>?sortby=Nachname">DozentIn</a></b></font>
+                	</td>
+	   	<?
+   		if ($sem_browse_data["extend"]=="yes") {
+			?>
+			<td class="steel">
+				<font size=-1><b><a href="<? echo $PHP_SELF;?>?sortby=art">Typ</a></b></font>
+			</td>
+	                <td class="steel">
+        	        	<font size=-1><b><a href="<? echo $PHP_SELF;?>?sortby=Lesezugriff">Lesen</a></b> / <b><font size=-1><a href="<? echo $PHP_SELF;?>?sortby=Schreibzugriff">Schreiben</a></b></font>
+                	</td>
+	                <td class="steel">
+        	        	<font size=-1><b>Mein Status</b></font>
+                	</td>
+	                <?
                 }
-	echo "</tr>";
+		echo "</tr>";
+	} else {
+		echo "<tr><td class=\"blank\" colspan=2><font size=-1><b>Es wurden keine Veranstaltungen gefunden.</b></font>";
+	}
 	
 	$c=1;
 	$group=1;
@@ -608,7 +617,7 @@ if (($sem_browse_data["level"]=="s") || ($sem_browse_data["level"]=="sbb"))
 		
 		//Put group_by header
 		if ($group_header_name)
-			printf ("<tr> <td class=\"steelgroup%s\" colspan=%s><font size=-1><b>&nbsp;%s</b></font></td></tr>", $group_header_class, ($sem_browse_data["extend"] == "yes") ? "7" : "4", $group_header_name);
+			printf ("<tr> <td class=\"steelgroup%s\" colspan=%s><font size=-1><b>&nbsp;%s</b></font></td></tr>", ($sem_browse_switch_headers) ? $group_header_class : "1", ($sem_browse_data["extend"] == "yes") ? "7" : "4", $group_header_name);
 			
 	
 		echo"<tr><font size=-1>";
@@ -825,7 +834,7 @@ if (($sem_browse_data["level"]=="sb") && (!$hide_bereich))
 if (($sem_browse_data["level"]=="sbi")  && (!$hide_bereich))
 	{
 	echo "<tr><td class=\"blank\" width=\"50%\" valign=\"_top\">";
-	echo "<a href=\"$PHP_SELF?level=i&id=", $sem_browse_data["id"], "\"><b>Institute</b></a><br></td>";
+	echo "<a href=\"$PHP_SELF?level=i&id=", $sem_browse_data["id"], "\"><b>Einrichtungen</b></a><br></td>";
 	echo "<td class=\"blank\" width=\"50%\" valign=\"_top\">";
 	echo "<a href=\"$PHP_SELF?level=sb&id=",$sem_browse_data["id"], "\"><b>Studienf&auml;cher</b></a><br>";
 	echo "</td></tr>\n";

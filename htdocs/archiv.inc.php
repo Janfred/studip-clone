@@ -179,13 +179,13 @@ function dump_sem($sem_id)
 	$iid=$db2->f("Institut_id");
 	$db3->query("SELECT Name, url FROM Institute WHERE Institut_id = '$iid'");
 	$db3->next_record();
-	$dump.="<tr><td><b>Heimatinstitut:&nbsp;</b></td><td>".$db3->f("Name")."</td></tr>\n";
+	$dump.="<tr><td><b>Heimat-Einrichtung:&nbsp;</b></td><td>".$db3->f("Name")."</td></tr>\n";
 	$db3->query("SELECT Name, url FROM seminar_inst LEFT JOIN Institute USING (institut_id) WHERE seminar_id = '$sem_id' AND Institute.institut_id != '$iid'");
 	$cd=$db3->affected_rows();
 	if ($db3->affected_rows() == 1)
-		$dump.="<tr><td><b>beteiligtes Institut:&nbsp;</b></td><td>";
+		$dump.="<tr><td><b>beteiligte Einrichtung:&nbsp;</b></td><td>";
 	else if ($db3->affected_rows() >= 2)
-		$dump.="<tr><td><b>beteiligte Institute:&nbsp;</b></td><td>";
+		$dump.="<tr><td><b>beteiligte Einrichtungen:&nbsp;</b></td><td>";
 	
 	while ($db3->next_record()) {
 		$cd--;

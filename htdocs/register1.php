@@ -63,7 +63,7 @@ angegebene E-Mailadresse g&uuml;ltig und funktionsf&auml;hig ist.<br><br>
 
 3. Alle anderen Angaben zu Ihrer Person erfolgen freiwillig.<br>
 Wenn Sie weitere Daten von sich angeben, sind diese nur f&uuml;r andere, registrierte Nutzer des Systems zug&auml;nglich.
-Eine Ausnahme hiervon sind automatisch aus dem System generierte Personalverzeichnisse der beteiligten Institute.<br><br>
+Eine Ausnahme hiervon sind automatisch aus dem System generierte Personalverzeichnisse der beteiligten Einrichtungen.<br><br>
 
 4.Der Benutzer oder die Benutzerin stellt sicher, da&szlig; er/sie bei der Nutzung des
 Kommunikationssystems Stud.IP nicht gegen eine geltende Rechtsvorschrift

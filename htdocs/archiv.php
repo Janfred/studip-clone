@@ -285,7 +285,7 @@ include "header.php";   //hier wird der "Kopf" nachgeladen
 						</tr>						
 						<tr <? $cssSw->switchClass() ?>>
 							<td class="<? echo $cssSw->getClass() ?>" width="10%">
-								<font size=-1>Heimat-Institut </font>
+								<font size=-1>Heimat-Einrichtung </font>
 							</td>
 							<td class="<? echo $cssSw->getClass() ?>"  width="90%">
 								<font size=-1>

@@ -447,7 +447,7 @@ else
 				$db3->query("SELECT Name, url, Institut_id FROM Institute WHERE Institut_id = '".$db2->f("Institut_id")."' ");
 				$db3->next_record();
 				if ($db3->num_rows()) {
-				printf("<font size=-1><b>Heimateinrichtung:</b></font><br /><font size=-1><a href=\"institut_main.php?auswahl=%s\" target=\"_new\">%s</a></font>", $db3->f("Institut_id"), htmlReady($db3->f("Name")));
+				printf("<font size=-1><b>Heimat-Einrichtung:</b></font><br /><font size=-1><a href=\"institut_main.php?auswahl=%s\" target=\"_new\">%s</a></font>", $db3->f("Institut_id"), htmlReady($db3->f("Name")));
 				}
 				?>
 				</td>

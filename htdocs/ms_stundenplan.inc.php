@@ -200,7 +200,7 @@ function change_schedule_view() {
 					?>
 				<tr <? $cssSw->switchClass() ?>>
 					<td class="<? echo $cssSw->getClass() ?>" width="20%">
-					<blockquote><br><b>Angezeigtes Institut:</b></blockquote>
+					<blockquote><br><b>Angezeigte Einrichtung:</b></blockquote>
 					</td>
 					<td class="<? echo $cssSw->getClass() ?>" width="80%">
 					<?

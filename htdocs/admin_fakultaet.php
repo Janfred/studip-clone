@@ -61,8 +61,8 @@ include "links_admin.inc.php";  //Linkleiste fuer admins
 <tr>
 	<td class="blank" colspan=2>
 		<blockquote><br>	
-		Auf dieser Seite k&ouml;nnen Sie die Fakult&auml;ten, die im System verwendet werden, verwalten. Sie m&uuml;ssen mindestens eine Fakult&auml;t angelegt haben, um Institute anlegen zu k&ouml;nnen.<br>
-		<b>Achtung:</b> Das L&ouml;schen einer Fakult&auml;t ist nur m&ouml;glich, wenn keine Institute in dieser Fakult&auml;t existieren.
+		Auf dieser Seite k&ouml;nnen Sie die Fakult&auml;ten, die im System verwendet werden, verwalten. Sie m&uuml;ssen mindestens eine Fakult&auml;t angelegt haben, um Einrichtungen anlegen zu k&ouml;nnen.<br>
+		<b>Achtung:</b> Das L&ouml;schen einer Fakult&auml;t ist nur m&ouml;glich, wenn keine Einrichtungen in dieser Fakult&auml;t existieren.
 		</blockquote>
 	</td>
 </tr>
@@ -136,7 +136,7 @@ while ( is_array($HTTP_POST_VARS)
     ## Fakultaet in use?
 		$db->query("SELECT * FROM Institute WHERE fakultaets_id = '$f_id'");
     if ($db->next_record()) {
-      my_error("Sie k&ouml;nnen diese Fakult&auml;t nicht l&ouml;schen, da noch Institute dieser Fakult&auml;t existieren!");
+      my_error("Sie k&ouml;nnen diese Fakult&auml;t nicht l&ouml;schen, da noch Einrichtungen dieser Fakult&auml;t existieren!");
       break;
     }
     
@@ -164,7 +164,7 @@ while ( is_array($HTTP_POST_VARS)
 <table border=0  align="center" cellspacing=0 cellpadding=2 width="80%">
  <tr valign=top align=middle>
   <th width="55%"><a href="admin_fakultaet.php?sortby=Name">Bezeichnung der Fakult&auml;t</a></th>
-  <th width="15%"><a href="admin_fakultaet.php?sortby=number">Anzahl der Institute</a></th>
+  <th width="15%"><a href="admin_fakultaet.php?sortby=number">Anzahl der Einrichtungen</a></th>
   <th width="30%">Aktion</th>
  </tr>
 

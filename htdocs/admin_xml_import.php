@@ -121,13 +121,13 @@ if (($assi_page == 3) AND (isset($edit_names)))
 			case "anders": 
 				if (trim($GLOBALS["inst_alias".$alias_nr]) == "")
 				{
-					my_error("Es wurde kein neuer Name f&uuml;r das Institut \"" . $key ."\" angegeben.");
+					my_error("Es wurde kein neuer Name f&uuml;r die Einrichtung \"" . $key ."\" angegeben.");
 					$assi_page = 2;
 				}
 				for ($lauf=0; $lauf<sizeof($inst_namen); $lauf++)
 					if (strcasecmp($GLOBALS["inst_alias".$alias_nr], $inst_namen[$lauf]) == 0)
 					{
-						my_error("Es existiert bereits ein Institut mit dem Namen\"" . $GLOBALS["inst_alias".$alias_nr] ."\"");
+						my_error("Es existiert bereits eine Einrichtung mit dem Namen\"" . $GLOBALS["inst_alias".$alias_nr] ."\"");
 						$assi_page = 2;
 					}
 				if ($assi_page != 2)
@@ -150,7 +150,7 @@ if (($assi_page == 3) AND (isset($edit_names)))
 	reset($xml_import_org);
 }
 
-$default_orgname = "Unbekanntes Institut";
+$default_orgname = "UnbekannteEinrichtung";
 
 $v_names = array(
 			"Lecture",
@@ -599,7 +599,7 @@ if ((!isset($assi_page)) OR (!is_readable($dateiname)))
 elseif ($assi_page == 1)
 {
 	?>
-	<tr><td class="blank" colspan=2>Auswahl der Institute</td></tr>
+	<tr><td class="blank" colspan=2>Auswahl der Einrichtungen</td></tr>
 	<tr><td class="blank" colspan=2>&nbsp;</td></tr>
 	<tr><td class="blank" colspan=2 align=center>
 	<?
@@ -620,7 +620,7 @@ elseif ($assi_page == 1)
 	if (sizeof($xml_import_org) > 0)
 	{	
 		$inst_nr = 0;
-		echo "<b>" . sizeof($xml_import_org) . "</b> Institute gefunden:<br><table>";
+		echo "<b>" . sizeof($xml_import_org) . "</b> Einrichtungen gefunden:<br><table>";
 		while (list ($key, $val) = each ($xml_import_org)) 
 		{
 			echo "<tr><td>";
@@ -636,7 +636,7 @@ elseif ($assi_page == 1)
 				echo "en";
 			echo "</td><td>";
 			?>
-			Stud.IP-Institut: 
+			Stud.IP-Einrichtung: 
 			<?
 				
 			?>
@@ -647,7 +647,7 @@ elseif ($assi_page == 1)
 			$inst_fach = str_replace( "für ", "", $key);
 			$inst_fach = str_replace( "isches ", "", $inst_fach);
 			$inst_fach = str_replace( "Abteilung", "", $inst_fach);
-			$inst_fach = str_replace( "Institut", "", $inst_fach);
+			$inst_fach = str_replace( "Einrichtung", "", $inst_fach);
 			$inst_fach = str_replace( "Seminar", "", $inst_fach);
 			$inst_fach = trim($inst_fach);
 			if ($inst_fach == "") 
@@ -660,7 +660,7 @@ elseif ($assi_page == 1)
 					echo '<option value="' . $inst_namen[$lauf] . '" selected>' . $inst_namen[$lauf];
 				}
 			if (($exist == false) OR (sizeof($inst_namen)>1))
-				echo '<option value="add">-> Einem anderen Institut hinzuf&uuml;gen';
+				echo '<option value="add">-> Einer anderen Einrichtung hinzuf&uuml;gen';
 			if (($exist == false) AND ($perm->have_perm("root"))) 
 				echo '<option value="neu" selected>-> Neu anlegen';
 			?>
@@ -719,7 +719,7 @@ elseif ($assi_page == 2)
 	else*/
 	{
 		?>
-		<tr><td class="blank" colspan=2>Zuordnung der Institute</td></tr>
+		<tr><td class="blank" colspan=2>Zuordnung der Einrichtung</td></tr>
 		<tr><td class="blank" colspan=2>&nbsp;</td></tr>
 		<tr><td class="blank" colspan=2 align=center>
 		<?
@@ -761,7 +761,7 @@ elseif ($assi_page == 2)
 					echo "Wird neu angelegt als: '" . $key . "'";
 					break;
 					default: 
-					echo "Wird dem Institut '" . $val["change"] . "' hinzugef&uuml;gt"; 
+					echo "Wird der Einrichtung '" . $val["change"] . "' hinzugef&uuml;gt"; 
 				}
 				echo "</td></tr>";
 			}
@@ -804,7 +804,7 @@ if ($assi_page == 3)
 			$inst_fach = str_replace( "isches ", "", $inst_fach);
 			$inst_fach = str_replace( "Abteilung", "", $inst_fach);
 			$inst_fach = str_replace( "Zentrum", "", $inst_fach);
-			$inst_fach = str_replace( "Institut", "", $inst_fach);
+			$inst_fach = str_replace( "Einrichtung", "", $inst_fach);
 			$inst_fach = str_replace( "Seminar", "", $inst_fach);
 			$inst_fach = trim($inst_fach);
 			$fach = array("");
@@ -917,9 +917,9 @@ if ($assi_page == 4)
 			{	
 				$p_data[$pers_exist] = "";
 				if ((strcasecmp($db->f("Name"), $xml_import_org[$val["orgname"]]["name"]) != 0) OR ($db->f("Name") == ""))
-					$p_data[$pers_exist]["comment"] .= "- falsches Institut ";
+					$p_data[$pers_exist]["comment"] .= "- falsche Einrichtung ";
 				elseif ($db->f("inst_perms") != "dozent")
-					$p_data[$pers_exist]["comment"] .= "- falscher Instituts-Status ";
+					$p_data[$pers_exist]["comment"] .= "- falscher Einrichtungs-Status ";
 				$vn = "";
 				if ($val["title"] != "")
 					$vn = $val["title"] . " ";
@@ -1043,12 +1043,12 @@ if ($assi_page == 5)
 			echo "<tr><td>Status:</td><td> dozent (" . $val["lehr"] . ")</td></tr>";
 			echo "<tr><td>E-Mail:</td><td> " . $val["email"] . "</td></tr>";
 			echo "<tr><td colspan=2>&nbsp;</td></tr>";
-			echo "<tr><td>Institut:</td><td>" . $xml_import_org[$val["orgname"]]["name"] . "</td></tr>";
+			echo "<tr><td>Einrichtung:</td><td>" . $xml_import_org[$val["orgname"]]["name"] . "</td></tr>";
 			echo "<tr><td>Sprechzeiten:</td><td>&nbsp;" . "</td></tr>";
 			echo "<tr><td>Raum:</td><td>" . $val["office"] . "</td></tr>";
 			echo "<tr><td>Telefon:</td><td>" . $val["tel"] . "</td></tr>";
 			echo "<tr><td>Faxnummer:</td><td>" . $val["fax"] . "</td></tr>";
-			echo "<tr><td>Funktion im Institut:</td><td>" . $inst_funkt[$val["lehrtyp"]] . "</td></tr>";
+			echo "<tr><td>Funktion in der Einrichtung:</td><td>" . $inst_funkt[$val["lehrtyp"]] . "</td></tr>";
 /*			for ($lauf = 0; $lauf < sizeof($person_vars); $lauf++)	
 			{
 				echo "<tr><td>"; 

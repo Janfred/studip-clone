@@ -55,7 +55,7 @@ include ("seminar_open.php");
 	<font size=-1>Hier finden sie alle Veranstaltungen in Stud.IP.</font>
 	<br>
 	<br><a href="institut_browse.php"><b>Suchen nach Einrichtungen</b></a></br>
-	<font size=-1>Hier finden sie alle Einrichtungen und Institute  in Stud.IP.</font>
+	<font size=-1>Hier finden sie alle Einrichtungen in Stud.IP.</font>
 	<br>
 	<br><a href="archiv.php"><b>Suchen im Archiv</b></a></br>
 	<font size=-1>Hier finden sie alle Veranstaltungen vergangener Semester.</font>

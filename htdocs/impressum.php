@@ -194,63 +194,63 @@ IF ($view=="statistik") {?>
 			$cssSw->switchClass();
 			echo "<tr><td class=\"".$cssSw->getClass() ."\" colspan=2>&nbsp; </td></tr>";
 
-			$cssSw->switchClass();	$db->query("SELECT * FROM Institute");
+			$cssSw->switchClass();	
+			$db->query("SELECT * FROM Institute");
 			$anzahl = $db->num_rows();
-			echo "<tr><td class=\"".$cssSw->getClass() ."\">beteiligte Institute:</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 
+			echo "<tr><td class=\"".$cssSw->getClass() ."\">beteiligte Einrichtungen:</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 
 
-			$cssSw->switchClass();	$db->query("SELECT * FROM Institute");
+			$cssSw->switchClass();
 			$db->query("SELECT * FROM Fakultaeten");
 			$anzahl = $db->num_rows();
 			echo "<tr><td class=\"".$cssSw->getClass() ."\">beteiligte Fakult&auml;ten:</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 
 
-			$cssSw->switchClass();	$db->query("SELECT * FROM Institute");
+			$cssSw->switchClass();
 			echo "<tr><td class=\"".$cssSw->getClass() ."\" colspan=2>&nbsp; </td></tr>";
 
-			$cssSw->switchClass();	$db->query("SELECT * FROM Institute");
+			$cssSw->switchClass();
 			$db->query("SELECT * from auth_user_md5 WHERE perms='admin'");
 			$anzahl = $db->num_rows();
 			echo "<tr><td class=\"".$cssSw->getClass() ."\">registrierte Administratoren:</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 
 	
 			$cssSw->switchClass();	
-			$db->query("SELECT * FROM Institute");
 			$db->query("SELECT * from auth_user_md5 WHERE perms='dozent'");
 			$anzahl = $db->num_rows();
 			echo "<tr><td class=\"".$cssSw->getClass() ."\">registrierte Dozenten:</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 
 	
-			$cssSw->switchClass();	$db->query("SELECT * FROM Institute");
+			$cssSw->switchClass();
 			$db->query("SELECT * from auth_user_md5 WHERE perms='tutor'");
 			$anzahl = $db->num_rows();
 			echo "<tr><td class=\"".$cssSw->getClass() ."\">registrierte Tutoren:</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 
 	
-			$cssSw->switchClass();	$db->query("SELECT * FROM Institute");
+			$cssSw->switchClass();
 			$db->query("SELECT * from auth_user_md5 WHERE perms='autor'");
 			$anzahl = $db->num_rows();
 			echo "<tr><td class=\"".$cssSw->getClass() ."\">registrierte Studierende:</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 
 	
-			$cssSw->switchClass();	$db->query("SELECT * FROM Institute");
+			$cssSw->switchClass();
 			echo "<tr><td class=\"".$cssSw->getClass() ."\" colspan=2>&nbsp; </td></tr>";
 	
-			$cssSw->switchClass();	$db->query("SELECT * FROM Institute");
+			$cssSw->switchClass();
 			$db->query("SELECT * from px_topics");
 			$anzahl = $db->num_rows();
 			echo "<tr><td class=\"".$cssSw->getClass() ."\" >Postings:</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 	
 	
-			$cssSw->switchClass();	$db->query("SELECT * FROM Institute");
+			$cssSw->switchClass();
 			$db->query("SELECT * from dokumente");
 			$anzahl = $db->num_rows();
 			echo "<tr><td class=\"".$cssSw->getClass() ."\">Dateien:</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 	
 
-			$cssSw->switchClass();	$db->query("SELECT * FROM Institute");
+			$cssSw->switchClass();
 			$db->query("SELECT * from literatur");
 			$anzahl = $db->num_rows();
 			echo "<tr><td class=\"".$cssSw->getClass() ."\" >Literaturlisten:</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 	
 	
-			$cssSw->switchClass();	$db->query("SELECT * FROM Institute");
+			$cssSw->switchClass();
 			$db->query("SELECT * from termine");
 			$anzahl = $db->num_rows();
 			echo "<tr><td class=\"".$cssSw->getClass() ."\">Termine:</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 	
 	
-			$cssSw->switchClass();	$db->query("SELECT * FROM Institute");
+			$cssSw->switchClass();
 			$db->query("SELECT * from news");
 			$anzahl = $db->num_rows();
 			echo "<tr><td class=\"".$cssSw->getClass() ."\">News:</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr></blockquote></table></td></tr>"; 	

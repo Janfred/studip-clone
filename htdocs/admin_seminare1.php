@@ -176,7 +176,7 @@ if (($s_command=="edit") && ($s_send)){
     }
     
     if ((empty($Institut)) && (!$my_perms== "tutor")) {
-      $msg .= "error§Bitte geben Sie ein <B>Heimat-Institut</B> an!§";
+      $msg .= "error§Bitte geben Sie eine <B>Heimat-Einrichtung</B> an!§";
       $run = FALSE;
     }
 
@@ -457,7 +457,7 @@ if ($s_command) {
 			<tr>
 				<?
 					if ($my_perms != "tutor") {
-						echo "<td align=right><b>Heimat-Institut</b> &nbsp;</td>";
+						echo "<td align=right><b>Heimat-Einrichtung</b> &nbsp;</td>";
 						echo "<td align=left colspan=3>";
 						echo "<select name=\"Institut\">";
 						if (!$perm->have_perm("admin"))
@@ -471,7 +471,7 @@ if ($s_command) {
 							}
 						}
 					else {
-						echo "<td align=right>Heimat-Institut &nbsp;</td>";
+						echo "<td align=right>Heimat-Einrichtung &nbsp;</td>";
 						echo "<td align=left colspan=3>";
 						echo "<b>".htmlReady($db->f("Institut"))."</b>";
 						}
@@ -480,7 +480,7 @@ if ($s_command) {
 				</td>
 			</tr>				
 			<tr>
-				<td align=right>beteiligte Institute &nbsp;</td>
+				<td align=right>beteiligte Einrichtungen &nbsp;</td>
 				<td align=left colspan=3><select  name="b_institute[]" MULTIPLE SIZE=8>
 					<?php
 					$db3->query("SELECT * FROM Institute ORDER BY Name");

@@ -78,7 +78,7 @@ if ($sms_msg)
 ?>
 <tr>
 <td class="blank" align = left width="60%"><br /><blockquote>
-Hier k&ouml;nnen Sie die Homepages aller Nutzer abrufen, die im System registriert sind. <br />Sie erhalten auf den Nutzerhomepages von Institutsmitarbeitern auch weiterf&uuml;hrende Informationen wie Sprechstunden und R&auml;ume.<br />W&auml;hlen Sie den gew&uuml;nschen Bereich aus oder suchen Sie nach einem Namen!
+Hier k&ouml;nnen Sie die Homepages aller Nutzer abrufen, die im System registriert sind. <br />Sie erhalten auf den Nutzerhomepages von Mitarbeitern an Einrichtungen auch weiterf&uuml;hrende Informationen wie Sprechstunden und R&auml;ume.<br />W&auml;hlen Sie den gew&uuml;nschen Bereich aus oder suchen Sie nach einem Namen!
 <br><br><a href='score.php'>Zur Stud.IP Rangliste</a>
 </blockquote></td>
 <td class="blank" align = right><img src="pictures/board2.jpg" border="0"></td>
@@ -92,7 +92,7 @@ Hier k&ouml;nnen Sie die Homepages aller Nutzer abrufen, die im System registrie
 <form action="browse.php" method="POST">
 <tr>
 	<td width="20%" class="steel1" align="left">
-		&nbsp;<b><font size=-1>Institute</font></b>
+		&nbsp;<b><font size=-1>Einrichtungen</font></b>
 	</td>
 	<td align="left" class="steel1" colspan=3>
 		<font size=-1><SELECT Name="inst_id" size="1">
@@ -266,7 +266,7 @@ if (isset($query)):
 			case "Institut":
 				echo "<td class=\"steel\" nowrap valign=bottom width=\"22%\"><a href=\"browse.php?sortby=Vorname\"><b>Vorname</b></a></td>";
 				echo "<td class=\"steel\" nowrap valign=bottom width=\"22%\"><a href=\"browse.php?sortby=Nachname\"><b>Nachname</b></a></td>";
-				echo "<td class=\"steel\" nowrap valign=bottom width=\"22%\"><a href=\"browse.php?sortby=Funktion\"><b>Funktion am Institut</b></a></td>";
+				echo "<td class=\"steel\" nowrap valign=bottom width=\"22%\"><a href=\"browse.php?sortby=Funktion\"><b>Funktion an der Einrichtung</b></a></td>";
 			break;
 			case "Search":
 				echo "<td class=\"steel\" valign=bottom nowrap width=\"25%\"><a href=\"browse.php?sortby=Vorname\"><b>Vorname</b></a></td>";

@@ -725,7 +725,7 @@ if (isset($details)) {
 			}
 			while ($db2->next_record()) {
 				print "<tr><td class=\"steel2\" colspan=2 align=\"center\">";
-				printf ("&nbsp;%s <a href=\"inst_admin.php?details=%s&inst=%s\"><img src=\"pictures/admin.gif\" border=0 align=\"texttop\" alt=\"&Auml;ndern der Eintr&auml;ge des Benutzers im jeweiligen Institut\"></a>&nbsp;", htmlReady($db2->f("Name")), $db->f("username"), $db2->f("Institut_id"));
+				printf ("&nbsp;%s <a href=\"inst_admin.php?details=%s&inst=%s\"><img src=\"pictures/admin.gif\" border=0 align=\"texttop\" alt=\"&Auml;ndern der Eintr&auml;ge des Benutzers in der jeweiligen Einrichtung\"></a>&nbsp;", htmlReady($db2->f("Name")), $db->f("username"), $db2->f("Institut_id"));
 				print "</td></tr>\n";
 			}	
 			?>

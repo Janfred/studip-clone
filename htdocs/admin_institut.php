@@ -1,6 +1,6 @@
 <?php
 /*
-admin_institut.php - Instituts-Verwaltung von Stud.IP.
+admin_institut.php - Einrichtungs-Verwaltung von Stud.IP.
 Copyright (C) 2002 Cornelis Kater <ckater@gwdg.de>, Stefan Suchi <suchi@gmx.de>
 
 This program is free software; you can redistribute it and/or

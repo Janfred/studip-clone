@@ -149,7 +149,7 @@ if ($num_my_sem){
 		<th width="2%" colspan=2>&nbsp;</th>
 		<th width="70%"><a href="<? echo $PHP_SELF ?>?sortby=Name">Name</a></th>
 		<th width="10%"><a href="<? echo $PHP_SELF ?>?sortby=status">Veranstaltungstyp</a></th>
-		<th width="10%"><a href="<? echo $PHP_SELF ?>?sortby=Institut">Institut</a></th>
+		<th width="10%"><a href="<? echo $PHP_SELF ?>?sortby=Institut">Einrichtung</a></th>
 		<th width="10%">Inhalt</th>
 	</tr>
 	<?
