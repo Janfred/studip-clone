@@ -15,14 +15,15 @@
 
 
 <?php
-        include "seminar_open.php"; //hier werden die sessions initialisiert
+        include "$ABSOLUTE_PATH_STUDIP/seminar_open.php"; //hier werden die sessions initialisiert
 ?>
 
 <!-- hier muessen Seiten-Initialisierungen passieren -->
 
 <?php
-        include "header.php";   //hier wird der "Kopf" nachgeladen
-        require_once("functions.php");   //hier wird der "Kopf" nachgeladen
+        include "$ABSOLUTE_PATH_STUDIP/header.php";   //hier wird der "Kopf" nachgeladen
+        require_once("$ABSOLUTE_PATH_STUDIP/functions.php");   //hier wird der "Kopf" nachgeladen
+        require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");   //hier wird der "Kopf" nachgeladen
 ?>
 <body>
 <br>
@@ -40,6 +41,7 @@ $user_id=$user->id; //damit keiner schummelt...
 
 ////////////////////////// schreiben des Wertes
 $db=new DB_Seminar;
+$cssSw=new cssClassSwitcher;
 
 IF ($cmd=="write") {
 	$query = "UPDATE user_info "
@@ -68,7 +70,8 @@ echo "<br><br><a href='score.php?cmd=write'>Diesen Wert hier ver&ouml;ffentliche
 </tr>
 </table>
 <table width="100%" border=0 cellpadding=0 cellspacing=0><tr><td class=blank>
-<br><br><blockquote>Hier sehen Sie die Score der Nutzer, die Ihre Werte ver&ouml;ffentlicht haben:<br><br>&nbsp; </td></tr></table>
+<br><br><blockquote>Hier sehen Sie die Score der Nutzer, die Ihre Werte ver&ouml;ffentlicht haben:</blockquote>&nbsp; </td></tr>
+<tr><td class="blank">
 <?
 
 ///////////////////////// Liste aller die mutig (oder eitel?) genug sind
@@ -77,13 +80,14 @@ $rang = 1;
 $db=new DB_Seminar;
 $db->query("SELECT b.*,score FROM user_info a LEFT JOIN auth_user_md5 b USING (user_id) WHERE score > 0 ORDER BY score DESC");
 if ($db->num_rows()) {
-	echo "<table width=100% align=center border=0 cellpadding=0 cellspacing=1 class=blank>";
+	echo "<table width=\"99%\" align=\"center\" border=0 cellpadding=2 cellspacing=0>";
 	while ($db->next_record()) {
 		$kill = "";
+		$cssSw->switchClass();
 		IF ($db->f("user_id")==$user_id) $kill = "&nbsp; &nbsp; <a href='score.php?cmd=kill'>[l&ouml;schen]</a>";
-		echo "<tr><td width=1% class=steel1 nowrap align=right>".$rang."<td width=10% class=steel1 nowrap>"
+		echo "<tr><td class=\"".$cssSw->getClass()."\" width=1% class=steel1 nowrap align=right>".$rang.".<td class=\"".$cssSw->getClass()."\" width=10% class=steel1 nowrap>"
 		."&nbsp; &nbsp; <a href='about.php?username=".$db->f("username")."'>".$db->f("Vorname")."&nbsp; ".$db->f("Nachname")."</a></td>"
-		."<td width=10% class=steel1>".$db->f("score")."</td><td width=10% class=steel1>".gettitel($db->f("score"))
+		."<td class=\"".$cssSw->getClass()."\" width=10% class=steel1>".$db->f("score")."</td><td class=\"".$cssSw->getClass()."\" width=10% class=steel1>".gettitel($db->f("score"))
 		.$kill
 		."</td></tr>";
 		$rang++;
@@ -93,5 +97,6 @@ if ($db->num_rows()) {
 
           page_close()
  ?>
+ </td></tr></table>
 </body>
 </html>
