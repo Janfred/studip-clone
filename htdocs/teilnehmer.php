@@ -357,16 +357,19 @@ $db3->next_record();
 
 while (list ($key, $val) = each ($gruppe)) {
 
-if (!isset($sortby) || $sortby=="") 
-	$sortby = "doll DESC";
+	if (!isset($sortby) || $sortby=="") 
+		$sortby = "doll DESC";
+	
+	$counter=1;
+	
+	$db->query ("SELECT seminar_user.user_id, ". $_fullname_sql['full'] ." AS fullname, username, status, count(topic_id) AS doll,  studiengaenge.name, admission_studiengang_id AS studiengang_id FROM seminar_user LEFT JOIN px_topics USING (user_id,Seminar_id) LEFT JOIN auth_user_md5 ON (seminar_user.user_id=auth_user_md5.user_id) LEFT JOIN user_info USING (user_id) LEFT JOIN studiengaenge ON (seminar_user.admission_studiengang_id = studiengaenge.studiengang_id) WHERE seminar_user.Seminar_id = '$SessionSeminar' AND status = '$key'  GROUP by seminar_user.user_id ORDER BY $sortby");
 
-$db->query ("SELECT seminar_user.user_id, ". $_fullname_sql['full'] ." AS fullname, username, status, count(topic_id) AS doll,  studiengaenge.name, admission_studiengang_id AS studiengang_id FROM seminar_user LEFT JOIN px_topics USING (user_id,Seminar_id) LEFT JOIN auth_user_md5 ON (seminar_user.user_id=auth_user_md5.user_id) LEFT JOIN user_info USING (user_id) LEFT JOIN studiengaenge ON (seminar_user.admission_studiengang_id = studiengaenge.studiengang_id) WHERE seminar_user.Seminar_id = '$SessionSeminar' AND status = '$key'  GROUP by seminar_user.user_id ORDER BY $sortby");
-
-if ($db->num_rows()) { //Only if Users were found...
+	if ($db->num_rows()) { //Only if Users were found...
 	// die eigentliche Teil-Tabelle
 	echo "<tr height=28>";
 	if ($showscore==TRUE)  echo "<td class=\"steel\" width=\"1%\">&nbsp; </td>";
-	printf ("<td class=\"steel\" width=\"30%%\" align=\"left\"><img src=\"pictures/blank.gif\" width=\"1\" height=\"20\"><font size=\"-1\"><b><a href=%s?sortby=Nachname>%s</a></b></font></td>", $PHP_SELF, $val);
+	print "<td class=\"steel\" width=\"1%\">&nbsp; </td>";
+	printf ("<td class=\"steel\" width=\"29%%\" align=\"left\"><img src=\"pictures/blank.gif\" width=\"1\" height=\"20\"><font size=\"-1\"><b><a href=%s?sortby=Nachname>%s</a></b></font></td>", $PHP_SELF, $val);
 	printf ("<td class=\"steel\" width=\"10%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b><a href=%s>Postings</a></b></font></td>", $PHP_SELF);
 	echo "<td class=\"steel\" width=\"10%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>Dokumente</b></font></td>";
 	echo "<td class=\"steel\" width=\"9%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>Nachricht</b></font></td>";
@@ -405,7 +408,7 @@ if ($db->num_rows()) { //Only if Users were found...
 			printf ("<td class=\"steel\" width=\"%s%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>BenutzerIn entfernen</b></font></td>", $width);
 			if ($db3->f("admission_type"))
 				print"<td class=\"steel\" width=\"10%\" align=\"center\"><b>&nbsp;</b></td>";
-		}		
+		}
 	}
 	
 	echo "</tr>";
@@ -419,7 +422,6 @@ if ($db->num_rows()) { //Only if Users were found...
 		$class="steelgraulight"; 
 		$class2="colorline2";
 	}
-	$c++;
 
 //  Elemente holen
 
@@ -468,6 +470,7 @@ if ($db->num_rows()) { //Only if Users were found...
 		printf("<td bgcolor=\"#%s%s%s\" class=\"%s\">", $red, $green,$blue, $class2);
 		printf("<img src=\"pictures/blank.gif\" %s width=\"10\" heigth=\"10\"></td>", tooltip("Aktivität: ".round($aktivity_index_user)."%"));
 	}
+	printf ("<td class=\"%s\" nowrap><font size=\"-1\">&nbsp;%s.</td>", $class, $c);
 	printf("<td class=\"%s\"><font size=\"-1\"><a href = about.php?username=" . $db->f("username") . ">", $class);
 	print(htmlReady($db->f("fullname")) ."</a>");
 	print("</font></td><td class=\"$class\" align=\"center\"><font size=\"-1\">");
@@ -536,6 +539,7 @@ if ($db->num_rows()) { //Only if Users were found...
 
 
 	print("</tr>\n");
+	$c++;
 } // eine Zeile zuende
 
 if ($rechte) {
