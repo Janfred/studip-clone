@@ -332,23 +332,24 @@ class AssignObject {
 		return false;
 	}
 	
-	function checkOverlap() {
+	function checkOverlap($check_locks = TRUE) {
 		$resObject =& ResourceObject::Factory($this->resource_id);
-		if (!$resObject->getMultipleAssign()) { //when multiple assigns are allowed, we need no check...
-			//we check overlaps always for a whole day
-			$start = mktime (0,0,0, date("n", $this->begin), date("j", $this->begin), date("Y", $this->begin));
-			if ($this->repeat_end)
-				$end = mktime (23,59,59, date("n", $this->repeat_end), date("j", $this->repeat_end), date("Y", $this->repeat_end));
-			else
-				$end = mktime (23,59,59, date("n", $this->end), date("j", $this->end), date("Y", $this->end));
-				
-			//load the existing assigns for the given resource...
-			list_restore_assign($this, $this->resource_id, $start, $end);
+		//we check overlaps always for a whole day
+		$start = mktime (0,0,0, date("n", $this->begin), date("j", $this->begin), date("Y", $this->begin));
+		if ($this->repeat_end)
+			$end = mktime (23,59,59, date("n", $this->repeat_end), date("j", $this->repeat_end), date("Y", $this->repeat_end));
+		else
+			$end = mktime (23,59,59, date("n", $this->end), date("j", $this->end), date("Y", $this->end));	
 		
-			//...and add the actual assign to perform the checks ...
-			create_assigns($this, $this);
-			
-			//..so we have a "virtual" set of assign-events in the given resource. Now we can check...
+		//load the events of the actual assign...
+		create_assigns($this, $this);
+
+		//...and add the events of existing assigns in the given resource...
+		list_restore_assign($this, $this->resource_id, $start, $end);
+		//..so we have a "virtual" set of assign-events in the given resource. Now we can check overlaps...
+		
+		//check for regular overlaps
+		if (!$resObject->getMultipleAssign()) { //when multiple assigns are allowed, we need no check...
 			if (is_array($this->events))
 				$keys=array_keys($this->events);
 			$my_id = $this->getId();
@@ -371,7 +372,7 @@ class AssignObject {
 						|| (($val2_begin > $val_begin) && ($val2_begin < $val_end))
 						|| (($val_begin == $val2_begin) && ($val_end == $val2_end))) {
 							if (($val2_assign_id  != $my_id) && ($val_assign_id  == $my_id )) {
-								$overlaps[$val2_assign_id] = array("begin" =>$val_begin, "end"=>$val_end);
+								$overlaps[] = array("begin" =>$val_begin, "end"=>$val_end);
 							}
 						}
 					}
