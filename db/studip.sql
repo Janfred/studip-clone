@@ -355,18 +355,6 @@ CREATE TABLE news_range (
 # --------------------------------------------------------
 
 #
-# Tabellenstruktur für Tabelle `newsletter`
-#
-
-CREATE TABLE newsletter (
-  user_id varchar(32) NOT NULL default '',
-  newsletter_id varchar(32) NOT NULL default '',
-  status tinyint(4) NOT NULL default '0',
-  PRIMARY KEY  (user_id)
-) TYPE=MyISAM;
-# --------------------------------------------------------
-
-#
 # Tabellenstruktur für Tabelle `object_rate`
 #
 
@@ -954,16 +942,6 @@ CREATE TABLE voteanswers_user (
 ) TYPE=MyISAM PACK_KEYS=1;
 # --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `wap_sessions`
-#
-
-CREATE TABLE wap_sessions (
-  user_id char(32) NOT NULL default '',
-  session_id char(32) NOT NULL default '',
-  creation_time datetime default NULL
-) TYPE=MyISAM;
-# --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `wiki`

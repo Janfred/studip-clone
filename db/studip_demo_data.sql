@@ -1,208 +1,330 @@
+# phpMyAdmin MySQL-Dump
+# version 2.3.3pl1
+# http://www.phpmyadmin.net/ (download page)
+#
+# Host: localhost
+# Erstellungszeit: 29. Oktober 2003 um 12:12
+# Server Version: 3.23.52
+# PHP-Version: 4.2.2
+# Datenbank: `studip`
 
 #
-# Dumping data for table `admission_seminar_studiengang`
+# Daten für Tabelle `Institute`
 #
-INSERT INTO `admission_seminar_studiengang` (`seminar_id`, `studiengang_id`, `quota`) VALUES ('35f0ab24761e9e426e1e3dbe5e46a0fa', '4780c15be9f63594440dd48fca054d06', 50);
-INSERT INTO `admission_seminar_studiengang` (`seminar_id`, `studiengang_id`, `quota`) VALUES ('35f0ab24761e9e426e1e3dbe5e46a0fa', 'a4f2fd9ba41c3433c3fbbd87f74eabd2', 40);
-INSERT INTO `admission_seminar_studiengang` (`seminar_id`, `studiengang_id`, `quota`) VALUES ('35f0ab24761e9e426e1e3dbe5e46a0fa', 'all', 10);
+
+INSERT INTO Institute VALUES ('d9a2cb67781cb478caef29fd14a0653a', 'Test-Fakultät', 'd9a2cb67781cb478caef29fd14a0653a', 'Geismar Landstr. 17b', '37083 Göttingen', 'http://www.studip.de', '0551 / 381 985 0', 'testfakultaet@studip.de', '0551 / 381 985 3', 7, 179, 1066997621, 1067423638);
+INSERT INTO Institute VALUES ('6a1f27ed3c07b1cff22f467e8bd20868', 'Test-Einrichtung', 'd9a2cb67781cb478caef29fd14a0653a', 'Geismar Landstr. 17b', '37083 Göttingen', 'www.studip.de', '0551 / 381 985 0', 'testeinrichtung@studip.de', '0551 / 381 985 3', 1, 179, 1067423615, 1067423615);
+
 #
-# Dumping data for table `admission_seminar_user`
+# Daten für Tabelle `auth_user_md5`
 #
+
+INSERT IGNORE INTO auth_user_md5 VALUES ('76ed43ef286fb55cf9e41beadb484a9f', 'root@studip', 'ae2b1fca515949e5d54fb22b8ed95575', 'root', 'Root', 'Studip', 'root@localhost', NULL);
+INSERT INTO auth_user_md5 VALUES ('205f3efb7997a0fc9755da2b535038da', 'test_dozent', 'ae2b1fca515949e5d54fb22b8ed95575', 'dozent', 'Testaccount', 'Dozent', 'dozent@studip.de', NULL);
+INSERT INTO auth_user_md5 VALUES ('6235c46eb9e962866ebdceece739ace5', 'test_admin', 'ae2b1fca515949e5d54fb22b8ed95575', 'admin', 'Testaccount', 'Admin', 'admin@studip.de', NULL);
+INSERT INTO auth_user_md5 VALUES ('7e81ec247c151c02ffd479511e24cc03', 'test_tutor', 'ae2b1fca515949e5d54fb22b8ed95575', 'tutor', 'Testaccount', 'Tutor', 'tutor@studip.de', NULL);
+INSERT INTO auth_user_md5 VALUES ('e7a0a84b161f3e8c09b4a0a2e8a58147', 'test_autor', 'ae2b1fca515949e5d54fb22b8ed95575', 'autor', 'Testaccount', 'Autor', 'autor@studip.de', NULL);
+
 #
-# Dumping data for table `archiv`
+# Daten für Tabelle `folder`
 #
+
+INSERT INTO folder VALUES ('60dab5a0f4bc9da27759119ca678523e', 'd9a2cb67781cb478caef29fd14a0653a', '', 'Allgemeiner Dateiordner', 'Ablage für allgemeine Ordner und Dokumente der Einrichtung', 1066997621, 1066997621);
+INSERT INTO folder VALUES ('121c23103f4006f48d1900d14b8456bb', '6a1f27ed3c07b1cff22f467e8bd20868', '', 'Allgemeiner Dateiordner', 'Ablage für allgemeine Ordner und Dokumente der Einrichtung', 1067423615, 1067423615);
+INSERT INTO folder VALUES ('4cb68ee5e7f65059aa26327b4ea93d7c', '0df1d0586ad3a160dd00d4e2789cf8e8', '76ed43ef286fb55cf9e41beadb484a9f', 'Allgemeiner Dateiordner', 'Ablage für allgemeine Ordner und Dokumente der Veranstaltung', 1067424154, 1067424154);
+INSERT INTO folder VALUES ('b2eb66de1e60d7b505270a307dd5d206', '049616112f21acf8567013820e3878ce', '76ed43ef286fb55cf9e41beadb484a9f', 'Sitzung: Kein Titel am 20.10.2003', 'Ablage für Ordner und Dokumente zu diesem Termin', 1067424271, 1067425166);
+INSERT INTO folder VALUES ('bb39059956122c909cd041e27cfdb530', '7e55c42bfa96389c1f601f93f5f26db0', '76ed43ef286fb55cf9e41beadb484a9f', 'Sitzung: Kein Titel am 23.10.2003', 'Ablage für Ordner und Dokumente zu diesem Termin', 1067424272, 1067425166);
+INSERT INTO folder VALUES ('698e1327adfb63e6e2cd8aa8cc71deed', 'c187467f7d49cb3824428a0ca3fed1e2', '76ed43ef286fb55cf9e41beadb484a9f', 'Sitzung: Kein Titel am 27.10.2003', 'Ablage für Ordner und Dokumente zu diesem Termin', 1067424272, 1067425166);
+INSERT INTO folder VALUES ('5852c7d13aa61e8628a5b04052856ab4', '75d8545383cfe668ec3d346b05afe2a4', '76ed43ef286fb55cf9e41beadb484a9f', 'Sitzung: Kein Titel am 30.10.2003', 'Ablage für Ordner und Dokumente zu diesem Termin', 1067424272, 1067425166);
+INSERT INTO folder VALUES ('78471ee028a012a414787e1bb4ce0bef', '6426bd7e032e2e21d27eb45f79ea1bc8', '76ed43ef286fb55cf9e41beadb484a9f', 'Sitzung: Kein Titel am 03.11.2003', 'Ablage für Ordner und Dokumente zu diesem Termin', 1067424272, 1067425166);
+INSERT INTO folder VALUES ('bb4f31eb95d71bc24bbfb3142b64336d', '930b0f91e7ba58d6a56d18dee783482d', '76ed43ef286fb55cf9e41beadb484a9f', 'Sitzung: Kein Titel am 06.11.2003', 'Ablage für Ordner und Dokumente zu diesem Termin', 1067424272, 1067425167);
+INSERT INTO folder VALUES ('e51e4b690b9e2ffd5263576264a0b9ba', 'e880531505932cb1af91b4aedb68560f', '76ed43ef286fb55cf9e41beadb484a9f', 'Sitzung: Kein Titel am 10.11.2003', 'Ablage für Ordner und Dokumente zu diesem Termin', 1067424272, 1067425167);
+INSERT INTO folder VALUES ('66ecf6789cf7eecf255138faba9fb14a', 'ef6de39cd7b74f57dc431ca6d43b1364', '76ed43ef286fb55cf9e41beadb484a9f', 'Sitzung: Kein Titel am 13.11.2003', 'Ablage für Ordner und Dokumente zu diesem Termin', 1067424272, 1067425167);
+INSERT INTO folder VALUES ('23ddf22259b94fa99455c20084c44787', '0627fae9f6fcee584db9b2478b98d128', '76ed43ef286fb55cf9e41beadb484a9f', 'Sitzung: Kein Titel am 17.11.2003', 'Ablage für Ordner und Dokumente zu diesem Termin', 1067424272, 1067425167);
+INSERT INTO folder VALUES ('a84da90bb2a7d8cc803f05f0e9f8005a', 'e02bcc95b7b5a89314b15fea1077b415', '76ed43ef286fb55cf9e41beadb484a9f', 'Sitzung: Kein Titel am 20.11.2003', 'Ablage für Ordner und Dokumente zu diesem Termin', 1067424272, 1067425167);
+INSERT INTO folder VALUES ('86f1dc5446fb26bf457947081f8f1f75', '27a53e480be39615139e25cca31ec832', '76ed43ef286fb55cf9e41beadb484a9f', 'Sitzung: Kein Titel am 24.11.2003', 'Ablage für Ordner und Dokumente zu diesem Termin', 1067424272, 1067425167);
+INSERT INTO folder VALUES ('f8a447ba4e29164ea1a948c28ae51315', '57b0cf0e704407b1791592bba21ca22f', '76ed43ef286fb55cf9e41beadb484a9f', 'Sitzung: Kein Titel am 27.11.2003', 'Ablage für Ordner und Dokumente zu diesem Termin', 1067424272, 1067425167);
+INSERT INTO folder VALUES ('b466946f90cb8a08d0f36c8730ee4730', '58c11e07905705a5e4b55483db66f84e', '76ed43ef286fb55cf9e41beadb484a9f', 'Sitzung: Kein Titel am 01.12.2003', 'Ablage für Ordner und Dokumente zu diesem Termin', 1067424272, 1067425167);
+INSERT INTO folder VALUES ('470f5986e630eff8e61da9f8ed570f8a', '59af1de2f72f0d4f01e174773916af41', '76ed43ef286fb55cf9e41beadb484a9f', 'Sitzung: Kein Titel am 04.12.2003', 'Ablage für Ordner und Dokumente zu diesem Termin', 1067424272, 1067425167);
+INSERT INTO folder VALUES ('1e2206d6452ea967dd5ffe1d79811e18', '3762407314151dd0674e61c0c4234d38', '76ed43ef286fb55cf9e41beadb484a9f', 'Sitzung: Kein Titel am 08.12.2003', 'Ablage für Ordner und Dokumente zu diesem Termin', 1067424272, 1067425167);
+INSERT INTO folder VALUES ('be85964b497df03c8899875dafb62479', 'a746e21ece7630b2e6e2a7f354e67fd4', '76ed43ef286fb55cf9e41beadb484a9f', 'Sitzung: Kein Titel am 11.12.2003', 'Ablage für Ordner und Dokumente zu diesem Termin', 1067424272, 1067425167);
+INSERT INTO folder VALUES ('288988b95afa33b8383ccae19977f6d2', 'af259534e1d569f6ef563ffd3e3c0bbc', '76ed43ef286fb55cf9e41beadb484a9f', 'Sitzung: Kein Titel am 15.12.2003', 'Ablage für Ordner und Dokumente zu diesem Termin', 1067424272, 1067425167);
+INSERT INTO folder VALUES ('e0d2d6a4f6846023c1fcc3d6bafe022f', '939a229c1e5462bf69bd67eabf6938c6', '76ed43ef286fb55cf9e41beadb484a9f', 'Sitzung: Kein Titel am 18.12.2003', 'Ablage für Ordner und Dokumente zu diesem Termin', 1067424272, 1067425167);
+INSERT INTO folder VALUES ('c54bc2bba23988b15b40005ffb272eb4', '581a6065357f2a2b25e2aed40e1797c9', '76ed43ef286fb55cf9e41beadb484a9f', 'Sitzung: Kein Titel am 05.01.2004', 'Ablage für Ordner und Dokumente zu diesem Termin', 1067424273, 1067425167);
+INSERT INTO folder VALUES ('738c98a9e0d4386257ce633425325453', '81825595bec9d6097d44223f8770c59b', '76ed43ef286fb55cf9e41beadb484a9f', 'Sitzung: Kein Titel am 08.01.2004', 'Ablage für Ordner und Dokumente zu diesem Termin', 1067424273, 1067425168);
+INSERT INTO folder VALUES ('e1f1154076c19d02b1741261edd20f7c', 'b456e5c0985c24b49f08fac99f768f5e', '76ed43ef286fb55cf9e41beadb484a9f', 'Sitzung: Kein Titel am 12.01.2004', 'Ablage für Ordner und Dokumente zu diesem Termin', 1067424273, 1067425168);
+INSERT INTO folder VALUES ('47a1cf460a55b80f32e11baf8d39f833', '8ecc2035ecf5378773086e126a951832', '76ed43ef286fb55cf9e41beadb484a9f', 'Sitzung: Kein Titel am 15.01.2004', 'Ablage für Ordner und Dokumente zu diesem Termin', 1067424273, 1067425168);
+INSERT INTO folder VALUES ('a1805baaf098dc5137d65695a0c8299c', '68fd6ec6efba9c46023f1b85dff80974', '76ed43ef286fb55cf9e41beadb484a9f', 'Sitzung: Kein Titel am 19.01.2004', 'Ablage für Ordner und Dokumente zu diesem Termin', 1067424273, 1067425168);
+INSERT INTO folder VALUES ('e220c3ac66e769bff95a73d6797f5b04', '01b76210274246a06ff80f2b3874344c', '76ed43ef286fb55cf9e41beadb484a9f', 'Sitzung: Kein Titel am 22.01.2004', 'Ablage für Ordner und Dokumente zu diesem Termin', 1067424273, 1067425168);
+INSERT INTO folder VALUES ('24d1dad9fe0838684d5aa32eff9e9df1', 'd10f4f1ab03a747217365e05f9072027', '76ed43ef286fb55cf9e41beadb484a9f', 'Sitzung: Kein Titel am 26.01.2004', 'Ablage für Ordner und Dokumente zu diesem Termin', 1067424273, 1067425168);
+INSERT INTO folder VALUES ('abf1228c6b2aa780108d8d2fb0901fdd', 'f9dbc6deddbae235ca713b7346f6355b', '76ed43ef286fb55cf9e41beadb484a9f', 'Sitzung: Kein Titel am 29.01.2004', 'Ablage für Ordner und Dokumente zu diesem Termin', 1067424273, 1067425168);
+INSERT INTO folder VALUES ('f1859de72dd1c0978d2f60c22008ff44', '4895b056cb06379c3a2193661a5419b7', '76ed43ef286fb55cf9e41beadb484a9f', 'Sitzung: Kein Titel am 02.02.2004', 'Ablage für Ordner und Dokumente zu diesem Termin', 1067424273, 1067425168);
+INSERT INTO folder VALUES ('7426e2ce8fb9fff852062710d923841f', '71d22e1dd7e9dbe188e1884aebbad8a6', '76ed43ef286fb55cf9e41beadb484a9f', 'Sitzung: Kein Titel am 05.02.2004', 'Ablage für Ordner und Dokumente zu diesem Termin', 1067424273, 1067425168);
+INSERT INTO folder VALUES ('4d927a73f23c71af7360ad1d07dfd5b9', 'b4b9f08454b3871e697caea84f8f22c2', '76ed43ef286fb55cf9e41beadb484a9f', 'Allgemeiner Dateiordner', 'Ablage für allgemeine Ordner und Dokumente der Veranstaltung', 1067425274, 1067425274);
+
 #
-# Dumping data for table `archiv_user`
+# Daten für Tabelle `literatur`
 #
+
+INSERT INTO literatur VALUES ('d7939111c6ab813d84808256b95a7e0d', '0df1d0586ad3a160dd00d4e2789cf8e8', '76ed43ef286fb55cf9e41beadb484a9f', 'Schüpbach, Evi: Didaktischer Leitfaden für E-Learning. Bern 2003', 'www.studip.de\r\nwww.data-quest.de\r\n', 1067424264, 1067424264);
+
 #
-# Dumping data for table `auth_user_md5`
+# Daten für Tabelle `news`
 #
-INSERT INTO `auth_user_md5` (`user_id`, `username`, `password`, `perms`, `Vorname`, `Nachname`, `Email`) VALUES ('f7fc4adacb450600ed22cb6abdaedd91', 'test_autor', 'ae2b1fca515949e5d54fb22b8ed95575', 'autor', 'Test', 'Autor', 'info@studip.de');
-INSERT INTO `auth_user_md5` (`user_id`, `username`, `password`, `perms`, `Vorname`, `Nachname`, `Email`) VALUES ('12fd5b8766c19ef6ee50fb94231659d3', 'test_tutor', 'ae2b1fca515949e5d54fb22b8ed95575', 'tutor', 'Test', 'Tutor', 'info@studip.de');
-INSERT INTO `auth_user_md5` (`user_id`, `username`, `password`, `perms`, `Vorname`, `Nachname`, `Email`) VALUES ('a25ec520443b6b2a7deb6688804e5b26', 'test_dozent', 'ae2b1fca515949e5d54fb22b8ed95575', 'dozent', 'Test', 'Dozent', 'info@studip.de');
-INSERT INTO `auth_user_md5` (`user_id`, `username`, `password`, `perms`, `Vorname`, `Nachname`, `Email`) VALUES ('157ee45ad191f25b39a86664b036e5e3', 'test_admin', 'ae2b1fca515949e5d54fb22b8ed95575', 'admin', 'Test', 'Admin', 'info@studip.de');
-INSERT INTO `auth_user_md5` (`user_id`, `username`, `password`, `perms`, `Vorname`, `Nachname`, `Email`) VALUES ('d2efba7cfecb87a86ba11d225848e9f9', 'test_fak_admin', 'ae2b1fca515949e5d54fb22b8ed95575', 'admin', 'Test', 'Admin (Fakultät)', 'info@studip.de');
+
+INSERT IGNORE INTO news VALUES ('29f2932ce32be989022c6f43b866e744', 'Herzlich Willkommen!', 'Das Stud.IP-Team heisst sie herzlich willkommen. \r\nBitte schauen Sie sich ruhig um!\r\n\r\nWenn Sie das System selbst installiert haben und diese News sehen, haben Sie die Demonstrationsdaten in die Datenbank eingefügt. Wenn Sie produktiv mit dem System arbeiten wollen, sollten Sie diese Daten später wieder löschen, da die Passwörter der Accounts (vor allem des root-Accounts) öffentlich bekannt sind.', 'Root Studip', UNIX_TIMESTAMP(NOW()), '76ed43ef286fb55cf9e41beadb484a9f', 7343999);
+
 #
-# Dumping data for table `contact`
+# Daten für Tabelle `news_range`
 #
-INSERT INTO `contact` (`contact_id`, `owner_id`, `user_id`, `buddy`) VALUES ('0979087506eb1e4afdfa130ef0a165d4', 'f7fc4adacb450600ed22cb6abdaedd91', 'a25ec520443b6b2a7deb6688804e5b26', 1);
-INSERT INTO `contact` (`contact_id`, `owner_id`, `user_id`, `buddy`) VALUES ('b648621a313cb4ee711830a086fe7ab5', 'f7fc4adacb450600ed22cb6abdaedd91', '12fd5b8766c19ef6ee50fb94231659d3', 1);
+
+INSERT INTO news_range VALUES ('29f2932ce32be989022c6f43b866e744', '76ed43ef286fb55cf9e41beadb484a9f');
+INSERT INTO news_range VALUES ('29f2932ce32be989022c6f43b866e744', 'studip');
+
 #
-# Dumping data for table `contact_userinfo`
+# Daten für Tabelle `px_topics`
 #
+
+INSERT INTO px_topics VALUES ('27e0b6806c65f5d8e69497582eb2efb3', '0', '27e0b6806c65f5d8e69497582eb2efb3', 'Allgemeine Diskussionen', 'Hier ist Raum für allgemeine Diskussionen', 1066997621, 1066997621, '', '82.82.159.129', 'd9a2cb67781cb478caef29fd14a0653a', '76ed43ef286fb55cf9e41beadb484a9f');
+INSERT INTO px_topics VALUES ('c195a93402bba46d424bd07cc8f9651a', '0', 'c195a93402bba46d424bd07cc8f9651a', 'Allgemeine Diskussionen', 'Hier ist Raum für allgemeine Diskussionen', 1067423615, 1067423615, '', '213.23.233.209', '6a1f27ed3c07b1cff22f467e8bd20868', '76ed43ef286fb55cf9e41beadb484a9f');
+INSERT INTO px_topics VALUES ('e16a753465395b7cb04fed6d1d27e858', '0', 'e16a753465395b7cb04fed6d1d27e858', 'Allgemeine Diskussionen', 'Hier ist Raum für allgemeine Diskussionen', 1067424154, 1067424154, 'Root Studip', '213.23.233.209', '0df1d0586ad3a160dd00d4e2789cf8e8', '76ed43ef286fb55cf9e41beadb484a9f');
+INSERT INTO px_topics VALUES ('f24255f809a8dbfd5063fa9ec8508f13', '0', 'f24255f809a8dbfd5063fa9ec8508f13', 'Sitzung: Kein Titel am 20.10.2003', 'Hier kann zu diesem Termin diskutiert werden', 1067424271, 1067425166, 'Root Studip', '213.23.233.209', '0df1d0586ad3a160dd00d4e2789cf8e8', '76ed43ef286fb55cf9e41beadb484a9f');
+INSERT INTO px_topics VALUES ('b5c64a3ab8ce81c019d719ebf0cfd612', '0', 'b5c64a3ab8ce81c019d719ebf0cfd612', 'Sitzung: Kein Titel am 23.10.2003', 'Hier kann zu diesem Termin diskutiert werden', 1067424272, 1067425166, 'Root Studip', '213.23.233.209', '0df1d0586ad3a160dd00d4e2789cf8e8', '76ed43ef286fb55cf9e41beadb484a9f');
+INSERT INTO px_topics VALUES ('7080e92cf5880ca11e6554014c95f7f4', '0', '7080e92cf5880ca11e6554014c95f7f4', 'Sitzung: Kein Titel am 27.10.2003', 'Hier kann zu diesem Termin diskutiert werden', 1067424272, 1067425166, 'Root Studip', '213.23.233.209', '0df1d0586ad3a160dd00d4e2789cf8e8', '76ed43ef286fb55cf9e41beadb484a9f');
+INSERT INTO px_topics VALUES ('2aa3c87a1bf554130e77e9e5e6cfea1a', '0', '2aa3c87a1bf554130e77e9e5e6cfea1a', 'Sitzung: Kein Titel am 30.10.2003', 'Hier kann zu diesem Termin diskutiert werden', 1067424272, 1067425166, 'Root Studip', '213.23.233.209', '0df1d0586ad3a160dd00d4e2789cf8e8', '76ed43ef286fb55cf9e41beadb484a9f');
+INSERT INTO px_topics VALUES ('07e712098fa59d116c1a0b3c7feb3b25', '0', '07e712098fa59d116c1a0b3c7feb3b25', 'Sitzung: Kein Titel am 03.11.2003', 'Hier kann zu diesem Termin diskutiert werden', 1067424272, 1067425166, 'Root Studip', '213.23.233.209', '0df1d0586ad3a160dd00d4e2789cf8e8', '76ed43ef286fb55cf9e41beadb484a9f');
+INSERT INTO px_topics VALUES ('ff0a8ee14ba6239a7111a33323668696', '0', 'ff0a8ee14ba6239a7111a33323668696', 'Sitzung: Kein Titel am 06.11.2003', 'Hier kann zu diesem Termin diskutiert werden', 1067424272, 1067425167, 'Root Studip', '213.23.233.209', '0df1d0586ad3a160dd00d4e2789cf8e8', '76ed43ef286fb55cf9e41beadb484a9f');
+INSERT INTO px_topics VALUES ('bc6694d534b53ee7d3e85825f19e583f', '0', 'bc6694d534b53ee7d3e85825f19e583f', 'Sitzung: Kein Titel am 10.11.2003', 'Hier kann zu diesem Termin diskutiert werden', 1067424272, 1067425167, 'Root Studip', '213.23.233.209', '0df1d0586ad3a160dd00d4e2789cf8e8', '76ed43ef286fb55cf9e41beadb484a9f');
+INSERT INTO px_topics VALUES ('e56cf52ec332ba0e7ea88ca13237d112', '0', 'e56cf52ec332ba0e7ea88ca13237d112', 'Sitzung: Kein Titel am 13.11.2003', 'Hier kann zu diesem Termin diskutiert werden', 1067424272, 1067425167, 'Root Studip', '213.23.233.209', '0df1d0586ad3a160dd00d4e2789cf8e8', '76ed43ef286fb55cf9e41beadb484a9f');
+INSERT INTO px_topics VALUES ('3fceaa866d0daaf2c1319ac3ac99c8df', '0', '3fceaa866d0daaf2c1319ac3ac99c8df', 'Sitzung: Kein Titel am 17.11.2003', 'Hier kann zu diesem Termin diskutiert werden', 1067424272, 1067425167, 'Root Studip', '213.23.233.209', '0df1d0586ad3a160dd00d4e2789cf8e8', '76ed43ef286fb55cf9e41beadb484a9f');
+INSERT INTO px_topics VALUES ('89ba1903d0a32967ece574be9e82853e', '0', '89ba1903d0a32967ece574be9e82853e', 'Sitzung: Kein Titel am 20.11.2003', 'Hier kann zu diesem Termin diskutiert werden', 1067424272, 1067425167, 'Root Studip', '213.23.233.209', '0df1d0586ad3a160dd00d4e2789cf8e8', '76ed43ef286fb55cf9e41beadb484a9f');
+INSERT INTO px_topics VALUES ('6eb809e3df5608e56ce8def424227982', '0', '6eb809e3df5608e56ce8def424227982', 'Sitzung: Kein Titel am 24.11.2003', 'Hier kann zu diesem Termin diskutiert werden', 1067424272, 1067425167, 'Root Studip', '213.23.233.209', '0df1d0586ad3a160dd00d4e2789cf8e8', '76ed43ef286fb55cf9e41beadb484a9f');
+INSERT INTO px_topics VALUES ('2abe059b3aa9021e2badbf8807616f14', '0', '2abe059b3aa9021e2badbf8807616f14', 'Sitzung: Kein Titel am 27.11.2003', 'Hier kann zu diesem Termin diskutiert werden', 1067424272, 1067425167, 'Root Studip', '213.23.233.209', '0df1d0586ad3a160dd00d4e2789cf8e8', '76ed43ef286fb55cf9e41beadb484a9f');
+INSERT INTO px_topics VALUES ('0ae7abae49ed09b2b6b8905a6b820ee8', '0', '0ae7abae49ed09b2b6b8905a6b820ee8', 'Sitzung: Kein Titel am 01.12.2003', 'Hier kann zu diesem Termin diskutiert werden', 1067424272, 1067425167, 'Root Studip', '213.23.233.209', '0df1d0586ad3a160dd00d4e2789cf8e8', '76ed43ef286fb55cf9e41beadb484a9f');
+INSERT INTO px_topics VALUES ('f635f82740928e193572b36ca5db76e2', '0', 'f635f82740928e193572b36ca5db76e2', 'Sitzung: Kein Titel am 04.12.2003', 'Hier kann zu diesem Termin diskutiert werden', 1067424272, 1067425167, 'Root Studip', '213.23.233.209', '0df1d0586ad3a160dd00d4e2789cf8e8', '76ed43ef286fb55cf9e41beadb484a9f');
+INSERT INTO px_topics VALUES ('f831e0b0ff790f5226f3bca9fc31f969', '0', 'f831e0b0ff790f5226f3bca9fc31f969', 'Sitzung: Kein Titel am 08.12.2003', 'Hier kann zu diesem Termin diskutiert werden', 1067424272, 1067425167, 'Root Studip', '213.23.233.209', '0df1d0586ad3a160dd00d4e2789cf8e8', '76ed43ef286fb55cf9e41beadb484a9f');
+INSERT INTO px_topics VALUES ('db0ba0822fca309fbbf7a8bdeecb5e09', '0', 'db0ba0822fca309fbbf7a8bdeecb5e09', 'Sitzung: Kein Titel am 11.12.2003', 'Hier kann zu diesem Termin diskutiert werden', 1067424272, 1067425167, 'Root Studip', '213.23.233.209', '0df1d0586ad3a160dd00d4e2789cf8e8', '76ed43ef286fb55cf9e41beadb484a9f');
+INSERT INTO px_topics VALUES ('dff914ffe337d6b59a403589f1672ff4', '0', 'dff914ffe337d6b59a403589f1672ff4', 'Sitzung: Kein Titel am 15.12.2003', 'Hier kann zu diesem Termin diskutiert werden', 1067424272, 1067425167, 'Root Studip', '213.23.233.209', '0df1d0586ad3a160dd00d4e2789cf8e8', '76ed43ef286fb55cf9e41beadb484a9f');
+INSERT INTO px_topics VALUES ('f7a6cdf74fba7a29238d7568b6f80e09', '0', 'f7a6cdf74fba7a29238d7568b6f80e09', 'Sitzung: Kein Titel am 18.12.2003', 'Hier kann zu diesem Termin diskutiert werden', 1067424272, 1067425167, 'Root Studip', '213.23.233.209', '0df1d0586ad3a160dd00d4e2789cf8e8', '76ed43ef286fb55cf9e41beadb484a9f');
+INSERT INTO px_topics VALUES ('f89b9b75d019073c3910361623b9974c', '0', 'f89b9b75d019073c3910361623b9974c', 'Sitzung: Kein Titel am 05.01.2004', 'Hier kann zu diesem Termin diskutiert werden', 1067424273, 1067425167, 'Root Studip', '213.23.233.209', '0df1d0586ad3a160dd00d4e2789cf8e8', '76ed43ef286fb55cf9e41beadb484a9f');
+INSERT INTO px_topics VALUES ('24717f7883b5c2cbd59533606f6b1c6f', '0', '24717f7883b5c2cbd59533606f6b1c6f', 'Sitzung: Kein Titel am 08.01.2004', 'Hier kann zu diesem Termin diskutiert werden', 1067424273, 1067425168, 'Root Studip', '213.23.233.209', '0df1d0586ad3a160dd00d4e2789cf8e8', '76ed43ef286fb55cf9e41beadb484a9f');
+INSERT INTO px_topics VALUES ('bfc05a7bf3b61b019bc4d9c9ef6c9ef8', '0', 'bfc05a7bf3b61b019bc4d9c9ef6c9ef8', 'Sitzung: Kein Titel am 12.01.2004', 'Hier kann zu diesem Termin diskutiert werden', 1067424273, 1067425168, 'Root Studip', '213.23.233.209', '0df1d0586ad3a160dd00d4e2789cf8e8', '76ed43ef286fb55cf9e41beadb484a9f');
+INSERT INTO px_topics VALUES ('e2eb162aa327c9f448816a2ce3d02164', '0', 'e2eb162aa327c9f448816a2ce3d02164', 'Sitzung: Kein Titel am 15.01.2004', 'Hier kann zu diesem Termin diskutiert werden', 1067424273, 1067425168, 'Root Studip', '213.23.233.209', '0df1d0586ad3a160dd00d4e2789cf8e8', '76ed43ef286fb55cf9e41beadb484a9f');
+INSERT INTO px_topics VALUES ('08d6ebb84ed75cc8afbd50d23dcb81a1', '0', '08d6ebb84ed75cc8afbd50d23dcb81a1', 'Sitzung: Kein Titel am 19.01.2004', 'Hier kann zu diesem Termin diskutiert werden', 1067424273, 1067425168, 'Root Studip', '213.23.233.209', '0df1d0586ad3a160dd00d4e2789cf8e8', '76ed43ef286fb55cf9e41beadb484a9f');
+INSERT INTO px_topics VALUES ('62970222190f348078180194e0926f76', '0', '62970222190f348078180194e0926f76', 'Sitzung: Kein Titel am 22.01.2004', 'Hier kann zu diesem Termin diskutiert werden', 1067424273, 1067425168, 'Root Studip', '213.23.233.209', '0df1d0586ad3a160dd00d4e2789cf8e8', '76ed43ef286fb55cf9e41beadb484a9f');
+INSERT INTO px_topics VALUES ('dfd9d2b50483054e1fcc521bf82f5602', '0', 'dfd9d2b50483054e1fcc521bf82f5602', 'Sitzung: Kein Titel am 26.01.2004', 'Hier kann zu diesem Termin diskutiert werden', 1067424273, 1067425168, 'Root Studip', '213.23.233.209', '0df1d0586ad3a160dd00d4e2789cf8e8', '76ed43ef286fb55cf9e41beadb484a9f');
+INSERT INTO px_topics VALUES ('bc4fa1b44ba30d8735d2ed39ee86143d', '0', 'bc4fa1b44ba30d8735d2ed39ee86143d', 'Sitzung: Kein Titel am 29.01.2004', 'Hier kann zu diesem Termin diskutiert werden', 1067424273, 1067425168, 'Root Studip', '213.23.233.209', '0df1d0586ad3a160dd00d4e2789cf8e8', '76ed43ef286fb55cf9e41beadb484a9f');
+INSERT INTO px_topics VALUES ('9a1e70b55b2cd12184c61758a01c9a70', '0', '9a1e70b55b2cd12184c61758a01c9a70', 'Sitzung: Kein Titel am 02.02.2004', 'Hier kann zu diesem Termin diskutiert werden', 1067424273, 1067425168, 'Root Studip', '213.23.233.209', '0df1d0586ad3a160dd00d4e2789cf8e8', '76ed43ef286fb55cf9e41beadb484a9f');
+INSERT INTO px_topics VALUES ('86792cfad094dbcd2d7caf155eea661d', '0', '86792cfad094dbcd2d7caf155eea661d', 'Sitzung: Kein Titel am 05.02.2004', 'Hier kann zu diesem Termin diskutiert werden', 1067424273, 1067425168, 'Root Studip', '213.23.233.209', '0df1d0586ad3a160dd00d4e2789cf8e8', '76ed43ef286fb55cf9e41beadb484a9f');
+INSERT INTO px_topics VALUES ('2a192ab371437c021752fb6b8a032db4', '0', '2a192ab371437c021752fb6b8a032db4', 'Allgemeine Diskussionen', 'Hier ist Raum für allgemeine Diskussionen', 1067425274, 1067425274, 'Root Studip', '213.23.233.209', 'b4b9f08454b3871e697caea84f8f22c2', '76ed43ef286fb55cf9e41beadb484a9f');
+
 #
-# Dumping data for table `dokumente`
+# Daten für Tabelle `range_tree`
 #
+
+INSERT INTO range_tree VALUES ('85db2baab403372b121b189eebe050ee', 'root', 0, 0, 'Test-Fakultät', 'fak', 'd9a2cb67781cb478caef29fd14a0653a');
+INSERT INTO range_tree VALUES ('59c37d2e638d827cf3b72f435688b4cd', '85db2baab403372b121b189eebe050ee', 0, 0, 'Test-Einrichtung', 'inst', '6a1f27ed3c07b1cff22f467e8bd20868');
+
 #
-# Dumping data for table `extern_config`
+# Daten für Tabelle `sem_tree`
 #
+
+INSERT INTO sem_tree VALUES ('6d4782f8bb17dadf53e3bf8a9cfb919a', 'root', 1, '', '', 'd9a2cb67781cb478caef29fd14a0653a');
+INSERT INTO sem_tree VALUES ('e29e0dfff182b5915c421b65c34264df', '6d4782f8bb17dadf53e3bf8a9cfb919a', 0, '', 'Test-Studienfach 1', NULL);
+INSERT INTO sem_tree VALUES ('5b6ad76729028bde2fed8ebb6bf0323a', '6d4782f8bb17dadf53e3bf8a9cfb919a', 1, '', 'Test Studienfach 2', NULL);
+
 #
-# Dumping data for table `folder`
+# Daten für Tabelle `seminar_inst`
 #
-INSERT INTO `folder` (`folder_id`, `range_id`, `user_id`, `name`, `description`, `mkdate`, `chdate`) VALUES ('1544c80107894655e29b9f01062eae34', '92b89ae00ae39d467c3cd5a1a9a53445', '', 'Allgemeiner Dateiordner', 'Ablage für allgemeine Ordner und Dokumente der Einrichtung', 1048795298, 1048795298);
-INSERT INTO `folder` (`folder_id`, `range_id`, `user_id`, `name`, `description`, `mkdate`, `chdate`) VALUES ('2c914518cdb07d9552553fe702c1970c', '8eec88158b9742e868dd47104620f614', '', 'Allgemeiner Dateiordner', 'Ablage für allgemeine Ordner und Dokumente der Einrichtung', 1048795330, 1048795330);
-INSERT INTO `folder` (`folder_id`, `range_id`, `user_id`, `name`, `description`, `mkdate`, `chdate`) VALUES ('7421a65a3eb7687e90ce2e1139b221d7', 'feca0e3ccd285b1f414ddcde7299ba29', '', 'Allgemeiner Dateiordner', 'Ablage für allgemeine Ordner und Dokumente der Einrichtung', 1048795368, 1048795368);
-INSERT INTO `folder` (`folder_id`, `range_id`, `user_id`, `name`, `description`, `mkdate`, `chdate`) VALUES ('886c89cda4b4154d198aec24c90a28bf', '7009adabf5107440876e2b971bd3a888', '76ed43ef286fb55cf9e41beadb484a9f', 'Allgemeiner Dateiordner', 'Ablage für allgemeine Ordner und Dokumente der Veranstaltung', 1048796294, 1048796294);
-INSERT INTO `folder` (`folder_id`, `range_id`, `user_id`, `name`, `description`, `mkdate`, `chdate`) VALUES ('cea739f8213c827a9143a1285e078011', 'c2aae30732fe32178f40e86ef130fd17', '157ee45ad191f25b39a86664b036e5e3', 'Allgemeiner Dateiordner', 'Ablage für allgemeine Ordner und Dokumente der Veranstaltung', 1048796674, 1048796674);
-INSERT INTO `folder` (`folder_id`, `range_id`, `user_id`, `name`, `description`, `mkdate`, `chdate`) VALUES ('6255ca4b4f117b2a104602ed9168613d', 'fb41520a81db27b6881b0e40b813627b', '76ed43ef286fb55cf9e41beadb484a9f', 'Allgemeiner Dateiordner', 'Ablage für allgemeine Ordner und Dokumente der Veranstaltung', 1051714664, 1051714664);
-INSERT INTO `folder` (`folder_id`, `range_id`, `user_id`, `name`, `description`, `mkdate`, `chdate`) VALUES ('ad3a0a7009bd994e109cb2f4f38d615f', '35f0ab24761e9e426e1e3dbe5e46a0fa', '76ed43ef286fb55cf9e41beadb484a9f', 'Allgemeiner Dateiordner', 'Ablage für allgemeine Ordner und Dokumente der Veranstaltung', 1051715127, 1051715127);
-INSERT INTO `folder` (`folder_id`, `range_id`, `user_id`, `name`, `description`, `mkdate`, `chdate`) VALUES ('8b9b8e380c0f41049409cc109d2f6270', '18d08887fdb7fa3ced99195986ad78f4', '76ed43ef286fb55cf9e41beadb484a9f', 'Sitzung: Kein Titel am 17.06.2003', 'Ablage für Ordner und Dokumente zu diesem Termin', 1051715233, 1051715463);
-INSERT INTO `folder` (`folder_id`, `range_id`, `user_id`, `name`, `description`, `mkdate`, `chdate`) VALUES ('6222eb4d5765c517a9ed725ef173d149', 'd1718fcb6e0fc19e1fd1e0d4b3790c15', '76ed43ef286fb55cf9e41beadb484a9f', 'Sitzung: Kein Titel am 01.07.2003', 'Ablage für Ordner und Dokumente zu diesem Termin', 1051715233, 1051715463);
-INSERT INTO `folder` (`folder_id`, `range_id`, `user_id`, `name`, `description`, `mkdate`, `chdate`) VALUES ('158045383644e5649bd5e3bae6d50fec', '0577536619fe3d6c4a8536e23954df83', '76ed43ef286fb55cf9e41beadb484a9f', 'Sitzung: Kein Titel am 15.07.2003', 'Ablage für Ordner und Dokumente zu diesem Termin', 1051715234, 1051715463);
+
+INSERT INTO seminar_inst VALUES ('0df1d0586ad3a160dd00d4e2789cf8e8', '6a1f27ed3c07b1cff22f467e8bd20868');
+INSERT INTO seminar_inst VALUES ('b4b9f08454b3871e697caea84f8f22c2', 'd9a2cb67781cb478caef29fd14a0653a');
+
 #
-# Dumping data for table `globalmessages`
+# Daten für Tabelle `seminar_sem_tree`
 #
-INSERT INTO `globalmessages` (`user_id_rec`, `user_id_snd`, `mkdate`, `message`, `message_id`, `chat_id`) VALUES ('test_dozent', 'root@studip', 1051715772, 'Ihre persönliche Seite wurde von einer Administratorin oder einem Administrator verändert.\n Folgende Veränderungen wurden vorgenommen:\n \nIhre persönlichen Daten wurden geändert.\n', 'ca8f3f5bf5a1e0d56dec8e14d8324020', NULL);
-INSERT INTO `globalmessages` (`user_id_rec`, `user_id_snd`, `mkdate`, `message`, `message_id`, `chat_id`) VALUES ('test_tutor', 'root@studip', 1051715824, 'Ihre persönliche Seite wurde von einer Administratorin oder einem Administrator verändert.\n Folgende Veränderungen wurden vorgenommen:\n \nIhre persönlichen Daten wurden geändert.\n', '0aa795c59e2c29c435b8ffdb963001a0', NULL);
+
+INSERT INTO seminar_sem_tree VALUES ('0df1d0586ad3a160dd00d4e2789cf8e8', '5b6ad76729028bde2fed8ebb6bf0323a');
+INSERT INTO seminar_sem_tree VALUES ('0df1d0586ad3a160dd00d4e2789cf8e8', 'e29e0dfff182b5915c421b65c34264df');
+
 #
-# Dumping data for table `Institute`
+# Daten für Tabelle `seminar_user`
 #
-INSERT INTO `Institute` (`Institut_id`, `Name`, `fakultaets_id`, `Strasse`, `Plz`, `url`, `telefon`, `email`, `fax`, `type`, `mkdate`, `chdate`) VALUES ('92b89ae00ae39d467c3cd5a1a9a53445', 'Demo Fakultät', '92b89ae00ae39d467c3cd5a1a9a53445', 'Georg-Müller-Str. 32', '37075 Göttingen', 'www.studip.de', '0551 / 9963325', 'test@studip.de', '0551 / 9963326', 7, 1048795298, 1048795298);
-INSERT INTO `Institute` (`Institut_id`, `Name`, `fakultaets_id`, `Strasse`, `Plz`, `url`, `telefon`, `email`, `fax`, `type`, `mkdate`, `chdate`) VALUES ('8eec88158b9742e868dd47104620f614', 'Test Einrichtung', '92b89ae00ae39d467c3cd5a1a9a53445', 'Albrecht-Thaer-Weg 72', '37075 Göttingen', 'www.studip.de', '0551 / 9963327', 'test@studip.de', '0551 / 9963328', 1, 1048795330, 1048795330);
-INSERT INTO `Institute` (`Institut_id`, `Name`, `fakultaets_id`, `Strasse`, `Plz`, `url`, `telefon`, `email`, `fax`, `type`, `mkdate`, `chdate`) VALUES ('feca0e3ccd285b1f414ddcde7299ba29', 'Test Abteilung', '92b89ae00ae39d467c3cd5a1a9a53445', 'Albrecht-Dürer-Weg 18', '37075 Göttingen', 'www.studip.de', '0551 / 99633223', 'info@ckater.de', '0551 / 99633222', 4, 1048795368, 1048795368);
+
+INSERT INTO seminar_user VALUES ('0df1d0586ad3a160dd00d4e2789cf8e8', '205f3efb7997a0fc9755da2b535038da', 'dozent', 2, '', 1067424154, NULL);
+INSERT INTO seminar_user VALUES ('0df1d0586ad3a160dd00d4e2789cf8e8', '7e81ec247c151c02ffd479511e24cc03', 'tutor', 2, '', 1067424154, NULL);
+INSERT INTO seminar_user VALUES ('b4b9f08454b3871e697caea84f8f22c2', '205f3efb7997a0fc9755da2b535038da', 'dozent', 2, '', 1067425274, NULL);
+INSERT INTO seminar_user VALUES ('b4b9f08454b3871e697caea84f8f22c2', '7e81ec247c151c02ffd479511e24cc03', 'tutor', 2, '', 1067425274, NULL);
+
 #
-# Dumping data for table `kategorien`
+# Daten für Tabelle `seminare`
 #
-INSERT INTO `kategorien` (`kategorie_id`, `range_id`, `name`, `content`, `hidden`, `mkdate`, `chdate`, `priority`) VALUES ('c1a2679038f846c37e87e8da517f5a0e', '446fcff18c676a7ad05848c5b611e1cb', 'Erklärung', 'Diese Einrichtung dient nur als Test.', 0, 1048795457, 1048795457, 0);
-INSERT INTO `kategorien` (`kategorie_id`, `range_id`, `name`, `content`, `hidden`, `mkdate`, `chdate`, `priority`) VALUES ('9141904ef341f634bf1af24000829791', '4711264a82cab32b9fb13d6ddf8c67c8', 'Erklärung', 'Dies ist eine übergeordnete Einrichtung ("Fakultät").', 0, 1051714085, 1051714085, 0);
-INSERT INTO `kategorien` (`kategorie_id`, `range_id`, `name`, `content`, `hidden`, `mkdate`, `chdate`, `priority`) VALUES ('0af17ba3d13475591056e26573a6baef', 'bcf67d880ae408f78322ac42ba78703a', 'Erklärung', 'Diese Einrichtung dient nur als Test.', 0, 1051714186, 1051714186, 0);
+
+INSERT INTO seminare VALUES ('0df1d0586ad3a160dd00d4e2789cf8e8', '', '6a1f27ed3c07b1cff22f467e8bd20868', 'Test-Lehrveranstaltung', '', '2', '', '', '', '', 1, 1, 1064959200, 0, '', '', '', '', '', 'a:5:{s:3:"art";s:1:"0";s:12:"start_termin";i:-1;s:11:"start_woche";s:1:"0";s:6:"turnus";s:1:"0";s:11:"turnus_data";a:2:{i:0;a:8:{s:3:"idx";s:5:"11000";s:3:"day";s:1:"1";s:12:"start_stunde";i:10;s:12:"start_minute";i:0;s:10:"end_stunde";i:12;s:10:"end_minute";i:0;s:4:"room";s:9:"Hörsaal 1";s:11:"resource_id";s:32:"6f3e26a53a4c1f40501217c281d4969a";}i:1;a:8:{s:3:"idx";s:5:"41400";s:3:"day";s:1:"4";s:12:"start_stunde";i:14;s:12:"start_minute";i:0;s:10:"end_stunde";i:16;s:10:"end_minute";i:0;s:4:"room";s:9:"Hörsaal 2";s:11:"resource_id";s:32:"d6a41a3a473de72a87ef5fff0c73c510";}}}', 1067424154, 1067425166, '', -1, 0, NULL, 0, 0, NULL, 0, '', 1067424179, -1, 1, 0, 431);
+INSERT INTO seminare VALUES ('b4b9f08454b3871e697caea84f8f22c2', '', 'd9a2cb67781cb478caef29fd14a0653a', 'Testveranstaltung Community', '', '11', 'Diese Veranstaltung ist rein virtuell. Hier kann zum Beispiel über Filme oder Bücher dikutiert werden.', '', '', '', 0, 0, 1064959200, -1, '', '', '', '', '', '', 1067425274, 1067425642, '', -1, 0, 0, 0, 0, NULL, 0, '', 1067425319, -1, 1, 0, 387);
+
 #
-# Dumping data for table `literatur`
+# Daten für Tabelle `statusgruppe_user`
 #
-INSERT INTO `literatur` (`literatur_id`, `range_id`, `user_id`, `literatur`, `links`, `mkdate`, `chdate`) VALUES ('e53a9559f67b2f784f96e8cc260bc078', '7009adabf5107440876e2b971bd3a888', '76ed43ef286fb55cf9e41beadb484a9f', '', '', 1048796300, 1048796300);
+
+INSERT INTO statusgruppe_user VALUES ('345b175099d24bcd080b8bfc1b0b4512', '205f3efb7997a0fc9755da2b535038da');
+INSERT INTO statusgruppe_user VALUES ('9522b28753171e55b86f0dbe4b642678', '7e81ec247c151c02ffd479511e24cc03');
+INSERT INTO statusgruppe_user VALUES ('9ce36c46083003cd7cbec361c7cd6e51', '205f3efb7997a0fc9755da2b535038da');
+
 #
-# Dumping data for table `news`
+# Daten für Tabelle `statusgruppen`
 #
+
+INSERT INTO statusgruppen VALUES ('f5f06f1a820d875dbd1d4b19346dab1a', 'unbenannt', 'd9a2cb67781cb478caef29fd14a0653a', 1, 0, 1067423651, 1067423651);
+INSERT INTO statusgruppen VALUES ('74619a019a5f6bc3c4cf1ef0abf62b9c', 'unbenannt', 'd9a2cb67781cb478caef29fd14a0653a', 2, 0, 1067423656, 1067423656);
+INSERT INTO statusgruppen VALUES ('345b175099d24bcd080b8bfc1b0b4512', 'DirektorIn', '6a1f27ed3c07b1cff22f467e8bd20868', 1, 0, 1067423716, 1067423740);
+INSERT INTO statusgruppen VALUES ('9ce36c46083003cd7cbec361c7cd6e51', 'HochschullehrerIn', '6a1f27ed3c07b1cff22f467e8bd20868', 2, 0, 1067423719, 1067423754);
+INSERT INTO statusgruppen VALUES ('9522b28753171e55b86f0dbe4b642678', 'stud. Hilfskraft', '6a1f27ed3c07b1cff22f467e8bd20868', 3, 0, 1067423787, 1067423787);
+
 #
-# Dumping data for table `news_range`
+# Daten für Tabelle `studiengaenge`
 #
+
+INSERT INTO studiengaenge VALUES ('63b13b29db6adcf0e2814a6388d4583c', 'Test Studiengang 1', '', 1067423985, 1067423985);
+INSERT INTO studiengaenge VALUES ('4a55e9df07a18e76ebb84e27ae212b30', 'Test Studiengang 2', '', 1067423997, 1067423997);
+
 #
-# Dumping data for table `px_topics`
+# Daten für Tabelle `termine`
 #
-INSERT INTO `px_topics` (`topic_id`, `parent_id`, `root_id`, `name`, `description`, `mkdate`, `chdate`, `author`, `author_host`, `Seminar_id`, `user_id`) VALUES ('c54f1a605ac5d04e01c58d2a01c10a0f', '0', 'c54f1a605ac5d04e01c58d2a01c10a0f', 'Allgemeine Diskussionen', 'Hier ist Raum für allgemeine Diskussionen', 1048795298, 1048795298, '', '134.76.62.67', '92b89ae00ae39d467c3cd5a1a9a53445', '76ed43ef286fb55cf9e41beadb484a9f');
-INSERT INTO `px_topics` (`topic_id`, `parent_id`, `root_id`, `name`, `description`, `mkdate`, `chdate`, `author`, `author_host`, `Seminar_id`, `user_id`) VALUES ('e8567d6e1f66a6d5e6a23b3b7f0f8295', '0', 'e8567d6e1f66a6d5e6a23b3b7f0f8295', 'Allgemeine Diskussionen', 'Hier ist Raum für allgemeine Diskussionen', 1048795330, 1048795330, '', '134.76.62.67', '8eec88158b9742e868dd47104620f614', '76ed43ef286fb55cf9e41beadb484a9f');
-INSERT INTO `px_topics` (`topic_id`, `parent_id`, `root_id`, `name`, `description`, `mkdate`, `chdate`, `author`, `author_host`, `Seminar_id`, `user_id`) VALUES ('9237e9cce296698f951efb27fb8c7bf4', '0', '9237e9cce296698f951efb27fb8c7bf4', 'Allgemeine Diskussionen', 'Hier ist Raum für allgemeine Diskussionen', 1048795368, 1048795368, '', '134.76.62.67', 'feca0e3ccd285b1f414ddcde7299ba29', '76ed43ef286fb55cf9e41beadb484a9f');
-INSERT INTO `px_topics` (`topic_id`, `parent_id`, `root_id`, `name`, `description`, `mkdate`, `chdate`, `author`, `author_host`, `Seminar_id`, `user_id`) VALUES ('deb1f92bd68daad159d1801a573f19ed', '0', 'deb1f92bd68daad159d1801a573f19ed', 'Allgemeine Diskussionen', 'Hier ist Raum für allgemeine Diskussionen', 1048796294, 1048796294, 'Root Studip', '134.76.62.67', '7009adabf5107440876e2b971bd3a888', '76ed43ef286fb55cf9e41beadb484a9f');
-INSERT INTO `px_topics` (`topic_id`, `parent_id`, `root_id`, `name`, `description`, `mkdate`, `chdate`, `author`, `author_host`, `Seminar_id`, `user_id`) VALUES ('abc38321da4e016543243b8764cc3e62', '0', 'abc38321da4e016543243b8764cc3e62', 'Allgemeine Diskussionen', 'Hier ist Raum für allgemeine Diskussionen', 1048796674, 1048796674, 'Test Admin', '134.76.62.67', 'c2aae30732fe32178f40e86ef130fd17', '157ee45ad191f25b39a86664b036e5e3');
-INSERT INTO `px_topics` (`topic_id`, `parent_id`, `root_id`, `name`, `description`, `mkdate`, `chdate`, `author`, `author_host`, `Seminar_id`, `user_id`) VALUES ('a71028b7f6f44978ae57cd46f7a25c84', '0', 'a71028b7f6f44978ae57cd46f7a25c84', 'Allgemeine Diskussionen', 'Hier ist Raum für allgemeine Diskussionen', 1051714664, 1051714664, 'Root Studip', '127.0.0.1', 'fb41520a81db27b6881b0e40b813627b', '76ed43ef286fb55cf9e41beadb484a9f');
-INSERT INTO `px_topics` (`topic_id`, `parent_id`, `root_id`, `name`, `description`, `mkdate`, `chdate`, `author`, `author_host`, `Seminar_id`, `user_id`) VALUES ('081b170c5fb81a2d57b05177fc686885', '0', '081b170c5fb81a2d57b05177fc686885', 'Allgemeine Diskussionen', 'Hier ist Raum für allgemeine Diskussionen', 1051715127, 1051715127, 'Root Studip', '127.0.0.1', '35f0ab24761e9e426e1e3dbe5e46a0fa', '76ed43ef286fb55cf9e41beadb484a9f');
-INSERT INTO `px_topics` (`topic_id`, `parent_id`, `root_id`, `name`, `description`, `mkdate`, `chdate`, `author`, `author_host`, `Seminar_id`, `user_id`) VALUES ('5f67bfa2966ee30e2b848aa17d01f43c', '0', '5f67bfa2966ee30e2b848aa17d01f43c', 'Sitzung: Kein Titel am 17.06.2003', 'Hier kann zu diesem Termin diskutiert werden', 1051715233, 1051715463, 'Root Studip', '127.0.0.1', '35f0ab24761e9e426e1e3dbe5e46a0fa', '76ed43ef286fb55cf9e41beadb484a9f');
-INSERT INTO `px_topics` (`topic_id`, `parent_id`, `root_id`, `name`, `description`, `mkdate`, `chdate`, `author`, `author_host`, `Seminar_id`, `user_id`) VALUES ('fc2b73a717fe2daa69fc58ab46944899', '0', 'fc2b73a717fe2daa69fc58ab46944899', 'Sitzung: Kein Titel am 01.07.2003', 'Hier kann zu diesem Termin diskutiert werden', 1051715233, 1051715463, 'Root Studip', '127.0.0.1', '35f0ab24761e9e426e1e3dbe5e46a0fa', '76ed43ef286fb55cf9e41beadb484a9f');
-INSERT INTO `px_topics` (`topic_id`, `parent_id`, `root_id`, `name`, `description`, `mkdate`, `chdate`, `author`, `author_host`, `Seminar_id`, `user_id`) VALUES ('5aa43cf59095ca6557bfec4abfa04062', '0', '5aa43cf59095ca6557bfec4abfa04062', 'Sitzung: Kein Titel am 15.07.2003', 'Hier kann zu diesem Termin diskutiert werden', 1051715234, 1051715463, 'Root Studip', '127.0.0.1', '35f0ab24761e9e426e1e3dbe5e46a0fa', '76ed43ef286fb55cf9e41beadb484a9f');
+
+INSERT INTO termine VALUES ('049616112f21acf8567013820e3878ce', '0df1d0586ad3a160dd00d4e2789cf8e8', '76ed43ef286fb55cf9e41beadb484a9f', 'Kein Titel', NULL, 1066636800, 1066644000, 1067424271, 1067425166, 1, 'f24255f809a8dbfd5063fa9ec8508f13', NULL, NULL, NULL, NULL, 'Hörsaal 1');
+INSERT INTO termine VALUES ('7e55c42bfa96389c1f601f93f5f26db0', '0df1d0586ad3a160dd00d4e2789cf8e8', '76ed43ef286fb55cf9e41beadb484a9f', 'Kein Titel', NULL, 1066910400, 1066917600, 1067424272, 1067425166, 1, 'b5c64a3ab8ce81c019d719ebf0cfd612', NULL, NULL, NULL, NULL, 'Hörsaal 2');
+INSERT INTO termine VALUES ('c187467f7d49cb3824428a0ca3fed1e2', '0df1d0586ad3a160dd00d4e2789cf8e8', '76ed43ef286fb55cf9e41beadb484a9f', 'Kein Titel', NULL, 1067245200, 1067252400, 1067424272, 1067425166, 1, '7080e92cf5880ca11e6554014c95f7f4', NULL, NULL, NULL, NULL, 'Hörsaal 1');
+INSERT INTO termine VALUES ('75d8545383cfe668ec3d346b05afe2a4', '0df1d0586ad3a160dd00d4e2789cf8e8', '76ed43ef286fb55cf9e41beadb484a9f', 'Kein Titel', NULL, 1067518800, 1067526000, 1067424272, 1067425166, 1, '2aa3c87a1bf554130e77e9e5e6cfea1a', NULL, NULL, NULL, NULL, 'Hörsaal 2');
+INSERT INTO termine VALUES ('6426bd7e032e2e21d27eb45f79ea1bc8', '0df1d0586ad3a160dd00d4e2789cf8e8', '76ed43ef286fb55cf9e41beadb484a9f', 'Kein Titel', NULL, 1067850000, 1067857200, 1067424272, 1067425166, 1, '07e712098fa59d116c1a0b3c7feb3b25', NULL, NULL, NULL, NULL, 'Hörsaal 1');
+INSERT INTO termine VALUES ('930b0f91e7ba58d6a56d18dee783482d', '0df1d0586ad3a160dd00d4e2789cf8e8', '76ed43ef286fb55cf9e41beadb484a9f', 'Kein Titel', NULL, 1068123600, 1068130800, 1067424272, 1067425167, 1, 'ff0a8ee14ba6239a7111a33323668696', NULL, NULL, NULL, NULL, 'Hörsaal 2');
+INSERT INTO termine VALUES ('e880531505932cb1af91b4aedb68560f', '0df1d0586ad3a160dd00d4e2789cf8e8', '76ed43ef286fb55cf9e41beadb484a9f', 'Kein Titel', NULL, 1068454800, 1068462000, 1067424272, 1067425167, 1, 'bc6694d534b53ee7d3e85825f19e583f', NULL, NULL, NULL, NULL, 'Hörsaal 1');
+INSERT INTO termine VALUES ('ef6de39cd7b74f57dc431ca6d43b1364', '0df1d0586ad3a160dd00d4e2789cf8e8', '76ed43ef286fb55cf9e41beadb484a9f', 'Kein Titel', NULL, 1068728400, 1068735600, 1067424272, 1067425167, 1, 'e56cf52ec332ba0e7ea88ca13237d112', NULL, NULL, NULL, NULL, 'Hörsaal 2');
+INSERT INTO termine VALUES ('0627fae9f6fcee584db9b2478b98d128', '0df1d0586ad3a160dd00d4e2789cf8e8', '76ed43ef286fb55cf9e41beadb484a9f', 'Kein Titel', NULL, 1069059600, 1069066800, 1067424272, 1067425167, 1, '3fceaa866d0daaf2c1319ac3ac99c8df', NULL, NULL, NULL, NULL, 'Hörsaal 1');
+INSERT INTO termine VALUES ('e02bcc95b7b5a89314b15fea1077b415', '0df1d0586ad3a160dd00d4e2789cf8e8', '76ed43ef286fb55cf9e41beadb484a9f', 'Kein Titel', NULL, 1069333200, 1069340400, 1067424272, 1067425167, 1, '89ba1903d0a32967ece574be9e82853e', NULL, NULL, NULL, NULL, 'Hörsaal 2');
+INSERT INTO termine VALUES ('27a53e480be39615139e25cca31ec832', '0df1d0586ad3a160dd00d4e2789cf8e8', '76ed43ef286fb55cf9e41beadb484a9f', 'Kein Titel', NULL, 1069664400, 1069671600, 1067424272, 1067425167, 1, '6eb809e3df5608e56ce8def424227982', NULL, NULL, NULL, NULL, 'Hörsaal 1');
+INSERT INTO termine VALUES ('57b0cf0e704407b1791592bba21ca22f', '0df1d0586ad3a160dd00d4e2789cf8e8', '76ed43ef286fb55cf9e41beadb484a9f', 'Kein Titel', NULL, 1069938000, 1069945200, 1067424272, 1067425167, 1, '2abe059b3aa9021e2badbf8807616f14', NULL, NULL, NULL, NULL, 'Hörsaal 2');
+INSERT INTO termine VALUES ('58c11e07905705a5e4b55483db66f84e', '0df1d0586ad3a160dd00d4e2789cf8e8', '76ed43ef286fb55cf9e41beadb484a9f', 'Kein Titel', NULL, 1070269200, 1070276400, 1067424272, 1067425167, 1, '0ae7abae49ed09b2b6b8905a6b820ee8', NULL, NULL, NULL, NULL, 'Hörsaal 1');
+INSERT INTO termine VALUES ('59af1de2f72f0d4f01e174773916af41', '0df1d0586ad3a160dd00d4e2789cf8e8', '76ed43ef286fb55cf9e41beadb484a9f', 'Kein Titel', NULL, 1070542800, 1070550000, 1067424272, 1067425167, 1, 'f635f82740928e193572b36ca5db76e2', NULL, NULL, NULL, NULL, 'Hörsaal 2');
+INSERT INTO termine VALUES ('3762407314151dd0674e61c0c4234d38', '0df1d0586ad3a160dd00d4e2789cf8e8', '76ed43ef286fb55cf9e41beadb484a9f', 'Kein Titel', NULL, 1070874000, 1070881200, 1067424272, 1067425167, 1, 'f831e0b0ff790f5226f3bca9fc31f969', NULL, NULL, NULL, NULL, 'Hörsaal 1');
+INSERT INTO termine VALUES ('a746e21ece7630b2e6e2a7f354e67fd4', '0df1d0586ad3a160dd00d4e2789cf8e8', '76ed43ef286fb55cf9e41beadb484a9f', 'Kein Titel', NULL, 1071147600, 1071154800, 1067424272, 1067425167, 1, 'db0ba0822fca309fbbf7a8bdeecb5e09', NULL, NULL, NULL, NULL, 'Hörsaal 2');
+INSERT INTO termine VALUES ('af259534e1d569f6ef563ffd3e3c0bbc', '0df1d0586ad3a160dd00d4e2789cf8e8', '76ed43ef286fb55cf9e41beadb484a9f', 'Kein Titel', NULL, 1071478800, 1071486000, 1067424272, 1067425167, 1, 'dff914ffe337d6b59a403589f1672ff4', NULL, NULL, NULL, NULL, 'Hörsaal 1');
+INSERT INTO termine VALUES ('939a229c1e5462bf69bd67eabf6938c6', '0df1d0586ad3a160dd00d4e2789cf8e8', '76ed43ef286fb55cf9e41beadb484a9f', 'Kein Titel', NULL, 1071752400, 1071759600, 1067424272, 1067425167, 1, 'f7a6cdf74fba7a29238d7568b6f80e09', NULL, NULL, NULL, NULL, 'Hörsaal 2');
+INSERT INTO termine VALUES ('581a6065357f2a2b25e2aed40e1797c9', '0df1d0586ad3a160dd00d4e2789cf8e8', '76ed43ef286fb55cf9e41beadb484a9f', 'Kein Titel', NULL, 1073293200, 1073300400, 1067424273, 1067425167, 1, 'f89b9b75d019073c3910361623b9974c', NULL, NULL, NULL, NULL, 'Hörsaal 1');
+INSERT INTO termine VALUES ('81825595bec9d6097d44223f8770c59b', '0df1d0586ad3a160dd00d4e2789cf8e8', '76ed43ef286fb55cf9e41beadb484a9f', 'Kein Titel', NULL, 1073566800, 1073574000, 1067424273, 1067425168, 1, '24717f7883b5c2cbd59533606f6b1c6f', NULL, NULL, NULL, NULL, 'Hörsaal 2');
+INSERT INTO termine VALUES ('b456e5c0985c24b49f08fac99f768f5e', '0df1d0586ad3a160dd00d4e2789cf8e8', '76ed43ef286fb55cf9e41beadb484a9f', 'Kein Titel', NULL, 1073898000, 1073905200, 1067424273, 1067425168, 1, 'bfc05a7bf3b61b019bc4d9c9ef6c9ef8', NULL, NULL, NULL, NULL, 'Hörsaal 1');
+INSERT INTO termine VALUES ('8ecc2035ecf5378773086e126a951832', '0df1d0586ad3a160dd00d4e2789cf8e8', '76ed43ef286fb55cf9e41beadb484a9f', 'Kein Titel', NULL, 1074171600, 1074178800, 1067424273, 1067425168, 1, 'e2eb162aa327c9f448816a2ce3d02164', NULL, NULL, NULL, NULL, 'Hörsaal 2');
+INSERT INTO termine VALUES ('68fd6ec6efba9c46023f1b85dff80974', '0df1d0586ad3a160dd00d4e2789cf8e8', '76ed43ef286fb55cf9e41beadb484a9f', 'Kein Titel', NULL, 1074502800, 1074510000, 1067424273, 1067425168, 1, '08d6ebb84ed75cc8afbd50d23dcb81a1', NULL, NULL, NULL, NULL, 'Hörsaal 1');
+INSERT INTO termine VALUES ('01b76210274246a06ff80f2b3874344c', '0df1d0586ad3a160dd00d4e2789cf8e8', '76ed43ef286fb55cf9e41beadb484a9f', 'Kein Titel', NULL, 1074776400, 1074783600, 1067424273, 1067425168, 1, '62970222190f348078180194e0926f76', NULL, NULL, NULL, NULL, 'Hörsaal 2');
+INSERT INTO termine VALUES ('d10f4f1ab03a747217365e05f9072027', '0df1d0586ad3a160dd00d4e2789cf8e8', '76ed43ef286fb55cf9e41beadb484a9f', 'Kein Titel', NULL, 1075107600, 1075114800, 1067424273, 1067425168, 1, 'dfd9d2b50483054e1fcc521bf82f5602', NULL, NULL, NULL, NULL, 'Hörsaal 1');
+INSERT INTO termine VALUES ('f9dbc6deddbae235ca713b7346f6355b', '0df1d0586ad3a160dd00d4e2789cf8e8', '76ed43ef286fb55cf9e41beadb484a9f', 'Kein Titel', NULL, 1075381200, 1075388400, 1067424273, 1067425168, 1, 'bc4fa1b44ba30d8735d2ed39ee86143d', NULL, NULL, NULL, NULL, 'Hörsaal 2');
+INSERT INTO termine VALUES ('4895b056cb06379c3a2193661a5419b7', '0df1d0586ad3a160dd00d4e2789cf8e8', '76ed43ef286fb55cf9e41beadb484a9f', 'Kein Titel', NULL, 1075712400, 1075719600, 1067424273, 1067425168, 1, '9a1e70b55b2cd12184c61758a01c9a70', NULL, NULL, NULL, NULL, 'Hörsaal 1');
+INSERT INTO termine VALUES ('71d22e1dd7e9dbe188e1884aebbad8a6', '0df1d0586ad3a160dd00d4e2789cf8e8', '76ed43ef286fb55cf9e41beadb484a9f', 'Kein Titel', NULL, 1075986000, 1075993200, 1067424273, 1067425168, 1, '86792cfad094dbcd2d7caf155eea661d', NULL, NULL, NULL, NULL, 'Hörsaal 2');
+
 #
-# Dumping data for table `range_tree`
+# Daten für Tabelle `user_info`
 #
-INSERT INTO `range_tree` (`item_id`, `parent_id`, `priority`, `name`, `studip_object`, `studip_object_id`) VALUES ('446fcff18c676a7ad05848c5b611e1cb', '4711264a82cab32b9fb13d6ddf8c67c8', 0, 'Test Einrichtung', 'inst', '8eec88158b9742e868dd47104620f614');
-INSERT INTO `range_tree` (`item_id`, `parent_id`, `priority`, `name`, `studip_object`, `studip_object_id`) VALUES ('bcf67d880ae408f78322ac42ba78703a', '446fcff18c676a7ad05848c5b611e1cb', 0, 'Test Abteilung', 'inst', 'feca0e3ccd285b1f414ddcde7299ba29');
-INSERT INTO `range_tree` (`item_id`, `parent_id`, `priority`, `name`, `studip_object`, `studip_object_id`) VALUES ('4711264a82cab32b9fb13d6ddf8c67c8', 'root', 2, 'Demo Fakultät', 'fak', '92b89ae00ae39d467c3cd5a1a9a53445');
+
+INSERT IGNORE INTO user_info VALUES ('76ed43ef286fb55cf9e41beadb484a9f', '', NULL, '', '', '', '', '', 0, 0, 0, 0, '', '', NULL);
+INSERT INTO user_info VALUES ('a4ab271addc1d902e2f2d6e03d747632', '', NULL, '', '', '', '', '', 0, 0, 1066887991, 0, '', 'M.A.', NULL);
+INSERT INTO user_info VALUES ('205f3efb7997a0fc9755da2b535038da', '', NULL, '', '', '', '', '', 0, 0, 1066998899, 1067423409, '', '', NULL);
+INSERT INTO user_info VALUES ('6235c46eb9e962866ebdceece739ace5', '', NULL, '', '', '', '', '', 0, 0, 1067423390, 1067423390, '', '', NULL);
+INSERT INTO user_info VALUES ('7e81ec247c151c02ffd479511e24cc03', '', NULL, '', '', '', '', '', 0, 0, 1067423435, 1067423470, '', '', NULL);
+INSERT INTO user_info VALUES ('e7a0a84b161f3e8c09b4a0a2e8a58147', '', NULL, '', '', '', '', '', 0, 0, 1067423459, 1067423459, '', '', NULL);
+
 #
-# Dumping data for table `sem_tree`
+# Daten für Tabelle `user_inst`
 #
-INSERT INTO `sem_tree` (`sem_tree_id`, `parent_id`, `priority`, `info`, `name`, `studip_object_id`) VALUES ('e5462fe499926db698c4e0ab6b263774', 'root', 1, '', '', '92b89ae00ae39d467c3cd5a1a9a53445');
-INSERT INTO `sem_tree` (`sem_tree_id`, `parent_id`, `priority`, `info`, `name`, `studip_object_id`) VALUES ('2c97382a307c8b78a791c18be83ed4ce', 'e5462fe499926db698c4e0ab6b263774', 0, 'Ein Demonstrationsbereich', 'Studienbereich A - Virtuelle Lehre', NULL);
-INSERT INTO `sem_tree` (`sem_tree_id`, `parent_id`, `priority`, `info`, `name`, `studip_object_id`) VALUES ('b455161f3770b6624407d534ac3037c6', 'e5462fe499926db698c4e0ab6b263774', 1, '', 'Studienbereich B - Präsenzlehre', NULL);
-INSERT INTO `sem_tree` (`sem_tree_id`, `parent_id`, `priority`, `info`, `name`, `studip_object_id`) VALUES ('ee3c16ca7364cb96c3949a148c0295e5', 'e5462fe499926db698c4e0ab6b263774', 2, '', 'Studienbereich C - sonstiges', NULL);
+
+INSERT INTO user_inst VALUES ('7e81ec247c151c02ffd479511e24cc03', '6a1f27ed3c07b1cff22f467e8bd20868', 'tutor', '', '', '', '');
+INSERT INTO user_inst VALUES ('205f3efb7997a0fc9755da2b535038da', '6a1f27ed3c07b1cff22f467e8bd20868', 'dozent', '', '', '', '');
+
 #
-# Dumping data for table `seminar_inst`
+# Daten für Tabelle `vote`
 #
-INSERT INTO `seminar_inst` (`seminar_id`, `institut_id`) VALUES ('35f0ab24761e9e426e1e3dbe5e46a0fa', 'feca0e3ccd285b1f414ddcde7299ba29');
-INSERT INTO `seminar_inst` (`seminar_id`, `institut_id`) VALUES ('7009adabf5107440876e2b971bd3a888', '8eec88158b9742e868dd47104620f614');
-INSERT INTO `seminar_inst` (`seminar_id`, `institut_id`) VALUES ('c2aae30732fe32178f40e86ef130fd17', '8eec88158b9742e868dd47104620f614');
-INSERT INTO `seminar_inst` (`seminar_id`, `institut_id`) VALUES ('c2aae30732fe32178f40e86ef130fd17', '92b89ae00ae39d467c3cd5a1a9a53445');
-INSERT INTO `seminar_inst` (`seminar_id`, `institut_id`) VALUES ('fb41520a81db27b6881b0e40b813627b', '8eec88158b9742e868dd47104620f614');
-INSERT INTO `seminar_inst` (`seminar_id`, `institut_id`) VALUES ('fb41520a81db27b6881b0e40b813627b', '92b89ae00ae39d467c3cd5a1a9a53445');
-INSERT INTO `seminar_inst` (`seminar_id`, `institut_id`) VALUES ('fb41520a81db27b6881b0e40b813627b', 'feca0e3ccd285b1f414ddcde7299ba29');
+
+INSERT INTO vote VALUES ('2a3dd58230afd8b4618fd48b40951b0c', '76ed43ef286fb55cf9e41beadb484a9f', '0df1d0586ad3a160dd00d4e2789cf8e8', 'vote', 'Nutzen Sie bereits Stud.IP?', 'Haben Sie Stud.IP bereits im Einsatz, planen sie es einzusetzen?', 'active', 1067424988, NULL, NULL, 1067424501, 1067424988, 'delivery', 0, 1, 0, NULL, 0);
+INSERT INTO vote VALUES ('6634a62af213b1fa79ab68b5ef4d1457', '76ed43ef286fb55cf9e41beadb484a9f', 'studip', 'vote', 'Nutzen Sie bereits Stud.IP?', 'Haben Sie Stud.IP bereits im Einsatz, planen sie es einzusetzen?', 'active', 1067424840, NULL, NULL, 1067424848, 1067424947, 'delivery', 0, 1, 0, NULL, 0);
+
 #
-# Dumping data for table `seminar_lernmodul`
+# Daten für Tabelle `vote_user`
 #
+
+INSERT INTO vote_user VALUES ('2a3dd58230afd8b4618fd48b40951b0c', '76ed43ef286fb55cf9e41beadb484a9f', 1067424512);
+INSERT INTO vote_user VALUES ('6634a62af213b1fa79ab68b5ef4d1457', '76ed43ef286fb55cf9e41beadb484a9f', 1067425003);
+
 #
-# Dumping data for table `seminar_sem_tree`
+# Daten für Tabelle `voteanswers`
 #
-INSERT INTO `seminar_sem_tree` (`seminar_id`, `sem_tree_id`) VALUES ('35f0ab24761e9e426e1e3dbe5e46a0fa', 'ee3c16ca7364cb96c3949a148c0295e5');
-INSERT INTO `seminar_sem_tree` (`seminar_id`, `sem_tree_id`) VALUES ('7009adabf5107440876e2b971bd3a888', '2c97382a307c8b78a791c18be83ed4ce');
-INSERT INTO `seminar_sem_tree` (`seminar_id`, `sem_tree_id`) VALUES ('7009adabf5107440876e2b971bd3a888', 'ee3c16ca7364cb96c3949a148c0295e5');
+
+INSERT INTO voteanswers VALUES ('c258787df2805e86c78574a2d78d0ebd', '2a3dd58230afd8b4618fd48b40951b0c', 'Ich nutze die Version 0.7.5', 0, 0, 0);
+INSERT INTO voteanswers VALUES ('a3384aa48e8c0dfc522271b5b908442e', '2a3dd58230afd8b4618fd48b40951b0c', 'Ich nutze die Version 0.8.0', 1, 0, 0);
+INSERT INTO voteanswers VALUES ('5d9a8dd52e7f053a1ca59299c3c4d60c', '2a3dd58230afd8b4618fd48b40951b0c', 'Ich nutze die Version 0.8.15', 2, 0, 0);
+INSERT INTO voteanswers VALUES ('37cf657122dc4b3ad1001d6c59afa16b', '2a3dd58230afd8b4618fd48b40951b0c', 'Ich nutze die Version 0.9.0', 3, 0, 0);
+INSERT INTO voteanswers VALUES ('98b61a589dadddbb9533ab9c8ad978b1', '2a3dd58230afd8b4618fd48b40951b0c', 'Ich nutze die Version 0.9.5', 4, 1, 0);
+INSERT INTO voteanswers VALUES ('7abce26bb6614f400065296069abdcd4', '2a3dd58230afd8b4618fd48b40951b0c', 'Ich plane, es demnächst einzusetzen', 5, 0, 0);
+INSERT INTO voteanswers VALUES ('2a63482ac998c5f2b936b04aca0d965f', '2a3dd58230afd8b4618fd48b40951b0c', 'Ich schaue mich nur mal um', 6, 0, 0);
+INSERT INTO voteanswers VALUES ('7400ebd6befe3168b5cb6ff1f216962e', '2a3dd58230afd8b4618fd48b40951b0c', 'Ich bin nicht interessiert', 7, 0, 0);
+INSERT INTO voteanswers VALUES ('98d5ecf7356e488ffc09bd515eced5fe', '6634a62af213b1fa79ab68b5ef4d1457', 'Ich schaue mich nur mal um', 6, 0, 0);
+INSERT INTO voteanswers VALUES ('cb139549f83b18d9bd8e49f4d869ecc6', '6634a62af213b1fa79ab68b5ef4d1457', 'Ich plane, es demnächst einzusetzen', 5, 0, 0);
+INSERT INTO voteanswers VALUES ('0580b0b5f70eccde3a8b252ca7c73cca', '6634a62af213b1fa79ab68b5ef4d1457', 'Ich nutze die Version 0.9.5', 4, 1, 0);
+INSERT INTO voteanswers VALUES ('3431d7b9d720ce96a66b928efdba8300', '6634a62af213b1fa79ab68b5ef4d1457', 'Ich nutze die Version 0.9.0', 3, 0, 0);
+INSERT INTO voteanswers VALUES ('d53b24842074b0647fed67676b718ba7', '6634a62af213b1fa79ab68b5ef4d1457', 'Ich nutze die Version 0.8.15', 2, 0, 0);
+INSERT INTO voteanswers VALUES ('5593a50b22dff96b7c29112380d04511', '6634a62af213b1fa79ab68b5ef4d1457', 'Ich nutze die Version 0.8.0', 1, 0, 0);
+INSERT INTO voteanswers VALUES ('cdb86f7c957cdda1c2573fb7026741ac', '6634a62af213b1fa79ab68b5ef4d1457', 'Ich nutze die Version 0.7.5', 0, 0, 0);
+INSERT INTO voteanswers VALUES ('a2558597e1d5d1ef0abcf062e54aa2ed', '6634a62af213b1fa79ab68b5ef4d1457', 'Ich bin nicht interessiert', 7, 0, 0);
+
 #
-# Dumping data for table `seminar_user`
+# Daten für Tabelle `resources_assign`
 #
-INSERT INTO `seminar_user` (`Seminar_id`, `user_id`, `status`, `gruppe`, `admission_studiengang_id`, `mkdate`) VALUES ('7009adabf5107440876e2b971bd3a888', 'a25ec520443b6b2a7deb6688804e5b26', 'dozent', 2, '', 1048796294);
-INSERT INTO `seminar_user` (`Seminar_id`, `user_id`, `status`, `gruppe`, `admission_studiengang_id`, `mkdate`) VALUES ('7009adabf5107440876e2b971bd3a888', '12fd5b8766c19ef6ee50fb94231659d3', 'tutor', 2, '', 1048796294);
-INSERT INTO `seminar_user` (`Seminar_id`, `user_id`, `status`, `gruppe`, `admission_studiengang_id`, `mkdate`) VALUES ('7009adabf5107440876e2b971bd3a888', 'f7fc4adacb450600ed22cb6abdaedd91', 'autor', 7, '', 1048796470);
-INSERT INTO `seminar_user` (`Seminar_id`, `user_id`, `status`, `gruppe`, `admission_studiengang_id`, `mkdate`) VALUES ('c2aae30732fe32178f40e86ef130fd17', 'a25ec520443b6b2a7deb6688804e5b26', 'dozent', 2, '', 1048796674);
-INSERT INTO `seminar_user` (`Seminar_id`, `user_id`, `status`, `gruppe`, `admission_studiengang_id`, `mkdate`) VALUES ('c2aae30732fe32178f40e86ef130fd17', 'f7fc4adacb450600ed22cb6abdaedd91', 'autor', 7, '', 1048796733);
-INSERT INTO `seminar_user` (`Seminar_id`, `user_id`, `status`, `gruppe`, `admission_studiengang_id`, `mkdate`) VALUES ('c2aae30732fe32178f40e86ef130fd17', '12fd5b8766c19ef6ee50fb94231659d3', 'autor', 7, '', 1048796799);
-INSERT INTO `seminar_user` (`Seminar_id`, `user_id`, `status`, `gruppe`, `admission_studiengang_id`, `mkdate`) VALUES ('fb41520a81db27b6881b0e40b813627b', 'a25ec520443b6b2a7deb6688804e5b26', 'dozent', 2, '', 1051714664);
-INSERT INTO `seminar_user` (`Seminar_id`, `user_id`, `status`, `gruppe`, `admission_studiengang_id`, `mkdate`) VALUES ('fb41520a81db27b6881b0e40b813627b', '12fd5b8766c19ef6ee50fb94231659d3', 'tutor', 2, '', 1051714664);
-INSERT INTO `seminar_user` (`Seminar_id`, `user_id`, `status`, `gruppe`, `admission_studiengang_id`, `mkdate`) VALUES ('35f0ab24761e9e426e1e3dbe5e46a0fa', 'a25ec520443b6b2a7deb6688804e5b26', 'dozent', 2, '', 1051715127);
+
+INSERT INTO resources_assign VALUES ('b1c6c1787e60a61ffe405157c8813434', '6f3e26a53a4c1f40501217c281d4969a', '049616112f21acf8567013820e3878ce', '', 1066636800, 1066644000, 1066644000, 0, 0, 0, 0, 0, 0, 0, 0, 1067425166, 1067425166);
+INSERT INTO resources_assign VALUES ('03d27333a8171969eb18ba4be2b64f66', 'd6a41a3a473de72a87ef5fff0c73c510', '7e55c42bfa96389c1f601f93f5f26db0', '', 1066910400, 1066917600, 1066917600, 0, 0, 0, 0, 0, 0, 0, 0, 1067425166, 1067425166);
+INSERT INTO resources_assign VALUES ('da0f294b09a372c33bae908cf1ac51fb', '6f3e26a53a4c1f40501217c281d4969a', 'c187467f7d49cb3824428a0ca3fed1e2', '', 1067245200, 1067252400, 1067252400, 0, 0, 0, 0, 0, 0, 0, 0, 1067425166, 1067425166);
+INSERT INTO resources_assign VALUES ('61937315605477abbb71b01fabe56eb5', 'd6a41a3a473de72a87ef5fff0c73c510', '75d8545383cfe668ec3d346b05afe2a4', '', 1067518800, 1067526000, 1067526000, 0, 0, 0, 0, 0, 0, 0, 0, 1067425166, 1067425166);
+INSERT INTO resources_assign VALUES ('d3c4c1b107a34f48c95792af362cffc8', '6f3e26a53a4c1f40501217c281d4969a', '6426bd7e032e2e21d27eb45f79ea1bc8', '', 1067850000, 1067857200, 1067857200, 0, 0, 0, 0, 0, 0, 0, 0, 1067425167, 1067425167);
+INSERT INTO resources_assign VALUES ('5ff56f691ece2319df8251f07646c544', 'd6a41a3a473de72a87ef5fff0c73c510', '930b0f91e7ba58d6a56d18dee783482d', '', 1068123600, 1068130800, 1068130800, 0, 0, 0, 0, 0, 0, 0, 0, 1067425167, 1067425167);
+INSERT INTO resources_assign VALUES ('c8e1b0b343ff79b6dcc8725be16e76c6', '6f3e26a53a4c1f40501217c281d4969a', 'e880531505932cb1af91b4aedb68560f', '', 1068454800, 1068462000, 1068462000, 0, 0, 0, 0, 0, 0, 0, 0, 1067425167, 1067425167);
+INSERT INTO resources_assign VALUES ('55d8680e85008090e265ed10dc4b9223', 'd6a41a3a473de72a87ef5fff0c73c510', 'ef6de39cd7b74f57dc431ca6d43b1364', '', 1068728400, 1068735600, 1068735600, 0, 0, 0, 0, 0, 0, 0, 0, 1067425167, 1067425167);
+INSERT INTO resources_assign VALUES ('f432973a5225a0505a253b76b916d640', '6f3e26a53a4c1f40501217c281d4969a', '0627fae9f6fcee584db9b2478b98d128', '', 1069059600, 1069066800, 1069066800, 0, 0, 0, 0, 0, 0, 0, 0, 1067425167, 1067425167);
+INSERT INTO resources_assign VALUES ('a7cef7ec82b33696a1080fb49b890345', 'd6a41a3a473de72a87ef5fff0c73c510', 'e02bcc95b7b5a89314b15fea1077b415', '', 1069333200, 1069340400, 1069340400, 0, 0, 0, 0, 0, 0, 0, 0, 1067425167, 1067425167);
+INSERT INTO resources_assign VALUES ('a0e26262ca0f4bf9f29266fe2ed2f386', '6f3e26a53a4c1f40501217c281d4969a', '27a53e480be39615139e25cca31ec832', '', 1069664400, 1069671600, 1069671600, 0, 0, 0, 0, 0, 0, 0, 0, 1067425167, 1067425167);
+INSERT INTO resources_assign VALUES ('65679ab96fdd6e14c26d966ac3c262a8', 'd6a41a3a473de72a87ef5fff0c73c510', '57b0cf0e704407b1791592bba21ca22f', '', 1069938000, 1069945200, 1069945200, 0, 0, 0, 0, 0, 0, 0, 0, 1067425167, 1067425167);
+INSERT INTO resources_assign VALUES ('d6b796b405add1656f7e9e709a1a2a25', '6f3e26a53a4c1f40501217c281d4969a', '58c11e07905705a5e4b55483db66f84e', '', 1070269200, 1070276400, 1070276400, 0, 0, 0, 0, 0, 0, 0, 0, 1067425167, 1067425167);
+INSERT INTO resources_assign VALUES ('6bc8063f8c97688b07ba67570d7c6ff6', 'd6a41a3a473de72a87ef5fff0c73c510', '59af1de2f72f0d4f01e174773916af41', '', 1070542800, 1070550000, 1070550000, 0, 0, 0, 0, 0, 0, 0, 0, 1067425167, 1067425167);
+INSERT INTO resources_assign VALUES ('69f21120999ef425ad4180c86d785221', '6f3e26a53a4c1f40501217c281d4969a', '3762407314151dd0674e61c0c4234d38', '', 1070874000, 1070881200, 1070881200, 0, 0, 0, 0, 0, 0, 0, 0, 1067425167, 1067425167);
+INSERT INTO resources_assign VALUES ('9615d24d427dcb72fd5c7aa542e80174', 'd6a41a3a473de72a87ef5fff0c73c510', 'a746e21ece7630b2e6e2a7f354e67fd4', '', 1071147600, 1071154800, 1071154800, 0, 0, 0, 0, 0, 0, 0, 0, 1067425167, 1067425167);
+INSERT INTO resources_assign VALUES ('e37fde81ba46de8068f2e7be7e0c0884', '6f3e26a53a4c1f40501217c281d4969a', 'af259534e1d569f6ef563ffd3e3c0bbc', '', 1071478800, 1071486000, 1071486000, 0, 0, 0, 0, 0, 0, 0, 0, 1067425167, 1067425167);
+INSERT INTO resources_assign VALUES ('739df99327db7cde8c5f09deab05f64c', 'd6a41a3a473de72a87ef5fff0c73c510', '939a229c1e5462bf69bd67eabf6938c6', '', 1071752400, 1071759600, 1071759600, 0, 0, 0, 0, 0, 0, 0, 0, 1067425167, 1067425167);
+INSERT INTO resources_assign VALUES ('5a3e1ef27dfbba24bdec376e52a4d057', '6f3e26a53a4c1f40501217c281d4969a', '581a6065357f2a2b25e2aed40e1797c9', '', 1073293200, 1073300400, 1073300400, 0, 0, 0, 0, 0, 0, 0, 0, 1067425167, 1067425167);
+INSERT INTO resources_assign VALUES ('c392db69567de4310805776f3a7d8939', 'd6a41a3a473de72a87ef5fff0c73c510', '81825595bec9d6097d44223f8770c59b', '', 1073566800, 1073574000, 1073574000, 0, 0, 0, 0, 0, 0, 0, 0, 1067425168, 1067425168);
+INSERT INTO resources_assign VALUES ('0c079d8eb12ab5ef8cdd6d6f2bf4704b', '6f3e26a53a4c1f40501217c281d4969a', 'b456e5c0985c24b49f08fac99f768f5e', '', 1073898000, 1073905200, 1073905200, 0, 0, 0, 0, 0, 0, 0, 0, 1067425168, 1067425168);
+INSERT INTO resources_assign VALUES ('a6321eac550afbc81e84584e16b1a902', 'd6a41a3a473de72a87ef5fff0c73c510', '8ecc2035ecf5378773086e126a951832', '', 1074171600, 1074178800, 1074178800, 0, 0, 0, 0, 0, 0, 0, 0, 1067425168, 1067425168);
+INSERT INTO resources_assign VALUES ('6380805b1aeced2e79f88eb126a20eb5', '6f3e26a53a4c1f40501217c281d4969a', '68fd6ec6efba9c46023f1b85dff80974', '', 1074502800, 1074510000, 1074510000, 0, 0, 0, 0, 0, 0, 0, 0, 1067425168, 1067425168);
+INSERT INTO resources_assign VALUES ('9cd401098be91bf638f0e4fe4607c3be', 'd6a41a3a473de72a87ef5fff0c73c510', '01b76210274246a06ff80f2b3874344c', '', 1074776400, 1074783600, 1074783600, 0, 0, 0, 0, 0, 0, 0, 0, 1067425168, 1067425168);
+INSERT INTO resources_assign VALUES ('0c2df2d19ae30732ae420a3b851a7a3d', '6f3e26a53a4c1f40501217c281d4969a', 'd10f4f1ab03a747217365e05f9072027', '', 1075107600, 1075114800, 1075114800, 0, 0, 0, 0, 0, 0, 0, 0, 1067425168, 1067425168);
+INSERT INTO resources_assign VALUES ('1ea354b6841e71d15f28034fa956196a', 'd6a41a3a473de72a87ef5fff0c73c510', 'f9dbc6deddbae235ca713b7346f6355b', '', 1075381200, 1075388400, 1075388400, 0, 0, 0, 0, 0, 0, 0, 0, 1067425168, 1067425168);
+INSERT INTO resources_assign VALUES ('5927da39a093b646a031bf48d37bfd5d', '6f3e26a53a4c1f40501217c281d4969a', '4895b056cb06379c3a2193661a5419b7', '', 1075712400, 1075719600, 1075719600, 0, 0, 0, 0, 0, 0, 0, 0, 1067425168, 1067425168);
+INSERT INTO resources_assign VALUES ('a174389172f3937c16bfe95af4fe25ab', 'd6a41a3a473de72a87ef5fff0c73c510', '71d22e1dd7e9dbe188e1884aebbad8a6', '', 1075986000, 1075993200, 1075993200, 0, 0, 0, 0, 0, 0, 0, 0, 1067425168, 1067425168);
+
 #
-# Dumping data for table `seminare`
+# Daten für Tabelle `resources_objects`
 #
-INSERT INTO `seminare` (`Seminar_id`, `VeranstaltungsNummer`, `Institut_id`, `Name`, `Untertitel`, `status`, `Beschreibung`, `Ort`, `Sonstiges`, `Passwort`, `Lesezugriff`, `Schreibzugriff`, `start_time`, `duration_time`, `art`, `teilnehmer`, `vorrausetzungen`, `lernorga`, `leistungsnachweis`, `metadata_dates`, `mkdate`, `chdate`, `ects`, `admission_endtime`, `admission_turnout`, `admission_binding`, `admission_type`, `admission_selection_take_place`, `showscore`) VALUES ('7009adabf5107440876e2b971bd3a888', '0', '8eec88158b9742e868dd47104620f614', 'Test Lehrveranstaltung', '', '2', '', '', '', '', 1, 1, 1049148000, 0, '', '', 'Interesse', 'Kleingruppen', 'Klausur', 'a:5:{s:3:"art";s:1:"0";s:12:"start_termin";s:2:"-1";s:11:"start_woche";s:1:"0";s:6:"turnus";s:1:"0";s:11:"turnus_data";a:1:{i:0;a:8:{s:3:"idx";s:5:"11000";s:3:"day";s:1:"1";s:12:"start_stunde";s:2:"10";s:12:"start_minute";s:1:"0";s:10:"end_stunde";s:2:"12";s:10:"end_minute";s:1:"0";s:4:"room";s:8:"Testraum";s:11:"resource_id";s:32:"47107f2140bdfa0ba0352c32af45535f";}}}', 1048796294, 1048796294, '', -1, 0, 0, 0, 0, 0);
-INSERT INTO `seminare` (`Seminar_id`, `VeranstaltungsNummer`, `Institut_id`, `Name`, `Untertitel`, `status`, `Beschreibung`, `Ort`, `Sonstiges`, `Passwort`, `Lesezugriff`, `Schreibzugriff`, `start_time`, `duration_time`, `art`, `teilnehmer`, `vorrausetzungen`, `lernorga`, `leistungsnachweis`, `metadata_dates`, `mkdate`, `chdate`, `ects`, `admission_endtime`, `admission_turnout`, `admission_binding`, `admission_type`, `admission_selection_take_place`, `showscore`) VALUES ('c2aae30732fe32178f40e86ef130fd17', '0', '8eec88158b9742e868dd47104620f614', 'Feedbackforum', 'Kommentare und Fragen zum System', '13', '', '', '', '', 0, 0, 1049148000, -1, '', '', '', '', '', '', 1048796674, 1048796674, '', -1, 0, 0, 0, 0, 0);
-INSERT INTO `seminare` (`Seminar_id`, `VeranstaltungsNummer`, `Institut_id`, `Name`, `Untertitel`, `status`, `Beschreibung`, `Ort`, `Sonstiges`, `Passwort`, `Lesezugriff`, `Schreibzugriff`, `start_time`, `duration_time`, `art`, `teilnehmer`, `vorrausetzungen`, `lernorga`, `leistungsnachweis`, `metadata_dates`, `mkdate`, `chdate`, `ects`, `admission_endtime`, `admission_turnout`, `admission_binding`, `admission_type`, `admission_selection_take_place`, `showscore`) VALUES ('fb41520a81db27b6881b0e40b813627b', '', '92b89ae00ae39d467c3cd5a1a9a53445', 'Fakultätsrat', '', '8', 'Hier werden wichtige Dinge besprochen.', '', '', 'ae2b1fca515949e5d54fb22b8ed95575', 2, 2, 1049148000, -1, '', '', '', '', '', '', 1051714664, 1051714664, '', -1, 0, 0, 0, 0, 0);
-INSERT INTO `seminare` (`Seminar_id`, `VeranstaltungsNummer`, `Institut_id`, `Name`, `Untertitel`, `status`, `Beschreibung`, `Ort`, `Sonstiges`, `Passwort`, `Lesezugriff`, `Schreibzugriff`, `start_time`, `duration_time`, `art`, `teilnehmer`, `vorrausetzungen`, `lernorga`, `leistungsnachweis`, `metadata_dates`, `mkdate`, `chdate`, `ects`, `admission_endtime`, `admission_turnout`, `admission_binding`, `admission_type`, `admission_selection_take_place`, `showscore`) VALUES ('35f0ab24761e9e426e1e3dbe5e46a0fa', '123456', 'feca0e3ccd285b1f414ddcde7299ba29', 'Test Lehrveranstaltung 2 (zugangsbeschränkt)', '', '1', 'Zugangsbeschränkte Veranstaltung', '', '', '', 3, 3, 1049148000, 0, '', '', '', '', '', 'a:5:{s:3:"art";s:1:"0";s:12:"start_termin";i:1055800800;s:11:"start_woche";s:2:"-1";s:6:"turnus";s:1:"1";s:11:"turnus_data";a:1:{i:0;a:8:{s:3:"idx";s:5:"21015";s:3:"day";s:1:"2";s:12:"start_stunde";i:10;s:12:"start_minute";i:15;s:10:"end_stunde";i:11;s:10:"end_minute";i:45;s:4:"room";s:8:"Testraum";s:11:"resource_id";s:32:"47107f2140bdfa0ba0352c32af45535f";}}}', 1051715125, 1051715463, '', 1055627999, 15, 0, 2, 0, 0);
+
+INSERT INTO resources_objects VALUES ('30d2887b82d3f184251273a7c5902f98', '30d2887b82d3f184251273a7c5902f98', '0', '', '76ed43ef286fb55cf9e41beadb484a9f', 0, 'Ressourcen der Testinstallation', '', '', 0, 1067425065, 1067425090);
+INSERT INTO resources_objects VALUES ('6f3e26a53a4c1f40501217c281d4969a', '30d2887b82d3f184251273a7c5902f98', '30d2887b82d3f184251273a7c5902f98', '1cf2a34de92c06137ecdfcef4a29e4bc', '76ed43ef286fb55cf9e41beadb484a9f', 1, 'Hörsaal 1', '', '', 0, 1067425093, 1067425104);
+INSERT INTO resources_objects VALUES ('d6a41a3a473de72a87ef5fff0c73c510', '30d2887b82d3f184251273a7c5902f98', '30d2887b82d3f184251273a7c5902f98', '1cf2a34de92c06137ecdfcef4a29e4bc', '76ed43ef286fb55cf9e41beadb484a9f', 1, 'Hörsaal 2', '', '', 0, 1067425131, 1067425141);
+
 #
-# Dumping data for table `statusgruppe_user`
+# Daten für Tabelle `resources_objects_properties`
 #
-INSERT INTO `statusgruppe_user` (`statusgruppe_id`, `user_id`) VALUES ('178fa6ee83e8312c636845d865c071b3', '12fd5b8766c19ef6ee50fb94231659d3');
-INSERT INTO `statusgruppe_user` (`statusgruppe_id`, `user_id`) VALUES ('178fa6ee83e8312c636845d865c071b3', 'a25ec520443b6b2a7deb6688804e5b26');
-INSERT INTO `statusgruppe_user` (`statusgruppe_id`, `user_id`) VALUES ('237c1b79c14e10d8060f461427d80a02', 'a25ec520443b6b2a7deb6688804e5b26');
-INSERT INTO `statusgruppe_user` (`statusgruppe_id`, `user_id`) VALUES ('6ecccc7b87655d8cd783658b2924ad02', '12fd5b8766c19ef6ee50fb94231659d3');
-INSERT INTO `statusgruppe_user` (`statusgruppe_id`, `user_id`) VALUES ('6ecccc7b87655d8cd783658b2924ad02', 'a25ec520443b6b2a7deb6688804e5b26');
-INSERT INTO `statusgruppe_user` (`statusgruppe_id`, `user_id`) VALUES ('d326a1313836259b713e25ddac93b299', '12fd5b8766c19ef6ee50fb94231659d3');
-#
-# Dumping data for table `statusgruppen`
-#
-INSERT INTO `statusgruppen` (`statusgruppe_id`, `name`, `range_id`, `position`, `size`, `mkdate`, `chdate`) VALUES ('178fa6ee83e8312c636845d865c071b3', 'Lehrende', '8eec88158b9742e868dd47104620f614', 1, 5, 1048796125, 1048796125);
-INSERT INTO `statusgruppen` (`statusgruppe_id`, `name`, `range_id`, `position`, `size`, `mkdate`, `chdate`) VALUES ('237c1b79c14e10d8060f461427d80a02', 'HochschullehrerIn', 'feca0e3ccd285b1f414ddcde7299ba29', 1, 0, 1051714449, 1051714449);
-INSERT INTO `statusgruppen` (`statusgruppe_id`, `name`, `range_id`, `position`, `size`, `mkdate`, `chdate`) VALUES ('d326a1313836259b713e25ddac93b299', 'stud. Hilfskraft', 'feca0e3ccd285b1f414ddcde7299ba29', 2, 0, 1051714462, 1051714462);
-INSERT INTO `statusgruppen` (`statusgruppe_id`, `name`, `range_id`, `position`, `size`, `mkdate`, `chdate`) VALUES ('6ecccc7b87655d8cd783658b2924ad02', 'Meine liebsten Lehrenden', 'f7fc4adacb450600ed22cb6abdaedd91', 1, 0, 1051716073, 1051716073);
-#
-# Dumping data for table `studiengaenge`
-#
-INSERT INTO `studiengaenge` (`studiengang_id`, `name`, `beschreibung`, `mkdate`, `chdate`) VALUES ('9442ab7d2a41e2fca158f507202fdbcd', 'Virtuelle Lehrsysteme', '', 1048795730, 1048795730);
-INSERT INTO `studiengaenge` (`studiengang_id`, `name`, `beschreibung`, `mkdate`, `chdate`) VALUES ('4780c15be9f63594440dd48fca054d06', 'Jura', '', 1048795747, 1048795747);
-INSERT INTO `studiengaenge` (`studiengang_id`, `name`, `beschreibung`, `mkdate`, `chdate`) VALUES ('a4f2fd9ba41c3433c3fbbd87f74eabd2', 'Soziologie', '', 1048795755, 1048795755);
-#
-# Dumping data for table `studip_ilias`
-#
-#
-# Dumping data for table `termine`
-#
-INSERT INTO `termine` (`termin_id`, `range_id`, `autor_id`, `content`, `description`, `date`, `end_time`, `mkdate`, `chdate`, `date_typ`, `topic_id`, `expire`, `repeat`, `color`, `priority`, `raum`) VALUES ('091735e55ed66c375d0b369b66247086', '7009adabf5107440876e2b971bd3a888', '76ed43ef286fb55cf9e41beadb484a9f', 'Vorbesprechung', '', 1047898800, 1047906000, 1048796294, 1048796313, 2, '0', NULL, NULL, NULL, NULL, 'Testraum');
-INSERT INTO `termine` (`termin_id`, `range_id`, `autor_id`, `content`, `description`, `date`, `end_time`, `mkdate`, `chdate`, `date_typ`, `topic_id`, `expire`, `repeat`, `color`, `priority`, `raum`) VALUES ('7eb4623c4618389be9dfecc66386ac6d', '7009adabf5107440876e2b971bd3a888', '76ed43ef286fb55cf9e41beadb484a9f', 'Kein Titel', NULL, 1051516800, 1051524000, 1048796303, 1048796303, 1, '', NULL, NULL, NULL, NULL, 'Testraum');
-INSERT INTO `termine` (`termin_id`, `range_id`, `autor_id`, `content`, `description`, `date`, `end_time`, `mkdate`, `chdate`, `date_typ`, `topic_id`, `expire`, `repeat`, `color`, `priority`, `raum`) VALUES ('300f929e10a4ebbd6b417ac0f3d33f13', '7009adabf5107440876e2b971bd3a888', '76ed43ef286fb55cf9e41beadb484a9f', 'Kein Titel', NULL, 1052121600, 1052128800, 1048796303, 1048796303, 1, '', NULL, NULL, NULL, NULL, 'Testraum');
-INSERT INTO `termine` (`termin_id`, `range_id`, `autor_id`, `content`, `description`, `date`, `end_time`, `mkdate`, `chdate`, `date_typ`, `topic_id`, `expire`, `repeat`, `color`, `priority`, `raum`) VALUES ('00d59caf9666c18b464bef87c7a12a7c', '7009adabf5107440876e2b971bd3a888', '76ed43ef286fb55cf9e41beadb484a9f', 'Kein Titel', NULL, 1052726400, 1052733600, 1048796303, 1048796303, 1, '', NULL, NULL, NULL, NULL, 'Testraum');
-INSERT INTO `termine` (`termin_id`, `range_id`, `autor_id`, `content`, `description`, `date`, `end_time`, `mkdate`, `chdate`, `date_typ`, `topic_id`, `expire`, `repeat`, `color`, `priority`, `raum`) VALUES ('a3e24c56c402036ff4b5bd5cf2d4821c', '7009adabf5107440876e2b971bd3a888', '76ed43ef286fb55cf9e41beadb484a9f', 'Kein Titel', NULL, 1053331200, 1053338400, 1048796303, 1048796303, 1, '', NULL, NULL, NULL, NULL, 'Testraum');
-INSERT INTO `termine` (`termin_id`, `range_id`, `autor_id`, `content`, `description`, `date`, `end_time`, `mkdate`, `chdate`, `date_typ`, `topic_id`, `expire`, `repeat`, `color`, `priority`, `raum`) VALUES ('9b0a28629d70f0994d15e061604cf292', '7009adabf5107440876e2b971bd3a888', '76ed43ef286fb55cf9e41beadb484a9f', 'Kein Titel', NULL, 1053936000, 1053943200, 1048796303, 1048796303, 1, '', NULL, NULL, NULL, NULL, 'Testraum');
-INSERT INTO `termine` (`termin_id`, `range_id`, `autor_id`, `content`, `description`, `date`, `end_time`, `mkdate`, `chdate`, `date_typ`, `topic_id`, `expire`, `repeat`, `color`, `priority`, `raum`) VALUES ('44718d51d8947804012de6433e2b8c8d', '7009adabf5107440876e2b971bd3a888', '76ed43ef286fb55cf9e41beadb484a9f', 'Kein Titel', NULL, 1054540800, 1054548000, 1048796303, 1048796303, 1, '', NULL, NULL, NULL, NULL, 'Testraum');
-INSERT INTO `termine` (`termin_id`, `range_id`, `autor_id`, `content`, `description`, `date`, `end_time`, `mkdate`, `chdate`, `date_typ`, `topic_id`, `expire`, `repeat`, `color`, `priority`, `raum`) VALUES ('14a86f4956c30a259f8154c4ff1c85eb', '7009adabf5107440876e2b971bd3a888', '76ed43ef286fb55cf9e41beadb484a9f', 'Kein Titel', NULL, 1055750400, 1055757600, 1048796303, 1048796303, 1, '', NULL, NULL, NULL, NULL, 'Testraum');
-INSERT INTO `termine` (`termin_id`, `range_id`, `autor_id`, `content`, `description`, `date`, `end_time`, `mkdate`, `chdate`, `date_typ`, `topic_id`, `expire`, `repeat`, `color`, `priority`, `raum`) VALUES ('f38f179eb5bef72c5f70ca5547ab1360', '7009adabf5107440876e2b971bd3a888', '76ed43ef286fb55cf9e41beadb484a9f', 'Kein Titel', NULL, 1056355200, 1056362400, 1048796303, 1048796303, 1, '', NULL, NULL, NULL, NULL, 'Testraum');
-INSERT INTO `termine` (`termin_id`, `range_id`, `autor_id`, `content`, `description`, `date`, `end_time`, `mkdate`, `chdate`, `date_typ`, `topic_id`, `expire`, `repeat`, `color`, `priority`, `raum`) VALUES ('89eae36de6acda54b7605d770ca6de8e', '7009adabf5107440876e2b971bd3a888', '76ed43ef286fb55cf9e41beadb484a9f', 'Kein Titel', NULL, 1056960000, 1056967200, 1048796303, 1048796303, 1, '', NULL, NULL, NULL, NULL, 'Testraum');
-INSERT INTO `termine` (`termin_id`, `range_id`, `autor_id`, `content`, `description`, `date`, `end_time`, `mkdate`, `chdate`, `date_typ`, `topic_id`, `expire`, `repeat`, `color`, `priority`, `raum`) VALUES ('aa404410a199644bca1bfae410f31e39', '7009adabf5107440876e2b971bd3a888', '76ed43ef286fb55cf9e41beadb484a9f', 'Kein Titel', NULL, 1057564800, 1057572000, 1048796303, 1048796303, 1, '', NULL, NULL, NULL, NULL, 'Testraum');
-INSERT INTO `termine` (`termin_id`, `range_id`, `autor_id`, `content`, `description`, `date`, `end_time`, `mkdate`, `chdate`, `date_typ`, `topic_id`, `expire`, `repeat`, `color`, `priority`, `raum`) VALUES ('effcf72aff71bb7dd61dff7eef7bd4bb', '7009adabf5107440876e2b971bd3a888', '76ed43ef286fb55cf9e41beadb484a9f', 'Kein Titel', NULL, 1058169600, 1058176800, 1048796304, 1048796304, 1, '', NULL, NULL, NULL, NULL, 'Testraum');
-INSERT INTO `termine` (`termin_id`, `range_id`, `autor_id`, `content`, `description`, `date`, `end_time`, `mkdate`, `chdate`, `date_typ`, `topic_id`, `expire`, `repeat`, `color`, `priority`, `raum`) VALUES ('18d08887fdb7fa3ced99195986ad78f4', '35f0ab24761e9e426e1e3dbe5e46a0fa', '76ed43ef286fb55cf9e41beadb484a9f', 'Kein Titel', NULL, 1055837700, 1055843100, 1051715233, 1051715463, 1, '5f67bfa2966ee30e2b848aa17d01f43c', NULL, NULL, NULL, NULL, 'Testraum');
-INSERT INTO `termine` (`termin_id`, `range_id`, `autor_id`, `content`, `description`, `date`, `end_time`, `mkdate`, `chdate`, `date_typ`, `topic_id`, `expire`, `repeat`, `color`, `priority`, `raum`) VALUES ('d1718fcb6e0fc19e1fd1e0d4b3790c15', '35f0ab24761e9e426e1e3dbe5e46a0fa', '76ed43ef286fb55cf9e41beadb484a9f', 'Kein Titel', NULL, 1057047300, 1057052700, 1051715233, 1051715463, 1, 'fc2b73a717fe2daa69fc58ab46944899', NULL, NULL, NULL, NULL, 'Testraum');
-INSERT INTO `termine` (`termin_id`, `range_id`, `autor_id`, `content`, `description`, `date`, `end_time`, `mkdate`, `chdate`, `date_typ`, `topic_id`, `expire`, `repeat`, `color`, `priority`, `raum`) VALUES ('0577536619fe3d6c4a8536e23954df83', '35f0ab24761e9e426e1e3dbe5e46a0fa', '76ed43ef286fb55cf9e41beadb484a9f', 'Kein Titel', NULL, 1058256900, 1058262300, 1051715234, 1051715463, 1, '5aa43cf59095ca6557bfec4abfa04062', NULL, NULL, NULL, NULL, 'Testraum');
-#
-# Dumping data for table `user_info`
-#
-INSERT INTO `user_info` (`user_id`, `hobby`, `lebenslauf`, `raum`, `sprechzeiten`, `publi`, `schwerp`, `Lehre`, `Home`, `privatnr`, `privadr`, `score`, `geschlecht`, `mkdate`, `chdate`, `hide_studiengang`, `preferred_language`, `title_front`, `title_rear`) VALUES ('f7fc4adacb450600ed22cb6abdaedd91', '', NULL, NULL, NULL, '', '', '', '', '', '', 0, 0, 1048795803, 1048795803, NULL, NULL, '', '');
-INSERT INTO `user_info` (`user_id`, `hobby`, `lebenslauf`, `raum`, `sprechzeiten`, `publi`, `schwerp`, `Lehre`, `Home`, `privatnr`, `privadr`, `score`, `geschlecht`, `mkdate`, `chdate`, `hide_studiengang`, `preferred_language`, `title_front`, `title_rear`) VALUES ('12fd5b8766c19ef6ee50fb94231659d3', '', NULL, NULL, NULL, '', '', '', '', '', '', 0, 0, 1048795821, 1051715824, NULL, NULL, '', 'MBA');
-INSERT INTO `user_info` (`user_id`, `hobby`, `lebenslauf`, `raum`, `sprechzeiten`, `publi`, `schwerp`, `Lehre`, `Home`, `privatnr`, `privadr`, `score`, `geschlecht`, `mkdate`, `chdate`, `hide_studiengang`, `preferred_language`, `title_front`, `title_rear`) VALUES ('a25ec520443b6b2a7deb6688804e5b26', '', NULL, NULL, NULL, '', '', '', '', '', '', 0, 0, 1048795849, 1051715772, NULL, NULL, 'Prof. Dr.', '');
-INSERT INTO `user_info` (`user_id`, `hobby`, `lebenslauf`, `raum`, `sprechzeiten`, `publi`, `schwerp`, `Lehre`, `Home`, `privatnr`, `privadr`, `score`, `geschlecht`, `mkdate`, `chdate`, `hide_studiengang`, `preferred_language`, `title_front`, `title_rear`) VALUES ('157ee45ad191f25b39a86664b036e5e3', '', NULL, NULL, NULL, '', '', '', '', '', '', 0, 0, 1048795876, 1048795876, NULL, NULL, '', '');
-INSERT INTO `user_info` (`user_id`, `hobby`, `lebenslauf`, `raum`, `sprechzeiten`, `publi`, `schwerp`, `Lehre`, `Home`, `privatnr`, `privadr`, `score`, `geschlecht`, `mkdate`, `chdate`, `hide_studiengang`, `preferred_language`, `title_front`, `title_rear`) VALUES ('d2efba7cfecb87a86ba11d225848e9f9', '', NULL, NULL, NULL, '', '', '', '', '', '', 0, 0, 1048795876, 1048795876, NULL, NULL, '', '');
-#
-# Dumping data for table `user_inst`
-#
-INSERT INTO `user_inst` (`user_id`, `Institut_id`, `inst_perms`, `sprechzeiten`, `raum`, `Telefon`, `Fax`) VALUES ('a25ec520443b6b2a7deb6688804e5b26', '8eec88158b9742e868dd47104620f614', 'dozent', '', '', '', '');
-INSERT INTO `user_inst` (`user_id`, `Institut_id`, `inst_perms`, `sprechzeiten`, `raum`, `Telefon`, `Fax`) VALUES ('157ee45ad191f25b39a86664b036e5e3', '8eec88158b9742e868dd47104620f614', 'admin', '', '', '', '');
-INSERT INTO `user_inst` (`user_id`, `Institut_id`, `inst_perms`, `sprechzeiten`, `raum`, `Telefon`, `Fax`) VALUES ('12fd5b8766c19ef6ee50fb94231659d3', '8eec88158b9742e868dd47104620f614', 'tutor', '', '', '', '');
-INSERT INTO `user_inst` (`user_id`, `Institut_id`, `inst_perms`, `sprechzeiten`, `raum`, `Telefon`, `Fax`) VALUES ('d2efba7cfecb87a86ba11d225848e9f9', '92b89ae00ae39d467c3cd5a1a9a53445', 'admin', '', '', '', '');
-INSERT INTO `user_inst` (`user_id`, `Institut_id`, `inst_perms`, `sprechzeiten`, `raum`, `Telefon`, `Fax`) VALUES ('a25ec520443b6b2a7deb6688804e5b26', 'feca0e3ccd285b1f414ddcde7299ba29', 'dozent', '', '', '', '');
-INSERT INTO `user_inst` (`user_id`, `Institut_id`, `inst_perms`, `sprechzeiten`, `raum`, `Telefon`, `Fax`) VALUES ('12fd5b8766c19ef6ee50fb94231659d3', 'feca0e3ccd285b1f414ddcde7299ba29', 'tutor', '', '', '', '');
-INSERT INTO `user_inst` (`user_id`, `Institut_id`, `inst_perms`, `sprechzeiten`, `raum`, `Telefon`, `Fax`) VALUES ('f7fc4adacb450600ed22cb6abdaedd91', 'feca0e3ccd285b1f414ddcde7299ba29', 'user', '', '', '', '');
-#
-# Dumping data for table `user_studiengang`
-#
-INSERT INTO `user_studiengang` (`user_id`, `studiengang_id`) VALUES ('f7fc4adacb450600ed22cb6abdaedd91', '9442ab7d2a41e2fca158f507202fdbcd');
-    
+
+INSERT INTO resources_objects_properties VALUES ('6f3e26a53a4c1f40501217c281d4969a', 'ef4ba565e635b45c3f43ecdc69fb4aca', '25');
+INSERT INTO resources_objects_properties VALUES ('6f3e26a53a4c1f40501217c281d4969a', '0ef8a73d95f335cdfbaec50cae92762a', 'alles was man so braucht');
+INSERT INTO resources_objects_properties VALUES ('6f3e26a53a4c1f40501217c281d4969a', '31abad810703df361d793361bf6b16e5', 'Hörsaal');
+INSERT INTO resources_objects_properties VALUES ('6f3e26a53a4c1f40501217c281d4969a', '5753ab43945ae787f983f5c8a036712d', 'on');
+INSERT INTO resources_objects_properties VALUES ('6f3e26a53a4c1f40501217c281d4969a', '648b8579ffca64a565459fd6ea0313c5', 'on');
+INSERT INTO resources_objects_properties VALUES ('d6a41a3a473de72a87ef5fff0c73c510', 'ef4ba565e635b45c3f43ecdc69fb4aca', '500');
+INSERT INTO resources_objects_properties VALUES ('d6a41a3a473de72a87ef5fff0c73c510', '0ef8a73d95f335cdfbaec50cae92762a', 'eher mäßig');
+INSERT INTO resources_objects_properties VALUES ('d6a41a3a473de72a87ef5fff0c73c510', '31abad810703df361d793361bf6b16e5', 'Hörsaal');
+INSERT INTO resources_objects_properties VALUES ('d6a41a3a473de72a87ef5fff0c73c510', '648b8579ffca64a565459fd6ea0313c5', '');
