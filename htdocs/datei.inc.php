@@ -751,8 +751,8 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 				else
 					$titel= $tmp_titel."&nbsp;&nbsp;(".round ($db3->f("filesize") / 1024)." kB";
 					
-				// add number of downloads
-				$titel .= " / ".$db3->f("downloads")." Downloads)";
+				//add number of downloads
+				$titel .= " / ".(($db3->f("downloads") == 1) ? $db3->f("downloads")." "._("Download") : $db3->f("downloads")." "._("Downloads")).")";
 				
 				//Zusatzangaben erstellen
 				$zusatz="<a href=\"about.php?username=".$db3->f("username")."\"><font color=\"#333399\">".$db3->f("fullname")."</font></a>&nbsp;".date("d.m.Y - H:i",$db3->f("mkdate"));			
