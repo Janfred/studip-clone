@@ -39,7 +39,7 @@ include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
 <body>
 <table width="100%" border="0" cellpadding="2" cellspacing="0">
 	<tr>
-		<td class="topic" colspan="2"><b>&nbsp;<?=getHeaderLine($SessSemName[1])?></b></td>
+		<td class="topic" colspan="2"><b><img src="./pictures/icon-lit.gif" border="0" />&nbsp;<?=getHeaderLine($SessSemName[1])." - "._("Literatur")?></b></td>
 	</tr>
 	<tr>
 	<td class="blank" width="99%" align="left" valign="top">
@@ -62,13 +62,13 @@ if ( ($list = StudipLitList::GetFormattedListsByRange($SessSemName[1])) ){
 <?
 $infobox[0] = array ("kategorie" => _("Information:"),
 					"eintrag" =>	array(	
-									array("icon" => "pictures/blank.gif","text"  =>	_("Hier sehen sie Literaturlisten.")),
+									array("icon" => "pictures/ausruf_small.gif","text"  =>	_("Hier sehen sie Literaturlisten.")),
 									)
 					);
 $infobox[1] = array ("kategorie" => _("Aktionen:"));
 $infobox[1]["eintrag"][] = array("icon" => "pictures/blank.gif","text"  =>  _("Sie k&ouml;nnen jede dieser Listen in ihren pers&ouml;nlichen Literaturbereich kopieren, um erweiterte Informationen über die Eintr&auml;ge zu erhalten.") );
 
-print_infobox ($infobox,"pictures/browse.jpg");
+print_infobox ($infobox,"pictures/literaturelist.jpg");
 ?>
 </td>
 </tr>

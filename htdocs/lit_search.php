@@ -92,7 +92,7 @@ $_msg .= $_the_search->search_plugin->getError("msg");
 <body>
 <table width="100%" border="0" cellpadding="2" cellspacing="0">
 	<tr>
-		<td class="topic" colspan="2"><b>&nbsp;<?=_("Literatur suchen")?></b></td>
+		<td class="topic" colspan="2"><img src="./pictures/icon-lit.gif" border="0" /><b>&nbsp;<?=_("Literatur suchen")?></b></td>
 	</tr>
 	<tr>
 	<td class="blank" width="99%" align="left" valign="top">
