@@ -18,7 +18,10 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
+if (!isset($order)) $order = "";
+
+page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"), $order);
+
 $auth->login_if($again && ($auth->auth["uid"] == "nobody"));
 
 // database object
@@ -46,7 +49,6 @@ include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Sessio
 require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
-
 // -- hier muessen Seiten-Initialisierungen passieren --
 
 // -- wir sind jetzt definitiv in keinem Seminar, also... --
@@ -75,6 +77,7 @@ include ("$ABSOLUTE_PATH_STUDIP/header.php");
 
 //Anzeigemodul fuer studentische Startseite (nur wenn man angemeldet und nicht global dozent oder hoeher ist!)
 if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("dozent")) {
+
 ?>
 
 <div align="center">
@@ -315,11 +318,11 @@ echo "</table>";
 	include ('show_news.php');
 	if (show_news("studip", TRUE, 0, $index_data["nopen"], "70%", $LastLogin))
 		echo "<br />";
-		
-        if ($GLOBALS['VOTE_ENABLE']) {
-        	include ("show_vote.php");
-	        show_votes ("studip", $auth->auth["uid"], $perm);
-	}
+
+  if ($GLOBALS['VOTE_ENABLE']) {
+    include ("show_vote.php");
+    show_votes ("studip", $auth->auth["uid"], $perm);
+  }
 }
 
 ?>
@@ -331,3 +334,5 @@ echo "</table>";
   // Save data back to database.
   page_close();
 ?>
+
+
