@@ -317,13 +317,13 @@ function quotes_encode ($description,$author) {
 }
 
 // Hilfsfunktion für formatReady
-function format_help($what, $trim = TRUE, $extern = FALSE, $wiki = FALSE) {
+function format_help($what, $trim = TRUE, $extern = FALSE, $wiki = FALSE, $show_comments="icon") {
 
 	if (preg_match_all("'\[code\](.+)\[/code\]'isU", $what, $match_code)) {
 		$what = htmlReady($what, $trim, FALSE);
 		$what = preg_replace("'\[code\].+\[/code\]'isU", 'ü', $what);
 		if ($wiki == TRUE)
-			$what = symbol(smile(FixLinks(wiki_format(format(latex($what, $extern))), FALSE, TRUE, TRUE, $extern), $extern), $extern);
+			$what = symbol(smile(FixLinks(wiki_format(format(latex($what, $extern)), $show_comments), FALSE, TRUE, TRUE, $extern), $extern), $extern);
 		else
 			$what = symbol(smile(FixLinks(format(latex($what, $extern)), FALSE, TRUE, TRUE, $extern), $extern), $extern);
 		$what = explode('ü', $what);
@@ -342,7 +342,7 @@ function format_help($what, $trim = TRUE, $extern = FALSE, $wiki = FALSE) {
 	}
 	$what = htmlReady($what, $trim, FALSE);
 	if ($wiki == TRUE)
-		return symbol(smile(FixLinks(wiki_format(format(latex($what, $extern))), FALSE, TRUE, TRUE, $extern), $extern), $extern);
+		return symbol(smile(FixLinks(wiki_format(format(latex($what, $extern)), $show_comments), FALSE, TRUE, TRUE, $extern), $extern), $extern);
 	else
 		return symbol(smile(FixLinks(format(latex($what, $extern)), FALSE, TRUE, TRUE, $extern), $extern), $extern);
 }
@@ -356,9 +356,10 @@ function format_help($what, $trim = TRUE, $extern = FALSE, $wiki = FALSE) {
 * @param        boolean $trim		should the output trimmed?
 * @param        boolean $extern TRUE if called from external pages ('externe Seiten')
 * @param	boolean $wiki		if TRUE format for wiki
+* @param	string 	$show_comments	Comment mode (none, all, icon), used for Wiki comments
 * @return       string
 */
-function formatReady ($what, $trim = TRUE, $extern = FALSE, $wiki = FALSE) {
+function formatReady ($what, $trim = TRUE, $extern = FALSE, $wiki = FALSE, $show_comments="icon") {
 
 	if (preg_match_all("'\[nop\](.+)\[/nop\]'isU", $what, $matches)) {
 		$what = preg_replace("'\[nop\].+\[/nop\]'isU", '{-*~*%}', $what);
@@ -376,7 +377,7 @@ function formatReady ($what, $trim = TRUE, $extern = FALSE, $wiki = FALSE) {
 		}
 		return $all;
 	}
-	return format_help($what, $trim, $extern, $wiki);
+	return format_help($what, $trim, $extern, $wiki, $show_comments);
 }
 
 
@@ -390,8 +391,8 @@ function formatReady ($what, $trim = TRUE, $extern = FALSE, $wiki = FALSE) {
 * @param        boolean $extern TRUE if called from external pages ('externe Seiten')
 * @return       string
 */
-function wikiReady ($what, $trim = TRUE, $extern = FALSE) {
-	return formatReady ($what, $trim, $extern, TRUE);
+function wikiReady ($what, $trim = TRUE, $extern = FALSE, $show_comments="icon") {
+	return formatReady ($what, $trim, $extern, TRUE, $show_comments);
 }
 
 /**
@@ -401,9 +402,29 @@ function wikiReady ($what, $trim = TRUE, $extern = FALSE) {
 * @access       public
 * @param        string $text		what to format
 */
-function wiki_format ($text) {
+function wiki_format ($text, $show_comments) {
+	if ($show_comments=="icon" || $show_comments=="all") {
+		$text=preg_replace("#\[comment(=.*)?\](.*)\[/comment\]#emU","format_wiki_comment('\\2','\\1',$show_comments)",$text);
+	} else {
+		$text=preg_replace("#\[comment(=.*)?\](.*)\[/comment\]#mU","",$text);
+	}
 	return $text;
 }
+
+
+function format_wiki_comment($comment, $metainfo, $show_comment) {
+	$metainfo=trim($metainfo,"=");
+	if ($show_comment=="all") {
+		$commenttmpl="<table style=\"border:thin solid;margin: 5px;\" bgcolor=\"#ffff88\"><tr><td><font size=-1><b>"._("Kommentar von")." %s:</b>&nbsp;</font></td></tr><tr class=steelgrau><td class=steelgrau><font size=-1>%s</font></td></tr></table>";
+	} elseif ($show_comment=="icon") {
+		$commenttmpl="<img src=\"pictures/icon-posting.gif\" alt=\"%s: %s\" title=\"%s: %s\" ".tooltip(sprintf("%s %s:\n%s",_("Kommentar von"),$metainfo,$comment),TRUE,TRUE).">";
+	} else {
+		echo "<p>Error: unknown show_comment value in format_wiki_comment: ".$show_comment."</p>";
+		die();
+	}
+	return sprintf($commenttmpl, $metainfo, $comment, $metainfo, $comment);
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////
 
