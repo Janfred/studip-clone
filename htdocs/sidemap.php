@@ -1,6 +1,6 @@
 <?php
 /*
-sidemap.php - Anzeige der Grundfunktionen von Stud.IP und Anpassung der Startseite
+sitemap.php - Anzeige der Grundfunktionen von Stud.IP und Anpassung der Startseite
 Copyright (C) 2002 	Ralf Stockmann <rstockm@gwdg.de>
 
 This program is free software; you can redistribute it and/or
@@ -47,7 +47,7 @@ include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 //							1 -> Anzeige
 //							2 -> Anzeige und Default auf Startseite
 
-$sidemap = array	(			
+$sitemap = array	(			
 	array  ("kategorie"  => "Veranstaltungen",
 		"eintrag" => array	(	
 						array (	"name" => "Veranstaltungs&uuml;bersicht",
@@ -468,7 +468,7 @@ $sidemap = array	(
 
 
 
-function print_sidemap ($content) {
+function print_sitemap ($content) {
 global $PHP_SELF, $auth;
 $print = "<table align=\"left\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">";
 
@@ -519,7 +519,7 @@ echo $print;
 
 
 
-$content = $sidemap;
+$content = $sitemap;
 $preview = "";
 for ($i = 0; $i < count($content); $i++)  {
 	for ($j = 0; $j < count($content[$i]["eintrag"]); $j++) { 
@@ -532,6 +532,13 @@ for ($i = 0; $i < count($content); $i++)  {
 // die Infobox der Seite
 
 $infobox = array	(			
+	array  ("kategorie"  => "Vorschau Ihrer Startseite:",
+		"eintrag" => array	(	
+						array (	"icon" => "pictures/blank.gif",
+								"text"  => $preview
+								)
+		)
+	),
 	array  ("kategorie"  => "Information:",
 		"eintrag" => array	(	
 						array (	"icon" => "pictures/ausruf_small.gif",
@@ -548,13 +555,6 @@ $infobox = array	(
 								"text"  => "Um die entsprechende Seite auf Ihrer Startseite zu verankern, w&auml;hlen Sie die entsprechende Box an!"
 								)
 		)
-	),
-	array  ("kategorie"  => "Vorschau Ihrer Startseite:",
-		"eintrag" => array	(	
-						array (	"icon" => "pictures/blank.gif",
-								"text"  => $preview
-								)
-		)
 	)
 );
 
@@ -569,7 +569,7 @@ $infobox = array	(
 	 <table width="100%" border="0" cellpadding="0" cellspacing="0">
 	<tr>
 		<td class="topic" colspan="3">
-			<img src="pictures/meinesem.gif" border="0" align="texttop">&nbsp;<b>Stud.IP Sidemap</b>
+			<img src="pictures/meinesem.gif" border="0" align="texttop">&nbsp;<b>Stud.IP Sitemap</b>
 		</td>
 	</tr>
 	 <tr>
@@ -581,7 +581,7 @@ $infobox = array	(
 		 	<form action="<? echo $PHP_SELF?>?cmd=change_index" method="POST">
 		 	<blockquote>
 			<?
-			print_sidemap($sidemap);
+			print_sitemap($sitemap);
 			?>
 			</blockquote>
 			<br>&nbsp; 
