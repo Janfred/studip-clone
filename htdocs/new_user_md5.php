@@ -447,7 +447,7 @@ while ( is_array($HTTP_POST_VARS)
 			## Studiengaenge loeschen
 			$query = "delete from user_studiengang where user_id='$u_id'";
 			$db->query($query);
-			if (($db_ar = $db->affected_rows()) > 0) {
+			if (($db_ar = $db->affected_rows()) > 0)
 				$msg .= "info§$db_ar Zuordnungen zu Studieng&auml;ngen gel&ouml;scht.§";
 			## Dokumente des users loeschen
 			$temp_count = 0;
