@@ -104,6 +104,7 @@ function update_admission ($seminar_id, $send_message=TRUE) {
 	$messaging=new messaging;
 	
 	echo checkpoint0;
+	die;
 	//Daten holen / Abfrage ob ueberhaupt begrenzt
 	$db->query("SELECT Seminar_id, Name, admission_endtime, admission_turnout, admission_type, start_time FROM seminare WHERE Seminar_id = '$seminar_id' AND admission_selection_take_place = '1' ");
 	echo checkpoint1;
