@@ -557,7 +557,6 @@ if (($uebernehmen_x) && (!$errormsg)) {
 	
 		if (!$term_metadata["art"])
 			{
-			echo $term_metadata["start_woche"];
 		?>
 					<tr <? $cssSw->switchClass() ?> rowspan=2>
 						<td class="<? echo $cssSw->getClass() ?>" width="4%" align="right" rowspan=2>
