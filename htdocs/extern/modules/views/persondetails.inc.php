@@ -418,7 +418,7 @@ function head (&$this, $db, $a) {
 
 	// fit size of image
 	if ($pic_max_width && $pic_max_height) {
-		$pic_size = @getimagesize($GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . "user/"
+		$pic_size = @getimagesize($GLOBALS["ABSOLUTE_PATH_STUDIP"] . "user/"
 				. $db->f("user_id") . ".jpg");
 	
 		if ($pic_size[0] > $pic_max_width || $pic_size[1] > $pic_max_height) {
@@ -440,10 +440,10 @@ function head (&$this, $db, $a) {
 		$pic_max_width = $pic_width;
 		$pic_max_height = $pic_height;
 	}
-	else {
+/*	else {
 		$pic_max_width = "";
 		$pic_max_height = "";
-	}
+	}*/
 
 	$this->config->config["PersondetailsHeader"]["img_width"] = $pic_max_width;
 	$this->config->config["PersondetailsHeader"]["img_height"] = $pic_max_height;
