@@ -644,7 +644,6 @@ function printhead ($breite, $left, $link, $open, $new, $icon,
 				$tmp = $index;
 			$tmpb = 68-$tmp;
 			$blue = dechex(255 - $tmpb);
-			echo $blue;
 			$other = dechex(119 + ($tmpb/1.5));
 			$timecolor= "#" . $other . $other . $blue;
 		}
