@@ -22,29 +22,6 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" =>
 $auth->login_if($auth->auth["uid"] == "nobody");
 $perm->check("admin");
 
-function JS_checkbox_tricks () {
-	?>
-	/* ---------------------------------------
-	   author: Vincent Puglia, GrassBlade Software
-	   site:   http://members.aol.com/grassblad
-	------------------------------------------- */
-
-	function selectAll(formObj, isInverse) 
-	{
-	   for (var i=0;i < formObj.length;i++) 
-	   {
-	      fldObj = formObj.elements[i];
-	      if (fldObj.type == 'checkbox')
-	      { 
-	         if(isInverse)
-	            fldObj.checked = (fldObj.checked) ? false : true;
-	         else fldObj.checked = true; 
-	       }
-	   }
-	}
-	<?
-}
-
 include "$ABSOLUTE_PATH_STUDIP/seminar_open.php"; // hier werden die sessions initialisiert
 require_once("$ABSOLUTE_PATH_STUDIP/dates.inc.php"); // Funktionen zum Loeschen von Terminen
 require_once("$ABSOLUTE_PATH_STUDIP/datei.inc.php"); // Funktionen zum Loeschen von Dokumenten
@@ -70,17 +47,12 @@ $cssSw=new cssClassSwitcher;
 -->
   <title>Stud.IP</title>
 	<link rel="stylesheet" href="style.css" type="text/css">
-<script language="JavaScript">
-<!--
-	<? JS_checkbox_tricks() ?>
--->
-</script>	
+
 </head>
 <?
 
 include ("header.php");   // hier wird der "Kopf" nachgeladen
 include ("links_admin.inc.php");
-
 
 //Handlings....
 
@@ -441,7 +413,7 @@ if (($archiv_assi_data["sems"]) && (sizeof($archiv_assi_data["sem_check"])>0)){
 					}
 					if ($inc_possible)
 						{ ?>&nbsp;<a href="<? echo $PHP_SELF ?>?dec=TRUE"><img src="./pictures/buttons/vorherige-button.gif" border=0></a> <? } ?>
-					&nbsp;<a href="<? echo $PHP_SELF ?>?list=TRUE"><img src="./pictures/buttons/abbrechen-button.gif" border=0></a>
+					&nbsp;<a href="<? echo $PHP_SELF ?>?list=TRUE&new_session=TRUE"><img src="./pictures/buttons/abbrechen-button.gif" border=0></a>
 					&nbsp;<a href="<? echo $PHP_SELF ?>?kill=TRUE"><img src="./pictures/buttons/archivieren-button.gif" border=0></a>
 					<?
 					//can we dec?
