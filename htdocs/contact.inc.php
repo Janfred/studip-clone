@@ -106,7 +106,7 @@ function GetExtraUserinfo ($contact_id)
 }
 
 
-function ShowUserInfo ($user_id, $contact_id)
+function ShowUserInfo ($user_id, $contact_id="")
 { 	// Show the standard userinfo
 	global $user, $open, $edit_id;
 	$output = "";
