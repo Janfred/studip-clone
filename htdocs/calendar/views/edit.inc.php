@@ -42,7 +42,6 @@ require("$ABSOLUTE_PATH_STUDIP/html_head.inc.php");
 require("$ABSOLUTE_PATH_STUDIP/header.php");
 require($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/views/navigation.inc.php");
 
-
 echo "<table width=\"100%\" class=\"blank\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n";
 echo "<tr><td class=\"blank\" width=\"100%\" valign=\"top\">\n";
 echo "<table class=\"blank\" width=\"99%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" align=\"center\">\n";
@@ -118,7 +117,7 @@ if (!$set_recur_x) {
 	echo "</select>";
 	echo ($err["start_time"] ? $error_sign : "");
 	echo "&nbsp; &nbsp; <input type=\"checkbox\" name=\"wholeday\"";
-	echo ($wholeday ? 'checked="checked"' : '') . "$disabled> &nbsp;";
+	echo ($wholeday ? ' checked="checked"' : '') . "$disabled> &nbsp;";
 	echo _("ganzt&auml;gig");
 	$info = _("Als ganztägig markierte Termine beginnen um 00:00 Uhr am angegebenen Starttag und enden um 23.59 am angegeben Endtag.");
 	echo "&nbsp;&nbsp;&nbsp;<img src=\"" . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . "pictures/info.gif\"";
@@ -223,7 +222,7 @@ if (!$set_recur_x) {
 		echo "<tr><td class=\"" . $css_switcher->getClass() . "\">\n";
 		$info = _("Private und vertrauliche Termine sind nur für Sie sichtbar. Öffentliche Termine werden auf ihrer internen Homepage auch anderen Nutzern bekanntgegeben.");
 		echo "<font size=\"-1\">";
-		echo _("Sichtbarkeit:") . "&nbsp;&nbsp;\n";
+		echo _("Zugriff:") . "&nbsp;&nbsp;\n";
 		echo "<select name=\"via\" size=\"1\">\n";
 		$via_names = array(
 				"PUBLIC"       => _("&ouml;ffentlich"),
@@ -551,7 +550,7 @@ else{
 		echo ($err["exc_time"] ? $error_sign : "");
 		echo '&nbsp;&nbsp;';
 		echo "<input type=\"image\" src=\"$CANONICAL_RELATIVE_PATH_STUDIP/pictures/add_right.gif\"";
-		echo " name=\"add_exc\">";
+		echo " name=\"add_exc\"" . tooltip(_("Ausnahme hinzufügen")) . ">";
 		echo "&nbsp; &nbsp;</font></td><td><font size=\"-1\">\n";
 		echo "<select name=\"exc_delete[]\" size=\"4\" multiple=\"multiple\" style=\"width:170px; vertical-align:middle;\">\n";
 		foreach ($exceptions as $exception) {
@@ -560,7 +559,8 @@ else{
 		}
 		echo "</select>\n</font></td></tr>\n";
 		echo "<tr><td>&nbsp;</td>\n<td><input style=\"vertical-align:middle;\" type=\"image\" ";
-		echo " src=\"$CANONICAL_RELATIVE_PATH_STUDIP/pictures/trash.gif\" name=\"del_exc\">\n";
+		echo " src=\"$CANONICAL_RELATIVE_PATH_STUDIP/pictures/trash.gif\" name=\"del_exc\"";
+		echo tooltip(_("ausgewählte Ausnahme löschen")) . ">\n";
 		echo '<font size="-1">' . _("ausgew&auml;hlte l&ouml;schen") . '</font>';
 		echo "</td></tr></table>\n</td>\n</tr>\n";
 		
@@ -574,13 +574,15 @@ else{
 
 #######################################################################################
 
-$info_box['export_link'] = "$PHP_SELF?cmd=export&expmod=exp_direct&termin_id=";
-$info_box['export_link'] .= $atermin->getId();
-if (get_class($atermin) == 'seminarevent')
-	$info_box['export_link'] .= '&evtype=sem';
-$info_box['export'] = array('icon' => '/pictures/vcardexport.gif',
-		'text' => sprintf(_("Sie k&ouml;nnen diesen Termin einzeln %sexportieren%s."),
-				"<a href=\"{$info_box['export_link']}\">", "</a>"));
+if ($termin_id) {
+	$info_box['export_link'] = "$PHP_SELF?cmd=export&expmod=exp_direct&termin_id=";
+	$info_box['export_link'] .= $atermin->getId();
+	if (get_class($atermin) == "seminarevent")
+		$info_box['export_link'] .= '&evtype=sem';
+	$info_box['export'] = array('icon' => '/pictures/vcardexport.gif',
+			'text' => sprintf(_("Sie k&ouml;nnen diesen Termin einzeln %sexportieren%s."),
+			"<a href=\"{$info_box['export_link']}\">", "</a>"));
+}
 	
 if (isset($atermin) && get_class($atermin) == "seminarevent") {
 	$db = new DB_Seminar();
@@ -633,6 +635,7 @@ else {
 		echo "<input type=\"image\" " . makeButton("zurueck", "src"). " name=\"back_recur\" border=\"0\">\n";
 		echo "&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ";
 		echo "<input type=\"hidden\" name=\"set_recur_x\" value=\"1\">\n";
+		echo "<input type=\"hidden\" name=\"wholeday\" value=\"{$HTTP_POST_VARS['wholeday']}\">\n";
 	}
 	if ($atime && get_class($atermin) == 'calendarevent') {
 		if ($count_events < $CALENDAR_MAX_EVENTS)
@@ -671,8 +674,10 @@ else {
 	$info_box['all'][0]['kategorie'] = _("Information:");
 	$info_box['all'][0]['eintrag'][] = array("icon" => "pictures/ausruf_small.gif",
 			"text" => $info_box['count']);
-	$info_box['all'][1]['kategorie'] = _("Aktion:");
-	$info_box['all'][1]['eintrag'][] = $info_box['export'];
+	if ($termin_id) {
+		$info_box['all'][1]['kategorie'] = _("Aktion:");
+		$info_box['all'][1]['eintrag'][] = $info_box['export'];
+	}
 }
 
 
