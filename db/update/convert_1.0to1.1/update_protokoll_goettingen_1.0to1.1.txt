@@ -29,8 +29,8 @@ PHP-Module:
 
 Die Version 1.1 benötigt keine neuen PHP-Module oder andere Erweiterungen (einen Überblick über alle benötigten PHP-Module, Zusatzprogramme
 und andere Erweiterungen wird in der Datei "studip_installation_guide.txt" im Verzeichnis studip-doc der Distribution gegeben).
-Zu beachten ist lediglich, dass das Programm Imagemagik nun auch für den Bildupload und nicht mehr ausschließlich für den Latex-Renderer
-verwendet wird. Sollte dieser im Ausgangszustand nicht installiert gewesen sein, muss die Installation von Imagemagik zum Betrieb der
+Zu beachten ist lediglich, dass nun Imagemagik bzw. die gd-Erweiterung für den Bildupload von persönlichen Bildern 
+verwendet werden. Sollte dieser im Ausgangszustand nicht installiert gewesen sein, muss die Installation von Imagemagik zum Betrieb der
 1.1 auf jeden Fall vorgenommen werden.
 
 Anpassung der Konfigurationsdateien:

@@ -118,7 +118,9 @@ CREATE TABLE IF NOT EXISTS `resources_temporary_events` (
 PRIMARY KEY (`event_id`)
 ) TYPE=HEAP;
 
-ALTER TABLE `resources_assign` CHANGE `assign_user_id` `assign_user_id` VARCHAR( 32 ) DEFAULT NULL
+ALTER TABLE `resources_assign` CHANGE `assign_user_id` `assign_user_id` VARCHAR( 32 ) DEFAULT NULL;
+
+UPDATE `resources_categories` SET `is_room`='1' WHERE `name` = 'Raum';
 
 # #6
 # create default entries for resources-management
@@ -128,7 +130,7 @@ INSERT INTO `config` VALUES ('3d415eca600096df09e59407e4a7994d', 'RESOURCES_LOCK
 INSERT INTO `config` VALUES ('b7a2817d142ddd185df2f5ac587fe218', 'RESOURCES_ALLOW_ROOM_REQUESTS', '', '', 1074780851, '');
 INSERT INTO `config` VALUES ('d821ffbff29ce636cef63ffe3fd8b427', 'RESOURCES_ALLOW_CREATE_ROOMS', '1', '', 1074780851, '');
 INSERT INTO `config` VALUES ('e48dacf9158cd0b936144f0f4cf8dfa3', 'RESOURCES_INHERITANCE_PERMS_ROOMS', '1', '1', 1074780851, '');
-INSERT INTO `CONFIG` VALUES ('45856b1e3407ceb37d87ec9b8fd32d7d', 'RESOURCES_INHERITANCE_PERMS', '1', '1', 1074780851, '');
+INSERT INTO `config` VALUES ('45856b1e3407ceb37d87ec9b8fd32d7d', 'RESOURCES_INHERITANCE_PERMS', '1', '1', 1074780851, '');
 INSERT INTO `config` VALUES ('c353c73d8f37e3c301ae34e99c837af4', 'RESOURCES_ENABLE_ORGA_CLASSIFY', '', '', 1074780851, '');
 INSERT INTO `config` VALUES ('dde143b2b8ed77a384f8c48c956982b8', 'RESOURCES_ENABLE_ORGA_ADMIN_NOTICE', '', '', 1074780851, '');
 INSERT INTO `config` VALUES ('4ff6d5e7ef7ee66acefa5fcf8e7f2305', 'RESOURCES_ALLOW_SINGLE_ASSIGN_PERCENTAGE', '50', '', 1074780851, '');
