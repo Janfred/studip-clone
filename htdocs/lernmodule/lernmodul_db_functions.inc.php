@@ -103,11 +103,12 @@ function get_all_modules($hide_mod = false)
 		$mod_array[$module_count]["description"] = $ilias_db -> f("description");
 		if ($hide_mod != false)
 			for ($i=0; $i<sizeof($hide_mod); $i++)
-				if (($hide_mod[$module_count]["id"] == $mod_array[$module_count]["id"]) AND ($hide_mod[$module_count]["inst"] == $mod_array[$module_count]["inst"]))
+			{echo $i;	
+				if (($hide_mod[$i]["id"] == $mod_array[$module_count]["id"]) AND ($hide_mod[$i]["inst"] == $mod_array[$module_count]["inst"]))
 					{
 						unset($mod_array[$module_count]);
 						$module_count--;
-					}
+			}		}
 		
 		$module_count ++;
 	}
