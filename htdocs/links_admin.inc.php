@@ -313,8 +313,8 @@ if ($i_page == "admin_fakultaet.php" OR $i_page == "admin_fach.php" OR $i_page =
 		IF ($i_page == "admin_fakultaet.php"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="admin_fakultaet.php">Fakult&auml;ten&nbsp; &nbsp; </a> <?}
 		ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="admin_fakultaet.php">Fakult&auml;ten&nbsp; &nbsp; </a> <?}
 
-		IF ($i_page == "admin_institut.php"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="admin_institut.php?view=global">Einrichtungen &nbsp; &nbsp; </a> <?}
-		ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="admin_institut.php?view=global">Einrichtungen &nbsp; &nbsp; </a> <?}
+		IF ($i_page == "admin_institut.php"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="admin_institut.php?view=global&list=TRUE">Einrichtungen &nbsp; &nbsp; </a> <?}
+		ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="admin_institut.php?view=global&list=TRUE">Einrichtungen &nbsp; &nbsp; </a> <?}
 
 		IF ($i_page == "admin_fach.php"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2"  href="admin_fach.php">F&auml;cher&nbsp; &nbsp; </a> <?}
 		ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="admin_fach.php">F&auml;cher&nbsp; &nbsp; </a> <?}
@@ -355,7 +355,7 @@ if ((!$links_admin_data["inst_id"]) && ($list) &&
 	?>
 	<tr>
 		<td class="blank" colspan=2>&nbsp;
-		<form name="links_admin_search" action="<? echo $PHP_SELF ?>?view=inst" method="POST">
+		<form name="links_admin_search" action="<? echo $PHP_SELF,"?", "view=$view"?>" method="POST">
 			<table cellpadding="0" cellspacing="0" border="0" width="99%" align="center">
 				<tr>
 					<td class="steel1">
