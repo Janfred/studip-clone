@@ -592,9 +592,12 @@ if ($resources_data["view"]=="view_schedule" || $resources_data["view"]=="openob
 			$resources_data["schedule_mode"] = "graphical";			
 		}
 	} else {
-		$resources_data["schedule_start_time"] = mktime (0, 0, 0, date("n", time()), date("j", time()), date("Y", time()));
-		$resources_data["schedule_end_time"] = mktime (23, 59, 0, date("n", time()), date("j", time())+7, date("Y", time()));
-		$resources_data["schedule_mode"] = "graphical";		
+		if (!$resources_data["schedule_start_time"])
+			$resources_data["schedule_start_time"] = mktime (0, 0, 0, date("n", time()), date("j", time()), date("Y", time()));
+		if (!$resources_data["schedule_end_time"])
+			$resources_data["schedule_end_time"] = mktime (23, 59, 0, date("n", time()), date("j", time())+7, date("Y", time()));
+		if (!$resources_data["schedule_mode"])
+			$resources_data["schedule_mode"] = "graphical";		
 	}
 }
 

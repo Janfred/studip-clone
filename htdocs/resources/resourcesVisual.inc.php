@@ -1453,6 +1453,16 @@ class ViewSchedules extends cssClasses {
 	}
 	
 	function navigator () {
+	 	//match start_time & end_time for a whole week
+	 	$dow = date ("w", $this->start_time);
+	 	if (date ("w", $this->start_time) >1)
+	 		$offset = 1 - date ("w", $this->start_time);
+	 	if (date ("w", $this->start_time) <1)
+		 	$offset = -6;
+	 
+ 		$start_time = mktime (0, 0, 0, date("n",$this->start_time), date("j", $this->start_time)+$offset+($this->week_offset*7), date("Y", $this->start_time));
+ 		$end_time = mktime (23, 59, 0, date("n",$start_time), date("j", $start_time)+6, date("Y", $start_time));
+	
 		?>
 		<table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
 		<form method="POST" action="<?echo $PHP_SELF ?>?navigate=TRUE&view=view_schedule">
@@ -1467,9 +1477,9 @@ class ViewSchedules extends cssClasses {
 				</td>
 				<td class="<? echo $this->getClass() ?>" width="30%" rowspan="2" valign="top"><font size=-1>
 					<font size=-1>Beginn:&nbsp; 
-					<input type="text" name="schedule_begin_day" size=2 maxlength=2 value="<? if (!$this->start_time) echo date("d",time()); else echo date("d",$this->start_time); ?>">.
-					<input type="text" name="schedule_begin_month" size=2 maxlength=2 value="<? if (!$this->start_time) echo date("m",time()); else echo date("m",$this->start_time); ?>">.
-					<input type="text" name="schedule_begin_year" size=4 maxlength=4 value="<? if (!$this->start_time) echo date("Y",time()); else echo date("Y",$this->start_time); ?>"><br /> 
+					<input type="text" name="schedule_begin_day" size=2 maxlength=2 value="<? if (!$start_time) echo date("d",time()); else echo date("d",$start_time); ?>">.
+					<input type="text" name="schedule_begin_month" size=2 maxlength=2 value="<? if (!$start_time) echo date("m",time()); else echo date("m",$start_time); ?>">.
+					<input type="text" name="schedule_begin_year" size=4 maxlength=4 value="<? if (!$start_time) echo date("Y",time()); else echo date("Y",$start_time); ?>"><br /> 
 					&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; <input type="IMAGE" name="jump" border="0"<? echo makeButton("auswaehlen", "src") ?> /><br />
 				</td>
 				<td class="<? echo $this->getClass() ?>" width="66%" valign="top"><font size=-1>
@@ -1533,7 +1543,7 @@ class ViewSchedules extends cssClasses {
 		<br /><br />
 	<?
 	}
-
+	
 	function showScheduleGraphical() {
 		global $RELATIVE_PATH_RESOURCES, $PHP_SELF;
 	 	
@@ -1545,7 +1555,6 @@ class ViewSchedules extends cssClasses {
 	 		$offset = 1 - date ("w", $this->start_time);
 	 	if (date ("w", $this->start_time) <1)
 		 	$offset = -6;
-
 
 		 //select view to jump from the schedule
 		 if ($this->used_view == "openobject_schedule")
