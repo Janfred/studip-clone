@@ -69,6 +69,7 @@ function export_sem($inst_id)
 			$order = "bereiche.name, seminare.Name";
 			$group = "FIRSTGROUP";
 			$group_tab_zelle = "name";
+			$do_group = true;
 		break;
 		case "status":
 			$order = "seminare.status, bereiche.name, seminare.Name";
@@ -76,6 +77,8 @@ function export_sem($inst_id)
 			$group_tab_zelle = "status";
 			$subgroup = "FIRSTGROUP";
 			$subgroup_tab_zelle = "name";
+			$do_group = true;
+			$do_subgroup = true;
 		break;
 		case "seminar":
 			$order = " seminare.Name";
@@ -95,16 +98,16 @@ function export_sem($inst_id)
 	while ($db->next_record()) 
 	{
 		$group_string = "";
-		if ((isset($group)) AND ($group != $db->f($group_tab_zelle)))
+		if (($do_group) AND ($group != $db->f($group_tab_zelle)))
 		{
 			if ($group != "FIRSTGROUP")
 				$group_string .= xml_close_tag($xml_groupnames_lecture["subgroup1"]);
 			$group_string .= xml_open_tag($xml_groupnames_lecture["subgroup1"], $db->f($group_tab_zelle));
 			$group = $db->f($group_tab_zelle);
-			if (isset($subgroup) AND ($subgroup == $db->f($subgroup_tab_zelle)))
+			if (($do_subgroup) AND ($subgroup == $db->f($subgroup_tab_zelle)))
 				$subgroup = "NEXTGROUP";
 		}
-		if ((isset($subgroup)) AND ($subgroup != $db->f($subgroup_tab_zelle)))
+		if (($do_subgroup) AND ($subgroup != $db->f($subgroup_tab_zelle)))
 		{
 			if ($subgroup != "FIRSTGROUP")
 				$group_string = xml_close_tag($xml_groupnames_lecture["subgroup2"]) . $group_string;
@@ -149,9 +152,9 @@ function export_sem($inst_id)
 		$data_object = "";
 	}
 
-	if (isset($subgroup))
+	if ($do_subgroup)
 		$data_object .= xml_close_tag($xml_groupnames_lecture["subgroup2"]);
-	if (isset($group))
+	if ($do_group)
 		$data_object .= xml_close_tag($xml_groupnames_lecture["subgroup1"]);
 
 	$data_object .= xml_close_tag($xml_groupnames_lecture["group"]);
@@ -169,6 +172,7 @@ function export_pers($inst_id)
 			$order = "statusgruppen.name";
 			$group = "FIRSTGROUP";
 			$group_tab_zelle = "name";
+			$do_group = true;
 		break;
 		default:
 			$order = "statusgruppen.name";
@@ -189,7 +193,7 @@ function export_pers($inst_id)
 	while ($db->next_record()) 
 	{
 		$group_string = "";
-		if ((isset($group)) AND ($group != $db->f($group_tab_zelle)))
+		if (($do_group) AND ($group != $db->f($group_tab_zelle)))
 		{
 			if ($group != "FIRSTGROUP")
 				$group_string .= xml_close_tag($xml_groupnames_person["subgroup1"]);
@@ -212,7 +216,7 @@ function export_pers($inst_id)
 		$data_object = "";
 	}
 
-	if (isset($group))
+	if ($do_group)
 		$data_object .= xml_close_tag($xml_groupnames_person["subgroup1"]);
 
 	$data_object .= xml_close_tag( $xml_groupnames_person["group"]);
