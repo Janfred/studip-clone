@@ -419,14 +419,18 @@ while ( is_array($HTTP_POST_VARS)
 		}
 
 		if ($run) { // Rechte ok
-			## Delete that user.
-			## user aus den Seminaren rauswerfen (seine Postings bleiben aber stehen)
+			// Delete that user.
+			
+			// store user preferred language for sending mail
+			$user_language = getUserLanguagePath($u_id);
+			
+			// delete user from seminars (postings will be preserved)
 			$query = "delete from seminar_user where user_id='$u_id'";
 			$db->query($query);
 			if (($db_ar = $db->affected_rows()) > 0) {
 				$msg .= "info§$db_ar Eintr&auml;ge aus Veranstaltungen gel&ouml;scht.§";
 			}
-			## user aus den Wartelisten rauswerfen
+			// delete user from waiting lists
 			$query2 = "SELECT seminar_id FROM admission_seminar_user where user_id='$u_id'";
 			$query = "delete from admission_seminar_user where user_id='$u_id'";
 			$db->query($query);
@@ -436,12 +440,12 @@ while ( is_array($HTTP_POST_VARS)
 			while ($db2->next_record()) 
 				update_admission($db2->f("seminar_id"));
 			}
-			## Studiengaenge loeschen
+			// delete 'Studiengaenge'
 			$query = "delete from user_studiengang where user_id='$u_id'";
 			$db->query($query);
 			if (($db_ar = $db->affected_rows()) > 0)
 				$msg .= "info§$db_ar Zuordnungen zu Studieng&auml;ngen gel&ouml;scht.§";
-			## Dokumente des users loeschen
+			// Dokumente des users loeschen
 			$temp_count = 0;
 			$query = "SELECT dokument_id FROM dokumente WHERE user_id='$u_id'";
 			$db->query($query);
@@ -452,7 +456,7 @@ while ( is_array($HTTP_POST_VARS)
 			if ($temp_count) {
 				$msg .= "info§$temp_count Dokumente gel&ouml;scht.§";
 			}
-			## Leere folder des users loeschen
+			// delete empty folders of this user
 			$temp_count = 0;
 			$query = "SELECT folder_id FROM folder WHERE user_id='$u_id' ORDER BY mkdate DESC";
 			$db->query($query);
@@ -469,14 +473,14 @@ while ( is_array($HTTP_POST_VARS)
 			if ($temp_count) {
 				$msg .= "info§$temp_count leere Ordner gel&ouml;scht.§";
 			}
-			## noch folder ueber?
+			// folder left?
 			$query = "SELECT count(*) AS count FROM folder WHERE user_id='$u_id'";
 			$db->query($query);
 	 		$db->next_record();
 			if ($db->f("count")) {
 				$msg .= sprintf("info§%s Ordner konnten nicht gel&ouml;scht werden, da sie noch Dokumente anderer Benutzer enthalten.§", $db->f("count"));
 			}
-			## user aus den Instituten rauswerfen
+			// delete user from instituts
 			$query = "delete from user_inst where user_id='$u_id'";
 			$db->query($query);
 			if (($db_ar = $db->affected_rows()) > 0) {
@@ -565,7 +569,6 @@ while ( is_array($HTTP_POST_VARS)
 					$to=$Email;
 
 					// include language-specific subject and mailbody
-					$user_language = getUserLanguagePath($u_id);
 					include_once("$ABSOLUTE_PATH_STUDIP"."locale/$user_language/LC_MAILS/delete_mail.inc.php");
 
 					$smtp->SendMessage(
