@@ -20,7 +20,9 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
-require_once($ABSOLUTE_PATH_STUDIP . "StudipRangeTreeView.class.php");
+require_once($ABSOLUTE_PATH_STUDIP . "StudipRangeTree.class.php");
+require_once($ABSOLUTE_PATH_STUDIP . "TreeView.class.php");
+require_once($ABSOLUTE_PATH_STUDIP . "RangeTreeObject.class.php");
 /**
 * class to print out the admin view of the "range tree"
 *
@@ -32,7 +34,7 @@ require_once($ABSOLUTE_PATH_STUDIP . "StudipRangeTreeView.class.php");
 * @version	$Id$
 * @package	
 */
-class StudipRangeTreeViewAdmin extends StudipRangeTreeView{
+class StudipRangeTreeViewAdmin extends TreeView{
 
 	
 	var $tree_status;
@@ -61,7 +63,8 @@ class StudipRangeTreeViewAdmin extends StudipRangeTreeView{
 	*/
 	function StudipRangeTreeViewAdmin(){
 		global $sess,$_marked_item;
-		parent::StudipRangeTreeView(); //calling the baseclass constructor 
+		$this->root_content = "Eine gaaaaaanz tolle Uni.";
+		parent::TreeView("StudipRangeTree"); //calling the baseclass constructor 
 		if (is_object($sess)){
 			$sess->register("_marked_item");
 			$this->marked_item =& $_marked_item;
@@ -727,3 +730,4 @@ class StudipRangeTreeViewAdmin extends StudipRangeTreeView{
 //echo "</table>";
 //page_close();
 ?>
+
