@@ -64,7 +64,7 @@ class ExternModule {
 			$class_name = "ExternModule" . $module_name;
 			
 			require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . "extern/modules/$class_name.class.php");
-			$this = new $class_name($range_id, $module_name);
+			$this = new $class_name();
 		}
 		
 		// the module is called via extern.php (not via the admin area) and there is
@@ -94,13 +94,21 @@ class ExternModule {
 				$this->field_names, $this->config);
 		
 		// instantiate the registered elements
-		foreach ($this->registered_elements as $registered_element)
-			$this->elements[$registered_element] =& new ExternElement($this->config, $registered_element);
+		foreach ($this->registered_elements as $name => $registered_element) {
+			if (is_int($name) || !$name)
+				$this->elements[$registered_element] =& new ExternElement($this->config, $registered_element);
+			else {
+				$this->elements[$name] =& new ExternElement($this->config, $registered_element);
+				$this->elements[$name]->name = $name;
+			}
+		}
 		
 		if ($set_config != "" && $config_id == "") {
 			$config = $this->getDefaultConfig();
 			$this->config->setConfiguration($set_config, $config);
 		}
+		
+		$this->setup();
 	}
 
 	/**
@@ -286,11 +294,11 @@ class ExternModule {
 	*/
 	function getModuleLink ($module, $config, $sri_link) {
 		if ($sri_link) {
-			$link = "http://{$GLOBALS['EXTERN_SERVER_NAME']}/extern.php";
+			$link = "http://{$GLOBALS['EXTERN_SERVER_NAME']}extern.php";
 			$link .= "?page_url=$sri_link";
 		}
 		else {
-			$link = "http://{$GLOBALS['EXTERN_SERVER_NAME']}/extern.php?module=$module";
+			$link = "http://{$GLOBALS['EXTERN_SERVER_NAME']}extern.php?module=$module";
 			if ($config)
 				$link .= "&config_name=$config";
 			$link .= "&range_id={$this->config->range_id}";
@@ -298,6 +306,11 @@ class ExternModule {
 		
 		return $link;
 	}
+	
+	/**
+	*
+	*/
+	function setup () {}
 	
 }
 ?>
