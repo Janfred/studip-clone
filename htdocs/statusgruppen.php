@@ -185,6 +185,12 @@ function PrintNonMembers ($range_id)
 			if ($anzahltext == 0) {
 				$Memberstatus = _("Niemand ist einer Funktion / Gruppe zugeordnet.");
 			}
+
+			if (($EXPORT_ENABLE) AND ($perm->have_studip_perm("tutor", $SessSemName[1])))
+			{
+				include_once($ABSOLUTE_PATH_STUDIP . $PATH_EXPORT . "/export_linking_func.inc.php");
+				echo "<br><b>&nbsp;<font size=\"-1\">" . export_link($SessSemName[1], "person", $SessSemName[0], "html", "html-teiln", "status") . "</font></b>";
+			}
 			?>
 		</td>
 	</tr>
