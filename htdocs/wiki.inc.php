@@ -384,15 +384,21 @@ function showDeleteDialog($keyword, $version) {
 		}
 		$islatest=1;
 	}
+
+	if (!$islatest) {
+		begin_blank_table();
+		parse_msg("error§" . _("Die Version, die Sie l&ouml;schen wollen, ist nicht die aktuellste. &Uuml;berpr&uuml;fen Sie, ob inzwischen eine aktuellere Version erstellt wurde."));
+		end_blank_table();
+		echo "</td></tr></table></body></html>";
+		die;
+	}
 	begin_blank_table();
 	$msg="info§" . sprintf(_("Wollen Sie die untenstehende Version %s der Seite %s wirklich l&ouml;schen?"), "<b>".$version."</b>", "<b>".$keyword."</b>") . "<br>\n";
-	if ($islatest && !$willvanish) {
+	if (!$willvanish) {
 		$msg .= _("Diese Version ist derzeit aktuell. Nach dem L&ouml;schen wird die n&auml;chst&auml;ltere Version aktuell.") . "<br>";
-	} elseif ($islatest && $willvanish) {
-		$msg .= _("Diese Version ist die derzeit einzige. Nach dem L&ouml;schen ist die Seite komplet gelöscht.") . "<br>";
 	} else {
-		$msg .= _("Diese Version ist nicht aktuell. Das L&ouml;schen wirkt sich daher nicht auf die aktuelle Version aus.") . "<br>";
-	}    
+		$msg .= _("Diese Version ist die derzeit einzige. Nach dem L&ouml;schen ist die Seite komplet gelöscht.") . "<br>";
+	} 
 	$msg.="<a href=\"".$PHP_SELF."?cmd=really_delete&keyword=$keyword&version=$version&dellatest=$islatest\">" . makeButton("ja2", "img") . "</a>&nbsp; \n";
 	$lnk = "?keyword=$keyword"; // what to do when delete is aborted
 	if (!$islatest) $lnk .= "&version=$version"; 
@@ -457,6 +463,14 @@ function deleteWikiPage($keyword, $version, $range_id) {
 	if (!$perm->have_perm("dozent")) {
 		begin_blank_table();
 		parse_msg("error§" . _("Sie haben keine Berechtigung, Seiten zu l&ouml;schen."));
+		end_blank_table();
+		echo "</td></tr></table></body></html>";
+		die;
+	}
+	$lv=getLatestVersion($keyword, $SessSemName[1]);
+	if ($lv["version"] != $version) {
+		begin_blank_table();
+		parse_msg("error§" . _("Die Version, die Sie l&ouml;schen wollen, ist nicht die aktuellste. &Uuml;berpr&uuml;fen Sie, ob inzwischen eine aktuellere Version erstellt wurde."));
 		end_blank_table();
 		echo "</td></tr></table></body></html>";
 		die;
@@ -674,6 +688,9 @@ function wikiSinglePageHeader($wikiData, $keyword) {
 **/
 function wikiEdit($keyword, $wikiData, $user_id, $backpage=NULL) {
 
+	showPageFrameStart();
+	wikiSinglePageHeader($wikiData, $keyword);
+	begin_blank_table();
 	if (!$wikiData) {
 		$body = "";
 		$version = 0;
@@ -685,19 +702,11 @@ function wikiEdit($keyword, $wikiData, $user_id, $backpage=NULL) {
 	}
 	releaseLocks($keyword); // kill old locks 
 	$locks=getLock($keyword);
+	$cont="";
 	if ($locks && $lock["user_id"]!=$user_id) { 
-		begin_blank_table();
-		echo "<tr><td class=blank>&nbsp;</td></tr>";
-		parse_msg("info§" . _("Die Seite wird eventuell bearbeitet von ") . $locks . ".<br>" . _("Wenn Sie die Seite trotzdem &auml;ndern, kann ein Versionskonflikt entstehen.") . "<br>" . _("Es werden dann beide Versionen eingetragen und m&uuml;ssen von Hand zusammengef&uuml;hrt werden.") . "<br>" . _("Klicken Sie auf Abbrechen, um zurückzukehren."));
-		end_blank_table();
+		parse_msg("info§" . "<p>&nbsp;</p>". sprintf(_("Die Seite wird eventuell von %s bearbeitet."), $locks) . "<br>" . _("Wenn Sie die Seite trotzdem &auml;ndern, kann ein Versionskonflikt entstehen.") . "<br>" . _("Es werden dann beide Versionen eingetragen und m&uuml;ssen von Hand zusammengef&uuml;hrt werden.") . "<br>" . _("Klicken Sie auf Abbrechen, um zurückzukehren."), "§", "printcontent");
 	}
 
-	echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">";
-	echo "<tr><td>";
-	$cont = "<font size=-2><p>" . _("Sie k&ouml;nnen beliebigen Text einf&uuml;gen und vorhandenen Text &auml;ndern.") . " ";
-	$cont .= _("Beachten Sie dabei die "). "<a href=\"help/index.php?help_page=ix_forum6.htm\" target=\"_new\">" . _("Formatierungsm&ouml;glichkeiten") . "</a>.<br>";
-	$cont .= _("Links entstehen automatisch aus W&ouml;rtern, die mit Gro&szlig;buchstaben beginnen und einen Gro&szlig;buchstaben in der Wortmitte enthalten.") . "</p></font>";
-    
 	$cont .= "<p><form method=\"post\" action=\"?keyword=$keyword&cmd=edit\">";
 	$cont .= "<textarea name=\"body\" cols=\"80\" rows=\"15\">$body</textarea>\n";
 	$cont .= "<input type=\"hidden\" name=\"wiki\" value=\"$keyword\">";
@@ -707,8 +716,11 @@ function wikiEdit($keyword, $wikiData, $user_id, $backpage=NULL) {
 	$cont .= "<br><br><input type=image name=\"submit\" value=\"abschicken\" " . makeButton("abschicken", "src") . " align=\"absmiddle\" border=0 >&nbsp;<a href=\"wiki.php?cmd=abortedit&keyword=$keyword$lastpage\"><img " . makeButton("abbrechen", "src") . " align=\"absmiddle\" border=0></a>";
 	$cont .= "</form>\n";
 	printcontent(0,0,$cont,"");
-	echo "</tr></table>     ";
-	echo "</td></tr></table>";
+	$infobox = array ();
+	$infobox[] = array("kategorie" => _("Information"), "eintrag" => array(array("icon"=>"pictures/ausruf_small.gif", "text"=> _("Sie k&ouml;nnen beliebigen Text einf&uuml;gen und vorhandenen Text &auml;ndern. Beachten Sie dabei die <a href=\"help/index.php?help_page=ix_forum6.htm\" target=\"_new\"> Formatierungsm&ouml;glichkeiten</a>. Links entstehen automatisch aus W&ouml;rtern, die mit Gro&szlig;buchstaben beginnen und einen Gro&szlig;buchstaben in der Wortmitte enthalten."))));
+	end_blank_table();
+	echo "</td>"; // end of content area
+	showPageFrameEnd($infobox);
 }
 
 /**
@@ -919,29 +931,36 @@ function getDiffPageInfobox($keyword) {
 /**
 * Display wiki page.
 * 
-* @param	string	keyword	WikiPage name
-* @param	string	version	WikiPage version
+* @param	string	WikiPage name
+* @param	string	WikiPage version
+* @param	string	ID of special dialog to be printed (delete, delete_all)
 *
 **/
-function showWikiPage($keyword, $version) {
+function showWikiPage($keyword, $version, $special="") {
 	global $perm;
+
+	showPageFrameStart();
+
+	// show dialogs if any..
+	//
+	if ($special == "delete") {
+		$version=showDeleteDialog($keyword, $version);
+	} else if ($special == "delete_all") {
+		showDeleteAllDialog($keyword);
+	}
+
 	$wikiData = getWikiPage($keyword, $version);
 	if (!$version) {
 		$latest_version=1;
 	}
 
-	showPageFrameStart();
 	// show page logic
 	//
 	wikiSinglePageHeader($wikiData, $keyword);
 
 	if ($perm->have_perm("autor")) { 
 		if (!$latest_version) {
-			if ($perm->have_perm("dozent")) {
-				$edit="<a href=\"?keyword=$keyword&cmd=delete&version=$version\"><img ".makeButton("loeschen","src")." border=\"0\"></a>";
-			} else {
-				$edit="Ältere Version, nicht bearbeitbar!";
-			}
+			$edit="Ältere Version, nicht bearbeitbar!";
 		} else {
 			$edit="";
 			if ($perm->have_perm("autor")) {
@@ -1038,9 +1057,6 @@ function showDiffs($keyword, $versions_since) {
 		$diffarray .= "</table>\n";
 		printcontent(0,0, $diffarray, "");
 		echo "</tr>";
-		//echo "<tr><td>";
-		//combodiff($keyword, $lastversion, $currentversion);
-		//echo "</td></tr>";
 		$last = $current;
 		$lastversion = $currentversion;
 		$zusatz=getZusatz($db->Record);
@@ -1064,8 +1080,7 @@ function do_diff($strlines1,$strlines2)
 {
 	$plus="<td width=\"3\" bgcolor=\"green\">&nbsp;</td>";
 	$minus="<td width=\"3\" bgcolor=\"red\">&nbsp;</td>";
-	//$equal="<td width=\"3\" bgcolor=\"grey\">&nbsp;</td>";
-	$equal="=";
+	$equal="<td width=\"3\" bgcolor=\"grey\">&nbsp;</td>";
 	$obj = new line_diff($plus, $minus, $equal);
 	$str = $obj->str_compare($strlines1,$strlines2);
 	return $str;
@@ -1170,7 +1185,7 @@ function showComboDiff($keyword, $db=NULL) {
 }
 
 function create_color($index) {
-	$shades=array("9","b","7","d","8","a","6","c","e","5");
+	$shades=array("e","b","d","a","c","9","8","7","6","5");
 	if ($index>70) {
 		$index=$index%70;
 	}
@@ -1237,11 +1252,22 @@ class line_diff
 		$this->compare();
 		
 		$str = '';
+		$lastdiff = "";
+		$textaccu = "";
+		$template = "<tr>%s<td width=\"10\">&nbsp;</td><td><font size=-1>%s</font></td></tr>";
 		foreach ($this->toArray() as $obj)
 		{
 			if ($show_equal || $obj->get('diff') != $this->equal) {
-				$str .= "<tr>".$obj->get('diff')."<td width=\"10\">&nbsp;</td><td><font size=-1>".$obj->text()."&nbsp;</font></td></tr>";
+				$textaccu .= $obj->text();
+				if ($lastdiff && $obj->get("diff") != $lastdiff) {
+					$str .= sprintf($template, $lastdiff, wikiReady($textaccu));
+					$textaccu="";
+				}
+				$lastdiff = $obj->get("diff");
 			}
+		}
+		if ($textaccu) {
+			$str .= sprintf($template, $lastdiff, wikiReady($textaccu));
 		}
 		return $str;
 	}
