@@ -232,6 +232,8 @@ INSERT INTO user_info VALUES ('e7a0a84b161f3e8c09b4a0a2e8a58147', '', NULL, '', 
 
 INSERT INTO user_inst VALUES ('7e81ec247c151c02ffd479511e24cc03', '6a1f27ed3c07b1cff22f467e8bd20868', 'tutor', '', '', '', '');
 INSERT INTO user_inst VALUES ('205f3efb7997a0fc9755da2b535038da', '6a1f27ed3c07b1cff22f467e8bd20868', 'dozent', '', '', '', '');
+INSERT INTO user_inst VALUES ('7e81ec247c151c02ffd479511e24cc03', 'd9a2cb67781cb478caef29fd14a0653a', 'tutor', '', '', '', '');
+INSERT INTO user_inst VALUES ('205f3efb7997a0fc9755da2b535038da', 'd9a2cb67781cb478caef29fd14a0653a', 'dozent', '', '', '', '');
 
 #
 # Daten für Tabelle `vote`
