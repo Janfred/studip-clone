@@ -49,10 +49,8 @@ require_once("$ABSOLUTE_PATH_STUDIP/wiki.inc.php");
 echo "<table width=\"100%\" border=0 cellpadding=0 cellspacing=0>\n";
 
 $db=new DB_Seminar;
-$username=$auth->auth['uname'];
-$db->query("SELECT * FROM auth_user_md5  WHERE username ='$username'");
-$db->next_record();
-$user_id=$db->f("user_id");
+
+$user_id=$auth->auth['uid'];
 
 $begin_blank_table="<table width=\"100%\" class=\"blank\" border=0 cellpadding=0 cellspacing=0>\n";
 $end_blank_table="</tr></table>";
@@ -115,7 +113,6 @@ if ($view=="listall") {
 	$wikiData=getWikiPage($keyword,$version);
 
 	// set lock
-	$db=new DB_Seminar;
 	$result=$db->query("REPLACE INTO wiki_locks (user_id, range_id, keyword, chdate) VALUES ('$user->id', '$SessSemName[1]', '$keyword', '".time()."')");
 
 	wikiSinglePageHeader($wikiData, $keyword);
@@ -131,7 +128,6 @@ if ($view=="listall") {
 		die;
 	}
 	// set lock
-	$db=new DB_Seminar;
 	$result=$db->query("REPLACE INTO wiki_locks (user_id, range_id, keyword, chdate) VALUES ('$user->id', '$SessSemName[1]', '$keyword', '".time()."')");
 	wikiSinglePageHeader($wikiData, $keyword);
 	wikiEdit($keyword, NULL, $lastpage);
@@ -157,7 +153,6 @@ if ($view=="listall") {
 		} else if ($latestVersion && ($version!="") && ($lastchange < 30*60) && ($user->id == $latestVersion[user_id])) {
 			// if same author changes again within 30 minutes,
 			// no new verison is created 
-			$db=new DB_Seminar;
 			$result=$db->query("UPDATE wiki SET body='$body', chdate='$date' WHERE keyword='$keyword' AND range_id='$SessSemName[1]' AND version='$version'");
 			echo $begin_blank_table;
 			parse_msg("info§" . _("Update ok, keine neue Version, da erneute Änderung innerhalb 30 Minuten."));
@@ -169,7 +164,6 @@ if ($view=="listall") {
 				$version=$latestVersion['version']+1;
 			}
 			$date=time();
-			$db=new DB_Seminar;
 			$result=$db->query("INSERT INTO wiki (range_id, user_id, keyword, body, chdate, version) VALUES ('$SessSemName[1]', '$user->id', '$keyword','$body','$date','$version')");
 			echo $begin_blank_table;
 			parse_msg("info§" . _("Update ok, neue Version angelegt."));
