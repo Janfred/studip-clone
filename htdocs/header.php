@@ -53,7 +53,7 @@ function MakeToolbar($icon,$URL,$text,$tooltip,$size,$target="_top",$align="cent
 
 	$toolbar .= "<img border=\"0\" src=\"pictures/blank.gif\" height=\"1\" width=\"30\"><br>"
 			  ."<a class=\"toolbar\" href=\"$URL\" target=\"$target\"><img border=\"0\" src=\"$icon\" ".$tool."><br>"
-			  ."<img border=\"0\" src=\"pictures/blank.gif\" height=\"4\" width=\"$size\"><br>"
+			  ."<img border=\"0\" src=\"pictures/blank.gif\" height=\"6\" width=\"$size\"><br>"
 			  ."<b>$text</b></a><br>"
 			  ."<img border=\"0\" src=\"pictures/blank.gif\" height=\"7\" width=\"30\">";
 	$toolbar .= "</td>\n";
