@@ -2,12 +2,14 @@
 /**
 * function.php
 * 
-* The Stud.IP-Core function. Look to the descriptions to get further details
+* The Stud.IP-Core functions. Look to the descriptions to get further details
 * 
 *
 * @author		Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>, Ralf Stockmann <rstockm@gwdg.de>, André Noack André Noack <andre.noack@gmx.net>
+* @version		$Id$
 * @access		public
-* @modulegroup	system_core
+* @package		studip_core
+* @modulegroup	library
 * @module		functions.php
 */
 
