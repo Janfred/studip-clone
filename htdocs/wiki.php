@@ -35,6 +35,15 @@ require_once("$ABSOLUTE_PATH_STUDIP/wiki.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
 require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 
+// -- Load Wiki Plugins -------------------
+// $WIKI_PLUGINS is defined in local.inc
+//
+if (is_array($WIKI_PLUGINS)) {
+	foreach ($WIKI_PLUGINS as $plugin) {
+		require_once($ABSOLUTE_PATH_STUDIP.$plugin);
+	}
+}
+
 
 if ($view=="wikiprint") {
 	printWikiPage($keyword, $version);

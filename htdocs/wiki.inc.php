@@ -288,6 +288,32 @@ function releasePageLocks($keyword) {
 $wiki_keyword_regex="(^|\s|\A|\>)(([A-Z]|&[AOU]uml;)([a-z0-9]|&[aou]uml;|&szlig;)+([A-Z]|&[AOU]uml;)([a-zA-Z0-9]|&[aouAOU]uml;|&szlig;)+)";
 
 /**
+* Register Wiki directive markup
+*
+* @param       string  pattern
+* @param       string  replace
+*
+**/
+function wikiMarkup($pattern, $replace) {
+	global $wiki_directives;
+	$wiki_directives[]=array($pattern, $replace);
+}
+
+/**
+* Process registered wiki-directives
+*
+* @param	string  text, all other markup conversions applied
+*
+**/
+function wikiDirectives($str) {
+	global $wiki_directives; // array of pattern-replace-arrays
+	foreach ($wiki_directives as $direct) {
+		$str=preg_replace($direct[0],$direct[1],$str);
+	}
+	return $str;
+}
+
+/**
 * Replace WikiWords with appropriate links in given string
 *
 * @param	string 	str
@@ -304,6 +330,7 @@ function wikiLinks($str, $page) {
 	if (preg_match_all("'\<nowikilink\>(.+)\</nowikilink\>'isU", $str, $matches)) {
 		$str = preg_replace("'\<nowikilink\>.+\</nowikilink\>'isU", 'ö', $str);
 		$str = preg_replace("/$wiki_keyword_regex/e", "'\\1'.isKeyword('\\2', $page)", $str);
+		$str=wikiDirectives($str);  // process Wiki-Plugins
 		$str = explode('ö', $str);
 		$i = 0; $all = '';
 		foreach ($str as $w) $all .= $w .  $matches[1][$i++];
@@ -1040,7 +1067,7 @@ function showWikiPage($keyword, $version, $special="", $show_comments="icon") {
 
 	begin_blank_table();
 	echo "<tr>\n";
-	$cont = wikiLinks(wikiReady($wikiData["body"],TRUE,FALSE,$show_comments), $keyword);
+	$cont = wikiDirectives(wikiLinks(wikiReady($wikiData["body"],TRUE,FALSE,$show_comments), $keyword));
 	$num_body_lines=substr_count($wikiData['body'], "\n");
 	if ($num_body_lines<15) {
 		$cont .= "<p>";
