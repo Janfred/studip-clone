@@ -467,9 +467,9 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 			// delete Entry from List:
 
 			if (($values["status"]=="dozent") || ($values["status"]=="tutor")) 
-				echo "<td class=\"".$cssSw->getClass()."\"  align=center>&nbsp;</td>";
+				echo "<td class=\"".$cssSw->getClass()."\"  align=center><img width=\"19\" width=\"17\" src=\"pictures/blank.gif\" /></td>";
 			elseif ($values["binding"]) //anderer Link und andere Tonne wenn Veranstaltungszuordnung bindend ist.
-				printf("<td class=\"".$cssSw->getClass()."\"  align=center nowrap><a href=\"$PHP_SELF?auswahl=%s&cmd=no_kill\"><img src=\"pictures/lighttrash.gif\" ".tooltip(_("Das Abonnement ist bindend. Bitte wenden Sie sich an die Dozentin oder den Dozenten."))." border=\"0\"></a>&nbsp; </td>", $semid);
+				printf("<td class=\"".$cssSw->getClass()."\"  align=center nowrap><a href=\"$PHP_SELF?auswahl=%s&cmd=no_kill\"><img src=\"pictures/logout_seminare_no.gif\" ".tooltip(_("Das Abonnement ist bindend. Bitte wenden Sie sich an die Dozentin oder den Dozenten."))." border=\"0\"></a>&nbsp; </td>", $semid);
 			else
 				printf("<td class=\"".$cssSw->getClass()."\"  align=center nowrap><a href=\"$PHP_SELF?auswahl=%s&cmd=suppose_to_kill\"><img src=\"pictures/logout_seminare.gif\" ".tooltip(_("aus der Veranstaltung abmelden"))." border=\"0\"></a>&nbsp;</td>", $semid);
 			echo "</tr>\n";
@@ -681,7 +681,7 @@ if ( !$perm->have_perm("root")) {
 
 			// delete Entry from List:
 			if (($values["status"]=="dozent") || ($values["status"]=="tutor") || ($values["status"]=="admin") || ($values["status"]=="autor"))
-				echo "<td class=\"".$cssSw->getClass()."\" align=center>&nbsp;</td>";
+				echo "<td class=\"".$cssSw->getClass()."\" align=center><img width=\"19\" width=\"17\" src=\"pictures/blank.gif\" /</td>";
 			else
 				printf("<td class=\"".$cssSw->getClass()."\" align=center align=center><a href=\"$PHP_SELF?auswahl=%s&cmd=inst_kill\"><img src=\"pictures/logout_seminare.gif\" ".tooltip(_("aus der Einrichtung austragen"))." border=\"0\">&nbsp;</a></td>", $instid);
 		 	echo "</tr>\n";
