@@ -365,7 +365,7 @@ function createInfoxboxArray($mode){
 			array ("kategorie"  => "Information:",
 				"eintrag" => array	(	
 						array	 (	"icon" => "pictures/ausruf_small.gif",
-								"text"  => _("Um eine Druckansicht ihrer Veranstaltungen zu erstellen, wählen Sie bitte zunächst das entsprechende Semester aus und engen gegebenenfalls ihre Suchabfrage ein.")
+								"text"  => _("Um eine Druckansicht Ihrer Veranstaltungen zu erstellen, wählen Sie bitte zunächst das entsprechende Semester aus und engen gegebenenfalls ihre Suchabfrage ein.")
 								),
 						)
 			),
