@@ -89,28 +89,58 @@ echo "<a href=\"$PHP_SELF?open=all&filter=$filter\">Alle aufklappen</a>";
 
 // Buchstabenleiste
 
-echo "<table align=\"center\" ><tr>";
-if (!$filter) {
-	$cssSw->switchClass();
-}
-echo "<td ".$cssSw->getHover()." class=\"".$cssSw->getClass()."\">&nbsp; "
-	."<a href=\"$PHP_SELF\">a-z</a>"
-	."&nbsp; </td>";
-if (!$filter) {
-	$cssSw->switchClass();
-}
-for ($i=97;$i<123;$i++) {
-	if ($filter==chr($i)) {
+if ($view!="gruppen") {
+	echo "<table align=\"center\" ><tr>";
+	if (!$filter) {
 		$cssSw->switchClass();
 	}
 	echo "<td ".$cssSw->getHover()." class=\"".$cssSw->getClass()."\">&nbsp; "
-	."<a href=\"$PHP_SELF?filter=".chr($i)."\">".chr($i)."</a>"
-	."&nbsp; </td>";
-	if ($filter==chr($i)) {
+		."<a href=\"$PHP_SELF\">a-z</a>"
+		."&nbsp; </td>";
+	if (!$filter) {
 		$cssSw->switchClass();
 	}
+	for ($i=97;$i<123;$i++) {
+		if ($filter==chr($i)) {
+			$cssSw->switchClass();
+		}
+		echo "<td ".$cssSw->getHover()." class=\"".$cssSw->getClass()."\">&nbsp; "
+		."<a href=\"$PHP_SELF?filter=".chr($i)."\">".chr($i)."</a>"
+		."&nbsp; </td>";
+		if ($filter==chr($i)) {
+			$cssSw->switchClass();
+		}
+	}
+	echo "</tr></table>";
 }
-echo "</tr></table>";
+
+if ($view=="gruppen") {
+	echo "<table align=\"center\" ><tr>";
+	if (!$filter) {
+		$cssSw->switchClass();
+	}
+	echo "<td ".$cssSw->getHover()." class=\"".$cssSw->getClass()."\">&nbsp; "
+		."<a href=\"$PHP_SELF\">alle Gruppen</a>"
+		."&nbsp; </td>";
+	if (!$filter) {
+		$cssSw->switchClass();
+	}
+	$owner_id = $user->id;
+	$db=new DB_Seminar;
+	$db->query ("SELECT name, statusgruppe_id FROM statusgruppen WHERE range_id = '$owner_id'");	
+	while ($db->next_record()) {
+		if ($filter==$db->f("statusgruppe_id")) {
+			$cssSw->switchClass();
+		}
+		echo "<td ".$cssSw->getHover()." class=\"".$cssSw->getClass()."\">&nbsp; "
+		."<a href=\"$PHP_SELF?filter=".$db->f("statusgruppe_id")."\">".$db->f("name")."</a>"
+		."&nbsp; </td>";
+		if ($filter==$db->f("statusgruppe_id")) {
+			$cssSw->switchClass();
+		}
+	}
+	echo "</tr></table>";
+}
 
 
 

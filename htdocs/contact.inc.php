@@ -162,6 +162,11 @@ function ShowUserInfo ($user_id, $contact_id="")
 		if(file_exists("./user/".$user_id.".jpg")) {
 			$output.="<tr><td align=\"center\" class=\"steel1\" colspan=\"2\" width=\"350\"><br><img src=\"./user/".$user_id.".jpg\" border=1></td>";
 		}
+		$owner_id = $user->id;
+		$db->query ("SELECT DISTINCT name FROM statusgruppen LEFT JOIN statusgruppe_user USING(statusgruppe_id) WHERE user_id = '$user_id' AND range_id= '$owner_id'");	
+		while ($db->next_record()) {		
+			$output .= "<tr><td class=\"steel1\" width=\"100\"><font size=\"2\">Gruppe:</font></td><td class=\"steel1\" width=\"250\"><font size=\"2\">".$db->f("name")."</font></td></tr>";		
+		}		
 	}
 	return $output;	
 } 
