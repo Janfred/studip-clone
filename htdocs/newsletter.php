@@ -129,8 +129,7 @@ function SendMail($newsletter_id,$username,$Vorname,$Nachname,$Email)
 			echo "nicht erreichbar";
 			return false;
 		} else {
-
-			## Abschicken der Bestaetigungsmail
+			// Newsletter los
 			$from="\"Stud.IP\" <wwwrun@".$smtp->host_name.">";
 			$env_from="wwwrun@".$smtp->host_name;
 			$abuse="abuse@".$smtp->host_name;
@@ -151,9 +150,7 @@ function SendMail($newsletter_id,$username,$Vorname,$Nachname,$Email)
 			$smtp->SendMessage(
 			$env_from, array($to),
 			array("From: $from", "Reply-To: $abuse", "To: $to", "Subject: Newsletter"),
-			"hallo");
-
-//			$mailbody);
+			$mailbody);
 		}
 }
 
