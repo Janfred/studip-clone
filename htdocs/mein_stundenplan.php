@@ -53,7 +53,7 @@ check_schedule_settings();
 if (!$print_view) {
 	include "header.php";   //hier wird der "Kopf" nachgeladen
 	if (!$perm->have_perm("admin"))
-		include "kalenderLinks.php";
+		include "$RELATIVE_PATH_CALDENDAR/kalenderLinks.php";
 	}
 
 if ($change_view) {
