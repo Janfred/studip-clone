@@ -46,7 +46,7 @@ if ($forumsend=="bla"){
 <tr  <? $cssSw->switchClass() ?>><td  class="<? echo $cssSw->getClass() ?>"><blockquote><b><?print _("Neue Beiträge immer aufgeklappt");?></b></td>
 <td class="<? echo $cssSw->getClass() ?>"><input type="CHECKBOX" name="neuauf" value="1"<?IF($forum["neuauf"]==1) echo " checked";?>></td><td  width="70%" class="<? echo $cssSw->getClass() ?>"><br><blockquote><?print _("Neue Postings sind immer automatisch aufgeklappt");?><br><br></td></tr>
 <input type="HIDDEN" name="forumsend" value="bla">
-<tr  <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>">&nbsp; </td><td  class="<? echo $cssSw->getClass() ?>" colspan=2><br /><font size=-1><input type="IMAGE" <?=makeButton("uebernehmen", "src") ?> border=0 value="&Auml;nderungen &uuml;bernehmen"></font>&nbsp;</td></tr>		
+<tr  <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>">&nbsp; </td><td  class="<? echo $cssSw->getClass() ?>" colspan=2><br /><font size=-1><input type="IMAGE" <?=makeButton("uebernehmen", "src") ?> border=0 value="<?_("&Auml;nderungen &uuml;bernehmen")?>"></font>&nbsp;</td></tr>		
 </form>		
 </table><br />
 <? IF ($forumsend=="anpassen") {
