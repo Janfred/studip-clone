@@ -37,7 +37,7 @@ require_once ($RELATIVE_PATH_RESOURCES."/lib/AssignObject.class.php");
 require_once ($RELATIVE_PATH_RESOURCES."/lib/AssignEvent.class.php");
 
 
-function list_restore_assign(&$this, $resource_id, $begin, $end, $user_id='', $range_id='', $filter = FALSE){
+function list_restore_assign(&$assEvtLst, $resource_id, $begin, $end, $user_id='', $range_id='', $filter = FALSE){
 	$db = new DB_Seminar();
 
 	$year = date("Y", $begin);
@@ -61,11 +61,11 @@ function list_restore_assign(&$this, $resource_id, $begin, $end, $user_id='', $r
 	//handle the assigns und create all the repeated stuff
 	while($db->next_record()) {
 		$assign_object =& AssignObject::Factory($db->f("assign_id"));
-		create_assigns($assign_object, $this, $begin, $end, $filter);
+		create_assigns($assign_object, $assEvtLst, $begin, $end, $filter);
 	}
 }
 
-function create_assigns($assign_object, &$this, $begin='', $end='', $filter = FALSE) {
+function create_assigns($assign_object, &$assEvtLst, $begin='', $end='', $filter = FALSE) {
 	static $all_holidays;
 	$year_offset=0;
 	$week_offset=0;
@@ -104,7 +104,7 @@ function create_assigns($assign_object, &$this, $begin='', $end='', $filter = FA
 								$assign_object->getUserFreeName());
 		$assEvt->setRepeatMode($ao_repeat_mode);
 		if (!isFiltered($filter, $assEvt->getRepeatMode(TRUE)))
-			$this->events[] = $assEvt;
+			$assEvtLst->events[] = $assEvt;
 	} elseif ($ao_repeat_mode == "sd") {
 		// several days mode, we create multiple assigns
 		
@@ -120,7 +120,7 @@ function create_assigns($assign_object, &$this, $begin='', $end='', $filter = FA
 								$assign_object->getUserFreeName());
 			$assEvt->setRepeatMode($ao_repeat_mode);
 			if (!isFiltered($filter, $assEvt->getRepeatMode()))
-				$this->events[] = $assEvt;
+				$assEvtLst->events[] = $assEvt;
 		}
 		//in between days
 		for ($d=date("j",$ao_begin)+1; $d<=date("j",$ao_r_end)-1; $d++) {
@@ -140,7 +140,7 @@ function create_assigns($assign_object, &$this, $begin='', $end='', $filter = FA
 								$assign_object->getUserFreeName());
 				$assEvt->setRepeatMode($ao_repeat_mode);
 				if (!isFiltered($filter, $assEvt->getRepeatMode()))
-					$this->events[] = $assEvt;								
+					$assEvtLst->events[] = $assEvt;								
 			}
 		}
 				
@@ -163,7 +163,7 @@ function create_assigns($assign_object, &$this, $begin='', $end='', $filter = FA
 								$assign_object->getUserFreeName());
 			$assEvt->setRepeatMode($ao_repeat_mode);
 			if (!isFiltered($filter, $assEvt->getRepeatMode()))
-				$this->events[] = $assEvt;								
+				$assEvtLst->events[] = $assEvt;								
 		}
 		
 	} elseif ((($ao_r_end >= $begin) && ($ao_begin <= $end)) ||
@@ -204,7 +204,7 @@ function create_assigns($assign_object, &$this, $begin='', $end='', $filter = FA
 		if (!$holiday_skipping) {
 			//check if we want to show the event and if it is not outdated
 			if (($begin == -1) && ($end == -1) && ($ao_r_q  >0))
-				 	$this->events[] = new AssignEvent($assign_object->getId(), $temp_ts, $temp_ts_end,
+				 	$assEvtLst->events[] = new AssignEvent($assign_object->getId(), $temp_ts, $temp_ts_end,
 											$assign_object->getResourceId(), $assign_object->getAssignUserId(), 
 											$assign_object->getUserFreeName());
 			elseif ($temp_ts >= $begin) {
@@ -214,7 +214,7 @@ function create_assigns($assign_object, &$this, $begin='', $end='', $filter = FA
 											$assign_object->getUserFreeName());
 					$assEvt->setRepeatMode($ao_repeat_mode);
 					if (!isFiltered($filter, $assEvt->getRepeatMode()))
-						$this->events[] = $assEvt;										
+						$assEvtLst->events[] = $assEvt;										
 				}
 			}
 		}
