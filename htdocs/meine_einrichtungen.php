@@ -254,11 +254,34 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("roo
 
      }
 
-?>
+//Fusstext
+ $db->query("SELECT count(*) as count  FROM Institute");
+ $db->next_record();
+  ?>
 	<tr>
-	<td class="blank" colspan=2>&nbsp;</td>
+		<td class="blank" colspan=2>
+			<table width="99%" border=0 cellpadding=0 cellspacing=0 align="center">
+				<tr>
+					<td align="right"><br />
+						<font size=-1>Es sind  <? echo ($db->f("count")-$num_my_inst) ?> weitere Einrichtungen vorhanden.</font><br />&nbsp; 
+					</td>
+				</tr>
+				<tr>
+					<td>
+					Wenn Sie weitere Einrichtungen in ihre pers&ouml;nliche Auswahl aufzunehmen m&ouml;chten, <br />k&ouml;nnen sie sich hier <a href="edit_about.php?view=Karriere#einrichtungen">zuordnen.</a><br /><br />
+					Um Einrichtungen zu suchen und sich Informationen anzeigen zu lassen<br /> nutzen Sie die <a href="institut_browse.php">Suchfunktion.</a><br />
+					</td>
+				</tr>
+				<tr>
+					<td align="right">
+						&nbsp;
+					</td>
+				</tr>
+			</table
+		</td>
 	</tr>
-<?
+	<tr>
+<?	
 
 }
 // Save data back to database.

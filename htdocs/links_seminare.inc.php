@@ -38,11 +38,6 @@ foreach ($SEM_CLASS as $key=>$val)  {
 }
 //
 $structure["_meine_einrichtungen"]=array (topKat=>"meine_einrichtungen", name=>"&Uuml;bersicht", link=>"meine_einrichtungen.php", active=>FALSE);
-$structure["einrichtung_suche"]=array (topKat=>"meine_einrichtungen", name=>"Einrichtungen suchen", link=>"institut_browse", active=>FALSE);
-
-if ((!$perm->have_perm("dozent")) && (!$perm->have_perm("admin")) && (!$perm->have_perm("root"))) {
-	$structure["einrichtung_personal"]=array (topKat=>"meine_einrichtungen", name=>"Zuordnung zu Einrichtungen", link=>"edit_about.php?view=Karriere#einrichtungen", active=>FALSE);
-}
 
 if ($perm->have_perm("admin")) {
 	$structure["einrichtung_admin"]=array (topKat=>"meine_einrichtungen", name=>"Einrichtungen verwalten", link=>"admin_institut.php?list=TRUE", active=>FALSE);

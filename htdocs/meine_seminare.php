@@ -328,7 +328,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
       IF ($db->num_rows()) {
       	?>
        	<tr>
-	<td class="blank" colspan=2><b>Anmelde- und Wartelisteneintr&auml;ge:</b><br />&nbsp; </td>
+	<td class="blank" colspan=2><b>&nbsp; Anmelde- und Wartelisteneintr&auml;ge:</b><br />&nbsp; </td>
 	</tr>
 	<tr>
 	<td class="blank" colspan=2>
@@ -372,11 +372,38 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 	printf ("<td width=\"10%%\" align=\"center\" class=\"%s\">%s</td>", $cssSw->getClass(),  ($db->f("status") == "claiming") ? "Anmeldeliste" : "Warteliste");
 	printf("<td width=\"3%%\" class=\"%s\" align=\"center\"><a href=\"$PHP_SELF?auswahl=%s&cmd=%skill_admission\"><img src=\"pictures/trash.gif\" alt=\"aus der Veranstaltung abmelden\" border=\"0\"></a></td></tr>", $cssSw->getClass(), $db->f("seminar_id"), ($db->f("status") == "awaiting") ? "suppose_to_" : "");
 	}
-	print "</table>";
+	print "</table></td></tr>";
 }	
 
  // Ende Wartelisten
-
+ 
+ //Fusstext
+ $db->query("SELECT count(*) as count  FROM seminare");
+ $db->next_record();
+  ?>
+	<tr>
+		<td class="blank" colspan=2>
+			<table width="99%" border=0 cellpadding=0 cellspacing=0 align="center">
+				<tr>
+					<td align="right">
+						<font size=-1>Es sind noch <? echo ($db->f("count")-$num_my_sem) ?> weitere Veranstaltungen vorhanden.</font><br />&nbsp; 
+					</td>
+				</tr>
+				<tr>
+					<td>
+					Wenn Sie weitere Veranstaltungen in ihre pers&ouml;nliche Auswahl aufzunehmen, <br />nutzen Sie bitte die <a href="sem_portal.php?view=Alle&reset_all=TRUE">Suchfunktion.</a>
+					</td>
+				</tr>
+				<tr>
+					<td align="right">
+						&nbsp;
+					</td>
+				</tr>
+			</table
+		</td>
+	</tr>
+	<tr>
+<?	
 }
 
 
