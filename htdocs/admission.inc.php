@@ -43,6 +43,56 @@ ignore_user_abort(TRUE);
 set_time_limit(0);
 
 /**
+* This function inserts an user into the seminar_user and does consitency checks with admission_seminar_user
+*
+* Please use this functions always to insert user to a seminar. Returns true, if user was on the admission_seminar_user
+*
+* @param		string seminar_id		the seminar_id of the seminar to calculate
+* @param		string user_id			the user_id
+* @param		string status			the perms the user should archive
+* @param		boolean copy_studycourse	should the entry for studycourse from admission_seminar_user into seminar user be copied?
+* @return		boolean
+*
+*/
+function insert_seminar_user($seminar_id, $user_id, $status, $copy_studycourse=FALSE) {
+	$db=new DB_Seminar;
+	$db2=new DB_Seminar;
+		
+	$query = sprintf("SELECT comment, studiengang_id FROM admission_seminar_user WHERE user_id = '%s' AND seminar_id ='%s' ", $user_id, $seminar_id);
+	$db->query($query);
+	if ($db->nf()) {
+		$db->next_record();
+		$admission_entry = TRUE;
+		$comment = $db->f("comment");
+		if ($copy_studycourse)
+			$studiengang_id = $db->f("studiengang_id");
+		else
+			$studiengang_id = FALSE;
+	}
+
+	$query = sprintf("SELECT start_time FROM seminare WHERE Seminar_id ='%s' ", $seminar_id);
+	$db->query($query);
+	$db->next_record();
+	$group = select_group ($db->f("start_time"), $user_id); //ok, here ist the "colored-group" meant (for grouping on meine_seminare), not the grouped seminars as above!
+	
+	$query = sprintf("INSERT INTO seminar_user SET Seminar_id = '%s', user_id = '%s', status= '%s', admission_studiengang_id ='%s', comment ='%s', gruppe='%s', mkdate = '%s' ", $seminar_id, $user_id, $status, $studiengang_id, $comment, $group, time());
+	$db->query($query);
+	
+	if ($db->affected_rows()) {
+		$query2 = sprintf("DELETE FROM admission_seminar_user WHERE user_id = '%s' AND seminar_id ='%s'", $user_id, $seminar_id);
+		$db2->query($query2);
+	}
+	
+	if ($db2->affected_rows()) {
+		//renumber the waiting list, if a user was deleted from it
+		renumber_admission($seminar_id);
+		return TRUE;
+	} else
+		return FALSE;
+}
+
+
+/**
 * This function calculate the remaining places for the "alle"-allocation
 *
 * The function calculate the remaining places for the "alle"-allocation. It considers
