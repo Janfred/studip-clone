@@ -58,7 +58,15 @@ include($ABSOLUTE_PATH_STUDIP . "links_admin.inc.php");  //Linkleiste fuer admin
 	<td class="topic" align="left" width="100%">&nbsp;<b>
 <?
 echo getHeaderLine($range_id) . " - ";
-echo _("Verwaltung der externen Anzeigemodule") . "</b></td>";
+echo _("Verwaltung der externen Anzeigemodule");
+reset($EXTERN_MODULE_TYPES);
+foreach ($EXTERN_MODULE_TYPES as $key => $type) {
+	if ($type["module"] == $mod) {
+		echo " ({$EXTERN_MODULE_TYPES[$key]['name']})";
+		break;
+	}
+}
+echo "</b></td>";
 ?>
 </tr>
 <tr><td class="blank" width="100%">&nbsp;</td></tr>
@@ -248,6 +256,7 @@ else {
 			$css_switcher_2->resetClass();
 			echo "</table>\n";
 			echo "</td></tr>\n";
+			$css_switcher_2->switchClass();
 			echo "<td" . $css_switcher_2->getFullClass() . ">&nbsp;</td></tr>";
 			echo "</table>\n";
 		}
