@@ -474,29 +474,97 @@ print_infobox ($infobox,"pictures/seminare.jpg");
 
 ELSEIF ($auth->auth["perm"]=="admin"){
 
-	   if (!isset($sortby)) $sortby="Institut, start_time, Name";
-	   if ($sortby == "teilnehmer")
-	   $sortby = "teilnehmer DESC";
-	   $db->query("SELECT Institute.Name AS Institut, seminare.*, COUNT(seminar_user.user_id) AS teilnehmer FROM user_inst LEFT JOIN Institute USING (Institut_id) LEFT JOIN seminare USING(Institut_id) LEFT OUTER JOIN seminar_user USING(Seminar_id) WHERE user_inst.inst_perms='admin' AND user_inst.user_id='$user->id' AND seminare.Institut_id is not NULL GROUP BY seminare.Seminar_id ORDER BY $sortby");
-	   $num_my_sem=$db->num_rows();
-	   if (!$num_my_sem) $meldung="msg§An ihren Einrichtungen sind zur Zeit keine Veranstaltungen angelegt.§".$meldung;
+	$db2=new DB_Seminar();
+
+	$db->query("SELECT a.Institut_id,b.Name, IF(b.Institut_id=b.fakultaets_id,1,0) AS is_fak,count(seminar_id) AS num_sem FROM user_inst a LEFT JOIN Institute b USING (Institut_id)  
+				LEFT JOIN seminare using(Institut_id)	WHERE a.user_id='$user->id' AND a.inst_perms='admin' GROUP BY a.Institut_id ORDER BY is_fak,num_sem DESC,Name");
+
+	while($db->next_record()){
+		$_my_inst[$db->f("Institut_id")] = array("name" => $db->f("Name"), "is_fak" => $db->f("is_fak"), "num_sem" => $db->f("num_sem"));
+		if ($db->f("is_fak")){
+			$db2->query("SELECT a.Institut_id, a.Name,count(seminar_id) AS num_sem FROM Institute a 
+					LEFT JOIN seminare USING(Institut_id) WHERE fakultaets_id='" . $db->f("Institut_id") . "' AND a.Institut_id!='" .$db->f("Institut_id") . "' 
+					GROUP BY a.Institut_id ORDER BY num_sem DESC, a.Name");
+			$num_inst = 0;
+			while ($db2->next_record()){
+				if(!$_my_inst[$db2->f("Institut_id")]){
+					++$num_inst;
+				}
+				$_my_inst[$db2->f("Institut_id")] = array("name" => $db2->f("Name"), "is_fak" => 0 , "num_sem" => $db2->f("num_sem"));
+			}
+			$_my_inst[$db->f("Institut_id")]["num_inst"] = $num_inst;
+		}
+	}
+	$_my_inst_arr = array_keys($_my_inst);
+	if(!$user->is_registered("_my_admin_inst_id")){
+		$_my_admin_inst_id = $_my_inst_arr[0];
+		$user->register("_my_admin_inst_id");
+	}
+	if($_REQUEST['institut_id']){
+		$_my_admin_inst_id = ($_my_inst[$_REQUEST['institut_id']]) ? $_REQUEST['institut_id'] : $_my_inst_arr[0];
+	}
+	
+	if (!isset($sortby)) $sortby="start_time, Name";
+	if ($sortby == "teilnehmer")
+	$sortby = "teilnehmer DESC";
+	$db->query("SELECT Institute.Name AS Institut, seminare.*, COUNT(seminar_user.user_id) AS teilnehmer FROM Institute LEFT JOIN seminare USING(Institut_id) LEFT JOIN seminar_user USING(Seminar_id) WHERE Institute.Institut_id='$_my_admin_inst_id' AND seminare.Institut_id is not NULL GROUP BY seminare.Seminar_id ORDER BY $sortby");
+	$num_my_sem=$db->num_rows();
+	if (!$num_my_sem) 
+		$meldung = "msg§"
+				. sprintf(_("An der Einrichtung: <b>%s</b> sind zur Zeit keine Veranstaltungen angelegt.§"), htmlReady($_my_inst[$_my_admin_inst_id]['name']))
+				. $meldung;
 	 ?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
 	<tr>
-		<td class="topic" colspan=2><img src="pictures/meinesem.gif" border="0" align="texttop">&nbsp;<b>Veranstaltungen an meinen Einrichtungen</></td>
+		<td class="topic" ><img src="pictures/meinesem.gif" border="0" align="texttop">
+		&nbsp;<b><?=_("Veranstaltungen an meinen Einrichtungen");?> - <?=htmlReady($_my_inst[$_my_admin_inst_id]['name'])?></b></td>
 	</tr>
 	<tr>
-		<td class="blank" width="100%" colspan=2>&nbsp;
+		<td class="blank" width="100%" >&nbsp;
 			<?
 			if ($meldung) parse_msg($meldung);
 			?>
 		</td>
 	</tr>
+	<tr>
+		<form action="<?=$PHP_SELF?>" method="post">
+		<td class="blank" width="100%" >
+			<div style="font-weight:bold;font-size:10pt;margin-left:10px;">
+			<?=_("Bitte w&auml;hlen Sie eine Einrichtung aus:")?> 
+			</div>
+			<div style="margin-left:10px;">
+			<select name="institut_id" style="vertical-align:middle;">
+				<?
+				reset($_my_inst);
+				while (list($key,$value) = each($_my_inst)){
+					printf ("<option %s value=\"%s\" style=\"%s\">%s (%s)</option>\n",
+							($key == $_my_admin_inst_id) ? "selected" : "" , $key,($value["is_fak"] ? "font-weight:bold;" : ""),
+							htmlReady($value["name"]), $value["num_sem"]);
+					if ($value["is_fak"]){
+						$num_inst = $value["num_inst"];
+						for ($i = 0; $i < $num_inst; ++$i){
+							list($key,$value) = each($_my_inst);
+							printf("<option %s value=\"%s\">&nbsp;&nbsp;&nbsp;&nbsp;%s (%s)</option>\n",
+								($key == $_my_admin_inst_id) ? "selected" : "", $key,
+								htmlReady($value["name"]), $value["num_sem"]);
+						}
+					}
+				}
+				?>
+				</select>&nbsp;
+				<input <?=makeButton("auswaehlen","src")?> <?=tooltip(_("Einrichtung auswählen"))?> type="image" style="vertical-align:middle;">
+				<br>&nbsp;
+			</div>
+		</td>
+		</form>
+	</tr>
+		
+		
 	 <?
 	 if ($num_my_sem) {
 	 ?>
 	<tr>
-		<td class="blank" colspan=2>
+		<td class="blank" >
 			<table border="0" cellpadding="0" cellspacing="0" width="99%" align="center" class=blank>
 				<tr valign"top" align="center">
 					<th width="50%" colspan=2><a href="<? echo $PHP_SELF ?>?sortby=Name">Name</a></th>
@@ -507,7 +575,6 @@ ELSEIF ($auth->auth["perm"]=="admin"){
 					<th width="5%"><b>&nbsp; </b></th>
 				</tr>
 	<?
-  $db2=new DB_Seminar;
 
 	while ($db->next_record()){
 	$my_sem[$db->f("Seminar_id")]=array(institut=>$db->f("Institut"),teilnehmer=>$db->f("teilnehmer"),name=>$db->f("Name"),status=>$db->f("status"),chdate=>$db->f("chdate"),start_time=>$db->f("start_time"), binding=>$db->f("admission_binding"));
@@ -563,7 +630,7 @@ ELSEIF ($auth->auth["perm"]=="admin"){
 
 ?>
 	<tr>
-		<td class="blank" colspan=2>&nbsp;
+		<td class="blank">&nbsp;
 		</td>
 	</tr>
 <?

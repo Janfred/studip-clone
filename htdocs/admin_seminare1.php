@@ -110,6 +110,7 @@ $user_id = $auth->auth["uid"];
 $msg = "";
 
 function auth_check() {
+	/*
 	global $s_id, $user_id, $perm;
 	$db = new DB_Seminar;
 	
@@ -127,6 +128,9 @@ function auth_check() {
 				return FALSE;
     	}
 	return TRUE;
+	*/
+	global $perm,$s_id;
+	return $perm->have_studip_perm("tutor",$s_id);
 }
 
 

@@ -436,7 +436,7 @@ if (((!$SessSemName[1]) || ($SessSemName["class"] == "sem")) && ($list) && ($vie
 						
 					printf ("<option value=\"NULL\">-- bitte Einrichtung ausw&auml;hlen --</option>\n");
 					while ($db->next_record()){
-						printf ("<option value=\"%s\">%s </option>\n", $db->f("Institut_id"), htmlReady(substr($db->f("Name"), 0, 70)));
+						printf ("<option value=\"%s\" style=\"%s\">%s </option>\n", $db->f("Institut_id"),($db->f("is_fak") ? "font-weight:bold;" : ""), htmlReady(substr($db->f("Name"), 0, 70)));
 						if ($db->f("is_fak")){
 							$db2->query("SELECT Institut_id, Name FROM Institute WHERE fakultaets_id='" .$db->f("Institut_id") . "' AND institut_id!='" .$db->f("Institut_id") . "'");
 							while ($db2->next_record()){

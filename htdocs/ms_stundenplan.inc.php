@@ -9,7 +9,7 @@ require_once "functions.php";
 
 //Funktion zum ueberpruefen der Einstellungen
 function check_schedule_settings() {
-	global $my_schedule_settings, $perm, $user, $SEMESTER, $SEM_NAME_NEXT, $SEM_NAME, $VORLES_ENDE;
+	global $my_schedule_settings,$_my_admin_inst_id, $perm,$auth, $user, $SEMESTER, $SEM_NAME_NEXT, $SEM_NAME, $VORLES_ENDE;
 	
 	$db=new DB_Seminar;
 	
@@ -31,6 +31,7 @@ function check_schedule_settings() {
 	if ($my_schedule_settings["glb_sem"]==$SEM_NAME)
 		$my_schedule_settings["glb_sem"]='';
 
+	/*
 	//Check, ob ich noch in dem Institut Admin wo ich es sein soll
 	if (($my_schedule_settings["glb_inst_id"]) && (!$perm->have_perm("root"))) {
 		$db->query("SELECT institut_id FROM user_inst  WHERE user_id = '".$user->id."' AND institut_id ='".$my_schedule_settings["glb_inst_id"]."' AND inst_perms = 'admin' ");
@@ -46,6 +47,13 @@ function check_schedule_settings() {
 			$my_schedule_settings["glb_inst_id"]=$db->f("Institut_id");
 			}
 		}
+	*/
+	
+	//Admins bekommen das Institut, dass sie auf meine_seminare ausgewählt haben
+	if ($auth->auth['perm'] == 'admin'){
+		$my_schedule_settings["glb_inst_id"] = $_my_admin_inst_id;
+	}
+	
 	}
 
 //vorgenommene Anpassungen der Ansicht in Uservariablen schreiben
@@ -71,7 +79,7 @@ if ($schedule_cmd=="change_view_insert") {
 
 //Anpassen der Ansicht
 function change_schedule_view() {
-	global $my_schedule_settings, $PHP_SELF, $SEMESTER, $SEM_NAME, $SEM_NAME_NEXT, $VORLES_ENDE, $perm, $user;
+	global $my_schedule_settings, $PHP_SELF, $SEMESTER, $SEM_NAME, $SEM_NAME_NEXT, $VORLES_ENDE, $perm,$auth, $user;
 		
 	$db=new DB_Seminar;
 	$cssSw=new cssClassSwitcher;		
@@ -191,11 +199,8 @@ function change_schedule_view() {
 					</td>
 				</tr>
 				<?
-				if ($perm->have_perm("admin")) {
-					if ($perm->have_perm("root"))
-						$db->query("SELECT Institut_id, Name FROM Institute  ORDER BY Name");
-					else
-						$db->query("SELECT Institute.Institut_id, Name FROM Institute LEFT JOIN user_inst USING(Institut_id) WHERE user_id = '".$user->id."' AND inst_perms = 'admin' ORDER BY Name");						
+				if ($perm->have_perm("root")) {
+					$db->query("SELECT Institut_id, Name FROM Institute  ORDER BY Name");
 					if ($db->num_rows()>1) {
 					?>
 				<tr <? $cssSw->switchClass() ?>>

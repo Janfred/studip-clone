@@ -118,7 +118,7 @@ require_once ("$ABSOLUTE_PATH_STUDIP/functions.php"); 		// Semester-Namen fuer A
 $cssSw=new cssClassSwitcher;                          					// Klasse für Zebra-Design
 $cssSw->enableHover();
 $db=new DB_Seminar;
-
+$db2=new DB_Seminar;
 // we are defintely not in an lexture or institute
 closeObject();
 $links_admin_data =''; 	//Auch im Adminbereich gesetzte Veranstaltungen muessen geloescht werden.
@@ -145,12 +145,12 @@ if ($cmd=="kill") {
 
 
 //This view is only for users up to admin
-IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("root")){
+IF ( !$perm->have_perm("root")){
 
 	 if (!isset($sortby)) $sortby="Name";
 	 if ($sortby == "count")
 	 $sortby = "count DESC";
-	$db->query ("SELECT Institute.Name, Institute.Institut_id, user_inst.inst_perms FROM user_inst LEFT JOIN Institute  USING (Institut_id) WHERE user_inst.user_id = '$user->id' GROUP BY Institut_id ORDER BY $sortby");
+	$db->query ("SELECT b.Name, b.Institut_id, user_inst.inst_perms,IF(b.Institut_id=b.fakultaets_id,1,0) AS is_fak FROM user_inst LEFT JOIN Institute b USING (Institut_id) WHERE user_inst.user_id = '$user->id' GROUP BY Institut_id ORDER BY $sortby");
 	$num_my_inst=$db->num_rows();
 	 if (!$num_my_inst)
 	 	if ($perm->have_perm("dozent"))
@@ -197,10 +197,19 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("roo
 	<?
 	ob_end_flush(); //Buffer leeren, damit der Header zu sehen ist
 	ob_start();
-	 while ($db->next_record())
-		{
-	  $my_inst[$db->f("Institut_id")]=array(name=>$db->f("Name"),status=>$db->f("inst_perms"));
-	  $value_list.="('".$db->f("Institut_id")."',0".$loginfilenow[$db->f("Institut_id")]."),";
+	 while ($db->next_record()){
+			$my_inst[$db->f("Institut_id")]=array(name=>$db->f("Name"),status=>$db->f("inst_perms"));
+			$value_list.="('".$db->f("Institut_id")."',0".$loginfilenow[$db->f("Institut_id")]."),";
+			if ($db->f("is_fak") && $db->f("inst_perms") == "admin"){
+				$db2->query("SELECT a.Institut_id, a.Name FROM Institute a 
+					 WHERE fakultaets_id='" . $db->f("Institut_id") . "' AND a.Institut_id!='" .$db->f("Institut_id") . "' 
+					 ORDER BY $sortby");
+				while($db2->next_record()){
+					$my_inst[$db2->f("Institut_id")]=array(name=>$db2->f("Name"),status=>"admin");
+					$value_list.="('".$db2->f("Institut_id")."',0".$loginfilenow[$db2->f("Institut_id")]."),";
+			
+				}
+			}
 	 }
 	 $value_list=substr($value_list,0,-1);
 	 $db->query("CREATE  TEMPORARY TABLE IF NOT EXISTS loginfilenow_".$user->id." ( Seminar_id varchar(32) NOT NULL PRIMARY KEY, loginfilenow int(11) NOT NULL DEFAULT 0, INDEX(loginfilenow) ) TYPE=HEAP");
@@ -212,7 +221,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("roo
   foreach ($my_inst as $instid=>$values){
 
 		$cssSw->switchClass();
-		$lastVisit = $loginfilenow[$semid];
+		$lastVisit = $loginfilenow[$instid];
 		ECHO "<tr ".$cssSw->getHover().">";
 		ECHO "<td class=\"".$cssSw->getClass()."\">&nbsp; </td>";
 // Name-field		
