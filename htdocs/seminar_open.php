@@ -99,7 +99,6 @@ if ($auth->is_authenticated() && $user->id != "nobody") {
 		$user->register("my_messaging_settings");
 		$user->register("my_schedule_settings");
 		$user->register("my_personal_sems");
-		$user->register("my_buddies");
 		
 		//garbage collect for user variables
 		// loginfilenow und loginfilelast
@@ -122,19 +121,6 @@ if ($auth->is_authenticated() && $user->id != "nobody") {
 			}
 			unset($tmp_sem_inst);
 		}
-		// buddylist
-		if (is_array($my_buddies)) {
-			$db->query("SELECT username FROM auth_user_md5 WHERE username IN ('".join("','",array_keys($my_buddies))."')");
-			while($db->next_record()){
-				$known_buddies[$db->f(0)] = true;
-			}
-			foreach ($my_buddies as $key => $value){
-				if (!isset($known_buddies[$key])){
-					unset($my_buddies[$key]);
-				}
-			}
-		}
-		
 		
 		// call default functions
 		check_messaging_default();

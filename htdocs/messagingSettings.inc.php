@@ -2,10 +2,11 @@
 //Variable registrieren
 //$user->register("my_messaging_settings");
 
-require_once ("config.inc.php");
-require_once ("functions.php");
-require_once ("visual.inc.php");
-require_once ("messaging.inc.php");
+require_once ($ABSOLUTE_PATH_STUDIP."/config.inc.php");
+require_once ($ABSOLUTE_PATH_STUDIP."/functions.php");
+require_once ($ABSOLUTE_PATH_STUDIP."/visual.inc.php");
+require_once ($ABSOLUTE_PATH_STUDIP."/messaging.inc.php");
+require_once ($ABSOLUTE_PATH_STUDIP."/contact.inc.php");
 
 $msging=new messaging;
 
@@ -26,7 +27,7 @@ if ($do_add_user_x)
 
 //Anpassen der Ansicht
 function change_messaging_view() {
-	global $_fullname_sql,$my_messaging_settings, $my_buddies, $PHP_SELF, $perm, $user, $search_exp, $add_user, $add_user_x, $do_add_user_x, $new_search_x, $i_page;
+	global $_fullname_sql,$my_messaging_settings, $PHP_SELF, $perm, $user, $search_exp, $add_user, $add_user_x, $do_add_user_x, $new_search_x, $i_page;
 		
 	$db=new DB_Seminar;
 	$cssSw=new cssClassSwitcher;	
@@ -92,11 +93,11 @@ function change_messaging_view() {
 				</tr>
 				<tr <? $cssSw->switchClass() ?>>
 					<td class="<? echo $cssSw->getClass() ?>" colspan=2>
-					&nbsp; &nbsp; <b>Buddies</b><a name="buddy_anker"></a>
+					&nbsp; &nbsp; <b>Buddies / Wer ist online</b><a name="buddy_anker"></a>
 					</td>
 				</tr>
 				<?
-				if (is_array($my_buddies)) {
+				if (GetNumberOfBuddies()) {
 				?>
 				<tr <? $cssSw->switchClass() ?>>
 					<td class="<? echo $cssSw->getClass() ?>" width="20%">
