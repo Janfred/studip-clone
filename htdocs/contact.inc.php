@@ -529,6 +529,25 @@ function DeleteContact ($contact_id)
 	return $output;
 }
 
+function DeleteAdressbook($owner_id) {
+	// delete a complete guestbook (only needed when deleting user)
+	$db=new DB_Seminar;
+	$db2=new DB_Seminar;
+	$i = 0;
+	$db->query ("SELECT contact_id FROM contact WHERE owner_id = '$owner_id'");	
+	WHILE ($db->next_record()) {	// remove all selfmade entries
+		$contact_id = $db->f("contact_id");
+		$db2->query ("DELETE FROM contact_userinfo WHERE contact_id = '$contact_id'");
+		$i++;
+	}
+	$db->query ("DELETE FROM contact WHERE owner_id = '$owner_id'");
+	if ($db->next_record()) // remove all contacts 
+		$return = _("Guestbook mit $i Einträgen gelöscht.");
+	else
+		$return = FALSE;
+	return $return;
+}
+
 function PrintEditContact($edit_id)
 {	global $user;
 	$owner_id = $user->id;
