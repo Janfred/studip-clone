@@ -9,9 +9,12 @@ function print_freie($username) {
 	
 	$db->query("SELECT * FROM auth_user_md5 LEFT JOIN kategorien ON(range_id=user_id) WHERE username='$username' AND NOT ISNULL(range_id) ORDER BY priority ");
 
-        echo "<tr><td align=\"left\" valign=\"top\" class=\"blank\"><blockquote><br>Hier können Sie beliebige eigene Kategorien anlegen. Diese Kategorien erscheinen auf Ihrer pers&ouml;nlichen Homepage.<br>Wenn Sie die Option \"f&uuml;r andere unsichtbar\" verwenden, k&ouml;nnen Sie Memos anlegen, die nur f&uuml;r Sie selbst auf der Homepage sichtbar werden - andere Nutzer k&ouml;nnen die Daten nicht einsehen.";
-  	echo "<br><br></td></tr>\n<tr><td class=blank><table width=100% class=blank border=0 cellpadding=0 cellspacing=0>";
-     	echo "<form action=\"$PHP_SELF?freie=update_freie&username=$username&view=$view\" method=\"POST\" name=\"edit_freie\">";
+	echo "<tr><td align=\"left\" valign=\"top\" class=\"blank\"><blockquote><br>Hier können Sie beliebige eigene Kategorien anlegen."
+			."Diese Kategorien erscheinen auf Ihrer pers&ouml;nlichen Homepage. Mit den Pfeilsymbolen k&ouml;nnen sie die Reihenfolge, in der "
+			."die Kategorien angezeigt werden, ver&auml;ndern.<br>Wenn Sie die Option \"f&uuml;r andere unsichtbar\" verwenden, k&ouml;nnen "
+			."sie Memos anlegen, die nur f&uuml;r Sie selbst auf der Homepage sichtbar werden - andere Nutzer k&ouml;nnen die Daten nicht einsehen.";
+	echo "<br><br></td></tr>\n<tr><td class=blank><table width=100% class=blank border=0 cellpadding=0 cellspacing=0>";
+	echo "<form action=\"$PHP_SELF?freie=update_freie&username=$username&view=$view\" method=\"POST\" name=\"edit_freie\">";
 	if (!$db->num_rows())
 		echo "<tr><td class=\"".$cssSw->getClass()."\"><font size=-1><b><blockquote>Es existieren zur Zeit keine eigenen Kategorien.</b></font></blockquote></td></tr>\n";
 	echo "<tr><td class=\"".$cssSw->getClass()."\"><blockquote>Kategorie&nbsp; <a href='$PHP_SELF?freie=create_freie&view=$view&username=$username'><img src='pictures/buttons/neuanlegen-button.gif' border=0 align=absmiddle></a></blockquote></td></tr>";
@@ -48,8 +51,8 @@ function print_freie($username) {
 			// Breite für textarea
 			$cols = $auth->auth["jscript"]?ceil($auth->auth["xres"]/13):50;
 			echo "<tr><td class=\"".$cssSw->getClass()."\"><blockquote><textarea  name='freie_content[]' style=\"width: 90%\" cols=\"$cols\" rows=7 wrap=virtual>".htmlReady($db->f("content"))."</textarea>";
-			echo "<br><br><a href='$PHP_SELF?freie=delete_freie&freie_id=$id&view=$view&username=$username'><img src='pictures/buttons/loeschen-button.gif' border=0></a>";
-			echo "&nbsp;<input type='IMAGE' name='update' border=0 src='pictures/buttons/uebernehmen-button.gif' value='ver&auml;ndern'><br />&nbsp; </td></tr>";
+			echo "<br><br><input type='IMAGE' name='update' border=0 src='pictures/buttons/uebernehmen-button.gif' value='ver&auml;ndern'>";
+			echo "&nbsp;<a href='$PHP_SELF?freie=delete_freie&freie_id=$id&view=$view&username=$username'><img src='pictures/buttons/loeschen-button.gif' border=0></a><br />&nbsp; </td></tr>";
 			$count++;
 			}
 		}
