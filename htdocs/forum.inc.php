@@ -806,11 +806,11 @@ function forum_print_toolbar ($id="") {
 				$print .= "<input type=hidden name=view value='".$forum["view"]."'>";
 				$print .= "<input type=image name=create value=\"abschicken\" src=\"pictures/haken_transparent.gif\" align=\"middle\" border=\"0\"".tooltip(_("Sortierung durchführen")).">";
 			}
-			$print .= "&nbsp;&nbsp;|&nbsp;&nbsp;<a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&toolbar=close&open=$open\" ".tooltip(_("Toolbar einfahren"))."><img src=\"pictures/x_transparent.gif\" align=\"middle\" border=\"0\"></a>&nbsp;";
+			$print .= "&nbsp;&nbsp;</td><td class=\"blank\"><a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&toolbar=close&open=$open\" ".tooltip(_("Toolbar einfahren"))."><img src=\"pictures/griff.jpg\" align=\"middle\" border=\"0\"></a>&nbsp;";
 			$print .= "</td><td class=\"blank\" width=\"99%\"></td></tr><tr><td class=\"blank\" colspan=\"9\">&nbsp;</td></tr></table>";
 		} else {
 			$print .= "<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" class=\"blank\"><tr><td class=\"blank\"><img src=\"pictures/blank.gif\" height=\"22\" width=\"1\"></td>";
-			$print .= "</form><td class=\"blank\"><font size=\"-1\"><a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&toolbar=open&open=$open\"><img src=\"pictures/toolbar.gif\" align=\"middle\" border=\"0\"".tooltip(_("Toolbar ausfahren"))."></a>";
+			$print .= "</form><td class=\"blank\"><font size=\"-1\"><a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&toolbar=open&open=$open\"><img src=\"pictures/griff2.jpg\" align=\"middle\" border=\"0\"".tooltip(_("Toolbar ausfahren"))."></a>";
 			$print .= "</td></tr></table>";
 		}
 		if ($id) {  // Schreibmodus, also form einbauen
