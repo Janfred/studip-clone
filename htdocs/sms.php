@@ -384,9 +384,9 @@ if ($msg)	{
 				$zusatz.="</font>";
 			}
 			if (strpos($db->f("message"),$msging->sig_string))
-				$titel=mila(kill_format(substr($db->f("message"), 0, strpos($db->f("message"),$msging->sig_string))));
+				$titel=htmlReady(mila(kill_format(substr($db->f("message"), 0, strpos($db->f("message"),$msging->sig_string)))));
 			else
-				$titel=mila(kill_format($db->f("message")));
+				$titel=htmlReady(mila(kill_format($db->f("message"))));
 			
 			$content=quotes_decode(formatReady($db->f("message")));
 
@@ -424,7 +424,7 @@ if ($msg)	{
 				}
 				
 			if ($link)
-				$titel = "<a href=\"$link\" class=\"tree\" >".htmlReady($titel)."</a>";
+				$titel = "<a href=\"$link\" class=\"tree\" >$titel</a>";
 		
 			echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" align=\"center\"><tr>";
 			printhead(0, 0, $link, $open, $red, $icon, $titel, $zusatz);
