@@ -145,8 +145,8 @@ if ($change_object_schedules) {
 		//check, if the owner of the assign object is a Veranstaltung, which has own dates to insert
 		if (get_object_type($change_schedule_assign_user_id) == "sem") {
 		 	require_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
-		 	$veranstAssign = new VeranstaltungResourcesAssign($change_schedule_assign_user_id, $change_schedule_resource_id, $change_schedule_user_free_name);
-			$created_ids = $veranstAssign->updateAssign();
+		 	$veranstAssign = new VeranstaltungResourcesAssign($change_schedule_assign_user_id);
+			$created_ids = $veranstAssign->changeAssign($change_schedule_resource_id, $change_schedule_user_free_name);
 
 			//after a succesful insert show the first (maybe the only) assign-object
 			if (is_array($created_ids))
