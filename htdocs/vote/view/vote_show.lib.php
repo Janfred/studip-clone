@@ -411,9 +411,12 @@ function createVoteHeadline (&$vote, $open, $openID) {
  * @returns  String   The HTML-text
  */
 function createStoppedVotesHeadline ($stoppedVotes, $openStoppedVotes) {
-    $link = $GLOBALS["PHP_SELF"]."?openStoppedVotes=" . 
-	($openStoppedVotes ? NO : YES) . "#stoppedVotes";
-    
+   $link = $GLOBALS["PHP_SELF"]."?openStoppedVotes=" . 
+       ($openStoppedVotes ? NO : YES);
+   if (!empty ($GLOBALS["username"]))
+       $link .= "&username=".$GLOBALS["username"];
+   $link .= "#stoppedVotes";
+
    return "<tr>"
        . printhead (0, 0, $link, ($openStoppedVotes) ? "open" : "close",
 		    FALSE, "&nbsp;<img src=\"".VOTE_ICON_STOPPED.
