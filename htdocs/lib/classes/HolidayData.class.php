@@ -46,11 +46,28 @@ class HolidayData {
 		$i=0;
 		$sql = "SELECT * FROM semester_holiday order by beginn";
 		if (!$this->db->query($sql)) {
-			echo "Error! Query not succeeded";
-			return 0;
+			echo "Error! Query (getAllHolidays) not succeeded";
+			die();
 		}
 		if ($this->db->num_rows()==0) {
-			return 0;
+			return array();
+		}
+		while ($this->db->next_record()) {
+			$holidaydata[$i] = $this->wrapHolidayData();
+			$i++;
+		}
+		return $holidaydata;
+	}
+	
+	function getHolidaysInPeriod($start,$end) {
+		$i=0;
+		$sql = "SELECT * FROM semester_holiday WHERE beginn >= '".$start."' AND ende <= '".$end."'";
+		if (!$this->db->query($sql)) {
+			echo "Error! Query not succeeded in getHolidayInPeriod!";
+			die();
+		}
+		if ($this->db->num_rows()==0) {
+			return array();
 		}
 		while ($this->db->next_record()) {
 			$holidaydata[$i] = $this->wrapHolidayData();
@@ -62,8 +79,8 @@ class HolidayData {
 	function deleteHoliday($holiday_id) {
 		$sql = "DELETE FROM semester_holiday WHERE holiday_id = '".$holiday_id."'";
 		if (!$this->db->query($sql)) {
-			echo "Error! Query not succeeded";
-			return 0;
+			echo "Error! Query (deleteHoliday) not succeeded";
+			die();
 		}
 		return 1;
 	}
@@ -71,11 +88,11 @@ class HolidayData {
 	function getHolidayData($holiday_id) {
 		$sql = "SELECT * FROM semester_holiday WHERE holiday_id='".$holiday_id."'";
 		if (!$this->db->query($sql)) {
-			echo "Error! Query not succeeded";
-			return 0;
+			echo "Error! Query (getHolidayData) not succeeded";
+			die();
 		}
 		if ($this->db->num_rows()==0) {
-			return 0;
+			return array();
 		}
 		$this->db->next_record();
 		return $this->wrapHolidayData();
@@ -86,8 +103,8 @@ class HolidayData {
 		$sql = 	"INSERT INTO semester_holiday (holiday_id,semester_id,name,description,beginn,ende) ".
 				"VALUES ('".$holiday_id."','1','".$holidaydata["name"]."','".$holidaydata["description"]."','".$holidaydata["beginn"]."','".$holidaydata["ende"]."')";
 		if (!$this->db->query($sql)) {
-			echo "Error! Query not succeeded";
-			return 0;
+			echo "Error! Query (insertNewHoliday) not succeeded";
+			die();
 		}
 		return $holiday_id;
 	}
@@ -100,8 +117,8 @@ class HolidayData {
 				"ende = '".$holidaydata["ende"]."' ".
 				"WHERE holiday_id='".$holidaydata["holiday_id"]."'";
 		if (!$this->db->query($sql)) {
-			echo "Error! Query not succeeded";
-			return 0;
+			echo "Error! Query (updateExistingHoliday) not succeeded";
+			die();
 		}
 		return 1;
 	}
@@ -116,6 +133,4 @@ class HolidayData {
 		return $holidaydata;
 	}
 }
-
-
 ?>
