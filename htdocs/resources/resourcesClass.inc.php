@@ -1089,8 +1089,10 @@ class ResourceObject {
 			return FALSE;
 	}
 	
-	function flushProperties() {
-		$query = sprintf("DELETE FROM resources_objects_properties WHERE resource_id='%s' ",$this->id);
+	function flushProperties($id='') {
+		if (!$id)
+			$id = $this->id;
+		$query = sprintf("DELETE FROM resources_objects_properties WHERE resource_id='%s' ",$id);
 		$this->db->query($query);
 		if ($this->db->affected_rows())
 			return TRUE;
@@ -1227,7 +1229,9 @@ class ResourceObject {
 	//delete section, very privat :)
 	
 	//private
-	function deleteAllAssigns($id) {
+	function deleteAllAssigns($id='') {
+		if (!$id)
+			$id = $this->id;
 		$query = sprintf("SELECT assign_id FROM resources_assign WHERE resource_id = '%s' ", $id);
 		$this->db->query($query);
 		while ($this->db->next_record()) {
@@ -1237,7 +1241,9 @@ class ResourceObject {
 	}
 
 	//private
-	function deleteAllPerms($id) {
+	function deleteAllPerms($id='') {
+		if (!$id)
+			$id = $this->id;
 		$query = sprintf("DELETE FROM resources_user_resources WHERE resource_id = '%s' ", $id);
 		$this->db->query($query);			
 	}
@@ -1257,6 +1263,7 @@ class ResourceObject {
 
 		$this->deleteAllAssigns($id);
 		$this->deleteAllPerms($id);
+		$this->flushProperties($id);
 	
 		$query2 = sprintf("DELETE FROM resources_objects WHERE resource_id = '%s' ", $id);
 		$db2->query($query2);			
