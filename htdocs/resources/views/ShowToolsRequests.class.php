@@ -119,7 +119,7 @@ class ShowToolsRequests {
 	}
 
 	function selectDates($seminar_id, $termin_id = '') {
-		$query = sprintf("SELECT * FROM termine WHERE range_id = '%s' %s ORDER BY date, content", $seminar_id, ($termin_id) ? "AND termin_id = '".$termin_id."'" : "");
+		$query = sprintf("SELECT *, resource_id FROM termine LEFT JOIN resources_assign ra ON (ra.assign_user_id = termine.termin_id) WHERE range_id = '%s' %s ORDER BY date, content", $seminar_id, ($termin_id) ? "AND termin_id = '".$termin_id."'" : "");
 		$this->db->query($query);
 		return;
 	}
@@ -277,13 +277,9 @@ class ShowToolsRequests {
 								$i=1;
 								while ($this->db->next_record()) {
 									printf ("<font color=\"blue\"><i><b>%s</b></i></font>. %s%s<br />", $i, date("d.m.Y, H:i", $this->db->f("date")), ($this->db->f("date") != $this->db->f("end_time")) ? " - ".date("H:i", $this->db->f("end_time")) : "");
-									foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"] as $key=>$val) {
-										if ($val["termin_id"] == $this->db->f("termin_id")) {
-											$resObj =& ResourceObject::Factory($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$key]["resource_id"]);
-											if ($link = $resObj->getFormattedLink($this->db->f("date")))
-												print "&nbsp;&nbsp;&nbsp;&nbsp;$link<br />";
-										}
-									}
+									$resObj =& ResourceObject::Factory($this->db->f("resource_id"));
+									if ($link = $resObj->getFormattedLink($this->db->f("date")))
+											print "&nbsp;&nbsp;&nbsp;&nbsp;$link<br />";
 									$i++;
 								}
 							} else
@@ -291,15 +287,11 @@ class ShowToolsRequests {
 						}
 					} else {
 						$this->selectDates($reqObj->getSeminarId(), $reqObj->getTerminId());
-						//workaround, hier klappt noch irgendwas nicht
-						if (is_array($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"])){
-							$tmp_assign_ids = array_keys($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"]);
-						}
 						if ($this->db->nf() ) {
 							$i=1;
 							while ($this->db->next_record()) {
 								printf ("<font color=\"blue\"><i><b>%s</b></i></font>. %s%s<br />", $i, date("d.m.Y, H:i", $this->db->f("date")), ($this->db->f("date") != $this->db->f("end_time")) ? " - ".date("H:i", $this->db->f("end_time")) : "");
-								$resObj =& ResourceObject::Factory($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$tmp_assign_ids[$i-1]]["resource_id"]);
+								$resObj =& ResourceObject::Factory($this->db->f("resource_id"));
 								if ($link = $resObj->getFormattedLink($this->db->f("date")))
 									print "&nbsp;&nbsp;&nbsp;&nbsp;$link<br />";
 								$i++;
