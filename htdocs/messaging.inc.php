@@ -31,13 +31,18 @@ function messaging () {
 	$this->sig_string="\n \n -- \n";
 		
 	$this->db = new DB_Seminar;
-	if ($my_buddies) {
-		foreach ($my_buddies as $a)
-			$this->db->query("SELECT username FROM auth_user_md5 WHERE username = '".$a["username"]."' ");
-				if (!$this->db->next_record())
-				unset ($my_buddies[$a["username"]]);
+	if (is_array($my_buddies)) {
+		$this->db->query("SELECT username FROM auth_user_md5 WHERE username IN ('".join("','",array_keys($my_buddies))."')");
+		while($this->db->next_record()){
+			$known_buddies[$this->db->f("username")] = true;
+		}
+		foreach ($my_buddies as $key => $value){
+			if (!$known_buddies[$key]){
+				unset($my_buddies[$key]);
+			}
 		}
 	}
+}
 
 //alle Nachrichten loeschen
 function delete_all_sms  ($user_id, $delete_unread) { 
