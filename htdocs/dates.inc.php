@@ -23,7 +23,7 @@ require_once $ABSOLUTE_PATH_STUDIP."datei.inc.php";  // benötigt zum Löschen von
 require_once $ABSOLUTE_PATH_STUDIP."config.inc.php";  //Daten 
 require_once $ABSOLUTE_PATH_STUDIP."functions.php";  //Daten 
 require_once $ABSOLUTE_PATH_STUDIP."/lib/classes/SemesterData.class.php";  //Daten 
-require_once ($ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_CALENDAR."/calendar_func.inc.php");
+require_once ($ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CALENDAR."/calendar_func.inc.php");
 
 /**
 * This function creates the assigned room name for range_id
