@@ -106,6 +106,11 @@ class AdminModules extends Modules {
 		$this->registered_modules["vips"]["name"] = _("ViPS (Virtuelles Prüfungssystem)");
 		$this->registered_modules["vips"]["msg_activate"] = _("ViPS kann jederzeit aktiviert werden.");
 		$this->registered_modules["vips"]["msg_deactivate"] = _("ViPS kann jederzeit deaktiviert werden.");
+		$this->registered_modules["scm"]["name"] = _("Frei gestaltbare Kursseite");
+		$this->registered_modules["scm"]["msg_activate"] = _("Die freie Kursseite kann jederzeit aktiviert werden.");
+		$this->registered_modules["scm"]["msg_warning"] = _("Wollen Sie wirklich die freie Kursseite deaktivieren und damit den erfassten Inhalt l&ouml;schen?");
+		$this->registered_modules["scm"]["msg_pre_warning"] = _("Achtung: Beim Deaktivieren der freien Kursseite werden die eingestellten Inhalte gel&ouml;scht!");
+		$this->registered_modules["scm"]["msg_deactivate"] = _("Die freie Kursseite kann jederzeit deaktiviert werden.");
 	}
 	
 	function getModuleForumExistingItems($range_id) {
@@ -237,6 +242,29 @@ class AdminModules extends Modules {
 
 		$query = sprintf ("DELETE FROM wiki_locks WHERE range_id='%s'", $range_id);
 		$this->db->query($query);
+	}
+
+	function getModuleScmExistingItems($range_id) {
+		$query = sprintf ("SELECT COUNT(scm_id) as items FROM scm WHERE range_id = '%s' ", $range_id);
+
+		$this->db->query($query);
+		$this->db->next_record();
+
+		return $this->db->f("items");
+	}
+
+	function moduleScmDeactivate($range_id) {
+		$query = sprintf ("DELETE FROM scm WHERE range_id='%s'", $range_id);
+		$this->db->query($query);
+	}
+
+	function moduleScmActivate($range_id) {
+		global $user;
+
+		$db = new DB_Seminar;
+
+		//create a default folder
+		$db->query("INSERT INTO scm SET scm_id='".md5(uniqid("simplecontentmodule"))."', range_id='".$range_id."', user_id='".$user_id."', tab_name='"._("Info")."', content='', mkdate='".time()."', chdate='".time()."'");
 	}
 
 	function moduleImpuls_ECDeactivate($range_id) {
