@@ -502,11 +502,11 @@ function forum_print_toolbar ($id="") {
 			else
 				$print .=  "</td><td nowrap class=\"steelkante\" valign=\"middle\">&nbsp;<a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&open=$open&indikator=views\"><img src=\"pictures/forum_indikator_grau.gif\" border=\"0\" align=\"middle\"><font size=\"-1\" color=\"#555555\">"._("Views")."</a> &nbsp;";
 			if ($forum["indikator"] == "rate")
-				$print .=  "</td><td nowrap class=\"steelgraulight_shadow\" valign=\"middle\">&nbsp;<img src=\"pictures/forumrot_indikator.gif\" align=\"middle\"><font size=\"-1\">"._("Bewertung")." &nbsp;";
+				$print .=  "</td><td nowrap class=\"steelgraulight_shadow\" valign=\"middle\">&nbsp;<img src=\"pictures/forum_indikator_gelb.gif\" align=\"middle\"><font size=\"-1\">"._("Bewertung")." &nbsp;";
 			else
 				$print .=  "</td><td nowrap class=\"steelkante\" valign=\"middle\">&nbsp;<a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&open=$open&indikator=rate\"><img src=\"pictures/forum_indikator_grau.gif\" border=\"0\" align=\"middle\"><font size=\"-1\" color=\"#555555\">"._("Bewertung")."</a> &nbsp;";
 			if ($forum["indikator"] == "score")
-				$print .=  "</td><td nowrap class=\"steelgraulight_shadow\" valign=\"middle\">&nbsp;<img src=\"pictures/forumrot_indikator.gif\" align=\"middle\"><font size=\"-1\">"._("Relevanz")." &nbsp;";
+				$print .=  "</td><td nowrap class=\"steelgraulight_shadow\" valign=\"middle\">&nbsp;<img src=\"pictures/forum_indikator_blau.gif\" align=\"middle\"><font size=\"-1\">"._("Relevanz")." &nbsp;";
 			else
 				$print .=  "</td><td nowrap class=\"steelkante\" valign=\"middle\">&nbsp;<a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&open=$open&indikator=score\"><img src=\"pictures/forum_indikator_grau.gif\" border=\"0\" align=\"middle\"><font size=\"-1\" color=\"#555555\">"._("Relevanz")."</a> &nbsp;";
 			$print .= "</td><td nowrap class=\"steelkante\" valign=\"bottom\">&nbsp;|&nbsp;&nbsp;<font size=\"-1\">Sortierung:&nbsp;&nbsp;</font>";
@@ -571,14 +571,29 @@ function printposting ($forumposting) {
 				$link = ""; // zuklappen nur m&ouml;glich wenn neueimmerauf nicht gesetzt	
   		}
   		
+  		/// Indexe
+  		
   		if (!$objectviews)
   			$objectviews = object_return_views($forumposting["id"]);
   		if ($objectviews > 0)
   			$forumposting["rate"] = object_print_rate($forumposting["id"]);
   		else
   			$forumposting["rate"] = "?";
+  		
+  		$time = (time() - $forumposting["mkdate"])/604800;
+  		$relevanz = $objectviews / $time;
+  		if ($forumposting["rate"]=="?")
+  			$rtmp = 0;
+  		else 
+  			$rtmp = $forumposting["rate"]-3;
+  		$relevanz += $rtmp*5;
+  		
   		$forumhead[] = "<font color=\"#007700\">".$objectviews."</font> / ";
   		$forumhead[] = "<font color=\"#AA8800\">".$forumposting["rate"]."</font> / ";
+  		$forumhead[] = "<font color=\"#000077\">".round($relevanz,1)."</font> / ";
+  		
+  		/// Ende Indexe
+  		
   		
   		if ($forumposting["foldercount"] && $forumposting["type"] == "folder" && $forumposting["openclose"] == "close")
   			$forumhead[] = "<b>".($forumposting["foldercount"]-1)."</b> / ";
@@ -613,15 +628,23 @@ function printposting ($forumposting) {
   		
   		if ($forumposting["newold"] == "new")
   			$new = TRUE;
+  		  		
   		if (($forum["view"]=="tree" || $forum["view"]=="mixed") && $forumposting["type"] == "folder") {
   			if ($loginfilelast[$SessSemName[1]] < $forumposting["folderlast"])
 			 	$new = TRUE;		
+			
   			$forumposting["mkdate"] = $forumposting["folderlast"];
   		}
+  		
+  		// welcher Index liegt auf den Pfeilen?
+  		
   		if ($forum["indikator"] == "views")
   			$index = $objectviews;
   		elseif ($forum["indikator"] == "rate")
   			$index = $forumposting["rate"];
+  		elseif ($forum["indikator"] == "score")
+  			$index = $relevanz;
+  		
   		
   // Kopfzeile ausgeben 		
   		

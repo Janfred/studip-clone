@@ -634,6 +634,17 @@ function printhead ($breite, $left, $link, $open, $new, $icon,
 			$red = dechex(255);
 			$timecolor= "#" . $red . $green . $other;
 		}
+	} elseif ($indikator == "score") {
+		if ($index == "0") {
+			$timecolor = "#BBBBBB";
+		} else {
+			if ($index >= 68)
+				$index = 68;
+			$index = 68-$index;
+			$blue = dechex(255 - $index);
+			$other = dechex(119 + ($index/1.5));
+			$timecolor= "#" . $other . $other . $blue;
+		}
 	} else {
 		if ($timestmp == 0)
 			$timecolor = "#BBBBBB";
