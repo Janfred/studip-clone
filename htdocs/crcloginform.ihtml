@@ -115,7 +115,7 @@ $_language_path = init_i18n($_language);
 	<!-- failed login code -->
 	<table>
 		<tr>
-			<? parse_msg ("error§<font size=\"-1\">" . _("Bei der Anmeldung trat ein Fehler auf:") . " </font><br /><b><font size=\"-1\">".$this->error_msg."</font></b><font size=\"-1\">" .  sprintf(_("Bitte wenden Sie sich bei Problemen an: %s"), "<a href=\"mailto:".$UNI_CONTACT."\">".$UNI_CONTACT."</a>") . "</font></b>", "§", "blank", 1, FALSE );?>
+			<? parse_msg ("error§<font size=\"-1\">" . _("Bei der Anmeldung trat ein Fehler auf:") . " </font><br /><b><font size=\"-1\">".$this->error_msg."</font></b><font size=\"-1\">" .  sprintf(_("Bitte wenden Sie sich bei Problemen an: <br />%s"), "<a href=\"mailto:".$UNI_CONTACT."\">".$UNI_CONTACT."</a>") . "</font></b>", "§", "blank", 1, FALSE );?>
 		</tr>
 	</table>
 
