@@ -372,7 +372,7 @@ class ExternElement {
 						break;
 					case "align" :
 						$fault[$form_name][$i] = $value[$i]
-								&& !preg_match("/^(left|right|center)$/", $value[$i]);
+								&& !preg_match("/^(left|right|center|bottom|middle|top)$/", $value[$i]);
 						break;
 					case "size" :
 						$fault[$form_name][$i] = $value[$i]
