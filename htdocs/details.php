@@ -20,29 +20,19 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $auth->login_if($again && ($auth->auth["uid"] == "nobody"));
 
-?>
+include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
-<html>
- <head>
-<!--
-// here i include my personal meta-tags; one of those might be useful:
-// <META HTTP-EQUIV="REFRESH" CONTENT="<?php print $auth->lifetime*60;?>; URL=logout.php">
--->
-  <title>Stud.IP</title>
-	<link rel="stylesheet" href="style.css" type="text/css">
- </head>
-<body>
+// -- here you have to put initialisations for the current page
 
-
-<?php
-	include "$ABSOLUTE_PATH_STUDIP/seminar_open.php"; //hier werden die sessions initialisiert
-	include "$ABSOLUTE_PATH_STUDIP/header.php";   //hier wird der "Kopf" nachgeladen
+// Start of Output
+include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
+include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 	
-	require_once "$ABSOLUTE_PATH_STUDIP/msg.inc.php";
-	require_once "$ABSOLUTE_PATH_STUDIP/dates.inc.php"; //Funktionen zum Anzeigen der Terminstruktur
-	require_once "$ABSOLUTE_PATH_STUDIP/config.inc.php";
-	require_once "$ABSOLUTE_PATH_STUDIP/visual.inc.php"; // wir brauchen htmlReady
-	require_once "$ABSOLUTE_PATH_STUDIP/admission.inc.php"; // wir brauchen htmlReady
+require_once "$ABSOLUTE_PATH_STUDIP/msg.inc.php";
+require_once "$ABSOLUTE_PATH_STUDIP/dates.inc.php"; //Funktionen zum Anzeigen der Terminstruktur
+require_once "$ABSOLUTE_PATH_STUDIP/config.inc.php";
+require_once "$ABSOLUTE_PATH_STUDIP/visual.inc.php"; // wir brauchen htmlReady
+require_once "$ABSOLUTE_PATH_STUDIP/admission.inc.php"; // wir brauchen htmlReady
 
 ?>
 <body>
@@ -56,22 +46,20 @@ $db3=new DB_Seminar;
 
 
 //wenn kein Seminar gesetzt und auch kein externer Aufruf raus....
-IF (($SessSemName[1] =="") && (!isset($sem_id)))
-	{
+if (($SessSemName[1] =="") && (!isset($sem_id))) {
 	parse_window ("error§Sie haben kein Objekt gew&auml;hlt. <br /><font size=-1 color=black>Dieser Teil des Systems kann nur genutzt werden, wenn Sie vorher ein Objekt (Veranstaltung oder Einrichtung) gew&auml;hlt haben.<br /><br /> Dieser Fehler tritt auch auf, wenn Ihre Session abgelaufen ist. Wenn sie sich länger als $AUTH_LIFETIME Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurück zur Anmeldung zu gelangen. </font>", "§",
 				"Keine Veranstaltung gew&auml;hlt", 
 				"<a href=\"index.php\"><b>&nbsp;Hier</b></a> geht es wieder zur Anmeldung beziehungsweise Startseite.<br />&nbsp;");
 	die;
-	}
+}
 	
 //wenn Seminar gesetzt und kein externer Aufruf uebernahme der SessionVariable
-if (($SessSemName[1] <>"") && (!isset($sem_id)))
-	{
+if (($SessSemName[1] <>"") && (!isset($sem_id))) {
 	include "links1.php";
 
 	$sem_id=$SessSemName[1];
 	
-	}
+}
 
 // nachfragen, ob das Seminar abonniert werden soll
 if (($sem_id) && (!$perm->have_perm("admin"))) {

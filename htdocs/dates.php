@@ -19,56 +19,40 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
+$auth->login_if($again && ($auth->auth["uid"] == "nobody"));
 
-          page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
-          $auth->login_if($again && ($auth->auth["uid"] == "nobody"));
-?>
+include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
-<html>
- <head>
-<!--
-// here i include my personal meta-tags; one of those might be useful:
-// <META HTTP-EQUIV="REFRESH" CONTENT="<?php print $auth->lifetime*60;?>; URL=logout.php">
--->
-  <title>Stud.IP</title>
-        <link rel="stylesheet" href="style.css" type="text/css">
- </head>
-<body bgcolor="#ffffff">
+// -- here you have to put initialisations for the current page
 
-
-<?php
-// hier muessen Seiten-Initialisierungen passieren
-
-        include "seminar_open.php"; //hier werden die sessions initialisiert
-        include "header.php";   //hier wird der "Kopf" nachgeladen
-        
-        $sess->register("dates_data");
-        
-
+$sess->register("dates_data");
+	
+// Start of Output
+include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
+include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+	
 ?>
 <body>
 
 <?
-IF ($SessSemName[1] =="")
-        {
+if ($SessSemName[1] =="") {
 	parse_window ("error§Sie haben keine Veranstaltung gew&auml;hlt. <br /><font size=-1 color=black>Dieser Teil des Systems kann nur genutzt werden, wenn Sie vorher eine Veranstaltung gew&auml;hlt haben.<br /><br /> Dieser Fehler tritt auch auf, wenn Ihre Session abgelaufen ist. Wenn sie sich länger als $AUTH_LIFETIME Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurück zur Anmeldung zu gelangen. </font>", "§",
 				"Keine Veranstaltung gew&auml;hlt", 
 				"<a href=\"index.php\"><b>&nbsp;Hier</b></a> geht es wieder zur Anmeldung beziehungsweise Startseite.<br />&nbsp;");
 	die;
-        }
-ELSE
-        {
-        include "links1.php";
-        include "show_dates.inc.php";
-        
-        require_once("config.inc.php");
-				require_once("visual.inc.php");
-        
-        if ($dopen)
-        	$dates_data["open"]=$dopen;
-        
-        if ($dclose)
-        	$dates_data["open"]='';
+} else {
+	include ("$ABSOLUTE_PATH_STUDIP/links1.php");
+
+	require_once("$ABSOLUTE_PATH_STUDIP/show_dates.inc.php");
+	require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");
+	require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
+	
+	if ($dopen)
+		$dates_data["open"]=$dopen;
+	
+	if ($dclose)
+		$dates_data["open"]='';
 
 	?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
@@ -82,13 +66,13 @@ ELSE
 			</td>
 		</tr>
 	</table>
-<?
-$show_docs=TRUE;
-$name = rawurlencode($SessSemName[0]);
-($rechte) ? $show_admin="admin_dates.php?range_id=$SessSemName[1]&ebene=sem&name=$name" : $show_admin=FALSE;
-if (show_dates($SessSemName[1], 0, 0, $show_not,$show_docs, $show_admin, $dates_data["open"]))
-	echo"<br>";
-	}
+	<?
+	$show_docs=TRUE;
+	$name = rawurlencode($SessSemName[0]);
+	($rechte) ? $show_admin="admin_dates.php?range_id=$SessSemName[1]&ebene=sem&name=$name" : $show_admin=FALSE;
+	if (show_dates($SessSemName[1], 0, 0, $show_not,$show_docs, $show_admin, $dates_data["open"]))
+		echo"<br>";
+}
 
 ?>
 </body>

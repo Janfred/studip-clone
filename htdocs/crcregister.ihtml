@@ -1,10 +1,12 @@
 <html>
 <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<meta name="copyright" content="Stud.IP-Crew (crew@studip.de)">
   <title>Stud.IP</title>
 	<link rel="stylesheet" href="style.css" type="text/css">
-<script language="javascript" src="md5.js"></script>
+<script type="text/javascript" language="javascript" src="md5.js"></script>
 
-<SCRIPT language="JavaScript">
+<script type="text/javascript" language="javaScript">
 <!--
 function checkusername(){
  var re_username = /^([a-zA-Z0-9_@-]*)$/;

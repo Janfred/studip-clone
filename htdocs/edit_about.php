@@ -19,7 +19,6 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $auth->login_if(!$logout && ($auth->auth["uid"] == "nobody"));
 
@@ -564,17 +563,14 @@ $cssSw = new cssClassSwitcher;
 
 if ($logout)  // wir wurden gerade ausgeloggt...
   {
-  ?>
- <html>
- <head>
- <title>Stud.IP
-</title>
-  <link rel="stylesheet" href="style.css" type="text/css">
-  </head>
-  <?
-  include ("seminar_open.php");
-  include ("header.php");
- ?>
+	include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+
+	// -- here you have to put initialisations for the current page
+	
+	// Start of Output
+	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
+	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+	?>
   <table cellspacing="0" cellpadding="0" border="0" width="100%">
   <tr><td class="topic" colspan=2><b>&nbsp;Daten geändert!</b></th></tr>
   <?
@@ -593,14 +589,12 @@ if ($logout)  // wir wurden gerade ausgeloggt...
 //No Permission to change userdata
 if (!$my_about->check)
  {
-  ?>
-  <html>
-  <head>
-   <title>Stud.IP</title>
- 	<link rel="stylesheet" href="style.css" type="text/css">
-  </head>
-  <?
-  include "header.php";   //hier wird der "Kopf" nachgeladen 
+	include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+
+	// -- here you have to put initialisations for the current page
+	// Start of Output
+	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
+	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
   parse_window ("error§Zugriff verweigert.<br /><font size=-1 color=black><font size=-1 color=black>Wahrscheinlich ist Ihre Session abgelaufen. Wenn sie sich länger als $AUTH_LIFETIME Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurück zur Anmeldung zu gelangen.<br /> <br /> Eine andere Ursache kann der Versuch des Zugriffs auf Userdaten, die Sie nicht bearbeiten d&uuml;rfen, sein. Nutzen Sie den untenstehenden Link, um zurück auf die Startseite zu gelangen.</font>", "§",
 	"Zugriff auf Userdaten verweigert", 
 	"<a href=\"index.php\"><b>&nbsp;Hier</b></a> geht es wieder zur Anmeldung beziehungsweise Startseite.<br />&nbsp;");
@@ -683,19 +677,19 @@ if ($cmd)
   header("Location:$PHP_SELF?username=$username&msg=$msg&view=$view");  //Seite neu aufrufen, um Parameter loszuwerden
   die;
   }
+
+include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+
+// -- here you have to put initialisations for the current page
+
+// Start of Output
+include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
+
+if ($auth->auth["jscript"]) { // nur wenn JS aktiv
 ?>
+<script type="text/javascript" language="javascript" src="md5.js"></script>
 
-<html>
-<head>
-<title>Stud.IP</title>
- <link rel="stylesheet" href="style.css" type="text/css">
-
-
-<? IF ($auth->auth["jscript"]) { // nur wenn JS aktiv
-?>
-<script language="javascript" src="md5.js"></script>
-
-<SCRIPT language="Javascript">
+<script type="text/javascript" language="javascript">
 <!--
 
 function oeffne()
@@ -798,20 +792,8 @@ function checkdata(){
 <?
 
 } // Ende nur wenn JS aktiv
-?>
-</head>
-<!--
-// here i include my personal meta-tags; one of those might be useful:
-// <META HTTP-EQUIV="REFRESH" CONTENT="<?php print $auth->lifetime*60;?>; URL=logout.php">
--->
-<body bgcolor=white>
 
-<?php
-
-
- include "seminar_open.php"; //hier werden die sessions initialisiert
- include "header.php";   //hier wird der "Kopf" nachgeladen
-
+include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 
 
 if (!$cmd)
