@@ -294,7 +294,7 @@ function move_item ($item_id, $new_parent) {
 		return TRUE;
 	}
 	
-function edit_item ($item_id, $type, $name, $description, $protected=0, $url = "") {
+function edit_item ($item_id, $type, $name, $description, $protected=0, $url = "", $filesize="") {
 	global $the_file_name;
 	$db=new DB_Seminar;
 	if (!$url) {
@@ -308,8 +308,10 @@ function edit_item ($item_id, $type, $name, $description, $protected=0, $url = "
 	if ($protected == "on") $protected=1;
 	if ($type)
 		$db->query("UPDATE folder SET name='$name', description='$description' WHERE folder_id ='$item_id'");
+	elseif ($url != "")
+		$db->query("UPDATE dokumente SET name='$name', filesize='$filesize', description='$description', protected='$protected', url='$url', filename='$the_file_name' WHERE dokument_id ='$item_id'");
 	else
-		$db->query("UPDATE dokumente SET name='$name', description='$description', protected='$protected', url='$url', filename='$the_file_name' WHERE dokument_id ='$item_id'");	
+		$db->query("UPDATE dokumente SET name='$name', description='$description', protected='$protected', url='$url', filename='$the_file_name' WHERE dokument_id ='$item_id'");
 	
 	if ($db->affected_rows())
 		return TRUE;
@@ -858,7 +860,7 @@ function insert_link_db($range_id, $the_file_size, $refresh = FALSE) {
 
 
 function link_item ($range_id, $create = FALSE, $echo = FALSE, $refresh = FALSE, $link_update = FALSE) {
-	global $the_link, $name, $description, $protect;
+	global $the_link, $name, $description, $protect, $filesize;
 
 	if ($create) {
 		$link_data = parse_link($the_link);
@@ -869,7 +871,8 @@ function link_item ($range_id, $create = FALSE, $echo = FALSE, $refresh = FALSE,
 						delete_link($refresh, TRUE);
 				$tmp = TRUE;
 			} else {
-				edit_item ($link_update, FALSE, $name, $description, $protect , $the_link);
+				$filesize = $link_data["Content-Length"];
+				edit_item ($link_update, FALSE, $name, $description, $protect , $the_link, $filesize);
 				$tmp = TRUE;
 			}
 		} else {
