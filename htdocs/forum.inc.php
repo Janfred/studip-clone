@@ -1484,7 +1484,7 @@ function DisplayKids ($forumposting, $level=0) {
 		
 		// wird geshrinkt?
 		
-		if (strstr($forum["shrinkopenlist"],$forumposting["id"])!=TRUE && $forum["shrink"]!=0 && $openall != TRUE) {
+		if (strstr($forum["shrinkopenlist"],$forumposting["id"])!=TRUE && strstr($forum["openlist"],$forumposting["id"])!=TRUE && $forum["shrink"]!=0 && $openall != TRUE) {
 			$age = ForumCheckShrink($forumposting["id"]);
 			$age = explode(";",$age);
 			$forumposting["shrinkcount"] = sizeof($age)-1;
