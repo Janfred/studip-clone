@@ -37,11 +37,11 @@ require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
 
 if ($ILIAS_CONNECT_ENABLE) 
 {
-	require_once ("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_LERNMODUL/lernmodul_config.inc.php");
-	require_once ("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_LERNMODUL/lernmodul_db_functions.inc.php");
-	require_once ("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_LERNMODUL/lernmodul_linking_functions.inc.php");
-	require_once ("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_LERNMODUL/lernmodul_user_functions.inc.php");
-	require_once ("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_LERNMODUL/lernmodul_view_functions.inc.php");
+	require_once ("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_LEARNINGMODULES/lernmodul_config.inc.php");
+	require_once ("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_LEARNINGMODULES/lernmodul_db_functions.inc.php");
+	require_once ("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_LEARNINGMODULES/lernmodul_linking_functions.inc.php");
+	require_once ("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_LEARNINGMODULES/lernmodul_user_functions.inc.php");
+	require_once ("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_LEARNINGMODULES/lernmodul_view_functions.inc.php");
 }
 ?>
 <body>

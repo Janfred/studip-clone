@@ -26,9 +26,9 @@ $perm->check("dozent");
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
 //$i_page = "meine_seminare.php";
-$ILIAS_CONNECT_ENABLE = true;
-$RELATIVE_PATH_LERNMODUL = "lernmodule";
-$ABSOLUTE_PATH_ILIAS = "/ilias/";
+//$ILIAS_CONNECT_ENABLE = true;
+//$RELATIVE_PATH_LEARNINGMODULES = "lernmodule";
+//$ABSOLUTE_PATH_ILIAS = "/ilias/";
 // -- here you have to put initialisations for the current page
 
 require_once ($ABSOLUTE_PATH_STUDIP."/visual.inc.php");
@@ -45,11 +45,11 @@ if ($ILIAS_CONNECT_ENABLE)
 
 	include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");
 
-	require_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LERNMODUL ."/lernmodul_config.inc.php");
-	require_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LERNMODUL ."/lernmodul_db_functions.inc.php");
-	require_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LERNMODUL ."/lernmodul_user_functions.inc.php");
-	require_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LERNMODUL ."/lernmodul_view_functions.inc.php");
-	require_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LERNMODUL ."/lernmodul_linking_functions.inc.php");
+	require_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_config.inc.php");
+	require_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_db_functions.inc.php");
+	require_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_user_functions.inc.php");
+	require_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_view_functions.inc.php");
+	require_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_linking_functions.inc.php");
 
 ?><table cellspacing="0" cellpadding="0" border="0" width="100%">
 	<tr>
