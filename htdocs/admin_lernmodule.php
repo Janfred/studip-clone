@@ -116,8 +116,12 @@ if ($ILIAS_CONNECT_ENABLE)
 									"text"  => _("Sie k&ouml;nnen ein Lernmodul bearbeiten, wenn Sie als Autor oder Co-Autor daf&uuml;r eingetragen sind.")
 								);
 		$infobox[1]["eintrag"][] = array (	"icon" => "pictures/trash.gif" ,
-									"text"  => _("Sie k&ouml;nnen ein Lernmodul l&ouml;schen, indem Sie auf die M&uuml;lltonne klicken.")
+									"text"  => _("Sie k&ouml;nnen ein Lernmodul l&ouml;schen, indem Sie den Kasten des Moduls &ouml;ffnen und auf 'l&ouml;schen' klicken.")
 								);
+		if ((get_connected_user_id($auth->auth["uid"]) != false) AND ($perm->have_studip_perm("autor",$seminar_id)))
+			$infobox[1]["eintrag"][] = array (	"icon" => "pictures/icon-lern.gif" ,
+										"text"  => sprintf(_("Hier k&ouml;nnen Sie ein %s neues Lernmodul anlegen %s"), "<a href=\"" . link_new_module() ."\" target=\"_blank\">", "</a>")
+									);
 			print_infobox ($infobox,"pictures/lernmodule.jpg");
 		?>		
 		</td>		

@@ -244,7 +244,7 @@ include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul
 										"text"  => _("Wenn Sie auf den Titel eines Lernmoduls klicken, &ouml;ffnet sich ein neues Fenster mit dem ILIAS-Lernmodul. Mit den Navigationspfeilen k&ouml;nnen Sie durch das Lernmodul bl&auml;ttern.")
 									);
 
-		if ((get_connected_user_id($auth->auth["uid"]) != false) AND ($perm->have_studip_perm("tutor",$seminar_id)))
+		if ((get_connected_user_id($auth->auth["uid"]) != false) AND ($perm->have_studip_perm("autor",$seminar_id)))
 			$infobox[1]["eintrag"][] = array (	"icon" => "pictures/icon-lern.gif" ,
 										"text"  => sprintf(_("Hier k&ouml;nnen Sie ein %s neues Lernmodul anlegen %s"), "<a href=\"" . link_new_module() ."\" target=\"_blank\">", "</a>")
 									);
@@ -252,8 +252,8 @@ include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul
 		$cssSw = new cssClassSwitcher;									// Klasse für Zebra-Design
 		show_seminar_modules_links($seminar_id);
 
-		if ((get_connected_user_id($auth->auth["uid"]) != false) AND ($perm->have_studip_perm("autor",$seminar_id)))
-			echo "<br><br><a href=\"" . link_new_module() ."\" target=\"_blank\">". _("Neues Lernmodul anlegen") ."</a><br>";
+//		if ((get_connected_user_id($auth->auth["uid"]) != false) AND ($perm->have_studip_perm("autor",$seminar_id)))
+//			echo "<br><br><a href=\"" . link_new_module() ."\" target=\"_blank\">". _("Neues Lernmodul anlegen") ."</a><br>";
 	}
 	?>
 	<br>
