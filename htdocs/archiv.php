@@ -58,7 +58,7 @@ function archiv_check_perm($seminar_id){
 			}
 		}
 		if ($perm->is_fak_admin()){
-			$db->query("SELECT archiv.seminar_id FROM archiv LEFT JOIN user_inst ON (archiv.fakultaet_id = institut_id) WHERE user_inst.user_id = '$u_id' AND user_inst.inst_perms = 'admin'");
+			$db->query("SELECT archiv.seminar_id FROM archiv LEFT JOIN Institute ON  (archiv.heimat_inst_id = Institute.institut_id) LEFT JOIN user_inst ON (user_inst.institut_id = Institute.fakultaets_id) WHERE user_inst.user_id = '$u_id' AND user_inst.inst_perms = 'admin'");
 			while($db->next_record()){
 				$archiv_perms[$db->f("seminar_id")] = "admin";
 			}
@@ -347,9 +347,9 @@ if ($archiv_data["perform_search"]) {
 	if (!$archiv_data["sortby"])
 		$archiv_data["sortby"]="Name";
 	if ($archiv_data["pers"])
-		$query ="SELECT archiv.seminar_id, name, untertitel,  beschreibung, start_time, semester, studienbereiche, heimat_inst_id, fakultaet_id, institute, dozenten, fakultaet, archiv_file_id, forumdump FROM archiv LEFT JOIN archiv_user USING (seminar_id) WHERE user_id = '".$user->id."' AND ";
+		$query ="SELECT archiv.seminar_id, name, untertitel,  beschreibung, start_time, semester, studienbereiche, heimat_inst_id, institute, dozenten, fakultaet, archiv_file_id, forumdump FROM archiv LEFT JOIN archiv_user USING (seminar_id) WHERE user_id = '".$user->id."' AND ";
 	else
-		$query ="SELECT seminar_id, name, untertitel,  beschreibung, start_time, semester, studienbereiche, heimat_inst_id, fakultaet_id, institute, dozenten, fakultaet, archiv_file_id, forumdump FROM archiv WHERE ";
+		$query ="SELECT seminar_id, name, untertitel,  beschreibung, start_time, semester, studienbereiche, heimat_inst_id, institute, dozenten, fakultaet, archiv_file_id, forumdump FROM archiv WHERE ";
 	if ($archiv_data["all"]) {
 		$query .= "name LIKE '%".$archiv_data["all"]."%'";
 		$query .= " OR untertitel LIKE '%".$archiv_data["all"]."%'";
