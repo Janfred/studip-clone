@@ -91,7 +91,7 @@ else
 			$export_pagecontent .= "</td></tr></table><br>";
 	
 			$result_printimage = "<a href=\"sendfile.php?type=2&file_id=" . $pdf_file . "&file_name=" . $xslt_filename . ".pdf" . "\"><img src=\"./pictures/" . $export_icon["pdf"] . "\" border=0></a>";
-			$result_printlink = "<a href=\"sendfile.php?type=2&file_id=" . $pdf_file . "&file_name=" . $xslt_filename . ".pdf" . "\">" . $xslt_filename . ".pdf" . "</a>";
+			$result_printlink = "<a href=\"sendfile.php?type=2&file_id=" . $pdf_file . "&file_name=" . $xslt_filename . ".pdf" . "\" class=\"tree\">" . $xslt_filename . ".pdf" . "</a>";
 			$result_printdesc = _("PDF-Datei");
 			$result_printcontent = _("Dies ist die fertige PDF-Datei.") . "<br>";	
 		}	
@@ -109,12 +109,12 @@ else
 		}
 	
 		$xml_printimage = "<a href=\"sendfile.php?type=2&file_id=$xml_file_id&file_name=$xml_filename\"><img src=\"./pictures/" . $export_icon["xml"] . "\" border=0></a>";
-		$xml_printlink = "<a href=\"sendfile.php?type=2&file_id=$xml_file_id&file_name=$xml_filename\">" . $xml_filename . "</a>";
+		$xml_printlink = "<a href=\"sendfile.php?type=2&file_id=$xml_file_id&file_name=$xml_filename\" class=\"tree\">" . $xml_filename . "</a>";
 		$xml_printdesc = _("XML-Daten");
 		$xml_printcontent = _("In dieser Datei sind die Daten als XML-Tags gespeichert. Diese Tags k&ouml;nnen mit einem XSLT-Script verarbeitet werden.") . "<br>";	
 	
 		$xslt_printimage = "<a href=\"sendfile.php?type=2&file_id=" . $result_file . "&file_name=" . $xslt_filename . "." . $format . "\"><img src=\"./pictures/" . $export_icon[$format] . "\" border=0></a>";
-		$xslt_printlink = "<a href=\"sendfile.php?type=2&file_id=" . $result_file . "&file_name=" . $xslt_filename . "." . $format . "\">" . $xslt_filename . "." . $format . "</a>";
+		$xslt_printlink = "<a href=\"sendfile.php?type=2&file_id=" . $result_file . "&file_name=" . $xslt_filename . "." . $format . "\" class=\"tree\">" . $xslt_filename . "." . $format . "</a>";
 		$xslt_printdesc = _("Formatting-Objects-Datei");
 		$xslt_printcontent = _("In dieser Datei sind die Formatting Objects zur Erzeugung der PDF-Datei gespeichert.") . "<br>";	
 	

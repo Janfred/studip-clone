@@ -133,19 +133,19 @@ else
 
 
 		$xml_printimage = "<a href=\"sendfile.php?type=2&file_id=$xml_file_id&file_name=$xml_filename\" target=\"new\"><img src=\"./pictures/" . $export_icon["xml"] . "\" border=0></a>";
-		$xml_printlink = "<a href=\"sendfile.php?type=2&file_id=$xml_file_id&file_name=$xml_filename\">" . $xml_filename . "</a>";
+		$xml_printlink = "<a href=\"sendfile.php?type=2&file_id=$xml_file_id&file_name=$xml_filename\" class=\"tree\">" . $xml_filename . "</a>";
 		$xml_printdesc = _("XML-Daten");
 		$xml_printcontent = _("In dieser Datei sind die Daten als XML-Tags gespeichert. Diese Tags können mit einem XSLT-Script verarbeitet werden.") . "<br>";	
 	
 		$xslt_printimage = "<a href=\"sendfile.php?type=3&file_id=" . $xslt_files[$choose]["file"] . "&file_name=" . $xslt_files[$choose]["name"] . ".xsl\"><img src=\"./pictures/" . $export_icon["xslt"] . "\" border=0></a>";
-		$xslt_printlink = "<a href=\"sendfile.php?type=3&file_id=" . $xslt_files[$choose]["file"] . "&file_name=" . $xslt_files[$choose]["name"] . ".xsl\">" . $xslt_files[$choose]["name"] . ".xsl</a>";
+		$xslt_printlink = "<a href=\"sendfile.php?type=3&file_id=" . $xslt_files[$choose]["file"] . "&file_name=" . $xslt_files[$choose]["name"] . ".xsl\" class=\"tree\">" . $xslt_files[$choose]["name"] . ".xsl</a>";
 		$xslt_printdesc = _("XSLT-Datei");
 		$xslt_printcontent = _("Dies ist das XSLT-Script zur Konvertierung der Daten. Klicken Sie auf den Dateinamen, um die Datei zu öffnen.") . "<br>";	
 
 		if ($xslt_process)
 		{
 			$result_printimage = "<a href=\"sendfile.php?type=2&file_id=" . $result_file . "&file_name=" . $xslt_filename . "." . $format . "\"><img src=\"./pictures/" . $export_icon[$format] . "\" border=0></a>";
-			$result_printlink = "<a href=\"sendfile.php?type=2&file_id=" . $result_file . "&file_name=" . $xslt_filename . "." . $format . "\">" . $xslt_filename . "." . $format . "</a>";
+			$result_printlink = "<a href=\"sendfile.php?type=2&file_id=" . $result_file . "&file_name=" . $xslt_filename . "." . $format . "\" class=\"tree\">" . $xslt_filename . "." . $format . "</a>";
 			$result_printdesc = _("Ausgabe-Datei");
 			$result_printcontent = _("Dies ist die fertige Ausgabedatei.") . "<br>";	
 		}

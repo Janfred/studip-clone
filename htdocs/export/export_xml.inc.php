@@ -104,7 +104,7 @@ if (($o_mode == "file") OR ($o_mode == "choose"))
 		$export_weiter_button = "<br><br><center><a href=\"" . $PHP_SELF . "?xml_file_id=" . $xml_file_id . "&ex_type=" . $ex_type . "&o_mode=choose\">" . makeButton("weiter") . "</a></center>";
 
 		$xml_printimage = "<a href=\"sendfile.php?type=2&file_id=$xml_file_id&file_name=$xml_filename\"><img src=\"./pictures/" . $export_icon["xml"] . "\" border=0></a>";
-		$xml_printlink = "<a href=\"sendfile.php?type=2&file_id=$xml_file_id&file_name=$xml_filename\">" . $xml_filename . "</a>";
+		$xml_printlink = "<a href=\"sendfile.php?type=2&file_id=$xml_file_id&file_name=$xml_filename\" class=\"tree\">" . $xml_filename . "</a>";
 		$xml_printdesc = _("XML-Daten");
 		$xml_printcontent = _("In dieser Datei sind die Daten als XML-Tags gespeichert. Diese Tags können mit einem XSLT-Script verarbeitet werden.") . "<br>";	
 	}
