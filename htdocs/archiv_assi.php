@@ -342,7 +342,7 @@ if (($archiv_assi_data["sems"]) && (sizeof($archiv_assi_data["sem_check"])>0)){
 				<?
 				if ($db->f("VeranstaltungsNummer"))
 					printf ("<font size=-1><b>Veranstaltungsnummer:</b></font><br /><font size=-1>%s</font>",$db->f("VeranstaltungsNummer"));
-				?>
+				?>&nbsp; 
 				</td>
 			</tr>
 			<tr>
@@ -397,7 +397,7 @@ if (($archiv_assi_data["sems"]) && (sizeof($archiv_assi_data["sem_check"])>0)){
 				<?
 				if ($db->f("art"))
 					printf ("<font size=-1><b>Art/Form:</b></font><br /><font size=-1>%s</font>",$db->f("art"));
-				?>
+				?>&nbsp; 
 				</td>
 			</tr>
 			<? if ($db->f("Beschreibung") !="") {

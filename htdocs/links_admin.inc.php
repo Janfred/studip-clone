@@ -627,7 +627,7 @@ while ($db->next_record()) {
 			?>
 				</tr>
 				<tr>
-					<td class="blank" colspan=1> 
+					<td class="blank" colspan=2> 
 					&nbsp; 
 					</td>
 				</tr>
@@ -635,8 +635,10 @@ while ($db->next_record()) {
 		</td>
 	</tr>
 	</table>
-	</table>
-	</form>				
+	</form>
+</td>
+</tr>
+</table>
 	<?
 	page_close();
 	die;
