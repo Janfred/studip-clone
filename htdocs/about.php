@@ -109,13 +109,6 @@ if (!$db->nf()) {
 	$user_id=$db->f("user_id");
 
 
-
-//Guestbook actions
-if ($guestbook)
-	actions_guestbook($guestbook);
-if ($deletepost)
-	delete_post_guestbook($user_id, $deletepost);
-
 // count views of Page
 if ($auth->auth["uid"]!=$user_id && $homepage_cache != $user_id) {
 	object_add_view($user_id);
@@ -142,6 +135,11 @@ if ($perm->is_fak_admin()){
 	$admin_darf = TRUE;
 }
 
+//Guestbook actions
+if ($guestbook)
+	actions_guestbook($guestbook);
+if ($deletepost)
+	delete_post_guestbook($user_id, $deletepost);
 
 //Her mit den Daten...
 $db->query("SELECT user_info.* , auth_user_md5.*,". $_fullname_sql['full'] . " AS fullname FROM auth_user_md5 LEFT JOIN user_info USING (user_id) WHERE auth_user_md5.user_id = '$user_id'");
@@ -291,7 +289,7 @@ if ($GLOBALS['VOTE_ENABLE']) {
 }
 
 // show Guestbook
-if (($perm->have_perm("autor") AND $auth->auth["uid"]==$user_id) || check_guestbook($user_id)==TRUE) {
+if (($perm->have_perm("autor") AND $auth->auth["uid"]==$user_id) || check_guestbook($user_id)==TRUE || $admin_darf == TRUE) {
 	print_guestbook($user_id);
 	echo "<br>";	
 }

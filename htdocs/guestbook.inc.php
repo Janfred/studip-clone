@@ -18,8 +18,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 function print_guestbook ($range_id) {
-	global $user;
-	if ($range_id == $user->id)
+	global $user, $admin_darf;
+	if ($range_id == $user->id || $admin_darf == TRUE)
 		if (check_guestbook($range_id)==TRUE)
 			$active = " ("._("aktiviert").")";
 		else
@@ -34,7 +34,7 @@ function print_guestbook ($range_id) {
 		$content = show_posts_guestbook($range_id);
 		$content .= form_guestbook($range_id);
 	}
-	if ($range_id == $user->id)
+	if ($range_id == $user->id || $admin_darf == TRUE)
 		$buttons = buttons_guestbook($range_id);
 	else
 		$buttons = "";
@@ -42,15 +42,16 @@ function print_guestbook ($range_id) {
 	echo "</td></tr></table>";
 }
 
+
 function show_posts_guestbook ($range_id) {
-	global $PHP_SELF, $user, $username;
+	global $PHP_SELF, $user, $username, $admin_darf;
 	$db=new DB_Seminar;
 	$output = "<table class=\"blank\" width=\"98%%\" border=\"0\" cellpadding=\"5\" cellspacing=\"0\">";
 	$db->query("SELECT * FROM guestbook WHERE range_id = '$range_id' ORDER BY mkdate DESC");
 	while ($db->next_record()) {  
 		$output .= "<tr><td class=\"steel2\"><b><font size=\"-1\"><a href=\"$PHP_SELF?username=".get_username($db->f("user_id"))."\">".get_fullname($db->f("user_id"))."</a>&nbsp;"._("hat am")."&nbsp;".date("d.m.Y - H:i", $db->f("mkdate"))."&nbsp;"._("geschrieben:")."</font></b></td></tr>"
-			. "<tr><td class=\"steelgraulight\"><font size=\"-1\">".formatready($db->f("content"))."</font><p align=\"right\">";
-		if ($range_id == $user->id)
+			. "<tr><td class=\"steelgraulight\"><font size=\"-1\">".quotes_decode(formatready($db->f("content")))."</font><p align=\"right\">";
+		if ($range_id == $user->id || $admin_darf == TRUE)
 			$addon = "<a href=\"".$PHP_SELF."?deletepost=".$db->f("post_id")."&username=$username#anker\">" . makeButton("loeschen", "img") . "</a>";
 		else
 			$addon = "&nbsp;";
@@ -79,22 +80,23 @@ function form_guestbook($range_id) {
 		.$text
 		."<div align=center><textarea name=post style=\"width:70%\" cols=\"". $cols."\"  rows=8 wrap=virtual>"
 		."</textarea>"
-		."<br><br><input type=image name=create value=\"abschicken\" " . makeButton("abschicken", "src") . " align=\"absmiddle\" border=0>&nbsp;<br>";
+		."<br><br><input type=image name=create value=\"abschicken\" " . makeButton("abschicken", "src") . " align=\"absmiddle\" border=0>&nbsp;"
+		."&nbsp;&nbsp;<a href=\"show_smiley.php\" target=\"new\"><font size=\"-1\">"._("Smileys")."</a>&nbsp;&nbsp;"."<a href=\"help/index.php?help_page=ix_forum6.htm\" target=\"new\"><font size=\"-1\">"._("Formatierungshilfen")."</a>";
 	return $form;
 }
 
 function delete_post_guestbook ($range_id, $post_id) {
-	global $user;
+	global $user, $admin_darf;
 	$db=new DB_Seminar;
-	if ($range_id == $user->id) {
+	if ($range_id == $user->id || $admin_darf == TRUE) {
 		$db->query("DELETE FROM guestbook WHERE post_id = '$post_id'");	
 	}	
 }
 
 function erase_guestbook ($range_id) {
-	global $user;
+	global $user, $admin_darf;
 	$db=new DB_Seminar;
-	if ($range_id == $user->id) {
+	if ($range_id == $user->id || $admin_darf == TRUE) {
 		$db->query("DELETE FROM guestbook WHERE range_id = '$range_id'");	
 	}	
 }
@@ -113,11 +115,12 @@ function buttons_guestbook ($range_id) {
 }
 
 function actions_guestbook($guestbook) {
-	global $user, $post, $create;
-	if ($guestbook=="switch")
-		$msg = switch_guestbook($user->id);
-	if ($guestbook=="erase")
-		erase_guestbook ($user->id);
+	global $user, $post, $create, $username, $admin_darf;
+	$user_id = get_userid($username);
+	if ($guestbook=="switch" && ($user_id == $user->id || $admin_darf == TRUE))
+		$msg = switch_guestbook($username);
+	if ($guestbook=="erase" && ($user_id == $user->id || $admin_darf == TRUE))
+		erase_guestbook ($user_id);
 	if ($post) {
 		$msg = add_post_guestbook($guestbook,$post);
 	}
@@ -166,13 +169,14 @@ function makeunique_guestbook ()
 }
 
 function switch_guestbook ($range_id) {
+	$user_id = get_userid($range_id);
 	$db=new DB_Seminar;
-	if (check_guestbook($range_id) == "TRUE") { // Guestbook is activated
-		$db->query("UPDATE user_info SET guestbook='0' WHERE user_id='$range_id'");
-		$tmp = _("Sie haben Ihr Gästebuch deaktiviert. Es ist nun nicht mehr sichtbar.");
+	if (check_guestbook($user_id) == "TRUE") { // Guestbook is activated
+		$db->query("UPDATE user_info SET guestbook='0' WHERE user_id='$user_id'");
+		$tmp = _("Sie haben das Gästebuch deaktiviert. Es ist nun nicht mehr sichtbar.");
 	} else { 
-		$db->query("UPDATE user_info SET guestbook='1' WHERE user_id='$range_id'");
-		$tmp = _("Sie haben Ihr Gästebuch aktiviert: Besucher können nun schreiben!");
+		$db->query("UPDATE user_info SET guestbook='1' WHERE user_id='$user_id'");
+		$tmp = _("Sie haben das Gästebuch aktiviert: Besucher können nun schreiben!");
 	}
 	return $tmp;
 }
