@@ -81,8 +81,10 @@ function create_assigns($assign_object, &$this, $begin='', $end='') {
 								$assign_object->getResourceId(), $assign_object->getAssignUserId(), 
 								$assign_object->getUserFreeName());
 	
-	} elseif (($assign_object -> getRepeatEnd() >= $begin) && ($assign_object -> getBegin() <= $end))
+	} elseif ((($assign_object -> getRepeatEnd() >= $begin) && ($assign_object -> getBegin() <= $end)) ||
+			(($begin == -1) &&($end == -1) && ($assign_object->getRepeatQuantity() >0)))
 		do { 
+
 		//create a temp_ts to try every possible repeatation
 		$temp_ts=mktime(date("G",$assign_object -> getBegin()), 
 						date("i",$assign_object -> getBegin()), 
@@ -106,14 +108,24 @@ function create_assigns($assign_object, &$this, $begin='', $end='') {
 		$quantity++;
 		
 		//check if we want to show the event and if it is not outdated
-		if ($temp_ts >= $begin) {
+		if (($begin == -1) && ($end == -1) && ($assign_object->getRepeatQuantity() >0))
+			 	$this->events[] = new AssignEvent($assign_object->getId(), $temp_ts, $temp_ts_end,
+										$assign_object->getResourceId(), $assign_object->getAssignUserId(), 
+										$assign_object->getUserFreeName());
+		elseif ($temp_ts >= $begin) {
 			 if (($temp_ts <=$end) && ($temp_ts <= $assign_object -> getRepeatEnd()) && (($quantity <= $assign_object->getRepeatQuantity()) || ($assign_object->getRepeatQuantity() == -1)))  {
 			 	$this->events[] = new AssignEvent($assign_object->getId(), $temp_ts, $temp_ts_end,
 										$assign_object->getResourceId(), $assign_object->getAssignUserId(), 
 										$assign_object->getUserFreeName());
 				}
 			}
-		} while(($temp_ts <=$end) && ($temp_ts <= $assign_object -> getRepeatEnd()) && ($quantity < $assign_object->getRepeatQuantity() || $assign_object->getRepeatQuantity() == -1));
+		
+		//security break
+		if ($quantity > 150)
+			break;
+			
+		} while((($temp_ts <=$end) && ($temp_ts <= $assign_object -> getRepeatEnd()) && ($quantity < $assign_object->getRepeatQuantity() || $assign_object->getRepeatQuantity() == -1)) || 
+				(($begin == -1) &&($end == -1) &&($assign_object->getRepeatQuantity()) >0) && ($quantity < $assign_object->getRepeatQuantity()));
 }
 
 ?>

@@ -272,7 +272,7 @@ if ($change_object_schedules) {
 		if ($SavedStateAssignObject->getAssignUserId())
 			$ObjectPerms = new AssignObjectPerms($change_object_schedules);
 	}
-	
+
 	if ($ObjectPerms->getUserPerm() == "autor" || $ObjectPerms->getUserPerm() == "admin") {
 		if ($kill_assign_x) {
 			$killAssign=new AssignObject($change_object_schedules);
@@ -423,7 +423,11 @@ if ($change_object_schedules) {
 				$change_schedule_repeat_week_of_month,
 				$change_schedule_repeat_day_of_week,
 				$change_schedule_repeat_week);
-
+			
+			//if isset quantity, we calculate the correct end date
+			if ($changeAssign->getRepeatQuantity() >0)
+				$changeAssign->setRepeatEnd($changeAssign->getRepeatEndByQuantity());
+				
 			//check repeat_end
 			if (($changeAssign->getRepeatMode() != "na") && ($change_schedule_repeat_end_month) && ($change_schedule_repeat_end_day) && ($change_schedule_repeat_end_year)){
 				if (!check_date($change_schedule_repeat_end_month, $change_schedule_repeat_end_day, $change_schedule_repeat_end_year)) {
@@ -432,30 +436,29 @@ if ($change_object_schedules) {
 				}
 				//repeat end schould not be bevor the begin
 				if (!$illegal_dates) {
-					if ($change_schedule_end > $change_schedule_repeat_end) {
-						$illegal_dates=TRUE;
-						$msg -> addMsg(19);
+					if ($changeAssign->getEnd() > $changeAssign->getRepeatEnd()) {
+						$changeAssign->setRepeatEnd($changeAssign->getBegin());
 					}
 				}
 				//limit recurrences
 				if (!$illegal_dates) {
 					switch ($changeAssign->getRepeatMode()) {
-						case "y" : if ((date("Y",$change_schedule_repeat_end) - date("Y", $change_schedule_begin)) > 10) {
+						case "y" : echo hallo;if ((date("Y",$changeAssign->getRepeatEnd()) - date("Y", $changeAssign->getBegin())) > 10) {
 									$illegal_dates=TRUE;
 									$msg -> addMsg(21);
 								}
 						break;
-						case "m" : if ((date("Y",$change_schedule_repeat_end) - date("Y", $change_schedule_begin)) > 10) {
+						case "m" : if ((date("Y",$changeAssign->getRepeatEnd()) - date("Y", $changeAssign->getBegin())) > 10) {
 									$illegal_dates=TRUE;
 									$msg -> addMsg(22);
 								}
 						break;
-						case "w" : if ((($change_schedule_repeat_end - $change_schedule_begin) / (60 * 60 * 24 *7) / $changeAssign->getRepeatInterval()) > 50) {
+						case "w" : if ((($changeAssign->getRepeatEnd() - $changeAssign->getBegin()) / (60 * 60 * 24 *7) / $changeAssign->getRepeatInterval()) > 50) {
 									$illegal_dates=TRUE;
 									$msg -> addMsg(23);
 								}
 						break;
-						case "d" : if ((int)(($change_schedule_repeat_end - $change_schedule_begin) / (60 * 60 * 24) / $changeAssign->getRepeatInterval()) > 100) {
+						case "d" : if ((int)(($changeAssign->getRepeatEnd() - $changeAssign->getBegin()) / (60 * 60 * 24) / $changeAssign->getRepeatInterval()) > 100) {
 									$illegal_dates=TRUE;
 									$msg -> addMsg(24);
 								}

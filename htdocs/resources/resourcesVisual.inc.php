@@ -1048,9 +1048,11 @@ class EditObject extends cssClasses {
 					<input type="IMAGE" align="absmiddle"  <?=makeButton("uebernehmen", "src") ?> border=0 name="submit" value="&Uuml;bernehmen">
 				<?
 				}
-				?>&nbsp;<a href="<?=$PHP_SELF."?view=".$this->used_view ?>"><?=makeButton("abbrechen", "img") ?></a><?
+				?>
+					&nbsp;<a href="<?=$PHP_SELF."?view=".$this->used_view ?>"><?=makeButton("abbrechen", "img") ?></a>
+				<?
 				if ($killButton) {
-					?>&nbsp;<input type="IMAGE"align="absmiddle" <?=makeButton("loeschen", "src") ?> border=0 name="kill_assign" value="l&ouml;schen"><?
+					?>&nbsp;<input type="IMAGE" align="absmiddle" <?=makeButton("loeschen", "src") ?> border=0 name="kill_assign" value="<?=_("l&ouml;schen")?>"><?
 				}
 				if  (!$resAssign->getId()) 
 					 print "<br /><img src=\"pictures/ausruf_small2.gif\" align=\"absmiddle\" />&nbsp;<font size=-1>"._("Sie erstellen eine neue Belegung")."</font>";
