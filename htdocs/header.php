@@ -114,29 +114,10 @@ if ($auth->auth["uid"] == "nobody") { ?>
 		$db=new DB_Seminar;
 
 		// wer ist ausser mir online
-		$now = time(); // nach eingestellter Zeit (default = 5 Minuten ohne Aktion) zaehlt man als offline
-		$query = "SELECT " . $GLOBALS['_fullname_sql']['full'] . " AS full_name,($now-UNIX_TIMESTAMP(changed)) AS lastaction,a.username,a.user_id FROM active_sessions LEFT JOIN auth_user_md5 a ON (a.user_id=sid) LEFT JOIN user_info USING(user_id) WHERE changed > '".date("YmdHis",$now - ($my_messaging_settings["active_time"] * 60))."' AND sid != 'nobody' AND sid != '".$auth->auth["uid"]."' AND active_sessions.name = 'Seminar_User' ORDER BY changed DESC";
-		$db->query($query);
-		while ($db->next_record()) {
-			$online[$db->f("username")] = array("name"=>$db->f("full_name"),"last_action"=>$db->f("lastaction"),"userid"=>$db->f("user_id"));      
-		}
+		$online = get_users_online($my_messaging_settings["active_time"]);
 		
 		$myuname=$auth->auth["uname"];
 		$tmp_last_visit = ($my_messaging_settings["last_visit"]) ?  $my_messaging_settings["last_visit"] : time();
-		/*$db->query("
-					SELECT COUNT(m.chat_id) AS chat_m, 
-					COUNT(IF(m_u.readed = 0, m_u.message_id, NULL)) AS neu_m, 
-					COUNT(IF(m_u.readed = 1, m_u.message_id, NULL)) AS alt_m,
-					COUNT(IF((m.mkdate > ".$my_messaging_settings["last_box_visit"]." AND m_u.readed = 0), m_u.message_id, NULL)) AS neu_x
-					FROM message_user AS m_u  INNER JOIN message AS m  USING (message_id) WHERE m_u.user_id='".$user->id."'  AND m_u.snd_rec = 'rec' AND deleted = 0
-					");
-		if ($db->next_record()) {
-			$chatm = $db->f("chat_m");
-			$neum = $db->f("neu_m"); // das ist eine neue Nachricht.
-			$altm = $db->f("alt_m");
-			$neux = $db->f("neu_x");
-		}
-		*/
 		$db->query("SELECT STRAIGHT_JOIN count(*) FROM message LEFT JOIN message_user USING (message_id) WHERE message_user.user_id = '{$user->id}' AND snd_rec = 'rec' AND chat_id IS NOT NULL");
 		$db->next_record();
 		$chatm = $db->f(0);
