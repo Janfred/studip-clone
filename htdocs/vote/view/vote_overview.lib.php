@@ -630,7 +630,7 @@ function makeNewVoteSelectForm($action){
 	 // Auswahlliste erstellen
 
 	if ($rangemode != "autor"){
-		$html .="<font size=\"-1\"> "._("in")." </font>";
+		$html .="<font size=\"-1\"> ".$label["selections_text_middle"]." </font>";
 		$html .="	   <select name=\"rangeID\" style=\"vertical-align:middle;\">\n";
 		if($hidden1_name == "all_ranges")
 			$html .="	   <option value=\"$hidden1_name\" selected>$hidden1_value</option>\n";
@@ -691,8 +691,7 @@ function makeDisplaySelectForm($action){
 		$counter++;
 	}
 	$html .="	   </select>\n";
-	//$html .="	   ".$label["selections_text_end"]."\n";
-
+	
 	$html .="	   <input type=image name=new style=\"vertical-align:middle;\" "
 		  . 	    makeButton($label["selections_selectrange_button"],"src") . " title=\"".$label["selections_selectrange_tooltip"]."\" alt=\"".$label["selections_selectrange_tooltip"]."\">\n"
 		  . "	   <br></font></form>\n"

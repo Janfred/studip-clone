@@ -368,7 +368,7 @@ function callSafeguard($voteaction, $voteID = "", $showrangeID = NULL, $search =
 			: $safeguard .= printSafeguard("ok", sprintf(_("Der Test \"%s\" wurde mit den Ver&auml;nderungen gespeichert."),$votename));
 			break;
 		default:
-			$safeguard .= printSafeguard("ausruf",_("Fehler bei 'voteaction'! Es wurde versucht, eine nicht vorhandene Aktion auszuführen."));
+			$safeguard .= printSafeguard("ausruf",_("Fehler! Es wurde versucht, eine nicht vorhandene Aktion auszuführen."));
 			break;
 	}
 	global $auth;
@@ -377,8 +377,7 @@ function callSafeguard($voteaction, $voteID = "", $showrangeID = NULL, $search =
 	    // --> send notification sms
 	    $sms = new messaging();
 	    $sms->insert_sms( $vote->voteDB->getAuthorUsername($vote->getAuthorID()),
-			      mysql_escape_string( sprintf( _("An Ihrem %s \"%s\" wurden von dem Administrator oder der ".
-						      "Administratorin %s Änderungen vorgenommen."),
+			      mysql_escape_string( sprintf( _("An Ihrem %s \"%s\" wurden von dem Administrator oder der Administratorin %s Änderungen vorgenommen."),
 						    ($vote->instanceof() == INSTANCEOF_TEST
 						    ? _("Test") : _("Voting")), $vote->getTitle(),
 						    $vote->voteDB->getAuthorRealname($auth->auth["uid"]) ) ),
@@ -548,11 +547,10 @@ function createLabel(){
 		// labels for printSelections
 		"selections_text_vote" => _("Ein neues Voting"),
 		"selections_text_test" => _("Einen neuen Test"),
-		"selections_text_end" => "",
+		"selections_text_middle" => _("in"),
 		"selections_button" => _("erstellen"),
 		"selections_tooltip" => _("Voting oder Test erstellen."),
 		"selections_selectrange_text" => _("Votings/Tests aus "),
-		"selections_selectrange_text_end" => "",
 		"selections_allranges" => _("allen Bereichen"),
 		"selections_selectrange_button" => _("anzeigen"),
 		"selections_selectrange_tooltip" => _("Bereich der angezeigten Votings und Tests ausw&auml;hlen."),
