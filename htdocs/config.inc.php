@@ -118,7 +118,7 @@ $INST_FUNKTION[22]=array("name"=>"ausserdem am Institut tätig", "en"=>"assoziate
 $INST_FUNKTION[23]=array("name"=>"Dozent institutsübergreifender Veranstaltungen", "en"=>"Lecturer of interinstitutional courses");
 //weitere Funktionen koennen hier angefuegt werden
 
-$INST_FUNKTION_ORDER = array(0,18,10,19,16,9,7,8,4,3,2,5,1,14,13,21,15,17,12,11,0,20,6);
+$INST_FUNKTION_ORDER = array(21,13,11,12,10,9,6,3,20,7,23,8,2,15,14,23,19,17,5,18,4,22,16);
 
 //Festlegen der Veranstaltungs Termin Typen
 $TERMIN_TYP[1]=array("name"=>"Sitzung", "sitzung"=>1); 		//dieser Termin Typ wird immer als Seminarsitzung verwendet und im Ablaufplan entsprechend markiert. Der Titel kann veraendert werden, Eintraege aus dem Seminar Assistenten und Terminverwaltung fuer Seminar-Sitzungsterrmine bekommen jedoch immer diesen Typ
