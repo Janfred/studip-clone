@@ -930,24 +930,47 @@ function forum_draw_topicline() {
 * prints the rating-bar
 *
 **/
-function print_rating($rate) {
-	 
+function print_rating($rate, $id, $username) {
+	global $openorig, $forum, $user, $auth;	 
 	 if ($rate == "?")
-	 	$bar = "<img src=\"pictures/rate_leer\" width=\"50\" height=\"11\">";
+	 	$bar = "<img src=\"pictures/rate_leer\" width=\"50\" border=\"0\" height=\"11\">";
 	 elseif ($rate > 3) {
 		 $grau = (5-$rate)*10;
 		 $rot = 25 - $grau;
-		 $bar = "<img src=\"pictures/rate_leer\" width=25 height=11><img src=\"pictures/rate_rot\" width=\"$rot\" height=\"11\"><img src=\"pictures/rate_leer\" width=\"$grau\" height=11>";
+		 $bar = "<img src=\"pictures/rate_leer\" width=25 height=11 border=\"0\"><img src=\"pictures/rate_rot\" width=\"$rot\" border=\"0\" height=\"11\"><img src=\"pictures/rate_leer\" width=\"$grau\" border=\"0\" height=11>";
 	 } elseif ($rate < 3) {
 		 $grau = ($rate-1)*10;
 		 $gruen = 25 - $grau;
-		 $bar = "<img src=\"pictures/rate_leer\" width=\"$grau\" height=\"11\"><img src=\"pictures/rate_gruen\" width=\"$gruen\" height=11><img src=\"pictures/rate_leer\" width=25 height=11>";
+		 $bar = "<img src=\"pictures/rate_leer\" width=\"$grau\" height=\"11\" border=\"0\"><img src=\"pictures/rate_gruen\" border=\"0\" width=\"$gruen\" height=11><img src=\"pictures/rate_leer\" border=\"0\" width=25 height=11>";
 	 } else {
-		$bar = "<img src=\"pictures/rate_neutral\" width=\"50\" height=\"11\">"; 
+		$bar = "<img src=\"pictures/rate_neutral\" width=\"50\" height=\"11\" border=\"0\">"; 
 	 }
-		 
-	 $bar .= " | ";
-		
+
+	if ($auth->auth["jscript"]) { //Java Script activated?
+
+  		if (object_check_user($id, "rate") == TRUE || get_username($user->id) == $username) { // already rated / my own posting
+ 			$ol_txt = "'<div align=center>Bewertung: $rate</div>', CSSOFF, LEFT, WIDTH, 100";
+ 		 	$bar = '<a href="javascript:void(0);" onmouseover="return overlib('.$ol_txt.');" onmouseout="return nd();">' . $bar . '</a> | ';
+ 		 } else {
+  		 	$random = rand();
+    			$start = $forum["flatviewstartposting"];
+    			$txt  = _("Bewertung: $rate <br>Zum Abstimmen bitte klicken.");
+    			$txt2 = _("Bitte werten:");
+    			$txt3 = _("Bewertung des Beitrags");
+    			$txt4 = _("Schulnote");
+    			$ol_txt = "'<div align=center>$txt</div>', LEFT, WIDTH, 200";
+    			$ol_txt2 = "'<div align=center><font size=-1>$txt3</font><br><font size=-2>($txt4)</font><br>";
+  			$ol_txt2 .= "<form method=post action=./forum.php#anker ><b>&nbsp;<font size=2 color=#009900 >1";
+  			$ol_txt2 .= "<input type=radio name=rate[$id] value=1><input type=radio name=rate[$id] value=2>";
+	 		$ol_txt2 .= "<input type=radio name=rate[$id] value=3><input type=radio name=rate[$id] value=4>";
+  			$ol_txt2 .= "<input type=radio name=rate[$id] value=5><font size=2 color=#990000>5&nbsp;<br><br>";
+  			$ol_txt2 .= "<input type=hidden name=open value=$openorig><input type=hidden name=flatviewstartposting value=$start>";
+ 	 		$ol_txt2 .= "<input type=image name=sidebar value=$id src=./locale/de/LC_BUTTONS/bewerten-button.gif align=absmiddle border=0></form></font></div>";
+  			$ol_txt2 .= "', CAPTION, '$txt2', CSSOFF, STICKY, LEFT, ABOVE, WIDTH, 200, HEIGHT, 100";
+  			$bar = '<a href="javascript:overlib('.$ol_txt2.'), void(0);" onmouseover="return overlib('.$ol_txt.');"  onmouseout="return nd();">' . $bar . '</a> | ';
+  		}
+	}
+//	$bar .= " | ";
 	return $bar;
 }
 
@@ -1062,7 +1085,7 @@ function printposting ($forumposting) {
 		
 	// Die Bewertungsanzeige
 
-		$forumhead[] = print_rating($forumposting["rating"]);
+		$forumhead[] = print_rating($forumposting["rating"],$forumposting["id"],$forumposting["username"]);
 		
 		
 		
