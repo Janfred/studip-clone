@@ -46,7 +46,7 @@ include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
 	<table width="100%" border="0" cellpadding="20" cellspacing="0">
 		<tr><td align="left" class="steel1">
 <?
-if ( ($list = StudipLitList::GetFormattedListsByRange($SessSemName[1])) ){
+if ( ($list = StudipLitList::GetFormattedListsByRange($SessSemName[1], $loginfilelast[$SessSemName[1]])) ){
 	echo $list;
 } else {
 	echo _("Es wurde noch keine Literatur erfasst");
