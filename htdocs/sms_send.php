@@ -117,7 +117,18 @@ if (($cmd == "write_chatinv") && (!is_array($admin_chats))) {
 // send message
 if ($cmd_insert_x) {
 
+	if (!empty($sms_data["p_rec"])) {
+		#$count = "";
+		$time = date("U");
+		$tmp_message_id = md5(uniqid("321losgehtes"));
+		if ($chat_id) {
+			$count = $msging->insert_message($message, $sms_data["p_rec"], $chat_id);
+		} else {
+			$count = $msging->insert_message($message, $sms_data["p_rec"], FALSE, $time, $tmp_message_id, FALSE, $signature, $messagesubject);
+		}
+	}
 
+/*
 	if (!empty($sms_data["p_rec"])) {
 		$count = "";
 		$time = date("U");
@@ -130,7 +141,7 @@ if ($cmd_insert_x) {
 			}
 		}
 	}
-
+*/
 
 
 
@@ -871,7 +882,53 @@ if ($send_view) {
 	}
 
 	$switch_sendview = sprintf(_("Wählen Sie hier zwischen Experten- und Standard-Ansicht."))."<br><a href=\"".$PHP_SELF."?send_view=".$tmp_link_01."\">".$tmp_link_02."</a>";
+
+	if($GLOBALS["MESSAGING_FORWARD_AS_EMAIL"] == TRUE) {
+		if($sms_data["tmpemailsnd"] == 1) {
+			$emailforwardinfo = _("Ihre Nachricht wird auch als Email versand.");
+			if($GLOBALS["MESSAGING_FORWARD_DEFAULT"] == 3) $emailforwardinfo .= "<br>"._(" Diese Emailweiterleitung ist auch abhängig von den Einstellungen des Adressaten");
+		} else {
+			$emailforwardinfo = _("Ihre Nachricht wird nicht auch als Email versand.");
+		}
+		if($tmp_link_01 == 1) $emailforwardinfo .= "<br>".sprintf(_("Nutzern Sie die <a href=\"%s?send_view=1\">Experten-Ansicht</a> um die Einstellung zu ändern."), $PHP_SELF);
+		$emailforwardinfo = array("kategorie" => _("Emailweiterleitung:"),"eintrag" => array(array("icon" => "pictures/nachricht1.gif", "text" => sprintf($emailforwardinfo))));
+	}
+
+	$smsinfos = "";
+
+	if($GLOBALS["MESSAGING_FORWARD_AS_EMAIL"] == TRUE) {
+		if($sms_data["tmpemailsnd"] == 1) {
+			$smsinfos .= "<img src=\"pictures/vote_answer_correct.gif\" width=\"16\" height=\"16\" border=0 alt=\"\">";
+		} else {
+			$smsinfos = "<img src=\"pictures/vote_answer_wrong.gif\" width=\"16\" height=\"16\" border=0 alt=\"\">";
+		}
+		$smsinfos .= "&nbsp;"._("Emailweiterleitung")."<br>";
+	}
+
+
+	if($sms_data["tmpreadsnd"] == 1) {
+		$smsinfos .= "<img src=\"pictures/vote_answer_correct.gif\" width=\"16\" height=\"16\" border=0 alt=\"\">";
+	} else {
+		$smsinfos .= "<img src=\"pictures/vote_answer_wrong.gif\" width=\"16\" height=\"16\" border=0 alt=\"\">";
+	}
+	$smsinfos .= "&nbsp;"._("Lesebestätigung")."<br>";
+
+	if($sms_data["tmpsavesnd"] == 1) {
+		$smsinfos .= "<img src=\"pictures/vote_answer_correct.gif\" width=\"16\" height=\"16\" border=0 alt=\"\">";
+	} else {
+		$smsinfos .= "<img src=\"pictures/vote_answer_wrong.gif\" width=\"16\" height=\"16\" border=0 alt=\"\">";
+	}
+	$smsinfos .= "&nbsp;"._("Speichern")."<br>";
 	
+	if($sms_data["sig"] == 1) {
+		$smsinfos .= "<img src=\"pictures/vote_answer_correct.gif\" width=\"16\" height=\"16\" border=0 alt=\"\">";
+	} else {
+		$smsinfos .= "<img src=\"pictures/vote_answer_wrong.gif\" width=\"16\" height=\"16\" border=0 alt=\"\">";
+	}
+	$smsinfos .= "&nbsp;"._("Signatur");
+
+	$smsinfos = array("kategorie" => _("Übersicht:"),"eintrag" => array(array("icon" => "pictures/einst.gif", "text" => sprintf($smsinfos))));
+
 	echo"</form>\n";
 	print "</td><td class=\"blank\" width=\"270\" align=\"right\" valign=\"top\">";
 
@@ -879,9 +936,8 @@ if ($send_view) {
 		array("kategorie" => _("Ansicht:"),"eintrag" => array(
 			array("icon" => "pictures/admin.gif", "text" => $switch_sendview)
 		)),
-		array("kategorie" => _("Empf&auml;nger hinzuf&uuml;gen:"),"eintrag" => array(
-			array("icon" => "pictures/nutzeronline.gif", "text" => sprintf(_("Nutzen Sie die Adressbuch-Liste oder freie Suche um Empf&auml;ngerInnen hinzuf&uuml;gen.")))
-		)),
+		$smsinfos,
+		$emailforwardinfo,
 		array("kategorie" => _("Smilies & Textformatierung:"),"eintrag" => array(
 			array("icon" => "pictures/smile/asmile.gif", "text" => sprintf(_("%s Liste mit allen Smilies %s Hilfe zu Smilies %s Hilfe zur Textformatierung %s"), "<a href=\"show_smiley.php\" target=\"_blank\">", "</a><br><a href=\"help/index.php?help_page=ix_forum7.htm\" target=\"_blank\">", "</a><br><a href=\"help/index.php?help_page=ix_forum6.htm\" target=\"_blank\">", "</a>"))
 		))

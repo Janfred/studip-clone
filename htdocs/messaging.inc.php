@@ -230,7 +230,6 @@ class messaging {
 
 	}
 
-	/*
 	function get_forward_id($id) {
 		
 		$db = new DB_Seminar;
@@ -254,9 +253,7 @@ class messaging {
 
 		return $forward_copy;
 	}
-	*/
 
-	/*
 	function insert_message($message, $rec_uname, $user_id='', $time='', $tmp_message_id='', $set_deleted='', $signature='', $subject='') {
 
 		global $_fullname_sql, $user, $my_messaging_settings, $sms_data;
@@ -292,8 +289,6 @@ class messaging {
 		
 			if ($user_id != "____%system%____")  { // real-user message
 				
-				#$db5->query("SELECT smsforward_rec, smsforward_copy FROM user_info WHERE user_id='".$rec_userid."'");
-				#$db5->next_record();
 				$snd_user_id = $user_id;
 				if ($sms_data["tmpsavesnd"] != "1") { // don't save save sms in outbox
 					$set_deleted = "1";
@@ -311,6 +306,7 @@ class messaging {
 
 				// system-signatur
 				$snd_user_id = "____%system%____";		
+				// hier problem!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! weil rec_userid noch unklar
 				setTempLanguage($rec_userid);
 				$message .= $this->sig_string. _("Diese Nachricht wurde automatisch vom Stud.IP-System generiert. Sie können darauf nicht antworten.");
 				restoreLanguage();
@@ -343,9 +339,9 @@ class messaging {
 			}
 			// wir gehen das eben erstellt array durch und schauen, ob irgendwer was weiterleiten moechte. diese user_id schreiben wir in ein tempraeres array
 			for($x=0; $x<sizeof($rec_id); $x++) {
-				$tmp_forward_id = get_forward_id($rec_id[$x]);
+				$tmp_forward_id = $this->get_forward_id($rec_id[$x]);
 				if($tmp_forward_id) {
-					$tmp_forward_copy = get_forward_copy($rec_id[$x])
+					$tmp_forward_copy = $this->get_forward_copy($rec_id[$x]);
 					$rec_id_tmp[] = $tmp_forward_id;	
 				}
 				
@@ -355,65 +351,34 @@ class messaging {
 			$rec_id = array_merge($rec_id, $rec_id_tmp);
 			$rec_id = array_unique($rec_id);
 
-			
-				#$rec_userid = get_userid($rec_uname);
-	
-				// forwarding
-				if ($db5->f("smsforward_rec") != "") {
-					$userid_forward = $db5->f("smsforward_rec");
-					$username_forward = get_username($userid_forward);
-				}
-
-				// insert rec
-				if ($db5->f("smsforward_rec") != "") { // forwarding?
-
-					$db3->query("INSERT message_user SET message_id='".$tmp_message_id."', user_id='".$userid_forward."', snd_rec='rec'"); // message for forward-receiver
-					
-					if ($db5->f("smsforward_copy") == 1) { // message for original receiver if he like to
-						$db3->query("INSERT message_user SET message_id='".$tmp_message_id."', user_id='".$rec_userid."', snd_rec='rec'"); 
-					}		
-					
-				} else { // don't forward, 
-					$db3->query("INSERT message_user SET message_id='".$tmp_message_id."', user_id='".$rec_userid."', snd_rec='rec'");
-				}
-
-				//Benachrichtigung in alle Chaträume schicken	 
-				$snd_name = ($user_id != "____%system%____") ? get_fullname($user_id) . " (" . get_username($user_id). ")" : "Stud.IP-System";
-				if ($GLOBALS['CHAT_ENABLE']) {	 
-					$chatServer =& ChatServer::GetInstance($GLOBALS['CHAT_SERVER_NAME']);	 
-					setTempLanguage($rec_userid);	 
-					$chatMsg = sprintf(_("Sie haben eine Nachricht von <b>%s</b> erhalten!"),htmlReady($snd_name));	 
-					restoreLanguage();	 
-					$chatMsg .= "<br></i>" . quotes_decode(formatReady(stripslashes($message)))."<i>";	 
-					foreach($chatServer->chatDetail as $chatid => $wert) {	 
-						if ($wert['users'][$rec_userid]) {	 
-							$chatServer->addMsg("system:".$db4->f("user_id"),$chatid,$chatMsg);	 
-						}	 
-					}	 
-				}
-
-
-
-				// Email senden
-				if ($GLOBALS["MESSAGING_FORWARD_AS_EMAIL"]) {
-
-					// mail to forwarding-receiver
-					if($db5->f("smsforward_rec") != "") { 
-						$mailstatus_forward = $this->user_wants_email($userid_forward);
-						if($mailstatus_forward == 2 || ($mailstatus_forward == 3 && $email_request == 1)) { // the user always want to receive emails
-							$this->sendingEmail($username_forward, $snd_user_id, $message, $subject);
-						}
-					}
-					
+		
+			// hier gehen wir alle empfaenger durch, schreiben das in die db und schicken eine mail
+			for($x=0; $x<sizeof($rec_id); $x++) {
+				$db3->query("INSERT message_user SET message_id='".$tmp_message_id."', user_id='".$rec_id[$x]."', snd_rec='rec'");
+				if ($GLOBALS["MESSAGING_FORWARD_AS_EMAIL"]) {	
 					// mail to original receiver
 					$mailstatus_original = $this->user_wants_email($rec_uname);
 					if($mailstatus_original == 2 || ($mailstatus_original == 3 && $email_request == 1)) { 
 						$this->sendingEmail($rec_uname, $snd_user_id, $message, $subject);
 					}
 				}
+				//Benachrichtigung in alle Chaträume schicken	 
+				$snd_name = ($user_id != "____%system%____") ? get_fullname($user_id) . " (" . get_username($user_id). ")" : "Stud.IP-System";
+				if ($GLOBALS['CHAT_ENABLE']) {	 
+					$chatServer =& ChatServer::GetInstance($GLOBALS['CHAT_SERVER_NAME']);	 
+					setTempLanguage($rec_id[$x]);	 
+					$chatMsg = sprintf(_("Sie haben eine Nachricht von <b>%s</b> erhalten!"), htmlReady($snd_name));	 
+					restoreLanguage();	 
+					$chatMsg .= "<br></i>" . quotes_decode(formatReady(stripslashes($message)))."<i>";	 
+					foreach($chatServer->chatDetail as $chatid => $wert) {	 
+						if ($wert['users'][$rec_id[$x]]) {	 
+							$chatServer->addMsg("system:".$db4->f("user_id"),$chatid,$chatMsg);	 
+						}	 
+					}	 
+				}
+			}
 
-
-			return 1;
+			return sizeof($rec_id);
 
 		} else { // wenn $message empty
 
@@ -421,9 +386,15 @@ class messaging {
 
 		}
 	}
-*/
 
 
+
+
+
+
+
+
+/*
 	function insert_message($message, $rec_uname, $user_id='', $time='', $tmp_message_id='', $set_deleted='', $signature='', $subject='') {
 
 		global $_fullname_sql, $user, $my_messaging_settings, $sms_data;
@@ -610,7 +581,7 @@ class messaging {
 		}
 	}
 	
-
+*/
 
 	function buddy_chatinv ($message, $chat_id) {
 		global $user;
