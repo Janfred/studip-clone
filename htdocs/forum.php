@@ -416,9 +416,6 @@ if ($zitat==TRUE)
 if ($edit_id) 
 	$open = $edit_id;
 
-if ($fav)   // zu den Favoriten hinzufügen/entfernen
-	$fav = object_switch_fav($fav);
-
 if ($flatallopen=="TRUE")
 	$forum["flatallopen"] = "TRUE";
 
@@ -436,6 +433,9 @@ if ($rate) { // Objekt bewerten
 		$forum["anchor"] = $key;
 	}
 }
+
+if ($fav)   // zu den Favoriten hinzufügen/entfernen
+	$fav = object_switch_fav($fav);
 
 	
 
