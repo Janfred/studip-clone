@@ -38,6 +38,13 @@ if ($nopen)
        
 if ($nclose)
 	$index_data["nopen"]='';
+	
+// Auf- und Zuklappen Termine
+if ($dopen)
+	$index_data["dopen"]=$dopen;
+       
+if ($dclose)
+	$index_data["dopen"]='';
 
 // Start of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
