@@ -146,7 +146,7 @@ if ($cmd=="write") {
 		<blockquote>Schreiben Sie hier eine Nachricht an einen anderen Benutzer:
 		<?
 		if ($SessSemName[0] && $SessSemName["class"] == "inst")
-			echo "<br /><br /><a href=\"$sms_source_page\">Zur&uuml;ck zur Einrichtung</a>";
+			echo "<br /><br /><a href=\"institut_main.php\">Zur&uuml;ck zur Einrichtung</a>";
 		elseif ($SessSemName[0])
 			echo "<br /><br /><a href=\"seminar_main.php\">Zur&uuml;ck zur Veranstaltung</a>";
 		?>
