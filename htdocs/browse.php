@@ -57,10 +57,11 @@ if ($send) {
 if ($sortby)
 	$browse_data["sortby"]=$sortby;
 	
-if ($group)
+if ($group) {
 	$browse_data["group"]=$group;
-			
-		
+	$browse_data["sortby"]='';
+}
+
 ?>
 <body>
 <table width="100%" border=0 cellpadding=0 cellspacing=0>
