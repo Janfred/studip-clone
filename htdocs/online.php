@@ -94,19 +94,15 @@ if ($msg)
 	<?
 ob_end_flush();
 ob_start();
-if (is_array ($online)) {
-	//Erzeugen der Liste aktiver Buddies
-	reset($online);
+	//Erzeugen der Liste aktiver und inaktiver Buddies
 	$different_groups=FALSE;
 		if ($my_buddies) {
 			foreach ($my_buddies as $a) {
 				if ($online[$a["username"]]) {
 					$active_buddies[]=array($a["group"], $online[$a["username"]]["name"],$online[$a["username"]]["last_action"],$a["username"]);
-					$tmp_online_userids[]=$a["username"];
 					if ($a["group"])
 						$different_groups=TRUE;
-					
-				 	} else {
+					} else {
 					$inactive_buddies[]=array(get_fullname_from_uname($a["username"]), $a["username"]);
 				}
 			}
@@ -118,6 +114,7 @@ if (is_array ($online)) {
 	if (is_array($inactive_buddies))
 		sort ($inactive_buddies);
 
+	if (is_array ($online)) {
 	//Erzeugen der Liste anderer Nutzer	
 	if (!$my_messaging_settings["show_only_buddys"]) {
 			foreach($online as $key=>$value){
