@@ -376,14 +376,7 @@ switch ($i_page) {
 		$reiter_view="timetable"; 
 	break;	
 	case "scm.php":
-		switch ($i_view) {
-			case FALSE:
-				$reiter_view="scm";
-			break;
-			case "edit":
-				$reiter_view="scm_admin";
-			break;
-		}
+		$reiter_view="scm";
 	break;
 	case "literatur.php": 
 		$reiter_view="literatur";
