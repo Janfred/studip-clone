@@ -8,7 +8,7 @@
 * @author		Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
 * @version		$Id$
 * @access		public
-* @modulegroup	resources
+* @modulegroup		resources
 * @module		page_intros.inc.php
 * @package		resources
 */
@@ -57,7 +57,7 @@ switch ($resources_data["view"]) {
 							"eintrag" => array (
 								array ("icon" => "pictures/ausruf_small.gif", 	
 									"text"  => ($resources_data["list_recurse"]) ? _("Untergeordnete Ebenen werden ausgegeben.") : _("Untergeordnete Ebenen werden <u>nicht</u> ausgegeben.")))),*/
-					array  ("kategorie" => "Aktionen:", 
+					array  ("kategorie" => _("Aktionen:"), 
 							"eintrag" => array (
 								array	("icon" => "pictures/suchen.gif",
 									"text"  => (($resources_data["search_mode"] == "browse") || (!$resources_data["search_mode"]))? sprintf(_("Ressourcen &uuml;ber ihre %sEigenschaften%s suchen"), "<a href=\"$PHPSELF?view=search&mode=properties\">", "</a>") :  sprintf(_("%sEbenen%s durchsuchen"), "<a href=\"$PHP_SELF?view=search&mode=browse\">", "</a>")),
@@ -81,7 +81,7 @@ switch ($resources_data["view"]) {
 							"eintrag" => array (
 								array ("icon" => "pictures/ausruf_small.gif", 	
 									"text"  => ($resources_data["list_recurse"]) ? _("Untergeordnete Ebenen werden ausgegeben.") : _("Untergeordnete Ebenen werden <u>nicht</u> ausgegeben.")))),
-					array  ("kategorie" => "Aktionen:", 
+					array  ("kategorie" => _("Aktionen:"), 
 							"eintrag" => array (
 								array	("icon" =>  (!$resources_data["list_recurse"]) ? "pictures/on_small.gif" : "pictures/off_small.gif",
 									"text"  => ($resources_data["list_recurse"]) ? sprintf(_("Ressourcen in untergeordneten Ebenen %snicht ausgeben%s."), "<a href=\"$PHPSELF?nrecurse_list=TRUE\">", "</a>") :  sprintf(_("Ressourcen in untergeordneten Ebenen %s(mit) ausgeben%s"), "<a href=\"$PHP_SELF?recurse_list=TRUE\">", "</a>")))));
@@ -95,7 +95,7 @@ switch ($resources_data["view"]) {
 		$title=_("Belegungen anzeigen/bearbeiten").$currentObjectTitelAdd;
 		if ($resources_data["view_mode"] == "no_nav") {
 			$infobox = array(
-						array  ("kategorie" => "Aktionen:", 
+						array  ("kategorie" => _("Aktionen:"), 
 								"eintrag" => array (
 									array	("icon" => "pictures/forumrot.gif",
 										"text"  => "<a href=\"$PHP_SELF?view=view_schedule&view_mode=no_nav\">"._("zur&uuml;ck zum Belegungsplan")."</a>"))));
