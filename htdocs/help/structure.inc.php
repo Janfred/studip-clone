@@ -481,6 +481,10 @@ $pages[] = array	(	"name" => _("Verschiedenes"),
 																				"text" => _("Die Stud.IP-Rangliste"),
 																				"page" => "score.htm"
 																			),
+																array	(	"name" => _("WAP"),
+																				"text" => _("Der Handy-Zugang zu Stud.IP"),
+																				"page" => "wap_help.htm"
+																			),
 																array	(	"name" => _("Glossar"),
 																				"text" => _("Kurze Erklärungen"),
 																				"page" => "glossar.htm"
