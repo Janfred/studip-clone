@@ -162,7 +162,7 @@ class EvaluationDB extends EvaluationObjectDB {
    * @param  object   Evaluation  &$evalObject  The evaluation to save
    * @throws  error
    */
-  function save (&$evalObject) {
+  function save (&$evalObject) {     
     if (EVAL_DEBUGLEVEL >= 1)
       echo "DB: Speichere Evaluationsobjekt<br>\n";
 

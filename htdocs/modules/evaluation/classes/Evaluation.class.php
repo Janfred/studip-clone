@@ -460,6 +460,13 @@ class Evaluation extends EvaluationObject {
      parent::check ();
      if (empty ($this->title))
        $this->throwError (1, _("Der Titel darf nicht leer sein."));
+     
+     if ($this->isTemplate () && $this->hasVoted ())
+        $this->throwError (2, _("Ungültiges Objekt: Bei einer Vorlage wurde abgestimmt."));
+     
+     if (!$this->isTemplate () && $this->isShared ())
+        $this->throwError (3, _("Ungültiges Objekt: Eine aktive Evaluation wurde freigegeben."));
+
    }
 # ==================================================== end: private functions #
 
