@@ -636,13 +636,15 @@ while ($db->next_record()) {
 	</tr>
 	</table>
 	</form>
-</td>
-</tr>
-</table>					
 	<?
 	page_close();
 	die;
-	} 
+	}
+	?>
+</td>
+</tr>
+</table>			
+<?
 }
 endif; // Navigationsleiste ab status "Tutor"
 ?>
