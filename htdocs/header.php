@@ -51,7 +51,7 @@ function MakeToolbar($icon,$URL,$text,$tooltip,$size,$target="_top",$align="cent
 	}
 	$toolbar = "<td class=\"toolbar\" align=\"$align\">";
 
-	$toolbar .= "<img border=\"0\" src=\"pictures/blank.gif\" height=\"1\" width=\"50\"><br>"
+	$toolbar .= "<img border=\"0\" src=\"pictures/blank.gif\" height=\"1\" width=\"45\"><br>"
 			  ."<a class=\"toolbar\" href=\"$URL\" target=\"$target\"><img border=\"0\" src=\"$icon\" ".$tool."><br>"
 			  ."<img border=\"0\" src=\"pictures/blank.gif\" height=\"6\" width=\"$size\"><br>"
 			  ."<b><font size=\"2\">".$text."</font></b></a><br>"
@@ -139,11 +139,7 @@ if ($auth->auth["uid"] == "nobody") { ?>
 <?
 				echo MakeToolbar("pictures/home.gif","index.php",_("Start"),_("Zurück zur Startseite"),40,"_top");
 				echo MakeToolbar("pictures/meinesem.gif","meine_seminare.php",_("Veranstaltungen"),_("Meine Veranstaltungen & Einrichtungen"),40, "_top","left");
-?>
-			<td class="toolbar" width="99%">
-			&nbsp; 
-			</td>
-<?
+
 
 
 //Nachrichten anzeigen
@@ -209,10 +205,15 @@ if ($auth->auth["uid"] == "nobody") { ?>
 		}
 
 ?>
+		<td class="toolbar" width="99%">
+		&nbsp; 
+		</td>
 	</tr>
 	</table>
 	</td>
-	<td width="20%" align="center">
+
+
+	<td width="50%" align="center">
 		<table class="toolbar" border="0" width="100%" cellspacing="0" cellpadding="0">
 		<tr align="center">
 <? //create (javascript) info tooltip/window
@@ -227,8 +228,11 @@ if ($auth->auth["uid"] == "nobody") { ?>
 	<td width="40%" align="right">
 		<table class="toolbar" border="0" width="100%" cellspacing="0" cellpadding="0">
 		<tr>
-<?
-
+			<td class="toolbar" width="99%">
+			&nbsp; 
+			</td>
+			
+<?			
 		if ($perm->have_perm("autor")) {
 			echo MakeToolbar("pictures/einst.gif","about.php",_("Homepage"),_("Zu Ihrer Einstellungsseite"),40, "_top","right");
 			echo MakeToolbar("pictures/suchen.gif","auswahl_suche.php",_("Suche"),_("Im System suchen"),40, "_top");
@@ -245,12 +249,9 @@ if ($auth->auth["uid"] == "nobody") { ?>
 		}
 		
 		
-		echo MakeToolbar("pictures/info.gif","#",$auth->auth["uname"],$infotext,40, "","left","TRUE");
+		echo MakeToolbar("pictures/info.gif","#",$auth->auth["uname"],$infotext,85, "","left","TRUE");
 
 ?>
-			<td class="toolbar" width="99%">
-			&nbsp; 
-			</td>
 <?		
 
 		echo MakeToolbar("pictures/hilfe.gif","./help/index.php$help_query",_("Hilfe"),_("Hilfe zu dieser Seite"),40, "_new","right");
