@@ -26,32 +26,13 @@ include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Sessio
 require_once("$ABSOLUTE_PATH_STUDIP/dates.inc.php"); //Funktionen zur Anzeige der Terminstruktur
 require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
 
 
 if (isset($auswahl) && $auswahl!="") {
-	// dieses Seminar wurde gerade eben betreten
-	$SessionSeminar="$auswahl";
-	$db=new DB_Seminar;
-	$db->query ("SELECT Institut_id, Name, Seminar_id, Ort, Untertitel, start_time, status FROM seminare WHERE Seminar_id='$auswahl'");
-	while ($db->next_record()) {
-		$SessSemName[0] = $db->f("Name");
-		$SessSemName[1] = $db->f("Seminar_id");
-		$SessSemName[2] = $db->f("Ort");
-		$SessSemName[3] = $db->f("Untertitel");
-		$SessSemName[4] = $db->f("start_time");
-		$SessSemName[5] = $db->f("Institut_id");
-		$SessSemName["art_generic"]="Veranstaltung";
-		$SessSemName["class"]="sem";
-		$SessSemName["art_num"]=$db->f("status");		 //numerisch die Typnummer
-		if ($SEM_TYPE[$db->f("status")]["name"] == $SEM_TYPE_MISC_NAME)
-			$SessSemName["art"] = "Veranstaltung";
-		else
-			$SessSemName["art"] = $SEM_TYPE[$db->f("status")]["name"];
-		$nr = $db->f("Seminar_id");
-		$loginfilelast["$nr"] = $loginfilenow["$nr"];
-		$loginfilenow["$nr"] = time();
-	}
-}	else {
+	//just opened Veranstaltung... here follows the init
+	openSem($auswahl);
+} else {
 	$auswahl=$SessSemName[1];
 }
 
@@ -112,12 +93,11 @@ if ($SessSemName[1] =="") {
 		$smain_data["nopen"]='';
 
 	?>
-
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
 	<tr><td class="topic" colspan=2><b>&nbsp;<? echo $SessSemName["art"],": ",htmlReady($SessSemName[0]), " - Kurzinfo"; ?>
 	</b></td></tr>
-	<tr><td class="blank"><blockquote>
-		<?
+	<tr><td class="blank" valign="top"><blockquote>
+	<?
 
 	if ($SessSemName[3]!="") {
 		echo "<br /><b>Untertitel: </b>"; echo htmlReady($SessSemName[3]); echo"<br>";
@@ -132,14 +112,14 @@ if ($SessSemName[1] =="") {
 	$db=new DB_Seminar;
 	$db->query ("SELECT seminar_user.user_id, Vorname, Nachname, username, status FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE seminar_user.Seminar_id = '$SessionSeminar' AND status = 'dozent' ORDER BY Nachname");
 	if ($db->affected_rows() > 1)
-		print ("<br><b>DozentInnen: </b>");
+		printf ("<br><b>%s: </b>", ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) ? "LeiterInnen" : "DozentInnen");
 	else
-		print ("<br><b>DozentIn: </b>");
+		printf ("<br><b>%s: </b>", ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) ? "LeiterIn" : "DozentIn");
 
 	$i=0;
 	while ($db->next_record()) {
 		if ($i)
-			print( "| <a href = about.php?username=" . $db->f("username") . ">");
+			print( ", <a href = about.php?username=" . $db->f("username") . ">");
 		else
 			print( "<a href = about.php?username=" . $db->f("username") . ">");
 		print(htmlReady($db->f("Vorname")) ." ". htmlReady($db->f("Nachname")) ."</a>  ");
