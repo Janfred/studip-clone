@@ -343,23 +343,50 @@ echo "</table>\n";
 echo "</td></tr>\n";  // Auflistung zuende
 
 // Warteliste
+if ($rechte) {
+	$db->query ("SELECT admission_seminar_user.user_id, Vorname, Nachname, username, studiengaenge.name, position, admission_seminar_user.studiengang_id, status FROM admission_seminar_user LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN studiengaenge ON (admission_seminar_user.studiengang_id=studiengaenge.studiengang_id)  WHERE admission_seminar_user.seminar_id = '$SessionSeminar' ORDER BY position");
+	if ($db->num_rows()) { //Only if Users were found...
 
-$db->query ("SELECT admission_seminar_user.user_id, Vorname, Nachname, username, studiengaenge.name, position FROM admission_seminar_user LEFT JOIN studiengaenge USING (studiengang_id) LEFT JOIN auth_user_md5 ON (admission_seminar_user.user_id=auth_user_md5.user_id)  WHERE admission_seminar_user.seminar_id = '$SessionSeminar' GROUP by admission_seminar_user.user_id ORDER BY position");
+		$db2->query ("SELECT admission_type FROM seminare WHERE Seminar_id = '$SessionSeminar'");
+		$db2->next_record();
+		// die eigentliche Teil-Tabelle
+	 	echo "<tr><td class=\"blank\" colspan=2>";
+		echo "<table width=\"99%\" border=\"0\"  cellpadding=\"2\" cellspacing=\"0\" align=\"center\">";
+		echo "<tr height=28>";
+		printf ("<td class=\"steel\" width=\"30%%\" align=\"left\"><img src=\"pictures/blank.gif\" width=1 height=20><font size=-1><b>%s</b></font></td>", ($db2->f("admission_type") == 1) ? "Anmeldeliste" : "Warteliste");
+		if ($db2->f("admission_type") == 2)
+			printf ("<td class=\"steel\" width=\"10%%\" align=\"center\"><font size=-1><b>Position</b></font></td>");
+		printf ("<td class=\"steel\" width=\"%s\" align=\"center\"><font size=-1><b>Kontingent</b></font></td>", ($db2->f("admission_type") == 1) ? "20%" : "10%");
+		printf ("<td class=\"steel\" width=\"10%%\" align=\"center\"><font size=-1><b>Nachricht</b></font></td>");
+		printf ("<td class=\"steel\" width=\"20%%\" align=\"center\"><font size=-1><b>in Veranstaltung eintragen</b></font></td>");
+		printf ("<td class=\"steel\" width=\"20%%\" align=\"center\"><font size=-1><b>Aus Liste entfernen</b></font></td></tr>");
 
-if ($db->num_rows()) { //Only if Users were found...
-	// die eigentliche Teil-Tabelle
-
- 	echo "<td class=\"blank\" colspan=2>";
-	echo "<table width=\"99%\" border=\"0\"  cellpadding=\"2\" cellspacing=\"0\" align=\"center\">";
-    echo "<tr height=28>";
-	printf ("<td class=\"steel\" width=\"20%%\" align=\"left\"><img src=\"pictures/blank.gif\" width=1 height=20><font size=-1><b>%s</b></font></td>","in Warteposition");
-	printf ("<td class=\"steel\" width=\"20%%\" align=\"center\"><font size=-1><b>%s</b></font></td>","Position");
-	printf ("<td class=\"steel\" width=\"60%%\" align=\"center\"><font size=-1><b>%s</b></font></td></tr>","Studiengang");
-
-    WHILE ($db->next_record()) {
-       $cssSw->switchClass();
-       printf ("<tr><td class=\"%s\" align=left><font size=-1><a href=\"about.php?username=%s\">%s&nbsp;%s</a></font></td><td align=center class=\"%s\"><font size=-1>%s</font></td></td><td class=\"%s\"><font size=-1>%s</font></td></tr>",$cssSw->getClass(),$db->f("username"),$db->f("Vorname"), $db->f("Nachname"),$cssSw->getClass(), $db->f("position"),$cssSw->getClass(),$db->f("name"));
-    }
+		WHILE ($db->next_record()) {
+			IF ($db->f("status") == "claiming") { // wir sind in einer Anmeldeliste und brauchen Prozentangaben
+				$db2=new DB_Seminar;
+				$admission_studiengang_id = $db->f("studiengang_id");
+				$admission_seminar_id = $db->f("seminar_id");
+				$plaetze = round ($db->f("admission_turnout") * ($db->f("quota") / 100));  // Anzahl der Plaetze in dem Studiengang in den ich will
+				$db2->query("SELECT count(*) AS wartende FROM admission_seminar_user WHERE seminar_id = '$admission_seminar_id' AND studiengang_id = '$admission_studiengang_id'");
+				IF ($db2->next_record())
+					$wartende = ($db2->f("wartende"));   // Anzahl der Personen die auch in diesem Studiengang auf einen Platz lauern
+	        	         IF ($plaetze >= $wartende) 
+        		         	$admission_chance = 100;   // ich komm auf jeden Fall rein
+				ELSE 
+					$admission_chance = round (($plaetze / $wartende) * 100); // mehr Bewerber als Plaetze
+			}
+		
+			$cssSw->switchClass(); 
+			printf ("<tr><td width=\"30%%\" class=\"%s\" align=left><font size=-1><a href=\"about.php?username=%s\">%s&nbsp;%s</a></font></td>", $cssSw->getClass(), $db->f("username"), $db->f("Vorname"), $db->f("Nachname"));
+			if ($db2->f("admission_type") == 2)
+				printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><font size=-1>%s</font></td>", $cssSw->getClass(), $db->f("position"));
+			printf ("<td width=\"%s\" align=\"center\" class=\"%s\"><font size=-1>%s</font></td>", ($db2->f("admission_type") == 1) ? "20%" : "10%", $cssSw->getClass(), ($db->f("studiengang_id") == "all") ? "alle Studieng&auml;nge" : $db->f("name"));
+			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><a href=\"sms.php?sms_source_page=teilnehmer.php&cmd=write&rec_uname=%s\"><img src=\"pictures/nachricht1.gif\" alt=\"Nachricht an User verschicken\" border=\"0\"></a></td>",$cssSw->getClass(), $db->f("username")); 
+			printf ("<td width=\"20%%\" align=\"center\" class=\"%s\"><a href=\"$PHP_SELF?cmd=admission_rein&username=%s\"><img border=\"0\" src=\"pictures/up.gif\" width=\"21\" height=\"16\"></a></td>", $cssSw->getClass(), $db->f("username"));
+			printf ("<td width=\"20%%\" align=\"center\" class=\"%s\"><a href=\"$PHP_SELF?cmd=admission_raus&username=%s\"><img border=\"0\" src=\"pictures/down.gif\" width=\"21\" height=\"16\"></a></td></tr>", $cssSw->getClass(), $db->f("username"));
+		}
+		print "</table>";
+	}
 }
 
 
