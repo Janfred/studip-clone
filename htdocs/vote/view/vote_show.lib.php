@@ -284,7 +284,9 @@ function createVoteForm (&$vote, $userID) {
    $type     = $vote->isMultiplechoice() ? "checkbox" : "radio";
 
    /* Header --------------------------------------------------------------- */
-   $html .= "<b>".formatReady($vote->getQuestion())."</b>\n<br><br>\n";
+   $html .= " <b>\n  <font size=\"-1\">\n   ";
+   $html .= formatReady($vote->getQuestion());
+   $html .= "\n  </font>\n </b>\n<br><br>\n";
    /* ---------------------------------------------------------------------- */
 
    /* Questions ------------------------------------------------------------ */
@@ -648,7 +650,10 @@ function createVoteResult ($vote, $preview = NO) {
 	  "<br>\n";
    /* ---------------------------------------------------------------------- */
 
-   $html .= "<b>".formatReady($vote->getQuestion())."</b><br><br>";
+   $html .= " <b>\n  <font size=\"-1\">\n   ";
+   $html .= formatReady($vote->getQuestion());
+   $html .= "\n  </font>\n </b>\n<br><br>\n";
+   //$html .= "<b>".formatReady($vote->getQuestion())."</b><br><br>";
    $html .= "<div align=\"center\">\n";
    $html .= " <table align=center border=\"0\" width=\"95%\" ".
       "cellpadding=3 cellspacing=0>\n";
