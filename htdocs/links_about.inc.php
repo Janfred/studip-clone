@@ -57,7 +57,7 @@ $structure["_sonstiges"]=array (topKat=>"sonstiges", name=>"eigene Kategorien be
 $structure["login"]=array (topKat=>"mystudip", name=>"Login", link=>"edit_about.php?view=Login&username=$username", active=>FALSE);
 $structure["forum"]=array (topKat=>"mystudip", name=>"Forum", link=>"edit_about.php?view=Forum&username=$username", active=>FALSE);
 $structure["calendar"]=array (topKat=>"mystudip", name=>"Terminkalender", link=>"edit_about.php?view=calendar&username=$username", active=>FALSE);
-$structure["stundenplan"]=array (topKat=>"mystudip", name=>"Studenplan", link=>"edit_about.php?view=Stundenplan&username=$username", active=>FALSE);
+$structure["stundenplan"]=array (topKat=>"mystudip", name=>"Stundenplan", link=>"edit_about.php?view=Stundenplan&username=$username", active=>FALSE);
 $structure["messaging"]=array (topKat=>"mystudip", name=>"Messaging", link=>"edit_about.php?view=Messaging&username=$username", active=>FALSE);
 
 
