@@ -14,7 +14,7 @@ function banner_show() {
 	// this number is chosen
 	
 	$banners=array();
-
+	$now = time();
 	// collect banners to consider 
 	// build banners array
 	while ($db->next_record()) {
