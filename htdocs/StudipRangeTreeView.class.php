@@ -278,7 +278,11 @@ class StudipRangeTreeView {
 	
 	function getItemHead($item_id){
 		$head = "";
-		$head .= "<b>" . htmlReady($this->tree->tree_data[$item_id]['name']) . "</b>";
+		if ($this->open_items[$item_id])
+			$head .= "<b>";
+		$head .= htmlReady($this->tree->tree_data[$item_id]['name']);
+		if ($this->open_items[$item_id])
+			$head .= "</b>";
 		return $head;
 	}
 	
@@ -302,7 +306,7 @@ class StudipRangeTreeView {
 			}
 			$content .= "</td></tr><tr><td class=\"blank\" align=\"left\"><a href=\"institut_main.php?auswahl="
 						. $range_object->item_data['studip_object_id'] ."\"". tooltip(_("Seite dieser Einrichtung in Stud.IP aufrufen"))
-						. ">" . $range_object->item_data['name'] . "</a>&nbsp;" ._("in Stud.IP") ."</td></tr>";
+						. ">" . htmlReady($range_object->item_data['name']) . "</a>&nbsp;" ._("in Stud.IP") ."</td></tr>";
 			
 		} elseif (!$range_object->item_data['studip_object']){
 			$content .= "\n<tr><td class=\"blank\" align=\"left\">" .
