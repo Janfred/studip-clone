@@ -631,7 +631,7 @@ class ResourcesUserRoomsList {
 		
 		//if perm is root, load all rooms
 		if ($perm->have_perm ("root")) {
-			$query = sprintf ("SELECT resource_id FROM resources_categoriesres LEFT JOIN resources_objects USING (category_id) WHERE resources_categories.name = 'Raum' ");
+			$query = sprintf ("SELECT resource_id FROM resources_categories LEFT JOIN resources_objects USING (category_id) WHERE resources_categories.name = 'Raum' ");
 			$db->query($query);
 			while ($db->next_record()) {
 				$resource_object = new ResourceObject ($db->f("resource_id"));
