@@ -617,7 +617,8 @@ class ShowToolsRequests {
 					print("&nbsp;<input type=\"IMAGE\" name=\"dec_request\" ".makeButton("zurueck", "src")." border=\"0\" />");
 				} 
 				print("&nbsp;<input type=\"IMAGE\" name=\"cancel_edit_request\" ".makeButton("abbrechen", "src")." border=\"0\" />");
-				if (($reqObj->getResourceId()) || (sizeof($matching_rooms)) || (sizeof($clipped_rooms))) {
+				if ((($reqObj->getResourceId()) || (sizeof($matching_rooms)) || (sizeof($clipped_rooms))) &&
+					((is_array($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["groups"])) || ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"]))) {
 					print("&nbsp;<input type=\"IMAGE\" name=\"save_state\" ".makeButton("speichern", "src")." border=\"0\" />");
 					print("&nbsp;<input type=\"IMAGE\" name=\"decline_request\" ".makeButton("ablehnen", "src")." border=\"0\" />");
 				}
