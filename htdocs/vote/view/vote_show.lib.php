@@ -104,7 +104,7 @@ function createFormFooter (&$vote, $userID, $perm, $rangeID) {
    if ( ! ($isAssociated || $isPreview || $isStopped)
 	|| ($changeAnswer && !$isPreview)) {
       $html .= 
-	 "<input type=\"image\" style=\"vertical-align:middle;\" " .
+	 "<input type=\"image\" " .
 	 "name=\"voteButton\" border=\"0\" " .
 	 makeButton ("abschicken", "src") . 
 	 tooltip(_("Geben Sie hier Ihre Stimme ab!")) .
@@ -118,7 +118,7 @@ function createFormFooter (&$vote, $userID, $perm, $rangeID) {
 	($vote->getResultvisibility() == VOTE_RESULTS_ALWAYS || $haveFullPerm)
 	) {
       $html .= 
-	 "&nbsp;<input type=\"image\" style=\"vertical-align:middle;\" " .
+	 "&nbsp;<input type=\"image\" " .
 	 "name=\"previewButton\" border=\"0\" " .
 	 makeButton ("ergebnisse", "src") . 
 	 tooltip(_("Hier können Sie sich die Ergebnisse im Voraus ansehen.")) .
@@ -134,7 +134,7 @@ function createFormFooter (&$vote, $userID, $perm, $rangeID) {
        ! $vote->isError()
        ) {
       $html .= 
-	 "&nbsp;<input type=\"image\" style=\"vertical-align:middle;\" " .
+	 "&nbsp;<input type=\"image\" " .
 	 "name=\"changeAnswerButton\" border=\"0\" " .
 	 makeButton ("antwortaendern", "src") . 
 	 tooltip(_("Hier können Sie Ihre Antwort nochmal ändern.")) .
@@ -146,7 +146,7 @@ function createFormFooter (&$vote, $userID, $perm, $rangeID) {
    /* Backbutton ----------------------------------------------------------- */
    elseif ($isPreview) {
       $html .= 
-	 "&nbsp;<input type=\"image\" style=\"vertical-align:middle;\" " .
+	 "&nbsp;<input type=\"image\" " .
 	 "name=\"escapePreviewButton\" border=\"0\" " .
 	 makeButton ("zurueck", "src") . 
 	 tooltip(_("Zurück zum Abstimmen.")) .
@@ -171,7 +171,7 @@ function createFormFooter (&$vote, $userID, $perm, $rangeID) {
       $html .= 
 	 "&nbsp;".
 	 "<a href=\"".$link_sort."\">".
-	 "<img style=\"vertical-align:middle;\" ".
+	 "<img ".
 	 makeButton ( ($sortAnswers ? "nichtsortieren" : "sortieren"), "src").
 	 tooltip ( ($sortAnswers
 		    ? _("Antworten wieder in Ihrer ursprünglichen Reihenfolge darstellen.")
@@ -204,13 +204,13 @@ function createFormFooter (&$vote, $userID, $perm, $rangeID) {
        if( $_GET["revealNames"] && 
 	   $GLOBALS["voteopenID"] == $vote->getVoteID ())
 	   $html .= "&nbsp;<a href=\"".$link_reveal."\">".
-	       "<img style=\"vertical-align:middle;\" ".
+	       "<img ".
 	       makeButton ("normaleansicht", "src"). 
 	       tooltip(_("Zurück zur normalen Ansicht.")).
 	      " border=\"0\"></a>";
        else
 	   $html .= "&nbsp;<a href=\"".$link_reveal."\">".
-	       "<img style=\"vertical-align:middle;\" ".
+	       "<img ".
 	      makeButton ("namenzeigen", "src"). 
 	      tooltip(_("Zeigen, wer welche Antwort gewählt hat.")).
 	      " border=\"0\"></a>";
@@ -230,7 +230,7 @@ function createFormFooter (&$vote, $userID, $perm, $rangeID) {
 	    "<a href=\"".VOTE_FILE_ADMIN."?page=edit&type=".
 	    $vote->instanceof().
 	    "&voteID=".$vote->getVoteID ()."\">".
-	     "<img style=\"vertical-align:middle;\" ".
+	     "<img ".
 	    makeButton ("bearbeiten", "src"). 
 	    tooltip( $vote->instanceof() == INSTANCEOF_TEST
 		     ? _("Diesen Test bearbeiten.")
@@ -242,7 +242,7 @@ function createFormFooter (&$vote, $userID, $perm, $rangeID) {
 	 "<a href=\"".VOTE_FILE_ADMIN."?page=overview&voteID=".
 	 $vote->getVoteID ().
 	 "&voteaction=delete_request&showrangeID=".$vote->getRangeID()."\">" .
-	 "<img style=\"vertical-align:middle;\" ".
+	 "<img  ".
 	 makeButton ("loeschen", "src"). 
 	 tooltip( $vote->instanceof() == INSTANCEOF_TEST
 		  ? _("Diesen Test löschen.")
@@ -364,8 +364,7 @@ function createVoteHeadline (&$vote, $open, $openID) {
 #   $isNew = ($date >= $last_visited);
    $icon = ($vote->instanceof () == INSTANCEOF_TEST) ? VOTE_ICON_TEST : 
       VOTE_ICON_VOTE;
-   $icon = "&nbsp;<img src=\"".$icon."\" border=\"0\" ".
-      "style=\"vertical-align:bottom;\">";
+   $icon = "&nbsp;<img src=\"".$icon."\" border=\"0\">";
    $voteInfo = $number." / <a href=\"about.php?username=".$authorUsername."\">\n"
       . "  <font size=\"-1\" color=\"#333399\">".$authorName."</font>\n"
       . " </a>\n"
@@ -406,7 +405,7 @@ function createStoppedVotesHeadline ($stoppedVotes, $openStoppedVotes) {
    return "<tr>"
        . printhead (0, 0, $link, ($openStoppedVotes) ? "open" : "close",
 		    FALSE, "&nbsp;<img src=\"".VOTE_ICON_STOPPED.
-		    "\" border=0 style=\"vertical-align:bottom;\">",
+		    "\" border=\"0\">",
 		    "<a href=\"".$link."\" class=\"tree\">" . 
 		    _("Abgelaufene Votings und Tests") . "</a>".
 		    "<a name=\"stoppedVotes\"></a>",
