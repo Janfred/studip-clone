@@ -536,7 +536,7 @@ while ( is_array($HTTP_POST_VARS)
 		 	if (($db_ar = $db->affected_rows()) > 0) {
 			 	$msg .= "info§$db_ar Eintr&auml;ge aus dem Zugriffsberechtigungen f&uuml;r das Archiv gel&ouml;scht.§";
 	 		}
-			## alle Daten des lusers löschen
+			## alle Daten des users löschen
 			$query = "delete from kategorien where range_id = '$u_id'";
 			$db->query($query);
 			$query = "delete from active_sessions where sid = '$u_id'";
@@ -553,11 +553,17 @@ while ( is_array($HTTP_POST_VARS)
 				else
 					$msg .= "error§Bild konnte nicht gel&ouml;scht werden.§";
 			}
+			//kill all the ressources that are assigned to the Veranstaltung (and all the linked or subordinated stuff!)
+			if ($RESOURCES_ENABLE) {
+				$killAssign = new ResourcesAssign($u_id);
+				$killAssign->delete();
+			}
+			
 			$query = "delete from auth_user_md5 where user_id='$u_id' and username='$username'";
 			$db->query($query);
 			if ($db->affected_rows() == 0) {
 				$msg .= "error§<b>Fehlgeschlagen:</b> $query§";
-      	$run = FALSE;
+      			$run = FALSE;
 			}
 		}
 		
@@ -910,4 +916,3 @@ page_close();
 ?>
 </body>
 </html>
-<!-- $Id$ -->
