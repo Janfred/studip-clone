@@ -364,7 +364,17 @@ class StudipLitList extends TreeAbstract {
 		$tree =& TreeAbstract::GetInstance("StudipLitList", $range_id);
 		if ( ($lists = $tree->getVisibleListIds()) ){
 			for ($i = 0; $i < count($lists); ++$i){
-				$ret .= "\n<div align=\"left\"><b><u>" . htmlReady($tree->tree_data[$lists[$i]]['name']) . "</u></b></div>";
+				if ( ($tree->tree_data[$lists[$i]]['user_id'] != $GLOBALS['auth']->auth['uid'])
+				&& ($last_modified_since !== false)
+				&& ($tree->tree_data[$lists[$i]]['chdate'] > $last_modified_since) ){ 
+					$ret .= '<div align="left" style="color:red" title="' . htmlReady(sprintf(_("Letzte Änderung am %s von %s"),
+					date('d M Y H:i',$tree->tree_data[$lists[$i]]['chdate']),
+					$tree->tree_data[$lists[$i]]['fullname'])) . '">';
+					$ret .=  "<b><u>" . htmlReady($tree->tree_data[$lists[$i]]['name']) . "</u></b>\n<br>\n";
+					$ret .= '</div>';
+				} else {
+					$ret .= "\n<div align=\"left\"><b><u>" . htmlReady($tree->tree_data[$lists[$i]]['name']) . "</u></b></div>";
+				}
 				if ($copy_link){
 					$ret .= "\n<div align=\"right\" style=\"font-size:10pt\"><a href=\"admin_lit_list.php?cmd=CopyUserList&_range_id=self&user_list={$lists[$i]}#anchor\"><img src=\"pictures/link_intern.gif\" border=\"0\">"
 						. "&nbsp;" . _("Literaturliste kopieren") . "</a></div>";
