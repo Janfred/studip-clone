@@ -16,7 +16,7 @@ newsticker_tl = new textlist(";
 for ($i = 1; $i < 5; $i++)
 	$topics[] = sprintf("'" . _("Das ist News Nummer %s!") . "'", $i);
 if ($this->config->getValue("Main", "endtext"))
-	$topics = "'" . $this->config->getValue("Main", "endtext") . "'";
+	$topics[] = "'" . $this->config->getValue("Main", "endtext") . "'";
 echo implode(", ", $topics) . ")";
 
 echo "
