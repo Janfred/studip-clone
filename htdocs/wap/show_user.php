@@ -12,7 +12,7 @@
 * </code>
 *
 * @author		Florian Hansen <f1701h@gmx.net>
-* @version		0.12	10.09.2003	21:25:42
+* @version		0.12	18.09.2003	11:30:46
 * @access		public
 * @modulegroup	wap_modules
 * @module		dates_search.php
@@ -54,11 +54,11 @@
 	wap_adm_start_card();
 
         $db = new DB_Seminar;
-        $q_string  = "SELECT " . $_fullname_sql['full'];
-        $q_string .= " AS komplett_name";
-        $q_string .= ", Email FROM auth_user_md5 ";
-        $q_string .= "INNER JOIN user_info USING (user_id) ";
-        $q_string .= "WHERE auth_user_md5.user_id='$user_id'";
+        $q_string  = "SELECT " . $_fullname_sql['full'] . " ";
+        $q_string .= "AS komplett_name, Email ";
+        $q_string .= "FROM auth_user_md5 ";
+        $q_string .= "LEFT JOIN user_info USING (user_id) ";
+        $q_string .= "WHERE auth_user_md5.user_id=\"$user_id\"";
         $db-> query("$q_string");
         $db-> next_record();
 

@@ -6,7 +6,7 @@
 * They each return the appropriate description-string.
 *
 * @author		Florian Hansen <f1701h@gmx.net>
-* @version		0.12	10.09.2003	21:26:31
+* @version		0.13	16.09.2003	19:26:39
 * @access		public
 * @modulegroup	wap_modules
 * @module		wap_buttons.inc.php
@@ -41,10 +41,10 @@
 	* Creates a page-forward-button with page numbers.
 	*
 	* @author			Florian Hansen <f1701h@gmx.net>
-	* @version			0.1
+	* @version			0.11	16.09.2003	19:26:00
 	* @access			public
-	* @param	string	The current page
-	* @param	string	The total number of pages
+	* @param	int		The current page
+	* @param	int		The total number of pages
 	* @return	string	The text-button
 	*/
 	 function wap_buttons_forward_page($page, $num_pages)
@@ -61,10 +61,10 @@
 	* Creates a page-back-button with page numbers.
 	*
 	* @author			Florian Hansen <f1701h@gmx.net>
-	* @version			0.1
+	* @version			0.11	16.09.2003	19:26:05
 	* @access			public
-	* @param	string	The current page
-	* @param	string	The total number of pages
+	* @param	int		The current page
+	* @param	int		The total number of pages
 	* @return	string	The text-button
 	*/
 	 function wap_buttons_back_page($page, $num_pages)
@@ -81,10 +81,10 @@
 	* Creates a part-forward-button with part numbers.
 	*
 	* @author			Florian Hansen <f1701h@gmx.net>
-	* @version			0.11	09.09.2003	14:56:40
+	* @version			0.12	16.09.2003	19:26:13
 	* @access			public
-	* @param	string	The current part
-	* @param	string	The total number of parts
+	* @param	int		The current part
+	* @param	int		The total number of parts
 	* @return	string	The text-button
 	*/
 	 function wap_buttons_forward_part($part, $num_parts)
@@ -101,10 +101,10 @@
 	* Creates a part-backward-button with part numbers.
 	*
 	* @author			Florian Hansen <f1701h@gmx.net>
-	* @version			0.11	09.09.2003	14:56:35
+	* @version			0.12	16.09.2003	19:26:23
 	* @access			public
-	* @param	string	The current part
-	* @param	string	The total number of parts
+	* @param	int		The current part
+	* @param	int		The total number of parts
 	* @return	string	The text-button
 	*/
 	 function wap_buttons_back_part($part, $num_parts)

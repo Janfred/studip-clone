@@ -13,7 +13,7 @@
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // wap_hlp.inc.php
-// Helping function
+// Helping functions
 // Copyright (c) 2003 Florian Hansen <f1701h@gmx.net>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -73,8 +73,7 @@
 	* @param	string	A user-id
 	* @param	string	The name or part of the name of the
 	*						required global variable
-	* @return	boolean	FALSE, if the user or user-var could not
-	*						be found
+	* @return	boolean	FALSE, if the user could not be found
 	*/
 	function wap_hlp_get_global_user_var($user_id, $var_string)
 	{

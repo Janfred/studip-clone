@@ -11,7 +11,7 @@
 * </code>
 *
 * @author		Florian Hansen <f1701h@gmx.net>
-* @version		0.11	10.09.2003	21:25:51
+* @version		0.12	18.09.2003	11:23:21
 * @access		public
 * @modulegroup	wap_modules
 * @module		dates_search.php
@@ -68,13 +68,14 @@
         }
 
         wap_hlp_get_global_user_var($session_user_id, "CurrentLogin");
-        $user_name = wap_adm_get_user_name($session_user_id);
 
         $db = new DB_Seminar();
-        $q_string  = "SELECT COUNT(message_id) AS num_sms ";
-        $q_string .= "FROM globalmessages ";
-        $q_string .= "WHERE user_id_rec = \"$user_name\" ";
-        $q_string .= "AND mkdate > $CurrentLogin";
+        $q_string  = "SELECT COUNT(message_user.message_id) AS num_sms ";
+        $q_string .= "FROM message_user LEFT JOIN message USING (message_id) ";
+        $q_string .= "WHERE message_user.user_id = \"$session_user_id\" ";
+		$q_string .= "AND message_user.snd_rec = \"rec\" ";
+		$q_string .= "AND message_user.deleted = \"0\" ";
+        $q_string .= "AND message.mkdate > $CurrentLogin";
 
         $db-> query("$q_string");
         $db-> next_record();
@@ -83,10 +84,13 @@
 
         if ($num_sms > 0)
         {
-            $q_string  = "SELECT user_id_snd, message_id FROM globalmessages ";
-            $q_string .= "WHERE user_id_rec = \"$user_name\" ";
-            $q_string .= "AND mkdate > $CurrentLogin ";
-            $q_string .= "ORDER BY mkdate DESC ";
+            $q_string  = "SELECT message_user.message_id, auth_user_md5.username ";
+	        $q_string .= "FROM message_user LEFT JOIN message USING (message_id) ";
+			$q_string .= "LEFT JOIN auth_user_md5 ON (message.autor_id = auth_user_md5.user_id) ";
+	        $q_string .= "WHERE message_user.user_id = \"$session_user_id\" ";
+			$q_string .= "AND message_user.snd_rec = \"rec\" ";
+			$q_string .= "AND message_user.deleted = \"0\" ";
+	        $q_string .= "AND message.mkdate > $CurrentLogin ";
             $q_string .= "LIMIT $progress_counter, " . SMS_PER_PAGE;
 
             $db-> query("$q_string");
@@ -107,7 +111,7 @@
             while ($db-> next_record() && $progress_counter < $progress_limit)
             {
                 $progress_counter ++;
-                $entry_sender = $db-> f("user_id_snd");
+                $entry_sender = $db-> f("username");
                 $entry_id     = $db-> f("message_id");
 
                 $short_sender = wap_txt_shorten_text($entry_sender, WAP_TXT_LINK_LENGTH - 3);

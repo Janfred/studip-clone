@@ -3,7 +3,7 @@
 * Text-functions for use with WML.
 *
 * @author		Florian Hansen <f1701h@gmx.net>
-* @version		0.11	10.09.2003	21:21:28
+* @version		0.12	16.09.2003	20:06:02
 * @access		public
 * @modulegroup	wap_modules
 * @module		wap_txt.inc.php
@@ -71,10 +71,10 @@
 	* Two types of abbreviation are supportet.
 	*
 	* @author			Florian Hansen <f1701h@gmx.net>
-	* @version			0.11	05.09.2003	12:23:39
+	* @version			0.12	16.09.2003	20:05:55
 	* @access			public
 	* @param	string	Text that will be shortened
-	* @param	string	The length the text is shortened to
+	* @param	int		The length the text is shortened to
 	* @param	string	cut_middle | cut_end;
 	*						The way the text is shortened
 	* @return	string	The shortened text

@@ -11,7 +11,7 @@
 * </code>
 *
 * @author		Florian Hansen <f1701h@gmx.net>
-* @version		0.11	10.09.2003	21:25:32
+* @version		0.12	18.09.2003	11:23:05
 * @access		public
 * @modulegroup	wap_modules
 * @module		show_sms.php
@@ -63,13 +63,14 @@
         }
 
         $db = new DB_Seminar();
-        $q_string  = "SELECT user_id_snd, mkdate, message ";
-        $q_string .= "FROM globalmessages ";
-        $q_string .= "WHERE message_id=\"$sms_id\"";
+        $q_string  = "SELECT auth_user_md5.username, message.message, message.mkdate ";
+        $q_string .= "FROM message LEFT JOIN auth_user_md5 ";
+        $q_string .= "ON (message.autor_id = auth_user_md5.user_id) ";
+        $q_string .= "WHERE message.message_id=\"$sms_id\"";
 
         $db-> query("$q_string");
         $db-> next_record();
-        $sender   = $db-> f("user_id_snd");
+        $sender   = $db-> f("username");
         $sms_date = $db-> f("mkdate");
         $message  = $db-> f("message");
 
