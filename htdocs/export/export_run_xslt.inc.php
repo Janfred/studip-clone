@@ -106,7 +106,7 @@ else
 		if ($xslt_process)
 		{
 			$export_pagecontent .= "<table cellspacing=\"0\" cellpadding=\"0\" border=\"0\" width=\"30%\"><tr><td>";
-			$export_pagecontent .= "<b>" . _("Ausgabe-Datei: ") . "</b>";
+			$export_pagecontent .= "&nbsp; <b>" . _("Ausgabe-Datei: ") . "</b>";
 			$export_pagecontent .= "</td><td>" . $link2 . $result_file . "</a>";
 //			$export_pagecontent .= "</td></tr><tr><td colspan=\"2\">";
 //			$export_pagecontent .= "&nbsp;&nbsp;&nbsp;&nbsp; - &nbsp;&nbsp;" . $link1 . _("Datei &ouml;ffnen") . "</a></td></tr><tr><td colspan=\"2\">";
@@ -146,7 +146,7 @@ else
 		{
 			$infobox[1]["kategorie"] = _("Aktionen:");
 				$infobox[1]["eintrag"][] = array (	"icon" => "pictures/icon-disc.gif" ,
-											"text"  => sprintf(_("Um die Ausgabe-Datei herunterzuladen, klicken Sie %s hier %s."), $link2, "</a>")
+											"text"  => sprintf(_("Um die Ausgabe-Datei herunterzuladen, klicken Sie %shier%s."), $link2, "</a>")
 										);
 		}
 	}
