@@ -631,25 +631,32 @@ Dabei werden die Beschriftungen der Ordner im Forensystem und im Dateisystem akt
 */
 
 
-function edit_dates($stunde,$minute,$monat,$tag,$jahr,$end_stunde, $end_minute, $termin_id,$art,$titel,$description,$topic_id,$raum,$resource_id,$range_id,$term_data='') {
-	global $user,$auth, $TERMIN_TYP, $RESOURCES_ENABLE, $RELATIVE_PATH_RESOURCES;
+function edit_dates($stunde,$minute,$monat,$tag,$jahr,$end_stunde, $end_minute, $termin_id,$art,$titel,$description,$topic_id,$raum,$resource_id,$range_id,$save_changes_with_request = FALSE) {
+	global $user,$auth, $TERMIN_TYP, $RESOURCES_ENABLE, $RELATIVE_PATH_RESOURCES, $PHP_SELF;
+
+	$db=new DB_Seminar;
+	$db2=new DB_Seminar;
+	$db3=new DB_Seminar;
+	$db4=new DB_Seminar;
 	$semester = new SemesterData;
+	$semObj = new Seminar($range_id);
 
 	if ($RESOURCES_ENABLE) {
 		include_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
+		include_once ($RELATIVE_PATH_RESOURCES."/lib/RoomRequest.class.php");
 		include_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
 	}
 	
 	$do=TRUE;
 	if (!checkdate($monat,$tag,$jahr)) {
 		$do=FALSE;
-		$result= "error§" . _("Bitte geben Sie ein g&uuml;ltiges Datum ein!");
+		$result= "error§" . _("Bitte geben Sie ein g&uuml;ltiges Datum ein!"). "§";
 	}
 
 	if ($do)		
 		if ((!$stunde) && (!end_stunde)) {
 			$do=FALSE;	
-			$result .= "error§" . _("Bitte geben Sie eine g&uuml;ltige Start- und Endzeit an!");
+			$result .= "error§" . _("Bitte geben Sie eine g&uuml;ltige Start- und Endzeit an!"). "§";
 		}
 	
 	$start_time = mktime($stunde,$minute,0,$monat,$tag,$jahr);
@@ -658,10 +665,72 @@ function edit_dates($stunde,$minute,$monat,$tag,$jahr,$end_stunde, $end_minute, 
 	if ($do)		
 		if ($start_time > $end_time) {
 			$do=FALSE;	
-			$result .= "error§" . _("Der Endzeitpunkt muss nach dem Startzeitpunkt liegen!");
+			$result .= "error§" . _("Der Endzeitpunkt muss nach dem Startzeitpunkt liegen!"). "§";
 		}
+		
+	//check, if a single date should be created when it is forbidden (no single dates corresponding to metadates are allowed when using resources, only a whole schedule creating with date-assi is fine...!)
+	if ($GLOBALS["RESOURCES_ENABLE"]) {
+		if ((isMetadateCorrespondingDate($termin_id, $start_time, $end_time, $range_id)) && (!$semObj->getMetaDateType()) && (!isSchedule($range_id))) {
+			$do = FALSE;
+				if ($TERMIN_TYP[$art]["sitzung"])
+					$add_result .= "info§" . sprintf(_("Sie wollen einen oder mehrere Sitzungstermine auf die regelm&auml;&szlig;igen Veranstaltungszeiten &auml;ndern. Bitte verwenden Sie f&uuml;r diese Termine den Ablaufplanassistenten, um die entsprechenden Termine f&uuml;r den gesamten Veranstaltungszeitraum anzulegen.")) . "§";
+				else
+					$add_result .= "info§" . sprintf(_("Sie wollen einen oder mehrere Sondertermine auf die regelm&auml;&szlig;igen Veranstaltungszeiten &auml;ndern. Bitte verwenden Sie f&uuml;r diese Termine den Ablaufplanassistenten und &auml;ndern dann die Terminart f&uuml;r den gew&uuml;nschten Termin.")). "§";
+
+		} elseif ($GLOBALS["RESOURCES_ALLOW_ROOM_REQUESTS"]) {
+			
+			if ($resource_id) {
+				$check_resource_id = $resource_id;
+			} else {
+				$check_resource_id = getDateAssigenedRoom($termin_id);
+			}
+			if ($check_resource_id) {	
+				$resObjPrm = new ResourceObjectPerms($check_resource_id);
+				if (!$resObjPrm->havePerm("autor")) {
+					//load the saved state to check for changes to date and time
+					$query = sprintf("SELECT date, end_time FROM termine WHERE termin_id = '%s' ", $termin_id);
+					$db->query($query);
+					if ($db->next_record()) {
+						if (($db->f("date") != $start_time) || ($db->f("end_time") != $end_time)) {
+							if ($save_changes_with_request) {
+								$create_update_request = TRUE;
+							} else {
+								$do = FALSE;
+								$add_result .= "info§" . sprintf(_("Sie wollen die Zeiten eines oder mehrere Termine &auml;ndern, f&uuml;r den bereits ein Raum durch den Raumadministrator zugewiesen wurde. Wenn Sie die Zeiten dieser Termine &auml;ndern, verlieren Sie diese Buchung und es mu&szlig; eine neue Anfrage an den Raumadministrator gestellt werden. <br /> Wollen Sie diese Termin dennoch &auml;ndern und daf&uuml;r jeweils neue Anfragen erstellen?"));
+								$add_result .= "<br /><a href=\"$PHP_SELF?save_changes_with_request=1\">".makeButton("ja2")."</a>&nbsp;<a href=\"$PHP_SELF?reset_edit=1\">".makeButton("nein")."</a>§";
+							}
+						}
+					}
+				}
+			}
+		}
+	}		
+	
+	//create a request or reopen a given one
+	if ($create_update_request) {
+		if ($request_id = getDateRoomRequest($termin_id)) {
+			$reqObj = new RoomRequest ($request_id);
+			$reqObj->setClosed(0);
+			if (!$reqObj->getResourceId())
+				$reqObj->setResourceId($resObjPrm->getId());
+			$reqObj->store();
+			$create_req = TRUE;
+		} elseif ($request_id = getSeminarRoomRequest($range_id)) {
+			$reqObj = new RoomRequest ($request_id);
+			$reqObj->copy();
+			$reqObj->setTerminId($termin_id);
+			if (!$reqObj->getResourceId())
+				$reqObj->setResourceId($resObjPrm->getId());
+			$reqObj->store();
+			$create_req = TRUE;
+		} else {
+			$add_result .= "info§" . sprintf(_("Sie haben die Zeiten eines oder mehrerer Termine ge&auml;ndert und damit die Raumbuchung verloren. Bitte stellen Sie f&uuml;r diese Termine Raumanfragen, um einen Raum durch den Raumadministrator zugewiesen zu bekommen."). "§");
+		}
+		if ($create_req)
+			$add_result .= "info§" . sprintf(_("Sie haben die Zeiten eines oder mehrerer Termine ge&auml;ndert und damit die Raumbuchung verloren. Eine entsprechende Raumanfrage wurde erstellt. Sie k&ouml;nnen diese Raumanfrage jederzeit bearbeiten, in dem Sie auf \"Raumanfrage bearbeiten\" klicken.")."§");
+	}
 				
-	//Check auf Konsistenz mt Metadaten, Semestercheck
+	//Check auf Konsistenz mit Metadaten, Semestercheck bei allen Sitzungsterminen
 	$all_semester = $semester->getAllSemesterData();
 	if (($do) && ($TERMIN_TYP[$art]["sitzung"]==1) && (is_array($term_data ["turnus_data"]))) {
 		foreach ($all_semester as $a) {
@@ -674,38 +743,15 @@ function edit_dates($stunde,$minute,$monat,$tag,$jahr,$end_stunde, $end_minute, 
 			}
 			
 		if (($start_time < $sem_beginn) || ($start_time > $sem_ende))
-			$add_result .= "info§" . _("Sie haben einen oder mehrere Termine eingegeben, der ausserhalb des Semesters liegt, in dem die Veranstaltung stattfindet. Es wird empfohlen, diese Termine anzupassen.") . "§";
+			$add_result .= "info§" . _("Sie haben einen oder mehrere Termine eingegeben, die ausserhalb des Semesters liegen, in dem die Veranstaltung stattfindet. Es wird empfohlen, diese Termine anzupassen.") . "§";
 		
-		//Und dann noch auf regelmaessige Termine checken, wenn dieser Typ gewsehlt ist
-		if (!$term_data["art"]) {
-			foreach ($term_data ["turnus_data"] as $a) {
-				if ($a["day"] == 7) 
-					$tmp_day=0;
-				else
-					$tmp_day=$a["day"];
-				if ($tmp_day == date("w", $start_time)) {
-					$tmp_start_time=mktime (date("G", $start_time), date("i", $start_time), 0, 8, 1, 2001);
-					$tmp_end_time=mktime (date("G", $end_time), date("i", $end_time), 0, 8, 1, 2001);
-					$tmp_turnus_start=mktime ($a["start_stunde"], $a["start_minute"], 0, 8, 1, 2001);
-					$tmp_turnus_end=mktime ($a["end_stunde"], $a["end_minute"], 0, 8, 1, 2001);
-					if (($tmp_start_time >= $tmp_turnus_start) && ($tmp_end_time <= $tmp_turnus_end))
-						$ok=TRUE;
-				}
-			}
-			if (!$ok)
-				$add_result .= "info§" . _("Sie haben einen oder mehrere Termine eingegeben, der nicht zu den allgemeinen Veranstaltungszeiten stattfindet. Es wird empfohlen, Sitzungstermine von regelm&auml;&szlig;igen Veranstaltungen nur zu den allgemeinen Zeiten stattfinden zu lassen.") . "§";
+		//Und dann noch auf regelmaessige Termine checken, wenn dieser Typ gewaehlt ist
+		if ((!$term_data["art"]) && (!isMetadateCorrespondingDate($termin_id, $start_time, $end_time, $range_id))) {
+			$add_result .= "info§" . _("Sie haben einen oder mehrere Termine eingegeben, der nicht zu den allgemeinen Veranstaltungszeiten stattfindet. Es wird empfohlen, Sitzungstermine von regelm&auml;&szlig;igen Veranstaltungen nur zu den allgemeinen Zeiten stattfinden zu lassen.") . "§";
 		}
 	}
-		
-	if ($result) 
-		$result .= "<br> " . sprintf(_("Der Termin <b>%s</b> konnte nicht ge&auml;ndert werden."), $titel) . "§";
 	
 	if ($do) {
-		$db=new DB_Seminar;
-		$db2=new DB_Seminar;
-		$db3=new DB_Seminar;
-		$db4=new DB_Seminar;
-
 		$author = get_fullname();
 
 		$titel=$titel;
@@ -718,6 +764,8 @@ function edit_dates($stunde,$minute,$monat,$tag,$jahr,$end_stunde, $end_minute, 
 		$db->query("UPDATE  termine SET autor_id='$user->id', content='$titel', date= '$start_time', end_time='$end_time', date_typ='$art', raum='$raum', description='$description'  WHERE termin_id='$termin_id'");
 		if ($db->affected_rows()) {
 			$db->query ("UPDATE termine SET chdate='".time()."' WHERE termin_id='$termin_id'"); //Nur wenn Daten geaendert wurden, schreiben wir auch ein chdate
+			$result.= sprintf ("msg§" ._("Der Termin <b>%s</b> wurde ge&auml;ndert!")."§", htmlReady($titel));
+			$date_changed = TRUE;
 		}
 			
 		//Workaround fuer Forenbug. Dies ist keine Loesung, sondern Schadensvermeidung!!
@@ -741,7 +789,7 @@ function edit_dates($stunde,$minute,$monat,$tag,$jahr,$end_stunde, $end_minute, 
 				$db->query("UPDATE termine SET topic_id=''  WHERE termin_id='$termin_id'");		
 			}
 		//WA Ende
-			
+
 		//Aendern des Titels des zugehoerigen Ordners
 		$titel_f=$TERMIN_TYP[$art]["name"].": $titel";
 		$titel_f .= " " . _("am") . " " . date("d.m.Y ", $start_time);
@@ -753,17 +801,20 @@ function edit_dates($stunde,$minute,$monat,$tag,$jahr,$end_stunde, $end_minute, 
 			if ($db2->affected_rows())
 				$db3->query("UPDATE folder SET chdate='".time()."' WHERE folder_id = '".$db->f("folder_id")."'");
 		}
-		
+
 		//update assigned resources, if resource manangement activ
 		if ($RESOURCES_ENABLE) {
 			$updateAssign = new VeranstaltungResourcesAssign($range_id);
 			if ($resource_id)
 				$resources_result=$updateAssign->changeDateAssign($termin_id, $resource_id);
-			else
-				$updateAssign->killDateAssign($termin_id);
+			if ($create_update_request)
+				$resources_result=$updateAssign->killDateAssign($termin_id);
 		}
-	}
+		
+	} else
+		$result.= sprintf ("error§" ._("Der Termin <b>%s</b> wurde <u>nicht</u> ge&auml;ndert!")."§", htmlReady($titel));
 
+	$result_a["changed"]=$date_changed;
 	$result_a["msg"]=$result;
 	$result_a["add_msg"]=$add_result;
 	$result_a["resources_result"]=$resources_result;
@@ -895,7 +946,7 @@ function delete_range_of_dates ($range_id, $topics = FALSE) {
 
 
 //Erstellt automatisch einen Ablaufplan oder aktualisiert ihn
-function dateAssi ($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full = FALSE, $old_turnus = FALSE, $dont_check_overlaps = TRUE, $update_resources = TRUE) {
+function dateAssi ($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full = FALSE, $old_turnus = FALSE, $dont_check_overlaps = TRUE, $update_resources = TRUE, $presence_dates_only = TRUE) {
 	global $RESOURCES_ENABLE, $RELATIVE_PATH_RESOURCES, $TERMIN_TYP, $user;
 	
 	if ($RESOURCES_ENABLE)	{
@@ -928,7 +979,7 @@ function dateAssi ($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full =
 	if ($mode == "update") {
 
 		//first, we load all dates that exists
-		$query = sprintf("SELECT termin_id, date, end_time FROM termine WHERE range_id='%s' ORDER BY date", $sem_id);
+		$query = sprintf("SELECT termin_id, date, end_time FROM termine WHERE range_id='%s' %s ORDER BY date", $sem_id, ($presence_dates_only) ? "AND date_typ IN".getPresenceTypeClause() : "");
 		$db->query($query);
 
 		//than we check, which ones matches to our metadates
@@ -1114,7 +1165,7 @@ function dateAssi ($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full =
 }
 
 //Checkt, ob Ablaufplantermine zu gespeicherten Metadaten vorliegen
-function isSchedule ($sem_id, $clearcache = FALSE) {
+function isSchedule ($sem_id, $presence_dates_only = TRUE, $clearcache = FALSE) {
 	static $cache;
 	
 	if ($clearcache)
@@ -1132,7 +1183,7 @@ function isSchedule ($sem_id, $clearcache = FALSE) {
 	$term_metadata=unserialize($db->f("metadata_dates"));
 
 	//first, we load all dates that exists
-	$query = sprintf("SELECT termin_id, date, end_time FROM termine WHERE range_id='%s' ORDER BY date", $sem_id);
+	$query = sprintf("SELECT termin_id, date, end_time FROM termine WHERE range_id='%s' %s ORDER BY date", $sem_id, ($presence_dates_only) ? "AND date_typ IN".getPresenceTypeClause() : "");
 	$db->query($query);
 	
 	if ($term_metadata["art"] == 1) {
@@ -1242,15 +1293,20 @@ function getMetadateCorrespondingDates ($sem_id, $presence_dates_only) {
 * @return		boolean	TRUE, if the date corresponds to a metadate
 *
 */
-function isMetadateCorrespondingDate ($termin_id) {
+function isMetadateCorrespondingDate ($termin_id, $begin = '', $end = '', $seminar_id='') {
 	$db = new DB_Seminar;
 	
-	//first, we load all dates that exists
+	//first, we the date
 	$query = sprintf("SELECT termin_id, date, end_time, range_id FROM termine WHERE termin_id ='%s' ", $termin_id);
 	$db->query($query);
 	$db->next_record();
 	
-	$semObj = new Seminar($db->f("range_id"));
+	if ((!$begin) && (!$end) && (!$seminar_id)) {
+		$begin = $db->f("date");
+		$end = $db->f("end_time");
+		$seminar_id = $db->f("range_id");
+	}
+	$semObj = new Seminar($seminar_id);
 
 	//than we check, if the date matches a metadate
 	if (is_array($semObj->getMetaDates())) {
@@ -1261,10 +1317,10 @@ function isMetadateCorrespondingDate ($termin_id) {
 			else
 				$t_day = $val["day"];
 			
-			if ((date("w", $db->f("date")) == $t_day) &&
-				(date("G", $db->f("date")) == $val["start_hour"]) &&
-				(date("i", $db->f("date")) == $val["start_minute"]) &&
-				(date("G", $db->f("end_time")) == $val["end_hour"]) &&
+			if ((date("w", $begin) == $t_day) &&
+				(date("G", $begin) == $val["start_hour"]) &&
+				(date("i", $begin) == $val["start_minute"]) &&
+				(date("G", $end) == $val["end_hour"]) &&
 				(date("i", $db->f("end_time")) == $val["end_minute"]))
 				$result = TRUE;
 		}
