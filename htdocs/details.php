@@ -162,10 +162,10 @@ elseif (($SessSemName[1] <>"") && (!isset($sem_id)))
 					?>
 					<tr>
 						<td width="1%" valign="top">
-							<? echo "<a href=\"sem_verify.php?id=".$sem_id."&send_from_search=".$send_from_search."\"><img src=\"./pictures/meinesem.gif\" border=0</a>"; ?>
+							<? echo "<a href=\"sem_verify.php?id=".$sem_id."&send_from_search=&send_from_search_page=$send_from_search_page\"><img src=\"./pictures/meinesem.gif\" border=0</a>"; ?>
 						</td>
 						<td width="99%">
-							<font size=-1><? echo "<a href=\"sem_verify.php?id=".$sem_id."&send_from_search=".$send_from_search."\">",$abo_msg, "</a>"; ?></font>
+							<font size=-1><? echo "<a href=\"sem_verify.php?id=".$sem_id."&send_from_search=$send_from_search&send_from_search_page=$send_from_search_page\">",$abo_msg, "</a>"; ?></font>
 						</td>					
 					</tr>
 					<? } 

@@ -2,7 +2,7 @@
 /*
 sem_verify.php - Script zum Anmelden zu einem Seminar mit Ueberpruef
  aller Rechte.
-Copyright (C) 2000 André Noack <anoack@mcis.de>, Cornelis Kater <ckater@gwdg.de>, Stefan Suchi <suchi@gmx.de>
+Copyright (C) 2002 André Noack <anoack@mcis.de>, Cornelis Kater <ckater@gwdg.de>, Stefan Suchi <suchi@gmx.de>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -58,7 +58,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 <body>
 
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
-	<tr><td class="topic" colspan=2>&nbsp;<b>Seminarfreischaltung</b></td></tr>
+	<tr><td class="topic" colspan=2>&nbsp;<b>Veranstaltungsfreischaltung</b></td></tr>
 	<tr><td class="blank" colspan=2>&nbsp<br></td></tr>
 <?
 	// admins und roots haben hier nix verloren
@@ -66,7 +66,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 	    parse_msg ("info§Sie sind ein <b>Administrator</b> und k&ouml;nnen sich daher nicht f&uuml;r einzelne Veranstaltungen anmelden!");
 	    echo"<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp;&nbsp; zur&uuml;ck zur Startseite</a>";
 	    if ($send_from_search)
-	    	echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">zur&uuml;ck zur Suche</a>";
+	    	echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">zur&uuml;ck zur letzten Auswahl</a>";
 	    echo "<br><br></td></tr></table>";
 	    page_close();
 	    die;
@@ -81,7 +81,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 	$db->next_record();
 	$group = select_group ($db->f("start_time"), $user->id);
 	 
-	//nobody darf sogar durch (wird sp&auml;ter schon abgefangen)
+	//nobody darf sogar durch (wird spaeter schon abgefangen)
 	if ($perm->have_perm("user")) {
 
 		//Sonderfall, Passwort fuer Schreiben nicht eingegeben, Lesen aber erlaubt
@@ -89,11 +89,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 			$db->query("SELECT Lesezugriff, Name FROM seminare WHERE Seminar_id LIKE '$SemIDtemp'");
 			$db->next_record();
 			if ($db->f("Lesezugriff") <= 1 && $perm->have_perm("autor")) {
-				$db->query("INSERT INTO seminar_user VALUES ('$SemIDtemp','$user->id','user','$group' )");
+				$db->query("INSERT INTO seminar_user VALUES ('$SemIDtemp','$user->id','user','$group', '', '".time()."' )");
 				parse_msg ("msg§Sie wurden mit dem Status <b> user </b> in die Veranstaltung ".$db->f("Name")." eingetragen. ");
 				echo"<tr><td class=\"blank\" colspan=2><a href=\"seminar_main.php?auswahl=$SemIDtemp\">&nbsp; &nbsp; Hier </a>kommen sie zu der Veranstaltung";
 				if ($send_from_search)
-			    		echo "&nbsp; |&nbsp;<a href=\"sem_portal.php\">zur&uuml;ck zur Suche</a>";
+			    		echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">zur&uuml;ck zur Auswahl</a>";
 				echo "<br><br></td></tr></table>";
 			}
 	 		page_close();
@@ -101,8 +101,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 		}
 
 		//wenn eine Sessionvariable gesetzt ist, nehmen wir besser die
-		if (!isset($id)) if (isset($SessSemName[1])) $id=$SessSemName[1];
-		//laden von ben&ouml;tigten Informationen
+		if (!isset($id)) if (isset($SessSemName[1])) 
+			$id=$SessSemName[1];
+			
+		//laden von benoetigten Informationen
 		$db=new DB_Seminar;
 		$db->query("SELECT Lesezugriff, Schreibzugriff, Passwort, Name FROM seminare WHERE Seminar_id LIKE '$id'");
 		while ($db->next_record()) {
@@ -122,17 +124,17 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 				parse_msg ("msg§Sie wurden die Veranstaltung <b>$SeminarName</b> auf den Status <b> autor </b> hochgestuft.");
 				echo"<tr><td class=\"blank\" colspan=2><a href=\"seminar_main.php?auswahl=$id\">&nbsp; &nbsp; weiter zu der Veranstaltung</a>";
 			    	if ($send_from_search)
-				    	echo "&nbsp; |&nbsp;<a href=\"sem_portal.php\">zur&uuml;ck zur Suche</a>";
+				    	echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">zur&uuml;ck zur letzten Auswahl</a>";
 				echo "<br><br></td></tr></table>";
 				page_close();
 				die;
 			}
 			elseif ($perm->have_perm("autor")) {
-				$db->query("INSERT INTO seminar_user VALUES ('$id','$user->id','autor','$group')");
+				$db->query("INSERT INTO seminar_user VALUES ('$id','$user->id','autor','$group'', '', '".time()."')");
 				parse_msg ("msg§Sie wurden mit dem Status <b> autor </b> in die Veranstaltung <b>$SeminarName</b> eingetragen.");
 				echo"<tr><td class=\"blank\" colspan=2><a href=\"seminar_main.php?auswahl=$id\">&nbsp; &nbsp; weiter zur Veranstaltung</a>";
 			  	if ($send_from_search)
-				    	echo "&nbsp; |&nbsp;<a href=\"sem_portal.php\">zur&uuml;ck zur Suche</a>";
+				    	echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">zur&uuml;ck zur letzten Auswahl</a>";
 				echo "<br><br></td></tr></table>";
 				page_close();
 				die;
@@ -142,18 +144,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 		    parse_msg ("error§Ung&uuml;ltiges Passwort eingegeben, bitte nocheinmal versuchen !");
 	}
 
-	//Die eigentliche &Uuml;berpr&uuml;fung verschiedener Rechtesachen
+	//Die eigentliche Ueberpruefung verschiedener Rechtesachen
 	//User schon in der Seminar_user vorhanden? Und was macht er da eigentlich?
 		if ($SemUserStatus) {
-			if ($SemUserStatus=="user") { //Nur user? Dann m&uuml;ssen wir noch mal pr&uuml;fen
+			if ($SemUserStatus=="user") { //Nur user? Dann muessen wir noch mal puefen
 				if ($SemSecLevelWrite==2) { //Schreiben nur per Passwort, der User darf es eingeben
-					if ($perm->have_perm("autor")) { //nur globale Autoren d&uuml;rfen sich hochstufen!
+					if ($perm->have_perm("autor")) { //nur globale Autoren duerfen sich hochstufen!
 						echo "<tr><td class=\"blank\" colspan=2>&nbsp; &nbsp; Bitte Passwort f&uuml;r die Veranstaltung <b>$SeminarName</b> eingeben.<br><br></td></tr>";
-						echo "<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp;&nbsp; zur&uuml;ck zur Startseite</a>";
-					    	if ($send_from_search)
-						    	echo "&nbsp; |&nbsp;<a href=\"sem_portal.php\">zur&uuml;ck zur Suche</a>";
-						echo "<br><br></td></tr>";
 						?>
+						</td></tr>
 						<tr><td class="blank" colspan=2>
 						<form action="<? echo $sess->pself_url(); ?>" method="POST" >
 						&nbsp; &nbsp; <input type="PASSWORD" name="pass" size="12">
@@ -161,13 +160,19 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 						<input type="HIDDEN" name="hashpass" value="">
 						<input onSubmit="verifySeminar();return true;" type="SUBMIT" value="abschicken">
 						</form>
+						<?
+						echo "<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp; &nbsp; zur&uuml;ck zur Startseite</a>";
+					    	if ($send_from_search)
+						    	echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">zur&uuml;ck zur letzten Auswahl</a>";
+						echo "<br><br>";
+						?>
 						</td></tr></table>
 						<?
 					} else {
 						parse_msg ("info§Um in der Veranstaltung <b>$SeminarName</b> Schreibrechte zu bekommen, m&uuml;ssen sie zumindest auf die Registrierungsmail geantwortet haben!");
 	   					echo"<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp;&nbsp; zur&uuml;ck zur Startseite</a>";
   						if ($send_from_search)
-						    	echo "&nbsp; |&nbsp;<a href=\"sem_portal.php\">zur&uuml;ck zur Suche</a>";
+						    	echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">zur&uuml;ck zur letzten Auswahl</a>";
 						echo "<br><br></td></tr></table>";
 					}
 						page_close();
@@ -179,7 +184,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 						parse_msg("info§Sie wurden in der Veranstaltung <b>$SeminarName</b> hochgestuft auf den Status <b> autor </b>.");
 						echo"<tr><td class=\"blank\" colspan=2><a href=\"seminar_main.php?auswahl=$id\">&nbsp; &nbsp; weiter zu der Veranstaltung</a>";
 						if ($send_from_search)
-						    	echo "&nbsp; |&nbsp;<a href=\"sem_portal.php\">zur&uuml;ck zur Suche</a>";
+						    	echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">zur&uuml;ck zur letzten Auswahl</a>";
 						echo "<br><br></td></tr></table>";
 						page_close();
 						die;
@@ -187,7 +192,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 						parse_msg("info§Sie sind schon mit der Berechtigung <b>$SemUserStatus</b> f&uuml;r die Veranstaltung <b>$SeminarName</b> freigeschaltet. Wenn sie auf die Registrierungsmail antworten, bekommen sie in dieser Veranstaltung Schreibrechte.");
 						echo"<tr><td class=\"blank\" colspan=2>&nbsp; &nbsp; <a href=\"seminar_main.php?auswahl=$id\">weiter zu der Veranstaltung</a>";
 						if ($send_from_search)
-						    	echo "&nbsp; |&nbsp;<a href=\"sem_portal.php\">zur&uuml;ck zur Suche</a>";
+						    	echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">zur&uuml;ck zur letzten Auswahl</a>";
 						echo "<br><br></td></tr></table>";
 						page_close();
 						die;
@@ -197,7 +202,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 				parse_msg("info§Sie sind schon mit der Berechtigung <b>$SemUserStatus</b> f&uuml;r die Veranstaltung <b>$SeminarName</b> freigeschaltet.");
 				echo"<tr><td class=\"blank\" colspan=2>&nbsp; &nbsp; <a href=\"seminar_main.php?auswahl=$id\"> weiter zu der Veranstaltung</a>";
 				if ($send_from_search)
-				    	echo "&nbsp; |&nbsp;<a href=\"sem_portal.php\">zur&uuml;ck zur Suche</a>";
+				    	echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">zur&uuml;ck zur letzten Auswahl</a>";
 				echo "<br><br></td></tr></table>";
 				die;
 			}
@@ -205,11 +210,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 			if ($perm->have_perm("autor")) {
 				if (($SemSecLevelWrite==2)&&($SemSecLevelRead==2)) {//Paswort auf jeden Fall erforderlich, also her damit
 					echo "<tr><td class=\"blank\" colspan=2>&nbsp; &nbsp; Bitte Passwort f&uuml;r die Veranstaltung <b>$SeminarName</b> eingeben.<br><br></td></tr>";
-					echo "<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp;&nbsp; zur&uuml;ck zur Startseite</a>";
-				    	if ($send_from_search)
-					    	echo "&nbsp; |&nbsp;<a href=\"sem_portal.php\">zur&uuml;ck zur Suche</a>";
-					echo "<br><br></td></tr>";
 					?>
+					</td></tr>					
 					<tr><td class="blank" colspan=2>
 					<form action="<? echo $sess->pself_url(); ?>" method="POST" >
 					&nbsp; &nbsp; <input type="PASSWORD" name="pass" size="12">
@@ -217,22 +219,23 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 					<input type="HIDDEN" name="hashpass" value="">
 					<input onSubmit="verifySeminar();return true;" type="SUBMIT" value="abschicken">
 					</form>
+					<?
+					echo "<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp; &nbsp; zur&uuml;ck zur Startseite</a>";
+				    	if ($send_from_search)
+					    	echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">zur&uuml;ck zur letzten Auswahl</a>";
+					echo "<br><br>";
+					?>
 					</td></tr></table>				
 					<?
 					page_close();
 					die;
 				}
 				elseif ($SemSecLevelWrite==2) {//nur passwort f&uuml;r Schreiben, User k&ouml;nnte ohne Passwort als 'User' in das Seminar
-//					$sess->register("SemIDtemp"); //wir setzen aus Sichergr&uuml;nden eine Sessionvariable, da&szlig; sich keiner per Link in seminar_user schreibt
-//					$SemIDtemp=$id;
 					echo "<tr><td class=\"blank\" colspan=2>&nbsp; &nbsp; Bitte Passwort f&uuml;r die Veranstaltung <b>$SeminarName</b> eingeben.<br><br></td></tr>";
 					echo "<tr><td class=\"blank\" colspan=2>&nbsp; &nbsp; Falls sie das Passwort jetzt noch nicht eingeben m&ouml;chten, k&ouml;nnen sie mit Leseberechtigung an der Veranstaltung teilnehmen.<br><br></td></tr>";
 					echo "<tr><td class=\"blank\" colspan=2>&nbsp; &nbsp; Bitte klicken sie dazu<a href=\"sem_verify.php?SemIDtemp=$id\"> hier</a>!<br><br></td></tr>";
-					echo "<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp;&nbsp; zur&uuml;ck zur Startseite</a>";
-					if ($send_from_search)
-					    	echo "&nbsp; |&nbsp;<a href=\"sem_portal.php\">zur&uuml;ck zur Suche</a>";
-					echo "<br><br></td></tr>";
 					?>
+					</td></tr>					
 					<tr><td class="blank" colspan=2>
 					<form action="<? echo $sess->pself_url(); ?>" method="POST" >
 					&nbsp; &nbsp; <input type="PASSWORD" name="pass" size="12">
@@ -240,6 +243,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 					<input type="HIDDEN" name="hashpass" value="">
 					<input onSubmit="verifySeminar();return true;" type="SUBMIT" value="abschicken">
 					</form>
+					<?
+					echo "<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp; &nbsp; zur&uuml;ck zur Startseite</a>";
+				    	if ($send_from_search)
+					    	echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">zur&uuml;ck zur letzten Auswahl</a>";
+					echo "<br><br>";
+					?>
 					</td></tr></table>					
 					<?
 					page_close();
@@ -252,7 +261,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 					parse_msg ("info§Um an der Veranstaltung <b>$SeminarName</b> teilnehmen zu k&ouml;nnen, m&uuml;ssen sie zumindest auf die Registrierungsmail geantwortet haben!");
 					echo "<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp;&nbsp; zur&uuml;ck zur Startseite</a>";
 					if ($send_from_search)
-					    	echo "&nbsp; |&nbsp;<a href=\"sem_portal.php\">zur&uuml;ck zur Suche</a>";
+					    	echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">zur&uuml;ck zur letzten Auswahl</a>";
 					echo "<br><br></td></tr></table>";
 					page_close();
 					die;
@@ -267,11 +276,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 		}
 
 		if (isset($InsertStatus)) {//Status reinschreiben
-			$db->query("INSERT INTO seminar_user VALUES ('$id', '$user->id', '$InsertStatus','$group')");
+			$db->query("INSERT INTO seminar_user VALUES ('$id', '$user->id', '$InsertStatus','$group'', '', '".time()."')");
 			parse_msg ("msg§Sie wurden mit dem Status <b>$InsertStatus </b>in die Veranstaltung <b>$SeminarName</b> eingetragen.");
 			echo"<tr><td class=\"blank\" colspan=2><a href=\"seminar_main.php?auswahl=$id\">&nbsp; &nbsp; Hier kommen Sie zu der Veranstaltung</a>";
 			if ($send_from_search)
-			    	echo "&nbsp; |&nbsp;<a href=\"sem_portal.php\">zur&uuml;ck zur Suche</a>";
+			    	echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">zur&uuml;ck zur letzten Auswahl</a>";
 			echo "<br><br></td></tr></table>";
 			page_close();
 			die;
@@ -284,7 +293,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 		parse_msg ("error§Sie habe nicht die erforderlichen Rechte, um an der Veranstaltung <b>$SeminarName</b> teilnehmen zu d&uuml;rfen!");
 		echo "<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp;&nbsp; zur&uuml;ck zur Startseite</a>";
 		if ($send_from_search)
-	    		echo "&nbsp; |&nbsp;<a href=\"sem_portal.php\">zur&uuml;ck zur Suche</a>";
+	    		echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">zur&uuml;ck zur letzten Auswahl</a>";
 		echo "<br><br></td></tr></table>";
 	}
 	
