@@ -1,36 +1,16 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="iso-8859-1"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format">
 	<xsl:output method="text"/>
 	<xsl:template match="/">
-		<xsl:text>{\rtf1\ansi\ansicpg1252\deff0\deflang1031{\fonttbl{\f0\fnil\fcharset0 Times New Roman;}}
-\viewkind4\uc1\pard\par\qc\fs56 Sozialwissenschaftliche Fakult\'e4t
-\par\fs36 der Georg-August-Universit\'e4t G\'f6ttingen
-\par\pard\fs44 
-\par 
-\par 
-\par 
-\par 
-\par 
-\par 
-\par 
-\par 
-\par 
-\par 
-\par 
-\par 
-\par 
-\par 
-\par 
-\par 
-\par
-\par\qc\fs96 Vorlesungskommentar
-\par\fs56 SOMMERSEMESTER 2002\fs24\par\pard\page</xsl:text>
+			<xsl:text>{\rtf1\ansi\ansicpg1252\deff0\deflang1031{\fonttbl{\f0\fnil\fcharset0 Times New Roman;}}
+\viewkind4\uc1\pard\par\</xsl:text>
+
 		<xsl:for-each select="studip/institut">
 			<xsl:text>
 \fs36 Institut: </xsl:text>
 			<xsl:value-of select="name"/>
 			<xsl:text>
-\par\par\fs24\b Fakultät: \b0 </xsl:text>
+\par\par\fs24\b Fakult\'e4t: \b0 </xsl:text>
 			<xsl:value-of select="fakultaet"/>
 			<xsl:text>
 \par\b Homepage: \b0 </xsl:text>
@@ -109,6 +89,8 @@
 					</xsl:otherwise>
 				</xsl:choose>
 			</xsl:if>
+		<xsl:text>
+\page</xsl:text>
 		</xsl:for-each>
 		<xsl:text> }</xsl:text>
 	</xsl:template>
@@ -127,7 +109,7 @@
 				<xsl:text> </xsl:text>
 				<xsl:value-of select="nachname"/>
 			<xsl:if test="titel2">
-				<xsl:text> </xsl:text><xsl:value-of select="titel2"/>
+				<xsl:text>, </xsl:text><xsl:value-of select="titel2"/>
 			</xsl:if>
 <xsl:text>\cell </xsl:text>
 			<xsl:if test="telefon">
