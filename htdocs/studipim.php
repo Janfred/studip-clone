@@ -17,7 +17,14 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
-page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
+
+/**
+* Close the actual window if PHPLib shows login screen
+* @const CLOSE_ON_LOGIN_SCREEN
+*/
+
+define("CLOSE_ON_LOGIN_SCREEN",true);
+page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 
 if ($auth->auth["uid"]!="nobody"){
 
@@ -72,6 +79,7 @@ while ($db->next_record())
       }
 }
 // Start of Output
+$_html_head_title = "Stud.IP IM (" . $auth->auth["uname"] . ")";
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 ?>
 <script language="JavaScript">
@@ -109,7 +117,7 @@ setTimeout('again_and_again();',<? print($refresh*1000);?>);
 
 <table width="100%" border=0 cellpadding=2 cellspacing=0>
 <tr>
-	<td class="topic" colspan=2><img src="pictures/nutzer.gif" border="0" align="texttop"><b>&nbsp;Stud.IP-Messenger</b></td>
+	<td class="topic" colspan=2><img src="pictures/nutzer.gif" border="0" align="texttop"><b>&nbsp;Stud.IP-Messenger (<?=$auth->auth["uname"]?>)</b></td>
 </tr>
 <tr><td class="blank" width="50%" ><table width="100%" border=0 cellpadding=1 cellspacing=0>
 <?php

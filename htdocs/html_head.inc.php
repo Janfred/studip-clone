@@ -2,11 +2,14 @@
 /**
 * html_head.inc.php
 * 
-* output of html-head for all Stud.IP pages
-* parameter $_include_stylesheet
-* -- if not set, use default stylesheet
-* -- if empty, use no stylesheet
-* -- else use set stylesheet
+* output of html-head for all Stud.IP pages<br>
+* parameter <b>$_include_stylesheet</b>
+* <ul><li>if not set, use default stylesheet</li>
+* <li>if empty, use no stylesheet</li>
+* <li>else use set stylesheet</li></ul><br>
+* parameter <b>$_html_head_title</b><br>
+* <ul><li>if not set use default</li>
+* <li> if set use as title </li></ul>
 *
 * @author		Stefan Suchi <suchi@data-quest.de>
 * @version		$Id$
@@ -48,13 +51,16 @@ define("PHPDOC_DUMMY",true);
 		<meta http-equiv="REFRESH" CONTENT="<?php print $auth->lifetime*60;?>; URL=logout.php">
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 		<meta name="copyright" content="Stud.IP-Crew (crew@studip.de)">
-		<title>Stud.IP</title>
 <?php
+if (!isset($_html_head_title))  // if not set, use default title
+	$_html_head_title ="Stud.IP";
+printf("\t\t<title>%s</title>",$_html_head_title);
 if (!isset($_include_stylesheet))  // if not set, use default stylesheet
 	$_include_stylesheet ="style.css";
 if ($_include_stylesheet != "")  // if empty, use no stylesheet
 	printf("\t\t<link rel=\"stylesheet\" href=\"%s\" type=\"text/css\">\n", $_include_stylesheet);
 unset ($_include_stylesheet);
+unset ($_html_head_title);
 ?>
 	</head>
 	<body>
