@@ -91,7 +91,7 @@ class TestVote extends Vote {
       }
 
       if ($ok == NO)
-	 return $this->throwError (1, _("Der ".$this->instanceof." besitzt ".
+	 return $this->throwError (1, _("Der Test besitzt ".
 					"keine als richtig deklarierte ".
 					"Antwort."));
 
