@@ -215,7 +215,6 @@ if ($form == 1)
 	$sem_create_data["sem_inst_id"]=$sem_inst_id;
 	$sem_create_data["term_art"]=$term_art;
 	$sem_create_data["sem_start_time"]=$sem_start_time;
-	echo $sem_create_data["sem_start_time"];
 	
 	if (($sem_duration_time == 0) || ($sem_duration_time == -1))
 		$sem_create_data["sem_duration_time"]=$sem_duration_time;
