@@ -33,7 +33,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 	else{
 		?><td class="links1" align="right" nowrap><a class="links1" href="calendar.php">&nbsp; &nbsp; Terminkalender&nbsp; &nbsp; </a><img src="pictures/reiter1.jpg" align="absmiddle"></td><?
 	}
-
+	if($i_page == "contact.php"){
+		?><td class="links1b" align="right" nowrap><a class="links1b" href="contact.php">&nbsp; &nbsp; Addressbuch&nbsp; &nbsp; </a><img src="pictures/reiter2.jpg" align="absmiddle"></td><?
+	}
+	else{
+		?><td class="links1" align="right" nowrap><a class="links1" href="contact.php">&nbsp; &nbsp; Addressbuch&nbsp; &nbsp; </a><img src="pictures/reiter1.jpg" align="absmiddle"></td><?
+	}
 	if($i_page == "mein_stundenplan.php"){
 		?><td class="links1b" align="right" nowrap><a class="links1b" href="mein_stundenplan.php">&nbsp; &nbsp; Stundenplan&nbsp; &nbsp; </a><img src="pictures/reiter4.jpg" align="absmiddle"></td><?
 	}
@@ -109,6 +114,15 @@ if($i_page == "calendar.php"){
 		?><img src="pictures/forumgrau.gif" border="0"><a class="links1"  href="calendar.php?cmd=changeview<? if($atime) echo "&atime=$atime" ?>">Ansicht anpassen&nbsp; &nbsp; </a><?
 	}
 	
+	echo"<br />";
+}
+
+elseif ($i_page == "contact.php"){
+	echo "<tr><td class=\"steel1\">&nbsp; &nbsp; ";	
+
+
+	?><img src="pictures/forumgrau.gif" border="0"><a class="links1"  target="_new" href="contact.php?print_view=TRUE">Gruppenverwaltung&nbsp; &nbsp; </a><?
+
 	echo"<br />";
 }
 
