@@ -713,7 +713,7 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 			$content.=$default_description;
 		$content.="</textarea>\n";
 		if (($modules["forum"]) || ($modules["documents"]))
-			$content.="<b>" . _("Verkn&uuml;pfungen mit diesem Termin:") . "</b><br />";
+			$content.="<font size=-1><b>" . _("Verkn&uuml;pfungen mit diesem Termin:") . "</b></font><br />";
 
 		//only, if the forum is active
 		if ($modules["forum"])
