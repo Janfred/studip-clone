@@ -39,8 +39,8 @@ require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."
 
 class ExternElementMainLecturedetails extends ExternElementMain {
 
-	var $attributes = array("name", "order", "visible", "aliases",
-			"wholesite", "nameformat", "urlcss", "title", "datelanguage");
+	var $attributes = array("name", "order", "visible", "aliases", "range", "studipinfo",
+			"studiplink", "wholesite", "nameformat", "urlcss", "title", "timelocale");
 	var $edit_function = "editMainSettings";
 	
 	/**
@@ -64,11 +64,14 @@ class ExternElementMainLecturedetails extends ExternElementMain {
 				."|"._("Veranstaltungstyp:")."|"._("Beschreibung:")."|"._("Ort:")."|"._("Zeiten:")
 				."|"._("Teilnehmer:")."|"._("Voraussetzungen:")."|"._("Lernorganisation:")
 				."|"._("Leistungsnachweis:")."|"._("Bereichseinordnung:")."|"._("Sonstiges:"),
+			"range" => "long",
+			"studipinfo" => "1",
+			"studiplink" => "1",
 			"wholesite" => "",
 			"nameformat" => "no_title",
 			"urlcss" => "",
 			"title" => "",
-			"datelanguage" => "de_DE"
+			"timelocale" => "de_DE"
 		);
 		
 		return $config;
@@ -107,24 +110,41 @@ class ExternElementMainLecturedetails extends ExternElementMain {
 		
 		$headline = $edit_form->editHeadline(_("Weitere Angaben"));
 		
+		$title = _("Bereichseinordnung:");
+		$info = _("Wählen Sie, ob die Bereichseinordnung mit übergeordneten Bereichen angezeigt werden soll. Die Option \"kurz\" gibt nur den untersten Bereich aus.");
+		$values = array("long", "short");
+		$names = array(_("vollst&auml;ndig"), _("kurz"));
+		$table = $edit_form->editRadioGeneric("range", $title, $info, $values, $names);
+		
+		$title = _("Stud.IP-Info:");
+		$info = _("Diese Option zeigt weitere Informationen aus der Stud.IP-Datenbank an (Anzahl Teilnehmer, Posting, Dokumente usw.).");
+		$values = "1";
+		$names = "";
+		$table .= $edit_form->editCheckboxGeneric("studipinfo", $title, $info, $values, $names);
+		
+		$title = _("Stud.IP-Link:");
+		$info = _("Anwählen, wenn ein Link angezeigt werden soll, der direkt zum Stud.IP-Administrationsbereich verweisen soll.");
+		$value = "1";
+		$table .= $edit_form->editCheckboxGeneric("studiplink", $title, $info, $value, "");
+		
 		$title = _("HTML-Header/Footer:");
 		$info = _("Anwählen, wenn die Seite als komplette HTML-Seite ausgegeben werden soll, z.B. bei direkter Verlinkung oder in einem Frameset.");
 		$values = "1";
 		$names = "";
-		$table = $edit_form->editCheckboxGeneric("wholesite", $title, $info, $values, $names);
+		$table .= $edit_form->editCheckboxGeneric("wholesite", $title, $info, $values, $names);
 		
 		$title = _("Namensformat:");
 		$info = _("Wählen Sie, wie Personennamen formatiert werden sollen.");
-		$values = array("no_title", "no_title_rev", "full", "full_rev");
-		$names = array(_("Vorname Nachname"), _("Nachname Vorname"),
-				_("Titel Vorname Nachname"), _("Nachname Vorname Titel"));
+		$values = array("no_title_short", "no_title", "no_title_rev", "full", "full_rev");
+		$names = array(_("Meyer, P."), _("Peter Meyer"), _("Meyer Peter"),
+				_("Dr. Peter Meyer"), _("Meyer, Peter, Dr."));
 		$table .= $edit_form->editOptionGeneric("nameformat", $title, $info, $values, $names);
 		
 		$title = _("Sprache Datum");
 		$info = ("Wählen Sie eine Sprache für die Datumsangaben aus.");
 		$values = array("de_DE", "en_US");
 		$names = array(_("Deutsch"), _("Englisch (US)"));
-		$table .= $edit_form->editOptionGeneric("datelanguage", $title, $info, $values, $names);
+		$table .= $edit_form->editOptionGeneric("timelocale", $title, $info, $values, $names);
 		
 		$title = _("Stylesheet-Datei:");
 		$info = _("Geben Sie hier die URL Ihrer Stylesheet-Datei an.");
