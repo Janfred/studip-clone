@@ -130,7 +130,7 @@ class ExternElementMainPersons extends ExternElementMain {
 		else {
 			$text = _("An dieser Einrichtung wurden noch keine Gruppen/Funktionen angelegt, oder es wurden diesen noch keine Personen zugeordnet.");
 			$text .= _("Das Modul gibt nur Daten von Personen aus, die einer Gruppe/Funktion zugeordnet sind.");
-			$table = $edit_form->editText($text);
+			$table = $edit_form->editTextblock($text);
 		}
 		
 		$content_table .= $edit_form->editContentTable($headline, $table);
