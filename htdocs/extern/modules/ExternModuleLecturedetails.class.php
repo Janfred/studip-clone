@@ -165,19 +165,18 @@ class ExternModuleLecturedetails extends ExternModule {
 				$data["subtitle"] = htmlReady($this->db->f("Untertitel"));
 			
 			if ($visible[++$j]) {
-				$lecturer_link = $this->getModuleLink("Persondetails",
-						$this->config->getValue("LinkInternSimple", "config"),
-						$this->config->getValue("LinkInternSimple", "srilink"));
-				$name_sql = $GLOBALS['_fullname_sql'][$this->config->getValue("Main", "nameformat")];
+				if (!$name_sql = $GLOBALS['_fullname_sql'][$this->config->getValue("Main", "nameformat")])
+					$name_sql = "full";
 				$db_lecturer =& new DB_Seminar();
 				$db_lecturer->query("SELECT $name_sql AS name, username FROM seminar_user su LEFT JOIN
 						auth_user_md5 USING(user_id) LEFT JOIN user_info USING(user_id)
 						WHERE su.Seminar_id='{$this->seminar_id}' AND su.status='dozent'");
 				while ($db_lecturer->next_record()) {
-					$data["lecturer"][] = sprintf("<a href=\"%s&username=%s&seminar_id=%s\"%s>%s</a>",
-							$lecturer_link, $db_lecturer->f("username"), $this->seminar_id,
-							$this->config->getAttributes("LinkInternSimple", "a"),
-							$db_lecturer->f("name"));
+					$data["lecturer"][] = $this->elements["LinkInternSimple"]->toString(
+							array("module" => "Persondetails",
+							"link_args" => "username=" . $db_lecturer->f("username")
+							. "&seminar_id=" . $this->seminar_id,
+							"content" => $db_lecturer->f("name")));
 				}
 				if (is_array($data["lecturer"]))
 					$data["lecturer"] = implode(", ", $data["lecturer"]);
@@ -410,10 +409,15 @@ class ExternModuleLecturedetails extends ExternModule {
 			if ($preview)
 				$studip_link = "";
 			else {
-				$studip_link = "http://{$GLOBALS['EXTERN_SERVER_NAME']}seminar_main.php?&auswahl=";
-				$studip_link .= $this->seminar_id;
-				if ($this->config->getValue("Main", "studiplinktarget") != "quickinfo")
-					$studip_link .= "&redirect_to=admin_seminare1.php&login=true&new_sem=TRUE";
+				if ($this->config->getValue("Main", "studiplinktarget") != "signin") {
+					$studip_link = "http://{$GLOBALS['EXTERN_SERVER_NAME']}seminar_main.php?auswahl=";
+					$studip_link .= $this->seminar_id;
+					$studip_link .= "&again=1&redirect_to=admin_seminare1.php&login=true&new_sem=TRUE";
+				}
+				else {
+					$studip_link = "http://{$GLOBALS['EXTERN_SERVER_NAME']}details.php?again=1&sem_id=";
+					$studip_link .= $this->seminar_id;
+				}
 			}
 			if ($this->config->getValue("Main", "studiplink") == "top") {
 				$args = array("width" => "100%", "height" => "40", "link" => $studip_link);
