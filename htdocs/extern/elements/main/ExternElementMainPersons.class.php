@@ -42,7 +42,7 @@ class ExternElementMainPersons extends ExternElementMain {
 	var $attributes = array("name", "genericdatafields", "order", "visible", "aliases", "width",
 			"width_pp", "sort", "groupsalias", "groupsvisible", "grouping", "wholesite",
 			"nameformat", "repeatheadrow", "urlcss", "title", "bodystyle", "bodyclass",
-			"copyright", "author");
+			"copyright", "author", "defaultadr");
 	var $edit_function = "editMainSettings";
 	
 	/**
@@ -84,7 +84,8 @@ class ExternElementMainPersons extends ExternElementMain {
 			"srilink" => "",
 			"copyright" => htmlentities($GLOBALS['UNI_NAME_CLEAN']
 					. " ({$GLOBALS['UNI_CONTACT']})", ENT_QUOTES),
-			"author" => ""
+			"author" => "",
+			"defaultadr" => ''
 		);
 		
 		get_default_generic_datafields($config, "user");
@@ -158,6 +159,10 @@ class ExternElementMainPersons extends ExternElementMain {
 		$names = array(_("&uuml;ber"), _("unter Gruppenname"), _("keine"));
 		$table .= $edit_form->editRadioGeneric("repeatheadrow", $title, $info, $values, $names);
 		
+		$title = _("Standard-Adresse:");
+		$info = _("Wenn Sie diese Option wählen, wird die Standard-Adresse ausgegeben, die jede(r) Mitarbeiter(in) bei seinen universitären Daten auswählen kann. Wählen Sie diese Option nicht, wenn immer die Adresse der Einrichtung ausgegeben werden soll.");
+		$table .= $edit_form->editCheckboxGeneric('defaultadr', $title, $info, '1', '0');
+		
 		$title = _("HTML-Header/Footer:");
 		$info = _("Anwählen, wenn die Seite als komplette HTML-Seite ausgegeben werden soll, z.B. bei direkter Verlinkung oder in einem Frameset.");
 		$values = "1";
@@ -192,15 +197,15 @@ class ExternElementMainPersons extends ExternElementMain {
 	}
 	
 	function checkValue ($attribute, $value) {
-		if ($attribute == "grouping") {
+		if ($attribute == "grouping" || $attribute == "defaultadr") {
 			// This is especially for checkbox-values. If there is no checkbox
 			// checked, the variable is not declared and it is necessary to set the
-			// variable to "".
+			// variable to "0".
 			if (!isset($GLOBALS["HTTP_POST_VARS"][$this->name . "_" . $attribute])) {
 				$GLOBALS["HTTP_POST_VARS"][$this->name . "_" . $attribute] = "";
 				return FALSE;
 			}
-			return !($value == "1" || $value == "");
+			return !($value == '1' || $value == '');
 		}
 		
 		return FALSE;
