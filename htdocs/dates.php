@@ -1,0 +1,105 @@
+<?php
+/*
+dates.php - Script zur Anzeige des Ablaufplans einer Veranstaltung
+Copyright (C) 2000 Andr‚ Noack <anoack@mcis.de>, Cornelis Kater <ckater@gwdg.de>,
+Stefan Suchi <suchi@gmx.de>
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+*/
+
+
+          page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
+          $auth->login_if($again && ($auth->auth["uid"] == "nobody"));
+?>
+
+<html>
+ <head>
+<!--
+// here i include my personal meta-tags; one of those might be useful:
+// <META HTTP-EQUIV="REFRESH" CONTENT="<?php print $auth->lifetime*60;?>; URL=logout.php">
+-->
+  <title>Stud.IP</title>
+        <link rel="stylesheet" href="style.css" type="text/css">
+ </head>
+<body bgcolor="#ffffff">
+
+
+<?php
+// hier muessen Seiten-Initialisierungen passieren
+
+        include "seminar_open.php"; //hier werden die sessions initialisiert
+        include "header.php";   //hier wird der "Kopf" nachgeladen
+        
+        $sess->register("dates_data");
+        
+
+?>
+<body>
+
+<?
+IF ($SessSemName[1] =="")
+        {
+	parse_window ("errorºSie haben keine Veranstaltung gew&auml;hlt. <br /><font size=-1 color=black>Dieser Teil des Systems kann nur genutzt werden, wenn Sie vorher eine Veranstaltung gew&auml;hlt haben.<br /><br /> Dieser Fehler tritt auch auf, wenn Ihre Session abgelaufen ist. Wenn sie sich l„nger als $AUTH_LIFETIME Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurck zur Anmeldung zu gelangen. </font>", "º",
+				"Keine Veranstaltung gew&auml;hlt", 
+				"<a href=\"index.php\"><b>&nbsp;Hier</b></a> geht es wieder zur Anmeldung beziehungsweise Startseite.<br />&nbsp;");
+	die;
+        }
+ELSE
+        {
+        include "links1.php";
+        include "links2.php";
+        include "show_dates.inc.php";
+        
+        require_once("config.inc.php");
+				require_once("visual.inc.php");
+        
+        if ($dopen)
+        	$dates_data["open"]=$dopen;
+        
+        if ($dclose)
+        	$dates_data["open"]='';
+
+	?>
+	<table width="100%" border=0 cellpadding=0 cellspacing=0>
+		<tr>
+			<td class="blank" colspan=2 width="100%">&nbsp;
+			</td>
+		</tr>
+		<tr>
+			<td class="topic" colspan=2><b>&nbsp;<img src="pictures/icon-uhr.gif" align="absmiddle">&nbsp; <? echo htmlReady($SessSemName["art"]) . ": ", htmlReady($SessSemName[0]) ?> - Ablaufplan</b>
+			</td>
+		</tr>
+			<td class="blank" width="100%"><blockquote>Hier finden Sie alle Termine der Veranstaltung.<br><br>Klicken sie auf ein Text-Icon, um zu den hochgeladenen Dateien des jeweiligen Termins zu gelangen.
+			</td>
+			<td class="blank" align="right"><img src="pictures/termine.jpg" border="0">
+			</td>
+		</tr>
+	</table>
+<?
+$show_docs=TRUE;
+$name = rawurlencode($SessSemName[0]);
+($rechte) ? $show_admin="admin_dates.php?range_id=$SessSemName[1]&ebene=sem&name=$name" : $show_admin=FALSE;
+if (show_dates($SessSemName[1], 0, 0, $show_not,$show_docs, $show_admin, $dates_data["open"]))
+	echo"<br>";
+	}
+
+?>
+</body>
+</html>
+<?php
+  // Save data back to database.
+  page_close()
+ ?>
+<!-- $Id$ -->

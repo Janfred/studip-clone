@@ -1,0 +1,168 @@
+30.09.2002 v 0.8 release candidate 3
+- Veranstaltungssuche/šbersicht verbessert: optische besser hervorgehobene Gliederung, frei w„hlbare Gliederungsmodi,
+  verbesserte und bersichtlichere Darstellung
+- Rundmails an alle Buddies k÷nnen verschickt werden
+- neue Institutssuche eingebaut
+- Selbstbezeichnung fr Institute kann nun ver„ndert werden
+- Institute k÷nnen nun als eigenes Objekt betrachtet werden: Damit gibt es eigene Foren, Dateibereich, Mitarberlisten und
+  Veranstaltungsbersicht an jedem Institut innerhalb des Systems 
+
+10.03.2002 v.0.7.5 release candidate 2
+- bessere Performance der Veranstaltungsbersicht
+- Druckansicht fr ein komplettes Forum einer Veranstaltung
+- beim Archivieren wird ein Forumdump mit archiviert
+- der Terminkalender wurde weiter verbessert, insbesondere das Handling von Ganztagsterminen
+- Zitierfunktion im Forum und SMS eingefgt
+- v 2.0 des Chats fertig gestellt: neue Funktionen: SMS aus dem Chat, private Nachrichten, alle Schnellformatierungen verfgbar,
+  Perforrmance optimiert
+- Druckansicht fr das Stundenplanmodul eingefgt
+- umfangreiche Schnellformatierungen eingefhrt. Dafr wird aus Sicherheitsgrnden kein html.Code mehr akzeptiert
+- Linkerkennung verbessert, Formatierungstag fr Linknamen eingefhrt
+- Smiley-Funktion berarbeitet: Neue Smileys, Smiley-Tag wird auf Alt-Tag eingeblendet, Smiley-šbersichtsseite als Link auf jedes Smiley
+- v 2.0 des SMS-Systems: Nachrichten werden nicht mehr sofort gel÷scht, automatisches L÷schen beim Logout auf Wunsch, Signatur fr 
+  SMS
+- Messsenger verbessert
+- Buddylisten eingefngt
+- neue Konfigurationsseite Messaging: Buddieverwaltung, Funktion zum automatischen Starten des Messengers, Einstellungen fr 
+  SMS-System
+- Hilfeseiten auf den aktuellen Stand gebracht
+- mehr Smileys :)
+- weitere Detailverbesserungen und Bugfixes
+
+13.01.2002 v.0.7.0 release candidate 1
+- Komplett neu geschriebener Terminkalender: Tages-, Monats-, Wochen- und Jahresansicht, flexible Wiederholungstermine, 
+  farbliche Kennungen fr Termine, freie Einbindung vom Veranstaltungsterminen, PIM-Optik, zahlreiche Optionen ber
+  MyStudip-Bereich frei konfigurierbar
+- verbessete Ablaufplanverwaltung: Optik an Fluid-Design angepasst, nachtr„gliches Anlegen von Datei und Forenordnern
+  nun m÷glich, verbesserte Bedienung
+- Veranstaltungsbersicht fr Instituts-Admins durch Studenplanmodul realisiert
+- Semesterauswahl fr Stundenplan nun m÷glich
+- MyStud.IP Bereich als eingest„ndiges Modul erstellt und ausgebaut: Optionen fr Forum, Stundenplan und Terminkalender 
+  k÷nnen hier zentral verwaltet werden.
+- Neuer Autologin, der html-Datei als Login Script an den Benutzer verschickt
+- v 2.0 der Newsverwaltung: šbersichtliches Ausw„hlen von gewnschten Bereichen, verbesserte Bedienung, zahlreiche
+  Detailverbesserungen
+- Aufteilung aller Veranstaltung in beliebig viele Kategorien, etwa Kultur und Lehre
+- TOP Listen bei der Veranstaltungsauswahl zeigen meistbesuchte, zuletzt angelegte, aktivste und teilnehmerst„rkste
+  Veranstaltungen an
+- Veranstaltungsauswahl ber Reiter in Bereiche strukturiert
+- Pers÷nliche Seite in der Bedienung verbessert: Einzelne Bereiche k÷nnen direkt angesprungen werden
+- v 2.0 der Verwaltung eigener Kategorien
+- Optik der Startseite verbessert und differenzierte Startseiten fr verschiedene Nutzergruppen realisiert
+- Adminbereich neustrukturiert: Auswahllisten fr einzelne Bereiche sind indentisch im Aufbau, Veranstaltungen k÷nnen vorge-
+  w„hlt werden, so dass das Verwalten mehrerer Aspekte einer Veranstaltung leicht f„llt
+- Optik des Archivs verbessert, es kann auf selbst besuchte Veranstaltungen eingegrenzt werden
+- Der Download wurde verbessert: Download ist als ZIP-Archiv fr alle Dateitypen m÷glich, MIME-Typen werden fr die 
+  wichtigsten Dateien erkannt
+- Aussagekr„ftigere Fehlermeldungen in vielen Bereichen umgesetzt
+- Geschlecht kann bei der Registrierung mit angegeben werden, Zeitpunkt der Erstanmeldung wird gespeichert
+- šbersichtliches Kennzeichnung von Ver„nderungen in besuchten Seminaren auf der šbersichtsseite
+- Verschieben ist im Forum m÷glich, etliche Detailverbesserungen im Forenbereich
+- Impresum neu strukturiert
+- Optik des Literaturbereichs verbessert
+- Handling von Sonderzeichen systemweit optimiert
+- weitere Detailverbesserungen und Bugfixes
+
+01.10.2001 v.0.6.0 beta 4
+- erste komplett berarbeitete und in vielen Details neu durchdachte und strukturierte Version
+- v.2.0 des Forensystems (NT Version): Komplett graphischer Treeview, JavaScript Effekte zur schnellen
+  Verarbeitung der Informationen
+- Assistent zum Anlegen von Seminaren
+- Neues Terminsystem, das flexible Verwaltung von Terminmetadaten erm÷glicht
+- Neue Suchfunktion in der globalen Nutzerverwaltung
+- v.2.0 der Terminverwaltung und des Assistenten zum Erstellen eines Ablaufplans
+- v.3.0 der Ordnerverwaltung: rekursive Ordnerverwaltung, flexibles Anpassen an unterschiedliche Anforderungen,
+  Download per send-Methode
+- Optimierung der Dateiverwaltung durch das OS
+- Optimierung des Zusammenspiels zwischen Terminen und Dokumenten/Ordnern
+- deutlich verbesserte Archivsuche
+- nachtr„gliches Vergeben von Berechtigungen im Archiv nun m÷glich
+- Anzeigen der berechtigten Personen im Archiv m÷glich
+- Scorefunktion eingefgt (Codename geschnitten Brot)
+- freies Verwalten von Kategorien auf der pers÷nlichen Homepage (Codename Extrawurst) eingefgt
+- mystudip eingefgt
+- Stud.IP Messenger eingefgt (beta)
+- Fluid 'n' Steel Optik eingefhrt
+- Ersetzen von Buttons durch Grafikbuttons begonnen
+- Detailverbesserungen am Seminar-Browser
+- Neue Reiteroptik
+- weitere Detailverbesserungen und Bugfixes
+
+28.08.2001
+- Start der Portalseite auf www.studip.de
+
+07.06.2001 v.0.5.0 beta 3 
+- Release bei Sourceforge
+- weitere Fixes
+- Graphische Ausgabe des Stundenplans
+- SMS nicht mehr auf 255 Zeichen begrenzt
+
+01.05,2001 v.0.4.0 beta 2
+- Archiv eingefgt
+- neuer Seminar-Browser (Suchfunktion fr Veranstaltungen)
+- automatisches Archivieren der Veranstaltungen
+- Bereichs- und Fachverwaltung
+- v.2.0 der Dateiverwaltung: Upload nun ber grafische Oberfl„che, orientiert am Explorerlook
+- automatisches Hilfesystem
+- Gruppierung von "Meine Seminare" ber Farbcodes
+- v.2.0 des Newssystems 
+- Facelifting beim Design: Neue Buttons, konsequenter Fensterlook
+
+19.03.2001 v.0.3.0 beta 1
+- erster Release bei Sourceforge
+- unz„hlige Buxfixes
+- alle Detail-Verbesserungen, die sich im laufenden Betrieb gezeit haben
+- diese Version hat den Betrieb ber ein Semester im Ernstfall am Zentrum fr interdisziplin„re Medien-
+  wissenschaft ohne Probleme berstanden 
+
+15.12.2000
+- Stud.IP wird bei Sourceforge registriert
+
+16.10.2000 v.0.2.0 alpha 
+- In letzter Sekunde wird pnktlich zum Start des WS 2000/01 die erste Version im ÷ffentlichen Einsatz fertig gestellt
+- Neue Funktionen: Dateiordner, Chat, SMS-System, Anzeige von Personen, die ebenfalls Online sind,
+  Terminplaner, Personensuche und pers÷nliche Homepage
+- Erste Version mit durchg„ngiger CI
+- Navigation per Reitersystem
+- Anbindung an externe Seiten
+
+07.08.2000
+- sechsstufiges Rechtessystem fertig gestellt
+
+05.08.2000
+- Das Chatmodul wird eingefgt
+
+Sommer 2000
+- Die Konturen des Systems werden allm„hlich erkennbar. Seminarverwaltung, Rechtessystem, Personenverwaltung,
+  erweitertes Forensystem und einige weitere Seiten sind umgesetzt.
+- Andr‚ Noack st÷˜t zu der Entwicklercrew
+- Der Name Stud.IP wird geboren. Es ist die Abkrzung fr STUDentischer Internetsupport von 
+  Pr„senzlehre
+- Domain www.studip.de wird registriert
+
+11.01.2000 v0.1.0
+- Die erste Version im Lehreinsatz: Die Veranstaltung "Kurzfilmpraxis" von Ralf Stockmann nutzt 
+  das personalisierte Forum zur Entwicklung von Drehbchern
+
+07.01.2000
+- Umstellung auf Php-Lib und damit Einfhrung des Sessionmanagements
+
+Dezember 1999
+- Die Arbeiten an Stud.IP beginnen. Noch ist der Name allerdings nicht erfunden.
+- Die Entwickler der ersten Stunde: Stefan Suchi (Core) und Ralf Stockmann (Forum)
+- Grundstein des Systems: Ein Forensystem, realisiert in Php
+
+03.12.1999
+- Der Stud.IP Server, der nach wie vor l„uft, wird installiert
+
+27.11.1999
+- Die erste Projektentwrfe von Stud.IP entstehen. Es soll ein internetbasiertes System zur Untersttzung
+  von Lehrveranstaltungen werden. Personalisiert, mit Seminarverwaltung, Dateiupload, Terminen, News,
+  Forum und Literatur- und Linklisten
+- Das Konzept wird ma˜geblich von der bis heute bestehenden Stud.IP-Crew Oliver Brakel, Cornelis Kater, Ralf 
+  Stockmann und Stefan Suchi entworfen
+- Schnell wird klar, das die Technologie der Wahl ein LAMP Server-System ist
+
+Herbst 1999
+- Eine kleine Gruppe von Interessierten trifft sich, um gemeinsam die Technik dynamischer 
+  Internetseiten mit Datenbankanbindung zu erlernen

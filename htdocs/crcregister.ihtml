@@ -1,0 +1,258 @@
+<html>
+<head>
+  <title>Stud.IP</title>
+	<link rel="stylesheet" href="style.css" type="text/css">
+<script language="javascript" src="md5.js"></script>
+
+<SCRIPT language="JavaScript">
+<!--
+function checkusername(){
+ var re_username = /^([a-zA-Z0-9_@-]*)$/;
+ var checked = true;
+ if (document.login.username.value.length<4) {
+    alert("Der Benutzername ist zu kurz \n- er sollte mindestens 4 Zeichen lang sein.");
+ 		document.login.username.focus();
+    checked = false;
+    }
+ if (re_username.test(document.login.username.value)==false) {
+    alert("Der Benutzername enthÑlt unzulÑssige Zeichen\n- er darf keine Sonderzeichen oder Leerzeichen enthalten.");
+ 		document.login.username.focus();
+    checked = false;
+		}
+ return checked;
+}
+
+function checkpassword(){
+ var checked = true;
+ if (document.login.password.value.length<4) {
+    alert("Das Passwort ist zu kurz \n- es sollte mindestens 4 Zeichen lang sein.");
+ 		document.login.password.focus();
+    checked = false;
+    }
+ return checked;
+}
+
+function checkpassword2(){
+ var checked = true;
+if (document.login.password.value != document.login.password2.value) {
+    alert("Das Passwort stimmt nicht mit dem BestÑtigungspasswort Åberein!");
+    		document.login.password2.focus();
+    checked = false;
+    }
+ return checked;
+}
+
+function checkVorname(){
+ var re_vorname = /^([a-zA-Zéôö][^0-9"¥'`\/\\\(\)\[\]]+)$/;
+ var checked = true;
+ if (re_vorname.test(document.login.Vorname.value)==false) {
+    alert("Bitte geben Sie Ihren tatsÑchlichen Vornamen an.");
+ 		document.login.Vorname.focus();
+    checked = false;
+		}
+ return checked;
+}
+
+function checkNachname(){
+ var re_nachname = /^([a-zA-Zéôö][^0-9"¥'`\/\\\(\)\[\]]+)$/;
+ var checked = true;
+ if (re_nachname.test(document.login.Nachname.value)==false) {
+    alert("Bitte geben Sie Ihren tatsÑchlichen Nachnamen an.");
+ 		document.login.Nachname.focus();
+    checked = false;
+		}
+ return checked;
+}
+
+function checkEmail(){
+ var re_email = /^([_a-zA-Z0-9-]+)(\.[_a-zA-Z0-9-]+)*@([_a-zA-Z0-9-]+\.)+([a-zA-Z]{2,4})$/;
+ var Email = document.login.Email.value;
+ var checked = true;
+ if ((re_email.test(Email))==false || Email.length==0) {
+    alert("Die E-Mail Adresse ist nicht korrekt!");
+ 		document.login.Email.focus();
+    checked = false;
+    }
+ return checked;
+}
+
+function checkdata(){
+ // kompletter Check aller Felder vor dem Abschicken
+ var checked = true;
+ if (!checkusername())
+  checked = false;
+ if (!checkpassword())
+  checked = false;
+ if (!checkpassword2())
+  checked = false;  
+ if (!checkVorname())
+  checked = false;
+ if (!checkNachname())
+  checked = false;
+ if (!checkEmail())
+  checked = false;
+ if (checked) {
+   document.login.method = "post";
+   document.login.action = "<?php print $this->url() ?>";
+   document.login.response.value = MD5(document.login.password.value);
+   document.login.response2.value = MD5(document.login.password2.value);
+   document.login.password.value = "";
+   document.login.password2.value = "";   
+   document.login.submit();
+ }
+ return checked;
+}
+// -->
+</SCRIPT>
+</head>
+
+<body bgcolor="#ffffff">
+<blockquote>
+<table width="80%" align=center border=0 cellpadding=0 cellspacing=0>
+<tr><td class="topic"><b>&nbsp;Stud.IP - Registrierung</b></td></tr>
+<tr><td class="blank">&nbsp;</td></tr>
+<tr><td class="blank">
+
+	<? 
+	global $HTTP_COOKIE_VARS, $username, $Vorname, $Nachname, $Email;
+
+	require_once("msg.inc.php");
+	
+	if (!$HTTP_COOKIE_VARS[$sess->name] || !$HTTP_COOKIE_VARS[$sess->cookiename]) {
+  		?>
+		<table>
+		<tr>
+			<? parse_msg ("error∫<b>Cookies sind nicht aktiviert!</b>∫info∫Die Anmeldung fÅr Stud.IP ist nur m˜glich, wenn Sie das Setzen von Cookies erlauben! Bitte &auml;ndern Sie Ihre Einstellungen und und wiederholen Sie den <a href=\"".$this->url()."\">Login</a>", "∫", "blank", 1, TRUE);?>
+		</tr>
+		<tr>
+			<td class="blank" colspan=2>
+			
+			<b>&nbsp; Was sind Cookies?</b><br /><br />
+			<blockquote>
+			<font size =-1>Cookies werden normalerweise benutzt, damit der Browser den Benutzer der Seiten beim wiederholten Aufrufen dieser Seiten wiederekennen kann <br />
+			Innerhalb von Stud.IP werden Cookies benutzt, um den Namen und die Daten des angemeldeten Benutzers auf jeder Seite neu verf&uuml;gbar zu machen.<br />
+			Ohne Cookies m&uuml;ssten Sie sich beim Betreten jeder Seite neu anmelden!<br></font></blockquote>
+			
+			<b>&nbsp; Sind Cookies gefahrlich?</b><br /><br />
+			<blockquote>
+			<font size =-1>Das Zulassen von Cookies stellt - leider - ein geringf&uuml;giges Sicherheitsrisiko dar. Jedoch sollten Sie Ihr Augenmerk darauf richten, dass in den meisten Browsern Techniken stecken, die ein deutlich gr&ouml;sseres Sicherheitsririko darstellen (etwa AktiveX-Elemente)<br />
+			Au&szlig;sserdem gibt es zwei verschiedene Arten von Cookies: Jene, die auf der Festplatte gespeichert werden und auf dem Rechner verbleiben, und solche, die nur solange aktiv sind, wie sie die entsprechenden Seiten benutzen.<br />
+			Das Stud.IP-System nutzt nur die ungef&auml;hrlicheren Cookies, die sich nur f&uuml;r die Dauer der Sitzung im Speichern des Browser befinden und danach automatisch verschwinden.<br>
+			Sie brauchen sich also keine Sorgen zu machen!<br /></font></blockquote>
+
+			<b>&nbsp; Hinweise f&uuml;r Benutzer des Internet Explorers 6.0</b><br /><br />
+			<blockquote>
+			<font size =-1>Wenn Sie den Internet Explorer 6.0 benutzen, kann es vorkommen, dass Sie auf diese Seite gelangen, da der Browser Cookies vom Stud.IP System nicht akzeptiert<br />
+			Gehen Sie dann bitte so vor:
+			<ol type="1" start="1">
+				<li>&Ouml;ffnen Sie das Menu "Extras" in der Kopfzeile des Browsers
+				<li>Gehen Sie auf "Internetoptionen"
+				<li>W&auml;hlen Sie den Punkt "Datenschutz"
+				<li>Stellen Sie den Regler auf die Einstellung "Alle Cookies annehmen"
+			</ol>
+			</font></blockquote>
+			
+			<b>&nbsp; Hinweise f&uuml;r Benutzer des Netscape Navigator 4.x</b><br /><br />
+			<blockquote>
+			<font size =-1>Wenn Sie den Netscape Navigator 4.x benutzen, k&ouml;nnen Sie das Annehmen von Cookies auf folgende Weise einschalten:<br />
+			<ol type="1" start="1">
+				<li>&Ouml;ffnen Sie das Menu "Bearbeiten" in der Kopfzeile des Browsers
+				<li>Gehen Sie auf "Einstellungen"
+				<li>WÑhlen sie jetzt auf der linken Seite der Einstellungsseite den MenÅpunkt "Erweitert"
+				<li>Aktivieren sie jetzt auf der rechten Seite die Punkte:
+					<ul type="disc">
+					<li>"Benutze JavaScript"
+					<li>"Benutze Style Sheets"
+					<li>"Erlaube Cookies nur von dem Server, von dem die aktuelle Seite stammt"
+					</ul>
+			</ol>
+			</font></blockquote>
+			</td>
+		</table>
+		</td></tr></table>
+		<?
+		die;         
+		}
+
+
+?>
+
+<b>&nbsp;Herzlich Willkommen!<br></b>
+&nbsp;Bitte f&uuml;llen Sie zur Anmeldung das Formular aus:<br>
+
+	<?
+	if ( isset($username) ): ?>
+	<!-- failed login code -->
+	<table>
+		<tr>
+			<? parse_msg ("error∫Bei der Registrierung ist ein Fehler aufgetreten: <b>".$this->error_msg."</b>Bitte korrigieren Sie Ihre Eingaben und versuchen es erneut</b>", "∫", "blank", 1, FALSE );?>
+		</tr>
+	</table>
+
+	<?php endif;?>
+
+
+<form name=login onsubmit="return checkdata()">
+<table border=0 bgcolor="#eeeeee" align="center" cellspacing=0 cellpadding=4>
+ <tr valign=top align=left>
+  <td>Benutzername:</td>
+  <td><input type="text" name="username" onchange="checkusername()" value="<?php print (isset($username) ? $username : "" ) ?>" size=32 maxlength=63></td>
+ </tr>
+
+ <tr valign=top align=left>
+  <td>Passwort:</td>
+  <td><input type="password" name="password" onchange="checkpassword()" size=32 maxlength=31></td>
+ </tr>
+ 
+ <tr valign=top align=left>
+  <td>Passwortbest&auml;tigung:</td>
+  <td><input type="password" name="password2" onchange="checkpassword2()" size=32 maxlength=31></td>
+ </tr>
+
+ <tr valign=top align=left>
+  <td>Vorname:</td>
+  <td><input type="text" name="Vorname" onchange="checkVorname()"  value="<?php print (isset($Vorname) ? $Vorname : "" ) ?>"size=32 maxlength=63></td>
+ </tr>
+
+ <tr valign=top align=left>
+  <td>Nachname:</td>
+  <td><input type="text" name="Nachname" onchange="checkNachname()"  value="<?php print (isset($Nachname) ? $Nachname : "" ) ?>"size=32 maxlength=63></td>
+ </tr>
+
+<tr valign=top align=left>
+  <td>Geschlecht:</td>
+  <td><input type="RADIO" <? if (!$geschlecht) echo "checked" ?> name="geschlecht" value="0">m&auml;nnlich&nbsp; <input type="RADIO" name="geschlecht" <? if ($geschlecht) echo "checked" ?> value="1">weiblich</td>
+ </tr>
+
+ <tr valign=top align=left>
+  <td>E-Mail:</td>
+  <td><input type="text" name="Email" onchange="checkEmail()"  value="<?php print (isset($Email) ? $Email : "" ) ?>"size=32 maxlength=63></td>
+ </tr>
+
+ <tr>
+  <td>&nbsp;</td>
+  <td align=right><input type="submit" name="submitbtn" value=" Registrieren "></td>
+ </tr>
+</table>
+<br /><br />
+
+<!-- Set up the form with the challenge value and an empty reply value -->
+<input type="hidden" name="challenge" value="<?php print $challenge ?>">
+<input type="hidden" name="response"  value="">
+<input type="hidden" name="response2"  value="">
+</form>
+
+</td></tr></table></blockquote>
+
+</body>
+<script language="JavaScript">
+<!--
+  // Activate the appropriate input form field.
+  if (document.login.username.value == '') {
+    document.login.username.focus();
+  } else {
+    document.login.password.focus();
+  }
+// -->
+</script>
+</html>

@@ -1,0 +1,155 @@
+<html>
+<head>
+  <title>Stud.IP</title>
+	<link rel="stylesheet" href="style.css" type="text/css">
+<script language="javascript" src="md5.js"></script>
+<script language="javascript">
+<!--
+  function doChallengeResponse() {
+    str = document.login.username.value + ":" +
+	  MD5(document.login.password.value) + ":" +
+	  document.login.challenge.value;
+
+    document.login.response.value = MD5(str);
+    document.login.password.value = "";
+    document.login.resolution.value = screen.width+"x"+screen.height;
+    document.login.submit();
+  }
+// -->
+</script>
+</head>
+
+<body bgcolor="#ffffff">
+<table width="75%" align="center" border=0 cellpadding=0 cellspacing=0>
+<tr><td class="topic"><img src="pictures/login.gif" border="0"><b>&nbsp;Stud.IP - Login</b></td></tr>
+<tr><td class="blank">
+
+	<? 
+	global $HTTP_COOKIE_VARS, $username;
+	
+	require_once("msg.inc.php");
+	
+	if ($username && !$HTTP_COOKIE_VARS[$sess->name])
+	{
+		?>
+		<table width="96%" class=blank border=0 cellpadding=0 cellspacing=0>
+		<tr>
+			<td class="blank">
+			&nbsp;  
+			</td>
+		</tr>
+		<? parse_msg ("error∫<b>Cookies sind nicht aktiviert!</b>∫info∫Die Anmeldung fÅr Stud.IP ist nur m˜glich, wenn Sie das Setzen von Cookies erlauben! Bitte &auml;ndern Sie Ihre Einstellungen und und wiederholen Sie den <a href=\"".$this->url()."\">Login</a>", "∫", "blank", 1, TRUE);?>
+		<tr>
+			<td class="blank">
+			
+			<b>&nbsp; Was sind Cookies?</b><br /><br />
+			<blockquote>
+			<font size =-1>Cookies werden normalerweise benutzt, damit der Browser den Benutzer der Seiten beim wiederholten Aufrufen dieser Seiten wiederekennen kann <br />
+			Innerhalb von Stud.IP werden Cookies benutzt, um den Namen und die Daten des angemeldeten Benutzers auf jeder Seite neu verf&uuml;gbar zu machen.<br />
+			Ohne Cookies m&uuml;ssten Sie sich beim Betreten jeder Seite neu anmelden!<br></font></blockquote>
+			
+			<b>&nbsp; Sind Cookies gefahrlich?</b><br /><br />
+			<blockquote>
+			<font size =-1>Das Zulassen von Cookies stellt - leider - ein geringf&uuml;giges Sicherheitsrisiko dar. Jedoch sollten Sie Ihr Augenmerk darauf richten, dass in den meisten Browsern Techniken stecken, die ein deutlich gr&ouml;sseres Sicherheitsririko darstellen (etwa AktiveX-Elemente)<br />
+			Au&szlig;sserdem gibt es zwei verschiedene Arten von Cookies: Jene, die auf der Festplatte gespeichert werden und auf dem Rechner verbleiben, und solche, die nur solange aktiv sind, wie sie die entsprechenden Seiten benutzen.<br />
+			Das Stud.IP-System nutzt nur die ungef&auml;hrlicheren Cookies, die sich nur f&uuml;r die Dauer der Sitzung im Speichern des Browser befinden und danach automatisch verschwinden.<br>
+			Sie brauchen sich also keine Sorgen zu machen!<br /></font></blockquote>
+
+			<b>&nbsp; Hinweise f&uuml;r Benutzer des Internet Explorers 6.0</b><br /><br />
+			<blockquote>
+			<font size =-1>Wenn Sie den Internet Explorer 6.0 benutzen, kann es vorkommen, dass Sie auf diese Seite gelangen, da der Browser Cookies vom Stud.IP System nicht akzeptiert<br />
+			Gehen Sie dann bitte so vor:
+			<ol type="1" start="1">
+				<li>&Ouml;ffnen Sie das Menu "Extras" in der Kopfzeile des Browsers
+				<li>Gehen Sie auf "Internetoptionen"
+				<li>W&auml;hlen Sie den Punkt "Datenschutz"
+				<li>Stellen Sie den Regler auf die Einstellung "Alle Cookies annehmen"
+			</ol>
+			</font></blockquote>
+			
+			<b>&nbsp; Hinweise f&uuml;r Benutzer des Netscape Navigator 4.x</b><br /><br />
+			<blockquote>
+			<font size =-1>Wenn Sie den Netscape Navigator 4.x benutzen, k&ouml;nnen Sie das Annehmen von Cookies auf folgende Weise einschalten:<br />
+			<ol type="1" start="1">
+				<li>&Ouml;ffnen Sie das Menu "Bearbeiten" in der Kopfzeile des Browsers
+				<li>Gehen Sie auf "Einstellungen"
+				<li>WÑhlen sie jetzt auf der linken Seite der Einstellungsseite den MenÅpunkt "Erweitert"
+				<li>Aktivieren sie jetzt auf der rechten Seite die Punkte:
+					<ul type="disc">
+					<li>"Benutze JavaScript"
+					<li>"Benutze Style Sheets"
+					<li>"Erlaube Cookies nur von dem Server, von dem die aktuelle Seite stammt"
+					</ul>
+			</ol>
+			</font></blockquote>
+			</td>
+		</tr>
+		<tr>
+			<td class="blank">
+			&nbsp;  
+			</td>
+		</tr>
+		</table>
+		</td></tr></table>
+		<?
+		die;
+	}
+	?>
+	<table width=100% class=blank border=0 cellpadding=0 cellspacing=0><tr><td class=blank><blockquote>
+	<br>
+	Bitte identifizieren Sie sich mit Benutzername und Passwort:<br>	
+	
+	<?
+	if  (isset($this->auth["uname"]) && $this->error_msg):
+	?>
+	<!-- failed login code -->
+	<table>
+		<tr>
+			<? parse_msg ("error∫Bei der Anmeldung trat ein Fehler auf: <br /><b>".$this->error_msg."</b>Versuchen Sie es noch einmal!</b>", "∫", "blank", 1, FALSE );?>
+		</tr>
+	</table>
+
+	<?php endif;?>
+
+
+	<FORM NAME="login" METHOD=POST ACTION="<?php print $this->url() ?>">
+
+	<!-- Set up the form with the challenge value and an empty reply value -->
+	<input type="hidden" name="challenge" value="<?php print $challenge ?>">
+	<input type="hidden" name="response"  value="">
+	<input type="hidden" name="resolution"  value="">
+
+	<table border=0 bgcolor="#eeeeee" align="left" cellspacing=0 cellpadding=4>
+
+		<tr valign=top align=left>
+			<td class="steel1">Benutzername: </td>
+			<td class="steel1"><input type="text" name="username" value="<?php print (isset($this->auth["uname"]) ? $this->auth["uname"] : "" ) ?>" size=20 maxlength=63></td>
+		</tr>
+
+		<tr valign=top align=left>
+			<td class="steel1">Passwort: </td>
+			<td class="steel1"><input type="password" name="password" size=20 maxlength=31></td> 
+		</tr>
+
+		<tr>
+			<td class="steel1">&nbsp;</td>
+			<td align=right class="steel1"><input type="submit" onClick="doChallengeResponse(); return false;"  name="submitbtn" src="./pictures/buttons/login-button.gif" border="0" value=" Login "></td>
+		</tr>
+
+	</table></blockquote></td><td align=right class=blank valign=top><img src="pictures/maus.jpg"></td></tr><tr><td class=blank colspan=2 align=center><br><br><img src="pictures/willkommen.gif"><br>&nbsp;</td></tr></table>
+	</form>
+
+</td></tr></table>
+
+</body>
+<script language="JavaScript">
+<!--
+  // Activate the appropriate input form field.
+  if (document.login.username.value == '') {
+    document.login.username.focus();
+  } else {
+    document.login.password.focus();
+  }
+// -->
+</script>
+</html>

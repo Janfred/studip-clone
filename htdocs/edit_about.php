@@ -1,0 +1,1136 @@
+<?php
+/*
+about_edit.php - éndern der pers˜nlichen Userseiten von Stud.IP
+Copyright (C) 2000 Ralf Stockmann <rstockm@gwdg.de>, Stefan Suchi <suchi@gmx.de>, Niklas Nohlen <nnohlen@gwdg.de>,
+Miro Freitag <mfreita@goe.net>, AndrÇ Noack <andre.noack@gmx.net>
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+*/
+
+
+page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
+$auth->login_if(!$logout && ($auth->auth["uid"] == "nobody"));
+
+if ($usr_name)  $username=$usr_name; //wenn wir von den externen Seiten kommen, nehmen wir den Usernamen aus usr_name, falls dieser gesetzt ist, um die Anmeldeprozedur nicht zu verwirren....
+
+require_once "config.inc.php";
+require_once "kategorien.inc.php";
+require_once "msg.inc.php";
+require_once "messaging.inc.php";
+require_once "visual.inc.php";
+
+// Klassendefinition
+
+class about extends messaging  
+{
+var $db;     //unsere Datenbankverbindung
+var $auth_user = array();     // assoziatives Array, enthÑlt die Userdaten aus der Tabelle auth_user_md5
+var $user_info = array();     // assoziatives Array, enthÑlt die Userdaten aus der Tabelle user_info
+var $user_inst = array();     // assoziatives Array, enthÑlt die Userdaten aus der Tabelle user_inst
+var $check="";    //Hilfsvariable fÅr den Rechtecheck
+var $special_user=FALSE;  // Hilfsvariable fÅr bes. Institutsfunktionen
+var $msg = ""; //enthÑlt evtl Fehlermeldungen
+var $max_file_size = 100; //max Gr˜òe der Bilddatei in KB
+var $uploaddir = "./user"; //Uploadverzeichnis fÅr Bilder
+var $logout_user = FALSE; //Hilfsvariable, zeigt an, ob der User ausgeloggt werden muò
+var $priv_msg="";  //énderungsnachricht bei Adminzugriff
+var $default_url="http://www"; //default fuer private URL
+
+
+function about($username,$msg)   // Konstruktor, prÅft die Rechte
+{
+ global $user,$perm,$auth;
+  $this->db = new DB_Seminar;
+  $this->get_auth_user($username);
+  $this->msg = rawurldecode($msg); //Meldungen restaurieren
+
+  if ($auth->auth["uname"] == $username AND $perm->have_perm("autor")) $this->check="user"; // der user selbst natÅrlich auch
+  elseif ($auth->auth["perm"]=="admin")     //bei admins schauen wir mal
+   {
+   $this->db->query("SELECT a.user_id FROM user_inst AS a LEFT JOIN user_inst AS b USING (Institut_id) WHERE (b.inst_perms='admin' AND b.user_id='$user->id') AND (a.user_id='".$this->auth_user["user_id"]."' AND a.inst_perms IN ('dozent','tutor','autor'))");
+   if ($this->db->num_rows()) $this->check="admin";
+   }
+ elseif ($auth->auth["perm"]=="root") $this->check="admin";  //root darf mal wieder alles
+ else $this->check="";
+
+ if ($this->auth_user["username"]=="") $this->check="";    //hier ist wohl was falschgelaufen...
+
+  return;
+}
+
+
+function get_auth_user($username)
+{
+ $this->db->query("SELECT * FROM auth_user_md5 WHERE username = '$username'");  //ein paar userdaten brauchen wir schon mal
+  if ($this->db->next_record())
+   {
+   $fields = $this->db->metadata();
+   for ($i=0; $i<count($fields); $i++)
+    {
+    $field_name = $fields[$i]["name"];
+    $this->auth_user[$field_name] = $this->db->f("$field_name");
+    }
+   }
+}
+
+function get_user_details()        // fÅllt die arrays  mit Daten
+{
+  $this->db->query("SELECT * FROM user_info WHERE user_id = '".$this->auth_user["user_id"]."'");
+  if ($this->db->next_record())
+   {
+   $fields = $this->db->metadata();
+   for ($i=0; $i<count($fields); $i++)
+    {
+    $field_name = $fields[$i]["name"];
+    $this->user_info[$field_name] = $this->db->f("$field_name");
+    if (!$this->user_info["Home"])
+    	$this->user_info["Home"]=$this->default_url;
+    }
+   }
+
+
+  $this->db->query("SELECT user_inst.*,Institute.Name FROM user_inst LEFT JOIN Institute USING (Institut_id) WHERE user_id = '".$this->auth_user["user_id"]."' ORDER BY Institut_id");
+  while ($this->db->next_record())
+   {
+   $this->user_inst[$this->db->f("Institut_id")] = array ("inst_perms" => $this->db->f("inst_perms"), "sprechzeiten" => $this->db->f("sprechzeiten"), "raum" => $this->db->f("raum"), "Telefon" => $this->db->f("Telefon"), "Fax" => $this->db->f("Fax"), "Name" => $this->db->f("Name"), "Funktion" => $this->db->f("Funktion"));
+   if ($this->db->f("inst_perms")!="user") $this->special_user=TRUE;
+   }
+
+  return;
+}
+
+function imaging($img,$img_size,$img_name)
+{
+ global $DJPEG_PATH, $CJPEG_PATH, $PNMSCALE_PATH, $GIFTOPNM_PATH;
+ if ($img_size > ($this->max_file_size*1024))  //Bilddatei ist zu groò
+   {
+   $this->msg = "error∫Die hochgeladene Bilddatei ist ".round($img_size/1024)." KB groò!<br>Die maximale Dateigr˜òe betrÑgt ".$this->max_file_size." KB!";
+   return;
+   }
+  if (!$img_name)  //keine Datei ausgewÑhlt!
+   {
+   $this->msg = "error∫Sie haben keine Datei zum hochladen ausgewÑhlt!";
+   return;
+   }
+  //Dateiendung bestimmen
+  $dot = strrpos($img_name,".");
+  if ($dot)
+   {
+       $l = strlen($img_name) - $dot;
+       $ext = strtolower(substr($img_name,$dot+1,$l));
+   }
+  //passende Endung ?
+  if ($ext != "jpg" && $ext != "gif" )
+   {
+   $this->msg = "error∫Der Dateityp der Bilddatei ist falsch (.$ext)!<br>Es sind nur die Dateiendungen .gif und .jpg erlaubt!";
+   return;
+   }
+
+  //na dann kopieren wir mal...
+  $newfile = $this->uploaddir . "/".$this->auth_user["user_id"].".jpg";
+  if(!copy($img,$newfile))
+   {
+   $this->msg = "error∫Fehler beim kopieren der Datei!!!";
+   return;
+   }
+  else
+   {
+    //Tempr&auml;re Datei
+   $tmpimg = "/tmp/tmp.pnm";
+   //Konvertierung nach PNM
+   if ($ext == "jpg")
+     { system($DJPEG_PATH ." $newfile >$tmpimg"); }
+   else if ($ext == "gif")
+    { system($GIFTOPNM_PATH ." $newfile >$tmpimg"); }
+
+    $imgsize = GetImageSize($img);
+   //Bildgr&ouml;&szlig;e &uuml;berpf&uuml;fen
+   if (($imgsize[0] > 200) || ($imgsize[1] > 250))
+    {
+    //Neues Bild
+    system($PNMSCALE_PATH ." -xysize 200 250 $tmpimg | ". $CJPEG_PATH ." -smoo 10 -qual 60 >$newfile");
+    }
+  else
+   {
+      system($CJPEG_PATH ." -smoo 10 -qual 60 -outfile $newfile $tmpimg");
+     }
+
+   $this->msg = "msg∫Die Bilddatei wurde erfolgreich hochgeladen! Eventuell sehen Sie das neue Bild erst nach einem Reload dieser Seite.";
+   $this->priv_msg= "Eine neue Bilddatei wurde hochgeladen.";
+   }
+  return;
+}
+
+
+function inst_edit($inst_delete,$new_inst)
+{
+ if (is_array($inst_delete))
+   {
+   for ($i=0; $i < count($inst_delete); $i++)
+    {
+    $this->db->query("DELETE FROM user_inst WHERE user_id='".$this->auth_user["user_id"]."' AND Institut_id='$inst_delete[$i]'");
+    if (!$this->db->affected_rows()) $this->msg = $this->msg."error∫Fehler beim L&ouml;schen in user_inst bei ID=$inst_delete[$i]∫";
+    }
+   }
+
+  if ($new_inst)
+   {
+   $this->db->query("INSERT INTO user_inst (user_id,Institut_id,inst_perms,Funktion) VALUES ('".$this->auth_user["user_id"]."','$new_inst','user','Student')");
+   if (!$this->db->affected_rows()) $this->msg = $this->msg."error∫Fehler beim Einf&uuml;gen in user_inst bei ID=$new_inst∫";
+   }
+
+  if ( ($inst_delete || $new_inst) && !$this->msg)
+  {
+  $this->msg = "msg∫Die Zuordnung zu Einrichtungen wurde ge&auml;ndert.";
+  $this->priv_msg= "Die Zuordnung zu Einrichtungen wurde ge&auml;ndert!";
+  }
+
+  return;
+}
+
+function special_edit($raum,$sprech,$tel,$fax,$name)
+{
+ if (is_array($raum))
+   {
+   while (list($inst_id,$detail) = each ($raum))
+    {
+    $this->db->query("UPDATE user_inst SET raum='$detail', sprechzeiten='$sprech[$inst_id]', Telefon='$tel[$inst_id]', Fax='$fax[$inst_id]' WHERE Institut_id='$inst_id' AND user_id='".$this->auth_user["user_id"]."'");
+    if ($this->db->affected_rows())
+         {
+         $this->msg = $this->msg."msg∫Ihre Daten an der Einrichtung $name[$inst_id] wurden geÑndert∫";
+         $this->priv_msg = $this->priv_msg."Ihre Daten an der Einrichtung $name[$inst_id] wurden geÑndert.";
+         }
+    }
+
+   }
+  return;
+}
+
+function edit_leben($password,$check_pass,$response,$new_username,$vorname,$nachname,$email,$telefon,$anschrift,$home,$hobby,$geschlecht,$lebenslauf,$schwerp,$publi,$view)
+{
+  //check ob die blobs verÑndert wurden...
+   $this->db->query("SELECT  lebenslauf, schwerp, publi FROM user_info WHERE user_id='".$this->auth_user["user_id"]."'");
+   $this->db->next_record();
+   if ($lebenslauf!=$this->db->f("lebenslauf") || $schwerp!=$this->db->f("schwerp") || $publi!=$this->db->f("publi"))
+    	{
+  	$this->db->query("UPDATE user_info SET lebenslauf='$lebenslauf', schwerp='$schwerp', publi='$publi', chdate='".time()."' WHERE user_id='".$this->auth_user["user_id"]."'");
+      	$this->msg = $this->msg."msg∫Daten an Lebenslauf u.a. ge&auml;ndert∫";
+  	$this->priv_msg = "Daten Daten an Lebenslauf u.a. wurden geÑndert.";
+   	}
+   }
+
+
+function edit_pers($password,$check_pass,$response,$new_username,$vorname,$nachname,$email,$telefon,$anschrift,$home,$hobby,$geschlecht,$lebenslauf,$schwerp,$publi,$view)
+{
+	global $UNI_NAME_CLEAN; 
+ //erstmal die "unwichtigen" Daten
+  if ($home==$this->default_url)
+  	$home='';
+  $this->db->query("UPDATE user_info SET privatnr='$telefon', privadr='$anschrift', Home='$home', hobby='$hobby', geschlecht='$geschlecht', chdate='".time()."' WHERE user_id='".$this->auth_user["user_id"]."'");
+  if ($this->db->affected_rows())
+       {
+       $this->msg = $this->msg."msg∫Ihre pers&ouml;nlichen Daten wurden ge&auml;ndert.∫";
+       $this->priv_msg = "Ihre pers˜nlichen Daten wurden geÑndert.";
+       }
+
+	$new_username = trim($new_username);
+	$vorname = trim($vorname);
+	$nachname = trim($nachname);
+	$email = trim($email);
+
+  //nur n˜tig wenn der user selbst seine daten Ñndert
+  if ($this->check == "user")
+  {
+  //erstmal die Syntax checken $validator wird in der local.inc.php benutzt, sollte also funzen
+  $validator=new email_validation_class; ## Klasse zum Ueberpruefen der Eingaben
+  $validator->timeout=10;
+
+  if (($response && $response!=md5("*****")) || $password!="*****")       //Passwort verÑndert ?
+  {                     ## auf doppelte Vergabe wird weiter unten getestet.
+  if (!isset($response) || $response=="") { ## wir haben kein verschluesseltes Passwort
+   if (!$validator->ValidatePassword($password))
+     {
+     $this->msg=$this->msg."error∫Das Paòwort ist zu kurz!∫";
+     return false;
+     }
+    if ($check_pass != $password)
+     {
+     $this->msg=$this->msg."error∫Die Wiederholung des Paòwortes ist falsch! Bitte geben sie das exakte Paòwort ein!∫";
+     return false;
+     }
+    $newpass=md5($password);             ## also k˜nnen wir das unverschluesselte Passwort testen
+    }
+     else $newpass=$response;
+
+    $this->db->query("UPDATE auth_user_md5 SET password='$newpass' WHERE user_id='".$this->auth_user["user_id"]."'");
+    $this->msg=$this->msg."msg∫Ihr Passwort wurde geÑndert!∫";
+    }
+
+    if ($vorname!=$this->auth_user["Vorname"] || $nachname!=$this->auth_user["Nachname"])  //Namen verÑndert ?
+  {
+  if (!$validator->ValidateName($vorname))
+    {
+    $this->msg=$this->msg."error∫Der Vorname fehlt, oder ist unsinnig!∫";
+   return false;
+   }      ## Vorname nicht korrekt oder fehlend
+  if (!$validator->ValidateName($nachname))
+    {
+    $this->msg=$this->msg."error∫Der Nachname fehlt, oder ist unsinnig!∫";
+   return false;      ## Nachname nicht korrekt oder fehlend
+    }
+  $this->db->query("UPDATE auth_user_md5 SET Vorname='$vorname', Nachname='$nachname' WHERE user_id='".$this->auth_user["user_id"]."'");
+  $this->msg=$this->msg."msg∫Ihr Name wurde geÑndert!∫";
+  }
+
+  if ($this->auth_user["username"] != $new_username)
+    {
+    if (!$validator->ValidateUsername($new_username))
+     {
+     $this->msg=$this->msg."error∫Der gewÑhlte Username ist zu kurz!∫";
+           return false;
+        }
+   $this->db->query("SELECT username,Vorname,Nachname FROM auth_user_md5 WHERE username='$new_username'") ;
+        if ($this->db->num_rows())
+         {
+     $this->msg=$this->msg."error∫Der Username wird bereits von einem anderen User (".$this->db->f("Vorname")." ".$this->db->f("Nachname").") verwendet. Bitte wÑhlen sie einen Anderen!∫";
+        return false;
+     }
+    $this->db->query("UPDATE auth_user_md5 SET username='$new_username' WHERE user_id='".$this->auth_user["user_id"]."'");
+    $this->msg=$this->msg."msg∫Ihr Username wurde geÑndert!∫";
+    $this->logout_user = TRUE;
+    }
+
+  if ($this->auth_user["Email"] != $email)
+   {  //email wurde geÑndert!
+   $smtp=new smtp_class;       ## Einstellungen fuer das Verschicken der Mails
+   $smtp->host_name=getenv("SERVER_NAME");
+   $smtp->localhost="localhost";
+   $REMOTE_ADDR=getenv("REMOTE_ADDR");
+   $Zeit=date("H:i:s, d.m.Y",time());
+
+
+   if (!$validator->ValidateEmailAddress($email))
+    {
+    $this->msg=$this->msg."error∫Die E-Mail Addresse fehlt, oder ist falsch geschrieben!∫";
+   return false;        ## E-Mail syntaktisch nicht korrekt oder fehlend
+   }
+
+
+   if (!$validator->ValidateEmailHost($email)) {     ## Mailserver nicht erreichbar, ablehnen
+   $this->msg=$this->msg."error∫Der Mailserver ist nicht erreichbar, bitte ÅberprÅfen Sie, ob Sie E-Mails mit der angegebenen Addresse verschicken k˜nnen!∫";
+   return false;
+    } else {       ## Server ereichbar
+   if (!$validator->ValidateEmailBox($email)) {    ## aber user unbekannt. Mail an abuse@puk!
+    $from="wwwrun@".$smtp->host_name;
+    $to="abuse@".$smtp->host_name;
+    $smtp->SendMessage(
+    $from, array($to),
+    array("From: $from", "To: $to", "Subject: edit_about"),
+    "Emailbox unbekannt\n\nUser: ".$this->auth_user["username"]."\nEmail: $email\n\nIP: $REMOTE_ADDR\nZeit: $Zeit\n");
+    $this->msg=$this->msg."error∫Die angegebene E-Mail Addresse ist nicht erreichbar, bitte ÅberprÅfen Sie Ihre Angaben!∫";
+    return false;
+     }
+
+    }
+       $this->db->query("SELECT Email,Vorname,Nachname FROM auth_user_md5 WHERE Email='$email'") ;
+
+       if ($this->db->next_record())
+        {
+    $this->msg=$this->msg."error∫Die angegebene E-Mail Addresse wird bereits von einem anderen User (".$this->db->f("Vorname")." ".$this->db->f("Nachname").") verwendet. Sie mÅssen eine andere E-Mail Addresse angeben!∫";
+    return false;
+    }
+
+      //email ist ok, user bekommt neues Passwort an diese Addresse
+
+      $newpass=$this->generate_password(6);
+      $hashpass=md5($newpass);
+      ## Mail abschicken...
+  $from="\"Stud.IP\" <wwwrun@".$smtp->host_name.">";
+  $abuse="abuse@".$smtp->host_name;
+  $to=$email;
+  $url = "http://" . $smtp->host_name . $CANONICAL_RELATIVE_PATH_STUDIP;
+  $mailbody="Dies ist eine Informationsmail des Systems\n"
+  ."\"Studentischer Internetsupport PrÑsenzlehre\"\n"
+	."- $UNI_NAME_CLEAN -\n\n"
+  ."Ihr Passwort wurde um $Zeit neu gesetzt,\n"
+  ."da Sie Ihre Email Addresse verÑndert haben!\n"
+  ."Die aktuellen Angaben lauten:\n\n"
+  ."Benutzername: $new_username\n"
+  ."Passwort: $newpass\n"
+  ."Status: ".$this->auth_user["perms"]."\n"
+  ."Vorname: $vorname\n"
+  ."Nachname: $nachname\n"
+  ."Email-Adresse: $email\n\n"
+  ."Das Passwort ist nur Ihnen bekannt. Bitte geben Sie es an niemanden\n"
+  ."weiter (auch nicht an einen Administrator), damit nicht Dritte in Ihrem\n"
+  ."Namen Nachrichten in das System einstellen k˜nnen!\n\n"
+  ."Hier kommen Sie direkt ins System:\n"
+  ."$url\n\n"
+;
+
+  $smtp->SendMessage(
+  $from, array($to),
+  array("From: $from", "Reply-To: $abuse", "To: $to", "Subject: Passwort-énderung Stud.IP"),
+  $mailbody);
+
+   $this->db->query("UPDATE auth_user_md5 SET Email='$email', password='$hashpass' WHERE user_id='".$this->auth_user["user_id"]."'");
+   $this->msg=$this->msg."msg∫Ihre Email Addresse wurde geÑndert!∫info∫ACHTUNG!<br>Aus SicherheitsgrÅnden wurde auch ihr Paòwort geÑndert, es wurde an die neu angegebene Email Addresse geschickt!∫";
+   $this->logout_user = TRUE;
+    }
+
+  }
+
+  return;
+}
+
+
+function select_inst()   //Hilfsfunktion, erzeugt eine Auswahlbox mit noch auswÑhlbaren Instituten
+{
+  echo "<select name=\"new_inst\" width=30><option selected></option>";
+  $this->db->query("SELECT a.Institut_id,a.Name FROM Institute AS a LEFT JOIN user_inst AS b ON (b.user_id='".$this->auth_user["user_id"]."' AND a.Institut_id=b.Institut_id) WHERE b.Institut_id IS NULL ORDER BY a.Name");
+
+  while ($this->db->next_record())
+   {
+   echo "<option value=\"".$this->db->f("Institut_id")."\">".htmlReady(substr($this->db->f("Name"),0,50))."</option>";
+   }
+  echo "</select>";
+
+  return;
+}
+
+function generate_password($length)       //Hilfsfunktion, erzeugt neues Passwort
+{
+ mt_srand((double)microtime()*1000000);
+ for ($i=1;$i<=$length;$i++) {
+  $temp = mt_rand() % 36;
+  if ($temp < 10)
+   $temp += 48;   // 0 = chr(48), 9 = chr(57)
+  else
+   $temp += 87;   // a = chr(97), z = chr(122)
+  $pass .= chr($temp);
+ }
+ return $pass;
+}
+
+
+
+//Displays Errosmessages (kritischer Abbruch, Symbol "X")
+
+function my_error($msg)
+{
+?>
+ <tr>
+  <td class="blank" colspan=2>
+   <table border=0 align="left" cellspacing=0 cellpadding=2>
+    <tr>
+     <td class="blank" align="center" width=50><img src="pictures/x.gif"></td>
+     <td class="blank" align="left" width="*"><font color=#FF2020><?php print $msg ?></font></td>
+    </tr>
+   </table>
+  </td>
+ </tr>
+ <tr>
+  <td class="blank" colspan=2>&nbsp;</td>
+ </tr>
+<?
+}
+
+
+//Displays  Successmessages (Information &uuml;ber erfolgreiche Aktion, Symbol Haken)
+
+function my_msg($msg)
+{
+?>
+ <tr>
+  <td class="blank" colspan=2>
+   <table border=0 align="left" cellspacing=0 cellpadding=2>
+    <tr>
+     <td class="blank" align="center" width=50><img src="pictures/ok.gif"></td>
+     <td class="blank" align="left" width="*"><font color=#008000><?php print $msg ?></font></td>
+    </tr>
+   </table>
+  </td>
+ </tr>
+ <tr>
+  <td class="blank" colspan=2>&nbsp;</td>
+ </tr>
+<?
+}
+
+//Displays  Informationmessages  (Hinweisnachrichten, Symbol Ausrufungszeichen)
+
+function my_info($msg)
+{
+?>
+ <tr>
+  <td class="blank" colspan=2>
+   <table border=0 align="left" cellspacing=0 cellpadding=2>
+    <tr>
+     <td class="blank" align="center" width=50><img src="pictures/ausruf.gif"></td>
+     <td class="blank" align="left" width="*"><font color=#008000><?php print $msg ?></font></td>
+    </tr>
+   </table>
+  </td>
+ </tr>
+ <tr>
+  <td class="blank" colspan=2>&nbsp;</td>
+ </tr>
+<?
+}
+
+function parse_msg($long_msg,$separator="∫")
+{
+  $msg = explode ($separator,$long_msg);
+   for ($i=0; $i < count($msg); $i=$i+2)
+         {
+         switch ($msg[$i])
+     {
+     case "error" : $this->my_error($msg[$i+1]); break;
+     case "info" : $this->my_info($msg[$i+1]); break;
+     case "msg" : $this->my_msg($msg[$i+1]); break;
+     }
+         }
+  return;
+}
+
+
+} // ende Klassendefinition
+
+
+
+
+
+
+// hier gehts los
+if (!$username) $username = $auth->auth["uname"];
+
+$my_about = new about($username,$msg);
+$cssSw = new cssClassSwitcher;
+
+if ($logout)  // wir wurden gerade ausgeloggt...
+  {
+  ?>
+ <html>
+ <head>
+ <title>Stud.IP
+</title>
+  <link rel="stylesheet" href="style.css" type="text/css">
+  </head>
+  <?
+  include ("seminar_open.php");
+  include ("header.php");
+ ?>
+  <table cellspacing="0" cellpadding="0" border="0" width="100%">
+  <tr><td class="topic" colspan=2><b>&nbsp;Daten geÑndert!</b></th></tr>
+  <?
+
+  $my_about->parse_msg($my_about->msg);
+  $my_about->my_info("<br><font color=\"black\">Um eine korrekte Authentifizierung
+      mit ihren neuen Daten sicherzustellen, wurden sie automatisch ausgeloggt<br>
+      Wenn sie ihre Email Addresse geÑndert haben, mÅssen sie das ihnen an diese Addresse zugesandte Paòwort verwenden!<br><br>
+      Ihr aktueller Username ist: <b>".$username."</b><br>---> <a href=\"index.php?again=yes\">Login</a> <---</font>");
+
+
+  echo "</table></html>";
+  die;
+  }
+
+//No Permission to change userdata
+if (!$my_about->check)
+ {
+  ?>
+  <html>
+  <head>
+   <title>Stud.IP</title>
+ 	<link rel="stylesheet" href="style.css" type="text/css">
+  </head>
+  <?
+  include "header.php";   //hier wird der "Kopf" nachgeladen 
+  parse_window ("error∫Zugriff verweigert.<br /><font size=-1 color=black><font size=-1 color=black>Wahrscheinlich ist Ihre Session abgelaufen. Wenn sie sich lÑnger als $AUTH_LIFETIME Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurÅck zur Anmeldung zu gelangen.<br /> <br /> Eine andere Ursache kann der Versuch des Zugriffs auf Userdaten, die Sie nicht bearbeiten d&uuml;rfen, sein. Nutzen Sie den untenstehenden Link, um zurÅck auf die Startseite zu gelangen.</font>", "∫",
+	"Zugriff auf Userdaten verweigert", 
+	"<a href=\"index.php\"><b>&nbsp;Hier</b></a> geht es wieder zur Anmeldung beziehungsweise Startseite.<br />&nbsp;");
+  
+  ?>
+  </body>
+  </html>  
+  <?
+  page_close();
+  die;
+  }
+
+//ein Bild wurde hochgeladen
+if ($cmd=="copy")
+ {
+  $my_about->imaging($imgfile,$imgfile_size,$imgfile_name);
+
+  }
+
+//VerÑnderungen an Instituten fÅr Studies
+if ($cmd=="inst_edit")
+ {
+  $my_about->inst_edit($inst_delete,$new_inst);
+  }
+
+//VerÑnderungen an Raum, Sprechzeit, etc
+if ($cmd=="special_edit")
+ {
+  $my_about->special_edit($raum,$sprech,$tel,$fax,$name);
+  }
+
+//VerÑnderungen der pers. Daten
+if ($cmd=="edit_pers")
+ {
+
+  $my_about->edit_pers($password,$check_pass,$response,$new_username,$vorname,$nachname,$email,$telefon,$anschrift,$home,$hobby,$geschlecht,$lebenslauf,$schwerp,$publi,$view);
+
+  if (($my_about->auth_user["username"] != $new_username) && $my_about->logout_user == TRUE) $my_about->get_auth_user($new_username);   //username wurde geÑndert!
+   else $my_about->get_auth_user($username);
+  $username = $my_about->auth_user["username"];
+  }
+
+if ($cmd=="edit_leben")  {
+	$my_about->edit_leben($password,$check_pass,$response,$new_username,$vorname,$nachname,$email,$telefon,$anschrift,$home,$hobby,$geschlecht,$lebenslauf,$schwerp,$publi,$view);
+  	if (($my_about->auth_user["username"] != $new_username) && $my_about->logout_user == TRUE) $my_about->get_auth_user($new_username);   //username wurde geÑndert!
+   	else $my_about->get_auth_user($username);
+  	$username = $my_about->auth_user["username"];
+  	}
+
+if ($my_about->logout_user)
+ {
+  $sess->delete();  // User logout vorbereiten
+  $auth->logout();
+
+ $timeout=(time()-300);
+     $sqldate = date("YmdHis", $timeout);
+    $query = "UPDATE active_sessions SET changed = '$sqldate' WHERE sid = '$user->id'";
+    $my_about->db->query($query);
+  $msg = rawurlencode($my_about->msg);
+  header("Location:$PHP_SELF?username=$username&msg=$msg&logout=1&view=$view"); //Seite neu aufrufen, damit user nobody wird...
+  die;
+  }
+
+if ($cmd)
+ {
+  if (($my_about->check != "user") && ($my_about->priv_msg != ""))
+       {
+       $m_id=md5(uniqid("smswahn"));
+       $priv_msg = "Ihre pers˜nliche Seite wurde von einem Administrator verÑndert.\n Folgende VerÑnderungen wurden vorgenommen:\n \n".$my_about->priv_msg;
+	$my_about->insert_sms($my_about->auth_user["username"], $priv_msg);
+      }
+
+  $msg = rawurlencode($my_about->msg);
+  header("Location:$PHP_SELF?username=$username&msg=$msg&view=$view");  //Seite neu aufrufen, um Parameter loszuwerden
+  die;
+  }
+?>
+
+<html>
+<head>
+<title>Stud.IP</title>
+ <link rel="stylesheet" href="style.css" type="text/css">
+
+
+<? IF ($auth->auth["jscript"]) { // nur wenn JS aktiv
+?>
+<script language="javascript" src="md5.js"></script>
+
+<SCRIPT language="Javascript">
+<!--
+
+function oeffne()
+{
+	fenster=window.open('get_auto.php','','scrollbars=no,width=400,height=150','resizable=no');
+	fenster.focus();
+}
+function checkusername(){
+ var re_username = /^([a-zA-Z0-9_@-]*)$/;
+ var checked = true;
+ if (document.pers.new_username.value.length<4) {
+    alert("Der Benutzername ist zu kurz \n- er sollte mindestens 4 Zeichen lang sein.");
+   document.pers.new_username.focus();
+    checked = false;
+    }
+ if (re_username.test(document.pers.new_username.value)==false) {
+    alert("Der Benutzername enthÑlt unzulÑssige Zeichen\n- er darf keine Sonderzeichen oder Leerzeichen enthalten.");
+   document.pers.new_username.focus();
+    checked = false;
+  }
+ return checked;
+}
+
+function checkpassword(){
+ var checked = true;
+ if (document.pers.password.value.length<4) {
+    alert("Das Passwort ist zu kurz \n- es sollte mindestens 4 Zeichen lang sein.");
+   document.pers.password.focus();
+    checked = false;
+    }
+ if (document.pers.password.value != document.pers.check_pass.value)
+  {
+  alert("Bei der Wiederholung des Paòwortes ist ein Fehler aufgetreten! Bitte geben sie das exakte Paòwort ein!");
+  document.pers.check_pass.focus();
+  checked = false;
+  }
+
+ return checked;
+}
+
+function checkvorname(){
+ var re_vorname = /^([a-zA-Zéôö][^0-9"¥'`\/\\\(\)\[\]]+)$/;
+ var checked = true;
+ if (re_vorname.test(document.pers.vorname.value)==false) {
+    alert("Bitte geben Sie Ihren tatsÑchlichen Vornamen an.");
+   document.pers.vorname.focus();
+    checked = false;
+  }
+ return checked;
+}
+
+function checknachname(){
+ var re_nachname = /^([a-zA-Zéôö][^0-9"¥'`\/\\\(\)\[\]]+)$/;
+ var checked = true;
+ if (re_nachname.test(document.pers.nachname.value)==false) {
+    alert("Bitte geben Sie Ihren tatsÑchlichen Nachnamen an.");
+   document.pers.nachname.focus();
+    checked = false;
+  }
+ return checked;
+}
+
+function checkemail(){
+ var re_email = /^([_a-zA-Z0-9-]+)(\.[_a-zA-Z0-9-]+)*@([_a-zA-Z0-9-]+\.)+([a-zA-Z]{2,4})$/;
+ var email = document.pers.email.value;
+ var checked = true;
+ if ((re_email.test(email))==false || email.length==0) {
+    alert("Die E-Mail Adresse ist nicht korrekt!");
+   document.pers.email.focus();
+    checked = false;
+    }
+ return checked;
+}
+
+function checkdata(){
+ // kompletter Check aller Felder vor dem Abschicken
+ var checked = true;
+ if (!checkusername())
+  checked = false;
+ if (!checkpassword())
+  checked = false;
+ if (!checkvorname())
+  checked = false;
+ if (!checknachname())
+  checked = false;
+ if (!checkemail())
+  checked = false;
+ if (checked) {
+   document.pers.method = "post";
+   document.pers.action = "<?php print ("$PHP_SELF?cmd=edit_pers&username=$username&view=$view") ?>";
+   document.pers.response.value = MD5(document.pers.password.value);
+   document.pers.password.value = "*****";
+   document.pers.check_pass.value = "*****";
+   document.pers.submit();
+ }
+ return checked;
+}
+// -->
+</SCRIPT>
+
+<?
+
+} // Ende nur wenn JS aktiv
+?>
+</head>
+<!--
+// here i include my personal meta-tags; one of those might be useful:
+// <META HTTP-EQUIV="REFRESH" CONTENT="<?php print $auth->lifetime*60;?>; URL=logout.php">
+-->
+<body bgcolor=white>
+
+<?php
+
+
+ include "seminar_open.php"; //hier werden die sessions initialisiert
+ include "header.php";   //hier wird der "Kopf" nachgeladen
+
+
+
+if (!$cmd)
+ {
+ // darfst du Ñndern?? evtl erst ab autor ?
+  $perm->check("user");
+  $my_about->get_user_details();
+  $username = $my_about->auth_user["username"];
+    //maximale spaltenzahl berechnen
+   if ($auth->auth["jscript"]) $max_col = round($auth->auth["xres"] / 10 );
+   else $max_col =  64 ; //default fÅr 640x480
+  ?>
+  
+
+
+  <table cellpadding="0" cellspacing="0" border="0"><tr>
+<?	
+
+// Reitersystem
+
+	IF (!$view) $view="Bild";
+	
+	?> <td class="links1" align=right nowrap><a  class="links1" href="about.php?username=<?echo $username?>"><font color="#000000" size=2><b>&nbsp; &nbsp; Alle&nbsp; &nbsp; </b></font></a><img src="pictures/reiter1.jpg" align=absmiddle></td><?
+
+	if ($view == "Bild") {?>  <td class="links1b" align=right nowrap><a  class="links1b" href="edit_about.php?view=Bild&username=<?echo $username?>"><font color="#000000" size=2><b>&nbsp; &nbsp; Bild&nbsp; &nbsp; </b></font></a><img src="pictures/reiter2.jpg" align=absmiddle></td><?}
+	ELSE {?>  <td class="links1" align=right nowrap><a  class="links1" href="edit_about.php?view=Bild&username=<?echo $username?>"><font color="#000000" size=2><b>&nbsp; &nbsp; Bild&nbsp; &nbsp; </b></font></a><img src="pictures/reiter1.jpg" align=absmiddle></td><?}
+
+	if ($view == "Daten") {?>  <td class="links1b" align=right nowrap><a  class="links1b" href="edit_about.php?view=Daten&username=<?echo $username?>"><font color="#000000" size=2><b>&nbsp; &nbsp; Daten&nbsp; &nbsp; </b></font></a><img src="pictures/reiter2.jpg" align=absmiddle></td><?}
+	ELSE {?>  <td class="links1" align=right nowrap><a  class="links1" href="edit_about.php?view=Daten&username=<?echo $username?>"><font color="#000000" size=2><b>&nbsp; &nbsp; Daten&nbsp; &nbsp; </b></font></a><img src="pictures/reiter1.jpg" align=absmiddle></td><?}
+
+	if ($view == "Karriere") {?>  <td class=links1b align=right nowrap><a  class="links1b" href="edit_about.php?view=Karriere&username=<?echo $username?>"><font color="#000000" size=2><b>&nbsp; &nbsp; Karriere&nbsp; &nbsp; </b></font></a><img src="pictures/reiter2.jpg" align=absmiddle></td><?}
+	ELSE {?>  <td class="links1" align=right nowrap><a  class="links1" href="edit_about.php?view=Karriere&username=<?echo $username?>"><font color="#000000" size=2><b>&nbsp; &nbsp; Karriere&nbsp; &nbsp; </b></font></a><img src="pictures/reiter1.jpg" align=absmiddle></td><?}
+
+	if ($view == "Lebenslauf") {?>  <td class="links1b" align=right nowrap><a  class="links1b" href="edit_about.php?view=Lebenslauf&username=<?echo $username?>"><font color="#000000" size=2><b>&nbsp; &nbsp; Lebenslauf&nbsp; &nbsp; </b></font></a><img src="pictures/reiter2.jpg" align=absmiddle></td><?}
+	ELSE {?>  <td class="links1" align=right nowrap><a  class="links1" href="edit_about.php?view=Lebenslauf&username=<?echo $username?>"><font color="#000000" size=2><b>&nbsp; &nbsp; Lebenslauf&nbsp; &nbsp; </b></font></a><img src="pictures/reiter1.jpg" align=absmiddle></td><?}
+ 
+	if ($view == "Sonstiges") {
+		IF ($auth->auth["perm"]!="admin" AND $auth->auth["perm"]!="root")
+			ECHO "<td class=\"links1b\" align=\"right\" nowrap><a  class=\"links1b\" href=\"edit_about.php?view=Sonstiges&username=".$username."\"><font color=\"#000000\" size=2><b>&nbsp; &nbsp; Sonstiges&nbsp; &nbsp; </b></font></a><img src=\"pictures/reiter2.jpg\" align=\"absmiddle\"></td>";
+		ELSE echo "<td \"class=links1b\" align=\"right\" nowrap><a  class=\"links1b\" href=\"edit_about.php?view=Sonstiges&username=".$username."\"><font color=\"#000000\" size=2><b>&nbsp; &nbsp; Sonstiges&nbsp; &nbsp; </b></font></a><img src=\"pictures/reiter4.jpg\" align=\"absmiddle\"></td>";
+		}
+	ELSE {?>  <td class="links1" align="right" nowrap><a  class="links1" href="edit_about.php?view=Sonstiges&username=<?echo $username?>"><font color="#000000" size=2><b>&nbsp; &nbsp; Sonstiges&nbsp; &nbsp; </b></font></a><img src="pictures/reiter1.jpg" align="absmiddle"></td><?}
+
+	IF ($auth->auth["perm"]!="admin" AND $auth->auth["perm"]!="root") {
+		IF ($view=="Login" || $view=="Forum" || $view=="Terminkalender" || $view=="Stundenplan" || $view=="Messaging"){?>  <td class=links1b align=right nowrap><a  class="links1b" href="edit_about.php?view=Login"><font color="#000000" size=2><b>&nbsp; &nbsp; MyStud.IP&nbsp; &nbsp; </b></font></a><img src="pictures/reiter4.jpg" align=absmiddle></td><?}
+		ELSE {?>  <td class="links1" align="right" nowrap><a  class="links1" href="edit_about.php?view=Login"><font color="#000000" size=2><b>&nbsp; &nbsp; MyStud.IP&nbsp; &nbsp; </b></font></a><img src="pictures/reiter1.jpg" align="absmiddle"></td><?}
+		}
+echo "</tr>\n</table>\n<table class=blank cellspacing=0 cellpadding=0 border=0 width=100%>";
+
+//My StudIP-Bereich Kategorien bei bedarf einbinden
+IF ($view=="Login" || $view=="Forum" || $view=="Terminkalender" || $view=="Stundenplan" || $view=="Messaging"){
+
+	echo "</table><table cellspacing=0 cellpadding=4 border=0 width=\"100%\"><tr><td class=\"steel1\">&nbsp; &nbsp; ";
+		
+	if ($view == "Login"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2"  href="edit_about?view=Login">Login&nbsp; &nbsp; </a> <?}
+	else{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2"  href="edit_about?view=Login">Login&nbsp; &nbsp; </a> <?}
+
+	if ($view == "Forum"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2"  href="edit_about.php?view=Forum">Forum&nbsp; &nbsp; </a> <?}
+	else{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2"  href="edit_about.php?view=Forum">Forum&nbsp; &nbsp; </a> <?}
+
+	if ($view == "Terminkalender"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2"  href="edit_about.php?view=Terminkalender">Terminkalender&nbsp; &nbsp; </a> <?}
+	else{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2"  href="edit_about.php?view=Terminkalender">Terminkalender&nbsp; &nbsp; </a> <?}
+
+	if ($view == "Stundenplan"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2"  href="edit_about.php?view=Stundenplan">Stundenplan&nbsp; &nbsp; </a> <?}
+	else{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2"  href="edit_about.php?view=Stundenplan">Stundenplan&nbsp; &nbsp; </a> <?}
+
+	if ($view == "Messaging"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2"  href="edit_about.php?view=Messaging">Messaging&nbsp; &nbsp; </a> <?}
+	else{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2"  href="edit_about.php?view=Messaging">Messaging&nbsp; &nbsp; </a> <?}
+
+	echo"<br></td></tr><tr><td class=\"reiterunten\">&nbsp; </td></tr></table>";
+	echo "<table class=\"blank\" width=\"100%\" border=0 cellspacing=0 cellpadding=0><tr><td class=\"blank\">";
+	}
+
+//Kopfzeile bei allen eigenen Modulen ausgeben
+IF ($view!="Forum" AND $view!="Terminkalender" AND $view!="Stundenplan" AND $view!="Messaging"){
+	if ($view!="Login") {
+		echo "<tr><td class=\"steel1\">&nbsp; &nbsp; ";
+		echo"</td></tr>\n<tr><td class=\"reiterunten\">&nbsp; </td></tr>\n</table>\n";
+		echo "<table class=\"blank\" cellspacing=0 cellpadding=0 border=0 width=\"100%\">";
+		echo "<tr><td class=\"blank\" colspan=2>&nbsp;</td></tr>\n";
+		}
+		
+	if ($username!=$auth->auth["uname"]) 
+		echo "<tr><td class=\"topicwrite\" colspan=2><img src='pictures/einst.gif' border=0 align=texttop><b>&nbsp;";
+	else 
+		echo "<tr><td class=\"topic\" colspan=2><img src='pictures/einst.gif' border=0 align=texttop><b>&nbsp;";
+	switch ($view) {
+		case ("Bild") :
+			echo "Hochladen des pers&ouml;nlichen Bildes";
+		break;
+		case ("Daten") :
+			echo "Benutzerdaten bearbeiten";
+		break;
+		case ("Karriere") :
+			if ($perm->have_perm ("tutor"))
+				echo "Studienkarriere und Einrichtungen bearbeiten";
+			else
+				echo "Studienkarriere bearbeiten";
+		break;
+		case ("Lebenslauf") :
+			if ($perm->have_perm ("dozent"))
+				echo "Lebenslauf, Arbeitsschwerpunkte und Publikationen bearbeiten";
+			else
+				echo "Lebenslauf bearbeiten";
+		break;
+		case ("Sonstiges") :
+			echo "Eigene Kategorien bearbeiten";
+		break;
+		case ("Login") :
+			echo "Autologin einrichten";
+		break;
+		}
+	if ($username!=$auth->auth["uname"]) 
+		echo "&nbsp; &nbsp; <font size=-1>Daten von: ".$my_about->auth_user["Vorname"]." ".$my_about->auth_user["Nachname"]." ($username), Status:  ".$my_about->auth_user["perms"]."</font>";
+
+	echo "</b></td></tr>\n";
+	echo "<tr><td class=\"blank\" colspan=\"2\">&nbsp;</td></tr>\n</table>\n<table class=\"blank\" cellspacing=0 cellpadding=2 border=0 width=\"100%\">";
+	}
+
+  // evtl Fehlermeldung ausgeben
+  if ($my_about->msg)
+   {
+   $my_about->parse_msg($my_about->msg);
+   }
+
+IF ($view=="Bild"){
+	 // hier wird das Bild ausgegeben
+	$cssSw->switchClass();
+	echo "<tr><td colspan=2 class=\"blank\"><blockquote><br />Auf dieser Seite k&ouml;nnen Sie ein pers&ouml;nliches Bild f&uuml;r Ihre Homepage hochladen.<br><br><br></td></tr>";
+	echo"<tr><td width=\"30%\" class=\"".$cssSw->getClass()."\" align=\"center\">";
+	echo "<font size=-1><b>Aktuell angezeigtes Bild:<br /><br /></b></font>";
+	
+	if(!file_exists("./user/".$my_about->auth_user["user_id"].".jpg"))
+		echo "<img src=\"./user/nobody.jpg\" width=\"200\" height=\"250\" alt=\"kein pers&ouml;nliches Bild vorhanden\" ><br />&nbsp; ";
+	else
+        	echo "<img border=\"1\" src=\"./user/".$my_about->auth_user["user_id"].".jpg\" alt=\"". $my_about->auth_user["Vorname"]." ".$my_about->auth_user["Nachname"]."\"><br />&nbsp; ";
+        	
+       	echo "</td><td class=\"".$cssSw->getClass()."\" width=\"70%\" align=\"left\" valign=\"top\"><blockquote>";
+       	echo "<form enctype=\"multipart/form-data\" action=\"$PHP_SELF?cmd=copy&username=$username\" method=\"POST\">";
+       	echo "<br />Upload eines Bildes:<br><br>1. WÑhlen sie mit <b>Durchsuchen</b> eine Bilddatei von ihrer Festplatte aus.<br><br>";
+       	echo "&nbsp;&nbsp;<input name=\"imgfile\" type=\"file\" style=\"width: 80%\" cols=".round($max_col*0.7*0.8)."><br><br>";
+       	echo "2. Klicken sie auf <b>Bild senden</b>, um das Bild hochzuladen.<br><br>";
+       	echo "&nbsp;&nbsp;<input type=\"submit\" value=\"Bild senden\"><br><br>";
+       	echo "<b>ACHTUNG!</b><br>Die Bilddatei darf max. ".$my_about->max_file_size." KB groò sein, es sind nur Dateien mit den Endungen <b>.jpg</b> oder <b>.gif</b> erlaubt!";
+       	echo "</blockquote></td></tr>";
+       	}
+
+IF ($view=="Daten"){
+ $cssSw->switchClass();
+ //pers˜nliche Daten...
+  echo "<tr><td align=\"left\" valign=\"top\" class=\"blank\"><blockquote><br>Hier k˜nnen sie Ihre Benutzerdaten verÑndern.";
+  echo "<br><font size=-1>Alle mit einem Sternchen&nbsp;</font><font color=\"red\" size=+1><b>*</b></font><font size=-1>&nbsp;markierten Felder m&uuml;ssen ausgef&uuml;llt werden.</font><br><br>";
+  echo "<br></td></tr>\n<tr><td class=blank><table align=\"center\" width=99% class=blank border=0 cellpadding=2 cellspacing=0>";
+  //Keine JavaScript ÅberprÅfung bei adminzugriff
+  if ($my_about->check=="user" AND $auth->auth["jscript"])
+     echo "<tr><form action=\"$PHP_SELF?cmd=edit_pers&username=$username&view=$view\" method=\"POST\" name=\"pers\" onsubmit=\"return checkdata()\">";
+    else
+     echo "<tr><form action=\"$PHP_SELF?cmd=edit_pers&username=$username&view=$view\" method=\"POST\" name=\"pers\">";
+     
+//   echo "<td width=\"30%\"></td><td>";
+
+  if ($my_about->check=="user"){
+   echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>Username: </td><td class=\"".$cssSw->getClass()."\" colspan=2 width=\"80%\" align=\"left\">&nbsp; <input type=\"text\" size=\"".round($max_col*0.25)."\" name=\"new_username\" value=\"".$my_about->auth_user["username"]."\">&nbsp; <font color=\"red\" size=+2>*</font></td></tr>\n";
+   $cssSw->switchClass();
+   echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>Paòwort: </td><td class=\"".$cssSw->getClass()."\" nowrap width=\"20%\" align=\"left\"><font size=-1>&nbsp; neues Passwort:</font><br />&nbsp; <input type=\"password\" size=\"".round($max_col*0.25)."\" name=\"password\" value=\"*****\"><input type=\"HIDDEN\" name=\"response\" value=\"\">&nbsp; <font color=\"red\" size=+2>*</font>&nbsp; </td><td class=\"".$cssSw->getClass()."\" width=\"60%\" nowrap align=\"left\"><font size=-1>&nbsp; Passwort-Wiederholung:</font><br />&nbsp; <input type=\"password\" size=\"".round($max_col*0.25)."\" name=\"check_pass\" value=\"*****\">&nbsp; <font color=\"red\" size=+2>*</font></td></tr>\n";
+   $cssSw->switchClass();
+   echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>Name: </td><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><font size=-1>&nbsp; Vorname:</font><br />&nbsp; <input type=\"text\" size=\"".round($max_col*0.25)."\" name=\"vorname\" value=\"".$my_about->auth_user["Vorname"]."\">&nbsp; <font color=\"red\" size=+2>*</font></td><td class=\"".$cssSw->getClass()."\" nowrap width=\"60%\" align=\"left\"><font size=-1>&nbsp; Nachname:</font><br />&nbsp; <input type=\"text\" size=\"".round($max_col*0.25)."\" name=\"nachname\" value=\"".$my_about->auth_user["Nachname"]."\">&nbsp; <font color=\"red\" size=+2>*</font></td></tr>\n";
+   $cssSw->switchClass();
+   echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>Email: </td><td class=\"".$cssSw->getClass()."\" colspan=2 width=\"80%\" align=\"left\">&nbsp; <input type=\"text\" size=\"".round($max_col*0.25)."\" name=\"email\" value=\"".$my_about->auth_user["Email"]."\">&nbsp; <font color=\"red\" size=+2>*</font></td></tr>\n";
+   }
+  else {
+   $cssSw->switchClass();
+   echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>Username: </td><td class=\"".$cssSw->getClass()."\" width=\"30%\" align=\"left\">&nbsp; ".$my_about->auth_user["username"]."</td><td width=\"50%\" rowspan=4 align=\"center\"><b><font color=\"red\">Adminzugriff hier nicht m˜glich!</font></b></td></tr>\n";
+   $cssSw->switchClass();
+   echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>Paòwort: </td><td class=\"".$cssSw->getClass()."\" width=\"30%\" align=\"left\">&nbsp; *****</td></tr>\n";
+   $cssSw->switchClass();
+   echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>Name: </td><td class=\"".$cssSw->getClass()."\" width=\"30%\" align=\"left\">&nbsp; ".$my_about->auth_user["Vorname"]." ".$my_about->auth_user["Nachname"]."</td></tr>\n";
+   $cssSw->switchClass();
+   echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>Email: </td><td class=\"".$cssSw->getClass()."\" width=\"30%\" align=\"left\">&nbsp; ".$my_about->auth_user["Email"]."</td></tr>\n";
+   }
+
+   $cssSw->switchClass();
+  echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>Geschlecht: </td><td colspan=2 nowrap width=\"80%\" align=\"left\"><font size=-1>&nbsp; m&auml;nnlich&nbsp; <input type=\"RADIO\" name=\"geschlecht\" value=0 ";
+  if (!$my_about->user_info["geschlecht"]) 
+  	echo "checked";
+  echo " />&nbsp; weiblich&nbsp; <input type=\"RADIO\" name=\"geschlecht\" value=1 ";
+  if ($my_about->user_info["geschlecht"]) 
+  	echo "checked";
+  echo " /></font></td></tr>";
+
+   $cssSw->switchClass();
+  echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"100%\" colspan=3 align=\"center\"><b>Optionale Angaben</b></td></tr>\n";
+   $cssSw->switchClass();
+  echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>Telefon: </td><td class=\"".$cssSw->getClass()."\" colspan=2 width=\"80%\" align=\"left\">&nbsp; <input type=\"text\" size=\"".round($max_col*0.25)."\" name=\"telefon\" value=\"".htmlReady($my_about->user_info["privatnr"])."\"></td></tr>\n";
+   $cssSw->switchClass();
+  echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>Anschrift: </td><td class=\"".$cssSw->getClass()."\" colspan=2 width=\"80%\" align=\"left\">&nbsp; <input type=\"text\" size=\"".round($max_col*0.5)."\" name=\"anschrift\" value=\"".htmlReady($my_about->user_info["privadr"])."\"></td></tr>\n";
+   $cssSw->switchClass();
+  echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>Homepage: </td><td class=\"".$cssSw->getClass()."\" colspan=2 width=\"80%\" align=\"left\">&nbsp; <input type=\"text\" size=\"".round($max_col*0.5)."\" name=\"home\" value=\"".htmlReady($my_about->user_info["Home"])."\"></td></tr>\n";
+   $cssSw->switchClass();
+  echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>Hobbies: </td><td class=\"".$cssSw->getClass()."\" colspan=2 width=\"80%\" align=\"left\">&nbsp; <textarea  name=\"hobby\"  style=\"width: 50%\" cols=".round($max_col*0.5)." rows=4 maxlength=250 wrap=virtual >".htmlReady($my_about->user_info["hobby"])."</textarea></td></tr>\n";
+   $cssSw->switchClass();
+  echo "<tr><td class=\"".$cssSw->getClass()."\">&nbsp; </td><td class=\"".$cssSw->getClass()."\" colspan=2>&nbsp; <input type=\"IMAGE\" src=\"pictures/buttons/uebernehmen-button.gif\" border=0 value=\"énderungen Åbernehmen\"></td></tr>\n</table>\n</td>";
+}
+
+	
+
+IF ($view=="Karriere"){
+	
+IF ($perm->have_perm("root") AND $username==$auth->auth["uname"])   echo "<tr><td align=\"left\" valign=\"top\" class=\"blank\"><blockquote><br><br>Als Root haben Sie bereits genug Karriere gemacht ;-)<br><br>";
+ELSE { 
+	if (($perm->have_perm("tutor")) && (!$perm->have_perm("dozent")))
+		echo "<tr><td align=\"left\" valign=\"top\" class=\"blank\"><blockquote><br>Hier k˜nnen Sie Angaben &uuml;ber ihre Studienkarriere und Daten an Einrichtungen, an denen Sie arbeiten, machen.";
+	elseif ($perm->have_perm("dozent"))
+		echo "<tr><td align=\"left\" valign=\"top\" class=\"blank\"><blockquote><br>Hier k˜nnen Sie Angaben &uuml;ber Daten an Einrichtungen, in den Sie arbeiten, machen.";	
+	else
+		echo "<tr><td align=\"left\" valign=\"top\" class=\"blank\"><blockquote><br>Hier k˜nnen Sie Angaben &uuml;ber ihre Studienkarriere machen.";	
+	
+  	echo "<br />&nbsp; </td></tr>";
+
+  //VerÑndern von Raum, Sprechzeiten etc
+  if ($my_about->special_user)
+   {
+   reset ($my_about->user_inst);
+   echo "<tr><td class=\"blank\">";
+   echo "<b>&nbsp; Ich arbeite an folgenden Einrichtungen:</b>";
+   echo "<table cellspacing=0 cellpadding=2 border=0 align=\"center\" width=\"99%\" border=\"0\">";
+   echo "<form action=\"$PHP_SELF?cmd=special_edit&username=$username&view=$view\" method=\"POST\">";
+   while (list ($inst_id,$details) = each ($my_about->user_inst))
+    {
+    $cssSw->resetClass();
+    $cssSw->switchClass();    
+    if ($details["inst_perms"]!= "user")
+     {
+     echo "<tr><td class=\"blank\">&nbsp; </td></tr>";
+     echo "<tr><td class=\"".$cssSw->getClass()."\" colspan=\"2\" align=\"left\">&nbsp; <b>".htmlReady($details["Name"])."</b>";
+     if ($details ["Funktion"])
+     	echo ", Funktion: ", $INST_FUNKTION[$details ["Funktion"]]["name"];
+     echo "<input type=\"HIDDEN\" name=\"name[$inst_id]\" value=\"".htmlReady($details["Name"])."\"></td></tr>";
+     $cssSw->switchClass();
+     echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\">Raum:</td><td class=\"".$cssSw->getClass()."\" width=\"80%\" align=\"left\">&nbsp; <input type=\"text\" style=\"width: 30%\" size=\"".round($max_col*0.25*0.6)."\"   name=\"raum[$inst_id]\" value=\"".htmlReady($details["raum"])."\"></td></tr>";
+     $cssSw->switchClass();
+     echo "<td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\">Sprechzeit:</td><td class=\"".$cssSw->getClass()."\" width=\"80%\" align=\"left\">&nbsp; <input type=\"text\" style=\"width: 30%\" size=\"".round($max_col*0.25*0.6)."\"   name=\"sprech[$inst_id]\" value=\"".htmlReady($details["sprechzeiten"])."\"></td></tr>";
+     $cssSw->switchClass();
+     echo "<td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\">Telefon:</td><td class=\"".$cssSw->getClass()."\" width=\"80%\" align=\"left\">&nbsp; <input type=\"text\" style=\"width: 30%\" size=\"".round($max_col*0.25*0.6)."\"   name=\"tel[$inst_id]\" value=\"".htmlReady($details["Telefon"])."\"></td></tr>";
+     $cssSw->switchClass();
+     echo "<td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\">Fax:</td><td class=\"".$cssSw->getClass()."\" width=\"80%\" align=\"left\">&nbsp; <input type=\"text\" style=\"width: 30%\" size=\"".round($max_col*0.25*0.6)."\"   name=\"fax[$inst_id]\" value=\"".htmlReady($details["Fax"])."\"></td></tr>";
+  
+     }
+    }
+     $cssSw->switchClass();
+   echo "<tr><td class=\"".$cssSw->getClass()."\">&nbsp; </td><td class=\"".$cssSw->getClass()."\">&nbsp; <input type=\"IMAGE\" src=\"pictures/buttons/uebernehmen-button.gif\" border=0 value=\"énderungen Åbernehmen\"></td></table><br />&nbsp; </form></td></tr>";
+   }
+}
+
+  //Institute, an denen studiert wird
+  if ($my_about->auth_user["perms"]=="autor" || $my_about->auth_user["perms"]=="tutor")
+   {
+   $cssSw->resetClass();
+   $cssSw->switchClass();    
+   echo "<tr><td class=\"blank\">";
+   echo "<b>&nbsp; Ich studiere an folgenden Einrichtungen:</b>";
+   echo "<table width= \"99%\" align=\"center\" border=0 cellpadding=2 cellspacing=0>\n";
+   echo "<form action=\"$PHP_SELF?cmd=inst_edit&username=$username&view=$view\" method=\"POST\">";
+   echo "<tr><td width=\"30%\" valign=\"top\"><table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"2\">";
+   reset ($my_about->user_inst);
+   $flag=FALSE;
+   $i=0;
+   while (list ($inst_id,$details) = each ($my_about->user_inst))
+    {
+    if ($details["inst_perms"] == "user")
+     {
+     if (!$i)
+     	echo "<tr><td class=\"steelgraudunkel\" width=\"80%\">Einrichtung</td><td class=\"steelgraudunkel\" width=\"30%\">austragen</ts></tr>";
+    $cssSw->switchClass();    
+     echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"80%\">".htmlReady($details["Name"])."</td><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"center\"><input type=\"CHECKBOX\" name=\"inst_delete[]\" value=\"$inst_id\"></td><tr>";
+     $i++;
+     $flag=TRUE;
+     }
+    }
+   if (!$flag) echo "<tr><td class=\"".$cssSw->getClass()."\" colspan=\"2\"><br /><font size=-1><b>Sie haben sich noch keinen Einrichtungen zugeordnet.</b><br /><br />Wenn Sie auf ihrer Homepage die Einrichtungen, an denen Sie studieren, auflisten wollen, k&ouml;nnen Sie diese Einrichtungen hier entragen.</font></td><tr>";
+   $cssSw->resetClass();
+   $cssSw->switchClass();    
+   echo "</table></td><td class=\"".$cssSw->getClass()."\" width=\"70%\" align=\"left\" valign=\"top\"><blockquote><br />Um sich als Student einer Einrichtung zuzuordnen, wÑhlen sie die entsprechende Einrichtung aus der folgenden Liste aus:<br>";
+   echo "<br><div align=\"center\">";
+   $my_about->select_inst();
+   echo "</div><br></b>Wenn sie aus Einrichtungen wieder ausgetragen werden m˜chten, markieren sie die entsprechenden Felder in der linken Tabelle.<br>";
+   echo "Mit einem Klick auf <b>&Uuml;bernehmen</b> werden die gewÑhlten énderungen durchgefÅhrt.<br /><br /> ";
+   echo "<input type=\"IMAGE\" src=\"pictures/buttons/uebernehmen-button.gif\" border=0 value=\"énderungen Åbernehmen\"></blockquote></td></tr>";
+   echo "</form>";
+   }
+ echo "</td></tr></table>";
+}   
+
+IF ($view=="Lebenslauf"){
+  $cssSw->switchClass();    
+  if ($my_about->auth_user["perms"] == "dozent")
+	 echo "<tr><td align=\"left\" valign=\"top\" class=\"blank\"><blockquote><br>Hier k˜nnen sie Ihren Lebenslauf, Publikationen und Arbeitschwerpunkte bearbeiten.";
+  else
+ 	 echo "<tr><td align=\"left\" valign=\"top\" class=\"blank\"><blockquote><br>Hier k˜nnen sie Ihren Lebenslauf bearbeiten.";
+	  
+  echo "<br>&nbsp; </td></tr>\n<tr><td class=blank><table align=\"center\" width=\"99%\" align=\"center\" border=0 cellpadding=2 cellspacing=0>";
+  echo "<tr><form action=\"$PHP_SELF?cmd=edit_leben&username=$username&view=$view\" method=\"POST\" name=\"pers\">";
+  echo "<td class=\"".$cssSw->getClass()."\" colspan=\"2\" align=\"left\" valign=\"top\"><b><blockquote>Lebenslauf:</b><br>";
+  echo "<textarea  name=\"lebenslauf\" style=\" width: 80%\" cols=".round($max_col/1.3)." rows=7 wrap=virtual>".htmlReady($my_about->user_info["lebenslauf"])."</textarea></td></tr>\n";
+  if ($my_about->auth_user["perms"] == "dozent"){
+       $cssSw->switchClass();    
+	echo "<tr><td class=\"".$cssSw->getClass()."\" colspan=\"2\" align=\"left\" valign=\"top\"><b><br><blockquote>Schwerpunkte:</b><br>";
+	echo "<textarea  name=\"schwerp\" style=\" width: 80%\" cols=".round($max_col/1.3)." rows=7 wrap=virtual>".htmlReady($my_about->user_info["schwerp"])."</textarea></td></tr>\n";
+        $cssSw->switchClass();    
+	echo "<tr><td class=\"".$cssSw->getClass()."\" colspan=\"2\" align=\"left\" valign=\"top\"><b><br><blockquote>Publikationen:</b><br>";
+	echo "<textarea  name=\"publi\" style=\" width: 80%\" cols=".round($max_col/1.3)." rows=7 wrap=virtual>".htmlReady($my_about->user_info["publi"])."</textarea></td></tr>\n";
+	}
+  echo "<tr><td class=\"steel1\" colspan=2><blockquote><br><input type=\"IMAGE\" src=\"pictures/buttons/uebernehmen-button.gif\" border=0 value=\"énderungen Åbernehmen\"><br><br></blockquote></td></tr>\n</table>\n</td>";
+}
+
+IF ($view=="Sonstiges"){
+	IF ($freie=="create_freie") create_freie();
+	IF ($freie=="delete_freie") delete_freie($freie_id);
+	IF ($freie=="update_freie") update_freie();
+	print_freie($username);
+	}
+
+// Ab hier die Views der MyStudip-Sektion
+IF ($view=="Login"){
+	if ($my_about->check=="user" && !$perm->have_perm("admin")){
+		echo "<tr><td colspan=2 class=blank><blockquote>";
+		echo "<br><br>Um die automatische Anmeldung zu nutzen mÅssen sie ihre pers˜nliche Login Datei auf ihren Rechner kopieren. Mit dem folgenden Link ˜ffnet sich ein Fenster, indem sie ihr Paòwort eingeben mÅssen.";
+		echo "Dann wird die Datei erstellt und zu ihrem Rechner geschickt.<br><br>";
+		echo "<b><center><a href=\"javascript:oeffne();\">Autologin Datei erzeugen</a></b></center>";
+		echo "<br><br><b>ACHTUNG!</b> Die automatische Anmeldung stellt eine groòe SicherheitslÅcke dar. Jeder, der Zugriff auf ihren Rechner hat, kann sich damit unter ihrem Namen in Stud.IP einloggen!";
+		echo "</blockquote></td></tr>";
+		}
+	ELSE {
+		echo "<blockquote><br><br>Als Administrator d&uuml;rfen Sie dieses Feature nicht nutzen - tragen Sie Verantwortung!";
+		echo "</blockquote></td></tr>";
+		}
+	}	
+
+if($view == "Forum"){
+	require_once("forumsettings.inc.php");
+	}
+
+if ($view == "Stundenplan") {
+	require_once ("ms_stundenplan.inc.php");
+	check_schedule_default();
+	change_schedule_view();
+	}
+	
+if($view == "Terminkalender"){
+	require_once("kalenderSettings.inc.php");
+	}
+
+if ($view == "Messaging") {
+	require_once ("messagingSettings.inc.php");
+	check_messaging_default();
+	change_messaging_view();
+	}
+
+////////////////
+
+  echo "\n</table></td></tr></form>";
+  echo "\n</table>";
+  echo "</body>";
+  echo "</html>";
+  }
+
+page_close();
+
+
+?>
