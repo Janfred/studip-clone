@@ -55,6 +55,10 @@ reset($HTTP_GET_VARS);
 if (strstr( PHP_OS,"WIN") && $CHAT_ENABLE == true) 						//Attention: file based chat for windows installations (slow)
 	$CHAT_SERVER_NAME = "ChatFileServer";
 
+// path generation for SRI-interface (external pages)
+if ($EXTERN_ENABLE && preg_match('#^(http://)?(.+?)(/)?$#', $EXTERN_SERVER_NAME, $matches))
+	$EXTERN_SERVER_NAME  = $matches[2] . '/';
+
 //Besser hier globale Variablen definieren...
 $_fullname_sql['full'] = "TRIM(CONCAT(title_front,' ',Vorname,' ',Nachname,IF(title_rear!='',CONCAT(', ',title_rear),'')))";
 $_fullname_sql['full_rev'] = "TRIM(CONCAT(Nachname,', ',Vorname,IF(title_front!='',CONCAT(', ',title_front),''),IF(title_rear!='',CONCAT(', ',title_rear),'')))";
