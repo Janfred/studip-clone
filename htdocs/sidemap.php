@@ -584,8 +584,8 @@ $infobox = array	(
 			print_sidemap($sidemap);
 			?>
 			</blockquote>
-			<br>
-
+			<br>&nbsp; 
+			<br>&nbsp; 		
 			</form>
 		</td>
 		<td class="blank" width="290" align="right" valign="top">
