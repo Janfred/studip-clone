@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2003-03-24 13:37+0100\n"
-"PO-Revision-Date: 2003-03-21 16:42+0100\n"
+"PO-Revision-Date: 2003-03-24 17:17+0100\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
 "MIME-Version: 1.0\n"
@@ -94,7 +94,7 @@ msgstr "Year"
 
 #: calendar/calendar_links.inc.php:136 calendar/calendar_links.inc.php:143
 msgid "Bearbeiten"
-msgstr "Edit"
+msgstr "Edit "
 
 #: calendar/calendar_links.inc.php:151 calendar/calendar_links.inc.php:158
 msgid "Veranstaltungstermine"
@@ -129,8 +129,7 @@ msgstr "Customise settings for my appointment calendar"
 msgid ""
 "Hier k&ouml;nnen Sie die Ansicht Ihres pers&ouml;nlichen Terminkalenders "
 "anpassen."
-msgstr ""
-"Here you can customise the lay out of your personal appointment calendar."
+msgstr "Here you can customise the lay out of your personal appointment calendar."
 
 #: calendar/calendar_settings.inc.php:62
 msgid "Startansicht anpassen:"
@@ -162,7 +161,7 @@ msgstr "until"
 
 #: calendar/calendar_settings.inc.php:135
 msgid "Uhr."
-msgstr "  "
+msgstr "     "
 
 #: calendar/calendar_settings.inc.php:141
 msgid "Zeitintervall der Tagesansicht:"
@@ -521,8 +520,7 @@ msgstr ""
 msgid ""
 "Um diesen Termin zu bearbeiten, wechseln Sie bitte in die %"
 "sTerminverwaltung</a>."
-msgstr ""
-"To edit this appointment, please switch to the %s Course administration</a> "
+msgstr "To edit this appointment, please switch to the %s Course administration</a> "
 
 #: calendar/views/edit.inc.php:498
 msgid "Aktion:"
@@ -558,7 +556,7 @@ msgstr ""
 #: calendar/views/week.inc.php:53
 #, c-format
 msgid "%s. Woche vom %s bis %s"
-msgstr "Week %s  from %s until %s."
+msgstr "Week %s from %s until %s."
 
 #: calendar/views/year.inc.php:141
 #, c-format
@@ -589,3 +587,4 @@ msgstr "1. appointment"
 
 #~ msgid "Komfortfunktionen"
 #~ msgstr "Extras"
+

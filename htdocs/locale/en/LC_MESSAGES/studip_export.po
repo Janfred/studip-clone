@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2003-03-24 13:37+0100\n"
-"PO-Revision-Date: 2003-03-21 14:56+0100\n"
+"PO-Revision-Date: 2003-03-24 17:56+0100\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
 "MIME-Version: 1.0\n"
@@ -67,7 +67,7 @@ msgstr "Export format:"
 
 #: export/export_choose_xslt.inc.php:112
 msgid "Name der Datei (z.B. &raquo;Test&laquo;):"
-msgstr "File name (e.g &raquo; Test&laquo;)"
+msgstr "File name (e.g &raquo;Test&laquo;)"
 
 #: export/export_choose_xslt.inc.php:122 export/export_choose_xslt.inc.php:189
 #: export/export_choose_xslt.inc.php:241 export/export_run_xslt.inc.php:120
@@ -102,8 +102,7 @@ msgstr "Selection of export module"
 msgid ""
 "W&auml;hlen Sie bitte eine der folgenden XSLT-Dateien und klicken Sie auf "
 "'weiter'"
-msgstr ""
-"Please select one of the following XSLT- files and click on 'continue' "
+msgstr "Please select one of the following XSLT- files and click on 'continue' "
 
 #: export/export_choose_xslt.inc.php:157
 msgid "Ausgabemodul"
@@ -186,26 +185,23 @@ msgstr ""
 "installed XSLT processor."
 
 #: export/export_linking_func.inc.php:10
-#, fuzzy
 msgid "Diese Daten exportieren: "
-msgstr "Data export"
+msgstr "Export these data:"
 
 #: export/export_linking_func.inc.php:22
 msgid "Diese Daten Exportieren"
-msgstr ""
+msgstr "Export these data"
 
 #: export/export_linking_func.inc.php:45
-#, fuzzy
 msgid "Diese Daten exportieren"
-msgstr "Data export"
+msgstr "Export these data"
 
 #: export/export_run_fop.inc.php:37 export/export_run_xslt.inc.php:38
 msgid "Fehlende Parameter!"
 msgstr "Defective parameter!"
 
 #: export/export_run_fop.inc.php:53 export/export_xml.inc.php:54
-msgid ""
-"Die Parametern, mit denen diese Seite aufgerufen wurde, sind fehlerhaft."
+msgid "Die Parametern, mit denen diese Seite aufgerufen wurde, sind fehlerhaft."
 msgstr "The parameters, with which this page has been loaded are defective."
 
 #: export/export_run_fop.inc.php:62
@@ -238,8 +234,8 @@ msgid ""
 "Bei der Erzeugung der PDF-Datei ist ein Fehler aufgetreten. "
 "<br>Fehlermeldung: %s <br>Datei: %s"
 msgstr ""
-"An error occurred while the PDF file was being created. <br>Error message: %"
-"s<br>File: %s"
+"An error occurred while the PDF file was being created. "
+"<br>Error message: %s<br>File: %s"
 
 #: export/export_run_fop.inc.php:114
 msgid ""
@@ -361,8 +357,8 @@ msgid ""
 "Dies ist das Stud.IP-Exportmodul. Mit diesem Modul k&ouml;nnen Sie Daten in "
 "den Formaten %s und XML ausgeben."
 msgstr ""
-"This is the Stud.IP export module. The data can be exported in the formats %"
-"s and XML with this module."
+"This is the Stud.IP export module. The data can be exported "
+"in the formats %s and XML with this module."
 
 #: export/export_start.inc.php:140
 msgid ""
@@ -419,8 +415,7 @@ msgstr "No data was found!"
 msgid ""
 "Es wurden keine Daten gefunden! Die &uuml;bergebene ID ist mit keinen "
 "Veranstaltungs- / Personendaten verbunden."
-msgstr ""
-"No data was found! The given ID is not connected to any course or user data."
+msgstr "No data was found! The given ID is not connected to any course or user data."
 
 #: export/export_xml.inc.php:96
 msgid "Die Daten wurden erfolgreich exportiert."
@@ -429,12 +424,12 @@ msgstr "The data was successfully exported."
 #: export/export_xml.inc.php:98
 #, c-format
 msgid "%s Objekt wurde verarbeitet."
-msgstr "%s object was accepted."
+msgstr "%s object was processed."
 
 #: export/export_xml.inc.php:100
 #, c-format
 msgid "%s Objekte wurden verarbeitet."
-msgstr "%s objects were accepted."
+msgstr "%s objects were processed."
 
 #: export/export_xml.inc.php:102
 msgid ""
@@ -455,8 +450,7 @@ msgstr "To download the XML file click %shere%s."
 msgid ""
 "Wenn Sie die Daten in ein anderes Format konvertieren wollen, klicken Sie "
 "auf 'weiter'."
-msgstr ""
-"If you want to convert the data to another format then click on 'continue'."
+msgstr "If you want to convert the data to another format then click on 'continue'."
 
 #: export/export_xslt_vars.inc.php:11 export/export_xslt_vars.inc.php:27
 #: export/export_xslt_vars.inc.php:60 export/export_xslt_vars.inc.php:82
@@ -471,7 +465,7 @@ msgid ""
 "werden."
 msgstr ""
 "Standard module for the output of user or course data in text format. The "
-"data will only be formatted with tabs and hyphens. The outputfile can be "
+"data will only be formatted with tabs and hyphens. The output file can be "
 "edited in a word processor program."
 
 #: export/export_xslt_vars.inc.php:18
@@ -639,3 +633,4 @@ msgstr ""
 #: export/oscar.php:50
 msgid "Das Verzeichnis existiert nicht!"
 msgstr "The index does not exist!"
+
