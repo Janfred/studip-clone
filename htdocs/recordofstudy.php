@@ -191,7 +191,6 @@ elseif($mode == "pdf_assortment"){
 		"semester" => $semester,
 		"semesternumber" => $semesternumber
 	);
-
 	// creating the seminare-arrays cut into ones with the size of 10
 	$runner = 10;
 	// $j is the current page
@@ -208,9 +207,10 @@ elseif($mode == "pdf_assortment"){
 				$seminars[$j][$i]["sws"] = $_POST['sws'.$y];
 				$seminars[$j][$i]["description"] = $_POST['description'.$y];
 		}
-	
 	}
-
+	$exemptions = array (10,20,30,40,50,60,70,80,90,100);
+	if (in_array($seminare_max,$exemptions))
+		$j--;
 	$seminars["numberofseminars"] = $seminare_max;
 	$seminars["numberofpages"] = $j;
 }
