@@ -304,6 +304,8 @@ if ($ILIAS_CONNECT_ENABLE)
 	$structure["lernmodule"]=array (topKat=>"modules", name=>"Lernmodule", link=>"admin_lernmodule.php", active=>FALSE);
 if ($RESOURCES_ENABLE)
 	$structure["resources"]=array (topKat=>"modules", name=>"Ressourcenverwaltung", link=>"resources.php", active=>FALSE);
+if ($perm->have_perm("admin"))
+	$structure["show_admission"]=array (topKat=>"modules", name=>"laufende&nbsp;Anmeldeverfahren", link=>"show_admission.php", active=>FALSE);
 //
 if ($perm->have_perm("admin")) {		
 	$structure["new_user"]=array (topKat=>"global", name=>"Benutzer", link=>"new_user_md5.php", active=>FALSE);
@@ -408,6 +410,9 @@ switch ($i_page) {
 	break;
 	case "inst_admin.php": 
 		$reiter_view="mitarbeiter"; 
+	break;
+	case "show_admission.php": 
+		$reiter_view="show_admission"; 
 	break;
 	case "export.php": 
 		$reiter_view="export"; 
