@@ -182,7 +182,6 @@ if ($topic_id AND !$update) {
 // loeschen von nicht zuende getippten Postings
 
 if ($forum["lostposting"]!="" AND !isset($update)) {
-	echo "killed";
 	$writemode = $forum["lostposting"];
 	$db=new DB_Seminar;
 	$db->query("SELECT * FROM px_topics WHERE topic_id='$writemode' and (description = 'Dieser Beitrag wird gerade bearbeitet.' OR description = 'Beschreibung des Themas')");
