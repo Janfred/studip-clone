@@ -1,5 +1,5 @@
 A:visited {	color:#213499; text-decoration : none;	font-family: Arial, Helvetica, sans-serif;}
-A:link {	color:#213499; text-decoration : none;	font-family: Arial, Helvetica, sans-serif;} 
+A:link {	color:#213499; text-decoration : none;	font-family: Arial, Helvetica, sans-serif;}
 A:hover {	color: #FF3333; text-decoration : none;	font-family: Arial, Helvetica, sans-serif;}
 A:active {color: #FF3333; text-decoration : none; font-family: Arial, Helvetica, sans-serif;}
 
@@ -153,5 +153,12 @@ td.current {border-width: 2px; border-style: solid; border-color: #DD0000; backg
 td.currenttoday {border-width: 2px; border-style: solid; border-color: #DD0000; background-image: url('pictures/celltoday.gif');}
 td.month {background-image: url('pictures/steelcal.jpg');}
 td.lightmonth{background-image: url('pictures/steel1.jpg');	font-family: Arial, Helvetica, sans-serif;}
+
+/* Styles fuer TerminZeile */
+a.adaterow {color: #3333DD; font-family: Arial, Helvetica, sans-serif; font-size:8pt;}
+table.tabdaterow {background-color: white; }
+td.tddaterow {border-style: solid; border-color: #dddddd;  border-width: 1px; background-image: url('pictures/steel1.jpg'); font-family: Arial, Helvetica, sans-serif; font-size:8pt;}
+table.tabdaterow2 {background-color: white; }
+td.tddaterow2 {background-image: url('pictures/steel1.jpg');  font-family: Arial, Helvetica, sans-serif; font-size:8pt;}
 
 code  { font-size:10pt; }
