@@ -90,6 +90,7 @@ if (!$db->num_rows()) {
 			$titel=$tmp_titel."<a name='anker'>";
 			if ($db->f("user_id") != $auth->auth["uid"])
 				object_add_view($db->f("news_id"));  //Counter for news - not my own
+				object_set_visit($db->f("news_id"), "news"); //and, set a visittime
 		} else {
 			$link=$PHP_SELF."?nopen=".$db->f("news_id");
 			$titel=$tmp_titel;
