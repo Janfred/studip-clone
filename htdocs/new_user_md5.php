@@ -153,6 +153,19 @@ while ( is_array($HTTP_POST_VARS)
 				}
 		}
 		
+		//do auto inserts, if we created an autor
+		if (($run) && (($permlist == "autor") || ($permlist == "tutor") || ($permlist == "dozent"))) {
+			if (is_array($AUTO_INSERT_SEM)){
+				foreach ($AUTO_INSERT_SEM as $a) {
+					$db->query("SELECT Name, start_time FROM seminare WHERE Seminar_id = '$a'");
+					$db->next_record();							
+					$group=select_group ($db->f("start_time"),$u_id);							
+					$db2->query("INSERT into seminar_user (Seminar_id, user_id, status, gruppe) values ('$a', '$u_id', 'autor', '$group')");
+					$msg .= sprintf("msg§Der Nutzer wurde automatisch in die Veranstaltung <b>%s</b> eingetragen.§", $db->f("Name"));
+				}
+			}
+		}
+		
 		if ($run) { // Benutzer angelegt
 			$msg .= "msg§Benutzer \"$username\" angelegt.§";
 
@@ -282,6 +295,34 @@ while ( is_array($HTTP_POST_VARS)
 			$smtp->env_from, array($to),
 			array("From: $smtp->from", "Reply-To: $smtp->abuse", "To: $to", "Subject: $subject"),
 			$mailbody);
+			
+			//do auto inserts, if we changed to autor or higher
+			if (($permlist == "autor") || ($permlist == "tutor") || ($permlist == "dozent")) {
+				if (is_array($AUTO_INSERT_SEM)){
+					foreach ($AUTO_INSERT_SEM as $a) {
+						$db->query("SELECT Name, start_time, Schreibzugriff FROM seminare WHERE Seminar_id = '$a'");
+						if ($db->num_rows()) {
+							$db->next_record();
+							if ($db->f("Schreibzugriff") < 2) { // es gibt das Seminar und es ist kein Passwort gesetzt
+								$db2 = new DB_Seminar;
+								$db2->query("SELECT status FROM seminar_user WHERE Seminar_id = '$a' AND user_id='$u_id'");
+								if ($db2->num_rows()) { // Benutzer ist schon eingetragen
+									$db2->next_record();
+									if ($db2->f("status") == "user") { // wir können ihn hochstufen
+										$db2->query("UPDATE seminar_user SET status = 'autor' WHERE Seminar_id = '$a' AND user_id='$user->id'");	
+										$msg .= sprintf("msg§Dem Nutzer wurden wurden Schreibrechte in der Veranstaltung <b>%s</b> erteilt.§", $db->f("Name"));
+									}
+								} else {  // Benutzer ist noch nicht eingetragen
+									$group=select_group ($db->f("start_time"),$u_id);							
+									$db2->query("INSERT into seminar_user (Seminar_id, user_id, status, gruppe) values ('$a', '$u_id', 'autor', '$group')");
+									$msg .= sprintf("msg§Der Nutzer wurde automatisch in die Veranstaltung <b>%s</b> eingetragen.§", $db->f("Name"));
+								}
+							}
+						}
+					}
+				}
+			}
+				
 
 			// Hochstufung auf admin oder root?
 			if (addslashes(implode($perms,",")) == "admin" || addslashes(implode($perms,",")) == "root") {
