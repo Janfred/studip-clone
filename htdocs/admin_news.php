@@ -150,7 +150,7 @@ class studip_news {
 
 	function show_news($id){
 		global $auth;
-		$cssSw= new cssClassSwitcher;
+		$cssSw= new cssClassSwitcher();
 		$cssSw->enableHover();
 		$this->get_news_by_range($id,$limit=100);
 		if (!is_array($this->news_query)) {
@@ -164,25 +164,25 @@ class studip_news {
 		echo "\n<tr><td width=\"100%\" class=\"blank\"><blockquote>";
 		echo "\n<form action=\"".$this->p_self("cmd=kill")."\" method=\"POST\">";
 		echo "<table class=\"blank\" align=\"left\" width=\"".round(0.89*$this->xres)."\" cellspacing=\"0\" cellpadding=\"2\" border=\"0\">";
-		echo "\n<tr><td class=\"blank\" colspan=\"4\" align=\"left\"><font size=-1>" . _("Vorhandene News im gew&auml;hlten Bereich:") . "<br>";
-		echo "</td><td class=\"blank\" colspan=\"4\" align=\"right\"><font size=-1>" . _("markierte News l&ouml;schen");
-		echo "\n<input type=\"IMAGE\" name=\"kill\" " . makeButton("loeschen","src") . tooltip(_("Markierte News löschen")) . " border=\"0\" align=\"absmiddle\">&nbsp;&nbsp;</td></tr>";
+		echo "\n<tr><td class=\"blank\" colspan=\"4\" align=\"left\" style=\"vertical-align:middle;\"><font size=-1 >" . _("Vorhandene News im gew&auml;hlten Bereich:") . "<br>";
+		echo "</td><td class=\"blank\" colspan=\"4\" align=\"right\" style=\"vertical-align:middle;\"><font size=-1 >" . _("markierte News l&ouml;schen");
+		echo "\n<input type=\"IMAGE\" style=\"vertical-align:middle;\" name=\"kill\" " . makeButton("loeschen","src") . tooltip(_("Markierte News löschen")) . " border=\"0\" >&nbsp;&nbsp;</td></tr>";
 		echo "\n<tr><th width=\"15%\">" . _("&Uuml;berschrift") . "</th><th width=\"20%\">" . _("Inhalt") . "</th><th width=\"20%\">"
 			. _("Autor") . "</th><th width=\"10%\">" . _("Einstelldatum") . "</th><th width=\"10%\">" . _("Ablaufdatum") . "</th><th width=\"15%\">"
 			. _("Bearbeiten") . "</th><th width=\"10%\">" . _("L&ouml;schen") . "</th>";
 		while (list ($news_id,$details) = each ($this->news_query)) {
 			$cssSw->switchClass();
-			echo "\n<tr ".$cssSw->getHover()."><td class=\"".$cssSw->getClass()."\" width=\"15%\" align=\"center\"><b>".htmlReady($details["topic"])."</b></td>";
+			echo "\n<tr ".$cssSw->getHover()."><td class=\"".$cssSw->getClass()."\" width=\"15%\" align=\"center\"><font size=\"-1\"><b>".htmlReady($details["topic"])."</b></font></td>";
 			list ($body,$admin_msg)=explode("<admin_msg>",$details["body"]);
-			echo "\n<td class=\"".$cssSw->getClass()."\" width=\"25%\" align=\"center\">".htmlready(mila($body))."</td>";
-			echo "\n<td class=\"".$cssSw->getClass()."\" width=\"15%\" align=\"center\">".htmlReady($details["author"])."</td>";
+			echo "\n<td class=\"".$cssSw->getClass()."\" width=\"25%\" align=\"center\"><font size=\"-1\">".htmlready(mila($body))."</font></td>";
+			echo "\n<td class=\"".$cssSw->getClass()."\" width=\"15%\" align=\"center\"><font size=\"-1\">".htmlReady($details["author"])."</font></td>";
 			echo "\n<td class=\"".$cssSw->getClass()."\" width=\"10%\" align=\"center\">".strftime("%d.%m.%y", $details["date"])."</td>";
 			echo "\n<td class=\"".$cssSw->getClass()."\" width=\"10%\" align=\"center\">".strftime("%d.%m.%y", ($details["date"]+$details["expire"]))."</td>";
 			echo "\n<td class=\"".$cssSw->getClass()."\" width=\"15%\" align=\"center\"><a href=\"".$this->p_self("cmd=edit&edit_news=$news_id")."\"><img "
 				. makeButton("bearbeiten","src") . tooltip(_("Diese News bearbeiten")) . " border=\"0\"></a></td>";
 			echo "\n<td class=\"".$cssSw->getClass()."\" width=\"10%\" align=\"center\">";
 			if ($this->news_perm[$id]["perm"]==3 OR $auth->auth["perm"]=="root" OR $details["user_id"]==$this->user_id) 
-				echo "<input type=\"CHECKBOX\" name=\"kill_news[]\" value=\"$news_id\">";
+				echo "<input type=\"CHECKBOX\" name=\"kill_news[]\" value=\"$news_id\" " . tooltip(_("Diese News zum löschen vormerken"),false) . ">";
 			else 
 				echo "<font color=\"red\">" . _("Nein") . "</font>";
 			echo "</td></tr>";
@@ -623,11 +623,12 @@ class studip_news {
 
 	function send_sms() {
 		$admin_name="____%system%____";
+		$msg_object = new messaging();
 		while (list($user_id,$msg) = each($this->sms)) {
 			$this->db->query("SELECT username FROM auth_user_md5 WHERE user_id='$user_id'");
 			$this->db->next_record();
 			$user_name=$this->db->f("username");
-			messaging::insert_sms($user_name, mysql_escape_string($msg), $admin_name);
+			$msg_object->insert_sms($user_name, mysql_escape_string($msg), $admin_name);
 		}
 	}
 
@@ -640,7 +641,7 @@ include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");	//Linkleiste fuer admins
 
 require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 
-echo "\n".cssClassSwitcher::GetHoverJSFunction()."\n";
+echo "\n" . cssClassSwitcher::GetHoverJSFunction() . "\n";
 
 if(!$news_range_id) {
 	$sess->register("news_range_id");
@@ -659,153 +660,147 @@ $news = new studip_news();
 ?>
 <table cellspacing="0" cellpadding="0" border="0" width="100%">
 <tr><td class="topic"><b>&nbsp;
-Newsverwaltung</b> <font size="-1">(gew&auml;hlter Bereich: <b><?=htmlReady($news_range_name)?></b>)</font></td></tr>
+<?=_("Newsverwaltung")?></b> <font size="-1">(<?=_("gew&auml;hlter Bereich:")?> <b><?=htmlReady($news_range_name)?></b>)</font></td></tr>
 <?
 
- if ($perm->have_perm("admin"))
- {
- if ($cmd=="search")
-		 {
-	 if (!$search)
-			 {
-		  $news->msg.="error§Der Suchbegriff fehlt!§";
-		  $cmd="";
-		  }
-	 else
-			 {
-		  $news->search_range($search);
-		  if (!is_array($news->search_result)) $news->msg.="info§Die Suche ergab keine Treffer!§";
-		  $cmd="";
-		  }
-	 }
- }
+if ($perm->have_perm("admin"))	{
+	if ($cmd=="search") {
+		if (!$search) {
+			$news->msg .= "error§" . _("Der Suchbegriff fehlt!") . "§";
+			$cmd="";
+		} else {
+			$news->search_range($search);
+			if (!is_array($news->search_result)) 
+				$news->msg.="info§" . _("Die Suche ergab keine Treffer!") . "§";
+			$cmd="";
+		}
+	}
+}
 
 
- if ($cmd=="news_submit")
-	  {
-	  $edit_news=$news->update_news($news_id,$author,$topic,$body,$user_id,$date,$expire,$add_range) ;
-	  if ($edit_news) $cmd="edit";
-	  else $cmd="";
-	  }
+if ($cmd=="news_submit") {
+	$edit_news=$news->update_news($news_id,$author,$topic,$body,$user_id,$date,$expire,$add_range) ;
+	if ($edit_news) 
+		$cmd="edit";
+	else 
+		$cmd="";
+}
 
- if ($news->msg) {
+if ($news->msg) {
 	echo "<tr><td class=\"blank\"><br />";
 	parse_msg($news->msg,"§","blank","1");
 	echo "</td></tr>";
- }
- $news->msg="";
+}
+$news->msg="";
 
- if ($cmd=="edit") {
-	  if ($perm->have_perm("admin") && $search) {
-		   if ($search) $news->search_range($search);
-		   if (empty($news->search_result)) {
-		echo "<tr><td class=\"blank\"><br />";
-			parse_msg("info§Die Suche ergab keine Treffer!§","§","blank","1",FALSE);
-		echo "</td></tr>";
-	   }
-	  }
-	  if ($auth->auth["perm"]=="dozent" OR $auth->auth["perm"]=="tutor") $news->search_range("blah");
-	  $news->edit_news($edit_news);
+if ($cmd=="edit") {
+	if ($perm->have_perm("admin") && $search) {
+		if ($search) 
+			$news->search_range($search);
+		if (empty($news->search_result)) {
+			echo "<tr><td class=\"blank\"><br />";
+			parse_msg("info§" . _("Die Suche ergab keine Treffer!") . "§","§","blank","1",FALSE);
+			echo "</td></tr>";
+		}
+	}
+	if ($auth->auth["perm"]=="dozent" OR $auth->auth["perm"]=="tutor") 
+		$news->search_range("blah");
+	$news->edit_news($edit_news);
 }
 
- if ($cmd=="kill")
-			{
-		  $news->kill_news($kill_news);
-		  $cmd="";
-		  }
- if ($news->msg) {
+if ($cmd=="kill") {
+	$news->kill_news($kill_news);
+	$cmd="";
+}
+
+if ($news->msg) {
 	echo "<tr><td class=\"blank\"><br />";
 	parse_msg($news->msg,"§","blank","1");
 	echo "</td></tr>";	
- }
- $news->msg="";
+}
+$news->msg="";
 
- if ($cmd=="new_entry")
-	{
-	 if ($auth->auth["perm"]=="dozent" OR $auth->auth["perm"]=="tutor") $news->search_range("blah");
-	 $news->edit_news();
-	 }
+if ($cmd=="new_entry") {
+	if ($auth->auth["perm"]=="dozent" OR $auth->auth["perm"]=="tutor") 
+		$news->search_range("blah");
+	$news->edit_news();
+}
 
- if (!$cmd OR $cmd=="show") {
-		  if ($news->sms) $news->send_sms();
-
-		  if ($perm->have_perm("tutor"))
-			 {
-			 if ($perm->have_perm("admin"))
-			  {
-			  echo"\n<tr><td class=\"blank\"><blockquote><br /><b>Bereichsauswahl</b><br />&nbsp; </blockquote></td></tr>\n";
-			  echo "<tr><td class=\"blank\"><blockquote>";
-			  echo "<table width=\"50%\" cellspacing=0 cellpadding=2 border=0>";
-			  echo "<form action=\"".$news->p_self("cmd=search")."\" method=\"POST\">";
-			  echo "<tr><td class=\"steel1\">";
-			  echo "&nbsp; <font size=-1>Geben Sie einen Suchbegriff ein, um weitere Bereiche zu finden!</font><br /><br />";
-			  echo "&nbsp; <INPUT TYPE=\"TEXT\"	 name=\"search\" size=\"20\">&nbsp;&nbsp;<input type=\"IMAGE\" name=\"submit\" src=\"pictures/buttons/suchestarten-button.gif\" border=0 value=\"Suche starten\">";
-			  echo "</td></tr></table>\n";
-			  echo "</blockquote>";
-			  echo "</form>";
-			   }
-			 else $news->search_range("blah");
-		  echo "\n<tr><td class=\"blank\"><blockquote>";
-		  if ($perm->have_perm("admin"))
-		  echo "<hr width=\"100%\">";
-	  echo "<br /><b>verf&uuml;gbare Bereiche";	
-		  echo "</b></blockquote></td></tr>\n ";
-		  $typen = array("user"=>"Benutzer","sem"=>"Veranstaltung","inst"=>"Einrichtung","fak"=>"Fakult&auml;t");
-		  $my_cols=4;
-		  if ($perm->have_perm("tutor")){
-			  echo "\n<tr><td class=\"blank\"><blockquote>";
-			  echo "<font size=-1>Sie k&ouml;nnen&nbsp; <b>Pers&ouml;nliche News</b></font>&nbsp;<a href=\"".$news->p_self("range_id=$user->id")."\">&nbsp; <img src=\"pictures/buttons/bearbeiten-button.gif\" border=0></a>";
-		  }
-		  if ($perm->have_perm("root")) {
-			  echo "<font size=-1>&nbsp; <i>oder</i>&nbsp; <b>Systemweite News</b></font>&nbsp;<a href=\"".$news->p_self("range_id=studip")."\">&nbsp; <img src=\"pictures/buttons/bearbeiten-button.gif\" border=0></a>";
-		  }
-		  if ($news->search_result)
-			  echo "<font size=-1>&nbsp; <i>oder</i> <b>hier</b> einen der gefundenen Bereiche ausw&auml;hlen:</i>&nbsp; <b></font>";
-		  
-		  if ($perm->have_perm("tutor"))
-			  echo "</blockquote></td></tr>";
-
-		  if ($news->search_result) {
-			echo "\n<tr><td width=\"100%\" class=\"blank\"><br /><blockquote>";
+if (!$cmd OR $cmd=="show") {
+	if ($news->sms) 
+		$news->send_sms();
+	if ($perm->have_perm("tutor")) {
+		if ($perm->have_perm("admin")) {
+			echo"\n<tr><td class=\"blank\"><blockquote><br /><b>" . _("Bereichsauswahl") . "</b><br />&nbsp; </blockquote></td></tr>\n";
+			echo "<tr><td class=\"blank\"><blockquote>";
+			echo "<table width=\"50%\" cellspacing=0 cellpadding=2 border=0>";
+			echo "<form action=\"".$news->p_self("cmd=search")."\" method=\"POST\">";
+			echo "<tr><td class=\"steel1\">";
+			echo "&nbsp; <font size=-1>" . _("Geben Sie einen Suchbegriff ein, um weitere Bereiche zu finden!") . "</font><br /><br />";
+			echo "&nbsp; <INPUT TYPE=\"TEXT\" style=\"vertical-align:middle;\" name=\"search\" size=\"20\">&nbsp;&nbsp;";
+			echo "<input type=\"IMAGE\" style=\"vertical-align:middle;\" name=\"submit\" " . makeButton("suchestarten","src") . tooltip( _("Suche starten")) ." border=\"0\">";
+			echo "</td></tr></table>\n";
+			echo "</blockquote>";
+			echo "</form>";
+		}
+		else $news->search_range("blah");
+		echo "\n<tr><td class=\"blank\"><blockquote>";
+		if ($perm->have_perm("admin"))
+		echo "<hr width=\"100%\">";
+		echo "<br /><b>" . _("verf&uuml;gbare Bereiche");
+		echo "</b></blockquote></td></tr>\n ";
+		$typen = array("user"=>_("Benutzer"),"sem"=>_("Veranstaltung"),"inst"=>_("Einrichtung"),"fak"=>_("Fakult&auml;t"));
+		$my_cols=4;
+		if ($perm->have_perm("tutor")){
+			echo "\n<tr><td class=\"blank\"><blockquote>";
+			echo "<font size=\"-1\" style=\"vertical-align:middle;\">" . _("Sie k&ouml;nnen&nbsp; <b>Pers&ouml;nliche News</b> bearbeiten") . "</font>&nbsp;";
+			echo "<a href=\"".$news->p_self("range_id=$user->id")."\">&nbsp; <img style=\"vertical-align:middle;\" " . makeButton("bearbeiten","src") . tooltip(_("Persönliche News bearbeiten")) ." border=\"0\"></a>";
+		}
+		if ($perm->have_perm("root")) {
+			echo "<font size=\"-1\" style=\"vertical-align:middle;\">&nbsp; " . _("<i>oder</i> <b>Systemweite News</b> bearbeiten") . "</font>&nbsp;";
+			echo "<a href=\"".$news->p_self("range_id=studip")."\">&nbsp;<img style=\"vertical-align:middle;\" " . makeButton("bearbeiten","src") . tooltip(_("Systemweite News bearbeiten")) ." border=\"0\"></a>";
+		}
+		if ($news->search_result)
+			echo "<br><br><font size=\"-1\" style=\"vertical-align:middle;\">" . _("<i>oder</i> <b>hier</b> einen der gefundenen Bereiche ausw&auml;hlen:") . "&nbsp;</font>";
+		
+		if ($perm->have_perm("tutor"))
+			echo "</blockquote></td></tr>";
+		
+		if ($news->search_result) {
+			echo "\n<tr><td width=\"100%\" class=\"blank\"><blockquote>";
 			echo "<table width=\"".round(0.89*$news->xres)."\" cellspacing=\"0\" cellpadding=\"2\" border=\"0\">";
 			$css = new CssClassSwitcher(array("steel1","steel1"));
 			$css->hoverenabled = TRUE;
 			$css->switchClass();
-			 while (list($typen_key,$typen_value)=each ($typen))
-					  {
-					  if (!$perm->have_perm("root") AND $typen_key=="user") continue;
-					  echo "\n<td class=\"steel1\" width=\"".floor(100/$my_cols)."%\" align=\"center\" valign=\"top\"><b>$typen_value</b><br><font size=\"-1\">";
-					  reset($news->search_result);
-					  while (list ($range,$details) = each ($news->search_result))
-					  {
-					  if ($details["type"]==$typen_key)
-						 {
-						 echo "\n<div ".$css->getHover()."><a href=\"".$news->p_self("range_id=$range")."\">".htmlReady($details["name"]);
-						 ($details["anzahl"]) ? print " (".$details["anzahl"].")" : print " (0)";
-						 echo "</a></div>";
-						 }
-					  }
-					  echo "\n</font></td>";
-					  }
-			  echo"\n</table></blockquote></td></tr>";
-					  
-			 }
-		  }
-
-		 echo "\n<tr><td class=\"blank\"><br /><blockquote>";
-		 echo "<form action=\"".$news->p_self("cmd=new_entry")."\" method=\"POST\">";
-	 echo "<hr width=\"100%\"><br /><b>gew&auml;hlter Bereich: </b>".htmlReady($news_range_name). "<br /><br />";
-		 echo "<font size=-1>eine neue News im gew&auml;hlten Bereich </font>&nbsp; <input type=\"IMAGE\" name=\"new_entry\" src=\"pictures/buttons/erstellen-button.gif\" border=0	 value=\"erstellen\">";
-		 echo "</b></blockquote></form></td></tr>\n ";
-	
-
-		 if (!$news->show_news($news_range_id)) {
-			echo "\n<tr><td class=\"blank\"><blockquote>";
-			echo "<font size=-1>" . _("Im gew&auml;hlten Bereich sind keine News vorhanden!") . "<br><br>";
-			echo "</blockquote></td></tr>";
-		 }
-	 }
-
+			while (list($typen_key,$typen_value)=each ($typen)) {
+				if (!$perm->have_perm("root") AND $typen_key=="user") 
+					continue;
+				echo "\n<td class=\"steel1\" width=\"".floor(100/$my_cols)."%\" align=\"center\" valign=\"top\"><b>$typen_value</b><br><font size=\"-1\">";
+				reset($news->search_result);
+				while (list ($range,$details) = each ($news->search_result)) {
+					if ($details["type"]==$typen_key) {
+						echo "\n<div ".$css->getHover()."><a href=\"".$news->p_self("range_id=$range")."\">".htmlReady($details["name"]);
+						echo ($details["anzahl"]) ? " (".$details["anzahl"].")" : " (0)";
+						echo "</a></div>";
+					}
+				}
+				echo "\n</font></td>";
+			}
+			echo"\n</table></blockquote></td></tr>";
+		}
+	}
+	echo "\n<tr><td class=\"blank\"><br /><blockquote>";
+	echo "<form action=\"".$news->p_self("cmd=new_entry")."\" method=\"POST\">";
+	echo "<hr width=\"100%\"><br /><b>" . _("gew&auml;hlter Bereich:") . " </b>".htmlReady($news_range_name). "<br /><br />";
+	echo "<font size=\"-1\" style=\"vertical-align:middle;\">" . _("Eine neue News im gew&auml;hlten Bereich erstellen") . "</font>&nbsp;";
+	echo "<input type=\"IMAGE\" style=\"vertical-align:middle;\" name=\"new_entry\" " .makeButton("erstellen","src") . tooltip(_("Eine neue News erstellen")) . " border=\"0\">";
+	echo "</b></blockquote></form></td></tr>\n ";
+	if (!$news->show_news($news_range_id)) {
+		echo "\n<tr><td class=\"blank\"><blockquote>";
+		echo "<font size=\"-1\" style=\"vertical-align:middle;\">" . _("Im gew&auml;hlten Bereich sind keine News vorhanden!") . "<br><br>";
+		echo "</blockquote></td></tr>";
+	}
+}
 echo"\n</table></html>";
 page_close();
 ?>
