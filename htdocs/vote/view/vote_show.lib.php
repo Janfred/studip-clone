@@ -241,7 +241,19 @@ function createFormFooter (&$vote, $userID, $perm, $rangeID) {
 	 "&nbsp;".
 	 "<a href=\"".VOTE_FILE_ADMIN."?page=overview&voteID=".
 	 $vote->getVoteID ().
-	 "&voteaction=delete_request&showrangeID=".$vote->getRangeID()."\">" .
+	 "&voteaction=stop&referer=1&showrangeID=".$vote->getRangeID()."\">" .
+	 "<img  ".
+	 makeButton ("stop", "src"). 
+	 tooltip( $vote->instanceof() == INSTANCEOF_TEST
+		  ? _("Diesen Test stoppen.")
+		  : _("Dieses Voting stoppen.") ).
+	 " border=\"0\"></a>";
+
+      $html .= 
+	 "&nbsp;".
+	 "<a href=\"".VOTE_FILE_ADMIN."?page=overview&voteID=".
+	 $vote->getVoteID ().
+	 "&voteaction=delete_request&referer=1&showrangeID=".$vote->getRangeID()."\">" .
 	 "<img  ".
 	 makeButton ("loeschen", "src"). 
 	 tooltip( $vote->instanceof() == INSTANCEOF_TEST

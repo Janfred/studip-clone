@@ -31,7 +31,7 @@ require_once($ABSOLUTE_PATH_STUDIP . "seminar_open.php");
 require_once($ABSOLUTE_PATH_STUDIP . "html_head.inc.php");
 require_once($ABSOLUTE_PATH_STUDIP . "header.php");
 require_once($ABSOLUTE_PATH_STUDIP . "links_admin.inc.php");
-
+ob_start(); // start output buffering
 include_once($ABSOLUTE_PATH_STUDIP . "vote/view/visual.inc.php");
 include_once($ABSOLUTE_PATH_STUDIP . "vote/Vote.class.php");
 include_once($ABSOLUTE_PATH_STUDIP.  "vote/TestVote.class.php");
@@ -67,6 +67,7 @@ $openID										= $HTTP_GET_VARS['openID'];
 	if(empty($openID))			$openID 	= NULL;
 $searchRange 								= htmlready($HTTP_POST_VARS['searchRange']);
 	if(empty($searchRange))		$searchRange= NULL;
+$referer									= $HTTP_GET_VARS['referer'];
 
 /* **END*of*initialize*post/get*variables*********************************** */
 
@@ -110,6 +111,20 @@ elseif ($voteaction != "search"){
 	$safeguard = printSafeguard("ausruf",_("Kein Bereich ausgewählt. Es werden Votings und Tests ihrer persönlichen Homepage angezeigt."));
 	$showrangeID = get_username ($userID);
 	}
+
+if (($referer) && ($referer == "1")){
+
+//	if( ! $referer ) {
+    	$referer = $_SERVER['HTTP_REFERER'];
+    	$referer = removeArgFromURL( $referer, "voteaction" );
+    	$referer = removeArgFromURL( $referer, "voteID" );
+    	$referer = removeArgFromURL( $referer, "showrangeID" );
+//    	if( $_POST['rangeID'] )
+//		$referer .= "&showrangeID=".$_POST['rangeID'];
+//    	elseif( $_REQUEST["showrangeID"] )
+//		$referer .= "&showrangeID=".$showrangeID;
+//	}
+}
 
 /* ************************************************************************** *
 /*																			  *
@@ -161,7 +176,7 @@ elseif ($rangemode == "autor"){
 /* ************************************************************************* */
 
 // If a votes attribute(s) is to be modified, the action will be execute here.
-if ($voteaction && $voteaction != "search") $safeguard .= callSafeguard($voteaction, $voteID, $showrangeID, $searchRange);
+if ($voteaction && $voteaction != "search") $safeguard .= callSafeguard($voteaction, $voteID, $showrangeID, $searchRange, $referer);
 //print "<table><tr>$safeguard</tr></table>";
 // Displays the Options to create a new Vote or Test
 // and the selection of displayed votes/tests
@@ -213,7 +228,8 @@ elseif (($voteaction == "search") && (($rangemode == "root") || ($rangemode == "
  * @access private
  * @param voteaction	string comprised the action
  */
-function callSafeguard($voteaction, $voteID = "", $showrangeID = NULL, $search = NULL){
+function callSafeguard($voteaction, $voteID = "", $showrangeID = NULL, $search = NULL, $referer = NULL){
+
 	$voteDB = &new voteDB;
 	$votechanged = NULL;
 	$safeguard = "";
@@ -306,8 +322,8 @@ function callSafeguard($voteaction, $voteID = "", $showrangeID = NULL, $search =
 				return $safeguard;
 			}
 			$type
-			? $safeguard .= printSafeguard("ok", sprintf(_("Das Voting \"%s\" wurde gestoppt."),$votename))
-			: $safeguard .= printSafeguard("ok", sprintf(_("Der Test \"%s\" wurde gestoppt."),$votename));
+			? $safeguard .= printSafeguard("ok", sprintf(_("Das Voting \"%s\" wurde gestoppt."),$votename),"","","",$referer)
+			: $safeguard .= printSafeguard("ok", sprintf(_("Der Test \"%s\" wurde gestoppt."),$votename),"","","",$referer);
 			$votechanged = 1;
 			break;
 		case "continue":
@@ -338,8 +354,8 @@ function callSafeguard($voteaction, $voteID = "", $showrangeID = NULL, $search =
 			break;
 		case "delete_request":
 			$type
-			? $safeguard .= printSafeguard("ausruf", sprintf(_("Das Voting \"%s\" wirklich l&ouml;schen?"),$votename),"delete_request",$voteID, $showrangeID)
-			: $safeguard .= printSafeguard("ausruf", sprintf(_("Den Test \"%s\" wirklich l&ouml;schen?"),$votename),"delete_request",$voteID, $showrangeID);
+			? $safeguard .= printSafeguard("ausruf", sprintf(_("Das Voting \"%s\" wirklich l&ouml;schen?"),$votename),"delete_request",$voteID, $showrangeID, $referer)
+			: $safeguard .= printSafeguard("ausruf", sprintf(_("Den Test \"%s\" wirklich l&ouml;schen?"),$votename),"delete_request",$voteID, $showrangeID, $referer);
 			break;
 		case "delete_confirmed":
 			$vote->executeRemove();
@@ -350,14 +366,14 @@ function callSafeguard($voteaction, $voteID = "", $showrangeID = NULL, $search =
 				return $safeguard;
 			}
 			$type
-			? $safeguard .= printSafeguard("ok", sprintf(_("Das Voting \"%s\" wurde gel&ouml;scht."),$votename))
-			: $safeguard .= printSafeguard("ok", sprintf(_("Der Test \"%s\" wurde gel&ouml;scht."),$votename));
+			? $safeguard .= printSafeguard("ok", sprintf(_("Das Voting \"%s\" wurde gel&ouml;scht."),$votename),"","","",$referer)
+			: $safeguard .= printSafeguard("ok", sprintf(_("Der Test \"%s\" wurde gel&ouml;scht."),$votename),"","","",$referer);
 			$votechanged = 1;
 			break;
 		case "delete_aborted":
 			$type
-			? $safeguard .= printSafeguard("ok", sprintf(_("Das Voting \"%s\" wurde nicht gel&ouml;scht."),$votename))
-			: $safeguard .= printSafeguard("ok", sprintf(_("Der Test \"%s\" wurde nicht gel&ouml;scht."),$votename));
+			? $safeguard .= printSafeguard("ok", sprintf(_("Das Voting \"%s\" wurde nicht gel&ouml;scht."),$votename),"","","",$referer)
+			: $safeguard .= printSafeguard("ok", sprintf(_("Der Test \"%s\" wurde nicht gel&ouml;scht."),$votename),"","","",$referer);
 			break;
 		case "created":
 			$type
@@ -435,7 +451,7 @@ function createVoteArray($mode){
 	}
 	else { // request the right data from the db / just on range
 */
-		switch ($mode){
+/*		switch ($mode){
 			case VOTE_STATE_NEW:
 					$votearrays = $voteDB->getNewVotes($userID);
 				break;
@@ -450,6 +466,7 @@ function createVoteArray($mode){
 			default:
 				break;
 		}
+*/
 //	}
 //  }
 
@@ -546,7 +563,10 @@ function createLabel(){
 	$label = array(
 		// labels for printSiteTitle
 		"sitetitle_title" => _("Voting-Verwaltung"),
-
+		
+		// labels for printSafeguard
+		"referer" => _("Zum vorherigen Bereich zur&uuml;ckkehren."),
+		
 		// labels for printSelections
 		"selections_text_vote" => _("Ein neues Voting"),
 		"selections_text_test" => _("Einen neuen Test"),
@@ -628,6 +648,39 @@ function createLabel(){
 		"no_votes_message_stopped" => _("Keine gestoppten Votings oder Tests vorhanden."),
 	);
 	return $label;
+}
+
+/**
+ * deletes argument '&arg=value' from URL
+ *
+ * @access  public
+ * @param   string $URL    the URL to be modified
+ * @param   string $arg    the name of the argument
+ * @returns string         the new URL
+ *
+ */
+
+function removeArgFromURL( $URL, $arg ) {
+    $pos = strpos( $URL, "$arg=" );
+
+    if( $pos ) {
+	if( $URL[$pos-1] == "&" ) {
+	    // If pos-1 is pointing to a '&', knock pos back one, so it is removed.
+	    $pos--;
+	}
+	$nMax = strlen( $URL );
+	$nEndPos = strpos( $URL, "&", $pos+1 );
+
+	if( $nEndPos === false ) {
+	    // $arg is on the end of the URL
+	    $URL = substr( $URL, 0, $pos );
+	}
+	else {
+	    // $arg is in the URL
+	    $URL = str_replace( substr( $URL, $pos, $nEndPos-$pos ), '', $URL );
+	}
+    }
+    return $URL;
 }
 /* **END*of*private*functions*********************************************** */
 ?>

@@ -37,7 +37,7 @@ function printSiteTitle(){
  * @param text   string        The Text to draw
  * @param voteID string needed if you want to delete a vote (not needed)
  */
-function printSafeguard($sign,$text,$mode = NULL, $voteID = NULL, $showrangeID = NULL){
+function printSafeguard($sign,$text,$mode = NULL, $voteID = NULL, $showrangeID = NULL, $referer = NULL){
 	global $label;
 /*	$html = "<table class=\"blank\" cellspacing=0 cellpadding=0 border=0 width=\"100%\">\n"
 		  . " <tr>\n"
@@ -60,6 +60,9 @@ function printSafeguard($sign,$text,$mode = NULL, $voteID = NULL, $showrangeID =
 	$html .="	 <td align=\"left\" valign=\"middle\" style=\"vertical-align:middle;\">\n";
 	$html .="	  <font size=\"-1\" color=\"$color\"><br>$text</font><br><br>\n";
 
+	if ($referer)
+		$linkreferer = "&referer=".$referer;
+
 	if (($mode == "delete_request") || ($mode == "NeverResultvisibility")){
 		if ($mode == "delete_request"){
 			$value1 = "delete_confirmed";
@@ -70,12 +73,18 @@ function printSafeguard($sign,$text,$mode = NULL, $voteID = NULL, $showrangeID =
 			$value2 = "setResultvisibility_aborted";
 		}
 		global $_language_path, $CANONICAL_RELATIVE_PATH_STUDIP;
-		$html .="<font size=\"-1\"><a href=\"".$ABSOLUTE_PATH_STUDIP . VOTE_FILE_ADMIN."?page=overview&voteaction=".$value1."&voteID=".$voteID."&showrangeID=".$showrangeID."\" title=\"".$label["yes"]."\"><img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}locale/".$_language_path."/LC_BUTTONS/ja2-button.gif\" width=\"93\" alt=\"".$label["yes"]."\" title=\"".$label["yes"]."\" border=\"0\" align=\"middle\"></a></font>\n";
-		$html .="<font size=\"-1\"><a href=\"".$ABSOLUTE_PATH_STUDIP.VOTE_FILE_ADMIN."?page=overview&voteaction=".$value2."&voteID=".$voteID."&showrangeID=".$showrangeID."\" title=\"".$label["no"]."\"><img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}locale/".$_language_path."/LC_BUTTONS/nein-button.gif\" width=\"93\" alt=\"".$label["no"]."\" title=\"".$label["no"]."\" border=\"0\" align=\"middle\"></a></font>\n";
+		$html .="<font size=\"-1\"><a href=\"".$ABSOLUTE_PATH_STUDIP . VOTE_FILE_ADMIN."?page=overview&voteaction=".$value1."&voteID=".$voteID."&showrangeID=".$showrangeID;
+		if ($referer) $html .= "&referer=".$referer;
+		$html .="\" title=\"".$label["yes"]."\"><img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}locale/".$_language_path."/LC_BUTTONS/ja2-button.gif\" width=\"93\" alt=\"".$label["yes"]."\" title=\"".$label["yes"]."\" border=\"0\" align=\"middle\"></a></font>\n";
+		$html .="<font size=\"-1\"><a href=\"".$ABSOLUTE_PATH_STUDIP.VOTE_FILE_ADMIN."?page=overview&voteaction=".$value2."&voteID=".$voteID."&showrangeID=".$showrangeID;
+		if ($referer) $html .= "&referer=".$referer;
+		$html .="\" title=\"".$label["no"]."\"><img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}locale/".$_language_path."/LC_BUTTONS/nein-button.gif\" width=\"93\" alt=\"".$label["no"]."\" title=\"".$label["no"]."\" border=\"0\" align=\"middle\"></a></font>\n";
 	}
 	$html .="	 </td>\n"
-		  . "	</tr>\n"
-		  . "   </table>\n";
+		  . "	</tr>\n";
+	if ($referer)
+		$html .= "	 <tr><td>&nbsp;</td><td><font size=\"-1\"><a href=\"$referer\">".$label["referer"]."</a></font></td></tr>";
+	$html .="   </table>\n";
 		/*  . "  </td>\n"
 		  . " </tr>\n"
 		  . "</table>\n";*/
