@@ -22,13 +22,11 @@ $AUTO_INSERT_SEM[2]="db3ef283064dc8b34aa8e8df579998da";
 //weitere Veranstaltungen koennen mit ihren IDs hier angefuegt werden
 
 
-//Daten ueber Ferientage (Uniferien, Feiertage usw.)
+//Daten ueber Uniferien
 $HOLIDAY[1]=array("beginn"=>mktime(0,0,0,12,22,2001), "ende"=>mktime (23,59,59,1,6,2002));		# Beginn und Ende der Weihnachtsferien
-$HOLIDAY[2]=array("beginn"=>mktime(0,0,0,5,1,2002), "ende"=>mktime (23,59,59,5,1,2002));		# Beginn und Ende des Maifeiertages
-$HOLIDAY[3]=array("beginn"=>mktime(0,0,0,5,20,2002), "ende"=>mktime (23,59,59,5,26,2002));		# Beginn und Ende der Pfingstferien 2002
-$HOLIDAY[4]=array("beginn"=>mktime(0,0,0,10,3,2002), "ende"=>mktime  (23,59,59,10,3,2002));		# Beginn und Ende des Tages der deutschen Einheit
-$HOLIDAY[5]=array("beginn"=>mktime(0,0,0,12,23,2002), "ende"=>mktime (23,59,59,1,5,2003));		# Beginn und Ende der Weihnachtsferien 2002
-$HOLIDAY[6]=array("beginn"=>mktime(0,0,0,6,9,2003), "ende"=>mktime (23,59,59,6,15,2003));		# Beginn und Ende der Pfingstferien 2003
+$HOLIDAY[2]=array("beginn"=>mktime(0,0,0,5,20,2002), "ende"=>mktime (23,59,59,5,26,2002));		# Beginn und Ende der Pfingstferien 2002
+$HOLIDAY[3]=array("beginn"=>mktime(0,0,0,12,23,2002), "ende"=>mktime (23,59,59,1,5,2003));		# Beginn und Ende der Weihnachtsferien 2002
+$HOLIDAY[4]=array("beginn"=>mktime(0,0,0,6,9,2003), "ende"=>mktime (23,59,59,6,15,2003));		# Beginn und Ende der Pfingstferien 2003
 //weitere Feiertage und Ferien koennen hier angefuegt werden
 
 
@@ -36,7 +34,7 @@ $HOLIDAY[6]=array("beginn"=>mktime(0,0,0,6,9,2003), "ende"=>mktime (23,59,59,6,1
 $SEMESTER[1]=array("name"=>"WS 2000/01", "beginn"=>mktime(0,0,0,10,1,2000), "ende"=>mktime(23,59,59,3,31,2001), "vorles_beginn"=>mktime(0,0,0,10,14,2000), "vorles_ende"=>mktime(23,59,59,2,17,2001), "past"=>FALSE); 		# Daten ueber das WS 2000/01
 $SEMESTER[2]=array("name"=>"SS 2001", "beginn"=>mktime(0,0,0,4,1,2001), "ende"=>mktime(23,59,59,9,30,2001), "vorles_beginn"=>mktime(0,0,0,4,16,2001), "vorles_ende"=>mktime(23,59,59,7,15,2001), "past"=>FALSE); 			# Daten ueber das SS 2001
 $SEMESTER[3]=array("name"=>"WS 2001/02", "beginn"=>mktime(0,0,0,10,1,2001), "ende"=>mktime(23,59,59,3,31,2002), "vorles_beginn"=>mktime(0,0,0,10,15,2001), "vorles_ende"=>mktime(23,59,59,2,17,2002), "past"=>FALSE); 		# Daten ueber das WS 2001/02
-$SEMESTER[4]=array("name"=>"SS 2002", "beginn"=>mktime(0,0,0,4,1,2002), "ende"=>mktime(23,59,59,9,30,2002), "vorles_beginn"=>mktime(0,0,0,4,8,2002), "vorles_ende"=>mktime(23,59,59,7,7,2002), "past"=>FALSE); 			# Daten ueber das SS 2002
+$SEMESTER[4]=array("name"=>"SS 2002", "beginn"=>mktime(0,0,0,4,1,2002), "ende"=>mktime(23,59,59,9,30,2002), "vorles_beginn"=>mktime(0,0,0,4,8,2002), "vorles_ende"=>mktime(23,59,59,7,7,2002), "past"=>FALSE); 				# Daten ueber das SS 2002
 $SEMESTER[5]=array("name"=>"WS 2002/03", "beginn"=>mktime(0,0,0,10,1,2002), "ende"=>mktime(23,59,59,3,31,2003), "vorles_beginn"=>mktime(0,0,0,10,14,2002), "vorles_ende"=>mktime(23,59,59,2,14,2003), "past"=>FALSE); 		# Daten ueber das WS 2002/03
 $SEMESTER[6]=array("name"=>"SS 2003", "beginn"=>mktime(0,0,0,4,1,2003), "ende"=>mktime(23,59,59,9,30,2003), "vorles_beginn"=>mktime(0,0,0,4,22,2003), "vorles_ende"=>mktime(23,59,59,7,18,2003), "past"=>FALSE); 			# Daten ueber das SS 2003
 $SEMESTER[7]=array("name"=>"WS 2003/04", "beginn"=>mktime(0,0,0,10,1,2003), "ende"=>mktime(23,59,59,3,31,2004), "vorles_beginn"=>mktime(0,0,0,10,13,2003), "vorles_ende"=>mktime(23,59,59,2,14,2004), "past"=>FALSE); 		# Daten ueber das WS 2003/04
