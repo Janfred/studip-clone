@@ -52,6 +52,10 @@ require_once($ABSOLUTE_PATH_STUDIP . "language.inc.php");
 
 include($ABSOLUTE_PATH_STUDIP . "links_admin.inc.php");  //Linkleiste fuer admins
 
+//get ID from a open Institute
+if ($SessSemName[1])
+	$range_id = $SessSemName[1];
+
 echo "<table border=\"0\" class=\"blank\" align=\"center\" cellspacing=\"0\" cellpadding=\"0\" width=\"100%\">\n";
 echo "<tr valign=\"top\" align=\"center\">\n";
 echo "<td class=\"topic\" align=\"left\" colspan=\"2\">&nbsp;<b>\n";

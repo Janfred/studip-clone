@@ -44,10 +44,6 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth",
 		"perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check("admin");
 
-//get ID from a open Institute
-if ($SessSemName[1])
-	$range_id = $SessSemName[1];
-	
 if ($EXTERN_ENABLE)
 	include($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_EXTERN . "/admin_extern.inc.php");
 else {
