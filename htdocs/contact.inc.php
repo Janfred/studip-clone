@@ -102,8 +102,6 @@ function AddNewUserinfo ($contact_id, $name, $content)
 	return $userinfo_id;	
 } 
 
-
-
 function GetExtraUserinfo ($contact_id)
 { 	// Build an array with extrauserinfos
 		$output = "";	
@@ -114,7 +112,6 @@ function GetExtraUserinfo ($contact_id)
 		}
 		return $userinfo;
 }
-
 
 function ShowUserInfo ($contact_id)
 { 	// Show the standard userinfo
@@ -186,7 +183,6 @@ function ShowUserInfo ($contact_id)
 	return $output;	
 } 
 
-
 function ShowContact ($contact_id)
 {	// Ausgabe eines Kontaktes
 	global $PHP_SELF, $open, $filter;
@@ -215,8 +211,8 @@ function ShowContact ($contact_id)
 		}
 		$output .= "<table cellspacing=\"0\" width=\"350\" class=\"blank\">
 					<tr>
-						<td class=\"topic\" colspan=\"2\">"
-							.get_nachname($db->f("user_id")).", ".get_vorname($db->f("user_id"))."</td>"
+						<td class=\"topic\" colspan=\"2\"><font size=\"2\"><b>"
+							.get_nachname($db->f("user_id")).", ".get_vorname($db->f("user_id"))."</b></font></td>"
 							."
 						</td>
 					</tr>"
@@ -227,6 +223,25 @@ function ShowContact ($contact_id)
 		$output = "Fehler!";
 	}
 	return $output;
+}
+
+function SearchResults ($search_exp)
+{ global $SessSemName, $_fullname_sql,$_range_type;
+	$db=new DB_Seminar;
+	$query = "SELECT DISTINCT auth_user_md5.user_id, " . $_fullname_sql['full_rev'] ." AS fullname, username, perms ".
+		"FROM auth_user_md5 LEFT JOIN user_info USING (user_id) LEFT JOIN user_inst ON user_inst.user_id=auth_user_md5.user_id AND Institut_id = '$inst_id' ".
+		"WHERE (Vorname LIKE '%$search_exp%' OR Nachname LIKE '%$search_exp%' OR username LIKE '%$search_exp%') ORDER BY Nachname ";
+
+	$db->query($query); // results all users which are not in the seminar
+	if (!$db->num_rows()) {
+		echo "&nbsp; keine Treffer&nbsp; ";
+	} else {
+		echo "&nbsp; <select name=\"Freesearch\" size=\"4\">";
+		while ($db->next_record()) {
+			printf ("<option value=\"%s\">%s - %s\n", $db->f("username"), htmlReady(my_substr($db->f("fullname"),0,35)." (".$db->f("username").")"), $db->f("perms"));
+		}
+		echo "</select>";
+	}
 }
 
 function ShowEditContact ($contact_id)
@@ -372,18 +387,21 @@ function PrintAllContact($filter="")
 		$db->query ("SELECT contact_id, nachname FROM contact LEFT JOIN auth_user_md5 using(user_id) WHERE owner_id = '$owner_id' ORDER BY nachname");		
 	if ($contact["view"]=="gruppen" && $filter!="") 
 		$db->query ("SELECT nachname, contact_id FROM contact LEFT JOIN statusgruppe_user USING(user_id) LEFT JOIN auth_user_md5 USING(user_id)  WHERE statusgruppe_id = '$filter' AND owner_id =  '$owner_id' ORDER BY nachname");		
-
-
 	$middle = round($db->num_rows()/2);
-	echo "<table class=\"blank\" width=\"700\" align=center cellpadding=\"10\"><tr><td valign=\"top\" width=\"350\" class=\"blank\">";
-	while ($db->next_record()) {
-		$contact_id = $db->f("contact_id");
-		echo ShowContact ($contact_id);
-		echo "<br>";
-		if ($i==$middle) { //Spaltenumbruch
-			echo "</td><td valign=\"top\" width=\"350\" class=\"blank\">";
+	if ($middle == 0) {
+		echo "<table class=\"blank\" width=\"700\" align=center cellpadding=\"10\"><tr><td valign=\"top\" width=\"350\" class=\"blank\">Keine Eintr&auml;ge in diesem Bereich.";	
+		echo "</td><td valign=\"top\" width=\"350\" class=\"blank\">";
+	} else {
+		echo "<table class=\"blank\" width=\"700\" align=center cellpadding=\"10\"><tr><td valign=\"top\" width=\"350\" class=\"blank\">";
+		while ($db->next_record()) {
+			$contact_id = $db->f("contact_id");
+			echo ShowContact ($contact_id);
+			echo "<br>";
+			if ($i==$middle) { //Spaltenumbruch
+				echo "</td><td valign=\"top\" width=\"350\" class=\"blank\">";
+			}
+		$i++;
 		}
-	$i++;
 	}
 	echo "</td></tr></table>";
 }

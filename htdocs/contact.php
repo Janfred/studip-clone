@@ -45,15 +45,20 @@ $cssSw->switchClass();
 include "links_openobject.inc.php";
 
 $sess->register("contact");
+
 if (!$contact["filter"])
-	$contact["filter"]="";
+	$contact["filter"]="all";
 if ($view) {
 	$contact["view"]=$view;
 }
+if (!$contact["view"])
+	$contact["view"]="alpha";
+
 if ($filter) {
 	$contact["filter"]=$filter;
 }
 $filter = $contact["filter"];
+
 if ($filter == "all")
 	$filter="";
 if ($contact["view"]=="alpha" && strlen($filter) > 3)
@@ -62,13 +67,37 @@ if ($contact["view"]=="gruppen" && strlen($filter) < 4)
 	$filter="";
 
 ?>
-<table width = "100%" cellspacing="0"><tr>
-	<td class="topic" width = "100%"><img src="pictures/nutzer.gif" border="0" align="texttop"><b>&nbsp; Mein Addressbuch</b>
+<table width = "100%" cellspacing="0" cellpadding="0"><tr>
+	<td class="topic" colspan="2" width = "100%"><img src="pictures/nutzer.gif" border="0" align="texttop"><b>&nbsp; Mein Addressbuch</b>
 	</td>
-</tr><tr><td class="blank">&nbsp;</td></tr></table>
+</tr><tr><td class="blank" align="left" valign="absmiddle">
+
+	<form action="<? echo $PHP_SELF ?>?cmd=search" method="POST"><?
+echo "&nbsp; <a href=\"$PHP_SELF?open=all&filter=$filter\"><img src=\"pictures/forumgraurunt.gif\" border=\"0\">&nbsp; <font size=\"2\">Alle aufklappen</font></a></td>";
+echo "<td class=\"blank\" align=\"right\">";
+
+if ($search_exp) {
+	printf ("<input type=\"IMAGE\" name=\"search\" src= \"./pictures/buttons/eintragen-button.gif\" border=\"0\" value=\" In Addressbuch eintragen\" %s>&nbsp;  ", tooltip("In Addressbuch eintragen"));
+	SearchResults($search_exp);
+	printf ("<input type=\"IMAGE\" name=\"search\" src= \"./pictures/rewind.gif\" border=\"0\" value=\" Personen suchen\" %s>&nbsp;  ", tooltip("neue Suche"));
+} else {
+	echo "&nbsp; <input type=\"text\" name=\"search_exp\" value=\"\">";
+	printf ("<input type=\"IMAGE\" name=\"search\" src= \"./pictures/suchen.gif\" border=\"0\" value=\" Personen suchen\" %s>&nbsp;  ", tooltip("Person suchen"));
+} 
+echo "</form>";
+
+?>
+
+</td></tr></table>
 <?
 
 // Aktionen //////////////////////////////////////
+
+// adding a contact via search
+
+if ($Freesearch) {
+	$open = AddNewContact(get_userid($Freesearch));
+}
 
 // deletel a contact
 
@@ -105,8 +134,21 @@ if ($existingowninfolabel) {
 	}
 }
 
-echo "<table align=\"center\" class=\"blank\" width=\"100%\" cellpadding=\"10\"><tr><td class=\"steelgraulight\">";
-echo "<a href=\"$PHP_SELF?open=all&filter=$filter\">Alle aufklappen</a>";
+
+
+
+
+
+echo "<table align=\"center\" class=\"blank\" width=\"100%\" cellpadding=\"1\"><tr><td align=\"middle\" class=\"steelgraulight\">";
+
+/*
+
+
+
+
+*/
+
+// echo "<a href=\"$PHP_SELF?open=all&filter=$filter\"><img src=\"pictures/meinesem.gif\" border=\"0\" valign=\"bottom\">&nbsp; <font size=\"2\">in Addressbuch aufnehmen</font></a><hr>";
 
 // Buchstabenleiste
 
