@@ -101,58 +101,63 @@ if ($nclose)
 ?>
 
 <table width="100%" border=0 cellpadding=0 cellspacing=0>
-<tr><td class="topic" colspan=2><b>&nbsp; <? echo $SessSemName["header_line"]. " - " . _("Kurzinfo"); ?>
-</b></td></tr>
-<tr><td class="blank">
-<br><blockquote><?
-$db->query ("SELECT a.*, b.Name AS fakultaet_name  FROM Institute a LEFT JOIN Institute b ON (b.Institut_id = a.fakultaets_id) WHERE a.Institut_id='$auswahl'");
-$db->next_record();
-
-if ($db->f("Strasse")) {
-	echo "<font size=\"-1\"><b>" . _("Straﬂe:") . " </b>"; echo htmlReady($db->f("Strasse")); echo"<br></font>";
-}
+	<tr>
+		<td class="topic" colspan=2><b>&nbsp;<? echo $SessSemName["header_line"]. " - " . _("Kurzinfo"); ?></b>
+		</td>
+	</tr>
+	<tr>
+		<td class="blank" valign="top">
+		<blockquote>
+	<br />
+	<?
 	
-if ($db->f("Plz")) {
-	echo "<font size=\"-1\"><b>" . _("Ort:") . " </b>"; echo htmlReady($db->f("Plz")); echo"<br></font>";
-}
-
-if ($db->f("telefon")) {
-	echo "<font size=\"-1\"><b>" . _("Tel.:") . " </b>"; echo htmlReady($db->f("telefon")); echo"<br></font>";
-}
-
-if ($db->f("fax")) {
-	echo "<font size=\"-1\"><b>" . _("Fax:") . " </b>"; echo htmlReady($db->f("fax")); echo"<br></font>";
-}
-
-if ($db->f("url")) {
-	echo "<font size=\"-1\"><b>" . _("Homepage:") . " </b>"; echo formatReady($db->f("url")); echo"<br></font>";
-}
-
-if ($db->f("email")) {
-	echo "<font size=\"-1\"><b>" . _("E-Mail:") . " </b>"; echo formatReady($db->f("email")); echo"<br></font>";
-}
-
-if ($db->f("fakultaet_name")) {
-	echo "<font size=\"-1\"><b>" . _("Fakult&auml;t:") . " </b>"; echo htmlReady($db->f("fakultaet_name")); echo"<br></font>";
-}
-
-$localFields = $DataFields->getLocalFields();
-
-foreach ($localFields as $val) {
-	echo "<font size=\"-1\"><b>" .htmlReady($val["name"]) . ": </b>"; echo htmlReady($val["content"]); echo"<br>";
-}
-
+	$db->query ("SELECT a.*, b.Name AS fakultaet_name  FROM Institute a LEFT JOIN Institute b ON (b.Institut_id = a.fakultaets_id) WHERE a.Institut_id='$auswahl'");
+	$db->next_record();
+	
+	if ($db->f("Strasse")) {
+		echo "<font size=\"-1\"><b>" . _("Straﬂe:") . " </b>"; echo htmlReady($db->f("Strasse")); echo"<br></font>";
+	}
+		
+	if ($db->f("Plz")) {
+		echo "<font size=\"-1\"><b>" . _("Ort:") . " </b>"; echo htmlReady($db->f("Plz")); echo"<br></font>";
+	}
+	
+	if ($db->f("telefon")) {
+		echo "<font size=\"-1\"><b>" . _("Tel.:") . " </b>"; echo htmlReady($db->f("telefon")); echo"<br></font>";
+	}
+	
+	if ($db->f("fax")) {
+		echo "<font size=\"-1\"><b>" . _("Fax:") . " </b>"; echo htmlReady($db->f("fax")); echo"<br></font>";
+	}
+	
+	if ($db->f("url")) {
+		echo "<font size=\"-1\"><b>" . _("Homepage:") . " </b>"; echo formatReady($db->f("url")); echo"<br></font>";
+	}
+	
+	if ($db->f("email")) {
+		echo "<font size=\"-1\"><b>" . _("E-Mail:") . " </b>"; echo formatReady($db->f("email")); echo"<br></font>";
+	}
+	
+	if ($db->f("fakultaet_name")) {
+		echo "<font size=\"-1\"><b>" . _("Fakult&auml;t:") . " </b>"; echo htmlReady($db->f("fakultaet_name")); echo"<br></font>";
+	}
+	
+	$localFields = $DataFields->getLocalFields();
+	
+	foreach ($localFields as $val) {
+		echo "<font size=\"-1\"><b>" .htmlReady($val["name"]) . ": </b>"; echo htmlReady($val["content"]); echo"<br>";
+	}
 	
 ?>
-</blockquote>
-</td>
-<td class="blank" align="right" valign="top">
-	<img src="pictures/blank.gif" height="10" width="5" /><br />
-	<img src="pictures/einrichtungen.jpg" border="0"><img src="pictures/blank.gif" height="10" width="10" /><br />
-	<img src="pictures/blank.gif" height="10" width="5" />
-</td>
-</tr>
-</table>
+			</blockquote>
+		</td>
+		<td class="blank" align="right" valign="top">
+			<img src="pictures/blank.gif" height="10" width="5" /><br />
+			<img src="pictures/einrichtungen.jpg" border="0"><img src="pictures/blank.gif" height="10" width="10" /><br />
+			<img src="pictures/blank.gif" height="10" width="5" />
+		</td>
+		</tr>
+	</table>
 <br />
 <?php
 
