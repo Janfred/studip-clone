@@ -18,10 +18,12 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 	  page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
-	$perm->check("user");	
+	$perm->check("user");
+
+ob_start(); //Outputbuffering für maximal Performance
 
 function get_my_sem_values(&$my_sem) {
-	 global $user,$loginfilenow,$auth;
+	 global $user,$loginfilenow;
 	 $db2 = new DB_seminar;
 	 $my_semids="('".implode("','",array_keys($my_sem))."')";
 // Postings
@@ -45,11 +47,11 @@ function get_my_sem_values(&$my_sem) {
 	 }
 
 //News
-	 $db2->query ("SELECT range_id,count(*) as count  FROM news LEFT JOIN news_range USING(news_id) WHERE range_id IN ".$my_semids." GROUP BY range_id");
+	 $db2->query ("SELECT range_id,count(*) as count  FROM news_range  LEFT JOIN news USING(news_id) WHERE range_id IN ".$my_semids." GROUP BY range_id");
 	 while($db2->next_record()) {
 	 $my_sem[$db2->f("range_id")]["news"]=$db2->f("count");
 	 }
-	 $db2->query ("SELECT range_id,count(*) as count  FROM news LEFT JOIN news_range USING(news_id)  LEFT JOIN loginfilenow_".$user->id." b ON (b.Seminar_id=range_id) WHERE range_id IN ".$my_semids." AND date > b.loginfilenow AND user_id !='$user->id' GROUP BY range_id");
+	 $db2->query ("SELECT range_id,count(*) as count  FROM news_range LEFT JOIN news  USING(news_id)  LEFT JOIN loginfilenow_".$user->id." b ON (b.Seminar_id=range_id) WHERE range_id IN ".$my_semids." AND date > b.loginfilenow AND user_id !='$user->id' GROUP BY range_id");
 	 while($db2->next_record()) {
 	 $my_sem[$db2->f("range_id")]["neuenews"]=$db2->f("count");
 	 }
@@ -91,7 +93,7 @@ function print_seminar_content($semid,$my_sem_values) {
   ELSE ECHO "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
 
   //Literatur
-  IF ($my_sem_values["literatur"]) {
+IF ($my_sem_values["literatur"]) {
     ECHO "<a href=\"seminar_main.php?auswahl=$semid&redirect_to=literatur.php\">";
     if ($my_sem_values["neueliteratur"])
       ECHO "&nbsp; <img src=\"pictures/icon-lit2.gif\" border=0 alt='Zur Literatur und Linkliste (ge&auml;ndert)'></a>";
@@ -131,7 +133,7 @@ function print_seminar_content($semid,$my_sem_values) {
 
 		$SessSemName[0] = "";
 		$SessSemName[1] = "";
-		$links_admin_data =''; 	//Auch im Adminbereich gesetzte Veranstaltungen muessen geloescht werden.		
+		$links_admin_data =''; 	//Auch im Adminbereich gesetzte Veranstaltungen muessen geloescht werden.
 
 		include "header.php";   //hier wird der "Kopf" nachgeladen
 		require_once "config.inc.php"; // Klarnamen fuer den Veranstaltungsstatus
@@ -142,8 +144,6 @@ function print_seminar_content($semid,$my_sem_values) {
 
 <?
 $db=new DB_Seminar;
-
-
 //bei Bedarf aus seminar_user austragen
 if ($cmd=="kill") {
 	$db->query("DELETE FROM seminar_user WHERE user_id='$user->id' AND Seminar_id='$auswahl'");
@@ -154,24 +154,25 @@ if ($cmd=="kill") {
 	  $meldung="msg§Das Abonnement der Veranstaltung <b>".$db->f("Name")."</b> wurde aufgehoben. Sie sind nun nicht mehr als Teilnehmer dieser Veranstaltung im System registriert.";
 	}
 }
-	 
+
 // Update der Gruppen
-	 
-      if ($gruppesent=="1") 
+
+      if ($gruppesent=="1")
       {for ($gruppe; $key = key($gruppe); next($gruppe))
 			$db->query ("UPDATE seminar_user SET gruppe = '$gruppe[$key]' WHERE Seminar_id = '$key' AND user_id = '$user->id'");
 	}
-      
-      
+
+
 //Anzeigemodul fuer eigene Seminare (nur wenn man angemeldet und nicht root oder admin ist!)
 IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("admin")){
 
      if (!isset($sortby)) $sortby="gruppe, Name";
      if ($sortby == "count")
      $sortby = "count DESC";
-	$db->query ("SELECT seminare.Name, seminare.Seminar_id, seminar_user.status, seminar_user.gruppe, seminare.chdate FROM seminare LEFT JOIN seminar_user USING (Seminar_id) WHERE seminar_user.user_id = '$user->id' GROUP BY Seminar_id ORDER BY $sortby");
+	$db->query ("SELECT seminare.Name, seminare.Seminar_id, seminar_user.status, seminar_user.gruppe, seminare.chdate FROM seminar_user LEFT JOIN seminare  USING (Seminar_id) WHERE seminar_user.user_id = '$user->id' GROUP BY Seminar_id ORDER BY $sortby");
 	$num_my_sem=$db->num_rows();
      if (!$num_my_sem) $meldung="msg§Sie haben keine Veranstaltungen abonniert!§".$meldung;
+
      ?>
      <table width="100%" border=0 cellpadding=0 cellspacing=0>
 	<tr>
@@ -188,7 +189,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
      if ($num_my_sem){
      ?>
      <tr><td class="blank" colspan=2>
- 	<table border="0" cellpadding="0" cellspacing="0" width="100%" align="center" class="blank">
+	<table border="0" cellpadding="0" cellspacing="0" width="100%" align="center" class="blank">
 	<tr valign="top" align="center">
 		<th width="2%" colspan=2 nowrap align="center">&nbsp;<a href="gruppe.php"><img src="pictures/gruppe.gif" alt="Gruppe &auml;ndern" border="0"></a></th>
 		<th width="65%" align="center"><a href="<? echo $PHP_SELF ?>?sortby=Name">Name</a></th>
@@ -198,16 +199,18 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 		<th width="3%"><b>X</b></th>
 	</tr>
 	<?
+	ob_end_flush(); //Buffer leeren, damit der Header zu sehen ist
+	ob_start();
      while ($db->next_record())
 		{
-          $my_sem[$db->f("Seminar_id")]=array(name=>$db->f("Name"),status=>$db->f("status"),gruppe=>$db->f("gruppe"),chdate=>$db->f("chdate"));
-          $value_list.="('".$db->f("Seminar_id")."',0".$loginfilenow[$db->f("Seminar_id")]."),";
+	  $my_sem[$db->f("Seminar_id")]=array(name=>$db->f("Name"),status=>$db->f("status"),gruppe=>$db->f("gruppe"),chdate=>$db->f("chdate"));
+	  $value_list.="('".$db->f("Seminar_id")."',0".$loginfilenow[$db->f("Seminar_id")]."),";
      }
      $value_list=substr($value_list,0,-1);
-     $db->query("CREATE  TEMPORARY TABLE IF NOT EXISTS loginfilenow_".$user->id." ( Seminar_id varchar(32) NOT NULL PRIMARY KEY, loginfilenow int(11) NOT NULL DEFAULT 0 ) TYPE=HEAP");
+     $db->query("CREATE  TEMPORARY TABLE IF NOT EXISTS loginfilenow_".$user->id." ( Seminar_id varchar(32) NOT NULL PRIMARY KEY, loginfilenow int(11) NOT NULL DEFAULT 0, INDEX(loginfilenow) ) TYPE=HEAP");
      $ins_query="REPLACE INTO loginfilenow_".$user->id." (Seminar_id,loginfilenow) VALUES ".$value_list;
      $db->query($ins_query);
-     get_my_sem_values(&$my_sem);
+     get_my_sem_values($my_sem);
      $db->query("DROP TABLE loginfilenow_".$user->id);
 
  $c=1;
@@ -215,9 +218,9 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 	  if ($c % 2)
 			$class="steel1";
 		else
-			$class="steelgraulight"; 
+			$class="steelgraulight";
 		$c++;
-		
+
 		$lastVisit = $loginfilenow[$semid];
 
 		ECHO "<tr><td class=gruppe";
@@ -240,7 +243,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 			 {
 			 echo "<td class=\"$class\" align=\"center\">", date("d.m.Y", $loginfilenow[$semid]),"</td>";
 			}
-			
+
 // Inhalt
 		echo "<td class=\"$class\" align=\"left\" nowrap>";
 		print_seminar_content($semid, $values);
@@ -254,7 +257,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 	echo "</table></td></tr>";
 
      }
-  
+
 ?>
 	<tr>
 	<td class="blank" colspan=2>&nbsp;</td>
@@ -263,7 +266,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 	<tr>
 	<td class="blank" align = left width="90%"><blockquote>
 <?
-      $db->query("SELECT count(*) as count  FROM seminare ");
+      $db->query("SELECT count(*) as count  FROM seminare");
 	$db->next_record();
 	echo "Um weitere Veranstaltungen in Ihre pers&ouml;nliche Auswahl aufzunehmen, nutzen Sie bitte die\n";
 	echo "<a href=\"sem_portal.php?view=Alle\">Veranstaltungssuche</a><br>\n";
@@ -273,12 +276,12 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 	    echo "<a href=\"admin_seminare_assi.php?new_session=TRUE\">Veranstaltungs-Assistenten</a><br>\n";
 	}
 	echo"</blockquote></td>";
-?>      
+?>
 	<td class="blank" align = right><img src="pictures/board1.jpg" width="266" height="173" border="0"></td>
 	</tr>
 
 <?
- 
+
 }
 
 
@@ -306,7 +309,7 @@ ELSEIF ($auth->auth["perm"]=="admin"){
      if ($num_my_sem) {
      ?>
 	<tr><td class="blank" colspan=2>
-  	<table border="0" cellpadding="0" cellspacing="0" width="100%" align="center" class=blank>
+	<table border="0" cellpadding="0" cellspacing="0" width="100%" align="center" class=blank>
 	<tr valign"top" align="center">
 		<th width="50%" colspan=2><a href="<? echo $PHP_SELF ?>?sortby=Name">Name</a></th>
 		<th width="10%"><a href="<? echo $PHP_SELF ?>?sortby=status">Status</a></th>
@@ -333,32 +336,32 @@ ELSEIF ($auth->auth["perm"]=="admin"){
 	  if ($c % 2)
 			$class="steel1";
 		else
-			$class="steelgraulight"; 
+			$class="steelgraulight";
 		$c++;
-	
+
 		$lastVisit = $loginfilenow[$semid];
-	
+
 		echo "<td class=\"$class\">&nbsp;&nbsp;</td>";
 
 		ECHO "<td class=\"$class\"><a href=\"seminar_main.php?auswahl=$semid\">";
 		if ($lastVisit <= $values["chdate"])
 			print ("<font color=\"red\">");
 		ECHO htmlReady($values["name"]);
-		echo " (" . get_sem_name($values["start_time"]) .")"; 
+		echo " (" . get_sem_name($values["start_time"]) .")";
 		if ($lastVisit <= $values["chdate"])
 			print ("</font>");
 		print ("</a></td>");
 
 		ECHO "<td class=\"$class\" align=\"center\">&nbsp;" . $SEM_TYPE[$values["status"]]["name"] . "&nbsp;</td>";
-// Dozenten	
-		$db2->query ("SELECT Vorname, Nachname, username FROM auth_user_md5 LEFT JOIN seminar_user USING (user_id) WHERE Seminar_id='$semid' AND status='dozent'");
+// Dozenten
+		$db2->query ("SELECT Vorname, Nachname, username FROM  seminar_user LEFT JOIN auth_user_md5  USING (user_id) WHERE Seminar_id='$semid' AND status='dozent'");
 		$temp = "";
 		while ($db2->next_record()) {
 		    $temp .= "<a href=\"about.php?username=" . $db2->f("username") . "\">" . $db2->f("Nachname") . "</a>, ";
 		}
 		$temp = substr($temp, 0, -2);
 		print ("<td class=\"$class\" align=\"center\">&nbsp;$temp</td>");
-			
+
 // Inhalt
 		echo "<td class=\"$class\" align=\"left\" nowrap>";
 		print_seminar_content($semid, $values);
@@ -371,7 +374,7 @@ ELSEIF ($auth->auth["perm"]=="admin"){
 	echo "</table></td></tr>";
 
      }
- 
+
 ?>
 	<tr>
 	<td class="blank" colspan=2>&nbsp;</td>
@@ -384,7 +387,7 @@ ELSEIF ($auth->auth["perm"]=="admin"){
 	    echo "<br>Um eine neue Veranstaltung anzulegen, benutzen Sie bitte den<br>\n";
 	    echo "<a href=\"admin_seminare_assi.php?new_session=TRUE\">Veranstaltungs-Assistenten</a><br>\n";
 	echo"</blockquote></td>";
-?>      
+?>
 	<td class="blank" align = right><img src="pictures/board1.jpg" width="266" height="173" border="0"></td>
 	</tr>
 <?
@@ -417,9 +420,9 @@ ELSEIF ($perm->have_perm("root")){
 		$root_mode=TRUE;
 		$target_url="seminar_main.php";	//teilt der nachfolgenden Include mit, wo sie die Leute hinschicken soll
 		$target_id="auswahl"; 			//teilt der nachfolgenden Include mit, wie die id, die uebergeben wird, bezeichnet werden soll
-	
+
 		include "sem_browse.inc.php"; 		//der zentrale Seminarbrowser wird hier eingef&uuml;gt.
-		
+
 	?>
 			</td>
 		</tr>
@@ -438,6 +441,7 @@ ELSEIF ($perm->have_perm("root")){
 </html>
 <?
   // Save data back to database.
-  page_close();
+ob_end_flush(); //Outputbuffering beenden
+page_close();
   ?>
 <!-- $Id$ -->
