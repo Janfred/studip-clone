@@ -163,7 +163,7 @@ function imaging($img,$img_size,$img_name) {
 		$this->msg = "error§" . _("Sie haben keine Datei zum Hochladen ausgewählt!");
 		return;
 	}
-
+	
 	//Dateiendung bestimmen
 	$dot = strrpos($img_name,".");
 	if ($dot) {
@@ -217,7 +217,20 @@ function imaging($img,$img_size,$img_name) {
 			$ret_val = false;
 			//try ImageMagick...
 			if (file_exists($CONVERT_PATH)){
-				system($CONVERT_PATH . ' -resize ' . $newwidth . 'x' . $newheight . '! ' . $newfile .' ' . $newfile, $ret_val);
+				$out = array();
+				$identify_path = dirname($CONVERT_PATH) . '/identify';
+				if (file_exists($identify_path)){
+					exec($identify_path . ' -format "%n" ' . $newfile, $out, $ret_val);
+					if (!$ret_val){
+						if (count($out) > 1 || $out[0] > 1){
+							$ret_val = true;
+						} else {
+							exec($CONVERT_PATH . ' -resize ' . $newwidth . 'x' . $newheight . '! ' . $newfile .' ' . $newfile, $out, $ret_val);
+						}
+					}
+				} else {
+					$ret_val = true;
+				}
 			} else {
 				$ret_val = true;
 			}
