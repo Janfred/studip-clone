@@ -492,7 +492,7 @@ function get_perm($range_id,$user_id="") {
 * @return		string	
 *
 */
-function get_fullname($user_id = "", $format = "full" , $htmlready = true){
+function get_fullname($user_id = "", $format = "full" , $htmlready = false){
 	static $cache;
 	global $user,$_fullname_sql;
 	$author = _("unbekannt");
@@ -518,7 +518,7 @@ function get_fullname($user_id = "", $format = "full" , $htmlready = true){
 * @return		string
 *
 */
-function get_fullname_from_uname($uname = "", $format = "full", $htmlready = true){
+function get_fullname_from_uname($uname = "", $format = "full", $htmlready = false){
 	static $cache;
 	global $auth,$_fullname_sql;
 	$author = _("unbekannt");
