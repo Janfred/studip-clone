@@ -45,11 +45,21 @@ $cssSw->switchClass();
 include "links_openobject.inc.php";
 
 $sess->register("contact");
-
+if (!$contact["filter"])
+	$contact["filter"]="";
 if ($view) {
 	$contact["view"]=$view;
 }
-
+if ($filter) {
+	$contact["filter"]=$filter;
+}
+$filter = $contact["filter"];
+if ($filter == "all")
+	$filter="";
+if ($contact["view"]=="alpha" && strlen($filter) > 3)
+	$filter="";
+if ($contact["view"]=="gruppen" && strlen($filter) < 4)
+	$filter="";
 
 ?>
 <table width = "100%" cellspacing="0"><tr>
@@ -58,12 +68,19 @@ if ($view) {
 </tr><tr><td class="blank">&nbsp;</td></tr></table>
 <?
 
-// Aktionen
+// Aktionen //////////////////////////////////////
 
 // deletel a contact
 
 if ($cmd == "delete") {
 	DeleteContact ($contact_id);
+}
+
+// remove from buddylist
+
+if ($cmd == "changebuddy") {
+	changebuddy($contact_id);
+	$open = $contact_id;
 }
 
 // delete a single userinfo
@@ -93,7 +110,7 @@ echo "<a href=\"$PHP_SELF?open=all&filter=$filter\">Alle aufklappen</a>";
 
 // Buchstabenleiste
 
-echo $contact["view"];
+// echo $filter;
 
 
 if (($contact["view"])=="alpha") {
@@ -102,7 +119,7 @@ if (($contact["view"])=="alpha") {
 		$cssSw->switchClass();
 	}
 	echo "<td ".$cssSw->getHover()." class=\"".$cssSw->getClass()."\">&nbsp; "
-		."<a href=\"$PHP_SELF\">a-z</a>"
+		."<a href=\"$PHP_SELF?filter=all\">a-z</a>"
 		."&nbsp; </td>";
 	if (!$filter) {
 		$cssSw->switchClass();
@@ -127,7 +144,7 @@ if (($contact["view"])=="gruppen") {
 		$cssSw->switchClass();
 	}
 	echo "<td ".$cssSw->getHover()." class=\"".$cssSw->getClass()."\">&nbsp; "
-		."<a href=\"$PHP_SELF\">alle Gruppen</a>"
+		."<a href=\"$PHP_SELF?filter=all\"><font size=\"2\">Alle Gruppen</font></a>"
 		."&nbsp; </td>";
 	if (!$filter) {
 		$cssSw->switchClass();
@@ -140,7 +157,7 @@ if (($contact["view"])=="gruppen") {
 			$cssSw->switchClass();
 		}
 		echo "<td ".$cssSw->getHover()." class=\"".$cssSw->getClass()."\">&nbsp; "
-		."<a href=\"$PHP_SELF?filter=".$db->f("statusgruppe_id")."\">".$db->f("name")."</a>"
+		."<a href=\"$PHP_SELF?filter=".$db->f("statusgruppe_id")."\"><font size=\"2\">".$db->f("name")."</font></a>"
 		."&nbsp; </td>";
 		if ($filter==$db->f("statusgruppe_id")) {
 			$cssSw->switchClass();
