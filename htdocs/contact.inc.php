@@ -1,4 +1,4 @@
-<?
+<?php
 /**
 * helper functions for handling contacts
 * 
@@ -201,11 +201,11 @@ function GetUserInfo($user_id)
 	$db->query ("SELECT * FROM user_info WHERE user_id = '$user_id'");	
 	if ($db->next_record()) {	
 		if ($db->f("Home")!="")
-			$userinfo[_("Homepage")] = "<a href=\"".$db->f("Home")."\">".$db->f("Home")."</a>";
+			$userinfo[_("Homepage")] = FixLinks(HtmlReady($db->f("Home")));
 		if ($db->f("privatnr")!="")
-			$userinfo[_("Tel. (privat)")] = $db->f("privatnr");
+			$userinfo[_("Tel. (privat)")] = HtmlReady($db->f("privatnr"));
 		if ($db->f("privadr")!="")
-			$userinfo[_("Adresse")] = $db->f("privadr");
+			$userinfo[_("Adresse")] = HtmlReady($db->f("privadr"),1);
 	}
 	return $userinfo;
 }
