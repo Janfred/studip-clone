@@ -108,17 +108,15 @@ function insert_sms ($rec_uname, $message, $user_id='') {
 			//Benachrichtigung in alle Chaträume schicken
 			if ($CHAT_ENABLE) {
 				$chatServer =& ChatServer::GetInstance($GLOBALS['CHAT_SERVER_NAME']);
-					$myUser=$chatServer->chatUser[$db2->f("user_id")];
-	        		$chatMsg="Du hast eine SMS von <b>".$db->f("fullname")." (".$db->f("username").")</b> erhalten!<br></i>";
-		        	$chatMsg.=formatReady(stripslashes($message))."<i>";
-		        	if (is_array($myUser))
-        				foreach($myUser as $chatid =>$wert)
-						if ($chatid["action"])
-							$chatServer->addMsg("system:".$db2->f("user_id"),$chatid,$chatMsg);
+				$chatMsg = "Du hast eine SMS von <b>".$db->f("fullname")." (".$db->f("username").")</b> erhalten!<br></i>";
+				$chatMsg .= formatReady(stripslashes($message))."<i>";
+				foreach($chatServer->chatDetail as $chatid => $wert)
+					if ($wert['users'][$db2->f("user_id")])
+						$chatServer->addMsg("system:".$db2->f("user_id"),$chatid,$chatMsg);
 			}
 			return $db3->affected_rows();
 		} else 
-       			return false;
+			return false;
 	} else
 		return -1;
 }
@@ -145,11 +143,9 @@ function insert_chatinv ($rec_uname, $user_id='') {
 	//Benachrichtigung in alle Chaträume schicken, noch nicht so sinnvoll :)
 	if ($CHAT_ENABLE) {
 		$chatServer =& ChatServer::GetInstance($GLOBALS['CHAT_SERVER_NAME']);
-		$myUser=$chatServer->chatUser[$db2->f("user_id")];
 		$chatMsg="Du wurdest von <b>".$db->f("fullname")." (".$db->f("username").")</b> in den Chat eingeladen !";
-		if (is_array($myUser))        
-			foreach($myUser as $chatid=>$wert)
-			if ($chatid["action"])
+		foreach($chatServer->chatDetail as $chatid => $wert)
+			if ($wert['users'][$db2->f("user_id")])
 				$chatServer->addMsg("system:".$db2->f("user_id"),$chatid,$chatMsg);
 	}
 	
