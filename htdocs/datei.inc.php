@@ -152,7 +152,7 @@ function createSelectedZip ($file_ids, $perm_check = TRUE) {
 
 		//create folder content
 		$in = "('".join("','",$file_ids)."')";
-		$query = sprintf ("SELECT dokument_id, filename FROM dokumente WHERE dokument_id IN %s %s ORDER BY name, filename", $in, ($perm_check) ? "AND seminar_id = '".$SessSemName[1]."'" : "");
+		$query = sprintf ("SELECT dokument_id, filename FROM dokumente WHERE dokument_id IN %s %s ORDER BY chdate, name, filename", $in, ($perm_check) ? "AND seminar_id = '".$SessSemName[1]."'" : "");
 		$db->query($query);
 		while ($db->next_record()) {
 			$docs++;
