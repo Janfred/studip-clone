@@ -64,42 +64,46 @@ if ($perm->have_studip_perm("tutor", $admin_modules_data["range_id"])) {
 		$admin_modules_data["changed_bin"] = $amodules->getDefaultBinValue($admin_modules_data["range_id"]);
 	}
 
-	if ($uebernehmen_x) {
+	if (($uebernehmen_x) || ($retry)) {
 		$msg='';
 
-		foreach ($amodules->registered_modules as $key => $val) {
-			$tmp_key = $key."_value";
-			if ($$tmp_key == "TRUE")
-				$$tmp_key = TRUE;
-			else
-				$$tmp_key = FALSE;
-	
-			if ($$tmp_key) {
-				$amodules->setBit($admin_modules_data["changed_bin"], $amodules->registered_modules[$key]["id"]);
-			} else {
-				$amodules->clearBit($admin_modules_data["changed_bin"], $amodules->registered_modules[$key]["id"]);
-			}
-		}
-
-			
-		//consistency checks
-		foreach ($amodules->registered_modules as $key => $val) {
-	
-			//checks for deactivating a module
-			$getModuleXxExistingItems = "getModule".$key."ExistingItems";
-	
-			if (method_exists($amodules,$getModuleXxExistingItems)) {
-				if (($amodules->isBit($admin_modules_data["orig_bin"],  $amodules->registered_modules[$key]["id"])) &&
-					(!$amodules->isBit($admin_modules_data["changed_bin"],  $amodules->registered_modules[$key]["id"])) &&
-					($amodules->$getModuleXxExistingItems($admin_modules_data["range_id"]))) {
-					
-					$msg.="info§".$amodules->registered_modules[$key]["msg_warning"];
-					$msg.="<br /><a href=\"".$PHP_SELF."?delete_$key=TRUE\">" . makeButton("ja2", "img") . "</a>&nbsp; \n";
-					$msg.="<a href=\"".$PHP_SELF."?cancel=TRUE\">" . makeButton("nein", "img") . "</a>\n§";
-					$dont_save = TRUE;
+		if ($uebernehmen_x)
+			foreach ($amodules->registered_modules as $key => $val) {
+				$tmp_key = $key."_value";
+				if ($$tmp_key == "TRUE")
+					$$tmp_key = TRUE;
+				else
+					$$tmp_key = FALSE;
+		
+				if ($$tmp_key) {
+					$amodules->setBit($admin_modules_data["changed_bin"], $amodules->registered_modules[$key]["id"]);
+				} else {
+					$amodules->clearBit($admin_modules_data["changed_bin"], $amodules->registered_modules[$key]["id"]);
 				}
 			}
 			
+		//consistency checks
+		foreach ($amodules->registered_modules as $key => $val) {
+			$delete_xx = "delete_".$key;
+			$cancel_xx = "cancel_".$key;
+			
+			//checks for deactivating a module
+			if ((!$$delete_xx) && (!$$cancel_xx)) {
+				$getModuleXxExistingItems = "getModule".$key."ExistingItems";
+		
+				if (method_exists($amodules,$getModuleXxExistingItems)) {
+					if (($amodules->isBit($admin_modules_data["orig_bin"],  $amodules->registered_modules[$key]["id"])) &&
+						(!$amodules->isBit($admin_modules_data["changed_bin"],  $amodules->registered_modules[$key]["id"])) &&
+						($amodules->$getModuleXxExistingItems($admin_modules_data["range_id"]))) {
+						
+						$msg.="info§".$amodules->registered_modules[$key]["msg_warning"];
+						$msg.="<br /><a href=\"".$PHP_SELF."?delete_$key=TRUE&retry=TRUE\">" . makeButton("ja2", "img") . "</a>&nbsp; \n";
+						$msg.="<a href=\"".$PHP_SELF."?cancel_$key=TRUE&retry=TRUE\">" . makeButton("nein", "img") . "</a>\n§";
+						$dont_save = TRUE;
+					}
+				}
+			}
+				
 			//checks for activating a module
 			$moduleXxActivate = "module".$key."Activate";
 	
@@ -113,27 +117,34 @@ if ($perm->have_studip_perm("tutor", $admin_modules_data["range_id"])) {
 		}
 	}
 
-	if ((!$dont_save) && ($admin_modules_data["orig_bin"] != $admin_modules_data["changed_bin"])) {
-		$amodules->writeBin($admin_modules_data["range_id"], $admin_modules_data["changed_bin"]);
-		$admin_modules_data["orig_bin"] = $admin_modules_data["changed_bin"];
-		$admin_modules_data["modules_list"] = $amodules->getLocalModules($admin_modules_data["range_id"]);
-		$msg.= "msg§Die ver&auml;nderte Modulkonfiguration wurde &uuml;bernommen";
-	}
-	
-		
-
-	//consitency kill objects
+	//consistency: kill objects
 	foreach ($amodules->registered_modules as $key => $val) {
 		$moduleXxDeactivate = "module".$key."Deactivate";
 		$delete_xx = "delete_".$key;
 	
 		if (($$delete_xx) && (method_exists($amodules,$moduleXxDeactivate))) {
 			$amodules->$moduleXxDeactivate($admin_modules_data["range_id"]);
-			$amodules->writeStatus($key, $admin_modules_data["range_id"], FALSE);
-			$admin_modules_data["modules_list"] = $amodules->getLocalModules($admin_modules_data["range_id"]);
-			$admin_modules_data["orig_bin"] = $amodules->getBin($admin_modules_data["range_id"]);
+			$amodules->clearBit($admin_modules_data["changed_bin"], $amodules->registered_modules[$key]["id"]);
 		}
 	}
+
+
+	//consitency: cancel kill objects
+	foreach ($amodules->registered_modules as $key => $val) {
+		$cancel_xx = "cancel_".$key;
+	
+		if (($$cancel_xx) && (method_exists($amodules,$moduleXxDeactivate))) {
+			$amodules->setBit($admin_modules_data["changed_bin"], $amodules->registered_modules[$key]["id"]);
+		}
+	}
+	
+	if ((!$dont_save) && ($admin_modules_data["orig_bin"] != $admin_modules_data["changed_bin"])) {
+		$amodules->writeBin($admin_modules_data["range_id"], $admin_modules_data["changed_bin"]);
+		$admin_modules_data["orig_bin"] = $admin_modules_data["changed_bin"];
+		$admin_modules_data["modules_list"] = $amodules->getLocalModules($admin_modules_data["range_id"]);
+		$msg.= "msg§Die ver&auml;nderte Modulkonfiguration wurde &uuml;bernommen";
+	}
+
 }
 
 // Start of Output
