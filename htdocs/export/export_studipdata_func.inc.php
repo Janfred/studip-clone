@@ -216,6 +216,9 @@ function export_sem($inst_id, $ex_sem_id = "all")
 
 	if ($ex_sem_id != "all")
 		$addquery .= " AND seminare.Seminar_id = '" . $ex_sem_id . "' ";
+	
+	if (!$GLOBALS['perm']->have_perm('root')) $addquery .= " AND visible=1 ";
+	
 	$db->query('SELECT * FROM seminar_inst
 				LEFT JOIN seminare USING (Seminar_id)
 				WHERE seminar_inst.Institut_id = "' . $inst_id . '" ' . $addquery . '
