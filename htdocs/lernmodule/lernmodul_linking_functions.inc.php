@@ -32,8 +32,9 @@ function link_new_module()
 * Returns an array of links to ILIAS to start, edit or delete learning-modules
 *
 * @access	public        
-* @param		string	Array of learning-module-IDs
-* @return		string	Array of learning-module-data
+* @param		array		$this_array	Array of learning-module-IDs
+* @param		string	$perm_area	Permission-Range
+* @return		array		Array of learning-module-data
 */
 function get_module_linkdata($this_array, $perm_area = 0)
 {
@@ -90,7 +91,7 @@ function get_module_linkdata($this_array, $perm_area = 0)
 * Returns an array of links to ILIAS to start, edit or delete learning-modules that belong to the given seminar
 *
 * @access	public        
-* @param		string	Seminar-ID
+* @param		string	$seminar_id	Seminar-ID
 * @return		string	Link-String or false
 */
 function link_seminar_modules($seminar_id)
@@ -115,8 +116,8 @@ function link_seminar_modules($seminar_id)
 * Returns a link to ILIAS to start the learning-module specified by the given IDs
 *
 * @access	public        
-* @param		string	ILIAS-Inst-ID
-* @param		string	ILIAS-learning-module-ID
+* @param		integer	$co_inst	Ilias Inst ID
+* @param		integer	$co_id	Ilias learning module ID
 * @return		string	Link-String
 */
 function link_use_module($co_inst, $co_id)
@@ -131,8 +132,8 @@ function link_use_module($co_inst, $co_id)
 * Returns a link to ILIAS to edit the learning-module specified by the given IDs
 *
 * @access	public        
-* @param		string	ILIAS-Inst-ID
-* @param		string	ILIAS-learning-module-ID
+* @param		integer	$co_inst	Ilias Inst ID
+* @param		integer	$co_id	Ilias learning module ID
 * @return		string	Link-String
 */
 function link_edit_module($co_inst, $co_id)
@@ -147,8 +148,8 @@ function link_edit_module($co_inst, $co_id)
 * Returns a link to ILIAS to delete the learning-module specified by the given IDs
 *
 * @access	public        
-* @param		string	ILIAS-Inst-ID
-* @param		string	ILIAS-learning-module-ID
+* @param		integer	$co_inst	Ilias Inst ID
+* @param		integer	$co_id	Ilias learning module ID
 * @return		string	Link-String
 */
 function link_delete_module($co_inst, $co_id)

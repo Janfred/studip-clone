@@ -18,7 +18,7 @@
 * Shows a set of learning-modules specified by $mod_array using the printhead/printcontent functions of Stud.IP.
 *
 * @access	public        
-* @param		string	$mod_array	Array of learning-module-data
+* @param		array		$mod_array	Array of learning-module-data
 * @return		boolean	returns false if array is empty
 */
 function show_these_modules($mod_array)
@@ -218,7 +218,8 @@ function show_admin_modules()
 *
 * @access	public        
 * @param		string	$seminar_id	id of the lecture / institute
-* @param		string	$status	all learning-modules or officials or inofficials?
+* @param		integer	$status	all learning-modules or officials or inofficials?
+* @return		boolean	returns false if array is empty
 */
 function show_seminar_modules($seminar_id, $status = 0)
 {
