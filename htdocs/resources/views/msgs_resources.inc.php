@@ -178,4 +178,9 @@ $this->msg[41] = array (
 $this->msg[42] = array (
 		"mode" => "info",
 		"msg"=> _("Folgenden Einzelterminen wurde kein Raum zugewiesen, da gesonderte Anfragen zu diesem Termine vorliegen, die einzeln bearbeitet werden m&uuml;ssen:")."<font size=\"-1\" color=\"black\">%s</font>");
+$this->msg[43] = array (
+		"mode" => "info",
+		"msg"=> _("Wollen Sie die Anfrage wirklich ablehnen?")
+			."<br /><a href=\"%s?decline_request=1\">".makeButton("ja2")."</a>"
+			."&nbsp;<a href=\"%s\">".makeButton("nein")."</a>");
 ?>
