@@ -268,7 +268,7 @@ if ($db->num_rows()) { //Only if Users were found...
 	print(htmlReady($db->f("Vorname")) ." ". htmlReady($db->f("Nachname")) ."</a>");
 	print("</font></td><td class=\"$class\" align=center><font size=-1>");
 	print( $db->f("doll"));
-	print("</font></td><td class=\"$class\" align=center>");
+	print("</font></td><td class=\"$class\" align=center><font size=-1>");
 
 	$Dokumente = 0;
 	$UID = $db->f("user_id");
@@ -277,7 +277,7 @@ if ($db->num_rows()) { //Only if Users were found...
 		$Dokumente = $db2->f("doll");
 	}
 	print $Dokumente;
-	print("</td>");
+	print("</font></td>");
 	
 	printf ("<td class=\"$class\" align=center>");
 	printf ("<a href=\"sms.php?sms_source_page=teilnehmer.php&cmd=write&rec_uname=%s\"><img src=\"pictures/nachricht1.gif\" alt=\"Nachricht an User verschicken\" border=\"0\"></a>", $db->f("username")); 
