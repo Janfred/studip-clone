@@ -687,6 +687,7 @@ function tooltip($text,$with_alt = TRUE,$with_popup = FALSE){
 	$ret .= " title=\"$text\" ";
 	return $ret;
 }
+<<<<<<< visual.inc.php
 
 
 /**
@@ -696,9 +697,9 @@ function tooltip($text,$with_alt = TRUE,$with_popup = FALSE){
 * is used for international buttons, later...
 *
 * @access	public        
-* @param		name	the (german) button name
-* @param		mode	if mode = img, the functions return the full tag, if mode = src, it return only the src-part (for graphic submits)
-* @return		tring		html output of the button
+* @param		string	the (german) button name
+* @param		string	if mode = img, the functions return the full tag, if mode = src, it return only the src-part (for graphic submits)
+* @return		string	html output of the button
 */
 function makeButton ($name, $mode="img") {
 	switch ($LANG) {
