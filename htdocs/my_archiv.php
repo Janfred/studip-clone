@@ -116,7 +116,7 @@ if ($num_my_sem) {
 		else
 			echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
 		 //documents-field
- 		$file_name=rawurlencode("Dateisammlung ".substr($db->f("name"),0,200).".zip");
+ 		$file_name=rawurlencode(_("Dateisammlung") . " ".substr($db->f("name"),0,200).".zip");
 		if ($db->f("archiv_file_id"))
 			echo "<a href=\"sendfile.php?type=1&file_id=".$db->f("archiv_file_id")."&file_name=".$file_name."\">&nbsp; <img src=\"pictures/icon-disc.gif\" border=0 ".tooltip(_("Dateisammlung der Veranstaltung herunterladen"))."></a>";
 		else
