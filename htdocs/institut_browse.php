@@ -63,7 +63,7 @@ if ($_REQUEST['cmd']=="suche"){
 	if (count($found_items)){
 		$msg = "info§" . _("Gefundene Einrichtungen:"). "<div style=\"font-size:10pt;\">" . join("<br>",$found_items) ."</div>§";
 	} else {
-		$msg = "info§" . _("Es konnte keine den Suchkriterien entsprechende Einrichtung gefunden werden."). "§";
+		$msg = "info§" . _("Es konnte keine Einrichtung gefunden werden, die Ihrer Suchanfrage entspricht."). "§";
 	}
 }
 ?>
