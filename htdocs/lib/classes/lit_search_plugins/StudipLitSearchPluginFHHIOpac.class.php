@@ -45,7 +45,7 @@ class StudipLitSearchPluginFHHIOpac extends StudipLitSearchPluginGvk{
 								'1006' => _("Kongresse [KON]"), '1007' => _("alle Nummern [NUM]"),
 								'5040' => _("Schlagwörter [SLW]"),'8062' => _("alle Titelanfänge [TAF]"),
 								'8580' => _("Verlagsort, Verlag [PUB]"), '54' => _("Signatur [SGN]"));
-								);
+//								);
 	}
 }
 ?>
