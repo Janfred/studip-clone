@@ -41,7 +41,7 @@ class reiter {
 	function info($alt,$js,$closeToActive=FALSE) {
 		global $auth;
 		
-		printf ("<td class=\"%s\" nowrap>&nbsp; <img align=\"absmiddle\" src=\"%s\"", $this->classActive, $this->infoPic);
+		printf ("<td class=\"%s\" nowrap>&nbsp; <img align=\"absmiddle\" src=\"%s\" ", $this->classActive, $this->infoPic);
 		 //JavaScript Infofenster aufbauen
 		if ($auth->auth["jscript"])
 			printf ("onClick=\"alert('%s');\"\n",$js);

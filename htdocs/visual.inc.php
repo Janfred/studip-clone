@@ -571,7 +571,7 @@ function printhead($breite,$left,$link,$open,$new,$icon,$titel,$zusatz,$timestmp
 	if ($link) {
 		$print.= "</a>";
 	}
-	$print.="</td><td class=\"printhead\"nowrap width=\"1%\" valign=\"middle\">".$icon."</td>"."<td class=\"printhead\" align=\"left\" width=\"20%\" nowrap valign=\"bottom\">&nbsp;".$titel."</td>"."<td align=\"right\" class=\"printhead\" width=\"99%\" valign='bottom'>".$zusatz."&nbsp;</td>";
+	$print.="</td><td class=\"printhead\" nowrap width=\"1%\" valign=\"middle\">".$icon."</td>"."<td class=\"printhead\" align=\"left\" width=\"20%\" nowrap valign=\"bottom\">&nbsp;".$titel."</td>"."<td align=\"right\" class=\"printhead\" width=\"99%\" valign='bottom'>".$zusatz."&nbsp;</td>";
 	echo $print;
 }
 
