@@ -39,7 +39,7 @@ if ($folderzip) {
 	$query = sprintf ("SELECT name FROM folder WHERE folder_id = '%s' ", $folderzip);
 	$db->query($query);
 	$db->next_record();
-	$zip_name = prepareFilename(_("Dateiordner ").$db->f("name"));
+	$zip_name = prepareFilename(_("Dateiordner ").$db->f("name").".zip");
 	header("Location: sendfile.php/?type=4&file_id=$zip_file_id&file_name=$zip_name.zip");
 	page_close();
 	die;
@@ -48,7 +48,7 @@ if ($folderzip) {
 if ($download_selected_x) {
 	if (is_array($download_ids)) {
 		$zip_file_id = createSelectedZip($download_ids);
-		$zip_name = prepareFilename($SessSemName[0]." - "._("Dokumente"));
+		$zip_name = prepareFilename($SessSemName[0]." - "._("Dokumente").".zip");
 		header("Location: sendfile.php/?type=4&file_id=$zip_file_id&file_name=$zip_name");
 		page_close();
 		die;
@@ -275,7 +275,7 @@ if ($close) {
 		<? printf (_("Hier sehen Sie alle Dateien, die zu dieser %s eingestellt wurden. Wenn Sie eine neue Datei einstellen m&ouml;chten, w&auml;hlen Sie bitte die Ordneransicht und &ouml;ffnen den Ordner, in den Sie die Datei einstellen wollen."), $SessSemName["art_generic"]); ?>
 		</blockquote>
 		<?
-		print ("<div align=\"right\"><a style=\"vertical-align: middle;\" href=\"$PHP_SELF?check_all=TRUE\">".makeButton("alleauswaehlen")."</a>&nbsp;<input style=\"vertical-align: middle;\" type=\"IMAGE\" name=\"download_selected\" border=\"0\" ".makeButton("herunterladen", "src")." />&nbsp;</div>");		
+		print ("<div align=\"right\"><a style=\"vertical-align: middle;\" valign=\"middle\" href=\"$PHP_SELF?check_all=TRUE\">".makeButton("alleauswaehlen")."</a>&nbsp;<input style=\"vertical-align: middle;\" valign=\"middle\" type=\"IMAGE\" name=\"download_selected\" border=\"0\" ".makeButton("herunterladen", "src")." />&nbsp;</div>");		
 		}
 		
 	//Alle Termine der Veranstaltung holen
