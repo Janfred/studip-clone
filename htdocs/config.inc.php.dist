@@ -280,6 +280,13 @@ $SCM_PRESET[3] = array("name"=>_("Links"));
 $SCM_PRESET[4] = array("name"=>_("Verschiedenes"));
 //you can add more presets here
 
+//preset template for formatting of literature list entries
+$LIT_LIST_FORMAT_TEMPLATE = "**{dc_creator}** |({dc_contributor})||\n"
+						. "{dc_title}||\n"
+						. "{dc_identifier}||\n"
+						. "%%{published}%%||\n"
+						. "{note}||\n"
+						. "[{lit_plugin}]{external_link}|\n";
 
 //Shorts for Smiley
 $SMILE_SHORT = array( //diese Kuerzel fuegen das angegebene Smiley ein (Dateiname + ".gif")
@@ -298,7 +305,7 @@ $SYMBOL_SHORT = array( //use this shorts to insert an symbols (filename + ".gif"
 	"(c)"=>"symbol05" , 
 	"(r)"=>"symbol06" , 
 	" tm "=>"symbol08");
-	
+
 
 /*configuration for additional modules
 ----------------------------------------------------------------
