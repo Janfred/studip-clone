@@ -34,6 +34,7 @@ require_once "$ABSOLUTE_PATH_STUDIP/forum.inc.php";		//damit wir Themen anlegen 
 require_once "$ABSOLUTE_PATH_STUDIP/visual.inc.php";		//Aufbereitungsfunktionen
 require_once "$ABSOLUTE_PATH_STUDIP/dates.inc.php";		//Terminfunktionen
 require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipSemTreeSearch.class.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/Modules.class.php");
 
 if ($RESOURCES_ENABLE) {
 	include_once ($RELATIVE_PATH_RESOURCES."/resourcesClass.inc.php");
@@ -985,8 +986,8 @@ if ($cmd_f_x)
 		
 						
 		$query = "INSERT INTO seminare values('".
-				$sem_create_data["sem_id"]."', '".				//Feld Seminar_id 
-				$sem_create_data["sem_nummer"]."', '".		//Feld VeranstaltungsNummer
+				$sem_create_data["sem_id"]."', '".			//Feld Seminar_id 
+				$sem_create_data["sem_nummer"]."', '".			//Feld VeranstaltungsNummer
 				$sem_create_data["sem_inst_id"]."', '".			//Feld Institut_id 
 				$sem_create_data["sem_name"]."', '".			//Feld Name 
 				$sem_create_data["sem_untert"]."', '".			//Feld Untertitel 
@@ -998,22 +999,23 @@ if ($cmd_f_x)
 				$sem_create_data["sem_sec_lese"]."', '".		//Feld Lesezugriff 
 				$sem_create_data["sem_sec_schreib"]."', '".		//Feld Schreibzugriff
 				$sem_create_data["sem_start_time"]."', '".		//Feld start_time 
-				$sem_create_data["sem_duration_time"]."', '".	//Feld duration_time 
+				$sem_create_data["sem_duration_time"]."', '".		//Feld duration_time 
 				$sem_create_data["sem_art"]."', '".			//Feld art 
 				$sem_create_data["sem_teiln"]."', '".			//Feld teilnehmer 
 				$sem_create_data["sem_voraus"]."', '".			//Feld vorrausetzungen 
 				$sem_create_data["sem_orga"]."', '".			//Feld lernorga 
 				$sem_create_data["sem_leistnw"]."', '".			//Feld leistungsnachweis 
-				$serialized_metadata."', '".					//Feld metadata_dates 
-				time()."', '".								//Feld mkdate 
-				time()."', '".								//Feld chdate 
+				$serialized_metadata."', '".				//Feld metadata_dates 
+				time()."', '".						//Feld mkdate 
+				time()."', '".						//Feld chdate 
 				$sem_create_data["sem_ects"]."', '".			//Feld ects
-				$sem_create_data["sem_admission_date"]."', '".	//Feld admission_endtime 
+				$sem_create_data["sem_admission_date"]."', '".		//Feld admission_endtime 
 				$sem_create_data["sem_turnout"]."', '".			//Feld admission_turnout 
-				"', '".										//Feld admission_binding
+				"', '".							//Feld admission_binding
 				$sem_create_data["sem_admission"]."', '".		//Feld admission_type 
-				"0' ,'".									//Feld admission_selection_take_place
-				"0' )";									//Feld showscore
+				"0' ,'".						//Feld admission_selection_take_place
+				"0' ,'".						//Feld showscore
+				"')";							//Feld modules
 
 		//und jetzt wirklich eintragen
 		if (!$sem_create_data["sem_entry"]) {
@@ -1030,6 +1032,10 @@ if ($cmd_f_x)
 				openSem($sem_create_data["sem_id"]); //open Veranstaltung to administrate in the admin-area
 				$links_admin_data["referred_from"]="assi";
 				$links_admin_data["assi"]=FALSE; //protected Assi-mode off
+				
+				//write the default module-config
+				$Modules = new Modules;
+				$Modules->writeDefaultStatus($sem_create_data["sem_id"]);
 
     				//update/insert the assigned roomes
     				if ($RESOURCES_ENABLE) {
