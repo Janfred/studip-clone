@@ -41,10 +41,10 @@ $structure["search_lists"]=array (topKat=>"lists", name=>"Suchen", link=>"resour
 $structure["export_lists"]=array (topKat=>"lists", name=>"Listen exportieren", link=>"resources.php?view=export_lists", active=>FALSE);
 
 //Reiter "Objekt"
-$structure["view_schedule"]=array (topKat=>"objects", name=>"Belegung ausgeben", link=>"resources.php?view=view_schedule", active=>FALSE);
-$structure["edit_object_assign"]=array (topKat=>"objects", name=>"Belegung bearbeiten", link=>"resources.php?view=edit_object_assign", active=>FALSE);
 $structure["edit_object_properties"]=array (topKat=>"objects", name=>"Eigenschaften bearbeiten", link=>"resources.php?view=edit_object_properties", active=>FALSE);
 $structure["edit_object_perms"]=array (topKat=>"objects", name=>"Rechte bearbeiten", link=>"resources.php?view=edit_object_perms", active=>FALSE);
+$structure["view_schedule"]=array (topKat=>"objects", name=>"Belegungsplan", link=>"resources.php?view=view_schedule", active=>FALSE);
+$structure["edit_object_assign"]=array (topKat=>"objects", name=>"Belegung bearbeiten", link=>"resources.php?view=edit_object_assign", active=>FALSE);
 
 //Reiter "Anpassen"
 if (($my_perms->getGlobalPerms() == "admin") || ($perm->have_perm("root"))){ //Grundlegende Einstellungen fuer alle Ressourcen Admins
