@@ -715,15 +715,8 @@ ELSEIF ($perm->have_perm("root")){
 			</td>
 		</tr>
 		<tr>
-			<td class="blank" colspan=2>
-	<?
-		$root_mode=TRUE;
-		$target_url="seminar_main.php";	//teilt der nachfolgenden Include mit, wo sie die Leute hinschicken soll
-		$target_id="auswahl";			 //teilt der nachfolgenden Include mit, wie die id, die uebergeben wird, bezeichnet werden soll
-
-		include "sem_browse.inc.php";		 //der zentrale Seminarbrowser wird hier eingef&uuml;gt.
-
-	?>
+			<td class="blank" align="center" colspan=2>
+			<b>Sie sind 'root', sie sollten eigentlich nicht hier sein!<b>
 			</td>
 		</tr>
 		<tr>

@@ -293,7 +293,7 @@ unset($temp_language_key); unset($temp_language);
 	<td width="5%" class="blank" valign="middle">&nbsp;</td>
 	<td width="90%" class="blank" valign="top">
 		<table cellpadding=4>
-		<tr><td class="blank"><a href="meine_seminare.php"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("Veranstaltungs&uuml;bersicht")?></a></td></tr>
+		<tr><td class="blank"><a href="sem_portal.php"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("Veranstaltungs&uuml;bersicht")?></a></td></tr>
 		<tr><td class="blank"><a href="adminarea_start.php?list=TRUE"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("Verwaltung von Veranstaltungen")?></a></td></tr>
 		<tr><td class="blank"><a href="admin_institut.php?list=TRUE"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("Verwaltung von Einrichtungen")?></a></td></tr>
 		<tr><td class="blank"><a href="new_user_md5.php"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("Verwaltung globaler Einstellungen")?></a></td></tr>

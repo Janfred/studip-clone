@@ -133,8 +133,13 @@ include ("$ABSOLUTE_PATH_STUDIP/links_seminare.inc.php");   	//hier wird die Nav
 $init_data = array("level" => "f","cmd"=>"qs","show_class"=>$sem_portal['bereich'],"group_by"=>0,"default_sem"=>"all","sem_status"=>$_sem_status);
 if ($reset_all) $sem_browse_data = null;
 $sem_browse_obj = new SemBrowse($init_data);
-$sem_browse_obj->target_url="details.php";	//teilt der nachfolgenden Include mit, wo sie die Leute hinschicken soll
-$sem_browse_obj->target_id="sem_id"; 		//teilt der nachfolgenden Include mit, wie die id die &uuml;bergeben wird, bezeichnet werden soll
+if (!$perm->have_perm("root")){
+	$sem_browse_obj->target_url="details.php";	
+	$sem_browse_obj->target_id="sem_id"; 
+} else {
+	$sem_browse_obj->target_url="seminar_main.php";	
+	$sem_browse_obj->target_id="auswahl";
+}
 
 ?>
 <table width="100%" border=0 cellpadding=0 cellspacing=0>

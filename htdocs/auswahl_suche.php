@@ -41,11 +41,7 @@ include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 	<font size=-1><?=_("Hier k&ouml;nnen Sie nach Ihren, in Stud.IP registrierten, KommilitonInnen und Dozierenden suchen.")?></font>
 	<br>
 	<br>
-	<? if (!$perm->have_perm("root"))
-		print "<a href=\"sem_portal.php\">";
-	else
-		print "<a href=\"meine_seminare.php\">";
-	?>
+	<a href="sem_portal.php">
 	<b><?=_("Suchen nach Veranstaltungen")?></b></a></br>
 	<font size=-1><?=_("Hier finden Sie alle Veranstaltungen in Stud.IP.")?></font>
 	<br>
