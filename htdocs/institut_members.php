@@ -25,6 +25,7 @@ include($ABSOLUTE_PATH_STUDIP."seminar_open.php"); //hier werden die sessions in
 require_once($ABSOLUTE_PATH_STUDIP."config.inc.php");
 require_once($ABSOLUTE_PATH_STUDIP."visual.inc.php");
 require_once($ABSOLUTE_PATH_STUDIP."html_head.inc.php");
+require_once($ABSOLUTE_PATH_STUDIP."statusgruppe.inc.php");
 
 $css_switcher = new CssClassSwitcher();
 echo $css_switcher->GetHoverJSFunction();
@@ -57,9 +58,9 @@ if (isset($extend))
 
 // check the given parameters or initialize them
 if ($perm->have_perm("admin"))
-	$accepted_columns = array("Nachname", "Funktion", "Status");
+	$accepted_columns = array("Nachname", "inst_perms");
 else
-	$accepted_columns = array("Nachname", "Funktion");
+	$accepted_columns = array("Nachname");
 	
 if(!in_array($institut_members_data["sortby"], $accepted_columns))
 	$institut_members_data["sortby"] = "Nachname";
@@ -73,16 +74,19 @@ else{
 	$new_direction = "DESC";
 }
 
-// if the user have admin permissions, we show him the member who has no function 
-if ($perm->have_perm("admin"))
-	$INST_FUNKTION_ORDER[] = 0;
-
 $accepted_functions = implode(",", $INST_FUNKTION_ORDER);
 
 if($SessSemName[1] == ""){
-	parse_window ("error§Sie haben kein Objekt gew&auml;hlt. <br /><font size=-1 color=black>Dieser Teil des Systems kann nur genutzt werden, wenn Sie vorher ein Objekt gew&auml;hlt haben.<br /><br /> Dieser Fehler tritt auch auf, wenn Ihre Session abgelaufen ist. Wenn sie sich länger als $AUTH_LIFETIME Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurück zur Anmeldung zu gelangen. </font>", "§",
+	parse_window ("error§Sie haben kein Objekt gew&auml;hlt. <br />"
+				. "<font size=\"-1\" color=\"black\">Dieser Teil des Systems kann nur "
+				. "genutzt werden, wenn Sie vorher ein Objekt gew&auml;hlt haben.<br />"
+				. "<br /> Dieser Fehler tritt auch auf, wenn Ihre Session abgelaufen ist. "
+				. "Wenn sie sich länger als $AUTH_LIFETIME Minuten nicht im System bewegt "
+				. "haben, werden Sie automatisch abgemeldet. Bitte nutzen Sie in diesem "
+				. "Fall den untenstehenden Link, um zurück zur Anmeldung zu gelangen. </font>", "§",
 				"Kein Objekt gew&auml;hlt", 
-				"<a href=\"index.php\"><b>&nbsp;Hier</b></a> geht es wieder zur Anmeldung beziehungsweise Startseite.<br />&nbsp;");
+				"<a href=\"index.php\"><b>&nbsp;Hier</b></a> geht es wieder zur Anmeldung "
+				. "beziehungsweise Startseite.<br />&nbsp;");
 	page_close();
 	die;
 }
@@ -109,11 +113,10 @@ if ($institut_members_data["extend"] == "yes") {
 												"name" => array("name" => "Name",
 														"link" => $PHP_SELF . "?sortby=Nachname&direction=" . $new_direction,
 														"width" => "30%"),
-												"funktion" => array("name" => "Funktion",
-														"link" => $PHP_SELF . "?sortby=Funktion&direction=" . $new_direction,
+												"statusgruppe" => array("name" => "Funktion",
 														"width" => "15%"),
 												"status" => array("name" => "Status",
-														"link" => $PHP_SELF . "?sortby=inst_perm&direction=" . $new_direction,
+														"link" => $PHP_SELF . "?sortby=inst_perms&direction=" . $new_direction,
 														"width" => "10"),
 												"raum" => array("name" => "Raum",
 														"width" => "10%"),
@@ -132,8 +135,7 @@ if ($institut_members_data["extend"] == "yes") {
 												"name" => array("name" => "Name",
 														"link" => $PHP_SELF . "?sortby=Nachname&direction=" . $new_direction,
 														"width" => "30%"),
-												"funktion" => array("name" => "Funktion",
-														"link" => $PHP_SELF . "?sortby=Funktion&direction=" . $new_direction,
+												"statusgruppe" => array("name" => "Funktion",
 														"width" => "10%"),
 												"raum" => array("name" => "Raum",
 														"width" => "10%"),
@@ -155,8 +157,7 @@ if ($institut_members_data["extend"] == "yes") {
 												"name" => array("name" => "Name",
 														"link" => $PHP_SELF . "?sortby=Nachname&direction=" . $new_direction,
 														"width" => "30%"),
-												"funktion" => array("name" => "Funktion",
-														"link" => $PHP_SELF . "?sortby=Funktion&direction=" . $new_direction,
+												"statusgruppe" => array("name" => "Funktion",
 														"width" => "15%"),
 												"raum" => array("name" => "Raum",
 														"width" => "10%"),
@@ -177,7 +178,7 @@ if ($institut_members_data["extend"] == "yes") {
 														"link" => $PHP_SELF . "?sortby=Nachname&direction=" . $new_direction,
 														"width" => "30%"),
 												"status" => array("name" => "Status",
-														"link" => $PHP_SELF . "?sortby=inst_perm&direction=" . $new_direction,
+														"link" => $PHP_SELF . "?sortby=inst_perms&direction=" . $new_direction,
 														"width" => "10"),
 												"raum" => array("name" => "Raum",
 														"width" => "15%"),
@@ -220,11 +221,10 @@ else {
 												"name" => array("name" => "Name",
 														"link" => $PHP_SELF . "?sortby=Nachname&direction=" . $new_direction,
 														"width" => "35%"),
-												"funktion" => array("name" => "Funktion",
-														"link" => $PHP_SELF . "?sortby=Funktion&direction=" . $new_direction,
+												"statusgruppe" => array("name" => "Funktion",
 														"width" => "15%"),
 												"status" => array("name" => "Status",
-														"link" => $PHP_SELF . "?sortby=inst_perm&direction=" . $new_direction,
+														"link" => $PHP_SELF . "?sortby=inst_perms&direction=" . $new_direction,
 														"width" => "10"),
 												"raum" => array("name" => "Raum",
 														"width" => "20%"),
@@ -239,8 +239,7 @@ else {
 												"name" => array("name" => "Name",
 														"link" => $PHP_SELF . "?sortby=Nachname&direction=" . $new_direction,
 														"width" => "30%"),
-												"funktion" => array("name" => "Funktion",
-														"link" => $PHP_SELF . "?sortby=Funktion&direction=" . $new_direction,
+												"statusgruppe" => array("name" => "Funktion",
 														"width" => "15%"),
 												"raum" => array("name" => "Raum",
 														"width" => "15%"),
@@ -258,8 +257,7 @@ else {
 												"name" => array("name" => "Name",
 														"link" => $PHP_SELF . "?sortby=Nachname&direction=" . $new_direction,
 														"width" => "40%"),
-												"funktion" => array("name" => "Funktion",
-														"link" => $PHP_SELF . "?sortby=Funktion&direction=" . $new_direction,
+												"statusgruppe" => array("name" => "Funktion",
 														"width" => "20%"),
 												"raum" => array("name" => "Raum",
 														"width" => "20%"),
@@ -276,7 +274,7 @@ else {
 														"link" => $PHP_SELF . "?sortby=Nachname&direction=" . $new_direction,
 														"width" => "40%"),
 												"status" => array("name" => "Status",
-														"link" => $PHP_SELF . "?sortby=inst_perm&direction=" . $new_direction,
+														"link" => $PHP_SELF . "?sortby=inst_perms&direction=" . $new_direction,
 														"width" => "15"),
 												"raum" => array("name" => "Raum",
 														"width" => "20%"),
@@ -306,10 +304,15 @@ else {
 
 $colspan = sizeof($table_structure);
 
-$query = "SELECT COUNT(*) AS count FROM user_inst WHERE Institut_id = '$auswahl'
-					AND Funktion IN ($accepted_functions)";
-$db_institut_members->query($query);
-$db_institut_members->next_record();
+if ($perm->have_perm("admin")) {
+	$query = "SELECT COUNT(*) AS count FROM user_inst WHERE
+						Institut_id = '$auswahl' AND inst_perms != 'user'";
+	$db_institut_members->query($query);
+	$db_institut_members->next_record();
+	$count = $db_institut_members->f("count");
+}
+else
+	$count = CountMembersStatusgruppen($auswahl);
 
 echo "<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">";
 printf("\n<tr><td class=\"topic\" colspan=\"2\"><b>&nbsp; %s</b></td></tr>",
@@ -323,7 +326,7 @@ if ($sms_msg) {
 	
 echo "\n<tr><td class=\"blank\"><br /><blockquote>\n";
 
-if ($db_institut_members->f("count") > 0)
+if ($count > 0)
 	printf("%s <b>%s</b>", "Alle Mitarbeiter der Einrichtung", $SessSemName[0]);
 else {
 	printf("Der Einrichtung <b>%s</b> wurden noch keine Mitarbeiter zugeordnet!", $SessSemName[0]);
@@ -364,13 +367,13 @@ else {
 	}
 	else {
 		echo "&nbsp; &nbsp; &nbsp; <a href=\"./institut_members.php?show=funktion\">";
-		printf("<font size=\"-1\"><b>%s</b></font></a>\n", "Nach Status gruppiert anzeigen");
+		printf("<font size=\"-1\"><b>%s</b></font></a>\n", "Nach Funktion gruppiert anzeigen");
 	}
 }
 	
 echo "</td><td class=\"steel1\" width=\"30%\">\n";
 printf("<font size=\"-1\"><b>%s</b> %s</font>",
-	$db_institut_members->f("count"), "Mitarbeiter gefunden");
+	$count, "Mitarbeiter gefunden");
 echo "</td><td class=\"steel1\" width=\"10%\">\n";
 
 if ($institut_members_data["extend"] == "yes") {
@@ -389,31 +392,62 @@ echo "<table border=\"0\" width=\"99%\" cellpadding=\"0\" cellspacing=\"0\" alig
 
 table_head($table_structure, $css_switcher);
 
+// if you have the right question you will get the right answer ;-)
 if ($institut_members_data["show"] == "funktion") {
-	foreach ($INST_FUNKTION_ORDER as $key => $function) {
+	$all_statusgruppen = GetAllStatusgruppen($auswahl);
+	foreach ($all_statusgruppen as $statusgruppe_id => $statusgruppe_name) {
 		if ($institut_members_data["extend"] == "yes")
-			$query = sprintf("SELECT aum.Nachname, aum.Vorname, ui.raum, ui.sprechzeiten, ui.Telefon,
-												ui.inst_perms, aum.Email, aum.user_id,	aum.username, info.Home
-												FROM user_inst ui LEFT JOIN	auth_user_md5 aum USING(user_id) LEFT JOIN
-												user_info info USING(user_id) WHERE ui.Institut_id = '%s'
-												AND Funktion = '%s' ORDER BY %s %s", $auswahl, $function,
-												$institut_members_data["sortby"], $institut_members_data["direction"]);
+			$query = sprintf("SELECT aum.Nachname, aum.Vorname, ui.inst_perms, ui.raum,
+								ui.sprechzeiten, ui.Telefon, ui.inst_perms, aum.Email, aum.user_id,
+								aum.username, info.Home, statusgruppe_id
+								FROM user_inst ui LEFT JOIN	auth_user_md5 aum USING(user_id) LEFT JOIN
+								user_info info USING(user_id) LEFT JOIN statusgruppe_user USING(user_id)
+								WHERE ui.Institut_id = '%s' AND ui.inst_perms != 'user'
+								AND statusgruppe_id = '%s' ORDER BY %s %s", $auswahl, $statusgruppe_id,
+								$institut_members_data["sortby"], $institut_members_data["direction"]);
 		else
 			$query = sprintf("SELECT Nachname, Vorname, raum, sprechzeiten, Telefon, inst_perms,
-												Email, auth_user_md5.user_id,
-												username FROM user_inst LEFT JOIN	auth_user_md5 USING(user_id)
-												WHERE user_inst.Institut_id = '%s' AND Funktion = '%s'
-												ORDER BY %s %s", $auswahl, $function,
-												$institut_members_data["sortby"], $institut_members_data["direction"]);
+								Email, auth_user_md5.user_id, username, statusgruppe_id
+								FROM user_inst LEFT JOIN	auth_user_md5 USING(user_id)
+								LEFT JOIN statusgruppe_user USING(user_id)
+								WHERE Institut_id = '%s' AND statusgruppe_id = '%s'
+								AND inst_perms != 'user' ORDER BY %s %s", $auswahl, $statusgruppe_id,
+								$institut_members_data["sortby"], $institut_members_data["direction"]);
+								
 		$db_institut_members->query($query);
 		if ($db_institut_members->num_rows() > 0) {
-			if ($function == 0)
-				$function_name = "keine Funktion";
-			else
-				$function_name = $INST_FUNKTION[$function]["name"];
-			printf("<tr><td class=\"steelgroup1\" colspan=\"%s\" height=\"20\">", $colspan);
-			printf("<font size=\"-1\"><b>&nbsp;%s<b></font></td></tr>\n", $function_name);
-			table_boddy($db_institut_members,$table_structure, $css_switcher);
+			echo "<tr><td class=\"steelgroup1\" colspan=\"$colspan\" height=\"20\">";
+			echo "<font size=\"-1\"><b>&nbsp;$statusgruppe_name<b></font></td></tr>\n";
+			table_boddy($db_institut_members, $auswahl, $table_structure, $css_switcher);
+		}
+	}
+	if ($perm->have_perm("admin")) {
+		$assigned = implode("','", GetAllSelected($auswahl));
+		$db_residual = new DB_Seminar();
+		if ($institut_members_data["extend"] == "yes")
+			$query = sprintf("SELECT aum.Nachname, aum.Vorname, ui.inst_perms, ui.raum,
+								ui.sprechzeiten, ui.Telefon, aum.Email, aum.user_id,
+								aum.username
+								FROM user_inst ui LEFT JOIN	auth_user_md5 aum USING(user_id)
+								WHERE ui.Institut_id = '%s' AND ui.inst_perms != 'user'
+								AND ui.user_id NOT IN('%s') ORDER BY %s %s",
+								$auswahl, $assigned, $institut_members_data["sortby"],
+								$institut_members_data["direction"]);
+		else
+			$query = sprintf("SELECT aum.Nachname, aum.Vorname, ui.inst_perms, ui.raum,
+								ui.Telefon, aum.user_id, aum.username
+								FROM user_inst ui LEFT JOIN	auth_user_md5 aum USING(user_id)
+								WHERE ui.Institut_id = '%s' AND ui.inst_perms != 'user'
+								AND ui.user_id NOT IN('%s')ORDER BY %s %s", $auswahl,
+								$assigned,
+								$institut_members_data["sortby"], $institut_members_data["direction"]);
+										
+		$db_residual->query($query);
+		if ($db_residual->num_rows() > 0) {
+			echo "<tr><td class=\"steelgroup1\" colspan=\"$colspan\" height=\"20\">";
+			echo "<font size=\"-1\"><b>&nbsp;";
+			echo _("keiner Funktion zugeordnet") . "<b></font></td></tr>\n";
+			table_boddy($db_residual, $auswahl, $table_structure, $css_switcher);
 		}
 	}
 }
@@ -421,7 +455,7 @@ elseif ($institut_members_data["show"] == "status") {
 	$inst_permissions = array("admin" => "Admin", "dozent" => "Dozent", "tutor" => "Tutor",
 														"autor" => "Autor", "user" => "User");
 	foreach ($inst_permissions as $key => $permission) {
-		$query = sprintf("SELECT Nachname, Vorname, raum, sprechzeiten, Telefon, Funktion,
+		$query = sprintf("SELECT Nachname, Vorname, raum, sprechzeiten, Telefon,
 											inst_perms, Email, auth_user_md5.user_id,
 											username FROM user_inst LEFT JOIN	auth_user_md5 USING(user_id)
 											WHERE user_inst.Institut_id = '%s' AND inst_perms = '%s'
@@ -429,32 +463,53 @@ elseif ($institut_members_data["show"] == "status") {
 											$institut_members_data["sortby"], $institut_members_data["direction"]);
 		$db_institut_members->query($query);
 		if ($db_institut_members->num_rows() > 0) {
-			printf("<tr><td class=\"steelgroup1\" colspan=\"%s\" height=\"20\">", $colspan);
-			printf("<font size=\"-1\"><b>&nbsp;%s<b></font></td></tr>\n", $permission);
-			table_boddy($db_institut_members,$table_structure, $css_switcher);
+			echo "<tr><td class=\"steelgroup1\" colspan=\"$colspan\" height=\"20\">";
+			echo "<font size=\"-1\"><b>&nbsp;$permission<b></font></td></tr>\n";
+			table_boddy($db_institut_members, $auswahl, $table_structure, $css_switcher);
 		}
 	}
 }
 else {
-	if ($institut_members_data["extend"] == "yes")
-		$query = sprintf("SELECT ui.raum, ui.sprechzeiten, ui.Telefon,
-											ui.Funktion, ui.inst_perms, aum.user_id, info.Home, 
-											aum.Nachname, aum.Vorname,aum.Email, aum.username
-											FROM user_inst ui LEFT JOIN	auth_user_md5 aum USING(user_id)
-											LEFT JOIN user_info info USING(user_id)
-											WHERE ui.Institut_id = '%s' AND Funktion IN (%s)
-											ORDER BY %s %s", $auswahl, $accepted_functions,
-											$institut_members_data["sortby"], $institut_members_data["direction"]);
-	else
-		$query = sprintf("SELECT Nachname, Vorname, raum, sprechzeiten, Telefon, Funktion,
-											inst_perms, Email, auth_user_md5.user_id,
-											username FROM user_inst LEFT JOIN	auth_user_md5 USING(user_id)
-											WHERE user_inst.Institut_id = '%s' AND Funktion IN (%s)
-											ORDER BY %s %s", $auswahl, $accepted_functions,
-											$institut_members_data["sortby"], $institut_members_data["direction"]);
+	if ($institut_members_data["extend"] == "yes") {
+		if($perm->have_perm("admin"))
+			$query = sprintf("SELECT ui.raum, ui.sprechzeiten, ui.Telefon, ui.inst_perms,
+							aum.user_id, info.Home, aum.Nachname, aum.Vorname,aum.Email, aum.username
+							FROM user_inst ui LEFT JOIN	auth_user_md5 aum USING(user_id)
+							LEFT JOIN user_info info USING(user_id)
+							WHERE ui.Institut_id = '%s' AND ui.inst_perms != 'user'
+							ORDER BY %s %s", $auswahl, $institut_members_data["sortby"],
+							$institut_members_data["direction"]);
+		else
+			$query = sprintf("SELECT ui.raum, ui.sprechzeiten, ui.Telefon,
+							aum.user_id, info.Home, 
+							aum.Nachname, aum.Vorname, aum.Email, aum.username, Institut_id
+							FROM statusgruppen LEFT JOIN statusgruppe_user USING(statusgruppe_id)
+							LEFT JOIN user_inst ui USING(user_id) LEFT JOIN auth_user_md5 aum USING(user_id)
+							LEFT JOIN user_info info USING(user_id)
+							WHERE range_id = '%s' HAVING Institut_id = '%s'
+							ORDER BY %s %s", $auswahl, $auswahl, $institut_members_data["sortby"],
+							$institut_members_data["direction"]);
+	}
+	else {
+		if($perm->have_perm("admin"))
+			$query = sprintf("SELECT raum, sprechzeiten, Telefon, Nachname, Vorname,
+							inst_perms, username, ui.user_id
+							FROM user_inst ui LEFT JOIN	auth_user_md5 USING(user_id)
+							WHERE ui.Institut_id = '%s' AND inst_perms != 'user'
+							ORDER BY %s %s", $auswahl, $institut_members_data["sortby"],
+							$institut_members_data["direction"]);
+		else
+			$query = sprintf("SELECT ui.raum, ui.sprechzeiten, ui.Telefon,
+							aum.user_id, aum.Nachname, aum.Vorname, aum.username, Institut_id
+							FROM statusgruppen LEFT JOIN statusgruppe_user USING(statusgruppe_id)
+							LEFT JOIN user_inst ui USING(user_id) LEFT JOIN auth_user_md5 aum USING(user_id)
+							WHERE range_id = '%s' HAVING Institut_id = '%s'
+							ORDER BY %s %s", $auswahl, $auswahl, $institut_members_data["sortby"],
+							$institut_members_data["direction"]);
+	}
 	$db_institut_members->query($query);
 	if ($db_institut_members->num_rows() != 0)
-		table_boddy($db_institut_members,$table_structure, $css_switcher);
+		table_boddy($db_institut_members, $auswahl, $table_structure, $css_switcher);
 }
 
 echo "<tr><td class=\"blank\" colspan=\"$colspan\">&nbsp;</td></tr>\n";
@@ -495,25 +550,27 @@ function table_head ($structure, $css_switcher) {
 
 		
 
-function table_boddy ($db, $structure, $css_switcher) {
-	global $INST_FUNKTION;
+function table_boddy ($db, $range_id, $structure, $css_switcher) {
 	$css_switcher->enableHover();
 	
 	while ($db->next_record()) {
 		
 		$css_switcher->switchClass();
 		printf("<tr%s>\n", $css_switcher->getHover());
-		if($db->f("Vorname") && $db->f("Nachname")) {
+		if($db->f("Nachname") && $db->f("Vorname")) {
 			printf("<td%s>", $css_switcher->getFullClass());
 			echo "<img src=\"pictures/blank.gif\" width=\"2\" height=\"1\">";
 			printf("<a href=\"about.php?username=%s\"><font size=\"-1\">%s</font></a></td>\n",
 				$db->f("username"), htmlReady($db->f("Nachname") . ", " . $db->f("Vorname")));
 		}
+		else
+			printf("<td%s>&nbsp;</td>", $css_switcher->getFullClass());
 	
-		if ($structure["funktion"]) {
-			if ($db->f("Funktion") != 0)
+		if ($structure["statusgruppe"]) {
+			$statusgruppen = GetStatusgruppen($range_id, $db->f("user_id"));
+			if ($statusgruppen)
 				printf("<td%salign=\"center\"><font size=\"-1\">%s</font></td>\n",
-					$css_switcher->getFullClass(), htmlReady($INST_FUNKTION[$db->f("Funktion")]["name"]));
+					$css_switcher->getFullClass(), htmlReady(implode(", ", $statusgruppen)));
 			else
 				printf("<td%salign=\"center\"><font size=\"-1\">%s</font></td>\n",
 					$css_switcher->getFullClass(), "keine");
@@ -557,7 +614,7 @@ function table_boddy ($db, $structure, $css_switcher) {
 		
 		if ($structure["email"]) {
 			if ($db->f("Email"))
-				printf("<td%salign=\"center\"><a href=\"mailto:%s\"><font size=\"-1\">%s</font></td>\n",
+				printf("<td%salign=\"center\"><font size=\"-1\"><a href=\"mailto:%s\">%s</a></font></td>\n",
 					$css_switcher->getFullClass(), $db->f("Email"), $db->f("Email"));
 			else
 				printf("<td%salign=\"center\"><font size=\"-1\">&nbsp;</font></td>\n",
