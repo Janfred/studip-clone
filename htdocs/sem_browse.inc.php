@@ -156,8 +156,9 @@ if (($sem_browse_data["cmd"]=="xts"))
 		for ($i; $i <= sizeof($SEMESTER); $i++)
 			{
 			echo "<option";			
-			if (($sem_browse_data["s_sem"]==$SEMESTER[$i]["name"]) || ((!$sem_browse_data["s_sem"]) && ((($SEMESTER[$i]["name"] == $SEM_NAME_NEXT) && ($VORLES_ENDE < time())) ||  (($SEMESTER[$i]["name"] == $SEM_NAME) && ($SEM_BEGINN < time())))))
-				echo" selected ";
+			if (($sem_browse_data["s_sem"]==$SEMESTER[$i]["name"]) || 
+				((!$sem_browse_data["s_sem"]) && ((($SEMESTER[$i]["name"] == $SEM_NAME_NEXT) && ($VORLES_ENDE < time())) ||  (($SEMESTER[$i]["name"] == $SEM_NAME) && ($VORLES_ENDE > time())))))
+				echo" selected";
 			echo ">", $SEMESTER[$i]["name"], "</option>";
 			}
 	if ($sem_browse_data["s_sem"]=="alle")
