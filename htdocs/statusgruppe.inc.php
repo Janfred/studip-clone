@@ -100,6 +100,7 @@ function MovePersonStatusgruppe ($range_id, $AktualMembers="", $InstitutMembers=
 		while (list($key, $val) = each ($HTTP_POST_VARS)) {
 			$statusgruppe_id = substr($key, 0, -2);
 		}
+		echo $statusgruppe_id;
 		$db=new DB_Seminar;
 		$db2=new DB_Seminar;
 		$mkdate = time();
