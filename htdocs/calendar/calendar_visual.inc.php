@@ -512,7 +512,7 @@ function createWeekTable ($week_obj, $start = 6, $end = 21, $step = 3600,
 	
 	for ($i = 0; $i < $week_obj->getType(); $i++)
 		$tab_arr[$i] = createDayTable($week_obj->wdays[$i], $start, $end, $step, FALSE,
-												FALSE, $link_edit, $length, 20, 4, 1);
+												FALSE, $link_edit, $length, 20, 4, 1, 'small');
 		
 	// weekday and date as title for each column
 	for ($i = 0; $i < $week_obj->getType(); $i++) {
