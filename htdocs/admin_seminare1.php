@@ -241,7 +241,7 @@ if ($s_send) {
     if ($my_perms != "tutor")
 	$query .="Institut_id='$Institut', ";
     $query .= "Name='$Name', Untertitel='$Untertitel',
-			status='$Status', Beschreibung='$Beschreibung',  Ort='$Ort',
+			status='$Status', Beschreibung='$Beschreibung', 
 			Sonstiges='$Sonstiges', art='$art', teilnehmer='$teilnehmer', 
 			vorrausetzungen='$vorrausetzungen', lernorga='$lernorga',
 			leistungsnachweis='$leistungsnachweis', ects='$ects', admission_turnout='$turnout'
@@ -448,11 +448,7 @@ if (($s_id) && (auth_check())) {
 				<td class="<? echo $cssSw->getClass() ?>"  align=left colspan=2>&nbsp; <input type="int" name="turnout" size=6 maxlength=4 value="<?php echo $db->f("admission_turnout") ?>"></td>
 			</tr>
 			<tr>
-				<td class="<? echo $cssSw->getClass() ?>" align=right>Raum &nbsp;</td>
-				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <input type="text" name="Ort" size=20 maxlength=254 value="<?php echo htmlReady($db->f("Ort")) ?>"></td>
-			</tr>
-			<tr>
-				<td class="<? echo $cssSw->getClass() ?>" align=right>Beschreibung &nbsp;</td>
+				<td class="<? echo $cssSw->getClass() ?>" align=right>Beschreibung</td>
 				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <textarea name="Beschreibung" cols=58 rows=6><?php echo htmlReady($db->f("Beschreibung")) ?></textarea></td>
 			</tr>			
 			<tr>
