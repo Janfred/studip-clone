@@ -444,7 +444,6 @@ if (isset($details)) {
 	<tr><td class="blank" colspan=2>&nbsp;</td></tr>
 
 	<?
-	parse_msg($msg);
 	parse_msg($UserManagement->msg);
 	?>
 
@@ -455,7 +454,7 @@ if (isset($details)) {
 	} else {
 		echo "<p>&nbsp;" . _("Die Standard Authentifizierung ist ausgeschaltet. Das Anlegen von neuen Benutzern ist nicht möglich!") . "</p>";
 	}
-	unset($msg);
+
 	include ("pers_browse.inc.php");
 	print "<br>\n";
 	parse_msg($msg);

@@ -413,7 +413,7 @@ class UserManagement {
 			return FALSE;
 		}
 		
-		if ($ILIAS_CONNECT_ENABLE) {
+		if ($GLOBALS['$ILIAS_CONNECT_ENABLE']) {
 			$this_ilias_id = get_connected_user_id($this->user_data['auth_user_md5.user_id']);
 			if ($this_ilias_id) 
 				edit_ilias_user($this_ilias_id, $this->user_data['auth_user_md5.username'], $this->user_data['user_info.geschlecht'], $this->user_data['auth_user_md5.Vorname'], $this->user_data['auth_user_md5.Nachname'], $this->user_data['user_info.title_front'], "Stud.IP", $this->user_data['auth_user_md5.Email'], $this->user_data['auth_user_md5.perms'], $this->user_data['user_info.preferred_language']);
@@ -755,7 +755,7 @@ class UserManagement {
 		}
 
 		// delete ILIAS-Account (if it was automatically generated)
-		if ($ILIAS_CONNECT_ENABLE) {
+		if ($GLOBALS['$ILIAS_CONNECT_ENABLE']) {
 			$this_ilias_id = get_connected_user_id($this->user_data['auth_user_md5.user_id']);
 			if (($this_ilias_id) AND (is_created_user($this->user_data['auth_user_md5.user_id'])))
 				delete_ilias_user($this_ilias_id);
