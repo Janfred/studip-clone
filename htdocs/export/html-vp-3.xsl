@@ -4,7 +4,8 @@
 	<xsl:template match="/">
 	<html>
 		<body>
-			<xsl:for-each select="studip/institut">
+		<xsl:for-each select="studip">
+			<xsl:for-each select="institut">
 				<h1><xsl:choose>
 	<xsl:when test="type"><xsl:value-of select="type"/></xsl:when>
 	<xsl:otherwise>Einrichtung</xsl:otherwise>
@@ -132,7 +133,7 @@
 				</xsl:if>
 				<xsl:if test="personen">
 					<table width="100%" cellpadding="5" cellspacing="2">
-						<tr colspan="5">
+						<tr colspan="3">
 							<td>
 								<h2>MitarbeiterInnen</h2>
 							</td>
@@ -155,16 +156,6 @@
 								</td>
 								<td bgcolor="#006699">
 									<b>
-										<font color="#FFFFFF">Raum</font>
-									</b>
-								</td>
-								<td bgcolor="#006699">
-									<b>
-										<font color="#FFFFFF">Sprechzeiten</font>
-									</b>
-								</td>
-								<td bgcolor="#006699">
-									<b>
 										<font color="#FFFFFF">E-Mail</font>
 									</b>
 								</td>
@@ -172,8 +163,8 @@
 						<xsl:choose>
 							<xsl:when test="personen/gruppe">
 								<xsl:for-each select="personen/gruppe">
-									<tr bgcolor="#8800BB">
-										<td colspan="5">
+									<tr bgcolor="#006699">
+										<td colspan="3">
 											<font color="#FFFFFF">
 												<b>
 													<xsl:value-of select="@key"/>
@@ -195,6 +186,8 @@
 					<br/>
 					<br/>
 				</xsl:for-each>
+				<font size="-1">Generiert von Stud.IP Version <xsl:value-of select="@version"/></font>
+			</xsl:for-each>
 			</body>
 		</html>
 	</xsl:template>
@@ -219,18 +212,6 @@
 			<td bgcolor="#EEEEEE">
 				<xsl:if test="telefon">
 					<xsl:value-of select="telefon"/>
-				</xsl:if>
-				<br/>
-			</td>
-			<td bgcolor="#EEEEEE">
-				<xsl:if test="raum">
-					<xsl:value-of select="raum"/>
-				</xsl:if>
-				<br/>
-			</td>
-			<td bgcolor="#EEEEEE">
-				<xsl:if test="sprechzeiten">
-					<xsl:value-of select="sprechzeiten"/>
 				</xsl:if>
 				<br/>
 			</td>

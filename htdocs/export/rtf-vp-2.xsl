@@ -5,7 +5,8 @@
 			<xsl:text>{\rtf1\ansi\ansicpg1252\deff0\deflang1031{\fonttbl{\f0\fnil\fcharset0 Times New Roman;}}
 \viewkind4\uc1\pard\par\</xsl:text>
 
-		<xsl:for-each select="studip/institut">
+		<xsl:for-each select="studip">
+		<xsl:for-each select="institut">
 			<xsl:text>
 \fs36 </xsl:text><xsl:choose>
 	<xsl:when test="type"><xsl:value-of select="type"/></xsl:when>
@@ -116,6 +117,8 @@
 			</xsl:if>
 		<xsl:text>
 \page</xsl:text>
+		</xsl:for-each>
+\par\fs36 Generiert von Stud.IP Version <xsl:value-of select="@version"/>
 		</xsl:for-each>
 		<xsl:text> }</xsl:text>
 	</xsl:template>

@@ -2,7 +2,8 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format">
 	<xsl:output method="text" encoding="iso-8859-1"/>
 	<xsl:template match="/">
-	<xsl:for-each select="studip/institut">
+	<xsl:for-each select="studip">
+	<xsl:for-each select="institut">
 -----------------------------------------------------------------		
 <xsl:choose>
 	<xsl:when test="type"><xsl:value-of select="type"/></xsl:when>
@@ -82,6 +83,9 @@
 						</xsl:choose>
 					</xsl:if>
 				</xsl:for-each>
+				
+				Generiert von Stud.IP Version <xsl:value-of select="@version"/>
+			</xsl:for-each>
 	</xsl:template>
 
 <xsl:template name="showperson">

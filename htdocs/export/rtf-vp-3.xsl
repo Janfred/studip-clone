@@ -33,9 +33,7 @@
 			</xsl:if>
 <xsl:text>\par\fs56 </xsl:text><xsl:value-of select="@zeitraum"/>
 <xsl:text>\fs24\par\pard\page</xsl:text>
-		</xsl:for-each>
-
-		<xsl:for-each select="studip/institut">
+		<xsl:for-each select="institut">
 			<xsl:text>
 \fs36 </xsl:text><xsl:choose>
 	<xsl:when test="type"><xsl:value-of select="type"/></xsl:when>
@@ -138,8 +136,11 @@
 		<xsl:text>
 \page</xsl:text>
 		</xsl:for-each>
+\par\fs36 Generiert von Stud.IP Version <xsl:value-of select="@version"/>
+		</xsl:for-each>
 		<xsl:text> }</xsl:text>
 	</xsl:template>
+
 	<xsl:template name="showperson">
 		<xsl:for-each select="person">
 			<xsl:text>

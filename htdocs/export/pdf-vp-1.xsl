@@ -33,6 +33,9 @@ MitarbeiterInnen
 						<fo:block text-align="center" font-family="Helvetica" font-size="18pt">
 							<xsl:value-of select="@uni"/>
 						</fo:block>
+						<fo:block text-align="right" font-family="Helvetica" font-size="10pt">
+							Generiert von Stud.IP Version <xsl:value-of select="@version"/>
+						</fo:block>
 					</xsl:for-each>
 				</fo:flow>
 			</fo:page-sequence>

@@ -4,7 +4,8 @@
 	<xsl:template match="/">
 	<html>
 		<body>
-			<xsl:for-each select="studip/institut">
+		<xsl:for-each select="studip">
+			<xsl:for-each select="institut">
 				<h1><xsl:choose>
 	<xsl:when test="type"><xsl:value-of select="type"/></xsl:when>
 	<xsl:otherwise>Einrichtung</xsl:otherwise>
@@ -168,6 +169,8 @@
 					<br/>
 					<br/>
 				</xsl:for-each>
+				<font size="-1">Generiert von Stud.IP Version <xsl:value-of select="@version"/></font>	
+			</xsl:for-each>
 			</body>
 		</html>
 	</xsl:template>

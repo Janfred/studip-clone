@@ -68,6 +68,7 @@
 					<br/>
 					<br/>
 				</xsl:for-each>
+				<font size="-1">Generiert von Stud.IP Version <xsl:value-of select="@version"/></font>
 			</xsl:for-each>
 			</body>
 		</html>
