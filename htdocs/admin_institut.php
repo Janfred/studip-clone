@@ -39,7 +39,8 @@ require_once("$ABSOLUTE_PATH_STUDIP/datei.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
 require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/Modules.class.php");
-require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/DataFields.class.php"); 
+require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/DataFields.class.php");
+require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/StudipLitList.class.php");
 
 if ($RESOURCES_ENABLE) {
 	include_once($RELATIVE_PATH_RESOURCES."/lib/DeleteResourcesUser.class.php");
@@ -183,16 +184,23 @@ while ( is_array($HTTP_POST_VARS)
 		$query = "DELETE FROM seminar_inst WHERE Institut_id='$i_id'";
 		$db->query($query);
 		if (($db_ar = $db->affected_rows()) > 0) {
-			$msg.="msg§" . sprintf(_("%s Beteiligungen an Veranstaltungen gel&ouml;scht"), $db_ar) . ".§";
+			$msg.="msg§" . sprintf(_("%s Beteiligungen an Veranstaltungen gel&ouml;scht"), $db_ar) . "§";
 		}
 	
-		// delete literatur in literatur
-		$query = "DELETE FROM literatur WHERE range_id='$i_id'";
+		
+		// delete literatur 
+		$del_lit = StudipLitList::DeleteListsByRange($i_id);
+		if ($del_lit) {
+			$msg.="msg§" . sprintf(_("%s Literaturlisten gel&ouml;scht."),$del_lit['list'])  . "§";
+		}
+		
+		// SCM löschen
+		$query = "DELETE FROM scm where range_id='$i_id'";
 		$db->query($query);
 		if (($db_ar = $db->affected_rows()) > 0) {
-			$msg.="msg§" . _("Literatur/Links gel&ouml;scht.") . "§";
+			$msg .= "msg§" . _("Freie Seite der Einrichtung gel&ouml;scht") . "§";
 		}
-	
+		
 		// delete news-links
 		$query = "DELETE FROM news_range where range_id='$i_id'";
 		$db->query($query);

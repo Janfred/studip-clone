@@ -32,6 +32,7 @@ require_once($ABSOLUTE_PATH_STUDIP . "functions.php");
 require_once($ABSOLUTE_PATH_STUDIP . "visual.inc.php");
 require_once($ABSOLUTE_PATH_STUDIP . "statusgruppe.inc.php"); //Enthaelt Funktionen fuer Statusgruppen
 require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/DataFields.class.php"); //Enthaelt Funktionen fuer Statusgruppen
+require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/StudipLitList.class.php");
 
 if ($RESOURCES_ENABLE) {
 	include_once ($RELATIVE_PATH_RESOURCES . "/lib/DeleteResourcesUser.class.php");
@@ -162,12 +163,18 @@ if (is_array($archiv_sem)) {
 							$liste .= "<li>" . sprintf(_("%s Dokumente und Ordner archiviert."), $db_ar) . "</li>";
 						} 
 						
-						// Literatur zu diesem Seminar löschen
-						$query = "DELETE FROM literatur where range_id='$s_id'";
+						// Freie Seite zu diesem Seminar löschen
+						$query = "DELETE FROM scm where range_id='$s_id'";
 						$db->query($query);
 						if (($db_ar = $db->affected_rows()) > 0) {
-							$liste .= "<li>" . _("Literatur und Links der Veranstaltung archiviert.") . "</li>";
+							$liste .= "<li>" . _("Freie Seite der Veranstaltung archiviert.") . "</li>";
 						} 
+						
+						// delete literatur 
+						$del_lit = StudipLitList::DeleteListsByRange($s_id);
+						if ($del_lit) {
+							$liste .= "<li>" . sprintf(_("%s Literaturlisten archiviert."),$del_lit['list'])  . "</li>";
+						}
 						
 						// Alle News-Verweise auf dieses Seminar löschen
 						$query = "DELETE FROM news_range where range_id='$s_id'";

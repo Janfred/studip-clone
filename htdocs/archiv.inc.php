@@ -26,6 +26,7 @@ require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/language.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/DataFields.class.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/Modules.class.php");
+require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/StudipLitList.class.php");
 
 
 
@@ -271,34 +272,38 @@ function dump_sem($sem_id) {
 		}
 	}
 	
-	//Literatur & Links
-	if ($Modules["literature"]) {	
-		$db->query("SELECT * FROM literatur WHERE range_id='$sem_id'");
+	//SCM
+	if ($Modules["scm"]) {	
+		$db->query("SELECT * FROM scm WHERE range_id='$sem_id'");
 		if ($db->num_rows()) {
 		  	$db->next_record();
-		  	$literatur=$db->f("literatur");
-		  	$literatur=FixLinks(htmlReady($literatur)); // /newline fixen
-		  	$links=$db->f("links");
-		  	$links=FixLinks(htmlReady($links)); // /newline fixen
+		  	$content = $db->f("content");
+		  	$content = FixLinks(format($content)); // /newline fixen
+		  	$tab_name = $db->f("tab_name");
+		  	$tab_name = htmlReady($tab_name); // /newline fixen
 		     
-		  	IF(!empty($literatur)) {
+		  	if(!empty($content)) {
 		 		$dump.="<br>";	  
 		  		$dump.="<table width=100% border=1 cellpadding=2 cellspacing=0>";
 				$dump .= " <tr><td align=left class=\"topic\">";
-				$dump .= "<H2 class=\"topic\">&nbsp;" . _("Literatur:") . "</H2>";
+				$dump .= "<H2 class=\"topic\">&nbsp;" . $tab_name . "</H2>";
 				$dump.= "</td></tr>\n";
-				$dump.="<tr><td align=\"left\" width=\"100%\"><br>".$literatur."<br></td></tr>\n";
+				$dump.="<tr><td align=\"left\" width=\"100%\"><br>". $content ."<br></td></tr>\n";
 				$dump .= "</table>\n";
 			}
-			IF(!empty($links)) {
-		  		$dump.="<br>";	  
-			    	$dump.="<table width=100% border=1 cellpadding=2 cellspacing=0>";
-				$dump .= " <tr><td align=left class=\"topic\">";
-				$dump .= "<H2 class=\"topic\">&nbsp;" . _("Links:") . "</H2>";
-				$dump.= "</td></tr>\n";
-				$dump.="<tr><td align=\"left\" width=\"100%\"><br>".$links."<br></td></tr>\n";
-				$dump .= "</table>\n";
-			}
+		}
+	}
+	
+	if ($Modules['literature']){
+		$lit = StudipLitList::GetFormattedListsByRange($sem_id, false);
+		if ($lit){
+			$dump.="<br>";	  
+		  	$dump.="<table width=100% border=1 cellpadding=2 cellspacing=0>";
+			$dump .= " <tr><td align=left class=\"topic\">";
+			$dump .= "<H2 class=\"topic\">&nbsp;" . _("Literaturlisten") . "</H2>";
+			$dump.= "</td></tr>\n";
+			$dump.="<tr><td align=\"left\" width=\"100%\"><br>". format($lit) ."<br></td></tr>\n";
+			$dump .= "</table>\n";
 		}
 	}
 	
