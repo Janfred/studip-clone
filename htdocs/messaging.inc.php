@@ -161,23 +161,6 @@ class messaging {
 		}
 	}
 
-	//make a string RFC-conform (for use in E-Mail-Subject)
-	function rfc_string($title) {
-		$n_title = "";
-		for ($i = 0; $i < strlen($title); $i++) {
-			if ($title[$i] == chr(228)) $n_title .= "ae";
-			elseif ($title[$i] == chr(246)) $n_title .= "oe";
-			elseif ($title[$i] == chr(252)) $n_title .= "ue";
-			elseif ($title[$i] == chr(128)) $n_title .= "Euro";
-			elseif (ord ($title[$i]) > 127) {
-				$n_title .= "_";
-			} else {
-				$n_title .= $title[$i];
-			}
-		}
-		return $n_title;
-	}
-
 	function user_wants_email($userid) {
 
 		$db = new DB_Seminar("SELECT email_forward FROM user_info a, auth_user_md5 b WHERE a.user_id = b.user_id AND (b.username = '$userid' OR b.user_id = '$userid')");
@@ -209,7 +192,7 @@ class messaging {
 		$db4 = new DB_Seminar("SELECT user_id, Email FROM auth_user_md5 WHERE username = '$rec_uname' OR user_id = '$rec_uname';");
 		$db4->next_record();
 		$to = $db4->f("Email");				
-		$rec_fullname = $this->rfc_string(get_fullname($db4->f("user_id")));
+		$rec_fullname = get_fullname($db4->f("user_id"));
 			
 		$smtp = new studip_smtp_class;
 			
@@ -218,16 +201,16 @@ class messaging {
 		$title = _("[Stud.IP] Eine Nachricht von ");
 				
 		if ($snd_user_id != "____%system%____") {
-			$snd_fullname = $this->rfc_string(get_fullname($snd_user_id));
+			$snd_fullname = get_fullname($snd_user_id);
 			$db4->query("SELECT Email FROM auth_user_md5 WHERE user_id = '$user->id'");
 			$db4->next_record();
-			$reply_to = "\"".$snd_fullname."\" <".$db4->f("Email").">";
+			$reply_to = "\"".$smtp->QuotedPrintableEncode($snd_fullname,1)."\" <".$db4->f("Email").">";
 		} else {
 			$snd_fullname = "Stud.IP";
 			$reply_to = $GLOBALS["UNI_CONTACT"];
 		}
 
-		$title = $this->rfc_string($title . $snd_fullname);
+		$title = $smtp->QuotedPrintableEncode($title . $snd_fullname, 1);
 		// Generate "Header" of the message
 		$mailmessage = _("Von: ")."$snd_fullname\n";
 		$mailmessage .= _("An: ")."$rec_fullname\n";
@@ -243,7 +226,7 @@ class messaging {
 		restoreLanguage();
 				
 		// Now, let us send the message
-		$smtp->SendMessage($smtp->env_from, array($to), array("From: ".$smtp->from, "To: \"$rec_fullname\" <$to>", "Reply-To: $reply_to", "Subject: $title", "Content-Transfer-Encoding: 8bit"), $mailmessage);
+		$smtp->SendMessage($smtp->env_from, array($to), array("From: ".$smtp->from, "To: \"".$smtp->QuotedPrintableEncode($rec_fullname,1)."\" <$to>", "Reply-To: $reply_to", "Subject: $title"), $mailmessage);
 
 	}
 
@@ -745,7 +728,7 @@ class messaging {
 			if (is_array($active_chats)){
 				$clause = " AND chat_id NOT IN('" . join("','",$active_chats) . "')";
 			}
-			$this->db->query("SELECT message.message_id FROM message_user LEFT JOIN message USING (message_id) WHERE message_user.user_id = '$user_id' AND snd_rec = 'rec' AND chat_id IS NOT NULL" . $clause);
+			$this->db->query("SELECT message.message_id FROM message  LEFT JOIN message_user USING (message_id) WHERE message_user.user_id = '$user_id' AND snd_rec = 'rec' AND chat_id IS NOT NULL" . $clause);
 			
 			while ($this->db->next_record()) {
 				$this->db2->query ("DELETE FROM message_user WHERE message_id ='".$this->db->f("message_id")."' ");
@@ -770,7 +753,7 @@ class messaging {
 			if (!$chat_uniqid){
 				return false;	//no active chat
 			}
-			$this->db->query("SELECT message.message_id FROM message_user LEFT JOIN message USING (message_id) WHERE message_user.user_id = '$user_id' AND snd_rec = 'rec' AND chat_id='$chat_uniqid' LIMIT 1");
+			$this->db->query("SELECT message.message_id FROM message  LEFT JOIN message_user USING (message_id) WHERE message_user.user_id = '$user_id' AND snd_rec = 'rec' AND chat_id='$chat_uniqid' LIMIT 1");
 			return $this->db->next_record();
 		} else {
 			return false;
@@ -788,7 +771,7 @@ class messaging {
 				return false;	//no active chat
 			}
 			$ret = false;
-			$this->db->query("SELECT DISTINCT chat_id FROM message_user LEFT JOIN message USING (message_id) WHERE user_id='$user_id' AND snd_rec = 'rec' AND chat_id IN('" . join("','",$chat_uniqids)."')");
+			$this->db->query("SELECT DISTINCT chat_id FROM message  LEFT JOIN message_user USING (message_id) WHERE user_id='$user_id' AND snd_rec = 'rec' AND chat_id IN('" . join("','",$chat_uniqids)."')");
 			while ($this->db->next_record()){
 				$ret[$this->db->f("chat_id")] = true;
 			}
