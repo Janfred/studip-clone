@@ -217,7 +217,7 @@ class Object {
 		       "line" => $errline,
 		       "type" => $errtype)
 		);
-    if ($errtype = ERROR_CRITICAL) {
+    if ($errtype == ERROR_CRITICAL) {
 	 @mail ($this->getAuthorEmail (),
 		"Critical error in Stud.IP",
 		"Hello ".$this->getAuthorName ()."\n\n".
