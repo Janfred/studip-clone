@@ -832,7 +832,7 @@ function smile ($text = "", $extern = FALSE) {
 	$replaces = array();
 	reset($SMILE_SHORT);
 	while (list($key,$value) = each($SMILE_SHORT)) {
-		$patterns[] = "'(\>|^|\s)" . preg_quote($key) . "($|\<|\s)'m";
+		$patterns[] = "'(\>|^|\s)" . preg_quote($key) . "(?=$|\<|\s)'m";
 		if (!$extern) {
 			$replaces[] = "\\1<a href=\"{$CANONICAL_RELATIVE_PATH_STUDIP}show_smiley.php\" target=\"_blank\">"
 					. "<img alt=\"$value\" title=\"$value\" border=\"0\" src=\""
