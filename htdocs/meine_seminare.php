@@ -303,18 +303,18 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 	// last visited-field
 		IF ($view=="ext") {
 			IF ($loginfilenow[$semid]==0) {
-				echo "<td class=".$cssSw->getClass()."  align=\"center\" nowrap>n.b.</td>";
+				echo "<td class=".$cssSw->getClass()."  align=\"center\" nowrap><font size=-1>n.b.</font></td>";
 			}
 			ELSE {
-			 	echo "<td class=\"".$cssSw->getClass()."\" align=\"center\" nowrap>", date("d.m.", $loginfilenow[$semid]),"</td>";
+			 	echo "<td class=\"".$cssSw->getClass()."\" align=\"center\" nowrap><font size=-1>", date("d.m.", $loginfilenow[$semid]),"</font></td>";
 			}
 	// Status-field
-			echo "<td class=\"".$cssSw->getClass()."\"  align=\"center\" nowrap>". $values["status"]."&nbsp;</td>";
+			echo "<td class=\"".$cssSw->getClass()."\"  align=\"center\" nowrap><font size=-1>". $values["status"]."&nbsp;</font></td>";
 	// Teilnehmer
 			$db2=new DB_Seminar;
 			$db2->query ("SELECT count(*) as teilnehmer FROM seminar_user WHERE Seminar_id ='$semid'");
 	 		while($db2->next_record()) 
-	 			echo "<td class=\"".$cssSw->getClass()."\"  nowrap align=\"right\">". $db2->f("teilnehmer")."&nbsp;</td>";
+	 			echo "<td class=\"".$cssSw->getClass()."\"  nowrap align=\"right\"><font size=-1>". $db2->f("teilnehmer")."&nbsp;</font></td>";
 		}
 
 
