@@ -370,8 +370,23 @@ if (substr($path_file,0,6) != "ftp://") {
 }
 */
 
+// Check bei verlinkten Dateien ob sie erreichbar sind
+
+if ($type ==6) {
+	$link_data = parse_link($path_file);
+	if (!($link_data["HTTP/1.0 200 OK"] || $link_data["HTTP/1.1 200 OK"])) {
+		include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
+		include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+		$add_msg= sprintf(_("%sZur&uuml;ck%s zum Downloadbereich"), "<a href=\"archiv.php?back=TRUE\"><b>&nbsp;", "</b></a>") . "<br />&nbsp;" ;
+		parse_window("error§" . _("Diese Datei wird von einem externen Server geladen und ist dort momentan nicht erreichbar!"), "§", _("Download nicht m&ouml;glich"), $add_msg);
+		page_close();
+		echo "</body>";
+		die;
+	}
+}
 
 //Datei verschicken
+
 if ($type != 5 && $type != 6){
 	$filesize = filesize($path_file);
 } else {
