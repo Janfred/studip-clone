@@ -330,7 +330,7 @@ class StudipLitList extends TreeAbstract {
 			for ($i = 0; $i < count($lists); ++$i){
 				$ret .= "<div align=\"left\"><b><u>" . htmlReady($tree->tree_data[$lists[$i]]['name']) . "</u></b></div>";
 				if ($copy_link){
-					$ret . "<div align=\"right\" style=\"font-size:10pt\"><a href=\"admin_lit_list.php?cmd=CopyUserList&_range_id=self&user_list={$lists[$i]}#anchor\"><img src=\"pictures/link_intern.gif\" border=\"0\">"
+					$ret .= "<div align=\"right\" style=\"font-size:10pt\"><a href=\"admin_lit_list.php?cmd=CopyUserList&_range_id=self&user_list={$lists[$i]}#anchor\"><img src=\"pictures/link_intern.gif\" border=\"0\">"
 						. "&nbsp;Literaturliste kopieren</a></div>";
 				}
 				$ret .= "<span style=\"font-size:10pt\">";
