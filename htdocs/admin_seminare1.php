@@ -150,7 +150,7 @@ if ($delete_tut) {
 	if (auth_check()) {
 		$db2->query ("DELETE FROM seminar_user WHERE Seminar_id = '$s_id' AND user_id ='".get_userid($delete_tut)."' ");
 		if ($db2->affected_rows())
-			$msg .= "msg§Der Nutzer <b>".htmlReady(get_fullname_from_uname($delete_doz))."</b> wurde aus der Veranstaltung gel&ouml;scht.§";
+			$msg .= "msg§Der Nutzer <b>".htmlReady(get_fullname_from_uname($delete_tut))."</b> wurde aus der Veranstaltung gel&ouml;scht.§";
 
 		$db2->query ("SELECT user_id FROM seminar_user WHERE Seminar_id = '$s_id' AND status = 'dozent' ");
 		if ($db2->nf() == 0)
@@ -198,8 +198,8 @@ if ($s_send) {
 		}
 	}
     
-    //we have to select at leat one Dozent!
-    if ($perm->have_perm("admin")) {
+    //we have to select at least one Dozent!
+    if (($perm->have_perm("admin")) && (!$add_doz)) {
 	$db2->query ("SELECT user_id FROM seminar_user WHERE Seminar_id = '$s_id' AND status = 'dozent' ");
 	if ($db2->nf() == 0) {
 		$msg .= sprintf ("error§Btte geben Sie wenigstens <b>einen</b> %s an.§", ($SEM_CLASS[$SEM_TYPE[$Status]["class"]]["workgroup_mode"]) ? "Leiter" : "Dozenten");
@@ -267,6 +267,7 @@ if ($s_send) {
 		else								//User noch nicht da
 			$query = "INSERT INTO seminar_user values('$s_id','$add_doz_id',\"dozent\",'$group', '', '".time()."')";
 		$db3->query($query);					//Dozent eintragen
+		$user_added=TRUE;		
 	}
 	
 	//a Tutor was added
@@ -284,6 +285,7 @@ if ($s_send) {
 			$query = "INSERT INTO seminar_user values('$s_id','$add_tut_id',\"tutor\",'$group', '', '".time()."')";
 		if ($query) {
 			$db3->query($query);				//Tutor eintragen
+			$user_added=TRUE;
 			$query = "DELETE FROM admission_seminar_user WHERE seminar_id = '$s_id' AND user_id = '$add_tut_id' ";
 			$db3->query($query);				//delete possible entrys in wainting list
 			if ($db3->affected_rows())
@@ -492,6 +494,10 @@ if (($s_id) && (auth_check())) {
 				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" align="center" colspan=3>
 					<input <? if ($SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["bereiche"]) echo "onClick=\"checkdata('edit'); return false;\" "; ?> type="image" <? echo makeButton ("uebernehmen", "src") ?> border=0 name="s_edit" value=" Ver&auml;ndern ">
 				<input type="hidden" name="s_send" value="TRUE">
+				<?
+				if (($user_added) || ($reset_search_x) || ($search_exp_tut) || ($search_exp_doz))
+					print "<a name=\"anker\"></a>";
+				?>
 				</td>
 			</tr>
 			<tr <?$cssSw->switchClass() ?>>     <!-- Dozenten und Tutoren -->				
@@ -548,12 +554,13 @@ if (($s_id) && (auth_check())) {
 							printf ("&nbsp; <a href=\"%s?delete_doz=%s&s_id=%s\"><img src=\"./pictures/trash.gif\" border=\"0\"></a>&nbsp; <font size=\"-1\"><b>%s, %s (%s)&nbsp; &nbsp; <br />", $PHP_SELF, $db4->f("username"), $s_id, htmlReady(get_nachname($db4->f("user_id"))), htmlReady(get_vorname($db4->f("user_id"))), $db4->f("username"));
 						}
 					} else {
-						printf ("<font size=\"-1\">&nbsp;  Keine %s gew&auml;hlt.</font><br >", $SEM_CLASS[$db->f("status")]["workgroup_mode"] ? "LeiterIn" : "DozentIn");
+						printf ("<font size=\"-1\">&nbsp;  Keine %s gew&auml;hlt.</font><br >", ($SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["workgroup_mode"]) ? "LeiterIn" : "DozentIn");
 					}
 					?>
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" align="left" valign="top">
 					<?
+					$no_doz_found=TRUE;
 					if (($search_exp_doz) && ($search_doz_x)) {
 						if ((!$perm->have_perm("root")) && ($SEM_CLASS[$sem_create_data["sem_class"]]["only_inst_user"])) {
 							$clause="AND Institut_id IN ('".$sem_create_data["sem_inst_id"]."'";
@@ -563,12 +570,12 @@ if (($s_id) && (auth_check())) {
 							$clause.=")";
 						} else
 							$clause='';
-						if ($SEM_CLASS[$sem_create_data["sem_class"]]["only_inst_user"])									
+						if($SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["only_inst_user"]) 								
 							$db4->query ("SELECT username, Vorname, Nachname FROM user_inst LEFT JOIN auth_user_md5 USING (user_id) WHERE inst_perms = 'dozent' $clause AND (username LIKE '%$search_exp_doz%' OR Vorname LIKE '%$search_exp_doz%' OR Nachname LIKE '%$search_exp_doz%') ORDER BY Nachname");
 						else
 							$db4->query ("SELECT username, Vorname, Nachname FROM auth_user_md5  WHERE perms = 'dozent' AND (username LIKE '%$search_exp_doz%' OR Vorname LIKE '%$search_exp_doz%' OR Nachname LIKE '%$search_exp_doz%') ORDER BY Nachname");								
 						if ($db4->num_rows()) {
-							print "<a name=\"anker\"></a>";
+							$no_doz_found=FALSE;
 							printf ("<font size=-1><b>%s</b> Nutzer gefunden:<br />", $db4->num_rows());
 							print "<input type=\"IMAGE\" src=\"./pictures/move_left.gif\" ".tooltip("Den Benutzer hinzufügen")." border=\"0\" name=\"add_doz\" />";
 							print "&nbsp; <select name=\"add_doz\">";
@@ -579,10 +586,10 @@ if (($s_id) && (auth_check())) {
 							print "<input type=\"IMAGE\" src=\"./pictures/rewind.gif\" ".tooltip("Neue Suche starten")." border=\"0\" name=\"reset_search\" />";									
 						}
 					}
-					else {
+					if ($no_doz_found) {
 						?>
 						<font size=-1>
-						<? printf ("%s %s", (($search_exp_doz) && (!$db4->num_rows())) ? "Keinen Nutzer gefunden. <a name=\"anker\"></a>" : "",   (!$search_exp_doz) ? (!$SEM_CLASS[$sem_create_data["sem_class"]]["workgroup_mode"]) ? "DozentIn hinzuf&uuml;gen" : "LeiterIn hinzuf&uuml;gen"  : "");?>
+						<? printf ("%s %s", (($search_exp_doz) && ($no_doz_found)) ? "Keinen Nutzer gefunden. <a name=\"anker\"></a>" : "",   (!$search_exp_doz) ? (!$SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["workgroup_mode"]) ? "DozentIn hinzuf&uuml;gen" : "LeiterIn hinzuf&uuml;gen"  : "");?>
 						</font><br />
 						<input type="TEXT" size="30" maxlength="255" name="search_exp_doz" />&nbsp; 
 						<input type="IMAGE" src="./pictures/suchen.gif" <? echo tooltip("Suche starten") ?> border="0" name="search_doz" /><br />
@@ -608,12 +615,13 @@ if (($s_id) && (auth_check())) {
 							printf ("&nbsp; <a href=\"%s?delete_tut=%s&s_id=%s\"><img src=\"./pictures/trash.gif\" border=\"0\"></a>&nbsp; <font size=\"-1\"><b>%s, %s (%s)&nbsp; &nbsp; <br />", $PHP_SELF, $db4->f("username"), $s_id, htmlReady(get_nachname($db4->f("user_id"))), htmlReady(get_vorname($db4->f("user_id"))), $db4->f("username"));
 						}
 					} else {
-						printf ("<font size=\"-1\">&nbsp;  %s gew&auml;hlt.</font><br >", $SEM_CLASS[$db->f("status")]["workgroup_mode"] ? "Kein Mitarbeiter" : "Keine TutorIn");
+						printf ("<font size=\"-1\">&nbsp;  %s gew&auml;hlt.</font><br >", ($SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["workgroup_mode"]) ? "Kein Mitarbeiter" : "Keine TutorIn");
 					}
 					?>
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" align="left" valign="top">
 					<?
+					$no_tut_found=TRUE;	
 					if (($search_exp_tut) && ($search_tut_x)) {
 						if ((!$perm->have_perm("root")) && ($SEM_CLASS[$sem_create_data["sem_class"]]["only_inst_user"])) {
 							$clause="AND Institut_id IN ('".$sem_create_data["sem_inst_id"]."'";
@@ -623,12 +631,12 @@ if (($s_id) && (auth_check())) {
 							$clause.=")";
 						} else
 							$clause='';
-						if ($SEM_CLASS[$sem_create_data["sem_class"]]["only_inst_user"])
+						if ($SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["only_inst_user"]) 
 							$db4->query ("SELECT username, Vorname, Nachname FROM user_inst LEFT JOIN auth_user_md5 USING (user_id) WHERE inst_perms IN ('tutor', 'dozent') $clause AND (username LIKE '%$search_exp_tut%' OR Vorname LIKE '%$search_exp_tut%' OR Nachname LIKE '%$search_exp_tut%') ORDER BY Nachname");
 						else
 							$db4->query ("SELECT username, Vorname, Nachname FROM auth_user_md5 WHERE perms IN ('tutor', 'dozent') AND (username LIKE '%$search_exp_tut%' OR Vorname LIKE '%$search_exp_tut%' OR Nachname LIKE '%$search_exp_tut%') ORDER BY Nachname");								
 						if ($db4->num_rows()) {
-							print "<a name=\"anker\"></a>";
+							$no_tut_found=FALSE;
 							printf ("<font size=-1><b>%s</b> Nutzer gefunden:<br />", $db4->num_rows());
 							print "<input type=\"IMAGE\" src=\"./pictures/move_left.gif\" ".tooltip("Den Benutzer hinzufügen")." border=\"0\" name=\"add_tut\" />";
 							print "&nbsp; <select name=\"add_tut\">";
@@ -639,10 +647,10 @@ if (($s_id) && (auth_check())) {
 							print "<input type=\"IMAGE\" src=\"./pictures/rewind.gif\" ".tooltip("neue Suche starten")." border=\"0\" name=\"reset_search\" />";									
 						}
 					}
-					else {
+					if ($no_tut_found) {
 						?>
 						<font size=-1>
-						<? printf ("%s %s", (($search_exp_tut) && (!$db4->num_rows())) ? "Keinen Nutzer gefunden.<a name=\"anker\"></a>" : "",   (!$search_exp_tut) ? (!$SEM_CLASS[$sem_create_data["sem_class"]]["workgroup_mode"]) ? "TutorIn hinzuf&uuml;gen" : "Mitglied hinzuf&uuml;gen"  : "");?>
+						<? printf ("%s %s", (($search_exp_tut) && ($no_tut_found)) ? "Keinen Nutzer gefunden.<a name=\"anker\"></a>" : "",   (!$search_exp_tut) ? (!$SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["workgroup_mode"]) ? "TutorIn hinzuf&uuml;gen" : "Mitglied hinzuf&uuml;gen"  : "");?>
 						</font><br />
 						<input type="TEXT" size="30" maxlength="255" name="search_exp_tut" />&nbsp; 
 						<input type="IMAGE" src="./pictures/suchen.gif" <? echo tooltip("Suche starten") ?> border="0" name="search_tut" /><br />
@@ -684,9 +692,9 @@ if (($s_id) && (auth_check())) {
 							$db4->query("SELECT name from faecher WHERE fach_id = '$fachtmp'");	
 							while ($db4->next_record()) 
 								{
-								ECHO "<option value = nix>==========================</option>";
-								ECHO "<option value = nix>==&nbsp;".htmlReady(my_substr($db4->f("name"),0,58))."</option>";
-								ECHO "<option value = nix>==========================</option>";
+								ECHO "<option style=\"color:red;\" value = \"nix\">------------------------------------------------------------</option>";
+								ECHO "<option style=\"color:red;\" value = \"nix\">".htmlReady(my_substr($db4->f("name"),0,60))."</option>";
+								ECHO "<option style=\"color:red;\" value = \"nix\">------------------------------------------------------------</option>";
 								}
 							}
 						$bereichtmp =	 $db3->f("bereich_id");
@@ -718,9 +726,9 @@ if (($s_id) && (auth_check())) {
 							$db4->query("SELECT name from faecher WHERE fach_id = '$fachtmp'");	
 							while ($db4->next_record()) 
 								{
-								ECHO "<option value = nix>------------------------------------------------------------</option>";
-								ECHO "<option value = nix>--&nbsp;".htmlReady(my_substr($db4->f("name"),0,60))."</option>";
-								ECHO "<option value = nix>------------------------------------------------------------</option>";
+								ECHO "<option style=\"color:red;\" value = \"nix\">------------------------------------------------------------</option>";
+								ECHO "<option style=\"color:red;\" value = \"nix\">".htmlReady(my_substr($db4->f("name"),0,60))."</option>";
+								ECHO "<option style=\"color:red;\" value = \"nix\">------------------------------------------------------------</option>";
 								}
 							}
 						$bereichtmp =	 $db3->f("bereich_id");
