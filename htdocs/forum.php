@@ -109,6 +109,7 @@ if ($view)
 if (!$forum["view"]) {
 	$view = $forum["themeview"];
 	$forum["view"] = $view;
+	echo "kein globaler View";
 }
 
 $view = $forum["view"];
