@@ -41,7 +41,7 @@ require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."
 class ExternModuleDownload extends ExternModule {
 
 	var $field_names = array();
-	var $data_fields = array("icon", "filename", "description", "mkdate", "size", "name");
+	var $data_fields = array("icon", "filename", "description", "mkdate", "filesize", "name");
 	var $registered_elements = array("Body", "TableHeader", "TableHeadrow",
 																	 "TableRow", "Link", "TableFooter");
 
