@@ -101,6 +101,44 @@ class ExternEdit {
 		return htmlentities($this->config->getValue($this->element_name, $attribute), ENT_QUOTES);
 	}
 	
+	function getEditFormContent ($attributes, $tag_headlines = "") {
+		$previous_tag = "";
+		
+		reset($attributes);
+		foreach ($attributes as $attribute) {
+			$attribute_part = explode("_", $attribute);
+			if (!$attribute_part[2] && $attribute_part[1]) {
+				$edit_function = "edit" . $attribute_part[1];
+			
+				if ($attribute_part[0] != $previous_tag) {
+					if ($previous_tag != "") {
+						$out .= $this->editContentTable($headline, $table);
+						$out .= $this->editBlankContent();
+						if ($tag_headlines == "")
+							$headline = sprintf(_("Angaben zum HTML-Tag &lt;%s&gt;"), $attribute_part[0]);
+						else
+							$headline = $tag_headlines[$attribute_part[0]];
+						$headline = $this->editHeadline($headline);
+						$table = "";
+					}
+					else {
+						if ($tag_headlines == "")
+							$headline = sprintf(_("Angaben zum HTML-Tag &lt;%s&gt;"), $attribute_part[0]);
+						else
+							$headline = $tag_headlines[$attribute_part[0]];
+						$headline = $this->editHeadline($headline);
+					}
+					
+					$previous_tag = $attribute_part[0];
+				}
+				$table .= $this->$edit_function($attribute);
+			}
+		}
+		$out .= $this->editContentTable($headline, $table);
+		
+		return $out;
+	}
+	
 	function editHeader () {
 		$out = "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" ";
 		$out .= "width=\"95%\" align=\"left\">\n";
@@ -147,28 +185,11 @@ class ExternEdit {
 		return $out;
 	}
 	
-	function editTagHeadline ($tag) {
-		$headline = "&nbsp; " . sprintf(_("Angaben zum HTML-Tag %s"), "&lt;$tag&gt;");
-		
-		$out = "<table class=\"blank\" width=\"100%\" cellpadding=\"0\" ";
-		$out .= "cellspacing=\"0\" border=\"0\">\n<tr><td class=\"" . $this->css->getHeaderClass();
-		$out .= "\" width=\"100%\"><font size=\"2\"><b>$headline</b></font>";
-		$out .= "</td></tr>\n</table>\n";
-		
-		$this->css->resetClass();
-		
-		return $out;
-	}
-	
 	function editElementHeadline ($element_real_name, $module_name, $config_id,
-			$open = TRUE, $anker = "") {
+			$open = TRUE) {
 			
-		$titel = sprintf(_("Angaben zum Element %s"), "&quot;$element_real_name&quot;");
 		$icon = "<img src=\"{$GLOBALS['CANONICAL_RELATIV_PATH_STUDIP']}pictures/";
 		$icon .= "txt-icon.gif\" border=\"0\">";
-		
-		if ($this->element_name == $anker)
-			$titel .= "<a name=\"anker\">&nbsp;</a>";
 		
 		if ($open) {
 			$link = $GLOBALS["PHP_SELF"] . "?com=close&mod=$module_name&edit=";
@@ -180,6 +201,11 @@ class ExternEdit {
 			$link .= $this->element_name . "&config_id=$config_id#anker";
 			$open = "close";
 		}
+		
+		$titel = sprintf(_("Angaben zum Element %s"), "&quot;$element_real_name&quot;");
+		$titel = "<a class=\"tree\" href=\"$link\">$titel</a>";
+		if ($this->element_name == $this->edit_element)
+			$titel .= "<a name=\"anker\">&nbsp;</a>";
 		
 		$out = "<tr><td class=\"blank\" width=\"100%\">\n";
 		$out .= "<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n";
@@ -197,7 +223,6 @@ class ExternEdit {
 		$out .= "<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n";
 		$out .= "<tr><td class=\"blank\" width=\"100%\">\n" . $header;
 		$out .= "</td></tr>\n</table>\n";
-	//	$out .= "<form action=\"{$GLOBALS['PHP_SELF']}j?com=store\" method=\"post\">\n";
 		$out .= "<table width=\"100%\" style=\"border-style:solid; border-width:1px; ";
 		$out .= "border-color:#000000;\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n";
 		$out .= $body . "</table>\n</td></tr>\n</table>\n";
