@@ -64,9 +64,9 @@ function get_my_inst_values(&$my_inst) {
 	 $db2->query ("SELECT range_id,chdate,user_id FROM literatur WHERE range_id IN ".$my_instids);
 	while($db2->next_record()) {
 	  if ($db2->f("chdate")>$loginfilenow[$db2->f("range_id")] AND $db2->f("user_id")!=$user->id){
-	  	$my_inst[$db2->f("range_id")]["neueliteratur"]=TRUE;
+		$my_inst[$db2->f("range_id")]["neueliteratur"]=TRUE;
 		$my_inst[$db2->f("range_id")]["literatur"]=TRUE;
-	    }
+		}
 	 else $my_inst[$db2->f("range_id")]["literatur"]=TRUE;
 	 }
 	 $db2->query ("SELECT range_id,count(*) as count FROM termine WHERE range_id IN ".$my_instids." GROUP BY range_id");
@@ -83,37 +83,38 @@ function get_my_inst_values(&$my_inst) {
 
 function print_institut_content($instid,$my_inst_values) {
   // Postings
-  IF ($my_inst_values["neuepostings"])  ECHO "<a href=\"institut_main.php?auswahl=$instid&redirect_to=forum.php&view=neue\">&nbsp; <img src='pictures/icon-posting2.gif' border=0 alt='".$my_inst_values["postings"]." Postings, ".$my_inst_values["neuepostings"]." Neue' title='".$my_inst_values["postings"]." Postings, ".$my_inst_values["neuepostings"]." Neue'></a>";
-  ELSEIF ($my_inst_values["postings"]) ECHO "<a href=\"institut_main.php?auswahl=$instid&redirect_to=forum.php\">&nbsp; <img src='pictures/icon-posting.gif' border=0 alt='".$my_inst_values["postings"]." Postings' title='".$my_inst_values["postings"]." Postings'></a>";
+  IF ($my_inst_values["neuepostings"])  ECHO "<a href=\"institut_main.php?auswahl=$instid&redirect_to=forum.php&view=neue\">&nbsp; <img src='pictures/icon-posting2.gif' border=0 ".tooltip($my_inst_values["postings"]."></a>";
+  ELSEIF ($my_inst_values["postings"]) ECHO "<a href=\"institut_main.php?auswahl=$instid&redirect_to=forum.php\">&nbsp; <img src='pictures/icon-posting.gif' border=0 ".tooltip($my_inst_values["postings"]." Postings")."></a>";
   ELSE ECHO "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
   //Dokumente
-  IF ($my_inst_values["neuedokumente"]) ECHO "&nbsp; <a href=\"institut_main.php?auswahl=$instid&redirect_to=folder.php&cmd=all\"><img src='pictures/icon-disc2.gif' border=0 alt='".$my_inst_values["dokumente"]." Dokumente, ".$my_inst_values["neuedokumente"]." neue' title='".$my_inst_values["dokumente"]." Dokumente, ".$my_inst_values["neuedokumente"]." neue'></a>";
-  ELSEIF ($my_inst_values["dokumente"]) ECHO "&nbsp; <a href=\"institut_main.php?auswahl=$instid&redirect_to=folder.php&cmd=tree\"><img src='pictures/icon-disc.gif' border=0 alt='".$my_inst_values["dokumente"]." Dokumente' title='".$my_inst_values["dokumente"]." Dokumente'></a>";
+  IF ($my_inst_values["neuedokumente"]) ECHO "&nbsp; <a href=\"institut_main.php?auswahl=$instid&redirect_to=folder.php&cmd=all\"><img src='pictures/icon-disc2.gif' border=0 ".tooltip($my_inst_values["dokumente"]." Dokumente, ".$my_inst_values["neuedokumente"]." neue")."></a>";
+  ELSEIF ($my_inst_values["dokumente"]) ECHO "&nbsp; <a href=\"institut_main.php?auswahl=$instid&redirect_to=folder.php&cmd=tree\"><img src='pictures/icon-disc.gif' border=0 ".tooltip($my_inst_values["dokumente"]." Dokumente")."></a>";
   ELSE ECHO "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
 
   //News
-  IF ($my_inst_values["neuenews"]) ECHO "&nbsp; <a href=\"institut_main.php?auswahl=$instid\"><img src='pictures/icon-news2.gif' border=0 alt='".$my_inst_values["news"]." News, ".$my_inst_values["neuenews"]." neue' title='".$my_inst_values["news"]." News, ".$my_inst_values["neuenews"]." neue'></a>";
-  ELSEIF ($my_inst_values["news"]) ECHO "&nbsp; <a href=\"institut_main.php?auswahl=$instid\"><img src='pictures/icon-news.gif' border=0 alt='".$my_inst_values["news"]." News' title='".$my_inst_values["news"]." News'></a>";
+  IF ($my_inst_values["neuenews"]) ECHO "&nbsp; <a href=\"institut_main.php?auswahl=$instid\"><img src='pictures/icon-news2.gif' border=0 ".tooltip($my_inst_values["news"]." News, ".$my_inst_values["neuenews"]." neue")." </a>";
+  ELSEIF ($my_inst_values["news"]) ECHO "&nbsp; <a href=\"institut_main.php?auswahl=$instid\"><img src='pictures/icon-news.gif' border=0 ".tooltip($my_inst_values["news"]." News")."></a>";
   ELSE ECHO "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
 
   //Literatur
 IF ($my_inst_values["literatur"]) {
-    ECHO "<a href=\"institut_main.php?auswahl=$instid&redirect_to=literatur.php\">";
-    if ($my_inst_values["neueliteratur"])
-      ECHO "&nbsp; <img src=\"pictures/icon-lit2.gif\" border=0 alt='Zur Literatur und Linkliste (ge&auml;ndert)'></a>";
+	ECHO "<a href=\"institut_main.php?auswahl=$instid&redirect_to=literatur.php\">";
+	if ($my_inst_values["neueliteratur"])
+	  ECHO "&nbsp; <img src=\"pictures/icon-lit2.gif\" border=0 ".tooltip("Zur Literatur und Linkliste (geändert)")."></a>";
 		else
-		  ECHO "&nbsp; <img src=\"pictures/icon-lit.gif\" border=0 alt='Zur Literatur und Linkliste'></a>";
+		  ECHO "&nbsp; <img src=\"pictures/icon-lit.gif\" border=0 ".tooltip("Zur Literatur und Linkliste")."></a>";
   }
   ELSE ECHO "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
 
   // Termine
-  IF ($my_inst_values["neuetermine"]) ECHO "&nbsp; <a href=\"institut_main.php?auswahl=$instid&redirect_to=dates.php\"><img src='pictures/icon-uhr2.gif' border=0 alt='".$my_inst_values["termine"]." Termine, ".$my_inst_values["neuetermine"]." neue' title='".$my_inst_values["termine"]." Termine, ".$my_inst_values["neuetermine"]." neue'></a>";
-  ELSEIF ($my_inst_values["termine"]) ECHO "&nbsp; <a href=\"institut_main.php?auswahl=$instid&redirect_to=dates.php\"><img src='pictures/icon-uhr.gif' border=0 alt='".$my_inst_values["termine"]." Termine' title='".$my_inst_values["termine"]." Termine'></a>";
+  IF ($my_inst_values["neuetermine"]) ECHO "&nbsp; <a href=\"institut_main.php?auswahl=$instid&redirect_to=dates.php\"><img src='pictures/icon-uhr2.gif' border=0 ".tooltip($my_inst_values["termine"]." Termine, ".$my_inst_values["neuetermine"]." neue")."></a>";
+  ELSEIF ($my_inst_values["termine"]) ECHO "&nbsp; <a href=\"institut_main.php?auswahl=$instid&redirect_to=dates.php\"><img src='pictures/icon-uhr.gif' border=0 ".tooltip($my_inst_values["termine"]." Termine")."></a>";
   ELSE ECHO "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
 
   echo "&nbsp;&nbsp;";
 
 } // Ende function print_institut_content
+
 
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php");		 //hier werden die sessions initialisiert
 
@@ -122,7 +123,7 @@ require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php"); 		// htmlReady fuer die V
 require_once ("$ABSOLUTE_PATH_STUDIP/dates.inc.php"); 		// Semester-Namen fuer Admins
 
 $cssSw=new cssClassSwitcher;                          					// Klasse für Zebra-Design
-$cssSw->hoverenabled = TRUE;
+$cssSw->enableHover();
 $db=new DB_Seminar;
 
 // we are defintely not in an lexture or institute$SessSemName[0] = "";
@@ -164,15 +165,15 @@ if ($cmd=="kill") {
 //This view is only for users up to admin
 IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("root")){
 
-     if (!isset($sortby)) $sortby="Name";
-     if ($sortby == "count")
-     $sortby = "count DESC";
+	 if (!isset($sortby)) $sortby="Name";
+	 if ($sortby == "count")
+	 $sortby = "count DESC";
 	$db->query ("SELECT Institute.Name, Institute.Institut_id, user_inst.inst_perms FROM user_inst LEFT JOIN Institute  USING (Institut_id) WHERE user_inst.user_id = '$user->id' GROUP BY Institut_id ORDER BY $sortby");
 	$num_my_inst=$db->num_rows();
-     if (!$num_my_inst) $meldung="msg§Sie haben sich keine Einrichtungen zugeordnet§".$meldung;
+	 if (!$num_my_inst) $meldung="msg§Sie haben sich keine Einrichtungen zugeordnet§".$meldung;
 
-     ?>
-     <table width="100%" border=0 cellpadding=0 cellspacing=0>
+	 ?>
+	 <table width="100%" border=0 cellpadding=0 cellspacing=0>
 	<tr>
 		<td class="topic" colspan="2"><img src="pictures/meinesem.gif" border="0" align="texttop">&nbsp;<b>Meine Einrichtungen</></td>
 	</tr>
@@ -182,10 +183,10 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("roo
 	<?
 	if ($meldung) parse_msg($meldung);
 	?>
-     <?
-     if ($num_my_inst){
-     ?>
-     <tr><td class="blank" colspan=2>
+	 <?
+	 if ($num_my_inst){
+	 ?>
+	 <tr><td class="blank" colspan=2>
 	<table border="0" cellpadding="0" cellspacing="0" width="99%" align="center" class="blank">
 	<tr valign="top" align="center">
 		<th width="1%">&nbsp; </th>
@@ -198,17 +199,17 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("roo
 	<?
 	ob_end_flush(); //Buffer leeren, damit der Header zu sehen ist
 	ob_start();
-     while ($db->next_record())
+	 while ($db->next_record())
 		{
 	  $my_inst[$db->f("Institut_id")]=array(name=>$db->f("Name"),status=>$db->f("inst_perms"));
 	  $value_list.="('".$db->f("Institut_id")."',0".$loginfilenow[$db->f("Institut_id")]."),";
-     }
-     $value_list=substr($value_list,0,-1);
-     $db->query("CREATE  TEMPORARY TABLE IF NOT EXISTS loginfilenow_".$user->id." ( Seminar_id varchar(32) NOT NULL PRIMARY KEY, loginfilenow int(11) NOT NULL DEFAULT 0, INDEX(loginfilenow) ) TYPE=HEAP");
-     $ins_query="REPLACE INTO loginfilenow_".$user->id." (Seminar_id, loginfilenow) VALUES ".$value_list;
-     $db->query($ins_query);
-     get_my_inst_values($my_inst);
-     $db->query("DROP TABLE loginfilenow_".$user->id);
+	 }
+	 $value_list=substr($value_list,0,-1);
+	 $db->query("CREATE  TEMPORARY TABLE IF NOT EXISTS loginfilenow_".$user->id." ( Seminar_id varchar(32) NOT NULL PRIMARY KEY, loginfilenow int(11) NOT NULL DEFAULT 0, INDEX(loginfilenow) ) TYPE=HEAP");
+	 $ins_query="REPLACE INTO loginfilenow_".$user->id." (Seminar_id, loginfilenow) VALUES ".$value_list;
+	 $db->query($ins_query);
+	 get_my_inst_values($my_inst);
+	 $db->query("DROP TABLE loginfilenow_".$user->id);
 
   foreach ($my_inst as $instid=>$values){
 
@@ -239,12 +240,12 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("roo
 		if (($values["status"]=="dozent") || ($values["status"]=="tutor") || ($values["status"]=="admin"))
 			echo "<td class=\"".$cssSw->getClass()."\" align=center>&nbsp;</td>";
 		else
-			printf("<td class=\"".$cssSw->getClass()."\" align=center align=center><a href=\"$PHP_SELF?auswahl=%s&cmd=kill\"><img src=\"pictures/trash.gif\" alt=\"aus der Einrichtung austragen\" border=\"0\"></a></td>", $instid);
+			printf("<td class=\"".$cssSw->getClass()."\" align=center align=center><a href=\"$PHP_SELF?auswahl=%s&cmd=kill\"><img src=\"pictures/trash.gif\" ".tooltip("aus der Einrichtung austragen")." border=\"0\"></a></td>", $instid);
 		 echo "</tr>\n";
 		}
 	echo "</table></td></tr>";
 
-     }
+	 }
 
 //Fusstext
  $db->query("SELECT count(*) as count  FROM Institute");
