@@ -249,7 +249,7 @@ function topic_liste ($eintrag, $root_id, $open, $name, $author, $create_dt, $ro
 			$name = htmlReady(mila($name));
 		}
 		//create a link onto the titel, too
-		if ($link)
+		if (($link) && (!$form))
 			$name = "<a href=\"$link\" class=\"tree\" >$name</a>";
 		
 		printhead ("90%","0",$link,"open",$neuer_beitrag,$icon,$name,$zusatz,$create_dt);
@@ -459,7 +459,7 @@ function DisplayKids ($topic_id=0, $level=0, $open=0, $lines="",$zitat="") {
 				elseif (strpos($open,$r_topic_id)==0 AND !$write AND $all!=TRUE)
 					echo "<a name='anker'></a>";  //es wird ein Anker gesetzt wenn der erste aufgeklapte Beitrag angespringen wird, etwa aus letzte5;		
 				//create a link onto the titel, too
-				if ($link)
+				if (($link) && (!$form))
 					$r_name = "<a href=\"$link\" class=\"tree\" >$r_name</a>";
 
 				printhead ("100%","0",$link,"open",$neuer_beitrag,$icon,$r_name,$zusatz,$r_mkdate);
@@ -614,7 +614,7 @@ function DisplayTopic ($datum=0, $topic_id=0, $open=0, $level=0, $nokids=0,$zita
 						ELSE
 							$icon ="<a href='forum.php?topic_id=".$r_topic_id."&all=TRUE#anker'><img src=\"pictures/cont_folder2.gif\" border=0 " . tooltip(_("alle Postings im Ordner &ouml;ffnen")) . "></a>";
 						//create a link onto the titel, too
-						if (!$form)
+						if (($link) && (!$form))
 							$name = "<a href=\"forum.php\" class=\"tree\" >$name</a>";
 
 						printhead ("100%","0","forum.php","open",$neuer_beitrag,$icon,$name,$zusatz,$mkdate);

@@ -79,7 +79,8 @@ function topic_liste_suche($eintrag, $root_id, $open, $name, $author, $create_dt
 			$name = htmlReady(mila($name));
 		}
 		//create a link onto the titel, too
-		$name = "<a href=\"$link\" class=\"tree\" >".$name."</a>";
+		if (!$form)
+			$name = "<a href=\"$link\" class=\"tree\" >".$name."</a>";
 		
 		printhead ("100%","0",$link,"open",$neuer_beitrag,$icon,$name,$zusatz);
 		echo "</tr></table>";	
