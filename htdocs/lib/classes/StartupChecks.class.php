@@ -191,8 +191,9 @@ class StartupChecks {
 	function myInstitutesDozent() {
 		global $user, $perm;
 		
-
-		if (!$perm->have_perm ("root")) {
+		if ($perm->have_perm ("root")) {
+			return FALSE;
+		} else {
 			$query = sprintf ("SELECT a.Institut_id, IF(a.Institut_id=fakultaets_id,1,0) AS is_fak,inst_perms FROM user_inst  a LEFT JOIN Institute USING (institut_id) WHERE (user_id = '%s' AND inst_perms = 'admin')", $user->id);
 	
 			$this->db->query($query);
@@ -211,10 +212,8 @@ class StartupChecks {
 				$clause = implode("', '", $tmp_inst_ids);
 			
 			$query = sprintf ("SELECT user_id FROM user_inst WHERE inst_perms = 'dozent' AND Institut_id IN ('%s')", $clause);
-		} else {
-			$query = "SELECT user_id FROM user_inst WHERE inst_perms = 'dozent'";
-		}
-		
+		} 
+				
 		$this->db->query ($query);
 
 		if ($this->db->nf()) {
