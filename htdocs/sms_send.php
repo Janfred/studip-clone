@@ -90,7 +90,10 @@ function CheckAllAdded($adresses_array, $rec_array) {
 ###########################################################
 
 if (empty($my_messaging_settings["addsignature"])) {
-	$my_messaging_settings["addsignature"] ="0";
+	$my_messaging_settings["addsignature"] = "0";
+}
+if (empty($my_messaging_settings["save_snd"])) {
+	$my_messaging_settings["save_snd"] = "1";
 }
 
 // check if active chat avaiable
