@@ -861,4 +861,3 @@ function sortBySurname ($a, $b) {
 }
 
 ?>
-
