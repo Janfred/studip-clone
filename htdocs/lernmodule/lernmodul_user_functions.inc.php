@@ -27,7 +27,12 @@ function get_ilias_logindata()
 {
 	global $auth, $username_prefix;
 //	return "&acct_name=" . $username_prefix . $auth->auth["uname"] . "&acct_pass=" . get_password_md5()."&SID=" . md5(uniqid(rand())) . "&USER_ENV=" . serialize(array("id" => get_ilias_user_id($auth->auth["uname"])));
-	return "&acct_name=" . $username_prefix . $auth->auth["uname"] . "&u_id=" . get_ilias_user_id($auth->auth["uname"]). "&set_lang=de";
+	$ilias_db = New DB_Ilias;
+	$ilias_db->query("SELECT * FROM benutzer WHERE benutzername='" . $username_prefix . mysql_escape_string($auth->auth["uname"])."'");
+	if ($ilias_db->next_record())
+		return "&acct_name=" . $username_prefix . $auth->auth["uname"] . "&u_id=" . $ilias_db->f("id") . "&u_pw=" . md5($ilias_db->f("passwort")) . "&set_lang=en";
+	else
+		return false;
 }
 
 function new_ilias_user($benutzername, $passwort, $geschlecht, $vorname, $nachname, $title_front, $institution, $telefon, $email, $status, $preferred_language)
