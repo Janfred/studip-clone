@@ -67,6 +67,10 @@ $EXTERN_MODULE_TYPES[8] = array("module" => "Rangelecturetree", "name" => _("Ein
 													"description" => _("Das Modul &quot;Veranstaltungen&quot; gibt alle Veranstaltungen einer Einrichtung aus."));
 */
 
+$EXTERN_MODULE_TYPES[7] = array("module" => "Newsticker", "name" => _("Newsticker"), "level" => 1,
+													"description" => _("Das Modul &quot;Newsticker&quot; gibt alle News einer Einrichtung in einem Ticker aus."));
+
+
 // Don't allow more than 10 configuration files for each module!
 $EXTERN_MAX_CONFIGURATIONS = 6;
 
