@@ -646,7 +646,7 @@ if ($cmd=="special_edit")
 //Veränderungen der pers. Daten
 if ($cmd=="edit_pers")
 {
-	if (($my_about->auth_user["Email"] != $email) && ($response)) {
+	if (($my_about->auth_user["Email"] != $email) && (($response && $response!=md5("*****")) || $password!="*****")) {
 	  $my_about->msg = $my_about->msg . "error§" . _("Bitte ändern Sie erst ihre E-Mail-Adresse und dann ihr Passwort!") . "§";
 	} else {
 	$my_about->edit_pers($password,$check_pass,$response,$new_username,$vorname,$nachname,$email,$telefon,$anschrift,$home,$hobby,$geschlecht,$title_front,$title_front_chooser,$title_rear,$title_rear_chooser,$view);
