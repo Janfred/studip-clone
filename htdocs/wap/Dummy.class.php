@@ -21,7 +21,7 @@
 	* Dummy class
 	*
 	* Used in dates_search.php in order to create a dummy user for
-	* AppList and bindSeminarEvents().<br/>
+	* DbCalendarEventList and bindSeminarEvents().<br/>
 	* So please do not delete :-)
 	*
 	* @access	public
