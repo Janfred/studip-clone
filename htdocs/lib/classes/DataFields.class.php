@@ -53,7 +53,46 @@ class DataFields {
 		$this->db = new DB_Seminar;
 		$this->db2 = new DB_Seminar;
 	}
+	
+	function getReadableUserClass($class) {
+		foreach ($this->perms_mask as $key=>$val) {
+			if ($class & $val) {
+				if ($i)
+					$result.=", ";
+				$result.=$key;
+				$i++;
+			}
+		}
+		return $result;
+	}
 
+	function getNumberUsedEntries($datafield_id) {
+		$db = new DB_Seminar;
+		$query = sprintf ("SELECT count(range_id) AS count FROM datafields_entries WHERE datafield_id = '%s' ", $datafield_id);
+	
+		$db->query($query);
+		$db->next_record();
+		
+		return $db->f("count");
+	}
+
+	function getFields($object_type='') {
+		$datafields = array();
+		
+		if ($object_type) {
+			$query = sprintf ("SELECT * FROM datafields WHERE object_type = '%s' ORDER BY object_class, priority, name", $object_type);
+			
+			$this->db->query($query);
+				
+			while ($this->db->next_record()) {
+				$datafields[$this->db->f("datafield_id")] = $this->db->Record;
+				$datafields[$this->db->f("datafield_id")]["used_entries"] = $this->getNumberUsedEntries($this->db->f("datafield_id"));
+			}
+		}
+		
+		return $datafields;
+	}
+	
 	function getLocalFields($range_id = '', $object_class='', $object_type='') {
 		$local_datafields = array();
 		
@@ -138,6 +177,57 @@ class DataFields {
 
 	}
 	
+	function storeDataField($datafield_id='', $name='', $object_type='', $object_class='', $edit_perms='', $priority='') {
+		if ($datafield_id) {
+			$query = sprintf ("SELECT * FROM datafields WHERE datafield_id = '%s' ", $datafield_id);
+
+			$this->db->query($query);
+			$this->db->next_record();
+			
+			if (!$name)
+				$name = $this->db->f("name");
+
+			if (!$object_type)
+				$object_type = $this->db->f("object_type");
+				
+			if (!$object_class) {
+				$object_class = $this->db->f("object_class");
+				if (!$object_class)
+					$object_class = "NULL";
+				
+			}
+			
+			if (!$edit_perms)
+				$edit_perms = $this->db->f("edit_perms");
+				
+			if (!$priority)
+				$priority = $this->db->f("priority");
+		} else {
+			$datafield_id = md5(uniqid("life42"));
+		}
+		
+		$query = sprintf ("REPLACE INTO datafields SET datafield_id = '%s', name= '%s', object_type = '%s', object_class = %s, edit_perms = '%s', priority = '%s' ",
+				$datafield_id, $name, $object_type, $object_class, $edit_perms, $priority);
+
+		$this->db->query($query);
+
+		if ($this->db->affected_rows())
+			return TRUE;
+		else
+			return FALSE;
+	}
+	
+	function killDataField ($datafield_id) {
+		$query = sprintf ("DELETE FROM datafields WHERE datafield_id = '%s' ", $datafield_id);
+		
+		$this->db->query($query);
+		
+		if ($this->db->affected_rows())
+			return TRUE;
+		else
+			return FALSE;
+	}
+
 	function killAllEntries ($range_id = '') {
 		if (!$range_id)
 			$range_id = $this->range_id;
