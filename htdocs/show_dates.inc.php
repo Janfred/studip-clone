@@ -397,7 +397,7 @@ function show_all_dates ($date_start, $date_end, $show_docs=FALSE, $show_admin=T
 
 		while($termin = $list->nextEvent()){
 			$icon = '&nbsp;<img src="./pictures/termin-icon.gif" border="0" alt="Termin">';
-			$have_wright_permission = (($termin->getType() == 1 && $termin->haveWritePermission())
+			$have_write_permission = (($termin->getType() == 1 && $termin->haveWritePermission())
 					|| ($termin->getType() != 1));
 					
 			$zusatz = "";
@@ -498,7 +498,7 @@ function show_all_dates ($date_start, $date_end, $show_docs=FALSE, $show_admin=T
 				}
 								
 				$edit = FALSE;
-				if($have_wright_permission)
+				if($have_write_permission)
 					$edit = sprintf("<a href=\"./calendar.php?cmd=edit&termin_id=%s&atime=%s&source_page=%s\">"
 								. makeButton("terminaendern", "img")
 								. "</a>", $termin->getId(), $termin->getStart(), rawurlencode($PHP_SELF));
