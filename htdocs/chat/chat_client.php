@@ -72,9 +72,9 @@ function chatSystemMsg($msg){
 	if (!$id) {
 		printJs("if (parent.frames['frm_nicklist'].location.href) parent.frames['frm_nicklist'].location.href = parent.frames['frm_nicklist'].location.href;");
 		printJs("if (parent.frames['frm_status'].location.href) parent.frames['frm_status'].location.href = parent.frames['frm_status'].location.href;");
-		$output = strftime("%T",floor($msg[2]))."<i> [chatbot] $msg[1]</i><br>";
+		$output = strftime("%H:%M:%S",$msg[2][1])."<i> [chatbot] $msg[1]</i><br>";
 	} elseif ($user->id == $id){
-		$output = strftime("%T",floor($msg[2]))."<i> [chatbot] $msg[1]</i><br>";
+		$output = strftime("%H:%M:%S",$msg[2][1])."<i> [chatbot] $msg[1]</i><br>";
 	}
 	return $output;
 }
@@ -315,18 +315,19 @@ function chatCommand($msg){
 function outputLoop($chatid){
 	global $user,$chatServer,$userQuit,$chat_log;
 	$lastPingTime = 0;
-	$lastMsgTime = time()-1;
+	$lastMsgTime = $chatServer->getMsTime();
+	--$lastMsgTime[1];
 	set_time_limit(0);       //wir sind nicht zu stoppen...
 	ignore_user_abort(1);    //es sei denn wir werden brutal ausgebremst :)
 
 	while(!connection_aborted()){
 
-		$currentMsTime = $chatServer->getMsTime();
+		$currentMsTime = $chatServer->msTimeToFloat();
 		//Timeout vorbeugen
 		if (($currentMsTime - $lastPingTime) > CHAT_TO_PREV_TIME) {
 			echo"<!-- -->\n";
 			flush();
-			$lastPingTime=$currentMsTime;
+			$lastPingTime = $currentMsTime;
 		}
 		//Gibt es neue Nachrichten ?
 		$newMsg = $chatServer->getMsg($chatid,$lastMsgTime);
@@ -337,7 +338,7 @@ function outputLoop($chatid){
 					$output = chatSystemMsg($msg);
 					if ($output){
 							if ($chatServer->chatDetail[$chatid]['log'][$user->id]){
-								$chat_log[] = strftime("%T",floor($msg[2]))." [chatbot] $msg[1]";
+								$chat_log[] = strftime("%H:%M:%S",$msg[2][1])." [chatbot] $msg[1]";
 							}
 					} else {
 						continue;
@@ -350,10 +351,10 @@ function outputLoop($chatid){
 				}
 				if (!$output){
 					$output = "<font color=\"".$chatServer->chatDetail[$chatid]['users'][$msg[0]]["color"]."\">"
-					. strftime("%T",floor($msg[2]))." [".fullNick($msg[0])."] "
+					. strftime("%H:%M:%S",$msg[2][1])." [".fullNick($msg[0])."] "
 					. formatReady($msg[1])."</font><br>";
 					if ($chatServer->chatDetail[$chatid]['log'][$user->id]){
-						$chat_log[] = strftime("%T",floor($msg[2]))." [".fullNick($msg[0])."] " . $msg[1];
+						$chat_log[] = strftime("%H:%M:%S",$msg[2][1])." [".fullNick($msg[0])."] " . $msg[1];
 					}
 				}
 				echo $output;

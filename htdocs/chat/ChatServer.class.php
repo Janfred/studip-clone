@@ -41,7 +41,7 @@ class ChatServer {
 	function &GetInstance($class_name){
 		static $object_instance;
 		if (!is_object($object_instance[$class_name])){
-			$object_instance[$class_name] = new $class_name();
+			$object_instance[$class_name] =& new $class_name();
 		} 
 		return $object_instance[$class_name];
 	}
@@ -180,13 +180,13 @@ class ChatServer {
 		$this->store();
 	}
 	
-	function getMsg($rangeid,$msStamp=0){
+	function getMsg($rangeid,$msStamp = null){
 		$this->restore();
 		if (is_array($this->chatDetail[$rangeid]["messages"])){
-			if ($msStamp) {
+			if (is_array($msStamp)) {
 				$anzahl = count($this->chatDetail[$rangeid]["messages"]);
 				for ($i = 0; $i < $anzahl; ++$i){
-					if ($this->chatDetail[$rangeid]["messages"][$i][2] > $msStamp)
+					if ($this->msTimeToFloat($this->chatDetail[$rangeid]["messages"][$i][2]) > $this->msTimeToFloat($msStamp))
 					break;
 				}
 			} else {
@@ -227,12 +227,16 @@ class ChatServer {
 	}
 	
 	function getMsTime(){
-			//$microtime = explode(' ', microtime());
-			//return (double)($microtime[1].substr($microtime[0],1));
-			list($usec, $sec) = explode(" ",microtime()); 
-			return ((float)str_replace(",",".",$usec) + (float)$sec);
+		list($usec, $sec) = explode(" ",microtime()); 
+		return array((int)($usec*1000) ,(int)$sec);
 	}
-
+	
+	function msTimeToFloat($arg = null){
+		if (!$arg){
+			$arg = $this->getMsTime();
+		}
+		return ((float)($arg[0]/1000) + (float)($arg[1]));
+	}
 
 }
 ?>
