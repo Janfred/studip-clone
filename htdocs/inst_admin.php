@@ -84,7 +84,7 @@ return;
 //zeigen wir eine einzelne Person an?
 
 if (isset($details)) {
-	$db->query("SELECT auth_user_md5.*, user_inst.*, Institute.Name FROM auth_user_md5 LEFT JOIN user_inst USING (user_id) LEFT JOIN Institute USING (Institut_id) WHERE username = '$details' AND user_inst.Institut_id = '$inst_id'");
+	$db->query("SELECT  " . $_fullname_sql['full'] . " AS fullname,user_inst.*,auth_user_md5.*, Institute.Name FROM auth_user_md5 LEFT JOIN user_info USING (user_id) LEFT JOIN user_inst USING (user_id) LEFT JOIN Institute USING (Institut_id) WHERE username = '$details' AND user_inst.Institut_id = '$inst_id'");
 	while ($db->next_record()) {
 		?>
 		<tr>
@@ -97,7 +97,7 @@ if (isset($details)) {
 			</tr>
 			<tr <?$cssSw->switchClass() ?>>
 				<td class="<? echo $cssSw->getClass() ?>" height="30"><b>&nbsp;Name:</b></td>
-				<td class="<? echo $cssSw->getClass() ?>" ><?php  echo $db->f("Vorname") . "   " . $db->f("Nachname") ?></td>
+				<td class="<? echo $cssSw->getClass() ?>" ><?php  echo $db->f("fullname") ?></td>
 			</tr>
 			<tr <?$cssSw->switchClass() ?>>
 				<td class="<? echo $cssSw->getClass() ?>" ><b>&nbsp;Status in der Einrichtung:&nbsp;</b></td>
@@ -169,10 +169,10 @@ else {
 
 	if ( is_array($HTTP_POST_VARS) && list($key, $val) = each($HTTP_POST_VARS)) {
     		if ($perms!="") { //hoffentlich auch was Sinnvolles?
-			$db->query("SELECT Vorname, Nachname, perms FROM auth_user_md5 WHERE user_id = '$u_id'");
+			$db->query("SELECT " . $_fullname_sql['full'] . " AS fullname, perms FROM auth_user_md5 LEFT JOIN user_info USING (user_id) WHERE user_id = '$u_id'");
 			while ($db->next_record()) {
 				$scherge=$db->f("perms");
-				$Fullname = $db->f("Vorname") . " " . $db->f("Nachname");
+				$Fullname = $db->f("fullname");
 			}
 
 			// Hier darf fast keiner was:
@@ -233,9 +233,9 @@ else {
 				// der Admin hat Tomaten auf den Augen, der Mitarbeiter sitzt schon im Institut
 				my_error("<b>Die Person ist bereits in der Einrichtung eingetragen. Bitte verwenden Sie die untere Tabelle, um Rechte etc. zu &auml;ndern!</b>");
 			} else {  // mal nach dem globalen Status sehen
-				$db3->query("SELECT Vorname, Nachname, perms FROM auth_user_md5 WHERE user_id = '$u_id'");
+				$db3->query("SELECT " . $_fullname_sql['full'] . " AS fullname, perms FROM auth_user_md5 a LEFT JOIN user_info USING(user_id) WHERE a.user_id = '$u_id'");
 				$db3->next_record();
-				$Fullname = $db3->f("Vorname") . " " . $db3->f("Nachname");
+				$Fullname = $db3->f("fullname");
 				if ($db3->f("perms") == "root")
 					my_error("<b>roots k&ouml;nnen nicht berufen werden!</b>");
 				elseif ($db3->f("perms") == "admin") {
@@ -281,7 +281,7 @@ if ($inst_id != "" && $inst_id !="0") {
 		// Der Admin will neue Sklaven ins Institut berufen...
 			if (!$search_exp) //wenn leerer Suchaussruck, verwutzen (aus Datenschutzgruenden)
 				$search_exp=md5(uniqid(rand()));
-			$db->query ("SELECT DISTINCT auth_user_md5.user_id, Vorname, Nachname, username, perms  FROM auth_user_md5 LEFT JOIN user_inst ON user_inst.user_id=auth_user_md5.user_id AND Institut_id = '$inst_id' WHERE perms !='root' AND (user_inst.inst_perms = 'user' OR user_inst.inst_perms IS NULL) AND (Vorname LIKE '%$search_exp%' OR Nachname LIKE '%$search_exp%' OR username LIKE '%$search_exp%') ORDER BY Nachname ");		
+			$db->query ("SELECT DISTINCT auth_user_md5.user_id, " . $_fullname_sql['full_rev'] . " AS fullname, username, perms  FROM auth_user_md5 LEFT JOIN user_info USING(user_id)LEFT JOIN user_inst ON user_inst.user_id=auth_user_md5.user_id AND Institut_id = '$inst_id' WHERE perms !='root' AND (user_inst.inst_perms = 'user' OR user_inst.inst_perms IS NULL) AND (Vorname LIKE '%$search_exp%' OR Nachname LIKE '%$search_exp%' OR username LIKE '%$search_exp%') ORDER BY Nachname ");		
 			?>
 			<blockquote>Auf dieser Seite k&ouml;nnen Sie Personen der Einrichtung <b><? echo htmlReady($inst_name) ?></b> zuordnen, Daten ver&auml;ndern und Berechtigungen vergeben.<br /><br /></blockquote>
 			<table width="100%" border="0" bgcolor="#C0C0C0" bordercolor="#FFFFFF" cellpadding="2" cellspacing="0">			
@@ -305,7 +305,7 @@ if ($inst_id != "" && $inst_id !="0") {
 						//Alle User auswaehlen, auf die der Suchausdruck passt und die im Institut nicht schon was sind. Selected werden hierdurch 
 //						printf ("<option value=\"0\">-- bitte ausw&auml;hlen --\n");
 						while ($db->next_record())
-							printf ("<option value=\"%s\">%s, %s (%s) - %s\n", $db->f("user_id"), $db->f("Nachname"), $db->f("Vorname"), $db->f("username"), $db->f("perms"));
+							printf ("<option value=\"%s\">%s (%s) - %s\n", $db->f("user_id"), $db->f("fullname"), $db->f("username"), $db->f("perms"));
 							?>
 							</select>&nbsp;
 						<input type="hidden" name="ins_id" value="<?echo $inst_id;?>"><br />
@@ -363,7 +363,7 @@ if ($inst_id != "" && $inst_id !="0") {
 	//entweder wir gehoeren auch zum Institut oder sind global root und es ist ein Institut ausgewählt
 	$db2->query("SELECT Institut_id FROM user_inst WHERE Institut_id = '$inst_id' AND user_id = '$user->id'");
 	if ($db2->num_rows() > 0 || ($perm->have_perm("root") && isset($inst_id))) {  
-	  	$query = "SELECT * FROM user_inst LEFT JOIN auth_user_md5 USING (user_id) WHERE Institut_id ='$inst_id' AND inst_perms !='user' ORDER BY $sortby";
+	  	$query = "SELECT user_inst.*, " . $_fullname_sql['full_rev'] . " AS fullname,Email,username FROM user_inst LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE Institut_id ='$inst_id' AND inst_perms !='user' ORDER BY $sortby";
 		$db->query($query);
 
 		//Ausgabe der Tabellenueberschrift
@@ -374,9 +374,8 @@ if ($inst_id != "" && $inst_id !="0") {
 
 		if ($db->num_rows() > 0) {
 			// wir haben ein Ergebnis
-			echo "<th width=\"15%\"><a href=\"inst_admin.php?sortby=Vorname&inst_id=$inst_id\">Vorname</a></th>";
-			echo "<th width=\"15%\"><a href=\"inst_admin.php?sortby=Nachname&inst_id=$inst_id\">Nachname</a></th>";
-			echo "<th width=\"15%\"><a href=\"inst_admin.php?sortby=inst_perms&inst_id=$inst_id\">Status </a></th>";
+			echo "<th width=\"30%\"><a href=\"inst_admin.php?sortby=Nachname&inst_id=$inst_id\">Name</a></th>";
+			echo "<th width=\"10%\"><a href=\"inst_admin.php?sortby=inst_perms&inst_id=$inst_id\">Status </a></th>";
 			echo "<th width=\"15%\">Gruppe / Funktion</th>";
 			echo "<th width=\"10%\"><a href=\"inst_admin.php?sortby=raum&inst_id=$inst_id\">Raum Nr.</a></th>";
 			echo "<th width=\"10%\"><a href=\"inst_admin.php?sortby=sprechzeiten&inst_id=$inst_id\">Sprechzeit</a></th>";
@@ -388,13 +387,14 @@ if ($inst_id != "" && $inst_id !="0") {
 
 	  	while ($db->next_record()) {
 	  			$user_id = $db->f("user_id");
+				$mail_list[] = $db->f("Email");
 	  			$cssSw->switchClass();
 				ECHO "<tr valign=middle align=left>";
 				
 				  if ($perm->have_perm("root") || $db->f("inst_perms") != "admin" || $db->f("username") == $auth->auth["uname"])
-					printf ("<td class=\"%s\">%s</td><td class=\"%s\"><a href=\"%s?details=%s&inst_id=%s\">%s</a></td>", $cssSw->getClass(), $db->f("Vorname"),  $cssSw->getClass(), $PHP_SELF, $db->f("username"), $db->f("Institut_id"), $db->f("Nachname"));	 
+					printf ("<td class=\"%s\"><a href=\"%s?details=%s&inst_id=%s\">%s</a></td>", $cssSw->getClass(), $PHP_SELF, $db->f("username"), $db->f("Institut_id"), $db->f("fullname"));	 
 				else
-					printf ("<td class=\"%s\">&nbsp;%s</td><td class=\"%s\">%s</td>", $cssSw->getClass(), $db->f("Vorname"), $cssSw->getClass(), $db->f("Nachname"));	 ?>
+					printf ("<td class=\"%s\">&nbsp;%s</td>", $cssSw->getClass(), $db->f("fullname"));	 ?>
 	
 				<td class="<? echo $cssSw->getClass() ?>" >&nbsp;<?php echo $db->f("inst_perms"); ?></td>
 				<td class="<? echo $cssSw->getClass() ?>"  align="left"><?
@@ -420,17 +420,7 @@ if ($inst_id != "" && $inst_id !="0") {
 			//Link fuer tolle Rundmailfunktion wird hier gebastelt
 	
 			echo"</table><br><b>Rundmail an alle Mitarbeiter verschicken</b><br><br>&nbsp;Bitte hier <a href=\"mailto:";
-			$db->seek(0);	
-
-			$kommaja=false;
-	
-			while ($db->next_record()) {
-				if ($db->f("inst_perms")!='user') { 
-					if ($kommaja) echo", ";
-					echo $db->f("Email");
-					$kommaja=true;
-				}
-			}
+			echo join(",",$mail_list);
 			echo"\">klicken</a><br /><br /></blockquote></td></tr>";
 
 			print("</table>");

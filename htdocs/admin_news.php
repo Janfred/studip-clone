@@ -24,6 +24,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 require_once "$ABSOLUTE_PATH_STUDIP/messaging.inc.php";
 require_once "$ABSOLUTE_PATH_STUDIP/visual.inc.php";
+require_once "$ABSOLUTE_PATH_STUDIP/functions.php";
+
 
 // Klassendefinition
 class studip_news extends messaging
@@ -58,9 +60,7 @@ function studip_news()
    
  $this->user_id=$auth->auth["uid"];
  $this->db = new DB_Seminar;
- $this->db->query("SELECT CONCAT(vorname,' ',nachname) AS author FROM auth_user_md5 WHERE user_id='".$this->user_id."'");
- $this->db->next_record();
- $this->full_username=$this->db->f("author");
+ $this->full_username = get_fullname();
  $this->get_news_perm();
 
  if ($this->news_perm[$news_range_id]["perm"]>=2 OR $perm->have_perm("root")) {
@@ -72,12 +72,8 @@ function studip_news()
 	   $news_range_name="StudIP System News";
    }
    elseif ($news_range_id!=""){
-		$query="SELECT CONCAT(vorname,' ',nachname) AS full_name FROM auth_user_md5 WHERE user_id= '$news_range_id'";
-		$this->db->query($query);
-		if ($this->db->next_record()){
-		  $news_range_name=$this->db->f("full_name");
-		}
-		else {
+		$news_range_name = get_fullname($news_range_id);
+		if ($news_range_name == "unbekannt") {
 			 $query="SELECT Name FROM seminare WHERE Seminar_id='$news_range_id'";
 			 $this->db->query($query);
 			 if ($this->db->next_record()){
@@ -133,15 +129,15 @@ function get_news_by_range($range,$limit)
 
 function get_one_news($news_id)
 {
-		global $perm;
+		global $perm,$_fullname_sql;
 		$this->news_query="";
 		$this->db->query("SELECT * FROM news WHERE news_id='$news_id'");
 		if ($this->db->next_record())
 				{
 				$this->news_query = array("news_id"=>$news_id, "topic" => $this->db->f("topic"), "body" => $this->db->f("body"), "date" => $this->db->f("date"), "user_id" =>$this->db->f("user_id"), "author" =>$this->db->f("author"), "expire" =>$this->db->f("expire"));
-				$query="SELECT a.range_id,b.user_id, CONCAT(b.vorname,' ',b.nachname) AS author,".
+				$query="SELECT a.range_id,b.user_id, ". $_fullname_sql['full'] ." AS author,".
 						  " c.Seminar_id, c.Name AS seminar_name,d.Institut_id,d.Name AS institut_name, e.Fakultaets_id,e.Name AS fakultaet_name ".
-						  " FROM news_range AS a LEFT JOIN auth_user_md5 AS b ON (b.user_id=a.range_id) ".
+						  " FROM news_range AS a LEFT JOIN auth_user_md5 AS b ON (b.user_id=a.range_id) LEFT JOIN user_info USING(user_id) ".
 						  " LEFT JOIN seminare AS c ON (c.Seminar_id=a.range_id)  LEFT JOIN Institute AS d ON (d.Institut_id=a.range_id) ".
 						  " LEFT JOIN Fakultaeten AS e ON (e.Fakultaets_id=a.range_id) WHERE news_id='$news_id'";
 				//echo "<br>$query<br>";
@@ -432,11 +428,11 @@ else $this->msg.="error§Keine News zum löschen ausgewählt!§";
 
 function search_range($search_str)
 {
-global $perm,$auth;
+global $perm,$auth,$_fullname_sql;
 
 if ($perm->have_perm("root"))
 		{
-	 $query="SELECT user_id,CONCAT(vorname,' ',nachname) AS full_name,username FROM auth_user_md5 WHERE CONCAT(vorname,' ',nachname,' ',username) LIKE '%$search_str%'";
+	 $query="SELECT a.user_id,". $_fullname_sql['full'] . " AS full_name,username FROM auth_user_md5 a LEFT JOIN user_info USING(user_id) WHERE CONCAT(Vorname,' ',Nachname,' ',username) LIKE '%$search_str%'";
 	 $this->db->query($query);
 	 while($this->db->next_record())
 			 {
@@ -504,7 +500,7 @@ elseif ($perm->have_perm("admin"))
 
 		}
 
-if (is_Array($this->search_result)){
+if (is_array($this->search_result)){
 	$query="SELECT range_id,COUNT(range_id) AS anzahl FROM news_range WHERE range_id IN ('".implode("','",array_keys($this->search_result))."') GROUP BY range_id";
 	$this->db->query($query);
 	while($this->db->next_record()) {
@@ -657,9 +653,7 @@ return FALSE;
 
 function send_sms()
 {
-	$this->db->query("SELECT user_id FROM auth_user_md5 WHERE user_id='$this->user_id'");
-	 $this->db->next_record();
-	 $admin_name=$this->db->f("user_id");
+	 $admin_name=$this->user_id;
 	 while (list($user_id,$msg) = each($this->sms))
 		{
 		  $this->db->query("SELECT username FROM auth_user_md5 WHERE user_id='$user_id'");
