@@ -5,12 +5,13 @@ $perm->check("autor");
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 
-if (!$HTTP_POST_VARS["pass"])
+if (!$_POST["pass"])
    {
     ?>
 		<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
     <html><head><title><?=_("Autologin Datei erzeugen")?></title>
 		<meta name="copyright" content="Stud.IP-Crew (crew@studip.de)">
+		<script type="text/javascript" src="md5.js"></script>
     <script type="text/javascript">
     function doSubmit(){
 	    if (document.forms[0].pass.value!="") document.forms[0].submit();
@@ -29,14 +30,14 @@ if (!$HTTP_POST_VARS["pass"])
     die;
     }
 ob_start();
-
+$link = "http" . ($_SERVER['HTTPS'] ? 's' : '') . "://" . $_SERVER["HTTP_HOST"].$CANONICAL_RELATIVE_PATH_STUDIP;
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
 	<title><?=_("Autologin")?></title>
 	<meta name="copyright" content="Stud.IP-Crew (crew@studip.de)">
-<script src="http://<? echo $HTTP_SERVER_VARS["HTTP_HOST"].$CANONICAL_RELATIVE_PATH_STUDIP;?>get_key.php" type="text/javascript">
+<script src="<? echo $link;?>get_key.php" type="text/javascript">
 </script>
 <script type="text/javascript">
 
@@ -68,12 +69,12 @@ var geheim=""
 }
 
 /* Hier gehts los... */
-var password = "<?=$HTTP_POST_VARS["pass"];?>";
+var password = "<?=$_POST["pass"];?>";
 var username = "<?=$auth->auth["uname"];?>";
 if (auto_key)
    {
     var response = one_time_pad(password,auto_key);
-    var autourl="http://<? echo $HTTP_SERVER_VARS["HTTP_HOST"].$CANONICAL_RELATIVE_PATH_STUDIP;?>index.php?again=yes&auto_user=" + username + "&auto_response=" + response + "&auto_id=" + auto_id + "&resolution=" + screen.width+"x"+screen.height;
+    var autourl="<? echo $link;?>index.php?again=yes&auto_user=" + username + "&auto_response=" + response + "&auto_id=" + auto_id + "&resolution=" + screen.width+"x"+screen.height;
     location.href=autourl;
     }
 //-->
@@ -83,11 +84,13 @@ if (auto_key)
 </body>
 </html>
 <?
-header("Content-Type: application/x-autologin");
-header("Content-Disposition: inline; filename=\"autologin_".$auth->auth["uname"].".rename_to_html\"");
-header("Pragma: no-cache");
-header("Expires: 0");
-header("cache-control: no-cache");
-
-ob_end_flush();
+$data = ob_get_contents();
+header("Expires: Mon, 12 Dec 2001 08:00:00 GMT");
+header("Last-Modified: " . gmdate ("D, d M Y H:i:s") . " GMT");
+header("Cache-Control: no-store, no-cache, must-revalidate");   // HTTP/1.1
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Content-Type: application/octet-stream");
+header("Content-Disposition: attachment; filename=\"autologin_".$auth->auth["uname"].".html\"");
+header("Content-Length: " . strlen($data));
+echo $data;
 ?>
