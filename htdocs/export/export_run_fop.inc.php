@@ -103,7 +103,7 @@ else
 			unset($export_info);
 			unset($export_msg);
 			$export_pagecontent = "";
-			$export_error = "<b>" . sprintf(_("Bei der Erzeugung der PDF-Datei ist ein Fehler aufgetreten. <br>Fehlermeldung: %s <br>Datei: %s"), $out, $pdf_file) . "</b><br>";
+			$export_error = "<b>" . sprintf(_("Bei der Erzeugung der PDF-Datei ist ein Fehler aufgetreten. <br>Fehlermeldung: %s <br>Datei: %s"), $out, $pdf_file) . "</b><br><".$JAVA_ENV_CALL.$FOP_SH_CALL.">";
 			$export_error_num ++;
 		}
 	
