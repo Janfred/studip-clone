@@ -106,7 +106,7 @@ class ScheduleWeek {
 			}
 				
 			$sort_index = 	date ("G", $start_time)+$idx_corr_h.(int)((date("i", $start_time)+$idx_corr_m) / 15).$week_day;			
-			$id = md5(uniqid("rss"));
+			$id = md5(uniqid("rss",1));
 			$this->events[$id]=array (
 							"sort_index" => $sort_index,
 							"id" =>$id,
