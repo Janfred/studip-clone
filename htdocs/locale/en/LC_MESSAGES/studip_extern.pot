@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2004-03-23 19:29+0100\n"
+"POT-Creation-Date: 2004-03-31 18:32+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -137,8 +137,8 @@ msgid ""
 msgstr ""
 
 #: extern/extern_config.inc.php:54
-#: extern/elements/main/ExternElementMainLectures.class.php:75
-#: extern/elements/main/ExternElementMainLecturestable.class.php:82
+#: extern/elements/main/ExternElementMainLectures.class.php:76
+#: extern/elements/main/ExternElementMainLecturestable.class.php:85
 msgid "Veranstaltungen"
 msgstr ""
 
@@ -204,41 +204,41 @@ msgstr ""
 #: extern/views/ExternEditHtml.class.php:452
 #: extern/views/ExternEditHtml.class.php:496
 #: extern/views/ExternEditHtml.class.php:538
-#: extern/elements/ExternElementPersondetailsLectures.class.php:101
-#: extern/elements/ExternElementPersondetailsLectures.class.php:105
-#: extern/elements/ExternElementPersondetailsLectures.class.php:109
-#: extern/elements/ExternElementPersondetailsLectures.class.php:120
-#: extern/elements/ExternElementPersondetailsLectures.class.php:131
-#: extern/elements/main/ExternElementMainDownload.class.php:138
-#: extern/elements/main/ExternElementMainDownload.class.php:152
-#: extern/elements/main/ExternElementMainGlobal.class.php:104
-#: extern/elements/main/ExternElementMainGlobal.class.php:108
-#: extern/elements/main/ExternElementMainGlobal.class.php:112
-#: extern/elements/main/ExternElementMainGlobal.class.php:123
-#: extern/elements/main/ExternElementMainGlobal.class.php:134
-#: extern/elements/main/ExternElementMainGlobal.class.php:148
-#: extern/elements/main/ExternElementMainGlobal.class.php:155
-#: extern/elements/main/ExternElementMainLecturedetails.class.php:173
-#: extern/elements/main/ExternElementMainLecturedetails.class.php:180
-#: extern/elements/main/ExternElementMainLectures.class.php:125
-#: extern/elements/main/ExternElementMainLectures.class.php:129
+#: extern/elements/ExternElementPersondetailsLectures.class.php:104
+#: extern/elements/ExternElementPersondetailsLectures.class.php:108
+#: extern/elements/ExternElementPersondetailsLectures.class.php:112
+#: extern/elements/ExternElementPersondetailsLectures.class.php:123
+#: extern/elements/ExternElementPersondetailsLectures.class.php:134
+#: extern/elements/main/ExternElementMainDownload.class.php:141
+#: extern/elements/main/ExternElementMainDownload.class.php:155
+#: extern/elements/main/ExternElementMainGlobal.class.php:110
+#: extern/elements/main/ExternElementMainGlobal.class.php:114
+#: extern/elements/main/ExternElementMainGlobal.class.php:118
+#: extern/elements/main/ExternElementMainGlobal.class.php:129
+#: extern/elements/main/ExternElementMainGlobal.class.php:140
+#: extern/elements/main/ExternElementMainGlobal.class.php:154
+#: extern/elements/main/ExternElementMainGlobal.class.php:161
+#: extern/elements/main/ExternElementMainLecturedetails.class.php:176
+#: extern/elements/main/ExternElementMainLecturedetails.class.php:183
 #: extern/elements/main/ExternElementMainLectures.class.php:133
-#: extern/elements/main/ExternElementMainLectures.class.php:144
-#: extern/elements/main/ExternElementMainLectures.class.php:155
-#: extern/elements/main/ExternElementMainLectures.class.php:233
-#: extern/elements/main/ExternElementMainLectures.class.php:240
-#: extern/elements/main/ExternElementMainLecturestable.class.php:143
-#: extern/elements/main/ExternElementMainLecturestable.class.php:147
-#: extern/elements/main/ExternElementMainLecturestable.class.php:151
-#: extern/elements/main/ExternElementMainLecturestable.class.php:162
-#: extern/elements/main/ExternElementMainLecturestable.class.php:173
-#: extern/elements/main/ExternElementMainLecturestable.class.php:248
-#: extern/elements/main/ExternElementMainLecturestable.class.php:255
-#: extern/elements/main/ExternElementMainNews.class.php:116
-#: extern/elements/main/ExternElementMainNews.class.php:130
-#: extern/elements/main/ExternElementMainPersondetails.class.php:131
-#: extern/elements/main/ExternElementMainPersondetails.class.php:145
-#: extern/elements/main/ExternElementMainPersons.class.php:145
+#: extern/elements/main/ExternElementMainLectures.class.php:137
+#: extern/elements/main/ExternElementMainLectures.class.php:141
+#: extern/elements/main/ExternElementMainLectures.class.php:152
+#: extern/elements/main/ExternElementMainLectures.class.php:163
+#: extern/elements/main/ExternElementMainLectures.class.php:241
+#: extern/elements/main/ExternElementMainLectures.class.php:248
+#: extern/elements/main/ExternElementMainLecturestable.class.php:152
+#: extern/elements/main/ExternElementMainLecturestable.class.php:156
+#: extern/elements/main/ExternElementMainLecturestable.class.php:160
+#: extern/elements/main/ExternElementMainLecturestable.class.php:171
+#: extern/elements/main/ExternElementMainLecturestable.class.php:182
+#: extern/elements/main/ExternElementMainLecturestable.class.php:257
+#: extern/elements/main/ExternElementMainLecturestable.class.php:264
+#: extern/elements/main/ExternElementMainNews.class.php:119
+#: extern/elements/main/ExternElementMainNews.class.php:133
+#: extern/elements/main/ExternElementMainPersondetails.class.php:135
+#: extern/elements/main/ExternElementMainPersondetails.class.php:149
+#: extern/elements/main/ExternElementMainPersons.class.php:149
 msgid "keine Auswahl"
 msgstr ""
 
@@ -539,8 +539,8 @@ msgid "Reihenfolge/<br>Sichtbarkeit"
 msgstr ""
 
 #: extern/views/ExternEditModule.class.php:120
-#: extern/elements/main/ExternElementMainLecturestable.class.php:200
-#: extern/elements/main/ExternElementMainPersons.class.php:152
+#: extern/elements/main/ExternElementMainLecturestable.class.php:209
+#: extern/elements/main/ExternElementMainPersons.class.php:156
 msgid "keine"
 msgstr ""
 
@@ -605,49 +605,49 @@ msgstr ""
 msgid "Reihenfolge"
 msgstr ""
 
-#: extern/views/extern_edit_module.inc.php:55
+#: extern/views/extern_edit_module.inc.php:57
 #, c-format
 msgid ""
 "Es wurden bereits %s Konfigurationen angelegt. Sie k&ouml;nnen f&uuml;r "
 "dieses Module keine weiteren Konfigurationen anlegen."
 msgstr ""
 
-#: extern/views/extern_edit_module.inc.php:104
+#: extern/views/extern_edit_module.inc.php:109
 #, c-format
 msgid "Bitte korrigieren Sie die mit %s gekennzeichneten Werte!"
 msgstr ""
 
-#: extern/views/extern_edit_module.inc.php:121
+#: extern/views/extern_edit_module.inc.php:126
 msgid ""
 "Der Konfigurationsname wurde bereits für eine Konfiguration dieses Moduls "
 "vergeben. Bitte geben Sie einen anderen Namen ein."
 msgstr ""
 
-#: extern/views/extern_edit_module.inc.php:127
+#: extern/views/extern_edit_module.inc.php:132
 msgid ""
 "Die eingegebenen Werte wurden übernommen und der Name der Konfiguration "
 "geändert."
 msgstr ""
 
-#: extern/views/extern_edit_module.inc.php:134
+#: extern/views/extern_edit_module.inc.php:139
 msgid "Die eingegebenen Werte wurden übernommen."
 msgstr ""
 
-#: extern/views/extern_edit_module.inc.php:155
+#: extern/views/extern_edit_module.inc.php:160
 msgid ""
 "Um die Werte eines einzelnen Elements zu &auml;ndern, klicken Sie bitte den "
 "&quot;&Uuml;bernehmen&quot;-Button innerhalb des jeweiligen Elements."
 msgstr ""
 
-#: extern/views/extern_edit_module.inc.php:158
+#: extern/views/extern_edit_module.inc.php:163
 msgid "Um eine Vorschau der Seite zu erhalten, klicken Sie bitte hier:"
 msgstr ""
 
-#: extern/views/extern_edit_module.inc.php:167
+#: extern/views/extern_edit_module.inc.php:172
 msgid "Die Vorschau wird in einem neuen Fenster ge&ouml;ffnet."
 msgstr ""
 
-#: extern/views/extern_edit_module.inc.php:168
+#: extern/views/extern_edit_module.inc.php:173
 msgid "Es werden eventuell nicht alle Einstellungen in der Vorschau angezeigt."
 msgstr ""
 
@@ -742,7 +742,7 @@ msgstr ""
 
 #: extern/modules/ExternModuleDownload.class.php:57
 #: extern/modules/ExternModuleLecturedetails.class.php:80
-#: extern/modules/ExternModuleLecturedetails.class.php:307
+#: extern/modules/ExternModuleLecturedetails.class.php:311
 #: extern/modules/views/lecturedetails_preview.inc.php:42
 #: extern/elements/main/ExternElementMainDownload.class.php:65
 msgid "Beschreibung"
@@ -775,47 +775,47 @@ msgstr ""
 msgid "Link zum Dateidownload"
 msgstr ""
 
-#: extern/modules/ExternModuleDownload.class.php:234
+#: extern/modules/ExternModuleDownload.class.php:238
 msgid "Das ist eine Text-Datei."
 msgstr ""
 
-#: extern/modules/ExternModuleDownload.class.php:237
+#: extern/modules/ExternModuleDownload.class.php:241
 msgid "Das ist eine Powerpoint-Datei."
 msgstr ""
 
-#: extern/modules/ExternModuleDownload.class.php:240
+#: extern/modules/ExternModuleDownload.class.php:244
 msgid "Das ist eine ZIP-Datei."
 msgstr ""
 
-#: extern/modules/ExternModuleDownload.class.php:243
+#: extern/modules/ExternModuleDownload.class.php:247
 msgid "Das ist eine Excel-Datei."
 msgstr ""
 
-#: extern/modules/ExternModuleDownload.class.php:246
+#: extern/modules/ExternModuleDownload.class.php:250
 msgid "Das ist eine Bild-Datei."
 msgstr ""
 
-#: extern/modules/ExternModuleDownload.class.php:249
+#: extern/modules/ExternModuleDownload.class.php:253
 msgid "Das ist ein Dokument im Microsoft Rich-Text-Format."
 msgstr ""
 
-#: extern/modules/ExternModuleDownload.class.php:252
+#: extern/modules/ExternModuleDownload.class.php:256
 msgid "Das ist ein Adobe PDF-Dokument."
 msgstr ""
 
-#: extern/modules/ExternModuleDownload.class.php:255
+#: extern/modules/ExternModuleDownload.class.php:259
 msgid "Und noch ein ZIP-Archiv."
 msgstr ""
 
-#: extern/modules/ExternModuleDownload.class.php:258
+#: extern/modules/ExternModuleDownload.class.php:262
 msgid "Eine weitere Text-Datei."
 msgstr ""
 
-#: extern/modules/ExternModuleDownload.class.php:261
+#: extern/modules/ExternModuleDownload.class.php:265
 msgid "Ein Bild im PNG-Format."
 msgstr ""
 
-#: extern/modules/ExternModuleDownload.class.php:264
+#: extern/modules/ExternModuleDownload.class.php:268
 msgid "Eine anderes Format."
 msgstr ""
 
@@ -869,7 +869,7 @@ msgstr ""
 
 #: extern/modules/ExternModuleLecturedetails.class.php:76
 #: extern/modules/ExternModuleLecturestable.class.php:67
-#: extern/elements/main/ExternElementMainLecturestable.class.php:67
+#: extern/elements/main/ExternElementMainLecturestable.class.php:70
 msgid "Untertitel"
 msgstr ""
 
@@ -877,18 +877,18 @@ msgstr ""
 #: extern/modules/ExternModuleLecturestable.class.php:72
 #: extern/modules/views/ExternSemBrowse.class.php:22
 #: extern/modules/views/ExternSemBrowseTable.class.php:22
-#: extern/elements/main/ExternElementMainLectures.class.php:78
-#: extern/elements/main/ExternElementMainLectures.class.php:117
-#: extern/elements/main/ExternElementMainLectures.class.php:221
-#: extern/elements/main/ExternElementMainLecturestable.class.php:68
-#: extern/elements/main/ExternElementMainLecturestable.class.php:85
-#: extern/elements/main/ExternElementMainLecturestable.class.php:135
-#: extern/elements/main/ExternElementMainLecturestable.class.php:236
+#: extern/elements/main/ExternElementMainLectures.class.php:79
+#: extern/elements/main/ExternElementMainLectures.class.php:125
+#: extern/elements/main/ExternElementMainLectures.class.php:229
+#: extern/elements/main/ExternElementMainLecturestable.class.php:71
+#: extern/elements/main/ExternElementMainLecturestable.class.php:88
+#: extern/elements/main/ExternElementMainLecturestable.class.php:144
+#: extern/elements/main/ExternElementMainLecturestable.class.php:245
 msgid "DozentIn"
 msgstr ""
 
 #: extern/modules/ExternModuleLecturedetails.class.php:78
-#: extern/elements/main/ExternElementMainLecturestable.class.php:68
+#: extern/elements/main/ExternElementMainLecturestable.class.php:71
 msgid "Veranstaltungsart"
 msgstr ""
 
@@ -899,31 +899,31 @@ msgstr ""
 #: extern/modules/ExternModuleLecturedetails.class.php:81
 #: extern/modules/ExternModuleLecturestable.class.php:69
 #: extern/elements/ExternElementRangeTreeLevelContent.class.php:85
-#: extern/elements/main/ExternElementMainLecturestable.class.php:68
+#: extern/elements/main/ExternElementMainLecturestable.class.php:71
 msgid "Ort"
 msgstr ""
 
 #: extern/modules/ExternModuleLecturedetails.class.php:82
 #: extern/modules/views/ExternSemBrowse.class.php:20
 #: extern/modules/views/ExternSemBrowseTable.class.php:20
-#: extern/elements/main/ExternElementMainLectures.class.php:78
-#: extern/elements/main/ExternElementMainLectures.class.php:117
-#: extern/elements/main/ExternElementMainLectures.class.php:221
-#: extern/elements/main/ExternElementMainLecturestable.class.php:85
-#: extern/elements/main/ExternElementMainLecturestable.class.php:135
-#: extern/elements/main/ExternElementMainLecturestable.class.php:236
+#: extern/elements/main/ExternElementMainLectures.class.php:79
+#: extern/elements/main/ExternElementMainLectures.class.php:125
+#: extern/elements/main/ExternElementMainLectures.class.php:229
+#: extern/elements/main/ExternElementMainLecturestable.class.php:88
+#: extern/elements/main/ExternElementMainLecturestable.class.php:144
+#: extern/elements/main/ExternElementMainLecturestable.class.php:245
 msgid "Semester"
 msgstr ""
 
 #: extern/modules/ExternModuleLecturedetails.class.php:83
 #: extern/modules/ExternModuleLecturestable.class.php:71
-#: extern/elements/main/ExternElementMainLecturestable.class.php:68
+#: extern/elements/main/ExternElementMainLecturestable.class.php:71
 msgid "Zeiten"
 msgstr ""
 
 #: extern/modules/ExternModuleLecturedetails.class.php:84
 #: extern/modules/ExternModuleLecturestable.class.php:65
-#: extern/elements/main/ExternElementMainLecturestable.class.php:67
+#: extern/elements/main/ExternElementMainLecturestable.class.php:70
 msgid "Veranstaltungsnummer"
 msgstr ""
 
@@ -932,19 +932,19 @@ msgid "TeilnehmerInnen"
 msgstr ""
 
 #: extern/modules/ExternModuleLecturedetails.class.php:86
-#: extern/modules/ExternModuleLecturedetails.class.php:313
+#: extern/modules/ExternModuleLecturedetails.class.php:317
 #: extern/modules/views/lecturedetails_preview.inc.php:48
 msgid "Voraussetzungen"
 msgstr ""
 
 #: extern/modules/ExternModuleLecturedetails.class.php:87
-#: extern/modules/ExternModuleLecturedetails.class.php:314
+#: extern/modules/ExternModuleLecturedetails.class.php:318
 #: extern/modules/views/lecturedetails_preview.inc.php:49
 msgid "Lernorganisation"
 msgstr ""
 
 #: extern/modules/ExternModuleLecturedetails.class.php:88
-#: extern/modules/ExternModuleLecturedetails.class.php:315
+#: extern/modules/ExternModuleLecturedetails.class.php:319
 #: extern/modules/views/lecturedetails_preview.inc.php:50
 msgid "Leistungsnachweis"
 msgstr ""
@@ -954,7 +954,7 @@ msgid "Bereichseinordnung"
 msgstr ""
 
 #: extern/modules/ExternModuleLecturedetails.class.php:90
-#: extern/modules/ExternModuleLecturedetails.class.php:317
+#: extern/modules/ExternModuleLecturedetails.class.php:321
 #: extern/modules/views/lecturedetails_preview.inc.php:52
 msgid "Sonstiges"
 msgstr ""
@@ -964,7 +964,7 @@ msgid "ECTS-Kreditpunkte"
 msgstr ""
 
 #: extern/modules/ExternModuleLecturedetails.class.php:100
-#: extern/modules/ExternModuleLecturedetails.class.php:284
+#: extern/modules/ExternModuleLecturedetails.class.php:288
 #: extern/modules/views/lecturedetails_preview.inc.php:19
 msgid "Name der Veranstaltung"
 msgstr ""
@@ -981,137 +981,136 @@ msgstr ""
 msgid "Link zum Modul Mitarbeiterdetails"
 msgstr ""
 
-#: extern/modules/ExternModuleLecturedetails.class.php:285
+#: extern/modules/ExternModuleLecturedetails.class.php:289
 #: extern/modules/views/lecturedetails_preview.inc.php:20
 msgid "Untertitel der Veranstaltung"
 msgstr ""
 
-#: extern/modules/ExternModuleLecturedetails.class.php:288
+#: extern/modules/ExternModuleLecturedetails.class.php:292
 #: extern/modules/views/lecturedetails_preview.inc.php:23
 #: extern/modules/views/lecturedetails_preview.inc.php:38
 #: extern/modules/views/lectures_preview.inc.php:40
 #: extern/modules/views/lectures_preview.inc.php:55
-#: extern/modules/views/lecturestable_preview.inc.php:49
-#: extern/modules/views/lecturestable_preview.inc.php:64
+#: extern/modules/views/lecturestable_preview.inc.php:54
+#: extern/modules/views/lecturestable_preview.inc.php:69
 #: extern/modules/views/news_preview.inc.php:30
 #: extern/modules/views/persondetails_preview.inc.php:86
-#: extern/elements/main/ExternElementMainDownload.class.php:138
-#: extern/elements/main/ExternElementMainGlobal.class.php:148
-#: extern/elements/main/ExternElementMainLecturedetails.class.php:173
-#: extern/elements/main/ExternElementMainLectures.class.php:233
-#: extern/elements/main/ExternElementMainLecturestable.class.php:248
-#: extern/elements/main/ExternElementMainNews.class.php:116
-#: extern/elements/main/ExternElementMainPersondetails.class.php:131
-#: extern/elements/main/ExternElementMainPersons.class.php:145
+#: extern/elements/main/ExternElementMainDownload.class.php:141
+#: extern/elements/main/ExternElementMainGlobal.class.php:154
+#: extern/elements/main/ExternElementMainLecturedetails.class.php:176
+#: extern/elements/main/ExternElementMainLectures.class.php:241
+#: extern/elements/main/ExternElementMainLecturestable.class.php:257
+#: extern/elements/main/ExternElementMainNews.class.php:119
+#: extern/elements/main/ExternElementMainPersondetails.class.php:135
+#: extern/elements/main/ExternElementMainPersons.class.php:149
 msgid "Meyer, P."
 msgstr ""
 
-#: extern/modules/ExternModuleLecturedetails.class.php:291
+#: extern/modules/ExternModuleLecturedetails.class.php:295
 #: extern/modules/views/lecturedetails_preview.inc.php:26
 #: extern/modules/views/lectures_preview.inc.php:43
-#: extern/modules/views/lecturestable_preview.inc.php:52
+#: extern/modules/views/lecturestable_preview.inc.php:57
 #: extern/modules/views/news_preview.inc.php:33
 #: extern/modules/views/news_preview.inc.php:48
 #: extern/modules/views/persondetails_preview.inc.php:89
-#: extern/elements/main/ExternElementMainDownload.class.php:138
-#: extern/elements/main/ExternElementMainGlobal.class.php:148
-#: extern/elements/main/ExternElementMainLecturedetails.class.php:173
-#: extern/elements/main/ExternElementMainLectures.class.php:233
-#: extern/elements/main/ExternElementMainLecturestable.class.php:248
-#: extern/elements/main/ExternElementMainNews.class.php:116
-#: extern/elements/main/ExternElementMainPersondetails.class.php:131
-#: extern/elements/main/ExternElementMainPersons.class.php:145
+#: extern/elements/main/ExternElementMainDownload.class.php:141
+#: extern/elements/main/ExternElementMainGlobal.class.php:154
+#: extern/elements/main/ExternElementMainLecturedetails.class.php:176
+#: extern/elements/main/ExternElementMainLectures.class.php:241
+#: extern/elements/main/ExternElementMainLecturestable.class.php:257
+#: extern/elements/main/ExternElementMainNews.class.php:119
+#: extern/elements/main/ExternElementMainPersondetails.class.php:135
+#: extern/elements/main/ExternElementMainPersons.class.php:149
 msgid "Peter Meyer"
 msgstr ""
 
-#: extern/modules/ExternModuleLecturedetails.class.php:294
+#: extern/modules/ExternModuleLecturedetails.class.php:298
 #: extern/modules/views/lecturedetails_preview.inc.php:29
 #: extern/modules/views/lectures_preview.inc.php:46
-#: extern/modules/views/lecturestable_preview.inc.php:55
+#: extern/modules/views/lecturestable_preview.inc.php:60
 #: extern/modules/views/news_preview.inc.php:36
 #: extern/modules/views/persondetails_preview.inc.php:92
-#: extern/elements/main/ExternElementMainDownload.class.php:138
-#: extern/elements/main/ExternElementMainGlobal.class.php:148
-#: extern/elements/main/ExternElementMainLecturedetails.class.php:173
-#: extern/elements/main/ExternElementMainLectures.class.php:233
-#: extern/elements/main/ExternElementMainLecturestable.class.php:248
-#: extern/elements/main/ExternElementMainNews.class.php:116
-#: extern/elements/main/ExternElementMainPersondetails.class.php:131
-#: extern/elements/main/ExternElementMainPersons.class.php:145
+#: extern/elements/main/ExternElementMainDownload.class.php:141
+#: extern/elements/main/ExternElementMainGlobal.class.php:154
+#: extern/elements/main/ExternElementMainLecturedetails.class.php:176
+#: extern/elements/main/ExternElementMainLectures.class.php:241
+#: extern/elements/main/ExternElementMainLecturestable.class.php:257
+#: extern/elements/main/ExternElementMainNews.class.php:119
+#: extern/elements/main/ExternElementMainPersondetails.class.php:135
 msgid "Meyer Peter"
 msgstr ""
 
-#: extern/modules/ExternModuleLecturedetails.class.php:297
-#: extern/modules/ExternModuleLecturedetails.class.php:303
+#: extern/modules/ExternModuleLecturedetails.class.php:301
+#: extern/modules/ExternModuleLecturedetails.class.php:307
 #: extern/modules/views/lecturedetails_preview.inc.php:32
 #: extern/modules/views/lectures_preview.inc.php:49
-#: extern/modules/views/lecturestable_preview.inc.php:58
+#: extern/modules/views/lecturestable_preview.inc.php:63
 #: extern/modules/views/news_preview.inc.php:39
 #: extern/modules/views/persondetails_preview.inc.php:95
 #: extern/modules/views/persondetails_preview.inc.php:101
-#: extern/elements/main/ExternElementMainDownload.class.php:139
-#: extern/elements/main/ExternElementMainGlobal.class.php:149
-#: extern/elements/main/ExternElementMainLecturedetails.class.php:174
-#: extern/elements/main/ExternElementMainLectures.class.php:234
-#: extern/elements/main/ExternElementMainLecturestable.class.php:249
-#: extern/elements/main/ExternElementMainNews.class.php:117
-#: extern/elements/main/ExternElementMainPersondetails.class.php:132
-#: extern/elements/main/ExternElementMainPersons.class.php:146
+#: extern/elements/main/ExternElementMainDownload.class.php:142
+#: extern/elements/main/ExternElementMainGlobal.class.php:155
+#: extern/elements/main/ExternElementMainLecturedetails.class.php:177
+#: extern/elements/main/ExternElementMainLectures.class.php:242
+#: extern/elements/main/ExternElementMainLecturestable.class.php:258
+#: extern/elements/main/ExternElementMainNews.class.php:120
+#: extern/elements/main/ExternElementMainPersondetails.class.php:136
+#: extern/elements/main/ExternElementMainPersons.class.php:150
 msgid "Dr. Peter Meyer"
 msgstr ""
 
-#: extern/modules/ExternModuleLecturedetails.class.php:300
+#: extern/modules/ExternModuleLecturedetails.class.php:304
 #: extern/modules/views/lecturedetails_preview.inc.php:35
 #: extern/modules/views/lectures_preview.inc.php:52
-#: extern/modules/views/lecturestable_preview.inc.php:61
+#: extern/modules/views/lecturestable_preview.inc.php:66
 #: extern/modules/views/news_preview.inc.php:42
 #: extern/modules/views/persondetails_preview.inc.php:98
-#: extern/elements/main/ExternElementMainDownload.class.php:139
-#: extern/elements/main/ExternElementMainGlobal.class.php:149
-#: extern/elements/main/ExternElementMainLecturedetails.class.php:174
-#: extern/elements/main/ExternElementMainLectures.class.php:234
-#: extern/elements/main/ExternElementMainLecturestable.class.php:249
-#: extern/elements/main/ExternElementMainNews.class.php:117
-#: extern/elements/main/ExternElementMainPersondetails.class.php:132
-#: extern/elements/main/ExternElementMainPersons.class.php:146
+#: extern/elements/main/ExternElementMainDownload.class.php:142
+#: extern/elements/main/ExternElementMainGlobal.class.php:155
+#: extern/elements/main/ExternElementMainLecturedetails.class.php:177
+#: extern/elements/main/ExternElementMainLectures.class.php:242
+#: extern/elements/main/ExternElementMainLecturestable.class.php:258
+#: extern/elements/main/ExternElementMainNews.class.php:120
+#: extern/elements/main/ExternElementMainPersondetails.class.php:136
+#: extern/elements/main/ExternElementMainPersons.class.php:150
 msgid "Meyer, Peter, Dr."
 msgstr ""
 
-#: extern/modules/ExternModuleLecturedetails.class.php:305
+#: extern/modules/ExternModuleLecturedetails.class.php:309
 #: extern/modules/views/lecturedetails_preview.inc.php:40
 msgid "Testveranstaltung"
 msgstr ""
 
-#: extern/modules/ExternModuleLecturedetails.class.php:308
+#: extern/modules/ExternModuleLecturedetails.class.php:312
 #: extern/modules/views/lecturedetails_preview.inc.php:43
 msgid "A 123, 1. Stock"
 msgstr ""
 
-#: extern/modules/ExternModuleLecturedetails.class.php:310
+#: extern/modules/ExternModuleLecturedetails.class.php:314
 #: extern/modules/views/lecturedetails_preview.inc.php:45
 #: extern/modules/views/lectures_preview.inc.php:34
 #: extern/modules/views/lectures_preview.inc.php:36
-#: extern/modules/views/lecturestable_preview.inc.php:31
-#: extern/modules/views/lecturestable_preview.inc.php:33
+#: extern/modules/views/lecturestable_preview.inc.php:36
+#: extern/modules/views/lecturestable_preview.inc.php:38
 msgid "Di. 8:30 - 13:30, Mi. 8:30 - 13:30, Do. 8:30 - 13:30"
 msgstr ""
 
-#: extern/modules/ExternModuleLecturedetails.class.php:312
+#: extern/modules/ExternModuleLecturedetails.class.php:316
 #: extern/modules/views/lecturedetails_preview.inc.php:47
 msgid "Teilnehmer"
 msgstr ""
 
-#: extern/modules/ExternModuleLecturedetails.class.php:316
+#: extern/modules/ExternModuleLecturedetails.class.php:320
 #: extern/modules/views/lecturedetails_preview.inc.php:51
 msgid "Fakult&auml;t &gt; Studiengang &gt; Bereich"
 msgstr ""
 
-#: extern/modules/ExternModuleLecturedetails.class.php:496
+#: extern/modules/ExternModuleLecturedetails.class.php:500
 #: extern/modules/views/lecturedetails_preview.inc.php:226
 msgid "Heimatinstitut"
 msgstr ""
 
-#: extern/modules/ExternModuleLecturedetails.class.php:500
+#: extern/modules/ExternModuleLecturedetails.class.php:504
 #: extern/modules/views/lecturedetails_preview.inc.php:231
 msgid "Beteiligte Institute"
 msgstr ""
@@ -1130,12 +1129,12 @@ msgstr ""
 #: extern/modules/ExternModuleLecturestable.class.php:66
 #: extern/modules/ExternModulePersons.class.php:55
 #: extern/elements/main/ExternElementMainDownload.class.php:65
-#: extern/elements/main/ExternElementMainPersons.class.php:69
+#: extern/elements/main/ExternElementMainPersons.class.php:70
 msgid "Name"
 msgstr ""
 
 #: extern/modules/ExternModuleLecturestable.class.php:68
-#: extern/elements/main/ExternElementMainLecturestable.class.php:67
+#: extern/elements/main/ExternElementMainLecturestable.class.php:70
 msgid "Status"
 msgstr ""
 
@@ -1169,7 +1168,7 @@ msgstr ""
 #: extern/modules/ExternModulePersondetails.class.php:64
 #: extern/modules/ExternModulePersons.class.php:57
 #: extern/elements/ExternElementContact.class.php:90
-#: extern/elements/main/ExternElementMainPersons.class.php:69
+#: extern/elements/main/ExternElementMainPersons.class.php:70
 msgid "Raum"
 msgstr ""
 
@@ -1177,7 +1176,7 @@ msgstr ""
 #: extern/modules/ExternModulePersons.class.php:56
 #: extern/elements/ExternElementContact.class.php:90
 #: extern/elements/ExternElementRangeTreeLevelContent.class.php:85
-#: extern/elements/main/ExternElementMainPersons.class.php:69
+#: extern/elements/main/ExternElementMainPersons.class.php:70
 msgid "Telefon"
 msgstr ""
 
@@ -1191,7 +1190,7 @@ msgstr ""
 #: extern/modules/ExternModulePersons.class.php:58
 #: extern/elements/ExternElementContact.class.php:90
 #: extern/elements/ExternElementRangeTreeLevelContent.class.php:85
-#: extern/elements/main/ExternElementMainPersons.class.php:69
+#: extern/elements/main/ExternElementMainPersons.class.php:70
 msgid "Email"
 msgstr ""
 
@@ -1204,7 +1203,7 @@ msgstr ""
 #: extern/modules/ExternModulePersondetails.class.php:69
 #: extern/modules/ExternModulePersons.class.php:59
 #: extern/elements/ExternElementContact.class.php:90
-#: extern/elements/main/ExternElementMainPersons.class.php:69
+#: extern/elements/main/ExternElementMainPersons.class.php:70
 msgid "Sprechzeiten"
 msgstr ""
 
@@ -1214,30 +1213,30 @@ msgid "Name, Anschrift, Kontakt"
 msgstr ""
 
 #: extern/modules/ExternModulePersondetails.class.php:74
-#: extern/elements/main/ExternElementMainPersondetails.class.php:64
+#: extern/elements/main/ExternElementMainPersondetails.class.php:65
 msgid "Lebenslauf"
 msgstr ""
 
 #: extern/modules/ExternModulePersondetails.class.php:75
-#: extern/elements/main/ExternElementMainPersondetails.class.php:64
+#: extern/elements/main/ExternElementMainPersondetails.class.php:65
 msgid "Schwerpunkte"
 msgstr ""
 
 #: extern/modules/ExternModulePersondetails.class.php:76
-#: extern/elements/ExternElementPersondetailsLectures.class.php:57
-#: extern/elements/main/ExternElementMainLectures.class.php:84
-#: extern/elements/main/ExternElementMainLecturestable.class.php:91
-#: extern/elements/main/ExternElementMainPersondetails.class.php:64
+#: extern/elements/ExternElementPersondetailsLectures.class.php:58
+#: extern/elements/main/ExternElementMainLectures.class.php:85
+#: extern/elements/main/ExternElementMainLecturestable.class.php:94
+#: extern/elements/main/ExternElementMainPersondetails.class.php:65
 msgid "Lehrveranstaltungen"
 msgstr ""
 
 #: extern/modules/ExternModulePersondetails.class.php:78
-#: extern/elements/main/ExternElementMainPersondetails.class.php:65
+#: extern/elements/main/ExternElementMainPersondetails.class.php:66
 msgid "Termine"
 msgstr ""
 
 #: extern/modules/ExternModulePersondetails.class.php:79
-#: extern/elements/main/ExternElementMainPersondetails.class.php:65
+#: extern/elements/main/ExternElementMainPersondetails.class.php:66
 msgid "Publikationen"
 msgstr ""
 
@@ -1255,34 +1254,34 @@ msgstr ""
 
 #: extern/modules/views/ExternSemBrowse.class.php:21
 #: extern/modules/views/ExternSemBrowseTable.class.php:21
-#: extern/elements/main/ExternElementMainLectures.class.php:78
-#: extern/elements/main/ExternElementMainLectures.class.php:117
-#: extern/elements/main/ExternElementMainLectures.class.php:221
-#: extern/elements/main/ExternElementMainLecturestable.class.php:85
-#: extern/elements/main/ExternElementMainLecturestable.class.php:135
-#: extern/elements/main/ExternElementMainLecturestable.class.php:236
+#: extern/elements/main/ExternElementMainLectures.class.php:79
+#: extern/elements/main/ExternElementMainLectures.class.php:125
+#: extern/elements/main/ExternElementMainLectures.class.php:229
+#: extern/elements/main/ExternElementMainLecturestable.class.php:88
+#: extern/elements/main/ExternElementMainLecturestable.class.php:144
+#: extern/elements/main/ExternElementMainLecturestable.class.php:245
 msgid "Bereich"
 msgstr ""
 
 #: extern/modules/views/ExternSemBrowse.class.php:23
 #: extern/modules/views/ExternSemBrowseTable.class.php:23
-#: extern/elements/main/ExternElementMainLectures.class.php:79
-#: extern/elements/main/ExternElementMainLectures.class.php:118
-#: extern/elements/main/ExternElementMainLectures.class.php:221
-#: extern/elements/main/ExternElementMainLecturestable.class.php:86
-#: extern/elements/main/ExternElementMainLecturestable.class.php:136
-#: extern/elements/main/ExternElementMainLecturestable.class.php:236
+#: extern/elements/main/ExternElementMainLectures.class.php:80
+#: extern/elements/main/ExternElementMainLectures.class.php:126
+#: extern/elements/main/ExternElementMainLectures.class.php:229
+#: extern/elements/main/ExternElementMainLecturestable.class.php:89
+#: extern/elements/main/ExternElementMainLecturestable.class.php:145
+#: extern/elements/main/ExternElementMainLecturestable.class.php:245
 msgid "Typ"
 msgstr ""
 
 #: extern/modules/views/ExternSemBrowse.class.php:24
 #: extern/modules/views/ExternSemBrowseTable.class.php:24
-#: extern/elements/main/ExternElementMainLectures.class.php:79
-#: extern/elements/main/ExternElementMainLectures.class.php:118
-#: extern/elements/main/ExternElementMainLectures.class.php:221
-#: extern/elements/main/ExternElementMainLecturestable.class.php:86
-#: extern/elements/main/ExternElementMainLecturestable.class.php:136
-#: extern/elements/main/ExternElementMainLecturestable.class.php:236
+#: extern/elements/main/ExternElementMainLectures.class.php:80
+#: extern/elements/main/ExternElementMainLectures.class.php:126
+#: extern/elements/main/ExternElementMainLectures.class.php:229
+#: extern/elements/main/ExternElementMainLecturestable.class.php:89
+#: extern/elements/main/ExternElementMainLecturestable.class.php:145
+#: extern/elements/main/ExternElementMainLecturestable.class.php:245
 msgid "Einrichtung"
 msgstr ""
 
@@ -1310,46 +1309,46 @@ msgid "Name der Veranstaltung 3"
 msgstr ""
 
 #: extern/modules/views/lectures_preview.inc.php:35
-#: extern/modules/views/lecturestable_preview.inc.php:32
+#: extern/modules/views/lecturestable_preview.inc.php:37
 msgid ""
 "Termine am 31.7. 14:00 - 16:00, 17.8. 11:00 - 14:30, 6.9. 14:00 - 16:00,..."
 msgstr ""
 
-#: extern/modules/views/lecturestable_preview.inc.php:25
-#: extern/modules/views/lecturestable_preview.inc.php:27
-#: extern/modules/views/lecturestable_preview.inc.php:29
+#: extern/modules/views/lecturestable_preview.inc.php:30
+#: extern/modules/views/lecturestable_preview.inc.php:32
+#: extern/modules/views/lecturestable_preview.inc.php:34
 #, c-format
 msgid "Name der Veranstaltung %s"
 msgstr ""
 
-#: extern/modules/views/lecturestable_preview.inc.php:26
-#: extern/modules/views/lecturestable_preview.inc.php:28
-#: extern/modules/views/lecturestable_preview.inc.php:30
+#: extern/modules/views/lecturestable_preview.inc.php:31
+#: extern/modules/views/lecturestable_preview.inc.php:33
+#: extern/modules/views/lecturestable_preview.inc.php:35
 #, c-format
 msgid "Untertitel der Veranstaltung %s"
 msgstr ""
 
-#: extern/modules/views/lecturestable_preview.inc.php:37
+#: extern/modules/views/lecturestable_preview.inc.php:42
 msgid "Seminar"
 msgstr ""
 
-#: extern/modules/views/lecturestable_preview.inc.php:38
+#: extern/modules/views/lecturestable_preview.inc.php:43
 msgid "Vorlesung"
 msgstr ""
 
-#: extern/modules/views/lecturestable_preview.inc.php:39
+#: extern/modules/views/lecturestable_preview.inc.php:44
 msgid "Praktikum"
 msgstr ""
 
-#: extern/modules/views/lecturestable_preview.inc.php:40
+#: extern/modules/views/lecturestable_preview.inc.php:45
 msgid "Vorlesung im Hauptstudium"
 msgstr ""
 
-#: extern/modules/views/lecturestable_preview.inc.php:41
+#: extern/modules/views/lecturestable_preview.inc.php:46
 msgid "Vorlesung im Grundstudium"
 msgstr ""
 
-#: extern/modules/views/lecturestable_preview.inc.php:42
+#: extern/modules/views/lecturestable_preview.inc.php:47
 msgid "Praktikum im Haupstudium"
 msgstr ""
 
@@ -1364,7 +1363,7 @@ msgid "Beschreibung der Nachricht Nr. %s"
 msgstr ""
 
 #: extern/modules/views/news_preview.inc.php:45
-#: extern/elements/main/ExternElementMainNews.class.php:117
+#: extern/elements/main/ExternElementMainNews.class.php:120
 msgid "Meyer"
 msgstr ""
 
@@ -1509,14 +1508,14 @@ msgstr ""
 
 #: extern/lib/ExternElementMain.class.php:55
 #: extern/elements/main/ExternElementMainDownload.class.php:53
-#: extern/elements/main/ExternElementMainGlobal.class.php:52
+#: extern/elements/main/ExternElementMainGlobal.class.php:53
 #: extern/elements/main/ExternElementMainLecturedetails.class.php:52
-#: extern/elements/main/ExternElementMainLectures.class.php:54
-#: extern/elements/main/ExternElementMainLecturestable.class.php:54
+#: extern/elements/main/ExternElementMainLectures.class.php:55
+#: extern/elements/main/ExternElementMainLecturestable.class.php:57
 #: extern/elements/main/ExternElementMainNews.class.php:52
 #: extern/elements/main/ExternElementMainNewsticker.class.php:51
-#: extern/elements/main/ExternElementMainPersondetails.class.php:51
-#: extern/elements/main/ExternElementMainPersons.class.php:52
+#: extern/elements/main/ExternElementMainPersondetails.class.php:52
+#: extern/elements/main/ExternElementMainPersons.class.php:53
 #: extern/elements/main/ExternElementMainRangelecturetree.class.php:53
 #: extern/elements/main/ExternElementMainSemlecturetree.class.php:53
 msgid "Grundeinstellungen"
@@ -1628,15 +1627,15 @@ msgstr ""
 
 #: extern/elements/ExternElementContentNews.class.php:82
 #: extern/elements/ExternElementStudipLink.class.php:91
-#: extern/elements/main/ExternElementMainDownload.class.php:123
-#: extern/elements/main/ExternElementMainGlobal.class.php:143
-#: extern/elements/main/ExternElementMainLecturedetails.class.php:132
-#: extern/elements/main/ExternElementMainLectures.class.php:228
-#: extern/elements/main/ExternElementMainLecturestable.class.php:243
-#: extern/elements/main/ExternElementMainNews.class.php:111
+#: extern/elements/main/ExternElementMainDownload.class.php:126
+#: extern/elements/main/ExternElementMainGlobal.class.php:149
+#: extern/elements/main/ExternElementMainLecturedetails.class.php:135
+#: extern/elements/main/ExternElementMainLectures.class.php:236
+#: extern/elements/main/ExternElementMainLecturestable.class.php:252
+#: extern/elements/main/ExternElementMainNews.class.php:114
 #: extern/elements/main/ExternElementMainNewsticker.class.php:97
-#: extern/elements/main/ExternElementMainPersondetails.class.php:114
-#: extern/elements/main/ExternElementMainPersons.class.php:140
+#: extern/elements/main/ExternElementMainPersondetails.class.php:118
+#: extern/elements/main/ExternElementMainPersons.class.php:144
 #: extern/elements/main/ExternElementMainRangelecturetree.class.php:94
 #: extern/elements/main/ExternElementMainSemlecturetree.class.php:94
 msgid "Weitere Angaben"
@@ -1837,157 +1836,157 @@ msgstr ""
 msgid "Höhe:"
 msgstr ""
 
-#: extern/elements/ExternElementPersondetailsLectures.class.php:58
+#: extern/elements/ExternElementPersondetailsLectures.class.php:59
 msgid "Angaben zur Ausgabe von Lehrveranstaltungen."
 msgstr ""
 
-#: extern/elements/ExternElementPersondetailsLectures.class.php:70
+#: extern/elements/ExternElementPersondetailsLectures.class.php:71
 msgid "Wintersemester"
 msgstr ""
 
-#: extern/elements/ExternElementPersondetailsLectures.class.php:71
+#: extern/elements/ExternElementPersondetailsLectures.class.php:72
 msgid "Sommersemester"
 msgstr ""
 
-#: extern/elements/ExternElementPersondetailsLectures.class.php:95
+#: extern/elements/ExternElementPersondetailsLectures.class.php:98
 #: extern/elements/ExternElementTreeBackLink.class.php:74
 #: extern/elements/ExternElementTreePath.class.php:71
 msgid "Allgemeine Angaben"
 msgstr ""
 
-#: extern/elements/ExternElementPersondetailsLectures.class.php:97
-#: extern/elements/main/ExternElementMainGlobal.class.php:100
-#: extern/elements/main/ExternElementMainLectures.class.php:121
-#: extern/elements/main/ExternElementMainLecturestable.class.php:139
+#: extern/elements/ExternElementPersondetailsLectures.class.php:100
+#: extern/elements/main/ExternElementMainGlobal.class.php:106
+#: extern/elements/main/ExternElementMainLectures.class.php:129
+#: extern/elements/main/ExternElementMainLecturestable.class.php:148
 msgid "Startsemester:"
 msgstr ""
 
-#: extern/elements/ExternElementPersondetailsLectures.class.php:98
-#: extern/elements/main/ExternElementMainGlobal.class.php:101
-#: extern/elements/main/ExternElementMainLectures.class.php:122
-#: extern/elements/main/ExternElementMainLecturestable.class.php:140
+#: extern/elements/ExternElementPersondetailsLectures.class.php:101
+#: extern/elements/main/ExternElementMainGlobal.class.php:107
+#: extern/elements/main/ExternElementMainLectures.class.php:130
+#: extern/elements/main/ExternElementMainLecturestable.class.php:149
 msgid ""
 "Geben Sie das erste anzuzeigende Semester an. Die Angaben \"vorheriges\", "
 "\"aktuelles\" und \"nächstes\" beziehen sich immer auf das laufende Semester "
 "und werden automatisch angepasst."
 msgstr ""
 
-#: extern/elements/ExternElementPersondetailsLectures.class.php:101
-#: extern/elements/ExternElementPersondetailsLectures.class.php:105
-#: extern/elements/ExternElementPersondetailsLectures.class.php:109
-#: extern/elements/main/ExternElementMainGlobal.class.php:104
-#: extern/elements/main/ExternElementMainGlobal.class.php:108
-#: extern/elements/main/ExternElementMainGlobal.class.php:112
-#: extern/elements/main/ExternElementMainLectures.class.php:125
-#: extern/elements/main/ExternElementMainLectures.class.php:129
+#: extern/elements/ExternElementPersondetailsLectures.class.php:104
+#: extern/elements/ExternElementPersondetailsLectures.class.php:108
+#: extern/elements/ExternElementPersondetailsLectures.class.php:112
+#: extern/elements/main/ExternElementMainGlobal.class.php:110
+#: extern/elements/main/ExternElementMainGlobal.class.php:114
+#: extern/elements/main/ExternElementMainGlobal.class.php:118
 #: extern/elements/main/ExternElementMainLectures.class.php:133
-#: extern/elements/main/ExternElementMainLecturestable.class.php:143
-#: extern/elements/main/ExternElementMainLecturestable.class.php:147
-#: extern/elements/main/ExternElementMainLecturestable.class.php:151
+#: extern/elements/main/ExternElementMainLectures.class.php:137
+#: extern/elements/main/ExternElementMainLectures.class.php:141
+#: extern/elements/main/ExternElementMainLecturestable.class.php:152
+#: extern/elements/main/ExternElementMainLecturestable.class.php:156
+#: extern/elements/main/ExternElementMainLecturestable.class.php:160
 msgid "aktuelles"
 msgstr ""
 
-#: extern/elements/ExternElementPersondetailsLectures.class.php:101
-#: extern/elements/main/ExternElementMainGlobal.class.php:104
-#: extern/elements/main/ExternElementMainLectures.class.php:125
-#: extern/elements/main/ExternElementMainLecturestable.class.php:143
+#: extern/elements/ExternElementPersondetailsLectures.class.php:104
+#: extern/elements/main/ExternElementMainGlobal.class.php:110
+#: extern/elements/main/ExternElementMainLectures.class.php:133
+#: extern/elements/main/ExternElementMainLecturestable.class.php:152
 msgid "n&auml;chstes"
 msgstr ""
 
-#: extern/elements/ExternElementPersondetailsLectures.class.php:105
-#: extern/elements/ExternElementPersondetailsLectures.class.php:109
-#: extern/elements/main/ExternElementMainGlobal.class.php:108
-#: extern/elements/main/ExternElementMainGlobal.class.php:112
-#: extern/elements/main/ExternElementMainLectures.class.php:129
-#: extern/elements/main/ExternElementMainLectures.class.php:133
-#: extern/elements/main/ExternElementMainLecturestable.class.php:147
-#: extern/elements/main/ExternElementMainLecturestable.class.php:151
+#: extern/elements/ExternElementPersondetailsLectures.class.php:108
+#: extern/elements/ExternElementPersondetailsLectures.class.php:112
+#: extern/elements/main/ExternElementMainGlobal.class.php:114
+#: extern/elements/main/ExternElementMainGlobal.class.php:118
+#: extern/elements/main/ExternElementMainLectures.class.php:137
+#: extern/elements/main/ExternElementMainLectures.class.php:141
+#: extern/elements/main/ExternElementMainLecturestable.class.php:156
+#: extern/elements/main/ExternElementMainLecturestable.class.php:160
 msgid "vorheriges"
 msgstr ""
 
-#: extern/elements/ExternElementPersondetailsLectures.class.php:118
-#: extern/elements/main/ExternElementMainGlobal.class.php:121
-#: extern/elements/main/ExternElementMainLectures.class.php:142
-#: extern/elements/main/ExternElementMainLecturestable.class.php:160
+#: extern/elements/ExternElementPersondetailsLectures.class.php:121
+#: extern/elements/main/ExternElementMainGlobal.class.php:127
+#: extern/elements/main/ExternElementMainLectures.class.php:150
+#: extern/elements/main/ExternElementMainLecturestable.class.php:169
 msgid "Anzahl der anzuzeigenden Semester:"
 msgstr ""
 
-#: extern/elements/ExternElementPersondetailsLectures.class.php:119
-#: extern/elements/main/ExternElementMainGlobal.class.php:122
-#: extern/elements/main/ExternElementMainLectures.class.php:143
-#: extern/elements/main/ExternElementMainLecturestable.class.php:161
+#: extern/elements/ExternElementPersondetailsLectures.class.php:122
+#: extern/elements/main/ExternElementMainGlobal.class.php:128
+#: extern/elements/main/ExternElementMainLectures.class.php:151
+#: extern/elements/main/ExternElementMainLecturestable.class.php:170
 msgid ""
 "Geben Sie an, wieviele Semester (ab o.a. Startsemester) angezeigt werden "
 "sollen."
 msgstr ""
 
-#: extern/elements/ExternElementPersondetailsLectures.class.php:129
-#: extern/elements/main/ExternElementMainGlobal.class.php:132
-#: extern/elements/main/ExternElementMainLectures.class.php:153
-#: extern/elements/main/ExternElementMainLecturestable.class.php:171
+#: extern/elements/ExternElementPersondetailsLectures.class.php:132
+#: extern/elements/main/ExternElementMainGlobal.class.php:138
+#: extern/elements/main/ExternElementMainLectures.class.php:161
+#: extern/elements/main/ExternElementMainLecturestable.class.php:180
 msgid "Umschalten des aktuellen Semesters:"
 msgstr ""
 
-#: extern/elements/ExternElementPersondetailsLectures.class.php:130
-#: extern/elements/main/ExternElementMainGlobal.class.php:133
-#: extern/elements/main/ExternElementMainLectures.class.php:154
-#: extern/elements/main/ExternElementMainLecturestable.class.php:172
+#: extern/elements/ExternElementPersondetailsLectures.class.php:133
+#: extern/elements/main/ExternElementMainGlobal.class.php:139
+#: extern/elements/main/ExternElementMainLectures.class.php:162
+#: extern/elements/main/ExternElementMainLecturestable.class.php:181
 msgid ""
 "Geben Sie an, wieviele Wochen vor Semesterende automatisch auf das nächste "
 "Semester umgeschaltet werden soll."
 msgstr ""
 
-#: extern/elements/ExternElementPersondetailsLectures.class.php:131
-#: extern/elements/main/ExternElementMainGlobal.class.php:134
-#: extern/elements/main/ExternElementMainLectures.class.php:155
-#: extern/elements/main/ExternElementMainLecturestable.class.php:173
+#: extern/elements/ExternElementPersondetailsLectures.class.php:134
+#: extern/elements/main/ExternElementMainGlobal.class.php:140
+#: extern/elements/main/ExternElementMainLectures.class.php:163
+#: extern/elements/main/ExternElementMainLecturestable.class.php:182
 msgid "am Semesterende"
 msgstr ""
 
-#: extern/elements/ExternElementPersondetailsLectures.class.php:131
-#: extern/elements/main/ExternElementMainGlobal.class.php:134
-#: extern/elements/main/ExternElementMainLectures.class.php:155
-#: extern/elements/main/ExternElementMainLecturestable.class.php:173
+#: extern/elements/ExternElementPersondetailsLectures.class.php:134
+#: extern/elements/main/ExternElementMainGlobal.class.php:140
+#: extern/elements/main/ExternElementMainLectures.class.php:163
+#: extern/elements/main/ExternElementMainLecturestable.class.php:182
 msgid "1 Woche vor Semesterende"
 msgstr ""
 
-#: extern/elements/ExternElementPersondetailsLectures.class.php:133
-#: extern/elements/main/ExternElementMainGlobal.class.php:136
-#: extern/elements/main/ExternElementMainLectures.class.php:157
-#: extern/elements/main/ExternElementMainLecturestable.class.php:175
+#: extern/elements/ExternElementPersondetailsLectures.class.php:136
+#: extern/elements/main/ExternElementMainGlobal.class.php:142
+#: extern/elements/main/ExternElementMainLectures.class.php:165
+#: extern/elements/main/ExternElementMainLecturestable.class.php:184
 #, c-format
 msgid "%s Wochen vor Semesterende"
 msgstr ""
 
-#: extern/elements/ExternElementPersondetailsLectures.class.php:137
+#: extern/elements/ExternElementPersondetailsLectures.class.php:140
 msgid "Bezeichnung Sommersemester:"
 msgstr ""
 
-#: extern/elements/ExternElementPersondetailsLectures.class.php:138
+#: extern/elements/ExternElementPersondetailsLectures.class.php:141
 msgid "Alternative Bezeichnung für den Begriff \"Sommersemester\"."
 msgstr ""
 
-#: extern/elements/ExternElementPersondetailsLectures.class.php:141
+#: extern/elements/ExternElementPersondetailsLectures.class.php:144
 msgid "Bezeichnung Wintersemester:"
 msgstr ""
 
-#: extern/elements/ExternElementPersondetailsLectures.class.php:142
+#: extern/elements/ExternElementPersondetailsLectures.class.php:145
 msgid "Alternative Bezeichnung für den Begriff \"Wintersemester\"."
 msgstr ""
 
-#: extern/elements/ExternElementPersondetailsLectures.class.php:145
+#: extern/elements/ExternElementPersondetailsLectures.class.php:148
 msgid "Darstellungsart:"
 msgstr ""
 
-#: extern/elements/ExternElementPersondetailsLectures.class.php:146
+#: extern/elements/ExternElementPersondetailsLectures.class.php:149
 msgid "Wählen Sie zwischen Listendarstellung und reiner Textdarstellung."
 msgstr ""
 
-#: extern/elements/ExternElementPersondetailsLectures.class.php:147
+#: extern/elements/ExternElementPersondetailsLectures.class.php:150
 msgid "Liste"
 msgstr ""
 
-#: extern/elements/ExternElementPersondetailsLectures.class.php:147
+#: extern/elements/ExternElementPersondetailsLectures.class.php:150
 msgid "nur Text"
 msgstr ""
 
@@ -2017,8 +2016,8 @@ msgstr ""
 
 #: extern/elements/ExternElementRangeTreeLevelContent.class.php:84
 #: extern/elements/ExternElementRangeTreeLevelName.class.php:88
-#: extern/elements/main/ExternElementMainLecturedetails.class.php:122
-#: extern/elements/main/ExternElementMainLecturedetails.class.php:126
+#: extern/elements/main/ExternElementMainLecturedetails.class.php:125
+#: extern/elements/main/ExternElementMainLecturedetails.class.php:129
 msgid "Geben Sie eine alternative Bezeichnung ein."
 msgstr ""
 
@@ -2081,9 +2080,9 @@ msgid "Anzahl der Dokumente im Stud.IP-Downloadbereich:"
 msgstr ""
 
 #: extern/elements/ExternElementStudipInfo.class.php:90
-#: extern/elements/main/ExternElementMainLecturedetails.class.php:119
-#: extern/elements/main/ExternElementMainLectures.class.php:207
-#: extern/elements/main/ExternElementMainLecturestable.class.php:222
+#: extern/elements/main/ExternElementMainLecturedetails.class.php:122
+#: extern/elements/main/ExternElementMainLectures.class.php:215
+#: extern/elements/main/ExternElementMainLecturestable.class.php:231
 msgid "Textersetzungen"
 msgstr ""
 
@@ -2134,7 +2133,7 @@ msgid "Geben Sie den Text für den Link ein."
 msgstr ""
 
 #: extern/elements/ExternElementStudipLink.class.php:99
-#: extern/elements/main/ExternElementMainPersondetails.class.php:122
+#: extern/elements/main/ExternElementMainPersondetails.class.php:126
 msgid "Bild anzeigen:"
 msgstr ""
 
@@ -2319,14 +2318,14 @@ msgid ""
 msgstr ""
 
 #: extern/elements/main/ExternElementMainDownload.class.php:54
-#: extern/elements/main/ExternElementMainGlobal.class.php:53
+#: extern/elements/main/ExternElementMainGlobal.class.php:54
 #: extern/elements/main/ExternElementMainLecturedetails.class.php:53
-#: extern/elements/main/ExternElementMainLectures.class.php:55
-#: extern/elements/main/ExternElementMainLecturestable.class.php:55
+#: extern/elements/main/ExternElementMainLectures.class.php:56
+#: extern/elements/main/ExternElementMainLecturestable.class.php:58
 #: extern/elements/main/ExternElementMainNews.class.php:53
 #: extern/elements/main/ExternElementMainNewsticker.class.php:52
-#: extern/elements/main/ExternElementMainPersondetails.class.php:52
-#: extern/elements/main/ExternElementMainPersons.class.php:53
+#: extern/elements/main/ExternElementMainPersondetails.class.php:53
+#: extern/elements/main/ExternElementMainPersons.class.php:54
 #: extern/elements/main/ExternElementMainRangelecturetree.class.php:54
 #: extern/elements/main/ExternElementMainSemlecturetree.class.php:54
 msgid ""
@@ -2342,49 +2341,49 @@ msgstr ""
 msgid "Keine Dateien vorhanden"
 msgstr ""
 
-#: extern/elements/main/ExternElementMainDownload.class.php:110
-#: extern/elements/main/ExternElementMainLecturedetails.class.php:107
-#: extern/elements/main/ExternElementMainLectures.class.php:106
-#: extern/elements/main/ExternElementMainLecturestable.class.php:116
-#: extern/elements/main/ExternElementMainNews.class.php:97
+#: extern/elements/main/ExternElementMainDownload.class.php:113
+#: extern/elements/main/ExternElementMainLecturedetails.class.php:110
+#: extern/elements/main/ExternElementMainLectures.class.php:114
+#: extern/elements/main/ExternElementMainLecturestable.class.php:125
+#: extern/elements/main/ExternElementMainNews.class.php:100
 #: extern/elements/main/ExternElementMainNewsticker.class.php:91
-#: extern/elements/main/ExternElementMainPersondetails.class.php:99
-#: extern/elements/main/ExternElementMainPersons.class.php:107
+#: extern/elements/main/ExternElementMainPersondetails.class.php:103
+#: extern/elements/main/ExternElementMainPersons.class.php:111
 #: extern/elements/main/ExternElementMainRangelecturetree.class.php:81
 #: extern/elements/main/ExternElementMainSemlecturetree.class.php:81
 msgid "Name der Konfiguration"
 msgstr ""
 
-#: extern/elements/main/ExternElementMainDownload.class.php:115
-#: extern/elements/main/ExternElementMainLecturedetails.class.php:112
-#: extern/elements/main/ExternElementMainLecturestable.class.php:122
-#: extern/elements/main/ExternElementMainNews.class.php:103
-#: extern/elements/main/ExternElementMainPersondetails.class.php:105
-#: extern/elements/main/ExternElementMainPersons.class.php:113
+#: extern/elements/main/ExternElementMainDownload.class.php:118
+#: extern/elements/main/ExternElementMainLecturedetails.class.php:115
+#: extern/elements/main/ExternElementMainLecturestable.class.php:131
+#: extern/elements/main/ExternElementMainNews.class.php:106
+#: extern/elements/main/ExternElementMainPersondetails.class.php:109
+#: extern/elements/main/ExternElementMainPersons.class.php:117
 msgid "Allgemeine Angaben zum Tabellenaufbau"
 msgstr ""
 
-#: extern/elements/main/ExternElementMainDownload.class.php:125
-#: extern/elements/main/ExternElementMainGlobal.class.php:158
-#: extern/elements/main/ExternElementMainLecturedetails.class.php:164
-#: extern/elements/main/ExternElementMainLectures.class.php:243
-#: extern/elements/main/ExternElementMainLecturestable.class.php:258
-#: extern/elements/main/ExternElementMainNews.class.php:139
-#: extern/elements/main/ExternElementMainPersondetails.class.php:154
-#: extern/elements/main/ExternElementMainPersons.class.php:155
+#: extern/elements/main/ExternElementMainDownload.class.php:128
+#: extern/elements/main/ExternElementMainGlobal.class.php:164
+#: extern/elements/main/ExternElementMainLecturedetails.class.php:167
+#: extern/elements/main/ExternElementMainLectures.class.php:251
+#: extern/elements/main/ExternElementMainLecturestable.class.php:267
+#: extern/elements/main/ExternElementMainNews.class.php:142
+#: extern/elements/main/ExternElementMainPersondetails.class.php:158
+#: extern/elements/main/ExternElementMainPersons.class.php:159
 #: extern/elements/main/ExternElementMainRangelecturetree.class.php:96
 #: extern/elements/main/ExternElementMainSemlecturetree.class.php:96
 msgid "HTML-Header/Footer:"
 msgstr ""
 
-#: extern/elements/main/ExternElementMainDownload.class.php:126
-#: extern/elements/main/ExternElementMainGlobal.class.php:159
-#: extern/elements/main/ExternElementMainLecturedetails.class.php:165
-#: extern/elements/main/ExternElementMainLectures.class.php:244
-#: extern/elements/main/ExternElementMainLecturestable.class.php:259
-#: extern/elements/main/ExternElementMainNews.class.php:140
-#: extern/elements/main/ExternElementMainPersondetails.class.php:155
-#: extern/elements/main/ExternElementMainPersons.class.php:156
+#: extern/elements/main/ExternElementMainDownload.class.php:129
+#: extern/elements/main/ExternElementMainGlobal.class.php:165
+#: extern/elements/main/ExternElementMainLecturedetails.class.php:168
+#: extern/elements/main/ExternElementMainLectures.class.php:252
+#: extern/elements/main/ExternElementMainLecturestable.class.php:268
+#: extern/elements/main/ExternElementMainNews.class.php:143
+#: extern/elements/main/ExternElementMainPersondetails.class.php:159
+#: extern/elements/main/ExternElementMainPersons.class.php:160
 #: extern/elements/main/ExternElementMainRangelecturetree.class.php:97
 #: extern/elements/main/ExternElementMainSemlecturetree.class.php:97
 msgid ""
@@ -2392,162 +2391,162 @@ msgid ""
 "B. bei direkter Verlinkung oder in einem Frameset."
 msgstr ""
 
-#: extern/elements/main/ExternElementMainDownload.class.php:131
+#: extern/elements/main/ExternElementMainDownload.class.php:134
 msgid "Max. L&auml;nge der Beschreibung:"
 msgstr ""
 
-#: extern/elements/main/ExternElementMainDownload.class.php:132
+#: extern/elements/main/ExternElementMainDownload.class.php:135
 msgid ""
 "Geben Sie an, wieviele Zeichen der Beschreibung der Datei ausgegeben werden "
 "sollen."
 msgstr ""
 
-#: extern/elements/main/ExternElementMainDownload.class.php:135
-#: extern/elements/main/ExternElementMainGlobal.class.php:145
-#: extern/elements/main/ExternElementMainLecturedetails.class.php:170
-#: extern/elements/main/ExternElementMainLectures.class.php:230
-#: extern/elements/main/ExternElementMainLecturestable.class.php:245
-#: extern/elements/main/ExternElementMainNews.class.php:113
-#: extern/elements/main/ExternElementMainPersondetails.class.php:128
-#: extern/elements/main/ExternElementMainPersons.class.php:142
+#: extern/elements/main/ExternElementMainDownload.class.php:138
+#: extern/elements/main/ExternElementMainGlobal.class.php:151
+#: extern/elements/main/ExternElementMainLecturedetails.class.php:173
+#: extern/elements/main/ExternElementMainLectures.class.php:238
+#: extern/elements/main/ExternElementMainLecturestable.class.php:254
+#: extern/elements/main/ExternElementMainNews.class.php:116
+#: extern/elements/main/ExternElementMainPersondetails.class.php:132
+#: extern/elements/main/ExternElementMainPersons.class.php:146
 msgid "Namensformat:"
 msgstr ""
 
-#: extern/elements/main/ExternElementMainDownload.class.php:136
-#: extern/elements/main/ExternElementMainGlobal.class.php:146
-#: extern/elements/main/ExternElementMainLecturedetails.class.php:171
-#: extern/elements/main/ExternElementMainLectures.class.php:231
-#: extern/elements/main/ExternElementMainLecturestable.class.php:246
-#: extern/elements/main/ExternElementMainNews.class.php:114
-#: extern/elements/main/ExternElementMainPersondetails.class.php:129
-#: extern/elements/main/ExternElementMainPersons.class.php:143
+#: extern/elements/main/ExternElementMainDownload.class.php:139
+#: extern/elements/main/ExternElementMainGlobal.class.php:152
+#: extern/elements/main/ExternElementMainLecturedetails.class.php:174
+#: extern/elements/main/ExternElementMainLectures.class.php:239
+#: extern/elements/main/ExternElementMainLecturestable.class.php:255
+#: extern/elements/main/ExternElementMainNews.class.php:117
+#: extern/elements/main/ExternElementMainPersondetails.class.php:133
+#: extern/elements/main/ExternElementMainPersons.class.php:147
 msgid "Wählen Sie, wie Personennamen formatiert werden sollen."
-msgstr ""
-
-#: extern/elements/main/ExternElementMainDownload.class.php:142
-#: extern/elements/main/ExternElementMainNews.class.php:120
-#: extern/elements/main/ExternElementMainPersondetails.class.php:135
-msgid "Datumsformat:"
-msgstr ""
-
-#: extern/elements/main/ExternElementMainDownload.class.php:143
-#: extern/elements/main/ExternElementMainNews.class.php:121
-#: extern/elements/main/ExternElementMainPersondetails.class.php:136
-msgid "Wählen Sie, wie Datumsangaben formatiert werden sollen."
 msgstr ""
 
 #: extern/elements/main/ExternElementMainDownload.class.php:145
 #: extern/elements/main/ExternElementMainNews.class.php:123
-#: extern/elements/main/ExternElementMainPersondetails.class.php:138
-msgid "25. Nov. 2003"
-msgstr ""
-
-#: extern/elements/main/ExternElementMainDownload.class.php:145
-#: extern/elements/main/ExternElementMainPersondetails.class.php:138
-msgid "25.11.2003"
-msgstr ""
-
-#: extern/elements/main/ExternElementMainDownload.class.php:145
-#: extern/elements/main/ExternElementMainPersondetails.class.php:138
-msgid "25.11.03"
+#: extern/elements/main/ExternElementMainPersondetails.class.php:139
+msgid "Datumsformat:"
 msgstr ""
 
 #: extern/elements/main/ExternElementMainDownload.class.php:146
 #: extern/elements/main/ExternElementMainNews.class.php:124
-#: extern/elements/main/ExternElementMainPersondetails.class.php:139
-msgid "25. November 2003"
+#: extern/elements/main/ExternElementMainPersondetails.class.php:140
+msgid "Wählen Sie, wie Datumsangaben formatiert werden sollen."
 msgstr ""
 
-#: extern/elements/main/ExternElementMainDownload.class.php:146
-#: extern/elements/main/ExternElementMainPersondetails.class.php:139
-msgid "11/25/03"
+#: extern/elements/main/ExternElementMainDownload.class.php:148
+#: extern/elements/main/ExternElementMainNews.class.php:126
+#: extern/elements/main/ExternElementMainPersondetails.class.php:142
+msgid "25. Nov. 2003"
+msgstr ""
+
+#: extern/elements/main/ExternElementMainDownload.class.php:148
+#: extern/elements/main/ExternElementMainPersondetails.class.php:142
+msgid "25.11.2003"
+msgstr ""
+
+#: extern/elements/main/ExternElementMainDownload.class.php:148
+#: extern/elements/main/ExternElementMainPersondetails.class.php:142
+msgid "25.11.03"
 msgstr ""
 
 #: extern/elements/main/ExternElementMainDownload.class.php:149
-#: extern/elements/main/ExternElementMainGlobal.class.php:152
-#: extern/elements/main/ExternElementMainLecturedetails.class.php:177
-#: extern/elements/main/ExternElementMainLectures.class.php:237
-#: extern/elements/main/ExternElementMainLecturestable.class.php:252
 #: extern/elements/main/ExternElementMainNews.class.php:127
-#: extern/elements/main/ExternElementMainPersondetails.class.php:142
+#: extern/elements/main/ExternElementMainPersondetails.class.php:143
+msgid "25. November 2003"
+msgstr ""
+
+#: extern/elements/main/ExternElementMainDownload.class.php:149
+#: extern/elements/main/ExternElementMainPersondetails.class.php:143
+msgid "11/25/03"
+msgstr ""
+
+#: extern/elements/main/ExternElementMainDownload.class.php:152
+#: extern/elements/main/ExternElementMainGlobal.class.php:158
+#: extern/elements/main/ExternElementMainLecturedetails.class.php:180
+#: extern/elements/main/ExternElementMainLectures.class.php:245
+#: extern/elements/main/ExternElementMainLecturestable.class.php:261
+#: extern/elements/main/ExternElementMainNews.class.php:130
+#: extern/elements/main/ExternElementMainPersondetails.class.php:146
 msgid "Sprache:"
 msgstr ""
 
-#: extern/elements/main/ExternElementMainDownload.class.php:150
-#: extern/elements/main/ExternElementMainGlobal.class.php:153
-#: extern/elements/main/ExternElementMainLecturedetails.class.php:178
-#: extern/elements/main/ExternElementMainLectures.class.php:238
-#: extern/elements/main/ExternElementMainLecturestable.class.php:253
-#: extern/elements/main/ExternElementMainNews.class.php:128
-#: extern/elements/main/ExternElementMainPersondetails.class.php:143
+#: extern/elements/main/ExternElementMainDownload.class.php:153
+#: extern/elements/main/ExternElementMainGlobal.class.php:159
+#: extern/elements/main/ExternElementMainLecturedetails.class.php:181
+#: extern/elements/main/ExternElementMainLectures.class.php:246
+#: extern/elements/main/ExternElementMainLecturestable.class.php:262
+#: extern/elements/main/ExternElementMainNews.class.php:131
+#: extern/elements/main/ExternElementMainPersondetails.class.php:147
 msgid "Wählen Sie eine Sprache für die Datumsangaben aus."
 msgstr ""
 
-#: extern/elements/main/ExternElementMainDownload.class.php:152
-#: extern/elements/main/ExternElementMainGlobal.class.php:155
-#: extern/elements/main/ExternElementMainLecturedetails.class.php:180
-#: extern/elements/main/ExternElementMainLectures.class.php:240
-#: extern/elements/main/ExternElementMainLecturestable.class.php:255
-#: extern/elements/main/ExternElementMainNews.class.php:130
-#: extern/elements/main/ExternElementMainPersondetails.class.php:145
+#: extern/elements/main/ExternElementMainDownload.class.php:155
+#: extern/elements/main/ExternElementMainGlobal.class.php:161
+#: extern/elements/main/ExternElementMainLecturedetails.class.php:183
+#: extern/elements/main/ExternElementMainLectures.class.php:248
+#: extern/elements/main/ExternElementMainLecturestable.class.php:264
+#: extern/elements/main/ExternElementMainNews.class.php:133
+#: extern/elements/main/ExternElementMainPersondetails.class.php:149
 msgid "Deutsch"
 msgstr ""
 
-#: extern/elements/main/ExternElementMainDownload.class.php:152
-#: extern/elements/main/ExternElementMainGlobal.class.php:155
-#: extern/elements/main/ExternElementMainLecturedetails.class.php:180
-#: extern/elements/main/ExternElementMainLectures.class.php:240
-#: extern/elements/main/ExternElementMainLecturestable.class.php:255
-#: extern/elements/main/ExternElementMainNews.class.php:130
-#: extern/elements/main/ExternElementMainPersondetails.class.php:145
+#: extern/elements/main/ExternElementMainDownload.class.php:155
+#: extern/elements/main/ExternElementMainGlobal.class.php:161
+#: extern/elements/main/ExternElementMainLecturedetails.class.php:183
+#: extern/elements/main/ExternElementMainLectures.class.php:248
+#: extern/elements/main/ExternElementMainLecturestable.class.php:264
+#: extern/elements/main/ExternElementMainNews.class.php:133
+#: extern/elements/main/ExternElementMainPersondetails.class.php:149
 msgid "Englisch"
 msgstr ""
 
-#: extern/elements/main/ExternElementMainDownload.class.php:155
-#: extern/elements/main/ExternElementMainGlobal.class.php:164
-#: extern/elements/main/ExternElementMainLecturedetails.class.php:183
-#: extern/elements/main/ExternElementMainLectures.class.php:249
-#: extern/elements/main/ExternElementMainLecturestable.class.php:264
-#: extern/elements/main/ExternElementMainNews.class.php:145
-#: extern/elements/main/ExternElementMainPersondetails.class.php:160
-#: extern/elements/main/ExternElementMainPersons.class.php:161
+#: extern/elements/main/ExternElementMainDownload.class.php:158
+#: extern/elements/main/ExternElementMainGlobal.class.php:170
+#: extern/elements/main/ExternElementMainLecturedetails.class.php:186
+#: extern/elements/main/ExternElementMainLectures.class.php:257
+#: extern/elements/main/ExternElementMainLecturestable.class.php:273
+#: extern/elements/main/ExternElementMainNews.class.php:148
+#: extern/elements/main/ExternElementMainPersondetails.class.php:164
+#: extern/elements/main/ExternElementMainPersons.class.php:165
 #: extern/elements/main/ExternElementMainRangelecturetree.class.php:102
 #: extern/elements/main/ExternElementMainSemlecturetree.class.php:102
 msgid "Stylesheet-Datei:"
 msgstr ""
 
-#: extern/elements/main/ExternElementMainDownload.class.php:156
-#: extern/elements/main/ExternElementMainGlobal.class.php:165
-#: extern/elements/main/ExternElementMainLecturedetails.class.php:184
-#: extern/elements/main/ExternElementMainLectures.class.php:250
-#: extern/elements/main/ExternElementMainLecturestable.class.php:265
-#: extern/elements/main/ExternElementMainNews.class.php:146
-#: extern/elements/main/ExternElementMainPersondetails.class.php:161
-#: extern/elements/main/ExternElementMainPersons.class.php:162
+#: extern/elements/main/ExternElementMainDownload.class.php:159
+#: extern/elements/main/ExternElementMainGlobal.class.php:171
+#: extern/elements/main/ExternElementMainLecturedetails.class.php:187
+#: extern/elements/main/ExternElementMainLectures.class.php:258
+#: extern/elements/main/ExternElementMainLecturestable.class.php:274
+#: extern/elements/main/ExternElementMainNews.class.php:149
+#: extern/elements/main/ExternElementMainPersondetails.class.php:165
+#: extern/elements/main/ExternElementMainPersons.class.php:166
 #: extern/elements/main/ExternElementMainRangelecturetree.class.php:103
 #: extern/elements/main/ExternElementMainSemlecturetree.class.php:103
 msgid "Geben Sie hier die URL Ihrer Stylesheet-Datei an."
 msgstr ""
 
-#: extern/elements/main/ExternElementMainDownload.class.php:159
-#: extern/elements/main/ExternElementMainLecturedetails.class.php:187
-#: extern/elements/main/ExternElementMainLectures.class.php:253
-#: extern/elements/main/ExternElementMainLecturestable.class.php:268
-#: extern/elements/main/ExternElementMainNews.class.php:149
-#: extern/elements/main/ExternElementMainPersondetails.class.php:164
-#: extern/elements/main/ExternElementMainPersons.class.php:165
+#: extern/elements/main/ExternElementMainDownload.class.php:162
+#: extern/elements/main/ExternElementMainLecturedetails.class.php:190
+#: extern/elements/main/ExternElementMainLectures.class.php:261
+#: extern/elements/main/ExternElementMainLecturestable.class.php:277
+#: extern/elements/main/ExternElementMainNews.class.php:152
+#: extern/elements/main/ExternElementMainPersondetails.class.php:168
+#: extern/elements/main/ExternElementMainPersons.class.php:169
 #: extern/elements/main/ExternElementMainRangelecturetree.class.php:106
 #: extern/elements/main/ExternElementMainSemlecturetree.class.php:106
 msgid "Seitentitel:"
 msgstr ""
 
-#: extern/elements/main/ExternElementMainDownload.class.php:160
-#: extern/elements/main/ExternElementMainLecturedetails.class.php:188
-#: extern/elements/main/ExternElementMainLectures.class.php:254
-#: extern/elements/main/ExternElementMainLecturestable.class.php:269
-#: extern/elements/main/ExternElementMainNews.class.php:150
-#: extern/elements/main/ExternElementMainPersondetails.class.php:165
-#: extern/elements/main/ExternElementMainPersons.class.php:166
+#: extern/elements/main/ExternElementMainDownload.class.php:163
+#: extern/elements/main/ExternElementMainLecturedetails.class.php:191
+#: extern/elements/main/ExternElementMainLectures.class.php:262
+#: extern/elements/main/ExternElementMainLecturestable.class.php:278
+#: extern/elements/main/ExternElementMainNews.class.php:153
+#: extern/elements/main/ExternElementMainPersondetails.class.php:169
+#: extern/elements/main/ExternElementMainPersons.class.php:170
 #: extern/elements/main/ExternElementMainRangelecturetree.class.php:107
 #: extern/elements/main/ExternElementMainSemlecturetree.class.php:107
 msgid ""
@@ -2555,109 +2554,159 @@ msgid ""
 "Web-Browser in der Titelzeile des Anzeigefensters angezeigt."
 msgstr ""
 
-#: extern/elements/main/ExternElementMainDownload.class.php:163
+#: extern/elements/main/ExternElementMainDownload.class.php:166
 msgid "Keine Dateien:"
 msgstr ""
 
-#: extern/elements/main/ExternElementMainDownload.class.php:164
+#: extern/elements/main/ExternElementMainDownload.class.php:167
 msgid ""
 "Dieser Text wird an Stelle der Tabelle ausgegeben, wenn keine Dateien zum "
 "Download verfügbar sind."
 msgstr ""
 
 #: extern/elements/main/ExternElementMainDownload.class.php:170
-msgid "Eigene Icons"
+#: extern/elements/main/ExternElementMainGlobal.class.php:174
+#: extern/elements/main/ExternElementMainLecturedetails.class.php:194
+#: extern/elements/main/ExternElementMainLectures.class.php:265
+#: extern/elements/main/ExternElementMainLecturestable.class.php:281
+#: extern/elements/main/ExternElementMainNews.class.php:160
+#: extern/elements/main/ExternElementMainPersondetails.class.php:172
+#: extern/elements/main/ExternElementMainPersons.class.php:173
+msgid "Copyright:"
+msgstr ""
+
+#: extern/elements/main/ExternElementMainDownload.class.php:171
+#: extern/elements/main/ExternElementMainGlobal.class.php:175
+#: extern/elements/main/ExternElementMainLecturedetails.class.php:195
+#: extern/elements/main/ExternElementMainLectures.class.php:266
+#: extern/elements/main/ExternElementMainLecturestable.class.php:282
+#: extern/elements/main/ExternElementMainNews.class.php:161
+#: extern/elements/main/ExternElementMainPersondetails.class.php:173
+#: extern/elements/main/ExternElementMainPersons.class.php:174
+msgid ""
+"Geben Sie hier einen Copyright-Vermerk an. Dieser wird im Meta-Tag "
+"\"copyright\" ausgegeben, wenn Sie die Option \"HTML-Header/Footer\" "
+"angewählt haben."
 msgstr ""
 
 #: extern/elements/main/ExternElementMainDownload.class.php:174
-msgid "Bilder:"
+#: extern/elements/main/ExternElementMainGlobal.class.php:178
+#: extern/elements/main/ExternElementMainLecturedetails.class.php:198
+#: extern/elements/main/ExternElementMainLectures.class.php:269
+#: extern/elements/main/ExternElementMainLecturestable.class.php:285
+#: extern/elements/main/ExternElementMainNews.class.php:164
+#: extern/elements/main/ExternElementMainPersondetails.class.php:176
+#: extern/elements/main/ExternElementMainPersons.class.php:177
+msgid "Autor:"
 msgstr ""
 
 #: extern/elements/main/ExternElementMainDownload.class.php:175
-msgid "Text:"
-msgstr ""
-
-#: extern/elements/main/ExternElementMainDownload.class.php:176
-msgid "Adobe pdf:"
-msgstr ""
-
-#: extern/elements/main/ExternElementMainDownload.class.php:177
-msgid "Powerpoint (ppt):"
-msgstr ""
-
-#: extern/elements/main/ExternElementMainDownload.class.php:178
-msgid "Excel (xls):"
-msgstr ""
-
-#: extern/elements/main/ExternElementMainDownload.class.php:179
-msgid "Rich Text (rtf):"
-msgstr ""
-
-#: extern/elements/main/ExternElementMainDownload.class.php:180
-msgid "ZIP-Dateien:"
+#: extern/elements/main/ExternElementMainGlobal.class.php:179
+#: extern/elements/main/ExternElementMainLecturedetails.class.php:199
+#: extern/elements/main/ExternElementMainLectures.class.php:270
+#: extern/elements/main/ExternElementMainLecturestable.class.php:286
+#: extern/elements/main/ExternElementMainNews.class.php:165
+#: extern/elements/main/ExternElementMainPersondetails.class.php:177
+#: extern/elements/main/ExternElementMainPersons.class.php:178
+msgid ""
+"Geben Sie hier den Namen des Seitenautors an. Dieser wird im Meta-Tag "
+"\"author\" ausgegeben, wenn Sie die Option \"HTML-Header/Footer\" angewählt "
+"haben."
 msgstr ""
 
 #: extern/elements/main/ExternElementMainDownload.class.php:181
+msgid "Eigene Icons"
+msgstr ""
+
+#: extern/elements/main/ExternElementMainDownload.class.php:185
+msgid "Bilder:"
+msgstr ""
+
+#: extern/elements/main/ExternElementMainDownload.class.php:186
+msgid "Text:"
+msgstr ""
+
+#: extern/elements/main/ExternElementMainDownload.class.php:187
+msgid "Adobe pdf:"
+msgstr ""
+
+#: extern/elements/main/ExternElementMainDownload.class.php:188
+msgid "Powerpoint (ppt):"
+msgstr ""
+
+#: extern/elements/main/ExternElementMainDownload.class.php:189
+msgid "Excel (xls):"
+msgstr ""
+
+#: extern/elements/main/ExternElementMainDownload.class.php:190
+msgid "Rich Text (rtf):"
+msgstr ""
+
+#: extern/elements/main/ExternElementMainDownload.class.php:191
+msgid "ZIP-Dateien:"
+msgstr ""
+
+#: extern/elements/main/ExternElementMainDownload.class.php:192
 msgid "sonstige Dateien:"
 msgstr ""
 
-#: extern/elements/main/ExternElementMainDownload.class.php:184
+#: extern/elements/main/ExternElementMainDownload.class.php:195
 msgid ""
 "Geben Sie die URL eines Bildes ein, dass als Icon für Bild-Dateien dienen "
 "soll. Erlaubte Formate: jpg, png, gif. "
 msgstr ""
 
-#: extern/elements/main/ExternElementMainDownload.class.php:185
+#: extern/elements/main/ExternElementMainDownload.class.php:196
 msgid ""
 "Geben Sie die URL eines Bildes ein, dass als Icon für Text-Dateien dienen "
 "soll. Erlaubte Formate: jpg, png, gif. "
 msgstr ""
 
-#: extern/elements/main/ExternElementMainDownload.class.php:186
+#: extern/elements/main/ExternElementMainDownload.class.php:197
 msgid ""
 "Geben Sie die URL eines Bildes ein, dass als Icon für PDF-Dateien dienen "
 "soll. Erlaubte Formate: jpg, png, gif. "
 msgstr ""
 
-#: extern/elements/main/ExternElementMainDownload.class.php:187
+#: extern/elements/main/ExternElementMainDownload.class.php:198
 msgid ""
 "Geben Sie die URL eines Bildes ein, dass als Icon für Powerpoint-Dateien "
 "dienen soll. Erlaubte Formate: jpg, png, gif. "
 msgstr ""
 
-#: extern/elements/main/ExternElementMainDownload.class.php:188
+#: extern/elements/main/ExternElementMainDownload.class.php:199
 msgid ""
 "Geben Sie die URL eines Bildes ein, dass als Icon für Excel-Dateien dienen "
 "soll. Erlaubte Formate: jpg, png, gif. "
 msgstr ""
 
-#: extern/elements/main/ExternElementMainDownload.class.php:189
+#: extern/elements/main/ExternElementMainDownload.class.php:200
 msgid ""
 "Geben Sie die URL eines Bildes ein, dass als Icon für RTF-Dateien dienen "
 "soll. Erlaubte Formate: jpg, png, gif. "
 msgstr ""
 
-#: extern/elements/main/ExternElementMainDownload.class.php:190
+#: extern/elements/main/ExternElementMainDownload.class.php:201
 msgid ""
 "Geben Sie die URL eines Bildes ein, dass als Icon für komprimierte Dateien "
 "dienen soll. Erlaubte Formate: jpg, png, gif. "
 msgstr ""
 
-#: extern/elements/main/ExternElementMainDownload.class.php:191
+#: extern/elements/main/ExternElementMainDownload.class.php:202
 msgid ""
 "Geben Sie die URL eines Bildes ein, dass als Icon für alle anderen "
 "Dateiformate dienen soll. "
 msgstr ""
 
-#: extern/elements/main/ExternElementMainDownload.class.php:193
+#: extern/elements/main/ExternElementMainDownload.class.php:204
 msgid "Wenn sie keine URL angeben, wird ein Standard-Icon ausgegeben."
 msgstr ""
 
-#: extern/elements/main/ExternElementMainGlobal.class.php:92
+#: extern/elements/main/ExternElementMainGlobal.class.php:98
 msgid "Name der globalen Konfiguration"
 msgstr ""
 
-#: extern/elements/main/ExternElementMainGlobal.class.php:98
+#: extern/elements/main/ExternElementMainGlobal.class.php:104
 msgid "Anzuzeigende Lehrveranstaltungen"
 msgstr ""
 
@@ -2718,12 +2767,12 @@ msgid "ECTS-Kreditpunkte:"
 msgstr ""
 
 #: extern/elements/main/ExternElementMainLecturedetails.class.php:69
-#: extern/elements/main/ExternElementMainLecturedetails.class.php:121
+#: extern/elements/main/ExternElementMainLecturedetails.class.php:124
 msgid "Vorbesprechung:"
 msgstr ""
 
 #: extern/elements/main/ExternElementMainLecturedetails.class.php:70
-#: extern/elements/main/ExternElementMainLecturedetails.class.php:125
+#: extern/elements/main/ExternElementMainLecturedetails.class.php:128
 msgid "Erster Termin:"
 msgstr ""
 
@@ -2731,230 +2780,230 @@ msgstr ""
 msgid "Veranstaltungsdaten"
 msgstr ""
 
-#: extern/elements/main/ExternElementMainLecturedetails.class.php:134
+#: extern/elements/main/ExternElementMainLecturedetails.class.php:137
 msgid "Absatz&uuml;berschrift in eigener Zeile:"
 msgstr ""
 
-#: extern/elements/main/ExternElementMainLecturedetails.class.php:135
+#: extern/elements/main/ExternElementMainLecturedetails.class.php:138
 msgid ""
 "Diese Option bewirkt, dass die Überschrift eines Absatzes in einer eigenen "
 "Zeile ausgegeben wird. Ist diese Option nicht ausgewählt, wird die "
 "Überschrift dem Text des Absatzes direkt vorangestellt."
 msgstr ""
 
-#: extern/elements/main/ExternElementMainLecturedetails.class.php:140
-#: extern/elements/main/ExternElementMainLectures.class.php:167
-#: extern/elements/main/ExternElementMainLecturestable.class.php:185
+#: extern/elements/main/ExternElementMainLecturedetails.class.php:143
+#: extern/elements/main/ExternElementMainLectures.class.php:175
+#: extern/elements/main/ExternElementMainLecturestable.class.php:194
 msgid "Bereichspfad ab Ebene:"
 msgstr ""
 
-#: extern/elements/main/ExternElementMainLecturedetails.class.php:141
-#: extern/elements/main/ExternElementMainLectures.class.php:168
-#: extern/elements/main/ExternElementMainLecturestable.class.php:186
+#: extern/elements/main/ExternElementMainLecturedetails.class.php:144
+#: extern/elements/main/ExternElementMainLectures.class.php:176
+#: extern/elements/main/ExternElementMainLecturestable.class.php:195
 msgid "Wählen Sie, ab welcher Ebene der Bereichspfad ausgegeben werden soll."
 msgstr ""
 
-#: extern/elements/main/ExternElementMainLecturedetails.class.php:146
+#: extern/elements/main/ExternElementMainLecturedetails.class.php:149
 msgid "Stud.IP-Info:"
 msgstr ""
 
-#: extern/elements/main/ExternElementMainLecturedetails.class.php:147
+#: extern/elements/main/ExternElementMainLecturedetails.class.php:150
 msgid ""
 "Diese Option zeigt weitere Informationen aus der Stud.IP-Datenbank an "
 "(Anzahl Teilnehmer, Posting, Dokumente usw.)."
 msgstr ""
 
-#: extern/elements/main/ExternElementMainLecturedetails.class.php:152
-#: extern/elements/main/ExternElementMainNews.class.php:133
-#: extern/elements/main/ExternElementMainPersondetails.class.php:148
+#: extern/elements/main/ExternElementMainLecturedetails.class.php:155
+#: extern/elements/main/ExternElementMainNews.class.php:136
+#: extern/elements/main/ExternElementMainPersondetails.class.php:152
 msgid "Stud.IP-Link:"
 msgstr ""
 
-#: extern/elements/main/ExternElementMainLecturedetails.class.php:153
-#: extern/elements/main/ExternElementMainNews.class.php:134
-#: extern/elements/main/ExternElementMainPersondetails.class.php:149
+#: extern/elements/main/ExternElementMainLecturedetails.class.php:156
+#: extern/elements/main/ExternElementMainNews.class.php:137
+#: extern/elements/main/ExternElementMainPersondetails.class.php:153
 msgid ""
 "Ausgabe eines Links, der direkt zum Stud.IP-Administrationsbereich verweist."
 msgstr ""
 
-#: extern/elements/main/ExternElementMainLecturedetails.class.php:155
-#: extern/elements/main/ExternElementMainNews.class.php:136
-#: extern/elements/main/ExternElementMainPersondetails.class.php:151
+#: extern/elements/main/ExternElementMainLecturedetails.class.php:158
+#: extern/elements/main/ExternElementMainNews.class.php:139
+#: extern/elements/main/ExternElementMainPersondetails.class.php:155
 msgid "oberhalb"
 msgstr ""
 
-#: extern/elements/main/ExternElementMainLecturedetails.class.php:155
-#: extern/elements/main/ExternElementMainNews.class.php:136
-#: extern/elements/main/ExternElementMainPersondetails.class.php:151
+#: extern/elements/main/ExternElementMainLecturedetails.class.php:158
+#: extern/elements/main/ExternElementMainNews.class.php:139
+#: extern/elements/main/ExternElementMainPersondetails.class.php:155
 msgid "unterhalb der Tabelle"
 msgstr ""
 
-#: extern/elements/main/ExternElementMainLecturedetails.class.php:155
-#: extern/elements/main/ExternElementMainNews.class.php:136
-#: extern/elements/main/ExternElementMainPersondetails.class.php:151
+#: extern/elements/main/ExternElementMainLecturedetails.class.php:158
+#: extern/elements/main/ExternElementMainNews.class.php:139
+#: extern/elements/main/ExternElementMainPersondetails.class.php:155
 msgid "ausblenden"
 msgstr ""
 
-#: extern/elements/main/ExternElementMainLecturedetails.class.php:158
+#: extern/elements/main/ExternElementMainLecturedetails.class.php:161
 msgid "Stud.IP-Link-Ziel:"
 msgstr ""
 
-#: extern/elements/main/ExternElementMainLecturedetails.class.php:159
+#: extern/elements/main/ExternElementMainLecturedetails.class.php:162
 msgid ""
 "Ziel des Stud.IP-Links. Entweder direkter Einsprung zur Anmeldeseite oder in "
 "den Administrationsbereich (nur für berechtigte Nutzer) der Veranstaltung"
 msgstr ""
 
-#: extern/elements/main/ExternElementMainLecturedetails.class.php:161
+#: extern/elements/main/ExternElementMainLecturedetails.class.php:164
 msgid "Anmeldung"
 msgstr ""
 
-#: extern/elements/main/ExternElementMainLecturedetails.class.php:161
+#: extern/elements/main/ExternElementMainLecturedetails.class.php:164
 msgid "Administrationsbereich"
 msgstr ""
 
-#: extern/elements/main/ExternElementMainLectures.class.php:76
-#: extern/elements/main/ExternElementMainLectures.class.php:114
-#: extern/elements/main/ExternElementMainLecturestable.class.php:83
-#: extern/elements/main/ExternElementMainLecturestable.class.php:132
-#: extern/elements/main/ExternElementMainPersons.class.php:125
+#: extern/elements/main/ExternElementMainLectures.class.php:77
+#: extern/elements/main/ExternElementMainLectures.class.php:122
+#: extern/elements/main/ExternElementMainLecturestable.class.php:86
+#: extern/elements/main/ExternElementMainLecturestable.class.php:141
+#: extern/elements/main/ExternElementMainPersons.class.php:129
 msgid "Gruppierung:"
 msgstr ""
 
-#: extern/elements/main/ExternElementMainLectures.class.php:77
-#: extern/elements/main/ExternElementMainLecturestable.class.php:84
+#: extern/elements/main/ExternElementMainLectures.class.php:78
+#: extern/elements/main/ExternElementMainLecturestable.class.php:87
 msgid "keine Studienbereiche eingetragen"
 msgstr ""
 
-#: extern/elements/main/ExternElementMainLectures.class.php:112
-#: extern/elements/main/ExternElementMainLecturestable.class.php:130
+#: extern/elements/main/ExternElementMainLectures.class.php:120
+#: extern/elements/main/ExternElementMainLecturestable.class.php:139
 msgid "Allgemeine Angaben Seitenaufbau"
 msgstr ""
 
-#: extern/elements/main/ExternElementMainLectures.class.php:115
-#: extern/elements/main/ExternElementMainLecturestable.class.php:133
+#: extern/elements/main/ExternElementMainLectures.class.php:123
+#: extern/elements/main/ExternElementMainLecturestable.class.php:142
 msgid "Wählen Sie, wie die Veranstaltungen gruppiert werden sollen."
 msgstr ""
 
-#: extern/elements/main/ExternElementMainLectures.class.php:161
-#: extern/elements/main/ExternElementMainLecturestable.class.php:179
+#: extern/elements/main/ExternElementMainLectures.class.php:169
+#: extern/elements/main/ExternElementMainLecturestable.class.php:188
 msgid "Veranstaltungen beteiligter Institute anzeigen:"
 msgstr ""
 
-#: extern/elements/main/ExternElementMainLectures.class.php:162
-#: extern/elements/main/ExternElementMainLecturestable.class.php:180
+#: extern/elements/main/ExternElementMainLectures.class.php:170
+#: extern/elements/main/ExternElementMainLecturestable.class.php:189
 msgid ""
 "Wählen Sie diese Option, um Veranstaltungen anzuzeigen, bei denen diese "
 "Einrichtung als beteiligtes Institut eingetragen ist."
 msgstr ""
 
-#: extern/elements/main/ExternElementMainLectures.class.php:172
-#: extern/elements/main/ExternElementMainLecturestable.class.php:191
+#: extern/elements/main/ExternElementMainLectures.class.php:180
+#: extern/elements/main/ExternElementMainLecturestable.class.php:200
 msgid "Anzahl Veranstaltungen/Gruppierung anzeigen:"
 msgstr ""
 
-#: extern/elements/main/ExternElementMainLectures.class.php:173
-#: extern/elements/main/ExternElementMainLecturestable.class.php:192
+#: extern/elements/main/ExternElementMainLectures.class.php:181
+#: extern/elements/main/ExternElementMainLecturestable.class.php:201
 msgid ""
 "Wählen Sie diese Option, wenn die Anzahl der Veranstaltungen und die "
 "gewählte Gruppierungsart angezeigt werden sollen."
 msgstr ""
 
-#: extern/elements/main/ExternElementMainLectures.class.php:178
+#: extern/elements/main/ExternElementMainLectures.class.php:186
 msgid "Termine/Zeiten anzeigen:"
 msgstr ""
 
-#: extern/elements/main/ExternElementMainLectures.class.php:179
+#: extern/elements/main/ExternElementMainLectures.class.php:187
 msgid ""
 "Wählen Sie diese Option, wenn Termine und Zeiten der Veranstaltung unter dem "
 "Veranstaltungsnamen angezeigt werden sollen."
 msgstr ""
 
-#: extern/elements/main/ExternElementMainLectures.class.php:184
+#: extern/elements/main/ExternElementMainLectures.class.php:192
 msgid "DozentInnen anzeigen:"
 msgstr ""
 
-#: extern/elements/main/ExternElementMainLectures.class.php:185
+#: extern/elements/main/ExternElementMainLectures.class.php:193
 msgid ""
 "Wählen Sie diese Option, wenn die Namen der Dozenten der Veranstaltung "
 "angezeigt werden sollen."
 msgstr ""
 
-#: extern/elements/main/ExternElementMainLectures.class.php:193
-#: extern/elements/main/ExternElementMainLecturestable.class.php:206
+#: extern/elements/main/ExternElementMainLectures.class.php:201
+#: extern/elements/main/ExternElementMainLecturestable.class.php:215
 msgid "Ausgabe bestimmter Veranstaltungsklassen"
 msgstr ""
 
-#: extern/elements/main/ExternElementMainLectures.class.php:197
-#: extern/elements/main/ExternElementMainLecturestable.class.php:211
+#: extern/elements/main/ExternElementMainLectures.class.php:205
+#: extern/elements/main/ExternElementMainLecturestable.class.php:220
 msgid "Wählen Sie die anzuzeigenden Veranstaltungsklassen aus."
 msgstr ""
 
-#: extern/elements/main/ExternElementMainLectures.class.php:209
-#: extern/elements/main/ExternElementMainLecturestable.class.php:224
+#: extern/elements/main/ExternElementMainLectures.class.php:217
+#: extern/elements/main/ExternElementMainLecturestable.class.php:233
 msgid "Anzahl Veranstaltungen:"
 msgstr ""
 
-#: extern/elements/main/ExternElementMainLectures.class.php:210
-#: extern/elements/main/ExternElementMainLecturestable.class.php:225
+#: extern/elements/main/ExternElementMainLectures.class.php:218
+#: extern/elements/main/ExternElementMainLecturestable.class.php:234
 msgid ""
 "Geben Sie einen Text ein, der nach der Anzahl der Veranstaltungen steht. Nur "
 "wirksam, wenn die Ausgabe der Anzahl der Veranstaltungen und der Gruppierung "
 "aktiviert wurde."
 msgstr ""
 
-#: extern/elements/main/ExternElementMainLectures.class.php:213
-#: extern/elements/main/ExternElementMainLecturestable.class.php:228
+#: extern/elements/main/ExternElementMainLectures.class.php:221
+#: extern/elements/main/ExternElementMainLecturestable.class.php:237
 msgid "Gruppierungsinformation:"
 msgstr ""
 
-#: extern/elements/main/ExternElementMainLectures.class.php:214
-#: extern/elements/main/ExternElementMainLecturestable.class.php:229
+#: extern/elements/main/ExternElementMainLectures.class.php:222
+#: extern/elements/main/ExternElementMainLecturestable.class.php:238
 msgid ""
 "Geben Sie einen Text ein, der vor der Gruppierungsart steht. Nur wirksam, "
 "wenn die Ausgabe der Anzahl der Veranstaltungen und der Gruppierung "
 "aktiviert wurde."
 msgstr ""
 
-#: extern/elements/main/ExternElementMainLectures.class.php:217
-#: extern/elements/main/ExternElementMainLecturestable.class.php:232
+#: extern/elements/main/ExternElementMainLectures.class.php:225
+#: extern/elements/main/ExternElementMainLecturestable.class.php:241
 msgid "&quot;Keine Studienbereiche&quot;:"
 msgstr ""
 
-#: extern/elements/main/ExternElementMainLectures.class.php:218
-#: extern/elements/main/ExternElementMainLecturestable.class.php:233
+#: extern/elements/main/ExternElementMainLectures.class.php:226
+#: extern/elements/main/ExternElementMainLecturestable.class.php:242
 msgid ""
 "Geben Sie einen Text ein, der Angezeigt wird, wenn Lehrveranstaltungen "
 "vorliegen, die keinem Bereich zugeordnet sind. Nur wirksam in Gruppierung "
 "nach Bereich."
 msgstr ""
 
-#: extern/elements/main/ExternElementMainLectures.class.php:222
-#: extern/elements/main/ExternElementMainLecturestable.class.php:237
+#: extern/elements/main/ExternElementMainLectures.class.php:230
+#: extern/elements/main/ExternElementMainLecturestable.class.php:246
 msgid "Geben Sie eine Bezeichnung für die entsprechende Gruppierungsart ein."
 msgstr ""
 
-#: extern/elements/main/ExternElementMainLecturestable.class.php:67
+#: extern/elements/main/ExternElementMainLecturestable.class.php:70
 msgid "Titel"
 msgstr ""
 
-#: extern/elements/main/ExternElementMainLecturestable.class.php:197
-#: extern/elements/main/ExternElementMainPersons.class.php:149
+#: extern/elements/main/ExternElementMainLecturestable.class.php:206
+#: extern/elements/main/ExternElementMainPersons.class.php:153
 msgid "Spalten&uuml;berschriften<br>wiederholen:"
 msgstr ""
 
-#: extern/elements/main/ExternElementMainLecturestable.class.php:198
-#: extern/elements/main/ExternElementMainPersons.class.php:150
+#: extern/elements/main/ExternElementMainLecturestable.class.php:207
+#: extern/elements/main/ExternElementMainPersons.class.php:154
 msgid ""
 "Wiederholung der Spaltenüberschriften über oder unter der Gruppierungszeile."
 msgstr ""
 
-#: extern/elements/main/ExternElementMainLecturestable.class.php:200
-#: extern/elements/main/ExternElementMainPersons.class.php:152
+#: extern/elements/main/ExternElementMainLecturestable.class.php:209
+#: extern/elements/main/ExternElementMainPersons.class.php:156
 msgid "&uuml;ber"
 msgstr ""
 
-#: extern/elements/main/ExternElementMainLecturestable.class.php:200
+#: extern/elements/main/ExternElementMainLecturestable.class.php:209
 msgid "unter Gruppierungszeile"
 msgstr ""
 
@@ -2963,12 +3012,12 @@ msgstr ""
 msgid "Keine aktuellen News"
 msgstr ""
 
-#: extern/elements/main/ExternElementMainNews.class.php:153
+#: extern/elements/main/ExternElementMainNews.class.php:156
 #: extern/elements/main/ExternElementMainNewsticker.class.php:115
 msgid "Keine News:"
 msgstr ""
 
-#: extern/elements/main/ExternElementMainNews.class.php:154
+#: extern/elements/main/ExternElementMainNews.class.php:157
 msgid ""
 "Dieser Text wird an Stelle der Tabelle ausgegeben, wenn keine News verfügbar "
 "sind."
@@ -3072,64 +3121,68 @@ msgid ""
 "und 200 erlaubt."
 msgstr ""
 
-#: extern/elements/main/ExternElementMainPersondetails.class.php:65
+#: extern/elements/main/ExternElementMainPersondetails.class.php:66
 msgid "Aktuell"
 msgstr ""
 
-#: extern/elements/main/ExternElementMainPersondetails.class.php:74
-#: extern/elements/main/ExternElementMainPersons.class.php:80
+#: extern/elements/main/ExternElementMainPersondetails.class.php:75
+#: extern/elements/main/ExternElementMainPersons.class.php:81
 msgid "MitarbeiterInnen"
 msgstr ""
 
-#: extern/elements/main/ExternElementMainPersondetails.class.php:116
+#: extern/elements/main/ExternElementMainPersondetails.class.php:120
 msgid "Kontaktdaten anzeigen:"
 msgstr ""
 
-#: extern/elements/main/ExternElementMainPersondetails.class.php:117
+#: extern/elements/main/ExternElementMainPersondetails.class.php:121
 msgid ""
 "Anwählen, wenn die Kontaktdaten (Anschrift, Email, Telefon usw.) angezeigt "
 "werden sollen."
 msgstr ""
 
-#: extern/elements/main/ExternElementMainPersondetails.class.php:123
+#: extern/elements/main/ExternElementMainPersondetails.class.php:127
 msgid ""
 "Wählen Sie, ob ein vom Nutzer in Stud.IP eingestelltes Bild links oder "
 "rechts neben den Kontaktdaten angezeigt werden soll."
 msgstr ""
 
-#: extern/elements/main/ExternElementMainPersondetails.class.php:125
+#: extern/elements/main/ExternElementMainPersondetails.class.php:129
 msgid "links"
 msgstr ""
 
-#: extern/elements/main/ExternElementMainPersondetails.class.php:125
+#: extern/elements/main/ExternElementMainPersondetails.class.php:129
 msgid "rechts"
 msgstr ""
 
-#: extern/elements/main/ExternElementMainPersondetails.class.php:125
+#: extern/elements/main/ExternElementMainPersondetails.class.php:129
 msgid "nicht anzeigen"
 msgstr ""
 
-#: extern/elements/main/ExternElementMainPersons.class.php:121
+#: extern/elements/main/ExternElementMainPersons.class.php:125
 msgid "Anzeige von Gruppen"
 msgstr ""
 
-#: extern/elements/main/ExternElementMainPersons.class.php:126
+#: extern/elements/main/ExternElementMainPersons.class.php:130
 msgid "Personen nach Gruppen/Funktionen gruppieren."
 msgstr ""
 
-#: extern/elements/main/ExternElementMainPersons.class.php:131
+#: extern/elements/main/ExternElementMainPersons.class.php:135
 msgid ""
 "An dieser Einrichtung wurden noch keine Gruppen/Funktionen angelegt, oder es "
 "wurden diesen noch keine Personen zugeordnet."
 msgstr ""
 
-#: extern/elements/main/ExternElementMainPersons.class.php:132
+#: extern/elements/main/ExternElementMainPersons.class.php:136
 msgid ""
 "Das Modul gibt nur Daten von Personen aus, die einer Gruppe/Funktion "
 "zugeordnet sind."
 msgstr ""
 
-#: extern/elements/main/ExternElementMainPersons.class.php:152
+#: extern/elements/main/ExternElementMainPersons.class.php:149
+msgid "Meyer, Peter"
+msgstr ""
+
+#: extern/elements/main/ExternElementMainPersons.class.php:156
 msgid "unter Gruppenname"
 msgstr ""
 

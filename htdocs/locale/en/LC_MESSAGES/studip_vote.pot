@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2004-03-23 19:29+0100\n"
+"POT-Creation-Date: 2004-03-31 18:32+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -756,15 +756,15 @@ msgstr ""
 msgid "Fehler beim Einlesen der Evaluation"
 msgstr ""
 
-#: vote/vote_show.inc.php:245
+#: vote/vote_show.inc.php:247
 msgid "Fehler beim Einlesen des Votes"
 msgstr ""
 
-#: vote/vote_show.inc.php:274
+#: vote/vote_show.inc.php:276
 msgid "Die &Auml;nderungen wurden gespeichert"
 msgstr ""
 
-#: vote/vote_show.inc.php:295
+#: vote/vote_show.inc.php:297
 msgid "Fehler bei der Abstimmung"
 msgstr ""
 

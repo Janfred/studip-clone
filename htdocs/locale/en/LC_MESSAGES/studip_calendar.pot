@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2004-03-23 19:29+0100\n"
+"POT-Creation-Date: 2004-03-31 18:32+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,60 +15,60 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: calendar/calendar.inc.php:212 calendar/calendar.inc.php:217
-#: calendar/calendar.inc.php:230
+#: calendar/calendar.inc.php:213 calendar/calendar.inc.php:218
+#: calendar/calendar.inc.php:231
 msgid "Mein pers&ouml;nlicher Terminkalender - Tagesansicht"
 msgstr ""
 
-#: calendar/calendar.inc.php:220 calendar/calendar.inc.php:252
+#: calendar/calendar.inc.php:221 calendar/calendar.inc.php:253
 msgid "Mein pers&ouml;nlicher Terminkalender - Wochenansicht"
 msgstr ""
 
-#: calendar/calendar.inc.php:223 calendar/calendar.inc.php:257
+#: calendar/calendar.inc.php:224 calendar/calendar.inc.php:258
 msgid "Mein pers&ouml;nlicher Terminkalender - Monatsansicht"
 msgstr ""
 
-#: calendar/calendar.inc.php:226 calendar/calendar.inc.php:262
+#: calendar/calendar.inc.php:227 calendar/calendar.inc.php:263
 msgid "Mein pers&ouml;nlicher Terminkalender - Jahresansicht"
 msgstr ""
 
-#: calendar/calendar.inc.php:267
+#: calendar/calendar.inc.php:268
 msgid ""
 "Mein pers&ouml;nlicher Terminkalender - Termindaten importieren, exportieren "
 "und synchronisieren"
 msgstr ""
 
-#: calendar/calendar.inc.php:272
+#: calendar/calendar.inc.php:273
 msgid "Mein pers&ouml;nlicher Terminkalender - Veranstaltungstermine einbinden"
 msgstr ""
 
-#: calendar/calendar.inc.php:287
+#: calendar/calendar.inc.php:288
 msgid "Mein pers&ouml;nlicher Terminkalender - Veranstaltungstermin"
 msgstr ""
 
-#: calendar/calendar.inc.php:293
+#: calendar/calendar.inc.php:294
 msgid "Mein pers&ouml;nlicher Terminkalender - Termin bearbeiten"
 msgstr ""
 
-#: calendar/calendar.inc.php:306 calendar/calendar.inc.php:318
+#: calendar/calendar.inc.php:307 calendar/calendar.inc.php:319
 msgid "Kein Titel"
 msgstr ""
 
-#: calendar/calendar.inc.php:348
+#: calendar/calendar.inc.php:349
 msgid "Mein pers&ouml;nlicher Terminkalender - Termin anlegen/bearbeiten"
 msgstr ""
 
-#: calendar/calendar.inc.php:511
+#: calendar/calendar.inc.php:512
 #, c-format
 msgid "Termin am %s"
 msgstr ""
 
-#: calendar/calendar.inc.php:514
+#: calendar/calendar.inc.php:515
 #, c-format
 msgid "Termin am %s bearbeiten"
 msgstr ""
 
-#: calendar/calendar.inc.php:518
+#: calendar/calendar.inc.php:519
 #, c-format
 msgid "Termin erstellen am %s"
 msgstr ""
@@ -190,85 +190,93 @@ msgstr ""
 msgid "3 Monate nach Ablauf"
 msgstr ""
 
-#: calendar/calendar_settings.inc.php:269 calendar/views/edit.inc.php:517
+#: calendar/calendar_settings.inc.php:269 calendar/views/edit.inc.php:516
 msgid "nie"
 msgstr ""
 
-#: calendar/calendar_visual.inc.php:172 calendar/views/edit.inc.php:88
-#: calendar/views/edit.inc.php:130 calendar/views/week.inc.php:118
+#: calendar/calendar_visual.inc.php:175 calendar/views/edit.inc.php:87
+#: calendar/views/edit.inc.php:129 calendar/views/week.inc.php:118
 #: calendar/views/week.inc.php:120
 msgid "Tag"
 msgstr ""
 
-#: calendar/calendar_visual.inc.php:207 calendar/calendar_visual.inc.php:222
+#: calendar/calendar_visual.inc.php:208 calendar/calendar_visual.inc.php:223
 msgid "neuer Tagestermin"
 msgstr ""
 
-#: calendar/calendar_visual.inc.php:241
+#: calendar/calendar_visual.inc.php:242
 msgid "neuer Termin um %R Uhr"
 msgstr ""
 
-#: calendar/calendar_visual.inc.php:570
+#: calendar/calendar_visual.inc.php:567
 msgid "Gehe zu:"
 msgstr ""
 
-#: calendar/calendar_visual.inc.php:609 calendar/views/month.inc.php:67
+#: calendar/calendar_visual.inc.php:606 calendar/views/month.inc.php:67
 msgid "ein Jahr zurück"
 msgstr ""
 
-#: calendar/calendar_visual.inc.php:612
+#: calendar/calendar_visual.inc.php:609
 msgid "vorherige Woche"
 msgstr ""
 
-#: calendar/calendar_visual.inc.php:627
+#: calendar/calendar_visual.inc.php:624
 msgid "nächste Woche"
 msgstr ""
 
-#: calendar/calendar_visual.inc.php:631 calendar/views/month.inc.php:84
+#: calendar/calendar_visual.inc.php:628 calendar/views/month.inc.php:84
 msgid "ein Jahr vor"
 msgstr ""
 
-#: calendar/calendar_visual.inc.php:750
+#: calendar/calendar_visual.inc.php:744 calendar/views/edit.inc.php:167
+msgid "Zusammenfassung:"
+msgstr ""
+
+#: calendar/calendar_visual.inc.php:748
 msgid "Veranstaltung:"
 msgstr ""
 
-#: calendar/calendar_visual.inc.php:752 calendar/views/edit.inc.php:175
+#: calendar/calendar_visual.inc.php:752 calendar/views/edit.inc.php:174
 msgid "Beschreibung:"
 msgstr ""
 
-#: calendar/calendar_visual.inc.php:754 calendar/views/edit.inc.php:184
+#: calendar/calendar_visual.inc.php:756 calendar/views/edit.inc.php:183
 msgid "Kategorie:"
 msgstr ""
 
-#: calendar/calendar_visual.inc.php:756
+#: calendar/calendar_visual.inc.php:760
 msgid "Ort:"
 msgstr ""
 
-#: calendar/calendar_visual.inc.php:758 calendar/views/edit.inc.php:242
+#: calendar/calendar_visual.inc.php:764 calendar/views/edit.inc.php:241
 msgid "Priorit&auml;t:"
 msgstr ""
 
-#: calendar/calendar_visual.inc.php:759
+#: calendar/calendar_visual.inc.php:766 calendar/views/edit.inc.php:225
 msgid "Zugriff:"
 msgstr ""
 
-#: calendar/calendar_visual.inc.php:760
+#: calendar/calendar_visual.inc.php:768
 msgid "Wiederholung:"
 msgstr ""
 
-#: calendar/lib/CalendarEvent.class.php:133 calendar/views/edit.inc.php:246
+#: calendar/calendar_visual.inc.php:789
+msgid "Öffentlicher Termin"
+msgstr ""
+
+#: calendar/lib/CalendarEvent.class.php:133 calendar/views/edit.inc.php:245
 msgid "hoch"
 msgstr ""
 
-#: calendar/lib/CalendarEvent.class.php:135 calendar/views/edit.inc.php:247
+#: calendar/lib/CalendarEvent.class.php:135 calendar/views/edit.inc.php:246
 msgid "mittel"
 msgstr ""
 
-#: calendar/lib/CalendarEvent.class.php:137 calendar/views/edit.inc.php:248
+#: calendar/lib/CalendarEvent.class.php:137 calendar/views/edit.inc.php:247
 msgid "niedrig"
 msgstr ""
 
-#: calendar/lib/CalendarEvent.class.php:139 calendar/views/edit.inc.php:245
+#: calendar/lib/CalendarEvent.class.php:139 calendar/views/edit.inc.php:244
 msgid "keine Angabe"
 msgstr ""
 
@@ -276,46 +284,46 @@ msgstr ""
 msgid "öffentlich"
 msgstr ""
 
-#: calendar/lib/CalendarEvent.class.php:149 calendar/views/edit.inc.php:231
+#: calendar/lib/CalendarEvent.class.php:149 calendar/views/edit.inc.php:230
 msgid "vertraulich"
 msgstr ""
 
-#: calendar/lib/CalendarEvent.class.php:151 calendar/views/edit.inc.php:230
+#: calendar/lib/CalendarEvent.class.php:151 calendar/views/edit.inc.php:229
 msgid "privat"
 msgstr ""
 
-#: calendar/lib/CalendarEvent.class.php:445 calendar/views/edit.inc.php:316
-#: calendar/views/edit.inc.php:376
+#: calendar/lib/CalendarEvent.class.php:445 calendar/views/edit.inc.php:315
+#: calendar/views/edit.inc.php:375
 msgid "Montag"
 msgstr ""
 
-#: calendar/lib/CalendarEvent.class.php:445 calendar/views/edit.inc.php:317
-#: calendar/views/edit.inc.php:379
+#: calendar/lib/CalendarEvent.class.php:445 calendar/views/edit.inc.php:316
+#: calendar/views/edit.inc.php:378
 msgid "Dienstag"
 msgstr ""
 
-#: calendar/lib/CalendarEvent.class.php:445 calendar/views/edit.inc.php:318
-#: calendar/views/edit.inc.php:382
+#: calendar/lib/CalendarEvent.class.php:445 calendar/views/edit.inc.php:317
+#: calendar/views/edit.inc.php:381
 msgid "Mittwoch"
 msgstr ""
 
-#: calendar/lib/CalendarEvent.class.php:446 calendar/views/edit.inc.php:319
-#: calendar/views/edit.inc.php:385
+#: calendar/lib/CalendarEvent.class.php:446 calendar/views/edit.inc.php:318
+#: calendar/views/edit.inc.php:384
 msgid "Donnerstag"
 msgstr ""
 
-#: calendar/lib/CalendarEvent.class.php:446 calendar/views/edit.inc.php:320
-#: calendar/views/edit.inc.php:389
+#: calendar/lib/CalendarEvent.class.php:446 calendar/views/edit.inc.php:319
+#: calendar/views/edit.inc.php:388
 msgid "Freitag"
 msgstr ""
 
-#: calendar/lib/CalendarEvent.class.php:446 calendar/views/edit.inc.php:321
-#: calendar/views/edit.inc.php:392
+#: calendar/lib/CalendarEvent.class.php:446 calendar/views/edit.inc.php:320
+#: calendar/views/edit.inc.php:391
 msgid "Samstag"
 msgstr ""
 
-#: calendar/lib/CalendarEvent.class.php:446 calendar/views/edit.inc.php:322
-#: calendar/views/edit.inc.php:395
+#: calendar/lib/CalendarEvent.class.php:446 calendar/views/edit.inc.php:321
+#: calendar/views/edit.inc.php:394
 msgid "Sonntag"
 msgstr ""
 
@@ -364,11 +372,11 @@ msgstr ""
 msgid "Der Termin wird am %s. %s jeden Monat wiederholt."
 msgstr ""
 
-#: calendar/lib/CalendarEvent.class.php:510 calendar/views/edit.inc.php:326
+#: calendar/lib/CalendarEvent.class.php:510 calendar/views/edit.inc.php:325
 msgid "Januar"
 msgstr ""
 
-#: calendar/lib/CalendarEvent.class.php:510 calendar/views/edit.inc.php:327
+#: calendar/lib/CalendarEvent.class.php:510 calendar/views/edit.inc.php:326
 msgid "Februar"
 msgstr ""
 
@@ -376,39 +384,39 @@ msgstr ""
 msgid "März"
 msgstr ""
 
-#: calendar/lib/CalendarEvent.class.php:510 calendar/views/edit.inc.php:329
+#: calendar/lib/CalendarEvent.class.php:510 calendar/views/edit.inc.php:328
 msgid "April"
 msgstr ""
 
-#: calendar/lib/CalendarEvent.class.php:510 calendar/views/edit.inc.php:330
+#: calendar/lib/CalendarEvent.class.php:510 calendar/views/edit.inc.php:329
 msgid "Mai"
 msgstr ""
 
-#: calendar/lib/CalendarEvent.class.php:511 calendar/views/edit.inc.php:331
+#: calendar/lib/CalendarEvent.class.php:511 calendar/views/edit.inc.php:330
 msgid "Juni"
 msgstr ""
 
-#: calendar/lib/CalendarEvent.class.php:511 calendar/views/edit.inc.php:332
+#: calendar/lib/CalendarEvent.class.php:511 calendar/views/edit.inc.php:331
 msgid "Juli"
 msgstr ""
 
-#: calendar/lib/CalendarEvent.class.php:511 calendar/views/edit.inc.php:333
+#: calendar/lib/CalendarEvent.class.php:511 calendar/views/edit.inc.php:332
 msgid "August"
 msgstr ""
 
-#: calendar/lib/CalendarEvent.class.php:511 calendar/views/edit.inc.php:334
+#: calendar/lib/CalendarEvent.class.php:511 calendar/views/edit.inc.php:333
 msgid "September"
 msgstr ""
 
-#: calendar/lib/CalendarEvent.class.php:511 calendar/views/edit.inc.php:335
+#: calendar/lib/CalendarEvent.class.php:511 calendar/views/edit.inc.php:334
 msgid "Oktober"
 msgstr ""
 
-#: calendar/lib/CalendarEvent.class.php:512 calendar/views/edit.inc.php:336
+#: calendar/lib/CalendarEvent.class.php:512 calendar/views/edit.inc.php:335
 msgid "November"
 msgstr ""
 
-#: calendar/lib/CalendarEvent.class.php:512 calendar/views/edit.inc.php:337
+#: calendar/lib/CalendarEvent.class.php:512 calendar/views/edit.inc.php:336
 msgid "Dezember"
 msgstr ""
 
@@ -427,9 +435,13 @@ msgstr ""
 msgid "Der Termin wird jeden letzten %s im %s wiederholt."
 msgstr ""
 
-#: calendar/lib/CalendarEvent.class.php:533 calendar/views/edit.inc.php:263
+#: calendar/lib/CalendarEvent.class.php:533 calendar/views/edit.inc.php:262
 #: calendar/views/edit.inc.php:570
 msgid "Der Termin wird nicht wiederholt."
+msgstr ""
+
+#: calendar/lib/CalendarEvent.class.php:567
+msgid "ganztägig"
 msgstr ""
 
 #: calendar/lib/calendar_misc_func.inc.php:75
@@ -465,8 +477,8 @@ msgstr ""
 msgid "nicht besucht"
 msgstr ""
 
-#: calendar/views/bind.inc.php:133 calendar/views/edit.inc.php:606
-#: calendar/views/edit.inc.php:616 calendar/views/edit.inc.php:671
+#: calendar/views/bind.inc.php:133 calendar/views/edit.inc.php:608
+#: calendar/views/edit.inc.php:618 calendar/views/edit.inc.php:674
 #: calendar/views/export.inc.php:137 calendar/views/export.inc.php:251
 #: calendar/views/export.inc.php:256
 msgid "Information:"
@@ -496,205 +508,205 @@ msgstr ""
 msgid "zeig danach"
 msgstr ""
 
-#: calendar/views/edit.inc.php:52 calendar/views/export.inc.php:103
+#: calendar/views/edit.inc.php:51 calendar/views/export.inc.php:103
 #, c-format
 msgid "Bitte korrigieren Sie die mit %s gekennzeichneten Felder.%s"
 msgstr ""
 
-#: calendar/views/edit.inc.php:87
+#: calendar/views/edit.inc.php:86
 msgid "Beginn:"
 msgstr ""
 
-#: calendar/views/edit.inc.php:93 calendar/views/edit.inc.php:135
+#: calendar/views/edit.inc.php:92 calendar/views/edit.inc.php:134
 msgid "Uhrzeit"
 msgstr ""
 
-#: calendar/views/edit.inc.php:122
+#: calendar/views/edit.inc.php:121
 msgid "ganzt&auml;gig"
 msgstr ""
 
-#: calendar/views/edit.inc.php:123
+#: calendar/views/edit.inc.php:122
 msgid ""
 "Als ganztägig markierte Termine beginnen um 00:00 Uhr am angegebenen "
 "Starttag und enden um 23.59 am angegeben Endtag."
 msgstr ""
 
-#: calendar/views/edit.inc.php:129
+#: calendar/views/edit.inc.php:128
 msgid "Ende:"
 msgstr ""
 
-#: calendar/views/edit.inc.php:168
-msgid "Zusammenfassung:"
-msgstr ""
-
-#: calendar/views/edit.inc.php:199
+#: calendar/views/edit.inc.php:198
 msgid "keine Auswahl"
 msgstr ""
 
-#: calendar/views/edit.inc.php:208
+#: calendar/views/edit.inc.php:207
 msgid ""
 "Sie können beliebige Kategorien in das Freitextfeld eingeben. Trennen Sie "
 "einzelne Kategorien bitte durch ein Komma."
 msgstr ""
 
-#: calendar/views/edit.inc.php:217
+#: calendar/views/edit.inc.php:216
 msgid "Raum:"
 msgstr ""
 
-#: calendar/views/edit.inc.php:224
+#: calendar/views/edit.inc.php:223
 msgid ""
 "Private und vertrauliche Termine sind nur für Sie sichtbar. Öffentliche "
 "Termine werden auf ihrer internen Homepage auch anderen Nutzern "
 "bekanntgegeben."
 msgstr ""
 
-#: calendar/views/edit.inc.php:226
-msgid "Sichtbarkeit:"
-msgstr ""
-
-#: calendar/views/edit.inc.php:229
+#: calendar/views/edit.inc.php:228
 msgid "&ouml;ffentlich"
 msgstr ""
 
-#: calendar/views/edit.inc.php:308
+#: calendar/views/edit.inc.php:307
 msgid "ersten"
 msgstr ""
 
-#: calendar/views/edit.inc.php:309
+#: calendar/views/edit.inc.php:308
 msgid "zweiten"
 msgstr ""
 
-#: calendar/views/edit.inc.php:310
+#: calendar/views/edit.inc.php:309
 msgid "dritten"
 msgstr ""
 
-#: calendar/views/edit.inc.php:311
+#: calendar/views/edit.inc.php:310
 msgid "vierten"
 msgstr ""
 
-#: calendar/views/edit.inc.php:312
+#: calendar/views/edit.inc.php:311
 msgid "letzten"
 msgstr ""
 
-#: calendar/views/edit.inc.php:328
+#: calendar/views/edit.inc.php:327
 msgid "M&auml;rz"
 msgstr ""
 
-#: calendar/views/edit.inc.php:348
+#: calendar/views/edit.inc.php:347
 msgid "Alle"
 msgstr ""
 
-#: calendar/views/edit.inc.php:351
+#: calendar/views/edit.inc.php:350
 msgid "Tage"
 msgstr ""
 
-#: calendar/views/edit.inc.php:357
+#: calendar/views/edit.inc.php:356
 msgid "Jeden Werktag"
 msgstr ""
 
-#: calendar/views/edit.inc.php:371
+#: calendar/views/edit.inc.php:370
 #, c-format
 msgid "Alle %s Wochen %s am:"
 msgstr ""
 
-#: calendar/views/edit.inc.php:413
+#: calendar/views/edit.inc.php:412
 #, c-format
 msgid "Wiederholt am %s alle %s Monate"
 msgstr ""
 
-#: calendar/views/edit.inc.php:416 calendar/views/edit.inc.php:454
+#: calendar/views/edit.inc.php:415 calendar/views/edit.inc.php:453
 msgid "Jeden"
 msgstr ""
 
-#: calendar/views/edit.inc.php:437
+#: calendar/views/edit.inc.php:436
 msgid "alle"
 msgstr ""
 
-#: calendar/views/edit.inc.php:441
+#: calendar/views/edit.inc.php:440
 msgid "Monate"
 msgstr ""
 
-#: calendar/views/edit.inc.php:493
+#: calendar/views/edit.inc.php:492
 #, c-format
 msgid "Jeden %s im"
 msgstr ""
 
-#: calendar/views/edit.inc.php:513
+#: calendar/views/edit.inc.php:512
 msgid "Wiederholung endet:"
 msgstr ""
 
-#: calendar/views/edit.inc.php:520
+#: calendar/views/edit.inc.php:519
 msgid "am:"
 msgstr ""
 
-#: calendar/views/edit.inc.php:532
+#: calendar/views/edit.inc.php:531
 #, c-format
 msgid "nach %s Wiederholungen"
 msgstr ""
 
-#: calendar/views/edit.inc.php:545
+#: calendar/views/edit.inc.php:544
 msgid "Ausnahmen:"
+msgstr ""
+
+#: calendar/views/edit.inc.php:553
+msgid "Ausnahme hinzufügen"
+msgstr ""
+
+#: calendar/views/edit.inc.php:563
+msgid "ausgewählte Ausnahme löschen"
 msgstr ""
 
 #: calendar/views/edit.inc.php:564
 msgid "ausgew&auml;hlte l&ouml;schen"
 msgstr ""
 
-#: calendar/views/edit.inc.php:582
+#: calendar/views/edit.inc.php:583
 #, c-format
 msgid "Sie k&ouml;nnen diesen Termin einzeln %sexportieren%s."
 msgstr ""
 
-#: calendar/views/edit.inc.php:596
+#: calendar/views/edit.inc.php:598
 #, c-format
 msgid ""
 "Dieser Termin geh&ouml;rt zur Veranstaltung:<p>%s</p>Veranstaltungstermine "
 "k&ouml;nnen nicht im pers&ouml;nlichen Terminkalender bearbeitet werden."
 msgstr ""
 
-#: calendar/views/edit.inc.php:598
+#: calendar/views/edit.inc.php:600
 #, c-format
 msgid ""
 "<a href=\"%s?cmd=bind\">W&auml;hlen</a> Sie aus, welche "
 "Veranstaltungstermine in Ihrem Terminkalender angezeigt werden sollen."
 msgstr ""
 
-#: calendar/views/edit.inc.php:603
+#: calendar/views/edit.inc.php:605
 #, c-format
 msgid ""
 "Um diesen Termin zu bearbeiten, wechseln Sie bitte in die %"
 "sTerminverwaltung</a>."
 msgstr ""
 
-#: calendar/views/edit.inc.php:609 calendar/views/edit.inc.php:619
-#: calendar/views/edit.inc.php:674
+#: calendar/views/edit.inc.php:611 calendar/views/edit.inc.php:621
+#: calendar/views/edit.inc.php:678
 msgid "Aktion:"
 msgstr ""
 
-#: calendar/views/edit.inc.php:651
+#: calendar/views/edit.inc.php:654
 msgid "Sie k&ouml;nnen keine weiteren Termine mehr speichern!"
 msgstr ""
 
-#: calendar/views/edit.inc.php:653
+#: calendar/views/edit.inc.php:656
 #, c-format
 msgid ""
 "L&ouml;schen Sie &auml;ltere Termine, oder w&auml;hlen Sie eine automatische "
 "L&ouml;schfunktion in ihren %sKalenderoptionen%s."
 msgstr ""
 
-#: calendar/views/edit.inc.php:659
+#: calendar/views/edit.inc.php:662
 #, c-format
 msgid "Sie k&ouml;nnen noch %s Termine speichern."
 msgstr ""
 
-#: calendar/views/edit.inc.php:662
+#: calendar/views/edit.inc.php:665
 #, c-format
 msgid ""
 "W&auml;hlen Sie eine automatische L&ouml;schfunktion in Ihren %"
 "sKalenderoptionen%s, um &auml;ltere Termine zu l&ouml;schen."
 msgstr ""
 
-#: calendar/views/edit.inc.php:667
+#: calendar/views/edit.inc.php:670
 #, c-format
 msgid ""
 "Sie k&ouml;nnen abgelaufene Termine automatisch l&ouml;schen lassen. W&auml;"
@@ -933,8 +945,8 @@ msgid "Die Datei enthält keine Termine."
 msgstr ""
 
 #: calendar/lib/sync/CalendarParserICalendar.class.php:78
-#: calendar/lib/sync/CalendarParserICalendar.class.php:299
-#: calendar/lib/sync/CalendarParserICalendar.class.php:310
+#: calendar/lib/sync/CalendarParserICalendar.class.php:287
+#: calendar/lib/sync/CalendarParserICalendar.class.php:302
 msgid "Die Datei ist keine g&uuml;ltige iCalendar-Datei!"
 msgstr ""
 

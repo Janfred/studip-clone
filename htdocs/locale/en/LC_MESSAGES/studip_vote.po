@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: studip_vote\n"
-"POT-Creation-Date: 2004-03-23 19:29+0100\n"
+"POT-Creation-Date: 2004-03-31 18:32+0200\n"
 "PO-Revision-Date: 2004-02-14 17:25+0100\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
@@ -786,15 +786,15 @@ msgstr "Edit this entry."
 msgid "Fehler beim Einlesen der Evaluation"
 msgstr "Error while reading the votes"
 
-#: vote/vote_show.inc.php:245
+#: vote/vote_show.inc.php:247
 msgid "Fehler beim Einlesen des Votes"
 msgstr "Error while reading the votes"
 
-#: vote/vote_show.inc.php:274
+#: vote/vote_show.inc.php:276
 msgid "Die &Auml;nderungen wurden gespeichert"
 msgstr "The changes were saved."
 
-#: vote/vote_show.inc.php:295
+#: vote/vote_show.inc.php:297
 msgid "Fehler bei der Abstimmung"
 msgstr "Error while voting."
 

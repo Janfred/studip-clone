@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2004-03-23 19:29+0100\n"
+"POT-Creation-Date: 2004-03-31 18:32+0200\n"
 "PO-Revision-Date: 2004-02-15 13:53+0100\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
@@ -114,7 +114,7 @@ msgstr "Short message"
 msgid "Username oder Passwort nicht korrekt."
 msgstr "Username or password not correct."
 
-#: wap/show_date.php:108
+#: wap/show_date.php:106
 msgid "bis"
 msgstr "until"
 
