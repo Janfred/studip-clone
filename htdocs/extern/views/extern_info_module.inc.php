@@ -68,8 +68,8 @@ if ($info["level"] == 1) {
 	echo "<tr><td" . $css_switcher->getFullClass() . ">\n";
 	echo "<blockquote><font size=\"2\"><br>\n";
 	echo _("Der folgende Link verweist auf die von Stud.IP generierte HTML-Seite.");
-	echo "<blockquote>\n<b>";
-	echo $info["link_br"] . "</b></blockquote>\n";
+	echo "<blockquote>\n<a href=\"{$info['link']}\" target=\"_blank\"><b>";
+	echo $info["link_br"] . "</b></a></blockquote>\n";
 	echo _("Diese Adresse k&ouml;nnen Sie in einen Link auf Ihrer Website integrieren, um auf die Ausgabe des Moduls zu verweisen.");
 	echo "<br></font></blockquote>\n</td></tr>\n";
 	echo "<tr><td" . $css_switcher->getFullClass() . ">&nbsp;</td></tr>\n";
