@@ -83,7 +83,6 @@ function get_snapshot() {
 
 //wenn wir frisch reinkommen, werden die alten Metadaten eingelesen
 if (($seminar_id) && (!$uebernehmen_x) && (!$add_turnus_field_x) &&(!$delete_turnus_field) && !($open_ureg_x) && !($open_reg_x) && !($enter_start_termin_x) && !($nenter_start_termin_x)) {
-	echo lala; 
 	$db->query("SELECT metadata_dates, art, Name, start_time, duration_time, status FROM seminare WHERE Seminar_id = '$seminar_id'");
 	$db->next_record();
 	$term_metadata=unserialize($db->f("metadata_dates"));
