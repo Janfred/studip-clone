@@ -812,7 +812,7 @@ function smile ($text = "", $extern = FALSE) {
 		return $text;
 	
 	//smileys in the ":name:" notation
-	$pattern = "'(\>|^|\s):([_a-zA-Z][_a-z0-9A-Z-]*):($|\<|\s)'m";
+	$pattern = "'(\>|^|\s):([_a-zA-Z][_a-z0-9A-Z-]*):(?=$|\<|\s)'m";
 	$replace = "\\1";
 	if (!$extern) {
 		$path = $CANONICAL_RELATIVE_PATH_STUDIP;
