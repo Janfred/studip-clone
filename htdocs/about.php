@@ -171,7 +171,7 @@ if ($msg)
 
 // Anzeige der Institute an denen (hoffentlich) studiert wird:
 
-    $db3->query("SELECT Institute.* FROM Institute LEFT JOIN user_inst USING (Institut_id) WHERE user_id = '$user_id' AND inst_perms = 'user'");
+    $db3->query("SELECT Institute.* FROM user_inst LEFT JOIN Institute  USING (Institut_id) WHERE user_id = '$user_id' AND inst_perms = 'user'");
     IF ($db3->num_rows()) {
 			echo "<br><b>&nbsp;Wo ich studiere:&nbsp;&nbsp;</b><br>";
       while ($db3->next_record()) {
@@ -294,7 +294,7 @@ if ($msg)
 	}
 // Anzeige der Seminare
 
-	$db2->query("SELECT * FROM seminar_user, seminare WHERE seminar_user.user_id = '$user_id' AND seminar_user.status = 'dozent' AND seminare.Seminar_id = seminar_user.Seminar_id ORDER BY start_time");
+	$db2->query("SELECT * FROM seminar_user LEFT JOIN seminare USING(Seminar_id) WHERE seminar_user.user_id = '$user_id' AND seminar_user.status = 'dozent' ORDER BY start_time");
 	if ($db2->num_rows()) {
 		echo "<table class='blank' width=100% border='0' cellpadding='0' cellspacing='0'><tr><td class=\"topic\"><b>&nbsp;Veranstaltungen</b></td></tr><tr><td class='steel1'><blockquote>";
 		while ($db2->next_record()) {
