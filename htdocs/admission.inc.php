@@ -234,10 +234,10 @@ function update_admission ($seminar_id, $send_message=TRUE) {
 				$db4->query("UPDATE admission_seminar_user SET status = 'accepted' WHERE user_id='".$db3->f("user_id")."' AND seminar_id = '".$db->f("Seminar_id")."'");
 			}
 			if ($db4->affected_rows()) {
-				if (!$sem_preliminary)
+				if (!$sem_preliminary) 
 					$db5->query("DELETE FROM admission_seminar_user WHERE user_id ='".$db3->f("user_id")."' AND seminar_id = '".$db->f("Seminar_id")."' ");
 				//User benachrichtigen
-				if (($db5->affected_rows()) && ($send_message)) {
+				if (($sem_preliminary || $db5->affected_rows()) && ($send_message)) {
 					setTempLanguage($db3->f("user_id"));
 					if (!$sem_preliminary) {
 						$message = sprintf (_("Sie sind als TeilnehmerIn der Veranstaltung **%s (%s)** eingetragen worden, da für Sie ein Platz frei geworden ist. Ab sofort finden Sie die Veranstaltung in der Übersicht Ihrer Veranstaltungen. Damit sind Sie auch als TeilnehmerIn der Präsenzveranstaltung zugelassen."), $db->f("Name"), view_turnus($db->f("Seminar_id")));
@@ -281,7 +281,7 @@ function update_admission ($seminar_id, $send_message=TRUE) {
 					if (!$sem_preliminary)
 						$db6->query("DELETE FROM admission_seminar_user WHERE user_id ='".$db4->f("user_id")."' AND seminar_id = '".$db->f("Seminar_id")."' ");
 					//User benachrichtigen
-					if (($db6->affected_rows()) && ($send_message)) {
+					if (($sem_preliminary || $db6->affected_rows()) && ($send_message)) {
 						setTempLanguage($db4->f("user_id"));
 						if (!$sem_preliminary) {
 							$message = sprintf (_("Sie sind als TeilnehmerIn der Veranstaltung **%s** eingetragen worden, da für Sie ein Platz frei geworden ist. Ab sofort finden Sie die Veranstaltung in der Übersicht Ihrer Veranstaltungen. Damit sind Sie auch als TeilnehmerIn der Präsenzveranstaltung zugelassen."), $db->f("Name"));
@@ -407,23 +407,12 @@ function check_admission ($send_message=TRUE) {
 * @return		boolean
 *
 */
-function seminar_preliminary($seminar_id,$user_id=FALSE) {
+function seminar_preliminary($seminar_id) {
 	$db=new DB_Seminar;
-	$db2=new DB_Seminar;
 
 	$db->query("SELECT Name,admission_prelim FROM seminare WHERE Seminar_id='$seminar_id'");
 	$db->next_record();
 	if ($db->f("admission_prelim") == 1) {
-		if ($user_id) {
-			$db2->query("SELECT user_id FROM admission_seminar_user WHERE user_id='$user_id' AND seminar_id='$seminar_id'");
-			if ($db2->next_record()) {
-				echo "<tr><td class=\"blank\" colspan=2>";
-				parse_msg (sprintf("msg§"._("Sie sind für die Veranstaltung **%s** bereits vorläufig eingetragen!"),$db->f("Name")));
-				echo "</td></tr>";
-				page_close();
-				die;
-			}
-		}	
 		return TRUE;
 	} else {
 		return FALSE;
