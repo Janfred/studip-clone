@@ -76,7 +76,7 @@ function get_ilias_logindata()
 	$ilias_db = New DB_Ilias;
 	$ilias_db->query("SELECT * FROM benutzer WHERE id='" . mysql_escape_string(get_connected_user_id($auth->auth["uid"]))."'");
 	if ($ilias_db->next_record())
-		return "&acct_name=" . $ilias_db->f("benutzername") . "&u_id=" . $ilias_db->f("id") . "&u_pw=" . md5($ilias_db->f("passwort")) . "&set_lang=";
+		return "&acct_name=" . $ilias_db->f("benutzername") . "&u_id=" . $ilias_db->f("id") . "&u_pw=" . md5($ilias_db->f("passwort")) . "&set_lang=" . $language;
 	else
 		return false;
 }
