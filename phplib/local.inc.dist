@@ -76,40 +76,6 @@ $DVIPS_PATH = "/usr/bin/dvips";
 $CONVERT_PATH = "/usr/bin/convert";
 $IDENTIFY_PATH = "/usr/bin/identify";
 
-//Authentication Plugins
-//----------------------
-
-//$STUDIP_AUTH_PLUGIN[] = "LdapReader";
-//$STUDIP_AUTH_PLUGIN[] = "Ldap";
-$STUDIP_AUTH_PLUGIN[] = "Standard";
-
-/*
-$STUDIP_AUTH_CONFIG_LDAPREADER = array(	"host" => "localhost",
-										"base_dn" => "dc=studip,dc=de",
-										"protocol_version" => 3,
-										"username_attribute" => "uid",
-										"user_password_attribute" => "userpassword",
-										"anonymous_bind" => false,
-										"reader_dn" => "uid=reader,dc=studip,dc=de",
-										"reader_password" => "<password>",
-										"user_data_mapping" =>
-										array(	"auth_user_md5.username" => array("callback" => "dummy", "map_args" => ""),
-												"auth_user_md5.password" => array("callback" => "dummy", "map_args" => ""));
-												
-$STUDIP_AUTH_CONFIG_LDAP = array(	"host" => "localhost",
-										"base_dn" => "dc=data-quest,dc=de",
-										"protocol_version" => 3,
-										"username_attribute" => "uid",
-										"anonymous_bind" => true,
-										"user_data_mapping" =>
-										array(	"auth_user_md5.username" => array("callback" => "dummy", "map_args" => ""),
-												"auth_user_md5.password" => array("callback" => "dummy", "map_args" => ""));
-
-												
-*/
-//should it be possible for an user to register himself (you MUST enable Standard authentication-plugin to use this!)
-$ENABLE_SELF_REGISTRATION = true;
-
 
 /*Stud.IP modules
 ----------------------------------------------------------------
@@ -161,6 +127,79 @@ $INSTALLED_LANGUAGES["en_GB"] =	array ("path"=>"en", "picture"=>"lang_en.gif", "
 $DEFAULT_LANGUAGE = "de_DE";  // which language should we use if we can gather no information from user? 
 
 $_language_domain = "studip";  // the name of the language file. Should not be changed except in cases of individual translations or special terms.
+
+
+//Authentication Plugins
+//----------------------
+//the following plugins are available:
+//Standard 			authentication using the local Stud.IP database
+//StandardExtern  	authentication using an alternative Stud.IP database, e.g. another installation
+//Ldap  			authentication using an LDAP server, this plugin uses anonymous bind against LDAP to retrieve the user dn,
+//					then it uses the submitted password to authenticate with this user dn
+//LdapReader		authentication using an LDAP server, this plugin binds to the server using a given dn and a password,
+//					this account must have read access to gather the attributes for the user who tries to authenticate.
+//					Using this plugin allows to keep the md5 challenge-response mechanism during the login process, provided a md5
+//					hash of the user password is available in LDAP
+//
+// if you write your own plugin put it in 
+//studip-htdocs/lib/classes/auth_plugins and enable it here
+//the name of the plugin is the classname excluding "StudipAuth"
+//you could also place your configuration here, name it $STUDIP_AUTH_CONFIG_<plugin name>, all uppercase
+//each item of the configuration array will become a member of your plugin class
+//----------------------
+
+//$STUDIP_AUTH_PLUGIN[] = "LdapReader";
+//$STUDIP_AUTH_PLUGIN[] = "Ldap";
+//$STUDIP_AUTH_PLUGIN[] = "StandardExtern";
+$STUDIP_AUTH_PLUGIN[] = "Standard";
+
+/*
+$STUDIP_AUTH_CONFIG_LDAPREADER = array(	"host" => "localhost",
+										"base_dn" => "dc=studip,dc=de",
+										"protocol_version" => 3,
+										"username_attribute" => "uid",
+										"user_password_attribute" => "userpassword",
+										"reader_dn" => "uid=reader,dc=studip,dc=de",
+										"reader_password" => "<password>",
+										"user_data_mapping" =>
+										array(	"auth_user_md5.username" => array("callback" => "dummy", "map_args" => ""),
+												"auth_user_md5.password" => array("callback" => "dummy", "map_args" => ""));
+												
+$STUDIP_AUTH_CONFIG_LDAP = array(	"host" => "localhost",
+										"base_dn" => "dc=data-quest,dc=de",
+										"protocol_version" => 3,
+										"username_attribute" => "uid",
+										"anonymous_bind" => true,
+										"user_data_mapping" =>
+										array(	"auth_user_md5.username" => array("callback" => "dummy", "map_args" => ""),
+												"auth_user_md5.password" => array("callback" => "dummy", "map_args" => ""));
+
+$STUDIP_AUTH_CONFIG_STANDARDEXTERN = array(	"db_host" => "localhost",
+											"db_username" => "extern",
+											"db_name" => "extern_studip",
+											"db_password" => "<password>",
+											"user_data_mapping" =>
+											array(	"auth_user_md5.username" => array("callback" => "dummy", "map_args" => ""),
+													"auth_user_md5.password" => array("callback" => "dummy", "map_args" => ""),
+													"auth_user_md5.Email" => array("callback" => "doExternMap", "map_args" => "Email"),
+													"auth_user_md5.Nachname" => array("callback" => "doExternMap", "map_args" => "Nachname"),
+													"auth_user_md5.Vorname" => array("callback" => "doExternMap", "map_args" => "Vorname"),
+													"auth_user_md5.perms" => array("callback" => "doExternMapPerms", "map_args" => "perms"),
+													"user_info.privatnr" => array("callback" => "doExternMap", "map_args" => "privatnr"),
+													"user_info.privadr" => array("callback" => "doExternMap", "map_args" => "privadr"),
+													"user_info.geschlecht" => array("callback" => "doExternMap", "map_args" => "geschlecht"),
+													"user_info.hobby" => array("callback" => "doExternMap", "map_args" => "hobby"),
+													"user_info.lebenslauf" => array("callback" => "doExternMap", "map_args" => "lebenslauf"),
+													"user_info.title_front" => array("callback" => "doExternMap", "map_args" => "title_front"),
+													"user_info.title_rear" => array("callback" => "doExternMap", "map_args" => "title_rear"),
+													"user_info.publi" => array("callback" => "doExternMap", "map_args" => "publi"),
+													"user_info.schwerp" => array("callback" => "doExternMap", "map_args" => "schwerp"),
+													"user_info.Home" => array("callback" => "doExternMap", "map_args" => "Home")));
+
+												
+*/
+//should it be possible for an user to register himself (you MUST enable Standard authentication-plugin to use this!)
+$ENABLE_SELF_REGISTRATION = true;
 
 
 /*path generation 
