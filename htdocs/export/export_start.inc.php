@@ -64,7 +64,7 @@ $export_pagename = _("Datenexport - Startseite");
 			}
 		}
 	} /**/
-	$db->query("SELECT Institut_id, Name, is_fak, fakultaets_id FROM Institute WHERE fakultaets_id = Institut_id ORDER BY Name");
+	$db->query("SELECT Institut_id, Name, fakultaets_id FROM Institute WHERE fakultaets_id = Institut_id ORDER BY Name");
 
 	while ($db->next_record())
 	{
@@ -72,7 +72,7 @@ $export_pagename = _("Datenexport - Startseite");
 		if ($range_id == $db->f("fakultaets_id")) 
 			$export_pagecontent .= " selected";
 		$export_pagecontent .= " value=\"" . $db->f("Institut_id") . "\">" . htmlReady(my_substr($db->f("Name"), 0, 60)) . "</option>";
-		if ($db->f("is_fak"))
+		if ($db->f("fakultaets_id") == $db->f("Institut_id"))
 		{
 			$db2->query("SELECT Institut_id, Name FROM Institute WHERE fakultaets_id='" .$db->f("Institut_id") . "' AND institut_id!='" .$db->f("Institut_id") . "'");
 			while ($db2->next_record())
