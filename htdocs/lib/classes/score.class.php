@@ -284,7 +284,7 @@ function GetMyScore() {
 	$db->next_record();
 	$contact = $db->f("contactcount");
 	
-	$db->query("SELECT count(kategorie_id) as katcount FROM kategorien WHERE range_id = '$user_id' ");
+	$db->query("SELECT count(kategorie_id) as katcount FROM kategorien WHERE range_id = '$user_id' AND hidden = 0 ");
 	$db->next_record();
 	$katcount = $db->f("katcount");
 
