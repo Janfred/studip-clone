@@ -391,8 +391,13 @@ $db3->next_record();
 
 while (list ($key, $val) = each ($gruppe)) {
 
-	if (!isset($sortby) || $sortby=="") 
-		$sortby = "doll DESC";
+	if (!isset($sortby) || $sortby=="") {
+		if ($showscore) {
+			$sortby = "doll DESC";
+		} else { 
+			$sortby = "Nachname";
+		}
+	}
 	
 	$counter=1;
 	
