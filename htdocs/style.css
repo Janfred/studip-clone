@@ -34,7 +34,7 @@ TD.quote {border-style: solid; border-color: #000000;  border-width: 1px; font-s
 TD.nix {background-color: transparent;}
 TD.aufklapp {background-color : #FFFAEE;}
 
-BODY {	background-color : #FFF5EE;	background : url('pictures/bathtile.jpg'); font-family: Arial, Helvetica, sans-serif}
+BODY {background : url('pictures/bathtile.jpg'); font-family: Arial, Helvetica, sans-serif}
 
 
 TABLE.blank {	background-color: white;}
