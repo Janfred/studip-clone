@@ -828,6 +828,7 @@ function get_seminar_tutor($seminar_id) {
 
 function get_seminar_sem_tree_entries($seminar_id) {
 	// get sem_tree_entries for copy 
+	/*
 	$db = new DB_Seminar;
 	$sql = "SELECT sem_tree_id FROM seminar_sem_tree WHERE seminar_id='".$seminar_id."'";
 	if (!$db->query($sql)) {
@@ -852,6 +853,15 @@ function get_seminar_sem_tree_entries($seminar_id) {
 		}
 	}
 	return $sem_tree_final;
+	*/
+	$view = new DbView();
+	$ret = null;
+	$view->params[0] = $seminar_id;
+	$rs = $view->get_query("view:SEMINAR_SEM_TREE_GET_IDS");
+	while ($rs->next_record()){
+		$ret[] = $rs->f('sem_tree_id');
+	}
+	return $ret;
 }
 
 
