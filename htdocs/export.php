@@ -122,21 +122,21 @@ if ($EXPORT_ENABLE)
 		$page=3;
 	
 	//Exportmodul einbinden
-	if (($range_id != "") AND (!isset($xml_file_id)))
-	{
-		include($ABSOLUTE_PATH_STUDIP ."" . $PATH_EXPORT . "/export_xml.inc.php");
-		if ($export_error_num < 1)
-			$xml_output_done = true;
-	}
-	
-	if (($xml_file_id != "") AND ($page != 3) AND ($o_mode == "choose") AND ($export_error_num < 1))
+	if (/*($xml_file_id != "") AND */($page != 3) AND ($o_mode == "choose") AND ($export_error_num < 1))
 	{
 		include($ABSOLUTE_PATH_STUDIP ."" . $PATH_EXPORT . "/export_choose_xslt.inc.php");
 		if ($export_error_num < 1)
 			$xslt_choose_done = true;
 	}
 	
-	if ( ($choose != "") AND ($format != "") AND ($XSLT_ENABLE) AND ($export_error_num==0) AND
+	if (($range_id != "") AND ($xml_file_id == "") AND ($o_mode != "start") AND (($o_mode != "choose") OR ($page == 3)))
+	{
+		include($ABSOLUTE_PATH_STUDIP ."" . $PATH_EXPORT . "/export_xml.inc.php");
+		if ($export_error_num < 1)
+			$xml_output_done = true;
+	}
+	
+	if ( ($choose != "") AND ($format != "") AND ($format != "xml") AND ($XSLT_ENABLE) AND ($export_error_num==0) AND
 		( ($o_mode == "processor") OR ($o_mode == "passthrough") OR ($page == 3) ) )
 	{
 		include($ABSOLUTE_PATH_STUDIP ."" . $PATH_EXPORT . "/export_run_xslt.inc.php");
