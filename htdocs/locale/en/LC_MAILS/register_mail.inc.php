@@ -17,7 +17,7 @@
 		."Your mail program will probably support a simple click on the link.\n"
 		."If not, you must open your browser and copy the link completely into the line\n"
 		."\"Location\" oder \"URL\".\n\n"
-		."You must register as user \"$username\",\n"
+		."You must login as user \"$username\",\n"
 		."so that the re-confirmation can work.\n\n"
 		."If you have not registered as user \"$username\",\n"
 		."or have no idea what is being talked about here,\n"
