@@ -86,7 +86,7 @@ function insert_sms ($rec_uname, $message, $user_id='') {
 	$db2=new DB_Seminar;
 	$db3=new DB_Seminar;
 
-	if ((!$user_id))
+	if (!$user_id)
 		$user_id = $user->id;
 
 	if (!empty($message)) {
@@ -102,11 +102,11 @@ function insert_sms ($rec_uname, $message, $user_id='') {
 
 		if ($db2->num_rows()){
 			$m_id=md5(uniqid("voyeurism"));
-			if ($my_messaging_settings["sms_sig"])
-				if ($user_id != "____%system%____")
+			if ($user_id != "____%system%____")  {
+				if ($my_messaging_settings["sms_sig"])
 					$message.=$this->sig_string.$my_messaging_settings["sms_sig"];
-				else
-					$message.=$this->sig_string."Diese Nachricht wurde automatisch vom System generiert. Sie können darauf nicht antworten.";
+			} else
+				$message.=$this->sig_string."Diese Nachricht wurde automatisch vom System generiert. Sie können darauf nicht antworten.";
 			$db3->query("INSERT INTO globalmessages SET message_id='$m_id', user_id_rec='$rec_uname', user_id_snd='$snd_uname', mkdate='".time()."', message='$message' ");
 		
 			//Benachrichtigung in alle Chaträume schicken
