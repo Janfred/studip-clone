@@ -102,7 +102,7 @@ if ($RESOURCES_ENABLE) {
 	$structure["resources_overview"]=array (topKat=>"resources", name=>"&Uuml;bersicht", link=>"resources.php?view=openobject_main", active=>FALSE);
 	$structure["resources_details"]=array (topKat=>"resources", name=>"Details", link=>"resources.php?view=openobject_details", active=>FALSE);
 	$structure["resources_schedule"]=array (topKat=>"resources", name=>"Belegung", link=>"resources.php?view=openobject_schedule", active=>FALSE);
-	$structure["resources_assign"]=array (topKat=>"resources", name=>"Neue Belegung", link=>"resources.php?view=openobject_assign", active=>FALSE);
+	$structure["resources_assign"]=array (topKat=>"resources", name=>"Belegungen bearbeiten", link=>"resources.php?view=openobject_assign", active=>FALSE);
 	if ($rechte)
 		$structure["resources_admin"]=array (topKat=>"resources", name=>"Ressourcen verwalten", link=>"resources.php?view=resources", active=>FALSE);
 }
