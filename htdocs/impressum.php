@@ -104,7 +104,8 @@ $reiter->create($structure, $view);
 	
 	<tr>
 		<td class="steel1"colspan=2>
-			<br>&nbsp; &nbsp; <b>Die folgenden Entwickler</b> sind mit der st&auml;ndigen Pflege und Weiterentwicklung des Systems befasst:<br><br><blockquote>
+			<br>&nbsp; &nbsp; <b>Die folgenden Entwickler</b> sind mit der st&auml;ndigen Pflege und Weiterentwicklung des Systems befasst:<br>
+			<blockquote>
 			<b>Marco Bohnsack</b>, eMail: <a href="mailto:mbohnsa@stud.uni-goettingen.de">mbohnsa@stud.uni-goettingen.de</a> (Hilfe)
 			<br><b>Oliver Brakel</b>, eMail: <a href="mailto:obrakel@gwdg.de">obrakel@gwdg.de</a> (Distribution)
 			<br><b>Cornelis Kater</b>, eMail: <a href="mailto:kater@data-quest.de">kater@data-quest.de</a> (Kernentwicklung, Terminverwaltung, Adminbereich, Design)
@@ -119,18 +120,24 @@ $reiter->create($structure, $view);
 	</table>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
 	<tr>
-		<td class="blank" colspan=2>
-			&nbsp; 
+		<td class="blank" colspan=3>
+			<blockquote>
+				 <br>&nbsp;<font size=-1>gef&ouml;rdert von </font><br>
+			</blockquote>
 		</td>
 	</tr>
 	<tr>
-		<td align="left" class="blank" width="17%">
+		<td align="left" class="blank" width="15%">
 			<blockquote>
-				 &nbsp;<font size=-1>gef&ouml;rdert von </font><br />
 				<a target="_new" href="http://www.bmbf.de/"><img src="pictures/bmbf.gif" border="0" /></a>
 			</blockquote>
 		</td>
-		<td align="center" class="blank" width="83%">
+		<td align="left" class="blank" width="15%">
+			<blockquote>
+				<a target="_new" href="http://www.campussource.de/"><img src="pictures/cslogotransparent.jpg" border="0" /></a>
+			</blockquote>
+		</td>
+		<td align="center" class="blank" width="70%">
 			&nbsp; 
 		</td>
 	</tr>
