@@ -138,7 +138,7 @@ $reiter->create($structure, $view);
 		<td class="blank" width="4%">&nbsp; 
 		</td>
 		<td align="left" class="blank" width="15%" align="center">
-			<a target="_new" href="http://www.zim.uni-goettingen.de/"><img src="pictures/zim.gif" border="0" /></a>
+			<a target="_new" href="http://zim.uni-goettingen.de/"><img src="pictures/zim.gif" border="0" /></a>
 		</td>
 		<td align="left" class="blank" width="15%" align="center">
 			<a target="_new" href="http://www.data-quest.de/"><img src="pictures/dataquest.gif" border="0" /></a>
