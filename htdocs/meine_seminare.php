@@ -504,7 +504,7 @@ ELSEIF ($auth->auth["perm"]=="admin"){
 		$_my_admin_inst_id = ($_my_inst[$_REQUEST['institut_id']]) ? $_REQUEST['institut_id'] : $_my_inst_arr[0];
 	}
 	
-	if (!isset($sortby)) $sortby="start_time, Name";
+	if (!isset($sortby)) $sortby="start_time DESC, Name ASC";
 	if ($sortby == "teilnehmer")
 	$sortby = "teilnehmer DESC";
 	$db->query("SELECT Institute.Name AS Institut, seminare.*, COUNT(seminar_user.user_id) AS teilnehmer FROM Institute LEFT JOIN seminare USING(Institut_id) LEFT JOIN seminar_user USING(Seminar_id) WHERE Institute.Institut_id='$_my_admin_inst_id' AND seminare.Institut_id is not NULL GROUP BY seminare.Seminar_id ORDER BY $sortby");
