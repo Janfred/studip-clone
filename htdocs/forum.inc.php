@@ -440,7 +440,7 @@ function ForumIcon ($forumposting) {
 	} else {
 		if ($forumposting["shrink"] == TRUE && $forumposting["lonely"]==FALSE) {
 			$bild = "pictures/forum_shrink.gif";
-			$addon = tooltip(_("koprimierter Thread mit ".$forumposting["shrinkcount"]." Postings"));
+			$addon = tooltip(sprintf(_("komprimierter Thread mit %s Postings"), $forumposting["shrinkcount"]));
 		} else
 			$bild = "pictures/cont_blatt.gif";
 	}
@@ -599,7 +599,7 @@ function ForumNoPostings () {
 	if ($forum["view"] != "search")
 		$text = _("In dieser Ansicht gibt es derzeit keine Beiträge.");
 	else
-		$text = _("Zu Ihrem Suchbegriff gibt es keine Treffer.<br><a href=\"".$PHP_SELF."?view=search&reset=1\">Neue Suche</a>");
+		$text = _("Zu Ihrem Suchbegriff gibt es keine Treffer.") . "<br><a href=\"".$PHP_SELF."?view=search&reset=1\">" . _("Neue Suche") . "</a>";
 	$empty .= parse_msg("info§$text");
 	return $empty;
 } 
@@ -620,7 +620,7 @@ function forum_print_navi ($forum) {
 	$maxpages = ceil($forum["forumsum"] / $forum["postingsperside"]);
 	$ipage = ($forum["flatviewstartposting"] / $forum["postingsperside"])+1;
 	if ($ipage != 1)
-		$navi .= "<a href=\"$SELF_PHP?flatviewstartposting=".($ipage-2)*$forum["postingsperside"]."\"><font size=-1>zurück </a> | </font>";
+		$navi .= "<a href=\"$SELF_PHP?flatviewstartposting=".($ipage-2)*$forum["postingsperside"]."\"><font size=-1>" . _("zurück") . "</a> | </font>";
 	else
 		$navi .= "<font size=\"-1\">Seite: </font>";
 	while ($i <= $maxpages) {
@@ -641,7 +641,7 @@ function forum_print_navi ($forum) {
 		$i++;	
 	}
 	if ($ipage != $maxpages)
-		$navi .= "<a href=\"$SELF_PHP?flatviewstartposting=".($ipage)*$forum["postingsperside"]."\"><font size=-1> weiter</a></font>";
+		$navi .= "<a href=\"$SELF_PHP?flatviewstartposting=".($ipage)*$forum["postingsperside"]."\"><font size=-1> " . _("weiter") . "</a></font>";
 	return $navi;
 }
 
