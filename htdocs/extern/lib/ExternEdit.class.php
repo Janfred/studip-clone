@@ -77,20 +77,28 @@ class ExternEdit {
 			$value = $this->form_values[$form_name];
 			
 			if ($value != "" || $this->faulty_values[$form_name]) {
-			if (is_array($value)) {
-				// sort the array by keys and fit the values for output in a form
-				for ($i = 0; $i < sizeof($value); $i++)
-					$val_tmp[] = htmlentities(stripslashes($value[$i]), ENT_QUOTES);
-				$value = $val_tmp;
-			}
-			else
-				$value = htmlentities(stripslashes($value), ENT_QUOTES);
+				if (is_array($value)) {
+					// sort the array by keys and fit the values for output in a form
+					for ($i = 0; $i < sizeof($value); $i++)
+						$val_tmp[] = htmlentities(stripslashes($value[$i]), ENT_QUOTES);
+					
+					return $val_tmp;
+				}
 			
-			return $value;
+				return htmlentities(stripslashes($value), ENT_QUOTES);
 			}
 		}
 		
-		return $this->config->getValue($this->element_name, $attribute);
+		$value = $this->config->getValue($this->element_name, $attribute);
+		if (is_array($value)) {
+			// fit the values for output in a form
+			for ($i = 0; $i < sizeof($value); $i++)
+				$val_tmp[] = htmlentities(stripslashes($value[$i]), ENT_QUOTES);
+				
+			return $val_tmp;
+		}
+		
+		return htmlentities($this->config->getValue($this->element_name, $attribute), ENT_QUOTES);
 	}
 	
 	function editHeader () {

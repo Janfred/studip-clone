@@ -84,17 +84,20 @@ if (!$module)
 if ($main_element_command)
 	$module->mainCommand($main_element_command, $pos);
 
+//if ($com == "" || $com == "new" || $com == "edit" || $com == "open" || $com == "close") {
+
+$elements = $module->getAllElements();
+	
+// the first parameter of printOutEdit() has to be an array, because it is
+// possible to open more than one element form
+foreach ($elements as $element) {
+	if ($edit == $element->getName())
+	//	$EXTERN_SESSION_OPEN_ELEMENTS[$element->getName()] = ($com == "open");
+		$edit_open = array("$edit" => ($com != "close"));
+}
 if ($com == "new" || $com == "edit" || $com == "open" || $com == "close") {
-
-	$elements = $module->getAllElements();
-
-	foreach ($elements as $element) {
-		if ($edit == $element->getName())
-			$EXTERN_SESSION_OPEN_ELEMENTS[$element->getName()] = ($com == "open");
-	}
 	echo "<tr><td class=\"blank\" width=\"99%\" valign=\"top\">\n";
-	$module->printoutEdit($EXTERN_SESSION_OPEN_ELEMENTS, $HTTP_POST_VARS, "", $edit);
-
+	$module->printoutEdit($edit_open, $HTTP_POST_VARS, "", $edit);
 }
 
 if ($com == "store") {
@@ -106,7 +109,7 @@ if ($com == "store") {
 				"<font color=\"#ff0000\" size=\"+1\"><b>*</b></font>");
 		my_info($message);
 		echo "<tr><td class=\"blank\" width=\"99%\" valign=\"top\">\n";
-		$module->printoutEdit($EXTERN_SESSION_OPEN_ELEMENTS, $HTTP_POST_VARS,
+		$module->printoutEdit($edit_open, $HTTP_POST_VARS,
 				$faulty_values, $edit);
 	}
 	else {
@@ -119,20 +122,20 @@ if ($com == "store") {
 				$message = _("Der Konfigurationsname wurde bereits für eine Konfiguration dieses Moduls vergeben. Bitte geben Sie einen anderen Namen ein.");
 				my_error($message, "blank", 1);
 				echo "<tr><td class=\"blank\" width=\"99%\" valign=\"top\">\n";
-				$module->printoutEdit($EXTERN_SESSION_OPEN_ELEMENTS, "$HTTP_POST_VARS", "", $edit);
+				$module->printoutEdit($edit_open, "$HTTP_POST_VARS", "", $edit);
 			}
 			$module->store($edit, $HTTP_POST_VARS);
 			$message = _("Die eingegebenen Werte wurden übernommen und der Name der Konfiguration geändert.");
 			my_msg($message, "blank", 1);
 			echo "<tr><td class=\"blank\" width=\"99%\" valign=\"top\">\n";
-			$module->printoutEdit($EXTERN_SESSION_OPEN_ELEMENTS, "", "", $edit);
+			$module->printoutEdit($edit_open, "", "", $edit);
 		}
 		else {
 			$module->store($edit, $HTTP_POST_VARS);
 			$message = _("Die eingegebenen Werte wurden übernommen.");
 			my_msg($message, "blank", 1);
 			echo "<tr><td class=\"blank\" width=\"99%\" valign=\"top\">\n";
-			$module->printoutEdit($EXTERN_SESSION_OPEN_ELEMENTS, "", "", $edit);
+			$module->printoutEdit($edit_open, "", "", $edit);
 		}
 	}
 }

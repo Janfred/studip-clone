@@ -40,7 +40,7 @@ require_once($ABSOLUTE_PATH_STUDIP . "visual.inc.php");
 $db = new DB_Institut();
 $error_message = "";
 
-// stimmt die übergebene instituts_id?
+// stimmt die übergebene range_id?
 $query = "SELECT Name FROM Institute WHERE Institut_id=\"{$this->config->range_id}\"";
 $db->query($query);
 if(!$db->next_record())
@@ -48,10 +48,10 @@ if(!$db->next_record())
 
 // Daten holen
 global $_fullname_sql;
-$query = "SELECT dokument_id, description, filename, mkdate, chdate, filesize, ";
+$query = "SELECT dokument_id, description, filename, d.mkdate, d.chdate, filesize, ";
 $query .= $_fullname_sql[$this->config->getValue("Main", "nametitle")];
-$query .= "AS fullname FROM dokumente LEFT JOIN user_info USING (user_id) ";
-$query .= "LEFT JOIN auth_user_md5 USING (user_id) WHERE "
+$query .= "AS fullname FROM dokumente d LEFT JOIN user_info USING (user_id) ";
+$query .= "LEFT JOIN auth_user_md5 USING (user_id) WHERE ";
 $query .= "Seminar_id=\"{$this->config->range_id}\"";
 
 $sort = $this->config->getValue("Main", "sort");
@@ -120,132 +120,132 @@ if ($error_message) {
 	echo "<td" . $this->config->getAttributes("TableRow", "td") . " colspan=\"$i\">\n";
 	echo $error_message;
 	echo "</td></tr>\n</table>\n";
-	exit;
 }
-
-$set_1 = $this->config->getAttributes("TableRow", "td");
-$set_2 = $this->config->getAttributes("TableRow", "td", TRUE);
-$zebra = $this->config->getValue("TableRow", "td_zebratd_");
-
-while($db->next_record()){
-
-	preg_match("/^.+\.([a-z1-9_-]+)$/i", $db->f("filename"), $file_suffix);
+else {
+	$set_1 = $this->config->getAttributes("TableRow", "td");
+	$set_2 = $this->config->getAttributes("TableRow", "td", TRUE);
+	$zebra = $this->config->getValue("TableRow", "td_zebratd_");
 	
-	$icon = "";
-	switch ($file_suffix[1]) {
-		case "txt" :
-			if (!$picture_file = $this->config->getValue("Main", "icontxt"))
-				$icon = "txt-icon.gif";
-			break;
-		case "xls" :
-			if (!$picture_file = $this->config->getValue("Main", "iconxls"))
-				$icon = "xls-icon.gif";
-			break;
-		case "ppt" :
-			if (!$picture_file = $this->config->getValue("Main", "iconppt"))
-				$icon = "ppt-icon.gif";
-			break;
-		case "rtf" :
-			if (!$picture_file = $this->config->getValue("Main", "iconrtf"))
-				$icon = "rtf-icon.gif";
-			break;
-		case "zip" :
-		case "tgz" :
-		case "gz" :
-			if (!$picture_file = $this->config->getValue("Main", "iconzip"))
-				$icon = "zip-icon.gif";
-			break;
-		case "jpg" :
-		case "png" :
-		case "gif" :
-		case "jpeg" :
-		case "tif" :
-			if (!$picture_file = $this->config->getValue("Main", "iconpic"))
-				$icon = "pic-icon.gif";
-			break;
-		case "pdf" :
-			if (!$picture_file = $this->config->getValue("Main", "iconpdf"))
-				$icon = "pdf-icon.gif";
-			break;
-		default :
-			if (!$picture_file = $this->config->getValue("Main", "icondefault"))
-				$icon = "txt-icon.gif";
-	}
+	while($db->next_record()){
 	
-	if ($icon)
-		$picture_file = $CANONICAL_RELATIVE_PATH_STUDIP ."pictures/$icon";
-
-	$download_link = $CANONICAL_RELATIV_PATH_STUDIP;
-	$download_link .= sprintf("sendfile.php?type=0&file_id=%s&file_name=%s\"",
-			$db->f("dokument_id"), $db->f("filename"));
-
-	// Aufbereiten der Daten
-	$daten = array(
-		"icon"        => sprintf("<a href=\"%s\"><img border=\"0\" src=\"%s\"></a>"
-											, $download_link, $picture_file),
-											 
-		"filename"    => sprintf("<font%s><a%s href=\"%s\"%s>%s</a></font>"
-											, $this->config->getAttributes("Link", "font")
-											, $this->config->getAttributes("Link", "a")
-											, $download_link
-											, htmlReady($db->f("filename"))),
-											 
-		"description" => sprintf("<font%s>%s</font>"
-											, $this->config->getAttributes("TableRow", "font")
-											, htmlReady(mila_extern($db->f("description"),
-												$this->config->getValue("Main", "lengthdesc")))),
+		preg_match("/^.+\.([a-z1-9_-]+)$/i", $db->f("filename"), $file_suffix);
 		
-		"date"        => sprintf("<font%s>%s</font>"
-											, $this->config->getAttributes("TableRow", "font")
-											, date("d.m.Y", $db->f("mkdate"))),
+		$icon = "";
+		switch ($file_suffix[1]) {
+			case "txt" :
+				if (!$picture_file = $this->config->getValue("Main", "icontxt"))
+					$icon = "txt-icon.gif";
+				break;
+			case "xls" :
+				if (!$picture_file = $this->config->getValue("Main", "iconxls"))
+					$icon = "xls-icon.gif";
+				break;
+			case "ppt" :
+				if (!$picture_file = $this->config->getValue("Main", "iconppt"))
+					$icon = "ppt-icon.gif";
+				break;
+			case "rtf" :
+				if (!$picture_file = $this->config->getValue("Main", "iconrtf"))
+					$icon = "rtf-icon.gif";
+				break;
+			case "zip" :
+			case "tgz" :
+			case "gz" :
+				if (!$picture_file = $this->config->getValue("Main", "iconzip"))
+					$icon = "zip-icon.gif";
+				break;
+			case "jpg" :
+			case "png" :
+			case "gif" :
+			case "jpeg" :
+			case "tif" :
+				if (!$picture_file = $this->config->getValue("Main", "iconpic"))
+					$icon = "pic-icon.gif";
+				break;
+			case "pdf" :
+				if (!$picture_file = $this->config->getValue("Main", "iconpdf"))
+					$icon = "pdf-icon.gif";
+				break;
+			default :
+				if (!$picture_file = $this->config->getValue("Main", "icondefault"))
+					$icon = "txt-icon.gif";
+		}
 		
-		"size"        => sprintf("<font%s>%s</font>"
-											, $this->config->getAttributes("TableRow", "font"),
-											$db->f("filesize") > 1048576 ? round($db->f("filesize") / 1048576, 1) . " MB"
-											: round($db->f("filesize") / 1024, 1) . " kB"),
-												
-		"name"        => sprintf("<font%s>%s</font>"
-											, $this->config->getAttributes("TableRow", "font")
-											, htmlReady($db->f("fullname")))
-	);
+		if ($icon)
+			$picture_file = $CANONICAL_RELATIVE_PATH_STUDIP ."pictures/$icon";
 	
-	// "horizontal zebra"
-	if ($zebra == "HORIZONTAL") {
-		if ($i % 2)
-			$set = $set_2;
-		else
-			$set = $set_1;
-	}
-	else
-		$set = $set_1;
+		$download_link = $CANONICAL_RELATIV_PATH_STUDIP;
+		$download_link .= sprintf("sendfile.php?type=0&file_id=%s&file_name=%s\"",
+				$db->f("dokument_id"), $db->f("filename"));
 	
-	echo "<tr" . $this->config->getAttributes("TableRow", "tr") . ">\n";
-	
-	$j = 0;
-	reset($rf_download);
-	foreach($rf_download as $spalte){
+		// Aufbereiten der Daten
+		$daten = array(
+			"icon"        => sprintf("<a href=\"%s\"><img border=\"0\" src=\"%s\"></a>"
+												, $download_link, $picture_file),
+												 
+			"filename"    => sprintf("<font%s><a%s href=\"%s\"%s>%s</a></font>"
+												, $this->config->getAttributes("Link", "font")
+												, $this->config->getAttributes("Link", "a")
+												, $download_link
+												, htmlReady($db->f("filename"))),
+												 
+			"description" => sprintf("<font%s>%s</font>"
+												, $this->config->getAttributes("TableRow", "font")
+												, htmlReady(mila_extern($db->f("description"),
+													$this->config->getValue("Main", "lengthdesc")))),
+			
+			"date"        => sprintf("<font%s>%s</font>"
+												, $this->config->getAttributes("TableRow", "font")
+												, date("d.m.Y", $db->f("mkdate"))),
+			
+			"size"        => sprintf("<font%s>%s</font>"
+												, $this->config->getAttributes("TableRow", "font"),
+												$db->f("filesize") > 1048576 ? round($db->f("filesize") / 1048576, 1) . " MB"
+												: round($db->f("filesize") / 1024, 1) . " kB"),
+													
+			"name"        => sprintf("<font%s>%s</font>"
+												, $this->config->getAttributes("TableRow", "font")
+												, htmlReady($db->f("fullname")))
+		);
 		
-		// "vertical zebra"
-		if ($zebra == "VERTICAL") {
-			if ($j % 2)
+		// "horizontal zebra"
+		if ($zebra == "HORIZONTAL") {
+			if ($i % 2)
 				$set = $set_2;
 			else
 				$set = $set_1;
 		}
-	
-		if ($visible[$spalte]) {
-			if($daten[$this->data_fields[$spalte]] == "")
-				echo "<td$set>&nbsp;</td>\n";
-			else
-				echo "<td$set>" . $daten[$this->data_fields[$spalte]] . "</td>\n";
-			$j++;
+		else
+			$set = $set_1;
+		
+		echo "<tr" . $this->config->getAttributes("TableRow", "tr") . ">\n";
+		
+		$j = 0;
+		reset($rf_download);
+		foreach($rf_download as $spalte){
+			
+			// "vertical zebra"
+			if ($zebra == "VERTICAL") {
+				if ($j % 2)
+					$set = $set_2;
+				else
+					$set = $set_1;
+			}
+		
+			if ($visible[$spalte]) {
+				if($daten[$this->data_fields[$spalte]] == "")
+					echo "<td$set>&nbsp;</td>\n";
+				else
+					echo "<td$set>" . $daten[$this->data_fields[$spalte]] . "</td>\n";
+				$j++;
+			}
 		}
+		
+		echo "</tr>\n";
+		$i++;
 	}
 	
-	echo "</tr>\n";
-	$i++;
+	echo "\n</table>";
 }
-
-echo "\n</table>";
 
 ?>

@@ -515,7 +515,7 @@ class ExternEditHtml extends ExternEditGeneric {
 		$info = _("Geben Sie Style-Sheet-Angaben ein.");
 		$title = _("Style:");
 		
-		return $this->editTextfieldGeneric($attribute, $title, $info, 50, 250);
+		return $this->editTextfieldGeneric($attribute, $title, $info, 35, 250);
 	}
 	
 	/**
@@ -529,7 +529,7 @@ class ExternEditHtml extends ExternEditGeneric {
 		$info = _("Geben Sie einen Seitentitel an.");
 		$title = _("Seiten-Titel:");
 		
-		return $this->editTextfieldGeneric($attribute, $title, $info, 50, 128);
+		return $this->editTextfieldGeneric($attribute, $title, $info, 35, 128);
 	}
 	
 	/**

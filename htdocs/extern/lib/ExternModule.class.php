@@ -275,12 +275,6 @@ class ExternModule {
 	*
 	*/
 	function printError () {
-		global $user, $perm;
-		
-		if ($user->name)
-			$perm->check("GOTT");
-		else
-			echo $GLOBALS["EXTERN_ERROR_MESSAGE"];
 		
 		exit;
 	}

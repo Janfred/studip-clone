@@ -221,14 +221,12 @@ foreach ($data as $db) {
 				else
 					$set = $set_1;
 			}
-			else
-				$set = $set_1;
 	
 			if($daten[$this->data_fields[$spalte]])
 				echo "<td$set>" . $daten[$this->data_fields[$spalte]] . "</td>\n";
 			else
 				echo "<td$set>&nbsp;</td>\n";
-			$j++;
+				$j++;
 		}
 	}
 	

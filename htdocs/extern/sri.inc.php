@@ -38,36 +38,56 @@
 // this script is included in extern.inc.php
 
 $sri_page = implode("", file($page_url));
-
-$sri_pattern = "'^(.*)<studip_remote_include>(.*)</studip_remote_include>(.*)$'i";
+//echo $sri_page;
+$sri_pattern = "'(.*)\<studip_remote_include\>(.*)\<\/studip_remote_include\>(.*)'is";
 
 if (!preg_match($sri_pattern, $sri_page, $sri_matches)) {
 	echo $EXTERN_ERROR_MESSAGE;
+	echo $sri_page;
 	exit;
 }
 
+//echo $sri_matches[0];
+//echo $sri_matches[1];
+//echo $sri_matches[2];
+//echo $sri_matches[3];
+//echo $sri_matches[3];
+
+
 // get data out of sri-block
 // 1. range_id
-if (preg_match("'range_id\s*\=\s*([a-f0-9]{32})\s?\n'", $sri_matches[2], $matches))
-	$config_id = $matches[1];
+if (preg_match("'range_id\s*\=\s*([a-f0-9]{32})\s?\n'", $sri_matches[2], $matches)) {
+	$range_id = $matches[1];
+	echo $range_id . "<br>";
+}
 else {
+	echo $sri_matches[1];
 	echo $EXTERN_ERROR_MESSAGE;
+	echo $sri_matches[3];
 	exit;
 }
 
 // 2. module
-if (preg_match("'module\s*\=\s*([a-z]{5,20})\s?\n'i", $sri_matches[2], $matches))
+if (preg_match("'module\s*\=\s*([a-z]{5,20})\s?\n'i", $sri_matches[2], $matches)) {
 	$module = ucfirst(strtolower($matches[1]));
+	echo $module . "<br>";
+}
 else {
+	echo $sri_matches[1];
 	echo $EXTERN_ERROR_MESSAGE;
+	echo $sri_matches[3];
 	exit;
 }
 
 // 3. config_id / config_name
-if (preg_match("'config_id\s*\=\s*([a-f0-9]{32})\s?\n'", $sri_matches[2], $matches))
+if (preg_match("'config_id\s*\=\s*([a-f0-9]{32})\s?\n'", $sri_matches[2], $matches)){
 	$config_id = $matches[1];
-else (preg_match("'config_name\s*\=\s*([a-z0-9-_ ]{1,40})\s?\n'i", $sri_matches[2], $matches))
+	echo $config_id . "<br>";
+}
+elseif (preg_match("'config_name\s*\=\s*([a-z0-9-_ ]{1,40})\s?\n'i", $sri_matches[2], $matches)){
 	$config_name = $matches[1];
+	echo $config_name . "<br>";
+}
 
 // 4. sem (which semester?)
 if (preg_match("'sem\s*\=\s*([\+\-]1)\s?\n'", $sri_matches[2], $matches))
@@ -85,14 +105,18 @@ foreach ($EXTERN_MODULE_TYPES as $module_type => $module_data) {
 }
 // Wrong module name!
 if (!$type) {
+	echo $sri_matches[1];
 	echo $EXTERN_ERROR_MESSAGE;
+	echo $sri_matches[3];
 	exit;
 }
 
 if ($config_name) {
 	// check for valid configuration name and convert it into a config_id
 	if (!$config_id = get_config_by_name($range_id, $type, $config_name)) {
+		echo $sri_matches[1];
 		echo $EXTERN_ERROR_MESSAGE;
+		echo $sri_matches[3];
 		exit;
 	}
 }
@@ -136,7 +160,9 @@ foreach ($EXTERN_MODULE_TYPES as $type) {
 		$module_obj =& new ExternModule($range_id, $module, $config_id, $default);
 }
 
+echo $sri_matches[1];
 $module_obj->printout($start, $end);
+echo $sri_matches[3];
 
 ?>
 
