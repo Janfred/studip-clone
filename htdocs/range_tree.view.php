@@ -24,7 +24,7 @@
 $_views["TREE_KIDS"] = array("pk"=>"item_id","temp_table_type"=>"HEAP",
 							"query"=>"SELECT item_id FROM range_tree WHERE parent_id=? ORDER BY priority");
 $_views["TREE_GET_DATA"] = array("pk"=>"item_id","temp_table_type"=>"HEAP",
-							"query"=>"SELECT a.*, b.Name AS fak_name, c.Name as inst_name FROM range_tree a LEFT JOIN Fakultaeten b ON (a.studip_object = 'fak' AND a.studip_object_id = b.Fakultaets_id)
+							"query"=>"SELECT a.*, b.Name AS fak_name, c.Name as inst_name, c.fakultaets_id FROM range_tree a LEFT JOIN Fakultaeten b ON (a.studip_object = 'fak' AND a.studip_object_id = b.Fakultaets_id)
 LEFT JOIN Institute c ON (a.studip_object = 'inst' AND a.studip_object_id = c.Institut_id) ORDER BY priority");
 $_views["TREE_OBJECT_NAME"] = array("pk"=>"","temp_table_type"=>"HEAP",
 							"query"=>"SELECT Name FROM ! WHERE ! LIKE ? ");

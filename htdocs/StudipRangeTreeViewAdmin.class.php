@@ -65,15 +65,24 @@ class StudipRangeTreeViewAdmin extends StudipRangeTreeView{
 		if (is_array($this->open_items)){
 			foreach ($this->open_items as $key => $value){
 				if ($key != 'root'){
-					$studip_object_status[$this->tree->getAdminRange($key)] = ($user_perm == "root") ? 1 : -1;
+					$tmp = $this->tree->getAdminRange($key);
+					for ($i = 0; $i < count($i); ++$i){
+						$studip_object_status[$tmp[$i]] = ($user_perm == "root") ? 1 : -1;
+					}
 				}
 			}
 		}
 		if (is_array($this->open_ranges)){
 			foreach ($this->open_ranges as $key => $value){
 				if ($key != 'root'){
-					$studip_object_status[$this->tree->getAdminRange($key)] = ($user_perm == "root") ? 1 : -1;
-					$studip_object_status[$this->tree->getAdminRange($this->tree->tree_data[$key]['parent_id'])] = ($user_perm == "root") ? 1 : -1;
+					$tmp = $this->tree->getAdminRange($key);
+					for ($i = 0; $i < count($i); ++$i){
+						$studip_object_status[$tmp[$i]] = ($user_perm == "root") ? 1 : -1;
+					}
+					$tmp = $this->tree->getAdminRange($this->tree->tree_data[$key]['parent_id']);
+					for ($i = 0; $i < count($i); ++$i){
+						$studip_object_status[$tmp[$i]] = ($user_perm == "root") ? 1 : -1;
+					}
 				}
 			}
 		}
@@ -187,7 +196,7 @@ class StudipRangeTreeViewAdmin extends StudipRangeTreeView{
 	function execCommandEditItem(){
 		global $_REQUEST;
 		$item_id = $_REQUEST['item_id'];
-		if ($this->isItemAdmin($item_id)){
+		if ($this->isItemAdmin($item_id) || $this->isParentAdmin($item_id)){
 			$this->mode = "EditItem";
 			$this->anchor = $item_id;
 			$this->edit_item_id = $item_id;
@@ -221,7 +230,7 @@ class StudipRangeTreeViewAdmin extends StudipRangeTreeView{
 			}
 		}
 		if ($this->mode == "EditItem"){
-			if ($this->isItemAdmin($item_id)){
+			if ($this->isParentAdmin($item_id) || $this->isItemAdmin($item_id)){
 				$rs = $view->get_query("view:TREE_UPD_ITEM:$item_name,$studip_object,$studip_object_id,$item_id");
 				if ($rs->affected_rows()){
 					$this->mode = "";
@@ -234,39 +243,50 @@ class StudipRangeTreeViewAdmin extends StudipRangeTreeView{
 	}
 				
 	function isItemAdmin($item_id){
-		return ($this->tree_status[$this->tree->getAdminRange($item_id)] == 1) ? true :false;
+		$admin_ranges = $this->tree->getAdminRange($item_id);
+		for ($i = 0; $i < count($admin_ranges); ++$i){
+			if ($this->tree_status[$admin_ranges[$i]] == 1){
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	function isParentAdmin($item_id){
-			return ($this->tree_status[$this->tree->getAdminRange($this->tree->tree_data[$item_id]['parent_id'])] == 1) ? true : false;
+		$admin_ranges = $this->tree->getAdminRange($this->tree->tree_data[$item_id]['parent_id']);
+		for ($i = 0; $i < count($admin_ranges); ++$i){
+			if ($this->tree_status[$admin_ranges[$i]] == 1){
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	function getItemContent($item_id){
 		
-		if ($item_id == $this->edit_item_id && $this->isItemAdmin($item_id))
+		if ($item_id == $this->edit_item_id )
 			return $this->getEditItemContent();
 			
 		$content = "\n<table width=\"90%\" cellpadding=\"2\" cellspacing=\"2\" align=\"center\" style=\"font-size:10pt\">";
+		$content .= "\n<tr><td align=\"center\">";
 		if ($this->isItemAdmin($item_id)){
-			$content .= "\n<tr><td align=\"center\">";
 			$content .= "<a href=\"" . $this->getSelf("cmd=NewItem&item_id=$item_id") . "\">"
 						. "<img " .makeButton("neuesobjekt","src") . tooltip(_("Innerhalb dieser Ebene ein neues Element einfügen"))
 						. " border=\"0\"></a>&nbsp;";
-			if ($item_id != "root"){
-				$content .= "<a href=\"" . $this->getSelf("cmd=EditItem&item_id=$item_id") . "\">"
-				. "<img " .makeButton("bearbeiten","src") . tooltip(_("Dieses Element bearbeiten"))
-				. " border=\"0\"></a>&nbsp;";
-			}
-			if ($this->isParentAdmin($item_id) && $item_id !=$this->start_item_id){
-				$content .= "<a href=\"" . $this->getSelf("cmd=DeleteItem&item_id=$item_id") . "\">"
-				. "<img " .makeButton("loeschen","src") . tooltip(_("Dieses Element löschen"))
-				. " border=\"0\"></a>&nbsp;";
-				$content .= "<a href=\"" . $this->getSelf("cmd=MoveItem&item_id=$item_id") . "\">"
-				. "<img " .makeButton("verschieben","src") . tooltip(_("Dieses Element in eine andere Ebene verschieben"))
-				. " border=\"0\"></a>&nbsp;";
-			}
-			$content .= "<br>&nbsp;</td></tr></table>";
 		}
+		if ($this->isParentAdmin($item_id) && $item_id !=$this->start_item_id && $item_id != "root"){
+				$content .= "<a href=\"" . $this->getSelf("cmd=EditItem&item_id=$item_id") . "\">"
+			. "<img " .makeButton("bearbeiten","src") . tooltip(_("Dieses Element bearbeiten"))
+			. " border=\"0\"></a>&nbsp;";
+		
+			$content .= "<a href=\"" . $this->getSelf("cmd=DeleteItem&item_id=$item_id") . "\">"
+			. "<img " .makeButton("loeschen","src") . tooltip(_("Dieses Element löschen"))
+			. " border=\"0\"></a>&nbsp;";
+			$content .= "<a href=\"" . $this->getSelf("cmd=MoveItem&item_id=$item_id") . "\">"
+			. "<img " .makeButton("verschieben","src") . tooltip(_("Dieses Element in eine andere Ebene verschieben"))
+			. " border=\"0\"></a>&nbsp;";
+		}
+		$content .= "<br>&nbsp;</td></tr></table>";
 		$content .= "\n<table width=\"90%\" cellpadding=\"2\" cellspacing=\"2\" align=\"center\" style=\"font-size:10pt\">";
 		if ($item_id == "root"){
 			$content .= "\n<tr><td class=\"topic\" align=\"left\">" . htmlReady($this->tree->root_name) ." </td></tr>";

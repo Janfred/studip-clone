@@ -118,10 +118,11 @@ class StudipRangeTree {
 			}
 		$this->tree_data[$db->f("item_id")] = array("parent_id" => $db->f("parent_id"), 
 													"priority" => $db->f("priority"), "name" => $item_name,
-													"studip_object" => $db->f("studip_object"), "studip_object_id" => $db->f("studip_object_id"));
-		if ($db->f("parent_id") == "root") {
-			$this->tree_childs['root'][] = $db->f("item_id");
-		}
+													"studip_object" => $db->f("studip_object"),
+													"studip_object_id" => $db->f("studip_object_id"),
+													"fakultaets_id" => $db->f("fakultaets_id"));
+
+		$this->tree_childs[$db->f("parent_id")][] = $db->f("item_id");
 		}
 		$item_kids = count($this->tree_childs['root']);
 		$this->tree_data['root'] = array('parent_id' => null, 'name' => $this->root_name, 'studip_object_id' => 'root');
@@ -135,16 +136,8 @@ class StudipRangeTree {
 	* @return	array
 	*/
 	function getKids($item_id){
-		if (!$this->tree_childs[$item_id]){
-			$view = new DbView();
-			$db = $view->get_query("view:TREE_KIDS:$item_id");
-			while ($db->next_record()){
-				$this->tree_childs[$item_id][] = $db->f("item_id");
-				}
-			if (!$db->num_rows())
-				$this->tree_childs[$item_id] = "none";
-			} 
-		return ($this->tree_childs[$item_id] == "none") ? null : $this->tree_childs[$item_id];
+
+		return (is_array($this->tree_childs[$item_id])) ? $this->tree_childs[$item_id] : null;
 	}			
 	
 	/**
@@ -234,11 +227,42 @@ class StudipRangeTree {
 	function getAdminRange($item_id){
 		if (!$this->tree_data[$item_id])
 			return false;
+		$found = false;
+		$ret = false;
+		$next_link = $item_id;
+		while(($next_link = $this->getNextLink($next_link)) != 'root'){
+			if ($this->tree_data[$next_link]['studip_object'] == 'inst'){
+				$found[] = $next_link;
+			}
+			if ($this->tree_data[$next_link]['studip_object'] == 'fak'){
+				if (count($found)){
+					for($i = 0; $i < count($found); ++$i){
+						if ($this->tree_data[$found[$i]]['fakultaets_id'] == $this->tree_data[$next_link]['studip_object_id']){
+							$ret[] = $this->tree_data[$found[$i]]['studip_object_id'];
+						}
+					}
+				$ret[] = $this->tree_data[$next_link]['studip_object_id'];
+				} else {
+					$ret[] = $this->tree_data[$next_link]['studip_object_id'];
+				}
+				break;
+			}
+			$next_link = $this->tree_data[$next_link]['parent_id'];
+		}
+		if (!$ret){
+			$ret[] = $next_link;
+		}
+		return $ret;
+	}
+	
+	function getNextLink($item_id){
+	if (!$this->tree_data[$item_id])
+			return false;
 		$ret_id = $item_id;
 		while (!$this->tree_data[$ret_id]['studip_object_id']){
 			$ret_id = $this->tree_data[$ret_id]['parent_id'];
 		}
-		return $this->tree_data[$ret_id]['studip_object_id'];
+		return $ret_id;
 	}
 	
 	/**
