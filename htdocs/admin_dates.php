@@ -159,11 +159,11 @@ if ($insert_new) {
 }
 
 //maximale spaltenzahl berechnen
-if ($auth->auth["jscript"]) 
+if ($auth->auth["jscript"])
 	$max_col = round($auth->auth["xres"] / 10 );
-else 
+else
 	$max_col =  64 ; //default für 640x480
-	
+
 if ($admin_dates_data["range_id"] && !$perm->have_perm("root")) {
 	//Sicherheitscheck
 	$range_perm=get_perm($admin_dates_data["range_id"]);
@@ -586,9 +586,8 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 				printf(_("Assistent %s"), "<input type=\"IMAGE\" align=\"absmiddle\" name=\"make_dates\" " . makeButton("starten", "src") . " border=\"0\" value=\"" . _("Ablaufplan-Assistenten ausf&uuml;hren") . "\">");
 				?>
 				</font>
-				&nbsp; <img  src="./pictures/info.gif" 
-					onClick="alert('<?=_("Der Ablaufplan-Assistent erstellt automatisch die zu den Veranstaltungszeiten passenden Termine für ein oder mehrere Semester. Dabei werden - soweit wie möglich - Feiertage und Ferienzeiten ber&uuml;cksichtigt. Anschließend können Sie jedem Termin einen Titel und eine Beschreibung geben.")?>');" 
-					<?=tooltip(_("Der Ablaufplan-Assistent erstellt automatisch die zu den Veranstaltungszeiten passenden Termine f&uuml;r ein oder mehrere Semester. Dabei werden soweit wie m&ouml;glich Feiertage und Ferienzeiten &uuml;bersprungen. Anschlie&szligend k&ouml;nnen Sie jedem Termin einen Titel und eine Beschreibung geben."))?>>
+				&nbsp; <img  src="./pictures/info.gif"
+					<?=tooltip(_("Der Ablaufplan-Assistent erstellt automatisch die zu den Veranstaltungszeiten passenden Termine für ein oder mehrere Semester. Dabei werden - soweit wie möglich - Feiertage und Ferienzeiten übersprungen. Anschließend können Sie jedem Termin einen Titel und eine Beschreibung geben."), TRUE, TRUE)?>>
 				<br /><br />
 				</td>
 			</tr>
@@ -683,14 +682,13 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 		$titel.="<input type=\"TEXT\" style=\"font-size:8 pt;\" name=\"end_stunde\" maxlength=2 size=2 value=\"".$temp_default[6]."\"><font size=-1> :</font>";
 		$titel.="<input type=\"TEXT\" style=\"font-size:8 pt;\" name=\"end_minute\" maxlength=2 size=2 value=\"".$temp_default[7]."\"><font size=-1> " . _("Uhr") . ".</font>";
 		$titel.="<input type=\"HIDDEN\" name=\"termin_id\" value=\"".$admin_dates_data["insert_id"]."\">";
-		$titel .= Kalender_Termine_javascript(1,0);
 		$icon="&nbsp;<img src=\"./pictures/termin-icon.gif\" border=0>";
 		$link=$PHP_SELF."?cancel=TRUE";
 
 		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"99%\" align=\"center\"><tr>";
 		printhead(0, 0, $link, "open", TRUE, $icon, $titel, $zusatz);
-		echo "</tr></table>	";
-
+		echo "</tr></table>";
+		echo Termin_Eingabe_javascript(1,0);
 		//Contentbereich
 		$content='';
 
@@ -706,7 +704,7 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 			$content.=$default_description;
 		$content.="</textarea>\n";
 		if (($modules["forum"]) || ($modules["documents"]))
-			$content.="<font size=-1><b>" . _("Verkn&uuml;pfungen mit diesem Termin:") . "</b><br />";
+			$content.="<b>" . _("Verkn&uuml;pfungen mit diesem Termin:") . "</b><br />";
 
 		//only, if the forum is active
 		if ($modules["forum"])
@@ -833,7 +831,6 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 			$titel.="<input type=\"TEXT\" style=\"font-size:8 pt;\" name=\"end_minute[$c]\" maxlength=2 size=2 value=\"".sprintf('%02d',$end_minute)."\"><font size=-1> " . _("Uhr") . ".</font>";
 		    	$titel.="<input type=\"HIDDEN\" name=\"termin_id[$c]\" value=\"".$db->f("termin_id")."\">";
 			$titel.="<input type=\"HIDDEN\" name=\"topic_id[$c]\" value=\"".$topic_id."\">";
-			$titel .= Kalender_Termine_javascript(2,$c,sprintf('%02d',$stunde),sprintf('%02d',$minute),sprintf('%02d',$end_stunde),sprintf('%02d',$end_minute));
 		} else {
 			$titel .= substr(strftime("%a",$db->f("date")),0,2);
 			$titel.= date (". d.m.Y, H:i", $db->f("date"));
@@ -859,19 +856,22 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 
 		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"99%\" align=\"center\"><tr>";
 
-		if (($show_id  == $db->f("termin_id")) || ($show_all))
+		if (($show_id  == $db->f("termin_id")) || ($show_all)) {
 			printhead(0, 0, $link, "open", $neuer_termin, $icon, $titel, $zusatz, $db->f("mkdate"));
-		else
+			echo "</tr></table>";
+			if ($edit)
+				echo Termin_Eingabe_javascript(2,$c,sprintf('%02d',$stunde),sprintf('%02d',$minute),sprintf('%02d',$end_stunde),sprintf('%02d',$end_minute));
+		} else {
 			printhead(0, 0, $link, "close", $neuer_termin, $icon, $titel, $zusatz, $db->f("mkdate"));
-
-		echo "</tr></table>	";
+			echo "</tr></table>";
+		}
 
 		//Contentbereich
 		if (($show_id  == $db->f("termin_id")) || ($show_all)) {
 			$content='';
 			if ($edit) {
-				$content.="<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" align=\"left\"width=\"100%\"><tr>\n";
-				$content.="<td class=\"steel1\" width=\"70%\" valign=\"top\">\n";
+				$content .= '<table border="0" cellpadding="0" cellspacing="0" align="left"width="100%"><tr>' . "\n";
+				$content .= '<td class="steel1" width="70%" valign="top">' . "\n";
 
 				if (!$show_all) {
 					$content.="<input type=\"HIDDEN\" name=\"show_id\" value=\"". $db->f("termin_id")."\">";
@@ -913,7 +913,7 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 
 
 				//room
-				$content.="<font size=-1><b>&nbsp;" . _("Raum:")."</b>";
+				$content.="<b>&nbsp;" . _("Raum:")."</b>";
 
 				//show list of rooms, the user has perms on
 				if ($RESOURCES_ENABLE) {
@@ -983,7 +983,7 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 				<?
 			} else {
 				?>
-				<input type="IMAGE" name="edit" border=0 <?=makeButton("allesuebernehmen", "src")?> value="verändern">&nbsp; &nbsp; 
+				<input type="IMAGE" name="edit" border=0 <?=makeButton("allesuebernehmen", "src")?> value="verändern">&nbsp; &nbsp;
 				<?
 			}
 			?>
