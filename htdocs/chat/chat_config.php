@@ -81,14 +81,14 @@ define("CHAT_ADMIN_IDLE_TIMEOUT",7200);       //in Sekunden
 * A higher number means lower CPU usage on the server, but slower response times for the clients
 * @const CHAT_SLEEP_TIME
 */
-define("CHAT_SLEEP_TIME",500000);       //in usleep(micro s)
+define("CHAT_SLEEP_TIME",300000);       //in usleep(micro s)
 /**
 * Time seconds to 'ping' the clients
 *
 * used to prevent browser timeouts 
 * @const CHAT_TO_PREV_TIME
 */
-define("CHAT_TO_PREV_TIME",3.5);       //in Sekunden
+define("CHAT_TO_PREV_TIME",2.5);       //in Sekunden
 /**
 * Global array, contains pre-defined colors (use HTML compliant names)
 * @var array $chatColors
