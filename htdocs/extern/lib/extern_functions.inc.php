@@ -115,13 +115,12 @@ function get_statusgruppen_by_id ($range_id, $ids, $hidden = FALSE) {
 
 function get_all_configurations ($range_id, $type = "") {
 	$db =& new DB_Seminar();
-	$query = "SELECT ec.* FROM extern_config ec LEFT JOIN Institute i ";
-	$query .= "ON (ec.range_id=i.Institut_id) WHERE ec.range_id='$range_id' ";
+	$query = "SELECT * FROM extern_config WHERE range_id='$range_id' ";
 	
 	if ($type)
 		$query .= "AND config_type=$type ";
 		
-	$query .= "ORDER BY ec.name ASC";
+	$query .= "ORDER BY name ASC";
 	
 	$db->query($query);
 	
