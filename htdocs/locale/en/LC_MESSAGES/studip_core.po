@@ -1,12 +1,15 @@
 # translation of studip_core.po to 
+# translation of studip_core.po to
 # Copyright (C) 2003 Free Software Foundation, Inc.
+# , 2003
+# , 2003
 # , 2003
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: studip_core\n"
-"POT-Creation-Date: 2003-05-13 15:53+0200\n"
-"PO-Revision-Date: 2003-04-24 16:47+GMT\n"
+"POT-Creation-Date: 2003-05-15 17:04+0200\n"
+"PO-Revision-Date: 2003-05-13 15:57+GMT\n"
 "Last-Translator: \n"
 "Language-Team:  <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -149,7 +152,8 @@ msgid "unbegrenzt"
 msgstr "unlimited"
 
 #: about.php:331 admin_news.php:497 admin_test_fak.php:351 browse.php:126
-#: header.php:137 links_openobject.inc.php:59
+#: header.php:137 links_admin.inc.php:261 links_admin.inc.php:263
+#: links_openobject.inc.php:59
 msgid "Veranstaltungen"
 msgstr "Courses"
 
@@ -316,7 +320,7 @@ msgid ""
 "Die Berechtigungseinstellungen f&uuml;r die Veranstaltung wurden aktualisiert"
 msgstr "The authorisation for this course has been updated."
 
-#: admin_admission.php:459
+#: admin_admission.php:459 links_admin.inc.php:284 links_admin.inc.php:856
 msgid "Zugangsberechtigungen"
 msgstr "Access authorisations"
 
@@ -529,6 +533,41 @@ msgid ""
 msgstr ""
 "Only use this option with a corresponding requirement, e.g. after the random "
 "selection of participants has taken place!"
+
+#: adminarea_start.php:39
+#, fuzzy
+msgid "Veranstaltung vorgew&auml;hlt"
+msgstr "%s courses available"
+
+#: adminarea_start.php:45
+#, fuzzy, c-format
+msgid ""
+"Sie k&ouml;nnen hier direkt die Daten der Veranstaltung <b>%s</b> bearbeiten."
+msgstr "You have been granted writing access in the course <b>%s</b>."
+
+#: adminarea_start.php:46
+#, fuzzy
+msgid ""
+"Wenn Sie die Daten einer anderen Veranstaltung bearbeiten wollen, klicken "
+"Sie bitte auf das Schl&uuml;sselsymbol."
+msgstr ""
+"If you want to change the type of course, please go back to the first page."
+
+#: adminarea_start.php:48
+#, c-format
+msgid ""
+"Sie haben die Veranstaltung <b>%s</b> vorgew&auml;hlt. Sie k&ouml;nnen nun "
+"direkt die einzelnen Bereiche dieser Veranstaltung bearbeiten, in dem Sie "
+"die entsprechenden Menupunkte w&auml;hlen."
+msgstr ""
+
+#: adminarea_start.php:49
+#, fuzzy
+msgid ""
+"Wenn Sie eine andere Veranstaltung bearbeiten wollen, klicken Sie bitte auf "
+"das Schl&uuml;sselsymbol."
+msgstr ""
+"If you want to change the type of course, please go back to the first page."
 
 #: admin_dates.php:107
 msgid ""
@@ -1114,7 +1153,8 @@ msgstr "%s news have been deleted!"
 msgid "Sie haben keine News zum l&ouml;schen ausgew&auml;hlt!"
 msgstr "You haven't selected any news to be deleted!"
 
-#: admin_news.php:498 archiv.php:405 browse.php:95 sem_browse.inc.php:437
+#: admin_news.php:498 archiv.php:405 browse.php:95 links_admin.inc.php:264
+#: links_admin.inc.php:268 sem_browse.inc.php:437
 msgid "Einrichtungen"
 msgstr "Institutes"
 
@@ -1158,12 +1198,13 @@ msgstr "Enter a search keyword to find other areas!"
 msgid "verf&uuml;gbare Bereiche"
 msgstr "available areas"
 
-#: admin_news.php:759
+#: admin_news.php:759 links_admin.inc.php:315
 msgid "Benutzer"
 msgstr "User"
 
 #: admin_news.php:759 details.php:92 functions.php:63 functions.php:68
-#: functions.php:131 functions.php:135 gruppe.php:48
+#: functions.php:131 functions.php:135 gruppe.php:48 links_admin.inc.php:847
+#: links_admin.inc.php:865
 msgid "Veranstaltung"
 msgstr "Course"
 
@@ -1659,7 +1700,8 @@ msgstr ""
 "official course description)."
 
 #: admin_seminare_assi.php:1415 admin_sem_tree.php:164 archiv.inc.php:60
-#: details.php:231 sem_browse.inc.php:248 lib/classes/SemBrowse.class.php:240
+#: details.php:231 links_admin.inc.php:542 sem_browse.inc.php:248
+#: lib/classes/SemBrowse.class.php:240
 msgid "Semester:"
 msgstr "Semester:"
 
@@ -2471,7 +2513,7 @@ msgstr "Title:"
 msgid "Kommentar:"
 msgstr "Commentary:"
 
-#: admin_sem_tree.php:149
+#: admin_sem_tree.php:149 links_admin.inc.php:595
 msgid "Dozent:"
 msgstr "Lecturer:"
 
@@ -2584,7 +2626,7 @@ msgstr "No user found. "
 #: freie.php:166 institut_members.php:102 institut_members.php:124
 #: institut_members.php:146 institut_members.php:166 institut_members.php:186
 #: institut_members.php:210 institut_members.php:228 institut_members.php:246
-#: institut_members.php:262 institut_members.php:278
+#: institut_members.php:262 institut_members.php:278 links_admin.inc.php:786
 #: meine_einrichtungen.php:212 meine_seminare.php:268 meine_seminare.php:407
 #: meine_seminare.php:637 my_archiv.php:93 online.php:162 online.php:219
 #: sem_browse.inc.php:428
@@ -2723,7 +2765,8 @@ msgstr "Postings:"
 msgid "Dokumente:"
 msgstr "Documents:"
 
-#: archiv.inc.php:220 dates.php:52 links_openobject.inc.php:37
+#: archiv.inc.php:220 dates.php:52 links_admin.inc.php:282
+#: links_admin.inc.php:850 links_openobject.inc.php:37
 #: help/structure.inc.php:215
 msgid "Ablaufplan"
 msgstr "Schedule"
@@ -2849,7 +2892,9 @@ msgstr "If you don't enter any search criteria, all courses will be displayed."
 msgid "DozentIn der Veranstaltung:"
 msgstr "Course lecturer:"
 
-#: archiv.php:259 archiv.php:280 lib/classes/StudipSemSearch.class.php:144
+#: archiv.php:259 archiv.php:280 links_admin.inc.php:544
+#: links_admin.inc.php:569 links_admin.inc.php:597 links_admin.inc.php:625
+#: lib/classes/StudipSemSearch.class.php:144
 #: lib/classes/StudipSemSearch.class.php:149
 #: lib/classes/StudipSemSearch.class.php:157
 msgid "alle"
@@ -2872,13 +2917,14 @@ msgstr "Only show courses in which I have participated."
 msgid "Es wurden %s Veranstaltungen gefunden."
 msgstr "%s courses were found."
 
-#: archiv.php:404 details.php:276 meine_seminare.php:639
-#: sem_browse.inc.php:195 sem_browse.inc.php:375 seminar_main.php:119
-#: lib/classes/SemBrowse.class.php:28 lib/classes/SemBrowse.class.php:44
+#: archiv.php:404 details.php:276 links_admin.inc.php:789
+#: meine_seminare.php:639 sem_browse.inc.php:195 sem_browse.inc.php:375
+#: seminar_main.php:119 lib/classes/SemBrowse.class.php:28
+#: lib/classes/SemBrowse.class.php:44
 msgid "DozentIn"
 msgstr "Lecturer"
 
-#: archiv.php:407
+#: archiv.php:407 links_admin.inc.php:795
 msgid "Aktion"
 msgstr "Action"
 
@@ -2902,7 +2948,7 @@ msgstr "Full view"
 msgid "Diese Veranstaltung aus dem Archiv entfernen"
 msgstr "Remove this course from the archive"
 
-#: archiv.php:461 institut_main.php:129
+#: archiv.php:461 institut_main.php:129 links_admin.inc.php:623
 msgid "Fakult&auml;t:"
 msgstr "Faculty:"
 
@@ -2975,7 +3021,7 @@ msgstr "Please select a user from the list:"
 msgid "Diesen Benutzer hinzuf&uuml;gen"
 msgstr "Add this user"
 
-#: archiv.php:505 suchen.inc.php:259
+#: archiv.php:505 suchen.inc.php:260
 msgid "Neue Suche"
 msgstr "New search"
 
@@ -3208,7 +3254,7 @@ msgid "Und hier geht's zur %sStud.IP Portalseite%s&nbsp;"
 msgstr "And this goes directly to the %sMensa plan%s&nbsp;;-)"
 
 #: config.inc.php:76 config.inc.php:219 config.inc.php.dist:76
-#: config.inc.php.dist:219
+#: config.inc.php.dist:217
 msgid "Vorlesung"
 msgstr "Lecture"
 
@@ -3217,7 +3263,7 @@ msgstr "Lecture"
 msgid "Seminar"
 msgstr "Seminar"
 
-#: config.inc.php:78 config.inc.php.dist:78
+#: config.inc.php:78
 #, fuzzy
 msgid "&Uuml;bung"
 msgstr "Amateur"
@@ -3328,71 +3374,75 @@ msgstr "Faculty"
 msgid "Arbeitsgruppe"
 msgstr "Work group"
 
-#: config.inc.php:213 config.inc.php:225 config.inc.php.dist:213
-#: config.inc.php.dist:225
+#: config.inc.php:213 config.inc.php:225 config.inc.php.dist:211
+#: config.inc.php.dist:223
 msgid "Sitzung"
 msgstr "Meeting"
 
-#: config.inc.php:214 config.inc.php:226 config.inc.php.dist:214
-#: config.inc.php.dist:226
+#: config.inc.php:214 config.inc.php:226 config.inc.php.dist:212
+#: config.inc.php.dist:224
 msgid "Vorbesprechung"
 msgstr "Preliminary discussion"
 
-#: config.inc.php:215 config.inc.php:227 config.inc.php.dist:215
-#: config.inc.php.dist:227
+#: config.inc.php:215 config.inc.php:227 config.inc.php.dist:213
+#: config.inc.php.dist:225
 msgid "Klausur"
 msgstr "Written examination"
 
-#: config.inc.php:216 config.inc.php:228 config.inc.php.dist:216
-#: config.inc.php.dist:228
+#: config.inc.php:216 config.inc.php:228 config.inc.php.dist:214
+#: config.inc.php.dist:226
 msgid "Exkursion"
 msgstr "Excursion"
 
-#: config.inc.php:217 config.inc.php.dist:217
+#: config.inc.php:217 config.inc.php.dist:215
 msgid "anderer Termin"
 msgstr "Other appointments"
 
-#: config.inc.php:218 config.inc.php:229 config.inc.php.dist:218
-#: config.inc.php.dist:229
+#: config.inc.php:218 config.inc.php:229 config.inc.php.dist:216
+#: config.inc.php.dist:227
 msgid "Sondersitzung"
 msgstr "Special meeting"
 
-#: config.inc.php:224 config.inc.php.dist:224 links_about.inc.php:38
+#: config.inc.php:224 config.inc.php.dist:222 links_about.inc.php:38
 #: help/structure.inc.php:129 help/structure.inc.php:300
 msgid "Sonstiges"
 msgstr "Miscellaneous"
 
-#: config.inc.php:230 config.inc.php.dist:230
+#: config.inc.php:230 config.inc.php.dist:228
 msgid "Prüfung"
 msgstr "Exam"
 
-#: config.inc.php:231 config.inc.php.dist:231
+#: config.inc.php:231 config.inc.php.dist:229
 msgid "Telefonat"
 msgstr "Telephone call"
 
-#: config.inc.php:232 config.inc.php.dist:232
+#: config.inc.php:232 config.inc.php.dist:230
 msgid "Besprechung"
 msgstr "Conference"
 
-#: config.inc.php:233 config.inc.php.dist:233
+#: config.inc.php:233 config.inc.php.dist:231
 msgid "Verabredung"
 msgstr "Appointment"
 
-#: config.inc.php:234 config.inc.php.dist:234
+#: config.inc.php:234 config.inc.php.dist:232
 msgid "Geburtstag"
 msgstr "Birthday"
 
-#: config.inc.php:235 config.inc.php.dist:235
+#: config.inc.php:235 config.inc.php.dist:233
 msgid "Familie"
 msgstr "Family"
 
-#: config.inc.php:236 config.inc.php.dist:236
+#: config.inc.php:236 config.inc.php.dist:234
 msgid "Urlaub"
 msgstr "Holiday"
 
-#: config.inc.php:237 config.inc.php.dist:237
+#: config.inc.php:237 config.inc.php.dist:235
 msgid "Reise"
 msgstr "Journey"
+
+#: config.inc.php.dist:78
+msgid "Übung"
+msgstr ""
 
 #: contact.inc.php:204 header.php:237
 msgid "Homepage"
@@ -3531,7 +3581,7 @@ msgstr "1 entry"
 msgid "%d Eintr&auml;ge"
 msgstr "%d entries "
 
-#: contact.php:135 forum.inc.php:775 suchen.inc.php:229
+#: contact.php:135 forum.inc.php:775 suchen.inc.php:231
 msgid "Alle aufklappen"
 msgstr "Open all"
 
@@ -3808,9 +3858,9 @@ msgid "Bei der Anmeldung trat ein Fehler auf:"
 msgstr "An error occurred during registration:"
 
 #: crcloginform.ihtml:118
-#, fuzzy, c-format
+#, c-format
 msgid "Bitte wenden Sie sich bei Problemen an: <br />%s"
-msgstr "In case of problems please contact: %s"
+msgstr "In case of problems please contact: <br />%s"
 
 #: crcloginform.ihtml:136 crcregister.ihtml:203 migration2studip.php:27
 #: migration2studip.php:76
@@ -4948,9 +4998,9 @@ msgid "Eine sichere Variante besteht aus folgendem Link:"
 msgstr ""
 
 #: edit_about.php:1131
-#, fuzzy, c-format
+#, c-format
 msgid "Stud.IP - Login (%s)"
-msgstr "Stud.IP - login"
+msgstr "Stud.IP - login (%s)"
 
 #: edit_about.php:1132
 msgid "Speichern Sie diesen Link als Bookmark oder Favoriten."
@@ -5304,7 +5354,8 @@ msgstr "Always expand new postings"
 msgid "Neue Postings sind immer automatisch aufgeklappt"
 msgstr "New postings are always automatically expanded"
 
-#: freie.php:85 show_news.php:51 show_news.php:70
+#: freie.php:85 links_admin.inc.php:286 links_admin.inc.php:298
+#: show_news.php:51 show_news.php:70
 msgid "News"
 msgstr "News"
 
@@ -6163,7 +6214,7 @@ msgid "Tel.:"
 msgstr "Tel.:"
 
 #: institut_members.php:107 institut_members.php:169 institut_members.php:215
-#: institut_members.php:265 institut_members.php:348
+#: institut_members.php:265 institut_members.php:348 links_admin.inc.php:792
 #: meine_einrichtungen.php:218 meine_seminare.php:273 meine_seminare.php:638
 #: my_archiv.php:95
 msgid "Status"
@@ -6370,6 +6421,252 @@ msgstr "Messaging"
 msgid "Mein ILIAS-Account"
 msgstr "My ILIAS-Account"
 
+#: links_admin.inc.php:245
+#, fuzzy
+msgid "zur&uuml;ck zur ausgew&auml;hlten Einrichtung"
+msgstr "Back to selected institute"
+
+#: links_admin.inc.php:247
+#, fuzzy
+msgid "zur ausgew&auml;hlten Einrichtung"
+msgstr "Back to selected institute"
+
+#: links_admin.inc.php:251
+#, fuzzy
+msgid "zur&uuml;ck zur ausgew&auml;hlten Veranstaltung"
+msgstr "Back to selected course"
+
+#: links_admin.inc.php:253
+#, fuzzy
+msgid "zur neu angelegten Veranstaltung"
+msgstr "Latest courses"
+
+#: links_admin.inc.php:255
+#, fuzzy
+msgid "zur ausgew&auml;hlten Veranstaltung"
+msgstr "Back to selected course"
+
+#: links_admin.inc.php:269
+#, fuzzy
+msgid "globale Einstellungen"
+msgstr "Global settings administration"
+
+#: links_admin.inc.php:272
+msgid "Tools"
+msgstr ""
+
+#: links_admin.inc.php:280 links_admin.inc.php:293 help/structure.inc.php:288
+#, fuzzy
+msgid "Grunddaten"
+msgstr "Change group"
+
+#: links_admin.inc.php:281 links_admin.inc.php:853
+#, fuzzy
+msgid "Zeiten"
+msgstr "Time"
+
+#: links_admin.inc.php:283 links_admin.inc.php:297 links_openobject.inc.php:38
+#: literatur.php:70
+msgid "Literatur"
+msgstr "Literature"
+
+#: links_admin.inc.php:285 links_admin.inc.php:295
+msgid "Gruppen&nbsp;/&nbsp;Funktionen"
+msgstr ""
+
+#: links_admin.inc.php:288
+#, fuzzy
+msgid "archivieren"
+msgstr "Edit area"
+
+#: links_admin.inc.php:290
+#, fuzzy
+msgid "neue&nbsp;Veranstaltung"
+msgstr "My&nbsp;courses"
+
+#: links_admin.inc.php:294
+#, fuzzy
+msgid "Mitarbeiter"
+msgstr "Staff:"
+
+#: links_admin.inc.php:301
+#, fuzzy
+msgid "externe Seiten"
+msgstr "External homepage"
+
+#: links_admin.inc.php:303
+#, fuzzy
+msgid "neue&nbsp;Einrichtung"
+msgstr "My&nbsp;institutes"
+
+#: links_admin.inc.php:306
+#, fuzzy
+msgid "Export"
+msgstr "Expert"
+
+#: links_admin.inc.php:308 links_openobject.inc.php:47
+#: links_openobject.inc.php:49
+msgid "Lernmodule"
+msgstr "Learning modules"
+
+#: links_admin.inc.php:310 help/structure.inc.php:480
+#, fuzzy
+msgid "Ressourcenverwaltung"
+msgstr "Administer resources"
+
+#: links_admin.inc.php:312
+#, fuzzy
+msgid "laufende&nbsp;Anmeldeverfahren"
+msgstr "Registration procedure:"
+
+#: links_admin.inc.php:316
+#, fuzzy
+msgid "Einrichtungshierarchie"
+msgstr "Edit institute heirarchy"
+
+#: links_admin.inc.php:319
+#, fuzzy
+msgid "Veranstaltungshierarchie"
+msgstr "Edit course heirarchy"
+
+#: links_admin.inc.php:320
+#, fuzzy
+msgid "Studieng&auml;nge"
+msgstr "All subject areas"
+
+#: links_admin.inc.php:321
+#, fuzzy
+msgid "Sessions"
+msgstr "Version:"
+
+#: links_admin.inc.php:322
+msgid "DB Integrit&auml;t"
+msgstr ""
+
+#: links_admin.inc.php:337
+msgid "Sie befinden sich im Administrationsbereich von Stud.IP."
+msgstr ""
+
+#: links_admin.inc.php:340
+#, fuzzy
+msgid "Ausgewählte Veranstaltung:"
+msgstr "Style of course:"
+
+#: links_admin.inc.php:340 links_admin.inc.php:342
+msgid "Um die Auswahl aufzuheben, benutzen Sie bitte das Schlüsselsymbol."
+msgstr ""
+
+#: links_admin.inc.php:342
+#, fuzzy
+msgid "Ausgewählte Einrichtung:"
+msgstr "Displayed institute:"
+
+#: links_admin.inc.php:344
+#, fuzzy
+msgid "Keine Veranstaltung oder Einrichtung ausgewählt"
+msgstr "My courses and institutes"
+
+#: links_admin.inc.php:348
+#, fuzzy, c-format
+msgid "Auswahl der Veranstaltung %s aufheben"
+msgstr "Log out of the course"
+
+#: links_admin.inc.php:350
+#, fuzzy, c-format
+msgid "Auswahl der Einrichtung %s aufheben"
+msgstr "Removed from the institute "
+
+#: links_admin.inc.php:448
+msgid "Verwaltung aller Einrichtungen, auf die Sie Zugriff haben:"
+msgstr ""
+
+#: links_admin.inc.php:464
+#, fuzzy
+msgid "Bitte w&auml;hlen Sie die Einrichtung aus, die Sie bearbeiten wollen:"
+msgstr "Please choose an institute:"
+
+#: links_admin.inc.php:480
+#, fuzzy
+msgid "-- bitte Einrichtung ausw&auml;hlen --"
+msgstr "Please select"
+
+#: links_admin.inc.php:520
+#, fuzzy
+msgid "Verwaltung aller Veranstaltungen, auf die Sie Zugriff haben:"
+msgstr "Non-allocated courses on this level:"
+
+#: links_admin.inc.php:537
+#, fuzzy
+msgid "Sie k&ouml;nnen die Auswahl der Veranstaltungen eingrenzen:"
+msgstr "You have been entered for the course %s"
+
+#: links_admin.inc.php:567
+#, fuzzy
+msgid "Einrichtung:"
+msgstr "Institute"
+
+#: links_admin.inc.php:640
+#, fuzzy
+msgid "freie Suche:"
+msgstr "New search"
+
+#: links_admin.inc.php:655
+msgid ""
+"nur archivierbare Veranstaltungen ausw&auml;hlen -  (letztes) "
+"Veranstaltungssemester verstrichen"
+msgstr ""
+
+#: links_admin.inc.php:656
+msgid ""
+"nur inaktive Veranstaltungen ausw&auml;hlen (letzte Aktion vor mehr als 6 "
+"Monaten)"
+msgstr ""
+
+#: links_admin.inc.php:795
+#, fuzzy
+msgid "Archivieren"
+msgstr "Edit area"
+
+#: links_admin.inc.php:804
+#, fuzzy
+msgid "Alle ausgew&auml;hlten Veranstaltungen"
+msgstr "Back to selected course"
+
+#: links_admin.inc.php:805
+#, fuzzy
+msgid ""
+"Achtung: Das Archivieren ist ein Schritt, der <b>nicht</b> r&uuml;ckg&auml;"
+"ngig gemacht werden kann!"
+msgstr ""
+"%sPlease note:%s once you have started a registration procedure, you can not "
+"undo it."
+
+#: links_admin.inc.php:841 show_dates.inc.php:499
+msgid "Kategorie:"
+msgstr "Category:"
+
+#: links_admin.inc.php:859
+#, fuzzy
+msgid "Literatur/Links"
+msgstr "Literature and links"
+
+#: links_admin.inc.php:862 links_openobject.inc.php:106 statusgruppen.php:158
+#: help/structure.inc.php:210
+msgid "Funktionen / Gruppen"
+msgstr "Functions / Groups"
+
+#: links_admin.inc.php:882
+#, fuzzy
+msgid ""
+"Leider wurden keine Veranstaltungen entsprechend Ihren Suchkriterien "
+"gefunden!"
+msgstr "No courses have been found matching your search criteria."
+
+#: links_admin.inc.php:884
+#, fuzzy
+msgid "Leider wurden keine Veranstaltungen gefunden!"
+msgstr "No course was found."
+
 #: links_openobject.inc.php:20 links_openobject.inc.php:31
 #: links_openobject.inc.php:124 links_seminare.inc.php:40
 #: links_seminare.inc.php:53
@@ -6391,14 +6688,6 @@ msgstr "Resources"
 #: links_openobject.inc.php:34 links_openobject.inc.php:78 teilnehmer.php:335
 msgid "TeilnehmerInnen"
 msgstr "Participants"
-
-#: links_openobject.inc.php:38 literatur.php:70
-msgid "Literatur"
-msgstr "Literature"
-
-#: links_openobject.inc.php:47 links_openobject.inc.php:49
-msgid "Lernmodule"
-msgstr "Learning modules"
 
 #: links_openobject.inc.php:57
 msgid "Info"
@@ -6469,11 +6758,6 @@ msgstr "All documents"
 #: links_openobject.inc.php:100 links_openobject.inc.php:102 literatur.php:44
 msgid "Literatur und Links"
 msgstr "Literature and links"
-
-#: links_openobject.inc.php:106 statusgruppen.php:158
-#: help/structure.inc.php:210
-msgid "Funktionen / Gruppen"
-msgstr "Functions / Groups"
 
 #: links_openobject.inc.php:111 links_openobject.inc.php:114
 #: help/structure.inc.php:356
@@ -8416,10 +8700,6 @@ msgstr "All current appointments"
 msgid "Heute"
 msgstr "Today"
 
-#: show_dates.inc.php:499
-msgid "Kategorie:"
-msgstr "Category:"
-
 #: show_news.php:51 show_news.php:70
 msgid ""
 "Newsticker. Klicken Sie auf die Pfeile (rechts), um neue News in diesen "
@@ -8802,24 +9082,24 @@ msgstr "Search keyword:"
 msgid "Suchen in den Feldern:"
 msgstr "Search in the fields:"
 
-#: suchen.inc.php:201
+#: suchen.inc.php:202
 msgid "Ergebnis der Suche nach"
 msgstr "Result of the search for "
 
-#: suchen.inc.php:218
+#: suchen.inc.php:219
 #, c-format
 msgid "Ihre Suche ergab %s Treffer"
 msgstr "Your search revealed %s matches"
 
-#: suchen.inc.php:220
+#: suchen.inc.php:221
 msgid "Ihre Suche ergab leider keine Treffer"
 msgstr "Unfortunately your search did not reveal any matches"
 
-#: suchen.inc.php:252
+#: suchen.inc.php:253
 msgid "zeig mir die Neuesten"
 msgstr "Show me the most up to date"
 
-#: suchen.inc.php:255
+#: suchen.inc.php:256
 msgid "zeig mit alle Treffer"
 msgstr "Show me all matches"
 
@@ -10155,11 +10435,6 @@ msgstr "Course assistant"
 msgid "Veranstaltungen anlegen -ganz einfach!"
 msgstr "Set up course(s) again"
 
-#: help/structure.inc.php:288
-#, fuzzy
-msgid "Grunddaten"
-msgstr "Change group"
-
 #: help/structure.inc.php:289
 msgid "Name, Beschreibung, Raum u.a."
 msgstr ""
@@ -10492,11 +10767,6 @@ msgstr ""
 msgid "Oft gestellte Fragen"
 msgstr ""
 
-#: help/structure.inc.php:480
-#, fuzzy
-msgid "Ressourcenverwaltung"
-msgstr "Administer resources"
-
 #: help/structure.inc.php:481
 msgid "Verwaltung unterschiedlicher Ressourcen in Stud.IP"
 msgstr ""
@@ -10526,71 +10796,3 @@ msgstr ""
 #: help/structure.inc.php:499
 msgid "Was ist ILIAS und was sind ILIAS Lernmodule"
 msgstr ""
-
-#~ msgid "Grundstudium"
-#~ msgstr "General level (Grundstudium)"
-
-#~ msgid "Hauptstudium"
-#~ msgstr "Advanced level (Hauptstudium)"
-
-#~ msgid "Praxisveranstaltung"
-#~ msgstr "Practical course"
-
-#~ msgid "Gremiumsveranstaltung"
-#~ msgstr "Board meeting"
-
-#~ msgid "Community-Forum"
-#~ msgstr "Community forum"
-
-#~ msgid "Lehrveranstaltung nach PVO-Lehr I"
-#~ msgstr "Lehrveranstaltung nach PVO-Lehr I"
-
-#~ msgid "Anleitung zu selbständigen wissenschaftlichen Arbeiten"
-#~ msgstr "Tutorial for independent scientific work "
-
-#~ msgid "Sprachkurs"
-#~ msgstr "Language course"
-
-#~ msgid "Fachdidaktik"
-#~ msgstr "Fachdidaktik"
-
-#~ msgid "Übung"
-#~ msgstr "Excercise"
-
-#~ msgid "Proseminar"
-#~ msgstr "Proseminar"
-
-#~ msgid "Oberseminar"
-#~ msgstr "Oberseminar"
-
-#~ msgid "Arbeitsgemeinschaft"
-#~ msgstr "Working society"
-
-#~ msgid "Forschung"
-#~ msgstr "Research"
-
-#~ msgid ""
-#~ "Hier finden Sie virtuelle Veranstaltungen zu unterschiedlichen Themen"
-#~ msgstr "Here you will find virtual events concerning different topics"
-
-#~ msgid ""
-#~ "Wenn Sie Veranstaltungen als Diskussiongruppen zu unterschiedlichen "
-#~ "Themen anlegen m&ouml;chten, verwenden Sie diese Kategorie."
-#~ msgstr ""
-#~ "Use this category if you wish to set up discussion groups on different "
-#~ "topics."
-
-#~ msgid "Arbeitsgruppen"
-#~ msgstr "Work groups"
-
-#~ msgid "Hier finden Sie verschiedene Arbeitsgruppen an der %s"
-#~ msgstr "Here you will find different work groups at the %s."
-
-#~ msgid ""
-#~ "Verwenden Sie diese Kategorie, um unterschiedliche Arbeitsgruppen "
-#~ "anzulegen."
-#~ msgstr "Use this category to set up different work groups."
-
-#, fuzzy
-#~ msgid "Bitte identifizieren Sie sich mit Benutzername und Passwort: "
-#~ msgstr "Please identify yourself with username and password:"
