@@ -27,8 +27,7 @@ function string_to_unicode ($xml_string)
 	{
 		$char = substr($xml_string, $x, 1);
 		$dosc = ord($char);
-		$ret .= ($dosc > 127) ?
-		"&#".$dosc.";" : $char;
+		$ret .= ($dosc > 127) ? "&#".$dosc.";" : $char;
 	}
 	return $ret;
 }
@@ -46,18 +45,27 @@ function export_range($range_id)
 {
 	global $db, $o_mode, $range_name;
 
-//    Ist die Range-ID eine Instituts-ID?
 	$db=new DB_Seminar;
 
+//    Ist die Range-ID eine Einrichtungs-ID?
 	$db->query('SELECT * FROM Institute WHERE Institut_id = "' . $range_id . '"');
 	if (($db->next_record()) And ($db->f("Name") != "")) 
 	{
 		$range_name = $db->f("Name");
 		output_data ( xml_header(), $o_mode);
 		export_inst( $range_id );
+		
+	}
+
+//	Ist die Range-ID eine Fakultaets-ID? Dann auch untergeordnete Institute exportieren!
+	$db->query('SELECT * FROM Institute WHERE fakultaets_id = "' . $range_id . '" AND  Institut_id != "' . $range_id . '" ');
+	if (($db->next_record()) And ($db->f("Name") != "")) 
+	{
+		output_data ( xml_header(), $o_mode);
+		export_inst( $range_id );
+		
 	}
 	
-	$db=new DB_Seminar;
 
 //    Ist die Range-ID eine Seminar-ID?
 	$db->query('SELECT * FROM seminare WHERE Seminar_id = "' . $range_id . '"');
