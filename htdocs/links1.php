@@ -92,8 +92,8 @@ else
 
 if ($entry_level=="sem")
 	$structure["statusgruppen"]=array (topKat=>"teilnehmer", name=>"Statusgruppen", link=>"statusgruppen.php?view=statusgruppe_sem", active=>FALSE);
-else
-	$structure["statusgruppen"]=array (topKat=>"personal", name=>"Statusgruppen", link=>"statusgruppen.php?view=statusgruppe_inst", active=>FALSE);
+//else
+//	$structure["statusgruppen"]=array (topKat=>"personal", name=>"Statusgruppen", link=>"statusgruppen.php?view=statusgruppe_inst", active=>FALSE);
 
 
 if ($rechte)
