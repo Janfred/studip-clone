@@ -442,10 +442,10 @@ sein.
 --------------------
 Zum Betrieb von Stud.IP muss im Stammverzeichnis der Stud.IP Installation die
 config.inc.php angelegt werden. Sie finden dort bereits eine Distributionsversion 
-mit dem Namen config.inc.dist. Benennen Sie die Datei in config.inc um (eine "frische" 
-Kopie der config.inc.dist befindet sich zusätzlich im Verzeichnis studip-config).
+mit dem Namen config.inc.php.dist. Benennen Sie die Datei in config.inc um (eine "frische" 
+Kopie der config.inc.php.dist befindet sich zusätzlich im Verzeichnis studip-config).
 
-In der config.inc sollten Sie zunächst nur die allgemeinen Daten wie $UNI_URL, 
+In der config.inc.php sollten Sie zunächst nur die allgemeinen Daten wie $UNI_URL, 
 $UNI_CONTACT und $UNI_INFO setzen.
 Alle weiteren Einstellungen sollten als Default gut funktionieren - verändertn Sie
 diese Optionen bitte erst, wenn sie mit dem System bereits vertraut sind.
