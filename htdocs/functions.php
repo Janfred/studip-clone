@@ -60,12 +60,12 @@ function getHeaderLine ($id) {
 		$db->next_record();
 		
 		if ($SEM_TYPE[$db->f("status")]["name"] == $SEM_TYPE_MISC_NAME)
-			$header_line = "Veranstaltung";
+			$header_line = _("Veranstaltung");
 		else
 			$header_line = $SEM_TYPE[$db->f("status")]["name"];
 
 		if (!$header_line)
-			$header_line = "Veranstaltung";
+			$header_line = _("Veranstaltung");
 		
 		$header_line.=": ". htmlReady(substr($db->f("Name"), 0, 60));
 		
@@ -81,7 +81,7 @@ function getHeaderLine ($id) {
 		$header_line = $INST_TYPE[$db->f("type")]["name"];
 
 		if (!$header_line)
-			$header_line = "Einrichtung";
+			$header_line = _("Einrichtung");
 		
 		$header_line.= ": ". htmlReady(substr($db->f("Name"), 0, 60));
 		
@@ -128,11 +128,11 @@ function openSem ($sem_id) {
 		$SessSemName[3] = $db->f("Untertitel");
 		$SessSemName[4] = $db->f("start_time");
 		$SessSemName[5] = $db->f("Institut_id");
-		$SessSemName["art_generic"]="Veranstaltung";
+		$SessSemName["art_generic"]= _("Veranstaltung");
 		$SessSemName["class"]="sem";
 		$SessSemName["art_num"]=$db->f("status");
 		if ($SEM_TYPE[$db->f("status")]["name"] == $SEM_TYPE_MISC_NAME)
-			$SessSemName["art"] = "Veranstaltung";
+			$SessSemName["art"] = _("Veranstaltung");
 		else
 			$SessSemName["art"] = $SEM_TYPE[$db->f("status")]["name"];
 		$nr = $db->f("Seminar_id");
@@ -175,7 +175,7 @@ function openInst ($inst_id) {
 	while ($db->next_record()) {
 		$SessSemName[0] = $db->f("Name");
 		$SessSemName[1] = $db->f("Institut_id");
-		$SessSemName["art_generic"]="Einrichtung";
+		$SessSemName["art_generic"]= _("Einrichtung");
 		$SessSemName["art"]=$INST_TYPE[$db->f("type")]["name"];
 		if (!$SessSemName["art"])
 			$SessSemName["art"]=$SessSemName["art_generic"];
@@ -237,7 +237,7 @@ function lastActivity ($sem_id) {
 	if ($db->f("chdate") > $timestamp)
 		$timestamp = $db->f("chdate");
 
-	//Postings
+	//Folder
 	$db->query("SELECT chdate FROM folder WHERE range_id = '$sem_id' ORDER BY chdate DESC LIMIT 1");
 	$db->next_record();
 	if ($db->f("chdate") > $timestamp)
@@ -245,12 +245,6 @@ function lastActivity ($sem_id) {
 
 	//Dokuments
 	$db->query("SELECT chdate FROM dokumente WHERE seminar_id = '$sem_id' ORDER BY chdate DESC LIMIT 1");
-	$db->next_record();
-	if ($db->f("chdate") > $timestamp)
-		$timestamp = $db->f("chdate");
-
-	//Postings
-	$db->query("SELECT chdate FROM folder WHERE range_id = '$sem_id' ORDER BY chdate DESC LIMIT 1");
 	$db->next_record();
 	if ($db->f("chdate") > $timestamp)
 		$timestamp = $db->f("chdate");
@@ -282,7 +276,7 @@ function lastActivity ($sem_id) {
 
 
 /**
-* This function determines, which from which type an id is from.
+* This function determines, from which type an id is from.
 *
 * The function recognizes the following types at this moment:
 * Einrichtungen, Veranstaltungen, Statusgruppen and Fakultaeten
@@ -377,7 +371,7 @@ function my_substr($what, $start, $end) {
 * It uses the Variables $SemSecLevelWrite, $SemUserStatus and $rechte, which are created in the
 * modul check_sem_entry.inc.php and $perm from PHP-lib
 * 
-* @return		string	the error msg. If no masg is returned, the user has write permission
+* @return		string	the error msg. If no msg is returned, the user has write permission
 *
 */
 function have_sem_write_perm () {
@@ -386,28 +380,27 @@ global $SemSecLevelWrite, $SemUserStatus, $perm, $rechte;
 
 $error_msg="";
 if (!($perm->have_perm("root"))) {
-       if (!($rechte || ($SemUserStatus=="autor") || ($SemUserStatus=="tutor") || ($SemUserStatus=="dozent"))) // hier wohl eher kein Semikolon
-	   {
+	if (!($rechte || ($SemUserStatus=="autor") || ($SemUserStatus=="tutor") || ($SemUserStatus=="dozent"))) {
 		//Auch eigentlich uberfluessig...
 		//$error_msg = "<br><b>Sie haben nicht die Berechtigung in dieser Veranstaltung zu schreiben!</b><br><br>";
 		switch ($SemSecLevelWrite) {
 			case 2 : 
-				$error_msg=$error_msg."error§In dieser Veranstaltung ist ein Passwort f&uuml;r den Schreibzugriff n&ouml;tig.<br>Zur <a href=\"sem_verify.php\">Passworteingabe</a>§";
+				$error_msg=$error_msg."error§" . _("In dieser Veranstaltung ist ein Passwort f&uuml;r den Schreibzugriff n&ouml;tig.") . "<br>" . sprintf(_("Zur %sPassworteingabe%s"), "<a href=\"sem_verify.php\">", "</a>") . "§";
 				break;
 			case 1 :
 				if ($perm->have_perm("autor"))
-					$error_msg=$error_msg."info§Sie müssen sich erneut für diese Veranstaltung anmelden, um schreiben zu können!<br>Hie kommen sie zur <a href=\"sem_verify.php\">Freischaltung</a> der Veranstaltung.§";
+					$error_msg=$error_msg."info§" . _("Sie müssen sich erneut für diese Veranstaltung anmelden, um schreiben zu können!") . "<br>" . sprintf(_("Hier kommen sie zur %sFreischaltung%s der Veranstaltung."), "<a href=\"sem_verify.php\">", "</a>") . "§";
 				elseif ($perm->have_perm("user"))
-					$error_msg=$error_msg."info§Bitte folgen Sie den Anweisungen in der Registrierungsmail.§";
+					$error_msg=$error_msg."info§" . _("Bitte folgen Sie den Anweisungen in der Registrierungsmail.") . "§";
 				else
-					$error_msg=$error_msg."info§Bitte melden Sie sich an.<br>Hier geht es zur <a href=\"register1.php\">Registrierung</a> wenn Sie noch keinen Account im System haben.§";
+					$error_msg=$error_msg."info§" . _("Bitte melden Sie sich an.") . "<br>" . sprintf(_("Hier geht es zur %sRegistrierung%s wenn Sie noch keinen Account im System haben."), "<a href=\"register1.php\">", "</a>") . "§";
 				break;
 			default :
 				//Wenn Schreiben fuer Nobody jemals wieder komplett verboten werden soll, diesen Teil bitte wieder einkommentieren (man wei&szlig; ja nie...)
 				//$error_msg=$error_msg."Bitte melden Sie sich an.<br><br><a href=\"register1.php\"><b>Registrierung</b></a> wenn Sie noch keinen Account im System haben.<br><a href=\"index.php?again=yes\"><b>Login</b></a> f&uuml;r registrierte Benutzer.<br><br>";
 				break; 
 			}
-		$error_msg=$error_msg."info§Dieser Fehler kann auch aufteten, wenn Sie zu lange inaktiv gewesen sind. <br />Wenn sie l&auml;nger als $AUTH_LIFETIME Minuten keine Aktion mehr ausgef&uuml;hrt haben, m&uuml;ssen sie sich neu anmelden.§";
+		$error_msg=$error_msg."info§" . _("Dieser Fehler kann auch auftreten, wenn Sie zu lange inaktiv gewesen sind.") . " <br />" . sprintf(_("Wenn sie l&auml;nger als %s Minuten keine Aktion mehr ausgef&uuml;hrt haben, m&uuml;ssen sie sich neu anmelden."), $AUTH_LIFETIME) . "§";
 		}
 	}
 return $error_msg;
@@ -435,13 +428,13 @@ function get_global_perm($user_id="") {
 	 if ($db->next_record())
 	 	return $db->f("perms");
 	 else
-	 	return ("Fehler");
+	 	return (_("Fehler!"));
 }
 
 /**
 * Returns permission for given range_id and user_id
 *
-* Function works for Veranstaltungen, Einrichtunge, Fakultaeten.
+* Function works for Veranstaltungen, Einrichtungen, Fakultaeten.
 * admins get status 'admin' if range_id is a seminar
 * 
 * @param		string	an id a Veranstaltung, Einrichtung or Fakultaet
@@ -449,50 +442,10 @@ function get_global_perm($user_id="") {
 * @return		string	the perm level
 *
 */
-function get_perm($range_id,$user_id="")
-{
- /*
- global $user,$auth;
- $status="";
- if (!($user_id)) $user_id=$user->id;
- $db=new DB_Seminar;
- $db->query("SELECT status FROM seminar_user WHERE user_id='$user_id' AND Seminar_id='$range_id'");
- if ($db->num_rows())
- 	{
-	$db->next_record();
-	$status=$db->f("status");
-	}
- else
-	{
-	$db->query("SELECT inst_perms FROM user_inst WHERE user_id='$user_id' AND Institut_id='$range_id'");
-	if ($db->num_rows())
-		{
-		$db->next_record();
-		$status=$db->f("inst_perms");
-		}
-	else
-		{
-		$db->query("SELECT status FROM fakultaet_user WHERE user_id='$user_id' AND Fakultaets_id='$range_id'");
-		if ($db->num_rows())
-			{
-			$db->next_record();
-			$status=$db->f("status");
-			}
-	  }
-	}
- if ($auth->auth["perm"]=="admin")   // Institutsadmins sind automagisch admins in Seminaren des Institus
-	{
-	$db->query("SELECT user_inst.Institut_id, seminare.Seminar_id FROM user_inst LEFT JOIN seminare ON (user_inst.Institut_id=seminare.Institut_id AND seminare.Seminar_id='$range_id') WHERE inst_perms='admin' AND user_id='$user_id'");
-	if ($db->num_rows())
-		{
-		// Eintrag gefunden, also ein zum Instadmin gehöriges Seminar
-		$status="admin";
-		}
-	}
- */
+function get_perm($range_id,$user_id="") {
  global $perm;
  $status = $perm->get_studip_perm($range_id,$user_id);
- if (!($status)) $status="fehler!";
+ if (!($status)) $status= _("Fehler!");
 
  return $status;
 }
@@ -510,7 +463,7 @@ function get_perm($range_id,$user_id="")
 function get_fullname($user_id = "", $format = "full" )
 {
  global $user,$_fullname_sql;
- $author="unbekannt";
+ $author= _("unbekannt");
  if (!($user_id)) $user_id=$user->id;
  $db=new DB_Seminar;
  $db->query ("SELECT " . $_fullname_sql[$format] . " AS fullname FROM auth_user_md5 a LEFT JOIN user_info USING(user_id) WHERE a.user_id = '$user_id'");
@@ -530,7 +483,7 @@ function get_fullname($user_id = "", $format = "full" )
 function get_fullname_from_uname($uname = "", $format = "full")
 {
  global $auth,$_fullname_sql;
- $author = "unbekannt";
+ $author = _("unbekannt");
  if (!$uname) $uname=$auth->auth["uname"];
  $db=new DB_Seminar;
  $db->query ("SELECT " . $_fullname_sql[$format] . " AS fullname FROM auth_user_md5 LEFT JOIN user_info USING(user_id) WHERE username = '$uname'");
@@ -554,7 +507,7 @@ function get_fullname_from_uname($uname = "", $format = "full")
  $db->query ("SELECT Vorname FROM auth_user_md5 WHERE user_id = '$user_id'");
 				 while ($db->next_record())
 					 $author=$db->f("Vorname");
- if ($author=="") $author="unbekannt";
+ if ($author=="") $author= _("unbekannt");
 
  return $author;
  }
@@ -574,62 +527,66 @@ function get_nachname($user_id="")
  $db->query ("SELECT Nachname FROM auth_user_md5 WHERE user_id = '$user_id'");
 				 while ($db->next_record())
 					 $author=$db->f("Nachname");
- if ($author=="") $author="unbekannt";
+ if ($author=="") $author= _("unbekannt");
 
  return $author;
  }
 
 /**
 * Retrieves the username for a given user_id
+*
+* uses global $online array if user is online
 * 
 * @param		string	if omitted, current username will be returned
 * @return		string	
 *
 */
-function get_username($user_id="")
-{
-  global $auth,$online;
- $author="";
- if (!($user_id)) return $auth->auth["uname"];
- if(count($online)) {
- 	foreach($online as $key=>$value){
-		if ($value["userid"]==$user_id) {
+function get_username($user_id="") {
+	global $auth,$online;
+	$author="";
+	if (!($user_id))
+		return $auth->auth["uname"];
+	if(count($online)) {
+ 		foreach($online as $key=>$value) {
+			if ($value["userid"]==$user_id) {
 		    $author=$key;
 		    break;
 			}
 		}
 	}
-if (!$author) {
- $db=new DB_Seminar;
- $db->query ("SELECT username , user_id FROM auth_user_md5 WHERE user_id = '$user_id'");
-				 while ($db->next_record())
-					 $author=$db->f("username");
-}
- return $author;
+	if (!$author) {
+		$db=new DB_Seminar;
+		$db->query ("SELECT username , user_id FROM auth_user_md5 WHERE user_id = '$user_id'");
+		while ($db->next_record())
+			$author=$db->f("username");
+	}
+	return $author;
 }
 
 /**
 * Retrieves the userid for a given username
+*
+* uses global $online array if user is online
 * 
 * @param		string	if omitted, current user_id will be returned
 * @return		string	
 *
 */
-function get_userid($username="")
-{
- global $user,$online;
- $author="";
- if (!$username) return $user->id;
- if(count($online)) {
- 	$author=$online[$username]["userid"];
+function get_userid($username="") {
+	global $user,$online;
+	$author="";
+	if (!$username)
+		return $user->id;
+ 	if(count($online)) {
+ 		$author=$online[$username]["userid"];
 	}
-if (!$author) {
-$db=new DB_Seminar;
- $db->query ("SELECT user_id  FROM auth_user_md5 WHERE username = '$username'");
-				 while ($db->next_record())
-					 $author=$db->f("user_id");
-}
- return $author;
+	if (!$author) {
+		$db=new DB_Seminar;
+ 		$db->query ("SELECT user_id  FROM auth_user_md5 WHERE username = '$username'");
+		while ($db->next_record())
+			$author=$db->f("user_id");
+	}
+	return $author;
 }
 
 /**
@@ -639,85 +596,81 @@ $db=new DB_Seminar;
 * @return		string	the titel
 *
 */
-function gettitel($score)
+function gettitel($score) {
 
-{
-	IF ($score==0) $titel =		"Unbeschriebenes Blatt";
-	IF ($score>0) $titel =		"Neuling";
-	IF ($score>16) $titel =		"Greenhorn";
-	IF ($score>32) $titel =		"Anf&auml;nger";
-	IF ($score>64) $titel =		"Einsteiger";
-	IF ($score>128) $titel =		"Beginner";
-	IF ($score>256) $titel =		"Novize";
-	IF ($score>512) $titel =		"Fortgeschrittener";
-	IF ($score>1024) $titel =	"Kenner";
-	IF ($score>2048) $titel =	"K&ouml;nner";
-	IF ($score>4096) $titel =	"Experte";
-	IF ($score>8192) $titel =	"Meister";
-	IF ($score>16384) $titel =	"Gro&szlig;meister";
-	IF ($score>32768) $titel =	"Guru";
-	IF ($score>65536) $titel =	"Lichtgestalt";
-	IF ($score>131072) $titel =	"Gott";
+	IF ($score==0) $titel =			_("Unbeschriebenes Blatt");
+	IF ($score>0) $titel =			_("Neuling");
+	IF ($score>16) $titel =			_("Greenhorn");
+	IF ($score>32) $titel =			_("Anf&auml;nger");
+	IF ($score>64) $titel =			_("Einsteiger");
+	IF ($score>128) $titel =		_("Beginner");
+	IF ($score>256) $titel =		_("Novize");
+	IF ($score>512) $titel =		_("Fortgeschrittener");
+	IF ($score>1024) $titel =		_("Kenner");
+	IF ($score>2048) $titel =		_("K&ouml;nner");
+	IF ($score>4096) $titel =		_("Experte");
+	IF ($score>8192) $titel =		_("Meister");
+	IF ($score>16384) $titel =	_("Gro&szlig;meister");
+	IF ($score>32768) $titel =	_("Guru");
+	IF ($score>65536) $titel =	_("Lichtgestalt");
+	IF ($score>131072) $titel =	_("Gott");
 
 	return $titel;
 }
 
 /**
 * Retrieves the score for the current user
-*
-* uses global $online array if user is online
 * 
 * @return		integer	the score
 *
 */
-function getscore()
+function getscore() {
+	global $user,$auth;
 
-{ global $user,$auth;
+	$user_id=$user->id; //damit keiner schummelt...
 
-$user_id=$user->id; //damit keiner schummelt...
+	///// Werte holen...
 
-///// Werte holen...
+	$db=new DB_Seminar;
+	$db->query("SELECT count(*) as postings FROM px_topics WHERE user_id = '$user_id' ");
+	$db->next_record();
+	$postings=$db->f("postings");
 
-$db=new DB_Seminar;
-$db->query("SELECT count(*) as postings FROM px_topics WHERE user_id = '$user_id' ");
-$db->next_record();
-$postings=$db->f("postings");
+	$db->query("SELECT count(*) as dokumente FROM dokumente WHERE user_id = '$user_id' ");
+	$db->next_record();
+	$dokumente=$db->f("dokumente");
 
-$db->query("SELECT count(*) as dokumente FROM dokumente WHERE user_id = '$user_id' ");
-$db->next_record();
-$dokumente=$db->f("dokumente");
+	$db->query("SELECT count(*) as seminare FROM seminar_user WHERE user_id = '$user_id' ");
+	$db->next_record();
+	$seminare=$db->f("seminare");
 
-$db->query("SELECT count(*) as seminare FROM seminar_user WHERE user_id = '$user_id' ");
-$db->next_record();
-$seminare=$db->f("seminare");
+	$db->query("SELECT count(*) as archiv FROM archiv_user WHERE user_id = '$user_id' ");
+	$db->next_record();
+	$archiv=$db->f("archiv");
 
-$db->query("SELECT count(*) as archiv FROM archiv_user WHERE user_id = '$user_id' ");
-$db->next_record();
-$archiv=$db->f("archiv");
+	$db->query("SELECT count(*) as institut FROM user_inst WHERE user_id = '$user_id' ");
+	$db->next_record();
+	$institut=$db->f("institut");
 
-$db->query("SELECT count(*) as institut FROM user_inst WHERE user_id = '$user_id' ");
-$db->next_record();
-$institut=$db->f("institut");
-
-$db->query("SELECT count(*) as news FROM news WHERE user_id = '$user_id' ");
-$db->next_record();
-$news=$db->f("news");
+	$db->query("SELECT count(*) as news FROM news WHERE user_id = '$user_id' ");
+	$db->next_record();
+	$news=$db->f("news");
 
 
 ///////////////////////// Die HOCHGEHEIME Formel:
 
-$score = (5*$postings) + (5*$news) + (20*$dokumente) + (5*$institut) + (5*($archiv+$seminare));
-if(file_exists("./user/".$user_id.".jpg")) $score *=10;
+	$score = (5*$postings) + (5*$news) + (20*$dokumente) + (5*$institut) + (5*($archiv+$seminare));
+	if(file_exists("./user/".$user_id.".jpg"))
+		$score *=10;
 
 /// Schreiben wenn hoeher
 
+	$query = "UPDATE user_info "
+		." SET score = '$score'"
+		." WHERE user_id = '$user_id' AND score > 0";
+	$db->query($query);
 	
-$query = "UPDATE user_info "
-	." SET score = '$score'"
-	." WHERE user_id = '$user_id' AND score > 0";
-$db->query($query);
-	
-RETURN $score;
+	RETURN $score;
 }
 
 
@@ -733,13 +686,11 @@ function TrackAccess ($id) {
 	switch (get_object_type($id)) { 		// what kind ob object shall we track
 		case "dokument": 				// the object is a dokument, so downloads will be increased
 			$db=new DB_Seminar;
-			$db->query ("SELECT downloads FROM dokumente WHERE dokument_id = '$id'");
-			$db->next_record();
-			$newcount=$db->f("downloads")+1;
-			$db->query ("UPDATE dokumente SET downloads = '$newcount' WHERE dokument_id = '$id'");
+			$db->query ("UPDATE dokumente SET downloads = downloads + 1 WHERE dokument_id = '$id'");
 			break;
 	}
 }
+
 
 function get_sem_tree_path($seminar_id,$delimeter = ">"){
 	$the_tree =& TreeAbstract::GetInstance("StudipSemTree");
