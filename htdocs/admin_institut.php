@@ -40,7 +40,11 @@ require_once("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
 
 if ($RESOURCES_ENABLE) {
-	require_once ($RELATIVE_PATH_RESOURCES."/lib/ResourcesAssign.class.php");
+	require_once($RELATIVE_PATH_RESOURCES."/lib/ResourcesAssign.class.php");
+}
+
+if ($EXTERN_ENABLE) {
+	require_once($RELATIVE_PATH_EXTERN . "/lib/extern_functions.inc.php");
 }
 	
 ###
@@ -172,7 +176,7 @@ while ( is_array($HTTP_POST_VARS)
 		$msg="error§<b>Sie haben nicht die Berechtigung Fakult&auml;ten zu l&oumlschen!</b>";
 		break;
 	}
-		
+	
     ## Delete that Institut.
     $query = "delete from Institute where Institut_id='$i_id'";
     $db->query($query);
@@ -219,7 +223,15 @@ while ( is_array($HTTP_POST_VARS)
 		$killAssign = new ResourcesAssign($u_id);
 		$killAssign->delete();
 	}
-    
+  
+	// delete all configuration files for the "extern modules"
+	if ($EXTERN_ENABLE) {
+		$counts = delete_all_configs($i_id);
+		if ($counts["records"]) {
+			$msg .= "msg§" . sprintf(_("%s Konfigurations-Dateien gel&ouml;scht."), $counts["records"]);
+			$msg .= "§";
+		}
+	}
     ## delete folders and discussions
     $query = "DELETE from px_topics where Seminar_id='$i_id'";
     $db->query($query);
@@ -229,7 +241,6 @@ while ( is_array($HTTP_POST_VARS)
     $db_ar = recursiv_folder_delete($i_id);
     if ($db_ar > 0)
      $msg.="msg§$db_ar Dokumente gel&ouml;scht.§";
-
 
     $msg.="msg§Die Einrichtung \"".htmlReady(stripslashes($Name))."\" wurde gel&ouml;scht!§";
   	$i_view="delete";
