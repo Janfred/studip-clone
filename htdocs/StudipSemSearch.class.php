@@ -221,7 +221,7 @@ class StudipSemSearch {
 				$ret .= " $key=\"$value\"";
 			}
 		}
-		$ret .= ">";
+		$ret .= " border=\"0\">";
 		return $ret;
 	}
 	
@@ -235,7 +235,7 @@ class StudipSemSearch {
 				$ret .= " $key=\"$value\"";
 			}
 		}
-		$ret .= ">";
+		$ret .= " border=\"0\">";
 		return $ret;
 	}
 	
@@ -249,7 +249,7 @@ class StudipSemSearch {
 				$ret .= " $key=\"$value\"";
 			}
 		}
-		$ret .= ">";
+		$ret .= " border=\"0\">";
 	return $ret;
 	}
 		

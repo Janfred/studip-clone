@@ -1605,7 +1605,7 @@ if ($level==2)
 		</tr>
 		<tr>
 			<td class="blank" colspan=2>
-			<form method="POST" action="<? echo $PHP_SELF ?>">
+			<form method="POST" action="<? echo $PHP_SELF ?>#anker">
 			<input type="HIDDEN" name="form" value=2>
 				<table width ="99%" cellspacing=0 cellpadding=2 border=0 align="center">
 					<tr <? $cssSw->switchClass() ?>>
@@ -1799,8 +1799,8 @@ if ($level==2)
 						</td>
 						<td class="<? echo $cssSw->getClass() ?>" width="90%" colspan=3>
 							<?
-							echo "\n<div align=\"left\" style=\"width:100%\">&nbsp;";
-							echo $st_search->getSearchField(array('style' => 'vertical-align:middle;width:60%;'));
+							echo "\n<div align=\"left\" >&nbsp;";
+							echo $st_search->getSearchField(array('size' => 30 ,'style' => 'vertical-align:middle;'));
 							echo "&nbsp;";
 							echo $st_search->getSearchButton(array('style' => 'vertical-align:middle;'));
 							echo "<br>&nbsp;&nbsp;<span style=\"font-size:10pt;\">" . _("Geben Sie zur Suche den Namen des Studienbereiches ein.");

@@ -57,7 +57,7 @@ class StudipSemTreeViewSimple {
 	function showSemTree(){
 		echo "\n<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">";
 		echo "\n<tr><td class=\"steelgraulight\" align=\"left\" valign=\"top\" style=\"font-size:10pt;\">"
-			. "<div style=\"margin-left:10px\"><b>" . _("Studienbereiche:"). "</b><br>". $this->getSemPath();
+			. "<div style=\"font-size:10pt;margin-left:10px\"><b>" . _("Studienbereiche:"). "</b><br>". $this->getSemPath();
 		echo "</div></td></tr>";
 		echo "\n<tr><td class=\"steel1\"  align=\"center\" valign=\"center\">";
 		$this->showKids($this->start_item_id);
@@ -89,7 +89,7 @@ class StudipSemTreeViewSimple {
 		}
 		if ($item_id != "root"){
 			echo "\n<div align=\"right\" style=\"font-size:10pt;\"><a href=\"" .$this->getSelf("start_item_id={$this->tree->tree_data[$item_id]['parent_id']}", false) . "\">
-			<img src=\"pictures/move_left.gif\" border=\"0\" style=\"vertical-align:bottom;margin-right:3px;\">" . _("eine Ebene zur&uuml;ck") . "</a></div>";
+			<img src=\"pictures/move_left.gif\" border=\"0\" align=\"bottom\" hspace=\"3\">" . _("eine Ebene zur&uuml;ck") . "</a></div>";
 		}
 		echo "</td></tr></table>";
 	}

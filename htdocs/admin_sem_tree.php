@@ -101,7 +101,7 @@ if ($the_tree->mode == "MoveItem"){
 								htmlReady($the_tree->tree->tree_data[$the_tree->move_item_id]['name']),
 								"<div align=\"right\"><a href=\"" . $the_tree->getSelf("cmd=Cancel&item_id=$the_tree->move_item_id") . "\">"
 								. "<img " .makeButton("abbrechen","src") . tooltip(_("Verschieben abbrechen"))
-								. " border=\"0\" style=\"vertical-align:top;\"></a></div>");
+								. " border=\"0\" align=\"top\"></a></div>");
 }
 		
 	
@@ -134,42 +134,42 @@ $the_tree->showSemTree();
 	$search_obj->search_fields['type']['size'] = 30 ;
 	echo $search_obj->getFormStart($the_tree->getSelf());
 	?>
-	<table border="0" width="100%">
+	<table border="0" width="100%" style="font-size:10pt">
 	<tr>
-	<td style="font-size:10pt"><?=_("Titel:")?></td><td style="font-size:10pt"><?=$search_obj->getSearchField("title")?></td>
+	<td ><span style="font-size:10pt"><?=_("Titel:")?></span></td><td style="font-size:10pt"><?=$search_obj->getSearchField("title")?></td>
 	</tr>
 	<tr>
-	<td style="font-size:10pt"><?=_("Untertitel:")?></td><td style="font-size:10pt"><?=$search_obj->getSearchField("sub_title")?></td>
+	<td><span style="font-size:10pt"><?=_("Untertitel:")?></span></td><td style="font-size:10pt"><?=$search_obj->getSearchField("sub_title")?></td>
 	</tr>
 	<tr>
-	<td style="font-size:10pt"><?=_("Kommentar:")?></td><td style="font-size:10pt"><?=$search_obj->getSearchField("comment")?></td>
+	<td><span style="font-size:10pt"><?=_("Kommentar:")?></span></td><td style="font-size:10pt"><?=$search_obj->getSearchField("comment")?></td>
 	</tr>
 	<tr>
-	<td style="font-size:10pt"><?=_("Dozent:")?></td><td style="font-size:10pt"><?=$search_obj->getSearchField("lecturer")?></td>
+	<td><span style="font-size:10pt"><?=_("Dozent:")?></span></td><td style="font-size:10pt"><?=$search_obj->getSearchField("lecturer")?></td>
 	</tr>
 	<tr>
-	<td style="font-size:10pt"><?=_("Bereich:")?></td><td style="font-size:10pt"><?=$search_obj->getSearchField("scope")?></td>
+	<td><span style="font-size:10pt"><?=_("Bereich:")?></span></td><td style="font-size:10pt"><?=$search_obj->getSearchField("scope")?></td>
 	</tr>
 	<tr>
-	<td style="font-size:10pt"><?=_("Kombination:")?></td><td style="font-size:10pt"><?=$search_obj->getSearchField("combination",array('style' => 'width:*;font-size:10pt;'))?></td>
+	<td><span style="font-size:10pt"><?=_("Kombination:")?></span></td><td style="font-size:10pt"><?=$search_obj->getSearchField("combination",array('style' => 'width:*;font-size:10pt;'))?></td>
 	</tr>
 	<tr>
 	<td colspan="2"><hr></td>
 	</tr>
 	<tr>
-	<td style="font-size:10pt"><?=_("Typ:")?></td><td style="font-size:10pt"><?=$search_obj->getSearchField("type",array('style' => 'width:*;font-size:10pt;'))?></td>
+	<td><span style="font-size:10pt"><?=_("Typ:")?></span></td><td style="font-size:10pt"><?=$search_obj->getSearchField("type",array('style' => 'width:*;font-size:10pt;'))?></td>
 	</tr>
 	<tr>
-	<td style="font-size:10pt"><?=_("Semester:")?></td><td style="font-size:10pt"><?=$search_obj->getSearchField("sem",array('style' => 'width:*;font-size:10pt;'))?></td>
+	<td><span style="font-size:10pt"><?=_("Semester:")?></span></td><td style="font-size:10pt"><?=$search_obj->getSearchField("sem",array('style' => 'width:*;font-size:10pt;'))?></td>
 	</tr>
 	<tr>
 	<td align="right" colspan="2"><?=$search_obj->getSearchButton();?>&nbsp;&nbsp;<?=$search_obj->getNewSearchButton();?></td>
 	</tr>
 	</table>
 	<?=$search_obj->getFormEnd();?>
-	<div>
+	<p>
 	<b><?=_("Merkliste:")?></b>
-	</div>
+	</p>
 	<form action="<?=$the_tree->getSelf("cmd=MarkList")?>" method="post">
 	<select multiple size="20" name="sem_mark_list[]" style="font-size:8pt;width:100%;">
 	<?
@@ -181,7 +181,7 @@ $the_tree->showSemTree();
 		foreach($sem_data as $seminar_id => $data){
 			if (key($data['sem_number']) != $sem_number){
 				$sem_number = key($data['sem_number']);
-				echo "\n<option value=\"0\" style=\"font-weight:bold\">" . $the_tree->tree->sem_dates[$sem_number]['name'] . ":</option>";
+				echo "\n<option value=\"0\" style=\"font-weight:bold;color:red;\">" . $the_tree->tree->sem_dates[$sem_number]['name'] . ":</option>";
 			}
 			$line = htmlReady(my_substr(key($data["Name"]),0,50));
 			$tooltip = key($data["Name"]) . " (" . join(",",array_keys($data["doz_name"])) . ")";
@@ -192,7 +192,7 @@ $the_tree->showSemTree();
 	</select><br>&nbsp;<br><select name="mark_list_aktion" style="font-size:8pt;width:100%;">
 	<?
 	if (is_array($_open_items) && count($_open_items) && !(count($_open_items) == 1 && $_open_items['root'])){
-		echo "\n<option value=\"insert_all\">" . _("In alle ge&ouml;ffneten Bereiche eintragen") . "</option>";
+		echo "\n<option  value=\"insert_all\">" . _("In alle ge&ouml;ffneten Bereiche eintragen") . "</option>";
 		foreach ($_open_items as $item_id => $value){
 			echo "\n<option value=\"insert_{$item_id}\">" 
 				. sprintf(_("In \"%s\" eintragen"),htmlReady(my_substr($the_tree->tree->tree_data[$item_id]['name'],0,30))) . "</option>";
@@ -202,7 +202,7 @@ $the_tree->showSemTree();
 	<option value="del">Aus Merkliste l&ouml;schen</option>
 	</select>
 	<div align="right">
-	<input type="image" <?=makeButton("ok","src") . tooltip(_("Gewählte Aktion starten"))?> >
+	<input border="0" type="image" <?=makeButton("ok","src") . tooltip(_("Gewählte Aktion starten"))?> >
 	</div>
 	</form>
 	

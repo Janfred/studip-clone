@@ -106,7 +106,9 @@ class StudipSemTreeSearch {
 		}
 		$ret .= ">";
 		foreach ($this->sem_tree_ranges as $range_id => $sem_tree_id){
-			$ret .= "\n<option value=\"0\" style=\"text-decoration:underline;font-weight:bold;\">" . htmlReady(my_substr($this->getPath($range_id),0,$cols)) ."</option>";
+			$ret .= "\n<option value=\"0\">&nbsp;</option>";
+			$ret .= "\n<option value=\"0\" style=\"font-weight:bold;color:red;\">" . htmlReady(my_substr($this->getPath($range_id),0,$cols)) ."</option>";
+			$ret .= "\n<option value=\"0\" style=\"font-weight:bold;color:red;\">" . str_repeat("¯",$cols) . "</option>";
 			for ($i = 0; $i < count($sem_tree_id); ++$i){
 				$ret .= "\n<option value=\"{$sem_tree_id[$i]}\" " 
 						. (($this->selected[$sem_tree_id[$i]]) ? " selected " : "")
@@ -132,7 +134,7 @@ class StudipSemTreeSearch {
 	}
 	
 	function getSearchButton($attributes = array()){
-		$ret = "\n<input type=\"image\" name=\"{$this->form_name}_do_search\" src=\"pictures/suchen.gif\"" . tooltip(_("Suche nach Studienbereichen starten"));
+		$ret = "\n<input border=\"0\" type=\"image\" name=\"{$this->form_name}_do_search\" src=\"pictures/suchen.gif\"" . tooltip(_("Suche nach Studienbereichen starten"));
 		foreach($attributes as $key => $value){
 			$ret .= "$key=\"$value\"";
 		}

@@ -680,8 +680,8 @@ if (($s_id) && (auth_check())) {
 				<td class="<? echo $cssSw->getClass() ?>" align=right><b>Studienbereich(e)</b></td>
 				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <br />&nbsp; 
 					<?
-					echo "\n<div align=\"left\" style=\"width:100%\">&nbsp;";
-					echo $st_search->getSearchField(array('style' => 'vertical-align:middle;width:60%;'));
+					echo "\n<div align=\"left\">&nbsp;";
+					echo $st_search->getSearchField(array('style' => 'vertical-align:middle;','size'=>30));
 					echo "&nbsp;";
 					echo $st_search->getSearchButton(array('style' => 'vertical-align:middle;'));
 					echo "<br>&nbsp;&nbsp;<span style=\"font-size:10pt;\">" . _("Geben Sie zur Suche den Namen des Studienbereiches ein.");
