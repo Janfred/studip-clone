@@ -49,7 +49,7 @@ if(!$db->next_record())
 // Daten holen
 global $_fullname_sql;
 $query = "SELECT dokument_id, description, filename, d.mkdate, d.chdate, filesize, ";
-$query .= $_fullname_sql[$this->config->getValue("Main", "nametitle")];
+$query .= $_fullname_sql[$this->config->getValue("Main", "nameformat")];
 $query .= "AS fullname FROM dokumente d LEFT JOIN user_info USING (user_id) ";
 $query .= "LEFT JOIN auth_user_md5 USING (user_id) WHERE ";
 $query .= "Seminar_id='{$this->config->range_id}'";
