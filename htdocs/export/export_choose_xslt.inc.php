@@ -79,6 +79,7 @@ if (!CheckParamXSLT())
 // Die Seiten 2 und 3 ueberspringen, wenn als Dateiformat XML gewaehlt wurde
 if (($format == "xml") AND ($page == 1))
 {
+	$xml_file_id = "";
 	$o_mode = "file";
 	$page = 3;
 }
