@@ -19,6 +19,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 	page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
+	$perm->check("tutor");
+	
+	include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+
+// -- here you have to put initialisations for the current page
 
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
@@ -38,31 +43,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 		$temp_default[7]="mm";
 		}
 
-	$perm->check("tutor");
-	
 	$sess->register("term_data");
 	$sess->register("admin_dates_data");
 	
-	?>
-<html>
-<head>
-	<title>Stud.IP</title>
-	<link rel="stylesheet" href="style.css" type="text/css">
-	<META HTTP-EQUIV="REFRESH" CONTENT="<?php print $auth->lifetime*60;?>; URL=logout.php">
-	<body bgcolor=white>
-</head>
+// Start of Output
+include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
+include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 
-<?php
-
-include "seminar_open.php"; //hier werden die sessions initialisiert
-
-?>
-
-<!-- hier muessen Seiten-Initialisierungen passieren -->
-
-<?php
-
-include "header.php";   //hier wird der "Kopf" nachgeladen
 include "links_admin.inc.php";
 	
 require_once("dates.inc.php"); //ben&ouml;tigete Funktionen der Terminverwaltung

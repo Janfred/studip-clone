@@ -25,15 +25,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 ## Set this to something, just something different...
   $hash_secret = "dslkjjhetbjs";
   
+	include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+
+// -- here you have to put initialisations for the current page
+
+// Start of Output
+	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
+	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 ?>
-<html>
- <head>
-<!--
-// here i include my personal meta-tags; one of those might be useful:
-// <META HTTP-EQUIV="REFRESH" CONTENT="<?php print $auth->lifetime*60;?>; URL=logout.php">
--->
-  <title>Stud.IP</title>
-	<link rel="stylesheet" href="style.css" type="text/css">
+
  <script language="javascript" src="./md5.js"></script>
 
 
@@ -115,18 +115,10 @@ function checkdata_without_bereich(command){
  return checked;
 }
 
-
 //-->
 </SCRIPT>
 
- </head>
-
-<body>
-
 <?
-include "$ABSOLUTE_PATH_STUDIP/seminar_open.php"; // hier werden die sessions initialisiert
-include "$ABSOLUTE_PATH_STUDIP/header.php";   // hier wird der "Kopf" nachgeladen
-	
 require_once("$ABSOLUTE_PATH_STUDIP/dates.inc.php"); // Funktionen zum Loeschen von Terminen
 require_once("$ABSOLUTE_PATH_STUDIP/datei.inc.php"); // Funktionen zum Loeschen von Dokumenten
 require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
@@ -763,7 +755,7 @@ if ($s_command) {
 			}
 			?>
 			<tr>
-				<td class="<? echo $cssSw->getClass() ?>"></td>
+				<td class="<? echo $cssSw->getClass() ?>">&nbsp;</td>
 				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <font color="#FF0000">Bitte nutzen Sie den Menupunkt <? echo "<a href=\"admin_metadates.php?seminar_id=$s_id\"><b>Zeiten</b></a>" ?>, um diese Angaben zu ver&auml;ndern!</font></td>
 			<tr <?$cssSw->switchClass() ?>>   
 				<td class="<? echo $cssSw->getClass() ?>" align="center" colspan=3>

@@ -19,25 +19,16 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 	page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
-	 $perm->check("autor");
-	?>
-<html>
-<head>
-	<title>Stud.IP</title>
-	<link rel="stylesheet" href="style.css" type="text/css">
-	<META HTTP-EQUIV="REFRESH" CONTENT="<?php print $auth->lifetime*60;?>; URL=logout.php">
-	<body bgcolor=white>
-</head>
+	$perm->check("autor");
 
+	include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
-<?php
-	include "seminar_open.php"; //hier werden die sessions initialisiert
-?>
+// -- here you have to put initialisations for the current page
 
-<!-- hier muessen Seiten-Initialisierungen passieren -->
+// Start of Output
+	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
+	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 
-<?php
-	include "header.php";   //hier wird der "Kopf" nachgeladen
 	include "links_admin.inc.php";  //Linkleiste fuer admins
 
 	require_once "functions.php";

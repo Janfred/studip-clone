@@ -24,27 +24,15 @@ $perm->check("tutor");
 if ($abbrechen_x)
 	header ("Location: ".$term_metadata["source_page"]."?ebene=sem&range_id=".$term_metadata["sem_id"]);
 	
-?>
-<html>
-<head>
-	<title>Stud.IP</title>
-	<link rel="stylesheet" href="style.css" type="text/css">
-	<META HTTP-EQUIV="REFRESH" CONTENT="<?php print $auth->lifetime*60;?>; URL=logout.php">
-	<body bgcolor=white>
-</head>
+include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
-<?php
+// -- here you have to put initialisations for the current page
 
-include "seminar_open.php"; //hier werden die sessions initialisiert
+// Start of Output
+include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
+include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 
-?>
-
-<!-- hier muessen Seiten-Initialisierungen passieren -->
-
-<?php
-
-include "header.php";   //hier wird der "Kopf" nachgeladen
-include "links_admin.inc.php";
+include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");
 
 require_once("msg.inc.php");//ja auch die...
 require_once("config.inc.php");//ja,ja auch die...

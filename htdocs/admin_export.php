@@ -7,22 +7,18 @@
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User", "ses" => "ses"));
 $perm->check("admin");
 
-include "seminar_open.php"; //hier werden die sessions initialisiert
+include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+
+// -- here you have to put initialisations for the current page
+
+// Start of Output
+include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
+include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+
 require_once ("dates.inc.php"); 		//Datumsfunktionen
 require_once ("config.inc.php"); 		//wir brauchen die Seminar-Typen
 require_once ("msg.inc.php"); //Funktionen f&uuml;r Nachrichtenmeldungen
-?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html>
-<head>
-	<title>Stud.IP</title>
-	<link rel="stylesheet" href="style.css" type="text/css">
-	<META HTTP-EQUIV="REFRESH" CONTENT="<?php print $auth->lifetime*60;?>; URL=logout.php">
-</head>
-<body>
 
-<?
-include "header.php";   //hier wird der "Kopf" nachgeladen 
 $i_page = "admin_institut.php";
 include "links_admin.inc.php";  //Linkleiste fuer admins
 

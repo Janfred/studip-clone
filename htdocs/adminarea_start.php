@@ -19,35 +19,26 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-        page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
-         $perm->check("tutor");
-        ?>
-<html>
-<head>
-        <title>Stud.IP</title>
-        <link rel="stylesheet" href="style.css" type="text/css">
-        <META HTTP-EQUIV="REFRESH" CONTENT="<?php print $auth->lifetime*60;?>; URL=logout.php">
-        <body bgcolor=white>
-</head>
+	page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
+	$perm->check("tutor");
 
+	include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
-<?php
-        include "seminar_open.php"; //hier werden die sessions initialisiert
-?>
+// -- here you have to put initialisations for the current page
 
-<!-- hier muessen Seiten-Initialisierungen passieren -->
+// Start of Output
+	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
+	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 
-<?php
-        include "header.php";   //hier wird der "Kopf" nachgeladen
-				require_once("visual.inc.php");
+	require_once("visual.inc.php");
 
-        include "links_admin.inc.php";
-        
-        if ($links_admin_data["sem_id"]) {
-        $db=new DB_Seminar;
-        $db->query("SELECT Name FROM seminare WHERE Seminar_id ='".$links_admin_data["sem_id"]."'");
-        $db->next_record();
-        ?>
+	include "links_admin.inc.php";
+	
+	if ($links_admin_data["sem_id"]) {
+	$db=new DB_Seminar;
+	$db->query("SELECT Name FROM seminare WHERE Seminar_id ='".$links_admin_data["sem_id"]."'");
+	$db->next_record();
+	?>
       	<table cellspacing="0" cellpadding="0" border="0" width="100%">
 	<tr><td class="topic" colspan=2><img src="pictures/blank.gif" width="5" height="5" border="0"><b>Veranstaltung vorgew&auml;hlt</b></td></tr>
 	<tr><td class="blank" colspan=2>&nbsp;</td></tr>

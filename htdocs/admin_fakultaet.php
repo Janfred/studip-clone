@@ -21,33 +21,17 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
   page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
   $perm->check("root");
 
+	include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+
+// -- here you have to put initialisations for the current page
+
 ## Set this to something, just something different...
   $hash_secret = "hjeroxghsdf";
 
+// Start of Output
+	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
+	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 
-?>
-<html>
- <head>
-<!--
-// here i include my personal meta-tags; one of those might be useful:
-// <META HTTP-EQUIV="REFRESH" CONTENT="<?php print $auth->lifetime*60;?>; URL=logout.php">
--->
-  <title>Stud.IP</title>
-	<link rel="stylesheet" href="style.css" type="text/css">
- </head>
-
-<body bgcolor="#ffffff">
-
-<?php
-	include "seminar_open.php"; //hier werden die sessions initialisiert
-
-// hier muessen Seiten-Initialisierungen passieren
-
-	include "header.php";   //hier wird der "Kopf" nachgeladen 
-?>
-<body>
-
-<?php
 require_once("visual.inc.php");
 $cssSw=new cssClassSwitcher;
 
