@@ -40,7 +40,7 @@ global $ex_type, $xml_file_id, $page, $o_mode, $format, $choose, $xslt_files, $e
 		while (list($key, $val) = each($xslt_files))
 			if ($val[$ex_type] AND $val[$format])
 				$mod_counter++;
-		if ($mod_counter == 0)
+		if (($mod_counter == 0) AND ($format != "xml"))
 		{	
 			$export_error .= _("Für dieses Format sind keine Ausgabemodule installiert.<br>Bitte wählen Sie ein anderes Ausgabeformat.") . "<br>";
 			$page = 0;
@@ -53,7 +53,7 @@ global $ex_type, $xml_file_id, $page, $o_mode, $format, $choose, $xslt_files, $e
 
 	if ( ($page==2) AND ($choose == "") )
 		$page = 1;
-	if ( ($xml_file_id != "") AND ( in_array($ex_type, $export_ex_types) ) AND ( in_array($o_mode, $export_o_modes) ) )
+	if ( /*($xml_file_id != "") AND */( in_array($ex_type, $export_ex_types) ) AND ( in_array($o_mode, $export_o_modes) ) )
 		return true;
 
 	$export_error .= "<b>" . _("Unzulässiger Seitenaufruf!") . "</b><br>";
@@ -77,6 +77,13 @@ if (!CheckParamXSLT())
 	);
 }
 
+// Die Seiten 2 und 3 ueberspringen, wenn als Dateiformat XML gewaehlt wurde
+if (($format == "xml") AND ($page == 1))
+{
+	$o_mode = "file";
+	$page = 3;
+	$export_error .= $xml_file_id;	
+}
 
 elseif (!isset($page) or ($page == 0)) // Seite 1 : Auswahl des Dateiformats
 { 
