@@ -33,7 +33,7 @@ require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");	 //Enthaelt Funktionen fuer Statusgruppen
 
 if ($RESOURCES_ENABLE) {
-	include_once ($RELATIVE_PATH_RESOURCES."/lib/ResourcesAssign.class.php");
+	include_once ($RELATIVE_PATH_RESOURCES."/lib/DeleteResourcesUser.class.php");
 }
 
 ## Get a database connection
@@ -194,7 +194,7 @@ if ($archive_kill) {
     
 	if ($RESOURCES_ENABLE) {
 		//kill all the ressources that are assigned to the Veranstaltung (and all the linked or subordinated stuff!)
-		$killAssign = new ResourcesAssign($s_id);
+		$killAssign = new DeleteResourcesUser($s_id);
 		$killAssign->delete();
 	}
     

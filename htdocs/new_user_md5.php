@@ -52,7 +52,7 @@ require_once("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");	 //Enthaelt Funktion
 require_once("$ABSOLUTE_PATH_STUDIP/contact.inc.php");	 //Enthaelt Funktionen fuer Adressbuchverwaltung
 
 if ($RESOURCES_ENABLE) {
-	require_once ($RELATIVE_PATH_RESOURCES."/lib/ResourcesAssign.class.php");
+	include_once ($RELATIVE_PATH_RESOURCES."/lib/DeleteResourcesUser.class.php");
 }
 if ($ILIAS_CONNECT_ENABLE) {
 	include_once ("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_LEARNINGMODULES/lernmodul_config.inc.php");
@@ -537,7 +537,7 @@ while ( is_array($HTTP_POST_VARS)
 			}
 			//kill all the ressources that are assigned to the Veranstaltung (and all the linked or subordinated stuff!)
 			if ($RESOURCES_ENABLE) {
-				$killAssign = new ResourcesAssign($u_id);
+				$killAssign = new DeleteResourcesUser($u_id);
 				$killAssign->delete();
 			}
 			//kill ILIAS-Account if it was automatically generated)

@@ -40,7 +40,7 @@ require_once("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
 
 if ($RESOURCES_ENABLE) {
-	require_once($RELATIVE_PATH_RESOURCES."/lib/ResourcesAssign.class.php");
+	include_once($RELATIVE_PATH_RESOURCES."/lib/DeleteResourcesUser.class.php");
 }
 
 if ($EXTERN_ENABLE) {
@@ -220,7 +220,7 @@ while ( is_array($HTTP_POST_VARS)
 	}
 	//kill all the ressources that are assigned to the Veranstaltung (and all the linked or subordinated stuff!)
 	if ($RESOURCES_ENABLE) {
-		$killAssign = new ResourcesAssign($u_id);
+		$killAssign = new DeleteResourcesUser($u_id);
 		$killAssign->delete();
 	}
   
