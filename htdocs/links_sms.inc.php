@@ -59,6 +59,7 @@ $structure["timetable_changeview"] = array ("topKat"=>"timetable", "name"=>_("An
 $structure["contact_viewalpha"] = array ("topKat"=>"contact", "name"=>_("Alphabetisch"), "link"=>"contact.php?view=alpha", "active"=>FALSE);
 $structure["contact_viewgruppen"] = array ("topKat"=>"contact", "name"=>_("Gruppenansicht"), "link"=>"contact.php?view=gruppen", "active"=>FALSE);
 $structure["contact_statusgruppen"] = array ("topKat"=>"contact", "name"=>_("Gruppenverwaltung"), "link"=>"contact_statusgruppen.php", "active"=>FALSE);
+$structure["contact_export"] = array ("topKat"=>"contact", "name"=>_("VCF-Export"), "link"=>"contact_export.php", "active"=>FALSE);
 
 //View festlegen
 switch ($i_page) {
@@ -128,6 +129,9 @@ switch ($i_page) {
 	break;
 	case "contact_statusgruppen.php":
 		$reiter_view = "contact_statusgruppen";
+	break;
+	case "ccontact_export.php":
+		$reiter_view = "contact_export";
 	break;
 	default :
 		$reiter_view="post";
