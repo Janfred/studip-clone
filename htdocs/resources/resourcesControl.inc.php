@@ -34,7 +34,7 @@ require_once ($RELATIVE_PATH_RESOURCES."/resourcesVisual.inc.php");
 
 $sess->register("resources_data");
 $my_perms= new ResourcesPerms;
-$error = new ResourcesError;
+$msg = new ResourcesMsg;
 $db=new DB_Seminar;
 
 /*****************************************************************************
@@ -107,10 +107,10 @@ if ($kill_object) {
 	if ($ObjectPerms->getUserPerm () == "admin") {
 		$killObject=new resourceObject($kill_object);
 		if ($killObject->delete())
-		;
+		 	$msg -> addMsg(7);
 		$resources_data["view"]="resources";
 	} else {
-		$error->displayMsg(1);
+		$msg->displayMsg(1);
 		die;
 	}
 }
@@ -123,9 +123,9 @@ if ($change_structure_object) {
 		$changeObject->setName($change_name);
 		$changeObject->setDescription($change_description);
 		if ($changeObject->store())
-		;
+			$msg -> addMsg(6);
 	} else {
-		$error->displayMsg(1);
+		$msg->displayMsg(1);
 		die;
 	}
 	$resources_data["view"]="resources";
@@ -135,9 +135,8 @@ if ($change_structure_object) {
 //Objektbelegung erstellen/aendern
 if ($change_object_schedules) {
 	//load the perms
-	if ($change_object_schedules == "NEW") 
-		$ObjectPerms = new ResourcesObjectPerms($change_schedule_resource_id);
-	else
+	$ObjectPerms = new ResourcesObjectPerms($change_schedule_resource_id);
+	if (($ObjectPerms->getUserPerm () != "admin") && ($change_object_schedules != "NEW") || ($change_schedule_assign_user_id))
 		$ObjectPerms = new AssignObjectPerms($change_object_schedules);
 	
 	if ($ObjectPerms->getUserPerm () == "user" || $ObjectPerms->getUserPerm () == "admin") {
@@ -153,8 +152,15 @@ if ($change_object_schedules) {
 			if ($reset_search_user_x)
 				$search_string_search_user=FALSE;
 
-			if (($send_search_user) && ($submit_search_user !="FALSE") && (!$reset_search_user_x))
-				$change_schedule_assign_user_id=$submit_search_user;
+			if (($send_search_user_x) && ($submit_search_user !="FALSE") && (!$reset_search_user_x)) {
+				//Check if this user is able to reach the resource (and this assign), to provide, that the owner of the resources foists assigns to others
+				$ForeignObjectPerms = new ResourcesObjectPerms($change_schedule_resource_id, $submit_search_user);
+				
+				if (($ForeignObjectPerms->getUserPerms == "user") || ($ForeignObjectPerms-> getUserPerms == "admin"))
+					$change_schedule_assign_user_id=$submit_search_user;
+				else
+					$msg -> addMsg(2);
+			}
 
 			//check, if the owner of the assign object is a Veranstaltung, which has own dates to insert
 			if (get_object_type($change_schedule_assign_user_id) == "sem") {
@@ -285,18 +291,21 @@ if ($change_object_schedules) {
 					$change_schedule_repeat_week);
 
 				if ($change_object_schedules == "NEW") {
-					if ($changeAssign->create())
+					if ($changeAssign->create()) {
 						$assign_id=$changeAssign->getId();
+						$msg->addMsg(3);
+					}
 				} else {
 					$changeAssign->chng_flag=TRUE;
 					if ($changeAssign->store()) {
 						$assign_id=$changeAssign->getId();
+						$msg->addMsg(4);
 						}
 				}
 			}
 		}
 	} else {
-		$error->displayMsg(1);
+		$msg->displayMsg(1);
 		die;
 	}
 }
@@ -315,17 +324,19 @@ if ($change_object_properties) {
 		$changeObject->flushProperties();
 	
 		//Eigenschaften neu schreiben
+		$props_changed=FALSE;
 		if (is_array($change_property_val))
 			foreach ($change_property_val as $key=>$val) {
 				if ((substr($val, 0, 4) == "_id_") && (substr($change_property_val[$key+1], 0, 4) != "_id_"))
-					$changeObject->storeProperty(substr($val, 4, strlen($val)), $change_property_val[$key+1]);
+					if ($changeObject->storeProperty(substr($val, 4, strlen($val)), $change_property_val[$key+1]))
+						$props_changed=TRUE;
 			}
 	
 		//Object speichern
-		if ($changeObject->store())
-		;
+		if (($changeObject->store()) || ($props_changed))
+		 	$msg -> addMsg(6);
 	} else {
-		$error->displayMsg(1);
+		$msg->displayMsg(1);
 		die;
 	}
 	
@@ -340,11 +351,13 @@ if ($change_object_perms) {
 	
 		if (is_array($change_user_id))
 			foreach ($change_user_id as $key=>$val) {
-				$changeObject->storePerms($val, $change_user_perms[$key]);
+				if ($changeObject->storePerms($val, $change_user_perms[$key]))
+					$perms_changed=TRUE;
 			}
 
 		if ($delete_user_perms)
-			$changeObject->deletePerms($delete_user_perms);
+			if ($changeObject->deletePerms($delete_user_perms))
+				$perms_changed=TRUE;
 	
 		if ($reset_search_owner_x)
 			$search_string_search_owner=FALSE;
@@ -356,13 +369,14 @@ if ($change_object_perms) {
  			$changeObject->setOwnerId($submit_search_owner);
 	
 		if (($send_search_perm_user_x) && ($submit_search_perm_user !="FALSE") && (!$reset_search_perm_user_x))
-			$changeObject->storePerms($submit_search_perm_user);
+			if ($changeObject->storePerms($submit_search_perm_user))
+				$perms_changed=TRUE;
 	
 		//Object speichern
-		if ($changeObject->store())
-		;
+		if (($changeObject->store()) || ($perms_changed))
+			$msg->addMsg(8);
 	} else {
-		$error->displayMsg(1);
+		$msg->displayMsg(1);
 		die;
 	}
 	$resources_data["view"]="edit_object_perms";
@@ -388,7 +402,7 @@ if (($add_type) || ($delete_type) || ($add_type_property_id) || ($delete_type_pr
 			$db->query("DELETE FROM resources_categories_properties WHERE category_id='$delete_type_category_id' AND property_id='$delete_type_property_id' ");
 		}
 	/*} else {
-		$error->displayMsg(1);
+		$msg->displayMsg(1);
 		die;
 	}*/
 }
@@ -436,7 +450,7 @@ if (($add_property) || ($delete_property) || ($send_property_type_id)) {
 			$db->query("UPDATE resources_properties SET options='$options', type='$send_property_type' WHERE property_id='$send_property_type_id' ");
 		}
 	/*} else {
-		$error->displayMsg(1);
+		$msg->displayMsg(1);
 		die;
 	}*/
 }
@@ -458,7 +472,7 @@ if (($add_root_user) || ($delete_root_user_id)){
 				$db->query("UPDATE resources_user_resources SET perms='".$change_root_user_perms[$key]."' WHERE user_id='$val' ");
 			}
 	/*} else {
-		$error->displayMsg(1);
+		$msg->displayMsg(1);
 		die;
 	}*/
 }
@@ -547,19 +561,41 @@ include ("$RELATIVE_PATH_RESOURCES/views/page_intros.inc.php");
 ?>
 <table width="100%" cellspacing="0" cellpadding="0" border="0">
 	<tr>
-		<td class="topic">&nbsp;<img src="pictures/meinetermine.gif" border="0" align="absmiddle" alt="Ressourcen"><b>&nbsp;<? echo $title; ?></b></td>
+		<td class="topic" >&nbsp;<img src="pictures/meinetermine.gif" border="0" align="absmiddle" alt="Ressourcen"><b>&nbsp;<? echo $title; ?></b></td>
 	</tr>
+	<?
+	if ($infobox) {
+	?>
 	<tr>
 		<td class="blank">&nbsp;
-			<blockquote>
-			<? echo $page_intro ?>
-			</blockquote>
 		</td>
-	</tr>	
+	</tr>
+	<?
+	}
+	?>
 	<tr>
-		<td class="blank">
-
-<?	
+		<td class="blank" valign ="top">
+			<table width="100%" cellspacing="0" cellpadding="0" border="0">
+			<tr>
+				<td valign ="top">
+					<table width="100%" cellspacing="0" cellpadding="0" border="0">
+						<?
+						if ($msg->checkMsgs()) {	
+							print "<tr><td class=\"blank\">&nbsp; </td></tr>";
+							$msg->displayAllMsg($view_mode = "line");
+						}
+						?>
+						<tr>
+							<td class="blank"><br />
+								<blockquote>
+								<? echo $page_intro ?>
+								&nbsp; </blockquote>
+							</td>
+						</tr>	
+						<tr>
+							<td class="blank" valign ="top">
+	
+	<?	
 
 /*****************************************************************************
 Treeview, die Strukturdarstellung, views: resources, _resources, make_hierarchie
@@ -761,15 +797,28 @@ if ($resources_data["view"]=="search") {
 
 
 /*****************************************************************************
-Seite abschliessen
+Seite abschliessen und Infofenster aufbauen
 /*****************************************************************************/
-		?>
-			</td>
-		<tr>
-			<td class="blank">
-			&nbsp; 
-			</td>
-		</tr>
+		?>						</td>
+							</tr>
+						</table>
+					</td>
+				<?
+				if ($infobox) {
+					?>
+					<td class="blank" width="270" align="right" valign="top">
+						<? print_infobox ($infobox,"pictures/seminare.jpg");?>
+					</td>
+					<?
+				}
+			?>				
+				</tr>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td class="blank">&nbsp; 
+		</td>
 	</tr>
 </table>
 <?
