@@ -11,13 +11,6 @@
 * @modulegroup	library
 * @module				statusgruppe.inc.php
 */
-/**
-* workaround for PHPDoc
-*
-* Use this if module contains no elements to document !
-* @const PHPDOC_DUMMY
-*/
-define("PHPDOC_DUMMY",false);
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // statusgruppe.inc.php
@@ -43,8 +36,8 @@ define("PHPDOC_DUMMY",false);
 * @access private
 * @return	string
 */
-function MakeUniqueStatusgruppeID ()
-{	// baut eine ID die es noch nicht gibt
+function MakeUniqueStatusgruppeID () {
+	// baut eine ID die es noch nicht gibt
 
 	$hash_secret = "kertoiisdfgz";
 	$db=new DB_Seminar;
@@ -59,8 +52,8 @@ function MakeUniqueStatusgruppeID ()
 
 // Funktionen zum veraendern der Gruppen
 
-function AddNewStatusgruppe ($new_statusgruppe_name, $range_id, $new_statusgruppe_size)
-{
+function AddNewStatusgruppe ($new_statusgruppe_name, $range_id, $new_statusgruppe_size) {
+
 	$statusgruppe_id = MakeUniqueStatusgruppeID();
 	$mkdate = time();
 	$chdate = time();
@@ -75,28 +68,28 @@ function AddNewStatusgruppe ($new_statusgruppe_name, $range_id, $new_statusgrupp
 	return $statusgruppe_id;	
 } 
 
-function GetAllSelected ($range_id)
-{	
+function GetAllSelected ($range_id) {	
+
 	$zugeordnet[] = "";
-  	$db3=new DB_Seminar;
+  $db3=new DB_Seminar;
 	$db3->query ("SELECT DISTINCT user_id FROM statusgruppen LEFT JOIN statusgruppe_user USING(statusgruppe_id) WHERE range_id = '$range_id'");
 	while ($db3->next_record()) {
 		if (!in_array($db3->f("user_id"), $zugeordnet)) {
 			$zugeordnet[] = $db3->f("user_id");
 		}
 	}
-	RETURN $zugeordnet;
+	return $zugeordnet;
 }
 
-function EditStatusgruppe ($new_statusgruppe_name, $new_statusgruppe_size, $edit_id)
-{
+function EditStatusgruppe ($new_statusgruppe_name, $new_statusgruppe_size, $edit_id) {
+
 	$chdate = time();
 	$db=new DB_Seminar;
 	$db->query("UPDATE statusgruppen SET name = '$new_statusgruppe_name', size = '$new_statusgruppe_size', chdate = '$chdate' WHERE statusgruppe_id = '$edit_id'");
 }
 
-function InsertPersonStatusgruppe ($user_id, $statusgruppe_id)
-{
+function InsertPersonStatusgruppe ($user_id, $statusgruppe_id) {
+
 	$db=new DB_Seminar;
 	$db->query("SELECT * FROM statusgruppe_user WHERE statusgruppe_id = '$statusgruppe_id' AND user_id = '$user_id'");
 	if (!$db->next_record()) {			
@@ -108,15 +101,15 @@ function InsertPersonStatusgruppe ($user_id, $statusgruppe_id)
 	return $writedone;
 }
 
-function RemovePersonStatusgruppe ($username, $statusgruppe_id)
-{
+function RemovePersonStatusgruppe ($username, $statusgruppe_id) {
+
 	$user_id = get_userid($username);
 	$db=new DB_Seminar;
 	$db->query("DELETE FROM statusgruppe_user WHERE statusgruppe_id = '$statusgruppe_id' AND user_id = '$user_id'");
 }
 
-function RemovePersonFromAllStatusgruppen ($username)
-{
+function RemovePersonFromAllStatusgruppen ($username) {
+
 	$user_id = get_userid($username);
 	$db=new DB_Seminar;
 	$db->query("DELETE FROM statusgruppe_user WHERE user_id = '$user_id'");
@@ -124,8 +117,8 @@ function RemovePersonFromAllStatusgruppen ($username)
 	return $result;
 }
 
-function RemovePersonStatusgruppeComplete ($username, $range_id)
-{
+function RemovePersonStatusgruppeComplete ($username, $range_id) {
+
 	$user_id = get_userid($username);
 	$db=new DB_Seminar;
 	$db->query("SELECT DISTINCT statusgruppe_user.statusgruppe_id FROM statusgruppe_user LEFT JOIN statusgruppen USING(statusgruppe_id) WHERE range_id = '$range_id' AND user_id = '$user_id'");	
@@ -134,8 +127,8 @@ function RemovePersonStatusgruppeComplete ($username, $range_id)
 	}
 }
 
-function DeleteStatusgruppe ($statusgruppe_id)
-{
+function DeleteStatusgruppe ($statusgruppe_id) {
+
 	$db=new DB_Seminar;
 	$db->query("SELECT position, range_id FROM statusgruppen WHERE statusgruppe_id = '$statusgruppe_id'");
 	if ($db->next_record()) {
@@ -157,8 +150,8 @@ function DeleteStatusgruppe ($statusgruppe_id)
 	}
 }
 
-function DeleteAllStatusgruppen ($range_id)
-{
+function DeleteAllStatusgruppen ($range_id) {
+
 	$db=new DB_Seminar;
 	$i = 0;
 	$db->query("SELECT statusgruppe_id FROM statusgruppen WHERE range_id = '$range_id'");
@@ -170,8 +163,8 @@ function DeleteAllStatusgruppen ($range_id)
 	return $i;
 }
 
-function SwapStatusgruppe ($statusgruppe_id)
-{
+function SwapStatusgruppe ($statusgruppe_id) {
+
 	$db=new DB_Seminar;
 	$db->query("SELECT * FROM statusgruppen WHERE statusgruppe_id = '$statusgruppe_id'");
 	if ($db->next_record()) {
@@ -184,8 +177,8 @@ function SwapStatusgruppe ($statusgruppe_id)
 	}
 }
 
-function CheckStatusgruppe ($range_id, $name)
-{
+function CheckStatusgruppe ($range_id, $name) {
+
 	$db=new DB_Seminar;
 	$db->query("SELECT * FROM statusgruppen WHERE range_id = '$range_id' AND name = '$name'");
 	if ($db->next_record()) {
