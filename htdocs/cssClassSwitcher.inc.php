@@ -8,8 +8,6 @@
 * @version		$Id$
 * @access		public
 * @package		studip_core
-* @modulegroup	library
-* @module		cssClassSwitcher.inc.php
 */
 
 // +---------------------------------------------------------------------------+
