@@ -2,8 +2,8 @@
 /*
 This file is part of StudIP -
 chat_input.php
-Erzeugt das Eingabefenster,fgt geschriebene Nachrichten ein
-Copyright (c) 2002 Andr‚ Noack <andre.noack@gmx.net>
+Erzeugt das Eingabefenster,fügt geschriebene Nachrichten ein
+Copyright (c) 2002 André Noack <andre.noack@gmx.net>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -65,7 +65,7 @@ $chatServer=new ChatShmServer;
 </head>
 <body style="background-color:white;background-image:url('pictures/steel1.jpg');">
 <?
-//darf ich berhaupt hier sein ?
+//darf ich überhaupt hier sein ?
 if (!$chatServer->isActiveUser($user->id,$chatid)) {
      ?><table width="100%"><tr><?
      my_error("Du bist nicht in diesem Chat
@@ -76,7 +76,7 @@ if (!$chatServer->isActiveUser($user->id,$chatid)) {
 }
 
 
-//neue chatnachricht einfgen
+//neue chatnachricht einfügen
 if ($chatInput) {
 	if ($chatServer->isActiveUser($user->id,$chatid)){
           $chatInput=stripslashes($chatInput);

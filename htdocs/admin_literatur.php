@@ -1,7 +1,7 @@
 <?php
 /*
 admin_literatur.php - Literaturverwaltung von Stud.IP
-Copyright (C) 2000 Andr‚ Noack <anoack@mcis.de>, Cornelis Kater <ckater@gwdg.de>, Stefan Suchi <suchi@gmx.de>
+Copyright (C) 2000 André Noack <anoack@mcis.de>, Cornelis Kater <ckater@gwdg.de>, Stefan Suchi <suchi@gmx.de>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -73,7 +73,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 	  	
  	//maximale spaltenzahl berechnen
 	if ($auth->auth["jscript"]) $max_col = round($auth->auth["xres"] / 12 );
-		else $max_col =  64 ; //default fr 640x480
+		else $max_col =  64 ; //default für 640x480
 
 
 	 if($aendern && $range_id)
@@ -81,14 +81,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 		 if ($new_entry)
 			 {
 			 $db->query("INSERT INTO literatur VALUES ('$lit_id','$range_id','$user->id','$literatur','$links', '".time()."', '".time()."')");
-			 if ($db->affected_rows()) $result="msgºListen ge&auml;ndert";
+			 if ($db->affected_rows()) $result="msg§Listen ge&auml;ndert";
 			 }
 
 		 else
 			 {
 			 $db->query("UPDATE literatur SET user_id='$user->id', literatur='$literatur', links='$links' WHERE literatur_id='$lit_id'");
 			 if ($db->affected_rows()) {
-			 	$result="msgºListen ge&auml;ndert";
+			 	$result="msg§Listen ge&auml;ndert";
 			 	$db->query("UPDATE literatur SET chdate='".time()."' WHERE literatur_id='$lit_id'");
 			 	}
 			 }
@@ -145,8 +145,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 	  if (!$db->num_rows())
 		{
 		$new_entry=TRUE;
-		$literatur="Keine Eintr„ge";
-		$links="Keine Eintr„ge";
+		$literatur="Keine Einträge";
+		$links="Keine Einträge";
 		$hash_secret = "blafasel25";
 		$lit_id=md5(uniqid($hash_secret));
 		$autor=get_fullname();
@@ -164,7 +164,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 		 }
 	  echo"<tr><td width=\"100%\" align=\"center\" colspan=2>";
 	  echo"<textarea  name=\"literatur\"  style=\"width: 100%\" cols=$max_col rows=10 wrap=virtual >$literatur</textarea></td></tr>";
-	  echo"<tr><td width=\"50%\" align=\"left\" class=\"steel1\">&nbsp; &Auml;nderungen <input type=\"IMAGE\" align=\"absmiddle\" name=\"send_button\" value=\"Žnderungen vornehmen\" border=0 src=\"pictures/buttons/uebernehmen-button.gif\"></td>";
+	  echo"<tr><td width=\"50%\" align=\"left\" class=\"steel1\">&nbsp; &Auml;nderungen <input type=\"IMAGE\" align=\"absmiddle\" name=\"send_button\" value=\"Änderungen vornehmen\" border=0 src=\"pictures/buttons/uebernehmen-button.gif\"></td>";
 	  echo"<td width=\"50%\" align=\"center\" class=\"steel1\"><font size=-1>Eingestellt von: <b><a href=\"about.php?username=".$db2->f("username")."\">$autor</a></b>";
 	  if ($db->f("chdate"))
 	  	echo ", letzte &Auml;nderung am ".date("d.m.y", $db->f("chdate"))." um ",date("H:i", $db->f("chdate"));
@@ -184,7 +184,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 	  echo"<form action=\"$PHP_SELF\" method=\"POST\"><tr><td width=\"100%\" align=\"center\" colspan=\"2\">";
 	  echo"<textarea  name=\"links\"  style=\"width: 100%\" cols=$max_col rows=10 wrap=virtual >$links</textarea></td></tr>";
- 	  echo"<tr><td width=\"50%\" align=\"left\" class=\"steel1\">&nbsp; &Auml;nderungen <input type=\"IMAGE\" align=\"absmiddle\" name=\"send_button\" value=\"Žnderungen vornehmen\" border=0 src=\"pictures/buttons/uebernehmen-button.gif\"></td>";
+ 	  echo"<tr><td width=\"50%\" align=\"left\" class=\"steel1\">&nbsp; &Auml;nderungen <input type=\"IMAGE\" align=\"absmiddle\" name=\"send_button\" value=\"Änderungen vornehmen\" border=0 src=\"pictures/buttons/uebernehmen-button.gif\"></td>";
 	  echo"<td width=\"50%\" align=\"center\" class=\"steel1\"><font size=-1>Eingestellt von: <b><a href=\"about.php?username=".$db2->f("username")."\">$autor</a></b>";
 		  if ($db->f("chdate"))
 	  	echo ", letzte &Auml;nderung am ".date("d.m.y", $db->f("chdate"))." um ",date("H:i", $db->f("chdate"));

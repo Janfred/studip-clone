@@ -59,7 +59,7 @@ $db3=new DB_Seminar;
 //wenn kein Seminar gesetzt und auch kein externer Aufruf raus....
 IF (($SessSemName[1] =="") && (!isset($sem_id)))
 	{
-	parse_window ("errorºSie haben kein Objekt gew&auml;hlt. <br /><font size=-1 color=black>Dieser Teil des Systems kann nur genutzt werden, wenn Sie vorher ein Objekt (Veranstaltung oder Einrichtung) gew&auml;hlt haben.<br /><br /> Dieser Fehler tritt auch auf, wenn Ihre Session abgelaufen ist. Wenn sie sich l„nger als $AUTH_LIFETIME Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurck zur Anmeldung zu gelangen. </font>", "º",
+	parse_window ("error§Sie haben kein Objekt gew&auml;hlt. <br /><font size=-1 color=black>Dieser Teil des Systems kann nur genutzt werden, wenn Sie vorher ein Objekt (Veranstaltung oder Einrichtung) gew&auml;hlt haben.<br /><br /> Dieser Fehler tritt auch auf, wenn Ihre Session abgelaufen ist. Wenn sie sich länger als $AUTH_LIFETIME Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurück zur Anmeldung zu gelangen. </font>", "§",
 				"Keine Veranstaltung gew&auml;hlt", 
 				"<a href=\"index.php\"><b>&nbsp;Hier</b></a> geht es wieder zur Anmeldung beziehungsweise Startseite.<br />&nbsp;");
 	die;
@@ -71,12 +71,12 @@ if ($perm->have_perm("user")) { //Add lecture only if logged in
 	 {
 		$db->query("SELECT status FROM seminar_user WHERE user_id ='$user->id' AND Seminar_id = '$sem_id'");
 		if (!$db->num_rows()) {
-			$msg="infoº<font size=+1><b>Wenn sie diese Veranstaltung abonnieren m&ouml;chten, klicken sie bitte <a href=\"sem_verify.php?id=".$sem_id."&send_from_search=".$send_from_search."\">hier</a></b></font>º";
+			$msg="info§<font size=+1><b>Wenn sie diese Veranstaltung abonnieren m&ouml;chten, klicken sie bitte <a href=\"sem_verify.php?id=".$sem_id."&send_from_search=".$send_from_search."\">hier</a></b></font>§";
 			}
 	 else {
 		    $db->next_record();
 		    if ($db->f("status") == "user") {
-			$msg="infoº<font size=+1><b>Wenn sie Schreibrechte in diese Veranstaltung beantragen m&ouml;chten, klicken sie bitte <a href=\"sem_verify.php?id=".$sem_id."&send_from_search=".$send_from_search."\">hier</a></b></font>º";
+			$msg="info§<font size=+1><b>Wenn sie Schreibrechte in diese Veranstaltung beantragen m&ouml;chten, klicken sie bitte <a href=\"sem_verify.php?id=".$sem_id."&send_from_search=".$send_from_search."\">hier</a></b></font>§";
 	    		}
 		}
 	}
@@ -108,7 +108,7 @@ elseif (($SessSemName[1] <>"") && (!isset($sem_id)))
 	</b></td></tr>
 	<?
 	if ($send_from_search)
-	    	$msg.="infoºUm zur letzten Auswahl zue&uuml;ckzukehren, klicken Sie bitte <a href=\"$send_from_search_page\">hier</a>";
+	    	$msg.="info§Um zur letzten Auswahl zue&uuml;ckzukehren, klicken Sie bitte <a href=\"$send_from_search_page\">hier</a>";
 
 	if ($msg)
 		{
@@ -443,7 +443,7 @@ elseif (($SessSemName[1] <>"") && (!isset($sem_id)))
 				<td class="<? echo $cssSw->getClass() ?>" colspan=2 width="48%">
 				<?
 				printf ("<font size=-1><b>Schreibberechtigung:&nbsp;</b></font><font size=-1>%s </font>",$db3->f("anzahl"));
-					if ($mein_status == "dozent" || $mein_status == "tutor" || $mein_status == "autor") { // in den F„llen darf ich auf jeden Fall schreiben
+					if ($mein_status == "dozent" || $mein_status == "tutor" || $mein_status == "autor") { // in den Fällen darf ich auf jeden Fall schreiben
 					echo"<img border=\"0\" src=\"pictures/ampel_gruen.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>(bereits Teilnehmer)</font>";
 				} else {
 					switch($db2->f("Schreibzugriff")){

@@ -90,7 +90,7 @@ while ( is_array($HTTP_POST_VARS)
   case "kill_bereich":
   	{
 	$db->query("DELETE FROM bereich_fach WHERE bereich_id = '$bereich_id' AND fach_id ='$i_view'");
-	if ($db->affected_rows()==0)  parse_msg("errorºDatenbankoperation gescheitert."); else parse_msg("msgºDie Zuordnung wurde aufgehoben");
+	if ($db->affected_rows()==0)  parse_msg("error§Datenbankoperation gescheitert."); else parse_msg("msg§Die Zuordnung wurde aufgehoben");
 	break;
   	}
   	
@@ -98,7 +98,7 @@ while ( is_array($HTTP_POST_VARS)
   case "add_bereich":
   	{
 	$db->query("INSERT INTO bereich_fach VALUES ('$bereich_id', '$i_view')");
-	if ($db->affected_rows()==0)  parse_msg("errorºDatenbankoperation gescheitert."); else parse_msg("msgºDer Bereich wurde dem Fach zugeordnet");
+	if ($db->affected_rows()==0)  parse_msg("error§Datenbankoperation gescheitert."); else parse_msg("msg§Der Bereich wurde dem Fach zugeordnet");
 	break;
   	}
   
@@ -173,7 +173,7 @@ while ( is_array($HTTP_POST_VARS)
       break;
     }
     
-		unset($i_view);  // wenn wir das Fach gel÷scht haben, wollen wir nicht in die Detail-Ansicht dieses Faches...
+		unset($i_view);  // wenn wir das Fach gelöscht haben, wollen wir nicht in die Detail-Ansicht dieses Faches...
     my_msg("<b>Das Fach \"".htmlReady(stripslashes($Name))."\" wurde gel&ouml;scht!");
   break;
   

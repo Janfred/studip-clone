@@ -39,22 +39,22 @@ if (!($perm->have_perm("root"))) {
 		//$error_msg = "<br><b>Sie haben nicht die Berechtigung in dieser Veranstaltung zu schreiben!</b><br><br>";
 		switch ($SemSecLevelWrite) {
 			case 2 : 
-				$error_msg=$error_msg."errorºIn dieser Veranstaltung ist ein Passwort f&uuml;r den Schreibzugriff n&ouml;tig.<br>Zur <a href=\"sem_verify.php\">Passworteingabe</a>º";
+				$error_msg=$error_msg."error§In dieser Veranstaltung ist ein Passwort f&uuml;r den Schreibzugriff n&ouml;tig.<br>Zur <a href=\"sem_verify.php\">Passworteingabe</a>§";
 				break;
 			case 1 :
 				if ($perm->have_perm("autor"))
-					$error_msg=$error_msg."infoºSie mssen sich erneut fr diese Veranstaltung anmelden, um schreiben zu k÷nnen!<br>Hie kommen sie zur <a href=\"sem_verify.php\">Freischaltung</a> der Veranstaltung.º";
+					$error_msg=$error_msg."info§Sie müssen sich erneut für diese Veranstaltung anmelden, um schreiben zu können!<br>Hie kommen sie zur <a href=\"sem_verify.php\">Freischaltung</a> der Veranstaltung.§";
 				elseif ($perm->have_perm("user"))
-					$error_msg=$error_msg."infoºBitte folgen Sie den Anweisungen in der Registrierungsmail.º";
+					$error_msg=$error_msg."info§Bitte folgen Sie den Anweisungen in der Registrierungsmail.§";
 				else
-					$error_msg=$error_msg."infoºBitte melden Sie sich an.<br>Hier geht es zur <a href=\"register1.php\">Registrierung</a> wenn Sie noch keinen Account im System haben.º";
+					$error_msg=$error_msg."info§Bitte melden Sie sich an.<br>Hier geht es zur <a href=\"register1.php\">Registrierung</a> wenn Sie noch keinen Account im System haben.§";
 				break;
 			default :
 				//Wenn Schreiben fuer Nobody jemals wieder komplett verboten werden soll, diesen Teil bitte wieder einkommentieren (man wei&szlig; ja nie...)
 				//$error_msg=$error_msg."Bitte melden Sie sich an.<br><br><a href=\"register1.php\"><b>Registrierung</b></a> wenn Sie noch keinen Account im System haben.<br><a href=\"index.php?again=yes\"><b>Login</b></a> f&uuml;r registrierte Benutzer.<br><br>";
 				break; 
 			}
-		$error_msg=$error_msg."infoºDieser Fehler kann auch aufteten, wenn Sie zu lange inaktiv gewesen sind. <br />Wenn sie l&auml;nger als $AUTH_LIFETIME Minuten keine Aktion mehr ausgef&uuml;hrt haben, m&uuml;ssen sie sich neu anmelden.º";
+		$error_msg=$error_msg."info§Dieser Fehler kann auch aufteten, wenn Sie zu lange inaktiv gewesen sind. <br />Wenn sie l&auml;nger als $AUTH_LIFETIME Minuten keine Aktion mehr ausgef&uuml;hrt haben, m&uuml;ssen sie sich neu anmelden.§";
 		}
 	}
 return $error_msg;
@@ -111,7 +111,7 @@ function get_perm($range_id,$user_id="")
 	$db->query("SELECT user_inst.Institut_id, seminare.Seminar_id FROM user_inst LEFT JOIN seminare ON (user_inst.Institut_id=seminare.Institut_id AND seminare.Seminar_id='$range_id') WHERE inst_perms='admin' AND user_id='$user_id'");
 	if ($db->num_rows())
 		{
-		// Eintrag gefunden, also ein zum Instadmin geh÷riges Seminar
+		// Eintrag gefunden, also ein zum Instadmin gehöriges Seminar
 		$status="admin";
 		}
 	}

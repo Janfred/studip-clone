@@ -1,6 +1,5 @@
 <?php
 /*
-
 about.php - Anzeige der persoenlichen Userseiten von Stud.IP
 Copyright (C) 2000 Ralf Stockmann <rstockm@gwdg.de>, Stefan Suchi <suchi@gmx.de>, Niclas Nohlen <nnohlen@gwdg.de>
 
@@ -141,7 +140,7 @@ if (!isset($username) || $username == "")
 if ($msg)
 	{
 	echo"<tr><td class=\"steel1\"colspan=2><br>";
-	parse_msg ($msg, "º", "steel1");
+	parse_msg ($msg, "§", "steel1");
 	echo"</td></tr>";
 	}
 ?>

@@ -1,7 +1,7 @@
 <?php
 /*
 online.php - Anzeigemodul fuer Personen die Online sind
-Copyright (C) 2002 Andr‚ Noack <andre.noack@gmx.net>, Cornelis Kater <ckater@gwdg.de>
+Copyright (C) 2002 André Noack <andre.noack@gmx.net>, Cornelis Kater <ckater@gwdg.de>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License

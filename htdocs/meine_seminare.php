@@ -148,11 +148,11 @@ $db=new DB_Seminar;
 //bei Bedarf aus seminar_user austragen
 if ($cmd=="kill") {
 	$db->query("DELETE FROM seminar_user WHERE user_id='$user->id' AND Seminar_id='$auswahl'");
-	if ($db->affected_rows() == 0)  $meldung="errorºDatenbankfehler!";
+	if ($db->affected_rows() == 0)  $meldung="error§Datenbankfehler!";
 	else {
 	  $db->query("SELECT Name FROM seminare WHERE Seminar_id = '$auswahl'");
 	  $db->next_record();
-	  $meldung="msgºDas Abonnement der Veranstaltung <b>".$db->f("Name")."</b> wurde aufgehoben. Sie sind nun nicht mehr als Teilnehmer dieser Veranstaltung im System registriert.";
+	  $meldung="msg§Das Abonnement der Veranstaltung <b>".$db->f("Name")."</b> wurde aufgehoben. Sie sind nun nicht mehr als Teilnehmer dieser Veranstaltung im System registriert.";
 	}
 }
 	 
@@ -172,7 +172,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
      $sortby = "count DESC";
 	$db->query ("SELECT seminare.Name, seminare.Seminar_id, seminar_user.status, seminar_user.gruppe, seminare.chdate FROM seminare LEFT JOIN seminar_user USING (Seminar_id) WHERE seminar_user.user_id = '$user->id' GROUP BY Seminar_id ORDER BY $sortby");
 	$num_my_sem=$db->num_rows();
-     if (!$num_my_sem) $meldung="msgºSie haben keine Veranstaltungen abonniert!º".$meldung;
+     if (!$num_my_sem) $meldung="msg§Sie haben keine Veranstaltungen abonniert!§".$meldung;
      ?>
      <table width="100%" border=0 cellpadding=0 cellspacing=0>
 	<tr>
@@ -290,7 +290,7 @@ ELSEIF ($auth->auth["perm"]=="admin"){
        $sortby = "teilnehmer DESC";
        $db->query("SELECT Institute.Name AS Institut, seminare.*, COUNT(seminar_user.user_id) AS teilnehmer FROM user_inst LEFT JOIN Institute USING (Institut_id) LEFT JOIN seminare USING(Institut_id) LEFT OUTER JOIN seminar_user USING(Seminar_id) WHERE user_inst.inst_perms='admin' AND user_inst.user_id='$user->id' AND seminare.Institut_id is not NULL GROUP BY seminare.Seminar_id ORDER BY $sortby");
        $num_my_sem=$db->num_rows();
-       if (!$num_my_sem) $meldung="msgºSie haben keine Veranstaltungen!º".$meldung;
+       if (!$num_my_sem) $meldung="msg§Sie haben keine Veranstaltungen!§".$meldung;
 	 ?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
 	<tr>
@@ -394,7 +394,7 @@ ELSEIF ($auth->auth["perm"]=="admin"){
 ELSEIF ($perm->have_perm("root")){
 
 
-//Anzeigemodul fuer alle Seminare fr root
+//Anzeigemodul fuer alle Seminare für root
 	?>
 	<body>
 	<br>

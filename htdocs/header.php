@@ -57,7 +57,7 @@ if ($CHAT_ENABLE) {
 		<table class="header" border="0" width="100%" background="pictures/fill1.gif" cellspacing="0" cellpadding="0" bordercolor="#999999" height="25">
 			<tr>
 				<td class="header" width="33%" valign="bottom" align="left" background="pictures/fill1.gif">
-					&nbsp;<a href="index.php" target="_top"><img border="0" src="pictures/home.gif" alt="zurck zur Startseite"></a>
+					&nbsp;<a href="index.php" target="_top"><img border="0" src="pictures/home.gif" alt="zurück zur Startseite"></a>
 					&nbsp;<a href="./help/index.php<?echo $help_query?>" target="_new"><img border="0" src="pictures/hilfe.gif" alt="Hilfe" width="24" height="21"></a>
 					&nbsp;<a href="freie.php"><img border="0" src="pictures/meinesem.gif" alt="Freie Veranstaltungen" width="24" height="21"></a></td>
 				<td class="angemeldet" width="20%" nowrap bgcolor="#C0C0C0" align="center" valign="middle" background="pictures/kaverl1b.jpg">
@@ -115,7 +115,7 @@ if ($CHAT_ENABLE) {
 		<table class="header" border="0" width="100%" background="pictures/fill1.gif" cellspacing="0" cellpadding="0" bordercolor="#999999" height="25">
 			<tr>
 				<td class="header" width="33%" valign="bottom" background="pictures/fill1.gif">
-					&nbsp;<a href="index.php" target="_top"><img border="0" src="pictures/home.gif" alt="zurck zur Startseite" width="24" height="21"></a>
+					&nbsp;<a href="index.php" target="_top"><img border="0" src="pictures/home.gif" alt="zurück zur Startseite" width="24" height="21"></a>
 					&nbsp;<a href="./help/index.php<?echo $help_query?>" target="_new"><img border="0" src="pictures/hilfe.gif" alt="Hilfe" width="24" height="21"></a>
 					&nbsp;<a href="meine_seminare.php"><img border="0" src="pictures/meinesem.gif" alt="Meine Veranstaltungen" width="24" height="21"></a>
 					&nbsp;&nbsp;&nbsp;
@@ -135,7 +135,7 @@ if ($CHAT_ENABLE) {
 		echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 
 		// wurde ich zum Chat eingeladen? Wenn nicht, nachsehen ob wer im Chat ist
-          //Version fr neuen Chat (vorl„ufig)
+          //Version für neuen Chat (vorläufig)
   if ($CHAT_ENABLE) {
 
           if (($chatm) && ($i_page != "sms.php") && (!$chatServer->isActiveUser($user->id,"studip"))) {
@@ -193,7 +193,7 @@ if ($CHAT_ENABLE) {
 					print ", Letztes Login: ";
 					print date ("d. M Y, H:i:s", $LastLogin);
 					if ($auth->auth["jscript"]) print " JavaScript eingeschaltet, ";
-					if ($auth->auth["xres"]) print "Aufl÷sung :".$auth->auth["xres"]."x".$auth->auth["yres"];
+					if ($auth->auth["xres"]) print "Auflösung :".$auth->auth["xres"]."x".$auth->auth["yres"];
 					echo "');\" ";
 					}
 			?> alt="<?
@@ -206,7 +206,7 @@ if ($CHAT_ENABLE) {
 				print ", Letztes Login: ";
 				print date ("d. M Y, H:i:s", $LastLogin);
 				if ($auth->auth["jscript"]) print " JavaScript eingeschaltet, ";
-				if ($auth->auth["xres"]) print "Aufl÷sung :".$auth->auth["xres"]."x".$auth->auth["yres"];
+				if ($auth->auth["xres"]) print "Auflösung :".$auth->auth["xres"]."x".$auth->auth["yres"];
 			?>">
 			</font>
 		</td>

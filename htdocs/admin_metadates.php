@@ -131,7 +131,7 @@ if (($turnus_refresh) || ($term_metadates["start_woche"] ==-1))
 
 	if (!checkdate($monat, $tag, $jahr) && ($monat) && ($tag) && ($jahr))
 		{
-		$errormsg=$errormsg."errorºBitte geben Sie ein g&uuml;ltiges Datum ein!º";
+		$errormsg=$errormsg."error§Bitte geben Sie ein g&uuml;ltiges Datum ein!§";
 		$check=FALSE;			
 		}
 	else
@@ -172,7 +172,7 @@ if ($delete_turnus_field)
 //Checks performen
 if (($term_metadata["sem_duration_time"]<0) && ($term_metadata["sem_duration_time"] != -1))
 	{ 
-	$errormsg=$errormsg."errorºDas Endsemester darf nicht vor dem Startsemester liegen, bitte &auml;ndern Sie die entsprechenden Einstellungen!º";
+	$errormsg=$errormsg."error§Das Endsemester darf nicht vor dem Startsemester liegen, bitte &auml;ndern Sie die entsprechenden Einstellungen!§";
 	}
 	
 if (($term_metadata["art"]==0) && (!$term_metadata["block_na"]))
@@ -183,18 +183,18 @@ if (($term_metadata["art"]==0) && (!$term_metadata["block_na"]))
 			if ((($term_metadata["turnus_data"][$i]["start_stunde"]) && (!$term_metadata["turnus_data"][$i]["end_stunde"])) || ((!$term_metadata["turnus_data"][$i]["start_stunde"]) && ($term_metadata["end_stunde"])))
 					{
 					if (!$just_informed)
-						$errormsg=$errormsg."errorºBitte f&uuml;llen Sie beide Felder f&uuml;r Start- und Endzeit der regul&auml;ren Termine aus!º";	
+						$errormsg=$errormsg."error§Bitte f&uuml;llen Sie beide Felder f&uuml;r Start- und Endzeit der regul&auml;ren Termine aus!§";	
 					$just_informed=TRUE;
 					}
 			if ((($term_metadata["turnus_data"][$i]["start_stunde"]>23) || ($term_metadata["turnus_data"][$i]["start_stunde"]<0))  ||  (($term_metadata["turnus_data"][$i]["start_minute"]>59) || ($term_metadata["turnus_data"][$i]["start_minute"]<0))  ||  (($term_metadata["turnus_data"][$i]["end_stunde"]>23) ||($term_metadata["turnus_data"][$i]["end_stunde"]<0))  || (($term_metadata["turnus_data"][$i]["end_minute"]>59) || ($term_metadata["turnus_data"][$i]["end_minute"]<0)))
 					{
 					if (!$just_informed3)
-						$errormsg=$errormsg."errorºSie haben eine ung&uuml;ltige Zeit eingegeben, bitte korrigieren sie dies!$";	
+						$errormsg=$errormsg."error§Sie haben eine ung&uuml;ltige Zeit eingegeben, bitte korrigieren sie dies!$";	
 					$just_informed3=TRUE;
 					}
 			if (mktime($term_metadata["turnus_data"][$i]["start_stunde"], $term_metadata["turnus_data"][$i]["start_minute"], 0, 1, 1, 2001) > mktime($term_metadata["turnus_data"][$i]["end_stunde"], $term_metadata["turnus_data"][$i]["end_minute"], 0, 1, 1, 2001)) 
 				if ((!$just_informed5) && (!$just_informed)) {
-					$errormsg=$errormsg."errorºDie jeweilige Endzeitpunkt der regul&auml;ren Termine muss nach dem jeweiligen Startzeitpunkt liegen!º";
+					$errormsg=$errormsg."error§Die jeweilige Endzeitpunkt der regul&auml;ren Termine muss nach dem jeweiligen Startzeitpunkt liegen!§";
 					$just_informed5=TRUE;				
 				}
 			}
@@ -203,20 +203,20 @@ if (($term_metadata["art"]==0) && (!$term_metadata["block_na"]))
 					$empty_fields++;
 				else
 					{
-					$errormsg=$errormsg."errorºSie haben nicht alle Felder der regul&auml;ren Termine ausgef&uuml;llt, bitte korrigieren sie dies!º";
+					$errormsg=$errormsg."error§Sie haben nicht alle Felder der regul&auml;ren Termine ausgef&uuml;llt, bitte korrigieren sie dies!§";
 					$just_informed4=TRUE;
 					}
 	if ($empty_fields == $term_metadata["turnus_count"])
 		{
-		$errormsg=$errormsg."errorºBitte geben Sie wenigstens einen  regul&auml;ren Termin f&uuml;r die Veranstaltung an!  Wenn Sie keine regul&auml;ren Termine eingeben wollen, aktivieren Sie bitte das Kontrollk&auml;stchen \"keine Zeiten eingeben\".º";
+		$errormsg=$errormsg."error§Bitte geben Sie wenigstens einen  regul&auml;ren Termin f&uuml;r die Veranstaltung an!  Wenn Sie keine regul&auml;ren Termine eingeben wollen, aktivieren Sie bitte das Kontrollk&auml;stchen \"keine Zeiten eingeben\".§";
 		}
 	}
 
 if (($term_metadata["start_termin"] == -1) && ($term_metadata["start_woche"] ==-1))
-	$errormsg=$errormsg."errorºBitte geben Sie einen ersten Termin an!º";	
+	$errormsg=$errormsg."error§Bitte geben Sie einen ersten Termin an!§";	
 else
 	if ((($stunde) && (!$end_stunde)) || ((!$stunde) && ($end_stunde)))
-		$errormsg=$errormsg."errorºBitte f&uuml;llen Sie beide Felder f&uuml;r Start- und Endzeit des ersten Termins aus!º";	
+		$errormsg=$errormsg."error§Bitte f&uuml;llen Sie beide Felder f&uuml;r Start- und Endzeit des ersten Termins aus!§";	
 }
 
 //Umschalter zwischen den Typen
@@ -265,7 +265,7 @@ if (($save) && (!$errormsg))
 	//speichern
 	$db->query ("UPDATE seminare SET metadata_dates='$serialized_metadata', start_time='".$term_metadata["sem_start_time"]."', duration_time='".$term_metadata["sem_duration_time"]."' WHERE Seminar_id ='".$term_metadata["sem_id"]."'");
 	if ($db->affected_rows()) {
-		$errormsg.="msgºDie allgemeinen Termindaten wurden aktualisiertº";
+		$errormsg.="msg§Die allgemeinen Termindaten wurden aktualisiert§";
 		$db->query ("UPDATE seminare SET chdate='".time()."' WHERE Seminar_id ='".$term_metadata["sem_id"]."'");
 		}
 	$metadata_saved=TRUE;

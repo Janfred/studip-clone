@@ -261,7 +261,7 @@ else {
 					if ($db2->affected_rows())
 						my_msg("<b>$Fullname wurde als \"autor\" in die Einrichtung aufgenommen. Bitte verwenden Sie die untere Tabelle, um Rechte etc. zu &auml;ndern!</b>");
 					else
-						parse_msg ("errorº<b>$Fullname konnte nicht in die Einrichtung aufgenommen werden!º");
+						parse_msg ("error§<b>$Fullname konnte nicht in die Einrichtung aufgenommen werden!§");
 				}
 			}
 		}
@@ -412,7 +412,7 @@ if ($inst_id != "" && $inst_id !="0") {
 	if (!isset($sortby) || $sortby=="") 
 		$sortby = "Nachname";
 
-	//entweder wir gehoeren auch zum Institut oder sind global root und es ist ein Institut ausgew„hlt
+	//entweder wir gehoeren auch zum Institut oder sind global root und es ist ein Institut ausgewählt
 	$db2->query("SELECT Institut_id FROM user_inst WHERE Institut_id = '$inst_id' AND user_id = '$user->id'");
 	if ($db2->num_rows() > 0 || ($perm->have_perm("root") && isset($inst_id))) {  
 	  	$query = "SELECT * FROM user_inst LEFT JOIN auth_user_md5 USING (user_id) WHERE Institut_id ='$inst_id' AND inst_perms !='user' ORDER BY $sortby";

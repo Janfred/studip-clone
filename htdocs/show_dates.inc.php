@@ -1,7 +1,7 @@
 <?
 /*
-show_dates.inc.php enth„lt Funktionen zum Anzeigen von Terminen
-Copyright (C) 2000 Andr‚ Noack <anoack@mcis.de>, Cornelis Kater <ckater@gwdg.de>,
+show_dates.inc.php enthält Funktionen zum Anzeigen von Terminen
+Copyright (C) 2000 André Noack <anoack@mcis.de>, Cornelis Kater <ckater@gwdg.de>,
 Stefan Suchi <suchi@gmx.de>
 
 This program is free software; you can redistribute it and/or
@@ -47,7 +47,7 @@ function show_dates ($range_id, $date_start, $date_end, $show_not=0, $show_docs=
 	
 	if ($show_admin) {
 		if ($range_id == $user->id)
-			// Fr pers÷nliche Termine Einsprung in Terminkalender
+			// Für persönliche Termine Einsprung in Terminkalender
 			$admin_link="<a href=\"kalender.php?cmd=edit\">";
 		else
 			$admin_link="<a href=\"admin_dates.php?new_sem=TRUE&ebene=sem&range_id=".$range_id."\">";
@@ -104,7 +104,7 @@ function show_dates ($range_id, $date_start, $date_end, $show_not=0, $show_docs=
 		if ($show_admin) {
 			$colspan++;
 			if (!$show_whole_time) {
-				echo "\n<tr><td class='topic' width=\"99%\">&nbsp;<img src='./pictures/icon-uhr.gif' border='0' alt='Termine. Klicken Sie rechts auf die Pfeile, um Termine in diesen Bereich zu bearbeiten. Klicken Sie auf den einfachen Pfeil, um die Terminbeschreibung zu lesen.' align='texttop'><b>&nbsp;&nbsp;Termine fr die Zeit vom ".strftime("%d. %B %Y", $date_start)." bis zum ".strftime("%d. %B %Y", $date_end)."</b></td>";
+				echo "\n<tr><td class='topic' width=\"99%\">&nbsp;<img src='./pictures/icon-uhr.gif' border='0' alt='Termine. Klicken Sie rechts auf die Pfeile, um Termine in diesen Bereich zu bearbeiten. Klicken Sie auf den einfachen Pfeil, um die Terminbeschreibung zu lesen.' align='texttop'><b>&nbsp;&nbsp;Termine für die Zeit vom ".strftime("%d. %B %Y", $date_start)." bis zum ".strftime("%d. %B %Y", $date_end)."</b></td>";
 				echo "\n<td align = 'right' class='topic'>&nbsp;$admin_link<img src='./pictures/pfeillink.gif' border='0' alt='Termine bearbeiten'></a>&nbsp;</td></tr>";
 				} 
 			else {
@@ -114,7 +114,7 @@ function show_dates ($range_id, $date_start, $date_end, $show_not=0, $show_docs=
 			}
 		else
 			if (!$show_whole_time)
-				echo "\n<tr valign='baseline'><td class='topic'>&nbsp;<img src='./pictures/icon-uhr.gif' border='0' alt='Termine. Klicken Sie auf den einfachen Pfeil, um die Terminbeschreibung zu lesen.' align='texttop'><b>&nbsp;&nbsp;Termine fr die Zeit vom ".strftime("%d. %B %Y", $date_start)." bis zum ".strftime("%d. %B %Y", $date_end)."</b></td></tr>";
+				echo "\n<tr valign='baseline'><td class='topic'>&nbsp;<img src='./pictures/icon-uhr.gif' border='0' alt='Termine. Klicken Sie auf den einfachen Pfeil, um die Terminbeschreibung zu lesen.' align='texttop'><b>&nbsp;&nbsp;Termine für die Zeit vom ".strftime("%d. %B %Y", $date_start)." bis zum ".strftime("%d. %B %Y", $date_end)."</b></td></tr>";
 			else
 				echo "\n<tr valign='baseline'><td class='topic'>&nbsp;<img src='./pictures/icon-uhr.gif' border='0' alt='Termine. Klicken Sie auf den einfachen Pfeil, um die Terminbeschreibung zu lesen.' align='texttop'><b>&nbsp;&nbsp;Termine</b></td></tr>";
 		echo "\n";
@@ -239,11 +239,11 @@ function show_personal_dates ($range_id, $date_start, $date_end, $show_docs=FALS
 		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" align=\"center\">";
 		if($show_admin){
 			$colspan++;
-			echo "\n<tr><td class='topic' width=\"99%\">&nbsp;<img src='./pictures/icon-uhr.gif' border='0' alt='Termine. Klicken Sie rechts auf die Pfeile, um Termine in diesen Bereich zu bearbeiten. Klicken Sie auf den einfachen Pfeil, um die Terminbeschreibung zu lesen.' align='absmiddle'><b>&nbsp;&nbsp;Termine fr die Zeit vom ".strftime("%d. %B %Y", $list->getStart())." bis zum ".strftime("%d. %B %Y", $list->getEnd())."</b></td>";
+			echo "\n<tr><td class='topic' width=\"99%\">&nbsp;<img src='./pictures/icon-uhr.gif' border='0' alt='Termine. Klicken Sie rechts auf die Pfeile, um Termine in diesen Bereich zu bearbeiten. Klicken Sie auf den einfachen Pfeil, um die Terminbeschreibung zu lesen.' align='absmiddle'><b>&nbsp;&nbsp;Termine für die Zeit vom ".strftime("%d. %B %Y", $list->getStart())." bis zum ".strftime("%d. %B %Y", $list->getEnd())."</b></td>";
 			echo "\n<td align='right' class='topic'>&nbsp;$admin_link<img src='./pictures/pfeillink.gif' border='0' alt='Termine bearbeiten'></a>&nbsp;</td></tr>";
 		}
 		else
-			echo "\n<tr><td class='topic'>&nbsp;<img src='./pictures/icon-uhr.gif' border='0' alt='Termine. Klicken Sie auf den einfachen Pfeil, um die Terminbeschreibung zu lesen.' align='absmiddle'><b>&nbsp;&nbsp;Termine fr die Zeit vom ".strftime("%d. %B %Y", $list->getStart())." bis zum ".strftime("%d. %B %Y", $list->getEnd())."</b></td></tr>";
+			echo "\n<tr><td class='topic'>&nbsp;<img src='./pictures/icon-uhr.gif' border='0' alt='Termine. Klicken Sie auf den einfachen Pfeil, um die Terminbeschreibung zu lesen.' align='absmiddle'><b>&nbsp;&nbsp;Termine für die Zeit vom ".strftime("%d. %B %Y", $list->getStart())." bis zum ".strftime("%d. %B %Y", $list->getEnd())."</b></td></tr>";
 		echo "\n";
 
 		// Ausgabe der Daten
@@ -277,8 +277,8 @@ function show_personal_dates ($range_id, $date_start, $date_end, $show_docs=FALS
 				$titel .= ", ".$tmp_titel;
 			}
 			
-			// Zur Identifikation von auf- bzw. zugeklappten Terminen muss zus„tzlich
-			// die Startzeit berprft werden, da die Wiederholung eines Termins die
+			// Zur Identifikation von auf- bzw. zugeklappten Terminen muss zusätzlich
+			// die Startzeit überprüft werden, da die Wiederholung eines Termins die
 			// gleiche ID besitzt.
 			$app_ident = $termin->getId() . $termin->getStart();
 			if ($open != $app_ident)

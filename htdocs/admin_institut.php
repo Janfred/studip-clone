@@ -97,7 +97,7 @@ while ( is_array($HTTP_POST_VARS)
   case "kill_fach":
   	{
 	$db->query("DELETE FROM fach_inst WHERE fach_id = '$fach_id' AND institut_id ='$i_view'");
-	if ($db->affected_rows()==0)  parse_msg("errorºDatenbankoperation gescheitert."); else parse_msg("msgºDie Zuordnung wurde aufgehoben");
+	if ($db->affected_rows()==0)  parse_msg("error§Datenbankoperation gescheitert."); else parse_msg("msg§Die Zuordnung wurde aufgehoben");
 	break;
   	}
   	
@@ -105,7 +105,7 @@ while ( is_array($HTTP_POST_VARS)
   case "add_fach":
   	{
 	$db->query("INSERT INTO fach_inst VALUES ('$fach_id', '$i_view')");
-	if ($db->affected_rows()==0)  parse_msg("errorºDatenbankoperation gescheitert."); else parse_msg("msgºDas Fach wurde der Einrichtung zugeordnet");
+	if ($db->affected_rows()==0)  parse_msg("error§Datenbankoperation gescheitert."); else parse_msg("msg§Das Fach wurde der Einrichtung zugeordnet");
 	break;
   	}
   

@@ -413,9 +413,9 @@ function lies_seminar()
 		}
 	
 		$zeile = fgets($datei, 4096);
-		$zeile = str_replace("&#xFC;", "", $zeile);
-		$zeile = str_replace("&#xE4;", "„", $zeile);
-		$zeile = str_replace("&#xF6;", "÷", $zeile);
+		$zeile = str_replace("&#xFC;", "ü", $zeile);
+		$zeile = str_replace("&#xE4;", "ä", $zeile);
+		$zeile = str_replace("&#xF6;", "ö", $zeile);
 
 	}
 //	echo $var["orgname"] . $xml_import_org[$var["orgname"]]["anz"];
@@ -464,9 +464,9 @@ function hole_object($string)
 			}
 	
 		$zeile = fgets($datei, 4096);
-		$zeile = str_replace("&#xFC;", "", $zeile);
-		$zeile = str_replace("&#xE4;", "„", $zeile);
-		$zeile = str_replace("&#xF6;", "÷", $zeile);
+		$zeile = str_replace("&#xFC;", "ü", $zeile);
+		$zeile = str_replace("&#xE4;", "ä", $zeile);
+		$zeile = str_replace("&#xF6;", "ö", $zeile);
 	}
 }
 
@@ -501,13 +501,13 @@ function get_objects($string)
 		elseif (strpos($zeile, "orgname") >0)
 		{
 			$zeile = str_replace("Eintr&#xE4;ge auf dieser Ebene", $ebene_alias, $zeile);
-			$zeile = str_replace("&#xFC;", "", $zeile);
-			$zeile = str_replace("&#xE4;", "„", $zeile);
-			$zeile = str_replace("&#xF6;", "÷", $zeile);
-			$zeile = str_replace("&#xDC;", "š", $zeile);
-			$zeile = str_replace("&#xC4;", "", $zeile);
-			$zeile = str_replace("&#xD6;", "™", $zeile);
-			$zeile = str_replace("&#xDF;", "˜", $zeile);
+			$zeile = str_replace("&#xFC;", "ü", $zeile);
+			$zeile = str_replace("&#xE4;", "ä", $zeile);
+			$zeile = str_replace("&#xF6;", "ö", $zeile);
+			$zeile = str_replace("&#xDC;", "Ü", $zeile);
+			$zeile = str_replace("&#xC4;", "Ä", $zeile);
+			$zeile = str_replace("&#xD6;", "Ö", $zeile);
+			$zeile = str_replace("&#xDF;", "ß", $zeile);
 			$oname = trim(strip_tags($zeile));
 			$xml_import_org[$oname]["anz"]++;
 			if ($cl != "")
@@ -645,7 +645,7 @@ elseif ($assi_page == 1)
 			<option value="nicht">-> Nicht importieren
 			<? if ($perm->have_perm("root")) 
 				echo '<option value="anders">-> Unter anderem Namen anlegen';
-			$inst_fach = str_replace( "fr ", "", $key);
+			$inst_fach = str_replace( "für ", "", $key);
 			$inst_fach = str_replace( "isches ", "", $inst_fach);
 			$inst_fach = str_replace( "Abteilung", "", $inst_fach);
 			$inst_fach = str_replace( "Institut", "", $inst_fach);
@@ -1034,10 +1034,10 @@ if ($assi_page == 5)
 			echo '<table width="70%">';
 			$uname =$val["firstname"][0] . $val["lastname"][0] . $val["lastname"][1] . $val["lastname"][2] . $val["lastname"][3] . $val["lastname"][4] . $val["lastname"][5];
 			$uname = strtolower($uname);
-			$uname = str_replace("„","ae",$uname);
-			$uname = str_replace("÷","oe",$uname);
-			$uname = str_replace("","ue",$uname);
-			$uname = str_replace("˜","ss",$uname);
+			$uname = str_replace("ä","ae",$uname);
+			$uname = str_replace("ö","oe",$uname);
+			$uname = str_replace("ü","ue",$uname);
+			$uname = str_replace("ß","ss",$uname);
 			echo "<tr><td>Username:</td><td> " . $uname . "</td></tr>";
 			echo "<tr><td>Vorname:</td><td> " . trim($val["title"] . " " . $val["firstname"]) . "</td></tr>";
 			echo "<tr><td>Nachname:</td><td> " . $val["lastname"] . "</td></tr>";

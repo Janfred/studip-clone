@@ -16,10 +16,10 @@ IF  ($user->id == "nobody") {  // nicht angemeldete muessen Namen angeben, dazu 
 <SCRIPT language="JavaScript">
 <!--
 function pruefe_name(){
- var re_nachname = /^([a-zA-ZŽ™š][^0-9"´'`\/\\\(\)\[\]]+)$/;
+ var re_nachname = /^([a-zA-ZÄÖÜ][^0-9"´'`\/\\\(\)\[\]]+)$/;
  var checked = true;
  if (re_nachname.test(document.forumwrite.nobodysname.value)==false) {
- 	alert("Bitte geben Sie Ihren tats„chlichen Namen an.");
+ 	alert("Bitte geben Sie Ihren tatsächlichen Namen an.");
  	document.forumwrite.nobodysname.focus();
  	checked = false;
  	}
@@ -146,13 +146,13 @@ else
 	}
 	IF ($nobodysname) $author = $nobodysname;
 	$topic_id = CreateTopic ($name, $author, $description, $parent_id, $root_id);
-	parse_window( "msgºIhr Beitrag wurde erfolgreich ins System &uuml;bernommenºinfoºSie k&ouml;nnen dieses Fenster jetzt schliessen.<br>Um Ihr neues Posting zu sehen, m&uuml;ssen Sie das Hauptfenster aktualisieren!º", "º", "Schreiben erfolgreich", FALSE);
+	parse_window( "msg§Ihr Beitrag wurde erfolgreich ins System &uuml;bernommen§info§Sie k&ouml;nnen dieses Fenster jetzt schliessen.<br>Um Ihr neues Posting zu sehen, m&uuml;ssen Sie das Hauptfenster aktualisieren!§", "§", "Schreiben erfolgreich", FALSE);
 }
 }
 
 else {
       $msg=have_sem_write_perm();
-      parse_window($msg, "º", "Schreiben nicht m&ouml;glich");
+      parse_window($msg, "§", "Schreiben nicht m&ouml;glich");
       }
 ?>
 <?php

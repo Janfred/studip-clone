@@ -116,7 +116,7 @@ $db2=new DB_Seminar;
   if (!isset($sortby)) $sortby="Name";
 	$db->query("SELECT seminare.*, Institute.Name AS Institut, Institute.Institut_id AS id FROM seminare LEFT JOIN Institute USING (institut_id) WHERE Lesezugriff='0' ORDER BY $sortby");
 	$num_my_sem=$db->num_rows();
-  if (!$num_my_sem) $meldung="errorºEs gibt in dieser Installation keine &ouml;ffentlichen Veranstaltungen!º".$meldung;
+  if (!$num_my_sem) $meldung="error§Es gibt in dieser Installation keine &ouml;ffentlichen Veranstaltungen!§".$meldung;
 
 ?>
 <table width="100%" border=0 cellpadding=0 cellspacing=0 align=center>

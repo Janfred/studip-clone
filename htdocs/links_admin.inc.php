@@ -130,13 +130,13 @@ if ($links_admin_data["sem_id"]) {
 	if ($auth->auth["jscript"]) {
 		echo "onClick=\"alert('Sie befinden sich im Administrationsbereich von Stud.IP.";
 		if ($links_admin_data["sem_id"])
-			echo " Ausgew„hlte Veranstaltung: ",JSReady($db->f("Name"),"popup"), " - Um die Auswahl aufzuheben, benutzen Sie bitte das Schlsselsymbol.');\" ";
+			echo " Ausgewählte Veranstaltung: ",JSReady($db->f("Name"),"popup"), " - Um die Auswahl aufzuheben, benutzen Sie bitte das Schlüsselsymbol.');\" ";
 		else
 			echo " Keine Veranstaltung ausgew&auml;hlt.');\" ";
 		}
 	?> alt="Sie befinden sich im Administrationsbereich von Stud.IP.<? 
 	if ($links_admin_data["sem_id"])
-		echo " Ausgew&auml;hlte Veranstaltung: ",htmlReady($db->f("Name")), " - Um die Auswahl aufzuheben, benutzen Sie bitte das Schlsselsymbol.\" border=0>";
+		echo " Ausgew&auml;hlte Veranstaltung: ",htmlReady($db->f("Name")), " - Um die Auswahl aufzuheben, benutzen Sie bitte das Schlüsselsymbol.\" border=0>";
 	else
 		echo " Keine Veranstaltung ausgew&auml;hlt.\" border=0>&nbsp;";
 	
@@ -492,8 +492,8 @@ $query.=" ORDER BY  ".$links_admin_data["sortby"];
 $db->query($query);
 
 ?>
-			<table border=0  cellspacing=0 cellpadding=2 align=center width="99%">
 			<form name="links_admin_action" action="<? echo $PHP_SELF ?>" method="POST">
+			<table border=0  cellspacing=0 cellpadding=2 align=center width="99%">
 <?
 
 $c=-1;
@@ -615,11 +615,11 @@ while ($db->next_record()) {
 		?>
 		<tr>
 			<?
-			$srch_result="infoº<font size=-1><b>Leider wurden keine Veranstaltungen ";
+			$srch_result="info§<font size=-1><b>Leider wurden keine Veranstaltungen ";
 			if ($conditions) 
 				$srch_result.="entsprechend Ihren Suchkriterien " ;
-			$srch_result.="gefunden!</b></font>º";
-			parse_msg ($srch_result, "º", "steel1", 2, FALSE);
+			$srch_result.="gefunden!</b></font>§";
+			parse_msg ($srch_result, "§", "steel1", 2, FALSE);
 			?>
 		</tr>
 		<?
@@ -627,7 +627,7 @@ while ($db->next_record()) {
 			?>
 				</tr>
 				<tr>
-					<td class="blank" colspan=2>  
+					<td class="blank" colspan=1> 
 					&nbsp; 
 					</td>
 				</tr>
@@ -635,10 +635,7 @@ while ($db->next_record()) {
 		</td>
 	</tr>
 	</table>
-	</form>
-</td>
-</tr>
-</table>
+	</form>				
 	<?
 	page_close();
 	die;

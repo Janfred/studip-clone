@@ -88,7 +88,7 @@ while ( is_array($HTTP_POST_VARS)
   case "kill_sem":
   	{
 	$db->query("DELETE FROM seminar_bereich WHERE seminar_id = '$seminar_id' AND bereich_id ='$i_view'");
-	if ($db->affected_rows()==0)  parse_msg("errorºDatenbankoperation gescheitert."); else parse_msg("msgºDie Zuordnung wurde aufgehoben");
+	if ($db->affected_rows()==0)  parse_msg("error§Datenbankoperation gescheitert."); else parse_msg("msg§Die Zuordnung wurde aufgehoben");
 	break;
   	}
   	
@@ -96,7 +96,7 @@ while ( is_array($HTTP_POST_VARS)
   case "add_sem":
   	{
 	$db->query("INSERT INTO seminar_bereich VALUES ('$seminar_id', '$i_view')");
-	if ($db->affected_rows()==0)  parse_msg("errorºDatenbankoperation gescheitert."); else parse_msg("msgºDie Veranstaltung wurde dem Bereich zugeordnet");
+	if ($db->affected_rows()==0)  parse_msg("error§Datenbankoperation gescheitert."); else parse_msg("msg§Die Veranstaltung wurde dem Bereich zugeordnet");
 	break;
   	}
 
@@ -171,7 +171,7 @@ while ( is_array($HTTP_POST_VARS)
       break;
     }
     
-		unset($i_view);  // wenn wir den Bereich gel÷scht haben, wollen wir nicht in die Detail-Ansicht dieses Bereiches...
+		unset($i_view);  // wenn wir den Bereich gelöscht haben, wollen wir nicht in die Detail-Ansicht dieses Bereiches...
     my_msg("<b>Der Bereich \"".htmlReady(stripslashes($Name))."\" wurde gel&ouml;scht!");
   break;
   

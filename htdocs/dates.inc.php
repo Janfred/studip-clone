@@ -2,7 +2,7 @@
 
 /*
 dates.inc.php - basale Routinen zur Terminveraltung.
-Copyright (C) 2001 Stefan Suchi <suchi@gmx.de>, Andr‚ Noack <anoack@mcis.de>
+Copyright (C) 2001 Stefan Suchi <suchi@gmx.de>, André Noack <anoack@mcis.de>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -19,7 +19,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-require_once $ABSOLUTE_PATH_STUDIP."datei.inc.php";  // ben÷tigt zum L÷schen von Dokumenten
+require_once $ABSOLUTE_PATH_STUDIP."datei.inc.php";  // benötigt zum Löschen von Dokumenten
 require_once $ABSOLUTE_PATH_STUDIP."config.inc.php";  //Daten 
 
 
@@ -53,13 +53,13 @@ function view_turnus ($seminar_id, $short = FALSE)
 			if ($short)
 				$return_string="Termin: n. A.";
 			else
-				$return_string="unregelm„ssige Veranstaltung oder Blockveranstaltung. Die Termine stehen noch nicht fest ";
+				$return_string="unregelmässige Veranstaltung oder Blockveranstaltung. Die Termine stehen noch nicht fest ";
 			}
 		else
 			if ($short)
 				$return_string="Termine am ";
 			else
-				$return_string="unregelm„ssige Veranstaltung oder Blockveranstaltung am ";
+				$return_string="unregelmässige Veranstaltung oder Blockveranstaltung am ";
 
 			while ($db2->next_record())
 				$dates[]=array("start_time"=>$db2->f("date"), "end_time"=>$db2->f("end_time"), "conjuncted"=>FALSE, "time_match"=>FALSE);
@@ -187,7 +187,7 @@ function view_turnus ($seminar_id, $short = FALSE)
 				$return_string="Die Zeiten der Veranstaltung stehen noch nicht fest";
 				}			
 			if ($term_data["turnus"] == 1)
-				$return_string.=" (zweiw÷chentlich)";
+				$return_string.=" (zweiwöchentlich)";
 		}
 	return $return_string;
 	}
@@ -339,13 +339,13 @@ global $SEMESTER;
 			if ($short)
 				$return_string="Termin: n. A.";
 			else
-				$return_string="unregelm„ssige Veranstaltung oder Blockveranstaltung. Die Termine stehen noch nicht fest ";
+				$return_string="unregelmässige Veranstaltung oder Blockveranstaltung. Die Termine stehen noch nicht fest ";
 			}
 		else
 			if ($short)
 				$return_string="Termine am ";
 			else
-				$return_string="unregelm„ssige Veranstaltung oder Blockveranstaltung am ";
+				$return_string="unregelmässige Veranstaltung oder Blockveranstaltung am ";
 
 			while ($db2->next_record())
 				$dates[]=array("start_time"=>$db2->f("date"), "end_time"=>$db2->f("end_time"), "conjuncted"=>FALSE, "time_match"=>FALSE);
@@ -475,7 +475,7 @@ global $SEMESTER;
 				$return_string="Die Zeiten der Veranstaltung stehen noch nicht fest";
 				}			
 			if ($term_data["turnus"] == 1)
-				$return_string.=" (zweiw÷chentlich)";
+				$return_string.=" (zweiwöchentlich)";
 		}
 
 	return $return_string;	
@@ -556,14 +556,14 @@ function edit_dates($stunde,$minute,$monat,$tag,$jahr,$end_stunde, $end_minute, 
 		if (!checkdate($monat,$tag,$jahr))
 			{
 			$do=FALSE;
-			$result="errorºBitte geben Sie ein g&uuml;ltiges Datum ein!";
+			$result="error§Bitte geben Sie ein g&uuml;ltiges Datum ein!";
 			}
 
 		if ($do)		
 			if ((!$stunde) && (!end_stunde))
 				{
 				$do=FALSE;	
-				$result.="errorºBitte geben Sie eine g&uuml;eltige Start- und Endzeit an!";
+				$result.="error§Bitte geben Sie eine g&uuml;eltige Start- und Endzeit an!";
 				}
 	
 		$start_time = mktime($stunde,$minute,0,$monat,$tag,$jahr);
@@ -573,7 +573,7 @@ function edit_dates($stunde,$minute,$monat,$tag,$jahr,$end_stunde, $end_minute, 
 			if ($start_time > $end_time)
 				{
 				$do=FALSE;	
-				$result.="errorºDer Endzeitpunkt muss nach dem Startzeitpunkt liegen!";
+				$result.="error§Der Endzeitpunkt muss nach dem Startzeitpunkt liegen!";
 				}
 				
 		//Check auf Konsistenz mt Metadaten, Semestercheck
@@ -588,7 +588,7 @@ function edit_dates($stunde,$minute,$monat,$tag,$jahr,$end_stunde, $end_minute, 
 			}
 			
 		if (($start_time < $sem_beginn) || ($start_time > $sem_ende))
-			$add_result.="infoºSie haben einen oder mehrere Termine eingegeben, der ausserhalb des Semesters, in dem die Veranstaltung stattfindet, liegt. Es wird empfohlen, diese Termin anzupassen.º";
+			$add_result.="info§Sie haben einen oder mehrere Termine eingegeben, der ausserhalb des Semesters, in dem die Veranstaltung stattfindet, liegt. Es wird empfohlen, diese Termin anzupassen.§";
 		
 		//Und dann noch auf regelmaessige Termine checken, wenn dieser Typ gewsehlt ist
 		if (!$term_data["art"]) {
@@ -607,13 +607,13 @@ function edit_dates($stunde,$minute,$monat,$tag,$jahr,$end_stunde, $end_minute, 
 					}
 				}
 			if (!$ok)
-				$add_result.="infoºSie haben einen oder mehrere Termine eingegeben, der nicht zu den allgemeinen Veranstaltungszeiten stattfindet. Es wird empfohlen, Sitzungstermine von regelm&auml;&szlig;igen Veranstaltungen nur zu den allgemeinen Zeiten stattfinden zu lassen.º";
+				$add_result.="info§Sie haben einen oder mehrere Termine eingegeben, der nicht zu den allgemeinen Veranstaltungszeiten stattfindet. Es wird empfohlen, Sitzungstermine von regelm&auml;&szlig;igen Veranstaltungen nur zu den allgemeinen Zeiten stattfinden zu lassen.§";
 			}
 		}
 
 		
 		if ($result) 
-			$result.="<br> Der Termin <b>\"$titel\"</b> konnte nicht ge&auml;ndert werden.º";
+			$result.="<br> Der Termin <b>\"$titel\"</b> konnte nicht ge&auml;ndert werden.§";
 	
 		if ($do)
 			{
@@ -680,15 +680,15 @@ function edit_dates($stunde,$minute,$monat,$tag,$jahr,$end_stunde, $end_minute, 
 
 
 /*
-Die Funktion delete_topic l÷scht rekursiv alle Postings ab der bergebenen topic_id, der zweite Parameter
-muss(!) eine Variable sein, diese wird fr jedes gel÷schte Posting um eins erh÷ht
+Die Funktion delete_topic löscht rekursiv alle Postings ab der übergebenen topic_id, der zweite Parameter
+muss(!) eine Variable sein, diese wird für jedes gelöschte Posting um eins erhöht
 */
 
-function delete_topic($topic_id, &$deleted)  //rekursives l÷schen von topics VORSICHT!
+function delete_topic($topic_id, &$deleted)  //rekursives löschen von topics VORSICHT!
 {
 
 	$db=new DB_Seminar;
-	// echo "gel÷scht $topic_id<br>";
+	// echo "gelöscht $topic_id<br>";
 	$db->query("SELECT topic_id FROM px_topics WHERE parent_id='$topic_id'");
 	if ($db->num_rows()) {
 		while ($db->next_record()) {
@@ -707,19 +707,19 @@ function delete_topic($topic_id, &$deleted)  //rekursives l÷schen von topics VOR
 }
 
 /*
-Die function delete_date l÷scht einen Termin und verschiebt daran haegende
+Die function delete_date löscht einen Termin und verschiebt daran haegende
 Ordner in den allgemeinen Ordner.
-Der erste Parameter ist die termin_id des zu l÷schenden Termins.
+Der erste Parameter ist die termin_id des zu löschenden Termins.
 Der zweite Parameter topic_id gibt an, ob auch die zu diesem Termin gehoerenden
 Postings im Forensystem geloescht werden sollen.
 0 bzw. FALSE : keine Topics loeschen
 > 0 : rekursives loeschen von topic_id
 Der dritte Parameter gibt analog an, ob auch die zu diesem Terminen gehoerenden
 Folder im Ordnersystem geloescht werden sollen.
-Der Rckgabewert der Funktion ist die Anzahl der insgesamt gel÷schten Items.
+Der Rückgabewert der Funktion ist die Anzahl der insgesamt gelöschten Items.
 -1 bedeutet einen Fehler beim Loeschen des Termins.
 Ausgabe wird keine produziert.
-Es erfolgt keine šberprfung der Berechtigung innerhalb der Funktion,
+Es erfolgt keine Überprüfung der Berechtigung innerhalb der Funktion,
 dies muss das aufrufende Script sicherstellen.
 */
 
@@ -748,7 +748,7 @@ function delete_date ($termin_id, $topic_id = FALSE, $folder_move=FALSE, $sem_id
 			$db2->query("SELECT folder_id FROM folder WHERE range_id = '$termin_id'");
 			while ($db2->next_record()) {
 				move_item ($db2->f("folder_id"), $db->f("folder_id"));
-				$db3->query ("UPDATE folder SET name='Dateiordner zu gel÷schtem Termin', description='Dieser Ordner enth„lt Dokumente und Termine eines gel÷schten Termins' WHERE folder_id='".$db2->f("folder_id")."'");
+				$db3->query ("UPDATE folder SET name='Dateiordner zu gelöschtem Termin', description='Dieser Ordner enthält Dokumente und Termine eines gelöschten Termins' WHERE folder_id='".$db2->f("folder_id")."'");
 				}
 			}
 		}
@@ -762,18 +762,18 @@ function delete_date ($termin_id, $topic_id = FALSE, $folder_move=FALSE, $sem_id
 }
 
 /*
-Die function delete_range_of_dates l÷scht Termine mit allen daran haengenden Items.
-Der erste Parameter ist die range_id der zu l÷schenden Termine.
+Die function delete_range_of_dates löscht Termine mit allen daran haengenden Items.
+Der erste Parameter ist die range_id der zu löschenden Termine.
 Es koennen also mit einem Aufruf alle Termine eines Seminares,
 eines Institutes oder persoenliche Termine eines Benutzers aus der Datenbank entfernt werden.
-Dokumente und Literatur an diesen Terminen werden auf jeden Fall gel÷scht.
+Dokumente und Literatur an diesen Terminen werden auf jeden Fall gelöscht.
 Der zweite Parameter topics gibt an, ob auch die zu diesen Terminen gehoerenden
 Postings im Forensystem geloescht werden sollen.
 0 bzw. FALSE : keine Topics loeschen
 1 bzw. TURE : rekursives Loeschen der Postings
-Der Rckgabewert der Funktion ist die Anzahl der gel÷schten Termine.
+Der Rückgabewert der Funktion ist die Anzahl der gelöschten Termine.
 Ausgabe wird keine produziert.
-Es erfolgt keine šberprfung der Berechtigung innerhalb der Funktion,
+Es erfolgt keine Überprüfung der Berechtigung innerhalb der Funktion,
 dies muss das aufrufende Script sicherstellen.
 */
 

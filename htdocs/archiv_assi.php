@@ -126,7 +126,7 @@ if ($kill) {
 
    //Admin sollte man schon sein
    if (!$perm->have_perm("admin")) {
-    	$msg .= "errorºSie haben keine Berechtigung Veranstaltungen zu archivieren.º";
+    	$msg .= "error§Sie haben keine Berechtigung Veranstaltungen zu archivieren.§";
     	$run = FALSE;
     	}
 
@@ -134,7 +134,7 @@ if ($kill) {
     if (!$perm->have_perm("root")) {
 	$db2->query("select inst_perms from seminare LEFT JOIN user_inst USING(Institut_id) where Seminar_id = '$s_id' AND user_id = '$user_id'");
 		if (!$db2->next_record() || $db2->f("inst_perms") != "admin") {
-		      $msg .= "errorºSie haben keine Berechtigung diese Veranstaltung zu archivieren.º";
+		      $msg .= "error§Sie haben keine Berechtigung diese Veranstaltung zu archivieren.§";
 		      $run = FALSE;
 		}
 	}
@@ -144,11 +144,11 @@ if ($kill) {
 	$db2->next_record();
 	$tmp_name = $db2->f("Name");
 	if ($db2->f("duration_time") == -1) {
-		      $msg .= "errorºDas Archivieren der Veranstaltung ist nicht m&ouml;glich, da diese Veranstaltung eine dauerhafte Veranstaltung ist. <br>Wenn Sie sie wirklich archivieren wollen, dann &auml;ndern Sie bitte die Semesterzurordnung &uuml;ber den Menupunkt <a href=\"admin_metadates.php?seminar_id=$s_id\"><b>Zeiten</b></a>.º";
+		      $msg .= "error§Das Archivieren der Veranstaltung ist nicht m&ouml;glich, da diese Veranstaltung eine dauerhafte Veranstaltung ist. <br>Wenn Sie sie wirklich archivieren wollen, dann &auml;ndern Sie bitte die Semesterzurordnung &uuml;ber den Menupunkt <a href=\"admin_metadates.php?seminar_id=$s_id\"><b>Zeiten</b></a>.§";
 		      $run = FALSE;
 		}
 	elseif (time() < ($db2->f("start_time") + $db2->f("duration_time"))) {
-		      $msg .= "errorºDas Archivieren der Veranstaltung ist nicht m&ouml;glich, da diese Veranstaltung &uuml;ber mehrere Semester l&auml;uft und noch nicht abgeschlossen ist. <br>Wenn sie Sie wirklich archivieren wollen, dann &auml;ndern Sie bitte die Semesterzurordnung &uuml;ber den Menupunkt <a href=\"admin_metadates.php?seminar_id=$s_id\"><b>Zeiten</b></a>.º";
+		      $msg .= "error§Das Archivieren der Veranstaltung ist nicht m&ouml;glich, da diese Veranstaltung &uuml;ber mehrere Semester l&auml;uft und noch nicht abgeschlossen ist. <br>Wenn sie Sie wirklich archivieren wollen, dann &auml;ndern Sie bitte die Semesterzurordnung &uuml;ber den Menupunkt <a href=\"admin_metadates.php?seminar_id=$s_id\"><b>Zeiten</b></a>.§";
 		      $run = FALSE;
 		}
 
@@ -156,7 +156,7 @@ if ($kill) {
     ## Bevor es wirklich weg ist. kommt das Seminar doch noch schnell ins Archiv
     in_archiv($s_id);
     
-    $msg .= "infoº<font size=-1>";
+    $msg .= "info§<font size=-1>";
     ## Delete that Seminar.
 		## Alle Benutzer aus dem Seminar rauswerfen.
     $query = "DELETE from seminar_user where Seminar_id='$s_id'";
@@ -190,22 +190,22 @@ if ($kill) {
     if (($db_ar = recursiv_folder_delete($s_id)) > 0) {
       $msg .= "<li>$db_ar Dokumente und Ordner archiviert.</li>";
     }
-		## Literatur zu diesem Seminar l÷schen
+		## Literatur zu diesem Seminar löschen
 	  $query = "DELETE FROM literatur where range_id='$s_id'";
     $db->query($query);
     if (($db_ar = $db->affected_rows()) > 0) {
       $msg .= "<li>Literatur und Links der Veranstaltung archiviert.</li>";
     }
-		## Alle News-Verweise auf dieses Seminar l÷schen
+		## Alle News-Verweise auf dieses Seminar löschen
 	  $query = "DELETE FROM news_range where range_id='$s_id'";
     $db->query($query);
     if (($db_ar = $db->affected_rows()) > 0) {
       $tmp_news_deleted=$db_ar;
     }
-		## Die News durchsehen, ob es da jetzt verweiste Eintr„ge gibt...
+		## Die News durchsehen, ob es da jetzt verweiste Einträge gibt...
 	  $query = "SELECT news.news_id FROM news LEFT OUTER JOIN news_range USING (news_id) where range_id IS NULL";
     $db->query($query);
-		While ($db->next_record()) {			  // Diese News h„ngen an nix mehr...
+		While ($db->next_record()) {			  // Diese News hängen an nix mehr...
 			$tempNews_id = $db->f("news_id");
 		   $query = "DELETE FROM news where news_id = '$tempNews_id'";
 	    $db2->query($query);
@@ -216,18 +216,18 @@ if ($kill) {
     if ($tmp_news_deleted)
           $msg .= "<li>$tmp_news_deleted News gel&ouml;scht.</li>";
     
-    $msg .= "</font>º";
+    $msg .= "</font>§";
     
 		## und das Seminar loeschen.
     $query = "DELETE FROM seminare where Seminar_id= '$s_id'";
     $db->query($query);
     if ($db->affected_rows() == 0) {
-      $msg .= "errorº<b>Fehler beim L&ouml;schen der Veranstaltung º";
+      $msg .= "error§<b>Fehler beim L&ouml;schen der Veranstaltung §";
       break;
     }
     
     //Successful archived, if we are here
-    $msg .= "msgº<font size=-1>Die Veranstaltung <b>".htmlReady(stripslashes($tmp_name))."</b> wurde erfolgreich archiviert und aus den aktiven Veranstaltungen gel&ouml;scht.</font>º";
+    $msg .= "msg§<font size=-1>Die Veranstaltung <b>".htmlReady(stripslashes($tmp_name))."</b> wurde erfolgreich archiviert und aus den aktiven Veranstaltungen gel&ouml;scht.</font>§";
 
     //unset the checker, lecture is now killed!
     unset($archiv_assi_data["sem_check"][$s_id]);
@@ -253,7 +253,7 @@ if ($kill) {
 
 //Outputs...
 if (($archiv_assi_data["sems"]) && (sizeof($archiv_assi_data["sem_check"])>0)){
-	$msg.="infoº<font color=\"red\" size=-1>Sie sind im Begriff, die untenstehende  Veranstaltung zu archivieren. Dieser Schritt kann nicht r&uuml;ckg&auml;ngig gemacht werden!";
+	$msg.="info§<font color=\"red\" size=-1>Sie sind im Begriff, die untenstehende  Veranstaltung zu archivieren. Dieser Schritt kann nicht r&uuml;ckg&auml;ngig gemacht werden!";
 ?>
 <body>
 
@@ -277,7 +277,7 @@ if (($archiv_assi_data["sems"]) && (sizeof($archiv_assi_data["sem_check"])>0)){
 		<td class="blank" colspan=2><b>&nbsp;
 		<table align="center" width="99%" border=0 cellpadding=2 cellspacing=0>
 			<?
-			parse_msg($msg, "º", "blank", 3);
+			parse_msg($msg, "§", "blank", 3);
 			?>
 			<tr>
 				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
@@ -342,7 +342,7 @@ if (($archiv_assi_data["sems"]) && (sizeof($archiv_assi_data["sem_check"])>0)){
 				<?
 				if ($db->f("VeranstaltungsNummer"))
 					printf ("<font size=-1><b>Veranstaltungsnummer:</b></font><br /><font size=-1>%s</font>",$db->f("VeranstaltungsNummer"));
-				?>&nbsp; 
+				?>
 				</td>
 			</tr>
 			<tr>
@@ -397,7 +397,7 @@ if (($archiv_assi_data["sems"]) && (sizeof($archiv_assi_data["sem_check"])>0)){
 				<?
 				if ($db->f("art"))
 					printf ("<font size=-1><b>Art/Form:</b></font><br /><font size=-1>%s</font>",$db->f("art"));
-				?>&nbsp; 
+				?>
 				</td>
 			</tr>
 			<? if ($db->f("Beschreibung") !="") {
@@ -460,7 +460,7 @@ elseif (($archiv_assi_data["sems"]) && (sizeof($archiv_assi_data["sem_check"])==
 	<tr>
 		<td class="blank" colspan=2><b>&nbsp;
 		<?
-		parse_msg($msg."infoºSie haben alle ausgew&auml;hlten Veranstaltungen archiviert!");
+		parse_msg($msg."info§Sie haben alle ausgew&auml;hlten Veranstaltungen archiviert!");
 		?>
 		</td>
 	</tr>
@@ -477,7 +477,7 @@ elseif (!$list) {
 	<tr>
 		<td class="blank" colspan=2><b>&nbsp;
 		<?
-		parse_msg("infoºSie haben keine Veranstaltung zum Archivieren gew&auml;hlt.");
+		parse_msg("info§Sie haben keine Veranstaltung zum Archivieren gew&auml;hlt.");
 		?>
 		</td>
 	</tr>

@@ -54,7 +54,7 @@ include "links_admin.inc.php";  //Linkleiste fuer admins
 ## Handle gc: manual garbage collection
 if( !isset( $gc ) ) { $gc = ""; };
 if ($gc != "") {
-    parse_msg ("msgºManueller Garbage-Collect ausgef&uuml;hrt...");
+    parse_msg ("msg§Manueller Garbage-Collect ausgef&uuml;hrt...");
   $sess->gc();  
 }
 
@@ -74,7 +74,7 @@ if ($del) {
     }
   }
   
-  parse_msg ("msgº$sum Sessions gel&ouml;sct...º");
+  parse_msg ("msg§$sum Sessions gel&ouml;sct...§");
   
 }
 

@@ -9,7 +9,7 @@ function print_freie($username) {
 	
 	$db->query("SELECT * FROM kategorien LEFT JOIN auth_user_md5 ON(range_id=user_id) WHERE username='$username' ORDER BY chdate DESC");
 
-        echo "<tr><td align=\"left\" valign=\"top\" class=\"blank\"><blockquote><br>Hier k÷nnen Sie beliebige eigene Kategorien anlegen. Diese Kategorien erscheinen auf Ihrer pers&ouml;nlichen Homepage.<br>Wenn Sie die Option \"f&uuml;r andere unsichtbar\" verwenden, k&ouml;nnen Sie Memos anlegen, die nur f&uuml;r Sie selbst auf der Homepage sichtbar werden - andere Nutzer k&ouml;nnen die Daten nicht einsehen.";
+        echo "<tr><td align=\"left\" valign=\"top\" class=\"blank\"><blockquote><br>Hier können Sie beliebige eigene Kategorien anlegen. Diese Kategorien erscheinen auf Ihrer pers&ouml;nlichen Homepage.<br>Wenn Sie die Option \"f&uuml;r andere unsichtbar\" verwenden, k&ouml;nnen Sie Memos anlegen, die nur f&uuml;r Sie selbst auf der Homepage sichtbar werden - andere Nutzer k&ouml;nnen die Daten nicht einsehen.";
   	echo "<br><br></td></tr>\n<tr><td class=blank><table width=100% class=blank border=0 cellpadding=0 cellspacing=0>";
      	echo "<form action=\"$PHP_SELF?freie=update_freie&username=$username&view=$view\" method=\"POST\" name=\"edit_freie\">";
 	if (!$db->affected_rows())
@@ -34,7 +34,7 @@ function print_freie($username) {
 			IF ($db->f("hidden")=='1') 
 				echo " checked";
 			echo ">f&uuml;r andere unsichtbar<br />&nbsp; </td></tr>";
-			// Breite fr textarea
+			// Breite für textarea
 			$cols = $auth->auth["jscript"]?ceil($auth->auth["xres"]/13):50;
 			echo "<tr><td class=\"".$cssSw->getClass()."\"><blockquote><textarea  name='freie_content[]' style=\"width: 80%\" cols=\"$cols\" rows=7 wrap=virtual>".htmlReady($db->f("content"))."</textarea><br /><br />";
 			echo "<a href='$PHP_SELF?freie=delete_freie&freie_id=$id&view=$view&username=$username'><img src='pictures/buttons/loeschen-button.gif' border=0></a>";
@@ -62,7 +62,7 @@ function create_freie()
 		$user_id = $db->f("user_id");
 	$db2->query("INSERT INTO kategorien (kategorie_id,name, content, mkdate, chdate, range_id) VALUES ('$kategorie_id','neue Kategorie','Inhalt der Kategorie','$now','$now','$user_id')");
 	IF  ($db2->affected_rows() == 0){
-		parse_msg ("infoºAnlegen fehlgeschlagen");
+		parse_msg ("info§Anlegen fehlgeschlagen");
 		die;
 		}
 }
@@ -75,13 +75,13 @@ function delete_freie($kategorie_id)
 	$tmp = $username;
 	$db->query ("SELECT * FROM kategorien LEFT JOIN auth_user_md5 ON(range_id=user_id) WHERE username = '$tmp' and kategorie_id='$kategorie_id'");
 		IF (!$db->next_record()) { //hier wollte jemand schummeln
-				parse_msg ("infoºNetter Versuch, vielleicht beim n&auml;chsten Mal!");
+				parse_msg ("info§Netter Versuch, vielleicht beim n&auml;chsten Mal!");
 			die;
 			}
 		ELSE {
 			$db2->query("DELETE FROM kategorien WHERE kategorie_id='$kategorie_id'");
 			IF  ($db2->affected_rows() == 1) {
-				parse_msg ("msgºKategorie gel&ouml;scht!");
+				parse_msg ("msg§Kategorie gel&ouml;scht!");
 				}
 			}
 }
@@ -98,7 +98,7 @@ function update_freie()
 		$id = $freie_id[$i];
 		$db->query("UPDATE kategorien SET name='$name', content='$content', hidden='$secret', chdate='$now' WHERE kategorie_id='$id'");
 		}
-	parse_msg ("msgºKategorien ge&auml;ndert!");
+	parse_msg ("msg§Kategorien ge&auml;ndert!");
 }
 
 //////////////////////////////////////////////////////////////////////////

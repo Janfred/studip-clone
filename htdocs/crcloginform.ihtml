@@ -38,7 +38,7 @@
 			&nbsp;  
 			</td>
 		</tr>
-		<? parse_msg ("errorº<b>Cookies sind nicht aktiviert!</b>ºinfoºDie Anmeldung fr Stud.IP ist nur m÷glich, wenn Sie das Setzen von Cookies erlauben! Bitte &auml;ndern Sie Ihre Einstellungen und und wiederholen Sie den <a href=\"".$this->url()."\">Login</a>", "º", "blank", 1, TRUE);?>
+		<? parse_msg ("error§<b>Cookies sind nicht aktiviert!</b>§info§Die Anmeldung für Stud.IP ist nur möglich, wenn Sie das Setzen von Cookies erlauben! Bitte &auml;ndern Sie Ihre Einstellungen und und wiederholen Sie den <a href=\"".$this->url()."\">Login</a>", "§", "blank", 1, TRUE);?>
 		<tr>
 			<td class="blank">
 			
@@ -73,7 +73,7 @@
 			<ol type="1" start="1">
 				<li>&Ouml;ffnen Sie das Menu "Bearbeiten" in der Kopfzeile des Browsers
 				<li>Gehen Sie auf "Einstellungen"
-				<li>W„hlen sie jetzt auf der linken Seite der Einstellungsseite den Menpunkt "Erweitert"
+				<li>Wählen sie jetzt auf der linken Seite der Einstellungsseite den Menüpunkt "Erweitert"
 				<li>Aktivieren sie jetzt auf der rechten Seite die Punkte:
 					<ul type="disc">
 					<li>"Benutze JavaScript"
@@ -105,7 +105,7 @@
 	<!-- failed login code -->
 	<table>
 		<tr>
-			<? parse_msg ("errorºBei der Anmeldung trat ein Fehler auf: <br /><b>".$this->error_msg."</b>Versuchen Sie es noch einmal!</b>", "º", "blank", 1, FALSE );?>
+			<? parse_msg ("error§Bei der Anmeldung trat ein Fehler auf: <br /><b>".$this->error_msg."</b>Versuchen Sie es noch einmal!</b>", "§", "blank", 1, FALSE );?>
 		</tr>
 	</table>
 

@@ -92,11 +92,11 @@ while ( is_array($HTTP_POST_VARS)
 		$run = TRUE;
 		## Do we have permission to do so?
 		if (!$perm->have_perm("root") && addslashes(implode($perms,",")) == "admin") {
-			$msg .= "errorºSie haben keine Berechtigung <b>admins</b> anzulegen.º";
+			$msg .= "error§Sie haben keine Berechtigung <b>admins</b> anzulegen.§";
 			$run = FALSE;
 		}
 		if (!$perm->have_perm("root") && addslashes(implode($perms,",")) == "root") {
-			$msg .= "errorºSie haben keine Berechtigung <b>roots</b> anzulegen.º";
+			$msg .= "error§Sie haben keine Berechtigung <b>roots</b> anzulegen.§";
 			$run = FALSE;
 		}
 		
@@ -107,7 +107,7 @@ while ( is_array($HTTP_POST_VARS)
 		
 		## Do we have all necessary data?
 		if (empty($username) || empty($perms) || empty ($Email)) {
-			$msg .= "errorºBitte geben Sie <B>Username</B>, <B>Status</B> und <B>Email</B> an!º";
+			$msg .= "error§Bitte geben Sie <B>Username</B>, <B>Status</B> und <B>Email</B> an!§";
 			$run = FALSE;
 		}
 
@@ -115,17 +115,17 @@ while ( is_array($HTTP_POST_VARS)
 		## NOTE: This should be a transaction, but it isn't...
 		$db->query("select * from auth_user_md5 where username='$username'");
 		if ($db->nf()>0) {
-			$msg .= "errorºBenutzer <B>$username</B> ist schon vorhanden!º";
+			$msg .= "error§Benutzer <B>$username</B> ist schon vorhanden!§";
 			$run = FALSE;
 		}
 
 		## E-Mail erreichbar?
 		if (!$validator->ValidateEmailHost($Email)) {		 ## Mailserver nicht erreichbar, ablehnen
-			$msg .= "errorºMailserver ist nicht erreichbar!º";
+			$msg .= "error§Mailserver ist nicht erreichbar!§";
 			$run = FALSE;
 		} else {																					## Server ereichbar
 			if (!$validator->ValidateEmailBox($Email)) {		## aber user unbekannt, ablehnen
-				$msg .= "errorºE-Mail an <B>$Email</B> ist nicht zustellbar!º";
+				$msg .= "error§E-Mail an <B>$Email</B> ist nicht zustellbar!§";
 				$run = FALSE;
 			}
 		}
@@ -142,13 +142,13 @@ while ( is_array($HTTP_POST_VARS)
 			$db2->query($query2);
 
 			if (($db->affected_rows() == 0) && ($db2->affected_rows() == 0)) {
-				$msg .= "errorºDie &Auml;nderung konnte nicht in die Datenbank geschrieben werdenº";
+				$msg .= "error§Die &Auml;nderung konnte nicht in die Datenbank geschrieben werden§";
 				$run = FALSE;
 				}
 		}
 		
 		if ($run) { // Benutzer angelegt
-			$msg .= "msgºBenutzer \"$username\" angelegt.º";
+			$msg .= "msg§Benutzer \"$username\" angelegt.§";
 
 			## Mail abschicken...
 			$from="\"Stud.IP\" <wwwrun@".$smtp->host_name.">";
@@ -156,7 +156,7 @@ while ( is_array($HTTP_POST_VARS)
 			$to=$Email;
 			$url = "http://" . $smtp->host_name . $CANONICAL_RELATIVE_PATH_STUDIP;
 			$mailbody="Dies ist eine Informationsmail des Systems\n"
-			."\"Studentischer Internetsupport Pr„senzlehre\"\n"
+			."\"Studentischer Internetsupport Präsenzlehre\"\n"
 			."- $UNI_NAME_CLEAN -\n\n"
 			."Sie wurden um $Zeit mit folgenden Angaben von einem\n"
 			."der Administratoren ins System eingetragen:\n\n"
@@ -170,16 +170,16 @@ while ( is_array($HTTP_POST_VARS)
 			."und das Passwort mitzuteilen, mit dem Sie sich am System anmelden.\n\n"
 			."Sie finden die Startseite des Systems unter folgender URL:\n\n"
 			."$url\n\n"
-			."M÷glicherweise untersttzt ihr Mail-Programm ein einfaches Anklicken des Links.\n"
-			."Ansonsten mssen sie Ihren Browser ÷ffnen und den Link komplett in die Zeile\n"
+			."Möglicherweise unterstützt ihr Mail-Programm ein einfaches Anklicken des Links.\n"
+			."Ansonsten müssen sie Ihren Browser öffnen und den Link komplett in die Zeile\n"
 			."\"Location\" oder \"URL\" kopieren.\n\n"
-			."Um Zugang auf die nicht÷ffentlichen Bereiche des Systems zu bekommen\n"
-			."mssen Sie sich unter \"Login\" oben rechts auf der Seite anmelden.\n"
+			."Um Zugang auf die nichtöffentlichen Bereiche des Systems zu bekommen\n"
+			."müssen Sie sich unter \"Login\" oben rechts auf der Seite anmelden.\n"
 			."Geben Sie bitte unter Benutzername \"$username\" und unter\n"
 			."Passwort \"$password\" ein.\n\n"
 			."Das Passwort ist nur Ihnen bekannt. Bitte geben Sie es an niemanden\n"
 			."weiter (auch nicht an einen Administrator), damit nicht Dritte in ihrem\n"
-			."Namen Nachrichten in das System einstellen k÷nnen!\n\n";
+			."Namen Nachrichten in das System einstellen können!\n\n";
 			$smtp->SendMessage(
 			$from, array($to),
 			array("From: $from", "Reply-To: $abuse", "To: $to", "Subject: Anmeldung Stud.IP"),
@@ -193,22 +193,22 @@ while ( is_array($HTTP_POST_VARS)
 		$run = TRUE;
 		## Do we have permission to do so?
 		if (!$perm->have_perm("root") && addslashes(implode($perms,",")) == "admin") {
-			$msg .= "errorºSie haben keine Berechtigung, <b>Administratoren</b> anzulegen.º";
+			$msg .= "error§Sie haben keine Berechtigung, <b>Administratoren</b> anzulegen.§";
 			$run = FALSE;
 		}
 		if (!$perm->have_perm("root") && addslashes(implode($perms,",")) == "root") {
-			$msg .= "errorºSie haben keine Berechtigung, <b>Roots</b> anzulegen.º";
+			$msg .= "error§Sie haben keine Berechtigung, <b>Roots</b> anzulegen.§";
 			$run = FALSE;
 		}
 		if (!$perm->have_perm("root")) {
 			$db->query("select * from auth_user_md5 where user_id='$u_id'");
 			$db->next_record();
 			if ($db->f("perms") == "admin") {
-				$msg .= "errorºSie haben keine Berechtigung <b>admins</b> zu ver&auml;ndern.º";
+				$msg .= "error§Sie haben keine Berechtigung <b>admins</b> zu ver&auml;ndern.§";
 				$run = FALSE;
 			}
 			if ($db->f("perms") == "root") {
-				$msg .= "errorºSie haben keine Berechtigung <b>roots</b> zu ver&auml;ndern.º";
+				$msg .= "error§Sie haben keine Berechtigung <b>roots</b> zu ver&auml;ndern.§";
 				$run = FALSE;
 			}
 		}
@@ -216,7 +216,7 @@ while ( is_array($HTTP_POST_VARS)
 		$db->query("SELECT count(*) AS count FROM seminar_user WHERE user_id = '$u_id' AND status = 'dozent' GROUP BY user_id");
 		$db->next_record();
 		if ($db->f("count") && addslashes(implode($perms,",")) != "dozent") {
-			$msg .= sprintf("errorºDer Benutzer <b>$username</b> ist Dozent in %s aktiven Veranstaltungen und kann daher nicht in einen anderen Status versetzt werden.º", $db->f("count"));
+			$msg .= sprintf("error§Der Benutzer <b>$username</b> ist Dozent in %s aktiven Veranstaltungen und kann daher nicht in einen anderen Status versetzt werden.§", $db->f("count"));
 			$run = FALSE;
 		}
 			
@@ -228,18 +228,18 @@ while ( is_array($HTTP_POST_VARS)
 		
 		## Do we have all necessary data?
 		if (empty($username) || empty($perms) || empty ($Email)) {
-			$msg .= "errorºBitte geben Sie <B>Username</B>, <B>Status</B> und <B>Email</B> an!º";
+			$msg .= "error§Bitte geben Sie <B>Username</B>, <B>Status</B> und <B>Email</B> an!§";
 			$run = FALSE;
 		}
 		
 		if ($run) { // alle Rechte und Angaben ok
 			## E-Mail erreichbar?
 			if (!$validator->ValidateEmailHost($Email)) {		 ## Mailserver nicht erreichbar, ablehnen
-				$msg .= "errorºMailserver ist nicht erreichbar!º";
+				$msg .= "error§Mailserver ist nicht erreichbar!§";
 				$run = FALSE;
 			} else {																					## Server ereichbar
 				if (!$validator->ValidateEmailBox($Email)) {		## aber user unbekannt, ablehnen
-					$msg .= "errorºE-Mail an <B>$Email</B> ist nicht zustellbar!º";
+					$msg .= "error§E-Mail an <B>$Email</B> ist nicht zustellbar!§";
 					$run = FALSE;
 				}
 			}
@@ -254,13 +254,13 @@ while ( is_array($HTTP_POST_VARS)
 			$db2->query($query2);
 
 			if (($db->affected_rows() == 0) && ($db2->affected_rows() == 0)) {
-				$msg .= "errorºDie &Auml;nderung konnte nicht in die Datenbank geschrieben werdenº";
+				$msg .= "error§Die &Auml;nderung konnte nicht in die Datenbank geschrieben werden§";
 				$run = FALSE;
 				}
 		}
 		
 		if ($run) { // Aenderung erfolgt
-			$msg .= "msgºUser \"$username\" ver&auml;ndert.º";
+			$msg .= "msg§User \"$username\" ver&auml;ndert.§";
 
 			## Mail abschicken...
 			$from="\"Stud.IP\" <wwwrun@".$smtp->host_name.">";
@@ -268,25 +268,25 @@ while ( is_array($HTTP_POST_VARS)
 			$to=$Email;
 			$url = "http://" . $smtp->host_name . $CANONICAL_RELATIVE_PATH_STUDIP;
 			$mailbody="Dies ist eine Informationsmail des Systems\n"
-			."\"Studentischer Internetsupport Pr„senzlehre\"\n"
+			."\"Studentischer Internetsupport Präsenzlehre\"\n"
 			."- $UNI_NAME_CLEAN -\n\n"
-			."Ihr Account wurde um $Zeit von einem der Administratoren ver„ndert.\n"
+			."Ihr Account wurde um $Zeit von einem der Administratoren verändert.\n"
 			."Die aktuellen Angaben lauten:\n\n"
 			."Benutzername: $username\n"
 			."Status: $permlist\n"
 			."Vorname: $Vorname\n"
 			."Nachname: $Nachname\n"
 			."Email-Adresse: $Email\n\n"
-			."Ihr Passwort hat sich nicht ver„ndert.\n\n"
-			."Diese Mail wurde Ihnen zugesandt um Sie ber die Žnderungen zu informieren.\n\n"
-			."Wenn Sie Einw„nde gegen die Žnderungen haben, wenden Sie sich bitte an\n"
-			."$abuse. Sie k÷nnen einfach auf diese Mail antworten.\n\n"
+			."Ihr Passwort hat sich nicht verändert.\n\n"
+			."Diese Mail wurde Ihnen zugesandt um Sie über die Änderungen zu informieren.\n\n"
+			."Wenn Sie Einwände gegen die Änderungen haben, wenden Sie sich bitte an\n"
+			."$abuse. Sie können einfach auf diese Mail antworten.\n\n"
 			."Hier kommen Sie direkt ins System:\n"
 			."$url\n\n"
 ;
 			$smtp->SendMessage(
 			$from, array($to),
-			array("From: $from", "Reply-To: $abuse", "To: $to", "Subject: Account-Žnderung Stud.IP"),
+			array("From: $from", "Reply-To: $abuse", "To: $to", "Subject: Account-Änderung Stud.IP"),
 			$mailbody);
 
 			// Hochstufung auf admin oder root?
@@ -294,26 +294,26 @@ while ( is_array($HTTP_POST_VARS)
 				$query = "delete from seminar_user where user_id='$u_id'";
 				$db->query($query);
 				if (($db_ar = $db->affected_rows()) > 0) {
-					$msg .= "infoº$db_ar Eintr&auml;ge aus der Tabelle \"seminar_user\" gel&ouml;scht.º";
+					$msg .= "info§$db_ar Eintr&auml;ge aus der Tabelle \"seminar_user\" gel&ouml;scht.§";
 				}
 			}
 			if (addslashes(implode($perms,",")) == "admin") {
 				$query = "delete from user_inst where user_id='$u_id' AND inst_perms != 'admin'";
 				$db->query($query);
 				if (($db_ar = $db->affected_rows()) > 0) {
-					$msg .= "infoº$db_ar Eintr&auml;ge aus der Tabelle \"user_inst\" gel&ouml;scht.º";
+					$msg .= "info§$db_ar Eintr&auml;ge aus der Tabelle \"user_inst\" gel&ouml;scht.§";
 				}
 			}
 			if (addslashes(implode($perms,",")) == "root") {
 				$query = "delete from user_inst where user_id='$u_id'";
 				$db->query($query);
 				if (($db_ar = $db->affected_rows()) > 0) {
-					$msg .= "infoº$db_ar Eintr&auml;ge aus der Tabelle \"user_inst\" gel&ouml;scht.º";
+					$msg .= "info§$db_ar Eintr&auml;ge aus der Tabelle \"user_inst\" gel&ouml;scht.§";
 				}
 				$query = "delete from fakultaet_user where user_id='$u_id'";
 				$db->query($query);
 				if (($db_ar = $db->affected_rows()) > 0) {
-					$msg .= "infoº$db_ar Eintr&auml;ge aus der Tabelle \"fakultaet_user\" gel&ouml;scht.º";
+					$msg .= "info§$db_ar Eintr&auml;ge aus der Tabelle \"fakultaet_user\" gel&ouml;scht.§";
 				}
 			}
 		}
@@ -328,11 +328,11 @@ while ( is_array($HTTP_POST_VARS)
 			$db->query("select * from auth_user_md5 where user_id='$u_id'");
 			$db->next_record();
 			if ($db->f("perms") == "admin") {
-				$msg .= "errorºSie haben keine Berechtigung <b>admins</b> zu ver&auml;ndern.º";
+				$msg .= "error§Sie haben keine Berechtigung <b>admins</b> zu ver&auml;ndern.§";
       	$run = FALSE;
 			}
 			if ($db->f("perms") == "root") {
-				$msg .= "errorºSie haben keine Berechtigung <b>roots</b> zu ver&auml;ndern.º";
+				$msg .= "error§Sie haben keine Berechtigung <b>roots</b> zu ver&auml;ndern.§";
       	$run = FALSE;
 			}
 		}
@@ -340,11 +340,11 @@ while ( is_array($HTTP_POST_VARS)
 		if ($run) { // Rechte ok
 			## E-Mail erreichbar?
 			if (!$validator->ValidateEmailHost($Email)) {		 ## Mailserver nicht erreichbar, ablehnen
-				$msg .= "errorºMailserver ist nicht erreichbar!º";
+				$msg .= "error§Mailserver ist nicht erreichbar!§";
       	$run = FALSE;
 			} else {																					## Server ereichbar
 				if (!$validator->ValidateEmailBox($Email)) {		## aber user unbekannt, ablehnen
-					$msg .= "errorºE-Mail an <B>$Email</B> ist nicht zustellbar!º";
+					$msg .= "error§E-Mail an <B>$Email</B> ist nicht zustellbar!§";
       		$run = FALSE;
 				}
 			}
@@ -358,13 +358,13 @@ while ( is_array($HTTP_POST_VARS)
 			$query = "update auth_user_md5 set password='$hashpass' where user_id='$u_id'";
 			$db->query($query);
 			if ($db->affected_rows() == 0) {
-				$msg .= "errorº<b>Fehlgeschlagen:</b> $queryº";
+				$msg .= "error§<b>Fehlgeschlagen:</b> $query§";
 				break;
 			}
 		}
 		
 		if ($run) { // Aenderung durchgefuehrt
-			$msg .= "msgºPasswort von User \"$username\" neu gesetzt.º";
+			$msg .= "msg§Passwort von User \"$username\" neu gesetzt.§";
 
 			## Mail abschicken...
 			$from="\"Stud.IP\" <wwwrun@".$smtp->host_name.">";
@@ -372,7 +372,7 @@ while ( is_array($HTTP_POST_VARS)
 			$to=$Email;
 			$url = "http://" . $smtp->host_name . $CANONICAL_RELATIVE_PATH_STUDIP;
 			$mailbody="Dies ist eine Informationsmail des Systems\n"
-			."\"Studentischer Internetsupport Pr„senzlehre\"\n"
+			."\"Studentischer Internetsupport Präsenzlehre\"\n"
 			."- $UNI_NAME_CLEAN -\n\n"
 			."Ihr Passwort wurde um $Zeit von einem der Administratoren neu gesetzt.\n"
 			."Die aktuellen Angaben lauten:\n\n"
@@ -384,13 +384,13 @@ while ( is_array($HTTP_POST_VARS)
 			."Email-Adresse: $Email\n\n"
 			."Das Passwort ist nur Ihnen bekannt. Bitte geben Sie es an niemanden\n"
 			."weiter (auch nicht an einen Administrator), damit nicht Dritte in ihrem\n"
-			."Namen Nachrichten in das System einstellen k÷nnen!\n"
+			."Namen Nachrichten in das System einstellen können!\n"
 			."Hier kommen Sie direkt ins System:\n"
 			."$url\n\n"
 ;
 			$smtp->SendMessage(
 			$from, array($to),
-			array("From: $from", "Reply-To: $abuse", "To: $to", "Subject: Passwort-Žnderung Stud.IP"),
+			array("From: $from", "Reply-To: $abuse", "To: $to", "Subject: Passwort-Änderung Stud.IP"),
 			$mailbody);
 		}
 
@@ -404,11 +404,11 @@ while ( is_array($HTTP_POST_VARS)
 			$db->query("select * from auth_user_md5 where user_id='$u_id'");
 			$db->next_record();
 			if ($db->f("perms") == "admin") {
-				$msg .= "errorºSie haben keine Berechtigung <b>admins</b> zu l&ouml;schen.º";
+				$msg .= "error§Sie haben keine Berechtigung <b>admins</b> zu l&ouml;schen.§";
       	$run = FALSE;
 			}
 			if ($db->f("perms") == "root") {
-				$msg .= "errorºSie haben keine Berechtigung <b>roots</b> zu l&ouml;schen.º";
+				$msg .= "error§Sie haben keine Berechtigung <b>roots</b> zu l&ouml;schen.§";
       	$run = FALSE;
 			}
 		}
@@ -417,7 +417,7 @@ while ( is_array($HTTP_POST_VARS)
 		$db->query("SELECT count(*) AS count FROM seminar_user WHERE user_id = '$u_id' AND status = 'dozent' GROUP BY user_id");
 		$db->next_record();
 		if ($db->f("count")) {
-			$msg .= sprintf("errorºDer Benutzer <b>$username</b> ist Dozent in %s aktiven Veranstaltungen und kann daher nicht gel&ouml;scht werden.º", $db->f("count"));
+			$msg .= sprintf("error§Der Benutzer <b>$username</b> ist Dozent in %s aktiven Veranstaltungen und kann daher nicht gel&ouml;scht werden.§", $db->f("count"));
 			$run = FALSE;
 		}
 
@@ -427,7 +427,7 @@ while ( is_array($HTTP_POST_VARS)
 			$query = "delete from seminar_user where user_id='$u_id'";
 			$db->query($query);
 			if (($db_ar = $db->affected_rows()) > 0) {
-				$msg .= "infoº$db_ar Eintr&auml;ge aus der Tabelle \"seminar_user\" gel&ouml;scht.º";
+				$msg .= "info§$db_ar Eintr&auml;ge aus der Tabelle \"seminar_user\" gel&ouml;scht.§";
 			}
 			## Dokumente des users loeschen
 			$temp_count = 0;
@@ -438,7 +438,7 @@ while ( is_array($HTTP_POST_VARS)
 					$temp_count ++;
 			}
 			if ($temp_count) {
-				$msg .= "infoº$temp_count Dokumente gel&ouml;scht.º";
+				$msg .= "info§$temp_count Dokumente gel&ouml;scht.§";
 			}
 			## Leere folder des users loeschen
 			$temp_count = 0;
@@ -455,55 +455,55 @@ while ( is_array($HTTP_POST_VARS)
 				}
 			}
 			if ($temp_count) {
-				$msg .= "infoº$temp_count leere Ordner gel&ouml;scht.º";
+				$msg .= "info§$temp_count leere Ordner gel&ouml;scht.§";
 			}
 			## noch folder ueber?
 			$query = "SELECT count(*) AS count FROM folder WHERE user_id='$u_id'";
 			$db->query($query);
 	 		$db->next_record();
 			if ($db->f("count")) {
-				$msg .= sprintf("infoº%s Ordner konnten nicht gel&ouml;scht werden, da sie noch Dokumente anderer Benutzer enthalten.º", $db->f("count"));
+				$msg .= sprintf("info§%s Ordner konnten nicht gel&ouml;scht werden, da sie noch Dokumente anderer Benutzer enthalten.§", $db->f("count"));
 			}
 			## user aus den Instituten rauswerfen
 			$query = "delete from user_inst where user_id='$u_id'";
 			$db->query($query);
 			if (($db_ar = $db->affected_rows()) > 0) {
-				$msg .= "infoº$db_ar Eintr&auml;ge aus der Tabelle \"user_inst\" gel&ouml;scht.º";
+				$msg .= "info§$db_ar Eintr&auml;ge aus der Tabelle \"user_inst\" gel&ouml;scht.§";
 			}
 			## user aus den Fakultaeten rauswerfen
 			$query = "delete from fakultaet_user where user_id='$u_id'";
  			$db->query($query);
 		 	if (($db_ar = $db->affected_rows()) > 0) {
-			 	$msg .= "infoº$db_ar Eintr&auml;ge aus der Tabelle \"fakultaet_user\" gel&ouml;scht.º";
+			 	$msg .= "info§$db_ar Eintr&auml;ge aus der Tabelle \"fakultaet_user\" gel&ouml;scht.§";
 	 		}
-			## Alle persoenlichen Termine dieses users l÷schen
+			## Alle persoenlichen Termine dieses users löschen
 		 	if ($db_ar = delete_range_of_dates($u_id, FALSE) > 0) {
-				$msg .= "infoº$db_ar Eintr&auml;ge aus der Tabelle \"termine\" gel&ouml;scht.º";
+				$msg .= "info§$db_ar Eintr&auml;ge aus der Tabelle \"termine\" gel&ouml;scht.§";
 			}
-			## Alle persoenlichen News-Verweise auf diesen user l÷schen
+			## Alle persoenlichen News-Verweise auf diesen user löschen
 		 	$query = "DELETE FROM news_range where range_id='$u_id'";
 			$db->query($query);
 			if (($db_ar = $db->affected_rows()) > 0) {
-				$msg .= "infoº$db_ar Eintr&auml;ge aus der Tabelle \"news_range\" gel&ouml;scht.º";
+				$msg .= "info§$db_ar Eintr&auml;ge aus der Tabelle \"news_range\" gel&ouml;scht.§";
 			}
-			## Die News durchsehen, ob es da jetzt verweiste Eintr„ge gibt...
+			## Die News durchsehen, ob es da jetzt verweiste Einträge gibt...
 		 	$query = "SELECT news.news_id FROM news LEFT OUTER JOIN news_range USING (news_id) where range_id IS NULL";
 			$db->query($query);
-			while ($db->next_record()) {	// Diese News h„ngen an nix mehr...
+			while ($db->next_record()) {	// Diese News hängen an nix mehr...
 				$tempNews_id = $db->f("news_id");
 			 	$query = "DELETE FROM news where news_id = '$tempNews_id'";
 				$db2->query($query);
 			}
 			if (($db_ar = $db->num_rows()) > 0) {
-				$msg .= "infoº$db_ar Eintr&auml;ge aus der Tabelle \"news\" gel&ouml;scht.º";
+				$msg .= "info§$db_ar Eintr&auml;ge aus der Tabelle \"news\" gel&ouml;scht.§";
 			}
 			## user aus dem Archiv werfen
 			$query = "delete from archiv_user where user_id='$u_id'";
  			$db->query($query);
 		 	if (($db_ar = $db->affected_rows()) > 0) {
-			 	$msg .= "infoº$db_ar Eintr&auml;ge aus der Tabelle \"archiv_user\" gel&ouml;scht.º";
+			 	$msg .= "info§$db_ar Eintr&auml;ge aus der Tabelle \"archiv_user\" gel&ouml;scht.§";
 	 		}
-			## alle Daten des lusers l÷schen
+			## alle Daten des lusers löschen
 			$query = "delete from kategorien where range_id = '$u_id'";
 			$db->query($query);
 			$query = "delete from active_sessions where sid = '$u_id'";
@@ -516,27 +516,27 @@ while ( is_array($HTTP_POST_VARS)
 			$db->query($query);
 			if(file_exists("./user/".$u_id.".jpg")) {
 				if (unlink("./user/".$u_id.".jpg"))
-					$msg .= "infoºBild gel&ouml;scht.º";
+					$msg .= "info§Bild gel&ouml;scht.§";
 				else
-					$msg .= "errorºBild konnte nicht gel&ouml;scht werden.º";
+					$msg .= "error§Bild konnte nicht gel&ouml;scht werden.§";
 			}
 			$query = "delete from auth_user_md5 where user_id='$u_id' and username='$username'";
 			$db->query($query);
 			if ($db->affected_rows() == 0) {
-				$msg .= "errorº<b>Fehlgeschlagen:</b> $queryº";
+				$msg .= "error§<b>Fehlgeschlagen:</b> $query§";
       	$run = FALSE;
 			}
 		}
 		
 		if ($run) { // User geloescht
-			$msg .= "msgºUser \"$username\" gel&ouml;scht.º";
+			$msg .= "msg§User \"$username\" gel&ouml;scht.§";
 
 			## E-Mail erreichbar?
 			if (!$validator->ValidateEmailHost($Email)) {		 ## Mailserver nicht erreichbar, ablehnen
-				$msg .= "errorºMailserver ist nicht erreichbar!º";
+				$msg .= "error§Mailserver ist nicht erreichbar!§";
 			} else {																					## Server ereichbar
 				if (!$validator->ValidateEmailBox($Email)) {		## aber user unbekannt, ablehnen
-					$msg .= "errorºE-Mail an <B>$Email</B> ist nicht zustellbar!º";
+					$msg .= "error§E-Mail an <B>$Email</B> ist nicht zustellbar!§";
 				} else {
 					## Mail abschicken...
 					$permlist = addslashes(implode($perms,","));
@@ -544,7 +544,7 @@ while ( is_array($HTTP_POST_VARS)
 					$abuse="abuse@".$smtp->host_name;
 					$to=$Email;
 					$mailbody="Dies ist eine Informationsmail des Systems\n"
-					."\"Studentischer Internetsupport Pr„senzlehre\"\n"
+					."\"Studentischer Internetsupport Präsenzlehre\"\n"
 					."- $UNI_NAME_CLEAN -\n\n"
 					."Ihr Account\n\n"
 					."Benutzername: $username\n"
@@ -552,10 +552,10 @@ while ( is_array($HTTP_POST_VARS)
 					."Vorname: $Vorname\n"
 					."Nachname: $Nachname\n"
 					."Email-Adresse: $Email\n\n"
-					."wurde um $Zeit von einem der Administratoren gel÷scht.\n";
+					."wurde um $Zeit von einem der Administratoren gelöscht.\n";
 					$smtp->SendMessage(
 					$from, array($to),
-					array("From: $from", "Reply-To: $abuse", "To: $to", "Subject: Account-L÷schung Stud.IP"),
+					array("From: $from", "Reply-To: $abuse", "To: $to", "Subject: Account-Löschung Stud.IP"),
 					$mailbody);
 				}
 			}

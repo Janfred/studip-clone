@@ -2,7 +2,7 @@
 /*
 sem_verify.php - Script zum Anmelden zu einem Seminar mit Ueberpruef
  aller Rechte.
-Copyright (C) 2000 Andr‚ Noack <anoack@mcis.de>, Cornelis Kater <ckater@gwdg.de>, Stefan Suchi <suchi@gmx.de>
+Copyright (C) 2000 André Noack <anoack@mcis.de>, Cornelis Kater <ckater@gwdg.de>, Stefan Suchi <suchi@gmx.de>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -63,7 +63,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 <?
 	// admins und roots haben hier nix verloren
 	if ($perm->have_perm("admin")) {
-	    parse_msg ("infoºSie sind ein <b>Administrator</b> und k&ouml;nnen sich daher nicht f&uuml;r einzelne Veranstaltungen anmelden!");
+	    parse_msg ("info§Sie sind ein <b>Administrator</b> und k&ouml;nnen sich daher nicht f&uuml;r einzelne Veranstaltungen anmelden!");
 	    echo"<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp;&nbsp; zur&uuml;ck zur Startseite</a>";
 	    if ($send_from_search)
 	    	echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">zur&uuml;ck zur Suche</a>";
@@ -90,7 +90,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 			$db->next_record();
 			if ($db->f("Lesezugriff") <= 1 && $perm->have_perm("autor")) {
 				$db->query("INSERT INTO seminar_user VALUES ('$SemIDtemp','$user->id','user','$group' )");
-				parse_msg ("msgºSie wurden mit dem Status <b> user </b> in die Veranstaltung ".$db->f("Name")." eingetragen. ");
+				parse_msg ("msg§Sie wurden mit dem Status <b> user </b> in die Veranstaltung ".$db->f("Name")." eingetragen. ");
 				echo"<tr><td class=\"blank\" colspan=2><a href=\"seminar_main.php?auswahl=$SemIDtemp\">&nbsp; &nbsp; Hier </a>kommen sie zu der Veranstaltung";
 				if ($send_from_search)
 			    		echo "&nbsp; |&nbsp;<a href=\"sem_portal.php\">zur&uuml;ck zur Suche</a>";
@@ -119,7 +119,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 		if ((isset($pass) && $pass!="" && (md5($pass)==$SemSecPass))  ||  (isset($hashpass) && $hashpass!="" && $hashpass==$SemSecPass)) {
 			if (($SemUserStatus=="user") && ($perm->have_perm("autor"))){
 				$db->query("UPDATE seminar_user SET status='autor' WHERE Seminar_id = '$id' AND user_id = '$user->id'");
-				parse_msg ("msgºSie wurden die Veranstaltung <b>$SeminarName</b> auf den Status <b> autor </b> hochgestuft.");
+				parse_msg ("msg§Sie wurden die Veranstaltung <b>$SeminarName</b> auf den Status <b> autor </b> hochgestuft.");
 				echo"<tr><td class=\"blank\" colspan=2><a href=\"seminar_main.php?auswahl=$id\">&nbsp; &nbsp; weiter zu der Veranstaltung</a>";
 			    	if ($send_from_search)
 				    	echo "&nbsp; |&nbsp;<a href=\"sem_portal.php\">zur&uuml;ck zur Suche</a>";
@@ -129,7 +129,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 			}
 			elseif ($perm->have_perm("autor")) {
 				$db->query("INSERT INTO seminar_user VALUES ('$id','$user->id','autor','$group')");
-				parse_msg ("msgºSie wurden mit dem Status <b> autor </b> in die Veranstaltung <b>$SeminarName</b> eingetragen.");
+				parse_msg ("msg§Sie wurden mit dem Status <b> autor </b> in die Veranstaltung <b>$SeminarName</b> eingetragen.");
 				echo"<tr><td class=\"blank\" colspan=2><a href=\"seminar_main.php?auswahl=$id\">&nbsp; &nbsp; weiter zur Veranstaltung</a>";
 			  	if ($send_from_search)
 				    	echo "&nbsp; |&nbsp;<a href=\"sem_portal.php\">zur&uuml;ck zur Suche</a>";
@@ -139,7 +139,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 			}
 		}
  elseif ((isset($pass) && $pass!="") || (isset($hashpass) && $hashpass!="")) {
-		    parse_msg ("errorºUng&uuml;ltiges Passwort eingegeben, bitte nocheinmal versuchen !");
+		    parse_msg ("error§Ung&uuml;ltiges Passwort eingegeben, bitte nocheinmal versuchen !");
 	}
 
 	//Die eigentliche &Uuml;berpr&uuml;fung verschiedener Rechtesachen
@@ -164,7 +164,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 						</td></tr></table>
 						<?
 					} else {
-						parse_msg ("infoºUm in der Veranstaltung <b>$SeminarName</b> Schreibrechte zu bekommen, m&uuml;ssen sie zumindest auf die Registrierungsmail geantwortet haben!");
+						parse_msg ("info§Um in der Veranstaltung <b>$SeminarName</b> Schreibrechte zu bekommen, m&uuml;ssen sie zumindest auf die Registrierungsmail geantwortet haben!");
 	   					echo"<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp;&nbsp; zur&uuml;ck zur Startseite</a>";
   						if ($send_from_search)
 						    	echo "&nbsp; |&nbsp;<a href=\"sem_portal.php\">zur&uuml;ck zur Suche</a>";
@@ -176,7 +176,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 			  elseif ($SemSecLevelWrite==1){//Hat sich der globale Status in der zwischenzeit ge&auml;ndert? Dann hochstufen
 					if ($perm->have_perm("autor")) {
 						$db->query("UPDATE seminar_user SET status='autor' WHERE Seminar_id = '$id' AND user_id = '$user->id'");
-						parse_msg("infoºSie wurden in der Veranstaltung <b>$SeminarName</b> hochgestuft auf den Status <b> autor </b>.");
+						parse_msg("info§Sie wurden in der Veranstaltung <b>$SeminarName</b> hochgestuft auf den Status <b> autor </b>.");
 						echo"<tr><td class=\"blank\" colspan=2><a href=\"seminar_main.php?auswahl=$id\">&nbsp; &nbsp; weiter zu der Veranstaltung</a>";
 						if ($send_from_search)
 						    	echo "&nbsp; |&nbsp;<a href=\"sem_portal.php\">zur&uuml;ck zur Suche</a>";
@@ -184,7 +184,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 						page_close();
 						die;
 					} else {//wenn nicht, informieren
-						parse_msg("infoºSie sind schon mit der Berechtigung <b>$SemUserStatus</b> f&uuml;r die Veranstaltung <b>$SeminarName</b> freigeschaltet. Wenn sie auf die Registrierungsmail antworten, bekommen sie in dieser Veranstaltung Schreibrechte.");
+						parse_msg("info§Sie sind schon mit der Berechtigung <b>$SemUserStatus</b> f&uuml;r die Veranstaltung <b>$SeminarName</b> freigeschaltet. Wenn sie auf die Registrierungsmail antworten, bekommen sie in dieser Veranstaltung Schreibrechte.");
 						echo"<tr><td class=\"blank\" colspan=2>&nbsp; &nbsp; <a href=\"seminar_main.php?auswahl=$id\">weiter zu der Veranstaltung</a>";
 						if ($send_from_search)
 						    	echo "&nbsp; |&nbsp;<a href=\"sem_portal.php\">zur&uuml;ck zur Suche</a>";
@@ -194,7 +194,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 					}
 				}
 			} else { //User ist schon Autor oder hoeher, soll den Quatsch mal lassen und weiter ins Seminar
-				parse_msg("infoºSie sind schon mit der Berechtigung <b>$SemUserStatus</b> f&uuml;r die Veranstaltung <b>$SeminarName</b> freigeschaltet.");
+				parse_msg("info§Sie sind schon mit der Berechtigung <b>$SemUserStatus</b> f&uuml;r die Veranstaltung <b>$SeminarName</b> freigeschaltet.");
 				echo"<tr><td class=\"blank\" colspan=2>&nbsp; &nbsp; <a href=\"seminar_main.php?auswahl=$id\"> weiter zu der Veranstaltung</a>";
 				if ($send_from_search)
 				    	echo "&nbsp; |&nbsp;<a href=\"sem_portal.php\">zur&uuml;ck zur Suche</a>";
@@ -249,7 +249,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 				}
 			} else {//der User ist auch global 'User'
 				if ($SemSecLevelRead>0) {//Lesen d&uuml;rfen nur autoren, also wech hier
-					parse_msg ("infoºUm an der Veranstaltung <b>$SeminarName</b> teilnehmen zu k&ouml;nnen, m&uuml;ssen sie zumindest auf die Registrierungsmail geantwortet haben!");
+					parse_msg ("info§Um an der Veranstaltung <b>$SeminarName</b> teilnehmen zu k&ouml;nnen, m&uuml;ssen sie zumindest auf die Registrierungsmail geantwortet haben!");
 					echo "<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp;&nbsp; zur&uuml;ck zur Startseite</a>";
 					if ($send_from_search)
 					    	echo "&nbsp; |&nbsp;<a href=\"sem_portal.php\">zur&uuml;ck zur Suche</a>";
@@ -268,7 +268,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 		if (isset($InsertStatus)) {//Status reinschreiben
 			$db->query("INSERT INTO seminar_user VALUES ('$id', '$user->id', '$InsertStatus','$group')");
-			parse_msg ("msgºSie wurden mit dem Status <b>$InsertStatus </b>in die Veranstaltung <b>$SeminarName</b> eingetragen.");
+			parse_msg ("msg§Sie wurden mit dem Status <b>$InsertStatus </b>in die Veranstaltung <b>$SeminarName</b> eingetragen.");
 			echo"<tr><td class=\"blank\" colspan=2><a href=\"seminar_main.php?auswahl=$id\">&nbsp; &nbsp; Hier kommen Sie zu der Veranstaltung</a>";
 			if ($send_from_search)
 			    	echo "&nbsp; |&nbsp;<a href=\"sem_portal.php\">zur&uuml;ck zur Suche</a>";
@@ -281,7 +281,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
   if ($SemSecLevelRead==0) {//nur wenn das Seminar wirklich frei ist geht's hier weiter
 	echo"<tr><td class=\"blank\" colspan=2>&nbsp; &nbsp; Um zu der Veranstaltung <b>$SeminarName</b> zu gelangen, klicken sie bitte<a href=\"seminar_main.php?auswahl=$id\"> hier</a>!<br><br></td></tr></table>";
   }	else {//keine Rechte f&uuml;r das Seminar
-		parse_msg ("errorºSie habe nicht die erforderlichen Rechte, um an der Veranstaltung <b>$SeminarName</b> teilnehmen zu d&uuml;rfen!");
+		parse_msg ("error§Sie habe nicht die erforderlichen Rechte, um an der Veranstaltung <b>$SeminarName</b> teilnehmen zu d&uuml;rfen!");
 		echo "<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp;&nbsp; zur&uuml;ck zur Startseite</a>";
 		if ($send_from_search)
 	    		echo "&nbsp; |&nbsp;<a href=\"sem_portal.php\">zur&uuml;ck zur Suche</a>";

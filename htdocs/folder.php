@@ -64,7 +64,7 @@ if ($cmd=="all") {
 
 IF ($SessSemName[1] =="")
 	{
-	parse_window ("errorºSie haben keine Veranstaltung gew&auml;hlt. <br /><font size=-1 color=black>Dieser Teil des Systems kann nur genutzt werden, wenn Sie vorher eine Veranstaltung gew&auml;hlt haben.<br /><br /> Dieser Fehler tritt auch auf, wenn Ihre Session abgelaufen ist. Wenn sie sich l„nger als $AUTH_LIFETIME Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurck zur Anmeldung zu gelangen. </font>", "º",
+	parse_window ("error§Sie haben keine Veranstaltung gew&auml;hlt. <br /><font size=-1 color=black>Dieser Teil des Systems kann nur genutzt werden, wenn Sie vorher eine Veranstaltung gew&auml;hlt haben.<br /><br /> Dieser Fehler tritt auch auf, wenn Ihre Session abgelaufen ist. Wenn sie sich länger als $AUTH_LIFETIME Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurück zur Anmeldung zu gelangen. </font>", "§",
 				"Keine Veranstaltung gew&auml;hlt", 
 				"<a href=\"index.php\"><b>&nbsp;Hier</b></a> geht es wieder zur Anmeldung beziehungsweise Startseite.<br />&nbsp;");
 	die;
@@ -97,7 +97,7 @@ if (($rechte) || ($owner)) {
 	if (strpos($open, "_a_")) {
 		if (substr($open, (strpos($open, "_a_"))-32, (strpos($open, "_a_"))) == $SessionSeminar) {
 			$titel="Allgemeiner Dateiordner";
-			$description="Ablage fr allgemeine Ordner und Dokumente der Veranstaltung";
+			$description="Ablage für allgemeine Ordner und Dokumente der Veranstaltung";
 			}
 		
 		$db->query("SELECT date, date_typ, content FROM termine WHERE termin_id='".substr($open, (strpos($open, "_a_"))-32, (strpos($open, "_a_")))."'");
@@ -107,7 +107,7 @@ if (($rechte) || ($owner)) {
 			if (strlen($db->f("content")) >=35)
 				$titel.="...";
 			$titel.=" am ".date("d.m.Y ", $db->f("date"));
-			$description="Ablage fr Ordner und Dokumente zu diesem Termin";
+			$description="Ablage für Ordner und Dokumente zu diesem Termin";
 			}
 			
 		$change=create_folder($titel, $description, substr($open, (strpos($open, "_a_"))-32, (strpos($open, "_a_"))));
@@ -122,16 +122,16 @@ if (($rechte) || ($owner)) {
 	if (strpos($open, "_fd_")) {
 		$db->query("SELECT filename, Vorname, Nachname, username FROM dokumente LEFT JOIN auth_user_md5 USING (user_id) WHERE dokument_id ='".substr($open, (strpos($open, "_fd_"))-32, (strpos($open, "_fd_")))."'");
 		$db->next_record();
-		$msg="infoºWollen sie die Datei <b>".htmlentities(stripslashes($db->f("filename")))."</b> von <a href=\"about.php?username=".$db->f("username")."\">".$db->f("Vorname")." ".$db->f("Nachname")."</a> wirklich l&ouml;schen?<br>";
-		$msg.="<b><a href=\"$PHP_SELF?open=".substr($open, (strpos($open, "_fd_"))-32, (strpos($open, "_fd_")))."_rm_\"><img src=\"pictures/buttons/ja2-button.gif\" border=0></a>&nbsp;&nbsp; <a href=\"$PHP_SELF\"><img src=\"pictures/buttons/nein-button.gif\" border=0></a>º";
+		$msg="info§Wollen sie die Datei <b>".htmlentities(stripslashes($db->f("filename")))."</b> von <a href=\"about.php?username=".$db->f("username")."\">".$db->f("Vorname")." ".$db->f("Nachname")."</a> wirklich l&ouml;schen?<br>";
+		$msg.="<b><a href=\"$PHP_SELF?open=".substr($open, (strpos($open, "_fd_"))-32, (strpos($open, "_fd_")))."_rm_\"><img src=\"pictures/buttons/ja2-button.gif\" border=0></a>&nbsp;&nbsp; <a href=\"$PHP_SELF\"><img src=\"pictures/buttons/nein-button.gif\" border=0></a>§";
 		}
 
 	//Loeschen von Datein im wirklich-ernst Mode
 	if (strpos($open, "_rm_")) {
 		if (delete_document(substr($open, (strpos($open, "_rm_"))-32, (strpos($open, "_rm_")))))
-			$msg.="msgºDie Datei wurde gel&ouml;schtº";
+			$msg.="msg§Die Datei wurde gel&ouml;scht§";
 		else
-			$msg.="errorºDie Datei konnte nicht gel&ouml;scht werdenº";
+			$msg.="error§Die Datei konnte nicht gel&ouml;scht werden§";
 		} 
 
 	//wurde Code fuer Aendern des Namens und der Beschreibung von Ordnern oder Dokumenten ubermittelt (=id+"_c_"), wird entsprechende Funktion aufgerufen

@@ -88,7 +88,7 @@ $u_id = $user->id;
 if ($delete_id) {
    	$db->query("SELECT name FROM archiv WHERE seminar_id= '$delete_id'");
 	$db->next_record();
-	$msg="infoºWollen Sie die Veranstaltung <b>".htmlReady($db->f("name"))."</b> wirklich l&ouml;schen? S&auml;mtliche Daten und die mit der Veranstaltung archivierte Dateisammlung werden unwiederuflich gel&ouml;scht! <br />";
+	$msg="info§Wollen Sie die Veranstaltung <b>".htmlReady($db->f("name"))."</b> wirklich l&ouml;schen? S&auml;mtliche Daten und die mit der Veranstaltung archivierte Dateisammlung werden unwiederuflich gel&ouml;scht! <br />";
 	$msg.="<a href=\"".$PHP_SELF."?delete_really=TRUE&delete_id=$delete_id\"><img src=\"pictures/buttons/ja2-button.gif\" border=0 /></a>&nbsp; \n";
 	$msg.="<a href=\"".$PHP_SELF."?back=TRUE\"><img src=\"pictures/buttons/nein-button.gif\" border=0 /></a>\n";
 	
@@ -102,29 +102,29 @@ if (($delete_id) && ($delete_really)){
 		if ($db2->affected_rows() >0) {
 		$db->query("DELETE FROM archiv WHERE seminar_id = '$delete_id'");
 			if ($db->affected_rows())
-				$msg="msgºDie Veranstaltung wurde aus dem Archiv gel&ouml;schtº";
+				$msg="msg§Die Veranstaltung wurde aus dem Archiv gel&ouml;scht§";
 			$db2->next_record();
 			if ($db2->f("archiv_file_id")) {
 				if (unlink ($ARCHIV_PATH."/".$db2->f("archiv_file_id")))
-					$msg.="msgºDas Zip-Archiv der Veranstaltung wurde aus dem Archiv gel&ouml;scht.º";
+					$msg.="msg§Das Zip-Archiv der Veranstaltung wurde aus dem Archiv gel&ouml;scht.§";
 				else
-					$msg.="errorºDas Zip-Archiv der Veranstaltung konnte nicht aus dem Archiv gel&ouml;scht werden.º";
+					$msg.="error§Das Zip-Archiv der Veranstaltung konnte nicht aus dem Archiv gel&ouml;scht werden.§";
 				}
 			}
 		else
-			$msg="errorºNetter Versuch";
+			$msg="error§Netter Versuch";
 		}
 	elseif ($perm->have_perm("root")) {
 	   	$db2->query("SELECT archiv_file_id FROM archiv WHERE seminar_id='$delete_id'");
 		$db->query("DELETE FROM archiv WHERE seminar_id = '$delete_id'");
 		if ($db->affected_rows())
-			$msg="msgºDie Veranstaltung wurde aus dem Archiv gel&ouml;schtº";
+			$msg="msg§Die Veranstaltung wurde aus dem Archiv gel&ouml;scht§";
 		$db2->next_record();
 		if ($db2->f("archiv_file_id")) {
 			if (unlink ($ARCHIV_PATH."/".$db2->f("archiv_file_id")))
-				$msg.="msgºDas Zip-Archiv der Veranstaltung wurde aus dem Archiv gel&ouml;scht.º";
+				$msg.="msg§Das Zip-Archiv der Veranstaltung wurde aus dem Archiv gel&ouml;scht.§";
 			else
-				$msg.="errorºDas Zip-Archiv der Veranstaltung konnte nicht aus dem Archiv gel&ouml;scht werden.º";
+				$msg.="error§Das Zip-Archiv der Veranstaltung konnte nicht aus dem Archiv gel&ouml;scht werden.§";
 			}
 		}
 	}
@@ -147,10 +147,10 @@ if ($delete_user) {
 		if ($do) {
 		$db->query("DELETE FROM archiv_user WHERE seminar_id = '$d_sem_id' AND user_id='$delete_user'");
 		if ($db->affected_rows())
-			$msg="msgºZugriffsberechtigung entferntº";
+			$msg="msg§Zugriffsberechtigung entfernt§";
 		}
 		else
-			$msg="errorºNetter Versuch";
+			$msg="error§Netter Versuch";
 	}
 	
 //Eintragen von Archiv_Usern
@@ -171,10 +171,10 @@ if ($do_add_user) {
 		if ($do) {
 		$db->query("INSERT INTO archiv_user SET seminar_id = '$a_sem_id', user_id='$add_user', status=\"autor\"");
 		if ($db->affected_rows())
-			$msg="msgºZugriffsberechtigung erteiltº";
+			$msg="msg§Zugriffsberechtigung erteilt§";
 		}
 		else
-			$msg="errorºNetter Versuch";
+			$msg="error§Netter Versuch";
 	$add_user=FALSE;
 	}
 
@@ -534,7 +534,7 @@ IF ($archiv_data["perform_search"]) {
 				if ((($add_user) && (!$db2->affected_rows())) || (!$add_user) || ($new_search)) {
 					echo "<form action=\"$PHP_SELF#anker\">";
 					echo "<hr><b><font size=-1>Benutzer Berechtigung erteilen: </font></b><br />";
-					if (($add_user) && (!$db2->affected_rows)  && (!ºnew_search))
+					if (($add_user) && (!$db2->affected_rows)  && (!§new_search))
 						echo "<br /><b><font size=-1>Es wurde kein Benutzer zu dem eingegebenem Suchbegriff gefunden!</font></b><br />";
 					echo "<font size=-1>Bitte Namen, Vornamen oder Usernamen eingeben:</font>&nbsp; ";
 					echo "<br /><input type=\"TEXT\" size=20 maxlength=255 name=\"search_exp\" />";

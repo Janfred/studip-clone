@@ -169,7 +169,7 @@ function formatReady($what, $trim = TRUE){
 
 ////////////////////////////////////////////////////////////////////////////////
 
-// erm÷glicht einfache Formatierungen in Benutzereingaben
+// ermöglicht einfache Formatierungen in Benutzereingaben
 
 function format($text){
 	$text = preg_replace("'\n?\r\n?'", "\n", $text);
@@ -224,13 +224,13 @@ function format($text){
 	return $text;
 }
 
-// Hilfsfunktion fr format()
+// Hilfsfunktion für format()
 function preg_call_format($tbr){
 	return preg_replace("'-(.+?)(\n(?=-)|\Z)'se", "'<li>\\1</li>'", $tbr);
 }
 
 // entfernt alle Schnellformatierungszeichen aus $text
-// zurckgegeben wird reiner Text (fr HTML-Ausgabe (Druckansicht)
+// zurückgegeben wird reiner Text (für HTML-Ausgabe (Druckansicht)
 // muss dieser noch durch nl2br() laufen
 function kill_format($text){
 	$text = preg_replace("'\n?\r\n?'", "\n", $text);
@@ -298,7 +298,7 @@ function FixLinks($data= ""){
 	return $newText;
 }
 
-// Hilfsfunktion fr FixLinks()
+// Hilfsfunktion für FixLinks()
 function preg_call_link($name, $link, $mod){
 	if($mod == "LINK"){
 		if($name != "")

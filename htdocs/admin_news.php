@@ -1,7 +1,7 @@
 <?php
 /*
 admin_news.php - Ändern der News von Stud.IP
-Copyright (C) 2001  Andre Noack <andre.noack@gmx.net>
+Copyright (C) 2001  André Noack <andre.noack@gmx.net>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -19,19 +19,19 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
  page_open(array("sess"=> "Seminar_Session", "auth" =>"Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
-	$auth->login_if($auth->auth["uid"] == "nobody");
-	$perm->check("autor");
+$auth->login_if($auth->auth["uid"] == "nobody");
+ $perm->check("autor");
 
 require_once "messaging.inc.php";
- 
+
 
 // Klassendefinition
 class studip_news extends messaging
 {
       var $db;            //Datenbankverbindung
       var $modus;
-      var $self;       //enth„lt $PHP_SELF
-      var $msg;        //Nachricht fr msg.inc.php
+      var $self;       //enthält $PHP_SELF
+      var $msg;        //Nachricht für msg.inc.php
       var $sms=array();        //private Nachricht wegen Admin zugriff
       var $news_query=array();
       var $range_detail=array();
@@ -48,7 +48,7 @@ function studip_news()
  global $PHP_SELF,$perm,$auth,$news_range_id,$news_range_name;
  $this->self = $PHP_SELF;
  if ($auth->auth["jscript"]) $this->max_col = floor($auth->auth["xres"] / 10 );
-   else $this->max_col =  64 ; //default fr 640x480
+   else $this->max_col =  64 ; //default für 640x480
  $this->user_id=$auth->auth["uid"];
  $this->db = new DB_Seminar;
  $this->db->query("SELECT CONCAT(vorname,' ',nachname) AS author FROM auth_user_md5 WHERE user_id='".$this->user_id."'");
@@ -172,19 +172,19 @@ global $auth;
  $this->get_news_by_range($id,$limit=100);
  if (!is_array($this->news_query))
          {
-     $this->msg.="infoºKeine News vorhanden!º";
+     $this->msg.="info§Keine News vorhanden!§";
      return FALSE;
      }
  if ($this->news_perm[$id]["perm"]<2 AND $auth->auth["perm"]!="root")
  	{
-     $this->msg.="errorºSie drfen diesen News Bereich nicht administrieren!º";
+     $this->msg.="error§Sie dürfen diesen News Bereich nicht administrieren!§";
      return FALSE;
      }
  echo "\n<form action=\"".$this->p_self("cmd=kill")."\" method=\"POST\">";
  echo "\n<tr><td class=\"blank\"><table class=\"blank\" align=\"center\" width=\"90%\" cellspacing=\"2\" cellpadding=\"1\" border=\"0\">";
  echo "\n<tr><td class=\"blank\" colspan=\"4\" align=\"left\">Vorhandene News im Bereich:<br><b>$this->range_name</b><br>";
- echo "</td><td class=\"blank\" colspan=\"4\" align=\"right\">Markierte News <input type=\"SUBMIT\" name=\"kill\" value=\"l÷schen\">&nbsp;&nbsp;</td></tr>";
- echo "\n<tr><th width=\"15%\">šberschrift</th><th width=\"20%\">Inhalt</th><th width=\"20%\">Autor</th><th width=\"10%\">Einstelldatum</th><th width=\"10%\">Ablaufdatum</th><th width=\"15%\">Bearbeiten</th><th width=\"10%\">L÷schen</th>";
+ echo "</td><td class=\"blank\" colspan=\"4\" align=\"right\">Markierte News <input type=\"SUBMIT\" name=\"kill\" value=\"löschen\">&nbsp;&nbsp;</td></tr>";
+ echo "\n<tr><th width=\"15%\">Überschrift</th><th width=\"20%\">Inhalt</th><th width=\"20%\">Autor</th><th width=\"10%\">Einstelldatum</th><th width=\"10%\">Ablaufdatum</th><th width=\"15%\">Bearbeiten</th><th width=\"10%\">Löschen</th>";
 
  while (list ($news_id,$details) = each ($this->news_query))
         {
@@ -227,18 +227,18 @@ echo "\n<input type=\"HIDDEN\" name=\"news_id\" value=\"".$this->news_query["new
 echo "\n<input type=\"HIDDEN\" name=\"user_id\" value=\"".$this->news_query["user_id"]."\">";
 echo "\n<input type=\"HIDDEN\" name=\"author\" value=\"".$this->news_query["author"]."\">";
 echo "\n<table class=\"blank\" cellspacing=\"6\" cellpadding=\"2\" border=\"0\">";
-echo "\n<tr><td class=\"blank\" width=\"70%\"><b>Autor:</b>&nbsp;".$this->news_query["author"]."<br><br><b>šberschrift</b><br><input type=\"TEXT\" style=\"width: 50%\" size=\"".floor($this->max_col*.5*.8)."\"  name=\"topic\" value=\"".htmlReady($this->news_query["topic"])."\"><br>";
+echo "\n<tr><td class=\"blank\" width=\"70%\"><b>Autor:</b>&nbsp;".$this->news_query["author"]."<br><br><b>Überschrift</b><br><input type=\"TEXT\" style=\"width: 50%\" size=\"".floor($this->max_col*.5*.8)."\"  name=\"topic\" value=\"".htmlReady($this->news_query["topic"])."\"><br>";
 list ($body,$admin_msg)=explode("<admin_msg>",$this->news_query["body"]);
 echo "\n<br><b>Inhalt</b><br><textarea name=\"body\" style=\"width: 100%\" cols=\"".floor($this->max_col*.8*.8)."\" rows=\"10\"   wrap=\"virtual\">".htmlReady($body)."</textarea><br></td>";
-echo "\n<td class=\"blank\" width=\"30%\">Geben sie hier die šberschrift und den Inhalt ihrer News ein.<br><br>Im unteren Bereich k÷nnen sie ausw„hlen, in welchen Bereichen ihre News angezeigt wird.";
-echo "\n<br><br>Drcken sie danach hier, um die nderungen zu bernehmen.<br><br><center><INPUT TYPE=\"SUBMIT\"  name=\"news_submit\" value=\"šbernehmen\"></center></td></tr>";
+echo "\n<td class=\"blank\" width=\"30%\">Geben sie hier die Überschrift und den Inhalt ihrer News ein.<br><br>Im unteren Bereich können sie auswählen, in welchen Bereichen ihre News angezeigt wird.";
+echo "\n<br><br>Drücken sie danach hier, um die Änderungen zu übernehmen.<br><br><center><INPUT TYPE=\"SUBMIT\"  name=\"news_submit\" value=\"Übernehmen\"></center></td></tr>";
 echo "\n<tr><td class=\"blank\" colspan=\"2\">Einstelldatum: <select name=\"date\"><option value=\"".$aktuell."\" selected>".strftime("%d.%m.%y", $aktuell)."</option>";
 for ($i=1; $i<=14; $i++)
     {
     $temp=$aktuell+$i*86400;
     echo "\n<option value=\"".$temp."\">".strftime("%d.%m.%y",$temp)."</option>";
     }
-echo "</select>&nbsp;&nbsp;&nbsp;Gltigkeitsdauer: <select name=\"expire\">";
+echo "</select>&nbsp;&nbsp;&nbsp;Gültigkeitsdauer: <select name=\"expire\">";
 if ($this->news_query["news_id"]!="new_entry"){
     $this->news_query["expire"]=($this->news_query["date"]+$this->news_query["expire"])-$aktuell;
     echo "\n<option value=\"".$this->news_query["expire"]."\" selected>";
@@ -264,7 +264,7 @@ if ($perm->have_perm("root"))
 	if ($this->range_detail["studip"]["type"] OR ($this->news_range=="studip" AND $news_id=="new_entry")) echo "checked";
 	echo "></td></tr>";
      }
-echo "\n<tr><th width=\"90%\" align=\"left\">Pers÷nlicher Bereich:</th><th align=\"center\" width=\"10%\">Anzeigen ?</th></tr>";
+echo "\n<tr><th width=\"90%\" align=\"left\">Persönlicher Bereich:</th><th align=\"center\" width=\"10%\">Anzeigen ?</th></tr>";
 echo "\n<tr><td  width=\"90%\">".$this->news_query["author"]."</td>";
 echo "\n<td width=\"10%\" align=\"center\">";
 if ($this->news_perm[$this->news_query["user_id"]]["perm"] OR $this->news_query["user_id"]==$this->user_id)
@@ -286,7 +286,7 @@ echo "\n</table></form></td></tr>";
 if ($perm->have_perm("admin"))
      {
       echo "\n<form action=\"".$this->p_self("cmd=edit")."\" method=\"POST\"><input type=\"HIDDEN\" name=\"edit_news\" value=\"".$this->news_query["news_id"]."\">";
-      echo "\n<tr><td><br>Einen neuen Bereich hinzufgen:  <INPUT TYPE=\"TEXT\"  name=\"search\" size=\"20\">&nbsp;&nbsp;<input type=\"SUBMIT\" name=\"submit\" value=\"SUCHEN\"><br><br></td></tr></form>";
+      echo "\n<tr><td><br>Einen neuen Bereich hinzufügen:  <INPUT TYPE=\"TEXT\"  name=\"search\" size=\"20\">&nbsp;&nbsp;<input type=\"SUBMIT\" name=\"submit\" value=\"SUCHEN\"><br><br></td></tr></form>";
      }
 
 
@@ -311,7 +311,7 @@ if ($news_id)
                $author=$this->full_username;
                if (!$date) $date=time();
                $this->db->query("INSERT INTO news (news_id,author,topic,body,user_id,date,expire) VALUES ('$news_id','$author','$topic','$body','$user_id','$date','$expire')");
-           	if ($this->db->affected_rows()) $this->msg.="msgºOk, ihre neue News wurde gespeichert!º";
+           	if ($this->db->affected_rows()) $this->msg.="msg§Ok, ihre neue News wurde gespeichert!§";
                }
           else
           	{
@@ -325,10 +325,10 @@ if ($news_id)
                	$this->db->query("UPDATE news SET topic='$topic',body='$body',date='$date',expire='$expire' WHERE news_id='$news_id'");
           		if ($this->db->affected_rows())
                     	{
-                         $this->msg.="msgºOk, die News wurde ver„ndert!º";
+                         $this->msg.="msg§Ok, die News wurde verändert!§";
            			if ($this->modus=="admin" AND $user_id!=$this->user_id)
                          	{
-                              $this->sms[$user_id]="Ihre News \"$topic\" wurde von einem Administrator ver„ndert! \n";
+                              $this->sms[$user_id]="Ihre News \"$topic\" wurde von einem Administrator verändert! \n";
                     		}
                     	}
                     }
@@ -342,7 +342,7 @@ if ($news_id)
                     	if($this->news_perm[$range]["perm"] OR $auth->auth["perm"]=="root")
                     		{
                          	$this->db->query("DELETE FROM news_range WHERE news_id='$news_id' AND range_id='$range'");
-                         	if ($this->db->affected_rows()) $msg.="\n Bereich ".addslashes($details["name"])." gel÷scht.";
+                         	if ($this->db->affected_rows()) $msg.="\n Bereich ".addslashes($details["name"])." gelöscht.";
                          	}
                     	}
                	}
@@ -352,7 +352,7 @@ if ($news_id)
 
           if (!$add_range)
         		{
-          	$this->msg="infoºSie haben keinen Bereich fr ihre News ausgew„hlt! Ihre News ist so nicht sichtbar.";
+          	$this->msg="info§Sie haben keinen Bereich für ihre News ausgewählt! Ihre News ist so nicht sichtbar.";
                 return $news_id;
           	}
           else
@@ -364,17 +364,17 @@ if ($news_id)
                     	if($this->news_perm[$add_range[$i]]["perm"] OR $auth->auth["perm"]=="root")
                     		{
                     		$this->db->query("INSERT INTO news_range (news_id,range_id) VALUES ('$news_id','$add_range[$i]')");
-                    		if ($this->db->affected_rows()) $msg.="\n Bereich ".addslashes($this->news_perm[$add_range[$i]]["name"])." hinzugefgt.";
+                    		if ($this->db->affected_rows()) $msg.="\n Bereich ".addslashes($this->news_perm[$add_range[$i]]["name"])." hinzugefügt.";
                     		}
                     	}
                	}
                if ($msg)
                	{
-                    $this->msg.="msgº".nl2br(htmlReady(stripslashes($msg)))."º";
+                    $this->msg.="msg§".nl2br(htmlReady(stripslashes($msg)))."§";
                     if ($this->modus=="admin" AND $user_id!=$this->user_id)
                     	{
                          if ($this->sms[$user_id]) $this->sms[$user_id].=$msg;
-                         else $this->sms[$user_id]="Ihre News \"$topic\" wurde von einem Administrator ver„ndert! \n $msg";
+                         else $this->sms[$user_id]="Ihre News \"$topic\" wurde von einem Administrator verändert! \n $msg";
                          }
                     }
                }
@@ -384,7 +384,7 @@ if ($news_id)
      }
 else
 	{
-     $this->msg="errorºKeine news_id bergeben!º";
+     $this->msg="error§Keine news_id übergeben!§";
      }
 return FALSE;
 }
@@ -401,14 +401,14 @@ if ($kill_news)
      		{
      	$this->db->query("DELETE FROM news WHERE news_id='$kill_news[$i]'");
      	$this->db->query("DELETE FROM news_range WHERE news_id='$kill_news[$i]'");
-          if ($this->modus=="admin" AND $this->news_query["user_id"]!=$this->user_id) $this->sms[$this->news_query["user_id"]].="Ihre News \"".addslashes($this->news_query["topic"])."\" wurde von einem Administrator gel÷scht! \n";
+          if ($this->modus=="admin" AND $this->news_query["user_id"]!=$this->user_id) $this->sms[$this->news_query["user_id"]].="Ihre News \"".addslashes($this->news_query["topic"])."\" wurde von einem Administrator gelöscht! \n";
           $kill_count++;
           	}
 
      	}
-     $this->msg.="msgºEs wurden $kill_count News gel÷scht!º";
+     $this->msg.="msg§Es wurden $kill_count News gelöscht!§";
      }
-else $this->msg.="errorºKeine News zum l÷schen ausgew„hlt!º";
+else $this->msg.="error§Keine News zum löschen ausgewählt!§";
 }
 
 function search_range($search_str)
@@ -508,7 +508,7 @@ switch ($type)
         {
         case "sem" : $output[0].="Veranstaltungen"; $query="SELECT seminare.Seminar_id AS id,Name AS name FROM seminare LEFT JOIN seminar_user USING (Seminar_id) WHERE seminar_user.user_id='".$this->user_id."' AND seminar_user.status IN ('dozent','tutor')";$add=" AND seminare.Seminar_id ";break;
         case "inst" : $output[0].= "Institute"; $query="SELECT Institute.Institut_id AS id,Name AS name FROM Institute LEFT JOIN user_inst USING (Institut_id) WHERE user_inst.user_id='".$this->user_id."' AND user_inst.inst_perms IN ('admin','dozent','tutor','autor')";$add=" AND Institute.Institut_id ";break;
-        case "fak" : $output[0].= "Fakult„ten"; $query="SELECT Fakultaeten.fakultaets_id AS id,Name AS name FROM Fakultaeten LEFT JOIN fakultaet_user USING (fakultaets_id) WHERE fakultaet_user.user_id='".$this->user_id."' AND fakultaet_user.status IN ('admin','autor')";$add=" AND Fakultaeten.fakultaets_id ";break;
+        case "fak" : $output[0].= "Fakultäten"; $query="SELECT Fakultaeten.fakultaets_id AS id,Name AS name FROM Fakultaeten LEFT JOIN fakultaet_user USING (fakultaets_id) WHERE fakultaet_user.user_id='".$this->user_id."' AND fakultaet_user.status IN ('admin','autor')";$add=" AND Fakultaeten.fakultaets_id ";break;
         }
 $output[0].= "</th><th align=\"center\" width=\"10%\">Anzeigen ?</th></tr>";
 $not_in="";
@@ -618,7 +618,7 @@ if ($news_id=="new_entry") return TRUE;
 $this->get_one_news($news_id);
 if ($auth->auth["perm"]=="root") return TRUE;
 if ( $this->news_query["user_id"]==$this->user_id) return TRUE;
-else if ($this->modus!="admin") $this->msg.="errorºSie drfen nur ihre eigenen News ver„ndernº";
+else if ($this->modus!="admin") $this->msg.="error§Sie dürfen nur ihre eigenen News verändern§";
 if ($this->modus=="admin")
 	{
      reset($this->range_detail);
@@ -626,7 +626,7 @@ if ($this->modus=="admin")
      	{
           if ($this->news_perm[$range]["perm"]>=$check) return TRUE;
           }
-     $this->msg.="errorºSie haben keine Berechtigung fr diese Newsº";
+     $this->msg.="error§Sie haben keine Berechtigung für diese News§";
      }
 return FALSE;
 }
@@ -691,7 +691,7 @@ else
 ?>
 <table cellspacing="0" cellpadding="0" border="0" width="100%">
 <tr><td class="topic"><b>&nbsp;
-News eingeben / ver„ndern</b> <font size="-1">( Bereich: <b><?=$news_range_name?></b> )</font></td></tr>
+News eingeben / verändern</b> <font size="-1">( Bereich: <b><?=$news_range_name?></b> )</font></td></tr>
 <?
 
  if ($perm->have_perm("admin"))
@@ -700,13 +700,13 @@ News eingeben / ver„ndern</b> <font size="-1">( Bereich: <b><?=$news_range_name?
          {
      if (!$search)
              {
-          $news->msg.="errorºDer Suchbegriff fehlt!º";
+          $news->msg.="error§Der Suchbegriff fehlt!§";
           $cmd="";
           }
      else
              {
           $news->search_range($search);
-          if (!is_array($news->search_result)) $news->msg.="infoºDie Suche ergab keine Treffer!º";
+          if (!is_array($news->search_result)) $news->msg.="info§Die Suche ergab keine Treffer!§";
           $cmd="";
           }
      }
@@ -721,7 +721,7 @@ News eingeben / ver„ndern</b> <font size="-1">( Bereich: <b><?=$news_range_name?
       else $cmd="";
       }
 
- if ($news->msg) parse_msg($news->msg,"º","blank","1",FALSE);
+ if ($news->msg) parse_msg($news->msg,"§","blank","1",FALSE);
  $news->msg="";
 
  if ($cmd=="edit")
@@ -729,7 +729,7 @@ News eingeben / ver„ndern</b> <font size="-1">( Bereich: <b><?=$news_range_name?
       if ($perm->have_perm("admin") && $search)
            {
            if ($search) $news->search_range($search);
-           if (empty($news->search_result)) parse_msg("infoºDie Suche ergab keine Treffer!º","º","blank","1",FALSE);
+           if (empty($news->search_result)) parse_msg("info§Die Suche ergab keine Treffer!§","§","blank","1",FALSE);
            }
       if ($auth->auth["perm"]=="dozent" OR $auth->auth["perm"]=="tutor") $news->search_range("blah");
       $news->edit_news($edit_news);
@@ -740,7 +740,7 @@ News eingeben / ver„ndern</b> <font size="-1">( Bereich: <b><?=$news_range_name?
           $news->kill_news($kill_news);
           $cmd="";
           }
- if ($news->msg) parse_msg($news->msg,"º","blank","1",FALSE);
+ if ($news->msg) parse_msg($news->msg,"§","blank","1",FALSE);
  $news->msg="";
 
  if ($cmd=="new_entry")
@@ -758,12 +758,12 @@ News eingeben / ver„ndern</b> <font size="-1">( Bereich: <b><?=$news_range_name?
              if ($perm->have_perm("admin"))
               {
               echo "<form action=\"".$news->p_self("cmd=search")."\" method=\"POST\">&nbsp;&nbsp;&nbsp;<INPUT TYPE=\"TEXT\"  name=\"search\" size=\"20\">&nbsp;&nbsp;<input type=\"SUBMIT\" name=\"submit\" value=\"SUCHEN\">";
-              echo "&nbsp;&nbsp;&nbsp;Geben sie einen Suchbegriff ein, um den gewnschten Bereich zu finden!</form>";
+              echo "&nbsp;&nbsp;&nbsp;Geben sie einen Suchbegriff ein, um den gewünschten Bereich zu finden!</form>";
                }
              else $news->search_range("blah");
           echo "\n</td></tr>";
           echo "\n<tr><td class=\"steel1\"  align=\"center\"><table class=\"blank\" width=\"90%\" cellspacing=\"2\" cellpadding=\"1\" border=\"0\">";
-          $typen = array("user"=>"Benutzer","sem"=>"Veranstaltung","inst"=>"Institut","fak"=>"Fakult„t");
+          $typen = array("user"=>"Benutzer","sem"=>"Veranstaltung","inst"=>"Institut","fak"=>"Fakultät");
           $my_cols=3;
           if ($perm->have_perm("root"))
              {
@@ -772,7 +772,7 @@ News eingeben / ver„ndern</b> <font size="-1">( Bereich: <b><?=$news_range_name?
              }
           if ($perm->have_perm("tutor"))
              {
-              echo "<tr><td colspan=\"$my_cols\" align=\"left\"><b>Pers÷nliche News</b>&nbsp;<a href=\"".$news->p_self("range_id=$user->id")."\">bearbeiten</a></td></tr>";
+              echo "<tr><td colspan=\"$my_cols\" align=\"left\"><b>Persönliche News</b>&nbsp;<a href=\"".$news->p_self("range_id=$user->id")."\">bearbeiten</a></td></tr>";
              }
 
           if ($news->search_result)
@@ -798,7 +798,7 @@ News eingeben / ver„ndern</b> <font size="-1">( Bereich: <b><?=$news_range_name?
           echo"\n</table></td></tr>";
 
           }
-           echo"\n<tr><td class=\"steel1\"><br><form action=\"".$news->p_self("cmd=new_entry")."\" method=\"POST\">&nbsp;&nbsp;&nbsp;<input type=\"SUBMIT\" name=\"new_entry\" value=\"NEU\"> - Drcken sie hier, um eine neue News zu erstellen.</form></td></tr>";
+           echo"\n<tr><td class=\"steel1\"><br><form action=\"".$news->p_self("cmd=new_entry")."\" method=\"POST\">&nbsp;&nbsp;&nbsp;<input type=\"SUBMIT\" name=\"new_entry\" value=\"NEU\"> - Drücken sie hier, um eine neue News zu erstellen.</form></td></tr>";
 
          if (!$news->show_news($news_range_id))
             {

@@ -43,7 +43,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 function checkname(){
  var checked = true;
  if (document.details.Name.value.length<3) {
-    alert("Bitte geben Sie einen Namen fr die Veranstaltung ein!");
+    alert("Bitte geben Sie einen Namen für die Veranstaltung ein!");
  		document.details.Name.focus();
     checked = false;
     }
@@ -53,12 +53,12 @@ function checkname(){
 function checkbereich(){
  var checked = true;
  if (document.details["bereich[]"].selectedIndex < 0) {
-    alert("Bitte geben Sie mindestens einen Studienbereich fr die Veranstaltung ein!");
+    alert("Bitte geben Sie mindestens einen Studienbereich für die Veranstaltung ein!");
  		document.details["bereich[]"].focus();
     checked = false;
  } else {
 		if (document.details["bereich[]"].options[document.details["bereich[]"].selectedIndex].value == "nix") {
-			alert("Die Zeilen die mit '--' beginnen sind keine gltigen Bereiche, sie dienen nur der Orientierung.\nBitte geben Sie einen gltigen Bereich ein!");
+			alert("Die Zeilen die mit '--' beginnen sind keine gültigen Bereiche, sie dienen nur der Orientierung.\nBitte geben Sie einen gültigen Bereich ein!");
  			document.details["bereich[]"].focus();
     	checked = false;
 		}
@@ -69,7 +69,7 @@ function checkbereich(){
 function checkdozent(){
  var checked = true;
  if (document.details["Dozenten[]"].selectedIndex < 0) {
-    alert("Bitte geben Sie mindestens einen Dozenten fr die Veranstaltung ein!");
+    alert("Bitte geben Sie mindestens einen Dozenten für die Veranstaltung ein!");
  		document.details["Dozenten[]"].focus();
     checked = false;
  }
@@ -89,7 +89,7 @@ function checkpassword(){
 function checkpassword2(){
  var checked = true;
 if (document.details.password.value != document.details.password2.value) {
-    alert("Das Passwort stimmt nicht mit dem Wiederholungspasswortt berein!");
+    alert("Das Passwort stimmt nicht mit dem Wiederholungspasswortt überein!");
     		document.details.password2.focus();
     checked = false;3
     }
@@ -214,39 +214,39 @@ if (($s_command=="edit") && ($s_send)){
 		$my_perms=$db2->f("status");
 
 		if ((!$perm->have_perm("admin")) && ($db2->f("status") != "dozent") && ($db2->f("status") != "tutor")) {
-			$msg .= "errorºSie haben keine Berechtigung diese Veranstaltung zu ver&auml;ndern.º";
+			$msg .= "error§Sie haben keine Berechtigung diese Veranstaltung zu ver&auml;ndern.§";
 			$run = FALSE;
 			}
 			
 		if ($perm->have_perm("admin") && !$perm->have_perm("root")) {
 			$db2->query("select inst_perms from seminare LEFT JOIN user_inst USING(Institut_id) where Seminar_id = '$s_id' AND user_id = '$user_id'");
 				if (!$db2->next_record() || $db2->f("inst_perms") != "admin") {
-      					$msg .= "errorºSie haben keine Berechtigung diese Veranstaltung zu ver&auml;ndern.º";
+      					$msg .= "error§Sie haben keine Berechtigung diese Veranstaltung zu ver&auml;ndern.§";
       					$run = FALSE;
 					}
     }
 
     ## Do we have all necessary data?
     if (empty($Name)) {
-      $msg .= "errorºBitte geben Sie den <B>Namen der Veranstaltung</B> ein!º";
+      $msg .= "error§Bitte geben Sie den <B>Namen der Veranstaltung</B> ein!§";
       $run = FALSE;
     }
     
     if ((empty($Institut)) && (!$my_perms== "tutor")) {
-      $msg .= "errorºBitte geben Sie ein <B>Heimat-Institut</B> an!º";
+      $msg .= "error§Bitte geben Sie ein <B>Heimat-Institut</B> an!§";
       $run = FALSE;
     }
 
     if ($SEM_CLASS[$SEM_TYPE[$Status]["class"]]["bereiche"]) {
     if (empty($bereich)) {
-      $msg .= "errorºBitte geben Sie wenigstens einen <B>Studienbereich</B> an!º";
+      $msg .= "error§Bitte geben Sie wenigstens einen <B>Studienbereich</B> an!§";
       $run = FALSE;
 		} else {
 			$dochnoch = "nein";    // Test ob ausser Murks auch etwas Sinnvolles angeklickt wurde
 			while (list($key,$val) = each($bereich)) 
 				if ($val != "nix") $dochnoch = "ja";
 			if ($dochnoch != "ja") {
-				$msg .= "errorºSie haben nur einen ung&uuml;ltigen Studienbereich ausgew&auml;hlt. Bitte geben Sie wenigstens einen <B>Studienbereich</B> an!º";
+				$msg .= "error§Sie haben nur einen ung&uuml;ltigen Studienbereich ausgew&auml;hlt. Bitte geben Sie wenigstens einen <B>Studienbereich</B> an!§";
     	  $run = FALSE;
 			}
 			reset ($bereich);
@@ -254,18 +254,18 @@ if (($s_command=="edit") && ($s_send)){
 	}
     
     if ($perm->have_perm("admin") && empty($Dozenten)) {
-      $msg .= "errorºBitte geben Sie wenigstens einen <B>Dozenten</B> an!º";
+      $msg .= "error§Bitte geben Sie wenigstens einen <B>Dozenten</B> an!§";
       $run = FALSE;
       }
      
    if (($hashpass) && ($hashpass !=""))
     	if ($hashpass != $hashpass2) {
-		$msg .= "errorºDas Wiederholungspasswort stimmt nicht mit dem Passwort &uuml;berein!º";
+		$msg .= "error§Das Wiederholungspasswort stimmt nicht mit dem Passwort &uuml;berein!§";
 		$run = FALSE;
    		}
    else
     	if ($password != $password2) {
-		$msg .= "errorºDas Wiederholungspasswort stimmt nicht mit dem Passwort &uuml;berein!º";
+		$msg .= "error§Das Wiederholungspasswort stimmt nicht mit dem Passwort &uuml;berein!§";
 		$run = FALSE;
    		}
 
@@ -290,7 +290,7 @@ if (($s_command=="edit") && ($s_send)){
 			WHERE Seminar_id='$s_id'";
     $db->query($query);
     if ($db->affected_rows()) {
-	$msg .= "msgºDie Grund-Daten der Veranstaltung \"" . stripslashes($Name) . "\" wurden ver&auml;ndert.º";
+	$msg .= "msg§Die Grund-Daten der Veranstaltung \"" . stripslashes($Name) . "\" wurden ver&auml;ndert.§";
 	$db->query("UPDATE seminare SET chdate='".time()."' WHERE Seminar_id='$s_id'");
 	}
 	
@@ -307,7 +307,7 @@ if (($s_command=="edit") && ($s_send)){
 		$db->next_record();
 		$temp_admin_seminare_start_time=$db->f("start_time");
 
-		if (isset($Dozenten)) {				// alle ausgew„hlten Dozenten durchlaufen
+		if (isset($Dozenten)) {				// alle ausgewählten Dozenten durchlaufen
 			$self_included = 0;
 			while (list($key,$val) = each($Dozenten)) {
 				$start = strrpos($val,'(') + 1;
@@ -329,7 +329,7 @@ if (($s_command=="edit") && ($s_send)){
 			}
 		}
 
-		if (isset($Tutoren)) {				 // alle ausgew„hlten Tutoren durchlaufen
+		if (isset($Tutoren)) {				 // alle ausgewählten Tutoren durchlaufen
 			while (list($key,$val) = each($Tutoren)) {
 				$start = strrpos($val,'(') + 1;
 				$length = strrpos($val,')') - $start;
@@ -376,7 +376,7 @@ if (($s_command=="edit") && ($s_send)){
 			## Alle alten beteiligten Institute rauswerfen, dann noch mal sauber neu eintragen
 			    $query = "DELETE from seminar_inst where Seminar_id='$s_id'";
 			    $db3->query($query);
-			while (list($key,$val) = each($b_institute)) {       // alle ausgew„hlten beteiligten Institute durchlaufen
+			while (list($key,$val) = each($b_institute)) {       // alle ausgewählten beteiligten Institute durchlaufen
 				$query = "INSERT INTO seminar_inst values('$s_id','$val')";
 				$db3->query($query);			     // Institut eintragen
 			}
@@ -422,7 +422,7 @@ if (($s_command == "kill") && ($s_send)) {
 
    //Admin sollte man schon sein
    if (!$perm->have_perm("admin")) {
-    	$msg .= "errorºSie haben keine Berechtigung Veranstaltungen zu archivieren.º";
+    	$msg .= "error§Sie haben keine Berechtigung Veranstaltungen zu archivieren.§";
     	$run = FALSE;
     	}
 
@@ -430,7 +430,7 @@ if (($s_command == "kill") && ($s_send)) {
     if (!$perm->have_perm("root")) {
 	$db2->query("select inst_perms from seminare LEFT JOIN user_inst USING(Institut_id) where Seminar_id = '$s_id' AND user_id = '$user_id'");
 		if (!$db2->next_record() || $db2->f("inst_perms") != "admin") {
-		      $msg .= "errorºSie haben keine Berechtigung diese Veranstaltung zu archivieren.º";
+		      $msg .= "error§Sie haben keine Berechtigung diese Veranstaltung zu archivieren.§";
 		      $run = FALSE;
 		}
 	}
@@ -439,11 +439,11 @@ if (($s_command == "kill") && ($s_send)) {
 	$db2->query ("SELECT start_time, duration_time FROM seminare WHERE Seminar_id = '$s_id'");
 	$db2->next_record();
 	if ($db2->f("duration_time") == -1) {
-		      $msg .= "errorºDas Archivieren der Veranstaltung ist nicht m&ouml;glich, da diese Veranstaltung eine dauerhafte Veranstaltung ist. <br>Wenn Sie sie wirklich archivieren wollen, dann &auml;ndern Sie bitte die Semesterzurordnung &uuml;ber den Menupunkt <a href=\"admin_metadates.php?seminar_id=$s_id\"><b>Zeiten</b></a>.º";
+		      $msg .= "error§Das Archivieren der Veranstaltung ist nicht m&ouml;glich, da diese Veranstaltung eine dauerhafte Veranstaltung ist. <br>Wenn Sie sie wirklich archivieren wollen, dann &auml;ndern Sie bitte die Semesterzurordnung &uuml;ber den Menupunkt <a href=\"admin_metadates.php?seminar_id=$s_id\"><b>Zeiten</b></a>.§";
 		      $run = FALSE;
 		}
 	elseif (time() < ($db2->f("start_time") + $db2->f("duration_time"))) {
-		      $msg .= "errorºDas Archivieren der Veranstaltung ist nicht m&ouml;glich, da diese Veranstaltung &uuml;ber mehrere Semester l&auml;uft und noch nicht abgeschlossen ist. <br>Wenn sie Sie wirklich archivieren wollen, dann &auml;ndern Sie bitte die Semesterzurordnung &uuml;ber den Menupunkt <a href=\"admin_metadates.php?seminar_id=$s_id\"><b>Zeiten</b></a>.º";
+		      $msg .= "error§Das Archivieren der Veranstaltung ist nicht m&ouml;glich, da diese Veranstaltung &uuml;ber mehrere Semester l&auml;uft und noch nicht abgeschlossen ist. <br>Wenn sie Sie wirklich archivieren wollen, dann &auml;ndern Sie bitte die Semesterzurordnung &uuml;ber den Menupunkt <a href=\"admin_metadates.php?seminar_id=$s_id\"><b>Zeiten</b></a>.§";
 		      $run = FALSE;
 		}
 
@@ -456,66 +456,66 @@ if (($s_command == "kill") && ($s_send)) {
     $query = "DELETE from seminar_user where Seminar_id='$s_id'";
     $db->query($query);
     if (($db_ar = $db->affected_rows()) > 0) {
-      $msg .= "infoº$db_ar Eintr&auml;ge aus der Tabelle \"seminar_user\" gel&ouml;scht.º";
+      $msg .= "info§$db_ar Eintr&auml;ge aus der Tabelle \"seminar_user\" gel&ouml;scht.§";
     }
 		## Alle beteiligten Institute rauswerfen
 	  $query = "DELETE FROM seminar_inst where Seminar_id='$s_id'";
     $db->query($query);
     if (($db_ar = $db->affected_rows()) > 0) {
-      $msg .= "infoº$db_ar Eintr&auml;ge aus der Tabelle \"seminar_inst\" gel&ouml;scht.º";
+      $msg .= "info§$db_ar Eintr&auml;ge aus der Tabelle \"seminar_inst\" gel&ouml;scht.§";
     }
 		## Alle Eintraege in der seminar_bereich rauswerfen
 	  $query = "DELETE FROM seminar_bereich where Seminar_id='$s_id'";
     $db->query($query);
     if (($db_ar = $db->affected_rows()) > 0) {
-      $msg .= "infoº$db_ar Eintr&auml;ge aus der Tabelle \"seminar_bereich\" gel&ouml;scht.º";
+      $msg .= "info§$db_ar Eintr&auml;ge aus der Tabelle \"seminar_bereich\" gel&ouml;scht.§";
     }
 		## Alle Termine mit allem was dranhaengt zu diesem Seminar loeschen.
     if (($db_ar = delete_range_of_dates($s_id, TRUE)) > 0) {
-      $msg .= "infoº$db_ar Termine gel&ouml;scht.º";
+      $msg .= "info§$db_ar Termine gel&ouml;scht.§";
     }
 		## Alle weiteren Postings zu diesem Seminar loeschen.
     $query = "DELETE from px_topics where Seminar_id='$s_id'";
     $db->query($query);
     if (($db_ar = $db->affected_rows()) > 0) {
-      $msg .= "infoº$db_ar weitere Eintr&auml;ge aus der Tabelle \"px_topics\" gel&ouml;scht.º";
+      $msg .= "info§$db_ar weitere Eintr&auml;ge aus der Tabelle \"px_topics\" gel&ouml;scht.§";
     }
 		## Alle Dokumente im allgemeinen Ordner zu diesem Seminar loeschen.
     if (($db_ar = recursiv_folder_delete($s_id)) > 0) {
-      $msg .= "infoº$db_ar Dokumente und Ordner aus dem \"allgemeinen Dateiordner\" gel&ouml;scht.º";
+      $msg .= "info§$db_ar Dokumente und Ordner aus dem \"allgemeinen Dateiordner\" gel&ouml;scht.§";
     }
-		## Literatur zu diesem Seminar l÷schen
+		## Literatur zu diesem Seminar löschen
 	  $query = "DELETE FROM literatur where range_id='$s_id'";
     $db->query($query);
     if (($db_ar = $db->affected_rows()) > 0) {
-      $msg .= "infoºLiteratur und Links gel&ouml;scht.º";
+      $msg .= "info§Literatur und Links gel&ouml;scht.§";
     }
-		## Alle News-Verweise auf dieses Seminar l÷schen
+		## Alle News-Verweise auf dieses Seminar löschen
 	  $query = "DELETE FROM news_range where range_id='$s_id'";
     $db->query($query);
     if (($db_ar = $db->affected_rows()) > 0) {
-      $msg .= "infoº$db_ar Eintr&auml;ge aus der Tabelle \"news_range\" gel&ouml;scht.º";
+      $msg .= "info§$db_ar Eintr&auml;ge aus der Tabelle \"news_range\" gel&ouml;scht.§";
     }
-		## Die News durchsehen, ob es da jetzt verweiste Eintr„ge gibt...
+		## Die News durchsehen, ob es da jetzt verweiste Einträge gibt...
 	  $query = "SELECT news.news_id FROM news LEFT OUTER JOIN news_range USING (news_id) where range_id IS NULL";
     $db->query($query);
-		While ($db->next_record()) {			  // Diese News h„ngen an nix mehr...
+		While ($db->next_record()) {			  // Diese News hängen an nix mehr...
 			$tempNews_id = $db->f("news_id");
 		   $query = "DELETE FROM news where news_id = '$tempNews_id'";
 	    $db2->query($query);
 		}
     if (($db_ar = $db->num_rows()) > 0) {
-      $msg .= "infoº$db_ar Eintr&auml;ge aus der Tabelle \"news\" gel&ouml;scht.º";
+      $msg .= "info§$db_ar Eintr&auml;ge aus der Tabelle \"news\" gel&ouml;scht.§";
     }
 		## und das Seminar loeschen.
     $query = "DELETE FROM seminare where Seminar_id= '$s_id'";
     $db->query($query);
     if ($db->affected_rows() == 0) {
-      $msg .= "errorº<b>Fehler:</b> $query º";
+      $msg .= "error§<b>Fehler:</b> $query §";
       break;
     }
 
-    $msg .= "msgºVeranstaltung \"".htmlReady(stripslashes($Name))."\" gel&ouml;scht.º";
+    $msg .= "msg§Veranstaltung \"".htmlReady(stripslashes($Name))."\" gel&ouml;scht.§";
 	}
 }
 
@@ -556,12 +556,12 @@ if ($s_command) {
 	<tr><td class="blank" colspan=2><br>
 	<?
 	if ($s_command=="edit") {
-		$msg.="infoºAchtung: alle <b>FETT</b> gedruckten Kategorien M&Uuml;SSEN ausgef&uuml;llt werden!<br>Wenn Sie unsicher bei den m&ouml;glichen Eingaben sind, finden Sie in der Kopfzeile <img src='pictures/hilfe.gif' border=0> Hilfeº";
+		$msg.="info§Achtung: alle <b>FETT</b> gedruckten Kategorien M&Uuml;SSEN ausgef&uuml;llt werden!<br>Wenn Sie unsicher bei den m&ouml;glichen Eingaben sind, finden Sie in der Kopfzeile <img src='pictures/hilfe.gif' border=0> Hilfe§";
 		parse_msg($msg);
 		echo "</td></tr><tr><td class=\"blank\" colspan=2>";
 	}
 	elseif  ($s_command=="kill") {
-		$msg.="infoº<font size=-1>Achtung: Sie sind im Begriff die Veranstaltung <b>".$db->f("Name")."</b> zu archivieren! Damit verschieben Sie die Veranstaltung mit allen zugeh&ouml;rigen Daten in das Archiv.<br /> </font><font size=-1 color=\"#FF0000\">Die Veranstaltung kann danach nur im Archiv eingesehen werden. Dieser Schritt l&auml;sst sich nicht r&uuml;ckg&auml;ngig machen!</font><br /><font size=-1>Wenn Sie sich sicher sind, dass diese Veranstaltung nicht mehr aktiv ist, best&auml;tigen Sie das Archivieren unten am Ende der Seite.</font>º";
+		$msg.="info§<font size=-1>Achtung: Sie sind im Begriff die Veranstaltung <b>".$db->f("Name")."</b> zu archivieren! Damit verschieben Sie die Veranstaltung mit allen zugeh&ouml;rigen Daten in das Archiv.<br /> </font><font size=-1 color=\"#FF0000\">Die Veranstaltung kann danach nur im Archiv eingesehen werden. Dieser Schritt l&auml;sst sich nicht r&uuml;ckg&auml;ngig machen!</font><br /><font size=-1>Wenn Sie sich sicher sind, dass diese Veranstaltung nicht mehr aktiv ist, best&auml;tigen Sie das Archivieren unten am Ende der Seite.</font>§";
 		parse_msg($msg);
 		echo "</td></tr><tr><td class=\"blank\" colspan=2>";
 	}

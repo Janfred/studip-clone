@@ -53,7 +53,7 @@ if ($sms_msg)
 
 IF ($SessSemName[1] =="")
 	{
-	parse_window ("errorºSie haben keine Veranstaltung gew&auml;hlt. <br /><font size=-1 color=black>Dieser Teil des Systems kann nur genutzt werden, wenn Sie vorher eine Veranstaltung gew&auml;hlt haben.<br /><br /> Dieser Fehler tritt auch auf, wenn Ihre Session abgelaufen ist. Wenn sie sich l„nger als $AUTH_LIFETIME Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurck zur Anmeldung zu gelangen. </font>", "º",
+	parse_window ("error§Sie haben keine Veranstaltung gew&auml;hlt. <br /><font size=-1 color=black>Dieser Teil des Systems kann nur genutzt werden, wenn Sie vorher eine Veranstaltung gew&auml;hlt haben.<br /><br /> Dieser Fehler tritt auch auf, wenn Ihre Session abgelaufen ist. Wenn sie sich länger als $AUTH_LIFETIME Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurück zur Anmeldung zu gelangen. </font>", "§",
 				"Keine Veranstaltung gew&auml;hlt", 
 				"<a href=\"index.php\"><b>&nbsp;Hier</b></a> geht es wieder zur Anmeldung beziehungsweise Startseite.<br />&nbsp;");
 	die;
@@ -78,11 +78,11 @@ if ($cmd=="pleasure") {
 		if ($db->next_record()) {
 			$userchange=$db->f("user_id");
 			$db->query("UPDATE seminar_user SET status='tutor' WHERE Seminar_id = '$id' AND user_id = '$userchange'");
-			$msg = "msgºBef&ouml;rderung von ".$db->f("Vorname")." ". $db->f("Nachname")." durchgef&uuml;hrtº";
+			$msg = "msg§Bef&ouml;rderung von ".$db->f("Vorname")." ". $db->f("Nachname")." durchgef&uuml;hrt§";
 		}
-		else $msg ="errorºNetter Versuch! vielleicht beim n&auml;chsten Mal!º";
+		else $msg ="error§Netter Versuch! vielleicht beim n&auml;chsten Mal!§";
 	}
-	else $msg ="errorºNetter Versuch! vielleicht beim n&auml;chsten Mal!º";
+	else $msg ="error§Netter Versuch! vielleicht beim n&auml;chsten Mal!§";
 }
 
 // jemand ist der anspruchsvollen Aufgabe eines Tutors nicht gerecht geworden...
@@ -94,9 +94,9 @@ if ($cmd=="pain") {
 		$db->next_record();
 		$userchange=$db->f("user_id");
 		$db->query("UPDATE seminar_user SET status='autor' WHERE Seminar_id = '$id' AND user_id = '$userchange'");
-		$msg = "msgºDer Tutor ".$db->f("Vorname")." ". $db->f("Nachname")." wurde entlassen und auf Autor zur&uuml;ckgestuft.º";
+		$msg = "msg§Der Tutor ".$db->f("Vorname")." ". $db->f("Nachname")." wurde entlassen und auf Autor zur&uuml;ckgestuft.§";
 	}
-	else $msg ="errorºNetter Versuch! vielleicht beim n&auml;chsten Mal!º";
+	else $msg ="error§Netter Versuch! vielleicht beim n&auml;chsten Mal!§";
 }
 
 // jemand ist zu bl&ouml;de, sein Seminar selbst zu abbonieren...
@@ -108,11 +108,11 @@ if ($cmd=="schreiben") {
 		if ($db->next_record()) {
 			$userchange=$db->f("user_id");
 			$db->query("UPDATE seminar_user SET status='autor' WHERE Seminar_id = '$id' AND user_id = '$userchange'");
-			$msg = "msgºDer User ".$db->f("Vorname")." ". $db->f("Nachname")." wurde als Autor in die Veranstaltung aufgenommen.º";
+			$msg = "msg§Der User ".$db->f("Vorname")." ". $db->f("Nachname")." wurde als Autor in die Veranstaltung aufgenommen.§";
 		}
-		else $msg ="errorºNetter Versuch! vielleicht beim n&auml;chsten Mal!º";
+		else $msg ="error§Netter Versuch! vielleicht beim n&auml;chsten Mal!§";
 	}
-	else $msg ="errorºNetter Versuch! vielleicht beim n&auml;chsten Mal!º";
+	else $msg ="error§Netter Versuch! vielleicht beim n&auml;chsten Mal!§";
 }
 
 // jemand sollte erst mal das Maul halten...
@@ -124,11 +124,11 @@ if ($cmd=="lesen") {
 		$db->next_record();
 		$userchange=$db->f("user_id");
 		$db->query("UPDATE seminar_user SET status='user' WHERE Seminar_id = '$id' AND user_id = '$userchange'");
-		$msg = "msgºDer Autor ".$db->f("Vorname")." ". $db->f("Nachname")." wurde auf Leser zur&uuml;ckgestuft.º";
-		$msg.= "infoºUm jemanden permanent am Schreiben zu hindern, m&uuml;ssen Sie die Veranstaltung auf \"Schreiben nur mit Passwort\" setzen und ein Veranstaltungs-Passwort vergeben.<br>\n"
-				."Dann k&ouml;nnen sich weitere Benutzer nur noch mit Kenntnis des Veranstaltungs-Passworts als Autor anmelden.º";
+		$msg = "msg§Der Autor ".$db->f("Vorname")." ". $db->f("Nachname")." wurde auf Leser zur&uuml;ckgestuft.§";
+		$msg.= "info§Um jemanden permanent am Schreiben zu hindern, m&uuml;ssen Sie die Veranstaltung auf \"Schreiben nur mit Passwort\" setzen und ein Veranstaltungs-Passwort vergeben.<br>\n"
+				."Dann k&ouml;nnen sich weitere Benutzer nur noch mit Kenntnis des Veranstaltungs-Passworts als Autor anmelden.§";
 	}
-	else $msg ="errorºNetter Versuch! vielleicht beim n&auml;chsten Mal!º";
+	else $msg ="error§Netter Versuch! vielleicht beim n&auml;chsten Mal!§";
 }
 
 // und tschuess...
@@ -140,11 +140,11 @@ if ($cmd=="raus") {
 		$db->next_record();
 		$userchange=$db->f("user_id");
 		$db->query("DELETE FROM seminar_user WHERE Seminar_id = '$id' AND user_id = '$userchange'");
-		$msg = "msgºDer Leser ".$db->f("Vorname")." ". $db->f("Nachname")." wurde aus der Veranstaltung entfernt.º";
-		$msg.= "infoºUm jemanden permanent am Lesen zu hindern, m&uuml;ssen Sie die Veranstaltung auf \"Lesen nur mit Passwort\" setzen und ein Veranstaltungs-Passwort vergeben.<br>\n"
-				."Dann k&ouml;nnen sich weitere Benutzer nur noch mit Kenntnis des Veranstaltungs-Passworts als Autor anmelden.º";
+		$msg = "msg§Der Leser ".$db->f("Vorname")." ". $db->f("Nachname")." wurde aus der Veranstaltung entfernt.§";
+		$msg.= "info§Um jemanden permanent am Lesen zu hindern, m&uuml;ssen Sie die Veranstaltung auf \"Lesen nur mit Passwort\" setzen und ein Veranstaltungs-Passwort vergeben.<br>\n"
+				."Dann k&ouml;nnen sich weitere Benutzer nur noch mit Kenntnis des Veranstaltungs-Passworts als Autor anmelden.§";
 	}
-	else $msg ="errorºNetter Versuch! vielleicht beim n&auml;chsten Mal!º";
+	else $msg ="error§Netter Versuch! vielleicht beim n&auml;chsten Mal!§";
 }
 
 // so bin auch ich berufen?
@@ -164,7 +164,7 @@ if (isset($berufen)) {
 					if ($db2->f("status") == "autor" || $db2->f("status") == "user") {
 						// gehen wir ihn halt hier hochstufen
 						$db2->query("UPDATE seminar_user SET status='tutor' WHERE Seminar_id = '$id' AND user_id = '$u_id'");
-						$msg = "msgº".$db->f("Vorname")." ". $db->f("Nachname")." wurde zum Tutor bef&ouml;rdert..º";
+						$msg = "msg§".$db->f("Vorname")." ". $db->f("Nachname")." wurde zum Tutor bef&ouml;rdert..§";
 					} else {
 						;	// na, das ist ja voellig witzlos, da tun wir einfach nix.
 							// Nicht das sich noch ein Dozent auf die Art und Weise selber degradiert!
@@ -174,14 +174,14 @@ if (isset($berufen)) {
 					$db->next_record();
 					$group=select_group ($db3->f("start_time"), $u_id);
 					$db2->query("INSERT into seminar_user (Seminar_id, user_id, status, gruppe) values ('$id', '$u_id', 'tutor','$group' )");
-					$msg = sprintf ("msgº%s wurde als Tutor in die Veranstaltung aufgenommen.</b>", get_fullname($u_id));
+					$msg = sprintf ("msg§%s wurde als Tutor in die Veranstaltung aufgenommen.</b>", get_fullname($u_id));
 				}
 			}
-			else $msg ="errorºNetter Versuch! vielleicht beim n&auml;chsten Mal!º";
+			else $msg ="error§Netter Versuch! vielleicht beim n&auml;chsten Mal!§";
 		}
-		else $msg ="errorºNetter Versuch! vielleicht beim n&auml;chsten Mal!º";
+		else $msg ="error§Netter Versuch! vielleicht beim n&auml;chsten Mal!§";
 	}
-	else $msg ="errorºNetter Versuch! vielleicht beim n&auml;chsten Mal!º";
+	else $msg ="error§Netter Versuch! vielleicht beim n&auml;chsten Mal!§";
 }
 
 $gruppe = array ("dozent" => "Dozenten",
@@ -304,7 +304,7 @@ if ($db->num_rows()) { //Only if Users were found...
 		}
 
 		elseif ($key == "autor") {
-			// zum Tutor bef÷rdern
+			// zum Tutor befördern
 			if ($SemUserStatus!="tutor") {
 				$db2->query ("SELECT inst_perms, user_id, Institut_id FROM user_inst WHERE user_id = '$UID' AND Institut_id = '$SessSemName[5]' AND inst_perms!='user' AND inst_perms!='autor'");		
 				if ($db2->next_record()) {

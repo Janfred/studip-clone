@@ -2,7 +2,7 @@
 
 /*
 literatur.php - Literaturanzeige von Stud.IP
-Copyright (C) 2000 Andr‚ Noack <anoack@mcis.de>, Cornelis Kater <ckater@gwdg.de>, Stefan Suchi <suchi@gmx.de>
+Copyright (C) 2000 André Noack <anoack@mcis.de>, Cornelis Kater <ckater@gwdg.de>, Stefan Suchi <suchi@gmx.de>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -50,7 +50,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 <?
 IF ($SessSemName[1] =="")
 	{
-	parse_window ("errorºSie haben keine Veranstaltung gew&auml;hlt. <br /><font size=-1 color=black>Dieser Teil des Systems kann nur genutzt werden, wenn Sie vorher eine Veranstaltung gew&auml;hlt haben.<br /><br /> Dieser Fehler tritt auch auf, wenn Ihre Session abgelaufen ist. Wenn sie sich l„nger als $AUTH_LIFETIME Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurck zur Anmeldung zu gelangen. </font>", "º",
+	parse_window ("error§Sie haben keine Veranstaltung gew&auml;hlt. <br /><font size=-1 color=black>Dieser Teil des Systems kann nur genutzt werden, wenn Sie vorher eine Veranstaltung gew&auml;hlt haben.<br /><br /> Dieser Fehler tritt auch auf, wenn Ihre Session abgelaufen ist. Wenn sie sich länger als $AUTH_LIFETIME Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurück zur Anmeldung zu gelangen. </font>", "§",
 				"Keine Veranstaltung gew&auml;hlt", 
 				"<a href=\"index.php\"><b>&nbsp;Hier</b></a> geht es wieder zur Anmeldung beziehungsweise Startseite.<br />&nbsp;");
 	die;
@@ -116,7 +116,7 @@ if ($db->num_rows()) {
 		}
 	}
 	if ((!$literatur) && (!$links)) {
-		parse_msg("infoº<font size=-1><b>In dieser Veranstaltung wurde keine Literatur oder Links erfasst</b></font>", "º", "steel1", 
+		parse_msg("info§<font size=-1><b>In dieser Veranstaltung wurde keine Literatur oder Links erfasst</b></font>", "§", "steel1", 
 		2, FALSE);
 		}
 	echo "</td></tr></table></td></tr></table>";

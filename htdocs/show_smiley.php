@@ -11,7 +11,7 @@ $SMILE_SHORT_R=array_flip($SMILE_SHORT);
 <body>
 <table><tr><td valign="top">
 <table><tr>
-<th>Bild</th><th>Schreibweise</th><th>Krzel</th>
+<th>Bild</th><th>Schreibweise</th><th>Kürzel</th>
 </tr>
 <?
 $zahl=0;
@@ -30,7 +30,7 @@ while ($entry=$folder->read()){
            ?>
            </table></td><td valign="top">
            <table align="center"><tr>
-           <th>Bild</th><th>Schreibweise</th><th>Krzel</th>
+           <th>Bild</th><th>Schreibweise</th><th>Kürzel</th>
            </tr>
            <?
        }

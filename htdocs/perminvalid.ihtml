@@ -19,7 +19,7 @@ require_once "config.inc.php";
 <tr><td class="blank">&nbsp;</td></tr>
 
 	<?
-		parse_msg ("errorºZugriff verweigert <br /><font size=-1 color=black>Wahrscheinlich ist Ihre Session abgelaufen. Wenn sie sich l„nger als $AUTH_LIFETIME Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurck zur Anmeldung zu gelangen.<br /> <br /> Eine andere Ursache kann der Zugrff auf Teile des System, fr die Sie keine Berechtigung haben, sein. In diesem Fall gelangen Sie ben den untenstehenden Link zurck auf die Startseite.", "º", "blank", 1)
+		parse_msg ("error§Zugriff verweigert <br /><font size=-1 color=black>Wahrscheinlich ist Ihre Session abgelaufen. Wenn sie sich länger als $AUTH_LIFETIME Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurück zur Anmeldung zu gelangen.<br /> <br /> Eine andere Ursache kann der Zugrff auf Teile des System, für die Sie keine Berechtigung haben, sein. In diesem Fall gelangen Sie üben den untenstehenden Link zurück auf die Startseite.", "§", "blank", 1)
 	?>
 	<tr><td class="blank"><font size=-1><a href="index.php"><b>&nbsp;Hier</b></a> geht es wieder zur Anmeldung beziehungsweise Startseite.<br />&nbsp;
 

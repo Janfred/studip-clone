@@ -49,11 +49,11 @@ if ($cmd=="delete_all") {
 	$count_deleted_sms=$msging->delete_all_sms ($user->id, $delete_unread);
 	if ($count_deleted_sms)
 		if ($count_deleted_sms==1)
-			$msg="msg∫Es wurde eine Nachricht gel&ouml;scht.";
+			$msg="msgßEs wurde eine Nachricht gel&ouml;scht.";
 		else
-			$msg="msg∫Es wurden ".$db->affected_rows()." Nachrichten gel&ouml;scht.";
+			$msg="msgßEs wurden ".$db->affected_rows()." Nachrichten gel&ouml;scht.";
 	else
-		$msg="error∫Es liegen keine Nachrichten vor, die gel&ouml;scht werden konnten.";
+		$msg="errorßEs liegen keine Nachrichten vor, die gel&ouml;scht werden konnten.";
 	}
 	
 //Nachricht loeschen
@@ -66,12 +66,12 @@ if ($cmd=="delete") {
 			}
 	if ($l)
 		if ($l==1)
-			$msg="msg∫Es wurde eine Nachricht gel&ouml;scht.";
+			$msg="msgßEs wurde eine Nachricht gel&ouml;scht.";
 		else
-			$msg="msg∫Es wurden $l Nachrichten gel&ouml;scht.";
+			$msg="msgßEs wurden $l Nachrichten gel&ouml;scht.";
 		}
 	else
-		$msg="error∫Es konnten keine Nachrichten gel&ouml;scht werden.";
+		$msg="errorßEs konnten keine Nachrichten gel&ouml;scht werden.";
 	}
  
 //Geschriebene Nachricht einfuegen
@@ -88,16 +88,16 @@ if ($cmd=="insert") {
 		$count=$msging->insert_sms($rec_uname, $message);
 		
 	if (($count > 0) || ($buddy_count >0)) {
-		$msg="msg∫";
+		$msg="msgß";
 		if ($count > 0)	
 			$msg.="Ihre Nachricht an ".get_fullname_from_uname($rec_uname)." wurde verschickt! <br />";
 		if ($buddy_count > 0)	
 			$msg.="Die Nachricht wurde an alle $buddy_count Buddies verschickt!";
 	}
 	if ($count < 0)
-        	$msg="error∫Ihre Nachricht konnte nicht gesendet werden, die Nachricht ist leer.";
+        	$msg="errorßIhre Nachricht konnte nicht gesendet werden, die Nachricht ist leer.";
         elseif ((!$count) && (!$buddy_count))
-        	$msg="error∫Ihre Nachricht konnte nicht gesendet werden.";
+        	$msg="errorßIhre Nachricht konnte nicht gesendet werden.";
         	
 	$sms_msg=rawurlencode ($msg);
 
@@ -111,9 +111,9 @@ if ($cmd=="insert") {
 if ($cmd=="chatinsert") {
 	$count=$msging->insert_chatinv ($rec_uname, $message);
 	if ($count)
-		$msg="msg∫Ihre Einladung zum Chatten an ".get_fullname_from_uname($rec_uname)." wurde verschickt.";
+		$msg="msgßIhre Einladung zum Chatten an ".get_fullname_from_uname($rec_uname)." wurde verschickt.";
 	else
-		$msg="error∫Ihre Einladung zum Chatten an ".get_fullname_from_uname($rec_uname)." konnte nicht verschickt werden";
+		$msg="errorßIhre Einladung zum Chatten an ".get_fullname_from_uname($rec_uname)." konnte nicht verschickt werden";
 
 	$sms_msg=rawurlencode ($msg);
 
@@ -257,7 +257,7 @@ if ($msg)	{
 							$zusatz="<font size=-1>gesendet von </font><a href=\"about.php?username=".$db->f("user_id_snd")."\"><font size=-1 color=\"#333399\">".$db->f("Vorname")." ".$db->f("Nachname")."</font></a><font size=-1> am ".date("d.m.Y, H:i",$db->f("mkdate"))."<font size=-1>&nbsp;"."</font>";				
 							$titel="Einladung zum Chat";
 							$content=$db->f("Vorname")." ".$db->f("Nachname")." hat Sie am ".date("d.m.Y",$db->f("mkdate"))." um ".date("H:i",$db->f("mkdate"))." Uhr in den Chat eingeladen.\n";
-							$content.="Wenn Sie mit ihm Chatten wollen, betreten Sie den Chat Åber das Symbol in der Kopfzeile.";
+							$content.="Wenn Sie mit ihm Chatten wollen, betreten Sie den Chat ¸ber das Symbol in der Kopfzeile.";
 
 							echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" align=\"center\"><tr>";
 							printhead(0, 0, $link, $open, $neu, $icon, htmlReady($titel), $zusatz);
@@ -331,8 +331,8 @@ if ($msg)	{
 		}
 	if (!$n) {
 		echo "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" align=\"center\">";
-		$srch_result="info∫<font size=-1><b>Im Augenblick liegen keine systeminternen Nachrichten f&uuml;r Sie vor. ";
-		parse_msg ($srch_result, "∫", "steel1", 2, FALSE);
+		$srch_result="infoß<font size=-1><b>Im Augenblick liegen keine systeminternen Nachrichten f&uuml;r Sie vor. ";
+		parse_msg ($srch_result, "ß", "steel1", 2, FALSE);
 		echo "</td></tr></table";
 		}
 		

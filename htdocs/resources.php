@@ -39,7 +39,7 @@ else {
 		</head>
 		<body bgcolor="#FFFFFF">
 	<?
-	parse_window ("errorºDie Ressurcenverwaltung ist nicht eingebunden. Bitte aktivieren Sie sie in den Systemeinstellungen oder wenden Sie sich an den Systemadministrator.", "º",
+	parse_window ("error§Die Ressurcenverwaltung ist nicht eingebunden. Bitte aktivieren Sie sie in den Systemeinstellungen oder wenden Sie sich an den Systemadministrator.", "§",
 				"Ressourcenverwaltung nicht eingebunden");
 }
 ?>

@@ -18,7 +18,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-require_once "ChatShmServer.class.php"; //wird fr Nachrichten im chat ben÷tigt
+require_once "ChatShmServer.class.php"; //wird für Nachrichten im chat benötigt
 
 class messaging {
 	var $db;							//Datenbankanbindung
@@ -102,7 +102,7 @@ function insert_sms ($rec_uname, $message, $user_id='') {
 			$message.=$this->sig_string.$my_messaging_settings["sms_sig"];
 		$db3->query("INSERT INTO globalmessages SET message_id='$m_id', user_id_rec='$rec_uname', user_id_snd='".$db->f("username")."', mkdate='".time()."', message='$message' ");
 		
-//Benachrichtigung in alle Chatr„ume schicken
+//Benachrichtigung in alle Chaträume schicken
           $chatServer=new ChatShmServer;
           $myUser=$chatServer->chatUser[$db2->f("user_id")];
           $chatMsg="Du hast eine SMS von <b>".$db->f("fullname")." (".$db->f("username").")</b> erhalten!<br></i>";
@@ -141,7 +141,7 @@ function insert_chatinv ($rec_uname, $user_id='') {
 	$m_id=md5(uniqid("voyeurism"));
 	$db3->query ("INSERT INTO globalmessages SET message_id='$m_id', user_id_rec='$rec_uname', user_id_snd='".$db->f("username")."', mkdate='".time()."', message='chat_with_me' ");
 
-     //Benachrichtigung in alle Chatr„ume schicken, noch nicht so sinnvoll :)
+     //Benachrichtigung in alle Chaträume schicken, noch nicht so sinnvoll :)
           $chatServer=new ChatShmServer;
           $myUser=$chatServer->chatUser[$db2->f("user_id")];
           $chatMsg="Du wurdest von <b>".$db->f("fullname")." (".$db->f("username").")</b> in den Chat eingeladen !";

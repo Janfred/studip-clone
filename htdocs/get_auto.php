@@ -14,9 +14,9 @@ if (!$HTTP_POST_VARS["pass"])
     <body style="background-image: url('pictures/steel1.jpg');font-family: Arial, Helvetica, sans-serif;">
     <?
     echo "<div align=\"center\"><form action=\"$PHP_SELF\" method=\"post\" >";
-    echo "Bitte Passwort eingeben fÅr User: <b>".$auth->auth["uname"]."</b><br><br>";
+    echo "Bitte Passwort eingeben f¸r User: <b>".$auth->auth["uname"]."</b><br><br>";
     echo "<input type=\"password\" size=\"15\" name=\"pass\"><br><br><a href=\"javascript:doSubmit();\"><img alt=\"Die heruntergeladene Datei bitte mit Endung .html speichern!\" src=\"pictures/buttons/herunterladen-button.gif\" border=\"0\"></a>";
-    echo "&nbsp;&nbsp;<a href=\"javascript:window.close()\"><img alt=\"Fenster schlieòen\" src=\"pictures/buttons/abbrechen-button.gif\" border=\"0\"></a></form></div></body></html>";
+    echo "&nbsp;&nbsp;<a href=\"javascript:window.close()\"><img alt=\"Fenster schlieﬂen\" src=\"pictures/buttons/abbrechen-button.gif\" border=\"0\"></a></form></div></body></html>";
     ?><script type="text/javascript">document.forms[0].pass.focus();</script><?
     page_close();
     die;

@@ -1,7 +1,7 @@
 <?php 
 /*
-logout.php - Ausloggen aus Stud.IP und aufr„umen
-Copyright (C) 2000 Stefan Suchi <suchi@gmx.de>, Andr‚ Noack <andre.noack@gmx.net>,
+logout.php - Ausloggen aus Stud.IP und aufräumen
+Copyright (C) 2000 Stefan Suchi <suchi@gmx.de>, André Noack <andre.noack@gmx.net>,
 Cornelis Kater <ckater@gwdg.de>
 
 This program is free software; you can redistribute it and/or
@@ -86,7 +86,7 @@ include "header.php";   //hier wird der "Kopf" nachgeladen
 	<tr><td class="topic" valign="absmiddle"><img src="pictures/logout.gif" border="0"><b>&nbsp;Stud.IP - Logout</b></td></tr>
 	<tr><td class="blank">&nbsp;</td></tr>
 	<?
-		parse_msg ("infoºSie sind nun aus dem System abgemeldet", "º", "blank", 1)
+		parse_msg ("info§Sie sind nun aus dem System abgemeldet", "§", "blank", 1)
 	?>
 	<tr><td class="blank"><font size=-1><a href="index.php"><b>&nbsp;Hier</b></a> geht es wieder zur Startseite.<br />
 	<? if ($UNI_LOGOUT_ADD) {

@@ -91,7 +91,7 @@ function my_info($msg, $class="blank", $colspan=2, $add_row=TRUE) {
 }
 
 //Kombinierte Nachrichten zerlegen
-function parse_msg($long_msg,$separator="º", $class="blank", $colspan=2, $add_row=TRUE) {
+function parse_msg($long_msg,$separator="§", $class="blank", $colspan=2, $add_row=TRUE) {
   $msg = explode ($separator,$long_msg);
 	for ($i=0; $i < count($msg); $i=$i+2) {
 		switch ($msg[$i]) {
@@ -104,7 +104,7 @@ function parse_msg($long_msg,$separator="º", $class="blank", $colspan=2, $add_ro
 }
 
 //Kombinierte Nachrichten zerlegen und in eigenem Fenster anzeigen
-function parse_window ($long_msg,$separator="º", $titel="Fehler", $add_msg="<a href=\"index.php\"><b>&nbsp;Hier</b></a> geht es zur&uuml;ck zur Startseite.<br />&nbsp;") {
+function parse_window ($long_msg,$separator="§", $titel="Fehler", $add_msg="<a href=\"index.php\"><b>&nbsp;Hier</b></a> geht es zur&uuml;ck zur Startseite.<br />&nbsp;") {
 
 ?>
 <table border=0 bgcolor="#000000" align="center" cellspacing=0 cellpadding=0 width=70%>

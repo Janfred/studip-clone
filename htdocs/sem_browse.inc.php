@@ -680,7 +680,7 @@ if (($sem_browse_data["level"]=="s") || ($sem_browse_data["level"]=="sbb"))
 				}
 			}
 
-			if ($mein_status == "dozent" || $mein_status == "tutor" || $mein_status == "autor") { // in den F„llen darf ich auf jeden Fall schreiben
+			if ($mein_status == "dozent" || $mein_status == "tutor" || $mein_status == "autor") { // in den Fällen darf ich auf jeden Fall schreiben
 				echo"<img border=\"0\" src=\"pictures/ampel_gruen.gif\" width=\"11\" height=\"16\"></td>";
 			} else {
 				switch($db->f("Schreibzugriff")){

@@ -71,7 +71,7 @@ $SEM_TYPE[14]=array("name"=>"Kulturforum", "en"=>"Cultural forum", "class"=>4);
 $SEM_TYPE[15]=array("name"=>"sonstige", "en"=>"Miscellaneous", "class"=>4); 
 $SEM_TYPE[16]=array("name"=>"Praktikum", "en"=>"Practical course", "class"=>1); 
 $SEM_TYPE[17]=array("name"=>"Lehrveranstaltung nach PVO-Lehr I", "en"=>"", "class"=>1); 
-$SEM_TYPE[18]=array("name"=>"Anleitung zu selbst„ndigen wissenschaftlichen Arbeiten", "en"=>"", "class"=>1); 
+$SEM_TYPE[18]=array("name"=>"Anleitung zu selbständigen wissenschaftlichen Arbeiten", "en"=>"", "class"=>1); 
 //weitere Typen koennen hier angefuegt werden
 
 
@@ -119,15 +119,15 @@ $TERMIN_TYP[8]=array("name"=>"Vorlesung", "sitzung"=>1);
 //weitere Typen koennen hier angefuegt werden
 
 
-// Festlegen der Kategorien fr pers÷nlichen Terminkalender
-// Diese Kategorien drfen nicht ver„ndert werden !!
+// Festlegen der Kategorien für persönlichen Terminkalender
+// Diese Kategorien dürfen nicht verändert werden !!
 $PERS_TERMIN_KAT[1]=array("name"=>"Sonstiges", "color"=>"#B8660B");
 $PERS_TERMIN_KAT[2]=array("name"=>"Sitzung", "color"=>"#FF7F50");
 $PERS_TERMIN_KAT[3]=array("name"=>"Vorbesprechung", "color"=>"#DC143C");
 $PERS_TERMIN_KAT[4]=array("name"=>"Klausur", "color"=>"#FF0000");
 $PERS_TERMIN_KAT[5]=array("name"=>"Exkursion", "color"=>"#FFA500");
 $PERS_TERMIN_KAT[6]=array("name"=>"Sondersitzung", "color"=>"#FFA500");
-$PERS_TERMIN_KAT[7]=array("name"=>"Pfung", "color"=>"#FF0000");
+$PERS_TERMIN_KAT[7]=array("name"=>"Püfung", "color"=>"#FF0000");
 $PERS_TERMIN_KAT[8]=array("name"=>"Telefonat", "color"=>"#6B8E23");
 $PERS_TERMIN_KAT[9]=array("name"=>"Besprechung", "color"=>"#32CD23");
 $PERS_TERMIN_KAT[10]=array("name"=>"Verabredung", "color"=>"#228B22");
@@ -135,7 +135,7 @@ $PERS_TERMIN_KAT[11]=array("name"=>"Geburtstag", "color"=>"#9932CC");
 $PERS_TERMIN_KAT[12]=array("name"=>"Familie", "color"=>"#191970");
 $PERS_TERMIN_KAT[13]=array("name"=>"Urlaub", "color"=>"#DB7093");
 $PERS_TERMIN_KAT[14]=array("name"=>"Reise", "color"=>"#C71585");
-// weitere Kategorien k÷nnen hier angefgt werden
+// weitere Kategorien können hier angefügt werden
 
 
 //Festlegen der erlaubten oder verbotenen Dateitypen
@@ -176,7 +176,7 @@ $UPLOAD_TYPES=array( 	"default" =>												//Name bezeichnet den zugehoerigen
 //weitere Definitionen fuer spezielle Veranstaltungstypen koennen hier angefuegt werden. Bitte Struktur wie oben exakt uebernehmen.
 
 
-//Abkrzungen fr Smileys
+//Abkürzungen für Smileys
 $SMILE_SHORT = array( //diese Kuerzel fuegen das angegebene Smiley ein (Dateiname + ".gif")
 	":)"=>"smile" , 
 	":-)"=>"asmile" , 

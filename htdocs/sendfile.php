@@ -225,7 +225,7 @@ if ($no_access) {
 	<?
 
 	include "header.php";
-	parse_window("errorºSie haben keine Zugriffsberechtigung f&uuml;r diesen Download!", "º", "Download nicht m&ouml;glch", $add_msg);
+	parse_window("error§Sie haben keine Zugriffsberechtigung f&uuml;r diesen Download!", "§", "Download nicht m&ouml;glch", $add_msg);
 	page_close();
 
 	?>

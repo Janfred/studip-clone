@@ -111,8 +111,8 @@ function write_toplist($rubrik,$query)
 	<b>Marco Bohnsack</b>, eMail: <a href="mailto:mbohnsa@stud.uni-goettingen.de">mbohnsa@stud.uni-goettingen.de</a> (Hilfe)
 	<br><b>Oliver Brakel</b>, eMail: <a href="mailto:obrakel@gwdg.de">obrakel@gwdg.de</a> (Distribution)
 	<br><b>Cornelis Kater</b>, eMail: <a href="mailto:ckater@gwdg.de">ckater@gwdg.de</a> (Kernentwicklung, Terminverwaltung, Adminbereich, Design)
-	<br><b>Andr‚ Noack</b>, eMail: <a href="mailto:andre.noack@gmx.net">andre.noack@gmx.net</a> (Kernentwicklung, Newsverwaltung, Chat)
-	<br><b>Arne Schr÷der</b>, eMail: <a href="mailto:23arne@web.de">23arne@web.de</a> (Externe Seiten)
+	<br><b>André Noack</b>, eMail: <a href="mailto:andre.noack@gmx.net">andre.noack@gmx.net</a> (Kernentwicklung, Newsverwaltung, Chat)
+	<br><b>Arne Schröder</b>, eMail: <a href="mailto:23arne@web.de">23arne@web.de</a> (Externe Seiten)
 	<br><b>Ralf Stockmann</b>, eMail: <a href="mailto:rstockm@gwdg.de">rstockm@gwdg.de</a> (Kernentwicklung, Forensystem, pers&ouml;nliche Seiten, Design)
 	<br><b>Stefan Suchi</b>, eMail: <a href="mailto:suchi@data-quest.de">suchi@data-quest.de</a> (Kernentwicklung, Datenbankstruktur, Rechtesystem, Adminbereich)
 	<br><b>Peter Thienel</b>, eMail: <a href="mailto:rabeiri@gmx.de">rabeiri@gmx.de</a> (Externe Seiten, Terminplaner)
@@ -296,12 +296,12 @@ IF ($view == "technik") {
 		<td colspan=6 class="blank"><blockquote><blockquote>
 <?
 
-echo "Stud IP ist ein Open-Source Projekt und steht unter der GNU General Public License. S„mtliche zum Betrieb notwendigen Dateien k÷nnen unter <a href='http://sourceforge.net/projects/studip/'>http://sourceforge.net/projects/studip/</a> heruntergeladen werden. ";
-echo "<br><br>Die technische Grundlage bietet ein LINUX-System mit Apache Webserver sowie eine MySQL Datenbank, die ber PHP gesteuert wird.";
-echo "<br><br>Im System findet ein 6-stufiges Rechtesystem Verwendung, das individuell auf verschiedenen Ebenen wirkt - etwa in Veranstaltungen, Einrichtungen, Fakult„ten oder systemweit.";
-echo "<br><br>Seminare oder Arbeitsgruppen k÷nnen mit Passw÷rtern geschtzt werden - die Verschlsselung erfolgt mit einem MD5 one-way-hash.";
-echo "<br><br>Das System ist zu 100% ber das Internet administrierbar, es sind keine zus„tzlichen Werkzeuge n÷tig. Ein Webbrowser ab Version 4 wird empfohlen.";
-echo "<br><br>Das System wird st„ndig weiterentwickelt und an die Wnsche unserer Nutzer angepasst - <a href='mailto:crew@studip.de'>sagen Sie uns Ihre Meinung!</a>";
+echo "Stud IP ist ein Open-Source Projekt und steht unter der GNU General Public License. Sämtliche zum Betrieb notwendigen Dateien können unter <a href='http://sourceforge.net/projects/studip/'>http://sourceforge.net/projects/studip/</a> heruntergeladen werden. ";
+echo "<br><br>Die technische Grundlage bietet ein LINUX-System mit Apache Webserver sowie eine MySQL Datenbank, die über PHP gesteuert wird.";
+echo "<br><br>Im System findet ein 6-stufiges Rechtesystem Verwendung, das individuell auf verschiedenen Ebenen wirkt - etwa in Veranstaltungen, Einrichtungen, Fakultäten oder systemweit.";
+echo "<br><br>Seminare oder Arbeitsgruppen können mit Passwörtern geschützt werden - die Verschlüsselung erfolgt mit einem MD5 one-way-hash.";
+echo "<br><br>Das System ist zu 100% über das Internet administrierbar, es sind keine zusätzlichen Werkzeuge nötig. Ein Webbrowser ab Version 4 wird empfohlen.";
+echo "<br><br>Das System wird ständig weiterentwickelt und an die Wünsche unserer Nutzer angepasst - <a href='mailto:crew@studip.de'>sagen Sie uns Ihre Meinung!</a>";
 
 ?>
 

@@ -1,5 +1,5 @@
 <?php
-//diese Datei enth„lt die links der Kopfzeile, besser nur anzeigen wenn ein Objekt ausgew„hlt wurde
+//diese Datei enthält die links der Kopfzeile, besser nur anzeigen wenn ein Objekt ausgewählt wurde
 if (isset($SessSemName) && $SessSemName[0] != "") {
 require_once ($ABSOLUTE_PATH_STUDIP."visual.inc.php");
 require_once ($ABSOLUTE_PATH_STUDIP."reiter.inc.php");

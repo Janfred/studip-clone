@@ -107,7 +107,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 		die;
 	}
 
-	if ($secret == $hash) {   // alles paletti, Status „ndern
+	if ($secret == $hash) {   // alles paletti, Status ändern
 		$db = new DB_Seminar;
 	   $query = "update auth_user_md5 set perms='autor' where user_id='$user->id'";
 	   $db->query($query);
@@ -129,7 +129,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 					$db2->query("SELECT status FROM seminar_user WHERE Seminar_id = '$a' AND user_id='$user->id'");
 					if ($db2->num_rows()) { // Benutzer ist schon eingetragen
 						$db2->next_record();
-						if ($db2->f("status") == "user") { // wir k÷nnen ihn hochstufen
+						if ($db2->f("status") == "user") { // wir können ihn hochstufen
 							$db2->query("UPDATE seminar_user SET status = 'autor' WHERE Seminar_id = '$a' AND user_id='$user->id'");	
 							my_msg("Ihnen wurden Schreibrechte in Veranstaltung \"" . $db->f("Name") . "\" erteilt.\n");
 						}
@@ -141,7 +141,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 			}
 		}
 		
-		$auth->logout();	// einen Logout durchfhren, um erneuten Login zu erzwingen
+		$auth->logout();	// einen Logout durchführen, um erneuten Login zu erzwingen
 		my_info("Die Status-&Auml;nderung wird erst nach einem erneuten <a href=\"index.php?again=yes\"><b>Login</b></a> wirksam!<br>\nDeshalb wurden Sie jetzt automatisch ausgeloggt.\n");
 		print "";
 	} else {

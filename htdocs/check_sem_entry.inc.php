@@ -2,7 +2,7 @@
 /*
 check_sem_entry.inc.php - Script zur Ueberpruefung der Zugangsberechtigung zu einem Seminar,
 wird nur augefuert, wenn ein Seminar gewaehlt wurde.
-Copyright (C) 2000 Andr‚ Noack <anoack@mcis.de>, Cornelis Kater <ckater@gwdg.de>, Stefan Suchi <suchi@gmx.de>
+Copyright (C) 2000 André Noack <anoack@mcis.de>, Cornelis Kater <ckater@gwdg.de>, Stefan Suchi <suchi@gmx.de>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -57,7 +57,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 					echo "<table width=\"100%\" border=0 cellpadding=0 cellspacing=0>";
 					echo "<tr><td class=\"topic\" colspan=2>&nbsp;<b>Rechtecheck</b></td></tr>";
 					echo "<tr><td class=\"blank\" colspan=2>&nbsp<br></td></tr>";
-					parse_msg ("errorºSie haben keine Berechtigung, diese Veranstaltung zu betreten!");
+					parse_msg ("error§Sie haben keine Berechtigung, diese Veranstaltung zu betreten!");
 					echo"<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp;&nbsp; zur&uuml;ck zur Startseite</a>";
 					if ($send_from_search)
 						echo " | <a href=\"sem_portal.php\">zur&uuml;ck zur Suche</a>";
@@ -73,13 +73,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 		elseif ($auth->auth["perm"]=="admin") {    // evtl ein Instadmin ?
 			$db->query("SELECT user_inst.Institut_id, seminare.Seminar_id FROM user_inst LEFT JOIN seminare USING (Institut_id) WHERE inst_perms='admin' AND user_id='$user->id' AND seminare.Seminar_id='$SessSemName[1]'");
 				if ($db->num_rows()) {
-					  // Eintrag gefunden, also ein zum Instadmin geh÷riges Seminar
+					  // Eintrag gefunden, also ein zum Instadmin gehöriges Seminar
 					$rechte=TRUE;
-				} else { // kein Eintrag gefunden, wir mssen drau˜en bleiben...
+				} else { // kein Eintrag gefunden, wir müssen draußen bleiben...
 					echo "<table width=\"100%\" border=0 cellpadding=0 cellspacing=0>";
 					echo "<tr><td class=\"topic\" colspan=2>&nbsp;<b>Rechtecheck</b></td></tr>";
 					echo "<tr><td class=\"blank\" colspan=2>&nbsp<br></td></tr>";
-					parse_msg ("errorºSie haben keine Berechtigung, diese Veranstaltung zu betreten!");
+					parse_msg ("error§Sie haben keine Berechtigung, diese Veranstaltung zu betreten!");
 					echo"<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp;&nbsp; zur&uuml;ck zur Startseite</a>";
 					if ($send_from_search)
 						echo" | <a href=\"sem_portal.php\">zur&uuml;ck zur Suche</a><br /><br /></td></tr></table>";

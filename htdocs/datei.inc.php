@@ -241,7 +241,7 @@ function validate_upload($the_file) {
 	
 	$error = FALSE;
 	if ($the_file == "none") { # haben wir eine Datei?
-		$emsg.= "errorºSie haben keine Datei zum Hochladen ausgew&auml;hlt!º";
+		$emsg.= "error§Sie haben keine Datei zum Hochladen ausgew&auml;hlt!§";
 	} else { # pruefen, ob der Typ stimmt
 
 		//Die Dateierweiterung von dem Original erfragen
@@ -264,12 +264,12 @@ function validate_upload($the_file) {
 					}
 				if (!$t) {
 					if ($i==2)
-						$emsg.= "errorºDie Datei konnte nicht &uuml;bertragen werden: Sie d&uuml;rfen den Dateityp$exts nicht hochladen!º";
+						$emsg.= "error§Die Datei konnte nicht &uuml;bertragen werden: Sie d&uuml;rfen den Dateityp$exts nicht hochladen!§";
 					else
-						$emsg.= "errorºDie Datei konnte nicht &uuml;bertragen werden: Sie d&uuml;rfen die Dateitypen$exts nicht hochladen!º";
+						$emsg.= "error§Die Datei konnte nicht &uuml;bertragen werden: Sie d&uuml;rfen die Dateitypen$exts nicht hochladen!§";
 					if ($doc)
 						if (!$auth->auth["jscript"])
-							$emsg.= "infoº<a target=\"_new\" href=\"help/index.php?referrer_page=datei.inc.php&doc=TRUE\">Hier</a> bekommen Sie Hilfe zum Upload von Word-Dokumenten.º";
+							$emsg.= "info§<a target=\"_new\" href=\"help/index.php?referrer_page=datei.inc.php&doc=TRUE\">Hier</a> bekommen Sie Hilfe zum Upload von Word-Dokumenten.§";
 					}
 				}
 			else {
@@ -285,14 +285,14 @@ function validate_upload($the_file) {
 					}
 				if (!$t) {
 					if ($i==2)
-						$emsg.= "errorºDie Datei konnte nicht &uuml;bertragen werden: Sie d&uuml;rfen nur den Dateityp$exts hochladen!º";
+						$emsg.= "error§Die Datei konnte nicht &uuml;bertragen werden: Sie d&uuml;rfen nur den Dateityp$exts hochladen!§";
 					else
-						$emsg.= "errorºDie Datei konnte nicht &uuml;bertragen werden: Sie d&uuml;rfen nur die Dateitypen$exts hochladen!º";
+						$emsg.= "error§Die Datei konnte nicht &uuml;bertragen werden: Sie d&uuml;rfen nur die Dateitypen$exts hochladen!§";
 					if ($doc)
 						if (!$auth->auth["jscript"])
-							$emsg.= "infoº<a target=\"_new\" href=\"help/index.php?referrer_page=datei.inc.php&doc=TRUE\">Hier</a> bekommen Sie Hilfe zum Upload von Word-Dokumenten.º";
+							$emsg.= "info§<a target=\"_new\" href=\"help/index.php?referrer_page=datei.inc.php&doc=TRUE\">Hier</a> bekommen Sie Hilfe zum Upload von Word-Dokumenten.§";
 						else
-							$emsg.= "infoº<script language=\"Javascript\">{fenster=window.open(\"help/index.php?referrer_page=datei.inc.php&doc=TRUE\",\"help\",\"scrollbars=yes,width=620,height=400\");} </script>Hilfe zum Upload von Word-Dokumenten bekommen Sie in dem soeben ge&ouml;ffneten Hilfefenster!º";
+							$emsg.= "info§<script language=\"Javascript\">{fenster=window.open(\"help/index.php?referrer_page=datei.inc.php&doc=TRUE\",\"help\",\"scrollbars=yes,width=620,height=400\");} </script>Hilfe zum Upload von Word-Dokumenten bekommen Sie in dem soeben ge&ouml;ffneten Hilfefenster!§";
 					}
 				}
 			}
@@ -310,14 +310,14 @@ function validate_upload($the_file) {
 					}
 				if (!$t) {
 					if ($i==2)
-						$emsg.= "errorºDie Datei konnte nicht &uuml;bertragen werden: Sie d&uuml;rfen den Dateityp$exts nicht hochladen!º";
+						$emsg.= "error§Die Datei konnte nicht &uuml;bertragen werden: Sie d&uuml;rfen den Dateityp$exts nicht hochladen!§";
 					else
-						$emsg.= "errorºDie Datei konnte nicht &uuml;bertragen werden: Sie d&uuml;rfen  die Dateitypen$exts nicht hochladen!º";
+						$emsg.= "error§Die Datei konnte nicht &uuml;bertragen werden: Sie d&uuml;rfen  die Dateitypen$exts nicht hochladen!§";
 					if ($doc)
 						if (!$auth->auth["jscript"])
-							$emsg.= "infoº<a target=\"_new\" href=\"help/index.php?referrer_page=datei.inc.php&doc=TRUE\">Hier</a> bekommen Sie Hilfe zum Upload von Word-Dokumenten.º";
+							$emsg.= "info§<a target=\"_new\" href=\"help/index.php?referrer_page=datei.inc.php&doc=TRUE\">Hier</a> bekommen Sie Hilfe zum Upload von Word-Dokumenten.§";
 						else
-							$emsg.= "infoº<script language=\"Javascript\">{fenster=window.open(\"help/index.php?referrer_page=datei.inc.php&doc=TRUE\",\"help\",\"scrollbars=yes,width=620,height=400\");} </script>Hilfe zum Upload von Word-Dokumenten bekommen Sie in dem soeben ge&ouml;ffneten Hilfefenster!º";
+							$emsg.= "info§<script language=\"Javascript\">{fenster=window.open(\"help/index.php?referrer_page=datei.inc.php&doc=TRUE\",\"help\",\"scrollbars=yes,width=620,height=400\");} </script>Hilfe zum Upload von Word-Dokumenten bekommen Sie in dem soeben ge&ouml;ffneten Hilfefenster!§";
 					}
 				}					      				
 			else {
@@ -333,21 +333,21 @@ function validate_upload($the_file) {
 					}
 				if (!$t) {
 					if ($i==2)
-						$emsg.= "errorºDie Datei konnte nicht &uuml;bertragen werden: Sie d&uuml;rfen nur den Dateityp$exts hochladen!º";
+						$emsg.= "error§Die Datei konnte nicht &uuml;bertragen werden: Sie d&uuml;rfen nur den Dateityp$exts hochladen!§";
 					else
-						$emsg.= "errorºDie Datei konnte nicht &uuml;bertragen werden: Sie d&uuml;rfen nur die Dateitypen$exts hochladen!º";
+						$emsg.= "error§Die Datei konnte nicht &uuml;bertragen werden: Sie d&uuml;rfen nur die Dateitypen$exts hochladen!§";
 					if ($doc)
 						if (!$auth->auth["jscript"])
-							$emsg.= "infoº<a target=\"_new\" href=\"help/index.php?referrer_page=datei.inc.php&doc=TRUE\">Hier</a> bekommen Sie Hilfe zum Upload von Word-Dokumenten.º";
+							$emsg.= "info§<a target=\"_new\" href=\"help/index.php?referrer_page=datei.inc.php&doc=TRUE\">Hier</a> bekommen Sie Hilfe zum Upload von Word-Dokumenten.§";
 						else
-							$emsg.= "infoº<script language=\"Javascript\">{fenster=window.open(\"help/index.php?referrer_page=datei.inc.php&doc=TRUE\",\"help\",\"scrollbars=yes,width=620,height=400\");} </script>Hilfe zum Upload von Word-Dokumenten bekommen Sie in dem soeben ge&ouml;ffneten Hilfefenster!º";
+							$emsg.= "info§<script language=\"Javascript\">{fenster=window.open(\"help/index.php?referrer_page=datei.inc.php&doc=TRUE\",\"help\",\"scrollbars=yes,width=620,height=400\");} </script>Hilfe zum Upload von Word-Dokumenten bekommen Sie in dem soeben ge&ouml;ffneten Hilfefenster!§";
 					}
 				}
 			}
 		
 		//pruefen ob die Groesse stimmt.
 		if ($the_file_size > $max_filesize) {
-			$emsg.= "errorºDie Datei konnte nicht &uuml;bertragen werden: Die maximale Gr&ouml;sse zum Upload (".($max_filesize /1048576)." Megabyte) wurde &uuml;berschritten!";
+			$emsg.= "error§Die Datei konnte nicht &uuml;bertragen werden: Die maximale Gr&ouml;sse zum Upload (".($max_filesize /1048576)." Megabyte) wurde &uuml;berschritten!";
 		}
 	}
 	if ($emsg) {
@@ -375,10 +375,10 @@ function upload($the_file) {
 
 		//Kopieren und Fehlermeldung
 		if (!@copy($the_file,$newfile)) {
-			$msg.= "errorºDatei&uuml;bertragung gescheitert!";
+			$msg.= "error§Datei&uuml;bertragung gescheitert!";
 			return FALSE;
 		} else {
-			$msg="msgºDie Datei wurde erfolgreich auf den Server &uuml;bertragen!";
+			$msg="msg§Die Datei wurde erfolgreich auf den Server &uuml;bertragen!";
 			return TRUE;
 		}
 	}
@@ -429,7 +429,7 @@ function JS_for_upload() {
 	file_name=document.upload_form.the_file.value
 	if (!file_name)
 	     {
-	     alert("Bitte w„hlen Sie eine Datei aus !");
+	     alert("Bitte wählen Sie eine Datei aus !");
 	     document.upload_form.the_file.focus();
 	     return false;
 	     }
@@ -884,12 +884,12 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 	}
 
 /*
-Die function delete_document l÷scht ein hochgeladenes Dokument.
-Der erste Parameter ist die dokument_id des zu l÷schenden Dokuments.
-Der Rckgabewert der Funktion ist bei Erfolg TRUE.
+Die function delete_document löscht ein hochgeladenes Dokument.
+Der erste Parameter ist die dokument_id des zu löschenden Dokuments.
+Der Rückgabewert der Funktion ist bei Erfolg TRUE.
 FALSE bedeutet einen Fehler beim Loeschen des Dokumentes.
 Ausgabe wird keine produziert.
-Es erfolgt keine šberprfung der Berechtigung innerhalb der Funktion,
+Es erfolgt keine Überprüfung der Berechtigung innerhalb der Funktion,
 dies muss das aufrufende Script sicherstellen.
 */
 
@@ -912,12 +912,12 @@ function delete_document ($dokument_id) {
 
 
 /*
-Die function delete_folder l÷scht einen kompletten Dateiordner.
-Der Parameter ist die folder_id des zu l÷schenden Ordners.
-Der Rckgabewert der Funktion ist bei Erfolg TRUE.
+Die function delete_folder löscht einen kompletten Dateiordner.
+Der Parameter ist die folder_id des zu löschenden Ordners.
+Der Rückgabewert der Funktion ist bei Erfolg TRUE.
 FALSE bedeutet einen Fehler beim Loeschen des Dokumentes.
 Ausgabe wird keine produziert.
-Es erfolgt keine šberprfung der Berechtigung innerhalb der Funktion,
+Es erfolgt keine Überprüfung der Berechtigung innerhalb der Funktion,
 dies muss das aufrufende Script sicherstellen.
 */
 
@@ -934,16 +934,16 @@ function delete_folder ($folder_id) {
 	$db->query("DELETE FROM folder WHERE folder_id='$folder_id'");
 	if ($db->affected_rows()) {
 		if ($deleted)
-			$msg.="infoºDer Dateiordner und $deleted Dokumente wurden gel&ouml;schtº";
+			$msg.="info§Der Dateiordner und $deleted Dokumente wurden gel&ouml;scht§";
 		else
-			$msg.="infoºDer Dateiordner wurde gel&ouml;schtº";
+			$msg.="info§Der Dateiordner wurde gel&ouml;scht§";
 		return TRUE;
 		}
 	else {
 		if ($deleted)
-			$msg.="errorºProbleme beim L&ouml;schen des Ordners. $deleted Dokumente wurden gel&ouml;schtº";
+			$msg.="error§Probleme beim L&ouml;schen des Ordners. $deleted Dokumente wurden gel&ouml;scht§";
 		else
-			$msg.="errorºProbleme beim L&ouml;schen des Ordnersº";
+			$msg.="error§Probleme beim L&ouml;schen des Ordners§";
 		return FALSE;
 		}
 	}
@@ -977,16 +977,16 @@ function recursiv_folder_delete ($parent_id) {
 
 
 /*
-Die function delete_range_of_documents l÷scht alle Dateien eines Items.
-Der Parameter ist die range_id der zu l÷schenden Dateien.
+Die function delete_range_of_documents löscht alle Dateien eines Items.
+Der Parameter ist die range_id der zu löschenden Dateien.
 Es koennen also mit einem Aufruf alle Dateien eines Seminares
 (nur die direkten im allgemeinen Ordner), eines Institutes oder
 eines Termines aus der Datenbank und von der Platte entfernt werden.
 -- update: Seit Einfuehrung des Folder-Systems nur noch noetig zum
 Loeschen aller Dateien eines Folders.
-Der Rckgabewert der Funktion ist die Anzahl der gel÷schten Dateien.
+Der Rückgabewert der Funktion ist die Anzahl der gelöschten Dateien.
 Ausgabe wird keine produziert.
-Es erfolgt keine šberprfung der Berechtigung innerhalb der Funktion,
+Es erfolgt keine Überprüfung der Berechtigung innerhalb der Funktion,
 dies muss das aufrufende Script sicherstellen.
 */
 

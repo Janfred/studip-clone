@@ -1,7 +1,7 @@
 <?php
 /*
 studipim.php - Instant Messenger for Studip
-Copyright (C) 2001 Andr‚ Noack <andre.noack@gmx.net>
+Copyright (C) 2001 André Noack <andre.noack@gmx.net>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License

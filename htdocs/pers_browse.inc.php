@@ -50,7 +50,7 @@ return;
 }
 
 
-// Check auf neue šbergabe und Variablen-Registrierung
+// Check auf neue Übergabe und Variablen-Registrierung
 if (isset($pers_browse_search)) {
 	$pers_browse_old[username] = $pers_browse_username;
 	$pers_browse_old[Vorname] = $pers_browse_Vorname;

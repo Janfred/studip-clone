@@ -96,7 +96,7 @@ if ($SessionStart==0) {
 
 // steht jetzt lesbar in $i_page
 	
-// Funktion, um die bergebenen Parameter der Seite zu bekommen:
+// Funktion, um die übergebenen Parameter der Seite zu bekommen:
 
 	$i_query = explode('&',getenv("QUERY_STRING"));
 

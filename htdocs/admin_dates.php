@@ -27,7 +27,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 	//Defaults, die fuer DAUS (<admin) gesetzt werden
 	$default_description="Bitte geben Sie hier nur optionale Angaben (genauere Terminbeschreibung, Referatsthemen usw.) ein.";
-	$default_titel="Kurztitel, bitte ausfllen";
+	$default_titel="Kurztitel, bitte ausfüllen";
 	if ((!$perm->have_perm ("admin")) && (!$perm->have_perm ("root"))) {
 		$temp_default[1]="tt";
 		$temp_default[2]="mm";
@@ -223,7 +223,7 @@ if ($make_dates)
 		
 	while ($insert_termin_start[0] <=$vorles_ende);
 
-	$result="msgDer Ablaufplan wurde erstellt. Es wurden ".$made_dates." Termine erstellt.";
+	$result="msg§Der Ablaufplan wurde erstellt. Es wurden ".$made_dates." Termine erstellt.§";
 	$admin_dates_data["manuel_edit"]=TRUE;
 	}
 
@@ -233,14 +233,14 @@ if ($new)
 	if (!checkdate($monat,$tag,$jahr))
 		{
 		$do=FALSE;
-		$result="errorBitte geben Sie ein g&uuml;ltiges Datum ein!";
+		$result="error§Bitte geben Sie ein g&uuml;ltiges Datum ein!§";
 		}
 
 	if ($do)		
 		if ((!$stunde) && (!end_stunde))
 			{
 			$do=FALSE;	
-			$result.="errorBitte geben Sie eine g&uuml;eltige Start- und Endzeit an!";
+			$result.="error§Bitte geben Sie eine g&uuml;eltige Start- und Endzeit an!§";
 			}
 		
 	$start_time = mktime($stunde,$minute,0,$monat,$tag,$jahr);
@@ -250,7 +250,7 @@ if ($new)
 		if ($start_time > $end_time)
 			{
 			$do=FALSE;	
-			$result.="errorDer Endzeitpunkt muss nach dem Startzeitpunkt liegen!";
+			$result.="error§Der Endzeitpunkt muss nach dem Startzeitpunkt liegen!§";
 			}
 	
 	//Check auf Konsistenz mt Metadaten, Semestercheck
@@ -266,7 +266,7 @@ if ($new)
 			}
 			
 		if (($start_time < $sem_beginn) || ($start_time > $sem_ende))
-			$result.="infoDer eingegebene Termine liegt ausserhalb des Semesters, in dem die Veranstaltung stattfindet. Es wird empfohlen, den Termin anzupassen.";
+			$result.="info§Der eingegebene Termine liegt ausserhalb des Semesters, in dem die Veranstaltung stattfindet. Es wird empfohlen, den Termin anzupassen.§";
 		
 		//Und dann noch auf regelmaessige Termine checken, wenn dieser Typ gewaehlt ist
 		if (!$term_data["art"]) {
@@ -285,7 +285,7 @@ if ($new)
 					}
 				}
 			if (!$ok)
-				$result.="infoDer eingegebene Termin findet nicht zu allgemeinen Veranstaltungszeiten statt. Es wird empfohlen, Sitzungstermine von regelm&auml;&szlig;igen Veranstaltungen nur zu den allgemeinen Zeiten stattfinden zu lassen.";
+				$result.="info§Der eingegebene Termin findet nicht zu allgemeinen Veranstaltungszeiten statt. Es wird empfohlen, Sitzungstermine von regelm&auml;&szlig;igen Veranstaltungen nur zu den allgemeinen Zeiten stattfinden zu lassen.§";
 			}
 		}
 	
@@ -325,7 +325,7 @@ if ($new)
 		$db->query("INSERT INTO termine SET termin_id='$t_id', range_id='".$admin_dates_data["range_id"]."', autor_id='$user->id', content='$tmp_titel', date='$start_time', mkdate='$aktuell', chdate='$aktuell', date_typ='$art', topic_id='$topic_id', end_time='$end_time', raum='$raum', description='$description'");
 
 		if ($db->affected_rows()) {
-			$result.="msgIhr Termin wurde eingef&uuml;gt!";
+			$result.="msg§Ihr Termin wurde eingef&uuml;gt!§";
 			$admin_dates_data["termin_id"]=FALSE;
 			}
 		}
@@ -397,9 +397,9 @@ if (($kill) && ($admin_dates_data["range_id"]))
 		}
 	if ($del_count)
 		if ($del_count ==1)
-			$result="msg$del_count Termin wurde gel&ouml;scht!";
+			$result="msg§$del_count Termin wurde gel&ouml;scht!";
 		else
-			$result="msg$del_count Termine wurden gel&ouml;scht!";
+			$result="msg§$del_count Termine wurden gel&ouml;scht!";
 	$beschreibung='';
 	}
 
@@ -572,13 +572,13 @@ if (($kill) && ($admin_dates_data["range_id"]))
 					}
 				?>
 				<img  src="./pictures/info.gif" 
-					onClick="alert('Der Ablaufplanassistent erstellt automatisch alle Termine des ersten oder aller Semesters, je nach Auswahl. Dabei werden soweit wie m”glich Feiertage und Ferienzeiten übersprungen. Anschliessend k”nnen Sie jedem Termin einen Titel und eine Beschreibung geben.');" 
+					onClick="alert('Der Ablaufplanassistent erstellt automatisch alle Termine des ersten oder aller Semesters, je nach Auswahl. Dabei werden soweit wie möglich Feiertage und Ferienzeiten übersprungen. Anschliessend können Sie jedem Termin einen Titel und eine Beschreibung geben.');" 
 					alt="Der Ablaufplanassistent erstellt automatisch alle Termine des ersten oder aller Semesters, je nach Auswahl. Dabei werden soweit wir m&ouml;glich Feiertage und Ferienzeiten &uuml;bersprungen. Anschliessend k&ouml;nnen Sie jedem Termin einen Titel und eine Beschreibung geben.">
 				<hr>
 				<font size=-1>&nbsp; Sie k&ouml;nnen auch direkt zur Verwaltung der Termine springen und Termine manuell anlegen</font><br><br>
 				&nbsp; <input type="SUBMIT" name="manuel_edit_set" value="Termine manuell anlegen >> ">
 				<img  src="./pictures/info.gif" 
-					onClick="alert('In diesem Bearbeitungsmodus k”nnen Sie alle Termine einzeln von Hand anlegen.');" 
+					onClick="alert('In diesem Bearbeitungsmodus können Sie alle Termine einzeln von Hand anlegen.');" 
 					alt="'In diesem Bearbeitungsmodus k&ouml;nnen Sie alle Termine einzeln von Hand anlegen.">
 				</form>
 			</td>
@@ -604,7 +604,7 @@ if (($kill) && ($admin_dates_data["range_id"]))
 				<font size=-1>&nbsp; Sie k&ouml;nnen auch direkt zur Verwaltung der Termine springen und Termine manuell anlegen</font><br><br>
 				&nbsp; <input type="SUBMIT" name="manuel_edit_set" value="Termine manuell anlegen >> ">
 				<img  src="./pictures/info.gif" 
-					onClick="alert('In diesem Bearbeitungsmodus k”nnen Sie alle Termine einzeln von Hand anlegen.');" 
+					onClick="alert('In diesem Bearbeitungsmodus können Sie alle Termine einzeln von Hand anlegen.');" 
 					alt="'In diesem Bearbeitungsmodus k&ouml;nnen Sie alle Termine einzeln von Hand anlegen.">
 				</form>
 				
@@ -652,7 +652,7 @@ if (($kill) && ($admin_dates_data["range_id"]))
 			<?
 				if (!$show_all) {
 				?>
-			<input type="IMAGE" name="send" border=0 src="pictures/buttons/loeschen-button.gif" value="l”schen">&nbsp; &nbsp; 
+			<input type="IMAGE" name="send" border=0 src="pictures/buttons/loeschen-button.gif" value="löschen">&nbsp; &nbsp; 
 				<?
 				}
 			}
@@ -869,7 +869,7 @@ if (($kill) && ($admin_dates_data["range_id"]))
 		<?
 			if (!$show_all) {
 			?>
-		<input type="IMAGE" name="send" border=0 src="pictures/buttons/loeschen-button.gif" value="l”schen">&nbsp; &nbsp; 
+		<input type="IMAGE" name="send" border=0 src="pictures/buttons/loeschen-button.gif" value="löschen">&nbsp; &nbsp; 
 			<?
 			}
 		}

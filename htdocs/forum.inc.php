@@ -139,7 +139,7 @@ function editarea($write,$description,$nichtneu=FALSE,$zitat_id)
 			} else {
 				// warum wir in die editarea kommen, wenn wir doch gar nicht editieren
 				// wollen, weiss nur der liebe Ralf.
-				// aber so ist hier der einzige m÷gliche Punkt, den formatReady einzuh„ngen..
+				// aber so ist hier der einzige mögliche Punkt, den formatReady einzuhängen..
 				$description = formatReady($description); 
 			}
 	RETURN $description;
@@ -481,7 +481,7 @@ function DisplayTopic ($datum=0, $topic_id=0, $open=0, $level=0, $nokids=0,$zita
 		IF ($rechte) $text = "In diesem Forum wurde noch kein Themenordner angelegt.<br>Sie k&ouml;nnen oben unter \"neues Thema\" einen Ordner anlegen.";
 		ELSE $text = "In diesem Forum wurde noch kein Themenordner angelegt.<br>Kontaktieren Sie einen Tutor oder den Dozent dieser Veranstaltung, um Ordner anlegen zu lassen.";
 		echo "<table width=\"100%\" border=0 cellpadding=0 cellspacing=0>";
-		parse_msg("infoº$text");
+		parse_msg("info§$text");
 		echo "</table>";
 		}
 	ELSE {
@@ -669,7 +669,7 @@ IF ($view=="neue"){
 	$db2->query ("SELECT topic_id, name , author , mkdate , chdate , root_id, description , Seminar_id FROM px_topics WHERE chdate > '$datumtmp' AND Seminar_id = '$SessionSeminar' ORDER BY mkdate DESC");
 	if  ($db2->affected_rows() == 0){
 		echo "<table width=\"100%\" border=0 cellpadding=0 cellspacing=0>";
-		parse_msg ("infoºSeit Ihrem letzten Login gibt es keine neuen Beitr„ge.");
+		parse_msg ("info§Seit Ihrem letzten Login gibt es keine neuen Beiträge.");
 		echo "</table></td></tr></table></body></html>";
 		die;
 		}
@@ -680,7 +680,7 @@ ELSE {
 		IF ($rechte) $text = "In diesem Forum wurde noch kein Themenordner angelegt.<br>Sie k&ouml;nnen oben unter \"neues Thema\" einen Ordner anlegen.";
 		ELSE $text = "In diesem Forum wurde noch kein Themenordner angelegt.<br>Kntaktieren Sie einen Tutor oder den Dozent dieser Veranstaltung, um Ordner anlegen zu lassen.";
 		echo "<table width=\"100%\" border=0 cellpadding=0 cellspacing=0>";
-		parse_msg("infoº$text");
+		parse_msg("info§$text");
 		echo "</table></td></tr></table>";
 		die;
 		}
