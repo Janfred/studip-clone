@@ -340,7 +340,7 @@ if ($sms_data["time"] == "all") {
 				$tmp[3] = " value=\"".htmlready(stripslashes(return_val_from_key($my_messaging_settings["folder"][$sms_data["view"]], $ren_folder)))."\"";
 				$tmp[4] = "<input type=\"hidden\" name=\"orig_folder_name\" value=\"".htmlready(stripslashes($ren_folder))."\">";
 			}
-			$titel = "	<input type=\"text\" name=\"".$tmp[0]."\"".$tmp[3].">";
+			$titel = "	<input type=\"text\" name=\"".$tmp[0]."\"".$tmp[3]." style=\"font-size: 8pt\">";
 			echo "\n<form action=\"".$PHP_SELF."\" method=\"post\"><table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"99%\" align=\"center\"><tr>";
 			printhead(0, 0, FALSE, "open", FALSE, "<img src=\"pictures/cont_folder.gif\" border=0>", $titel, FALSE);
 			echo "</tr></table>	";
@@ -380,7 +380,7 @@ if ($sms_data["time"] == "all") {
 				</form>
 				<form action=\"".$PHP_SELF."\" method=\"post\" style=\"display: inline\">
 				<input type=\"image\" name=\"delete_selected_button\" border=\"0\" ".makeButton("loeschen", "src")." value=\"delete_selected\" align=\"absmiddle\">";
-				if (!empty($my_messaging_settings["folder"][$sms_data['view']])) {
+				if (have_msgfolder($sms_data['view']) == TRUE) {
 					$content_content .= "&nbsp;<input type=\"image\" name=\"move_selected_button\" border=\"0\" ".makeButton("verschieben", "src")." value=\"move\" align=\"absmiddle\">";
 				}
 				$content_content .= "<br></div>";
@@ -395,7 +395,7 @@ if ($sms_data["time"] == "all") {
 		}
 		if (folder_openclose($sms_show['folder'][$sms_data['view']], "all") == "open") print_messages();
 
-		if (!empty($my_messaging_settings["folder"][$sms_data['view']])) {
+		if (have_msgfolder($sms_data['view']) == TRUE) {
 			// persoenliche ordner
 			for($x="0";$x<sizeof($my_messaging_settings["folder"][$sms_data['view']]);$x++) {
 				if (htmlready(stripslashes(return_val_from_key($my_messaging_settings["folder"][$sms_data["view"]], $x))) != "dummy") {
@@ -487,7 +487,7 @@ if ($sms_data["time"] == "all") {
 			array("kategorie" => _("Nachrichten filtern:"),"eintrag" => array(
 				array("icon" => "pictures/suchen.gif", "text" => $time_by_links))),
 			array("kategorie" => _("Optionen:"),"eintrag" => array(
-				array("icon" => "pictures/link_intern.gif", "text" => sprintf("<a href=\"%s?cmd_show=openall\">"._("Alle Nachrichten aufklappen")."</a><br><img src=\"./pictures/blank.gif\" border=\"0\" height=\"2\"><br><a href=\"%s?cmd=mark_allsmsreaded\">"._("Alle als gelesen speichern")."</a>", $PHP_SELF, $PHP_SELF, $PHP_SELF))))		
+				array("icon" => "pictures/link_intern.gif", "text" => sprintf("<a href=\"%s?cmd_show=openall\">"._("Alle Nachrichten aufklappen")."</a><br><img src=\"./pictures/blank.gif\" border=\"0\" height=\"2\"><br><a href=\"%s?cmd=mark_allsmsreaded\">"._("Alle als gelesen speichern")."</a><br><img src=\"./pictures/blank.gif\" border=\"0\" height=\"2\"><br>	<a href=\"%s?cmd=admin_folder&cmd_2=new\">"._("Neuen Ordner erstellen")."</a>", $PHP_SELF, $PHP_SELF, $PHP_SELF, $PHP_SELF))))		
 		);
 		print_infobox($infobox,"pictures/sms3.jpg"); ?>
 	</td>

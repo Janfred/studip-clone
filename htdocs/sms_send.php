@@ -134,7 +134,12 @@ if ($group_id) {
 		$add_group_members[] = $db->f("username");
 	}
 	$sms_data["p_rec"] = "";
-	$sms_data["p_rec"] = array_add_value($add_group_members, $sms_data["p_rec"]);
+	if (is_array($add_group_members)) {
+		$sms_data["p_rec"] = array_add_value($add_group_members, $sms_data["p_rec"]);
+	} else {
+		$sms_msg = "error§"._("Die gewählte Adressbuchgruppe enthält keine Mitglieder.");
+		unset($sms_data["p_rec"]);
+	}
 	$sms_data["sig"] = $my_messaging_settings["addsignature"];
 }
 
@@ -350,9 +355,9 @@ function show_sigform() {
 			$tmp .= "</font><br>";
 			$tmp .= "<textarea name=\"signature\" style=\"width: 250px\" cols=20 rows=7 wrap=\"virtual\">\n";
 			if (!$signature) {
-				$tmp .= htmlready($my_messaging_settings["sms_sig"]);
+				$tmp .= htmlready(stripslashes($my_messaging_settings["sms_sig"]));
 			} else {
-				$tmp .= htmlready($signature);
+				$tmp .= htmlready(stripslashes($signature));
 			}
 			$tmp .= "</textarea>\n";
 	} else {
