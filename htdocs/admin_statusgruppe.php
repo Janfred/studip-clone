@@ -490,7 +490,7 @@ if ($db->num_rows()>0) {   // haben wir schon Gruppen? dann Anzeige
     <?
   	parse_msg("info§Es sind noch keine Gruppen oder Funktionen angelegt. 
   	<br>Bitte nutzen Sie die obere Zeile, um f&uuml;r diesen Bereich Gruppen oder Funktionen anzulegen!
-  	<br><br>Sie haben mit dem Feld 'Gruppengr&ouml;&szlig;e' die M&ouml;glichkeit, sie Sollst&auml;rke f&uuml;r eine Gruppe festzulegen.
+  	<br><br>Sie haben mit dem Feld 'Gruppengr&ouml;&szlig;e' die M&ouml;glichkeit, die Sollst&auml;rke f&uuml;r eine Gruppe festzulegen.
   	<br>Wenn Sie Gruppen angelegt haben, k&ouml;nnen Sie diesen Personen zuordnen. Jeder Gruppe k&ouml;nnen beliebig viele Personen zugeordnet werden. Jede Person kann beliebig vielen Gruppen zugeordnet werden.
   	<br><br>Lesen Sie weitere Bedienungshinweise in der <a href=\"help/index.php?referrer_page=admin_statusgruppe.php\">Hilfe</a> nach!
   	§");
