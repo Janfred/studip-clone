@@ -125,36 +125,36 @@ function SendMail($newsletter_id,$username,$Vorname,$Nachname,$Email)
 		if (!$validator->ValidateEmailHost($Email)) {     ## Mailserver nicht erreichbar, ablehnen
 			echo "nicht versand";
 			return false;
-		} else {					  ## Server ereichbar
-			if (!$validator->ValidateEmailBox($Email)) {    ## aber user unbekannt. Mail an abuse@puk!
-				echo "nicht erreichbar";
-				return false;
-			}
+		} elseif (!$validator->ValidateEmailBox($Email)) {    ## aber user unbekannt. Mail an abuse@puk!
+			echo "nicht erreichbar";
+			return false;
+		} else {
+
+			## Abschicken der Bestaetigungsmail
+			$from="\"Stud.IP\" <wwwrun@".$smtp->host_name.">";
+			$env_from="wwwrun@".$smtp->host_name;
+			$abuse="abuse@".$smtp->host_name;
+			$to=$Email;
+			$secret= md5("$username:$magic");
+			$url = "http://" . $smtp->host_name . $CANONICAL_RELATIVE_PATH_STUDIP . "email_validation.php?username=$username&secret=" . $secret;
+			$mailbody="Dies ist ein Newsletter des Systems\n"
+			."\"Studienbegleitender Internetsupport Präsenzlehre\"\n"
+			."- $UNI_NAME_CLEAN -\n\n"
+			."Diese Mail wurde Ihnen zugesandt um sicherzustellen,\n"
+			."daß die angegebene Email-Adresse tatsächlich Ihnen gehört.\n\n"
+			."Wenn diese Angaben korrekt sind, dann öffnen Sie bitte den Link\n\n"
+			."$url\n\n"
+			."in Ihrem Browser.\n"
+			."Möglicherweise unterstützt ihr Mail-Programm ein einfaches Anklicken des Links.\n"
+			."damit der Eintrag aus der Datenbank gelöscht wird.\n";
+
+			echo $to;
+
+			$smtp->SendMessage(
+			$env_from, array($to),
+			array("From: $from", "Reply-To: $abuse", "To: $to", "Subject: Newsletter"),
+			$mailbody);
 		}
-
-
-		## Abschicken der Bestaetigungsmail
-		$from="\"Stud.IP\" <wwwrun@".$smtp->host_name.">";
-		$env_from="wwwrun@".$smtp->host_name;
-		$abuse="abuse@".$smtp->host_name;
-		$to=$Email;
-		$secret= md5("$username:$magic");
-		$url = "http://" . $smtp->host_name . $CANONICAL_RELATIVE_PATH_STUDIP . "email_validation.php?username=$username&secret=" . $secret;
-		echo $url;
-		$mailbody="Dies ist ein Newsletter des Systems\n"
-		."\"Studienbegleitender Internetsupport Präsenzlehre\"\n"
-		."- $UNI_NAME_CLEAN -\n\n"
-		."Diese Mail wurde Ihnen zugesandt um sicherzustellen,\n"
-		."daß die angegebene Email-Adresse tatsächlich Ihnen gehört.\n\n"
-		."Wenn diese Angaben korrekt sind, dann öffnen Sie bitte den Link\n\n"
-		."$url\n\n"
-		."in Ihrem Browser.\n"
-		."Möglicherweise unterstützt ihr Mail-Programm ein einfaches Anklicken des Links.\n"
-		."damit der Eintrag aus der Datenbank gelöscht wird.\n";
-		$smtp->SendMessage(
-		$env_from, array($to),
-		array("From: $from", "Reply-To: $abuse", "To: $to", "Subject: Newsletter"),
-		$mailbody);
 }
 
 function SendLetter($newsletter_id)
