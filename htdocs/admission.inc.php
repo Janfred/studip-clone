@@ -71,7 +71,7 @@ function check_admission ($send_message=TRUE) {
 				$db4->query("UPDATE admission_seminar_user SET position = '$position', status = 'awaiting' WHERE user_id = '".$db3->f("user_id")."' AND seminar_id = '".$db->f("Seminar_id")."' ");
 				//User benachrichten
 				if (($db4->affected_rows()) && ($send_message)) {
-					$message="Sie wurden leider im Losverfahren der Veranstaltung **".$db->f("Name")."** nicht ausgelost. Sie wurden jedoch auf Position $position auf die Warteliste gesetzt. Das System wird Sie automatisch eintragen, sobald ein Platz für Sie frei wird.";
+					$message="Sie wurden leider im Losverfahren der Veranstaltung **".$db->f("Name")."** <u>nicht</u> ausgelost. Sie wurden jedoch auf Position $position auf die Warteliste gesetzt. Das System wird Sie automatisch eintragen, sobald ein Platz für Sie frei wird.";
 					$messaging->insert_sms ($db3->f("username"), $message, "____%system%____");
 				}
 				$position++;

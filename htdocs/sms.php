@@ -51,7 +51,7 @@ if ($cmd=="delete_all") {
 		if ($count_deleted_sms==1)
 			$msg="msg§Es wurde eine Nachricht gel&ouml;scht.";
 		else
-			$msg="msg§Es wurden ".$db->affected_rows()." Nachrichten gel&ouml;scht.";
+			$msg="msg§Es wurden ".$$count_deleted_sms." Nachrichten gel&ouml;scht.";
 	else
 		$msg="error§Es liegen keine Nachrichten vor, die gel&ouml;scht werden konnten.";
 	}
