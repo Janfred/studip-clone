@@ -1114,8 +1114,11 @@ function dateAssi ($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full =
 }
 
 //Checkt, ob Ablaufplantermine zu gespeicherten Metadaten vorliegen
-function isSchedule ($sem_id) {
+function isSchedule ($sem_id, $clearcache = FALSE) {
 	static $cache;
+	
+	if ($clearcache)
+		$cache = '';
 
 	if (isset($cache[$sem_id]))
 		return $cache[$sem_id];
