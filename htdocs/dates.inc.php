@@ -23,6 +23,106 @@ require_once $ABSOLUTE_PATH_STUDIP."datei.inc.php";  // benötigt zum Löschen von
 require_once $ABSOLUTE_PATH_STUDIP."config.inc.php";  //Daten 
 require_once $ABSOLUTE_PATH_STUDIP."functions.php";  //Daten 
 
+/**
+* This function creates the assigned room name for range_id
+*
+* @param		string	the id of the Veranstaltung or date
+* @retunr		string	the name of the room
+*
+*/
+
+function getRoom ($range_id) {
+	global $RESOURCES_ENABLE, $RELATIVE_PATH_RESOURCES, $TERMIN_TYP;
+	
+	if ($RESOURCES_ENABLE)	
+	 	require_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
+	
+	$db = new DB_Seminar;
+	$db2 = new DB_Seminar;
+	
+	switch (get_object_type($range_id)) {
+		case ("sem"):
+			$query = sprintf ("SELECT metadata_dates, ort FROM seminare WHERE Seminar_id = '%s'", $range_id);
+			$db->query($query);
+			if ($db->next_record()) {
+				//get the metatdata array
+				$term_data=unserialize($db->f("metadata_dates"));
+				$i=0;
+				if (is_array($term_data["turnus_data"])) {
+					foreach ($term_data["turnus_data"] as $data) {
+						if ($i)
+							$ret.=", ";
+						if (sizeof($term_data["turnus_data"]) > 1)
+							switch ($data["day"]) {
+								case "1": $ret .=_("Mo.: "); break;
+								case "2": $ret .=_("Di.: "); break;
+								case "3": $ret .=_("Mi.: "); break;
+								case "4": $ret .=_("Do.: "); break;
+								case "5": $ret .=_("Fr.: "); break;
+								case "6": $ret .=_("Sa.: "); break;
+								case "7": $ret .=_("So.: "); break;
+							}
+						if (($RESOURCES_ENABLE) && ($data["resource_id"]))
+							$ret .= getResourceObjectName($data["resource_id"]);
+						elseif (!$data["room"]) 
+							$ret .=_("n. A.");
+						else
+							$ret .=$data["room"];
+						$i++;
+					}
+					return $ret;
+				} else {
+					//Load all TERMIN_TYPs that are "Sitzungstermine" and build query-clause
+					$i=0;
+					$typ_clause = "(";
+					foreach ($TERMIN_TYP as $key=>$val) {
+						if ($val["sitzung"]) {
+							if ($i)
+								$typ_clause .= ", ";
+							$typ_clause .= "'".$key."' ";
+							$i++;
+						}
+					}
+					$typ_clause .= ")";	
+					
+					$query = sprintf ("SELECT termin_id, date, raum FROM termine WHERE date_typ IN $typ_clause AND range_id='%s' ORDER BY date", $range_id);
+					$db->query($query);
+					$i=0;
+					while ($db->next_record()) {
+						if ($i)
+							$ret .= ", ";
+						if ($db->nf() > 1)
+							$ret .= date ("d.m", $db->f("date")).": ";
+						if ($RESOURCES_ENABLE) 
+							$tmp_room = getResourceObjectName(getDateAssigenedRoom($db->f("termin_id")));
+						if ($tmp_room)
+							$ret .= $tmp_room;
+						elseif (!$db->f("raum"))
+							$ret .=_("n. A.");
+						else
+							$ret .=$db->f("raum");
+						$i++;
+					}
+					return $ret;
+				}
+			} else
+				return FALSE;
+		break;
+		case ("date");
+			$query = sprintf ("SELECT termin_id, date, raum FROM termine WHERE termin_id='%s' ", $range_id);
+			$db->query($query);
+			$db->next_record();
+
+			if ($RESOURCES_ENABLE) 
+				$tmp_room = getResourceObjectName(getDateAssigenedRoom($range_id));
+			if ($tmp_room)
+				$ret .= $tmp_room;
+			else
+				$ret .=$db->f("raum");
+			return $ret;
+		break;
+	}
+}
 
 
 /*
@@ -34,9 +134,8 @@ beruecksichtigt. Im 'ad hoc' Modus koennen der Funktion auch die eizelnen Variab
 uebergeben werden. Dann werden konkrete Termine nur mit berruecksichtigt, sofern sie schon angelegt wurden.
 */
 
-function veranstaltung_beginn ($seminar_id='', $art='', $semester_start_time='', $start_woche='', $start_termin='', $turnus_data='', $return_mode='')
-	{
-	global $SEMESTER;
+function veranstaltung_beginn ($seminar_id='', $art='', $semester_start_time='', $start_woche='', $start_termin='', $turnus_data='', $return_mode='') {
+	global $SEMESTER, $TERMIN_TYP;
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;	
 	
@@ -118,7 +217,21 @@ function veranstaltung_beginn ($seminar_id='', $art='', $semester_start_time='',
 		}
 	//Unregelmaessige Termine, also konkrete Termine aus Termintabelle
 	else {
-		$db2->query("SELECT date, end_time FROM termine WHERE date_typ='1' AND range_id='$seminar_id' ORDER BY date");
+	
+		//Load all TERMIN_TYPs that are "Sitzungstermine" and build query-clause
+		$i=0;
+		$typ_clause = "(";
+		foreach ($TERMIN_TYP as $key=>$val) {
+			if ($val["sitzung"]) {
+				if ($i)
+					$typ_clause .= ", ";
+				$typ_clause .= "'".$key."' ";
+				$i++;
+			}
+		}
+		$typ_clause .= ")";	
+		
+		$db2->query("SELECT date, end_time FROM termine WHERE date_typ IN $typ_clause AND range_id='$seminar_id' ORDER BY date");
 		$db2->next_record();
 		if ($db->affected_rows()) {
 			$return_string=date ("d.m.Y, G:i", $db2->f("date"))." - ".date ("G:i",  $db2->f("end_time"));
@@ -145,8 +258,9 @@ Bei regelmaessigen Veranstaltungen werden die einzelen Zeiten ausgegeben, bei zw
 Turnus mit dem enstprechenden Zusatz. Short verkuerzt die Ansicht nochmals.
 */
 
-function view_turnus ($seminar_id, $short = FALSE)
-	{
+function view_turnus ($seminar_id, $short = FALSE) {
+	global $TERMIN_TYP;
+
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
 	
@@ -159,7 +273,20 @@ function view_turnus ($seminar_id, $short = FALSE)
 	
 	if ($term_data["art"] == 1)
 		{
-		$db2->query("SELECT * FROM termine WHERE range_id='$seminar_id' AND date_typ='1' ORDER BY date");
+		//Load all TERMIN_TYPs that are "Sitzungstermine" and build query-clause
+		$i=0;
+		$typ_clause = "(";
+		foreach ($TERMIN_TYP as $key=>$val) {
+			if ($val["sitzung"]) {
+				if ($i)
+					$typ_clause .= ", ";
+				$typ_clause .= "'".$key."' ";
+				$i++;
+			}
+		}
+		$typ_clause .= ")";
+		
+		$db2->query("SELECT * FROM termine WHERE range_id='$seminar_id' AND date_typ IN $typ_clause ORDER BY date");
 		if ($db2->affected_rows() == 0)
 			{
 			if ($short)
@@ -309,9 +436,22 @@ Die Funktion Seminartermin ueberpueft, ob der erste Veranstaltungstermin bereits
 und gibt entweder Datum und Zeit des ersten Termins oder Wochentage und Uhrzeiten als String zurueck.
 */
 
-function seminartermin($seminar_id, $short = TRUE, $br = TRUE)
-{
-global $SEMESTER;
+function seminartermin($seminar_id, $short = TRUE, $br = TRUE) {
+	global $SEMESTER, $TERMIN_TYP;
+	
+	//Load all TERMIN_TYPs that are "Sitzungstermine" and build query-clause
+	$i=0;
+	$typ_clause = "(";
+	foreach ($TERMIN_TYP as $key=>$val) {
+		if ($val["sitzung"]) {
+			if ($i)
+				$typ_clause .= ", ";
+			$typ_clause .= "'".$key."' ";
+			$i++;
+		}
+	}
+	$typ_clause .= ")";
+
 	$return_string = "";
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;	
@@ -361,7 +501,7 @@ global $SEMESTER;
 		}
 	else
 		{
-		$db2->query("SELECT date, end_time FROM termine WHERE date_typ='1' AND range_id='$seminar_id' ORDER BY date");
+		$db2->query("SELECT date, end_time FROM termine WHERE date_typ IN $typ_clause AND range_id='$seminar_id' ORDER BY date");
 		$db2->next_record();
 		if ($db->affected_rows())
 			{
@@ -377,7 +517,7 @@ global $SEMESTER;
 	//setlocale( ("LC_ALL", "de_DE");
 	if ($term_data["art"] == 1)
 		{
-		$db2->query("SELECT * FROM termine WHERE range_id='$seminar_id' AND date_typ='1' ORDER BY date");
+		$db2->query("SELECT * FROM termine WHERE range_id='$seminar_id' AND date_typ IN $typ_clause  ORDER BY date");
 		if ($db2->affected_rows() == 0)
 			{
 			if ($short)
@@ -607,7 +747,7 @@ Dabei werden die Beschriftungen der Ordner im Forensystem und im Dateisystem akt
 
 function edit_dates($stunde,$minute,$monat,$tag,$jahr,$end_stunde, $end_minute, $termin_id,$art,$titel,$description,$topic_id,$raum,$resource_id,$range_id,$term_data='') {
 	global $user,$auth, $SEMESTER, $TERMIN_TYP, $RESOURCES_ENABLE, $RELATIVE_PATH_RESOURCES;
-	
+
 	if ($RESOURCES_ENABLE) {
 		require_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
 	}
@@ -681,7 +821,7 @@ function edit_dates($stunde,$minute,$monat,$tag,$jahr,$end_stunde, $end_minute, 
 
 		$titel=$titel;
 		$description=$description; 
-		
+
 		//if we have a resource_id, we flush the room name
 		if ($resource_id)
 			$raum='';
@@ -729,7 +869,10 @@ function edit_dates($stunde,$minute,$monat,$tag,$jahr,$end_stunde, $end_minute, 
 		//update assigned resources, if resource manangement activ
 		if ($RESOURCES_ENABLE) {
 			$updateAssign = new VeranstaltungResourcesAssign($range_id);
-			$updateAssign->changeDateAssign($termin_id, $resource_id);
+			if ($resource_id)
+				$updateAssign->changeDateAssign($termin_id, $resource_id);
+			else
+				$updateAssign->killDateAssign($termin_id);			
 			$updateAssign->updateAssign();
 		}
 	}
