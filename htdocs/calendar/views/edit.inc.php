@@ -58,23 +58,18 @@ echo "<tr><td class=\"blank\" width=\"99%\" valign=\"top\">\n";
 echo "<form action=\"$PHP_SELF?cmd=edit\" method=\"post\">";
 echo "<table class=\"blank\" width=\"99%\" border=\"0\" cellspacing=\"0\" cellpadding=\"10\">\n";
 
-if (isset($atermin) && get_class($atermin) == "seminarevent") {
-	echo "<tr><th width=\"100%\" align=\"left\">";
+if (isset($atermin) && get_class($atermin) == "seminarevent")
 	// form is not editable
 	$disabled = " style=\"color:#000000; background-color:#FFFFFF;\" disabled=\"disabled\"";
-}
-else {
-	echo "<tr><th width=\"100%\" align=\"left\">";
+else
 	$disabled = '';
-}
 
-
+echo "<tr><th width=\"100%\" align=\"left\">";
 echo $edit_mode_out;
+echo "\n</th></tr>\n";
 
 $css_switcher = new cssClassSwitcher();
 $css_switcher->switchClass();
-
-echo "\n</th></tr>\n";
 
 ########################################################################################
 
