@@ -1,4 +1,15 @@
 <?
+
+/**
+* displays editable personal messaging-settings
+* 
+* @author				Nils K. Windisch <studip@nkwindisch.de>
+* @access				public
+* @modulegroup	Messaging
+* @module				sms_box.php
+* @package			Stud.IP Core
+*/
+
 /*
 messagingSettings.php
 Copyright (C) 2003 Nils K. Windisch <info@nkwindisch.de>

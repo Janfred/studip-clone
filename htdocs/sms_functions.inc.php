@@ -1,5 +1,15 @@
 <?
 
+/**
+* several functions used for the systeminternal messages
+* 
+* @author				Nils K. Windisch <studip@nkwindisch.de>
+* @access				public
+* @modulegroup	Messaging
+* @module				sms_functions.inc.php
+* @package			Stud.IP Core
+*/
+
 /*
 sms_functions.inc.php -
 Copyright (C) 2002 Cornelis Kater <ckater@gwdg.de>, Nils K. Windisch <info@nkwindisch.de>
@@ -19,26 +29,26 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+/**
+ * returns the key from a val
+ *
+ * @author			Nils K. Windisch <studip@nkwindisch.de>
+ * @access			private
+ */
+
 function return_key_from_val($array, $val) {
-	/*while(list($tmp_key, $tmp_val) = each($array)) {
-		if ($tmp_val == $val) {
-			$key = $tmp_key;
-		}
-	}
-	return $key;
-	*/
 	return array_search($val, $array);
 }
 
+/**
+ * returns the val from a key
+ *
+ *
+ * @author			Nils K. Windisch <studip@nkwindisch.de>
+ * @access			private
+ */
+
 function return_val_from_key($array, $key) {
-	/*
-	while(list($tmp_key, $tmp_val) = each($array)) {
-		if ($tmp_key == $key) {
-			$val = $tmp_val;
-		}
-	}
-	return $val;
-	*/
 	return $array[$key];
 }
 
