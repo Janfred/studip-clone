@@ -143,7 +143,7 @@ if ((is_array($online)) && (is_array ($buddies))) {
 		$c++;
 	}
  } else {
-        echo "<tr><td class='blank' colspan='2' align='left'><font size=-1>" . _("Kein Buddy ist online.") . "</font><br />&nbsp; ";
+        echo "<tr><td class='blank' colspan='2' align='left'><font size=-1>" . _("Kein Nutzer ist online.") . "</font><br />&nbsp; ";
 }
 
 if (!$my_messaging_settings["show_only_buddys"]) {
@@ -161,7 +161,7 @@ if (!$my_messaging_settings["show_only_buddys"]) {
 <?
 if ($old_msg) 
 	printf(_("%s alte Nachricht(en) %s[lesen]%s"),$old_msg,"<a target=\"_content\" href=\"sms.php\">","</a><br>");
-elseif (!is_array($sidebar_data["new_msgs"]))
+elseif (!is_array($new_msgs))
 	print (_("Keine Nachrichten") . "<br>");
 else
 	print (_("Keine alten Nachrichten") . "<br>");
