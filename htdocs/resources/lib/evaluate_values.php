@@ -1541,7 +1541,7 @@ if ($snd_closed_request_sms) {
 	}
 	$in="('".join("','",$request_ids)."')";
 	
-	$query = sprintf ("SELECT request_id, seminar_id FROM resources_requests WHERE closed 1 AND request_id IN %s", $in);
+	$query = sprintf ("SELECT request_id, seminar_id FROM resources_requests WHERE closed = 1 AND request_id IN %s", $in);
 	$db->query($query);
 	
 	while ($db->next_record()) {
