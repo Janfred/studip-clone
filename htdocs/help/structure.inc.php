@@ -280,12 +280,26 @@ array	(	"name" => _("In der Veranstaltung: die Dateiverwaltung"),
 																			)
 																
 																)
-			),
+			));
 			
 			
+
+//show help for WikiWikiWeb, if available
+if ($GLOBALS["WIKI_ENABLE"]) {
+	$pages[] = array("name" => _("In der Veranstaltung: das Wiki"),
+			"text" => _("Wie Sie gemeinsam Texte verfassen"),
+			"perm" =>	"user",
+			"kategorien" => array	(	
+				array(	"name" => _("Das WikiWikiWeb"),
+					"text" => _("Die kollaborative Schreibumgebung"),
+					"page" => "wiki_all.htm"
+					),
+				)
+			);
+}
 			
 			
-			array	(	"name" => _("Der Veranstaltungs-Assistent"),
+	$pages[]=array	(	"name" => _("Der Veranstaltungs-Assistent"),
 				"text" => _("Veranstaltungen anlegen -ganz einfach!"),
 				"perm" =>	"dozent",
 				"kategorien" => array	(	
@@ -318,9 +332,9 @@ array	(	"name" => _("In der Veranstaltung: die Dateiverwaltung"),
 																				"page" => "va_assi7.htm"
 																			) 
 															)
-			),
+			);
 			
-array	(	"name" => _("Veranstaltungen verwalten"),
+$pages[]=array	(	"name" => _("Veranstaltungen verwalten"),
 				"text" => _("Wie Sie Ihre Veranstaltungen anlegen und aktuell halten"),
 				"perm" =>	"tutor",
 				"kategorien" => array	(	
@@ -349,10 +363,6 @@ array	(	"name" => _("Veranstaltungen verwalten"),
 																				"text" => _("Wie Sie die Zugangsberechtigungen für Veranstaltungen ändern können"),
 																				"page" => "x_admission.htm"
 																			),
-																array	(	"name" => _("Modulkonfiguration ändern"),
-																				"text" => _("Wie Sie Module für Veranstaltungen oder Einrichtungen aktivieren oder deaktivieren k&ouml;nnen"),
-																				"page" => "x_admin_modules.htm"
-																			),
 																array	(	"name" => _("Themen anlegen"),
 																				"text" => _("Wie Sie Debattenthemen für das Forum vorgeben können"),
 																				"page" => "x_themen.htm"
@@ -375,13 +385,13 @@ array	(	"name" => _("Veranstaltungen verwalten"),
 																				"page" => "x_admin_news.htm"
 																			) 
 															)
-			),
+			);
 			
-			array	(	"name" => _("Terminkalender und Stundenplan"),
-				"text" => _("Ihr Timeplaner im Netz"),
-				"perm" =>	"user",
-				"kategorien" => array	(	
-																array	(	"name" => _("Der Stundenplan"),
+$pages[]=array	(	"name" => _("Terminkalender und Stundenplan"),
+			"text" => _("Ihr Timeplaner im Netz"),
+			"perm" =>	"user",
+			"kategorien" => array	(	
+															array	(	"name" => _("Der Stundenplan"),
 																				"text" => _("Praktisch und einfach"),
 																				"page" => "stupla.htm"
 																			),
@@ -403,9 +413,9 @@ array	(	"name" => _("Veranstaltungen verwalten"),
 																			)
 																
 															)
-			),
+			);
 			
-			array	(	"name" => _("MyStud.IP"),
+$pages[] = array	(	"name" => _("MyStud.IP"),
 				"text" => _("Stud.IP anpassen"),
 				"perm" =>	"user",
 				"kategorien" => array	(	
@@ -430,9 +440,9 @@ array	(	"name" => _("Veranstaltungen verwalten"),
 																				"page" => "iii_homepagef5.htm"
 																			)
 															)
-			),
+			);
 			
-			array	(	"name" => _("Suchen"),
+$pages[] = array	(	"name" => _("Suchen"),
 				"text" => _("Was möchten Sie finden?"),
 				"perm" =>	"user",
 				"kategorien" => array	(	
@@ -453,9 +463,9 @@ array	(	"name" => _("Veranstaltungen verwalten"),
 																				"page" => "xii_suchen3.htm"
 																			)
 															)
-			),
+			);
 
-			array	(	"name" => _("Verschiedenes"),
+$pages[] = array	(	"name" => _("Verschiedenes"),
 				"text" => _("Textformatierungen, FAQ u.a."),
 				"perm" =>	"user",
 				"kategorien" => array	(	
@@ -480,8 +490,7 @@ array	(	"name" => _("Veranstaltungen verwalten"),
 																				"page" => "faq.htm"
 																			)
 															)
-			)
-);
+			);
 
 //show help for resources management, if available
 if ($GLOBALS["RESOURCES_ENABLE"]) {

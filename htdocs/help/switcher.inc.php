@@ -323,6 +323,11 @@ switch($referrer_page) {
 	case "migration2studip.php":
 		$help_page = "what_is_ilias.php";
 	break;
+
+	case "wiki.php":
+		$help_page = "wiki_all.htm";
+		break;
+
 	default :
 		;
 }
