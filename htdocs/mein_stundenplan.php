@@ -37,27 +37,15 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" =>
 
 ob_start(); //Outputbuffering for max performance
 
-?>
+include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
-<html>
- <head>
-<!--
-// here i include my personal meta-tags; one of those might be useful:
-// <META HTTP-EQUIV="REFRESH" CONTENT="<?php print $auth->lifetime*60;?>; URL=logout.php">
--->
-  <title>Stud.IP</title>
-        <?if (!$print_view) {?>
-        <link rel="stylesheet" href="style.css" type="text/css">
-        <?}
-        else {?>
-        <link rel="stylesheet" href="style_print	.css" type="text/css">
-        <?}?>
- </head>
-<body bgcolor="#ffffff">
+// -- here you have to put initialisations for the current page
+if (isset($print_view))
+	$_include_stylesheet = "style_print.css"; // use special stylesheet for printing
 
+// Start of Output
+include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 
-<?php
-require_once "$ABSOLUTE_PATH_STUDIP/seminar_open.php";
 require_once "$ABSOLUTE_PATH_STUDIP/config.inc.php"; //Daten laden
 require_once "$ABSOLUTE_PATH_STUDIP/config_tools_semester.inc.php"; 
 require_once "$ABSOLUTE_PATH_STUDIP/ms_stundenplan.inc.php";
@@ -88,21 +76,6 @@ $db2=new DB_Seminar;
 $hash_secret="machomania";
 setlocale ("LC_TIME","de_DE");
 
-//laden der persoenlichen Eintraege/Einstellungen aus dem Sessionmanagement
-//$user->register("my_personal_sems");
-
-//temporaere Routine, die alle alten Eintraege in my_personal_sems in das neue (=assoziative) Format 
-//konvertiert, die alten loescht bzw. deaktiviert und sie damit ueber das neue System loeschbar macht.
-//Funktionweise kann allerdings leider schwer gestestet werden....... :(
-//Diese Routine kann nach einiger Zeit auch wieder weg
-
-/*for ($o=0; $o<1000; $o++)
-	if (!$my_personal_sems[$my_personal_sems[$o]["seminar_id"]]) {
-		$my_personal_sems[$my_personal_sems[$o]["seminar_id"]]=$my_personal_sems[$o];
-		$my_personal_sems[$o]='';
-		unset($my_personal_sems[$o]);
-		}*/
-	
 //Wert fuer colspan Ausrechnen
 $glb_colspan=0;
 if ($my_schedule_settings["glb_days"]["mo"]) $glb_colspan++;
