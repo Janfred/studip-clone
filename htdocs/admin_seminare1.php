@@ -500,7 +500,7 @@ if ($s_command) {
 					if ($my_perms != "tutor") {
 						echo "<td class=\"".$cssSw->getClass()."\" align=right><b>Heimat-Einrichtung</b></td>";
 						echo "<td class=\"".$cssSw->getClass()."\" align=left colspan=2>&nbsp; ";
-						echo "&nbsp; <select name=\"Institut\">";
+						echo "<select name=\"Institut\">";
 						if (!$perm->have_perm("admin"))
 							$db3->query("SELECT * FROM Institute LEFT JOIN user_inst USING (institut_id) WHERE (user_id = '$user_id' AND (inst_perms = 'dozent' OR inst_perms = 'tutor')) GROUP BY Institute.institut_id ORDER BY Name");
 						else if (!$perm->have_perm("root"))
