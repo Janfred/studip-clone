@@ -68,8 +68,12 @@ if ($com == "new") {
 }
 else {
 	foreach ($EXTERN_MODULE_TYPES as $type) {
-		if ($type["module"] == $mod)
+		if ($type["module"] == $mod) {
+			// Vorläufiger Bugfix
+			$class_name = "ExternModule" . $mod;
+			require_once($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_EXTERN . "/modules/$class_name.class.php");
 			$module =& new ExternModule($range_id, $mod, $config_id);
+		}
 	}
 }
 
