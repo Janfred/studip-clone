@@ -861,13 +861,13 @@ class VoteDB extends StudipObject {
 	   $query = "INSERT INTO vote (".
 	     "vote_id, author_id, range_id,type , title, question, state, ".
 	     "startdate, stopdate, timespan, mkdate, chdate, ".
-	     "resultvisibility, namesvisibility".
+	     "resultvisibility, namesvisibility, ".
 	     "multiplechoice, anonymous, changeable, co_visibility) ".
 	     "VALUES (\"".$voteID."\",\"".$authorID."\", \"".$rangeID."\",".
 	     "\"".$type."\",\"".$title."\", ".
 	     "\"".$question."\", \"".$state."\", ".$startTime.", ".
 	     $endTime.", ".$timespan.", \"".$mkdate."\", ".
-	     "\"".$chdate."\", \"".$resultvisibility."\", \"".$namesvisibility."\",".
+	     "\"".$chdate."\", \"".$resultvisibility."\", \"".$namesvisibility."\", ".
 	     "\"".$multiplechoice."\", \"".$anonymous."\", ".
 	     "\"".$changeable."\", ".$co_visibility.")";
 
