@@ -1514,7 +1514,7 @@ class ResourcesMsg {
 			return FALSE;
 	}
 	
-	function displayAllMsg($view_mode = "window") {
+	function displayAllMsg($view_mode = "line") {
 		if (is_array($this->codes)) {
 			foreach ($this->codes as $val)
 				$collected_msg.=($this->msg[$val]["mode"]."§".$this->msg[$val]["msg"]."§");
@@ -1525,7 +1525,7 @@ class ResourcesMsg {
 		}
 	}
 	
-	function displayMsg($msg_code, $view_mode = "window") {
+	function displayMsg($msg_code, $view_mode = "line") {
 		if ($view_mode == "window")
 			parse_window($this->msg[$msg_code]["mode"]."§".$this->msg[$msg_code]["msg"], "§", $this->msg[$msg_code]["titel"], "<a href=\"resources.php?view=resources\">"._("zur&uuml;ck")."</a>");
 		else
