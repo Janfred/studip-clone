@@ -296,6 +296,10 @@ switch($referrer_page) {
 	case "statusgruppen.php" :
 		$help_page = "vi_statusgruppen_show.htm";
 		break;
+
+	case "admin_statusgruppe.php" :
+		$help_page = "x_statusgruppen_admin.htm";
+		break;
 	
 	default :
 		;

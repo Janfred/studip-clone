@@ -352,6 +352,11 @@ array	(	"name" => "Veranstaltungen verwalten",
 																				"text" => "Wie Sie Teilnehmer verwalten und Tutoren ernennen können",
 																				"page" => "x_teil.htm"
 																			), 
+																array	(	"name" => "Funktionen / Gruppen verwalten",
+																				"text" => "Wie Sie Teilnehmer mit Funktionen oder Gruppen organisieren",
+																				"page" => "x_statusgruppen_admin.htm"
+																			), 
+
 																array	(	"name" => "Dateiordner verwalten",
 																				"text" => "Wie Sie Dateiordner verwalten können",
 																				"page" => "x_datei.htm"
