@@ -267,6 +267,13 @@ echo "\n<b>Hallo ".fullNick($user->id).",<br> willkommen im Raum: "
 register_shutdown_function("chatLogout");   //für korrektes ausloggen am Ende!
 outputLoop($chatid);
 $userid=$user->id; //konservieren für shutdown_function
+//PHPLib Session Variablen unangetastet lassen
+foreach($sess->pt as $key){
+	unset($$key);
+}
+foreach($user->pt as $key){
+	unset($$key);
+}
 page_close();
 ?>
 
