@@ -42,7 +42,7 @@ include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
 ?>
 <table width="100%" border=0 cellpadding=0 cellspacing=0>
 <tr>
-	<td class="topic" colspan=2><b>&nbsp;<img src="pictures/icon-lit.gif" align=absmiddle>&nbsp; <? echo $SessSemName["header_line"]; ?> - <?=_("Content")?></b></td>
+	<td class="topic" colspan=2><b>&nbsp;<img src="pictures/icon-cont.gif" align=absmiddle>&nbsp; <? echo $SessSemName["header_line"]; ?> - <?=_("Content")?></b></td>
 </tr>
 <tr>
 	<td class="blank" colspan=2>
@@ -59,7 +59,7 @@ if ($db->num_rows()) {
 	$content=$db->f("content");
 	
 	$zusatz="<font size=-1>" . sprintf(_("Zuletzt ge&auml;ndert von %s am %s"), "</font><a href=\"about.php?username=".get_username ($db->f("user_id"))."\"><font size=-1 color=\"#333399\">".get_fullname ($db->f("user_id"))."</font></a><font size=-1>", date("d.m.Y, H:i",$db->f("chdate"))."<font size=-1>&nbsp;"."</font>");				
-	$icon="&nbsp;<img src=\"pictures/cont_lit.gif\">";
+	$icon="&nbsp;<img src=\"pictures/icon-cont.gif\">";
 	
 	// Content
 	// 
