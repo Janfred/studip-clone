@@ -38,7 +38,7 @@ if ($EXPORT_ENABLE)
 	if (($page==2) AND $XSLT_ENABLE AND $skip_page_2) $page=3;
 	//Exportmodul einbinden
 	if ($range_id != "")	
-		include($ABSOLUTE_PATH_STUDIP ."" . $PATH_EXPORT . "/export.inc.php");
+		include($ABSOLUTE_PATH_STUDIP ."" . $PATH_EXPORT . "/export_xml.inc.php");
 	elseif (($xml_file_id != "") AND ($page != 3))
 		include($ABSOLUTE_PATH_STUDIP ."" . $PATH_EXPORT . "/export_choose_xslt.inc.php");
 
