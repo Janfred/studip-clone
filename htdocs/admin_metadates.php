@@ -344,7 +344,7 @@ if (($uebernehmen_x) && (!$errormsg)) {
 			if (($foreign_resources) && ($RESOURCES_ALLOW_ROOM_REQUESTS) && (!$change_metadates_open_request)) {
 				$update_resources = FALSE;
 				$create_request = TRUE;
-				$errormsg.="info§"._("Sie haben die Zeiten eines zugewiesenen Raums ge&auml;ndert. Dabei verlieren Sie die Buchung des zugewiesenen Raums. Der zust&auml;ndige Raumadministrator mu&szlig; Ihnen den Raum erneut zuweisen, daf&uuml;r wird Raumanfrage ben&ouml;tigt.")
+				$errormsg.="info§"._("Sie haben die Belegungszeiten eines zugewiesenen Raums ge&auml;ndert. Dabei verlieren Sie die Buchung des zugewiesenen Raums. Der zust&auml;ndige Raumadministrator mu&szlig; Ihnen den Raum erneut zuweisen, daf&uuml;r wird eine Raumanfrage ben&ouml;tigt.")
 						."<br />"._("Wollen Sie die Zeiten dennoch &auml;ndern?")."<br /><a href=\"$PHP_SELF?change_metadates_open_request=1&uebernehmen_x=1\">".makeButton("ja2")."</a>"
 						."&nbsp;<a href=\"$PHP_SELF\">".makeButton("nein")."</a>§";
 			} elseif  (!$change_metadates_open_request)
