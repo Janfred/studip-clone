@@ -43,7 +43,7 @@ class StudipLitSearchPluginGvk extends StudipLitSearchPluginZ3950Abstract{
 		$this->z_syntax = "MARC";
 		$this->convert_umlaute = true;
 		$this->z_accession_bib = "12";
-		$this->z_accession_re = '/[0-9]{9}/';
+		$this->z_accession_re = '/[0-9]{8}[0-9X]{1}/';
 		$this->z_profile = array('1016' => _("Basisindex [ALL]") , '1' => _("Personennamen [PRS]"),'2' => _("Körperschaftsname [KOS]"),
 								'3' => _("Kongress [KNS]"),'4' => _("Titelstichwörter [TIT]"),
 								'5' => _("Serienstichwörter [SER]"), '7' => _("ISBN [ISB]"),
