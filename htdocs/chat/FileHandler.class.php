@@ -67,7 +67,11 @@ class FileHandler {
 	* @param	integer	$key	must be unique on this machine
 	* @param	integer	$size	in bytes
 	*/
-	function FileHandler($file_name = "chat_data" ,$file_path = "/tmp") {
+	function FileHandler($file_name = "chat_data" ,$file_path = "@") {
+   		global $TMP_PATH;
+ 	      	if($file_path == "@:"){
+ 	        	$file_path = $TMP_PATH;
+ 	        }  
 		$this->file_name = $file_name;
 		$this->file_path = $file_path;
 	}

@@ -235,14 +235,12 @@ $db3=new DB_Seminar;
 		}
 
 		if ($db->nf() && $ALLOW_GROUPING_SEMINARS) {
-			print("<table width=\"90%\" border=0 cellspacing=0 cellpadding=2>\n");
 			print ("<tr><td></td><td>\n");
 			echo "<input ".makeButton("gruppieren","src")." ".tooltip(_("Markierte Veranstaltungen gruppieren"))." type=\"image\" border=\"0\" style=\"vertical-align:left;\" align=\"left\">";
-			//TODO: Button gruppieren statt auswählen
-			print("</td></tr>\n");
 			print("<input type=\"hidden\" name=\"group\" value=\"group\">\n");
 			printf("<input type=\"hidden\" name=\"institut_id\" value=\"%s\">\n",$institut_id);
 			print("</form>\n");
+			print("</td></tr>\n");
 		}
 
 		print("</table>");
