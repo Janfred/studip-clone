@@ -993,10 +993,17 @@ function dateAssi ($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full =
 						//insert a entry for the linked resource, if resource management activ
 						if ($RESOURCES_ENABLE) {
 							$insertAssign->dont_check = TRUE;
-							if ($saved_dates[$affected_dates]) {
-								$resources_result = array_merge($resources_result, $insertAssign->changeDateAssign($saved_dates[$affected_dates], $val["resource_id"]));
-							} else 
-								$resources_result = array_merge($resources_result, $insertAssign->insertDateAssign($date_id, $val["resource_id"]));
+							//only if we get a resource_id, we update assigns...
+							if ($val["resource_id"]) {
+								if ($saved_dates[$affected_dates]) {
+									$resources_result = array_merge($resources_result, $insertAssign->changeDateAssign($saved_dates[$affected_dates], $val["resource_id"]));
+								} else {
+									$resources_result = array_merge($resources_result, $insertAssign->insertDateAssign($date_id, $val["resource_id"]));
+								}
+							//...if no resource_id (but assign, if ressource was set but is no more), kill assign
+							} else {
+								$insertAssign->killDateAssign($saved_dates[$affected_dates]);
+							}
 						}
 						$affected_dates++;
 					}
