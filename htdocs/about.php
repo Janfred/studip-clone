@@ -46,14 +46,14 @@ fenster=window.open("studipim.php","im_<?=$user->id;?>","scrollbars=yes,width=40
 <!-- hier muessen Seiten-Initialisierungen passieren -->
 
 <?php
-include "header.php";   //hier wird der "Kopf" nachgeladen
-include ("show_news.php");
-include ("show_dates.inc.php");
-require_once("functions.php");
-require_once("config.inc.php");
-require_once("dates.inc.php");
-require_once("messaging.inc.php");
-require_once("msg.inc.php");
+include ("$ABSOLUTE_PATH_STUDIP/header.php");
+include ("$ABSOLUTE_PATH_STUDIP/show_news.php");
+include ("$ABSOLUTE_PATH_STUDIP/show_dates.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
+require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/dates.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/messaging.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
 
 $sess->register("about_data");
 $msging=new messaging;
@@ -111,26 +111,8 @@ if (!isset($username) || $username == "")
 
 //daten anzeigen
  IF (($user_id==$user->id AND $perm->have_perm("autor")) OR $perm->have_perm("root") OR $admin_darf == TRUE) { // Es werden die Editreiter angezeigt, wenn ich &auml;ndern darf
-   
-    ?>  
-<table cellpadding="0" cellspacing="0" border="0">
-<tr>
- <td class="links1b" align="right" nowrap><a  class="links1" href="about.php?username=<?echo $username?>"><font color="#000000" size=2><b>&nbsp; &nbsp; Alle&nbsp; &nbsp; </b></font></a><img src="pictures/reiter2.jpg" align=absmiddle></td>
- <td class="links1" align="right" nowrap><a  class="links1" href="edit_about.php?view=Bild&username=<?echo $username?>"><font color="#000000" size=2><b>&nbsp; &nbsp; Bild&nbsp; &nbsp; </b></font></a><img src="pictures/reiter1.jpg" align=absmiddle></td>
- <td class="links1" align="right" nowrap><a  class="links1" href="edit_about.php?view=Daten&username=<?echo $username?>"><font color="#000000" size=2><b>&nbsp; &nbsp; Daten&nbsp; &nbsp; </b></font></a><img src="pictures/reiter1.jpg" align=absmiddle></td>
- <td class="links1" align="right" nowrap><a  class="links1" href="edit_about.php?view=Karriere&username=<?echo $username?>"><font color="#000000" size=2><b>&nbsp; &nbsp; universit&auml;re Daten&nbsp; &nbsp; </b></font></a><img src="pictures/reiter1.jpg" align=absmiddle></td>
- <td class="links1" align="right" nowrap><a  class="links1" href="edit_about.php?view=Lebenslauf&username=<?echo $username?>"><font color="#000000" size=2><b>&nbsp; &nbsp; Lebenslauf&nbsp; &nbsp; </b></font></a><img src="pictures/reiter1.jpg" align=absmiddle></td>
- <td class="links1" align="right" nowrap><a  class="links1" href="edit_about.php?view=Sonstiges&username=<?echo $username?>"><font color="#000000" size=2><b>&nbsp; &nbsp; Sonstiges&nbsp; &nbsp; </b></font></a><img src="pictures/reiter1.jpg" align=absmiddle></td>
-<? 	IF ($auth->auth["perm"]!="admin" AND $auth->auth["perm"]!="root") {?>
-	<td class="links1" align="right" nowrap><a  class="links1" href="edit_about.php?view=Login"><font color="#000000" size=2><b>&nbsp; &nbsp; MyStud.IP&nbsp; &nbsp; </b></font></a><img src="pictures/reiter1.jpg" align=absmiddle></td>
-<?}?>
-</tr></table>
-<table class=blank cellspacing=0 cellpadding=0 border=0 width="100%">
-<tr><td class=steel1>&nbsp; 
-</td></tr><tr><td class=reiterunten>&nbsp; </td></tr></table>
-<?
-
-	}
+	 include ("$ABSOLUTE_PATH_STUDIP/links_about.inc.php");  
+ }
 
 ?>
 

@@ -25,11 +25,11 @@ $auth->login_if(!$logout && ($auth->auth["uid"] == "nobody"));
 
 if ($usr_name)  $username=$usr_name; //wenn wir von den externen Seiten kommen, nehmen wir den Usernamen aus usr_name, falls dieser gesetzt ist, um die Anmeldeprozedur nicht zu verwirren....
 
-require_once "config.inc.php";
-require_once "kategorien.inc.php";
-require_once "msg.inc.php";
-require_once "messaging.inc.php";
-require_once "visual.inc.php";
+require_once "$ABSOLUTE_PATH_STUDIP/config.inc.php";
+require_once "$ABSOLUTE_PATH_STUDIP/kategorien.inc.php";
+require_once "$ABSOLUTE_PATH_STUDIP/msg.inc.php";
+require_once "$ABSOLUTE_PATH_STUDIP/messaging.inc.php";
+require_once "$ABSOLUTE_PATH_STUDIP/visual.inc.php";
 
 // Klassendefinition
 
@@ -823,76 +823,13 @@ if (!$cmd)
     //maximale spaltenzahl berechnen
    if ($auth->auth["jscript"]) $max_col = round($auth->auth["xres"] / 10 );
    else $max_col =  64 ; //default für 640x480
-  ?>
-  
-
-
-  <table cellpadding="0" cellspacing="0" border="0"><tr>
-<?	
 
 // Reitersystem
-
-	IF (!$view) $view="Bild";
-	
-	?> <td class="links1" align=right nowrap><a  class="links1" href="about.php?username=<?echo $username?>"><font color="#000000" size=2><b>&nbsp; &nbsp; Alle&nbsp; &nbsp; </b></font></a><img src="pictures/reiter1.jpg" align=absmiddle></td><?
-
-	if ($view == "Bild") {?>  <td class="links1b" align=right nowrap><a  class="links1b" href="edit_about.php?view=Bild&username=<?echo $username?>"><font color="#000000" size=2><b>&nbsp; &nbsp; Bild&nbsp; &nbsp; </b></font></a><img src="pictures/reiter2.jpg" align=absmiddle></td><?}
-	ELSE {?>  <td class="links1" align=right nowrap><a  class="links1" href="edit_about.php?view=Bild&username=<?echo $username?>"><font color="#000000" size=2><b>&nbsp; &nbsp; Bild&nbsp; &nbsp; </b></font></a><img src="pictures/reiter1.jpg" align=absmiddle></td><?}
-
-	if ($view == "Daten") {?>  <td class="links1b" align=right nowrap><a  class="links1b" href="edit_about.php?view=Daten&username=<?echo $username?>"><font color="#000000" size=2><b>&nbsp; &nbsp; Daten&nbsp; &nbsp; </b></font></a><img src="pictures/reiter2.jpg" align=absmiddle></td><?}
-	ELSE {?>  <td class="links1" align=right nowrap><a  class="links1" href="edit_about.php?view=Daten&username=<?echo $username?>"><font color="#000000" size=2><b>&nbsp; &nbsp; Daten&nbsp; &nbsp; </b></font></a><img src="pictures/reiter1.jpg" align=absmiddle></td><?}
-
-	if ($view == "Karriere") {?>  <td class=links1b align=right nowrap><a  class="links1b" href="edit_about.php?view=Karriere&username=<?echo $username?>"><font color="#000000" size=2><b>&nbsp; &nbsp; universit&auml;re Daten&nbsp; &nbsp; </b></font></a><img src="pictures/reiter2.jpg" align=absmiddle></td><?}
-	ELSE {?>  <td class="links1" align=right nowrap><a  class="links1" href="edit_about.php?view=Karriere&username=<?echo $username?>"><font color="#000000" size=2><b>&nbsp; &nbsp; universit&auml;re Daten&nbsp; &nbsp; </b></font></a><img src="pictures/reiter1.jpg" align=absmiddle></td><?}
-
-	if ($view == "Lebenslauf") {?>  <td class="links1b" align=right nowrap><a  class="links1b" href="edit_about.php?view=Lebenslauf&username=<?echo $username?>"><font color="#000000" size=2><b>&nbsp; &nbsp; Lebenslauf&nbsp; &nbsp; </b></font></a><img src="pictures/reiter2.jpg" align=absmiddle></td><?}
-	ELSE {?>  <td class="links1" align=right nowrap><a  class="links1" href="edit_about.php?view=Lebenslauf&username=<?echo $username?>"><font color="#000000" size=2><b>&nbsp; &nbsp; Lebenslauf&nbsp; &nbsp; </b></font></a><img src="pictures/reiter1.jpg" align=absmiddle></td><?}
- 
-	if ($view == "Sonstiges") {
-		IF ($auth->auth["perm"]!="admin" AND $auth->auth["perm"]!="root")
-			ECHO "<td class=\"links1b\" align=\"right\" nowrap><a  class=\"links1b\" href=\"edit_about.php?view=Sonstiges&username=".$username."\"><font color=\"#000000\" size=2><b>&nbsp; &nbsp; Sonstiges&nbsp; &nbsp; </b></font></a><img src=\"pictures/reiter2.jpg\" align=\"absmiddle\"></td>";
-		ELSE echo "<td class=\"links1b\" align=\"right\" nowrap><a  class=\"links1b\" href=\"edit_about.php?view=Sonstiges&username=".$username."\"><font color=\"#000000\" size=2><b>&nbsp; &nbsp; Sonstiges&nbsp; &nbsp; </b></font></a><img src=\"pictures/reiter4.jpg\" align=\"absmiddle\"></td>";
-		}
-	ELSE {?>  <td class="links1" align="right" nowrap><a  class="links1" href="edit_about.php?view=Sonstiges&username=<?echo $username?>"><font color="#000000" size=2><b>&nbsp; &nbsp; Sonstiges&nbsp; &nbsp; </b></font></a><img src="pictures/reiter1.jpg" align="absmiddle"></td><?}
-
-	IF ($auth->auth["perm"]!="admin" AND $auth->auth["perm"]!="root") {
-		IF ($view=="Login" || $view=="Forum" || $view=="calendar" || $view=="Stundenplan" || $view=="Messaging"){?>  <td class=links1b align=right nowrap><a  class="links1b" href="edit_about.php?view=Login"><font color="#000000" size=2><b>&nbsp; &nbsp; MyStud.IP&nbsp; &nbsp; </b></font></a><img src="pictures/reiter4.jpg" align=absmiddle></td><?}
-		ELSE {?>  <td class="links1" align="right" nowrap><a  class="links1" href="edit_about.php?view=Login"><font color="#000000" size=2><b>&nbsp; &nbsp; MyStud.IP&nbsp; &nbsp; </b></font></a><img src="pictures/reiter1.jpg" align="absmiddle"></td><?}
-		}
-echo "</tr>\n</table>\n<table class=blank cellspacing=0 cellpadding=0 border=0 width=100%>";
-
-//My StudIP-Bereich Kategorien bei bedarf einbinden
-IF ($view=="Login" || $view=="Forum" || $view=="calendar" || $view=="Stundenplan" || $view=="Messaging"){
-
-	echo "</table><table cellspacing=0 cellpadding=4 border=0 width=\"100%\"><tr><td class=\"steel1\">&nbsp; &nbsp; ";
-		
-	if ($view == "Login"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2"  href="edit_about?view=Login">Login&nbsp; &nbsp; </a> <?}
-	else{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2"  href="edit_about?view=Login">Login&nbsp; &nbsp; </a> <?}
-
-	if ($view == "Forum"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2"  href="edit_about.php?view=Forum">Forum&nbsp; &nbsp; </a> <?}
-	else{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2"  href="edit_about.php?view=Forum">Forum&nbsp; &nbsp; </a> <?}
-
-	if ($view == "calendar"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2"  href="edit_about.php?view=calendar">Terminkalender&nbsp; &nbsp; </a> <?}
-	else{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2"  href="edit_about.php?view=calendar">Terminkalender&nbsp; &nbsp; </a> <?}
-
-	if ($view == "Stundenplan"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2"  href="edit_about.php?view=Stundenplan">Stundenplan&nbsp; &nbsp; </a> <?}
-	else{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2"  href="edit_about.php?view=Stundenplan">Stundenplan&nbsp; &nbsp; </a> <?}
-
-	if ($view == "Messaging"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2"  href="edit_about.php?view=Messaging">Messaging&nbsp; &nbsp; </a> <?}
-	else{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2"  href="edit_about.php?view=Messaging">Messaging&nbsp; &nbsp; </a> <?}
-
-	echo"<br></td></tr><tr><td class=\"reiterunten\">&nbsp; </td></tr></table>";
-	echo "<table class=\"blank\" width=\"100%\" border=0 cellspacing=0 cellpadding=0><tr><td class=\"blank\">";
-	}
+include ("$ABSOLUTE_PATH_STUDIP/links_about.inc.php");  
 
 //Kopfzeile bei allen eigenen Modulen ausgeben
 IF ($view!="Forum" AND $view!="calendar" AND $view!="Stundenplan" AND $view!="Messaging"){
-	if ($view!="Login") {
-		echo "<tr><td class=\"steel1\">&nbsp; &nbsp; ";
-		echo"</td></tr>\n<tr><td class=\"reiterunten\">&nbsp; </td></tr>\n</table>\n";
-		echo "<table class=\"blank\" cellspacing=0 cellpadding=0 border=0 width=\"100%\">";
-		echo "<tr><td class=\"blank\" colspan=2>&nbsp;</td></tr>\n";
-		}
+	echo "<table class=\"blank\" cellspacing=0 cellpadding=0 border=0 width=\"100%\">";
 		
 	if ($username!=$auth->auth["uname"]) 
 		echo "<tr><td class=\"topicwrite\" colspan=2><img src='pictures/einst.gif' border=0 align=texttop><b>&nbsp;";
@@ -994,7 +931,7 @@ IF ($view=="Daten"){
    }
 
    $cssSw->switchClass();
-  echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>Geschlecht: </td><td colspan=2 nowrap width=\"80%\" align=\"left\"><font size=-1>&nbsp; m&auml;nnlich&nbsp; <input type=\"RADIO\" name=\"geschlecht\" value=0 ";
+  echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>Geschlecht: </td><td class=\"".$cssSw->getClass()."\" colspan=2 nowrap width=\"80%\" align=\"left\"><font size=-1>&nbsp; m&auml;nnlich&nbsp; <input type=\"RADIO\" name=\"geschlecht\" value=0 ";
   if (!$my_about->user_info["geschlecht"]) 
   	echo "checked";
   echo " />&nbsp; weiblich&nbsp; <input type=\"RADIO\" name=\"geschlecht\" value=1 ";
@@ -1035,6 +972,7 @@ ELSE {
   if ($my_about->special_user)
    {
    reset ($my_about->user_inst);
+   echo "<a name=\"inst_data\"></a>";   
    echo "<tr><td class=\"blank\">";
    echo "<b>&nbsp; Ich arbeite an folgenden Einrichtungen:</b>";
    echo "<table cellspacing=0 cellpadding=2 border=0 align=\"center\" width=\"99%\" border=\"0\">";
@@ -1071,6 +1009,7 @@ if ($my_about->auth_user["perms"]=="autor" || $my_about->auth_user["perms"]=="tu
    {
    $cssSw->resetClass();
    $cssSw->switchClass();
+   echo "<a name=\"studiengaenge\"></a>";   
    echo "<tr><td class=\"blank\">";
    echo "<b>&nbsp; Ich bin in folgenden Studiengängen immatrikuliert:</b>";
    echo "<table width= \"99%\" align=\"center\" border=0 cellpadding=2 cellspacing=0>\n";
@@ -1108,7 +1047,8 @@ if ($my_about->auth_user["perms"]=="autor" || $my_about->auth_user["perms"]=="tu
   if ($my_about->auth_user["perms"]=="autor" || $my_about->auth_user["perms"]=="tutor")
    {
    $cssSw->resetClass();
-   $cssSw->switchClass();    
+   $cssSw->switchClass();
+   echo "<a name=\"einrichtungen\"></a>";
    echo "<tr><td class=\"blank\">";
    echo "<br><b>&nbsp; Ich studiere an folgenden Einrichtungen:</b>";
    echo "<table width= \"99%\" align=\"center\" border=0 cellpadding=2 cellspacing=0>\n";
@@ -1144,7 +1084,8 @@ if ($my_about->auth_user["perms"]=="autor" || $my_about->auth_user["perms"]=="tu
 }   
 
 IF ($view=="Lebenslauf"){
-  $cssSw->switchClass();    
+  $cssSw->switchClass();
+  echo "<a name=\"lebenslauf\"></a>";   
   if ($my_about->auth_user["perms"] == "dozent")
 	 echo "<tr><td align=\"left\" valign=\"top\" class=\"blank\"><blockquote><br>Hier können sie Ihren Lebenslauf, Publikationen und Arbeitschwerpunkte bearbeiten.";
   else
@@ -1155,10 +1096,12 @@ IF ($view=="Lebenslauf"){
   echo "<td class=\"".$cssSw->getClass()."\" colspan=\"2\" align=\"left\" valign=\"top\"><b><blockquote>Lebenslauf:</b><br>";
   echo "<textarea  name=\"lebenslauf\" style=\" width: 80%\" cols=".round($max_col/1.3)." rows=7 wrap=virtual>".htmlReady($my_about->user_info["lebenslauf"])."</textarea></td></tr>\n";
   if ($my_about->auth_user["perms"] == "dozent"){
-       $cssSw->switchClass();    
+       $cssSw->switchClass();
+        echo "<a name=\"schwerpunkte\"></a>";   
 	echo "<tr><td class=\"".$cssSw->getClass()."\" colspan=\"2\" align=\"left\" valign=\"top\"><b><br><blockquote>Schwerpunkte:</b><br>";
 	echo "<textarea  name=\"schwerp\" style=\" width: 80%\" cols=".round($max_col/1.3)." rows=7 wrap=virtual>".htmlReady($my_about->user_info["schwerp"])."</textarea></td></tr>\n";
-        $cssSw->switchClass();    
+        $cssSw->switchClass();
+        echo "<a name=\"publikationen\"></a>";   
 	echo "<tr><td class=\"".$cssSw->getClass()."\" colspan=\"2\" align=\"left\" valign=\"top\"><b><br><blockquote>Publikationen:</b><br>";
 	echo "<textarea  name=\"publi\" style=\" width: 80%\" cols=".round($max_col/1.3)." rows=7 wrap=virtual>".htmlReady($my_about->user_info["publi"])."</textarea></td></tr>\n";
 	}
