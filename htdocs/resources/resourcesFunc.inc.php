@@ -33,6 +33,8 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
+require_once ($RELATIVE_PATH_RESOURCES."/lib/ResourceObjectPerms.class.php");
+
 
 /*
 * allowCreateRooms
@@ -399,6 +401,14 @@ function getMyRoomRequests($user_id = '') {
 		//load all my seminars
 		$my_sems = search_administrable_seminars();
 		
+		if (sizeof($my_res)) {
+			foreach ($my_res as $res_id => $dummy){
+				$object_perms =& ResourceObjectPerms::Factory($res_id, $user_id);
+				if (!$object_perms->havePerm('tutor')){
+					unset($my_res[$res_id]);
+				}
+			}
+		}
 		if (sizeof($my_res)) {
 			$in_resource_id =  "('".join("','",array_keys($my_res))."')";
 			$query_res = sprintf("SELECT request_id, closed, LOCATE('s:11:\"turnus_data\";',metadata_dates) AS metatime,
