@@ -81,7 +81,7 @@ include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 
 <?
 
-include "$ABSOLUTE_PATH_STUDIP/links_admin.inc.php";	//hier wird das Reiter- und Suchsystem des Adminbereichs eingebunden
+include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");	//hier wird das Reiter- und Suchsystem des Adminbereichs eingebunden
 
 require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php");	//Ausgaben
 require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");	//Settings....
@@ -95,6 +95,17 @@ $cssSw=new cssClassSwitcher;
 $sess->register("admin_admission_data");
 $messaging=new messaging;
 
+
+/**
+* This function creates a snapshor for all the values the admin_admission script uses
+*
+* The function serialized all the data which is used on this page. So you can
+* compare an old and a new state of the whole set. It is used to inform the user,
+* that the data isn't saved yet.
+*
+* @param		string	all the data in serilized form
+*
+*/
 function get_snapshot() {
 	global $admin_admission_data;
 	return	serialize($admin_admission_data["admission_turnout"]).
