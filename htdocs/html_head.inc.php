@@ -50,6 +50,7 @@ define("PHPDOC_DUMMY",true);
 		<meta http-equiv="REFRESH" CONTENT="<?php print $auth->lifetime*60;?>; URL=logout.php">
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 		<meta name="copyright" content="Stud.IP-Crew (crew@studip.de)">
+		<link rel="SHORTCUT ICON" href="http://www.studip.de/favicon.ico">
 <?php
 if (!isset($_html_head_title))  // if not set, use default title
 	$_html_head_title ="Stud.IP";
