@@ -1,7 +1,7 @@
 <?
 /**
 * helper functions for handling the board 
-* 
+*
 * helper functions for handling boards
 *
 * @author			Ralf Stockmann <rstockm@uni-goettingen.de>
@@ -40,9 +40,8 @@
 *
 **/
 function forum_kill_edit ($description) {
-	if (ereg("<admin_msg",$description)) { // wurde schon mal editiert
-		$postmp = strpos($description,"<admin_msg");
-		$description = substr_replace($description,"",$postmp);
+	if (preg_match('/^(.*)(<admin_msg.*?)$/s',$description, $match)) { // wurde schon mal editiert
+		return $match[1];
 	}
 	return $description;
 }
@@ -56,9 +55,9 @@ function forum_kill_edit ($description) {
 *
 **/
 function forum_append_edit ($description) {
-	$edit = "<admin_msg autor=\"".get_fullname()."\" chdate=\"".time()."\">";
-	$description = forum_kill_edit($description).$edit;
-	return $description;
+	$edit = "<admin_msg autor=\"".addslashes(get_fullname('', 'full', false))."\" chdate=\"".time()."\">";
+	//$description = forum_kill_edit($description).$edit;
+	return $description . $edit;
 }
 
 /**
@@ -70,12 +69,10 @@ function forum_append_edit ($description) {
 *
 **/
 function forum_parse_edit ($description) {
-	if (ereg("<admin_msg",$description)) { // wurde schon mal editiert
-		$postmp = strrpos($description,"<admin_msg");
-		$edittmp = substr($description,$postmp);
-		$tmp = explode("\"",$edittmp);
+	if (preg_match('/^.*(<admin_msg.*?)$/s',$description, $match)) { // wurde schon mal editiert
+		$tmp = explode('"',$match[1]);
 		$append = "\n\n%%["._("Zuletzt editiert von ").$tmp[1]." - ".date ("d.m.y - H:i", $tmp[3])."]%%";
-		$description = forum_kill_edit($description).$append;
+		$description = forum_kill_edit($description) . $append;
 	}
 	return $description;
 }
@@ -1071,9 +1068,9 @@ function printposting ($forumposting) {
   		
   		
   		if (!$auth->is_authenticated() || $user->id == "nobody" || $forumposting["author"]=="unbekannt" || $forumposting["username"]=="") // Nobody darf nicht auf die about...
-			$forumhead[] = htmlReady($forumposting["author"]);
+			$forumhead[] = $forumposting["author"];
 		else
-			$forumhead[] = "<a class=\"printhead\" href=\"about.php?username=".$forumposting["username"]."\">". htmlReady($forumposting["author"]) ."&nbsp;</a>";
+			$forumhead[] = "<a class=\"printhead\" href=\"about.php?username=".$forumposting["username"]."\">". $forumposting["author"] ."&nbsp;</a>";
     		
   	// Alter ausgeben
   		
@@ -1128,7 +1125,7 @@ function printposting ($forumposting) {
 	// Antwort-Pfeil
 		
 		if (!(have_sem_write_perm()) && !$delete_id) 
-			$forumhead[] = "<a href=\"write_topic.php?write=1&root_id=".$forumposting["rootid"]."&topic_id=".$forumposting["id"]."\" target=\"_new\"><img src=\"pictures/antwortnew.gif\" border=0 " . tooltip(_("Hier klicken um in einem neuen Fenster zu antworten")) . "></a>"; 
+			$forumhead[] = "<a href=\"write_topic.php?write=1&root_id=".$forumposting["rootid"]."&topic_id=".$forumposting["id"]."\" target=\"_new\"><img src=\"pictures/antwortnew.gif\" border=0 " . tooltip(_("Hier klicken um in einem neuen Fenster zu antworten")) . "></a>";
   		
   		$zusatz = ForumParseZusatz($forumhead);
   		
@@ -1167,7 +1164,7 @@ function printposting ($forumposting) {
 		printhead ("100%","0",$link,$forumposting["openclose"],$new,$forumposting["icon"],$name,$zusatz,$age_tmp,"TRUE",$index,$forum["indikator"]);
 		if ($forumposting["intree"]==TRUE)
 			echo "<td class=\"blank\">&nbsp;&nbsp;&nbsp;</td>";
-		echo "</tr></table>\n";	
+		echo "</tr></table>\n";
 
 // Kontentzeile	zusammenbauen	
 	
