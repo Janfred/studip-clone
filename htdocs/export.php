@@ -46,6 +46,7 @@ include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Sessio
 
 //$i_page = "meine_seminare.php";
 $EXPORT_ENABLE = TRUE;
+$PATH_EXPORT = "export";
 // -- here you have to put initialisations for the current page
 
 require_once ($ABSOLUTE_PATH_STUDIP."/visual.inc.php");
