@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-03-20 23:57+0100\n"
+"POT-Creation-Date: 2003-03-21 13:06+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -188,226 +188,236 @@ msgstr ""
 msgid "keine Auswahl"
 msgstr ""
 
-#: extern/views/ExternEditHtml.class.php:274
+#: extern/views/ExternEditHtml.class.php:271
 msgid ""
 "Geben Sie den Abstand zwischen Zelleninhalt und Zellenrand in Pixeln an."
 msgstr ""
 
-#: extern/views/ExternEditHtml.class.php:286
+#: extern/views/ExternEditHtml.class.php:283
 msgid "Cellpadding:"
 msgstr ""
 
-#: extern/views/ExternEditHtml.class.php:305
+#: extern/views/ExternEditHtml.class.php:302
 msgid "Geben Sie den Abstand zwischen benachbarten Zellen in Pixeln an."
 msgstr ""
 
-#: extern/views/ExternEditHtml.class.php:317
+#: extern/views/ExternEditHtml.class.php:314
 msgid "Cellspacing:"
 msgstr ""
 
-#: extern/views/ExternEditHtml.class.php:336
+#: extern/views/ExternEditHtml.class.php:333
 msgid "Geben Sie die Gesamtbreite der Tabelle in Prozent oder Pixeln an."
 msgstr ""
 
-#: extern/views/ExternEditHtml.class.php:353
+#: extern/views/ExternEditHtml.class.php:350
 msgid "Tabellenbreite:"
 msgstr ""
 
-#: extern/views/ExternEditHtml.class.php:362
-#: extern/views/ExternEditModule.class.php:139
-#: extern/views/ExternEditModule.class.php:145
+#: extern/views/ExternEditHtml.class.php:359
+#: extern/views/ExternEditModule.class.php:140
+#: extern/views/ExternEditModule.class.php:146
 msgid "Prozent"
 msgstr ""
 
-#: extern/views/ExternEditHtml.class.php:368
-#: extern/views/ExternEditModule.class.php:139
-#: extern/views/ExternEditModule.class.php:149
+#: extern/views/ExternEditHtml.class.php:365
+#: extern/views/ExternEditModule.class.php:140
+#: extern/views/ExternEditModule.class.php:150
 msgid "Pixel"
 msgstr ""
 
-#: extern/views/ExternEditHtml.class.php:385
+#: extern/views/ExternEditHtml.class.php:382
 msgid "Wählen Sie aus der Auswahlliste die Art der horizontalen Ausrichtung."
 msgstr ""
 
-#: extern/views/ExternEditHtml.class.php:390
+#: extern/views/ExternEditHtml.class.php:387
 msgid "linksbündig"
 msgstr ""
 
-#: extern/views/ExternEditHtml.class.php:391
+#: extern/views/ExternEditHtml.class.php:388
 msgid "rechtsbündig"
 msgstr ""
 
-#: extern/views/ExternEditHtml.class.php:392
-#: extern/views/ExternEditHtml.class.php:435
+#: extern/views/ExternEditHtml.class.php:389
+#: extern/views/ExternEditHtml.class.php:432
 msgid "zentriert"
 msgstr ""
 
-#: extern/views/ExternEditHtml.class.php:401
+#: extern/views/ExternEditHtml.class.php:398
 msgid "horizontale Ausrichtung:"
 msgstr ""
 
-#: extern/views/ExternEditHtml.class.php:428
+#: extern/views/ExternEditHtml.class.php:425
 msgid "Wählen Sie aus der Auswahlliste die Art der vertikalen Ausrichtung."
 msgstr ""
 
-#: extern/views/ExternEditHtml.class.php:433
+#: extern/views/ExternEditHtml.class.php:430
 msgid "obenbündig"
 msgstr ""
 
-#: extern/views/ExternEditHtml.class.php:434
+#: extern/views/ExternEditHtml.class.php:431
 msgid "untenbündig"
 msgstr ""
 
-#: extern/views/ExternEditHtml.class.php:444
+#: extern/views/ExternEditHtml.class.php:441
 msgid "vertikale Ausrichtung:"
 msgstr ""
 
-#: extern/views/ExternEditHtml.class.php:471
+#: extern/views/ExternEditHtml.class.php:468
 msgid "Geben Sie die relative Schriftgröße an."
 msgstr ""
 
-#: extern/views/ExternEditHtml.class.php:472
+#: extern/views/ExternEditHtml.class.php:469
 msgid "Schriftgröße:"
 msgstr ""
 
-#: extern/views/ExternEditHtml.class.php:487
+#: extern/views/ExternEditHtml.class.php:484
 msgid "Schriftart:"
 msgstr ""
 
-#: extern/views/ExternEditHtml.class.php:488
+#: extern/views/ExternEditHtml.class.php:485
 msgid "Wählen Sie eine Schriftart aus."
 msgstr ""
 
-#: extern/views/ExternEditHtml.class.php:501
+#: extern/views/ExternEditHtml.class.php:498
 msgid "Geben Sie einen CSS-Klassennamen aus Ihrer Stylesheet-Definition an."
 msgstr ""
 
-#: extern/views/ExternEditHtml.class.php:502
+#: extern/views/ExternEditHtml.class.php:499
 msgid "CSS-Klasse:"
 msgstr ""
 
-#: extern/views/ExternEditHtml.class.php:515
+#: extern/views/ExternEditHtml.class.php:512
 msgid "Geben Sie Style-Sheet-Angaben ein."
 msgstr ""
 
-#: extern/views/ExternEditHtml.class.php:516
+#: extern/views/ExternEditHtml.class.php:513
 msgid "Style:"
 msgstr ""
 
-#: extern/views/ExternEditHtml.class.php:529
+#: extern/views/ExternEditHtml.class.php:526
 msgid "Geben Sie einen Seitentitel an."
 msgstr ""
 
-#: extern/views/ExternEditHtml.class.php:530
+#: extern/views/ExternEditHtml.class.php:527
 msgid "Seiten-Titel:"
 msgstr ""
 
-#: extern/views/ExternEditHtml.class.php:544
+#: extern/views/ExternEditHtml.class.php:541
 msgid ""
 "Aktivieren Sie einen vertikalen oder horizontalen Zebra-Effekt für "
 "Tabellenzeilen/-spalten. "
 msgstr ""
 
-#: extern/views/ExternEditHtml.class.php:545
-#: extern/views/ExternEditHtml.class.php:562
+#: extern/views/ExternEditHtml.class.php:542
+#: extern/views/ExternEditHtml.class.php:559
 msgid "Geben Sie hierfür eine zweite Hintergrundfarbe an."
 msgstr ""
 
-#: extern/views/ExternEditHtml.class.php:546
-#: extern/views/ExternEditHtml.class.php:563
+#: extern/views/ExternEditHtml.class.php:543
+#: extern/views/ExternEditHtml.class.php:560
 msgid "Zebra-Effekt:"
 msgstr ""
 
-#: extern/views/ExternEditHtml.class.php:547
-#: extern/views/ExternEditHtml.class.php:564
+#: extern/views/ExternEditHtml.class.php:544
+#: extern/views/ExternEditHtml.class.php:561
 msgid "aus"
 msgstr ""
 
-#: extern/views/ExternEditHtml.class.php:547
+#: extern/views/ExternEditHtml.class.php:544
 msgid "horizontal"
 msgstr ""
 
-#: extern/views/ExternEditHtml.class.php:547
+#: extern/views/ExternEditHtml.class.php:544
 msgid "vertikal"
 msgstr ""
 
-#: extern/views/ExternEditHtml.class.php:561
+#: extern/views/ExternEditHtml.class.php:558
 msgid "Aktivieren Sie einen Zebra-Effekt für die Spaltenüberschriften. "
 msgstr ""
 
-#: extern/views/ExternEditHtml.class.php:564
+#: extern/views/ExternEditHtml.class.php:561
 msgid "an"
 msgstr ""
 
-#: extern/views/ExternEditModule.class.php:60
-msgid "Spaltenname"
+#: extern/views/ExternEditHtml.class.php:575
+msgid ""
+"Geben Sie die URL eines Bildes an, das als Hintergrundbild für die gesamte "
+"Seite dienen soll."
+msgstr ""
+
+#: extern/views/ExternEditHtml.class.php:576
+msgid "Hintergrundbild:"
 msgstr ""
 
 #: extern/views/ExternEditModule.class.php:61
-msgid "&Uuml;berschrift"
+msgid "Spaltenname"
 msgstr ""
 
 #: extern/views/ExternEditModule.class.php:62
-msgid "Breite"
+msgid "&Uuml;berschrift"
 msgstr ""
 
 #: extern/views/ExternEditModule.class.php:63
-msgid "Sortierung"
+msgid "Breite"
 msgstr ""
 
 #: extern/views/ExternEditModule.class.php:64
+msgid "Sortierung"
+msgstr ""
+
+#: extern/views/ExternEditModule.class.php:65
 msgid "Reihenfolge/<br>Sichtbarkeit"
 msgstr ""
 
-#: extern/views/ExternEditModule.class.php:108
+#: extern/views/ExternEditModule.class.php:109
 msgid "nach links verschieben"
 msgstr ""
 
-#: extern/views/ExternEditModule.class.php:114
+#: extern/views/ExternEditModule.class.php:115
 msgid "nach rechts verschieben"
 msgstr ""
 
-#: extern/views/ExternEditModule.class.php:121
-#: extern/views/ExternEditModule.class.php:215
+#: extern/views/ExternEditModule.class.php:122
+#: extern/views/ExternEditModule.class.php:217
 msgid "Spalte ausblenden"
 msgstr ""
 
-#: extern/views/ExternEditModule.class.php:127
-#: extern/views/ExternEditModule.class.php:221
+#: extern/views/ExternEditModule.class.php:128
+#: extern/views/ExternEditModule.class.php:223
 msgid "Spalte einblenden"
 msgstr ""
 
-#: extern/views/ExternEditModule.class.php:136
+#: extern/views/ExternEditModule.class.php:137
 msgid "Breite in:"
 msgstr ""
 
-#: extern/views/ExternEditModule.class.php:137
+#: extern/views/ExternEditModule.class.php:138
 msgid ""
 "Wählen Sie hier, ob die Breiten der Tabellenspalten als Prozentwerte oder "
 "Pixel interpretiert werden sollen."
 msgstr ""
 
-#: extern/views/ExternEditModule.class.php:160
+#: extern/views/ExternEditModule.class.php:161
 msgid "Geben Sie den Namen der Konfiguration an."
 msgstr ""
 
-#: extern/views/ExternEditModule.class.php:171
+#: extern/views/ExternEditModule.class.php:172
 msgid "Gruppen auswählen:"
 msgstr ""
 
-#: extern/views/ExternEditModule.class.php:172
+#: extern/views/ExternEditModule.class.php:173
 msgid "Wählen sie die Statusgruppen aus, die ausgegeben werden sollen."
 msgstr ""
 
-#: extern/views/ExternEditModule.class.php:190
+#: extern/views/ExternEditModule.class.php:192
 msgid "Gruppenname"
 msgstr ""
 
-#: extern/views/ExternEditModule.class.php:191
+#: extern/views/ExternEditModule.class.php:193
 msgid "alternativer Gruppenname"
 msgstr ""
 
-#: extern/views/ExternEditModule.class.php:192
+#: extern/views/ExternEditModule.class.php:194
 msgid "Sichtbarkeit"
 msgstr ""
 
@@ -418,42 +428,42 @@ msgid ""
 "dieses Module keine weiteren Konfigurationen anlegen."
 msgstr ""
 
-#: extern/views/extern_edit_module.inc.php:108
+#: extern/views/extern_edit_module.inc.php:109
 #, c-format
 msgid "Bitte korrigieren Sie die mit %s gekennzeichneten Werte!"
 msgstr ""
 
-#: extern/views/extern_edit_module.inc.php:122
+#: extern/views/extern_edit_module.inc.php:123
 msgid ""
 "Der Konfigurationsname wurde bereits für eine Konfiguration dieses Moduls "
 "vergeben. Bitte geben Sie einen anderen Namen ein."
 msgstr ""
 
-#: extern/views/extern_edit_module.inc.php:128
+#: extern/views/extern_edit_module.inc.php:129
 msgid ""
 "Die eingegebenen Werte wurden übernommen und der Name der Konfiguration "
 "geändert."
 msgstr ""
 
-#: extern/views/extern_edit_module.inc.php:135
+#: extern/views/extern_edit_module.inc.php:136
 msgid "Die eingegebenen Werte wurden übernommen."
 msgstr ""
 
-#: extern/views/extern_edit_module.inc.php:145
+#: extern/views/extern_edit_module.inc.php:154
 msgid ""
 "Um die Werte eines einzelnen Elements zu &auml;ndern, klicken Sie bitte den "
 "&quot;&Uuml;bernehmen&quot;-Button innerhalb des jeweiligen Elements."
 msgstr ""
 
-#: extern/views/extern_edit_module.inc.php:146
+#: extern/views/extern_edit_module.inc.php:155
 msgid "Um eine Vorschau der Seite zu erhalten, klicken Sie bitte hier:"
 msgstr ""
 
-#: extern/views/extern_edit_module.inc.php:152
+#: extern/views/extern_edit_module.inc.php:161
 msgid "Die Vorschau wird in einem neuen Fenster ge&ouml;ffnet."
 msgstr ""
 
-#: extern/views/extern_edit_module.inc.php:153
+#: extern/views/extern_edit_module.inc.php:162
 msgid "Es werden eventuell nicht alle Einstellungen in der Vorschau angezeigt."
 msgstr ""
 
@@ -566,19 +576,19 @@ msgid "Name"
 msgstr ""
 
 #: extern/modules/ExternModulePersons.class.php:55
-msgid "Sprechzeiten"
-msgstr ""
-
-#: extern/modules/ExternModulePersons.class.php:56
 msgid "Telefon"
 msgstr ""
 
-#: extern/modules/ExternModulePersons.class.php:57
+#: extern/modules/ExternModulePersons.class.php:56
 msgid "Raum"
 msgstr ""
 
-#: extern/modules/ExternModulePersons.class.php:58
+#: extern/modules/ExternModulePersons.class.php:57
 msgid "Email"
+msgstr ""
+
+#: extern/modules/ExternModulePersons.class.php:58
+msgid "Sprechzeiten"
 msgstr ""
 
 #: extern/modules/views/download_preview.inc.php:43
@@ -621,18 +631,42 @@ msgstr ""
 msgid "Ein Bild im PNG-Format."
 msgstr ""
 
+#: extern/modules/views/download_preview.inc.php:73
+msgid "Eine anderes Format."
+msgstr ""
+
+#: extern/modules/views/persons_preview.inc.php:37
+msgid "Name Name"
+msgstr ""
+
+#: extern/modules/views/persons_preview.inc.php:38
+msgid "Raum 21"
+msgstr ""
+
+#: extern/modules/views/persons_preview.inc.php:39
+msgid "jeden Tag, 13.00 - 14.00"
+msgstr ""
+
+#: extern/modules/views/persons_preview.inc.php:40
+msgid "Gruppe A"
+msgstr ""
+
+#: extern/modules/views/persons_preview.inc.php:47
+msgid "Gruppe B"
+msgstr ""
+
 #: extern/lib/ExternEdit.class.php:118 extern/lib/ExternEdit.class.php:126
 #, c-format
 msgid "Angaben zum HTML-Tag &lt;%s&gt;"
 msgstr ""
 
-#: extern/lib/ExternEdit.class.php:205
+#: extern/lib/ExternEdit.class.php:206
 #, c-format
 msgid "Angaben zum Element %s"
 msgstr ""
 
 #: extern/lib/ExternElementMain.class.php:54
-#: extern/elements/ExternElementMainDownload.class.php:53
+#: extern/elements/ExternElementMainDownload.class.php:52
 #: extern/elements/ExternElementMainPersons.class.php:52
 msgid "Grundeinstellungen"
 msgstr ""
@@ -659,224 +693,233 @@ msgstr ""
 msgid "Eigenschaften der Schrift für Links."
 msgstr ""
 
-#: extern/elements/ExternElementMainDownload.class.php:54
+#: extern/elements/ExternElementMainDownload.class.php:53
 #: extern/elements/ExternElementMainPersons.class.php:53
 msgid ""
 "In den Grundeinstellungen k&ouml;nnen Sie allgemeine Daten des Moduls &auml;"
 "ndern."
 msgstr ""
 
-#: extern/elements/ExternElementMainDownload.class.php:107
+#: extern/elements/ExternElementMainDownload.class.php:104
 #: extern/elements/ExternElementMainPersons.class.php:103
 msgid "Name der Konfiguration"
 msgstr ""
 
-#: extern/elements/ExternElementMainDownload.class.php:112
+#: extern/elements/ExternElementMainDownload.class.php:109
 #: extern/elements/ExternElementMainPersons.class.php:109
 msgid "Allgemeine Angaben zum Tabellenaufbau"
 msgstr ""
 
-#: extern/elements/ExternElementMainDownload.class.php:120
-#: extern/elements/ExternElementMainPersons.class.php:126
+#: extern/elements/ExternElementMainDownload.class.php:117
+#: extern/elements/ExternElementMainPersons.class.php:137
 msgid "Weitere Angaben"
 msgstr ""
 
-#: extern/elements/ExternElementMainDownload.class.php:122
-#: extern/elements/ExternElementMainPersons.class.php:135
+#: extern/elements/ExternElementMainDownload.class.php:119
+#: extern/elements/ExternElementMainPersons.class.php:152
 msgid "HTML-Header/Footer:"
 msgstr ""
 
-#: extern/elements/ExternElementMainDownload.class.php:123
-#: extern/elements/ExternElementMainPersons.class.php:136
+#: extern/elements/ExternElementMainDownload.class.php:120
+#: extern/elements/ExternElementMainPersons.class.php:153
 msgid ""
 "Anwählen, wenn die Seite als komplette HTML-Seite ausgegeben werden soll, z."
 "B. bei direkter Verlinkung oder in einem Frameset."
 msgstr ""
 
-#: extern/elements/ExternElementMainDownload.class.php:128
+#: extern/elements/ExternElementMainDownload.class.php:125
 msgid "Max. L&auml;nge der Beschreibung:"
 msgstr ""
 
-#: extern/elements/ExternElementMainDownload.class.php:129
+#: extern/elements/ExternElementMainDownload.class.php:126
 msgid ""
 "Geben Sie an, wieviele Zeichen der Beschreibung der Datei ausgegeben werden "
 "sollen."
 msgstr ""
 
-#: extern/elements/ExternElementMainDownload.class.php:132
-#: extern/elements/ExternElementMainPersons.class.php:128
-msgid "Personennamen:"
+#: extern/elements/ExternElementMainDownload.class.php:129
+#: extern/elements/ExternElementMainPersons.class.php:139
+msgid "Namensformat:"
 msgstr ""
 
-#: extern/elements/ExternElementMainDownload.class.php:133
-#: extern/elements/ExternElementMainPersons.class.php:129
+#: extern/elements/ExternElementMainDownload.class.php:130
+#: extern/elements/ExternElementMainPersons.class.php:140
 msgid "Wählen Sie, wie Personennamen formatiert werden sollen."
 msgstr ""
 
-#: extern/elements/ExternElementMainDownload.class.php:135
-#: extern/elements/ExternElementMainPersons.class.php:131
+#: extern/elements/ExternElementMainDownload.class.php:132
+#: extern/elements/ExternElementMainPersons.class.php:142
 msgid "Vorname Nachname"
 msgstr ""
 
-#: extern/elements/ExternElementMainDownload.class.php:135
-#: extern/elements/ExternElementMainPersons.class.php:131
+#: extern/elements/ExternElementMainDownload.class.php:132
+#: extern/elements/ExternElementMainPersons.class.php:142
 msgid "Nachname Vorname"
 msgstr ""
 
-#: extern/elements/ExternElementMainDownload.class.php:136
-#: extern/elements/ExternElementMainPersons.class.php:132
+#: extern/elements/ExternElementMainDownload.class.php:133
+#: extern/elements/ExternElementMainPersons.class.php:143
 msgid "Titel Vorname Nachname"
 msgstr ""
 
-#: extern/elements/ExternElementMainDownload.class.php:136
-#: extern/elements/ExternElementMainPersons.class.php:132
+#: extern/elements/ExternElementMainDownload.class.php:133
+#: extern/elements/ExternElementMainPersons.class.php:143
 msgid "Nachname Vorname Titel"
 msgstr ""
 
-#: extern/elements/ExternElementMainDownload.class.php:139
-#: extern/elements/ExternElementMainPersons.class.php:141
+#: extern/elements/ExternElementMainDownload.class.php:136
+#: extern/elements/ExternElementMainPersons.class.php:158
 msgid "Stylesheet-Datei:"
 msgstr ""
 
-#: extern/elements/ExternElementMainDownload.class.php:140
-#: extern/elements/ExternElementMainPersons.class.php:142
+#: extern/elements/ExternElementMainDownload.class.php:137
+#: extern/elements/ExternElementMainPersons.class.php:159
 msgid "Geben Sie hier die URL Ihrer Stylesheet-Datei an."
 msgstr ""
 
-#: extern/elements/ExternElementMainDownload.class.php:143
-#: extern/elements/ExternElementMainPersons.class.php:145
+#: extern/elements/ExternElementMainDownload.class.php:140
+#: extern/elements/ExternElementMainPersons.class.php:162
 msgid "Seitentitel:"
 msgstr ""
 
-#: extern/elements/ExternElementMainDownload.class.php:144
-#: extern/elements/ExternElementMainPersons.class.php:146
+#: extern/elements/ExternElementMainDownload.class.php:141
+#: extern/elements/ExternElementMainPersons.class.php:163
 msgid ""
 "Geben Sie hier den Titel der Seite ein. Der Titel wird bei der Anzeige im "
 "Web-Browser in der Titelzeile des Anzeigefensters angezeigt."
 msgstr ""
 
-#: extern/elements/ExternElementMainDownload.class.php:147
-#: extern/elements/ExternElementMainPersons.class.php:149
-msgid "Style f&uuml;r &lt;body&gt;:"
-msgstr ""
-
-#: extern/elements/ExternElementMainDownload.class.php:148
-#: extern/elements/ExternElementMainPersons.class.php:150
-msgid "Sie können hier eine Stylesheet-Definition für das <body>-Tag eingeben."
-msgstr ""
-
-#: extern/elements/ExternElementMainDownload.class.php:151
-#: extern/elements/ExternElementMainPersons.class.php:153
-msgid "Class f&uuml;r &lt;body&gt;:"
-msgstr ""
-
-#: extern/elements/ExternElementMainDownload.class.php:152
-#: extern/elements/ExternElementMainPersons.class.php:154
-msgid "Sie können hier eine Stylesheet-Klasse für das <body>-Tag eingeben."
-msgstr ""
-
-#: extern/elements/ExternElementMainDownload.class.php:155
-#: extern/elements/ExternElementMainPersons.class.php:157
+#: extern/elements/ExternElementMainDownload.class.php:144
+#: extern/elements/ExternElementMainPersons.class.php:166
 msgid "Keine Dateien:"
 msgstr ""
 
-#: extern/elements/ExternElementMainDownload.class.php:156
-#: extern/elements/ExternElementMainPersons.class.php:158
+#: extern/elements/ExternElementMainDownload.class.php:145
+#: extern/elements/ExternElementMainPersons.class.php:167
 msgid ""
 "Dieser Text wird an Stelle der Tabelle ausgegeben, wenn keine Dateien zum "
 "Download verfügbar sind."
 msgstr ""
 
-#: extern/elements/ExternElementMainDownload.class.php:162
+#: extern/elements/ExternElementMainDownload.class.php:151
 msgid "Eigene Icons"
 msgstr ""
 
-#: extern/elements/ExternElementMainDownload.class.php:166
+#: extern/elements/ExternElementMainDownload.class.php:155
 msgid "Bilder:"
 msgstr ""
 
-#: extern/elements/ExternElementMainDownload.class.php:167
+#: extern/elements/ExternElementMainDownload.class.php:156
 msgid "Text:"
 msgstr ""
 
-#: extern/elements/ExternElementMainDownload.class.php:168
+#: extern/elements/ExternElementMainDownload.class.php:157
 msgid "Adobe pdf:"
 msgstr ""
 
-#: extern/elements/ExternElementMainDownload.class.php:169
+#: extern/elements/ExternElementMainDownload.class.php:158
 msgid "Powerpoint (ppt):"
 msgstr ""
 
-#: extern/elements/ExternElementMainDownload.class.php:170
+#: extern/elements/ExternElementMainDownload.class.php:159
 msgid "Excel (xls):"
 msgstr ""
 
-#: extern/elements/ExternElementMainDownload.class.php:171
+#: extern/elements/ExternElementMainDownload.class.php:160
 msgid "Rich Text (rtf):"
 msgstr ""
 
-#: extern/elements/ExternElementMainDownload.class.php:172
+#: extern/elements/ExternElementMainDownload.class.php:161
 msgid "ZIP-Dateien:"
 msgstr ""
 
-#: extern/elements/ExternElementMainDownload.class.php:173
+#: extern/elements/ExternElementMainDownload.class.php:162
 msgid "sonstige Dateien:"
 msgstr ""
 
-#: extern/elements/ExternElementMainDownload.class.php:176
+#: extern/elements/ExternElementMainDownload.class.php:165
 msgid ""
 "Geben Sie die URL eines Bildes ein, dass als Icon für Bild-Dateien dienen "
 "soll. Erlaubte Formate: jpg, png, gif. "
 msgstr ""
 
-#: extern/elements/ExternElementMainDownload.class.php:177
+#: extern/elements/ExternElementMainDownload.class.php:166
 msgid ""
 "Geben Sie die URL eines Bildes ein, dass als Icon für Text-Dateien dienen "
 "soll. Erlaubte Formate: jpg, png, gif. "
 msgstr ""
 
-#: extern/elements/ExternElementMainDownload.class.php:178
+#: extern/elements/ExternElementMainDownload.class.php:167
 msgid ""
 "Geben Sie die URL eines Bildes ein, dass als Icon für PDF-Dateien dienen "
 "soll. Erlaubte Formate: jpg, png, gif. "
 msgstr ""
 
-#: extern/elements/ExternElementMainDownload.class.php:179
+#: extern/elements/ExternElementMainDownload.class.php:168
 msgid ""
 "Geben Sie die URL eines Bildes ein, dass als Icon für Powerpoint-Dateien "
 "dienen soll. Erlaubte Formate: jpg, png, gif. "
 msgstr ""
 
-#: extern/elements/ExternElementMainDownload.class.php:180
+#: extern/elements/ExternElementMainDownload.class.php:169
 msgid ""
 "Geben Sie die URL eines Bildes ein, dass als Icon für Excel-Dateien dienen "
 "soll. Erlaubte Formate: jpg, png, gif. "
 msgstr ""
 
-#: extern/elements/ExternElementMainDownload.class.php:181
+#: extern/elements/ExternElementMainDownload.class.php:170
 msgid ""
 "Geben Sie die URL eines Bildes ein, dass als Icon für RTF-Dateien dienen "
 "soll. Erlaubte Formate: jpg, png, gif. "
 msgstr ""
 
-#: extern/elements/ExternElementMainDownload.class.php:182
+#: extern/elements/ExternElementMainDownload.class.php:171
 msgid ""
 "Geben Sie die URL eines Bildes ein, dass als Icon für komprimierte Dateien "
 "dienen soll. Erlaubte Formate: jpg, png, gif. "
 msgstr ""
 
-#: extern/elements/ExternElementMainDownload.class.php:183
+#: extern/elements/ExternElementMainDownload.class.php:172
 msgid ""
 "Geben Sie die URL eines Bildes ein, dass als Icon für alle anderen "
 "Dateiformate dienen soll. "
 msgstr ""
 
-#: extern/elements/ExternElementMainDownload.class.php:185
+#: extern/elements/ExternElementMainDownload.class.php:174
 msgid "Wenn sie keine URL angeben, wird ein Standard-Icon ausgegeben."
 msgstr ""
 
-#: extern/elements/ExternElementMainPersons.class.php:120
+#: extern/elements/ExternElementMainPersons.class.php:117
 msgid "Anzeige von Gruppen"
+msgstr ""
+
+#: extern/elements/ExternElementMainPersons.class.php:121
+msgid "Gruppierung:"
+msgstr ""
+
+#: extern/elements/ExternElementMainPersons.class.php:122
+msgid "Personen nach Gruppen/Funktionen gruppieren."
+msgstr ""
+
+#: extern/elements/ExternElementMainPersons.class.php:128
+msgid ""
+"An dieser Einrichtung wurden noch keine Gruppen/Funktionen angelegt, oder es "
+"wurden diesen noch keine Personen zugeordnet."
+msgstr ""
+
+#: extern/elements/ExternElementMainPersons.class.php:129
+msgid ""
+"Das Modul gibt nur Daten von Personen aus, die einer Gruppe/Funktion "
+"zugeordnet sind."
+msgstr ""
+
+#: extern/elements/ExternElementMainPersons.class.php:146
+msgid "Spalten&uuml;berschriften<br>Wiederholen:"
+msgstr ""
+
+#: extern/elements/ExternElementMainPersons.class.php:147
+msgid ""
+"Wiederholung der Spaltenüberschriften über oder unter der Gruppierungszeile."
 msgstr ""
 
 #: extern/elements/ExternElementTableFooter.class.php:55
