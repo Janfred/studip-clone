@@ -254,7 +254,7 @@ class messaging {
 		return $forward_copy;
 	}
 
-	function insert_message($message, $rec_uname, $user_id='', $time='', $tmp_message_id='', $set_deleted='', $signature='', $subject='') {
+	function insert_message($message, $rec_uname, $user_id='', $time='', $tmp_message_id='', $set_deleted='', $signature='', $subject='', $force_email='') {
 
 		global $_fullname_sql, $user, $my_messaging_settings, $sms_data;
 
@@ -358,7 +358,7 @@ class messaging {
 				if ($GLOBALS["MESSAGING_FORWARD_AS_EMAIL"]) {	
 					// mail to original receiver
 					$mailstatus_original = $this->user_wants_email($rec_id[$x]);
-					if($mailstatus_original == 2 || ($mailstatus_original == 3 && $email_request == 1)) { 
+					if($mailstatus_original == 2 || ($mailstatus_original == 3 && $email_request == 1) || $force_email == TRUE) { 
 						$this->sendingEmail($rec_id[$x], $snd_user_id, $message, $subject);
 					}
 				}
