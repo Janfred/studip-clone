@@ -263,10 +263,24 @@ if ($delete_id) {
 		$db->next_record();
 		if ($rechte || (($db->f("user_id") == $user->id) && ($count == 0))) {  // noch mal checken ob alles o.k.
 			$root = $db->f("root_id");
+			$forumposting["id"] = $db->f("topic_id");
+			$forumposting["name"] = $db->f("name");
+			$forumposting["description"] = $db->f("description");
+			$forumposting["author"] = $db->f("author");
+			$forumposting["username"] = $db->f("username");
+			$forumposting["rootid"] = $db->f("root_id");
+			$forumposting["rootname"] = $db->f("root_name");
+			$forumposting["mkdate"] = $db->f("mkdate");
+			$forumposting["chdate"] = $db->f("chdate");
+			$forumposting["buttons"] = "no";
 			forum_draw_topicline();
+			if ($forumposting["id"] == $forumposting["rootid"])
+				$tmp_label = _("den untenstehenden Ordner");
+			else
+				$tmp_label = _("das untenstehende Posting");
 			echo "\n\n<table class=\"blank\" cellspacing=0 cellpadding=5 border=0 width=\"100%\"><colgroup span=1></colgroup>\n";
 			echo "<tr><td class=\"blank\"></td></tr>";
-			$msg="info§" . sprintf(_("Wollen Sie das untenstehende Posting %s von %s wirklich löschen?"), "<b>".htmlReady($db->f("name"))."</b>", "<b>".$db->f("author")."</b>") . "<br>\n";
+			$msg="info§" . sprintf(_("Wollen Sie %s %s von %s wirklich löschen?"), $tmp_label, "<b>".htmlReady($db->f("name"))."</b>", "<b>".$db->f("author")."</b>") . "<br>\n";
 			if ($count)
 				$msg.= sprintf(_("Alle %s Antworten auf diesen Beitrag werden ebenfalls gelöscht!"), $count) . "<br />\n<br />\n";
 			$msg.="<a href=\"".$PHP_SELF."?really_kill=$delete_id&view=$view#anker\">" . makeButton("ja2", "img") . "</a>&nbsp; \n";
@@ -279,16 +293,7 @@ if ($delete_id) {
 			echo "<table width=\"100%\" class=blank border=0 cellpadding=0 cellspacing=0 align=center><tr><td class=blank><br><br>";	
 			echo "<table width=\"80%\" class=blank border=0 cellpadding=0 cellspacing=0 align=center><tr>";	
 	
-			$forumposting["id"] = $db->f("topic_id");
-			$forumposting["name"] = $db->f("name");
-			$forumposting["description"] = $db->f("description");
-			$forumposting["author"] = $db->f("author");
-			$forumposting["username"] = $db->f("username");
-			$forumposting["rootid"] = $db->f("root_id");
-			$forumposting["rootname"] = $db->f("root_name");
-			$forumposting["mkdate"] = $db->f("mkdate");
-			$forumposting["chdate"] = $db->f("chdate");
-			$forumposting["buttons"] = "no";
+
 			
 			printposting($forumposting);
 			
