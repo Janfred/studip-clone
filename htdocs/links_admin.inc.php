@@ -165,9 +165,6 @@ if ($links_admin_data["sem_id"]) {
 				$ebene="sem";
 			}
 		break;
-		case "admin_news.php": 
-			$range_id=$links_admin_data["sem_id"];
-		break;
 		case "archiv_assi.php": 
 			$archiv_sem[]="_id_".$links_admin_data["sem_id"];
 			$archiv_sem[]="on";
@@ -194,9 +191,6 @@ if ($links_admin_data["inst_id"]) {
 				$range_id=$links_admin_data["inst_id"];
 				$ebene="inst";
 				}
-		break;
-		case "admin_news.php": 
-			$range_id=$links_admin_data["inst_id"];
 		break;
 		}
 	}
