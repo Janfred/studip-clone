@@ -218,8 +218,8 @@ if (($s_command=="edit") && ($s_send)) {
 	$query .="Institut_id='$Institut', ";
     $query .= "Name='$Name', Untertitel='$Untertitel',
 			status='$Status', Beschreibung='$Beschreibung',  Ort='$Ort',
-			Sonstiges='$Sonstiges', Lesezugriff='$Lesezugriff', Schreibzugriff='$Schreibzugriff',
-			art='$art', teilnehmer='$teilnehmer', vorrausetzungen='$vorrausetzungen', lernorga='$lernorga',
+			Sonstiges='$Sonstiges', art='$art', teilnehmer='$teilnehmer', 
+			vorrausetzungen='$vorrausetzungen', lernorga='$lernorga',
 			leistungsnachweis='$leistungsnachweis', ects='$ects', admission_turnout='$turnout'
 			WHERE Seminar_id='$s_id'";
     $db->query($query);
