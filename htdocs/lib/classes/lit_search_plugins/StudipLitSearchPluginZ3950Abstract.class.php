@@ -44,10 +44,59 @@ class StudipLitSearchPluginZ3950Abstract extends StudipLitSearchPluginAbstract{
 	var $z_profile = array(); // [attribute] => [name]
 	var $z_timeout = 10;
 	var $convert_umlaute = false;
+	var $z_accession_bib = "";
+	var $z_accession_re = false; // RegEx to check for valid accession number
 	
 	function StudipLitSearchPluginZ3950Abstract(){
 		parent::StudipLitSearchPluginAbstract();
 		$this->z_hits =& $this->search_result['z_hits'];
+		/* UNIMARC mapping
+		$this->mapping['UNIMARC'] = array('001' => array('field' => 'accession_number', 'callback' => 'simpleMap', 'cb_args' => ''),
+								'010' => array('field' => 'dc_identifier', 'callback' => 'simpleMap', 'cb_args' => 'ISBN: $a'),
+								'101' => array('field' => 'dc_language', 'callback' => 'simpleMap', 'cb_args' => '$a'),
+								'200' => array('field' => 'dc_title', 'callback' => 'simpleMap', 'cb_args' => '$a $e' . chr(10) . '$f'),
+								'210' => array(	array('field' => 'dc_date', 'callback' => 'simpleMap', 'cb_args' => '$d-01-01'),
+												array('field' => 'dc_publisher', 'callback' => 'simpleMap', 'cb_args' => '$c, $a')),
+								'215' => array('field' => 'dc_format', 'callback' => 'simpleMap', 'cb_args' => '$a, $c'),
+								'225' => array('field' => 'dc_relation', 'callback' => 'simpleMap', 'cb_args' => '$a, $v'),
+								'300' => array('field' => 'dc_description', 'callback' => 'simpleMap', 'cb_args' => 'Abstract: $a' . chr(10)),
+								'328' => array('field' => 'dc_description', 'callback' => 'simpleMap', 'cb_args' => 'Dissertation note:$a' . chr(10)),
+								'463' => array('field' => 'dc_publisher', 'callback' => 'simpleMap', 'cb_args' => '$t, $v'),
+								'606' => array('field' => 'dc_subject', 'callback' => 'simpleMap', 'cb_args' => ' $a '),
+								'700' => array('field' => 'dc_creator', 'callback' => 'simpleMap', 'cb_args' => '$a, $b'),
+								'701' => array('field' => 'dc_creator', 'callback' => 'notEmptyMap', 'cb_args' => array('$a, $b','dc_contributor','$a, $b;')),
+								'702' => array('field' => 'dc_creator', 'callback' => 'notEmptyMap', 'cb_args' => array('$a, $b','dc_contributor','$a, $b;')),
+								'710' => array('field' => 'dc_creator', 'callback' => 'simpleMap', 'cb_args' => '$a, $b'),
+								'711' => array('field' => 'dc_creator', 'callback' => 'notEmptyMap', 'cb_args' => array('$a, $b','dc_contributor','$a, $b;')),
+								'712' => array('field' => 'dc_creator', 'callback' => 'notEmptyMap', 'cb_args' => array('$a, $b','dc_contributor','$a, $b;')),
+								'856' => array('field' => 'dc_identifier', 'callback' => 'simpleMap', 'cb_args' => 'URL: $u '),
+								);
+		*/
+		//MARC mapping
+		$this->mapping['MARC'] = array(	'001' => array('field' => 'accession_number', 'callback' => 'simpleMap', 'cb_args' => ''),
+										'008' => array(	array('field' => 'dc_language', 'callback' => 'simpleFixFieldMap', 'cb_args' => array('start'=>35,'length'=>3)),
+												array('field' => 'dc_date', 'callback' => 'simpleFixFieldMap', 'cb_args' => array('start'=>7,'length'=>4,'template'=>'{result}-01-01'))),
+										'020' => array('field' => 'dc_identifier', 'callback' => 'simpleMap', 'cb_args' => 'ISBN: $a'),
+										'084' => array('field' => 'dc_subject', 'callback' => 'simpleMap', 'cb_args' => '$a'. chr(10)),
+										'245' => array('field' => 'dc_title', 'callback' => 'simpleMap', 'cb_args' => '$a $b $h'),
+										'260' => array('field' => 'dc_publisher', 'callback' => 'simpleMap', 'cb_args' => '$a $b'),
+										'256' => array('field' => 'dc_description', 'callback' => 'simpleMap', 'cb_args' => '$a' . chr(10)),
+										'300' => array('field' => 'dc_format', 'callback' => 'simpleMap', 'cb_args' => '$a $b $c $e'),
+										'440' => array('field' => 'dc_relation', 'callback' => 'simpleMap', 'cb_args' => '$a, $v'),
+										'500' => array('field' => 'dc_description', 'callback' => 'simpleMap', 'cb_args' => '$a' . chr(10)),
+										'502' => array('field' => 'dc_description', 'callback' => 'simpleMap', 'cb_args' => 'Dissertation note:$a' . chr(10)),
+										'518' => array('field' => 'dc_description', 'callback' => 'simpleMap', 'cb_args' => '$a' . chr(10)),
+										'520' => array('field' => 'dc_subject', 'callback' => 'simpleMap', 'cb_args' => '$a' . chr(10)),
+										'533' => array('field' => 'dc_description', 'callback' => 'simpleMap', 'cb_args' => '$n' . chr(10)),
+										'773' => array('field' => 'dc_publisher', 'callback' => 'simpleMap', 'cb_args' => '$t, $g, $d'),
+										'100' => array('field' => 'dc_creator', 'callback' => 'simpleMap', 'cb_args' => '$a'),
+										'700' => array('field' => 'dc_creator', 'callback' => 'notEmptyMap', 'cb_args' => array('$a','dc_contributor','$a;')),
+										'110' => array('field' => 'dc_creator', 'callback' => 'simpleMap', 'cb_args' => '$a, $b'),
+										'111' => array('field' => 'dc_creator', 'callback' => 'notEmptyMap', 'cb_args' => array('$a, $b','dc_contributor','$a, $b;')),
+										'710' => array('field' => 'dc_creator', 'callback' => 'notEmptyMap', 'cb_args' => array('$a, $b','dc_contributor','$a, $b;')),
+										'711' => array('field' => 'dc_creator', 'callback' => 'notEmptyMap', 'cb_args' => array('$a, $b','dc_contributor','$a, $b;')),
+										'856' => array('field' => 'dc_identifier', 'callback' => 'simpleMap', 'cb_args' => 'URL: $u '),
+										);
 	}
 	
 	function doSearch($search_values = false){
@@ -81,6 +130,44 @@ class StudipLitSearchPluginZ3950Abstract extends StudipLitSearchPluginAbstract{
 				$fetched_records += $this->getZRecord($i);
 			}
 			return $fetched_records;
+		}
+	}
+	
+	function doCheckAccession($accession_number){
+		if (!$this->z_accession_bib){
+			$this->addError("error", sprintf(_("Attribut für Zugriffsnummer fehlt! (%s)"), get_class($this)));
+			return false;
+		}
+		if (!$accession_number){
+			$this->addError("error", sprintf(_("Zugriffsnummer fehlt!")));
+			return false;
+		}
+		if (!$this->checkAccessionNumber($accession_number)){
+			$this->addError("error", sprintf(_("Zugriffsnummer hat falsches Format für diesen Katalog!")));
+			return false;
+		}
+		if ($this->z_hits){
+			$save_result = $this->search_result;
+			$save_z_hits = $this->z_hits;
+			$this->search_result = array();
+			$restore_result = true;
+		}
+		$this->search_result['rpn'] = '@attr 1=' . $this->z_accession_bib . ' ' . $accession_number ;
+		$ret = $this->doSearch();
+		if ($restore_result){
+				$this->search_result = $save_result;
+				$this->z_hits = $save_z_hits;
+		} else {
+			$this->search_result = array();
+		}
+		return $ret;
+	}
+	
+	function checkAccessionNumber($accession_number){
+		if (!$this->z_accession_re){
+			return true;
+		} else {
+			return preg_match($this->z_accession_re, $accession_number);
 		}
 	}
 	
@@ -135,6 +222,7 @@ class StudipLitSearchPluginZ3950Abstract extends StudipLitSearchPluginAbstract{
 
 	function getZRecord($rn){
 		$record = yaz_record($this->z_id,$rn,"string");
+		$plugin_mapping = $this->mapping[$this->z_syntax];
 		if ($record){
 			$cat_element = new StudipLitCatElement();
 			$cat_element->setValue("user_id", $GLOBALS['auth']->auth['uid']);
@@ -151,8 +239,8 @@ class StudipLitSearchPluginZ3950Abstract extends StudipLitSearchPluginAbstract{
 				} else {
 					$data = trim($data);
 				}
-				if (isset($this->mapping[$code])){
-					$mapping = (is_array($this->mapping[$code][0])) ? $this->mapping[$code] : array($this->mapping[$code]);
+				if (isset($plugin_mapping[$code])){
+					$mapping = (is_array($plugin_mapping[$code][0])) ? $plugin_mapping[$code] : array($plugin_mapping[$code]);
 					for ($j = 0; $j < count($mapping); ++$j){
 						$map_method = $mapping[$j]['callback'];
 						$this->$map_method($cat_element, $data, $mapping[$j]['field'], $mapping[$j]['cb_args']);
@@ -168,6 +256,7 @@ class StudipLitSearchPluginZ3950Abstract extends StudipLitSearchPluginAbstract{
 	}
 	
 	function simpleMap(&$cat_element, $data, $field, $args){
+		$trim_chars = array('/',',',':');
 		if ($args != ""){
 			$result = $args;
 			$splitted_data = preg_split('/(\$[0-9a-z])/', $data, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
@@ -179,11 +268,27 @@ class StudipLitSearchPluginZ3950Abstract extends StudipLitSearchPluginAbstract{
 				}
 			}
 			$result = str_replace($token, $content, $result);
-			$result = preg_replace('/(\$[0-9a-z])/', "", $result);
+			$result = trim(preg_replace('/(\$[0-9a-z])/', "", $result));
+			$last_char = substr($result,-1);
+			if (in_array($last_char,$trim_chars)){
+				$result = substr($result,0,-1);
+			}
+
 		} else {
 			$result = trim($data);
 		}
 		$cat_element->setValue($field, $cat_element->getValue($field) . " " . $result);
+		return;
+	}
+	
+	function simpleFixFieldMap(&$cat_element, $data, $field, $args){
+		if (is_array($args) && $data != ""){
+			$result = substr($data,$args['start'],$args['length']);
+			if ($args['template']){
+				$result = str_replace('{result}',$result, $args['template']);
+			}
+			$cat_element->setValue($field, $cat_element->getValue($field) . " " . $result);
+		}
 		return;
 	}
 	
