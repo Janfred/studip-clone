@@ -48,14 +48,18 @@ if (!$group_ids = $this->config->getValue("Main", "groupsvisible")) {
 	
 $visible_groups = get_statusgruppen_by_id($range_id, $group_ids);
 $aliases_groups = $this->config->getValue("Main", "groupsalias");
-
+$order = $this->config->getValue("Main", "order");
 $sort = $this->config->getValue("Main", "sort");
-sort($sort, SORT_NUMERIC);
+//$sort = sort($sort, SORT_NUMERIC);
 
 $query_order = "";
-foreach ($sort as $position) {
+foreach ($sort as $key => $position) {
 	if ($position > 0)
-		$query_order .= " " . $this->data_fields[$position - 1] . ",";
+		$query_order[$position] = " " . $this->data_fields[$key] . ",";
+}
+if (is_array($query_order)) {
+	ksort($query_order, SORT_NUMERIC);
+	$query_order = implode("", $query_order);
 }
 
 $db = new DB_Institut();
@@ -64,7 +68,7 @@ if(!$grouping){
 	$groups_ids = implode("','", $this->config->getValue("Main", "groupsvisible"));
 	
 	$query = "SELECT DISTINCT ui.raum, ui.sprechzeiten, ui.Telefon, inst_perms,	Email, aum.user_id, username, ";
-	$query .= $_fullname_sql[$this->config->getValue("Main", "nameformat")] . " AS fullname ";
+	$query .= $_fullname_sql[$this->config->getValue("Main", "nameformat")] . " AS fullname, aum.Nachname ";
 	$query .= "FROM statusgruppe_user LEFT JOIN auth_user_md5 aum USING(user_id) ";
 	$query .= "LEFT JOIN user_info USING(user_id) LEFT JOIN user_inst ui USING(user_id) ";
 	$query .= "WHERE statusgruppe_id IN ('$groups_ids') AND Institut_id = '$range_id'";
@@ -76,7 +80,6 @@ if(!$grouping){
 }
 
 $repeat_headrow = $this->config->getValue("Main", "repeatheadrow");
-$order = $this->config->getValue("Main", "order");
 $width = $this->config->getValue("Main", "width");
 $alias = $this->config->getValue("Main", "aliases");
 $visible = $this->config->getValue("Main", "visible");
@@ -103,7 +106,7 @@ $first_loop = TRUE;
 foreach ($visible_groups as $group_id => $group) {
 	if($grouping){
 		$query = "SELECT ui.raum, ui.sprechzeiten, ui.Telefon, inst_perms,	Email, aum.user_id, username, ";
-		$query .= $_fullname_sql[$this->config->getValue("Main", "nameformat")] . " AS fullname ";
+		$query .= $_fullname_sql[$this->config->getValue("Main", "nameformat")] . " AS fullname, aum.Nachname ";
 		$query .= "FROM statusgruppe_user LEFT JOIN auth_user_md5 aum USING(user_id) ";
 		$query .= "LEFT JOIN user_info USING(user_id) LEFT JOIN user_inst ui USING(user_id) ";
 		$query .= "WHERE statusgruppe_id='$group_id' AND Institut_id = '$range_id'";
@@ -167,7 +170,7 @@ foreach ($visible_groups as $group_id => $group) {
 		while($db->next_record()){
 		
 			$data = array(
-			"fullname"     => sprintf("<a href=\"%s&username=%s\"%s><font%s>%s</font></a>",
+			"Nachname"     => sprintf("<a href=\"%s&username=%s\"%s><font%s>%s</font></a>",
 												$link_persondetails, $db->f("username"),
 												$this->config->getAttributes("Link", "a"),
 												$this->config->getAttributes("Link", "font"),

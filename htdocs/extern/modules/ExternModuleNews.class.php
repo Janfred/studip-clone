@@ -78,6 +78,8 @@ class ExternModuleNews extends ExternModule {
 					$this->config->getAttributes("Body", "body"));
 		}
 		
+		init_i18n($this->config->getValue("Main", "language"));
+		
 		include($GLOBALS["ABSOLUTE_PATH_STUDIP"] . $GLOBALS["RELATIVE_PATH_EXTERN"]
 				. "/modules/views/news.inc.php");
 		
@@ -86,17 +88,16 @@ class ExternModuleNews extends ExternModule {
 	}
 	
 	function printoutPreview () {
-		if ($this->config->getValue("Main", "wholesite")) {
-			echo html_header($this->config->getValue("Main", "title"),
-					$this->config->getValue("Main", "urlcss"),
-					$this->config->getAttributes("Body", "body"));
-		}
+		echo html_header($this->config->getValue("Main", "title"),
+				$this->config->getValue("Main", "urlcss"),
+				$this->config->getAttributes("Body", "body"));
+		
+		init_i18n($this->config->getValue("Main", "language"));
 		
 		include($GLOBALS["ABSOLUTE_PATH_STUDIP"] . $GLOBALS["RELATIVE_PATH_EXTERN"]
 				. "/modules/views/news_preview.inc.php");
 		
-		if ($this->config->getValue("Main", "wholesite"))
-			echo html_footer();
+		echo html_footer();
 	}
 	
 }

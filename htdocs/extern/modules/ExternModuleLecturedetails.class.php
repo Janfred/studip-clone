@@ -38,6 +38,7 @@
 require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."/lib/ExternModule.class.php");
 require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."/views/extern_html_templates.inc.php");
 require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."/modules/views/ExternSemBrowse.class.php");
+require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"]."language.inc.php");
 
 class ExternModuleLecturedetails extends ExternModule {
 
@@ -100,6 +101,8 @@ class ExternModuleLecturedetails extends ExternModule {
 					$this->config->getAttributes("Body", "body"));
 		}
 		
+		init_i18n($this->config->getValue("Main", "language"));
+		
 		include($GLOBALS["ABSOLUTE_PATH_STUDIP"] . $GLOBALS["RELATIVE_PATH_EXTERN"]
 				. "/modules/views/lecturedetails.inc.php");
 		
@@ -107,19 +110,16 @@ class ExternModuleLecturedetails extends ExternModule {
 			echo html_footer();
 	}
 	
-	function printoutPreview ($args) {
+	function printoutPreview () {
 		global $ABSOLUTE_PATH_STUDIP;
-		if ($this->config->getValue("Main", "wholesite")) {
-			echo html_header($this->config->getValue("Main", "title"),
-					$this->config->getValue("Main", "urlcss"),
-					$this->config->getAttributes("Body", "body"));
-		}
+		echo html_header($this->config->getValue("Main", "title"),
+				$this->config->getValue("Main", "urlcss"),
+				$this->config->getAttributes("Body", "body"));
 		
 		include($GLOBALS["ABSOLUTE_PATH_STUDIP"] . $GLOBALS["RELATIVE_PATH_EXTERN"]
 				. "/modules/views/lecturedetails_preview.inc.php");
 		
-		if ($this->config->getValue("Main", "wholesite"))
-			echo html_footer();
+		echo html_footer();
 	}
 	
 }

@@ -37,12 +37,13 @@
 
 require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."/lib/ExternModule.class.php");
 require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."/views/extern_html_templates.inc.php");
+require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"]."language.inc.php");
 
 class ExternModulePersondetails extends ExternModule {
 
 	var $field_names = array();
 	var $data_fields = array("contact" => array("raum", "Telefon", "Fax", "Email",
-			"Home", "sprechzeiten"), "content" => array("lebenslauf", "schwerp", "lehre",
+			"Home", "sprechzeiten"), "content" => array("head", "lebenslauf", "schwerp", "lehre",
 			"news", "termine", "publi", "kategorien"));
 	var $registered_elements = array("Body", "PersondetailsHeader", "Contact", "PersondetailsLectures",
 					"TableParagraph", "TableParagraphHeadline", "TableParagraphSubHeadline",
@@ -66,6 +67,7 @@ class ExternModulePersondetails extends ExternModule {
 			),
 			"content" => array
 			(
+				_("Name, Anschrift, Kontakt"),
 				_("Lebenslauf"),
 				_("Schwerpunkte"),
 				_("Lehrveranstaltungen"),
@@ -99,6 +101,8 @@ class ExternModulePersondetails extends ExternModule {
 					$this->config->getAttributes("Body", "body"));
 		}
 		
+		init_i18n($this->config->getValue("Main", "language"));
+		
 		include($GLOBALS["ABSOLUTE_PATH_STUDIP"] . $GLOBALS["RELATIVE_PATH_EXTERN"]
 				. "/modules/views/persondetails.inc.php");
 		
@@ -107,17 +111,14 @@ class ExternModulePersondetails extends ExternModule {
 	}
 	
 	function printoutPreview () {
-		if ($this->config->getValue("Main", "wholesite")) {
-			echo html_header($this->config->getValue("Main", "title"),
-					$this->config->getValue("Main", "urlcss"),
-					$this->config->getAttributes("Body", "body"));
-		}
+		echo html_header($this->config->getValue("Main", "title"),
+				$this->config->getValue("Main", "urlcss"),
+				$this->config->getAttributes("Body", "body"));
 		
 		include($GLOBALS["ABSOLUTE_PATH_STUDIP"] . $GLOBALS["RELATIVE_PATH_EXTERN"]
 				. "/modules/views/persondetails_preview.inc.php");
 		
-		if ($this->config->getValue("Main", "wholesite"))
-			echo html_footer();
+		echo html_footer();
 	}
 	
 }

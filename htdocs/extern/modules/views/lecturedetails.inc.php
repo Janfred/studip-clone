@@ -8,7 +8,6 @@ $db = new DB_Institut();
 $query = "SELECT * FROM seminare WHERE Seminar_id='$seminar_id'";
 $db->query($query);
 
-setlocale(LC_TIME, $this->config->getValue("Main", "timelocale"));
 $order = $this->config->getValue("Main", "order");
 $visible = $this->config->getValue("Main", "visible");
 $aliases = $this->config->getValue("Main", "aliases");
@@ -61,7 +60,7 @@ if ($db->next_record()) {
 		$data["teilnehmer"] = htmlReady($db->f("teilnehmer"));
 	
 	if ($visible[++$j] && $db->f("voraussetzungen"))
-		$data["requirements"] = htmlReady($db->f("teilnehmer"));
+		$data["requirements"] = htmlReady($db->f("voraussetzungen"));
 	
 	if ($visible[++$j] && $db->f("lernorga"))
 		$data["lernorga"] = htmlReady($db->f("lernorga"));
@@ -115,11 +114,6 @@ if ($db->next_record()) {
 	echo "<div" . $this->config->getAttributes("SemName", "div") . ">";
 	echo "<font" . $this->config->getAttributes("SemName", "font") . ">";
 	echo $data["name"] . "</font></div></td></tr>\n";
-/*	if ($change_link) {
-		echo "<td align=\"right\">";//$hg_leinzel_titel>";
-		echo "<a href=\"".$CANONICAL_RELATIVE_PATH_STUDIP."seminar_main?auswahl=$ID&redirect_to=admin_seminare1.php&login=true&new_sem=TRUE\"><font color=\"#$link_color\">$change_link</font></a>&nbsp";
-		echo "<a href=\"".$CANONICAL_RELATIVE_PATH_STUDIP."seminar_main?auswahl=$ID&redirect_to=admin_seminare1.php&login=true&new_sem=TRUE\"><img src=\"pfeillink.gif\" border=\"0\" alt=\"$change_link\"></a>\n";
-	}*/
 	
 	$headline_tr = $this->config->getAttributes("Headline", "tr");
 	$headline_td = $this->config->getAttributes("Headline", "td");
@@ -190,7 +184,6 @@ if ($db->next_record()) {
 			echo $involved_insts . "<br></font>\n";
 		}
 		
-		//Statistik
 		$db->query("SELECT count(*) as count_user FROM seminar_user WHERE Seminar_id='$seminar_id'");
 		$db->next_record();
 		

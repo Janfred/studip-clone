@@ -121,9 +121,20 @@ class ExternSemBrowse extends SemBrowse {
 	function print_result () {
 		global $_fullname_sql,$_views,$PHP_SELF,$SEM_TYPE,$SEM_CLASS,$SEMESTER;
 		
+		// reorganize the $SEM_TYPE-array
+		foreach ($SEM_CLASS as $key_class => $class) {
+			$i = 0;
+			foreach ($SEM_TYPE as $key_type => $type) {
+				if ($type["class"] == $key_class) {
+					$i++;
+					$sem_types_position[$key_type] = $i;
+				}
+			}
+		}
+		
 		// current semester
 		$now = time();
-		foreach ($GLOBALS["SEMESTER"] as $key => $sem) {
+		foreach ($SEMESTER as $key => $sem) {
 			if ($sem["beginn"] >= $now)
 				break;
 		}
@@ -238,7 +249,14 @@ class ExternSemBrowse extends SemBrowse {
 					break;
 					
 					case 3:
-					echo htmlReady($SEM_TYPE[$group_field]["name"]." (". $SEM_CLASS[$SEM_TYPE[$group_field]["class"]]["name"].")");
+					$aliases_sem_type = $this->config->getValue("ReplaceTextSemType",
+							"class_{$SEM_TYPE[$group_field]['class']}");
+					if ($aliases_sem_type[$sem_types_position[$group_field] - 1])
+						echo $aliases_sem_type[$sem_types_position[$group_field] - 1];
+					else {
+						echo htmlReady($SEM_TYPE[$group_field]["name"]
+								." (". $SEM_CLASS[$SEM_TYPE[$group_field]["class"]]["name"].")");
+					}
 					break;
 					
 					case 4:

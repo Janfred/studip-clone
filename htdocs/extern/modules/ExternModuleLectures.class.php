@@ -38,21 +38,22 @@
 require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."/lib/ExternModule.class.php");
 require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."/views/extern_html_templates.inc.php");
 require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."/modules/views/ExternSemBrowse.class.php");
+require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"]."language.inc.php");
 
 class ExternModuleLectures extends ExternModule {
 
 	var $field_names = array();
 	var $data_fields = array();
 	var $registered_elements = array(
-			"Body" => "Body",
-			"TableHeader" => "TableHeader",
+			"ReplaceTextSemType",
+			"Body",
+			"TableHeader",
 			"InfoCountSem" => "TableGroup",
 			"Grouping" => "TableGroup",
 			"SemName" => "TableGroup",
 			"TimeLecturer" => "TableRowTwoColumns",
 			"SemLink" => "LinkInternSimple",
-			"LecturerLink" => "LinkInternSimple",
-			"TableFooter" => "TableFooter");
+			"LecturerLink" => "LinkInternSimple");
 	var $args = array();
 
 	/**
@@ -90,6 +91,8 @@ class ExternModuleLectures extends ExternModule {
 					$this->config->getAttributes("Body", "body"));
 		}
 		
+		init_i18n($this->config->getValue("Main", "language"));
+		
 		$start_item_id = get_start_item_id($this->config->range_id);
 		$group_by = $this->config->getValue("Main", "grouping");
 		$sem_browse_data = array("start_item_id" => $start_item_id, "level" => "ev",
@@ -102,22 +105,15 @@ class ExternModuleLectures extends ExternModule {
 			echo html_footer();
 	}
 	
-	function printoutPreview ($args) {
-		global $ABSOLUTE_PATH_STUDIP;
-		if ($this->config->getValue("Main", "wholesite")) {
-			echo html_header($this->config->getValue("Main", "title"),
+	function printoutPreview () {
+		echo html_header($this->config->getValue("Main", "title"),
 					$this->config->getValue("Main", "urlcss"),
 					$this->config->getAttributes("Body", "body"));
-		}
 		
-		$sem_browse_data = array("start_item_id" => $this->config->range_id, "level" => "ev",
-		"cmd" => "qs", "show_class" => "all", "group_by" => 0, "default_sem" => "all",
-		"search_result" => Array(), "show_entries" => "level", "sem_status" => "", "sset" => "");
-		$browser =& new ExternSemBrowse($this->config, $sem_browse_data);
-		$browser->print_result();
-		
-		if ($this->config->getValue("Main", "wholesite"))
-			echo html_footer();
+		include($GLOBALS["ABSOLUTE_PATH_STUDIP"] . $GLOBALS["RELATIVE_PATH_EXTERN"]
+				. "/modules/views/lectures_preview.inc.php");
+				
+		echo html_footer();
 	}
 	
 }

@@ -115,21 +115,23 @@ function news (&$this, $db, $alias_content) {
 		echo "<td" . $this->config->getAttributes("TableParagraphHeadline", "td") . ">";
 		echo "<font" . $this->config->getAttributes("TableParagraphHeadline", "font") . ">";
 		echo "$alias_content</font></td></tr>\n";
-	}
-	while ($db_news->next_record()) {
-		echo "<tr" . $this->config->getAttributes("TableParagraphSubHeadline", "tr") . ">";
-		echo "<td" . $this->config->getAttributes("TableParagraphSubHeadline", "td") . ">";
-		echo "<div style=\"margin-left:" . $this->config->getValue("TableParagraphSubHeadline", "margin") . ";\">";
-		echo "<font" . $this->config->getAttributes("TableParagraphSubHeadline", "font") . ">";
-		echo format(htmlReady($db_news->f("topic")));
-		echo "</font></div></td></tr>\n";
-		echo "<tr" . $this->config->getAttributes("TableParagraphText", "tr") . ">";
-		list ($content, $admin_msg) = explode("<admin_msg>", $db_news->f("body"));
-		echo "<td" . $this->config->getAttributes("TableParagraphText", "td") . ">";
-		echo "<div style=\"margin-left:" . $this->config->getValue("TableParagraphText", "margin") . ";\">";
-		echo "<font" . $this->config->getAttributes("TableParagraphText", "font") . ">";
-		echo FixLinks(format(htmlReady($content)));
-		echo "</font></div></td></tr>\n</table>";
+	
+		while ($db_news->next_record()) {
+			echo "<tr" . $this->config->getAttributes("TableParagraphSubHeadline", "tr") . ">";
+			echo "<td" . $this->config->getAttributes("TableParagraphSubHeadline", "td") . ">";
+			echo "<div style=\"margin-left:" . $this->config->getValue("TableParagraphSubHeadline", "margin") . ";\">";
+			echo "<font" . $this->config->getAttributes("TableParagraphSubHeadline", "font") . ">";
+			echo format(htmlReady($db_news->f("topic")));
+			echo "</font></div></td></tr>\n";
+			echo "<tr" . $this->config->getAttributes("TableParagraphText", "tr") . ">";
+			list ($content, $admin_msg) = explode("<admin_msg>", $db_news->f("body"));
+			echo "<td" . $this->config->getAttributes("TableParagraphText", "td") . ">";
+			echo "<div style=\"margin-left:" . $this->config->getValue("TableParagraphText", "margin") . ";\">";
+			echo "<font" . $this->config->getAttributes("TableParagraphText", "font") . ">";
+			echo FixLinks(format(htmlReady($content)));
+			echo "</font></div></td></tr>\n";
+		}
+		echo "</table>\n";
 	}
 }
 
@@ -142,18 +144,17 @@ function termine (&$this, $db, $alias_content) {
 			echo "<td" . $this->config->getAttributes("TableParagraphHeadline", "td") . ">";
 			echo "<font" . $this->config->getAttributes("TableParagraphHeadline", "font") . ">";
 			echo "$alias_content</font></td></tr>\n";
-			//$date_form = $this->config->getValue("
 			
 			while ($event = $event_list->nextEvent()) {
 				echo "<tr" . $this->config->getAttributes("TableParagraphSubHeadline", "tr") . ">";
 				echo "<td" . $this->config->getAttributes("TableParagraphSubHeadline", "td") . ">";
 				echo "<div style=\"margin-left:" . $this->config->getValue("TableParagraphSubHeadline", "margin") . ";\">";
 				echo "<font" . $this->config->getAttributes("TableParagraphSubHeadline", "font") . ">";
-				echo strftime("%d.%m.%Y %H.%m", $event->getStart());
+				echo strftime($this->config->getValue("Main", "dateformat") . " %H.%m", $event->getStart());
 				if (date("dmY", $event->getStart()) == date("dmY", $event->getEnd()))
 					echo strftime(" - %H.%m", $event->getEnd());
 				else
-					echo strftime(" - %d.%m.%Y %H.%m", $event->getEnd());
+					echo strftime(" - " . $this->config->getValue("Main", "dateformat") . " %H.%m", $event->getEnd());
 				echo " &nbsp;" . format(htmlReady($event->getTitle()));
 				echo "</font></div></td></tr>\n";
 				if ($event->getDescription()) {
@@ -403,7 +404,6 @@ function head (&$this, $db) {
 }
 
 function kontakt ($this, $db) {
-//	global $db;
 	$attr_table = $this->config->getAttributes("Contact", "table");
 	$attr_tr = $this->config->getAttributes("Contact", "table");
 	$attr_td = $this->config->getAttributes("Contact", "td");
@@ -427,7 +427,7 @@ function kontakt ($this, $db) {
 		$url = trim($db->f("url"));
 		if (!stristr($url, "http://"))
 			$url = "http://$url";
-		$out .= "<a href=\"$url\" target=\"_top\">";
+		$out .= "<a href=\"$url\" target=\"_blank\">";
 		$out .= htmlReady($db->f("Name"), TRUE) . "</a><br>";
 		if ($this->config->getValue("Contact", "adradd"))
 			$out .= $this->config->getValue("Contact", "adradd");
@@ -435,7 +435,7 @@ function kontakt ($this, $db) {
 	
 	if ($db->f("Strasse")) {
 		$out .= "<br><br>" . htmlReady($db->f("Strasse"), TRUE);
-		if($db->f("Plz")!="")
+		if($db->f("Plz"))
   		$out .= "<br>" . htmlReady($db->f("Plz"), TRUE);
 	}
   $out .= "<br><br></font></td></tr>\n";

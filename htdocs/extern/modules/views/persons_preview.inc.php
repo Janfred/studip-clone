@@ -130,24 +130,24 @@ foreach ($group_data as $groups) {
 	
 	$i = 0;
 	foreach ($groups["persons"] as $data) {
-					
+	
 		$wert_daten = array(
-			"fullname"         => sprintf("<a href=\"\"%s><font%s>%s</font></a>",
+			"Nachname"         => sprintf("<a href=\"\"%s><font%s>%s</font></a>",
 												$this->config->getAttributes("Link", "a"),
 												$this->config->getAttributes("Link", "font"),
-												htmlReady($data["name"], TRUE)),
+												htmlReady($data["name"])),
 												
 			"Telefon"      => sprintf("<font%s>%s</font>",
 												$this->config->getAttributes("TableRow", "font"),
-												htmlReady($data["telefon"], TRUE)),
+												htmlReady($data["telefon"])),
 			
-			"Sprechzeiten" => sprintf("<font%s>%s</font>",
+			"sprechzeiten" => sprintf("<font%s>%s</font>",
 												$this->config->getAttributes("TableRow", "font"),
-												htmlReady($data["sprechzeiten"], TRUE)),
+												htmlReady($data["sprechzeiten"])),
 			
-			"Raum"         => sprintf("<font%s>%s</font>",
+			"raum"         => sprintf("<font%s>%s</font>",
 												$this->config->getAttributes("TableRow", "font"),
-												htmlReady($data["raum"], TRUE)),
+												htmlReady($data["raum"])),
 			
 			"Email"       => sprintf("<a href=\"mailto:%s\"%s><font%s>%s</font></a>",
 												$data["email"],

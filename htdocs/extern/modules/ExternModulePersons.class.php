@@ -41,7 +41,7 @@ require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."
 class ExternModulePersons extends ExternModule {
 
 	var $field_names = array();
-	var $data_fields = array("fullname", "Telefon", "raum", "Email", "sprechzeiten");
+	var $data_fields = array("Nachname", "Telefon", "raum", "Email", "sprechzeiten");
 	var $registered_elements = array("Body", "TableHeader", "TableHeadrow", "TableGroup",
 																	 "TableRow", "LinkIntern", "TableFooter");
 
@@ -88,17 +88,14 @@ class ExternModulePersons extends ExternModule {
 	}
 	
 	function printoutPreview () {
-		if ($this->config->getValue("Main", "wholesite")) {
-			echo html_header($this->config->getValue("Main", "title"),
-					$this->config->getValue("Main", "urlcss"),
-					$this->config->getAttributes("Body", "body"));
-		}
+		echo html_header($this->config->getValue("Main", "title"),
+				$this->config->getValue("Main", "urlcss"),
+				$this->config->getAttributes("Body", "body"));
 		
 		include($GLOBALS["ABSOLUTE_PATH_STUDIP"] . $GLOBALS["RELATIVE_PATH_EXTERN"]
 				. "/modules/views/persons_preview.inc.php");
 		
-		if ($this->config->getValue("Main", "wholesite"))
-			echo html_footer();
+		echo html_footer();
 	}
 	
 }

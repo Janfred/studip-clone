@@ -118,7 +118,6 @@ if ($error_message) {
 	echo "</td></tr>\n</table>\n";
 }
 else {
-	setlocale(LC_TIME, $this->config->getValue("Main", "datelanguage"));
 	$dateform = $this->config->getValue("Main", "dateformat");
 	$attr_a = $this->config->getAttributes("Link", "a");
 	$attr_font = $this->config->getAttributes("Link", "font");
@@ -144,7 +143,7 @@ else {
 														strftime($dateform, $db->f("date")), $link_persondetails,
 														$db->f("username"),$attr_a, $attr_font, htmlReady($db->f("name"))),
 				"topic" => sprintf("<div%s><font%s>%s</font></div><div%s><font%s>%s</font></div>",
-														$attr_div_topic, $atrr_font_topic,
+														$attr_div_topic, $attr_font_topic,
 														$db->f("topic"), $attr_div_body,
 														$attr_font_body, formatReady($content))
 		);

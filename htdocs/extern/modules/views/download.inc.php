@@ -82,7 +82,6 @@ if ($this->config->getValue("TableHeader", "width_pp") == "PERCENT")
 	$percent = "%";
 $alias_download = $this->config->getValue("Main", "aliases");
 $visible = $this->config->getValue("Main", "visible");
-setlocale(LC_TIME, $this->config->getValue("Main", "datelanguage"));
 
 $set_1 = $this->config->getAttributes("TableHeadrow", "th");
 $set_2 = $this->config->getAttributes("TableHeadrow", "th", TRUE);
