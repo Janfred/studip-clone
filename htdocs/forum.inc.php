@@ -1009,7 +1009,7 @@ function printposting ($forumposting) {
   			$viewlink = "flatfolder";
   			$forum["flatviewstartposting"] = 0;
   		} else {
-  	 		$viewlink = "";
+  	 		$viewlink = 0;
   	 	}
  		
  		if ($forumposting["openclose"] == "close" || $forum["view"] == "mixed") {
