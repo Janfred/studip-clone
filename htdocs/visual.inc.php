@@ -762,7 +762,6 @@ function FixLinks ($data = "", $fix_nl = TRUE, $nl_to_br = TRUE, $img = FALSE, $
 			$domains .= '|' . preg_quote($studip_domain);
 		$domains = preg_replace("'(\|.+?)((/.*?)|\|)'", "\\1.*?\\2", $domains);
 		$domains = substr($domains, 1);
-		echo "<br>".$domains;
 		$user_domain = preg_replace("'^($domains)(.*)$'i", "\\1",
 				$_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
 		$pattern = array("/([ \t\]\n]|^)www\./i",
