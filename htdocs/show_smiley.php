@@ -57,7 +57,7 @@ for($i=0;$i < count($i_smile);++$i){
 		echo "\n<td class=\"blank\" align=\"center\">:".$i_smile[$i][1].":</td>";
 		($SMILE_SHORT_R[$i_smile[$i][1]]) ? print "\n<td class=\"blank\" align=\"center\">".$SMILE_SHORT_R[$i_smile[$i][1]]."</td>" : print "\n<td class=\"blank\" align=\"center\">&nbsp</td>";
 		echo "\n</tr>";
-		$max = ceil(count($i_smile)/3);
+		$max = ceil(count($i_smile)/3)+1;
 		if (!(($i+1) % $max )) {
 			?>
 			</table></td><td valign="top">
