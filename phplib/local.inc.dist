@@ -361,6 +361,15 @@ $LATEX_FORMATS = array(
   		"arab" => array("tag" => "arab", "template" => "\documentclass[12pt]{article}\n \usepackage[latin1]{inputenc}\n \usepackage{arabtex,atrans}\n \pagestyle{empty}\n \begin{document}\n \begin{arabtext}%s\end{arabtext}\n \end{document}\n")
 */
 
+// WIKI PLUGINS
+// - plugins are loaded from the wiki module
+// - plugins can define own wiki markup applied after general markup rules
+//
+// uncomment/change below to activate
+//
+//$WIKI_PLUGINS=array(
+//	"wiki_steps.inc.php"  // Stud.IP Enhancement Proposal System
+//);
 
 /*path generation 
 -----------------------------------------------------------------
