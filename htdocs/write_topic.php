@@ -86,7 +86,13 @@ if (!isset($Create) || $Create != "abschicken") {
 	  	if (ereg("\[quote",$parent_description) AND ereg("\[/quote\]",$parent_description))
 				$parent_description = quotes_decode($parent_description);
 			printcontent ("100%","",$parent_description,"");
-			echo "\n</tr><tr><td colspan=2 class=steel>&nbsp; </td></tr><tr><td colspan=2 class=steel1><blockquote>";
+			echo "\n</tr>";
+			echo "	<tr>";
+			echo "		<td colspan=2 class=steel1 align=center>";
+			echo "			<a href='$PHP_SELF?write=1&root_id=$root_id&topic_id=$topic_id&quote=TRUE'><img src='pictures/buttons/zitieren-button.gif' border=0></a>";
+			echo "		</td>";
+			echo "	</tr>";
+			echo "<tr><td colspan=2 class=steel>&nbsp; </td></tr><tr><td colspan=2 class=steel1><blockquote>";
 			
 			}
 		print "<br><b>Hierzu antworten:</b><br><br>\n";
@@ -128,7 +134,15 @@ while ($db->next_record())
 	echo $description;
 ?>	
 Ihr Beitrag:
-<br><textarea name=description cols=60 rows=12></textarea><br>
+<br><textarea name=description cols=60 rows=12>
+<?
+IF ($quote==TRUE){  // es soll zitiert werden
+	$zitat = quote($topic_id);
+	echo htmlReady($zitat);
+	echo "\n";
+}
+?>
+</textarea><br>
 <input type="submit" name=Create value="abschicken">
 </form>
 <?
