@@ -146,7 +146,7 @@ if ($nclose)
 	if (show_news($auswahl,$show_admin, 0, $institut_main_data["nopen"], "100%", $loginfilelast[$SessSemName[1]]))
 		echo"<br>";
 	//show chat info
-	if ($GLOBALS['CHAT_ENABLE']){
+	if (($GLOBALS['CHAT_ENABLE']) && ($modules["chat"])){
 		if (chat_show_info($auswahl))
 			echo "<br>";
 	}
