@@ -86,7 +86,7 @@ function insert_sms ($rec_uname, $message, $user_id='') {
 	$db2=new DB_Seminar;
 	$db3=new DB_Seminar;
 
-	if ((!$user_id) && ($user_id != "____%system%____"))
+	if ((!$user_id))
 		$user_id = $user->id;
 
 	if (!empty($message)) {

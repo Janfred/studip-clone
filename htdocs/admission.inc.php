@@ -142,7 +142,7 @@ function renumber_admission ($seminar_id, $send_message=TRUE) {
 				//Usernamen auslesen
 				$db4->query("SELECT username FROM auth_user_md5 WHERE user_id = '".$db2->f("user_id")."' ");
 				$db4->next_record();
-				$message="Sie sind in der Warteliste der Veranstaltung **".$db->f("Name")."** hochgestuft worde. Sie stehen zur Zeit auf Position $position.";
+				$message="Sie sind in der Warteliste der Veranstaltung **".$db->f("Name")."** hochgestuft worden. Sie stehen zur Zeit auf Position $position.";
 				$messaging->insert_sms ($db4->f("username"), $message, "____%system%____");
 			}
 			$position++;
