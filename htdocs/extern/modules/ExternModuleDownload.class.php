@@ -152,8 +152,13 @@ class ExternModuleDownload extends ExternModule {
 		
 		$out = $this->elements["TableHeadrow"]->toString();
 		
-		if ($error_message)
-			$out = $this->elements["TableRow"]->toString(array("content" => $error_message));
+		if ($error_message) {
+			// use one column and set it visible to display error_message 
+			$this->config->setValue('Main', 'order', array('0'));
+			$this->config->setValue('Main', 'visible', array('1'));
+			$this->config->setValue('Main', 'width', array('100%'));
+			$out = $this->elements['TableRow']->toString(array('content' => array('' => $error_message)));
+		}
 		else {
 			$table_row_data["data_fields"] = $this->data_fields;
 			while($db->next_record()){
@@ -230,9 +235,9 @@ class ExternModuleDownload extends ExternModule {
 				);
 				$out .= $this->elements["TableRow"]->toString($table_row_data);
 			}
-			
-			return $this->elements["TableHeader"]->toString(array("content" => $out));
 		}
+		
+		return $this->elements["TableHeader"]->toString(array("content" => $out));
 	}
 	
 	function toStringPreview () {
