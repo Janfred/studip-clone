@@ -21,8 +21,11 @@ function show_user_modules($benutzername)
 			$printcontent = $module_info["description"] . "<br><br><center><a href=\"$edit_link\" target=\"_blank\">" . makeButton("bearbeiten", "img") . "</a>&nbsp;<a href=\"$delete_link\" target=\"_blank\">" . makeButton("loeschen", "img") . "</a></center>";
 			$mod_author = get_module_author($mod_array[$module_count]["inst"], $mod_array[$module_count]["id"]);
 			for ($i=0; $i<sizeof($mod_author); $i ++)
-				$mod_author[$i] = $mod_author[$i]["fullname"];
-			$printdesc = implode($mod_author, ", ");
+				if (get_studip_user($mod_author[$i]["id"]) == false)
+					$mod_desc[$i] = $mod_author[$i]["fullname"];
+				else
+					$mod_desc[$i] = "<a href=\"about.php?username=" . get_studip_user($mod_author[$i]["id"]). "\">" . $mod_author[$i]["fullname"] . "</a>";
+			$printdesc = implode($mod_desc, ", ");
 			?>
 			<table cellspacing="0" cellpadding="0" border="0" width="100%">
 				<tr>
@@ -73,8 +76,11 @@ function show_admin_modules()
 				"<a href=\"$delete_link\" target=\"_blank\">" . makeButton("loeschen", "img") . "</a></center>";
 			$mod_author = get_module_author($mod_array[$module_count]["inst"], $mod_array[$module_count]["id"]);
 			for ($i=0; $i<sizeof($mod_author); $i ++)
-				$mod_author[$i] = $mod_author[$i]["fullname"];
-			$printdesc = implode($mod_author, ", ");
+				if (get_studip_user($mod_author[$i]["id"]) == false)
+					$mod_desc[$i] = $mod_author[$i]["fullname"];
+				else
+					$mod_desc[$i] = "<a href=\"about.php?username=" . get_studip_user($mod_author[$i]["id"]). "\">" . $mod_author[$i]["fullname"] . "</a>";
+			$printdesc = implode($mod_desc, ", ");
 			?>
 			<table cellspacing="0" cellpadding="0" border="0" width="100%">
 				<tr>
@@ -128,8 +134,11 @@ function show_seminar_modules($seminar_id)
 			$printcontent = $module_info["description"] . "<br><br><center><a href=\"$link_del\">" . makeButton("entfernen", "img") . "</a></center>";
 			$mod_author = get_module_author($mod_array[$module_count]["inst"], $mod_array[$module_count]["id"]);
 			for ($i=0; $i<sizeof($mod_author); $i ++)
-				$mod_author[$i] = $mod_author[$i]["fullname"];
-			$printdesc = implode($mod_author, ", ");
+				if (get_studip_user($mod_author[$i]["id"]) == false)
+					$mod_desc[$i] = $mod_author[$i]["fullname"];
+				else
+					$mod_desc[$i] = "<a href=\"about.php?username=" . get_studip_user($mod_author[$i]["id"]). "\">" . $mod_author[$i]["fullname"] . "</a>";
+			$printdesc = implode($mod_desc, ", ");
 			?>
 			<table cellspacing="0" cellpadding="0" border="0" width="100%">
 				<tr>
@@ -187,8 +196,11 @@ function show_all_modules($seminar_id)
 			$printcontent = $module_info["description"] . "<br><br><center><a href=\"$link_con\">" . makeButton("hinzufuegen", "img") . "</a></center>";
 			$mod_author = get_module_author($mod_array[$module_count]["inst"], $mod_array[$module_count]["id"]);
 			for ($i=0; $i<sizeof($mod_author); $i ++)
-				$mod_author[$i] = $mod_author[$i]["fullname"];
-			$printdesc = implode($mod_author, ", ");
+				if (get_studip_user($mod_author[$i]["id"]) == false)
+					$mod_desc[$i] = $mod_author[$i]["fullname"];
+				else
+					$mod_desc[$i] = "<a href=\"about.php?username=" . get_studip_user($mod_author[$i]["id"]). "\">" . $mod_author[$i]["fullname"] . "</a>";
+			$printdesc = implode($mod_desc, ", ");
 			?>
 			<table cellspacing="0" cellpadding="0" border="0" width="100%">
 				<tr>
