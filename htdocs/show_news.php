@@ -106,7 +106,7 @@ if (!$db->num_rows()) {
 		if ($link)
 			$titel = "<a href=\"$link\" class=\"tree\" >".$titel."</a>";
 
-		$tempnew = (($db->f("date") >= object_get_visit($db->f("news_id"),'news',false)) && ($db->f("user_id") != $auth->auth["uid"]));
+		$tempnew = (($db->f("date") >= object_get_visit($db->f("news_id"),'news',false,false)) && ($db->f("user_id") != $auth->auth["uid"]));
 		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" align=\"center\"><tr>";
 		if ($open == $db->f("news_id"))
 			printhead(0, 0, $link, "open", $tempnew, $icon, $titel, $zusatz, $db->f("date"));
