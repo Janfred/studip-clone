@@ -44,7 +44,7 @@ $GLOBALS['_views']["LIT_GET_LIST"] = array("query" => "SELECT * FROM lit_list WH
 
 $GLOBALS['_views']["LIT_GET_LIST_CONTENT"] = array("query" => "SELECT a.*," . $GLOBALS['_views']['element_name_short_sql'] . " as short_name ,"
 													. $_fullname_sql['no_title_short'] . " AS fullname, username  FROM lit_list_content a 
-													LEFT JOIN lit_catalog USING(catalog_id) LEFT JOIN auth_user_md5 USING(user_id) 
+													LEFT JOIN lit_catalog USING(catalog_id) LEFT JOIN auth_user_md5 ON(auth_user_md5.user_id=a.user_id) 
 													LEFT JOIN user_info USING(user_id) 
 													WHERE list_id IN(&) ORDER BY list_id,priority");
 $GLOBALS['_views']["LIT_UPD_LIST_CONTENT"] = array("query" => "UPDATE lit_list_content SET list_id=?, catalog_id=?, user_id=?,note=?,priority=?, chdate=UNIX_TIMESTAMP() WHERE list_element_id=?");
@@ -60,6 +60,6 @@ $GLOBALS['_views']["LIT_INS_HELPER"] = array("pk" => "list_element_id", "query" 
 $GLOBALS['_views']["LIT_INS_LIST_CONTENT_COPY"] = array("query" => array("INSERT INTO lit_list_content (list_element_id,list_id,catalog_id,user_id,mkdate,chdate,note,priority)
 														SELECT * FROM {1}","view:LIT_INS_HELPER"));
 $GLOBALS['_views']["LIT_LIST_TOGGLE_VISIBILITY"] = array("query" => "UPDATE lit_list SET visibility=IF(visibility=0,1,0) WHERE list_id=?");
-$GLOBALS['_views']["LIT_LIST_TRIGGER_CHDATE"] = array("query" => "UPDATE lit_list SET chdate=UNIX_TIMESTAMP() WHERE list_id=?");
+$GLOBALS['_views']["LIT_LIST_TRIGGER_UPDATE"] = array("query" => "UPDATE lit_list SET chdate=UNIX_TIMESTAMP(),user_id=? WHERE list_id=?");
 
 ?>
