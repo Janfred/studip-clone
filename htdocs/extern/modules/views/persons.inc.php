@@ -106,6 +106,13 @@ $repeat_headrow = $this->config->getValue("Main", "repeatheadrow");
 $link_persondetails = $this->getModuleLink("Persondetails",
 		$this->config->getValue("LinkIntern", "config"), $this->config->getValue("LinkIntern", "srilink"));
 $data["data_fields"] = $this->data_fields;
+$defaultadr = $this->config->getValue('Main', 'defaultadr');
+if ($defaultadr) {
+	$db_defaultadr = new DB_Seminar();
+	$db_out = 'db_defaultadr';
+}
+else
+	$db_out = 'db';
 
 $out = "";
 $first_loop = TRUE;
@@ -114,11 +121,18 @@ foreach ($visible_groups as $group_id => $group) {
 	if ($grouping) {
 		if (!$query_order)
 			$query_order = ' ORDER BY su.position';
-		$query = "SELECT ui.raum, ui.sprechzeiten, ui.Telefon, inst_perms,	Email, aum.user_id, username, ";
-		$query .= $_fullname_sql[$nameformat] . " AS fullname, aum.Nachname ";
-		$query .= "FROM statusgruppe_user su LEFT JOIN auth_user_md5 aum USING(user_id) ";
-		$query .= "LEFT JOIN user_info USING(user_id) LEFT JOIN user_inst ui USING(user_id) ";
-		$query .= "WHERE su.statusgruppe_id='$group_id' AND Institut_id = '$range_id'$query_order";
+		if ($defaultadr) {
+			$query = "SELECT ui.user_id FROM statusgruppe_user su LEFT JOIN user_inst ui ";
+			$query .= "USING(user_id) WHERE su.statusgruppe_id = '$group_id' AND ";
+			$query .= "Institut_id = '$range_id'$query_order";
+		}
+		else {
+			$query = "SELECT ui.raum, ui.sprechzeiten, ui.Telefon, inst_perms,	Email, aum.user_id, username, ";
+			$query .= $_fullname_sql[$nameformat] . " AS fullname, aum.Nachname ";
+			$query .= "FROM statusgruppe_user su LEFT JOIN auth_user_md5 aum USING(user_id) ";
+			$query .= "LEFT JOIN user_info USING(user_id) LEFT JOIN user_inst ui USING(user_id) ";
+			$query .= "WHERE su.statusgruppe_id='$group_id' AND Institut_id = '$range_id'$query_order";
+		}
 		
 		$db->query($query);
 		
@@ -140,25 +154,45 @@ foreach ($visible_groups as $group_id => $group) {
 			$out .= $this->elements["TableGroup"]->toString(array("content" => htmlReady($group)));
 
 		while ($db->next_record()) {
-		
+			
+			if ($defaultadr) {
+				$query = "SELECT ui.raum, ui.sprechzeiten, ui.Telefon, inst_perms,	Email, ";
+				$query .= "aum.user_id, username, " . $_fullname_sql[$nameformat];
+				$query .= " AS fullname, aum.Nachname FROM auth_user_md5 aum LEFT JOIN ";
+				$query .= "user_inst ui USING(user_id) WHERE aum.user_id = '" . $db->f('user_id');
+				$query .= "' AND externdefault = 1";
+				$db_defaultadr->query($query);
+				// no default
+				if (!$db_defaultadr->next_record()) {
+					$query = "SELECT ui.raum, ui.sprechzeiten, ui.Telefon, inst_perms,	Email, ";
+					$query .= "aum.user_id, username, " . $_fullname_sql[$nameformat];
+					$query .= " AS fullname, aum.Nachname FROM auth_user_md5 aum LEFT JOIN ";
+					$query .= "user_inst ui USING(user_id) WHERE aum.user_id = '" . $db->f('user_id');
+					$query .= "' AND Institut_id = '$range_id'";
+					$db_defaultadr->query($query);
+					$db_defaultadr->next_record();
+				}
+			}
+			
 			$data["content"] = array(
 				"Nachname"			=> $this->elements["LinkIntern"]->toString(array("content" =>
-														htmlReady($db->f("fullname")), "module" => "Persondetails",
-														"link_args" => "username=" . $db->f("username"))),
+														htmlReady($$db_out->f("fullname")), "module" => "Persondetails",
+														"link_args" => "username=" . $$db_out->f("username"))),
 												
-				"Telefon"				=> htmlReady($db->f("Telefon")),
+				"Telefon"				=> htmlReady($$db_out->f("Telefon")),
 			
-				"sprechzeiten"	=> htmlReady($db->f("sprechzeiten")),
+				"sprechzeiten"	=> htmlReady($$db_out->f("sprechzeiten")),
 			
-				"raum"					=> htmlReady($db->f("raum")),
+				"raum"					=> htmlReady($$db_out->f("raum")),
 			
 				"Email"					=> $this->elements["Link"]->toString(array("content" =>
-														$db->f("Email"), "link" => "mailto:" . $db->f("Email")))
+														htmlReady($$db_out->f("Email")),
+														"link" => "mailto:" . htmlReady($$db_out->f("Email"))))
 			);
 			
 			// generic data fields
 			if ($generic_datafields) {
-				$datafields = $datafields_obj->getLocalFields($db->f("user_id"));
+				$datafields = $datafields_obj->getLocalFields($$db_out->f("user_id"));
 				foreach ($generic_datafields as $datafield) {
 					$data["content"][$datafield] = $datafields[$datafield]["content"];
 				}
