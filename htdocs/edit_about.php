@@ -919,7 +919,7 @@ if ($view=="Daten") {
 	}
 	 
 	if ($my_about->check=="user") {
-		echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>" . _("Username:") . " </td><td class=\"".$cssSw->getClass()."\" colspan=2 width=\"80%\" align=\"left\">&nbsp;";
+		echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"25%\" align=\"left\"><blockquote><b>" . _("Username:") . " </td><td class=\"".$cssSw->getClass()."\" colspan=2 width=\"75%\" align=\"left\">&nbsp;";
 		if ((!$ALLOW_CHANGE_USERNAME) || (StudipAuthAbstract::CheckField("auth_user_md5.username", $my_about->auth_user['auth_plugin']))) {
 			echo "&nbsp;<font size=\"-1\">".$my_about->auth_user["username"]."</font>";
 	} else {
@@ -927,22 +927,22 @@ if ($view=="Daten") {
 	}		
 	echo "</td></tr>\n";
 	$cssSw->switchClass();
-	echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>" . _("Passwort:") . " </td>";
+	echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><blockquote><b>" . _("Passwort:") . " </td>";
 	if (StudipAuthAbstract::CheckField("auth_user_md5.password", $my_about->auth_user['auth_plugin'])) {
-	echo "<td class=\"".$cssSw->getClass()."\" colspan=\"2\" width=\"80%\" align=\"left\">&nbsp; <font size=\"-1\">*****</font>";
+	echo "<td class=\"".$cssSw->getClass()."\" colspan=\"2\" align=\"left\">&nbsp; <font size=\"-1\">*****</font>";
 	} else {
-		echo "<td class=\"".$cssSw->getClass()."\" nowrap width=\"20%\" align=\"left\"><font size=-1>&nbsp; " . _("neues Passwort:") . "</font><br />&nbsp; <input type=\"password\" size=\"".round($max_col*0.25)."\" name=\"password\" value=\"*****\"><input type=\"HIDDEN\" name=\"response\" value=\"\">&nbsp; <font color=\"red\" size=+2>*</font>&nbsp; </td><td class=\"".$cssSw->getClass()."\" width=\"60%\" nowrap align=\"left\"><font size=-1>&nbsp; " . _("Passwort-Wiederholung:") . "</font><br />&nbsp; <input type=\"password\" size=\"".round($max_col*0.25)."\" name=\"check_pass\" value=\"*****\">&nbsp; <font color=\"red\" size=+2>*</font>";
+		echo "<td class=\"".$cssSw->getClass()."\" nowrap width=\"20%\" align=\"left\"><font size=-1>&nbsp; " . _("neues Passwort:") . "</font><br />&nbsp; <input type=\"password\" size=\"".round($max_col*0.25)."\" name=\"password\" value=\"*****\"><input type=\"HIDDEN\" name=\"response\" value=\"\">&nbsp; <font color=\"red\" size=+2>*</font>&nbsp; </td><td class=\"".$cssSw->getClass()."\" width=\"55%\" nowrap align=\"left\"><font size=-1>&nbsp; " . _("Passwort-Wiederholung:") . "</font><br />&nbsp; <input type=\"password\" size=\"".round($max_col*0.25)."\" name=\"check_pass\" value=\"*****\">&nbsp; <font color=\"red\" size=+2>*</font>";
 	}
 	echo "</td></tr>\n";
 
 	$cssSw->switchClass();
-	echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>" . _("Name:") . " </td><td class=\"".$cssSw->getClass()."\" nowrap width=\"20%\" align=\"left\"><font size=-1>&nbsp; " . _("Vorname:") . "</font><br />";
+	echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><blockquote><b>" . _("Name:") . " </td><td class=\"".$cssSw->getClass()."\" nowrap align=\"left\"><font size=-1>&nbsp; " . _("Vorname:") . "</font><br />";
 	if (StudipAuthAbstract::CheckField("auth_user_md5.Vorname", $my_about->auth_user['auth_plugin'])) {
         	echo "&nbsp; <font size=\"-1\">" . $my_about->auth_user["Vorname"]."</font>";
 	} else {
         	echo "&nbsp; <input type=\"text\" size=\"".round($max_col*0.25)."\" name=\"vorname\" value=\"".$my_about->auth_user["Vorname"]."\">&nbsp; <font color=\"red\" size=+2>*</font>";
 	}
-	echo "</td><td class=\"".$cssSw->getClass()."\" nowrap width=\"60%\" align=\"left\"><font size=-1>&nbsp; " . _("Nachname:") . "</font><br />";
+	echo "</td><td class=\"".$cssSw->getClass()."\" nowrap align=\"left\"><font size=-1>&nbsp; " . _("Nachname:") . "</font><br />";
 	if (StudipAuthAbstract::CheckField("auth_user_md5.Nachname", $my_about->auth_user['auth_plugin'])) {
 		echo "&nbsp; <font size=\"-1\">" . $my_about->auth_user["Nachname"]."</font>";
 	} else {
@@ -952,7 +952,7 @@ if ($view=="Daten") {
 	echo "</td></tr>\n";
       
 	$cssSw->switchClass();
-	echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>" . _("E-Mail:") . " </td><td class=\"".$cssSw->getClass()."\" colspan=2 width=\"80%\" align=\"left\">&nbsp;";
+	echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><blockquote><b>" . _("E-Mail:") . " </td><td class=\"".$cssSw->getClass()."\" colspan=2 align=\"left\">&nbsp;";
 	if ((!$ALLOW_CHANGE_EMAIL) || (StudipAuthAbstract::CheckField("auth_user_md5.Email", $my_about->auth_user['auth_plugin']))) {
 		echo "&nbsp; <font size=\"-1\">".$my_about->auth_user["Email"]."</font>";
 	} else {
@@ -961,20 +961,20 @@ if ($view=="Daten") {
 	echo "</td></tr>\n";
 	} else {
 		$cssSw->switchClass();
-		echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>" . _("Username:") . " </td><td class=\"".$cssSw->getClass()."\" width=\"30%\" align=\"left\">&nbsp; ".$my_about->auth_user["username"]."</td><td width=\"50%\" rowspan=4 align=\"center\"><b><font color=\"red\">" . _("Adminzugriff hier nicht möglich!") . "</font></b></td></tr>\n";
+		echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"25%\" align=\"left\"><blockquote><b>" . _("Username:") . " </td><td class=\"".$cssSw->getClass()."\" width=\"25%\" align=\"left\">&nbsp; ".$my_about->auth_user["username"]."</td><td width=\"50%\" rowspan=4 align=\"center\"><b><font color=\"red\">" . _("Adminzugriff hier nicht möglich!") . "</font></b></td></tr>\n";
 		$cssSw->switchClass();
-		echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>" . _("Passwort:") . " </td><td class=\"".$cssSw->getClass()."\" width=\"30%\" align=\"left\">&nbsp; *****</td></tr>\n";
+		echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><blockquote><b>" . _("Passwort:") . " </td><td class=\"".$cssSw->getClass()."\" align=\"left\">&nbsp; *****</td></tr>\n";
 		$cssSw->switchClass();
-		echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>" . _("Name:") . " </td><td class=\"".$cssSw->getClass()."\" width=\"30%\" align=\"left\">&nbsp; ".$my_about->auth_user["Vorname"]." ".$my_about->auth_user["Nachname"]."</td></tr>\n";
+		echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><blockquote><b>" . _("Name:") . " </td><td class=\"".$cssSw->getClass()."\" align=\"left\">&nbsp; ".$my_about->auth_user["Vorname"]." ".$my_about->auth_user["Nachname"]."</td></tr>\n";
 		$cssSw->switchClass();
-		echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>" . _("E-Mail:") . " </td><td class=\"".$cssSw->getClass()."\" width=\"30%\" align=\"left\">&nbsp; ".$my_about->auth_user["Email"]."</td></tr>\n";
+		echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><blockquote><b>" . _("E-Mail:") . " </td><td class=\"".$cssSw->getClass()."\" align=\"left\">&nbsp; ".$my_about->auth_user["Email"]."</td></tr>\n";
 	}
 	$cssSw->switchClass();
-	echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>" . _("Titel:") . " </td>";
+	echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><blockquote><b>" . _("Titel:") . " </td>";
 	if (StudipAuthAbstract::CheckField("user_info.title_front", $my_about->auth_user['auth_plugin'])) {
-		echo "<td class=\"".$cssSw->getClass()."\" width=\"80%\" colspan=\"2\" align=\"left\">&nbsp;" .  $my_about->user_info['title_front'] . "</td></tr>";
+		echo "<td class=\"".$cssSw->getClass()."\" colspan=\"2\" align=\"left\">&nbsp;" .  $my_about->user_info['title_front'] . "</td></tr>";
 	} else {
-		echo "<td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\">&nbsp;";
+		echo "<td class=\"".$cssSw->getClass()."\" align=\"left\">&nbsp;";
 		echo "\n<select name=\"title_front_chooser\" onChange=\"document.pers.title_front.value=document.pers.title_front_chooser.options[document.pers.title_front_chooser.selectedIndex].text;\">";
 		for($i = 0; $i < count($TITLE_FRONT_TEMPLATE); ++$i) {
 			echo "\n<option";
@@ -983,15 +983,15 @@ if ($view=="Daten") {
 			}
 			echo ">$TITLE_FRONT_TEMPLATE[$i]</option>";
 		}	
-		echo "</select></td><td class=\"".$cssSw->getClass()."\" width=\"60%\" align=\"left\">&nbsp;&nbsp;";
+		echo "</select></td><td class=\"".$cssSw->getClass()."\" align=\"left\">&nbsp;&nbsp;";
 		echo "<input type=\"text\" size=\"".round($max_col*0.25)."\" name=\"title_front\" value=\"".$my_about->user_info['title_front']."\"></td></tr>\n";
 	}
 	$cssSw->switchClass();
-	echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\" nowrap><blockquote><b>" . _("Titel nachgest.:") . " </td>";
+	echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\" nowrap><blockquote><b>" . _("Titel nachgest.:") . " </td>";
 	if (StudipAuthAbstract::CheckField("user_info.title_rear", $my_about->auth_user['auth_plugin'])) {
-		echo "<td class=\"".$cssSw->getClass()."\" width=\"80%\" colspan=\"2\" align=\"left\">&nbsp;" .  $my_about->user_info['title_rear'] . "</td></tr>";
+		echo "<td class=\"".$cssSw->getClass()."\" colspan=\"2\" align=\"left\">&nbsp;" .  $my_about->user_info['title_rear'] . "</td></tr>";
 	} else {
-		echo "<td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\">&nbsp;";
+		echo "<td class=\"".$cssSw->getClass()."\" align=\"left\">&nbsp;";
 		echo "\n<select name=\"title_rear_chooser\" onChange=\"document.pers.title_rear.value=document.pers.title_rear_chooser.options[document.pers.title_rear_chooser.selectedIndex].text;\">";
 		for($i = 0; $i < count($TITLE_REAR_TEMPLATE); ++$i) {
 			echo "\n<option";
@@ -1000,11 +1000,11 @@ if ($view=="Daten") {
 			}
 			echo ">$TITLE_REAR_TEMPLATE[$i]</option>";
 		}	
-		echo "</select></td><td class=\"".$cssSw->getClass()."\" width=\"60%\" align=\"left\">&nbsp;&nbsp;";
+		echo "</select></td><td class=\"".$cssSw->getClass()."\" align=\"left\">&nbsp;&nbsp;";
 		echo "<input type=\"text\" size=\"".round($max_col*0.25)."\" name=\"title_rear\" value=\"".$my_about->user_info['title_rear']."\"></td></tr>\n";
 	}
 	$cssSw->switchClass();
-	echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>" . _("Geschlecht:") . " </td><td class=\"".$cssSw->getClass()."\" colspan=2 nowrap width=\"80%\" align=\"left\"><font size=-1>";
+	echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><blockquote><b>" . _("Geschlecht:") . " </td><td class=\"".$cssSw->getClass()."\" colspan=2 nowrap align=\"left\"><font size=-1>";
 	if (StudipAuthAbstract::CheckField("user_info.geschlecht", $my_about->auth_user['auth_plugin'])) {
 		echo "&nbsp;" . (!$my_about->user_info["geschlecht"] ? _("m&auml;nnlich") : _("weiblich"));
 	} else {
@@ -1022,7 +1022,7 @@ if ($view=="Daten") {
 	$cssSw->switchClass();
 	echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"100%\" colspan=3 align=\"center\"><b>" . _("Freiwillige Angaben") . "</b></td></tr>\n";
 	 $cssSw->switchClass();
-	echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>" . _("Telefon:") . " </td><td class=\"".$cssSw->getClass()."\" colspan=2 width=\"80%\" align=\"left\">";
+	echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"25%\" align=\"left\"><blockquote><b>" . _("Telefon (privat):") . " </td><td class=\"".$cssSw->getClass()."\" colspan=2 width=\"75%\" align=\"left\">";
 	if (StudipAuthAbstract::CheckField("user_info.privatnr", $my_about->auth_user['auth_plugin'])) {
 		echo "&nbsp;" . htmlReady($my_about->user_info["privatnr"]);
 	} else {
@@ -1030,7 +1030,7 @@ if ($view=="Daten") {
 	}
 	echo "</td></tr>\n";
 	 $cssSw->switchClass();
-	echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>" . _("Anschrift:") . " </td><td class=\"".$cssSw->getClass()."\" colspan=2 width=\"80%\" align=\"left\">";
+	echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><blockquote><b>" . _("Adresse (privat):") . " </td><td class=\"".$cssSw->getClass()."\" colspan=2 align=\"left\">";
 	if (StudipAuthAbstract::CheckField("user_info.privadr", $my_about->auth_user['auth_plugin'])) {
 		echo "&nbsp;" . htmlReady($my_about->user_info["privadr"]);
 	} else {
@@ -1038,7 +1038,7 @@ if ($view=="Daten") {
 	}
 	echo "</td></tr>\n";
 	$cssSw->switchClass();
-	echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>" . _("Homepage:") . " </td><td class=\"".$cssSw->getClass()."\" colspan=2 width=\"80%\" align=\"left\">";
+	echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><blockquote><b>" . _("Homepage:") . " </td><td class=\"".$cssSw->getClass()."\" colspan=2 align=\"left\">";
 	if (StudipAuthAbstract::CheckField("user_info.Home", $my_about->auth_user['auth_plugin'])) {
 		echo "&nbsp;" . htmlReady($my_about->user_info["Home"]);
 	} else {
@@ -1047,7 +1047,7 @@ if ($view=="Daten") {
 	}
 	echo "</td></tr>\n";
 	$cssSw->switchClass();
-	echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>" . _("Hobbies:") . " </td><td class=\"".$cssSw->getClass()."\" colspan=2 width=\"80%\" align=\"left\">";
+	echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><blockquote><b>" . _("Hobbies:") . " </td><td class=\"".$cssSw->getClass()."\" colspan=2 align=\"left\">";
 	if (StudipAuthAbstract::CheckField("user_info.hobby", $my_about->auth_user['auth_plugin'])) {
 		echo "&nbsp;" . htmlReady($my_about->user_info["hobby"]);
 	} else {
