@@ -139,7 +139,7 @@ class ShowToolsRequests {
 				<td class="<? echo $cssSw->getClass() ?>"><font size=-1><b><?=_("aktueller Status")?></b><br />
 					<?
 					if ($open_requests){
-						printf (_("Es liegen insgesamt <b>%s</b> nicht aufgel&ouml;ste Anfragen vor - <br />davon <b>%s</b> von Veranstaltungen und <b>%s</b> auf Ressourcen, auf die Sie Zugriff haben."), $open_requests, $this->getMyOpenSemRequests(), $this->getMyOpenResRequests());
+						printf (_("Es liegen insgesamt <b>%s</b> nicht aufgel&ouml;ste Anfragen vor - <br />davon <b>%s</b> von Veranstaltungen und <b>%s</b> auf Ressourcen, auf die Sie Zugriff haben."), $open_requests, (int)$this->getMyOpenSemRequests(), (int)$this->getMyOpenResRequests());
 						if ($no_time = $this->getMyOpenNoTimeRequests()){
 							printf("<br>" . _("<b>%s</b> Anfragen haben keine Zeiten eingetragen!"), $no_time);
 						}
