@@ -1421,11 +1421,11 @@ function execCommandAssertDeleteItem(){
 	$this->msg[$this->itemID] .= "<br><br>"
 		. $this->createLinkButton("ja2",
 			_("löschen"),
-			"cmd[DeleteItem]")
+			"cmd[DeleteItem]=1")
 		. "&nbsp;"
 		. $this->createLinkButton("nein",
 			_("abbrechen"),
-			"cmd[Cancel]")
+			"cmd[Cancel]=1")
 		. "\n";
 
 	return false;
