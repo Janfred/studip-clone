@@ -149,13 +149,17 @@ if ($cmd=="insert") {
 //meine Seminare einlesen
 if ($inst_id) {
 	$db->query("SELECT seminare.Seminar_id, Name, Ort, start_time, duration_time,  metadata_dates FROM seminare WHERE Institut_id = '$inst_id' ");
+	$view="inst";
 }
 else {
 	$user_id=$user->id;
-	if ($perm->have_perm("admin"))
+	if ($perm->have_perm("admin")) {
 		$db->query("SELECT seminare.Seminar_id, Name, Ort, start_time, duration_time,  metadata_dates FROM seminare WHERE Institut_id = '".$my_schedule_settings ["glb_inst_id"]."' ");
-	else
+		$view="inst_admin";
+	} else {
 		$db->query("SELECT seminare.Seminar_id, Name, Ort, start_time, duration_time,  metadata_dates FROM seminare LEFT JOIN seminar_user USING (seminar_id) WHERE user_id = '$user_id'");
+		$view="user";
+	}
 }
 	
 //richtiges Semester ausw&auml;hlen
@@ -350,7 +354,7 @@ if (!$print_view)
 if ($perm->have_perm("admin")) {
 ?>
 <tr>
-	<td class="topic" width = "99%"colspan=<? echo $glb_colspan?>><img src="pictures/meinesem.gif" border="0" align="texttop"><b>&nbsp;Mein Stundenplan</b>
+	<td class="topic" width = "99%"colspan=<? echo $glb_colspan?>><img src="pictures/meinesem.gif" border="0" align="texttop"><b>&nbsp;<? if ($view=="user")  echo "Mein Stundenplan"; else echo "Veranstaltungs-Timetable" ?></b>
 	</td>
 	<td nowrap class="topic" align="right">Ansicht anpassen&nbsp; <a href="<? echo $PHP_SELF ?>?change_view=TRUE"><img src="pictures/pfeillink.gif" border=0></a>
 	</td>
@@ -361,7 +365,7 @@ else
 	{
 ?>
 <tr>
-	<td class="topic" width = "99%"colspan=<? echo $glb_colspan+1?>><img src="pictures/meinesem.gif" border="0" align="texttop"><b>&nbsp;Mein Stundenplan</b>
+	<td class="topic" width = "99%"colspan=<? echo $glb_colspan+1?>><img src="pictures/meinesem.gif" border="0" align="texttop"><b>&nbsp;<? if ($view=="user")  echo "Mein Stundenplan"; else echo "Veranstaltungs-Timetable" ?></b>
 	</td>
 </tr>
 <?
@@ -372,42 +376,44 @@ if (!$print_view) {
 <tr>
 	<td class="blank" colspan=<? echo $glb_colspan+1?>>&nbsp;
 		<blockquote>
-		Der Stundenplan zeigt Ihnen alle regelm&auml;&szlig;igen Veranstaltungen eines Semesters. Um den Stundenplan auszudrucken, nutzen sie bitte die Druckfunktion ihres Browsers..<br /><br />
-		<? if (!$perm->have_perm("admin")) { ?>
+		<?  if ($view=="user")  { ?>
+		Der Stundenplan zeigt Ihnen alle regelm&auml;&szlig;igen Veranstaltungen eines Semesters. Um den Stundenplan auszudrucken, nutzen sie bitte die Druckfunktion ihres Browsers.<br /><br />
 		<font size=-1>Wenn Sie weitere Veranstaltungen aus Stud.IP in ihren Stundenplan aufnehmen m&ouml;chten, nutzen Sie bitte die <a href = "sem_portal.php?view=Alle">Veranstaltungssuche</a>. <br>
 		Ihre pers&ouml;nlichen Termine finden sie auf der <a href="kalender.php">Termin&uuml;bersicht</a>.</font>
-		<?}?>
+		<?} else { ?>
+		In der Veranstaltungs-Timetable sehen Sie alle Veranstaltungen der Einrichtung des aktuellen Semesters.<br />
+		<? } ?>
 		<br>
 		</blockquote>
 	</td>
 </tr>	
 <tr>
-<td class="blank" colspan=<? echo $glb_colspan+1?>>
+<td class="steel1" colspan=<? echo $glb_colspan+1?>>
 <? } ?>
-<table <? if ($print_view) { ?> bgcolor="#eeeeee" <? } ?> width ="100%" cellspacing=1 cellpadding=1 border=0>
+<table <? if ($print_view) { ?> bgcolor="#eeeeee" <? } ?> width ="99%" align="center" cellspacing=1 cellpadding=2 border=0>
 <tr>
-	<td width="10%" align="center" class="angemeldet" >Zeit
+	<td width="10%" align="center" class="rahmen_steelgraulight" >Zeit
 	</td>
 	<? if ($my_schedule_settings["glb_days"]["mo"]) {?>
-	<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="angemeldet" >Montag
+	<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight" >Montag
 	</td><?}
 	if ($my_schedule_settings["glb_days"]["di"]) {?>
-	<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="angemeldet">Dienstag
+	<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight">Dienstag
 	</td><?}
 	if ($my_schedule_settings["glb_days"]["mi"]) {?>
-	<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="angemeldet">Mittwoch
+	<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight">Mittwoch
 	</td><?}
 	if ($my_schedule_settings["glb_days"]["do"]) {?>
-	<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="angemeldet">Donnerstag
+	<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight">Donnerstag
 	</td><?}
 	if ($my_schedule_settings["glb_days"]["fr"]) {?>
-	<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="angemeldet">Freitag
+	<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight">Freitag
 	</td><?}
 	if ($my_schedule_settings["glb_days"]["sa"]) {?>
-	<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="angemeldet">Samstag
+	<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight">Samstag
 	</td><?}
 	if ($my_schedule_settings["glb_days"]["so"]) {?>
-	<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="angemeldet">Sonntag
+	<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight">Sonntag
 	</td><?}?>
 </tr>
 <?
@@ -424,7 +430,7 @@ for ($i; $i<$my_schedule_settings["glb_end_time"]+1; $i++)
 		{
 		if ($k==0) 
 			{
-			echo "<tr><td align=\"center\" class=\"angemeldet\" rowspan=4>"; 
+			echo "<tr><td align=\"center\" class=\"rahmen_steelgraulight\" rowspan=4>"; 
 			if ($i<10) echo "0";
 			echo $i, ".00 Uhr</td>";
 			}
@@ -456,7 +462,7 @@ for ($i; $i<$my_schedule_settings["glb_end_time"]+1; $i++)
 				foreach ($cell_content as $cc)
 					{
 					if ($r==0)
-						echo "class=\"angemeldet\" valign=\"top\" rowspan=",$my_sems[$cell_content[0]["seminar_id"]]["row_span"],">";
+						echo "class=\"rahmen_steelgraulight\" valign=\"top\" rowspan=",$my_sems[$cell_content[0]["seminar_id"]]["row_span"],">";
 					else
 						echo "<hr \"95%\">";
 					$r++;
@@ -467,24 +473,26 @@ for ($i; $i<$my_schedule_settings["glb_end_time"]+1; $i++)
 					echo "</font><br>";
 					if (!$my_sems[$cc["seminar_id"]]["personal_sem"]) 
 						{
-						echo  "<a href=\"seminar_main.php?auswahl=", substr($my_sems[$cc["seminar_id"]]["seminar_id"], 0, 32), "\">";
+						echo  "<a href=\"seminar_main.php?auswahl=", substr($my_sems[$cc["seminar_id"]]["seminar_id"], 0, 32), "\"><font size=-1>";
 						echo substr($my_sems[$cc["seminar_id"]]["name"], 0,50);
 						if (strlen($my_sems[$cc["seminar_id"]]["name"])>50)
 							echo "..."; 
-						echo"</a>";
+						echo"</font></a>";
 						}
 					else
-						{						
+						{
+						echo "<font size=-1>";					
 						echo substr($my_sems[$cc["seminar_id"]]["name"], 0,50);
 						if (strlen($my_sems[$cc["seminar_id"]]["name"])>50)
 							echo "...";
+						echo "</font>";
 						}
 					if ($my_sems[$cc["seminar_id"]]["dozenten"]) echo "<br><div align=\"right\"><font size=-1>", $my_sems[$cc["seminar_id"]]["dozenten"], "</font></div>";
 					if ($my_sems[$cc["seminar_id"]]["personal_sem"]) echo "<div align=\"right\"><a href=\"",$PHP_SELF, "?cmd=delete&d_sem_id=",$my_sems[$cc["seminar_id"]]["seminar_id"], "\"><img border=0 src=\"./pictures/trash.gif\" alt=\"Dieses Feld aus der Auswahl l&ouml;schen\">&nbsp;</a></div>";
 					}
 				echo "</td>";
 				}
-			if (!$cell_sem[$idx])  echo "class=\"blank\"></td>"; 
+			if (!$cell_sem[$idx])  echo "class=\"steel1\"></td>"; 
 			}
 			}
 			echo "</tr>\n";
@@ -495,20 +503,23 @@ for ($i; $i<$my_schedule_settings["glb_end_time"]+1; $i++)
 		echo "<tr><td colspan=$glb_colspan><i><font size=-1>Erstellt am ",date("d.m.y", time())," um ", date("G:i", time())," Uhr.</font></i></td><td align=\"right\"><font size=-2><img src=\"pictures/logo2b.gif\"><br />&copy; ", date("Y", time())," v.$SOFTWARE_VERSION&nbsp; &nbsp; </font></td>";
 		}
 	else {
-		?>
-		<td class="blank" colspan=<? echo $glb_colspan?>>&nbsp;
-		<?
 		}
 	?>
 	</td>
 </tr>
-<tr>
 <?
+echo "</table></td></tr>";
 if (!$print_view) {
 ?>
-	<td colspan=<? echo $glb_colspan+1?>>
+<tr>
+	<td colspan=<? echo $glb_colspan+1?> class="blank">
+		&nbsp; 
+	</td>
+</tr>
+<tr>
+	<td colspan=<? echo $glb_colspan+1?> class="steelgraulight">
 		<b>&nbsp;Eigene Veranstaltung eintragen:</b><br>
-		<font size=-1>(Hier k&ouml;nnen sie Veranstaltungen, die nicht im Stud.IP System existieren oder andere eigene Ereignisse eintragen)</font><br>
+		<font size=-1>&nbsp;(Hier k&ouml;nnen sie Veranstaltungen, die nicht im Stud.IP System existieren oder andere eigene Ereignisse eintragen)</font><br>
 		<form method="POST" action="<? echo $PHP_SELF ?>?cmd=insert">
 			&nbsp;Wochentag:
 			<select name="tag">
@@ -561,10 +572,15 @@ if (!$print_view) {
 		</form>
 	</td>
 </tr>
+<tr>
+	<td colspan=<? echo $glb_colspan+1?> class="blank">
+		&nbsp; 
+	</td>
+</tr>
+
 <?
 }
 
-echo "</table>";
 
 // Save data back to database.
 page_close();
