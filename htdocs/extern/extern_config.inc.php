@@ -48,13 +48,13 @@ $EXTERN_CONFIG_FILE_PATH = "/var/lib/studip/extern_config/";
 
 
 $EXTERN_MODULE_TYPES[1] = array("module" => "Persons", "name" => _("Mitarbeiter"), "level" => 1,
-													"description" => _("Das Modul &quot;Personal&quot; gibt ein Mitarbeiterverzeichnis einer Einrichtung aus."));
+													"description" => _("Das Modul &quot;Mitarbeiter&quot; gibt ein Mitarbeiterverzeichnis einer Einrichtung aus."));
 
 $EXTERN_MODULE_TYPES[2] = array("module" => "Persondetails", "name" => _("Mitarbeiterdetails"), "level" => 2,
 													"description" => _("Das Modul &quot;Mitarbeiterdetails&quot; gibt die Daten eines Mitarbeiters einer Einrichtung aus."));
 
 $EXTERN_MODULE_TYPES[3] = array("module" => "Lectures", "name" => _("Veranstaltungen"), "level" => 1,
-													"description" => _("Das Modul &quot;Veranstaltungs&uuml;bersicht&quot; gibt alle Veranstaltungen einer Einrichtung aus."));
+													"description" => _("Das Modul &quot;Veranstaltungen&quot; gibt alle Veranstaltungen einer Einrichtung aus."));
 
 $EXTERN_MODULE_TYPES[4] = array("module" => "Lecturedetails", "name" => _("Veranstaltungsdetails"), "level" => 2,
 													"description" => _("Das Modul &quot;Veranstaltungsdetails&quot; gibt alle allgemeinen Daten einer Veranstaltung aus."));
