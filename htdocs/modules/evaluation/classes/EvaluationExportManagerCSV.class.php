@@ -47,7 +47,7 @@ define ("EVALEXPORT_DELIMITER", "\"");
  * @const EVALEXPORT_NODELIMITER Character to substitute the delimiter in a text
  * @access public
  */
-define ("EVALEXPORT_NODELIMITER", "\'");
+define ("EVALEXPORT_NODELIMITER", "'");
 
 /**
  * @const EVALEXPORT_ENDROW The characters to end a row
@@ -281,7 +281,8 @@ class EvaluationExportManagerCSV extends EvaluationExportManager {
                   $entry = "";
                   while ($answer = &$evalquestion->getNextChild ()) {
                      if ($db->hasVoted ($answer->getObjectID (), $userID) == YES)
-                        $entry = preg_replace ("(\r\n|\n|\r)", " ", $answer->getText ());
+                        $entry = preg_replace ("(\r\n|\n|\r)", " ",
+                                                $answer->getText ());
                   }
                   $this->addCol ($entry);
                }
