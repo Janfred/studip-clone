@@ -45,6 +45,7 @@ class RoomRequest {
 	var $id;					//request-id
 	var $seminar_id;				//seminar_id from the assigned seminar
 	var $properties = array();			//the assigned property-requests
+	var $last_search_result_count;			//the number of found rooms from last executed search
 
 	//Konstruktor
 	function RoomRequest($id='') {
@@ -263,16 +264,18 @@ class RoomRequest {
 			if ($setted_properties)
 				$query.= sprintf (" GROUP BY a.resource_id  HAVING resource_id_count = '%s' ", $i);
 			
-			$query.= sprintf ("ORDER BY b.name %s", ($limit_upper) ? "LIMIT ".(($limit_lower) ? $limit_lower : 0).",".$limit_upper : "");
+			$query.= sprintf ("ORDER BY b.name %s", ($limit_upper) ? "LIMIT ".(($limit_lower) ? $limit_lower : 0).",".($limit_upper - $limit_lower) : "");
 		}
 
 		$this->db->query($query);
+
 		if ($this->db->affected_rows()) {
 			while ($this->db->next_record()) {
 				if ($this->db->f("name")) {
 					$resources_found [$this->db->f("resource_id")] = $this->db->f("name");
 				}
 			}
+			$this->last_search_result_count = $this->db->nf();
 			return $resources_found;
 		} else
 			return array();

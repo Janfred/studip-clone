@@ -1459,8 +1459,38 @@ if (($dec_request_x) || ($auto_dec))
 		}
 	}
 
+//inc/dec the limits of found rooms
+if ($inc_limit_low) {
+	$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_low"]+=10;
+	$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["reload"] = TRUE;
+	if ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_low"] >= $resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_low"])
+		$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_low"] = $resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_high"] -1;
+}
+if ($inc_limit_high) {
+	$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_high"]+=10;
+	$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["reload"] = TRUE;
+}
+if ($dec_limit_low) {
+	$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_low"]-=10;
+	$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["reload"] = TRUE;
+	if ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_low"] < 0)
+		$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_low"] = 0;
+}
+if ($dec_limit_high) {
+	$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_high"]-=10;
+	$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["reload"] = TRUE;
+	if ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_high"] <= $resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_low"])
+		$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_high"] = $resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_low"] +1;
+}
+if ($matching_rooms_limit_submit_x) {
+	$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_low"] = $search_rooms_limit_low - 1;
+	$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_high"] = $search_rooms_limit_high ;
+	$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["reload"] = TRUE;
+}
+
+
 //create the (overlap)data for all resources that should checked for a request
-if (($inc_request_x) || ($dec_request_x) || ($new_session_started) || ($marked_clip_ids) || ($save_state_x) || $auto_inc || $auto_dec) {
+if (($inc_request_x) || ($dec_request_x) || ($new_session_started) || ($marked_clip_ids) || ($save_state_x) || $auto_inc || $auto_dec || $resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["reload"]) {
 	require_once ($RELATIVE_PATH_RESOURCES."/lib/RoomRequest.class.php");
 	require_once ($RELATIVE_PATH_RESOURCES."/lib/CheckMultipleOverlaps.class.php");
 	require_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
@@ -1470,6 +1500,12 @@ if (($inc_request_x) || ($dec_request_x) || ($new_session_started) || ($marked_c
 	
 	if ((!is_array($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["detected_overlaps"])) || ($marked_clip_ids) || ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["reload"])) {
 		unset ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["reload"]);
+		if (!isset($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_low"])) {
+			$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_low"] = 0;
+			$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_high"] = 10;
+		}
+		$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["considered_resources"] = array();
+		
 		$semester = new SemesterData;
 		$all_semester = $semester->getAllSemesterData();
 		
@@ -1484,9 +1520,13 @@ if (($inc_request_x) || ($dec_request_x) || ($new_session_started) || ($marked_c
 	
 		//add the matching ressources to selection
 		if (getGlobalPerms($user->id) != "admin")
-			$resList = new ResourcesUserRoomsList ($user->id, FALSE, FALSE);		
-		$machting_resources = $reqObj->searchRooms(FALSE, TRUE, 0, 10, TRUE, (is_object($resList)) ? array_keys($resList->getRooms()) : FALSE);
-		foreach ($machting_resources as $key => $val) {
+			$resList = new ResourcesUserRoomsList ($user->id, FALSE, FALSE);
+		$matching_resources = $reqObj->searchRooms(FALSE, TRUE, $resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_low"], $resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_high"], TRUE, (is_object($resList)) ? array_keys($resList->getRooms()) : FALSE);
+		if (($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_low"] + $resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_high"]) > $reqObj->last_search_result_count)
+			$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_high"] = $resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_low"] + $reqObj->last_search_result_count;
+		$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_high"] = $resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["found_rooms"] + $reqObj->last_search_result_count;
+		
+		foreach ($matching_resources as $key => $val) {
 			if (!$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["considered_resources"][$key])
 				$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["considered_resources"][$key] = array("type"=>"matching");
 		}

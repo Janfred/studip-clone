@@ -405,8 +405,9 @@ class ShowToolsRequests {
 							</td>
 						</tr>
 						<tr>
-							<td width="100%" colspan="<?=$cols+2?>">
-								<font size="-1"><b><?=_("weitere passende R&auml;ume:")?></b></font>
+							<td style="border-top:1px solid;" width="100%" colspan="<?=$cols+2?>">
+								<font size="-1"><b><?=_("weitere passende R&auml;ume:")?></b>
+								</font>
 							</td>
 						</tr>
 						<?
@@ -489,13 +490,32 @@ class ShowToolsRequests {
 						</tr>
 							<?
 							}
+							?>
+						<tr>
+							<td colspan="<?=$cols+2?>" align="center">
+								<font size="-1">
+									<?=_("zeige R&auml;ume")?>
+									<a href="<?=$PHP_SELF?>?dec_limit_low=1"><img src="pictures/-.gif" border="0" <?=tooltip(_("-10"))?>/></a>
+									<input type="TEXT" name="search_rooms_limit_low" maxlength="2" size="1" style="font-size:8pt" value="<?=($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_low"] + 1)?>">
+									<a href="<?=$PHP_SELF?>?inc_limit_low=1"><img src="pictures/+.gif" border="0" <?=tooltip(_("+10"))?>/></a>
+
+									bis
+									<a href="<?=$PHP_SELF?>?dec_limit_high=1"><img src="pictures/-.gif" border="0" <?=tooltip(_("-10"))?>/></a>
+									<input type="TEXT" name="search_rooms_limit_high" maxlength="2" size="1" style="font-size:8pt" value="<?=$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_high"]?>">
+									<a href="<?=$PHP_SELF?>?inc_limit_high=1"><img src="pictures/+.gif" border="0" <?=tooltip(_("+10"))?>/></a>
+
+									<input type="IMAGE" name="matching_rooms_limit_submit" src="pictures/move_right.gif" border="0" <?=tooltip(_("ausgewählten Bereich anzeigen"))?>/>
+								</font>
+							</td>
+						</tr>
+							<?
 						} else
 							print "<tr><td width=\"100%\" colspan=\"".($cols+1)."\"><font size=\"-1\">"._("keine gefunden")."</font></td></tr>";
 						//Clipped Rooms
 						if (sizeof($clipped_rooms)) {
 						?>						
 						<tr>
-							<td width="100%" colspan="<?=$cols+2?>">
+							<td style="border-top:1px solid;" width="100%" colspan="<?=$cols+2?>">
 								<font size="-1"><b><?=_("R&auml;ume aus der Merkliste:")?></b></font>
 							</td>
 						</tr>
