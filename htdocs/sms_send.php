@@ -67,7 +67,7 @@ if($answer_to) {
 }
 
 // write a chat-invitation, so predefine the messagesubject
-if (isset($chat_id) && !isset($messagesubject)) $messagesubject = _("Chateinladung");
+if ($cmd == "write_chatinv" && !isset($messagesubject)) $messagesubject = _("Chateinladung");
 
 // where do we save the message?
 if($tmp_save_snd_folder) {
