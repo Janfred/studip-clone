@@ -126,7 +126,7 @@ function show_smiley_list() {
 		$urlname=urlencode($smiley[1]);
 		echo $table->openRow();
 		echo $table->cell($count, array("align"=>"right"));
-		echo $table->cell("<img src=\"./pictures/smile/".$smiley[0]."\" alt=\"".$name."\">", array("align"=>"center"));
+		echo $table->cell("<img src=\"."$GLOBALS["SMILE_PATH"].".$smiley[0]."\" alt=\"".$name."\">", array("align"=>"center"));
 		echo $table->cell("<input name=\"rename_$urlname\" value=\"$smiley[1]\" size=20>");
 		echo $table->cell("<input readonly name=\"short_$urlname\" value=\"".$SMILE_SHORT_R[$smiley[1]]."\" size=\"5\">");
 		echo $table->cell("&nbsp;<a href=\"$PHP_SELF?cmd=delete&img=$urlname\"><img src=\"pictures/trash.gif\" border=0></a>&nbsp;", array("align"=>"center"));
