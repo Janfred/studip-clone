@@ -281,7 +281,7 @@ class StudipSemSearch {
 		
 		if (isset($_REQUEST[$this->form_name . "_sem"]) && $_REQUEST[$this->form_name . "_sem"] != 'all'){
 			$sem_number = $_REQUEST[$this->form_name . "_sem"];
-			$clause = " HAVING sem_number_end >= $sem_number OR (sem_number <= $sem_number AND sem_number_end = -1) ";
+			$clause = " HAVING (sem_number <= $sem_number AND (sem_number_end >= $sem_number OR sem_number_end = -1)) ";
 		}
 		if (isset($_REQUEST[$this->form_name . "_category"]) && $_REQUEST[$this->form_name . "_category"] != 'all'){
 			foreach($GLOBALS['SEM_TYPE'] as $type_key => $type_value){

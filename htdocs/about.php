@@ -31,6 +31,13 @@ require_once("$ABSOLUTE_PATH_STUDIP/dates.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/messaging.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/show_news.php");
+require_once("$ABSOLUTE_PATH_STUDIP/show_dates.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/DbView.class.php");
+require_once("$ABSOLUTE_PATH_STUDIP/lib/dbviews/sem_tree.view.php");
+require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/DbSnapshot.class.php");
+
+
 if ($GLOBALS['CHAT_ENABLE']){
 	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php"; 	
 	if ($_REQUEST['kill_chat']){
@@ -52,8 +59,6 @@ function open_im()
 </script>
 
 <?php
-include ("$ABSOLUTE_PATH_STUDIP/show_news.php");
-include ("$ABSOLUTE_PATH_STUDIP/show_dates.inc.php");
 
 $sess->register("about_data");
 $msging=new messaging;
@@ -297,16 +302,34 @@ while ($db2->next_record())  {
 }
 // Anzeige der Seminare
 
-$db2->query("SELECT * FROM seminar_user LEFT JOIN seminare USING(Seminar_id) WHERE seminar_user.user_id = '$user_id' AND seminar_user.status = 'dozent' ORDER BY start_time DESC");
-if ($db2->num_rows()) {
-	echo "<table class=\"blank\" width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><b>&nbsp;" . _("Veranstaltungen") . "</b></td></tr><tr><td class=\"steel1\"><blockquote>";
-	while ($db2->next_record()) {
-		if (($sem_name) <> (get_sem_name ($db2->f("start_time")))) {
-			$sem_name=get_sem_name ($db2->f("start_time"));
-			echo"<br><font size=\"+1\"><b>$sem_name</b></font><br><br>";
+if (!isset($SEMESTER[0])){
+	$SEMESTER[0] = array("name" => sprintf(_("vor dem %s"),$SEMESTER[1]['name']));
+}
+$view = new DbView();
+for ($i = count($SEMESTER)-1; $i >= 0; --$i){
+	$view->params[0] = $user_id;
+	$view->params[1] = "dozent";
+	$view->params[2] = " HAVING (sem_number <= $i AND (sem_number_end >= $i OR sem_number_end = -1)) ";
+	$snap = new DbSnapshot($view->get_query("view:SEM_USER_GET_SEM"));
+	if ($snap->numRows){
+		$sem_name = $SEMESTER[$i]['name'];
+		$output .= "<br><font size=\"+1\"><b>$sem_name</b></font><br><br>";
+		$snap->sortRows("Name", "ASC", SORT_STRING);
+		while ($snap->nextRow()) {
+			$ver_name = $snap->getField("Name");
+			$sem_number_start = $snap->getField("sem_number");
+			$sem_number_end = $snap->getField("sem_number_end");
+			if ($sem_number_start != $sem_number_end){
+				$ver_name .= " (" . $SEMESTER[$sem_number_start]['name'] . " - ";
+				$ver_name .= (($sem_number_end == -1) ? _("unbegrenzt") : $SEMESTER[$sem_number_end]['name']) . ")";
+			}
+			$output .= "<b><a href=\"details.php?sem_id=" . $snap->getField("Seminar_id") . "\">" . htmlReady($ver_name) . "</a></b><br>";
 		}
-		echo"<b><a href=\"details.php?sem_id=", $db2->f("Seminar_id"), "\">", htmlReady($db2->f("Name")), "</a></b><br>";
 	}
+}
+if ($output){
+	echo "<table class=\"blank\" width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><b>&nbsp;" . _("Veranstaltungen") . "</b></td></tr><tr><td class=\"steel1\"><blockquote>";
+	echo $output;
 	echo "</blockquote></td></tr><tr><td class=\"steel1\">&nbsp;</td></tr></table><br>\n";
 }
 

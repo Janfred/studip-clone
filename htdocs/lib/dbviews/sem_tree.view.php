@@ -93,6 +93,10 @@ $_views["SEM_TREE_GET_FAK"] = array("query" => "SELECT sem_tree_id FROM Institut
 
 $_views["SEM_INST_GET_SEM"] = array("query" => "SELECT c.Seminar_id," . $_views['sem_number_sql'] . " AS sem_number , " . $_views['sem_number_end_sql'] . " AS sem_number_end FROM seminar_inst a LEFT JOIN seminare c USING (seminar_id) WHERE a.Institut_id IN (&)
 												§ § ");
+
+$_views["SEM_USER_GET_SEM"] = array("query" =>"SELECT b.Seminar_id,b.Name, " . $_views['sem_number_sql'] . " AS sem_number , " . $_views['sem_number_end_sql'] . " AS sem_number_end FROM seminar_user a LEFT JOIN seminare b USING(Seminar_id)
+											WHERE a.user_id=? AND a.status=?  §");
+
 unset($allowed_sem_status);
 unset($sem_start_times);
 ?>

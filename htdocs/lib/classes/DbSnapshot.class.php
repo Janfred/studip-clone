@@ -123,6 +123,7 @@ class DbSnapshot {
 	
 	function getSnapshot(){
 		if($this->isDbResult()){
+			$this->result = array();
 			while($this->dbResult->next_record()){
 				$this->result[] = $this->dbResult->Record;
 			}

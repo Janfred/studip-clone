@@ -311,6 +311,7 @@ class SemBrowse {
 	}
 	
 	function print_result(){
+		ob_start();
 		global $_fullname_sql,$_views,$PHP_SELF,$SEM_TYPE,$SEM_CLASS;
 		if (is_array($this->sem_browse_data['search_result']) && count($this->sem_browse_data['search_result'])) {
 			$query = ("SELECT seminare.Seminar_id, seminare.status, seminare.Name 
@@ -333,12 +334,44 @@ class SemBrowse {
 				$data_fields[1] = $this->group_by_fields[$this->sem_browse_data['group_by']]['unique_field'];
 			}
 			$group_by_data = $snap->getGroupedResult($group_field, $data_fields);
+			$sem_data = $snap->getGroupedResult("Seminar_id");
 			if ($this->sem_browse_data['group_by'] == 0){
+				$group_by_duration = $snap->getGroupedResult("sem_number_end", array("sem_number","Seminar_id"));
+				foreach ($group_by_duration as $sem_number_end => $detail){
+					if ($sem_number_end != -1 && ($detail['sem_number'][$sem_number_end] && count($detail['sem_number']) == 1)){
+						continue;
+					} else {
+						foreach ($detail['Seminar_id'] as $seminar_id => $foo){
+							$start_sem = key($sem_data[$seminar_id]["sem_number"]);
+							if ($sem_number_end == -1){
+								$sem_number_end = count($this->search_obj->sem_dates)-1;
+							}
+							for ($i = $start_sem; $i <= $sem_number_end; ++$i){
+								if ($this->sem_number === false || (is_array($this->sem_number) && in_array($i,$this->sem_number))){
+									if ($group_by_data[$i] && !$tmp_group_by_data[$i]){
+										foreach($group_by_data[$i]['Seminar_id'] as $id => $bar){
+											$tmp_group_by_data[$i]['Seminar_id'][$id] = key($sem_data[$id]["Name"]);
+										}
+									}
+									$tmp_group_by_data[$i]['Seminar_id'][$seminar_id] = key($sem_data[$seminar_id]["Name"]);
+								}
+							}
+						}
+					}
+				}
+				if (is_array($tmp_group_by_data)){
+					if ($this->sem_number !== false){
+						unset($group_by_data);
+					}
+					foreach ($tmp_group_by_data as $start_sem => $detail){
+						$group_by_data[$start_sem] = $detail;
+						asort($group_by_data[$start_sem]['Seminar_id'], SORT_STRING);
+					}
+				}
 				krsort($group_by_data, SORT_NUMERIC);
 			} else {
 				ksort($group_by_data, SORT_STRING);
 			}
-			$sem_data = $snap->getGroupedResult("Seminar_id");
 			echo "\n<table border=\"0\" align=\"center\" cellspacing=0 cellpadding=2 width = \"99%\">\n";
 			echo "\n<tr><td class=\"steelgraulight\" colspan=\"2\"><div style=\"margin-top:10px;margin-bottom:10px;\"><font size=\"-1\"><b>&nbsp;"
 				. sprintf(_(" %s Veranstaltungen gefunden %s, Gruppierung: %s"),count($sem_data),
@@ -431,6 +464,7 @@ class SemBrowse {
 			echo "\n</table>";
 			$this->sem_browse_data["sset"] = 0;
 		}
+	ob_end_flush();
 	}
 }
 ?>
