@@ -158,11 +158,11 @@ class ExternEdit {
 		
 		$out = "<tr><td align=\"center\" colspan=\"2\" nowrap=\"nowrap\"";
 		$out .= $this->css->getFullClass() . ">&nbsp;";
+		$out .= "<input type=\"image\" name=\"submit\" ";
+		$out .= makeButton("uebernehmen", "src") . ">&nbsp; &nbsp; &nbsp;";
 		$out .= "<a href=\"{$GLOBALS['PHP_SELF']}?list=TRUE&view=extern_inst\">";
 		$out .= "<img " . makeButton("abbrechen", "src");
-		$out .= " border=\"0\" valign=\"absmiddle\"></a>&nbsp; &nbsp; &nbsp;";
-		$out .= "<input type=\"image\" name=\"submit\" ";
-		$out .= makeButton("uebernehmen", "src") . ">";
+		$out .= " border=\"0\" valign=\"absmiddle\"></a>\n";
 		$out .= "<input type=\"hidden\" name=\"config_id\" value=\"$config_id\">";
 		$out .= "<input type=\"hidden\" name=\"mod\" value=\"$module_name\">";
 		if ($element_name)
