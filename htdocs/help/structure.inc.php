@@ -301,7 +301,7 @@ array	(	"name" => _("In der Veranstaltung: die Dateiverwaltung"),
 																				"text" => _("Voraussetzungen, Lernorganisation, Leistungsnachweis, Sonstiges"),
 																				"page" => "va_assi4.htm"
 																			),
-																array	(	"name" => _("Bereit zum anlegen"),
+																array	(	"name" => _("Bereit zum Anlegen"),
 																				"text" => _("Fast fertig!"),
 																				"page" => "va_assi5.htm"
 																			), 
