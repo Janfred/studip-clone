@@ -4,7 +4,9 @@ $perm->check("autor");
 if (!$HTTP_POST_VARS["pass"])
    {
     ?>
+		<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
     <html><head><title>Autlogin Datei erzeugen</title>
+		<meta name="copyright" content="Stud.IP-Crew (crew@studip.de)">
     <script type="text/javascript">
     function doSubmit(){
 	    if (document.forms[0].pass.value!="") document.forms[0].submit();
@@ -24,10 +26,11 @@ if (!$HTTP_POST_VARS["pass"])
 ob_start();
 
 ?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-       <title>Autologin</title>
-
+	<title>Autologin</title>
+	<meta name="copyright" content="Stud.IP-Crew (crew@studip.de)">
 <script src="http://<? echo $HTTP_SERVER_VARS["HTTP_HOST"].$CANONICAL_RELATIVE_PATH_STUDIP;?>get_key.php" type="text/javascript">
 </script>
 <script type="text/javascript">

@@ -18,8 +18,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-	  page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
-	  $auth->login_if($again && ($auth->auth["uid"] == "nobody"));
+page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
+$auth->login_if($again && ($auth->auth["uid"] == "nobody"));
 
 
 function get_my_sem_values(&$my_sem) {
@@ -80,31 +80,23 @@ function print_seminar_content($semid,$my_sem_values) {
   echo "&nbsp;&nbsp;";
 
 } // Ende function print_seminar_content
-?>
 
-<html>
- <head>
-<!--
-// here i include my personal meta-tags; one of those might be useful:
-// <META HTTP-EQUIV="REFRESH" CONTENT="<?php print $auth->lifetime*60;?>; URL=logout.php">
--->
-  <title>Stud.IP</title>
-	<link rel="stylesheet" href="style.css" type="text/css">
-</head>
 
-<?php
-		include "seminar_open.php"; //hier werden die sessions initialisiert
+include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
-// -- hier muessen Seiten-Initialisierungen passieren --
+// -- here you have to put initialisations for the current page
 // -- wir sind jetzt definitiv in keinem Seminar, also... --
 
-		$SessSemName[0] = "";
-		$SessSemName[1] = "";
+$SessSemName[0] = "";
+$SessSemName[1] = "";
 
-		include "header.php";   //hier wird der "Kopf" nachgeladen
-		require_once "config.inc.php";
-		require_once "msg.inc.php";
-		require_once "visual.inc.php";
+// Start of Output
+include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
+include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+
+require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 
 
 $db=new DB_Seminar;
@@ -190,4 +182,3 @@ if ($num_my_sem){
   page_close()
  ?>
 <!-- $Id$ -->
-
