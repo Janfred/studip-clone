@@ -241,7 +241,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 	 ?>
 	 	<tr>
 	 		<td class="blank">
-				<table border="0" cellpadding="0" cellspacing="0" width="100%" align="center" class="blank">
+				<table border="0" cellpadding="0" cellspacing="0" width="99%" align="center" class="blank">
 					<tr valign="top" align="center">
 						<td colspan=>
 							<table border="0" cellpadding="0" cellspacing="0" width="100%" align="center" class="blank">
@@ -454,6 +454,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 						</td>
 					</tr>
 				</table>
+				<br />
 			</td>
 		</tr>
 	  </table>
