@@ -3,6 +3,7 @@
 - Terminkalender überarbeitet
 - Kürzel für Symbole wie Pfeile oder Copyright-Zeichen eingebaut
 - neue Verwaltungsebene "Funktionen / Gruppen", verwendbar für Einrichtungen und Veranstaltungen
+- grafische Aktiviotätsanzeige in Veranstaltungen kann vom Dozenten aktiviert werden
 - Anpassungen für die Funktionalität von Veranstaltungen als "Work Groups"
 - weitere Detailverbesserungen und Bugfixes
 
