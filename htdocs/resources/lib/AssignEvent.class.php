@@ -69,9 +69,8 @@ class AssignEvent {
 	}
 	
 	function getRepeatMode ($check_corresponding_metadata = FALSE) {
-		if (($this->repeat_mode == "na") && ($check_corresponding_metadata)) {
-			$assObj =& AssignObject::Factory($this->getAssignId());
-			if (($assObj->getOwnerType() == "date") && (isMetadateCorrespondingDate($this->getAssignUserId())))
+		if (($this->repeat_mode == "na") && ($check_corresponding_metadata) && $this->getAssignUserId()) {
+			if (isMetadateCorrespondingDate($this->getAssignUserId()))
 				return "meta";
 		}
 		return $this->repeat_mode;
