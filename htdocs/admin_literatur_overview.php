@@ -16,7 +16,7 @@ include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");  //Linkleiste fuer admins
 
 function my_session_var($var, $id = false){
 	if (!$id){
-		$id = md5($GLOBALS['PHP_SELF']);
+		$id = md5(basename($GLOBALS['PHP_SELF']));
 	}
 	if (!$GLOBALS['sess']->is_registered($id)){
 		$GLOBALS['sess']->register($id);
@@ -274,7 +274,7 @@ if ($preferred_plugin && in_array($preferred_plugin, $_search_plugins)){
 		} else {
 			echo "\n<a href=\"$PHP_SELF?cmd=open_all\" class=\"tree\"><img src=\"pictures/forumgrau2.gif\" border=\"0\" hspace=\"3\">" . _("Alle Einträge aufklappen") . "</a>";
 		}
-		echo "\n</td></tr></table>";
+		echo "\n</td><td class=\"steel1\" align=\"right\"><a href=\"lit_overview_print_view.php\" class=\"tree\" target=\"_blank\">" . _("Druckansicht") ."</a>&nbsp;&nbsp;</td></tr></table>";
 		foreach ($_lit_data as $cid => $data){
 			$element->setValues($data);
 			if ($element->getValue('catalog_id')){
@@ -306,6 +306,20 @@ if ($preferred_plugin && in_array($preferred_plugin, $_search_plugins)){
 				echo "\n<table width=\"99%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" align=\"center\"><tr>";
 				printhead(0,0,$link,$open,true,$icon,$titel,$addon);
 				echo "\n</tr></table>";
+				if (!is_array($_lit_data[$cid]['sem_data'])){
+						$db->query(str_replace('?', $element->getValue('catalog_id'), $sql2));
+						while ($db->next_record()){
+							$_lit_data[$cid]['sem_data'][$db->f('Seminar_id')] = $db->Record;
+						}
+					}
+				if (!is_array($_lit_data[$cid]['doz_data'])){
+						$db->query("SELECT Nachname,username,su.user_id FROM seminar_user su INNER JOIN auth_user_md5 USING(user_id) 
+									WHERE status='dozent' AND seminar_id IN('" . join("','", array_keys($_lit_data[$cid]['sem_data'])) . "')
+									ORDER BY Nachname");
+						while ($db->next_record()){
+							$_lit_data[$cid]['doz_data'][$db->f('user_id')] = $db->Record;
+						}
+				}
 				if ($open == 'open'){
 					$edit = "";
 					$content = "";
@@ -331,12 +345,17 @@ if ($preferred_plugin && in_array($preferred_plugin, $_search_plugins)){
 						}
 						$content .= "<br>";
 					}
-					$db2->query(str_replace('?', $element->getValue('catalog_id'), $sql2));
 					$content .= "<b>" . _("Veranstaltungen:") . "</b>&nbsp;&nbsp;";
-					while ($db2->next_record()){
-						$content .= '<a href="details.php?sem_id=' . $db2->f('Seminar_id') . '&send_from_search=1&send_from_search_page=' . $PHP_SELF . '">' . htmlReady(my_substr($db2->f("Name"),0,50)) . "</a>, ";
-						$estimated_p += $db2->f('admission_turnout');
-						$participants += $db2->f('participants');
+					foreach ($_lit_data[$cid]['sem_data'] as $sem_data){
+						$content .= '<a href="details.php?sem_id=' . $sem_data['Seminar_id'] . '&send_from_search=1&send_from_search_page=' . $PHP_SELF . '">' . htmlReady(my_substr($sem_data["Name"],0,50)) . "</a>, ";
+						$estimated_p += $sem_data['admission_turnout'];
+						$participants += $sem_data['participants'];
+					}
+					$content = substr($content,0,-2);
+					$content .= "<br>";
+					$content .= "<b>" . _("Dozenten:") . "</b>&nbsp;&nbsp;";
+					foreach ($_lit_data[$cid]['doz_data'] as $doz_data){
+						$content .= '<a href="about.php?username=' . $doz_data['username'] . '">' . htmlReady($doz_data["Nachname"]) . "</a>, ";
 					}
 					$content = substr($content,0,-2);
 					$content .= "<br>";
