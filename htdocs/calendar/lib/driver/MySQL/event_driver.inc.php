@@ -1,39 +1,67 @@
 <?
 
-function event_get_description($id){
-	$db = new DB_Seminar;
-	$query = sprintf("SELECT termin_id, description FROM termine WHERE termin_id='%s'", $id);
+function event_get_description ($id) {
+	global $user;
+		
+	$db =& new DB_Seminar;
+	$query = sprintf("SELECT event_id, description FROM calendar_events WHERE event_id='%s'"
+				. " AND range_id='%s'", $id, $user->id);
 	$db->query($query);
 	if($db->next_record())
 		return $db->f("description");
 	return FALSE;
 }
 
-function event_save(&$this){
+function event_save (&$this) {
 	// Natuerlich nur Speichern, wenn sich was geaendert hat
 	// und es sich um einen persoenlichen Termin handelt
-	if($this->chng_flag && ($this->type == -1 || $this->type == -2)){
-		$db = new DB_Seminar;
-		$chdate = time();
-		if($this->mkdate == -1)
-			$mkdate = $chdate;
-		else
-			$mkdate = $this->mkdate;
-
-		if($this->desc == null)
-			$query = sprintf("REPLACE termine (termin_id,range_id,autor_id,content,"
-			       . "date,end_time,mkdate,chdate,date_typ,expire,repeat,color,priority,raum) VALUES"
-			       . " ('%s','%s','%s','%s',%s,%s,%s,%s,%s,%s,'%s','%s',%s,'%s')"
-						 , $this->id, $this->user_id, $this->user_id, $this->txt, $this->start, $this->end
-						 , $mkdate, $chdate, $this->type, $this->exp, $this->rep, $this->cat, $this->prio
-						 , $this->loc);
-		else
-			$query = sprintf("REPLACE termine (termin_id,range_id,autor_id,content,description,"
+	if($this->isModified()){
+		$db =& new DB_Seminar();
+		
+		$query = "REPLACE calendar_events (event_id,range_id,autor_id,uid,summary,description,"
+		    	  . "start,end,class,categories,priority,location,ts,linterval,sinterval,wdays,"
+						. "month,day,rtype,duration,expire,exceptions,mkdate,chdate) VALUES ";
+		
+		$query .= sprintf("('%s','%s','%s','%s','%s','%s',%s,%s,'%s','%s',%s,'%s',%s,%s,%s,
+				'%s',%s,%s,'%s',%s,%s,'%s',%s,%s)",
+				$this->getId(), $this->getUserId(), $this->getUserId(),
+				$this->properties["UID"],
+				$this->properties["SUMMARY"],
+				$this->properties["DESCRIPTION"],
+				$this->properties["DTSTART"],
+				$this->properties["DTEND"],
+				$this->properties["CLASS"],
+				$this->properties["CATEGORIES"],
+				$this->properties["PRIORITY"],
+				$this->properties["LOCATION"],
+				$this->properties["RRULE"]["ts"],
+				$this->properties["RRULE"]["linterval"],
+				$this->properties["RRULE"]["sinterval"],
+				$this->properties["RRULE"]["wdays"],
+				$this->properties["RRULE"]["month"],
+				$this->properties["RRULE"]["day"],
+				$this->properties["RRULE"]["rtype"],
+				$this->properties["RRULE"]["duration"],
+				$this->properties["RRULE"]["expire"],
+				$this->properties["EXCEPTIONS"],
+				$this->getMakeDate(), $this->getChangeDate());
+		
+	/*		sprintf("REPLACE termine (termin_id,range_id,autor_id,content,description,"
 		         . "date,end_time,mkdate,chdate,date_typ,expire,repeat,color,priority,raum) VALUES"
-			       . " ('%s','%s','%s','%s','%s',%s,%s,%s,%s,%s,%s,'%s','%s',%s,'%s')"
-						 , $this->id, $this->user_id, $this->user_id, $this->txt, $this->desc, $this->start
-						 , $this->end, $mkdate, $chdate, $this->type, $this->exp, $this->rep, $this->cat
-						 , $this->prio, $this->loc);
+			       . " ('%s','%s','%s','%s','%s',%s,%s,%s,%s,%s,%s,'%s','%s',%s,'%s')",
+						 $this->id, $this->user_id, $this->user_id,
+						 $this->getProperty("SUMMARY"),
+						 $this->getProperty("DESCRIPTION"),
+						 $this->getProperty("DTSTART"),
+						 $this->getProperty("DTEND"),
+						 $mkdate, $chdate,
+						 $this->getProperty("CLASS"),
+						 $this->getProperty("EXPIRE"),
+						 $this->getProperty("RRULE"),
+						 $this->getProperty("CATEGORIES"),
+						 $this->getProperty("PRIORITY"),
+						 $this->getProperty("LOCATION"));
+	*/	
 		if($db->query($query)){
 			$this->chng_flag = FALSE;
 			return TRUE;
@@ -43,60 +71,45 @@ function event_save(&$this){
 	return FALSE;
 }
 
-function event_delete($event_id, $user_id){
+function event_delete ($event_id, $user_id) {
 	$db = new DB_Seminar;
-	$query = sprintf("DELETE FROM termine WHERE termin_id='%s' AND autor_id='%s'", $event_id, $user_id);
+	$query = sprintf("DELETE FROM calendar_events WHERE event_id='%s' AND range_id='%s'", $event_id, $user_id);
 	if($db->query($query))
 		return TRUE;
 	return FALSE;
 }
 
-function event_restore($id, &$this){
-	global $TERMIN_TYP, $PERS_TERMIN_KAT;
-	$db = new DB_Seminar;
-	if(func_num_args() == 2)
-		$query = sprintf("SELECT * FROM termine LEFT JOIN seminar_user ON (range_id=Seminar_id) "
-										. "WHERE (range_id='%s' OR user_id='%s') AND termin_id='%s'"
-										, $this->user_id, $this->user_id, $id);
-	else if(func_num_args() == 1)
-		$query = sprintf("SELECT * FROM termine LEFT JOIN seminar_user ON (range_id=Seminar_id) "
-										. "WHERE (range_id='%s' OR user_id='%s') AND termin_id='%s'"
-										, $this->user_id, $this->user_id, $this->id);
+function event_restore ($id, &$this) {
+	$db =& new DB_Seminar();
+
+	$query = sprintf("SELECT * FROM calendar_events "
+									. "WHERE range_id='%s' AND event_id='%s'"
+									, $this->getUserId(), $id);
 	$db->query($query);
 	
-	if($db->next_record()){
-		$this->id = $id;
-		$this->txt = $db->f("content");
-		$this->start = $db->f("date");
-		$this->type = $db->f("date_typ");
-		if(!$this->setEnd($db->f("end_time")))
-			return FALSE;
-			
-		// bei Seminar-Terminen ist kein expire gesetzt
-		if(!$TERMIN_TYP[$this->type] && !$this->setExpire($db->f("expire")))
-			return FALSE;
-	
-		$this->rep = $db->f("repeat");
-		
-		if($this->type == -1 || $this->type == -2)
-			$this->cat = $db->f("color");
-		else if($TERMIN_TYP[$this->type]){
-			$color = array("#000000","#FF0000","#FF9933","#FFCC66","#99FF99","#66CC66","#6699CC","#666699");
-			$this->cat = $this->type;
-			if($PERS_TERMIN_KAT[$this->type][color] == "")
-				$this->col = $color[$db->f("gruppe")];
-			else
-				$this->col = $PERS_TERMIN_KAT[$this->type][color];
-		}
-		
-		if($db->f("range_id") != $db->f("autor_id"))
-			$this->type = 1;
-		
-		$this->desc = $db->f("description");
-		$this->prio = $db->f("priority");
-		$this->loc = $db->f("raum");
-		$this->setSeminarId($db->f("Seminar_id"));
-		$this->mkdate = $db->f("mkdate");
+	if ($db->next_record()) {
+		$this->setId($id);
+		$this->setProperty("UID",         $db->f("uid"));
+		$this->setProperty("SUMMARY",     $db->f("summary"));
+		$this->setProperty("DTSTART",     $db->f("start"));
+		$this->setProperty("CLASS",       $db->f("class"));
+		$this->setProperty("DTEND",       $db->f("end"));
+		$this->setProperty("CATEGORIES",  $db->f("categories"));
+		$this->setProperty("DESCRIPTION", $db->f("description"));
+		$this->setProperty("PRIORITY",    $db->f("priority"));
+		$this->setProperty("LOCATION",    $db->f("location"));
+		$this->setProperty("RRULE", array(
+				"ts"        => $db->f("ts"),
+				"linterval" => $db->f("linterval"),
+				"sinterval" => $db->f("sinterval"),
+				"wdays"     => $db->f("wdays"),
+				"month"     => $db->f("month"),
+				"day"       => $db->f("day"),
+				"rtype"     => $db->f("rtype"),
+				"duration"  => $db->f("duration"),
+				"expire"    => $db->f("expire")));
+		$this->setMakeDate($db->f("mkdate"));
+		$this->setChangeDate($db->f("chdate"));
 		$this->chng_flag = FALSE;
 		
 		return TRUE;

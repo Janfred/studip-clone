@@ -1,75 +1,74 @@
 <?
 
-function day_save($this){
-	// Je nachdem, ob die Beschreibung eines Termins verändert wurde oder nicht,
-	// ist es erforderlich das description Feld in der DB zu überschreiben.
-	// Es werden also zwei unterschiedliche REPLACEs benötigt.
+function day_save (&$events_save, &$events_delete) {
 	$db = new DB_Seminar();
-	if($size = sizeof($this->app)){
-		$query1 = "REPLACE termine (termin_id,range_id,autor_id,content,description,"
-		        . "date,end_time,mkdate,chdate,date_typ,expire,repeat,color,priority,raum) VALUES";
-		$query2 = "REPLACE termine (termin_id,range_id,autor_id,content,"
-			      . "date,end_time,mkdate,chdate,date_typ,expire,repeat,color,priority,raum) VALUES";
-		$sep1 = FALSE;
-		$sep2 = FALSE;
+	if (sizeof($this->events)) {
+		$query = "REPLACE calendar_events (event_id,range_id,autor_id,uid,summary,description,"
+		        . "start,end,class,categories,priority,location,ts,linterval,sinterval,wdays,"
+						. "month,day,rtype,duration,expire,exceptions,mkdate,chdate) VALUES";
+		
+		$sep = FALSE;
+		
 		$chdate = time();
-		if($this->mkd == -1)
+		if ($event->getMakeDate() == -1)
 			$mkdate = $chdate;
 		else
-			$mkdate = $this->mkd;
+			$mkdate = $event->getMakeDate();
 		
-		for($i = 0;$i < $size;$i++){
-			if($this->app[$i]->type == -1 || $this->app[$i]->type == -2){
-				if(is_string($this->app[$i]->desc)){
-					if($sep1)
-						$values1 .= ",";
-					$values1 .= sprintf("('%s','%s','%s','%s','%s',%s,%s,%s,%s,%s,%s,'%s','%s',%s,'%s')"
-									 , $this->app[$i]->id, $this->user_id, $this->user_id, $this->app[$i]->txt
-									 , $this->app[$i]->desc, $this->app[$i]->start, $this->app[$i]->end, $mkdate
-									 , $chdate, $this->app[$i]->type, $this->app[$i]->exp, $this->app[$i]->rep
-									 , $this->app[$i]->cat, $this->app[$i]->prio, $this->app[$i]->loc);
-					$sep1 = TRUE;
-				}
-				else if($this->app[$i]->chng_flag){
-					if($sep2)
-						$values2 .= ",";
-					$values2 .= sprintf("('%s','%s','%s','%s',%s,%s,%s,%s,%s,%s,'%s','%s',%s,'%s')"
-									 , $this->app[$i]->id, $this->user_id, $this->user_id, $this->app[$i]->txt
-									 , $this->app[$i]->start, $this->app[$i]->end, $mkdate, $chdate, $this->app[$i]->type
-									 , $this->app[$i]->exp, $this->app[$i]->rep, $this->app[$i]->cat, $this->app[$i]->prio
-									 , $this->app[$i]->loc);
-					$sep2 = TRUE;
-				}
-			}
+		foreach ($events_save as $event) {
+			$properties = $event->getProperty();
+			if ($sep1)
+				$values .= ",";
+			$values .= sprintf("('%s','%s','%s','%s','%s','%s',%s,%s,'%s','%s',%s,'%s',%s,%s,%s,
+					'%s',%s,%s,'%s',%s,%s,'%s',%s,%s)",
+					$event->getId(), $event->getUserId(), $event->getUserId(),
+					$properties['UID'],
+					$properties['SUMMARY'],
+					$properties['DESCRIPTION'],
+					$properties['DTSTART'],
+					$properties['DTEND'],
+					$properties['CLASS'],
+					$properties['CATEGORIES'],
+					$properties['PRIORITY'],
+					$properties['LOCATION'],
+					$properties['RRULE']['ts'],
+					$properties['RRULE']['linterval'],
+					$properties['RRULE']['sinterval'],
+					$properties['RRULE']['wdays'],
+					$properties['RRULE']['month'],
+					$properties['RRULE']['day'],
+					$properties['RRULE']['rtype'],
+					$properties['RRULE']['duration'],
+					$properties['RRULE']['expire'],
+					$properties['EXCEPTIONS'],
+					$mkdate, $chdate);
+			$sep = TRUE;
 		}
-		if($values1){
-			$query1 .= $values1;
-			$db->query($query1);
-		}
-		if($values2){
-			$query2 .= $values2;
-			$db->query($query2);
-		}
-	}
-	if($size = sizeof($this->app_del)){
-		$query = sprintf("DELETE FROM termine WHERE range_id = '%s' AND autor_id = '%s' AND termin_id IN ("
-										, $this->user_id, $this->user_id);
-		for($i = 0;$i < $size;$i++){
-			if($this->app[$i]->type == -1 || $this->app[$i]->type == -2){
-				if($i > 0)
-					$values .= ",";
-				$values .= "'" . $this->app_del[$i]->getId() . "'";
-			}
-			$query .= $values . ")";
+		
+		if ($values) {
+			$query .= $values;
 			$db->query($query);
 		}
+		
+	}
+	if (sizeof($events_delete)) {
+		$query = "DELETE FROM calendar_events WHERE autor_id = '{$user->id}' AND event_id IN (";
+		$sep = FALSE;
+		foreach ($events_delete as $event) {
+			if ($sep)
+				$values .= ",";
+			$values .= "'" . $event->getId() . "'";
+		}
+		$query .= $values . ")";
+		$db->query($query);
 	}
 }
 
-function day_restore(&$this){
+function day_restore (&$this) {
+	
 	$db = new DB_Seminar;
 	// die Abfrage grenzt das Trefferset weitgehend ein
-	$query = sprintf("SELECT termin_id,content,date,end_time,date_typ,expire,repeat,color,priority,raum"
+/*	$query = sprintf("SELECT termin_id,content,date,end_time,date_typ,expire,repeat,color,priority,raum"
 	       . " FROM termine WHERE range_id='%s' AND autor_id='%s' AND ((date BETWEEN %s AND %s OR "
 				 . "end_time BETWEEN %s AND %s) OR (%s BETWEEN date AND end_time) OR (date <= %s AND expire > %s AND"
 				 . " repeat REGEXP '(.+,,,.*%s.*,,,DAYLY)|(.+,.+,,,,,DAYLY)|"
@@ -80,223 +79,224 @@ function day_restore(&$this){
 				 , $this->user_id, $this->user_id, $this->getStart(), $this->getEnd(), $this->getStart()
 				 , $this->getEnd(), $this->getStart(), $this->getEnd(), $this->getStart(), $this->dow, $this->dow
 				 , $this->dom, $this->dow, $this->mon, $this->dom, $this->dow, $this->mon);
+*/	
+	$query = sprintf("SELECT * FROM calendar_events WHERE range_id='%s' AND((start BETWEEN %s AND %s "
+					. "OR end BETWEEN %s AND %s) OR (%s BETWEEN start AND end) OR (start <= %s AND expire > %s "
+					. "AND (rtype = 'DAILY' OR (rtype = 'WEEKLY' AND wdays LIKE '%%%s%%') OR (rtype = 'MONTHLY' "
+					. "AND (wdays LIKE '%%%s%%' OR day = %s)) OR (rtype = 'YEARLY' AND (month = %s AND (day = %s "
+					. "OR wdays LIKE '%%%s%%'))) OR duration > 1)))",
+					$this->getUserId(), $this->getStart(), $this->getEnd(), $this->getStart(), $this->getEnd(),
+					$this->getStart(), $this->getEnd(), $this->getStart(), $this->dow, $this->dow, $this->dom,
+					$this->mon, $this->dom, $this->dow);
+	
 	$db->query($query);
 	
-	while($db->next_record()){
-		$time_range = 0;
-		$is_in_day = FALSE;
-		list($rep["ts"], $rep["lintervall"], $rep["sintervall"], $rep["wdays"],
-		     $rep["month"], $rep["day"], $rep["type"], $rep["duration"]) = explode(",", $db->f("repeat"));
+	while ($db->next_record()) {
+		$rep = array(
+				"ts"        => $db->f("ts"),
+				"linterval" => $db->f("linterval"),
+				"sinterval" => $db->f("sinterval"),
+				"wdays"     => $db->f("wdays"),
+				"month"     => $db->f("month"),
+				"day"       => $db->f("day"),
+				"rtype"     => $db->f("rtype"),
+				"duration"  => $db->f("duration"));
 		
 		// der "Ursprungstermin"
-		if($db->f("date") >= $this->getStart() && $db->f("end_time") <= $this->getEnd()){
-				$is_in_day = TRUE;
+		if ($db->f("start") >= $this->getStart() && $db->f("end") <= $this->getEnd()) {
+			createEvent($this, $db, 0);
 		}
-		elseif($db->f("date") >= $this->getStart() && $db->f("date") <= $this->getEnd()){
-			$is_in_day = TRUE;
-			$time_range = 1;
+		elseif ($db->f("start") >= $this->getStart() && $db->f("start") <= $this->getEnd()) {
+			createEvent($this, $db, 1);
 		}
-		elseif($db->f("date") < $this->getStart() && $db->f("end_time") > $this->getEnd()){
-			$is_in_day = TRUE;
-			$time_range = 2;
+		elseif ($db->f("start") < $this->getStart() && $db->f("end") > $this->getEnd()) {
+			createEvent($this, $db, 2);
 		}
-		elseif($db->f("end_time") >= $this->getStart() && $db->f("end_time") <= $this->getEnd()){
-			$is_in_day = TRUE;
-			$time_range = 3;
+		elseif ($db->f("end") >= $this->getStart() && $db->f("end") <= $this->getEnd()) {
+			createEvent($this, $db, 3);
 		}
-		else{
+		else {
 			
-			switch($rep["type"]){
-				case "DAYLY":
+			switch ($rep["rtype"]) {
+				case "DAILY":
 					
-					// täglich wiederholte Termine sind eh drin
-					if($rep["lintervall"] == 1){
-						$is_in_day = TRUE;
+		/*			// täglich wiederholte Termine sind eh drin
+					if($rep["linterval"] == 1){
+						createEvent($this, $db, 0);
 						break;
-					}
+					}*/
 					
-					$pos = (($this->ts - $rep["ts"]) / 86400) % $rep["lintervall"];
-					if($pos == 0){
-						$is_in_day = TRUE;
-						$time_range = 1;
-						break;
-					}
-					if($pos < $rep["duration"]){
-						$is_in_day = TRUE;
-						if($pos == $rep["duration"] - 1)
-							$time_range = 3;
+					$pos = (($this->ts - $rep["ts"]) / 86400) % $rep["linterval"];
+					
+					if ($pos == 0) {
+						if ($rep["duration"] > 1)
+							createEvent($this, $db, 1);
 						else
-							$time_range = 2;
+							createEvent($this, $db, 0);
+						break;
+					}
+					
+					if ($pos < $rep["duration"]) {
+						if (($pos == $rep["duration"] - 1) || ($rep["duration"] - $rep["linterval"] - 1 == $pos))
+							createEvent($this, $db, 3);
+						else
+							createEvent($this, $db, 2);
 					}
 					break;
 					
 				case "WEEKLY":
-					if($rep["duration"] == "#"){
-						// für die anderen berechne erst mal den Montag in dieser Woche...
+					if ($rep["duration"] == 1) {
+						// berechne den Montag in dieser Woche...
 						$adate = $this->ts - ($this->dow - 1) * 86400;
-						if(ceil(($adate - $rep["ts"]) / 604800) % $rep["lintervall"] == 0){
-							$is_in_day = TRUE;
+						if(ceil(($adate - $rep["ts"]) / 604800) % $rep["linterval"] == 0){
+							createEvent($this, $db, 0);
 							break;
 						}
 					}
-					else{
+					else {
 						$adate = $this->ts - ($this->dow - 1) * 86400;
-						if($adate + 1 > $rep["ts"] - ($this->dow - 1) * 86400){
-							for($i = 0;$i < strlen($rep["wdays"]);$i++){
-								$pos = (($adate - $rep["ts"]) / 86400 - $rep["wdays"][$i] + $this->dow) % ($rep["lintervall"] * 7);
-								if($pos == 0){
-									$is_in_day = TRUE;
-									$time_range = 1;
+						if ($adate + 1 > $rep["ts"] - ($this->dow - 1) * 86400) {
+							for ($i = 0;$i < strlen($rep["wdays"]);$i++) {
+								$pos = (($adate - $rep["ts"]) / 86400 - $rep["wdays"][$i] + $this->dow) % ($rep["linterval"] * 7);
+								if ($pos == 0) {
+									createEvent($this, $db, 1);
 									break;
 								}
-								if($pos < $rep["duration"]){
-									$is_in_day = TRUE;
+								if ($pos < $rep["duration"]) {
 									if($pos == $rep["duration"] - 1)
-										$time_range = 3;
+										createEvent($this, $db, 3);
 									else
-										$time_range = 2;
-									break 2;
+										createEvent($this, $db, 2);
+							//		break 2;
 								}
 							}
 						}
 					}
 					break;
 				case "MONTHLY":
-					if($rep["duration"] == "#"){
+					if ($rep["duration"] == 1) {
 						// liegt dieser Tag nach der ersten Wiederholung und gehört der Monat zur Wiederholungsreihe?
-						if($rep["ts"] < $this->ts + 1 && abs(date("n", $rep["ts"]) - $this->mon) % $rep["lintervall"] == 0){
+						if ($rep["ts"] < $this->ts + 1 && abs(date("n", $rep["ts"]) - $this->mon) % $rep["linterval"] == 0) {
 							// es ist ein Termin am X. Tag des Monats, den hat die Datenbankabfrage schon richtig erkannt
-							if($rep["sintervall"] == ""){
-								$is_in_day = TRUE;
+							if ($rep["sinterval"] == "") {
+								createEvent($this, $db, 0);
 								break;
 							}
 							// Termine an einem bestimmten Wochentag in der X. Woche
-							if(ceil($this->dom / 7) == $rep["sintervall"]){
-								$is_in_day = TRUE;
+							if (ceil($this->dom / 7) == $rep["sinterval"]) {
+								createEvent($this, $db, 0);
 								break;
 							}
-							if($rep["sintervall"] == 5 && (($this->dom / 7) > 3))
-								$is_in_day = TRUE;
+							if ($rep["sinterval"] == 5 && (($this->dom / 7) > 3))
+								createEvent($this, $db, 0);
 						}
 					}
-					else{
-						$amonth = ($rep["lintervall"] - ((($this->year - date("Y",$rep["ts"])) * 12) - (date("n",$rep["ts"]))) % $rep["lintervall"]) % $rep["lintervall"];
-						if($rep["day"]){
-							$lwst = mktime(12,0,0,$amonth,$rep["day"],$this->year,0);
+					else {
+						$amonth = ($rep["linterval"] - ((($this->year - date("Y",$rep["ts"])) * 12) - (date("n",$rep["ts"]))) % $rep["linterval"]) % $rep["linterval"];
+						if ($rep["day"]) {
+							$lwst = mktime(12, 0, 0, $amonth, $rep["day"], $this->year, 0);
 							$hgst = $lwst + ($rep["duration"] - 1) * 86400;
-								if($this->ts == $lwst){
-								$is_in_day = TRUE;
-								$time_range = 1;
+							if ($this->ts == $lwst) {
+								createEvent($this, $db, 1);
 								break;
 							}
 					
-							if($this->ts > $lwst && $this->ts < $hgst){
-								$is_in_day = TRUE;
-								$time_range = 2;
+							if ($this->ts > $lwst && $this->ts < $hgst) {
+								createEvent($this, $db, 2);
 								break;
 							}
 					
-							if($this->ts == $hgst){
-								$is_in_day = TRUE;
-								$time_range = 3;
+							if ($this->ts == $hgst) {
+								createEvent($this, $db, 3);
 								break;
 							}
 							
-							$lwst = mktime(12,0,0,$amonth - $rep["lintervall"],$rep["day"],$this->year,0);
+							$lwst = mktime(12, 0, 0, $amonth - $rep["linterval"], $rep["day"], $this->year, 0);
 							$hgst = $lwst + $rep["duration"] * 86400;
 							
-							if($this->ts == $lwst){
-								$is_in_day = TRUE;
-								$time_range = 1;
+							if ($this->ts == $lwst) {
+								createEvent($this, $db, 1);
 								break;
 							}
 					
-							if($this->ts > $lwst && $this->ts < $hgst){
-								$is_in_day = TRUE;
-								$time_range = 2;
+							if ($this->ts > $lwst && $this->ts < $hgst) {
+								createEvent($this, $db, 2);
 								break;
 							}
 					
-							if($this->ts == $hgst){
-								$is_in_day = TRUE;
-								$time_range = 3;
+							if ($this->ts == $hgst) {
+								createEvent($this, $db, 3);
 								break;
 							}
 							
 						}
-						if($rep["sintervall"]){
+						if ($rep["sinterval"]) {
 						
-							if($rep["sintervall"] == 5)
+							if ($rep["sinterval"] == 5)
 								$cor = 0;
 							else
 								$cor = 1;
 							
-							$lwst = mktime(12,0,0,$amonth,1,$this->year,0) + ($rep["sintervall"] - $cor) * 604800;
-							$aday = strftime("%u",$lwst);
+							$lwst = mktime(12, 0 , 0, $amonth, 1, $this->year, 0) + ($rep["sinterval"] - $cor) * 604800;
+							$aday = strftime("%u", $lwst);
 							$lwst -= ($aday - $rep["wdays"]) * 86400;
-							if($rep["sintervall"] == 5){
-								if(date("j",$lwst) < 10)
+							if ($rep["sinterval"] == 5) {
+								if(date("j", $lwst) < 10)
 									$lwst -= 604800;
-								if(date("n",$lwst) == date("n",$lwst + 604800))
+								if (date("n", $lwst) == date("n", $lwst + 604800))
 									$lwst += 604800;
 							}
-							else{
+							else {
 								if($aday > $rep["wdays"])
 									$lwst += 604800;
 							}
 							
 							$hgst = $lwst + ($rep["duration"] - 1) * 86400;
 							
-							if($this->ts == $lwst){
-								$is_in_day = TRUE;
-								$time_range = 1;
+							if ($this->ts == $lwst) {
+								createEvent($this, $db, 1);
 								break;
 							}
 							
-							if($this->ts > $lwst && $this->ts < $hgst){
-								$is_in_day = TRUE;
-								$time_range = 2;
+							if ($this->ts > $lwst && $this->ts < $hgst) {
+								createEvent($this, $db, 2);
 								break;
 							}
 							
-							if($this->ts == $hgst){
-								$is_in_day = TRUE;
-								$time_range =3;
+							if ($this->ts == $hgst) {
+								createEvent($this, $db, 3);
 								break;
 							}
 							
-							$lwst = mktime(12,0,0,$amonth - $rep["lintervall"],1,$this->year,0) + ($rep["sintervall"] - $cor) * 604800;;
-							$aday = strftime("%u",$lwst);
+							$lwst = mktime(12, 0, 0, $amonth - $rep["linterval"], 1, $this->year, 0) + ($rep["sinterval"] - $cor) * 604800;;
+							$aday = strftime("%u", $lwst);
 							$lwst -= ($aday - $rep["wdays"]) * 86400;
-							if($rep["sintervall"] == 5){
-								if(date("j",$lwst) < 10)
+							if ($rep["sinterval"] == 5) {
+								if (date("j", $lwst) < 10)
 									$lwst -= 604800;
-								if(date("n",$lwst) == date("n",$lwst + 604800))
+								if (date("n", $lwst) == date("n", $lwst + 604800))
 									$lwst += 604800;
 							}
-							else{
-								if($aday > $rep["wdays"])
+							else {
+								if ($aday > $rep["wdays"])
 									$lwst += 604800;
 							}
 							
 							$hgst = $lwst + $rep["duration"] * 86400;
 							$lwst += 86400;
 							
-							if($this->ts == $lwst){
-								$is_in_day = TRUE;
-								$time_range = 1;
+							if ($this->ts == $lwst) {
+								createEvent($this, $db, 1);
 								break;
 							}
 							
-							if($this->ts > $lwst && $this->ts < $hgst){
-								$is_in_day = TRUE;
-								$time_range = 2;
+							if ($this->ts > $lwst && $this->ts < $hgst) {
+								createEvent($this, $db, 2);
 								break;
 							}
 							
 							if($this->ts == $hgst){
-								$is_in_day = TRUE;
-								$time_range =3;
+								createEvent($this, $db, 3);
 								break;
 							}
 						}
@@ -306,162 +306,147 @@ function day_restore(&$this){
 					break;
 				case "YEARLY":
 				
-					if($rep["duration"] == "#"){
-						if($rep["ts"] > $this->getStart() && $rep["ts"] < $this->getEnd()){
-							$is_in_day = TRUE;
+					if ($rep["duration"] == 1) {
+						if ($rep["ts"] > $this->getStart() && $rep["ts"] < $this->getEnd()) {
+							createEvent($this, $db, 0);
 							break;
 						}
 							
 						// liegt der Wiederholungstermin überhaupt in diesem Jahr?
-						if($this->year == date("Y", $rep["ts"]) || ($this->year - date("Y", $rep["ts"])) % $rep["lintervall"] == 0){
+						if ($this->year == date("Y", $rep["ts"]) || ($this->year - date("Y", $rep["ts"])) % $rep["linterval"] == 0) {
 							// siehe "MONTHLY"
-							if($rep["sintervall"] == ""){
-								$is_in_day = TRUE;
+							if ($rep["sinterval"] == "") {
+								createEvent($this, $db, 0);
 								break;
 							}
-							if(ceil($this->dom / 7) == $rep["sintervall"]){
-								$is_in_day = TRUE;
+							if (ceil($this->dom / 7) == $rep["sinterval"]) {
+								createEvent($this, $db, 0);
 								break;
 							}
-							if($rep["sintervall"] == 5 && (($this->dom / 7) > 3)){
-								$is_in_day = TRUE;
+							if ($rep["sinterval"] == 5 && (($this->dom / 7) > 3)) {
+								createEvent($this, $db, 0);
 								break;
 							}
 						}
 					}
-					else{
+					else {
 					
 						// der erste Wiederholungstermin
 						$lwst = $rep["ts"];
 						$hgst = $rep["ts"] + $rep["duration"] * 86400;
-						if($lwst == $this->ts){
-							$is_in_day = TRUE;
-							$time_range = 1;
+						if ($lwst == $this->ts) {
+							createEvent($this, $db, 1);
 							break;
 						}
 						
-						if($this->ts > $lwst && $this->ts < $hgst){
-							$is_in_day = TRUE;
-							$time_range = 2;
+						if ($this->ts > $lwst && $this->ts < $hgst) {
+							createEvent($this, $db, 2);
 							break;
 						}
 					
-						if($this->ts == $hgst){
-							$is_in_day = TRUE;
-							$time_range = 3;
+						if ($this->ts == $hgst) {
+							createEvent($this, $db, 3);
 							break;
 						}
 						
-						if($rep["day"]){
+						if ($rep["day"]) {
 							$lwst = mktime(12,0,0,$rep["month"],$rep["day"],$this->year,0);
 							$hgst = $lwst + ($rep["duration"] - 1) * 86400;
-								if($this->ts == $lwst){
-								$is_in_day = TRUE;
-								$time_range = 1;
+							if ($this->ts == $lwst) {
+								createEvent($this, $db, 1);
 								break;
 							}
 					
-							if($this->ts > $lwst && $this->ts < $hgst){
-								$is_in_day = TRUE;
-								$time_range = 2;
+							if ($this->ts > $lwst && $this->ts < $hgst) {
+								createEvent($this, $db, 2);
 								break;
 							}
 					
-							if($this->ts == $hgst){
-								$is_in_day = TRUE;
-								$time_range = 3;
+							if ($this->ts == $hgst) {
+								createEvent($this, $db, 3);
 								break;
 							}
 							
-							$lwst = mktime(12,0,0,$rep["month"],$rep["day"] - 1,$this->year - 1,0);
+							$lwst = mktime(12, 0, 0, $rep["month"], $rep["day"] - 1, $this->year - 1, 0);
 							$hgst = $lwst + $rep["duration"] * 86400;
 							
-							if($this->ts == $lwst){
-								$is_in_day = TRUE;
-								$time_range = 1;
+							if ($this->ts == $lwst) {
+								createEvent($this, $db, 1);
 								break;
 							}
 					
-							if($this->ts > $lwst && $this->ts < $hgst){
-								$is_in_day = TRUE;
-								$time_range = 2;
+							if ($this->ts > $lwst && $this->ts < $hgst) {
+								createEvent($this, $db, 2);
 								break;
 							}
 					
-							if($this->ts == $hgst){
-								$is_in_day = TRUE;
-								$time_range = 3;
+							if ($this->ts == $hgst) {
+								createEvent($this, $db, 3);
 								break;
 							}
 							
 						}
 						
-						if($rep["sintervall"]){
-							$lwst = mktime(12,0,0,$rep["month"],1,$this->year,0) + ($rep["sintervall"] - $cor) * 604800;
+						if ($rep["sinterval"]) {
+							$lwst = mktime(12, 0, 0, $rep["month"], 1, $this->year, 0) + ($rep["sinterval"] - $cor) * 604800;
 							$aday = strftime("%u",$lwst);
 							$lwst -= ($aday - $rep["wdays"]) * 86400;
-							if($rep["sintervall"] == 5){
-								if(date("j",$lwst) < 10)
+							if ($rep["sinterval"] == 5) {
+								if (date("j",$lwst) < 10)
 									$lwst -= 604800;
-								if(date("n",$lwst) == date("n",$lwst + 604800))
+								if (date("n", $lwst) == date("n", $lwst + 604800))
 									$lwst += 604800;
 							}
 							else
-								if($aday > $rep["wdays"])
+								if ($aday > $rep["wdays"])
 									$lwst += 604800;
 					
 							$hgst = $lwst + ($rep["duration"] - 1) * 86400;
 					
-							if($this->ts == $lwst){
-								$is_in_day = TRUE;
-								$time_range = 1;
+							if ($this->ts == $lwst) {
+								createEvent($this, $db, 1);
 								break;
 							}
 							
-							if($this->ts > $lwst && $this->ts < $hgst){
-								$is_in_day = TRUE;
-								$time_range = 2;
+							if ($this->ts > $lwst && $this->ts < $hgst) {
+								createEvent($this, $db, 2);
 								break;
 							}
 							
-							if($this->ts == $hgst){
-								$is_in_day = TRUE;
-								$time_range = 3;
+							if ($this->ts == $hgst) {
+								createEvent($this, $db, 3);
 								break;
 							}
 							
-							$lwst = mktime(12,0,0,$rep["$month"],1,$this->year - 1,0) + ($rep["sintervall"] - $cor) * 604800;;
-							$aday = strftime("%u",$lwst);
+							$lwst = mktime(12, 0, 0, $rep["$month"], 1, $this->year - 1, 0) + ($rep["sinterval"] - $cor) * 604800;
+							$aday = strftime("%u", $lwst);
 							$lwst -= ($aday - $rep["wdays"]) * 86400;
-							if($rep["sintervall"] == 5){
-								if(date("j",$lwst) < 10)
+							if ($rep["sinterval"] == 5) {
+								if (date("j", $lwst) < 10)
 									$lwst -= 604800;
-								if(date("n",$lwst) == date("n",$lwst + 604800))
+								if (date("n", $lwst) == date("n", $lwst + 604800))
 									$lwst += 604800;
 							}
-							else{
-								if($aday > $rep["wdays"])
+							else {
+								if ($aday > $rep["wdays"])
 									$lwst += 604800;
 							}
 							
 							$hgst = $lwst + $rep["duration"] * 86400;
 							$lwst += 86400;
 							
-							if($this->ts == $lwst){
-								$is_in_day = TRUE;
-								$time_range = 1;
+							if ($this->ts == $lwst) {
+								createEvent($this, $db, 1);
 								break;
 							}
 							
-							if($this->ts > $lwst && $this->ts < $hgst){
-								$is_in_day = TRUE;
-								$time_range = 2;
+							if ($this->ts > $lwst && $this->ts < $hgst) {
+								createEvent($this, $db, 2);
 								break;
 							}
 							
-							if($this->ts == $hgst){
-								$is_in_day = TRUE;
-								$time_range = 3;
+							if ($this->ts == $hgst) {
+								createEvent($this, $db, 3);
 								break;
 							}
 							
@@ -470,7 +455,7 @@ function day_restore(&$this){
 			}
 		}
 		
-		if($is_in_day==TRUE){		
+	/*	if($is_in_day==TRUE){		
 			switch($time_range){
 				case 0: // Einzeltermin
 					$start = mktime(date("G",$db->f("date")),date("i",$db->f("date")),0,$this->mon,$this->dom,$this->year);
@@ -494,8 +479,53 @@ function day_restore(&$this){
 				$termin->setDayEvent(TRUE);
 			$termin->chng_flag = FALSE;
 			$this->app[] = $termin;
-		}
+		}*/
 	}
 }
+	
+	function createEvent (&$this, &$db, $time_range) {
+		switch ($time_range) {
+			case 0: // Einzeltermin
+				$start = mktime(date("G", $db->f("start")), date("i",$db->f("start")), 0, $this->mon, $this->dom, $this->year);
+				$end = mktime(date("G", $db->f("end")), date("i", $db->f("end")), 0, $this->mon, $this->dom, $this->year);
+				break;
+			case 1: // Start
+				$start = mktime(date("G", $db->f("start")), date("i", $db->f("start")), 0, $this->mon, $this->dom, $this->year);
+				$end = $this->getEnd();
+				break;
+			case 2: // Mitte
+				$start = $this->getStart();
+				$end = $this->getEnd();
+				break;
+			case 3: // Ende
+				$start = $this->getStart();
+				$end = mktime(date("G", $db->f("end")), date("i", $db->f("end")), 0, $this->mon, $this->dom, $this->year);
+		}
+		$termin =& new CalendarEvent(array(
+				"DTSTART"       => $start,
+				"DTEND"         => $end,
+				"SUMMARY"       => $db->f("summary"),
+				"DESCRIPTION"   => $db->f("description"),
+				"PRIORITY"      => $db->f("prority"),
+				"LOCATION"      => $db->f("location"),
+				"CATEGORIES"    => $db->f("categories"),
+				"UID"           => $db->f("uid"),
+				"RRULE"         => array(
+						"ts"        => $db->f("ts"),
+						"linterval" => $db->f("linterval"),
+						"sinterval" => $db->f("sinterval"),
+						"wdays"     => $db->f("wdays"),
+						"month"     => $db->f("month"),
+						"day"       => $db->f("day"),
+						"rtype"     => $db->f("rtype"),
+						"duration"  => $db->f("duration"),
+						"expire"    => $db->f("expire"))),
+				$db->f("event_id"), $db->f("mkdate"), $db->f("chdate"));
+		
+		if ($time_range == 2)
+			$termin->setDayEvent(TRUE);
+		$this->events[] = $termin;
+	}
+	
 
 ?>
