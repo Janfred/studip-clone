@@ -47,6 +47,17 @@ $UNI_LOGOUT_ADD=sprintf(_("Und hier geht's zur %sStud.IP Portalseite%s&nbsp;"), 
 $UNI_CONTACT = "<please insert your generel contact mail-adress here>";
 $UNI_INFO = "Stud.IP 1.1 - Studienbegleitender Internetsupport von Präsenzlehre"; 
 
+// Standardzeiten für Seminarbeginn und Seminarende
+$TIME_PRESETS = array ( //Startstunde, Startminute, Endstunde, Endminute
+		array ('07','45','09','15'), // 07:45 - 09:15 Uhr
+		array ('09','30','11','00'), // 09:30 - 11:00 Uhr
+		array ('11','15','12','45'), // 11:15 - 12:45 Uhr
+		array ('13','30','15','00'), // 13:30 - 15:00 Uhr
+		array ('15','15','16','45'), // 15:15 - 16:45 Uhr
+		array ('17','00','18','30'), // 17:00 - 18:30 Uhr
+		array ('18','45','20','15')  // 18:45 - 20:15 Uhr
+		);
+//$TIME_PRESETS = false;
 
 //Festlegen der zulaessigen Typen fuer Veranstaltungen
 $SEM_TYPE_MISC_NAME=_("sonstige"); //dieser Name wird durch die allgemeine Bezeichnung (=Veranstaltung ersetzt)
