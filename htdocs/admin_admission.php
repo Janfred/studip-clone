@@ -734,11 +734,7 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 				<td class="<? echo $cssSw->getClass() ?>" width="96%" colspan=2>
 					<font size=-1><b><?=_("maximale Teilnehmeranzahl:")?> </b></font><br />
 					<font size=-1><?=_("Diese Teilnehmeranzahl dient als Grundlage zur Berechnung der Pl&auml;tze pro Kontingent.")?></font><br /><br />
-					<? if (($admin_admission_data["admission_type_org"]) && (!$perm->have_perm("admin"))) {
-						printf ("<font size=-1>%s "._("Teilnehmende")." </font>", $admin_admission_data["admission_turnout"]);
-					} else { ?>
 					<font size=-1><input type="TEXT" name="admission_turnout" size=2 maxlength=5 value="<? echo $admin_admission_data["admission_turnout"]; ?>" /> <?=_("Teilnehmende")?></font>
-					<? } ?>
 				</td>
 			</tr>
 			<tr <? $cssSw->switchClass() ?>>
