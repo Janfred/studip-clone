@@ -134,7 +134,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 				die;
 			}
 			elseif ($perm->have_perm("autor")) {
-				$db->query("INSERT INTO seminar_user VALUES ('$id','$user->id','autor','$group'', '', '".time()."')");
+				$db->query("INSERT INTO seminar_user VALUES ('$id','$user->id','autor','$group', '', '".time()."')");
 				parse_msg ("msg§Sie wurden mit dem Status <b> autor </b> in die Veranstaltung <b>$SeminarName</b> eingetragen.");
 				echo"<tr><td class=\"blank\" colspan=2><a href=\"seminar_main.php?auswahl=$id\">&nbsp; &nbsp; weiter zur Veranstaltung</a>";
 			  	if ($send_from_search)
@@ -421,7 +421,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 		}
 
 		if (isset($InsertStatus)) {//Status reinschreiben
-			$db->query("INSERT INTO seminar_user VALUES ('$id', '$user->id', '$InsertStatus','$group'', '', '".time()."')");
+			$db->query("INSERT INTO seminar_user VALUES ('$id', '$user->id', '$InsertStatus','$group', '', '".time()."')");
 			parse_msg ("msg§Sie wurden mit dem Status <b>$InsertStatus </b>in die Veranstaltung <b>$SeminarName</b> eingetragen.");
 			echo"<tr><td class=\"blank\" colspan=2><a href=\"seminar_main.php?auswahl=$id\">&nbsp; &nbsp; Hier kommen Sie zu der Veranstaltung</a>";
 			if ($send_from_search)
