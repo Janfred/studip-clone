@@ -46,24 +46,6 @@ class CheckMultipleOverlaps {
 	//Kontruktor
 	function CheckMultipleOverlaps () {
 		$this->db = new DB_Seminar;
-		$this->createTable();
-	}
-	
-	function createTable() {
-		$query = "CREATE TABLE IF NOT EXISTS `resources_temporary_events` (
-				`event_id` varchar(32) NOT NULL default '',
-				`resource_id` varchar(32) NOT NULL default '',
-				`assign_id` varchar(32) NOT NULL default '',
-				`seminar_id` varchar(32) NOT NULL default '',
-				`termin_id` varchar(32) NOT NULL default '',
-				`begin` int(20) NOT NULL default '0',
-				`end` int(20) NOT NULL default '0',
-				`mkdate` int(20) NOT NULL default '0',
-				PRIMARY KEY  (`event_id`),
-				KEY `resource_id` (`resource_id`),
-				KEY `assign_object_id` (`assign_id`),
-				) TYPE=HEAP";
-		$this->db->query($query);
 	}
 	
 	function setTimeRange($begin, $end) {
@@ -84,6 +66,15 @@ class CheckMultipleOverlaps {
 		$this->setTimeRange($begin, $end);
 	}
 
+	function deleteIndexes() {
+		//$query = sprintf ("ALTER IGNORE TABLE `resources_temporary_events` DROP PRIMARY KEY, DROP INDEX `resource_id` ");
+		//$this->db->query($query);
+	}
+
+	function setIndexes() {
+		//$query = sprintf ("ALTER TABLE `resources_temporary_events` ADD PRIMARY KEY ( `event_id` ), ADD INDEX ( `resource_id` )");
+		//$this->db->query($query);
+	}
 	
 	function addResource($resource_id) {
 		$this->resource_ids[] = $resource_id;
@@ -97,20 +88,20 @@ class CheckMultipleOverlaps {
 		}
 	}
 	
-	function checkOverlap ($assObj, &$result, $resource = array()) {
-		$events = $assObj->getEvents();
-		
+	function checkOverlap ($events, &$result, $index_mode = "assign_id") {
 		foreach ($events as $obj) {
-			$clauses[] = sprintf ("((begin <= %s AND end > %s) OR (begin <= %s AND end >= %s) OR (begin < %s AND end >= %s))", $obj->getBegin(), $obj->getBegin(), $obj->getBegin(), $obj->getEnd(), $obj->getEnd(), $obj->getEnd());
+			$clause = sprintf ("((begin <= %s AND end > %s) OR (begin <= %s AND end >= %s) OR (begin < %s AND end >= %s))", $obj->getBegin(), $obj->getBegin(), $obj->getBegin(), $obj->getEnd(), $obj->getEnd(), $obj->getEnd());
+			$cases.= sprintf(" WHEN %s THEN '%s'", $clause, $obj->getId());
+			$clauses[] = $clause;
 		}
-		
+	
 		$clause = join(" OR ",$clauses);
 		$in = "('".join("','",$this->resource_ids)."')";
 		
-		$query = sprintf ("SELECT * FROM resources_temporary_events WHERE 1 AND (%s) AND resource_id IN %s ORDER BY begin", $clause, $in);
+		$query = sprintf ("SELECT *, CASE %s END AS event_id FROM resources_temporary_events WHERE 1 AND (%s) AND resource_id IN %s ORDER BY begin", $cases, $clause, $in);
 		$this->db->query($query);
 		while ($this->db->next_record()) {
-			$result[$this->db->f("resource_id")][$assObj->getId()][] = array("begin"=>$this->db->f("begin"), "end"=>$this->db->f("end"), "assign_id"=>$this->db->f("assign_id"));
+			$result[$this->db->f("resource_id")][($index_mode == "assign_id") ? $events[$this->db->f("event_id")]->getAssignId() : $events[$this->db->f("event_id")]->getAssignUserId()][] = array("begin"=>$this->db->f("begin"), "end"=>$this->db->f("end"), "event_id"=>$this->db->f("event_id"), "own_begin" =>$events[$this->db->f("event_id")]->getBegin(), "own_end" =>$events[$this->db->f("event_id")]->getEnd());
 		}
 		return;
 	}
