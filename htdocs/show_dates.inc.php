@@ -350,7 +350,9 @@ function show_personal_dates ($range_id, $date_start, $date_end, $show_docs=FALS
 
 function show_all_dates ($date_start, $date_end, $show_docs=FALSE, $show_admin=TRUE, $open){
 	global $PHP_SELF, $RELATIVE_PATH_CALENDAR, $SessSemName, $user, $TERMIN_TYP;
-	global $PERS_TERMIN_KAT, $username, $CALENDAR_DRIVER, $LastLogin;
+	global $PERS_TERMIN_KAT, $username, $CALENDAR_DRIVER, $LastLogin, $calendar_user_control_data;
+	
+//	$sess->register($calendar_user_control_data);
 	
 	require_once($RELATIVE_PATH_CALENDAR . "/lib/DbCalendarEventList.class.php");
 	
@@ -360,10 +362,14 @@ function show_all_dates ($date_start, $date_end, $show_docs=FALSE, $show_admin=T
 		$show_private = TRUE;
 		$admin_link = sprintf("<a href=\"./calendar.php?cmd=edit&source_page=%s\">", rawurlencode($PHP_SELF));
 	}
-
-	$list = new AppList($user->id, $show_private, $date_start, $date_end, TRUE);
 	
-	$list->bindSeminarEvents();
+	if	(is_array($calendar_user_control_data["bind_seminare"]))
+		$bind_seminare = array_keys($calendar_user_control_data["bind_seminare"], "TRUE");
+	else
+		$bind_seminare = "";
+	
+	$list = new AppList($user->id, $show_private, $date_start, $date_end, TRUE);
+	$list->bindSeminarEvents($bind_seminare);
 	
 	if($list->existEvent()){
 		
@@ -395,9 +401,11 @@ function show_all_dates ($date_start, $date_end, $show_docs=FALSE, $show_admin=T
 					|| ($termin->getType() != 1));
 					
 			$zusatz = "";
-			if($termin->getType == 1)
-				$zusatz.= "<font size=-1>Raum: ".htmlReady($termin->getLocation())."&nbsp;</font>";
-				
+			if($termin->getType() == 1)
+				$zusatz .= "<a href=\"seminar_main.php?auswahl=" . $termin->getSeminarId()
+								. "\"><font size=\"-2\">".htmlReady(mila($termin->getSemName(), 28))
+								. "&nbsp;</font></a>";
+			
 			$titel = "";
 			if(date("dmy", $termin->getStart()) == date("dmy", time()))
 				$titel .= "HEUTE" . date(", H:i", $termin->getStart());
@@ -410,9 +418,9 @@ function show_all_dates ($date_start, $date_end, $show_docs=FALSE, $show_admin=T
 				$titel .= " - ".date("H:i", $termin->getEnd());
 			
 			if($termin->getType() == 1)
-				$titel .= ", " . htmlReady(mila($termin->getSemName(), 45)); //Beschneiden des Titels
+				$titel .= ", " . htmlReady(mila($termin->getTitle(), 62)); //Beschneiden des Titels
 			else
-				$titel .= ", " . htmlReady(mila($termin->getTitle(), 45)); //Beschneiden des Titels
+				$titel .= ", " . htmlReady(mila($termin->getTitle(), 72)); //Beschneiden des Titels
 			
 			//Dokumente zaehlen
 			$num_docs = 0;
@@ -438,9 +446,9 @@ function show_all_dates ($date_start, $date_end, $show_docs=FALSE, $show_admin=T
 			}
 			
 			if ($termin->getChangeDate() > $LastLogin)
-				$new=TRUE;
+				$new = TRUE;
 			else
-				$new=FALSE;
+				$new = FALSE;
 			
 			// Zur Identifikation von auf- bzw. zugeklappten Terminen muss zusätzlich
 			// die Startzeit überprüft werden, da die Wiederholung eines Termins die
@@ -462,8 +470,6 @@ function show_all_dates ($date_start, $date_end, $show_docs=FALSE, $show_admin=T
 					
 			if($open == $app_ident) {
 				$content = "";
-				if ($termin->getType() == 1 && $termin->getTitle())
-					$content = "<b>" . htmlReady($termin->getTitle()) . "</b><br><br>";
 				if($termin->getDescription())
 					$content .= sprintf("%s<br /><br />", htmlReady($termin->getDescription()));
 				else
