@@ -18,7 +18,7 @@ function export_inst($inst_id)
 {
 	global $db, $ex_type, $o_mode, $xml_file, $xml_names_inst, $xml_groupnames_inst;
 
-	$db->query('SELECT * FROM institute WHERE Institut_id = "' . $inst_id . '"');
+	$db->query('SELECT * FROM Institute WHERE Institut_id = "' . $inst_id . '"');
 	$db->next_record();
 	$data_object .= xml_open_tag($xml_groupnames_inst["object"], $db->f("Name"));
 	while ( list($key, $val) = each($xml_names_inst))
@@ -28,7 +28,7 @@ function export_inst($inst_id)
 			$data_object .= xml_tag($val, $db->f($key));
 	}
 	reset($xml_names_inst);
-	$db->query('SELECT fakultaeten.Name FROM fakultaeten LEFT JOIN institute USING(fakultaets_id) WHERE Institut_id = "' . $inst_id . '"');
+	$db->query('SELECT Fakultaeten.Name FROM Fakultaeten LEFT JOIN Institute USING(fakultaets_id) WHERE Institut_id = "' . $inst_id . '"');
 	$db->next_record();
 	{
 		if ($db->f("Name") != "") 
