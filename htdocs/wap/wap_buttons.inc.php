@@ -81,7 +81,7 @@
 	* Creates a part-forward-button with part numbers.
 	*
 	* @author			Florian Hansen <f1701h@gmx.net>
-	* @version			0.1
+	* @version			0.11	09.09.2003	14:56:40
 	* @access			public
 	* @param	string	The current part
 	* @param	string	The total number of parts
@@ -92,7 +92,7 @@
 		global $_language_path;
 
 	 	$e = wap_txt_encode_to_wml(_("Teil"));
-	 	return "&#187; $e " . ($part + 1) . " / $num_pages";
+	 	return "&#187; $e " . ($part + 1) . " / $num_parts";
 	 }
 
 	/**
@@ -101,10 +101,9 @@
 	* Creates a part-backward-button with part numbers.
 	*
 	* @author			Florian Hansen <f1701h@gmx.net>
-	* @version			0.1
+	* @version			0.11	09.09.2003	14:56:35
 	* @access			public
-	* @param	string	The current part
-	* @param	string	The total number of parts
+	* @	* @param	string	The total number of parts
 	* @return	string	The text-button
 	*/
 	 function wap_buttons_back_part($part, $num_parts)
@@ -112,7 +111,7 @@
 		global $_language_path;
 
 	 	$e = wap_txt_encode_to_wml(_("Teil"));
-	 	return "&#171; $e " . ($part + 1) . " / $num_pages";
+	 	return "&#171; $e " . ($part + 1) . " / $num_parts";
 	 }
 
 	/**
