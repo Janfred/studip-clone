@@ -89,7 +89,7 @@ class ExternEditGeneric extends ExternEdit {
 	* Prints out a form with a text field.
 	*
 	* @param string attribute The name of the attribute (Syntax: [tag-name]_[attribute_name])
-	* @param string title The title of this textfield.
+	* @param mixed title The title(s) of the textfield(s).
 	* @param string info The info text.
 	* @param int size The size (length) of this textfield.
 	* @param int maxlength The maximal length of the text.
@@ -108,12 +108,33 @@ class ExternEditGeneric extends ExternEdit {
 			$width_2 = $this->width_2;
 		}
 		
+		if (is_array($title)) {
+			$out = "";
+			for($i = 0; $i < sizeof($title); $i++) {
+		
+				if ($this->faulty_values[$form_name][$i])
+					$error_sign = $this->error_sign;
+				else
+					$error_sign = "";
+		
+				$out .= "<tr><td><table width=\"100%\" border=\"0\" cellpadding=\"4\" cellspacing=\"0\">\n";
+				$out .= "<tr" . $this->css->getFullClass() . "><td$width_1 nowrap=\"nowrap\"><font size=\"2\">";
+				$out .= "{$title[$i]}</font></td>\n";
+				$out .= "<td$width_2 nowrap=\"nowrap\"><input type=\"text\" name=\"{$form_name}[]\" size=\"$size\"";
+				$out .= " maxlength=\"$maxlength\" value=\"{$value[$i]}\" />&nbsp; \n";
+				$out .= "<img src=\"" . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . "pictures/info.gif\"";
+				$out .= tooltip($info, TRUE, TRUE) . ">$error_sign</td></tr>\n</table>\n</td></tr>\n";
+				$this->css->switchClass();
+			}
+			return $out;
+		}
+		
 		if ($this->faulty_values[$form_name])
 			$error_sign = $this->error_sign;
 		else
 			$error_sign = "";
-		
-		$out = "<tr><td><table width=\"100%\" border=\"0\" cellpadding=\"4\" cellspacing=\"0\">\n";
+			
+		$out .= "<tr><td><table width=\"100%\" border=\"0\" cellpadding=\"4\" cellspacing=\"0\">\n";
 		$out .= "<tr" . $this->css->getFullClass() . "><td$width_1 nowrap=\"nowrap\"><font size=\"2\">";
 		$out .= "$title</font></td>\n";
 		$out .= "<td$width_2 nowrap=\"nowrap\"><input type=\"text\" name=\"$form_name\" size=\"$size\"";
