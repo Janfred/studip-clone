@@ -120,13 +120,13 @@ if($i_page == "calendar.php"){
 elseif ($i_page == "contact.php" || $i_page == "contact_statusgruppen.php"){
 	echo "<tr><td class=\"steel1\">&nbsp; &nbsp; ";	
 
-	if ($contact["view"]=="alpha") {
+	if ($i_page == "contact.php" && $contact["view"]=="alpha") {
 		?><img src="pictures/forumrot.gif" border="0"><a class="links1"  href="contact.php?view=alpha">Alphabetisch&nbsp; &nbsp; </a><?
 	} else {
 		?><img src="pictures/forumgrau.gif" border="0"><a class="links1"  href="contact.php?view=alpha">Alphabetisch&nbsp; &nbsp; </a><?	
 	}
 
-	if ($contact["view"]=="gruppen") {
+	if ($i_page == "contact.php" && $contact["view"]=="gruppen") {
 		?><img src="pictures/forumrot.gif" border="0"><a class="links1"  href="contact.php?view=gruppen">Gruppenansicht&nbsp; &nbsp; </a><?
 	} else {
 		?><img src="pictures/forumgrau.gif" border="0"><a class="links1"  href="contact.php?view=gruppen">Gruppenansicht&nbsp; &nbsp; </a><?	
