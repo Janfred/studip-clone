@@ -393,13 +393,15 @@
 				</td>
 			</tr>
 		</xsl:if>
-		<xsl:if test="bereich">
+		<xsl:if test="bereiche">
 			<tr>
 				<td bgcolor="#EEEEEE">
 					<b>Bereich: </b>
 				</td>
 				<td bgcolor="#EEEEEE">
-					<xsl:value-of select="bereich"/>
+					<xsl:for-each select="bereiche/bereich">
+						<xsl:value-of select="."/><br>
+					</xsl:for-each>
 				</td>
 			</tr>
 		</xsl:if>

@@ -353,11 +353,15 @@ MitarbeiterInnen
 					<xsl:value-of select="ects"/>
 				</fo:block>
 			</xsl:if>
-			<xsl:if test="bereich">
+			<xsl:if test="bereiche">
 				<fo:block>
 					<fo:inline font-weight="bold">Bereich: </fo:inline>
-					<xsl:value-of select="bereich"/>
 				</fo:block>
+				<xsl:for-each select="bereiche/bereich">
+				<fo:block>
+					<xsl:value-of select="."/>
+				</fo:block>
+				</xsl:for-each>
 			</xsl:if>
 			<fo:block space-after="12pt"> 
 </fo:block>

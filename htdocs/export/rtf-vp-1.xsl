@@ -223,9 +223,12 @@
 				<xsl:text>
 \par\b ECTS: \b0 </xsl:text><xsl:value-of select="ects"/>
 			</xsl:if>
-			<xsl:if test="bereich">
+			<xsl:if test="bereiche">
 				<xsl:text>
-\par\b Bereich: \b0 </xsl:text><xsl:value-of select="bereich"/>
+\par\b Bereich: \b0 </xsl:text>
+				<xsl:for-each select="bereiche/bereich">
+\par <xsl:value-of select="."/>
+				</xsl:for-each>
 			</xsl:if>
 			<xsl:text>
 \par </xsl:text>
