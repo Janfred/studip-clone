@@ -818,6 +818,7 @@ function preg_call_link ($params, $mod, $img, $extern = FALSE) {
 		if ($params[5] != 'img') {
 			if ($params[3] == '')
 				$params[3] = $params[4];
+			else $params[3] = format($params[3]);
 			$params[4] = str_replace('&amp;', '&', $params[4]);
 			$tbr = '<a href="'.idna_link($params[4])."\" target=\"_blank\">$link_pic{$params[3]}</a>";
 		}
