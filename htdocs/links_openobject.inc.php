@@ -17,8 +17,11 @@ if ($SessSemName["class"]=="inst") {
 	$structure["personal"]=array (topKat=>"", name=>"Personal", link=>"institut_members.php", active=>FALSE);
 	$structure["folder"]=array (topKat=>"", name=>"Dateien", link=>"folder.php?cmd=tree", active=>FALSE);
 	$structure["literatur"]=array (topKat=>"", name=>"Literatur zur Einrichtung", link=>"literatur.php", active=>FALSE);
-	if ($RESOURCES_ENABLE)
-		$structure["resources"]=array (topKat=>"", name=>"Ressourcen", link=>"resources.php?view=openobject_main", active=>FALSE);
+	if ($RESOURCES_ENABLE) {
+		require_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
+		if (checkAvaiableResources ($SessSemName[1]))
+			$structure["resources"]=array (topKat=>"", name=>"Ressourcen", link=>"resources.php?view=openobject_main", active=>FALSE);
+	}
 } else {
 	$structure["seminar_main"]=array (topKat=>"", name=>"&Uuml;bersicht", link=>"seminar_main.php", active=>FALSE);
 	$structure["forum"]=array (topKat=>"", name=>"Forum", link=>"forum.php", active=>FALSE);
@@ -26,8 +29,11 @@ if ($SessSemName["class"]=="inst") {
 	$structure["folder"]=array (topKat=>"", name=>"Dateien", link=>"folder.php?cmd=tree", active=>FALSE);
 	$structure["dates"]=array (topKat=>"", name=>"Ablaufplan", link=>"dates.php", active=>FALSE);
 	$structure["literatur"]=array (topKat=>"", name=>"Literatur", link=>"literatur.php", active=>FALSE);
-	if ($RESOURCES_ENABLE)
-		$structure["resources"]=array (topKat=>"", name=>"Ressourcen", link=>"resources.php?view=openobject_main", active=>FALSE);
+	if ($RESOURCES_ENABLE) {
+		require_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
+		if (checkAvaiableResources ($SessSemName[1]))
+			$structure["resources"]=array (topKat=>"", name=>"Ressourcen", link=>"resources.php?view=openobject_main", active=>FALSE);
+	}
 }
 
 //Bottomkats
