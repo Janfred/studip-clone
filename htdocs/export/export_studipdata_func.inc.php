@@ -179,8 +179,7 @@ function export_sem($inst_id, $ex_sem_id = "all")
 	if ($ex_sem_id != "all")
 		$addquery .= " AND seminare.Seminar_id = '" . $ex_sem_id . "' ";
 	$db->query('SELECT * FROM seminar_inst
-				LEFT JOIN seminare USING (Seminar_id) LEFT JOIN seminar_sem_tree USING(Seminar_id) 
-				LEFT JOIN sem_tree USING(sem_tree_id) 
+				LEFT JOIN seminare USING (Seminar_id)
 				WHERE seminar_inst.Institut_id = "' . $inst_id . '" ' . $addquery . '
 				ORDER BY ' . $order);
 
