@@ -185,7 +185,12 @@ if ($cmd=="admission_rein") {
 		$db->query("SELECT * FROM auth_user_md5 WHERE username = '$username'");
 		$db->next_record();
 		$userchange=$db->f("user_id");
-		$db->query("INSERT INTO seminar_user SET Seminar_id = '$id', user_id = '$userchange', status= 'autor' ");
+		
+		$db2->query("SELECT start_time FROM seminare WHERE Seminar_id = '$id'");
+		$db2->next_record();
+		$group=select_group ($db2->f("start_time"),$db->f("user_id"));		
+		
+		$db->query("INSERT INTO seminar_user SET Seminar_id = '$id', user_id = '$userchange', status= 'autor', gruppe='$group' ");
 		if ($db->affected_rows())
 			$db->query("DELETE FROM admission_seminar_user WHERE seminar_id = '$id' AND user_id = '$userchange'");
 
