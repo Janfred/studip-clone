@@ -18,7 +18,7 @@ function export_inst($inst_id)
 {
 	global $db, $ex_type, $o_mode, $xml_file, $xml_names_inst, $xml_groupnames_inst;
 
-	$db->query('SELECT * FROM Institute WHERE Institut_id = "' . $inst_id . '"');
+	$db->query('SELECT * FROM institute WHERE Institut_id = "' . $inst_id . '"');
 	$db->next_record();
 	$data_object .= xml_open_tag($xml_groupnames_inst["object"], $db->f("Name"));
 	while ( list($key, $val) = each($xml_names_inst))
@@ -28,7 +28,7 @@ function export_inst($inst_id)
 			$data_object .= xml_tag($val, $db->f($key));
 	}
 	reset($xml_names_inst);
-	$db->query('SELECT Fakultaeten.Name FROM Fakultaeten LEFT JOIN Institute USING(fakultaets_id) WHERE Institut_id = "' . $inst_id . '"');
+	$db->query('SELECT fakultaeten.Name FROM fakultaeten LEFT JOIN institute USING(fakultaets_id) WHERE Institut_id = "' . $inst_id . '"');
 	$db->next_record();
 	{
 		if ($db->f("Name") != "") 
@@ -93,8 +93,8 @@ function export_sem($inst_id)
 		$db2->query('SELECT * FROM auth_user_md5 
 					LEFT JOIN user_info USING(user_id) 
 					LEFT JOIN seminar_user USING(user_id) 
-					LEFT JOIN Seminare USING(seminar_id) 
-					WHERE (seminar_user.status = "dozent") AND (Seminare.Seminar_id = "' . $db->f("Seminar_id") . '")');
+					LEFT JOIN seminare USING(seminar_id) 
+					WHERE (seminar_user.status = "dozent") AND (seminare.Seminar_id = "' . $db->f("Seminar_id") . '")');
 		$data_object .= "<" . $xml_groupnames_lecture["childgroup2"] . ">\n";
 		while ($db2->next_record()) 
 			{
