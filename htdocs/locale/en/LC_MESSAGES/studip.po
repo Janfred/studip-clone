@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-10-01 16:12+0200\n"
+"POT-Creation-Date: 2003-10-01 18:51+0200\n"
 "PO-Revision-Date: 2003-10-01 13:49+0200\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
@@ -950,7 +950,7 @@ msgstr "Data base error while activating votes."
 
 #: vote/vote_show.inc.php:79 vote/vote_show.inc.php:88
 msgid "Votings und Tests"
-msgstr "Votes and tests."
+msgstr "Votes and tests"
 
 #: vote/vote_show.inc.php:81 vote/vote_show.inc.php:90
 msgid "Votings und Tests. Umfragen und mehr..."
@@ -1546,7 +1546,7 @@ msgstr "You can select more than one answer."
 #: vote/view/vote_show.lib.php:774
 #, c-format
 msgid "Es haben insgesamt <b>%s</b> Personen teilgenommen"
-msgstr "A total of <b>%s</b> people have taken part."
+msgstr "A total of <b>%s</b> people have taken part"
 
 #: vote/view/vote_show.lib.php:777
 msgid "Sie waren der/die einzigste TeilnehmerIn"
@@ -15387,7 +15387,7 @@ msgid ""
 "nicht mehr als TeilnehmerIn dieser Veranstaltung im System registriert."
 msgstr ""
 "The subscription to the course <b>%s</b> has been cancelled. You are no "
-"longera participant registered for this course."
+"longer a participant registered for this course."
 
 #: meine_seminare.php:279
 #, c-format

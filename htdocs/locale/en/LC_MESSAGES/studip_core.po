@@ -1,6 +1,8 @@
+# translation of studip_core.po to 
 # translation of studip_core.po to
 # translation of studip_core.po to
 # Copyright (C) 2003 Free Software Foundation, Inc.
+# , 2003
 # , 2003
 # , 2003
 # , 2003
@@ -10,14 +12,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: studip_core\n"
-"POT-Creation-Date: 2003-10-01 16:12+0200\n"
-"PO-Revision-Date: 2003-10-01 14:26+0200\n"
-"Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
-"Language-Team: english\n"
+"POT-Creation-Date: 2003-10-01 18:51+0200\n"
+"PO-Revision-Date: 2003-10-01 18:42+GMT\n"
+"Last-Translator: \n"
+"Language-Team:  <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 0.9.6\n"
+"X-Generator: KBabel 1.0.1\n"
 
 #: about.php:103
 msgid "Es wurde kein Nutzer unter dem angegebenen Nutzernamen gefunden!"
@@ -9322,7 +9324,7 @@ msgid ""
 "nicht mehr als TeilnehmerIn dieser Veranstaltung im System registriert."
 msgstr ""
 "The subscription to the course <b>%s</b> has been cancelled. You are no "
-"longera participant registered for this course."
+"longer a participant registered for this course."
 
 #: meine_seminare.php:279
 #, c-format
@@ -14358,122 +14360,3 @@ msgstr "What is ILIAS?"
 #: help/structure.inc.php:499
 msgid "Was ist ILIAS und was sind ILIAS Lernmodule"
 msgstr "what is ILIAS and what are ILIAS learning modules"
-
-#~ msgid "shrinkcount"
-#~ msgstr "shrink count"
-
-#~ msgid " Postings"
-#~ msgstr "Postings "
-
-#~ msgid "?view=search&reset=1\">Neue Suche</a>"
-#~ msgstr "?view=search&reset=1\">New search</a>"
-
-#~ msgid "Bitte geben Sie hier Ihren Suchbegriff ein:"
-#~ msgstr "Please enter your search criteria here: "
-
-#~ msgid "Ergebnis der Suche nach"
-#~ msgstr "Result of the search for "
-
-#~ msgid "Ihre Suche ergab %s Treffer"
-#~ msgstr "Your search revealed %s matches"
-
-#~ msgid "Ihre Suche ergab leider keine Treffer"
-#~ msgstr "Unfortunately your search did not reveal any matches"
-
-#~ msgid "zeig mir die Neuesten"
-#~ msgstr "Show me the most up to date"
-
-#~ msgid "zeig mit alle Treffer"
-#~ msgstr "Show me all matches"
-
-#, fuzzy
-#~ msgid "Weitere Informationen über %s"
-#~ msgstr "Other Information:"
-
-#~ msgid "Sie haben eine SMS von <b>%s</b> erhalten!"
-#~ msgstr "You have received a SMS from <b>%s</b>!"
-
-#, fuzzy
-#~ msgid "NutzerIn %s wurde endgültig akzeptiert."
-#~ msgstr "User %s has been entered for the course."
-
-#, fuzzy
-#~ msgid ""
-#~ "Sie k&ouml;nnen beliebigen Text einf&uuml;gen und vorhandenen Text &auml;"
-#~ "ndern."
-#~ msgstr "Here you can change your user data."
-
-#, fuzzy
-#~ msgid "Beachten Sie dabei die "
-#~ msgstr "What would you like to find?"
-
-#, fuzzy
-#~ msgid "Priorit&auml;t"
-#~ msgstr "DB integrity"
-
-#~ msgid ""
-#~ "Bitte geben Sie ein g&uuml;ltiges Datum f&uuml;r die Vorbesprechung ein!"
-#~ msgstr "Please enter a valid date for the preliminary discussion!"
-
-#~ msgid "Bitte geben Sie g&uuml;ltige Zeiten f&uuml;r die Vorbesprechung ein!"
-#~ msgstr "Please enter a valid times for the preliminary discussion!"
-
-#~ msgid "Neue Postings sind immer automatisch aufgeklappt"
-#~ msgstr "New postings are always automatically expanded"
-
-#~ msgid ""
-#~ "Von den folgenden m&ouml;glichen Kontingenten kommt nur das <b>fett</b>  "
-#~ "ausgegebene Kontingent f&uuml;r Sie in Frage."
-#~ msgstr ""
-#~ "From the following possible contingent groups, only the <b>bold</b> "
-#~ "applies to you."
-
-#~ msgid ""
-#~ "Bitte best&auml;tigen Sie, wenn Sie sich in dieses Kontingent eintragen "
-#~ "wollen:"
-#~ msgstr ""
-#~ "Please confirm if you would like to be added to this contingent group:"
-
-#~ msgid "Teilnahmebeschr&auml;nkte Veranstaltungen"
-#~ msgstr "Participant restricted courses"
-
-#~ msgid "Quota"
-#~ msgstr "Quota"
-
-#~ msgid ""
-#~ "Im gew&auml;hlten Bereich existieren keine teilnahmebeschr&auml;nkten "
-#~ "Veranstaltungen."
-#~ msgstr "There are no participant restricted courses in the chosen area."
-
-#~ msgid "alle Postings im Ordner &ouml;ffnen"
-#~ msgstr "Open all postings in this folder"
-
-#~ msgid "zeig mir mehr"
-#~ msgstr "Show me more"
-
-#~ msgid "zeig mir weniger"
-#~ msgstr "Show me less"
-
-#~ msgid "Themen"
-#~ msgstr "Topics"
-
-#~ msgid "neue Beitr&auml;ge"
-#~ msgstr "New postings"
-
-#~ msgid "letzte 5 Beitr&auml;ge"
-#~ msgstr "Last 5 postings"
-
-#~ msgid "Dieser Username existiert nicht!"
-#~ msgstr "This username does not exist!"
-
-#~ msgid ""
-#~ "Bitte achten Sie auf korrekte Gro&szlig;-Kleinschreibung beim Username!"
-#~ msgstr ""
-#~ "Please beware of using the correct uppercase and lowercase letters in the "
-#~ "username!"
-
-#~ msgid "Das Passwort ist falsch!"
-#~ msgstr "The password is incorrect!"
-
-#~ msgid "Name des Studiengangs"
-#~ msgstr "Name of program of study"

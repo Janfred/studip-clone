@@ -1,19 +1,18 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# translation of studip_vote.po to 
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER, 2003
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-10-01 16:12+0200\n"
-"PO-Revision-Date: 2003-10-01 15:38+0200\n"
-"Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
-"Language-Team: english\n"
+"Project-Id-Version: studip_vote\n"
+"POT-Creation-Date: 2003-10-01 18:51+0200\n"
+"PO-Revision-Date: 2003-10-01 18:47+GMT\n"
+"Last-Translator: \n"
+"Language-Team:  <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 0.9.6\n"
+"X-Generator: KBabel 1.0.1\n"
 
 #: vote/TestVote.class.php:78
 msgid "Der Test besitzt keine als richtig deklarierte Antwort."
@@ -764,7 +763,7 @@ msgstr "Data base error while activating votes."
 
 #: vote/vote_show.inc.php:79 vote/vote_show.inc.php:88
 msgid "Votings und Tests"
-msgstr "Votes and tests."
+msgstr "Votes and tests"
 
 #: vote/vote_show.inc.php:81 vote/vote_show.inc.php:90
 msgid "Votings und Tests. Umfragen und mehr..."
@@ -1360,7 +1359,7 @@ msgstr "You can select more than one answer."
 #: vote/view/vote_show.lib.php:774
 #, c-format
 msgid "Es haben insgesamt <b>%s</b> Personen teilgenommen"
-msgstr "A total of <b>%s</b> people have taken part."
+msgstr "A total of <b>%s</b> people have taken part"
 
 #: vote/view/vote_show.lib.php:777
 msgid "Sie waren der/die einzigste TeilnehmerIn"
