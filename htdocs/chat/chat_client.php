@@ -43,7 +43,7 @@ $perm->check("user");
 
 //chat eingeschaltet?
 if (!$CHAT_ENABLE) {
-	page_close();
+	//page_close();
 	die;
 }
 
@@ -255,13 +255,7 @@ if (!$chatServer->isActiveUser($user->id,$chatid)) {
 	my_error("Du bist nicht in diesem Chat angemeldet!","chat",1,false);
 	?></tr></table></body></html><?
 //PHPLib Session Variablen unangetastet lassen
-	foreach($sess->pt as $key){
-		unset($$key);
-	}
-	foreach($user->pt as $key){
-		unset($$key);
-	}
-	page_close();
+	//page_close();
 	die;
 }
 echo "\n<b>Hallo ".fullNick($user->id).",<br> willkommen im Raum: "
@@ -271,13 +265,7 @@ register_shutdown_function("chatLogout");   //für korrektes ausloggen am Ende!
 outputLoop($chatid);
 $userid=$user->id; //konservieren für shutdown_function
 //PHPLib Session Variablen unangetastet lassen
-foreach($sess->pt as $key){
-	unset($$key);
-}
-foreach($user->pt as $key){
-	unset($$key);
-}
-page_close();
+//page_close();
 
 
 
