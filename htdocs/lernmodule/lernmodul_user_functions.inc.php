@@ -11,6 +11,18 @@ function get_password_md5()
 		return false;
 }
 
+function get_studip_user($benutzername)
+{
+	global $auth, $username_prefix;
+	$db = New DB_Seminar;
+	$query_string = "SELECT studip_username FROM studip_ilias WHERE ilias_username = '$benutzername'";
+	$db->query($query_string);
+	if ($db->next_record())
+		return $db->f("studip_username");
+	else
+		return false;
+}
+
 function get_ilias_user($benutzername)
 {
 	global $auth, $username_prefix;

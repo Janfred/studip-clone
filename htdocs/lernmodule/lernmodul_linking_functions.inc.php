@@ -13,11 +13,23 @@ function link_seminar_modules($seminar_id)
 		for ($i=0; $i<sizeof($mod_array); $i ++)
 		{
 			$mod_info = get_module_info($mod_array[$i]["inst"], $mod_array[$i]["id"]);
-			$link_str[$i] .= "<a href=\"";
-			$link_str[$i] .= link_use_module($mod_array[$i]["inst"], $mod_array[$i]["id"]);
-			$link_str[$i] .= "\" target=\"_blank\">";
-			$link_str[$i] .= "<b>" . $mod_info["title"] . "</b> - " . $mod_info["description"] . "<br>";
-			$link_str[$i] .= "</a>";
+			$link_str[$i]["image"] .= "<a href=\"";
+			$link_str[$i]["image"] .= link_use_module($mod_array[$i]["inst"], $mod_array[$i]["id"]);
+			$link_str[$i]["image"] .= "\" target=\"_blank\">";
+			$link_str[$i]["image"] .= "<img src=\"./pictures/cont_blatt.gif\" border=0>";
+			$link_str[$i]["image"] .= "</a>";
+			$link_str[$i]["link"] .= "<a href=\"";
+			$link_str[$i]["link"] .= link_use_module($mod_array[$i]["inst"], $mod_array[$i]["id"]);
+			$link_str[$i]["link"] .= "\" target=\"_blank\">";
+			$link_str[$i]["link"] .= $mod_info["title"];
+			$link_str[$i]["link"] .= "</a>";
+			$link_str[$i]["content"] .= $mod_info["description"];
+			$mod_author = get_module_author($mod_array[$i]["inst"], $mod_array[$i]["id"]);
+			for ($i2=0; $i2<sizeof($mod_author); $i2 ++)
+			{
+				$mod_author[$i2] = "<a href=\"about.php?username=" . get_studip_user($mod_author[$i2]["username"]). "\">" . $mod_author[$i2]["fullname"] . "</a>";
+			}
+			$link_str[$i]["desc"] .= implode($mod_author, ", ");
 		}
 		return $link_str;
 	}

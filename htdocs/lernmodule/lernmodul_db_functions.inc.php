@@ -15,8 +15,27 @@ function get_module_info($co_inst, $co_id)
 		$module_info["description"] = $ilias_db -> f("description");
 		return $module_info;
 	}
-	else
-		return false;
+	return false;
+}
+
+function get_module_author($co_inst, $co_id)
+{
+	$module_author = false;
+	$ilias_db = New DB_Ilias;
+	$ilias_db -> query("SELECT DISTINCT benutzer.benutzername, benutzer.vorname, benutzer.nachname ".
+			" FROM meta_author, benutzer".
+			" WHERE meta_author.typ = 'le' ".
+			" AND meta_author.id = '$co_id' ".
+			" AND meta_author.inst = '$co_inst' ".
+			" AND meta_author.author_local_id = benutzer.id ");
+	$mcount = 0;
+	while ($ilias_db->next_record())
+	{
+		$module_author[$mcount]["fullname"] .= $ilias_db -> f("vorname") . " " . $ilias_db -> f("nachname");
+		$module_author[$mcount]["username"] .= $ilias_db -> f("benutzername");
+		$mcount++;
+	}
+	return $module_author;
 }
 
 function get_user_modules($benutzername)

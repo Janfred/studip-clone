@@ -145,28 +145,33 @@ function show_seminar_modules_links($seminar_id)
  	else
  	{
 		if (sizeof($out_str)<2)
-			echo "<font size=-1><b>" . _("Diese Veranstaltung ist mit einem Lernmodul verbunden:") . "</b></font><br /><br />";
+			echo "<br><b>" . _("Diese Veranstaltung ist mit einem Lernmodul verbunden:") . "</b><br /><br /><br />";
 		else
-			echo "<font size=-1><b>" . _("Diese Veranstaltung ist mit den folgenden Lernmodulen verbunden:") . "</b></font><br /><br />";
-	 	?>
-		<table cellspacing="0" cellpadding="0" border="0" width="100%">
-			<tr align="center" valign="top">
-				<th width="1%" align="left">&nbsp;</th>
-				<th width="99%" align="left"><b><? echo _("Name und Beschreibung"); ?></b></th>
-			</tr>		
-			<?
+			echo "<br><b>" . _("Diese Veranstaltung ist mit den folgenden Lernmodulen verbunden:") . "</b><br /><br /><br />";
+
 			for ($i=0; $i<sizeof($out_str); $i++) 
 			{
-				$cssSw->switchClass();
-				echo "<tr><td class=\"". $cssSw->getClass() ." width=\"1%\">&nbsp;</td>";
-				echo "<td class=\"" . $cssSw->getClass() . " width=\"99%\" valign=\"center\"><br>";
-				echo $out_str[$i];
-				echo "<br></td></tr>";
+				$printlink = $out_str[$i]["link"];
+				$printimage = $out_str[$i]["image"];
+				$printcontent = $out_str[$i]["content"];
+				$printdesc = $out_str[$i]["desc"];
+				?>
+				<table cellspacing="0" cellpadding="0" border="0" width="100%">
+					<tr>
+						<?
+						printhead ("99%", FALSE, "", "close", true, $printimage, $printlink, $printdesc);
+						?>
+					</tr>
+				</table>
+				<table cellspacing="0" cellpadding="0" border="0" width="100%">
+					<tr>
+						<?
+						printcontent("99%", FALSE, $printcontent, "");
+						?>
+					</tr>
+				</table>
+				<?
 			}
-			?></td>
-		</tr>
-		</table>
-		<?
 	}
 }
 ?>
