@@ -19,7 +19,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-require_once("visual.inc.php");
+require_once($ABSOLUTE_PATH_STUDIP . "visual.inc.php");
 
 // store user-settings
 if($cmd_cal == "chng_cal_settings"){
@@ -275,7 +275,7 @@ $css_switcher = new cssClassSwitcher();
 							echo '<input type="hidden" name="atime" value="'.$atime.'">';
 					?>
 						<input type="hidden" name="view" value="calendar">
-						<p><br /><input type="IMAGE" src="pictures/buttons/uebernehmen-button.gif" border=0 value="&Auml;nderungen &uuml;bernehmen"></font>&nbsp; </p>
+						<p><br /><input type="image" <? echo makeButton("uebernehmen" , "src"); ?> border="0"></font>&nbsp; </p>
 					</td>
 				</tr>
 			</table>
