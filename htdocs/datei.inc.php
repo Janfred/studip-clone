@@ -793,7 +793,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 					$icon="<a href=\"sendfile.php/?type=0&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\"><img src='pictures/rtf-icon.gif' border=0></a>";
 					elseif (getFileExtension(strtolower($db3->f("filename"))) == "xls")
 					$icon="<a href=\"sendfile.php/?type=0&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\"><img src='pictures/xls-icon.gif' border=0></a>";
-					elseif ((getFileExtension(strtolower($db3->f("filename"))) == "zip") || (getFileExtension(strtolower($db3->f("filename"))) == "tgz") || (getFileExtension(strtolower($db3->f("filename"))) == "gz"))
+					elseif ((getFileExtension(strtolower($db3->f("filename"))) == "zip") || (getFileExtension(strtolower($db3->f("filename"))) == "tgz") || (getFileExtension(strtolower($db3->f("filename"))) == "gz") || (getFileExtension(strtolower($db3->f("filename"))) == "bz2"))
 					$icon="<a href=\"sendfile.php/?type=0&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\"><img src='pictures/zip-icon.gif' border=0></a>";
 					elseif (getFileExtension(strtolower($db3->f("filename"))) == "ppt")
 					$icon="<a href=\"sendfile.php/?type=0&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\"><img src='pictures/ppt-icon.gif' border=0></a>";
@@ -901,7 +901,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 						$edit='';
 						if (($change != $db3->f("dokument_id")) && ($upload != $db3->f("dokument_id"))) {
 							$edit= "&nbsp;<a href=\"sendfile.php/?type=0&force_download=TRUE&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\">" . makeButton("herunterladen", "img") . "</a>";
-							if ((getFileExtension(strtolower($db3->f("filename"))) != "zip") && (getFileExtension(strtolower($db3->f("filename"))) != "tgz") && (getFileExtension(strtolower($db3->f("filename"))) != "gz"))
+							if ((getFileExtension(strtolower($db3->f("filename"))) != "zip") && (getFileExtension(strtolower($db3->f("filename"))) != "tgz") && (getFileExtension(strtolower($db3->f("filename"))) != "gz") && (getFileExtension(strtolower($db3->f("filename"))) != "bz2"))
 							$edit.= "&nbsp;<a href=\"sendfile.php/?zip=TRUE&type=0&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\">" . makeButton("alsziparchiv", "img") . "</a>";
 							
 							if (($rechte) || ($db3->f("user_id")==$user->id)) {
