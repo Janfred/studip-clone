@@ -28,17 +28,17 @@
 								</td>
 								<td bgcolor="#006699">
 									<b>
-										<font color="#FFFFFF">Adresse</font>
-									</b>
-								</td>
-								<td bgcolor="#006699">
-									<b>
 										<font color="#FFFFFF">Telefon</font>
 									</b>
 								</td>
 								<td bgcolor="#006699">
 									<b>
 										<font color="#FFFFFF">E-Mail</font>
+									</b>
+								</td>
+								<td bgcolor="#006699">
+									<b>
+										<font color="#FFFFFF">Kontingent</font>
 									</b>
 								</td>
 							</tr>
@@ -106,6 +106,12 @@
 			<td bgcolor="#EEEEEE">
 				<xsl:if test="email">
 					<xsl:value-of select="email"/>
+				</xsl:if>
+				<br/>
+			</td>
+			<td bgcolor="#EEEEEE">
+				<xsl:if test="kontingent">
+					<xsl:value-of select="kontingent"/>
 				</xsl:if>
 				<br/>
 			</td>
