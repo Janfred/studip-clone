@@ -217,9 +217,7 @@ if ($SessSemName["class"]=="inst") {
 //Reitersytem erzeugen
 $reiter=new reiter;
 
-//Topkats
-
-//Ruecksprung-Reiter
+//Ruecksprung-Reiter vorbereiten
 if ($SessSemName["class"] == "inst") {
 	if ($links_admin_data["referred_from"] == "inst")
 		$back_jump= "zur&uuml;ck zur ausgew&auml;hlten Einrichtung";
@@ -235,13 +233,7 @@ if ($SessSemName["class"] == "sem") {
 		$back_jump= "zur ausgew&auml;hlten Veranstaltung";
 }
 
-
-if ($SessSemName["class"] == "inst")
-	$structure["back_jump"]=array (topKat=>"", name=>$back_jump, link=>"institut_main.php?auswahl=".$SessSemName[1], active=>FALSE);
-elseif (($SessSemName["class"] == "sem") && (!$archive_kill) && (!$links_admin_data["assi"]))
-	$structure["back_jump"]=array (topKat=>"", name=>$back_jump, link=>"seminar_main.php?auswahl=".$SessSemName[1], active=>FALSE);
-
-//restliche Reiter
+//Topkats
 if ($perm->have_perm("tutor")) {
 	if (($SessSemName["class"] == "sem") && (!$archive_kill))
 		$structure["veranstaltungen"]=array (topKat=>"", name=>"Veranstaltungen", link=>"admin_seminare1.php", active=>FALSE);
@@ -254,6 +246,11 @@ if ($perm->have_perm("admin")) {
 	$structure["einrichtungen"]=array (topKat=>"", name=>"Einrichtungen", link=>"admin_institut.php?list=TRUE", active=>FALSE);
 	$structure["global"]=array (topKat=>"", name=>"globale Einstellungen", link=>"new_user_md5.php", active=>FALSE);
 }
+
+if ($SessSemName["class"] == "inst")
+	$structure["back_jump"]=array (topKat=>"", name=>$back_jump, link=>"institut_main.php?auswahl=".$SessSemName[1], active=>FALSE);
+elseif (($SessSemName["class"] == "sem") && (!$archive_kill) && (!$links_admin_data["assi"]))
+	$structure["back_jump"]=array (topKat=>"", name=>$back_jump, link=>"seminar_main.php?auswahl=".$SessSemName[1], active=>FALSE);
 
 //Bottomkats
 $structure["grunddaten_sem"]=array (topKat=>"veranstaltungen", name=>"Grunddaten", link=>"admin_seminare1.php?list=TRUE", active=>FALSE);
