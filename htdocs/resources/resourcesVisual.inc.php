@@ -639,7 +639,7 @@ class editSettings extends cssClasses {
 											echo _("einzeiliges Textfeld");
 										break; 
 										case "select":
-											echo _("definiertes Auswahlfeld");
+											echo _("Auswahlfeld");
 										break; 
 									}
 									?>
