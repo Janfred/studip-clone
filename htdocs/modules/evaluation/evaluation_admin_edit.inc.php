@@ -30,12 +30,12 @@
 // +---------------------------------------------------------------------------+
 
 # PHP-LIB: open session ===================================================== #
-page_open (array ("sess" => "Seminar_Session", 
+/*page_open (array ("sess" => "Seminar_Session", 
 		  "auth" => "Seminar_Auth",
 		  "perm" => "Seminar_Perm", 
 		  "user" => "Seminar_User"));
 $auth->login_if ($auth->auth["uid"] == "nobody");
-$perm->check ("autor");
+$perm->check ("autor");*/
 # ============================================================== end: PHP-LIB #
 
 # Include all required files ================================================ #
@@ -327,6 +327,6 @@ $debug .= "</pre>";
 #echo $debug;
 # PHP-LIB: close session ==================================================== #
 require_once ($ABSOLUTE_PATH_STUDIP . "html_end.inc.php");
-page_close ();
+//page_close ();
 # ============================================================== end: PHP-LIB #
 ?>
