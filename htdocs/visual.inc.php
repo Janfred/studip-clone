@@ -334,10 +334,6 @@ function formatReady ($what, $trim = TRUE, $extern = FALSE) {
 		$what = preg_replace("'\[nop\].+\[/nop\]'isU", 'ö', $what);
 		$what = symbol(smile(FixLinks(format(latex($what, $extern)), FALSE, TRUE, $extern), $extern), $extern);
 		$what = explode('ö', $what);
-		echo "<pre>";
-		print_r($what);
-		echo "</pre>";
-		
 		$i = 0;
 		foreach ($what as $w)	
 			$all .= $w . preg_replace("/\n?\r\n?/", '<br />', $matches[1][$i++]);
