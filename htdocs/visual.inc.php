@@ -501,8 +501,9 @@ function format ($text) {
 					"'\*\*(\S|\S.*?\S)\*\*'s",           // ML-fett
 					"'__(\S|\S.*?\S)__'s",                     // ML-unterstrichen
 					"'##(\S|\S.*?\S)##'s",                     // ML-diktengleich
-					"'\+\+(((\+\+)*)(\S|\S.*?\S)\\2)\+\+'se",  // ML-groesser
-					"'--(((--)*)(\S|\S.*?\S)\\2)--'se",        // ML-kleiner
+					//"'\+\+(((\+\+)*)(\S|\S.*?\S)\\2)\+\+'se",  // ML-groesser
+					//"'--(((--)*)(\S|\S.*?\S)\\2)--'se",        // ML-kleiner
+					"'((--)+|(\+\+)+)(\S|\S.*?\S)\\1'se",        // ML-kleiner / ML-groesser
 					"'&gt;&gt;(\S|\S.*?\S)&gt;&gt;'is",     // ML-hochgestellt
 					"'&lt;&lt;(\S|\S.*?\S)&lt;&lt;'is",     // ML-tiefgestellt
 					"'\n\n  (((\n\n)  )*(.+?))(\Z|\n\n(?! ))'se",   // Absatz eingerueckt
@@ -528,8 +529,9 @@ function format ($text) {
 					"<b>\\1</b>",
 					"<u>\\1</u>",
 					"<tt>\\1</tt>",
-					"'<big>'.format('\\1').'</big>'",
-					"'<small>'.format('\\1').'</small>'",
+					//"'<big>'.format('\\1').'</big>'",
+					//"'<small>'.format('\\1').'</small>'",
+					"preg_call_format_text('\\1', format('\\4'))",
 					"<sup>\\1</sup>",
 					"<sub>\\1</sub>",
 					"'<blockquote>'.format('\\1').'</blockquote>'",
@@ -539,6 +541,21 @@ function format ($text) {
 	$text = preg_replace($pattern, $replace, $text);
 	
 	return $text;
+}
+
+/**
+* callback function used by format() to generate big and small font
+*
+* @access	private
+* @param	string  string containing a string with quick-format char (++ or --)
+* @param	string  string containing text between quick-format char
+* @return	string
+*/
+function preg_call_format_text($ctxt, $content){
+	$c = strlen($ctxt) / 2;
+	if ($c > 5) $c = 5;
+	$tag = ($ctxt{1} == '+')? 'big':'small';
+	return str_repeat('<'.$tag.'>', $c) . $content. str_repeat('</'.$tag.'>', $c);
 }
 
 /**
