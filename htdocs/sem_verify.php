@@ -188,7 +188,7 @@ $db5=new DB_Seminar;
 						</td></tr></table>
 						<?
 					} else {
-						parse_msg (sprintf("info§"._("Um in der Veranstaltung <b>%s</b> Schreibrechte zu bekommen, m&uuml;ssen Sie zumindest auf die Registrierungsmail geantwortet haben!"), $SeminarName));
+						parse_msg (sprintf("info§"._("Um in der Veranstaltung <b>%s</b> Schreibrechte zu bekommen, m&uuml;ssen Sie zumindest auf die Registrierungsmail reagiert haben!"), $SeminarName));
 	   					echo"<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp;&nbsp; "._("zur&uuml;ck zur Startseite")."</a>";
   						if ($send_from_search)
 						    	echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">"._("zur&uuml;ck zur letzten Auswahl")."</a>";
