@@ -108,7 +108,6 @@ $infobox[1]["eintrag"][] = array (	"icon" => "pictures/suchen.gif" ,
 									"text" => $such_form
 								);
 print_infobox ($infobox,"pictures/einrichtungen.jpg");
-
 ?>
 </td></tr>
 </td></tr>
