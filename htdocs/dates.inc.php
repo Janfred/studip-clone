@@ -992,10 +992,10 @@ function dateAssi ($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full =
 					if ($db2->affected_rows()) {
 						//insert a entry for the linked resource, if resource management activ
 						if ($RESOURCES_ENABLE) {
-								$insertAssign->dont_check = TRUE;
-							if ($saved_dates[$affected_dates]) 
+							$insertAssign->dont_check = TRUE;
+							if ($saved_dates[$affected_dates]) {
 								$resources_result = array_merge($resources_result, $insertAssign->changeDateAssign($saved_dates[$affected_dates], $val["resource_id"]));
-							else 
+							} else 
 								$resources_result = array_merge($resources_result, $insertAssign->insertDateAssign($date_id, $val["resource_id"]));
 						}
 						$affected_dates++;
