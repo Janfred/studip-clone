@@ -487,8 +487,9 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 			<td class="rahmen_steel">
 				<font size="-1"><b><?=_("Ablaufplan-Assistent")?></b><br /><br /></font>
 				<font size="-1"><?=_("generieren Sie automatisch Sitzungstermine mit folgenden Einstellungen:")?><br /></font>
+				<?
 				//only, if the forum is active
-				<? if ($modules["forum"]) { ?>
+				if ($modules["forum"]) { ?>
 				&nbsp; &nbsp; <font size="-1"><input type="checkbox" name="pfad"> <?=_("Zu jedem Termin einen Themenordner im Forum der Veranstaltung anlegen.")?></font><br>
 				<? } 
 				//only, if the documents-folder is active
