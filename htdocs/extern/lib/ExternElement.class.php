@@ -132,7 +132,9 @@ class ExternElement {
 	*/
 	function toStringEdit ($post_vars = "", $faulty_values = "",
 			$edit_form = "", $anker = "") {
-			
+		
+		if ($faulty_values = "")
+			$faulty_values = array();	
 		$out = "";
 		$tag_headline = "";
 		$table = "";
@@ -140,44 +142,25 @@ class ExternElement {
 			$edit_form =& new ExternEditHtml($this->config, $post_vars, $faulty_values, $anker);
 		
 		$edit_form->setElementName($this->getName());
-		$element_headline = $edit_form->editElementHeadline($this->real_name,
-				$this->config->getName(), $this->config->getId(), TRUE, $anker);
+		$element_headline = $this->getEditFormHeadline($edit_form);
 		
-		if ($faulty_values = "")
-			$faulty_values = array();
+		$out = $edit_form->getEditFormContent($this->attributes);
 		
-		$previous_tag = "";
-		
-		reset($this->attributes);
-		foreach ($this->attributes as $attribute) {
-			$attribute_part = explode("_", $attribute);
-			if (!$attribute_part[2]) {
-				$edit_function = "edit" . $attribute_part[1];
-			
-				if ($attribute_part[0] != $previous_tag) {
-					if ($previous_tag != "") {
-						$out .= $edit_form->editContentTable($tag_headline, $table);
-						$out .= $edit_form->editBlankContent();
-						$tag_headline = $edit_form->editTagHeadline($attribute_part[0]);
-						$table = "";
-					}
-					else
-						$tag_headline = $edit_form->editTagHeadline($attribute_part[0]);
-					
-					$previous_tag = $attribute_part[0];
-				}
-				$table .= $edit_form->$edit_function($attribute);
-			}
-		}
-
-		$out .= $edit_form->editContentTable($tag_headline, $table);
 		$submit = $edit_form->editSubmit($this->config->getName(),
 				$this->config->getId(), $this->getName());
 		$out = $edit_form->editContent($out, $submit);
 		$out .= $edit_form->editBlank();
-		return $element_headline . $out;
+		
+		return  $element_headline . $out;
 	}
-
+	
+	function getEditFormHeadline (&$edit_form) {
+		$headline = $edit_form->editElementHeadline($this->real_name,
+				$this->config->getName(), $this->config->getId(), TRUE);
+		
+		return $headline;
+	}
+	
 	/**
 	* 
 	*/
