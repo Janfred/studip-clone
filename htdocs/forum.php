@@ -19,11 +19,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 	page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 
-	if (!isset($SessSemName[0]) || $SessSemName[0] == "") {
-		header("Location: index.php");
-    die;
-	}
-
 	include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
@@ -64,12 +59,15 @@ function pruefe_name(){
 		echo "<SCRIPT LANGUAGE=\"JavaScript\" SRC=\"overlib.js\"></SCRIPT>";
 	}
 
-	include "links_openobject.inc.php";
 	require_once "functions.php";
 	require_once "visual.inc.php";
 	require_once "forum.inc.php";
 	require_once "msg.inc.php";
 	require_once "dates.inc.php"; 
+
+	checkObject();
+
+	include "links_openobject.inc.php";
 	
 ////////////////////////////////////////////////////////////////////
 /*
@@ -88,45 +86,36 @@ $write_id (welcher wird geschrieben)
 
 // Sind wir da wo wir hinwollen?
 
-IF ($topic_id AND !$update) {
+if ($topic_id AND !$update) {
 	$db=new DB_Seminar;
 	$db->query("SELECT * FROM px_topics WHERE topic_id='$topic_id' AND Seminar_id ='$SessSemName[1]'");
 	if (!$db->num_rows()) { // wir sind NICHT im richtigen Seminar!
-	echo "<br><br>";
-	parse_window ("error§Sie versuchen, mit zwei Browserfenstern innerhalb verschiedener Foren zu navigieren.<br /><font size=-1 color=black>Um unerw&uuml;nschte Effekten wie falsch einsortierten Postings zu vermeiden,<br>empfehlen wir im System nur ein Browserfenster zu verwenden.</font>", "§",
-				"zuviele Browserfenster im Forenbereich", 
+		echo "<br><br>";
+		parse_window ("error§" . _("Sie versuchen, mit zwei Browserfenstern innerhalb verschiedener Foren zu navigieren.") . "<br /><font size=-1 color=black>" . _("Um unerw&uuml;nschte Effekten wie falsch einsortierten Postings zu vermeiden,<br>empfehlen wir im System nur ein Browserfenster zu verwenden.") . "</font>", "§",
+				_("zuviele Browserfenster im Forenbereich"), 
 				"");
-	die;
-		}
+		die;
 	}
-ELSEIF ($open AND !$update) {
+} elseif ($open AND !$update) {
 	$db=new DB_Seminar;
 	$db->query("SELECT * FROM px_topics WHERE topic_id='$open' AND Seminar_id ='$SessSemName[1]'");
 	if (!$db->num_rows()) { // wir sind NICHT im richtigen Seminar!
-	echo "<br><br>";
-	parse_window ("error§Sie versuchen, mit zwei Browserfenstern innerhalb verschiedener Foren zu navigieren.<br /><font size=-1 color=black>Um unerw&uuml;nschte Effekten wie falsch einsortierten Postings zu vermeiden,<br>empfehlen wir im System nur ein Browserfenster zu verwenden.</font>", "§",
-				"zuviele Browserfenster im Forenbereich", 
+		echo "<br><br>";
+		parse_window ("error§" . _("Sie versuchen, mit zwei Browserfenstern innerhalb verschiedener Foren zu navigieren.") . "<br /><font size=-1 color=black>" . _("Um unerw&uuml;nschte Effekten wie falsch einsortierten Postings zu vermeiden,<br>empfehlen wir im System nur ein Browserfenster zu verwenden.") . "</font>", "§",
+				_("zuviele Browserfenster im Forenbereich"), 
 				"");
-	die;
-		}
+		die;
 	}
+}
 
 //Titel-Zeile
-IF (!$forumsend=="anpassen") {
+if (!$forumsend=="anpassen") {
 	echo "\n<table width=\"100%\" class=\"blank\" border=0 cellpadding=0 cellspacing=0>\n";
-	echo "<tr><td class=\"topic\" width=\"95%\"><b>&nbsp;<img src='pictures/icon-posting.gif' align=absmiddle>&nbsp; ". $SessSemName["header_line"] ." - Forum</b></td><td class=\"topic\" width=\"5%\" align=\"right\"><a href='forum.php?forumsend=anpassen'><img src='pictures/pfeillink.gif' border=0 alt='Look & Feel anpassen'>&nbsp;</a></td></tr>\n";
+	echo "<tr><td class=\"topic\" width=\"95%\"><b>&nbsp;<img src='pictures/icon-posting.gif' align=absmiddle>&nbsp; ". $SessSemName["header_line"] ." - " . _("Forum") . "</b></td><td class=\"topic\" width=\"5%\" align=\"right\"><a href='forum.php?forumsend=anpassen'><img src='pictures/pfeillink.gif' border=0 " . tooltip(_("Look & Feel anpassen")) . ">&nbsp;</a></td></tr>\n";
 	echo "<tr><td class=\"blank\" colspan=2>&nbsp; </td></tr>\n";
 	echo "</table>\n";
-	}
+}
 
-//Sind wir wirklich da, wo wir vogeben zu sein?
-IF ($SessSemName[1] =="")
-	{
-	parse_window ("error§Sie haben kein Objekt gew&auml;hlt. <br /><font size=-1 color=black>Dieser Teil des Systems kann nur genutzt werden, wenn Sie vorher ein Objekt gew&auml;hlt haben.<br /><br /> Dieser Fehler tritt auch auf, wenn Ihre Session abgelaufen ist. Wenn sie sich länger als $AUTH_LIFETIME Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurück zur Anmeldung zu gelangen. </font>", "§",
-				"Kein Objekt gew&auml;hlt", 
-				"<a href=\"index.php\"><b>&nbsp;Hier</b></a> geht es wieder zur Anmeldung beziehungsweise Startseite.<br />&nbsp;");
-	die;
-	}
 
 // Rekursives Löschen von Postings, Warnung
 IF ($cmd == "kill" && $topic_id !="") {
@@ -140,11 +129,11 @@ IF ($cmd == "kill" && $topic_id !="") {
 		if ($rechte || (($db->f("user_id") == $user->id) && ($count == 0))) {  // noch mal checken ob alles o.k.
 			$root = $db->f("root_id");
 			echo "\n\n<table class=\"blank\" cellspacing=0 cellpadding=5 border=0 width=\"100%\"><colgroup span=1></colgroup>\n";
-			$msg="info§Wollen Sie das untenstehende Posting <b>".htmlReady($db->f("name"))."</b> von <b>".$db->f("author")."</b> wirklich l&ouml;schen?<br>\n";
+			$msg="info§" . sprintf(_("Wollen Sie das untenstehende Posting %s von %s wirklich l&ouml;schen?"), "<b>".htmlReady($db->f("name"))."</b>", "<b>".$db->f("author")."</b>") . "<br>\n";
 			if ($count)
-				$msg.="Alle $count Antworten darauf werden ebenfalls gel&ouml;scht!<br />\n<br />\n";
-			$msg.="<a href=\"".$PHP_SELF."?cmd=really_kill&topic_id=$topic_id&view=$view&mehr=$mehr#anker\"><img src=\"pictures/buttons/ja2-button.gif\" border=0 /></a>&nbsp; \n";
-			$msg.="<a href=\"".$PHP_SELF."?topic_id=$root&open=$topic_id&view=$view&mehr=$mehr#anker\"><img src=\"pictures/buttons/nein-button.gif\" border=0 /></a>\n";
+				$msg.= sprintf(_("Alle %s Antworten darauf werden ebenfalls gel&ouml;scht!"), $count) . "<br />\n<br />\n";
+			$msg.="<a href=\"".$PHP_SELF."?cmd=really_kill&topic_id=$topic_id&view=$view&mehr=$mehr#anker\">" . makeButton("ja2", "img") . "</a>&nbsp; \n";
+			$msg.="<a href=\"".$PHP_SELF."?topic_id=$root&open=$topic_id&view=$view&mehr=$mehr#anker\">" . makeButton("nein", "img") . "</a>\n";
 			parse_msg($msg, '§', 'blank', '1', FALSE);
 			echo "</table>";
 
@@ -161,7 +150,6 @@ IF ($cmd == "kill" && $topic_id !="") {
 			echo "<table width=\"80%\" border=0 cellpadding=0 cellspacing=0 align=center><tr>";	
 			printcontent ("100%","",$parent_description,"");
 			echo "</tr></table>\n<br><br></td></tr></table>";	
-	//		printf ("<tr><td class=blank><br><table width=80%% align=center border=0 cellpadding=5><tr><td class=\"steel1\">%s</td></tr></table><br />&nbsp;</td></tr></table>", $parent_description);
 			page_close();
 			die;
 		}
@@ -170,15 +158,15 @@ IF ($cmd == "kill" && $topic_id !="") {
 
 // loeschen von nicht zuende getippten Postings
 
-IF ($writemode!="" AND !isset($update)) {
+if ($writemode!="" AND !isset($update)) {
 	$db=new DB_Seminar;
 	$db->query("SELECT * FROM px_topics WHERE topic_id='$writemode' AND Seminar_id ='$SessSemName[1]' and (description = 'Dieser Beitrag wird gerade bearbeitet.' OR description = 'Beschreibung des Themas')");
 	if ($db->num_rows()) { // wir sind im richtigen Seminar!
 		$count = 0;
 		delete_topic($writemode,$count);
 		$writemode="";
-		}
 	}
+}
 
 // Rekursives Löschen von Postings, jetzt definitiv!
 
@@ -197,7 +185,7 @@ if ($cmd == "really_kill" && $topic_id !="") {
 			$topic_id = $db->f("root_id");
 			IF ($nurneu!=1) { // es wurde wirklich was gel&ouml;scht und nicht nur ein Anlegen unterbrochen
 				echo "<table class=\"blank\" cellspacing=0 cellpadding=0 border=0 width=\"100%\">";
-				parse_msg("msg§$count Posting(s) gel&ouml;scht");
+				parse_msg("msg§" . sprintf(_("%s Posting(s) gel&ouml;scht"), $count));
 				echo "</table>";
 			}
 		}		
@@ -236,7 +224,7 @@ IF ($cmd == "move" && $topic_id !="" && $rechte) {
 ?>	<table class="steel1" width="100%" cellpadding="0" cellspacing="0" border="0">
 			<tr>
 				<td class="steel2" colspan="2">
-					&nbsp; <img src="pictures/move.gif" border="0">&nbsp;<b><font size="-1">Als Thema verschieben (zusammen mit <?echo $count;?> Antworten):</font></b>
+					&nbsp; <img src="pictures/move.gif" border="0">&nbsp;<b><font size="-1"><?=sprintf(_("Als Thema verschieben (zusammen mit %s Antworten):"), $count)?></font></b>
 				</td>
 			</tr>
 			<tr>
@@ -246,11 +234,11 @@ IF ($cmd == "move" && $topic_id !="" && $rechte) {
 			</tr>
 			<tr>
 				<td class="steel1" align="right" nowrap width="20%" valign="baseline">
-					<font size="-1">in anderes Forum:</font>&nbsp; &nbsp; 
+					<font size="-1"><?=_("in anderes Forum:")?></font>&nbsp; &nbsp; 
 				</td>
 				<td class="steel1" width="80%">
 					<form action="forum.php" method="POST">
-					<input type="image" name="SUBMIT" value="Verschieben" src="pictures/move.gif" border="0" <?=tooltip("dahin verschieben")?>>&nbsp; 					
+					<input type="image" name="SUBMIT" value="Verschieben" src="pictures/move.gif" border="0" <?=tooltip(_("dahin verschieben"))?>>&nbsp; 					
 					<select Name="sem_id" size="1">
 			<?		while ($db->next_record()) {
 						$sem_name=htmlReady(substr($db->f("Name"), 0, 50));
@@ -268,11 +256,11 @@ IF ($cmd == "move" && $topic_id !="" && $rechte) {
 		?>
 			<tr>
 				<td class="steel1" align="right" nowrap width="20%" valign="baseline">
-			  		<font size="-1">in andere Einrichtung:</font>&nbsp; &nbsp; 
+			  		<font size="-1"><?=_("in andere Einrichtung:")?></font>&nbsp; &nbsp; 
 			  	</td>
 				<td class="steel1" width="80%">
 					<form action="forum.php" method="POST">
-					<input type=image name="SUBMIT" value="Verschieben" src="pictures/move.gif" border=0 <?=tooltip("dahin verschieben")?>>&nbsp; 						
+					<input type=image name="SUBMIT" value="Verschieben" src="pictures/move.gif" border=0 <?=tooltip(_("dahin verschieben"))?>>&nbsp; 						
 			  	<select Name="inst_id" size="1">
 			<?		while ($db2->next_record()) {
 						$inst_name=htmlReady(substr($db2->f("Name"), 0, 50));
@@ -295,7 +283,7 @@ IF ($cmd == "move" && $topic_id !="" && $rechte) {
 				<td class="steel1" width="80%">					
 					<br>
 
-			  		<a href="forum.php?view=<?echo $view;?>"><img src="pictures/buttons/abbrechen-button.gif" border=0></a>
+			  		<a href="forum.php?view=<?echo $view;?>"><?=makeButton("abbrechen", "img")?></a>
 
 		  		</td>
   			</tr>
@@ -305,43 +293,43 @@ IF ($cmd == "move" && $topic_id !="" && $rechte) {
 	
 
 	
-IF ($target =="Seminar"){ //Es soll in ein anderes Seminar verschoben werden 
+if ($target =="Seminar"){ //Es soll in ein anderes Seminar verschoben werden 
 	$verschoben = 0;
 	move_topic($topic_id,$sem_id,$topic_id,$verschoben);
 	echo "<table class=blank width=\"100%\" border=0 cellpadding=0 cellspacing=0>";
-	parse_msg("msg§$verschoben Posting(s) verschoben.");
+	parse_msg("msg§" . sprintf(_("%s Posting(s) verschoben."), $verschoben));
 	echo "</table>";
 	}
 	
-IF ($target =="Institut"){ //Es soll in ein Institut verschoben werden 
+if ($target =="Institut"){ //Es soll in ein Institut verschoben werden 
 	$verschoben = 0;
 	move_topic($topic_id,$inst_id,$topic_id,$verschoben);
 	echo "<table class=blank width=\"100%\" border=0 cellpadding=0 cellspacing=0>";
-	parse_msg("msg§$verschoben Posting(s) verschoben.");
+	parse_msg("msg§" . sprintf(_("%s Posting(s) verschoben."), $verschoben));
 	echo "</table>";
 	}
 
-IF ($target =="Thema"){ //Es soll in ein anderes Thema verschoben werden 
+if ($target =="Thema"){ //Es soll in ein anderes Thema verschoben werden 
 	$verschoben = 0;
 	move_topic2($move_id,$move_id,$verschoben,$parent_id);
 	echo "<table class=blank width=\"100%\" border=0 cellpadding=0 cellspacing=0>";
-	parse_msg("msg§$verschoben Posting(s) verschoben.");
+	parse_msg("msg§" . sprintf(_("%s Posting(s) verschoben."), $verschoben));
 	echo "</table>";
 	}
 
 // Einbau der Forumsetting-Ansicht
 
-IF ($forumsend) {
+if ($forumsend) {
 	
-	IF ($forumsend=="bla"){
+	if ($forumsend=="bla"){
 		$forum=array(
 			"jshover"=>$jshover, 
 			"neuauf"=>$neuauf,
 			"changed"=>"TRUE"			
 			);
-		}
-	ELSE include("forumsettings.inc.php");
-	}
+	} ELSE
+		include("forumsettings.inc.php");
+}
 
 // Anzeige der Topics
 if (!isset($topic_id) AND $view=="") {  // wir sind in der Themen-Auflistung
@@ -369,7 +357,7 @@ IF ($write){			// es wird ein neuer Beitrag gepostet
 	}
 	
 IF ($neuesthema==TRUE){			// es wird ein neues Thema angelegt
-		$name = "Name des Themas";
+		$name = _("Name des Themas");
 		$author = get_fullname();
 		$open = CreateTopic ($name, $author, "Beschreibung des Themas", "0", "0");
 		$write =$open;
@@ -406,5 +394,5 @@ ELSE
   // Save data back to database.
   page_close()
  ?>
-</body></body>
+</body>
 </html>
