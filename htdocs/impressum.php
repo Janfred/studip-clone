@@ -107,7 +107,7 @@ $reiter->create($structure, $view);
 			<br>&nbsp; &nbsp; <b>Die folgenden Entwickler</b> sind mit der st&auml;ndigen Pflege und Weiterentwicklung des Systems befasst:<br>
 			<blockquote>
 			<font size=-1><b>Marco Bohnsack</b>, eMail: <a href="mailto:mbohnsa@stud.uni-goettingen.de">mbohnsa@stud.uni-goettingen.de</a> (Hilfe)</font>
-			<br><font size=-1><b>Oliver Brakel</b>, eMail: <a href="mailto:obrakel@gwdg.de">obrakel@uni-goettingen.de</a> (Distribution)</font>
+			<br><font size=-1><b>Oliver Brakel</b>, eMail: <a href="mailto:obrakel@studip.de">obrakel@studip.de</a> (Distribution)</font>
 			<br><font size=-1><b>Cornelis Kater</b>, eMail: <a href="mailto:kater@data-quest.de">kater@data-quest.de</a> (Kernentwicklung, Terminverwaltung, Adminbereich, Design)</font>
 			<br><font size=-1><b>André Noack</b>, eMail: <a href="mailto:noack@data-quest.de">noack@data-quest.de</a> (Kernentwicklung, Newsverwaltung, Chat)</font>
 			<br><font size=-1><b>Arne Schröder</b>, eMail: <a href="mailto:23arne@web.de">schroeder@data-quest.de</a> (Externe Seiten)</font>
