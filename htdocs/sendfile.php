@@ -181,6 +181,10 @@ switch (strtolower(getFileExtension ($file_name))) {
 	break;
 	}
 
+//override disposition, if available
+if ($disposition)
+	$content_disposition=$disposition;
+
 //determine the type of the object we want to download a file from (only in type=0 mode!)
 $db->query("SELECT seminar_id AS object_id, filesize FROM dokumente WHERE dokument_id = '".$file_id."' ");
 $db->next_record();
