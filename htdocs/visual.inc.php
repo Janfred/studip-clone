@@ -459,14 +459,14 @@ function preg_call_link($name, $link, $mod){
 //////////////////////////////////////////////////////////////////////////////////////////
 
 function smile ($text= "") {
-	global $SMILE_SHORT, $SMILE_PATH;
+	global $SMILE_SHORT, $SMILE_PATH, $CANONICAL_RELATIVE_PATH_STUDIP;
 	if(empty($text)) {
 		return $text;
 	}
-	$text=preg_replace("'(\>|^|\s):([_a-zA-Z][_a-z0-9A-Z-]*):($|\<|\s)'m","\\1<a href=\"show_smiley.php\" target=\"_blank\"><img alt=\"\\2\" title=\"\\2\" border=\"0\" src=\"$SMILE_PATH/\\2.gif\"></a>\\3",$text);
+	$text=preg_replace("'(\>|^|\s):([_a-zA-Z][_a-z0-9A-Z-]*):($|\<|\s)'m","\\1<a href=\"{$CANONICAL_RELATIVE_PATH_STUDIP}show_smiley.php\" target=\"_blank\"><img alt=\"\\2\" title=\"\\2\" border=\"0\" src=\"$CANONICAL_RELATIVE_PATH_STUDIP$SMILE_PATH/\\2.gif\"></a>\\3",$text);
 	reset($SMILE_SHORT);
 	WHILE (list($key,$value) = each($SMILE_SHORT)) {
-		$text=str_replace($key,"<a href=\"show_smiley.php\" target=\"_blank\"><img ".tooltip($value)." border=\"0\" src=\"$SMILE_PATH/$value.gif\"></a>",$text);
+		$text=str_replace($key,"<a href=\"{$CANONICAL_RELATIVE_PATH_STUDIP}show_smiley.php\" target=\"_blank\"><img ".tooltip($value)." border=\"0\" src=\"$CANONICAL_RELATIVE_PATH_STUDIP$SMILE_PATH/$value.gif\"></a>",$text);
 	}
 	return $text;
 }

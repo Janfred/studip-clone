@@ -23,7 +23,7 @@ if ($perm->have_perm("user")) ;
 else
 	$my_messaging_settings["active_time"]=5;
 
-require_once ($ABSOLUTE_PATH_STUDIP . "ChatShmServer.class.php");
+require_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/ChatShmServer.class.php";
 require_once ($ABSOLUTE_PATH_STUDIP . "visual.inc.php");
 //nur sinnvoll wenn chat eingeschaltet
 if ($CHAT_ENABLE) {
@@ -35,7 +35,7 @@ if ($CHAT_ENABLE) {
      {
      <?
      if ($chatServer->isActiveUser($user->id,"studip")) echo "alert('Sie sind bereits im Chat angemeldet!');\n";
-     else echo "fenster=window.open(\"chat_login.php?chatid=studip\",\"chat_studip_".$auth->auth["uid"]."\",\"scrollbars=no,width=640,height=480,resizable=yes\");\n";
+     else echo "fenster=window.open(\"$RELATIVE_PATH_CHAT/chat_login.php?chatid=studip\",\"chat_studip_".$auth->auth["uid"]."\",\"scrollbars=no,width=640,height=480,resizable=yes\");\n";
      ?>
      }
      </script>

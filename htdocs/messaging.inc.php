@@ -18,7 +18,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-require_once "ChatShmServer.class.php"; //wird für Nachrichten im chat benötigt
+require_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/ChatShmServer.class.php"; //wird für Nachrichten im chat benötigt
 
 class messaging {
 	var $db;							//Datenbankanbindung
