@@ -318,29 +318,33 @@ function quotes_encode ($description,$author) {
 
 // Hilfsfunktion für formatReady
 function format_help($what, $trim = TRUE, $extern = FALSE, $wiki = FALSE) {
-	if (preg_match_all("'\[nop\](.+)\[/nop\]'isU", $what, $matches)) {
-		$what = preg_replace("'\[nop\].+\[/nop\]'isU", 'ö', $what);
+
+	if (preg_match_all("'\[code\](.+)\[/code\]'isU", $what, $match_code)) {
+		$what = htmlReady($what, $trim, FALSE);
+		$what = preg_replace("'\[code\].+\[/code\]'isU", 'ü', $what);
 		if ($wiki == TRUE)
 			$what = symbol(smile(FixLinks(wiki_format(format(latex($what, $extern))), FALSE, TRUE, TRUE, $extern), $extern), $extern);
 		else
 			$what = symbol(smile(FixLinks(format(latex($what, $extern)), FALSE, TRUE, TRUE, $extern), $extern), $extern);
-		$what = explode('ö', $what);
-		$i = 0; $all = '';
+		$what = explode('ü', $what);
+		$i = 0;
+		$all = '';
 		foreach ($what as $w) {
-			if ($matches[1][$i] == '') {
-				$all .= $w;
+			if ($match_code[1][$i] == ''){
+				$all .=  $w ;
 			} else {
-				$a = preg_replace("/\n?\r\n?/", '<br />', $matches[1][$i]);
-				$all .= $w . (($wiki == TRUE)? "<nowikilink> $a </nowikilink>\n" : $a);
+				$a = highlight_string( $match_code[1][$i] , TRUE);
+				$all .= $w . (($wiki == TRUE)? "<nowikilink>$a</nowikilink>":$a );
 			}
 			$i++;
 		}
 		return $all;
 	}
+	$what = htmlReady($what, $trim, FALSE);
 	if ($wiki == TRUE)
 		return symbol(smile(FixLinks(wiki_format(format(latex($what, $extern))), FALSE, TRUE, TRUE, $extern), $extern), $extern);
 	else
-		return symbol(smile(FixLinks(format(latex($what, $extern)),FALSE, TRUE, TRUE, $extern), $extern), $extern);
+		return symbol(smile(FixLinks(format(latex($what, $extern)), FALSE, TRUE, TRUE, $extern), $extern), $extern);
 }
 
 /**
@@ -356,27 +360,23 @@ function format_help($what, $trim = TRUE, $extern = FALSE, $wiki = FALSE) {
 */
 function formatReady ($what, $trim = TRUE, $extern = FALSE, $wiki = FALSE) {
 
-	if (preg_match_all("'\[code\](.+)\[/code\]'isU", $what, $match_code)) {
-		$what = htmlReady($what, $trim, FALSE);
-		$what = preg_replace("'\[code\].+\[/code\]'isU", 'ü', $what);
+	if (preg_match_all("'\[nop\](.+)\[/nop\]'isU", $what, $matches)) {
+		$what = preg_replace("'\[nop\].+\[/nop\]'isU", '{-*~*%}', $what);
 		$what = format_help($what, $trim, $extern, $wiki);
-		$what = explode('ü', $what);
-		$i = 0;
-		$all = '';
+		$what = explode('{-*~*%}', $what);
+		$i = 0; $all = '';
 		foreach ($what as $w) {
-			if ($match_code[1][$i] == ''){
-				$all .=  $w ;
+			if ($matches[1][$i] == '') {
+				$all .= $w;
 			} else {
-				$a = highlight_string( $match_code[1][$i] , TRUE);
-				$all .= $w . (($wiki == TRUE)? "<nowikilink> $a </nowikilink>\n":$a );
+				$a = preg_replace("/\n?\r\n?/", '<br />', htmlReady($matches[1][$i], $trim, FALSE));
+				$all .= $w . (($wiki == TRUE)? "<nowikilink>$a</nowikilink>" : $a);
 			}
 			$i++;
 		}
 		return $all;
-	} else {
-		$what = htmlReady($what, $trim, FALSE);
-		return format_help($what, $trim, $extern, $wiki);
 	}
+	return format_help($what, $trim, $extern, $wiki);
 }
 
 
