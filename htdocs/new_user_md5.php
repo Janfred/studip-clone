@@ -53,6 +53,11 @@ require_once("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");	 //Enthaelt Funktion
 if ($RESOURCES_ENABLE) {
 	require_once ($RELATIVE_PATH_RESOURCES."/lib/ResourcesAssign.class.php");
 }
+if ($ILIAS_CONNECT_ENABLE) {
+	include_once ("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_LEARNINGMODULES/lernmodul_config.inc.php");
+	include_once ("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_LEARNINGMODULES/lernmodul_db_functions.inc.php");
+	include_once ("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_LEARNINGMODULES/lernmodul_user_functions.inc.php");
+}
 
 $cssSw=new cssClassSwitcher;
 
@@ -270,6 +275,11 @@ while ( is_array($HTTP_POST_VARS)
 			if (($db->affected_rows() == 0) && ($db2->affected_rows() == 0)) {
 				$msg .= "error§Die &Auml;nderung konnte nicht in die Datenbank geschrieben werden§";
 				$run = FALSE;
+				}
+			if ($ILIAS_CONNECT_ENABLE) {
+				$this_ilias_id = get_connected_user_id($u_id);
+				if ($this_ilias_id != false) 
+					edit_ilias_user($this_ilias_id, $username, $geschlecht, $Vorname, $Nachname, $title_front, "Stud.IP", $Email, $permlist);
 				}
 		}
 		
@@ -568,6 +578,12 @@ while ( is_array($HTTP_POST_VARS)
 			if ($RESOURCES_ENABLE) {
 				$killAssign = new ResourcesAssign($u_id);
 				$killAssign->delete();
+			}
+			//kill ILIAS-Account if it was automatically generated)
+			if ($ILIAS_CONNECT_ENABLE) {
+				$this_ilias_id = get_connected_user_id($u_id);
+				if (($this_ilias_id != false) AND (is_created_user($u_id) == 1))
+					delete_ilias_user($this_ilias_id);
 			}
 			
 			$query = "delete from auth_user_md5 where user_id='$u_id' and username='$username'";
