@@ -444,6 +444,11 @@ while ( is_array($HTTP_POST_VARS)
 			while ($db2->next_record()) 
 				update_admission($db2->f("seminar_id"));
 			}
+			## Studiengaenge loeschen
+			$query = "delete from user_studiengang where user_id='$u_id'";
+			$db->query($query);
+			if (($db_ar = $db->affected_rows()) > 0) {
+				$msg .= "info§$db_ar Zuordnungen zu Studieng&auml;ngen gel&ouml;scht.§";
 			## Dokumente des users loeschen
 			$temp_count = 0;
 			$query = "SELECT dokument_id FROM dokumente WHERE user_id='$u_id'";
@@ -483,7 +488,7 @@ while ( is_array($HTTP_POST_VARS)
 			$query = "delete from user_inst where user_id='$u_id'";
 			$db->query($query);
 			if (($db_ar = $db->affected_rows()) > 0) {
-				$msg .= "info§$db_ar Eintr&auml;ge aus Mitarbeirerlisten gel&ouml;scht.§";
+				$msg .= "info§$db_ar Eintr&auml;ge aus Mitarbeiterlisten gel&ouml;scht.§";
 			}
 			// user aus den Statusgruppen rauswerfen
 			if ($db_ar = RemovePersonFromAllStatusgruppen(get_username($u_id))  > 0) {
