@@ -97,7 +97,7 @@ class EvaluationObjectDB extends DatabaseObject {
           $name = getHeaderLine ($rangeID);
          if ($name != NULL){
             if ( $html_decode )
-               $rangename = html_entity_decode ($name);
+               $rangename = decodeHTML ($name);
             else
                $rangename = $name;
          } else

@@ -183,7 +183,7 @@ class EvaluationObject extends StudipObject {
     */
    function setTitle ($title, $encoded = false) {
       if ($encoded)
-         $this->title = stripslashes (html_entity_decode ($title));
+         $this->title = stripslashes (decodeHTML ($title));
       else   
          $this->title = $title;
    }
@@ -211,7 +211,7 @@ class EvaluationObject extends StudipObject {
     */
    function setText ($text, $encoded = false) {
       if ($encoded)
-         $this->text = stripslashes (html_entity_decode ($text));
+         $this->text = stripslashes (decodeHTML ($text));
       else
          $this->text = $text;
    }
