@@ -47,7 +47,13 @@ define("PHPDOC_DUMMY",true);
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 	<head>
-		<meta http-equiv="REFRESH" CONTENT="<?php print $auth->lifetime*60;?>; URL=logout.php">
+<?
+if ($AUTH_LIFETIME) {
+?>
+		<meta http-equiv="REFRESH" CONTENT="<?=$AUTH_LIFETIME*60;?>; URL=logout.php">
+<?
+}
+?>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 		<meta name="copyright" content="Stud.IP-Crew (crew@studip.de)">
 		<link rel="SHORTCUT ICON" href="http://www.studip.de/favicon.ico">
