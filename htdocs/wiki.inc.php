@@ -40,6 +40,17 @@ function getWikiPage($keyword, $version, $db=NULL) {
 }
 
 /**
+* Fill in username in comments
+*
+* @param	string	body	WikiPage text
+*
+**/
+function completeWikiComments($body) {
+	global $auth;
+	return preg_replace("/\[comment\]/","\[comment=".get_fullname($auth->auth[uid])."\]",$body);
+}
+
+/**
 * Write a new/edited wiki page to database
 * 
 * @param	string	keyword	WikiPage name
@@ -60,6 +71,10 @@ function submitWikiPage($keyword, $version, $body, $user_id, $range_id) {
 		$date=time();
 		$lastchange = $date - $latestVersion[chdate];
 	}
+
+	// complete username in comments
+	$body=completeWikiComments($body);
+
 	if ($latestVersion && ($latestVersion['body'] == $body)) {
 		$message="info§" . _("Keine Änderung vorgenommen.");
 	} else if ($latestVersion && ($version!="") && ($lastchange < 30*60) && ($user_id == $latestVersion[user_id])) {
@@ -302,7 +317,7 @@ function wikiLinks($str, $page) {
 **/
 function getWikiLinks($str) {
 	global $wiki_keyword_regex;
-	$str = wikiReady($str);
+	$str = wikiReady($str,TRUE,FALSE,"none"); // ohne Kommentare
 	// [nop] und [code] Bereiche ausblenden ...
 	$str = preg_replace("'\<nowikilink\>.+\</nowikilink\>'isU", ' ', $str);
 	preg_match_all("/$wiki_keyword_regex/", $str, $out, PREG_PATTERN_ORDER);
@@ -560,7 +575,7 @@ function listPages($mode, $sortby=NULL) {
 
 	if ($mode=="all") {
 		$selfurl = $PHP_SELF."?view=listall";
-		$sort = "ORDER by keyword"; // default sort order for "all pages"
+		$sort = "ORDER by lastchange DESC"; // default sort order for "all pages"
 		$nopages = _("In dieser Veranstaltung wurden noch keine WikiSeiten angelegt.");
 	} else if ($mode=="new") {
 		$selfurl = $PHP_SELF."?view=listnew";
@@ -753,13 +768,13 @@ function printWikiPage($keyword, $version) {
 	echo "<body>";
 	echo "<p><em>$SessSemName[header_line]</em></p>";
 	echo "<h1>$keyword</h1>";
-	echo "<p><em>Version ".$wikiData['version'];
-	echo ", letzte Änderung ".date("d.m.Y, h:i", $wikiData['chdate']);
-	echo " von ".get_fullname($wikiData['user_id']).".</em></p>";
+	echo "<p><em>"._("Version")." ".$wikiData['version'];
+	echo ", "._("letzte Änderung")." ".date("d.m.Y, H:i", $wikiData['chdate']);
+	echo " "._("von")." ".get_fullname($wikiData['user_id']).".</em></p>";
 	echo "<hr>";
-	echo wikiReady($wikiData['body']);
+	echo wikiReady($wikiData['body'],TRUE,FALSE,"none");
 	echo "<hr><p><font size=-1>created by Stud.IP Wiki-Module ";
-	echo date("d.m.Y, h:i", time());
+	echo date("d.m.Y, H:i", time());
 	echo " </font></p>";
 	echo "</body></html>";
 }
@@ -814,8 +829,8 @@ function printAllWikiPages($range_id, $header) {
 				echo "<p><em>Version ".$pagedata['version'];
 				echo ", letzte Änderung ".date("d.m.Y, h:i", $pagedata['chdate']);
 				echo " von ".get_fullname($pagedata['user_id']).".</em></p>";
-				// output is html without WikiLinks
-				echo wikiReady($pagedata['body']);
+				// output is html without WikiLinks and comments
+				echo wikiReady($pagedata['body'],TRUE,FALSE,"none");
 			}
 		} 
 	}
@@ -862,7 +877,7 @@ function showPageFrameEnd($infobox) {
 *
 **/
 function getShowPageInfobox($keyword, $latest_version) {
-	global $PHP_SELF;
+	global $PHP_SELF, $show_wiki_comments;
 
 	$versions=getWikiPageVersions($keyword);
 	$versiontext="<a href=\"".$PHP_SELF."?keyword=".$keyword."\">Aktuelle Version</a><br>";
@@ -910,6 +925,20 @@ function getShowPageInfobox($keyword, $latest_version) {
 	}
 	$infobox[] = array("kategorie" => _("Alte Versionen dieser Seite:"),
 			"eintrag" => array(array("icon"=>"pictures/blank.gif","text"=>$versiontext)));
+	$comment_all="<a href=\"$PHP_SELF?keyword=".$keyword."&wiki_comments=all\">"._("einblenden")."</a>";
+	$comment_icon="<a href=\"$PHP_SELF?keyword=".$keyword."&wiki_comments=icon\">"._("als Icons einblenden")."</a>";
+	$comment_none="<a href=\"$PHP_SELF?keyword=".$keyword."&wiki_comments=none\">"._("ausblenden")."</a>";
+	if ($show_wiki_comments=="none") {
+			$comment_addon=" ("._("ausgeblendet").") ";
+			$comment_text=$comment_all."<br>".$comment_icon;
+	} elseif ($show_wiki_comments=="icon") {
+			$comment_text=$comment_all."<br>".$comment_none;
+	} elseif ($show_wiki_comments=="all") {
+			$comment_text=$comment_icon."<br>".$comment_none;
+	}
+	$infobox[] = array("kategorie"=> _("Kommentare".$comment_addon.":"),
+			"eintrag" => array(array("icon"=>"pictures/blank.gif",
+					"text"=>$comment_text)));
 	return $infobox;
 }
 
@@ -953,9 +982,10 @@ function getDiffPageInfobox($keyword) {
 * @param	string	WikiPage name
 * @param	string	WikiPage version
 * @param	string	ID of special dialog to be printed (delete, delete_all) or message string for parse_msg to display
+* @param	string  Comment show mode (all, none, icon)
 *
 **/
-function showWikiPage($keyword, $version, $special="") {
+function showWikiPage($keyword, $version, $special="", $show_comments="icon") {
 	global $perm, $SessSemName, $PHP_SELF;
 
 	showPageFrameStart();
@@ -1007,7 +1037,7 @@ function showWikiPage($keyword, $version, $special="") {
 
 	begin_blank_table();
 	echo "<tr>\n";
-	$cont = wikiLinks(wikiReady($wikiData["body"]), $keyword);
+	$cont = wikiLinks(wikiReady($wikiData["body"],TRUE,FALSE,$show_comments), $keyword);
 	$num_body_lines=substr_count($wikiData['body'], "\n");
 	if ($num_body_lines<15) {
 		$cont .= "<p>";
