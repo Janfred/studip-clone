@@ -128,7 +128,7 @@ function get_my_obj_values(&$my_obj) {
 				$my_obj[$db2->f("object_id")]["votes"] += $db2->f("count");
 		}
 	}
-	$db2->query("DROP TABLE myobj_" . $user_id);
+	$db2->query("DROP TABLE IF EXISTS myobj_" . $user_id);
 	
 	return;
 }
