@@ -516,6 +516,8 @@ if ($perm->have_perm("dozent")) {
 							</a>
 							&nbsp;
 						<? } ?>
+						</td>
+						<td><img src="pictures/balken.jpg"></td>
 					<tr>
 				</table>
 			</form>
@@ -615,10 +617,15 @@ while (list ($key, $val) = each ($gruppe)) {
 		print "&nbsp; ";
 	}
 	print "</td>";
-	printf("<td class=\"steel\" width=\"29%%\" align=\"left\"><img src=\"pictures/blank.gif\" width=\"1\" height=\"20\"><font size=\"-1\"><b><a href=%s?sortby=Nachname>%s</a></b></font></td>", $PHP_SELF, $val);
-	printf("<td class=\"steel\" width=\"10%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b><a href=%s?sortby=doll>%s</a></b></font></td>", $PHP_SELF, _("Postings"));
+	printf("<td class=\"steel\" width=\"29%%\" align=\"left\"><img src=\"pictures/blank.gif\" width=\"1\" height=\"20\"><font size=\"-1\"><b>%s</b></font></td>", $val);
+	if ($key != dozent)
+		printf("<td class=\"steel\" width=\"1%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>%s</b></font></td>", _("Anmeldedatum"));
+	printf("<td class=\"steel\" width=\"10%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>%s</b></font></td>", _("Postings"));
 	printf("<td class=\"steel\" width=\"10%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>%s</b></font></td>", _("Dokumente"));
 	printf("<td class=\"steel\" width=\"9%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>%s</b></font></td>", _("Nachricht"));
+	if ($key == "dozent") {
+		echo "<td class=\"steel\"></td>";
+	}
 
 	if ($rechte) {
 
@@ -742,20 +749,21 @@ while (list ($key, $val) = each ($gruppe)) {
 		}
 	}
 
-	printf ("<td class=\"%s\" nowrap><font size=\"-1\">&nbsp;%s.</td>", $class, $c);
+	$anker = "<A name=\"".$db->f("username")."\">";
+	printf ("<td class=\"%s\" nowrap>%s<font size=\"-1\">&nbsp;%s.</td>", $class, $anker, $c);
 	printf ("<td class=\"%s\">", $class);
 	if ($rechte) {
 		printf ("<A href=\"%s\"><img src=\"pictures/%s\" border=\"0\"", $link, $img);
 		echo tooltip(sprintf(_("Weitere Informationen über %s"), $db->f("username")));
 		echo ">&nbsp;</A>";
 	}
+
 	printf ("<font size=\"-1\"><a href = about.php?username=%s>", $db->f("username"));
-	print (htmlReady($db->f("fullname")) ."</a>");
-	print ("</font></td><td class=\"$class\" align=\"center\"><font size=\"-1\">");
-	print ( $db->f("doll"));
-	print ("</font></td><td class=\"$class\" align=\"center\"><font size=\"-1\">");
-	print $Dokumente;
-	print ("</font></td>");
+	echo htmlReady($db->f("fullname")) ."</a></font></td>";
+	if ($key != "dozent")
+		echo "<td class=\"$class\" align=\"center\"><font size=\"-1\">".date("d.m.y,",$db->f("mkdate"))."&nbsp;".date("H:i:s",$db->f("mkdate"))."</font></td>";
+	echo "<td class=\"$class\" align=\"center\"><font size=\"-1\">".$db->f("doll")."</font></td>";
+	echo "<td class=\"$class\" align=\"center\"><font size=\"-1\">".$Dokumente."</font></td>";
 
 	echo "<td class=\"$class\" align=\"center\">";
 	if ($GLOBALS['CHAT_ENABLE']){
@@ -815,8 +823,7 @@ while (list ($key, $val) = each ($gruppe)) {
 		}
 
 		else { // hier sind wir bei den Dozenten
-			echo "<td class=\"$class\" >&nbsp;</td>";
-			echo "<td class=\"$class\">&nbsp;</td>";
+			echo "<td colspan=\"3\" class=\"$class\" >&nbsp;</td>";
 		}
 
 		if ($db3->f("admission_type")) {
@@ -842,9 +849,6 @@ while (list ($key, $val) = each ($gruppe)) {
 							</td>
 							<td>&nbsp;</td>
 							<td class="<?=$class?>" align="left" valign="top" width="30%">
-								<font size="-1">
-									<?=_("Anmeldedatum:")." ".date("d.m. Y, H:i:s",$db->f("mkdate"))?><br/>
-								</font>
 							</td>
 							<td class="<?=$class?>" align="center" width="15%">
 								<font size="-1"><?=_("&Auml;nderungen")?></font><br />
