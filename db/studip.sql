@@ -1,40 +1,19 @@
 # phpMyAdmin MySQL-Dump
-# version 2.3.3pl1
+# version 2.5.1
 # http://www.phpmyadmin.net/ (download page)
 #
 # Host: localhost
-# Erstellungszeit: 13. August 2003 um 10:58
-# Server Version: 3.23.52
-# PHP-Version: 4.2.2
+# Erstellungszeit: 20. August 2003 um 10:19
+# Server Version: 4.0.12
+# PHP-Version: 4.3.1
 # Datenbank: `studip`
 # --------------------------------------------------------
 
 #
-# Tabellenstruktur für Tabelle `Institute`
-#
-
-CREATE TABLE `Institute` (
-  `Institut_id` varchar(32) NOT NULL default '',
-  `Name` varchar(255) NOT NULL default '',
-  `fakultaets_id` varchar(32) NOT NULL default '',
-  `Strasse` varchar(255) NOT NULL default '',
-  `Plz` varchar(255) NOT NULL default '',
-  `url` varchar(255) NOT NULL default 'http://www.studip.de',
-  `telefon` varchar(32) NOT NULL default '',
-  `email` varchar(255) NOT NULL default '',
-  `fax` varchar(32) NOT NULL default '',
-  `type` int(10) NOT NULL default '0',
-  `modules` int(10) unsigned default NULL,
-  `mkdate` int(20) NOT NULL default '0',
-  `chdate` int(20) NOT NULL default '0',
-  PRIMARY KEY  (`Institut_id`),
-  KEY `fakultaets_id` (`fakultaets_id`),
-  KEY `chdate` (`chdate`)
-) TYPE=MyISAM PACK_KEYS=1;
-# --------------------------------------------------------
-
-#
 # Tabellenstruktur für Tabelle `active_sessions`
+#
+# Erzeugt am: 20. August 2003 um 09:14
+# Aktualisiert am: 20. August 2003 um 09:14
 #
 
 CREATE TABLE `active_sessions` (
@@ -50,6 +29,9 @@ CREATE TABLE `active_sessions` (
 #
 # Tabellenstruktur für Tabelle `admission_seminar_studiengang`
 #
+# Erzeugt am: 20. August 2003 um 09:14
+# Aktualisiert am: 20. August 2003 um 09:14
+#
 
 CREATE TABLE `admission_seminar_studiengang` (
   `seminar_id` varchar(32) NOT NULL default '',
@@ -61,6 +43,9 @@ CREATE TABLE `admission_seminar_studiengang` (
 
 #
 # Tabellenstruktur für Tabelle `admission_seminar_user`
+#
+# Erzeugt am: 20. August 2003 um 09:14
+# Aktualisiert am: 20. August 2003 um 09:14
 #
 
 CREATE TABLE `admission_seminar_user` (
@@ -77,6 +62,9 @@ CREATE TABLE `admission_seminar_user` (
 #
 # Tabellenstruktur für Tabelle `archiv`
 #
+# Erzeugt am: 20. August 2003 um 09:17
+# Aktualisiert am: 20. August 2003 um 09:17
+#
 
 CREATE TABLE `archiv` (
   `seminar_id` varchar(32) NOT NULL default '',
@@ -86,8 +74,8 @@ CREATE TABLE `archiv` (
   `start_time` int(20) NOT NULL default '0',
   `semester` varchar(16) NOT NULL default '',
   `heimat_inst_id` varchar(32) NOT NULL default '',
-  `institute` varchar(255) NOT NULL default '',
-  `dozenten` varchar(255) NOT NULL default '',
+  `institute` text NOT NULL,
+  `dozenten` text NOT NULL,
   `fakultaet` varchar(255) NOT NULL default '',
   `dump` mediumtext NOT NULL,
   `archiv_file_id` varchar(32) NOT NULL default '',
@@ -103,6 +91,9 @@ CREATE TABLE `archiv` (
 #
 # Tabellenstruktur für Tabelle `archiv_user`
 #
+# Erzeugt am: 20. August 2003 um 09:14
+# Aktualisiert am: 20. August 2003 um 09:14
+#
 
 CREATE TABLE `archiv_user` (
   `seminar_id` varchar(32) NOT NULL default '',
@@ -116,6 +107,9 @@ CREATE TABLE `archiv_user` (
 #
 # Tabellenstruktur für Tabelle `auth_user_md5`
 #
+# Erzeugt am: 20. August 2003 um 09:15
+# Aktualisiert am: 20. August 2003 um 09:15
+#
 
 CREATE TABLE `auth_user_md5` (
   `user_id` varchar(32) NOT NULL default '',
@@ -125,6 +119,7 @@ CREATE TABLE `auth_user_md5` (
   `Vorname` varchar(64) default NULL,
   `Nachname` varchar(64) default NULL,
   `Email` varchar(64) default NULL,
+  `auth_plugin` varchar(64) default NULL,
   PRIMARY KEY  (`user_id`),
   UNIQUE KEY `k_username` (`username`)
 ) TYPE=MyISAM PACK_KEYS=1;
@@ -132,6 +127,9 @@ CREATE TABLE `auth_user_md5` (
 
 #
 # Tabellenstruktur für Tabelle `contact`
+#
+# Erzeugt am: 20. August 2003 um 09:14
+# Aktualisiert am: 20. August 2003 um 09:14
 #
 
 CREATE TABLE `contact` (
@@ -149,6 +147,9 @@ CREATE TABLE `contact` (
 #
 # Tabellenstruktur für Tabelle `contact_userinfo`
 #
+# Erzeugt am: 20. August 2003 um 09:14
+# Aktualisiert am: 20. August 2003 um 09:14
+#
 
 CREATE TABLE `contact_userinfo` (
   `userinfo_id` varchar(32) NOT NULL default '',
@@ -163,7 +164,52 @@ CREATE TABLE `contact_userinfo` (
 # --------------------------------------------------------
 
 #
+# Tabellenstruktur für Tabelle `datafields`
+#
+# Erzeugt am: 20. August 2003 um 09:23
+# Aktualisiert am: 20. August 2003 um 09:23
+# Letzter Check am: 20. August 2003 um 09:23
+#
+
+CREATE TABLE `datafields` (
+  `datafield_id` varchar(32) NOT NULL default '',
+  `name` varchar(255) default NULL,
+  `object_type` enum('sem','inst','user') default NULL,
+  `object_class` varchar(10) default NULL,
+  `edit_perms` enum('user','autor','tutor','dozent','admin','root') default NULL,
+  `priority` tinyint(3) unsigned NOT NULL default '0',
+  `mkdate` int(20) unsigned default NULL,
+  `chdate` int(20) unsigned default NULL,
+  PRIMARY KEY  (`datafield_id`),
+  KEY `priority` (`priority`),
+  KEY `object_type` (`object_type`),
+  KEY `object_class` (`object_class`),
+  KEY `edit_perms` (`edit_perms`)
+) TYPE=MyISAM;
+# --------------------------------------------------------
+
+#
+# Tabellenstruktur für Tabelle `datafields_entries`
+#
+# Erzeugt am: 20. August 2003 um 09:21
+# Aktualisiert am: 20. August 2003 um 09:21
+#
+
+CREATE TABLE `datafields_entries` (
+  `datafield_id` varchar(32) NOT NULL default '',
+  `range_id` varchar(32) NOT NULL default '',
+  `content` text,
+  `mkdate` int(20) unsigned default NULL,
+  `chdate` int(20) unsigned default NULL,
+  PRIMARY KEY  (`datafield_id`,`range_id`)
+) TYPE=MyISAM;
+# --------------------------------------------------------
+
+#
 # Tabellenstruktur für Tabelle `dokumente`
+#
+# Erzeugt am: 20. August 2003 um 09:14
+# Aktualisiert am: 20. August 2003 um 09:14
 #
 
 CREATE TABLE `dokumente` (
@@ -189,6 +235,9 @@ CREATE TABLE `dokumente` (
 #
 # Tabellenstruktur für Tabelle `extern_config`
 #
+# Erzeugt am: 20. August 2003 um 09:14
+# Aktualisiert am: 20. August 2003 um 09:14
+#
 
 CREATE TABLE `extern_config` (
   `config_id` varchar(32) NOT NULL default '',
@@ -204,6 +253,9 @@ CREATE TABLE `extern_config` (
 
 #
 # Tabellenstruktur für Tabelle `folder`
+#
+# Erzeugt am: 20. August 2003 um 09:14
+# Aktualisiert am: 20. August 2003 um 09:14
 #
 
 CREATE TABLE `folder` (
@@ -224,6 +276,9 @@ CREATE TABLE `folder` (
 #
 # Tabellenstruktur für Tabelle `globalmessages`
 #
+# Erzeugt am: 20. August 2003 um 09:14
+# Aktualisiert am: 20. August 2003 um 09:14
+#
 
 CREATE TABLE `globalmessages` (
   `user_id_rec` varchar(32) NOT NULL default '',
@@ -241,7 +296,38 @@ CREATE TABLE `globalmessages` (
 # --------------------------------------------------------
 
 #
+# Tabellenstruktur für Tabelle `institute`
+#
+# Erzeugt am: 20. August 2003 um 09:19
+# Aktualisiert am: 20. August 2003 um 09:19
+# Letzter Check am: 20. August 2003 um 09:19
+#
+
+CREATE TABLE `institute` (
+  `Institut_id` varchar(32) NOT NULL default '',
+  `Name` varchar(255) NOT NULL default '',
+  `fakultaets_id` varchar(32) NOT NULL default '',
+  `Strasse` varchar(255) NOT NULL default '',
+  `Plz` varchar(255) NOT NULL default '',
+  `url` varchar(255) NOT NULL default '',
+  `telefon` varchar(32) NOT NULL default '',
+  `email` varchar(255) NOT NULL default '',
+  `fax` varchar(32) NOT NULL default '',
+  `type` int(10) NOT NULL default '0',
+  `modules` int(10) unsigned default NULL,
+  `mkdate` int(20) NOT NULL default '0',
+  `chdate` int(20) NOT NULL default '0',
+  PRIMARY KEY  (`Institut_id`),
+  KEY `fakultaets_id` (`fakultaets_id`),
+  KEY `chdate` (`chdate`)
+) TYPE=MyISAM PACK_KEYS=1;
+# --------------------------------------------------------
+
+#
 # Tabellenstruktur für Tabelle `kategorien`
+#
+# Erzeugt am: 20. August 2003 um 09:14
+# Aktualisiert am: 20. August 2003 um 09:14
 #
 
 CREATE TABLE `kategorien` (
@@ -262,6 +348,9 @@ CREATE TABLE `kategorien` (
 #
 # Tabellenstruktur für Tabelle `literatur`
 #
+# Erzeugt am: 20. August 2003 um 09:14
+# Aktualisiert am: 20. August 2003 um 09:14
+#
 
 CREATE TABLE `literatur` (
   `literatur_id` varchar(32) NOT NULL default '',
@@ -281,6 +370,10 @@ CREATE TABLE `literatur` (
 #
 # Tabellenstruktur für Tabelle `news`
 #
+# Erzeugt am: 20. August 2003 um 09:20
+# Aktualisiert am: 20. August 2003 um 09:20
+# Letzter Check am: 20. August 2003 um 09:20
+#
 
 CREATE TABLE `news` (
   `news_id` varchar(32) NOT NULL default '',
@@ -298,6 +391,9 @@ CREATE TABLE `news` (
 #
 # Tabellenstruktur für Tabelle `news_range`
 #
+# Erzeugt am: 20. August 2003 um 09:14
+# Aktualisiert am: 20. August 2003 um 09:14
+#
 
 CREATE TABLE `news_range` (
   `news_id` varchar(32) NOT NULL default '',
@@ -311,6 +407,9 @@ CREATE TABLE `news_range` (
 #
 # Tabellenstruktur für Tabelle `newsletter`
 #
+# Erzeugt am: 20. August 2003 um 09:14
+# Aktualisiert am: 20. August 2003 um 09:14
+#
 
 CREATE TABLE `newsletter` (
   `user_id` varchar(32) NOT NULL default '',
@@ -321,7 +420,56 @@ CREATE TABLE `newsletter` (
 # --------------------------------------------------------
 
 #
+# Tabellenstruktur für Tabelle `object_rate`
+#
+# Erzeugt am: 20. August 2003 um 10:17
+# Aktualisiert am: 20. August 2003 um 10:17
+#
+
+CREATE TABLE `object_rate` (
+  `object_id` varchar(32) NOT NULL default '',
+  `rate` int(10) NOT NULL default '0',
+  `mkdate` int(20) NOT NULL default '0',
+  PRIMARY KEY  (`object_id`)
+) TYPE=MyISAM;
+# --------------------------------------------------------
+
+#
+# Tabellenstruktur für Tabelle `object_user`
+#
+# Erzeugt am: 20. August 2003 um 10:17
+# Aktualisiert am: 20. August 2003 um 10:17
+#
+
+CREATE TABLE `object_user` (
+  `object_id` varchar(32) NOT NULL default '',
+  `user_id` varchar(32) NOT NULL default '',
+  `flag` varchar(32) NOT NULL default '',
+  `mkdate` int(20) NOT NULL default '0',
+  PRIMARY KEY  (`object_id`,`user_id`)
+) TYPE=MyISAM;
+# --------------------------------------------------------
+
+#
+# Tabellenstruktur für Tabelle `object_views`
+#
+# Erzeugt am: 20. August 2003 um 09:24
+# Aktualisiert am: 20. August 2003 um 09:24
+#
+
+CREATE TABLE `object_views` (
+  `object_id` varchar(32) NOT NULL default '',
+  `views` int(20) NOT NULL default '0',
+  `chdate` int(20) NOT NULL default '0',
+  PRIMARY KEY  (`object_id`)
+) TYPE=MyISAM;
+# --------------------------------------------------------
+
+#
 # Tabellenstruktur für Tabelle `px_topics`
+#
+# Erzeugt am: 20. August 2003 um 09:14
+# Aktualisiert am: 20. August 2003 um 09:14
 #
 
 CREATE TABLE `px_topics` (
@@ -349,6 +497,9 @@ CREATE TABLE `px_topics` (
 #
 # Tabellenstruktur für Tabelle `range_tree`
 #
+# Erzeugt am: 20. August 2003 um 09:14
+# Aktualisiert am: 20. August 2003 um 09:14
+#
 
 CREATE TABLE `range_tree` (
   `item_id` varchar(32) NOT NULL default '',
@@ -367,6 +518,9 @@ CREATE TABLE `range_tree` (
 
 #
 # Tabellenstruktur für Tabelle `resources_assign`
+#
+# Erzeugt am: 20. August 2003 um 09:14
+# Aktualisiert am: 20. August 2003 um 09:14
 #
 
 CREATE TABLE `resources_assign` (
@@ -394,6 +548,9 @@ CREATE TABLE `resources_assign` (
 #
 # Tabellenstruktur für Tabelle `resources_categories`
 #
+# Erzeugt am: 20. August 2003 um 09:14
+# Aktualisiert am: 20. August 2003 um 09:14
+#
 
 CREATE TABLE `resources_categories` (
   `category_id` varchar(32) NOT NULL default '',
@@ -408,6 +565,9 @@ CREATE TABLE `resources_categories` (
 #
 # Tabellenstruktur für Tabelle `resources_categories_properties`
 #
+# Erzeugt am: 20. August 2003 um 09:14
+# Aktualisiert am: 20. August 2003 um 09:14
+#
 
 CREATE TABLE `resources_categories_properties` (
   `category_id` varchar(32) NOT NULL default '',
@@ -419,6 +579,9 @@ CREATE TABLE `resources_categories_properties` (
 
 #
 # Tabellenstruktur für Tabelle `resources_objects`
+#
+# Erzeugt am: 20. August 2003 um 09:14
+# Aktualisiert am: 20. August 2003 um 09:14
 #
 
 CREATE TABLE `resources_objects` (
@@ -443,6 +606,9 @@ CREATE TABLE `resources_objects` (
 #
 # Tabellenstruktur für Tabelle `resources_objects_properties`
 #
+# Erzeugt am: 20. August 2003 um 09:14
+# Aktualisiert am: 20. August 2003 um 09:14
+#
 
 CREATE TABLE `resources_objects_properties` (
   `resource_id` varchar(32) NOT NULL default '',
@@ -454,6 +620,9 @@ CREATE TABLE `resources_objects_properties` (
 
 #
 # Tabellenstruktur für Tabelle `resources_properties`
+#
+# Erzeugt am: 20. August 2003 um 09:14
+# Aktualisiert am: 20. August 2003 um 09:14
 #
 
 CREATE TABLE `resources_properties` (
@@ -470,6 +639,9 @@ CREATE TABLE `resources_properties` (
 #
 # Tabellenstruktur für Tabelle `resources_user_resources`
 #
+# Erzeugt am: 20. August 2003 um 09:14
+# Aktualisiert am: 20. August 2003 um 09:14
+#
 
 CREATE TABLE `resources_user_resources` (
   `user_id` varchar(32) NOT NULL default '',
@@ -481,6 +653,9 @@ CREATE TABLE `resources_user_resources` (
 
 #
 # Tabellenstruktur für Tabelle `sem_tree`
+#
+# Erzeugt am: 20. August 2003 um 09:14
+# Aktualisiert am: 20. August 2003 um 09:14
 #
 
 CREATE TABLE `sem_tree` (
@@ -500,6 +675,9 @@ CREATE TABLE `sem_tree` (
 #
 # Tabellenstruktur für Tabelle `seminar_inst`
 #
+# Erzeugt am: 20. August 2003 um 09:14
+# Aktualisiert am: 20. August 2003 um 09:14
+#
 
 CREATE TABLE `seminar_inst` (
   `seminar_id` varchar(32) NOT NULL default '',
@@ -510,6 +688,9 @@ CREATE TABLE `seminar_inst` (
 
 #
 # Tabellenstruktur für Tabelle `seminar_lernmodul`
+#
+# Erzeugt am: 20. August 2003 um 09:14
+# Aktualisiert am: 20. August 2003 um 09:14
 #
 
 CREATE TABLE `seminar_lernmodul` (
@@ -525,6 +706,9 @@ CREATE TABLE `seminar_lernmodul` (
 #
 # Tabellenstruktur für Tabelle `seminar_sem_tree`
 #
+# Erzeugt am: 20. August 2003 um 09:14
+# Aktualisiert am: 20. August 2003 um 09:14
+#
 
 CREATE TABLE `seminar_sem_tree` (
   `seminar_id` varchar(32) NOT NULL default '',
@@ -537,6 +721,9 @@ CREATE TABLE `seminar_sem_tree` (
 
 #
 # Tabellenstruktur für Tabelle `seminar_user`
+#
+# Erzeugt am: 20. August 2003 um 09:14
+# Aktualisiert am: 20. August 2003 um 09:14
 #
 
 CREATE TABLE `seminar_user` (
@@ -554,6 +741,9 @@ CREATE TABLE `seminar_user` (
 
 #
 # Tabellenstruktur für Tabelle `seminare`
+#
+# Erzeugt am: 20. August 2003 um 09:14
+# Aktualisiert am: 20. August 2003 um 09:14
 #
 
 CREATE TABLE `seminare` (
@@ -596,6 +786,9 @@ CREATE TABLE `seminare` (
 #
 # Tabellenstruktur für Tabelle `statusgruppe_user`
 #
+# Erzeugt am: 20. August 2003 um 09:14
+# Aktualisiert am: 20. August 2003 um 09:14
+#
 
 CREATE TABLE `statusgruppe_user` (
   `statusgruppe_id` varchar(32) NOT NULL default '',
@@ -606,6 +799,9 @@ CREATE TABLE `statusgruppe_user` (
 
 #
 # Tabellenstruktur für Tabelle `statusgruppen`
+#
+# Erzeugt am: 20. August 2003 um 09:14
+# Aktualisiert am: 20. August 2003 um 09:14
 #
 
 CREATE TABLE `statusgruppen` (
@@ -625,6 +821,9 @@ CREATE TABLE `statusgruppen` (
 #
 # Tabellenstruktur für Tabelle `studiengaenge`
 #
+# Erzeugt am: 20. August 2003 um 09:14
+# Aktualisiert am: 20. August 2003 um 09:14
+#
 
 CREATE TABLE `studiengaenge` (
   `studiengang_id` varchar(32) NOT NULL default '',
@@ -639,6 +838,9 @@ CREATE TABLE `studiengaenge` (
 #
 # Tabellenstruktur für Tabelle `studip_ilias`
 #
+# Erzeugt am: 20. August 2003 um 09:14
+# Aktualisiert am: 20. August 2003 um 09:14
+#
 
 CREATE TABLE `studip_ilias` (
   `studip_user_id` varchar(32) NOT NULL default '',
@@ -651,6 +853,9 @@ CREATE TABLE `studip_ilias` (
 
 #
 # Tabellenstruktur für Tabelle `support_contract`
+#
+# Erzeugt am: 20. August 2003 um 09:14
+# Aktualisiert am: 20. August 2003 um 09:14
 #
 
 CREATE TABLE `support_contract` (
@@ -670,6 +875,9 @@ CREATE TABLE `support_contract` (
 #
 # Tabellenstruktur für Tabelle `support_event`
 #
+# Erzeugt am: 20. August 2003 um 09:14
+# Aktualisiert am: 20. August 2003 um 09:14
+#
 
 CREATE TABLE `support_event` (
   `event_id` varchar(32) NOT NULL default '',
@@ -687,6 +895,9 @@ CREATE TABLE `support_event` (
 
 #
 # Tabellenstruktur für Tabelle `support_request`
+#
+# Erzeugt am: 20. August 2003 um 09:14
+# Aktualisiert am: 20. August 2003 um 09:14
 #
 
 CREATE TABLE `support_request` (
@@ -706,6 +917,9 @@ CREATE TABLE `support_request` (
 
 #
 # Tabellenstruktur für Tabelle `termine`
+#
+# Erzeugt am: 20. August 2003 um 09:14
+# Aktualisiert am: 20. August 2003 um 09:14
 #
 
 CREATE TABLE `termine` (
@@ -734,35 +948,10 @@ CREATE TABLE `termine` (
 # --------------------------------------------------------
 
 #
-# Tabellenstruktur für Tabelle `tracking_data`
-#
-
-CREATE TABLE `tracking_data` (
-  `entry_id` varchar(32) NOT NULL default '',
-  `user_id` varchar(32) NOT NULL default '',
-  `page` varchar(255) default NULL,
-  `params` text NOT NULL,
-  `timestamp` int(20) default NULL,
-  `open_object` varchar(32) default '0',
-  `user_ip` varchar(20) NOT NULL default '',
-  `user_agent` varchar(255) NOT NULL default '',
-  PRIMARY KEY  (`entry_id`)
-) TYPE=MyISAM;
-# --------------------------------------------------------
-
-#
-# Tabellenstruktur für Tabelle `tracking_user`
-#
-
-CREATE TABLE `tracking_user` (
-  `user_id` varchar(32) NOT NULL default '',
-  `alter` int(4) unsigned default '0',
-  PRIMARY KEY  (`user_id`)
-) TYPE=MyISAM;
-# --------------------------------------------------------
-
-#
 # Tabellenstruktur für Tabelle `user_info`
+#
+# Erzeugt am: 20. August 2003 um 09:14
+# Aktualisiert am: 20. August 2003 um 09:14
 #
 
 CREATE TABLE `user_info` (
@@ -789,6 +978,9 @@ CREATE TABLE `user_info` (
 #
 # Tabellenstruktur für Tabelle `user_inst`
 #
+# Erzeugt am: 20. August 2003 um 09:14
+# Aktualisiert am: 20. August 2003 um 09:14
+#
 
 CREATE TABLE `user_inst` (
   `user_id` varchar(32) NOT NULL default '0',
@@ -808,6 +1000,9 @@ CREATE TABLE `user_inst` (
 #
 # Tabellenstruktur für Tabelle `user_studiengang`
 #
+# Erzeugt am: 20. August 2003 um 09:14
+# Aktualisiert am: 20. August 2003 um 09:14
+#
 
 CREATE TABLE `user_studiengang` (
   `user_id` varchar(32) NOT NULL default '',
@@ -819,11 +1014,14 @@ CREATE TABLE `user_studiengang` (
 #
 # Tabellenstruktur für Tabelle `wiki`
 #
+# Erzeugt am: 20. August 2003 um 09:23
+# Aktualisiert am: 20. August 2003 um 09:23
+#
 
 CREATE TABLE `wiki` (
   `range_id` varchar(32) NOT NULL default '',
   `user_id` varchar(32) default NULL,
-  `keyword` varchar(255) NOT NULL default '',
+  `keyword` varchar(128) NOT NULL default '',
   `body` text,
   `chdate` int(11) default NULL,
   `version` int(11) NOT NULL default '0',
@@ -836,25 +1034,35 @@ CREATE TABLE `wiki` (
 #
 # Tabellenstruktur für Tabelle `wiki_links`
 #
+# Erzeugt am: 20. August 2003 um 09:23
+# Aktualisiert am: 20. August 2003 um 09:23
+#
 
 CREATE TABLE `wiki_links` (
-  `range_id` varchar(32) NOT NULL default '',
-  `from_keyword` varchar(255) NOT NULL default '',
-  `to_keyword` varchar(255) NOT NULL default ''
+  `range_id` char(32) NOT NULL default '',
+  `from_keyword` char(128) NOT NULL default '',
+  `to_keyword` char(128) NOT NULL default '',
+  PRIMARY KEY  (`range_id`,`to_keyword`,`from_keyword`)
 ) TYPE=MyISAM;
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `wiki_locks`
 #
+# Erzeugt am: 20. August 2003 um 09:23
+# Aktualisiert am: 20. August 2003 um 09:23
+#
 
 CREATE TABLE `wiki_locks` (
   `user_id` varchar(32) NOT NULL default '',
   `range_id` varchar(32) NOT NULL default '',
-  `keyword` varchar(255) NOT NULL default '',
+  `keyword` varchar(128) NOT NULL default '',
   `chdate` int(11) NOT NULL default '0',
-  PRIMARY KEY  (`range_id`,`user_id`,`keyword`),
+  PRIMARY KEY  (`range_id`,`keyword`,`user_id`),
   KEY `user_id` (`user_id`),
   KEY `chdate` (`chdate`)
 ) TYPE=MyISAM;
+
+    
+
 
