@@ -52,7 +52,7 @@ function wday ($tmstamp = "", $mode = "LONG", $day_german = "") {
 	
 	// If the setlocale is set to "de_DE" the short form of day names is a bit
 	// strange ;-), so it's better to use these ones:
-	if ($_language = "de_DE") {
+	if ($_language == "de_DE") {
 		$dayname_long = array("Sonntag", "Montag", "Dienstag", "Mittwoch",
 												"Donnerstag", "Freitag", "Samstag");
 		$dayname_short = array("So", "Mo", "Di", "Mi", "Do", "Fr", "Sa");
