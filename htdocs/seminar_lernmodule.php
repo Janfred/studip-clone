@@ -21,7 +21,7 @@
 // +---------------------------------------------------------------------------+
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
-$perm->check("dozent");
+$perm->check("autor");
 
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
@@ -41,20 +41,44 @@ if (isset($do_op) AND (($op_co_id == "") OR($op_co_inst == "") OR($seminar_id ==
 if ($ILIAS_CONNECT_ENABLE)
 {
 
+	if (($perm->have_perm("dozent")) AND ($view=="edit"))
+	{		
+		$db = New DB_Seminar;
+		if ($do_op == "clear")
+		{
+			$db->query("DELETE FROM seminar_lernmodul WHERE seminar_id = '$seminar_id' AND co_id = '$op_co_id' AND co_inst = '$op_co_inst' LIMIT 1");
+			$op_string= _("Die Zuordnung wurde aufgehoben.");
+	     	}
+	     	elseif ($do_op == "connect")
+	     	{
+			$op_string= _("Die Zuordnung wurde gespeichert.");
+	     		$db->query("SELECT * FROM  seminar_lernmodul WHERE seminar_id = '$seminar_id' AND co_id = '$op_co_id'");
+	     		if ($db->next_record())
+				$op_string= _("Dieses Lernmodul ist der Veranstaltung bereits zugeordnet.");
+	     		else
+	     			$db->query("INSERT INTO seminar_lernmodul (seminar_id, co_id, co_inst) VALUES ('$seminar_id', '$op_co_id', '$op_co_inst')");
+     		}
+	}
+
 	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 
-	include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");
+	include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
 
-	require_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_config.inc.php");
-	require_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_db_functions.inc.php");
-	require_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_view_functions.inc.php");
-	require_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_linking_functions.inc.php");
+	include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_config.inc.php");
+	include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_db_functions.inc.php");
+	include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_linking_functions.inc.php");
+	include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_view_functions.inc.php");
 
 
 ?><table cellspacing="0" cellpadding="0" border="0" width="100%">
 	<tr>
-		<td class="topic" colspan="2"><b><? echo _("Verbindung von Stud.IP-Veranstaltungen und Lernmodulen"); ?></b>
+		<td class="topic" colspan="2"><b>
+		<?   if ($view=="edit") 
+				echo _("Verbindung von Veranstaltungen und Lernmodulen"); 
+			else
+				echo _("Lernmodule f&uuml;r diese Veranstaltung"); 
+		?></b>
 		</td>
 	</tr>
 	<tr>
@@ -64,55 +88,77 @@ if ($ILIAS_CONNECT_ENABLE)
 	<tr valign="top">
 		<td width="90%" class="blank"><?
      				
-		$db = New DB_Seminar;
-     		if ($do_op == "clear")
-     		{
-     			$db->query("DELETE FROM seminar_lernmodul WHERE seminar_id = '$seminar_id' AND co_id = '$op_co_id' AND co_inst = '$op_co_inst' LIMIT 1");
-     			echo "<table><tr>";
-     			my_msg("Die Zuordnung wurde aufgehoben.");
-	     		echo "</tr></table>";
-	     	}
-	     	elseif ($do_op == "connect")
-	     	{
-	     		$db->query("INSERT INTO seminar_lernmodul (seminar_id, co_id, co_inst) VALUES ('$seminar_id', '$op_co_id', '$op_co_inst')");
-	     		echo "<table><tr>";
-	     		my_msg("Die Zuordnung wurde gespeichert.");
-	     		echo "</tr></table>";
-     		}
+	if (($view == "edit") AND ($perm->have_perm("dozent")))
+	{
+		$infobox = array	(			
+		array ("kategorie"  => _("Information:"),
+			"eintrag" => array	(	
+							array (	"icon" => "pictures/ausruf_small.gif",
+									"text"  => sprintf(_("Auf dieser Seite können Sie einer Veranstaltung Lernmodule zuordnen."), "<br><i>", "</i>")
+								 )
+							)
+			)
+		);
+		$infobox[1]["kategorie"] = _("Aktionen:");
+			$infobox[1]["eintrag"][] = array (	"icon" => "pictures/icon-posting.gif" ,
+										"text"  => _("Sie können der Veranstaltung ein Lernmodul zuordnen...")
+									);
+			$infobox[1]["eintrag"][] = array (	"icon" => "pictures/trash.gif" ,
+										"text"  => _("...oder eine bestehende Verknüpfung aufheben.")
+									);
+
+		if ($op_string != "") 
+		{
+			echo "<table><tr>";
+			my_msg($op_string);
+			echo "</tr></table>";
+		}
 		$cssSw = new cssClassSwitcher;									// Klasse für Zebra-Design
      		show_seminar_modules($seminar_id);
 		
 		$cssSw = new cssClassSwitcher;									// Klasse für Zebra-Design
 		show_all_modules($seminar_id);
+	}
+	else
+	{
+		include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_user_functions.inc.php");
 
-		?>
-		</table>
-		<br>
-		</td>
-		<td width="270" NOWRAP class="blank" align="center" valign="top">
-		<? 
-	$infobox = array	(			
-	array ("kategorie"  => _("Information:"),
-		"eintrag" => array	(	
-						array (	"icon" => "pictures/ausruf_small.gif",
-								"text"  => sprintf(_("Auf dieser Seite können Sie einer Veranstaltung Lernmodule zuordnen."), "<br><i>", "</i>")
-							 )
-						)
-		)
-	);
-	$link = "<a href=\"./test.xml"."\">";
-	$infobox[1]["kategorie"] = _("Aktionen:");
-		$infobox[1]["eintrag"][] = array (	"icon" => "pictures/icon-posting.gif" ,
-									"text"  => _("Sie können ein Lernmodul einer Veranstaltung zuordnen...")
-								);
-		$infobox[1]["eintrag"][] = array (	"icon" => "pictures/trash.gif" ,
-									"text"  => _("...oder eine bestehende Verknüpfung aufheben.")
-								);
-			print_infobox ($infobox,"pictures/lernmodule.jpg");
-		?>		
-		</td>		
-	</tr>
-	</table>
+		$le_modules = get_seminar_modules($seminar_id);
+		if ($le_modules != false)
+			$le_anzahl = sizeof($le_modules);
+		else
+			$le_anzahl = 0;
+		if ($le_anzahl == 1)
+			$info_text1 = _("Dieser Veranstaltung ist ein Lernmodul zugeordnet.");
+		else
+			$info_text1 = sprintf(_("Dieser Veranstaltung sind %s Lernmodule zugeordnet."), $le_anzahl);
+		$infobox = array	(			
+		array ("kategorie"  => _("Information:"),
+			"eintrag" => array	(	
+							array (	"icon" => "pictures/ausruf_small.gif",
+									"text"  => $info_text1
+								 )
+							)
+			)
+		);
+		$infobox[1]["kategorie"] = _("Aktionen:");
+			$infobox[1]["eintrag"][] = array (	"icon" => "pictures/icon-posting.gif" ,
+										"text"  => _("Wenn Sie auf den Titel eines Lernmoduls klicken, &ouml;ffnet sich ein neues Fenster mit dem ILIAS-Lernmodul.")
+									);
+
+		$cssSw = new cssClassSwitcher;									// Klasse für Zebra-Design
+		show_seminar_modules_links($seminar_id);
+	}
+	?>
+	<br>
+	</td>
+	<td width="270" NOWRAP class="blank" align="center" valign="top">
+	<? 
+		print_infobox ($infobox,"pictures/lernmodule.jpg");
+	?>		
+	</td>		
+</tr>
+</table>
 <?
 }
 else 
