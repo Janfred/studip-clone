@@ -565,15 +565,6 @@ if ($jump_back_x) {
 			} else {
 				$level = 3;
 			}
-		//jump from form 5 (admission and miscellanous) back
-		} elseif ($form == 5) {
-			if ($sem_create_data["term_art"] == -1) {
-				$level = 2;
-			} elseif ((is_array($sem_create_data["metadata_termin"]["turnus_data"])) || ($sem_create_data["term_first_date"]) || ($sem_create_data["sem_vor_termin"] > -1)) {
-				$level = 4; 
-			} else {
-				$level = 3;
-			}
 		//jump normal a form back
 		} else {
 			$level = $form - 1;
@@ -841,10 +832,7 @@ if (($form == 3) && ($jump_next_x))
 	}
 	
 	if (!$errormsg)
-		if ((!is_array($sem_create_data["metadata_termin"]["turnus_data"])) && (!$sem_create_data["term_first_date"]) && ($sem_create_data["sem_vor_termin"] == -1))
-			$level=5;
-		else
-			$level=4;
+		$level=4;
 	else
 		$level=3;
 	}
@@ -2419,7 +2407,7 @@ if ($level == 4) {
 			<td class="blank" valign="top">
 				<blockquote>
 				<b><?=_("Schritt 4: Raumangaben"); ?></b><br><br>
-				<? if (((get_config("RESOURCES_ALLOW_ROOM_REQUESTS")) || (get_config("RESOURCES_ALLOW_ROOM_PROPERTY_REQUESTS"))) && ($RESOURCES_ENABLE)) {
+				<? if (($RESOURCES_ALLOW_ROOM_REQUESTS) && ($RESOURCES_ENABLE)) {
 					if ($resList->roomsExist())
 						print _("Bitte geben Sie hier ein, welche Angaben zu R&auml;umen gemacht werden, buchen Sie konkrete R&auml;ume oder stellen sie Raumw&uuml;nsche an die zentrale Raumverweltung.")."<br><br>";
 					else
@@ -2449,8 +2437,7 @@ if ($level == 4) {
 						</td>
 					</tr>
 					<?
-					if (((get_config("RESOURCES_ALLOW_ROOM_REQUESTS")) || (get_config("RESOURCES_ALLOW_ROOM_PROPERTY_REQUESTS"))) && ($RESOURCES_ENABLE) &&
-						((is_array($sem_create_data["metadata_termin"]["turnus_data"])) || ($sem_create_data["term_first_date"]))) {
+					if (($RESOURCES_ALLOW_ROOM_REQUESTS) && ($RESOURCES_ENABLE)) {
 					?>
 					
 					<tr <? $cssSw->switchClass() ?>>
