@@ -343,7 +343,7 @@ for ($i; $i<7; $i++)
 <table width ="100%" cellspacing=0 cellpadding=2 border=0>
 <?
 if (!$print_view)
-if ($perm->have_perm("admin")) {
+if ($perm->have_perm("admin") && $view != "inst") {
 ?>
 <tr>
 	<td class="topic" width = "99%"colspan=<? echo $glb_colspan?>><img src="pictures/meinesem.gif" border="0" align="texttop"><b>&nbsp;<? if ($view=="user")  echo "Mein Stundenplan"; else echo "Veranstaltungs-Timetable" ?></b>
