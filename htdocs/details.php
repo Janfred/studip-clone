@@ -89,6 +89,9 @@ if ($send_from_search)
 //Namen holen
 $db2->query("SELECT * FROM seminare WHERE Seminar_id = '$sem_id'");
 $db2->next_record();
+
+//calculate a "quarter" year, to avoid showing dates that are older than a quarter year (only for irregular dates)
+$quarter_year = 60 * 60 * 24 * 90;
 	
 //In dieser Datei nehmen wir die Art direkt, nicht aus Session, da die Datei auch ausserhalb von Seminaren aufgerufen wird
 if ($SEM_TYPE[$db2->f("status")]["name"] == $SEM_TYPE_MISC_NAME) //Typ fuer Sonstiges
@@ -226,7 +229,7 @@ print_infobox ($infobox,"pictures/details.jpg");
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" valign="top" width="45%">
 				<?
-				printf ("<font size=-1><b>" . _("Zeit:") . "</b></font><br /><font size=-1>%s</font>",htmlReady(view_turnus($sem_id, FALSE)));
+				printf ("<font size=-1><b>" . _("Zeit:") . "</b></font><br /><font size=-1>%s</font>",htmlReady(view_turnus($sem_id, FALSE, FALSE, (time() - $quarter_year))));
 				?>
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" valign="top" width="25%">
@@ -254,7 +257,7 @@ print_infobox ($infobox,"pictures/details.jpg");
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="45%" valign="top">
 				<?
-				printf ("<font size=-1><b>" . _("Veranstaltungsort:") . "</b></font><br /><font size=-1>%s</font>", (getRoom ($sem_id)) ? getRoom ($sem_id) : "nicht angegeben.");
+				printf ("<font size=-1><b>" . _("Veranstaltungsort:") . "</b></font><br /><font size=-1>%s</font>", (getRoom ($sem_id, TRUE, (time() - $quarter_year))) ? getRoom ($sem_id, TRUE, (time() - $quarter_year)) : "nicht angegeben.");
 				?>
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="25%"  align="top">
