@@ -122,6 +122,9 @@ if ($auth->auth["uid"] == "nobody") { ?>
 		
 		$myuname=$auth->auth["uname"];
 		$tmp_last_visit = ($my_messaging_settings["last_visit"]) ?  $my_messaging_settings["last_visit"] : time();
+		if (!$my_messaging_settings["last_box_visit"]) {
+			$my_messaging_settings["last_box_visit"] = "1";
+		}
 		$db->query("
 					SELECT COUNT(m.chat_id) AS chat_m, 
 					COUNT(IF(m_u.readed = '0', m_u.message_id, NULL)) AS neu_m, 
