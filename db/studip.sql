@@ -1,13 +1,12 @@
 # phpMyAdmin MySQL-Dump
-# version 2.3.0
-# http://phpwizard.net/phpMyAdmin/
+# version 2.3.3pl1
 # http://www.phpmyadmin.net/ (download page)
 #
 # Host: localhost
-# Erstellungszeit: 27. März 2003 um 16:36
+# Erstellungszeit: 30. Juli 2003 um 09:51
 # Server Version: 3.23.52
 # PHP-Version: 4.2.2
-# Datenbank: `Seminar`
+# Datenbank: `studip`
 # --------------------------------------------------------
 
 #
@@ -25,10 +24,12 @@ CREATE TABLE Institute (
   email varchar(255) NOT NULL default '',
   fax varchar(32) NOT NULL default '',
   type int(10) NOT NULL default '0',
-  modules bigint(20) default NULL,
+  modules int(10) unsigned default NULL,
   mkdate int(20) NOT NULL default '0',
   chdate int(20) NOT NULL default '0',
-  PRIMARY KEY  (Institut_id)
+  PRIMARY KEY  (Institut_id),
+  KEY fakultaets_id (fakultaets_id),
+  KEY chdate (chdate)
 ) TYPE=MyISAM PACK_KEYS=1;
 # --------------------------------------------------------
 
@@ -42,8 +43,7 @@ CREATE TABLE active_sessions (
   val mediumtext,
   changed varchar(14) NOT NULL default '',
   PRIMARY KEY  (name,sid),
-  KEY changed (changed),
-  KEY sid (sid)
+  KEY changed (changed)
 ) TYPE=MyISAM PACK_KEYS=1;
 # --------------------------------------------------------
 
@@ -86,7 +86,6 @@ CREATE TABLE archiv (
   start_time int(20) NOT NULL default '0',
   semester varchar(16) NOT NULL default '',
   heimat_inst_id varchar(32) NOT NULL default '',
-  fakultaet_id varchar(32) NOT NULL default '',
   institute varchar(255) NOT NULL default '',
   dozenten varchar(255) NOT NULL default '',
   fakultaet varchar(255) NOT NULL default '',
@@ -96,8 +95,8 @@ CREATE TABLE archiv (
   forumdump longtext NOT NULL,
   studienbereiche text NOT NULL,
   PRIMARY KEY  (seminar_id),
-  KEY heimat_inst_id (heimat_inst_id),
-  KEY fakultaet_id (fakultaet_id)
+  UNIQUE KEY seminar_id (seminar_id),
+  KEY heimat_inst_id (heimat_inst_id)
 ) TYPE=MyISAM PACK_KEYS=1;
 # --------------------------------------------------------
 
@@ -110,7 +109,6 @@ CREATE TABLE archiv_user (
   user_id varchar(32) NOT NULL default '',
   status varchar(32) NOT NULL default '',
   PRIMARY KEY  (seminar_id,user_id),
-  KEY seminar_id (seminar_id),
   KEY user_id (user_id)
 ) TYPE=MyISAM PACK_KEYS=1;
 # --------------------------------------------------------
@@ -140,8 +138,9 @@ CREATE TABLE contact (
   contact_id varchar(32) NOT NULL default '',
   owner_id varchar(32) NOT NULL default '',
   user_id varchar(32) NOT NULL default '',
-  buddy smallint(6) NOT NULL default '1',
+  buddy tinyint(4) NOT NULL default '1',
   PRIMARY KEY  (contact_id),
+  UNIQUE KEY owner_user (owner_id,user_id),
   KEY owner_id (owner_id),
   KEY user_id (user_id)
 ) TYPE=MyISAM;
@@ -158,7 +157,8 @@ CREATE TABLE contact_userinfo (
   content text NOT NULL,
   priority int(11) NOT NULL default '0',
   PRIMARY KEY  (userinfo_id),
-  KEY contact_id (contact_id)
+  KEY contact_id (contact_id),
+  KEY priority (priority)
 ) TYPE=MyISAM;
 # --------------------------------------------------------
 
@@ -170,8 +170,8 @@ CREATE TABLE dokumente (
   dokument_id varchar(32) NOT NULL default '',
   range_id varchar(32) NOT NULL default '',
   user_id varchar(32) NOT NULL default '',
-  seminar_id varchar(32) NOT NULL default '',
-  description text,
+  seminar_id varchar(32) NOT NULL default '0',
+  description text NOT NULL,
   filename varchar(255) NOT NULL default '',
   mkdate int(20) NOT NULL default '0',
   chdate int(20) NOT NULL default '0',
@@ -180,8 +180,9 @@ CREATE TABLE dokumente (
   downloads int(20) NOT NULL default '0',
   PRIMARY KEY  (dokument_id),
   KEY range_id (range_id),
+  KEY seminar_id (seminar_id),
   KEY user_id (user_id),
-  KEY seminar_id (seminar_id)
+  KEY chdate (chdate)
 ) TYPE=MyISAM PACK_KEYS=1;
 # --------------------------------------------------------
 
@@ -215,8 +216,9 @@ CREATE TABLE folder (
   chdate int(20) NOT NULL default '0',
   PRIMARY KEY  (folder_id),
   KEY user_id (user_id),
-  KEY range_id (range_id)
-) TYPE=MyISAM;
+  KEY range_id (range_id),
+  KEY chdate (chdate)
+) TYPE=MyISAM PACK_KEYS=1;
 # --------------------------------------------------------
 
 #
@@ -253,8 +255,7 @@ CREATE TABLE kategorien (
   priority int(11) NOT NULL default '0',
   PRIMARY KEY  (kategorie_id),
   KEY kategorie_id_2 (kategorie_id,range_id),
-  KEY priority (priority),
-  KEY range_id (range_id)
+  KEY priority (priority)
 ) TYPE=MyISAM;
 # --------------------------------------------------------
 
@@ -271,7 +272,9 @@ CREATE TABLE literatur (
   mkdate int(20) NOT NULL default '0',
   chdate int(20) NOT NULL default '0',
   PRIMARY KEY  (literatur_id),
-  KEY range_id (range_id)
+  KEY range_id (range_id),
+  KEY mkdate (mkdate),
+  KEY chdate (chdate)
 ) TYPE=MyISAM PACK_KEYS=1;
 # --------------------------------------------------------
 
@@ -281,15 +284,14 @@ CREATE TABLE literatur (
 
 CREATE TABLE news (
   news_id varchar(32) NOT NULL default '',
-  topic varchar(70) NOT NULL default '',
+  topic varchar(255) NOT NULL default '',
   body text NOT NULL,
   author varchar(255) NOT NULL default '',
   date int(11) NOT NULL default '0',
   user_id varchar(32) NOT NULL default '',
   expire int(11) NOT NULL default '0',
   PRIMARY KEY  (news_id),
-  KEY date (date),
-  KEY user_id (user_id)
+  KEY date (date)
 ) TYPE=MyISAM PACK_KEYS=1;
 # --------------------------------------------------------
 
@@ -301,9 +303,21 @@ CREATE TABLE news_range (
   news_id varchar(32) NOT NULL default '',
   range_id varchar(32) NOT NULL default '',
   PRIMARY KEY  (news_id,range_id),
-  KEY range_id (range_id),
-  KEY news_id (news_id)
+  KEY news_id (news_id),
+  KEY range_id (range_id)
 ) TYPE=MyISAM PACK_KEYS=1;
+# --------------------------------------------------------
+
+#
+# Tabellenstruktur für Tabelle `newsletter`
+#
+
+CREATE TABLE newsletter (
+  user_id varchar(32) NOT NULL default '',
+  newsletter_id varchar(32) NOT NULL default '',
+  status tinyint(4) NOT NULL default '0',
+  PRIMARY KEY  (user_id)
+) TYPE=MyISAM;
 # --------------------------------------------------------
 
 #
@@ -312,8 +326,8 @@ CREATE TABLE news_range (
 
 CREATE TABLE px_topics (
   topic_id varchar(32) NOT NULL default '',
-  parent_id varchar(32) NOT NULL default '0',
-  root_id varchar(32) NOT NULL default '0',
+  parent_id varchar(32) NOT NULL default '',
+  root_id varchar(32) NOT NULL default '',
   name varchar(255) default NULL,
   description text,
   mkdate int(20) NOT NULL default '0',
@@ -326,8 +340,9 @@ CREATE TABLE px_topics (
   KEY root_id (root_id),
   KEY Seminar_id (Seminar_id),
   KEY parent_id (parent_id),
+  KEY user_id_2 (user_id,Seminar_id),
   KEY user_id (user_id),
-  KEY mkdate (mkdate)
+  KEY chdate (chdate)
 ) TYPE=MyISAM PACK_KEYS=1;
 # --------------------------------------------------------
 
@@ -338,6 +353,7 @@ CREATE TABLE px_topics (
 CREATE TABLE range_tree (
   item_id varchar(32) NOT NULL default '',
   parent_id varchar(32) NOT NULL default '',
+  level int(11) NOT NULL default '0',
   priority int(11) NOT NULL default '0',
   name varchar(255) NOT NULL default '',
   studip_object varchar(10) default NULL,
@@ -384,7 +400,7 @@ CREATE TABLE resources_categories (
   name varchar(255) NOT NULL default '',
   description text NOT NULL,
   system tinyint(4) NOT NULL default '0',
-  iconnr int(3) unsigned default '1',
+  iconnr int(3) default '1',
   PRIMARY KEY  (category_id)
 ) TYPE=MyISAM;
 # --------------------------------------------------------
@@ -411,7 +427,7 @@ CREATE TABLE resources_objects (
   parent_id varchar(32) NOT NULL default '',
   category_id varchar(32) NOT NULL default '',
   owner_id varchar(32) NOT NULL default '',
-  level varchar(4) default NULL,
+  level int(4) default NULL,
   name varchar(255) NOT NULL default '',
   description text NOT NULL,
   inventar_num varchar(255) NOT NULL default '',
@@ -488,9 +504,7 @@ CREATE TABLE sem_tree (
 CREATE TABLE seminar_inst (
   seminar_id varchar(32) NOT NULL default '',
   institut_id varchar(32) NOT NULL default '',
-  PRIMARY KEY  (seminar_id,institut_id),
-  KEY seminar_id (seminar_id),
-  KEY institut_id (institut_id)
+  PRIMARY KEY  (seminar_id,institut_id)
 ) TYPE=MyISAM PACK_KEYS=1;
 # --------------------------------------------------------
 
@@ -502,6 +516,7 @@ CREATE TABLE seminar_lernmodul (
   seminar_id varchar(32) NOT NULL default '',
   co_inst bigint(20) NOT NULL default '0',
   co_id bigint(20) NOT NULL default '0',
+  status tinyint(4) NOT NULL default '0',
   PRIMARY KEY  (seminar_id,co_id),
   KEY seminar_id (seminar_id)
 ) TYPE=MyISAM;
@@ -569,11 +584,12 @@ CREATE TABLE seminare (
   admission_turnout int(5) default NULL,
   admission_binding tinyint(4) default NULL,
   admission_type int(3) NOT NULL default '0',
-  admission_selection_take_place tinyint(4) default NULL,
+  admission_selection_take_place tinyint(4) default '0',
   showscore tinyint(3) default '0',
-  modules bigint(20) default NULL,
+  modules int(10) unsigned default NULL,
   PRIMARY KEY  (Seminar_id),
-  KEY Institut_id (Institut_id)
+  KEY Institut_id (Institut_id),
+  KEY chdate (chdate)
 ) TYPE=MyISAM PACK_KEYS=1;
 # --------------------------------------------------------
 
@@ -584,8 +600,7 @@ CREATE TABLE seminare (
 CREATE TABLE statusgruppe_user (
   statusgruppe_id varchar(32) NOT NULL default '',
   user_id varchar(32) NOT NULL default '',
-  PRIMARY KEY  (statusgruppe_id,user_id),
-  KEY user_id (user_id)
+  PRIMARY KEY  (statusgruppe_id,user_id)
 ) TYPE=MyISAM;
 # --------------------------------------------------------
 
@@ -635,6 +650,61 @@ CREATE TABLE studip_ilias (
 # --------------------------------------------------------
 
 #
+# Tabellenstruktur für Tabelle `support_contract`
+#
+
+CREATE TABLE support_contract (
+  contract_id varchar(32) NOT NULL default '',
+  institut_id varchar(32) default NULL,
+  range_id varchar(32) default NULL,
+  given_points int(20) unsigned NOT NULL default '0',
+  contract_begin int(20) unsigned NOT NULL default '0',
+  contract_end int(20) unsigned NOT NULL default '0',
+  mkdate int(20) unsigned NOT NULL default '0',
+  chdate int(20) unsigned NOT NULL default '0',
+  PRIMARY KEY  (contract_id),
+  KEY contract_id (contract_id,institut_id,range_id)
+) TYPE=MyISAM;
+# --------------------------------------------------------
+
+#
+# Tabellenstruktur für Tabelle `support_event`
+#
+
+CREATE TABLE support_event (
+  event_id varchar(32) NOT NULL default '',
+  request_id varchar(32) NOT NULL default '',
+  user_id varchar(32) NOT NULL default '',
+  begin int(20) unsigned NOT NULL default '0',
+  end int(20) unsigned NOT NULL default '0',
+  used_points int(4) unsigned NOT NULL default '0',
+  mkdate int(20) unsigned NOT NULL default '0',
+  chdate int(20) unsigned NOT NULL default '0',
+  PRIMARY KEY  (event_id),
+  KEY event_id (event_id,user_id,mkdate,request_id)
+) TYPE=MyISAM;
+# --------------------------------------------------------
+
+#
+# Tabellenstruktur für Tabelle `support_request`
+#
+
+CREATE TABLE support_request (
+  request_id varchar(32) NOT NULL default '',
+  contract_id varchar(32) NOT NULL default '',
+  name varchar(255) default NULL,
+  date int(20) unsigned NOT NULL default '0',
+  user_id varchar(32) NOT NULL default '0',
+  channel tinyint(3) unsigned default '0',
+  topic_id varchar(32) NOT NULL default '',
+  mkdate int(20) unsigned NOT NULL default '0',
+  chdate int(20) unsigned NOT NULL default '0',
+  PRIMARY KEY  (request_id),
+  KEY contract_id (contract_id,topic_id,user_id)
+) TYPE=MyISAM;
+# --------------------------------------------------------
+
+#
 # Tabellenstruktur für Tabelle `termine`
 #
 
@@ -656,9 +726,39 @@ CREATE TABLE termine (
   priority tinyint(4) default NULL,
   raum varchar(255) default NULL,
   PRIMARY KEY  (termin_id),
+  KEY chdate (chdate),
+  KEY date_typ (date_typ),
   KEY range_id (range_id),
   KEY autor_id (autor_id)
 ) TYPE=MyISAM PACK_KEYS=1;
+# --------------------------------------------------------
+
+#
+# Tabellenstruktur für Tabelle `tracking_data`
+#
+
+CREATE TABLE tracking_data (
+  entry_id varchar(32) NOT NULL default '',
+  user_id varchar(32) NOT NULL default '',
+  page varchar(255) default NULL,
+  params text NOT NULL,
+  timestamp int(20) default NULL,
+  open_object varchar(32) default '0',
+  user_ip varchar(20) NOT NULL default '',
+  user_agent varchar(255) NOT NULL default '',
+  PRIMARY KEY  (entry_id)
+) TYPE=MyISAM;
+# --------------------------------------------------------
+
+#
+# Tabellenstruktur für Tabelle `tracking_user`
+#
+
+CREATE TABLE tracking_user (
+  user_id varchar(32) NOT NULL default '',
+  alter int(4) unsigned default '0',
+  PRIMARY KEY  (user_id)
+) TYPE=MyISAM;
 # --------------------------------------------------------
 
 #
@@ -678,9 +778,9 @@ CREATE TABLE user_info (
   geschlecht tinyint(4) NOT NULL default '0',
   mkdate int(20) NOT NULL default '0',
   chdate int(20) NOT NULL default '0',
-  preferred_language varchar(6) default NULL,
   title_front varchar(64) NOT NULL default '',
   title_rear varchar(64) NOT NULL default '',
+  preferred_language varchar(6) default NULL,
   PRIMARY KEY  (user_id),
   KEY score (score)
 ) TYPE=MyISAM PACK_KEYS=1;
@@ -699,8 +799,8 @@ CREATE TABLE user_inst (
   Telefon varchar(32) NOT NULL default '',
   Fax varchar(32) NOT NULL default '',
   PRIMARY KEY  (user_id,Institut_id),
-  KEY user_id (user_id),
   KEY Institut_id (Institut_id),
+  KEY user_id (user_id),
   KEY inst_perms (inst_perms)
 ) TYPE=MyISAM PACK_KEYS=1;
 # --------------------------------------------------------
@@ -714,47 +814,36 @@ CREATE TABLE user_studiengang (
   studiengang_id varchar(32) NOT NULL default '',
   PRIMARY KEY  (user_id,studiengang_id)
 ) TYPE=MyISAM;
+# --------------------------------------------------------
 
 #
-# Dumping data for table 'resources_categories'
+# Tabellenstruktur für Tabelle `wiki`
 #
 
-INSERT INTO resources_categories VALUES("1cf2a34de92c06137ecdfcef4a29e4bc", "Raum", "", "1", "3");
-INSERT INTO resources_categories VALUES("82bdd20907e914de72bbfc8043dd3a46", "Gebäude", "", "0", "1");
-INSERT INTO resources_categories VALUES("891662c701078186c857fca25d34ade6", "Gerät", "", "0", "2");
-
-
-#
-# Dumping data for table 'resources_categories_properties'
-#
-
-INSERT INTO resources_categories_properties VALUES("82bdd20907e914de72bbfc8043dd3a46", "8772d6757457c8b4a05b180e1c2eba9c", "0");
-INSERT INTO resources_categories_properties VALUES("82bdd20907e914de72bbfc8043dd3a46", "5753ab43945ae787f983f5c8a036712d", "0");
-INSERT INTO resources_categories_properties VALUES("891662c701078186c857fca25d34ade6", "1b86b5026052fd3d8624fead31204cba", "0");
-INSERT INTO resources_categories_properties VALUES("891662c701078186c857fca25d34ade6", "9c0658891b95fe962d013f1308feb80d", "0");
-INSERT INTO resources_categories_properties VALUES("891662c701078186c857fca25d34ade6", "7bff1a7d45bc37280e988f6e8d007bad", "0");
-INSERT INTO resources_categories_properties VALUES("1cf2a34de92c06137ecdfcef4a29e4bc", "0ef8a73d95f335cdfbaec50cae92762a", "0");
-INSERT INTO resources_categories_properties VALUES("1cf2a34de92c06137ecdfcef4a29e4bc", "5753ab43945ae787f983f5c8a036712d", "0");
-INSERT INTO resources_categories_properties VALUES("1cf2a34de92c06137ecdfcef4a29e4bc", "31abad810703df361d793361bf6b16e5", "0");
-INSERT INTO resources_categories_properties VALUES("1cf2a34de92c06137ecdfcef4a29e4bc", "ef4ba565e635b45c3f43ecdc69fb4aca", "1");
-INSERT INTO resources_categories_properties VALUES("1cf2a34de92c06137ecdfcef4a29e4bc", "648b8579ffca64a565459fd6ea0313c5", "0");
+CREATE TABLE wiki (
+  range_id varchar(32) NOT NULL default '',
+  user_id varchar(32) default NULL,
+  keyword varchar(255) NOT NULL default '',
+  body text,
+  chdate int(11) default NULL,
+  version int(11) NOT NULL default '0',
+  PRIMARY KEY  (range_id,keyword,version),
+  KEY user_id (user_id),
+  KEY chdate (chdate)
+) TYPE=MyISAM;
+# --------------------------------------------------------
 
 #
-# Dumping data for table 'resources_properties'
+# Tabellenstruktur für Tabelle `wiki_locks`
 #
 
-INSERT INTO resources_properties VALUES("ef4ba565e635b45c3f43ecdc69fb4aca", "Sitzplätze", "", "num", "", "1");
-INSERT INTO resources_properties VALUES("8772d6757457c8b4a05b180e1c2eba9c", "Adresse", "", "text", "", "0");
-INSERT INTO resources_properties VALUES("0ef8a73d95f335cdfbaec50cae92762a", "Ausstattung", "", "text", "", "0");
-INSERT INTO resources_properties VALUES("7bff1a7d45bc37280e988f6e8d007bad", "Seriennummer", "", "num", "", "0");
-INSERT INTO resources_properties VALUES("31abad810703df361d793361bf6b16e5", "Raumtyp", "", "select", "Hörsaal;Übungsraum;Sitzungszimmer", "0");
-INSERT INTO resources_properties VALUES("5753ab43945ae787f983f5c8a036712d", "behindertengerecht", "", "bool", "", "0");
-INSERT INTO resources_properties VALUES("648b8579ffca64a565459fd6ea0313c5", "Verdunklung", "", "bool", "vorhanden", "0");
-INSERT INTO resources_properties VALUES("9c0658891b95fe962d013f1308feb80d", "Hersteller", "", "num", "", "0");
-INSERT INTO resources_properties VALUES("1b86b5026052fd3d8624fead31204cba", "Kaufdatum", "", "num", "", "0");
-
-# Anlegen des Benutzers root 
-
-# Benutzer: root@studip ; Password: testing
-INSERT INTO auth_user_md5 VALUES( '76ed43ef286fb55cf9e41beadb484a9f', 'root@studip', 'ae2b1fca515949e5d54fb22b8ed95575', 'root', 'Root', 'Studip', 'root@localhost');
-INSERT INTO user_info SET user_id ='76ed43ef286fb55cf9e41beadb484a9f';
+CREATE TABLE wiki_locks (
+  user_id varchar(32) NOT NULL default '',
+  range_id varchar(32) NOT NULL default '',
+  keyword varchar(255) NOT NULL default '',
+  version int(11) NOT NULL default '0',
+  chdate int(11) NOT NULL default '0',
+  PRIMARY KEY  (range_id,user_id,keyword,version),
+  KEY user_id (user_id),
+  KEY chdate (chdate)
+) TYPE=MyISAM;
