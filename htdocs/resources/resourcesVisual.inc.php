@@ -73,7 +73,7 @@ class ShowList extends ShowTreeRow{
 	
 	//private
 	function showListObject ($resource_id, $admin_buttons=FALSE) {
-		global $resources_data, $edit_structure_object, $RELATIVE_PATH_RESOURCES, $PHP_SELF;
+		global $resources_data, $edit_structure_object, $RELATIVE_PATH_RESOURCES, $PHP_SELF, $ActualObjectPerms;
 	
 		//Object erstellen
 		$resObject=new ResourceObject($resource_id);
@@ -114,24 +114,34 @@ class ShowList extends ShowTreeRow{
 		else			
 			$zusatz=sprintf (_("Besitzer:")." %s", $resObject->getOwnerName());
 		$new=TRUE;
-		if ($edit_structure_object==$resObject->id) {
-			$content= "<br /><textarea name=\"change_description\" rows=3 cols=40>".htmlReady($resObject->getDescription())."</textarea><br />";
-			$content.= "<input type=\"image\" name=\"send\" align=\"absmiddle\" ".makeButton("uebernehmen", "src")." border=0 value=\""._("&Auml;nderungen speichern")."\" />";
-			$content.= "&nbsp;<a href=\"$PHP_SELF?cancel_edit=$resObject->id\">".makeButton("abbrechen", "img")."</a>";						
-			$content.= "<input type=\"hidden\" name=\"change_structure_object\" value=\"".$resObject->getId()."\" />";
-			$open="open";
-		} else {
-			$content=htmlReady($resObject->getDescription());
-		}
-		if ($admin_buttons) {
-			if (!$weitere) {
-				$edit= "<a href=\"$PHP_SELF?kill_object=$resObject->id\">".makeButton("loeschen")."</a>";
-			} 
-			$edit.= "&nbsp;<a href=\"$PHP_SELF?create_object=$resObject->id\">".makeButton("neuesobjekt")."</a>";
-			$edit.= "&nbsp;<a href=\"$PHP_SELF?edit_object=$resObject->id\">".makeButton("details")."</a>";
-		} else {
-			$edit.= "&nbsp;<a href=\"$PHP_SELF?show_object=$resObject->id&view=view_details\">".makeButton("details")."</a>";
-			$edit.= "&nbsp;<a href=\"$PHP_SELF?show_object=$resObject->id&view=view_schedule\">".makeButton("belegung")."</a>";
+		if ($open=="open") {
+			//load the perms
+			if (($ActualObjectPerms) && ($ActualObjectPerms->getId() == $resObject->getId()))
+				$perms = $ActualObjectPerms->getUserPerm();
+			else {
+				$ThisObjectPerms = new ResourcesObjectPerms($resObject->getId());
+				$perms = $ActualObjectPerms->getUserPerm();
+			}
+		
+			if ($edit_structure_object==$resObject->id) {
+				$content= "<br /><textarea name=\"change_description\" rows=3 cols=40>".htmlReady($resObject->getDescription())."</textarea><br />";
+				$content.= "<input type=\"image\" name=\"send\" align=\"absmiddle\" ".makeButton("uebernehmen", "src")." border=0 value=\""._("&Auml;nderungen speichern")."\" />";
+				$content.= "&nbsp;<a href=\"$PHP_SELF?cancel_edit=$resObject->id\">".makeButton("abbrechen", "img")."</a>";						
+				$content.= "<input type=\"hidden\" name=\"change_structure_object\" value=\"".$resObject->getId()."\" />";
+				$open="open";
+			} else {
+				$content=htmlReady($resObject->getDescription());
+			}
+			if (($admin_buttons) && ($perms == "admin")) {
+				if (!$weitere) {
+					$edit= "<a href=\"$PHP_SELF?kill_object=$resObject->id\">".makeButton("loeschen")."</a>";
+				} 
+				$edit.= "&nbsp;<a href=\"$PHP_SELF?create_object=$resObject->id\">".makeButton("neuesobjekt")."</a>";
+				$edit.= "&nbsp;<a href=\"$PHP_SELF?edit_object=$resObject->id\">".makeButton("details")."</a>";
+			} else {
+				$edit.= "&nbsp;<a href=\"$PHP_SELF?show_object=$resObject->id&view=view_details\">".makeButton("details")."</a>";
+				$edit.= "&nbsp;<a href=\"$PHP_SELF?show_object=$resObject->id&view=view_schedule\">".makeButton("belegung")."</a>";
+			}
 		}
 
 		//Daten an Ausgabemodul senden (aus resourcesVisual)
@@ -242,13 +252,14 @@ class ShowThread extends ShowTreeRow {
 	}
 
 	function showThreadLevel ($root_id, $level=0, $lines='') {
-		global $resources_data, $edit_structure_object, $RELATIVE_PATH_RESOURCES, $PHP_SELF;
+		global $resources_data, $edit_structure_object, $RELATIVE_PATH_RESOURCES, $PHP_SELF, $ActualObjectPerms;
 		
 		$db=new DB_Seminar;		
 		$db2=new DB_Seminar;		
 		
 		//Daten des Objects holen
 		$db->query("SELECT resource_id FROM resources_objects WHERE resource_id = '$root_id' ");
+		
 		while ($db->next_record()) {
 			//Untergeordnete Objekte laden
 			$db2->query("SELECT resource_id FROM resources_objects WHERE parent_id = '".$db->f("resource_id")."' ");
@@ -297,35 +308,48 @@ class ShowThread extends ShowTreeRow {
 			else			
 				$zusatz=sprintf ("Besitzer: %s", $resObject->getOwnerName());
 			$new=TRUE;
-			if ($edit_structure_object==$resObject->id) {
-				$content.= "<br /><textarea name=\"change_description\" rows=3 cols=40>".htmlReady($resObject->getDescription())."</textarea><br />";
-				$content.= "<input type=\"image\" name=\"send\" align=\"absmiddle\" ".makeButton("uebernehmen", "src")." border=0 value=\""._("&Auml;nderungen speichern")."\" />";
-				$content.= "&nbsp;<a href=\"$PHP_SELF?cancel_edit=$resObject->id\">".makeButton("abbrechen", "img")."</a>";						
-				$content.= "<input type=\"hidden\" name=\"change_structure_object\" value=\"".$resObject->getId()."\" />";
-				$open="open";
-			} else {
-				$content=htmlReady($resObject->getDescription());
-			}
-			if ($resources_data["move_object"] == $resObject->id) 
-				$content.= sprintf ("<br />"._("Dieses Objekt wurde zum Verschieben markiert. Bitte w&auml;hlen sie das Einf&uuml;gen-Symbol %s, um es in die gew&uuml;nschten Ebene zu verschieben."), "<img src=\"pictures/move.gif\" border=0 alt=\""._("Klicken Sie dieses Symbol, um dieses Objekt in eine andere Ebene zu verschieben")."\">");
-			if (!$weitere) {
-				$edit.= "<a href=\"$PHP_SELF?kill_object=$resObject->id\">".makeButton("loeschen", "img")."</a>";
-			} else {
-				$edit.= "&nbsp;<a href=\"$PHP_SELF?open_list=$resObject->id\">".makeButton("listeoeffnen", "img")."</a>";
-			}
-			if ($resources_data["move_object"] == $resObject->id) 
-				$edit.= "&nbsp;<a href=\"$PHP_SELF?cancel_move=TRUE\">".makeButton("abbrechen", "img")."</a>";			
-			else
-				$edit.= "&nbsp;<a href=\"$PHP_SELF?pre_move_object=$resObject->id\">".makeButton("verschieben", "img")."</a>";			
-			$edit.= "&nbsp;<a href=\"$PHP_SELF?create_object=$resObject->id\">".makeButton("neuesobjekt", "img")."</a>";
-			$edit.= "&nbsp;<a href=\"$PHP_SELF?create_hierachie_level=$resObject->id\">".makeButton("neueebene", "img")."</a>";
-			$edit.= "&nbsp;<a href=\"$PHP_SELF?edit_object=$resObject->id\">".makeButton("details", "img")."</a>";
-			
+			if ($open=="open") {
+				//load the perms
+				if (($ActualObjectPerms) && ($ActualObjectPerms->getId() == $resObject->getId()))
+					$perms = $ActualObjectPerms->getUserPerm();
+				else {
+					$ThisObjectPerms = new ResourcesObjectPerms($resObject->getId());
+					$perms = $ActualObjectPerms->getUserPerm();
+				}
+				
+				if ($edit_structure_object==$resObject->id) {
+					$content.= "<br /><textarea name=\"change_description\" rows=3 cols=40>".htmlReady($resObject->getDescription())."</textarea><br />";
+					$content.= "<input type=\"image\" name=\"send\" align=\"absmiddle\" ".makeButton("uebernehmen", "src")." border=0 value=\""._("&Auml;nderungen speichern")."\" />";
+					$content.= "&nbsp;<a href=\"$PHP_SELF?cancel_edit=$resObject->id\">".makeButton("abbrechen", "img")."</a>";						
+					$content.= "<input type=\"hidden\" name=\"change_structure_object\" value=\"".$resObject->getId()."\" />";
+					$open="open";
+				} else {
+					$content=htmlReady($resObject->getDescription());
+				}
+				if ($resources_data["move_object"] == $resObject->id) 
+					$content.= sprintf ("<br />"._("Dieses Objekt wurde zum Verschieben markiert. Bitte w&auml;hlen sie das Einf&uuml;gen-Symbol %s, um es in die gew&uuml;nschten Ebene zu verschieben."), "<img src=\"pictures/move.gif\" border=0 alt=\""._("Klicken Sie dieses Symbol, um dieses Objekt in eine andere Ebene zu verschieben")."\">");
+	
+				if ($weitere)
+					$edit.= "&nbsp;<a href=\"$PHP_SELF?open_list=$resObject->id\">".makeButton("listeoeffnen", "img")."</a>";
+				elseif ($perms == "admin")
+					$edit.= "<a href=\"$PHP_SELF?kill_object=$resObject->id\">".makeButton("loeschen", "img")."</a>";
+				
+				if ($resources_data["move_object"] == $resObject->id) 
+					$edit.= "&nbsp;<a href=\"$PHP_SELF?cancel_move=TRUE\">".makeButton("abbrechen", "img")."</a>";			
+				elseif ($perms == "admin")
+					$edit.= "&nbsp;<a href=\"$PHP_SELF?pre_move_object=$resObject->id\">".makeButton("verschieben", "img")."</a>";
+							
+				if ($perms == "admin") {
+					$edit.= "&nbsp;<a href=\"$PHP_SELF?create_object=$resObject->id\">".makeButton("neuesobjekt", "img")."</a>";
+					$edit.= "&nbsp;<a href=\"$PHP_SELF?create_hierachie_level=$resObject->id\">".makeButton("neueebene", "img")."</a>";
+				}
+				$edit.= "&nbsp;<a href=\"$PHP_SELF?edit_object=$resObject->id\">".makeButton("details", "img")."</a>";
+			}	
 
 			//Daten an Ausgabemodul senden (aus resourcesVisual)
 			$this->showRow($icon, $link, $titel, $zusatz, $level, $lines, $weitere, $new, $open, $content, $edit);
 			
-			//in weitere Ebene abtauchen
+			//in weitere Ebene abtauchen &nbsp; 
 			while ($db2->next_record()) {
 				if ($resources_data["structure_opens"][$db->f("resource_id")])
 					$this->showThreadLevel($db2->f("resource_id"), $level+1, $lines);
