@@ -311,7 +311,7 @@ function export_teilis($inst_id, $ex_sem_id = "no", $mode = "status")
 				$db->query ("SELECT * FROM user_info 
 					LEFT JOIN auth_user_md5 USING ( user_id ) 
 					LEFT JOIN seminar_user USING ( user_id ) 
-					WHERE seminar_id = '$ex_sem_id' AND statusgruppe_id = '" . $key1 . "'");
+					WHERE seminar_id = '$ex_sem_id' ");
 			else	
 				$db->query ("SELECT * FROM statusgruppe_user  
 					LEFT JOIN user_info USING ( user_id ) 
