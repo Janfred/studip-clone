@@ -154,7 +154,7 @@ function renumber_admission ($seminar_id, $send_message=TRUE) {
 				setTempLanguage($db2->f("user_id"));
 				$message = sprintf(_("Sie sind in der Warteliste der Veranstaltung **%s (%s)** hochgestuft worden. Sie stehen zur Zeit auf Position %s."), $db->f("Name"), htmlReady(view_turnus($db->f("Seminar_id"))), $position);
 				restoreLanguage();
-				$messaging->insert_sms ($db4->f("username"), $message, "____%system%____");
+				$messaging->insert_sms ($db4->f("username"), addslashes($message), "____%system%____");
 			}
 			$position++;
 		}
@@ -185,7 +185,7 @@ function group_update_admission($seminar_id, $send_message=TRUE, $user_id, $user
 				setTempLanguage($user_id);
 				$message = sprintf (_("Sie wurden aus der Veranstaltung **%s (%s)** gelöscht, da Sie in einer anderen Veranstaltung dieser Gruppe von der Warteliste in die Teilnehmerliste aufgestiegen sind."), $db2->f("Name"), view_turnus($db2->f("Seminar_id")));
 				restoreLanguage();
-				$messaging->insert_sms ($username, $message, "____%system%____");
+				$messaging->insert_sms ($username, addslashes($message), "____%system%____");
 			}
 		//there was a change on the list of participants if the other seminar, so we have to update this seminar, maybe we can someone new put into the seminar
 		update_admission($db2->f("Seminar_id"), $send_message);
@@ -245,7 +245,7 @@ function update_admission ($seminar_id, $send_message=TRUE) {
 						$message = sprintf (_("Sie haben den Status vorläufig akzeptiert in der Veranstaltung **%s (%s)** erhalten, da für Sie ein Platz freigeworden ist."), $db->f("Name"), view_turnus($db->f("Seminar_id")));						
 					}
 					restoreLanguage();
-					$messaging->insert_sms ($db3->f("username"), $message, "____%system%____");
+					$messaging->insert_sms ($db3->f("username"), addslashes($message), "____%system%____");
 				}
 			}
 		}
@@ -286,10 +286,10 @@ function update_admission ($seminar_id, $send_message=TRUE) {
 						if (!$sem_preliminary) {
 							$message = sprintf (_("Sie sind als TeilnehmerIn der Veranstaltung **%s** eingetragen worden, da für Sie ein Platz frei geworden ist. Ab sofort finden Sie die Veranstaltung in der Übersicht Ihrer Veranstaltungen. Damit sind Sie auch als TeilnehmerIn der Präsenzveranstaltung zugelassen."), $db->f("Name"));
 						} else {
-							 $message = sprintf (_("Sie haben den Status vorläufig akzeptiert in der Veranstaltung **%s (%s)** erhalten,  da für Sie ein Platz freigeworden ist."), $db->f("Name"), view_turnus($db->f("Seminar_id")));
+							$message = sprintf (_("Sie haben den Status vorläufig akzeptiert in der Veranstaltung **%s (%s)** erhalten,  da für Sie ein Platz freigeworden ist."), $db->f("Name"), view_turnus($db->f("Seminar_id")));
 						}
 						restoreLanguage();
-						$messaging->insert_sms ($db4->f("username"), $message, "____%system%____");
+						$messaging->insert_sms ($db4->f("username"), addslashes($message), "____%system%____");
 					}
 				}
 			}
@@ -351,7 +351,7 @@ function check_admission ($send_message=TRUE) {
 							setTempLanguage($db3->f("user_id"));
 							$message = sprintf (_("Sie wurden als TeilnehmerIn der Veranstaltung **%s** ausgelost. Die endgültige Zulassung zu der Veranstaltung ist noch von weiteren Bedingungen abhängig, die Sie bitte der Veranstaltungsbeschreibung entnehmen."), $db->f("Name"));
 							restoreLanguage();							
-							$messaging->insert_sms ($db3->f("username"), $message, "____%system%____");
+							$messaging->insert_sms ($db3->f("username"), addslashes($message), "____%system%____");
 						}
 					} else {
 						$group = select_group ($db->f("start_time"), $db3->f("user_id"));			
@@ -363,7 +363,7 @@ function check_admission ($send_message=TRUE) {
 								setTempLanguage($db3->f("user_id"));
 								$message = sprintf (_("Sie wurden als TeilnehmerIn der Veranstaltung **%s** ausgelost. Ab sofort finden Sie die Veranstaltung in der Übersicht Ihrer Veranstaltungen. Damit sind Sie auch als TeilnehmerIn der Präsenzveranstaltung zugelassen."), $db->f("Name"));
 								restoreLanguage();							
-								$messaging->insert_sms ($db3->f("username"), $message, "____%system%____");
+								$messaging->insert_sms ($db3->f("username"), addslashes($message), "____%system%____");
 							}
 						}
 					}
@@ -393,7 +393,7 @@ function check_admission ($send_message=TRUE) {
 				setTempLanguage($db2->f("user_id"));						
 				$message = sprintf(_("Sie wurden leider im Losverfahren der Veranstaltung **%s** __nicht__ ausgelost. Sie wurden jedoch auf Position %s auf die Warteliste gesetzt. Das System wird Sie automatisch eintragen und benachrichtigen, sobald ein Platz für Sie frei wird."), $db->f("Name"), $db2->f("position"));
 				restoreLanguage();	
-				$messaging->insert_sms ($db2->f("username"), $message, "____%system%____");
+				$messaging->insert_sms ($db2->f("username"), addslashes($message), "____%system%____");
 			}
 		}
 	}
