@@ -157,7 +157,7 @@ if ($delete_user) {
 //Eintragen von Archiv_Usern
 if ($do_add_user) {
 	if (archiv_check_perm($a_sem_id) == "admin" || archiv_check_perm($a_sem_id) == "dozent") {
-		$db->query("INSERT INTO archiv_user SET seminar_id = '$a_sem_id', user_id='$add_user', status='autor'");
+		$db->query("INSERT IGNORE INTO archiv_user SET seminar_id = '$a_sem_id', user_id='$add_user', status='autor'");
 		if ($db->affected_rows()){
 			$msg="msg§" . _("Zugriffsberechtigung erteilt") . "§";
 		}
