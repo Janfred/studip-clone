@@ -131,10 +131,10 @@ class ShowList extends ShowTreeRow{
 				$content=htmlReady($resObject->getDescription());
 			}
 			if (($admin_buttons) && ($perms == "admin")) {
+				$edit.= "<a href=\"$PHP_SELF?create_object=$resObject->id\">".makeButton("neuesobjekt")."</a>";
 				if ($resObject->isDeletable()) {
-					$edit= "<a href=\"$PHP_SELF?kill_object=$resObject->id\">".makeButton("loeschen")."</a>";
+					$edit= "&nbsp;<a href=\"$PHP_SELF?kill_object=$resObject->id\">".makeButton("loeschen")."</a>";
 				} 
-				$edit.= "&nbsp;<a href=\"$PHP_SELF?create_object=$resObject->id\">".makeButton("neuesobjekt")."</a>";
 				$edit.= "&nbsp;&nbsp;&nbsp;&nbsp;";
 			} 
 			if (($SessSemName[1]) && ($resources_data["view_mode"] != "no_nav")){
@@ -350,14 +350,16 @@ class ShowThread extends ShowTreeRow {
 					$content.= sprintf ("<br />"._("Dieses Objekt wurde zum Verschieben markiert. Bitte w&auml;hlen sie das Einf&uuml;gen-Symbol %s, um es in die gew&uuml;nschte Ebene zu verschieben."), "<img src=\"pictures/move.gif\" border=0 alt=\""._("Klicken Sie auf dieses Symbol, um dieses Objekt in eine andere Ebene zu verschieben")."\">");
 	
 				if ($weitere)
-					$edit.= "&nbsp;<a href=\"$PHP_SELF?open_list=$resObject->id\">".makeButton("listeoeffnen", "img")."</a>";
-				elseif (($perms == "admin") && ($resObject->isDeletable()))
-					$edit.= "<a href=\"$PHP_SELF?kill_object=$resObject->id\">".makeButton("loeschen", "img")."</a>";
-				
+					$edit.= "<a href=\"$PHP_SELF?open_list=$resObject->id\">".makeButton("listeoeffnen", "img")."</a>";
+			
 				if ($resources_data["move_object"] == $resObject->id) 
 					$edit.= "&nbsp;<a href=\"$PHP_SELF?cancel_move=TRUE\">".makeButton("abbrechen", "img")."</a>";			
 				elseif ($perms == "admin")
 					$edit.= "&nbsp;<a href=\"$PHP_SELF?pre_move_object=$resObject->id\">".makeButton("verschieben", "img")."</a>";
+					
+				if ((!$weitere) && ($perms == "admin") && ($resObject->isDeletable()))
+					$edit.= "&nbsp;<a href=\"$PHP_SELF?kill_object=$resObject->id\">".makeButton("loeschen", "img")."</a>";
+				
 
 				$edit.= "&nbsp;&nbsp;&nbsp;&nbsp;";
 							
