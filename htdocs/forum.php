@@ -214,7 +214,7 @@ IF ($cmd == "move" && $topic_id !="" && $rechte) {
 	$db->query($query);
 
 	if ($perm->have_perm("tutor") OR $perm->have_perm("dozent") OR $perm->have_perm("admin")) {
-		$query2 = "SELECT institute.Institut_id, Name FROM user_inst LEFT JOIN institute USING(Institut_id) WHERE user_id = '$user->id' AND (inst_perms = 'tutor' OR inst_perms = 'dozent' OR inst_perms = 'admin') ORDER BY Name";	
+		$query2 = "SELECT Institute.Institut_id, Name FROM user_inst LEFT JOIN institute USING(Institut_id) WHERE user_id = '$user->id' AND (inst_perms = 'tutor' OR inst_perms = 'dozent' OR inst_perms = 'admin') ORDER BY Name";	
 		$db2=new DB_Seminar;
 		$db2->query($query2);
 	}
