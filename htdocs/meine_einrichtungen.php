@@ -287,9 +287,9 @@ if ( !$perm->have_perm("root")) {
 					echo "<a href=\"seminar_lernmodule.php?view=show&seminar_id=$instid\">&nbsp;";
 					echo "<img src=\"pictures/icon-lern.gif\" ";
 					if (sizeof($mod_count) == 1)
-						echo $tooltip(sprintf(_("Die Einrichtung ist mit %s ILIAS-Lernmodul verbunden."), sizeof($mod_count)))."border=\"0\">";
+						echo tooltip(sprintf(_("Die Einrichtung ist mit %s ILIAS-Lernmodul verbunden."), sizeof($mod_count)))."border=\"0\">";
 					else
-						echo $tooltip(sprintf(_("Die Einrichtung ist mit %s ILIAS-Lernmodulen verbunden."), sizeof($mod_count)))."border=\"0\">";
+						echo tooltip(sprintf(_("Die Einrichtung ist mit %s ILIAS-Lernmodulen verbunden."), sizeof($mod_count)))."border=\"0\">";
 					echo "</a>&nbsp;";
 				}
 				else
