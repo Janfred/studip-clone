@@ -118,8 +118,8 @@ echo "</td></tr>\n";
 echo "<tr><td class=\"precol1w\"$colspan_1 height=\"25\">" . _("Tag");
 echo "</td>{$tab['table'][1]}<td class=\"precol1w\"$colspan_1>";
 echo _("Tag") . "</td></tr>\n";
-		
-		
+echo "<tr height=\"2\"><td colspan=\"" . (2 * $colspan_1 + $colspan_2) . "\"></tr>\n";
+
 $j = $st;
 for ($i = 2; $i < sizeof($tab["table"]); $i++) {
 	echo "<tr>";
