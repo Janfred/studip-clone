@@ -245,7 +245,7 @@ class ShowList extends ShowTreeRow{
 		}
 		
 		$db->query($query);
-		echo $query;
+
 		//if we have an empty result
 		if ((!$db->num_rows()) && ($level==0))
 			return FALSE;
