@@ -34,8 +34,8 @@ $xml_groupnames_lecture = array(
 	"object"			=>		"seminar",
 	"childgroup1"		=>		"termine",
 	"childgroup2"		=>		"dozenten",
-	"childobject2"		=>		"dozent"
-	"childgroup3"		=>		"bereiche",
+	"childobject2"		=>		"dozent",
+	"childgroup3"		=>		"bereiche"
 );
 
 $xml_names_lecture = array( 
