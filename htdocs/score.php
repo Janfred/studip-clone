@@ -39,21 +39,21 @@ $score = getscore();
 $user_id=$user->id; //damit keiner schummelt...
 
 ////////////////////////// schreiben des Wertes
+$db=new DB_Seminar;
 
 IF ($cmd=="write") {
-	$db=new DB_Seminar;
 	$query = "UPDATE user_info "
-		." SET score = \"$score\""
+		." SET score = $score"
 		." WHERE user_id = '$user_id'";
-		$result = mysql_query($query);
+		$db->query($query);
 	}
 	
 IF ($cmd=="kill") {
 	$db=new DB_Seminar;
 	$query = "UPDATE user_info "
-		." SET score = \"0\""
+		." SET score = 0"
 		." WHERE user_id = '$user_id'";
-		$result = mysql_query($query);
+		$db->query($query);
 	}
 
 ////////////////////////// Angabe der eigenen Werte (immer)
@@ -75,7 +75,7 @@ echo "<br><br><a href='score.php?cmd=write'>Diesen Wert hier ver&ouml;ffentliche
 
 $rang = 1;
 $db=new DB_Seminar;
-$db->query("SELECT *, score FROM auth_user_md5 LEFT JOIN user_info USING (user_id) WHERE score > 0 ORDER BY score DESC");
+$db->query("SELECT b.*,score FROM user_info a LEFT JOIN auth_user_md5 b USING (user_id) WHERE score > 0 ORDER BY score DESC");
 if ($db->num_rows()) {
 	echo "<table width=100% align=center border=0 cellpadding=0 cellspacing=1 class=blank>";
 	while ($db->next_record()) {
