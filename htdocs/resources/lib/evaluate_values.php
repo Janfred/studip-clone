@@ -1216,7 +1216,7 @@ if ($save_state_x) {
 		//check all selected resources for perms
 		foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"] as $key=>$val) {
 			$resPerms =& ResourceObjectPerms::Factory($val);
-			if (!$resPerms->havePerm("tutor"))
+			if (!$resPerms->havePerm("autor"))
 				$no_perm = TRUE;
 			$resPerms ='';
 		}
