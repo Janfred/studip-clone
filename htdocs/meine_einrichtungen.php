@@ -197,7 +197,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("roo
 								}
 								?>
 								<tr>
-									<td class="blank" colspan="2">&nbsp;
+									<td class="blank" colspan="3">&nbsp;
 									</td>
 								</tr>
 								<tr valign="top" align="center">
@@ -282,7 +282,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("roo
 				&nbsp;&nbsp;
 			</td>
 			<td class="blank" width="240" valign="top">
-				<table "center" width="100%" border=0 cellpadding=0 cellspacing=0>
+				<table align="center" width="100%" border=0 cellpadding=0 cellspacing=0>
 					<tr>
 						<td class="blank" width="100%" align="right" colspan=2>
 							<img src="pictures/einrichtungen.jpg">
@@ -290,7 +290,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("roo
 					</tr>
 					<tr>
 						<td class="angemeldet" width="100%" colspan=2>
-							<table "center" width="99%" border=0 cellpadding=4 cellspacing=0>
+							<table align="center" width="99%" border=0 cellpadding=4 cellspacing=0>
 								<tr>
 									<td class="blank" width="100%" colspan=2>
 										<font size=-1><b><? print "Information" ?>:</b></font>
