@@ -261,7 +261,6 @@ include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 							echo "<tr><td class=\"blank\" colspan=2>&nbsp; &nbsp; Die Veranstaltung <b>$SeminarName</b> ist teilnahmebeschr&auml;nkt.<br><br></td></tr>";
 							echo "<tr><td class=\"blank\" colspan=2>&nbsp; &nbsp; Von den folgenden m&ouml;glichen Kontigenten kommt nur das <b>fett</b>  ausgegebene Kontingent f&uuml;r Sie in Frage. <br />&nbsp; &nbsp; Bitte best&auml;tigen Sie, wenn Sie sich in dieses Kontingent eintragen wollen: <br><br></td></tr>";
 							?>
-							</td></tr>
 							<tr><td class="blank" colspan=2>
 							<form action="<? echo $sess->pself_url(); ?>" method="POST">
 						       <?
@@ -279,8 +278,10 @@ include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 								print "<br />";
 							}
 						       ?>
-							</form><br />
+							<br />
 							&nbsp; &nbsp; <input type="IMAGE" src="./pictures/buttons/ok-button.gif" border=0 value="abschicken">
+							</form>
+							</td></tr>							
 							<?
 							if ($db2->f("admission_type") == 1)
 								printf ("<br /><br /><font size=-1>&nbsp; &nbsp; Die Teilnehmerauswahl %s nach dem Losverfahren am %s Uhr. %s<br /><font size=-1>&nbsp; &nbsp; In Klammern ist die Anzahl der <b>insgesamt</b> verf&uuml;gbaren Pl&auml;tze pro Kontingent angegeben.</font><br />&nbsp; ", ($db2->f("admission_selection_take_place")) ? "erfolgte" : "erfolgt",  date("d.m.Y, G:i", $db2->f("admission_endtime")), ($db2->f("admission_selection_take_place")) ? "Weitere Pl&auml;tze k&ouml;nnen evtl. &uuml;ber die Warteliste vergben werden" : "");
@@ -300,7 +301,6 @@ include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 							echo "<tr><td class=\"blank\" colspan=2>&nbsp; &nbsp; Sie k&ouml;nnen sich f&uuml;r <b>eines</b> der m&ouml;glichen Kontingente anmelden.<br/><br />&nbsp; &nbsp; Bitte w&auml;hlen Sie das f&uuml;r Sie am besten geeignete Kontingent aus: <br><br></td></tr>";
 							$db->query("SELECT admission_seminar_studiengang.studiengang_id, name, quota FROM admission_seminar_studiengang LEFT JOIN studiengaenge USING (studiengang_id)  WHERE seminar_id = '$id' ORDER BY name"); //Alle theoretisch moeglichen auswaehlen
 							?>
-							</td></tr>
 							<tr><td class="blank" colspan=2>
 							<form action="<? echo $sess->pself_url(); ?>" method="POST" >
 							       <?
@@ -319,7 +319,8 @@ include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 									}
 							       ?>
 							<br />&nbsp; &nbsp; <input type="IMAGE" src="./pictures/buttons/ok-button.gif" border=0 value="abschicken">
-							</for	m>
+							</form>
+							</td></tr>							
 							<?
 							if ($db2->f("admission_type") == 1)
 								printf ("<br /><br /><font size=-1>&nbsp; &nbsp; Die Teilnehmerauswahl %s nach dem Losverfahren am %s Uhr. %s<br /><font size=-1>&nbsp; &nbsp; In Klammern ist die Anzahl der <b>insgesamt</b> verf&uuml;gbaren Pl&auml;tze pro Kontingent angegeben.</font><br />&nbsp; ", ($db2->f("admission_selection_take_place")) ? "erfolgte" : "erfolgt", date("d.m.Y, G:i", $db2->f("admission_endtime")), ($db2->f("admission_selection_take_place")) ? "Weitere Pl&auml;tze k&ouml;nnen evtl. &uuml;ber die Warteliste vergben werden" : "");
