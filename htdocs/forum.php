@@ -200,7 +200,7 @@ $indexvars["viewcount"]["color"]="#008800";
 $indexvars["rating"]["name"]=_("Bewertung");
 $indexvars["rating"]["color"]="#CC7700";
 $indexvars["score"]["name"]=_("Relevanz");
-$indexvars["score"]["color"]=_("#0000FF");
+$indexvars["score"]["color"]="#0000FF";
 
 $openorig = $open;  // wird gebraucht für den open-Link wenn im Treeview $open überschrieben wird
 
