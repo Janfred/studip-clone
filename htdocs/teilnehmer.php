@@ -185,7 +185,7 @@ if ($cmd=="raus") {
 		}
 		restoreLanguage();
 
-		$messaging->insert_sms ($username, $message, "____%system%____");
+		$messaging->insert_message($message, $username, "____%system%____", FALSE, FALSE, "1");
 
 		// raus aus allen Statusgruppen
 		RemovePersonStatusgruppeComplete ($username, $id);
@@ -226,7 +226,7 @@ if ($cmd=="admission_raus") {
 		}
 		restoreLanguage();
 
-		$messaging->insert_sms ($username, $message, "____%system%____");
+		$messaging->insert_message($message, $username, "____%system%____", FALSE, FALSE, "1");
 
 		//Warteliste neu sortieren
 		renumber_admission($id);
@@ -278,7 +278,9 @@ if ((($cmd=="admission_rein") || ($cmd=="add_user")) && ($username)){
 				}
 			}
 			restoreLanguage();
-			$messaging->insert_sms ($username, $message, "____%system%____");
+			#$messaging->insert_message ($message, date("U"), $username, md5(uniqid("321losgehtes")));
+			$messaging->insert_message($message, $username, "____%system%____", FALSE, FALSE, "1");
+			#$messaging->insert_sms ($username, $message, "____%system%____");
 		}
 
 		//Warteliste neu sortieren
@@ -353,7 +355,9 @@ if (isset($add_tutor_x)) {
 						$message= sprintf(_("Sie wurden vom einem/r DozentIn oder AdministratorIn in die Veranstaltung **%s** aufgenommen."), $SessSemName[0]);
 					}
 					restoreLanguage();
-					$messaging->insert_sms (get_username($u_id), $message, "____%system%____");
+					#$messaging->insert_sms (get_username($u_id), $message, "____%system%____");
+					#$messaging->insert_message ($message, date("U"), $username, md5(uniqid("321losgehtes")));
+					$messaging->insert_message($message, get_username($u_id), "____%system%____", FALSE, FALSE, "1");
 				}
 			}
 			else $msg ="error§" . _("Netter Versuch! vielleicht beim n&auml;chsten Mal!") . "§";
@@ -626,7 +630,9 @@ while (list ($key, $val) = each ($gruppe)) {
 	if ($GLOBALS['CHAT_ENABLE']){
 		echo chat_get_online_icon($db->f("user_id"),$db->f("username"),$SessSemName[1]) . "&nbsp;";
 	}
-	printf ("<a href=\"sms.php?sms_source_page=teilnehmer.php&cmd=write&rec_uname=%s\"><img src=\"pictures/nachricht1.gif\" %s border=\"0\"></a>", $db->f("username"), tooltip(_("Nachricht an User verschicken")));
+
+	printf ("<a href=\"sms_send.php?sms_source_page=teilnehmer.php&rec_uname=%s\"><img src=\"pictures/nachricht1.gif\" %s border=\"0\"></a>", $db->f("username"), tooltip(_("Nachricht an User verschicken"))); 
+
 	echo "</td>";
 
 // Befoerderungen und Degradierungen
@@ -766,7 +772,9 @@ if ($rechte) {
 			if ($db3->f("admission_type") == 2 || $db3->f("admission_selection_take_place")==1)
 				printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><font size=\"-1\">%s</font></td>", $cssSw->getClass(), $db->f("position"));
 			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\">&nbsp; </td>", $cssSw->getClass());
-			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><a href=\"sms.php?sms_source_page=teilnehmer.php&cmd=write&rec_uname=%s\"><img src=\"pictures/nachricht1.gif\" %s border=\"0\"></a></td>",$cssSw->getClass(), $db->f("username"), tooltip(_("Nachricht an User verschicken")));
+
+			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><a href=\"sms_send.php?sms_source_page=teilnehmer.php&rec_uname=%s\"><img src=\"pictures/nachricht1.gif\" %s border=\"0\"></a></td>",$cssSw->getClass(), $db->f("username"), tooltip(_("Nachricht an User verschicken"))); 
+
 			printf ("<td width=\"15%%\" align=\"center\" class=\"%s\"><a href=\"$PHP_SELF?cmd=admission_rein&username=%s\"><img border=\"0\" src=\"pictures/up.gif\" width=\"21\" height=\"16\"></a></td>", $cssSw->getClass(), $db->f("username"));
 			printf ("<td width=\"15%%\" align=\"center\" class=\"%s\"><a href=\"$PHP_SELF?cmd=admission_raus&username=%s\"><img border=\"0\" src=\"pictures/down.gif\" width=\"21\" height=\"16\"></a></td>", $cssSw->getClass(), $db->f("username"));
 			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><font size=\"-1\">%s</font></td></tr>\n", $cssSw->getClass(), ($db->f("studiengang_id") == "all") ? _("alle Studieng&auml;nge") : $db->f("name"));
