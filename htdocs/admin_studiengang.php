@@ -143,8 +143,7 @@ while ( is_array($HTTP_POST_VARS)
     $query = "DELETE FROM user_studiengang WHERE studiengang_id='$i_id'";
     $db->query($query);
     if ($db->affected_rows() == 0) {
-      my_error("<b>keine Nutzer betroffen</b>");
-      break;
+      my_msg("<b>keine Nutzer betroffen</b>");
     }
     
     unset($i_view);  // gibt keine Detailansicht
