@@ -724,6 +724,9 @@ class ResourceObject {
 	var $description;			//Beschreibung des Objects;
 	var $owner_id;			//Owner_id;
 	var $category_id;			//Die Kategorie des Objects
+	var $category_name;		//name of the assigned catgory
+	var $category_iconnr;		//iconnumber of the assigned catgory
+	var $category_id;			//Die Kategorie des Objects
 	var $invetar_num;			//Die Inventarnummer des Objects;
 	var $parent_bind=FALSE;	//Verkn&uuml;pfung mit Parent?
 
@@ -818,12 +821,11 @@ class ResourceObject {
 	}
 
 	function getCategoryName() {
-		$query = sprintf("SELECT name FROM resources_categories WHERE category_id='%s' ",$this->category_id);
-		$this->db->query($query);
-		if ($this->db->next_record())
-			return $this->db->f("name");
-		else
-			return FALSE;
+		return $this->category_name;
+	}
+
+	function getCategoryIconnr() {
+		return $this->category_iconnr;
 	}
 
 	function getCategoryId() {
@@ -1028,9 +1030,9 @@ class ResourceObject {
 	function restore($id='') {
 
 		if(func_num_args() == 1)
-			$query = sprintf("SELECT * FROM resources_objects WHERE resource_id='%s' ",$id);
+			$query = sprintf("SELECT resources_objects.*, resources_categories.name AS category_name, resources_categories.iconnr FROM resources_objects LEFT JOIN resources_categories USING (category_id) WHERE resource_id='%s' ",$id);
 		else 
-			$query = sprintf("SELECT * FROM resources_objects WHERE resource_id='%s' ",$this->id);
+			$query = sprintf("SELECT resources_objects.*, resources_categories.name AS category_name, resources_categories.iconnr FROM resources_objects LEFT JOIN resources_categories USING (category_id) WHERE resource_id='%s' ",$this->id);
 		$this->db->query($query);
 		
 		if($this->db->next_record()) {
@@ -1039,6 +1041,8 @@ class ResourceObject {
 			$this->description = $this->db->f("description");
 			$this->owner_id = $this->db->f("owner_id");
 			$this->category_id = $this->db->f("category_id");
+			$this->category_name = $this->db->f("category_name");
+			$this->category_iconnr = $this->db->f("iconnr");
 			$this->inventar_num = $this->db->f("inventar_num");
 			$this->parent_id =$this->db->f("parent_id");
 			$this->root_id =$this->db->f("root_id");

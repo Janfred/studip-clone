@@ -58,13 +58,17 @@ class ShowList extends ShowTreeRow{
 	
 	//private
 	function showListObject ($resource_id, $admin_buttons=FALSE) {
-		global $resources_data, $edit_structure_object;
+		global $resources_data, $edit_structure_object, $RELATIVE_PATH_RESOURCES;
 	
 		//Object erstellen
 		$resObject=new ResourceObject($resource_id);
 
 		//Daten vorbereiten
-		$icon="<img src=\"pictures/cont_folder2.gif\" />";
+		if (!$resObject->getCategoryIconnr())
+			$icon="<img src=\"pictures/cont_folder2.gif\" />";
+		else
+			$icon="<img src=\"$RELATIVE_PATH_RESOURCES/pictures/cont_res".$resObject->getCategoryIconnr().".gif\" />";
+
 		if ($resources_data["structure_opens"][$resObject->id]) {			
 			$link=$PHP_SELF."?structure_close=".$resObject->id."#a";
 			$open="open";
@@ -216,7 +220,7 @@ class ShowThread extends ShowTreeRow {
 	}
 
 	function showThreadLevel ($root_id, $level=0, $lines='') {
-		global $resources_data, $edit_structure_object;
+		global $resources_data, $edit_structure_object, $RELATIVE_PATH_RESOURCES;
 		
 		$db=new DB_Seminar;		
 		$db2=new DB_Seminar;		
@@ -235,7 +239,11 @@ class ShowThread extends ShowTreeRow {
 			$resObject=new ResourceObject($db->f("resource_id"));
 
 			//Daten vorbereiten
-			$icon="<img src=\"pictures/cont_folder2.gif\" />";
+			if (!$resObject->getCategoryIconnr())
+				$icon="<img src=\"pictures/cont_folder2.gif\" />";
+			else
+				$icon="<img src=\"$RELATIVE_PATH_RESOURCES/pictures/cont_res".$resObject->getCategoryIconnr().".gif\" />";
+
 			if ($resources_data["move_object"])
 				$icon="&nbsp;<a href=\"$PHP_SELF?target_object=".$resObject->id."#a\"><img src=\"pictures/move.gif\" border=0 alt=\""._("Objekt in diese Ebene verschieben")."\" /></a>".$icon;
 			
