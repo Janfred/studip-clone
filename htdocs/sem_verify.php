@@ -53,6 +53,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 	require_once "functions.php";
 	
 	$db=new DB_Seminar;
+	$db2=new DB_Seminar;
+	$db3=new DB_Seminar;
+	$db4=new DB_Seminar;
+	$db5=new DB_Seminar;
 	
 ?>
 <body>
@@ -175,10 +179,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 						    	echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">zur&uuml;ck zur letzten Auswahl</a>";
 						echo "<br><br></td></tr></table>";
 					}
-						page_close();
-						die;
+					page_close();
+					die;
 				}
-			  elseif ($SemSecLevelWrite==1){//Hat sich der globale Status in der zwischenzeit ge&auml;ndert? Dann hochstufen
+			  	elseif ($SemSecLevelWrite==1){//Hat sich der globale Status in der Zwischenzeit geaendert? Dann hochstufen
 					if ($perm->have_perm("autor")) {
 						$db->query("UPDATE seminar_user SET status='autor' WHERE Seminar_id = '$id' AND user_id = '$user->id'");
 						parse_msg("info§Sie wurden in der Veranstaltung <b>$SeminarName</b> hochgestuft auf den Status <b> autor </b>.");
@@ -189,7 +193,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 						page_close();
 						die;
 					} else {//wenn nicht, informieren
-						parse_msg("info§Sie sind schon mit der Berechtigung <b>$SemUserStatus</b> f&uuml;r die Veranstaltung <b>$SeminarName</b> freigeschaltet. Wenn sie auf die Registrierungsmail antworten, bekommen sie in dieser Veranstaltung Schreibrechte.");
+						parse_msg("info§Sie sind nur mit der Berechtigung <b>$SemUserStatus</b> f&uuml;r die Veranstaltung <b>$SeminarName</b> freigeschaltet. Wenn sie auf die Registrierungsmail antworten, bekommen sie in dieser Veranstaltung Schreibrechte.");
 						echo"<tr><td class=\"blank\" colspan=2>&nbsp; &nbsp; <a href=\"seminar_main.php?auswahl=$id\">weiter zu der Veranstaltung</a>";
 						if ($send_from_search)
 						    	echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">zur&uuml;ck zur letzten Auswahl</a>";
@@ -204,11 +208,114 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 				if ($send_from_search)
 				    	echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">zur&uuml;ck zur letzten Auswahl</a>";
 				echo "<br><br></td></tr></table>";
+				page_close();
 				die;
 			}
 		} else {//User ist noch nicht eingetragen in seminar_user
-			if ($perm->have_perm("autor")) {
-				if (($SemSecLevelWrite==2)&&($SemSecLevelRead==2)) {//Paswort auf jeden Fall erforderlich, also her damit
+			if ($perm->have_perm("autor")) { //User ist global 'Autor'also normaler User
+				if (($SemSecLevelWrite==3) && ($SemSecLevelRead==3)) {//Teilnehmerbeschraenkte Veranstaltung, naehere Uberpruefungen erforderlich
+					$db2->query("SELECT admission_endtime, admission_turnout, admission_type, admission_selection_take_place FROM seminare WHERE Seminar_id LIKE '$id'"); //Wir brauchen in diesem Fall mehr Daten
+					$db2->next_record();
+					if (!$sem_verify_suggest_studg) {//Wir wissen noch nicht mit welchem Studiengang der User rein will
+						$db->query("SELECT admission_seminar_studiengang.studiengang_id, name, quota FROM admission_seminar_studiengang LEFT JOIN studiengaenge USING (studiengang_id) LEFT JOIN user_studiengang USING (studiengang_id) WHERE seminar_id LIKE '$id' AND (user_id = '$user->id' OR admission_seminar_studiengang.studiengang_id = 'all')"); //Hat der Studi passende Studiengaenge ausgewaehlt?
+						if ($db->num_rows() ==1) //Nur einen passenden gefunden? Dann nehmen wir den
+							$sem_verify_suggest_studg=$db->f("studiengang_id");
+						elseif ($db->num_rows() >1) { //Mehrere gefunden, fragen welcher es denn sein soll
+							echo "<tr><td class=\"blank\" colspan=2>&nbsp; &nbsp; Die Veranstaltung <b>$SeminarName</b> ist teilnahmebeschr&auml;nkt.<br><br></td></tr>";
+							echo "<tr><td class=\"blank\" colspan=2>&nbsp; &nbsp; Sie k&ouml;nnen sich f&uuml;r <b>eines</b> der m&ouml;glichen Kontingente anmelden.<br/><br />&nbsp; &nbsp; Bitte w&auml;hlen Sie das f&uuml;r Sie am besten geeignete Kontingent aus: <br><br></td></tr>";
+							?>
+							</td></tr>
+							<tr><td class="blank" colspan=2>
+							<form action="<? echo $sess->pself_url(); ?>" method="POST" >
+							&nbsp; &nbsp; <select name="sem_verify_suggest_studg">
+							       <?
+								while ($db->next_record())
+									printf ("<option value=\"%s\">Kontingent f&uuml;r %s (%s Pl&auml;tze)</option>", $db->f("studiengang_id"), ($db->f("studiengang_id") == "all") ? "alle Studieng&auml;nge" : $db->f("name"), round ($db2->f("admission_turnout") * ($db->f("quota") / 100)));
+							       ?>
+							 </select>
+							&nbsp; <input type="IMAGE" src="./pictures/buttons/auswaehlen-button.gif" border=0 value="abschicken">
+							</for	m>
+							<?
+							if ($db2->f("admission_type") == 1)
+								printf ("<br /><br /><font size=-1>&nbsp; &nbsp; Die Teilnehmerauswahl erfolgt nach dem Losverfahren am %s Uhr. <br /><font size=-1>&nbsp; &nbsp; In Klammern ist die Anzahl der <b>insgesamt</b> verf&uuml;gbaren Pl&auml;tze angegeben.</font><br />&nbsp; ", date("d.m.Y, G:i", $db2->f("admission_endtime")));
+							else
+								printf ("<br /><br /><font size=-1>&nbsp; &nbsp; Die Teilnehmerauswahl erfolgt in der Reihenfolge der Anmeldung.<br /><font size=-1>&nbsp; &nbsp; In Klammern ist die Anzahl der <b>insgesamt</b> verf&uuml;gbaren Pl&auml;tze angegeben.</font><br />&nbsp; ");
+							echo "<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp; &nbsp; zur&uuml;ck zur Startseite</a>";
+						    	if ($send_from_search)
+					    			echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">zur&uuml;ck zur letzten Auswahl</a>";
+							echo "<br><br>";
+							?>
+							</td></tr></table>				
+							<?						
+						} else { //Keine passenden Studeingaenge gefunden, abbruch
+							$db->query("SELECT studiengang_id FROM user_studiengang WHERE user_id = '$user->id' "); //Hat der Studie ueberhaupt Studiengaenge angegeben?
+							if ($db->num_rows() >=1) { //Es waren nur die falschen
+								parse_msg ("info§Sie belegen leider keinen passenden Studiengang, um an der teilnahmebeschr&auml;nkten Veranstaltung <b>$SeminarName</b> teilnehmen zu k&ouml;nnen.");
+								echo "<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp;&nbsp; zur&uuml;ck zur Startseite</a>";
+								if ($send_from_search)
+						    			echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">zur&uuml;ck zur letzten Auswahl</a>";
+								echo "<br	><br></td></tr></table>";
+								page_close();
+								die;
+							} else { //Es sin gar keine vorhanden! Hinweis wie man das eintragen kann
+								parse_msg ("info§Die Veranstaltung <b>$SeminarName</b> ist teilnahmebeschr&auml;nkt. Um sich f&uuml;r teilnahmebeschr&auml;nkte Veranstaltungen eintragen zu k&ouml;nnen, m&uuml;ssen sie einmalig ihre Studienkombination angeben! <br> Bitte tragen sie ihre Studeng&auml;nge auf ihrer <a href=\"edit_about.php?view=Karriere#studiengaenge\">pers&ouml;nlichen Homepage</a> ein!");
+								echo "<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp;&nbsp; zur&uuml;ck zur Startseite</a>";
+								if ($send_from_search)
+						    			echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">zur&uuml;ck zur letzten Auswahl</a>";
+								echo "<br	><br></td></tr></table>";
+								page_close();
+								die;
+							}
+						}
+						page_close();
+						die;
+					}
+					if ($sem_verify_suggest_studg) { //User hat einen Studiengang angegeben oeder wir haben genau einen passenden gefunden, mit dem er jetzt rein will/kann
+						$db3->query("SELECT name, quota FROM admission_seminar_studiengang LEFT JOIN studiengaenge USING (studiengang_id)  WHERE seminar_id LIKE '$id' AND admission_seminar_studiengang.studiengang_id = '$sem_verify_suggest_studg' "); //Nochmal die Daten des quotas fuer diese Veranstaltung
+						if ($db2->f("admission_type") == 1) { //Variante Losverfahren
+							if (!$db2->f("admission_selection_take_place")) { //es wurde noch nicht gelost --> auf Warteposition ist admission_seminar_user
+								$db5->query("SELECT position FROM admission_seminar_user ORDER BY position DESC");//letzte hoechste Position heruasfinden
+								$db5->next_record();
+							 	$db4->query("INSERT INTO admission_seminar_user SET user_id = '$user->id', seminar_id = '$id', studiengang_id = '$sem_verify_suggest_studg', status='claiming', mkdate='".time()."', position='' ");
+								parse_msg ("info§Sie wurden auf die Anmeldeliste der Veranstaltung <b>$SeminarName</b> gesetzt. Teilnehmer der Veranstaltung <b>$SeminarName</b> werden Sie, falls sie im Losverfahren am ".date("d.m.Y, G:i", $db2->f("admission_endtime"))." Uhr ausgelost werden. Sollten sie nicht ausgelost werden, werden sie auf die Warteliste gesetzt und werden vom System automatisch als Teilnehmer eingetragen, sobald ein Platz f&uuml;r Sie frei wird.");
+								echo "<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp;&nbsp; zur&uuml;ck zur Startseite</a>";
+								if ($send_from_search)
+						    			echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">zur&uuml;ck zur letzten Auswahl</a>";
+								echo "<br	><br></td></tr></table>";
+								page_close();
+								die;
+							} else { //wurde schon gelost --> Verfahren wird wie chronologsich geregelt: Wenn noch Plaetze im Kontingent frei sind, wird sofort eingetragen, sonst Warteliste
+								$chrono_after_selection=TRUE;
+							}
+						}
+						if (($db2->f("admission_type") == 2) || ($chrono_after_selection)) { //Variante chronologisches Eintragen oder Losverfahren nach dem Losen
+							$db->query("SELECT user_id FROM seminar_user WHERE admission_studiengang_id = '$sem_verify_suggest_studg'"); //Wieviel user sind schon in diesem Kontingent eingetragen
+							if ($db->num_rows() <= round ($db2->f("admission_turnout") * ($db->f("quota") / 100))) {//noch Platz in dem Kontingent --> direkt in seminar_user
+							 	$db4->query("INSERT INTO seminar_user SET user_id = '$user->id', Seminar_id = '$id', status='autor', gruppe='$group', admission_studiengang_id = '$sem_verify_suggest_studg', '".time()."' ");
+								parse_msg ("msg§Sie wurden mit dem Status <b>autor</b>in die Veranstaltung <b>$SeminarName</b> eingetragen und sind damit zugelassen..");
+								echo"<tr><td class=\"blank\" colspan=2><a href=\"seminar_main.php?auswahl=$id\">&nbsp; &nbsp; Hier kommen Sie zu der Veranstaltung</a>";
+								if ($send_from_search)
+								    	echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">zur&uuml;ck zur letzten Auswahl</a>";
+								echo "<br><br></td></tr></table>";
+								page_close();
+								die;
+							} else { //kein Platz mehr im Kontingent --> auf Warteposition in admission_seminar_user
+								$db5->query("SELECT position FROM admission_seminar_user ORDER BY position DESC");//letzte hoechste Position heruasfinden
+								$db5->next_record();
+							 	$db4->query("INSERT INTO admission_seminar_user SET user_id = '$user->id', seminar_id = '$id', studiengang_id = '$sem_verify_suggest_studg', status='awaiting', mkdate='".time()."', position='".($db5->f("position")+1)."'  ");
+								parse_msg ("info§Es gibt zur Zeit keinen freien Platz in der teilnahmebeschr&auml;nkten Veranstaltung <b>$SeminarName</b>. Sie wurden jedoch auf Platz ".($db5->num_rows()+1)." in die Warteliste eingetragen. <br /> Sie werden autoamtisch eingetragen, sobald ein Platz f&uuml;r sie frei wird.");
+								echo "<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp;&nbsp; zur&uuml;ck zur Startseite</a>";
+								if ($send_from_search)
+						    			echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">zur&uuml;ck zur letzten Auswahl</a>";
+								echo "<br	><br></td></tr></table>";
+								page_close();
+								die;
+							}
+						}
+						echo "<tr><td class=\"blank\" colspan=2>&nbsp; &nbsp; Die Veranstaltung <b>$SeminarName</b> ist teilnehmerbeschr&auml;nkt.<br>Sowas macht Laune!<br></td></tr>";
+					} 
+				}
+				elseif (($SemSecLevelWrite==2) && ($SemSecLevelRead==2)) {//Paswort auf jeden Fall erforderlich, also her damit
 					echo "<tr><td class=\"blank\" colspan=2>&nbsp; &nbsp; Bitte Passwort f&uuml;r die Veranstaltung <b>$SeminarName</b> eingeben.<br><br></td></tr>";
 					?>
 					</td></tr>					
@@ -230,7 +337,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 					page_close();
 					die;
 				}
-				elseif ($SemSecLevelWrite==2) {//nur passwort f&uuml;r Schreiben, User k&ouml;nnte ohne Passwort als 'User' in das Seminar
+				elseif ($SemSecLevelWrite==2) {//nur passwort fuer Schreiben, User koennte ohne Passwort als 'User' in das Seminar
 					echo "<tr><td class=\"blank\" colspan=2>&nbsp; &nbsp; Bitte Passwort f&uuml;r die Veranstaltung <b>$SeminarName</b> eingeben.<br><br></td></tr>";
 					echo "<tr><td class=\"blank\" colspan=2>&nbsp; &nbsp; Falls sie das Passwort jetzt noch nicht eingeben m&ouml;chten, k&ouml;nnen sie mit Leseberechtigung an der Veranstaltung teilnehmen.<br><br></td></tr>";
 					echo "<tr><td class=\"blank\" colspan=2>&nbsp; &nbsp; Bitte klicken sie dazu<a href=\"sem_verify.php?SemIDtemp=$id\"> hier</a>!<br><br></td></tr>";
@@ -257,7 +364,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 					$InsertStatus="autor";
 				}
 			} else {//der User ist auch global 'User'
-				if ($SemSecLevelRead>0) {//Lesen d&uuml;rfen nur autoren, also wech hier
+				if ($SemSecLevelRead>0) {//Lesen duerfen nur Autoren, also wech hier
 					parse_msg ("info§Um an der Veranstaltung <b>$SeminarName</b> teilnehmen zu k&ouml;nnen, m&uuml;ssen sie zumindest auf die Registrierungsmail geantwortet haben!");
 					echo "<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp;&nbsp; zur&uuml;ck zur Startseite</a>";
 					if ($send_from_search)
@@ -265,8 +372,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 					echo "<br><br></td></tr></table>";
 					page_close();
 					die;
-				}	else {//Lesen mit Berechtigung 'User' geht
-					if ($SemSecLevelWrite==0) {//Wenn Schreiben auch mit Berechtigung 'user' geht, darf es sogar als 'autor' rein (auch wenn es gegen das Grundprizip verstoesst (keine hoeheren Rechte als globale Rechte)
+				} else {//Lesen mit Berechtigung 'User' geht
+					if ($SemSecLevelWrite==0) {//Wenn Schreiben auch mit Berechtigung 'user' geht, darf es sogar als 'autor' rein (auch wenn es gegen das Grundprizip verstoesst (keine hoeheren Rechte als globale Rechte). Das geht nur, wenn in der config.inc Nobody write=TRUE fuer Veranstaltungsklasse ist
 						$InsertStatus="autor";
 					} else { //sonst bleibt es bei 'user'
 						$InsertStatus="user";
