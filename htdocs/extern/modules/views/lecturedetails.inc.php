@@ -91,7 +91,7 @@ if ($db->next_record()) {
 		$range_path_level = $this->config->getValue("Main", "rangepathlevel");
 		$pathes = get_sem_tree_path($seminar_id, $range_path_level);
 		if (is_array($pathes)) {
-			$data["range_path"] = htmlReady(implode("\n", array_values($pathes)));
+			$data["range_path"] = htmlReady(implode("\n", array_values($pathes)),true,true);
 		}
 		/*
 		$pathes = get_sem_tree_path($seminar_id, "^");
