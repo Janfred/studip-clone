@@ -154,6 +154,9 @@ function export_sem($inst_id, $ex_sem_id = "all")
 
 	switch ($filter)
 	{
+		case "seminar":
+			$order = " seminare.Name";
+		break;
 		case "bereich":
 			$order = "bereiche.name, seminare.Name";
 			$group = "FIRSTGROUP";
@@ -169,11 +172,11 @@ function export_sem($inst_id, $ex_sem_id = "all")
 			$do_group = true;
 			$do_subgroup = true;
 		break;
-		case "seminar":
-			$order = " seminare.Name";
-		break;
 		default:
 			$order = "bereiche.name, seminare.Name";
+			$group = "FIRSTGROUP";
+			$group_tab_zelle = "name";
+			$do_group = true;
 	}
 	if (isset($SEMESTER[ $ex_sem]["beginn"] ) )
 		$addquery = " AND seminare.start_time <=".$SEMESTER[$ex_sem]["beginn"]." AND (".$SEMESTER[$ex_sem]["beginn"]." <= (seminare.start_time + seminare.duration_time) OR seminare.duration_time = -1) ";
@@ -321,6 +324,9 @@ function export_pers($inst_id)
 
 	switch ($filter)
 	{
+		case "no":
+			$order = "statusgruppen.name";
+		break;
 		case "status":
 			$order = "statusgruppen.name";
 			$group = "FIRSTGROUP";
@@ -329,6 +335,9 @@ function export_pers($inst_id)
 		break;
 		default:
 			$order = "statusgruppen.name";
+			$group = "FIRSTGROUP";
+			$group_tab_zelle = "name";
+			$do_group = true;
 	}
 
 	$data_object = xml_open_tag( $xml_groupnames_person["group"] );
