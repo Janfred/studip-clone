@@ -195,4 +195,23 @@ function CheckStatusgruppe ($range_id, $name)
 	}
 	return $exists;
 }
+
+/**
+* get all statusgruppen for one user and one range
+*
+* get all statusgruppen for one user and one range
+* @access	public
+* @param	string	$range_id
+* @param	string	$user_id
+* @return	array	(structure statusgruppe_id => name)
+*/
+function GetStatusgruppen($range_id, $user_id){
+	$db = new DB_Seminar();
+	$db->query("SELECT a.statusgruppe_id,a.name FROM statusgruppen a 
+				LEFT JOIN statusgruppe_user b USING(statusgruppe_id) WHERE user_id='$user_id' AND range_id='$range_id'");
+	while ($db->next_record()){
+		$ret[$db->f("statusgruppe_id")] = $db->f("name");
+	}
+	return (is_array($ret)) ? $ret : false;
+}
 ?>
