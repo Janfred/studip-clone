@@ -650,6 +650,7 @@ function kill_format ($text) {
 					"'\n\n  (((\n\n)  )*(.+?))(\Z|\n\n(?! ))'s",  // Absatz eingerueckt
 					"'(?<=\n|^)--+(\d?)(\n|$|(?=<))'m", // Trennlinie
 					"'\[pre\](.+?)\[/pre\]'is" ,        // praeformatierter Text
+					"'\[nop\].+\[/nop\]'isU",
 					"'\[.+?\](((http://|https://|ftp://)?([^/\s]+)(.[^/\s]+){2,})|([-a-z0-9_]+(\.[_a-z0-9-]+)*@([a-z0-9-]+(\.[a-z0-9-]+)+)))'i",
 					"'\[quote=.+?quote\]'is",    // quoting
 					"':[^\s]+?:'s"              // smileys
@@ -663,19 +664,18 @@ function kill_format ($text) {
 					"'\\1'.substr(str_replace('#', ' ', '\\2'), 0, -1)",
 					"'\\1'.substr(str_replace('+', ' ', '\\2'), 0, -1)",
 					"'\\1'.substr(str_replace('-', ' ', '\\2'), 0, -1)",
-					"'\\1'.substr(str_replace('&gt;', ' ', '\\2'), 0, -1)",
-					"'\\1'.substr(str_replace('&lt;', ' ', '\\2'), 0, -1)",
+					"'\\1'.substr(str_replace('>', ' ', '\\2'), 0, -1)",
+					"'\\1'.substr(str_replace('<', ' ', '\\2'), 0, -1)",
 					"\\1", "\\1", "\\1", "\\1", "\\1", "\\1",
-					"\\1", "\\1", "\n\\1\n", "", "\\1", "", "", "");
+					"\\1", "\\1", "\n\\1\n", "", "\\1",'[nop] [/nop]', "\\2", "", "");
 
 	if (preg_match_all("'\[nop\](.+)\[/nop\]'isU", $text, $matches)) {
-		$text = preg_replace("'\[nop\].+\[/nop\]'isU", '[nop].[/nop]', $text);
 		$text = preg_replace($pattern, $replace, $text);
-		$text = explode('[nop].[/nop]', $text);
+		$text = explode("[nop] [/nop]", $text);
 		$i = 0;
 		$all = '';
 		foreach ($text as $w)
-			$all .= $w . preg_replace("/\n?\r\n?/", '<br />', $matches[1][$i++]);
+			$all .= $w . $matches[1][$i++];
 		
 		return $all;
 	}
