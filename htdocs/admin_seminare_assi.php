@@ -1400,7 +1400,7 @@ if (($form == 6) && ($jump_next_x))
 				if ($sem_create_data["sem_vor_resource_id"])
 					$sem_create_data["sem_vor_raum"]='';
 		
-				$db->query("INSERT INTO termine SET termin_id = '$termin_id', range_id='".$sem_create_data["sem_id"]."', autor_id='$user_id', content ='Vorbesprechung', date='".$sem_create_data["sem_vor_termin"]."', mkdate='$mkdate', chdate='$mkdate', date_typ='2', topic_id=0, end_time='".$sem_create_data["sem_vor_end_termin"]."', raum='".$sem_create_data["sem_vor_raum"]."'");
+				$db->query("INSERT INTO termine SET termin_id = '$termin_id', range_id='".$sem_create_data["sem_id"]."', autor_id='$user_id', content ='Vorbesprechung', date='".$sem_create_data["sem_vor_termin"]."', mkdate='$mkdate', chdate='$mkdate', date_typ='2', end_time='".$sem_create_data["sem_vor_end_termin"]."', raum='".$sem_create_data["sem_vor_raum"]."'");
 		
 				//update/insert the assigned roomes
 				if ($RESOURCES_ENABLE && $db->affected_rows()) {
@@ -1429,7 +1429,7 @@ if (($form == 6) && ($jump_next_x))
 						if ($sem_create_data["term_resource_id"][$i])
 							$sem_create_data["term_room"][$i]='';
 	
-						$db->query("INSERT INTO termine SET termin_id = '$termin_id', range_id='".$sem_create_data["sem_id"]."', autor_id='$user_id', content ='".($i+1).". Seminartermin (ohne Titel)', date='$date', mkdate='$mkdate', chdate='$mkdate', date_typ='1', topic_id=0, end_time='$end_time', raum='".$sem_create_data["term_room"][$i]."' ");
+						$db->query("INSERT INTO termine SET termin_id = '$termin_id', range_id='".$sem_create_data["sem_id"]."', autor_id='$user_id', content ='".($i+1).". Seminartermin (ohne Titel)', date='$date', mkdate='$mkdate', chdate='$mkdate', date_typ='1', end_time='$end_time', raum='".$sem_create_data["term_room"][$i]."' ");
 			
 						//update/insert the assigned roomes
 						if ($RESOURCES_ENABLE && $db->affected_rows()) {
