@@ -269,6 +269,15 @@ $TITLE_REAR_TEMPLATE = array("","M.A.","B.A.","M.S.","MBA","Ph.D.","Dipl.-Biol."
 							"Dipl.-Geol.","Dipl.-Geophys.","Dipl.-Ing. agr.","Dipl.-Kfm.","Dipl.-Math.","Dipl.-Phys.",
 							"Dipl.-Psych.","M. Sc","B. Sc");
 
+
+//preset names for scm (simple content module)
+$SCM_PRESET[1] = array("name"=>_("Informationen"));		//the first entry is the default label for scms, it'll be used if the user give no information for another label
+$SCM_PRESET[2] = array("name"=>_("Literatur"));
+$SCM_PRESET[3] = array("name"=>_("Links"));
+$SCM_PRESET[4] = array("name"=>_("Verschiedenes"));
+//you can add more presets here
+
+
 //Shorts for Smiley
 $SMILE_SHORT = array( //diese Kuerzel fuegen das angegebene Smiley ein (Dateiname + ".gif")
 	":)"=>"smile" , 
