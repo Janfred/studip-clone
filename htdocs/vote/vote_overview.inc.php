@@ -96,7 +96,7 @@ else
 
 $userID = $user->id;
 if (($showrangeID) && ($voteaction != "search")){
-	if (($perm->have_studip_perm("admin",$showrangeID)) ||
+	if (($perm->have_studip_perm("tutor",$showrangeID)) ||
 		(get_username($userID) == $showrangeID)){
 	}
 	else{
