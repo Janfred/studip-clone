@@ -161,6 +161,23 @@ class messaging {
 		}
 	}
 
+	//make a string RFC-conform (for use in E-Mail-Subject)
+	function rfc_string($title) {
+		$n_title = "";
+		for ($i = 0; $i < strlen($title); $i++) {
+			if ($title[$i] == chr(228)) $n_title .= "ae";
+			elseif ($title[$i] == chr(246)) $n_title .= "oe";
+			elseif ($title[$i] == chr(252)) $n_title .= "ue";
+			elseif ($title[$i] == chr(128)) $n_title .= "Euro";
+			elseif (ord ($title[$i]) > 127) {
+				$n_title .= "_";
+			} else {
+				$n_title .= $title[$i];
+			}
+		}
+		return $n_title;
+	}
+
 	function insert_message($message, $rec_uname, $user_id='', $time='', $tmp_message_id='', $set_deleted='', $signature='') {
 		global $_fullname_sql, $user, $my_messaging_settings, $sms_data;
 
@@ -244,54 +261,50 @@ class messaging {
 
 			//PH & TG: e-mail-forward of the message to the user
 			if (($my_messaging_settings["send_as_email"] == 1) && ($GLOBALS["MESSAGING_FORWARD_AS_EMAIL"])) {
-				$db4 = new DB_Seminar("SELECT Email FROM auth_user_md5 WHERE username = '$rec_uname' OR user_id = '$rec_uname';");
+				$db4 = new DB_Seminar("SELECT user_id, Email FROM auth_user_md5 WHERE username = '$rec_uname' OR user_id = '$rec_uname';");
 				$db4->next_record();
-				$to = $db4->f("Email");
-				$db4->query("SELECT Vorname, Nachname FROM auth_user_md5 WHERE username = '$rec_uname'");
-				$db4->next_record();
-				$rec_fullname = $db4->f("Vorname")." ".$db4->f("Nachname");
+				$to = $db4->f("Email");				
+				$rec_fullname = $this->rfc_string(get_fullname($db4->f("user_id")));
+				
+				$smtp = new studip_smtp_class;
+				
+				setTempLanguage($db4->f("user_id"));	
+				
 				$title = _("[Stud.IP] Eine Nachricht von ");
-				$from = $GLOBALS["UNI_CONTACT"];
-				$reply_to = "<no-reply>@studipserver.de";
+				
 				if ($snd_user_id != "____%system%____") {
-					$snd_fullname = get_fullname($snd_user_id);
+					$snd_fullname = $this->rfc_string(get_fullname($snd_user_id));
+					$db4->query("SELECT Email FROM auth_user_md5 WHERE user_id = '$user->id'");
+					$db4->next_record();
+					$reply_to = "\"".$snd_fullname."\" <".$db4->f("Email").">";
 				}
 				else
 				{
 					$snd_fullname = "Stud.IP";
+					$reply_to = $GLOBALS["UNI_CONTACT"];
 				}
 
-				$title = $title.$snd_fullname;
-
-				// Replace special chars by RFC-conform chars
-				$n_title = "";
-				for ($i = 0; $i < strlen($title); $i++) {
-					if ($title[$i] == chr(228)) $n_title .= "ae";
-					elseif ($title[$i] == chr(246)) $n_title .= "oe";
-					elseif ($title[$i] == chr(252)) $n_title .= "ue";
-					elseif ($title[$i] == chr(128)) $n_title .= "Euro";
-					elseif (ord ($title[$i]) > 127) {
-						$n_title .= "_";
-					} else {
-						$n_title .= $title[$i];
-					}
-				}
-				$title = $n_title;
+				$title = $this->rfc_string($title . $snd_fullname);
 				// Generate "Header" of the message
-				$message = "Von  : $snd_fullname\n".
-					"An   : $rec_fullname\n".
-					"Datum: ".date("d.m. Y, H:i",time())."\n\n".$message.
-					"\n-- \n".
-					sprintf(_("Diese E-Mail ist eine Kopie einer systeminternen Nachricht, die in Stud.IP an %s versendet wurde."),$rec_fullname)."\n".
-					sprintf(_("Antworten Sie nicht auf diese E-Mail, sondern benutzen Sie Stud.IP unter %s"),$GLOBALS["EXTERN_SERVER_NAME"]);
+				$message = _("Von  :")." $snd_fullname\n".
+					_("An   :")." $rec_fullname\n".
+					_("Datum: ").date("d.m. Y, H:i",time())."\n\n".$message.
+					"\n-- \n";
 
 				$message = kill_format($message);
+				
+				// generate signature of the message
+				$message .=	sprintf(_("Diese E-Mail ist eine Kopie einer systeminternen Nachricht, die in Stud.IP an %s versendet wurde."),$rec_fullname)."\n".
+					sprintf(_("Antworten Sie nicht auf diese E-Mail, sondern benutzen Sie Stud.IP unter %s"),$smtp->url);
 
+				$message = stripslashes($message);
+			
+				restoreLanguage();
+			
 				// Now, let us send the message
-				$smtp = new studip_smtp_class;
 				$smtp->SendMessage(
-						$from, array($to),
-						array("From: $from", "To: $to","Reply-To: $reply_to", "Subject: $title"), $message);
+						$smtp->env_from, array($to),
+						array("From: ".$smtp->from, "To: \"$rec_fullname\" <$to>", "Reply-To: $reply_to", "Subject: $title"), $message);
 			}
 				// -----------------------------------------
 
