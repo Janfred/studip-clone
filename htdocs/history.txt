@@ -10,6 +10,7 @@
 - bei regelmäßigen Veranstaltungen kann nun ein Raum für jeden Termin angegeben werden
 - Ablaufplanverwaltung überarbeitet
 - neue Titelverwaltung für Nutzernamen mit vor- und nachgestellten Titeln
+- verbesserte Konfigurierbarkeit des Mailversands
 - weitere Detailverbesserungen und Bugfixes
 
 13.10.2002 v 0.8.15 ;-)
