@@ -59,8 +59,6 @@ class IntegrityCheckUser extends IntegrityCheckAbstract{
 									'query' => 'view:USER_ARCHIVUSER:');
 		$this->checklist[] = array('detail_table' => 'admission_seminar_user',
 									'query' => 'view:USER_ADMISSIONUSER:');
-		$this->checklist[] = array('detail_table' => 'globalmessages',
-									'query' => 'view:USER_MESSAGES:');
 		$this->checklist[] = array('detail_table' => 'active_sessions',
 									'query' => 'view:USER_SESSION:');
 		$this->checklist[] = array('detail_table' => 'contact',

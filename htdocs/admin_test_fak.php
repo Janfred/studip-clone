@@ -181,7 +181,6 @@ if ($_REQUEST['cmd'] == 'user_form_send'){
 				}
 				RemovePersonFromAllStatusgruppen($db2->f("username"));
 				delete_range_of_dates($db2->f("user_id"), FALSE);
-				$db->query("DELETE FROM globalmessages WHERE user_id_rec='" . $db2->f("username") ."'");
 			}
 			$db->query("DELETE FROM auth_user_md5 WHERE user_id IN($kill_list)");
 			$_msg = "msg§" . sprintf(_("Es wurden %s NutzerInnen gelöscht."), $db->affected_rows()) ."§";
