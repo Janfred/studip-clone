@@ -119,7 +119,8 @@ class ShowToolsRequests {
 	}
 
 	function selectDates($seminar_id, $termin_id = '') {
-		$query = sprintf("SELECT *, resource_id FROM termine LEFT JOIN resources_assign ra ON (ra.assign_user_id = termine.termin_id) WHERE range_id = '%s' %s ORDER BY date, content", $seminar_id, ($termin_id) ? "AND termin_id = '".$termin_id."'" : "");
+		$query = sprintf("SELECT *, resource_id FROM termine LEFT JOIN resources_assign ra ON (ra.assign_user_id = termine.termin_id) 
+						WHERE range_id = '%s' %s ORDER BY date, content", $seminar_id, ($termin_id) ? "AND termin_id = '".$termin_id."'" : "AND date_typ IN".getPresenceTypeClause());
 		$this->db->query($query);
 		return;
 	}
