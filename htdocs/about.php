@@ -37,7 +37,7 @@ require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/DbView.class.php");
 require_once("$ABSOLUTE_PATH_STUDIP/lib/dbviews/sem_tree.view.php");
 require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/DbSnapshot.class.php");
 require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/DataFields.class.php");
-require_once("$ABSOLUTE_PATH_STUDIP/guestbook.class.php");
+require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/guestbook.class.php");
 require_once("$ABSOLUTE_PATH_STUDIP/object.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/score.class.php");
 require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/SemesterData.class.php");
