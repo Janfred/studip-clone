@@ -20,6 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/language.inc.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/object.inc.php");
 
 
 function show_news($range_id, $show_admin=FALSE,$limit="", $open, $width="100%", $last_visited=0) {
@@ -87,6 +88,8 @@ if (!$db->num_rows()) {
 		if ($open ==$db->f("news_id")) { 
 			$link=$PHP_SELF."?nclose=true";
 			$titel=$tmp_titel."<a name='anker'>";
+			if ($db->f("user_id") != $auth->auth["uid"])
+				object_add_view($db->f("news_id"));  //Counter for news - not my own
 		} else {
 			$link=$PHP_SELF."?nopen=".$db->f("news_id");
 			$titel=$tmp_titel;
@@ -97,7 +100,7 @@ if (!$db->num_rows()) {
 		$db2->query("SELECT username, " . $_fullname_sql['full'] ." AS fullname FROM auth_user_md5 a LEFT JOIN user_info USING (user_id) WHERE a.user_id='".$db->f("user_id")."'");
 		$db2->next_record();
 		$link .= "&username=".$db2->f("username");
-		$zusatz="<a href=\"about.php?username=".$db2->f("username")."\"><font size=-1 color=\"#333399\">".$db2->f("fullname")."</font></a><font size=-1>&nbsp;".date("d.m.Y",$db->f("date"))."</font>";			
+		$zusatz="<a href=\"about.php?username=".$db2->f("username")."\"><font size=-1 color=\"#333399\">".$db2->f("fullname")."</font></a><font size=-1>&nbsp;".date("d.m.Y",$db->f("date"))." | <font color=\"#005500\">".object_return_views($db->f("news_id"))."<font color=\"black\"> |</font>";			
 
 		if ($link)
 			$titel = "<a href=\"$link\" class=\"tree\" >".$titel."</a>";
