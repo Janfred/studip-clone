@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-10-06 13:02+0200\n"
+"POT-Creation-Date: 2003-10-08 19:31+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -686,10 +686,6 @@ msgstr ""
 
 #: vote/vote_overview.inc.php:637
 msgid "Diesen Eintrag jetzt fortsetzen."
-msgstr ""
-
-#: vote/vote_overview.inc.php:639
-msgid "zuruecksetzen"
 msgstr ""
 
 #: vote/vote_overview.inc.php:640

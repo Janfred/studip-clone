@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-10-06 13:02+0200\n"
+"POT-Creation-Date: 2003-10-08 19:31+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -882,7 +882,7 @@ msgstr ""
 msgid "Schritt 7: Ablaufplan und Termine der Veranstaltung: %s"
 msgstr ""
 
-#: admin_dates.php:420 help/structure.inc.php:312
+#: admin_dates.php:420 help/structure.inc.php:316
 msgid "Ablaufplan und Termine"
 msgstr ""
 
@@ -990,7 +990,7 @@ msgid "Titel:"
 msgstr ""
 
 #: admin_dates.php:624 admin_dates.php:763 admin_studiengang.php:185
-#: archiv.inc.php:118 archiv.php:299 archiv.php:459 datei.inc.php:204
+#: archiv.inc.php:118 archiv.php:299 archiv.php:459 datei.inc.php:230
 #: mein_stundenplan.php:640
 msgid "Beschreibung:"
 msgstr ""
@@ -1225,7 +1225,7 @@ msgid "Einrichtung gel&ouml;scht"
 msgstr ""
 
 #: admin_institut.php:293 admin_seminare1.php:364 links_admin.inc.php:225
-#: links_admin.inc.php:244 help/structure.inc.php:288
+#: links_admin.inc.php:244 help/structure.inc.php:292
 msgid "Grunddaten"
 msgstr ""
 
@@ -1243,7 +1243,7 @@ msgstr ""
 msgid "Neue Auswahl"
 msgstr ""
 
-#: admin_institut.php:337 datei.inc.php:202 edit_about.php:937
+#: admin_institut.php:337 datei.inc.php:228 edit_about.php:937
 #: edit_about.php:966 inst_admin.php:98
 msgid "Name:"
 msgstr ""
@@ -1922,7 +1922,7 @@ msgstr ""
 msgid "Benutzer"
 msgstr ""
 
-#: admin_news.php:759 config.inc.php:298 config.inc.php.dist:196
+#: admin_news.php:759 config.inc.php:298 config.inc.php.dist:192
 #: contact.inc.php:219 edit_about.php:1169 freie.php:168 functions.php:85
 #: functions.php:179 sem_browse.inc.php:377 show_bereich.php:76
 #: lib/classes/SemBrowse.class.php:30
@@ -2207,15 +2207,15 @@ msgid ""
 "Administrator ver&auml;ndert werden.)"
 msgstr ""
 
-#: admin_seminare1.php:750 config.inc.php:338 config.inc.php.dist:246
-#: help/structure.inc.php:129 help/structure.inc.php:300
+#: admin_seminare1.php:750 config.inc.php:338 config.inc.php.dist:242
+#: help/structure.inc.php:129 help/structure.inc.php:304
 msgid "Sonstiges"
 msgstr ""
 
 #: admin_seminare1.php:756 admin_seminare1.php:759 forum.inc.php:113
 #: functions.php:503 functions.php:523 functions.php:547 functions.php:567
 #: new_user_md5.php:873 new_user_md5.php:1036 teilnehmer.php:703
-#: write_topic.php:117
+#: write_topic.php:121
 msgid "unbekannt"
 msgstr ""
 
@@ -4243,7 +4243,7 @@ msgstr ""
 msgid "Suchen in Stud.IP"
 msgstr ""
 
-#: auswahl_suche.php:40 help/structure.inc.php:435
+#: auswahl_suche.php:40 help/structure.inc.php:439
 msgid "Suchen nach Personen"
 msgstr ""
 
@@ -4253,7 +4253,7 @@ msgid ""
 "und Dozierenden suchen."
 msgstr ""
 
-#: auswahl_suche.php:45 help/structure.inc.php:439
+#: auswahl_suche.php:45 help/structure.inc.php:443
 msgid "Suchen nach Veranstaltungen"
 msgstr ""
 
@@ -4287,7 +4287,7 @@ msgstr ""
 msgid "Hier finden Sie Lernmodule aus dem angebundenen ILIAS-System."
 msgstr ""
 
-#: auswahl_suche.php:67 help/structure.inc.php:443
+#: auswahl_suche.php:67 help/structure.inc.php:447
 msgid "Suchen im Archiv"
 msgstr ""
 
@@ -4511,8 +4511,8 @@ msgstr ""
 msgid "Und hier geht's direkt zum %sMensaplan%s&nbsp;;-)"
 msgstr ""
 
-#: config.inc.php:83 config.inc.php:333 config.inc.php.dist:71
-#: config.inc.php.dist:241
+#: config.inc.php:83 config.inc.php:333 config.inc.php.dist:67
+#: config.inc.php.dist:237
 msgid "Vorlesung"
 msgstr ""
 
@@ -4524,8 +4524,8 @@ msgstr ""
 msgid "Hauptstudium"
 msgstr ""
 
-#: config.inc.php:86 config.inc.php:303 config.inc.php.dist:72
-#: config.inc.php.dist:201
+#: config.inc.php:86 config.inc.php:303 config.inc.php.dist:68
+#: config.inc.php.dist:197
 msgid "Seminar"
 msgstr ""
 
@@ -4537,17 +4537,17 @@ msgstr ""
 msgid "Kolloquium"
 msgstr ""
 
-#: config.inc.php:89 config.inc.php:92 config.inc.php.dist:76
+#: config.inc.php:89 config.inc.php:92 config.inc.php.dist:72
 msgid "Forschungsgruppe"
 msgstr ""
 
-#: config.inc.php:90 config.inc.php:305 config.inc.php.dist:203
+#: config.inc.php:90 config.inc.php:305 config.inc.php.dist:199
 msgid "Arbeitsgruppe"
 msgstr ""
 
 #: config.inc.php:91 config.inc.php:93 config.inc.php:95 config.inc.php:97
-#: config.inc.php.dist:70 config.inc.php.dist:77 config.inc.php.dist:80
-#: config.inc.php.dist:83
+#: config.inc.php.dist:66 config.inc.php.dist:73 config.inc.php.dist:76
+#: config.inc.php.dist:79
 msgid "sonstige"
 msgstr ""
 
@@ -4559,7 +4559,7 @@ msgstr ""
 msgid "Community-Forum"
 msgstr ""
 
-#: config.inc.php:98 config.inc.php.dist:74
+#: config.inc.php:98 config.inc.php.dist:70
 msgid "Praktikum"
 msgstr ""
 
@@ -4579,7 +4579,7 @@ msgstr ""
 msgid "Fachdidaktik"
 msgstr ""
 
-#: config.inc.php:103 config.inc.php.dist:73
+#: config.inc.php:103 config.inc.php.dist:69
 msgid "Übung"
 msgstr ""
 
@@ -4595,15 +4595,15 @@ msgstr ""
 msgid "Arbeitsgemeinschaft"
 msgstr ""
 
-#: config.inc.php:111 config.inc.php.dist:88
+#: config.inc.php:111 config.inc.php.dist:84
 msgid "Lehre"
 msgstr ""
 
-#: config.inc.php:129 config.inc.php.dist:109
+#: config.inc.php:129 config.inc.php.dist:105
 msgid "Hier finden Sie alle in Stud.IP registrierten Lehrveranstaltungen"
 msgstr ""
 
-#: config.inc.php:130 config.inc.php.dist:110
+#: config.inc.php:130 config.inc.php.dist:106
 msgid "Verwenden Sie diese Kategorie, um normale Lehrveranstaltungen anzulegen"
 msgstr ""
 
@@ -4611,35 +4611,35 @@ msgstr ""
 msgid "Forschung"
 msgstr ""
 
-#: config.inc.php:150 config.inc.php.dist:126
+#: config.inc.php:150 config.inc.php.dist:122
 msgid ""
 "Hier finden Sie virtuelle Veranstaltungen zum Thema Forschung an der "
 "Universit&auml;t"
 msgstr ""
 
-#: config.inc.php:151 config.inc.php.dist:127
+#: config.inc.php:151 config.inc.php.dist:123
 msgid ""
 "In dieser Kategorie k&ouml;nnen sie virtuelle Veranstaltungen f&uuml;r "
 "Forschungsprojekte anlegen."
 msgstr ""
 
-#: config.inc.php:153 config.inc.php.dist:112
+#: config.inc.php:153 config.inc.php.dist:108
 msgid "Organisation"
 msgstr ""
 
-#: config.inc.php:166 config.inc.php.dist:141
+#: config.inc.php:166 config.inc.php.dist:137
 msgid ""
 "Hier finden Sie virtuelle Veranstaltungen zu verschiedenen Gremien an der "
 "Universit&auml;t"
 msgstr ""
 
-#: config.inc.php:167 config.inc.php.dist:142
+#: config.inc.php:167 config.inc.php.dist:138
 msgid ""
 "Um virtuelle Veranstaltungen f&uuml;r Uni-Gremien anzulegen, verwenden Sie "
 "diese Kategorie"
 msgstr ""
 
-#: config.inc.php:169 config.inc.php.dist:129
+#: config.inc.php:169 config.inc.php.dist:125
 msgid "Community"
 msgstr ""
 
@@ -4667,84 +4667,84 @@ msgid ""
 "Verwenden Sie diese Kategorie, um unterschiedliche Arbeitsgruppen anzulegen."
 msgstr ""
 
-#: config.inc.php:299 config.inc.php.dist:197
+#: config.inc.php:299 config.inc.php.dist:193
 msgid "Zentrum"
 msgstr ""
 
-#: config.inc.php:300 config.inc.php.dist:198
+#: config.inc.php:300 config.inc.php.dist:194
 msgid "Lehrstuhl"
 msgstr ""
 
-#: config.inc.php:301 config.inc.php.dist:199
+#: config.inc.php:301 config.inc.php.dist:195
 msgid "Abteilung"
 msgstr ""
 
-#: config.inc.php:302 config.inc.php.dist:200
+#: config.inc.php:302 config.inc.php.dist:196
 msgid "Fachbereich"
 msgstr ""
 
-#: config.inc.php:304 config.inc.php.dist:202
+#: config.inc.php:304 config.inc.php.dist:198
 msgid "Fakultät"
 msgstr ""
 
-#: config.inc.php:327 config.inc.php:339 config.inc.php.dist:235
-#: config.inc.php.dist:247
+#: config.inc.php:327 config.inc.php:339 config.inc.php.dist:231
+#: config.inc.php.dist:243
 msgid "Sitzung"
 msgstr ""
 
-#: config.inc.php:328 config.inc.php:340 config.inc.php.dist:236
-#: config.inc.php.dist:248
+#: config.inc.php:328 config.inc.php:340 config.inc.php.dist:232
+#: config.inc.php.dist:244
 msgid "Vorbesprechung"
 msgstr ""
 
-#: config.inc.php:329 config.inc.php:341 config.inc.php.dist:237
-#: config.inc.php.dist:249
+#: config.inc.php:329 config.inc.php:341 config.inc.php.dist:233
+#: config.inc.php.dist:245
 msgid "Klausur"
 msgstr ""
 
-#: config.inc.php:330 config.inc.php:342 config.inc.php.dist:238
-#: config.inc.php.dist:250
+#: config.inc.php:330 config.inc.php:342 config.inc.php.dist:234
+#: config.inc.php.dist:246
 msgid "Exkursion"
 msgstr ""
 
-#: config.inc.php:331 config.inc.php.dist:239
+#: config.inc.php:331 config.inc.php.dist:235
 msgid "anderer Termin"
 msgstr ""
 
-#: config.inc.php:332 config.inc.php:343 config.inc.php.dist:240
-#: config.inc.php.dist:251
+#: config.inc.php:332 config.inc.php:343 config.inc.php.dist:236
+#: config.inc.php.dist:247
 msgid "Sondersitzung"
 msgstr ""
 
-#: config.inc.php:344 config.inc.php.dist:252
+#: config.inc.php:344 config.inc.php.dist:248
 msgid "Prüfung"
 msgstr ""
 
-#: config.inc.php:345 config.inc.php.dist:253
+#: config.inc.php:345 config.inc.php.dist:249
 msgid "Telefonat"
 msgstr ""
 
-#: config.inc.php:346 config.inc.php.dist:254
+#: config.inc.php:346 config.inc.php.dist:250
 msgid "Besprechung"
 msgstr ""
 
-#: config.inc.php:347 config.inc.php.dist:255
+#: config.inc.php:347 config.inc.php.dist:251
 msgid "Verabredung"
 msgstr ""
 
-#: config.inc.php:348 config.inc.php.dist:256
+#: config.inc.php:348 config.inc.php.dist:252
 msgid "Geburtstag"
 msgstr ""
 
-#: config.inc.php:349 config.inc.php.dist:257
+#: config.inc.php:349 config.inc.php.dist:253
 msgid "Familie"
 msgstr ""
 
-#: config.inc.php:350 config.inc.php.dist:258
+#: config.inc.php:350 config.inc.php.dist:254
 msgid "Urlaub"
 msgstr ""
 
-#: config.inc.php:351 config.inc.php.dist:259
+#: config.inc.php:351 config.inc.php.dist:255
 msgid "Reise"
 msgstr ""
 
@@ -4753,23 +4753,23 @@ msgstr ""
 msgid "Und hier geht's zur %sStud.IP Portalseite%s&nbsp;"
 msgstr ""
 
-#: config.inc.php.dist:75
+#: config.inc.php.dist:71
 msgid "Colloquium"
 msgstr ""
 
-#: config.inc.php.dist:78
+#: config.inc.php.dist:74
 msgid "Gremium"
 msgstr ""
 
-#: config.inc.php.dist:79
+#: config.inc.php.dist:75
 msgid "Projektgruppe"
 msgstr ""
 
-#: config.inc.php.dist:81
+#: config.inc.php.dist:77
 msgid "Kulturforum"
 msgstr ""
 
-#: config.inc.php.dist:82
+#: config.inc.php.dist:78
 msgid "Veranstaltungsboard"
 msgstr ""
 
@@ -5104,6 +5104,10 @@ msgstr ""
 msgid "Benutzername:"
 msgstr ""
 
+#: crcregister.ihtml:119
+msgid "Stud.IP - Registrierung"
+msgstr ""
+
 #: crcregister.ihtml:148
 msgid "Hinweise f&uuml;r Benutzer des Internet Explorers 6.0"
 msgstr ""
@@ -5187,142 +5191,142 @@ msgstr ""
 msgid "E-Mail:"
 msgstr ""
 
-#: datei.inc.php:141
+#: datei.inc.php:167
 msgid "Sie haben diesen Ordner zum Upload ausgew&auml;hlt:"
 msgstr ""
 
-#: datei.inc.php:143
+#: datei.inc.php:169
 msgid ""
 "Sie haben diese Datei zum Aktualisieren ausgew&auml;hlt. Sie <b>&uuml;"
 "berschreiben</b> damit die vorhandene Datei durch eine neue Version!"
 msgstr ""
 
-#: datei.inc.php:151 datei.inc.php:173
+#: datei.inc.php:177 datei.inc.php:199
 msgid "Unzul&auml;ssige Dateitypen:"
 msgstr ""
 
-#: datei.inc.php:161 datei.inc.php:183
+#: datei.inc.php:187 datei.inc.php:209
 msgid "Zul&auml;ssige Dateitypen:"
 msgstr ""
 
-#: datei.inc.php:193
+#: datei.inc.php:219
 msgid "Maximale Gr&ouml;&szlig;e:"
 msgstr ""
 
-#: datei.inc.php:193
+#: datei.inc.php:219
 msgid "Megabyte"
 msgstr ""
 
-#: datei.inc.php:195
+#: datei.inc.php:221
 msgid ""
 "1. Klicken Sie auf <b>'Durchsuchen...'</b>, um eine Datei auszuw&auml;hlen."
 msgstr ""
 
-#: datei.inc.php:197
+#: datei.inc.php:223
 msgid "Dateipfad:"
 msgstr ""
 
-#: datei.inc.php:201
+#: datei.inc.php:227
 msgid ""
 "2. Geben Sie eine kurze Beschreibung und einen Namen f&uuml;r die Datei ein."
 msgstr ""
 
-#: datei.inc.php:206
+#: datei.inc.php:232
 msgid "3. Klicken Sie auf <b>'absenden'</b>, um die Datei hochzuladen"
 msgstr ""
 
-#: datei.inc.php:208
+#: datei.inc.php:234
 msgid ""
 "2. Klicken Sie auf <b>'absenden'</b>, um die Datei hochzuladen und damit die "
 "alte Version zu &uuml;berschreiben."
 msgstr ""
 
-#: datei.inc.php:252
+#: datei.inc.php:278
 msgid "Sie haben keine Datei zum Hochladen ausgew&auml;hlt!"
 msgstr ""
 
-#: datei.inc.php:275 datei.inc.php:323
+#: datei.inc.php:301 datei.inc.php:349
 #, c-format
 msgid ""
 "Die Datei konnte nicht &uuml;bertragen werden: Sie d&uuml;rfen den Dateityp %"
 "s nicht hochladen!"
 msgstr ""
 
-#: datei.inc.php:277 datei.inc.php:325
+#: datei.inc.php:303 datei.inc.php:351
 #, c-format
 msgid ""
 "Die Datei konnte nicht &uuml;bertragen werden: Sie d&uuml;rfen die "
 "Dateitypen %s nicht hochladen!"
 msgstr ""
 
-#: datei.inc.php:280 datei.inc.php:303 datei.inc.php:328 datei.inc.php:351
-#: datei.inc.php:353
+#: datei.inc.php:306 datei.inc.php:329 datei.inc.php:354 datei.inc.php:377
+#: datei.inc.php:379
 #, c-format
 msgid "%sHier%s bekommen Sie Hilfe zum Upload von Word-Dokumenten."
 msgstr ""
 
-#: datei.inc.php:282 datei.inc.php:305 datei.inc.php:330
+#: datei.inc.php:308 datei.inc.php:331 datei.inc.php:356
 msgid ""
 "Hilfe zum Upload von Word-Dokumenten bekommen Sie in dem soeben ge&ouml;"
 "ffneten Hilfefenster!"
 msgstr ""
 
-#: datei.inc.php:298 datei.inc.php:346
+#: datei.inc.php:324 datei.inc.php:372
 #, c-format
 msgid ""
 "Die Datei konnte nicht &uuml;bertragen werden: Sie d&uuml;rfen nur den "
 "Dateityp %s hochladen!"
 msgstr ""
 
-#: datei.inc.php:300 datei.inc.php:348
+#: datei.inc.php:326 datei.inc.php:374
 #, c-format
 msgid ""
 "Die Datei konnte nicht &uuml;bertragen werden: Sie d&uuml;rfen nur die "
 "Dateitypen %s hochladen!"
 msgstr ""
 
-#: datei.inc.php:360
+#: datei.inc.php:386
 #, c-format
 msgid ""
 "Die Datei konnte nicht &uuml;bertragen werden: Die maximale Gr&ouml;sse "
 "f&uuml;r einen Upload (%s Megabyte) wurde &uuml;berschritten!"
 msgstr ""
 
-#: datei.inc.php:388
+#: datei.inc.php:414
 msgid "Datei&uuml;bertragung gescheitert!"
 msgstr ""
 
-#: datei.inc.php:391
+#: datei.inc.php:417
 msgid "Die Datei wurde erfolgreich auf den Server &uuml;bertragen!"
 msgstr ""
 
-#: datei.inc.php:645 datei.inc.php:909
+#: datei.inc.php:670 datei.inc.php:941
 msgid "Objekt in diesen Ordner verschieben"
 msgstr ""
 
-#: datei.inc.php:661 datei.inc.php:922
+#: datei.inc.php:686 datei.inc.php:954
 #, c-format
 msgid "(%s Dokumente)"
 msgstr ""
 
-#: datei.inc.php:663 datei.inc.php:924
+#: datei.inc.php:688 datei.inc.php:956
 msgid "(1 Dokument)"
 msgstr ""
 
-#: datei.inc.php:706 datei.inc.php:846
+#: datei.inc.php:731 datei.inc.php:877
 msgid "&Auml;nderungen speichern"
 msgstr ""
 
-#: datei.inc.php:707 datei.inc.php:847
+#: datei.inc.php:732 datei.inc.php:878
 msgid "Abbrechen"
 msgstr ""
 
-#: datei.inc.php:714 datei.inc.php:855 show_dates.inc.php:203
+#: datei.inc.php:739 datei.inc.php:886 show_dates.inc.php:203
 #: show_dates.inc.php:334 show_dates.inc.php:493
 msgid "Keine Beschreibung vorhanden"
 msgstr ""
 
-#: datei.inc.php:717
+#: datei.inc.php:742
 #, c-format
 msgid ""
 "Dieser Ordner wurde zum Verschieben markiert. Bitte w&auml;hlen Sie das "
@@ -5330,31 +5334,31 @@ msgid ""
 "verschieben."
 msgstr ""
 
-#: datei.inc.php:717
+#: datei.inc.php:742
 msgid ""
 "Klicken Sie auf dieses Symbol, um diesen Ordner in einen anderen Ordner "
 "einzufügen."
 msgstr ""
 
-#: datei.inc.php:802
+#: datei.inc.php:833
 msgid "Download"
 msgstr ""
 
-#: datei.inc.php:802
+#: datei.inc.php:833
 msgid "Downloads"
 msgstr ""
 
-#: datei.inc.php:856
+#: datei.inc.php:887
 #, c-format
 msgid "<b>Dateigr&ouml;&szlig;e:</b> %s kB"
 msgstr ""
 
-#: datei.inc.php:857
+#: datei.inc.php:888
 #, c-format
 msgid "<b>Dateiname:</b> %s "
 msgstr ""
 
-#: datei.inc.php:861
+#: datei.inc.php:892
 #, c-format
 msgid ""
 "Diese Datei wurde zum Verschieben markiert. Bitte w&auml;hlen Sie das "
@@ -5362,27 +5366,27 @@ msgid ""
 "verschieben."
 msgstr ""
 
-#: datei.inc.php:861
+#: datei.inc.php:892
 msgid ""
 "Klicken Sie dieses Symbol, um diese Datei in einen anderen Ordner einzufügen"
 msgstr ""
 
-#: datei.inc.php:1005
+#: datei.inc.php:1038
 #, c-format
 msgid "Der Dateiordner und %s Dokumente wurden gel&ouml;scht"
 msgstr ""
 
-#: datei.inc.php:1007
+#: datei.inc.php:1040
 msgid "Der Dateiordner wurde gel&ouml;scht"
 msgstr ""
 
-#: datei.inc.php:1012
+#: datei.inc.php:1045
 #, c-format
 msgid ""
 "Probleme beim L&ouml;schen des Ordners. %s Dokumente wurden gel&ouml;scht"
 msgstr ""
 
-#: datei.inc.php:1014
+#: datei.inc.php:1047
 msgid "Probleme beim L&ouml;schen des Ordners"
 msgstr ""
 
@@ -5870,7 +5874,7 @@ msgstr ""
 msgid "Ihr Passwort wurde ge&auml;ndert!"
 msgstr ""
 
-#: edit_about.php:348 phplib_local.inc.php:402
+#: edit_about.php:348 phplib_local.inc.php:418
 msgid "Der Vorname fehlt oder ist unsinnig!"
 msgstr ""
 
@@ -5878,7 +5882,7 @@ msgstr ""
 msgid "Ihr Vorname wurde ge&auml;ndert!"
 msgstr ""
 
-#: edit_about.php:357 phplib_local.inc.php:407
+#: edit_about.php:357 phplib_local.inc.php:423
 msgid "Der Nachname fehlt oder ist unsinnig!"
 msgstr ""
 
@@ -5900,7 +5904,7 @@ msgstr ""
 msgid "Ihr Username wurde ge&auml;ndert!"
 msgstr ""
 
-#: edit_about.php:393 phplib_local.inc.php:412
+#: edit_about.php:393 phplib_local.inc.php:428
 msgid "Die E-Mail-Adresse fehlt oder ist falsch geschrieben!"
 msgstr ""
 
@@ -5942,7 +5946,7 @@ msgid ""
 "verwenden!<br><br>Ihr aktueller Username ist: <b>%s</b><br>"
 msgstr ""
 
-#: edit_about.php:594 header.php:103 index.php:135 links_about.inc.php:69
+#: edit_about.php:594 header.php:103 index.php:133 links_about.inc.php:69
 msgid "Login"
 msgstr ""
 
@@ -6392,7 +6396,7 @@ msgstr ""
 msgid "Ihr Beitrag"
 msgstr ""
 
-#: forum.inc.php:113 write_topic.php:117
+#: forum.inc.php:113 write_topic.php:121
 msgid "Ihr Name:"
 msgstr ""
 
@@ -6562,10 +6566,6 @@ msgstr ""
 msgid "Relevanz"
 msgstr ""
 
-#: forum.php:203
-msgid "#0000FF"
-msgstr ""
-
 #: forum.php:216 forum.php:226
 msgid ""
 "Sie versuchen, mit zwei Browserfenstern innerhalb verschiedener Foren zu "
@@ -6611,97 +6611,97 @@ msgstr ""
 msgid "%s Posting(s) verschoben."
 msgstr ""
 
-#: forumsettings.inc.php:32
+#: forumsettings.inc.php:40
 msgid "Einstellungen des Forums anpassen"
 msgstr ""
 
-#: forumsettings.inc.php:41
+#: forumsettings.inc.php:49
 msgid ""
 "Auf dieser Seite k&ouml;nnen Sie die Bedienung des Stud.IP-Forensystems an "
 "Ihre Bed&uuml;rfnisse anpassen."
 msgstr ""
 
-#: forumsettings.inc.php:49
+#: forumsettings.inc.php:57
 msgid "Option"
 msgstr ""
 
-#: forumsettings.inc.php:50
+#: forumsettings.inc.php:58
 msgid "Auswahl"
 msgstr ""
 
-#: forumsettings.inc.php:55
+#: forumsettings.inc.php:63
 msgid "Neue Beiträge immer aufgeklappt"
 msgstr ""
 
-#: forumsettings.inc.php:65
+#: forumsettings.inc.php:73
 msgid "Alle Beiträge im Flatview immer aufgeklappt"
 msgstr ""
 
-#: forumsettings.inc.php:74
+#: forumsettings.inc.php:82
 msgid "Bewertungsbereich bei geöffneten Postings immer anzeigen"
 msgstr ""
 
-#: forumsettings.inc.php:83
+#: forumsettings.inc.php:91
 msgid "Bilder im Bewertungsbereich anzeigen"
 msgstr ""
 
-#: forumsettings.inc.php:91
+#: forumsettings.inc.php:99
 msgid "Anzahl der Postings pro Seite im Flatview"
 msgstr ""
 
-#: forumsettings.inc.php:108
+#: forumsettings.inc.php:116
 msgid "Sortierung der Themenanzeige"
 msgstr ""
 
-#: forumsettings.inc.php:112
+#: forumsettings.inc.php:120
 msgid "Alter des Ordners - neue unten"
 msgstr ""
 
-#: forumsettings.inc.php:113
+#: forumsettings.inc.php:121
 msgid "Alter des Ordners - neue oben"
 msgstr ""
 
-#: forumsettings.inc.php:114
+#: forumsettings.inc.php:122
 msgid "Alter des neuesten Beitrags - neue oben"
 msgstr ""
 
-#: forumsettings.inc.php:119
+#: forumsettings.inc.php:127
 msgid "Anzeigemodus der Themenanzeige"
 msgstr ""
 
-#: forumsettings.inc.php:123
+#: forumsettings.inc.php:131
 msgid "Treeview"
 msgstr ""
 
-#: forumsettings.inc.php:124
+#: forumsettings.inc.php:132
 msgid "Flatview"
 msgstr ""
 
-#: forumsettings.inc.php:129
+#: forumsettings.inc.php:137
 msgid "Einsprungsseite des Forums"
 msgstr ""
 
-#: forumsettings.inc.php:133 links_openobject.inc.php:149
+#: forumsettings.inc.php:141 links_openobject.inc.php:149
 msgid "Themenansicht"
 msgstr ""
 
-#: forumsettings.inc.php:134 help/structure.inc.php:242
+#: forumsettings.inc.php:142 help/structure.inc.php:246
 msgid "Neue Beiträge"
 msgstr ""
 
-#: forumsettings.inc.php:135
+#: forumsettings.inc.php:143
 msgid "Letzte Beiträge"
 msgstr ""
 
-#: forumsettings.inc.php:140
+#: forumsettings.inc.php:148
 msgid "ForumAutoShrink-Engine aktivieren"
 msgstr ""
 
-#: forumsettings.inc.php:148
+#: forumsettings.inc.php:156
 msgid "ausgeschaltet"
 msgstr ""
 
-#: forumsettings.inc.php:152
+#: forumsettings.inc.php:160
 msgid "Wochen"
 msgstr ""
 
@@ -6974,7 +6974,7 @@ msgstr ""
 msgid "Fenster schließen"
 msgstr ""
 
-#: get_auto.php:37 help/structure.inc.php:404
+#: get_auto.php:37 help/structure.inc.php:408
 msgid "Autologin"
 msgstr ""
 
@@ -7017,7 +7017,7 @@ msgstr ""
 msgid "Informationen über das System"
 msgstr ""
 
-#: header.php:102 header.php:268 index.php:98 index.php:170 index.php:234
+#: header.php:102 header.php:268 index.php:96 index.php:168 index.php:232
 msgid "Hilfe"
 msgstr ""
 
@@ -7424,139 +7424,139 @@ msgid ""
 "angepasst - %ssagen Sie uns Ihre Meinung!%s"
 msgstr ""
 
-#: index.php:85
+#: index.php:83
 msgid "Ihre pers&ouml;nliche Startseite bei Stud.IP"
 msgstr ""
 
-#: index.php:90 index.php:229 meine_seminare.php:310 mystudip.inc.php:130
+#: index.php:88 index.php:227 meine_seminare.php:310 mystudip.inc.php:130
 #: help/structure.inc.php:160
 msgid "Meine Veranstaltungen"
 msgstr ""
 
-#: index.php:90
+#: index.php:88
 msgid "Veranstaltung hinzuf&uuml;gen"
 msgstr ""
 
-#: index.php:91 index.php:231 mystudip.inc.php:134
+#: index.php:89 index.php:229 mystudip.inc.php:134
 msgid "Mein Planer"
 msgstr ""
 
-#: index.php:91 index.php:231 links_about.inc.php:61 links_sms.inc.php:32
+#: index.php:89 index.php:229 links_about.inc.php:61 links_sms.inc.php:32
 msgid "Terminkalender"
 msgstr ""
 
-#: index.php:91 index.php:231 links_sms.inc.php:35
+#: index.php:89 index.php:229 links_sms.inc.php:35
 msgid "Adressbuch"
 msgstr ""
 
-#: index.php:91 index.php:231 links_about.inc.php:62 links_sms.inc.php:33
+#: index.php:89 index.php:229 links_about.inc.php:62 links_sms.inc.php:33
 #: links_sms.inc.php:55
 msgid "Stundenplan"
 msgstr ""
 
-#: index.php:92 index.php:232 inst_admin.php:159 new_user_md5.php:915
+#: index.php:90 index.php:230 inst_admin.php:159 new_user_md5.php:915
 msgid "pers&ouml;nliche Homepage"
 msgstr ""
 
-#: index.php:94 index.php:232
+#: index.php:92 index.php:230
 msgid "individuelle Einstellungen"
 msgstr ""
 
-#: index.php:97 index.php:233 index.php:273 index.php:309
-#: links_openobject.inc.php:153 help/structure.inc.php:250
-#: help/structure.inc.php:427
+#: index.php:95 index.php:231 index.php:271 index.php:307
+#: links_openobject.inc.php:153 help/structure.inc.php:254
+#: help/structure.inc.php:431
 msgid "Suchen"
 msgstr ""
 
-#: index.php:97 index.php:233 index.php:273 index.php:309
+#: index.php:95 index.php:231 index.php:271 index.php:307
 msgid "Personensuche"
 msgstr ""
 
-#: index.php:97 index.php:233 index.php:273 index.php:309
+#: index.php:95 index.php:231 index.php:271 index.php:307
 msgid "Veranstaltungssuche"
 msgstr ""
 
-#: index.php:135
+#: index.php:133
 msgid "f&uuml;r registrierte NutzerInnen"
 msgstr ""
 
-#: index.php:149
+#: index.php:147
 msgid "Registrieren"
 msgstr ""
 
-#: index.php:149
+#: index.php:147
 msgid "um NutzerIn zu werden"
 msgstr ""
 
-#: index.php:161
+#: index.php:159
 msgid "Freier Zugang"
 msgstr ""
 
-#: index.php:161
+#: index.php:159
 msgid "ohne Registrierung"
 msgstr ""
 
-#: index.php:170
+#: index.php:168
 msgid "zu Bedienung und Funktionsumfang"
 msgstr ""
 
-#: index.php:185
+#: index.php:183
 msgid "Zur Portalseite"
 msgstr ""
 
-#: index.php:195
+#: index.php:193
 msgid "Aktive Veranstaltungen"
 msgstr ""
 
-#: index.php:199
+#: index.php:197
 msgid "Registrierte NutzerInnen"
 msgstr ""
 
-#: index.php:204
+#: index.php:202
 msgid "Davon online"
 msgstr ""
 
-#: index.php:210
+#: index.php:208
 msgid "mehr"
 msgstr ""
 
-#: index.php:224
+#: index.php:222
 msgid "Startseite f&uuml;r DozentInnen bei Stud.IP"
 msgstr ""
 
-#: index.php:230 index.php:271 index.php:306
+#: index.php:228 index.php:269 index.php:304
 msgid "Verwaltung von Veranstaltungen"
 msgstr ""
 
-#: index.php:230
+#: index.php:228
 msgid "neue Veranstaltung anlegen"
 msgstr ""
 
-#: index.php:265
+#: index.php:263
 msgid "Startseite f&uuml;r AdministratorInnen bei Stud.IP"
 msgstr ""
 
-#: index.php:270 meine_seminare.php:646
+#: index.php:268 meine_seminare.php:646
 msgid "Veranstaltungen an meinen Einrichtungen"
 msgstr ""
 
-#: index.php:272 index.php:307
+#: index.php:270 index.php:305
 msgid "Verwaltung von Einrichtungen"
 msgstr ""
 
-#: index.php:274
+#: index.php:272
 msgid "globale Benutzerverwaltung"
 msgstr ""
 
-#: index.php:300
+#: index.php:298
 msgid "Startseite f&uuml;r Root bei Stud.IP"
 msgstr ""
 
-#: index.php:305
+#: index.php:303
 msgid "Veranstaltungs&uuml;bersicht"
 msgstr ""
 
-#: index.php:308
+#: index.php:306
 msgid "Verwaltung globaler Einstellungen"
 msgstr ""
 
@@ -8074,7 +8074,7 @@ msgstr ""
 msgid "Lernmodule"
 msgstr ""
 
-#: links_admin.inc.php:269 help/structure.inc.php:480
+#: links_admin.inc.php:269 help/structure.inc.php:484
 msgid "Ressourcenverwaltung"
 msgstr ""
 
@@ -8294,7 +8294,7 @@ msgid "Alle Dateien"
 msgstr ""
 
 #: links_openobject.inc.php:186 links_openobject.inc.php:188
-#: help/structure.inc.php:356
+#: help/structure.inc.php:360
 msgid "Funktionen / Gruppen verwalten"
 msgstr ""
 
@@ -8433,7 +8433,7 @@ msgid "Veranstaltungstermine"
 msgstr ""
 
 #: links_sms.inc.php:54 links_sms.inc.php:57 mein_stundenplan.php:385
-#: help/structure.inc.php:392
+#: help/structure.inc.php:396
 msgid "Ansicht anpassen"
 msgstr ""
 
@@ -9599,40 +9599,40 @@ msgstr ""
 msgid "Formular zurücksetzen"
 msgstr ""
 
-#: phplib_local.inc.php:241
+#: phplib_local.inc.php:251
 msgid "Fehler beim Auto-Login!"
 msgstr ""
 
-#: phplib_local.inc.php:258
+#: phplib_local.inc.php:267
 #, c-format
 msgid "Autologin ist mit dem Status: %s nicht möglich!"
 msgstr ""
 
-#: phplib_local.inc.php:387
+#: phplib_local.inc.php:403
 msgid "Der gewählte Username ist zu kurz!"
 msgstr ""
 
-#: phplib_local.inc.php:395
+#: phplib_local.inc.php:411
 msgid "Das Passwort ist zu kurz!"
 msgstr ""
 
-#: phplib_local.inc.php:421
+#: phplib_local.inc.php:437
 msgid ""
 "Der Mailserver ist nicht erreichbar, bitte überprüfen Sie, ob Sie E-Mails "
 "mit der angegebenen Adresse verschicken und empfangen können!"
 msgstr ""
 
-#: phplib_local.inc.php:431
+#: phplib_local.inc.php:447
 msgid ""
 "Die angegebene E-Mail-Adresse ist nicht erreichbar, bitte überprüfen Sie "
 "Ihre Angaben!"
 msgstr ""
 
-#: phplib_local.inc.php:445
+#: phplib_local.inc.php:461
 msgid "Der gewählte Username ist bereits vorhanden!"
 msgstr ""
 
-#: phplib_local.inc.php:456
+#: phplib_local.inc.php:472
 msgid ""
 "Die angegebene E-Mail-Adresse wird bereits von einem anderen User verwendet. "
 "Sie müssen eine andere E-Mail-Adresse angeben!"
@@ -10573,7 +10573,7 @@ msgid "Termine für die Zeit vom %s bis zum %s"
 msgstr ""
 
 #: show_dates.inc.php:108 show_dates.inc.php:113 show_dates.inc.php:261
-#: show_dates.inc.php:397 help/structure.inc.php:384
+#: show_dates.inc.php:397 help/structure.inc.php:388
 msgid "Termine bearbeiten"
 msgstr ""
 
@@ -11734,29 +11734,29 @@ msgstr ""
 msgid "Sie haben keine Berechtigung, Seiten zu editieren!"
 msgstr ""
 
-#: write_topic.php:88
+#: write_topic.php:92
 msgid "Hierzu antworten:"
 msgstr ""
 
-#: write_topic.php:102
+#: write_topic.php:106
 msgid "&Uuml;berschrift:"
 msgstr ""
 
-#: write_topic.php:120
+#: write_topic.php:124
 msgid "Ihr Beitrag:"
 msgstr ""
 
-#: write_topic.php:143
+#: write_topic.php:147
 msgid "Ihr Beitrag wurde erfolgreich ins System &uuml;bernommen"
 msgstr ""
 
-#: write_topic.php:143
+#: write_topic.php:147
 msgid ""
 "Sie k&ouml;nnen dieses Fenster jetzt schliessen.<br>Um Ihr neues Posting zu "
 "sehen, m&uuml;ssen Sie das Hauptfenster aktualisieren!"
 msgstr ""
 
-#: write_topic.php:147
+#: write_topic.php:151
 msgid "Schreiben nicht m&ouml;glich"
 msgstr ""
 
@@ -12527,6 +12527,86 @@ msgstr ""
 msgid "Alle Unterelemente schließen"
 msgstr ""
 
+#: lib/classes/auth_plugins/StudipAuthAbstract.class.php:308
+#: lib/classes/auth_plugins/StudipAuthStandard.class.php:81
+#, c-format
+msgid "Dieser Username wird bereits über %s authentifiziert!"
+msgstr ""
+
+#: lib/classes/auth_plugins/StudipAuthAbstract.class.php:401
+#: lib/classes/auth_plugins/StudipAuthAbstract.class.php:417
+#, c-format
+msgid "Methode %s nicht implementiert!"
+msgstr ""
+
+#: lib/classes/auth_plugins/StudipAuthLdap.class.php:73
+msgid "Keine Verbindung zum LDAP Server möglich."
+msgstr ""
+
+#: lib/classes/auth_plugins/StudipAuthLdap.class.php:77
+msgid "Setzen der LDAP Protokolversion fehlgeschlagen."
+msgstr ""
+
+#: lib/classes/auth_plugins/StudipAuthLdap.class.php:87
+#: lib/classes/auth_plugins/StudipAuthLdap.class.php:184
+msgid "Anonymer Bind fehlgeschlagen."
+msgstr ""
+
+#: lib/classes/auth_plugins/StudipAuthLdap.class.php:91
+#: lib/classes/auth_plugins/StudipAuthLdap.class.php:188
+msgid "Anonymes Durchsuchen des LDAP Baumes fehlgeschlagen."
+msgstr ""
+
+#: lib/classes/auth_plugins/StudipAuthLdap.class.php:95
+#, c-format
+msgid "%s wurde nicht unterhalb von %s gefunden."
+msgstr ""
+
+#: lib/classes/auth_plugins/StudipAuthLdap.class.php:120
+#: lib/classes/auth_plugins/StudipAuthLdapReader.class.php:78
+#, c-format
+msgid "Anmeldung von %s fehlgeschlagen."
+msgstr ""
+
+#: lib/classes/auth_plugins/StudipAuthLdap.class.php:124
+#: lib/classes/auth_plugins/StudipAuthLdapReader.class.php:82
+msgid "Abholen der User Attribute fehlgeschlagen."
+msgstr ""
+
+#: lib/classes/auth_plugins/StudipAuthLdap.class.php:177
+msgid "Kann den Usernamen nicht überprüfen, anonymous_bind ist ausgeschaltet!"
+msgstr ""
+
+#: lib/classes/auth_plugins/StudipAuthLdap.class.php:192
+#: lib/classes/auth_plugins/StudipAuthLdapReader.class.php:91
+#: lib/classes/auth_plugins/StudipAuthStandard.class.php:112
+msgid "Der Username wurde nicht gefunden."
+msgstr ""
+
+#: lib/classes/auth_plugins/StudipAuthLdap.class.php:199
+msgid "<br>LDAP Fehler: "
+msgstr ""
+
+#: lib/classes/auth_plugins/StudipAuthLdapReader.class.php:117
+#: lib/classes/auth_plugins/StudipAuthLdapReader.class.php:126
+#: lib/classes/auth_plugins/StudipAuthStandard.class.php:91
+#: lib/classes/auth_plugins/StudipAuthStandard.class.php:98
+msgid "Das Passwort ist falsch!"
+msgstr ""
+
+#: lib/classes/auth_plugins/StudipAuthLdapReader.class.php:134
+#: lib/classes/auth_plugins/StudipAuthStandard.class.php:104
+msgid "Unbekannter Fehler!"
+msgstr ""
+
+#: lib/classes/auth_plugins/StudipAuthStandard.class.php:75
+msgid "Dieser Username existiert nicht!"
+msgstr ""
+
+#: lib/classes/auth_plugins/StudipAuthStandard.class.php:78
+msgid "Bitte achten Sie auf korrekte Gro&szlig;-Kleinschreibung beim Username!"
+msgstr ""
+
 #: help/index.php:30
 msgid "Stud.IP - Hilfe"
 msgstr ""
@@ -12851,378 +12931,386 @@ msgstr ""
 msgid "Bedienlogik, Ansichten, Postings verfassen"
 msgstr ""
 
-#: help/structure.inc.php:238 help/structure.inc.php:408
+#: help/structure.inc.php:238
+msgid "Neue Funktionen in der 0.9.5"
+msgstr ""
+
+#: help/structure.inc.php:239
+msgid "Erweiterungen zu den Grundfunktionen"
+msgstr ""
+
+#: help/structure.inc.php:242 help/structure.inc.php:412
 msgid "Einstellungen des Forums"
 msgstr ""
 
-#: help/structure.inc.php:239 help/structure.inc.php:409
+#: help/structure.inc.php:243 help/structure.inc.php:413
 msgid "Schonen Sie Ihr Modem"
 msgstr ""
 
-#: help/structure.inc.php:243
+#: help/structure.inc.php:247
 msgid "Was gibt´s Neues?"
 msgstr ""
 
-#: help/structure.inc.php:246
+#: help/structure.inc.php:250
 msgid "Letzte 5 Beiträge"
 msgstr ""
 
-#: help/structure.inc.php:247
+#: help/structure.inc.php:251
 msgid "Was als letztes los war"
 msgstr ""
 
-#: help/structure.inc.php:251
+#: help/structure.inc.php:255
 msgid "Finden eines bestimmten Postings"
 msgstr ""
 
-#: help/structure.inc.php:261
+#: help/structure.inc.php:265
 msgid "In der Veranstaltung: die Dateiverwaltung"
 msgstr ""
 
-#: help/structure.inc.php:262
+#: help/structure.inc.php:266
 msgid "Wie Sie Dateien in das System einstellen und herunterladen"
 msgstr ""
 
-#: help/structure.inc.php:265
+#: help/structure.inc.php:269
 msgid "Dateien herunterladen"
 msgstr ""
 
-#: help/structure.inc.php:266
+#: help/structure.inc.php:270
 msgid "Die Dateiverwaltung und wie Sie Dateien herunterladen"
 msgstr ""
 
-#: help/structure.inc.php:269
+#: help/structure.inc.php:273
 msgid "Dateien einstellen"
 msgstr ""
 
-#: help/structure.inc.php:270
+#: help/structure.inc.php:274
 msgid "Wie Sie neue Dateien ins System einstellen"
 msgstr ""
 
-#: help/structure.inc.php:273
+#: help/structure.inc.php:277
 msgid "Dateien bearbeiten"
 msgstr ""
 
-#: help/structure.inc.php:274
+#: help/structure.inc.php:278
 msgid "Verschieben, löschen oder die Beschreibung ändern"
 msgstr ""
 
-#: help/structure.inc.php:284
+#: help/structure.inc.php:288
 msgid "Der Veranstaltungs-Assistent"
 msgstr ""
 
-#: help/structure.inc.php:285
+#: help/structure.inc.php:289
 msgid "Veranstaltungen anlegen -ganz einfach!"
 msgstr ""
 
-#: help/structure.inc.php:289
+#: help/structure.inc.php:293
 msgid "Name, Beschreibung, Raum u.a."
 msgstr ""
 
-#: help/structure.inc.php:292
+#: help/structure.inc.php:296
 msgid "Personendaten, Typ und Sicherheit"
 msgstr ""
 
-#: help/structure.inc.php:293
+#: help/structure.inc.php:297
 msgid "DozentInnen, TutorInnen und Passwörter"
 msgstr ""
 
-#: help/structure.inc.php:296
+#: help/structure.inc.php:300
 msgid "Termindaten"
 msgstr ""
 
-#: help/structure.inc.php:297
+#: help/structure.inc.php:301
 msgid "Wann finden Sitzungen statt?"
 msgstr ""
 
-#: help/structure.inc.php:301
+#: help/structure.inc.php:305
 msgid "Voraussetzungen, Lernorganisation, Leistungsnachweis, Sonstiges"
 msgstr ""
 
-#: help/structure.inc.php:304
+#: help/structure.inc.php:308
 msgid "Bereit zum Anlegen"
 msgstr ""
 
-#: help/structure.inc.php:305
+#: help/structure.inc.php:309
 msgid "Fast fertig!"
 msgstr ""
 
-#: help/structure.inc.php:308
+#: help/structure.inc.php:312
 msgid "Literatur- und Linkliste"
 msgstr ""
 
-#: help/structure.inc.php:309
+#: help/structure.inc.php:313
 msgid "Bücher und Webquellen anlegen"
 msgstr ""
 
-#: help/structure.inc.php:313
+#: help/structure.inc.php:317
 msgid "Manuell oder automatisch anlegen"
 msgstr ""
 
-#: help/structure.inc.php:319
+#: help/structure.inc.php:323
 msgid "Veranstaltungen verwalten"
 msgstr ""
 
-#: help/structure.inc.php:320
+#: help/structure.inc.php:324
 msgid "Wie Sie Ihre Veranstaltungen anlegen und aktuell halten"
 msgstr ""
 
-#: help/structure.inc.php:323
+#: help/structure.inc.php:327
 msgid "Die Administrierungsseite"
 msgstr ""
 
-#: help/structure.inc.php:324
+#: help/structure.inc.php:328
 msgid "Zugang zur Veranstaltungsverwaltung"
 msgstr ""
 
-#: help/structure.inc.php:328
+#: help/structure.inc.php:332
 msgid "Basisdaten ändern"
 msgstr ""
 
-#: help/structure.inc.php:329
+#: help/structure.inc.php:333
 msgid "Wie Sie die Basisdaten einer Veranstaltung ändern können"
 msgstr ""
 
-#: help/structure.inc.php:332
+#: help/structure.inc.php:336
 msgid "Literatur / Links"
 msgstr ""
 
-#: help/structure.inc.php:333
+#: help/structure.inc.php:337
 msgid "Wie Sie die Literatur und Linklisten Ihrer Veranstaltungen anpassen"
 msgstr ""
 
-#: help/structure.inc.php:336
+#: help/structure.inc.php:340
 msgid "Ablaufplan eingeben / ändern"
 msgstr ""
 
-#: help/structure.inc.php:337
+#: help/structure.inc.php:341
 msgid "Wie Sie den Ablaufplan einer Veranstaltung verwalten können"
 msgstr ""
 
-#: help/structure.inc.php:340
+#: help/structure.inc.php:344
 msgid "Zeiten ändern"
 msgstr ""
 
-#: help/structure.inc.php:341
+#: help/structure.inc.php:345
 msgid "Wie Sie die Veranstaltungszeiten ändern können"
 msgstr ""
 
-#: help/structure.inc.php:344
+#: help/structure.inc.php:348
 msgid "Zugangsberechtigungen ändern"
 msgstr ""
 
-#: help/structure.inc.php:345
+#: help/structure.inc.php:349
 msgid "Wie Sie die Zugangsberechtigungen für Veranstaltungen ändern können"
 msgstr ""
 
-#: help/structure.inc.php:348
+#: help/structure.inc.php:352
 msgid "Themen anlegen"
 msgstr ""
 
-#: help/structure.inc.php:349
+#: help/structure.inc.php:353
 msgid "Wie Sie Debattenthemen für das Forum vorgeben können"
 msgstr ""
 
-#: help/structure.inc.php:352
+#: help/structure.inc.php:356
 msgid "Teilnehmer verwalten"
 msgstr ""
 
-#: help/structure.inc.php:353
+#: help/structure.inc.php:357
 msgid "Wie Sie Teilnehmer verwalten und Tutoren ernennen können"
 msgstr ""
 
-#: help/structure.inc.php:357
+#: help/structure.inc.php:361
 msgid "Wie Sie Teilnehmer mit Funktionen oder Gruppen organisieren"
 msgstr ""
 
-#: help/structure.inc.php:361
+#: help/structure.inc.php:365
 msgid "Dateiordner verwalten"
 msgstr ""
 
-#: help/structure.inc.php:362
+#: help/structure.inc.php:366
 msgid "Wie Sie Dateiordner verwalten können"
 msgstr ""
 
-#: help/structure.inc.php:365
+#: help/structure.inc.php:369
 msgid "News anlegen und verwalten"
 msgstr ""
 
-#: help/structure.inc.php:366
+#: help/structure.inc.php:370
 msgid "Wie Sie die neuesten Neuigkeiten unters Volk bringen"
 msgstr ""
 
-#: help/structure.inc.php:372
+#: help/structure.inc.php:376
 msgid "Terminkalender und Stundenplan"
 msgstr ""
 
-#: help/structure.inc.php:373
+#: help/structure.inc.php:377
 msgid "Ihr Timeplaner im Netz"
 msgstr ""
 
-#: help/structure.inc.php:376
+#: help/structure.inc.php:380
 msgid "Der Stundenplan"
 msgstr ""
 
-#: help/structure.inc.php:377
+#: help/structure.inc.php:381
 msgid "Praktisch und einfach"
 msgstr ""
 
-#: help/structure.inc.php:380
+#: help/structure.inc.php:384
 msgid "Der Terminkalender"
 msgstr ""
 
-#: help/structure.inc.php:381
+#: help/structure.inc.php:385
 msgid "Bedienung und Ansichten"
 msgstr ""
 
-#: help/structure.inc.php:385
+#: help/structure.inc.php:389
 msgid "Anlegen und Ändern von Terminen"
 msgstr ""
 
-#: help/structure.inc.php:388
+#: help/structure.inc.php:392
 msgid "Termine einbinden"
 msgstr ""
 
-#: help/structure.inc.php:389
+#: help/structure.inc.php:393
 msgid "Veranstaltungstermine im Terminkalender anzeigen"
 msgstr ""
 
-#: help/structure.inc.php:393
+#: help/structure.inc.php:397
 msgid "Optionen des Terminkalenders"
 msgstr ""
 
-#: help/structure.inc.php:400
+#: help/structure.inc.php:404
 msgid "MyStud.IP"
 msgstr ""
 
-#: help/structure.inc.php:401
+#: help/structure.inc.php:405
 msgid "Stud.IP anpassen"
 msgstr ""
 
-#: help/structure.inc.php:405
+#: help/structure.inc.php:409
 msgid "Wenn es bequem sein soll"
 msgstr ""
 
-#: help/structure.inc.php:412
+#: help/structure.inc.php:416
 msgid "Einstellungen des Terminkalenders"
 msgstr ""
 
-#: help/structure.inc.php:413
+#: help/structure.inc.php:417
 msgid "Die Zeit läuft -aber wie schnell?"
 msgstr ""
 
-#: help/structure.inc.php:416
+#: help/structure.inc.php:420
 msgid "Einstellungen des Stundenplans"
 msgstr ""
 
-#: help/structure.inc.php:417
+#: help/structure.inc.php:421
 msgid "Haben Sie heute frei?"
 msgstr ""
 
-#: help/structure.inc.php:420
+#: help/structure.inc.php:424
 msgid "Einstellungen des Messaging"
 msgstr ""
 
-#: help/structure.inc.php:421
+#: help/structure.inc.php:425
 msgid "So bleiben Sie in Kontakt"
 msgstr ""
 
-#: help/structure.inc.php:428
+#: help/structure.inc.php:432
 msgid "Was möchten Sie finden?"
 msgstr ""
 
-#: help/structure.inc.php:431
+#: help/structure.inc.php:435
 msgid "Die Suchauswahl"
 msgstr ""
 
-#: help/structure.inc.php:432
+#: help/structure.inc.php:436
 msgid "Was genau suchen Sie?"
 msgstr ""
 
-#: help/structure.inc.php:436
+#: help/structure.inc.php:440
 msgid "DozentInnen und KommilitonInnen"
 msgstr ""
 
-#: help/structure.inc.php:440
+#: help/structure.inc.php:444
 msgid "Veranstaltungen des aktuellen und kommenden Semesters"
 msgstr ""
 
-#: help/structure.inc.php:444
+#: help/structure.inc.php:448
 msgid "Veranstaltungen vergangener Semester"
 msgstr ""
 
-#: help/structure.inc.php:450
+#: help/structure.inc.php:454
 msgid "Verschiedenes"
 msgstr ""
 
-#: help/structure.inc.php:451
+#: help/structure.inc.php:455
 msgid "Textformatierungen, FAQ u.a."
 msgstr ""
 
-#: help/structure.inc.php:454
+#: help/structure.inc.php:458
 msgid "Formatierungen von Text"
 msgstr ""
 
-#: help/structure.inc.php:455
+#: help/structure.inc.php:459
 msgid "Fett, kursiv, Aufzählungen und mehr"
 msgstr ""
 
-#: help/structure.inc.php:458
+#: help/structure.inc.php:462
 msgid "Smilies"
 msgstr ""
 
-#: help/structure.inc.php:459
+#: help/structure.inc.php:463
 msgid "Zeigen Sie Gefühl"
 msgstr ""
 
-#: help/structure.inc.php:462
+#: help/structure.inc.php:466
 msgid "Score-Liste"
 msgstr ""
 
-#: help/structure.inc.php:463
+#: help/structure.inc.php:467
 msgid "Die Stud.IP-Rangliste"
 msgstr ""
 
-#: help/structure.inc.php:466
+#: help/structure.inc.php:470
 msgid "Glossar"
 msgstr ""
 
-#: help/structure.inc.php:467
+#: help/structure.inc.php:471
 msgid "Kurze Erklärungen"
 msgstr ""
 
-#: help/structure.inc.php:470
+#: help/structure.inc.php:474
 msgid "FAQ"
 msgstr ""
 
-#: help/structure.inc.php:471
+#: help/structure.inc.php:475
 msgid "Oft gestellte Fragen"
 msgstr ""
 
-#: help/structure.inc.php:481
+#: help/structure.inc.php:485
 msgid "Verwaltung unterschiedlicher Ressourcen in Stud.IP"
 msgstr ""
 
-#: help/structure.inc.php:484
+#: help/structure.inc.php:488
 msgid "Einführung"
 msgstr ""
 
-#: help/structure.inc.php:485
+#: help/structure.inc.php:489
 msgid "Was fange ich mit der Ressourcenverwaltung an?"
 msgstr ""
 
-#: help/structure.inc.php:494
+#: help/structure.inc.php:498
 msgid "ILIAS Lernmodule in Stud.IP"
 msgstr ""
 
-#: help/structure.inc.php:495
+#: help/structure.inc.php:499
 msgid "Einrichten und Nutzen von Lernmodulen aus ILIAS Open Source"
 msgstr ""
 
-#: help/structure.inc.php:498
+#: help/structure.inc.php:502
 msgid "Was ist ILIAS"
 msgstr ""
 
-#: help/structure.inc.php:499
+#: help/structure.inc.php:503
 msgid "Was ist ILIAS und was sind ILIAS Lernmodule"
 msgstr ""
