@@ -52,7 +52,7 @@ if ($GLOBALS['CHAT_ENABLE']){
 }
 
 function print_chat_info($chatids){
-	global $chatServer,$auth,$_REQUEST,$sms,$chat_online_id;
+	global $chatServer,$auth,$_REQUEST,$sms,$chat_online_id,$PHP_SELF;
 	for ($i = 0; $i < count($chatids); ++$i){
 		$chat_id = $chatids[$i];
 		if ($chatServer->isActiveUser($_REQUEST['search_user'],$chat_id)){
