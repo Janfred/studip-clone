@@ -35,6 +35,7 @@ activate or deactivate some basic system-functions here*/
 $LATEXRENDER_ENABLE = TRUE;								//enable to use the LaTexrenderer (Please note the further LaTeX template-settings below)
 $WIKI_ENABLE = TRUE;									//enable WikiWiki-Webs
 $SCM_ENABLE = TRUE;									//enable Simple-Content functionality
+$SEMINAR_LOCK_ENABLE = FALSE;								//enable the locking-system for seminars
 
 
 /*Stud.IP modules
@@ -114,8 +115,10 @@ $FAVICON = "http://www.studip.de/favicon.ico";
 ----------------------------------------------------------------
 leave blank if localhost is also the mailserver*/
 
-$MAIL_LOCALHOST = "";	// name of the mail sending machine (the web server) defaults to SERVER_NAME
-$MAIL_HOST_NAME = "";	// which mailserver should we use? (must allow mail-relaying from $MAIL_LOCALHOST, defaults to SERVER_NAME)
+$MAIL_LOCALHOST = "";		// name of the mail sending machine (the web server) defaults to SERVER_NAME
+$MAIL_HOST_NAME = "";		// which mailserver should we use? (must allow mail-relaying from $MAIL_LOCALHOST, defaults to SERVER_NAME)
+
+$ALLOW_SEND_AS_EMAIL = FALSE;	// enable to forward every internal message to the user-mail (the user is able to deactivate this function in his personal settings)
 
 
 /*advanced system settings
