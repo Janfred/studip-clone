@@ -307,8 +307,7 @@ class messaging {
 
 				// system-signatur
 				$snd_user_id = "____%system%____";		
-				// hier problem!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! weil rec_userid noch unklar
-				setTempLanguage($rec_userid);
+				setTempLanguage();
 				$message .= $this->sig_string. _("Diese Nachricht wurde automatisch vom Stud.IP-System generiert. Sie können darauf nicht antworten.");
 				restoreLanguage();
 
