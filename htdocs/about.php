@@ -39,7 +39,7 @@ require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/DbSnapshot.class.php");
 require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/DataFields.class.php");
 require_once("$ABSOLUTE_PATH_STUDIP/guestbook.class.php");
 require_once("$ABSOLUTE_PATH_STUDIP/object.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/score.class.php");
+require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/score.class.php");
 require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'] . "/lib/classes/StudipLitList.class.php");
 
 

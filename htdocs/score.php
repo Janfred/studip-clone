@@ -11,7 +11,7 @@ include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 
 require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
 require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/score.class.php");
+require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/score.class.php");
 require_once("$ABSOLUTE_PATH_STUDIP/object.inc.php");
 ?>
 <table width="100%" border=0 cellpadding=0 cellspacing=0>
