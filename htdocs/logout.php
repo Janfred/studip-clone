@@ -23,13 +23,15 @@ ob_start();
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 
-require_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/ChatServer.class.php";
-
+require_once ("$ABSOLUTE_PATH_STUDIP/messaging.inc.php");
+if ($GLOBALS['CHAT_ENABLE']){
+	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/ChatServer.class.php"; //wird für Nachrichten im chat benötigt
+}
 if ($auth->auth["uid"]!="nobody") {   //nur wenn wir angemeldet sind sollten wir dies tun!
 
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
-
+	$sms = new messaging();
 	//User aus allen Chatraeumen entfernen
 	if ($CHAT_ENABLE) {
 		$chatServer =& ChatServer::GetInstance($CHAT_SERVER_NAME);
@@ -38,10 +40,7 @@ if ($auth->auth["uid"]!="nobody") {   //nur wenn wir angemeldet sind sollten wir
 	
 	//Wenn Option dafuer gewaehlt, vorliegende SMS loeschen
 	if ($my_messaging_settings["delete_messages_after_logout"]) {
-		$db->query ("SELECT username FROM auth_user_md5 WHERE user_id = '".$user->id."' ");
-		$db->next_record();
-
-		$db2->query("DELETE FROM globalmessages WHERE user_id_rec = '".$db->f("username")."' AND mkdate <'".$my_messaging_settings["last_visit"]."' ");
+		$sms->delete_all_sms($user->id,$my_messaging_settings["last_visit"]);
 	}
  
 	$logout_user=$user->id;
