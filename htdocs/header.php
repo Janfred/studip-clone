@@ -161,11 +161,10 @@ if ($auth->auth["uid"] == "nobody") { ?>
 			$tip = _("Sie haben eine neue Nachricht!");
 		}
 	} else {
-		$icon = "pictures/blank.gif";
-		$tip = "";
-		$text = "";
+		$noicon="TRUE";
 	}
-		echo MakeToolbar($icon,"sms.php",$text,$tip,40, "_top");
+		if (!$noicon) 
+			echo MakeToolbar($icon,"sms.php",$text,$tip,40, "_top");
 		
 		
 		if (!($perm->have_perm("admin") || $perm->have_perm("root"))) {
