@@ -114,7 +114,7 @@ function GetSizeofBook()
 	if ($db->next_record()) {
 		$size = $db->num_rows();
 	} else {
-		$size="keine";
+		$size=_("keine");
 	}
 	return $size;
 }
@@ -194,17 +194,25 @@ function GetUserInfo($user_id)
 		if ($db->f("privadr")!="")
 			$userinfo["Addresse"] = $db->f("privadr");
 	}
+	return $userinfo;
+}
+
+function GetinstInfo($user_id)
+{
+	$db=new DB_Seminar;
+	$i = 0;
 	$db->query ("SELECT sprechzeiten, raum, user_inst.telefon, user_inst.fax, Name, Institute.Institut_id FROM user_inst LEFT JOIN Institute USING(Institut_id) WHERE user_id = '$user_id' AND inst_perms != 'user'");	
 	while ($db->next_record()) {	
-		$userinfo["Einrichtung"] = "<a href=\"institut_main.php?auswahl=".$db->f("Institut_id")."\">".htmlReady($db->f("Name"))."</a>";
+		$userinfo[$i]["Einrichtung"] = "<a href=\"institut_main.php?auswahl=".$db->f("Institut_id")."\">".htmlReady($db->f("Name"))."</a>";
 		if ($db->f("raum")!="")
-			$userinfo["Raum"] = FormatReady($db->f("raum"));
+			$userinfo[$i]["Raum"] = FormatReady($db->f("raum"));
 		if ($db->f("sprechzeiten")!="")
-			$userinfo["Sprechzeiten"] = FormatReady($db->f("sprechzeiten"));
+			$userinfo[$i]["Sprechzeiten"] = FormatReady($db->f("sprechzeiten"));
 		if ($db->f("telefon")!="")
-			$userinfo["Dienst Tel."] =FormatReady($db->f("telefon"));			
+			$userinfo[$i]["Dienst Tel."] =FormatReady($db->f("telefon"));			
 		if ($db->f("fax")!="")
-			$userinfo["Dienst Fax"] = FormatReady($db->f("fax"));
+			$userinfo[$i]["Dienst Fax"] = FormatReady($db->f("fax"));
+		$i++;
 	}
 	return $userinfo;
 }
@@ -241,13 +249,20 @@ function ShowUserInfo ($contact_id)
 			}
 		}
 
+		$userinstinfo = GetInstInfo($user_id);
+		if (sizeof($userinstinfo)>0) {
+			while(list($key,$value) = each($userinfo)) {
+				$output .= "<tr><td class=\"steel1\" width=\"100\"><font size=\"2\">".$key.":</font></td><td class=\"steel1\" width=\"250\"><font size=\"2\">".$value."</font></td></tr>";
+			}
+		}
+
 		$extra = GetExtraUserinfo ($contact_id);
 		if (sizeof($extra)>0) {
 			while(list($key,$value) = each($extra)) {
 				$output .= "<tr><td class=\"steel1\" width=\"100\"><font size=\"2\">".htmlReady($key).":</font></td><td class=\"steel1\" width=\"250\"><font size=\"2\">".formatReady($value)."</font></td></tr>";
 			}
 		}
-
+		
 		if(file_exists("./user/".$user_id.".jpg")) {
 			$output.="<tr><td align=\"center\" class=\"steel1\" colspan=\"2\" width=\"350\"><br><img src=\"./user/".$user_id.".jpg\" border=1></td>";
 		}
@@ -297,14 +312,14 @@ function ShowContact ($contact_id)
 
 				$hoverlink = "<a href=\"$PHP_SELF?filter=$filter&open=".$contact_id."#anker\" ";
 				$name = "huhu";
-				$txt = "<hr>Klicken zum Bearbeiten";
+				$txt = "<hr>"._("Klicken zum Bearbeiten");
 				$bild = "pictures/forumgraurunt.gif";
 				if ($description == "")
-					$description = "<br>Keine eingegeben<br>";
+					$description = "<br>"._("Keine eingegeben")."<br>";
 				$link =	$hoverlink
 						."onMouseOver=\"return overlib('"
 						.JSReady($description,"contact").$txt
-						."', CAPTION, '&nbsp; &nbsp; &nbsp; Weitere Informationen:', NOCLOSE, CSSOFF)\" "
+						."', CAPTION, '&nbsp; &nbsp; &nbsp; "._("Weitere Informationen:").', NOCLOSE, CSSOFF)\" "
 						." onMouseOut=\"nd();\"><img src=\"".$bild."\" border=0></a>";
 			} else {
 				$link = "<a href=\"$PHP_SELF?filter=$filter&open=".$contact_id."#anker\"><img src=\"pictures/forumgraurunt.gif\" border=\"0\"></a>";
@@ -393,7 +408,7 @@ function ShowEditContact ($contact_id)
 		$output .= "<tr><td class=\"steel1\" colspan=\"3\">&nbsp; </td></tr>".$lastrow
 				."</table>";
 	} else {
-		$output = "Fehler!";
+		$output = _("Fehler!");
 	}
 	return $output;
 }
@@ -454,7 +469,7 @@ function DeleteContact ($contact_id)
 	$db->query ("SELECT owner_id, user_id FROM contact WHERE contact_id = '$contact_id'");	
 	if ($db->next_record()) {
 		if ($db->f("owner_id")!=$user->id) {
-			$ouput = "Sie haben kein Zugriffsrecht auf diesen Kontakt!";	
+			$ouput = _("Sie haben kein Zugriffsrecht auf diesen Kontakt!");	
 		} else {
 			$user_id = $db->f("user_id");
 			$owner_id = $db->f("owner_id");
@@ -465,7 +480,7 @@ function DeleteContact ($contact_id)
 				$statusgruppe_id = $db2->f("statusgruppe_id");
 				$db3->query ("DELETE FROM statusgruppe_user WHERE statusgruppe_id = '$statusgruppe_id' AND user_id = '$user_id'");	
 			}
-			$output = "Kontakt gel&ouml;scht";
+			$output = _("Kontakt gelöscht");
 		}
 	}
 	return $output;
