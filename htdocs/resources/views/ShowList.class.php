@@ -37,6 +37,8 @@ require_once ($RELATIVE_PATH_RESOURCES."/views/ShowTreeRow.class.php");
 require_once ($RELATIVE_PATH_RESOURCES."/lib/ResourceObject.class.php");
 require_once ($RELATIVE_PATH_RESOURCES."/lib/ResourceObjectPerms.class.php");
 require_once ($RELATIVE_PATH_RESOURCES."/lib/ResourcesUserRoomsList.class.php");
+require_once ($RELATIVE_PATH_RESOURCES."/lib/CheckMultipleOverlaps.class.php");
+require_once ($RELATIVE_PATH_RESOURCES."/lib/AssignObject.class.php");
 
 /*****************************************************************************
 ShowList, stellt Liste mit Hilfe von printThread dar
@@ -252,7 +254,7 @@ class ShowList extends ShowTreeRow{
 	return $result_count;		
 	}
 	
-	function showSearchList($search_array) {
+	function showSearchList($search_array, $check_assigns = FALSE) {
 		$db=new DB_Seminar;	
 
 		//create the query
@@ -298,11 +300,41 @@ class ShowList extends ShowTreeRow{
 		//if we have an empty result
 		if ((!$db->num_rows()) && ($level==0))
 			return FALSE;
+			
 
 		while ($db->next_record()) {
-			$this->showListObject($db->f("resource_id"));
-			$result_count++;
+			$found_resources[$db->f("resource_id")] = TRUE;
 		}
+		
+		//do further checks to determine free resources inthe given time range
+		if ($search_array["search_assign_begin"] && $check_assigns) {
+			$multiOverlaps = new CheckMultipleOverlaps;
+			$multiOverlaps->setTimeRange($search_array["search_assign_begin"], $search_array["search_assign_end"]);
+			$assEvt = new AssignEvent('', $search_array["search_assign_begin"], $search_array["search_assign_end"], '', '');
+			$event[$assEvt->getId()] = $assEvt;
+			
+			//add the found resources to the check-set
+			foreach ($found_resources as $key=>$val) {
+				$multiOverlaps->addResource($key);			
+			}
+			
+			$multiOverlaps->checkOverlap($event, $result);
+			
+			//output
+			foreach ($found_resources as $key=>$val) {
+				if (!$result[$key]) {
+					$this->showListObject($key);
+					$result_count++;
+				}
+			}
+		} else {
+			//output
+			foreach ($found_resources as $key=>$val) {
+				$this->showListObject($key);
+				$result_count++;
+			}
+		}
+		
 	return $result_count;
 	}
 }

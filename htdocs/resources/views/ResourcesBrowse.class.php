@@ -75,6 +75,10 @@ class ResourcesBrowse {
 		if (!$this->mode)
 			$this->mode="browse";
 	}
+	
+	function setCheckAssigns($value) {
+		$this->check_assigns=$value;
+	}
 
 	function setSearchArray($array) {
 		$this->searchArray=$array;
@@ -139,6 +143,34 @@ class ResourcesBrowse {
 					$result.= sprintf (" > %s", htmlReady($result_arr[$i]["name"]));
 			}
 		return $result;
+	}
+	
+	//private
+	function showTimeRange() {
+		?>	
+		<tr>
+			<td <? $this->cssSw->switchClass(); echo $this->cssSw->getFullClass() ?> >
+				<font size="-1"><?=_("gefundene Ressourcen sollen zu folgender Zeit <u>nicht</u> belegt sein:")?></font>
+			<br />
+			</td>
+		</tr>
+		<tr>	
+			<td <? $this->cssSw->switchClass(); echo $this->cssSw->getFullClass() ?> >
+			<font size="-1">
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<?=_("Datum")?>:
+					<input type="TEXT" style="{font-size:8pt;}" name="search_day" size="2" maxlength="2" value="<?=($this->searchArray["search_assign_begin"]) ? date("d", $this->searchArray["search_assign_begin"]) : _("tt")?>" />
+					.<input type="TEXT" style="{font-size:8pt;}" name="search_month" size="2" maxlength="2" value="<?=($this->searchArray["search_assign_begin"]) ? date("m", $this->searchArray["search_assign_begin"]) : _("mm")?>" />
+					.<input type="TEXT" style="{font-size:8pt;}" name="search_year" size="4" maxlength="4" value="<?=($this->searchArray["search_assign_begin"]) ? date("Y", $this->searchArray["search_assign_begin"]) : _("jjjj")?>" />
+				&nbsp;&nbsp;<?=_("Beginn")?>:
+					&nbsp;<input type="TEXT" style="{font-size:8pt;}" name="search_begin_hour" size="2" maxlength="2" value="<?=($this->searchArray["search_assign_begin"]) ? date("H", $this->searchArray["search_assign_begin"]) : _("ss")?>" />
+					<input type="TEXT" style="{font-size:8pt;}" name="search_begin_minute" size="2" maxlength="2" value="<?=($this->searchArray["search_assign_begin"]) ? date("i", $this->searchArray["search_assign_begin"]) : _("mm")?>" />&nbsp;<?=_("Uhr")?>
+				&nbsp;&nbsp;<?=_("Ende")?>:
+					&nbsp;<input type="TEXT" style="{font-size:8pt;}" name="search_end_hour" size="2" maxlength="2" value="<?=($this->searchArray["search_assign_end"]) ? date("H", $this->searchArray["search_assign_end"]) : _("ss")?>" />
+					<input type="TEXT" style="{font-size:8pt;}" name="search_end_minute" size="2" maxlength="2" value="<?=($this->searchArray["search_assign_end"]) ? date("i", $this->searchArray["search_assign_end"]) : _("mm")?>" />&nbsp;<?=_("Uhr")?>
+			</font>
+		</tr>
+		<?
 	}
 	
 	//private
@@ -322,11 +354,11 @@ class ResourcesBrowse {
 }
 	
 	//private
-	function showSearchList() {
+	function showSearchList($check_assigns = FALSE) {
 		?>
 		<tr>
 			<td <? echo ($this->mode == "browse") ? " colspan=\"2\"" : "" ?>>
-				<?$result_count=$this->list->showSearchList($this->searchArray);
+				<?$result_count=$this->list->showSearchList($this->searchArray, $check_assigns);
 		if (!$result_count) {
 			?>
 				<font size=-1><b><?=_("Es wurden keine Eintr&auml;ge zu Ihren Suchkriterien gefunden.")?></b></font>
@@ -338,7 +370,7 @@ class ResourcesBrowse {
 	
 	//private
 	function showSearch() {
-		global $view_mode;
+		global $view_mode, $resources_data;
 		?>
 			<table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
 				<form method="POST" action="<?echo $PHP_SELF ?>?search_send=yes&quick_view=search&quick_view_mode=<?=$view_mode?>">
@@ -347,12 +379,16 @@ class ResourcesBrowse {
 				if (!$this->searchArray) {
 					/*if ($this->mode == "browse")
 						$this->browseLevels();*/
+					if ($this->check_assigns)
+						$this->showTimeRange();
 					if ($this->mode == "properties")
 						$this->showProperties();
 					/*if ($this->mode == "browse")
 						$this->showList();*/
 				} else {
-					$this->showSearchList();
+					if ($this->check_assigns)
+						$this->showTimeRange();
+					$this->showSearchList(($resources_data["check_assigns"]) ? TRUE : FALSE);
 				}
 				?>
 				</form>

@@ -393,6 +393,7 @@ if ($view == "search") {
 	$search=new ResourcesBrowse;
 	$search->setStartLevel('');
 	$search->setMode($resources_data["search_mode"]);
+	$search->setCheckAssigns($resources_data["check_assigns"]);
 	$search->setSearchArray($resources_data["search_array"]);
 	
 	if ($resources_data["browse_open_level"])

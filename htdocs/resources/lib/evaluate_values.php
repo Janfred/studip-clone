@@ -999,9 +999,15 @@ if ($view == "search") {
 
 	if ($mode == "properties")
 		$resources_data["search_mode"]="properties";
-	
+
 	if ($mode == "browse")
 		$resources_data["search_mode"]="browse";
+		
+	if ($check_assigns == "TRUE")
+		$resources_data["check_assigns"]=TRUE;
+		
+	if ($check_assigns == "FALSE")
+		$resources_data["check_assigns"]=FALSE;
 	
 	if ((isset($start_search_x)) || ($search_send)) {
 		unset($resources_data["search_array"]);
@@ -1010,6 +1016,14 @@ if ($view == "search") {
 			foreach ($search_property_val as $key=>$val) {
 				if ((substr($val, 0, 4) == "_id_") && (substr($search_property_val[$key+1], 0, 4) != "_id_") && ($search_property_val[$key+1]))
 					$resources_data["search_array"]["properties"][substr($val, 4, strlen($val))]=$search_property_val[$key+1];
+		}
+		
+		//handle dates for searching resources that are free for this times
+		check_and_set_date ($search_day, $search_month, $search_year, $search_begin_hour, $search_begin_minute, $resources_data["search_array"], "search_assign_begin");
+		check_and_set_date ($search_day, $search_month, $search_year, $search_end_hour, $search_end_minute, $resources_data["search_array"], "search_assign_end");
+		if (($resources_data["search_array"]["search_assign_begin"] == -1) || ($resources_data["search_array"]["search_assign_end"] == -1)) {
+			$resources_data["search_array"]["search_assign_begin"] = 0;
+			$resources_data["search_array"]["search_assign_end"] = 0;
 		}
 	}
 	
