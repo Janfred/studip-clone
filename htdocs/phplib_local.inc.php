@@ -397,9 +397,15 @@ class Seminar_Register_Auth extends Seminar_Auth {
 	}
 	
 	function auth_doregister() {
-		global $username, $password, $challenge, $response, $Vorname, $Nachname, $geschlecht, $Email,$title_front,$title_front_chooser,$title_rear,$title_rear_chooser,$ABSOLUTE_PATH_STUDIP, $CANONICAL_RELATIVE_PATH_STUDIP, $UNI_NAME_CLEAN;
+		global $username, $password, $challenge, $response, $Vorname, $Nachname, $geschlecht, $Email,$title_front,$title_front_chooser,$title_rear,$title_rear_chooser,$ABSOLUTE_PATH_STUDIP, $CANONICAL_RELATIVE_PATH_STUDIP, $UNI_NAME_CLEAN, $DEFAULT_LANGUAGE;
 		
 		global $_language, $_language_path;
+		
+		// check for direct link to register2.php 
+		if (!isset($_language) || $_language == "") {
+			$_language = $DEFAULT_LANGUAGE;
+		}		
+		
 		$_language_path = init_i18n($_language);
 		
 		$this->auth["uname"]=$username;					// This provides access for "crcregister.ihtml"
