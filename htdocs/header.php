@@ -85,7 +85,7 @@ if (isset($i_query[0]) && $i_query[0] != "") {
 		$chatm=false;
 		while ($db->next_record())
 		{
-			if (ereg(("chat_with_me"), $db->f("message")))  {
+			if (preg_match("/chat_with_me/i", $db->f("message")))  {
 				if ($online[$db->f("user_id_snd")]) {
 				    $chatm=true;
 					}
