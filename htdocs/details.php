@@ -65,12 +65,12 @@ if (($sem_id) && (!$perm->have_perm("admin"))) {
 	if ($perm->have_perm("user")) { //Add lecture only if logged in	
 		$db->query("SELECT status FROM seminar_user WHERE user_id ='$user->id' AND Seminar_id = '$sem_id'");
 		if (!$db->num_rows()) {
-			$abo_msg="Tragen Sie sich hier ein</a></b></font>";
+			$abo_msg="Tragen Sie sich hier ein";
 			}
 	 else {
 		    $db->next_record();
 		    if ($db->f("status") == "user") {
-			$back_msg="Zur&uuml;ck zur letzten Auswahlinfo§<font size=+1><b>Wenn sie Schreibrechte in diese Veranstaltung beantragen m&ouml;chten, klicken sie bitte <a href=\"sem_verify.php?id=".$sem_id."&send_from_search=".$send_from_search."\">hier</a></b></font>§";
+			$abo_msg="Schrebrechte aktivieren";
 	    		}
 		}
 	}
@@ -130,15 +130,14 @@ elseif (($SessSemName[1] <>"") && (!isset($sem_id)))
 						<td width="100%" colspan=2>
 							<font size=-1><b><? print "Pers&ouml;nlicher Status" ?>:</b></font>
 							<?
-				
-				// Meinen Status ermitteln
-				$user_id = $auth->auth["uid"];
-				$db3->query("SELECT status FROM seminar_user WHERE Seminar_id = '$sem_id' AND user_id = '$user_id'");
-				if ($db3->next_record() ){
-					$mein_status = $db3->f("status");
-				} else {
-					unset ($mein_status);
-				}
+							// Meinen Status ermitteln
+							$user_id = $auth->auth["uid"];
+							$db3->query("SELECT status FROM seminar_user WHERE Seminar_id = '$sem_id' AND user_id = '$user_id'");
+							if ($db3->next_record() ){
+							$mein_status = $db3->f("status");
+							} else {
+								unset ($mein_status);
+							}
 							?>
 						</td>
 					</tr>
@@ -148,8 +147,13 @@ elseif (($SessSemName[1] <>"") && (!isset($sem_id)))
 						</td>
 						<td width="99%">
 						<?
-
-						printf ("<font size=-1 %s>%s</font>", (!$mein_status) ? " color=\"red\"" : "", ($mein_status) ? "Sie sind als Teilnehmer der Veranstaltung eingetragen" : "Sie sind nicht als Teilnehmer der Veranstaltung eingetragen.");
+						if ($mein_status)
+							$tmp_text="Sie sind als Teilnehmer der Veranstaltung eingetrage";
+						elseif (!$perm->have_perm("admin"))
+							$tmp_text="Sie sind nicht als Teilnehmer der Veranstaltung eingetragen.";
+						else
+							$tmp_text="Sie sind Administrator und k&ouml;nnen die Veranstaltung nicht abonnieren.";
+						printf ("<font size=-1 %s>%s</font>", (!$mein_status) ? " color=\"red\"" : "",$tmp_text);
 						?>
 						</td>
 					</tr>
