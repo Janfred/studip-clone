@@ -24,19 +24,18 @@ require_once ("$ABSOLUTE_PATH_STUDIP/datei.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/language.inc.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/DataFields.class.php");
 
 
 // Liefert den dump des Seminars
-
-
-function dump_sem($sem_id)  
-{
+function dump_sem($sem_id) {
 	global $TERMIN_TYP, $SEM_TYPE, $SEM_CLASS,$_fullname_sql,$AUTO_INSERT_SEM;
 	
-
 	$dump = "";
 	$db2=new DB_Seminar;
 	$db3=new DB_Seminar;
+	$DataFields = new DataFields($sem_id);
+
 	$db2->query ("SELECT * FROM seminare WHERE Seminar_id='$sem_id'");
 	$db2->next_record();
 
@@ -139,6 +138,17 @@ function dump_sem($sem_id)
 		$dump.="<tr><td width=\"15%\"><b>" . _("Leistungsnachweis:") . "&nbsp;</b></td><td align=left>";
 		$dump.= htmlReady($db2->f("leistungsnachweis"),1,1)."</td></tr>\n";
 		}
+	
+	//add the free adminstrable datafields
+	$localFields = $DataFields->getLocalFields();
+	
+	foreach ($localFields as $val) {
+		if ($val["content"]) {
+			$dump.="<tr><td width=\"15%\"><b>" . htmlReady($val["name"]) . ":&nbsp;</b></td><td align=left>";
+			$dump.= htmlReady($val["content"],1,1)."</td></tr>\n";
+		}
+	}
+	
 	if ($db2->f("Sonstiges")!="")
 		{
 		$dump.="<tr><td width=\"15%\"><b>" . _("Sonstiges:") . "&nbsp;</b></td><td align=left>";
