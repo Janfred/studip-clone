@@ -272,10 +272,10 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("roo
 						&nbsp;
 					</td>
 				</tr>
-			</table
+			</table>
 		</td>
 	</tr>
-	<tr>
+</td></tr></table></body></html>
 <?	
 
 }
