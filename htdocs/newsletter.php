@@ -25,7 +25,7 @@ include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Sessio
 
 // -- here you have to put initialisations for the current page
 
-	$magic     = "ddvedvgngda";  ## Challenge seed
+$magic     = "ddvedvgngda";  ## Challenge seed
 
 // Start of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
@@ -38,56 +38,64 @@ require_once ("$ABSOLUTE_PATH_STUDIP/newsletter.inc.php");
 
 ?>
 <br>
-
-<table width="100%" border=0 cellpadding=0 cellspacing=0>
-<tr><td class="blank" colspan=2 width=100%">&nbsp;</td></tr>
-<tr>
-	<td class="topic" colspan=2><b>&nbsp;Best&auml;tigung der Email-Adresse</b></td>
-</tr>
-<tr><td class="blank" colspan=2 width="100%">&nbsp;</td></tr>
-
+<table class="blank" width="70%" border=0 cellpadding=0 cellspacing=0 align="center">
+	<tr>
+		<td class="topic" colspan="2"><img src="pictures/nachricht1.gif" border="0" align="texttop"><b>&nbsp;Newsletter Verwaltung</b>
+		</td>
+	</tr>
+	<tr>
+		<td>
 <?
-
-//	So, wer bis hier hin gekommen ist gehoert zur Zielgruppe...
-
-	if (!isset($secret) || $secret == "" || !isset($username) || $username== "" || !isset($newsletter_id)) {   // Volltrottel (oder abuse)
-		my_error("<b>Sie m&uuml;ssen den vollst&auml;ndigen Link aus der Best&auml;tigungsmail<br>\nin die Zeile \"Location\" oder \"URL\" Ihres Browsers kopieren.</b>\n");
-		print "<tr><td class=\"blank\" colspan=2 width=\"100%\"><b>&nbsp;Versuchen Sie es noch einmal!</b><br><br>\n";
-		print "</td></tr></table>";
-		page_close();
-		die;
-	}
-
 	$hash = md5("$username:$magic");
 	// hier wird noch mal berechnet, welches secret in der Bestaetigungsmail uebergeben wurde
 
-	if ($secret != $hash) {   // abuse (oder Volltrottel)
+	if (!isset($secret) || $secret == "" || !isset($username) || $username== "" || !isset($newsletter_id)) {   // Volltrottel (oder abuse)
+		echo "<table class=\"blank\">";
+		my_error("<b>Sie m&uuml;ssen den vollst&auml;ndigen Link aus aus einem der Newsletter<br>\nin die Zeile \"Adresse\", \"Location\" oder \"URL\" Ihres Browsers kopieren.</b>\n");
+		print "<tr><td class=\"blank\" colspan=2><b>&nbsp;Versuchen Sie es noch einmal!</b><br><br>\n";
+		echo "</td></tr></table>";
+	} elseif ($secret != $hash) {   // wahrscheinlich URL-Hacking oder unvollstaendige URL
+		echo "<table class=\"blank\">";
 		my_error("<b>Der &uuml;bergebene \"Secret-Code\" ist nicht korrekt.</b>\n");
-		my_info("Sie m&uuml;ssen unter dem Benutzernamen eingeloggt sein,<br>\nf&uuml;r den Sie die Best&auml;tigungsmail erhalten haben.\n");
-		my_info("Und Sie m&uuml;ssen den vollst&auml;ndigen Link aus der Best&auml;tigungsmail<br>\nin die Zeile \"Location\" oder \"URL\" Ihres Browsers kopieren.\n");
+		my_info("Sie m&uuml;ssen den vollst&auml;ndigen Link aus einem der Newsletter<br>\nin die Zeile \"Adresse\", \"Location\" oder \"URL\" Ihres Browsers kopieren.\n");
 		print "<tr><td class=\"blank\" colspan=2 width=\"100%\"><b>&nbsp;Versuchen Sie es noch einmal!</b><br><br>\n";
-		print "</td></tr></table>";
-    // Mail an abuse
-		die;
+		echo "</td></tr></table>";
+	} else { // stimmt alles
+
+		echo "<table class=\"blank\">";
+
+		// haben wir ein Kommando?
+	
+		if ($cmd =="add") {  // soll rein
+			$msg = AddPersonNewsletter ($username, $newsletter_id);
+		} elseif ($cmd == "remove") {
+			$msg = RemovePersonNewsletter ($username, $newsletter_id);
+		}
+	
+		// Ausgabe Info
+		if ($msg) parse_msg($msg);
+		$status = CheckStatusPersonNewsletter ($username, $newsletter_id);
+		echo "	<tr>";
+		echo "		<td class=\"blank\">";
+		printf ("Ihr aktueller Status im Newsletter \"%s\":<br><br><b>%s</b><br><br>",$newsletter[$newsletter_id]["name"], $status);
+
+		// wieder anders:
+	
+		if ($status == "Eingetragen") {
+			printf ("Um sich aus dem Newsletter wieder auszutragen,<br>klicken Sie bitte %s hier</a>.","<a href= \"$PHP_SELF?username=$username&newsletter_id=$newsletter_id&cmd=remove&secret=$secret\">");
+		} else {
+			printf ("Um sich in den Newsletter wieder einzutragen,<br>klicken Sie bitte %s hier</a>.","<a href= \"$PHP_SELF?username=$username&newsletter_id=$newsletter_id&cmd=add&secret=$secret\">");
+		}
+		echo "</td></tr></table>";
 	}
-
-	if ($secret == $hash) {   // alles paletti, Status ändern
-		$db = new DB_Seminar;
-	   $query = "update auth_user_md5 set perms='autor' where user_id='$user->id'";
-	   $db->query($query);
-	   if ($db->affected_rows() == 0) {
-	     my_error("<b>Changes failed:</b> $query");
-	     break;
-	   }
-
-		my_msg("<b>Ihr Status wurde erfolgreich auf \"autor\" gesetzt.<br>\nDamit d&uuml;rfen Sie in den meisten Veranstaltungen schreiben,<br>\nf&uuml;r die Sie sich anmelden.</b>\n");
-
-	} else {
-		; // hier sollten wir nie hinkommen
-	}
-
+	
   page_close();
 ?>
+	</td>
+	<td class="blank" align = right valign="top"><img src="pictures/brief.jpg" border="0">
+	</td>
+    </tr>
+</table>
 </body>
 </html>
 <!-- $Id$ -->

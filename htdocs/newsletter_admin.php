@@ -122,7 +122,7 @@ function SendMail($newsletter_id,$username,$Vorname,$Nachname,$Email)
 			$abuse="abuse@".$smtp->host_name;
 			$to=$Email;
 			$secret= md5("$username:$magic");
-			$url = "http://" . $smtp->host_name . $CANONICAL_RELATIVE_PATH_STUDIP . "newsletter.php?username=$username&newsletter_id=$newsletter_id&secret=" . $secret;
+			$url = "http://" . $smtp->host_name . $CANONICAL_RELATIVE_PATH_STUDIP . "newsletter.php?username=$username&cmd=remove&newsletter_id=$newsletter_id&secret=" . $secret;
 			$mailbody = $newsletter[$newsletter_id]["text"];
 			$mailbody.="\n---------------------------------------\n"
 			."Dies ist ein Newsletter des Systems\n"
@@ -139,6 +139,7 @@ function SendMail($newsletter_id,$username,$Vorname,$Nachname,$Email)
 			$env_from, array($to),
 			array("From: $from", "Reply-To: $abuse", "To: $to", "Subject: Newsletter"),
 			$mailbody);
+			echo "gesendet";
 		}
 }
 
@@ -215,14 +216,33 @@ if ($msg) parse_msg($msg);
 				$db=new DB_Seminar;
 				$db->query ("SELECT * FROM auth_user_md5 ".$newsletter[$newsletter_id]["SQL"]."GROUP BY Email ORDER BY Nachname");
 				echo $db->num_rows();
+				echo "<br><b>Ausgetragen:</b>&nbsp; "; 
+				$db=new DB_Seminar;
+				$db->query ("SELECT * FROM newsletter WHERE newsletter_id=$newsletter_id AND status='0'");
+				echo $db->num_rows();
+				echo "<br><b>Zus&auml;tzlich:</b>&nbsp; "; 
+				$db=new DB_Seminar;
+				$db->query ("SELECT * FROM newsletter WHERE newsletter_id=$newsletter_id AND status='1'");
+				echo $db->num_rows();
 ?>				
 				</td>
 			</tr>
 		</table>
 		</blockquote>
 		<br>
-		<form action="<? echo $PHP_SELF ?>" method="POST">
 <?
+
+	// es wird versand
+
+	if ($sendletter) {
+		echo "<br>&nbsp; Versandstatus:";
+		SendLetter($newsletter_id);
+		echo "<br><br>&nbsp; &nbsp; <a href=\"$PHP_SELF\">zur&uuml;ck</a><br>&nbsp; ";		
+
+	// es wird nur administriert
+
+	} else {
+		echo "<form action=\"$PHP_SELF\" method=\"POST\">";
 		if ($search_exp) {
 			PrintRemoveSearch($search_exp, $newsletter_id);
 		} else {
@@ -247,9 +267,9 @@ if ($msg) parse_msg($msg);
 
 		PrintExclusions($newsletter_id);
 
-		echo "<br>&nbsp; Versandstatus:";
+		echo "<br><br>&nbsp; &nbsp; <a href=\"$PHP_SELF?sendletter=1\">Newsletter versenden</a><br>&nbsp; ";		
+	}
 
-		SendLetter($newsletter_id);
 ?>		
 	</td>
 </tr>

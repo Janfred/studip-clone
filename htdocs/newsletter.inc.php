@@ -35,6 +35,7 @@ function CheckPersonInNewsletter ($username, $newsletter_id)    // Ist jemand au
 	return $status;
 }
 
+
 function CheckPersonNewsletter ($username, $newsletter_id)    // Ist jemand in der Ausnahmeliste?
 { global $newsletter;
 	$user_id = get_userid($username);
@@ -52,6 +53,18 @@ function CheckPersonNewsletter ($username, $newsletter_id)    // Ist jemand in d
 	}
 	return $status;
 }
+
+function CheckStatusPersonNewsletter ($username, $newsletter_id)   // was ist nun der Gesamtstatus?
+{ global $newsletter;
+	if (CheckPersonInNewsletter ($username, $newsletter_id)=="letter" AND CheckPersonNewsletter ($username, $newsletter_id) !="removed") {
+		$status = "Eingetragen";
+	} elseif (CheckPersonNewsletter ($username, $newsletter_id) =="added") {		
+		$status = "Eingetragen";
+	} else {
+		$status = "Ausgetragen";
+	}
+	return $status;
+}  
 
 function AddPersonNewsletter ($username, $newsletter_id)    // Funktion, mit der man Personen auf die Positivliste setzt
 { global $newsletter;
