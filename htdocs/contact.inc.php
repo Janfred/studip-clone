@@ -55,6 +55,18 @@ function MakeUniqueContactID ()
 	RETURN $tmp_id;
 }
 
+function MakeUniqueUserinfoID ()
+{	// baut eine ID die es noch nicht gibt
+
+	$hash_secret = "kertoiisdfgz";
+	$db=new DB_Seminar;
+	$tmp_id=md5(uniqid($hash_secret));
+	$db->query ("SELECT userinfo_id FROM contact_userinfo WHERE userinfo_id = '$tmp_id'");	
+	IF ($db->next_record()) 	
+		$tmp_id = MakeUniqueContactID(); //ID gibt es schon, also noch mal
+	RETURN $tmp_id;
+}
+
 function AddNewContact ($user_id)
 { 	// Inserting an new contact
 	global $user;
@@ -67,8 +79,31 @@ function AddNewContact ($user_id)
 	return $contact_id;	
 } 
 
-function ShowUserInfo ($user_id)
+function AddNewUserinfo ($contact_id, $name, $content)
 { 	// Inserting an new contact
+	global $user;
+	$userinfo_id = MakeUniqueUserinfoID();
+	$db=new DB_Seminar;
+		$db->query("INSERT INTO contact_userinfo SET userinfo_id = '$userinfo_id', contact_id = '$contact_id', name = '$name', content= '$content', priority= '0'");
+	return $userinfo_id;	
+} 
+
+
+
+function GetExtraUserinfo ($contact_id)
+{ 	// Build an array with extrauserinfos
+		$output = "";	
+		$db=new DB_Seminar;
+		$db->query ("SELECT * FROM contact_userinfo WHERE contact_id = '$contact_id' ORDER BY priority");	
+		while ($db->next_record()) 	{
+			$userinfo[$db->f("name")] = $db->f("content");	
+		}
+		return $userinfo;
+}
+
+
+function ShowUserInfo ($user_id, $contact_id)
+{ 	// Show the standard userinfo
 	global $user, $open, $edit_id;
 	$output = "";
 	$db=new DB_Seminar;
@@ -112,6 +147,14 @@ function ShowUserInfo ($user_id)
 				$output .= "<tr><td class=\"steel1\" width=\"100\"><font size=\"2\">".$key.":</font></td><td class=\"steel1\" width=\"250\"><font size=\"2\">".$value."</font></td></tr>";
 			}
 		}
+
+		$extra = GetExtraUserinfo ($contact_id);
+		if (sizeof($extra)>0) {
+			while(list($key,$value) = each($extra)) {
+				$output .= "<tr><td class=\"steel1\" width=\"100\"><font size=\"2\">".$key.":</font></td><td class=\"steel1\" width=\"250\"><font size=\"2\">".$value."</font></td></tr>";
+			}
+		}
+
 		if(file_exists("./user/".$user_id.".jpg")) {
 			$output.="<tr><td align=\"center\" class=\"steel1\" colspan=\"2\" width=\"350\"><br><img src=\"./user/".$user_id.".jpg\" border=1></td>";
 		}
@@ -142,7 +185,7 @@ function ShowContact ($contact_id)
 							."
 						</td>
 					</tr>"
-						.ShowUserInfo ($db->f("user_id"))
+						.ShowUserInfo ($db->f("user_id"), $contact_id)
 						. $lastrow
 				."</table>";
 	} else {
@@ -155,12 +198,13 @@ function ShowEditContact ($contact_id)
 {	// Ausgabe eines zu editierenden Kontaktes
 	global $PHP_SELF, $open, $filter, $edit_id;
 	$db=new DB_Seminar;
+	$db2=new DB_Seminar;
 	$db->query ("SELECT user_id FROM contact WHERE contact_id = '$contact_id'");	
 	if ($db->next_record()) {
 
-		$lastrow =	"<tr><td class=\"steel1\"><form action=\"$PHP_SELF?cmd=newinfo\" method=\"POST\">"
+		$lastrow =	"<tr><td class=\"steel2\">"
 					."<input type=\"text\" name=\"owninfolabel[]\" value=\"Beschreibung\"></td>"
-					."<td class=\"steel1\"><input type=\"text\" name=\"owninfocontent[]\" value=\"Inhalt\">"
+					."<td class=\"steel2\"><textarea style=\"width: 55%\" cols=\"20\" rows\"3\" wrap=virtual name=\"owninfocontent[]\" value=\"Inhalt\">Inhalt</textarea>"
 					."<input type=\"HIDDEN\" name=\"range_id\" value=\"$range_id\">\n"
 					. "</td></tr>";
 		$lastrow .= "<tr><td valign=\"middle\" colspan=\"2\" class=\"steelgraulight\" align=\"center\"><br><input type=\"IMAGE\" name=\"search\" src= \"./pictures/buttons/uebernehmen-button.gif\" border=\"0\" value=\" Personen suchen\" ".tooltip("Seite aktualisieren")."></form></td></tr>";
@@ -172,12 +216,24 @@ function ShowEditContact ($contact_id)
 						</td>
 					</tr>"
 						.ShowUserInfo ($db->f("user_id"))
-						. $lastrow
+						."<form action=\"$PHP_SELF?edit_id=$contact_id\" method=\"POST\">";
+						
+		$db2->query ("SELECT * FROM contact_userinfo WHERE contact_id = '$contact_id' ORDER BY priority");	
+		while ($db2->next_record()) 	{
+			$output .= "<tr><td class=\"steel1\" width=\"100\"><input type=\"text\" name=\"existingowninfolabel[]\" value=\"".$db2->f("name")."\"></td><td class=\"steel1\" width=\"250\"><textarea name=\"existingowninfocontent[]\" value=\"".$db2->f("content")."\" style=\"width: 90%\" cols=\"20\" rows\"3\" wrap=virtual>".$db2->f("content")."</textarea><a href=\"$PHP_SELF?edit_id=$contact_id&deluserinfo=".$db2->f("userinfo_id")."\">&nbsp; <img src=\"pictures/trash.gif\" border=\"0\"></a></td></tr>";
+		}
+		$output .= "<tr><td class=\"steel1\" colspan=\"2\">&nbsp; </td></tr>".$lastrow
 				."</table>";
 	} else {
 		$output = "Fehler!";
 	}
 	return $output;
+}
+
+function DeleteUserinfo ($userinfo_id)
+{	// loeschen einer Userinfo
+	$db=new DB_Seminar;
+	$db->query ("DELETE FROM contact_userinfo WHERE userinfo_id = '$userinfo_id'");	
 }
 
 function DeleteContact ($contact_id)

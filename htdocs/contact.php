@@ -60,6 +60,10 @@ if ($cmd == "delete") {
 	echo DeleteContact ($contact_id);
 }
 
+if ($deluserinfo) {
+	DeleteUserinfo ($deluserinfo);
+}
+
 echo "<table align=\"center\" class=\"blank\" width=\"100%\" cellpadding=\"10\"><tr><td class=\"steelgraulight\">";
 echo "<a href=\"$PHP_SELF?open=all&filter=$filter\">Alle aufklappen</a>";
 
@@ -88,6 +92,10 @@ for ($i=97;$i<123;$i++) {
 }
 echo "</tr></table>";
 
+if ($owninfolabel) {
+	echo $owninfolabel[0];
+	AddNewUserinfo ($edit_id, $owninfolabel[0], $owninfocontent[0]);
+}
 
 // Anzeige Treffer
 if ($edit_id) {
