@@ -78,14 +78,17 @@ switch ($type) {
 }
 
 //replace bad charakters to avoid problems when saving the file
-$file_name = prepareFilename(rawurldecode($file_name));
+$file_name = prepareFilename(rawurldecode(basename($file_name)));
 
 if ($zip && is_file($path_file)) {
 	$tmp_id = md5(uniqid("suppe"));
-	$zip_path_file = "$TMP_PATH/$tmp_id.zip";
-	exec ("$ZIP_PATH -9 -j $zip_path_file $path_file");
+	$zip_path_file = "$TMP_PATH/$tmp_id";
+	$tmp_file_name = escapeshellcmd("$TMP_PATH/$file_name");
+	@copy($path_file, $tmp_file_name);
+	exec ("$ZIP_PATH -9 -j {$zip_path_file.zip} $tmp_file_name");
 	$file_name = $file_name . ".zip";
 	$path_file = $zip_path_file;
+	@unlink($tmp_file_name);
 }
 
 
