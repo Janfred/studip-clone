@@ -102,20 +102,18 @@ function suchen ($eintrag=0, $mehr=5, $suchbegriff,$check_author,$check_name,$ch
 		$mehr=5;
 
 	if($check_author) 
-		$search_author="x.author LIKE '%$suchbegriff%'";
+		$search_exp="x.author LIKE '%$suchbegriff%'";
 
-	if ($check_author && $check_name="ON")
-		$search_name=" OR x.name LIKE '%$suchbegriff%'";
-	elseif($check_name) 
-		$search_name="x.name LIKE '%$suchbegriff%'";
-	
+	if ($check_name) {
+		if ($search_exp)
+			$search_exp.=" OR";
+		$search_exp.=" x.name LIKE '%$suchbegriff%'";
+	}
+
 	if ($check_cont) {
-		if ($check_author)
-			$search_cont=" OR x.description LIKE '%$suchbegriff%'";
-		if ($check_name)
-			$search_cont=" OR x.description LIKE '%$suchbegriff%'";
-		else
-			$search_cont="x.description LIKE '%$suchbegriff%'";
+		if ($search_exp)
+			$search_exp.=" OR";
+		$search_exp.=" x.description LIKE '%$suchbegriff%'";
 	}
 
 	if(!isset($suchbegriff)):
@@ -143,29 +141,29 @@ function suchen ($eintrag=0, $mehr=5, $suchbegriff,$check_author,$check_name,$ch
 	   		<td class="steelgraulight">
 	   			<b>Suchen in den Feldern:</b>
 	   		</td>
-	   		<td class="steelgraulight">
-	   			&nbsp; 
+	   		<td class="steelgraulight">&nbsp;
+	   			 
 	   		</td>
 	   	</tr>
 		<tr>
-			<td class="steel1">
-				&nbsp; 
+			<td class="steel1">&nbsp;
+				 
 			</td>
 			<td class="steel1">
 				<input name="check_author" type="CHECKBOX" value="on" checked> Autor
 			</td>
 		</tr>
 	     	<tr>
-	     		<td class="steelgraulight">
-	     			&nbsp; 
+	     		<td class="steelgraulight">&nbsp;
+	     			 
 	     		</td>
 	     		<td class="steelgraulight">
 	     			<input type="CHECKBOX" name="check_name" value="on" checked> Thema 
 	     		</td>
 	     	</tr>
 	     	<tr>
-	     		<td class="steel1">
-		     		&nbsp; 
+	     		<td class="steel1">&nbsp;
+		     		 
 		     	</td>
 		     	<td class="steel1">
 		     		<input type="CHECKBOX" name="check_cont" value="on" checked> Inhalt
@@ -199,9 +197,9 @@ $db = new DB_Seminar;
 $db2 = new DB_Seminar;
 
 if(isset($SessSemName[0]) && $SessSemName[0] != "")
-	if ($search_author && $search_name && $search_cont)
+	if ($search_exp)
 	$db->query("SELECT x.topic_id, x.name AS titel, x.author , x.mkdate, y.name AS thema, y.topic_id AS thema_id, x.description, x.Seminar_id, x.user_id FROM px_topics x, px_topics y WHERE x.root_id = y.topic_id AND x.seminar_id =
-	'$SessionSeminar' AND($search_author $search_name $search_cont) ORDER BY mkdate DESC ");
+	'$SessionSeminar' AND($search_exp) ORDER BY mkdate DESC ");
 
 $i = 1;
 $anzahl = $db->num_rows();
