@@ -22,7 +22,6 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar", "perm" => "Sem
 				$perm->check("user");
 
 include "$ABSOLUTE_PATH_STUDIP/seminar_open.php"; //hier werden die sessions initialisiert
-include "$ABSOLUTE_PATH_STUDIP/header.php";   //hier wird der "Kopf" nachgeladen
 
 require_once "$ABSOLUTE_PATH_STUDIP/functions.php";   //hier wird der "Kopf" nachgeladen
 require_once "$ABSOLUTE_PATH_STUDIP/config.inc.php"; 		//wir brauchen die Seminar-Typen
@@ -38,6 +37,8 @@ require_once "$ABSOLUTE_PATH_STUDIP/visual.inc.php"; 		//wir brauchen die Semina
 <body>
 
 <? echo "\n".cssClassSwitcher::GetHoverJSFunction()."\n";
+
+include "$ABSOLUTE_PATH_STUDIP/header.php";   //hier wird der "Kopf" nachgeladen
 
         
 //Einstellungen fuer Reitersystem
