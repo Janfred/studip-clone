@@ -70,12 +70,6 @@ if ($dclose)
 	
 // Start of Output
 
-//Achtung, nur fuer Testzwecke!
-//
-$auth->auth["jscript"] = TRUE;
-//
-// hier muesste vielmehr ein Aufruf an eine modifizierte Variante der GetHoverJSFunction(), da wir noch nicht wissen ob JS an ist oder nicht
-
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");
 
