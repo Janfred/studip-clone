@@ -1266,7 +1266,7 @@ if ($view == "Stundenplan") {
 	change_schedule_view();
 }
 	
-if($view == "calendar") {
+if($view == "calendar" && $CALENDAR_ENABLE) {
 	require_once("$RELATIVE_PATH_CALENDAR/calendar_settings.inc.php");
 }
 

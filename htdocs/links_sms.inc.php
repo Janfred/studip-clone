@@ -51,7 +51,7 @@ if ($GLOBALS['CALENDAR_ENABLE']) {
 	$structure["calendar_week"] = array ("topKat"=>"calendar", "name"=>_("Woche"), "link"=>"calendar.php?cmd=showweek&atime=$atime", "active"=>FALSE);
 	$structure["calendar_month"] = array ("topKat"=>"calendar", "name"=>_("Monat"), "link"=>"calendar.php?cmd=showmonth&atime=$atime", "active"=>FALSE);
 	$structure["calendar_year"] = array ("topKat"=>"calendar", "name"=>_("Jahr"), "link"=>"calendar.php?cmd=showyear&atime=$atime", "active"=>FALSE);
-	$structure["calendar_edit"] = array ("topKat"=>"calendar", "name"=>_("Neuer Termin"), "link"=>"calendar.php?cmd=edit&atime=$atime", "active"=>FALSE);
+	$structure["calendar_edit"] = array ("topKat"=>"calendar", "name"=>_("Termin anlegen/bearbeiten"), "link"=>"calendar.php?cmd=edit&atime=$atime", "active"=>FALSE);
 	$structure["calendar_bind"] = array ("topKat"=>"calendar", "name"=>_("Veranstaltungstermine"), "link"=>"calendar.php?cmd=bind&atime=$atime", "active"=>FALSE);
 	$structure["calendar_export"] = array ("topKat"=>"calendar", "name"=>_("Export"), "link"=>"calendar.php?cmd=export&atime=$atime", "active"=>FALSE);
 	$structure["calendar_changeview"] = array ("topKat"=>"calendar", "name"=>_("Ansicht anpassen"), "link"=>"calendar.php?cmd=changeview&atime=$atime", "active"=>FALSE);
