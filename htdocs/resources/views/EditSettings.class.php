@@ -38,7 +38,6 @@ require_once ($ABSOLUTE_PATH_STUDIP."/cssClassSwitcher.inc.php");
 
 $cssSw = new cssClassSwitcher;
 
-
 class EditSettings {
 	var $db;
 	var $db2;
@@ -524,7 +523,7 @@ class EditSettings {
 				<td class="<? echo $cssSw->getClass() ?>" width="96%" align="left">
 					<font size=-1><b><?=_("Blockierung der Belegung von <i>R&auml;umen</i>")?></b><br /><br />
 					<?=_("Die Belegung von R&auml;umen kann f&uuml;r alle lokalen Ressourcen-Administratoren geblockt werden:")?><br /><br />
-					&nbsp;&nbsp;&nbsp;<input type="CHECKBOX" name="locking_active" <? print(get_config("RESOURCES_LOCKING_ACTIVE")) ? "checked" : ""; print ">&nbsp;"._("Blockierung ist zu den angegebenen Sperrzeiten aktiv:")?><br />
+					&nbsp;&nbsp;&nbsp;<input type="CHECKBOX" name="locking_active" <? print($GLOBALS['RESOURCES_LOCKING_ACTIVE']) ? "checked" : ""; print ">&nbsp;"._("Blockierung ist zu den angegebenen Sperrzeiten aktiv:")?><br />
 					<br />
 					<table border="0" cellspacing="0" cellpadding="0" width="50%" align="left">
 					<?
@@ -604,8 +603,8 @@ class EditSettings {
 				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="96%" align="left">
-					<font size=-1><b><?=_("Zulassen von <i>Raum</i>w&uuml;nschen")?></b><br /><br />
-					&nbsp;&nbsp;&nbsp;<input type="CHECKBOX" name="allow_requests" <? print(get_config("RESOURCES_ALLOW_ROOM_REQUESTS")) ? "checked" : ""; print ">&nbsp;"._("NutzerInnen k&ouml;nnen im Rahmen der Veranstaltungsverwaltung Raumeigenschaften und konkrete R&auml;ume w&uuml;nschen.")?><br />
+					<font size=-1><b><?=_("Zulassen von <i>Raum</i>anfragen")?></b><br /><br />
+					&nbsp;&nbsp;&nbsp;<input type="CHECKBOX" name="allow_requests" <? print($GLOBALS["RESOURCES_ALLOW_ROOM_REQUESTS"]) ? "checked" : ""; print ">&nbsp;"._("NutzerInnen k&ouml;nnen im Rahmen der Veranstaltungsverwaltung Raumeigenschaften und konkrete R&auml;ume w&uuml;nschen.")?><br />
 					<br />				
 				</td>
 			</tr>
@@ -613,9 +612,19 @@ class EditSettings {
 				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="96%" align="left">
+					<font size=-1><b><?=_("Optionen beim Bearbeiten von Anfragen")?></b><br /><br />
+					&nbsp;&nbsp;&nbsp;Anzahl der Belegungen, ab der R&auml;ume dennoch mit Einzelterminen passend belegt werden k&ouml;nnen: <input type="TEXT" size="5" maxlength="10" name="allow_single_assign_percentage" value="<? print($GLOBALS["RESOURCES_ALLOW_SINGLE_ASSIGN_PERCENTAGE"]);?>" />%<br />
+					&nbsp;&nbsp;&nbsp;Anzahl ab der Einzeltermine gruppiert bearbeitet werden sollen: <input type="TEXT" size="3" maxlength="5" name="allow_single_date_grouping" value="<? print($GLOBALS["RESOURCES_ALLOW_SINGLE_DATE_GROUPING"]);?>" /><br />
+					<br />				
+				</td>
+			</tr>			
+			<tr>
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				</td>
+				<td class="<? echo $cssSw->getClass() ?>" width="96%" align="left">
 					<font size=-1><b><?=_("Einordnung von <i>R&auml;umen</i> in Orga-Struktur")?></b><br /><br />
-					&nbsp;&nbsp;&nbsp;<input type="CHECKBOX" name="enable_orga_classify" <? print(get_config("RESOURCES_ENABLE_ORGA_CLASSIFY")) ? "checked" : ""; print ">&nbsp;"._("<i>R&auml;ume</i> k&ouml;nnen Fakult&auml;ten und Einrichtungen unabh&auml;ngig von Besitzerrechten zugeordnet werden.")?><br />
-					&nbsp;&nbsp;&nbsp;<input type="CHECKBOX" name="enable_orga_admin_notice" <? print(get_config("RESOURCES_ENABLE_ORGA_ADMIN_NOTICE")) ? "checked" : ""; print ">&nbsp;"._("Bei <i>Raum</i>w&uuml;nschen von DozentInnen auf <i>R&auml;ume</i> fremder Einrichtungen und Fakult&auml;ten die Administratoren benachrichtigen. ")?><br />
+					&nbsp;&nbsp;&nbsp;<input type="CHECKBOX" name="enable_orga_classify" <? print($GLOBALS["RESOURCES_ENABLE_ORGA_CLASSIFY"]) ? "checked" : ""; print ">&nbsp;"._("<i>R&auml;ume</i> k&ouml;nnen Fakult&auml;ten und Einrichtungen unabh&auml;ngig von Besitzerrechten zugeordnet werden.")?><br />
+					&nbsp;&nbsp;&nbsp;<input type="CHECKBOX" name="enable_orga_admin_notice" <? print($GLOBALS["RESOURCES_ENABLE_ORGA_ADMIN_NOTICE"]) ? "checked" : ""; print ">&nbsp;"._("Bei <i>Raum</i>w&uuml;nschen von DozentInnen auf <i>R&auml;ume</i> fremder Einrichtungen und Fakult&auml;ten die Administratoren benachrichtigen. ")?><br />
 					<br />				
 				</td>
 			</tr>
@@ -626,9 +635,9 @@ class EditSettings {
 					<font size=-1><b><?=_("Anlegen von <i>R&auml;umen</i>")?></b><br /><br />
 					<?=_("Das Anlegen von <i>R&auml;umen</i> kann nur durch folgende Personenkreise vorgenommen werden:")?><br /><br />
 					&nbsp;&nbsp;&nbsp;<select name="allow_create_resources">
-						<option value="1" <? print(get_config("RESOURCES_ALLOW_CREATE_ROOMS") == "1") ? "selected" : ""; print ">"._("NutzerInnen ab globalem Status Tutor")?></option>
-						<option value="2" <? print(get_config("RESOURCES_ALLOW_CREATE_ROOMS") == "2") ? "selected" : ""; print ">"._("NutzerInnen ab globalem Status Admin")?></option>
-						<option value="3" <? print(get_config("RESOURCES_ALLOW_CREATE_ROOMS") == "3") ? "selected" : ""; print ">"._("nur globale Ressourcenadministratoren")?></option>
+						<option value="1" <? print($GLOBALS["RESOURCES_ALLOW_CREATE_ROOMS"] == "1") ? "selected" : ""; print ">"._("NutzerInnen ab globalem Status Tutor")?></option>
+						<option value="2" <? print($GLOBALS["RESOURCES_ALLOW_CREATE_ROOMS"] == "2") ? "selected" : ""; print ">"._("NutzerInnen ab globalem Status Admin")?></option>
+						<option value="3" <? print($GLOBALS["RESOURCES_ALLOW_CREATE_ROOMS"] == "3") ? "selected" : ""; print ">"._("nur globale Ressourcenadministratoren")?></option>
 					</select>
 					<br />&nbsp;
 				</td>
@@ -639,9 +648,9 @@ class EditSettings {
 				<td class="<? echo $cssSw->getClass() ?>" width="96%" align="left">
 					<font size=-1><b><?=_("Vererbte Berechtigungen von Veranstaltungen und Einrichtungen f&uuml;r Ressourcen")?></b><br /><br />
 					<?=_("Mitglieder von Veranstaltungen oder Einrichtungen erhalten folgende Rechte in Ressourcen, die diesen Veranstaltungen oder Einrichtungen geh&ouml;ren:")?><br /><br />
-						&nbsp;&nbsp;&nbsp;<input type="RADIO" name="inheritance_rooms" value="1" <? print (get_config("RESOURCES_INHERITANCE_PERMS_ROOMS") == "1") ? "checked" : "" ?>/><?=_("die lokalen Rechte der Einrichtung oder Veranstaltung werden &uuml;bertragen")?><br />
-						&nbsp;&nbsp;&nbsp;<input type="RADIO" name="inheritance_rooms" value="2" <? print (get_config("RESOURCES_INHERITANCE_PERMS_ROOMS") == "2") ? "checked" : "" ?>/><?=_("nur Autorenrechte (eigene Belegungen anlegen und bearbeiten)")?><br />
-						&nbsp;&nbsp;&nbsp;<input type="RADIO" name="inheritance_rooms" value="3" <? print (get_config("RESOURCES_INHERITANCE_PERMS_ROOMS") == "3") ? "checked" : "" ?>/><?=_("keine Rechte")?><br />
+						&nbsp;&nbsp;&nbsp;<input type="RADIO" name="inheritance_rooms" value="1" <? print ($GLOBALS["RESOURCES_INHERITANCE_PERMS_ROOMS"] == "1") ? "checked" : "" ?>/><?=_("die lokalen Rechte der Einrichtung oder Veranstaltung werden &uuml;bertragen")?><br />
+						&nbsp;&nbsp;&nbsp;<input type="RADIO" name="inheritance_rooms" value="2" <? print ($GLOBALS["RESOURCES_INHERITANCE_PERMS_ROOMS"] == "2") ? "checked" : "" ?>/><?=_("nur Autorenrechte (eigene Belegungen anlegen und bearbeiten)")?><br />
+						&nbsp;&nbsp;&nbsp;<input type="RADIO" name="inheritance_rooms" value="3" <? print ($GLOBALS["RESOURCES_INHERITANCE_PERMS_ROOMS"] == "3") ? "checked" : "" ?>/><?=_("keine Rechte")?><br />
 					</select>
 					<br />
 				</td>
@@ -652,9 +661,9 @@ class EditSettings {
 				<td class="<? echo $cssSw->getClass() ?>" width="96%" align="left">
 					<font size=-1><b><?=_("Vererbte Berechtigungen von Veranstaltungen und Einrichtungen f&uuml;r <i>R&auml;ume</i>")?></b><br /><br />
 					<?=_("Mitglieder von Veranstaltungen oder Einrichtungen erhalten folgende Rechte in <i>R&auml;umen</i>, die diesen Veranstaltungen oder Einrichtungen geh&ouml;ren:")?><br /><br />
-						&nbsp;&nbsp;&nbsp;<input type="RADIO" name="inheritance" value="1" <? print (get_config("RESOURCES_INHERITANCE_PERMS") == "1") ? "checked" : "" ?>/><?=_("die lokalen Rechte der Einrichtung oder Veranstaltung werden &uuml;bertragen")?><br />
-						&nbsp;&nbsp;&nbsp;<input type="RADIO" name="inheritance" value="2" <? print (get_config("RESOURCES_INHERITANCE_PERMS") == "2") ? "checked" : "" ?>/><?=_("nur Autorenrechte (eigene Belegungen anlegen und bearbeiten)")?><br />
-						&nbsp;&nbsp;&nbsp;<input type="RADIO" name="inheritance" value="3" <? print (get_config("RESOURCES_INHERITANCE_PERMS") == "3") ? "checked" : "" ?>/><?=_("keine Rechte")?><br />
+						&nbsp;&nbsp;&nbsp;<input type="RADIO" name="inheritance" value="1" <? print ($GLOBALS["RESOURCES_INHERITANCE_PERMS"] == "1") ? "checked" : "" ?>/><?=_("die lokalen Rechte der Einrichtung oder Veranstaltung werden &uuml;bertragen")?><br />
+						&nbsp;&nbsp;&nbsp;<input type="RADIO" name="inheritance" value="2" <? print ($GLOBALS["RESOURCES_INHERITANCE_PERMS"] == "2") ? "checked" : "" ?>/><?=_("nur Autorenrechte (eigene Belegungen anlegen und bearbeiten)")?><br />
+						&nbsp;&nbsp;&nbsp;<input type="RADIO" name="inheritance" value="3" <? print ($GLOBALS["RESOURCES_INHERITANCE_PERMS"] == "3") ? "checked" : "" ?>/><?=_("keine Rechte")?><br />
 					</select>
 					<br />
 				</td>
