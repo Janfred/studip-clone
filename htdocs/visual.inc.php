@@ -296,7 +296,8 @@ function decodeHTML($string) {
 
 function format($text){
 	$text = preg_replace("'\n?\r\n?'", "\n", $text);
-	$pattern = array("'\n--+(\d?)(\n|$|(?=<))'m",              // Trennlinie
+	$pattern = array("'\[pre\](.+?)\[/pre\]'is",    // praeformatierter Text 
+					"'\n--+(\d?)(\n|$|(?=<))'m",            // Trennlinie
 					"'(^|\s)%(?!%)(\S+%)+(?=(\s|$))'e",     // SL-kursiv
 					"'(^|\s)\*(?!\*)(\S+\*)+(?=(\s|$))'e",  // SL-fett
 					"'(^|\s)_(?!_)(\S+_)+(?=(\s|$))'e",     // SL-unterstrichen
@@ -309,15 +310,15 @@ function format($text){
 					"'\*\*(\S|\S.*?\S)\*\*'s",           // ML-fett
 					"'__(\S|\S.*?\S)__'s",                     // ML-unterstrichen
 					"'##(\S|\S.*?\S)##'s",                     // ML-diktengleich
-					"'\+\+(((\+\+)*)(\S|\S.*?\S)\\2)\+\+'se", // ML-groesser
-					"'--(((--)*)(\S|\S.*?\S)\\2)--'se",       // ML-kleiner
-					"'&gt;&gt;(\S|\S.*?\S)&gt;&gt;'is",  // ML-hochgestellt
-					"'&lt;&lt;(\S|\S.*?\S)&lt;&lt;'is",        // ML-tiefgestellt
+					"'\+\+(((\+\+)*)(\S|\S.*?\S)\\2)\+\+'se",  // ML-groesser
+					"'--(((--)*)(\S|\S.*?\S)\\2)--'se",        // ML-kleiner
+					"'&gt;&gt;(\S|\S.*?\S)&gt;&gt;'is",     // ML-hochgestellt
+					"'&lt;&lt;(\S|\S.*?\S)&lt;&lt;'is",     // ML-tiefgestellt
 					"'\n\n  (((\n\n)  )*(.+?))(\Z|\n\n(?! ))'se",        // Absatz eingerueckt
-					"'(\n|\A)((-([^\-]|[^\-].+?)(\n|\Z))+?)(\n|\Z)'se",            // Aufzaehlungsliste
-					"'\[pre\](.+?)\[/pre\]'is"           // praeformatierter Text 
+					"'(\n|\A)((-([^\-]|[^\-].+?)(\n|\Z))+?)(\n|\Z)'se"   // Aufzaehlungsliste
 					);
-	$replace = array("<hr noshade=\"noshade\" width=\"98%\" size=\"\\1\" align=\"center\" />",
+	$replace = array("<pre>\\1</pre>",
+					"<hr noshade=\"noshade\" width=\"98%\" size=\"\\1\" align=\"center\" />",
 					"'\\1<i>'.substr(str_replace('%', ' ', '\\2'), 0, -1).'</i>'",
 					"'\\1<b>'.substr(str_replace('*', ' ', '\\2'), 0, -1).'</b>'",
 					"'\\1<u>'.substr(str_replace('_', ' ', '\\2'), 0, -1).'</u>'",
@@ -335,8 +336,7 @@ function format($text){
 					"<sup>\\1</sup>",
 					"<sub>\\1</sub>",
 					"'<blockquote>'.format('\\1').'</blockquote>'",
-					"'<ul>'.preg_call_format('\\2').'</ul>'",
-					"<pre>\\1</pre>"
+					"'<ul>'.preg_call_format('\\2').'</ul>'"
 					);
 	$text = preg_replace($pattern, $replace, $text);
 	
