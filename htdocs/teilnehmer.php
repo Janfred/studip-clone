@@ -40,9 +40,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // -- hier muessen Seiten-Initialisierungen passieren --
 
-	require_once ("msg.inc.php");
-	require_once ("visual.inc.php");
-	require_once ("functions.php");
+	require_once ("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
+	require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
+	require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
+	require_once ("$ABSOLUTE_PATH_STUDIP/admission.inc.php");	//Funktionen der Teilnehmerbegrenzung	
 
 	include "header.php";   //hier wird der "Kopf" nachgeladen
 	include "links1.php";
@@ -186,6 +187,10 @@ if (isset($berufen)) {
 	}
 	else $msg ="error§Netter Versuch! vielleicht beim n&auml;chsten Mal!§";
 }
+
+//Alle fuer das Losen anstehenden Veranstaltungen bearbeiten (wenn keine anstehen wird hier nahezu keine Performance verbraten!)
+check_admission();
+ 
 
 $gruppe = array ("dozent" => "Dozenten",
 		  "tutor" => "Tutoren",
