@@ -25,8 +25,10 @@ include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Sessio
 
 // -- here you have to put initialisations for the current page
 
-if (isset($druck))
+if ($druck)
 	$_include_stylesheet = ""; // do not use any stylesheet for printing
+elseif (($dump_id) || ($forum_dump_id))
+	$_include_stylesheet = "style_dump.css";
 
 // Start of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
