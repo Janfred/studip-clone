@@ -1,4 +1,4 @@
-<?php
+c<?php
 /*
 admin_news.php - Ändern der News von Stud.IP
 Copyright (C) 2001	André Noack <andre.noack@gmx.net>
@@ -334,7 +334,7 @@ if ($news_id)
 				{
 					if ($this->modus=="admin" AND $user_id!=$this->user_id)
 						{
-						 $admin="<admin_msg>Zuletzt aktualisiert von ".$this->full_username." (".$auth->auth["uname"].") am ".date("j.n.y",time());
+						 $admin="<admin_msg>Zuletzt aktualisiert von ".$this->full_username." (".$auth->auth["uname"].") am ".date("d.m.y",time());
 						 $body.=$admin;
 						 }
 				$this->db->query("UPDATE news SET topic='$topic',body='$body',date='$date',expire='$expire' WHERE news_id='$news_id'");
