@@ -42,9 +42,7 @@ class ChatServer {
 		static $object_instance;
 		if (!is_object($object_instance[$class_name])){
 			$object_instance[$class_name] = new $class_name();
-		} else {
-		$object_instance[$class_name]->restore();
-		}
+		} 
 		return $object_instance[$class_name];
 	}
 	
@@ -64,7 +62,7 @@ class ChatServer {
 	}
 	
 	function addChat($rangeid, $chatname = "StudIP Global Chat",$password = false){
-		if ($this->isActiveChat($rangeid) && $this->getActiveUsers($range_id)){
+		if ($this->isActiveChat($rangeid) && $this->getActiveUsers($rangeid)){
 			return false;
 		}
 		$this->chatDetail[$rangeid]["name"] = $chatname;
@@ -72,6 +70,7 @@ class ChatServer {
 		$this->chatDetail[$rangeid]["password"] = $password;
 		$this->chatDetail[$rangeid]["users"] = array();
 		$this->chatDetail[$rangeid]["id"] = md5(uniqid("chat",1));
+		$this->chatDetail[$rangeid]["log"] = array();
 		$this->store();
 		return true;
 	}
@@ -109,7 +108,8 @@ class ChatServer {
 	
 	function getIdFromNick($rangeid,$nick){
 		$this->restore();
-		foreach($this->chatDetail[$rangeid]['users'] as $userid => $detail){
+		$chat_users = $this->getUsers($rangeid);
+		foreach($chat_users as $userid => $detail){
 			if ($detail["nick"] == $nick)
 				return $userid;
 		}
@@ -123,6 +123,7 @@ class ChatServer {
 		$this->chatDetail[$rangeid]["users"][$userid]["nick"] = $nick;
 		$this->chatDetail[$rangeid]["users"][$userid]["fullname"] = $fullname;
 		$this->chatDetail[$rangeid]["users"][$userid]["perm"] = $chatperm;
+		$this->chatDetail[$rangeid]["users"][$userid]["log"] = false;
 		if (!$this->chatDetail[$rangeid]["users"][$userid]["color"])
 			$this->chatDetail[$rangeid]["users"][$userid]["color"] = $color;
 		$this->addMsg("system",$rangeid, sprintf(_("%s hat den Chat betreten!"),htmlReady($fullname." (".$nick.")")));
@@ -151,6 +152,7 @@ class ChatServer {
 			return false;
 		$this->removeCmdMsg($userid,$rangeid);
 		$this->addMsg("system",$rangeid,sprintf(_("%s hat den Chat verlassen!"),htmlReady($this->getFullname($userid,$rangeid) ." (" . $this->getNick($userid,$rangeid) .")")));
+		unset($this->chatDetail[$rangeid]["log"][$userid]);
 		unset($this->chatDetail[$rangeid]["users"][$userid]);
 		$this->store();
 		return true;
