@@ -134,9 +134,9 @@ if ($ILIAS_CONNECT_ENABLE) {
 	if (get_seminar_modules($SessSemName[1]) != false)
 	{
 		if ($SessSemName["class"]=="inst") 
-			$structure["lernmodule_show"]=array (topKat=>"lernmodule", name=>_("Lernmodule dieser Veranstaltung"), link=>"seminar_lernmodule.php?view=show&seminar_id=" . $SessSemName[1], active=>FALSE);
-		else		
 			$structure["lernmodule_show"]=array (topKat=>"lernmodule", name=>_("Lernmodule dieser Einrichtung"), link=>"seminar_lernmodule.php?view=show&seminar_id=" . $SessSemName[1], active=>FALSE);
+		else		
+			$structure["lernmodule_show"]=array (topKat=>"lernmodule", name=>_("Lernmodule dieser Veranstaltung"), link=>"seminar_lernmodule.php?view=show&seminar_id=" . $SessSemName[1], active=>FALSE);
 	}
 	if  ($perm->have_studip_perm("dozent",$SessSemName[1]))
 		$structure["lernmodule_edit"]=array (topKat=>"lernmodule", name=>_("Lernmodule hinzuf&uuml;gen / entfernen"), link=>"seminar_lernmodule.php?view=edit&seminar_id=" . $SessSemName[1], active=>FALSE);
