@@ -43,11 +43,11 @@ class ScheduleWeek {
 	var $show_dates;			//If setted, the dates of each day will be shown
 	var $start_date;			//the timestamp of the first day (monday) of the viewed week 
 	var $categories = array(		//the categories configuration (color's and bg-image)
-		"0"=>array("bg-picture"=>"/studip/calendar/pictures/category5_small.jpg", "border-color"=>"#505064"),
-		"1"=>array("bg-picture"=>"/studip/calendar/pictures/category3_small.jpg", "border-color"=>"#5C2D64"),
-		"2"=>array("bg-picture"=>"/studip/calendar/pictures/category9_small.jpg", "border-color"=>"#957C29"),
-		"3"=>array("bg-picture"=>"/studip/calendar/pictures/category11_small.jpg", "border-color"=>"#66954F"),
-		"4"=>array("bg-picture"=>"/studip/calendar/pictures/category13_small.jpg", "border-color"=>"#951408"),
+		"0"=>array("bg-picture"=>"/studip/pictures/calendar/category5_small.jpg", "border-color"=>"#505064"),
+		"1"=>array("bg-picture"=>"/studip/pictures/calendar/category3_small.jpg", "border-color"=>"#5C2D64"),
+		"2"=>array("bg-picture"=>"/studip/pictures/calendar/category9_small.jpg", "border-color"=>"#957C29"),
+		"3"=>array("bg-picture"=>"/studip/pictures/calendar/category11_small.jpg", "border-color"=>"#66954F"),
+		"4"=>array("bg-picture"=>"/studip/pictures/calendar/category13_small.jpg", "border-color"=>"#951408"),
 		);
 	
 	//Kontruktor
