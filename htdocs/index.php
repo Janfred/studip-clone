@@ -110,11 +110,10 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("doz
 	$end = $start + 60 * 60 * 24 * 7;
 	show_all_dates($start, $end, TRUE, FALSE, $index_data["dopen"]);
 
-/* Include and show votes and test ----------------------------------------- */
+	/* Include and show votes and test ----------------------------------------- */
         require_once ("$ABSOLUTE_PATH_STUDIP/show_vote.php");
         show_votes ("studip", $auth->auth["uid"], $perm);
-        echo "hallo";
-/* ------------------------------------------------------------------------- */
+	/* ------------------------------------------------------------------------- */
 
 
 } elseif (!$perm->have_perm("dozent")) {
