@@ -4,19 +4,33 @@
 	<xsl:template match="/">
 	<xsl:for-each select="studip/institut">
 -----------------------------------------------------------------		
-Institut: <xsl:value-of select="name"/>
+Einrichtung: <xsl:value-of select="name"/>
 -----------------------------------------------------------------
+		<xsl:if test="fakultaet">
 		Fakultät: <xsl:value-of select="fakultaet"/>
+		</xsl:if>
+		<xsl:if test="homepage">
 		Homepage: <xsl:value-of select="homepage"/>
+		</xsl:if>
+		<xsl:if test="strasse">
 		Strasse: <xsl:value-of select="strasse"/>
+		</xsl:if>
+		<xsl:if test="plz">
 		Postleitzahl: <xsl:value-of select="plz"/>
+		</xsl:if>
+		<xsl:if test="telefon">
 		Telefon: <xsl:value-of select="telefon"/>
+		</xsl:if>
+		<xsl:if test="fax">
 		Fax: <xsl:value-of select="fax"/>
+		</xsl:if>
+		<xsl:if test="email">
 		E-mail: <xsl:value-of select="email"/>
+		</xsl:if>
 				
 			<xsl:if test="seminare">
      ------------------------------------------------------------		
-	Seminare
+	Veranstaltungen
      ------------------------------------------------------------		
 			<xsl:choose>
 				<xsl:when test="seminare/gruppe">
@@ -97,7 +111,7 @@ Institut: <xsl:value-of select="name"/>
 
 <xsl:template name="showseminar">
 	<xsl:for-each select="seminar">
-		Seminar - <xsl:for-each select="dozenten/dozent">
+		Veranstaltung - <xsl:for-each select="dozenten/dozent">
 			<xsl:if test="position() &gt; 1">
 				<xsl:text>, </xsl:text>
 			</xsl:if>

@@ -7,32 +7,46 @@
 
 		<xsl:for-each select="studip/institut">
 			<xsl:text>
-\fs36 Institut: </xsl:text>
+\fs36 Einrichtung: </xsl:text>
 			<xsl:value-of select="name"/>
+<xsl:if test="fakultaet">
 			<xsl:text>
 \par\par\fs24\b Fakult\'e4t: \b0 </xsl:text>
 			<xsl:value-of select="fakultaet"/>
+</xsl:if>
+<xsl:if test="homepage">
 			<xsl:text>
 \par\b Homepage: \b0 </xsl:text>
 			<xsl:value-of select="homepage"/>
+</xsl:if>
+<xsl:if test="strasse">
 			<xsl:text>
 \par\b Strasse: \b0 </xsl:text>
 			<xsl:value-of select="strasse"/>
+</xsl:if>
+<xsl:if test="plz">
 			<xsl:text>
 \par\b Postleitzahl: \b0 </xsl:text>
 			<xsl:value-of select="plz"/>
+</xsl:if>
+<xsl:if test="telefon">
 			<xsl:text>
 \par\b Telefon: \b0 </xsl:text>
 			<xsl:value-of select="telefon"/>
+</xsl:if>
+<xsl:if test="fax">
 			<xsl:text>
 \par\b Fax: \b0 </xsl:text>
 			<xsl:value-of select="fax"/>
+</xsl:if>
+<xsl:if test="email">
 			<xsl:text>
 \par\b E-mail: \b0 </xsl:text>
 			<xsl:value-of select="email"/>
+</xsl:if>
 			<xsl:if test="seminare">
 				<xsl:text>
-\page\fs36 Seminare\fs24\par</xsl:text>
+\page\fs36 Veranstaltungen\fs24\par</xsl:text>
 			<xsl:text>
 \par\trowd \trgaph70\trleft-70\trbrdrt\brdrs\brdrw10 \trbrdrl\brdrs\brdrw10 \trbrdrb\brdrs\brdrw10 
 \trbrdrr\brdrs\brdrw10 \trbrdrh\brdrs\brdrw10 \trbrdrv\brdrs\brdrw10 \clvertalt\clbrdrt\brdrs\brdrw10 \clbrdrl\brdrs\brdrw10 \clbrdrb\brdrs\brdrw10 \clbrdrr\brdrs\brdrw10 \cltxlrtb \cellx1839\clvertalt\clbrdrt\brdrs\brdrw10 \clbrdrl\brdrs\brdrw10 \clbrdrb

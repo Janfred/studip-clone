@@ -142,34 +142,48 @@ Vorlesungskommentar
 									<xsl:value-of select="name"/>
 								</fo:inline>
 							</fo:block>
+<xsl:if test="fakultaet">
 							<fo:block>
 								<fo:inline font-weight="bold">Fakult&#228;t: </fo:inline>
 								<xsl:value-of select="fakultaet"/>
 							</fo:block>
+</xsl:if>
+<xsl:if test="homepage">
 							<fo:block>
 								<fo:inline font-weight="bold">Homepage: </fo:inline>
 								<xsl:value-of select="homepage"/>
 							</fo:block>
+</xsl:if>
+<xsl:if test="strasse">
 							<fo:block>
 								<fo:inline font-weight="bold">Strasse: </fo:inline>
 								<xsl:value-of select="strasse"/>
 							</fo:block>
+</xsl:if>
+<xsl:if test="plz">
 							<fo:block>
 								<fo:inline font-weight="bold">Postleitzahl: </fo:inline>
 								<xsl:value-of select="plz"/>
 							</fo:block>
+</xsl:if>
+<xsl:if test="telefon">
 							<fo:block>
 								<fo:inline font-weight="bold">Telefon: </fo:inline>
 								<xsl:value-of select="telefon"/>
 							</fo:block>
+</xsl:if>
+<xsl:if test="fax">
 							<fo:block>
 								<fo:inline font-weight="bold">Fax: </fo:inline>
 								<xsl:value-of select="fax"/>
 							</fo:block>
+</xsl:if>
+<xsl:if test="email">
 							<fo:block>
 								<fo:inline font-weight="bold">E-mail: </fo:inline>
 								<xsl:value-of select="email"/>
 							</fo:block>
+</xsl:if>
 							<fo:block space-after="12pt">
 							</fo:block>
 							<xsl:if test="seminare">

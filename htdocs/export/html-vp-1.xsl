@@ -5,35 +5,49 @@
 	<html>
 		<body>
 			<xsl:for-each select="studip/institut">
-				<h1>Institut: <xsl:value-of select="name"/>
+				<h1>Einrichtung: <xsl:value-of select="name"/>
 				</h1>
+<xsl:if test="fakultaet">
 				<b>Fakultät: </b>
 				<xsl:value-of select="fakultaet"/>
 				<br/>
+</xsl:if>
+<xsl:if test="homepage">
 				<b>Homepage: </b>
 				<xsl:value-of select="homepage"/>
 				<br/>
+</xsl:if>
+<xsl:if test="strasse">
 				<b>Strasse: </b>
 				<xsl:value-of select="strasse"/>
 				<br/>
+</xsl:if>
+<xsl:if test="plz">
 				<b>Postleitzahl: </b>
 				<xsl:value-of select="plz"/>
 				<br/>
+</xsl:if>
+<xsl:if test="telefon">
 				<b>Telefon: </b>
 				<xsl:value-of select="telefon"/>
 				<br/>
+</xsl:if>
+<xsl:if test="fax">
 				<b>Fax: </b>
 				<xsl:value-of select="fax"/>
 				<br/>
+</xsl:if>
+<xsl:if test="email">
 				<b>E-mail: </b>
 				<xsl:value-of select="email"/>
 				<br/>
+</xsl:if>
 				<br/>
 				<xsl:if test="seminare">
 					<table width="100%" cellpadding="5" cellspacing="2">
 						<tr>
 							<td>
-								<h2>Seminare</h2>
+								<h2>Veranstaltungen</h2>
 							</td>
 						</tr>
 						<xsl:choose>
