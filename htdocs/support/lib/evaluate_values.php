@@ -119,7 +119,7 @@ if (($supporter) && ($create_con)) {
 //cancel a just created con
 if (($supporter) && ($cancel_edit_con)) {
 	$killCon = new ContractObject($cancel_edit_con);
-	if ($killCon->isUnchanged()) {
+	if (($killCon->isUnchanged()) && ($killCon->isDeleteable())) {
 		$killCon->delete();
 
 		unset($supportdb_data["con_opens"][$killCon->getId()]);
@@ -203,7 +203,7 @@ if (($supporter) && ($create_req)) {
 //cancel a just created request
 if (($supporter) && ($cancel_edit_req)) {
 	$killReq = new RequestObject($cancel_edit_req);
-	if ($killReq->isUnchanged()) {
+	if (($killReq->isUnchanged()) && ($killReq->isDeleteable())) {
 		$killReq->delete();
 
 		unset($supportdb_data["req_opens"][$killReq->getId()]);
@@ -234,8 +234,10 @@ if (($supporter) && ($sent_req_id)) {
 	$changedReq->setUserId($req_user_id);
 	if ($req_channel)
 		$changedReq->setChannel($req_channel);
-	if ($req_topic_id)
+	if ($req_topic_id != "FALSE")
 		$changedReq->setTopicId($req_topic_id);
+	else
+		$changedReq->setTopicId(FALSE);	
 	
 	//checkdates
 	if (!check_date($req_month, $req_day, $req_year, $req_hour, $req_min)) {
