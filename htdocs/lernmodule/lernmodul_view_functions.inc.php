@@ -99,7 +99,7 @@ function show_seminar_modules($seminar_id)
 	
 function show_all_modules($seminar_id)
 {
-	global $PHP_SELF, $print_open;
+	global $PHP_SELF, $print_open, $SessSemName;
 
 	$module_count = 0;
 	$hide_mod = get_seminar_modules($seminar_id);
@@ -194,7 +194,7 @@ function show_all_modules_admin()
 
 function show_seminar_modules_links($seminar_id)
 {
-	global $PHP_SELF, $print_open;
+	global $PHP_SELF, $print_open, $SessSemName;
 	$out_str = link_seminar_modules($seminar_id);
  	if ($out_str == false)
  	{
