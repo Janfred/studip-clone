@@ -56,8 +56,12 @@ if (strstr( PHP_OS,"WIN") && $CHAT_ENABLE == true) 						//Attention: file based
 	$CHAT_SERVER_NAME = "ChatFileServer";
 
 // path generation for SRI-interface (external pages)
-if ($EXTERN_ENABLE && preg_match('#^(http://)?(.+?)(/)?$#', $EXTERN_SERVER_NAME, $matches))
-	$EXTERN_SERVER_NAME  = $matches[2] . '/';
+if ($EXTERN_ENABLE) {
+	if ($EXTERN_SERVER_NAME && preg_match('#^(http://)?(.+?)(/)?$#', $EXTERN_SERVER_NAME, $matches))
+		$EXTERN_SERVER_NAME  = $matches[2] . '/';
+	else
+	$EXTERN_SERVER_NAME = getenv("HTTP_HOST") . $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'];
+}
 
 //Besser hier globale Variablen definieren...
 $_fullname_sql['full'] = "TRIM(CONCAT(title_front,' ',Vorname,' ',Nachname,IF(title_rear!='',CONCAT(', ',title_rear),'')))";
