@@ -188,7 +188,7 @@ if ($num_my_sem){
 		else
 			print "<td class=\"gruppe2\">&nbsp;</td>";
 		print "<td class=\"$class\" align=\"center\">&nbsp;</td>";
-		printf ("<td class=\"$class\"><a href=\"seminar_main.php?auswahl=$semid\">%s</a></td>", $values["name"]);
+		printf ("<td class=\"$class\"><a href=\"seminar_main.php?auswahl=$semid\">%s</a></td>", htmlReady($values["name"]));
 		printf ("<td class=\"$class\" align=\"center\">&nbsp;%s&nbsp;</td>", $SEM_TYPE[$values["status"]]["name"]);
 		printf ("<td class=\"$class\" align=\"center\"><a href=\"institut_main.php?auswahl=%s\">&nbsp;%s&nbsp;</a></td>", $values["id"], htmlReady($values["Institut"]));
 // Inhalt
