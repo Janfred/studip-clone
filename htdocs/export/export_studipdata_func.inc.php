@@ -344,9 +344,9 @@ function export_teilis($inst_id, $ex_sem_id = "no")
 					while ( list($key, $val) = each($xml_names_person))
 					{
 						if ($val == "") $val = $key;
-						if ($key == "admission_studiengang_id")
-							$val = $studiengang[$val];
-						if ($db->f($key) != "") 
+						if (($key == "admission_studiengang_id") AND ($db->f($key) != ""))
+							$data_object .= xml_tag($val, $studiengang[$db->f($key)]);
+						elseif ($db->f($key) != "") 
 							$data_object .= xml_tag($val, $db->f($key));
 					}
 					$data_object .= xml_close_tag( $xml_groupnames_person["object"] );
