@@ -185,11 +185,8 @@ function veranstaltung_beginn ($seminar_id='', $art='', $semester_start_time='',
 					if (($term_data["start_time"] >= $sem["beginn"]) AND ($term_data["start_time"] <= $sem["ende"]))
 						$vorles_beginn=$sem["vorles_beginn"];
 				
-				$start_termin=$vorles_beginn+(($term_data["turnus_data"][0]["day"]-1)*24*60*60)+($term_data["turnus_data"][0]["start_stunde"]*60*60)+($term_data["turnus_data"][0]["start_minute"]*60) + ($term_data["start_woche"] * 7 * 24 * 60 *60);
-				$end_termin=$vorles_beginn+(($term_data["turnus_data"][0]["day"]-1)*24*60*60)+($term_data["turnus_data"][0]["end_stunde"]*60*60)+($term_data["turnus_data"][0]["end_minute"]*60) + ($term_data["start_woche"] * 7 * 24 * 60 *60);;
-				
-				//correct the start_termin to match monday, if necessary
-				$dow = date("w", $start_termin);
+				//correct the vorles_beginn to match monday, if necessary
+				$dow = date("w", $vorles_beginn);
 
 				if ($dow <= 5)
 					$corr = ($dow -1) * -1;
@@ -201,15 +198,17 @@ function veranstaltung_beginn ($seminar_id='', $art='', $semester_start_time='',
 					$corr = 0;
 
 				if ($corr) {
-					$start_termin_uncorrected = $start_termin;
-					$start_termin = mktime(date("G",$start_termin), date("i",$start_termin), 0, date("n",$start_termin), date("j",$start_termin)+$corr,  date("Y",$start_termin));
-					$end_termin = mktime(date("G",$end_termin), date("i",$end_termin), 0, date("n",$end_termin), date("j",$end_termin)+$corr,  date("Y",$end_termin));
+					$vorles_beginn_uncorrected = $vorles_beginn;
+					$vorles_beginn = mktime(date("G",$vorles_beginn), date("i",$vorles_beginn), 0, date("n",$vorles_beginn), date("j",$vorles_beginn)+$corr,  date("Y",$vorles_beginn));
 				}
+
+				$start_termin=$vorles_beginn+(($term_data["turnus_data"][0]["day"]-1)*24*60*60)+($term_data["turnus_data"][0]["start_stunde"]*60*60)+($term_data["turnus_data"][0]["start_minute"]*60) + ($term_data["start_woche"] * 7 * 24 * 60 *60);
+				$end_termin=$vorles_beginn+(($term_data["turnus_data"][0]["day"]-1)*24*60*60)+($term_data["turnus_data"][0]["end_stunde"]*60*60)+($term_data["turnus_data"][0]["end_minute"]*60) + ($term_data["start_woche"] * 7 * 24 * 60 *60);;
 
 				//correct the start_termin if the start_termin is ealier than $start_termin_uncorrected
 				$corr = 0;
-				if ($start_termin_uncorrected)
-					if ($start_termin < $start_termin_uncorrected) {
+				if ($vorles_beginn_uncorrected)
+					if ($start_termin < $vorles_beginn_uncorrected) {
 						if ($term_data["turnus"])
 							$corr = $corr + 7;
 					}
