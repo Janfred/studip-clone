@@ -639,7 +639,7 @@ IF ($picture!="") {
 		}
 	$print .= "<tr>
 				<td class=\"angemeldet\" width=\"100%\">
-					<table align=\"center\" width=\"99%\" border=\"0\" cellpadding=\"4\" cellspacing=\"0\">";
+					<table background=\"pictures/white.gif\" align=\"center\" width=\"99%\" border=\"0\" cellpadding=\"4\" cellspacing=\"0\">";
 for ($i = 0; $i < count($content); $i++) { $print .= "
 						<tr>
 							<td class=\"blank\" width=\"100%\" colspan=\"2\">

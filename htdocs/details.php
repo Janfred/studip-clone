@@ -129,7 +129,7 @@ else
 				printf ("<font size=-1>%s</font>",htmlReady($db2->f("Untertitel")));
 				?>
 				</td>
-				<td class="steel1" width="26%" rowspan=5  valign="top">
+				<td  class="steel1" width="26%" rowspan=5  valign="top">
 				
 				<? // Infobox 
 				
