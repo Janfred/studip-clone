@@ -207,7 +207,7 @@ class ExternModuleLecturedetails extends ExternModule {
 			}
 			
 			if ($visible[++$j] && $this->db->f("Beschreibung"))
-				$data["description"] = FixLinks(format(htmlReady($this->db->f("Beschreibung"))));
+				$data["description"] = formatReady($this->db->f("Beschreibung"), TRUE, TRUE, TRUE);
 			
 			if ($visible[++$j])
 				$data["location"] = getRoom($this->seminar_id, FALSE);
@@ -249,7 +249,7 @@ class ExternModuleLecturedetails extends ExternModule {
 			}
 			
 			if ($visible[++$j] && $this->db->f("Sonstiges"))
-				$data["misc"] = FixLinks(format(htmlReady($this->db->f("Sonstiges"))));
+				$data["misc"] = formatReady($this->db->f("Sonstiges"), TRUE, TRUE, TRUE);
 			
 			if ($visible[++$j] && $this->db->f("ects"))
 				$data["ects"] = htmlReady($this->db->f("ects"));
@@ -260,7 +260,7 @@ class ExternModuleLecturedetails extends ExternModule {
 				$datafields = $datafields_obj->getLocalFields($this->seminar_id);
 				foreach ($generic_datafields as $datafield) {
 					if ($visible[++$j])
-						$data[$datafield] = FixLinks(format(htmlReady($datafields[$datafield]["content"])));
+						$data[$datafield] = formatReady($datafields[$datafield]["content"], TRUE, TRUE, TRUE);
 				}
 			}
 			$out = $this->toStringMainTable($data, FALSE); 
