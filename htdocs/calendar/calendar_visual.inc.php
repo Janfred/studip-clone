@@ -334,7 +334,7 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 						$tab[$zeile] .= ' rowspan="'.$rows.'"';
 					
 					$category_style = $term[$zeile][$j]->getCategoryStyle($bg_image);
-					$tab[$zeile] .= " style=\"vertical-align:top; font-size:6pt; color:#FFFFFF;";
+					$tab[$zeile] .= " style=\"vertical-align:top; font-size:8pt; color:#FFFFFF;";
 					$tab[$zeile] .= " background-image:url(";
 					$tab[$zeile] .= $category_style['image'];
 					$tab[$zeile] .= "); border-style:solid; border-width:1px; border-color:";
@@ -348,9 +348,9 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 						$title_out = $term[$zeile][$j]->getTitle();
 					
 					if ($rows < 2) {
-						$title = fit_title($title_out, $colsp[$zeile], $rows +1, $title_length - 6);
+						$title = fit_title($title_out, $colsp[$zeile], $rows, $title_length - 6);
 						
-						$tab[$zeile] .= sprintf("<a href=\"$PHP_SELF?cmd=edit&termin_id=%s&atime=%d%s\">"
+						$tab[$zeile] .= sprintf("<a style=\"color: #FFFFFF;\" href=\"$PHP_SELF?cmd=edit&termin_id=%s&atime=%d%s\">"
 													, $term[$zeile][$j]->getId()
 													, ($day_obj->getStart() + $term[$zeile][$j]->getStart() % 86400)
 													, get_class($term[$zeile][$j]) == "seminarevent" ? "&evtype=sem" : "");
@@ -363,7 +363,7 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 						$tab[$zeile] .= ";\">" . date('H.i-', $term[$zeile][$j]->getStart());
 						$tab[$zeile] .= date('H.i', $term[$zeile][$j]->getEnd()) . "</div>\n";
 						$tab[$zeile] .= "<span style=\"vertical-align:middle;\">";
-						$tab[$zeile] .= sprintf("<a  style=\"color: #FFFFFF;\" href=\"$PHP_SELF?cmd=edit&termin_id=%s&atime=%d%s\">"
+						$tab[$zeile] .= sprintf("<a style=\"color: #FFFFFF;\" href=\"$PHP_SELF?cmd=edit&termin_id=%s&atime=%d%s\">"
 													, $term[$zeile][$j]->getId()
 													, ($day_obj->getStart() + $term[$zeile][$j]->getStart() % 86400)
 													, get_class($term[$zeile][$j]) == "seminarevent" ? "&evtype=sem" : "");
