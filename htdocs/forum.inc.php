@@ -525,6 +525,7 @@ function forum_get_buttons ($forumposting) {
 
 	{ if (!(have_sem_write_perm())) { // nur mit Rechten...	
 		if ($view=="search") $tmp = "&view=tree";
+		if ($view=="mixed") $tmp = "&open=".$forumposting["id"]."&view=flatfolder";
 		$edit = "<a href=\"".$PHP_SELF."?answer_id=".$forumposting["id"]."&flatviewstartposting=0&sort=age".$tmp."#anker\">&nbsp;" . makeButton("antworten", "img") . "</a>";
 		$edit .= "<a href=\"".$PHP_SELF."?answer_id=".$forumposting["id"]."&zitat=TRUE&flatviewstartposting=0&sort=age".$tmp."#anker\">&nbsp;" . makeButton("zitieren", "img") . "</a>";
 		if ($forumposting["lonely"]==TRUE && ($rechte || $forumposting["perms"]=="write")) // ich darf bearbeiten
@@ -918,7 +919,7 @@ function forum_draw_topicline() {
 *
 **/
 function printposting ($forumposting) {
-	global $PHP_SELF,$forum,$view,$davor,$auth,$user, $SessSemName, $loginfilelast, $sidebar, $indexvars, $open, $openorig;
+	global $PHP_SELF,$forum,$view,$davor,$auth,$user, $SessSemName, $loginfilelast, $sidebar, $indexvars, $open, $openorig, $delete_id;
 
   // Status des Postings holen
  	// auf- zugeklappt
@@ -984,7 +985,7 @@ function printposting ($forumposting) {
     		
   	// Alter ausgeben
   		
-  		if ($forumposting["type"] == "folder" && ($view=="tree" || $view=="mixed"))
+  		if ($forumposting["type"] == "folder" && ($view=="tree" || $view=="mixed") && !$delete_id)
   			$forumhead[] = 	"&nbsp;".date("d.m.Y - H:i", $forumposting["folderlast"])."&nbsp;";
   		else
   			$forumhead[] = 	"&nbsp;".date("d.m.Y - H:i", $forumposting["chdate"])."&nbsp;";
