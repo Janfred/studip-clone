@@ -38,8 +38,6 @@
 require_once("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_EXTERN/lib/ExternModule.class.php");
 require_once($ABSOLUTE_PATH_STUDIP . "msg.inc.php");
 
-$sess->register("EXTERN_SESSION_OPEN_ELEMENTS");
-
 echo "<tr><td class=\"blank\" width=\"99%\" valign=\"top\">\n";
 echo "<table class=\"blank\" border=\"0\" width=\"95%\" ";
 echo "align=\"left\" cellspacing=\"0\" cellpadding=\"0\">\n";
@@ -89,9 +87,9 @@ $elements = $module->getAllElements();
 // the first parameter of printOutEdit() has to be an array, because it is
 // possible to open more than one element form
 $edit_open = "";
+$l=0;
 foreach ($elements as $element) {
 	if ($edit == $element->getName())
-	//	$EXTERN_SESSION_OPEN_ELEMENTS[$element->getName()] = ($com == "open");
 		$edit_open = array("$edit" => ($com != "close"));
 }
 if ($com == "new" || $com == "edit" || $com == "open" || $com == "close") {
@@ -158,45 +156,20 @@ $info_preview .= "&preview=1&config_id=" . $module->config->getId() . "\">";
 $info_preview .= makeButton("vorschau") . "</a></div><br>";
 $info_preview .= _("Die Vorschau wird in einem neuen Fenster ge&ouml;ffnet.") . "<br>";
 $info_preview .= _("Es werden eventuell nicht alle Einstellungen in der Vorschau angezeigt.");
-/*echo "<br>";
- print_r($EXTERN_SESSION_OPEN_ELEMENTS);
- echo "<br>";
-//$open_elements = $EXTERN_SESSION_OPEN_ELEMENTS;
-if ($EXTERN_SESSION_OPEN_ELEMENTS["Main"]) {
-	$info_name = _("Verwenden Sie für den Namen der Konfiguration keine Sonderzeichen oder Umlaute.");
-	$info_content = array(	
-									array("kategorie" => "Information:",
-												"eintrag" => array(	
-													array("icon" => "pictures/ausruf_small.gif",
-																"text" => $info_edit_element
-													),
-													"eintrag" => array(	
-													array("icon" => "pictures/ausruf_small.gif",
-																"text" => $info_name
-													)
-									))),
-									array("kategorie" => "Aktion:",
-		   									"eintrag" => array(	
-													array("icon" => "pictures/ausruf_small.gif",
-																"text" => $info_preview,
-													)
-									)));
-}
-else {*/
-	$info_content = array(	
-									array("kategorie" => "Information:",
-												"eintrag" => array(	
-													array("icon" => "pictures/ausruf_small.gif",
-																"text" => $info_edit_element
-													)
-									)),
-									array("kategorie" => "Aktion:",
-		   									"eintrag" => array(	
-													array("icon" => "pictures/ausruf_small.gif",
-																"text" => $info_preview,
-													)
-									)));
-//}
+
+$info_content = array(	
+								array("kategorie" => "Information:",
+											"eintrag" => array(	
+												array("icon" => "pictures/ausruf_small.gif",
+															"text" => $info_edit_element
+												)
+								)),
+								array("kategorie" => "Aktion:",
+	   									"eintrag" => array(	
+												array("icon" => "pictures/ausruf_small.gif",
+															"text" => $info_preview,
+												)
+								)));
 
 print_infobox($info_content, "pictures/einrichtungen.jpg");
 
