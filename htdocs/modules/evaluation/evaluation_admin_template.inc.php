@@ -673,8 +673,10 @@ function save1($myuserid){
      /*Anzahl der Antworten bei Polskalen anpassen ------------------------*/
      if ($template_type == EVALQUESTION_TYPE_POL && $i == 0){
 	$answerdiff = $controlnumber - $template_add_num_answers ;
-	//if($template_residual)
-	//  $answerdiff++;
+	if($template_residual){
+	   //echo "Hust<br>";
+	   //$answerdiff;
+	}
 	if($answerdiff > 0){
 	   /*differenz abziehen => answers überspringen*/
 	   $i=$i+$answerdiff;

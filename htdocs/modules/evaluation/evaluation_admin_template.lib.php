@@ -598,11 +598,14 @@ class EvalTemplateGUI {
 	  $select->attr( "name", "template_add_num_answers" );
 	  $select->attr( "size", "1" );
 	  $select->attr( "style", "vertical-align:middle;" );
+	  if($isResidual==YES){
+	     $res=1;
+	  }
 	  for( $i=4; $i<=20; $i++ ) {
 	     $option = new HTM( "option" );
 	     $option->attr( "value", $i );
 	     $option->cont( $i );
-	     if($i == $question->getNumberChildren())
+	     if($i == $question->getNumberChildren()-$res)
 		$option->addAttr("selected","selected");
 	     $select->cont( $option );
 	  }
