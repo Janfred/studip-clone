@@ -27,16 +27,17 @@ require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/admission.inc.php");	//Funktionen der Teilnehmerbegrenzung
 require_once ("$ABSOLUTE_PATH_STUDIP/messaging.inc.php");	//Funktionen des Nachrichtensystems
-	
+require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php");		//We need the config for some parameters of the class of the Veranstaltung
+
 // Start  of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head	
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   //hier wird der "Kopf" nachgeladen
 include ("$ABSOLUTE_PATH_STUDIP/links1.php");
 	
-	$messaging=new messaging;
-	$cssSw=new cssClassSwitcher;
+$messaging=new messaging;
+$cssSw=new cssClassSwitcher;
 
-//Hilfsfunktion, erzeugt eine lsite mit allen ids der einrichtungen
+//Hilfsfunktion, erzeugt eine Liste mit allen ids der einrichtungen
 function get_inst_list(){
 	global $SessSemName;
 	$db = new DB_Seminar("SELECT Institut_id FROM seminar_inst WHERE seminar_id='$SessSemName[1]'"); //beteiligte Einrichtungen
@@ -116,7 +117,7 @@ if ($cmd=="pain") {
 		$db->next_record();
 		$userchange=$db->f("user_id");
 		$db->query("UPDATE seminar_user SET status='autor' WHERE Seminar_id = '$id' AND user_id = '$userchange'");
-		$msg = "msg§Der Tutor ".$db->f("Vorname")." ". $db->f("Nachname")." wurde entlassen und auf Autor zur&uuml;ckgestuft.§";
+		$msg = sprintf ("msg§%s %s wurde entlassen und auf Autor zur&uuml;ckgestuft.§", ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) ? "Das Mitglied" : "Der Tutor", get_fullname($userchange));
 	}
 	else $msg ="error§Netter Versuch! vielleicht beim n&auml;chsten Mal!§";
 }
@@ -163,7 +164,8 @@ if ($cmd=="raus") {
 		$userchange=$db->f("user_id");
 		$db->query("DELETE FROM seminar_user WHERE Seminar_id = '$id' AND user_id = '$userchange'");
 		
-		$message="Ihr Abonnement der Veranstaltung **$SessSemName[0]** wurde von einem Dozenten oder Administrator aufgehoben.";
+		$message= sprintf ("Ihr Abonnement der Veranstaltung **%s** wurde von einem %s oder Administrator aufgehoben.", $SessSemName[0], ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) ? "Leiter" : "Dozent");
+;
 		$messaging->insert_sms ($username, $message, "____%system%____");
 		
 		//Pruefen, ob es Nachruecker gibt
@@ -185,7 +187,7 @@ if ($cmd=="admission_raus") {
 		$userchange=$db->f("user_id");
 		$db->query("DELETE FROM admission_seminar_user WHERE seminar_id = '$id' AND user_id = '$userchange'");
 
-		$message="Sie wurden vom einem Dozenten oder Administrator von der Warteliste der Veranstaltung **$SessSemName[0]** gestrichen und sind damit __nicht__ zugelassen worden.";
+		$message= sprintf ("Sie wurden vom einem %s oder Administrator von der Warteliste der Veranstaltung **%s** gestrichen und sind damit __nicht__ zugelassen worden.", ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) ? "Leiter" : "Dozent", $SessSemName[0]);
 		$messaging->insert_sms ($username, $message, "____%system%____");
 		
 		//Warteliste neu sortieren
@@ -197,31 +199,31 @@ if ($cmd=="admission_raus") {
 }
 
 //aus der Anmelde- oder Warteliste in die Veranstaltung hochstufen
-if (($cmd=="admission_rein") || ($cmd=="add_autor")) {
+if ((($cmd=="admission_rein") || ($cmd=="add_user")) && ($username)){
 	//erst mal sehen, ob er hier wirklich Dozent ist...
 	if ($rechte) {
 		$db->query("SELECT * FROM auth_user_md5 WHERE username = '$username'");
 		$db->next_record();
 		$userchange=$db->f("user_id");
-		
+
 		$db2->query("SELECT start_time FROM seminare WHERE Seminar_id = '$id'");
 		$db2->next_record();
 		$group=select_group ($db2->f("start_time"),$db->f("user_id"));		
-		
-		$db->query("INSERT INTO seminar_user SET Seminar_id = '$id', user_id = '$userchange', status= 'autor', gruppe='$group' ");
-		if ($db->affected_rows())
-			$db2->query("DELETE FROM admission_seminar_user WHERE seminar_id = '$id' AND user_id = '$userchange'");
+		$query2 = sprintf("INSERT INTO seminar_user SET Seminar_id = '%s', user_id = '%s', status= '%s', gruppe='$group' ", $id, $userchange, (!$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["only_inst_user"] && ($db->f("perms") == "tutor" || $db->f("perms") == "dozent")) ? "tutor" : "autor");
+		$db2->query($query2);
+		if ($db2->affected_rows())
+			$db3->query("DELETE FROM admission_seminar_user WHERE seminar_id = '$id' AND user_id = '$userchange'");
 		
 		//Only if user was on the waiting list
-		if ($db2->affected_rows()) {
-			$message="Sie wurden vom einem Dozenten oder Administrator aus der Warteliste in die Veranstaltung **$SessSemName[0]** aufgenommen und sind damit zugelassen.";
+		if ($db3->affected_rows()) {
+			$message = sprintf("Sie wurden vom einem %s oder Administrator aus der Warteliste in die Veranstaltung **%s** aufgenommen und sind damit zugelassen.", ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) ? "Leiter" : "Dozent", $SessSemName[0]);
 			$messaging->insert_sms ($username, $message, "____%system%____");
 		}
 
 		//Warteliste neu sortieren
 		 renumber_admission($id);
 		
-		if ($cmd=="add_autor")
+		if ($cmd=="add_user")
 			$msg = "msg§Der Nutzer ".$db->f("Vorname")." ". $db->f("Nachname")." wurde in die Veranstaltung eingetragen.§";
 		else
 			$msg = "msg§Der Nutzer ".$db->f("Vorname")." ". $db->f("Nachname")." wurde aus der Anmelde bzw. Warteliste in die Veranstaltung hochgestuft.§";
@@ -252,7 +254,7 @@ if (isset($add_tutor_x)) {
 					if ($db2->f("status") == "autor" || $db2->f("status") == "user") {
 						// gehen wir ihn halt hier hochstufen
 						$db2->query("UPDATE seminar_user SET status='tutor' WHERE Seminar_id = '$id' AND user_id = '$u_id'");
-						$msg = "msg§".$db->f("Vorname")." ". $db->f("Nachname")." wurde zum Tutor bef&ouml;rdert.§";
+						$msg = sprintf ("msg§%s wurde zum %s bef&ouml;rdert.§", get_fullname($u_id), ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) ? "Mitglied" : "Tutor" );
 						//kill from waiting user
 						$db2->query("DELETE FROM admission_seminar_user WHERE seminar_id = '$id' AND user_id = '$u_id'");
 						//reordner waiting list
@@ -266,14 +268,14 @@ if (isset($add_tutor_x)) {
 					$db->next_record();
 					$group=select_group ($db3->f("start_time"), $u_id);
 					$db2->query("INSERT into seminar_user (Seminar_id, user_id, status, gruppe) values ('$id', '$u_id', 'tutor','$group' )");
-					$msg = sprintf ("msg§%s wurde als Tutor in die Veranstaltung aufgenommen.</b>", get_fullname($u_id));
-	
+					$msg = sprintf ("msg§%s wurde als %s in die Veranstaltung aufgenommen.</b>", get_fullname($u_id), ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) ? "Mitglied" : "Tutor");
+
 					//kill from waiting user
 					$db2->query("DELETE FROM admission_seminar_user WHERE seminar_id = '$id' AND user_id = '$u_id'");
 					//reordner waiting list
 					 renumber_admission($id);
 
-					$message="Sie wurden vom einem Dozenten oder Administrator als **Tutor** in die Veranstaltung **$SessSemName[0]** aufgenommen und sind damit zugelassen";
+					$message= sprintf("Sie wurden vom einem %s oder Administrator als **%s** in die Veranstaltung **%s** aufgenommen und sind damit zugelassen", ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) ? "Leiter" : "Dozent", ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) ? "Mitglied" : "Tutor", $SessSemName[0]);
 					$messaging->insert_sms (get_username($u_id), $message, "____%system%____");
 				}
 			}
@@ -288,10 +290,17 @@ if (isset($add_tutor_x)) {
 check_admission();
  
 
-$gruppe = array ("dozent" => "DozentInnen",
-		  "tutor" => "TutorInnen",
-		  "autor" => "AutorInnen",
-		  "user" => "LeserInnen");
+if (!$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"])
+	$gruppe = array ("dozent" => "DozentInnen",
+				  "tutor" => "TutorInnen",
+				  "autor" => "AutorInnen",
+				  "user" => "LeserInnen");
+else
+	$gruppe = array ("dozent" => "LeiterInnen",
+				  "tutor" => "Mitglieder",
+				  "autor" => "AutorInnen",
+				  "user" => "LeserInnen");
+
 ?>
 
 <tr>
@@ -376,31 +385,31 @@ if ($db->num_rows()) { //Only if Users were found...
 			$width=20;
 						
 		if ($key == "dozent") {
-			echo"<td class=\"steel\" width=\"$width%\" align=\"center\"><b>&nbsp;</b></td>";
-			echo"<td class=\"steel\" width=\"$width%\" align=\"center\"><b>&nbsp;</b></td>";
+			printf ("<td class=\"steel\" width=\"%s%%\" align=\"center\"><b>&nbsp;</b></td>", $width);
+			printf ("<td class=\"steel\" width=\"%s%%\" align=\"center\"><b>&nbsp;</b></td>", $width);
 			if ($db3->f("admission_type"))
 				echo"<td class=\"steel\" width=\"10%\" align=\"center\"><b>&nbsp;</b></td>";
 		}
 
 		if ($key == "tutor") {
-			echo"<td class=\"steel\" width=\"$width%\" align=\"center\"><font size=\"-1\"><b>&nbsp;</b></font></td>";
-			echo"<td class=\"steel\" width=\"$width%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>TutorIn entlassen</b></font></td>";
+			printf ("<td class=\"steel\" width=\"%s%%\" align=\"center\"><font size=\"-1\"><b>&nbsp;</b></font></td>", $width);
+			printf ("<td class=\"steel\" width=\"%s%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>%s entlassen</b></font></td>", $width, ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) ? "Mitglied" : "TutorIn");
 			if ($db3->f("admission_type"))
 				echo"<td class=\"steel\" width=\"10%\" align=\"center\"><b>&nbsp;</b></td>";
 		}
 		
 		if ($key == "autor") {
-			echo"<td class=\"steel\" width=\"$width%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>als TutorIn eintragen</b></font></td>";
-			echo"<td class=\"steel\" width=\"$width%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>Schreibrecht entziehen</b></font></td>";
+			printf ("<td class=\"steel\" width=\"%s%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>als %s eintragen</b></font></td>",  $width, ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) ? "Mitglied" : "TutorIn");
+			printf ("<td class=\"steel\" width=\"%s%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>Schreibrecht entziehen</b></font></td>", $width);
 			if ($db3->f("admission_type"))
 				echo"<td class=\"steel\" width=\"10%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>Kontingent</b></font></td>";
 		}
 
 		if ($key == "user") {
-			echo"<td class=\"steel\" width=\"$width%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>Schreibrecht erteilen</b></font></td>";
-			echo"<td class=\"steel\" width=\"$width%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>BenutzerIn entfernen</b></font></td>";
+			printf ("<td class=\"steel\" width=\"%s%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>Schreibrecht erteilen</b></font></td>", $width);
+			printf ("<td class=\"steel\" width=\"%s%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>BenutzerIn entfernen</b></font></td>", $width);
 			if ($db3->f("admission_type"))
-				echo"<td class=\"steel\" width=\"10%\" align=\"center\"><b>&nbsp;</b></td>";
+				print"<td class=\"steel\" width=\"10%\" align=\"center\"><b>&nbsp;</b></td>";
 		}		
 	}
 	
@@ -462,7 +471,7 @@ if ($db->num_rows()) { //Only if Users were found...
 	echo "<tr>";
 	if ($showscore == TRUE) {
 		printf("<td bgcolor=\"#%s%s%s\" class=\"%s\">", $red, $green,$blue, $class2);
-		printf("<img src=\"pictures/blank.gif\" %s width=\"10\" heigth=\"10\"></td>", tooltip("Aktivitaet: ".round($aktivity_index_user)."%"));
+		printf("<img src=\"pictures/blank.gif\" %s width=\"10\" heigth=\"10\"></td>", tooltip("Aktivit&auml;aet: ".round($aktivity_index_user)."%"));
 	}
 	printf("<td class=\"%s\"><font size=\"-1\"><a href = about.php?username=" . $db->f("username") . ">", $class);
 	print(htmlReady($db->f("Vorname")) ." ". htmlReady($db->f("Nachname")) ."</a>");
@@ -490,7 +499,10 @@ if ($db->num_rows()) { //Only if Users were found...
 		elseif ($key == "autor") {
 			// zum Tutor befördern
 			if ($SemUserStatus!="tutor") {
-				$db2->query ("SELECT DISTINCT inst_perms, user_id, Institut_id FROM user_inst WHERE user_id = '$UID' AND Institut_id IN(".get_inst_list().") AND inst_perms!='user' AND inst_perms!='autor'");		
+				if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["only_inst_user"]) 
+					$db2->query ("SELECT DISTINCT inst_perms, user_id, Institut_id FROM user_inst WHERE user_id = '$UID' AND Institut_id IN(".get_inst_list().") AND inst_perms!='user' AND inst_perms!='autor'");		
+				else
+					$db2->query ("SELECT user_id FROM auth_user_md5  WHERE perms IN ('tutor', 'dozent') AND user_id = '$UID' ");						
 				if ($db2->next_record()) {
 					echo "<td class=\"$class\" align=\"center\">";
 					echo "<a href=\"$PHP_SELF?cmd=pleasure&username=$username\"><img border=\"0\" src=\"pictures/up.gif\" width=\"21\" height=\"16\"></a></td>";
@@ -599,7 +611,8 @@ if ($rechte) {
 }
 
 // Der Dozent braucht mehr Unterstuetzung, also Tutor aus der(n) Einrichtung(en) berufen...
-if ($rechte AND $SemUserStatus!="tutor") {
+//Note the option "only_inst_user" from the config.inc. If it is NOT setted, this Option is disabled (the functionality will do in this case do seachform below)
+if ($rechte AND $SemUserStatus!="tutor" AND $SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["only_inst_user"]) {
 	$value_list = get_inst_list();
 			$query = "SELECT DISTINCT b.user_id, username, Vorname, Nachname, inst_perms FROM user_inst a ".
 			"LEFT JOIN auth_user_md5  b USING(user_id) ".
@@ -625,7 +638,7 @@ if ($rechte AND $SemUserStatus!="tutor") {
 			printf ("<option value=\"%s\">%s - %s\n", $db->f("user_id"), my_substr($db->f("Nachname").", ".$db->f("Vorname")." (".$db->f("username"),0,35).")", $db->f("inst_perms"));
 		?>
 		</select></td>
-		<td class="steel1" width="20%" align="center"><font size=-1>als TutorIn</font><br />
+		<td class="steel1" width="20%" align="center"><font size=-1><? if (!$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) print "als TutorIn"; else print "als Mitglied" ?></font><br />
 		<input type="IMAGE" name="add_tutor" src="./pictures/buttons/eintragen-button.gif" border="0" value=" Als TutorIn berufen "></td>
 	</tr></form></table>
 <?
@@ -650,7 +663,7 @@ if ($rechte) {
 	<tr><td class=blank colspan=2>
 
 	<table width="99%" border="0" cellpadding="2" cellspacing="0" border=0 align="center">
-	<form action="<? echo $PHP_SELF ?>?cmd=add_autor" method="POST">
+	<form action="<? echo $PHP_SELF ?>?cmd=add_user" method="POST">
 	<tr>
 		<td class="steel1" width="40%" align="left">&nbsp; <font size=-1><b>Gefundene Nutzer</b></font></td>
 		<td class="steel1" width="40%" align="left"><select name="username" size="1">
@@ -660,8 +673,8 @@ if ($rechte) {
 			printf ("<option value=\"%s\">%s - %s\n", $db->f("username"), my_substr($db->f("Nachname").", ".$db->f("Vorname")." (".$db->f("username"),0,35).")", $db->f("perms"));
 		?>
 		</select></td>
-		<td class="steel1" width="20%" align="center"><font size=-1>als AutorIn&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </font><br />
-		<input type="IMAGE" name="add_autor" src="./pictures/buttons/eintragen-button.gif" border=0 value=" Als AutorIn berufen ">&nbsp; 
+		<td class="steel1" width="20%" align="center"><font size=-1><? if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["only_inst_user"]) print "als AutorIn" ?>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </font><br />
+		<input type="IMAGE" name="add_user" src="./pictures/buttons/eintragen-button.gif" border=0 value=" Als AutorIn berufen ">&nbsp; 
 		<a href="<? echo $PHP_SELF ?>"><img src="./pictures/buttons/neuesuche-button.gif" border=0 /></a></td>
 	</tr></form></table>
 		<?
