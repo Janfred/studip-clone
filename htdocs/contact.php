@@ -23,6 +23,16 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check("user");
 
+
+	if ($forum["jshover"]==1 AND $auth->auth["jscript"]) { // JS an und erwuenscht?
+		echo "<script language=\"JavaScript\">";
+		echo "var ol_textfont = \"Arial\"";
+		echo "</script>";
+		echo "<DIV ID=\"overDiv\" STYLE=\"position:absolute; visibility:hidden; z-index:1000;\"></DIV>";
+		echo "<SCRIPT LANGUAGE=\"JavaScript\" SRC=\"overlib.js\"></SCRIPT>";
+	}
+
+
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page

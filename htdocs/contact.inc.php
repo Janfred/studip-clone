@@ -181,6 +181,33 @@ function GetExtraUserinfo ($contact_id)
 		return $userinfo;
 }
 
+function GetUserInfo($user_id)
+{
+	$db=new DB_Seminar;
+	$db->query ("SELECT * FROM user_info WHERE user_id = '$user_id'");	
+	if ($db->next_record()) {	
+		if ($db->f("Home")!="")
+			$userinfo["Homepage"] = "<a href=\"".$db->f("Home")."\">".$db->f("Home")."</a>";
+		if ($db->f("privatnr")!="")
+			$userinfo["Privat Tel."] = $db->f("privatnr");
+		if ($db->f("privadr")!="")
+			$userinfo["Addresse"] = $db->f("privadr");
+	}
+	$db->query ("SELECT sprechzeiten, raum, user_inst.telefon, user_inst.fax, Name, Institute.Institut_id FROM user_inst LEFT JOIN Institute USING(Institut_id) WHERE user_id = '$user_id' AND inst_perms != 'user'");	
+	while ($db->next_record()) {	
+		$userinfo["Einrichtung"] = "<a href=\"institut_main.php?auswahl=".$db->f("Institut_id")."\">".$db->f("Name")."</a>";
+		if ($db->f("raum")!="")
+			$userinfo["Raum"] = $db->f("raum");
+		if ($db->f("sprechzeiten")!="")
+			$userinfo["Sprechzeiten"] = $db->f("sprechzeiten");
+		if ($db->f("telefon")!="")
+			$userinfo["Dienst Tel."] = $db->f("telefon");			
+		if ($db->f("fax")!="")
+			$userinfo["Dienst Fax"] = $db->f("fax");
+	}
+	return $userinfo;
+}
+
 function ShowUserInfo ($contact_id)
 { 	// Show the standard userinfo
 	global $user, $open, $edit_id;
@@ -205,30 +232,11 @@ function ShowUserInfo ($contact_id)
 	// hier Zusatzinfos
 
 	if ($open == $contact_id || $open == "all" || $edit_id) {
-		$db->query ("SELECT * FROM user_info WHERE user_id = '$user_id'");	
-		if ($db->next_record()) {	
-			if ($db->f("Home")!="")
-				$userinfo["Homepage"] = "<a href=\"".$db->f("Home")."\">".$db->f("Home")."</a>";
-			if ($db->f("privatnr")!="")
-				$userinfo["Privat Tel."] = $db->f("privatnr");
-			if ($db->f("privadr")!="")
-				$userinfo["Addresse"] = $db->f("privadr");
-		}
-		$db->query ("SELECT sprechzeiten, raum, user_inst.telefon, user_inst.fax, Name, Institute.Institut_id FROM user_inst LEFT JOIN Institute USING(Institut_id) WHERE user_id = '$user_id' AND inst_perms != 'user'");	
-		while ($db->next_record()) {	
-			$userinfo["Einrichtung"] = "<a href=\"institut_main.php?auswahl=".$db->f("Institut_id")."\">".$db->f("Name")."</a>";
-			if ($db->f("raum")!="")
-				$userinfo["Raum"] = $db->f("raum");
-			if ($db->f("sprechzeiten")!="")
-				$userinfo["Sprechzeiten"] = $db->f("sprechzeiten");
-			if ($db->f("telefon")!="")
-				$userinfo["Dienst Tel."] = $db->f("telefon");			
-			if ($db->f("fax")!="")
-				$userinfo["Dienst Fax"] = $db->f("fax");
-		}
+
+		$userinfo = GetUserInfo($user_id);
 		if (sizeof($userinfo)>0) {
 			while(list($key,$value) = each($userinfo)) {
-				$output .= "<tr><td class=\"steel1\" width=\"100\"><font size=\"2\">".$key.":</font></td><td class=\"steel1\" width=\"250\"><font size=\"2\">".$value."</font></td></tr>";
+				$output .= "<tr><td class=\"steel1\" width=\"100\"><font size=\"2\">".htmlReady($key).":</font></td><td class=\"steel1\" width=\"250\"><font size=\"2\">".htmlReady($value)."</font></td></tr>";
 			}
 		}
 
@@ -253,7 +261,7 @@ function ShowUserInfo ($contact_id)
 
 function ShowContact ($contact_id)
 {	// Ausgabe eines Kontaktes
-	global $PHP_SELF, $open, $filter;
+	global $PHP_SELF, $open, $filter, $forum, $auth;
 	$db=new DB_Seminar;
 	$db->query ("SELECT contact_id, user_id, buddy FROM contact WHERE contact_id = '$contact_id'");	
 	if ($db->next_record()) {
@@ -270,7 +278,38 @@ function ShowContact ($contact_id)
 						."<a href=\"$PHP_SELF?cmd=delete&contact_id=$contact_id\"><img src=\"pictures/trash_att.gif\" border=\"0\"></a></td></tr>"
 						."<tr><td colspan=\"2\" class=\"steelgraulight\" align=\"center\"><a href=\"$PHP_SELF?filter=$filter\"><img src=\"pictures/forumgraurauf.gif\" border=\"0\"></a></td></tr>";
 		} else {
-			$lastrow = "<tr><td colspan=\"2\" class=\"steelgraulight\" align=\"center\"><a href=\"$PHP_SELF?filter=$filter&open=".$contact_id."#anker\"><img src=\"pictures/forumgraurunt.gif\" border=\"0\"></a></td></tr>";
+			if ($forum["jshover"]==1 AND $auth->auth["jscript"]) { // Hovern
+				$description = "";	
+
+				$userinfo = GetUserInfo($db->f("user_id"));
+				if (sizeof($userinfo)>0) {
+					while(list($key,$value) = each($userinfo)) {
+//						$description .= "<tr><td class=\"steel1\" width=\"100\"><font size=\"2\">".$key.":</font></td><td class=\"steel1\" width=\"250\"><font size=\"2\">".$value."</font></td></tr>";
+						$description .= "<b>".FormatReady($key).":</b>       ".$value."\n";
+					}
+				}
+
+				$extra = GetExtraUserinfo ($contact_id);
+				if (sizeof($extra)>0) {
+					while(list($key,$value) = each($extra)) {
+						$description .= "<b>".JSReady($key).":</b>      ".FormatReady($value)."\n";
+					}
+				}
+
+				$hoverlink = "<a href=\"$PHP_SELF?filter=$filter&open=".$contact_id."#anker\" ";
+				$name = "huhu";
+				$txt = "<hr>Klicken zum Bearbeiten";
+				$bild = "pictures/forumgraurunt.gif";
+				$link =	$hoverlink
+						."onMouseOver=\"return overlib('"
+						.JSReady($description,"contact").$txt
+						."', NOCLOSE, CSSOFF)\" "
+						." onMouseOut=\"nd();\"><img src=\"".$bild."\" border=0></a>";
+			} else {
+				$link = "<a href=\"$PHP_SELF?filter=$filter&open=".$contact_id."#anker\"><img src=\"pictures/forumgraurunt.gif\" border=\"0\"></a>";
+			}
+
+			$lastrow = "<tr><td colspan=\"2\" class=\"steelgraulight\" align=\"center\">".$link."</td></tr>";
 		}			
 		if ($open == $contact_id) {		//es ist ein einzelner Beitrag aufgeklappt, also Anker setzen
 			$output = "<a name=\"anker\"></a>";
@@ -280,7 +319,7 @@ function ShowContact ($contact_id)
 		$output .= "<table cellspacing=\"0\" width=\"350\" class=\"blank\">
 					<tr>
 						<td class=\"topic\" colspan=\"2\"><font size=\"2\"><b>"
-							.get_nachname($db->f("user_id")).", ".get_vorname($db->f("user_id"))."</b></font></td>"
+							.get_fullname($db->f("user_id"), $format = "full_rev" )."</b></font></td>"
 							."
 						</td>
 					</tr>"
@@ -329,7 +368,7 @@ function ShowEditContact ($contact_id)
 		$output = "<table cellspacing=\"0\" width=\"700\" class=\"blank\">
 					<tr>
 						<td class=\"topicwrite\" colspan=\"3\">"
-							.get_nachname($db->f("user_id")).", ".get_vorname($db->f("user_id"))."</td>"
+							.get_fullname($db->f("user_id"), $format = "full_rev" )."</td>"
 							."
 						</td>
 					</tr>"
