@@ -800,7 +800,7 @@ function FixLinks ($data = "", $fix_nl = TRUE, $nl_to_br = TRUE, $img = FALSE, $
 * @return	string
 */
 function preg_call_link ($params, $mod, $img, $extern = FALSE) {
-	global $auth;
+	global $auth, $STUDIP_DOMAINS;
 	$chars= '&;_a-z0-9-';
 	if ($extern)
 		$link_pic = '';
@@ -816,6 +816,14 @@ function preg_call_link ($params, $mod, $img, $extern = FALSE) {
 			$tbr = '<a href="'.idna_link($params[4])."\" target=\"_blank\">$link_pic{$params[3]}</a>";
 		}
 		elseif ($img) {
+			if (is_array($STUDIP_DOMAINS)) {
+				$domains = '';
+				foreach ($STUDIP_DOMAINS as $studip_domain)
+					$domains .= '|' . preg_quote($studip_domain);
+				$domains = substr($domains, 1);
+				if (preg_match("'($domains)\/.+?\.php'i", $params[0]))
+					return $params[0];
+			}
 			if (!preg_match(':.+(\.jpg|\.jpeg|\.png|\.gif)$:i', $params[0]))
 				$tbr = $params[0];
 			else {
