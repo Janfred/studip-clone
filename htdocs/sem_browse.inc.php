@@ -828,14 +828,14 @@ if (($sem_browse_data["level"]=="i") && (!$hide_bereich))
 			if ($i % 2 == 0)
 				{
 				echo "<tr><td class=\"blank\" width=\"50%\" valign=\"_top\">";
-				echo "<a href=\"$PHP_SELF?level=s&id=", $db->f("Institut_id"), "&oid=".$sem_browse_data["id"]."\"><b>", htmlReady($db->f("Name")), "</b></a><br>";
+				echo "<a href=\"$PHP_SELF?level=s&id=", $db->f("Institut_id"), "&oid=".$sem_browse_data["id"]."\"><b>", htmlReady($db->f("Name")), "</b></a>&nbsp;<font size=-1>(", $db->f("number_seminare"), ")</font><br>";
 				$i++;
 				echo "</td>\n";
 				}
 			else
 				{
 				echo "<td class=\"blank\" width=\"50%\" valign=\"_top\">";
-				echo "<a href=\"$PHP_SELF?level=s&id=", $db->f("Institut_id"), "&oid=".$sem_browse_data["id"]."\"><b>", htmlReady($db->f("Name")), "</b></a><br>";
+				echo "<a href=\"$PHP_SELF?level=s&id=", $db->f("Institut_id"), "&oid=".$sem_browse_data["id"]."\"><b>", htmlReady($db->f("Name")), "</b></a>&nbsp;<font size=-1>(", $db->f("number_seminare"), ")</font><br>";
 				$i++;
 				echo "</td></tr>\n";
 				}
@@ -861,14 +861,14 @@ if (($sem_browse_data["level"]=="b")  && (!$hide_bereich))
 			if ($i % 2 == 0)
 				{
 				echo "<tr><td class=\"blank\" width=\"50%\" valign=\"_top\">";
-				echo "<a href=\"$PHP_SELF?level=sbb&id=", $db->f("bereich_id"), "&oid=".$sem_browse_data["id"]."&oid2=".$sem_browse_data["oid"]."\"><b>", htmlReady($db->f("name")), "</b></a><br>";
+				echo "<a href=\"$PHP_SELF?level=sbb&id=", $db->f("bereich_id"), "&oid=".$sem_browse_data["id"]."&oid2=".$sem_browse_data["oid"]."\"><b>", htmlReady($db->f("name")), "</b></a>&nbsp;<font size=-1>(", $db->f("number_seminare"), ")</font><br>";
 				$i++;
 				echo "</td>\n";
 				}
 			else
 				{
 				echo "<td class=\"blank\" width=\"50%\" valign=\"_top\">";
-				echo "<a href=\"$PHP_SELF?level=sbb&id=", $db->f("bereich_id"), "&oid=".$sem_browse_data["id"]."&oid2=".$sem_browse_data["oid"]."\"><b>", htmlReady($db->f("name")), "</b></a><br>";
+				echo "<a href=\"$PHP_SELF?level=sbb&id=", $db->f("bereich_id"), "&oid=".$sem_browse_data["id"]."&oid2=".$sem_browse_data["oid"]."\"><b>", htmlReady($db->f("name")), "</b></a>&nbsp;<font size=-1>(", $db->f("number_seminare"), ")</font><br>";
 				$i++;
 				echo "</td></tr>\n";
 				}
@@ -893,14 +893,14 @@ if (($sem_browse_data["level"]=="sb") && (!$hide_bereich))
 			if ($i % 2 == 0)
 				{
 				echo "<tr><td class=\"blank\" width=\"50%\" valign=\"_top\">";
-				echo "<a href=\"$PHP_SELF?level=b&id=", $db->f("fach_id"), "&oid=".$sem_browse_data["id"]."\"><b>", htmlReady($db->f("name")), "</b></a><br>";
+				echo "<a href=\"$PHP_SELF?level=b&id=", $db->f("fach_id"), "&oid=".$sem_browse_data["id"]."\"><b>", htmlReady($db->f("name")), "</b></a>&nbsp;<font size=-1>(", $db->f("number_seminare"), ")</font><br>";
 				$i++;
 				echo "</td>\n";
 				}
 			else
 				{
 				echo "<td class=\"blank\" width=\"50%\" valign=\"_top\">";
-				echo "<a href=\"$PHP_SELF?level=b&id=", $db->f("fach_id"), "&oid=".$sem_browse_data["id"]."\"><b>", htmlReady($db->f("name")), "	</b></a><br>";
+				echo "<a href=\"$PHP_SELF?level=b&id=", $db->f("fach_id"), "&oid=".$sem_browse_data["id"]."\"><b>", htmlReady($db->f("name")), "	</b></a>&nbsp;<font size=-1>(", $db->f("number_seminare"), ")</font><br>";
 				$i++;
 				echo "</td></tr>\n";
 				}
