@@ -108,11 +108,12 @@ class AdminModules extends Modules {
 		$this->registered_modules["vips"]["name"] = _("ViPS (Virtuelles Prüfungssystem)");
 		$this->registered_modules["vips"]["msg_activate"] = _("ViPS kann jederzeit aktiviert werden.");
 		$this->registered_modules["vips"]["msg_deactivate"] = _("ViPS kann jederzeit deaktiviert werden.");
-		$this->registered_modules["scm"]["name"] = _("Frei gestaltbare Kursseite");
-		$this->registered_modules["scm"]["msg_activate"] = _("Die freie Kursseite kann jederzeit aktiviert werden.");
-		$this->registered_modules["scm"]["msg_warning"] = _("Wollen Sie wirklich die freie Kursseite deaktivieren und damit den erfassten Inhalt l&ouml;schen?");
-		$this->registered_modules["scm"]["msg_pre_warning"] = _("Achtung: Beim Deaktivieren der freien Kursseite werden die eingestellten Inhalte gel&ouml;scht!");
-		$this->registered_modules["scm"]["msg_deactivate"] = _("Die freie Kursseite kann jederzeit deaktiviert werden.");
+
+		$this->registered_modules["scm"]["name"] = _("Freie Informationsseite");
+		$this->registered_modules["scm"]["msg_activate"] = _("Die freie Informationsseite kann jederzeit aktiviert werden.");
+		$this->registered_modules["scm"]["msg_warning"] = _("Wollen Sie wirklich die freie Informationsseite deaktivieren und damit den erfassten Inhalt l&ouml;schen?");
+		$this->registered_modules["scm"]["msg_pre_warning"] = _("Achtung: Beim Deaktivieren der freien Informationsseite werden die eingestellten Inhalte gel&ouml;scht!");
+		$this->registered_modules["scm"]["msg_deactivate"] = _("Die freie Informationsseite kann jederzeit deaktiviert werden.");
 	}
 	
 	function getModuleForumExistingItems($range_id) {
@@ -254,10 +255,10 @@ class AdminModules extends Modules {
 	}
 
 	function moduleScmActivate($range_id) {
-		global $user;
+		global $user, $SCM_PRESET;
 
 		//create a default folder
-		$this->db->query("INSERT IGNORE INTO scm SET scm_id='".md5(uniqid("simplecontentmodule"))."', range_id='".$range_id."', user_id='".$user->id."', tab_name='"._("Info")."', content='', mkdate='".time()."', chdate='".time()."'");
+		$this->db->query("INSERT IGNORE INTO scm SET scm_id='".md5(uniqid("simplecontentmodule"))."', range_id='".$range_id."', user_id='".$user->id."', tab_name='".$SCM_PRESET[1]["name"]."', content='', mkdate='".time()."', chdate='".time()."'");
 	}
 
 	function moduleImpuls_ECDeactivate($range_id) {
