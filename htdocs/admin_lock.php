@@ -87,7 +87,7 @@ if (isset($SessSemName[1]) && isset($selected)) {
 	$form 	.=	"<input type=\"hidden\" name=\"lock_all\" value=\"-1\">";
 	$form	.=	"<input type=\"IMAGE\" ".makeButton("zuweisen", "src")." border=0 align=\"absmiddle\" />";
 	$form 	.=	"</form>";
-	echo $zt->row(array($db7->f("Veranstaltungsnummer"), $db7->f("Name"), $form));
+	echo $zt->row(array(htmlready($db7->f("Veranstaltungsnummer")), htmlready($db7->f("Name")), $form));
 
 }
 
@@ -97,14 +97,14 @@ if (is_array($lock_sem) && (!$selected)) {
 		$db->query($sql);
 		if ($db->next_record()) {
 				$rule = $lock_rules->getLockRule($val);
-				echo $zt->row(array($db->f("Veranstaltungsnummer"), $db->f("Name"), $rule["name"]));
+				echo $zt->row(array(htmlready($db->f("Veranstaltungsnummer")), htmlready($db->f("Name")), htmlready($rule["name"])));
 				if ($make_lock) {
 					$sql = "UPDATE seminare SET lock_rule='".$val."' WHERE Seminar_id='".$key."'";
 					$db->query($sql);
 				}
 		}
 		else {
-			echo $zt->row(array("&nbsp;", $db->f("Name"), "<font color=red>". _("Änderung fehlgeschlagen") . "</font>"));
+			echo $zt->row(array("&nbsp;", htmlready($db->f("Name")), "<font color=red>". _("Änderung fehlgeschlagen") . "</font>"));
 
 		}
 	}

@@ -109,7 +109,7 @@ if ($SessSemName[1] && (!$change_visible)) {
 		$form 	.= 	"<input type=\"hidden\" name=\"change_visible\" value=\"1\">";
 		$form	.=	"<input type=\"image\" ".makeButton("zuweisen","src")." border=0 align=\"absmiddle\">";
 		$form	.=	"</form>";
-		echo $zt->row(array($db->f("VeranstaltungsNummer"), $db->f("Name"), $form));
+		echo $zt->row(array(htmlready($db->f("VeranstaltungsNummer")), htmlready($db->f("Name")), $form));
 	}
 
 } else {
@@ -127,17 +127,17 @@ if ($SessSemName[1] && (!$change_visible)) {
 				}
 			}
 			if ($visible && ($db->f("visible")!=1)) {
-				echo $zt->row(array($db->f("VeranstaltungsNummer"), $db->f("Name"), visibility_change_message($db->f("visible"), 1)));
+				echo $zt->row(array(htmlready($db->f("VeranstaltungsNummer")), htmlready($db->f("Name")), visibility_change_message($db->f("visible"), 1)));
 				$q="UPDATE seminare SET visible=1 WHERE Seminar_id='". $all_sem[$i] . "'";
 				$db->query($q);
 			} else if ($visible && ($db->f("visible")==1)) {
-				echo $zt->row(array($db->f("VeranstaltungsNummer"), $db->f("Name"), visibility_change_message($db->f("visible"), 1)));
+				echo $zt->row(array(htmlready($db->f("VeranstaltungsNummer")), htmlready($db->f("Name")), visibility_change_message($db->f("visible"), 1)));
 			} else if (!$visible && $db->f("visible") != 0) {
 				$q = "UPDATE seminare SET visible=0 WHERE Seminar_id='".$all_sem[$i]."'";
 				$db->query($q);
-				 echo $zt->row(array($db->f("VeranstaltungsNummer"), $db->f("Name"), visibility_change_message($db->f("visible"), 0)));
+				 echo $zt->row(array(htmlready($db->f("VeranstaltungsNummer")), htmlready($db->f("Name")), visibility_change_message($db->f("visible"), 0)));
 			} else {
-				echo $zt->row(array($db->f("VeranstaltungsNummer"), $db->f("Name"), visibility_change_message($db->f("visible"), 0)));
+				echo $zt->row(array(htmlready($db->f("VeranstaltungsNummer")), htmlready($db->f("Name")), visibility_change_message($db->f("visible"), 0)));
 			}
 			$visible = false;
 		} else {
