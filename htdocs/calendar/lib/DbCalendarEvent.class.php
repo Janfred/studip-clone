@@ -67,6 +67,7 @@ class DbCalendarEvent extends CalendarEvent {
 		$this->setProperty('UID', $uid);
 		
 		$this->setMakeDate($mkdate);
+		$this->setDayEvent($new_event->isDayEvent());
 		$this->chng_flag = TRUE;
 	}
 		

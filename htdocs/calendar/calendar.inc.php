@@ -178,20 +178,23 @@ $accepted_vars = array('start_m', 'start_h', 'start_day', 'start_month', 'start_
 											'linterval_m1', 'wday_m', 'day_m', 'type_y', 'sinterval_y', 'wday_y',
 											'day_y', 'month_y1', 'month_y2', 'atime', 'termin_id', 'exp_c', 'via',
 											'cat_text', 'mod_prv', 'exc_day', 'exc_month', 'exc_year', 'exceptions',
-											'exc_delete', 'add_exc_x', 'del_exc_x', 'exp_count', 'wholeday');
+											'exc_delete', 'add_exc_x', 'del_exc_x', 'exp_count');
 
 if ($cmd == 'add' || $cmd == 'edit') {
 	if (!isset($calendar_sess_forms_data))
 		$sess->register('calendar_sess_forms_data');
 	if (!empty($HTTP_POST_VARS)){
 		// Formulardaten uebernehmen
-		foreach ($HTTP_POST_VARS as $key => $value) {
-			if(in_array($key, $accepted_vars))
-				$calendar_sess_forms_data[$key] = $value;
+		foreach ($accepted_vars as $key) {
+			if (isset($HTTP_POST_VARS[$key]))
+				$calendar_sess_forms_data[$key] = $HTTP_POST_VARS[$key];
 		}
 	}
 	else
 		$calendar_sess_control_data['mod'] = '';
+	// checkbox-values
+	if (!$back_recur_x && !$set_recur_x)
+		$calendar_sess_forms_data['wholeday'] = $HTTP_POST_VARS['wholeday'];
 }
 else {
 	unset($calendar_sess_forms_data);
@@ -342,10 +345,9 @@ switch ($cmd) {
 				elseif ($set_recur_x)
 					unset($set_recur_x);
 			}
+			$title = _("Mein pers&ouml;nlicher Terminkalender - Termin anlegen/bearbeiten");
 		}
 		extract($calendar_sess_forms_data, EXTR_OVERWRITE);
-		
-		$title = _("Mein pers&ouml;nlicher Terminkalender - Termin anlegen/bearbeiten");
 		break;
 }
 
@@ -353,9 +355,9 @@ switch ($cmd) {
 
 if ($cmd == 'add') {
 	$atermin =& new DbCalendarEvent();
-	set_event_properties($calendar_sess_forms_data, $atermin, $calendar_sess_forms_data['mod_prv']);
 	// Ueberpruefung der Formulareingaben
 	$err = check_form_values($calendar_sess_forms_data);
+	set_event_properties($calendar_sess_forms_data, $atermin, $calendar_sess_forms_data['mod_prv']);
 	// wenn alle Daten OK, dann Termin anlegen oder, wenn termin_id vorhanden,
 	// updaten
 	if (empty($err) && $count_events < $CALENDAR_MAX_EVENTS) {
@@ -571,7 +573,7 @@ include($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/views/footer.inc.php
 page_close();
 
 
-function check_form_values ($post_vars) {
+function check_form_values (&$post_vars) {
 	$err = array();
 	if (!check_date($post_vars['start_month'], $post_vars['start_day'], $post_vars['start_year']))
 		$err['start_time'] = TRUE;
@@ -584,6 +586,10 @@ function check_form_values ($post_vars) {
 		if ($start > $end)
 			$err['end_time'] = TRUE;
 	}
+	if (!isset($post_vars['wholeday']))
+		$post_vars['wholeday'] = FALSE;
+	else
+		$post_vars['wholeday'] = TRUE;
 	
 	if (!preg_match('/^.*\S+.*$/', $post_vars['txt']))
 		$err['titel'] = TRUE;
@@ -655,12 +661,14 @@ function set_event_properties (&$post_vars, &$atermin, $mod) {
 				$post_vars['start_day'], $post_vars['start_year']);
 		$atermin->properties['DTEND'] = mktime(23, 59, 59, $post_vars['end_month'],
 				$post_vars['end_day'], $post_vars['end_year']);
+		$atermin->setDayEvent(TRUE);
 	}
 	else {
 		$atermin->properties['DTSTART'] = mktime($post_vars['start_h'], $post_vars['start_m'],
 				0, $post_vars['start_month'], $post_vars['start_day'], $post_vars['start_year']);
 		$atermin->properties['DTEND'] = mktime($post_vars['end_h'], $post_vars['end_m'], 0,
 				$post_vars['end_month'], $post_vars['end_day'], $post_vars['end_year']);
+		$atermin->setDayEvent(FALSE);
 	}
 	$atermin->properties['SUMMARY']         = $post_vars['txt'];
 	$atermin->properties['CATEGORIES']      = $post_vars['cat_text'];
@@ -773,10 +781,7 @@ function get_event_properties (&$post_vars, &$atermin) {
 	$post_vars['end_month'] = date('n', $atermin->getEnd());
 	$post_vars['end_year'] = date('Y', $atermin->getEnd());
 	
-	if ($atermin->isDayEvent())
-		$post_vars['wholeday'] = 1;
-	else
-		unset($post_vars['wholeday']);
+	$post_vars['wholeday'] = $atermin->isDayEvent();
 	
 	$post_vars['cat'] = $atermin->properties['STUDIP_CATEGORY'];
 	$post_vars['txt'] = htmlReady($atermin->getTitle());
