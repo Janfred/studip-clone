@@ -1,8 +1,8 @@
 <?
 /**
-* resourcesFunc.php
+* object.inc.php
 * 
-* functions for objectoperation as get/set viewdate, rates, favourites and more
+* functions for object operations (Stud.IP-ojects/modules) as get/set viewdate, rates, favourites and more
 * 
 *
 * @author		Ralf Stockmann <rstockm@gwdg.de>, Cornelis Kater <kater@data-quest.de>, data-quest GmbH <info@data-quest.de>
@@ -16,9 +16,9 @@
 //object.inc.php - Verwaltung von Objektoperationen
 //Copyright (C) 2004 Ralf Stockmann <rstockm@gwdg.de>, Cornelis Kater <kater@data-quest.de>, data-quest GmbH <info@data-quest.de>
 // This file is part of Stud.IP
-// resourcesFunc.php
-// Funktionen der Ressourcenverwaltung
-// Copyright (C) 2003 Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
+// object.inc.php
+// Funktionen fuer generische Objekt-Behandlungen (Stud.IP-Objekte/Module)
+// Copyright (C) 2004 Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
