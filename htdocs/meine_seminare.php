@@ -169,11 +169,11 @@ if ($cmd=="suppose_to_kill_admission") {
 
 //bei Bedarf aus seminar_user austragen
 if ($cmd=="kill") {
-	$db->query("SELECT Name, admission_binding FROM seminare WHERE Seminar_id = '$auswahl'");
+	$db->query("SELECT Name, admission_binding, a.status FROM seminar_user a LEFT JOIN seminare USING(Seminar_id) WHERE a.Seminar_id = '$auswahl' AND a.user_id='$user->id' AND a.status IN('user','autor')");
 	$db->next_record();
 	if ($db->f("admission_binding")) {
 		$meldung = "info§Die Veranstaltung <b>" . htmlReady($db->f("Name")) . "</b> ist als <b>bindend</b> angelegt. Wenn Sie sich austragen wollen, m&uuml;ssen Sie sich an den Dozenten der Veranstaltung wenden.<br />";
-	} else {
+	} elseif ($db->f("status")){
 		$db->query("DELETE FROM seminar_user WHERE user_id='$user->id' AND Seminar_id='$auswahl'");
 		if ($db->affected_rows() == 0)  $meldung="error§Datenbankfehler!";
 		else {
