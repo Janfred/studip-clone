@@ -119,21 +119,24 @@ function new_ilias_user($benutzername, $passwort, $geschlecht, $vorname, $nachna
 function create_ilias_user($benutzername)
 {
 	global $auth, $username_prefix;
+	$creation_result = false;
 	$db = new DB_Seminar;
 	$query_string = "SELECT * FROM auth_user_md5 LEFT JOIN user_info USING (user_id) WHERE auth_user_md5.username = '". $benutzername . "'";
 	$db->query($query_string);
 	if ($db->next_record())
 	{
-		if (new_ilias_user($db->f("username"), md5($db->f("password")), $db->f("geschlecht"), 
+		$creation_result = new_ilias_user($db->f("username"), md5($db->f("password")), $db->f("geschlecht"), 
 			$db->f("Vorname"), $db->f("Nachname"), $db->f("title_front"), 
 			"Stud.IP", $db->f("privatnr"), $db->f("Email"), 
-			$db->f("perms"), $db->f("preferred_language")))
+			$db->f("perms"), $db->f("preferred_language"));
+
+		if ($creation_result === true)
 		{
 			connect_users($db->f("username"), $username_prefix . $benutzername);
 			return true;
 		}
 	}
-	return false;
+	return $creation_result;
 }
 
 function create_studip_user($benutzername)
@@ -218,7 +221,10 @@ function delete_ilias_user($benutzername)
 {
 	$u_id = get_ilias_user_id($benutzername);
 	if ($u_id == false)
+	{
 		echo _("User wurde nicht gefunden.") . "<br>";
+		return false;
+	}
 	else
 	{
 		$ilias_db = New DB_Ilias;
@@ -231,6 +237,7 @@ function delete_ilias_user($benutzername)
 		$query_string = "DELETE FROM benutzer WHERE id=$u_id";
 		$ilias_db->query($query_string);
 	}
+	return true;
 }
 
 ?>
