@@ -140,27 +140,45 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("doz
 <table class="blank" width="600" border="0" cellpadding="0" cellspacing="0" align="center">
 <tr><td colspan=3 class="topic" valign="middle">&nbsp;<b><? echo $UNI_NAME;?></b><img src="pictures/blank.gif" height="16" width="5" border="0"></td></tr>
 <tr> 
-	<td colspan=3 background="./pictures/startseite.jpg" alt="Stud.IP - <?=$UNI_NAME?>"">
-	<table cellspacing="20" border="0">
+	<td valign="middle" colspan=3 background="./pictures/startseite.jpg" alt="Stud.IP - <?=$UNI_NAME?>"">
+		<img src="pictures/blank.gif" width="13" height="260" border="0" align="left"><br>
+		<table  cellspacing="0" cellpadding="0"border="0">
 		<tr>
 			<?
-			echo "<td class=\"steel1\"><a class=\"index\" href=\"index.php?again=yes\"><img src=\"./pictures/start.gif\" align=left border=\"0\">&nbsp; <font size=\"4\"><b>"._("Login")."</b></font><br><font color=#555555 size=\"1\">&nbsp; "._("f&uuml;r registrierte NutzerInnen")."</font></a>&nbsp; </td>";
+			echo "<td class=\"steel1\" width=\"280\" valign=\"middle\"><a class=\"index\" href=\"index.php?again=yes\"><img src=\"./pictures/indexpfeil.gif\" align=left border=\"0\"><font size=\"4\"><b>"._("Login")."</b></font><br><font color=#555555 size=\"1\">"._("f&uuml;r registrierte NutzerInnen")."</font></a>&nbsp; </td>";
+
 			?>
-		</tr><tr>
+		<td class="shadowver" width="3"><img src="pictures/blank.gif" width="3" border="0"></td>
+		</tr><tr><td class="shadowhor" width="280"><img src="pictures/blank.gif" width="10" height="3" border="0"></td>
+		<td class="shadowcor" width="3"><img src="pictures/blank.gif" width="3" border="0"></td>
+		</tr></table><br>
+		<table  cellspacing="0" cellpadding="0"border="0"><tr>
+		
 			<?
-			echo "<td class=\"steel1\"><a class=\"index\" href=\"register1.php\"><img src=\"./pictures/register.gif\" align=left border=\"0\">&nbsp; <font size=\"4\"><b>"._("Registrieren")."</b></font><br><font color=#555555 size=\"1\">&nbsp; ".("um NutzerIn zu werden")."</font></a>&nbsp; </td>";
+			echo "<td class=\"steel1\"><a class=\"index\" href=\"register1.php\"><img src=\"./pictures/indexpfeil.gif\" align=left border=\"0\"><font size=\"4\"><b>"._("Registrieren")."</b></font><br><font color=#555555 size=\"1\">".("um NutzerIn zu werden")."</font></a>&nbsp; </td>";
 			?>
-		</tr>	<tr>
+		<td class="shadowver" width="3"><img src="pictures/blank.gif" width="3" border="0"></td>
+		</tr><tr><td class="shadowhor" width="280"><img src="pictures/blank.gif" width="10" height="3" border="0"></td>
+		<td class="shadowcor" width="3"><img src="pictures/blank.gif" width="3" border="0"></td>
+		</tr></table><br>
+		<table  cellspacing="0" cellpadding="0"border="0"><tr>
 			<?
-			echo "<td class=\"steel1\"><a class=\"index\" href=\"freie.php\"><img src=\"./pictures/free.gif\" align=left border=\"0\">&nbsp; <font size=\"4\"><b>"._("Freier Zugang")."</b></font><br><font color=#555555 size=\"1\">&nbsp; "._("ohne Registrierung")."</font></a>&nbsp; </td>";
+			echo "<td class=\"steel1\"><a class=\"index\" href=\"freie.php\"><img src=\"./pictures/indexpfeil.gif\" align=left border=\"0\"><font size=\"4\"><b>"._("Freier Zugang")."</b></font><br><font color=#555555 size=\"1\">"._("ohne Registrierung")."</font></a>&nbsp; </td>";
 			?>
-		</tr>	<tr>
+		<td class="shadowver" width="3"><img src="pictures/blank.gif" width="3" border="0"></td>
+		</tr><tr><td class="shadowhor" width="280"><img src="pictures/blank.gif" width="10" height="3" border="0"></td>
+		<td class="shadowcor" width="3"><img src="pictures/blank.gif" width="3" border="0"></td>
+		</tr></table><br>
+		<table  cellspacing="0" cellpadding="0"border="0"><tr>
 			<?
-			echo "<td class=\"steel1\"><a class=\"index\" href=\"help/index.php\"><img src=\"./pictures/help.gif\" align=left border=\"0\">&nbsp; <font size=\"4\"><b>"._("Hilfe")."</b></font><br><font color=#555555 size=\"1\">&nbsp; "._("zu Bedienung und Funktionsumfang")."&nbsp; &nbsp; </font></a>&nbsp; </td>";
+			echo "<td class=\"steel1\"><a class=\"index\" href=\"help/index.php\"><img src=\"./pictures/indexpfeil.gif\" align=left border=\"0\"><font size=\"4\"><b>"._("Hilfe")."</b></font><br><font color=#555555 size=\"1\">"._("zu Bedienung und Funktionsumfang")."&nbsp; &nbsp; </font></a>&nbsp; </td>";
 			?>
-		</tr>
-	</table>
-</td></tr>
+		<td class="shadowver" width="3"><img src="pictures/blank.gif" width="3" border="0"></td>
+		</tr><tr><td class="shadowhor" width="280"><img src="pictures/blank.gif" width="10" height="3" border="0"></td>
+		<td class="shadowcor" width="3"><img src="pictures/blank.gif" width="3" border="0"></td>
+		</tr></table><br>
+	</td>
+</tr>
 <?
 unset($temp_language_key); unset($temp_language);
 ?>

@@ -20,7 +20,9 @@ A:visited.tree {color: #000000; text-decoration: none;font-family: Arial, Helvet
 A:hover.tree {color: #FF3333;text-decoration: none;font-family: Arial, Helvetica, sans-serif;font-size:10pt;}
 
 
-
+TD.shadowver {background-image: url('pictures/shadowver.gif');}
+TD.shadowhor {background-image: url('pictures/shadowhor.gif');}
+TD.shadowcor {background-image: url('pictures/shadowcor.gif');}
 
 TD.links1b {background-image: url('pictures/steel1.jpg');}
 TD.links1 {background-image: url('pictures/fill2.gif');}
