@@ -140,7 +140,7 @@ class ExternElementMainLectures extends ExternElementMain {
 		$table .= $edit_form->editOptionGeneric("semstart", $title, $info, $values, $names);
 		
 		$title = _("Anzahl der anzuzeigenden Semester:");
-		$info = _("Geben Sie an, wieviele Semester angezeigt werden sollen.");
+		$info = _("Geben Sie an, wieviele Semester (ab o.a. Startsemester) angezeigt werden sollen.");
 		$names = array();
 		$values = array();
 		$i = 1;
@@ -151,7 +151,7 @@ class ExternElementMainLectures extends ExternElementMain {
 		$table .= $edit_form->editOptionGeneric("semrange", $title, $info, $values, $names);
 		
 		$title = _("Umschalten des aktuellen Semesters:");
-		$info = _("Geben Sie an, wieviele Wochen vor Semesterende auf das nächste Semester umgeschaltet werden soll.");
+		$info = _("Geben Sie an, wieviele Wochen vor Semesterende automatisch auf das nächste Semester umgeschaltet werden soll.");
 		$names = array(_("am Semesterende"), _("1 Woche vor Semesterende"));
 		for ($i = 2; $i < 13; $i++)
 			$names[] = sprintf(_("%s Wochen vor Semesterende"), $i);
