@@ -455,7 +455,7 @@ function ForumIcon ($forumposting) {
 		}
 		$forumposting["icon"] =	$hoverlink
 			."onMouseOver=\"return overlib('"
-			.JSReady($forumposting["description"],"forum").$txt
+			.JSReady(forum_parse_edit($forumposting["description"]),"forum").$txt
 			."', CAPTION, '&nbsp;"
 			.JSReady($forumposting["name"])
 			."', NOCLOSE, CSSOFF)\" "
