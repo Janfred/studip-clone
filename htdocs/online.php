@@ -24,12 +24,12 @@ include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Sessio
 
 // -- here you have to put initialisations for the current page
 
-require_once ("functions.php");
-require_once ("msg.inc.php");
-require_once ("visual.inc.php");
-require_once ("messagingSettings.inc.php");
-require_once ("messaging.inc.php");
-require_once ("contact.inc.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/messagingSettings.inc.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/messaging.inc.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/contact.inc.php");
 if ($GLOBALS['CHAT_ENABLE']){
 	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php"; 
 	$chatServer =& ChatServer::GetInstance($GLOBALS['CHAT_SERVER_NAME']);
