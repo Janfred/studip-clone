@@ -324,7 +324,7 @@ class ExternSemBrowseTable extends SemBrowse {
 							$datafields = $datafields_obj->getLocalFields($seminar_id);
 							foreach ($generic_datafields as $datafield) {
 								$data["content"][$datafield] =
-										FixLinks(format(htmlReady($datafields[$datafield]["content"])));
+									 formatReady($datafields[$datafield]["content"], TRUE, TRUE, TRUE);
 							}
 						}
 						
