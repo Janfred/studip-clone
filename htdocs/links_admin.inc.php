@@ -21,7 +21,6 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 
 require_once "$ABSOLUTE_PATH_STUDIP/config.inc.php";
 require_once "$ABSOLUTE_PATH_STUDIP/admin_semester.inc.php";
-//require_once "$ABSOLUTE_PATH_STUDIP/config_tools_semester.inc.php";
 require_once "$ABSOLUTE_PATH_STUDIP/dates.inc.php";
 require_once "$ABSOLUTE_PATH_STUDIP/msg.inc.php";
 require_once "$ABSOLUTE_PATH_STUDIP/visual.inc.php";
@@ -143,7 +142,7 @@ if ($i_page == "admin_institut.php"
 		OR ($i_page == "admin_modules.php" AND $links_admin_data["view"] == "modules_inst")
 		OR ($i_page == "admin_extern.php" AND $links_admin_data["view"] == "extern_inst")
 		OR ($i_page == "admin_vote.php" AND $links_admin_data["view"] == "vote_inst")
-      OR ($i_page == "admin_evaluation.php" AND $links_admin_data["view"] == "eval_inst")
+		OR ($i_page == "admin_evaluation.php" AND $links_admin_data["view"] == "eval_inst")
 		) {
 		
 	$links_admin_data["topkat"]="inst";
@@ -165,7 +164,7 @@ if ($i_page == "admin_seminare1.php"
 		OR ($i_page == "admin_modules.php" AND $links_admin_data["view"] == "modules_sem")		
 		OR ($i_page == "admin_news.php" AND $links_admin_data["view"]=="news_sem")
 		OR ($i_page == "admin_vote.php" AND $links_admin_data["view"]=="vote_sem")
-      OR ($i_page == "admin_evaluation.php" AND $links_admin_data["view"]=="eval_sem")
+		OR ($i_page == "admin_evaluation.php" AND $links_admin_data["view"]=="eval_sem")
 		) {
 	
 	$links_admin_data["topkat"]="sem";
@@ -402,7 +401,7 @@ switch ($i_page) {
 		elseif ($links_admin_data["topkat"] == "inst")
 			$reiter_view="vote_inst";
 	break;
-   case "admin_evaluation.php": 
+	case "admin_evaluation.php": 
 		if ($links_admin_data["topkat"] == "sem")
 			$reiter_view="eval_sem"; 
 		elseif ($links_admin_data["topkat"] == "inst")
@@ -492,6 +491,9 @@ $reiter->create($structure, $reiter_view, $tooltip, $addText);
 
 //Einheitliches Auswahlmenu fuer Einrichtungen
 if (((!$SessSemName[1]) || ($SessSemName["class"] == "sem")) && ($list) && ($view_mode == "inst")) {
+	//Save data back to database and start a connection  - so we avoid some problems with large search results and data is writing back to db too late
+	page_close();
+	
 	?>
 	<table width="100%" cellspacing=0 cellpadding=0 border=0>
 	<tr valign=top align=middle>
@@ -564,6 +566,8 @@ if (((!$SessSemName[1]) || ($SessSemName["class"] == "sem")) && ($list) && ($vie
 	
 //Einheitliches Seminarauswahlmenu, wenn kein Seminar gewaehlt ist
 if (((!$SessSemName[1]) || ($SessSemName["class"] == "inst")) && ($list) && ($view_mode == "sem")) {
+	//Save data back to database and start a connection  - so we avoid some problems with large search results and data is writing back to db too late
+	page_close();
 	?>
 	<table width="100%" cellspacing=0 cellpadding=0 border=0>
 	<tr valign=top align=middle>
@@ -730,7 +734,6 @@ if (((!$SessSemName[1]) || ($SessSemName["class"] == "inst")) && ($list) && ($vi
 		<?
 	}
 
-
 // display Seminar-List
 if ($links_admin_data["srch_on"] || $auth->auth["perm"] =="tutor" || $auth->auth["perm"] == "dozent") {
 
@@ -781,21 +784,21 @@ if ($links_admin_data["srch_on"] || $auth->auth["perm"] =="tutor" || $auth->auth
 			$conditions++;
 		}
 
-	// tutors and dozents only have a plain list
-	} elseif (($auth->auth["perm"] =="tutor") || ($auth->auth["perm"] == "dozent")) {
-			$query="SELECT  seminare.*, Institute.Name AS Institut FROM seminar_user LEFT JOIN seminare USING (Seminar_id) 
-				LEFT JOIN Institute USING (institut_id) 
-				WHERE seminar_user.status IN ('dozent','tutor') 
-				AND seminar_user.user_id='$user->id' ";
-
-	// should never be reached
-	} else {
-		$query = FALSE;
-	}
-
-	$query.=" ORDER BY  ".$links_admin_data["sortby"];	
+		// tutors and dozents only have a plain list
+		} elseif (($auth->auth["perm"] =="tutor") || ($auth->auth["perm"] == "dozent")) {
+				$query="SELECT  seminare.*, Institute.Name AS Institut FROM seminar_user LEFT JOIN seminare USING (Seminar_id) 
+					LEFT JOIN Institute USING (institut_id) 
+					WHERE seminar_user.status IN ('dozent','tutor') 
+					AND seminar_user.user_id='$user->id' ";
+	
+		// should never be reached
+		} else {
+			$query = FALSE;
+		}
+	
+		$query.=" ORDER BY  ".$links_admin_data["sortby"];	
 		
-	$db->query($query);
+		$db->query($query);
 
 	?>
 	<form name="links_admin_action" action="<? echo $PHP_SELF ?>" method="POST">
