@@ -57,18 +57,22 @@ include ($ABSOLUTE_PATH_STUDIP."header.php");   // Output of Stud.IP head
 include ($ABSOLUTE_PATH_STUDIP."links_admin.inc.php");	//hier wird das Reiter- und Suchsystem des Adminbereichs eingebunden
 
 
-if ($change_datafield)
+if ($change_datafield) {
 	$admin_datafields_data["change_datafield"] = $change_datafield;
+	$admin_datafields_data["create_datafield"] = FALSE;
+}
 
-if ($create_new)
+if ($create_new) {
 	$admin_datafields_data["create_datafield"] = $create_new;
+	$admin_datafields_data["change_datafield"] = FALSE;
+}
 	
 if ($cancel) {
 	$admin_datafields_data["create_datafield"] = FALSE;
 	$admin_datafields_data["change_datafield"] = FALSE;
 }
 	
-if (($send_x) && (($admin_datafields_data["change_datafield"]) || ($admin_datafields_data["create_datafield"]))) {
+if (($send) && (($admin_datafields_data["change_datafield"]) || ($admin_datafields_data["create_datafield"]))) {
 	if (is_array($datafield_class)) {
 		$tmp_datafield_class = $datafield_class;
 		$datafield_class = 0;
@@ -270,7 +274,7 @@ if ($kill_datafield) {
 				</td>
 				<td class="<?=$cssSw->getClass()?>" align="center">
 					<font size="-1">
-						<input type="TEXT" maxlength="10" size="5" style="{font-size:8 pt; width: 30%%; text-align: center;}" name="datafield_priority" />
+						<input type="TEXT" maxlength="10" size="5" style="{font-size:8 pt; width: 30%; text-align: center;}" name="datafield_priority" />
 					</font>
 				</td>
 				<td class="<?=$cssSw->getClass()?>" align="center">
@@ -443,7 +447,7 @@ if ($kill_datafield) {
 				</td>
 				<td class="<?=$cssSw->getClass()?>" align="center">
 					<font size="-1">
-						<input type="TEXT" maxlength="10" size="5" style="{font-size:8 pt; width: 30%%; text-align: center;}" name="datafield_priority" />
+						<input type="TEXT" maxlength="10" size="5" style="{font-size:8 pt; width: 30%; text-align: center;}" name="datafield_priority" />
 					</font>
 				</td>
 				<td class="<?=$cssSw->getClass()?>" align="center">
@@ -621,7 +625,7 @@ if ($kill_datafield) {
 				</td>
 				<td class="<?=$cssSw->getClass()?>" align="center">
 					<font size="-1">
-						<input type="TEXT" maxlength="10" size="5" style="{font-size:8 pt; width: 30%%; text-align: center;}" name="datafield_priority" />
+						<input type="TEXT" maxlength="10" size="5" style="{font-size:8 pt; width: 30%; text-align: center;}" name="datafield_priority" />
 					</font>
 				</td>
 				<td class="<?=$cssSw->getClass()?>" align="center">
