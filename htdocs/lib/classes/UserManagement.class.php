@@ -568,7 +568,7 @@ class UserManagement {
 	*/
 	function deleteUser() {
 		global $perm, $auth;
-	
+
 		// Do we have permission to do so?
 		if (!$perm->have_perm("admin")) {
 			$this->msg .= "error§" . _("Sie haben keine Berechtigung Accounts zu l&ouml;schen.") . "§";
@@ -633,6 +633,7 @@ class UserManagement {
 		if ($temp_count) {
 			$this->msg .= "info§" . sprintf(_("%s leere Ordner gel&ouml;scht."), $temp_count) . "§";
 		}
+		
 		// folder left?
 		$query = "SELECT count(*) AS count FROM folder WHERE user_id='" . $this->user_data['auth_user_md5.user_id'] . "'";
 		$this->db->query($query);
@@ -642,7 +643,7 @@ class UserManagement {
 		}
 
 		// kill all the ressources that are assigned to the user (and all the linked or subordinated stuff!)
-		if ($RESOURCES_ENABLE) {
+		if ($GLOBALS['RESOURCES_ENABLE']) {
 			$killAssign = new DeleteResourcesUser($this->user_data['auth_user_md5.user_id']);
 			$killAssign->delete();
 		}
