@@ -1,7 +1,7 @@
 31.03.2003 v 0.9
 - erweitertes Chatsystem: eigene Chaträume für Veranstaltungen, Personen und Einrichtungen, Protokoll-
-  Funktion, Chaträume können mit Passwörter gesichert werden
-- Erste Testversion einer Einbindung von ILIAS-Lernmodulen
+  Funktion, Chaträume können mit einem Passwort gesichert werden
+- Verknüpfungsmöglichkeit mit Lernmodulen von ILIAS Open Source (muss ebenfalls installiert werden)
 - systemweiter TeX-Support
 - personalisierte Übersicht der persönlichen Veranstaltungen im Archiv
 - automatische Verwaltung und Konfiguration für externe Seiten (zur Einbindung des Stud.IP Contents in
