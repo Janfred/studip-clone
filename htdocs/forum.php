@@ -407,7 +407,10 @@ if ($forumsend) {
 if ($forumsend!="anpassen") {
 
 	echo "\n<table width=\"100%\" class=\"blank\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n";
-	echo "<tr><td class=\"topic\" width=\"99%\"><b>&nbsp;<img src='pictures/icon-posting.gif' align=absmiddle>&nbsp; ". $SessSemName["header_line"] ." - " . _("Forum") . "</b></td><td class=\"topic\" width=\"1%\" align=\"right\" nowrap><a href='forum.php?forumsend=anpassen&view=$view'><img src='pictures/pfeillink.gif' border=0 " . tooltip(_("Look & Feel anpassen")) . ">&nbsp;</a></td></tr>";
+	echo "<tr><td class=\"topic\" width=\"99%\"><b>&nbsp;<img src='pictures/icon-posting.gif' align=absmiddle>&nbsp; ". $SessSemName["header_line"] ." - " . _("Forum") . "</b></td><td class=\"topic\" width=\"1%\" align=\"right\" nowrap>";
+	if ($user->id != "nobody")
+		echo "<a href='forum.php?forumsend=anpassen&view=$view'><img src='pictures/pfeillink.gif' border=0 " . tooltip(_("Look & Feel anpassen")) . ">&nbsp;</a>";
+	echo "</td></tr>";
 	
 	// Ausgabe für Zusatzinfos
 	if ($message=="kill") echo parse_msg("msg§" . sprintf(_("%s Posting(s) gel&ouml;scht"), $count));
@@ -422,9 +425,13 @@ if ($forumsend!="anpassen") {
 	echo "\n</table>\n";
 }
 
-if (!$reset)   // wenn Suche aufgerufen wird keine toolbar
+if (!$reset && $user->id != "nobody")   // wenn Suche aufgerufen wird keine toolbar
 	echo forum_print_toolbar($edit_id);
-
+elseif ($user->id == "nobody") {
+	echo "\n<table width=\"100%\" class=\"blank\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"blank\"><br></td></tr>";
+	if ($edit_id)
+		echo "<form name=forumwrite onsubmit=\"return pruefe_name()\" method=post action=\"".$PHP_SELF."#anker\">";
+}
 //////////////////////////////////////////////////////////////////////////////////
 // Verzweigung zu den Anzeigemodi 
 //////////////////////////////////////////////////////////////////////////////////

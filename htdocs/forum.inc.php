@@ -814,8 +814,7 @@ function forum_print_toolbar ($id="") {
 			$print .= "</td></tr></table>";
 		}
 		if ($id) {  // Schreibmodus, also form einbauen
-			if  ($user->id == "nobody") $print .= "<form name=forumwrite onsubmit=\"return pruefe_name()\" method=post action=\"".$PHP_SELF."#anker\">";
-			else $print .= "<form name=forumwrite method=post action=\"".$PHP_SELF."#anker\">";
+			$print .= "<form name=forumwrite method=post action=\"".$PHP_SELF."#anker\">";
 		}
 		
 		$print .= "</td></tr></table>";	
@@ -995,7 +994,8 @@ function printposting ($forumposting) {
 			$favtxt = _("zu den Favoriten hinzufügen");
 		}
 		$rand = "&random=".rand();
-		$forumhead[] = "<a href=\"$PHP_SELF?fav=".$forumposting["id"]."&open=$openorig".$rand."&flatviewstartposting=".$forum["flatviewstartposting"]."#anker\"><img src=\"".$favicon."\" border=\"0\" ".tooltip($favtxt).">&nbsp;</a>";
+		if ($user->id != "nobody") // Nobody kriegt keine Favoriten
+			$forumhead[] = "<a href=\"$PHP_SELF?fav=".$forumposting["id"]."&open=$openorig".$rand."&flatviewstartposting=".$forum["flatviewstartposting"]."#anker\"><img src=\"".$favicon."\" border=\"0\" ".tooltip($favtxt).">&nbsp;</a>";
 		
 	// Antwort-Pfeil
 		
@@ -1097,7 +1097,7 @@ function printposting ($forumposting) {
 					$addon .= "<font size=\"-1\">&nbsp;&nbsp;Sie haben diesen&nbsp;<br>&nbsp;&nbsp;Beitrag bewertet.";
 				}
 			}
-		} else  // nur Aufklapppfeil
+		} elseif ($user->id != "nobody")  // nur Aufklapppfeil
 			$addon = "open:$PHP_SELF?open=".$forumposting["id"]."&flatviewstartposting=".$forum["flatviewstartposting"]."&sidebar=".$forumposting["id"]."#anker";		
   
   // Kontentzeile ausgeben
@@ -1193,9 +1193,9 @@ $query = "SELECT x.topic_id, x.name , x.author , x.mkdate, x.chdate as age, y.na
 	.", IFNULL(views,0) as viewcount, nachname, IFNULL(ROUND(AVG(rate),1),99) as rating"
 	.", object_user.object_id as fav"
 	.", ((6-(IFNULL(AVG(rate),3))-3)*5)+(IFNULL(views,0)/(((UNIX_TIMESTAMP()-x.mkdate)/604800)+1)) as score "
-	."FROM px_topics x LEFT JOIN auth_user_md5 USING(user_id) LEFT JOIN object_views ON(object_views.object_id=x.topic_id) LEFT JOIN object_rate ON(object_rate.object_id=x.topic_id) "
-	."LEFT OUTER JOIN object_user ON(object_user.object_id=x.topic_id AND object_user.user_id='$user->id' AND flag='fav') , px_topics y "
-	."WHERE x.root_id = y.topic_id AND x.seminar_id = '$SessionSeminar' AND (x.chdate>=x.mkdate OR x.user_id='$user->id')".$addon." "
+	."FROM px_topics x LEFT JOIN object_views ON(object_views.object_id=x.topic_id) LEFT JOIN object_rate ON(object_rate.object_id=x.topic_id) "
+	."LEFT JOIN auth_user_md5 ON(auth_user_md5.user_id = x.user_id) LEFT OUTER JOIN object_user ON(object_user.object_id=x.topic_id AND object_user.user_id='$user->id' AND flag='fav') , px_topics y "
+	."WHERE x.root_id = y.topic_id AND x.seminar_id = '$SessionSeminar' AND (x.chdate>=x.mkdate OR x.user_id='$user->id' OR x.author='unbekannt')".$addon." "
 	."GROUP by x.topic_id ORDER BY ".$forum["sort"]." ".$order
 	." ,age DESC LIMIT $flatviewstartposting,$postingsperside";
 
@@ -1325,7 +1325,7 @@ function DisplayFolders ($open=0, $update="", $zitat="") {
 	."FROM px_topics t LEFT JOIN px_topics s USING(root_id) "
 	."LEFT JOIN object_views ON(object_views.object_id=t.topic_id) LEFT JOIN object_rate ON(object_rate.object_id=t.topic_id) "
 	."LEFT OUTER JOIN object_user ON(object_user.object_id=t.root_id AND object_user.user_id='$user->id' AND flag='fav') "
-	."WHERE t.topic_id = t.root_id AND t.Seminar_id = '$SessionSeminar' AND (t.chdate>=t.mkdate OR t.user_id='$user->id') GROUP BY t.root_id  ORDER BY $order";
+	."WHERE t.topic_id = t.root_id AND t.Seminar_id = '$SessionSeminar' AND (t.chdate>=t.mkdate OR t.user_id='$user->id' OR t.author='unbekannt') GROUP BY t.root_id  ORDER BY $order";
 	$db=new DB_Seminar;
 	$db->query($query);
 	if ($db->num_rows()==0) {  // Das Forum ist leer
@@ -1354,10 +1354,12 @@ function DisplayFolders ($open=0, $update="", $zitat="") {
 		echo "<table class=\"blank\" width=\"100%\" border=0 cellpadding=0 cellspacing=0><tr>";
 		echo "<td class=\"steelgraudunkel\" width=\"33%\"><b><font size=\"-1\">&nbsp;" . _("Thema") . "</font></b></td>";
 		echo "<td class=\"steelgraudunkel\" width=\"33%\" align=\"center\"><font size=\"-1\">&nbsp;&nbsp;";
-		if ($forum["view"] == "tree")
-			echo "<a href=\"".$PHP_SELF."?view=mixed\"><img src=\"pictures/forumtree.gif\" border=\"0\" align=\"top\"></a>";
-		else
-			echo "<a href=\"".$PHP_SELF."?view=tree\"><img src=\"pictures/forumflat.gif\" border=\"0\" align=\"top\"></a>";
+		if ($user->id != "nobody") { // Nobody kriegt nur treeview
+			if ($forum["view"] == "tree")
+				echo "<a href=\"".$PHP_SELF."?view=mixed\"><img src=\"pictures/forumtree.gif\" border=\"0\" align=\"top\"></a>";
+			else
+				echo "<a href=\"".$PHP_SELF."?view=tree\"><img src=\"pictures/forumflat.gif\" border=\"0\" align=\"top\"></a>";
+		}
 		echo "</font><img src=\"pictures/forumleer.gif\" border=0 height=\"20\" align=\"middle\"></td>";
 		echo "<td class=\"steelgraudunkel\" width=\"33%\"align=\"right\"><font size=\"-1\">" . _("<b>Postings</b> / letzter Eintrag") . "&nbsp;&nbsp;".forum_get_index($forumposting)."&nbsp;&nbsp;</font></td></tr></table>\n";
 		while ($db->next_record()) {
@@ -1428,7 +1430,7 @@ function DisplayKids ($forumposting, $level=0) {
 		." LEFT JOIN object_views ON(object_views.object_id=topic_id) LEFT JOIN object_rate ON(object_rate.object_id=topic_id)"
 		." LEFT OUTER JOIN object_user ON(object_user.object_id=topic_id AND object_user.user_id='$user->id' AND flag='fav')"
 		." WHERE"
-		." parent_id = '$topic_id' AND (px_topics.chdate>=px_topics.mkdate OR px_topics.user_id='$user->id')"
+		." parent_id = '$topic_id' AND (px_topics.chdate>=px_topics.mkdate OR px_topics.user_id='$user->id' OR px_topics.author='unbekannt')"
 		." GROUP BY topic_id ORDER by px_topics.mkdate";
 	$db=new DB_Seminar;
 	$db->query($query);
