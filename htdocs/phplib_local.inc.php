@@ -370,7 +370,7 @@ class Seminar_Auth extends Auth {
 		$this->auth["xres"] = ($divided[0]) ? $divided[0] : 800; //default
 		$this->auth["yres"] = ($divided[1]) ? $divided[1] : 600; //default
 		// Change X-Resulotion on Multi-Screen Systems (as Matrox Graphic-Adapters are)
-		if (($this ->auth["xres"] / $this ->auth["yres"]) > 1.5){
+		if (($this ->auth["xres"] / $this ->auth["yres"]) > 2){
 			$this->auth["xres"] = $this->auth["xres"] /2;
 		}
 		//restore user-specific language preference
