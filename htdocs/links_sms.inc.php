@@ -37,21 +37,12 @@ $structure["post"]=array ("topKat"=>"", "name"=>_("Nachrichten"), "link"=>"sms_b
 $structure["chat"]=array ("topKat"=>"", "name"=>_("Chat"), "link"=>"chat_online.php", "active"=>FALSE);
 $structure["online"]=array ("topKat"=>"", "name"=>_("Wer ist online?"), "link"=>"online.php", "active"=>FALSE);
 
-
-
-
-
-
 //Bottomkats
 
-if ($atime) {
-	$xx = $atime;
-} else {
-	$xx = "";
-}
 $structure["in"] = array ("topKat"=>"post", "name"=>_("empfangene"), "link"=>"sms_box.php?sms_inout=in", "active"=>FALSE);
 $structure["out"] = array ("topKat"=>"post", "name"=>_("gesendete"), "link"=>"sms_box.php?sms_inout=out", "active"=>FALSE);
 $structure["write"] = array ("topKat"=>"post", "name"=>_("Neue Nachricht schreiben"), "link"=>"sms_send.php", "active"=>FALSE);
+$structure["adjust"] = array ("topKat"=>"post", "name"=>_("Messaging anpassen"), "link"=>"".$PHP_SELF."?change_view=TRUE", "active"=>FALSE);
 $structure["calendar_day"] = array ("topKat"=>"calender", "name"=>_("Tag"), "link"=>"calendar.php?cmd=showday&atime=$atime", "active"=>FALSE);
 $structure["calendar_week"] = array ("topKat"=>"calender", "name"=>_("Woche"), "link"=>"calendar.php?cmd=showweek&atime=$atime", "active"=>FALSE);
 $structure["calendar_month"] = array ("topKat"=>"calender", "name"=>_("Monat"), "link"=>"calendar.php?cmd=showmonth&atime=$atime", "active"=>FALSE);
@@ -70,10 +61,18 @@ $structure["contact_statusgruppen"] = array ("topKat"=>"contact", "name"=>_("Gru
 //View festlegen
 switch ($i_page) {
 	case "sms_box.php" : 
-		$reiter_view = $sms_data["view"]; 
+		if ($change_view == TRUE) {
+			$reiter_view = "adjust";
+		} else {
+			$reiter_view = $sms_data["view"]; 
+		}
 	break;
 	case "sms_send.php" : 
-		$reiter_view = "write"; 
+		if ($change_view == TRUE) {
+			$reiter_view = "adjust";
+		} else {
+			$reiter_view = "write"; 
+		}
 	break;
 	case "online.php" : 
 		$reiter_view = "online"; 

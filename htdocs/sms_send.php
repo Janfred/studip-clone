@@ -129,6 +129,7 @@ if ($group_id) {
 	while ($db->next_record()) {
 		$add_group_members[] = $db->f("username");
 	}
+	$sms_data["p_rec"] = "";
 	$sms_data["p_rec"] = array_add_value($add_group_members, $sms_data["p_rec"]);
 }
 
@@ -204,7 +205,7 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 						}
 					}
 					echo "</select><br>";	
-					echo "<input type=\"image\" name=\"del_receiver_button\" src=\"./pictures/trash.gif\" border=\"0\">";
+					echo "<input type=\"image\" name=\"del_receiver_button\" src=\"./pictures/trash.gif\" ".tooltip(_("löscht alle ausgewähtlen EmpfängerInnen"))." border=\"0\">";
 					echo " <font size=\"-1\">"._("ausgew&auml;hlte l&ouml;schen")."</font>";
 				}
 				echo "</td><td class=\"printcontent\" align=\"left\" valign=\"top\" width=\"70%\">";
@@ -246,7 +247,7 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 								echo "<option value=\"".$db->f("username")."\">".htmlReady(my_substr($db->f("fullname"),0,35))."</option>";
 							}
 						}
-						echo "</select><br><input type=\"image\" name=\"add_receiver_button\" src=\"./pictures/move_left.gif\" border=\"0\">&nbsp;<font size=\"-1\">"._("ausgew&auml;hlte hinzufügen")."</font>";
+						echo "</select><br><input type=\"image\" name=\"add_receiver_button\" src=\"./pictures/move_left.gif\" border=\"0\" ".tooltip(_("fügt alle ausgewähtlen Personen der EmpfängerInnenliste hinzu")).">&nbsp;<font size=\"-1\">"._("ausgew&auml;hlte hinzufügen")."</font>";
 					}
 				}
 				// free search
@@ -258,7 +259,7 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 					if (!$db->num_rows()) {
 						echo "&nbsp;<font size=\"-1\">"._("keine Treffer")."</font>";
 					} else {
-						echo "<input type=\"image\" name=\"add_freesearch\" ".tooltip(_("zu Empf&auml;ngerliste hinzuf&uuml;gen"))." value=\""._("zu Empf&auml;ngerliste hinzuf&uuml;gen")."\" src=\"./pictures/move_left.gif\" border=\"0\">&nbsp;";
+						echo "<input type=\"image\" name=\"add_freesearch\" ".tooltip(_("zu Empfängerliste hinzufügen"))." value=\""._("zu Empf&auml;ngerliste hinzuf&uuml;gen")."\" src=\"./pictures/move_left.gif\" border=\"0\">&nbsp;";
 						echo "<select size=\"1\" width=\"100\" name=\"freesearch[]\">";
 						while ($db->next_record()) {
 							if (!in_array($db->f("username"), $sms_data["p_rec"]) && !in_array($db->f("username"), $adresses_array) && get_username($user->id) != $db->f("username")) {
@@ -266,7 +267,7 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 							}
 						}
 						echo "</select>";
-						echo "<input type=\"image\" name=\"reset_freesearch\" src=\"./pictures/rewind.gif\" border=\"0\" value=\""._("Suche zur&uuml;cksetzen")."\">";
+						echo "<input type=\"image\" name=\"reset_freesearch\" src=\"./pictures/rewind.gif\" border=\"0\" value=\""._("Suche zur&uuml;cksetzen")."\" ".tooltip(_("setzt die Suche zurück")).">";
 					}
 				} else {
 					echo "<input type=\"text\" name=\"search_exp\" size=\"40\">";
@@ -295,7 +296,7 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 	}
 	echo "<input type=\"hidden\" name=\"sms_source_page\" value=\"$sms_source_page\">";
 	echo "<input type=\"hidden\" name=\"cmd\" value=\"$cmd\">";
-	if ($cmd=="write_chatinv") {
+	if ($cmd == "write_chatinv") {
 		echo "<td class=\"steel1\" width=\"100%\" valign=\"left\"><div align=\"left\">";
 		echo "<font size=\"-1\"><b>"._("Chatraum ausw&auml;hlen:")."</b>&nbsp;&nbsp;</font>";
 		echo "<select name=\"chat_id\" style=\"vertical-align:middle;font-size:9pt;\">";

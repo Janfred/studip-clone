@@ -51,15 +51,6 @@ function count_rec_messages_from_user($user_id) {
 	return $x;
 }
 
-function open_message($sms_data_open, $message_id) {
-	if ($sms_data_open == $message_id) {
-		$open = "open";
-	} else {
-		$open = "close";
-	}
-	return $open;
-}
-
 function set_read($message_id) {
 	global $db7, $user;
 	$user_id = $user->id;
@@ -132,7 +123,11 @@ function print_snd_message($mkdate, $message_id, $message, $sms_data_open, $sms_
 		$link = $PHP_SELF."?mopen=".$message_id;
 	}
 	
-	$titel = "<a href=\"$link\" class=\"tree\" >".htmlReady(preg_replace("/\n(.*)/", "", wordwrap($titel, 30)))."</a>";
+	if (strlen($titel) >= "50") {
+		$titel = "<a href=\"$link\" class=\"tree\" >".substr($titel, 0, 30)." ...</a>";
+	} else {
+		$titel = "<a href=\"$link\" class=\"tree\" >".$titel."</a>";
+	}
 
 	// ausgabe der ueberschrift		
 	echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"99%\" align=\"center\" class=\"steel1\"><tr>";
@@ -159,9 +154,19 @@ function print_rec_message($user_id_snd, $mkdate, $message_id, $message, $fullna
 	} else {
 		$checked = "";
 	}
-	
-	$open = open_message($sms_data_open, $message_id);
-	
+
+	// open if unread
+	if ($read != "1") {
+		$open = "open";
+		$link = $PHP_SELF."?mclose=TRUE";
+	} else if ($sms_data_open == $message_id) {
+		$open = "open";
+		$link = $PHP_SELF."?mclose=TRUE";
+	} else {
+		$open = "close";
+		$link = $PHP_SELF."?mopen=".$message_id;
+	}
+
 	if ($read == "1") {
 		$red = FALSE;
 		$icon = "&nbsp;<img src=\"pictures/cont_nachricht.gif\">";
@@ -203,13 +208,21 @@ function print_rec_message($user_id_snd, $mkdate, $message_id, $message, $fullna
 	}
 	$edit.= "&nbsp;<a href=\"".$PHP_SELF."?cmd=delete_selected&sel_delsms[1]=".$message_id."\">".makeButton("loeschen", "img")."</a><br><br>";
 	
+	/*
 	if ($sms_data_open == $message_id) {
 		$link = $PHP_SELF."?mclose=TRUE";
 	} else {
 		$link = $PHP_SELF."?mopen=".$message_id;
 	}
-	
-	$titel = "<a href=\"$link\" class=\"tree\" >".htmlReady(preg_replace("/\n(.*)/", "", wordwrap($titel, 30)))."</a>";
+	*/
+
+	if (strlen($titel) >= "50") {
+		$titel = "<a href=\"$link\" class=\"tree\" >".substr($titel, 0, 30)." ...</a>";
+	} else {
+		$titel = "<a href=\"$link\" class=\"tree\" >".$titel."</a>";
+	}
+
+
 
 	// ausgabe der ueberschrift		
 	echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"99%\" align=\"center\" class=\"steel1\"><tr>";
@@ -302,9 +315,20 @@ if ($sms_time) {
 	$sms_data["time"] = "all";
 }
 
+if ($sms_data['view'] == "in") {
+	$info_text_001 = "<img src=\"pictures/nachricht1.gif\" border=\"0\" align=\"texttop\"><b>&nbsp;"._("empfangene systeminterne Nachrichten anzeigen")."</b>";
+	$info_text_002 = _("Alle systeminternen Nachrichten, die an Sie gesendet wurden werden hier angezeigt.<br>");
+	$no_message_text_box = _("im Posteingang");
+} else if ($sms_data['view'] == "out") {
+	$info_text_001 = "<img src=\"pictures/nachricht1.gif\" border=\"0\" align=\"texttop\"><b>&nbsp;"._("gesendete systeminterne Nachrichten anzeigen")."</b>";
+	$info_text_002 = _("Alle systeminternen Nachrichten, die Sie gesendet haben werden hier angezeigt.<br>");
+	$no_message_text_box = _("im Postausgang");
+}
+
 if ($sms_data["time"] == "all") {
 	$info_text_003 = _("Sie sehen alle Ihre Nachrichten.");
 	$query_time = " ORDER BY message.mkdate DESC";
+	$no_message_text = sprintf(_("Es liegen keine systeminternen Nachrichten %s vor."), $no_message_text_box);
 }
 if ($sms_data["time"] == "new") {
 	$info_text_003 = _("Sie sehen nur neue Nachrichten.");
@@ -313,30 +337,28 @@ if ($sms_data["time"] == "new") {
 	} else {
 		$query_time = " AND message.mkdate > '".$CurrentLogin."' ORDER BY message.mkdate DESC";
 	}
+	#$no_message_text = _("Es liegen keine neuen systeminternen Nachrichten vor.");
+	$no_message_text = sprintf(_("Es liegen keine neuen systeminternen Nachrichten %s vor."), $no_message_text_box);
 }
 if ($sms_data["time"] == "24h") {
 	$info_text_003 = _("Sie sehen nur Nachrichten der letzten 24 Stunden.");
 	$query_time = " AND message.mkdate > '".(date("U")-86400)."' ORDER BY message.mkdate DESC";
+	$no_message_text = sprintf(_("Es liegen keine systeminternen Nachrichten aus den letzten 24 Stunden %s vor."), $no_message_text_box);
 }
 if ($sms_data["time"] == "7d") {
 	$info_text_003 = _("Sie sehen alle Nachrichten der letzten 7 Tage.");
 	$query_time = " AND message.mkdate > '".(date("U")-(7*86400))."' ORDER BY message.mkdate DESC";
+	$no_message_text = sprintf(_("Es liegen keine systeminternen Nachrichten aus den letzten 7 Tagen %s vor."), $no_message_text_box);
 }
 if ($sms_data["time"] == "30d") {
 	$info_text_003 = _("Sie sehen alle Nachrichten der letzten 30 Tage.");
 	$query_time = " AND message.mkdate > '".(date("U")-(30*86400))."' ORDER BY message.mkdate DESC";
+	$no_message_text = sprintf(_("Es liegen keine systeminternen Nachrichten aus den letzten 30 Tagen %s vor."), $no_message_text_box);
 }
 if ($sms_data["time"] == "older") {
 	$info_text_003 = _("Sie sehen nur Nachrichten, die &auml;lter als 30 Tage sind.");
 	$query_time = " AND message.mkdate < '".(date("U")-(30*86400))."' ORDER BY message.mkdate DESC";
-}
-
-if ($sms_data['view'] == "in") {
-	$info_text_001 = "<img src=\"pictures/nachricht1.gif\" border=\"0\" align=\"texttop\"><b>&nbsp;"._("empfangene systeminterne Nachrichten anzeigen")."</b>";
-	$info_text_002 = _("Alle systeminternen Nachrichten, die an Sie gesendet wurden werden hier angezeigt.<br>");
-} else if ($sms_data['view'] == "out") {
-	$info_text_001 = "<img src=\"pictures/nachricht1.gif\" border=\"0\" align=\"texttop\"><b>&nbsp;"._("gesendete systeminterne Nachrichten anzeigen")."</b>";
-	$info_text_002 = _("Alle systeminternen Nachrichten, die Sie gesendet haben werden hier angezeigt.<br>");
+	$no_message_text = sprintf(_("Es liegen keine systeminternen Nachrichten %s vor, die &auml;lter als 30 Tage sind."), $no_message_text_box);
 }
 
 // Start of Output
@@ -406,13 +428,10 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 	// wenn keine nachrichten zum anzeigen
 	if (!$n) {
 		echo "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"99%\" align=\"center\">";
-		$srch_result="info§<font size=-1><b>" . _("Im Augenblick liegen keine systeminternen Nachrichten f&uuml;r Sie vor.") . "</b></font>";
+		$srch_result = "info§<font size=-1><b>".$no_message_text."</b></font>";
 		parse_msg ($srch_result, "§", "steel1", 2, FALSE);
 		echo "</td></tr></table><br />";
 	}
-	#// raus!
-	//save last-visit-time
-	#$my_messaging_settings["last_visit"] = time();
 
 	print "</td><td class=\"blank\" width=\"270\" align=\"right\" valign=\"top\">";
 
