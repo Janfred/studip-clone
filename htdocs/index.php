@@ -184,9 +184,9 @@ unset($temp_language_key); unset($temp_language);
 ?>
 <tr>
 <td class="blank" align="left" valign="middle">
-	<img src="pictures/blank.gif" height="85" width="5" border="0">
+	<img src="pictures/blank.gif" height="85" width="38" border="0">
 </td>
-<td class="blank" valign="middle" align="center"><a href="http://www.studip.de"><img src="pictures/logoklein.gif" border="0" <?=tooltip(_("Zur Portalseite"))?>></a></td>
+<td class="blank" valign="middle" align="left"><a href="http://www.studip.de"><img src="pictures/logoklein.gif" border="0" <?=tooltip(_("Zur Portalseite"))?>></a></td>
 <td class="blank" align=right nowrap valign="middle">
 <?
 
