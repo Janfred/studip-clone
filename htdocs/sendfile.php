@@ -46,7 +46,9 @@ require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'] . "/lib/classes/StudipLitList.clas
 $db=new DB_Seminar;
 $db2=new DB_Seminar;
 
-
+if (isset($file_id))
+	$file_id = basename($file_id);
+	
 switch ($type) {
 	//We want to download from the archive (this mode performs perm checks)
 	case 1: 
