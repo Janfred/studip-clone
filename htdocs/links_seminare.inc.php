@@ -40,6 +40,8 @@ $structure["_meine_veranstaltungen"]=array (topKat=>"meine_veranstaltungen", nam
 if (!$perm->have_perm("admin")) {
 	$structure["meine_veranstaltungen_extendet"]=array (topKat=>"meine_veranstaltungen", name=>_("erweiterte&nbsp;&Uuml;bersicht"), link=>"meine_seminare.php?view=ext", active=>FALSE);
 	$structure["my_archiv"]=array (topKat=>"meine_veranstaltungen", name=>_("meine&nbsp;archivierten&nbsp;Veranstaltungen"), link=>"my_archiv.php", active=>FALSE);
+	if ($GLOBALS['EXPORT_ENABLE'])
+		$structure["record_of_study"]=array (topKat=>"meine_veranstaltungen", name=>_("Druckansicht"), link=>"recordofstudy.php", active=>FALSE);
 }
 if ($perm->have_perm("admin"))
 	$structure["veranstaltungs_timetable"]=array (topKat=>"meine_veranstaltungen", name=>_("Veranstaltungs-Timetable"), link=>"mein_stundenplan.php", active=>FALSE);
@@ -81,6 +83,9 @@ switch ($i_page) {
 	break;
 	case "mein_stundenplan.php" : 
 		$reiter_view="veranstaltungs_timetable";
+	break;
+	case "recordofstudy.php" : 
+		$reiter_view="record_of_study";
 	break;
 	default :
 		$reiter_view="meine_seminare";
