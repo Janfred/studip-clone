@@ -24,6 +24,7 @@ function show_user_modules($benutzername)
 			$printimage = "<img src=\"pictures/icon-lern.gif\">";
 			$printcontent = $module_info["description"] . "<br><br><center><a href=\"$edit_link\" target=\"_blank\">" . makeButton("bearbeiten", "img") . "</a>&nbsp;<a href=\"$delete_link\" target=\"_blank\">" . makeButton("loeschen", "img") . "</a></center>";
 			$mod_author = get_module_author($mod_array[$module_count]["inst"], $mod_array[$module_count]["id"]);
+			$mod_desc = "";
 			for ($i=0; $i<sizeof($mod_author); $i ++)
 				if (get_studip_user($mod_author[$i]["id"]) == false)
 					$mod_desc[$i] = $mod_author[$i]["fullname"];
@@ -65,7 +66,7 @@ function show_admin_modules()
 	$mod_array = get_all_modules();
 	if ($mod_array != false)
 	{	
-		echo "<b>" . _("Auf folgende Lernmodule haben Sie Zugriff:") . "</b><br><br>";
+		echo "<b>" . _("Sie haben Zugriff auf folgende Lernmodule:") . "</b><br><br>";
 		while ($module_count < sizeof($mod_array))
 		{
 			$module_info = get_module_info($mod_array[$module_count]["inst"], $mod_array[$module_count]["id"]);
@@ -83,6 +84,7 @@ function show_admin_modules()
 			$printcontent = $module_info["description"] . "<br><br><center><a href=\"$edit_link\" target=\"_blank\">" . makeButton("bearbeiten", "img") . "</a>&nbsp;".
 				"<a href=\"$delete_link\" target=\"_blank\">" . makeButton("loeschen", "img") . "</a></center>";
 			$mod_author = get_module_author($mod_array[$module_count]["inst"], $mod_array[$module_count]["id"]);
+			$mod_desc = "";
 			for ($i=0; $i<sizeof($mod_author); $i ++)
 				if (get_studip_user($mod_author[$i]["id"]) == false)
 					$mod_desc[$i] = $mod_author[$i]["fullname"];
@@ -145,6 +147,7 @@ function show_seminar_modules($seminar_id)
 			$printimage = "<img src=\"pictures/icon-lern.gif\">";
 			$printcontent = $module_info["description"] . "<br><br><center><a href=\"$link_del\">" . makeButton("entfernen", "img") . "</a></center>";
 			$mod_author = get_module_author($mod_array[$module_count]["inst"], $mod_array[$module_count]["id"]);
+			$mod_desc = "";
 			for ($i=0; $i<sizeof($mod_author); $i ++)
 				if (get_studip_user($mod_author[$i]["id"]) == false)
 					$mod_desc[$i] = $mod_author[$i]["fullname"];
@@ -211,6 +214,7 @@ function show_all_modules($seminar_id)
 			$printimage = "<img src=\"pictures/icon-lern.gif\">";
 			$printcontent = $module_info["description"] . "<br><br><center><a href=\"$link_con\">" . makeButton("hinzufuegen", "img") . "</a></center>";
 			$mod_author = get_module_author($mod_array[$module_count]["inst"], $mod_array[$module_count]["id"]);
+			$mod_desc = "";
 			for ($i=0; $i<sizeof($mod_author); $i ++)
 				if (get_studip_user($mod_author[$i]["id"]) == false)
 					$mod_desc[$i] = $mod_author[$i]["fullname"];

@@ -34,6 +34,7 @@ function link_seminar_modules($seminar_id)
 			$link_str[$i]["button"] = "<br><center><a href=\"" . link_use_module($mod_array[$i]["inst"], $mod_array[$i]["id"]) . "\" class=\"tree\" target=\"_blank\">"
 			. makeButton("starten", "img")."</a>&nbsp";
 			$mod_author = get_module_author($mod_array[$i]["inst"], $mod_array[$i]["id"]);
+			$mod_desc = "";
 			for ($i2=0; $i2<sizeof($mod_author); $i2 ++)
 			{
 				if (($auth->auth["uname"] == get_studip_user($mod_author[$i2]["id"])) OR ($perm->have_studip_perm("admin",$seminar_id)))
