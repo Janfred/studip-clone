@@ -120,7 +120,7 @@ if ($o_mode == "file")
 										"text"  => "Wenn Sie die Daten konvertieren wollen, klicken Sie auf 'weiter'."
 									);
 	}
-	print_infobox ($infobox,"pictures/export2.jpg");
+	print_infobox ($infobox,"pictures/export.jpg");
 	?>		
 		</td>		
 	</tr>
