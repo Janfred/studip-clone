@@ -67,7 +67,7 @@ function get_my_obj_values(&$my_obj) {
 
 	//News
 	
-	$db2->query(get_obj_clause('news_range a {ON_CLAUSE} LEFT JOIN news nw USING(news_id)','range_id','(IF(date < UNIX_TIMESTAMP(),range_id,NULL))',"(date > IFNULL(b.visitdate,0) AND nw.user_id !='$user_id')",'news',false,false,'nw.news_id'));
+	$db2->query(get_obj_clause('news_range a {ON_CLAUSE} LEFT JOIN news nw USING(news_id)','range_id','(IF(date < UNIX_TIMESTAMP(),range_id,NULL))',"(date > IFNULL(b.visitdate,0) AND nw.user_id !='$user_id')",'news',false,false,'a.news_id'));
 	while($db2->next_record()) {
 		$my_obj[$db2->f("object_id")]["neuenews"]=$db2->f("neue");
 		$my_obj[$db2->f("object_id")]["news"]=$db2->f("count");
@@ -122,7 +122,7 @@ function get_my_obj_values(&$my_obj) {
 		}
 		
 		$db2->query(get_obj_clause('eval_range a {ON_CLAUSE} INNER JOIN eval d ON ( a.eval_id = d.eval_id AND d.startdate < UNIX_TIMESTAMP( ) AND (d.stopdate > UNIX_TIMESTAMP( ) OR d.startdate + d.timespan > UNIX_TIMESTAMP( ) OR (d.stopdate IS NULL AND d.timespan IS NULL)))',
-									'range_id','a.eval_id',"(chdate > IFNULL(b.visitdate,0) AND d.author_id !='$user_id' )",'eval',false,false,'d.eval_id'));
+									'range_id','a.eval_id',"(chdate > IFNULL(b.visitdate,0) AND d.author_id !='$user_id' )",'eval',false,false,'a.eval_id'));
 		while($db2->next_record()) {
 				$my_obj[$db2->f("object_id")]["neuevotes"] += $db2->f("neue");
 				$my_obj[$db2->f("object_id")]["votes"] += $db2->f("count");
