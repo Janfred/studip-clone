@@ -6,7 +6,7 @@
 		."- $UNI_NAME_CLEAN -\n\n"
 		."You registered with the following information at $Zeit:\n\n"
 		."Username: $username\n"
-		."Forername: $Vorname\n"
+		."Forename: $Vorname\n"
 		."Surname: $Nachname\n"
 		."E-mail address: $Email\n\n"
 		."This mail is being sent to you be sure,\n"
