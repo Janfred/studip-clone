@@ -207,10 +207,10 @@ if (!count($_marked_sem)) {
 	
 	switch ($sem_portal["toplist"]) {
 		case FALSE:
-			$toplist = getToplist(_("Teilnehmeranzahl"), "SELECT seminare.seminar_id, seminare.name, count(seminare.seminar_id) as count FROM seminar_user LEFT JOIN seminare USING(seminar_id) ".$sql_where_query_seminare." GROUP BY seminare.seminar_id ORDER BY count DESC LIMIT $count");
+			$toplist =	getToplist(_("neueste Veranstaltungen"),"SELECT seminare.seminar_id, seminare.name, mkdate as count FROM seminare ".$sql_where_query_seminare." ORDER BY mkdate DESC LIMIT $count", "date");
 		break;
 		case 1:
-			$toplist =	getToplist(_("neueste Veranstaltungen"),"SELECT seminare.seminar_id, seminare.name, mkdate as count FROM seminare ".$sql_where_query_seminare." ORDER BY mkdate DESC LIMIT $count", "date");
+			$toplist = getToplist(_("Teilnehmeranzahl"), "SELECT seminare.seminar_id, seminare.name, count(seminare.seminar_id) as count FROM seminar_user LEFT JOIN seminare USING(seminar_id) ".$sql_where_query_seminare." GROUP BY seminare.seminar_id ORDER BY count DESC LIMIT $count");
 		break;
 		case 2:
 			$tmp_where = ($view != "all") ? $sql_where_query_seminare." AND NOT ISNULL(seminare.seminar_id) " : " WHERE NOT ISNULL(seminare.seminar_id) ";
@@ -224,9 +224,9 @@ if (!count($_marked_sem)) {
 	
 	//toplist link switcher
 	if ($sem_portal["toplist"])
-		$toplist_links .= "<a href=\"$PHP_SELF?choose_toplist=0\"><img src=\"pictures/forumrot.gif\" border=\"0\">&nbsp;"._("Teilnehmeranzahl")."</a><br />";
-	if ($sem_portal["toplist"] != 1)
 		$toplist_links .= "<a href=\"$PHP_SELF?choose_toplist=1\"><img src=\"pictures/forumrot.gif\" border=\"0\">&nbsp;"._("neueste Veranstaltungen")."</a><br />";
+	if ($sem_portal["toplist"] != 1)
+		$toplist_links .= "<a href=\"$PHP_SELF?choose_toplist=0\"><img src=\"pictures/forumrot.gif\" border=\"0\">&nbsp;"._("Teilnehmeranzahl")."</a><br />";
 	if ($sem_portal["toplist"] != 2)
 		$toplist_links .= "<a href=\"$PHP_SELF?choose_toplist=2\"><img src=\"pictures/forumrot.gif\" border=\"0\">&nbsp;"._("die meisten Materialien")."</a><br />";
 	if ($sem_portal["toplist"] != 3)
