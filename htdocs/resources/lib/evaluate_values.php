@@ -38,6 +38,7 @@ empfangene Werte auswerten und Befehle ausfuehren
 
 //got a fresh session?
 if ((sizeof ($_REQUEST) == 1) && (!$view)) {
+	$resources_data='';
 	$resources_data["view"]="resources";
 	$resources_data["view_mode"]=FALSE;
 }
