@@ -793,9 +793,9 @@ if (($kill) && ($admin_dates_data["range_id"]))
 		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr>";
 		
 		if (($show_id  == $db->f("termin_id")) || ($show_all))
-			printhead(0, 0, $link, "open", $neuer_termin, $icon, $titel, $zusatz);
+			printhead(0, 0, $link, "open", $neuer_termin, $icon, $titel, $zusatz, $db->f("mkdate"));
 		else
-			printhead(0, 0, $link, "close", $neuer_termin, $icon, $titel, $zusatz);
+			printhead(0, 0, $link, "close", $neuer_termin, $icon, $titel, $zusatz, $db->f("mkdate"));
 
 		echo "</tr></table>	";
 		

@@ -174,9 +174,9 @@ function show_dates ($range_id, $date_start, $date_end, $show_not=0, $show_docs=
 			echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr>";
 			
 			if ($open == $db->f("termin_id"))
-				printhead(0, 0, $link, "open", $new, $icon, $titel, $zusatz);
+				printhead(0, 0, $link, "open", $new, $icon, $titel, $zusatz, $db->f("mkdate"));
 			else
-				printhead(0, 0, $link, "close", $new, $icon, $titel, $zusatz);
+				printhead(0, 0, $link, "close", $new, $icon, $titel, $zusatz, $db->f("mkdate"));
 
 			echo "</tr></table>	";
 					
@@ -289,9 +289,9 @@ function show_personal_dates ($range_id, $date_start, $date_end, $show_docs=FALS
 			echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr>";
 			
 			if ($open == $app_ident)
-				printhead(0, 0, $link, "open", $new, $icon, $titel, $zusatz);
+				printhead(0, 0, $link, "open", $new, $icon, $titel, $zusatz, $db->f("mkdate"));
 			else
-				printhead(0, 0, $link, "close", $new, $icon, $titel, $zusatz);
+				printhead(0, 0, $link, "close", $new, $icon, $titel, $zusatz, $db->f("mkdate"));
 
 			echo "</tr></table>	";
 					
