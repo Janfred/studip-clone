@@ -244,7 +244,7 @@ if ($msg)
 // Ausgabe Hobbys
 
 	if ($db->f("hobby")!="") {
-		echo "<table class=\"blank\" width=\"100%%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><b>&nbsp;" . _("Hobbies") . " </b></td></tr>");
+		echo "<table class=\"blank\" width=\"100%%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><b>&nbsp;" . _("Hobbies") . " </b></td></tr>";
 		printf ("<tr><td class=\"steel1\">&nbsp;</td></tr><tr><td class=\"steel1\"><blockquote>%s</blockquote></td></tr><tr><td class=\"steel1\">&nbsp;</td></tr></table><br>\n",formatReady($db->f("hobby")));
 	}
 
