@@ -60,7 +60,7 @@ if ($AUTH_LIFETIME) {
 if (isset($FAVICON))
 		printf("<link rel=\"SHORTCUT ICON\" href=\"%s\">", $FAVICON);
 if (!isset($_html_head_title))  // if not set, use default title
-	$_html_head_title ="Stud.IP";
+	$_html_head_title = ($HTML_HEAD_TITLE) ? $HTML_HEAD_TITLE : "Stud.IP";
 printf("\t\t<title>%s</title>",$_html_head_title);
 if (!isset($_include_stylesheet))  // if not set, use default stylesheet
 	$_include_stylesheet ="style.css";
