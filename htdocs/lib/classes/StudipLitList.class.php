@@ -322,15 +322,17 @@ class StudipLitList extends TreeAbstract {
 		return $list_ids;
 	}
 	
-	function GetFormattedListsByRange($range_id){
+	function GetFormattedListsByRange($range_id, $copy_link = true){
 		$ret = false;
 		$dbv = new DbView();
 		$tree =& TreeAbstract::GetInstance("StudipLitList", $range_id);
 		if ( ($lists = $tree->getVisibleListIds()) ){
 			for ($i = 0; $i < count($lists); ++$i){
-				$ret .= "<div align=\"left\"><b><u>" . htmlReady($tree->tree_data[$lists[$i]]['name']) . "</u></b></div>"
-				. "<div align=\"right\" style=\"font-size:10pt\"><a href=\"admin_lit_list.php?cmd=CopyUserList&_range_id=self&user_list={$lists[$i]}#anchor\"><img src=\"pictures/link_intern.gif\" border=\"0\">"
-				. "&nbsp;Literaturliste kopieren</a></div>";
+				$ret .= "<div align=\"left\"><b><u>" . htmlReady($tree->tree_data[$lists[$i]]['name']) . "</u></b></div>";
+				if ($copy_link){
+					$ret . "<div align=\"right\" style=\"font-size:10pt\"><a href=\"admin_lit_list.php?cmd=CopyUserList&_range_id=self&user_list={$lists[$i]}#anchor\"><img src=\"pictures/link_intern.gif\" border=\"0\">"
+						. "&nbsp;Literaturliste kopieren</a></div>";
+				}
 				$ret .= "<span style=\"font-size:10pt\">";
 				if ($tree->hasKids($lists[$i])){
 					$dbv->params[0] = $lists[$i];
