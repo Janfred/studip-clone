@@ -73,20 +73,31 @@ if ($cancel) {
 }
 	
 if (($send) && (($admin_datafields_data["change_datafield"]) || ($admin_datafields_data["create_datafield"]))) {
-	if (is_array($datafield_class)) {
-		$tmp_datafield_class = $datafield_class;
-		$datafield_class = 0;
-		foreach ($tmp_datafield_class as $val) {
-			if ($val == "FALSE")
-				$datafield_class = "NULL";
-			else {
-				$datafield_class+= $DataFields->perms_mask[$val];
-			}
-		}
-	} elseif ($datafield_class == "FALSE")
-		$datafield_class = "NULL";
 
-	$DataFields->storeDataField($admin_datafields_data["change_datafield"], $datafield_name, $admin_datafields_data["create_datafield"], $datafield_class, $datafield_edit_perms, $datafield_priority);
+	function datafield_check_array($datafield) {	// we do not want duplicated code. Used for datafield_class & datafield_view_perms
+
+		global $DataFields;
+
+		if (is_array($datafield)) {
+			$tmp_datafield = $datafield;
+			$datafield = 0;
+			foreach ($tmp_datafield as $val) {
+				if ($val == "FALSE")
+					$datafield = "NULL";
+				else {
+					$datafield+= $DataFields->perms_mask[$val];
+				}
+			}
+		} elseif ($datafield == "FALSE")
+			$datafield = "NULL";
+
+		return $datafield;
+	}
+
+	$datafield_class = datafield_check_array($datafield_class);
+	$datafield_view_perms = datafield_check_array($datafield_view_perms);
+
+	$DataFields->storeDataField($admin_datafields_data["change_datafield"], $datafield_name, $admin_datafields_data["create_datafield"], $datafield_class, $datafield_edit_perms, $datafield_priority, $datafield_view_perms);
 	if ($admin_datafields_data["change_datafield"]) {
 		$admin_datafields_data["change_datafield"] = FALSE;
 		$msg = "msg§"._("Die &Auml;nderungen am Datenfeld wurden &uuml;bernommen.");
@@ -142,9 +153,14 @@ if ($kill_datafield) {
 					<b><?=_("Veranstaltungs-Kategorie")?></b>
 					</font>
 				</td>
-				<td class="steel" width="20%" align="center" valign="bottom">
+				<td class="steel" width="15%" align="center" valign="bottom">
 					<font size="-1">
 					<b><?=_("ben&ouml;tigter Status")?></b>
+					</font>
+				</td>
+				<td class="steel" width="15%" align="center" valign="bottom">
+					<font size="-1">
+					<b><?=_("Sichtbarkeit")?></b>
 					</font>
 				</td>
 				<td class="steel" width="10%" align="center" valign="bottom">
@@ -152,12 +168,12 @@ if ($kill_datafield) {
 					<b><?=_("Reihenfolge")?></b>
 					</font>
 				</td>
-				<td class="steel" width="20%" align="center" valign="bottom">
+				<td class="steel" width="15%" align="center" valign="bottom">
 					<font size="-1">
 					<b><?=_("Anzahl der Eintr&auml;ge")?></b>
 					</font>
 				</td>
-				<td class="steel" width="10%" align="center" valign="bottom">
+				<td class="steel" width="5%" align="center" valign="bottom">
 					<font size="-1">
 					<b><?=_("Aktion")?></b>
 					</font>
@@ -165,7 +181,7 @@ if ($kill_datafield) {
 			</tr>
 			<?
 			$datafields_list = $DataFields->getFields("sem");
-			foreach ($datafields_list as $key=>$val) {
+			foreach ($datafields_list as $key=>$val) {	//** start of loop **
 				$cssSw->switchClass()
 				?>
 			<tr>
@@ -184,7 +200,7 @@ if ($kill_datafield) {
 					<font size="-1">
 					<?
 					if (($admin_datafields_data["change_datafield"] == $val["datafield_id"]) && (!$val["used_entries"])) {
-						print "<select name=\"datafield_class\" style=\"{font-size:8 pt; width: 90%%;}\">";
+						print "<select name=\"datafield_class\" style=\"{font-size:8 pt;}\">";
 						foreach ($SEM_CLASS as $key2=>$val2) {
 							printf ("<option %s value=\"%s\">%s</option>", ($val["object_class"] == $key2) ? "selected" : "", $key2, $val2["name"]);
 						}
@@ -198,7 +214,7 @@ if ($kill_datafield) {
 					<font size="-1">
 					<?
 					if ($admin_datafields_data["change_datafield"] == $val["datafield_id"]) {
-						print "<select name=\"datafield_edit_perms\" style=\"{font-size:8 pt; width: 90%%;}\">";
+						print "<select name=\"datafield_edit_perms\" style=\"{font-size:8 pt;}\">";
 						printf ("<option %s value=\"user\">user</option>", ($val["edit_perms"] == "user") ? "selected" : "");
 						printf ("<option %s value=\"autor\">autor</option>", ($val["edit_perms"] == "autor") ? "selected" : "");
 						printf ("<option %s value=\"tutor\">tutor</option>", ($val["edit_perms"] == "tutor") ? "selected" : "");
@@ -208,6 +224,24 @@ if ($kill_datafield) {
 						print "</select>";
 					} else
 						print $val["edit_perms"]
+					?>
+					</font>
+				</td>				
+				<td class="<?=$cssSw->getClass()?>" align="center">
+				<font size="-1">
+				<?if (($admin_datafields_data["change_datafield"] == $val["datafield_id"]) && (!$val["used_entries"])) {
+					print "<select name=\"datafield_view_perms[]\"  multiple size=\"8\" style=\"{font-size:8 pt;}\">";
+					printf ("<option %s value=\"FALSE\">"._("alle")."</option>", (!$val["view_perms"]) ? "selected" : "");
+					printf ("<option %s value=\"user\">user</option>", ($val["view_perms"] & $DataFields->perms_mask["user"]) ? "selected" : "");
+					printf ("<option %s value=\"autor\">autor</option>", ($val["view_perms"] & $DataFields->perms_mask["autor"]) ? "selected" : "");
+					printf ("<option %s value=\"tutor\">tutor</option>", ($val["view_perms"] & $DataFields->perms_mask["tutor"]) ? "selected" : "");
+					printf ("<option %s value=\"dozent\">dozent</option>", ($val["view_perms"] & $DataFields->perms_mask["dozent"]) ? "selected" : "");
+					printf ("<option %s value=\"admin\">admin</option>", ($val["view_perms"] & $DataFields->perms_mask["admin"]) ? "selected" : "");
+					printf ("<option %s value=\"root\">root</option>", ($val["view_perms"] & $DataFields->perms_mask["root"]) ? "selected" : "");
+					printf ("<option %s value=\"self\">self</option>", ($val["view_perms"] & $DataFields->perms_mask["self"]) ? "selected" : "");
+					print "</select>";
+				} else
+					print ($val["view_perms"]) ? $DataFields->getReadableUserClass($val["view_perms"]) : _("alle")
 					?>
 					</font>
 				</td>
@@ -245,12 +279,12 @@ if ($kill_datafield) {
 				<td class="<?=$cssSw->getClass()?>" align="left">
 					<a name="a"></a>
 					<font size="-1">
-						<input type="TEXT" maxlength="255" size="30" style="{font-size:8 pt; width: 90%%;}" name="datafield_name" />
+						<input type="TEXT" maxlength="255" size="30" style="{font-size:8 pt;}" name="datafield_name" />
 					</font>
 				</td>
 				<td class="<?=$cssSw->getClass()?>" align="center">
 					<font size="-1">
-						<select name="datafield_class" style="{font-size:8 pt; width: 90%%;}">";
+						<select name="datafield_class" style="{font-size:8 pt;}">";
 						<option value="FALSE"><?=_("alle")?></option>
 						<?										
 						foreach ($SEM_CLASS as $key=>$val) {
@@ -262,13 +296,28 @@ if ($kill_datafield) {
 				</td>
 				<td class="<?=$cssSw->getClass()?>" align="center">
 					<font size="-1">
-						<select name="datafield_edit_perms" style="{font-size:8 pt; width: 90%%;}">";
+						<select name="datafield_edit_perms" style="{font-size:8 pt;}">";
 						<option value="user">user</option>
 						<option value="autor">autor</option>
 						<option value="tutor">tutor</option>
 						<option value="dozent">dozent</option>
 						<option value="admin">admin</option>
 						<option value="root">root</option>
+						</select>
+					</font>
+				</td>
+				<td class="<?=$cssSw->getClass()?>" align="center">
+				<? //New possibility: Set rights for visibility ?>
+					<font size="-1">
+						<select name="datafield_view_perms[]" multiple size="8" style="{font-size:8 pt;}">
+						<option value="FALSE"><?=_("alle")?></option>
+						<option value="user">user</option>
+						<option value="autor">autor</option>
+						<option value="tutor">tutor</option>
+						<option value="dozent">dozent</option>
+						<option value="admin">admin</option>
+						<option value="root">root</option>
+						<option value="self">self</option>
 						</select>
 					</font>
 				</td>
@@ -313,9 +362,14 @@ if ($kill_datafield) {
 					<b><?=_("Einrichtungs-Typ")?></b>
 					</font>
 				</td>
-				<td class="steel" width="20%" align="center" valign="bottom">
+				<td class="steel" width="15%" align="center" valign="bottom">
 					<font size="-1">
 					<b><?=_("ben&ouml;tigter Status")?></b>
+					</font>
+				</td>
+				<td class="steel" width="15%" align="center" valign="bottom">
+					<font size="-1">
+					<b><?=_("Sichtbarkeit")?></b>
 					</font>
 				</td>
 				<td class="steel" width="10%" align="center" valign="bottom">
@@ -323,12 +377,12 @@ if ($kill_datafield) {
 					<b><?=_("Reihenfolge")?></b>
 					</font>
 				</td>
-				<td class="steel" width="20%" align="center" valign="bottom">
+				<td class="steel" width="15%" align="center" valign="bottom">
 					<font size="-1">
 					<b><?=_("Anzahl der Eintr&auml;ge")?></b>
 					</font>
 				</td>
-				<td class="steel" width="10%" align="center" valign="bottom">
+				<td class="steel" width="5%" align="center" valign="bottom">
 					<font size="-1">
 					<b><?=_("Aktion")?></b>
 					</font>
@@ -384,6 +438,24 @@ if ($kill_datafield) {
 					</font>
 				</td>
 				<td class="<?=$cssSw->getClass()?>" align="center">
+				<font size="-1">
+				<?if (($admin_datafields_data["change_datafield"] == $val["datafield_id"]) && (!$val["used_entries"])) {
+					print "<select name=\"datafield_view_perms[]\"  multiple size=\"8\" style=\"{font-size:8 pt;}\">";
+					printf ("<option %s value=\"FALSE\">"._("alle")."</option>", (!$val["view_perms"]) ? "selected" : "");
+					printf ("<option %s value=\"user\">user</option>", ($val["view_perms"] & $DataFields->perms_mask["user"]) ? "selected" : "");
+					printf ("<option %s value=\"autor\">autor</option>", ($val["view_perms"] & $DataFields->perms_mask["autor"]) ? "selected" : "");
+					printf ("<option %s value=\"tutor\">tutor</option>", ($val["view_perms"] & $DataFields->perms_mask["tutor"]) ? "selected" : "");
+					printf ("<option %s value=\"dozent\">dozent</option>", ($val["view_perms"] & $DataFields->perms_mask["dozent"]) ? "selected" : "");
+					printf ("<option %s value=\"admin\">admin</option>", ($val["view_perms"] & $DataFields->perms_mask["admin"]) ? "selected" : "");
+					printf ("<option %s value=\"root\">root</option>", ($val["view_perms"] & $DataFields->perms_mask["root"]) ? "selected" : "");
+					printf ("<option %s value=\"self\">self</option>", ($val["view_perms"] & $DataFields->perms_mask["self"]) ? "selected" : "");
+					print "</select>";
+				} else
+					print ($val["view_perms"]) ? $DataFields->getReadableUserClass($val["view_perms"]) : _("alle")
+					?>
+					</font>
+				</td>
+				<td class="<?=$cssSw->getClass()?>" align="center">
 					<font size="-1">
 					<?
 					if ($admin_datafields_data["change_datafield"] == $val["datafield_id"]) {
@@ -435,13 +507,27 @@ if ($kill_datafield) {
 				</td>
 				<td class="<?=$cssSw->getClass()?>" align="center">
 					<font size="-1">
-						<select name="datafield_edit_perms" style="{font-size:8 pt; width: 90%%;}">";
+						<select name="datafield_edit_perms" style="{font-size:8 pt;}">";
 						<option value="user">user</option>
 						<option value="autor">autor</option>
 						<option value="tutor">tutor</option>
 						<option value="dozent">dozent</option>
 						<option value="admin">admin</option>
 						<option value="root">root</option>
+						</select>
+					</font>
+				</td>
+				<td class="<?=$cssSw->getClass()?>" align="center">
+					<font size="-1">
+						<select name="datafield_view_perms[]"  multiple size="8" style="{font-size:8 pt;}">";
+						<option value="FALSE"><?=_("alle")?></option>
+						<option value="user">user</option>
+						<option value="autor">autor</option>
+						<option value="tutor">tutor</option>
+						<option value="dozent">dozent</option>
+						<option value="admin">admin</option>
+						<option value="root">root</option>
+						<option value="self">self</option>
 						</select>
 					</font>
 				</td>
@@ -486,9 +572,14 @@ if ($kill_datafield) {
 					<b><?=_("Nutzer-Status")?></b>
 					</font>
 				</td>
-				<td class="steel" width="20%" align="center" valign="bottom">
+				<td class="steel" width="15%" align="center" valign="bottom">
 					<font size="-1">
 					<b><?=_("ben&ouml;tigter Status")?></b>
+					</font>
+				</td>
+				<td class="steel" width="15%" align="center" valign="bottom">
+					<font size="-1">
+					<b><?=_("Sichtbarkeit")?></b>
 					</font>
 				</td>
 				<td class="steel" width="10%" align="center" valign="bottom">
@@ -496,12 +587,12 @@ if ($kill_datafield) {
 					<b><?=_("Reihenfolge")?></b>
 					</font>
 				</td>
-				<td class="steel" width="20%" align="center" valign="bottom">
+				<td class="steel" width="15%" align="center" valign="bottom">
 					<font size="-1">
 					<b><?=_("Anzahl der Eintr&auml;ge")?></b>
 					</font>
 				</td>
-				<td class="steel" width="10%" align="center" valign="bottom">
+				<td class="steel" width="5%" align="center" valign="bottom">
 					<font size="-1">
 					<b><?=_("Aktion")?></b>
 					</font>
@@ -538,8 +629,9 @@ if ($kill_datafield) {
 						printf ("<option %s value=\"admin\">admin</option>", ($val["object_class"] & $DataFields->perms_mask["admin"]) ? "selected" : "");
 						printf ("<option %s value=\"root\">root</option>", ($val["object_class"] & $DataFields->perms_mask["root"]) ? "selected" : "");
 						print "</select>";
-					} else
-						print ($val["object_class"]) ? $DataFields->getReadableUserClass($val["object_class"]) : _("alle")
+					} else {
+						print ($val["object_class"]) ? $DataFields->getReadableUserClass($val["object_class"]) : _("alle");
+					}
 					?>
 					</font>
 				</td>
@@ -557,6 +649,25 @@ if ($kill_datafield) {
 						print "</select>";
 					} else
 						print $val["edit_perms"]
+					?>
+					</font>
+				</td>
+				<td class="<?=$cssSw->getClass()?>" align="center">
+				<font size="-1">
+				<?if (($admin_datafields_data["change_datafield"] == $val["datafield_id"]) && (!$val["used_entries"])) {
+					print "<select name=\"datafield_view_perms[]\"  multiple size=\"7\" style=\"{font-size:8 pt; width: 90%%;}\">";
+					printf ("<option %s value=\"FALSE\">"._("alle")."</option>", (!$val["view_perms"]) ? "selected" : "");
+					printf ("<option %s value=\"user\">user</option>", ($val["view_perms"] & $DataFields->perms_mask["user"]) ? "selected" : "");
+					printf ("<option %s value=\"autor\">autor</option>", ($val["view_perms"] & $DataFields->perms_mask["autor"]) ? "selected" : "");
+					printf ("<option %s value=\"tutor\">tutor</option>", ($val["view_perms"] & $DataFields->perms_mask["tutor"]) ? "selected" : "");
+					printf ("<option %s value=\"dozent\">dozent</option>", ($val["view_perms"] & $DataFields->perms_mask["dozent"]) ? "selected" : "");
+					printf ("<option %s value=\"admin\">admin</option>", ($val["view_perms"] & $DataFields->perms_mask["admin"]) ? "selected" : "");
+					printf ("<option %s value=\"root\">root</option>", ($val["view_perms"] & $DataFields->perms_mask["root"]) ? "selected" : "");
+					printf ("<option %s value=\"self\">self</option>", ($val["view_perms"] & $DataFields->perms_mask["self"]) ? "selected" : "");
+					print "</select>";
+				} else {
+					print ($val["view_perms"]) ? $DataFields->getReadableUserClass($val["view_perms"]) : _("alle");
+				}
 					?>
 					</font>
 				</td>
@@ -620,6 +731,20 @@ if ($kill_datafield) {
 						<option value="dozent">dozent</option>
 						<option value="admin">admin</option>
 						<option value="root">root</option>
+						</select>
+					</font>
+				</td>
+				<td class="<?=$cssSw->getClass()?>" align="center">
+					<font size="-1">
+						<select name="datafield_view_perms[]"  multiple size="7" style="{font-size:8 pt; width: 90%%;}">";
+						<option value="FALSE"><?=_("alle")?></option>
+						<option value="user">user</option>
+						<option value="autor">autor</option>
+						<option value="tutor">tutor</option>
+						<option value="dozent">dozent</option>
+						<option value="admin">admin</option>
+						<option value="root">root</option>
+						<option value="self">self</option>
 						</select>
 					</font>
 				</td>
