@@ -324,8 +324,8 @@ function forum_get_buttons ($forumposting) {
 		if ($forum["view"] == "flatfolder")
 			$page = (ceil($forum["forumsum"] / $forum["postingsperside"])-1)*$forum["postingsperside"];
 		else 	$page = "0";
-		$edit = "<a href=\"".$PHP_SELF."?answer_id=".$forumposting["id"]."&flatviewstartposting=$page#anker\">&nbsp;" . makeButton("antworten", "img") . "</a>";
-		$edit .= "<a href=\"".$PHP_SELF."?answer_id=".$forumposting["id"]."&zitat=TRUE&flatviewstartposting=$page#anker\">&nbsp;" . makeButton("zitieren", "img") . "</a>";
+		$edit = "<a href=\"".$PHP_SELF."?answer_id=".$forumposting["id"]."&flatviewstartposting=$page&sort=age#anker\">&nbsp;" . makeButton("antworten", "img") . "</a>";
+		$edit .= "<a href=\"".$PHP_SELF."?answer_id=".$forumposting["id"]."&zitat=TRUE&flatviewstartposting=$page&sort=age#anker\">&nbsp;" . makeButton("zitieren", "img") . "</a>";
 		if ($forumposting["lonely"]==TRUE && ($rechte || $forumposting["perms"]=="write")) // ich darf bearbeiten
 			$edit .= "&nbsp;<a href=\"".$PHP_SELF."?edit_id=".$forumposting["id"]."&view=".$forum["view"]."&flatviewstartposting=".$forum["flatviewstartposting"]."#anker\">"
 			. makeButton("bearbeiten", "img") . "</a>";
@@ -485,11 +485,8 @@ function ForumStriche($forumposting) {
 function forum_print_toolbar ($id="") {
 		global $user, $PHP_SELF, $forum, $open, $flatviewstartposting;
 		$print = "<table class=\"blank\" width=\"100%\" border=0 cellpadding=0 cellspacing=0><tr><td class=\"blank\">";
-		if ($id) {  // Schreibmodus, also form einbauen
-			if  ($user->id == "nobody") $print .= "<form name=forumwrite onsubmit=\"return pruefe_name()\" method=post action=\"".$PHP_SELF."#anker\">";
-			else $print .= "<form name=forumwrite method=post action=\"".$PHP_SELF."#anker\">";
-		}
 		if ($forum["toolbar"] == "open") {
+			$print .= "<form name=\"sortierung\" method=\"post\" action=\"".$PHP_SELF."\">";
 			$print .= "<table class=\"blank\" width=\"100%\" border=0 cellpadding=0 cellspacing=0><tr><td class=\"blank\">&nbsp;</td></tr><tr>";
 			$print .= "<td class=\"steelkante\"><img src=\"pictures/blank.gif\" height=\"22\" width=\"5\"></td>";
 			$print .= "<td class=\"steelkante\"><font size=\"-1\">Indikator:&nbsp;";
@@ -510,21 +507,37 @@ function forum_print_toolbar ($id="") {
 				$print .=  "</td><td nowrap class=\"steelgraulight_shadow\" valign=\"middle\">&nbsp;<img src=\"pictures/forum_indikator_blau.gif\" align=\"middle\"><font size=\"-1\">"._("Relevanz")." &nbsp;";
 			else
 				$print .=  "</td><td nowrap class=\"steelkante\" valign=\"middle\">&nbsp;<a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&open=$open&indikator=score\"><img src=\"pictures/forum_indikator_grau.gif\" border=\"0\" align=\"middle\"><font size=\"-1\" color=\"#555555\">"._("Relevanz")."</a> &nbsp;";
-			$print .= "</td><td nowrap class=\"steelkante\" valign=\"bottom\">&nbsp;|&nbsp;&nbsp;<font size=\"-1\">Sortierung:&nbsp;&nbsp;</font>";
-			$print .= "<select name=\"username\" size=\"1\">";
-			$print .= "<option value=\"\">Alter";
-			$print .= "<option value=\"\">Views";
-			$print .= "<option value=\"\">Bewertungen";
-			$print .= "<option value=\"\">Relevanz";
-			$print .= "</select>&nbsp;&nbsp;";
-			$print .= "<img src=\"pictures/haken_transparent.gif\" align=\"middle\">&nbsp;&nbsp;|&nbsp;&nbsp;<a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&toolbar=close&open=$open\" ".tooltip(_("Toolbar einfahren"))."><img src=\"pictures/forumgrau3.gif\" align=\"middle\" border=\"0\"></a>&nbsp;";
-			$print .= "</td><td class=\"blank\" width=\"99%\"></td></tr><tr><td class=\"blank\" colspan=\"9\">&nbsp;</td></tr></table>";
+			
+			if ($forum["view"] != "tree" && $forum["view"] != "mixed") { // Anzeige der Sortierung nicht in der Themenansicht
+				$print .= "</td><td nowrap class=\"steelkante\" valign=\"bottom\">&nbsp;|&nbsp;&nbsp;<font size=\"-1\">Sortierung:&nbsp;&nbsp;</font>";
+				$print .= "<select name=\"sort\" size=\"1\">";
+				$tmp["age"] = "Alter";
+				$tmp["viewcount"] = "Views";
+				$tmp["rating"] = "Bewertung";
+				$tmp["score"] = "Relevanz";
+				$tmp["nachname"] = "Autor";
+				$tmp["root_name"] = "Thema";
+				$tmp["x.name"] = "Titel";
+				while(list($key,$value) = each($tmp)) {
+					$print .= "<option value=\"$key\"";
+					if ($key == $forum["sort"]) $print.= " selected";
+					$print .= ">$value";
+				}
+				$print .= "</select>&nbsp;&nbsp;";
+				$print .= "<input type=hidden name=flatviewstartposting value='".$flatviewstartposting."'>";
+				$print .= "<input type=image name=create value=\"abschicken\" src=\"pictures/haken_transparent.gif\" align=\"middle\" border=\"0\">";
+			}
+			$print .= "&nbsp;&nbsp;|&nbsp;&nbsp;<a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&toolbar=close&open=$open\" ".tooltip(_("Toolbar einfahren"))."><img src=\"pictures/forumgrau3.gif\" align=\"middle\" border=\"0\"></a>&nbsp;";
+			$print .= "</td><td class=\"blank\" width=\"99%\"></td></tr><tr><td class=\"blank\" colspan=\"9\">&nbsp;</td></tr></table></form>";
 		} else {
 			$print .= "<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" class=\"blank\"><tr><td class=\"blank\"><img src=\"pictures/blank.gif\" height=\"22\" width=\"5\"></td>";
 			$print .= "<td class=\"blank\"><font size=\"-1\"><a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&toolbar=open&open=$open\"><img src=\"pictures/pfeillink.gif\" align=\"middle\" border=\"0\"".tooltip(_("Toolbar ausfahren"))."></a>";
 			$print .= "</td></tr></table>";
 		}
-		
+		if ($id) {  // Schreibmodus, also form einbauen
+			if  ($user->id == "nobody") $print .= "<form name=forumwrite onsubmit=\"return pruefe_name()\" method=post action=\"".$PHP_SELF."#anker\">";
+			else $print .= "<form name=forumwrite method=post action=\"".$PHP_SELF."#anker\">";
+		}
 		
 		$print .= "</td></tr></table>";	
 		return $print;
@@ -546,8 +559,7 @@ function printposting ($forumposting) {
 	$forumposting = ForumNewPosting($forumposting);
 	$forumposting = ForumOpenClose($forumposting);
 	$forumposting = ForumFolderOrPosting($forumposting);
-	if ($forumposting["openclose"] == "open" || ($forum["view"] == "tree"))
-		$forumposting = forum_lonely($forumposting);
+	$forumposting = forum_lonely($forumposting);
 	$forumposting = ForumIcon($forumposting);
 					
  // Kopfzeile zusammenbauen
@@ -575,24 +587,14 @@ function printposting ($forumposting) {
   		/// Indexe
   		
   		if (!$objectviews)
-  			$objectviews = object_return_views($forumposting["id"]);
-  		if ($objectviews > 0)
-  			$forumposting["rate"] = object_print_rate($forumposting["id"]);
-  		else
-  			$forumposting["rate"] = "?";
+  			$objectviews = $forumposting["viewcount"];
+  		if (($forumposting["rating"] == 99))
+  			$forumposting["rating"] = "?";
   		
-  		$time = round((time() - $forumposting["mkdate"])/604800);
-  		if ($time < 1) $time = 1;
-  		$relevanz = $objectviews / $time;
-  		
-  		if ($forumposting["rate"]=="?")
-  			$rtmp = 0;
-  		else 
-  			$rtmp = 6-$forumposting["rate"]-3;
-  		$relevanz += $rtmp*5;
+  		$relevanz = $forumposting["score"];
   		
   		$forumhead[] = "<font color=\"#007700\">".$objectviews."</font> / ";
-  		$forumhead[] = "<font color=\"#AA8800\">".$forumposting["rate"]."</font> / ";
+  		$forumhead[] = "<font color=\"#AA8800\">".$forumposting["rating"]."</font> / ";
   		$forumhead[] = "<font color=\"#000077\">".round($relevanz,1)."</font> / ";
   		
   		/// Ende Indexe
@@ -644,7 +646,7 @@ function printposting ($forumposting) {
   		if ($forum["indikator"] == "views")
   			$index = $objectviews;
   		elseif ($forum["indikator"] == "rate")
-  			$index = $forumposting["rate"];
+  			$index = $forumposting["rating"];
   		elseif ($forum["indikator"] == "score")
   			$index = $relevanz;
   		
@@ -746,28 +748,27 @@ $db = new DB_Seminar;
 if ($forum["view"]=="flatfolder") {
 	$folder_id = $forum["flatfolder"];
 	$addon = " AND x.root_id = '$folder_id'";
+}
+$order = "DESC";
+
+if ($forum["sort"] == "rating" && ($forum["view"] != "tree" && $forum["view"] != "mixed"))
 	$order = "ASC";
-} else
-	$order = "DESC";
 
 if ($forum["view"]=="search") {
 	if ($forum["search"]!="") {
-		$addon = $forum["search"];
-		$query = "SELECT x.topic_id, x.name , x.author , x.mkdate, y.name AS root_name, y.topic_id AS thema_id, x.description, x.Seminar_id, x.user_id, x.chdate, username FROM px_topics x LEFT JOIN auth_user_md5 USING(user_id), px_topics y WHERE x.root_id = y.topic_id AND x.seminar_id = '$SessionSeminar' AND ($addon) ORDER BY mkdate DESC ";
-		$addonlimit = " LIMIT $flatviewstartposting,$postingsperside";
+		$addon = " AND (".$forum["search"].")";
+		// $query = "SELECT x.topic_id, x.name , x.author , x.mkdate, y.name AS root_name, y.topic_id AS thema_id, x.description, x.Seminar_id, x.user_id, x.chdate, username FROM px_topics x LEFT JOIN auth_user_md5 USING(user_id), px_topics y WHERE x.root_id = y.topic_id AND x.seminar_id = '$SessionSeminar' AND ($addon) ORDER BY mkdate DESC ";
 	} else {
 		echo forum_search_field()."<br><br>";
 		$nomsg="TRUE";
-		
+		die;
 	}
 } elseif ($forum["view"]=="neue") {
 	$datumtmp = $loginfilelast[$SessSemName[1]];
-	$query = "SELECT x.topic_id, x.name , x.author , x.mkdate, x.chdate , y.name AS root_name, x.description , x.Seminar_id, y.topic_id AS root_id, username, x.user_id FROM px_topics x LEFT JOIN auth_user_md5 USING(user_id), px_topics y WHERE x.root_id = y.topic_id AND x.chdate > '$datumtmp' AND x.Seminar_id = '$SessionSeminar' ORDER BY x.chdate ".$order;	
-} else {
-	$query = "SELECT x.topic_id, x.name , x.author , x.mkdate, x.chdate, y.name AS root_name, x.description, x.Seminar_id, y.topic_id AS root_id, username, x.user_id FROM px_topics x LEFT JOIN auth_user_md5 USING(user_id), px_topics y WHERE x.root_id = y.topic_id AND x.seminar_id = '$SessionSeminar'".$addon." ORDER BY chdate ".$order;
-	$addonlimit = " LIMIT $flatviewstartposting,$postingsperside";
+	$addon = " AND x.chdate > '$datumtmp'";
 }
 
+$query = "SELECT x.topic_id, x.name , x.author , x.mkdate, x.chdate, y.name AS root_name, x.description, x.Seminar_id, y.topic_id AS root_id, x.user_id FROM px_topics x, px_topics y WHERE x.root_id = y.topic_id AND x.Seminar_id = '$SessionSeminar'".$addon."";
 $db->query($query);
 if ($db->num_rows() > 0) {  // Forum ist nicht leer
 	$forum["forumsum"] = $db->num_rows();
@@ -779,8 +780,19 @@ if ($db->num_rows() > 0) {  // Forum ist nicht leer
 	}
 	die;
 }
-$query .= $addonlimit;
+
+$query = "SELECT x.topic_id, x.name , x.author , x.mkdate, x.chdate as age, y.name AS root_name"
+	.", x.description, x.Seminar_id, y.topic_id AS root_id, username, x.user_id"
+	.", IFNULL(views,0) as viewcount, nachname, IFNULL(ROUND(AVG(rate),1),99) as rating"
+	.", ((6-(IFNULL(AVG(rate),3))-3)*5)+(IFNULL(views,0)/(((UNIX_TIMESTAMP()-x.mkdate)/604800)+1)) as score "
+	."FROM px_topics x LEFT JOIN auth_user_md5 USING(user_id) LEFT JOIN object_views ON(object_views.object_id=x.topic_id) LEFT JOIN object_rate ON(object_rate.object_id=x.topic_id) , px_topics y "
+	."WHERE x.root_id = y.topic_id AND x.seminar_id = '$SessionSeminar'".$addon." "
+	."GROUP by x.topic_id ORDER BY ".$forum["sort"]." ".$order;
+
+$query .= " LIMIT $flatviewstartposting,$postingsperside";
 $db->query($query);
+
+
 
 /////////////////////////////////////// HTML und Navigation
 
@@ -820,7 +832,10 @@ while($db->next_record()){
 	$forumposting["rootid"] = $db->f("root_id");
 	$forumposting["rootname"] = $db->f("root_name");
 	$forumposting["mkdate"] = $db->f("mkdate");
-	$forumposting["chdate"] = $db->f("chdate");
+	$forumposting["chdate"] = $db->f("age");
+	$forumposting["viewcount"] = $db->f("viewcount");
+	$forumposting["rating"] = $db->f("rating");
+	$forumposting["score"] = $db->f("score");
 	
 	$forumposting = printposting($forumposting);
 }
@@ -843,7 +858,6 @@ echo "		</td>";
 echo "	</tr>";
 echo "</table>";
 echo "</td>";
-
 echo "</tr>";
 echo "</table><br>";
 
@@ -877,7 +891,13 @@ function DisplayFolders ($open=0, $update="", $zitat="") {
 		$query .= $comma."t.".$val;
 		$comma = ", ";
 	}
-	$query .= ", count(*) as count, max(s.chdate) as last from px_topics t LEFT JOIN px_topics s USING(root_id) where t.topic_id = t.root_id AND t.Seminar_id = '$SessionSeminar' group by t.root_id  order by t.mkdate";
+	
+	$query .= ", count(*) as count, max(s.chdate) as last "
+	.", IFNULL(views,0) as viewcount, IFNULL(ROUND(AVG(rate),1),99) as rating "
+	.", ((6-(IFNULL(AVG(rate),3))-3)*5)+(IFNULL(views,0)/(((UNIX_TIMESTAMP()-t.mkdate)/604800)+1)) as score "
+	."FROM px_topics t LEFT JOIN px_topics s USING(root_id) "
+	."LEFT JOIN object_views ON(object_views.object_id=t.topic_id) LEFT JOIN object_rate ON(object_rate.object_id=t.topic_id)"
+	."WHERE t.topic_id = t.root_id AND t.Seminar_id = '$SessionSeminar' GROUP BY t.root_id  ORDER BY t.mkdate";
 	$db=new DB_Seminar;
 	$db->query($query);
 	if ($db->num_rows()==0) {  // Das Forum ist leer
@@ -920,6 +940,9 @@ function DisplayFolders ($open=0, $update="", $zitat="") {
 			$forumposting["chdate"] = $db->f("chdate");
 			$forumposting["foldercount"] = $db->f("count");
 			$forumposting["folderlast"] = $db->f("last");
+			$forumposting["viewcount"] = $db->f("viewcount");
+			$forumposting["rating"] = $db->f("rating");
+			$forumposting["score"] = $db->f("score");
 	
 			$forumposting = printposting($forumposting);
 		
@@ -954,9 +977,14 @@ function DisplayKids ($forumposting, $level=0) {
 	$topic_id = $forumposting["id"];
 	$forumposting["intree"]="TRUE";
 	$query = "select topic_id, parent_id, name, author "
-		.", mkdate, chdate, description, root_id, username, px_topics.user_id from px_topics LEFT JOIN auth_user_md5 USING(user_id) where "
+		.", px_topics.mkdate, px_topics.chdate, description, root_id, username, px_topics.user_id"
+		.", IFNULL(views,0) as viewcount, IFNULL(ROUND(AVG(rate),1),99) as rating"
+		.", ((6-(IFNULL(AVG(rate),3))-3)*5)+(IFNULL(views,0)/(((UNIX_TIMESTAMP()-px_topics.mkdate)/604800)+1)) as score "
+		." FROM px_topics LEFT JOIN auth_user_md5 USING(user_id)"
+		." LEFT JOIN object_views ON(object_views.object_id=topic_id) LEFT JOIN object_rate ON(object_rate.object_id=topic_id)"
+		." WHERE"
 		." parent_id = '$topic_id'"
-		." order by mkdate $sort";
+		." GROUP BY topic_id ORDER by px_topics.mkdate";
 	$db=new DB_Seminar;
 	$db->query($query);
 	$forumposting["lines"][$level] = $db->num_rows();
@@ -973,6 +1001,9 @@ function DisplayKids ($forumposting, $level=0) {
 		$forumposting["mkdate"] = $db->f("mkdate");
 		$forumposting["chdate"] = $db->f("chdate");
 		$forumposting["level"] = $level;
+		$forumposting["viewcount"] = $db->f("viewcount");
+		$forumposting["rating"] = $db->f("rating");
+		$forumposting["score"] = $db->f("score");
 					
 		echo "<table class=\"blank\" border=0 cellpadding=0 cellspacing=0 width=\"100%\"><tr><td class=\"blank\" nowrap valign=\"top\" ><img src='pictures/forumleer.gif'><img src='pictures/forumleer.gif'>";
 

@@ -121,8 +121,15 @@ if ($suchbegriff!="") {
 if ($reset=="1")
 	$forum["search"] = "";	
 
+// verschiedene GUI-Konstanten werden gesetzt
+
 if ($indikator)
 	$forum["indikator"] = $indikator;
+	
+if ($sort)
+	$forum["sort"] = $sort;
+if (!$forum["sort"])
+	$forum["sort"] = "age";
 	
 if (!$forum["indikator"])
 	$forum["indikator"] = "age";
