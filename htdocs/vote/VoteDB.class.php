@@ -482,15 +482,13 @@ class VoteDB extends StudipObject {
       else {
 	 $sql = 
 	    "SELECT".
-	    " a.answer_id, b.answer_id ".
-	    "FROM".
-	    " voteanswers_user a, voteanswers b ".
+	    " a.answer_id".
+	    " FROM ".
+	    "  voteanswers b INNER JOIN voteanswers_user a USING(answer_id)".
 	    "WHERE".
-	    " b.answer_id = a.answer_id".
-	    " AND".
-	    " b.vote_id = '".$voteID."'";
+	    " b.vote_id = '".$voteID."' LIMIT 1";
 	 $this->db->query ($sql);
-	 return ($this->db->nf() == NO) ? NO : YES;
+	 return ($this->db->next_record()) ? NO : YES;
       }
       /* ------------------------------------------------------------------- */
    }
