@@ -113,10 +113,10 @@ function doRefreshScoreContentCache(){
 	}
 	if (is_array( ($user_ids = array_keys($this->score_content_cache)) )){
 		$id_list = "('" . join("','", $user_ids) . "')";
-		$db->query("SELECT count(post_id) as guestcount,range_id FROM guestbook LEFT JOIN user_info ON(range_id=user_info.user_id) 
-					WHERE range_id IN $id_list AND guestbook='1' GROUP BY range_id");
+		$db->query("SELECT count(post_id) as guestcount,u.user_id FROM user_info u  LEFT JOIN guestbook ON(range_id=u.user_id) 
+					WHERE u.user_id IN $id_list AND guestbook=1 GROUP BY u.user_id");
 		while ($db->next_record()){
-			$this->score_content_cache[$db->f('range_id')]['guestcount'] = $db->f('guestcount');
+			$this->score_content_cache[$db->f('user_id')]['guestcount'] = $db->f('guestcount');
 		}
 		$db->query("SELECT count(news_id) as newscount,range_id FROM news_range WHERE range_id IN $id_list GROUP BY range_id");
 		while ($db->next_record()){
@@ -146,11 +146,11 @@ function GetScoreContent($user_id) {
 		$this->doRefreshScoreContentCache();
 	}
 	$username = $this->score_content_cache[$user_id]['username'];
-	if ( ($gaeste = $this->score_content_cache[$user_id]['guestcount']) ) {
+	if ( ($gaeste = $this->score_content_cache[$user_id]['guestcount']) !== null ) {
 		if ($gaeste == 1) 
 			$tmp = _("Gästebuch aktiviert mit 1 Eintrag");
 		else 
-			$tmp = _("Gästebuch aktiviert mit $gaeste Einträgen");
+			$tmp = _("Gästebuch aktiviert mit ". $gaeste ." Einträgen");
 		$content .= "<a href=\"about.php?username=$username&guestbook=open#guest\"><img src=\"pictures/icon-guest.gif\" border=\"0\"".tooltip("$tmp")."></a>&nbsp;";
 	} else {
 		$content .= "<img src=\"pictures/blank.gif\" width=\"17\">";
