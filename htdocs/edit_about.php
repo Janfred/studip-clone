@@ -251,9 +251,9 @@ function edit_leben($lebenslauf,$schwerp,$publi,$view) {
 	$this->db->next_record();
 	if ($lebenslauf!=$this->db->f("lebenslauf") || $schwerp!=$this->db->f("schwerp") || $publi!=$this->db->f("publi")) {
 		$this->db->query("UPDATE user_info SET lebenslauf='$lebenslauf', schwerp='$schwerp', publi='$publi', chdate='".time()."' WHERE user_id='".$this->auth_user["user_id"]."'");
-		$this->msg = $this->msg . _("msg§Daten an Lebenslauf u.a. ge&auml;ndert") . "§";
+		$this->msg = $this->msg . "msg§" . _("Daten an Lebenslauf u.a. ge&auml;ndert") . "§";
 		setTempLanguage($this->auth_user["user_id"]);
-		$this->priv_msg = _("Daten Daten an Lebenslauf u.a. wurden geändert.\n");
+		$this->priv_msg = _("Daten an Lebenslauf u.a. wurden geändert.\n");
 		restoreLanguage();
 	}
 }
