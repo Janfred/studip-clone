@@ -727,7 +727,7 @@ function preg_call_link ($params, $mod, $extern = FALSE) {
 				if ($params[2]) {
 					$width = '';
 					// width in percent
-					if (!substr($params[2], -1) == '%') {
+					if (substr($params[2], -1) == '%') {
 						$width = (int) substr($params[2], 0, -1) < 100 ? " width=\"{$params[2]}%\"" : ' width="100%"';
 					}
 					else {
