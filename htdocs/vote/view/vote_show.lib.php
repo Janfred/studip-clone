@@ -589,13 +589,16 @@ function createSuccessReport (&$vote, $firstTime = YES, $changed = NO) {
  * @returns  String   The HTML-text
  */
 function createVoteResult ($vote, $preview = NO) {
-   global $auth, $forum;
-//    static $overlibInitialized = NO;
+   global $auth, $forum, $perm;
+
+   $haveFullPerm = $perm->have_studip_perm ("tutor", $vote->getRangeID()) ||
+       $auth->auth["uid"] == $vote->getAuthorID ();
    $sortAnswers = $_GET["sortAnswers"] && 
-	 ($vote->getVoteID() == $_GET["voteopenID"]);
+       ($vote->getVoteID() == $_GET["voteopenID"]);
    $revealNames = $_GET["revealNames"] && 
-      ($vote->getVoteID() == $_GET["voteopenID"]) &&
-      ! $vote->isAnonymous();
+       ($vote->getVoteID() == $_GET["voteopenID"]) &&
+       ($haveFullPerm || $vote->getNamesVisibility()) &&
+       ! $vote->isAnonymous();
       
    if ($sortAnswers) $vote->sortVoteanswers (); 
   
