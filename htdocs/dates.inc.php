@@ -72,19 +72,14 @@ function veranstaltung_beginn ($seminar_id='', $art='', $semester_start_time='',
 					$return_string.=" - ".date ("G:i", $end_termin);
 				}
 			else {
-				if ($term_data["start_woche"]==0) {
-					$return_string="1. Semesterwoche";
-					$return_int=$vorles_beginn;
-				} else {
-					$return_string="2. Semesterwoche";
-					$return_int=$vorles_beginn+604800;
-				}
+				$return_string="nicht angegeben";
+				$return_int=-1; 
 			}
 		//anderer Startzeitpunkt gewaehlt
 		else {
 			//kein gueltiger Termin bekannt
 			if ($term_data["start_termin"]<1) {
-				$return_string.="nicht bekannt";
+				$return_string.="nicht angegeben";
 				$return_int=-1;
 			//gueltiger Termin bekannt
 			} else {
