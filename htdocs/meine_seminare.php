@@ -227,27 +227,27 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 	 if (!$num_my_sem) $meldung="info§Sie haben zur Zeit keine Veranstaltungen abonniert, in denen Sie teilnehmen k&ouml;nnen. Bitte nutzen Sie <a href=\"sem_portal.php?view=Alle&reset_all=TRUE\"><b>Veranstaltung suchen / hinzuf&uuml;gen</b></a> um neue Veranstaltungen aufzunehmen.§".$meldung;
 
 	 ?>
-	<table width="100%" border=0 cellpadding=0 cellspacing=0>
+	<table width="100%" border="0" cellpadding="0" cellspacing="0">
 		<tr>
 			<td class="topic" colspan="2">
 				<img src="pictures/meinesem.gif" border="0" align="texttop">&nbsp;<b>Meine Veranstaltungen</b>
 			</td>
 		</tr>
 	<?
+
 	if ($num_my_sem){
 	?>
-		<tr>
+		<tr valign="top">
 			<td class="blank" colspan="2">&nbsp;
 			</td>
 		</tr>
-		<? if ($meldung) { 
-			parse_msg($meldung, "§", "blank", 2);
-			}
-		?>
-		 <tr>
-			 <td valign="top" class="blank" align="center">
-					<table border="0" cellpadding="1" cellspacing="0" width="98%" align="center" class="blank">
-						<tr align="center">
+		<tr valign="top">
+			<td valign="top" class="blank" align="center">
+				<table border="0" cellpadding="1" cellspacing="0" width="98%" align="center" valign="top" class="blank">
+						<? if ($meldung) { 
+							parse_msg($meldung, "§", "blank",3);
+							}?>
+							<tr align="center" valign="top">
 									<th width="2%" colspan=2 nowrap align="center">&nbsp;<a href="gruppe.php"><img src="pictures/gruppe.gif" <? echo tooltip("Gruppe ändern") ?> border="0"></a></th>
 									<th width="85%" align="left"><a href="<? echo $PHP_SELF ?>?sortby=Name">Name</a></th>
 									<th width="10%"><b>Inhalt</b></th>
@@ -258,7 +258,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 										<th width="10%"><img src="pictures/nutzer.gif" alt="TeilnehmerInnen der Veranstaltung"></th>
 									<?	}?>
 									<th width="3%"><b>X&nbsp; </b></th>
-								</tr>
+							</tr>
 	<?
 	ob_end_flush(); //Buffer leeren, damit der Header zu sehen ist
 	ob_start();
@@ -326,16 +326,25 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 		 echo "</tr>\n";
 		}
 	 echo "</table><br><br>";
-	 } else {
+	 } 
+
+
+else {  // es sind keine Veranstaltungen abboniert
+	 
 	 ?>
 	 <tr>
+	 <tr>
+	 	<td class="blank" colspan="2">&nbsp; 
+	 	</td>
+	 </tr>
 		 <td valign="top" class="blank">
 			<table border="0" cellpadding="0" cellspacing="0" width="100%" align="center" class="blank">
 				<?
 				if ($meldung)	{
-					echo "<tr><td>&nbsp; </td></tr>";
 					parse_msg($meldung);
-				}
+				}?>
+			</table>
+<?			
 	}
 
 // Anzeige der Wartelisten
@@ -398,7 +407,9 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 
 //Info-field on the right side
 ?>
-			<td class="blank" width="270" align="right" valign="top">
+
+		</td>
+		<td class="blank" width="270" align="right" valign="top">
 <?
 
 // Berechnung der uebrigen Seminare
@@ -461,7 +472,11 @@ print_infobox ("pictures/seminare.jpg",$infobox);
 	
 ?>
 
-     </td>
+     	</td>
+    </tr>
+    <tr>
+    	<td class="blank" colspan="2">&nbsp; 
+    	</td>
     </tr>
 
 <?
