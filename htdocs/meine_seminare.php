@@ -332,8 +332,11 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 				$mod_count = get_seminar_modules($semid);
 				if ($mod_count) {
 					echo "<a href=\"seminar_main.php?view=show&auswahl=$semid&redirect_to=seminar_lernmodule.php\">&nbsp;";
-//					echo "<a href=\"seminar_lernmodule.php?view=show&seminar_id=$semid\">&nbsp;";
-					echo "<img src=\"pictures/icon-lern.gif\" ".tooltip(sprintf(_("Die Veranstaltung ist mit %s ILIAS-Lernmodulen verbunden."), sizeof($mod_count)))."border=\"0\">";
+					echo "<img src=\"pictures/icon-lern.gif\" ";
+					if (sizeof($mod_count) == 1)
+						echo tooltip(sprintf(_("Die Veranstaltung ist mit %s ILIAS-Lernmodul verbunden."), sizeof($mod_count)))."border=\"0\">";
+					else
+						echo tooltip(sprintf(_("Die Veranstaltung ist mit %s ILIAS-Lernmodulen verbunden."), sizeof($mod_count)))."border=\"0\">";
 					echo "</a>&nbsp;";
 				}
 				else
