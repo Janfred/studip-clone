@@ -4,7 +4,7 @@
 - komplette Überarbeitung der Engine für Forensysteme, um neue Funktionen erweitert (Flatview,   
   Indikatoren, Sortierung, Favoriten, AutoShrink)
 - komplette Überarbeitung des Bereichs zum Versenden von systeminternen-Nachrichten: Mehrere
-  Empfänger können ausgewählt werden, gesendeze und empfangene Nachrichten, bessere Bedienung
+  Empfänger können ausgewählt werden, gesendete und empfangene Nachrichten, bessere Bedienung
 - StartUp-Checker: Überprüft vor dem Anlegen von Veranstaltungen, ob alle Voraussetzungen zum Anlegen
   gegebenen sind und bietet gegebenenfalls Hilfestellungen.
 - Erweiterungen am Dateisystem: Angabe eines freien Namens für Dateien, Möglichkeit zur
