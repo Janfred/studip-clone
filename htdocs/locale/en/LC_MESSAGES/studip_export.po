@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-04-24 16:47+0200\n"
+"POT-Creation-Date: 2003-05-13 15:53+0200\n"
 "PO-Revision-Date: 2003-03-24 17:56+0100\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
@@ -38,7 +38,7 @@ msgstr "An error has occurred"
 
 #: export/export_choose_xslt.inc.php:69 export/export_choose_xslt.inc.php:127
 #: export/export_choose_xslt.inc.php:196 export/export_choose_xslt.inc.php:252
-#: export/export_run_fop.inc.php:49 export/export_run_fop.inc.php:122
+#: export/export_run_fop.inc.php:49 export/export_run_fop.inc.php:123
 #: export/export_run_xslt.inc.php:61 export/export_run_xslt.inc.php:154
 #: export/export_start.inc.php:130 export/export_xml.inc.php:50
 #: export/export_xml.inc.php:112
@@ -80,7 +80,7 @@ msgid "Diese Seite bereitet die Datenausgabe vor. %s Schritt 1/3 %s"
 msgstr "This page prepares the data for export. %s Step 1/3 %s"
 
 #: export/export_choose_xslt.inc.php:136 export/export_choose_xslt.inc.php:205
-#: export/export_choose_xslt.inc.php:261 export/export_run_fop.inc.php:131
+#: export/export_choose_xslt.inc.php:261 export/export_run_fop.inc.php:132
 #: export/export_run_xslt.inc.php:164 export/export_start.inc.php:139
 #: export/export_xml.inc.php:123
 msgid "Aktionen:"
@@ -134,7 +134,7 @@ msgstr "Download the files"
 msgid "Die ben&ouml;tigten Dateien liegen nun zum Download bereit."
 msgstr "The required files are ready to download."
 
-#: export/export_choose_xslt.inc.php:221 export/export_run_fop.inc.php:112
+#: export/export_choose_xslt.inc.php:221 export/export_run_fop.inc.php:113
 #: export/export_run_xslt.inc.php:136 export/export_xml.inc.php:107
 msgid "XML-Daten"
 msgstr "XML data"
@@ -218,19 +218,19 @@ msgstr ""
 msgid "Download der PDF-Datei"
 msgstr "Download the PDF files"
 
-#: export/export_run_fop.inc.php:85 export/export_run_xslt.inc.php:125
+#: export/export_run_fop.inc.php:86 export/export_run_xslt.inc.php:125
 msgid "Ausgabe-Datei: "
 msgstr "Export file:"
 
-#: export/export_run_fop.inc.php:94
+#: export/export_run_fop.inc.php:95
 msgid "PDF-Datei"
 msgstr "PDF file"
 
-#: export/export_run_fop.inc.php:95
+#: export/export_run_fop.inc.php:96
 msgid "Dies ist die fertige PDF-Datei."
 msgstr "This is the finished PDF file."
 
-#: export/export_run_fop.inc.php:106
+#: export/export_run_fop.inc.php:107
 #, c-format
 msgid ""
 "Bei der Erzeugung der PDF-Datei ist ein Fehler aufgetreten. "
@@ -239,7 +239,7 @@ msgstr ""
 "An error occurred while the PDF file was being created. <br>Error message: %"
 "s<br>File: %s"
 
-#: export/export_run_fop.inc.php:113
+#: export/export_run_fop.inc.php:114
 msgid ""
 "In dieser Datei sind die Daten als XML-Tags gespeichert. Diese Tags k&ouml;"
 "nnen mit einem XSLT-Script verarbeitet werden."
@@ -247,11 +247,11 @@ msgstr ""
 "In this file the data are saved as XML tags. These tags can be processed "
 "with a XSLT script."
 
-#: export/export_run_fop.inc.php:117
+#: export/export_run_fop.inc.php:118
 msgid "Formatting-Objects-Datei"
 msgstr "Formatting objects file"
 
-#: export/export_run_fop.inc.php:118
+#: export/export_run_fop.inc.php:119
 msgid ""
 "In dieser Datei sind die Formatting Objects zur Erzeugung der PDF-Datei "
 "gespeichert."
@@ -259,7 +259,7 @@ msgstr ""
 "In this file, the formatting objects are saved for the creation of a PDF "
 "file. "
 
-#: export/export_run_fop.inc.php:133
+#: export/export_run_fop.inc.php:134
 #, c-format
 msgid "Um die Ausgabe-Datei herunterzuladen, klicken Sie %s hier %s."
 msgstr "To download the export file, click %s here %s."
@@ -379,29 +379,29 @@ msgstr "NO AUTHORISATION!"
 msgid "Der gewählte Exportmodus wird nicht unterstützt."
 msgstr "The chosen export module is not supported."
 
-#: export/export_studipdata_func.inc.php:278
+#: export/export_studipdata_func.inc.php:285
 msgid "DozentInnen"
 msgstr "Lecturers"
 
-#: export/export_studipdata_func.inc.php:279
+#: export/export_studipdata_func.inc.php:286
 msgid "TutorInnen"
 msgstr "Tutors"
 
-#: export/export_studipdata_func.inc.php:280
-#: export/export_studipdata_func.inc.php:285
+#: export/export_studipdata_func.inc.php:287
+#: export/export_studipdata_func.inc.php:292
 msgid "AutorInnen"
 msgstr "Authors"
 
-#: export/export_studipdata_func.inc.php:281
-#: export/export_studipdata_func.inc.php:286
+#: export/export_studipdata_func.inc.php:288
+#: export/export_studipdata_func.inc.php:293
 msgid "LeserInnen"
 msgstr "Readers"
 
-#: export/export_studipdata_func.inc.php:283
+#: export/export_studipdata_func.inc.php:290
 msgid "LeiterInnen"
 msgstr "Co-ordinators"
 
-#: export/export_studipdata_func.inc.php:284
+#: export/export_studipdata_func.inc.php:291
 msgid "Mitglieder"
 msgstr "Members"
 
