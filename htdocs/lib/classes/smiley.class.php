@@ -518,7 +518,8 @@ EOT2;
 			echo '<tr>';
 			echo '<td align="center" class="blank">';
 			if ($this->user_id != 'nobody') {
-				echo '<a href="',$GLOBALS['PHP_SELF'],'?cmd=addfav&fc=',$this->fc,'&img=',$this->db->f('smiley_id'),'">';
+				$sid = $this->db->f('smiley_id');
+				echo '<a href="',$GLOBALS['PHP_SELF'],'?cmd=addfav&fc=',$this->fc,'&img=',$sid,'#anker',$sid,'" name="anker',$sid,'">';
 				$tooltiptxt = sprintf(_("%s zu meinen Favoriten hinzufügen"),$smile_name);
 			} else {
 				$tooltiptxt = $smile_name;
