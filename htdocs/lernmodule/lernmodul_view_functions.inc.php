@@ -110,7 +110,7 @@ function show_user_modules($benutzername)
 		}
 	}
 	else
-		echo "<b>" . _("Sie haben keinen Zugriff auf bestehende ILIAS-Lernmodule.") . "</b><br><br>";
+		echo "<b>" . _("Sie haben bisher keine ILIAS-Lernmodule angelegt.") . "</b><br><br>";
 }
 
 function show_admin_modules()
