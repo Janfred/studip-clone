@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2003-03-16 20:08+0100\n"
-"PO-Revision-Date: 2003-03-17 12:21+0100\n"
+"PO-Revision-Date: 2003-03-17 12:33+0100\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
 "MIME-Version: 1.0\n"
@@ -654,7 +654,7 @@ msgstr "Create&nbsp;a&nbsp;new&nbsp;Hierarchy&nbsp;level&nbsp;"
 
 #: resources/views/links_resources.inc.php:59
 msgid "Listenausgabe"
-msgstr ""
+msgstr "List view"
 
 #: resources/views/links_resources.inc.php:69
 msgid "Eigenschaften&nbsp;bearbeiten"
@@ -662,7 +662,7 @@ msgstr "Edit&nbsp;characters"
 
 #: resources/views/links_resources.inc.php:70
 msgid "Rechte&nbsp;bearbeiten"
-msgstr "Edit&nbsp;access authorisation"
+msgstr "Edit&nbsp;access&nbsp;authorisation"
 
 #: resources/views/links_resources.inc.php:73
 msgid "Belegungsplan"
@@ -732,11 +732,11 @@ msgstr "The allocation has been deleted"
 
 #: resources/views/msgs_resources.inc.php:59
 msgid "Eigenschaften ver&auml;ndert"
-msgstr "Character changed"
+msgstr "Property changed"
 
 #: resources/views/msgs_resources.inc.php:60
 msgid "Die Eigenschaften der Ressource wurden ver&auml;ndert"
-msgstr "The resource characters have been changed "
+msgstr "The resource properties have been changed "
 
 #: resources/views/msgs_resources.inc.php:63
 msgid "Ressource gel&ouml;scht"
@@ -772,17 +772,19 @@ msgstr "Please enter a user for the allocation, in order to save this allocation
 msgid ""
 "Die Belegung konnte nicht gespeichert werden, da Sie sich mit einer anderen "
 "Belegung &uuml;berschneidet!"
-msgstr "This allocation could not be saved because it overlaps with another allocation!"
+msgstr "This allocation could not be saved because it coincides with another allocation!"
 
 #: resources/views/msgs_resources.inc.php:81
 msgid "Es existieren keine Ressourcen oder Ebenen, auf die Sie Zugriff haben."
-msgstr ""
+msgstr "There are no resources or levels to which you have access."
 
 #: resources/views/msgs_resources.inc.php:81
 msgid ""
 "Um Ressourcen anzulegen, erzeugen Sie zun&auml;chst eine neue Ebene, indem "
 "sie &raquo;Neue Hierarchie erzeugen&laquo; anw&auml;hlen."
 msgstr ""
+"In order to set up resources, first create a new level, in which "
+"you the select &raquo;New Hierarchy&laquo;."
 
 #: resources/views/msgs_resources.inc.php:81
 msgid "Anschlieﬂend k&ouml;nnen auf dieser Ebene Ressourcen anlegen"
@@ -796,52 +798,54 @@ msgstr ""
 
 #: resources/views/msgs_resources.inc.php:87
 msgid "Sie haben keine Ebene ausgew&auml;hlt. Daher kann keine Liste erzeugt werden."
-msgstr ""
+msgstr "You have not selected a level. Therefore no list can be created."
 
 #: resources/views/msgs_resources.inc.php:87
 msgid ""
 "Benutzen Sie die Suchfunktion oder w&auml;hlen Sie unter &raquo;&Uuml;"
 "bersicht&laquo; einen Ebene bzw. Ressource in der Hierarchie aus."
 msgstr ""
+"Use the search function or select a level or resource from the hierarchy "
+"from under &raquo;Overview&laquo;."
 
 #: resources/views/msgs_resources.inc.php:90
 msgid "Sie haben keine Objekt zum Bearbeiten ausgew&auml;hlt."
-msgstr ""
+msgstr "You have not selected an object to edit."
 
 #: resources/views/msgs_resources.inc.php:90
 #: resources/views/msgs_resources.inc.php:93
 msgid "Bitte w&auml;hlen Sie zun&auml;chst ein Objekt aus."
-msgstr ""
+msgstr "Firstly, please choose an object."
 
 #: resources/views/msgs_resources.inc.php:93
 msgid "Sie haben keine Objekt zum Anzeigen ausgew&auml;hlt."
-msgstr ""
+msgstr "You have not selected an object to display."
 
 #: resources/views/msgs_resources.inc.php:96
 msgid ""
 "Bitte geben Sie g&uuml;ltige Werte f&uuml;r Datum, Beginn und Ende der "
 "Belegung an!"
-msgstr ""
+msgstr "Please enter valid values for the date, begin and end of the allocation!"
 
 #: resources/views/msgs_resources.inc.php:99
 msgid ""
 "Bitte geben Sie einen g&uuml;ltigen Wert f&uuml;r das Ende der Wiederholung "
 "an!"
-msgstr ""
+msgstr "Please enter a valid value for the end of the repetition!"
 
 #: resources/views/msgs_resources.inc.php:102
 msgid ""
 "Das Ende der Wiederholung darf nicht vor dem ersten Termin der Wiederholung "
 "liegen!"
-msgstr ""
+msgstr "The end of the repetition may not be before the first appointment of the repetition!"
 
 #: resources/views/msgs_resources.inc.php:105
 msgid "Die Startzeit darf nicht vor der Endzeit liegen!"
-msgstr ""
+msgstr "The start time may not be before the end time!"
 
 #: resources/views/msgs_resources.inc.php:108
 msgid "Die j&auml;hrliche Wiederholung darf maximal 10 Jahre dauern!"
-msgstr ""
+msgstr "The yearly repetition may take place for a maximum of 10 years!"
 
 #: resources/views/msgs_resources.inc.php:111
 msgid "Die monatliche Wiederholung darf maximal 10 Jahre dauern!"
