@@ -424,9 +424,6 @@ switch ($i_page) {
 	case "admin_lernmodule.php": 
 		$reiter_view="lernmodule"; 
 	break;
-	case "admin_modules_start.php": 
-		$reiter_view="modules"; 
-	break;
 	case "admin_range_tree.php": 
 		$reiter_view="range_tree"; 
 	break;
