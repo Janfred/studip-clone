@@ -131,7 +131,7 @@ if ($view=="listall") {
     }
 		// set lock
 		$db=new DB_Seminar;
-		$result=$db->query("INSERT INTO wiki_locks (user_id, range_id, keyword, version, chdate) VALUES ('$user->id', '$SessSemName[1]', '$keyword', '0', '".time()."')");
+		$result=$db->query("REPLACE INTO wiki_locks (user_id, range_id, keyword, version, chdate) VALUES ('$user->id', '$SessSemName[1]', '$keyword', '0', '".time()."')");
 		wikiSinglePageHeader($wikiData, $keyword);
     wikiEdit($keyword, NULL, $lastpage);
 
@@ -164,7 +164,7 @@ if ($view=="listall") {
 			if ($version=="") {
 				$version=0;
 			} else {
-				$version=$version+1;
+				$version=$latestVersion['version']+1;
 			}
 			$date=time();
 			$db=new DB_Seminar;
