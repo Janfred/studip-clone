@@ -22,13 +22,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 function check_messaging_default() {
 	global $my_messaging_settings;
 	
-	if (!$my_messaging_settings["changed"]) {
+	if (!$my_messaging_settings) {
 		$my_messaging_settings=array(
 			"show_only_buddys"=>FALSE, 
 			"delete_messages_after_logout"=>FALSE,
 			"start_messenger_at_startup"=>FALSE,
 			"active_time"=>5,
-			"default_setted"=>time()
+			"default_setted"=>time(),
+			"last_login"=>0
 			);
 		}			
 	}
@@ -38,7 +39,7 @@ function check_messaging_default() {
 function check_schedule_default() {
 	global $my_schedule_settings;
 		
-	if (!$my_schedule_settings["changed"]) {
+	if (!$my_schedule_settings) {
 		$my_schedule_settings=array(
 			"glb_start_time"=>8, 
 			"glb_end_time"=>19,
@@ -51,7 +52,6 @@ function check_schedule_default() {
 				"sa"=>"",
 				"so"=>""
 				),
-			"changed"=>"FALSE",
 			"default_setted"=>time()
 			);
 		}		
