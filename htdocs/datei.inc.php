@@ -98,6 +98,21 @@ function parse_link($link) {
 	}
 }
 
+function createLinkInfo () {
+	global $SessSemName;
+	$linkinfo = FALSE;
+	$db = new DB_Seminar();
+	$db->query("SELECT dokument_id, filename FROM dokumente WHERE url != '' AND seminar_id = '".$SessSemName[1]."'");
+	while ($db->next_record()) {
+		$linkinfo .= " \n";	
+		$linkinfo .= $db->f("filename");
+	}
+	if ($linkinfo)
+		$linkinfo = _("Hinweis: die folgenden Dateien sind nicht im Archiv enthalten, da sie lediglich verlinkt wurden:").$linkinfo;
+	return $linkinfo;
+}
+
+
 
 function createSelectedZip ($file_ids, $perm_check = TRUE) {
 	global $TMP_PATH, $UPLOAD_PATH, $ZIP_PATH, $SessSemName;
@@ -134,6 +149,16 @@ function createFolderZip ($folder_id) {
 	//create temporary Folder
 	exec ("mkdir $TMP_PATH/$zip_file_id");
 	$tmp_full_path="$TMP_PATH/$zip_file_id";
+	
+	//check for linked files
+	$linkinfo = createLinkInfo ();
+	if ($linkinfo) {
+	// build info-file	
+		exec ("touch $tmp_full_path/info.txt");
+		$fp = fopen ("$tmp_full_path/info.txt","w");
+		fwrite ($fp,$linkinfo);
+		fclose ($fp);
+	}
 	
 	//create folder comntent
 	createTempFolder ($folder_id, $tmp_full_path);

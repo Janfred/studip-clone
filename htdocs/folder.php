@@ -315,7 +315,7 @@ if ($close) {
 			<?
 			}
 		}
-		
+
 	//when changing, uploading or show all (for download selector), create a form
 	if ((($change) || ($folder_system_data["cmd"]=="all")) && (!$folder_system_data["upload"])) {
 		echo "<form method=\"post\" action=\"$PHP_SELF\">";
