@@ -350,8 +350,8 @@ MitarbeiterInnenliste
 				</fo:block>
 			</fo:table-cell>
 			<fo:table-cell border-style="solid" border-color="black">
-				<fo:block>
-					<xsl:if test="email" hyphenate="true">
+				<fo:block hyphenate="true">
+					<xsl:if test="email">
 						<xsl:value-of select="email"/>
 					</xsl:if>
 				</fo:block>
