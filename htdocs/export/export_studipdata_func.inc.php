@@ -275,13 +275,21 @@ function export_sem($inst_id, $ex_sem_id = "all")
 	$data_object = "";
 }
 
-function export_teilis($inst_id, $ex_sem_id = "no")
+function export_teilis($inst_id, $ex_sem_id = "no", $mode = "status")
 {
 	global $db, $db2, $range_id, $xml_file, $o_mode, $xml_names_person, $xml_groupnames_person, $object_counter, $filter, $SEM_CLASS, $SEM_TYPE, $SessSemName;
 
 	$db=new DB_Seminar;
 
-	if (!$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"])
+	if ($mode == "status")
+	{
+		$db->query ("SELECT name, statusgruppe_id FROM statusgruppen WHERE range_id = '$ex_sem_id' ");
+		while ($db->next_record()) 
+		{
+			$gruppe[$db->f("statusgruppe_id")] = $db->f("name");
+		}
+	}
+	elseif (!$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"])
 		$gruppe = array ("dozent" => _("DozentInnen"),
 			  "tutor" => _("TutorInnen"),
 			  "autor" => _("AutorInnen"),
@@ -294,15 +302,22 @@ function export_teilis($inst_id, $ex_sem_id = "no")
 
 	$data_object = xml_open_tag( $xml_groupnames_person["group"] );
 
-	while (list ($key, $val) = each ($gruppe)) 
+	while (list ($key1, $val1) = each ($gruppe)) 
 	{
-		$db->query ("SELECT * FROM seminar_user  
-			LEFT JOIN user_info USING(user_id) 
-			LEFT JOIN auth_user_md5 USING(user_id) 
-			WHERE seminar_id = '$ex_sem_id' AND seminar_user.status = '" . $key . "'");
+		if ($mode == "status")
+			$db->query ("SELECT * FROM statusgruppe_user  
+				LEFT JOIN user_info USING ( user_id ) 
+				LEFT JOIN auth_user_md5 USING ( user_id ) 
+				LEFT JOIN seminar_user USING ( user_id ) 
+				WHERE seminar_id = '$ex_sem_id' AND statusgruppe_id = '" . $key1 . "'");
+		else
+			$db->query ("SELECT * FROM seminar_user  
+				LEFT JOIN user_info USING(user_id) 
+				LEFT JOIN auth_user_md5 USING(user_id) 
+				WHERE seminar_id = '$ex_sem_id' AND seminar_user.status = '" . $key1 . "'");
 		if ($db->num_rows())
 		{
-			$data_object .= xml_open_tag($xml_groupnames_person["subgroup1"], $val);
+			$data_object .= xml_open_tag($xml_groupnames_person["subgroup1"], $val1);
 			while ($db->next_record()) 
 			{
 				$object_counter++;
