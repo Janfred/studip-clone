@@ -116,7 +116,7 @@ function scm_get_content($range_id) {
 }
 
 function scm_show_content($range_id, $msg) {
-	global $rechte;
+	global $rechte, $PHP_SELF;
 	$result=scm_get_content($range_id);
 	
 	$header_table=scm_seminar_header($range_id, $result["tab_name"]);
