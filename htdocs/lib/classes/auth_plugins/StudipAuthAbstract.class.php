@@ -29,8 +29,14 @@ require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'] . "/lib/classes/DbSnapshot.class.
 /**
 * abstract base class for authentication plugins
 *
-* abstract base class for authentication plugins 
+* abstract base class for authentication plugins
+* to write your own authentication plugin, derive it from this class and 
+* implement the following abstract methods: isUsedUsername($username) and 
+* isAuthenticated($username, $password, $jscript)
+* don't forget to call the parents constructor if you implement your own, php
+* won't do that for you !
 *
+* @abstract
 * @access	public
 * @author	André Noack <noack@data-quest.de>
 * @version	$Id$
@@ -42,6 +48,7 @@ class StudipAuthAbstract {
 	* indicates whether login form should use md5 challenge response auth
 	*
 	* this should only be true, if password is stored and accessible as md5 hash !
+	* should be set in local.inc
 	*
 	* @access	public
 	* @var		bool
@@ -80,7 +87,11 @@ class StudipAuthAbstract {
 	/**
 	* associative array with mapping for database fields
 	*
-	* 
+	* associative array with mapping for database fields,
+	* should be set in local.inc
+	* structure :
+	* array("<table name>.<field name>" => array(	"callback" => "<name of callback method used for data retrieval>",
+	*												"map_args" => "<arguments passed to callback method>"))
 	* @access	public
 	* @var		array $user_data_mapping
 	*/
@@ -89,31 +100,36 @@ class StudipAuthAbstract {
 	/**
 	* database connection
 	*
-	* 
+	* database connection to the Stud.IP DB
+	*
 	* @access	public
 	* @var		object DbView
 	*/
 	var $dbv;
 	
 	/**
-	* name of the plugin (last part of class name)
+	* name of the plugin 
 	*
-	* 
+	* name of the plugin (last part of class name) is set in the constructor
 	* @access	public
 	* @var		string
 	*/
 	var $plugin_name;
 	
+	
 	/**
-	* 
+	* static method to instantiate and retrieve a reference to an object (singleton)
 	*
-	* 
+	* use always this method to instantiate a plugin object, it will ensure that only one object of each
+	* plugin will exist
 	* @access public
 	* @static
+	* @param	string	name of plugin, if omitted an array with all plugin objects will be returned
+	* @return	mixed	either a reference to the plugin with the passed name, or an array with references to all plugins
 	*/
 	
 	function &GetInstance( $plugin_name = false){
-		static $plugin_instance;
+		static $plugin_instance;	//container to hold the plugin objects
 		if (!is_array($plugin_instance)){
 			foreach($GLOBALS['STUDIP_AUTH_PLUGIN'] as $plugin){
 				$plugin = "StudipAuth" . $plugin;
@@ -125,14 +141,16 @@ class StudipAuthAbstract {
 	}
 	
 	/**
-	* 
+	* static method to check in all plugins, if md5 challenge/response is allowed
 	*
-	* 
+	* if md5 challenge/response is disabled in one plugin, false is returned
+	*
 	* @access public
 	* @static
+	* @return	bool
 	*/
 	function CheckMD5(){
-		$plugins =& StudipAuthAbstract::GetInstance();
+		$plugins =& StudipAuthAbstract::GetInstance(); //get a reference to the plugin container
 		foreach($plugins as $object){
 			if (!$object->md5_challenge_response){
 				return false;
@@ -142,11 +160,17 @@ class StudipAuthAbstract {
 	}
 	
 	/**
-	* 
+	* static method to check authentication in all plugins
 	*
-	* 
+	* if authentication fails in one plugin, the error message is stored and the next plugin is used
+	* if authentication succeeds, the uid element in the returned array will contain the Stud.IP user id
+	*
 	* @access public
 	* @static
+	* @param	string	the username to check
+	* @param	string	the password to check
+	* @param	bool	indicates if javascript was enabled/disabled during the login process
+	* @return	array	structure: array('uid'=>'string <Stud.IP user id>','error'=>'string <error message>','is_new_user'=>'bool')
 	*/
 	function CheckAuthentication($username,$password,$jscript = false){
 		$plugins =& StudipAuthAbstract::GetInstance();
@@ -163,11 +187,14 @@ class StudipAuthAbstract {
 	}
 	
 	/**
-	* 
+	* static method to check if passed username is used in external data sources
 	*
-	* 
+	* all plugins are checked, the error messages are stored and returned
+	*
 	* @access public
 	* @static
+	* @param	string the username
+	* @return	array	
 	*/
 	function CheckUsername($username){
 		$plugins =& StudipAuthAbstract::GetInstance();
@@ -183,11 +210,16 @@ class StudipAuthAbstract {
 		return array('found' => $found,'error' => $error);
 	}
 	/**
-	* 
+	* static method to check for a mapped field
 	*
-	* 
+	* this method checks in the plugin with the passed name, if the passed 
+	* Stud.IP DB field is mapped to an external data source
+	*
 	* @access public
 	* @static
+	* @param	string	the name of the db field must be in form '<table name>.<field name>'
+	* @param	string	the name of the plugin to check
+	* @return	bool	true if the field is mapped, else false
 	*/
 	function CheckField($field_name,$plugin_name){
 		if (!$plugin_name){
@@ -201,20 +233,26 @@ class StudipAuthAbstract {
 	/**
 	* Constructor
 	*
+	* the constructor is private, you should use StudipAuthAbstract::GetInstance($plugin_name)
+	* to get a reference to a plugin object. Make sure the constructor in the base class is called
+	* when deriving your own plugin class, it assigns the settings from local.inc as members of the plugin
+	* each key of the $STUDIP_AUTH_CONFIG_<plugin name> array will become a member of the object
 	* 
 	* @access private
 	* 
 	*/
 	function StudipAuthAbstract() {
 		$this->plugin_name = substr(get_class($this),10);
-		//hier auslesen von konfigurationsoptionen
+		//get configuration array set in local inc
 		$config_var = $GLOBALS["STUDIP_AUTH_CONFIG_" . strtoupper($this->plugin_name)];
+		//assign each key in the config array as a member of the plugin object
 		if (isset($config_var)){
 			foreach ($config_var as $key => $value){
 				$this->$key = $value;
 			}
 		}
 		$this->dbv = new DbView();
+		//$challenge is a global set by PhpLib
 		$this->challenge = $GLOBALS['challenge'];
 	}
 	
