@@ -65,7 +65,7 @@ $query .= $_fullname_sql[$this->config->getValue("Main", "nameformat")];
 $query .= "AS fullname, username FROM dokumente d LEFT JOIN user_info USING (user_id) ";
 $query .= "LEFT JOIN auth_user_md5 USING (user_id) WHERE ";
 $query .= "Seminar_id='{$this->config->range_id}'$query_order";
-echo "<br>$query<br>";
+
 $db->query($query);
 
 if (!$db->num_rows())
