@@ -43,7 +43,7 @@ define("PHPDOC_DUMMY",false);
 * @access private
 * @return	string
 */
-function MakeUniqueID ()
+function MakeUniqueStatusgruppeID ()
 {	// baut eine ID die es noch nicht gibt
 
 	$hash_secret = "kertoiisdfgz";
@@ -52,7 +52,7 @@ function MakeUniqueID ()
 
 	$db->query ("SELECT statusgruppe_id FROM statusgruppen WHERE statusgruppe_id = '$tmp_id'");	
 	IF ($db->next_record()) 	
-		$tmp_id = MakeUniqueID(); //ID gibt es schon, also noch mal
+		$tmp_id = MakeUniqueStatusgruppeID(); //ID gibt es schon, also noch mal
 	RETURN $tmp_id;
 }
 
@@ -61,7 +61,7 @@ function MakeUniqueID ()
 
 function AddNewStatusgruppe ($new_statusgruppe_name, $range_id, $new_statusgruppe_size)
 {
-	$statusgruppe_id = MakeUniqueID();
+	$statusgruppe_id = MakeUniqueStatusgruppeID();
 	$mkdate = time();
 	$chdate = time();
 	$db=new DB_Seminar;
@@ -115,6 +115,15 @@ function RemovePersonStatusgruppe ($username, $statusgruppe_id)
 	$db->query("DELETE FROM statusgruppe_user WHERE statusgruppe_id = '$statusgruppe_id' AND user_id = '$user_id'");
 }
 
+function RemovePersonFromAllStatusgruppen ($username)
+{
+	$user_id = get_userid($username);
+	$db=new DB_Seminar;
+	$db->query("DELETE FROM statusgruppe_user WHERE user_id = '$user_id'");
+	$result = $db->affected_rows();
+	return $result;
+}
+
 function RemovePersonStatusgruppeComplete ($username, $range_id)
 {
 	$user_id = get_userid($username);
@@ -151,11 +160,14 @@ function DeleteStatusgruppe ($statusgruppe_id)
 function DeleteAllStatusgruppen ($range_id)
 {
 	$db=new DB_Seminar;
+	$i = 0;
 	$db->query("SELECT statusgruppe_id FROM statusgruppen WHERE range_id = '$range_id'");
 	while ($db->next_record()) {
 		$statusgruppe_id = $db->f("statusgruppe_id");
 		DeleteStatusgruppe($statusgruppe_id);
+		$i++;
 	}
+	return $i;
 }
 
 function SwapStatusgruppe ($statusgruppe_id)
