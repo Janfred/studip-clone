@@ -51,7 +51,7 @@ while ($db2->next_record()) {
 }
 
 //vorgenommene Anpassungen der Ansicht in Uservariablen schreiben
-if ($messaging_cmd=="change_view_insert") {
+if ($messaging_cmd=="change_view_insert" && !$set_msg_default_x) {
 	$my_messaging_settings["changed"] = TRUE;
 	$my_messaging_settings["show_only_buddys"] = $show_only_buddys;
 	$my_messaging_settings["delete_messages_after_logout"] = $delete_messages_after_logout;
@@ -77,11 +77,16 @@ if ($messaging_cmd=="change_view_insert") {
 			$db3->query($query);		
 		}
 	}
-	if ($set_msg_default_x) {
-		echo $set_msg_default_x;
-		unset($my_messaging_settings);
-		check_messaging_default();
-	}
+} else if ($messaging_cmd=="change_view_insert" && $set_msg_default_x) {
+	$reset_txt = "<font size=\"-1\">"._("Durch das Zurücksetzen werden die persönliche Messaging-Einstellungen auf die Startwerte zurückgesetzt und die persönlichen Nachrichten-Ordner gelöscht. Nachrichten werden nicht entfernt.")."</font>";
+}
+
+if ($messaging_cmd == "reset_msg_settings") {
+	$user_id = $user->id;
+	unset($my_messaging_settings);
+	check_messaging_default();
+	$db3->query("UPDATE user_info SET smsforward_copy='', smsforward_rec='' WHERE user_id='".$user_id."'");
+	$db3->query("UPDATE message_user SET folder='' WHERE user_id='".$user_id."'");
 }
 
 if ($do_add_user_x)
@@ -90,7 +95,7 @@ if ($do_add_user_x)
 ## FUNCTION ##
 
 function change_messaging_view() {
-	global $_fullname_sql,$my_messaging_settings, $PHP_SELF, $perm, $user, $search_exp, $add_user, $add_user_x, $do_add_user_x, $new_search_x, $i_page, $search_exp, $gosearch_x,  $smsforward;
+	global $_fullname_sql,$my_messaging_settings, $PHP_SELF, $perm, $user, $search_exp, $add_user, $add_user_x, $do_add_user_x, $new_search_x, $i_page, $search_exp, $gosearch_x, $smsforward, $reset_txt;
 	$msging=new messaging;
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
@@ -102,8 +107,7 @@ function change_messaging_view() {
 			<td class="topic" colspan=2><img src="pictures/einst.gif" border="0" align="texttop"><b>&nbsp;<?print _("Einstellungen des Messagings anpassen");?></b></td>
 		</tr>
 		<tr>
-			<td class="blank" colspan=2>&nbsp;
-			</td>
+			<td class="blank" colspan=2>&nbsp;</td>
 		</tr>
 		<tr>
 			
@@ -112,6 +116,15 @@ function change_messaging_view() {
 				<font size="-1"><b><?print _("Auf dieser Seite k&ouml;nnen Sie die Eigenschaften des Stud.IP-Messagingsystems an Ihre Bed&uuml;rfnisse anpassen.");?>
 			</blockquote>			
 			<form action="<?=$PHP_SELF?>?messaging_cmd=change_view_insert" method="post">
+			<? if ($reset_txt) {
+				?><table width="70%" align="center" cellpadding=8 cellspacing=0 border=0><tr><td align="left" class="steel1"><?
+				echo $reset_txt; ?>
+				<br><div align="center"><font size="-1">
+				<?=_("Möchten Sie fortfahren?")?>
+				<a href="<?=$PHP_SELF?>?messaging_cmd=reset_msg_settings&change_view=TRUE"><?=makeButton("ja2", "img")?></a>&nbsp;
+				<a href="<?=$PHP_SELF?>?change_view=TRUE"><?=makeButton("nein", "img")?></a></font><div>
+				</td></tr></table><br><?
+			} ?>
 			<table width="70%" align="center"cellpadding=8 cellspacing=0 border=0>
 				<tr>
 					<th width="50%" align=center><?=_("Option")?></th>
