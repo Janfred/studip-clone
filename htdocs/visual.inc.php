@@ -329,14 +329,19 @@ function quotes_encode ($description,$author) {
 * @return       string
 */
 function formatReady ($what, $trim = TRUE, $extern = FALSE) {
-	if (preg_match_all("'\[nop\](.+)\[/nop\]'isU", htmlReady($what, $trim, FALSE), $matches)) {
+	$what = htmlReady($what, $trim, FALSE);
+	if (preg_match_all("'\[nop\](.+)\[/nop\]'isU", $what, $matches)) {
 		$what = preg_replace("'\[nop\].+\[/nop\]'isU", 'ö', $what);
 		$what = symbol(smile(FixLinks(format(latex($what, $extern)), FALSE, TRUE, $extern), $extern), $extern);
 		$what = explode('ö', $what);
+		echo "<pre>";
+		print_r($what);
+		echo "</pre>";
+		
 		$i = 0;
-		foreach ($what as $w)
+		foreach ($what as $w)	
 			$all .= $w . preg_replace("/\n?\r\n?/", '<br />', $matches[1][$i++]);
-	
+			
 		return $all;
 	}
 	
@@ -355,7 +360,8 @@ function formatReady ($what, $trim = TRUE, $extern = FALSE) {
 * @return       string
 */
 function wikiReady ($what, $trim = TRUE, $extern = FALSE) {
-	if (preg_match_all("'\[nop\](.+)\[/nop\]'isU", htmlReady($what, $trim, FALSE), $matches)) {
+	$what = htmlReady($what, $trim, FALSE);
+	if (preg_match_all("'\[nop\](.+)\[/nop\]'isU", $what, $matches)) {
 		$what = preg_replace("'\[nop\].+\[/nop\]'isU", 'ö', $what);
 		$what = symbol(smile(FixLinks(wiki_format(format(latex($what, $extern)), FALSE), $extern), $extern), $extern);
 		$what = explode('ö', $what);
@@ -643,7 +649,7 @@ function kill_format ($text) {
 					"\\1", "\\1", "\\1", "\\1", "\\1", "\\1",
 					"\\1", "\\1", "\n\\1\n", "", "\\1", "", "", "");
 	
-	if (preg_match_all("'\[nop\](.+)\[/nop\]'isU", htmlReady($text, $trim, FALSE), $matches)) {
+	if (preg_match_all("'\[nop\](.+)\[/nop\]'isU", $text, $matches)) {
 		$text = preg_replace("'\[nop\].+\[/nop\]'isU", '[nop].[/nop]', $text);
 		$text = preg_replace($pattern, $replace, $text);
 		$text = explode('[nop].[/nop]', $text);
