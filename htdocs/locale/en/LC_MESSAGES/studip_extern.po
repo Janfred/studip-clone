@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-04-03 19:46+0200\n"
+"POT-Creation-Date: 2003-04-04 13:43+0200\n"
 "PO-Revision-Date: 2003-04-04 12:17+0200\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
@@ -123,7 +123,8 @@ msgstr "Staff member"
 msgid ""
 "Das Modul &quot;Personal&quot; gibt ein Mitarbeiterverzeichnis einer "
 "Einrichtung aus."
-msgstr "The module &quot;personal&quot; provides a staff index of an institute."
+msgstr ""
+"The module &quot;personal&quot; provides a staff index of an institute."
 
 #: extern/extern_config.inc.php:53
 msgid "Mitarbeiterdetails"
@@ -145,7 +146,9 @@ msgstr "Course overview"
 msgid ""
 "Das Modul &quot;Veranstaltungs&uuml;bersicht&quot; gibt alle Veranstaltungen "
 "einer Einrichtung aus."
-msgstr "The module &quot;course overview&quot; provides all courses from an institute."
+msgstr ""
+"The module &quot;course overview&quot; provides all courses from an "
+"institute."
 
 #: extern/extern_config.inc.php:59
 msgid "Veranstaltungsdetails"
@@ -155,7 +158,9 @@ msgstr "Course details"
 msgid ""
 "Das Modul &quot;Veranstaltungsdetails&uot; gibt alle allgemeinen Daten einer "
 "Veranstaltung aus."
-msgstr "The module &quot;course details&quot; provides all general data from an institute."
+msgstr ""
+"The module &quot;course details&quot; provides all general data from an "
+"institute."
 
 #: extern/extern_config.inc.php:62
 #: extern/modules/ExternModulePersondetails.class.php:72
@@ -238,8 +243,10 @@ msgstr ""
 "field, or choose a colour from the drop down menu."
 
 #: extern/views/ExternEditHtml.class.php:161
-msgid "Diese Farbe wird als zweite Farbe bei aktiviertem Zebra-Effekt ausgegeben."
-msgstr "This colour will be used as the second colour when Zebra Effect is activated."
+msgid ""
+"Diese Farbe wird als zweite Farbe bei aktiviertem Zebra-Effekt ausgegeben."
+msgstr ""
+"This colour will be used as the second colour when Zebra Effect is activated."
 
 #: extern/views/ExternEditHtml.class.php:162
 msgid "2. Hintergrundf.:"
@@ -250,8 +257,10 @@ msgid "keine Auswahl"
 msgstr "no selection"
 
 #: extern/views/ExternEditHtml.class.php:271
-msgid "Geben Sie den Abstand zwischen Zelleninhalt und Zellenrand in Pixeln an."
-msgstr "Enter the distance, in pixels, between the cell contents and the cell border."
+msgid ""
+"Geben Sie den Abstand zwischen Zelleninhalt und Zellenrand in Pixeln an."
+msgstr ""
+"Enter the distance, in pixels, between the cell contents and the cell border."
 
 #: extern/views/ExternEditHtml.class.php:283
 msgid "Cellpadding:"
@@ -299,7 +308,7 @@ msgstr "right-justified"
 
 #: extern/views/ExternEditHtml.class.php:389
 #: extern/views/ExternEditHtml.class.php:432
-#: extern/elements/ExternElementPersondetailsHeader.class.php:102
+#: extern/elements/ExternElementPersondetailsHeader.class.php:103
 msgid "zentriert"
 msgstr "centred"
 
@@ -367,7 +376,8 @@ msgstr "Page title:"
 msgid ""
 "Aktivieren Sie einen vertikalen oder horizontalen Zebra-Effekt für "
 "Tabellenzeilen/-spalten. "
-msgstr "Activate a vertical or horizontal Zebra Effect for table rows / columns. "
+msgstr ""
+"Activate a vertical or horizontal Zebra Effect for table rows / columns. "
 
 #: extern/views/ExternEditHtml.class.php:542
 #: extern/views/ExternEditHtml.class.php:559
@@ -513,7 +523,8 @@ msgstr ""
 msgid ""
 "Die eingegebenen Werte wurden übernommen und der Name der Konfiguration "
 "geändert."
-msgstr "The given value has been accepted and the name of the configuration changed."
+msgstr ""
+"The given value has been accepted and the name of the configuration changed."
 
 #: extern/views/extern_edit_module.inc.php:132
 msgid "Die eingegebenen Werte wurden übernommen."
@@ -1061,7 +1072,8 @@ msgstr "Address add-on:"
 
 #: extern/elements/ExternElementContact.class.php:98
 msgid "Zusatz zur Adresse der Einrichtung, z.B. Universitätsname."
-msgstr "Additional address information for the institute, e.g. University name."
+msgstr ""
+"Additional address information for the institute, e.g. University name."
 
 #: extern/elements/ExternElementContact.class.php:114
 msgid "Schriftformatierung Spaltentitel"
@@ -1146,9 +1158,10 @@ msgid ""
 "Ist für das aufgerufene Modul noch keine Konfiguration erstellt worden, wird "
 "die Stud.IP-Default-Konfiguration verwendet."
 msgstr ""
-"The link calls up the module with the selected configuration. Select \"Standard\" to use "
-"your standard configuration settings. If no configuration has been created for the "
-"selected module, the Stud.IP default configuration will be used."
+"The link calls up the module with the selected configuration. Select "
+"\"Standard\" to use your standard configuration settings. If no "
+"configuration has been created for the selected module, the Stud.IP default "
+"configuration will be used."
 
 #: extern/elements/ExternElementLinkIntern.class.php:99
 #: extern/elements/ExternElementLinkInternSimple.class.php:95
@@ -1169,8 +1182,8 @@ msgid ""
 "falls Sie die SRI-Schnittstelle nicht nutzen."
 msgstr ""
 "If you use the SRI interface, you must give the complete URL of the page "
-"(with http://) in which the module is connected. "
-"Leave the field blank if you do not use the SRI interface."
+"(with http://) in which the module is connected. Leave the field blank if "
+"you do not use the SRI interface."
 
 #: extern/elements/ExternElementLinkInternSimple.class.php:55
 msgid "Formatierung des Links."
@@ -1617,8 +1630,8 @@ msgid ""
 "Wählen Sie, ob die Bereichseinordnung mit übergeordneten Bereichen angezeigt "
 "werden soll. Die Option \"kurz\" gibt nur den untersten Bereich aus."
 msgstr ""
-"Choose whether the area classification should be displayed with higher level areas. "
-"The option \"short\" will only provide the lowest level area."
+"Choose whether the area classification should be displayed with higher level "
+"areas. The option \"short\" will only provide the lowest level area."
 
 #: extern/elements/ExternElementMainLecturedetails.class.php:116
 msgid "vollst&auml;ndig"
@@ -1637,8 +1650,8 @@ msgid ""
 "Diese Option zeigt weitere Informationen aus der Stud.IP-Datenbank an "
 "(Anzahl Teilnehmer, Posting, Dokumente usw.)."
 msgstr ""
-"This option displays further information from the Stud.IP database "
-"(number of participants, postings, documents etc.)."
+"This option displays further information from the Stud.IP database (number "
+"of participants, postings, documents etc.)."
 
 #: extern/elements/ExternElementMainLecturedetails.class.php:125
 #: extern/elements/ExternElementMainNews.class.php:133
@@ -1653,8 +1666,8 @@ msgid ""
 "Anwählen, wenn ein Link angezeigt werden soll, der direkt zum Stud.IP-"
 "Administrationsbereich verweisen soll."
 msgstr ""
-"Choose when this link should be displayed. The link goes directly to the Stud.IP "
-"administration area."
+"Choose when this link should be displayed. The link goes directly to the "
+"Stud.IP administration area."
 
 #: extern/elements/ExternElementMainLecturedetails.class.php:144
 #: extern/elements/ExternElementMainNews.class.php:128
@@ -1731,9 +1744,8 @@ msgid ""
 "Wählen Sie diese Option, wenn Termine und Zeiten der Veranstaltung unter dem "
 "Veranstaltungsnamen angezeigt werden sollen."
 msgstr ""
-"Choose this option if course appointments and times should be displayed under "
-"the course names. "
-" "
+"Choose this option if course appointments and times should be displayed "
+"under the course names.  "
 
 #: extern/elements/ExternElementMainLectures.class.php:131
 msgid "Dozenten anzeigen:"
@@ -1743,7 +1755,8 @@ msgstr "Show lecturers:"
 msgid ""
 "Wählen Sie diese Option, wenn die Namen der Dozenten der Veranstaltung "
 "angezeigt werden sollen."
-msgstr "Choose this option if the names of the course lecturers should be displayed."
+msgstr ""
+"Choose this option if the names of the course lecturers should be displayed."
 
 #: extern/elements/ExternElementMainLectures.class.php:140
 msgid "Ausgabe bestimmter Veranstaltungsklassen"
@@ -1768,9 +1781,9 @@ msgid ""
 "wirksam, wenn die Ausgabe der Anzahl der Veranstaltungen und der Gruppierung "
 "aktiviert wurde."
 msgstr ""
-"Enter the text which will appear after the number of courses. It will only appear "
-"when the information concerning the number of courses and the grouping is "
-"activated."
+"Enter the text which will appear after the number of courses. It will only "
+"appear when the information concerning the number of courses and the "
+"grouping is activated."
 
 #: extern/elements/ExternElementMainLectures.class.php:162
 msgid "Gruppierungsinformation:"
@@ -1782,9 +1795,9 @@ msgid ""
 "wenn die Ausgabe der Anzahl der Veranstaltungen und der Gruppierung "
 "aktiviert wurde."
 msgstr ""
-"Enter the text which will appear before the grouping style. It will only appear "
-"when the information concerning the number of courses and the grouping is "
-"activated."
+"Enter the text which will appear before the grouping style. It will only "
+"appear when the information concerning the number of courses and the "
+"grouping is activated."
 
 #: extern/elements/ExternElementMainLectures.class.php:166
 msgid "&quot;Keine Studienbereiche&quot;:"
@@ -1796,8 +1809,9 @@ msgid ""
 "vorliegen, die keinem Bereich zugeordnet sind. Nur wirksam in Gruppierung "
 "nach Bereich."
 msgstr ""
-"Enter the text which will be shown if courses exist which have not been allocated to "
-"any area. It will only appear when courses are grouped according to area."
+"Enter the text which will be shown if courses exist which have not been "
+"allocated to any area. It will only appear when courses are grouped "
+"according to area."
 
 #: extern/elements/ExternElementMainLectures.class.php:171
 msgid "Geben Sie eine Bezeichnung für die entsprechende Gruppierungsart ein."
@@ -1840,7 +1854,8 @@ msgid "Spalten&uuml;berschriften<br>Wiederholen:"
 msgstr "Repeat column heading<br>"
 
 #: extern/elements/ExternElementMainPersons.class.php:149
-msgid "Wiederholung der Spaltenüberschriften über oder unter der Gruppierungszeile."
+msgid ""
+"Wiederholung der Spaltenüberschriften über oder unter der Gruppierungszeile."
 msgstr "Repeat the column heading above or under the grouping row."
 
 #: extern/elements/ExternElementMainPersons.class.php:151
@@ -1860,80 +1875,80 @@ msgstr "none"
 msgid "Umschlie&szlig;ende Tabelle"
 msgstr "Enclosed table"
 
-#: extern/elements/ExternElementPersondetailsHeader.class.php:61
+#: extern/elements/ExternElementPersondetailsHeader.class.php:62
 msgid "Seitenkopf/Bild"
 msgstr "Page header/picture"
 
-#: extern/elements/ExternElementPersondetailsHeader.class.php:62
+#: extern/elements/ExternElementPersondetailsHeader.class.php:63
 msgid "Angaben zur Gestaltung des Seitenkopfes."
 msgstr "Information for the configuration of the page header."
 
-#: extern/elements/ExternElementPersondetailsHeader.class.php:92
+#: extern/elements/ExternElementPersondetailsHeader.class.php:93
 msgid "Tabellenzeile Name"
 msgstr "Table row name"
 
-#: extern/elements/ExternElementPersondetailsHeader.class.php:92
+#: extern/elements/ExternElementPersondetailsHeader.class.php:93
 msgid "Schriftformatierung Name"
 msgstr "Font formatting name"
 
-#: extern/elements/ExternElementPersondetailsHeader.class.php:93
+#: extern/elements/ExternElementPersondetailsHeader.class.php:94
 msgid "Tabellenzelle Name"
 msgstr "Table cell name"
 
-#: extern/elements/ExternElementPersondetailsHeader.class.php:93
+#: extern/elements/ExternElementPersondetailsHeader.class.php:94
 msgid "Tabellenzelle Bild"
 msgstr "Table cell picture:"
 
-#: extern/elements/ExternElementPersondetailsHeader.class.php:94
+#: extern/elements/ExternElementPersondetailsHeader.class.php:95
 msgid "Tabellenzelle Kontakt"
 msgstr "Table cell contact"
 
-#: extern/elements/ExternElementPersondetailsHeader.class.php:98
+#: extern/elements/ExternElementPersondetailsHeader.class.php:99
 msgid "Bild"
 msgstr "Picture"
 
-#: extern/elements/ExternElementPersondetailsHeader.class.php:100
+#: extern/elements/ExternElementPersondetailsHeader.class.php:101
 msgid "Ausrichtung:"
 msgstr "Arrangement:"
 
-#: extern/elements/ExternElementPersondetailsHeader.class.php:101
+#: extern/elements/ExternElementPersondetailsHeader.class.php:102
 msgid "Ausrichtung des Bildes."
 msgstr "Picture arrangement."
 
-#: extern/elements/ExternElementPersondetailsHeader.class.php:102
+#: extern/elements/ExternElementPersondetailsHeader.class.php:103
 msgid "linksb&uuml;ndig"
 msgstr "left-justified "
 
-#: extern/elements/ExternElementPersondetailsHeader.class.php:102
+#: extern/elements/ExternElementPersondetailsHeader.class.php:103
 msgid "rechtsb&uuml;ndig"
 msgstr "right-justified "
 
-#: extern/elements/ExternElementPersondetailsHeader.class.php:103
+#: extern/elements/ExternElementPersondetailsHeader.class.php:104
 msgid "obenb&uuml;ndig"
 msgstr "top-justified "
 
-#: extern/elements/ExternElementPersondetailsHeader.class.php:103
+#: extern/elements/ExternElementPersondetailsHeader.class.php:104
 msgid "untenb&uuml;ndig"
 msgstr "bottom-justified "
 
-#: extern/elements/ExternElementPersondetailsHeader.class.php:107
+#: extern/elements/ExternElementPersondetailsHeader.class.php:108
 msgid "Rahmenbreite:"
 msgstr "Border thickness: "
 
-#: extern/elements/ExternElementPersondetailsHeader.class.php:108
+#: extern/elements/ExternElementPersondetailsHeader.class.php:109
 msgid "Breite des Bildrahmens."
 msgstr "Width of the picture border."
 
-#: extern/elements/ExternElementPersondetailsHeader.class.php:111
+#: extern/elements/ExternElementPersondetailsHeader.class.php:112
 msgid "Breite:"
 msgstr "Width:"
 
-#: extern/elements/ExternElementPersondetailsHeader.class.php:112
-#: extern/elements/ExternElementPersondetailsHeader.class.php:116
+#: extern/elements/ExternElementPersondetailsHeader.class.php:113
+#: extern/elements/ExternElementPersondetailsHeader.class.php:117
 msgid "Breite des Bildes."
 msgstr "Picture width."
 
-#: extern/elements/ExternElementPersondetailsHeader.class.php:115
+#: extern/elements/ExternElementPersondetailsHeader.class.php:116
 msgid "Höhe:"
 msgstr "Height:"
 
@@ -2033,7 +2048,9 @@ msgstr "Information from Stud.IP"
 msgid ""
 "Anzeige weiterer Informationen aus Stud.IP im Modul &quot;"
 "Veranstaltungsdetails&quot;."
-msgstr "Display further information from Stud.IP in the module &quot;course details&quot;"
+msgstr ""
+"Display further information from Stud.IP in the module &quot;course "
+"details&quot;"
 
 #: extern/elements/ExternElementStudipInfo.class.php:65
 msgid "Weitere Informationen aus Stud.IP zu dieser Veranstaltung"
@@ -2065,7 +2082,8 @@ msgstr "Number of documents in the Stud.IP download area:"
 msgid ""
 "Geben Sie jeweils einen Text ein, der an der entsprechenden Stelle "
 "ausgegeben werden soll."
-msgstr "In each case, enter the text which will appear in the corresponding location."
+msgstr ""
+"In each case, enter the text which will appear in the corresponding location."
 
 #: extern/elements/ExternElementStudipInfo.class.php:95
 msgid "&Uuml;berschrift:"
@@ -2120,8 +2138,8 @@ msgid ""
 "Geben Sie die URL eines Bildes ein, dass als Link dienen soll. Wenn sie "
 "keine URL angeben, wird ein Standard-Bild (Pfeile) ausgegeben."
 msgstr ""
-"Enter the URL of a picture that should serve as a link. If you do not enter a URL, "
-"a standard picture (arrow) will be used."
+"Enter the URL of a picture that should serve as a link. If you do not enter "
+"a URL, a standard picture (arrow) will be used."
 
 #: extern/elements/ExternElementTableFooter.class.php:55
 msgid "Tabellenfuß"
@@ -2302,8 +2320,8 @@ msgid ""
 "Geben Sie ein oder mehrere Zeichen ein, die als Trennzeichen zwischen den "
 "Links im Navigations-Pfad erscheinen sollen."
 msgstr ""
-"Enter one or more symbols which should appear as seperators between links "
-"in the navigations path."
+"Enter one or more symbols which should appear as seperators between links in "
+"the navigations path."
 
 #, fuzzy
 #~ msgid "Bereichsbaum Veranstaltungen"
@@ -2340,4 +2358,3 @@ msgstr ""
 
 #~ msgid "Konfiguration Mitarbeiterdetails:"
 #~ msgstr "Staff details configuration:"
-
