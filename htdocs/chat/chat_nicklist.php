@@ -56,22 +56,22 @@ $chatServer->caching = true;
 ?>
 <html>
 <head>
-	   <title>Chat Nicklist</title>
-	   <style type="text/css">
-	   <!--
-	   A:visited {	color:#3333BB;	text-decoration : none;	font-family: Arial, Helvetica, sans-serif;}
-	   A:link {	color:#3333BB;	text-decoration : none;	font-family: Arial, Helvetica, sans-serif;}
-	   A:hover {	color: #FF3333;	text-decoration : none;	font-family: Arial, Helvetica, sans-serif;}
-	   A:active {color: #FF3333; text-decoration : none; font-family: Arial, Helvetica, sans-serif;}
-	   TABLE.blank {	background-color: white;}
-	   TD.blank {background-color: #FFFFFF;}
-	   th   {border:0px solid #000000; background:#B5B5B5 url('<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/steelgraudunkel.gif'); color:#FFFFFF; font-family:Arial, Helvetica, sans-serif; background-color:#B5B5B5  }
-	   p, td, form, ul {font-family: Arial, Helvetica, sans-serif;	color: #000000 }
-	   h1, h2, h3 {font-family: Arial, Helvetica, sans-serif;	color: #990000;	font-weight: bold; }
-	   table.header { background-image: url('<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/fill1.gif');}
-	   TD.topic {border:0px solid #000000; background: url('<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/fill1.gif'); color:#FFFFFF; font-family:Arial, Helvetica, sans-serif; background-color:#4A5681  }
-	   BODY {background-color:#EEEEEE;background-image:url('<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/steel1.jpg');font-family: Arial, Helvetica, sans-serif}
-	   -->
+	<title>Chat Nicklist</title>
+	<style type="text/css">
+	<!--
+	A:visited {	color:#3333BB;	text-decoration : none;	font-family: Arial, Helvetica, sans-serif;}
+	A:link {	color:#3333BB;	text-decoration : none;	font-family: Arial, Helvetica, sans-serif;}
+	A:hover {	color: #FF3333;	text-decoration : none;	font-family: Arial, Helvetica, sans-serif;}
+	A:active {color: #FF3333; text-decoration : none; font-family: Arial, Helvetica, sans-serif;}
+	TABLE.blank {	background-color: white;}
+	TD.blank {background-color: #FFFFFF;}
+	th   {border:0px solid #000000; background:#B5B5B5 url('<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/steelgraudunkel.gif'); color:#FFFFFF; font-family:Arial, Helvetica, sans-serif; background-color:#B5B5B5  }
+	p, td, form, ul {font-family: Arial, Helvetica, sans-serif;	color: #000000 }
+	h1, h2, h3 {font-family: Arial, Helvetica, sans-serif;	color: #990000;	font-weight: bold; }
+	table.header { background-image: url('<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/fill1.gif');}
+	TD.topic {border:0px solid #000000; background: url('<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/fill1.gif'); color:#FFFFFF; font-family:Arial, Helvetica, sans-serif; background-color:#4A5681  }
+	BODY {background-color:#EEEEEE;background-image:url('<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/steel1.jpg');font-family: Arial, Helvetica, sans-serif}
+	-->
 </style>
 
 </head>
@@ -79,35 +79,35 @@ $chatServer->caching = true;
 <?
 //darf ich überhaupt hier sein ?
 if (!$chatServer->isActiveUser($user->id,$chatid)) {
-	 ?><table width="100%"><tr><?
-	 my_error("Du bist nicht in diesem Chat angemeldet!",$class="blank",$colspan=1);
-	 ?></tr></table></body></html><?
-	 page_close();
-	 die;
+	?><table width="100%"><tr><?
+	my_error("Du bist nicht in diesem Chat angemeldet!",$class="blank",$colspan=1);
+	?></tr></table></body></html><?
+	page_close();
+	die;
 }
 ?>
 <div align="center">
 <table align="center" border="0" bgcolor="#FFFFFF" cellpadding="0" cellspacing="2"  width="95%">
-  <tr>
-	 <td align="center">
-		  <table align="center" border="0" cellpadding="1" cellspacing="1" width="100%">
-			   <tr>
-					<td class="topic" align="center"><b>Nicklist</b></td>
-			   </tr>
-			   <?
-			   foreach ($chatServer->chatUser as $chatUserId => $chatUserDetail){
+<tr>
+	<td align="center">
+		<table align="center" border="0" cellpadding="1" cellspacing="1" width="100%">
+			<tr>
+				<td class="topic" align="center"><b>Nicklist</b></td>
+			</tr>
+			<?
+			foreach ($chatServer->chatUser as $chatUserId => $chatUserDetail){
 					if ($chatUserDetail[$chatid]["action"]){
-						 echo "\n<tr><td><span style=\"font-size:10pt\">";
-						 if ($chatUserDetail[$chatid]["perm"])  echo "<b>";
-						 echo "<a href=\"javascript:parent.coming_home('{$CANONICAL_RELATIVE_PATH_STUDIP}about.php?username=".$chatUserDetail[$chatid]["nick"]."')\">".$chatUserDetail[$chatid]["fullname"]."</a><br>(".$chatUserDetail[$chatid]["nick"].")";
-						 if ($chatUserDetail[$chatid]["perm"])  echo "</b>";
-						 echo "</span></td></tr>";
+						echo "\n<tr><td><span style=\"font-size:10pt\">";
+						if ($chatUserDetail[$chatid]["perm"])  echo "<b>";
+						echo "<a href=\"javascript:parent.coming_home('{$CANONICAL_RELATIVE_PATH_STUDIP}about.php?username=".$chatUserDetail[$chatid]["nick"]."')\">".$chatUserDetail[$chatid]["fullname"]."</a><br>(".$chatUserDetail[$chatid]["nick"].")";
+						if ($chatUserDetail[$chatid]["perm"])  echo "</b>";
+						echo "</span></td></tr>";
 					}
-			   }
-			   ?>
-		  </table>
-	 </td>
-  </tr>
+			}
+			?>
+		</table>
+	</td>
+</tr>
 </table>
 </div>
 </body>

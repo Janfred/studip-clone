@@ -53,44 +53,43 @@ $db=new DB_Seminar("SELECT CONCAT(Vorname,' ',Nachname) as fullname FROM auth_us
 $db->next_record();
 $chatServer->addChat($chatid);
 if (!$chatServer->addUser($user->id,$chatid,$auth->auth["uname"],$db->f("fullname"),$perm->have_perm("root"))){
-	 ?><html>
-	 <head>
-		 <title>Stud.IP</title>
-		<style type="text/css">
-	   <!--
-	   A:visited {	color:#3333BB;	text-decoration : none;	font-family: Arial, Helvetica, sans-serif;}
-	   A:link {	color:#3333BB;	text-decoration : none;	font-family: Arial, Helvetica, sans-serif;}
-	   A:hover {	color: #FF3333;	text-decoration : none;	font-family: Arial, Helvetica, sans-serif;}
-	   A:active {color: #FF3333; text-decoration : none; font-family: Arial, Helvetica, sans-serif;}
-	   TABLE.blank {	background-color: white;}
-	   TD.blank {background-color: #FFFFFF;}
-	   th   {border:0px solid #000000; background:#B5B5B5 url('<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/steelgraudunkel.gif'); color:#FFFFFF; font-family:Arial, Helvetica, sans-serif; background-color:#B5B5B5  }
-	   p, td, form, ul {font-family: Arial, Helvetica, sans-serif;	color: #000000 }
-	   h1, h2, h3 {font-family: Arial, Helvetica, sans-serif;	color: #990000;	font-weight: bold; }
-	   table.header { background-image: url('<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/fill1.gif');}
-	   TD.topic {border:0px solid #000000; background: url('<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/fill1.gif'); color:#FFFFFF; font-family:Arial, Helvetica, sans-serif; background-color:#4A5681  }
-	   BODY {background-color:#EEEEEE;background-image:url('<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/steel1.jpg');font-family: Arial, Helvetica, sans-serif}
--->
-	   </style>
+	?><html>
+	<head>
+	 <title>Stud.IP</title>
+	<style type="text/css">
+	<!--
+	A:visited {	color:#3333BB;	text-decoration : none;	font-family: Arial, Helvetica, sans-serif;}
+	A:link {	color:#3333BB;	text-decoration : none;	font-family: Arial, Helvetica, sans-serif;}
+	A:hover {	color: #FF3333;	text-decoration : none;	font-family: Arial, Helvetica, sans-serif;}
+	A:active {color: #FF3333; text-decoration : none; font-family: Arial, Helvetica, sans-serif;}
+	TABLE.blank {	background-color: white;}
+	TD.blank {background-color: #FFFFFF;}
+	th   {border:0px solid #000000; background:#B5B5B5 url('<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/steelgraudunkel.gif'); color:#FFFFFF; font-family:Arial, Helvetica, sans-serif; background-color:#B5B5B5  }
+	p, td, form, ul {font-family: Arial, Helvetica, sans-serif;	color: #000000 }
+	h1, h2, h3 {font-family: Arial, Helvetica, sans-serif;	color: #990000;	font-weight: bold; }
+	table.header { background-image: url('<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/fill1.gif');}
+	TD.topic {border:0px solid #000000; background: url('<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/fill1.gif'); color:#FFFFFF; font-family:Arial, Helvetica, sans-serif; background-color:#4A5681  }
+	BODY {background-color:#EEEEEE;background-image:url('<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/steel1.jpg');font-family: Arial, Helvetica, sans-serif}
+	-->
+	</style>
 	 </head>
 	 <body>
 	 <table border=0 bgcolor="#000000" align="center" cellspacing=0 cellpadding=0 width=70%>
-		  <tr valign=top align=middle>
-			 <td class="topic" align="left"><b>&nbsp;Zugriff verweigert</b></td>
-		  </tr>
-		  <tr><td class="blank">&nbsp;</td></tr>
+		<tr valign=top align=middle>
+			<td class="topic" align="left"><b>&nbsp;Zugriff verweigert</b></td>
+		</tr>
+		<tr><td class="blank">&nbsp;</td></tr>
 		<?
 		parse_msg ("error§Chatlogin nicht möglich <br/><font size=-1 color=black>Vermutlich sind sie noch aus einer früheren Chat Session angemeldet. Es dauert ca. 3-5 s bis sie automatisch aus dem Chat entfernt werden. Versuchen sie es etwas später noch einmal.</font>", "§", "blank", 1);
 		?>
 		<tr><td class="blank"><font size=-1>&nbsp;Fenster <a href="javascript:window.close()"><b>schließen</b></a><br />&nbsp;</font>
-			   </td>
-		  </tr>
-	 </table>
-	 </body>
-	 </html>
-	 <?
-	 page_close();
-	 die;
+		</td></tr>
+	</table>
+	</body>
+	</html>
+	<?
+	page_close();
+	die;
 }
 //evtl Chateinladungen löschen
 $sms=new messaging();
@@ -102,42 +101,27 @@ $sms->delete_chatinv($auth->auth["uname"]);
 <head>
 	<title>Chat(<?=$auth->auth["uname"]?>) -
 	<?=$chatServer->chatDetail[$chatid]["name"]?></title>
-	<style type="text/css">
-	   <!--
-	   A:visited {	color:#3333BB;	text-decoration : none;	font-family: Arial, Helvetica, sans-serif;}
-	   A:link {	color:#3333BB;	text-decoration : none;	font-family: Arial, Helvetica, sans-serif;}
-	   A:hover {	color: #FF3333;	text-decoration : none;	font-family: Arial, Helvetica, sans-serif;}
-	   A:active {color: #FF3333; text-decoration : none; font-family: Arial, Helvetica, sans-serif;}
-	   TABLE.blank {	background-color: white;}
-	   TD.blank {background-color: #FFFFFF;}
-	   th   {border:0px solid #000000; background:#B5B5B5 url('<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/steelgraudunkel.gif'); color:#FFFFFF; font-family:Arial, Helvetica, sans-serif; background-color:#B5B5B5  }
-	   p, td, form, ul {font-family: Arial, Helvetica, sans-serif;	color: #000000 }
-	   h1, h2, h3 {font-family: Arial, Helvetica, sans-serif;	color: #990000;	font-weight: bold; }
-	   table.header { background-image: url('<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/fill1.gif');}
-	   TD.topic {border:0px solid #000000; background: url('<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/fill1.gif'); color:#FFFFFF; font-family:Arial, Helvetica, sans-serif; background-color:#4A5681  }
-	   BODY {background-color:#EEEEEE;background-image:url('<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/steel1.jpg');font-family: Arial, Helvetica, sans-serif}
-	   -->
-</style>
+
 <script type="text/javascript">
 	/**
 	* JavaScript 
 	*/
 	function coming_home(url)
 	{
-		  if (opener.closed) alert('Das Hauptfenster wurde geschlossen,\ndiese Funktion kann nicht mehr ausgeführt werden!');
-		  else {
-			   opener.location.href = url;
-			   opener.focus();
-		  }
+		if (opener.closed) alert('Das Hauptfenster wurde geschlossen,\ndiese Funktion kann nicht mehr ausgeführt werden!');
+		else {
+			opener.location.href = url;
+			opener.focus();
+		}
 
 	}
-	 </script>
+	</script>
 </head>
 <frameset rows="83%,*" FRAMEBORDER=NO FRAMESPACING=0 FRAMEPADDING=0 border=0>
-  <frameset cols="*,25%" FRAMEBORDER=NO FRAMESPACING=0 FRAMEPADDING=0 border=0>
-	<frame name="frm_chat" src="chat_client.php?chatid=<?=$chatid?>" marginwidth=1 marginheight=1>
-	<frame name="frm_nicklist" src="chat_nicklist.php?chatid=<?=$chatid?>"  marginwidth=1 marginheight=1>
-	</frameset>
+	<frameset cols="*,25%" FRAMEBORDER=NO FRAMESPACING=0 FRAMEPADDING=0 border=0>
+		<frame name="frm_chat" src="chat_client.php?chatid=<?=$chatid?>" marginwidth=1 marginheight=1>
+		<frame name="frm_nicklist" src="chat_nicklist.php?chatid=<?=$chatid?>"  marginwidth=1 marginheight=1>
+		</frameset>
 <frame name="frm_input" src="chat_input.php?chatid=<?=$chatid?>" marginwidth=1 marginheight=2 >
 </frameset>
 </html>

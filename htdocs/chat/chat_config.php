@@ -90,11 +90,11 @@ $chatColors=array("black","blue","green","orange","indigo","darkred","red","dark
 * @var array $chatColors
 */
 $chatCmd=array("quit" => " [msg] - Du verlässt den Chat mit der Botschaft [msg]",
-               "color" => " [colorcode] - Deine Schriftfarbe wird auf [colorcode] gesetzt",
-               "me" => " [msg] - Dein Name wird zusammen mit [msg] vom Chatbot ausgegeben",
-               "private" => " [username][msg] - Die Botschaft [msg] wird geheim an [username] übermittelt",
-               "help" => " - Zeigt diesen Hilfetext",
-               "kick" => " [username] - Wirft [username] aus dem Chat wenn du Chatadmin bist",
-               "sms" => " [username][msg] - Verschickt eine Studip SMS [msg] an [username]");
+			"color" => " [colorcode] - Deine Schriftfarbe wird auf [colorcode] gesetzt",
+			"me" => " [msg] - Dein Name wird zusammen mit [msg] vom Chatbot ausgegeben",
+			"private" => " [username][msg] - Die Botschaft [msg] wird geheim an [username] übermittelt",
+			"help" => " - Zeigt diesen Hilfetext",
+			"kick" => " [username] - Wirft [username] aus dem Chat wenn du Chatadmin bist",
+			"sms" => " [username][msg] - Verschickt eine Studip SMS [msg] an [username]");
 
 ?>

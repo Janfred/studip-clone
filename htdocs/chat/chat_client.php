@@ -1,4 +1,4 @@
-<?
+<?php
 /**
 * chat client
 * 
@@ -8,7 +8,7 @@
 * @author		André Noack <andre.noack@gmx.net>
 * @version		$Id$
 * @access		public
-* @modulegroup		chat_modules
+* @modulegroup	chat_modules
 * @module		chat_client
 * @package		Chat
 */
@@ -50,202 +50,189 @@ require_once $ABSOLUTE_PATH_STUDIP."messaging.inc.php";
 
 //shutdown funktion, wird automatisch bei skriptende aufgerufen
 function chatLogout(){
-	 global $userid,$chatid,$chatServer;
-	 $chatServer->removeUser($userid,$chatid);
+	global $userid,$chatid,$chatServer;
+	$chatServer->removeUser($userid,$chatid);
 }
 
 //Hilfsfunktion, druckt script tags
 function printJs($code){
-	 echo "<script type=\"text/Javascript\">$code</script>\n";
+	echo "<script type=\"text/Javascript\">$code</script>\n";
 }
-//Hilfsfunktion, gibt vollen Namen inkl usernamen zurück
-//function fullNick($userid) {
-//     global $chatServer,$chatid;
-//     return $chatServer->chatUser[$userid][$chatid]["fullname"]." (".$chatServer->chatUser[$userid][$chatid]["nick"].")";
-//}
 
 function fullNick($userid) {
-	 global $chatServer,$chatid;
-	 return $chatServer->chatUser[$userid][$chatid]["nick"];
+	global $chatServer,$chatid;
+	return $chatServer->chatUser[$userid][$chatid]["nick"];
 }
 
 //Hilfsfunktion, unterscheidet zwischen öffentlichen und privaten System Nachrichten
 function chatSystemMsg(&$msg,&$output){
-	 global $user,$chatServer;
-	 $id=substr(strrchr ($msg[0],":"),1);
-	 if (!$id) {
+	global $user,$chatServer;
+	$id=substr(strrchr ($msg[0],":"),1);
+	if (!$id) {
 		  printJs("if (parent.frames['frm_nicklist'].location.href) parent.frames['frm_nicklist'].location.href = parent.frames['frm_nicklist'].location.href;");
 		  $output=strftime("%T",floor($msg[2]))."<i> [chatbot] $msg[1]</i><br>";
-	 }
-	 elseif ($user->id==$id){
-		  $output=strftime("%T",floor($msg[2]))."<i> [chatbot] $msg[1]</i><br>";
-	 }
-	 return;
+	} elseif ($user->id==$id){
+		$output=strftime("%T",floor($msg[2]))."<i> [chatbot] $msg[1]</i><br>";
+	}
+	return;
 }
 //Die Funktionen für die Chatkommandos, für jedes Kommando in $chatCmd muss es eine Funktion geben
 function chatCommand_color($msgStr,&$output){
-	 global $user,$chatServer,$chatid;
-	 if (!$msgStr OR $msgStr=="\n" OR $msgStr=="\r") return;
-	 $chatServer->chatUser[$user->id][$chatid]["color"]=formatReady($msgStr);
-	 $chatServer->shmCt->store(&$chatServer->chatUser,CHAT_USER_KEY);
-	 $chatServer->addMsg("system:$user->id",$chatid,"Deine <font color=\"".formatReady($msgStr)."\">Schriftfarbe</font> wurde geändert!");
-	 return;
+	global $user,$chatServer,$chatid;
+	if (!$msgStr OR $msgStr=="\n" OR $msgStr=="\r")
+		return;
+	$chatServer->chatUser[$user->id][$chatid]["color"]=formatReady($msgStr);
+	$chatServer->shmCt->store(&$chatServer->chatUser,CHAT_USER_KEY);
+	$chatServer->addMsg("system:$user->id",$chatid,"Deine <font color=\"".formatReady($msgStr)."\">Schriftfarbe</font> wurde geändert!");
+	return;
 }
 
 function chatCommand_quit($msgStr,&$output){
-	 global $user,$chatServer,$chatid,$userQuit;
-	 $chatServer->removeUser($user->id,$chatid);
-	 $chatServer->addMsg("system",$chatid,fullNick($user->id)." verlässt den Chat und sagt: ".formatReady($msgStr));
-	 echo "Du hast den Chat verlassen!<br>";
-	 echo "Chatfenster wird in 3 s geschlossen!<br>";
-	 printJs("window.scrollBy(0, 500);");
-	 printJs("setTimeout('parent.close()',3000);");
-	 flush();
-	 $userQuit=true;  //dirty deeds...
+	global $user,$chatServer,$chatid,$userQuit;
+	$chatServer->removeUser($user->id,$chatid);
+	$chatServer->addMsg("system",$chatid,fullNick($user->id)." verlässt den Chat und sagt: ".formatReady($msgStr));
+	echo "Du hast den Chat verlassen!<br>";
+	echo "Chatfenster wird in 3 s geschlossen!<br>";
+	printJs("window.scrollBy(0, 500);");
+	printJs("setTimeout('parent.close()',3000);");
+	flush();
+	$userQuit=true;  //dirty deeds...
 
 }
 
 function chatCommand_me($msgStr,&$output){
-	 global $user,$chatServer,$chatid;
-	 $chatServer->addMsg("system",$chatid,"<b>".fullNick($user->id)." ".formatReady($msgStr)."</b>");
-
+	global $user,$chatServer,$chatid;
+	$chatServer->addMsg("system",$chatid,"<b>".fullNick($user->id)." ".formatReady($msgStr)."</b>");
 }
 
 function chatCommand_help($msgStr,&$output){
-	 global $user,$chatServer,$chatid,$chatCmd;
-	 $str="Mögliche Kommandos:";
-	 foreach($chatCmd as $cmd => $text)
-		  $str.="<br><b>/$cmd</b>$text";
-	 $chatServer->addMsg("system:$user->id",$chatid,$str);
+	global $user,$chatServer,$chatid,$chatCmd;
+	$str="Mögliche Kommandos:";
+	foreach($chatCmd as $cmd => $text)
+		$str.="<br><b>/$cmd</b>$text";
+	$chatServer->addMsg("system:$user->id",$chatid,$str);
 }
 
 function chatCommand_private($msgStr,&$output){
-	 global $user,$chatServer,$chatid;
-	 $recid=$chatServer->getIdFromNick($chatid,trim(substr($msgStr." ",0,strpos($msgStr," "))));
-	 $privMsgStr=trim(strstr($msgStr," "));
-	 if ($chatServer->isActiveUser($recid,$chatid)){
-		  $chatServer->addMsg("system:$user->id",$chatid,"Deine Botschaft an ".fullNick($recid)." wurde übermittelt.");
-		  $chatServer->addMsg("system:$recid",$chatid,"Eine geheime Botschaft von ".fullNick($user->id)
-			   .":<font color=\"".$chatServer->chatUser[$user->id][$chatid]["color"]."\"> ".$privMsgStr
-			   ."</font>");
-	 }
-	 else
-		  $chatServer->addMsg("system:$user->id",$chatid,trim(substr($msgStr." ",0,strpos($msgStr," ")))." ist in diesem Chat nicht bekannt.");
-		  
+	global $user,$chatServer,$chatid;
+	$recid=$chatServer->getIdFromNick($chatid,trim(substr($msgStr." ",0,strpos($msgStr," "))));
+	$privMsgStr=trim(strstr($msgStr," "));
+	if ($chatServer->isActiveUser($recid,$chatid)){
+		$chatServer->addMsg("system:$user->id",$chatid,"Deine Botschaft an ".fullNick($recid)." wurde übermittelt.");
+		$chatServer->addMsg("system:$recid",$chatid,"Eine geheime Botschaft von ".fullNick($user->id)
+			.":<font color=\"".$chatServer->chatUser[$user->id][$chatid]["color"]."\"> ".$privMsgStr
+			."</font>");
+	} else {
+		$chatServer->addMsg("system:$user->id",$chatid,trim(substr($msgStr." ",0,strpos($msgStr," ")))." ist in diesem Chat nicht bekannt.");
+	}
 }
 
 function chatCommand_kick($msgStr,&$output){
-	 global $user,$chatServer,$chatid;
-	 if ($chatServer->chatUser[$user->id][$chatid]["perm"]){
-		  $kickid=$chatServer->getIdFromNick($chatid,trim(substr($msgStr." ",0,strpos($msgStr," ")-1)));
-		  if ($chatServer->removeUser($kickid,$chatid)){
-			   $chatServer->addMsg("system",$chatid,fullNick($kickid)." wurde von ".fullNick($user->id)." aus dem Chat geworfen!");
-		  }
-		  else {
-			   $chatServer->addMsg("system:$user->id",$chatid,fullNick($kickid)." ist nicht in diesem Chat!");
-		  }
-	 }
-	 else
-		  $chatServer->addMsg("system:$user->id",$chatid,"Du darfst hier niemanden rauswerfen!");
-		  
+	global $user,$chatServer,$chatid;
+	if ($chatServer->chatUser[$user->id][$chatid]["perm"]){
+		$kickid=$chatServer->getIdFromNick($chatid,trim(substr($msgStr." ",0,strpos($msgStr," ")-1)));
+		if ($chatServer->removeUser($kickid,$chatid)){
+			$chatServer->addMsg("system",$chatid,fullNick($kickid)." wurde von ".fullNick($user->id)." aus dem Chat geworfen!");
+		} else {
+			$chatServer->addMsg("system:$user->id",$chatid,fullNick($kickid)." ist nicht in diesem Chat!");
+		}
+	} else
+		$chatServer->addMsg("system:$user->id",$chatid,"Du darfst hier niemanden rauswerfen!");
 }
 
 function chatCommand_sms($msgStr,&$output){
-	 global $user,$chatServer,$chatid;
-	 $recUserName=trim(substr($msgStr." ",0,strpos($msgStr," ")));
-	 $smsMsgStr=trim(strstr($msgStr," "));
-	 if (!$recUserName OR !$smsMsgStr) return;
-	 if (messaging::insert_sms($recUserName,$smsMsgStr))
-		  $chatServer->addMsg("system:$user->id",$chatid,"Deine SMS an [".$recUserName."] wurde übermittelt.");
-	 else
-		  $chatServer->addMsg("system:$user->id",$chatid,"Fehler, deine SMS konnte nicht übermittelt werden!");
+	global $user,$chatServer,$chatid;
+	$recUserName=trim(substr($msgStr." ",0,strpos($msgStr," ")));
+	$smsMsgStr=trim(strstr($msgStr," "));
+	if (!$recUserName OR !$smsMsgStr)
+		return;
+	if (messaging::insert_sms($recUserName,$smsMsgStr))
+		$chatServer->addMsg("system:$user->id",$chatid,"Deine SMS an [".$recUserName."] wurde übermittelt.");
+	else
+		$chatServer->addMsg("system:$user->id",$chatid,"Fehler, deine SMS konnte nicht übermittelt werden!");
 }
 
 	 
 //Simpler Kommandoparser
 function chatCommand(&$msg,&$output){
-	 global $user,$chatServer,$chatCmd,$chatid;
-	 $cmdStr=trim(substr($msg[1]." ",1,strpos($msg[1]," ")-1));
-	 $msgStr=trim(strstr($msg[1]," "));
-	 if (!$chatCmd[$cmdStr]) {
-		  $chatServer->addMsg("system:$user->id",$chatid,"Unbekanntes Kommando: $cmdStr");
-		  return;
-	 }
-	 $chatFunc="chatCommand_".$cmdStr;
-	 $chatFunc($msgStr,&$output);       //variabler Funktionsaufruf!
+	global $user,$chatServer,$chatCmd,$chatid;
+	$cmdStr=trim(substr($msg[1]." ",1,strpos($msg[1]," ")-1));
+	$msgStr=trim(strstr($msg[1]," "));
+	if (!$chatCmd[$cmdStr]) {
+		$chatServer->addMsg("system:$user->id",$chatid,"Unbekanntes Kommando: $cmdStr");
+		return;
+	}
+	$chatFunc="chatCommand_".$cmdStr;
+	$chatFunc($msgStr,&$output);       //variabler Funktionsaufruf!
 }
 
 
 //Die Ausgabeschleife, läuft endlos wenn keine Abbruchbedingung erreicht wird
 function outputLoop($chatid){
-	 global $user,$chatServer,$userQuit;
-	 
-	 $lastPingTime=0;
-	 $lastMsgTime=time()-1;
-	 setlocale ("LC_TIME", "de_DE");
-	 set_time_limit(0);       //wir sind nicht zu stoppen...
-	 ignore_user_abort(1);    //es sei denn wir werden brutal ausgebremst :)
+	global $user,$chatServer,$userQuit;
+	$lastPingTime=0;
+	$lastMsgTime=time()-1;
+	setlocale ("LC_TIME", "de_DE");
+	set_time_limit(0);       //wir sind nicht zu stoppen...
+	ignore_user_abort(1);    //es sei denn wir werden brutal ausgebremst :)
 
-	 while(!connection_aborted()){
+	while(!connection_aborted()){
 
-		  $currentMsTime=$chatServer->getMsTime();
+		$currentMsTime=$chatServer->getMsTime();
 //Timeout vorbeugen
-		  if (($currentMsTime-$lastPingTime) > CHAT_TO_PREV_TIME) {
-			   echo"<!-- -->\n";
-			   flush();
-			   $lastPingTime=$currentMsTime;
-		  }
+		if (($currentMsTime-$lastPingTime) > CHAT_TO_PREV_TIME) {
+			echo"<!-- -->\n";
+			flush();
+			$lastPingTime=$currentMsTime;
+		}
 //Gibt es neue Nachrichten ?
-		  $newMsg=$chatServer->getMsg($chatid,$lastMsgTime);
-		  if ($newMsg) {
-			   foreach($newMsg as $msg){
-					$output="";
-					if (substr($msg[0],0,6)=="system") {
-						 chatSystemMsg(&$msg,&$output);
-						 if (!$output) continue;
+		$newMsg=$chatServer->getMsg($chatid,$lastMsgTime);
+		if ($newMsg) {
+			foreach($newMsg as $msg){
+				$output="";
+				if (substr($msg[0],0,6)=="system") {
+					 chatSystemMsg(&$msg,&$output);
+					 if (!$output) continue;
+				} elseif (substr($msg[1],0,1)=="/") {
+					if ($msg[0]==$user->id) chatCommand(&$msg,&$output);
+					if (!$output) continue;
+				}
+				if (!$output){
+					$output="<font color=\"".$chatServer->chatUser[$msg[0]][$chatid]["color"]."\">"
+					.strftime("%T",floor($msg[2]))." [".fullNick($msg[0])."] "
+					.formatReady($msg[1])."</font><br>";
 					}
-					elseif (substr($msg[1],0,1)=="/") {
-						 if ($msg[0]==$user->id) chatCommand(&$msg,&$output);
-						 if (!$output) continue;
-					}
-					if (!$output){
-						 $output="<font color=\"".$chatServer->chatUser[$msg[0]][$chatid]["color"]."\">"
-							  .strftime("%T",floor($msg[2]))." [".fullNick($msg[0])."] "
-							  .formatReady($msg[1])."</font><br>";
-					}
-					echo $output;
-					printJs("window.scrollBy(0, 500);");
-					flush();
-					$lastPingTime=$currentMsTime;
-			   }
-			   $lastMsgTime=$msg[2];
+				echo $output;
+				printJs("window.scrollBy(0, 500);");
+				flush();
+				$lastPingTime=$currentMsTime;
+			}
+			$lastMsgTime=$msg[2];
+		}
 
-
-		  }
-
-		  if ($userQuit) break; //...done dirt cheap
-		  
+		if ($userQuit) break; //...done dirt cheap
+		
 //wurden wir zwischenzeitlich gekickt?
-		  if (!$chatServer->isActiveUser($user->id,$chatid)){
-			   echo "Du musstest den Chat verlassen...<br>";
-			   echo "<a href=\"javascript:parent.location.href='chat_login.php?chatid=$chatid';\">Hier</a> kannst du versuchen wieder einzusteigen.<br>";
-			   printJs("window.scrollBy(0, 500);");
-			   flush();
-			   break;
-		  }
+		if (!$chatServer->isActiveUser($user->id,$chatid)){
+			echo "Du musstest den Chat verlassen...<br>";
+			echo "<a href=\"javascript:parent.location.href='chat_login.php?chatid=$chatid';\">Hier</a> kannst du versuchen wieder einzusteigen.<br>";
+			printJs("window.scrollBy(0, 500);");
+			flush();
+			break;
+		}
 //Allzulange rumidlen soll keiner
-		  if ((time()-$chatServer->chatUser[$user->id][$chatid]["action"]) > CHAT_IDLE_TIMEOUT) {
-			   echo "<b>IDLE TIMOUT</b> du wurdest aus dem Chat entfernt!<br>";
-			   $chatServer->addMsg("system",$chatid,$chatServer->chatUser[$user->id][$chatid]["fullname"]." (".$chatServer->chatUser[$user->id][$chatid]["nick"].") hat nichts mehr zu sagen...");
-			   echo "<a href=\"javascript:parent.location.href='chat_login.php?chatid=$chatid';\">Hier</a> kannst du versuchen wieder einzusteigen.<br>";
-			   printJs("window.scrollBy(0, 500);");
-			   flush();
-			   break;
-		  }
+		if ((time()-$chatServer->chatUser[$user->id][$chatid]["action"]) > CHAT_IDLE_TIMEOUT) {
+			echo "<b>IDLE TIMOUT</b> du wurdest aus dem Chat entfernt!<br>";
+			$chatServer->addMsg("system",$chatid,$chatServer->chatUser[$user->id][$chatid]["fullname"]." (".$chatServer->chatUser[$user->id][$chatid]["nick"].") hat nichts mehr zu sagen...");
+			echo "<a href=\"javascript:parent.location.href='chat_login.php?chatid=$chatid';\">Hier</a> kannst du versuchen wieder einzusteigen.<br>";
+			printJs("window.scrollBy(0, 500);");
+			flush();
+			break;
+		}
 
-		  usleep(CHAT_SLEEP_TIME);
-	 }
-	 //echo "Output beendet";
+		usleep(CHAT_SLEEP_TIME);
+	}
+	//echo "Output beendet";
 
 }
 
@@ -258,31 +245,31 @@ $userQuit=false;
 <html>
 <head>
 	<title>ChatAusgabe</title>
-	   <style type="text/css">
-	   <!--
-	   A:visited {	color:#3333BB;	text-decoration : none;	font-family: Arial, Helvetica, sans-serif;}
-	   A:link {	color:#3333BB;	text-decoration : none;	font-family: Arial, Helvetica, sans-serif;}
-	   A:hover {	color: #FF3333;	text-decoration : none;	font-family: Arial, Helvetica, sans-serif;}
-	   A:active {color: #FF3333; text-decoration : none; font-family: Arial, Helvetica, sans-serif;}
-	   TABLE.blank {	background-color: white;}
-	   TD.blank {background-color: #FFFFFF;}
-	   th   {border:0px solid #000000; background:#B5B5B5 url('<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/steelgraudunkel.gif'); color:#FFFFFF; font-family:Arial, Helvetica, sans-serif; background-color:#B5B5B5  }
-	   p, td, form, ul {font-family: Arial, Helvetica, sans-serif;	color: #000000 }
-	   h1, h2, h3 {font-family: Arial, Helvetica, sans-serif;	color: #990000;	font-weight: bold; }
-	   table.header { background-image: url('<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/fill1.gif');}
-	   TD.topic {border:0px solid #000000; background: url('<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/fill1.gif'); color:#FFFFFF; font-family:Arial, Helvetica, sans-serif; background-color:#4A5681  }
-	   BODY {font-family: Arial, Helvetica, sans-serif}
-	   -->
-</style>
+	<style type="text/css">
+	<!---
+		A:visited {	color:#3333BB;	text-decoration : none;	font-family: Arial, Helvetica, sans-serif;}isited {	color:#3333BB;	text-decoration : none;	font-family: Arial, Helvetica, sans-serif;}
+		A:link {	color:#3333BB;	text-decoration : none;	font-family: Arial, Helvetica, sans-serif;}ink {	color:#3333BB;	text-decoration : none;	font-family: Arial, Helvetica, sans-serif;}
+		A:hover {	color: #FF3333;	text-decoration : none;	font-family: Arial, Helvetica, sans-serif;}over {	color: #FF3333;	text-decoration : none;	font-family: Arial, Helvetica, sans-serif;}
+		A:active {color: #FF3333; text-decoration : none; font-family: Arial, Helvetica, sans-serif;}ctive {color: #FF3333; text-decoration : none; font-family: Arial, Helvetica, sans-serif;}
+		TABLE.blank {	background-color: white;}LE.blank {	background-color: white;}
+		TD.blank {background-color: #FFFFFF;}blank {background-color: #FFFFFF;}
+		th   {border:0px solid #000000; background:#B5B5B5 url('<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/steelgraudunkel.gif'); color:#FFFFFF; font-family:Arial, Helvetica, sans-serif; background-color:#B5B5B5  }  {border:0px solid #000000; background:#B5B5B5 url('<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/steelgraudunkel.gif'); color:#FFFFFF; font-family:Arial, Helvetica, sans-serif; background-color:#B5B5B5  }
+		p, td, form, ul {font-family: Arial, Helvetica, sans-serif;	color: #000000 }td, form, ul {font-family: Arial, Helvetica, sans-serif;	color: #000000 }
+		h1, h2, h3 {font-family: Arial, Helvetica, sans-serif;	color: #990000;	font-weight: bold; } h2, h3 {font-family: Arial, Helvetica, sans-serif;	color: #990000;	font-weight: bold; }
+		table.header { background-image: url('<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/fill1.gif');}le.header { background-image: url('<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/fill1.gif');}
+		TD.topic {border:0px solid #000000; background: url('<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/fill1.gif'); color:#FFFFFF; font-family:Arial, Helvetica, sans-serif; background-color:#4A5681  }topic {border:0px solid #000000; background: url('<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/fill1.gif'); color:#FFFFFF; font-family:Arial, Helvetica, sans-serif; background-color:#4A5681  }
+		BODY {background-color:#EEEEEE;background-image:url('<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/steel1.jpg');font-family: Arial, Helvetica, sans-serif}Y {font-family: Arial, Helvetica, sans-serif}
+		-->
+	</style>
 </head>
 <body style="background-color:#EEEEEE;background-image:url('<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/steel1.jpg');font-size:10pt;">
 <?
 if (!$chatServer->isActiveUser($user->id,$chatid)) {
-	 ?><table width="100%"><tr><?
-	 my_error("Du bist nicht in diesem Chat angemeldet!",$class="blank",$colspan=1);
-	 ?></tr></table></body></html><?
-	 page_close();
-	 die;
+	?><table width="100%"><tr><?
+	my_error("Du bist nicht in diesem Chat angemeldet!",$class="blank",$colspan=1);
+	?></tr></table></body></html><?
+	page_close();
+	die;
 }
 echo "\n<b>Hallo ".fullNick($user->id).",<br> willkommen im Raum: "
 	.$chatServer->chatDetail[$chatid]["name"]."</b><br>";
