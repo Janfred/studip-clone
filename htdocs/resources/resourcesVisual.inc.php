@@ -50,10 +50,10 @@ class ShowList extends ShowTreeRow{
 	function ShowList() {
 		$this->recurse_levels=-1;
 		$this->supress_hierachy_levels=FALSE;
+		$this->simple_list=FALSE;
 	
 		$this->db = new DB_Seminar;
 		$this->db2 = new DB_Seminar;
-		
 	}
 
 	function setRecurseLevels($levels) {
@@ -62,6 +62,10 @@ class ShowList extends ShowTreeRow{
 
 	function setAdminButtons($value) {
 		$this->admin_buttons=$value;
+	}
+
+	function setSimpleList($value) {
+		$this->simple_list=$value;
 	}
 	
 	function setViewHiearchyLevels($mode) {
@@ -77,81 +81,88 @@ class ShowList extends ShowTreeRow{
 	
 		//Object erstellen
 		$resObject=new ResourceObject($resource_id);
-
-		//Daten vorbereiten
-		if (!$resObject->getCategoryIconnr())
-			$icon="<img src=\"pictures/cont_folder2.gif\" />";
-		else
-			$icon="<img src=\"$RELATIVE_PATH_RESOURCES/pictures/cont_res".$resObject->getCategoryIconnr().".gif\" />";
-
-		if ($resources_data["structure_opens"][$resObject->id]) {			
-			$link=$PHP_SELF."?structure_close=".$resObject->id."#a";
-			$open="open";
-			if ($resources_data["actual_object"] == $resObject->id)
-				echo "<a name=\"a\"></a>";
-		} else {
-			$link=$PHP_SELF."?structure_open=".$resObject->id."#a";
-			$open="close";
-		}
-
-		$titel='';
-		if ($resObject->getCategoryName())
-			$titel=$resObject->getCategoryName().": ";
-		if ($edit_structure_object==$resObject->id) {
-			echo "<a name=\"a\"></a>";
-			$titel.="<input style=\"{font-size:8 pt; width: 100%;}\" type=\"text\" size=20 maxlength=255 name=\"change_name\" value=\"".htmlReady($resObject->getName())."\" />";
-		} else {
-			$titel.=htmlReady($resObject->getName());
-		}
-
-		//create a link on the titel, too
-		if (($link) && ($edit_structure_object != $resObject->id))
-			$titel = "<a href=\"$link\" class=\"tree\" >$titel</a>";
 		
-		if ($resObject->getOwnerLink())
-			$zusatz=sprintf (_("verantwortlich:")." <a href=\"%s\"><font color=\"#333399\">%s</font></a>", $resObject->getOwnerLink(), $resObject->getOwnerName());
-		else			
-			$zusatz=sprintf (_("verantwortlich:")." %s", $resObject->getOwnerName());
-		$new=TRUE;
-		if ($open=="open") {
-			//load the perms
-			if (($ActualObjectPerms) && ($ActualObjectPerms->getId() == $resObject->getId()))
-				$perms = $ActualObjectPerms->getUserPerm();
-			else {
-				$ThisObjectPerms = new ResourcesObjectPerms($resObject->getId());
-				$perms = $ThisObjectPerms->getUserPerm();
-			}
-			if ($edit_structure_object==$resObject->id) {
-				$content= "<br /><textarea name=\"change_description\" rows=3 cols=40>".htmlReady($resObject->getDescription())."</textarea><br />";
-				$content.= "<input type=\"image\" name=\"send\" align=\"absmiddle\" ".makeButton("uebernehmen", "src")." border=0 value=\""._("&Auml;nderungen speichern")."\" />";
-				$content.= "&nbsp;<a href=\"$PHP_SELF?cancel_edit=$resObject->id\">".makeButton("abbrechen", "img")."</a>";						
-				$content.= "<input type=\"hidden\" name=\"change_structure_object\" value=\"".$resObject->getId()."\" />";
+		if ($this->simple_list){
+			//create a simple list intead of printhead/printcontent-design
+			$return="<li><a href=\"$PHP_SELF?view=view_details&actual_object=".$resObject->getId()."\">".$resObject->getName()."</a></li>\n";
+			print $return;
+		} else {
+			//Daten vorbereiten
+			if (!$resObject->getCategoryIconnr())
+				$icon="<img src=\"pictures/cont_folder2.gif\" />";
+			else
+				$icon="<img src=\"$RELATIVE_PATH_RESOURCES/pictures/cont_res".$resObject->getCategoryIconnr().".gif\" />";
+	
+			if ($resources_data["structure_opens"][$resObject->id]) {			
+				$link=$PHP_SELF."?structure_close=".$resObject->id."#a";
 				$open="open";
+				if ($resources_data["actual_object"] == $resObject->id)
+					echo "<a name=\"a\"></a>";
 			} else {
-				$content=htmlReady($resObject->getDescription());
+				$link=$PHP_SELF."?structure_open=".$resObject->id."#a";
+				$open="close";
 			}
-			if (($admin_buttons) && ($perms == "admin")) {
-				$edit.= "<a href=\"$PHP_SELF?create_object=$resObject->id\">".makeButton("neuesobjekt")."</a>";
-				if ($resObject->isDeletable()) {
-					$edit= "&nbsp;<a href=\"$PHP_SELF?kill_object=$resObject->id\">".makeButton("loeschen")."</a>";
+	
+			$titel='';
+			if ($resObject->getCategoryName())
+				$titel=$resObject->getCategoryName().": ";
+			if ($edit_structure_object==$resObject->id) {
+				echo "<a name=\"a\"></a>";
+				$titel.="<input style=\"{font-size:8 pt; width: 100%;}\" type=\"text\" size=20 maxlength=255 name=\"change_name\" value=\"".htmlReady($resObject->getName())."\" />";
+			} else {
+				$titel.=htmlReady($resObject->getName());
+			}
+	
+			//create a link on the titel, too
+			if (($link) && ($edit_structure_object != $resObject->id))
+				$titel = "<a href=\"$link\" class=\"tree\" >$titel</a>";
+			
+			if ($resObject->getOwnerLink())
+				$zusatz=sprintf (_("verantwortlich:")." <a href=\"%s\"><font color=\"#333399\">%s</font></a>", $resObject->getOwnerLink(), $resObject->getOwnerName());
+			else			
+				$zusatz=sprintf (_("verantwortlich:")." %s", $resObject->getOwnerName());
+			$new=TRUE;
+			if ($open=="open") {
+				//load the perms
+				if (($ActualObjectPerms) && ($ActualObjectPerms->getId() == $resObject->getId()))
+					$perms = $ActualObjectPerms->getUserPerm();
+				else {
+					$ThisObjectPerms = new ResourcesObjectPerms($resObject->getId());
+					$perms = $ThisObjectPerms->getUserPerm();
+				}
+				if ($edit_structure_object==$resObject->id) {
+					$content= "<br /><textarea name=\"change_description\" rows=3 cols=40>".htmlReady($resObject->getDescription())."</textarea><br />";
+					$content.= "<input type=\"image\" name=\"send\" align=\"absmiddle\" ".makeButton("uebernehmen", "src")." border=0 value=\""._("&Auml;nderungen speichern")."\" />";
+					$content.= "&nbsp;<a href=\"$PHP_SELF?cancel_edit=$resObject->id\">".makeButton("abbrechen", "img")."</a>";						
+					$content.= "<input type=\"hidden\" name=\"change_structure_object\" value=\"".$resObject->getId()."\" />";
+					$open="open";
+				} else {
+					$content=htmlReady($resObject->getDescription());
+				}
+				if (($admin_buttons) && ($perms == "admin")) {
+					$edit.= "<a href=\"$PHP_SELF?create_object=$resObject->id\">".makeButton("neuesobjekt")."</a>";
+					if ($resObject->isDeletable()) {
+						$edit= "&nbsp;<a href=\"$PHP_SELF?kill_object=$resObject->id\">".makeButton("loeschen")."</a>";
+					} 
+					$edit.= "&nbsp;&nbsp;&nbsp;&nbsp;";
 				} 
-				$edit.= "&nbsp;&nbsp;&nbsp;&nbsp;";
-			} 
-			if ($resources_data["view_mode"] == "oobj"){
-				if (($perms == "autor") || ($perms == "admin")) 
-					if ($resObject->getCategoryId())
-						$edit.= "<a href=\"$PHP_SELF?show_object=$resObject->id&view=openobject_schedule\">".makeButton("belegung")."</a>&nbsp;";
-				$edit.= "<a href=\"$PHP_SELF?show_object=$resObject->id&view=openobject_details\">".makeButton("eigenschaften")."</a>";
-			} else {
-				if (($perms == "autor") || ($perms == "admin"))
-					if ($resObject->getCategoryId())
-						$edit.= "<a href=\"$PHP_SELF?show_object=$resObject->id&view=view_schedule\">".makeButton("belegung")."</a>&nbsp;";
-				$edit.= "<a href=\"$PHP_SELF?show_object=$resObject->id&view=view_details\">".makeButton("eigenschaften")."</a>";
+				if ($resources_data["view_mode"] == "oobj"){
+					if (($perms == "autor") || ($perms == "admin")) 
+						if ($resObject->getCategoryId())
+							$edit.= "<a href=\"$PHP_SELF?show_object=$resObject->id&view=openobject_schedule\">".makeButton("belegung")."</a>&nbsp;";
+					$edit.= "<a href=\"$PHP_SELF?show_object=$resObject->id&view=openobject_details\">".makeButton("eigenschaften")."</a>";
+				} else {
+					if (($perms == "autor") || ($perms == "admin"))
+						if ($resObject->getCategoryId())
+							$edit.= "<a href=\"$PHP_SELF?show_object=$resObject->id&view=view_schedule\">".makeButton("belegung")."</a>&nbsp;";
+					$edit.= "<a href=\"$PHP_SELF?show_object=$resObject->id&view=view_details\">".makeButton("eigenschaften")."</a>";
+				}
 			}
+	
+			//Daten an Ausgabemodul senden
+			$this->showRow($icon, $link, $titel, $zusatz, 0, 0, 0, $new, $open, $content, $edit);
 		}
-
-		//Daten an Ausgabemodul senden (aus resourcesVisual)
-		$this->showRow($icon, $link, $titel, $zusatz, 0, 0, 0, $new, $open, $content, $edit);
+		return TRUE;
 	}
 	
 	function showListObjects ($start_id='', $level=0, $result_count=0) {
@@ -864,6 +875,11 @@ class viewObject {
 		$this->db2 = new DB_Seminar;
 		$this->resObject = new ResourceObject($resource_id);
 		$this->cssSw = new cssClassSwitcher;
+
+		$this->list = new ShowList;
+		$this->list->setRecurseLevels(-1);
+		$this->list->setViewHiearchyLevels(TRUE);
+		$this->list->setSimpleList(TRUE);
 	}
 
 	function selectProperties() {
@@ -896,15 +912,27 @@ class viewObject {
 				</td>
 				<td class="<? echo $this->cssSw->getClass() ?>" valign="top" colspan=2><font size=-1><b><?=_("Beschreibung:")?></b></font><br />
 				<font size=-1><? echo $this->resObject->getDescription() ?></font>
-				<cho
 			</tr>
+			<?
+			if ($this->resObject->isParent())
+				$childs = TRUE;
+			?>
 			<tr>
 				<td class="<? $this->cssSw->switchClass(); echo $this->cssSw->getClass() ?>" width="4%">&nbsp; 
 				</td>
-				<td class="<? echo $this->cssSw->getClass() ?>" valign="top" colspan=2><font size=-1><b><?=_("Einordnung:")?></b></font><br />
+				<td class="<? echo $this->cssSw->getClass() ?>" valign="top" <?=($childs) ? "" : "colspan=\"2\"" ?>><font size=-1><b><?=_("Einordnung:")?></b></font><br />
 				<font size=-1><? echo ResourcesBrowse::getHistory($this->resObject->getId(), "view_details") ?></font>
-				<cho
+				</td>
+				<?
+				if ($childs) {
+				?>
+				<td class="<? echo $this->cssSw->getClass() ?>" valign="top" ><font size=-1><b><?=_("Untergeordnete Objekte:")?></b></font><br />
+				<font size=-1><? $this->list->showListObjects($this->resObject->getId()) ?></font>
+				<?
+				}
+				?>
 			</tr>
+			
 			<? 
 			if ($this->resObject->getCategoryId()) {
 			?>
@@ -1785,8 +1813,8 @@ class ResourcesBrowse {
 		$this->db2 = new DB_Seminar;
 		$this->db3 = new DB_Seminar;
 		$this->cssSw = new cssClassSwitcher;
+
 		$this->list = new ShowList;
-		
 		$this->list->setRecurseLevels(0);
 		$this->list->setViewHiearchyLevels(FALSE);
 	}

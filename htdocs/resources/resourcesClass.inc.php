@@ -1073,13 +1073,20 @@ class ResourceObject {
 	}
 
 	function isDeletable() {
+		if ($this->isParent())
+			return FALSE;
+		else
+			return TRUE;
+	}
+
+	function isParent() {
 		$db = new DB_Seminar;
 		$query = sprintf ("SELECT resource_id FROM resources_objects WHERE parent_id = '%s'", $this->id);
 		$this->db->query($query);
 		if ($this->db->affected_rows())
-			return FALSE;
-		else 
 			return TRUE;
+		else 
+			return FALSE;
 	}
 	
 	function flushProperties() {
