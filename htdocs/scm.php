@@ -192,9 +192,9 @@ function scm_edit_content($range_id) {
 	
 	$content="<textarea name=\"content\" style=\"width: 90%\" cols=$max_col rows=10 wrap=virtual >".htmlReady($result["content"])."</textarea>\n";
 	if (!$result);
-		$content.="<input type=\"HIDDEN\" name=\"new_entry\" value=\"$new_entry\"><b>\n";
+		$content.="<input type=\"HIDDEN\" name=\"new_entry\" value=\"1\"><b>\n";
 	$content.= "<input type=\"HIDDEN\" name=\"scm_id\" value=\"$scm_id\">";
-	$content.= "<input type=\"HIDDEN\" name=\"new_entry\" value=\"$new_entry\">";
+//	$content.= "<input type=\"HIDDEN\" name=\"new_entry\" value=\"$new_entry\">";
 	$content.= "<input type=\"HIDDEN\" name=\"i_view\" value=\"change\">";
 	
 	$edit="<input style=\"vertical-align: middle;\" type=\"IMAGE\" name=\"send_scm\" value=\"&auml;nderungen vornehmen\" border=0 " . makeButton("uebernehmen", "src") . ">";
@@ -230,7 +230,7 @@ function scm_change_content($scm_id, $range_id, $name, $preset, $content, $new_e
 	
 	if ($new_entry) {
 		$scm_id=md5(uniqid("simplecontent"));
-		$db->query("INSERT INTO scm SET scm_id = '$scm_id','$range_id','$user->id','$tab_name','$content', '".time()."', '".time()."')");
+		$db->query("INSERT INTO scm SET scm_id = '$scm_id', range_id='$range_id', user_id='$user->id', tab_name='$tab_name', content='$content', mkdate='".time()."', chdate='".time()."'");
 		if ($db->affected_rows())
 			$result="msg§" . _("Inhalt ge&auml;ndert");
 	} else {
