@@ -91,7 +91,7 @@ if ($ILIAS_CONNECT_ENABLE)
 				echo "<a href=\"" . link_new_module() ."\" target=\"_blank\">". _("Neues Lernmodul anlegen") ."</a><br><br>";
 
 			if ($perm->have_perm("admin"))  
-				show_all_modules_admin();
+				show_admin_modules();
 			else
 				show_user_modules($auth->auth["uid"]);
 		}
