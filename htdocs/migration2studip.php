@@ -284,6 +284,9 @@ if ($ILIAS_CONNECT_ENABLE)
 ?>
 		<tr><td>
 		<br>
+		<input type="hidden" name="came_from" value="<? echo $came_from; ?>">
+		<input type="hidden" name="came_from_view" value="<? echo $came_from_view; ?>">
+		
 		<!--<input type="IMAGE" <? echo makeButton("zurueck", "src"); ?> name="back" value="<? echo _("Zur&uuml;ck"); ?>">-->
 		<? if (($auth_mode == false) AND (!isset($delete))) { ?>
 		<input type="IMAGE" <? echo makeButton("weiter", "src"); ?> name="next" value="<? echo _("Weiter"); ?>">
@@ -299,6 +302,18 @@ if ($ILIAS_CONNECT_ENABLE)
 		</td>
 		<td width="270" NOWRAP class="blank" align="center" valign="top">
 <?
+			if ($came_from == "admin")
+				$infobox[1]["eintrag"][] = array (	"icon" => "pictures/forumgrau.gif" ,
+											"text"  => sprintf(_("Hier gelangen Sie %s zur&uuml;ck in den Administrationsbereich %s"), "<a href=\"./admin_lernmodule.php\">", "</a>")
+										);
+			elseif (($came_from != "") AND ($SessSemName["class"] == "inst"))
+				$infobox[1]["eintrag"][] = array (	"icon" => "pictures/forumgrau.gif" ,
+											"text"  => sprintf(_("Hier gelangen Sie %s zur&uuml;ck zur ausgew&auml;hlten Einrichtung %s"), "<a href=\"./seminar_lernmodule.php?seminar_id=$came_from&view=$came_from_view\">", "</a>")
+										);
+			elseif (($came_from != "") AND ($SessSemName["class"] != "inst"))
+				$infobox[1]["eintrag"][] = array (	"icon" => "pictures/forumgrau.gif" ,
+											"text"  => sprintf(_("Hier gelangen Sie %s zur&uuml;ck zur ausgew&auml;hlten Veranstaltung %s"), "<a href=\"./seminar_lernmodule.php?seminar_id=$came_from&view=$came_from_view\">", "</a>")
+										);
 			print_infobox ($infobox,"pictures/lernmodule.jpg");
 ?>		
 		</td>		

@@ -75,6 +75,34 @@ if ($ILIAS_CONNECT_ENABLE)
 	//neuen ILIAS-User anlegen, wenn noch nicht vorhanden.
 //	create_ilias_user($auth->auth["uname"]);
 
+	if (get_connected_user_id($auth->auth["uid"]) == false)
+	{
+		echo "<table><tr>";
+		my_info(_("Sie m&uuml;ssen Ihren Account mit dem angebundenen ILIAS-System verbinden, bevor sie Lernmodule nutzen k&ouml;nnen."));
+		echo "</tr></table>";
+		echo _("F&uuml;r die Verwendung von Lernmodulen ist das Stud.IP mit einem ILIAS System verbunden. Damit Sie die Funktionen von ILIAS nutzen k&ouml;nnen, muss Ihrem Account in Stud.IP zun&auml;chst ein ILIAS-Account zugeordnet werden. Die Verwaltung des ILIAS-Accounts finden Sie auf ihrer Einstellungsseite (Werkzeugsymbol) unter \"My Stud.IP\". Dorthin gelangen Sie auch mit dem folgenden Link.");
+		echo "<br><br>";
+		echo "<a href=\"migration2studip.php?came_from=admin\"><b>" . _("Mein ILIAS-Account") . "</b></a>";
+		$infobox = array	(			
+		array ("kategorie"  => _("Information:"),
+			"eintrag" => array	(	
+							array (	"icon" => "pictures/ausruf_small.gif",
+									"text"  => _("Ihr Account wurde noch nicht mit dem angebundenen ILIAS-System verbunden.")
+								 )
+							)
+			)
+		);
+		$infobox[1]["kategorie"] = _("Aktionen:");
+			$infobox[1]["eintrag"][] = array (	"icon" => "pictures/forumgrau.gif" ,
+										"text"  => sprintf(_("Hier k&ouml;nnen Sie Ihrem Stud.IP-Account einen %s ILIAS-Account zuweisen. %s"), "<a href=\"migration2studip.php\">", "</a>")
+									);
+		if ((get_connected_user_id($auth->auth["uid"]) != false) AND ($perm->have_studip_perm("autor",$seminar_id)))
+			$infobox[1]["eintrag"][] = array (	"icon" => "pictures/icon-lern.gif" ,
+										"text"  => sprintf(_("Hier k&ouml;nnen Sie ein %s neues Lernmodul anlegen%s. Das Modul muss anschlie&szlig;end noch zugewiesen werden."), "<a href=\"" . link_new_module() ."\" target=\"_blank\">", "</a>")
+									);
+	}
+	else
+	{
 		if (isset($delete))
 		{	
 			echo "<table>";
@@ -101,28 +129,29 @@ if ($ILIAS_CONNECT_ENABLE)
 		</td>
 		<td width="270" NOWRAP class="blank" align="center" valign="top">
 		<? 
-	$infobox = array	(			
-	array ("kategorie"  => _("Information:"),
-		"eintrag" => array	(	
-						array (	"icon" => "pictures/ausruf_small.gif",
-								"text"  => sprintf(_("Auf dieser Seite k&ouml;nnen Sie die Lernmodule administrieren."), "<br><i>", "</i>")
-							 )
-						)
-		)
-	);
-	$link = "<a href=\"./test.xml"."\">";
-	$infobox[1]["kategorie"] = _("Aktionen:");
-		$infobox[1]["eintrag"][] = array (	"icon" => "pictures/icon-posting.gif" ,
-									"text"  => _("Sie k&ouml;nnen ein Lernmodul bearbeiten, wenn Sie als AutorIn oder Co-AutorIn daf&uuml;r eingetragen sind.")
-								);
-		$infobox[1]["eintrag"][] = array (	"icon" => "pictures/trash.gif" ,
-									"text"  => _("Sie k&ouml;nnen ein Lernmodul l&ouml;schen, indem Sie den Kasten des Moduls &ouml;ffnen und auf 'l&ouml;schen' klicken.")
-								);
-		if ((get_connected_user_id($auth->auth["uid"]) != false) AND ($perm->have_perm("autor")))
-			$infobox[1]["eintrag"][] = array (	"icon" => "pictures/icon-lern.gif" ,
-										"text"  => sprintf(_("Hier k&ouml;nnen Sie ein %s neues Lernmodul anlegen %s"), "<a href=\"" . link_new_module() ."\" target=\"_blank\">", "</a>")
+		$infobox = array	(			
+		array ("kategorie"  => _("Information:"),
+			"eintrag" => array	(	
+							array (	"icon" => "pictures/ausruf_small.gif",
+									"text"  => sprintf(_("Auf dieser Seite k&ouml;nnen Sie die Lernmodule administrieren."), "<br><i>", "</i>")
+								 )
+							)
+			)
+		);
+		$link = "<a href=\"./test.xml"."\">";
+		$infobox[1]["kategorie"] = _("Aktionen:");
+			$infobox[1]["eintrag"][] = array (	"icon" => "pictures/icon-posting.gif" ,
+										"text"  => _("Sie k&ouml;nnen ein Lernmodul bearbeiten, wenn Sie als AutorIn oder Co-AutorIn daf&uuml;r eingetragen sind.")
 									);
-			print_infobox ($infobox,"pictures/lernmodule.jpg");
+			$infobox[1]["eintrag"][] = array (	"icon" => "pictures/trash.gif" ,
+										"text"  => _("Sie k&ouml;nnen ein Lernmodul l&ouml;schen, indem Sie den Kasten des Moduls &ouml;ffnen und auf 'l&ouml;schen' klicken.")
+									);
+			if ((get_connected_user_id($auth->auth["uid"]) != false) AND ($perm->have_perm("autor")))
+				$infobox[1]["eintrag"][] = array (	"icon" => "pictures/icon-lern.gif" ,
+											"text"  => sprintf(_("Hier k&ouml;nnen Sie ein %s neues Lernmodul anlegen %s"), "<a href=\"" . link_new_module() ."\" target=\"_blank\">", "</a>")
+										);
+				print_infobox ($infobox,"pictures/lernmodule.jpg");
+	}
 		?>		
 		</td>		
 	</tr>

@@ -125,7 +125,7 @@ if ($ILIAS_CONNECT_ENABLE)
 
 ?><table cellspacing="0" cellpadding="0" border="0" width="100%">
 	<tr>
-		<td class="topic" colspan="3">&nbsp;<img src="./pictures/icon-lern.gif">&nbsp;
+		<td class="topic" colspan="3">&nbsp;<img src="./pictures/icon-lern.gif" align="texttop">&nbsp;
 		<b>
 		<?   if ($view=="edit") 
 			{	
@@ -178,7 +178,7 @@ include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul
 		echo "</tr></table>";
 		echo _("F&uuml;r die Verwendung von Lernmodulen ist das Stud.IP mit einem ILIAS System verbunden. Damit Sie die Funktionen von ILIAS nutzen k&ouml;nnen, muss Ihrem Account in Stud.IP zun&auml;chst ein ILIAS-Account zugeordnet werden. Die Verwaltung des ILIAS-Accounts finden Sie auf ihrer Einstellungsseite (Werkzeugsymbol) unter \"My Stud.IP\". Dorthin gelangen Sie auch mit dem folgenden Link.");
 		echo "<br><br>";
-		echo "<a href=\"migration2studip.php\"><b>" . _("Mein ILIAS-Account") . "</b></a>";
+		echo "<a href=\"migration2studip.php?came_from=$seminar_id&came_from_view=$view\"><b>" . _("Mein ILIAS-Account") . "</b></a>";
 		$infobox = array	(			
 		array ("kategorie"  => _("Information:"),
 			"eintrag" => array	(	
