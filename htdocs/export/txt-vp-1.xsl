@@ -173,7 +173,8 @@
 		<xsl:if test="bereiche">
 				Bereich: 
 			<xsl:for-each select="bereiche/bereich">
-					<xsl:value-of select="."/>
+<xsl:text>
+					</xsl:text><xsl:value-of select="."/>
 			</xsl:for-each>
 		</xsl:if>
 <xsl:text>
