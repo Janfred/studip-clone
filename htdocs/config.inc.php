@@ -59,13 +59,13 @@ $HOLIDAY[3]=array("beginn"=>mktime(0,0,0,12,20,2003), "ende"=>mktime (23,59,59,1
 //weitere Feiertage und Ferien koennen hier angefuegt werden
 
 
-//Daten ueber Semester (ACHTUNG: Der Beginn der Vorlesungszeit muss ein Montag, 00:00 Uhr und das Ende ein Sonntag, 23:59 sein!)
+//Daten ueber Semester
 $SEMESTER[1]=array("name"=>"WS 2000/01", "beginn"=>mktime(0,0,0,10,1,2000), "ende"=>mktime(23,59,59,3,31,2001), "vorles_beginn"=>mktime(0,0,0,10,14,2000), "vorles_ende"=>mktime(23,59,59,2,17,2001), "past"=>FALSE); 		# Daten ueber das WS 2000/01
 $SEMESTER[2]=array("name"=>"SS 2001", "beginn"=>mktime(0,0,0,4,1,2001), "ende"=>mktime(23,59,59,9,30,2001), "vorles_beginn"=>mktime(0,0,0,4,16,2001), "vorles_ende"=>mktime(23,59,59,7,15,2001), "past"=>FALSE); 			# Daten ueber das SS 2001
 $SEMESTER[3]=array("name"=>"WS 2001/02", "beginn"=>mktime(0,0,0,10,1,2001), "ende"=>mktime(23,59,59,3,31,2002), "vorles_beginn"=>mktime(0,0,0,10,15,2001), "vorles_ende"=>mktime(23,59,59,2,17,2002), "past"=>FALSE); 		# Daten ueber das WS 2001/02
 $SEMESTER[4]=array("name"=>"SS 2002", "beginn"=>mktime(0,0,0,4,1,2002), "ende"=>mktime(23,59,59,9,30,2002), "vorles_beginn"=>mktime(0,0,0,4,8,2002), "vorles_ende"=>mktime(23,59,59,7,7,2002), "past"=>FALSE); 				# Daten ueber das SS 2002
 $SEMESTER[5]=array("name"=>"WS 2002/03", "beginn"=>mktime(0,0,0,10,1,2002), "ende"=>mktime(23,59,59,3,31,2003), "vorles_beginn"=>mktime(0,0,0,10,14,2002), "vorles_ende"=>mktime(23,59,59,2,14,2003), "past"=>FALSE); 		# Daten ueber das WS 2002/03
-$SEMESTER[6]=array("name"=>"SS 2003", "beginn"=>mktime(0,0,0,4,1,2003), "ende"=>mktime(23,59,59,9,30,2003), "vorles_beginn"=>mktime(0,0,0,4,21,2003), "vorles_ende"=>mktime(23,59,59,7,20,2003), "past"=>FALSE); 			# Daten ueber das SS 2003
+$SEMESTER[6]=array("name"=>"SS 2003", "beginn"=>mktime(0,0,0,4,1,2003), "ende"=>mktime(23,59,59,9,30,2003), "vorles_beginn"=>mktime(0,0,0,4,22,2003), "vorles_ende"=>mktime(23,59,59,7,20,2003), "past"=>FALSE); 			# Daten ueber das SS 2003
 $SEMESTER[7]=array("name"=>"WS 2003/04", "beginn"=>mktime(0,0,0,10,1,2003), "ende"=>mktime(23,59,59,3,31,2004), "vorles_beginn"=>mktime(0,0,0,10,20,2003), "vorles_ende"=>mktime(23,59,59,2,8,2004), "past"=>FALSE); 		# Daten ueber das WS 2003/04
 $SEMESTER[8]=array("name"=>"SS 2004", "beginn"=>mktime(0,0,0,4,1,2004), "ende"=>mktime(23,59,59,9,30,2004), "vorles_beginn"=>mktime(0,0,0,4,5,2004), "vorles_ende"=>mktime(23,59,59,7,11,2004), "past"=>FALSE); 			# Daten ueber das SS 2004
 //weitere Semester koennen hier angefuegt werden
