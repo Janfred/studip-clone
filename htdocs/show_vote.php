@@ -1,7 +1,7 @@
 <?
 // +--------------------------------------------------------------------------+
 // This file is part of Stud.IP
-// vote.php
+// show_vote.php
 //
 // Anzeigefunktion fuer Votes
 //
