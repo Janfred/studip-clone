@@ -58,6 +58,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 		die;
 	}
 
+
+
+// Beginn Funktionsteil
+
+
 // Hilfsfunktionen
 
 function MakeUniqueID ()
@@ -73,8 +78,8 @@ function MakeUniqueID ()
 	RETURN $tmp_id;
 }
 
-function GetPresetGroups ()
-{ 	global $INST_STATUS_GROUPS, $SEM_STATUS_GROUPS, $view, $tmp_class;
+function GetPresetGroups ($view, $veranstaltung_class)
+{ 	global $INST_STATUS_GROUPS, $SEM_STATUS_GROUPS;
         echo "<select name=\"move_old_statusgruppe\">";
 	if ($view == "statusgruppe_inst") {
 		for ($i=0; $i<sizeof($INST_STATUS_GROUPS["default"]); $i++) {
@@ -82,8 +87,8 @@ function GetPresetGroups ()
 		}
 	}
 	if ($view == "statusgruppe_sem") {
-		if (isset($tmp_class) AND isset($SEM_STATUS_GROUPS[$tmp_class])) {   // wir sind in einer Veranstaltung die Presets hat
-			$key = $tmp_class;
+		if (isset($tmp_class) AND isset($SEM_STATUS_GROUPS[$veranstaltung_class])) {   // wir sind in einer Veranstaltung die Presets hat
+			$key = $veranstaltung_class;
 		} else {
 			$key = "default";
 		}
@@ -94,8 +99,8 @@ function GetPresetGroups ()
 	echo "</select>";
 }
 
-function GetAllSelected ()
-{	global $range_id;
+function GetAllSelected ($range_id)
+{	
 	$zugeordnet[] = "";
   	$db3=new DB_Seminar;
 	$db3->query ("SELECT DISTINCT user_id FROM statusgruppe_user LEFT JOIN statusgruppen USING(statusgruppe_id) WHERE range_id = '$range_id'");
@@ -105,8 +110,14 @@ function GetAllSelected ()
 	RETURN $zugeordnet;
 }
 
-function PrintAktualStatusgruppen ()
-{	global $range_id, $PHP_SELF, $cmd, $edit_id, $view;
+
+
+
+// Funktionen zur reinen Augabe von Statusgruppendaten
+
+
+function PrintAktualStatusgruppen ($range_id, $view, $edit_id="")
+{	global $PHP_SELF;
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
 	$db->query ("SELECT name, statusgruppe_id, size FROM statusgruppen WHERE range_id = '$range_id' ORDER BY position ASC");
@@ -119,7 +130,7 @@ function PrintAktualStatusgruppen ()
 			        <tr> 
 				          <td width=\"5%\">";
 		printf ("            	  <input type=\"IMAGE\" name=\"%s\" src=\"./pictures/move.gif\" border=\"0\" %s>&nbsp; </td>", $statusgruppe_id, tooltip("Markierte Personen dieser Gruppe zuordnen"));
-		printf ("	          <td width=\"95%%\" class=\"%s\">&nbsp; %s </td><td class=\"topic\" width=\"1%%\"><a href=\"$PHP_SELF?cmd=edit_statusgruppe&edit_id=%s&range_id=%s&view=%s\"><img src=\"./pictures/einst.gif\" border=\"0\" %s></a></td>",$cmd =="edit_statusgruppe"&&$edit_id == $statusgruppe_id?"topicwrite":"topic",htmlReady($db->f("name")),$statusgruppe_id, $range_id, $view, tooltip("Gruppennahme oder Anzahl anpassen"));
+		printf ("	          <td width=\"95%%\" class=\"%s\">&nbsp; %s </td><td class=\"topic\" width=\"1%%\"><a href=\"$PHP_SELF?cmd=edit_statusgruppe&edit_id=%s&range_id=%s&view=%s\"><img src=\"./pictures/einst.gif\" border=\"0\" %s></a></td>",$edit_id == $statusgruppe_id?"topicwrite":"topic", htmlReady($db->f("name")),$statusgruppe_id, $range_id, $view, tooltip("Gruppennahme oder Anzahl anpassen"));
 		printf ( "	          <td width=\"4%%\"><a href=\"$PHP_SELF?cmd=remove_statusgruppe&statusgruppe_id=%s&range_id=%s&view=%s\"><img src=\"pictures/lighttrash.gif\" width=\"11\" height=\"17\" border=\"0\" %s></a></td>",$statusgruppe_id, $range_id, $view, tooltip("Gruppe mit Personenzuordnung entfernen"));
 		echo 	"</tr>";
 
@@ -143,52 +154,51 @@ function PrintAktualStatusgruppen ()
 			$k++;
 		}
 		while ($k <= $db->f("size")) {
-			echo "     <tr> 
-  			                  <td><font color=\"#FF4444\">$k</font></td>";
-			printf ("       <td class=\"blank\">&nbsp; </td>");
-			printf ( "	   <td width=\"5%%\">&nbsp; </td>");
-			echo "	</tr>";
+			echo "<tr><td><font color=\"#FF4444\">$k</font></td>";
+			printf ("<td class=\"blank\" width=\"95%%\">&nbsp; </td>");
+			printf ( "<td width=\"5%%\">&nbsp; </td>");
+			echo "</tr>";
 			$k++;
 		} 
 		$i++;
 		echo "</table>";
 		if ($i < $AnzahlStatusgruppen) {
-			printf ("<p align=\"center\"><a href=\"$PHP_SELF?cmd=swap&statusgruppe_id=%s&range_id=%s&view=%s\"><img src=\"pictures/move_up.gif\"  vspace=\"1\" width=\"13\" height=\"11\" border=\"0\"  %s><br><img src=\"pictures/move_down.gif\" vspace=\"1\" width=\"13\" height=\"11\" border=\"0\" %s></a><br>&nbsp;",$statusgruppe_id, $range_id, $view, tooltip("Gruppenreihenfolge tauschen"), tooltip("Gruppenreihenfolge tauschen")); 
+			printf ("<p align=\"center\"><a href=\"$PHP_SELF?cmd=swap&statusgruppe_id=%s&range_id=%s&view=%s\"><img src=\"pictures/move_up.gif\"  vspace=\"1\" width=\"13\" height=\"11\" border=\"0\"  %s><img src=\"pictures/move_down.gif\" vspace=\"1\" width=\"13\" height=\"11\" border=\"0\" %s></a><br>&nbsp;",$statusgruppe_id, $range_id, $view, tooltip("Gruppenreihenfolge tauschen"), tooltip("Gruppenreihenfolge tauschen")); 
 			//printf ("&nbsp; &nbsp; &nbsp; <a href=\"$PHP_SELF?cmd=swap&statusgruppe_id=%s&range_id=%s\&view=%s\"><img src=\"pictures/move_down.gif\" width=\"13\" height=\"11\" border=\"0\" %s></a> </p>",$statusgruppe_id, $range_id, $view, tooltip("Gruppenreihenfolge tauschen"));
 		}
 	}
 }
 
-function PrintSearchResults ($search_exp)
-{	global $SessSemName, $range_id;
-		$db=new DB_Seminar;
-		if (get_object_type($range_id) == "sem") {
-			$query = "SELECT a.user_id, username, Vorname, Nachname, perms FROM auth_user_md5 a ".		
-			"LEFT JOIN seminar_user b ON (b.user_id=a.user_id AND b.seminar_id='$range_id')  ".
-			"WHERE perms IN ('autor','tutor','dozent') AND ISNULL(b.seminar_id) AND ".
-			"(username LIKE '%$search_exp%' OR Vorname LIKE '%$search_exp%' OR Nachname LIKE '%$search_exp%') ".
-			"ORDER BY Nachname";
-		} else {
-			$query = "SELECT DISTINCT auth_user_md5.user_id, Vorname, Nachname, username, perms ".
-			"FROM auth_user_md5 LEFT JOIN user_inst ON user_inst.user_id=auth_user_md5.user_id AND Institut_id = '$inst_id' ".
-			"WHERE perms !='root' AND perms !='admin' AND (user_inst.inst_perms = 'user' OR user_inst.inst_perms IS NULL) ".
-			"AND (Vorname LIKE '%$search_exp%' OR Nachname LIKE '%$search_exp%' OR username LIKE '%$search_exp%') ORDER BY Nachname ";
+function PrintSearchResults ($search_exp, $range_id)
+{ global $SessSemName;
+	$db=new DB_Seminar;
+	if (get_object_type($range_id) == "sem") {
+		$query = "SELECT a.user_id, username, Vorname, Nachname, perms FROM auth_user_md5 a ".		
+		"LEFT JOIN seminar_user b ON (b.user_id=a.user_id AND b.seminar_id='$range_id')  ".
+		"WHERE perms IN ('autor','tutor','dozent') AND ISNULL(b.seminar_id) AND ".
+		"(username LIKE '%$search_exp%' OR Vorname LIKE '%$search_exp%' OR Nachname LIKE '%$search_exp%') ".
+		"ORDER BY Nachname";
+	} else {
+		$query = "SELECT DISTINCT auth_user_md5.user_id, Vorname, Nachname, username, perms ".
+		"FROM auth_user_md5 LEFT JOIN user_inst ON user_inst.user_id=auth_user_md5.user_id AND Institut_id = '$inst_id' ".
+		"WHERE perms !='root' AND perms !='admin' AND (user_inst.inst_perms = 'user' OR user_inst.inst_perms IS NULL) ".
+		"AND (Vorname LIKE '%$search_exp%' OR Nachname LIKE '%$search_exp%' OR username LIKE '%$search_exp%') ORDER BY Nachname ";
+	}
+	$db->query($query); // results all users which are not in the seminar
+	if (!$db->num_rows()) {
+		echo "&nbsp; keine Treffer&nbsp; ";
+	} else {
+		echo "&nbsp; <select name=\"Freesearch[]\" size=\"4\" multiple>";
+		while ($db->next_record()) {
+			printf ("<option value=\"%s\">%s - %s\n", $db->f("username"), my_substr($db->f("Nachname").", ".$db->f("Vorname")." (".$db->f("username"),0,35).")", $db->f("perms"));
 		}
-		$db->query($query); // results all users which are not in the seminar
-		if (!$db->num_rows()) {
-			echo "&nbsp; keine Treffer&nbsp; ";
-		} else {
-			echo "&nbsp; <select name=\"Freesearch[]\" size=\"4\" multiple>";
-			while ($db->next_record()) {
-				printf ("<option value=\"%s\">%s - %s\n", $db->f("username"), my_substr($db->f("Nachname").", ".$db->f("Vorname")." (".$db->f("username"),0,35).")", $db->f("perms"));
-			}
-			echo "</select>";
-		}
+		echo "</select>";
+	}
 }
 
 function PrintAktualMembers ($range_id)
 {	
-	$bereitszugeordnet = GetAllSelected();
+	$bereitszugeordnet = GetAllSelected($range_id);
 	if (get_object_type($range_id) == "sem") {
 		echo "<font size=\"-1\">&nbsp; TeilnehmerInnen der Veranstaltung</font><br>";
 		$query = "SELECT seminar_user.user_id, username, Nachname, Vorname, perms FROM auth_user_md5 LEFT JOIN seminar_user USING(user_id)  WHERE Seminar_id = '$range_id' ORDER BY Nachname ASC";
@@ -210,9 +220,8 @@ function PrintAktualMembers ($range_id)
 	echo "</select>";
 }
 
-
-function PrintInstitutMembers ()
-{	global $range_id;
+function PrintInstitutMembers ($range_id)
+{	
 	echo "<font size=\"-1\">&nbsp; MitarbeiterInnen der Institute</font><br>";
 	echo "&nbsp; <select name=\"InstitutMembers\">";
 	$db=new DB_Seminar;
@@ -229,47 +238,48 @@ function PrintInstitutMembers ()
 }
 
 
-// Abfrage der Formulare und Aktionen
 
-//	echo $range_id;
+// Funktionen zum veraendern der Gruppen
 
-	// neue Statusgruppe hinzufuegen
-
-	if (($cmd=="add_new_statusgruppe") && ($new_statusgruppe_name != "")) {
-		$statusgruppe_id = MakeUniqueID();
-		$mkdate = time();
-		$chdate = time();
-		$db=new DB_Seminar;
-		$db->query ("SELECT position FROM statusgruppen WHERE range_id = '$range_id' ORDER BY position DESC");
-		if ($db->next_record()) {
-			$position = $db->f("position")+1;
-		} else {
-			$position = "1";
-		}
-		$db->query("INSERT INTO statusgruppen SET statusgruppe_id = '$statusgruppe_id', name = '$new_statusgruppe_name', range_id= '$range_id', position='$position', size = '$new_statusgruppe_size', mkdate = '$mkdate', chdate = '$chdate'");
-	}
-
-	// bestehende Statusgruppe editieren
-
-	if (($cmd=="edit_existing_statusgruppe") && ($new_statusgruppe_name != "")) {
-		$chdate = time();
-		$db=new DB_Seminar;
-		$db->query("UPDATE statusgruppen SET name = '$new_statusgruppe_name', size = '$new_statusgruppe_size', chdate = '$chdate' WHERE statusgruppe_id = '$edit_id'");
-	}
-	
-	// bestehende Statusgruppe in Textfeld
-	
-	if ($cmd=="move_old_statusgruppe")  {
-		$statusgruppe_name = $move_old_statusgruppe;		
+function AddNewStatusgruppe ($new_statusgruppe_name, $range_id, $new_statusgruppe_size)
+{
+	$statusgruppe_id = MakeUniqueID();
+	$mkdate = time();
+	$chdate = time();
+	$db=new DB_Seminar;
+	$db->query ("SELECT position FROM statusgruppen WHERE range_id = '$range_id' ORDER BY position DESC");
+	if ($db->next_record()) {
+		$position = $db->f("position")+1;
 	} else {
-		$statusgruppe_name = "Name der Gruppe";
+		$position = "1";
 	}
+	$db->query("INSERT INTO statusgruppen SET statusgruppe_id = '$statusgruppe_id', name = '$new_statusgruppe_name', range_id= '$range_id', position='$position', size = '$new_statusgruppe_size', mkdate = '$mkdate', chdate = '$chdate'");
+} 
 
-	// zuordnen von Personen zu einer Statusgruppe
+function EditStatusgruppe ($new_statusgruppe_name, $new_statusgruppe_size, $edit_id)
+{
+	$chdate = time();
+	$db=new DB_Seminar;
+	$db->query("UPDATE statusgruppen SET name = '$new_statusgruppe_name', size = '$new_statusgruppe_size', chdate = '$chdate' WHERE statusgruppe_id = '$edit_id'");
+}
 
-	if ($cmd=="move_person" && ($AktualMembers !="" || $InstitutMembers !="---" || $Freesearch !=""))  {
+function InsertPersonStatusgruppe ($user_id, $statusgruppe_id)
+{
+	$db=new DB_Seminar;
+	$db->query("SELECT * FROM statusgruppe_user WHERE statusgruppe_id = '$statusgruppe_id' AND user_id = '$user_id'");
+	if (!$db->next_record()) {			
+		$db->query("INSERT INTO statusgruppe_user SET statusgruppe_id = '$statusgruppe_id', user_id = '$user_id'");
+		$writedone = TRUE;
+	} else {
+		$writedone = FALSE;
+	}
+	return $writedone;
+}
+
+
+function MovePersonStatusgruppe ($range_id, $AktualMembers="", $InstitutMembers="", $Freesearch="")
+{ global $HTTP_POST_VARS;
 		while (list($key, $val) = each ($HTTP_POST_VARS)) {
-//			echo "<b>$key</b>: $val<br>";
 			$statusgruppe_id = substr($key, 0, -2);
 		}
 		$db=new DB_Seminar;
@@ -278,26 +288,21 @@ function PrintInstitutMembers ()
 		if ($AktualMembers != "") {
 			for ($i  = 0; $i < sizeof($AktualMembers); $i++) {
 				$user_id = get_userid($AktualMembers[$i]);
-				$db->query("SELECT * FROM statusgruppe_user WHERE statusgruppe_id = '$statusgruppe_id' AND user_id = '$user_id'");
-				if (!$db->next_record()) {
-					$db2->query("INSERT INTO statusgruppe_user SET statusgruppe_id = '$statusgruppe_id', user_id = '$user_id'");
-				}
+				InsertPersonStatusgruppe ($user_id, $statusgruppe_id);
 			}
 		}
 		if (isset($InstitutMembers) && $InstitutMembers != "---") {
 			$user_id = get_userid($InstitutMembers);
-			$db->query("SELECT * FROM statusgruppe_user WHERE statusgruppe_id = '$statusgruppe_id' AND user_id = '$user_id'");
-			if (!$db->next_record()) {			
-				$db->query("INSERT INTO statusgruppe_user SET statusgruppe_id = '$statusgruppe_id', user_id = '$user_id'");
+			$writedone = InsertPersonStatusgruppe ($user_id, $statusgruppe_id);
+			if ($writedone ==TRUE) {
 				$db->query("INSERT INTO seminar_user SET Seminar_id = '$range_id', user_id = '$user_id', status = 'autor', gruppe = '6' , mkdate = '$mkdate'");
 			}
 		}
 		if ($Freesearch != "") {
 			for ($i  = 0; $i < sizeof($Freesearch); $i++) {
 				$user_id = get_userid($Freesearch[$i]);
-				$db->query("SELECT * FROM statusgruppe_user WHERE statusgruppe_id = '$statusgruppe_id' AND user_id = '$user_id'");
-				if (!$db->next_record()) {
-					$db2->query("INSERT INTO statusgruppe_user SET statusgruppe_id = '$statusgruppe_id', user_id = '$user_id'");
+				$writedone = InsertPersonStatusgruppe ($user_id, $statusgruppe_id);
+				if ($writedone==TRUE) {
 					if (get_object_type($range_id) == "sem") {
 						$db2->query("INSERT INTO seminar_user SET Seminar_id = '$range_id', user_id = '$user_id', status = 'autor', gruppe = '6' , mkdate = '$mkdate'");
 					} elseif (get_object_type($range_id) == "inst") {
@@ -312,57 +317,106 @@ function PrintInstitutMembers ()
 				}
 			}
 		}
+}
+
+function RemovePersonStatusgruppe ($username, $statusgruppe_id)
+{
+	$user_id = get_userid($username);
+	$db=new DB_Seminar;
+	$db->query("DELETE FROM statusgruppe_user WHERE statusgruppe_id = '$statusgruppe_id' AND user_id = '$user_id'");
+}
+
+function DeleteStatusgruppe ($statusgruppe_id)
+{
+	$db=new DB_Seminar;
+	$db->query("SELECT position, range_id FROM statusgruppen WHERE statusgruppe_id = '$statusgruppe_id'");
+	if ($db->next_record()) {
+		$position = $db->f("position");
+		$range_id = $db->f("range_id");
+	}
+	$db=new DB_Seminar;
+	$db->query("DELETE FROM statusgruppe_user WHERE statusgruppe_id = '$statusgruppe_id'");
+	$db->query("DELETE FROM statusgruppen WHERE statusgruppe_id = '$statusgruppe_id'");
+
+	// Neusortierung
+		
+	$db->query("SELECT * FROM statusgruppen WHERE range_id = '$range_id' AND position > '$position'");
+	while ($db->next_record()) {
+		$new_position = $db->f("position")-1;
+		$statusgruppe_id = $db->f("statusgruppe_id");
+		$db2=new DB_Seminar;
+		$db2->query("UPDATE statusgruppen SET position =  '$new_position' WHERE statusgruppe_id = '$statusgruppe_id'");
+	}
+}
+
+function SwapStatusgruppe ($statusgruppe_id)
+{
+	$db=new DB_Seminar;
+	$db->query("SELECT * FROM statusgruppen WHERE statusgruppe_id = '$statusgruppe_id'");
+	if ($db->next_record()) {
+		$current_position = $db->f("position");
+		$range_id = $db->f("range_id");
+		$next_position = $current_position + 1;
+		$db2=new DB_Seminar;
+		$db2->query("UPDATE statusgruppen SET position =  '$next_position' WHERE statusgruppe_id = '$statusgruppe_id'");
+		$db2->query("UPDATE statusgruppen SET position =  '$current_position' WHERE range_id = '$range_id' AND position = '$next_position' AND statusgruppe_id != '$statusgruppe_id'");
+	}
+}
+
+// Ende Funktionen
+
+
+// Abfrage der Formulare und Aktionen
+
+	// neue Statusgruppe hinzufuegen
+
+	if (($cmd=="add_new_statusgruppe") && ($new_statusgruppe_name != "")) {
+		AddNewStatusgruppe ($new_statusgruppe_name, $range_id, $new_statusgruppe_size);
+	}
+
+	// bestehende Statusgruppe editieren
+
+	if (($cmd=="edit_existing_statusgruppe") && ($new_statusgruppe_name != "")) {
+		EditStatusgruppe ($new_statusgruppe_name, $new_statusgruppe_size, $edit_id);
 	}
 	
+	// bestehende Statusgruppe in Textfeld
+	
+	if ($cmd=="move_old_statusgruppe")  {
+		$statusgruppe_name = $move_old_statusgruppe;		
+	} else {
+		$statusgruppe_name = "Name der Gruppe";
+	}
+
+	// zuordnen von Personen zu einer Statusgruppe
+	if ($cmd=="move_person" && ($AktualMembers !="" || $InstitutMembers !="---" || $Freesearch !=""))  {
+		MovePersonStatusgruppe ($range_id, $AktualMembers, $InstitutMembers, $Freesearch);
+	}
+
 	// Entfernen von Personen aus einer Statusgruppe
-	
+
 	if ($cmd=="remove_person") {
-		$user_id = get_userid($username);
-		$db=new DB_Seminar;
-		$db->query("DELETE FROM statusgruppe_user WHERE statusgruppe_id = '$statusgruppe_id' AND user_id = '$user_id'");
+		RemovePersonStatusgruppe ($username, $statusgruppe_id);	
 	}
-	
+
 	// Entfernen von Statusgruppen
 
 	if ($cmd=="remove_statusgruppe") {
-		$db=new DB_Seminar;
-		$db->query("SELECT position FROM statusgruppen WHERE statusgruppe_id = '$statusgruppe_id'");
-		if ($db->next_record()) {
-			$position = $db->f("position");
-		}
-		$db=new DB_Seminar;
-		$db->query("DELETE FROM statusgruppe_user WHERE statusgruppe_id = '$statusgruppe_id'");
-		$db->query("DELETE FROM statusgruppen WHERE statusgruppe_id = '$statusgruppe_id'");
-
-		// Neusortierung
-		
-		$db->query("SELECT * FROM statusgruppen WHERE range_id = '$range_id' AND position > '$position'");
-		while ($db->next_record()) {
-			$new_position = $db->f("position")-1;
-			$statusgruppe_id = $db->f("statusgruppe_id");
-			$db2=new DB_Seminar;
-			$db2->query("UPDATE statusgruppen SET position =  '$new_position' WHERE statusgruppe_id = '$statusgruppe_id'");
-		}
+		DeleteStatusgruppe ($statusgruppe_id);	
 	}
-	
+
 	// Aendern der Position
 
 	if ($cmd=="swap") {
-		$db->query("SELECT * FROM statusgruppen WHERE statusgruppe_id = '$statusgruppe_id'");
-		if ($db->next_record()) {
-			$current_position = $db->f("position");
-			$next_position = $current_position + 1;
-			$db2=new DB_Seminar;
-			$db2->query("UPDATE statusgruppen SET position =  '$next_position' WHERE statusgruppe_id = '$statusgruppe_id'");
-			$db2->query("UPDATE statusgruppen SET position =  '$current_position' WHERE range_id = '$range_id' AND position = '$next_position' AND statusgruppe_id != '$statusgruppe_id'");
-		}
+		SwapStatusgruppe ($statusgruppe_id);	
 	}
+
 
 // Ende Abfrage Formulare
 
 
+// fehlende Werte holen
 
-// Beginn Darstellungsteil
 
 	if (get_object_type($range_id) == "sem") {
 		$view = "statusgruppe_sem";
@@ -382,11 +436,15 @@ function PrintInstitutMembers ()
 			$tmp_typ = "Veranstaltung"; 
 		} else {
 			$tmp_typ = $SEM_TYPE[$db->f("status")]["name"];
-			$tmp_class = $SEM_TYPE[$db->f("status")]["class"];
+			$veranstaltung_class = $SEM_TYPE[$db->f("status")]["class"];
 		}
 	}
 
 	$tmp_name=$db->f("Name");
+
+
+
+// Beginn Darstellungsteil
 
 // Anfang Edit-Bereich
 
@@ -409,7 +467,7 @@ function PrintInstitutMembers ()
 	 	<?
 	 	echo"<input type=\"HIDDEN\" name=\"range_id\" value=\"$range_id\">&nbsp; ";
       	  	echo"<input type=\"HIDDEN\" name=\"view\" value=\"$view\"><font size=\"2\">Vorlagen:</font>&nbsp; ";
-		GetPresetGroups (); 
+		GetPresetGroups ($view,$veranstaltung_class); 
 		printf ("&nbsp; <input type=\"IMAGE\" src=\"./pictures/move.gif\" border=\"0\" %s>&nbsp;  ", tooltip("in Namesnsfeld uebernehmen"));
 	        ?>
 	        </form>
@@ -487,13 +545,13 @@ if ($db->num_rows()>0) {   // haben wir schon Gruppen? dann Anzeige
 		<br><br>
 		<?
 		if (get_object_type($range_id) == "sem") {
-			PrintInstitutMembers ();
+			PrintInstitutMembers ($range_id);
 		}
 		?>
        	   <br><br>
 		<?
 		if ($search_exp) {
-			PrintSearchResults($search_exp);
+			PrintSearchResults($search_exp, $range_id);
 			printf ("<input type=\"IMAGE\" name=\"search\" src= \"./pictures/rewind.gif\" border=\"0\" value=\" Personen suchen\" %s>&nbsp;  ", tooltip("neue Suche"));
 		} else {
 			echo "<font size=\"-1\">&nbsp; freie Personensuche</font><br>";
@@ -508,8 +566,8 @@ if ($db->num_rows()>0) {   // haben wir schon Gruppen? dann Anzeige
 ?>   
 <? // Anfang Gruppenuebersicht
     
-    printf ("<td class=\"blank\" width=\"50%%\" align=\"center\" valign=\"top\">");
-	PrintAktualStatusgruppen ();
+    	printf ("<td class=\"blank\" width=\"50%%\" align=\"center\" valign=\"top\">");
+	PrintAktualStatusgruppen ($range_id, $view, $edit_id);
 	?>
 	<br>&nbsp; 
     </td>
