@@ -985,7 +985,7 @@ function dateAssi ($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full =
 					
 					//insert/update dates
 					if ($saved_dates[$affected_dates]) 
-						$query2 = "UPDATE termine SET autor_id='$user->id', date='$start_time', chdate='$aktuell', end_time='$end_time', raum='$room' WHERE termin_id = '".$saved_dates[$affected_dates]."' ";
+						$query2 = "UPDATE termine SET date='$start_time', chdate='$aktuell', end_time='$end_time', raum='$room' WHERE termin_id = '".$saved_dates[$affected_dates]."' ";
 					else
 						$query2 = "INSERT INTO termine SET termin_id='$date_id', range_id='$sem_id', autor_id='$user->id', content='" . _("Kein Titel") . "', date='$start_time', mkdate='$aktuell', chdate='$aktuell', date_typ='$date_typ', topic_id='$topic_id', end_time='$end_time', raum='$room' ";
 					$db2->query($query2);
@@ -1015,11 +1015,11 @@ function dateAssi ($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full =
 						$db->next_record();
 						
 						//change topic
-						$db2->query("UPDATE px_topics SET name='".$TERMIN_TYP[$date_typ]["name"].": ".$db->f("content")." " . _("am") . " ".date("d.m.Y ", $start_time)."', author='$author', user_id='".$user->id."', chdate='$aktuell' WHERE topic_id='".$db->f("topic_id")." '");
+						$db2->query("UPDATE px_topics SET name='".$TERMIN_TYP[$date_typ]["name"].": ".$db->f("content")." " . _("am") . " ".date("d.m.Y ", $start_time)."', chdate='$aktuell' WHERE topic_id='".$db->f("topic_id")." '");
 					
 						//change folder
 						$titel = sprintf (_("%s: %s am %s"), $TERMIN_TYP[$date_typ]["name"], $db->f("content"), date("d.m.Y", $start_time));
-						$db2->query("UPDATE folder SET user_id='$user->id', name='$titel', chdate='$aktuell' WHERE range_id = '".$saved_dates[$affected_dates-1]."' ");
+						$db2->query("UPDATE folder SET name='$titel', chdate='$aktuell' WHERE range_id = '".$saved_dates[$affected_dates-1]."' ");
 					}
 				}
 			}
