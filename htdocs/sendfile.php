@@ -33,6 +33,9 @@
 if (ini_get('zlib.output_compression')){
 	@ini_set('zlib.output_compression','0');
 }
+if (!ini_get('allow_url_fopen')){
+	@ini_set('allow_url_fopen','1');
+}
 $dont_put_headers=TRUE;
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 
@@ -40,7 +43,7 @@ require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/datei.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
-require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'] . "/lib/classes/StudipLitList.class.php");
+require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/StudipLitList.class.php");
 
 $db=new DB_Seminar;
 $db2=new DB_Seminar;
