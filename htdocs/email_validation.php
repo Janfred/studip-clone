@@ -1,6 +1,6 @@
 <?php
 /*
-email_validation.php - Hochstufung eines user auf Status aurtor, wenn erfolgreich per Mail zurueckgemeldet
+email_validation.php - Hochstufung eines user auf Status autor, wenn erfolgreich per Mail zurueckgemeldet
 Copyright (C) 2001 Stefan Suchi <suchi@gmx.de>
 
 This program is free software; you can redistribute it and/or
@@ -18,41 +18,26 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-  page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
-     $auth->login_if($auth->auth["uid"] == "nobody");
-  $perm->check("user");
+page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
+$auth->login_if($auth->auth["uid"] == "nobody");
+$perm->check("user");
 // nobody hat hier nix zu suchen...
 
-	$magic     = "dsdfjhgretha";  // Challenge seed.
+include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+
+// -- here you have to put initialisations for the current page
+
+$magic     = "dsdfjhgretha";  // Challenge seed.
 // MUSS IDENTISCH ZU DEM IN SEMINAR_REGISTER_AUTH IN LOCAL.INC SEIN!
 
-?>
+// Start of Output
+include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
+include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 
-<html>
- <head>
-<!--
-// here i include my personal meta-tags; one of those might be useful:
-// <META HTTP-EQUIV="REFRESH" CONTENT="<?php print $auth->lifetime*60;?>; URL=logout.php">
--->
-  <title>Stud.IP</title>
-	<link rel="stylesheet" href="style.css" type="text/css">
- </head>
-
-<body bgcolor="#ffffff">
-
-<?php
-	include "seminar_open.php"; //hier werden die sessions initialisiert
-
-// -- hier muessen Seiten-Initialisierungen passieren -->
-
-	require_once("msg.inc.php");
-	require_once("config.inc.php"); 
-	include "header.php";   //hier wird der "Kopf" nachgeladen
+require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php"); 
 
 ?>
-<body>
 <br>
 
 <table width="100%" border=0 cellpadding=0 cellspacing=0>

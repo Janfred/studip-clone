@@ -18,39 +18,25 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-	page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
+page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 	
-require_once("msg.inc.php");
-require_once("datei.inc.php");
-require_once("visual.inc.php");
-require_once("config.inc.php");
-require_once("functions.php");
+include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
-?>
-
-<html>
-<head>
-<?
-		//JS Routinen einbinden, wenn benoetigt. Wird in der Funktion gecheckt, ob noetig...
-		JS_for_upload();
-
-?>
-
-<!--
-// here i include my personal meta-tags; one of those might be useful:
-// <META HTTP-EQUIV="REFRESH" CONTENT="<?php print $auth->lifetime*60;?>; URL=logout.php">
--->
-	<title>Stud.IP</title>
-	<link rel="stylesheet" href="style.css" type="text/css">
-</head>
-<body bgcolor="#ffffff" onUnLoad="upload_end()">
-
-<?
-
-include "seminar_open.php"; //hier werden die sessions initialisiert
-include "header.php";   //hier wird der "Kopf" nachgeladen
+// -- here you have to put initialisations for the current page
+require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/datei.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
 
 $sess->register("folder_system_data");
+
+// Start of Output
+include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
+//JS Routinen einbinden, wenn benoetigt. Wird in der Funktion gecheckt, ob noetig...
+JS_for_upload();
+include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+
 
 //Switch fuerr die Ansichten
 if ($cmd=="tree") {
@@ -194,56 +180,6 @@ if ($close) {
 		$folder_system_data["open"]=substr($folder_system_data["open"], 32, strlen($folder_system_data["open"])); 	
 	}
 
-// Funktion zur Anzeige aller Dateien (alt - aber man wei&szlig; ja nie...)
-
-/*
-function show_all()
-{
-global $cmd,$PHP_SELF,$user,$auth,$rechte,$range_id;
-$result="<tr><td class=\"blank\">&nbsp;</td></tr>";
-$db=new DB_Seminar;
-$i=0;
-//Auslesen aller Dokumente an Terminen in Array
-$db->query ("SELECT dokument_id, dokumente.description, filename, dokumente.mkdate, filesize, dokumente.user_id, username, Nachname  FROM dokumente LEFT JOIN termine ON termine.termin_id = dokumente.range_id LEFT JOIN auth_user_md5 ON auth_user_md5.user_id = dokumente.user_id WHERE termine.range_id = '$range_id'");
-while ($db->next_record())
-	{
-	$dbresult[$i]=array("mkdate"=>$db->f("mkdate"), "dokument_id"=>$db->f("dokument_id"), "description"=>$db->f("description"), "filename"=>$db->f("filename"), "filesize"=>$db->f("filesize"),"user_id"=> $db->f("user_id"), "username"=>$db->f("username"), "nachname"=>$db->f("Nachname"));
-	$i++;
-	}
-//Auslesen der globalen Seminardokumente
-$db->query ("SELECT dokument_id, dokumente.description, filename, mkdate, filesize, dokumente.user_id, username, Nachname  FROM dokumente LEFT JOIN auth_user_md5 USING (user_id) WHERE dokumente.range_id = '$range_id'");
-while ($db->next_record())
-	{
-	$dbresult[$i]=array("mkdate"=>$db->f("mkdate"), "dokument_id"=>$db->f("dokument_id"), "description"=>$db->f("description"), "filename"=>$db->f("filename"), "filesize"=>$db->f("filesize"),"user_id"=> $db->f("user_id"), "username"=>$db->f("username"), "nachname"=>$db->f("Nachname"));	$i++;
-	}
-if (!sizeof($dbresult)==0)
-{
-rsort ($dbresult);
-for ($i=0; $i<sizeof($dbresult); $i++)
-	{
-	$page =rawurlencode ($dbresult[$i]["filename"]);
-	$doc_id = $dbresult[$i]["dokument_id"];
-	$sizetmp = $dbresult[$i]["filesize"];
-	$sizetmp = ROUND($sizetmp / 1024);
-	$size = "(".$sizetmp." KB)";
-
-       $result=$result."<tr><td class='blank'><a href=upload_doc/". $doc_id ."/". $page ."><img src=\"pictures/file2.gif\" alt=\"". $dbresult[$i]["filename"]."\" border=\"0\"></a></td>".
-	    "<td class='blank'></td><td width='90%'><font size=\"-1\">&nbsp;".$dbresult[$i]["description"]."&nbsp;".$size."</td><td><font size=\"-1\">".
-	    "<a href = about.php?username=".$dbresult[$i]["username"] .">&nbsp;".$dbresult[$i]["nachname"] ."&nbsp;</a>".
-	    "</td><td><font size=\"-1\">&nbsp;".date("d.m.", $dbresult[$i]["date"])."</td>";
-
-	if (($rechte) || ($dbresult[$i]["user_id"] == $auth->auth["uid"]))
-		{
-		$result=$result."<td class='blank'><a href='".$PHP_SELF."?cmd=kill&name=".$dbresult[$i]["filename"]."&doc_id=".$dbresult[$i]["dokument_id"]."'>&nbsp;<img src='pictures/trash.gif' alt='Datei \"".$dbresult[$i]["filename"]."\" l&ouml;schen' border='0''></a></td>";
-		}
-	else { $result=$result."<td class='blank'>&nbsp;</td>";}
-	$result=$result."</tr>";
-	}
-}
-$result=$result."</table>";
-return $result;
-}
-*/
 // Hauptteil
 
  if (!isset($range_id)) $range_id = $SessionSeminar ;
