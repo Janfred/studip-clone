@@ -58,7 +58,7 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" =>
 		
 		if ($new_msg){
 			//load the data from new messages
-			$query =  "SELECT message.message_id, message_user.mkdate, autor_id, message, subject 
+			$query =  "SELECT message.message_id, message.mkdate, autor_id, message, subject 
 			FROM message_user LEFT JOIN message USING (message_id)
 			WHERE deleted = 0 AND message_user.readed = 0 AND snd_rec = 'rec' AND message_user.user_id ='".$user->id."' 
 			ORDER BY message.mkdate";
