@@ -1,3 +1,8 @@
+12.10.2002 v 0.8.15 ;-)
+- neue Verwaltungsebene Funktionen / Gruppen, verwendbar für Einrichtungen und Veranstaltungen
+- Anpassungen für die Funktionalität von Veranstaltungen als "Work Groups"
+- weitere Detailverbesserungen und Bugfixes
+
 31.08.2002 v 0.8 release candidate 3
 - Verschieben von Postings in andere Einrichtungen nun möglich
 - neues Wartungstool um die Integrität der Datenbank zu testen und wiederherzustellen
