@@ -1233,6 +1233,41 @@ function getMetadateCorrespondingDates ($sem_id, $presence_dates_only) {
 }
 
 /**
+* this functions checks, if a date corresponds with a metadate
+*
+* @param		string	termin_id
+* @return		boolean	TRUE, if the date corresponds to a metadate
+*
+*/
+function isMetadateCorrespondingDate ($termin_id) {
+	$db = new DB_Seminar;
+	
+	//first, we load all dates that exists
+	$query = sprintf("SELECT termin_id, date, end_time, range_id FROM termine WHERE termin_id ='%s' ", $termin_id);
+	$db->query($query);
+	$db->next_record();
+	
+	$semObj = new Seminar($db->f("range_id"));
+
+	//than we check, if the date matches a metadate
+	foreach ($semObj->getMetaDates() as $key=>$val) {
+		//compense php sunday = 0 bullshit
+		if ($val["day"] == 7)
+			$t_day = 0;
+		else
+			$t_day = $val["day"];
+		
+		if ((date("w", $db->f("date")) == $t_day) &&
+			(date("G", $db->f("date")) == $val["start_hour"]) &&
+			(date("i", $db->f("date")) == $val["start_minute"]) &&
+			(date("G", $db->f("end_time")) == $val["end_hour"]) &&
+			(date("i", $db->f("end_time")) == $val["end_minute"]))
+			$result = TRUE;
+	}
+	return $result;
+}
+
+/**
 * a small helper funktion to get the type query for "Sitzungstermine"
 * (this dates are important to get he regularly, presence dates
 * for a seminar
