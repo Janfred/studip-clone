@@ -85,7 +85,7 @@ class ShowObject {
 				if ($view_mode == "no_nav")
 					print $this->resObject->getOwnerName(TRUE);
 				else
-					print "<a href=\"".$this->resObject->getOwnerLink()."\">".$this->resObject->getOwnerName(TRUE)."</a>"
+					print "<a href=\"".$this->resObject->getOwnerLink()."\">".$this->resObject->getOwnerName(TRUE)."</a>";
 				?>
 				</font>
 				</td>
