@@ -157,7 +157,7 @@ if (($sem_browse_data["cmd"]=="xts"))
 			{
 			echo "<option";			
 			if (($sem_browse_data["s_sem"]==$SEMESTER[$i]["name"]) || ((!$sem_browse_data["s_sem"]) && ((($SEMESTER[$i]["name"] == $SEM_NAME_NEXT) && ($VORLES_ENDE < time())) ||  (($SEMESTER[$i]["name"] == $SEM_NAME) && ($SEM_BEGINN < time())))))
-				echo" selected";
+				echo" selected ";
 			echo ">", $SEMESTER[$i]["name"], "</option>";
 			}
 	if ($sem_browse_data["s_sem"]=="alle")
