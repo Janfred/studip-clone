@@ -84,7 +84,7 @@ $_the_clipboard =& StudipLitClipBoard::GetInstance();
 $_the_clip_form =& $_the_clipboard->getFormObject();
 
 
-if ( ($lists = $_the_tree->getListIds()) ){
+if ( ($lists = $_the_tree->getListIds()) && $_the_clipboard->getNumElements()){
 	for ($i = 0; $i < count($lists); ++$i){
 		$_the_clip_form->form_fields['clip_cmd']['options'][] 
 		= array('name' => htmlReady(my_substr(sprintf(_("In \"%s\" eintragen"), $_the_tree->tree_data[$lists[$i]]['name']),0,50)),
@@ -94,13 +94,17 @@ if ( ($lists = $_the_tree->getListIds()) ){
 
 if ($_the_clip_form->isClicked("clip_ok")){
 	$clip_cmd = explode("_",$_the_clip_form->getFormFieldValue("clip_cmd"));
-	if ($clip_cmd[0] == "ins" && is_array($_the_clip_form->getFormFieldValue("clip_content"))){
-		$inserted = $_the_tree->insertElementBulk($_the_clip_form->getFormFieldValue("clip_content"), $clip_cmd[1]);
-		if ($inserted){
-			$_the_tree->init();
-			$_the_treeview->open_ranges[$clip_cmd[1]] = true;
-			$_msg .= "msg§" . sprintf(_("%s Eintr&auml;ge aus ihrer Merkliste wurden in <b>%s</b> eingetragen."),
-										$inserted, htmlReady($_the_tree->tree_data[$clip_cmd[1]]['name'])) . "§";
+	if ($clip_cmd[0] == "ins"){
+		if (is_array($_the_clip_form->getFormFieldValue("clip_content"))){
+			$inserted = $_the_tree->insertElementBulk($_the_clip_form->getFormFieldValue("clip_content"), $clip_cmd[1]);
+			if ($inserted){
+				$_the_tree->init();
+				$_the_treeview->open_ranges[$clip_cmd[1]] = true;
+				$_msg .= "msg§" . sprintf(_("%s Eintr&auml;ge aus ihrer Merkliste wurden in <b>%s</b> eingetragen."),
+				$inserted, htmlReady($_the_tree->tree_data[$clip_cmd[1]]['name'])) . "§";
+			} 
+		} else {
+			$_msg .= "info§" . _("Sie haben keinen Eintrag in ihrer Merkliste ausgew&auml;hlt!") . "§";
 		}
 	}
 	$_the_clipboard->doClipCmd();
