@@ -83,7 +83,11 @@ class VoteDB extends StudipObject {
     * @returns array    All active voteID's
     */
    function getNewVotes ($rangeID) {
-
+	
+	// convert username to userID
+	if ($id = get_userID($rangeID))
+		$rangeID = $id;
+   
       $result = array ();
       $query = "SELECT * FROM vote WHERE range_id=\"".$rangeID."\" AND ".
 	"state = \"new\" ORDER BY chdate DESC";
@@ -112,7 +116,11 @@ class VoteDB extends StudipObject {
     * @returns array    All active voteID's
     */
    function getActiveVotes ($rangeID) {
-
+	
+	// convert username to userID
+	if ($id = get_userID($rangeID))
+		$rangeID = $id;
+		
       $result = array ();
       $query = "SELECT * FROM vote WHERE range_id=\"".$rangeID."\" AND ".
 	"state = \"active\" ORDER BY chdate DESC";
@@ -142,7 +150,11 @@ class VoteDB extends StudipObject {
     * @returns array    All active voteID's
     */
    function getStoppedVisibleVotes ($rangeID) {
-
+	
+	// convert username to userID
+	if ($id = get_userID($rangeID))
+		$rangeID = $id;
+		
       $result = array ();
 
       $query = "SELECT * FROM vote WHERE range_id=\"".$rangeID."\" AND ".
@@ -170,6 +182,11 @@ class VoteDB extends StudipObject {
     * @returns array    All voteID's of stopped votes
     */
    function getStoppedVotes ($rangeID) {
+	
+	// convert username to userID
+	if ($id = get_userID($rangeID))
+		$rangeID = $id;
+		
      $result = array ();
      $query = "SELECT * FROM vote WHERE range_id=\"".$rangeID."\" AND ".
        "state = \"stopvis\" OR state = \"stopinvis\" ORDER BY chdate DESC";
@@ -195,6 +212,11 @@ class VoteDB extends StudipObject {
     * @returns array    All active voteID's
     */ 
    function getNewUserVotes ($authorID, $rangeID = NULL) {
+	
+	// convert username to userID
+	if ($id = get_userID($rangeID))
+		$rangeID = $id;
+		
       $result = array ();
       if($rangeID != NULL)
 	$query = "SELECT * FROM vote WHERE author_id=\"".$authorID."\" AND ".
@@ -226,6 +248,11 @@ class VoteDB extends StudipObject {
     * @returns array    All active voteID's
     */
    function getActiveUserVotes ($authorID, $rangeID = NULL) {
+	
+	// convert username to userID
+	if ($id = get_userID($rangeID))
+		$rangeID = $id;
+		
       $result = array ();
       if($rangeID == NULL)
 	$query = "SELECT * FROM vote WHERE author_id=\"".$authorID."\" AND ".
@@ -256,6 +283,11 @@ class VoteDB extends StudipObject {
     * @returns array    All active voteID's
     */
    function getStoppedUserVotes ($authorID, $rangeID = NULL) {
+	
+	// convert username to userID
+	if ($id = get_userID($rangeID))
+		$rangeID = $id;
+		
       $result = array ();
 	  if($rangeID == NULL)
       $query = "SELECT * FROM vote WHERE author_id=\"".$authorID."\" AND ".
@@ -804,7 +836,11 @@ class VoteDB extends StudipObject {
 		       $chdate, $resultvisibility, $multiplechoice,
 		       $anonymous, $answerarray, $changeable,
 		       $co_visibility = NULL, $type) {
-
+	
+	  // convert username to userID
+	  if ($id = get_userID($rangeID))
+		$rangeID = $id;
+		  
       if ($startTime == NULL) $startTime="NULL";
       if ($endTime == NULL) $endTime="NULL";
       if ($timespan == NULL) $timespan="NULL";
