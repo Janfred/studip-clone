@@ -1400,18 +1400,18 @@ function getPresenceTypeClause() {
 
 
 /**
-* Javascript für Eingabehilfe und popup-Kalender
+* Javascript für TerminEingabeHilfe und popup-Kalender
 *
-* Beim ersten Aufruf werden alle benötigten js Funktionen
+* Beim ersten Aufruf werden alle benötigten js-Funktionen
 * und die Linkzeile zurückgegeben. Bei allen weiteren Aufrufen enthält
 * der Rückgabewert nur noch die Linkzeile.
 *
 * @param	int	Werte von 1 bis 6, bestimmt welche Formularfeldnamen verwendet werden
-* @param	int	counter wenn mehrere Termin Zeilen auf einer Seite
-* @param	string	ursprüngliche Startstunde (Wert für ESC Taste)
-* @param	string	ursprüngliche Startminute (Wert für ESC Taste)
-* @param	string	ursprüngliche Endstunde (Wert für ESC Taste)
-* @param	string	ursprüngliche Endminute (Wert für ESC Taste)
+* @param	int	counter wenn mehrere TerminZeilen auf einer Seite
+* @param	string	ursprüngliche StartStunde (Wert für ESC Taste)
+* @param	string	ursprüngliche StartMinute (Wert für ESC Taste)
+* @param	string	ursprüngliche EndStunde (Wert für ESC Taste)
+* @param	string	ursprüngliche EndMinute (Wert für ESC Taste)
 * @return	string	JavaScriptCode
 *
 */
@@ -1477,15 +1477,24 @@ function set_sem_time(t, nn, ss,sm,es,em){
 
 
 function write_js_zeile(t2, nn2, ss2, sm2, es2, em2){
-  var tx = '';
+  var xx = 640;
+  if (window.outerWidth)
+  	xx = window.outerWidth;
+  else
+  	if (screen.width)
+  		xx = screen.width;
+  var tx = '<tt>&lt;&#8212;</tt><font size="-'+((xx > 1000 )?2:1)+'">&nbsp;';
 EOT;
 		for($z = 0; $z < count($zz); $z++) {
-			$jszeit =  $zz[$z][0].':'.$zz[$z][1].'&nbsp;-&nbsp;'.$zz[$z][2].':'.$zz[$z][3] .'&nbsp;' . _('Uhr') . '&nbsp;' . _('eintragen');
-			$jstxt .= '  tx = tx + \'<a href="javascript:set_sem_time(\' + t2 + \', \' + nn2 + \',\\\''.$zz[$z][0].'\\\', \\\''.$zz[$z][1].'\\\', \\\''.$zz[$z][2].'\\\', \\\''.$zz[$z][3]. '\\\')" title="'. $jszeit .'">[ '. ($z + 1)  .". ]</a>&nbsp;';\n";
+			$jszeit =  $zz[$z][0].':'.$zz[$z][1].'&nbsp;-&nbsp;'.$zz[$z][2].':'.$zz[$z][3];
+			$jszeitc =  $jszeit .'&nbsp;' . _('Uhr') . '&nbsp;' . _('eintragen');
+			$jstxt .= '  tx = tx + \'[<a href="javascript:set_sem_time(\' + t2 + \', \' + nn2 + \',\\\''.$zz[$z][0].'\\\', \\\''.$zz[$z][1].'\\\', \\\''.$zz[$z][2].'\\\', \\\''.$zz[$z][3]. '\\\')" title="'. $jszeitc .'">\' + ((xx > 1000 && !ns4)?"'. $jszeit . '":" ' .($z + 1)  . '. ") + \'</a>]&nbsp;\';'. "\n";
 		}
 		$jstxt .= '  if (ss2 != "")'. "\n";
-		$jstxt .= '    tx = tx + \'<a href="javascript:set_sem_time(\' + t2 + \', \' + nn2 + \',\\\'\' + ss2 + \'\\\', \\\'\' + sm2 + \'\\\', \\\'\' + es2 + \'\\\', \\\'\' + em2 + \'\\\')" title="'._('zur&uuml;cksetzten auf').' \' + ss2 + \':\' + sm2 + \'&nbsp;-&nbsp;\' + es2 + \':\' + em2 + \'&nbsp;'. _('Uhr') .'">[ ' . _('Esc') . " ]</a>';\n";
-		$jstxt .= '  document.write(\' <font size="-1"><tt>&lt;&#8212;</tt> \' + tx + \' <a href="javascript:openKalenderWindow(\' + t2 + \', \' + nn2 + \');" title="'. _('Kalenderfenster &ouml;ffnen').'">[Kalender]</a></font>\');'. "\n";
+		$jstxt .= '    tx = tx + \'[<a href="javascript:set_sem_time(\' + t2 + \', \' + nn2 + \',\\\'\' + ss2 + \'\\\', \\\'\' + sm2 + \'\\\', \\\'\' + es2 + \'\\\', \\\'\' + em2 + \'\\\')" title="'._('zur&uuml;cksetzten auf').' \' + ss2 + \':\' + sm2 + \'&nbsp;-&nbsp;\' + es2 + \':\' + em2 + \'&nbsp;'. _('Uhr') .'">' . _('Reset') . "</a>]&nbsp;';\n";
+		$jstxt .= '  tx = tx + \'[<a href="javascript:openKalenderWindow(\' + t2 + \', \' + nn2 + \');" title="'. _('Kalenderfenster &ouml;ffnen').'">'._('Kalender').'</a>]\';'. "\n";
+		$jstxt .= '  tx = tx + "</font>";'. "\n";
+		$jstxt .= '  document.write( tx );'. "\n";
 		$jstxt .= '}' . "\n\n";
 
 		$jstxt .= 'function Kalender(t4, n4, Monat,Jahr) {' . "\n";
@@ -1545,7 +1554,7 @@ EOT;
 }
 
 function openKalenderWindow(t3, n3){
-	if (navigator.appName.indexOf("Netscape")== -1 && window["tf"]) window["tf"].close();
+	if (!ns4 && window["tf"]) window["tf"].close();
 	var tt = "";
 EOT2;
 		$jstxt .= "	tt = tt + '<html><head><title>"._('Kalender')."</title>\\n';";
@@ -1598,7 +1607,7 @@ EOT2;
 	window["tf"].document.write(tt);
 	window["tf"].focus();
 }
-
+  var ns4 = (navigator.appName.indexOf("Netscape")!= -1 && navigator.appVersion.substring(0,1) == "4")? 1 : 0;
   var jetzt = new Date();
   var DieserMonat = jetzt.getMonth() + 1;
   var DiesesJahr = jetzt.getYear();
