@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-03-28 16:47+0100\n"
+"POT-Creation-Date: 2003-04-02 14:44+0200\n"
 "PO-Revision-Date: 2003-03-24 17:27+0100\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
@@ -286,77 +286,87 @@ msgstr "End the recording:"
 msgid "Aufgezeichnet von: "
 msgstr "Recorded by:"
 
-#: chat/chat_func_inc.php:47
+#: chat/chat_func_inc.php:57
 msgid "Dieser Chatraum ist leer"
 msgstr "This chat room is empty"
 
-#: chat/chat_func_inc.php:49
+#: chat/chat_func_inc.php:59
 msgid "Sie haben eine gültige Einladung für diesen Chatraum"
 msgstr "You have a valid invitation to this chat room"
 
-#: chat/chat_func_inc.php:50 chat/chat_func_inc.php:54
-#: chat/chat_func_inc.php:174
+#: chat/chat_func_inc.php:60 chat/chat_func_inc.php:64
+#: chat/chat_func_inc.php:189
 msgid "Es ist eine Person in diesem Chatraum."
 msgstr "There is one person in this chat room."
 
-#: chat/chat_func_inc.php:50 chat/chat_func_inc.php:54
-#: chat/chat_func_inc.php:174
+#: chat/chat_func_inc.php:60 chat/chat_func_inc.php:64
+#: chat/chat_func_inc.php:189
 #, c-format
 msgid "Es sind %s Personen in diesem Chatraum"
 msgstr "There are %s people in this chat room"
 
-#: chat/chat_func_inc.php:52
+#: chat/chat_func_inc.php:62
 msgid "Sie sind alleine in diesem Chatraum"
 msgstr "You are alone in this chat room"
 
-#: chat/chat_func_inc.php:137
+#: chat/chat_func_inc.php:147
 msgid "Chatraum:"
 msgstr "Chat room:"
 
-#: chat/chat_func_inc.php:153
+#: chat/chat_func_inc.php:163
 msgid "Diesen Chatraum betreten"
 msgstr "Enter this chat room"
 
-#: chat/chat_func_inc.php:154
+#: chat/chat_func_inc.php:164
 #, c-format
 msgid "Sie k&ouml;nnen diesen Chatraum %sbetreten%s."
 msgstr "You can %senter%s this chat room. "
 
-#: chat/chat_func_inc.php:156
+#: chat/chat_func_inc.php:166
 msgid "(Sie wurden eingeladen.)"
 msgstr "(You have been invited.)"
 
-#: chat/chat_func_inc.php:159 chat/chat_func_inc.php:160
+#: chat/chat_func_inc.php:169 chat/chat_func_inc.php:170
 msgid "Sie haben diesen Chatraum bereits betreten."
 msgstr "You have already entered this chat room."
 
-#: chat/chat_func_inc.php:164
+#: chat/chat_func_inc.php:174
 msgid "Dieser Chatraum ist mit einem Passwort gesichert."
 msgstr "This chat room is secured with a password."
 
-#: chat/chat_func_inc.php:168
+#: chat/chat_func_inc.php:178
+#, fuzzy
+msgid "Diesen Chatraum leeren"
+msgstr "Enter this chat room"
+
+#: chat/chat_func_inc.php:179
+#, fuzzy, c-format
+msgid "Diesen Chatraum %sleeren%s"
+msgstr "This chat room is empty"
+
+#: chat/chat_func_inc.php:183
 msgid ""
 "Um diesen Chatraum zu betreten, brauchen sie eine g&uuml;ltige Einladung."
 msgstr "You need a valid invitation in order to enter this chat room."
 
-#: chat/chat_func_inc.php:172
+#: chat/chat_func_inc.php:187
 msgid "Dieser Chatraum ist leer."
 msgstr "This chat room is empty."
 
-#: chat/chat_func_inc.php:209
+#: chat/chat_func_inc.php:224
 msgid "Dieser User befindet sich in einem Chatraum."
 msgstr "This user is in a chat room."
 
-#: chat/chat_func_inc.php:209
+#: chat/chat_func_inc.php:224
 #, c-format
 msgid "Dieser User befindet sich in %s Chaträumen"
 msgstr "This user is in %s chat rooms"
 
-#: chat/chat_func_inc.php:216
+#: chat/chat_func_inc.php:231
 msgid "zum Chatten einladen"
 msgstr "invite to chat"
 
-#: chat/chat_func_inc.php:218
+#: chat/chat_func_inc.php:233
 msgid ""
 "Sie haben in keinem aktiven Chatraum die Berechtigung andere NutzerInnen "
 "einzuladen!"

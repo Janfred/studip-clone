@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-03-28 16:47+0100\n"
+"POT-Creation-Date: 2003-04-02 14:44+0200\n"
 "PO-Revision-Date: 2003-03-28 16:07+0100\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
@@ -126,8 +126,11 @@ msgstr ""
 "institute for downloading."
 
 #: extern/extern_config.inc.php:52
-msgid "Personal"
-msgstr "Personal"
+#: extern/elements/ExternElementMainPersondetails.class.php:69
+#: extern/elements/ExternElementMainPersons.class.php:81
+#, fuzzy
+msgid "Mitarbeiter"
+msgstr "Staff details"
 
 #: extern/extern_config.inc.php:53
 msgid ""
@@ -154,6 +157,7 @@ msgstr ""
 
 #: extern/extern_config.inc.php:61
 #: extern/modules/ExternModulePersondetails.class.php:72
+#: extern/elements/ExternElementMainNews.class.php:74
 msgid "News"
 msgstr "News"
 
@@ -172,6 +176,29 @@ msgid ""
 msgstr ""
 "The module &quot;staff details&quot; provides all data of the staff of an "
 "institute."
+
+#: index.php:296
+msgid "Veranstaltungs&uuml;bersicht"
+msgstr "Course overview"
+
+#: extern/extern_config.inc.php:68
+#, fuzzy
+msgid ""
+"Das Modul &quot;Veranstaltungs&uuml;bersicht&quot; gibt alle Veranstaltungen "
+"einer Einrichtung aus."
+msgstr "The module &quot;News&quot; provides all news from an institute."
+
+#: extern/extern_config.inc.php:70
+#, fuzzy
+msgid "Veranstaltungsdetails"
+msgstr "Courses"
+
+#: extern/extern_config.inc.php:71
+#, fuzzy
+msgid ""
+"Das Modul &quot;Veranstaltungsdetails&uot; gibt alle allgemeinen Daten einer "
+"Veranstaltung aus."
+msgstr "The module &quot;News&quot; provides all news from an institute."
 
 #: extern/views/ExternEditGeneric.class.php:56
 msgid "serifenlose Schrift"
@@ -486,7 +513,7 @@ msgstr "alternative group name"
 msgid "Sichtbarkeit"
 msgstr "Visibility"
 
-#: extern/views/extern_edit_module.inc.php:59
+#: extern/views/extern_edit_module.inc.php:57
 #, c-format
 msgid ""
 "Es wurden bereits %s Konfigurationen angelegt. Sie k&ouml;nnen f&uuml;r "
@@ -495,12 +522,12 @@ msgstr ""
 "%s configurations have already been created. You cannot create any more "
 "configurations for these modules."
 
-#: extern/views/extern_edit_module.inc.php:107
+#: extern/views/extern_edit_module.inc.php:105
 #, c-format
 msgid "Bitte korrigieren Sie die mit %s gekennzeichneten Werte!"
 msgstr "Please correct the values marked with a %s!"
 
-#: extern/views/extern_edit_module.inc.php:121
+#: extern/views/extern_edit_module.inc.php:119
 msgid ""
 "Der Konfigurationsname wurde bereits für eine Konfiguration dieses Moduls "
 "vergeben. Bitte geben Sie einen anderen Namen ein."
@@ -508,18 +535,18 @@ msgstr ""
 "The configuration name is already being used by another configuration of "
 "this module. Please enter another name."
 
-#: extern/views/extern_edit_module.inc.php:127
+#: extern/views/extern_edit_module.inc.php:125
 msgid ""
 "Die eingegebenen Werte wurden übernommen und der Name der Konfiguration "
 "geändert."
 msgstr ""
 "The given value has been accepted and the name of the configuration changed."
 
-#: extern/views/extern_edit_module.inc.php:134
+#: extern/views/extern_edit_module.inc.php:132
 msgid "Die eingegebenen Werte wurden übernommen."
 msgstr "The given values have been accepted."
 
-#: extern/views/extern_edit_module.inc.php:152
+#: extern/views/extern_edit_module.inc.php:150
 msgid ""
 "Um die Werte eines einzelnen Elements zu &auml;ndern, klicken Sie bitte den "
 "&quot;&Uuml;bernehmen&quot;-Button innerhalb des jeweiligen Elements."
@@ -527,15 +554,15 @@ msgstr ""
 "To change the value of a single element, click on the &quot;accept&quot; "
 "button within the corresponding element."
 
-#: extern/views/extern_edit_module.inc.php:153
+#: extern/views/extern_edit_module.inc.php:151
 msgid "Um eine Vorschau der Seite zu erhalten, klicken Sie bitte hier:"
 msgstr "To see a preview of the page, please click here:"
 
-#: extern/views/extern_edit_module.inc.php:159
+#: extern/views/extern_edit_module.inc.php:157
 msgid "Die Vorschau wird in einem neuen Fenster ge&ouml;ffnet."
 msgstr "The preview will be opened in a new window."
 
-#: extern/views/extern_edit_module.inc.php:160
+#: extern/views/extern_edit_module.inc.php:158
 msgid "Es werden eventuell nicht alle Einstellungen in der Vorschau angezeigt."
 msgstr "Not all settings may be shown in the preview."
 
@@ -560,6 +587,8 @@ msgid "Letzte &Auml;nderung:"
 msgstr "Last changes:"
 
 #: extern/views/extern_info_module.inc.php:60
+#: extern/modules/ExternModuleLecturedetails.class.php:66
+#: extern/elements/ExternElementMainLecturedetails.class.php:64
 msgid "Beschreibung:"
 msgstr "Description:"
 
@@ -638,20 +667,106 @@ msgid "Dateiname"
 msgstr "File name"
 
 #: extern/modules/ExternModuleDownload.class.php:56
+#: extern/elements/ExternElementMainDownload.class.php:65
 msgid "Beschreibung"
 msgstr "Description"
 
 #: extern/modules/ExternModuleDownload.class.php:57
+#: extern/elements/ExternElementMainNews.class.php:65
 msgid "Datum"
 msgstr "Date"
 
 #: extern/modules/ExternModuleDownload.class.php:58
+#: extern/elements/ExternElementMainDownload.class.php:66
 msgid "Gr&ouml;&szlig;e"
 msgstr "Size"
 
 #: extern/modules/ExternModuleDownload.class.php:59
+#: extern/elements/ExternElementMainDownload.class.php:66
 msgid "Upload durch"
 msgstr "Upload with"
+
+#: extern/modules/ExternModuleDownload.class.php:66
+#: extern/modules/ExternModuleLecturedetails.class.php:82
+#: extern/modules/ExternModuleNews.class.php:62
+#: extern/modules/ExternModulePersons.class.php:64
+#, fuzzy
+msgid "Link zum Modul Mitarbeiterdetails"
+msgstr "Staff details"
+
+#: extern/modules/ExternModuleDownload.class.php:67
+msgid "Link zum Dateidownload"
+msgstr ""
+
+#: admin_seminare_assi.php:1321 admin_sem_tree.php:143 archiv.inc.php:54
+#: archiv.php:457 sem_browse.inc.php:245 seminar_main.php:105
+#: lib/classes/SemBrowse.class.php:237
+msgid "Untertitel:"
+msgstr "Subtitle:"
+
+#: archiv.inc.php:78 sem_browse.inc.php:256
+#: lib/classes/SemBrowse.class.php:248
+msgid "DozentIn:"
+msgstr "Lecturer:"
+
+#: extern/modules/ExternModuleLecturedetails.class.php:64
+#: extern/elements/ExternElementMainLecturedetails.class.php:63
+#, fuzzy
+msgid "Veranstaltungsart:"
+msgstr "Representation style:"
+
+#: details.php:315
+msgid "Veranstaltungstyp:"
+msgstr "Type of course:"
+
+#: archiv.inc.php:69 institut_main.php:109 seminar_main.php:111
+msgid "Ort:"
+msgstr "Place:"
+
+#: extern/modules/ExternModuleLecturedetails.class.php:68
+#: extern/elements/ExternElementMainLecturedetails.class.php:64
+#, fuzzy
+msgid "Zeiten:"
+msgstr "Width:"
+
+#: archiv.inc.php:124
+msgid "Teilnehmer:"
+msgstr "Participant:"
+
+#: admin_seminare_assi.php:2382 archiv.inc.php:129 details.php:358
+msgid "Voraussetzungen:"
+msgstr "Prerequisites:"
+
+#: admin_seminare_assi.php:2393 archiv.inc.php:134 details.php:370
+msgid "Lernorganisation:"
+msgstr "Learning organisation:"
+
+#: admin_seminare_assi.php:2404 archiv.inc.php:139 details.php:382
+msgid "Leistungsnachweis:"
+msgstr "Performance accreditation:"
+
+#: extern/modules/ExternModuleLecturedetails.class.php:73
+#: extern/elements/ExternElementMainLecturedetails.class.php:66
+#, fuzzy
+msgid "Bereichseinordnung:"
+msgstr "Description:"
+
+#: admin_seminare_assi.php:2418 archiv.inc.php:144 details.php:394
+msgid "Sonstiges:"
+msgstr "Miscellaneous:"
+
+#: admin_test_fak.php:292
+msgid "Name der Veranstaltung"
+msgstr "Name of the course"
+
+#: extern/modules/ExternModuleLecturedetails.class.php:79
+#, fuzzy
+msgid "&Uuml;berschriften"
+msgstr "Heading"
+
+#: extern/modules/ExternModuleLecturedetails.class.php:80
+msgid "Abs&auml;tze"
+msgstr ""
 
 #: extern/modules/ExternModuleNews.class.php:54
 #, fuzzy
@@ -668,12 +783,14 @@ msgstr "Message"
 #: extern/modules/ExternModulePersondetails.class.php:60
 #: extern/modules/ExternModulePersons.class.php:56
 #: extern/elements/ExternElementContact.class.php:89
+#: extern/elements/ExternElementMainPersons.class.php:69
 msgid "Raum"
 msgstr "Room"
 
 #: extern/modules/ExternModulePersondetails.class.php:61
 #: extern/modules/ExternModulePersons.class.php:55
 #: extern/elements/ExternElementContact.class.php:89
+#: extern/elements/ExternElementMainPersons.class.php:69
 #: extern/elements/ExternElementRangeTreeLevelContent.class.php:84
 msgid "Telefon"
 msgstr "Telephone"
@@ -687,6 +804,7 @@ msgstr "Fax"
 #: extern/modules/ExternModulePersondetails.class.php:63
 #: extern/modules/ExternModulePersons.class.php:57
 #: extern/elements/ExternElementContact.class.php:89
+#: extern/elements/ExternElementMainPersons.class.php:69
 #: extern/elements/ExternElementRangeTreeLevelContent.class.php:84
 msgid "Email"
 msgstr "E-mail"
@@ -700,27 +818,34 @@ msgstr "Homepage"
 #: extern/modules/ExternModulePersondetails.class.php:65
 #: extern/modules/ExternModulePersons.class.php:58
 #: extern/elements/ExternElementContact.class.php:89
+#: extern/elements/ExternElementMainPersons.class.php:69
 msgid "Sprechzeiten"
 msgstr "Office hours"
 
 #: extern/modules/ExternModulePersondetails.class.php:69
+#: extern/elements/ExternElementMainPersondetails.class.php:64
 msgid "Lebenslauf"
 msgstr "Curriculum vitae"
 
 #: extern/modules/ExternModulePersondetails.class.php:70
+#: extern/elements/ExternElementMainPersondetails.class.php:64
 msgid "Schwerpunkte"
 msgstr "Research interests"
 
 #: extern/modules/ExternModulePersondetails.class.php:71
+#: extern/elements/ExternElementMainLectures.class.php:73
+#: extern/elements/ExternElementMainPersondetails.class.php:64
 #: extern/elements/ExternElementPersondetailsLectures.class.php:54
 msgid "Lehrveranstaltungen"
 msgstr "Courses"
 
 #: extern/modules/ExternModulePersondetails.class.php:73
+#: extern/elements/ExternElementMainPersondetails.class.php:65
 msgid "Termine"
 msgstr "Appointments"
 
 #: extern/modules/ExternModulePersondetails.class.php:74
+#: extern/elements/ExternElementMainPersondetails.class.php:65
 msgid "Publikationen"
 msgstr "Publications"
 
@@ -728,7 +853,13 @@ msgstr "Publications"
 msgid "eigene Kategorien"
 msgstr "Own categories"
 
+#: extern/modules/ExternModulePersondetails.class.php:83
+msgid "Link zum Modul Veranstaltungsdetails"
+msgstr ""
+
 #: extern/modules/ExternModulePersons.class.php:54
+#: extern/elements/ExternElementMainDownload.class.php:65
+#: extern/elements/ExternElementMainPersons.class.php:69
 msgid "Name"
 msgstr "Name"
 
@@ -776,6 +907,38 @@ msgstr "A picture in PNG format."
 msgid "Eine anderes Format."
 msgstr "Another format."
 
+#: admin_metadates.php:619 archiv.php:254 archiv.php:406
+#: sem_browse.inc.php:373 sem_browse.inc.php:451
+#: lib/classes/SemBrowse.class.php:26
+msgid "Semester"
+msgstr "Semester"
+
+#: sem_browse.inc.php:374 lib/classes/SemBrowse.class.php:27
+msgid "Bereich"
+msgstr "Area"
+
+#: archiv.php:404 details.php:276 meine_seminare.php:631
+#: sem_browse.inc.php:195 sem_browse.inc.php:375 seminar_main.php:119
+#: lib/classes/SemBrowse.class.php:28 lib/classes/SemBrowse.class.php:44
+msgid "DozentIn"
+msgstr "Lecturer"
+
+#: resources/resourcesVisual.inc.php:571
+msgid "Typ"
+msgstr "Type"
+
+#: resources/resourcesClass.inc.php:140 resources/resourcesClass.inc.php:1003
+msgid "Einrichtung"
+msgstr "Institute"
+
+#: sem_browse.inc.php:195 lib/classes/SemBrowse.class.php:44
+msgid "Titel"
+msgstr "Title"
+
+#: sem_browse.inc.php:195 lib/classes/SemBrowse.class.php:44
+msgid "Kommentar"
+msgstr "Commentary"
+
 #: extern/modules/views/persons_preview.inc.php:37
 msgid "Name Name"
 msgstr "Name name"
@@ -808,9 +971,11 @@ msgstr "Information about element %s"
 
 #: extern/lib/ExternElementMain.class.php:54
 #: extern/elements/ExternElementMainDownload.class.php:53
+#: extern/elements/ExternElementMainLecturedetails.class.php:51
+#: extern/elements/ExternElementMainLectures.class.php:51
 #: extern/elements/ExternElementMainNews.class.php:52
 #: extern/elements/ExternElementMainPersondetails.class.php:51
-#: extern/elements/ExternElementMainPersons.class.php:53
+#: extern/elements/ExternElementMainPersons.class.php:52
 #: extern/elements/ExternElementMainRangelecturetree.class.php:53
 #: extern/elements/ExternElementMainSemlecturetree.class.php:53
 msgid "Grundeinstellungen"
@@ -883,22 +1048,76 @@ msgid "Schriftformatierung News-Titel"
 msgstr "Font formatting name"
 
 #: extern/elements/ExternElementContentNews.class.php:81
-#: extern/elements/ExternElementMainDownload.class.php:122
+#: extern/elements/ExternElementMainDownload.class.php:123
+#: extern/elements/ExternElementMainLecturedetails.class.php:108
+#: extern/elements/ExternElementMainLectures.class.php:144
 #: extern/elements/ExternElementMainNews.class.php:110
-#: extern/elements/ExternElementMainPersondetails.class.php:104
-#: extern/elements/ExternElementMainPersons.class.php:140
+#: extern/elements/ExternElementMainPersondetails.class.php:105
+#: extern/elements/ExternElementMainPersons.class.php:139
 #: extern/elements/ExternElementMainRangelecturetree.class.php:94
 #: extern/elements/ExternElementMainSemlecturetree.class.php:94
 msgid "Weitere Angaben"
 msgstr "Further information"
 
 #: extern/elements/ExternElementLink.class.php:54
+#: extern/elements/ExternElementLinkIntern.class.php:55
+#: extern/elements/ExternElementLinkInternSimple.class.php:54
 msgid "Links"
 msgstr "Links"
 
 #: extern/elements/ExternElementLink.class.php:55
+#: extern/elements/ExternElementLinkIntern.class.php:56
 msgid "Eigenschaften der Schrift für Links."
 msgstr "Properties of the font for links."
+
+#: extern/elements/ExternElementLinkIntern.class.php:57
+#, fuzzy
+msgid "Schriftformatierung"
+msgstr "Font formatting name"
+
+#: extern/elements/ExternElementLinkIntern.class.php:57
+#: extern/elements/ExternElementLinkInternSimple.class.php:56
+#, fuzzy
+msgid "Linkformatierung"
+msgstr "Sort order"
+
+#: extern/elements/ExternElementLinkIntern.class.php:58
+#: extern/elements/ExternElementLinkInternSimple.class.php:56
+msgid "Verlinkung zum Modul"
+msgstr ""
+
+#: extern/elements/ExternElementLinkIntern.class.php:85
+#: extern/elements/ExternElementLinkInternSimple.class.php:81
+#, fuzzy
+msgid "Konfiguration:"
+msgstr "Name of the configuration:"
+
+#: extern/elements/ExternElementLinkIntern.class.php:99
+#: extern/elements/ExternElementLinkInternSimple.class.php:95
+msgid "Standardkonfiguration"
+msgstr "Standard configuration"
+
+#: extern/elements/ExternElementLinkIntern.class.php:102
+#: extern/elements/ExternElementLinkInternSimple.class.php:98
+msgid "SRI-Link:"
+msgstr "SRI Link:"
+
+#: extern/elements/ExternElementLinkIntern.class.php:103
+#: extern/elements/ExternElementLinkInternSimple.class.php:99
+#, fuzzy
+msgid ""
+"Wenn Sie die SRI-Schnittstelle benutzen, müssen Sie hier die vollständige "
+"URL (mit http://) der Seite angeben, in der das Modul, das durch den Link "
+"aufgerufen wird, eingebunden ist. Lassen Sie dieses Feld unbedingt leer, "
+"falls Sie die SRI-Schnittstelle nicht nutzen."
+msgstr ""
+"If you use the SRI interface, you must give the complete URL of the page "
+"(with http://) in which the output module for the staff data is connected. "
+"Leave the field blank if you do not use the SRI interface."
+
+#: extern/elements/ExternElementLinkInternSimple.class.php:55
+msgid "Formatierung des Links."
+msgstr ""
 
 #: extern/elements/ExternElementList.class.php:53
 msgid "Aufz&auml;hlungsliste"
@@ -917,9 +1136,11 @@ msgstr ""
 "indented from the left."
 
 #: extern/elements/ExternElementMainDownload.class.php:54
+#: extern/elements/ExternElementMainLecturedetails.class.php:52
+#: extern/elements/ExternElementMainLectures.class.php:52
 #: extern/elements/ExternElementMainNews.class.php:53
 #: extern/elements/ExternElementMainPersondetails.class.php:52
-#: extern/elements/ExternElementMainPersons.class.php:54
+#: extern/elements/ExternElementMainPersons.class.php:53
 #: extern/elements/ExternElementMainRangelecturetree.class.php:54
 #: extern/elements/ExternElementMainSemlecturetree.class.php:54
 msgid ""
@@ -927,35 +1148,52 @@ msgid ""
 "ndern."
 msgstr "In the basic settings you can change the general data of the module."
 
-#: extern/elements/ExternElementMainDownload.class.php:109
+#: extern/elements/ExternElementMainDownload.class.php:65
+#, fuzzy
+msgid "Upload am"
+msgstr "Upload with"
+
+#: extern/elements/ExternElementMainDownload.class.php:74
+#, fuzzy
+msgid "Keine Dateien vorhanden"
+msgstr "No files:"
+
+#: extern/elements/ExternElementMainDownload.class.php:110
+#: extern/elements/ExternElementMainLecturedetails.class.php:95
+#: extern/elements/ExternElementMainLectures.class.php:94
 #: extern/elements/ExternElementMainNews.class.php:96
-#: extern/elements/ExternElementMainPersondetails.class.php:89
-#: extern/elements/ExternElementMainPersons.class.php:106
+#: extern/elements/ExternElementMainPersondetails.class.php:90
+#: extern/elements/ExternElementMainPersons.class.php:105
 #: extern/elements/ExternElementMainRangelecturetree.class.php:81
 #: extern/elements/ExternElementMainSemlecturetree.class.php:81
 msgid "Name der Konfiguration"
 msgstr "Name of the configuration"
 
-#: extern/elements/ExternElementMainDownload.class.php:114
+#: extern/elements/ExternElementMainDownload.class.php:115
+#: extern/elements/ExternElementMainLecturedetails.class.php:100
 #: extern/elements/ExternElementMainNews.class.php:102
-#: extern/elements/ExternElementMainPersondetails.class.php:95
-#: extern/elements/ExternElementMainPersons.class.php:112
+#: extern/elements/ExternElementMainPersondetails.class.php:96
+#: extern/elements/ExternElementMainPersons.class.php:111
 msgid "Allgemeine Angaben zum Tabellenaufbau"
 msgstr "General information about table construction"
 
-#: extern/elements/ExternElementMainDownload.class.php:124
+#: extern/elements/ExternElementMainDownload.class.php:125
+#: extern/elements/ExternElementMainLecturedetails.class.php:110
+#: extern/elements/ExternElementMainLectures.class.php:153
 #: extern/elements/ExternElementMainNews.class.php:132
-#: extern/elements/ExternElementMainPersondetails.class.php:113
-#: extern/elements/ExternElementMainPersons.class.php:155
+#: extern/elements/ExternElementMainPersondetails.class.php:114
+#: extern/elements/ExternElementMainPersons.class.php:154
 #: extern/elements/ExternElementMainRangelecturetree.class.php:96
 #: extern/elements/ExternElementMainSemlecturetree.class.php:96
 msgid "HTML-Header/Footer:"
 msgstr "HTML-Header / Footer:"
 
-#: extern/elements/ExternElementMainDownload.class.php:125
+#: extern/elements/ExternElementMainDownload.class.php:126
+#: extern/elements/ExternElementMainLecturedetails.class.php:111
+#: extern/elements/ExternElementMainLectures.class.php:154
 #: extern/elements/ExternElementMainNews.class.php:133
-#: extern/elements/ExternElementMainPersondetails.class.php:114
-#: extern/elements/ExternElementMainPersons.class.php:156
+#: extern/elements/ExternElementMainPersondetails.class.php:115
+#: extern/elements/ExternElementMainPersons.class.php:155
 #: extern/elements/ExternElementMainRangelecturetree.class.php:97
 #: extern/elements/ExternElementMainSemlecturetree.class.php:97
 msgid ""
@@ -965,138 +1203,156 @@ msgstr ""
 "Select when the page should be display as complete HTML page, e.g., when "
 "using a direct link or in a frameset."
 
-#: extern/elements/ExternElementMainDownload.class.php:130
+#: extern/elements/ExternElementMainDownload.class.php:131
 msgid "Max. L&auml;nge der Beschreibung:"
 msgstr "Max. length of the description:"
 
-#: extern/elements/ExternElementMainDownload.class.php:131
+#: extern/elements/ExternElementMainDownload.class.php:132
 msgid ""
 "Geben Sie an, wieviele Zeichen der Beschreibung der Datei ausgegeben werden "
 "sollen."
 msgstr "Enter how many characters the file description should display."
 
-#: extern/elements/ExternElementMainDownload.class.php:134
+#: extern/elements/ExternElementMainDownload.class.php:135
+#: extern/elements/ExternElementMainLecturedetails.class.php:116
+#: extern/elements/ExternElementMainLectures.class.php:146
 #: extern/elements/ExternElementMainNews.class.php:112
-#: extern/elements/ExternElementMainPersondetails.class.php:106
-#: extern/elements/ExternElementMainPersons.class.php:142
+#: extern/elements/ExternElementMainPersondetails.class.php:107
+#: extern/elements/ExternElementMainPersons.class.php:141
 msgid "Namensformat:"
 msgstr "Name format:"
 
-#: extern/elements/ExternElementMainDownload.class.php:135
+#: extern/elements/ExternElementMainDownload.class.php:136
+#: extern/elements/ExternElementMainLecturedetails.class.php:117
+#: extern/elements/ExternElementMainLectures.class.php:147
 #: extern/elements/ExternElementMainNews.class.php:113
-#: extern/elements/ExternElementMainPersondetails.class.php:107
-#: extern/elements/ExternElementMainPersons.class.php:143
+#: extern/elements/ExternElementMainPersondetails.class.php:108
+#: extern/elements/ExternElementMainPersons.class.php:142
 msgid "Wählen Sie, wie Personennamen formatiert werden sollen."
 msgstr "Choose how people's names should be fomatted."
 
-#: extern/elements/ExternElementMainDownload.class.php:137
-#: extern/elements/ExternElementMainNews.class.php:115
-#: extern/elements/ExternElementMainPersondetails.class.php:109
-#: extern/elements/ExternElementMainPersons.class.php:145
-msgid "Vorname Nachname"
-msgstr "Forename Surname"
-
-#: extern/elements/ExternElementMainDownload.class.php:137
-#: extern/elements/ExternElementMainNews.class.php:115
-#: extern/elements/ExternElementMainPersondetails.class.php:109
-#: extern/elements/ExternElementMainPersons.class.php:145
-msgid "Nachname Vorname"
-msgstr "Surname Forename"
+#: extern/elements/ExternElementMainDownload.class.php:138
+#: extern/elements/ExternElementMainLectures.class.php:149
+#: extern/elements/ExternElementMainPersons.class.php:144
+msgid "Meyer, P."
+msgstr ""
 
 #: extern/elements/ExternElementMainDownload.class.php:138
-#: extern/elements/ExternElementMainNews.class.php:116
-#: extern/elements/ExternElementMainPersondetails.class.php:110
-#: extern/elements/ExternElementMainPersons.class.php:146
-msgid "Titel Vorname Nachname"
-msgstr "Title Forename Surname"
+#: extern/elements/ExternElementMainLectures.class.php:149
+#: extern/elements/ExternElementMainPersons.class.php:144
+msgid "Peter Meyer"
+msgstr ""
 
 #: extern/elements/ExternElementMainDownload.class.php:138
-#: extern/elements/ExternElementMainPersondetails.class.php:110
-#: extern/elements/ExternElementMainPersons.class.php:146
-msgid "Nachname Vorname Titel"
-msgstr "Surname Forename Title"
+#: extern/elements/ExternElementMainLectures.class.php:149
+#: extern/elements/ExternElementMainPersons.class.php:144
+msgid "Meyer Peter"
+msgstr ""
 
-#: extern/elements/ExternElementMainDownload.class.php:141
+#: extern/elements/ExternElementMainDownload.class.php:139
+#: extern/elements/ExternElementMainLectures.class.php:150
+#: extern/elements/ExternElementMainPersons.class.php:145
+msgid "Dr. Peter Meyer"
+msgstr ""
+
+#: extern/elements/ExternElementMainDownload.class.php:139
+#: extern/elements/ExternElementMainLectures.class.php:150
+#: extern/elements/ExternElementMainPersons.class.php:145
+msgid "Meyer, Peter, Dr."
+msgstr ""
+
+#: extern/elements/ExternElementMainDownload.class.php:142
 #: extern/elements/ExternElementMainNews.class.php:119
 msgid "Datumsformat:"
 msgstr "Date format:"
 
-#: extern/elements/ExternElementMainDownload.class.php:142
+#: extern/elements/ExternElementMainDownload.class.php:143
 #: extern/elements/ExternElementMainNews.class.php:120
 msgid "Wählen Sie, wie Datumsangaben formatiert werden sollen."
 msgstr "Choose how date information should be fomatted."
 
-#: extern/elements/ExternElementMainDownload.class.php:144
+#: extern/elements/ExternElementMainDownload.class.php:145
 #: extern/elements/ExternElementMainNews.class.php:122
 msgid "25. Nov. 2003"
 msgstr "25. Nov. 2003"
 
-#: extern/elements/ExternElementMainDownload.class.php:144
+#: extern/elements/ExternElementMainDownload.class.php:145
 #: extern/elements/ExternElementMainNews.class.php:122
 msgid "25.11.2003"
 msgstr "25.11.2003"
 
-#: extern/elements/ExternElementMainDownload.class.php:144
+#: extern/elements/ExternElementMainDownload.class.php:145
 #: extern/elements/ExternElementMainNews.class.php:122
 msgid "25.11.03"
 msgstr "25.11.03"
 
-#: extern/elements/ExternElementMainDownload.class.php:145
+#: extern/elements/ExternElementMainDownload.class.php:146
 #: extern/elements/ExternElementMainNews.class.php:123
 msgid "25. November 2003"
 msgstr "25. November 2003"
 
-#: extern/elements/ExternElementMainDownload.class.php:145
+#: extern/elements/ExternElementMainDownload.class.php:146
 #: extern/elements/ExternElementMainNews.class.php:123
 msgid "11/25/03"
 msgstr "11/25/03"
 
-#: extern/elements/ExternElementMainDownload.class.php:148
+#: extern/elements/ExternElementMainDownload.class.php:149
+#: extern/elements/ExternElementMainLecturedetails.class.php:123
 #: extern/elements/ExternElementMainNews.class.php:126
 msgid "Sprache Datum"
 msgstr "Date language"
 
-#: extern/elements/ExternElementMainDownload.class.php:151
+#: extern/elements/ExternElementMainDownload.class.php:152
+#: extern/elements/ExternElementMainLecturedetails.class.php:126
 #: extern/elements/ExternElementMainNews.class.php:129
 msgid "Deutsch"
 msgstr "German"
 
-#: extern/elements/ExternElementMainDownload.class.php:151
+#: extern/elements/ExternElementMainDownload.class.php:152
+#: extern/elements/ExternElementMainLecturedetails.class.php:126
 #: extern/elements/ExternElementMainNews.class.php:129
 msgid "Englisch (US)"
 msgstr "English (US)"
 
-#: extern/elements/ExternElementMainDownload.class.php:154
+#: extern/elements/ExternElementMainDownload.class.php:155
+#: extern/elements/ExternElementMainLecturedetails.class.php:129
+#: extern/elements/ExternElementMainLectures.class.php:159
 #: extern/elements/ExternElementMainNews.class.php:138
-#: extern/elements/ExternElementMainPersondetails.class.php:119
-#: extern/elements/ExternElementMainPersons.class.php:161
+#: extern/elements/ExternElementMainPersondetails.class.php:120
+#: extern/elements/ExternElementMainPersons.class.php:160
 #: extern/elements/ExternElementMainRangelecturetree.class.php:102
 #: extern/elements/ExternElementMainSemlecturetree.class.php:102
 msgid "Stylesheet-Datei:"
 msgstr "Stylesheet file:"
 
-#: extern/elements/ExternElementMainDownload.class.php:155
+#: extern/elements/ExternElementMainDownload.class.php:156
+#: extern/elements/ExternElementMainLecturedetails.class.php:130
+#: extern/elements/ExternElementMainLectures.class.php:160
 #: extern/elements/ExternElementMainNews.class.php:139
-#: extern/elements/ExternElementMainPersondetails.class.php:120
-#: extern/elements/ExternElementMainPersons.class.php:162
+#: extern/elements/ExternElementMainPersondetails.class.php:121
+#: extern/elements/ExternElementMainPersons.class.php:161
 #: extern/elements/ExternElementMainRangelecturetree.class.php:103
 #: extern/elements/ExternElementMainSemlecturetree.class.php:103
 msgid "Geben Sie hier die URL Ihrer Stylesheet-Datei an."
 msgstr "Enter here the URL of your Stylesheet file."
 
-#: extern/elements/ExternElementMainDownload.class.php:158
+#: extern/elements/ExternElementMainDownload.class.php:159
+#: extern/elements/ExternElementMainLecturedetails.class.php:133
+#: extern/elements/ExternElementMainLectures.class.php:163
 #: extern/elements/ExternElementMainNews.class.php:142
-#: extern/elements/ExternElementMainPersondetails.class.php:123
-#: extern/elements/ExternElementMainPersons.class.php:165
+#: extern/elements/ExternElementMainPersondetails.class.php:124
+#: extern/elements/ExternElementMainPersons.class.php:164
 #: extern/elements/ExternElementMainRangelecturetree.class.php:106
 #: extern/elements/ExternElementMainSemlecturetree.class.php:106
 msgid "Seitentitel:"
 msgstr "Page title:"
 
-#: extern/elements/ExternElementMainDownload.class.php:159
+#: extern/elements/ExternElementMainDownload.class.php:160
+#: extern/elements/ExternElementMainLecturedetails.class.php:134
+#: extern/elements/ExternElementMainLectures.class.php:164
 #: extern/elements/ExternElementMainNews.class.php:143
-#: extern/elements/ExternElementMainPersondetails.class.php:124
-#: extern/elements/ExternElementMainPersons.class.php:166
+#: extern/elements/ExternElementMainPersondetails.class.php:125
+#: extern/elements/ExternElementMainPersons.class.php:165
 #: extern/elements/ExternElementMainRangelecturetree.class.php:107
 #: extern/elements/ExternElementMainSemlecturetree.class.php:107
 msgid ""
@@ -1106,15 +1362,15 @@ msgstr ""
 "Enter here the title of the page. The title will be shown in the title row "
 "of the browser window when shown by a web-browser."
 
-#: extern/elements/ExternElementMainDownload.class.php:162
+#: extern/elements/ExternElementMainDownload.class.php:163
 #: extern/elements/ExternElementMainNews.class.php:146
-#: extern/elements/ExternElementMainPersons.class.php:169
+#: extern/elements/ExternElementMainPersons.class.php:168
 msgid "Keine Dateien:"
 msgstr "No files:"
 
-#: extern/elements/ExternElementMainDownload.class.php:163
+#: extern/elements/ExternElementMainDownload.class.php:164
 #: extern/elements/ExternElementMainNews.class.php:147
-#: extern/elements/ExternElementMainPersons.class.php:170
+#: extern/elements/ExternElementMainPersons.class.php:169
 msgid ""
 "Dieser Text wird an Stelle der Tabelle ausgegeben, wenn keine Dateien zum "
 "Download verfügbar sind."
@@ -1122,70 +1378,43 @@ msgstr ""
 "This text will be displayed in place of a table, when no files are available "
 "for downloading."
 
-#: extern/elements/ExternElementMainDownload.class.php:166
-#: extern/elements/ExternElementMainPersons.class.php:173
-msgid "Konfiguration Mitarbeiterdetails:"
-msgstr "Staff details configuration:"
-
-#: extern/elements/ExternElementMainDownload.class.php:179
-#: extern/elements/ExternElementMainPersons.class.php:186
-msgid "Standardkonfiguration"
-msgstr "Standard configuration"
-
-#: extern/elements/ExternElementMainDownload.class.php:182
-#: extern/elements/ExternElementMainPersons.class.php:189
-msgid "SRI-Link:"
-msgstr "SRI Link:"
-
-#: extern/elements/ExternElementMainDownload.class.php:183
-#: extern/elements/ExternElementMainPersons.class.php:190
-msgid ""
-"Wenn Sie die SRI-Schnittstelle benutzen, müssen Sie hier die vollständige "
-"URL (mit http://) der Seite angeben, in der das Ausgabemodul für die "
-"Mitarbeiterdaten eingebunden wird. Lassen Sie dieses Feld unbedingt leer, "
-"falls Sie die SRI-Schnittstelle nicht nutzen."
-msgstr ""
-"If you use the SRI interface, you must give the complete URL of the page "
-"(with http://) in which the output module for the staff data is connected. "
-"Leave the field blank if you do not use the SRI interface."
-
-#: extern/elements/ExternElementMainDownload.class.php:189
+#: extern/elements/ExternElementMainDownload.class.php:170
 msgid "Eigene Icons"
 msgstr "Own icons"
 
-#: extern/elements/ExternElementMainDownload.class.php:193
+#: extern/elements/ExternElementMainDownload.class.php:174
 msgid "Bilder:"
 msgstr "Pictures:"
 
-#: extern/elements/ExternElementMainDownload.class.php:194
+#: extern/elements/ExternElementMainDownload.class.php:175
 msgid "Text:"
 msgstr "Text:"
 
-#: extern/elements/ExternElementMainDownload.class.php:195
+#: extern/elements/ExternElementMainDownload.class.php:176
 msgid "Adobe pdf:"
 msgstr "Adobe pdf:"
 
-#: extern/elements/ExternElementMainDownload.class.php:196
+#: extern/elements/ExternElementMainDownload.class.php:177
 msgid "Powerpoint (ppt):"
 msgstr "Powerpoint (ppt):"
 
-#: extern/elements/ExternElementMainDownload.class.php:197
+#: extern/elements/ExternElementMainDownload.class.php:178
 msgid "Excel (xls):"
 msgstr "Excel (xls):"
 
-#: extern/elements/ExternElementMainDownload.class.php:198
+#: extern/elements/ExternElementMainDownload.class.php:179
 msgid "Rich Text (rtf):"
 msgstr "Rich Text (rtf):"
 
-#: extern/elements/ExternElementMainDownload.class.php:199
+#: extern/elements/ExternElementMainDownload.class.php:180
 msgid "ZIP-Dateien:"
 msgstr "ZIP files:"
 
-#: extern/elements/ExternElementMainDownload.class.php:200
+#: extern/elements/ExternElementMainDownload.class.php:181
 msgid "sonstige Dateien:"
 msgstr "Other files:"
 
-#: extern/elements/ExternElementMainDownload.class.php:203
+#: extern/elements/ExternElementMainDownload.class.php:184
 msgid ""
 "Geben Sie die URL eines Bildes ein, dass als Icon für Bild-Dateien dienen "
 "soll. Erlaubte Formate: jpg, png, gif. "
@@ -1193,7 +1422,7 @@ msgstr ""
 "Enter the URL of a picture that should serve as an icon for picture files. "
 "Formats allowed: jpg, png, gif.  "
 
-#: extern/elements/ExternElementMainDownload.class.php:204
+#: extern/elements/ExternElementMainDownload.class.php:185
 msgid ""
 "Geben Sie die URL eines Bildes ein, dass als Icon für Text-Dateien dienen "
 "soll. Erlaubte Formate: jpg, png, gif. "
@@ -1201,7 +1430,7 @@ msgstr ""
 "Enter the URL of a picture that should serve as icon for text files. Formats "
 "allowed: jpg, png, gif."
 
-#: extern/elements/ExternElementMainDownload.class.php:205
+#: extern/elements/ExternElementMainDownload.class.php:186
 msgid ""
 "Geben Sie die URL eines Bildes ein, dass als Icon für PDF-Dateien dienen "
 "soll. Erlaubte Formate: jpg, png, gif. "
@@ -1209,7 +1438,7 @@ msgstr ""
 "Enter the URL of a picture that should serve as icon for PDF files. Formats "
 "allowed: jpg, png, gif."
 
-#: extern/elements/ExternElementMainDownload.class.php:206
+#: extern/elements/ExternElementMainDownload.class.php:187
 msgid ""
 "Geben Sie die URL eines Bildes ein, dass als Icon für Powerpoint-Dateien "
 "dienen soll. Erlaubte Formate: jpg, png, gif. "
@@ -1217,7 +1446,7 @@ msgstr ""
 "Enter the URL of a picture that should serve as icon for Powerpoint files. "
 "Formats allowed: jpg, png, gif."
 
-#: extern/elements/ExternElementMainDownload.class.php:207
+#: extern/elements/ExternElementMainDownload.class.php:188
 msgid ""
 "Geben Sie die URL eines Bildes ein, dass als Icon für Excel-Dateien dienen "
 "soll. Erlaubte Formate: jpg, png, gif. "
@@ -1225,7 +1454,7 @@ msgstr ""
 "Enter the URL of a picture that should serve as icon for Excel files. "
 "Formats allowed: jpg, png, gif."
 
-#: extern/elements/ExternElementMainDownload.class.php:208
+#: extern/elements/ExternElementMainDownload.class.php:189
 msgid ""
 "Geben Sie die URL eines Bildes ein, dass als Icon für RTF-Dateien dienen "
 "soll. Erlaubte Formate: jpg, png, gif. "
@@ -1233,7 +1462,7 @@ msgstr ""
 "Enter the URL of a picture that should serve as icon for RTF files. Formats "
 "allowed: jpg, png, gif."
 
-#: extern/elements/ExternElementMainDownload.class.php:209
+#: extern/elements/ExternElementMainDownload.class.php:190
 msgid ""
 "Geben Sie die URL eines Bildes ein, dass als Icon für komprimierte Dateien "
 "dienen soll. Erlaubte Formate: jpg, png, gif. "
@@ -1241,7 +1470,7 @@ msgstr ""
 "Enter the URL of a picture that should serve as icon for compressed files. "
 "Formats allowed: jpg, png, gif."
 
-#: extern/elements/ExternElementMainDownload.class.php:210
+#: extern/elements/ExternElementMainDownload.class.php:191
 msgid ""
 "Geben Sie die URL eines Bildes ein, dass als Icon für alle anderen "
 "Dateiformate dienen soll. "
@@ -1249,9 +1478,134 @@ msgstr ""
 "Enter the URL of a picture that should serve as icon for all other file "
 "formats. "
 
-#: extern/elements/ExternElementMainDownload.class.php:212
+#: extern/elements/ExternElementMainDownload.class.php:193
 msgid "Wenn sie keine URL angeben, wird ein Standard-Icon ausgegeben."
 msgstr "If you do not enter a URL, a standard icon will be used."
+
+#: extern/elements/ExternElementMainLecturedetails.class.php:119
+#: extern/elements/ExternElementMainNews.class.php:115
+#: extern/elements/ExternElementMainPersondetails.class.php:110
+msgid "Vorname Nachname"
+msgstr "Forename Surname"
+
+#: extern/elements/ExternElementMainLecturedetails.class.php:119
+#: extern/elements/ExternElementMainNews.class.php:115
+#: extern/elements/ExternElementMainPersondetails.class.php:110
+msgid "Nachname Vorname"
+msgstr "Surname Forename"
+
+#: extern/elements/ExternElementMainLecturedetails.class.php:120
+#: extern/elements/ExternElementMainNews.class.php:116
+#: extern/elements/ExternElementMainPersondetails.class.php:111
+msgid "Titel Vorname Nachname"
+msgstr "Title Forename Surname"
+
+#: extern/elements/ExternElementMainLecturedetails.class.php:120
+#: extern/elements/ExternElementMainPersondetails.class.php:111
+msgid "Nachname Vorname Titel"
+msgstr "Surname Forename Title"
+
+#: resources/resourcesFunc.inc.php:208 resources/resourcesFunc.inc.php:233
+#: resources/resourcesFunc.inc.php:255 resources/resourcesFunc.inc.php:268
+#: resources/resourcesFunc.inc.php:322
+msgid "Veranstaltungen"
+msgstr "Courses"
+
+#: extern/elements/ExternElementMainLectures.class.php:66
+#: extern/elements/ExternElementMainPersons.class.php:123
+msgid "Gruppierung:"
+msgstr "Grouping:"
+
+#: lib/classes/SemBrowse.class.php:364
+msgid "keine Studienbereiche eingetragen"
+msgstr "No subject areas added"
+
+#: extern/elements/ExternElementMainLectures.class.php:100
+#, fuzzy
+msgid "Allgemeine Angaben Seitenaufbau"
+msgstr "General information about table construction"
+
+#: extern/elements/ExternElementMainLectures.class.php:102
+msgid "Anzahl Veranstaltungen/Gruppierung:"
+msgstr ""
+
+#: extern/elements/ExternElementMainLectures.class.php:103
+msgid ""
+"Wählen Sie diese Option, wenn die Anzahl der Veranstaltungen und die "
+"gewählte Gruppierungsart angezeigt werden sollen."
+msgstr ""
+
+#: extern/elements/ExternElementMainLectures.class.php:108
+msgid "Termine/Zeiten anzeigen:"
+msgstr ""
+
+#: extern/elements/ExternElementMainLectures.class.php:109
+#, fuzzy
+msgid ""
+"Wählen Sie diese Option, wenn Termine und Zeiten der Veranstaltung unter dem "
+"Veranstaltungsnamen angezeigt werden sollen."
+msgstr "Enter from which semester courses should be shown."
+
+#: extern/elements/ExternElementMainLectures.class.php:114
+#, fuzzy
+msgid "Dozenten anzeigen:"
+msgstr "Other files:"
+
+#: extern/elements/ExternElementMainLectures.class.php:115
+#, fuzzy
+msgid ""
+"Wählen Sie diese Option, wenn die Namen der Dozenten der Veranstaltung "
+"angezeigt werden sollen."
+msgstr "Enter from which semester courses should be shown."
+
+#: extern/elements/ExternElementMainLectures.class.php:123
+#, fuzzy
+msgid "Textersetzungen"
+msgstr "Further information"
+
+#: extern/elements/ExternElementMainLectures.class.php:125
+#, fuzzy
+msgid "Anzahl Veranstaltungen:"
+msgstr "Courses"
+
+#: extern/elements/ExternElementMainLectures.class.php:126
+msgid ""
+"Geben Sie einen Text ein, der nach der Anzahl der Veranstaltungen steht. Nur "
+"wirksam, wenn die Ausgabe der Anzahl der Veranstaltungen und der Gruppierung "
+"aktiviert wurde."
+msgstr ""
+
+#: extern/elements/ExternElementMainLectures.class.php:129
+#, fuzzy
+msgid "Gruppierungsinformation:"
+msgstr "Grouping:"
+
+#: extern/elements/ExternElementMainLectures.class.php:130
+msgid ""
+"Geben Sie einen Text ein, der vor der Gruppierungsart steht. Nur wirksam, "
+"wenn die Ausgabe der Anzahl der Veranstaltungen und der Gruppierung "
+"aktiviert wurde."
+msgstr ""
+
+#: extern/elements/ExternElementMainLectures.class.php:133
+msgid "&quot;Keine Studienbereiche&quot;:"
+msgstr ""
+
+#: extern/elements/ExternElementMainLectures.class.php:134
+msgid ""
+"Geben Sie einen Text ein, der Angezeigt wird, wenn Lehrveranstaltungen "
+"vorliegen, die keinem Bereich zugeordnet sind. Nur wirksam in Gruppierung "
+"nach Bereich."
+msgstr ""
+
+#: extern/elements/ExternElementMainLectures.class.php:138
+msgid "Geben Sie eine Bezeichnung für die entsprechende Gruppierungsart ein."
+msgstr ""
+
+#: extern/elements/ExternElementMainNews.class.php:75
+#, fuzzy
+msgid "Keine aktuellen News"
+msgstr "only current"
 
 #: extern/elements/ExternElementMainNews.class.php:116
 #, fuzzy
@@ -1262,19 +1616,20 @@ msgstr "Surname Forename Title"
 msgid "Nachname"
 msgstr "Surname"
 
-#: extern/elements/ExternElementMainPersons.class.php:120
+#: extern/elements/ExternElementMainPersondetails.class.php:65
+#, fuzzy
+msgid "Aktuell"
+msgstr "only current"
+
+#: extern/elements/ExternElementMainPersons.class.php:119
 msgid "Anzeige von Gruppen"
 msgstr "Group display"
 
 #: extern/elements/ExternElementMainPersons.class.php:124
-msgid "Gruppierung:"
-msgstr "Grouping:"
-
-#: extern/elements/ExternElementMainPersons.class.php:125
 msgid "Personen nach Gruppen/Funktionen gruppieren."
 msgstr "Group people according to group / function."
 
-#: extern/elements/ExternElementMainPersons.class.php:131
+#: extern/elements/ExternElementMainPersons.class.php:130
 msgid ""
 "An dieser Einrichtung wurden noch keine Gruppen/Funktionen angelegt, oder es "
 "wurden diesen noch keine Personen zugeordnet."
@@ -1282,7 +1637,7 @@ msgstr ""
 "No group / function has been created at this institute, or they have not "
 "been assigned any people."
 
-#: extern/elements/ExternElementMainPersons.class.php:132
+#: extern/elements/ExternElementMainPersons.class.php:131
 msgid ""
 "Das Modul gibt nur Daten von Personen aus, die einer Gruppe/Funktion "
 "zugeordnet sind."
@@ -1290,11 +1645,11 @@ msgstr ""
 "The module will only display data about people, who are assigned to a "
 "group / function."
 
-#: extern/elements/ExternElementMainPersons.class.php:149
+#: extern/elements/ExternElementMainPersons.class.php:148
 msgid "Spalten&uuml;berschriften<br>Wiederholen:"
 msgstr "Repeat column heading<br>"
 
-#: extern/elements/ExternElementMainPersons.class.php:150
+#: extern/elements/ExternElementMainPersons.class.php:149
 msgid ""
 "Wiederholung der Spaltenüberschriften über oder unter der Gruppierungszeile."
 msgstr "Repeat the column heading above or under the grouping row."
@@ -1380,6 +1735,16 @@ msgstr "Height:"
 #: extern/elements/ExternElementPersondetailsLectures.class.php:55
 msgid "Angaben zur Ausgabe von Lehrveranstaltungen."
 msgstr "Information for displaying courses."
+
+#: extern/elements/ExternElementPersondetailsLectures.class.php:65
+#, fuzzy
+msgid "Wintersemester"
+msgstr "Winter semester notation:"
+
+#: extern/elements/ExternElementPersondetailsLectures.class.php:66
+#, fuzzy
+msgid "Sommersemester"
+msgstr "Summer semester notation:"
 
 #: extern/elements/ExternElementPersondetailsLectures.class.php:88
 #: extern/elements/ExternElementTreeBackLink.class.php:74
@@ -1571,6 +1936,45 @@ msgstr "Data row"
 #: extern/elements/ExternElementTableRow.class.php:58
 msgid "Angaben zur Formatierung einer Datenzeile."
 msgstr "Information for formatting a data row."
+
+#: extern/elements/ExternElementTableRowTwoColumns.class.php:58
+msgid "Zeile mit zwei Spalten"
+msgstr ""
+
+#: extern/elements/ExternElementTableRowTwoColumns.class.php:59
+#, fuzzy
+msgid "Angaben zur Formatierung einer Tabellenzeile mit zwei Spalten."
+msgstr "Information for formatting a data row."
+
+#: extern/elements/ExternElementTableRowTwoColumns.class.php:61
+#, fuzzy
+msgid "Angaben zum HTML-Tag &lt;tr&gt;"
+msgstr "Information about HTML Tag &lt;%s&gt;"
+
+#: extern/elements/ExternElementTableRowTwoColumns.class.php:61
+msgid "Linke Spalte &lt;td&gt;"
+msgstr ""
+
+#: extern/elements/ExternElementTableRowTwoColumns.class.php:62
+msgid "Linke Spalte &lt;font&gt;"
+msgstr ""
+
+#: extern/elements/ExternElementTableRowTwoColumns.class.php:62
+msgid "Rechte Spalte &lt;td&gt;"
+msgstr ""
+
+#: extern/elements/ExternElementTableRowTwoColumns.class.php:63
+msgid "Rechte Spalte &lt;font&gt;"
+msgstr ""
+
+#: extern/elements/ExternElementTableRowTwoColumns.class.php:87
+#, fuzzy
+msgid "Spaltenbreite:"
+msgstr "Table width:"
+
+#: extern/elements/ExternElementTableRowTwoColumns.class.php:88
+msgid "Breite der Spalte in Prozent."
+msgstr ""
 
 #: extern/elements/ExternElementTreeBackLink.class.php:57
 msgid "Link auf &uuml;bergeordnete Ebene"
@@ -2358,10 +2762,6 @@ msgstr "The index does not exist!"
 msgid "NutzerIn"
 msgstr "User"
 
-#: resources/resourcesClass.inc.php:140 resources/resourcesClass.inc.php:1003
-msgid "Einrichtung"
-msgstr "Institute"
-
 #: resources/resourcesClass.inc.php:149 resources/resourcesClass.inc.php:1012
 msgid "Fakult&auml;t"
 msgstr "Faculty"
@@ -2396,12 +2796,6 @@ msgstr "back"
 #: resources/resourcesFunc.inc.php:317
 msgid "Personen"
 msgstr "People"
-
-#: resources/resourcesFunc.inc.php:208 resources/resourcesFunc.inc.php:233
-#: resources/resourcesFunc.inc.php:255 resources/resourcesFunc.inc.php:268
-#: resources/resourcesFunc.inc.php:322
-msgid "Veranstaltungen"
-msgstr "Courses"
 
 #: resources/resourcesFunc.inc.php:213 resources/resourcesFunc.inc.php:219
 #: resources/resourcesFunc.inc.php:260 resources/resourcesFunc.inc.php:273
@@ -2480,10 +2874,6 @@ msgstr ""
 #: resources/resourcesVisual.inc.php:512
 msgid "NutzerInnen hinzuf&uuml;gen"
 msgstr "Add users"
-
-#: resources/resourcesVisual.inc.php:571
-msgid "Typ"
-msgstr "Type"
 
 #: resources/resourcesVisual.inc.php:574
 msgid "zugeordnete Eigenschaften"
@@ -3725,77 +4115,87 @@ msgstr "End the recording:"
 msgid "Aufgezeichnet von: "
 msgstr "Recorded by:"
 
-#: chat/chat_func_inc.php:47
+#: chat/chat_func_inc.php:57
 msgid "Dieser Chatraum ist leer"
 msgstr "This chat room is empty"
 
-#: chat/chat_func_inc.php:49
+#: chat/chat_func_inc.php:59
 msgid "Sie haben eine gültige Einladung für diesen Chatraum"
 msgstr "You have a valid invitation to this chat room"
 
-#: chat/chat_func_inc.php:50 chat/chat_func_inc.php:54
-#: chat/chat_func_inc.php:174
+#: chat/chat_func_inc.php:60 chat/chat_func_inc.php:64
+#: chat/chat_func_inc.php:189
 msgid "Es ist eine Person in diesem Chatraum."
 msgstr "There is one person in this chat room."
 
-#: chat/chat_func_inc.php:50 chat/chat_func_inc.php:54
-#: chat/chat_func_inc.php:174
+#: chat/chat_func_inc.php:60 chat/chat_func_inc.php:64
+#: chat/chat_func_inc.php:189
 #, c-format
 msgid "Es sind %s Personen in diesem Chatraum"
 msgstr "There are %s people in this chat room"
 
-#: chat/chat_func_inc.php:52
+#: chat/chat_func_inc.php:62
 msgid "Sie sind alleine in diesem Chatraum"
 msgstr "You are alone in this chat room"
 
-#: chat/chat_func_inc.php:137
+#: chat/chat_func_inc.php:147
 msgid "Chatraum:"
 msgstr "Chat room:"
 
-#: chat/chat_func_inc.php:153
+#: chat/chat_func_inc.php:163
 msgid "Diesen Chatraum betreten"
 msgstr "Enter this chat room"
 
-#: chat/chat_func_inc.php:154
+#: chat/chat_func_inc.php:164
 #, c-format
 msgid "Sie k&ouml;nnen diesen Chatraum %sbetreten%s."
 msgstr "You can %senter%s this chat room. "
 
-#: chat/chat_func_inc.php:156
+#: chat/chat_func_inc.php:166
 msgid "(Sie wurden eingeladen.)"
 msgstr "(You have been invited.)"
 
-#: chat/chat_func_inc.php:159 chat/chat_func_inc.php:160
+#: chat/chat_func_inc.php:169 chat/chat_func_inc.php:170
 msgid "Sie haben diesen Chatraum bereits betreten."
 msgstr "You have already entered this chat room."
 
-#: chat/chat_func_inc.php:164
+#: chat/chat_func_inc.php:174
 msgid "Dieser Chatraum ist mit einem Passwort gesichert."
 msgstr "This chat room is secured with a password."
 
-#: chat/chat_func_inc.php:168
+#: chat/chat_func_inc.php:178
+#, fuzzy
+msgid "Diesen Chatraum leeren"
+msgstr "Enter this chat room"
+
+#: chat/chat_func_inc.php:179
+#, fuzzy, c-format
+msgid "Diesen Chatraum %sleeren%s"
+msgstr "This chat room is empty"
+
+#: chat/chat_func_inc.php:183
 msgid ""
 "Um diesen Chatraum zu betreten, brauchen sie eine g&uuml;ltige Einladung."
 msgstr "You need a valid invitation in order to enter this chat room."
 
-#: chat/chat_func_inc.php:172
+#: chat/chat_func_inc.php:187
 msgid "Dieser Chatraum ist leer."
 msgstr "This chat room is empty."
 
-#: chat/chat_func_inc.php:209
+#: chat/chat_func_inc.php:224
 msgid "Dieser User befindet sich in einem Chatraum."
 msgstr "This user is in a chat room."
 
-#: chat/chat_func_inc.php:209
+#: chat/chat_func_inc.php:224
 #, c-format
 msgid "Dieser User befindet sich in %s Chaträumen"
 msgstr "This user is in %s chat rooms"
 
-#: chat/chat_func_inc.php:216
+#: chat/chat_func_inc.php:231
 msgid "zum Chatten einladen"
 msgstr "invite to chat"
 
-#: chat/chat_func_inc.php:218
+#: chat/chat_func_inc.php:233
 msgid ""
 "Sie haben in keinem aktiven Chatraum die Berechtigung andere NutzerInnen "
 "einzuladen!"
@@ -4420,11 +4820,11 @@ msgstr "%s appointments"
 msgid "1 Termin"
 msgstr "1. appointment"
 
-#: about.php:91
+#: about.php:95
 msgid "Es wurde kein Nutzer unter dem angegebenen Nutzernamen gefunden!"
 msgstr "No user was found under the given username!"
 
-#: about.php:91
+#: about.php:95
 msgid ""
 " Wenn Sie auf einen Link geklickt haben, kann es sein, dass sich der "
 "Username des gesuchten Nutzers ge&auml;ndert hat, oder der Nutzer gel&ouml;"
@@ -4433,93 +4833,93 @@ msgstr ""
 "If you have clicked on a link, it could be that the username of the user you "
 "have searched for has changed, or that the user has been deleted."
 
-#: about.php:91
+#: about.php:95
 msgid "Benutzer nicht gefunden"
 msgstr "User not found"
 
-#: about.php:142
+#: about.php:146
 msgid "kein persönliches Bild vorhanden"
 msgstr "no personal photo is included"
 
-#: about.php:151
+#: about.php:155
 msgid "E-mail:"
 msgstr "E-mail:"
 
-#: about.php:152
+#: about.php:156
 msgid "Telefon (privat):"
 msgstr "Home telephone number: "
 
-#: about.php:153
+#: about.php:157
 msgid "Adresse (privat):"
 msgstr "Home address:"
 
-#: about.php:157 edit_about.php:928 institut_main.php:117
+#: about.php:161 edit_about.php:928 institut_main.php:121
 msgid "Homepage:"
 msgstr "Homepage:"
 
-#: about.php:164
+#: about.php:168
 msgid "Wo ich studiere:"
 msgstr "Where I study:"
 
-#: about.php:174
+#: about.php:178
 msgid "Wo ich arbeite:"
 msgstr "Where I work:"
 
-#: about.php:190 edit_about.php:974
+#: about.php:194 edit_about.php:974
 msgid "Sprechzeit:"
 msgstr "Office hours:"
 
-#: about.php:192 edit_about.php:924 edit_about.php:976
+#: about.php:196 edit_about.php:924 edit_about.php:976
 msgid "Telefon:"
 msgstr "Telephone:"
 
-#: about.php:194 edit_about.php:978 institut_main.php:113
+#: about.php:198 edit_about.php:978 institut_main.php:117
 msgid "Fax:"
 msgstr "Fax:"
 
-#: about.php:207
+#: about.php:211
 msgid "Stud.IP Messenger starten"
 msgstr "Start Stud.IP Messenger"
 
-#: about.php:209
+#: about.php:213
 msgid "Nachricht an User:"
 msgstr "Message to user:"
 
-#: about.php:209 browse.php:325 institut_members.php:647
+#: about.php:213 browse.php:325 institut_members.php:647
 #: institut_members.php:648 online.php:84 online.php:186 online.php:203
 #: online.php:230 studipim.php:139 teilnehmer.php:527 teilnehmer.php:647
 msgid "Nachricht an User verschicken"
 msgstr "Send message to user"
 
-#: about.php:211
+#: about.php:215
 msgid "Zu Buddies hinzuf&uuml;gen"
 msgstr "Add to Buddies"
 
-#: about.php:218
+#: about.php:222
 msgid "Zur Highscoreliste"
 msgstr "To high score list"
 
-#: about.php:218
+#: about.php:222
 msgid "Ihr Stud.IP-Score:"
 msgstr "Your Stud.IP score:"
 
-#: about.php:218
+#: about.php:222
 msgid "Ihr Rang:"
 msgstr "Your rank:"
 
-#: about.php:223
+#: about.php:227
 msgid "Stud.IP-Score:"
 msgstr "Stud.IP-Score:"
 
-#: about.php:223
+#: about.php:227
 msgid "Rang:"
 msgstr "Rank:"
 
-#: about.php:262
+#: about.php:266
 msgid "Hobbies"
 msgstr "Hobbies"
 
-#: about.php:276
+#: about.php:280
 msgid "Arbeitsschwerpunkte"
 msgstr "Research interests"
 
@@ -5161,12 +5561,6 @@ msgstr "Please enter the date of the first meeting here:"
 #: admin_metadates.php:614
 msgid "weitere Daten"
 msgstr "other dates"
-
-#: admin_metadates.php:619 archiv.php:254 archiv.php:406
-#: sem_browse.inc.php:373 sem_browse.inc.php:451
-#: lib/classes/SemBrowse.class.php:26
-msgid "Semester"
-msgstr "Semester"
 
 #: admin_metadates.php:633
 msgid "Dauer"
@@ -5827,12 +6221,6 @@ msgstr ""
 "course. This entry appears throughout Stud.IP as identification for the "
 "course."
 
-#: admin_seminare_assi.php:1321 admin_sem_tree.php:143 archiv.inc.php:54
-#: archiv.php:457 sem_browse.inc.php:245 seminar_main.php:102
-#: lib/classes/SemBrowse.class.php:237
-msgid "Untertitel:"
-msgstr "Subtitle:"
-
 #: admin_seminare_assi.php:1326
 msgid "Der Untertitel ermöglicht eine genauere Beschreibung der Veranstaltung."
 msgstr "The subtitle allows for a more exact description of the course."
@@ -6409,19 +6797,11 @@ msgid ""
 "geeignet ist."
 msgstr "Please enter for which participant group the course is suitable."
 
-#: admin_seminare_assi.php:2382 archiv.inc.php:129 details.php:358
-msgid "Voraussetzungen:"
-msgstr "Prerequisites:"
-
 #: admin_seminare_assi.php:2387
 msgid ""
 "Bitte geben Sie hier ein, welche Voraussetzungen für die Veranstaltung nötig "
 "sind."
 msgstr "Please enter here which prerequisites are necessary for the course."
-
-#: admin_seminare_assi.php:2393 archiv.inc.php:134 details.php:370
-msgid "Lernorganisation:"
-msgstr "Learning organisation:"
 
 #: admin_seminare_assi.php:2398
 msgid ""
@@ -6431,18 +6811,10 @@ msgstr ""
 "Please enter here, through which learning organisation the course will be "
 "directed."
 
-#: admin_seminare_assi.php:2404 archiv.inc.php:139 details.php:382
-msgid "Leistungsnachweis:"
-msgstr "Performance accreditation:"
-
 #: admin_seminare_assi.php:2409
 msgid ""
 "Bitte geben Sie hier ein, welche Leistungsnachweise erbracht werden müssen."
 msgstr "Please enter here what performance accreditation can be acheived."
-
-#: admin_seminare_assi.php:2418 archiv.inc.php:144 details.php:394
-msgid "Sonstiges:"
-msgstr "Miscellaneous:"
 
 #: admin_seminare_assi.php:2423
 msgid "Hier ist Platz für alle sonstigen Informationen zur Veranstaltung."
@@ -6742,20 +7114,20 @@ msgstr "Type:"
 msgid "Merkliste:"
 msgstr "Clipboard:"
 
-#: admin_sem_tree.php:199
+#: admin_sem_tree.php:205
 msgid "In alle ge&ouml;ffneten Bereiche eintragen"
 msgstr "Enter in all open areas"
 
-#: admin_sem_tree.php:202
+#: admin_sem_tree.php:208
 #, c-format
 msgid "In \"%s\" eintragen"
 msgstr "Enter in \"%s\""
 
-#: admin_sem_tree.php:206
+#: admin_sem_tree.php:212
 msgid "Aus Merkliste l&ouml;schen"
 msgstr "Delete from clipboard"
 
-#: admin_sem_tree.php:209 lib/classes/StudipSemTreeViewAdmin.class.php:538
+#: admin_sem_tree.php:215 lib/classes/StudipSemTreeViewAdmin.class.php:544
 msgid "Gewählte Aktion starten"
 msgstr "Start selected action"
 
@@ -6799,10 +7171,6 @@ msgstr "Users courses"
 #: admin_test_fak.php:289 admin_test_fak.php:353
 msgid "Keine Veranstaltungen gefunden."
 msgstr "No courses found."
-
-#: admin_test_fak.php:292
-msgid "Name der Veranstaltung"
-msgstr "Name of the course"
 
 #: admin_test_fak.php:292 browse.php:272
 msgid "Status in der Veranstaltung"
@@ -6898,22 +7266,13 @@ msgstr ""
 "waiting list. The system will automatically enter you as soon as a place "
 "becomes available for you. "
 
-#: archiv.inc.php:57 details.php:226 seminar_main.php:105
+#: archiv.inc.php:57 details.php:226 seminar_main.php:108
 msgid "Zeit:"
 msgstr "Time:"
 
 #: archiv.inc.php:63 details.php:240
 msgid "Erster Termin:"
 msgstr "First meeting:"
-
-#: archiv.inc.php:69 institut_main.php:105 seminar_main.php:108
-msgid "Ort:"
-msgstr "Place:"
-
-#: archiv.inc.php:78 sem_browse.inc.php:256
-#: lib/classes/SemBrowse.class.php:248
-msgid "DozentIn:"
-msgstr "Lecturer:"
 
 #: archiv.inc.php:87
 msgid "TutorInnen:"
@@ -6922,10 +7281,6 @@ msgstr "Tutors:"
 #: archiv.inc.php:89
 msgid "TutorIn:"
 msgstr "Tutor:"
-
-#: archiv.inc.php:124
-msgid "Teilnehmer:"
-msgstr "Participant:"
 
 #: archiv.inc.php:153
 msgid "Fakult&auml;t(en):"
@@ -7084,12 +7439,6 @@ msgstr "Only show courses in which I have participated."
 msgid "Es wurden %s Veranstaltungen gefunden."
 msgstr "%s courses were found."
 
-#: archiv.php:404 details.php:276 meine_seminare.php:631
-#: sem_browse.inc.php:195 sem_browse.inc.php:375 seminar_main.php:116
-#: lib/classes/SemBrowse.class.php:28 lib/classes/SemBrowse.class.php:44
-msgid "DozentIn"
-msgstr "Lecturer"
-
 #: archiv.php:407
 msgid "Aktion"
 msgstr "Action"
@@ -7114,7 +7463,7 @@ msgstr "Full view"
 msgid "Diese Veranstaltung aus dem Archiv entfernen"
 msgstr "Remove this course from the archive"
 
-#: archiv.php:461 institut_main.php:125
+#: archiv.php:461 institut_main.php:129
 msgid "Fakult&auml;t:"
 msgstr "Faculty:"
 
@@ -7324,69 +7673,69 @@ msgstr ""
 msgid "Terminkalender ist nicht eingebunden!"
 msgstr "Appointment calendar is not connected!"
 
-#: chat_online.php:113
+#: chat_online.php:116
 msgid "Chat-Online"
 msgstr "Chat online"
 
-#: chat_online.php:124
+#: chat_online.php:127
 msgid "Hier sehen Sie eine &Uuml;bersicht aller aktiven Chatr&auml;ume."
 msgstr "Here you can see an overview of all active chat rooms."
 
-#: chat_online.php:130
+#: chat_online.php:133
 msgid "Allgemeiner Chatraum"
 msgstr "General chat room"
 
-#: chat_online.php:145
+#: chat_online.php:148
 msgid "Pers&ouml;nlicher Chatraum"
 msgstr "Personal chat room"
 
-#: chat_online.php:161
+#: chat_online.php:164
 msgid "Chatr&auml;ume anderer NutzerInnen"
 msgstr "Other users' chat rooms"
 
-#: chat_online.php:178
+#: chat_online.php:181
 msgid "Chatr&auml;ume f&uuml;r Veranstaltungen"
 msgstr "Course chat rooms"
 
-#: chat_online.php:195
+#: chat_online.php:198
 msgid "Chatr&auml;ume f&uuml;r Einrichtungen"
 msgstr "Institute chat rooms"
 
-#: chat_online.php:222 header.php:173
+#: chat_online.php:225 header.php:173
 msgid "Es ist niemand im Chat"
 msgstr "There is no-one in the chat"
 
-#: chat_online.php:224 header.php:175
+#: chat_online.php:227 header.php:177
 msgid "Es ist eine Person im Chat"
 msgstr "There is one person in the chat"
 
-#: chat_online.php:226 header.php:177
+#: chat_online.php:229 header.php:179
 #, c-format
 msgid "Es sind %s Personen im Chat"
 msgstr "There are %s people in the chat"
 
-#: chat_online.php:229 header.php:180
+#: chat_online.php:232 header.php:182
 msgid "ein aktiver Chatraum"
 msgstr "an active chat room"
 
-#: chat_online.php:231 header.php:182
+#: chat_online.php:234 header.php:184
 #, c-format
 msgid "%s aktive Chaträume"
 msgstr "%s active chat rooms"
 
-#: chat_online.php:242
+#: chat_online.php:245
 msgid "Symbole:"
 msgstr "Symbol:"
 
-#: chat_online.php:248
+#: chat_online.php:251
 msgid "Sie sind allein in diesem Chatraum"
 msgstr "You are alone in this chat room"
 
-#: chat_online.php:251
+#: chat_online.php:254
 msgid "Eine oder mehrere Personen befinden sich in diesem Chatraum"
 msgstr "One or more people are in this chat room"
 
-#: chat_online.php:254
+#: chat_online.php:257
 msgid "Sie haben eine Einladung f&uuml;r diesen Chatraum"
 msgstr "You have an invitation for this chat room"
 
@@ -8115,7 +8464,7 @@ msgid "Geschlecht:"
 msgstr "Gender:"
 
 #: crcregister.ihtml:262 edit_about.php:872 edit_about.php:881
-#: institut_main.php:121
+#: institut_main.php:125
 msgid "E-Mail:"
 msgstr "E-mail:"
 
@@ -8558,7 +8907,7 @@ msgstr "Subscription to this course is <u>binding</u>!"
 msgid "Veranstaltungsort:"
 msgstr "Course location:"
 
-#: details.php:276 seminar_main.php:116
+#: details.php:276 seminar_main.php:119
 msgid "LeiterIn"
 msgstr "Co-ordinator"
 
@@ -8569,10 +8918,6 @@ msgstr "Member"
 #: details.php:295
 msgid "TutorIn"
 msgstr "Tutor"
-
-#: details.php:315
-msgid "Veranstaltungstyp:"
-msgstr "Type of course:"
 
 #: details.php:315
 #, c-format
@@ -9440,34 +9785,34 @@ msgstr "Do you really want to delete the below posting %s from %s?"
 msgid "Alle %s Antworten auf diesen Beitrag werden ebenfalls gel&ouml;scht!"
 msgstr "All %s replies to this contribution will be deleted!"
 
-#: forum.php:188
+#: forum.php:189
 #, c-format
 msgid "%s Posting(s) gel&ouml;scht"
 msgstr "%s posting(s) deleted."
 
-#: forum.php:227
+#: forum.php:229
 #, c-format
 msgid "Als Thema verschieben (zusammen mit %s Antworten):"
 msgstr "Moved as topic (together with %s replies):"
 
-#: forum.php:237
+#: forum.php:239
 msgid "in anderes Forum:"
 msgstr "In another forum:"
 
-#: forum.php:241 forum.php:263
+#: forum.php:243 forum.php:265
 msgid "dahin verschieben"
 msgstr "Move there"
 
-#: forum.php:259
+#: forum.php:261
 msgid "in andere Einrichtung:"
 msgstr "In another institute:"
 
-#: forum.php:300 forum.php:308 forum.php:316
+#: forum.php:302 forum.php:310 forum.php:318
 #, c-format
 msgid "%s Posting(s) verschoben."
 msgstr "%s posting(s) moved."
 
-#: forum.php:360
+#: forum.php:362
 msgid "Name des Themas"
 msgstr "Name of the topic"
 
@@ -9737,19 +10082,19 @@ msgstr "Public"
 msgid "Freie Veranstaltungen"
 msgstr "public courses"
 
-#: header.php:87 header.php:219
+#: header.php:87 header.php:223
 msgid "Impressum"
 msgstr "Imprint"
 
-#: header.php:87 header.php:219
+#: header.php:87 header.php:223
 msgid "Informationen zu dieser Installation"
 msgstr "Information concerning this installation"
 
-#: header.php:95 header.php:256 index.php:101 index.php:162 index.php:231
+#: header.php:95 header.php:260 index.php:101 index.php:162 index.php:231
 msgid "Hilfe"
 msgstr "Help"
 
-#: header.php:95 header.php:256
+#: header.php:95 header.php:260
 msgid "Hilfe zu dieser Seite"
 msgstr "Help for this page"
 
@@ -9791,57 +10136,62 @@ msgstr "Planner"
 msgid "Termine und Kontakte"
 msgstr "Appointments and contacts"
 
-#: header.php:185 header.php:187 header.php:189
+#: header.php:175
+#, fuzzy
+msgid "Nur Sie sind im Chat"
+msgstr "No-one else is online"
+
+#: header.php:187 header.php:189 header.php:191 header.php:193
 msgid "Chat"
 msgstr "Chat"
 
-#: header.php:185
+#: header.php:187
 msgid "Sie haben eine Chateinladung"
 msgstr "You have a chat invitation"
 
-#: header.php:185
+#: header.php:187
 #, c-format
 msgid "Sie haben %s Chateinladungen"
 msgstr "You have %s chat invitations"
 
-#: header.php:197 header.php:200 header.php:202
+#: header.php:201 header.php:204 header.php:206
 msgid "Online"
 msgstr "Online"
 
-#: header.php:197
+#: header.php:201
 msgid "Nur Sie sind online"
 msgstr "No-one else is online"
 
-#: header.php:200
+#: header.php:204
 msgid "Außer Ihnen ist eine Person online"
 msgstr "There is one other user online"
 
-#: header.php:202
+#: header.php:206
 #, c-format
 msgid "Es sind außer Ihnen %s Personen online"
 msgstr "There are %s other users online"
 
-#: header.php:233
+#: header.php:237
 msgid "Zu Ihrer Einstellungsseite"
 msgstr "To your preferences page"
 
-#: header.php:234
+#: header.php:238
 msgid "Suche"
 msgstr "Search"
 
-#: header.php:234
+#: header.php:238
 msgid "Im System suchen"
 msgstr "Search within system"
 
-#: header.php:238 institut_members.php:452
+#: header.php:242 institut_members.php:452
 msgid "Admin"
 msgstr "Admin"
 
-#: header.php:238
+#: header.php:242
 msgid "Zu Ihrer Administrationsseite"
 msgstr "To your administrative page"
 
-#: header.php:247
+#: header.php:251
 #, c-format
 msgid ""
 "Sie sind angemeldet als: %s mit der Berechtigung: %s. Beginn der Session: %"
@@ -9850,19 +10200,19 @@ msgstr ""
 "You are logged on as: %s with the authorisation: %s. Beginning of session: %"
 "s, last login: %s, %s, screen resolution: %sx%s, selected language: %s"
 
-#: header.php:249
+#: header.php:253
 msgid "JavaScript eingeschaltet"
 msgstr "JavaScript enabled"
 
-#: header.php:249
+#: header.php:253
 msgid "JavaScript ausgeschaltet"
 msgstr "JavaScript disabled"
 
-#: header.php:257
+#: header.php:261
 msgid "Logout"
 msgstr "Logout"
 
-#: header.php:257
+#: header.php:261
 msgid "Aus dem System abmelden"
 msgstr "Logout of the system"
 
@@ -10256,10 +10606,6 @@ msgstr "Global user administration"
 msgid "Startseite f&uuml;r Root bei Stud.IP"
 msgstr "Start page for root at Stud.IP"
 
-#: index.php:296
-msgid "Veranstaltungs&uuml;bersicht"
-msgstr "Course overview"
-
 #: index.php:299
 msgid "Verwaltung globaler Einstellungen"
 msgstr "Global settings administration"
@@ -10300,15 +10646,15 @@ msgstr "Institute to which this course belongs:"
 msgid "Suchen:"
 msgstr "Search:"
 
-#: institut_main.php:93 links_openobject.inc.php:70 seminar_main.php:96
+#: institut_main.php:97 links_openobject.inc.php:70 seminar_main.php:99
 msgid "Kurzinfo"
 msgstr "Quick info"
 
-#: institut_main.php:101
+#: institut_main.php:105
 msgid "Straße:"
 msgstr "Street: "
 
-#: institut_main.php:109
+#: institut_main.php:113
 msgid "Tel.:"
 msgstr "Tel.:"
 
@@ -10511,7 +10857,7 @@ msgstr "Info"
 msgid "MitarbeiterInnen"
 msgstr "Staff"
 
-#: links_openobject.inc.php:61 links_seminare.inc.php:43
+#: links_openobject.inc.php:61 links_seminare.inc.php:46
 #: mein_stundenplan.php:377 mein_stundenplan.php:388
 msgid "Veranstaltungs-Timetable"
 msgstr "Course time table"
@@ -10617,31 +10963,31 @@ msgid ""
 msgstr ""
 "You are in the course: %s, last visit: %s, your status in this course: %s"
 
-#: links_seminare.inc.php:28
+#: links_seminare.inc.php:29
 msgid "Meine&nbsp;Veranstaltungen"
 msgstr "My&nbsp;courses"
 
-#: links_seminare.inc.php:30
+#: links_seminare.inc.php:32
 msgid "Veranstaltungen&nbsp;suchen / hinzuf&uuml;gen"
 msgstr "Courses&nbsp;search / add"
 
-#: links_seminare.inc.php:32
+#: links_seminare.inc.php:34
 msgid "Veranstaltungen&nbsp;suchen"
 msgstr "Course&nbsp;search"
 
-#: links_seminare.inc.php:34
+#: links_seminare.inc.php:37
 msgid "Meine&nbsp;Einrichtungen"
 msgstr "My&nbsp;institutes"
 
-#: links_seminare.inc.php:39 links_seminare.inc.php:51
+#: links_seminare.inc.php:42 links_seminare.inc.php:54
 msgid "erweiterte&nbsp;&Uuml;bersicht"
 msgstr "Advanced&nbsp;overview"
 
-#: links_seminare.inc.php:40
+#: links_seminare.inc.php:43
 msgid "meine&nbsp;archivierten&nbsp;Veranstaltungen"
 msgstr "My&nbsp;archived&nbsp;courses"
 
-#: links_seminare.inc.php:54
+#: links_seminare.inc.php:57
 msgid "Einrichtungen&nbsp;verwalten"
 msgstr "Administer&nbsp;institutes"
 
@@ -11727,14 +12073,6 @@ msgstr "Here you can see the scores of users who have published them."
 msgid "[l&ouml;schen]"
 msgstr "[delete]"
 
-#: sem_browse.inc.php:195 lib/classes/SemBrowse.class.php:44
-msgid "Titel"
-msgstr "Title"
-
-#: sem_browse.inc.php:195 lib/classes/SemBrowse.class.php:44
-msgid "Kommentar"
-msgstr "Commentary"
-
 #: sem_browse.inc.php:200 lib/classes/SemBrowse.class.php:198
 msgid "Schnellsuche:"
 msgstr "Quick search:"
@@ -11751,10 +12089,6 @@ msgstr "Combination:"
 #: sem_browse.inc.php:276 sem_portal.php:174
 msgid "Zur Schnellsuche zurückgehen"
 msgstr "Back to quick search"
-
-#: sem_browse.inc.php:374 lib/classes/SemBrowse.class.php:27
-msgid "Bereich"
-msgstr "Area"
 
 #: sem_browse.inc.php:378
 msgid "Anzeigeoptionen übernehmen"
@@ -11785,7 +12119,7 @@ msgstr "My Status"
 msgid "Es wurden keine Veranstaltungen gefunden."
 msgstr "No course was found."
 
-#: sem_browse.inc.php:729 lib/classes/SemBrowse.class.php:421
+#: sem_browse.inc.php:729 lib/classes/SemBrowse.class.php:428
 msgid "(Der Suchbegriff fehlt oder ist zu kurz)"
 msgstr "(The search keyword is missing or is too short)"
 
@@ -13191,6 +13525,16 @@ msgstr ""
 msgid "Schreiben nicht m&ouml;glich"
 msgstr "Writing not possible"
 
+#: lib/classes/SemBrowse.class.php:293
+#, fuzzy
+msgid "Suche im Einrichtungsverzeichnis"
+msgstr "Search in %sInstitute index%s"
+
+#: lib/classes/SemBrowse.class.php:295
+#, fuzzy
+msgid "Suche im Vorlesungsverzeichnis"
+msgstr "/%sCourse index%s"
+
 #: lib/classes/SemBrowse.class.php:344
 #, c-format
 msgid " %s Veranstaltungen gefunden %s, Gruppierung: %s"
@@ -13200,11 +13544,7 @@ msgstr "%s courses found %s, grouping:%s "
 msgid "(Suchergebnis)"
 msgstr "(search results)"
 
-#: lib/classes/SemBrowse.class.php:364
-msgid "keine Studienbereiche eingetragen"
-msgstr "No subject areas added"
-
-#: lib/classes/SemBrowse.class.php:419
+#: lib/classes/SemBrowse.class.php:426
 msgid "Ihre Suche ergab keine Treffer"
 msgstr "The search did not reveal any matches"
 
@@ -13381,7 +13721,7 @@ msgid "Keine weiteren Daten vorhanden!"
 msgstr "No further data included!"
 
 #: lib/classes/StudipRangeTreeViewAdmin.class.php:594
-#: lib/classes/StudipSemTreeViewAdmin.class.php:602
+#: lib/classes/StudipSemTreeViewAdmin.class.php:608
 msgid "An dieser Stelle einfügen"
 msgstr "Insert in this position"
 
@@ -13398,12 +13738,12 @@ msgid "Element bearbeiten"
 msgstr "Edit element"
 
 #: lib/classes/StudipRangeTreeViewAdmin.class.php:620
-#: lib/classes/StudipSemTreeViewAdmin.class.php:549
+#: lib/classes/StudipSemTreeViewAdmin.class.php:555
 msgid "Name des Elements:"
 msgstr "Name of the element:"
 
 #: lib/classes/StudipRangeTreeViewAdmin.class.php:626
-#: lib/classes/StudipSemTreeViewAdmin.class.php:561
+#: lib/classes/StudipSemTreeViewAdmin.class.php:567
 msgid "Aktion abbrechen"
 msgstr "Cancel action"
 
@@ -13666,39 +14006,39 @@ msgstr "Entries on this level:"
 msgid "Nicht zugeordnete Veranstaltungen auf dieser Ebene:"
 msgstr "Non-allocated courses on this level:"
 
-#: lib/classes/StudipSemTreeViewAdmin.class.php:531
+#: lib/classes/StudipSemTreeViewAdmin.class.php:537
 msgid "Auswahl umkehren"
 msgstr "Undo choice"
 
-#: lib/classes/StudipSemTreeViewAdmin.class.php:532
+#: lib/classes/StudipSemTreeViewAdmin.class.php:538
 msgid "Aktion auswählen"
 msgstr "Choose action"
 
-#: lib/classes/StudipSemTreeViewAdmin.class.php:533
+#: lib/classes/StudipSemTreeViewAdmin.class.php:539
 msgid "in Merkliste &uuml;bernehmen"
 msgstr "Add to clipboard"
 
-#: lib/classes/StudipSemTreeViewAdmin.class.php:535
+#: lib/classes/StudipSemTreeViewAdmin.class.php:541
 msgid "l&ouml;schen und in Merkliste &uuml;bernehmen"
 msgstr "Delete and add to clipboard."
 
-#: lib/classes/StudipSemTreeViewAdmin.class.php:536
+#: lib/classes/StudipSemTreeViewAdmin.class.php:542
 msgid "l&ouml;schen"
 msgstr "Delete"
 
-#: lib/classes/StudipSemTreeViewAdmin.class.php:548
+#: lib/classes/StudipSemTreeViewAdmin.class.php:554
 msgid "Bereich editieren"
 msgstr "Edit area"
 
-#: lib/classes/StudipSemTreeViewAdmin.class.php:555
+#: lib/classes/StudipSemTreeViewAdmin.class.php:561
 msgid "Infotext:"
 msgstr "Info text:"
 
-#: lib/classes/StudipSemTreeViewAdmin.class.php:613
+#: lib/classes/StudipSemTreeViewAdmin.class.php:619
 msgid "Element nach oben"
 msgstr "Element to top"
 
-#: lib/classes/StudipSemTreeViewAdmin.class.php:618
+#: lib/classes/StudipSemTreeViewAdmin.class.php:624
 msgid "Element nach unten"
 msgstr "Element to bottom"
 
@@ -13716,6 +14056,18 @@ msgstr "Open all sub-elements"
 msgid "Alle Unterelemente schließen"
 msgstr "Close all sub-elements"
 
+#: extern/elements/ExternElementMainDownload.class.php:183
+#: extern/elements/ExternElementMainPersons.class.php:190
+msgid ""
+"Wenn Sie die SRI-Schnittstelle benutzen, müssen Sie hier die vollständige "
+"URL (mit http://) der Seite angeben, in der das Ausgabemodul für die "
+"Mitarbeiterdaten eingebunden wird. Lassen Sie dieses Feld unbedingt leer, "
+"falls Sie die SRI-Schnittstelle nicht nutzen."
+msgstr ""
+"If you use the SRI interface, you must give the complete URL of the page "
+"(with http://) in which the output module for the staff data is connected. "
+"Leave the field blank if you do not use the SRI interface."
+
 #: admin_dates.php:391 admin_metadates.php:365
 #, c-format
 msgid ""
@@ -13723,3 +14075,9 @@ msgid ""
 "eingetragen."
 msgstr ""
 "The allocation of rooms %s has been sent to the resources administration."
+
+#~ msgid "Personal"
+#~ msgstr "Personal"
+
+#~ msgid "Konfiguration Mitarbeiterdetails:"
+#~ msgstr "Staff details configuration:"
