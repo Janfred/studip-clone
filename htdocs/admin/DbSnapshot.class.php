@@ -127,7 +127,7 @@ class DbSnapshot {
 				$this->result[] = $this->dbResult->Record;
 			}
 			$this->numFields = $this->dbResult->num_fields();
-			$this->numRows = count($this->result);
+			$this->numRows = $this->dbResult->num_rows();
 			$this->metaData = $this->dbResult->metadata();
 			unset($this->dbResult);
 			$this->pos = false;
@@ -152,7 +152,16 @@ class DbSnapshot {
 	function resetPos(){
 		$this->pos = false;
 	}
-	
+
+	function isField($name){
+		for ($i = 0; $i < $this->numFields; ++$i) {
+			if ($name == $this->metaData[$i]['name']){
+				return true;
+			}
+		}
+		return true;
+	}
+		
 	function getRow($row = false){
 		if(!$row===false AND !$this->result[$row])
 			$this->halt("Snapshot has only ".($this->numRows-1)." rows!");
@@ -175,12 +184,23 @@ class DbSnapshot {
 		return ($this->pos===false) ? false : $this->result[$this->pos][$field];
 	}
 	
-	function getFields($fieldname = 0){
+	function getRows($fieldname = 0){
 		if(!$this->numRows)
 			$this->halt("No snapshot available or empty result!");
 		$ret = array();
-		foreach($this->result as $value){
-			$ret[] = $value[$fieldname];
+		for($i = 0; $i < $this->numRows; ++$i){
+			$ret[] = $this->result[$i][$fieldname];
+		}
+		return $ret;
+	}
+	
+	function getDistinctRows($fieldname){
+		if (!$this->isField($fieldname))
+			$this->halt("Field: $fieldname not found in result set!");
+		$ret = array();
+		for($i = 0; $i < $this->numRows; ++$i){
+			$ret[$this->result[$i][$fieldname]] = $this->result[$i];
+			$ret[$this->result[$i][$fieldname]]['row'] = $i;
 		}
 		return $ret;
 	}
@@ -189,7 +209,7 @@ class DbSnapshot {
 		if(!$this->numRows)
 			$this->halt("No snapshot available or empty result!");
 		$sortfunc = ($order=="ASC") ? "asort" : "arsort";
-		$sortfields = $this->getFields($fieldname);
+		$sortfields = $this->getRows($fieldname);
 		$sortfunc($sortfields,$stype);
 		$sortresult = array();
 		foreach($sortfields as $key => $value){
@@ -203,7 +223,8 @@ class DbSnapshot {
 		if(!$this->numRows)
 			$this->halt("No snapshot available or empty result!");
 		$ret = false;
-		foreach($this->getFields($fieldname) as $key => $value){
+		$sortfields = $this->getRows($fieldname);
+		foreach($sortfields as $key => $value){
 			if(preg_match($searchstr,$value)) {
 				$ret = true;
 				$this->pos = $key;
@@ -213,6 +234,59 @@ class DbSnapshot {
 		return $ret;
 	}
 	
+	function getGroupedResult($group_by_field, $fields_to_group = null){
+		if (!$this->numRows)
+			$this->halt("No snapshot available or empty result!");
+		$fieldlist = $this->getFieldList();
+		if (!in_array($group_by_field,$fieldlist))
+			$this->halt("group_by_field not found in result set!");
+		if (is_array($fields_to_group))
+			$fieldlist = $fields_to_group;
+		$num_fields = count($fieldlist);
+		$ret = array();
+		for($i = 0; $i < $this->numRows; ++$i){
+			for ($j = 0; $j < $num_fields; ++$j){
+				if ($fieldlist[$j] != $group_by_field){
+					++$ret[$this->result[$i][$group_by_field]][$fieldlist[$j]][$this->result[$i][$fieldlist[$j]]];
+				}
+			}
+		}
+		return $ret;
+	}
+		
+	function mergeSnapshot($m_snap, $key_field = false, $mode = "ADD"){
+		if ($mode == "ADD"){
+			for ($i = 0 ;$i < $m_snap->numRows; ++$i){
+				$this->result[] = $m_snap->result[$i];
+			}
+		} elseif ($mode == "AND"){
+			if (!$this->numRows || !$m_snap->numRows){
+					$this->result = array();
+				} elseif ($m_snap->numRows) {
+					$m_result = $m_snap->getDistinctRows($key_field);
+					for ($i = 0 ;$i < $this->numRows; ++$i){
+						if (!($m_result[$this->result[$i][$key_field]] && $this->result[$i][$key_field])){
+							unset($this->result[$i]);
+						}
+					}
+				}
+		} elseif ($mode == "OR"){
+			if (!$this->numRows){
+				$this->result = $m_snap->result;
+			} elseif ($m_snap->numRows) {
+				$result = $this->getDistinctRows($key_field);
+				for ($i = 0 ;$i < $m_snap->numRows; ++$i){
+					if (!$result[$m_snap->result[$i][$key_field]]){
+						$this->result[] = $m_snap->result[$i];
+					}
+				}
+			}
+		}
+		$this->result = array_merge(array(),$this->result);
+		$this->numRows = count($this->result);
+		$this->resetPos();
+		return $this->numRows;
+	}
 	/**
 	* print error message and exit script
 	*
@@ -230,21 +304,23 @@ class DbSnapshot {
 
 	}	
 }
-
-
-
 //
-//$db = new DB_Seminar("SELECT * FROM auth_user_md5  LIMIT 10");
-//$snap = new DbSnapshot($db);
-//print($snap->numFields."\n".$snap->numRows."\n");
-//print_r($snap->result);
-//$snap->sortRows("Nachname","DESC",SORT_STRING);
-//print_r($snap->result);
-//if ($snap->searchFields("Nachname","/noack/i")) echo "Gefunden: ".$snap->getField("Vorname")." ".$snap->getField("Nachname");
-//print_r($snap->getRow());
-//print_r($snap->getFieldList());
-//$snap->resetPos();
-//while($snap->nextRow()) print($snap->getField("username")."\n");
-//print_r($snap->getRow(10));
+//$db = new DB_Seminar("SELECT * FROM auth_user_md5 WHERE username like 'suchi%' LIMIT 10");
+//$snap1 = new DbSnapshot($db);
+//$db->query("SELECT * FROM auth_user_md5 WHERE username like 'suchi@%' OR username like 'anoack' LIMIT 10");
+//$snap2 = new DbSnapshot($db);
+//echo "<pre>";
+//print_r($snap1->result);
+//print_r($snap2->result);
+//echo "\n" .$snap1->mergeSnapshot($snap2,"user_id","OR") . "\n";
+//print_r($snap1->result);
+//$snap1->sortRows("Nachname","DESC",SORT_STRING);
+//print_r($snap1->result);
+//if ($snap1->searchFields("Nachname","/noack/i")) echo "Gefunden: ".$snap->getField("Vorname")." ".$snap->getField("Nachname");
+//print_r($snap1->getRow());
+//print_r($snap1->getFieldList());
+//$snap1->resetPos();
+//while($snap1->nextRow()) print($snap1->getField("username")."\n");
+//print_r($snap1->getRow(4));
 //
 ?>

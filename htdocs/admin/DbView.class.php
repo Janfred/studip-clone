@@ -217,7 +217,7 @@ class DbView {
 	
 	function get_uniqid(){
 		mt_srand((double)microtime()*1000000);
-		return md5(uniqid (mt_rand()));
+		return md5(uniqid (mt_rand(),1));
 	}
 	
 	function get_value_list($list){
