@@ -303,8 +303,8 @@ class EvaluationTreeShowUser {
 	$html .= "\n<!-- getGroupContent ----------------- -->\n";
 	$html .= "<table width=\"100%\" cellpadding=\"2\" cellspacing=\"2\" align=\"center\" ".$style.">\n";
 ###
-	if( $group->getChildType() == "EvaluationGroup" )
-	    $html .= "<tr><td class=\"steelgroup2\" width=\"100%\" height=\"3\"></td></tr>\n";
+#	if( $group->getChildType() == "EvaluationGroup" )
+#	    $html .= "<tr><td class=\"steelgroup4\" width=\"100%\" height=\"3\"></td></tr>\n";
 ###
 	$html .= "<tr>\n";
 	$html .= "<td align=\"left\" class=\"".$class."\">\n";
@@ -395,7 +395,7 @@ class EvaluationTreeShowUser {
 			}
 
 			$html .= 
-			    "  <td align=\"center\" ".
+			    "  <td align=\"center\" class=\"steelgroup6\" ".
 			    "style=\"border-bottom: $answerBorder; ".
 			    "border-left: $answerBorder; border-top: $answerBorder; $extraStyle;\" ".
 			    "width=\"".$cellWidth."%\" ".($noWrap ? "nowrap" : "").">";
@@ -430,8 +430,8 @@ class EvaluationTreeShowUser {
 #			    "<td align=\"center\" class=\"steelgraudunkel\" ".
 #			    "style=\"border-left: $answerBorder; border-top: $answerBorder;\" ".
 #			    "width=\"2\"></td>";
-			    "<td align=\"center\" style=\"$extraStyle\" ".
-			    "width=\"1\">&nbsp;</td>";
+			    "<td align=\"center\" class=\"steelgroup7\" style=\"$extraStyle\" ".
+			    "width=\"1%\">&nbsp;</td>";
 		    }
 
 		    $extraStyle .= ($question->getPosition() == $group->getNumberChildren() - 1
