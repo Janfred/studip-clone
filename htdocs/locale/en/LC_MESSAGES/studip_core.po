@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: STUD.IP 0.9.0\n"
-"POT-Creation-Date: 2003-01-17 15:07+0100\n"
-"PO-Revision-Date: 2003-01-13 20:55+GMT\n"
+"POT-Creation-Date: 2003-01-20 16:05+0100\n"
+"PO-Revision-Date: 2003-01-20 14:33+GMT\n"
 "Last-Translator: \n"
 "Language-Team:  <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -30,7 +30,7 @@ msgstr ""
 msgid "Adresse (privat):"
 msgstr ""
 
-#: about.php:149 edit_about.php:951
+#: about.php:149 edit_about.php:945
 msgid "Homepage:"
 msgstr ""
 
@@ -42,19 +42,19 @@ msgstr ""
 msgid "Wo ich arbeite:"
 msgstr ""
 
-#: about.php:180 edit_about.php:995 show_dates.inc.php:483
+#: about.php:180 edit_about.php:989 show_dates.inc.php:483
 msgid "Raum:"
 msgstr ""
 
-#: about.php:182 edit_about.php:997
+#: about.php:182 edit_about.php:991
 msgid "Sprechzeit:"
 msgstr ""
 
-#: about.php:184 edit_about.php:947 edit_about.php:999
+#: about.php:184 edit_about.php:941 edit_about.php:993
 msgid "Telefon:"
 msgstr ""
 
-#: about.php:186 edit_about.php:1001
+#: about.php:186 edit_about.php:995
 msgid "Fax:"
 msgstr ""
 
@@ -94,7 +94,7 @@ msgstr ""
 msgid "Rang:"
 msgstr ""
 
-#: about.php:240
+#: about.php:240 links_about.inc.php:37 links_about.inc.php:52
 msgid "Lebenslauf"
 msgstr ""
 
@@ -102,7 +102,7 @@ msgstr ""
 msgid "Hobbies"
 msgstr ""
 
-#: about.php:254
+#: about.php:254 links_about.inc.php:55
 msgid "Publikationen"
 msgstr ""
 
@@ -324,7 +324,7 @@ msgid ""
 "gew&auml;hlt haben."
 msgstr ""
 
-#: admin_admission.php:585 admin_admission.php:587 edit_about.php:891
+#: admin_admission.php:585 admin_admission.php:587 edit_about.php:885
 msgid "Passwort-Wiederholung:"
 msgstr ""
 
@@ -627,6 +627,28 @@ msgstr ""
 msgid " - Bereiche verwalten"
 msgstr ""
 
+#: admin_seminare_assi.php:635 admin_seminare_assi.php:698
+msgid ""
+"Folgende gew&uuml;nschte Raumbelegungen &uuml;berschneiden sich mit bereits "
+"vorhandenen Belegungen. Bitte &auml;ndern Sie die R&auml;ume oder Zeiten!"
+msgstr ""
+
+#: admin_seminare_assi.php:643 admin_seminare_assi.php:705
+#: admin_seminare_assi.php:733
+msgid "und weitere"
+msgstr ""
+
+#: admin_seminare_assi.php:644 admin_seminare_assi.php:706
+#: admin_seminare_assi.php:734
+msgid "Raumplan anzeigen"
+msgstr ""
+
+#: admin_seminare_assi.php:726
+msgid ""
+"Der gew&uuml;nschte Raum der Vorbesprechung &uuml;berschneidet sich mit "
+"bereits vorhandenen Belegungen. Bitte &auml;ndern Sie den Raum oder die Zeit!"
+msgstr ""
+
 #: dates.inc.php:57
 msgid "Mo.: "
 msgstr ""
@@ -663,507 +685,510 @@ msgstr ""
 msgid "nicht angegeben"
 msgstr ""
 
-#: edit_about.php:130
+#: edit_about.php:131
 #, c-format
 msgid ""
 "Die hochgeladene Bilddatei ist %s KB groß!<br>Die maximale Dateigröße "
 "beträgt %s KB!"
 msgstr ""
 
-#: edit_about.php:135
+#: edit_about.php:136
 msgid "Sie haben keine Datei zum hochladen ausgewählt!"
 msgstr ""
 
-#: edit_about.php:147
+#: edit_about.php:148
 #, c-format
 msgid ""
 "Der Dateityp der Bilddatei ist falsch (%s)!<br>Es sind nur die "
 "Dateiendungen .gif und .jpg erlaubt!"
 msgstr ""
 
-#: edit_about.php:154
+#: edit_about.php:155
 msgid "Fehler beim kopieren der Datei!"
 msgstr ""
 
-#: edit_about.php:172
+#: edit_about.php:173
 msgid ""
 "Die Bilddatei wurde erfolgreich hochgeladen! Eventuell sehen Sie das neue "
 "Bild erst nach einem Reload dieser Seite."
 msgstr ""
 
-#: edit_about.php:174
+#: edit_about.php:175
 msgid "Eine neue Bilddatei wurde hochgeladen.\n"
 msgstr ""
 
-#: edit_about.php:186
+#: edit_about.php:187
 #, c-format
 msgid "Fehler beim L&ouml;schen in user_studiengang bei ID=%s"
 msgstr ""
 
-#: edit_about.php:193
+#: edit_about.php:194
 #, c-format
 msgid "Fehler beim Einf&uuml;gen in user_studiengang bei ID=%s"
 msgstr ""
 
-#: edit_about.php:197
+#: edit_about.php:198
 msgid "Die Zuordnung zu Studiengängen wurde ge&auml;ndert."
 msgstr ""
 
-#: edit_about.php:199
+#: edit_about.php:200
 msgid "Die Zuordnung zu Studiengängen wurde geändert!\n"
 msgstr ""
 
-#: edit_about.php:213
+#: edit_about.php:214
 #, c-format
 msgid "Fehler beim L&ouml;schen in user_inst bei ID=%s"
 msgstr ""
 
-#: edit_about.php:220
+#: edit_about.php:221
 #, c-format
 msgid "Fehler beim Einf&uuml;gen in user_inst bei ID=%s"
 msgstr ""
 
-#: edit_about.php:224
+#: edit_about.php:225
 msgid "Die Zuordnung zu Einrichtungen wurde ge&auml;ndert."
 msgstr ""
 
-#: edit_about.php:226
+#: edit_about.php:227
 msgid "Die Zuordnung zu Einrichtungen wurde geändert!\n"
 msgstr ""
 
-#: edit_about.php:238
+#: edit_about.php:239
 #, c-format
 msgid "Ihre Daten an der Einrichtung %s wurden ge&auml;ndert"
 msgstr ""
 
-#: edit_about.php:240
+#: edit_about.php:241
 #, c-format
 msgid "Ihre Daten an der Einrichtung %s wurden geändert.\n"
 msgstr ""
 
-#: edit_about.php:254
-msgid "msg§Daten an Lebenslauf u.a. ge&auml;ndert"
-msgstr ""
+#: edit_about.php:255
+msgid "Daten an Lebenslauf u.a. ge&auml;ndert"
+msgstr "Data regarding curriculum vitae were changed"
 
-#: edit_about.php:256
-msgid "Daten Daten an Lebenslauf u.a. wurden geändert.\n"
-msgstr ""
+#: edit_about.php:257
+msgid "Daten an Lebenslauf u.a. wurden geändert.\n"
+msgstr "Data regarding curriculum vitae were changed.\n"
 
-#: edit_about.php:276
+#: edit_about.php:277
 msgid "Ihre pers&ouml;nlichen Daten wurden ge&auml;ndert."
 msgstr ""
 
-#: edit_about.php:278
+#: edit_about.php:279
 msgid "Ihre persönlichen Daten wurden geändert.\n"
 msgstr ""
 
-#: edit_about.php:297
+#: edit_about.php:298
 msgid "Das Paßwort ist zu kurz!"
 msgstr ""
 
-#: edit_about.php:301
+#: edit_about.php:302
 msgid ""
 "Die Wiederholung des Paßwortes ist falsch! Bitte geben sie das exakte "
 "Paßwort ein!"
 msgstr ""
 
-#: edit_about.php:309
+#: edit_about.php:310
 msgid "Ihr Passwort wurde ge&auml;ndert!"
 msgstr ""
 
-#: edit_about.php:314
+#: edit_about.php:315
 msgid "Der Vorname fehlt, oder ist unsinnig!"
 msgstr ""
 
-#: edit_about.php:318
+#: edit_about.php:319
 msgid "Der Nachname fehlt, oder ist unsinnig!"
 msgstr ""
 
-#: edit_about.php:322
+#: edit_about.php:323
 msgid "Ihr Name wurde ge&auml;ndert!"
 msgstr ""
 
-#: edit_about.php:327
+#: edit_about.php:328
 msgid "Der gewählte Username ist zu kurz!"
 msgstr ""
 
-#: edit_about.php:332
+#: edit_about.php:333
 #, c-format
 msgid ""
 "Der Username wird bereits von einem anderen User (%s %s) verwendet. Bitte "
 "wählen sie einen Anderen!"
 msgstr ""
 
-#: edit_about.php:336
+#: edit_about.php:337
 msgid "Ihr Username wurde ge&auml;ndert!"
 msgstr ""
 
-#: edit_about.php:349
+#: edit_about.php:350
 msgid "Die E-Mail Addresse fehlt, oder ist falsch geschrieben!"
 msgstr ""
 
-#: edit_about.php:354
+#: edit_about.php:355
 msgid ""
 "Der Mailserver ist nicht erreichbar. Bitte überprüfen Sie, ob Sie E-Mails "
 "mit der angegebenen Addresse verschicken können!"
 msgstr ""
 
-#: edit_about.php:364
+#: edit_about.php:365
 msgid ""
 "Die angegebene E-Mail Addresse ist nicht erreichbar. Bitte überprüfen Sie "
 "Ihre Angaben!"
 msgstr ""
 
-#: edit_about.php:371
+#: edit_about.php:372
 #, c-format
 msgid ""
 "Die angegebene E-Mail Addresse wird bereits von einem anderen User (%s %s) "
 "verwendet. Sie müssen eine andere E-Mail Addresse angeben!"
 msgstr ""
 
-#: edit_about.php:406
+#: edit_about.php:407
 msgid "Ihre Email Addresse wurde geändert!"
 msgstr ""
 
-#: edit_about.php:406
+#: edit_about.php:407
 msgid ""
 "ACHTUNG!<br>Aus Sicherheitsgründen wurde auch ihr Paßwort geändert, es wurde "
 "an die neu angegebene Email Addresse geschickt!"
 msgstr ""
 
-#: edit_about.php:561
+#: edit_about.php:559
 msgid "Um eine korrekte Authentifizierung mit ihren neuen Daten"
 msgstr ""
 
-#: edit_about.php:566
+#: edit_about.php:564 links_about.inc.php:66
 msgid "Login"
 msgstr ""
 
-#: edit_about.php:585
+#: edit_about.php:581
 msgid "Zugriff auf Userdaten verweigert"
 msgstr ""
 
-#: edit_about.php:586
+#: edit_about.php:582
 msgid ""
 "<a href=\"index.php\"><b>&nbsp;Hier</b></a> geht es wieder zur Anmeldung "
 "beziehungsweise Startseite.<br />&nbsp;"
 msgstr ""
 
-#: edit_about.php:661
+#: edit_about.php:657
 msgid ""
 "Ihre persönliche Seite wurde von einem Administrator verändert.\n"
 " Folgende Veränderungen wurden vorgenommen:\n"
 " \n"
 msgstr ""
 
-#: edit_about.php:812
+#: edit_about.php:806 links_about.inc.php:45
 msgid "Hochladen des pers&ouml;nlichen Bildes"
 msgstr ""
 
-#: edit_about.php:815
+#: edit_about.php:809
 msgid "Benutzerdaten bearbeiten"
 msgstr ""
 
-#: edit_about.php:819
+#: edit_about.php:813
 msgid "Studienkarriere und Einrichtungen bearbeiten"
 msgstr ""
 
-#: edit_about.php:821
+#: edit_about.php:815
 msgid "Studienkarriere bearbeiten"
 msgstr ""
 
-#: edit_about.php:825
+#: edit_about.php:819
 msgid "Lebenslauf, Arbeitsschwerpunkte und Publikationen bearbeiten"
 msgstr ""
 
-#: edit_about.php:827
+#: edit_about.php:821
 msgid "Lebenslauf bearbeiten"
 msgstr ""
 
-#: edit_about.php:830
+#: edit_about.php:824
 msgid "Eigene Kategorien bearbeiten"
 msgstr ""
 
-#: edit_about.php:833
+#: edit_about.php:827
 msgid "Autologin einrichten"
 msgstr ""
 
-#: edit_about.php:839
+#: edit_about.php:833
 #, c-format
 msgid "Daten von: %s %s (%s), Status: %s"
 msgstr ""
 
-#: edit_about.php:855
+#: edit_about.php:849
 msgid ""
 "Auf dieser Seite k&ouml;nnen Sie ein pers&ouml;nliches Bild f&uuml;r Ihre "
 "Homepage hochladen."
 msgstr ""
 
-#: edit_about.php:857
+#: edit_about.php:851
 msgid "Aktuell angezeigtes Bild:"
 msgstr ""
 
-#: edit_about.php:860
+#: edit_about.php:854
 msgid "kein pers&ouml;nliches Bild vorhanden"
 msgstr ""
 
-#: edit_about.php:867
+#: edit_about.php:861
 msgid "Upload eines Bildes:"
 msgstr ""
 
-#: edit_about.php:867
+#: edit_about.php:861
 msgid ""
 "1. Wählen sie mit <b>Durchsuchen</b> eine Bilddatei von ihrer Festplatte aus."
 msgstr ""
 
-#: edit_about.php:869
-msgid "2. Klicken sie auf <b>Bild senden</b>, um das Bild hochzuladen."
+#: edit_about.php:863
+msgid "2. Klicken sie auf <b>absenden</b>, um das Bild hochzuladen."
 msgstr ""
 
-#: edit_about.php:878
+#: edit_about.php:864
+msgid "absenden"
+msgstr ""
+
+#: edit_about.php:872
 msgid "Hier können sie Ihre Benutzerdaten verändern."
 msgstr ""
 
-#: edit_about.php:879
+#: edit_about.php:873
 #, c-format
 msgid ""
 "Alle mit einem Sternchen %s markierten Felder m&uuml;ssen ausgef&uuml;llt "
 "werden."
 msgstr ""
 
-#: edit_about.php:889 edit_about.php:898
+#: edit_about.php:883 edit_about.php:892
 msgid "Username:"
 msgstr ""
 
-#: edit_about.php:891 edit_about.php:900
+#: edit_about.php:885 edit_about.php:894
 msgid "Paßwort:"
 msgstr ""
 
-#: edit_about.php:891
+#: edit_about.php:885
 msgid "neues Passwort:"
 msgstr ""
 
-#: edit_about.php:893 edit_about.php:902
+#: edit_about.php:887 edit_about.php:896
 #, fuzzy
 msgid "Name:"
 msgstr "Name"
 
-#: edit_about.php:893
+#: edit_about.php:887
 msgid "Vorname:"
 msgstr ""
 
-#: edit_about.php:893
+#: edit_about.php:887
 #, fuzzy
 msgid "Nachname:"
 msgstr "Name"
 
-#: edit_about.php:895 edit_about.php:904
+#: edit_about.php:889 edit_about.php:898
 msgid "Email:"
 msgstr ""
 
-#: edit_about.php:898
+#: edit_about.php:892
 msgid "Adminzugriff hier nicht möglich!"
 msgstr ""
 
-#: edit_about.php:907
+#: edit_about.php:901
 msgid "Titel:"
 msgstr ""
 
-#: edit_about.php:920
+#: edit_about.php:914
 msgid "Titel nachgest.:"
 msgstr ""
 
-#: edit_about.php:934
+#: edit_about.php:928
 msgid "Geschlecht:"
 msgstr ""
 
-#: edit_about.php:934
+#: edit_about.php:928
 msgid "m&auml;nnlich"
 msgstr ""
 
-#: edit_about.php:938
+#: edit_about.php:932
 msgid "weiblich"
 msgstr ""
 
-#: edit_about.php:945
+#: edit_about.php:939
 msgid "Optionale Angaben"
 msgstr ""
 
-#: edit_about.php:949
+#: edit_about.php:943
 msgid "Anschrift:"
 msgstr ""
 
-#: edit_about.php:953
+#: edit_about.php:947
 msgid "Hobbies:"
 msgstr ""
 
-#: edit_about.php:955 edit_about.php:1005 edit_about.php:1043
-#: edit_about.php:1083 edit_about.php:1108
-#: StudipRangeTreeViewAdmin.class.php:687
+#: edit_about.php:949 edit_about.php:999 edit_about.php:1037
+#: edit_about.php:1077 edit_about.php:1102
+#: StudipRangeTreeViewAdmin.class.php:688
 msgid "Änderungen übernehmen"
 msgstr ""
 
-#: edit_about.php:963
+#: edit_about.php:957
 msgid "Als Root haben Sie bereits genug Karriere gemacht ;-)"
 msgstr ""
 
-#: edit_about.php:966
+#: edit_about.php:960
 msgid ""
 "Hier können Sie Angaben &uuml;ber ihre Studienkarriere und Daten an "
 "Einrichtungen, an denen Sie arbeiten, machen."
 msgstr ""
 
-#: edit_about.php:968
+#: edit_about.php:962
 msgid ""
 "Hier können Sie Angaben &uuml;ber Daten an Einrichtungen, in den Sie "
 "arbeiten, machen."
 msgstr ""
 
-#: edit_about.php:970
+#: edit_about.php:964
 msgid "Hier können Sie Angaben &uuml;ber ihre Studienkarriere machen."
 msgstr ""
 
-#: edit_about.php:979
+#: edit_about.php:973
 #, fuzzy
 msgid "Ich arbeite an folgenden Einrichtungen:"
 msgstr "Institution"
 
-#: edit_about.php:1014
+#: edit_about.php:1008
 msgid "Ich bin in folgenden Studiengängen immatrikuliert:"
 msgstr ""
 
-#: edit_about.php:1024
+#: edit_about.php:1018
 msgid "Studiengang"
 msgstr ""
 
-#: edit_about.php:1024 edit_about.php:1064
+#: edit_about.php:1018 edit_about.php:1058
 msgid "austragen"
 msgstr ""
 
-#: edit_about.php:1033
+#: edit_about.php:1027
 msgid "Sie haben sich noch keinem Studiengang zugeordnet."
 msgstr ""
 
-#: edit_about.php:1033
+#: edit_about.php:1027
 msgid "Tragen Sie bitte hier die Angaben aus Ihrem Studierendenausweis ein!"
 msgstr ""
 
-#: edit_about.php:1037
+#: edit_about.php:1031
 msgid ""
 "Wählen Sie die Studiengänge auf Ihrem Studierendenausweis aus der folgenden "
 "Liste aus:"
 msgstr ""
 
-#: edit_about.php:1041
+#: edit_about.php:1035
 msgid ""
 "Wenn Sie einen Studiengang wieder ausgetragen möchten, markieren Sie die "
 "entsprechenden Felder in der linken Tabelle."
 msgstr ""
 
-#: edit_about.php:1042 edit_about.php:1082
+#: edit_about.php:1036 edit_about.php:1076
 msgid ""
 "Mit einem Klick auf <b>&Uuml;bernehmen</b> werden die gewählten Änderungen "
 "durchgeführt."
 msgstr ""
 
-#: edit_about.php:1054
+#: edit_about.php:1048
 #, fuzzy
 msgid "Ich studiere an folgenden Einrichtungen:"
 msgstr "Type of course"
 
-#: edit_about.php:1064 freie.php:168
+#: edit_about.php:1058 freie.php:168
 msgid "Einrichtung"
 msgstr "Institution"
 
-#: edit_about.php:1073
+#: edit_about.php:1067
 msgid "Sie haben sich noch keinen Einrichtungen zugeordnet."
 msgstr ""
 
-#: edit_about.php:1073
+#: edit_about.php:1067
 msgid ""
 "Wenn Sie auf ihrer Homepage die Einrichtungen, an denen Sie studieren, "
 "auflisten wollen, k&ouml;nnen Sie diese Einrichtungen hier entragen."
 msgstr ""
 
-#: edit_about.php:1077
+#: edit_about.php:1071
 msgid ""
 "Um sich als Student einer Einrichtung zuzuordnen, wählen sie die "
 "entsprechende Einrichtung aus der folgenden Liste aus:"
 msgstr ""
 
-#: edit_about.php:1081
+#: edit_about.php:1075
 msgid ""
 "Wenn sie aus Einrichtungen wieder ausgetragen werden möchten, markieren sie "
 "die entsprechenden Felder in der linken Tabelle."
 msgstr ""
 
-#: edit_about.php:1092
+#: edit_about.php:1086
 msgid ""
 "Hier können sie Ihren Lebenslauf, Publikationen und Arbeitschwerpunkte "
 "bearbeiten."
 msgstr ""
 
-#: edit_about.php:1094
+#: edit_about.php:1088
 msgid "Hier können sie Ihren Lebenslauf bearbeiten."
-msgstr ""
+msgstr "Here you can change your curriculum vitae."
 
-#: edit_about.php:1098
+#: edit_about.php:1092
 msgid "Lebenslauf:"
 msgstr ""
 
-#: edit_about.php:1102
+#: edit_about.php:1096
 msgid "Schwerpunkte:"
 msgstr ""
 
-#: edit_about.php:1105
+#: edit_about.php:1099
 msgid "Publikationen:"
 msgstr ""
 
-#: edit_about.php:1148
+#: edit_about.php:1142
 msgid ""
 "Um die automatische Anmeldung zu nutzen müssen sie ihre persönliche Login "
 "Datei auf ihren Rechner kopieren. Mit dem folgenden Link öffnet sich ein "
 "Fenster, indem sie ihr Paßwort eingeben müssen."
 msgstr ""
 
-#: edit_about.php:1149
+#: edit_about.php:1143
 msgid "Dann wird die Datei erstellt und zu ihrem Rechner geschickt."
 msgstr ""
 
-#: edit_about.php:1150
+#: edit_about.php:1144
 msgid "Autologin Datei erzeugen"
 msgstr ""
 
-#: edit_about.php:1151
+#: edit_about.php:1145
 msgid ""
 "<b>ACHTUNG!</b> Die automatische Anmeldung stellt eine große "
 "Sicherheitslücke dar. Jeder, der Zugriff auf ihren Rechner hat, kann sich "
 "damit unter ihrem Namen in Stud.IP einloggen!"
 msgstr ""
 
-#: edit_about.php:1154
+#: edit_about.php:1148
 msgid ""
 "Als Administrator d&uuml;rfen Sie dieses Feature nicht nutzen - tragen Sie "
 "Verantwortung!"
 msgstr ""
 
-#: export.php:91
+#: export.php:96
 msgid "Fehlerhafter Seitenaufruf"
 msgstr ""
 
-#: export.php:96
-msgid ""
-"Die Parametern, mit denen diese Seite aufgerufen wurde, sind fehlerhaft."
+#: export.php:101
+msgid "Die Parameter, mit denen diese Seite aufgerufen wurde, sind fehlerhaft."
 msgstr ""
 
-#: export.php:110
+#: export.php:115
 msgid ""
 "Das Exportmodul ist nicht eingebunden. Damit Daten im XML-Format exportiert "
 "werden k&ouml;nnen, muss das Exportmodul in den Systemeinstellungen "
 "freigeschaltet werden. Wenden Sie sich bitte an den Administrator."
 msgstr ""
 
-#: export.php:111
+#: export.php:116
 msgid "Exportmodul nicht eingebunden"
 msgstr ""
 
@@ -1294,12 +1319,155 @@ msgstr ""
 msgid "keiner Funktion zugeordnet"
 msgstr ""
 
+#: kategorien.inc.php:13
+msgid ""
+"Hier können Sie beliebige eigene Kategorien anlegen. Diese Kategorien "
+"erscheinen auf Ihrer pers&ouml;nlichen Homepage. Mit den Pfeilsymbolen "
+"k&ouml;nnen sie die Reihenfolge, in der die Kategorien angezeigt werden, "
+"ver&auml;ndern."
+msgstr ""
+
+#: kategorien.inc.php:15
+msgid ""
+"Wenn Sie die Option \"f&uuml;r andere unsichtbar\" verwenden, k&ouml;nnen "
+"sie Memos anlegen, die nur f&uuml;r Sie selbst auf der Homepage sichtbar "
+"werden - andere Nutzer k&ouml;nnen die Daten nicht einsehen."
+msgstr ""
+
+#: kategorien.inc.php:19
+msgid "Es existieren zur Zeit keine eigenen Kategorien."
+msgstr ""
+
+#: kategorien.inc.php:20
+msgid "Kategorie"
+msgstr ""
+
+#: kategorien.inc.php:39
+msgid "f&uuml;r andere unsichtbar"
+msgstr ""
+
 #: kategorien.inc.php:43
 msgid "Kategorie nach oben schieben"
 msgstr ""
 
 #: kategorien.inc.php:48
 msgid "Kategorie nach unten schieben"
+msgstr ""
+
+#: kategorien.inc.php:54
+msgid "ver&auml;ndern"
+msgstr ""
+
+#: kategorien.inc.php:63
+#, c-format
+msgid ""
+"Es existiereren zus&auml;tzlich %s Kategorien, die Sie nicht einsehen und "
+"bearbeiten k&ouml;nnen."
+msgstr ""
+
+#: kategorien.inc.php:67
+msgid ""
+"Es existiert zus&auml;tzlich eine Kategorie, die Sie nicht einsehen und "
+"bearbeiten k&ouml;nnen."
+msgstr ""
+
+#: kategorien.inc.php:84
+msgid "neue Kategorie"
+msgstr ""
+
+#: kategorien.inc.php:84
+msgid "Inhalt der Kategorie"
+msgstr ""
+
+#: kategorien.inc.php:86
+msgid "Anlegen fehlgeschlagen"
+msgstr ""
+
+#: kategorien.inc.php:97
+msgid "Netter Versuch, vielleicht beim n&auml;chsten Mal!"
+msgstr ""
+
+#: kategorien.inc.php:102
+msgid "Kategorie gel&ouml;scht!"
+msgstr ""
+
+#: kategorien.inc.php:120
+msgid "Kategorien ge&auml;ndert!"
+msgstr ""
+
+#: kategorien.inc.php:144
+msgid "Kategorien wurden neu geordnet"
+msgstr ""
+
+#: links_about.inc.php:33
+msgid "Alle"
+msgstr ""
+
+#: links_about.inc.php:34
+msgid "Bild"
+msgstr ""
+
+#: links_about.inc.php:35
+msgid "Nutzerdaten"
+msgstr ""
+
+#: links_about.inc.php:36 links_about.inc.php:47
+msgid "universit&auml;re Daten"
+msgstr ""
+
+#: links_about.inc.php:38
+#, fuzzy
+msgid "Sonstiges"
+msgstr "postings"
+
+#: links_about.inc.php:41
+msgid "My Stud.IP"
+msgstr ""
+
+#: links_about.inc.php:44
+msgid "Pers&ouml;nliche Homepage"
+msgstr ""
+
+#: links_about.inc.php:46
+msgid "Nutzerdaten bearbeiten"
+msgstr ""
+
+#: links_about.inc.php:49
+msgid "Zuordnung zu Studieng&auml;ngen"
+msgstr ""
+
+#: links_about.inc.php:50
+#, fuzzy
+msgid "Zuordnung zu Einrichtungen"
+msgstr "Institution"
+
+#: links_about.inc.php:54
+msgid "Schwerpunkte"
+msgstr ""
+
+#: links_about.inc.php:57
+msgid "eigene Kategorien bearbeiten"
+msgstr ""
+
+#: links_about.inc.php:58
+msgid "Allgemeines"
+msgstr ""
+
+#: links_about.inc.php:59
+msgid "Forum"
+msgstr ""
+
+#: links_about.inc.php:61
+#, fuzzy
+msgid "Terminkalender"
+msgstr "appointments"
+
+#: links_about.inc.php:62
+msgid "Stundenplan"
+msgstr ""
+
+#: links_about.inc.php:64
+msgid "Messaging"
 msgstr ""
 
 #: meine_seminare.php:514
@@ -1635,254 +1803,254 @@ msgstr ""
 msgid "Kategorie:"
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:167
+#: StudipRangeTreeViewAdmin.class.php:168
 msgid "Element wurde eine Position nach oben verschoben."
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:167
+#: StudipRangeTreeViewAdmin.class.php:168
 msgid "Element wurde eine Position nach unten verschoben."
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:183
+#: StudipRangeTreeViewAdmin.class.php:184
 msgid "Neues Element"
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:189
-#: StudipRangeTreeViewAdmin.class.php:238
+#: StudipRangeTreeViewAdmin.class.php:190
+#: StudipRangeTreeViewAdmin.class.php:239
 msgid ""
 "W&auml;hlen sie einen Namen für dieses Element, oder verlinken sie es mit "
 "einer Stud.IP Einrichtung"
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:216
+#: StudipRangeTreeViewAdmin.class.php:217
 #, c-format
 msgid "Ihre Suche ergab %s Treffer."
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:218
+#: StudipRangeTreeViewAdmin.class.php:219
 msgid "Sie haben keinen Suchbegriff eingegeben."
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:266
+#: StudipRangeTreeViewAdmin.class.php:267
 msgid "Dieses Element wurde neu eingef&uuml;gt."
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:275
+#: StudipRangeTreeViewAdmin.class.php:276
 msgid "Element wurde ge&auml;ndert."
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:277
-#: StudipRangeTreeViewAdmin.class.php:451
+#: StudipRangeTreeViewAdmin.class.php:278
+#: StudipRangeTreeViewAdmin.class.php:452
 msgid "Keine Ver&auml;nderungen vorgenommen."
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:293
+#: StudipRangeTreeViewAdmin.class.php:294
 msgid ""
 "Sie beabsichtigen dieses Element inklusive aller Unterelemente zu l&ouml;"
 "schen. "
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:294
+#: StudipRangeTreeViewAdmin.class.php:295
 #, c-format
 msgid "Es werden insgesamt %s Elemente gel&ouml;scht !"
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:295
+#: StudipRangeTreeViewAdmin.class.php:296
 msgid "Wollen sie diese Elemente wirklich l&ouml;schen ?"
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:297
+#: StudipRangeTreeViewAdmin.class.php:298
 msgid "löschen"
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:300
+#: StudipRangeTreeViewAdmin.class.php:301
 msgid "abbrechen"
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:320
+#: StudipRangeTreeViewAdmin.class.php:321
 #, c-format
 msgid ""
 "Das Element <b>%s</b> und alle Unterelemente (insgesamt %s) wurden gel&ouml;"
 "scht. "
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:322
+#: StudipRangeTreeViewAdmin.class.php:323
 msgid "Fehler, es konnten keine Elemente gel&ouml;scht werden !"
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:327
+#: StudipRangeTreeViewAdmin.class.php:328
 #, c-format
 msgid "<br>Es wurden %s Datenfelder gel&ouml;scht. "
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:355
+#: StudipRangeTreeViewAdmin.class.php:356
 msgid "Element wurde verschoben."
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:357
+#: StudipRangeTreeViewAdmin.class.php:358
 msgid "Keine Verschiebung durchgeführt."
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:395
+#: StudipRangeTreeViewAdmin.class.php:396
 msgid "Datenfelder wurden neu geordnet"
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:444
+#: StudipRangeTreeViewAdmin.class.php:445
 #, c-format
 msgid "Es wurden %s Datenfelder aktualisiert."
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:446
+#: StudipRangeTreeViewAdmin.class.php:447
 msgid " Ein neues Datenfeld wurde eingef&uuml;gt."
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:449
+#: StudipRangeTreeViewAdmin.class.php:450
 msgid "Ein neues Datenfeld wurde eingef&uuml;gt."
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:468
+#: StudipRangeTreeViewAdmin.class.php:469
 msgid "Ein Datenfeld wurde gel&ouml;scht."
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:510
+#: StudipRangeTreeViewAdmin.class.php:511
 #, c-format
 msgid ""
 "Dieses Element wurde zum Verschieben markiert. Bitte w&auml;hlen sie ein "
 "Einfügesymbol %s aus,"
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:511
+#: StudipRangeTreeViewAdmin.class.php:512
 msgid " um das Element zu verschieben."
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:511
+#: StudipRangeTreeViewAdmin.class.php:512
 msgid "Einfügesymbol"
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:518
+#: StudipRangeTreeViewAdmin.class.php:519
 msgid "Innerhalb dieser Ebene ein neues Element einfügen"
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:523
+#: StudipRangeTreeViewAdmin.class.php:524
 msgid "Dieses Element bearbeiten"
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:527
+#: StudipRangeTreeViewAdmin.class.php:528
 msgid "Dieses Element löschen"
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:531
+#: StudipRangeTreeViewAdmin.class.php:532
 msgid "Verschieben abbrechen"
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:535
+#: StudipRangeTreeViewAdmin.class.php:536
 msgid "Dieses Element in eine andere Ebene verschieben"
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:562 StudipRangeTreeView.class.php:334
+#: StudipRangeTreeViewAdmin.class.php:563 StudipRangeTreeView.class.php:75
 msgid ""
 "Dieses Element ist keine Stud.IP Einrichtung, es hat daher keine Grunddaten."
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:564 StudipRangeTreeView.class.php:336
+#: StudipRangeTreeViewAdmin.class.php:565 StudipRangeTreeView.class.php:77
 msgid "Keine Grunddaten vorhanden!"
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:566
+#: StudipRangeTreeViewAdmin.class.php:567
 msgid "Mitarbeiter: "
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:570
+#: StudipRangeTreeViewAdmin.class.php:571
 msgid "Grunddaten in Stud.IP bearbeiten"
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:585
-#: StudipRangeTreeViewAdmin.class.php:696 StudipRangeTreeView.class.php:346
+#: StudipRangeTreeViewAdmin.class.php:586
+#: StudipRangeTreeViewAdmin.class.php:697 StudipRangeTreeView.class.php:87
 msgid "Keine weiteren Daten vorhanden!"
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:600
+#: StudipRangeTreeViewAdmin.class.php:601
 msgid "An dieser Stelle einfügen"
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:608
+#: StudipRangeTreeViewAdmin.class.php:609
 msgid "Element nach oben"
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:613
+#: StudipRangeTreeViewAdmin.class.php:614
 msgid "Element nach unten"
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:625
+#: StudipRangeTreeViewAdmin.class.php:626
 msgid "Element editieren"
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:626
+#: StudipRangeTreeViewAdmin.class.php:627
 msgid "Name des Elements:"
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:632
+#: StudipRangeTreeViewAdmin.class.php:633
 msgid "Aktion abbrechen"
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:634
+#: StudipRangeTreeViewAdmin.class.php:635
 msgid "Element mit Stud.IP Einrichtung verlinken"
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:635
+#: StudipRangeTreeViewAdmin.class.php:636
 #, fuzzy
 msgid "Stud.IP Einrichtung:"
 msgstr "Institution"
 
-#: StudipRangeTreeViewAdmin.class.php:639
+#: StudipRangeTreeViewAdmin.class.php:640
 msgid "Kein Link"
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:651
+#: StudipRangeTreeViewAdmin.class.php:652
 msgid "Stud.IP Einrichtung suchen:"
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:661
-#: StudipRangeTreeViewAdmin.class.php:663
+#: StudipRangeTreeViewAdmin.class.php:662
+#: StudipRangeTreeViewAdmin.class.php:664
 msgid "Neues Datenfeld anlegen"
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:676
+#: StudipRangeTreeViewAdmin.class.php:677
 msgid "Datenfeld nach oben"
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:681
+#: StudipRangeTreeViewAdmin.class.php:682
 msgid "Datenfeld nach unten"
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:690
+#: StudipRangeTreeViewAdmin.class.php:691
 msgid "Datenfeld löschen"
 msgstr ""
 
-#: StudipRangeTreeView.class.php:275 StudipRangeTreeView.class.php:301
-msgid "Dieses Element schließen"
-msgstr ""
-
-#: StudipRangeTreeView.class.php:276 StudipRangeTreeView.class.php:302
-msgid "Dieses Element öffnen"
-msgstr ""
-
-#: StudipRangeTreeView.class.php:288
-msgid "Unterelement(e) öffnen"
-msgstr ""
-
-#: StudipRangeTreeView.class.php:288
-msgid "Alle Unterelemente schliessen"
-msgstr ""
-
-#: StudipRangeTreeView.class.php:293
-msgid "Dieses Element hat keine Unterelemente"
-msgstr ""
-
-#: StudipRangeTreeView.class.php:329
+#: StudipRangeTreeView.class.php:70
 msgid "Seite dieser Einrichtung in Stud.IP aufrufen"
 msgstr ""
 
-#: StudipRangeTreeView.class.php:330
+#: StudipRangeTreeView.class.php:71
 msgid "in Stud.IP"
+msgstr ""
+
+#: TreeView.class.php:296 TreeView.class.php:329
+msgid "Dieses Element schließen"
+msgstr ""
+
+#: TreeView.class.php:297 TreeView.class.php:330
+msgid "Dieses Element öffnen"
+msgstr ""
+
+#: TreeView.class.php:309
+msgid "Alle Unterelement öffnen"
+msgstr ""
+
+#: TreeView.class.php:309
+msgid "Alle Unterelemente schliessen"
+msgstr ""
+
+#: TreeView.class.php:314
+msgid "Dieses Element hat keine Unterelemente"
 msgstr ""
