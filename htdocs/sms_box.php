@@ -378,7 +378,6 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 <tr>
 	<td class="topic" colspan="2"><?
 		echo $info_text_001;
-		
 	?></td>
 </tr>
 <tr>
@@ -393,8 +392,13 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 		print ("</td></tr></table>");
 	}
 	print("<table cellpadding=\"5\" border=\"0\" width=\"100%\"><tr><td colspan=\"2\" valign=\"top\">");
-	print("<font size=-1>".$info_text_002.$info_text_003."</font>");
-	print("</td><td class=\"blank\" align=\"right\" valign=\"bottom\">");
+	print("<font size=-1>".$info_text_002.$info_text_003);
+	if ($SessSemName[0] && $SessSemName["class"] == "inst") {
+		echo "<br><br><a href=\"institut_main.php\">"._("Zur&uuml;ck zur ausgew&auml;hlten Einrichtung")."</a>";
+	} elseif ($SessSemName[0]) {
+		echo "<br><br><a href=\"seminar_main.php\">"._("Zur&uuml;ck zur ausgew&auml;hlten Veranstaltung")."</a>";
+	}
+	print("</font></td><td class=\"blank\" align=\"right\" valign=\"bottom\">");
 	print("<a href=\"".$PHP_SELF."?cmd=select_all\">".makeButton("alleauswaehlen", "img")."</a><br><br>");
 	print("&nbsp;&nbsp;");
 	print("<form action=\"".$PHP_SELF."\" method=\"post\" style=\"display: inline\">");
