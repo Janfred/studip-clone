@@ -17,15 +17,15 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
-        
-        page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
-        $perm->check("user");
+	
+	page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
+	$perm->check("user");
 
 ?>
 <html>
 <head>
 <title>Stud.IP</title>
-        <link rel="stylesheet" href="style.css" type="text/css">
+	<link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <!--
 // here i include my personal meta-tags; one of those might be useful:
@@ -34,22 +34,22 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 <body bgcolor=white>
 
 <?
-        
-        
-        include "seminar_open.php"; //hier werden die sessions initialisiert
+	
+	
+	include "seminar_open.php"; //hier werden die sessions initialisiert
 
 // -- hier muessen Seiten-Initialisierungen passieren --
 
-        require_once ("functions.php");
-        require_once ("msg.inc.php");
-        require_once ("visual.inc.php");
+	require_once ("functions.php");
+	require_once ("msg.inc.php");
+	require_once ("visual.inc.php");
 	require_once ("messagingSettings.inc.php");
 	require_once ("messaging.inc.php");
 
 	$msging=new messaging;
 
-        include "header.php";   //hier wird der "Kopf" nachgeladen
-        
+	include "header.php";   //hier wird der "Kopf" nachgeladen
+	
 if ($sms_msg)
 	$msg=rawurldecode($sms_msg);
 
@@ -176,7 +176,7 @@ else
 			reset ($active_buddies);
 			while (list($index)=each($active_buddies)) {
 				list($gruppe,$vor,$nach,$zeit,$tmp_online_uname)=$active_buddies[$index];
-				echo "<tr><td width=\"1%\" class=\"gruppe".$gruppe."\">&nbsp; </td><td width=\"64%\"><a href=\"about.php?username=$tmp_online_uname\"><font size=-1>&nbsp; $vor $nach </font></a></td><td width=\"20%\"><font size=-1> ".date("i",$zeit).":".date("s",$zeit)."</font></td>";
+				printf("<tr><td width=\"1%%\" class=\"gruppe%s\">&nbsp; </td><td width=\"64%%\"><a href=\"about.php?username=%s\"><font size=-1>&nbsp; %s %s </font></a></td><td width=\"20%%\"><font size=-1> %s:%s</font></td>", $gruppe, $tmp_online_uname, htmlReady($vor), htmlReady($nach), date("i",$zeit), date("s",$zeit));
 				echo "<td width=\"5%\" align=center>";
 				if ($CHAT_ENABLE) {
 					if ($chatServer->isActiveUser($chatServer->getIdFromNick("studip",$tmp_online_uname),"studip"))
@@ -195,7 +195,7 @@ else
 			reset ($inactive_buddies);
 			while (list($index)=each($inactive_buddies)) {
 				list($nachname, $tmp_online_uname)=$inactive_buddies[$index];
-				echo "<tr><td colspan=3 width=\"85%\"><a href=\"about.php?username=$tmp_online_uname\"><font color=\"#666666\" size=-1>&nbsp; ".get_fullname_from_uname($tmp_online_uname)."</font></a></td><td width=\"5%\"align=center>&nbsp; </td><td width=\"5%\"align=center><a href=\"sms.php?sms_source_page=online.php&cmd=write&rec_uname=$tmp_online_uname\"><img src=\"pictures/nachricht1.gif\" alt=\"Nachricht an User verschicken\" border=\"0\"></a></td><td width=\"5%\" align=\"center\"><a href=\"$PHP_SELF?cmd=delete_user&delete_uname=$tmp_online_uname\"><img src=\"pictures/trash.gif\" alt=\"aus der Buddylist entfernen\" border=\"0\"></a></td></tr>";
+				echo "<tr><td colspan=3 width=\"85%\"><a href=\"about.php?username=$tmp_online_uname\"><font color=\"#666666\" size=-1>&nbsp; ".htmlReady(get_fullname_from_uname($tmp_online_uname))."</font></a></td><td width=\"5%\"align=center>&nbsp; </td><td width=\"5%\"align=center><a href=\"sms.php?sms_source_page=online.php&cmd=write&rec_uname=$tmp_online_uname\"><img src=\"pictures/nachricht1.gif\" alt=\"Nachricht an User verschicken\" border=\"0\"></a></td><td width=\"5%\" align=\"center\"><a href=\"$PHP_SELF?cmd=delete_user&delete_uname=$tmp_online_uname\"><img src=\"pictures/trash.gif\" alt=\"aus der Buddylist entfernen\" border=\"0\"></a></td></tr>";
 				}
 			}
 			echo "<td width=\"50%\" align=\"center\" colspan=6><font size=-1>Um weitere Buddies aufzunehmen, klicken sie <a href=\"$PHP_SELF?change_view=TRUE#buddy_anker\">hier</a></font></td>";
@@ -212,7 +212,7 @@ else
 			reset($n_buddies);
 			while (list($index)=each($n_buddies)) {
 				list($vor,$nach,$zeit,$tmp_online_uname)=$n_buddies[$index];
-				echo "<tr><td width=\"1%\"><a href=\"$PHP_SELF?cmd=add_user&add_uname=$tmp_online_uname\"><img src=\"pictures/add_buddy.gif\" alt=\"zu den Buddies hinzuf&uuml;gen\" border=\"0\"></a></td><td width=\"69%\" align=\"left\"><a href=\"about.php?username=$tmp_online_uname\"><font size=-1>&nbsp; $vor $nach </font></a></td><td width=\"20%\"><font size=-1> ".date("i",$zeit).":".date("s",$zeit)."</font></td>";
+				printf("<tr><td width=\"1%%\"><a href=\"$PHP_SELF?cmd=add_user&add_uname=$tmp_online_uname\"><img src=\"pictures/add_buddy.gif\" alt=\"zu den Buddies hinzuf&uuml;gen\" border=\"0\"></a></td><td width=\"69%%\" align=\"left\"><a href=\"about.php?username=%s\"><font size=-1>&nbsp; %s %s </font></a></td><td width=\"20%%\"><font size=-1> %s:%s</font></td>", $tmp_online_uname, htmlReady($vor), htmlReady($nach), date("i",$zeit), date("s",$zeit));
 				echo "<td width=\"5%\"align=center>";
 				if ($CHAT_ENABLE){
 					if ($chatServer->isActiveUser($chatServer->getIdFromNick("studip",$tmp_online_uname),"studip"))

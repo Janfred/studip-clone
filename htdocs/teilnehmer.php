@@ -257,7 +257,7 @@ if ($db->num_rows()) { //Only if Users were found...
 
 	print("<tr><td class=\"$class\">");
 	print( "<font size=-1><a href = about.php?username=" . $db->f("username") . ">");
-	print($db->f("Vorname") ." ". $db->f("Nachname") ."</a>");
+	print(htmlReady($db->f("Vorname")) ." ". htmlReady($db->f("Nachname")) ."</a>");
 	print("</font></td><td class=\"$class\" align=center><font size=-1>");
 	print( $db->f("doll"));
 	print("</font></td><td class=\"$class\" align=center>");

@@ -906,7 +906,7 @@ if ($s_command) {
 			</td>			
 			<tr>
 				<td align=right>Zeit &nbsp;</td>
-				<td align=left colspan=3><b><? echo view_turnus ($s_id) ?></b>&nbsp; </td>
+				<td align=left colspan=3><b><? echo htmlReady(view_turnus ($s_id)) ?></b>&nbsp; </td>
 			</td>
 			<tr>
 				<td align=right>Semester &nbsp;</td>

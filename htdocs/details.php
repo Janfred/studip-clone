@@ -131,7 +131,7 @@ elseif (($SessSemName[1] <>"") && (!isset($sem_id)))
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" valign="top" width="47%">
 				<?
-				printf ("<font size=-1><b>Zeit:</b></font><br /><font size=-1>%s</font>",view_turnus($sem_id, FALSE));
+				printf ("<font size=-1><b>Zeit:</b></font><br /><font size=-1>%s</font>",htmlReady(view_turnus($sem_id, FALSE)));
 				?>
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" valign="top" width="47%">
