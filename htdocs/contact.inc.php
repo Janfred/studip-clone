@@ -196,7 +196,7 @@ function GetUserInfo($user_id)
 	}
 	$db->query ("SELECT sprechzeiten, raum, user_inst.telefon, user_inst.fax, Name, Institute.Institut_id FROM user_inst LEFT JOIN Institute USING(Institut_id) WHERE user_id = '$user_id' AND inst_perms != 'user'");	
 	while ($db->next_record()) {	
-		$userinfo["Einrichtung"] = "<a href=\"institut_main.php?auswahl=".$db->f("Institut_id")."\">".$db->f("Name")."</a>";
+		$userinfo["Einrichtung"] = "<a href=\"institut_main.php?auswahl=".$db->f("Institut_id")."\">".htmlReady($db->f("Name"))."</a>";
 		if ($db->f("raum")!="")
 			$userinfo["Raum"] = $db->f("raum");
 		if ($db->f("sprechzeiten")!="")
@@ -237,7 +237,7 @@ function ShowUserInfo ($contact_id)
 		$userinfo = GetUserInfo($user_id);
 		if (sizeof($userinfo)>0) {
 			while(list($key,$value) = each($userinfo)) {
-				$output .= "<tr><td class=\"steel1\" width=\"100\"><font size=\"2\">".htmlReady($key).":</font></td><td class=\"steel1\" width=\"250\"><font size=\"2\">".htmlReady($value)."</font></td></tr>";
+				$output .= "<tr><td class=\"steel1\" width=\"100\"><font size=\"2\">".$key.":</font></td><td class=\"steel1\" width=\"250\"><font size=\"2\">".$value."</font></td></tr>";
 			}
 		}
 
