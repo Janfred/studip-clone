@@ -392,6 +392,7 @@ if ($view=="ansprechpartner") {?>
 		</td>
 		<td class="blank" align="center" valign="middle">
 			<a target="_new" href="http://www.studip.de"><img src="pictures/studipanim.gif" border="0"></a>
+			<div align="left"><br>&nbsp; &nbsp;<b><?=_("Version:")?> </b><? echo $SOFTWARE_VERSION?></div>		
 		</td>
 	</tr>
 	<tr>
