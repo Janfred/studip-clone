@@ -23,7 +23,7 @@
 
 require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'] . "/lib/classes/DbView.class.php");
 require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'] . "/lib/classes/DbSnapshot.class.php");
-require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'] . "/config.inc.php");
+
 			
 
 /**
@@ -275,13 +275,14 @@ class StudipAuthAbstract {
 	* 
 	*/
 	function doNewUserInit($uid){
+		include ($GLOBALS['ABSOLUTE_PATH_STUDIP'] . "/config.inc.php");
 		$permlist = array('autor','tutor','dozent');
 		$this->dbv->params[] = $uid;
 		$db = $this->dbv->get_query("view:AUTH_USER_UID");
 		$db->next_record();
 		if (in_array($db->f("perms"), $permlist)){
-			if (is_array($GLOBALS['AUTO_INSERT_SEM'])){
-				foreach ($GLOBALS['AUTO_INSERT_SEM'] as $sem_id) {
+			if (is_array($AUTO_INSERT_SEM)){
+				foreach ($AUTO_INSERT_SEM as $sem_id) {
 					$this->dbv->params = array($sem_id, $uid, 'autor', 0);
 					$db = $this->dbv->get_query("view:SEM_USER_INSERT");
 				}
