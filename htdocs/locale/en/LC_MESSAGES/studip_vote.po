@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: studip_vote\n"
-"POT-Creation-Date: 2004-04-07 13:15+0200\n"
+"POT-Creation-Date: 2004-04-14 14:39+0200\n"
 "PO-Revision-Date: 2004-04-01 13:35+GMT\n"
 "Last-Translator: \n"
 "Language-Team:  <de@li.org>\n"
@@ -779,19 +779,19 @@ msgstr "Surveys and more..."
 msgid "Umfragen bearbeiten"
 msgstr "Edit surveys."
 
-#: vote/vote_show.inc.php:148
+#: vote/vote_show.inc.php:150
 msgid "Fehler beim Einlesen der Evaluation"
 msgstr "Error while reading the evaluation"
 
-#: vote/vote_show.inc.php:249
+#: vote/vote_show.inc.php:251
 msgid "Fehler beim Einlesen des Votes"
 msgstr "Error while reading the votes"
 
-#: vote/vote_show.inc.php:278
+#: vote/vote_show.inc.php:280
 msgid "Die &Auml;nderungen wurden gespeichert"
 msgstr "The changes were saved."
 
-#: vote/vote_show.inc.php:299
+#: vote/vote_show.inc.php:301
 msgid "Fehler bei der Abstimmung"
 msgstr "Error while voting."
 

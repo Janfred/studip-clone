@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: studip_eval\n"
-"POT-Creation-Date: 2004-04-07 13:15+0200\n"
+"POT-Creation-Date: 2004-04-14 14:39+0200\n"
 "PO-Revision-Date: 2004-03-31 18:28+GMT\n"
 "Last-Translator: \n"
 "Language-Team:  <de@li.org>\n"
@@ -96,120 +96,120 @@ msgstr "Edit evaluation"
 msgid "Datenbankfehler"
 msgstr "Data base error"
 
-#: modules/evaluation/evaluation_admin_overview.inc.php:100
+#: modules/evaluation/evaluation_admin_overview.inc.php:104
 #: modules/evaluation/evaluation_admin_overview.lib.php:926
 msgid "Sie haben keinen Zugriff auf diesen Bereich."
 msgstr "You do not have access to this area."
 
-#: modules/evaluation/evaluation_admin_overview.inc.php:130
+#: modules/evaluation/evaluation_admin_overview.inc.php:134
 msgid "Gefundene öffentliche Evaluationsvorlagen:"
 msgstr "Public evaluation templates found:"
 
-#: modules/evaluation/evaluation_admin_overview.inc.php:137
-#: modules/evaluation/evaluation_admin_overview.inc.php:178
-#: modules/evaluation/evaluation_admin_overview.inc.php:299
-#: modules/evaluation/evaluation_admin_overview.inc.php:334
-#: modules/evaluation/evaluation_admin_overview.inc.php:368
+#: modules/evaluation/evaluation_admin_overview.inc.php:141
+#: modules/evaluation/evaluation_admin_overview.inc.php:182
+#: modules/evaluation/evaluation_admin_overview.inc.php:303
+#: modules/evaluation/evaluation_admin_overview.inc.php:338
+#: modules/evaluation/evaluation_admin_overview.inc.php:372
 msgid "Titel"
 msgstr "Title"
 
-#: modules/evaluation/evaluation_admin_overview.inc.php:139
-#: modules/evaluation/evaluation_admin_overview.inc.php:300
-#: modules/evaluation/evaluation_admin_overview.inc.php:335
-#: modules/evaluation/evaluation_admin_overview.inc.php:369
+#: modules/evaluation/evaluation_admin_overview.inc.php:143
+#: modules/evaluation/evaluation_admin_overview.inc.php:304
+#: modules/evaluation/evaluation_admin_overview.inc.php:339
+#: modules/evaluation/evaluation_admin_overview.inc.php:373
 msgid "Autor"
 msgstr "Author"
 
-#: modules/evaluation/evaluation_admin_overview.inc.php:140
+#: modules/evaluation/evaluation_admin_overview.inc.php:144
 msgid "Letzte Änderung"
 msgstr "Last change"
 
-#: modules/evaluation/evaluation_admin_overview.inc.php:141
+#: modules/evaluation/evaluation_admin_overview.inc.php:145
 msgid "Anonym"
 msgstr "Anonymous"
 
-#: modules/evaluation/evaluation_admin_overview.inc.php:143
+#: modules/evaluation/evaluation_admin_overview.inc.php:147
 msgid "Ansehen"
 msgstr "View"
 
-#: modules/evaluation/evaluation_admin_overview.inc.php:144
+#: modules/evaluation/evaluation_admin_overview.inc.php:148
 #: modules/evaluation/evaluation_admin_overview.lib.php:249
 msgid "Kopieren"
 msgstr "Copy"
 
-#: modules/evaluation/evaluation_admin_overview.inc.php:170
+#: modules/evaluation/evaluation_admin_overview.inc.php:174
 msgid "Eigene Evaluationsvorlagen:"
 msgstr "Your private evaluation templates:"
 
-#: modules/evaluation/evaluation_admin_overview.inc.php:179
+#: modules/evaluation/evaluation_admin_overview.inc.php:183
 msgid "Freigeben"
 msgstr "Published"
 
-#: modules/evaluation/evaluation_admin_overview.inc.php:183
-#: modules/evaluation/evaluation_admin_overview.inc.php:304
+#: modules/evaluation/evaluation_admin_overview.inc.php:187
+#: modules/evaluation/evaluation_admin_overview.inc.php:308
 msgid "Bearbeiten"
 msgstr "Edit"
 
-#: modules/evaluation/evaluation_admin_overview.inc.php:184
-#: modules/evaluation/evaluation_admin_overview.inc.php:305
-#: modules/evaluation/evaluation_admin_overview.inc.php:340
-#: modules/evaluation/evaluation_admin_overview.inc.php:374
+#: modules/evaluation/evaluation_admin_overview.inc.php:188
+#: modules/evaluation/evaluation_admin_overview.inc.php:309
+#: modules/evaluation/evaluation_admin_overview.inc.php:344
+#: modules/evaluation/evaluation_admin_overview.inc.php:378
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:2780
 msgid "Löschen"
 msgstr "Delete"
 
-#: modules/evaluation/evaluation_admin_overview.inc.php:202
+#: modules/evaluation/evaluation_admin_overview.inc.php:206
 msgid "Keine eigenen Evaluationsvorlagen vorhanden."
 msgstr "No private evaluation template available."
 
-#: modules/evaluation/evaluation_admin_overview.inc.php:246
+#: modules/evaluation/evaluation_admin_overview.inc.php:250
 msgid "Evaluationen"
 msgstr "Evaluations"
 
-#: modules/evaluation/evaluation_admin_overview.inc.php:274
+#: modules/evaluation/evaluation_admin_overview.inc.php:278
 msgid "Suchergebnisse:"
 msgstr "Search results:"
 
-#: modules/evaluation/evaluation_admin_overview.inc.php:295
+#: modules/evaluation/evaluation_admin_overview.inc.php:299
 msgid "Noch nicht gestartete Evaluationen: "
 msgstr "Evaluations not started yet:"
 
-#: modules/evaluation/evaluation_admin_overview.inc.php:301
+#: modules/evaluation/evaluation_admin_overview.inc.php:305
 msgid "Startdatum"
 msgstr "Start date"
 
-#: modules/evaluation/evaluation_admin_overview.inc.php:302
-#: modules/evaluation/evaluation_admin_overview.inc.php:337
-#: modules/evaluation/evaluation_admin_overview.inc.php:371
+#: modules/evaluation/evaluation_admin_overview.inc.php:306
+#: modules/evaluation/evaluation_admin_overview.inc.php:341
+#: modules/evaluation/evaluation_admin_overview.inc.php:375
 msgid "Status"
 msgstr "Status"
 
-#: modules/evaluation/evaluation_admin_overview.inc.php:315
+#: modules/evaluation/evaluation_admin_overview.inc.php:319
 msgid "Keine neuen Evaluationen vorhanden."
 msgstr "No new evaluations available."
 
-#: modules/evaluation/evaluation_admin_overview.inc.php:331
+#: modules/evaluation/evaluation_admin_overview.inc.php:335
 msgid "Laufende Evaluationen:"
 msgstr "Running evaluations:"
 
-#: modules/evaluation/evaluation_admin_overview.inc.php:336
+#: modules/evaluation/evaluation_admin_overview.inc.php:340
 msgid "Ablaufdatum"
 msgstr "Termination date"
 
-#: modules/evaluation/evaluation_admin_overview.inc.php:339
-#: modules/evaluation/evaluation_admin_overview.inc.php:373
+#: modules/evaluation/evaluation_admin_overview.inc.php:343
+#: modules/evaluation/evaluation_admin_overview.inc.php:377
 msgid "Exportieren"
 msgstr "Export"
 
-#: modules/evaluation/evaluation_admin_overview.inc.php:349
+#: modules/evaluation/evaluation_admin_overview.inc.php:353
 msgid "Keine laufenden Evaluationen vorhanden."
 msgstr "No running evaluation available."
 
-#: modules/evaluation/evaluation_admin_overview.inc.php:364
+#: modules/evaluation/evaluation_admin_overview.inc.php:368
 msgid "Beendete Evaluationen:"
 msgstr "Terminated evaluations:"
 
-#: modules/evaluation/evaluation_admin_overview.inc.php:383
+#: modules/evaluation/evaluation_admin_overview.inc.php:387
 msgid "Keine gestoppten Evaluationen vorhanden."
 msgstr "No stopped evaluations available."
 
@@ -1075,7 +1075,7 @@ msgstr " the template."
 
 #: modules/evaluation/evaluation_admin_template.inc.php:325
 #: modules/evaluation/evaluation_admin_template.inc.php:337
-#: modules/evaluation/evaluation_admin_template.inc.php:730
+#: modules/evaluation/evaluation_admin_template.inc.php:733
 msgid "Fehler beim Speichern."
 msgstr "Error while saving."
 
@@ -1259,23 +1259,23 @@ msgstr "Back to %s administrating the evaluations %s"
 msgid "Aktionen:"
 msgstr "Actions:"
 
-#: modules/evaluation/evaluation.lib.php:233
+#: modules/evaluation/evaluation.lib.php:225
 msgid "Es sind Fehler aufgetreten."
 msgstr "Errors have occurred."
 
-#: modules/evaluation/evaluation.lib.php:234
+#: modules/evaluation/evaluation.lib.php:226
 msgid "Es ist ein Fehler aufgetreten."
 msgstr "An error has occurred."
 
-#: modules/evaluation/evaluation.lib.php:241
+#: modules/evaluation/evaluation.lib.php:233
 msgid "Es ist kein Fehler aufgetreten"
 msgstr "No error has occured"
 
-#: modules/evaluation/evaluation.lib.php:257
+#: modules/evaluation/evaluation.lib.php:249
 msgid "Datei: "
 msgstr "File: "
 
-#: modules/evaluation/evaluation.lib.php:260
+#: modules/evaluation/evaluation.lib.php:252
 msgid "Zeile: "
 msgstr "Line: "
 
@@ -1679,21 +1679,24 @@ msgid "Veränderungen wurden gespeichert."
 msgstr "Changes have been saved."
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:1306
-msgid "Fehler beim Einlesen (Gruppe)"
-msgstr "Error while reading (group)"
+#, fuzzy
+msgid "Fehler beim Einlesen (Block)"
+msgstr "Error while reading (question block)"
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:1331
-msgid "Einer Frage wurden noch keine Antworten zugewiesen."
+#, fuzzy
+msgid "Einer Frage wurden noch keine Antwortenmöglichkeiten zugewiesen."
 msgstr "There is a question no reply has been associated to."
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:1333
-msgid "Einer Frage  wurden noch keine Antworten zugewiesen."
+#, fuzzy
+msgid "Einer Frage  wurden noch keine Antwortenmöglichkeiten zugewiesen."
 msgstr "There is a question no reply has been associated to."
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:1336
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:1338
-#, c-format
-msgid "%s Fragen wurden noch keine Antworten zugewiesen."
+#, fuzzy, c-format
+msgid "%s Fragen wurden noch keine Antwortenmöglichkeiten zugewiesen."
 msgstr "There are %s questions no replies have been associated to."
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:1345
@@ -1745,7 +1748,8 @@ msgid "löschen"
 msgstr "delete"
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:1455
-msgid "Fehler beim Löschen einer Gruppe."
+#, fuzzy
+msgid "Fehler beim Löschen eines Block."
 msgstr "Error while deleting a group."
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:1459
@@ -1777,19 +1781,17 @@ msgid "Der Gruppierungsblock <b>%s</b> wurden gel&ouml;scht. "
 msgstr "The content block <b>%s</b> has been deleted."
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:1499
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1509
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:1560
-msgid "Fehler beim Anlegen einer neuen Gruppe."
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1570
+#, fuzzy
+msgid "Fehler beim Anlegen eines neuen Blocks."
 msgstr "Error while creating a new group."
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:1501
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:1511
 msgid "Ein neuer Gruppierungsblock wurde angelegt."
 msgstr "A new content block has been created."
-
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1509
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1570
-msgid "Fehler beim Anlegen einer neuen Untergruppe."
-msgstr "Error while creating a new content sub-block."
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:1562
 msgid "Ein neuer Fragenblock wurde angelegt."
@@ -1850,8 +1852,8 @@ msgid "Es wurde keine Frage gelöscht."
 msgstr "No questions have been deleted."
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:1792
-#, c-format
-msgid "Der Frage <b>%s</b> wurden Antworten zugewiesen."
+#, fuzzy, c-format
+msgid "Der Frage <b>%s</b> wurden Antwortenmöglichkeiten zugewiesen."
 msgstr "Replies have been associated to question <b>%s</b>."
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:1823
@@ -1935,7 +1937,8 @@ msgstr ""
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:2096
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:2099
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:2102
-msgid "Fehler beim Verschieben einer Gruppe"
+#, fuzzy
+msgid "Fehler beim Verschieben eines Blocks."
 msgstr "Error while moving a group."
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:1992
@@ -2041,8 +2044,9 @@ msgid "Fragenblock mit"
 msgstr "Question block with"
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:2345
-msgid "Neue Fragengruppe"
-msgstr "New group of questions"
+#, fuzzy
+msgid "Einen neuen Fragenblock erstellen"
+msgstr "Create a new content block"
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:2423
 msgid "Titel der Evaluation"
@@ -2103,14 +2107,15 @@ msgid "Die Fragen dieses Blocks müssen beantwortet werden (Pflichtfelder):"
 msgstr "All questions in this block must be answered (mandatory fields):"
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:2677
-#, c-format
-msgid "Dieser Fragenblock benutzt die Antwortenvorlage <b>%s</b>."
+#, fuzzy, c-format
+msgid "Diesem Fragenblock ist die Antwortenvorlage <b>%s</b> zugewiesen."
 msgstr "This question block uses reply template <b>%s</b>."
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:2679
+#, fuzzy
 msgid ""
-"Das Zuweisen einer Antwortenvorlage ändert alle Antworten der Fragen dieses "
-"Fragenblocks."
+"Das Zuweisen einer Antwortenvorlage ändert alle Antwortenmöglichkeiten der "
+"Fragen dieses Fragenblocks."
 msgstr ""
 "Associating a reply template to this question will cause all replies to this "
 "question block to get lost."
@@ -2152,23 +2157,27 @@ msgid "Diese Frage eine Position nach unten verschieben."
 msgstr "Move down this question by one position."
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:2929
+#, fuzzy
 msgid ""
-"Dieser Frage wurden noch keine Antworten zugewiesen. Drücken sie auf den "
-"Doppelfpeil, um dies jetzt zu tun."
+"Dieser Frage wurden noch keine Antwortenmöglichkeiten zugewiesen. Drücken "
+"sie auf den Doppelfpeil, um dies jetzt zu tun."
 msgstr ""
 "No replies have been associated to this question, yet. Click on the double "
 "arrow to do so."
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:2930
-msgid "Dieser Frage Antwortmöglichkeiten zuweisen."
+#, fuzzy
+msgid "Dieser Frage Antwortenmöglichkeiten zuweisen."
 msgstr "Associate reply possibilities to this question."
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:2933
-msgid "Dieser Frage wurden bereits folgende Antworten zugewiesen:"
+#, fuzzy
+msgid "Dieser Frage wurden bereits folgende Antwortenmöglichkeiten zugewiesen:"
 msgstr "The following replies have already been associated to this question:"
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:2935
-msgid "Die zugewiesenen Antwortmöglichkeiten bearbeiten."
+#, fuzzy
+msgid "Die zugewiesenen Antwortenmöglichkeiten bearbeiten."
 msgstr "Modify the associated reply possibilities."
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:2981
@@ -2317,3 +2326,12 @@ msgstr "Error while searching. Error message:"
 #: modules/evaluation/classes/db/EvaluationQuestionDB.class.php:90
 msgid "Keine Frage mit dieser ID gefunden."
 msgstr "No question with this ID found."
+
+#~ msgid "Fehler beim Einlesen (Gruppe)"
+#~ msgstr "Error while reading (group)"
+
+#~ msgid "Fehler beim Anlegen einer neuen Untergruppe."
+#~ msgstr "Error while creating a new content sub-block."
+
+#~ msgid "Neue Fragengruppe"
+#~ msgstr "New group of questions"

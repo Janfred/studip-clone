@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2004-04-07 13:15+0200\n"
+"POT-Creation-Date: 2004-04-14 14:39+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,45 +15,45 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: resources/resourcesFunc.inc.php:449 resources/resourcesFunc.inc.php:458
-#: resources/resourcesFunc.inc.php:467 resources/resourcesFunc.inc.php:513
-#: resources/resourcesFunc.inc.php:538 resources/resourcesFunc.inc.php:560
-#: resources/resourcesFunc.inc.php:573 resources/resourcesFunc.inc.php:616
-#: resources/resourcesFunc.inc.php:667
+#: resources/resourcesFunc.inc.php:452 resources/resourcesFunc.inc.php:461
+#: resources/resourcesFunc.inc.php:470 resources/resourcesFunc.inc.php:516
+#: resources/resourcesFunc.inc.php:541 resources/resourcesFunc.inc.php:563
+#: resources/resourcesFunc.inc.php:576 resources/resourcesFunc.inc.php:619
+#: resources/resourcesFunc.inc.php:670
 msgid "Veranstaltungen"
 msgstr ""
 
-#: resources/resourcesFunc.inc.php:500
+#: resources/resourcesFunc.inc.php:503
 #: resources/lib/ResourceObject.class.php:263
 msgid "Global"
 msgstr ""
 
-#: resources/resourcesFunc.inc.php:508 resources/resourcesFunc.inc.php:532
-#: resources/resourcesFunc.inc.php:566 resources/resourcesFunc.inc.php:579
-#: resources/resourcesFunc.inc.php:582 resources/resourcesFunc.inc.php:639
-#: resources/resourcesFunc.inc.php:662
+#: resources/resourcesFunc.inc.php:511 resources/resourcesFunc.inc.php:535
+#: resources/resourcesFunc.inc.php:569 resources/resourcesFunc.inc.php:582
+#: resources/resourcesFunc.inc.php:585 resources/resourcesFunc.inc.php:642
+#: resources/resourcesFunc.inc.php:665
 msgid "Personen"
 msgstr ""
 
-#: resources/resourcesFunc.inc.php:518 resources/resourcesFunc.inc.php:524
-#: resources/resourcesFunc.inc.php:565 resources/resourcesFunc.inc.php:578
-#: resources/resourcesFunc.inc.php:622 resources/resourcesFunc.inc.php:672
+#: resources/resourcesFunc.inc.php:521 resources/resourcesFunc.inc.php:527
+#: resources/resourcesFunc.inc.php:568 resources/resourcesFunc.inc.php:581
+#: resources/resourcesFunc.inc.php:625 resources/resourcesFunc.inc.php:675
 msgid "Einrichtungen"
 msgstr ""
 
-#: resources/resourcesFunc.inc.php:698
+#: resources/resourcesFunc.inc.php:701
 msgid "diesen Eintrag übernehmen"
 msgstr ""
 
-#: resources/resourcesFunc.inc.php:702
+#: resources/resourcesFunc.inc.php:705
 msgid "jedeR"
 msgstr ""
 
-#: resources/resourcesFunc.inc.php:717
+#: resources/resourcesFunc.inc.php:720
 msgid "Suche zurücksetzen"
 msgstr ""
 
-#: resources/resourcesFunc.inc.php:722
+#: resources/resourcesFunc.inc.php:725
 msgid "Starten Sie hier Ihre Suche"
 msgstr ""
 
@@ -202,40 +202,40 @@ msgstr ""
 msgid "In aktueller Anfrage mit ber&uuml;cksichtigen"
 msgstr ""
 
-#: resources/lib/evaluate_values.php:1179
-#: resources/lib/evaluate_values.php:1183
-#: resources/lib/evaluate_values.php:1193
+#: resources/lib/evaluate_values.php:1181
+#: resources/lib/evaluate_values.php:1185
 #: resources/lib/evaluate_values.php:1195
-#: resources/lib/evaluate_values.php:1213
-#: resources/lib/evaluate_values.php:1217
-#: resources/lib/evaluate_values.php:1242
-#: resources/lib/evaluate_values.php:1245
-#: resources/lib/evaluate_values.php:1261
-#: resources/lib/evaluate_values.php:1264
+#: resources/lib/evaluate_values.php:1197
+#: resources/lib/evaluate_values.php:1215
+#: resources/lib/evaluate_values.php:1219
+#: resources/lib/evaluate_values.php:1244
+#: resources/lib/evaluate_values.php:1247
+#: resources/lib/evaluate_values.php:1263
+#: resources/lib/evaluate_values.php:1266
 #, c-format
 msgid "%s, Belegungszeit: %s"
 msgstr ""
 
-#: resources/lib/evaluate_values.php:1522
+#: resources/lib/evaluate_values.php:1524
 #, c-format
 msgid "Ihre Raumanfrage zur Veranstaltung %s wurde bearbeitet."
 msgstr ""
 
-#: resources/lib/evaluate_values.php:1522
+#: resources/lib/evaluate_values.php:1524
 msgid "Für folgende Belegungszeiten wurde der jeweils angegebene Raum gebucht:"
 msgstr ""
 
-#: resources/lib/evaluate_values.php:1539
+#: resources/lib/evaluate_values.php:1541
 msgid "wöchentlich"
 msgstr ""
 
-#: resources/lib/evaluate_values.php:1541
+#: resources/lib/evaluate_values.php:1543
 #: resources/views/EditResourceData.class.php:251
 #: resources/views/ShowToolsRequests.class.php:246
 msgid "zweiw&ouml;chentlich"
 msgstr ""
 
-#: resources/lib/evaluate_values.php:1542
+#: resources/lib/evaluate_values.php:1544
 #: resources/views/ShowToolsRequests.class.php:247
 msgid "ab:"
 msgstr ""

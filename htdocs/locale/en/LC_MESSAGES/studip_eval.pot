@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2004-04-07 13:15+0200\n"
+"POT-Creation-Date: 2004-04-14 14:39+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -85,120 +85,120 @@ msgstr ""
 msgid "Datenbankfehler"
 msgstr ""
 
-#: modules/evaluation/evaluation_admin_overview.inc.php:100
+#: modules/evaluation/evaluation_admin_overview.inc.php:104
 #: modules/evaluation/evaluation_admin_overview.lib.php:926
 msgid "Sie haben keinen Zugriff auf diesen Bereich."
 msgstr ""
 
-#: modules/evaluation/evaluation_admin_overview.inc.php:130
+#: modules/evaluation/evaluation_admin_overview.inc.php:134
 msgid "Gefundene öffentliche Evaluationsvorlagen:"
 msgstr ""
 
-#: modules/evaluation/evaluation_admin_overview.inc.php:137
-#: modules/evaluation/evaluation_admin_overview.inc.php:178
-#: modules/evaluation/evaluation_admin_overview.inc.php:299
-#: modules/evaluation/evaluation_admin_overview.inc.php:334
-#: modules/evaluation/evaluation_admin_overview.inc.php:368
+#: modules/evaluation/evaluation_admin_overview.inc.php:141
+#: modules/evaluation/evaluation_admin_overview.inc.php:182
+#: modules/evaluation/evaluation_admin_overview.inc.php:303
+#: modules/evaluation/evaluation_admin_overview.inc.php:338
+#: modules/evaluation/evaluation_admin_overview.inc.php:372
 msgid "Titel"
 msgstr ""
 
-#: modules/evaluation/evaluation_admin_overview.inc.php:139
-#: modules/evaluation/evaluation_admin_overview.inc.php:300
-#: modules/evaluation/evaluation_admin_overview.inc.php:335
-#: modules/evaluation/evaluation_admin_overview.inc.php:369
+#: modules/evaluation/evaluation_admin_overview.inc.php:143
+#: modules/evaluation/evaluation_admin_overview.inc.php:304
+#: modules/evaluation/evaluation_admin_overview.inc.php:339
+#: modules/evaluation/evaluation_admin_overview.inc.php:373
 msgid "Autor"
 msgstr ""
 
-#: modules/evaluation/evaluation_admin_overview.inc.php:140
+#: modules/evaluation/evaluation_admin_overview.inc.php:144
 msgid "Letzte Änderung"
 msgstr ""
 
-#: modules/evaluation/evaluation_admin_overview.inc.php:141
+#: modules/evaluation/evaluation_admin_overview.inc.php:145
 msgid "Anonym"
 msgstr ""
 
-#: modules/evaluation/evaluation_admin_overview.inc.php:143
+#: modules/evaluation/evaluation_admin_overview.inc.php:147
 msgid "Ansehen"
 msgstr ""
 
-#: modules/evaluation/evaluation_admin_overview.inc.php:144
+#: modules/evaluation/evaluation_admin_overview.inc.php:148
 #: modules/evaluation/evaluation_admin_overview.lib.php:249
 msgid "Kopieren"
 msgstr ""
 
-#: modules/evaluation/evaluation_admin_overview.inc.php:170
+#: modules/evaluation/evaluation_admin_overview.inc.php:174
 msgid "Eigene Evaluationsvorlagen:"
 msgstr ""
 
-#: modules/evaluation/evaluation_admin_overview.inc.php:179
+#: modules/evaluation/evaluation_admin_overview.inc.php:183
 msgid "Freigeben"
 msgstr ""
 
-#: modules/evaluation/evaluation_admin_overview.inc.php:183
-#: modules/evaluation/evaluation_admin_overview.inc.php:304
+#: modules/evaluation/evaluation_admin_overview.inc.php:187
+#: modules/evaluation/evaluation_admin_overview.inc.php:308
 msgid "Bearbeiten"
 msgstr ""
 
-#: modules/evaluation/evaluation_admin_overview.inc.php:184
-#: modules/evaluation/evaluation_admin_overview.inc.php:305
-#: modules/evaluation/evaluation_admin_overview.inc.php:340
-#: modules/evaluation/evaluation_admin_overview.inc.php:374
+#: modules/evaluation/evaluation_admin_overview.inc.php:188
+#: modules/evaluation/evaluation_admin_overview.inc.php:309
+#: modules/evaluation/evaluation_admin_overview.inc.php:344
+#: modules/evaluation/evaluation_admin_overview.inc.php:378
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:2780
 msgid "Löschen"
 msgstr ""
 
-#: modules/evaluation/evaluation_admin_overview.inc.php:202
+#: modules/evaluation/evaluation_admin_overview.inc.php:206
 msgid "Keine eigenen Evaluationsvorlagen vorhanden."
 msgstr ""
 
-#: modules/evaluation/evaluation_admin_overview.inc.php:246
+#: modules/evaluation/evaluation_admin_overview.inc.php:250
 msgid "Evaluationen"
 msgstr ""
 
-#: modules/evaluation/evaluation_admin_overview.inc.php:274
+#: modules/evaluation/evaluation_admin_overview.inc.php:278
 msgid "Suchergebnisse:"
 msgstr ""
 
-#: modules/evaluation/evaluation_admin_overview.inc.php:295
+#: modules/evaluation/evaluation_admin_overview.inc.php:299
 msgid "Noch nicht gestartete Evaluationen: "
 msgstr ""
 
-#: modules/evaluation/evaluation_admin_overview.inc.php:301
+#: modules/evaluation/evaluation_admin_overview.inc.php:305
 msgid "Startdatum"
 msgstr ""
 
-#: modules/evaluation/evaluation_admin_overview.inc.php:302
-#: modules/evaluation/evaluation_admin_overview.inc.php:337
-#: modules/evaluation/evaluation_admin_overview.inc.php:371
+#: modules/evaluation/evaluation_admin_overview.inc.php:306
+#: modules/evaluation/evaluation_admin_overview.inc.php:341
+#: modules/evaluation/evaluation_admin_overview.inc.php:375
 msgid "Status"
 msgstr ""
 
-#: modules/evaluation/evaluation_admin_overview.inc.php:315
+#: modules/evaluation/evaluation_admin_overview.inc.php:319
 msgid "Keine neuen Evaluationen vorhanden."
 msgstr ""
 
-#: modules/evaluation/evaluation_admin_overview.inc.php:331
+#: modules/evaluation/evaluation_admin_overview.inc.php:335
 msgid "Laufende Evaluationen:"
 msgstr ""
 
-#: modules/evaluation/evaluation_admin_overview.inc.php:336
+#: modules/evaluation/evaluation_admin_overview.inc.php:340
 msgid "Ablaufdatum"
 msgstr ""
 
-#: modules/evaluation/evaluation_admin_overview.inc.php:339
-#: modules/evaluation/evaluation_admin_overview.inc.php:373
+#: modules/evaluation/evaluation_admin_overview.inc.php:343
+#: modules/evaluation/evaluation_admin_overview.inc.php:377
 msgid "Exportieren"
 msgstr ""
 
-#: modules/evaluation/evaluation_admin_overview.inc.php:349
+#: modules/evaluation/evaluation_admin_overview.inc.php:353
 msgid "Keine laufenden Evaluationen vorhanden."
 msgstr ""
 
-#: modules/evaluation/evaluation_admin_overview.inc.php:364
+#: modules/evaluation/evaluation_admin_overview.inc.php:368
 msgid "Beendete Evaluationen:"
 msgstr ""
 
-#: modules/evaluation/evaluation_admin_overview.inc.php:383
+#: modules/evaluation/evaluation_admin_overview.inc.php:387
 msgid "Keine gestoppten Evaluationen vorhanden."
 msgstr ""
 
@@ -1022,7 +1022,7 @@ msgstr ""
 
 #: modules/evaluation/evaluation_admin_template.inc.php:325
 #: modules/evaluation/evaluation_admin_template.inc.php:337
-#: modules/evaluation/evaluation_admin_template.inc.php:730
+#: modules/evaluation/evaluation_admin_template.inc.php:733
 msgid "Fehler beim Speichern."
 msgstr ""
 
@@ -1195,23 +1195,23 @@ msgstr ""
 msgid "Aktionen:"
 msgstr ""
 
-#: modules/evaluation/evaluation.lib.php:233
+#: modules/evaluation/evaluation.lib.php:225
 msgid "Es sind Fehler aufgetreten."
 msgstr ""
 
-#: modules/evaluation/evaluation.lib.php:234
+#: modules/evaluation/evaluation.lib.php:226
 msgid "Es ist ein Fehler aufgetreten."
 msgstr ""
 
-#: modules/evaluation/evaluation.lib.php:241
+#: modules/evaluation/evaluation.lib.php:233
 msgid "Es ist kein Fehler aufgetreten"
 msgstr ""
 
-#: modules/evaluation/evaluation.lib.php:257
+#: modules/evaluation/evaluation.lib.php:249
 msgid "Datei: "
 msgstr ""
 
-#: modules/evaluation/evaluation.lib.php:260
+#: modules/evaluation/evaluation.lib.php:252
 msgid "Zeile: "
 msgstr ""
 
@@ -1602,21 +1602,21 @@ msgid "Veränderungen wurden gespeichert."
 msgstr ""
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:1306
-msgid "Fehler beim Einlesen (Gruppe)"
+msgid "Fehler beim Einlesen (Block)"
 msgstr ""
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:1331
-msgid "Einer Frage wurden noch keine Antworten zugewiesen."
+msgid "Einer Frage wurden noch keine Antwortenmöglichkeiten zugewiesen."
 msgstr ""
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:1333
-msgid "Einer Frage  wurden noch keine Antworten zugewiesen."
+msgid "Einer Frage  wurden noch keine Antwortenmöglichkeiten zugewiesen."
 msgstr ""
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:1336
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:1338
 #, c-format
-msgid "%s Fragen wurden noch keine Antworten zugewiesen."
+msgid "%s Fragen wurden noch keine Antwortenmöglichkeiten zugewiesen."
 msgstr ""
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:1345
@@ -1666,7 +1666,7 @@ msgid "löschen"
 msgstr ""
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:1455
-msgid "Fehler beim Löschen einer Gruppe."
+msgid "Fehler beim Löschen eines Block."
 msgstr ""
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:1459
@@ -1694,18 +1694,15 @@ msgid "Der Gruppierungsblock <b>%s</b> wurden gel&ouml;scht. "
 msgstr ""
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:1499
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1509
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:1560
-msgid "Fehler beim Anlegen einer neuen Gruppe."
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1570
+msgid "Fehler beim Anlegen eines neuen Blocks."
 msgstr ""
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:1501
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:1511
 msgid "Ein neuer Gruppierungsblock wurde angelegt."
-msgstr ""
-
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1509
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1570
-msgid "Fehler beim Anlegen einer neuen Untergruppe."
 msgstr ""
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:1562
@@ -1768,7 +1765,7 @@ msgstr ""
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:1792
 #, c-format
-msgid "Der Frage <b>%s</b> wurden Antworten zugewiesen."
+msgid "Der Frage <b>%s</b> wurden Antwortenmöglichkeiten zugewiesen."
 msgstr ""
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:1823
@@ -1849,7 +1846,7 @@ msgstr ""
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:2096
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:2099
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:2102
-msgid "Fehler beim Verschieben einer Gruppe"
+msgid "Fehler beim Verschieben eines Blocks."
 msgstr ""
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:1992
@@ -1949,7 +1946,7 @@ msgid "Fragenblock mit"
 msgstr ""
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:2345
-msgid "Neue Fragengruppe"
+msgid "Einen neuen Fragenblock erstellen"
 msgstr ""
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:2423
@@ -2012,13 +2009,13 @@ msgstr ""
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:2677
 #, c-format
-msgid "Dieser Fragenblock benutzt die Antwortenvorlage <b>%s</b>."
+msgid "Diesem Fragenblock ist die Antwortenvorlage <b>%s</b> zugewiesen."
 msgstr ""
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:2679
 msgid ""
-"Das Zuweisen einer Antwortenvorlage ändert alle Antworten der Fragen dieses "
-"Fragenblocks."
+"Das Zuweisen einer Antwortenvorlage ändert alle Antwortenmöglichkeiten der "
+"Fragen dieses Fragenblocks."
 msgstr ""
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:2681
@@ -2057,20 +2054,20 @@ msgstr ""
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:2929
 msgid ""
-"Dieser Frage wurden noch keine Antworten zugewiesen. Drücken sie auf den "
-"Doppelfpeil, um dies jetzt zu tun."
+"Dieser Frage wurden noch keine Antwortenmöglichkeiten zugewiesen. Drücken "
+"sie auf den Doppelfpeil, um dies jetzt zu tun."
 msgstr ""
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:2930
-msgid "Dieser Frage Antwortmöglichkeiten zuweisen."
+msgid "Dieser Frage Antwortenmöglichkeiten zuweisen."
 msgstr ""
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:2933
-msgid "Dieser Frage wurden bereits folgende Antworten zugewiesen:"
+msgid "Dieser Frage wurden bereits folgende Antwortenmöglichkeiten zugewiesen:"
 msgstr ""
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:2935
-msgid "Die zugewiesenen Antwortmöglichkeiten bearbeiten."
+msgid "Die zugewiesenen Antwortenmöglichkeiten bearbeiten."
 msgstr ""
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:2981
