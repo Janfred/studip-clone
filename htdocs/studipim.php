@@ -85,6 +85,7 @@ if ($auth->auth["uid"]!="nobody"){
 }
 // Start of Output
 $_html_head_title = "Stud.IP IM (" . $auth->auth["uname"] . ")";
+$messenger_started = true; //html_head should NOT try to open us again!
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 ?>
 <script language="JavaScript">
