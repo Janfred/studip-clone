@@ -31,6 +31,7 @@ include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Sessio
 //$ABSOLUTE_PATH_ILIAS = "/ilias/";
 // -- here you have to put initialisations for the current page
 
+require_once ($ABSOLUTE_PATH_STUDIP."/config.inc.php");
 require_once ($ABSOLUTE_PATH_STUDIP."/visual.inc.php");
 require_once ($ABSOLUTE_PATH_STUDIP."/functions.php");
 require_once ($ABSOLUTE_PATH_STUDIP."/msg.inc.php");
@@ -45,7 +46,6 @@ if ($ILIAS_CONNECT_ENABLE)
 
 	include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");
 
-	include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_config.inc.php");
 	include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_db_functions.inc.php");
 	include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_user_functions.inc.php");
 	include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_view_functions.inc.php");

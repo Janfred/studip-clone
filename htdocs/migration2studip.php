@@ -86,6 +86,7 @@ $perm->check("user");
 
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 	
+require_once ($ABSOLUTE_PATH_STUDIP."/config.inc.php");
 include_once ($ABSOLUTE_PATH_STUDIP."/visual.inc.php");
 include_once ($ABSOLUTE_PATH_STUDIP."/functions.php");
 include_once ($ABSOLUTE_PATH_STUDIP."/msg.inc.php");
@@ -93,7 +94,6 @@ include_once ($ABSOLUTE_PATH_STUDIP."/msg.inc.php");
 if ($ILIAS_CONNECT_ENABLE)
 {
 
-	include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_config.inc.php");
 	include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_db_functions.inc.php");
 	include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_user_functions.inc.php");
 	include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_view_functions.inc.php");

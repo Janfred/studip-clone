@@ -133,7 +133,6 @@ if ($GLOBALS['CHAT_ENABLE']){
 	$sms = new messaging();
 }
 if ($GLOBALS['ILIAS_CONNECT_ENABLE']){
-	include_once ($ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_LEARNINGMODULES."/lernmodul_config.inc.php"); 
 	include_once ($ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_LEARNINGMODULES."/lernmodul_db_functions.inc.php"); 
 }
 
