@@ -1,6 +1,6 @@
 <?php
 /*
-help/index.php - Zentrale Steuerungsdatei fr die Hilfe in Stud.IP
+help/index.php - Zentrale Steuerungsdatei fuer die Hilfe in Stud.IP
 Copyright (C) 2001 Stefan Suchi <suchi@gmx.de>
 
 This program is free software; you can redistribute it and/or
