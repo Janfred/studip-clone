@@ -64,10 +64,14 @@ function getRoom ($range_id, $link=TRUE) {
 								case "7": $ret .=_("So.: "); break;
 							}
 						if (($RESOURCES_ENABLE) && ($data["resource_id"])) {
-							if ($link)
-								$ret .= sprintf ("<a href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=no_nav\">%s</a>", $data["resource_id"], htmlReady(getResourceObjectName($data["resource_id"])));
+							$resname = getResourceObjectName($data["resource_id"]);
+							if ($resname)
+								if ($link)
+									$ret .= sprintf ("<a href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=no_nav\">%s</a>", $data["resource_id"], htmlReady($resname));
+								else
+									$ret .= htmlReady($resname);
 							else
-								$ret .= getResourceObjectName($data["resource_id"]);
+								$ret .= htmlReady($data["room"]);
 						}
 						elseif ((!$data["room"]) && (sizeof($term_data["turnus_data"]) >1))
 							$ret .=_("n. A.");
@@ -133,7 +137,7 @@ function getRoom ($range_id, $link=TRUE) {
 					if ($link)
 						$tmp_room .= sprintf ("<a href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=no_nav\">%s</a>", getDateAssigenedRoom($range_id), htmlReady(getResourceObjectName(getDateAssigenedRoom($range_id))));
 					else
-						$tmp_room .= getResourceObjectName(getDateAssigenedRoom($range_id));
+						$tmp_room .= htmlReady(getResourceObjectName(getDateAssigenedRoom($range_id)));
 			}
 			if ($tmp_room)
 				$ret .= $tmp_room;
