@@ -807,7 +807,7 @@ function dateAssi ($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full =
 		$insertAssign = new VeranstaltungResourcesAssign($admin_dates_data["range_id"]);
 	}
 	 	
-	$hash_secret = "blubbelsupp";
+	$hash_secret = "blubbersuppe";
 	$date_typ=1; //type to use for new dates
 	$author = get_fullname();
 
@@ -854,28 +854,32 @@ function dateAssi ($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full =
 		foreach ($SEMESTER as $val)
 			if (($veranstaltung_start_time >= $val["beginn"]) AND ($veranstaltung_start_time <= $val["ende"])) {
 				$sem_begin = mktime(0, 0, 0, date("n",$val["vorles_beginn"]), date("j",$val["vorles_beginn"])+($term_data["start_woche"] * 7),  date("Y",$val["vorles_beginn"]));
-				$sem_end = $val["vorles_ende"];
 			}
-	} else  {
-		$dow = date("w", $term_data["start_termin"]);
-		//calculate corrector to get first day of the week
-		if ($dow <= 5)
-			$corr = ($dow -1) * -1;
-		elseif ($dow == 6)
-			$corr = 2;
-		elseif ($dow == 0)
-			$corr = 1;
-		else
-			$corr = 0;
+	} else
+		$sem_begin = $term_data["start_termin"];
 		
-		$sem_begin = mktime(0, 0, 0, date("n",$term_data["start_termin"]), date("j",$term_data["start_termin"])+$corr,  date("Y",$term_data["start_termin"]));
-		foreach ($SEMESTER as $val)
-			if (($veranstaltung_start_time >= $val["beginn"]) AND ($veranstaltung_start_time <= $val["ende"])) {
-				$sem_end = $val["vorles_ende"];
-			}
-	}
+	$dow = date("w", $sem_begin);
 
-	//determine the last day as sem_end
+	if ($dow <= 5)
+		$corr = ($dow -1) * -1;
+	elseif ($dow == 6)
+		$corr = 2;
+	elseif ($dow == 0)
+		$corr = 1;
+	else
+		$corr = 0;
+	
+	if ($corr)
+		$sem_begin_uncorrected = $sem_begin;
+		
+	$sem_begin = mktime(0, 0, 0, date("n",$sem_begin), date("j",$sem_begin)+$corr,  date("Y",$sem_begin));
+	
+	foreach ($SEMESTER as $val)
+		if (($veranstaltung_start_time >= $val["beginn"]) AND ($veranstaltung_start_time <= $val["ende"])) {
+			$sem_end = $val["vorles_ende"];
+		}
+
+	//determine the last day as sem_end when $full (Veranstaltung uses multiple Semesters)
 	if ($full)
 		if ($veranstaltung_duration_time == -1) {
 			$last_sem = array_pop($SEMESTER);
@@ -910,6 +914,11 @@ function dateAssi ($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full =
 					if ($holy_type == 3)
 						$do = FALSE;
 				}
+				
+				//check if corrected $sem_begin
+				if (($do) && ($sem_begin_uncorrected))
+					if ($start_time < $sem_begin_uncorrected)
+						$do = FALSE;
 
 				if (($do) && ($end_time <$sem_end)){
 					//ids
@@ -1024,7 +1033,7 @@ function isSchedule ($sem_id) {
 		return FALSE;
 }
 
-//Checkt, ob bereist angelegte Termine ueber mehrere Semester laufen
+//Checkt, ob bereits angelegte Termine ueber mehrere Semester laufen
 function isDatesMultiSem ($sem_id) {
 	$db = new DB_Seminar;
 
