@@ -18,12 +18,12 @@ function checkusername(){
  var re_username = /^([a-zA-Z0-9_@-]*)$/;
  var checked = true;
  if (document.login.username.value.length<4) {
-    alert("Der Benutzername ist zu kurz \n- er sollte mindestens 4 Zeichen lang sein.");
+    alert("<?=_("Der Benutzername ist zu kurz \\n- er sollte mindestens 4 Zeichen lang sein.")?>");
  		document.login.username.focus();
     checked = false;
     }
  if (re_username.test(document.login.username.value)==false) {
-    alert("Der Benutzername enthält unzulässige Zeichen\n- er darf keine Sonderzeichen oder Leerzeichen enthalten.");
+    alert("<?=_("Der Benutzername enthält unzulässige Zeichen \\n- er darf keine Sonderzeichen oder Leerzeichen enthalten.")?>");
  		document.login.username.focus();
     checked = false;
 		}
@@ -33,7 +33,7 @@ function checkusername(){
 function checkpassword(){
  var checked = true;
  if (document.login.password.value.length<4) {
-    alert("Das Passwort ist zu kurz \n- es sollte mindestens 4 Zeichen lang sein.");
+    alert("<?=_("Das Passwort ist zu kurz \\n- es sollte mindestens 4 Zeichen lang sein.")?>");
  		document.login.password.focus();
     checked = false;
     }
@@ -43,7 +43,7 @@ function checkpassword(){
 function checkpassword2(){
  var checked = true;
 if (document.login.password.value != document.login.password2.value) {
-    alert("Das Passwort stimmt nicht mit dem Bestätigungspasswort überein!");
+    alert("<?=_("Das Passwort stimmt nicht mit dem Bestätigungspasswort überein!")?>");
     		document.login.password2.focus();
     checked = false;
     }
@@ -54,7 +54,7 @@ function checkVorname(){
  var re_vorname = /^([a-zA-ZÄÖÜ][^0-9"´'`\/\\\(\)\[\]]+)$/;
  var checked = true;
  if (re_vorname.test(document.login.Vorname.value)==false) {
-    alert("Bitte geben Sie Ihren tatsächlichen Vornamen an.");
+    alert("<?=_("Bitte geben Sie Ihren tatsächlichen Vornamen an.")?>");
  		document.login.Vorname.focus();
     checked = false;
 		}
@@ -65,7 +65,7 @@ function checkNachname(){
  var re_nachname = /^([a-zA-ZÄÖÜ][^0-9"´'`\/\\\(\)\[\]]+)$/;
  var checked = true;
  if (re_nachname.test(document.login.Nachname.value)==false) {
-    alert("Bitte geben Sie Ihren tatsächlichen Nachnamen an.");
+    alert("<?=_("Bitte geben Sie Ihren tatsächlichen Nachnamen an.")?>");
  		document.login.Nachname.focus();
     checked = false;
 		}
@@ -77,7 +77,7 @@ function checkEmail(){
  var Email = document.login.Email.value;
  var checked = true;
  if ((re_email.test(Email))==false || Email.length==0) {
-    alert("Die E-Mail Adresse ist nicht korrekt!");
+    alert("<?=_("Die E-Mail Adresse ist nicht korrekt!")?>");
  		document.login.Email.focus();
     checked = false;
     }
@@ -255,7 +255,7 @@ function checkdata(){
 
 <tr valign=top align=left>
   <td colspan="2"><?=_("Geschlecht:")?></td>
-  <td><input type="RADIO" <? if (!$geschlecht) echo "checked" ?> name="geschlecht" value="0">m&auml;nnlich&nbsp; <input type="RADIO" name="geschlecht" <? if ($geschlecht) echo "checked" ?> value="1">weiblich</td>
+  <td><input type="RADIO" <? if (!$geschlecht) echo "checked" ?> name="geschlecht" value="0"><?=_("m&auml;nnlich")?>&nbsp; <input type="RADIO" name="geschlecht" <? if ($geschlecht) echo "checked" ?> value="1"><?=_("weiblich")?></td>
  </tr>
 
  <tr valign=top align=left>
