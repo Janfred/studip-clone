@@ -357,9 +357,9 @@ class messaging {
 				$db3->query("INSERT message_user SET message_id='".$tmp_message_id."', user_id='".$rec_id[$x]."', snd_rec='rec'");
 				if ($GLOBALS["MESSAGING_FORWARD_AS_EMAIL"]) {	
 					// mail to original receiver
-					$mailstatus_original = $this->user_wants_email($rec_uname);
+					$mailstatus_original = $this->user_wants_email($rec_id[$x]);
 					if($mailstatus_original == 2 || ($mailstatus_original == 3 && $email_request == 1)) { 
-						$this->sendingEmail($rec_uname, $snd_user_id, $message, $subject);
+						$this->sendingEmail($rec_id[$x], $snd_user_id, $message, $subject);
 					}
 				}
 				//Benachrichtigung in alle Chaträume schicken	 
