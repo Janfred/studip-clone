@@ -150,7 +150,6 @@ function PrintAktualStatusgruppen ($range_id, $view, $edit_id="")
 		echo "</table>";
 		if ($i < $AnzahlStatusgruppen) {
 			printf ("<p align=\"center\"><a href=\"$PHP_SELF?cmd=swap&statusgruppe_id=%s&range_id=%s&view=%s\"><img src=\"pictures/move_up.gif\"  vspace=\"1\" width=\"13\" height=\"11\" border=\"0\"  %s><img src=\"pictures/move_down.gif\" vspace=\"1\" width=\"13\" height=\"11\" border=\"0\" %s></a><br>&nbsp;",$statusgruppe_id, $range_id, $view, tooltip("Gruppenreihenfolge tauschen"), tooltip("Gruppenreihenfolge tauschen")); 
-			//printf ("&nbsp; &nbsp; &nbsp; <a href=\"$PHP_SELF?cmd=swap&statusgruppe_id=%s&range_id=%s\&view=%s\"><img src=\"pictures/move_down.gif\" width=\"13\" height=\"11\" border=\"0\" %s></a> </p>",$statusgruppe_id, $range_id, $view, tooltip("Gruppenreihenfolge tauschen"));
 		}
 	}
 }
@@ -208,7 +207,7 @@ function PrintAktualMembers ($range_id)
 
 function PrintInstitutMembers ($range_id)
 {	
-	echo "<font size=\"-1\">&nbsp; MitarbeiterInnen der Institute</font><br>";
+	echo "<font size=\"-1\">&nbsp; MitarbeiterInnen der Einrichtungen</font><br>";
 	echo "&nbsp; <select name=\"InstitutMembers\">";
 	$db=new DB_Seminar;
 	$query = "SELECT a.user_id, username, Vorname, Nachname, inst_perms, perms FROM seminar_inst d LEFT JOIN user_inst a USING(Institut_id) ".
