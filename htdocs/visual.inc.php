@@ -20,26 +20,26 @@ function get_ampel_write ($mein_status, $admission_status, $write_level, $print=
 			case 0 : //Schreiben darf jeder
 				$ampel_status="<img border=\"0\" src=\"pictures/ampel_gruen.gif\" width=\"11\" height=\"16\">";
 			break;
-			case 1 : //Schreiben duerfen registrierte nur Stud.IP Teilnehmer
+			case 1 : //Schreiben duerfen nur registrierte Stud.IP Teilnehmer
 				if ($perm->have_perm("autor"))
 					$ampel_status="<img border=\"0\" src=\"pictures/ampel_gruen.gif\" width=\"11\" height=\"16\">";
 				else
-					$ampel_status="<img border=\"0\" src=\"pictures/ampel_rot.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>(Registrierungsmail beachten)</font>";
+					$ampel_status="<img border=\"0\" src=\"pictures/ampel_rot.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>" . _("(Registrierungsmail beachten)") . "</font>";
 			break;
 			case 2 : //Schreiben nur mit Passwort
 				if ($perm->have_perm("autor"))
-					$ampel_status="<img border=\"0\" src=\"pictures/ampel_gelb.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>(mit Passwort)</font>";
+					$ampel_status="<img border=\"0\" src=\"pictures/ampel_gelb.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>" . _("(mit Passwort)") . "</font>";
 				else
-					$ampel_status="<img border=\"0\" src=\"pictures/ampel_rot.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>(Registrierungsmail beachten)</font>";
+					$ampel_status="<img border=\"0\" src=\"pictures/ampel_rot.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>" . _("(Registrierungsmail beachten)") . "</font>";
 			break;
 			case 3 : //Schreiben nur nach Anmeldeverfaren
 				if ($perm->have_perm("autor"))
 					if ($admission_status)
-						$ampel_status="<img border=\"0\" src=\"pictures/ampel_gelb.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>(Anmelde-/Warteliste)</font>";
+						$ampel_status="<img border=\"0\" src=\"pictures/ampel_gelb.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>" . _("(Anmelde-/Warteliste)") . "</font>";
 					else
-						$ampel_status="<img border=\"0\" src=\"pictures/ampel_gelb.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>(Anmeldeverfahren)</font>";
+						$ampel_status="<img border=\"0\" src=\"pictures/ampel_gelb.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>" . _("(Anmeldeverfahren)") . "</font>";
 				else
-					$ampel_status="<img border=\"0\" src=\"pictures/ampel_rot.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>(Registrierungsmail beachten)</font>";
+					$ampel_status="<img border=\"0\" src=\"pictures/ampel_rot.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>" . _("(Registrierungsmail beachten)") . "</font>";
 			break;
 		}
 	}
@@ -69,22 +69,22 @@ function get_ampel_read ($mein_status, $admission_status, $read_level, $print="T
 				if ($perm->have_perm("autor"))
 					$ampel_status="<img border=\"0\" src=\"pictures/ampel_gruen.gif\" width=\"11\" height=\"16\">";
 				else
-					$ampel_status="<img border=\"0\" src=\"pictures/ampel_rot.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>(Registrierungsmail beachten!)</font>";
+					$ampel_status="<img border=\"0\" src=\"pictures/ampel_rot.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>" . _("(Registrierungsmail beachten!)") . "</font>";
 			break; //Lesen nur mit Passwort
 			case 2 :
 				if ($perm->have_perm("autor"))
-					$ampel_status="<img border=\"0\" src=\"pictures/ampel_gelb.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>(mit Passwort)</font>";
+					$ampel_status="<img border=\"0\" src=\"pictures/ampel_gelb.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>" . _("(mit Passwort)") . "</font>";
 				else
-					$ampel_status="<img border=\"0\" src=\"pictures/ampel_rot.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>(Registrierungsmail beachten!)</font>";
+					$ampel_status="<img border=\"0\" src=\"pictures/ampel_rot.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>" . _("(Registrierungsmail beachten!)") . "</font>";
 			break;
 			case 3 : //Lesen nur nach Anmeldeverfaren
 				if ($perm->have_perm("autor"))
 					if ($admission_status)
-						$ampel_status="<img border=\"0\" src=\"pictures/ampel_gelb.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>(Anmelde-/Warteliste)</font>";
+						$ampel_status="<img border=\"0\" src=\"pictures/ampel_gelb.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>" . _("(Anmelde-/Warteliste)") . "</font>";
 					else
-						$ampel_status="<img border=\"0\" src=\"pictures/ampel_gelb.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>(Anmeldeverfahren)</font>";
+						$ampel_status="<img border=\"0\" src=\"pictures/ampel_gelb.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>" . _("(Anmeldeverfahren)") . "</font>";
 				else
-					$ampel_status="<img border=\"0\" src=\"pictures/ampel_rot.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>(Registrierungsmail beachten)</font>";
+					$ampel_status="<img border=\"0\" src=\"pictures/ampel_rot.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>" . _("(Registrierungsmail beachten)") . "</font>";
 			break;
 		}
 	}
@@ -139,7 +139,6 @@ function JSReady ($what = "", $target = "overlib") {
 		if (ereg("\[quote",$what) AND ereg("\[/quote\]",$what))
 			$what = quotes_decode($what);
 		$what = "<p width=\"100%\"class=\"printcontent\">" . $what . "</p>";
-//                $what = "<table width=\"100%\"><tr><td class=\"printcontent\">" . $what . "</td></tr></table>";
 		$what = addslashes(htmlentities($what,ENT_COMPAT));
 		return $what;
 		break;
@@ -159,7 +158,7 @@ function JSReady ($what = "", $target = "overlib") {
 
 function quotes_decode($description) 
 {
-// Funktion um Quotings zu encoden
+// Funktion um Quotings zu decoden
 // $description: der Text der gequotet werden soll, wird zurueckgegeben
 
 	$description = " ".$description;
@@ -188,14 +187,14 @@ function quotes_decode($description)
 							$between_tags = substr($between_tags,$nameend_pos+6);
 						ELSE // da wird gepfuscht, also mal besser Finger weg
 							$between_tags = substr($between_tags,$nameend_pos+1);
-						$between_tags = "<b>".$quote_name." hat geschrieben:</b><hr>".$between_tags;
+						$between_tags = "<b>".sprintf(_("%s hat geschrieben:"),$quote_name)."</b><hr>".$between_tags;
 						}
 					ELSE { // kein Name, also nur Zitat
 						$nameend_pos = strpos($between_tags,"]");
 						IF (substr($between_tags,$nameend_pos,5)=="]<br>") // ja, hier wurde anstaendig gequotet
-							$between_tags = "<b>Zitat:</b><hr>".substr($between_tags,$nameend_pos+6);
+							$between_tags = "<b>"._("Zitat:")."</b><hr>".substr($between_tags,$nameend_pos+6);
 						ELSE // da wird gepfuscht, also mal besser Finger weg
-							$between_tags = "<b>Zitat:</b><hr>".substr($between_tags,$nameend_pos+1);
+							$between_tags = "<b>"._("Zitat:")."</b><hr>".substr($between_tags,$nameend_pos+1);
 						}
 					$description = $before_start_tag . "<blockquote class=\"quote\">";
 					$description .= $between_tags . "</blockquote>";
@@ -491,16 +490,16 @@ function printhead($breite,$left,$link,$open,$new,$icon,$titel,$zusatz,$timestmp
 	}
 	if ($link) {
 		if ($open=="close" AND $new!=TRUE) {
-			$print.="pictures/forumgrau2.gif\" alt=\"Objekt aufklappen\"";
+			$print.="pictures/forumgrau2.gif\"" . tooltip(_("Objekt aufklappen"));
 		}
 		if ($open=="open" AND $new!=TRUE) {
-			$print.="pictures/forumgraurunt2.gif\" alt=\"Objekt zuklappen\"";
+			$print.="pictures/forumgraurunt2.gif\"" . tooltip(_("Objekt zuklappen"));
 		}
 		if ($open=="close" AND $new==TRUE) {
-			$print.="pictures/forumrot.gif\" alt=\"Objekt aufklappen\"";
+			$print.="pictures/forumrot.gif\"" . tooltip(_("Objekt aufklappen"));
 		}
 		if ($open=="open" AND $new==TRUE) {
-			$print.="pictures/forumrotrunt.gif\" alt=\"Objekt zuklappen\"";
+			$print.="pictures/forumrotrunt.gif\"" . tooltip(_("Objekt zuklappen"));
 		}
 	} else {
 		if ($open=="close") {
