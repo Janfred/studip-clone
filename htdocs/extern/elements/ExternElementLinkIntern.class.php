@@ -154,13 +154,13 @@ class ExternElementLinkIntern extends ExternElement {
 			$link .= "&global_id=" . $this->config->global_id;
 		
 		// to set the color of the font in the style-attribute of the a-tag
-		if ($color = $this->config->getValue($this->name, "font_color_")) {
+		if ($color = $this->config->getValue($this->name, "font_color")) {
 			$this->config->setValue($this->name, "a_style", "color:$color;"
-					. $this->config->getValue($this->name, "a_style_"));
+					. $this->config->getValue($this->name, "a_style"));
 		}
 		
-		if ($tag = $this->config->getTag($this->name, "font", FALSE, TRUE))
-			$out = $tag . $args["content"] . "</font>";
+		if ($font_attr = $this->config->getAttributes($this->name, "font"))
+			$out = "<font$font_attr>" . $args["content"] . "</font>";
 		else
 			$out = $args["content"];
 		$out = "<a href=\"$link\"" . $this->config->getAttributes($this->name, "a") . ">" . $out . "</a>";

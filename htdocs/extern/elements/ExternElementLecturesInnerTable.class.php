@@ -41,9 +41,8 @@ class ExternElementLecturesInnerTable extends ExternElement {
 
 	var $attributes = array("tr_class", "tr_style", "td_bgcolor", "td_bgcolor2_",
 			"td_class", "td_style", "td1_height", "td1_align", "td1_valign",
-			"font1_face", "font1_size", "font1_color", "font1_class", "font1_style", "td2_height",
-			"td2_align", "td2_valign", "td2width", "font2_face", "font2_size", "font2_color",
-			"font2_class", "font2_style", "td3_align");
+			"td2_height", "td2_align", "td2_valign", "td2width", "font2_face",
+			"font2_size", "font2_color", "font2_class", "font2_style", "td3_align");
 			
 	/**
 	* Constructor
@@ -59,8 +58,8 @@ class ExternElementLecturesInnerTable extends ExternElement {
 		$this->description = _("Formatierung von Veranstaltungsname/Zeiten(Termine)/DozentIn in der Veranstaltungs&uuml;bersicht.");
 		
 		$this->headlines = array(_("Angaben zum HTML-Tag &lt;tr&gt;"), _("Angaben zum HTML-Tag &lt;td&gt;"),
-			_("Ausrichtung Veranstaltungsname"), _("Schrift Veranstaltungsname (HTML-Tag &lt;font&gt;)"),
-			_("Ausrichtung Zeiten(Termine)/DozentIn"), _("Schrift Zeiten(Termine)/DozentIn (HTML-Tag &lt;font&gt;)"));
+			_("Ausrichtung Veranstaltungsname"), _("Ausrichtung Zeiten(Termine)/DozentIn"),
+			_("Schrift Zeiten(Termine)/DozentIn (HTML-Tag &lt;font&gt;)"));
 	}
 	
 	/**
@@ -92,12 +91,7 @@ class ExternElementLecturesInnerTable extends ExternElement {
 		$content_table .= $edit_form->editContentTable($headline, $table);
 		$content_table .= $edit_form->editBlankContent();
 		
-		$attributes = array("font1_face", "font1_size", "font1_color", "font1_class", "font1_style");
-		$headline = array("font1" => $this->headlines[3]);
-		$content_table .= $edit_form->getEditFormContent($attributes, $headline);
-		$content_table .= $edit_form->editBlankContent();
-		
-		$headline = $edit_form->editHeadline($this->headlines[4]);
+		$headline = $edit_form->editHeadline($this->headlines[3]);
 		
 		$table = $edit_form->editHeight("td2_height");
 		
@@ -123,7 +117,7 @@ class ExternElementLecturesInnerTable extends ExternElement {
 		$content_table .= $edit_form->editBlankContent();
 		
 		$attributes = array("font2_face", "font2_size", "font2_color", "font2_class", "font2_style");
-		$headline = array("font2" => $this->headlines[5]);
+		$headline = array("font2" => $this->headlines[4]);
 		$content_table .= $edit_form->getEditFormContent($attributes, $headline);
 		$content_table .= $edit_form->editBlankContent();
 	
@@ -168,10 +162,8 @@ class ExternElementLecturesInnerTable extends ExternElement {
 		$zebra++;
 		$out .= "<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n";
 		$out .= "<tr" . $this->config->getAttributes($this->name, "tr1") . ">";
-		$out .= "<td$colspan" . $this->config->getAttributes($this->name, "td1") . ">";
-		$out .= "<font" . $this->config->getAttributes($this->name, "font1") . ">";
-		
-		$out .= "{$args['content']['sem_name']}</font></td></tr>\n";
+		$out .= "<td$colspan" . $this->config->getAttributes($this->name, "td1") . ">";		
+		$out .= "{$args['content']['sem_name']}</td></tr>\n";
 		
 		if ($show_time || $show_lecturer) {
 			$out .= "\n<tr" . $this->config->getAttributes($this->name, "tr2") . ">";
