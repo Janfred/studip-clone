@@ -1,31 +1,17 @@
 <?php
-        page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
+page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 
+include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
+// -- here you have to put initialisations for the current page
 
+// Start of Output
+include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
+include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+
+require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
+require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 ?>
-<html>
-<head>
-        <link rel="stylesheet" href="style.css" type="text/css">
-        <META HTTP-EQUIV="REFRESH" CONTENT="<?php print $auth->lifetime*60;?>; URL=logout.php">
-        <body bgcolor=white>
-
-<title>Stud.IP</title>
-</head>
-
-
-<?php
-        include "$ABSOLUTE_PATH_STUDIP/seminar_open.php"; //hier werden die sessions initialisiert
-?>
-
-<!-- hier muessen Seiten-Initialisierungen passieren -->
-
-<?php
-        include "$ABSOLUTE_PATH_STUDIP/header.php";   //hier wird der "Kopf" nachgeladen
-        require_once("$ABSOLUTE_PATH_STUDIP/functions.php");   //hier wird der "Kopf" nachgeladen
-        require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");   //hier wird der "Kopf" nachgeladen
-?>
-<body>
 <table width="100%" border=0 cellpadding=0 cellspacing=0>
 <tr>
 	<td class="topic" colspan=2><img src="pictures/suchen.gif" border="0" align="texttop"><b>&nbsp;Stud.IP-Score</td>
@@ -68,7 +54,7 @@ echo "<br><br><a href='score.php?cmd=write'>Diesen Wert hier ver&ouml;ffentliche
 <td class="blank" align = right><img src="pictures/board2.jpg" border="0"></td>
 </tr>
 </table>
-<table width="100%" border=0 cellpadding=0 cellspacing=0><tr><td class=blank>
+<table width="100%" border="0" cellpadding="0" cellspacing="0"><tr><td class=blank>
 <br><br><blockquote>Hier sehen Sie die Score der Nutzer, die Ihre Werte ver&ouml;ffentlicht haben:</blockquote>&nbsp; </td></tr>
 <tr><td class="blank">
 <?
@@ -79,23 +65,25 @@ $rang = 1;
 $db=new DB_Seminar;
 $db->query("SELECT b.*,score FROM user_info a LEFT JOIN auth_user_md5 b USING (user_id) WHERE score > 0 ORDER BY score DESC");
 if ($db->num_rows()) {
-	echo "<table width=\"99%\" align=\"center\" border=0 cellpadding=2 cellspacing=0>";
+	echo "<table width=\"99%\" align=\"center\" border=\"0\" cellpadding=\"2\" cellspacing=\"0\">";
 	while ($db->next_record()) {
 		$kill = "";
 		$cssSw->switchClass();
-		IF ($db->f("user_id")==$user_id) $kill = "&nbsp; &nbsp; <a href='score.php?cmd=kill'>[l&ouml;schen]</a>";
-		echo "<tr><td class=\"".$cssSw->getClass()."\" width=1% class=steel1 nowrap align=right>".$rang.".<td class=\"".$cssSw->getClass()."\" width=39% class=steel1 nowrap>"
-		."&nbsp; &nbsp; <a href='about.php?username=".$db->f("username")."'>".$db->f("Vorname")."&nbsp; ".$db->f("Nachname")."</a></td>"
-		."<td class=\"".$cssSw->getClass()."\" width=30% class=steel1>".$db->f("score")."</td><td class=\"".$cssSw->getClass()."\" width=30% class=steel1>".gettitel($db->f("score"))
-		.$kill
-		."</td></tr>";
-		$rang++;
+		if ($db->f("user_id")==$user_id) {
+			$kill = "&nbsp; &nbsp; <a href='score.php?cmd=kill'>[l&ouml;schen]</a>";
 		}
+		echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"1%\" nowrap align=\"right\">".$rang.".</td><td class=\"".$cssSw->getClass()."\" width=\"39%\" nowrap>"
+		."&nbsp; &nbsp; <a href='about.php?username=".$db->f("username")."'>".$db->f("Vorname")."&nbsp; ".$db->f("Nachname")."</a></td>"
+		."<td class=\"".$cssSw->getClass()."\" width=\"30%\">".$db->f("score")."</td><td class=\"".$cssSw->getClass()."\" width=\"30%\">".gettitel($db->f("score"))
+		.$kill
+		."</td></tr>\n";
+		$rang++;
+	}
 	echo "</table>\n";
 	}
 
-          page_close()
- ?>
- </td></tr></table>
+page_close()
+?>
+</td></tr></table>
 </body>
 </html>
