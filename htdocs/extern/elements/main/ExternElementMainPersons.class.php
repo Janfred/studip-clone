@@ -83,7 +83,7 @@ class ExternElementMainPersons extends ExternElementMain {
 			"srilink" => ""
 		);
 		
-	//	get_default_generic_datafields($config, "user");
+		get_default_generic_datafields($config, "user");
 		
 		return $config;
 	}
@@ -94,7 +94,7 @@ class ExternElementMainPersons extends ExternElementMain {
 	function toStringEdit ($post_vars = "", $faulty_values = "",
 			$edit_form = "", $anker = "") {
 		
-	//	update_generic_datafields($this->config, $this->data_fields, $this->field_names, "user");
+		update_generic_datafields($this->config, $this->data_fields, $this->field_names, "user");
 		$out = "";
 		$table = "";
 		if ($edit_form == "")

@@ -80,7 +80,7 @@ class ExternElementMainLecturedetails extends ExternElementMain {
 			"language" => ""
 		);
 		
-	//	get_default_generic_datafields($config, "sem");
+		get_default_generic_datafields($config, "sem");
 		
 		return $config;
 	}
@@ -91,7 +91,7 @@ class ExternElementMainLecturedetails extends ExternElementMain {
 	function toStringEdit ($post_vars = "", $faulty_values = "",
 			$edit_form = "", $anker = "") {
 		
-	//	update_generic_datafields($this->config, $this->data_fields, $this->field_names, "sem");
+		update_generic_datafields($this->config, $this->data_fields, $this->field_names, "sem");
 		$out = "";
 		$table = "";
 		if ($edit_form == "")

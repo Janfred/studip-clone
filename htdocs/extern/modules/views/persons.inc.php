@@ -144,7 +144,11 @@ foreach ($visible_groups as $group_id => $group) {
 														$db->f("Email"), "link" => "mailto:" . $db->f("Email")))
 			);
 			
-			// include generic datafields
+			// generic data fields
+			$datafields = $datafields_obj->getLocalFields($db->f("user_id"));
+			foreach ($generic_datafields as $datafield) {
+				$data["content"][$datafield] = $datafields[$datafield]["content"];
+			}
 			
 			$out .= $this->elements["TableRow"]->toString($data);
 		}

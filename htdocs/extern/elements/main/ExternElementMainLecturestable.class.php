@@ -91,7 +91,7 @@ class ExternElementMainLecturestable extends ExternElementMain {
 			"title" => _("Lehrveranstaltungen")
 		);
 		
-	//	get_default_generic_datafields($config, "sem");
+		get_default_generic_datafields($config, "sem");
 		
 		return $config;
 	}
@@ -103,7 +103,7 @@ class ExternElementMainLecturestable extends ExternElementMain {
 			$edit_form = "", $anker = "") {
 		global $SEMESTER;
 		
-	//	update_generic_datafields($this->config, $this->data_fields, $this->field_names, "sem");
+		update_generic_datafields($this->config, $this->data_fields, $this->field_names, "sem");
 		$out = "";
 		$table = "";
 		if ($edit_form == "")
