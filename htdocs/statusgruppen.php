@@ -69,7 +69,7 @@ function PrintAktualStatusgruppen () {
 
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
-	$db->query ("SELECT name, statusgruppe_id, size FROM statusgruppen WHERE range_id = '$SessSemName[1]' ORDER BY position ASC");
+	$db->query ("SELECT name, statusgruppe_id, size, selfassign FROM statusgruppen WHERE range_id = '$SessSemName[1]' ORDER BY position ASC");
 	$AnzahlStatusgruppen = $db->num_rows();
 	$i = 0;
 	while ($db->next_record()) {
@@ -80,7 +80,7 @@ function PrintAktualStatusgruppen () {
 		printf ("<td width=\"90%%\" class=\"topic\"><font size=\"-1\"><b>&nbsp;%s &nbsp;%s</b></font>",CheckAssignRights($statusgruppe_id,$user->id)?"<a href=\"$PHP_SELF?assign=$statusgruppe_id\"><img src=\"pictures/move.gif\" border=\"0\"". tooltip(_("In diese Gruppe eintragen"))."></a>":"", htmlReady($db->f("name")));
 
 		$limit = GetStatusgruppeLimit($statusgruppe_id);
-		if ($limit) {
+		if ($limit!=FALSE && $db->f("selfassign")=="1") {
 			$voll = CountMembersPerStatusgruppe ($statusgruppe_id);
 			if ($voll >= $limit)
 				$limitcolor = "#FF5555";
