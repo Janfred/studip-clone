@@ -128,6 +128,7 @@ if ($SessionStart==0) {
 	$sess->register("SessionSeminar");
 	$sess->register("SessSemName");
 	$sess->register("messenger_started");
+	$sess->register("homepage_cache");
 
 	// Language Settings
 	$sess->register("_language");
