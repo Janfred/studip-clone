@@ -1403,11 +1403,11 @@ function getPresenceTypeClause() {
 
 
 /**
-* Javascript für TerminEingabeHilfe und popup-Kalender
+* Javascript für TerminEingabeHilfe
 *
-* Beim ersten Aufruf werden alle benötigten js-Funktionen
-* und die Linkzeile zurückgegeben. Bei allen weiteren Aufrufen enthält
-* der Rückgabewert nur noch die Linkzeile.
+* Beim ersten Aufruf wird die benötigte js-Funktionen
+* und die HTML-TerminZeile zurückgegeben. Bei allen weiteren Aufrufen enthält
+* der Rückgabewert nur noch die HTML-TerminZeile.
 *
 * @param	int	Werte von 1 bis 6, bestimmt welche Formularfeldnamen verwendet werden
 * @param	int	counter wenn mehrere TerminZeilen auf einer Seite
@@ -1415,10 +1415,11 @@ function getPresenceTypeClause() {
 * @param	string	ursprüngliche StartMinute (Wert für ESC Taste)
 * @param	string	ursprüngliche EndStunde (Wert für ESC Taste)
 * @param	string	ursprüngliche EndMinute (Wert für ESC Taste)
-* @return	string	JavaScriptCode
+* @return	string	JavaScriptCode und HTML-TerminZeile
 *
 */
-function Kalender_Termine_javascript ($t = 0, $n = 0, $ss = '', $sm = '', $es = '', $em = '') {
+function Termin_Eingabe_javascript ($t = 0, $n = 0, $ss = '', $sm = '', $es = '', $em = '') {
+	global $auth, $CANONICAL_RELATIVE_PATH_STUDIP, $RELATIVE_PATH_CALENDAR;
 	static $first = 1;
 	$zz = array (
 		array ('07','45','09','15'),
@@ -1429,42 +1430,57 @@ function Kalender_Termine_javascript ($t = 0, $n = 0, $ss = '', $sm = '', $es = 
 		array ('17','00','18','30'),
 		array ('18','45','20','15')
 	);
+
 	if (!isset($zz) || count($zz) == 0) return '';
-	$jstxt = "\n<script type=\"text/javascript\">\n<!--\n";
+	if (!$auth->auth["jscript"]) return '';
+	$km = ($auth->auth["xres"] > 650)? 8 : 6;
+	$kx = ($auth->auth["xres"] > 650)? 740 : 600;
+	$jstxt = '';
+	$kalenderok = (($t == 1 || $t == 2 || $t == 5 || $t == 6)? 1:0);
+	$vollebreite = (($t == 1 || $t == 2)? 1:0); // ;-)
 	if ($first == 1) {
 		$jstxt .= <<<EOT
+
+<script type="text/javascript">
+<!--
 function set_sem_time(t, nn, ss,sm,es,em){
  switch (t){
+  // admin_dates.php Einzeltermin
   case 1:
    feld_ss = "stunde";
    feld_sm = "minute";
    feld_es = "end_stunde";
    feld_em = "end_minute";
    break;
+  // admin_dates.php alle Termine
   case 2:
    feld_ss = "stunde["+nn+"]";
    feld_sm = "minute["+nn+"]";;
    feld_es = "end_stunde["+nn+"]";
    feld_em = "end_minute["+nn+"]";
    break;
+  //
   case 3:
    feld_ss = "turnus_start_stunde["+nn+"]";
    feld_sm = "turnus_start_minute["+nn+"]";
    feld_es = "turnus_end_stunde["+nn+"]";
    feld_em = "turnus_end_minute["+nn+"]";
    break;
+  // admin_seminare_assi.php regelmäßige Veranstaltungen
   case 4:
    feld_ss = "term_turnus_start_stunde["+nn+"]";
    feld_sm = "term_turnus_start_minute["+nn+"]";
    feld_es = "term_turnus_end_stunde["+nn+"]";
    feld_em = "term_turnus_end_minute["+nn+"]";
    break;
+  // admin_seminare_assi.php unregelmäßige Veranstaltungen
   case 5:
    feld_ss = "term_start_stunde["+nn+"]";
    feld_sm = "term_start_minute["+nn+"]";
    feld_es = "term_end_stunde["+nn+"]";
    feld_em = "term_end_minute["+nn+"]";
    break;
+  // admin_seminare_assi.php Vorbesprechung
   case 6:
    feld_ss = "vor_stunde";
    feld_sm = "vor_minute";
@@ -1477,167 +1493,45 @@ function set_sem_time(t, nn, ss,sm,es,em){
  document.Formular.elements[feld_es].value = es;
  document.Formular.elements[feld_em].value = em;
 }
+//-->
+</script>
 
-
-function write_js_zeile(t2, nn2, ss2, sm2, es2, em2){
-  var xx = 640;
-  if (window.outerWidth)
-  	xx = window.outerWidth;
-  else
-  	if (screen.width)
-  		xx = screen.width;
-  var tx = '<tt>&lt;&#8212;</tt><font size="-'+((xx > 1000 )?2:1)+'">&nbsp;';
 EOT;
-		for($z = 0; $z < count($zz); $z++) {
-			$jszeit =  $zz[$z][0].':'.$zz[$z][1].'&nbsp;-&nbsp;'.$zz[$z][2].':'.$zz[$z][3];
-			$jszeitc =  $jszeit .'&nbsp;' . _('Uhr') . '&nbsp;' . _('eintragen');
-			$jstxt .= '  tx = tx + \'[<a href="javascript:set_sem_time(\' + t2 + \', \' + nn2 + \',\\\''.$zz[$z][0].'\\\', \\\''.$zz[$z][1].'\\\', \\\''.$zz[$z][2].'\\\', \\\''.$zz[$z][3]. '\\\')" title="'. $jszeitc .'">\' + ((xx > 1000 && !ns4)?"'. $jszeit . '":" ' .($z + 1)  . '. ") + \'</a>]&nbsp;\';'. "\n";
-		}
-		$jstxt .= '  if (ss2 != "")'. "\n";
-		$jstxt .= '    tx = tx + \'[<a href="javascript:set_sem_time(\' + t2 + \', \' + nn2 + \',\\\'\' + ss2 + \'\\\', \\\'\' + sm2 + \'\\\', \\\'\' + es2 + \'\\\', \\\'\' + em2 + \'\\\')" title="'._('zur&uuml;cksetzten auf').' \' + ss2 + \':\' + sm2 + \'&nbsp;-&nbsp;\' + es2 + \':\' + em2 + \'&nbsp;'. _('Uhr') .'">' . _('Reset') . "</a>]&nbsp;';\n";
-		$jstxt .= '  tx = tx + \'[<a href="javascript:openKalenderWindow(\' + t2 + \', \' + nn2 + \', \' + DieserMonat + \', \' + DiesesJahr + \');" title="'. _('Kalenderfenster &ouml;ffnen').'">'._('Kalender').'</a>]\';'. "\n";
-		$jstxt .= '  tx = tx + "</font>";'. "\n";
-		$jstxt .= '  document.write( tx );'. "\n";
-		$jstxt .= '}' . "\n\n";
-
-		$jstxt .= 'function Kalender(t4, n4, Monat,Jahr, cc) {' . "\n";
-		$jstxt .= '  Monatsname = new Array' . "\n";
-		$jstxt .= '  ("' . _('Januar') . '","' . _('Februar') . '","' . _('M&auml;rz') . '","' . _('April') . '","' . _('Mai') . '","' . _('Juni') . '","' . _('Juli') . '",' . "\n";
-		$jstxt .= '  "' . _('August') . '","' . _('September') . '","' . _('Oktober') . '","' . _('November') . '","' . _('Dezember') .'");' . "\n";
-		$jstxt .= '  Tag = new Array ("' . _('Mo') . '","' . _('Di') . '","' . _('Mi') . '","' . _('Do') . '","' . _('Fr') . '","' . _('Sa') . '","' . _('So') . '");' . "\n";
-
-		$jstxt .= <<<EOT2
-  var txt1 = '';
-  var Zeit = new Date(Jahr,Monat-1,1);
-  var Start = Zeit.getDay();
-  if(Start > 0) Start--;
-  else Start = 6;
-  var Stop = 31;
-  if(Monat==4 ||Monat==6 || Monat==9 || Monat==11 ) --Stop;
-  if(Monat==2) {
-   Stop = Stop - 3;
-   if(Jahr%4==0) Stop++;
-   if(Jahr%100==0) Stop--;
-   if(Jahr%400==0) Stop++;
-  }
-  txt1 = txt1 + '<table border="0" cellpadding="1" cellspacing="2"><tr>\\n';
-  if (cc == 1 && !ms && !ns4) txt1 = txt1 + '<td bgcolor="#E0E0E0"><a href="javascript:prev_kalender();"><font color="#888888" size="-1"><b>&lt;&lt;</b></font></a></td>';
-  txt1 = txt1 + '<td align="center" colspan="'+((!ms && !ns4 && (cc == 1 || cc == 8))?6:7)+'" bgcolor="#E0E0E0"><font color="#888888" size="-1"><b>';
-  txt1 = txt1 +  Monatsname[Monat-1] + " " + Jahr
-  txt1 = txt1 + '</b></font></td>\\n';
-  if (cc == 8 && !ms && !ns4) txt1 = txt1 + '<td bgcolor="#E0E0E0"><a href="javascript:next_kalender();"><font color="#888888" size="-1"><b>&gt;&gt;</b></font></a></td>';
-  txt1 = txt1 + '</tr>\\n';
-  txt1 = txt1 + '<tr align="center">';
-  for(var i = 0; i <= 6; i++)
-    txt1 = txt1 + '<td bgcolor="#E0E0E0"><font color="#888888" size="-1">' + Tag[i] + '</font></td>\\n';
-  txt1 = txt1 + '</tr>\\n';
-  var Tageszahl = 1;
-  for(var i = 0; i <= 5; i++) {
-    txt1 = txt1 + '<tr align="center">';
-    for(var j = 0; j <= 6; j++) {
-      txt1 = txt1 + '<td bgcolor="';
-      if((i == 0) && (j < Start))
-       txt1 = txt1 + '#F7F7F7">&nbsp;';
-      else {
-        if(Tageszahl > Stop)
-          txt1 = txt1 + '#F7F7F7">&nbsp;';
-        else {
-          if((Jahr==DiesesJahr)&&(Monat==DieserMonat)&&(Tageszahl==DieserTag)) txt1 = txt1 + '#FFFF99">';
-          else txt1 = txt1 + '#E8E8E8">';
-          txt1 = txt1 + '<a href="javascript:set_date('+t4+','+n4+',\\''+Tageszahl+'\\',\\''+Monat+'\\', \\''+Jahr+'\\');" title="'+Tageszahl+'.'+Monat+'.'+Jahr+'">';
-          if (j == 6) txt1 = txt1 + '<font color="DD0000" size="-1">';
-          else txt1 = txt1 + '<font color="#3333DD" size="-1">';
-          txt1 = txt1 + Tageszahl++;
-          txt1 = txt1 + '</font></a>\\n';
-         }
-       }
-       txt1 = txt1 + '</td>\\n';
-    }
-     txt1 = txt1 + '</tr>\\n';
-  }
-  txt1 = txt1 + '</table>\\n';
-  return txt1;
-}
-
-function openKalenderWindow(t3, n3, smon, sjahr){
-	if (!ns4 && window["tf"]) window["tf"].close();
-	var tt = "";
-EOT2;
-		$jstxt .= "	tt = tt + '<html><head><title>"._('Kalender')."</title>\\n';";
-		$jstxt .= <<<EOT3
-	tt = tt + '<script type="text/javascript">\\n';
-	tt = tt + 'window.setTimeout("window.close()", 120000);\\n';
-	tt = tt + 'function set_date(t5, n5, t,m,j){\\n ';
-	tt = tt + '  switch (t5){\\n';
-	tt = tt + '    case 1:\\n';
-	tt = tt + '      feld_tag   = "tag";\\n';
-	tt = tt + '      feld_monat = "monat";\\n';
-	tt = tt + '      feld_jahr  = "jahr";\\n';
-	tt = tt + '      break;\\n';
-	tt = tt + '    case 2:\\n';
-	tt = tt + '      feld_tag   = "tag["+n5+"]";\\n';
-	tt = tt + '      feld_monat = "monat["+n5+"]";\\n';
-	tt = tt + '      feld_jahr  = "jahr["+n5+"]";\\n';
-	tt = tt + '      break;\\n';
-	tt = tt + '    case 5:\\n';
-	tt = tt + '      feld_tag   = "term_tag["+n5+"]";\\n';
-	tt = tt + '      feld_monat = "term_monat["+n5+"]";\\n';
-	tt = tt + '      feld_jahr  = "term_jahr["+n5+"]";\\n';
-	tt = tt + '      break;\\n';
-	tt = tt + '    case 6:\\n';
-	tt = tt + '      feld_tag   = "vor_tag";\\n';
-	tt = tt + '      feld_monat = "vor_monat";\\n';
-	tt = tt + '      feld_jahr  = "vor_jahr";\\n';
-	tt = tt + '      break;\\n';
-	tt = tt + '  }\\n';
-
-	tt = tt + '  opener.document.Formular.elements[feld_tag].value = (t < 10)? "0"+t:t;\\n ';
-	tt = tt + '  opener.document.Formular.elements[feld_monat].value = (m < 10)? "0"+m:m;\\n ';
-	tt = tt + '  opener.document.Formular.elements[feld_jahr].value = j;\\n ';
-	tt = tt + '  window.close();\\n}\\n ';
-	tt = tt + 'function next_kalender(){\\n ';
-	tt = tt + '  var smon2 = ' + smon + ' + 8; var sjahr2 = ' + sjahr + ';\\n';
-	tt = tt + '  if (smon2 > 13) { smon2 = smon2 - 12; sjahr2++; }\\n';
-	tt = tt + '  opener.openKalenderWindow(' + t3 + ', ' + n3 + ', smon2, sjahr2 );\\n';
-	tt = tt + '}\\n';
-	tt = tt + 'function prev_kalender(){\\n ';
-	tt = tt + '  var smon2 = ' + smon + ' - 8; var sjahr2 = ' + sjahr + ';\\n';
-	tt = tt + '  if (smon2 < 1) { smon2 = smon2 + 12; sjahr2--; }\\n';
-	tt = tt + '  opener.openKalenderWindow(' + t3 + ', ' + n3 + ', smon2, sjahr2 );\\n';
-	tt = tt + '}\\n';
-	tt = tt + '</script>\\n';
-	tt = tt + '</head>\\n<body bgcolor="#FFFFFF">\\n';
-	tt = tt + '<table border="0"><tr valign="top">\\n';
-	for (var ii = 1; ii < 9; ii++){
-		tt = tt + '<td>' + Kalender(t3, n3, smon++, sjahr, ii) + '</td>';
-		if (smon > 12) {smon = 1; sjahr++;}
-		if (ii == 4) tt = tt + '</tr><tr valign="top">';
-	}
-	tt = tt + '</tr></table>\\n</body></html>\\n';
-	if (navigator.appName.indexOf("Konqueror") != -1 )
-		tf = window.open("", "Kalender", "dependent=yes,width=700,height=450");
-	else
-		tf = window.open("about:blank", "Kalender", "dependent=yes,width=560,height=380");
-
-	window["tf"].document.write(tt);
-	window["tf"].focus();
-}
-  var ns4 = (navigator.appName.indexOf("Netscape")!= -1 && navigator.appVersion.substring(0,1) == "4")? 1 : 0;
-  var ms = (document.all && !window.opera)? 1 : 0;
-  var jetzt = new Date();
-  var DieserMonat = jetzt.getMonth() + 1;
-  var DiesesJahr = jetzt.getYear();
-  if(DiesesJahr < 999) DiesesJahr+=1900;
-  var DieserTag = jetzt.getDate();
-EOT3;
-
 		$first = 0;
 	}
+	$txt = "\n";
 
-	$jstxt .= 'write_js_zeile("'.$t.'", "'.$n.'", "'.$ss.'", "'.$sm.'", "'.$es.'", "'.$em. '");'. "\n";
-	$jstxt .= '//-->' . "\n";
-	$jstxt .= '</script>' . "\n";
-	return $jstxt;
+	if ($kalenderok) {
+		$txt .= '<table cellspacing="0" cellpadding="1"'. (($vollebreite)? ' class="tabdaterow2" width="99%" align="center"':'') . '><tr>';
+		if ($vollebreite) $txt .= '<td class="tddaterow2" width="1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>';
+		$txt .= '<td  class="tddaterow2" width="1">&nbsp;<a class="adaterow" href="';
+		$txt .= "javascript:window.open('".$CANONICAL_RELATIVE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR. "/views/insert_date_popup.php?mcount=$km&element_switch=$t&c=$n', 'kalender', 'dependent=yes, width=$kx, height=450');void(0);";
+		$txt .= '" '.tooltip(_('Kalender öffnen')).'>Kalender</a>&nbsp;</td>';
+		$txt .= '<td class="tddaterow2" width="1">' . "\n";
+	} else {
+		$txt .= '<table cellspacing="0" cellpadding="0"><tr><td>&nbsp;&nbsp;</td>';
+		$txt .= '<td width="1">' . "\n";
+	}
+	$txt .= '<table class="tabdaterow" cellspacing="0" cellpadding="0"><tr>'. "\n";
+	for($z = 0; $z < count($zz); $z++) {
+		$txtzeit =  $zz[$z][0].':'.$zz[$z][1].'&nbsp;-&nbsp;'.$zz[$z][2].':'.$zz[$z][3];
+		$txtzeitc =  $zz[$z][0].':'.$zz[$z][1].' - '.$zz[$z][2].':'.$zz[$z][3] .' ' . _('Uhr') . ' ' . _('eintragen');
+		$txt .= '<td class="tddaterow">&nbsp;<a class="adaterow" href="javascript:set_sem_time(' . $t .', ' . $n .',\''.$zz[$z][0].'\', \''.$zz[$z][1].'\', \''.$zz[$z][2].'\', \''.$zz[$z][3]. '\');" ' . tooltip($txtzeitc) .'>'. $txtzeit . '</a>&nbsp;</td>'. "\n";
+		//$txt .= '<td class="tddaterow">'.$z.'</td>';
+	}
+	if ($ss !== '') {
+		$txtzeitc =  _('zurücksetzen auf') .' '. $ss.':'.$sm.' - '.$es.':'.$em .' ' . _('Uhr');
+		$txt .= '<td class="tddaterow">&nbsp;<a class="adaterow" href="javascript:set_sem_time(' . $t .', ' . $n .',\''.$ss.'\', \''.$sm.'\', \''.$es.'\', \''.$em. '\');" ' . tooltip($txtzeitc) .'>'._('Reset').'</a>&nbsp;</td>'. "\n";
+	}
+	//if ($kalenderok)
+	$txt .= '</tr></table></td>'. "\n";
+	$txt .= '<td width="1" '.(($kalenderok)? ' class="tddaterow2"':'').'><img  src="./pictures/info.gif" border="0"';
+	if ($kalenderok)
+		$txt .= tooltip(_("Zur einfacheren Terminwahl können Sie hier einen Kalender öffnen und/oder mit einem Mausklick eine der angegebenen Standardzeiten übernehmen."),TRUE,TRUE).'></td>';
+	else
+		$txt .= tooltip(_("Zur einfacheren Terminwahl können Sie mit einem Mausklick eine der angegebenen Standardzeiten übernehmen."),TRUE,TRUE).'></td>';
+	$txt .= '<td' . (($vollebreite)? ' class="tddaterow2"':'') . '>&nbsp;</td></tr></table>'. "\n";
+	return $jstxt . $txt;
 }
 
 ?>
