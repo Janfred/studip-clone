@@ -149,14 +149,17 @@ if ((($seminar_id) || ($termin_id)) && (!$uebernehmen_x) && (!$search_room_x) &&
 				
 	//Property Requests
 	if ($admin_rooms_data["resRequest"]->getCategoryId()) {
-		foreach ($admin_rooms_data["resRequest"]->getAvailableProperties() as $key=>$val) {
-			if ($val["system"] == 2) { //it's the property for the seat/room-size! 
-				if ($seats_are_admission_turnout)
-					$admin_rooms_data["resRequest"]->setPropertyState($key, $admin_rooms_data["admission_turnout"]);
-				elseif (!$send_room_type_x)
+		$available_properties = $admin_rooms_data["resRequest"]->getAvailableProperties();
+		if (is_array($available_properties)) {
+			foreach ($available_properties as $key=>$val) {
+				if ($val["system"] == 2) { //it's the property for the seat/room-size! 
+					if ($seats_are_admission_turnout)
+						$admin_rooms_data["resRequest"]->setPropertyState($key, $admin_rooms_data["admission_turnout"]);
+					elseif (!$send_room_type_x)
+						$admin_rooms_data["resRequest"]->setPropertyState($key, $request_property_val[$key]);
+				} else {
 					$admin_rooms_data["resRequest"]->setPropertyState($key, $request_property_val[$key]);
-			} else {
-				$admin_rooms_data["resRequest"]->setPropertyState($key, $request_property_val[$key]);
+				}
 			}
 		}
 	}
