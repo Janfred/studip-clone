@@ -141,22 +141,22 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("doz
 <tr><td colspan=3 class="topic" valign="middle">&nbsp;<b><? echo $UNI_NAME;?></b><img src="pictures/blank.gif" height="16" width="5" border="0"></td></tr>
 <tr> 
 	<td colspan=3 background="./pictures/startseite.jpg" alt="Stud.IP - <?=$UNI_NAME?>"">
-	<table cellspacing="20">
+	<table cellspacing="20" border="0">
 		<tr>
 			<?
-			echo "<td class=\"steel1\"><a class=\"index\" href=\"index.php?again=yes\"><img src=\"./pictures/start.gif\" align=left border=\"0\">&nbsp; <font size=\"4\"><b>"._("Login")."</b></font><br><font color=#555555>&nbsp; "._("f&uuml;r registrierte NutzerInnen")."</font></a>&nbsp; </td>";
+			echo "<td class=\"steel1\"><a class=\"index\" href=\"index.php?again=yes\"><img src=\"./pictures/start.gif\" align=left border=\"0\">&nbsp; <font size=\"4\"><b>"._("Login")."</b></font><br><font color=#555555 size=\"1\">&nbsp; "._("f&uuml;r registrierte NutzerInnen")."</font></a>&nbsp; </td>";
 			?>
 		</tr><tr>
 			<?
-			echo "<td class=\"steel1\"><a class=\"index\" href=\"register1.php\"><img src=\"./pictures/register.gif\" align=left border=\"0\">&nbsp; <font size=\"4\"><b>"._("Registrieren")."</b></font><br><font color=#555555>&nbsp; ".("um NutzerIn zu werden")."</font></a>&nbsp; </td>";
+			echo "<td class=\"steel1\"><a class=\"index\" href=\"register1.php\"><img src=\"./pictures/register.gif\" align=left border=\"0\">&nbsp; <font size=\"4\"><b>"._("Registrieren")."</b></font><br><font color=#555555 size=\"1\">&nbsp; ".("um NutzerIn zu werden")."</font></a>&nbsp; </td>";
 			?>
 		</tr>	<tr>
 			<?
-			echo "<td class=\"steel1\"><a class=\"index\" href=\"freie.php\"><img src=\"./pictures/free.gif\" align=left border=\"0\">&nbsp; <font size=\"4\"><b>"._("Freier Zugang")."</b></font><br><font color=#555555>&nbsp; "._("ohne Registrierung")."</font></a>&nbsp; </td>";
+			echo "<td class=\"steel1\"><a class=\"index\" href=\"freie.php\"><img src=\"./pictures/free.gif\" align=left border=\"0\">&nbsp; <font size=\"4\"><b>"._("Freier Zugang")."</b></font><br><font color=#555555 size=\"1\">&nbsp; "._("ohne Registrierung")."</font></a>&nbsp; </td>";
 			?>
 		</tr>	<tr>
 			<?
-			echo "<td class=\"steel1\"><a class=\"index\" href=\"help/index.php\"><img src=\"./pictures/help.gif\" align=left border=\"0\">&nbsp; <font size=\"4\"><b>"._("Hilfe")."</b></font><br><font color=#555555>&nbsp; "._("zu Bedienung und Funktionsumfang")."&nbsp; &nbsp; </font></a>&nbsp; </td>";
+			echo "<td class=\"steel1\"><a class=\"index\" href=\"help/index.php\"><img src=\"./pictures/help.gif\" align=left border=\"0\">&nbsp; <font size=\"4\"><b>"._("Hilfe")."</b></font><br><font color=#555555 size=\"1\">&nbsp; "._("zu Bedienung und Funktionsumfang")."&nbsp; &nbsp; </font></a>&nbsp; </td>";
 			?>
 		</tr>
 	</table>
@@ -179,16 +179,16 @@ unset($temp_language_key); unset($temp_language);
 			$db->query("SELECT count(*) from seminare");
 			$db->next_record();
 			$anzahl = $db->f(0);
-			echo "<tr><td class=\"steel1\"><font size=\"2\">&nbsp; "._("Aktive Veranstaltungen").":</font></td><td class=\"steel1\" align=right><font size=\"2\">&nbsp; $anzahl&nbsp; </font></td><td class=\"blank\">&nbsp; &nbsp; </td></tr>"; 
+			echo "<tr><td class=\"steel1\"><font size=\"2\" color=\"#555555\">&nbsp; "._("Aktive Veranstaltungen").":</font></td><td class=\"steel1\" align=right><font size=\"2\" color=\"#555555\">&nbsp; $anzahl&nbsp; </font></td><td class=\"blank\">&nbsp; &nbsp; </td></tr>"; 
 			$db->query("SELECT count(*) from auth_user_md5 WHERE perms <> 'user'");
 			$db->next_record();
 			$anzahl = $db->f(0);			
-			echo "<tr><td class=\"steel1\"><font size=\"2\">&nbsp; "._("Registrierte NutzerInnen").":</font></td><td class=\"steel1\" align=right><font size=\"2\">&nbsp; $anzahl&nbsp; </font></td><td class=\"blank\">&nbsp; &nbsp; </td></tr>"; 
+			echo "<tr><td class=\"steel1\"><font size=\"2\" color=\"#555555\">&nbsp; "._("Registrierte NutzerInnen").":</font></td><td class=\"steel1\" align=right><font size=\"2\" color=\"#555555\">&nbsp; $anzahl&nbsp; </font></td><td class=\"blank\">&nbsp; &nbsp; </td></tr>"; 
 			$now = time()-600; 
 			$db->query("SELECT count(*) FROM active_sessions WHERE changed > '".date("YmdHis",$now)."' AND active_sessions.name = 'Seminar_User' AND sid != 'nobody'");
 			$db->next_record();
 			$anzahl = $db->f(0);			
-			echo "<tr><td class=\"steel1\"><font size=\"2\">&nbsp; "._("Davon online").":</font></td><td class=\"steel1\" align=right><font size=\"2\">&nbsp; $anzahl&nbsp; </font></td><td class=\"blank\">&nbsp; &nbsp; </td></tr>"; 
+			echo "<tr><td class=\"steel1\"><font size=\"2\" color=\"#555555\">&nbsp; "._("Davon online").":</font></td><td class=\"steel1\" align=right><font size=\"2\" color=\"#555555\">&nbsp; $anzahl&nbsp; </font></td><td class=\"blank\">&nbsp; &nbsp; </td></tr>"; 
 			echo "<tr><td height=\"30\" class=\"blank\" valign=\"middle\">";
 			// choose language
 			foreach ($INSTALLED_LANGUAGES as $temp_language_key => $temp_language) {
