@@ -216,12 +216,10 @@ function export_sem($inst_id, $ex_sem_id = "all")
 			if ($val == "") $val = $key;
 			if ($key == "status") 
 				$data_object .= xml_tag($val, $SEM_TYPE[$db->f($key)]["name"]);
-			elseif ($key == "bereich") 
+			elseif (($key == "bereich") AND (($SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["bereiche"])))
 			{
-				if ($SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["bereiche"]) {
-					$sem_path = get_sem_tree_path($db->f("Seminar_id"));
-					$data_object .= xml_tag($val, implode($sem_path, "\n"));
-				}
+				foreach (get_sem_tree_path($db->f("Seminar_id")) as $sem_tree_id => $path_name)
+					$data_object .= xml_tag($val, $path_name));
 			}
 			elseif ($key == "ort") 
 				$data_object .= xml_tag($val, getRoom($db->f("Seminar_id")));
