@@ -77,7 +77,7 @@ class StudipRangeTree extends TreeAbstract {
 		parent::init();
 		$this->tree_data['root']['studip_object_id'] = 'root';
 		$this->view->params[0] = (isset($this->sem_number)) ? " IF(" . $GLOBALS['_views']['sem_number_sql'] . " IN(" . join(",",$this->sem_number) . "),d.Seminar_id,NULL)"  : "d.Seminar_id";
-		$this->view->params[1] = (isset($this->sem_status)) ? " AND d.visible='1' AND d.status IN('" . join("','", $this->sem_status) . "')" : " ";
+		$this->view->params[1] = (isset($this->sem_status)) ? " AND d.status IN('" . join("','", $this->sem_status) . "')" : " ";
 		$db = $this->view->get_query("view:TREE_GET_DATA_WITH_SEM");
 		while ($db->next_record()){
 			$item_name = $db->f("name");
