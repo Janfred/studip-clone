@@ -195,7 +195,7 @@ switch ($view) {
 									"text"  => ($perm->have_studip_perm("autor", $SessSemName[1]) ? 
 												(($SessSemName["class"] == "sem") ? _("Als Teilnehmer der Veranstaltung haben Sie die M&ouml;glichkeit, diese Ressourcen frei zu belegen oder den Belegungsplan einzusehen.") :
 																				_("Als Mitarbeiter der Einrichtung haben Sie die M&ouml;glichkeit, diese Ressourcen frei zu belegen oder den Belegungsplan einzusehen.")) :
-												(($SessSemName["class"] == "sem") ? _("Sie k&ouml;nnen hier den Details und Belegungsplan der dieser Veranstaltung zugeordneten Ressourcen einsehen.") :
+												(($SessSemName["class"] == "sem") ? _("Sie k&ouml;nnen hier die Details und den Belegungsplan der dieser Veranstaltung zugeordneten Ressourcen einsehen.") :
 																				_("Sie k&ouml;nnen hier den Details und Belegungsplan der dieser Einrichtung zugeordneten Ressourcen einsehen.")))))));
 		$infopic = "pictures/schedule.jpg";
 	break;
