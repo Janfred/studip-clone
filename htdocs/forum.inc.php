@@ -535,7 +535,7 @@ function printposting ($forumposting) {
   		} else {
   			if (get_username($user->id) != $forumposting["username"])  // eigene Postings werden beim view nicht gezählt
   				$objectviews = object_add_view($forumposting["id"]); // Anzahl der Views erhöhen
-  			if ($forum["view"] == "tree")
+  			if ($forum["view"] == "tree" && $forumposting["type"] == "posting")
   				$link = $PHP_SELF."?open=".$forumposting["rootid"]."#anker"; 
   			else
   				$link = $PHP_SELF."?&flatviewstartposting=".$forum["flatviewstartposting"]."#anker"; 
