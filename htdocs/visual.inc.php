@@ -89,42 +89,48 @@ cssClassSwitcher, Klasse um cssClasses fuer Zebra auszuwaehlen
 /*****************************************************************************/
 class cssClassSwitcher {
 	var $class = array("steelgraulight", "steel1"); 		//Klassen
-	var $headerClass="steel";
-	var $classcnt=0;		//Counter
-	var	$hoverclass = array("hover1","hover2");
-	var $JSenabled=FALSE;
-	var $hoverenabled=FALSE;
+	var $headerClass = "steel";
+	var $classcnt = 0;		//Counter
+	var	$hoverclass = array("hover1", "hover2");
+	var $JSenabled = FALSE;
+	var $hoverenabled = FALSE;
 	
-	function cssClassSwitcher($class="",$headerClass="",$hoverclass=""){
+	function cssClassSwitcher($class = "",$headerClass = "",$hoverclass = ""){
 		if ($GLOBALS["auth"]->auth["jscript"]) $this->JSenabled = TRUE;
 		if (is_array($class)) $this->class = $class;
 		if ($headerClass) $this->headerClass = $headerClass;
 		if (is_array($hoverclass)) $this->hoverclass = $hoverclass;
 	}
 	
-	function enableHover($newclass=""){
-		if (is_array($newclass)) $this->class = $newclass;
-		else $this->class = array("nohover1","nohover2");
+	function enableHover($newclass = ""){
+		if (is_array($newclass))
+			$this->class = $newclass;
+		else
+			$this->class = array("nohover1", "nohover2");
+			
 		$this->hoverenabled = TRUE;
 	}
 	
-	function disableHover($newclass=""){
-		if (is_array($newclass)) $this->class = $newclass;
-		else $this->class = array("steelgraulight","steel1");
+	function disableHover($newclass = ""){
+		if (is_array($newclass))
+			$this->class = $newclass;
+		else
+			$this->class = array("steelgraulight", "steel1");
+			
 		$this->hoverenabled = FALSE;
 	}
 	
 	function getHover(){
 		$ret = $this->getFullClass();
-		if($this->hoverenabled AND $this->JSenabled){
-			$ret .=" onMouseOver='doHover(this,\"".$this->class[$this->classcnt]."\",\"".$this->hoverclass[$this->classcnt]."\")'".
+		if($this->hoverenabled && $this->JSenabled){
+			$ret .= " onMouseOver='doHover(this,\"".$this->class[$this->classcnt]."\",\"".$this->hoverclass[$this->classcnt]."\")'".
 				" onMouseOut='doHover(this,\"".$this->hoverclass[$this->classcnt]."\",\"".$this->class[$this->classcnt]."\")' ";
 		}
 		return $ret;
 	}
 	
 	function getFullClass(){
-		return " class=\"".$this->class[$this->classcnt]."\"";
+		return " class=\"" . $this->class[$this->classcnt] . "\"";
 	}
 	
 	function getClass() {
@@ -136,20 +142,19 @@ class cssClassSwitcher {
 	}
 
 	function resetClass() {
-		return $this->classcnt=0;
+		return $this->classcnt = 0;
 	}
 
 	function switchClass() {
 		$this->classcnt++;
 		if ($this->classcnt >= sizeof($this->class))
-			$this->classcnt=0;
+			$this->classcnt = 0;
 	}
 	
 	function GetHoverJSFunction(){
-		static $is_called = 0;
+		static $is_called = FALSE;
 		$ret = "";
-		++$is_called;
-		if($GLOBALS["auth"]->auth["jscript"] OR ($is_called <= 1)) {
+		if($this->JSenabled && (!$is_called)) {
 			$ret = "<script type=\"text/javascript\">
 					function doHover(theRow, theFromClass, theToClass){
 						if (theFromClass == '' || theToClass == '' || typeof(theRow.className) == 'undefined') {
@@ -177,17 +182,18 @@ class cssClassSwitcher {
 					}
 					</script>";
 		}
+		$is_called = TRUE;
 		return $ret;
 	}
 }
 
-function htmlReady($what,$trim=TRUE,$br=FALSE) {
+function htmlReady($what, $trim = TRUE, $br = FALSE){
 	if ($trim)
 		$what = trim(htmlentities($what,ENT_QUOTES));
 	else
 		$what = htmlentities($what,ENT_QUOTES);
 	if ($br)
-		$what = preg_replace("/(\n\r|\r\n|\n|\r)/", "<br>", $what); // newline fixen
+		$what = preg_replace("/(\n\r|\r\n|\n|\r)/", "<br />", $what); // newline fixen
 	return $what;
 }
 
@@ -196,8 +202,8 @@ function JSReady ($what = "", $target = "overlib") {
 
 	case "popup" :
 		$what = addslashes(htmlentities($what,ENT_COMPAT));
-		$what = ereg_replace("\n","<br>",$what);
-		$what = ereg_replace("\r","",$what);
+		$what = str_replace("\n","<br />",$what);
+		$what = str_replace("\r","",$what);
 		return $what;
 	break;
 	
@@ -212,9 +218,9 @@ function JSReady ($what = "", $target = "overlib") {
 
 		$what = htmlentities($what,ENT_COMPAT);
 		$what = format($what);
-		$what = ereg_replace("\r","",$what);
+		$what = str_replace("\r","",$what);
 		$what = smile($what);
-		$what = ereg_replace("\n","<br> ",$what);
+		$what = str_replace("\n","<br /> ",$what);
 		if (ereg("\[quote",$what) AND ereg("\[/quote\]",$what))
 			$what = quotes_decode($what);
 		$what = "<p width=\"100%\"class=\"printcontent\">" . $what . "</p>";
@@ -226,8 +232,8 @@ function JSReady ($what = "", $target = "overlib") {
 	case "overlib" :
 	default :
 		$what = addslashes(htmlentities(htmlentities($what,ENT_COMPAT),ENT_COMPAT));
-		$what = ereg_replace("\n","<br>",$what);
-		$what = ereg_replace("\r","",$what);
+		$what = str_replace("\n","<br />",$what);
+		$what = str_replace("\r","",$what);
 		return $what;
    break;
    }
@@ -320,7 +326,7 @@ function quotes_encode($description,$author)
 ////////////////////////////////////////////////////////////////////////////////
 
 function formatReady($what, $trim = TRUE){
-	return smile(FixLinks(format(htmlReady($what, $trim, FALSE))));
+	return smile(FixLinks(format(htmlReady($what, $trim, FALSE)), FALSE, TRUE));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -433,25 +439,27 @@ function kill_format($text){
 
 //////////////////////////////////////////////////////////////////////////
 
-function FixLinks($data= ""){
+function FixLinks($data = "", $fix_nl = TRUE, $nl_to_br = FALSE){
 	if(empty($data)){
 		return $data;
 	}
-	$newText = preg_replace("/(\n\r|\r\n|\n|\r)/", "<br>", $newText); // newline fixen
-	$lines = explode("\n", $data);
+	if($fix_nl === TRUE)
+		$data = preg_replace("/\n?\r\n?/", "\n", $data); // newline fixen
+	//$lines = explode("\n", $data);
 	
-	$pattern = array("/([ \t\]]|^)www\./i", "/([ \t\]]|^)ftp\./i");
+	$pattern = array("/([ \t\]\n]|^)www\./i", "/([ \t\]\n]|^)ftp\./i");
 	$replace = array("\\1http://www.", "\\1ftp://ftp.");
-	$lines = preg_replace($pattern, $replace, $lines);
+	$fixed_text = preg_replace($pattern, $replace, $data);
 	
-	$pattern = array("'(\[([^\n\r\f\]]+)\])?((http://[^ )\r\n<]+)|(https://[^ )\r\n<]+)|(ftp://[^ )\r\n<]+))'ie",
-									 "'(\[([^\n\r\f\]]+)\])?([^\:][-a-z0-9_]+(\.[_a-z0-9-]+)*@([a-z0-9-]+(\.[a-z0-9-]+)+))'ie");
+	$pattern = array("'(\[([^\n\f\]]+)\])?(((http://)|(https://)|(ftp://([_a-z0-9-]+@)?))[_a-z0-9-]+(\.[_a-z0-9-]+)+)'ie",
+									 "'(\[([^\n\f\]]+)\])?([-a-z0-9_]+(\.[_a-z0-9-]+)*@([_a-z0-9-]+(\.[_a-z0-9-]+)+))'ie");
 	$replace = array("preg_call_link('\\2', '\\3', 'LINK')", "preg_call_link('\\2', '\\3', 'MAIL')");
-	$lines = preg_replace($pattern, $replace, $lines);
+	$fixed_text = preg_replace($pattern, $replace, $fixed_text);
 	
-	$newText = implode("<br>\n", $lines);
+	if($nl_to_br === TRUE)
+		$fixed_text = str_replace("\n", "<br />", $fixed_text);
 	
-	return $newText;
+	return $fixed_text;
 }
 
 // Hilfsfunktion für FixLinks()
