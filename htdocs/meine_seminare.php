@@ -106,16 +106,16 @@ function get_my_obj_values(&$my_obj) {
 			"SELECT".
 			" b.Seminar_id,".
 			" (COUNT(DISTINCT d.eval_id) + COUNT(DISTINCT vote_id)) AS count,".
-			" (COUNT(if ((".
+			" (COUNT(DISTINCT(if ((".
 			"             a.chdate > b.loginfilenow".
 			"             AND".
 			"             a.author_id !='".$user->id."'".
 			"            ),".
 			"            a.vote_id,".
 			"            NULL".
-			"           )".
+			"           ))".
 			"        ) + ".
-			"  COUNT(if ((".
+			"  COUNT(DISTINCT(if ((".
 			"             d.chdate > b.loginfilenow".
 			"             AND".
 			"             d.author_id != '".$user->id."'".
@@ -123,7 +123,7 @@ function get_my_obj_values(&$my_obj) {
 			"            d.eval_id,".
 			"            NULL".
 			"           )".
-			"        )".
+			"        ))".
 			" ) AS neue ".
 			"FROM".
 			" loginfilenow_".$user->id." b ".
@@ -134,7 +134,9 @@ function get_my_obj_values(&$my_obj) {
 			"LEFT JOIN".
 			" eval d ".
 			"ON".
-			" (d.eval_id = c.eval_id)".
+			" (d.eval_id = c.eval_id AND d.startdate IS NOT NULL ".
+			" AND".
+			" (d.stopdate > ".time()." OR d.stopdate IS NULL) ) ".
 			"LEFT JOIN".
 			" vote a ".
 			"ON".
@@ -143,10 +145,6 @@ function get_my_obj_values(&$my_obj) {
 			"  a.state ".
 			"  IN".
 			"  ('active','stopvis')) ".
-			"WHERE".
-			" d.startdate IS NOT NULL ".
-			" AND".
-			" (d.stopdate > ".time()." OR d.stopdate IS NULL) ".
 			"GROUP BY".
 			" b.Seminar_id";
 		$db2->query ($sql);
