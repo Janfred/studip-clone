@@ -124,10 +124,10 @@ if ($auth->auth["uid"] == "nobody") { ?>
 		$tmp_last_visit = ($my_messaging_settings["last_visit"]) ?  $my_messaging_settings["last_visit"] : time();
 		$db->query("
 					SELECT COUNT(m.chat_id) AS chat_m, 
-					COUNT(IF(m_u.readed = '0', m_u.message_id, NULL)) AS neu_m, 
-					COUNT(IF(m_u.readed = '1', m_u.message_id, NULL)) AS alt_m,
-					COUNT(IF((m.mkdate > ".$my_messaging_settings["last_box_visit"]." AND m_u.readed = '0'), m_u.message_id, NULL)) AS neu_x
-					FROM message_user AS m_u LEFT JOIN message AS m USING (message_id) WHERE m_u.user_id='".$user->id."' AND deleted = '0' AND m_u.snd_rec = 'rec'
+					COUNT(IF(m_u.readed = 0, m_u.message_id, NULL)) AS neu_m, 
+					COUNT(IF(m_u.readed = 1, m_u.message_id, NULL)) AS alt_m,
+					COUNT(IF((m.mkdate > ".$my_messaging_settings["last_box_visit"]." AND m_u.readed = 0), m_u.message_id, NULL)) AS neu_x
+					FROM message_user AS m_u  INNER JOIN message AS m  USING (message_id) WHERE m_u.user_id='".$user->id."'  AND m_u.snd_rec = 'rec' AND deleted = 0
 					");
 		if ($db->next_record()) {
 			$chatm = $db->f("chat_m");
