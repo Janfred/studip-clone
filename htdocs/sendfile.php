@@ -386,8 +386,13 @@ if ($type ==6) {
 }
 
 //Datei verschicken
-
-if ($type != 5 && $type != 6){
+if ($type == 6) {
+	$db->query("SELECT filesize FROM dokumente WHERE dokument_id = '$file_id'");
+	if ($db->next_record())
+		$filesize = $db->f("filesize");
+	if (!$filesize)
+		$filesize = FALSE;
+} elseif ($type != 5){
 	$filesize = filesize($path_file);
 } else {
 	$filesize = strlen($the_data);
@@ -404,7 +409,7 @@ header("Cache-Control: private");
 header("Expires: 0");
 
 header("Content-type: $content_type; name=\"".rawurldecode($file_name)."\"");
-if ($type != 6)
+if ($filesize != FALSE)
 	header("Content-length: $filesize");
 header("Content-disposition: $content_disposition; filename=\"".rawurldecode($file_name)."\"");
 if ($type != 5){
