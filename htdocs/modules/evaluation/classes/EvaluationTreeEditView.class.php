@@ -193,7 +193,7 @@ function EvaluationTreeEditView ( $itemID = ROOT_BLOCK, $evalID = NULL ){
 		EVAL_LOAD_ONLY_EVALGROUP);
 
 	# filter out an old session itemID ======================================= #
-	if (is_array($this->tree->tree_data)){
+	if (is_array($this->tree->tree_data) && !is_null($itemID) ){
 		if (!array_key_exists($itemID,$this->tree->tree_data)){
 			$this->itemID = ROOT_BLOCK;
 			$this->startItemID = ROOT_BLOCK;
