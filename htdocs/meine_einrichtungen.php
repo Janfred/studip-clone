@@ -146,7 +146,6 @@ include ("$ABSOLUTE_PATH_STUDIP/links_seminare.inc.php");   	//hier wird die Nav
 require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php"); 		// Klarnamen fuer den Veranstaltungsstatus
 require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php"); 		// htmlReady fuer die Veranstaltungsnamen
 require_once ("$ABSOLUTE_PATH_STUDIP/dates.inc.php"); 		// Semester-Namen fuer Admins
-require_once ("$ABSOLUTE_PATH_STUDIP/admission.inc.php");	//Funktionen der Teilnehmerbegrenzung
 $cssSw=new cssClassSwitcher;                                // Klasse für Zebra-Design
 ?>
 <body>
@@ -156,15 +155,13 @@ $db=new DB_Seminar;
 
 //bei Bedarf aus seminar_user austragen
 if ($cmd=="kill") {
-	$db->query("DELETE FROM seminar_user WHERE user_id='$user->id' AND Seminar_id='$auswahl'");
+	$db->query("DELETE FROM user_inst WHERE user_id='$user->id' AND Institut_id='$auswahl'");
 	if ($db->affected_rows() == 0)  $meldung="error§Datenbankfehler!";
 	else {
-	  //Pruefen, ob es Nachruecker gibt
-	  update_admission($auswahl);
 	  
-	  $db->query("SELECT Name FROM seminare WHERE Seminar_id = '$auswahl'");
+	  $db->query("SELECT Name FROM Institute WHERE Institut_id = '$auswahl'");
 	  $db->next_record();
-	  $meldung="msg§Das Abonnement der Veranstaltung <b>".$db->f("Name")."</b> wurde aufgehoben. Sie sind nun nicht mehr als Teilnehmer dieser Veranstaltung im System registriert.";
+	  $meldung="msg§Die Zuordnung zur Einrichtung <b>".$db->f("Name")."</b> wurde aufgehoben.";
 	}
 }
 
