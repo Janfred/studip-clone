@@ -147,8 +147,8 @@ if ($form==1)
 if ($form==2)
 	{
 	if(isset($sem_bereich_chooser) && !$st_search->search_done){
-		unset($st_search->sem_tree_ranges);
-		unset($st_search->sem_tree_ids);
+		$st_search->sem_tree_ranges = array();
+		$st_search->sem_tree_ids = array();
 		for ($i = 0; $i < count($sem_bereich_chooser); $i++){
 			if($sem_bereich_chooser[$i] != '0'){
 				$st_search->selected[$sem_bereich_chooser[$i]] = true;
