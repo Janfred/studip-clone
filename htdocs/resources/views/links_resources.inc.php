@@ -52,7 +52,7 @@ if ($resources_data["actual_object"])
 if ((getGlobalPerms($user->id) == "admin") || ($perm->have_perm("root"))) {
 	$resList = new ResourcesUserRoomsList($user_id, TRUE, FALSE);
 	if (($resList->roomsExist()) && (get_config("RESOURCES_ALLOW_ROOM_REQUESTS"))) {
-		$structure["room_planning"]=array (topKat=>"", name=>_("Raumplanung"), link=>"resources.php?view=requests_start", active=>FALSE);
+		$structure["room_planning"]=array (topKat=>"", name=>_("Raumplanung"), link=>"resources.php?view=requests_start&cancel_edit_request_x=1", active=>FALSE);
 		$top_kat_tools = TRUE;
 	}
 
@@ -89,7 +89,7 @@ if ($resources_data["actual_object"]) {
 
 //Reiter "Raumplanung"
 if ($top_kat_tools) {
-	$structure["requests_start"]=array (topKat=>"room_planning", name=>_("&Uuml;bersicht"), link=>"resources.php?view=requests_start", active=>FALSE);
+	$structure["requests_start"]=array (topKat=>"room_planning", name=>_("&Uuml;bersicht"), link=>"resources.php?view=requests_start&cancel_edit_request_x=1", active=>FALSE);
 	$structure["edit_request"]=array (topKat=>"room_planning", name=>_("Anfragen&nbsp;bearbeiten"), link=>"resources.php?view=edit_request", active=>FALSE, "disabled"=>(($resources_data["requests_working_on"]) ? FALSE : TRUE));
 }
 
