@@ -103,7 +103,6 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
 
    /* Show all active Votes ------------------------------------------------ */
    foreach ($activeVotes as $tmpVote) {
-      $isAssociated = false;
       $voteID = $tmpVote["voteID"];
       if ($tmpVote["type"] == INSTANCEOF_TEST)
 	 $vote = &new TestVote ($voteID);
@@ -143,7 +142,6 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
 	 /* User has already used the vote --------------------------------- */
 	 if ( $voteDB->isAssociated ($voteID, $userID) &&
 	      (! $changeAnswer) && (! $answerChanged) ) {
-	    $isAssociated = true;
 	    echo createSuccessReport ($vote, NO);
 	 }
 	  
@@ -166,8 +164,6 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
 		  echo createSuccessReport ($vote, NO, YES);
 	       else
 		  echo createSuccessReport ($vote);
-
-	       $isAssociated = true;
 	    }
 	 }
 	 /* --------------------------------------------------------------- */
@@ -177,8 +173,7 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
 	    echo createVoteForm ($vote, $userID);
 	 }
 	 /* --------------------------------------------------------------- */
-	 echo createFormFooter ($vote, $userID, $perm, $rangeID, 
-				$isAssociated);
+	 echo createFormFooter ($vote, $userID, $perm, $rangeID);
 	 echo createBoxContentFooter ();
 	 $vote->finalize ();
 

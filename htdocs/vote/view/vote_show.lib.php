@@ -59,13 +59,13 @@ function createFormHeader (&$vote) {
  * @param    Object   $vote    The vote object
  * @param    String   $userID  The unique user id
  * @param    String   $perm    The perm of the user
- * @param    String   $perm    The rangeID
+ * @param    String   $rangeID The rangeID
  * @returns  String   The HTML-form-footer
  */
-function createFormFooter (&$vote, $userID, $perm, $rangeID, 
-			   $isAssociated = true) {
+function createFormFooter (&$vote, $userID, $perm, $rangeID) {
    $html = "";
    $isPreview = $_GET["previewResults"] || $_POST["previewButton_x"];
+   $isAssociated = $vote->voteDB->isAssociated ($vote->getVoteID(), $userID);
 
    $revealNames = $_GET["revealNames"] &&
        $vote->getVoteID() == $_GET["voteopenID"] &&
@@ -85,7 +85,7 @@ function createFormFooter (&$vote, $userID, $perm, $rangeID,
    $link .= ($isPreview) ? "&previewResults=".YES : "";
    $link .= ($GLOBALS["username"]) ? "&username=".$GLOBALS["username"] : "";
       
-   /* Meta-informations about the vote ------------------------------------- */
+   /* Meta-information about the vote -------------------------------------- */
    $html .= createVoteInfo ($vote, $isAssociated);
    /* ---------------------------------------------------------------------- */
 
@@ -97,7 +97,7 @@ function createFormFooter (&$vote, $userID, $perm, $rangeID,
       $html .= 
 	 "<input type=\"image\" style=\"vertical-align:middle;\" " .
 	 "name=\"voteButton\" " .
-	 makeButton (_("abschicken"), "src") . 
+	 makeButton ("abschicken", "src") . 
 	 tooltip(_("Geben Sie hier Ihre Stimme ab!")) .
 	 ">";
    }
@@ -110,7 +110,7 @@ function createFormFooter (&$vote, $userID, $perm, $rangeID,
       $html .= 
 	 "&nbsp;<input type=\"image\" style=\"vertical-align:middle;\" " .
 	 "name=\"previewButton\" " .
-	 makeButton (_("ergebnisse"), "src") . 
+	 makeButton ("ergebnisse", "src") . 
 	 tooltip(_("Hier können Sie sich die Ergebnisse im Voraus ansehen.")) .
 	 ">";
    }
@@ -118,15 +118,15 @@ function createFormFooter (&$vote, $userID, $perm, $rangeID,
 
    /* Changebutton --------------------------------------------------------- */
    if ($vote->isChangeable() &&
+       $isAssociated &&
        ! $vote->isStopped() &&
        ! $_POST["changeAnswerButton_x"] &&
-       ! $vote->isError() &&
-       $vote->voteDB->isAssociated($vote->getVoteID(), $userID)
+       ! $vote->isError()
        ) {
       $html .= 
 	 "&nbsp;<input type=\"image\" style=\"vertical-align:middle;\" " .
 	 "name=\"changeAnswerButton\" " .
-	 makeButton (_("antwortaendern"), "src") . 
+	 makeButton ("antwortaendern", "src") . 
 	 tooltip(_("Hier können Sie Ihre Antwort nochmal ändern.")) .
 	 ">";
 #      $html_extra = "<br>";
@@ -138,7 +138,7 @@ function createFormFooter (&$vote, $userID, $perm, $rangeID,
       $html .= 
 	 "&nbsp;<input type=\"image\" style=\"vertical-align:middle;\" " .
 	 "name=\"escapePreviewButton\" " .
-	 makeButton (_("zurueck"), "src") . 
+	 makeButton ("zurueck", "src") . 
 	 tooltip(_("Zurück zum Abstimmen.")) .
 	 ">";
 #      $html_extra = "<br>";
@@ -162,7 +162,7 @@ function createFormFooter (&$vote, $userID, $perm, $rangeID,
 	 "&nbsp;".
 	 "<a href=\"".$link_sort."\">".
 	 "<img style=\"vertical-align:middle;\" ".
-	 makeButton ( ($sortAnswers ? _("nichtsortieren") : _("sortieren")), "src").
+	 makeButton ( ($sortAnswers ? "nichtsortieren" : "sortieren"), "src").
 	 tooltip ( ($sortAnswers
 		    ? _("Antworten wieder in Ihrer ursprünglichen Reihenfolge darstellen.")
 		    : _("Antworten nach Stimmenanzahl sortieren."))
@@ -194,14 +194,14 @@ function createFormFooter (&$vote, $userID, $perm, $rangeID,
 	   $GLOBALS["voteopenID"] == $vote->getVoteID ())
 	   $html .= "&nbsp;<a href=\"".$link_reveal."\">".
 	       "<img style=\"vertical-align:middle;\" ".
-	       makeButton (_("normaleansicht"), "src"). 
+	       makeButton ("normaleansicht", "src"). 
 	       tooltip(_("Zurück zur normalen Ansicht.")).
 	      " border=\"0\"></a>";
        else
 	   $html .= "&nbsp;<a href=\"".$link_reveal."\">".
 	       "<img style=\"vertical-align:middle;\" ".
-	      makeButton (_("namenzeigen"), "src"). 
-	      tooltip(_("Zeigen, wer welche Antwort gew&auml;hlt hat.")).
+	      makeButton ("namenzeigen", "src"). 
+	      tooltip(_("Zeigen, wer welche Antwort gewählt hat.")).
 	      " border=\"0\"></a>";
    }
    /* ---------------------------------------------------------------------- */
@@ -220,7 +220,7 @@ function createFormFooter (&$vote, $userID, $perm, $rangeID,
 	    $vote->instanceof().
 	    "&voteID=".$vote->getVoteID ()."\">".
 	     "<img style=\"vertical-align:middle;\" ".
-	    makeButton (_("bearbeiten"), "src"). 
+	    makeButton ("bearbeiten", "src"). 
 	    tooltip( $vote->instanceof() == INSTANCEOF_TEST
 		     ? _("Diesen Test bearbeiten.")
 		     : _("Dieses Voting bearbeiten.") ).
@@ -232,7 +232,7 @@ function createFormFooter (&$vote, $userID, $perm, $rangeID,
 	 $vote->getVoteID ().
 	 "&voteaction=delete_request&showrangeID=".$vote->getRangeID()."\">" .
 	 "<img style=\"vertical-align:middle;\" ".
-	 makeButton (_("loeschen"), "src"). 
+	 makeButton ("loeschen", "src"). 
 	 tooltip( $vote->instanceof() == INSTANCEOF_TEST
 		  ? _("Diesen Test löschen.")
 		  : _("Dieses Voting löschen.") ).
@@ -481,17 +481,14 @@ function createSuccessReport (&$vote, $firstTime = YES, $changed = NO) {
      case VOTE_RESULTS_AFTER_END:
       $html .= "<font size=\"-1\">";
       if (!empty ($stopdate)) {
-	 $html .= sprintf(_("Die Ergebnisse werden Ihnen ab dem <b>%s</b>, ".
-			    "%s Uhr angezeigt."),
+	 $html .= sprintf(_("Die Ergebnisse werden Ihnen ab dem <b>%s</b>, %s Uhr angezeigt."),
 			  date ("d.m.Y", $stopdate),
 			  date ("H:i", $stopdate));
 	 $html .= "<br><br>\n";
       } else {
 	 $html .= ($vote->instanceof() == INSTANCEOF_TEST)
-	    ? _("Die Ergebnisse werden Ihnen angezeigt, sobald der Test ".
-		"vom Ersteller beendet worden ist.")
-	    : _("Die Ergebnisse werden Ihnen angezeigt, sobald das Voting ".
-		"vom Ersteller beendet worden ist.");
+	    ? _("Die Ergebnisse werden Ihnen angezeigt, sobald der Test vom Ersteller beendet worden ist.")
+	    : _("Die Ergebnisse werden Ihnen angezeigt, sobald das Voting vom Ersteller beendet worden ist.");
 	 $html .= "<br><br>\n";
       }
       $html .= "</font>";
@@ -499,8 +496,7 @@ function createSuccessReport (&$vote, $firstTime = YES, $changed = NO) {
       
      case VOTE_RESULTS_NEVER:
       $html .= "<font size=\"-1\">";
-      $html .= _("Die Ergebnisse werden Ihnen nicht angezeigt, ".
-		 "da dies vom Ersteller nicht erwünscht ist.");
+      $html .= _("Die Ergebnisse werden Ihnen nicht angezeigt, da dies vom Ersteller nicht erwünscht ist.");
       $html .= "<br><br>";
       $html .= "</font>";
       break;
@@ -523,33 +519,27 @@ function createSuccessReport (&$vote, $firstTime = YES, $changed = NO) {
 	 if ($vote->isMultipleChoice ()) {
 	    if ($nrCorrect == 0)
 	       $html .= createReportMessage 
-		  (sprintf(_("Leider haben Sie keine der %s richtigen ".
-			     "Antwort(en) gew&auml;hlt."),
+		  (sprintf(_("Leider haben Sie keine der %s richtigen Antwort(en) gew&auml;hlt."),
 			   $vote->getNumberOfCorrectAnswers()),
 		   VOTE_ICON_ERROR, VOTE_COLOR_ERROR );
 	       
 	    else if ($nrFalse == 0 && 
 		     ($nrCorrect == $vote->getNumberOfCorrectAnswers ()))
 	       $html .= createReportMessage 
-		  (sprintf(_("Gl&uuml;ckwunsch! Sie haben alle der %s ".
-			     "richtigen Antwort(en) gew&auml;hlt."),
+		  (sprintf(_("Gl&uuml;ckwunsch! Sie haben alle der %s richtigen Antwort(en) gew&auml;hlt."),
 			   $vote->getNumberOfCorrectAnswers()),
 		   VOTE_ICON_SUCCESS, VOTE_COLOR_SUCCESS );
 	    else
 	       if ($nrFalse > 0)
 		  $html .= createReportMessage 
-		     (sprintf(_("Sie haben von %s richtigen ".
-				"Antwort(en) %s gefunden und ".
-				"dar&uuml;ber hinaus %s falsche ".
-				"Antwort(en) gegeben."),
+		     (sprintf(_("Sie haben von %s richtigen Antwort(en) %s gefunden und dar&uuml;ber hinaus %s falsche Antwort(en) gegeben."),
 			      $vote->getNumberOfCorrectAnswers(),
 			      $nrCorrect,
 			      $nrFalse),
 		      VOTE_ICON_ERROR, VOTE_COLOR_ERROR );
 	       else
 		  $html .= createReportMessage 
-		     (sprintf(_("Sie haben von %s richtigen ".
-				"Antwort(en) %s gefunden."),
+		     (sprintf(_("Sie haben von %s richtigen Antwort(en) %s gefunden."),
 			      $vote->getNumberOfCorrectAnswers(),
 			      $nrCorrect),
 		      VOTE_ICON_ERROR, VOTE_COLOR_ERROR );
@@ -558,8 +548,7 @@ function createSuccessReport (&$vote, $firstTime = YES, $changed = NO) {
 		  
 	    if ( $nrCorrect > 0 )
 	       $html .= 
-		  createReportMessage (_("Gl&uuml;ckwunsch! Ihre Antwort ".
-					 "war richtig."), 
+		  createReportMessage (_("Gl&uuml;ckwunsch! Ihre Antwort war richtig."), 
 				       VOTE_ICON_SUCCESS, VOTE_COLOR_SUCCESS );
 	    else
 	       $html .= 
@@ -739,7 +728,7 @@ function createVoteInfo (&$vote, $isAssociated = NO) {
 
    /* multiple choice? ----------------------------------------------------- */
    if ($vote->isMultipleChoice()) {
-       $html .= ($isAssociated)
+       $html .= ($isAssociated || $vote->isStopped())
 	   ? _("Sie konnten mehrere Antworten ausw&auml;hlen.")
 	   : _("Sie k&ouml;nnen mehrere Antworten ausw&auml;hlen.");
        $html .= " \n";
@@ -749,19 +738,15 @@ function createVoteInfo (&$vote, $isAssociated = NO) {
    /* Get number of votes -------------------------------------------------- */
    if ($vote->isStopped()) {
       if ($number != 1)
-	 $html .= sprintf (_("Es haben insgesamt <b>%s</b> Personen ".
-			     "teilgenommen"), $number);
+	 $html .= sprintf (_("Es haben insgesamt <b>%s</b> Personen teilgenommen"), $number);
       else
-	 $html .= sprintf (_("Es hat insgesamt <b>eine</b> Person ".
-			     "teilgenommen"));
+	 $html .= sprintf (_("Es hat insgesamt <b>eine</b> Person teilgenommen"));
    }
    else {
       if ($number != 1)
-	 $html .= sprintf (_("Es haben bisher <b>%s</b> Personen ".
-			     "teilgenommen"), $number);
+	 $html .= sprintf (_("Es haben bisher <b>%s</b> Personen teilgenommen"), $number);
       else
-	 $html .= sprintf (_("Es hat bisher insgesamt <b>eine</b> Person ".
-			     "teilgenommen"));
+	 $html .= sprintf (_("Es hat bisher insgesamt <b>eine</b> Person teilgenommen"));
    }
    /* ---------------------------------------------------------------------- */
 
@@ -769,7 +754,7 @@ function createVoteInfo (&$vote, $isAssociated = NO) {
    // a: habe $number als Überprüfung hinzugefügt, da sonst bei abgelaufenen 
    // Votes die Anzeige nicht funktioniert...muss überarbeitet werden!
    if ($isAssociated && $number) 
-       $html .= formatReady(_(", Sie haben ebenfalls abgestimmt"));
+       $html .= formatReady(_(", Sie ebenfalls"));
    /* ---------------------------------------------------------------------- */
 
    $html .= ".";
@@ -790,27 +775,22 @@ function createVoteInfo (&$vote, $isAssociated = NO) {
        else {
 	   if ($isAssociated) {
 	       if ($vote->isChangeable()) {
-		   $html .= sprintf (_("Sie k&ouml;nnen Ihre Antwort ".
-				       "&auml;ndern bis zum ".
-				       "<b>%s</b> um <b>%s</b> Uhr."),
+		   $html .= sprintf (_("Sie k&ouml;nnen Ihre Antwort &auml;ndern bis zum <b>%s</b> um <b>%s</b> Uhr."),
 				     date ("d.m.Y", $stopdate),
 				     date ("H:i", $stopdate));
 	       }
 	       else {
 		   $html .= ($vote->instanceof() == INSTANCEOF_TEST)
-		       ? sprintf (_("Der Test wird voraussichtlich beendet am ".
-				    "<b>%s</b> um <b>%s</b> Uhr."),
+		       ? sprintf (_("Der Test wird voraussichtlich beendet am <b>%s</b> um <b>%s</b> Uhr."),
 				  date ("d.m.Y", $stopdate),
 				  date ("H:i", $stopdate))
-		       : sprintf (_("Das Voting wird voraussichtlich beendet am ".
-				    "<b>%s</b> um <b>%s</b> Uhr."),
+		       : sprintf (_("Das Voting wird voraussichtlich beendet am <b>%s</b> um <b>%s</b> Uhr."),
 				  date ("d.m.Y", $stopdate),
 				  date ("H:i", $stopdate));
 	       }
 	   }
 	   else {
-	       $html .= sprintf (_("Sie k&ouml;nnen abstimmen bis zum ".
-				   "<b>%s</b> um <b>%s</b> Uhr."),
+	       $html .= sprintf (_("Sie k&ouml;nnen abstimmen bis zum <b>%s</b> um <b>%s</b> Uhr."),
 				 date ("d.m.Y", $stopdate),
 				 date ("H:i", $stopdate));
 	   }
@@ -852,9 +832,8 @@ define ("VOTE_MESSAGE_EMPTY",
 	"<blockquote>\n".
 	" <font size=\"-1\">\n".
 	"   <br>\n".
-	"   "._("Es sind keine aktuellen Votes vorhanden. Um neue Votes ".
-	       "zu erstellen, klicken Sie auf die Doppelpfeile.")."\n".
-	"  <br><br>\n".
+	"   "._("Es sind keine aktuellen Votes vorhanden. Um neue Votes zu erstellen, klicken Sie auf die Doppelpfeile.")."\n".
+	"   <br><br>\n".
 	" </font>\n".
 	"</blockquote>\n");
 /* ------------------------------------------------------------------------- */
