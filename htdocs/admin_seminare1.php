@@ -551,7 +551,7 @@ if (($s_id) && (auth_check())) {
 				?>
 				<td class="<? echo $cssSw->getClass() ?>" align="left">
 					<?
-					$db4->query("SELECT TRIM(CONCAT(Nachname,', ',Vorname,', ',title)) AS fullname, seminar_user.user_id,status,username FROM seminar_user LEFT JOIN auth_user_md5 USING(user_id) LEFT JOIN user_info USING(user_id) WHERE Seminar_id = '$s_id' AND Status = 'dozent' ORDER BY Nachname");
+					$db4->query("SELECT TRIM(CONCAT(Nachname,', ',Vorname,IF(title!='',CONCAT(', ',title),''))) AS fullname, seminar_user.user_id,status,username FROM seminar_user LEFT JOIN auth_user_md5 USING(user_id) LEFT JOIN user_info USING(user_id) WHERE Seminar_id = '$s_id' AND Status = 'dozent' ORDER BY Nachname");
 					if ($db4->nf()) {
 						while ($db4->next_record()) {
 							printf ("&nbsp; <a href=\"%s?delete_doz=%s&s_id=%s#anker\"><img src=\"./pictures/trash.gif\" border=\"0\"></a>&nbsp; <font size=\"-1\"><b>%s (%s)&nbsp; &nbsp; <br />", $PHP_SELF, $db4->f("username"), $s_id, htmlReady($db4->f("fullname")), $db4->f("username"));
@@ -577,9 +577,9 @@ if (($s_id) && (auth_check())) {
 								$i++;
 							}
 							$clause.=")";
-							$db4->query ("SELECT DISTINCT username, TRIM(CONCAT(Nachname,', ',Vorname,', ',title)) AS fullname FROM user_inst LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING(user_id) WHERE inst_perms = 'dozent' $clause AND (username LIKE '%$search_exp_doz%' OR Vorname LIKE '%$search_exp_doz%' OR Nachname LIKE '%$search_exp_doz%') ORDER BY Nachname");
+							$db4->query ("SELECT DISTINCT username, TRIM(CONCAT(Nachname,', ',Vorname,IF(title!='',CONCAT(', ',title),''))) AS fullname FROM user_inst LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING(user_id) WHERE inst_perms = 'dozent' $clause AND (username LIKE '%$search_exp_doz%' OR Vorname LIKE '%$search_exp_doz%' OR Nachname LIKE '%$search_exp_doz%') ORDER BY Nachname");
 						} else
-							$db4->query ("SELECT username, TRIM(CONCAT(Nachname,', ',Vorname,', ',title)) AS fullname FROM auth_user_md5 LEFT JOIN user_info USING(user_id)  WHERE perms = 'dozent' AND (username LIKE '%$search_exp_doz%' OR Vorname LIKE '%$search_exp_doz%' OR Nachname LIKE '%$search_exp_doz%') ORDER BY Nachname");								
+							$db4->query ("SELECT username, TRIM(CONCAT(Nachname,', ',Vorname,IF(title!='',CONCAT(', ',title),''))) AS fullname FROM auth_user_md5 LEFT JOIN user_info USING(user_id)  WHERE perms = 'dozent' AND (username LIKE '%$search_exp_doz%' OR Vorname LIKE '%$search_exp_doz%' OR Nachname LIKE '%$search_exp_doz%') ORDER BY Nachname");								
 						if ($db4->num_rows()) {
 							$no_doz_found=FALSE;
 							printf ("<font size=-1><b>%s</b> Nutzer gefunden:<br />", $db4->num_rows());
@@ -615,7 +615,7 @@ if (($s_id) && (auth_check())) {
 				<td class="<? echo $cssSw->getClass() ?>" align="right"><? if (!$SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["workgroup_mode"]) echo "TutorInnen"; else echo "Mitglieder";?></td>
 				<td class="<? echo $cssSw->getClass() ?>" align="left">
 					<?
-					$db4->query("SELECT TRIM(CONCAT(Nachname,', ',Vorname,', ',title)) AS fullname,seminar_user.user_id,status,username FROM seminar_user LEFT JOIN auth_user_md5 USING(user_id) LEFT JOIN user_info USING(user_id) WHERE Seminar_id = '$s_id' AND Status = 'tutor' ORDER BY Nachname");
+					$db4->query("SELECT TRIM(CONCAT(Nachname,', ',Vorname,IF(title!='',CONCAT(', ',title),''))) AS fullname,seminar_user.user_id,status,username FROM seminar_user LEFT JOIN auth_user_md5 USING(user_id) LEFT JOIN user_info USING(user_id) WHERE Seminar_id = '$s_id' AND Status = 'tutor' ORDER BY Nachname");
 					if ($db4->nf()) {
 						while ($db4->next_record()) {
 							printf ("&nbsp; <a href=\"%s?delete_tut=%s&s_id=%s#anker\"><img src=\"./pictures/trash.gif\" border=\"0\"></a>&nbsp; <font size=\"-1\"><b>%s, %s (%s)&nbsp; &nbsp; <br />", $PHP_SELF, $db4->f("username"), $s_id, htmlReady($db4->f("fullname")), $db4->f("username"));
@@ -641,9 +641,9 @@ if (($s_id) && (auth_check())) {
 								$i++;
 							}
 							$clause.=")";
-							$db4->query ("SELECT DISTINCT username, TRIM(CONCAT(Nachname,', ',Vorname,', ',title)) AS fullname FROM user_inst LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING(user_id) WHERE inst_perms IN ('tutor', 'dozent') $clause AND (username LIKE '%$search_exp_tut%' OR Vorname LIKE '%$search_exp_tut%' OR Nachname LIKE '%$search_exp_tut%') ORDER BY Nachname");
+							$db4->query ("SELECT DISTINCT username, TRIM(CONCAT(Nachname,', ',Vorname,IF(title!='',CONCAT(', ',title),''))) AS fullname FROM user_inst LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING(user_id) WHERE inst_perms IN ('tutor', 'dozent') $clause AND (username LIKE '%$search_exp_tut%' OR Vorname LIKE '%$search_exp_tut%' OR Nachname LIKE '%$search_exp_tut%') ORDER BY Nachname");
 						} else
-							$db4->query ("SELECT username, TRIM(CONCAT(Nachname,', ',Vorname,', ',title)) AS fullname FROM auth_user_md5 LEFT JOIN user_info USING(user_id) WHERE perms IN ('tutor', 'dozent') AND (username LIKE '%$search_exp_tut%' OR Vorname LIKE '%$search_exp_tut%' OR Nachname LIKE '%$search_exp_tut%') ORDER BY Nachname");
+							$db4->query ("SELECT username, TRIM(CONCAT(Nachname,', ',Vorname,IF(title!='',CONCAT(', ',title),''))) AS fullname FROM auth_user_md5 LEFT JOIN user_info USING(user_id) WHERE perms IN ('tutor', 'dozent') AND (username LIKE '%$search_exp_tut%' OR Vorname LIKE '%$search_exp_tut%' OR Nachname LIKE '%$search_exp_tut%') ORDER BY Nachname");
 						if ($db4->num_rows()) {
 							$no_tut_found=FALSE;
 							printf ("<font size=-1><b>%s</b> Nutzer gefunden:<br />", $db4->num_rows());

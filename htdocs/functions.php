@@ -504,33 +504,24 @@ function get_perm($range_id,$user_id="")
 /**
 * Retrieves the fullname for a given user_id
 *
-* uses global $online array if user is online
 * 
 * @param		string	if omitted, current user_id is used
-* @param		bool	if set to true, title is included
+* @param		string	output format
 * @return		string	
 *
 */
-function get_fullname($user_id = "", $with_title = true)
+function get_fullname($user_id = "", $format = "full" )
 {
- global $user,$online;
- $author = "";
+ global $user;
+ $fullname_sql['full'] = "TRIM(CONCAT(title,' ',Vorname,' ',Nachname))";
+ $fullname_sql['full_rev'] = "TRIM(CONCAT(Nachname,', ',Vorname,IF(title!='',CONCAT(', ',title),'')))";
+ $fullname_sql['no_title'] = "CONCAT(Vorname ,' ', Nachname)";
+ $author="unbekannt";
  if (!($user_id)) $user_id=$user->id;
- if(count($online)) {
- 	foreach($online as $key=>$value){
-		if ($value["userid"]==$user_id) {
-		    $author = ($with_title) ? trim($value["title"] . " ". $value["name"]) : $value["name"];
-		    break;
-			}
-		}
-	}
-if (!$author) {
-     $db=new DB_Seminar;
-     $db->query ("SELECT CONCAT(Vorname ,' ', Nachname) AS fullname, title FROM auth_user_md5 a LEFT JOIN user_info USING(user_id) WHERE a.user_id = '$user_id'");
-    				 while ($db->next_record())
-    					 $author = ($with_title) ? trim($db->f("title") . " " . $db->f("fullname")) : $db->f("fullname");
- }
- if ($author=="") $author="unbekannt";
+ $db=new DB_Seminar;
+ $db->query ("SELECT " . $fullname_sql[$format] . " AS fullname FROM auth_user_md5 a LEFT JOIN user_info USING(user_id) WHERE a.user_id = '$user_id'");
+	 if ($db->next_record())
+			$author = $db->f("fullname");
  return $author;
  }
 
@@ -538,28 +529,22 @@ if (!$author) {
 * Retrieves the fullname for a given username
 * 
 * @param		string	if omitted, current user_id is used
-* @param		bool	if set to true, title is included
+* @param		string	output format
 * @return		string	
 *
 */
-function get_fullname_from_uname($uname = "", $with_title = true)
+function get_fullname_from_uname($uname = "", $format = "full")
 {
- global $auth,$online;
- $author="";
+ global $auth;
+ $fullname_sql['full'] = "TRIM(CONCAT(title,' ',Vorname,' ',Nachname))";
+ $fullname_sql['full_rev'] = "TRIM(CONCAT(Nachname,', ',Vorname,IF(title!='',CONCAT(', ',title),'')))";
+ $fullname_sql['no_title'] = "CONCAT(Vorname ,' ', Nachname)";
+ $author = "unbekannt";
  if (!$uname) $uname=$auth->auth["uname"];
- if(count($online)) {
- 	if ($online[$uname]) {
-			$author = ($with_title) ? trim($online[$uname]["title"] . " ". $online[$uname]["name"]) : $online[$uname]["name"];
-	}
-}
-if (!$author) {
  $db=new DB_Seminar;
- $db->query ("SELECT CONCAT(Vorname ,' ', Nachname) AS fullname, title FROM auth_user_md5 LEFT JOIN user_info USING(user_id) WHERE username = '$uname'");
-				 while ($db->next_record())
-					 $author = ($with_title) ? trim($db->f("title") . " " . $db->f("fullname")) : $db->f("fullname");
- }
- if ($author=="") $author="unbekannt";
-
+ $db->query ("SELECT " . $fullname_sql[$format] . " AS fullname FROM auth_user_md5 LEFT JOIN user_info USING(user_id) WHERE username = '$uname'");
+	if ($db->next_record())
+		$author = $db->f("fullname");
  return $author;
  }
  

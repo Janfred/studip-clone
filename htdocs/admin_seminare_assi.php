@@ -1044,9 +1044,7 @@ if ($cmd_f_x)
 		$db3->query($query);
 
 		//Standard Thema im Forum anlegen, damit Studis auch ohne Zutun des Dozenten diskutieren koennen
-		$db->query("SELECT Vorname, Nachname FROM auth_user_md5 WHERE user_id = '$user_id'");
-		$db->next_record();
-		CreateTopic('Allgemeine Diskussionen', $db->f("Vorname")." ".$db->f("Nachname"), 'Hier ist Raum für allgemeine Diskussionen', 0, 0, $sem_create_data["sem_id"]);
+		CreateTopic('Allgemeine Diskussionen', get_fullname($user_id), 'Hier ist Raum für allgemeine Diskussionen', 0, 0, $sem_create_data["sem_id"]);
 		
 		//Standard Ordner im Foldersystem anlegen, damit Studis auch ohne Zutun des Dozenten Uploaden k&ouml;nnen
 		$db3->query("INSERT INTO folder SET folder_id='".md5(uniqid(rand()))."', range_id='".$sem_create_data["sem_id"]."', user_id='".$user_id."', name='Allgemeiner Dateiordner', description='Ablage für allgemeine Ordner und Dokumente der Veranstaltung', mkdate='".time()."', chdate='".time()."'");
@@ -1488,7 +1486,7 @@ if ($level==2)
 							<?
 							if (sizeof($sem_create_data["sem_doz"]) >0) {
 								foreach($sem_create_data["sem_doz"] as $key=>$val) {
-									printf ("&nbsp; <a href=\"%s?delete_doz=%s\"><img src=\"./pictures/trash.gif\" border=\"0\"></a>&nbsp; <font size=\"-1\"><b>%s, %s (%s)&nbsp; &nbsp; <br />", $PHP_SELF, get_username($key), htmlReady(get_nachname($key)), htmlReady(get_vorname($key)), get_username($key));
+									printf ("&nbsp; <a href=\"%s?delete_doz=%s\"><img src=\"./pictures/trash.gif\" border=\"0\"></a>&nbsp; <font size=\"-1\"><b>%s (%s)&nbsp; &nbsp; <br />", $PHP_SELF, get_username($key), htmlReady(get_fullname($key,"full_rev")), get_username($key));
 								}
 							} else {
 								printf ("<font size=\"-1\">&nbsp;  Keine %s gew&auml;hlt.</font><br >", $SEM_CLASS[$sem_create_data["sem_class"]]["workgroup_mode"] ? "LeiterIn" : "DozentIn");
@@ -1513,16 +1511,16 @@ if ($level==2)
 										foreach($sem_create_data["sem_bet_inst"] as $val)
 											$clause.=",'$val'";
 									$clause.=")";
-									$db->query ("SELECT DISTINCT username, Vorname, Nachname FROM user_inst LEFT JOIN auth_user_md5 USING (user_id) WHERE inst_perms = 'dozent' $clause AND (username LIKE '%$search_exp_doz%' OR Vorname LIKE '%$search_exp_doz%' OR Nachname LIKE '%$search_exp_doz%') ORDER BY Nachname");
+									$db->query ("SELECT DISTINCT username, TRIM(CONCAT(Nachname,', ',Vorname,IF(title!='',CONCAT(', ',title),''))) AS fullname FROM user_inst LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING(user_id) WHERE inst_perms = 'dozent' $clause AND (username LIKE '%$search_exp_doz%' OR Vorname LIKE '%$search_exp_doz%' OR Nachname LIKE '%$search_exp_doz%') ORDER BY Nachname");
 								} else
-									$db->query ("SELECT username, Vorname, Nachname FROM auth_user_md5  WHERE perms = 'dozent' AND (username LIKE '%$search_exp_doz%' OR Vorname LIKE '%$search_exp_doz%' OR Nachname LIKE '%$search_exp_doz%') ORDER BY Nachname");								
+									$db->query ("SELECT username, TRIM(CONCAT(Nachname,', ',Vorname,IF(title!='',CONCAT(', ',title),''))) AS fullname FROM auth_user_md5 LEFT JOIN user_info USING(user_id)  WHERE perms = 'dozent' AND (username LIKE '%$search_exp_doz%' OR Vorname LIKE '%$search_exp_doz%' OR Nachname LIKE '%$search_exp_doz%') ORDER BY Nachname");								
 								if ($db->num_rows()) {
 									print "<a name=\"anker\"></a>";
 									printf ("<font size=-1><b>%s</b> Nutzer gefunden:<br />", $db->num_rows());
 									print "<input type=\"IMAGE\" src=\"./pictures/move_left.gif\" ".tooltip("Den Benutzer hinzufügen")." border=\"0\" name=\"add_doz\" />";
 									print "&nbsp; <select name=\"add_doz\">";
 									while ($db->next_record()) {
-										printf ("<option value=\"%s\">%s </option>", $db->f("username"), htmlReady(my_substr($db->f("Nachname").", ".$db->f("Vorname")." (".$db->f("username").")", 0, 30)));
+										printf ("<option value=\"%s\">%s </option>", $db->f("username"), htmlReady(my_substr($db->f("fullname")." (".$db->f("username").")", 0, 30)));
 									}
 									print "</select></font>";
 									print "<input type=\"IMAGE\" src=\"./pictures/rewind.gif\" ".tooltip("Neue Suche starten")." border=\"0\" name=\"reset_search\" />";									
@@ -1553,7 +1551,7 @@ if ($level==2)
 							<?
 							if (sizeof($sem_create_data["sem_tut"]) >0) {
 								foreach($sem_create_data["sem_tut"] as $key=>$val) {
-									printf ("&nbsp; <a href=\"%s?delete_tut=%s\"><img src=\"./pictures/trash.gif\" border=\"0\"></a>&nbsp; <font size=\"-1\"><b>%s, %s (%s)&nbsp; &nbsp; <br />", $PHP_SELF, get_username($key), htmlReady(get_nachname($key)), htmlReady(get_vorname($key)), get_username($key));
+									printf ("&nbsp; <a href=\"%s?delete_tut=%s\"><img src=\"./pictures/trash.gif\" border=\"0\"></a>&nbsp; <font size=\"-1\"><b>%s (%s)&nbsp; &nbsp; <br />", $PHP_SELF, get_username($key), htmlReady(get_fullname($key,"full_rev")), get_username($key));
 								}
 							} else {
 								printf ("<font size=\"-1\">&nbsp; %s gew&auml;hlt.</font><br >", $SEM_CLASS[$sem_create_data["sem_class"]]["workgroup_mode"] ? "Kein Mitglied" : "Keine TutorIn");
@@ -1578,16 +1576,16 @@ if ($level==2)
 										foreach($sem_create_data["sem_bet_inst"] as $val)
 											$clause.=",'$val'";
 									$clause.=")";
-									$db->query ("SELECT DISTINCT username, Vorname, Nachname FROM user_inst LEFT JOIN auth_user_md5 USING (user_id) WHERE inst_perms IN ('tutor', 'dozent') $clause AND (username LIKE '%$search_exp_tut%' OR Vorname LIKE '%$search_exp_tut%' OR Nachname LIKE '%$search_exp_tut%') ORDER BY Nachname");
+									$db->query ("SELECT DISTINCT username, TRIM(CONCAT(Nachname,', ',Vorname,IF(title!='',CONCAT(', ',title),''))) AS fullname FROM user_inst LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING(user_id) WHERE inst_perms IN ('tutor', 'dozent') $clause AND (username LIKE '%$search_exp_tut%' OR Vorname LIKE '%$search_exp_tut%' OR Nachname LIKE '%$search_exp_tut%') ORDER BY Nachname");
 								} else
-									$db->query ("SELECT username, Vorname, Nachname FROM auth_user_md5 WHERE perms IN ('tutor', 'dozent') AND (username LIKE '%$search_exp_tut%' OR Vorname LIKE '%$search_exp_tut%' OR Nachname LIKE '%$search_exp_tut%') ORDER BY Nachname");								
+									$db->query ("SELECT username, TRIM(CONCAT(Nachname,', ',Vorname,IF(title!='',CONCAT(', ',title),''))) AS fullname FROM auth_user_md5 LEFT JOIN user_info USING(user_id) WHERE perms IN ('tutor', 'dozent') AND (username LIKE '%$search_exp_tut%' OR Vorname LIKE '%$search_exp_tut%' OR Nachname LIKE '%$search_exp_tut%') ORDER BY Nachname");								
 								if ($db->num_rows()) {
 									print "<a name=\"anker\"></a>";
 									printf ("<font size=-1><b>%s</b> Nutzer gefunden:<br />", $db->num_rows());
 									print "<input type=\"IMAGE\" src=\"./pictures/move_left.gif\" ".tooltip("Den Benutzer hinzufügen")." border=\"0\" name=\"add_tut\" />";
 									print "&nbsp; <select name=\"add_tut\">";
 									while ($db->next_record()) {
-										printf ("<option value=\"%s\">%s </option>", $db->f("username"), htmlReady(my_substr($db->f("Nachname").", ".$db->f("Vorname")." (".$db->f("username").")", 0, 30)));
+										printf ("<option value=\"%s\">%s </option>", $db->f("username"), htmlReady(my_substr($db->f("fullname")." (".$db->f("username").")", 0, 30)));
 									}
 									print "</select></font>";
 									print "<input type=\"IMAGE\" src=\"./pictures/rewind.gif\" ".tooltip("neue Suche starten")." border=\"0\" name=\"reset_search\" />";									
