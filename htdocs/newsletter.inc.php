@@ -103,7 +103,7 @@ function RemovePersonNewsletter ($username, $newsletter_id)    // Funktion, mit 
 	$newsletter[0]["name"] = "Stud.IP Newsletter";
 //	$newsletter[0]["SQL"] = "WHERE username = 'rstockm'";
 	$newsletter[0]["SQL"] = "WHERE perms != 'user' AND perms != 'autor'";
-	$newsletter[0]["return"] = "crew@studip.de";
+	$newsletter[0]["return"] = "goettingen@studip.de";
 	$newsletter[0]["text"] = 
 "Stud.IP-Newsletter  #01  / 19.10.2002
 ----------------------------------------------------------------------

@@ -45,7 +45,7 @@ if ($auth->is_authenticated() && $user->id != "nobody") {
 Stud.IP ist ein Open Source Projekt und steht unter der GPL. Das Programm
 befindet sich in einer Phase der st&auml;ndigen Weiterentwicklung. F&uuml;r Vorschl&auml;ge
 und Kritik findet sich immer ein Ohr. Wenden Sie sich hierzu entweder an
-<a href="mailto:crew@studip.de">crew@studip.de</a> oder direkt an die
+<a href="mailto:studip-users@lists.sourceforge.net">Stud.IP Crew</a> oder direkt an die
 <a href="impressum.php">Entwickler</a>.<br><br>
 
 Um den Funktionsumfang von Stud.IP nutzen zu k&ouml;nnen, m&uuml;ssen Sie sich im System anmelden.<br>
