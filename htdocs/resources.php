@@ -19,26 +19,21 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-// Default_Auth
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check("user"); //Noch anpassen!!!
 
-include "seminar_open.php";
+include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
-if ($RESOURCES_ENABLE)
+// -- here you have to put initialisations for the current page
+
+if ($RESOURCES_ENABLE) {
 	//Steuerung der Ressourcenverwaltung einbinden
 	include($RELATIVE_PATH_RESOURCES."/resourcesControl.inc.php");
-else {
-	include ("header.php");
+} else {
+	// Start of Output
+	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
+	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 	require_once ($ABSOLUTE_PATH_STUDIP."msg.inc.php");
-	?>
-	<html>
-		<head>
-			<title>Stud.IP</title>
-			<link rel="stylesheet" href="style.css" type="text/css">
-		</head>
-		<body bgcolor="#FFFFFF">
-	<?
 	parse_window ("error§Die Ressurcenverwaltung ist nicht eingebunden. Bitte aktivieren Sie sie in den Systemeinstellungen oder wenden Sie sich an den Systemadministrator.", "§",
 				"Ressourcenverwaltung nicht eingebunden");
 }
