@@ -395,7 +395,7 @@ function latex($text, $extern = FALSE) {
 	if ($LATEXRENDER_ENABLE && isset($LATEX_FORMATS)) {
 		include_once($ABSOLUTE_PATH_STUDIP."/lib/classes/latexrender.class.php");
 		if ($extern) {
-			$extern_path = substr($EXTERN_SERVER_NAME, 0, -1);
+			$extern_path = 'http://' . substr($EXTERN_SERVER_NAME, 0, -1);
 			$latex = new LatexRender($ABSOLUTE_PATH_STUDIP.$TEXCACHE_PATH, $extern_path . $TEXCACHE_PATH);
 		}
 		else {
@@ -796,7 +796,7 @@ function smile ($text = "", $extern = FALSE) {
 		$replace .= "$path$SMILE_PATH/\\2.gif\"></a>\\3";
 	}
 	else {
-		$path = $EXTERN_SERVER_NAME;
+		$path = 'http://' . $EXTERN_SERVER_NAME;
 		$replace .= "<img alt=\"\\2\" title=\"\\2\" border=\"0\" src=\"";
 		$replace .= "$path$SMILE_PATH/\\2.gif\">\\3";
 	}
@@ -844,7 +844,7 @@ function symbol ($text = "", $extern = FALSE) {
 		return $text;
 	
 	if ($extern)
-		$path = $EXTERN_SERVER_NAME;
+		$path = 'http://' . $EXTERN_SERVER_NAME;
 	else
 		$path = $CANONICAL_RELATIVE_PATH_STUDIP;
 	
