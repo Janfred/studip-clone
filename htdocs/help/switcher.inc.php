@@ -33,7 +33,9 @@ switch($referrer_page) {
 		
 	case "index.php" :
 		if ($perm->have_perm("user"))
-		    $help_page = "startseite.html";
+		    $help_page = "startseite.htm";
+		    if ($perm->have_perm("dozent"))
+		    $help_page = "startdozenten.htm";
 		break;
 	
 	case "admin_metadates.php" :
