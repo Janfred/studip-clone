@@ -207,7 +207,8 @@ class ClipBoard {
 		<div align="center">
 		<?
 		print $this->form_obj->getFormButton("clip_ok", array('style'=>'vertical-align:middle;margin:3px;'));
-		print $this->form_obj->getFormButton("clip_reload", array('style'=>'vertical-align:middle;margin:3px;'))
+		if ($this->form_obj->form_buttons['clip_reload'])
+			print $this->form_obj->getFormButton("clip_reload", array('style'=>'vertical-align:middle;margin:3px;'))
 		?>
 		</div>
 		<?
