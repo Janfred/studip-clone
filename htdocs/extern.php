@@ -44,14 +44,15 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" =>
 if (!$EXTERN_ENABLE) {
 	if ($perm->have_perm("nobody"))
 			$perm->perm_invalid($auth->auth["perm"], "");
-		else {
-			echo "<br><br><br><blockquote><b>This page is not available!<br>The module \"extern\"";
-			echo " is not enabled in this Stud.IP-installation.</b></blockquote>";
-		}
-		
-		exit;
+	else {
+		echo "<br><br><br><blockquote><b>This page is not available!<br>The module \"extern\"";
+		echo " is not enabled in this Stud.IP-installation.</b></blockquote>";
+	}
+	page_close();
+	exit;
 }
-include($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_EXTERN . "/extern.inc.php");
+else
+	include($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_EXTERN . "/extern.inc.php");
 	
 page_close();
 ?>
