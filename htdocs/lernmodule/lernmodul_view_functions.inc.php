@@ -37,13 +37,17 @@ function show_user_modules($benutzername)
 
 function show_seminar_modules($seminar_id)
 {
-	global $PHP_SELF, $print_open;
+	global $PHP_SELF, $print_open, $SessSemName;
 
 	$module_count = 0;
 	$mod_array = get_seminar_modules($seminar_id);
 	if ($mod_array != false)
 	{	
-		echo "<b>" . _("Der Veranstaltung sind folgende Lernmodule zugeordnet:") . "</b><br><br>";
+		if ($SessSemName["class"]=="inst") 
+			$msg = _("Der Einrichtung sind folgende Lernmodule zugeordnet:");
+		else	
+			$msg = _("Der Veranstaltung sind folgende Lernmodule zugeordnet:");
+		echo "<b>" . $msg . "</b><br><br>";
 
 		while ($module_count < sizeof($mod_array))
 		{
@@ -84,7 +88,13 @@ function show_seminar_modules($seminar_id)
 		echo "<br>";
 	}
 	else
-		echo "<b>" . _("Mit dieser Veranstaltung sind keine ILIAS-Lernmodule verknüpft.") . "</b><br><br>";
+	{
+		if ($SessSemName["class"]=="inst") 
+			$msg = _("Mit dieser Einrichtung sind keine ILIAS-Lernmodule verknüpft.");
+		else	
+			$msg = _("Mit dieser Veranstaltung sind keine ILIAS-Lernmodule verknüpft.");
+		echo "<b>" . $msg . "</b><br><br>";
+	}
 }
 	
 function show_all_modules($seminar_id)
@@ -136,7 +146,13 @@ function show_all_modules($seminar_id)
 		}
 	}
 	elseif ($hide_mod != "")
-		echo "<b>" . _("Alle verf&uuml;gbaren Lernmodule sind der Veranstaltung zugeordnet.") . "</b><br><br>";
+	{	
+		if ($SessSemName["class"]=="inst") 
+			$msg = _("Alle verf&uuml;gbaren Lernmodule sind der Einrichtung zugeordnet.");
+		else	
+			$msg = _("Alle verf&uuml;gbaren Lernmodule sind der Veranstaltung zugeordnet.");
+		echo "<b>" . $msg . "</b><br><br>";
+	}
 	else
 		echo "<b>" . _("Es sind keine Lernmodule vorhanden.") . "</b><br><br>";
 }
@@ -187,10 +203,22 @@ function show_seminar_modules_links($seminar_id)
  	else
  	{
 		if (sizeof($out_str)<2)
-			echo "<br><b>" . _("Diese Veranstaltung ist mit einem Lernmodul verbunden:") . "</b><br /><br /><br />";
+		{
+			if ($SessSemName["class"]=="inst") 
+				$msg = _("Diese Einrichtung ist mit einem Lernmodul verbunden:");
+			else	
+				$msg = _("Diese Veranstaltung ist mit einem Lernmodul verbunden:");
+			echo "<br><b>" . $msg . "</b><br /><br /><br />";
+		}
 		else
-			echo "<br><b>" . _("Diese Veranstaltung ist mit den folgenden Lernmodulen verbunden:") . "</b><br /><br /><br />";
-
+		{	
+			if ($SessSemName["class"]=="inst") 
+				$msg = _("Diese Einrichtung ist mit den folgenden Lernmodulen verbunden:");
+			else	
+				$msg = _("Diese Veranstaltung ist mit den folgenden Lernmodulen verbunden:");
+			echo "<br><b>" . $msg . "</b><br /><br /><br />";
+		}
+		
 			for ($i=0; $i<sizeof($out_str); $i++) 
 			{
 				$printlink = $out_str[$i]["link"];
