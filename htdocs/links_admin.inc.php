@@ -45,7 +45,7 @@ $sess->register("admin_dates_data");
 */
 function reset_all_data() {
 	global $links_admin_data, $sem_create_data, $admin_dates_data, $admin_admission_data, $archiv_assi_data,
-		$term_metadata;
+		$term_metadata, $news_range_id, $news_range_name;
 	
 	$links_admin_data='';
 	$sem_create_data='';
@@ -53,6 +53,8 @@ function reset_all_data() {
 	$admin_admission_data='';
 	$archiv_assi_data='';
 	$term_metadata='';
+	$news_range_id='';
+	$news_range_name='';
 
 	$links_admin_data["select_old"]=TRUE;
 	// $links_admin_data["select_inactive"]=TRUE;
