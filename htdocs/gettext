@@ -47,6 +47,10 @@ do {
 	xgettext -C -n --keyword=_ -o locale/$language/LC_MESSAGES/studip_wap.pot  wap/*.* 
 	msgmerge locale/$language/LC_MESSAGES/studip_wap.po.old locale/$language/LC_MESSAGES/studip_wap.pot --output-file=locale/$language/LC_MESSAGES/studip_wap.po
 
+	mv locale/$language/LC_MESSAGES/studip_eval.po locale/$language/LC_MESSAGES/studip_eval.po.old
+	xgettext -C -n --keyword=_ -o locale/$language/LC_MESSAGES/studip_eval.pot  modules/evaluation/*.* modules/evaluation/classes/*.* modules/evaluation/classes/db/*.*
+	msgmerge locale/$language/LC_MESSAGES/studip_eval.po.old locale/$language/LC_MESSAGES/studip_eval.pot --output-file=locale/$language/LC_MESSAGES/studip_eval.po
+
 	# then merge into one file
 	msgcat locale/$language/LC_MESSAGES/studip_core.po locale/$language/LC_MESSAGES/studip.po --output-file=locale/$language/LC_MESSAGES/studip.po --use-first
 	msgcat locale/$language/LC_MESSAGES/studip_calendar.po locale/$language/LC_MESSAGES/studip.po --output-file=locale/$language/LC_MESSAGES/studip.po --use-first
@@ -58,5 +62,6 @@ do {
 	msgcat locale/$language/LC_MESSAGES/studip_support.po locale/$language/LC_MESSAGES/studip.po --output-file=locale/$language/LC_MESSAGES/studip.po --use-first
 	msgcat locale/$language/LC_MESSAGES/studip_vote.po locale/$language/LC_MESSAGES/studip.po --output-file=locale/$language/LC_MESSAGES/studip.po --use-first
 	msgcat locale/$language/LC_MESSAGES/studip_wap.po locale/$language/LC_MESSAGES/studip.po --output-file=locale/$language/LC_MESSAGES/studip.po --use-first
+	msgcat locale/$language/LC_MESSAGES/studip_eval.po locale/$language/LC_MESSAGES/studip.po --output-file=locale/$language/LC_MESSAGES/studip.po --use-first
 } ;
 done

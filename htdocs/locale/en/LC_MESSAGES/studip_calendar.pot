@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2004-02-15 14:50+0100\n"
+"POT-Creation-Date: 2004-03-23 19:29+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -465,10 +465,10 @@ msgstr ""
 msgid "nicht besucht"
 msgstr ""
 
-#: calendar/views/bind.inc.php:133 calendar/views/edit.inc.php:599
-#: calendar/views/edit.inc.php:609 calendar/views/edit.inc.php:663
-#: calendar/views/export.inc.php:121 calendar/views/export.inc.php:235
-#: calendar/views/export.inc.php:240
+#: calendar/views/bind.inc.php:133 calendar/views/edit.inc.php:606
+#: calendar/views/edit.inc.php:616 calendar/views/edit.inc.php:671
+#: calendar/views/export.inc.php:137 calendar/views/export.inc.php:251
+#: calendar/views/export.inc.php:256
 msgid "Information:"
 msgstr ""
 
@@ -496,7 +496,7 @@ msgstr ""
 msgid "zeig danach"
 msgstr ""
 
-#: calendar/views/edit.inc.php:52 calendar/views/export.inc.php:87
+#: calendar/views/edit.inc.php:52 calendar/views/export.inc.php:103
 #, c-format
 msgid "Bitte korrigieren Sie die mit %s gekennzeichneten Felder.%s"
 msgstr ""
@@ -640,193 +640,199 @@ msgstr ""
 msgid "ausgew&auml;hlte l&ouml;schen"
 msgstr ""
 
-#: calendar/views/edit.inc.php:589
+#: calendar/views/edit.inc.php:582
+#, c-format
+msgid "Sie k&ouml;nnen diesen Termin einzeln %sexportieren%s."
+msgstr ""
+
+#: calendar/views/edit.inc.php:596
 #, c-format
 msgid ""
 "Dieser Termin geh&ouml;rt zur Veranstaltung:<p>%s</p>Veranstaltungstermine "
 "k&ouml;nnen nicht im pers&ouml;nlichen Terminkalender bearbeitet werden."
 msgstr ""
 
-#: calendar/views/edit.inc.php:591
+#: calendar/views/edit.inc.php:598
 #, c-format
 msgid ""
 "<a href=\"%s?cmd=bind\">W&auml;hlen</a> Sie aus, welche "
 "Veranstaltungstermine in Ihrem Terminkalender angezeigt werden sollen."
 msgstr ""
 
-#: calendar/views/edit.inc.php:596
+#: calendar/views/edit.inc.php:603
 #, c-format
 msgid ""
 "Um diesen Termin zu bearbeiten, wechseln Sie bitte in die %"
 "sTerminverwaltung</a>."
 msgstr ""
 
-#: calendar/views/edit.inc.php:602 calendar/views/edit.inc.php:612
+#: calendar/views/edit.inc.php:609 calendar/views/edit.inc.php:619
+#: calendar/views/edit.inc.php:674
 msgid "Aktion:"
 msgstr ""
 
-#: calendar/views/edit.inc.php:643
+#: calendar/views/edit.inc.php:651
 msgid "Sie k&ouml;nnen keine weiteren Termine mehr speichern!"
 msgstr ""
 
-#: calendar/views/edit.inc.php:645
+#: calendar/views/edit.inc.php:653
 #, c-format
 msgid ""
 "L&ouml;schen Sie &auml;ltere Termine, oder w&auml;hlen Sie eine automatische "
 "L&ouml;schfunktion in ihren %sKalenderoptionen%s."
 msgstr ""
 
-#: calendar/views/edit.inc.php:651
+#: calendar/views/edit.inc.php:659
 #, c-format
 msgid "Sie k&ouml;nnen noch %s Termine speichern."
 msgstr ""
 
-#: calendar/views/edit.inc.php:654
+#: calendar/views/edit.inc.php:662
 #, c-format
 msgid ""
 "W&auml;hlen Sie eine automatische L&ouml;schfunktion in Ihren %"
 "sKalenderoptionen%s, um &auml;ltere Termine zu l&ouml;schen."
 msgstr ""
 
-#: calendar/views/edit.inc.php:659
+#: calendar/views/edit.inc.php:667
 #, c-format
 msgid ""
 "Sie k&ouml;nnen abgelaufene Termine automatisch l&ouml;schen lassen. W&auml;"
 "hlen Sie dazu eine L&ouml;schfunktion in Ihren %sKalenderoptionen%s."
 msgstr ""
 
-#: calendar/views/export.inc.php:106
+#: calendar/views/export.inc.php:122
 #, c-format
 msgid "Stud.IP hat %s Termine synchronisiert."
 msgstr ""
 
-#: calendar/views/export.inc.php:110
+#: calendar/views/export.inc.php:126
 msgid ""
 "Ihr iCalendar-Datei enthielt keine Termine, die synchronisiert werden "
 "konnten."
 msgstr ""
 
-#: calendar/views/export.inc.php:114
+#: calendar/views/export.inc.php:130
 #, c-format
 msgid "Die zum Download zur Verf&uuml;gung stehende Datei enthält %s Termine."
 msgstr ""
 
-#: calendar/views/export.inc.php:118
+#: calendar/views/export.inc.php:134
 msgid ""
 "Ihr Stud.IP-Kalender enthält keine neueren Termine als die hochgeladene "
 "iCalendar-Datei. Es wurde keine Ausgabedatei erzeugt."
 msgstr ""
 
-#: calendar/views/export.inc.php:130
+#: calendar/views/export.inc.php:146
 msgid ""
 "Klicken Sie auf den Button, um die Datei mit den synchronisierten "
 "Kalenderdaten herunterzuladen."
 msgstr ""
 
-#: calendar/views/export.inc.php:131
+#: calendar/views/export.inc.php:147
 msgid ""
 "Die Daten liegen ebenfalls in einer iCalendar-Datei vor, die Sie in Ihren "
 "lokalen Terminkalender (z.B. MS Outlook) importieren können."
 msgstr ""
 
-#: calendar/views/export.inc.php:143
+#: calendar/views/export.inc.php:159
 msgid "Herunterladen der synchronisierten Kalenderdaten"
 msgstr ""
 
-#: calendar/views/export.inc.php:153
+#: calendar/views/export.inc.php:169
 msgid "Exportieren Ihrer Kalenderdaten"
 msgstr ""
 
-#: calendar/views/export.inc.php:155
+#: calendar/views/export.inc.php:171
 msgid ""
 "Es werden nur Termine von Veranstaltungen exportiert, die zuvor im Menüpunkt "
 "\"Veranstaltungstermine\" ausgewählt wurden."
 msgstr ""
 
-#: calendar/views/export.inc.php:157
+#: calendar/views/export.inc.php:173
 msgid "Bitte w&auml;hlen Sie, welche Termine exportiert werden sollen:"
 msgstr ""
 
-#: calendar/views/export.inc.php:160
+#: calendar/views/export.inc.php:176
 msgid "Nur meine pers&ouml;nlichen Termine"
 msgstr ""
 
-#: calendar/views/export.inc.php:162
+#: calendar/views/export.inc.php:178
 msgid "Nur meine Veranstaltungstermine"
 msgstr ""
 
-#: calendar/views/export.inc.php:164 calendar/views/export.inc.php:173
+#: calendar/views/export.inc.php:180 calendar/views/export.inc.php:189
 msgid "Alle Termine"
 msgstr ""
 
-#: calendar/views/export.inc.php:168
+#: calendar/views/export.inc.php:184
 msgid "Geben Sie an, aus welchem Zeitbereich Termine exportiert werden sollen:"
 msgstr ""
 
-#: calendar/views/export.inc.php:179
+#: calendar/views/export.inc.php:195
 #, c-format
 msgid "Nur Termine vom:%sbis zum:"
 msgstr ""
 
-#: calendar/views/export.inc.php:200
+#: calendar/views/export.inc.php:216
 msgid "Importieren Ihrer Kalenderdaten"
 msgstr ""
 
-#: calendar/views/export.inc.php:204
+#: calendar/views/export.inc.php:220
 msgid ""
 "Sie k&ouml;nnen Termine importieren, die sich in einer iCalendar-Datei "
 "befinden."
 msgstr ""
 
-#: calendar/views/export.inc.php:205 calendar/views/export.inc.php:218
+#: calendar/views/export.inc.php:221 calendar/views/export.inc.php:234
 msgid "Klicken Sie auf \"Durchsuchen\", um eine Datei auszuwählen."
 msgstr ""
 
-#: calendar/views/export.inc.php:213
+#: calendar/views/export.inc.php:229
 msgid "Synchronisieren Ihrer Kalenderdaten"
 msgstr ""
 
-#: calendar/views/export.inc.php:217
+#: calendar/views/export.inc.php:233
 msgid ""
 "Sie k&ouml;nnen Termine synchronisieren, die sich in einer iCalendar-Datei "
 "befinden."
 msgstr ""
 
-#: calendar/views/export.inc.php:227
+#: calendar/views/export.inc.php:243
 #, c-format
 msgid "Es wurden %s Termine importiert."
 msgstr ""
 
-#: calendar/views/export.inc.php:232
+#: calendar/views/export.inc.php:248
 msgid "Es wurden keine Termine importiert."
 msgstr ""
 
-#: calendar/views/export.inc.php:242
+#: calendar/views/export.inc.php:258
 msgid ""
 "Sie k&ouml;nnen Termindaten importieren, exportieren und synchronisieren."
 msgstr ""
 
-#: calendar/views/export.inc.php:279
+#: calendar/views/export.inc.php:295
 msgid "Der Export konnte nicht durchgef&uuml;hrt werden!"
 msgstr ""
 
-#: calendar/views/export.inc.php:306 calendar/views/export.inc.php:318
+#: calendar/views/export.inc.php:322 calendar/views/export.inc.php:334
 msgid "Der Import konnte nicht durchgef&uuml;hrt werden!"
 msgstr ""
 
-#: calendar/views/export.inc.php:314
+#: calendar/views/export.inc.php:330
 msgid "Der Import wurde erfolgreich durchgef&uuml;hrt!"
 msgstr ""
 
-#: calendar/views/export.inc.php:319
+#: calendar/views/export.inc.php:335
 msgid "Die zu importierende Datei enth&auml;lt zuviele Termine."
 msgstr ""
 
-#: calendar/views/export.inc.php:342
+#: calendar/views/export.inc.php:358
 msgid "Die Synchronisation konnte nicht durgef&uuml;hrt werden!"
 msgstr ""
 
-#: calendar/views/export.inc.php:353
+#: calendar/views/export.inc.php:369
 msgid "Die Synchronisation wurde erfolgreich durchgef&uuml;hrt!"
 msgstr ""
 

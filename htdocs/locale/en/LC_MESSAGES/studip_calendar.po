@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2004-02-15 14:50+0100\n"
+"POT-Creation-Date: 2004-03-23 19:29+0100\n"
 "PO-Revision-Date: 2004-02-15 13:48+0100\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
@@ -469,10 +469,10 @@ msgstr "Status"
 msgid "nicht besucht"
 msgstr "not visited"
 
-#: calendar/views/bind.inc.php:133 calendar/views/edit.inc.php:599
-#: calendar/views/edit.inc.php:609 calendar/views/edit.inc.php:663
-#: calendar/views/export.inc.php:121 calendar/views/export.inc.php:235
-#: calendar/views/export.inc.php:240
+#: calendar/views/bind.inc.php:133 calendar/views/edit.inc.php:606
+#: calendar/views/edit.inc.php:616 calendar/views/edit.inc.php:671
+#: calendar/views/export.inc.php:137 calendar/views/export.inc.php:251
+#: calendar/views/export.inc.php:256
 msgid "Information:"
 msgstr "Information:"
 
@@ -502,7 +502,7 @@ msgstr "show before"
 msgid "zeig danach"
 msgstr "show afterwards"
 
-#: calendar/views/edit.inc.php:52 calendar/views/export.inc.php:87
+#: calendar/views/edit.inc.php:52 calendar/views/export.inc.php:103
 #, c-format
 msgid "Bitte korrigieren Sie die mit %s gekennzeichneten Felder.%s"
 msgstr "Please correct the %smarked fields%s."
@@ -652,7 +652,12 @@ msgstr "Exception:"
 msgid "ausgew&auml;hlte l&ouml;schen"
 msgstr "Delete selection"
 
-#: calendar/views/edit.inc.php:589
+#: calendar/views/edit.inc.php:582
+#, fuzzy, c-format
+msgid "Sie k&ouml;nnen diesen Termin einzeln %sexportieren%s."
+msgstr "You can save %s more appointments."
+
+#: calendar/views/edit.inc.php:596
 #, c-format
 msgid ""
 "Dieser Termin geh&ouml;rt zur Veranstaltung:<p>%s</p>Veranstaltungstermine "
@@ -661,7 +666,7 @@ msgstr ""
 "These appointments belong to the course:<p>%s</p>course meetings can not be "
 "edited in your personal appointment calendar."
 
-#: calendar/views/edit.inc.php:591
+#: calendar/views/edit.inc.php:598
 #, c-format
 msgid ""
 "<a href=\"%s?cmd=bind\">W&auml;hlen</a> Sie aus, welche "
@@ -670,7 +675,7 @@ msgstr ""
 "<a href=\"%s?cmd=bind\">Choose</a>which course meetings should be displayed "
 "in your appointment calendar."
 
-#: calendar/views/edit.inc.php:596
+#: calendar/views/edit.inc.php:603
 #, c-format
 msgid ""
 "Um diesen Termin zu bearbeiten, wechseln Sie bitte in die %"
@@ -678,15 +683,16 @@ msgid ""
 msgstr ""
 "To edit this appointment, please switch to the %s Course administration</a> "
 
-#: calendar/views/edit.inc.php:602 calendar/views/edit.inc.php:612
+#: calendar/views/edit.inc.php:609 calendar/views/edit.inc.php:619
+#: calendar/views/edit.inc.php:674
 msgid "Aktion:"
 msgstr "Action:"
 
-#: calendar/views/edit.inc.php:643
+#: calendar/views/edit.inc.php:651
 msgid "Sie k&ouml;nnen keine weiteren Termine mehr speichern!"
 msgstr "You can not save any further appointments!"
 
-#: calendar/views/edit.inc.php:645
+#: calendar/views/edit.inc.php:653
 #, c-format
 msgid ""
 "L&ouml;schen Sie &auml;ltere Termine, oder w&auml;hlen Sie eine automatische "
@@ -695,12 +701,12 @@ msgstr ""
 "Delete old appointments or choose an automatic deletion function from your %"
 "scalendar options%s."
 
-#: calendar/views/edit.inc.php:651
+#: calendar/views/edit.inc.php:659
 #, c-format
 msgid "Sie k&ouml;nnen noch %s Termine speichern."
 msgstr "You can save %s more appointments."
 
-#: calendar/views/edit.inc.php:654
+#: calendar/views/edit.inc.php:662
 #, c-format
 msgid ""
 "W&auml;hlen Sie eine automatische L&ouml;schfunktion in Ihren %"
@@ -709,7 +715,7 @@ msgstr ""
 "Select an automatic deletion function from your %scalendar options%s, in "
 "order to delete old appointments."
 
-#: calendar/views/edit.inc.php:659
+#: calendar/views/edit.inc.php:667
 #, c-format
 msgid ""
 "Sie k&ouml;nnen abgelaufene Termine automatisch l&ouml;schen lassen. W&auml;"
@@ -718,12 +724,12 @@ msgstr ""
 "You can let past appointments automatically be deleted. Select a deletion "
 "function from your %scalandar options%s."
 
-#: calendar/views/export.inc.php:106
+#: calendar/views/export.inc.php:122
 #, c-format
 msgid "Stud.IP hat %s Termine synchronisiert."
 msgstr "Stud.IP has synchronised %s appointments."
 
-#: calendar/views/export.inc.php:110
+#: calendar/views/export.inc.php:126
 msgid ""
 "Ihr iCalendar-Datei enthielt keine Termine, die synchronisiert werden "
 "konnten."
@@ -731,12 +737,12 @@ msgstr ""
 "Your iCalendar-file does not contain any appointments which can be "
 "synchronised."
 
-#: calendar/views/export.inc.php:114
+#: calendar/views/export.inc.php:130
 #, c-format
 msgid "Die zum Download zur Verf&uuml;gung stehende Datei enthält %s Termine."
 msgstr "There are %s appointments in files available for download."
 
-#: calendar/views/export.inc.php:118
+#: calendar/views/export.inc.php:134
 msgid ""
 "Ihr Stud.IP-Kalender enthält keine neueren Termine als die hochgeladene "
 "iCalendar-Datei. Es wurde keine Ausgabedatei erzeugt."
@@ -744,7 +750,7 @@ msgstr ""
 "Your Stud.IP calendar does not contain any new appointments not already in "
 "the uploaded iCalendar file. No export file has been created."
 
-#: calendar/views/export.inc.php:130
+#: calendar/views/export.inc.php:146
 msgid ""
 "Klicken Sie auf den Button, um die Datei mit den synchronisierten "
 "Kalenderdaten herunterzuladen."
@@ -752,7 +758,7 @@ msgstr ""
 "Click the button in order to download the file with the synchronised "
 "calendar data."
 
-#: calendar/views/export.inc.php:131
+#: calendar/views/export.inc.php:147
 msgid ""
 "Die Daten liegen ebenfalls in einer iCalendar-Datei vor, die Sie in Ihren "
 "lokalen Terminkalender (z.B. MS Outlook) importieren können."
@@ -760,15 +766,15 @@ msgstr ""
 "The data are also in a iCalendar file, which you can import into your local "
 "appointment calendar (e.g. MS Outlook). "
 
-#: calendar/views/export.inc.php:143
+#: calendar/views/export.inc.php:159
 msgid "Herunterladen der synchronisierten Kalenderdaten"
 msgstr "Download the synchronised calendar data."
 
-#: calendar/views/export.inc.php:153
+#: calendar/views/export.inc.php:169
 msgid "Exportieren Ihrer Kalenderdaten"
 msgstr "Export your calendar data."
 
-#: calendar/views/export.inc.php:155
+#: calendar/views/export.inc.php:171
 msgid ""
 "Es werden nur Termine von Veranstaltungen exportiert, die zuvor im Menüpunkt "
 "\"Veranstaltungstermine\" ausgewählt wurden."
@@ -776,91 +782,91 @@ msgstr ""
 "Only those course appointments will be exported, which were selected under "
 "the menu tab \"Course appointments\" beforehand."
 
-#: calendar/views/export.inc.php:157
+#: calendar/views/export.inc.php:173
 msgid "Bitte w&auml;hlen Sie, welche Termine exportiert werden sollen:"
 msgstr "Please select which appointments should be exported:"
 
-#: calendar/views/export.inc.php:160
+#: calendar/views/export.inc.php:176
 msgid "Nur meine pers&ouml;nlichen Termine"
 msgstr "only my personal appointments"
 
-#: calendar/views/export.inc.php:162
+#: calendar/views/export.inc.php:178
 msgid "Nur meine Veranstaltungstermine"
 msgstr "only my course appointments"
 
-#: calendar/views/export.inc.php:164 calendar/views/export.inc.php:173
+#: calendar/views/export.inc.php:180 calendar/views/export.inc.php:189
 msgid "Alle Termine"
 msgstr "All appointments"
 
-#: calendar/views/export.inc.php:168
+#: calendar/views/export.inc.php:184
 msgid "Geben Sie an, aus welchem Zeitbereich Termine exportiert werden sollen:"
 msgstr ""
 "Please enter from which time period the appointments should be exported."
 
-#: calendar/views/export.inc.php:179
+#: calendar/views/export.inc.php:195
 #, c-format
 msgid "Nur Termine vom:%sbis zum:"
 msgstr "Only appointments from: %s until:"
 
-#: calendar/views/export.inc.php:200
+#: calendar/views/export.inc.php:216
 msgid "Importieren Ihrer Kalenderdaten"
 msgstr "Import your calendar data"
 
-#: calendar/views/export.inc.php:204
+#: calendar/views/export.inc.php:220
 msgid ""
 "Sie k&ouml;nnen Termine importieren, die sich in einer iCalendar-Datei "
 "befinden."
 msgstr "You can import appointments which are in a iCalendar file."
 
-#: calendar/views/export.inc.php:205 calendar/views/export.inc.php:218
+#: calendar/views/export.inc.php:221 calendar/views/export.inc.php:234
 msgid "Klicken Sie auf \"Durchsuchen\", um eine Datei auszuwählen."
 msgstr "Click on \"Browse\" to select a file."
 
-#: calendar/views/export.inc.php:213
+#: calendar/views/export.inc.php:229
 msgid "Synchronisieren Ihrer Kalenderdaten"
 msgstr "Synchronise your calendar data"
 
-#: calendar/views/export.inc.php:217
+#: calendar/views/export.inc.php:233
 msgid ""
 "Sie k&ouml;nnen Termine synchronisieren, die sich in einer iCalendar-Datei "
 "befinden."
 msgstr "You can synchronise appointments which are in a iCalendar file."
 
-#: calendar/views/export.inc.php:227
+#: calendar/views/export.inc.php:243
 #, c-format
 msgid "Es wurden %s Termine importiert."
 msgstr "%s appointments have been imported."
 
-#: calendar/views/export.inc.php:232
+#: calendar/views/export.inc.php:248
 msgid "Es wurden keine Termine importiert."
 msgstr "No appointments have been imported."
 
-#: calendar/views/export.inc.php:242
+#: calendar/views/export.inc.php:258
 msgid ""
 "Sie k&ouml;nnen Termindaten importieren, exportieren und synchronisieren."
 msgstr "You can import, export and synchronise appointment data."
 
-#: calendar/views/export.inc.php:279
+#: calendar/views/export.inc.php:295
 msgid "Der Export konnte nicht durchgef&uuml;hrt werden!"
 msgstr "The export could not be carried out!"
 
-#: calendar/views/export.inc.php:306 calendar/views/export.inc.php:318
+#: calendar/views/export.inc.php:322 calendar/views/export.inc.php:334
 msgid "Der Import konnte nicht durchgef&uuml;hrt werden!"
 msgstr "The import could not be carried out!"
 
-#: calendar/views/export.inc.php:314
+#: calendar/views/export.inc.php:330
 msgid "Der Import wurde erfolgreich durchgef&uuml;hrt!"
 msgstr "The import was successfully carried out!"
 
-#: calendar/views/export.inc.php:319
+#: calendar/views/export.inc.php:335
 msgid "Die zu importierende Datei enth&auml;lt zuviele Termine."
 msgstr "The file to import contains too many appointments."
 
-#: calendar/views/export.inc.php:342
+#: calendar/views/export.inc.php:358
 msgid "Die Synchronisation konnte nicht durgef&uuml;hrt werden!"
 msgstr "The synchronisation could not be carried out!"
 
-#: calendar/views/export.inc.php:353
+#: calendar/views/export.inc.php:369
 msgid "Die Synchronisation wurde erfolgreich durchgef&uuml;hrt!"
 msgstr "The synchronisation was successfully carried out!"
 

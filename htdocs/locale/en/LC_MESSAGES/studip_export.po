@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: studip_export\n"
-"POT-Creation-Date: 2004-02-15 14:50+0100\n"
+"POT-Creation-Date: 2004-03-23 19:29+0100\n"
 "PO-Revision-Date: 2004-02-15 14:22+GMT\n"
 "Last-Translator: \n"
 "Language-Team:  <de@li.org>\n"
@@ -39,7 +39,7 @@ msgstr "An error has occurred"
 #: export/export_choose_xslt.inc.php:210 export/export_choose_xslt.inc.php:267
 #: export/export_run_fop.inc.php:49 export/export_run_fop.inc.php:119
 #: export/export_run_xslt.inc.php:61 export/export_run_xslt.inc.php:158
-#: export/export_start.inc.php:144 export/export_xml.inc.php:50
+#: export/export_start.inc.php:147 export/export_xml.inc.php:50
 #: export/export_xml.inc.php:137
 msgid "Information:"
 msgstr "Information:"
@@ -81,7 +81,7 @@ msgstr "This page prepares the data for export. %s Step 1/3 %s"
 
 #: export/export_choose_xslt.inc.php:149 export/export_choose_xslt.inc.php:219
 #: export/export_choose_xslt.inc.php:276 export/export_run_fop.inc.php:128
-#: export/export_run_xslt.inc.php:168 export/export_start.inc.php:153
+#: export/export_run_xslt.inc.php:168 export/export_start.inc.php:156
 #: export/export_xml.inc.php:148
 msgid "Aktionen:"
 msgstr "Actions:"
@@ -319,45 +319,45 @@ msgstr "This is the finished export file."
 msgid "Um die Ausgabe-Datei herunterzuladen, klicken Sie %shier%s."
 msgstr "In order to download the export file, click %shere%s."
 
-#: export/export_start.inc.php:32
+#: export/export_start.inc.php:34
 msgid "Datenexport - Startseite"
 msgstr "Export data - Start page"
 
-#: export/export_start.inc.php:34
+#: export/export_start.inc.php:36
 msgid "Bitte wählen Sie Datenart und Einrichtung."
 msgstr "Please choose data type and institute."
 
-#: export/export_start.inc.php:38
+#: export/export_start.inc.php:40
 msgid "Bitte w&auml;hlen Sie eine Einrichtung: "
 msgstr "Please choose an institute:"
 
-#: export/export_start.inc.php:91
+#: export/export_start.inc.php:93
 msgid "Art der auszugebenden Daten: "
 msgstr "Type of data to be exported:"
 
-#: export/export_start.inc.php:96
+#: export/export_start.inc.php:98
 msgid "Veranstaltungsdaten"
 msgstr "Course data"
 
-#: export/export_start.inc.php:101
+#: export/export_start.inc.php:103
 msgid "MitarbeiterInnendaten"
 msgstr "Staff data"
 
-#: export/export_start.inc.php:110
+#: export/export_start.inc.php:112
 msgid ""
 "Aus welchem Semester sollen die Daten exportiert werden (f&uuml;r "
 "Veranstaltungsexport): "
 msgstr "From which semester should the data be exported (for course export)"
 
-#: export/export_start.inc.php:111
+#: export/export_start.inc.php:113
 msgid "Alle Semester"
 msgstr "All semesters"
 
-#: export/export_start.inc.php:123
+#: export/export_start.inc.php:126
 msgid "Welche Arten von Veranstaltungen sollen exportiert werden? "
 msgstr "What form of course should be exported?"
 
-#: export/export_start.inc.php:147
+#: export/export_start.inc.php:150
 #, c-format
 msgid ""
 "Dies ist das Stud.IP-Exportmodul. Mit diesem Modul k&ouml;nnen Sie Daten in "
@@ -366,7 +366,7 @@ msgstr ""
 "This is the Stud.IP export module. You can export data in the following "
 "formats using this module:%s."
 
-#: export/export_start.inc.php:155
+#: export/export_start.inc.php:158
 msgid ""
 "W&auml;hlen Sie die Art der Daten, die Sie exportieren wollen, und die "
 "Einrichtung, aus der die Daten gelesen werden sollen. Klicken Sie dann auf "
@@ -375,57 +375,57 @@ msgstr ""
 "Choose the type of data that you would like to export and the institute from "
 "which the data should be read. Then click on 'continue'."
 
-#: export/export_studipdata_func.inc.php:166
+#: export/export_studipdata_func.inc.php:168
 msgid "KEINE BERECHTIGUNG!"
 msgstr "NO AUTHORISATION!"
 
-#: export/export_studipdata_func.inc.php:170
+#: export/export_studipdata_func.inc.php:172
 msgid "Der gewählte Exportmodus wird nicht unterstützt."
 msgstr "The chosen export module is not supported."
 
-#: export/export_studipdata_func.inc.php:268
+#: export/export_studipdata_func.inc.php:275
 msgid "max."
 msgstr "max."
 
-#: export/export_studipdata_func.inc.php:268
+#: export/export_studipdata_func.inc.php:275
 msgid "erw."
 msgstr "exp."
 
-#: export/export_studipdata_func.inc.php:344
+#: export/export_studipdata_func.inc.php:351
 msgid "keiner Funktion oder Gruppe zugeordnet"
 msgstr "Not allocated to a function or group"
 
-#: export/export_studipdata_func.inc.php:353
+#: export/export_studipdata_func.inc.php:360
 msgid "Alle Studieng&auml;nge"
 msgstr "All programs of study"
 
-#: export/export_studipdata_func.inc.php:355
+#: export/export_studipdata_func.inc.php:362
 msgid "DozentInnen"
 msgstr "Lecturers"
 
-#: export/export_studipdata_func.inc.php:356
+#: export/export_studipdata_func.inc.php:363
 msgid "TutorInnen"
 msgstr "Tutors"
 
-#: export/export_studipdata_func.inc.php:357
-#: export/export_studipdata_func.inc.php:362
+#: export/export_studipdata_func.inc.php:364
+#: export/export_studipdata_func.inc.php:369
 msgid "AutorInnen"
 msgstr "Authors"
 
-#: export/export_studipdata_func.inc.php:358
-#: export/export_studipdata_func.inc.php:363
+#: export/export_studipdata_func.inc.php:365
+#: export/export_studipdata_func.inc.php:370
 msgid "LeserInnen"
 msgstr "Readers"
 
-#: export/export_studipdata_func.inc.php:360
+#: export/export_studipdata_func.inc.php:367
 msgid "LeiterInnen"
 msgstr "Co-ordinators"
 
-#: export/export_studipdata_func.inc.php:361
+#: export/export_studipdata_func.inc.php:368
 msgid "Mitglieder"
 msgstr "Members"
 
-#: export/export_xml_func.inc.php:10
+#: export/export_xml_func.inc.php:14
 msgid "Alle Einrichtungen"
 msgstr "All institutes"
 

@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2004-02-15 14:50+0100\n"
+"POT-Creation-Date: 2004-03-23 19:29+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -875,8 +875,8 @@ msgstr ""
 
 #: extern/modules/ExternModuleLecturedetails.class.php:77
 #: extern/modules/ExternModuleLecturestable.class.php:72
-#: extern/modules/views/ExternSemBrowse.class.php:18
-#: extern/modules/views/ExternSemBrowseTable.class.php:18
+#: extern/modules/views/ExternSemBrowse.class.php:22
+#: extern/modules/views/ExternSemBrowseTable.class.php:22
 #: extern/elements/main/ExternElementMainLectures.class.php:78
 #: extern/elements/main/ExternElementMainLectures.class.php:117
 #: extern/elements/main/ExternElementMainLectures.class.php:221
@@ -904,8 +904,8 @@ msgid "Ort"
 msgstr ""
 
 #: extern/modules/ExternModuleLecturedetails.class.php:82
-#: extern/modules/views/ExternSemBrowse.class.php:16
-#: extern/modules/views/ExternSemBrowseTable.class.php:16
+#: extern/modules/views/ExternSemBrowse.class.php:20
+#: extern/modules/views/ExternSemBrowseTable.class.php:20
 #: extern/elements/main/ExternElementMainLectures.class.php:78
 #: extern/elements/main/ExternElementMainLectures.class.php:117
 #: extern/elements/main/ExternElementMainLectures.class.php:221
@@ -989,12 +989,12 @@ msgstr ""
 #: extern/modules/ExternModuleLecturedetails.class.php:288
 #: extern/modules/views/lecturedetails_preview.inc.php:23
 #: extern/modules/views/lecturedetails_preview.inc.php:38
-#: extern/modules/views/lectures_preview.inc.php:38
-#: extern/modules/views/lectures_preview.inc.php:53
+#: extern/modules/views/lectures_preview.inc.php:40
+#: extern/modules/views/lectures_preview.inc.php:55
 #: extern/modules/views/lecturestable_preview.inc.php:49
 #: extern/modules/views/lecturestable_preview.inc.php:64
 #: extern/modules/views/news_preview.inc.php:30
-#: extern/modules/views/persondetails_preview.inc.php:85
+#: extern/modules/views/persondetails_preview.inc.php:86
 #: extern/elements/main/ExternElementMainDownload.class.php:138
 #: extern/elements/main/ExternElementMainGlobal.class.php:148
 #: extern/elements/main/ExternElementMainLecturedetails.class.php:173
@@ -1008,11 +1008,11 @@ msgstr ""
 
 #: extern/modules/ExternModuleLecturedetails.class.php:291
 #: extern/modules/views/lecturedetails_preview.inc.php:26
-#: extern/modules/views/lectures_preview.inc.php:41
+#: extern/modules/views/lectures_preview.inc.php:43
 #: extern/modules/views/lecturestable_preview.inc.php:52
 #: extern/modules/views/news_preview.inc.php:33
 #: extern/modules/views/news_preview.inc.php:48
-#: extern/modules/views/persondetails_preview.inc.php:88
+#: extern/modules/views/persondetails_preview.inc.php:89
 #: extern/elements/main/ExternElementMainDownload.class.php:138
 #: extern/elements/main/ExternElementMainGlobal.class.php:148
 #: extern/elements/main/ExternElementMainLecturedetails.class.php:173
@@ -1026,10 +1026,10 @@ msgstr ""
 
 #: extern/modules/ExternModuleLecturedetails.class.php:294
 #: extern/modules/views/lecturedetails_preview.inc.php:29
-#: extern/modules/views/lectures_preview.inc.php:44
+#: extern/modules/views/lectures_preview.inc.php:46
 #: extern/modules/views/lecturestable_preview.inc.php:55
 #: extern/modules/views/news_preview.inc.php:36
-#: extern/modules/views/persondetails_preview.inc.php:91
+#: extern/modules/views/persondetails_preview.inc.php:92
 #: extern/elements/main/ExternElementMainDownload.class.php:138
 #: extern/elements/main/ExternElementMainGlobal.class.php:148
 #: extern/elements/main/ExternElementMainLecturedetails.class.php:173
@@ -1044,11 +1044,11 @@ msgstr ""
 #: extern/modules/ExternModuleLecturedetails.class.php:297
 #: extern/modules/ExternModuleLecturedetails.class.php:303
 #: extern/modules/views/lecturedetails_preview.inc.php:32
-#: extern/modules/views/lectures_preview.inc.php:47
+#: extern/modules/views/lectures_preview.inc.php:49
 #: extern/modules/views/lecturestable_preview.inc.php:58
 #: extern/modules/views/news_preview.inc.php:39
-#: extern/modules/views/persondetails_preview.inc.php:94
-#: extern/modules/views/persondetails_preview.inc.php:100
+#: extern/modules/views/persondetails_preview.inc.php:95
+#: extern/modules/views/persondetails_preview.inc.php:101
 #: extern/elements/main/ExternElementMainDownload.class.php:139
 #: extern/elements/main/ExternElementMainGlobal.class.php:149
 #: extern/elements/main/ExternElementMainLecturedetails.class.php:174
@@ -1062,10 +1062,10 @@ msgstr ""
 
 #: extern/modules/ExternModuleLecturedetails.class.php:300
 #: extern/modules/views/lecturedetails_preview.inc.php:35
-#: extern/modules/views/lectures_preview.inc.php:50
+#: extern/modules/views/lectures_preview.inc.php:52
 #: extern/modules/views/lecturestable_preview.inc.php:61
 #: extern/modules/views/news_preview.inc.php:42
-#: extern/modules/views/persondetails_preview.inc.php:97
+#: extern/modules/views/persondetails_preview.inc.php:98
 #: extern/elements/main/ExternElementMainDownload.class.php:139
 #: extern/elements/main/ExternElementMainGlobal.class.php:149
 #: extern/elements/main/ExternElementMainLecturedetails.class.php:174
@@ -1089,8 +1089,8 @@ msgstr ""
 
 #: extern/modules/ExternModuleLecturedetails.class.php:310
 #: extern/modules/views/lecturedetails_preview.inc.php:45
-#: extern/modules/views/lectures_preview.inc.php:32
 #: extern/modules/views/lectures_preview.inc.php:34
+#: extern/modules/views/lectures_preview.inc.php:36
 #: extern/modules/views/lecturestable_preview.inc.php:31
 #: extern/modules/views/lecturestable_preview.inc.php:33
 msgid "Di. 8:30 - 13:30, Mi. 8:30 - 13:30, Do. 8:30 - 13:30"
@@ -1253,8 +1253,8 @@ msgstr ""
 msgid "Email-Link"
 msgstr ""
 
-#: extern/modules/views/ExternSemBrowse.class.php:17
-#: extern/modules/views/ExternSemBrowseTable.class.php:17
+#: extern/modules/views/ExternSemBrowse.class.php:21
+#: extern/modules/views/ExternSemBrowseTable.class.php:21
 #: extern/elements/main/ExternElementMainLectures.class.php:78
 #: extern/elements/main/ExternElementMainLectures.class.php:117
 #: extern/elements/main/ExternElementMainLectures.class.php:221
@@ -1264,8 +1264,8 @@ msgstr ""
 msgid "Bereich"
 msgstr ""
 
-#: extern/modules/views/ExternSemBrowse.class.php:19
-#: extern/modules/views/ExternSemBrowseTable.class.php:19
+#: extern/modules/views/ExternSemBrowse.class.php:23
+#: extern/modules/views/ExternSemBrowseTable.class.php:23
 #: extern/elements/main/ExternElementMainLectures.class.php:79
 #: extern/elements/main/ExternElementMainLectures.class.php:118
 #: extern/elements/main/ExternElementMainLectures.class.php:221
@@ -1275,8 +1275,8 @@ msgstr ""
 msgid "Typ"
 msgstr ""
 
-#: extern/modules/views/ExternSemBrowse.class.php:20
-#: extern/modules/views/ExternSemBrowseTable.class.php:20
+#: extern/modules/views/ExternSemBrowse.class.php:24
+#: extern/modules/views/ExternSemBrowseTable.class.php:24
 #: extern/elements/main/ExternElementMainLectures.class.php:79
 #: extern/elements/main/ExternElementMainLectures.class.php:118
 #: extern/elements/main/ExternElementMainLectures.class.php:221
@@ -1286,30 +1286,30 @@ msgstr ""
 msgid "Einrichtung"
 msgstr ""
 
-#: extern/modules/views/ExternSemBrowse.class.php:26
-#: extern/modules/views/ExternSemBrowseTable.class.php:25
+#: extern/modules/views/ExternSemBrowse.class.php:30
+#: extern/modules/views/ExternSemBrowseTable.class.php:29
 #, c-format
 msgid "vor dem %s"
 msgstr ""
 
-#: extern/modules/views/ExternSemBrowse.class.php:299
-#: extern/modules/views/ExternSemBrowseTable.class.php:257
+#: extern/modules/views/ExternSemBrowse.class.php:303
+#: extern/modules/views/ExternSemBrowseTable.class.php:261
 msgid "unbegrenzt"
 msgstr ""
 
-#: extern/modules/views/lectures_preview.inc.php:29
+#: extern/modules/views/lectures_preview.inc.php:31
 msgid "Name der Veranstaltung 1"
 msgstr ""
 
-#: extern/modules/views/lectures_preview.inc.php:30
+#: extern/modules/views/lectures_preview.inc.php:32
 msgid "Name der Veranstaltung 2"
 msgstr ""
 
-#: extern/modules/views/lectures_preview.inc.php:31
+#: extern/modules/views/lectures_preview.inc.php:33
 msgid "Name der Veranstaltung 3"
 msgstr ""
 
-#: extern/modules/views/lectures_preview.inc.php:33
+#: extern/modules/views/lectures_preview.inc.php:35
 #: extern/modules/views/lecturestable_preview.inc.php:32
 msgid ""
 "Termine am 31.7. 14:00 - 16:00, 17.8. 11:00 - 14:30, 6.9. 14:00 - 16:00,..."
@@ -1368,108 +1368,108 @@ msgstr ""
 msgid "Meyer"
 msgstr ""
 
-#: extern/modules/views/persondetails_preview.inc.php:36
+#: extern/modules/views/persondetails_preview.inc.php:37
 msgid "Das ist mein Lebenslauf."
 msgstr ""
 
-#: extern/modules/views/persondetails_preview.inc.php:39
+#: extern/modules/views/persondetails_preview.inc.php:40
 msgid "Das sind meine Arbeitsschwerpunkte."
 msgstr ""
 
-#: extern/modules/views/persondetails_preview.inc.php:42
+#: extern/modules/views/persondetails_preview.inc.php:43
 msgid "Das sind meine Publikationen."
 msgstr ""
 
-#: extern/modules/views/persondetails_preview.inc.php:45
+#: extern/modules/views/persondetails_preview.inc.php:46
 msgid "Das ist News Nr. 1"
 msgstr ""
 
-#: extern/modules/views/persondetails_preview.inc.php:46
+#: extern/modules/views/persondetails_preview.inc.php:47
 msgid "News Nr. 1"
 msgstr ""
 
-#: extern/modules/views/persondetails_preview.inc.php:47
+#: extern/modules/views/persondetails_preview.inc.php:48
 msgid "Das ist News Nr. 2"
 msgstr ""
 
-#: extern/modules/views/persondetails_preview.inc.php:48
+#: extern/modules/views/persondetails_preview.inc.php:49
 msgid "News Nr. 2"
 msgstr ""
 
-#: extern/modules/views/persondetails_preview.inc.php:49
+#: extern/modules/views/persondetails_preview.inc.php:50
 msgid "Das ist News Nr. 3"
 msgstr ""
 
-#: extern/modules/views/persondetails_preview.inc.php:50
+#: extern/modules/views/persondetails_preview.inc.php:51
 msgid "News Nr. 3"
 msgstr ""
 
-#: extern/modules/views/persondetails_preview.inc.php:58
+#: extern/modules/views/persondetails_preview.inc.php:59
 msgid "Das ist der erste Termin"
 msgstr ""
 
-#: extern/modules/views/persondetails_preview.inc.php:59
+#: extern/modules/views/persondetails_preview.inc.php:60
 msgid "Das ist der zweite Termin"
 msgstr ""
 
-#: extern/modules/views/persondetails_preview.inc.php:60
+#: extern/modules/views/persondetails_preview.inc.php:61
 msgid "Das ist der dritte Termin"
 msgstr ""
 
-#: extern/modules/views/persondetails_preview.inc.php:61
+#: extern/modules/views/persondetails_preview.inc.php:62
 msgid "Erster Termin"
 msgstr ""
 
-#: extern/modules/views/persondetails_preview.inc.php:62
+#: extern/modules/views/persondetails_preview.inc.php:63
 msgid "Zweiter Termin"
 msgstr ""
 
-#: extern/modules/views/persondetails_preview.inc.php:63
+#: extern/modules/views/persondetails_preview.inc.php:64
 msgid "dritter Termin "
 msgstr ""
 
-#: extern/modules/views/persondetails_preview.inc.php:66
 #: extern/modules/views/persondetails_preview.inc.php:67
+#: extern/modules/views/persondetails_preview.inc.php:68
 msgid "Eigene Kategorie"
 msgstr ""
 
-#: extern/modules/views/persondetails_preview.inc.php:74
+#: extern/modules/views/persondetails_preview.inc.php:75
 msgid "Veranstaltung 1"
 msgstr ""
 
-#: extern/modules/views/persondetails_preview.inc.php:75
+#: extern/modules/views/persondetails_preview.inc.php:76
 msgid "Veranstaltung 2"
 msgstr ""
 
-#: extern/modules/views/persondetails_preview.inc.php:76
+#: extern/modules/views/persondetails_preview.inc.php:77
 msgid "Veranstaltung 3"
 msgstr ""
 
-#: extern/modules/views/persondetails_preview.inc.php:77
+#: extern/modules/views/persondetails_preview.inc.php:78
 msgid "Untertitel der Veranstaltung 1"
 msgstr ""
 
-#: extern/modules/views/persondetails_preview.inc.php:78
+#: extern/modules/views/persondetails_preview.inc.php:79
 msgid "Untertitel der Veranstaltung 2"
 msgstr ""
 
-#: extern/modules/views/persondetails_preview.inc.php:79
+#: extern/modules/views/persondetails_preview.inc.php:80
 msgid "Untertitel der Veranstaltung 3"
 msgstr ""
 
-#: extern/modules/views/persondetails_preview.inc.php:103
+#: extern/modules/views/persondetails_preview.inc.php:104
 msgid "Mustereinrichtung"
 msgstr ""
 
-#: extern/modules/views/persondetails_preview.inc.php:104
+#: extern/modules/views/persondetails_preview.inc.php:105
 msgid "Musterstra&szlig;e"
 msgstr ""
 
-#: extern/modules/views/persondetails_preview.inc.php:105
+#: extern/modules/views/persondetails_preview.inc.php:106
 msgid "12345 Musterstadt"
 msgstr ""
 
-#: extern/modules/views/persondetails_preview.inc.php:111
+#: extern/modules/views/persondetails_preview.inc.php:112
 msgid "Mo. und Do. 12.00 - 13.00"
 msgstr ""
 
