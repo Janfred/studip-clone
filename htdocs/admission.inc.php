@@ -213,35 +213,106 @@ function renumber_admission ($seminar_id, $send_message=TRUE) {
 
 
 
-/* Helper-Function for grouped admissions */
-function group_update_admission($seminar_id, $send_message=TRUE, $user_id, $username) {
+/* 
+ * Helper-Functions for grouped admissions
+ * Grouped seminars MUST HAVE chronologically admission-procedure activated!
+ */
+function check_group($user_id, $username, $grouped_sems, $cur_name, $cur_id) {
+
+	global $send_message;
+
+	$db = new DB_Seminar;
+	$db2 = new DB_Seminar;
+	$db3 = new DB_Seminar;
+	$messaging = new messaging;
+
+	//crunch array into sql_statement
+	$sql = "";
+	while ($elem = array_pop($grouped_sems)) {
+		if ($sql != "") $sql .= " OR ";
+		$sql .= "(Seminar_id = '$elem')";
+	}
+	$db->query("SELECT * FROM seminar_user WHERE user_id = '$user_id' AND ($sql);");
+	if ($db->num_rows() != 0) {
+		$db->next_record();
+		$db2->query("DELETE FROM seminar_user WHERE user_id = '$user_id' AND Seminar_id = '".$db->f("Seminar_id")."';");
+		if ($db2->affected_rows()) {
+			$db3->query("SELECT Name FROM seminare WHERE Seminar_id = '".$db->f("Seminar_id")."';");
+			$db3->next_record();
+			setTempLanguage($db->f("user_id"));
+			$message = sprintf (_("Ihr Abonnement der Veranstaltung **%s (%s)** wurde aufgehoben, da Sie in der Veranstaltung **%s (%s)** von der Warteliste nachgerückt sind. Bei diesen Veranstaltungen handelt sich um gruppierte Veranstaltungen, der Wartelisteneintrag wurde somit bevorzugt behandelt."),$db3->f("Name") ,view_turnus($db->f("Seminar_id")),$cur_name, view_turnus($cur_id));
+			restoreLanguage();
+			$messaging->insert_message(addslashes($message), $username, "____%system%____", FALSE, FALSE, "1");
+			update_admission($db->f("Seminar_id"), $send_message);
+		}
+	}
+}
+
+function group_update_admission($seminar_id, $send_message = TRUE) {
 
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
 	$db3=new DB_Seminar;
+	$db4=new DB_Seminar;
+	$db5=new DB_Seminar;
 	$messaging=new messaging;
 
-	//check if seminar ist grouped
-	$db->query("SELECT start_time, duration_time, admission_group, Name FROM seminare WHERE Seminar_id='$seminar_id'");
+	//get date / check if there is any admission
+	$db->query("SELECT * FROM seminare WHERE Seminar_id = '$seminar_id' ");
 	$db->next_record();
+
+	//Groups exist only for chronological admissions
+	if ($db->f("admission_type") != 2) return;
+	
+	//check if seminar ist grouped
 	if ($db->f("admission_group")) {
-		//check if already in another seminar
-		$db2->query("SELECT seminare.Seminar_id, seminare.Name FROM seminare, seminar_user WHERE seminare.admission_group='".$db->f("admission_group")."' AND seminare.Seminar_id = seminar_user.Seminar_id AND seminar_user.user_id='$user_id'");
-		if ($db2->next_record()) {
-			//remove from other seminar
-			$db3->query("DELETE FROM seminar_user WHERE Seminar_id='".$db2->f("Seminar_id")."' AND user_id='$user_id'");
-			//send a message if necessary
-			if ($send_message) {
-				setTempLanguage($user_id);
-				$message = sprintf (_("Sie wurden aus der Veranstaltung **%s (%s)** gelöscht, da Sie in einer anderen Veranstaltung dieser Gruppe von der Warteliste in die Teilnehmerliste aufgestiegen sind."), $db2->f("Name"), view_turnus($db2->f("Seminar_id")));
-				restoreLanguage();
-				$messaging->insert_message(addslashes($message), $username, "____%system%____", FALSE, FALSE, "1");
-			}
-		//there was a change on the list of participants if the other seminar, so we have to update this seminar, maybe we can someone new put into the seminar
-		update_admission($db2->f("Seminar_id"), $send_message);
+		$db2->query("SELECT * FROM seminare WHERE admission_group = '".$db->f("admission_group")."' AND Seminar_id <> '".$db->f("Seminar_id")."';");
+		$grouped_seminars = array();
+		while ($db2->next_record()) {
+			$grouped_seminars[] = $db2->f("Seminar_id");
+		}
+		//if no more contingents, just fill up
+		if ($db->f("admission_selection_take_place")) {
+			//anzahl der freien Plaetze holen
+			$count=get_free_admission($seminar_id);
+
+			//Studis auswaehlen, die jetzt aufsteigen koennen
+			$db3->query("SELECT admission_seminar_user.user_id, username, studiengang_id FROM admission_seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE seminar_id =  '".$db->f("Seminar_id")."' AND status != 'accepted' ORDER BY position LIMIT $count");
+			while ($db3->next_record()) {
+				//First we check to parse the grouped seminars
+				check_group($db3->f("user_id"),$db3->f("username"),$grouped_seminars,$db->f("Name"),$db->f("Seminar_id"));
+      }	
+		} else {
+	    //Alle zugelassenen Studiengaenge einzeln bearbeiten
+  	  $db2->query("SELECT studiengang_id, quota FROM admission_seminar_studiengang WHERE seminar_id = '".$db->f("Seminar_id")."' ");
+	    while ($db2->next_record()) {
+	      //Wenn Kontingent "alle" bearbeitet wird, wird die Teilnehmerzahl aus den anderen Kontingenten gebildet
+  	    if ($db2->f("studiengang_id") == "all")
+	        $tmp_admission_quota=get_all_quota($db->f("Seminar_id"));
+	      else
+	        $tmp_admission_quota=round ($db->f("admission_turnout") * ($db2->f("quota") / 100));
+	      //belegte Plaetze zaehlen
+	      $db3->query("SELECT user_id FROM seminar_user WHERE Seminar_id =  '".$db->f("Seminar_id")."' AND admission_studiengang_id ='".$db2->f("studiengang_id")."' ");
+	      $db5->query("SELECT user_id FROM admission_seminar_user WHERE seminar_id = '".$db->f("Seminar_id")."' AND status = 'accepted' AND studiengang_id = '".$db2->f("studiengang_id")."'");
+	      $free_quota=$tmp_admission_quota - $db3->num_rows() - $db5->num_rows();
+	      //Studis auswaehlen, die jetzt aufsteigen koennen
+	      $db4->query("SELECT admission_seminar_user.user_id, username, studiengang_id FROM admission_seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE seminar_id =  '".$db->f("Seminar_id")."' AND studiengang_id = '".$db2->f("studiengang_id")."' AND status != 'accepted' ORDER BY position LIMIT $free_quota");
+	      while ($db4->next_record()) {
+    			check_group($db4->f("user_id"),$db4->f("username"),$grouped_seminars,$db->f("Name"),$db->f("Seminar_id"));
+      	}
+    	}
 		}
 	}
 
+}
+
+/*
+ * This function is a kind of wrapper, so that no nasty loops between the updaters occur
+ *
+ **/
+function update_admission ($seminar_id, $send_message = TRUE) {
+	group_update_admission($seminar_id, $send_message);
+	normal_update_admission($seminar_id, $send_message);
 }
 
 /**
@@ -254,7 +325,7 @@ function group_update_admission($seminar_id, $send_message=TRUE, $user_id, $user
 * @param		boolean	send_message		should a system-message be send?
 *
 */
-function update_admission ($seminar_id, $send_message=TRUE) {
+function normal_update_admission($seminar_id, $send_message = TRUE) {
 
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
@@ -281,7 +352,6 @@ function update_admission ($seminar_id, $send_message=TRUE) {
 		//Studis auswaehlen, die jetzt aufsteigen koennen
 		$db3->query("SELECT admission_seminar_user.user_id, username, studiengang_id FROM admission_seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE seminar_id =  '".$db->f("Seminar_id")."' AND status != 'accepted' ORDER BY position LIMIT $count");
 		while ($db3->next_record()) {
-			group_update_admission($seminar_id,$send_message,$db3->f("user_id"),$db3->f("username")); //controll grouped
 			$group = select_group ($db->f("start_time"), $db3->f("user_id")); //ok, here ist the "colored-group" meant (for grouping on meine_seminare), not the grouped seminars as above!
 			if (!$sem_preliminary) {
 				$db4->query("INSERT INTO seminar_user SET user_id = '".$db3->f("user_id")."', Seminar_id = '".$db->f("Seminar_id")."', status= 'autor', gruppe = '$group', admission_studiengang_id = '".$db3->f("studiengang_id")."', mkdate = '".time()."' ");
@@ -325,7 +395,6 @@ function update_admission ($seminar_id, $send_message=TRUE) {
 			//Studis auswaehlen, die jetzt aufsteigen koennen
 			$db4->query("SELECT admission_seminar_user.user_id, username, studiengang_id FROM admission_seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE seminar_id =  '".$db->f("Seminar_id")."' AND studiengang_id = '".$db2->f("studiengang_id")."' AND status != 'accepted' ORDER BY position LIMIT $free_quota");
 			while ($db4->next_record()) {
-				group_update_admission($seminar_id,$send_message,$db4->f("user_id"),$db4->f("username")); //controll grouped
 				$group = select_group ($db->f("start_time"), $db4->f("user_id")); //ok, here ist the "colored-group" meant (for grouping on meine_seminare), not the grouped seminars as above!
 				if (!$sem_preliminary) {
 					$db5->query("INSERT INTO seminar_user SET user_id = '".$db4->f("user_id")."', Seminar_id = '".$db->f("Seminar_id")."', status= 'autor', gruppe = '$group', admission_studiengang_id = '".$db2->f("studiengang_id")."', mkdate = '".time()."' ");
@@ -374,7 +443,7 @@ function check_admission ($send_message=TRUE) {
 	$messaging=new messaging;
 
 	//Daten holen / Abfrage ob ueberhaupt begrenzt
-	$db->query("SELECT Seminar_id, Name, admission_endtime, admission_turnout, admission_type, start_time FROM seminare WHERE admission_endtime <= '".time()."' AND admission_type > 0 AND (admission_selection_take_place = '0' OR admission_selection_take_place IS NULL) ");
+	$db->query("SELECT Seminar_id, Name, admission_endtime, admission_turnout, admission_type, start_time FROM seminare WHERE admission_endtime <= '".time()."' AND admission_type > 0 AND (admission_selection_take_place = '0' OR admission_selection_take_place IS NULL)"); // OK_VISIBLE
 	while ($db->next_record()) {
 
 		$db2->query("SELECT Name,admission_prelim FROM seminare WHERE Seminar_id='".$db->f("Seminar_id")."'");
@@ -447,7 +516,7 @@ function check_admission ($send_message=TRUE) {
 		$db2->query("UPDATE seminare SET admission_selection_take_place ='1' WHERE Seminar_id = '".$db->f("Seminar_id")."' ");
 
 		//evtl. verbliebene Plaetze auffuellen
-		update_admission($db->f("Seminar_id"), $send_message);
+		normal_update_admission($db->f("Seminar_id"), $send_message);
 
 		//User benachrichten (nur bei Losverfahren, da Warteliste erst waehrend des Losens generiert wurde).
 		if (($send_message) && ($db->f("admission_type") == '1')) {
