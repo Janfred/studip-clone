@@ -92,7 +92,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("doz
 		<tr><td class="blank"><a href="help/index.php" target="_new"><img src="pictures/forumrot.gif" border=0>&nbsp;Hilfe</a></td></tr>
 		</table>
 	</td>
-	<td class="blank" align="right" valign="top"><img src="pictures/board1.jpg" border="0"></td>
+	<td class="blank" align="right" valign="top" background="pictures/indexbild.jpg"><img src="pictures/blank.gif" width=240></td>
 </tr>
 </table>
 
@@ -150,7 +150,7 @@ ELSEIF ($auth->auth["perm"]=="dozent"){
 		<tr><td class="blank"><a href="help/index.php" target="_new"><img src="pictures/forumrot.gif" border=0>&nbsp;Hilfe</a></td></tr>
 		</table>
 	</td>
-	<td class="blank" align="right" valign="top"><img src="pictures/board1.jpg" border="0"></td>
+	<td class="blank" align="right" valign="top" background="pictures/indexbild.jpg"><img src="pictures/blank.gif" width=240></td>
 </tr>
 </table>
 
@@ -182,7 +182,7 @@ ELSEIF ($auth->auth["perm"]=="admin"){
 		<tr><td class="blank"><a href="new_user_md5.php"><img src="pictures/forumrot.gif" border=0>&nbsp;globale Benutzerverwaltung</a></td></tr>
 		</table>
 	</td>
-	<td class="blank" align="right" valign="top"><img src="pictures/board1.jpg" border="0"></td>
+	<td class="blank" align="right" valign="top" background="pictures/indexbild.jpg"><img src="pictures/blank.gif" width=240></td>
 </tr>
 </table>
 
@@ -213,7 +213,7 @@ ELSEIF ($perm->have_perm("root")){
 		<tr><td class="blank"><a href="auswahl_suche.php"><img src="pictures/forumrot.gif" border=0>&nbsp;Suchen</a><br />&nbsp; &nbsp; <font size="-1"><a href="browse.php">Personensuche</a>&nbsp;/&nbsp;<a href="sem_portal.php">Veranstaltungsuche</a></font></td></tr>
 		</table>
 	</td>
-	<td class="blank" align="right" valign="top"><img src="pictures/board1.jpg" border="0"></td>
+	<td class="blank" align="right" valign="top" background="pictures/indexbild.jpg"><img src="pictures/blank.gif" width=240></td>
 </tr>
 </table>
 
