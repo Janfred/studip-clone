@@ -168,7 +168,7 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
 
          
          $table = new HTML ("table");
-         $table->addAttr("class", "inday");
+         $table->addAttr("style", "font-size:1.2em;");
          $table->addAttr("width", "100%");
          $table->addAttr("border", "0");
          $tr = new HTML ("tr");
@@ -230,12 +230,14 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
 
    /* Show all active Votes ------------------------------------------------ */
    foreach ($activeVotes as $tmpVote) {
+
       $voteID = $tmpVote["voteID"];
+   
       if ($tmpVote["type"] == INSTANCEOF_TEST)
-	 $vote = &new TestVote ($voteID);
+         $vote = new TestVote ($voteID);
       else
-	 $vote = &new Vote ($voteID);
-	 
+         $vote = new Vote ($voteID);
+      
       if ($vote->isError ()) {
 	 echo createErrorReport ($vote, _("Fehler beim Einlesen des Votes"));
       }

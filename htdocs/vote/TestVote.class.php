@@ -131,7 +131,7 @@ class TestVote extends Vote {
     * @throws  error
     */
    function readVote () {
-      $result = $this->voteDB->getVote ($this->voteID);
+      $result = $this->voteDB->getVote ($this->objectID);
       $this->setCo_Visibility ($result["co_visibility"]);
       parent::readVote();
    }

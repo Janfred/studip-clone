@@ -214,12 +214,12 @@ class Vote extends StudipObject {
 
       /* Load an old Vote or create a new one ------------------------------ */
       if (empty ($oldVoteID)) {
-	 $this->objectID = md5 (uniqid (rand()));
+         $this->objectID = md5 (uniqid (rand()));
       } else {
-	 if (! $this->voteDB->isExistant ($oldVoteID))
-	    return $this->throwError (1, _("Die angegebene ID existiert nicht."));
-	 $this->objectID = $oldVoteID;
-	 $this->readVote ();	
+         if (! $this->voteDB->isExistant ($oldVoteID))
+            return $this->throwError (1, _("Die angegebene ID existiert nicht."));
+         $this->objectID = $oldVoteID;
+         $this->readVote ();	
       }
 
       $this->voteDB->setVote ($this);

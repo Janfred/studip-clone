@@ -61,6 +61,7 @@ $structure["_sonstiges"]=array (topKat=>"sonstiges", name=>_("Eigene Kategorien 
 $structure["news"]=array (topKat=>"tools", name=>_("News"), link=>"admin_news.php?range_id=self&username=$username", active=>FALSE);
 $structure["lit"]=array (topKat=>"tools", name=>_("Literatur"), link=>"admin_lit_list.php?_range_id=self&username=$username", active=>FALSE);
 $structure["vote"]=array (topKat=>"tools", name=>_("Votings und Tests"), link=>"admin_vote.php?page=overview&showrangeID=$username&username=$username", active=>FALSE);
+$structure["eval"]=array (topKat=>"tools", name=>_("Evaluationen"), link=>"admin_evaluation.php?rangeID=$username", active=>FALSE);
 
 $structure["allgemein"]=array (topKat=>"mystudip", name=>_("Allgemeines"), link=>"edit_about.php?view=allgemein&username=$username", active=>FALSE);
 $structure["forum"]=array (topKat=>"mystudip", name=>_("Forum"), link=>"edit_about.php?view=Forum&username=$username", active=>FALSE);
@@ -133,6 +134,9 @@ switch ($i_page) {
 	break;
 	case "admin_vote.php":
 		$reiter_view = "vote";
+	break;
+   case "admin_evaluation.php":
+		$reiter_view = "eval";
 	break;
 	default :
 		$reiter_view="alle";
