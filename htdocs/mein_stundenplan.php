@@ -248,14 +248,14 @@ while ($db->next_record())
 				settype ($data["start_stunde"], "integer");
 				settype ($data["end_stunde"], "integer");
 				settype ($data["start_minute"], "integer");
-				settype ($data["start_minute"], "integer");
+				settype ($data["end_minute"], "integer");
 					
 				//Check, ob die Endzeit ueber den sichtbaren Bereich des Stundenplans hinauslaeuft, wenn ja wird row_span entsprechend angepasst
 				if ($data["end_stunde"] >$global_end_time) {
 					$tmp_row_span = ((($global_end_time - $data["start_stunde"])+1) *4);
 					$tmp_row_span = $tmp_row_span - (int)($data["start_minute"] / 15);
 				} else 
-					$tmp_row_span = (($data["end_stunde"] - $data["start_stunde"]) * 4) + (int)(($data["end_minute"]-1) / 15);
+					$tmp_row_span = (($data["end_stunde"] - $data["start_stunde"]) * 4) + (int)(($data["end_minute"] - (($data['start_minute'] > 0) ? 60 - $data['start_minute']: 0) -1) / 15);
 
 				//Check, ob die Startzeit ueber den Sichtbaren Bereich hinauslaeuft, wenn ja wird row_span und der index entsprechend frisiert
 				if ($data["start_stunde"] < $global_start_time) {
