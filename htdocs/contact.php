@@ -20,11 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 // Default_Auth
-page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
-if ($perm->have_perm("admin")) {
-	$perm->perm_invalid($auth->auth["perm"], "");
-	exit;
-}
+page_open(array("sess" => "Seminar_Session", "auth" => "Seminar", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check("user");
 
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
@@ -47,6 +43,14 @@ echo "\n" . $cssSw->GetHoverJSFunction() . "\n";
 $cssSw->switchClass();
 
 include "links_openobject.inc.php";
+
+$sess->register("contact");
+
+if ($view) {
+	$contact["view"]=$view;
+}
+
+
 ?>
 <table width = "100%" cellspacing="0"><tr>
 	<td class="topic" width = "100%"><img src="pictures/nutzer.gif" border="0" align="texttop"><b>&nbsp; Mein Addressbuch</b>
@@ -89,7 +93,10 @@ echo "<a href=\"$PHP_SELF?open=all&filter=$filter\">Alle aufklappen</a>";
 
 // Buchstabenleiste
 
-if ($view!="gruppen") {
+echo $contact["view"];
+
+
+if (($contact["view"])=="alpha") {
 	echo "<table align=\"center\" ><tr>";
 	if (!$filter) {
 		$cssSw->switchClass();
@@ -114,7 +121,7 @@ if ($view!="gruppen") {
 	echo "</tr></table>";
 }
 
-if ($view=="gruppen") {
+if (($contact["view"])=="gruppen") {
 	echo "<table align=\"center\" ><tr>";
 	if (!$filter) {
 		$cssSw->switchClass();
@@ -152,6 +159,9 @@ if ($edit_id) {
 }
 
 echo "</td></tr></table>";
-print("</body></html>");
 
-?>
+page_close()
+
+ ?>
+</body>
+</html>

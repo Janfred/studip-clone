@@ -136,7 +136,7 @@ function ShowUserInfo ($user_id, $contact_id="")
 		}
 		$db->query ("SELECT sprechzeiten, raum, user_inst.telefon, user_inst.fax, Name, Institute.Institut_id FROM user_inst LEFT JOIN Institute USING(Institut_id) WHERE user_id = '$user_id' AND inst_perms != 'user'");	
 		while ($db->next_record()) {	
-			$userinfo["Institut"] = "<a href=\"institut_main.php?auswahl=".$db->f("Institut_id")."\">".$db->f("Name")."</a>";
+			$userinfo["Einrichtung"] = "<a href=\"institut_main.php?auswahl=".$db->f("Institut_id")."\">".$db->f("Name")."</a>";
 			if ($db->f("raum")!="")
 				$userinfo["Raum"] = $db->f("raum");
 			if ($db->f("sprechzeiten")!="")
@@ -181,6 +181,7 @@ function ShowContact ($contact_id)
 		if ($open == $db->f("user_id") || $open == "all") {
 			$lastrow =  	"<tr><td colspan=\"2\" class=\"steel1\" align=\"right\">"
 						."<a href=\"$PHP_SELF?cmd=delete&contact_id=$contact_id\"><img src=\"pictures/nutzer.gif\" border=\"0\"></a>&nbsp; "
+						."<a href=\"sms.php?sms_source_page=contact.php&cmd=write&rec_uname=".get_username($db->f("user_id"))."\"><img src=\"pictures/nachricht1.gif\" border=\"0\"></a>&nbsp; "
 						."<a href=\"$PHP_SELF?edit_id=$contact_id\"><img src=\"pictures/einst.gif\" border=\"0\"></a>&nbsp; "
 						."<a href=\"$PHP_SELF?cmd=delete&contact_id=$contact_id\"><img src=\"pictures/trash_att.gif\" border=\"0\"></a></td></tr>"
 						."<tr><td colspan=\"2\" class=\"steelgraulight\" align=\"center\"><a href=\"$PHP_SELF?filter=$filter\"><img src=\"pictures/forumgraurauf.gif\" border=\"0\"></a></td></tr>";

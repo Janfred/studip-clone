@@ -121,7 +121,7 @@ elseif ($i_page == "contact.php" || $i_page == "contact_statusgruppen.php"){
 	echo "<tr><td class=\"steel1\">&nbsp; &nbsp; ";	
 
 
-	?><img src="pictures/forumgrau.gif" border="0"><a class="links1"  href="contact.php">Alphabetisch&nbsp; &nbsp; </a><?
+	?><img src="pictures/forumgrau.gif" border="0"><a class="links1"  href="contact.php?view=alpha">Alphabetisch&nbsp; &nbsp; </a><?
 	?><img src="pictures/forumgrau.gif" border="0"><a class="links1"  href="contact.php?view=gruppen">Gruppenansicht&nbsp; &nbsp; </a><?
 	?><img src="pictures/forumgrau.gif" border="0"><a class="links1"  href="contact_statusgruppen.php">Gruppenverwaltung&nbsp; &nbsp; </a><?
 

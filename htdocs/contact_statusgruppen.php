@@ -28,7 +28,7 @@ include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Sessio
 
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
-
+include "contact.inc.php";
 
 require_once ($ABSOLUTE_PATH_STUDIP . "/config.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
@@ -83,47 +83,12 @@ function MovePersonStatusgruppe ($range_id, $AktualMembers="", $InstitutMembers=
 				InsertPersonStatusgruppe ($user_id, $statusgruppe_id);
 			}
 		}
-		if (isset($InstitutMembers) && $InstitutMembers != "---") {
-			$user_id = get_userid($InstitutMembers);
-			$writedone = InsertPersonStatusgruppe ($user_id, $statusgruppe_id);
-			if ($writedone ==TRUE) {
-				if ($workgroup_mode == TRUE) {
-					$globalperms = get_global_perm($user_id);
-					if ($globalperms == "tutor" || $globalperms == "dozent") {
-						$db->query("INSERT INTO seminar_user SET Seminar_id = '$range_id', user_id = '$user_id', status = 'tutor', gruppe = '6' , mkdate = '$mkdate'");
-					} else {
-						$db->query("INSERT INTO seminar_user SET Seminar_id = '$range_id', user_id = '$user_id', status = 'autor', gruppe = '6' , mkdate = '$mkdate'");
-					}
-				} else {
-					$db->query("INSERT INTO seminar_user SET Seminar_id = '$range_id', user_id = '$user_id', status = 'autor', gruppe = '6' , mkdate = '$mkdate'");
-				}
-			}
-		}
 		if ($Freesearch != "") {
 			for ($i  = 0; $i < sizeof($Freesearch); $i++) {
 				$user_id = get_userid($Freesearch[$i]);
 				$writedone = InsertPersonStatusgruppe ($user_id, $statusgruppe_id);
 				if ($writedone==TRUE) {
-					if ($_range_type == "sem") {
-						if ($workgroup_mode == TRUE) {
-							$globalperms = get_global_perm($user_id);
-							if ($globalperms == "tutor" || $globalperms == "dozent") {
-								$db2->query("INSERT INTO seminar_user SET Seminar_id = '$range_id', user_id = '$user_id', status = 'tutor', gruppe = '6' , mkdate = '$mkdate'");
-							} else {
-								$db2->query("INSERT INTO seminar_user SET Seminar_id = '$range_id', user_id = '$user_id', status = 'autor', gruppe = '6' , mkdate = '$mkdate'");
-							}
-						} else {
-							$db2->query("INSERT INTO seminar_user SET Seminar_id = '$range_id', user_id = '$user_id', status = 'autor', gruppe = '6' , mkdate = '$mkdate'");
-						}
-					} elseif ($_range_type == "inst" || $_range_type == "fak") {
-						$globalperms = get_global_perm($user_id);
-						if (get_perm($range_id, $user_id) =="fehler!") {
-							$db2->query("INSERT INTO user_inst SET Institut_id = '$range_id', user_id = '$user_id', inst_perms = '$globalperms'");
-						}
-						if (get_perm($range_id, $user_id) =="user") {
-							$db2->query("UPDATE user_inst SET inst_perms = '$globalperms' WHERE user_id = '$user_id' AND Institut_id = '$range_id'");
-						}
-					}
+					AddNewContact ($user_id);
 				}
 			}
 		}
@@ -313,9 +278,6 @@ function PrintAktualContacts ($range_id)
 	 	<form action="<? echo $PHP_SELF ?>?cmd=move_old_statusgruppe" method="POST">
 	 	<?
 	 	echo"<input type=\"HIDDEN\" name=\"range_id\" value=\"$range_id\">&nbsp; ";
-      	  	echo"<input type=\"HIDDEN\" name=\"view\" value=\"$view\"><font size=\"2\">Vorlagen:</font>&nbsp; ";
-		GetPresetGroups ($view,$veranstaltung_class); 
-		printf ("&nbsp; <input type=\"IMAGE\" src=\"./pictures/move.gif\" border=\"0\" %s>&nbsp;  ", tooltip("in Namensfeld übernehmen"));
 	        ?>
 	        </form>
 <?	}
@@ -330,10 +292,8 @@ function PrintAktualContacts ($range_id)
 	  	  echo"<input type=\"HIDDEN\" name=\"range_id\" value=\"$range_id\">";
   	      	  echo"<input type=\"HIDDEN\" name=\"view\" value=\"$view\">";
 	  	?>
-	        <font size="2">Gruppenname: </font>
-	        <input type="text" name="new_statusgruppe_name" value="<? echo htmlready(stripslashes($statusgruppe_name));?>">
-	        &nbsp; &nbsp; &nbsp; <font size="2">Gruppengr&ouml;&szlig;e:</font> 
-	        <input name="new_statusgruppe_size" type="text" value="" size="3">
+	        <font size="2">Addressbuchgruppe anlegen: </font>
+	        <input type="text" name="new_statusgruppe_name" value="Gruppenname">
 	        &nbsp; &nbsp; &nbsp; <b>Einf&uuml;gen</b>&nbsp; 
 	        <?
 	    	printf ("<input type=\"IMAGE\" name=\"add_new_statusgruppe\" src=\"./pictures/move_down.gif\" border=\"0\" value=\" neue Statusgruppe \" %s>&nbsp;  &nbsp; &nbsp; ", tooltip("neue Gruppe anlegen"));
@@ -347,7 +307,6 @@ function PrintAktualContacts ($range_id)
 		$db->query ("SELECT name, size FROM statusgruppen WHERE statusgruppe_id = '$edit_id'");
 		if ($db->next_record()) {
 			$gruppe_name = $db->f("name");
-			$gruppe_anzahl = $db->f("size");
 		}
 	  	  echo"<input type=\"HIDDEN\" name=\"range_id\" value=\"$range_id\">";
   	  	  echo"<input type=\"HIDDEN\" name=\"update_id\" value=\"$edit_id\">";
@@ -355,8 +314,6 @@ function PrintAktualContacts ($range_id)
 	  	?>
 	        <font size="2">neuer Gruppenname: </font>
 	        <input type="text" name="new_statusgruppe_name" value="<? echo htmlReady($gruppe_name);?>">
-	        &nbsp; &nbsp; &nbsp; <font size="2">neue Gruppengr&ouml;&szlig;e:</font> 
-	        <input name="new_statusgruppe_size" type="text" value="<? echo $gruppe_anzahl;?>" size="3">
 	        &nbsp; &nbsp; &nbsp; <b>&Auml;ndern</b>&nbsp; 
 	        <?
 	    	printf ("<input type=\"IMAGE\" name=\"add_new_statusgruppe\" src=\"./pictures/move_down.gif\" border=\"0\" value=\" neue Statusgruppe \" %s>&nbsp;  &nbsp; &nbsp; ", tooltip("Gruppe anpassen"));
@@ -393,7 +350,7 @@ if ($db->num_rows()>0) {   // haben wir schon Gruppen? dann Anzeige
 			PrintSearchResults($search_exp, $range_id);
 			printf ("<input type=\"IMAGE\" name=\"search\" src= \"./pictures/rewind.gif\" border=\"0\" value=\" Personen suchen\" %s>&nbsp;  ", tooltip("neue Suche"));
 		} else {
-			echo "<font size=\"-1\">&nbsp; freie Personensuche</font><br>";
+			echo "<font size=\"-1\">&nbsp; freie Personensuche (wird in Addressbuch &uuml;bernommen)</font><br>";
 			echo "&nbsp; <input type=\"text\" name=\"search_exp\" value=\"\">";
 			printf ("<input type=\"IMAGE\" name=\"search\" src= \"./pictures/suchen.gif\" border=\"0\" value=\" Personen suchen\" %s>&nbsp;  ", tooltip("Person suchen"));
 		} 
