@@ -73,39 +73,39 @@ if ($dclose)
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");
 
-// nur wenn man angemeldet ist!
+// only for authenticated users
 if ($auth->is_authenticated() && $user->id != 'nobody') {
 	//                     Menuename, Link, Target
-	$menue[ 1] = array( _('Meine Veranstaltungen'), 'meine_seminare.php', false);
-	$menue[ 2] = array( _('Veranstaltung hinzuf&uuml;gen'), 'sem_portal.php', false);
-	$menue[ 3] = array( _('Mein Planer'), 'calendar.php', false);
-	$menue[ 4] = array( _('Terminkalender'), 'calendar.php', false);
-	$menue[ 5] = array( _('Adressbuch'), 'contact.php', false);
-	$menue[ 6] = array( _('Stundenplan'), 'mein_stundenplan.php', false);
-	$menue[ 7] = array( _('pers&ouml;nliche Homepage'), 'about.php', false);
-	$menue[ 8] = array( _('individuelle Einstellungen'), 'edit_about.php?view=allgemein', false);
-	$menue[ 9] = array( _('Suchen'), 'auswahl_suche.php', false);
-	$menue[10] = array( _('Personensuche'), 'browse.php', false);
-	$menue[11] = array( _('Veranstaltungssuche'), 'sem_portal.php', false);
-	$menue[12] = array( _('Hilfe'), 'help/index.php', '_new');
-	$menue[13] = array( _('Schnelleinstieg'), 'help/index.php?help_page=schnelleinstieg.htm', '_new');
+	$menue[ 1] = array( _("Meine Veranstaltungen"), 'meine_seminare.php', false);
+	$menue[ 2] = array( _("Veranstaltung hinzuf&uuml;gen"), 'sem_portal.php', false);
+	$menue[ 3] = array( _("Mein Planer"), 'calendar.php', false);
+	$menue[ 4] = array( _("Terminkalender"), 'calendar.php', false);
+	$menue[ 5] = array( _("Adressbuch"), 'contact.php', false);
+	$menue[ 6] = array( _("Stundenplan"), 'mein_stundenplan.php', false);
+	$menue[ 7] = array( _("pers&ouml;nliche Homepage"), 'about.php', false);
+	$menue[ 8] = array( _("individuelle Einstellungen"), 'edit_about.php?view=allgemein', false);
+	$menue[ 9] = array( _("Suchen"), 'auswahl_suche.php', false);
+	$menue[10] = array( _("Personensuche"), 'browse.php', false);
+	$menue[11] = array( _("Veranstaltungssuche"), 'sem_portal.php', false);
+	$menue[12] = array( _("Hilfe"), 'help/index.php', '_new');
+	$menue[13] = array( _("Schnelleinstieg"), 'help/index.php?help_page=schnelleinstieg.htm', '_new');
 	// dozent
-	$menue[20] = array( _('Verwaltung von Veranstaltungen'), 'adminarea_start.php?list=TRUE', false);
-	$menue[21] = array( _('neue Veranstaltung anlegen'), 'admin_seminare_assi.php?new_session=TRUE', false);
+	$menue[20] = array( _("Verwaltung von Veranstaltungen"), 'adminarea_start.php?list=TRUE', false);
+	$menue[21] = array( _("neue Veranstaltung anlegen"), 'admin_seminare_assi.php?new_session=TRUE', false);
 	// admin
-	$menue[30] = array( _('Veranstaltungen an meinen Einrichtungen'), 'meine_seminare.php', false);
-	$menue[31] = array( _('Verwaltung von Veranstaltungen'), 'adminarea_start.php?list=TRUE', false);
-	$menue[32] = array( _('Verwaltung von Einrichtungen'), 'admin_institut.php?list=TRUE', false);
-	$menue[33] = array( _('globale Benutzerverwaltung'), 'new_user_md5.php', false);
+	$menue[30] = array( _("Veranstaltungen an meinen Einrichtungen"), 'meine_seminare.php', false);
+	$menue[31] = array( _("Verwaltung von Veranstaltungen"), 'adminarea_start.php?list=TRUE', false);
+	$menue[32] = array( _("Verwaltung von Einrichtungen"), 'admin_institut.php?list=TRUE', false);
+	$menue[33] = array( _("globale Benutzerverwaltung"), 'new_user_md5.php', false);
 	// root
-	$menue[40] = array( _('Veranstaltungs&uuml;bersicht'), 'sem_portal.php', false);
-	$menue[41] = array( _('Verwaltung globaler Einstellungen'), 'new_user_md5.php', false);
+	$menue[40] = array( _("Veranstaltungs&uuml;bersicht"), 'sem_portal.php', false);
+	$menue[41] = array( _("Verwaltung globaler Einstellungen"), 'new_user_md5.php', false);
 
 
 
 	if ($perm->have_perm('root')) { // root
-		$ueberschrift = _('Startseite f&uuml;r Root bei Stud.IP');
-		//                 array(Nr. Hauptmenü, array(Nummern der Untermenüs));
+		$ueberschrift = _("Startseite f&uuml;r Root bei Stud.IP");
+		//                 array(mainmenue number, array(submenue numbers));
 		$menue_auswahl[] = array(40, array());
 		$menue_auswahl[] = array(31, array());
 		$menue_auswahl[] = array(32, array());
@@ -113,7 +113,7 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 		$menue_auswahl[] = array(9, array(10, 11));
 
 	} elseif ($perm->have_perm('admin')) { // admin
-		$ueberschrift = _('Startseite f&uuml;r AdministratorInnen bei Stud.IP');
+		$ueberschrift = _("Startseite f&uuml;r AdministratorInnen bei Stud.IP");
 		$menue_auswahl[] = array(30, array());
 		$menue_auswahl[] = array(31, array());
 		$menue_auswahl[] = array(32, array());
@@ -121,7 +121,7 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 		$menue_auswahl[] = array(33, array());
 
 	} elseif ($perm->have_perm('dozent')) { // dozent
-		$ueberschrift = _('Startseite f&uuml;r DozentInnen bei Stud.IP');
+		$ueberschrift = _("Startseite f&uuml;r DozentInnen bei Stud.IP");
 		$menue_auswahl[] = array( 1, array());
 		$menue_auswahl[] = array(20, array(21));
 		$menue_auswahl[] = array( 3, array(4, 5, 6));
@@ -130,7 +130,7 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 		$menue_auswahl[] = array(12, array(13));
 
 	} elseif ($perm->have_perm('autor')) { // autor, tutor
-		$ueberschrift = _('Ihre pers&ouml;nliche Startseite bei Stud.IP');
+		$ueberschrift = _("Ihre pers&ouml;nliche Startseite bei Stud.IP");
 		$menue_auswahl[] = array( 1, array(2));
 		$menue_auswahl[] = array( 3, array(4, 5, 6));
 		$menue_auswahl[] = array( 7, array(8));
@@ -138,7 +138,7 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 		$menue_auswahl[] = array(12, array(13));
 
 	} else { // user
-		$ueberschrift = _('Ihre pers&ouml;nliche Startseite bei Stud.IP');
+		$ueberschrift = _("Ihre pers&ouml;nliche Startseite bei Stud.IP");
 		$menue_auswahl[] = array( 1, array(2));
 		$menue_auswahl[] = array( 3, array(4, 5, 6));
 		$menue_auswahl[] = array( 7, array());
@@ -154,7 +154,7 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 			<td width="90%" class="blank" valign="top">
 				<table cellpadding="2">
 					<tr><td class="blank" colspan="2">
-					<? my_info('<font size=-1>' . sprintf(_('Sie haben noch nicht auf Ihre %s Bestätigungsmail %s geantwortet.<br>Bitte holen Sie dies nach, um Stud.IP Funktionen wie das Belegen von Veranstaltungen nutzen zu können.<br>Bei Problemen wenden Sie Sich an: %s'),'<a href="help/index.php?help_page=ii_bestaetigungsmail.htm" target="new">','</a>', '<a href="mailto:'.$GLOBALS['UNI_CONTACT'].'">'.$GLOBALS['UNI_CONTACT'].'</a></font>')); ?>
+					<? my_info('<font size=-1>' . sprintf(_("Sie haben noch nicht auf Ihre %s Bestätigungsmail %s geantwortet.<br>Bitte holen Sie dies nach, um Stud.IP Funktionen wie das Belegen von Veranstaltungen nutzen zu können.<br>Bei Problemen wenden Sie Sich an: %s"),'<a href="help/index.php?help_page=ii_bestaetigungsmail.htm" target="new">','</a>', '<a href="mailto:'.$GLOBALS['UNI_CONTACT'].'">'.$GLOBALS['UNI_CONTACT'].'</a></font>')); ?>
 					</td></tr>
 				</table>
 			</td>
@@ -178,12 +178,12 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 	echo	'<tr>', "\n", '<td width="5%" class="blank" valign="middle">&nbsp;</td>', "\n",
 		'<td width="90%" class="blank" valign="top">', "\n", '<table cellpadding=4>', "\n";
 
-		for ($i=0; $i < count($menue_auswahl); $i++) { // Hauptmenue
+		for ($i=0; $i < count($menue_auswahl); $i++) { // mainmenue
 			echo	'<tr><td class="blank"><a href="',$menue[$menue_auswahl[$i][0]][1], '"',
 				(($menue[$menue_auswahl[$i][0]][2])? ' target="'.$menue[$menue_auswahl[$i][0]][2].'"':''),
 				'><img src="pictures/forumrot.gif" border=0>&nbsp;', $menue[$menue_auswahl[$i][0]][0], '</a>';
 
-			for ($k = 0; $k < count($menue_auswahl[$i][1]); $k++) { // Untermenuepunkte
+			for ($k = 0; $k < count($menue_auswahl[$i][1]); $k++) { // submenue
 				echo	(($k == 0)? '<br />&nbsp; &nbsp; ':'&nbsp;/&nbsp;');
 				echo	'<font size="-1"><a href="',$menue[$menue_auswahl[$i][1][$k]][1],'"',
 					(($menue[$menue_auswahl[$i][1][$k]][2])? ' target="'.$menue[$menue_auswahl[$i][1][$k]][2].'"':''),
@@ -216,7 +216,7 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 		show_votes ('studip', $auth->auth['uid'], $perm);
 	}
 
-} else { //Anzeigemodul fuer nobody
+} else { //displaymodul for nobody
 	$mtxt  = '<img src="pictures/blank.gif" width="13" height="50" border="0" align="left"><br>'. "\n";
 	$mtxt .= '<table cellspacing="0" cellpadding="0" border="0"><tr>'. "\n";
 	$mtxt .= '<td class="steel1" width="280" valign="middle"><a class="index" href="%s">'. "\n";
@@ -233,11 +233,11 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 	<tr>
 		<td valign="middle" height="260" colspan=3 background="./pictures/startseite.jpg" alt="Stud.IP - <?=$UNI_NAME?>"">
 			<?
-			echo sprintf($mtxt, 'index.php?again=yes', _('Login'), _('f&uuml;r registrierte NutzerInnen'));
+			echo sprintf($mtxt, 'index.php?again=yes', _("Login"), _("f&uuml;r registrierte NutzerInnen"));
 			if ($GLOBALS['ENABLE_SELF_REGISTRATION'])
-				echo sprintf($mtxt, 'register1.php', _('Registrieren'), _('um NutzerIn zu werden'));
-			echo sprintf($mtxt, 'freie.php', _('Freier Zugang'), _('ohne Registrierung'));
-			echo sprintf($mtxt, 'help/index.php', _('Hilfe'), _('zu Bedienung und Funktionsumfang')), '<br>';
+				echo sprintf($mtxt, 'register1.php', _("Registrieren"), _("um NutzerIn zu werden"));
+			echo sprintf($mtxt, 'freie.php', _("Freier Zugang"), _("ohne Registrierung"));
+			echo sprintf($mtxt, 'help/index.php', _("Hilfe"), _("zu Bedienung und Funktionsumfang")), '<br>';
 
 			if(isset($UNI_LOGIN_ADD) && ($UNI_LOGIN_ADD != '')) {
 				echo '</td></tr>';
