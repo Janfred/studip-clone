@@ -82,9 +82,9 @@ if ($ILIAS_CONNECT_ENABLE)
 	if ((!$perm->have_studip_perm("tutor",$seminar_id)) AND ($view=="edit"))
 	{
 		if ($SessSemName["class"]=="inst") 
-			$msg = 
+			$msg = _("Sie haben keine Berechtigung, die Lernmodul-Zuordnungen dieser Einrichtung zu ver&auml;ndern.");
 		else	
-			$msg = 
+			$msg = _("Sie haben keine Berechtigung, die Lernmodul-Zuordnungen dieser Veranstaltung zu ver&auml;ndern.");
 		parse_window ("error§" . $msg, "§",
 					_("Keine Berechtigung"));
 		die();
