@@ -148,7 +148,7 @@ if (($SemUserStatus == "autor") || ($rechte)) {
 		}	
 	
 	//wurde eine Datei hochgeladen/aktualisiert?
-	if (($cmd=="upload") && (!$cancel_x)) {
+	if (($cmd=="upload") && (!$cancel_x) && ($folder_system_data["upload"])) {
 		upload_item ($folder_system_data["upload"], TRUE, FALSE, $folder_system_data["refresh"]);
 		$open = $dokument_id;
 		$close = $folder_system_data["refresh"];
