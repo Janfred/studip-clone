@@ -1,5 +1,7 @@
 <?
-global $SEM_TYPE,$SEM_CLASS, $SEMESTER;
+require_once($GLOBALS['ABSOLUTE_PATH_STUDIP']."lib/classes/SemesterData.class.php");
+
+global $SEM_TYPE, $SEM_CLASS;
 
 // reorganize the $SEM_TYPE-array
 foreach ($SEM_CLASS as $key_class => $class) {
@@ -12,9 +14,12 @@ foreach ($SEM_CLASS as $key_class => $class) {
 	}
 }
 
+// get semester data
+$semester =& new SemesterData();
+$semester_data = $semester->getAllSemesterData();
 // current semester
 $now = time();
-foreach ($SEMESTER as $key => $sem) {
+foreach ($semester_data as $key => $sem) {
 	if ($sem["beginn"] >= $now)
 		break;
 }

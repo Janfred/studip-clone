@@ -38,6 +38,7 @@ global $ABSOLUTE_PATH_STUDIP, $RELATIVE_PATH_EXTERN;
 
 require_once($ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_EXTERN."/lib/ExternElement.class.php");
 require_once($ABSOLUTE_PATH_STUDIP."dates.inc.php");
+require_once($ABSOLUTE_PATH_STUDIP."lib/classes/SemesterData.class.php");
 
 class ExternElementPersondetailsLectures extends ExternElement {
 
@@ -81,7 +82,9 @@ class ExternElementPersondetailsLectures extends ExternElement {
 	function toStringEdit ($post_vars = "", $faulty_values = "",
 			$edit_form = "", $anker = "") {
 		
-		global $SEMESTER;
+		// get semester data
+		$semester =& new SemesterData();
+		$semester_data = $semester->getAllSemesterData();
 		
 		$out = "";
 		$table = "";
@@ -109,7 +112,7 @@ class ExternElementPersondetailsLectures extends ExternElement {
 			$names = array(_("keine Auswahl"), _("vorheriges"), _("aktuelles"), "n&auml;chstes");
 			$values = array("", "previous", "current", "next");
 		}
-		foreach ($SEMESTER as $sem_num => $sem) {
+		foreach ($semester_data as $sem_num => $sem) {
 			$names[] = $sem["name"];
 			$values[] = $sem_num;
 		}
@@ -120,7 +123,7 @@ class ExternElementPersondetailsLectures extends ExternElement {
 		$names = array(_("keine Auswahl"));
 		$values = array("");
 		$i = 1;
-		foreach ($SEMESTER as $sem_num => $sem) {
+		foreach ($semester_data as $sem_num => $sem) {
 			$names[] = $i++;
 			$values[] = $sem_num;
 		}
