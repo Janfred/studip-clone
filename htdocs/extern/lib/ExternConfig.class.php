@@ -226,7 +226,7 @@ class ExternConfig {
 	*
 	*/
 	function store ($module = "", $element_name = "", $values = "") {
-		$file_content = "; Configuration file for the extern modules"
+		$file_content = "; Configuration file for the extern module"
 				. " $this->module_name in Stud.IP\n"
 				. "; (range_id: $this->range_id)\n"
 				. "; DO NOT EDIT !!!\n";
