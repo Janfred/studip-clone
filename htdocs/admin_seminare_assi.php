@@ -215,6 +215,7 @@ if ($form == 1)
 	$sem_create_data["sem_inst_id"]=$sem_inst_id;
 	$sem_create_data["term_art"]=$term_art;
 	$sem_create_data["sem_start_time"]=$sem_start_time;
+	echo $sem_create_data["sem_start_time"];
 	
 	if (($sem_duration_time == 0) || ($sem_duration_time == -1))
 		$sem_create_data["sem_duration_time"]=$sem_duration_time;
@@ -399,6 +400,7 @@ if ($form == 3)
 }
 
 if ($form == 4) {
+	$sem_create_data["sem_room"]=$sem_room; 
 	//The room for the prelimary discussion
 	$sem_create_data["sem_vor_raum"]=$vor_raum; 
 	$sem_create_data["sem_vor_resource_id"]=($vor_resource_id == "FALSE") ? FALSE : $vor_resource_id; 
@@ -464,8 +466,6 @@ if ($form == 4) {
 }
 
 if ($form == 5) {
-	$sem_create_data["sem_room"]=$sem_room; 
-	
 	// create a timestamp for begin and end of the seminar
         if (!check_and_set_date($adm_s_tag, $adm_s_monat, $adm_s_jahr, $adm_s_stunde, $adm_s_minute, $sem_create_data, "sem_admission_start_date")) {
         $errormsg=$errormsg."error§"._("Bitte geben Sie ein g&uuml;ltiges Datum f&uuml;r den Start des Anmeldezeitraums ein!")."§";
@@ -2192,6 +2192,8 @@ if ($level == 2)
 if ($level == 3) {
 	if ($RESOURCES_ENABLE)
 		$resList = new ResourcesUserRoomsList($user_id);
+	$semester = new SemesterData;
+	$all_semester = $semester->getAllSemesterData();
 	?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
 		<tr>
@@ -2260,15 +2262,17 @@ if ($level == 3) {
 									</select>&nbsp;  <font size=-1><?=_("erster Termin in der"); ?></font> 
 									<select name="term_start_woche">
 									<?
-									if ($sem_create_data["term_start_woche"]==0)
-										echo "<option selected value=0>"._("1. Semesterwoche")."</option>";
+									$tmp_first_date = getCorrectedSemesterVorlesBegin(get_sem_num($sem_create_data["sem_start_time"]));
+									if ($sem_create_data["term_start_woche"] == 0)
+										echo "<option selected value=0>"._("1. Semesterwoche")." ("._("ab")." ".date("d.m.Y",$tmp_first_date).")</option>";
 									else
-										echo "<option value=0>"._("1. Semesterwoche")."</option>";
-									if ($sem_create_data["term_start_woche"]==1)
-										echo "<option selected value=1>"._("2. Semesterwoche")."</option>";
+										echo "<option value=0>"._("1. Semesterwoche")." ("._("ab")." ".date("d.m.Y",$tmp_first_date).")</option>";
+									$tmp_first_date = $tmp_first_date + (7 * 24 * 60 * 60);
+									if ($sem_create_data["term_start_woche"] == 1)
+										echo "<option selected value=1>"._("2. Semesterwoche")." ".date("d.m.Y",$tmp_first_date).")</option>";
 									else
-										echo "<option value=1>"._("2. Semesterwoche")."</option>";
-									if ($sem_create_data["term_start_woche"]==-1)
+										echo "<option value=1>"._("2. Semesterwoche")." ("._("ab")." ".date("d.m.Y",$tmp_first_date).")</option>";
+									if ($sem_create_data["term_start_woche"] == -1)
 										echo "<option selected value=-1>"._("anderer Startzeitpunkt")."</option>";
 									else
 										echo "<option value=-1>"._("anderer Startzeitpunkt")."</option>";
@@ -2812,6 +2816,23 @@ if ($level == 4) {
 						</td>
 					</tr>
 					<?
+					} else {
+					?>
+					<tr <? $cssSw->switchClass() ?>>
+						<td class="<? echo $cssSw->getClass() ?>" width="4%" align="right">
+						
+						</td>
+						<td class="<? echo $cssSw->getClass() ?>" width="96%"  colspan=3>
+							<font size="-1">&nbsp; 
+							<?=_("Sie k&ouml;nnen hier eine unspezifische Ortsangabe machen:")?><br />
+							&nbsp; <textarea name="sem_room" cols=58 rows="4"><? echo  htmlReady(stripslashes($sem_create_data["sem_room"])) ?></textarea>
+							<img  src="./pictures/info.gif" 
+								<? echo tooltip(_("Sie können hier einen Ort eingeben, der nur angezeigt wird, wenn keine genaueren Angaben aus Zeiten oder Sitzungsterminen gemacht werden können oder Sitzungstermine bereits abgelaufen sind und aus diesem Grund nicht mehr angezeigt werden."), TRUE, TRUE) ?>
+							>
+							<br />&nbsp; <?=_("<b>Achtung:</b> Diese Ortsangabe wird nur angezeigt, wenn keine genaueren Angaben aus Zeiten oder Sitzungsterminen gemacht werden k&ouml;nnen.");?>
+						</td>
+					</tr>
+					<?
 					}
 					?>
 					<tr <? $cssSw->switchClass() ?>>
@@ -3144,19 +3165,6 @@ if ($level == 5)
 							<img  src="./pictures/info.gif" 
 								<? echo tooltip(_("Bitte geben Sie hier ein, welche Leistungsnachweise erbracht werden müssen."), TRUE, TRUE) ?>
 							>
-						</td>
-					</tr>
-					<tr <? $cssSw->switchClass() ?>>
-						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
-							<?=_("Ort:"); ?>
-						</td>
-						<td class="<? echo $cssSw->getClass() ?>" width="90%"  colspan=3>
-							<font size="-1">
-							&nbsp; <textarea name="sem_room" cols=58 rows="4"><? echo  htmlReady(stripslashes($sem_create_data["sem_room"])) ?></textarea>
-							<img  src="./pictures/info.gif" 
-								<? echo tooltip(_("Sie können hier einen Ort eingeben, der nur angezeigt wird, wenn keine genaueren Angaben aus Zeiten oder Sitzungsterminen gemacht werden können oder Sitzungstermine bereits abgelaufen sind und aus diesem Grund nicht mehr angezeigt werden."), TRUE, TRUE) ?>
-							>
-							<br />&nbsp; <?=_("<b>Achtung:</b> Diese Ortsangabe wird nur angezeigt, wenn keine genaueren Angaben aus Zeiten oder Sitzungsterminen gemacht werden k&ouml;nnen.");?>
 						</td>
 					</tr>
 					<?
