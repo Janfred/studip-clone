@@ -44,7 +44,7 @@ define("PHPDOC_DUMMY",true);
 
 $EXTERN_SERVER_NAME = "test.studip.de";
 
-$EXTERN_CONFIG_FILE_PATH = "/var/lib/extern_config/";
+$EXTERN_CONFIG_FILE_PATH = "/var/lib/studip/extern_config/";
 
 $EXTERN_MODULE_TYPES[1] = array("module" => "Download", "name" => _("Download"), "level" => 1,
 													"description" => _("Das Modul &quot;Download&quot; stellt alle Dateien aus dem Dateibereich einer Einrichtung zum Download zur Verf&uuml;gung."));
