@@ -83,6 +83,20 @@ function RemoveBuddy($username)
 	}
 }
 
+function RemoveUserFromBuddys($user_id)
+{ 
+	$db=new DB_Seminar;
+	$db2=new DB_Seminar;
+	$db->query ("SELECT contact_id FROM contact WHERE user_id = '$user_id'");	
+	while ($db->next_record()) {   // erst mal die selbstzugefügten weg
+		$contact_id = $db->f("contact_id")	;		
+		$db2->query ("DELETE FROM contact_userinfo WHERE contact_id = '$contact_id'");
+	}
+	$db->query ("DELETE FROM contact WHERE user_id = '$user_id'");	   // jetzt alle Zuordnungen
+	$buddykills = $db->affected_rows();
+	return $buddykills;
+}
+
 function CheckBuddy($username, $owner_id=FALSE)
 { global $user;
 	if (!$owner_id)

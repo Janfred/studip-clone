@@ -49,6 +49,7 @@ require_once("$ABSOLUTE_PATH_STUDIP/datei.inc.php"); // Wir brauchen die Funktio
 require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/admission.inc.php");	 //Enthaelt Funktionen zum Updaten der Wartelisten
 require_once("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");	 //Enthaelt Funktionen fuer Statusgruppen
+require_once("$ABSOLUTE_PATH_STUDIP/contact.inc.php");	 //Enthaelt Funktionen fuer Adressbuchverwaltung
 
 if ($RESOURCES_ENABLE) {
 	require_once ($RELATIVE_PATH_RESOURCES."/lib/ResourcesAssign.class.php");
@@ -545,6 +546,13 @@ while ( is_array($HTTP_POST_VARS)
 				if (($this_ilias_id != false) AND (is_created_user($u_id) == 1))
 					delete_ilias_user($this_ilias_id);
 			}
+			
+			// Aus allen Adressbüchern und persönlcihen Einträgen raus...
+			$buddykills = RemoveUserFromBuddys($u_id);
+			if ($buddykills > 0) {
+				$msg .= "info§$buddykills Einträge aus Adressbüchern gelöscht.§";
+			}
+
 			
 			$query = "delete from auth_user_md5 where user_id='$u_id' and username='$username'";
 			$db->query($query);
