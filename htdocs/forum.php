@@ -77,7 +77,7 @@ function getMsTime(){
 	return (double)($microtime[1].substr($microtime[0],1)); 
 }
 
-$stoppuhr=getMsTime();
+// $stoppuhr=getMsTime();
 
 //////////////////////////////////////////////////////////////////////////////////
 // Anzeige und View-Logik
@@ -443,7 +443,7 @@ else
 //////////////////////////////////////////////////////////////////////////////////
 
 
-echo "Zeit:".(getMsTime()-$stoppuhr);
+// echo "Zeit:".(getMsTime()-$stoppuhr);
 
   // Save data back to database.
   page_close()
