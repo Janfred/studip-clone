@@ -253,11 +253,13 @@ class VeranstaltungResourcesAssign {
 	}
 
 	function killDateAssign($termin_id) {
-		$query = sprintf ("SELECT assign_id FROM resources_assign LEFT JOIN resources_objects USING (resource_id) LEFT JOIN resources_categories USING (category_id) WHERE assign_user_id = '%s' AND resources_categories.name = 'Raum' ", $termin_id);
-		$this->db->query($query);
-		while ($this->db->next_record()) {
-			$killAssign=new AssignObject($this->db->f("assign_id"));
-			$killAssign->delete();
+		if ($termin_id) {
+			$query = sprintf ("SELECT assign_id FROM resources_assign LEFT JOIN resources_objects USING (resource_id) LEFT JOIN resources_categories USING (category_id) WHERE assign_user_id = '%s' AND resources_categories.name = 'Raum' ", $termin_id);
+			$this->db->query($query);
+			while ($this->db->next_record()) {
+				$killAssign=new AssignObject($this->db->f("assign_id"));
+				$killAssign->delete();
+			}
 		}
 	}
 	
@@ -266,8 +268,8 @@ class VeranstaltungResourcesAssign {
 			$query = sprintf("SELECT assign_id FROM resources_assign LEFT JOIN resources_objects USING (resource_id) LEFT JOIN resources_categories USING (category_id) WHERE resources_assign.assign_user_id = '%s' AND resources_categories.name = 'Raum' ", $this->seminar_id);
 			$this->db->query($query);
 			while ($this->db->next_record()) {
-				$query2 = sprintf("DELETE FROM resources_assign WHERE assign_id = '%s'  ", $this->db->f("assign_id"));
-				$this->db2->query($query2);			
+				$killAssign=new AssignObject($this->db->f("assign_id"));
+				$killAssign->delete();
 			}
 		}
 	}
