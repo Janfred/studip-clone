@@ -349,9 +349,9 @@ class AssignEventList{
 	 	
 	 	require_once ($RELATIVE_PATH_RESOURCES."/lib/list_assign.inc.php");
 	 	
-		if(!$start)
+		if (!$start)
 			$start = $SEMESTER[$SEM_ID]["beginn"];
-		if(!$end )
+		if (!$end )
 			$end = $SEMESTER[$SEM_ID]["ende"];
 		
 		
