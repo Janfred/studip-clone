@@ -76,9 +76,9 @@ class ResourcesUserRoomsList {
 		$db2=new DB_Seminar;
 		
 		if ($this->only_rooms)
-			$query = sprintf ("SELECT resource_id, lockable FROM resources_categories LEFT JOIN resources_objects USING (category_id) WHERE resources_categories.is_room = '1' AND resources_objects.resource_id = '%s' ", $resource_id);
+			$query = sprintf ("SELECT resource_id, lockable, resources_objects.name FROM resources_categories LEFT JOIN resources_objects USING (category_id) WHERE resources_categories.is_room = '1' AND resources_objects.resource_id = '%s' ", $resource_id);
 		else
-			$query = sprintf ("SELECT resource_id, lockable FROM resources_objects WHERE resources_objects.resource_id = '%s' ", $resource_id);		
+			$query = sprintf ("SELECT resource_id, lockable, resources_objects.name FROM resources_objects WHERE resources_objects.resource_id = '%s' ", $resource_id);		
 		$db->query($query);
 		$db->next_record();
 		$db->f("count");
@@ -88,7 +88,7 @@ class ResourcesUserRoomsList {
 				$resource_object = new ResourceObject ($resource_id);
 				$this->resources[$resource_id] = $resource_object;
 			} else {
-				$this->resources[$resource_id] = TRUE;
+				$this->resources[$resource_id] = array("name"=>$db->f("name"), "resource_id" =>$db->f("resource_id"));
 			}
 		}
 
@@ -102,7 +102,6 @@ class ResourcesUserRoomsList {
 	// private
 	function restore() {
 		global $perm, $user;
-		
 		$db = new DB_Seminar;
 		$db2 = new DB_Seminar;
 		
