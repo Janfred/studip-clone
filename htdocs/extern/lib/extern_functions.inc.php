@@ -391,8 +391,9 @@ function update_config ($range_id, $config_id) {
 }
 
 function print_footer () {
-	echo "</td></tr>\n</table>\n<tr><td class=\"blank\" width=\"100%\">&nbsp;</td></tr>\n";
-	echo "</table>\n</body>\n</html>";
+	echo "\n</td></tr></table>";
+	echo "\n</td></tr>\n<tr><td class=\"blank\" colspan=\"2\" width=\"100%\">&nbsp;";
+	echo "</td></tr>\n</table>\n</body>\n</html>";
 	page_close();
 }
 
