@@ -36,14 +36,6 @@ require_once ("$ABSOLUTE_PATH_STUDIP/admission.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/StudipSemTree.class.php");
 
-if ($ILIAS_CONNECT_ENABLE) 
-{
-	require_once ("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_LEARNINGMODULES/lernmodul_config.inc.php");
-	require_once ("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_LEARNINGMODULES/lernmodul_db_functions.inc.php");
-	require_once ("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_LEARNINGMODULES/lernmodul_linking_functions.inc.php");
-	require_once ("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_LEARNINGMODULES/lernmodul_user_functions.inc.php");
-	require_once ("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_LEARNINGMODULES/lernmodul_view_functions.inc.php");
-}
 ?>
 <body>
 <?
@@ -557,7 +549,6 @@ print_infobox ($infobox,"pictures/details.jpg");
 				</td>
 				
 			</tr>
-			<? if ($ILIAS_CONNECT_ENABLE) show_seminar_modules_links($sem_id); ?>
 		</table>
 		<br />&nbsp; 
 	</td>
