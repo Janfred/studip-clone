@@ -166,7 +166,7 @@ function get_objects ($search_string='', $user_id='') {
 		case "tutor": 
 			$my_objects[$user_id]=array("name"=>"aktueller Account"." (".get_username($user_id).")", "art"=>"Person");
 			//Alle meine Seminare
-			$db->query("SELECT seminare.Seminar_id, Name FROM seminare LEFT JOIN seminar_user USING (seminar_id) WHERE  (Name LIKE '%$search_string%' OR Untertitel LIKE '%$search_string%' OR seminare.Seminar_id = '$search_string') status='tutor' ORDER BY Name");
+			$db->query("SELECT seminare.Seminar_id, Name FROM seminare LEFT JOIN seminar_user USING (seminar_id) WHERE  (Name LIKE '%$search_string%' OR Untertitel LIKE '%$search_string%' OR seminare.Seminar_id = '$search_string') AND seminare.status='tutor' ORDER BY Name");
 			while ($db->next_record())
 				$my_objects[$db->f("Seminar_id")]=array("name"=>$db->f("Name"), "art"=>"Veranstaltungen");
 			//Alle meine Institute...

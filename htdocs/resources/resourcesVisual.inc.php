@@ -831,10 +831,10 @@ class editObject extends cssClasses {
 				<td class="<? echo $this->getClass() ?>" width="40%"><font size=-1>Art der Wiederholung:</font><br />
 				<font size=-1>
 					<input type="IMAGE" name="change_schedule_repeat_none" src="./pictures/buttons/keine<? printf (($resAssign->getRepeatMode()=="na") ? "2" :"") ?>-button.gif" border=0 />
-					&nbsp;<input type="IMAGE" name="change_schedule_repeat_day" src="./pictures/buttons/jedentag<? printf (($resAssign->getRepeatMode()=="d") ? "2" :"") ?>-button.gif" border=0 />
-					&nbsp;<input type="IMAGE" name="change_schedule_repeat_week" src="./pictures/buttons/jedewoche<? printf (($resAssign->getRepeatMode()=="w") ? "2" :"") ?>-button.gif" border=0 /><br />
-					<input type="IMAGE" name="change_schedule_repeat_month" src="./pictures/buttons/jedenmonat<? printf (($resAssign->getRepeatMode()=="m") ? "2" :"") ?>-button.gif" border=0 />
-					&nbsp;<input type="IMAGE" name="change_schedule_repeat_year" src="./pictures/buttons/jedesjahr<? printf (($resAssign->getRepeatMode()=="y") ? "2" :"") ?>-button.gif" border=0 />
+					&nbsp;<input type="IMAGE" name="change_schedule_repeat_day" src="./pictures/buttons/taeglich<? printf (($resAssign->getRepeatMode()=="d") ? "2" :"") ?>-button.gif" border=0 />
+					&nbsp;<input type="IMAGE" name="change_schedule_repeat_week" src="./pictures/buttons/woechentlich<? printf (($resAssign->getRepeatMode()=="w") ? "2" :"") ?>-button.gif" border=0 /><br />
+					<input type="IMAGE" name="change_schedule_repeat_month" src="./pictures/buttons/monatlich<? printf (($resAssign->getRepeatMode()=="m") ? "2" :"") ?>-button.gif" border=0 />
+					&nbsp;<input type="IMAGE" name="change_schedule_repeat_year" src="./pictures/buttons/jaehrlich<? printf (($resAssign->getRepeatMode()=="y") ? "2" :"") ?>-button.gif" border=0 />
 				</font>
 				</td>
 			</tr>
@@ -851,7 +851,7 @@ class editObject extends cssClasses {
 				</td>
 				<td class="<? echo $this->getClass() ?>" width="40%" valign="top">
 				<? if ($resAssign->getRepeatMode() != "na") { ?>
-				<font size=-1>Wiederholung bis:</font><br />				
+				<font size=-1>Wiederholung bis sp&auml;testens:</font><br />				
 				<font size=-1>
 					<input name="change_schedule_repeat_end_day" value="<? echo date("d",$resAssign->getRepeatEnd()); ?>" size=2 maxlength="2" />
 					.<input name="change_schedule_repeat_end_month" value="<? echo date("m",$resAssign->getRepeatEnd()); ?>" size=2 maxlength="2" />
@@ -869,7 +869,8 @@ class editObject extends cssClasses {
 				</td>
 				<td class="<? echo $this->getClass() ?>" valign="top"><font size=-1>eingetragen f&uuml;r die Belegung:</font><br />
 				<font size=-1>
-					<? $user_name=$resAssign->getUsername(FALSE);
+					<? 
+					$user_name=$resAssign->getUsername(FALSE);
 					if ($user_name)
 						echo "<b>$user_name&nbsp;</b><br /><br /></font>";
 					else
@@ -885,26 +886,66 @@ class editObject extends cssClasses {
 				</td>
 				<td class="<? echo $this->getClass() ?>" valign="top">
 				<? if ($resAssign->getRepeatMode() != "na") { ?>
-				<font size=-1>Anzahl der Wiederholungen:</font><br />				
+				<font size=-1>Wiederholungsturnus:</font><br />				
 				<font size=-1>
-					<input name="change_schedule_repeat_quantity" value="<?  echo $resAssign->getRepeatQuantity(); ?>" size=2 maxlength="2" />
-					alle&nbsp;<input name="change_schedule_repeat_interval" value="<? echo $resAssign->getRepeatInterval(); ?>" size=2 maxlength="2" />
+					<select name="change_schedule_repeat_interval"> value="<? echo $resAssign->getRepeatInterval(); ?>" size=2 maxlength="2" />
 					<?
 					switch ($resAssign->getRepeatMode()) {
 						case "d": 
-							echo "Tage";
+							$str[1]= "jeden Tag";
+							$str[2]= "jeden zweiten Tag";
+							$str[3]= "jeden dritten Tag";
+							$str[4]= "jeden vierten Tag";
+							$str[5]= "jeden f&uuml;nften Tag";
+							$str[6]= "jeden sechsten Tag";
+							$max=6;
 						break;
 						case "w": 
-							echo "Wochen";
+							$str[1]= "jede Woche";
+							$str[2]= "jede zweite Woche";
+							$str[3]= "jede dritte Woche";
+							$max=3;
 						break;
 						case "m": 
-							echo "Monate";
+							$str[1]= "jeden Monat";
+							$str[2]= "jeden zweiten Monat";
+							$str[3]= "jeden dritten Monat";
+							$str[4]= "jeden vierten Monat";
+							$str[5]= "jeden f&uuml;nften Monat";
+							$str[6]= "jeden sechsten Monat";
+							$str[7]= "jeden siebten Monat";
+							$str[8]= "jeden achten Monat";
+							$str[9]= "jeden neunten Monat";
+							$str[10]= "jeden zehnten Monat";
+							$str[11]= "jeden elften Monat";
+							$max=11;
 						break;
 						case "y": 
-							echo "Jahre";
+							$str[1]= "jedes Jahr";
+							$str[2]= "jedes zweite Jahr";
+							$str[3]= "jedes dritte Jahr";
+							$str[4]= "jedes vierte Jahr";
+							$str[5]= "jedes f&uuml;nfte Jahr";
+							$max=5;
 						break;
 					}
+					for ($i=1; $i<=$max; $i++) {
+						if ($resAssign->getRepeatInterval() == $i)
+							printf ("<option value=\"%s\" selected>%s</option>", $i, $str[$i]);
+						else
+							printf ("<option value=\"%s\">%s</option>", $i, $str[$i]);						
+					}
 					?>
+					</select><br />
+					</font>
+					<font size=-1>begrenzte Anzahl der Wiederholungen:</font><br />				
+					<font size=-1>
+					max.&nbsp;<input name="change_schedule_repeat_quantity" value="<?  if ($resAssign->getRepeatQuantity() != -1) echo $resAssign->getRepeatQuantity(); ?>" size=2 maxlength="2" />&nbsp; Mal wiederholen
+					<?
+					if ($resAssign->getRepeatQuantity() == -1) 
+						{ ?> <input type="HIDDEN" name="change_schedule_repeat_quantity_infinity" value="TRUE" /> <? }
+					?>
+					</font>
 				</font>
 				<? 
 				} else { 
@@ -1203,7 +1244,7 @@ class ViewSchedules extends cssClasses {
 					echo "<br /><br />";
 					while ($event=$assign_events->nextEvent()) {
 						echo "<a href=\"$PHP_SELF?view=edit_object_schedules&edit_assign_object=".$event->getAssignId()."\"><img src=\"pictures/buttons/bearbeiten-button.gif\" border=0></a>";
-						echo "&nbsp; <font size=-1>Belegung ist von <b>", date("d.m.Y H:i", $event->getBegin()), "</b> bis <b>", date("j.m.Y H:i", $event->getEnd()), "</b></font>";
+						echo "&nbsp; <font size=-1>Belegung ist von <b>", date("d.m.Y H:i", $event->getBegin()), "</b> bis <b>", date("d.m.Y H:i", $event->getEnd()), "</b></font>";
 						echo "&nbsp; <font size=-1>belegt von <b>".$event->getName()."</b></font><br />";
 					}
 					?>

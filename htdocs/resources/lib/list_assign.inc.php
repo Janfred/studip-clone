@@ -76,7 +76,7 @@ function list_restore_assign(&$this){
 					$quantity++;
 					}
 				}
-			} while(($temp_ts <=$end) && ($quantity < $assign_object->getRepeatQuantity()));
+			} while(($temp_ts <=$end) && ($quantity < $assign_object->getRepeatQuantity() || $assign_object->getRepeatQuantity() == -1));
 	}
 }
 

@@ -776,10 +776,10 @@ class ResourcesPerms {
 	
 	function ResourcesPerms ($user_id='') {
 		global $user;
-		
+
 		$this->db=new DB_Seminar;
 		if ($user_id)
-			$this->$user_id=$user_id;
+			$this->user_id=$user_id;
 		else
 			$this->user_id=$user->id;
 	}
@@ -825,7 +825,7 @@ class ResourcesObjectPerms extends ResourcesPerms {
 				$this->perm="admin";
 		
 		//check if the user is owner of the object	
-		$this->db->query("SELECT owner_id FROM resources_objects WHERE owner_id='$this->user_id' AND resource_id = '$resource_object_id' ");
+		$this->db->query("SELECT owner_id FROM resources_objects WHERE owner_id='$this->user_id' AND resource_id = '$this->resource_id' ");
 		if ($this->db->next_record()) {
 			$this->owner=TRUE;
 			$this->perm="admin";
@@ -841,7 +841,7 @@ class ResourcesObjectPerms extends ResourcesPerms {
 			$my_objects[$this->user_id]="user"; //myself is administrable, too...
 			//check if one of my administrable (system) objects owner of the resourcen object, so that I am too...
 			foreach ($my_objects as $key=>$val) {
-				$this->db->query("SELECT owner_id FROM resources_objects WHERE owner_id='$key' AND resource_id = '$resource_object_id' ");
+				$this->db->query("SELECT owner_id FROM resources_objects WHERE owner_id='$key' AND resource_id = '$this->resource_id' ");
 				if ($this->db->next_record())
 					$this->perm="admin";
 				
@@ -849,7 +849,7 @@ class ResourcesObjectPerms extends ResourcesPerms {
 					break;
 				
 				//also check the additional perms...
-				$this->db->query("SELECT perms FROM resources_user_resources  WHERE user_id='$key' AND resource_id = '$resource_object_id' ");
+				$this->db->query("SELECT perms FROM resources_user_resources  WHERE user_id='$key' AND resource_id = '$this->resource_id' ");
 				if ($this->db->next_record())
 					$this->perm=$this->db->f("perms");
 
@@ -918,21 +918,30 @@ class ResourcesUserRoots {
 	function ResourcesUserRoots($user_id='') {
 		global $user, $perm, $auth;
 		
+		if (!$this->user_id)
+			$this->user_id=$user->id;
+
 		$db=new DB_Seminar;
 		$db2=new DB_Seminar;
 		$db3=new DB_Seminar;
+		$resPerms= new ResourcesPerms($this->user_id);
 		
 		if(func_num_args() == 1){
 			$this->user_id = func_get_arg(0);
 		}
-		
-		if (!$this->user_id)
-			$this->user_id=$user->id;
-			
+
+		//load the global perms in the resources-system (check if the user ist resources-root)
+		$this->resources_global_perm=$resPerms->getGlobalPerms();
+		//load the global studip perms (check, if user id root)
 		$this->user_global_perm=get_global_perm($this->user_id);
 		
+		if ($this->resources_global_perm == "admin")
+			$global_perm="root";
+		else
+			$global_perm=$this->user_global_perm;
+			
 		//Bestimmen aller Root Straenge auf die ich Zugriff habe
-		switch ($this->user_global_perm) {
+		switch ($global_perm) {
 			case "root": 
 				 //Root hat Zugriff auf alles, also alle Stamm-Ressourcen
 				$db->query("SELECT resource_id FROM resources_objects WHERE parent_id='0'");
