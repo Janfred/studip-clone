@@ -45,7 +45,8 @@ class ExternElementContact extends ExternElement {
 				"tr_style", "td_height", "td_align", "td_valign", "td_bgcolor", "td_class", "td_style",
 				"fonttitle_face", "fonttitle_size", "fonttitle_color", "fonttitle_class",
 				"fonttitle_style", "fontcontent_face", "fontcontent_size", "fontcontent_color",
-				"fontcontent_class", "fontcontent_style");
+				"fontcontent_class", "fontcontent_style", "hidepersname", "hideinstname", "separatelinks",
+				"showinstgroup", "defaultadr");
 	
 	/**
 	* Constructor
@@ -65,7 +66,12 @@ class ExternElementContact extends ExternElement {
 			"aliases" => "|"._("Raum:")."|"._("Telefon:")."|"._("Fax:")."|"._("Email:")."|"
 					._("Homepage:")."|"._("Sprechzeiten:"),
 			"headline" => _("Kontakt:"),
-			"adrradd" => _("der Georg-August-Universit&auml;t G&ouml;ttingen")
+			"adrradd" => "",
+			"hidepersname" => "",
+			"hideinstname" => "",
+			"separatelinks" => "",
+			"showinstgroup" => "",
+			"defaultadr" => ""
 		);
 		
 		return $config;
@@ -90,9 +96,31 @@ class ExternElementContact extends ExternElement {
 		$field_names = array(_("Raum"), _("Telefon"), _("Fax"), _("Email"), _("Homepage"), _("Sprechzeiten"));
 		$table = $edit_form->editMainSettings($field_names, "", array("width", "sort", "widthpp"));
 		
-		$title = _("&Uuml;berschrift");
+		$title = _("&Uuml;berschrift:");
 		$info = _("Überschrift der Kontakt-Daten");
 		$table .= $edit_form->editTextfieldGeneric("headline", $title, $info, 35, 100);
+		
+		$title = _("Standard-Adresse:");
+		$info = _("Wenn Sie diese Option wählen, wird die Standard-Adresse ausgegeben, die jede(r) Mitarbeiter(in) bei seinen universitären Daten auswählen kann. Wählen Sie diese Option nicht, wenn immer die Adresse der Einrichtung ausgegeben werden soll.");
+		$table .= $edit_form->editCheckboxGeneric('defaultadr', $title, $info, '1', '0');
+		
+		$title = _("Personenname ausblenden:");
+		$info = _("Unterdrückt die Anzeige des Namens im Adressfeld.");
+		$table .= $edit_form->editCheckboxGeneric('hidepersname', $title, $info, '1', '0');
+		
+		$title = _("Funktionen anzeigen:");
+		$info = _("Ausgabe der Funktionen der Mitarbeiterin/des Mitarbeiters in der Einrichtung.");
+		$table .= $edit_form->editCheckboxGeneric('showinstgroup', $title, $info, '1', '0');
+		
+		$title = _("Einrichtungsname:");
+		$info = _("Anzeige des Einrichtungsnamens. Der Name kann auch als Link auf die in Stud.IP angegebene URL (unter Grunddaten der Einrichtung) angezeigt werden.");
+		$values = array('1', '0', 'link');
+		$names = array(_("nicht anzeigen"), _("anzeigen"), _("als Link anzeigen"));
+		$table .= $edit_form->editRadioGeneric('hideinstname', $title, $info, $values, $names);
+		
+		$title = _("Email und Hompage getrennt:");
+		$info = _("Sinnvoll ist diese Option bei sehr langen Email-Adresse und Homepage-Links der Mitarbeiter. Diese werden dann unterhalb des Adressfeldes ausgegeben.");
+		$table .= $edit_form->editCheckboxGeneric('separatelinks', $title, $info, '1', '0');
 		
 		$title = _("Adresszusatz:");
 		$info = _("Zusatz zur Adresse der Einrichtung, z.B. Universitätsname.");
@@ -122,6 +150,20 @@ class ExternElementContact extends ExternElement {
 		$out .= $edit_form->editBlank();
 		
 		return $element_headline . $out;
+	}
+	
+	function checkValue ($attribute, $value) {
+		if ($attribute == 'hidepersname' || $attribute == 'separatelinks'
+				|| $attribute == 'defaultadr') {
+			if (!isset($GLOBALS['HTTP_POST_VARS']["Contact_$attribute"])) {
+				$GLOBALS['HTTP_POST_VARS']["Contact_$attribute"] = 0;
+				return FALSE;
+			}
+				
+			return !($value == '1' || $value == '');
+		}
+		
+		return FALSE;
 	}
 	
 }
