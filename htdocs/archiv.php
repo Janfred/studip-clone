@@ -19,25 +19,17 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
+$perm->check("user");
 
-include "seminar_open.php";
+include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
-?>
-<html>
-<head>
-<title>Stud.IP</title>
+// -- here you have to put initialisations for the current page
 
-<?
-// Druckversion? ansonsten mit CSS
-IF (!isset($druck)) ECHO"<link rel='stylesheet' href='style.css' type='text/css'>";
-?>
-</head>
-<!--
-// here i include my personal meta-tags; one of those might be useful:
-// <META HTTP-EQUIV="REFRESH" CONTENT="<?php print $auth->lifetime*60;?>; URL=logout.php">
--->
-<body bgcolor=white>
-<?php 
+if (isset($druck))
+	$_include_stylesheet = ""; // do not use any stylesheet for printing
+
+// Start of Output
+include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 
 require_once "msg.inc.php";
 require_once "config.inc.php";

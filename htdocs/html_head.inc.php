@@ -1,3 +1,41 @@
+<?php
+/**
+* html_head.inc.php
+* 
+* output of html-head for all Stud.IP pages
+* parameter $_include_stylesheet
+* -- if not set, use default stylesheet
+* -- if empty, use no stylesheet
+* -- else use set stylesheet
+*
+* @author		Stefan Suchi <suchi@data-quest.de>
+* @version		$Id$
+* @access		public
+* @package		studip_core
+* @modulegroup	library
+* @module		html_head.inc.php
+*/
+
+// +---------------------------------------------------------------------------+
+// This file is part of Stud.IP
+// html_head.inc.php
+// Copyright (c) 2002 Stefan Suchi <suchi@data-quest.de>
+// +---------------------------------------------------------------------------+
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or any later version.
+// +---------------------------------------------------------------------------+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+// +---------------------------------------------------------------------------+
+?>
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 	<head>
@@ -5,7 +43,13 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 		<meta name="copyright" content="Stud.IP-Crew (crew@studip.de)">
 		<title>Stud.IP</title>
-		<link rel="stylesheet" href="style.css" type="text/css">
+<?php
+if (!isset($_include_stylesheet))  // if not set, use default stylesheet
+	$_include_stylesheet ="style.css";
+if ($_include_stylesheet != "")  // if empty, use no stylesheet
+	printf("\t\t<link rel=\"stylesheet\" href=\"%s\" type=\"text/css\">\n", $_include_stylesheet);
+unset ($_include_stylesheet);
+?>
 	</head>
 	<body>
 	
