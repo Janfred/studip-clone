@@ -12,6 +12,7 @@ $export_icon["xml"] = "xls-icon.gif";
 $export_icon["xslt"] = "xls-icon.gif";
 $export_icon["xsl"] = "xls-icon.gif";
 $export_icon["rtf"] = "rtf-icon.gif";
+$export_icon["fo"] = "pdf-icon.gif";
 $export_icon["pdf"] = "pdf-icon.gif";
 $export_icon["html"] = "txt-icon.gif";
 $export_icon["htm"] = "txt-icon.gif";
