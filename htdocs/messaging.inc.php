@@ -35,6 +35,7 @@ class messaging {
 function messaging () {
 	$this->sig_string="\n \n -- \n";
 	$this->db = new DB_Seminar;
+	$this->db2 = new DB_Seminar;
 }
 
 //Nachricht loeschen
@@ -67,70 +68,6 @@ function delete_all_messages() {
 		$this->delete_message($db->f("message_id"));
 	}
 }
-
-
-/*
-// insert written message
-function insert_sms ($rec_uname, $message, $user_id='') {
-	global $_fullname_sql,$user, $my_messaging_settings, $CHAT_ENABLE;
-
-	$db=new DB_Seminar;
-	$db2=new DB_Seminar;
-	$db3=new DB_Seminar;
-
-	if (!$user_id) {
-		$user_id = $user->id;
-	}
-	if (!empty($message)) {
-		if ($user_id != "____%system%____") {
-			$db->query ("SELECT username," . $_fullname_sql['full'] ." AS fullname FROM auth_user_md5 a LEFT JOIN user_info USING (user_id) WHERE a.user_id = '".$user_id."' ");
-			$db->next_record();
-			$snd_uname = $db->f("username");
-		} else {
-			$snd_uname = "____%system%____";			
-		}
-		$db2->query ("SELECT user_id FROM auth_user_md5 WHERE username = '".$rec_uname."' ");
-		$db2->next_record();
-
-		if ($db2->num_rows()) {
-			if ($user_id != "____%system%____")  { // wenn nicht vom system signatur anhaengen
-				if ($my_messaging_settings["sms_sig"]) {
-					$message .= $this->sig_string.$my_messaging_settings["sms_sig"];
-				}
-			} else { // wenn vom system dies anhaengen
-				setTempLanguage($db2->f("user_id"));
-				$message .= $this->sig_string. _("Diese Nachricht wurde automatisch vom Stud.IP-System generiert. Sie können darauf nicht antworten.");
-				restoreLanguage();
-			}
-			
-			$m_id = md5(uniqid("voyeurism"));
-
-			$db3->query("INSERT IGNORE message SET message_id='$m_id', mkdate='".time()."', message='$message'");
-			$db3->query("INSERT IGNORE message_user SET message_id='$m_id', user_id='$snd_uname', snd_rec='snd' ");
-			$db3->query("INSERT IGNORE message_user SET message_id='$m_id', user_id='$rec_uname', snd_rec='rec' ");
-			
-			//Benachrichtigung in alle Chaträume schicken
-			if ($CHAT_ENABLE) {
-				$chatServer =& ChatServer::GetInstance($GLOBALS['CHAT_SERVER_NAME']);
-				setTempLanguage($db2->f("user_id"));
-				$chatMsg = sprintf(_("Sie haben eine SMS von <b>%s</b> erhalten!"),htmlReady($db->f("fullname")." (".$db->f("username").")"));
-				restoreLanguage();
-				$chatMsg .= "<br></i>" . formatReady(stripslashes($message))."<i>";
-				foreach($chatServer->chatDetail as $chatid => $wert) {
-					if ($wert['users'][$db2->f("user_id")]) {
-						$chatServer->addMsg("system:".$db2->f("user_id"),$chatid,$chatMsg);
-					}
-				}
-			}
-			return $db3->affected_rows();
-		} else {
-			return false;
-		}
-	} else {
-		return -1;
-	}
-}
-*/
 
 function insert_message($message, $rec_uname, $user_id='', $time='', $tmp_message_id='', $set_deleted='') {
 	global $_fullname_sql, $user, $my_messaging_settings;
@@ -183,53 +120,24 @@ function insert_message($message, $rec_uname, $user_id='', $time='', $tmp_messag
 	}
 }
 
-/*
-//send mail to a group of users
-function circular_sms ($message, $mode, $group_id=0) {
-	global $user;
-	
-	$db=new DB_Seminar;
-	
-	switch ($mode) {
-		case "buddy" :
-			$query = sprintf ("SELECT contact.user_id, username FROM contact LEFT JOIN auth_user_md5 USING (user_id) WHERE owner_id = '%s' AND buddy = '1' ", $user->id);
-			$db->query ($query);
-
-			while ($db->next_record()) {
-				$count+=$this->insert_sms($db->f("username"), $message);
-			}
-		break;
-		case "group" :
-			$query = sprintf ("SELECT statusgruppe_user.user_id, username FROM statusgruppe_user LEFT JOIN auth_user_md5 USING (user_id) WHERE statusgruppe_id = '%s' ", $group_id);
-			$db->query($query);
-
-			while ($db->next_record()) {
-				$count+=$this->insert_sms($db->f("username"), $message);
-			}
-		break;
-	}
-	return $count;
-} 
-*/
 
 function buddy_chatinv ($message, $chat_id) {
 	global $user;
 	$this->db->query("SELECT contact.user_id, username FROM contact LEFT JOIN auth_user_md5 USING (user_id) WHERE owner_id = '$user->id' AND buddy = '1' ");
 	while ($this->db->next_record()) {
-		$count += $this->insert_chatinv($this->db->f("username"),$chat_id, $message);
+		$count += $this->insert_chatinv($message, $this->db->f("username"), $chat_id);
 	}
 	return $count;
 }
 
 //Chateinladung absetzen
-function insert_chatinv($rec_uname, $chat_id, $msg = "", $user_id = false) {
+function insert_chatinv($msg, $rec_uname, $chat_id, $user_id = false) {
 	global $user,$_fullname_sql,$CHAT_ENABLE;
 	if ($CHAT_ENABLE){
 		$chatServer =& ChatServer::GetInstance($GLOBALS['CHAT_SERVER_NAME']);
 		$db=new DB_Seminar;
 		$db2=new DB_Seminar;
 		$db3=new DB_Seminar;
-		$db4=new DB_Seminar;
 		
 		if (!$user_id) {
 			$user_id = $user->id;
@@ -251,7 +159,7 @@ function insert_chatinv($rec_uname, $chat_id, $msg = "", $user_id = false) {
 		
 		$m_id = md5(uniqid("voyeurism"));
 		
-		$db4->query ("INSERT INTO message SET message_id='$m_id', autor_id='".$user_id."', mkdate='".time()."', message='".mysql_escape_string($message)."', chat_id='$chat_uniqid' ");
+		$db3->query ("INSERT INTO message SET message_id='$m_id', autor_id='".$user_id."', mkdate='".time()."', message='".mysql_escape_string($message)."', chat_id='$chat_uniqid' ");
 		
 		$db3->query ("INSERT IGNORE INTO message_user SET message_id='$m_id', user_id='".get_userid($rec_uname)."', snd_rec='rec'");
 		$db3->query ("INSERT IGNORE INTO message_user SET message_id='$m_id', user_id='".get_userid($rec_uname)."', snd_rec='snd', deleted='1'");
@@ -265,21 +173,20 @@ function insert_chatinv($rec_uname, $chat_id, $msg = "", $user_id = false) {
 				$chatServer->addMsg("system:".$db2->f("user_id"),$chatid,$chatMsg);
 			}
 		}
-		
-		if ($db4->affected_rows()){
-			return TRUE;
-		} else {
-			return FALSE;
-		}
-		
+
+		return TRUE;
 	} else {
 		return FALSE;
 	}
 }
 
 function delete_chatinv($user_id = false){
+	global $user;
+
 	if ($GLOBALS['CHAT_ENABLE']){
-		$username = get_username($user_id);
+		if (!$user_id)
+			$user_id = $user->id;	
+			
 		$chatServer =& ChatServer::GetInstance($GLOBALS['CHAT_SERVER_NAME']);
 		foreach($chatServer->chatDetail as $chatid => $wert){
 			$active_chats[] = $wert['id'];
@@ -287,22 +194,32 @@ function delete_chatinv($user_id = false){
 		if (is_array($active_chats)){
 			$clause = " AND chat_id NOT IN('" . join("','",$active_chats) . "')";
 		}
-		$this->db->query("DELETE FROM globalmessages WHERE user_id_rec='$username'  AND chat_id IS NOT NULL" . $clause);
-		return $this->db->affected_rows();
+		$this->db->query("SELECT message.message_id FROM message_user LEFT JOIN message USING (message_id) WHERE message_user.user_id = '$user_id' AND snd_rec = 'rec' AND chat_id IS NOT NULL" . $clause);
+		
+		while ($this->db->next_record()) {
+			$this->db2->query ("DELETE FROM message_user WHERE message_id ='".$this->db->f("message_id")."' ");
+			$this->db2->query ("DELETE FROM message WHERE message_id ='".$this->db->f("message_id")."' ");
+		}
+
+		return $this->db2->affected_rows();
 	} else {
 		return false;
 	}
 }
 
 function check_chatinv($chat_id, $user_id = false){
+	global $user;
+	
 	if ($GLOBALS['CHAT_ENABLE']){
-		$username = get_username($user_id);
+		if (!$user_id)
+			$user_id = $user->id;
+			
 		$chatServer =& ChatServer::GetInstance($GLOBALS['CHAT_SERVER_NAME']);
 		$chat_uniqid = $chatServer->chatDetail[$chat_id]['id'];
 		if (!$chat_uniqid){
 			return false;	//no active chat
 		}
-		$this->db->query("SELECT message_id FROM globalmessages WHERE user_id_rec='$username' AND chat_id='$chat_uniqid' LIMIT 1");
+		$this->db->query("SELECT message.message_id FROM message_user LEFT JOIN message USING (message_id) WHERE message_user.user_id = '$user_id' AND snd_rec = 'rec' AND chat_id='$chat_uniqid' LIMIT 1");
 		return $this->db->next_record();
 	} else {
 		return false;
@@ -310,13 +227,17 @@ function check_chatinv($chat_id, $user_id = false){
 }
 
 function check_list_of_chatinv($chat_uniqids, $user_id = false){
+	global $user;
+	
 	if ($GLOBALS['CHAT_ENABLE']){
-		$username = get_username($user_id);
+		if (!$user_id)
+			$user_id = $user->id;
+			
 		if (!is_array($chat_uniqids)){
 			return false;	//no active chat
 		}
 		$ret = false;
-		$this->db->query("SELECT DISTINCT chat_id FROM globalmessages WHERE user_id_rec='$username' AND chat_id IN('" . join("','",$chat_uniqids)."')");
+		$this->db->query("SELECT DISTINCT chat_id FROM message_user LEFT JOIN message USING (message_id) WHERE user_id='$user_id' AND snd_rec = 'rec' AND chat_id IN('" . join("','",$chat_uniqids)."')");
 		while ($this->db->next_record()){
 			$ret[$this->db->f("chat_id")] = true;
 		}
