@@ -292,7 +292,7 @@ if ($s_send) {
 			status='$Status', Beschreibung='$Beschreibung', 
 			Sonstiges='$Sonstiges', art='$art', teilnehmer='$teilnehmer', 
 			vorrausetzungen='$vorrausetzungen', lernorga='$lernorga',
-			leistungsnachweis='$leistungsnachweis', ects='$ects', admission_turnout='$turnout' ";
+			leistungsnachweis='$leistungsnachweis', ects='$ects', admission_turnout='$turnout', Ort='$room'";
 		
 	$query .= "WHERE Seminar_id='$s_id'";
 
@@ -820,6 +820,12 @@ if (($s_id) && (auth_check())) {
 				<td class="<? echo $cssSw->getClass() ?>" align=right><?=_("Leistungsnachweis")?></td>
 				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <textarea name="leistungsnachweis" cols=58 rows=3 <? if ($lockdata[$lock_status]["leistungsnachweis"]) { echo " readonly ";}?>><?php echo htmlReady($db->f("leistungsnachweis")) ?></textarea><? if ($lockdata[$lock_status]["leistungsnachweis"]) { echo $lock_text;}?></td>
 			</tr>
+			<tr>
+				<td class="<? echo $cssSw->getClass() ?>" align=right><?=_("Ort")?></td>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <textarea name="room" cols=58 rows=3><?php echo htmlReady($db->f("Ort")) ?></textarea>
+					<br />&nbsp; <font size="-1"><b><?=_("Achtung:")."&nbsp;</b>"._("Diese Ortsangabe wird nur angezeigt, wenn keine Angaben aus Zeiten oder Sitzungsterminen gemacht werden k&ouml;nnen.");?></font>
+				</td>
+			</tr>
 			<?
 			//add the free adminstrable datafields
 			$localFields = $DataFields->getLocalFields($SessSemName[1], ($SessSemName["class"]) ? $SessSemName["class"] : "inst");
@@ -847,7 +853,7 @@ if (($s_id) && (auth_check())) {
 				</td>
 			</tr>
 			<?
-			}
+			} 
 			?>
 			<tr>
 				<td class="<? echo $cssSw->getClass() ?>" align=right><?=_("Sonstiges")?></td>
