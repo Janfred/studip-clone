@@ -728,16 +728,16 @@ function preg_call_link ($params, $mod, $extern = FALSE) {
 					$width = '';
 					// width in percent
 					if (substr($params[2], -1) == '%') {
-						$width = (int) substr($params[2], 0, -1) < 100 ? " width=\"{$params[2]}%\"" : ' width="100%"';
+						$width = (int) substr($params[2], 0, -1) < 100 ? " width=\"{$params[2]}\"" : ' width="100%"';
 					}
 					else {
 						// width of image in pixels
 						if (is_object($auth) && $auth->auth['xres'])
 							// 50% of x-resolution maximal
-							$max_width = floor($auth->auth['xres'] * 0.5);
+							$max_width = floor((int) $auth->auth['xres'] * 0.5);
 						else
 							$max_width = 400;
-						$width = $params[2] < $max_width ? " width=\"{$params[2]}\"" : " width=\"$max_width\"";
+						$width = ($params[2] < $max_width) ? " width=\"{$params[2]}\"" : " width=\"$max_width\"";
 					}
 				}
 				$tbr = "<img src=\"{$params[4]}\"$width border=\"0\"$style alt=\"{$params[1]}\">";
