@@ -101,15 +101,16 @@ function create_assigns($assign_object, &$this, $begin='', $end='') {
 		if ($assign_object->getRepeatMode() == "w") $week_offset++;
 		if ($assign_object->getRepeatMode() == "m") $month_offset++;
 		if ($assign_object->getRepeatMode() == "d") $day_offset++;
+
+		//inc the count
+		$quantity++;
 		
 		//check if we want to show the event and if it is not outdated
 		if ($temp_ts >= $begin) {
-			 if (($temp_ts <=$end) && ($temp_ts <= $assign_object -> getRepeatEnd()) && (($quantity < $assign_object->getRepeatQuantity()) || ($assign_object->getRepeatQuantity() == -1)))  {
+			 if (($temp_ts <=$end) && ($temp_ts <= $assign_object -> getRepeatEnd()) && (($quantity <= $assign_object->getRepeatQuantity()) || ($assign_object->getRepeatQuantity() == -1)))  {
 			 	$this->events[] = new AssignEvent($assign_object->getId(), $temp_ts, $temp_ts_end,
 										$assign_object->getResourceId(), $assign_object->getAssignUserId(), 
 										$assign_object->getUserFreeName());
-			
-				$quantity++;
 				}
 			}
 		} while(($temp_ts <=$end) && ($temp_ts <= $assign_object -> getRepeatEnd()) && ($quantity < $assign_object->getRepeatQuantity() || $assign_object->getRepeatQuantity() == -1));
