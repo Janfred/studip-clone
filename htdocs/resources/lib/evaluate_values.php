@@ -179,9 +179,11 @@ if (($view == "search") || ($view == "edit_request")) {
 	$clipObj = & ClipBoard::GetInstance("search");
 	$clipFormObj =& $clipObj->getFormObject();
 	if ($view == "edit_request") {
-		$clipFormObj->form_fields['clip_cmd']['options'][] = array('name' => _("In aktueller Anfrage mit ber&uuml;cksichtigen"), 'value' => 'add');
+		array_unshift ($clipFormObj->form_fields['clip_cmd']['options'], array('name' => _("In aktueller Anfrage mit ber&uuml;cksichtigen"), 'value' => 'add'));
+		$clipFormObj->form_buttons['clip_reload'] = array('type' => 'aktualisieren', 'info' => _("neu laden"));
 		
-		if ($clipFormObj->getFormFieldValue("clip_cmd") == "add") {
+		
+		if (($clipFormObj->getFormFieldValue("clip_cmd") == "add") && ($clipFormObj->IsClicked("clip_ok"))){
 			$marked_clip_ids = $clipFormObj->getFormFieldValue("clip_content");
 			$msg->addMsg(32);
 		}
@@ -191,7 +193,8 @@ if (($view == "search") || ($view == "edit_request")) {
 		$clipObj->insertElement($clip_in, "res");
 	if ($clip_out)
 		$clipObj->deleteElement($clip_out);
-	$clipObj->doClipCmd();
+	if (!$clipFormObj->IsClicked("clip_reload"))
+		$clipObj->doClipCmd();
 }
 
 
@@ -1405,7 +1408,12 @@ if ($save_state_x) {
 	}
 }
 
-if ($decline_request_x) {
+if ($suppose_decline_request_x) {
+	$msg->addMsg(43, array($PHP_SELF, $PHP_SELF));
+	$view = "edit_request";
+}
+
+if ($decline_request) {
 	require_once ($RELATIVE_PATH_RESOURCES."/lib/RoomRequest.class.php");
 	
 	$reqObj = new RoomRequest($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["request_id"]);
@@ -1477,7 +1485,7 @@ if (($inc_request_x) || ($dec_request_x) || ($new_session_started) || ($marked_c
 		//add the matching ressources to selection
 		if (getGlobalPerms($user->id) != "admin")
 			$resList = new ResourcesUserRoomsList ($user->id, FALSE, FALSE);		
-		$machting_resources = $reqObj->searchRooms(FALSE, TRUE, 10, TRUE, (is_object($resList)) ? array_keys($resList->getRooms()) : FALSE);
+		$machting_resources = $reqObj->searchRooms(FALSE, TRUE, 0, 10, TRUE, (is_object($resList)) ? array_keys($resList->getRooms()) : FALSE);
 		foreach ($machting_resources as $key => $val) {
 			if (!$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["considered_resources"][$key])
 				$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["considered_resources"][$key] = array("type"=>"matching");
