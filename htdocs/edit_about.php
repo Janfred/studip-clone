@@ -39,7 +39,7 @@ require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/DataFields.class.php");
 
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
-$ALLOW_ADMIN_USERACCESS = TRUE;
+$ALLOW_ADMIN_USERACCESS = FALSE;
 
 // Klassendefinition
 
@@ -965,7 +965,7 @@ if ($view=="Daten") {
 	 
 	if (($my_about->check=="user") || ($perm->have_perm("root") && $ALLOW_ADMIN_USERACCESS)) {
 		echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"25%\" align=\"left\"><blockquote><b>" . _("Username:") . " </td><td class=\"".$cssSw->getClass()."\" colspan=2 width=\"75%\" align=\"left\">&nbsp;";
-		if (($ALLOW_CHANGE_USERNAME && !StudipAuthAbstract::CheckField("auth_user_m5.username",$my_about->auth_user['auth_plugin'])) || ($perm->have_perm("root") && $ALLOW_ADMIN_USERACCESS)) {
+		if (($ALLOW_CHANGE_USERNAME && !StudipAuthAbstract::CheckField("auth_user_md5.username",$my_about->auth_user['auth_plugin'])) ) {
 			echo "&nbsp;<input type=\"text\" size=\"".round($max_col*0.25)."\" name=\"new_username\" value=\"".$my_about->auth_user["username"]."\">&nbsp; <font color=\"red\" size=+2>*</font>";
 		} else {
 			echo "&nbsp;<font size=\"-1\">".$my_about->auth_user["username"]."</font>";
