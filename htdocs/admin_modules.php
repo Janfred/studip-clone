@@ -256,7 +256,7 @@ if ($admin_modules_data["range_id"]) {
 				<font size=-1><?=_("aus")?><br /></font>
 			</td>
 			<td class="<? echo $cssSw->getClass() ?>" width="70%">
-				<font size=-1><?=($admin_modules_data["modules_list"]["ilias-connect"]) ? _("Die Anbindung zu Ilias Lernmodulen kann jederzeit deaktiviert werden.") : _("Die Anbindung zu Ilias Lernmodulen  kann jederzeit aktiviert werden.")?></font>
+				<font size=-1><?=($admin_modules_data["modules_list"]["ilias_connect"]) ? _("Die Anbindung zu Ilias Lernmodulen kann jederzeit deaktiviert werden.") : _("Die Anbindung zu Ilias Lernmodulen  kann jederzeit aktiviert werden.")?></font>
 			</td>
 		</tr>
 		<? }
