@@ -21,48 +21,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA	02111-1307, USA.
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
 $perm->check("admin");
 
-// Set this to something, just something different...
-$hash_secret = "jdfiuwenxclka";
-
-// generate_password($length):
-//
-// Erzeugt ein Passwort mit $length Zeichen [a-z0-9]
-function generate_password($length) {
-	mt_srand((double)microtime()*1000000);
-	for ($i=1;$i<=$length;$i++) {
-		$temp = mt_rand() % 36;
-		if ($temp < 10)
-			$temp += 48;	 // 0 = chr(48), 9 = chr(57)
-		else
-			$temp += 87;	 // a = chr(97), z = chr(122)
-		$pass .= chr($temp);
-	}
-	return $pass;
-}
-
-
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); 		// initialise Stud.IP-Session
 require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php"); 		// Funktionen fuer Nachrichtenmeldungen
-require_once("$ABSOLUTE_PATH_STUDIP/dates.inc.php"); 		// Wir brauchen die Funktionen zum Loeschen von Terminen...
 require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php"); 		// Wir brauchen den Namen der Uni
-require_once("$ABSOLUTE_PATH_STUDIP/datei.inc.php"); 		// Wir brauchen die Funktionen zum Loeschen der folder
 require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/admission.inc.php");	// Enthaelt Funktionen zum Updaten der Wartelisten
-require_once("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");	// Enthaelt Funktionen fuer Statusgruppen
-require_once("$ABSOLUTE_PATH_STUDIP/contact.inc.php");	 	// Enthaelt Funktionen fuer Adressbuchverwaltung
-require_once("$ABSOLUTE_PATH_STUDIP/messaging.inc.php");	 	// Enthaelt Funktionen fuer Nachrichtenubermittlung
-require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/DataFields.class.php");
-
-if ($RESOURCES_ENABLE) {
-	include_once ($RELATIVE_PATH_RESOURCES."/lib/DeleteResourcesUser.class.php");
-}
-if ($ILIAS_CONNECT_ENABLE) {
-	include_once ("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_LEARNINGMODULES/lernmodul_db_functions.inc.php");
-	include_once ("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_LEARNINGMODULES/lernmodul_user_functions.inc.php");
-}
+require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/UserManagement.class.php");
 
 $cssSw=new cssClassSwitcher;
-$messaging=new messaging;
 
 //-- hier muessen Seiten-Initialisierungen passieren --
 
@@ -76,10 +41,6 @@ include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");	//Linkleiste fuer admins
 // Get a database connection
 $db = new DB_Seminar;
 $db2 = new DB_Seminar;
-$validator=new email_validation_class;	// Klasse zum Ueberpruefen der Eingaben
-$validator->timeout=10;									// Wie lange warten wir auf eine Antwort des Mailservers?
-$smtp=new studip_smtp_class;									 // Einstellungen fuer das Verschicken der Mails
-$Zeit=date("H:i:s, d.m.Y",time());
 
 
 // Check if there was a submission
@@ -90,573 +51,88 @@ while ( is_array($HTTP_POST_VARS)
 	// Create a new user
 	case "create_x":
 
-		$run = TRUE;
-		// Do we have permission to do so?
-		if (!$perm->is_fak_admin() && addslashes(implode($perms,",")) == "admin") {
-			$msg .= "error§" . _("Sie haben keine Berechtigung <b>Admin-Accounts</b> anzulegen.") . "§";
-			$run = FALSE;
-		}
-		if (!$perm->have_perm("root") && addslashes(implode($perms,",")) == "root") {
-			$msg .= "error§" . _("Sie haben keine Berechtigung <b>Root-Accounts</b> anzulegen.") . "§";
-			$run = FALSE;
-		}
+		$UserManagement = new UserManagement;
 		
-		$username = trim($username);
-		$Vorname = trim($Vorname);
-		$Nachname = trim($Nachname);
-		$Email = trim($Email);
+		if (!$title_front)
+			$title_front = $title_front_chooser;
+		if (!$title_rear)
+			$title_rear = $title_rear_chooser;
+
+		$newuser = array(	'auth_user_md5.username' => stripslashes(trim($username)),
+											'auth_user_md5.Vorname' => stripslashes(trim($Vorname)),
+											'auth_user_md5.Nachname' => stripslashes(trim($Nachname)),
+											'auth_user_md5.Email' => stripslashes(trim($Email)),
+											'auth_user_md5.perms' => implode($perms,","),
+											'user_info.title_front' => stripslashes(trim($title_front)),
+											'user_info.title_rear' => stripslashes(trim($title_rear)),
+											'user_info.geschlecht' => stripslashes(trim($geschlecht)),
+										);
 		
-		// Do we have all necessary data?
-		if (empty($username) || empty($perms) || empty ($Email)) {
-			$msg .= "error§" . _("Bitte geben Sie <b>Username</b>, <b>Status</b> und <b>E-Mail</b> an!") . "§";
-			$run = FALSE;
-		}
-
-		// Does the user already exist?
-		// NOTE: This should be a transaction, but it is not...
-		$db->query("select * from auth_user_md5 where username='$username'");
-		if ($db->nf()>0) {
-			$msg .= "error§" . sprintf(_("BenutzerIn <b>%s</b> ist schon vorhanden!"), $username) . "§";
-			$run = FALSE;
-		}
-
-		// E-Mail erreichbar?
-		if (!$validator->ValidateEmailHost($Email)) {		 // Mailserver nicht erreichbar, ablehnen
-			$msg .= "error§" . _("Mailserver ist nicht erreichbar!") . "§";
-			$run = FALSE;
-		} else {																					// Server ereichbar
-			if (!$validator->ValidateEmailBox($Email)) {		// aber user unbekannt, ablehnen
-				$msg .= "error§" . sprintf(_("E-Mail an <b>%s</b> ist nicht zustellbar!"), $Email) . "§";
-				$run = FALSE;
-			}
-		}
+		$UserManagement->createNewUser($newuser);
 		
-		if ($run) { // alle Angaben ok
-			// Create a uid and insert the user...
-			$u_id=md5(uniqid($hash_secret));
-			$permlist = addslashes(implode($perms,","));
-			$password = generate_password(6);
-			$hashpass = md5($password);
-			if (!$title_front)
-				$title_front = $title_front_chooser;
-			if (!$title_rear)
-				$title_rear = $title_rear_chooser;
-				
-			$query = "INSERT INTO auth_user_md5 (user_id, username, password, perms, Vorname, Nachname, Email) values('$u_id','$username','$hashpass','$permlist','$Vorname','$Nachname','$Email')";
-			$query2 = "INSERT INTO user_info SET user_id='$u_id', geschlecht='$geschlecht', title_front='$title_front',title_rear='$title_rear', mkdate='".time()."', chdate='".time()."' ";			
-			$db->query($query);
-			$db2->query($query2);
-
-			if (($db->affected_rows() == 0) && ($db2->affected_rows() == 0)) {
-				$msg .= "error§" . _("Die &Auml;nderung konnte nicht in die Datenbank geschrieben werden.") . "§";
-				$run = FALSE;
-				}
-		}
-		
-		//do auto inserts, if we created an autor
-		if (($run) && (($permlist == "autor") || ($permlist == "tutor") || ($permlist == "dozent"))) {
-			if (is_array($AUTO_INSERT_SEM)){
-				foreach ($AUTO_INSERT_SEM as $a) {
-					$db->query("SELECT Name, start_time FROM seminare WHERE Seminar_id = '$a'");
-					$db->next_record();							
-					$group=select_group ($db->f("start_time"),$u_id);							
-					$db2->query("INSERT into seminar_user (Seminar_id, user_id, status, gruppe) values ('$a', '$u_id', 'autor', '$group')");
-					$msg .= sprintf("msg§" . _("Die Person wurde automatisch in die Veranstaltung <b>%s</b> eingetragen.") . "§", $db->f("Name"));
-				}
-			}
-		}
-		
-		if ($run) { // Benutzer angelegt
-			$msg .= "msg§" . sprintf(_("BenutzerIn \"%s\" angelegt."), $username) . "§";
-
-			// Mail abschicken...
-			$to=$Email;
-			$url = $smtp->url;
-
-			// include language-specific subject and mailbody
-			$user_language = getUserLanguagePath($u_id); // user has been just created, so we will get $DEFAULT_LANGUAGE
-			include_once("$ABSOLUTE_PATH_STUDIP"."locale/$user_language/LC_MAILS/create_mail.inc.php");
-
-			$smtp->SendMessage(
-			$smtp->env_from, array($to),
-			array("From: $smtp->from", "Reply-To: $smtp->abuse", "To: $to", "Subject: $subject"),
-			$mailbody);
-		}
-
 		break;
+
 
 	// Change user parameters
 	case "u_edit_x":
 
-		$run = TRUE;
-		// Do we have permission to do so?
-		if (!$perm->is_fak_admin() && addslashes(implode($perms,",")) == "admin") {
-			$msg .= "error§" . _("Sie haben keine Berechtigung, <b>Admin-Accounts</b> anzulegen.") . "§";
-			$run = FALSE;
-		}
-		if (!$perm->have_perm("root") && addslashes(implode($perms,",")) == "root") {
-			$msg .= "error§" . _("Sie haben keine Berechtigung, <b>Root-Accounts</b> anzulegen.") . "§";
-			$run = FALSE;
-		}
-		if (!$perm->have_perm("root")) {
-			$db->query("select * from auth_user_md5 where user_id='$u_id'");
-			$db->next_record();
-			if (!$perm->is_fak_admin() && $db->f("perms") == "admin") {
-				$msg .= "error§" . _("Sie haben keine Berechtigung <b>Admin-Accounts</b> zu ver&auml;ndern.") . "§";
-				$run = FALSE;
-			}
-			if ($db->f("perms") == "root") {
-				$msg .= "error§" . _("Sie haben keine Berechtigung <b>Root-Accounts</b> zu ver&auml;ndern.") . "§";
-				$run = FALSE;
-			}
-			if ($perm->is_fak_admin() && $db->f("perms") == "admin"){
-				$db->query("SELECT IF(count(a.Institut_id) - count(c.inst_perms),0,1) AS admin_ok FROM user_inst AS a 
-							LEFT JOIN Institute b ON (a.Institut_id=b.Institut_id AND b.Institut_id!=b.fakultaets_id) 
-							LEFT JOIN user_inst AS c ON(b.fakultaets_id=c.Institut_id AND c.user_id = '$user->id' AND c.inst_perms='admin') 
-							WHERE a.user_id ='$u_id' AND a.inst_perms = 'admin'");
-				$db->next_record();
-				$run = $db->f("admin_ok");
-				if (!$run){
-					$msg .= "error§" . _("Sie haben keine Berechtigung diesen Admin-Account zu ver&auml;ndern.") . "§";
-				}
-			}
-		}
-		
-		// aktiver Dozent?
-		$db->query("SELECT count(*) AS count FROM seminar_user WHERE user_id = '$u_id' AND status = 'dozent' GROUP BY user_id");
-		$db->next_record();
-		if ($db->f("count") && addslashes(implode($perms,",")) != "dozent") {
-			$msg .= sprintf("error§" . "Der Benutzer <b>%s</b> ist Dozent in %s aktiven Veranstaltungen und kann daher nicht in einen anderen Status versetzt werden." . "§", $username, $db->f("count"));
-			$run = FALSE;
-		}
-			
-		$db->query("select * from auth_user_md5 where user_id='$u_id'");
-		$db->next_record();
-			
-		$username = isset($username) ? trim($username) : $db->f("username");
-		$Vorname = isset($Vorname) ? trim($Vorname) : addslashes($db->f("Vorname"));
-		$Nachname = isset($Nachname) ? trim($Nachname) : addslashes($db->f("Nachname"));
-		$Email = isset($Email) ? trim($Email) : addslashes($db->f("Email"));
-		$permlist = isset($perms) ? addslashes(implode($perms,",")) : addslashes($db->f("perms"));
-			
-		// Do we have all necessary data?
-		if (empty($username) || empty($perms) || empty ($Email)) {
-			$msg .= "error§" . _("Bitte geben Sie <b>Username</b>, <b>Status</b> und <b>E-Mail</b> an!") . "§";
-			$run = FALSE;
-		}
-		
-		if ($run) { // alle Rechte und Angaben ok
-			// E-Mail erreichbar?
-			if (!$validator->ValidateEmailHost($Email)) {		 // Mailserver nicht erreichbar, ablehnen
-				$msg .= "error§" . _("Mailserver ist nicht erreichbar!") . "§";
-				$run = FALSE;
-			} else {																					// Server ereichbar
-				if (!$validator->ValidateEmailBox($Email)) {		// aber user unbekannt, ablehnen
-					$msg .= "error§" . sprintf(_("E-Mail an <b>%s</b> ist nicht zustellbar!"), $Email) . "§";
-					$run = FALSE;
-				}
-			}
-		}
-		
-		if ($run) { // E-Mail erreichbar
-			// Update user information.
+		$UserManagement = new UserManagement($u_id);
+
+		$newuser = array();
+		if (isset($username))
+			$newuser['auth_user_md5.username'] = stripslashes(trim($username));
+		if (isset($Vorname))
+			$newuser['auth_user_md5.Vorname'] = stripslashes(trim($Vorname));
+		if (isset($Nachname))
+			$newuser['auth_user_md5.Nachname'] = stripslashes(trim($Nachname));
+		if (isset($Email))
+			$newuser['auth_user_md5.Email'] = stripslashes(trim($Email));
+		if (isset($perms))
+			$newuser['auth_user_md5.perms'] = implode($perms,",");
+		if (isset($title_front) || isset($title_front_chooser)) {
 			if (!$title_front)
 				$title_front = $title_front_chooser;
+			$newuser['user_info.title_front'] = stripslashes(trim($title_front));
+		}
+		if (isset($title_rear) || isset($title_rear_chooser)) {
 			if (!$title_rear)
 				$title_rear = $title_rear_chooser;
-			$query = "UPDATE auth_user_md5 set username='$username', perms='$permlist', Vorname='$Vorname', Nachname='$Nachname', Email='$Email' where user_id='$u_id'";
-			$query2 = "UPDATE user_info SET geschlecht='$geschlecht', title_front='$title_front',title_rear='$title_rear',chdate='".time()."' WHERE user_id = '$u_id' ";			
-			$db->query($query);
-			$db2->query($query2);
-
-			if (($db->affected_rows() == 0) && ($db2->affected_rows() == 0)) {
-				$msg .= "error§" . _("Die &Auml;nderung konnte nicht in die Datenbank geschrieben werden.") . "§";
-				$run = FALSE;
-			}
-			if ($ILIAS_CONNECT_ENABLE) {
-				$db->query("SELECT preferred_language FROM user_info WHERE user_id='$u_id'");
-				if ($db->next_record()) 
-					$preferred_language = $db->f("preferred_language");
-				$this_ilias_id = get_connected_user_id($u_id);
-				if ($this_ilias_id != false) 
-					edit_ilias_user($this_ilias_id, $username, $geschlecht, $Vorname, $Nachname, $title_front, "Stud.IP", $Email, $permlist, $preferred_language);
-			}
+			$newuser['user_info.title_rear'] = stripslashes(trim($title_rear));
 		}
-		
-		if ($run) { // Aenderung erfolgt
-			$msg .= "msg§" . sprintf(_("User \"%s\" ver&auml;ndert."), $username) . "§";
-
-			// Mail abschicken...
-			$to=$Email;
-			$url = $smtp->url;
-
-			// include language-specific subject and mailbody
-			$user_language = getUserLanguagePath($u_id);
-			include_once("$ABSOLUTE_PATH_STUDIP"."locale/$user_language/LC_MAILS/change_mail.inc.php");
-
-			$smtp->SendMessage(
-			$smtp->env_from, array($to),
-			array("From: $smtp->from", "Reply-To: $smtp->abuse", "To: $to", "Subject: $subject"),
-			$mailbody);
+		if (isset($geschlecht))
+			$newuser['user_info.geschlecht'] = stripslashes(trim($geschlecht));
 			
-			//do auto inserts, if we changed to autor or higher
-			if (($permlist == "autor") || ($permlist == "tutor") || ($permlist == "dozent")) {
-				if (is_array($AUTO_INSERT_SEM)){
-					foreach ($AUTO_INSERT_SEM as $a) {
-						$db->query("SELECT Name, start_time, Schreibzugriff FROM seminare WHERE Seminar_id = '$a'");
-						if ($db->num_rows()) {
-							$db->next_record();
-							if ($db->f("Schreibzugriff") < 2) { // es gibt das Seminar und es ist kein Passwort gesetzt
-								$db2 = new DB_Seminar;
-								$db2->query("SELECT status FROM seminar_user WHERE Seminar_id = '$a' AND user_id='$u_id'");
-								if ($db2->num_rows()) { // Benutzer ist schon eingetragen
-									$db2->next_record();
-									if ($db2->f("status") == "user") { // wir können ihn hochstufen
-										$db2->query("UPDATE seminar_user SET status = 'autor' WHERE Seminar_id = '$a' AND user_id='$user->id'");	
-										$msg .= sprintf("msg§" . _("Der Person wurden Schreibrechte in der Veranstaltung <b>%s</b> erteilt.") . "§", $db->f("Name"));
-									}
-								} else {  // Benutzer ist noch nicht eingetragen
-									$group=select_group ($db->f("start_time"),$u_id);							
-									$db2->query("INSERT into seminar_user (Seminar_id, user_id, status, gruppe) values ('$a', '$u_id', 'autor', '$group')");
-									$msg .= sprintf("msg§" . _("Die Person wurde automatisch in die Veranstaltung <b>%s</b> eingetragen.") . "§", $db->f("Name"));
-								}
-							}
-						}
-					}
-				}
-			}
-				
-
-			// Hochstufung auf admin oder root?
-			if (addslashes(implode($perms,",")) == "admin" || addslashes(implode($perms,",")) == "root") {
-				//Eintraege aus Veranstaltungen loeschen
-				$query = "delete from seminar_user where user_id='$u_id'";
-				$db->query($query);
-				if (($db_ar = $db->affected_rows()) > 0) {
-					$msg .= "info§" . sprintf(_("%s Eintr&auml;ge aus Veranstaltungen gel&ouml;scht."), $db_ar) . "§";
-				}
-				//Eintraege aus Wartelisten loeschen
-				$query2 = "SELECT seminar_id FROM admission_seminar_user where user_id='$u_id'";
-				$query = "delete from admission_seminar_user where user_id='$u_id'";
-				$db->query($query);
-				$db2->query($query2);
-				if (($db_ar = $db->affected_rows()) > 0) {
-					$msg .= "info§" . sprintf(_("%s Eintr&auml;ge aus Wartelisten gel&ouml;scht."), $db_ar) . "§";
-				while ($db2->next_record()) 
-					update_admission($db2->f("seminar_id"));
-				}
-			}
-			if (addslashes(implode($perms,",")) == "admin") {
-				$query = "delete from user_inst where user_id='$u_id' AND inst_perms != 'admin'";
-				$db->query($query);
-				if (($db_ar = $db->affected_rows()) > 0) {
-					$msg .= "info§" . sprintf(_("%s Eintr&auml;ge aus MitarbeiterInnenlisten gel&ouml;scht."), $db_ar) . "§";
-				}
-			}
-			if (addslashes(implode($perms,",")) == "root") {
-				$query = "delete from user_inst where user_id='$u_id'";
-				$db->query($query);
-				if (($db_ar = $db->affected_rows()) > 0) {
-					$msg .= "info§" . sprintf(_("%s Eintr&auml;ge aus MitarbeiterInnenlisten gel&ouml;scht."), $db_ar) . "§";
-				}
-			}
-		}
-
+		$UserManagement->changeUser($newuser);
+		
 		break;
+
 
 	// Change user password
 	case "u_pass_x":
 	
-		$run = TRUE;
-		// Do we have permission to do so?
-		if (!$perm->have_perm("root")) {
-			$db->query("select * from auth_user_md5 where user_id='$u_id'");
-			$db->next_record();
-			if ($db->f("perms") == "root") {
-				$msg .= "error§" . _("Sie haben keine Berechtigung <b>Root-Accounts</b> zu ver&auml;ndern.") . "§";
-				$run = FALSE;
-			}
-			if ($perm->is_fak_admin() && $db->f("perms") == "admin"){
-				$db->query("SELECT IF(count(a.Institut_id) - count(c.inst_perms),0,1) AS admin_ok FROM user_inst AS a 
-							LEFT JOIN Institute b ON (a.Institut_id=b.Institut_id AND b.Institut_id!=b.fakultaets_id) 
-							LEFT JOIN user_inst AS c ON(b.fakultaets_id=c.Institut_id AND c.user_id = '$user->id' AND c.inst_perms='admin') 
-							WHERE a.user_id ='$u_id' AND a.inst_perms = 'admin'");
-				$db->next_record();
-				$run = $db->f("admin_ok");
-				if (!$run){
-					$msg .= "error§" . _("Sie haben keine Berechtigung diesen Admin-Account zu ver&auml;ndern.") . "§";
-				}
-			}
-			
-		}
-		
-		if ($run) { // Rechte ok
-			// E-Mail erreichbar?
-			if (!$validator->ValidateEmailHost($Email)) {		 // Mailserver nicht erreichbar, ablehnen
-				$msg .= "error§" . _("Mailserver ist nicht erreichbar!") . "§";
-      	$run = FALSE;
-			} else {																					// Server ereichbar
-				if (!$validator->ValidateEmailBox($Email)) {		// aber user unbekannt, ablehnen
-					$msg .= "error§" . sprintf(_("E-Mail an <b>%s</b> ist nicht zustellbar!"), $Email) . "§";
-      		$run = FALSE;
-				}
-			}
-		}
-		
-		if ($run) { // E-Mail erreichbar
-			// Update user password.
-			$permlist = addslashes(implode($perms,","));
-			$password = generate_password(6);
-			$hashpass = md5($password);
-			$query = "update auth_user_md5 set password='$hashpass' where user_id='$u_id'";
-			$db->query($query);
-			if ($db->affected_rows() == 0) {
-				$msg .= "error§<b>" . _("Fehlgeschlagen:") . "</b> " . $query . "§";
-				break;
-			}
-		}
-		
-		if ($run) { // Aenderung durchgefuehrt
-			$msg .= "msg§" . sprintf(_("Passwort von User \"%s\" neu gesetzt."), $username) . "§";
+		$UserManagement = new UserManagement($u_id);
 
-			// Mail abschicken...
-			$to=$Email;
-			$url = $smtp->url;
-
-			// include language-specific subject and mailbody
-			$user_language = getUserLanguagePath($u_id);
-			include_once("$ABSOLUTE_PATH_STUDIP"."locale/$user_language/LC_MAILS/password_mail.inc.php");
-
-			$smtp->SendMessage(
-			$smtp->env_from, array($to),
-			array("From: $smtp->from", "Reply-To: $smtp->abuse", "To: $to", "Subject: $subject"),
-			$mailbody);
-		}
+		$UserManagement->setPassword();
 
 		break;
+
 
 	// Delete the user
 	case "u_kill_x":
 	
-		$run = TRUE;
-		$db->query("select perms,username from auth_user_md5 where user_id='$u_id'");
-		$db->next_record();
-		$username = $db->f("username");
-		// Do we have permission to do so?
-		if (!$perm->have_perm("root")) {
-			if ($db->f("perms") == "root") {
-				$msg .= "error§" . _("Sie haben keine Berechtigung <b>Root-Accounts</b> zu l&ouml;schen.") . "§";
-				$run = FALSE;
-			}
-			if ($perm->is_fak_admin() && $db->f("perms") == "admin"){
-				$db->query("SELECT IF(count(a.Institut_id) - count(c.inst_perms),0,1) AS admin_ok FROM user_inst AS a 
-							LEFT JOIN Institute b ON (a.Institut_id=b.Institut_id AND b.Institut_id!=b.fakultaets_id) 
-							LEFT JOIN user_inst AS c ON(b.fakultaets_id=c.Institut_id AND c.user_id = '$user->id' AND c.inst_perms='admin') 
-							WHERE a.user_id ='$u_id' AND a.inst_perms = 'admin'");
-				$db->next_record();
-				$run = $db->f("admin_ok");
-				if (!$run){
-					$msg .= "error§" . _("Sie haben keine Berechtigung diesen Admin-Account zu l&ouml;schen.") . "§";
-				}
-			}
-		}
-		
-		// aktiver Dozent?
-		$db->query("SELECT count(*) AS count FROM seminar_user WHERE user_id = '$u_id' AND status = 'dozent' GROUP BY user_id");
-		$db->next_record();
-		if ($db->f("count")) {
-			$msg .= sprintf("error§" . _("Der Benutzer/die Benutzerin <b>%s</b> ist DozentIn in %s aktiven Veranstaltungen und kann daher nicht gel&ouml;scht werden.") . "§", $username, $db->f("count"));
-			$run = FALSE;
-		}
+		$UserManagement = new UserManagement($u_id);
 
-		if ($run) { // Rechte ok
-			// Delete that user.
-			
-			// store user preferred language for sending mail
-			$user_language = getUserLanguagePath($u_id);
-			
-			// delete user from seminars (postings will be preserved)
-			$query = "delete from seminar_user where user_id='$u_id'";
-			$db->query($query);
-			if (($db_ar = $db->affected_rows()) > 0) {
-				$msg .= "info§" . sprintf(_("%s Eintr&auml;ge aus Veranstaltungen gel&ouml;scht."), $db_ar) . "§";
-			}
-			// delete user from waiting lists
-			$query2 = "SELECT seminar_id FROM admission_seminar_user where user_id='$u_id'";
-			$query = "delete from admission_seminar_user where user_id='$u_id'";
-			$db->query($query);
-			$db2->query($query2);
-			if (($db_ar = $db->affected_rows()) > 0) {
-				$msg .= "info§" . sprintf(_("%s Eintr&auml;ge aus Wartelisten gel&ouml;scht."), $db_ar) . "§";
-			while ($db2->next_record()) 
-				update_admission($db2->f("seminar_id"));
-			}
-			// delete 'Studiengaenge'
-			$query = "delete from user_studiengang where user_id='$u_id'";
-			$db->query($query);
-			if (($db_ar = $db->affected_rows()) > 0)
-				$msg .= "info§" . sprintf(_("%s Zuordnungen zu Studieng&auml;ngen gel&ouml;scht."), $db_ar) . "§";
-			// Dokumente des users loeschen
-			$temp_count = 0;
-			$query = "SELECT dokument_id FROM dokumente WHERE user_id='$u_id'";
-			$db->query($query);
-			while ($db->next_record()) {
-				if (delete_document($db->f("dokument_id")))
-					$temp_count ++;
-			}
-			if ($temp_count) {
-				$msg .= "info§" . sprintf(_("%s Dokumente gel&ouml;scht."), $temp_count) . "§";
-			}
-			// delete empty folders of this user
-			$temp_count = 0;
-			$query = "SELECT folder_id FROM folder WHERE user_id='$u_id' ORDER BY mkdate DESC";
-			$db->query($query);
-			while ($db->next_record()) {
-				$query = "SELECT count(*) AS count FROM folder WHERE range_id = '".$db->f("folder_id")."'";
-				$db2->query($query);
-	 			$db2->next_record();
-				if (!$db2->f("count") && !doc_count($db->f("folder_id"))) {
-					$query = "DELETE FROM folder WHERE folder_id ='".$db->f("folder_id")."'";
-					$db2->query($query);
-					$temp_count += $db2->affected_rows();
-				}
-			}
-			if ($temp_count) {
-				$msg .= "info§" . sprintf(_(" leere Ordner gel&ouml;scht."), $temp_count) . "§";
-			}
-			// folder left?
-			$query = "SELECT count(*) AS count FROM folder WHERE user_id='$u_id'";
-			$db->query($query);
-	 		$db->next_record();
-			if ($db->f("count")) {
-				$msg .= sprintf("info§" . _("%s Ordner konnten nicht gel&ouml;scht werden, da sie noch Dokumente anderer BenutzerInnen enthalten.") . "§", $db->f("count"));
-			}
-			// delete user from instituts
-			$query = "delete from user_inst where user_id='$u_id'";
-			$db->query($query);
-			if (($db_ar = $db->affected_rows()) > 0) {
-				$msg .= "info§" . sprintf(_("%s Eintr&auml;ge aus MitarbeiterInnenlisten gel&ouml;scht."), $db_ar) . "§";
-			}
-			// user aus den Statusgruppen rauswerfen
-			if ($db_ar = RemovePersonFromAllStatusgruppen(get_username($u_id))  > 0) {
-				$msg .= "info§" . sprintf(_("%s Eintr&auml;ge aus Funktionen / Gruppen gel&ouml;scht."), $db_ar) . "§";
-			}
-			// Alle persoenlichen Termine dieses users löschen
-		 	if ($db_ar = delete_range_of_dates($u_id, FALSE) > 0) {
-				$msg .= "info§" . sprintf(_("%s Eintr&auml;ge aus den Terminen gel&ouml;scht."), $db_ar) . "§";
-			}
-			// Alle persoenlichen News-Verweise auf diesen user löschen
-		 	$query = "DELETE FROM news_range where range_id='$u_id'";
-			$db->query($query);
-			if (($db_ar = $db->affected_rows()) > 0) {
-				$msg .= "info§" . sprintf(_("%s Verweise auf News gel&ouml;scht."), $db_ar) . "§";
-			}
-			// Die News durchsehen, ob es da jetzt verweiste Einträge gibt...
-		 	$query = "SELECT news.news_id FROM news LEFT OUTER JOIN news_range USING (news_id) where range_id IS NULL";
-			$db->query($query);
-			while ($db->next_record()) {	// Diese News hängen an nix mehr...
-				$tempNews_id = $db->f("news_id");
-			 	$query = "DELETE FROM news where news_id = '$tempNews_id'";
-				$db2->query($query);
-			}
-			if (($db_ar = $db->num_rows()) > 0) {
-				$msg .= "info§" . sprintf(_("%s Eintr&auml;ge aus den News gel&ouml;scht."), $db_ar) . "§";
-			}
-			// user aus dem Archiv werfen
-			$query = "delete from archiv_user where user_id='$u_id'";
- 			$db->query($query);
-		 	if (($db_ar = $db->affected_rows()) > 0) {
-			 	$msg .= "info§" . sprintf(_("%s Eintr&auml;ge aus dem Zugriffsberechtigungen f&uuml;r das Archiv gel&ouml;scht."), $db_ar) . "§";
-	 		}
-	 		// Delete all guestbook entrys
-			$query = "delete from guestbook where range_id='$u_id'";
- 			$db->query($query);
-		 	if (($db_ar = $db->affected_rows()) > 0) {
-			 	$msg .= "info§" . sprintf(_("%s Eintr&auml;ge aus dem Gästebuch gel&ouml;scht."), $db_ar) . "§";
-	 		}
-	 		
-			// alle Daten des users löschen
-			$query = "delete from kategorien where range_id = '$u_id'";
-			$db->query($query);
-			$query = "delete from active_sessions where sid = '$u_id'";
-			$db->query($query);
-			
-			// delete all messeges send or received by this user
-			$messaging->delete_all_messages($u_id);
-			
-			$db->query($query);
-			$query = "delete from user_info where user_id= '$u_id'";
-			$db->query($query);
-			if(file_exists("./user/".$u_id.".jpg")) {
-				if (unlink("./user/".$u_id.".jpg"))
-					$msg .= "info§" . _("Bild gel&ouml;scht.") . "§";
-				else
-					$msg .= "error§" . _("Bild konnte nicht gel&ouml;scht werden.") . "§";
-			}
-			
-			//kill the datafields
-			$DataFields = new DataFields($u_id);
-			$DataFields->killAllEntries();				
-			
-			//kill all the ressources that are assigned to the Veranstaltung (and all the linked or subordinated stuff!)
-			if ($RESOURCES_ENABLE) {
-				$killAssign = new DeleteResourcesUser($u_id);
-				$killAssign->delete();
-			}
-			
-			//kill ILIAS-Account if it was automatically generated)
-			if ($ILIAS_CONNECT_ENABLE) {
-				$this_ilias_id = get_connected_user_id($u_id);
-				if (($this_ilias_id != false) AND (is_created_user($u_id) == 1))
-					delete_ilias_user($this_ilias_id);
-			}
-			
-			// Aus allen Adressbüchern und persönlcihen Einträgen raus...
-			$buddykills = RemoveUserFromBuddys($u_id);
-			if ($buddykills > 0) {
-				$msg .= "info§" . sprintf(_("%s Eintr&auml;ge aus Adressb&uuml;chern gel&ouml;scht."), $buddykills) . "§";
-			}
+		$UserManagement->deleteUser();
 
-			$query = "delete from auth_user_md5 where user_id='$u_id' and username='$username'";
-			$db->query($query);
-			if ($db->affected_rows() == 0) {
-				$msg .= "error§<b>" . _("Fehlgeschlagen:") . "</b> " . $query . "§";
-      			$run = FALSE;
-			}
-		}
-		
-		if ($run) { // User geloescht
-			$msg .= "msg§" . sprintf(_("User \"%s\" gel&ouml;scht."), $username) . "§";
-
-			// E-Mail erreichbar?
-			if (!$validator->ValidateEmailHost($Email)) {		 // Mailserver nicht erreichbar, ablehnen
-				$msg .= "error§" . _("Mailserver ist nicht erreichbar!") . "§";
-			} else {																					// Server ereichbar
-				if (!$validator->ValidateEmailBox($Email)) {		// aber user unbekannt, ablehnen
-					$msg .= "error§" . sprintf(_("E-Mail an <b>%s</b> ist nicht zustellbar!"), $Email) . "§";
-				} else {
-					// Mail abschicken...
-					$permlist = addslashes(implode($perms,","));
-					$to=$Email;
-
-					// include language-specific subject and mailbody
-					include_once("$ABSOLUTE_PATH_STUDIP"."locale/$user_language/LC_MAILS/delete_mail.inc.php");
-
-					$smtp->SendMessage(
-					$smtp->env_from, array($to),
-					array("From: $smtp->from", "Reply-To: $smtp->abuse", "To: $to", "Subject: $subject"),
-					$mailbody);
-				}
-			}
-		}
 		break;
+
 	
 	default:
 		break;
  	}
 }
 
-	// einzelnen Benutzer anzeigen
+// einzelnen Benutzer anzeigen
 if (isset($details)) {
 	if ($details=="" && in_array("Standard",$GLOBALS['STUDIP_AUTH_PLUGIN'])) { // neuen Benutzer anlegen
 		?>
@@ -810,7 +286,7 @@ if (isset($details)) {
 					 if($TITLE_FRONT_TEMPLATE[$i] == $db->f("title_front"))
 					 	echo " selected ";
 					 echo ">$TITLE_FRONT_TEMPLATE[$i]</option>";
-				}
+					}
 				?>
 				</select></td>
 				<td class="steel1">&nbsp;<input type="text" name="title_front" value="<?=$db->f("title_front")?>" size=24 maxlength=63>
@@ -834,7 +310,7 @@ if (isset($details)) {
 					 if($TITLE_REAR_TEMPLATE[$i] == $db->f("title_rear"))
 					 	echo " selected ";
 					 echo ">$TITLE_REAR_TEMPLATE[$i]</option>";
-				}
+					}
 				?>
 				</select></td>
 				<td class="steel1">&nbsp;<input type="text" name="title_rear" value="<?=$db->f("title_rear")?>" size=24 maxlength=63>
@@ -895,9 +371,9 @@ if (isset($details)) {
 					$db2->next_record();
 				}
 			
-				if ($perm->have_perm("root") || 
+				if ($perm->have_perm("root") ||
 					($db->f("perms") != "admin" && $db->f("perms") != "root") ||
-					$db2->f("admin_ok") ) {
+					$db2->f("admin_ok")) {
 					?>
 					<input type="IMAGE" name="u_edit" <?=makeButton("uebernehmen", "src")?> value=" <?=_("Ver&auml;ndern")?> ">&nbsp;
 					<?
@@ -969,6 +445,7 @@ if (isset($details)) {
 
 	<?
 	parse_msg($msg);
+	parse_msg($UserManagement->msg);
 	?>
 
 	<tr><td class="blank" colspan=2>

@@ -3,19 +3,20 @@
 		
 		$mailbody="This is a Stud.IP system information mail\n"
 		."(Studienbegleitender Internetsupport von Präsenzlehre)\n"
-		."- $UNI_NAME_CLEAN -\n\n"
+		."- " . $GLOBALS['UNI_NAME_CLEAN'] . " -\n\n"
 		."Your account was modified by an administrator at $Zeit\n"
 		."The current information is:\n\n"
-		."Username: $username\n"
-		."Status: $permlist\n"
-		."Forename: $Vorname\n"
-		."Surname: $Nachname\n"
-		."E-mail-address: $Email\n\n"
+		."Username: " . $this->user_data['auth_user_md5.username'] . "\n"
+		."Status: " . $this->user_data['auth_user_md5.perms'] . "\n"
+		."Forename: " . $this->user_data['auth_user_md5.Vorname'] . "\n"
+		."Surname: " . $this->user_data['auth_user_md5.Nachname'] . "\n"
+		."E-mail-address: " . $this->user_data['auth_user_md5.Email'] . "\n\n"
 		."Your password has not been changed.\n\n"
 		."This mail has been sent to you, to inform you of the changes.\n\n"
 		."If you have objections against these changes, please contact\n"
-		."$smtp->abuse. You can simply reply to this mail.\n\n"
+		. $this->smtp->abuse . "\n"
+		."You can simply reply to this mail.\n\n"
 		."Here takes you directly into the system:\n"
-		."$url\n\n";
+		. $this->smtp->url . "\n\n";
 
 ?>

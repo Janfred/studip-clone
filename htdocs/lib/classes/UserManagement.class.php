@@ -202,8 +202,12 @@ class UserManagement {
 	* @param	string	old status before changes
 	*/
 	function autoInsertSem($old_status = FALSE) {
-		global $AUTO_INSERT_SEM, $auth;
+		global $AUTO_INSERT_SEM, $perm, $auth;
 		
+		if (!$perm->have_perm("admin") && $this->user_data['auth_user_md5.user_id'] != $auth->auth["uid"]) {
+			$this->msg .= "error§" . _("Sie haben keine Berechtigung diesen Account zu ver&auml;ndern.") . "§";
+			return FALSE;
+		}
 		if (($old_status != "autor") && ($old_status != "tutor") && ($old_status != "dozent")) {
 			if (($this->user_data['auth_user_md5.perms'] == "autor") || ($this->user_data['auth_user_md5.perms'] == "tutor") || ($this->user_data['auth_user_md5.perms'] == "dozent")) {
 				if (is_array($AUTO_INSERT_SEM)){

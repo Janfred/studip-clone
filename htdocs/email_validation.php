@@ -24,6 +24,10 @@ $perm->check("user");
 // nobody hat hier nix zu suchen...
 
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php"); 
+require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
+require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/UserManagement.class.php");
 
 // -- here you have to put initialisations for the current page
 
@@ -34,9 +38,6 @@ $magic     = "dsdfjhgretha";  // Challenge seed.
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 
-require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php"); 
-require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
 
 ?>
 <br>
@@ -103,29 +104,9 @@ require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
 		my_info(_("Einige Veranstaltungen erfordern allerdings bei der Anmeldung<br>die Eingabe eines Passwortes.<br>Dieses Passwort erfahren Sie von der Dozentin oder dem Dozenten der Veranstaltung.") . "\n");
 
 		// Auto-Eintrag in Boards
-		if (is_array($AUTO_INSERT_SEM)){
-			foreach ($AUTO_INSERT_SEM as $a) {
-				$db->query("SELECT Name, start_time, Schreibzugriff FROM seminare WHERE Seminar_id = '$a'");
-				if ($db->num_rows()) {
-					$db->next_record();
-					if ($db->f("Schreibzugriff") < 2) { // es gibt das Seminar und es ist kein Passwort gesetzt
-						$db2 = new DB_Seminar;
-						$db2->query("SELECT status FROM seminar_user WHERE Seminar_id = '$a' AND user_id='$user->id'");
-						if ($db2->num_rows()) { // Benutzer ist schon eingetragen
-							$db2->next_record();
-							if ($db2->f("status") == "user") { // wir können ihn hochstufen
-								$db2->query("UPDATE seminar_user SET status = 'autor' WHERE Seminar_id = '$a' AND user_id='$user->id'");	
-								my_msg(sprintf(_("Ihnen wurden Schreibrechte in der Veranstaltung <b>%s</b> erteilt."), $db->f("Name")) . "\n");
-							}
-						} else {  // Benutzer ist noch nicht eingetragen
-							$group=select_group ($db->f("start_time"),$user->id);							
-							$db2->query("INSERT into seminar_user (Seminar_id, user_id, status, gruppe) values ('$a', '$user->id', 'autor', '$group')");
-							my_msg(sprintf(_("Sie wurden automatisch in die Veranstaltung <b>%s</b> eingetragen."), $db->f("Name")) . "\n");
-						}
-					}
-				}
-			}
-		}
+		$UserManagement = new UserManagement($user->id);
+		$UserManagement->autoInsertSem('user');
+
 		$auth->logout();	// einen Logout durchführen, um erneuten Login zu erzwingen
 		my_info(sprintf(_("Die Status&auml;nderung wird erst nach einem erneuten %sLogin%s wirksam!<br>Deshalb wurden Sie jetzt automatisch ausgeloggt."), "<a href=\"index.php?again=yes\"><b>", "</b></a>") . "\n");
 		print "";
