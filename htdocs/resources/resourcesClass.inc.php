@@ -90,6 +90,8 @@ class AssignObject {
 	}
 
 	function getOwnerName($explain=FALSE, $id='') {
+		global $TERMIN_TYP;
+		
 		if (!$id)
 			$id=$this->owner_id;
 
@@ -128,13 +130,13 @@ class AssignObject {
 						return $this->db->f("Name"). " (Veranstaltung)";	
 			break;
 			case "date":
-				$query = sprintf("SELECT content FROM termine WHERE termin_id='%s' ",$id);
+				$query = sprintf("SELECT Name, content, date_typ FROM termine LEFT JOIN seminare ON (seminar_id = range_id) WHERE termin_id='%s' ",$id);
 				$this->db->query($query);
 				if ($this->db->next_record())
 					if (!$explain)
-						return $this->db->f("content");
+						return $this->db->f("Name");
 					else
-						return $this->db->f("content"). " (Veranstaltungstermin)";	
+						return $this->db->f("Name")." (".$TERMIN_TYP[$this->db->f("date_typ")]["name"].")";	
 			break;
 			case "global":
 			default:
