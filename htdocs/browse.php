@@ -133,7 +133,7 @@ echo _("W&auml;hlen Sie den gew&uuml;nschen Bereich aus oder suchen Sie nach ein
 		$db2->query("SELECT * FROM seminare ORDER BY Name");
 	else {
 		$templist = "'" . implode ("', '", $AUTO_INSERT_SEM) . "'";
-		$db2->query("SELECT * FROM seminar_user LEFT JOIN seminare USING (Seminar_id) WHERE seminare.Seminar_id NOT IN ($templist) AND user_id = '$user->id' ORDER BY Name");
+		$db2->query("SELECT * FROM seminar_user LEFT JOIN seminare USING (Seminar_id) WHERE seminare.Seminar_id NOT IN ($templist) AND user_id = '$user->id' AND (seminare.modules & 8) ORDER BY Name");
 	}
 	if ($sem_id == "")
 		printf ("<option value=\"0\">- - -\n");
