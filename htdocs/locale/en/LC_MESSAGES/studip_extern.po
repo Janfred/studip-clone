@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: studip_extern\n"
-"POT-Creation-Date: 2004-02-14 18:58+0100\n"
+"POT-Creation-Date: 2004-02-15 14:22+0100\n"
 "PO-Revision-Date: 2004-02-15 14:01+0100\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
@@ -140,7 +140,8 @@ msgstr "Staff member"
 msgid ""
 "Das Modul &quot;Mitarbeiter&quot; gibt ein Mitarbeiterverzeichnis einer "
 "Einrichtung aus."
-msgstr "The module &quot;staff member&quot; provides a staff index of an institute."
+msgstr ""
+"The module &quot;staff member&quot; provides a staff index of an institute."
 
 #: extern/extern_config.inc.php:51
 msgid "Mitarbeiterdetails"
@@ -331,8 +332,10 @@ msgstr ""
 "field, or choose a colour from the drop down menu."
 
 #: extern/views/ExternEditHtml.class.php:161
-msgid "Diese Farbe wird als zweite Farbe bei aktiviertem Zebra-Effekt ausgegeben."
-msgstr "This colour will be used as the second colour when Zebra Effect is activated."
+msgid ""
+"Diese Farbe wird als zweite Farbe bei aktiviertem Zebra-Effekt ausgegeben."
+msgstr ""
+"This colour will be used as the second colour when Zebra Effect is activated."
 
 #: extern/views/ExternEditHtml.class.php:162
 msgid "2. Hintergrundf.:"
@@ -357,7 +360,8 @@ msgid "Linkfarbe (nicht besucht):"
 msgstr "Link colour (not visited):"
 
 #: extern/views/ExternEditHtml.class.php:206
-msgid "Diese Farbe wird seitenweit für Verweise zu bereits besuchten Zielen benutzt."
+msgid ""
+"Diese Farbe wird seitenweit für Verweise zu bereits besuchten Zielen benutzt."
 msgstr "This colour is used page-wide for links to lines already used."
 
 #: extern/views/ExternEditHtml.class.php:207
@@ -373,8 +377,10 @@ msgid "Linkfarbe (aktiviert):"
 msgstr "Link colour (activated):"
 
 #: extern/views/ExternEditHtml.class.php:336
-msgid "Geben Sie den Abstand zwischen Zelleninhalt und Zellenrand in Pixeln an."
-msgstr "Enter the distance, in pixels, between the cell contents and the cell border."
+msgid ""
+"Geben Sie den Abstand zwischen Zelleninhalt und Zellenrand in Pixeln an."
+msgstr ""
+"Enter the distance, in pixels, between the cell contents and the cell border."
 
 #: extern/views/ExternEditHtml.class.php:348
 msgid "Cellpadding:"
@@ -499,7 +505,8 @@ msgstr "Page title:"
 msgid ""
 "Aktivieren Sie einen vertikalen oder horizontalen Zebra-Effekt für "
 "Tabellenzeilen/-spalten. "
-msgstr "Activate a vertical or horizontal Zebra Effect for table rows / columns. "
+msgstr ""
+"Activate a vertical or horizontal Zebra Effect for table rows / columns. "
 
 #: extern/views/ExternEditHtml.class.php:609
 #: extern/views/ExternEditHtml.class.php:626
@@ -662,7 +669,8 @@ msgstr ""
 msgid ""
 "Die eingegebenen Werte wurden übernommen und der Name der Konfiguration "
 "geändert."
-msgstr "The given value has been accepted and the name of the configuration changed."
+msgstr ""
+"The given value has been accepted and the name of the configuration changed."
 
 #: extern/views/extern_edit_module.inc.php:134
 msgid "Die eingegebenen Werte wurden übernommen."
@@ -1358,7 +1366,8 @@ msgstr "Course name 3"
 
 #: extern/modules/views/lectures_preview.inc.php:33
 #: extern/modules/views/lecturestable_preview.inc.php:32
-msgid "Termine am 31.7. 14:00 - 16:00, 17.8. 11:00 - 14:30, 6.9. 14:00 - 16:00,..."
+msgid ""
+"Termine am 31.7. 14:00 - 16:00, 17.8. 11:00 - 14:30, 6.9. 14:00 - 16:00,..."
 msgstr ""
 "Appointments on 31.7. 14.00 - 16.00, 17.8. 11.00 - 14.30, 6.9. 14.00 - "
 "16.00,..."
@@ -1642,7 +1651,8 @@ msgstr "Address add-on:"
 
 #: extern/elements/ExternElementContact.class.php:98
 msgid "Zusatz zur Adresse der Einrichtung, z.B. Universitätsname."
-msgstr "Additional address information for the institute, e.g. university name."
+msgstr ""
+"Additional address information for the institute, e.g. university name."
 
 #: extern/elements/ExternElementContact.class.php:114
 msgid "Schriftformatierung der &Uuml;berschrift"
@@ -1932,9 +1942,9 @@ msgid ""
 "\"aktuelles\" und \"nächstes\" beziehen sich immer auf das laufende Semester "
 "und werden automatisch angepasst."
 msgstr ""
-"Enter the first semester which is to be displayed. The information \"previous\" , "
-"\"current\" and \"next\" always refer to the ongoing semester and will be automatically "
-"adapted."
+"Enter the first semester which is to be displayed. The information \"previous"
+"\" , \"current\" and \"next\" always refer to the ongoing semester and will "
+"be automatically adapted."
 
 #: extern/elements/ExternElementPersondetailsLectures.class.php:101
 #: extern/elements/ExternElementPersondetailsLectures.class.php:105
@@ -1983,7 +1993,9 @@ msgstr "Number of semesters to be shown:"
 msgid ""
 "Geben Sie an, wieviele Semester (ab o.a. Startsemester) angezeigt werden "
 "sollen."
-msgstr "Enter how many semesters should be displayed (starting with the given semester)."
+msgstr ""
+"Enter how many semesters should be displayed (starting with the given "
+"semester)."
 
 #: extern/elements/ExternElementPersondetailsLectures.class.php:129
 #: extern/elements/main/ExternElementMainGlobal.class.php:132
@@ -2880,8 +2892,10 @@ msgstr "Stud.IP Link:"
 #: extern/elements/main/ExternElementMainLecturedetails.class.php:153
 #: extern/elements/main/ExternElementMainNews.class.php:134
 #: extern/elements/main/ExternElementMainPersondetails.class.php:149
-msgid "Ausgabe eines Links, der direkt zum Stud.IP-Administrationsbereich verweist."
-msgstr "Display a link which refers directly to the Stud.IP administration area."
+msgid ""
+"Ausgabe eines Links, der direkt zum Stud.IP-Administrationsbereich verweist."
+msgstr ""
+"Display a link which refers directly to the Stud.IP administration area."
 
 #: extern/elements/main/ExternElementMainLecturedetails.class.php:155
 #: extern/elements/main/ExternElementMainNews.class.php:136
@@ -2992,7 +3006,8 @@ msgstr "Show lecturers: "
 msgid ""
 "Wählen Sie diese Option, wenn die Namen der Dozenten der Veranstaltung "
 "angezeigt werden sollen."
-msgstr "Choose this option if the names of the course lecturers should be displayed."
+msgstr ""
+"Choose this option if the names of the course lecturers should be displayed."
 
 #: extern/elements/main/ExternElementMainLectures.class.php:193
 #: extern/elements/main/ExternElementMainLecturestable.class.php:206
@@ -3068,7 +3083,8 @@ msgstr "Repeat column heading<br>:"
 
 #: extern/elements/main/ExternElementMainLecturestable.class.php:198
 #: extern/elements/main/ExternElementMainPersons.class.php:150
-msgid "Wiederholung der Spaltenüberschriften über oder unter der Gruppierungszeile."
+msgid ""
+"Wiederholung der Spaltenüberschriften über oder unter der Gruppierungszeile."
 msgstr "Repeat the column heading above or under the grouping row."
 
 #: extern/elements/main/ExternElementMainLecturestable.class.php:200
@@ -3122,7 +3138,9 @@ msgstr "Pause between news:"
 msgid ""
 "Geben Sie an, wie lange der Ticker warten soll (in Millisekunden), bis er "
 "die nächste News ausgibt."
-msgstr "Enter how long the ticker should wait (in milliseconds) before it produces the next news."
+msgstr ""
+"Enter how long the ticker should wait (in milliseconds) before it produces "
+"the next news."
 
 #: extern/elements/main/ExternElementMainNewsticker.class.php:107
 msgid "Text am Anfang der Ausgabe:"
@@ -3133,8 +3151,8 @@ msgid ""
 "Dieser Text wird ausgegeben, während die News in den Ticker geladen werden, "
 "also am Anfang des ersten Durchlaufs."
 msgstr ""
-"This text will be produced while the news is being loaded, i.e. at the beginning "
-"of the first run through."
+"This text will be produced while the news is being loaded, i.e. at the "
+"beginning of the first run through."
 
 #: extern/elements/main/ExternElementMainNewsticker.class.php:111
 msgid "Text am Ende der Ausgabe:"
@@ -3145,8 +3163,8 @@ msgid ""
 "Dieser Text wird ausgegeben, nachdem alle News angezeigt wurden, also am "
 "Ende jedes Durchlaufs."
 msgstr ""
-"This text will be produced after all the news has been displayed i.e. at the end of the "
-"final run through."
+"This text will be produced after all the news has been displayed i.e. at the "
+"end of the final run through."
 
 #: extern/elements/main/ExternElementMainNewsticker.class.php:116
 msgid "Dieser Text wird ausgegeben, wenn keine News verfügbar sind."
@@ -3166,8 +3184,8 @@ msgid ""
 msgstr ""
 "Choose this option when the ticker module should be started automatically. "
 "If a page takes a while to load it may make sense to start the ticker once "
-"the page has loaded completely. Deactivate this option and enter the attribute "
-"onLoad=\"newsticker\" into the <body>-tag on the page."
+"the page has loaded completely. Deactivate this option and enter the "
+"attribute onLoad=\"newsticker\" into the <body>-tag on the page."
 
 #: extern/elements/main/ExternElementMainNewsticker.class.php:123
 msgid "Nur JavaScript-Funktion ausgeben?"
@@ -3179,8 +3197,9 @@ msgid ""
 "soll. Die Funktionsname ist newsticker(). Sie kann z.B. innerhalb von "
 "<textarea> eingesetzt werden. Beispiel:"
 msgstr ""
-"Choose this function when the module should only produce the JavaScript function. "
-"The functions name is newsticker(). It can be entered in the <textarea>. For example:"
+"Choose this function when the module should only produce the JavaScript "
+"function. The functions name is newsticker(). It can be entered in the "
+"<textarea>. For example:"
 
 #: extern/elements/main/ExternElementMainNewsticker.class.php:139
 msgid "Angaben zum HTML-Tag &lt;textarea&gt;"
@@ -3204,7 +3223,9 @@ msgstr "Number of symbols per line:"
 msgid ""
 "Geben Sie die Anzahl der Zeichen pro Zeile an. Es sind nur Werte zwischen 10 "
 "und 200 erlaubt."
-msgstr "Enter the number of symbols per line. Only values between 10 and 200 are allowed."
+msgstr ""
+"Enter the number of symbols per line. Only values between 10 and 200 are "
+"allowed."
 
 #: extern/elements/main/ExternElementMainPersondetails.class.php:65
 msgid "Aktuell"
@@ -3313,4 +3334,3 @@ msgstr "Enclosed table"
 
 #~ msgid "alle"
 #~ msgstr "all"
-

@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2004-02-14 18:58+0100\n"
+"POT-Creation-Date: 2004-02-15 14:22+0100\n"
 "PO-Revision-Date: 2004-02-15 13:48+0100\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
@@ -36,11 +36,14 @@ msgstr "My personal appointment calendar - yearly view"
 msgid ""
 "Mein pers&ouml;nlicher Terminkalender - Termindaten importieren, exportieren "
 "und synchronisieren"
-msgstr "My personal appointment calender - import, export and synchronise appointment data."
+msgstr ""
+"My personal appointment calender - import, export and synchronise "
+"appointment data."
 
 #: calendar/calendar.inc.php:272
 msgid "Mein pers&ouml;nlicher Terminkalender - Veranstaltungstermine einbinden"
-msgstr "Integrate my personal appointment calendar with the course appointments"
+msgstr ""
+"Integrate my personal appointment calendar with the course appointments"
 
 #: calendar/calendar.inc.php:287
 msgid "Mein pers&ouml;nlicher Terminkalender - Veranstaltungstermin"
@@ -81,7 +84,8 @@ msgstr "Customise settings for the appointment calendar"
 msgid ""
 "Hier k&ouml;nnen Sie die Ansicht Ihres pers&ouml;nlichen Terminkalenders "
 "anpassen."
-msgstr "Here you can customise the lay-out of your personal appointment calendar."
+msgstr ""
+"Here you can customise the lay-out of your personal appointment calendar."
 
 #: calendar/calendar_settings.inc.php:67
 msgid "Option"
@@ -520,8 +524,8 @@ msgid ""
 "Als ganztägig markierte Termine beginnen um 00:00 Uhr am angegebenen "
 "Starttag und enden um 23.59 am angegeben Endtag."
 msgstr ""
-"The appointments marked full-time begin at 00:00 on the "
-"given start day and end at 23:59 on the given end day."
+"The appointments marked full-time begin at 00:00 on the given start day and "
+"end at 23:59 on the given end day."
 
 #: calendar/views/edit.inc.php:129
 msgid "Ende:"
@@ -540,8 +544,8 @@ msgid ""
 "Sie können beliebige Kategorien in das Freitextfeld eingeben. Trennen Sie "
 "einzelne Kategorien bitte durch ein Komma."
 msgstr ""
-"You can enter categories of your choice in the free text field. "
-"Please separate the various categories with a comma."
+"You can enter categories of your choice in the free text field. Please "
+"separate the various categories with a comma."
 
 #: calendar/views/edit.inc.php:217
 msgid "Raum:"
@@ -553,8 +557,8 @@ msgid ""
 "Termine werden auf ihrer internen Homepage auch anderen Nutzern "
 "bekanntgegeben."
 msgstr ""
-"Private and trusted appointments can only be seen by you. Public appointments will be "
-"made known to other users via your internal homepage."
+"Private and trusted appointments can only be seen by you. Public "
+"appointments will be made known to other users via your internal homepage."
 
 #: calendar/views/edit.inc.php:226
 msgid "Sichtbarkeit:"
@@ -663,15 +667,16 @@ msgid ""
 "<a href=\"%s?cmd=bind\">W&auml;hlen</a> Sie aus, welche "
 "Veranstaltungstermine in Ihrem Terminkalender angezeigt werden sollen."
 msgstr ""
-"<a href=\"%s?cmd=bind\">Choose</a>which course meetings should "
-"be displayed in your appointment calendar."
+"<a href=\"%s?cmd=bind\">Choose</a>which course meetings should be displayed "
+"in your appointment calendar."
 
 #: calendar/views/edit.inc.php:596
 #, c-format
 msgid ""
 "Um diesen Termin zu bearbeiten, wechseln Sie bitte in die %"
 "sTerminverwaltung</a>."
-msgstr "To edit this appointment, please switch to the %s Course administration</a> "
+msgstr ""
+"To edit this appointment, please switch to the %s Course administration</a> "
 
 #: calendar/views/edit.inc.php:602 calendar/views/edit.inc.php:612
 msgid "Aktion:"
@@ -687,8 +692,8 @@ msgid ""
 "L&ouml;schen Sie &auml;ltere Termine, oder w&auml;hlen Sie eine automatische "
 "L&ouml;schfunktion in ihren %sKalenderoptionen%s."
 msgstr ""
-"Delete old appointments or choose an automatic deletion function from your "
-"%scalendar options%s."
+"Delete old appointments or choose an automatic deletion function from your %"
+"scalendar options%s."
 
 #: calendar/views/edit.inc.php:651
 #, c-format
@@ -701,8 +706,8 @@ msgid ""
 "W&auml;hlen Sie eine automatische L&ouml;schfunktion in Ihren %"
 "sKalenderoptionen%s, um &auml;ltere Termine zu l&ouml;schen."
 msgstr ""
-"Select an automatic deletion function from your %scalendar options%s, "
-"in order to delete old appointments."
+"Select an automatic deletion function from your %scalendar options%s, in "
+"order to delete old appointments."
 
 #: calendar/views/edit.inc.php:659
 #, c-format
@@ -710,8 +715,8 @@ msgid ""
 "Sie k&ouml;nnen abgelaufene Termine automatisch l&ouml;schen lassen. W&auml;"
 "hlen Sie dazu eine L&ouml;schfunktion in Ihren %sKalenderoptionen%s."
 msgstr ""
-"You can let past appointments automatically be deleted. Select a "
-"deletion function from your %scalandar options%s."
+"You can let past appointments automatically be deleted. Select a deletion "
+"function from your %scalandar options%s."
 
 #: calendar/views/export.inc.php:106
 #, c-format
@@ -722,7 +727,9 @@ msgstr "Stud.IP has synchronised %s appointments."
 msgid ""
 "Ihr iCalendar-Datei enthielt keine Termine, die synchronisiert werden "
 "konnten."
-msgstr "Your iCalendar-file does not contain any appointments which can be synchronised."
+msgstr ""
+"Your iCalendar-file does not contain any appointments which can be "
+"synchronised."
 
 #: calendar/views/export.inc.php:114
 #, c-format
@@ -734,14 +741,16 @@ msgid ""
 "Ihr Stud.IP-Kalender enthält keine neueren Termine als die hochgeladene "
 "iCalendar-Datei. Es wurde keine Ausgabedatei erzeugt."
 msgstr ""
-"Your Stud.IP calendar does not contain any new appointments not already in the "
-"uploaded iCalendar file. No export file has been created."
+"Your Stud.IP calendar does not contain any new appointments not already in "
+"the uploaded iCalendar file. No export file has been created."
 
 #: calendar/views/export.inc.php:130
 msgid ""
 "Klicken Sie auf den Button, um die Datei mit den synchronisierten "
 "Kalenderdaten herunterzuladen."
-msgstr "Click the button in order to download the file with the synchronised calendar data."
+msgstr ""
+"Click the button in order to download the file with the synchronised "
+"calendar data."
 
 #: calendar/views/export.inc.php:131
 msgid ""
@@ -785,7 +794,8 @@ msgstr "All appointments"
 
 #: calendar/views/export.inc.php:168
 msgid "Geben Sie an, aus welchem Zeitbereich Termine exportiert werden sollen:"
-msgstr "Please enter from which time period the appointments should be exported."
+msgstr ""
+"Please enter from which time period the appointments should be exported."
 
 #: calendar/views/export.inc.php:179
 #, c-format
@@ -826,7 +836,8 @@ msgid "Es wurden keine Termine importiert."
 msgstr "No appointments have been imported."
 
 #: calendar/views/export.inc.php:242
-msgid "Sie k&ouml;nnen Termindaten importieren, exportieren und synchronisieren."
+msgid ""
+"Sie k&ouml;nnen Termindaten importieren, exportieren und synchronisieren."
 msgstr "You can import, export and synchronise appointment data."
 
 #: calendar/views/export.inc.php:279
@@ -956,8 +967,10 @@ msgid "Die Datei ist keine g&uuml;ltige iCalendar-Datei!"
 msgstr "The file is not a valid iCalendar file!"
 
 #: calendar/lib/sync/CalendarSynchronizer.class.php:103
-msgid "Die Datei kann nicht mit dem Stud.IP-Terminkalender synchronisiert werden."
-msgstr "The file can not be synchronised with the Stud.IP appointment calendar."
+msgid ""
+"Die Datei kann nicht mit dem Stud.IP-Terminkalender synchronisiert werden."
+msgstr ""
+"The file can not be synchronised with the Stud.IP appointment calendar."
 
 #: calendar/lib/sync/CalendarSynchronizer.class.php:146
 msgid "Die zu synchronisierende Datei enth&auml;lt zu viele Termine."
@@ -1018,4 +1031,3 @@ msgstr "The file to be synchronised contains too many appointments."
 #~ msgstr ""
 #~ "This appointment calendar administers your appointments. You can enter "
 #~ "appointments as well as edit, group and display them."
-

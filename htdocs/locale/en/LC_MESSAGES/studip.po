@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2004-02-14 18:58+0100\n"
-"PO-Revision-Date: 2004-02-14 17:23+0100\n"
+"POT-Creation-Date: 2004-02-15 14:22+0100\n"
+"PO-Revision-Date: 2004-02-15 13:53+0100\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
 "MIME-Version: 1.0\n"
@@ -18,7 +18,7 @@ msgstr ""
 #: wap/dates.php:54 wap/event_dates.php:57 wap/login_index.php:76
 #: wap/show_event.php:114
 msgid "Termine"
-msgstr "Appointment"
+msgstr "Appointments"
 
 #: wap/dates.php:59
 msgid "Für die nächsten Tage:"
@@ -3221,19 +3221,16 @@ msgid "Praktikum"
 msgstr "Practical"
 
 #: extern/modules/views/lecturestable_preview.inc.php:40
-#, fuzzy
 msgid "Vorlesung im Hauptstudium"
-msgstr "Lecture"
+msgstr "Lecture in 'Hauptstudium'"
 
 #: extern/modules/views/lecturestable_preview.inc.php:41
-#, fuzzy
 msgid "Vorlesung im Grundstudium"
-msgstr "Lecture"
+msgstr "Lecture in 'Grundstudium'"
 
 #: extern/modules/views/lecturestable_preview.inc.php:42
-#, fuzzy
 msgid "Praktikum im Haupstudium"
-msgstr "Practical"
+msgstr "Practical in 'Hauptstudium'"
 
 #: extern/modules/views/news_preview.inc.php:26
 #, c-format
@@ -3749,12 +3746,14 @@ msgstr "Start semester:"
 #: extern/elements/main/ExternElementMainGlobal.class.php:101
 #: extern/elements/main/ExternElementMainLectures.class.php:122
 #: extern/elements/main/ExternElementMainLecturestable.class.php:140
-#, fuzzy
 msgid ""
 "Geben Sie das erste anzuzeigende Semester an. Die Angaben \"vorheriges\", "
 "\"aktuelles\" und \"nächstes\" beziehen sich immer auf das laufende Semester "
 "und werden automatisch angepasst."
-msgstr "Semester on only current always Semester."
+msgstr ""
+"Enter the first semester which is to be displayed. The information \"previous"
+"\" , \"current\" and \"next\" always refer to the ongoing semester and will "
+"be automatically adapted."
 
 #: extern/elements/ExternElementPersondetailsLectures.class.php:101
 #: extern/elements/ExternElementPersondetailsLectures.class.php:105
@@ -3793,60 +3792,59 @@ msgstr "previous"
 #: extern/elements/main/ExternElementMainGlobal.class.php:121
 #: extern/elements/main/ExternElementMainLectures.class.php:142
 #: extern/elements/main/ExternElementMainLecturestable.class.php:160
-#, fuzzy
 msgid "Anzahl der anzuzeigenden Semester:"
-msgstr "Number Semester:"
+msgstr "Number of semesters to be shown:"
 
 #: extern/elements/ExternElementPersondetailsLectures.class.php:119
 #: extern/elements/main/ExternElementMainGlobal.class.php:122
 #: extern/elements/main/ExternElementMainLectures.class.php:143
 #: extern/elements/main/ExternElementMainLecturestable.class.php:161
-#, fuzzy
 msgid ""
 "Geben Sie an, wieviele Semester (ab o.a. Startsemester) angezeigt werden "
 "sollen."
-msgstr "Enter from which semester courses should be shown."
+msgstr ""
+"Enter how many semesters should be displayed (starting with the given "
+"semester)."
 
 #: extern/elements/ExternElementPersondetailsLectures.class.php:129
 #: extern/elements/main/ExternElementMainGlobal.class.php:132
 #: extern/elements/main/ExternElementMainLectures.class.php:153
 #: extern/elements/main/ExternElementMainLecturestable.class.php:171
 msgid "Umschalten des aktuellen Semesters:"
-msgstr ""
+msgstr "Change the current semester:"
 
 #: extern/elements/ExternElementPersondetailsLectures.class.php:130
 #: extern/elements/main/ExternElementMainGlobal.class.php:133
 #: extern/elements/main/ExternElementMainLectures.class.php:154
 #: extern/elements/main/ExternElementMainLecturestable.class.php:172
-#, fuzzy
 msgid ""
 "Geben Sie an, wieviele Wochen vor Semesterende automatisch auf das nächste "
 "Semester umgeschaltet werden soll."
-msgstr "Enter how many characters the file description should display."
+msgstr ""
+"Enter how many weeks before the end of semester, the current semester should "
+"automatically be switched to the next semester."
 
 #: extern/elements/ExternElementPersondetailsLectures.class.php:131
 #: extern/elements/main/ExternElementMainGlobal.class.php:134
 #: extern/elements/main/ExternElementMainLectures.class.php:155
 #: extern/elements/main/ExternElementMainLecturestable.class.php:173
-#, fuzzy
 msgid "am Semesterende"
-msgstr "Semester"
+msgstr "at the end of semester"
 
 #: extern/elements/ExternElementPersondetailsLectures.class.php:131
 #: extern/elements/main/ExternElementMainGlobal.class.php:134
 #: extern/elements/main/ExternElementMainLectures.class.php:155
 #: extern/elements/main/ExternElementMainLecturestable.class.php:173
-#, fuzzy
 msgid "1 Woche vor Semesterende"
-msgstr "Semester"
+msgstr "1 week before the end of semester"
 
 #: extern/elements/ExternElementPersondetailsLectures.class.php:133
 #: extern/elements/main/ExternElementMainGlobal.class.php:136
 #: extern/elements/main/ExternElementMainLectures.class.php:157
 #: extern/elements/main/ExternElementMainLecturestable.class.php:175
-#, fuzzy, c-format
+#, c-format
 msgid "%s Wochen vor Semesterende"
-msgstr "Semester"
+msgstr "%s weeks before the end of semester"
 
 #: extern/elements/ExternElementPersondetailsLectures.class.php:137
 msgid "Bezeichnung Sommersemester:"
@@ -4583,9 +4581,8 @@ msgid "Name der globalen Konfiguration"
 msgstr "Name of the global configuration:"
 
 #: extern/elements/main/ExternElementMainGlobal.class.php:98
-#, fuzzy
 msgid "Anzuzeigende Lehrveranstaltungen"
-msgstr "Courses"
+msgstr "Courses to be displayed"
 
 #: extern/elements/main/ExternElementMainLecturedetails.class.php:64
 msgid "Untertitel:"
@@ -4728,19 +4725,20 @@ msgid "ausblenden"
 msgstr "Hide "
 
 #: extern/elements/main/ExternElementMainLecturedetails.class.php:158
-#, fuzzy
 msgid "Stud.IP-Link-Ziel:"
-msgstr "Stud.IP Link:"
+msgstr "Stud.IP Link target:"
 
 #: extern/elements/main/ExternElementMainLecturedetails.class.php:159
 msgid ""
 "Ziel des Stud.IP-Links. Entweder direkter Einsprung zur Anmeldeseite oder in "
 "den Administrationsbereich (nur für berechtigte Nutzer) der Veranstaltung"
 msgstr ""
+"Target for the Stud.IP link. Either a direct jump to the registration page "
+"or into the administration area of the course (only for authorised users)."
 
 #: extern/elements/main/ExternElementMainLecturedetails.class.php:161
 msgid "Anmeldung"
-msgstr ""
+msgstr "Registration"
 
 #: extern/elements/main/ExternElementMainLecturedetails.class.php:161
 msgid "Administrationsbereich"
@@ -4900,9 +4898,8 @@ msgid "&uuml;ber"
 msgstr "about"
 
 #: extern/elements/main/ExternElementMainLecturestable.class.php:200
-#, fuzzy
 msgid "unter Gruppierungszeile"
-msgstr "under group names"
+msgstr "under grouping lines"
 
 #: extern/elements/main/ExternElementMainNews.class.php:76
 #: extern/elements/main/ExternElementMainNewsticker.class.php:68
@@ -4924,82 +4921,80 @@ msgstr ""
 
 #: extern/elements/main/ExternElementMainNewsticker.class.php:66
 msgid "Der Ticker wird geladen..."
-msgstr ""
+msgstr "The ticker is being loaded..."
 
 #: extern/elements/main/ExternElementMainNewsticker.class.php:67
-#, fuzzy
 msgid "Ende des Tickers."
-msgstr "End."
+msgstr "End of the ticker."
 
 #: extern/elements/main/ExternElementMainNewsticker.class.php:99
 msgid "Tick-Frequenz:"
-msgstr ""
+msgstr "Tick frequence:"
 
 #: extern/elements/main/ExternElementMainNewsticker.class.php:100
-#, fuzzy
 msgid "Geben Sie an, wieviele Zeichen pro Sekunde ausgegeben werden sollen."
-msgstr "Enter how many characters the file description should display."
+msgstr "Enter how many symbols per second should be produced."
 
 #: extern/elements/main/ExternElementMainNewsticker.class.php:103
 msgid "Pause zwischen News:"
-msgstr ""
+msgstr "Pause between news:"
 
 #: extern/elements/main/ExternElementMainNewsticker.class.php:104
-#, fuzzy
 msgid ""
 "Geben Sie an, wie lange der Ticker warten soll (in Millisekunden), bis er "
 "die nächste News ausgibt."
-msgstr "on in until."
+msgstr ""
+"Enter how long the ticker should wait (in milliseconds) before it produces "
+"the next news."
 
 #: extern/elements/main/ExternElementMainNewsticker.class.php:107
-#, fuzzy
 msgid "Text am Anfang der Ausgabe:"
-msgstr "on Begin:"
+msgstr "Text at beginning of the entry:"
 
 #: extern/elements/main/ExternElementMainNewsticker.class.php:108
-#, fuzzy
 msgid ""
 "Dieser Text wird ausgegeben, während die News in den Ticker geladen werden, "
 "also am Anfang des ersten Durchlaufs."
-msgstr "in on Begin first."
+msgstr ""
+"This text will be produced while the news is being loaded, i.e. at the "
+"beginning of the first run through."
 
 #: extern/elements/main/ExternElementMainNewsticker.class.php:111
-#, fuzzy
 msgid "Text am Ende der Ausgabe:"
-msgstr "on End:"
+msgstr "Text at the end of the entry:"
 
 #: extern/elements/main/ExternElementMainNewsticker.class.php:112
-#, fuzzy
 msgid ""
 "Dieser Text wird ausgegeben, nachdem alle News angezeigt wurden, also am "
 "Ende jedes Durchlaufs."
-msgstr "all on End."
+msgstr ""
+"This text will be produced after all the news has been displayed i.e. at the "
+"end of the final run through."
 
 #: extern/elements/main/ExternElementMainNewsticker.class.php:116
-#, fuzzy
 msgid "Dieser Text wird ausgegeben, wenn keine News verfügbar sind."
-msgstr ""
-"This text will be displayed in place of a table, when no files are available "
-"for downloading."
+msgstr "This text will be produced when no news is available."
 
 #: extern/elements/main/ExternElementMainNewsticker.class.php:119
-#, fuzzy
 msgid "Ticker sofort starten?"
-msgstr "immediately?"
+msgstr "Start the ticker immediately?"
 
 #: extern/elements/main/ExternElementMainNewsticker.class.php:120
-#, fuzzy
 msgid ""
 "Wählen Sie diese Option, wenn das Modul den Ticker automatisch starten soll. "
 "Bei längeren Ladezeiten der Seite, in der Sie den Ticker integriert haben, "
 "kann es sinnvoll sein, den Ticker erst zu starten, wenn die Seite komplett "
 "geladen ist. Deaktivieren Sie dafür diese Option, und fügen Sie im <body>-"
 "Tag der Seite das Attribut onLoad=\"newsticker\" ein."
-msgstr "Option Page in Page Option<body> Day Page."
+msgstr ""
+"Choose this option when the ticker module should be started automatically. "
+"If a page takes a while to load it may make sense to start the ticker once "
+"the page has loaded completely. Deactivate this option and enter the "
+"attribute onLoad=\"newsticker\" into the <body>-tag on the page."
 
 #: extern/elements/main/ExternElementMainNewsticker.class.php:123
 msgid "Nur JavaScript-Funktion ausgeben?"
-msgstr ""
+msgstr "Produce JavaScript function only?"
 
 #: extern/elements/main/ExternElementMainNewsticker.class.php:124
 msgid ""
@@ -5007,35 +5002,35 @@ msgid ""
 "soll. Die Funktionsname ist newsticker(). Sie kann z.B. innerhalb von "
 "<textarea> eingesetzt werden. Beispiel:"
 msgstr ""
+"Choose this function when the module should only produce the JavaScript "
+"function. The functions name is newsticker(). It can be entered in the "
+"<textarea>. For example:"
 
 #: extern/elements/main/ExternElementMainNewsticker.class.php:139
-#, fuzzy
 msgid "Angaben zum HTML-Tag &lt;textarea&gt;"
-msgstr "Information about HTML Tag &lt;tr&gt;"
+msgstr "Information about HTML Tag &lt;textarea&gt;"
 
 #: extern/elements/main/ExternElementMainNewsticker.class.php:141
-#, fuzzy
 msgid "Anzahl Zeilen im Ausgabefenster:"
-msgstr "Number:"
+msgstr "Number rows in display window:"
 
 #: extern/elements/main/ExternElementMainNewsticker.class.php:142
-#, fuzzy
 msgid ""
 "Geben Sie die Anzahl der Zeilen an. Es sind nur Werte zwischen 1 und 10 "
 "erlaubt."
-msgstr "Number on."
+msgstr "Enter the number of lines. Only values between 1 and 10 are allowed."
 
 #: extern/elements/main/ExternElementMainNewsticker.class.php:145
-#, fuzzy
 msgid "Anzahl der Zeichen pro Zeile:"
-msgstr "Number:"
+msgstr "Number of symbols per line:"
 
 #: extern/elements/main/ExternElementMainNewsticker.class.php:146
-#, fuzzy
 msgid ""
 "Geben Sie die Anzahl der Zeichen pro Zeile an. Es sind nur Werte zwischen 10 "
 "und 200 erlaubt."
-msgstr "Number on."
+msgstr ""
+"Enter the number of symbols per line. Only values between 10 and 200 are "
+"allowed."
 
 #: extern/elements/main/ExternElementMainPersondetails.class.php:65
 msgid "Aktuell"
@@ -5579,11 +5574,11 @@ msgstr "NO AUTHORISATION!"
 msgid "Der gewählte Exportmodus wird nicht unterstützt."
 msgstr "The chosen export module is not supported."
 
-#: details.php:660
+#: export/export_studipdata_func.inc.php:268
 msgid "max."
 msgstr "max."
 
-#: details.php:660
+#: export/export_studipdata_func.inc.php:268
 msgid "erw."
 msgstr "exp."
 
@@ -5917,176 +5912,166 @@ msgid "Fehler beim &Ouml;ffnen des Export-Temp-Verzeichnisses!"
 msgstr "Error while opening the temporary export directory!"
 
 #: export/recordofstudy.lib.php:32
-#, fuzzy
 msgid "Veranstaltungsübersicht erstellen"
-msgstr "Course data"
+msgstr "Create course overview"
 
 #: export/recordofstudy.lib.php:33
-#, fuzzy
 msgid "Veranstaltungsübersicht erstellen:"
-msgstr "Course data"
+msgstr "Create course overview:"
 
 #: export/recordofstudy.lib.php:57
-#, fuzzy
 msgid "Bitte wählen sie ein Semster aus:"
-msgstr "Please choose an institute:"
+msgstr "Please select a semester:"
 
 #: export/recordofstudy.lib.php:65
 msgid "Semester und Kriterium auswählen."
-msgstr ""
+msgstr "Select semester and criteria."
 
 #: export/recordofstudy.lib.php:67
-#, fuzzy
 msgid "nur Lehrveranstaltungen"
-msgstr "Course data"
+msgstr "only taught courses"
 
 #: export/recordofstudy.lib.php:68
-#, fuzzy
 msgid "alle Veranstaltungen"
-msgstr "Course data"
+msgstr "All courses"
 
 #: export/recordofstudy.lib.php:71
 msgid "Vorlage"
-msgstr ""
+msgstr "Templates"
 
 #: export/recordofstudy.lib.php:126
 msgid "Keine Veranstaltungen zum Anzeigen vorhanden."
-msgstr ""
+msgstr "No courses available for display."
 
 #: export/recordofstudy.lib.php:126
 msgid ""
 "Bitte fügen sie Veranstaltungen mit Hilfe des Buttons \"hinzufügen\" ein "
-"oder ändern Sie ihre ihre Auswahl."
+"oder ändern Sie ihre Auswahl."
 msgstr ""
+"Please enter courses of your choice with the help of the button \"add\" or "
+"change your selection."
 
 #: export/recordofstudy.lib.php:128
 msgid "Sie haben mehr als 10 Veranstaltungen in diesem Semester ausgewählt."
-msgstr ""
+msgstr "You have choosen more than 10 courses in this semester."
 
 #: export/recordofstudy.lib.php:128
 msgid "Es werden automatisch mehrere Veranstaltungsübersichtseiten erstellt."
-msgstr ""
+msgstr "More course overviews were automatically created."
 
 #: export/recordofstudy.lib.php:138 export/recordofstudy.lib.php:244
 msgid "Hochschule: "
-msgstr ""
+msgstr "University:"
 
 #: export/recordofstudy.lib.php:139 export/recordofstudy.lib.php:245
 msgid "Studienfach: "
-msgstr ""
+msgstr "Subject:"
 
 #: export/recordofstudy.lib.php:140 export/recordofstudy.lib.php:246
 msgid "Name (Vor- und Zuname): "
-msgstr ""
+msgstr "Name (first and surname):"
 
 #: export/recordofstudy.lib.php:141 export/recordofstudy.lib.php:247
-#, fuzzy
 msgid "Semester: "
-msgstr "All semesters"
+msgstr "Semester:"
 
 #: export/recordofstudy.lib.php:142 export/recordofstudy.lib.php:248
 msgid "Fachsemester: "
-msgstr ""
+msgstr "Subject semester:"
 
-#: meine_seminare.php:734
+#: export/recordofstudy.lib.php:146
 msgid "Veranstaltungen:"
 msgstr "Courses:"
 
 #: export/recordofstudy.lib.php:150
 msgid "Kenn.-Nr"
-msgstr ""
+msgstr "Course number"
 
 #: export/recordofstudy.lib.php:151
 msgid "Name des Dozenten"
-msgstr ""
+msgstr "Lecturer's name"
 
 #: export/recordofstudy.lib.php:152
 msgid "Wochenstundenzahl"
-msgstr ""
+msgstr "Number of hours per week"
 
-#: admin_lit_element.php:84 lib/classes/StudipLitListViewAdmin.class.php:254
-#: lib/classes/StudipRangeTreeViewAdmin.class.php:297
-#: lib/classes/StudipSemTreeViewAdmin.class.php:230
+#: export/recordofstudy.lib.php:153
 msgid "löschen"
-msgstr "Delete"
+msgstr "delete"
 
 #: export/recordofstudy.lib.php:169
 msgid "SWS"
-msgstr ""
+msgstr "SWS"
 
 #: export/recordofstudy.lib.php:177
 msgid "Genaue Bezeichnung:"
-msgstr ""
+msgstr "Exact description:"
 
 #: export/recordofstudy.lib.php:189
-#, fuzzy
 msgid "Neue Veranstaltung hinzufügen."
-msgstr "Course data"
+msgstr "Add new course."
 
 #: export/recordofstudy.lib.php:199
-#, fuzzy
 msgid "Markierte Veranstaltung(en) löschen"
-msgstr "Unformatted with course numbers"
+msgstr "Delete marked course(s)"
 
 #: export/recordofstudy.lib.php:199
 msgid "Markierte Veranstaltung(en) löschen."
-msgstr ""
+msgstr "Delete marked course(s)"
 
 #: export/recordofstudy.lib.php:210
 msgid "Abbrechen und ein anderes Semester auswählen."
-msgstr ""
+msgstr "Cancel and select another semester."
 
 #: export/recordofstudy.lib.php:211
 msgid "Weiter zum Download ihrer Veranstaltungsübersicht."
-msgstr ""
+msgstr "Onward to download your course overview."
 
 #: export/recordofstudy.lib.php:238
 #, c-format
 msgid "Sie haben %s Einträge für ihre Veranstaltungsübersicht ausgewählt. "
-msgstr ""
+msgstr "You have chosen %s entries for your course overview."
 
 #: export/recordofstudy.lib.php:240
 #, c-format
 msgid "Deshalb werden ihre Einträge auf %s Seiten verteilt."
-msgstr ""
+msgstr "Therefore your entries will be spread over %s pages."
 
 #: export/recordofstudy.lib.php:241
 msgid "Ihre Einträge können auf einer Seite untergebracht werden."
-msgstr ""
+msgstr "Your entries could be fit onto one page."
 
 #: export/recordofstudy.lib.php:243
 msgid "Ihre Studiendaten:"
-msgstr ""
+msgstr "Your study data:"
 
 #: export/recordofstudy.lib.php:250
 msgid "Vorlage:"
-msgstr ""
+msgstr "Templates:"
 
 #: export/recordofstudy.lib.php:254
 msgid ""
 "Klicken sie nun auf die einzelnen Links, um ihre Veranstaltungsübersicht zu "
 "erstellen."
-msgstr ""
+msgstr "Click on the various links to create your course overview."
 
 #: export/recordofstudy.lib.php:255
 msgid ""
 "Klicken sie nun auf den Link, um ihre Veranstaltungsübersicht zu erstellen."
-msgstr ""
+msgstr "Click the link to create your course overview."
 
 #: export/recordofstudy.lib.php:259
-#, fuzzy
 msgid "Veranstaltungsübersicht: "
-msgstr "Course data"
+msgstr "Course overview:"
 
 #: export/recordofstudy.lib.php:263
 #, c-format
 msgid "Seite %s"
-msgstr ""
+msgstr "Page %s"
 
 #: export/recordofstudy.lib.php:264
-#, fuzzy
 msgid "Veranstaltungsübersicht"
-msgstr "Course data"
+msgstr "Course overview"
 
 #: resources/resourcesClass.inc.php:131 resources/resourcesClass.inc.php:1010
 #: resources/resourcesVisual.inc.php:552
@@ -7705,33 +7690,33 @@ msgid "Mein pers&ouml;nlicher Terminkalender - Jahresansicht"
 msgstr "My personal appointment calendar - yearly view"
 
 #: calendar/calendar.inc.php:267
-#, fuzzy
 msgid ""
 "Mein pers&ouml;nlicher Terminkalender - Termindaten importieren, exportieren "
 "und synchronisieren"
-msgstr "Integrate my personal appointment calendar with the course meetings"
+msgstr ""
+"My personal appointment calender - import, export and synchronise "
+"appointment data."
 
 #: calendar/calendar.inc.php:272
 msgid "Mein pers&ouml;nlicher Terminkalender - Veranstaltungstermine einbinden"
-msgstr "Integrate my personal appointment calendar with the course meetings"
+msgstr ""
+"Integrate my personal appointment calendar with the course appointments"
 
 #: calendar/calendar.inc.php:287
-#, fuzzy
 msgid "Mein pers&ouml;nlicher Terminkalender - Veranstaltungstermin"
-msgstr "Integrate my personal appointment calendar with the course meetings"
+msgstr "My personal appointment calender - course appointment"
 
 #: calendar/calendar.inc.php:293
 msgid "Mein pers&ouml;nlicher Terminkalender - Termin bearbeiten"
 msgstr "My personal appointment calendar - edit appointment"
 
-#: admin_dates.php:233 dates.inc.php:1013
+#: calendar/calendar.inc.php:306 calendar/calendar.inc.php:318
 msgid "Kein Titel"
-msgstr "No title"
+msgstr "no title "
 
 #: calendar/calendar.inc.php:348
-#, fuzzy
 msgid "Mein pers&ouml;nlicher Terminkalender - Termin anlegen/bearbeiten"
-msgstr "My personal appointment calendar - edit appointment"
+msgstr "My personal appointment calendar - create / edit appointment"
 
 #: calendar/calendar.inc.php:511
 #, c-format
@@ -7749,9 +7734,8 @@ msgid "Termin erstellen am %s"
 msgstr "Create appointment on %s"
 
 #: calendar/calendar_settings.inc.php:52
-#, fuzzy
 msgid "Einstellungen des Terminkalenders anpassen"
-msgstr "Customise settings for my appointment calendar"
+msgstr "Customise settings for the appointment calendar"
 
 #: calendar/calendar_settings.inc.php:62
 msgid ""
@@ -7844,21 +7828,20 @@ msgid "Bearbeiten-Link in Wochenansicht"
 msgstr "Edit link in week view"
 
 #: calendar/calendar_settings.inc.php:249
-#, fuzzy
 msgid "L&ouml;schen von Terminen:"
-msgstr "%s appointments"
+msgstr "Delete appointments:"
 
 #: calendar/calendar_settings.inc.php:257
 msgid "12 Monate nach Ablauf"
-msgstr ""
+msgstr "12 months after event"
 
 #: calendar/calendar_settings.inc.php:261
 msgid "6 Monate nach Ablauf"
-msgstr ""
+msgstr "6 months after event"
 
 #: calendar/calendar_settings.inc.php:265
 msgid "3 Monate nach Ablauf"
-msgstr ""
+msgstr "3 months after event"
 
 #: calendar/calendar_visual.inc.php:172 calendar/views/edit.inc.php:88
 #: calendar/views/edit.inc.php:130 calendar/views/week.inc.php:118
@@ -7880,24 +7863,23 @@ msgstr "Go to:"
 
 #: calendar/calendar_visual.inc.php:609 calendar/views/month.inc.php:67
 msgid "ein Jahr zurück"
-msgstr ""
+msgstr "one year back"
 
 #: calendar/calendar_visual.inc.php:612
 msgid "vorherige Woche"
-msgstr ""
+msgstr "Last week"
 
 #: calendar/calendar_visual.inc.php:627
 msgid "nächste Woche"
-msgstr ""
+msgstr "Next week"
 
 #: calendar/calendar_visual.inc.php:631 calendar/views/month.inc.php:84
-#, fuzzy
 msgid "ein Jahr vor"
-msgstr "show before"
+msgstr "one year forward"
 
 #: calendar/calendar_visual.inc.php:750
 msgid "Veranstaltung:"
-msgstr ""
+msgstr "Course:"
 
 #: calendar/calendar_visual.inc.php:754 calendar/views/edit.inc.php:184
 msgid "Kategorie:"
@@ -7909,40 +7891,35 @@ msgstr "Priority:"
 
 #: calendar/calendar_visual.inc.php:759
 msgid "Zugriff:"
-msgstr ""
+msgstr "Access:"
 
 #: calendar/calendar_visual.inc.php:760
-#, fuzzy
 msgid "Wiederholung:"
-msgstr "Repetition"
+msgstr "Repetition:"
 
 #: calendar/lib/CalendarEvent.class.php:133 calendar/views/edit.inc.php:246
-#, fuzzy
 msgid "hoch"
-msgstr "Week"
+msgstr "high"
 
 #: calendar/lib/CalendarEvent.class.php:135 calendar/views/edit.inc.php:247
-#, fuzzy
 msgid "mittel"
-msgstr "third"
+msgstr "middle"
 
 #: calendar/lib/CalendarEvent.class.php:137 calendar/views/edit.inc.php:248
-#, fuzzy
 msgid "niedrig"
-msgstr "never"
+msgstr "low"
 
 #: calendar/lib/CalendarEvent.class.php:139 calendar/views/edit.inc.php:245
 msgid "keine Angabe"
-msgstr ""
+msgstr "no entry"
 
 #: calendar/lib/CalendarEvent.class.php:147
-#, fuzzy
 msgid "öffentlich"
-msgstr "public"
+msgstr "public "
 
 #: calendar/lib/CalendarEvent.class.php:149 calendar/views/edit.inc.php:231
 msgid "vertraulich"
-msgstr ""
+msgstr "trusted"
 
 #: calendar/lib/CalendarEvent.class.php:151 calendar/views/edit.inc.php:230
 msgid "privat"
@@ -7951,47 +7928,47 @@ msgstr "private"
 #: calendar/lib/CalendarEvent.class.php:454
 #, c-format
 msgid "Der Termin wird alle %s Tage wiederholt."
-msgstr ""
+msgstr "The appointment will be repeated every %s days."
 
 #: calendar/lib/CalendarEvent.class.php:458
 msgid "Der Termin wird täglich wiederholt"
-msgstr ""
+msgstr "The appointment will be repeated daily"
 
 #: calendar/lib/CalendarEvent.class.php:463
 #, c-format
 msgid "Der Termin wird alle %s Wochen am %s wiederholt."
-msgstr ""
+msgstr "The appointment will be repeated every %s weeks on %s."
 
 #: calendar/lib/CalendarEvent.class.php:467
 #, c-format
 msgid "Der Termin wird jeden %s wiederholt."
-msgstr ""
+msgstr "The appointment will be repeated every %s."
 
 #: calendar/lib/CalendarEvent.class.php:473
 #, c-format
 msgid "Der Termin wird am %s. alle %s Monate wiederholt."
-msgstr ""
+msgstr "The appointment will be repeated on %s every %s months."
 
 #: calendar/lib/CalendarEvent.class.php:478
 #, c-format
 msgid "Der Termin wird jeden %s. %s alle %s Monate wiederholt."
-msgstr ""
+msgstr "The appointment will be repeated every %s. %s every %s month."
 
 #: calendar/lib/CalendarEvent.class.php:483
 #: calendar/lib/CalendarEvent.class.php:501
 #, c-format
 msgid "Der Termin wird jeden letzten %s alle %s Monate wiederholt."
-msgstr ""
+msgstr "The appointment will be repeated on the last %s every %s months."
 
 #: calendar/lib/CalendarEvent.class.php:491
 #, c-format
 msgid "Der Termin wird am %s. jeden Monat wiederholt."
-msgstr ""
+msgstr "The appointment will be repeated on %s every month."
 
 #: calendar/lib/CalendarEvent.class.php:496
 #, c-format
 msgid "Der Termin wird am %s. %s jeden Monat wiederholt."
-msgstr ""
+msgstr "The appointment will be repeated on %s. %s every month."
 
 #: calendar/lib/CalendarEvent.class.php:510 calendar/views/edit.inc.php:326
 msgid "Januar"
@@ -8003,7 +7980,7 @@ msgstr "February"
 
 #: calendar/lib/CalendarEvent.class.php:510
 msgid "März"
-msgstr ""
+msgstr "March"
 
 #: calendar/lib/CalendarEvent.class.php:510 calendar/views/edit.inc.php:329
 msgid "April"
@@ -8044,31 +8021,31 @@ msgstr "December"
 #: calendar/lib/CalendarEvent.class.php:514
 #, c-format
 msgid "Der Termin wird jeden %s. %s wiederholt."
-msgstr ""
+msgstr "The appointment will be repeated every %s. %s repeated."
 
 #: calendar/lib/CalendarEvent.class.php:520
 #, c-format
 msgid "Der Termin wird jeden %s. %s im %s wiederholt."
-msgstr ""
+msgstr "The appointment will be repeated every %s %s in %s."
 
 #: calendar/lib/CalendarEvent.class.php:525
 #, c-format
 msgid "Der Termin wird jeden letzten %s im %s wiederholt."
-msgstr ""
+msgstr "The appointment will be repeated every last %s in %s."
 
 #: calendar/lib/CalendarEvent.class.php:533 calendar/views/edit.inc.php:263
 #: calendar/views/edit.inc.php:570
 msgid "Der Termin wird nicht wiederholt."
-msgstr ""
+msgstr "The appointment will not be repeated."
 
 #: calendar/lib/calendar_misc_func.inc.php:75
 msgid "Daten-Export"
-msgstr ""
+msgstr "Export data"
 
 #: calendar/lib/calendar_misc_func.inc.php:78
 #, c-format
 msgid "Die Daten werden exportiert. %sBitte haben sie etwas Geduld!"
-msgstr ""
+msgstr "The data are being exported. %s Please be patient!"
 
 #: calendar/views/bind.inc.php:70
 msgid "Gruppe ändern"
@@ -8115,33 +8092,36 @@ msgstr "Time"
 
 #: calendar/views/edit.inc.php:122
 msgid "ganzt&auml;gig"
-msgstr ""
+msgstr "full-time"
 
 #: calendar/views/edit.inc.php:123
 msgid ""
 "Als ganztägig markierte Termine beginnen um 00:00 Uhr am angegebenen "
 "Starttag und enden um 23.59 am angegeben Endtag."
 msgstr ""
+"The appointments marked full-time begin at 00:00 on the given start day and "
+"end at 23:59 on the given end day."
 
 #: calendar/views/edit.inc.php:168
 msgid "Zusammenfassung:"
-msgstr ""
+msgstr "Summary:"
 
 #: calendar/views/edit.inc.php:208
 msgid ""
 "Sie können beliebige Kategorien in das Freitextfeld eingeben. Trennen Sie "
 "einzelne Kategorien bitte durch ein Komma."
 msgstr ""
+"You can enter categories of your choice in the free text field. Please "
+"separate the various categories with a comma."
 
 #: calendar/views/edit.inc.php:224
-#, fuzzy
 msgid ""
 "Private und vertrauliche Termine sind nur für Sie sichtbar. Öffentliche "
 "Termine werden auf ihrer internen Homepage auch anderen Nutzern "
 "bekanntgegeben."
 msgstr ""
-"Private appointments can only be seen by you. Public appointments will be "
-"made known to other users via your internal homepage."
+"Private and trusted appointments can only be seen by you. Public "
+"appointments will be made known to other users via your internal homepage."
 
 #: calendar/views/edit.inc.php:226
 msgid "Sichtbarkeit:"
@@ -8165,7 +8145,7 @@ msgstr "third"
 
 #: calendar/views/edit.inc.php:311
 msgid "vierten"
-msgstr "fouth"
+msgstr "fourth"
 
 #: calendar/views/edit.inc.php:312
 msgid "letzten"
@@ -8190,12 +8170,12 @@ msgstr "Every work day"
 #: calendar/views/edit.inc.php:371
 #, c-format
 msgid "Alle %s Wochen %s am:"
-msgstr ""
+msgstr "Every %s weeks at %s:"
 
 #: calendar/views/edit.inc.php:413
-#, fuzzy, c-format
+#, c-format
 msgid "Wiederholt am %s alle %s Monate"
-msgstr "<b>repeat on</b>%s<b>every</b>%smonths"
+msgstr "Repeated on %s every %s months."
 
 #: calendar/views/edit.inc.php:416 calendar/views/edit.inc.php:454
 msgid "Jeden"
@@ -8206,31 +8186,30 @@ msgid "Monate"
 msgstr "Months"
 
 #: calendar/views/edit.inc.php:493
-#, fuzzy, c-format
+#, c-format
 msgid "Jeden %s im"
-msgstr "Every%sin"
+msgstr "Every %s in"
 
 #: calendar/views/edit.inc.php:513
 msgid "Wiederholung endet:"
 msgstr "Repetition ends:"
 
 #: calendar/views/edit.inc.php:520
-#, fuzzy
 msgid "am:"
-msgstr "Room:"
+msgstr "at:"
 
 #: calendar/views/edit.inc.php:532
-#, fuzzy, c-format
+#, c-format
 msgid "nach %s Wiederholungen"
-msgstr "Repetition"
+msgstr "after %s repetitions"
 
 #: calendar/views/edit.inc.php:545
 msgid "Ausnahmen:"
-msgstr ""
+msgstr "Exception:"
 
-#: sms_send.php:220
+#: calendar/views/edit.inc.php:564
 msgid "ausgew&auml;hlte l&ouml;schen"
-msgstr "Delete selected"
+msgstr "Delete selection"
 
 #: calendar/views/edit.inc.php:589
 #, c-format
@@ -8242,13 +8221,13 @@ msgstr ""
 "edited in your personal appointment calendar."
 
 #: calendar/views/edit.inc.php:591
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<a href=\"%s?cmd=bind\">W&auml;hlen</a> Sie aus, welche "
 "Veranstaltungstermine in Ihrem Terminkalender angezeigt werden sollen."
 msgstr ""
-"<a href=\"%s?cmd=bind\">Choose</a>which course meetings should automatically "
-"be displayed in your appointment calendar."
+"<a href=\"%s?cmd=bind\">Choose</a>which course meetings should be displayed "
+"in your appointment calendar."
 
 #: calendar/views/edit.inc.php:596
 #, c-format
@@ -8264,7 +8243,7 @@ msgstr "Action:"
 
 #: calendar/views/edit.inc.php:643
 msgid "Sie k&ouml;nnen keine weiteren Termine mehr speichern!"
-msgstr ""
+msgstr "You can not save any further appointments!"
 
 #: calendar/views/edit.inc.php:645
 #, c-format
@@ -8272,11 +8251,13 @@ msgid ""
 "L&ouml;schen Sie &auml;ltere Termine, oder w&auml;hlen Sie eine automatische "
 "L&ouml;schfunktion in ihren %sKalenderoptionen%s."
 msgstr ""
+"Delete old appointments or choose an automatic deletion function from your %"
+"scalendar options%s."
 
 #: calendar/views/edit.inc.php:651
 #, c-format
 msgid "Sie k&ouml;nnen noch %s Termine speichern."
-msgstr ""
+msgstr "You can save %s more appointments."
 
 #: calendar/views/edit.inc.php:654
 #, c-format
@@ -8284,6 +8265,8 @@ msgid ""
 "W&auml;hlen Sie eine automatische L&ouml;schfunktion in Ihren %"
 "sKalenderoptionen%s, um &auml;ltere Termine zu l&ouml;schen."
 msgstr ""
+"Select an automatic deletion function from your %scalendar options%s, in "
+"order to delete old appointments."
 
 #: calendar/views/edit.inc.php:659
 #, c-format
@@ -8291,152 +8274,162 @@ msgid ""
 "Sie k&ouml;nnen abgelaufene Termine automatisch l&ouml;schen lassen. W&auml;"
 "hlen Sie dazu eine L&ouml;schfunktion in Ihren %sKalenderoptionen%s."
 msgstr ""
+"You can let past appointments automatically be deleted. Select a deletion "
+"function from your %scalandar options%s."
 
 #: calendar/views/export.inc.php:106
 #, c-format
 msgid "Stud.IP hat %s Termine synchronisiert."
-msgstr ""
+msgstr "Stud.IP has synchronised %s appointments."
 
 #: calendar/views/export.inc.php:110
 msgid ""
 "Ihr iCalendar-Datei enthielt keine Termine, die synchronisiert werden "
 "konnten."
 msgstr ""
+"Your iCalendar-file does not contain any appointments which can be "
+"synchronised."
 
 #: calendar/views/export.inc.php:114
 #, c-format
 msgid "Die zum Download zur Verf&uuml;gung stehende Datei enthält %s Termine."
-msgstr ""
+msgstr "There are %s appointments in files available for download."
 
 #: calendar/views/export.inc.php:118
 msgid ""
 "Ihr Stud.IP-Kalender enthält keine neueren Termine als die hochgeladene "
 "iCalendar-Datei. Es wurde keine Ausgabedatei erzeugt."
 msgstr ""
+"Your Stud.IP calendar does not contain any new appointments not already in "
+"the uploaded iCalendar file. No export file has been created."
 
 #: calendar/views/export.inc.php:130
 msgid ""
 "Klicken Sie auf den Button, um die Datei mit den synchronisierten "
 "Kalenderdaten herunterzuladen."
 msgstr ""
+"Click the button in order to download the file with the synchronised "
+"calendar data."
 
 #: calendar/views/export.inc.php:131
 msgid ""
 "Die Daten liegen ebenfalls in einer iCalendar-Datei vor, die Sie in Ihren "
 "lokalen Terminkalender (z.B. MS Outlook) importieren können."
 msgstr ""
+"The data are also in a iCalendar file, which you can import into your local "
+"appointment calendar (e.g. MS Outlook). "
 
 #: calendar/views/export.inc.php:143
 msgid "Herunterladen der synchronisierten Kalenderdaten"
-msgstr ""
+msgstr "Download the synchronised calendar data."
 
 #: calendar/views/export.inc.php:153
 msgid "Exportieren Ihrer Kalenderdaten"
-msgstr ""
+msgstr "Export your calendar data."
 
 #: calendar/views/export.inc.php:155
 msgid ""
 "Es werden nur Termine von Veranstaltungen exportiert, die zuvor im Menüpunkt "
 "\"Veranstaltungstermine\" ausgewählt wurden."
 msgstr ""
+"Only those course appointments will be exported, which were selected under "
+"the menu tab \"Course appointments\" beforehand."
 
 #: calendar/views/export.inc.php:157
 msgid "Bitte w&auml;hlen Sie, welche Termine exportiert werden sollen:"
-msgstr ""
+msgstr "Please select which appointments should be exported:"
 
 #: calendar/views/export.inc.php:160
-#, fuzzy
 msgid "Nur meine pers&ouml;nlichen Termine"
-msgstr "My personal appointment calendar - new appointment"
+msgstr "only my personal appointments"
 
 #: calendar/views/export.inc.php:162
-#, fuzzy
 msgid "Nur meine Veranstaltungstermine"
-msgstr "Course meetings"
+msgstr "only my course appointments"
 
 #: calendar/views/export.inc.php:164 calendar/views/export.inc.php:173
-#, fuzzy
 msgid "Alle Termine"
-msgstr "Appointments"
+msgstr "All appointments"
 
 #: calendar/views/export.inc.php:168
 msgid "Geben Sie an, aus welchem Zeitbereich Termine exportiert werden sollen:"
 msgstr ""
+"Please enter from which time period the appointments should be exported."
 
 #: calendar/views/export.inc.php:179
 #, c-format
 msgid "Nur Termine vom:%sbis zum:"
-msgstr ""
+msgstr "Only appointments from: %s until:"
 
 #: calendar/views/export.inc.php:200
 msgid "Importieren Ihrer Kalenderdaten"
-msgstr ""
+msgstr "Import your calendar data"
 
 #: calendar/views/export.inc.php:204
 msgid ""
 "Sie k&ouml;nnen Termine importieren, die sich in einer iCalendar-Datei "
 "befinden."
-msgstr ""
+msgstr "You can import appointments which are in a iCalendar file."
 
 #: calendar/views/export.inc.php:205 calendar/views/export.inc.php:218
 msgid "Klicken Sie auf \"Durchsuchen\", um eine Datei auszuwählen."
-msgstr ""
+msgstr "Click on \"Browse\" to select a file."
 
 #: calendar/views/export.inc.php:213
 msgid "Synchronisieren Ihrer Kalenderdaten"
-msgstr ""
+msgstr "Synchronise your calendar data"
 
 #: calendar/views/export.inc.php:217
 msgid ""
 "Sie k&ouml;nnen Termine synchronisieren, die sich in einer iCalendar-Datei "
 "befinden."
-msgstr ""
+msgstr "You can synchronise appointments which are in a iCalendar file."
 
 #: calendar/views/export.inc.php:227
 #, c-format
 msgid "Es wurden %s Termine importiert."
-msgstr ""
+msgstr "%s appointments have been imported."
 
 #: calendar/views/export.inc.php:232
 msgid "Es wurden keine Termine importiert."
-msgstr ""
+msgstr "No appointments have been imported."
 
 #: calendar/views/export.inc.php:242
 msgid ""
 "Sie k&ouml;nnen Termindaten importieren, exportieren und synchronisieren."
-msgstr ""
+msgstr "You can import, export and synchronise appointment data."
 
 #: calendar/views/export.inc.php:279
 msgid "Der Export konnte nicht durchgef&uuml;hrt werden!"
-msgstr ""
+msgstr "The export could not be carried out!"
 
 #: calendar/views/export.inc.php:306 calendar/views/export.inc.php:318
 msgid "Der Import konnte nicht durchgef&uuml;hrt werden!"
-msgstr ""
+msgstr "The import could not be carried out!"
 
 #: calendar/views/export.inc.php:314
 msgid "Der Import wurde erfolgreich durchgef&uuml;hrt!"
-msgstr ""
+msgstr "The import was successfully carried out!"
 
 #: calendar/views/export.inc.php:319
 msgid "Die zu importierende Datei enth&auml;lt zuviele Termine."
-msgstr ""
+msgstr "The file to import contains too many appointments."
 
 #: calendar/views/export.inc.php:342
 msgid "Die Synchronisation konnte nicht durgef&uuml;hrt werden!"
-msgstr ""
+msgstr "The synchronisation could not be carried out!"
 
 #: calendar/views/export.inc.php:353
 msgid "Die Synchronisation wurde erfolgreich durchgef&uuml;hrt!"
-msgstr ""
+msgstr "The synchronisation was successfully carried out!"
 
 #: calendar/views/month.inc.php:71
 msgid "einen Monat zurück"
-msgstr ""
+msgstr "one month back"
 
 #: calendar/views/month.inc.php:79
 msgid "einen Monat vor"
-msgstr ""
+msgstr "one month forward"
 
 #: calendar/views/month.inc.php:259 calendar/views/month.inc.php:281
 #, c-format
@@ -8450,7 +8443,7 @@ msgstr "still %s appointments before"
 
 #: calendar/views/week.inc.php:85
 msgid "eine Woche zurück"
-msgstr ""
+msgstr "one week back"
 
 #: calendar/views/week.inc.php:87
 #, c-format
@@ -8459,7 +8452,7 @@ msgstr "Week %s from %s until %s."
 
 #: calendar/views/week.inc.php:93
 msgid "eine Woche vor"
-msgstr ""
+msgstr "one week forward"
 
 #: calendar/views/year.inc.php:152
 #, c-format
@@ -8473,69 +8466,70 @@ msgstr "1. appointment"
 #: calendar/lib/sync/CalendarExport.class.php:72
 #: calendar/lib/sync/CalendarExport.class.php:96
 msgid "Es wurden keine Termine exportiert."
-msgstr ""
+msgstr "No appointments have been exported."
 
 #: calendar/lib/sync/CalendarExport.class.php:76
 #: calendar/lib/sync/CalendarExport.class.php:100
 #, c-format
 msgid "Es wurden %s Termine exportiert"
-msgstr ""
+msgstr "%s appointments have been exported"
 
 #: calendar/lib/sync/CalendarExportFile.class.php:93
 #: calendar/lib/sync/CalendarExportFile.class.php:141
 msgid "Die Export-Datei konnte nicht erstellt werden!"
-msgstr ""
+msgstr "The export file could not be created!"
 
 #: calendar/lib/sync/CalendarExportFile.class.php:122
 msgid "Das Export-Verzeichnis konnte nicht angelegt werden!"
-msgstr ""
+msgstr "The export index could not be created!"
 
 #: calendar/lib/sync/CalendarExportFile.class.php:127
 msgid ""
 "Die Zugriffsrechte auf das Export-Verzeichnis konnten nicht ge&auml;ndert "
 "werden!"
-msgstr ""
+msgstr "The access authorisation to the export index could not be changed!"
 
 #: calendar/lib/sync/CalendarExportFile.class.php:135
 msgid "Eine bestehende Export-Datei konnte nicht gel&ouml;scht werden!"
-msgstr ""
+msgstr "An existing export file could not be deleted!"
 
 #: calendar/lib/sync/CalendarImportFile.class.php:67
 msgid "Die Import-Datei konnte nicht geöffnet werden!"
-msgstr ""
+msgstr "The import file could not be opened!"
 
 #: calendar/lib/sync/CalendarImportFile.class.php:143
 #: calendar/lib/sync/CalendarImportFile.class.php:161
 msgid "Die Datei konnte nicht gelesen werden!"
-msgstr ""
+msgstr "The file could not be read!"
 
 #: calendar/lib/sync/CalendarImportFile.class.php:181
 msgid "Die Datei konnte nicht gel&ouml;scht werden!"
-msgstr ""
+msgstr "The file could not be deleted!"
 
 #: calendar/lib/sync/CalendarParser.class.php:84
 msgid "Die Import-Datei konnte nicht verarbeitet werden!"
-msgstr ""
+msgstr "The import file could not be processed!"
 
 #: calendar/lib/sync/CalendarParserICalendar.class.php:58
 #: calendar/lib/sync/CalendarParserICalendar.class.php:89
 msgid "Die Datei enthält keine Termine."
-msgstr ""
+msgstr "The file contains no appointments."
 
 #: calendar/lib/sync/CalendarParserICalendar.class.php:78
 #: calendar/lib/sync/CalendarParserICalendar.class.php:299
 #: calendar/lib/sync/CalendarParserICalendar.class.php:310
 msgid "Die Datei ist keine g&uuml;ltige iCalendar-Datei!"
-msgstr ""
+msgstr "The file is not a valid iCalendar file!"
 
 #: calendar/lib/sync/CalendarSynchronizer.class.php:103
 msgid ""
 "Die Datei kann nicht mit dem Stud.IP-Terminkalender synchronisiert werden."
 msgstr ""
+"The file can not be synchronised with the Stud.IP appointment calendar."
 
 #: calendar/lib/sync/CalendarSynchronizer.class.php:146
 msgid "Die zu synchronisierende Datei enth&auml;lt zu viele Termine."
-msgstr ""
+msgstr "The file to be synchronised contains too many appointments."
 
 #: about.php:108
 msgid "Es wurde kein Nutzer unter dem angegebenen Nutzernamen gefunden!"
@@ -10094,7 +10088,7 @@ msgstr "You haven`t created any lists yet!"
 #: admin_lit_list.php:175
 #, c-format
 msgid "%s öffentlich sichtbare Listen, insgesamt %s Eintr&auml;ge"
-msgstr "%s publicly visibly lists, a total of %s entries"
+msgstr "%s publicly visible lists, a total of %s entries"
 
 #: admin_lit_list.php:177
 #, c-format
@@ -10654,7 +10648,7 @@ msgstr "in the category"
 
 #: admin_seminare1.php:418
 msgid "Art der Veranstaltung"
-msgstr "Form of appointment"
+msgstr "Form of course"
 
 #: admin_seminare1.php:422
 msgid "Veranstaltungs-Nummer"
@@ -12178,9 +12172,8 @@ msgid "Markierte Personen dieser Gruppe zuordnen"
 msgstr "Allocate selected users to this group"
 
 #: admin_statusgruppe.php:158
-#, fuzzy
 msgid "Personen können sich dieser Gruppe selbst zuordnen"
-msgstr "Allocate selected users to this group"
+msgstr "People can allocate themselves to this group"
 
 #: admin_statusgruppe.php:158 contact_statusgruppen.php:92
 msgid "Gruppenname oder -größe anpassen"
@@ -12544,7 +12537,7 @@ msgid ""
 "Sie haben den Status vorläufig akzeptiert in der Veranstaltung **%s (%s)** "
 "erhalten, da für Sie ein Platz freigeworden ist."
 msgstr ""
-"You have received the status of provisionally accepted for the course **%s(%"
+"You have received the status of provisionally accepted for the course **%s (%"
 "s)** since a place has become available for you."
 
 #: admission.inc.php:411
@@ -15535,12 +15528,12 @@ msgid "zuviele Browserfenster im Forenbereich!"
 msgstr "Too many browser windows in forum area!"
 
 #: forum.php:237
-#, fuzzy
 msgid ""
 "Sie versuchen, mit zwei Browserfenstern innerhalb verschiedener Stud.IP "
 "Bereiche zu navigieren."
 msgstr ""
-"You are trying to navigate in different forums with two browser windows."
+"You are trying to navigate within different Stud.IP areas with two browser "
+"windows."
 
 #: forum.php:288
 msgid "das untenstehende Thema"
@@ -17326,7 +17319,7 @@ msgstr "Create / edit appointments "
 
 #: links_sms.inc.php:55
 msgid "Veranstaltungstermine"
-msgstr "Course appointment"
+msgstr "Course appointments"
 
 #: links_sms.inc.php:56
 msgid "Export/Sync"
@@ -18774,14 +18767,13 @@ msgstr ""
 "enter another E-mail address!  "
 
 #: recordofstudy.php:368
-#, fuzzy
 msgid ""
 "Um eine Druckansicht Ihrer Veranstaltungen zu erstellen, wählen Sie bitte "
 "zunächst das entsprechende Semester aus und engen gegebenenfalls ihre "
 "Suchabfrage ein."
 msgstr ""
-"In order to create a print view of your course, please select the "
-"correspondingsemester and enter your search criteria. "
+"In order to create a print view of your course, please first select the "
+"corresponding semester and enter any search criteria if necessary. "
 
 #: recordofstudy.php:379
 msgid ""
@@ -22222,11 +22214,11 @@ msgstr "Title - dc_title\n"
 
 #: lib/classes/StudipLitListViewAdmin.class.php:64
 msgid "Verfasser oder Urheber - dc_creator\n"
-msgstr "Author or editor - dc_creator\n"
+msgstr "Author or creator - dc_creator\n"
 
 #: lib/classes/StudipLitListViewAdmin.class.php:65
 msgid "Thema und Stichwörter - dc_subject\n"
-msgstr "Theme and keyword - dc_subject\n"
+msgstr "Subject and keywords - dc_subject\n"
 
 #: lib/classes/StudipLitListViewAdmin.class.php:66
 msgid "Inhaltliche Beschreibung - dc_description\n"
@@ -22234,11 +22226,11 @@ msgstr "Description of contents - dc_description\n"
 
 #: lib/classes/StudipLitListViewAdmin.class.php:67
 msgid "Verleger, Herausgeber - dc_publisher\n"
-msgstr "Publisher - dc_publisher\n"
+msgstr "Editor, publisher - dc_publisher\n"
 
 #: lib/classes/StudipLitListViewAdmin.class.php:68
 msgid "Weitere beteiligten Personen und Körperschaften - dc_contributor\n"
-msgstr "Other people and corporations involved - dc_contributor\n"
+msgstr "Other people and corporations who contributed - dc_contributor\n"
 
 #: lib/classes/StudipLitListViewAdmin.class.php:69
 msgid "Datum - dc_date\n"
@@ -22254,7 +22246,7 @@ msgstr "Format - dc_format\n"
 
 #: lib/classes/StudipLitListViewAdmin.class.php:72
 msgid "Ressourcen-Identifikation - dc_identifier\n"
-msgstr "Resource identification - dc_identifier\n"
+msgstr "Resource identifier - dc_identifier\n"
 
 #: lib/classes/StudipLitListViewAdmin.class.php:73
 msgid "Quelle - dc_source\n"
@@ -22266,19 +22258,19 @@ msgstr "Language - dc_language\n"
 
 #: lib/classes/StudipLitListViewAdmin.class.php:75
 msgid "Beziehung zu anderen Ressourcen - dc_relation\n"
-msgstr "Connection with other resources - dc_relation\n"
+msgstr "Relation with other resources - dc_relation\n"
 
 #: lib/classes/StudipLitListViewAdmin.class.php:76
 msgid "Räumliche und zeitliche Maßangaben - dc_coverage\n"
-msgstr "Spatial and temporal specifications - dc_coverage\n"
+msgstr "Spatial and temporal coverage - dc_coverage\n"
 
 #: lib/classes/StudipLitListViewAdmin.class.php:77
 msgid "Rechtliche Bedingungen - dc_rights\n"
-msgstr "Legal conditions - dc_rights\n"
+msgstr "Legal rights - dc_rights\n"
 
 #: lib/classes/StudipLitListViewAdmin.class.php:78
 msgid "Zugriffsnummer - accession_number\n"
-msgstr "Access number - accession_number\n"
+msgstr "Accession number - accession_number\n"
 
 #: lib/classes/StudipLitListViewAdmin.class.php:79
 msgid "Jahr - year\n"
@@ -22290,7 +22282,7 @@ msgstr "All authors - authors\n"
 
 #: lib/classes/StudipLitListViewAdmin.class.php:81
 msgid "Herausgeber mit Jahr - published\n"
-msgstr "Publisher with year - published\n"
+msgstr "Year published - published\n"
 
 #: lib/classes/StudipLitListViewAdmin.class.php:82
 msgid "Anmerkung - note\n"
@@ -23989,7 +23981,7 @@ msgstr "Introduction"
 
 #: help/structure.inc.php:556
 msgid "Was fange ich mit der Ressourcenverwaltung an?"
-msgstr "what do I do with the resource administration?"
+msgstr "What do I do with the resource administration?"
 
 #: help/structure.inc.php:565
 msgid "Export von Daten"
@@ -24018,6 +24010,12 @@ msgstr "What is ILIAS?"
 #: help/structure.inc.php:584
 msgid "Was ist ILIAS und was sind ILIAS Lernmodule"
 msgstr "What is ILIAS and what are ILIAS learning modules"
+
+#: export/recordofstudy.lib.php:126
+msgid ""
+"Bitte fügen sie Veranstaltungen mit Hilfe des Buttons \"hinzufügen\" ein "
+"oder ändern Sie ihre ihre Auswahl."
+msgstr ""
 
 #: admin_statusgruppe.php:158
 #, fuzzy
