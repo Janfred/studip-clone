@@ -53,6 +53,7 @@ if ($resources_data["view"]=="create_hierarchie" || $create_hierachie_level) {
 	$newHiearchie->create();
 	$edit_structure_object=$newHiearchie->id;
 	$resources_data["structure_opens"][$newHiearchie->id] =TRUE;
+	$resources_data["actual_object"]=$newHiearchie->getId();	
 	$resources_data["view"]="resources";
 	}
 
@@ -547,12 +548,10 @@ if ($resources_data["view"]=="search") {
 if ($show_object)
 	$resources_data["actual_object"]=$show_object;
 	
-
 //if ObjectPerms for actual user and actual object are not loaded, load them!
 if ($ObjectPerms) {
 	if (($ObjectPerms->getId() == $resources_data["actual_object"]) && ($ObjectPerms->getUserId()  == $user->id))
 		$ActualObjectPerms = $ObjectPerms;
 } else
 	$ActualObjectPerms = new ResourcesObjectPerms($resources_data["actual_object"]);
-
 ?>
