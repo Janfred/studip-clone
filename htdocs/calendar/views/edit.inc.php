@@ -478,27 +478,29 @@ if (isset($atermin) && $atermin->getSeminarId()) {
 										. "\">" . htmlReady($db->f("name")) . "</a>";
 	$permission = get_perm($atermin->getSeminarId());
 	
+	$info_text_1 = sprintf(_("Dieser Termin geh&ouml;rt zur Veranstaltung:<p>%s</p>Veranstaltungstermine k&ouml;nnen nicht im pers&ouml;nlichen Terminkalender bearbeitet werden.")
+			, $link_to_seminar);
+	$info_text_2 = sprintf(_("<a href=\"%s?cmd=bind\">W&auml;hlen</a> Sie aus, welche Veranstaltungstermine automatisch in Ihrem Terminkalender angezeigt werden sollen.")
+			, $PHP_SELF);
 	if ($permission == "tutor" || $permission == "dozent") {
-		$info_text_1 = sprintf(_("Dieser Termin geh&ouml;rt zur Veranstaltung:<p>%s</p>Veranstaltungstermine k&ouml;nnen nicht im pers&ouml;nlichen Terminkalender bearbeitet werden.")
-				, $link_to_seminar);
-		$info_text_2 = sprintf(_("<a href=\"%s?cmd=bind\">W&auml;hlen</a> Sie aus, welche Veranstaltungstermine automatisch in Ihrem Terminkalender angezeigt werden sollen.")
-				, $PHP_SELF);
-		$info_text_3 = sprintf(_("Um diesen Termin zu bearbeiten, wechseln Sie bitte in die <a href=\"%sadmin_dates.php?range_id=%s&show_id=%s>Terminverwaltung</a>.")
+		$link_to_seminar = sprintf("<a href=\"%sadmin_dates.php?range_id=%s&show_id=%s\">"
 				, $CANONICAL_RELATIVE_PATH_STUDIP, $atermin->getSeminarId(), $atermin->getId());
+		$info_text_3 = sprintf(_("Um diesen Termin zu bearbeiten, wechseln Sie bitte in die %sTerminverwaltung</a>.")
+				, $link_to_seminar);
 		$info_content = array(	
 										array("kategorie" => _("Information:"),
 													"eintrag" => array(	
-													array("icon" => "{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/ausruf_small.gif",
+													array("icon" => "/pictures/ausruf_small.gif",
 																"text" => $info_text_1
 																)
 													)
 										),
 										array("kategorie" => _("Aktion:"),
 		   										"eintrag" => array(	
-													array("icon" => "{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/meinesem.gif",
+													array("icon" => "/pictures/meinesem.gif",
 																"text" => $info_text_2
 																),
-													array("icon" => "{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/admin.gif",
+													array("icon" => "/pictures/admin.gif",
 																"text" => $info_text_3
 																)
 													)
@@ -509,14 +511,14 @@ if (isset($atermin) && $atermin->getSeminarId()) {
 		$info_content = array(	
 										array("kategorie" => "Information:",
 													"eintrag" => array(	
-													array("icon" => "{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/ausruf_small.gif",
+													array("icon" => "/pictures/ausruf_small.gif",
 																"text" => $info_text_1
 																)
 													)
 										),
 										array("kategorie" => "Aktion:",
 		  											"eintrag" => array(	
-													array (	"icon" => "{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/meinesem.gif",
+													array (	"icon" => "/pictures/meinesem.gif",
 																	"text" => $info_text_2
 																)
 													)
@@ -528,7 +530,7 @@ if (isset($atermin) && $atermin->getSeminarId()) {
 	echo "<td class=\"blank\" align=\"center\" rowspan=\"1\" valign=\"top\" width=\"20%\">\n";
 	echo "<table class=\"blank\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" valign=\"top\">\n";
 	echo "<tr><td class=\"blank\" align=\"center\" valign=\"top\">\n";
-	print_infobox($info_content, "{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/dates.jpg");
+	print_infobox($info_content, "/pictures/dates.jpg");
 	echo "</td></tr>\n</table>\n<tr><td class=\"blank\">\n";
 	echo "</td></tr>\n";
 }
