@@ -104,7 +104,7 @@ function show_dates ($range_id, $date_start, $date_end, $show_not=0, $show_docs=
 		if ($show_admin) {
 			$colspan++;
 			if (!$show_whole_time) {
-				echo "\n<tr><td class='topic' width=\"99%\">&nbsp;<img src='./pictures/icon-uhr.gif' border='0' alt='Termine. Klicken Sie rechts auf die Pfeile, um Termine in diesen Bereich zu bearbeiten. Klicken Sie auf den einfachen Pfeil, um die Terminbeschreibung zu lesen.' align='texttop'><b>&nbsp;&nbsp;Termine für die Zeit vom ".strftime("%d. %B %Y", $date_start)." bis zum ".strftime("%d. %B %Y", $date_end)."</b></td>";
+				echo "\n<tr><td class='topic' width=\"99%\">&nbsp;<img src='./pictures/termin-.gif' border='0' alt='Termine. Klicken Sie rechts auf die Pfeile, um Termine in diesen Bereich zu bearbeiten. Klicken Sie auf den einfachen Pfeil, um die Terminbeschreibung zu lesen.' align='texttop'><b>&nbsp;&nbsp;Termine für die Zeit vom ".strftime("%d. %B %Y", $date_start)." bis zum ".strftime("%d. %B %Y", $date_end)."</b></td>";
 				echo "\n<td align = 'right' class='topic'>&nbsp;$admin_link<img src='./pictures/pfeillink.gif' border='0' alt='Termine bearbeiten'></a>&nbsp;</td></tr>";
 				} 
 			else {
@@ -173,7 +173,7 @@ function show_dates ($range_id, $date_start, $date_end, $show_not=0, $show_docs=
 			else
 				$link=$PHP_SELF."?dclose=true".$add_to_link;
 					
-			$icon="&nbsp;<img src=\"./pictures/icon-uhr.gif\" border=0>";
+			$icon="&nbsp;<img src=\"./pictures/termin-icon.gif\" border=0>";
 			
 			
 			echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr>";
@@ -259,7 +259,7 @@ function show_personal_dates ($range_id, $date_start, $date_end, $show_docs=FALS
 			$add_to_link="&username=$username";
 		
 		while($termin = $list->nextTermin()){
-			$icon = '&nbsp;<img src="./pictures/icon-uhr.gif" border="0" alt="Termin">';
+			$icon = '&nbsp;<img src="./pictures/termin-icon.gif" border="0" alt="Termin">';
 			
 			$zusatz = '';
 			if($termin->getLocation())
