@@ -265,7 +265,7 @@ if ($sem_browse_obj->show_result && count($sem_browse_data['search_result'])){
 						"eintrag" => array	(	
 									array (	"icon" => "pictures/ausruf_small.gif",
 											"text"  => sprintf (_("Gew&auml;hlte Kategorie: <b>%s</b>")."<br />"._("%s Veranstaltungen vorhanden"), $SEM_CLASS[$sem_portal["bereich"]]["name"], $anzahl_seminare_class)
-														. (($anzahl_seminare_class < 30) ? "<br>" . sprintf(_("Alle Veranstaltungen %sanzeigen%s"),"<a href=\"$PHP_SELF?do_show_class=1\">","</a>") : ""))
+														. (($anzahl_seminare_class && $anzahl_seminare_class < 30) ? "<br>" . sprintf(_("Alle Veranstaltungen %sanzeigen%s"),"<a href=\"$PHP_SELF?do_show_class=1\">","</a>") : ""))
 										)
 						) : FALSE;
 	$infobox[] =
