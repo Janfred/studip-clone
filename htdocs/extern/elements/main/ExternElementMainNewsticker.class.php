@@ -40,7 +40,7 @@ require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."
 class ExternElementMainNewsticker extends ExternElementMain {
 
 	var $attributes = array("name", "rows", "length", "pause", "frequency",
-			"starttext", "endtext", "nodatatext", "automaticstart", "style");
+			"starttext", "endtext", "nodatatext", "automaticstart", "jsonly", "style");
 	var $edit_function = "editMainSettings";
 	
 	/**
@@ -120,6 +120,19 @@ class ExternElementMainNewsticker extends ExternElementMain {
 		$info = _("Wählen Sie diese Option, wenn das Modul den Ticker automatisch starten soll. Bei längeren Ladezeiten der Seite, in der Sie den Ticker integriert haben, kann es sinnvoll sein, den Ticker erst zu starten, wenn die Seite komplett geladen ist. Deaktivieren Sie dafür diese Option, und fügen Sie im <body>-Tag der Seite das Attribut onLoad=\"newsticker\" ein.");
 		$table .= $edit_form->editCheckboxGeneric("automaticstart", $title, $info, "1", "");
 		
+		$title = _("Nur JavaScript-Funktion ausgeben?");
+		$info = _("Wählen Sie diese Option, wenn das Modul nur die JavaScript-Funktion ausgeben soll. Die Funktionsname ist newsticker(). Sie kann z.B. innerhalb von <textarea> eingesetzt werden. Beispiel:");
+		$info .= "\n<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n";
+		$info .= "<html>\n\t<head>\n\t\t";
+		$info .= "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=ISO-8859-1\">\n";
+		$info .= "\t\t<title>Newsticker</title>\n\t</head>\n";
+		$info .= "\t\t<script src=\"Link to SRI-Interface for newsticker. Look at info-page (i).\" type=\"text/javascript\">\n";
+		$info .= "\t<body>\n\t\t<form name=\"tickform\">\n\t\t\t";	
+		$info .= "<textarea name=\"tickfield\" rows=\"5\" cols=\"50\">Loading ticker...</textarea>\n";
+		$info .= "\t\t</form>\n\t\t<script type=\"text/javascript\">\n\t\t\t";
+		$info .= "newsticker();\n\t\t</script>\n\t</body>\n</html>";
+		$table .= $edit_form->editCheckboxGeneric("jsonly", $title, $info, "1", "");
+		
 		$content_table .= $edit_form->editContentTable($headline, $table);
 		$content_table .= $edit_form->editBlankContent();
 		
@@ -153,6 +166,7 @@ class ExternElementMainNewsticker extends ExternElementMain {
 			case "length" :
 				return !(preg_match("'^\d{1,3}$'", $value) && $value > 9 && $value < 201);
 			case "automaticstart" :
+			case "jsonly" :
 				if (!isset($GLOBALS["HTTP_POST_VARS"][$this->name . "_" . $attribute])) {
 					$GLOBALS["HTTP_POST_VARS"][$this->name . "_" . $attribute] = 0;
 					return FALSE;
