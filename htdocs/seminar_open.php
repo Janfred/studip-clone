@@ -106,10 +106,8 @@ function check_calendar_default(){
 function startpage_redirect($page_code) {
 	switch ($page_code) {
 		case 1:
-			$jump_page = "meine_seminare.php";
-		break;
 		case 2:
-			$jump_page = "meine_einrichtungen.php";
+			$jump_page = "meine_seminare.php";
 		break;
 		case 3:
 			$jump_page = "mein_stundenplan.php";
