@@ -268,8 +268,8 @@ function lastActivity ($sem_id) {
 	if ($db->f("chdate") > $timestamp)
 		$timestamp = $db->f("chdate");
 
-	//Literatur
-	$db->query("SELECT chdate FROM literatur WHERE range_id = '$sem_id' ORDER BY chdate DESC LIMIT 1");
+	//SCM
+	$db->query("SELECT chdate FROM scm WHERE range_id = '$sem_id' ORDER BY chdate DESC LIMIT 1");
 	$db->next_record();
 	if ($db->f("chdate") > $timestamp)
 		$timestamp = $db->f("chdate");
