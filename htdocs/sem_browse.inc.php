@@ -156,7 +156,7 @@ if (($sem_browse_data["cmd"]=="xts"))
 		for ($i; $i <= sizeof($SEMESTER); $i++)
 			{
 			echo "<option";			
-			if (            ($sem_browse_data["s_sem"]==$SEMESTER[$i]["name"]) || (        (!$sem_browse_data["s_sem"]) && (($SEMESTER[$i]["name"] == $SEM_NAME_NEXT) && ($VORLES_ENDE < time())) ||  (($SEMESTER[$i]["name"] == $SEM_NAME) && ($SEM_BEGINN < time()))           )              )
+			if (($sem_browse_data["s_sem"]==$SEMESTER[$i]["name"]) || ((!$sem_browse_data["s_sem"]) && ((($SEMESTER[$i]["name"] == $SEM_NAME_NEXT) && ($VORLES_ENDE < time())) ||  (($SEMESTER[$i]["name"] == $SEM_NAME) && ($SEM_BEGINN < time())))))
 				echo" selected";
 			echo ">", $SEMESTER[$i]["name"], "</option>";
 			}
