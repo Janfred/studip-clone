@@ -55,6 +55,8 @@ function show_seminar_modules($seminar_id)
 			$printimage = "<img src=\"pictures/icon-lern.gif\">";
 			$printcontent = $module_info["description"] . "<br><br><center><a href=\"$link_del\">" . makeButton("entfernen", "img") . "</a></center>";
 			$mod_author = get_module_author($mod_array[$module_count]["inst"], $mod_array[$module_count]["id"]);
+			for ($i=0; $i<sizeof($mod_author); $i ++)
+				$mod_author[$i] = $mod_author[$i]["fullname"];
 			$printdesc = implode($mod_author, ", ");
 			?>
 			<table cellspacing="0" cellpadding="0" border="0" width="100%">
@@ -106,6 +108,8 @@ function show_all_modules($seminar_id)
 			$printimage = "<img src=\"pictures/icon-lern.gif\">";
 			$printcontent = $module_info["description"] . "<br><br><center><a href=\"$link_con\">" . makeButton("hinzufuegen", "img") . "</a></center>";
 			$mod_author = get_module_author($mod_array[$module_count]["inst"], $mod_array[$module_count]["id"]);
+			for ($i=0; $i<sizeof($mod_author); $i ++)
+				$mod_author[$i] = $mod_author[$i]["fullname"];
 			$printdesc = implode($mod_author, ", ");
 			?>
 			<table cellspacing="0" cellpadding="0" border="0" width="100%">
