@@ -203,9 +203,4 @@ class StudipRangeTree extends TreeAbstract {
 		return $deleted;
 	}
 }
-//$test =& TreeAbstract::GetInstance("StudipRangeTree");
-//echo "<pre>";
-//echo get_class($test) . "\n";
-//print_r($test->tree_data);
-//print_r($test->getKidsKids("root"));
 ?>
