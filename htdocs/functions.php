@@ -707,6 +707,66 @@ function check_and_set_date($tag, $monat, $jahr, $stunde, $minute, &$arr, $field
 	return $check;
 }
 
+/**
+ * write_config
+ *
+ * writes an entry into the studip configuration table
+ *
+ * @param	string	the key for the config entry
+ * @param	string	the value that should be set
+ * @param	array	an array with key=>value to write into config
+ *
+ * @return	bool	true if date was valid, else false
+ *
+ **/
+function write_config ($key='', $val='', $arr='') {
+	$db = new DB_Seminar;
+
+	if (func_num_args() == 2) {
+		$arr[$key] = $val;
+	}
+	if (is_array($arr)) {
+		foreach ($arr as $key=>$val) {
+			$query = sprintf ("SELECT * FROM CONFIG WHERE `key` = '%s' ", $key);
+			$db->query($query);
+		
+			if ($db->nf()) {
+				$query = sprintf ("UPDATE CONFIG SET `key` = '%s', value = '%s', chdate = '%s' WHERE `key` = '%s' ", $key, $val, time(), $key);
+			} else {
+				$query = sprintf ("INSERT INTO CONFIG SET config_id = '%s', `key` = '%s', value = '%s', chdate = '%s'", md5(uniqid("configID")), $key, $val, time());
+			}
+			$db->query($query);
+		}
+		return TRUE;
+	} else
+		return FALSE;
+}
+
+/**
+ * get_config
+ *
+ * gets an entry from the studip configuration table
+ *
+ * @param	string	the key for the config entry
+ * @param	boolean	if set, the default value will we returned
+ *
+ * @return	sttring	the value
+ *
+ **/
+function get_config ($key, $default = FALSE) {
+	$db = new DB_Seminar;
+	
+	$query = sprintf ("SELECT value, default_value FROM CONFIG WHERE `key` = '%s' ", $key);
+	$db->query($query);
+	if ($db->next_record()) {
+		if ($default)
+			return $db->f("default_value");
+		else
+			return $db->f("value");
+	} else
+		return FALSE;
+}
+
 // folgende Funktion ist nur notwendig, wenn die zu kopierende Veranstaltung nicht vom Dozenten selbst,
 // sondern vom Admin oder vom root kopiert wird (sonst wird das Dozentenfeld leer gelassen, was ja keiner will...)
 function get_seminar_dozent($seminar_id) {
