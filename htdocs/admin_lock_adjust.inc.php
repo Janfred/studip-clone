@@ -233,11 +233,6 @@ function show_lock_rule_form($lockdata="",$edit=0) {
 	} else {
 		$form .= $zt->row(array(_("Endzeitpunkt der Anmeldem&ouml;glichkeit"),"<input type=\"radio\" name=\"lockdata[attributes][admission_endtime_sem]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][admission_endtime_sem]\" value=0 checked>"));	
 	}
-	if ($lockdata["attributes"]["user_number"]) {
-		$form .= $zt->row(array(_("Vergabe von Teilnehmernummern"),"<input type=\"radio\" name=\"lockdata[attributes][user_number]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][user_number]\" value=0>"));	
-	} else {
-		$form .= $zt->row(array(_("Vergabe von Teilnehmernummern"),"<input type=\"radio\" name=\"lockdata[attributes][user_number]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][user_number]\" value=0 checked>"));	
-	}
 	if ($lockdata["attributes"]["Lesezugriff"]) {
 		$form .= $zt->row(array(_("Lesezugriff"),"<input type=\"radio\" name=\"lockdata[attributes][Lesezugriff]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][Lesezugriff]\" value=0>"));	
 	} else {

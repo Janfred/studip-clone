@@ -189,7 +189,6 @@ if ($cmd=="schreiben") {
 			$userchange=$db->f("user_id");
 			$fullname = $db->f("fullname");
 			$db->query("UPDATE seminar_user SET status='autor' WHERE Seminar_id = '$id' AND user_id = '$userchange'");
-			seminar_usernumber($id,$userchange);
 			$msg = "msg§" . sprintf(_("User %s wurde als Autor in die Veranstaltung aufgenommen."), $fullname) . "§";
 		}
 		else $msg ="error§" . _("Netter Versuch! vielleicht beim n&auml;chsten Mal!") . "§";
@@ -302,7 +301,6 @@ if ((($cmd=="admission_rein") || ($cmd=="add_user")) && ($username)){
 		//But: perhaps a better solution?
 
 		$admission_user = insert_seminar_user($id, $userchange, $status, ($accepted) ? TRUE : FALSE);
-		seminar_usernumber($id,$userchange);
 		//Only if user was on the waiting list
 		if ($admission_user) {
 			setTempLanguage($userchange);
@@ -831,18 +829,6 @@ while (list ($key, $val) = each ($gruppe)) {
 		// info-field for users
 		$show_area = "show_".$key;
 		if ((is_opened($db->f("user_id")) || isset($$show_area)) && $rechte) { // show further userinfosi
-			$db4->query("SELECT status FROM seminare WHERE seminar_id = '$id'");
-			$db4->next_record();
-			$unum = FALSE;
-			if ($db3->f("user_number")) { //get user_number if needed and allowed
-				$db4->query("SELECT * FROM seminar_user_number WHERE user_id = '".$db->f("user_id")."' AND seminar_id = '$id';");
-				if ($db4->next_record()) {
-					$unum = TRUE;
-					$user_number = $db4->f("usernumber");
-				} else {
-					$unum = FALSE;
-				}
-			}
 
 		?>
 			<tr>

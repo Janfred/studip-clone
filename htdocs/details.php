@@ -158,15 +158,6 @@ else
 				unset ($admission_status);
 			}
 
-			$db4->query("SELECT * FROM seminar_user_number WHERE user_id = '$user_id' AND seminar_id = '$sem_id';");
-			if ($db4->next_record()) {
-				$lead = "";
-				for ($i = 1; $i <= 5 - strlen($db4->f("user_number")); $i++) {
-					$lead .= "0";
-				}
-				$num_text = sprintf("<b>" . _(" (Teilnehmernummer: %s)") . "</b>",$lead.$db4->f("user_number"));
-			}
-
 			if (($mein_status) || ($admission_status)) {
 				$picture_tmp = "./pictures/haken.gif";
 			} else {

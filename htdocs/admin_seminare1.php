@@ -284,30 +284,6 @@ if ($s_send) {
 		$db->query("SELECT * FROM seminare WHERE Seminar_id = '$s_id'");
 		$db->next_record();
 
-		if ($user_number == "on") {
-			$user_number = 1;
-				if (!$db->f("user_number")) {
-				$msging = new messaging();
-				$query = array();
-				$db3->query("SELECT Name FROM seminare WHERE Seminar_id = '$s_id';");
-				$db3->next_record();
-				$query[1] = "SELECT * FROM seminar_user WHERE Seminar_id = '$s_id' AND status != 'dozent';";
-				$query[2] = "SELECT * FROM admission_seminar_user WHERE seminar_id = '$s_id';";
-				for ($i = 1; $i <= 2; $i++) {
-					$db->query($query[$i]);
-					while ($db->next_record()) {
-						$db2->query("INSERT INTO seminar_user_number (user_id, seminar_id) VALUES ('".$db->f("user_id")."','$s_id');");
-						$db2->query("SELECT username FROM auth_user_md5 WHERE user_id = '".$db->f("user_id")."';");
-						$db2->next_record();
-						$msging->insert_message(sprintf(_("Für Veranstaltung **%s** wurden Teilnehmernummern vergeben. Ihre Teilnehmernummer finden Sie auf der Übersichtsseite dieser Veranstaltung."), $db3->f("Name")), $db2->f("username"));
-					}
-				}
-			}
-		} else {
-			$db->query("DELETE FROM seminar_user_number WHERE seminar_id = '$s_id';");
-			$user_number = "NULL";
-		}
-	
     // Update Seminar information.
     $query = "UPDATE seminare SET Veranstaltungsnummer='$VeranstaltungsNummer', ";
     if ($perm->have_studip_perm("dozent",$s_id))
@@ -316,8 +292,7 @@ if ($s_send) {
 			status='$Status', Beschreibung='$Beschreibung', 
 			Sonstiges='$Sonstiges', art='$art', teilnehmer='$teilnehmer', 
 			vorrausetzungen='$vorrausetzungen', lernorga='$lernorga',
-			leistungsnachweis='$leistungsnachweis', ects='$ects', admission_turnout='$turnout', 
-			user_number = $user_number ";
+			leistungsnachweis='$leistungsnachweis', ects='$ects', admission_turnout='$turnout' ";
 		
 	$query .= "WHERE Seminar_id='$s_id'";
 
@@ -518,10 +493,6 @@ if (($s_id) && (auth_check())) {
 			<tr>
 				<td class="<? echo $cssSw->getClass() ?>" align=right><? printf ("%s" . _("max. TeilnehmerInnenanzahl") . "%s", ($db->f("admission_type")) ? "<b>" : "",  ($db->f("admission_type")) ? "</b>" : ""); ?></td>
 				<td class="<? echo $cssSw->getClass() ?>"  align=left colspan=2>&nbsp; <input type="int" name="turnout" size=6 maxlength=4 value="<?php echo $db->f("admission_turnout") ?>"<? if ($lockdata[$lock_status]["admission_turnout"]) { echo " readonly ";}?>><? if ($lockdata[$lock_status]["admission_turnout"]) { echo $lock_text;}?></td>
-			</tr>
-			<tr>
-				<td class="<? echo $cssSw->getClass() ?>" align=right><?=_("Teilnehmernummern")?></td>
-				<td class="<? echo $cssSw->getClass() ?>"  align=left colspan=2>&nbsp;<input type="checkbox" name="user_number" <?=($db->f("user_number")) ? "checked" : "" ?><? if ($lockdata[$lock_status]["user_number"]) { echo " disabled ";}?>>&nbsp;<?=_("Teilnehmernummern vergeben");?><? if ($lockdata[$lock_status]["user_number"]) { echo $lock_text;}?></td>
 			</tr>
 			<tr>
 				<td class="<? echo $cssSw->getClass() ?>" align=right><?=_("Beschreibung")?></td>

@@ -706,26 +706,4 @@ function check_and_set_date($tag, $monat, $jahr, $stunde, $minute, &$arr, $field
 	}
 	return $check;
 }
-
-/**
- * This function checks, if a given seminar gives user_numbers and adds the given user to seminar_user_number
- *
- * @param    string  seminar_id
- * @param    string  user_id
- * @return   boolean
- *
- */
-function seminar_usernumber($seminar_id,$userid=NULL) {
-  $db = new DB_Seminar;
-
-  $db->query("SELECT user_number FROM seminare WHERE Seminar_id='$seminar_id'");
-  $db->next_record();
-  if (!$db->f("user_number")) {
-    return FALSE;
-  }
-  if ($userid) {
-    $db->query("INSERT INTO seminar_user_number (user_id, seminar_id) VALUES ('$userid', '$seminar_id');");
-  }
-  return TRUE;
-}
 ?>

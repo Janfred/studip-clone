@@ -359,7 +359,6 @@ if ($start_level) { //create defaults
 
 if ($form==1)
 	{
-	$sem_create_data["user_number"]=$user_number;
 	$sem_create_data["sem_name"]=$sem_name;
 	$sem_create_data["sem_untert"]=$sem_untert;
 	$sem_create_data["sem_nummer"]=$sem_nummer;
@@ -1698,18 +1697,6 @@ elseif ((!$level) || ($level==1))
  							<?=_("vorl&auml;ufiger Eintrag"); ?>&nbsp; 
 							<img  src="./pictures/info.gif" 
  								<? echo tooltip(_("Neue Teilnehmer bekommen den Status \"vorläufig aktzeptiert\". Sie können von Hand die zugelassenen Teilnehmer auswählen. Vorläufig akzeptierte Teilnehmer haben keinen Zugriff auf die Veranstaltung."), TRUE, TRUE) ?>
-							>
-						</td>
-					</tr>
-					<tr <? $cssSw->switchClass() ?>>
-						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
-							<?=_("Teilnehmernummer:");?>
-						</td>
-						<td class="<? echo $cssSw->getClass() ?>" width="90%" align="left">
-							&nbsp;&nbsp;<input type="checkbox" name="user_number" value="1" <? if ($sem_create_data["user_number"] == "1") echo checked?>>
-							<?=_("Teilnehmernummern vergeben");?>
-							<img src="./pictures/info.gif"
-							<? echo tooltip(_("Jeder Teilnehmer bekommt eine einzigartige Teilnehmernummer zugewiesen."), TRUE, TRUE) ?>
 							>
 						</td>
 					</tr>
