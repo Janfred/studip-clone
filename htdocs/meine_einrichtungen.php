@@ -282,10 +282,14 @@ if ( !$perm->have_perm("root")) {
 				echo "</a>&nbsp;";
 			}
 			if ($GLOBALS['ILIAS_CONNECT_ENABLE']) {
-				$mod_count = get_seminar_modules($semid);
+				$mod_count = get_seminar_modules($instid);
 				if ($mod_count) {
-					echo "<a href=\"seminar_lernmodule.php?view=show&seminar_id=$semid\">&nbsp;";
-					echo "<img src=\"pictures/icon-lern.gif\" ".tooltip(sprintf(_("Die Veranstaltung ist mit %s ILIAS-Lernmodulen verbunden."), sizeof($mod_count)))."border=\"0\">";
+					echo "<a href=\"seminar_lernmodule.php?view=show&seminar_id=$instid\">&nbsp;";
+					echo "<img src=\"pictures/icon-lern.gif\" ";
+					if (sizeof($mod_count) == 1)
+						echo $tooltip(sprintf(_("Die Einrichtung ist mit %s ILIAS-Lernmodul verbunden."), sizeof($mod_count)))."border=\"0\">";
+					else
+						echo $tooltip(sprintf(_("Die Einrichtung ist mit %s ILIAS-Lernmodulen verbunden."), sizeof($mod_count)))."border=\"0\">";
 					echo "</a>&nbsp;";
 				}
 				else
