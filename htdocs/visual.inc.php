@@ -689,14 +689,21 @@ function printhead ($breite, $left, $link, $open, $new, $icon,
 }
 
 //Ausgabe des Contents einer aufgeklappten Kopfzeile
-function printcontent ($breite, $write = FALSE, $inhalt, $edit, $printout = TRUE) {
+function printcontent ($breite, $write = FALSE, $inhalt, $edit, $printout = TRUE, $addon="") {
 
 	$print = "<td class=\"printcontent\" width=\"22\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-	$print .= "</td><td class=\"printcontent\" width=\"$breite\"><br>";
+	$print .= "</td><td class=\"printcontent\" width=\"$breite\" valign=\"bottom\"><br>";
 	$print .= $inhalt;
 	
-	if ($edit)
+	if ($edit) {
 		$print .= "<br><br><div align=\"center\">$edit</div><img src=\"pictures/blank.gif\" height=\"6\" border=\"0\">";
+		if ($addon!="")
+			if (substr($addon,0,5)=="open:") // es wird der öffnen-Pfeil mit Link ausgegeben
+				$print .= "</td><td valign=\"middle\" class=\"steel1\" nowrap><a href=\"".substr($addon,5)."\"><img src=\"pictures/forumgrau4.gif\" align=\"middle\" border=\"0\"></a>&nbsp;";
+			else { 				// es wird erweiterter Inhalt ausgegeben
+				$print .= "</td><td class=\"steelblau_schatten\" nowrap>";
+				$print .= "<font size=\"-2\" color=\"#444444\">$addon";
+	}		}
 	else
 		$print .= "<br>";
 	

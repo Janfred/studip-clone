@@ -505,7 +505,7 @@ function ForumStriche($forumposting) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function printposting ($forumposting) {
-	global $PHP_SELF,$forum,$view,$davor,$auth,$user, $SessSemName, $loginfilelast;
+	global $PHP_SELF,$forum,$view,$davor,$auth,$user, $SessSemName, $loginfilelast, $sidebar;
 
   // Status des Postings holen
  	// auf- zugeklappt
@@ -613,15 +613,28 @@ function printposting ($forumposting) {
 		}
 		if (ereg("\[quote",$description) AND ereg("\[/quote\]",$description) AND $forumposting["writestatus"] == "none")
 			$description = quotes_decode($description);
-		
+
+		if ($sidebar==$forumposting["id"]) {
+			$addon = "<font size=\"-1\" color=\"555555\"><br>&nbsp;&nbsp;Views: $objectviews<br>&nbsp;&nbsp;Relevanz:<br>&nbsp;&nbsp;Bewertung:";
+			$addon .= "<br><font size=\"-2\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5:<br>";
+			$addon .= "<div align=\"center\"><font size=\"-1\">Dieser Beitrag war<br><font size=\"-2\">(Schulnote)</font><br><form method=post action=$PHP_SELF>";
+			$addon .= "<b>&nbsp;<font size=\"2\" color=\"555555\">1<input type=radio name=rate value=1>";
+			$addon .= "<input type=radio name=rate value=2>";
+			$addon .= "<input type=radio name=rate value=3>";
+			$addon .= "<input type=radio name=rate value=4>";
+			$addon .= "<input type=radio name=rate value=5>5&nbsp;";
+			$addon .= "<br><br><input type=image name=create value=\"abschicken\" " . makeButton("abschicken", "src") . " align=\"absmiddle\" border=0>";
+			$addon .= "</form>";
+		} else 
+			$addon = "open:$PHP_SELF?open=".$forumposting["id"]."&flatviewstartposting=".$forum["flatviewstartposting"]."&sidebar=".$forumposting["id"]."#anker";		
+  
   // Kontentzeile ausgeben
 		
 		echo "<table width=\"100%\" border=0 cellpadding=0 cellspacing=0 align=center><tr>";
 		
 		if ($forumposting["intree"]==TRUE) // etwas Schmuckwerk für die Strichlogik
 			echo ForumStriche($forumposting);
-		
-		printcontent ("100%",$formposting,$description,$edit);
+		printcontent ("100%",$formposting,$description,$edit,TRUE,$addon);
 		if ($forumposting["intree"]==TRUE)
 			echo "<td class=\"blank\">&nbsp;&nbsp;&nbsp;</td>";
 		echo "</tr></table>\n";	
