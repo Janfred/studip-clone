@@ -486,8 +486,21 @@ array	(	"name" => "Veranstaltungen verwalten",
 																			
 															)
 			)
-			
 );
-
-
+//show help for resources management, if available
+if ($GLOBALS["RESOURCES_ENABLE"]) {
+	$pages[] = array	(	"name" => "Modul: Ressourcenverwaltung",
+				"text" => "Verwaltung unterschiedlicher Ressourcen in Stud.IP",
+				"perm" =>	"user",
+				"kategorien" => array	(	
+																
+																			
+																array	(	"name" => "Einführung",
+																				"text" => "Was fange ich mit der Ressourcenverwaltung an?",
+																				"page" => "resources_intro.htm"
+																			)
+															)
+			);
+	
+}
 ?>

@@ -300,6 +300,14 @@ switch($referrer_page) {
 	case "admin_statusgruppe.php" :
 		$help_page = "x_statusgruppen_admin.htm";
 		break;
+
+	case "resources.php" :
+		switch ($view) {
+			default:
+				$help_page = "resources_intro.htm";
+			break;
+		}
+		break;
 	
 	default :
 		;
