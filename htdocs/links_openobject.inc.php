@@ -52,6 +52,11 @@ if ($ILIAS_CONNECT_ENABLE) {
 			$structure["lernmodule"]=array (topKat=>"", name=>_("Lernmodule"), link=>"migration2studip.php", active=>FALSE);/**/
 }
 
+if ($SUPPORT_ENABLE) {
+	$structure["support"]=array (topKat=>"", name=>_("SupportDB"), link=>"support.php?view=overview", active=>FALSE);
+}
+
+
 //Bottomkats
 if ($SessSemName["class"]=="inst") {
 	$structure["_institut_main"]=array (topKat=>"institut_main", name=>_("Info"), link=>"institut_main.php", active=>FALSE);
@@ -120,6 +125,7 @@ if ($rechte)
 	else
 		$structure["admin_literatur"]=array (topKat=>"literatur", name=>_("Literatur und Links bearbeiten"), link=>"admin_literatur.php?view=literatur_inst&new_inst=TRUE&range_id=".$SessSemName[1], active=>FALSE);
 
+//entrys for resources-management, if modul is activated
 if ($RESOURCES_ENABLE) {
 	$structure["resources_overview"]=array (topKat=>"resources", name=>_("&Uuml;bersicht"), link=>"resources.php?view=openobject_main", active=>FALSE);
 	$structure["resources_details"]=array (topKat=>"resources", name=>_("Details"), link=>"resources.php?view=openobject_details", active=>FALSE);
@@ -129,6 +135,7 @@ if ($RESOURCES_ENABLE) {
 		$structure["resources_admin"]=array (topKat=>"resources", name=>_("Ressourcen verwalten"), link=>"resources.php", active=>FALSE);
 }
 
+//entrys for Ilias-connect, if modul is activated
 if ($ILIAS_CONNECT_ENABLE) {
 	if (get_seminar_modules($SessSemName[1]) != false)
 	{
@@ -139,6 +146,14 @@ if ($ILIAS_CONNECT_ENABLE) {
 	}
 	if  ($perm->have_studip_perm("tutor",$SessSemName[1]))
 		$structure["lernmodule_edit"]=array (topKat=>"lernmodule", name=>_("Lernmodule hinzuf&uuml;gen / entfernen"), link=>"seminar_lernmodule.php?view=edit&seminar_id=" . $SessSemName[1], active=>FALSE);
+}
+
+//entrys for SupportDB, if modul is activated
+if ($SUPPORT_ENABLE) {
+	$structure["support_overview"]=array (topKat=>"support", name=>_("&Uuml;bersicht"), link=>"support.php?view=overview", active=>FALSE);
+	$structure["support_requests"]=array (topKat=>"support", name=>_("Anfragen"), link=>"support.php?view=requests", active=>FALSE);
+	if ($rechte)
+		$structure["support_events"]=array (topKat=>"resources", name=>_("Supportleistungen bearbeiten"), link=>"support.php?view=edit_events", active=>FALSE);
 }
 
 
@@ -273,6 +288,19 @@ switch ($i_page) {
 			break;
 			default :
 				$reiter_view="resources";
+			break;
+		}
+	break;
+	case "support.php": 
+		switch ($supportdb_data["view"]) {
+			case "overview":
+				$reiter_view="support_overview";
+			break;
+			case "requests":
+				$reiter_view="support_requests";
+			break;
+			case "edit_events":
+				$reiter_view="support_events";
 			break;
 		}
 	break;
