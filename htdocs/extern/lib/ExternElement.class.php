@@ -365,20 +365,23 @@ class ExternElement {
 						}
 						break;
 					case "valign" :
-						$fault[$form_name][$i] = !preg_match("/^(top|bottom|center)$/", $value[$i]);
+						$fault[$form_name][$i] = $value[$i]
+								&& !preg_match("/^(top|bottom|center)$/", $value[$i]);
 						break;
 					case "align" :
-						$fault[$form_name][$i] = !preg_match("/^(left|right|center)$/", $value[$i]);
+						$fault[$form_name][$i] = $value[$i]
+								&& !preg_match("/^(left|right|center)$/", $value[$i]);
 						break;
 					case "size" :
-						$fault[$form_name][$i] = !preg_match("/^(-|\+)*(1|2|3|4|5|6|7)$/", $value[$i]);
+						$fault[$form_name][$i] = $value[$i]
+								&& !preg_match("/^(-|\+)*(1|2|3|4|5|6|7)$/", $value[$i]);
 						break;
 					case "face" :
-						$fault[$form_name][$i] = !preg_match("/^(Arial,Helvetica,sans-serif|"
+						$fault[$form_name][$i] = $value[$i] && !preg_match("/^(Arial,Helvetica,sans-serif|"
 								. "Times,Times New Roman,serif|Courier,Courier New,monospace)$/", $value[$i]);
 						break;
 					case "background" :
-						$fault[$form_name][$i] = ($value[$i] != ""
+						$fault[$form_name][$i] = ($value[$i]
 								&& (preg_match("/(<|>|\"|<script|<php)/i", $value[$i])
 								|| !preg_match("/^[^.\/\\\].*\.(png|jpg|jpeg|gif)$/i", $value[$i])));
 						break;
