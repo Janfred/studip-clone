@@ -138,6 +138,7 @@ if (!(have_sem_write_perm()) OR $pass==TRUE) {
 			}
 		}
 		if ($nobodysname) $author = $nobodysname;
+		$writeextern = TRUE;
 		$topic_id = CreateTopic ($name, $author, $description, $parent_id, $root_id);
 		parse_window( "msg§" . _("Ihr Beitrag wurde erfolgreich ins System &uuml;bernommen") . "§info§" . _("Sie k&ouml;nnen dieses Fenster jetzt schliessen.<br>Um Ihr neues Posting zu sehen, m&uuml;ssen Sie das Hauptfenster aktualisieren!") . "§", "§", "Schreiben erfolgreich", "&nbsp;");
 	}
