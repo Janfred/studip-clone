@@ -33,9 +33,10 @@ $db = new DB_Seminar("SELECT range_id, IF (s.Name IS NULL , CONCAT( 'Einrichtung
 					FROM literatur LEFT JOIN seminare s ON ( range_id = Seminar_id )  LEFT JOIN Institute i ON ( range_id = i.Institut_id ) ");
 while($db->next_record()){
 	if ($modules->writeStatus("scm", $db->f("range_id"), 1)){
-		echo $db->f("name") . " <b>scm eingeschaltet</b><br>";
+		$modules->writeStatus("literature", $db->f("range_id"), 0);
+		echo $db->f("name") . " <b>SCM eingeschaltet, Literaturverwaltung ausgeschaltet</b><br>";
 	} else {
-		echo $db->f("name") . " <b>scm ist schon eingeschaltet</b><br>";
+		echo $db->f("name") . " <b>SCM ist schon eingeschaltet</b><br>";
 	}
 }
 
@@ -43,7 +44,7 @@ $db->query("INSERT IGNORE INTO scm (scm_id, range_id, user_id, tab_name, content
  SELECT literatur_id,range_id,user_id,'Literatur/Links',
  CONCAT_WS('\n','__**Literatur:**__',literatur,'\n__**Links:**__',links) ,mkdate,chdate FROM literatur
 ");
-echo $db->affected_rows() . " Einträge in scm geschrieben.";
+echo $db->affected_rows() . " Einträge in SCM geschrieben.";
 echo "<br>Hugh, ich habe gesprochen.";
 page_close();
 ?>
