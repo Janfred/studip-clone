@@ -316,7 +316,7 @@ Seite abschliessen und Infofenster aufbauen
 				if ($infobox) {
 					?>
 					<td class="blank" width="270" align="right" valign="top">
-						<? print_infobox ($infobox,"pictures/seminare.jpg");?>
+						<? print_infobox ($infobox, $infopic);?>
 					</td>
 					<?
 				}
