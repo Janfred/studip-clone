@@ -89,8 +89,8 @@ class AdminModules extends Modules {
 		$this->registered_modules["support"]["msg_deactivate"] = _("Die SupportDB kann jederzeit deaktiviert werden.");
 
 		$this->registered_modules["wiki"]["name"] = _("Wiki-Web");
-		$this->registered_modules["wiki"]["msg_warning"] = _("Wollen Sie wirklich das Wiki deaktivieren und damit alle Seiten l&ouml;schen?");
-		$this->registered_modules["wiki"]["msg_pre_warning"] = _("Achtung: Beim Deaktivieren des Wiki-Webs werden <b>%s</b> Seiten ebenfalls gel&ouml;scht!");
+		$this->registered_modules["wiki"]["msg_warning"] = _("Wollen Sie wirklich das Wiki deaktivieren und damit alle Seitenversionen l&ouml;schen?");
+		$this->registered_modules["wiki"]["msg_pre_warning"] = _("Achtung: Beim Deaktivieren des Wiki-Webs werden <b>%s</b> Seitenversionen ebenfalls gel&ouml;scht!");
 		$this->registered_modules["wiki"]["msg_activate"] = _("Das Wiki-Web kann jederzeit aktiviert werden.");
 		$this->registered_modules["wiki"]["msg_deactivate"] = _("Das Wiki-Web kann jederzeit deaktiviert werden.");
 
