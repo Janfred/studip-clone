@@ -27,6 +27,7 @@ require_once ("$ABSOLUTE_PATH_STUDIP$PATH_EXPORT/export_xslt_vars.inc.php");   /
 require_once ("$ABSOLUTE_PATH_STUDIP/config_tools_semester.inc.php");   // Checken des aktuellen Semesters
 	
 	$db=new DB_Seminar;
+	$db2=new DB_Seminar;
 
 $export_pagename = _("Datenexport - Startseite");
 
@@ -36,14 +37,53 @@ $export_pagename = _("Datenexport - Startseite");
 
 	$export_pagecontent .="<b><font size=\"-1\">". _("Bitte w&auml;hlen Sie eine Einrichtung: ") .  "</font></b><br /><select name=\"range_id\">";
 	
-	$db->query("SELECT Institute.Institut_id, Institute.Name FROM Institute WHERE Institut_id <> fakultaets_id ORDER BY Institute.Name");
+/*	if ($auth->auth['perm'] == "root")
+	{
+		$db->query("SELECT Institut_id, Name, 1 AS is_fak  FROM Institute WHERE Institut_id=fakultaets_id ORDER BY Name");
+	} 
+	elseif ($auth->auth['perm'] == "admin") 
+	{
+		$db->query("SELECT a.Institut_id,Name, IF(b.Institut_id=b.fakultaets_id,1,0) AS is_fak FROM user_inst a LEFT JOIN Institute b USING (Institut_id)  
+					WHERE a.user_id='$user->id' AND a.inst_perms='admin' ORDER BY is_fak,Name");
+	} 
+	else 
+	{
+		$db->query("SELECT a.Institut_id,Name FROM user_inst a LEFT JOIN Institute b USING (Institut_id) WHERE inst_perms IN('tutor','dozent') AND user_id='$user->id'");
+	}
+		
+	$export_pagecontent .= sprintf ("<option value=\"NULL\">-- " . _("bitte Einrichtung ausw&auml;hlen") . " --</option>\n");
 	while ($db->next_record())
 	{
-		$export_pagecontent .= "<option";
-		if ($range_id == $db->f("Institut_id")) 
+		$export_pagecontent .= sprintf ("<option value=\"%s\" style=\"%s\">%s </option>\n", $db->f("Institut_id"),($db->f("is_fak") ? "font-weight:bold;" : ""), htmlReady(my_substr($db->f("Name"), 0, 60)));
+		if ($db->f("is_fak"))
+		{
+			$db2->query("SELECT Institut_id, Name FROM Institute WHERE fakultaets_id='" .$db->f("Institut_id") . "' AND institut_id!='" .$db->f("Institut_id") . "'");
+			while ($db2->next_record())
+			{
+				$export_pagecontent .= sprintf("<option value=\"%s\">&nbsp;&nbsp;&nbsp;&nbsp;%s </option>\n", $db2->f("Institut_id"), htmlReady(my_substr($db2->f("Name"), 0, 60)));
+			}
+		}
+	} /**/
+	$db->query("SELECT Institut_id, Name, is_fak, fakultaets_id FROM Institute WHERE fakultaets_id = Institut_id ORDER BY Name");
+
+	while ($db->next_record())
+	{
+		$export_pagecontent .= "<option style=\"font-weight:bold;\" ";
+		if ($range_id == $db->f("fakultaets_id")) 
 			$export_pagecontent .= " selected";
 		$export_pagecontent .= " value=\"" . $db->f("Institut_id") . "\">" . htmlReady(my_substr($db->f("Name"), 0, 60)) . "</option>";
-	}
+		if ($db->f("is_fak"))
+		{
+			$db2->query("SELECT Institut_id, Name FROM Institute WHERE fakultaets_id='" .$db->f("Institut_id") . "' AND institut_id!='" .$db->f("Institut_id") . "'");
+			while ($db2->next_record())
+			{
+				$export_pagecontent .= sprintf("<option value=\"%s\"", $db2->f("Institut_id"));
+				if ( ( $range_id == $db2->f("Institut_id") ) AND( $range_id != $db->f("Institut_id")))
+					$export_pagecontent .= " selected";
+				$export_pagecontent .= sprintf(">&nbsp;&nbsp;&nbsp;&nbsp;%s </option>\n", htmlReady(my_substr($db2->f("Name"), 0, 60)));
+			}
+		}
+	} /**/
 	$export_pagecontent .= "</select><br><br><br>";
 	
 	$export_pagecontent .= "<b><font size=\"-1\">"._("Art der auszugebenden Daten: ") .  "</font></b><br /><select name=\"ex_type\">";
