@@ -1297,7 +1297,7 @@ elseif ((!$level) || ($level==1))
 							else
 								echo "<option value=\"1\">unregelm&auml;&szlig;ig oder Blockveranstaltung</option>";
 							if ($sem_create_data["term_art"] == -1) 
-								echo "<option selected value=\"-1\">keine Termine engeben</option>";
+								echo "<option selected value=\"-1\">keine Termine eingeben</option>";
 							else
 								echo "<option value=\"-1\">keine Termine eingeben</option>";
 							?>
