@@ -143,6 +143,17 @@ if ($toolbar=="open")
 if ($toolbar=="close")
 	$forum["toolbar"] = "close";
 
+$indexvars["age"]["name"]=_("Alter");
+$indexvars["age"]["color"]="#FF0000";
+$indexvars["viewcount"]["name"]=_("Views");
+$indexvars["viewcount"]["color"]="#008800";
+$indexvars["rating"]["name"]=_("Bewertung");
+$indexvars["rating"]["color"]="#CC7700";
+$indexvars["score"]["name"]=_("Relevanz");
+$indexvars["score"]["color"]=_("#0000FF");
+
+
+
 // Sind wir da wo wir hinwollen?
 
 if ($topic_id AND !$update) {

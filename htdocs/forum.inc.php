@@ -483,7 +483,7 @@ function ForumStriche($forumposting) {
 }
 
 function forum_print_toolbar ($id="") {
-		global $user, $PHP_SELF, $forum, $open, $flatviewstartposting;
+		global $user, $PHP_SELF, $forum, $open, $flatviewstartposting, $indexvars;
 		$print = "<table class=\"blank\" width=\"100%\" border=0 cellpadding=0 cellspacing=0><tr><td class=\"blank\">";
 		if ($forum["toolbar"] == "open") {
 			$print .= "<form name=\"sortierung\" method=\"post\" action=\"".$PHP_SELF."\">";
@@ -492,29 +492,29 @@ function forum_print_toolbar ($id="") {
 			$print .= "<td class=\"steelkante\"><font size=\"-1\">Indikator:&nbsp;";
 			
 			if ($forum["indikator"] == "age")
-				$print .=  "</td><td nowrap class=\"steelgraulight_shadow\" valign=\"middle\">&nbsp;<img src=\"pictures/forumrot_indikator.gif\" align=\"middle\"><font size=\"-1\">"._("Alter")." &nbsp;";
+				$print .=  "</td><td nowrap class=\"steelgraulight_shadow\" valign=\"middle\">&nbsp;<img src=\"pictures/forumrot_indikator.gif\" align=\"middle\"><font size=\"-1\">".$indexvars["age"]["name"]." &nbsp;";
 			else
-				$print .=  "</td><td nowrap class=\"steelkante\" valign=\"middle\">&nbsp;<a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&open=$open&indikator=age\"><img src=\"pictures/forum_indikator_grau.gif\" border=\"0\" align=\"middle\"><font size=\"-1\" color=\"#555555\">"._("Alter")."</a> &nbsp;";
-			if ($forum["indikator"] == "views")
-				$print .=  "</td><td nowrap class=\"steelgraulight_shadow\" valign=\"middle\">&nbsp;<img src=\"pictures/forum_indikator_gruen.gif\" align=\"middle\"><font size=\"-1\">"._("Views")." &nbsp;";
+				$print .=  "</td><td nowrap class=\"steelkante\" valign=\"middle\">&nbsp;<a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&open=$open&indikator=age\"><img src=\"pictures/forum_indikator_grau.gif\" border=\"0\" align=\"middle\"><font size=\"-1\" color=\"#555555\">".$indexvars["age"]["name"]."</a> &nbsp;";
+			if ($forum["indikator"] == "viewcount")
+				$print .=  "</td><td nowrap class=\"steelgraulight_shadow\" valign=\"middle\">&nbsp;<img src=\"pictures/forum_indikator_gruen.gif\" align=\"middle\"><font size=\"-1\">".$indexvars["viewcount"]["name"]." &nbsp;";
 			else
-				$print .=  "</td><td nowrap class=\"steelkante\" valign=\"middle\">&nbsp;<a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&open=$open&indikator=views\"><img src=\"pictures/forum_indikator_grau.gif\" border=\"0\" align=\"middle\"><font size=\"-1\" color=\"#555555\">"._("Views")."</a> &nbsp;";
-			if ($forum["indikator"] == "rate")
-				$print .=  "</td><td nowrap class=\"steelgraulight_shadow\" valign=\"middle\">&nbsp;<img src=\"pictures/forum_indikator_gelb.gif\" align=\"middle\"><font size=\"-1\">"._("Bewertung")." &nbsp;";
+				$print .=  "</td><td nowrap class=\"steelkante\" valign=\"middle\">&nbsp;<a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&open=$open&indikator=viewcount\"><img src=\"pictures/forum_indikator_grau.gif\" border=\"0\" align=\"middle\"><font size=\"-1\" color=\"#555555\">".$indexvars["viewcount"]["name"]."</a> &nbsp;";
+			if ($forum["indikator"] == "rating")
+				$print .=  "</td><td nowrap class=\"steelgraulight_shadow\" valign=\"middle\">&nbsp;<img src=\"pictures/forum_indikator_gelb.gif\" align=\"middle\"><font size=\"-1\">".$indexvars["rating"]["name"]." &nbsp;";
 			else
-				$print .=  "</td><td nowrap class=\"steelkante\" valign=\"middle\">&nbsp;<a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&open=$open&indikator=rate\"><img src=\"pictures/forum_indikator_grau.gif\" border=\"0\" align=\"middle\"><font size=\"-1\" color=\"#555555\">"._("Bewertung")."</a> &nbsp;";
+				$print .=  "</td><td nowrap class=\"steelkante\" valign=\"middle\">&nbsp;<a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&open=$open&indikator=rating\"><img src=\"pictures/forum_indikator_grau.gif\" border=\"0\" align=\"middle\"><font size=\"-1\" color=\"#555555\">".$indexvars["rating"]["name"]."</a> &nbsp;";
 			if ($forum["indikator"] == "score")
-				$print .=  "</td><td nowrap class=\"steelgraulight_shadow\" valign=\"middle\">&nbsp;<img src=\"pictures/forum_indikator_blau.gif\" align=\"middle\"><font size=\"-1\">"._("Relevanz")." &nbsp;";
+				$print .=  "</td><td nowrap class=\"steelgraulight_shadow\" valign=\"middle\">&nbsp;<img src=\"pictures/forum_indikator_blau.gif\" align=\"middle\"><font size=\"-1\">".$indexvars["score"]["name"]." &nbsp;";
 			else
-				$print .=  "</td><td nowrap class=\"steelkante\" valign=\"middle\">&nbsp;<a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&open=$open&indikator=score\"><img src=\"pictures/forum_indikator_grau.gif\" border=\"0\" align=\"middle\"><font size=\"-1\" color=\"#555555\">"._("Relevanz")."</a> &nbsp;";
+				$print .=  "</td><td nowrap class=\"steelkante\" valign=\"middle\">&nbsp;<a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&open=$open&indikator=score\"><img src=\"pictures/forum_indikator_grau.gif\" border=\"0\" align=\"middle\"><font size=\"-1\" color=\"#555555\">".$indexvars["score"]["name"]."</a> &nbsp;";
 			
 			if ($forum["view"] != "tree" && $forum["view"] != "mixed") { // Anzeige der Sortierung nicht in der Themenansicht
 				$print .= "</td><td nowrap class=\"steelkante\" valign=\"bottom\">&nbsp;|&nbsp;&nbsp;<font size=\"-1\">Sortierung:&nbsp;&nbsp;</font>";
 				$print .= "<select name=\"sort\" size=\"1\">";
 				$tmp["age"] = "Alter";
-				$tmp["viewcount"] = "Views";
-				$tmp["rating"] = "Bewertung";
-				$tmp["score"] = "Relevanz";
+				$tmp["viewcount"] = $indexvars["viewcount"]["name"];
+				$tmp["rating"] = $indexvars["rating"]["name"];
+				$tmp["score"] = $indexvars["score"]["name"];
 				$tmp["nachname"] = "Autor";
 				$tmp["root_name"] = "Thema";
 				$tmp["x.name"] = "Titel";
@@ -543,10 +543,25 @@ function forum_print_toolbar ($id="") {
 		return $print;
 }
 
+function forum_get_index ($forumposting) {
+	global $forum, $indexvars;
+ 	if ($forum["sort"] == "viewcount" || $forum["sort"] == "rating" || $forum["sort"] == "score") {
+  		$color = $indexvars[$forum["sort"]]["color"];
+  		$name = $indexvars[$forum["sort"]]["name"];
+  		$i = 1;
+  	} else {
+  		$color = $indexvars[$forum["indikator"]]["color"];
+  		$name = $indexvars[$forum["indikator"]]["name"];
+  		
+  	}
+	$tmp = "<font size=\"-1\" color =\"$color\">$name</font>";
+	if ($forum["indikator"] == "age" && $i != 1) $tmp = "";
+	return $tmp;
+}
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function printposting ($forumposting) {
-	global $PHP_SELF,$forum,$view,$davor,$auth,$user, $SessSemName, $loginfilelast, $sidebar;
+	global $PHP_SELF,$forum,$view,$davor,$auth,$user, $SessSemName, $loginfilelast, $sidebar, $indexvars;
 
   // Status des Postings holen
  	// auf- zugeklappt
@@ -618,8 +633,16 @@ function printposting ($forumposting) {
 					."</a>"
 					."&nbsp; ";
   		
-		$forumhead[] = "| ".$forumposting[$forum["sort"]]." | ";
-
+  		if ($forum["sort"] == "viewcount" || $forum["sort"] == "rating" || $forum["sort"] == "score") {
+  			$color = $indexvars[$forum["sort"]]["color"];
+  			$printindex = $forumposting[$forum["sort"]];
+  		} else {
+  			$color = $indexvars[$forum["indikator"]]["color"];
+  			$printindex = $forumposting[$forum["indikator"]];
+  		}
+  		if ($printindex=="" && ($forum["sort"]=="score" || $forum["indikator"]=="score")) $printindex="0";
+  		if ($printindex!= "") $forumhead[] = "| <font color=\"$color\">$printindex</font> | ";
+		
 		if (!(have_sem_write_perm())) // Antwort-Pfeil
 			$forumhead[] = "<a href=\"write_topic.php?write=1&root_id=".$forumposting["rootid"]."&topic_id=".$forumposting["id"]."\" target=\"_new\"><img src=\"pictures/antwortnew.gif\" border=0 " . tooltip(_("Hier klicken um in einem neuen Fenster zu antworten")) . "></a>"; 
   		
@@ -645,9 +668,9 @@ function printposting ($forumposting) {
   		
   		// welcher Index liegt auf den Pfeilen?
   		
-  		if ($forum["indikator"] == "views")
+  		if ($forum["indikator"] == "viewcount")
   			$index = $objectviews;
-  		elseif ($forum["indikator"] == "rate")
+  		elseif ($forum["indikator"] == "rating")
   			$index = $forumposting["rating"];
   		elseif ($forum["indikator"] == "score")
   			$index = $forumposting["score"];
@@ -752,7 +775,7 @@ if ($forum["view"]=="flatfolder") {
 }
 $order = "DESC";
 
-if ($forum["sort"] == "rating" && ($forum["view"] != "tree" && $forum["view"] != "mixed"))
+if (($forum["sort"] == "rating" || $forum["sort"]== "nachname" || $forum["sort"]== "root_name" || $forum["sort"]== "x.name") && ($forum["view"] != "tree" && $forum["view"] != "mixed"))
 	$order = "ASC";
 
 if ($forum["view"]=="search") {
@@ -817,7 +840,7 @@ else
 		."?flatviewstartposting=".$forum["flatviewstartposting"]."&flatallopen=TRUE\"><img src='pictures/forumleer.gif' border=0 height='10' align=middle><img src='pictures/forumgraurunt.gif' border=0 " . tooltip(_("Alle aufklappen")) . " align=middle><img src='pictures/forumleer.gif' border=0></a>";
 
 echo "</td><td class=\"steelgraudunkel\" align=\"right\" width=\"45%\">";
-echo forum_print_navi($forum)."&nbsp;&nbsp;&nbsp;";
+echo forum_print_navi($forum)."&nbsp;&nbsp;&nbsp;".forum_get_index($forumposting)."&nbsp;&nbsp;&nbsp;";
 echo "</td></tr></table>";
 
 /////////////////// Konstanten für das gerade auszugebene Posting und Posting ausgeben
@@ -849,7 +872,7 @@ echo "</td>";
 echo "	</tr>";
 echo "	<tr>";
 echo "		<td class=\"steelgraudunkel\" align=\"right\" ><img src=\"pictures/forumleer.gif\" border=\"0\" height=\"10\" align=\"middle\">";
-echo forum_print_navi($forum);
+echo forum_print_navi($forum)."&nbsp;&nbsp;&nbsp;".forum_get_index($forumposting);
 echo "		&nbsp;&nbsp;</td>";
 echo "	</tr>";
 echo "	<tr>";
@@ -881,6 +904,7 @@ function DisplayFolders ($open=0, $update="", $zitat="") {
 
 	$forum["update"] = $update;
 	$forum["zitat"] = $zitat;
+	$forum["sort"] = "age";
 		
 	$fields = array("topic_id", "parent_id", "root_id", "name"
 		, "description", "author", "author_host", "mkdate"
@@ -926,7 +950,7 @@ function DisplayFolders ($open=0, $update="", $zitat="") {
 		else
 			echo "<a href=\"".$PHP_SELF."?view=tree\"><img src=\"pictures/forumflat.gif\" border=\"0\" align=\"top\"></a>";
 		echo "</font><img src=\"pictures/forumleer.gif\" border=0 height=\"20\" align=\"middle\"></td>";
-		echo "<td class=\"steelgraudunkel\" width=\"33%\"align=\"right\"><font size=\"-1\">" . _("<b>Postings</b> / letzter Eintrag") . "&nbsp;&nbsp;</font></td></tr></table>\n";
+		echo "<td class=\"steelgraudunkel\" width=\"33%\"align=\"right\"><font size=\"-1\">" . _("<b>Postings</b> / letzter Eintrag") . "&nbsp;&nbsp;".forum_get_index($forumposting)."&nbsp;&nbsp;</font></td></tr></table>\n";
 		while ($db->next_record()) {
 			$forumposting["id"] = $db->f("topic_id");
 			$forumposting["name"] = $db->f("name");

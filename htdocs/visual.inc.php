@@ -612,7 +612,7 @@ function printhead ($breite, $left, $link, $open, $new, $icon,
 
 		// Verzweigung was der PFeil anzeigen soll
 		
-	if ($indikator=="views") {
+	if ($indikator=="viewcount") {
 		if ($index == "0") {
 			$timecolor = "#BBBBBB";
 		} else {
@@ -624,7 +624,7 @@ function printhead ($breite, $left, $link, $open, $new, $icon,
 			$other = dechex(119 + ($tmp/1.5));
 			$timecolor= "#" . $other . $green . $other;
 		}
-	} elseif ($indikator == "rate") {
+	} elseif ($indikator == "rating") {
 		if ($index == "?") {
 			$timecolor = "#BBBBBB";
 		} else {
