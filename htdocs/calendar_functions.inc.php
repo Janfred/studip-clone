@@ -76,32 +76,6 @@ function wday ($tmstamp = "", $mode = "LONG", $day_german = "") {
 	
 }
 
-// Gibt fuer einen Unix-Timestamp folgende Werte zurueck:
-//    "SS" : Timestamp liegt im Sommersemester
-//    "WS" : Timestamp liegt im Wintersemester
-
-function sem ($tmstamp) {
-	
-	$year = date("Y", $tmstamp);
-	if (date("n", $tmstamp) < 4) {
-		$start = mktime(0,0,0,10,01, $year - 1);
-		$ende = mktime(23,59,59,03,31, $year);
-		if($tmstamp > $start && $tmstamp < $ende)
-			return "WS";
-	}
-	elseif (date("n", $tmstamp) > 3 && date("n") < 10) {
-		$start = mktime(0,0,0,04,01, $year);
-		$ende = mktime(23,59,59,9,30, $year);
-		if($tmstamp > $start && $tmstamp < $ende)
-			return "SS";
-	}
-	elseif (date("n", $tmstamp) > 9) {
-		$start = mktime(0,0,0,10,01, $year);
-		$ende = mktime(23,59,59,03,31, $year + 1);
-		if($tmstamp > $start && $tmstamp < $ende)
-			return "WS";
-	}
-}
 
 function ldate ($tmstamp) {
 	return wday($tmstamp) . ", " . date("j. ",$tmstamp)
