@@ -178,10 +178,10 @@ class ContractObject {
 	}
 	
 	function isOldestActive() {
-		$query = sprintf ("SELECT contract_id FROM support_contract WHERE contract_end < '%s' ORDER by contract_begin ASC", time());
+		$query = sprintf ("SELECT contract_id FROM support_contract WHERE contract_end > '%s' AND range_id = '%s' ORDER by contract_begin ASC", time(), $this->range_id);
 		$this->db->query($query);
 		$this->db->next_record();
-		
+
 		if ($this->id == $this->db->f("contract_id"))
 			return TRUE;
 		else
