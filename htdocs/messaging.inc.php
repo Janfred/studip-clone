@@ -102,43 +102,22 @@ class messaging {
 		}
 	}
 
-/*
 	// delete all messages from user
-	function delete_all_messages($user_id = FALSE, $time="") {
+	function delete_all_messages($user_id = FALSE) {
 		global $user;
-		$db = new DB_Seminar;
-		echo $time;
+		$db=new DB_Seminar;
+		
 		if (!$user_id) {
 			$user_id = $user->id;
 		}
-		if ($time == "all") {
-			$query = "SELECT message_id FROM message_user WHERE user_id = '".$user_id."' AND deleted='0'";
-		} else if ($time == "7d") {
-			$query = "
-			SELECT m_u.message_id, m.mkdate 
-			FROM message_user AS m_u
-				LEFT JOIN message AS m ON m.message_id
-			WHERE user_id = '".$user_id."' 
-				AND m.mkdate < '".(date("U")-(7*86400))."' 
-				AND m_u.deleted='0'";
-			echo $query;
-		} else if ($time == "30d") {
-			$query = "
-			SELECT m_u.message_id, m.mkdate 
-			FROM message_user AS m_u
-				LEFT JOIN message AS m ON m.message_id
-			WHERE user_id = '".$user_id."' 
-				AND m.mkdate < '".(date("U")-(30*86400))."' 
-				AND m_u.deleted='0'";
-	echo $query;
-			#$query = "SELECT message_id, mkdate FROM message_user WHERE user_id = '".$user_id."' AND mkdate < '".(date("U")-(30*86400))."' AND deleted='0'";
-		}
+		
+		$query = "SELECT message_id FROM message_user WHERE user_id = '".$user_id."' AND deleted='0'";
 		$db->query("$query");
 		while ($db->next_record()) {
 			$this->delete_message($db->f("message_id"));
 		}
 	}
-*/
+
 	function insert_message($message, $rec_uname, $user_id='', $time='', $tmp_message_id='', $set_deleted='', $signature='') {
 		global $_fullname_sql, $user, $my_messaging_settings, $sms_data;
 
