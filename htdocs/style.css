@@ -153,3 +153,5 @@ td.current {border-width: 2px; border-style: solid; border-color: #DD0000; backg
 td.currenttoday {border-width: 2px; border-style: solid; border-color: #DD0000; background-image: url('pictures/celltoday.gif');}
 td.month {background-image: url('pictures/steelcal.jpg');}
 td.lightmonth{background-image: url('pictures/steel1.jpg');	font-family: Arial, Helvetica, sans-serif;}
+
+code  { font-size:10pt; }
