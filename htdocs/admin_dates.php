@@ -34,7 +34,7 @@ $db2=new DB_Seminar;
 $db3=new DB_Seminar;	
 $db4=new DB_Seminar;
 $Modules=new Modules;
-$semester=new SemesterData;	
+$semester=new SemesterData; 
 
 //Defaults, die fuer DAUS (<admin) gesetzt werden
 $default_description= _("Bitte geben Sie hier nur weiterführende Angaben (genauere Terminbeschreibung, Referatsthemen usw.) ein.");
@@ -690,7 +690,7 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 		$titel .= "<input type=\"TEXT\" style=\"font-size:8 pt;\" name=\"end_stunde\" maxlength=2 size=2 value=\"".$temp_default[6]."\"><font size=-1> :</font>";
 		$titel .= "<input type=\"TEXT\" style=\"font-size:8 pt;\" name=\"end_minute\" maxlength=2 size=2 value=\"".$temp_default[7]."\"><font size=-1> " . _("Uhr") . ".</font>";
 		$titel .= "<input type=\"HIDDEN\" name=\"termin_id\" value=\"".$admin_dates_data["insert_id"]."\">";
-		$titel .= Termin_Eingabe_javascript(1,0);
+		$titel .= Termin_Eingabe_javascript(1,0,0);
 		$icon = "&nbsp;<img src=\"./pictures/termin-icon.gif\" border=0>";
 		$link = $PHP_SELF."?cancel=TRUE";
 
@@ -866,7 +866,8 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 
 		if (($show_id  == $db->f("termin_id")) || ($show_all)) {
 			if ($edit) {
-				$titel .= Termin_Eingabe_javascript(2, $c, $stunde, $minute, $end_stunde, $end_minute);
+				$at = mktime(0,0,0,$monat,$tag,$jahr);
+				$titel .= Termin_Eingabe_javascript(2, $c, $at, $stunde, $minute, $end_stunde, $end_minute);
 			}
 			printhead(0, 0, $link, "open", $neuer_termin, $icon, $titel, $zusatz, $db->f("mkdate"));
 		} else {

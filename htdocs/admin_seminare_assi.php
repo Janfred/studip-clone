@@ -2364,7 +2364,7 @@ if ($level == 3) {
 											&nbsp; <a href="<? echo $PHP_SELF?>?delete_turnus_field=<?echo $i+1?>"><img border=0 src="./pictures/trash.gif" <? echo tooltip(_("Dieses Feld aus der Auswahl löschen"), TRUE) ?> ></a>
 											<?
 										}
-										echo  Termin_Eingabe_javascript(4, $i, $ss,$sm,$es,$em);
+										echo  Termin_Eingabe_javascript(4, $i, 0, $ss,$sm,$es,$em);
 									}
 									?>
 									<br />&nbsp; <input type="IMAGE" name="add_turnus_field" <?=makeButton("feldhinzufuegen", "src"); ?> border=0 value="Feld hinzuf&uuml;gen">&nbsp;
@@ -2426,7 +2426,7 @@ if ($level == 3) {
 											&nbsp; <a href="<? echo $PHP_SELF?>?delete_term_field=<?echo $i+1?>"><img border=0 src="./pictures/trash.gif" <? echo tooltip(_("Dieses Feld aus der Auswahl löschen"), TRUE) ?> ></a>
 											<?
 											}
-										echo  Termin_Eingabe_javascript (5, $i, $ss, $sm, $es, $em);
+										echo  Termin_Eingabe_javascript (5, $i, 0, $ss, $sm, $es, $em);
 										}
 										?>
 										<br />&nbsp; <input type="IMAGE" name="add_term_field" <?=makeButton("feldhinzufuegen", "src"); ?> border=0 value="Feld hinzuf&uuml;gen">&nbsp;
@@ -2461,7 +2461,7 @@ if ($level == 3) {
 							echo '<img  src="./pictures/info.gif"';
 							echo tooltip(_("Dieses Feld müssen Sie nur ausfüllen, wenn es eine verbindliche Vorbesprechung zu der Veranstaltung gibt."), TRUE, TRUE);
 							echo '>';
-							echo  Termin_Eingabe_javascript (6, 0, $ss, $sm, $es, $em);
+							echo  Termin_Eingabe_javascript (6, 0, 0, $ss, $sm, $es, $em);
 						?>
 						</td>
 					</tr>
