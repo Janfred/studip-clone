@@ -313,11 +313,11 @@ function export_teilis($inst_id, $ex_sem_id = "no")
 					LEFT JOIN seminar_user USING ( user_id ) 
 					WHERE seminar_id = '$ex_sem_id' ");
 			else	
-				$db->query ("SELECT * FROM statusgruppe_user  
+				$db->query ("SELECT DISTINCT * FROM statusgruppe_user  
 					LEFT JOIN user_info USING ( user_id ) 
 					LEFT JOIN auth_user_md5 USING ( user_id ) 
-					LEFT JOIN seminar_user USING ( user_id ) 
 					WHERE statusgruppe_id = '" . $key1 . "'");
+//					LEFT JOIN seminar_user USING ( user_id ) 
 		}
 		else
 			$db->query ("SELECT * FROM seminar_user  
