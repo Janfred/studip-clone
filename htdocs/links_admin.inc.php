@@ -25,6 +25,7 @@ require_once "$ABSOLUTE_PATH_STUDIP/config_tools_semester.inc.php";
 require_once "$ABSOLUTE_PATH_STUDIP/dates.inc.php";
 require_once "$ABSOLUTE_PATH_STUDIP/msg.inc.php";
 require_once "$ABSOLUTE_PATH_STUDIP/visual.inc.php";
+require_once "$ABSOLUTE_PATH_STUDIP/reiter.inc.php";
 
 $db=new DB_Seminar;
 $db2=new DB_Seminar;
@@ -136,7 +137,7 @@ if ($i_view=="new")
 
 //Wenn nur ein Institut verwaltet werden kann, immer dieses waehlen (Auswahl unterdruecken)
 if ((!$links_admin_data["inst_id"]) && ($list) &&
-	(($i_page == "admin_institut.php" OR ($i_page == "admin_statusgruppe.php" AND $links_admin_data["view"]=="inst") OR ($i_page == "admin_literatur.php" AND $links_admin_data["view"]=="inst") OR $i_page == "inst_admin.php"))) {
+	(($i_page == "admin_institut.php" OR ($i_page == "admin_statusgruppe.php" AND $links_admin_data["view"]=="statusgruppe_inst") OR ($i_page == "admin_literatur.php" AND $links_admin_data["view"]=="literatur_inst") OR $i_page == "inst_admin.php"))) {
 	if ($perm->have_perm("root"))
 		$db->query("SELECT Institut_id  FROM Institute ORDER BY Name");
 	else
@@ -161,13 +162,14 @@ if ($links_admin_data["sem_id"]) {
 			$seminar_id=$links_admin_data["sem_id"];
 		break;
 		case "admin_literatur.php":
-			if ($links_admin_data["view"]=="sem") {
+			if ($links_admin_data["view"]=="literatur_sem") {
 				$range_id=$links_admin_data["sem_id"];
 				$ebene="sem";
 			}
 		break;
 		case "admin_statusgruppe.php":
-			if ($links_admin_data["view"]=="sem") {
+			if ($links_admin_data["view"]=="statusgruppe_sem") {
+				echo lala;
 				$range_id=$links_admin_data["sem_id"];
 				$ebene="sem";
 			}
@@ -195,13 +197,13 @@ if ($links_admin_data["inst_id"]) {
 			$inst_id=$links_admin_data["inst_id"];
 		break;
 		case "admin_literatur.php": 
-			if ($links_admin_data["view"]=="inst") {
+			if ($links_admin_data["view"]=="literatur_inst") {
 				$range_id=$links_admin_data["inst_id"];
 				$ebene="inst";
 				}
 		break;
 		case "admin_statusgruppe.php": 
-			if ($links_admin_data["view"]=="inst") {
+			if ($links_admin_data["view"]=="statusgruppe_inst") {
 				$range_id=$links_admin_data["inst_id"];
 				$ebene="inst";
 				}
@@ -210,16 +212,84 @@ if ($links_admin_data["inst_id"]) {
 	}
 
 
-?>
+//Reitersytem erzeugen
+$reiter=new reiter;
 
-<!-- obere Leiste -->
+//Topkats
 
-<table cellpadding="0" cellspacing="0" border="0">
-<tr>
-	<td class="steel1" nowrap>&nbsp; <img align="absmiddle" src="pictures/info.gif" 
+//Ruecksprung-Reiter
+if (($SessSemName[0]) && (!$links_admin_data["assi"])) {
+	if ($links_admin_data["inst_id"])
+		$back_jump= "zur&uuml;ck zur ausgew&auml;hlten Einrichtung";
+	elseif (!$archive_kill)
+		$back_jump= "zur&uuml;ck zur ausgew&auml;hlten Veranstaltung";
+}
+elseif (($links_admin_data["assi"]) && (!$archive_kill))
+	$back_jump= "zur neu angelegten Veranstaltung";
+elseif ($links_admin_data["inst_id"])
+	$back_jump= "zur ausgew&auml;hlten Einrichtung";
+elseif (!$archive_kill)
+	$back_jump= "zur ausgew&auml;hlten Veranstaltung";
 
-<? //Reitersystem
+if (($links_admin_data["sem_id"]) || ($links_admin_data["inst_id"])) {
+	if ($links_admin_data["inst_id"])
+		$structure["back_jump"]=array (topKat=>"", name=>$back_jump, link=>"institut_main.php?auswahl=".$links_admin_data["inst_id"], active=>FALSE);
+	elseif (!$archive_kill)
+		$structure["back_jump"]=array (topKat=>"", name=>$back_jump, link=>"seminar_main.php?auswahl=".$links_admin_data["sem_id"], active=>FALSE);
+}
 
+//restliche Reiter
+if ($perm->have_perm("tutor")) {
+	if ($links_admin_data["sem_id"])
+		$structure["veranstaltungen"]=array (topKat=>"", name=>"Veranstaltungen", link=>"admin_seminare1.php", active=>FALSE);
+	else
+		$structure["veranstaltungen"]=array (topKat=>"", name=>"Veranstaltungen", link=>"adminarea_start.php?list=TRUE", active=>FALSE);	
+	$structure["einrichtungen"]=array (topKat=>"", name=>"Einrichtungen", link=>"admin_literatur.php?list=TRUE&view=literatur_inst", active=>FALSE);
+}
+
+if ($perm->have_perm("admin")) {
+	$structure["einrichtungen"]=array (topKat=>"", name=>"Einrichtungen", link=>"admin_institut.php?list=TRUE", active=>FALSE);
+	$structure["global"]=array (topKat=>"", name=>"globale Einstellungen", link=>"new_user_md5.php", active=>FALSE);
+}
+
+//Bottomkats
+$structure["grunddaten_sem"]=array (topKat=>"veranstaltungen", name=>"Grunddaten", link=>"admin_seminare1.php?list=TRUE", active=>FALSE);
+$structure["zeiten"]=array (topKat=>"veranstaltungen", name=>"Zeiten", link=>"admin_metadates.php?list=TRUE", active=>FALSE);
+$structure["ablaufplan"]=array (topKat=>"veranstaltungen", name=>"Ablaufplan", link=>"admin_dates.php?list=TRUE", active=>FALSE);
+$structure["literatur_sem"]=array (topKat=>"veranstaltungen", name=>"Literatur", link=>"admin_literatur.php?list=TRUE&view=literatur_sem", active=>FALSE);
+$structure["zugang"]=array (topKat=>"veranstaltungen", name=>"Zugangsberechtigungen", link=>"admin_admission.php?list=TRUE", active=>FALSE);
+$structure["statusgruppe_sem"]=array (topKat=>"veranstaltungen", name=>"Statusgruppen", link=>"admin_statusgruppe.php?list=TRUE&view=statusgruppe_sem", active=>FALSE);
+if ($perm->have_perm("admin")) 
+	$structure["archiv"]=array (topKat=>"veranstaltungen", name=>"archivieren", link=>"archiv_assi.php?list=TRUE&new_session=TRUE", active=>FALSE);
+if ($perm->have_perm("dozent")) 
+	$structure["new_sem"]=array (topKat=>"veranstaltungen", name=>"neue Veranstaltung", link=>"admin_seminare_assi.php?new_session=TRUE", active=>FALSE);
+$structure["news_sem"]=array (topKat=>"veranstaltungen", name=>"News", link=>"admin_news.php?view=news_sem", active=>FALSE);
+//
+$structure["literatur_inst"]=array (topKat=>"einrichtungen", name=>"Literatur", link=>"admin_literatur.php?list=TRUE&view=literatur_inst", active=>FALSE);
+$structure["news_inst"]=array (topKat=>"einrichtungen", name=>"News", link=>"admin_news.php?view=news_inst", active=>FALSE);
+if ($perm->have_perm("admin")) {
+	$structure["grunddaten_inst"]=array (topKat=>"einrichtungen", name=>"Grunddaten", link=>"admin_institut.php?list=TRUE", active=>FALSE);
+	$structure["mitarbeiter"]=array (topKat=>"einrichtungen", name=>"Mitarbeiter", link=>"inst_admin.php?list=TRUE", active=>FALSE);
+	$structure["statusgruppe_inst"]=array (topKat=>"einrichtungen", name=>"Statusgruppen", link=>"admin_statusgruppe.php?list=TRUE&view=statusgruppe_inst", active=>FALSE);
+}
+if ($perm->have_perm("root"))
+	$structure["new_inst"]=array (topKat=>"einrichtungen", name=>"neue Einrichtung", link=>"admin_institut.php?i_view=new", active=>FALSE);
+//
+if ($perm->have_perm("admin")) 		
+	$structure["new_user"]=array (topKat=>"global", name=>"Benutzer", link=>"new_user_md5.php", active=>FALSE);
+if ($perm->have_perm("root")) {
+	$structure["fakultaet"]=array (topKat=>"global", name=>"Fakult&auml;ten", link=>"admin_fakultaet.php", active=>FALSE);
+	$structure["studiengang"]=array (topKat=>"global", name=>"Studieng&auml;nge", link=>"admin_studiengang.php", active=>FALSE);
+	$structure["fach"]=array (topKat=>"global", name=>"Studienf&auml;cher", link=>"admin_fach.php", active=>FALSE);
+	$structure["bereich"]=array (topKat=>"global", name=>"Bereiche", link=>"admin_bereich.php", active=>FALSE);
+	$structure["news_global"]=array (topKat=>"global", name=>"News", link=>"admin_news.php?view=news_global", active=>FALSE);
+	$structure["sessions"]=array (topKat=>"global", name=>"Sessions", link=>"view_sessions.php", active=>FALSE);
+	$structure["integrity"]=array (topKat=>"global", name=>"DB Integrit&auml;t", link=>"admin_db_integrity.php", active=>FALSE);
+}
+//Reitersystem Ende
+
+
+//Tooltip erzeugen
 if ($links_admin_data["sem_id"]) {
 	$db->query ("SELECT Name FROM seminare WHERE Seminar_id = '".$links_admin_data["sem_id"]."' ");
 	$db->next_record();
@@ -228,202 +298,82 @@ if ($links_admin_data["inst_id"]) {
 	$db->query ("SELECT Name FROM Institute WHERE Institut_id = '".$links_admin_data["inst_id"]."' ");
 	$db->next_record();
 	}
-	
-	if ($auth->auth["jscript"]) {
-		echo "onClick=\"alert('Sie befinden sich im Administrationsbereich von Stud.IP.";
-		if (($links_admin_data["sem_id"]) && (!$archive_kill))
-			echo " Ausgewählte Veranstaltung: ",JSReady($db->f("Name"),"popup"), " - Um die Auswahl aufzuheben, benutzen Sie bitte das Schlüsselsymbol.');\" ";
-		elseif ($links_admin_data["inst_id"])
-			echo " Ausgewählte Einrichtung: ",JSReady($db->f("Name"),"popup"), " - Um die Auswahl aufzuheben, benutzen Sie bitte das Schlüsselsymbol.');\" ";		
-		else
-			echo " Keine Veranstaltung oder Einrichtung ausgew&auml;hlt.');\" ";
-		}
-	?> alt="Sie befinden sich im Administrationsbereich von Stud.IP.<? 
-	if (($links_admin_data["sem_id"]) && (!$archive_kill))
-		echo " Ausgew&auml;hlte Veranstaltung: ",htmlReady($db->f("Name")), " - Um die Auswahl aufzuheben, benutzen Sie bitte das Schlüsselsymbol.\" border=0>";
-	elseif ($links_admin_data["inst_id"])
-		echo " Ausgew&auml;hlte Einrichtung: ",htmlReady($db->f("Name")), " - Um die Auswahl aufzuheben, benutzen Sie bitte das Schlüsselsymbol.\" border=0>";
-	else
-		echo " Keine Veranstaltung ausgew&auml;hlt.\" border=0>&nbsp;";
-	
-	if (($links_admin_data["sem_id"]) && (!$archive_kill))
-		echo " <a href=\"adminarea_start.php?list=TRUE\"><img alt=\"Auswahl der Veranstaltung ", htmlReady($db->f("Name")), " aufheben\" align=\"absmiddle\" src=\"pictures/admin.gif\" border=0></a>";
-	elseif ($links_admin_data["inst_id"])
-		echo " <a href=\"adminarea_start.php?list=TRUE\"><img alt=\"Auswahl der Einrichtung ", htmlReady($db->f("Name")), " aufheben\" align=\"absmiddle\" src=\"pictures/admin.gif\" border=0></a>";
+
+$tooltip="Sie befinden sich im Administrationsbereich von Stud.IP. ";
+
+if (($links_admin_data["sem_id"]) && (!$archive_kill))
+	$tooltip.= " Ausgewählte Veranstaltung: ".$db->f("Name")." - Um die Auswahl aufzuheben, benutzen Sie bitte das Schlüsselsymbol.";
+elseif ($links_admin_data["inst_id"])
+	$tooltip.= " Ausgewählte Einrichtung: ".$db->f("Name")." - Um die Auswahl aufzuheben, benutzen Sie bitte das Schlüsselsymbol.";		
+else
+	$tooltip.= " Keine Veranstaltung oder Einrichtung ausgewählt";
+
+//Additional Text erzeugen
+if (($links_admin_data["sem_id"]) && (!$archive_kill))
+	$addText=" <a href=\"adminarea_start.php?list=TRUE\"><img ".tooltip("Auswahl der Veranstaltung ".$db->f("Name")." aufheben")." align=\"absmiddle\" src=\"pictures/admin.gif\" border=0></a>";
+elseif ($links_admin_data["inst_id"])
+	$addText=" <a href=\"adminarea_start.php?list=TRUE\"><img ".tooltip("Auswahl der Einrichtung ".$db->f("Name")." aufheben")." align=\"absmiddle\" src=\"pictures/admin.gif\" border=0></a>";
 					
-	if ($i_page != "admin_dates.php" AND $i_page != "admin_statusgruppe.php" AND $i_page != "admin_literatur.php" AND $i_page != "admin_news.php" AND $i_page != "admin_seminare1.php" AND $i_page != "admin_seminare_assi.php" AND $i_page != "admin_metadates.php" AND $i_page != "admin_admission.php" AND $i_page != "adminarea_start.php" AND $i_page != "archiv_assi.php" 
-		OR ($links_admin_data["sem_id"] AND !$archive_kill)
-		OR (($i_page == "admin_news.php" AND $links_admin_data["view"]=="inst") OR $i_page == "admin_institut.php" OR $i_page == "inst_admin.php" OR ($i_page == "admin_statusgruppe.php" AND $links_admin_data["view"]=="inst") OR ($i_page == "admin_literatur.php" AND $links_admin_data["view"]=="inst")))
-		echo "&nbsp; <img src=\"pictures/reiter2.jpg\" align=absmiddle>";
-	else
-		echo "&nbsp; <img src=\"pictures/reiter1.jpg\" align=absmiddle>";
-	echo "</td>";	
-
-if (($links_admin_data["sem_id"]) || ($links_admin_data["inst_id"])) {
-	if ($links_admin_data["inst_id"])
-		{?>  <td class="links1" align=right nowrap><a  class="links1" href="institut_main.php?auswahl=<? echo $links_admin_data["inst_id"] ?>"><font color="#000000" size=2><b>&nbsp; &nbsp; <? }
-	elseif (!$archive_kill)
-		{?>  <td class="links1" align=right nowrap><a  class="links1" href="seminar_main.php?auswahl=<? echo $links_admin_data["sem_id"] ?>"><font color="#000000" size=2><b>&nbsp; &nbsp; <? }
-
-	if (($SessSemName[0]) && (!$links_admin_data["assi"]))
-		if ($links_admin_data["inst_id"])
-			echo "zur&uuml;ck zur ausgew&auml;hlten Einrichtung&nbsp; &nbsp; </b></a><img src=\"pictures/reiter1.jpg\" align=absmiddle></td>";
-		else {
-			if (!$archive_kill)
-				echo "zur&uuml;ck zur ausgew&auml;hlten Veranstaltung&nbsp; &nbsp; </b></a><img src=\"pictures/reiter1.jpg\" align=absmiddle></td>";
-		}
-	elseif (($links_admin_data["assi"]) && (!$archive_kill))
-		echo "zur neu angelegten Veranstaltung&nbsp; &nbsp; </b></a><img src=\"pictures/reiter1.jpg\" align=absmiddle></td>";
-	elseif ($links_admin_data["inst_id"])
-		echo "zur ausgew&auml;hlten Einrichtung&nbsp; &nbsp; </b></a><img src=\"pictures/reiter1.jpg\" align=absmiddle></td>";
-	elseif (!$archive_kill)
-		echo "zur ausgew&auml;hlten Veranstaltung&nbsp; &nbsp; </b></a><img src=\"pictures/reiter1.jpg\" align=absmiddle></td>";
-	}
-
-//Veranstaltungen...
-if ($perm->have_perm("tutor")) {
-	if (($i_page == "admin_news.php" AND $links_admin_data["view"]=="sem") OR $i_page == "admin_seminare1.php" OR $i_page == "admin_dates.php" OR ($i_page == "admin_literatur.php" AND $links_admin_data["view"]=="sem") OR $i_page == "admin_metadates.php" OR $i_page == "admin_admission.php" OR $i_page == "admin_seminare_assi.php" OR $i_page == "adminarea_start.php" OR $i_page == "archiv_assi.php" OR ($i_page == "admin_statusgruppe.php" AND $links_admin_data["view"]=="sem")) {?>  <td class="links1b" align=right nowrap><a  class="links1b" href="<? if ($links_admin_data["sem_id"]) echo "admin_seminare1.php"; else echo "adminarea_start.php?list=TRUE" ?>"><font color="#000000" size=2><b>&nbsp; &nbsp; Veranstaltungen&nbsp; &nbsp; </b></font></a><?
-		if ($perm->have_perm("tutor")) {
-			?><img src="pictures/reiter2.jpg" align=absmiddle></td><? }
-		ELSE {
-			?><img src="pictures/reiter4.jpg" align=absmiddle></td><?} 
-	}
-	ELSE {?>  <td class="links1" align=right nowrap><a  class="links1" href="<? if ($links_admin_data["sem_id"]) echo "admin_seminare1.php"; else echo "adminarea_start.php?list=TRUE" ?>"><font color="#000000" size=2><b>&nbsp; &nbsp; Veranstaltungen&nbsp; &nbsp; </b></font></a><img src="pictures/reiter1.jpg" align=absmiddle></td><?}
+//View festlegen
+if ($view)
+	$reiter_view=$view;
+else
+	switch ($i_page) {
+		case "admin_admission.php" : 
+			$reiter_view="zugang"; 
+		break;
+		case "admin_bereich.php" : 
+			$reiter_view="bereich"; 
+		break;
+		case "admin_dates.php" : 
+			$reiter_view="ablaufplan"; 
+		break;
+		case "admin_db_integrity.php" :
+			$reiter_view = "integrity";
+		break;
+		case "admin_fach.php" : 
+			$reiter_view="fach"; 
+		break;
+		case "admin_fakultaet.php" : 
+			$reiter_view="fakultaet"; 
+		break;
+		case "admin_institut.php" : 
+			$reiter_view="grunddaten_inst"; 
+		break;
+		case "admin_metadates.php" : 
+			$reiter_view="zeiten"; 
+		break;
+		case "admin_seminare1.php": 
+			$reiter_view="grunddaten_sem"; 
+		break;
+		case "admin_seminare_assi.php": 
+			$reiter_view="new_sem"; 
+		break;
+		case "admin_studiengang.php": 
+			$reiter_view="studiengang"; 
+		break;
+		case "adminarea_start.php" : 
+			$reiter_view="(veranstaltungen)"; 
+		break;
+		case "archiv_assi.php": 
+			$reiter_view="archiv"; 
+		break;
+		case "new_user_md5.php": 
+			$reiter_view="new_user"; 
+		break;
+		case "view_sessions.php":
+			$reiter_view="sessions";
+		break;
+		case "inst_admin.php": 
+			$reiter_view="mitarbeiter"; 
+		break;	
 }
 
-//Einrichtungen...
-if ($perm->have_perm("tutor")) {
-	if (($i_page == "admin_news.php" AND $links_admin_data["view"]=="inst") OR $i_page == "admin_institut.php" OR $i_page == "inst_admin.php" OR ($i_page == "admin_statusgruppe.php" AND $links_admin_data["view"]=="inst") OR ($i_page == "admin_literatur.php" AND $links_admin_data["view"]=="inst")) {
-		?> 
-		<td class="links1b" align=right nowrap><a  class="links1b" href="<? if ($perm->have_perm("admin")) echo "admin_institut.php?list=TRUE"; else echo "admin_literatur.php?list=true&view=inst"; ?>"><font color="#000000" size=2><b>&nbsp; &nbsp; Einrichtungen&nbsp; &nbsp; </b></font></a>
-		<? if ($perm->have_perm("admin")) {
-			?><img src="pictures/reiter2.jpg" align=absmiddle></td><? }
-		ELSE {
-			?><img src="pictures/reiter4.jpg" align=absmiddle></td><?} 
-	}
-	ELSE {?>  <td class="links1" align=right nowrap><a  class="links1" href="<? if ($perm->have_perm("admin")) echo "admin_institut.php?list=TRUE"; else echo "admin_literatur.php?list=true&view=inst"; ?>"><font color="#000000" size=2><b>&nbsp; &nbsp; Einrichtungen&nbsp; &nbsp; </b></font></a><img src="pictures/reiter1.jpg" align=absmiddle></td><?}
-}
+$reiter->create($structure, $reiter_view, $tooltip, $addText);
 
-//gloabal settings
-if ($perm->have_perm("admin")) {
-	if (($i_page == "admin_news.php" AND $links_admin_data["view"]=="global") OR$i_page == "admin_fakultaet.php" OR $i_page == "admin_fach.php" OR $i_page == "admin_bereich.php" OR $i_page == "admin_studiengang.php" OR $i_page == "view_sessions.php" OR $i_page == "new_user_md5.php" OR $i_page == "admin_db_integrity.php") {?>  <td class="links1b" align=right nowrap><a  class="links1b" href="new_user_md5.php"><font color="#000000" size=2><b>&nbsp; &nbsp; globale Einstellungen&nbsp; &nbsp; </b></font></a><img src="pictures/reiter4.jpg" align=absmiddle></td><?}
-	ELSE {?>  <td class="links1" align=right nowrap><a  class="links1" href="new_user_md5.php"><font color="#000000" size=2><b>&nbsp; &nbsp; globale Einstellungen&nbsp; &nbsp; </b></font></a><img src="pictures/reiter1.jpg" align=absmiddle></td><?}
-}
-
-//obere Reihe Ende
-?>
-
-</tr>
-</table>
-
-<!-- untere Leiste -->
-
-<table cellspacing="0" cellpadding=4 border=0 width="100%">
-<tr>
-	<td class="steel1">&nbsp; &nbsp; 
-<?
-if (($i_page == "admin_news.php" AND $links_admin_data["view"]=="sem") OR $i_page == "admin_seminare1.php" OR $i_page == "admin_dates.php" OR $i_page == "admin_metadates.php" OR $i_page == "admin_admission.php" OR ($i_page == "admin_literatur.php" AND $links_admin_data["view"]=="sem") OR $i_page == "admin_seminare_assi.php" OR $i_page == "archiv_assi.php"  OR $i_page == "adminarea_start.php" OR ($i_page == "admin_statusgruppe.php" AND $links_admin_data["view"]=="sem"))
-{
-	IF ($i_page == "admin_seminare1.php"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="admin_seminare1.php?list=TRUE">Grunddaten&nbsp; &nbsp; </a> <?}
-	ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="admin_seminare1.php?list=TRUE">Grunddaten&nbsp; &nbsp; </a> <?}
-
-	IF ($i_page == "admin_metadates.php"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="admin_metadates.php?list=TRUE">Zeiten&nbsp; &nbsp; </a> <?}
-	ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="admin_metadates.php?list=TRUE">Zeiten&nbsp; &nbsp; </a> <?}
-
-	IF ($i_page == "admin_dates.php") { ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="admin_dates.php?list=TRUE">Ablaufpl&auml;ne&nbsp; &nbsp; </a> <?}
-	ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="admin_dates.php?list=TRUE">Ablaufpl&auml;ne&nbsp; &nbsp; </a> <?}
-
-	IF ($i_page == "admin_statusgruppe.php") { ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="admin_statusgruppe.php?list=TRUE&view=sem">Statusgruppen&nbsp; &nbsp; </a> <?}
-	ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="admin_statusgruppe.php?list=TRUE&view=sem">Statusgruppen&nbsp; &nbsp; </a> <?}
-
-	IF ($i_page == "admin_literatur.php"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="admin_literatur.php?list=TRUE&view=sem">Literatur/Links&nbsp; &nbsp; </a> <?}
-	ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="admin_literatur.php?list=TRUE&view=sem">Literatur/Links&nbsp; &nbsp; </a> <?}
-
-	IF ($i_page == "admin_admission.php"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="admin_admission.php?list=TRUE">Zugangsberechtigungen&nbsp; &nbsp; </a> <?}
-	ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="admin_admission.php?list=TRUE">Zugangsberechtigungen&nbsp; &nbsp; </a> <?}
-
-	if ($perm->have_perm("admin")) {
-		IF ($i_page == "archiv_assi.php"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="archiv_assi.php?list=TRUE&new_session=TRUE">archivieren&nbsp; &nbsp;  </a> <?}
-		ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="archiv_assi.php?list=TRUE&new_session=TRUE">archivieren&nbsp; &nbsp;  </a> <?}
-		}
-
-	if ($perm->have_perm("dozent")) {
-		IF ($i_page == "admin_seminare_assi.php"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="admin_seminare_assi.php?new_session=TRUE">neue Veranstaltung&nbsp; &nbsp; </a> <?}
-		ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="admin_seminare_assi.php?new_session=TRUE">neue Veranstaltung&nbsp; &nbsp; </a> <?}
-		}
-
-	IF ($i_page == "admin_news.php"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="admin_news.php?view=sem">News&nbsp; &nbsp; </a> <?}
-	ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="admin_news.php?view=sem">News&nbsp; &nbsp; </a> <?}
-
-}
-
-if (($i_page == "admin_news.php" AND $links_admin_data["view"]=="inst") OR $i_page == "inst_admin.php" OR $i_page == "admin_institut.php" OR ($i_page == "admin_statusgruppe.php" AND $links_admin_data["view"]=="inst") OR ($i_page == "admin_literatur.php" AND $links_admin_data["view"]=="inst"))
-{
-
-	IF ($i_page == "admin_literatur.php"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="admin_literatur.php?view=inst&list=TRUE">Literatur/Links&nbsp; &nbsp; </a> <?}
-	ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="admin_literatur.php?view=inst&list=TRUE">Literatur/Links&nbsp; &nbsp; </a> <?}
-
-	IF ($i_page == "admin_news.php"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="admin_news.php?view=inst&list=TRUE">News&nbsp; &nbsp; </a> <?}
-	ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="admin_news.php?view=inst&list=TRUE">News&nbsp; &nbsp; </a> <?}
-
-	if ($perm->have_perm("admin")) {
-		IF (($i_page == "admin_institut.php") && ($i_view!="new")){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="admin_institut.php?list=TRUE">Grunddaten&nbsp; &nbsp; </a> <?}
-		ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="admin_institut.php?list=TRUE">Grunddaten&nbsp; &nbsp; </a> <?}
-
-		IF ($i_page == "inst_admin.php"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="inst_admin.php?list=TRUE">Mitarbeiter&nbsp; &nbsp; </a> <?}
-		ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="inst_admin.php?list=TRUE">Mitarbeiter&nbsp; &nbsp; </a> <?}
-
-		IF ($i_page == "admin_statusgruppe.php"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="admin_statusgruppe.php?list=TRUE&view=inst">Statusgruppen&nbsp; &nbsp; </a> <?}
-		ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="admin_statusgruppe.php?list=TRUE&view=inst">Statusgruppen&nbsp; &nbsp; </a> <?}
-	}
-
-	if ($perm->have_perm("root")) {
-		IF (($i_page == "admin_institut.php") && ($i_view=="new")) { ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="admin_institut.php?i_view=new"">neue Einrichtung&nbsp; &nbsp; </a> <?}
-		ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="admin_institut.php?i_view=new">neue Einrichtung&nbsp; &nbsp; </a> <?}
-	}
-}
-
-if (($i_page == "admin_news.php" AND $links_admin_data["view"]=="global") OR $i_page == "admin_fakultaet.php" OR $i_page == "admin_fach.php" OR $i_page == "admin_bereich.php" OR $i_page == "admin_studiengang.php" OR $i_page == "view_sessions.php" OR $i_page == "new_user_md5.php" OR $i_page == "admin_db_integrity.php")
-{
-	IF ($i_page == "new_user_md5.php"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="new_user_md5.php">Benutzer&nbsp; &nbsp; </a> <?}
-	ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="new_user_md5.php">Benutzer&nbsp; &nbsp; </a> <?}
-
-	if ($perm->have_perm("root")) {
-		IF ($i_page == "admin_fakultaet.php"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="admin_fakultaet.php">Fakult&auml;ten&nbsp; &nbsp; </a> <?}
-		ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="admin_fakultaet.php">Fakult&auml;ten&nbsp; &nbsp; </a> <?}
-
-		IF ($i_page == "admin_fach.php"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2"  href="admin_fach.php">F&auml;cher&nbsp; &nbsp; </a> <?}
-		ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="admin_fach.php">F&auml;cher&nbsp; &nbsp; </a> <?}
-
-		IF ($i_page == "admin_bereich.php"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="admin_bereich.php">Bereiche&nbsp; &nbsp; </a> <?}
-		ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="admin_bereich.php">Bereiche&nbsp; &nbsp; </a> <?}
-
-		IF ($i_page == "admin_studiengang.php"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="admin_studiengang.php">Studieng&auml;nge&nbsp; &nbsp; </a> <?}
-		ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="admin_studiengang.php">Studieng&auml;nge&nbsp; &nbsp; </a> <?}
-
-		IF ($i_page == "admin_news.php"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="admin_news.php?view=globalt">News&nbsp; &nbsp; </a> <?}
-		ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="admin_news.php?view=global">News&nbsp; &nbsp; </a> <?}
-
-		IF ($i_page == "view_sessions.php"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="view_sessions.php">Sessions&nbsp; &nbsp; </a> <?}
-		ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="view_sessions.php">Sessions&nbsp; &nbsp; </a> <?}
-		
-		IF ($i_page == "admin_db_integrity.php"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="admin_db_integrity.php">DB Integrit&auml;t&nbsp; &nbsp; </a> <?}
-		ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="admin_db_integrity.php">DB Integrit&auml;t&nbsp; &nbsp; </a> <?}
-	
-	}
-}
-//Reitersystem Ende
-?>
-<br>
-</td></tr>
-<tr>
-	<td class="reiterunten">&nbsp; </td>
-</tr>
-</table>
-<?
 //Einheitliches Auswahlmenu fuer Einrichtungen
 if ((!$links_admin_data["inst_id"]) && ($list) &&
-	(($i_page == "admin_institut.php" OR ($i_page == "admin_statusgruppe.php" AND $links_admin_data["view"]=="inst") OR ($i_page == "admin_literatur.php" AND $links_admin_data["view"]=="inst") OR $i_page == "inst_admin.php"))) {
+	(($i_page == "admin_institut.php" OR ($i_page == "admin_statusgruppe.php" AND $links_admin_data["view"]=="statusgruppe_inst") OR ($i_page == "admin_literatur.php" AND $links_admin_data["view"]=="literatur_inst") OR $i_page == "inst_admin.php"))) {
 	?>
 	<table width="100%" cellspacing=0 cellpadding=0 border=0>
 	<tr valign=top align=middle>
@@ -485,7 +435,7 @@ if ((!$links_admin_data["inst_id"]) && ($list) &&
 	
 //Einheitliches Seminarauswahlmenu, wenn kein Seminar gewaehlt ist
 if ((!$links_admin_data["sem_id"]) && ($list) &&
-	(( $i_page == "admin_seminare1.php" OR $i_page == "admin_dates.php" OR $i_page == "admin_metadates.php" OR $i_page == "admin_admission.php"  OR ($i_page == "admin_statusgruppe.php" AND $links_admin_data["view"]=="sem") OR ($i_page == "admin_literatur.php" AND $links_admin_data["view"]=="sem") OR $i_page == "archiv_assi.php" OR $i_page == "adminarea_start.php"))) {
+	(( $i_page == "admin_seminare1.php" OR $i_page == "admin_dates.php" OR $i_page == "admin_metadates.php" OR $i_page == "admin_admission.php"  OR ($i_page == "admin_statusgruppe.php" AND $links_admin_data["view"]=="statusgruppe_sem") OR ($i_page == "admin_literatur.php" AND $links_admin_data["view"]=="literatur_sem") OR $i_page == "archiv_assi.php" OR $i_page == "adminarea_start.php"))) {
 
 	//Umfangreiches Auswahlmenu nur ab Admin, alles darunter sollte eine uberschaubare Anzahl von Seminaren haben
 	?>
