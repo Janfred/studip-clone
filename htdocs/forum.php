@@ -425,7 +425,10 @@ if ($flatallopen=="TRUE")
 if ($flatallopen=="FALSE")
 	$forum["flatallopen"] = "FALSE";
 
-$forum["anchor"] = $open; // Anker setzen
+if ($fav)
+	$forum["anchor"] = $fav; // Anker auf Favoriten
+else
+	$forum["anchor"] = $open; // Anker setzen
 
 if ($rate) { // Objekt bewerten
 	while(list($key,$value) = each($rate)) {
@@ -433,6 +436,7 @@ if ($rate) { // Objekt bewerten
 		$forum["anchor"] = $key;
 	}
 }
+
 	
 
 
