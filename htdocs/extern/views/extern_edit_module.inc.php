@@ -80,11 +80,9 @@ else {
 if (!$module)
 	die("Unknown module type");
 
-// execute commands they modify attributes of the main element
-if ($main_element_command)
-	$module->mainCommand($main_element_command, $pos);
-
-//if ($com == "" || $com == "new" || $com == "edit" || $com == "open" || $com == "close") {
+// execute commands they modify attributes of given element
+if ($execute_command)
+	$module->executeCommand($edit, $execute_command, $pos);
 
 $elements = $module->getAllElements();
 	
