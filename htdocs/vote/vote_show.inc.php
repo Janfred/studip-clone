@@ -174,6 +174,14 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
          $tr = new HTML ("tr");
          $td = new HTML ("td");
          
+         if (strlen (formatReady($eval->getTitle ())) > VOTE_SHOW_MAXTITLELENGTH){
+            $b = new HTML ("b");
+            $b->addHTMLContent(formatReady($eval->getTitle ()));
+            
+            $td->addContent($b);
+            $td->addContent( new HTMLempty ("br") );
+            $td->addContent( new HTMLempty ("br") );
+         }
          
          $td->addHTMLContent(formatReady($eval->getText ()));
          $td->addContent(new HTMLempty ("br"));

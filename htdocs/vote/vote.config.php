@@ -152,6 +152,14 @@ define ("VOTE_IMAGETYPE_BAR", 1);
 
 define ("VOTE_IMAGETYPE_LINE", 2);
 
+/**
+ * Imagetype LINE-Graph
+ * @access public
+ * @const  VOTE_IMAGETYPE_LINE
+ */
+
+define ("VOTE_SHOW_MAXTITLELENGTH", 65);
+
 # ===================================================== end: public constants #
 
 ?>

@@ -369,7 +369,7 @@ function createOpeningOrClosingArrow () {
  * @returns  String   The HTML-text
  */
 function createVoteHeadline (&$vote, $open, $openID, $evalDB = "") {
-   $title          = htmlReady (my_substr ($vote->getTitle (), 0, 35));
+   $title          = htmlReady (my_substr ($vote->getTitle (), 0, VOTE_SHOW_MAXTITLELENGTH));
    $date           = $vote->getChangedate ();
    $authorName     = get_fullname ($vote->getAuthorID ());
    $authorUsername = get_username ($vote->getAuthorID ());
