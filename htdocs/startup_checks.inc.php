@@ -94,8 +94,12 @@ if ($problems_found) {
 					<font size="-1"><b><?=($i) ? $i."." : ""?></b></font>
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="91%" valign="top">
-					<font size="-1"><?=$checks->registered_checks[$key]["msg"]?></font><br>
-					<font size="-1">Aktion:&nbsp;<?=formatReady("=)")?>&nbsp;<a href="<?=$checks->registered_checks[$key]["link"]?>"><?=$checks->registered_checks[$key]["link_name"]?></a></font><br>
+					<font size="-1"><?if (($checks->registered_checks[$key]["msg_fak_admin"]) && ($perm->is_fak_admin())) print $checks->registered_checks[$key]["msg_fak_admin"]; else print $checks->registered_checks[$key]["msg"]; ?></font><br>
+					<font size="-1">Aktion:&nbsp;<?=formatReady("=)")?>&nbsp;
+						<a href="<?=(($checks->registered_checks[$key]["link_fak_admin"]) && ($perm->is_fak_admin())) ? $checks->registered_checks[$key]["link_fak_admin"] : $checks->registered_checks[$key]["link"]?>">
+							<?=(($checks->registered_checks[$key]["link_name_fak_admin"]) && ($perm->is_fak_admin())) ? $checks->registered_checks[$key]["link_name_fak_admin"] : $checks->registered_checks[$key]["link_name"]?>
+						</a>
+					</font><br>
 				</td>
 			</tr>
 			<? }
