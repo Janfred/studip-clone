@@ -184,6 +184,11 @@ class RoomRequest {
 		$this->chng_flag=TRUE;
 	}
 	
+	function setTerminId($value) {
+		$this->termin_id=$value;
+		$this->chng_flag=TRUE;
+	}
+
 	function setPropertyState($property_id, $value) {
 		//if ($value == "on")
 		//	$value = 1;
