@@ -689,10 +689,12 @@ class VoteDB extends StudipObject {
          $sql="DELETE FROM vote_user ".
 	     "WHERE vote_id=\"".$voteID."\"";
          $this->db->query($sql);
+	 /*
 	 if (!$this->db->affected_rows())
 	     $this->throwError (1, _("Antwortverknuepfungen (anonym) konnten nicht ".
 				     "geloescht werden."), 
 				__LINE__, __FILE__); 
+	 */
      }
 
      $sql="UPDATE voteanswers SET ".
