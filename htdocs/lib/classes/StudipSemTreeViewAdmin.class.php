@@ -296,7 +296,7 @@ class StudipSemTreeViewAdmin extends TreeView {
 	
 	function execCommandInsertFak(){
 		global $_REQUEST;
-		if($this->isItemAdmin("root")){
+		if($this->isItemAdmin("root") && $_REQUEST['insert_fak']){
 			$view = new DbView();
 			$item_id = $view->get_uniqid();
 			$view->params = array($item_id,'root','',$this->tree->getNumKids('root')+1,'',"'{$_REQUEST['insert_fak']}'");
@@ -465,7 +465,7 @@ class StudipSemTreeViewAdmin extends TreeView {
 			$content .= "\n<form action=\"" . $this->getSelf("cmd=InsertFak") . "\" method=\"post\">" . _("Stud.IP Fakult&auml;t einf&uuml;gen:")
 					. "&nbsp;\n<select style=\"width:200px;vertical-align:middle;\" name=\"insert_fak\">";
 			while($rs->next_record()){
-				$content .= "\n<option value=\"" . $rs->f("institut_id") . "\">" . htmlReady(my_substr($rs->f("Name"),0,50)) . "</option>";
+				$content .= "\n<option value=\"" . $rs->f("Institut_id") . "\">" . htmlReady(my_substr($rs->f("Name"),0,50)) . "</option>";
 			}
 			$content .= "</select>&nbsp;<input border=\"0\" type=\"image\" style=\"vertical-align:middle;\" " .makeButton("eintragen","src") . tooltip(_("Fakultät einfügen")) . "></form>";
 		}
