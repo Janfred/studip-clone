@@ -277,7 +277,7 @@ if ($perm->have_perm("admin")) {
 	}
 	ELSE {?>  <td class="links1" align=right nowrap><a  class="links1" href="admin_institut.php?list=TRUE"><font color="#000000" size=2><b>&nbsp; &nbsp; Einrichtungen&nbsp; &nbsp; </b></font></a><img src="pictures/reiter1.jpg" align=absmiddle></td><?}
 
-	if ($i_page == "admin_fakultaet.php" OR $i_page == "admin_fach.php" OR $i_page == "admin_bereich.php" OR $i_page == "admin_studiengang.php" OR $i_page == "view_sessions.php" OR $i_page == "new_user_md5.php") {?>  <td class="links1b" align=right nowrap><a  class="links1b" href="new_user_md5.php"><font color="#000000" size=2><b>&nbsp; &nbsp; globale Einstellungen&nbsp; &nbsp; </b></font></a><img src="pictures/reiter4.jpg" align=absmiddle></td><?}
+	if (($i_page == "admin_news.php" AND $links_admin_data["view"]=="global") OR$i_page == "admin_fakultaet.php" OR $i_page == "admin_fach.php" OR $i_page == "admin_bereich.php" OR $i_page == "admin_studiengang.php" OR $i_page == "view_sessions.php" OR $i_page == "new_user_md5.php") {?>  <td class="links1b" align=right nowrap><a  class="links1b" href="new_user_md5.php"><font color="#000000" size=2><b>&nbsp; &nbsp; globale Einstellungen&nbsp; &nbsp; </b></font></a><img src="pictures/reiter4.jpg" align=absmiddle></td><?}
 	ELSE {?>  <td class="links1" align=right nowrap><a  class="links1" href="new_user_md5.php"><font color="#000000" size=2><b>&nbsp; &nbsp; globale Einstellungen&nbsp; &nbsp; </b></font></a><img src="pictures/reiter1.jpg" align=absmiddle></td><?}
 }
 
@@ -346,7 +346,7 @@ if (($i_page == "admin_news.php" AND $links_admin_data["view"]=="inst") OR $i_pa
 	}
 }
 
-if ($i_page == "admin_fakultaet.php" OR $i_page == "admin_fach.php" OR $i_page == "admin_bereich.php" OR $i_page == "admin_studiengang.php" OR $i_page == "view_sessions.php" OR $i_page == "new_user_md5.php")
+if (($i_page == "admin_news.php" AND $links_admin_data["view"]=="global") OR $i_page == "admin_fakultaet.php" OR $i_page == "admin_fach.php" OR $i_page == "admin_bereich.php" OR $i_page == "admin_studiengang.php" OR $i_page == "view_sessions.php" OR $i_page == "new_user_md5.php")
 {
 	IF ($i_page == "new_user_md5.php"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="new_user_md5.php">Benutzer&nbsp; &nbsp; </a> <?}
 	ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="new_user_md5.php">Benutzer&nbsp; &nbsp; </a> <?}
@@ -363,6 +363,9 @@ if ($i_page == "admin_fakultaet.php" OR $i_page == "admin_fach.php" OR $i_page =
 
   		IF ($i_page == "admin_studiengang.php"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="admin_studiengang.php">Studieng&auml;nge&nbsp; &nbsp; </a> <?}
 		ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="admin_studiengang.php">Studieng&auml;nge&nbsp; &nbsp; </a> <?}
+
+		IF ($i_page == "admin_news.php"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="admin_news.php?view=globalt">News&nbsp; &nbsp; </a> <?}
+		ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="admin_news.php?view=global">News&nbsp; &nbsp; </a> <?}
 
 		IF ($i_page == "view_sessions.php"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="view_sessions.php">Sessions&nbsp; &nbsp; </a> <?}
 		ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="view_sessions.php">Sessions&nbsp; &nbsp; </a> <?}
