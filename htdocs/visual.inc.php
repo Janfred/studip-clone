@@ -190,7 +190,7 @@ function htmlReady ($what, $trim = TRUE, $br = FALSE) {
 	return $what;
 }
 
-function JSReady ($what = "", $target = "overlib") {        
+function JSReady ($what = "", $target = "overlib") {
 	switch ($target) {
 
 	case "contact" :
@@ -203,7 +203,7 @@ function JSReady ($what = "", $target = "overlib") {
 	case "alert" :
 		$what = addslashes(htmlentities($what,ENT_COMPAT));
 		$what = str_replace("\r","",$what);
-		$what = str_replace("\n","\\n",$what); // alert boxen stellen keine html tags dar 
+		$what = str_replace("\n","\\n",$what); // alert boxen stellen keine html tags dar
 		return $what;
 	break;
 
@@ -324,7 +324,7 @@ function format_help($what, $trim = TRUE, $extern = FALSE, $wiki = FALSE, $show_
 		$what = htmlReady($what, $trim, FALSE);
 		$what = preg_replace("'\[code\].+\[/code\]'isU", 'ü', $what);
 		if ($wiki == TRUE)
-			$what = symbol(smile(FixLinks(wiki_format(format(latex($what, $extern)), $show_comments), FALSE, TRUE, TRUE, $extern), $extern), $extern);
+			$what = wiki_format(symbol(smile(FixLinks(format(latex($what, $extern)), FALSE, TRUE, TRUE, $extern), $extern), $extern), $show_comments);
 		else
 			$what = symbol(smile(FixLinks(format(latex($what, $extern)), FALSE, TRUE, TRUE, $extern), $extern), $extern);
 		$what = explode('ü', $what);
@@ -424,7 +424,7 @@ function format_wiki_comment($comment, $metainfo, $show_comment) {
 		$comment = decodehtml($comment);
 		$comment = preg_replace("/<.*>/U","",$comment);
 		$metainfo = decodeHTML($metainfo);
-		return '<a href="javascript:void(0);" '.tooltip(sprintf("%s %s:\n%s",_("Kommentar von"),$metainfo,$comment),TRUE,TRUE) . "><img src=\"pictures/icon-posting.gif\" border=0></a>";
+		return '<nowikilink><a href="javascript:void(0);" '.tooltip(sprintf("%s %s:\n%s",_("Kommentar von"),$metainfo,$comment),TRUE,TRUE) . "><img src=\"pictures/icon-posting.gif\" border=0></a></nowikilink>";
 	} else {
 		echo "<p>Error: unknown show_comment value in format_wiki_comment: ".$show_comment."</p>";
 		die();
@@ -850,9 +850,9 @@ function preg_call_link ($params, $mod, $img, $extern = FALSE) {
 	}
 	elseif ($mod == 'MAIL') {
 		if ($params[0] != '')
-			$tbr = '<a href="mailto:'.idna_link($params[1]). "\">$link_pic{$params[0]}</a>";
+			$tbr = '<a href="mailto:'.idna_link($params[1], true). "\">$link_pic{$params[0]}</a>";
 		else
-			$tbr = '<a href="mailto:'.idna_link($params[1])."\">$link_pic{$params[1]}</a>";
+			$tbr = '<a href="mailto:'.idna_link($params[1], true)."\">$link_pic{$params[1]}</a>";
 	}
 
 	return $tbr;
@@ -865,11 +865,20 @@ function preg_call_link ($params, $mod, $img, $extern = FALSE) {
 * @param	string	link to convert
 * @return	string  link in punycode
 */
-function idna_link($link){
-
+function idna_link($link, $mail = false){
+	if (0 && !$GLOBALS['CONVERT_IDNA_URL']) return decodeHTML($link);
 	if (preg_match('/&\w+;/i',$link)) { //umlaute?  (html-coded)
 		$IDN = new idna_convert();
-		$out = $IDN->encode(utf8_encode(decodeHTML($link))); // false by error
+		$out = false;
+		if ($mail){ // bei mailadressen nur hinter dem @ auswerten ...
+			if (preg_match('#^([^@]*)@(.*)$#i',$link, $matches)) {
+				$out = $IDN->encode(utf8_encode(decodeHTML($matches[2]))); // false by error
+				$out = ($out)? $matches[1].'@'.$out : link;
+			}
+		}elseif (preg_match('#^([^/]*)//([^/]*)((/.*$)|$)#i',$link, $matches)) {
+			$out = $IDN->encode(utf8_encode(decodeHTML($matches[2]))); // false by error
+			$out = ($out)? $matches[1].'//'.$out.$matches[3] : $link;
+		}
 		return ($out)? $out:$link;
 	}
 	return $link;
