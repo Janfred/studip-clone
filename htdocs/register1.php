@@ -31,7 +31,7 @@ include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
 
 if ($auth->is_authenticated() && $user->id != "nobody") {
-	parse_window ("error§" . _("Sie sind schon als Benutzer am System angemeldet!"), "§",
+	parse_window ("error§" . _("Sie sind schon als BenutzerIn am System angemeldet!"), "§",
 				_("Bereits angemeldet"), 
 				"<a href=\"index.php\"><b>&nbsp;" . sprintf(_("Hier%s geht es zur Startseite."), "</b></a>") . "<br />&nbsp;");
 } else { 
@@ -42,17 +42,17 @@ if ($auth->is_authenticated() && $user->id != "nobody") {
 <tr><td class="topic"><img src="pictures/login.gif" border="0"><b>&nbsp;<?=_("Nutzungsbedingungen")?></b></td></tr>
 <tr><td class="blank">
 <blockquote><br><br>
-<?=_("Stud.IP ist ein Open Source Projekt und steht unter der GPL. Das Programm befindet sich in einer Phase der st&auml;ndigen Weiterentwicklung.")?>
+<?=_("Stud.IP ist ein Open Source Projekt und steht unter der Gnu Public Licence (GPL). Das System befindet sich in der st&auml;ndigen Weiterentwicklung.")?>
 
-<? printf(_("F&uuml;r Vorschl&auml;ge und Kritik findet sich immer ein Ohr. Wenden Sie sich hierzu entweder an %sStud.IP Crew%s oder direkt an die %sEntwickler%s."),"<a href=\"mailto:studip-users@lists.sourceforge.net\">", "</a>", "<a href=\"impressum.php\">", "</a>")?>
+<? printf(_("F&uuml;r Vorschl&auml;ge und Kritik findet sich immer ein Ohr. Wenden Sie sich hierzu entweder an die %sStud.IP Crew%s oder direkt an die %sEntwickler%s."),"<a href=\"mailto:studip-users@lists.sourceforge.net\">", "</a>", "<a href=\"impressum.php\">", "</a>")?>
 <br><br>
-<?=_("Um den Funktionsumfang von Stud.IP nutzen zu k&ouml;nnen, m&uuml;ssen Sie sich im System anmelden.")?><br>
+<?=_("Um den vollen Funktionsumfang von Stud.IP nutzen zu k&ouml;nnen, m&uuml;ssen Sie sich am System anmelden.")?><br>
 <?=_("Das hat viele Vorz&uuml;ge:")?><br>
 <blockquote><li><?=_("Zugriff auf Ihre Daten von jedem internetf&auml;higen Rechner weltweit,")?>
-<li><?=_("Anzeige neuer Mitteilungen oder Dateien seit Ihrem neuen Besuch,")?>
+<li><?=_("Anzeige neuer Mitteilungen oder Dateien seit Ihrem letzten Besuch,")?>
 <li><?=_("Eine eigene Homepage im System,")?>
-<li><?=_("die M&ouml;glichkeit anderen Teilnehmern Nachrichten zu verschicken oder mit ihnen zu chatten,")?>
-<li><?=_("und Vieles mehr.")?></li></blockquote><br>
+<li><?=_("die M&ouml;glichkeit anderen TeilnehmerInnen Nachrichten zu schicken oder mit ihnen zu chatten,")?>
+<li><?=_("und vieles mehr.")?></li></blockquote><br>
 
 <?=_("Mit der Anmeldung werden die nachfolgenden Nutzungsbedingungen akzeptiert:")?><br><br>
 

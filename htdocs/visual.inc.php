@@ -24,13 +24,13 @@ function get_ampel_write ($mein_status, $admission_status, $write_level, $print=
 				if ($perm->have_perm("autor"))
 					$ampel_status="<img border=\"0\" src=\"pictures/ampel_gruen.gif\" width=\"11\" height=\"16\">";
 				else
-					$ampel_status="<img border=\"0\" src=\"pictures/ampel_rot.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>" . _("(Registrierungsmail beachten)") . "</font>";
+					$ampel_status="<img border=\"0\" src=\"pictures/ampel_rot.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>" . _("(Registrierungsmail beachten!)") . "</font>";
 			break;
 			case 2 : //Schreiben nur mit Passwort
 				if ($perm->have_perm("autor"))
 					$ampel_status="<img border=\"0\" src=\"pictures/ampel_gelb.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>" . _("(mit Passwort)") . "</font>";
 				else
-					$ampel_status="<img border=\"0\" src=\"pictures/ampel_rot.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>" . _("(Registrierungsmail beachten)") . "</font>";
+					$ampel_status="<img border=\"0\" src=\"pictures/ampel_rot.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>" . _("(Registrierungsmail beachten!)") . "</font>";
 			break;
 			case 3 : //Schreiben nur nach Anmeldeverfaren
 				if ($perm->have_perm("autor"))
@@ -39,7 +39,7 @@ function get_ampel_write ($mein_status, $admission_status, $write_level, $print=
 					else
 						$ampel_status="<img border=\"0\" src=\"pictures/ampel_gelb.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>" . _("(Anmeldeverfahren)") . "</font>";
 				else
-					$ampel_status="<img border=\"0\" src=\"pictures/ampel_rot.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>" . _("(Registrierungsmail beachten)") . "</font>";
+					$ampel_status="<img border=\"0\" src=\"pictures/ampel_rot.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>" . _("(Registrierungsmail beachten!)") . "</font>";
 			break;
 		}
 	}
@@ -84,7 +84,7 @@ function get_ampel_read ($mein_status, $admission_status, $read_level, $print="T
 					else
 						$ampel_status="<img border=\"0\" src=\"pictures/ampel_gelb.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>" . _("(Anmeldeverfahren)") . "</font>";
 				else
-					$ampel_status="<img border=\"0\" src=\"pictures/ampel_rot.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>" . _("(Registrierungsmail beachten)") . "</font>";
+					$ampel_status="<img border=\"0\" src=\"pictures/ampel_rot.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>" . _("(Registrierungsmail beachten!)") . "</font>";
 			break;
 		}
 	}
