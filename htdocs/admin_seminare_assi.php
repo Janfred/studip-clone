@@ -25,7 +25,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 $hash_secret = "nirhtak";
 
 include "seminar_open.php"; 	//hier werden die sessions initialisiert
-require_once "msg.inc.php"; 		//Funktionen fuerr Nachrichtenmeldungen
+require_once "msg.inc.php"; 		//Funktionen fuer Nachrichtenmeldungen
 require_once "config.inc.php"; 		//wir brauchen die Seminar-Typen
 require_once "config_tools_semester.inc.php";  //Bereitstellung weiterer Daten
 require_once "functions.php";	//noch mehr Stuff
@@ -637,7 +637,7 @@ if (($cmd_e_x) || ($add_studg_x) || ($sem_delete_studg)) {
 				if ($cnt < 100)
 					$sem_create_data["sem_all_ratio"]=(100 - $cnt);
 				else {
-					$errormsg.=sprintf ("error§Das Werte der einzelnen Kontigente &uuml;bersteigen 100%%. Bitte &auml;ndern Sie die Kontigente!§", date ("d.m.Y", $sem_create_data["term_first_date"]));	
+					$errormsg.=sprintf ("error§Die Werte der einzelnen Kontigente &uuml;bersteigen 100%%. Bitte &auml;ndern Sie die Kontigente!§");	
 					$level=4;
 				}
 		}
