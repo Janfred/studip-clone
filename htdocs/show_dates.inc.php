@@ -196,7 +196,7 @@ function show_dates ($range_id, $date_start, $date_end, $show_not=0, $show_docs=
 			echo "</tr></table>	";
 					
 			if ($open == $db->f("termin_id")) {
-				echo "<a name='anker'></a>";
+				echo "<a name=\"a\"></a>";
 			
 				$content='';			
 				if ($db->f("description"))
@@ -329,7 +329,7 @@ function show_personal_dates ($range_id, $date_start, $date_end, $show_docs=FALS
 			echo "</tr></table>	";
 			
 			if($open == $app_ident) {
-				echo "<a name='anker'></a>";
+				echo "<a name=\"a\"></a>";
 
 				$content = '';			
 				if($termin->getDescription())
@@ -490,7 +490,7 @@ function show_all_dates ($date_start, $date_end, $show_docs=FALSE, $show_admin=T
 			echo "</tr></table>	";
 					
 			if($open == $app_ident) {
-				echo "<a name='anker'></a>";
+				echo "<a name=\"a\"></a>";
 
 				$content = "";
 				if($termin->getDescription())
