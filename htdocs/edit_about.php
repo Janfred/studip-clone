@@ -965,7 +965,7 @@ if ($view=="Karriere") {
 	 				echo "<tr><td class=\"".$cssSw->getClass()."\" colspan=\"2\" align=\"left\">&nbsp; <b>".htmlReady($details["Name"])."</b>";
 					//statusgruppen
 					if ($gruppen = GetStatusgruppen($inst_id, $my_about->auth_user["user_id"])) {
-						echo ",&nbsp;Funktion(en): " . htmlReady(join(", ", array_values($gruppen)));
+						echo ",&nbsp;" . _("Funktion(en):") . " " . htmlReady(join(", ", array_values($gruppen)));
 					}
 					echo "<input type=\"HIDDEN\" name=\"name[$inst_id]\" value=\"".htmlReady($details["Name"])."\"></td></tr>";
 	 				$cssSw->switchClass();
