@@ -160,14 +160,6 @@ while ( is_array($HTTP_POST_VARS)
 		break;
 	}
 	
-    ## Delete that Institut.
-    $query = "delete from Institute where Institut_id='$i_id'";
-    $db->query($query);
-    if ($db->affected_rows() == 0) {
-      $msg="error§<b>Datenbankoperation gescheitert: </b> $query</b>";
-      break;
-    }
-    
 	// delete users in user_inst
 	$query = "DELETE FROM user_inst WHERE Institut_id='$i_id'";
 	$db->query($query);
@@ -175,11 +167,11 @@ while ( is_array($HTTP_POST_VARS)
 		$msg.="msg§$db_ar Mitarbeiter gel&ouml;scht.§";
 	}
 	
-	// delete facher in fach_inst
-	$query = "DELETE FROM fach_inst WHERE Institut_id='$i_id'";
+	// delete facher in seminar_inst
+	$query = "DELETE FROM seminar_inst WHERE Institut_id='$i_id'";
 	$db->query($query);
 	if (($db_ar = $db->affected_rows()) > 0) {
-		$msg.="msg§$db_ar Fachzuordnungen gel&ouml;scht.§";
+		$msg.="msg§$db_ar beteiligte Veranstaltungen gel&ouml;scht.§";
 	}
 	
 	// delete literatur in literatur
@@ -195,7 +187,7 @@ while ( is_array($HTTP_POST_VARS)
 	$query = "UPDATE range_tree SET name='$Name (in Stud.IP gelöscht)',studip_object='',studip_object_id='' WHERE studip_object_id='$i_id'";
 	$db->query($query);
 	if (($db_ar = $db->affected_rows()) > 0) {
-		$msg.="msg§$db_ar Bereiche im Bereichsbaum angepasst§";
+		$msg.="msg§$db_ar Bereiche im Einrichtungsbaum angepasst§";
 	}
 	// Statusgruppen entfernen
 	 if ($db_ar = DeleteAllStatusgruppen($i_id) > 0) {
@@ -227,6 +219,15 @@ while ( is_array($HTTP_POST_VARS)
 
     $msg.="msg§Die Einrichtung \"".htmlReady(stripslashes($Name))."\" wurde gel&ouml;scht!§";
   	$i_view="delete";
+
+    ## Delete that Institut.
+    $query = "delete from Institute where Institut_id='$i_id'";
+    $db->query($query);
+    if ($db->affected_rows() == 0) {
+      $msg="error§<b>Datenbankoperation gescheitert: </b> $query</b>";
+      break;
+    }
+    
 	//We deleted that intitute, so we have to unset the selection 
 	closeObject();
 	break;
