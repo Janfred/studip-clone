@@ -77,9 +77,9 @@ class StudipSemTreeSearch {
 	}
 	
 	function init(){
-		unset($this->sem_tree_ranges);
-		unset($this->sem_tree_ids);
-		unset($this->selected);
+		$this->sem_tree_ranges = array();
+		$this->sem_tree_ids = array();
+		$this->selected = array();
 		$this->view->params[0] = $this->seminar_id;
 		$rs = $this->view->get_query("view:SEMINAR_SEM_TREE_GET_IDS");
 		while($rs->next_record()){
@@ -110,6 +110,7 @@ class StudipSemTreeSearch {
 		$rs = $this->view->get_query("view:SEM_TREE_GET_FAK");
 		if ($rs->next_record()){
 			$the_kids = $this->tree->getKidsKids($rs->f("sem_tree_id"));
+			$the_kids[] = $rs->f("sem_tree_id");
 			for ($i = 0; $i < count($the_kids); ++$i){
 				if (!$this->tree->hasKids($the_kids[$i]) && !in_array($the_kids[$i],$this->sem_tree_ids)){
 					$this->sem_tree_ranges[$this->tree->tree_data[$the_kids[$i]]['parent_id']][] = $the_kids[$i];
