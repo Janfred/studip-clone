@@ -1132,7 +1132,7 @@ function printposting ($forumposting) {
 						
 			$addon .= "<font size=\"-1\" color=\"555555\"><br>&nbsp;&nbsp;Views: $objectviews<br>&nbsp;&nbsp;Relevanz: ".$forumposting["score"]."<br>&nbsp;&nbsp;";
 			if ($forumposting["rating"] != "?") {
-				$addon .="Bewertung: ".$forumposting["rating"]."<br>";
+				$addon .=_("Bewertung: ").$forumposting["rating"]."<br>";
 				$rate = object_print_rates_detail($forumposting["id"]);
 				while(list($key,$value) = each($rate)) 
 					$addon .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$key: $value<br>";
@@ -1145,18 +1145,18 @@ function printposting ($forumposting) {
 			} else {
 				if (object_check_user($forumposting["id"], "rate") == FALSE) {  // wenn er noch nicht bewertet hat
 					$addon .= "<div align=\"center\"><font size=\"-1\">Dieser Beitrag war<br><font size=\"-2\">(Schulnote)</font><br><form method=post action=$PHP_SELF#anker>";
-					$addon .= "<b>&nbsp;<font size=\"2\" color=\"555555\">1";
+					$addon .= "<b>&nbsp;<font size=\"2\" color=\"009900\">1";
 					$addon .= "<input type=radio name=rate[".$forumposting["id"]."] value=1>";
 					$addon .= "<input type=radio name=rate[".$forumposting["id"]."] value=2>";
 					$addon .= "<input type=radio name=rate[".$forumposting["id"]."] value=3>";
 					$addon .= "<input type=radio name=rate[".$forumposting["id"]."] value=4>";
-					$addon .= "<input type=radio name=rate[".$forumposting["id"]."] value=5>5&nbsp;";
+					$addon .= "<input type=radio name=rate[".$forumposting["id"]."] value=5><font size=\"2\" color=\"990000\">5&nbsp;";
 					$addon .= "<br><br>";
 					$addon .= "<input type=hidden name=open value='".$forumposting["id"]."'>";
 					$addon .= "<input type=hidden name=flatviewstartposting value='".$forum["flatviewstartposting"]."'>";
-					$addon .= "<input type=image name=sidebar value='".$forumposting["id"]."' " . makeButton("abschicken", "src") . " align=\"absmiddle\" border=0>";
+					$addon .= "<input type=image name=sidebar value='".$forumposting["id"]."' " . makeButton("bewerten", "src") . " align=\"absmiddle\" border=0>";
 				} else {
-					$addon .= "<font size=\"-1\">&nbsp;&nbsp;Sie haben diesen&nbsp;<br>&nbsp;&nbsp;Beitrag bewertet.";
+					$addon .= "<font size=\"-1\">&nbsp;&nbsp;"._("Sie haben diesen&nbsp;<br>&nbsp;&nbsp;Beitrag bewertet.");
 				}
 			}
 		} elseif ($user->id != "nobody" && !$delete_id)  // nur Aufklapppfeil
