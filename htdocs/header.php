@@ -156,7 +156,7 @@ if ($auth->auth["uid"] == "nobody") { ?>
 		}
 	} elseif (($neum) && ($i_page != "sms.php")) {
 		$icon = "pictures/nachricht2.gif";		
-		$text = "Nachrichten";
+		$text = _("Post");
 		if ($neum > 1) {
 			$tip = sprintf(_("Sie haben %s neue Nachrichten!"), $neum);
 		} else {
@@ -193,7 +193,7 @@ if ($auth->auth["uid"] == "nobody") { ?>
 
 		// Ist sonst noch wer da?
 		if (!count($online))
-			echo MakeToolbar("pictures/nutzer.gif","online.php",_("Online"),_("Nur Sie sind online"),40, "_top");
+			echo MakeToolbar("pictures/nutzer.gif","online.php",_("Online"),_("Nur Sie sind online"),40, "_top","left");
 		else {
 			if (count($online)==1) {
 				echo MakeToolbar("pictures/nutzeronline.gif","online.php",_("Online"),_("Auﬂer Ihnen ist eine Person online"),40, "_top");
