@@ -224,7 +224,7 @@ if ($msg)	{
 	if ($SessSemName[0] && $SessSemName["class"] == "inst")
 		echo "<br /><br /><a href=\"institut_main.php\">Zur&uuml;ck zur ausgew&auml;hlten Einrichtung</a>";
 	elseif ($SessSemName[0])
-		echo "<br /><br /><a href=\"seminar_main.php\">Zur&uuml;ck zurausgew&auml;hlten Veranstaltung</a>";
+		echo "<br /><br /><a href=\"seminar_main.php\">Zur&uuml;ck zur ausgew&auml;hlten Veranstaltung</a>";
 
 	if ($db->affected_rows())
 		{?><form action="<? echo $PHP_SELF ?>"> <input type="hidden" name="cmd" value="delete_all" /> <input type="IMAGE"  align ="absmiddle" src="pictures/buttons/alleloeschen-button.gif" border=0 />&nbsp; <br /><br /><input type="CHECKBOX" name="delete_unread" checked /><font size=-1>Nachrichten seit letztem Login nicht l&ouml;schen</font></form><?}
