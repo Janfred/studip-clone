@@ -134,17 +134,17 @@ if ($group_id) {
 }
 
 // add a reciever from adress-members
-if ($add_receiver_button_x) {
+if ($add_receiver_button_x && !empty($add_receiver)) {
 	$sms_data["p_rec"] = array_add_value($add_receiver, $sms_data["p_rec"]);
 }
 
 // add receiver from freesearch
-if ($add_freesearch_x) {
+if ($add_freesearch_x && !empty($add_freesearch)) {
 	$sms_data["p_rec"] = array_add_value($freesearch, $sms_data["p_rec"]);
 }
 
 // aus empfaengerliste loeschen
-if ($del_receiver_button_x) {
+if ($del_receiver_button_x && !empty($del_receiver)) {
 	foreach ($del_receiver as $a) {
 		$sms_data["p_rec"] = array_delete_value($sms_data["p_rec"], $a);
 	}
@@ -257,6 +257,8 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 					SELECT username, ".$_fullname_sql['full_rev']." AS fullname FROM auth_user_md5 LEFT JOIN user_info USING(user_id) WHERE perms IN ('autor', 'tutor', 'dozent') AND (username LIKE '%$search_exp%' OR Vorname LIKE '%$search_exp%' OR Nachname LIKE '%$search_exp%') ORDER BY Nachname ASC";
 					$db->query($query); //
 					if (!$db->num_rows()) {
+						
+						echo "&nbsp;<input type=\"image\" name=\"reset_freesearch\" src=\"./pictures/rewind.gif\" border=\"0\" value=\""._("Suche zur&uuml;cksetzen")."\" ".tooltip(_("setzt die Suche zurück")).">";
 						echo "&nbsp;<font size=\"-1\">"._("keine Treffer")."</font>";
 					} else {
 						echo "<input type=\"image\" name=\"add_freesearch\" ".tooltip(_("zu Empfängerliste hinzufügen"))." value=\""._("zu Empf&auml;ngerliste hinzuf&uuml;gen")."\" src=\"./pictures/move_left.gif\" border=\"0\">&nbsp;";
