@@ -120,18 +120,6 @@ function move_topic2($topic_id, $root, &$verschoben,$thema)  //rekursives Versch
 
 //////////////////////////////////////////////////////////////////////////
 
-function leer($topic_id)  //schaut nach ob ein Ordner leer ist
-{	global $user,$auth,$rechte;
-	$leer=TRUE;
-	$db2=new DB_Seminar;
-	$db2->query("SELECT topic_id FROM px_topics WHERE parent_id='$topic_id'");
-		IF ($db2->num_rows()) $leer=FALSE;
- 	return $leer;
-}
-
-
-//////////////////////////////////////////////////////////////////////////
-
 function lonely($topic_id)  //Sucht alle aufgeklappten Beitraege raus
 {	global $user,$auth,$rechte;
 	$lonely=TRUE;
@@ -149,7 +137,6 @@ function lonely($topic_id)  //Sucht alle aufgeklappten Beitraege raus
  	return $lonely;
 }
 
-
 /////////////////////////////////////////////////////////////////////////
 
 function suche_kinder($topic_id)  //Sucht alle aufgeklappten Beitraege raus
@@ -165,7 +152,6 @@ function suche_kinder($topic_id)  //Sucht alle aufgeklappten Beitraege raus
 	$open .= ";".$topic_id;
  	return $open;
 }
-
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -195,12 +181,12 @@ function ForumNewPosting ($forumposting) {
 	return $forumposting;	
 }
 
-function ForumLonely($forumposting) {  //Sieht nach ob das Posting kinderlos ist
+function forum_lonely($forumposting) {  //Sieht nach ob das Posting kinderlos ist
 	
 	$topic_id = $forumposting["id"];
-	$db2=new DB_Seminar;
-	$db2->query("SELECT topic_id FROM px_topics WHERE parent_id='$topic_id'");
-		if (!$db2->num_rows())
+	$db=new DB_Seminar;
+	$db->query("SELECT topic_id FROM px_topics WHERE parent_id='$topic_id'");
+		if (!$db->num_rows())
 			$forumposting["lonely"]=TRUE;
 		else
 			$forumposting["lonely"]=FALSE;
@@ -261,21 +247,17 @@ function ForumGetWriteStatus($forumposting) {
 
 function ForumGetRights ($forumposting) {
 	global $user,$auth,$rechte;
-	$db=new DB_Seminar;
-	$topic_id = $forumposting["id"];
-	$db->query("SELECT user_id FROM px_topics WHERE topic_id='$topic_id'");
-	if ($db->next_record())
-		if ($db->f("user_id")==$user->id || $rechte)
-			$forumposting["perms"] = "write";
-		else
-			$forumposting["perms"] = "none";
+	if ($forumposting["userid"]==$user->id || $rechte)
+		$forumposting["perms"] = "write";
+	else
+		$forumposting["perms"] = "none";
 	return $forumposting;
 }
 
 function ForumIcon ($forumposting) {
 	global $cmd, $rechte, $topic_id, $PHP_SELF, $forum, $auth;
 	if ($forumposting["type"]=="folder") {
-		if (leer($forumposting["id"])==FALSE)
+		if ($forumposting["lonely"]==FALSE)
 			$bild = "pictures/cont_folder.gif";
 		else
 			$bild = "pictures/cont_folder2.gif";
@@ -563,8 +545,9 @@ function printposting ($forumposting) {
 	$forumposting = ForumNewPosting($forumposting);
 	$forumposting = ForumOpenClose($forumposting);
 	$forumposting = ForumFolderOrPosting($forumposting);
+	if ($forumposting["openclose"] == "open" || ($forum["view"] == "tree"))
+		$forumposting = forum_lonely($forumposting);
 	$forumposting = ForumIcon($forumposting);
-	$forumposting = ForumLonely($forumposting);
 					
  // Kopfzeile zusammenbauen
   		
@@ -590,7 +573,10 @@ function printposting ($forumposting) {
   		
   		if (!$objectviews)
   			$objectviews = object_return_views($forumposting["id"]);
-  		$forumposting["rate"] = object_print_rate($forumposting["id"]);
+  		if ($objectviews > 0)
+  			$forumposting["rate"] = object_print_rate($forumposting["id"]);
+  		else
+  			$forumposting["rate"] = "?";
   		$forumhead[] = "<font color=\"#007700\">".$objectviews."</font> / ";
   		$forumhead[] = "<font color=\"#AA8800\">".$forumposting["rate"]."</font> / ";
   		
@@ -750,11 +736,12 @@ if ($forum["view"]=="search") {
 	}
 } elseif ($forum["view"]=="neue") {
 	$datumtmp = $loginfilelast[$SessSemName[1]];
-	$query = "SELECT x.topic_id, x.name , x.author , x.mkdate, x.chdate , y.name AS root_name, x.description , x.Seminar_id, y.topic_id AS root_id, username FROM px_topics x LEFT JOIN auth_user_md5 USING(user_id), px_topics y WHERE x.root_id = y.topic_id AND x.chdate > '$datumtmp' AND x.Seminar_id = '$SessionSeminar' ORDER BY x.chdate ".$order;	
+	$query = "SELECT x.topic_id, x.name , x.author , x.mkdate, x.chdate , y.name AS root_name, x.description , x.Seminar_id, y.topic_id AS root_id, username, x.user_id FROM px_topics x LEFT JOIN auth_user_md5 USING(user_id), px_topics y WHERE x.root_id = y.topic_id AND x.chdate > '$datumtmp' AND x.Seminar_id = '$SessionSeminar' ORDER BY x.chdate ".$order;	
 } else {
-	$query = "SELECT x.topic_id, x.name , x.author , x.mkdate, x.chdate, y.name AS root_name, x.description, x.Seminar_id, y.topic_id AS root_id, username FROM px_topics x LEFT JOIN auth_user_md5 USING(user_id), px_topics y WHERE x.root_id = y.topic_id AND x.seminar_id = '$SessionSeminar'".$addon." ORDER BY chdate ".$order;
+	$query = "SELECT x.topic_id, x.name , x.author , x.mkdate, x.chdate, y.name AS root_name, x.description, x.Seminar_id, y.topic_id AS root_id, username, x.user_id FROM px_topics x LEFT JOIN auth_user_md5 USING(user_id), px_topics y WHERE x.root_id = y.topic_id AND x.seminar_id = '$SessionSeminar'".$addon." ORDER BY chdate ".$order;
 	$addonlimit = " LIMIT $flatviewstartposting,$postingsperside";
 }
+
 $db->query($query);
 if ($db->num_rows() > 0) {  // Forum ist nicht leer
 	$forum["forumsum"] = $db->num_rows();
@@ -803,6 +790,7 @@ while($db->next_record()){
 	$forumposting["description"] = $db->f("description");
 	$forumposting["author"] = $db->f("author");
 	$forumposting["username"] = $db->f("username");
+	$forumposting["userid"] = $db->f("user_id");
 	$forumposting["rootid"] = $db->f("root_id");
 	$forumposting["rootname"] = $db->f("root_name");
 	$forumposting["mkdate"] = $db->f("mkdate");
@@ -899,6 +887,7 @@ function DisplayFolders ($open=0, $update="", $zitat="") {
 			$forumposting["description"] = $db->f("description");
 			$forumposting["author"] = $db->f("author");
 			$forumposting["username"] = get_username($db->f("user_id"));
+			$forumposting["userid"] = $db->f("user_id");
 			$forumposting["rootid"] = $db->f("root_id");
 			$forumposting["rootname"] = $db->f("root_name");
 			$forumposting["mkdate"] = $db->f("mkdate");
@@ -910,11 +899,9 @@ function DisplayFolders ($open=0, $update="", $zitat="") {
 		
 			if ($forum["view"] == "tree" && $forumposting["openclose"]=="open") {
 				DisplayKids ($forumposting);
-				
 			}
 		}
 	}
-	
 	echo "<table class=blank border=0 cellpadding=0 cellspacing=0 width=\"100%\"><tr><td class='blank'><img src='pictures/forumleer.gif' border=0 height='4'></td></tr><tr>";
 	echo "<td align=center class=steelgraudunkel><img src='pictures/forumleer.gif' border=0 height='20' align=middle>";
 	if ($rechte)
@@ -929,7 +916,6 @@ function DisplayFolders ($open=0, $update="", $zitat="") {
 	
 	if ($update)
 		echo "</form>\n";
-
 }
 
 /////////////////////////////////
@@ -942,7 +928,7 @@ function DisplayKids ($forumposting, $level=0) {
 	$topic_id = $forumposting["id"];
 	$forumposting["intree"]="TRUE";
 	$query = "select topic_id, parent_id, name, author "
-		.", mkdate, chdate, description, root_id, username from px_topics LEFT JOIN auth_user_md5 USING(user_id) where "
+		.", mkdate, chdate, description, root_id, username, px_topics.user_id from px_topics LEFT JOIN auth_user_md5 USING(user_id) where "
 		." parent_id = '$topic_id'"
 		." order by mkdate $sort";
 	$db=new DB_Seminar;
@@ -955,6 +941,7 @@ function DisplayKids ($forumposting, $level=0) {
 		$forumposting["description"] = $db->f("description");
 		$forumposting["author"] = $db->f("author");
 		$forumposting["username"] = $db->f("username");
+		$forumposting["userid"] = $db->f("user_id");
 		$forumposting["rootid"] = $db->f("root_id");
 		$forumposting["rootname"] = $db->f("root_name");
 		$forumposting["mkdate"] = $db->f("mkdate");
@@ -1046,6 +1033,8 @@ $searchfield = "
 </tr></table><br></td></tr></table>";
 return $searchfield;
 }
+
+/////////////////////
 	
 function forum_move_navi ($topic_id) {
 	global $perm, $user, $forum, $view, $PHP_SELF;
@@ -1143,7 +1132,5 @@ function forum_move_navi ($topic_id) {
   		</table></td></tr>
 <?		
 }
-
-
 
 ?>
