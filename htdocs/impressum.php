@@ -31,7 +31,7 @@ include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 	
 require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
-
+require_once "$ABSOLUTE_PATH_STUDIP/reiter.inc.php";
 
 function write_toplist($rubrik,$query) {
 	global $PHP_SELF;
@@ -56,33 +56,25 @@ function write_toplist($rubrik,$query) {
 		}
 } 
 
+//Create Reitersystem
+$reiter=new reiter;
+
+//Topkats
+$structure["kontakt"]=array (topKat=>"", name=>"Kontakt", link=>"impressum.php?view=main", active=>FALSE);
+$structure["programm"]=array (topKat=>"", name=>"&Uuml;ber Stud.IP", link=>"impressum.php?view=technik", active=>FALSE);
+//Bottomkats
+$structure["main"]=array (topKat=>"kontakt", name=>"Entwickler", link=>"impressum.php?view=main", active=>FALSE);
+$structure["ansprechpartner"]=array (topKat=>"kontakt", name=>"Ansprechpartner", link=>"impressum.php?view=ansprechpartner", active=>FALSE);
+$structure["statistik"]=array (topKat=>"programm", name=>"Statistik", link=>"impressum.php?view=statistik", active=>FALSE);
+$structure["history"]=array (topKat=>"programm", name=>"History", link=>"impressum.php?view=history", active=>FALSE);
+$structure["technik"]=array (topKat=>"programm", name=>"Technik", link=>"impressum.php?view=technik", active=>FALSE);
+
+if (!$view)
+	$view="main";
+
+$reiter->create($structure, $view);
+
 ?>
-<table cellpadding="0" cellspacing="0" border="0">
-	<tr>
-<?	
-	IF (!$view) $view="main";
-	
-	if ($view == "main") {?>  <td class="links1b" align=right nowrap><a  class="links1b" href="impressum.php?view=main"><font color="#000000" size=2><b>&nbsp; &nbsp; Entwickler&nbsp; &nbsp; </b></font></a><img src="pictures/reiter2.jpg" align=absmiddle></td><?}
-	ELSE {?>  <td class="links1" align=right nowrap><a  class="links1" href="impressum.php?view=main"><font color="#000000" size=2><b>&nbsp; &nbsp; Entwickler&nbsp; &nbsp; </b></font></a><img src="pictures/reiter1.jpg" align=absmiddle></td><?}
-
-	if ($view == "ansprechpartner") {?>  <td class="links1b" align=right nowrap><a  class="links1b" href="impressum.php?view=ansprechpartner"><font color="#000000" size=2><b>&nbsp; &nbsp; Ansprechpartner&nbsp; &nbsp; </b></font></a><img src="pictures/reiter2.jpg" align=absmiddle></td><?}
-	ELSE {?>  <td class="links1" align=right nowrap><a  class="links1" href="impressum.php?view=ansprechpartner"><font color="#000000" size=2><b>&nbsp; &nbsp; Ansprechpartner&nbsp; &nbsp; </b></font></a><img src="pictures/reiter1.jpg" align=absmiddle></td><?}
-
-	if ($view == "statistik") {?>  <td class=links1b align=right nowrap><a  class="links1b" href="impressum.php?view=statistik"><font color="#000000" size=2><b>&nbsp; &nbsp; Statistik&nbsp; &nbsp; </b></font></a><img src="pictures/reiter2.jpg" align=absmiddle></td><?}
-	ELSE {?>  <td class="links1" align=right nowrap><a  class="links1" href="impressum.php?view=statistik"><font color="#000000" size=2><b>&nbsp; &nbsp; Statistik&nbsp; &nbsp; </b></font></a><img src="pictures/reiter1.jpg" align=absmiddle></td><?}
-
-	if ($view == "history") {?>  <td class="links1b" align=right nowrap><a  class="links1b" href="impressum.php?view=history"><font color="#000000" size=2><b>&nbsp; &nbsp; History&nbsp; &nbsp; </b></font></a><img src="pictures/reiter2.jpg" align=absmiddle></td><?}
-	ELSE {?>  <td class="links1" align=right nowrap><a  class="links1" href="impressum.php?view=history"><font color="#000000" size=2><b>&nbsp; &nbsp; History&nbsp; &nbsp; </b></font></a><img src="pictures/reiter1.jpg" align=absmiddle></td><?}
- 
-	if ($view == "technik") {?>  <td class=links1b align=right nowrap><a  class="links1b" href="impressum.php?view=technik"><font color="#000000" size=2><b>&nbsp; &nbsp; Technik&nbsp; &nbsp; </b></font></a><img src="pictures/reiter4.jpg" align=absmiddle></td><?}
-	ELSE {?>  <td class="links1" align=right nowrap><a  class="links1" href="impressum.php?view=technik"><font color="#000000" size=2><b>&nbsp; &nbsp; Technik&nbsp; &nbsp; </b></font></a><img src="pictures/reiter1.jpg" align=absmiddle></td><?}
-
-
-
-	echo "</tr></table>\n<table cellspacing=0 cellpadding=4 border=0 width=100%><tr><td class=\"steel1\">&nbsp; &nbsp; ";
-	echo"<br></td></tr><tr><td class=\"reiterunten\">&nbsp; </td></tr></table>\n";
-?>
-
 <table width="100%" border=0 cellpadding=0 cellspacing=0>
 
 
@@ -388,4 +380,3 @@ echo "<br><br>Das System wird ständig weiterentwickelt und an die Wünsche unsere
 page_close();
  ?>
 <!-- $Id$ -->
-
