@@ -40,7 +40,8 @@ require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."
 class ExternElementMainDownload extends ExternElementMain {
 
 	var $attributes = array("name", "order", "visible", "aliases", "width", "width_pp", "sort",
-			"wholesite", "urlcss", "title", "bodystyle", "bodyclass", "nodatatext", "iconpic", "icontxt", "iconpdf", "iconppt",
+			"wholesite", "lengthdesc", "nametitle", "urlcss", "title", "bodystyle", "bodyclass", "nodatatext",
+			"iconpic", "icontxt", "iconpdf", "iconppt",
 			"iconxls", "iconrtf", "iconzip", "icondefault");
 	var $edit_function = "editMainSettings";
 	
@@ -50,7 +51,7 @@ class ExternElementMainDownload extends ExternElementMain {
 	*/
 	function ExternElementMainDownload () {
 		$this->real_name = _("Grundeinstellungen");
-		$this->description = _("In den Grundeinstellungen k&ouml;nnen Sie allgemeine Daten des Elements ändern.");
+		$this->description = _("In den Grundeinstellungen k&ouml;nnen Sie allgemeine Daten des Moduls &auml;ndern.");
 	}
 	
 	/**
@@ -65,6 +66,8 @@ class ExternElementMainDownload extends ExternElementMain {
 			"width" => "|1%|20%|25%|15%|15%|24%",
 			"sort" => "|0|0|0|1|0|0",
 			"wholesite" => "",
+			"lengthdesc" => "",
+			"nametitle" => "1",
 			"urlcss" => "",
 			"title" => "",
 			"bodystyle" => "",
@@ -116,11 +119,22 @@ class ExternElementMainDownload extends ExternElementMain {
 		
 		$headline = $edit_form->editHeadline(_("Weitere Angaben"));
 		
-		$title = _("HTML-Header/-Footer:");
+		$title = _("HTML-Header/Footer:");
 		$info = _("Anwählen, wenn die Seite als komplette HTML-Seite ausgegeben werden soll, z.B. bei direkter Verlinkung oder in einem Frameset.");
 		$wholesite_values = "1";
 		$wholesite_names = "";
 		$table = $edit_form->editCheckboxGeneric("wholesite", $title, $info, $wholesite_values, $wholesite_names);
+		
+		$title = _("Max. L&auml;nge der Beschreibung:");
+		$info = _("Geben Sie an, wieviele Zeichen der Beschreibung der Datei ausgegeben werden sollen.");
+		$table .= $edit_form->editTextfieldGeneric("lengthdesc", $title, $info, 3, 3);
+		
+		$title = _("Personennamen:");
+		$info = _("Wählen Sie, wie Personennamen formatiert werden sollen.");
+		$nametitle_values = array("no_title", "no_title_rev", "full", "full_rev");
+		$nametitle_names = array(_("Vorname Nachname"), _("Nachname Vorname"),
+				_("Titel Vorname Nachname"), _("Nachname Vorname Titel"));
+		$table .= $edit_form->editOptionGeneric("nametitle", $title, $info, $nametitle_values, $nametitle_names);
 		
 		$title = _("Stylesheet-Datei:");
 		$info = _("Geben Sie hier die URL Ihrer Stylesheet-Datei an.");
