@@ -298,7 +298,7 @@ if ($view=="ansprechpartner") {?>
 	
 	
 	<tr>
-		<td class="blank" valign="top" colspan=2>
+		<td class="blank" valign="top">
 		<blockquote><b>
 <?
 	echo _("F&uuml;r diese Stud.IP-Installation sind folgende Administratoren zust&auml;ndig:") . "</b><br><br />";
@@ -317,6 +317,9 @@ if ($view=="ansprechpartner") {?>
 		<br>
 		<?=_("<b>allgemeine Anfragen</b> wie Passwort-Anforderungen u.a. richten Sie bitte an:")?><br>
 		<font size="-1"><a href="mailto:<?=$UNI_CONTACT?>"><?=$UNI_CONTACT?>	</a></font ><br /><br />
+		</td>
+		<td class="blank" align="center" valign="middle">
+			<a target="_new" href="http://www.studip.de"><img src="pictures/studipanim.gif" border="0"></a>
 		</td>
 	</tr>
 	<tr>
