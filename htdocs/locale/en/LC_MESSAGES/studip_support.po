@@ -1,0 +1,510 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: studip_support\n"
+"POT-Creation-Date: 2003-06-20 14:45+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: support/views/Msg.class.php:67 support/views/Msg.class.php:75
+msgid "zur&uuml;ck"
+msgstr ""
+
+#: support/views/msgs_support.inc.php:39
+msgid ""
+"Sie k&ouml;nnen die Punktzahl nicht kleiner als die bereits verbrauchten "
+"Punkte einstellen!"
+msgstr ""
+
+#: support/views/msgs_support.inc.php:42
+msgid "Ung&uuml;ltiges Anfangsdatum des Vertrages!"
+msgstr ""
+
+#: support/views/msgs_support.inc.php:45
+msgid "Ung&uuml;ltiges Enddatum des Vertrages!"
+msgstr ""
+
+#: support/views/msgs_support.inc.php:48
+msgid "Der Vertrag wurde gel&ouml;scht"
+msgstr ""
+
+#: support/views/msgs_support.inc.php:51
+msgid "Der Request wurde gel&ouml;scht"
+msgstr ""
+
+#: support/views/msgs_support.inc.php:54
+msgid "Ung&uuml;ltiges Datum des Requests!"
+msgstr ""
+
+#: support/views/msgs_support.inc.php:57
+msgid "Bitte geben sie einen Bearbeiter f&uuml;r die Bearbeitungszeit an!"
+msgstr ""
+
+#: support/views/msgs_support.inc.php:60
+msgid ""
+"Bitte w&auml;hlen Sie zun&auml;chst einen Vertrag aus, um die Anfragen "
+"einzusehen oder zu bearbeiten!"
+msgstr ""
+
+#: support/views/msgs_support.inc.php:63
+msgid ""
+"Es existieren keine Tutoren oder Autoren, die mit der Anfrage verkn&uuml;pft "
+"werden k&ouml;nnten."
+msgstr ""
+
+#: support/views/Overview.class.php:86
+msgid "Laufzeit: "
+msgstr ""
+
+#: support/views/Overview.class.php:94 support/views/ShowOverview.class.php:79
+#, c-format
+msgid "Supportvertrag vom %s bis %s"
+msgstr ""
+
+#: support/views/Overview.class.php:134
+msgid "Punkte in diesem Vertrag:"
+msgstr ""
+
+#: support/views/Overview.class.php:136
+msgid "Anfragen:"
+msgstr ""
+
+#: support/views/Overview.class.php:137
+msgid "verbrauchte Punkte:"
+msgstr ""
+
+#: support/views/Overview.class.php:138
+msgid "Events:"
+msgstr ""
+
+#: support/views/Overview.class.php:140
+msgid "verbleibende Punkte:"
+msgstr ""
+
+#: support/views/page_intros.inc.php:40
+msgid ""
+"Hier k&ouml;nnen Sie Einzelheiten zu ihrem abgeschlossenen Supportvertrag "
+"wie den Punktestand oder die Laufzeit einsehen."
+msgstr ""
+
+#: support/views/page_intros.inc.php:41
+msgid "&Uuml;berblick &uuml;ber ihre Supportvertr&auml;ge"
+msgstr ""
+
+#: support/views/page_intros.inc.php:42 support/views/page_intros.inc.php:54
+msgid "Information:"
+msgstr ""
+
+#: support/views/page_intros.inc.php:43
+#, c-format
+msgid "Insgesamt <b>%s</b> Punkte, davon noch <b>%s</b> verf&uuml;gbar"
+msgstr ""
+
+#: support/views/page_intros.inc.php:45 support/views/page_intros.inc.php:57
+msgid "Aktionen:"
+msgstr ""
+
+#: support/views/page_intros.inc.php:46
+#, c-format
+msgid "Einen neuen Vertrag %sanlegen%s"
+msgstr ""
+
+#: support/views/page_intros.inc.php:52
+#, c-format
+msgid ""
+"Sie sehen hier die letzten 10 Anfragen, die im Rahmen des Supportvertrages "
+"vom <b>%s</b> bis <b>%s</b> gestellt wurden. Nutzen Sie f&uuml;r &auml;ltere "
+"Anfragen die Suchfunktion."
+msgstr ""
+
+#: support/views/page_intros.inc.php:53
+msgid "Anfragen"
+msgstr ""
+
+#: support/views/page_intros.inc.php:55
+#, c-format
+msgid "Es liegen noch <b>%s</b> unbeantwortete Themen im Forum vor"
+msgstr ""
+
+#: support/views/page_intros.inc.php:55
+msgid ""
+"Im Augenblick sind alle Themen im Forum mit Anfragen verkn&uuml;pft oder es "
+"liegen keine Themen vor."
+msgstr ""
+
+#: support/views/page_intros.inc.php:58
+#, c-format
+msgid "Eine neue Anfrage %sanlegen%s"
+msgstr ""
+
+#: support/views/Processes.class.php:144
+msgid "Sie erstellen eine neue Belegung"
+msgstr ""
+
+#: support/views/Processes.class.php:157
+msgid ""
+"Diese Belegung ist ein regelm&auml;&szlig;iger Veranstaltungstermin, der in "
+"diesem Raum stattfindet."
+msgstr ""
+
+#: support/views/Processes.class.php:157
+#, c-format
+msgid ""
+"Die Zeiten dieser Belegung k&ouml;nnen Sie nur innerhalb der Veranstaltung %"
+"s bearbeiten!"
+msgstr ""
+
+#: support/views/Processes.class.php:159
+msgid ""
+"Diese Belegung ist ein Einzeltermin einer Veranstaltung, der in diesem Raum "
+"stattfindet."
+msgstr ""
+
+#: support/views/Processes.class.php:159
+#, c-format
+msgid ""
+" Die Zeiten dieser Belegung k&ouml;nnen Sie nur innerhalb der Veranstaltung %"
+"s bearbeiten!"
+msgstr ""
+
+#: support/views/Processes.class.php:161
+msgid "Sie haben nicht die Berechtigung, diese Belegung zu bearbeiten."
+msgstr ""
+
+#: support/views/Processes.class.php:169
+msgid "Datum/erster Termin:"
+msgstr ""
+
+#: support/views/Processes.class.php:184
+msgid "Art der Wiederholung:"
+msgstr ""
+
+#: support/views/Processes.class.php:190
+msgid "zweiw&ouml;chentlich"
+msgstr ""
+
+#: support/views/Processes.class.php:192
+msgid "w&ouml;chentlich"
+msgstr ""
+
+#: support/views/Processes.class.php:194
+msgid "keine Wiederholung (Einzeltermin)"
+msgstr ""
+
+#: support/views/Processes.class.php:212
+msgid "Beginn/Ende:"
+msgstr ""
+
+#: support/views/Processes.class.php:220 support/views/Processes.class.php:222
+#: support/views/Request.class.php:144
+msgid "Uhr"
+msgstr ""
+
+#: support/views/Processes.class.php:230
+msgid "Wiederholung bis sp&auml;testens:"
+msgstr ""
+
+#: support/views/Processes.class.php:230
+msgid "Letzter Termin:"
+msgstr ""
+
+#: support/views/Processes.class.php:241
+msgid "Ende der Vorlesungszeit"
+msgstr ""
+
+#: support/views/Processes.class.php:255
+msgid "eingetragen f&uuml;r die Belegung:"
+msgstr ""
+
+#: support/views/Processes.class.php:262
+msgid "keinE Stud.IP NutzerIn eingetragen"
+msgstr ""
+
+#: support/views/Processes.class.php:266
+msgid "einen anderen User (NutzerIn oder Einrichtung) eintragen:"
+msgstr ""
+
+#: support/views/Processes.class.php:268
+msgid "einen Nutzer (Person oder Einrichtung) eintragen:"
+msgstr ""
+
+#: support/views/Processes.class.php:271
+msgid "freie Eingabe zur Belegung:"
+msgstr ""
+
+#: support/views/Processes.class.php:273
+msgid ""
+"<b>Beachten Sie:</b> Wenn Sie einen NutzerIn oder eine Einrichtung "
+"eintragen, kann diese NutzerIn oder berechtigte Personen die Belegung "
+"selbstst&auml;ndig aufheben. Sie k&ouml;nnen die Belegung aber auch frei "
+"eingeben."
+msgstr ""
+
+#: support/views/Processes.class.php:283
+msgid "Wiederholungsturnus:"
+msgstr ""
+
+#: support/views/Processes.class.php:293
+msgid "jeden Tag"
+msgstr ""
+
+#: support/views/Processes.class.php:294
+msgid "jeden zweiten Tag"
+msgstr ""
+
+#: support/views/Processes.class.php:295
+msgid "jeden dritten Tag"
+msgstr ""
+
+#: support/views/Processes.class.php:296
+msgid "jeden vierten Tag"
+msgstr ""
+
+#: support/views/Processes.class.php:297
+msgid "jeden f&uuml;nften Tag"
+msgstr ""
+
+#: support/views/Processes.class.php:298
+msgid "jeden sechsten Tag"
+msgstr ""
+
+#: support/views/Processes.class.php:302
+msgid "jede Woche"
+msgstr ""
+
+#: support/views/Processes.class.php:303
+msgid "jede zweite Woche"
+msgstr ""
+
+#: support/views/Processes.class.php:304
+msgid "jede dritte Woche"
+msgstr ""
+
+#: support/views/Processes.class.php:308
+msgid "jeden Monat"
+msgstr ""
+
+#: support/views/Processes.class.php:309
+msgid "jeden zweiten Monat"
+msgstr ""
+
+#: support/views/Processes.class.php:310
+msgid "jeden dritten Monat"
+msgstr ""
+
+#: support/views/Processes.class.php:311
+msgid "jeden vierten Monat"
+msgstr ""
+
+#: support/views/Processes.class.php:312
+msgid "jeden f&uuml;nften Monat"
+msgstr ""
+
+#: support/views/Processes.class.php:313
+msgid "jeden sechsten Monat"
+msgstr ""
+
+#: support/views/Processes.class.php:314
+msgid "jeden siebten Monat"
+msgstr ""
+
+#: support/views/Processes.class.php:315
+msgid "jeden achten Monat"
+msgstr ""
+
+#: support/views/Processes.class.php:316
+msgid "jeden neunten Monat"
+msgstr ""
+
+#: support/views/Processes.class.php:317
+msgid "jeden zehnten Monat"
+msgstr ""
+
+#: support/views/Processes.class.php:318
+msgid "jeden elften Monat"
+msgstr ""
+
+#: support/views/Processes.class.php:322
+msgid "jedes Jahr"
+msgstr ""
+
+#: support/views/Processes.class.php:323
+msgid "jedes zweite Jahr"
+msgstr ""
+
+#: support/views/Processes.class.php:324
+msgid "jedes dritte Jahr"
+msgstr ""
+
+#: support/views/Processes.class.php:325
+msgid "jedes vierte Jahr"
+msgstr ""
+
+#: support/views/Processes.class.php:326
+msgid "jedes f&uuml;nfte Jahr"
+msgstr ""
+
+#: support/views/Processes.class.php:343
+msgid "begrenzte Anzahl der Wiederholungen:"
+msgstr ""
+
+#: support/views/Processes.class.php:347 support/views/Processes.class.php:351
+#, c-format
+msgid "max. %s Mal wiederholen"
+msgstr ""
+
+#: support/views/Processes.class.php:353
+msgid "unbegrenzt"
+msgstr ""
+
+#: support/views/Processes.class.php:399
+msgid "Name:"
+msgstr ""
+
+#: support/views/Processes.class.php:402
+msgid "Typ des Objektes:"
+msgstr ""
+
+#: support/views/Processes.class.php:411
+msgid "nicht zugeordnet"
+msgstr ""
+
+#: support/views/Processes.class.php:431
+msgid "Beschreibung:"
+msgstr ""
+
+#: support/views/Processes.class.php:435 support/views/Processes.class.php:546
+#: support/views/ShowList.class.php:95 support/views/ShowList.class.php:97
+msgid "verantwortlich:"
+msgstr ""
+
+#: support/views/Processes.class.php:455
+msgid "Eigenschaften"
+msgstr ""
+
+#: support/views/Processes.class.php:508
+msgid ""
+"Das Objekt wurde noch keinem Typ zugewiesen. Um Eigenschaften bearbeiten zu "
+"k&ouml;nnen, m&uuml;ssen Sie vorher einen Typ festlegen!"
+msgstr ""
+
+#: support/views/Processes.class.php:553
+msgid "verantworlicheN NutzerIn &auml;ndern:"
+msgstr ""
+
+#: support/views/Processes.class.php:556
+msgid "Sie k&ouml;nnen den/die verantwortlicheN NutzerIn nicht &auml;ndern."
+msgstr ""
+
+#: support/views/Processes.class.php:564
+msgid "Berechtigungen:"
+msgstr ""
+
+#: support/views/Processes.class.php:565
+msgid "Berechtigung hinzuf&uuml;gen"
+msgstr ""
+
+#: support/views/Processes.class.php:594
+msgid "Berechtigung löschen"
+msgstr ""
+
+#: support/views/Processes.class.php:596
+msgid "Sie d&uuml;rfen diese Berechtigung leider nicht löschen"
+msgstr ""
+
+#: support/views/Processes.class.php:611
+msgid "Es sind keine weiteren Berechtigungen eingetragen"
+msgstr ""
+
+#: support/views/Request.class.php:95 support/views/Request.class.php:101
+#: support/views/Request.class.php:103 support/views/Request.class.php:105
+msgid "von:"
+msgstr ""
+
+#: support/views/Request.class.php:101 support/views/Request.class.php:105
+#: support/views/Request.class.php:113 support/views/Request.class.php:134
+#: support/views/Request.class.php:223
+msgid "unbekannt"
+msgstr ""
+
+#: support/views/Request.class.php:110
+msgid "Kanal:"
+msgstr ""
+
+#: support/views/Request.class.php:114 support/views/Request.class.php:122
+msgid "eMail"
+msgstr ""
+
+#: support/views/Request.class.php:115 support/views/Request.class.php:125
+msgid "Telefon"
+msgstr ""
+
+#: support/views/Request.class.php:116
+msgid "Feedbackforum"
+msgstr ""
+
+#: support/views/Request.class.php:117 support/views/Request.class.php:131
+msgid "Supportforum"
+msgstr ""
+
+#: support/views/Request.class.php:128
+msgid "Feedbackforum der Installation"
+msgstr ""
+
+#: support/views/Request.class.php:138
+msgid "Datum:"
+msgstr ""
+
+#: support/views/Request.class.php:155 support/views/Request.class.php:169
+msgid "Beitrag im Forum:"
+msgstr ""
+
+#: support/views/Request.class.php:161
+msgid "kein Forumsthema"
+msgstr ""
+
+#: support/views/Request.class.php:179
+msgid "Bearbeitungszeiten:"
+msgstr ""
+
+#: support/views/Request.class.php:187
+msgid "Beginn:"
+msgstr ""
+
+#: support/views/Request.class.php:187
+msgid "Ende:"
+msgstr ""
+
+#: support/views/Request.class.php:187
+msgid "Punkte:"
+msgstr ""
+
+#: support/views/Request.class.php:187
+msgid "bearbeitet von:"
+msgstr ""
+
+#: support/views/Request.class.php:218
+msgid "werden automatisch berechnet"
+msgstr ""
+
+#: support/views/Request.class.php:247
+msgid "Diese Anfrage wurde noch nicht bearbeitet"
+msgstr ""
+
+#: support/views/ShowList.class.php:109
+#: support/views/ShowOverview.class.php:96
+msgid "&Auml;nderungen speichern"
+msgstr ""
+
+#: support/views/ShowTreeRow.class.php:15
+msgid "Keine Beschreibung"
+msgstr ""
