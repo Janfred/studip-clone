@@ -73,7 +73,7 @@ else
 //	$out = system( ( $str ) );
 	$out = exec( $JAVA_ENV_CALL );
 	$out = exec( $str );
-echo $str . "<br>" . $out . "<br>";
+//echo $str . "<br>" . $out . "<br>";
 /*
 	unlink( $TMP_PATH . "/" . $xml_file_id);
 	unlink( $TMP_PATH . "/" . $result_file);
