@@ -125,7 +125,8 @@ if ($RESOURCES_ENABLE) {
 	$structure["resources_overview"]=array (topKat=>"resources", name=>_("&Uuml;bersicht"), link=>"resources.php?view=openobject_main", active=>FALSE);
 	$structure["resources_details"]=array (topKat=>"resources", name=>_("Details"), link=>"resources.php?view=openobject_details", active=>FALSE);
 	$structure["resources_schedule"]=array (topKat=>"resources", name=>_("Belegung"), link=>"resources.php?view=openobject_schedule", active=>FALSE);
-	$structure["resources_assign"]=array (topKat=>"resources", name=>_("Belegungen bearbeiten"), link=>"resources.php?view=openobject_assign", active=>FALSE);
+	if ($perm->have_studip_perm("autor", $SessSemName[1])
+		$structure["resources_assign"]=array (topKat=>"resources", name=>_("Belegungen bearbeiten"), link=>"resources.php?view=openobject_assign", active=>FALSE);
 	if ($rechte)
 		$structure["resources_admin"]=array (topKat=>"resources", name=>_("Ressourcen verwalten"), link=>"resources.php", active=>FALSE);
 }
