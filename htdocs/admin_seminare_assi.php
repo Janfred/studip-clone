@@ -343,10 +343,10 @@ if ($form==3)
 if ($form==4) {
 	
 	// create a timestamp for begin and end of the seminar
-	if (!check_and_set_date($adm_s_tag, $adm_s_monat, $adm_s_jahr, $adm_s_minute, $adm_s_stunde, $sem_create_data, "sem_admission_start_date")) {
+	if (!check_and_set_date($adm_s_tag, $adm_s_monat, $adm_s_jahr, $adm_s_stunde, $adm_s_minute, $sem_create_data, "sem_admission_start_date")) {
 		$errormsg=$errormsg."error§"._("Bitte geben Sie ein g&uuml;ltiges Datum f&uuml;r den Start des Anmeldezeitraums ein!")."§";
 	}
-	if (!check_and_set_date($adm_e_tag, $adm_e_monat, $adm_e_jahr, $adm_e_minute, $adm_e_stunde, $sem_create_data, "sem_admission_end_date")) {
+	if (!check_and_set_date($adm_e_tag, $adm_e_monat, $adm_e_jahr, $adm_e_stunde, $adm_e_minute, $sem_create_data, "sem_admission_end_date")) {
 		$errormsg=$errormsg."error§"._("Bitte geben Sie ein g&uuml;ltiges Datum f&uuml;r das Ende des Anmeldezeitraums ein!")."§";
 	}
 
@@ -1190,10 +1190,10 @@ if ($cmd_f_x)
 		}
 		
 		//Store the additional datafields
-		foreach ($sem_create_data["sem_datafields"] as $key=>$val) {
-			$DataFields->storeContent($val, $key, $sem_create_data["sem_id"]);
-		}
-
+		if (is_array($sem_create_data["sem_datafields"]))
+			foreach ($sem_create_data["sem_datafields"] as $key=>$val) {
+				$DataFields->storeContent($val, $key, $sem_create_data["sem_id"]);
+			}
 		}
 
 	$level=6;
@@ -2282,7 +2282,7 @@ if ($level==4)
 								<? print _("Wenn es kein Ende der Anmeldefrist geben soll, lassen Sie das Enddatum unver&auml;ndert."); ?>
 								<br /><br />
 							</font>
-							<table border=0 cellpadding=2 cellspacing=0>
+							<table align="right" width="98%" border="0" cellpadding="2" cellspacing="0">
 								<tr>
 									<td class="<? echo $cssSw->getClass() ?>" valign="top" align="right" width="10%">
 										<font size=-1><? echo _("Startdatum f&uuml;r Anmeldungen");?>:</font>
@@ -2482,7 +2482,7 @@ if ($level==4)
 						<td class="<? echo $cssSw->getClass() ?>" colspan=3>
 							&nbsp;&nbsp;<textarea name="sem_paytxt" cols=58 rows=4><? echo htmlReady(stripslashes($sem_create_data["sem_paytxt"])) ?></textarea>
 							<img  src="./pictures/info.gif" 
-								<? echo tooltip(_("Dieser Hinweistext erläutert Ihren TeilnehmerInnen was sie tun müssen, um endgültig für di Veranstaltung zugelassen zu werden. ".
+								<? echo tooltip(_("Dieser Hinweistext erläutert Ihren TeilnehmerInnen was sie tun müssen, um endgültig für die Veranstaltung zugelassen zu werden. ".
 								"Beschreiben Sie genau, wie Beiträge zu entrichten sind, Leistungen nachgewiesen werden müssen, etc."), TRUE, TRUE) ?>
 							>
 						</td>
@@ -2563,7 +2563,7 @@ if ($level==4)
 							?>
 							&nbsp;<font size="-1"><?=_("Diese Daten werden von ihrem zust&auml;ndigen Administrator erfasst.")?></font>
 							<img  src="./pictures/info.gif" 
-								<? echo tooltip(_("Diese Felder werden zentral durch die zust&auml;ndigen Administratoren erfasst."), TRUE, TRUE) ?>
+								<? echo tooltip(_("Diese Felder werden zentral durch die zuständigen Administratoren erfasst."), TRUE, TRUE) ?>
 							>
 							<?
 							}
