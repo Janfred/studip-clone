@@ -273,19 +273,19 @@ if ($view=="statistik") {?>
 			$db->query("SELECT count(*) from news");
 			$db->next_record();
 			$anzahl = $db->f(0);
-			echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("News:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr></blockquote></table></td></tr>"; 	
+			echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("News:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 	
 			
 			$cssSw->switchClass();
 			$db->query("SELECT count(*) from vote WHERE type='vote'");
 			$db->next_record();
 			$anzahl = $db->f(0);
-			echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("Umfragen:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr></blockquote></table></td></tr>"; 	
+			echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("Umfragen:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 	
 			
 			$cssSw->switchClass();
 			$db->query("SELECT count(*) from vote WHERE type='test'");
 			$db->next_record();
 			$anzahl = $db->f(0);
-			echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("Tests:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr></blockquote></table></td></tr>"; 	
+			echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("Tests:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 	
 	
 			$cssSw->switchClass();
 			$db->query("SELECT count(*) from wiki");
