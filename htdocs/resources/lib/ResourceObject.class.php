@@ -450,8 +450,8 @@ class ResourceObject {
 	function isLocked() {
 		if (($this->isRoom()) 
 		&& ($this->isLockable())
-		&& (isLockPeriod()))
-			return TRUE;
+		&& (isLockPeriod("edit")))
+			return isLockPeriod("edit");
 		else
 			return FALSE;
 	}

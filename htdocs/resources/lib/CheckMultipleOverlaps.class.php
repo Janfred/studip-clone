@@ -42,6 +42,7 @@ class CheckMultipleOverlaps {
 	var $begin;
 	var $end;
 	var $db;			//db object
+	var $db1;			//db2 object
 	var $resource_ids;		//all the resources in the actual check-set
 	
 	//Kontruktor
@@ -78,20 +79,37 @@ class CheckMultipleOverlaps {
 	}
 	
 	function addResource($resource_id) {
+		global $RESOURCES_ASSIGN_LOCKING_ACTIVE, $user;
+		
 		$this->resource_ids[] = $resource_id;
 		$query = sprintf ("DELETE FROM resources_temporary_events WHERE resource_id = '%s'", $resource_id);
 		$this->db->query($query);
 		$resObject =& ResourceObject::Factory($resource_id);
-		if (!$resObject->getMultipleAssign()) { //when multiple assigns are allowed, we need no check...		
+		
+		//when multiple assigns are allowed, we need no check for other assigns...
+		if (!$resObject->getMultipleAssign()) {		
 			$assEvt = new AssignEventList($this->begin, $this->end, $resource_id, FALSE, FALSE, FALSE);
 			$now = time();
 			if ($assEvt->existEvent()){
 				while ($event = $assEvt->nextEvent()) {
-					$sql[] = "('" . md5(uniqid("tempo",1)) ."','$resource_id', '".$event->getAssignId()."', ".$event->getBegin().", ".$event->getEnd().", $now)";
+					$sql[] = "('" . md5(uniqid("tempo",1)) ."','$resource_id', '".$event->getAssignId()."', ".$event->getBegin().", ".$event->getEnd().", 'assign', $now)";
+				}
 			}
-			$query = "INSERT INTO resources_temporary_events (event_id ,resource_id, assign_id,begin,end,mkdate) VALUES " . join(",",$sql);
+		}
+		
+		//...but we always need the check for the locks, so insert them
+		if (($RESOURCES_ASSIGN_LOCKING_ACTIVE) && ($resObject->isLockable()) && ($resObject->isRoom()) && (getGlobalPerms($user->id) != "admin")) {
+			$query = "SELECT lock_id, lock_begin, lock_end FROM resources_locks WHERE type = 'assign'";
 			$this->db->query($query);
+			while ($this->db->next_record()) {
+				$sql[] = "('" . md5(uniqid("tempo",1)) ."','$resource_id', '".$this->db->f("lock_id")."', ".$this->db->f("lock_begin").", ".$this->db->f("lock_end").", 'lock', $now)";
 			}
+		}
+		
+		//insert data
+		if ($sql) {
+			$query = "INSERT INTO resources_temporary_events (event_id ,resource_id, assign_id,begin,end,type,mkdate) VALUES " . join(",",$sql);
+			$this->db->query($query);
 		}
 	}
 	
@@ -109,7 +127,10 @@ class CheckMultipleOverlaps {
 			$query = sprintf ("SELECT *, CASE %s END AS event_id FROM resources_temporary_events WHERE 1 AND (%s) AND resource_id IN %s ORDER BY begin", $cases, $clause, $in);
 			$this->db->query($query);
 			while ($this->db->next_record()) {
-				$result[$this->db->f("resource_id")][($index_mode == "assign_id") ? $events[$this->db->f("event_id")]->getAssignId() : $events[$this->db->f("event_id")]->getAssignUserId()][] = array("begin"=>$this->db->f("begin"), "end"=>$this->db->f("end"), "event_id"=>$this->db->f("event_id"), "own_begin" =>$events[$this->db->f("event_id")]->getBegin(), "own_end" =>$events[$this->db->f("event_id")]->getEnd());
+				$result[$this->db->f("resource_id")][($index_mode == "assign_id") ? $events[$this->db->f("event_id")]->getAssignId() : $events[$this->db->f("event_id")]->getAssignUserId()][] = 
+					array("begin"=>$this->db->f("begin"), "end"=>$this->db->f("end"), "event_id"=>$this->db->f("event_id"), 
+					      "own_begin" =>$events[$this->db->f("event_id")]->getBegin(), "own_end" =>$events[$this->db->f("event_id")]->getEnd(),
+					      "lock" =>($this->db->f("type") == "lock") ? TRUE : FALSE);
 			}
 			return;
 		}

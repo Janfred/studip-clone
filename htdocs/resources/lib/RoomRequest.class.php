@@ -338,6 +338,24 @@ class RoomRequest {
 		return $changed;
 	}
 	
+	function checkOpen($also_change = FALSE) {
+		//an request for a date is easy...
+		if ($this->termin_id) {
+			$query = sprintf ("SELECT assign_id FROM resources_assign WHERE assign_user_id = '%s' ", $this->termin_id);
+			$this->db->query($query);
+			if ($this->db->nf())
+				$existing_assign = TRUE;
+		//seminar request
+		} else {
+			$semObj = new Seminar($this->seminar_id);
+			//regularly metadates
+			if ($semObj->getMetaDateType()) {
+			//not regularly metadates
+			} else {
+			}
+		}
+	}
+	
 	function copy() {
 		$this->id = $this->createId();
 		$this->isNewObject = TRUE;

@@ -95,8 +95,8 @@ class EditSettings {
 	}
 	
 	//private
-	function selectLocks() {
-		$this->db->query ("SELECT * FROM resources_locks ORDER BY lock_begin");
+	function selectLocks($type) {
+		$this->db->query ("SELECT * FROM resources_locks WHERE type = '$type' ORDER BY lock_begin");
 		if (!$this->db->nf())
 			return FALSE;
 		else
@@ -544,13 +544,13 @@ class EditSettings {
 				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="96%" align="left">
-					<font size=-1><b><?=_("Blockierung der Belegung von <i>R&auml;umen</i>")?></b><br /><br />
-					<?=_("Die Belegung von R&auml;umen kann f&uuml;r alle lokalen Ressourcen-Administratoren geblockt werden:")?><br /><br />
+					<font size=-1><b><?=_("Sperrzeiten f&uuml;r die Bearbeitung von <i>Raum</i>belegungen")?></b><br /><br />
+					<?=_("Die <b>Bearbeitung</b> von Belegungen soll f&uuml;r alle lokalen Ressourcen-Administratoren zu folgenden Bearbeitungszeiten geblockt werden:")?><br /><br />
 					&nbsp;&nbsp;&nbsp;<input type="CHECKBOX" name="locking_active" <? print($GLOBALS['RESOURCES_LOCKING_ACTIVE']) ? "checked" : ""; print ">&nbsp;"._("Blockierung ist zu den angegebenen Sperrzeiten aktiv:")?><br />
 					<br />
 					<table border="0" cellspacing="0" cellpadding="0" width="50%" align="left">
 					<?
-					$this->selectLocks();
+					$this->selectLocks("edit");
 					if ($this->db->nf()) {
 						$rows = 0;
 						?>
@@ -616,12 +616,94 @@ class EditSettings {
 					?>
 						<tr>
 							<td colspan="3">
-								<a href="<?=$PHP_SELF?>?create_lock=1"><img src="pictures/add_right.gif" border="0" /></a>
+								<a href="<?=$PHP_SELF?>?create_lock=edit"><img src="pictures/add_right.gif" border="0" /></a>
 							</td>
 						</tr>
 					</table>
 				</td>
 			</tr>	
+			<tr>
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				</td>
+				<td class="<? echo $cssSw->getClass() ?>" width="96%" align="left">
+					<font size=-1><b><?=_("Sperrzeiten f&uuml;r f&uuml;r <i>Raum</i>belegungen")?></b><br /><br />
+					<?=_("Die <b>Belegung</b> soll f&uuml;r alle lokalen Ressourcen-Administratoren zu folgenden Belegungszeitenzeiten geblockt werden:")?><br /><br />
+					&nbsp;&nbsp;&nbsp;<input type="CHECKBOX" name="assign_locking_active" <? print($GLOBALS['RESOURCES_ASSIGN_LOCKING_ACTIVE']) ? "checked" : ""; print ">&nbsp;"._("Blockierung ist zu den angegebenen Sperrzeiten aktiv:")?><br />
+					<br />
+					<table border="0" cellspacing="0" cellpadding="0" width="50%" align="left">
+					<?
+					$this->selectLocks("assign");
+					if ($this->db->nf()) {
+						$rows = 0;
+						?>
+						
+						<tr>
+							<td width="20%"><font size="-1">
+								<?=_("Beginn:")?>
+							</td>
+							<td width="20%">
+								<font size="-1">
+								<?=_("Ende:")?>
+							</td>
+						</tr>
+						<?
+						while ($this->db->next_record()) {
+							$rows++;
+							if ($rows <= $this->db->nf()) {
+								?>
+						<tr>
+							<td colspan="3" style="{background-image: url('pictures/line.gif')}"><img src="pictures/blank.gif" width ="10" height="1" /></td>
+						</tr>
+						<tr>
+							<td colspan="3"><img src="pictures/blank.gif" width ="10" height="3" /></td>
+						</tr>
+								<?
+							}
+						?>
+						<tr>
+						<?
+							if ($resources_data["lock_edits"][$this->db->f("lock_id")]) {
+								//edit lock start time
+								print"<td width=\"40%%\"><font size=\"-1\">";
+								printf ("<input type=\"TEXT\" style=\"{font-size:8pt;}\" name=\"lock_begin_day[]\" size=\"2\" maxlength=\"2\" value=\"%s\" />.", ($this->db->f("lock_begin")) ? date("d", $this->db->f("lock_begin")) : _("tt"));
+								printf ("<input type=\"TEXT\" style=\"{font-size:8pt;}\" name=\"lock_begin_month[]\" size=\"2\" maxlength=\"2\" value=\"%s\" />.", ($this->db->f("lock_begin")) ? date("m", $this->db->f("lock_begin")) : _("mm"));
+								printf ("<input type=\"TEXT\" style=\"{font-size:8pt;}\" name=\"lock_begin_year[]\" size=\"4\" maxlength=\"4\" value=\"%s\" />&nbsp;", ($this->db->f("lock_begin")) ? date("Y", $this->db->f("lock_begin")) : _("jjjj"));
+								printf ("<br /><input type=\"TEXT\" style=\"{font-size:8pt;}\" name=\"lock_begin_hour[]\" size=\"2\" maxlength=\"2\" value=\"%s\" />:", ($this->db->f("lock_begin")) ? date("H", $this->db->f("lock_begin")) : _("ss"));
+								printf ("<input type=\"TEXT\" style=\"{font-size:8pt;}\" name=\"lock_begin_min[]\" size=\"2\" maxlength=\"2\" value=\"%s\" />", ($this->db->f("lock_begin")) ? date("i", $this->db->f("lock_begin")) : _("mm"));
+								print "</font></td>";
+									
+								//edit lock end time
+								print "<td width=\"40%%\"><font size=\"-1\">";
+								printf ("<input type=\"TEXT\" style=\"{font-size:8pt;}\" name=\"lock_end_day[]\" size=\"2\" maxlength=\"2\" value=\"%s\" />.", ($this->db->f("lock_end")) ? date("d", $this->db->f("lock_end")) : _("tt"));
+								printf ("<input type=\"TEXT\" style=\"{font-size:8pt;}\" name=\"lock_end_month[]\" size=\"2\" maxlength=\"2\" value=\"%s\" />.", ($this->db->f("lock_end")) ? date("m", $this->db->f("lock_end")) : _("mm"));
+								printf ("<input type=\"TEXT\" style=\"{font-size:8pt;}\" name=\"lock_end_year[]\" size=\"4\" maxlength=\"4\" value=\"%s\" />&nbsp;", ($this->db->f("lock_end")) ? date("Y", $this->db->f("lock_end")) : _("jjjj"));
+								printf ("<br /><input type=\"TEXT\" style=\"{font-size:8pt;}\" name=\"lock_end_hour[]\" size=\"2\" maxlength=\"2\" value=\"%s\" />:", ($this->db->f("lock_end")) ? date("H", $this->db->f("lock_end")) : _("ss"));
+								printf ("<input type=\"TEXT\" style=\"{font-size:8pt;}\" name=\"lock_end_min[]\" size=\"2\" maxlength=\"2\" value=\"%s\" />", ($this->db->f("lock_end")) ? date("i", $this->db->f("lock_end")) : _("mm"));
+								print "</font></td>";
+			
+								print "<td width=\"20%%\" align=\"right\" valign=\"top\"><font size=\"-1\">";
+								print "<br /><input type=\"HIDDEN\" name=\"lock_id[]\" value=\"".$this->db->f("lock_id")."\" />";
+								print "<input type=\"IMAGE\" name=\"lock_sent\" src=\"pictures/haken_transparent.gif\" border=\"0\" ".tooltip(_("Diesen Eintrag speichern"))." />";
+								print "&nbsp;&nbsp;<a href=\"$PHP_SELF?kill_lock=".$this->db->f("lock_id")."\"><img src=\"pictures/trash.gif\" border=\"0\" ".tooltip(_("Diesen Eintrag löschen"))."/></a>";						
+								print "</td></tr>";
+							} else {
+								printf ("<td width=\"40%%\"><font size=\"-1\">%s</font></td>", date("d.m.Y H:i", $this->db->f("lock_begin")));
+								printf ("<td width=\"40%%\"><font size=\"-1\">%s</font></td>", date("d.m.Y H:i", $this->db->f("lock_end")));
+								print "<td width=\"10%%\" align=\"right\" valign=\"top\"><a href=\"$PHP_SELF?edit_lock=".$this->db->f("lock_id")."\"><img src=\"pictures/edit_transparent.gif\" border=\"0\" ".tooltip(_("Diesen Eintrag bearbeiten"))."/>&nbsp;&nbsp;</a>";
+								print "<a href=\"$PHP_SELF?kill_lock=".$this->db->f("lock_id")."\"><img src=\"pictures/trash.gif\" border=\"0\" ".tooltip(_("Diesen Eintrag löschen"))."/></a></td>";
+							}
+						}
+						print "</tr>";
+					}
+					?>
+						<tr>
+							<td colspan="3">
+								<a href="<?=$PHP_SELF?>?create_lock=assign"><img src="pictures/add_right.gif" border="0" /></a>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>				
 			<tr>
 				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
 				</td>

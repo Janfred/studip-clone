@@ -72,7 +72,7 @@ class VeranstaltungResourcesAssign {
 		
 		//if no schedule-date exits, we take the metadates (only in this case! else we take only the concrete dates from the termin table!)
 		if (!isSchedule($this->seminar_id,true,true)){
-			$result2 = $this->changeMetaAssigns();
+			$result2 = array_merge($result, $this->changeMetaAssigns('', '', '', FALSE, FALSE, FALSE));
 			if (is_array($result2)){
 				$clear_turnus = false;
 				foreach($result2 as $key => $value){

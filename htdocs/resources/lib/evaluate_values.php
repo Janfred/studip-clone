@@ -598,9 +598,11 @@ if ($change_object_schedules) {
 					$changeAssign->restore();
 				}
 			} elseif (($change_object_schedules == "NEW") || ($new_assign_object)) {
-				if (($change_schedule_assign_user_id) || ($change_schedule_user_free_name))
-					$overlaps = $changeAssign->checkOverlap();
-				if (!$overlaps) {
+				if (($change_schedule_assign_user_id) || ($change_schedule_user_free_name)) {
+					$overlaps = $changeAssign->checkOverlap(FALSE);
+					$locks = $changeAssign->checkLock();
+				}
+				if ((!$overlaps) && (!$locks)) {
 					if ($changeAssign->create()) {
 						$resources_data["actual_assign"]=$changeAssign->getId();
 						$msg->addMsg(3);
@@ -612,13 +614,20 @@ if ($change_object_schedules) {
 						$new_assign_object=serialize($changeAssign);
 					}
 				} else {
-					$msg->addMsg(11);
-					$new_assign_object=serialize($changeAssign);
+					if ($overlaps)
+						$msg->addMsg(11);
+					if ($locks) {
+						foreach ($locks as $val)
+							$locks_txt.=date("d.m.Y, H:i",$val["lock_begin"])." - ".date("d.m.Y, H:i",$val["lock_end"])."<br>";
+						$msg->addMsg(44, array($locks_txt));
+					}
 				}
 			} else {
-				if (($change_schedule_assign_user_id) || ($change_schedule_user_free_name))
-					$overlaps = $changeAssign->checkOverlap();
-				if (!$overlaps) {
+				if (($change_schedule_assign_user_id) || ($change_schedule_user_free_name)) {
+					$overlaps = $changeAssign->checkOverlap(FALSE);
+					$locks = $changeAssign->checkLock();
+				}
+				if ((!$overlaps) && (!$locks)) {
 					$changeAssign->chng_flag=TRUE;
 					if ($changeAssign->store()) {
 						$msg->addMsg(4);
@@ -626,7 +635,13 @@ if ($change_object_schedules) {
 						}
 					$resources_data["actual_assign"]=$changeAssign->getId();
 				} else {
-					$msg->addMsg(11);
+					if ($overlaps)
+						$msg->addMsg(11);
+					if ($locks) {
+						foreach ($locks as $val)
+							$locks_txt.=date("d.m.Y, H:i",$val["lock_begin"])." - ".date("d.m.Y, H:i",$val["lock_end"])."<br>";
+						$msg->addMsg(44, array($locks_txt));
+					}
 					$changeAssign->restore();
 				}
 					
@@ -851,6 +866,7 @@ change settings
 if ($change_global_settings) {
 	if ($globalPerm == "admin") { //check for resources root or global root
 		write_config("RESOURCES_LOCKING_ACTIVE", $locking_active);
+		write_config("RESOURCES_ASSIGN_LOCKING_ACTIVE", $assign_locking_active);
 		write_config("RESOURCES_ALLOW_ROOM_REQUESTS", $allow_requests);
 		write_config("RESOURCES_ALLOW_CREATE_ROOMS", $allow_create_resources);
 		write_config("RESOURCES_INHERITANCE_PERMS_ROOMS", $inheritance_rooms);
@@ -868,7 +884,7 @@ if ($change_global_settings) {
 if ($create_lock) {
 	if ($globalPerm == "admin") { //check for resources root or global root
 		$id = md5(uniqid("locks",1));
-		$query = sprintf("INSERT INTO resources_locks SET lock_begin = '%s', lock_end = '%s', lock_id = '%s' ", 0, 0, $id);
+		$query = sprintf("INSERT INTO resources_locks SET lock_begin = '%s', lock_end = '%s', lock_id = '%s', type= '%s' ", 0, 0, $id, $create_lock);
 		$db->query($query);
 	
 		$resources_data["lock_edits"][$id] = TRUE;
@@ -1757,7 +1773,7 @@ some other stuff ;-)
 if ((in_array("1", $msg->codes)) || (in_array("25", $msg->codes))) {
 	$forbiddenObject =& ResourceObject::Factory($resources_data["actual_object"]);
 	if ($forbiddenObject->isLocked()) {
-		$lock_ts = getLockPeriod();
+		$lock_ts = getLockPeriod("edit");
 		$msg->addMsg(31, array(date("d.m.Y, G:i", $lock_ts[0]), date("d.m.Y, G:i", $lock_ts[1])));
 	}
 	$msg->displayAllMsg("window");

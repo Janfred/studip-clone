@@ -81,13 +81,13 @@ function allowCreateRooms($user_id='') {
 * @return	array	the start- and end-timestamp
 *
 **/
-function getLockPeriod($timestamp1='', $timestamp2='') {
+function getLockPeriod($type, $timestamp1='', $timestamp2='') {
 	static $cache;
-	
-	if ($cache[$timestamp1 / 60][$timestamp2 / 60]) {
-		return $cache[$timestamp1 / 60][$timestamp2 / 60];
-	}
 
+	if ($cache[$type][$timestamp1 / 60][$timestamp2 / 60]) {
+		return $cache[$type][$timestamp1 / 60][$timestamp2 / 60];
+	}
+	
 	$db = new DB_Seminar;
 	
 	if (!$timestamp1)
@@ -95,14 +95,14 @@ function getLockPeriod($timestamp1='', $timestamp2='') {
 	if (!$timestamp2)
 		$timestamp2 = time();
 	
-	if (!$GLOBALS['RESOURCES_LOCKING_ACTIVE']) {
-		$cache[$timestamp1 / 60][$timestamp2 / 60] = FALSE;	
+	if (((!$GLOBALS['RESOURCES_LOCKING_ACTIVE']) && ($type == "edit")) || ((!$GLOBALS['RESOURCES_ASSIGN_LOCKING_ACTIVE']) && ($type == "assign"))) {
+		$cache[$type][$timestamp1 / 60][$timestamp2 / 60] = FALSE;	
 		return FALSE;
 	} else {
 		if (($timestamp1) && ($timestamp2))
-			$query = sprintf ("SELECT lock_id, lock_begin, lock_end FROM resources_locks WHERE lock_begin <= '%s' AND lock_end >= '%s' ", $timestamp1, $timestamp1);
+			$query = sprintf ("SELECT lock_id, lock_begin, lock_end FROM resources_locks WHERE type = '%s' AND  lock_begin <= '%s' AND lock_end >= '%s' ", $type, $timestamp1, $timestamp1);
 		else
-			$query = sprintf ("SELECT lock_id, lock_begin, lock_end FROM resources_locks WHERE "
+			$query = sprintf ("SELECT lock_id, lock_begin, lock_end FROM resources_locks WHERE type = '%s' AND "
 					 ."((lock_begin <= %s AND lock_end > %s) OR (lock_begin >=%s AND lock_end <= %s) OR (lock_begin <= %s AND lock_end >= %s) OR (lock_begin < %s AND lock_end >= %s)) ", 
 					 $type, $timestamp1, $timestamp1, $timestamp1, $timestamp2, $timestamp1, $timestamp2, $timestamp2, $timestamp2);
 		$db->query($query);
@@ -111,10 +111,10 @@ function getLockPeriod($timestamp1='', $timestamp2='') {
 			$arr[0] = $db->f("lock_begin");
 			$arr[1] = $db->f("lock_end");
 			$arr[2] = $db->f("lock_id");
-			$cache[timestamp1 / 60][$timestamp2 / 60] = $arr;			
+			$cache[$type][timestamp1 / 60][$timestamp2 / 60] = $arr;			
 			return $arr;
 		} else {
-			$cache[timestamp1 / 60][$timestamp2 / 60] = FALSE;			
+			$cache[$type][timestamp1 / 60][$timestamp2 / 60] = FALSE;			
 			return FALSE;
 		}
 	}
@@ -129,28 +129,30 @@ function getLockPeriod($timestamp1='', $timestamp2='') {
 * @return	boolean	true or false
 *
 **/
-function isLockPeriod($timestamp='') {
+function isLockPeriod($type, $timestamp='') {
 	static $cache;
 	
-	if (!$GLOBALS['RESOURCES_LOCKING_ACTIVE']) {
-		return false;
+	if ($cache[$type][$timestamp / 60]) {
+		return $cache[$type][$timestamp / 60];
 	}
+	
+	$db = new DB_Seminar;
 	
 	if (!$timestamp)
 		$timestamp = time();
 	
-	$c_timestamp = floor($timestamp / 60);
-	
-	if (isset($cache[$c_timestamp])) {
-		return $cache[$c_timestamp];
+	if (((!$GLOBALS['RESOURCES_LOCKING_ACTIVE']) && ($type == "edit")) || ((!$GLOBALS['RESOURCES_ASSIGN_LOCKING_ACTIVE']) && ($type == "assign"))) {
+		$cache[$type][$timestamp % 60] = FALSE;
+		return FALSE;
 	} else {
-		$db = new DB_Seminar;
-		$query = sprintf ("SELECT * FROM resources_locks WHERE lock_begin <= '%s' AND lock_end >= '%s' ", $timestamp, $timestamp);
+		$query = sprintf ("SELECT * FROM resources_locks WHERE lock_begin <= '%s' AND lock_end >= '%s' AND type = '%s'", $timestamp, $timestamp, $type);
 		$db->query($query);
-		if ($db->next_record()) {
-			return ($cache[$c_timestamp] = TRUE);
+		if ($db->nf()) {
+			$cache[$type][$timestamp % 60] = TRUE;
+			return TRUE;
 		} else {
-			return ($cache[$c_timestamp] = FALSE);
+			$cache[$type][$timestamp % 60] = FALSE;
+			return FALSE;
 		}
 	}
 }
@@ -263,6 +265,14 @@ function getFormattedResult($result, $mode="bad", $bad_message_text = '', $good_
 			$i++;
 		}
 		$bad_message.="</font>";
+		if ($locks) {
+			$bad_message.="<br><font size=\"+0\" color=\"red\">"._("Die gew&uuml;nschten Belegungen kollidieren mit folgenden Sperrzeiten:")."</font>";
+			$bad_message.="<br><font size=\"-1\" color=\"black\">";
+			foreach ($locks as $val) {
+				$bad_message.=date("d.m.Y, H:i",$val["begin"])." - ".date("d.m.Y, H:i",$val["end"])."<br>";
+			}
+			$bad_message.="</font>";
+		}
 		$bad_message.="§";
 	}
 	

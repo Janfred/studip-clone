@@ -332,7 +332,28 @@ class AssignObject {
 		return false;
 	}
 	
+	function checkLock() {
+		global $user;
+		
+		$resObject =& ResourceObject::Factory($this->resource_id);
+		//load the events of the actual assign...
+		create_assigns($this, $this);
+
+		//check, if an assign_lock for one of the events is active
+		if (($GLOBALS["RESOURCES_ASSIGN_LOCKING_ACTIVE"]) && ($resObject->isLockable()) && ($resObject->isRoom()) && (getGlobalPerms($user->id) != "admin")) {
+			foreach ($this->events as $obj) {
+				$lock = getLockPeriod("assign", $obj->getBegin(), $obj->getEnd());
+				if ($lock) {
+					$locks[$lock[2]] = array("lock_begin"=>$lock[0], "lock_end"=>$lock[1]);
+				}	
+			}
+			if ($locks) {
+				return $locks;
+			}
+		}	
+	}
 	function checkOverlap($check_locks = TRUE) {
+		global $user;
 		$resObject =& ResourceObject::Factory($this->resource_id);
 		//we check overlaps always for a whole day
 		$start = mktime (0,0,0, date("n", $this->begin), date("j", $this->begin), date("Y", $this->begin));
@@ -344,6 +365,19 @@ class AssignObject {
 		//load the events of the actual assign...
 		create_assigns($this, $this);
 
+		//check, if an assign_lock for one of the events is active (results in an "overlap" so assign cant be saved)
+		if (($GLOBALS["RESOURCES_ASSIGN_LOCKING_ACTIVE"]) && ($resObject->isLockable()) && ($resObject->isRoom()) && (getGlobalPerms($user->id) != "admin") && ($check_locks)) {
+			foreach ($this->events as $obj) {
+				$lock = getLockPeriod("assign", $obj->getBegin(), $obj->getEnd());
+				if ($lock) {
+					$overlaps[] = array("begin" =>$obj->getBegin(), "end"=>$obj->getEnd(), "lock"=> TRUE, "lock_begin"=>$lock[0], "lock_end"=>$lock[1], "lock_id"=>$lock[2],);
+				}	
+			}
+			if ($overlaps) {
+				return $overlaps;
+			}
+		}
+		
 		//...and add the events of existing assigns in the given resource...
 		list_restore_assign($this, $this->resource_id, $start, $end);
 		//..so we have a "virtual" set of assign-events in the given resource. Now we can check overlaps...
