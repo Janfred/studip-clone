@@ -122,7 +122,7 @@ $SEM_CLASS[2]=array("name"=>"Forschung",
 					"turnus_default"=>-1, 
 					"default_read_level"=>2, 
 					"default_write_level" =>2, 
-					"bereiche"=>TRUE, 
+					"bereiche"=>FALSE, 
 					"show_browse"=>TRUE,
 					"write_access_nobody"=>FALSE, 
 					"description"=>"Hier finden Sie virtuelle Veranstaltungen zum Thema Forschung an der Universit&auml;t",
@@ -274,6 +274,7 @@ $INST_TYPE[6]=array("name"=>"Seminar", "en"=>"Seminar");
 
 //define the presets of statusgroups for Veranstaltungen (refers to the key of the $SEM_CLASS array)
 $SEM_STATUS_GROUPS["default"] = array ("DozentInnen", "TutorInnen", "AutorInnen", "LeserInnen", "sonstige"); 	//the default. Don't delete this entry!
+$SEM_STATUS_GROUPS["2"] = array ("Projektleitung", "Koordination", "Forschung", "Verwaltung", "sonstige");
 $SEM_STATUS_GROUPS["3"] = array ("Organisatoren", "Mitglieder", "Ausschu&szlig;mitglieder", "sonstige");
 $SEM_STATUS_GROUPS["4"] = array ("Moderatoren des Forums","Mitglieder", "sonstige");
 $SEM_STATUS_GROUPS["5"] = array ("ArbeitsgruppenleiterIn", "Arbeitsgruppenmitglieder", "sonstige");
@@ -281,8 +282,8 @@ $SEM_STATUS_GROUPS["5"] = array ("ArbeitsgruppenleiterIn", "Arbeitsgruppenmitgli
 
 
 //define the presets of statusgroups for Einrichtungen (refers to the key of the $INST_TYPE array)
-$INST_STATUS_GROUPS["default"] = array ("DirektorIn", "HochschullehrerIn", "Lehrbeauftragte", "Zweitmitglied", "wiss. Hilfskraft","wiss. Mitarbeiter",
-									"stud. Hilfskraft", "StudentIn", "StudentIn", "StudentIn", "techn. MitarbeiterIn", "Sekretariat / Verwaltung", 
+$INST_STATUS_GROUPS["default"] = array ("DirektorIn", "HochschullehrerIn", "Lehrbeauftragte", "Zweitmitglied", "wiss. Hilfskraft","wiss. MitarbeiterIn",
+									"stud. Hilfskraft", "Frauenbeauftragte", "Internetbeauftragte(r)", "StudentIn", "techn. MitarbeiterIn", "Sekretariat / Verwaltung", 
 									"stud. VertreterIn", "StudentIn");
 //you can add more specifig presets for the different types 
 
