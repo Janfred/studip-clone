@@ -170,8 +170,11 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("roo
 	 $sortby = "count DESC";
 	$db->query ("SELECT Institute.Name, Institute.Institut_id, user_inst.inst_perms FROM user_inst LEFT JOIN Institute  USING (Institut_id) WHERE user_inst.user_id = '$user->id' GROUP BY Institut_id ORDER BY $sortby");
 	$num_my_inst=$db->num_rows();
-	 if (!$num_my_inst) $meldung="msg§Sie haben sich keine Einrichtungen zugeordnet§".$meldung;
-
+	 if (!$num_my_inst)
+	 	if ($perm->have_perm("dozent"))
+	 		$meldung="info§Sie wurden noch keinen Einrichtungen zugeordnet. Bitte wenden Sie sich an einen der zust&auml;ndigen <a href=\"impressum.php?view=ansprechpartner\">Administratoren</a>.§".$meldung;
+	 	else
+			$meldung="info§Sie haben sich noch keinen Einrichtungen zugeordnet. Um sich Einrichtungen zuzuordnen, nutzen Sie bitte die entsprechende <a href=\"edit_about.php?view=Karriere#einrichtungen\">Option</a> unter \"universt&auml;re Daten\" in ihren pers&ouml;nlichen Einstellungen.§".$meldung;
 	 ?>
 	 <table width="100%" border=0 cellpadding=0 cellspacing=0>
 	<tr>
@@ -184,7 +187,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("roo
 	 if ($num_my_inst){
 	 ?>
 	 	<tr>
-	 		<td class="blank">
+	 		<td valign="top" class="blank">
 				<table border="0" cellpadding="0" cellspacing="0" width="100%" align="center" class="blank">
 					<tr valign="top" align="center">
 						<td align="center">
@@ -243,7 +246,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("roo
 			IF ($loginfilenow[$instid]==0) {
 				echo "<td class=\"".$cssSw->getClass()."\" align=\"center\" nowrap><font size=-1>nicht besucht</font></td>";
 			} ELSE  {
-				 echo "<td class=\"".$cssSw->getClass()."\"align=\"center\" nowrap><font size=-1>", date("d.m", $loginfilenow[$instid]),"</font></td>";
+				 echo "<td class=\"".$cssSw->getClass()."\"align=\"center\" nowrap><font size=-1>", date("d.m.", $loginfilenow[$instid]),"</font></td>";
 			}
 	// Status-field
 		echo "<td class=\"".$cssSw->getClass()."\" align=\"center\" nowrap><font size=-1>". $values["status"]."&nbsp;</font></td>";
@@ -256,17 +259,34 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("roo
 			printf("<td class=\"".$cssSw->getClass()."\" align=center align=center><a href=\"$PHP_SELF?auswahl=%s&cmd=kill\"><img src=\"pictures/trash.gif\" ".tooltip("aus der Einrichtung austragen")." border=\"0\"></a></td>", $instid);
 		 echo "</tr>\n";
 		}
-	 }
+	 } else {
+	 ?>
+	 <tr>
+		 <td valign="top" class="blank">
+			<table border="0" cellpadding="0" cellspacing="0" width="100%" align="center" class="blank">
+				<?
+				if ($meldung)	{
+					echo "<tr><td><br />";
+					parse_msg($meldung);
+					echo "</td></tr>"; 
+				}
+	}
 
 //Info-field on the right side
 ?>
-			</table>
+	</table>
 		</td>
 			<td class="blank">
 				&nbsp;&nbsp;
 			</td>
 			<td class="blank" width="240" valign="top">
 				<table "center" width="100%" border=0 cellpadding=0 cellspacing=0>
+					<? if ($meldung) {
+						echo "<tr><td><br />";
+						parse_msg($meldung);
+						echo "</td></tr>"; 
+					}
+					?>
 					<tr>
 						<td class="blank" width="100%" align="right" colspan=2>
 							<img src="pictures/einrichtungen.jpg">

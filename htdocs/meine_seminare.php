@@ -224,7 +224,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 	 $sortby = "count DESC";
 	$db->query ("SELECT seminare.Name, seminare.Seminar_id, seminar_user.status, seminar_user.gruppe, seminare.chdate, admission_binding FROM seminar_user LEFT JOIN seminare  USING (Seminar_id) WHERE seminar_user.user_id = '$user->id' GROUP BY Seminar_id ORDER BY $sortby");
 	$num_my_sem=$db->num_rows();
-	 if (!$num_my_sem) $meldung="msg§Sie haben zur Zeit keine Veranstaltungen abonniert, in denen Sie teilnehmen k&ouml;nnen. Bitte nutzen Sie die Veranstaltungssuche um neue Veranstaltungen aufzunehmen.§".$meldung;
+	 if (!$num_my_sem) $meldung="info§Sie haben zur Zeit keine Veranstaltungen abonniert, in denen Sie teilnehmen k&ouml;nnen. Bitte nutzen Sie <a href=\"sem_portal.php?view=Alle&reset_all=TRUE\"><b>Veranstaltung suchen / hinzuf&uuml;gen</b></a> um neue Veranstaltungen aufzunehmen.§".$meldung;
 
 	 ?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
@@ -234,27 +234,30 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 			</td>
 		</tr>
 	<?
-	if ($meldung) parse_msg($meldung);
+	if ($num_my_sem){
 	?>
-	 <?
-	 if ($num_my_sem){
-	 ?>
 		 <tr>
-			 <td class="blank">
+			 <td valign="top" class="blank">
 				<table border="0" cellpadding="0" cellspacing="0" width="100%" align="center" class="blank">
-					<tr valign="top" align="center">
+					<? if ($meldung) {
+						echo "<tr><td><br />";
+						parse_msg($meldung);
+						echo "</td></tr>"; 
+					}
+					?>
+					<tr align="center">
 						<td align="center">
 							<table border="0" cellpadding="1" cellspacing="0" width="98%" align="center" class="blank">
 								<tr>
 									<td class="blank" colspan="2">&nbsp;
-									
 									</td>
 								</tr>
-								<tr valign="top" align="center">
+								<tr align="center">
 									<th width="2%" colspan=2 nowrap align="center">&nbsp;<a href="gruppe.php"><img src="pictures/gruppe.gif" ".tooltip("Gruppe ändern")." border="0"></a></th>
 									<th width="85%" align="left"><a href="<? echo $PHP_SELF ?>?sortby=Name">Name</a></th>
 									<th width="10%"><b>Inhalt</b></th>
-<?									if ($view=="ext") { ?>
+									<? 
+									if ($view=="ext") { ?>
 										<th width="10%"><b>&nbsp;besucht&nbsp;</b></th>
 										<th width="10%"><a href="<? echo $PHP_SELF ?>?sortby=status">&nbsp;Status&nbsp;</a></th>
 										<th width="10%"><img src="pictures/nutzer.gif" alt="TeilnehmerInnen der Veranstaltung"></th>
@@ -328,7 +331,19 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 		 echo "</tr>\n";
 		}
 	 echo "</table></td></tr>";
-	 }?>
+	 } else {
+	 ?>
+	 <tr>
+		 <td valign="top" class="blank">
+			<table border="0" cellpadding="0" cellspacing="0" width="100%" align="center" class="blank">
+				<?
+				if ($meldung)	{
+					echo "<tr><td><br />";
+					parse_msg($meldung);
+					echo "</td></tr>"; 
+				}
+	}
+	?>
 	<tr>
 		<td class="blank" colspan=2>&nbsp;
 		</td>
@@ -346,7 +361,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 		</td>
 	</tr>
 	<tr>
-		<td class="blank" align="center">
+		<td valign="top" class="blank" align="center">
 		<?
 		ECHO "<table border=\"0\" cellpadding=\"2\" cellspacing=\"0\" width=\"98%\" align=\"center\" class=\"blank\">";
 		ECHO "<tr>";
