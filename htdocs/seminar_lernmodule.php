@@ -74,29 +74,38 @@ if ($ILIAS_CONNECT_ENABLE)
 		$language = "de";
 	$link1 = "<a href=\"".$ABSOLUTE_PATH_ILIAS . "help/$language/editor/index.html\">";
 
-	if (($perm->have_studip_perm("tutor",$seminar_id)) AND ($view=="edit"))
+	if (($perm->have_studip_perm("autor",$seminar_id)) AND ($view=="edit"))
 	{		
-		if ($do_op == "clear")
+		if (($do_op == "clear")  AND ($op_status == 2))
 		{
 			$db->query("DELETE FROM seminar_lernmodul WHERE seminar_id = '$seminar_id' AND co_id = '$op_co_id' AND co_inst = '$op_co_inst' LIMIT 1");
 			$op_string= _("Die Zuordnung wurde aufgehoben.");
+			$print_open[$op_co_id . "@" . $op_co_inst . "@all"] = $print_open[$op_co_id . "@" . $op_co_inst . "@sem"];
 			$print_open[$op_co_id . "@" . $op_co_inst . "@sem"] = false;
 	     	}
 	     	elseif ($do_op == "connect")
 	     	{
 			$op_string= _("Die Zuordnung wurde gespeichert.");
-	     		$db->query("SELECT * FROM  seminar_lernmodul WHERE seminar_id = '$seminar_id' AND co_id = '$op_co_id'");
+	     		$db->query("SELECT * FROM  seminar_lernmodul WHERE seminar_id = '$seminar_id' AND co_id = '$op_co_id' AND status = '$op_status' ");
 	     		if ($db->next_record())
 				$op_string= _("Dieses Lernmodul ist der Veranstaltung bereits zugeordnet.");
 	     		else
 	     		{
-	     			$db->query("INSERT INTO seminar_lernmodul (seminar_id, co_id, co_inst) VALUES ('$seminar_id', '$op_co_id', '$op_co_inst')");
+	     			$db->query("INSERT INTO seminar_lernmodul (seminar_id, co_id, co_inst, status) VALUES ('$seminar_id', '$op_co_id', '$op_co_inst', '$op_status')");
+				$print_open[$op_co_id . "@" . $op_co_inst . "@sem"] = $print_open[$op_co_id . "@" . $op_co_inst . "@all"];
 				$print_open[$op_co_id . "@" . $op_co_inst . "@all"] = false;
 			}
      		}
+	     	elseif (($do_op == "change") AND $perm->have_studip_perm("tutor",$seminar_id))
+	     	{
+			$op_string= _("Die Zuordnung wurde ge&auml;ndert.");
+			$db->query("DELETE FROM seminar_lernmodul WHERE seminar_id = '$seminar_id' AND co_id = '$op_co_id' AND co_inst = '$op_co_inst' LIMIT 1");
+     			$db->query("INSERT INTO seminar_lernmodul (seminar_id, co_id, co_inst, status) VALUES ('$seminar_id', '$op_co_id', '$op_co_inst', '$op_status')");
+//			$print_open[$op_co_id . "@" . $op_co_inst . "@sem"] = false;
+     		}
 	}
 	
-	if ((!$perm->have_studip_perm("tutor",$seminar_id)) AND ($view=="edit"))
+	if ((!$perm->have_studip_perm("autor",$seminar_id)) AND ($view=="edit"))
 	{
 		if ($SessSemName["class"]=="inst") 
 			$msg = _("Sie haben keine Berechtigung, die Lernmodul-Zuordnungen dieser Einrichtung zu ver&auml;ndern.");
@@ -160,7 +169,7 @@ include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul
 			$print_open[$do_close] = false;
 		$sess->register("print_open");
 
-// Anzeige, wenn noch keine Zuordnung besteht	
+// Anzeige, wenn noch keine Account-Zuordnung besteht	
 	if (get_connected_user_id($auth->auth["uid"]) == false)
 	{
 
@@ -242,8 +251,18 @@ include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul
 			echo "</tr></table>";
 		}
 		$cssSw = new cssClassSwitcher;									// Klasse für Zebra-Design
-     		show_seminar_modules($seminar_id);
-		
+// Offizielle Lernmodule der Veranstaltung anzeigen
+     		$erg1 = show_seminar_modules($seminar_id, 1);
+// Nicht-offizielle Lernmodule der Veranstaltung anzeigen
+     		$erg2 = show_seminar_modules($seminar_id, 2);
+		if (($erg1 == false) AND ($erg2 == false))
+		{
+			if ($SessSemName["class"]=="inst") 
+				$msg = _("Mit dieser Einrichtung sind keine ILIAS-Lernmodule verknüpft.");
+			else	
+				$msg = _("Mit dieser Veranstaltung sind keine ILIAS-Lernmodule verknüpft.");
+			echo "<b>" . $msg . "</b><br><br>";
+		}
 		$cssSw = new cssClassSwitcher;									// Klasse für Zebra-Design
 		show_all_modules($seminar_id);
 	}

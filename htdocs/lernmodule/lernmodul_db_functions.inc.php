@@ -133,11 +133,12 @@ function get_seminar_modules($seminar_id)
 	$mod_array = false;
 	$module_count = 0;
 	$db = New DB_Seminar;
-	$db -> query("SELECT co_inst, co_id FROM seminar_lernmodul WHERE seminar_id = '$seminar_id'");
+	$db -> query("SELECT co_inst, co_id, status FROM seminar_lernmodul WHERE seminar_id = '$seminar_id'");
 	while ($db->next_record() AND (get_module_info($db -> f("co_inst"), $db -> f("co_id")) != false))
 	{
 		$mod_array[$module_count]["inst"] = $db -> f("co_inst");
 		$mod_array[$module_count]["id"] = $db -> f("co_id");
+		$mod_array[$module_count]["status"] = $db -> f("status");
 		$module_count ++;
 	}
 	if ($module_count<1)

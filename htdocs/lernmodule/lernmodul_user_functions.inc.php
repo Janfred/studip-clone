@@ -2,7 +2,7 @@
 function get_ilias_inst_id()
 {
 	$ilias_db = New DB_Ilias;
-	$ilias_db->query("SELECT inst_id FROM cust'");
+	$ilias_db->query("SELECT inst_id FROM cust");
 	
 	if ($ilias_db->next_record())
 		return $ilias_db->f("inst_id");
@@ -241,6 +241,30 @@ function edit_ilias_user ($u_id, $benutzername, $geschlecht, $vorname, $nachname
 
 	$inst_id = get_ilias_inst_id();
 	 
+/*
+	$query_string = "SELECT * FROM benutzer ".
+			"WHERE benutzername='" . $benutzername . "' AND ".
+				"anrede='$anrede' AND ".
+				"vorname='$vorname' AND ".
+				"nachname='$nachname' AND ".
+				"atitel='$atitel' AND ".
+				"institution='$institution' AND ".
+				"strasse='$strasse' AND ".
+				"plz='$plz' AND ".
+				"ort='$ort' AND ".
+				"land='$land' AND ".
+				"telefon='$telefon' AND ".
+				"email='$email' AND ".
+				"status='$u_status' AND ".
+				"lang='$u_lang' AND ".
+				"id=$u_id";
+	$ilias_db->query($query_string);
+	if ($ilias_db->next_record())
+	{
+		echo "DUBLICATE ENTRY WARNING!!!!!!!!!!!";
+		return false;
+	}
+*/
 // Datenbankzugriff: BENUTZER
 	$query_string = "UPDATE benutzer ".
 			"SET benutzername='" . $benutzername . "',".
@@ -270,7 +294,7 @@ function edit_ilias_user ($u_id, $benutzername, $geschlecht, $vorname, $nachname
 	while ($ilias_db->next_record())
 		if ($ilias_db->f("own_id") < 5)
 			$old_own_id = $ilias_db->f("own_id");
-	if ($old_own_id != "0") 
+	if (($old_own_id != "0") AND ($old_own_id != $ilias_systemgroup[$status]) )
 	{
 		$query_string = "UPDATE object2 "
 			."SET own_id='" . $ilias_systemgroup[$status] . "' "

@@ -62,6 +62,7 @@ function link_seminar_modules($seminar_id)
 		for ($i=0; $i<sizeof($mod_array); $i ++)
 		{
 			$link_str[$i] = get_module_linkdata($mod_array[$i], $seminar_id);
+			$link_str[$i]["status"] = $mod_array[$i]["status"];
 		}
 		return $link_str;
 	}

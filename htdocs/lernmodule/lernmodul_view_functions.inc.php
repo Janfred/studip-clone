@@ -173,79 +173,97 @@ function show_admin_modules()
 		echo "<b>" . _("Es sind keine Lernmodule vorhanden.") . "</b><br><br>";
 }
 
-function show_seminar_modules($seminar_id)
+function show_seminar_modules($seminar_id, $status = 0)
 {
-	global $PHP_SELF, $print_open, $SessSemName;
+	global $PHP_SELF, $print_open, $SessSemName, $perm;
 
 	$module_count = 0;
 	$mod_array = get_seminar_modules($seminar_id);
 	if ($mod_array != false)
 	{	
-		if ($SessSemName["class"]=="inst") 
-			$msg = _("Der Einrichtung sind folgende Lernmodule zugeordnet:");
-		else	
-			$msg = _("Der Veranstaltung sind folgende Lernmodule zugeordnet:");
-		echo "<b>" . $msg . "</b><br><br>";
+		if ($status == 1)
+		{
+			if ($SessSemName["class"]=="inst") 
+				$msg = _("Offizielle Lernmodule dieser Einrichtung:");
+			else	
+				$msg = _("Offizielle Lernmodule dieser Veranstaltung:");
+		}
+		elseif ($status == 2)
+		{
+			if ($SessSemName["class"]=="inst") 
+				$msg = _("Inoffizielle Lernmodule zu dieser Einrichtung:");
+			else	
+				$msg = _("Inoffizielle Lernmodule zu dieser Veranstaltung:");
+		}
 
 		while ($module_count < sizeof($mod_array))
 		{
-			$link_del = $PHP_SELF . "?view=edit&seminar_id=" . $seminar_id . "&do_op=clear&op_co_inst=" . $mod_array[$module_count]["inst"] . "&op_co_id=". $mod_array[$module_count]["id"];
+			if (($mod_array[$module_count]["status"] == $status) OR ($status == 0))
+			{
+				if (!isset($module_info))
+					echo "<b>" . $msg . "</b><br><br>";
 
-			$module_info = get_module_info($mod_array[$module_count]["inst"], $mod_array[$module_count]["id"]);
-			$ph_key = $mod_array[$module_count]["id"] . "@" . $mod_array[$module_count]["inst"] . "@" . "sem";
-			if ($print_open[$ph_key] == true)
-				$do_str = "do_close";
-			else
-				$do_str = "do_open";
-			$printlink = "<a href=\"".$PHP_SELF . "?$do_str=" . $ph_key . "&view=edit&seminar_id=$seminar_id\" class=\"tree\">" . $module_info["title"] . "</a>";
-			$printimage = "<img src=\"pictures/icon-lern.gif\">";
-			$printcontent = $module_info["description"] . "<br><br><center><a href=\"$link_del\">" . makeButton("entfernen", "img") . "</a></center>";
-			$mod_author = get_module_author($mod_array[$module_count]["inst"], $mod_array[$module_count]["id"]);
-			$mod_desc = "";
-			for ($i=0; $i<sizeof($mod_author); $i ++)
-				if (get_studip_user($mod_author[$i]["id"]) == false)
-					$mod_desc[$i] = $mod_author[$i]["fullname"];
+				$link_del = $PHP_SELF . "?view=edit&seminar_id=" . $seminar_id . "&do_op=clear&op_co_inst=" . $mod_array[$module_count]["inst"] . "&op_co_id=". $mod_array[$module_count]["id"] . "&op_status=" . $mod_array[$module_count]["status"];	
+				if ($mod_array[$module_count]["status"] == 1)
+					$op_status = 2;
+				elseif ($mod_array[$module_count]["status"] == 2)
+					$op_status = 1;
+				if ($perm->have_studip_perm("tutor", $seminar_id))
+					$link_change = $PHP_SELF . "?view=edit&seminar_id=" . $seminar_id . "&do_op=change&op_co_inst=" . $mod_array[$module_count]["inst"] . "&op_co_id=". $mod_array[$module_count]["id"] . "&op_status=". $op_status;
+	
+				$module_info = get_module_info($mod_array[$module_count]["inst"], $mod_array[$module_count]["id"]);
+				$ph_key = $mod_array[$module_count]["id"] . "@" . $mod_array[$module_count]["inst"] . "@" . "sem";
+				if ($print_open[$ph_key] == true)
+					$do_str = "do_close";
 				else
-					$mod_desc[$i] = "<a href=\"about.php?username=" . get_studip_user($mod_author[$i]["id"]). "\">" . $mod_author[$i]["fullname"] . "</a>";
-			$printdesc = implode($mod_desc, ", ");
-			?>
-			<table cellspacing="0" cellpadding="0" border="0" width="100%">
-				<tr>
-					<?
-					if ($print_open[$ph_key] == true)
-						printhead ("99%", FALSE, $PHP_SELF . "?do_close=" . $ph_key . "&view=edit&seminar_id=$seminar_id", "open", true, $printimage, $printlink, $printdesc);
+					$do_str = "do_open";
+				$printlink = "<a href=\"".$PHP_SELF . "?$do_str=" . $ph_key . "&view=edit&seminar_id=$seminar_id\" class=\"tree\">" . $module_info["title"] . "</a>";
+				$printimage = "<img src=\"pictures/icon-lern.gif\">";
+				$printcontent = $module_info["description"] . "<br><br><center><a href=\"$link_change\">" . makeButton("jedentag2", "img") . "</a>&nbsp;<a href=\"$link_del\">" . makeButton("entfernen", "img") . "</a></center>";
+				$mod_author = get_module_author($mod_array[$module_count]["inst"], $mod_array[$module_count]["id"]);
+				$mod_desc = "";
+				for ($i=0; $i<sizeof($mod_author); $i ++)
+					if (get_studip_user($mod_author[$i]["id"]) == false)
+						$mod_desc[$i] = $mod_author[$i]["fullname"];
 					else
-						printhead ("99%", FALSE, $PHP_SELF . "?do_open=" . $ph_key . "&view=edit&seminar_id=$seminar_id", "close", true, $printimage, $printlink, $printdesc);
-					?>
-				</tr>
-			</table>
-			<? if ($print_open[$ph_key] == true) 
-			{ ?>
-			<table cellspacing="0" cellpadding="0" border="0" width="100%">
-				<tr>
-					<?
-					printcontent("99%", FALSE, $printcontent, "");
-					?>
-				</tr>
-			</table>
-			<? }
+						$mod_desc[$i] = "<a href=\"about.php?username=" . get_studip_user($mod_author[$i]["id"]). "\">" . $mod_author[$i]["fullname"] . "</a>";
+				$printdesc = implode($mod_desc, ", ");
+				?>
+				<table cellspacing="0" cellpadding="0" border="0" width="100%">
+					<tr>
+						<?
+						if ($print_open[$ph_key] == true)
+							printhead ("99%", FALSE, $PHP_SELF . "?do_close=" . $ph_key . "&view=edit&seminar_id=$seminar_id", "open", true, $printimage, $printlink, $printdesc);
+						else
+							printhead ("99%", FALSE, $PHP_SELF . "?do_open=" . $ph_key . "&view=edit&seminar_id=$seminar_id", "close", true, $printimage, $printlink, $printdesc);
+						?>
+					</tr>
+				</table>
+				<? if ($print_open[$ph_key] == true) 
+				{ ?>
+				<table cellspacing="0" cellpadding="0" border="0" width="100%">
+					<tr>
+						<?
+						printcontent("99%", FALSE, $printcontent, "");
+						?>
+					</tr>
+				</table>
+				<? }
+			}
 			$module_count ++;
 		}
-		echo "<br>";
 	}
-	else
-	{
-		if ($SessSemName["class"]=="inst") 
-			$msg = _("Mit dieser Einrichtung sind keine ILIAS-Lernmodule verknüpft.");
-		else	
-			$msg = _("Mit dieser Veranstaltung sind keine ILIAS-Lernmodule verknüpft.");
-		echo "<b>" . $msg . "</b><br><br>";
-	}
+
+	if (!isset($module_info))
+		return false;
+
+	echo "<br>";
+	return true;
 }
 	
 function show_all_modules($seminar_id)
 {
-	global $PHP_SELF, $print_open, $SessSemName;
+	global $PHP_SELF, $print_open, $SessSemName, $perm;
 
 	$module_count = 0;
 	$hide_mod = get_seminar_modules($seminar_id);
@@ -256,7 +274,10 @@ function show_all_modules($seminar_id)
 
 		while ($module_count < sizeof($mod_array))
 		{
-			$link_con = $PHP_SELF . "?view=edit&seminar_id=" . $seminar_id . "&do_op=connect&op_co_inst=" . $mod_array[$module_count]["inst"] . "&op_co_id=". $mod_array[$module_count]["id"];
+			$op_status = 2;
+			if ($perm->have_studip_perm("tutor", $seminar_id))
+				$op_status = 1;
+			$link_con = $PHP_SELF . "?view=edit&seminar_id=" . $seminar_id . "&do_op=connect&op_co_inst=" . $mod_array[$module_count]["inst"] . "&op_co_id=". $mod_array[$module_count]["id"] . "&op_status=". $op_status;
 
 			$module_info = get_module_info($mod_array[$module_count]["inst"], $mod_array[$module_count]["id"]);
 			$ph_key = $mod_array[$module_count]["id"] . "@" . $mod_array[$module_count]["inst"] . "@" . "all";
@@ -335,42 +356,54 @@ function show_seminar_modules_links($seminar_id)
 				$msg = _("Diese Einrichtung ist mit den folgenden Lernmodulen verbunden:");
 			else	
 				$msg = _("Diese Veranstaltung ist mit den folgenden Lernmodulen verbunden:");
-			echo "<br><b>" . $msg . "</b><br /><br /><br />";
+			echo "<br><b>" . $msg . "</b><br /><br />";
 		}
 		
+		for ($status=1; $status<=2; $status++) 
+		{
+			unset($printlink);
+			if ($status == 1)
+				$msg = _("Offizielle Lernmodule:");
+			else
+				$msg = _("Inoffizielle Lernmodule:");
 			for ($i=0; $i<sizeof($out_str); $i++) 
-			{
-				if ($print_open[$out_str[$i]["key"]] == true)
-					$do_str = "do_close";
-				else
-					$do_str = "do_open";
-				$printlink = "<a href=\"".$PHP_SELF . "?$do_str=" . $out_str[$i]["key"] . "&view=show&seminar_id=$seminar_id\" class=\"tree\">" . $out_str[$i]["link"] . "</a>";
-				$printimage = $out_str[$i]["image"];
-				$printcontent = $out_str[$i]["content"] . $out_str[$i]["button"];
-				$printdesc = $out_str[$i]["desc"];
-				
-				?>
-				<table cellspacing="0" cellpadding="0" border="0" width="100%">
-					<tr>
-						<?
-						if ($print_open[$out_str[$i]["key"]] == true)
-							printhead ("99%", FALSE, $PHP_SELF . "?do_close=" . $out_str[$i]["key"] . "&view=show&seminar_id=$seminar_id", "open", true, $printimage, $printlink, $printdesc);
-						else
-							printhead ("99%", FALSE, $PHP_SELF . "?do_open=" . $out_str[$i]["key"] . "&view=show&seminar_id=$seminar_id", "close", true, $printimage, $printlink, $printdesc);
-						?>
-					</tr>
-				</table>
-				<? if ($print_open[$out_str[$i]["key"]] == true) 
-				{ ?>
-				<table cellspacing="0" cellpadding="0" border="0" width="100%">
-					<tr>
-						<?
-						printcontent("99%", FALSE, $printcontent, "");
-						?>
-					</tr>
-				</table>
-				<? }
-			}
+				if ($out_str[$i]["status"] == $status)
+				{
+					if (!isset($printlink))
+						echo "<br><b>" . $msg . "</b><br /><br />";
+
+					if ($print_open[$out_str[$i]["key"]] == true)
+						$do_str = "do_close";
+					else
+						$do_str = "do_open";
+					$printlink = "<a href=\"".$PHP_SELF . "?$do_str=" . $out_str[$i]["key"] . "&view=show&seminar_id=$seminar_id\" class=\"tree\">" . $out_str[$i]["link"] . "</a>";
+					$printimage = $out_str[$i]["image"];
+					$printcontent = $out_str[$i]["content"] . $out_str[$i]["button"];
+					$printdesc = $out_str[$i]["desc"];
+					
+					?>
+					<table cellspacing="0" cellpadding="0" border="0" width="100%">
+						<tr>
+							<?
+							if ($print_open[$out_str[$i]["key"]] == true)
+								printhead ("99%", FALSE, $PHP_SELF . "?do_close=" . $out_str[$i]["key"] . "&view=show&seminar_id=$seminar_id", "open", true, $printimage, $printlink, $printdesc);
+							else
+								printhead ("99%", FALSE, $PHP_SELF . "?do_open=" . $out_str[$i]["key"] . "&view=show&seminar_id=$seminar_id", "close", true, $printimage, $printlink, $printdesc);
+							?>
+						</tr>
+					</table>
+					<? if ($print_open[$out_str[$i]["key"]] == true) 
+					{ ?>
+					<table cellspacing="0" cellpadding="0" border="0" width="100%">
+						<tr>
+							<?
+							printcontent("99%", FALSE, $printcontent, "");
+							?>
+						</tr>
+					</table>
+					<? }
+				}
+		}
 	}
 }
 ?>
