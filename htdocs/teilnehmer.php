@@ -147,7 +147,7 @@ if ($cmd=="raus") {
 		$messaging->insert_sms ($username, $message, "____%system%____");
 		
 		//Pruefen, ob es Nachruecker gibt
-		update_admission($auswahl);
+		update_admission($id);
 
 		$msg = "msg§Der Leser ".$db->f("Vorname")." ". $db->f("Nachname")." wurde aus der Veranstaltung entfernt.§";
 		$msg.= "info§Um jemanden permanent am Lesen zu hindern, m&uuml;ssen Sie die Veranstaltung auf \"Lesen nur mit Passwort\" setzen und ein Veranstaltungs-Passwort vergeben.<br>\n"
