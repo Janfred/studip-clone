@@ -283,11 +283,12 @@ function export_teilis($inst_id, $ex_sem_id = "no", $mode = "status")
 
 	if ($mode == "status")
 	{
-		$db->query ("SELECT name, statusgruppe_id FROM statusgruppen WHERE range_id = '$ex_sem_id' ");
+		$db->query ("SELECT name, statusgruppe_id FROM statusgruppen WHERE range_id = '$ex_sem_id' ORDER BY position ASC");
 		while ($db->next_record()) 
 		{
 			$gruppe[$db->f("statusgruppe_id")] = $db->f("name");
 		}
+		$gruppe["no"] = _("keiner Funktion oder Gruppe zugeordnet");
 	}
 	elseif (!$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"])
 		$gruppe = array ("dozent" => _("DozentInnen"),
@@ -305,11 +306,19 @@ function export_teilis($inst_id, $ex_sem_id = "no", $mode = "status")
 	while (list ($key1, $val1) = each ($gruppe)) 
 	{
 		if ($mode == "status")
-			$db->query ("SELECT * FROM statusgruppe_user  
-				LEFT JOIN user_info USING ( user_id ) 
-				LEFT JOIN auth_user_md5 USING ( user_id ) 
-				LEFT JOIN seminar_user USING ( user_id ) 
-				WHERE seminar_id = '$ex_sem_id' AND statusgruppe_id = '" . $key1 . "'");
+		{	
+			if ($key1 == "no")
+				$db->query ("SELECT * FROM user_info 
+					LEFT JOIN auth_user_md5 USING ( user_id ) 
+					LEFT JOIN seminar_user USING ( user_id ) 
+					WHERE seminar_id = '$ex_sem_id' AND statusgruppe_id = '" . $key1 . "'");
+			else	
+				$db->query ("SELECT * FROM statusgruppe_user  
+					LEFT JOIN user_info USING ( user_id ) 
+					LEFT JOIN auth_user_md5 USING ( user_id ) 
+					LEFT JOIN seminar_user USING ( user_id ) 
+					WHERE seminar_id = '$ex_sem_id' AND statusgruppe_id = '" . $key1 . "'");
+		}
 		else
 			$db->query ("SELECT * FROM seminar_user  
 				LEFT JOIN user_info USING(user_id) 
@@ -319,20 +328,22 @@ function export_teilis($inst_id, $ex_sem_id = "no", $mode = "status")
 		{
 			$data_object .= xml_open_tag($xml_groupnames_person["subgroup1"], $val1);
 			while ($db->next_record()) 
-			{
-				$object_counter++;
-				$data_object .= xml_open_tag($xml_groupnames_person["object"], $db->f("username"));
-				while ( list($key, $val) = each($xml_names_person))
+				if (($key1 != "no") OR ($person_out[$db->f("user_id")] != true)) // Nur Personen ausgeben, die entweder eine Gruppe angehoeren oder zu keiner Gruppe gehoeren und noch nicht ausgegeben wurden.
 				{
-					if ($val == "") $val = $key;
-					if ($db->f($key) != "") 
-						$data_object .= xml_tag($val, $db->f($key));
+					$object_counter++;
+					$data_object .= xml_open_tag($xml_groupnames_person["object"], $db->f("username"));
+					while ( list($key, $val) = each($xml_names_person))
+					{
+						if ($val == "") $val = $key;
+						if ($db->f($key) != "") 
+							$data_object .= xml_tag($val, $db->f($key));
+					}
+					$data_object .= xml_close_tag( $xml_groupnames_person["object"] );
+					reset($xml_names_person);
+					$person_out[$db->f("user_id")] = true;
 				}
-				$data_object .= xml_close_tag( $xml_groupnames_person["object"] );
-				reset($xml_names_person);
-			}
 			$data_object .= xml_close_tag($xml_groupnames_person["subgroup1"]);
-		}
+		}	
 	}
 
 	$data_object .= xml_close_tag( $xml_groupnames_person["group"]);
