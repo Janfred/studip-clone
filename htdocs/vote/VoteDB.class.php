@@ -807,14 +807,20 @@ class VoteDB extends StudipObject {
       if ($timespan == NULL) $timespan="NULL";
       if ($co_visibility === NULL) $co_visibility = "NULL";       
       
-      /* Lock tables ------------------------------------------------------- */
+      /* Doubleclick on save? ---------------------------------------------- */
       $sql = 
-	 "LOCK TABLES".
-	 " vote WRITE,".
-	 " voteanswers WRITE";
-      if (!$this->db->query ($sql))
-	 return $this->throwError (mysql_errno (), mysql_error (), 
-				   __LINE__, __FILE__, ERROR_CRITICAL);
+	 "SELECT".
+	 " 1 ".
+	 "FROM".
+	 " voteanswers ".
+	 "WHERE".
+	 " answer_id = '".$answerarray[0]["answer_id"]."'";
+      $this->db->query ($sql);
+      if ($this->db->nf ()) 
+	 return $this->throwError (1, _("Sie haben mehrmals auf ".
+					"'Speichern' gedr&uuml;ckt. Das ".
+					"Voting bzw. der Test wurde bereits ".
+					" in die Datenbank geschrieben."));
       /* ------------------------------------------------------------------- */
       
        $this->db->query ("SELECT title from vote WHERE ".
@@ -902,13 +908,7 @@ class VoteDB extends StudipObject {
 	   
 
        }
-       /* Unlock tables ---------------------------------------------------- */
-       $sql = "UNLOCK TABLES";
-       if (!$this->db->query ($sql))
-	  return $this->throwError (mysql_errno (), mysql_error (), 
-				    __LINE__, __FILE__, ERROR_CRITICAL);
-       /* ------------------------------------------------------------------ */
-       return true;
+        return true;
    } //writeVote
 
 
@@ -1247,6 +1247,22 @@ class VoteDB extends StudipObject {
       if ($stopdate  === NULL) $stopdate  = "NULL";
       if ($timespan  === NULL) $timespan  = "NULL";
       
+      /* Doubleclick on save? ---------------------------------------------- */
+      $sql = 
+	 "SELECT".
+	 " 1 ".
+	 "FROM".
+	 " voteanswers ".
+	 "WHERE".
+	 " answer_id = '".$answerarray[0]["answer_id"]."'";
+      $this->db->query ($sql);
+      if ($this->db->nf ()) 
+	 return $this->throwError (1, _("Sie haben mehrmals auf ".
+					"'Speichern' gedr&uuml;ckt. Das ".
+					"Voting bzw. der Test wurde bereits ".
+					" in die Datenbank geschrieben."));
+      /* ------------------------------------------------------------------- */
+
       /* If vote does not exists in DB create it --------------------------- */
       if (!$this->isExistant2 ()) {
 	 $sql =
@@ -1306,25 +1322,7 @@ class VoteDB extends StudipObject {
 	       " '".$answerarray[$index]["text"]."', ".
 	       " '".$index."',".
 	       " '".$answerarray[$index]["counter"]."'".
-	       " )";
-
-	    $this->db->Halt_On_Error = "no";
-	    // diese Einstellung sollte dann später im Konstruktor stehen
-	    // damit unsere eigene Fehlerbehandlung ansetzen kann...(alex)
-	    // Das hier ist nötig für beim mehrmaligen Benutzen des
-	    // speichern-Buttons...
-	    
-	    if (!$this->db->query ($sql)) {
-	       $errno = $this->throwError (mysql_errno (), mysql_error (), 
-				  __LINE__, __FILE__, ERROR_CRITICAL);
-	       $sql = 
-		  "DELETE FROM".
-		  " vote ".
-		  "WHERE".
-		  " vote_id = '".$this->vote->getVoteID ()."'";
-	       $this->db->query ($sql);
-	       return $errno;
-	    }
+	       " )";	  
 	 }
 	 /* ---------------------------------------------- end: save answers */
       }
