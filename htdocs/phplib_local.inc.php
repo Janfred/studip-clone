@@ -165,6 +165,10 @@ class Seminar_Session extends Session {
 			while($db->next_record()) {
 				$result[$db->Record[0]] = true;
 			}
+			$db->query("SELECT news.news_id FROM news LEFT OUTER JOIN news_range USING (news_id) WHERE range_id IS NULL");
+			while($db->next_record()) {
+				$result[$db->Record[0]] = true;
+			}
 			if (is_array($result)) {
 				$kill_news = "('".join("','",array_keys($result))."')";
 				$db->query("DELETE FROM news WHERE news_id IN $kill_news");
