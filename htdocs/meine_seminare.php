@@ -227,6 +227,10 @@ if ($cmd == "suppose_to_kill") {
 		$meldung = "info§" . sprintf(_("Wollen Sie das Abonnement der teilnahmebeschr&auml;nkten Veranstaltung <b>%s</b> wirklich aufheben? Sie verlieren damit die Berechtigung f&uuml;r die Veranstaltung und m&uuml;ssen sich ggf. neu anmelden!"), htmlReady($db->f("Name"))) . "<br />";
 		$meldung.= "<a href=\"$PHP_SELF?cmd=kill&auswahl=$auswahl\">" . makeButton("ja2") . "</a>&nbsp; \n";
 		$meldung.= "<a href=\"$PHP_SELF\">" . makeButton("nein") . "</a>\n";
+	} else if ($db->f("admission_endtime_sem")!="-1" && $db->f("admission_endtime_sem") < time()) {
+		$meldung = "info§" . sprintf(_("Wollen Sie das Abonnement der Veranstaltung <b>%s</b> wirklich aufheben? Der Anmeldzeitraum ist abgelaufen und Sie k&ouml;nnen sich nicht wieder anmelden!"), htmlReady($db->f("Name"))) . "<br />";
+		$meldung.= "<a href=\"$PHP_SELF?cmd=kill&auswahl=$auswahl\">" . makeButton("ja2") . "</a>&nbsp; \n";
+		$meldung.= "<a href=\"$PHP_SELF\">" . makeButton("nein") . "</a>\n";
 	} else {
 		$cmd="kill";
 	}
