@@ -404,7 +404,7 @@ else{
 			$out_1 = "&nbsp;";
 			$out_1 .= "<input type=\"text\" name=\"day_m\" size=\"2\" maxlength=\"2\" value=\"";
 			$out_1 .= ($day_m != '' ? "$day_m" : "$start_day");
-			$out_1 .= "\">" . ($err['sinterval_m'] ? $error_sign : "") . "&nbsp;.&nbsp; ";
+			$out_1 .= "\">" . ($err['day_m'] ? $error_sign : "") . "&nbsp;.&nbsp; ";
 			$out_2 = "&nbsp;";
 			$out_2 .= "<input type=\"text\" name=\"linterval_m1\" size=\"3\" maxlength=\"3\" value=\"";
 			$out_2 .= ($linterval_m1 != '' ? "$linterval_m1" : "1");
