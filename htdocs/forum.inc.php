@@ -391,12 +391,14 @@ function ForumNoPostings () {
 
 // Berechnung und Ausgabe der Blätternavigation
 
-function ForumPrintNavi ($forum) {
+function forum_print_navi ($forum) {
 	$i = 1;
 	$maxpages = ceil($forum["forumsum"] / $forum["postingsperside"]);
 	$ipage = ($forum["flatviewstartposting"] / $forum["postingsperside"])+1;
 	if ($ipage != 1)
 		$navi .= "<a href=\"$SELF_PHP?flatviewstartposting=".($ipage-2)*$forum["postingsperside"]."\"><font size=-1>zurück </a> | </font>";
+	else
+		$navi .= "<font size=\"-1\">Seite: </font>";
 	while ($i <= $maxpages) {
 		if ($i == 1 || $i+2 == $ipage || $i+1 == $ipage || $i == $ipage || $i-1 == $ipage || $i-2 == $ipage || $i == $maxpages) {
 			if ($space == 1) {
@@ -404,9 +406,11 @@ function ForumPrintNavi ($forum) {
 				$space = 0;
 			}
 			if ($i != $ipage)
-				$navi .= "<a href=\"$SELF_PHP?flatviewstartposting=".($i-1)*$forum["postingsperside"]."\"><font size=-1>".$i."</a> | </font>";
+				$navi .= "<a href=\"$SELF_PHP?flatviewstartposting=".($i-1)*$forum["postingsperside"]."\"><font size=-1>".$i."</a></font>";
 			else
-				$navi .= "<font size=-1><b>".$i."</b> | </font>";
+				$navi .= "<font size=\"-1\"><b>".$i."</b></font>";
+			if ($maxpages != 1)
+				$navi .= "<font size=\"-1\"> | </font>";
 		} else {
 			$space = 1;
 		}
@@ -675,13 +679,13 @@ if ($forum["view"]=="flatfolder")
 echo "</td><td class=\"steelgraudunkel\" align=\"center\" width=\"33%\">";
 if ($forum["flatallopen"]=="TRUE")
 	echo "<a href=\"".$PHP_SELF
-		."?flatviewstartposting=".$forum["flatviewstartposting"]."&flatallopen=FALSE\"><img src='pictures/forumleer.gif' border=0 height='20' align=middle><img src='pictures/forumgraurauf.gif' border=0 " . tooltip(_("Alle zuklappen")) . " align=middle><img src='pictures/forumleer.gif' border=0></a>";
+		."?flatviewstartposting=".$forum["flatviewstartposting"]."&flatallopen=FALSE\"><img src='pictures/forumleer.gif' border=0 height='10' align=middle><img src='pictures/forumgraurauf.gif' border=0 " . tooltip(_("Alle zuklappen")) . " align=middle><img src='pictures/forumleer.gif' border=0></a>";
 else
 	echo "<a href=\"".$PHP_SELF
-		."?flatviewstartposting=".$forum["flatviewstartposting"]."&flatallopen=TRUE\"><img src='pictures/forumleer.gif' border=0 height='20' align=middle><img src='pictures/forumgraurunt.gif' border=0 " . tooltip(_("Alle aufklappen")) . " align=middle><img src='pictures/forumleer.gif' border=0></a>";
+		."?flatviewstartposting=".$forum["flatviewstartposting"]."&flatallopen=TRUE\"><img src='pictures/forumleer.gif' border=0 height='10' align=middle><img src='pictures/forumgraurunt.gif' border=0 " . tooltip(_("Alle aufklappen")) . " align=middle><img src='pictures/forumleer.gif' border=0></a>";
 
 echo "</td><td class=\"steelgraudunkel\" align=\"right\" width=\"33%\">";
-echo ForumPrintNavi($forum)."&nbsp;&nbsp;&nbsp;";
+echo forum_print_navi($forum)."&nbsp;&nbsp;&nbsp;";
 echo "</td></tr></table>";
 
 ////////// Ausgabe der Postings
@@ -708,15 +712,15 @@ while($db->next_record()){
 
 /////////// HTML für den Rest
 
-echo "<table width=\"100%\" border=0 cellpadding=0 cellspacing=0 align='center'>";
+echo "<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" align=\"center\">";
 echo "	<tr>";
-echo "		<td class='blank'><img src='pictures/forumleer.gif' border=0 height='4'>";
-echo "		</td>";
+echo "		<td class=\"blank\" valign=\"top\"><img src=\"pictures/forumleer.gif\" border=\"0\" height=\"4\">";
+echo "</td>";
 echo "	</tr>";
 echo "	<tr>";
-echo "		<td class=\"steelgraudunkel\" align=\"center\" >";
-echo ForumPrintNavi($forum);
-echo "		</td>";
+echo "		<td class=\"steelgraudunkel\" align=\"right\" ><img src=\"pictures/forumleer.gif\" border=\"0\" height=\"10\" align=\"middle\">";
+echo forum_print_navi($forum);
+echo "		&nbsp;&nbsp;</td>";
 echo "	</tr>";
 echo "	<tr>";
 echo "		<td class=\"blank\">&nbsp;<br><br>";
@@ -789,7 +793,7 @@ function DisplayFolders ($open=0, $update="", $zitat="") {
 			else echo "<form name=forumwrite method=post action=\"".$PHP_SELF."#anker\">\n";
 		}
 		echo "</td></tr><tr>";
-		echo "<td class=\"steelgraudunkel\"><b>&nbsp;" . _("Thema") . "</b></td><td class=\"steelgraudunkel\"><img src=\"pictures/forumleer.gif\" border=0 height=\"25\"></td><td class=\"steelgraudunkel\" align=\"right\">" . _("<b>Postings</b> / letzter Eintrag") . "&nbsp;</td></tr></table>\n";
+		echo "<td class=\"steelgraudunkel\"><b><font size=\"-1\">&nbsp;" . _("Thema") . "</font></b></td><td class=\"steelgraudunkel\"><img src=\"pictures/forumleer.gif\" border=0 height=\"20\"></td><td class=\"steelgraudunkel\" align=\"right\"><font size=\"-1\">" . _("<b>Postings</b> / letzter Eintrag") . "&nbsp;&nbsp;</font></td></tr></table>\n";
 		while ($db->next_record()) {
 			$forumposting["id"] = $db->f("topic_id");
 			$forumposting["name"] = $db->f("name");
@@ -813,7 +817,7 @@ function DisplayFolders ($open=0, $update="", $zitat="") {
 	}
 	
 	echo "<table class=blank border=0 cellpadding=0 cellspacing=0 width=\"100%\"><tr><td class='blank'><img src='pictures/forumleer.gif' border=0 height='4'></td></tr><tr>";
-	echo "<td align=center class=steelgraudunkel><img src='pictures/forumleer.gif' border=0 height='25' align=middle>";
+	echo "<td align=center class=steelgraudunkel><img src='pictures/forumleer.gif' border=0 height='20' align=middle>";
 	if ($rechte)
 		echo "<a href='".$PHP_SELF."?neuesthema=TRUE#anker'><img src='pictures/forumgraurunt.gif' border=0 align=middle " . tooltip(_("Neues Thema anlegen")) . "><img src='pictures/cont_folder2.gif' " . tooltip(_("Neues Thema anlegen")) . " border=0 align=middle></a>";
 	echo "</td></tr><tr><td class=blank>&nbsp; <br>&nbsp; <br></td></tr></table>\n";
