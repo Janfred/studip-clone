@@ -404,14 +404,11 @@ function callSafeguard($voteaction, $voteID = "", $showrangeID = NULL, $search =
 	    // user's vote has been modified by admin/root
 	    // --> send notification sms
 	    $sms = new messaging();
-	    $sms->insert_sms( $vote->voteDB->getAuthorUsername($vote->getAuthorID()),
-			      mysql_escape_string( sprintf( _("An Ihrem %s \"%s\" wurden von dem Administrator oder der Administratorin %s Änderungen vorgenommen."),
-						    ($vote->instanceof() == INSTANCEOF_TEST
-						    ? _("Test") : _("Voting")), $vote->getTitle(),
-						    $vote->voteDB->getAuthorRealname($auth->auth["uid"]) ) ),
-			      "____%system%____" );
+		$sms->insert_message(	mysql_escape_string( sprintf( _("An Ihrem %s \"%s\" wurden von dem Administrator oder der Administratorin %s Änderungen vorgenommen."), ($vote->instanceof() == INSTANCEOF_TEST
+								? _("Test") : _("Voting")), $vote->getTitle(),
+								$vote->voteDB->getAuthorRealname($auth->auth["uid"]) ) ),
+			$vote->voteDB->getAuthorUsername($vote->getAuthorID()), "____%system%____", FALSE, FALSE, "1");
 	}
-	
 	return $safeguard;
 }
 

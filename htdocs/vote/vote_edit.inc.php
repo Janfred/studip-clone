@@ -330,10 +330,7 @@ if( isset( $saveButton_x ) ) {
 	    $smsText = sprintf( _("An Ihrem Vote/Test '%s' wurden von dem/der Administrator/in %s Änderungen vorgenommen."),
 				$vote->getTitle(),
 				$vote->voteDB->getAuthorRealname($auth->auth["uid"]) );
-	    $sms->insert_sms( $vote->voteDB->getAuthorUsername($vote->getAuthorID()),
-			      mysql_escape_string( $smsText ),
-			      "____%system%____" 
-			      );
+		$sms->insert_message(mysql_escape_string( $smsText ), $vote->voteDB->getAuthorUsername($vote->getAuthorID()), "____%system%____", FALSE, FALSE, "1");
 	}
     }
 
