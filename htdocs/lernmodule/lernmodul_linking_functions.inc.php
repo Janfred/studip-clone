@@ -44,8 +44,11 @@ function link_seminar_modules($seminar_id)
 			{
 				if (($auth->auth["uname"] == get_studip_user($mod_author[$i2]["id"])) OR ($perm->have_studip_perm("admin",$seminar_id)))
 				{
-					$link_str[$i]["button"] = "<br><center><a href=\"" . link_edit_module($mod_array[$i]["inst"], $mod_array[$i]["id"]) . "\" target=\"_blank\">".
-					makeButton("bearbeiten", "img")."</center></a>";
+					$link_str[$i]["button"] = "<br><center><a href=\"" . link_edit_module($mod_array[$i]["inst"], $mod_array[$i]["id"]) . "\" target=\"_blank\">"
+					. makeButton("bearbeiten", "img")."</a>&nbsp";
+					$delete_link = $PHP_SELF . "?delete=now&del_inst=".$mod_array[$i]["inst"]."&del_id=".$mod_array[$i]["id"]."&del_title=".$mod_info["title"];
+					$link_str[$i]["button"] .= "<a href=\"" . $delete_link . "\">"
+					. makeButton("bearbeiten", "img")."</a></center>";
 				}
 				if (get_studip_user($mod_author[$i2]["id"]) == false)
 					$mod_desc[$i2] = $mod_author[$i2]["fullname"];
