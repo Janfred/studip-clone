@@ -51,26 +51,6 @@ include $ABSOLUTE_PATH_STUDIP."html_head.inc.php";
 include $ABSOLUTE_PATH_STUDIP."header.php";   //hier wird der "Kopf" nachgeladen 
 include $ABSOLUTE_PATH_STUDIP."links_admin.inc.php";  //Linkleiste fuer admins
 
-// 3/18/2002 - Tim Gallagher<timg@sunflowerroad.com>
-// if $_REQUEST isn't set, we will set it based on $HTTP_GET_VARS AND $HTTP_POST_VARS
-// however, we should still global these variables in the functions to keep backward
-// compatability from breaking.
-if ( (! isset($_REQUEST)) && (! isset($_GET)) ) {
-	// swap the foreach loops to change the order of variable registration
-	// in other words you can change GET then POST to POST then GET
-	// where the second set of variables overrides the first.
-
-	foreach ($HTTP_GET_VARS as $key => $value) {
-		$_GET[$key] = $value;
-		$_REQUEST[$key] =& $_GET[$key];
-	} // end foreach loop
-
-	foreach ($HTTP_POST_VARS as $key => $value) {
-		$_POST[$key] = $value;
-		$_REQUEST[$key] =& $_POST[$key];
-	} // end foreach loop
-} // end if
-
 //global variables
 $_integrity_plugins = array("User","Seminar","Institut","Fakultaet","Archiv","Studiengang","Fach","Bereich","Termin");
 $_csw = new cssClassSwitcher();
