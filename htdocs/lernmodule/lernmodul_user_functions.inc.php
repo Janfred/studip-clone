@@ -309,21 +309,6 @@ function create_ilias_user($studip_id)
 	}
 	return $creation_result;
 }
-/*
-function create_studip_user($benutzername)
-{
-	global $auth;
-	$db = new DB_Ilias;
-	$query_string = "SELECT * FROM benutzer WHERE benutzername = '". $benutzername . "'";
-	$db->query($query_string);
-	if ($db->next_record())
-	{
-		connect_users($benutzername, $db->f("benutzername"));
-		return true;
-	}
-	return false;
-}
-/**/
 
 /**
 * Connects ILIAS-user-account with Stud.IP-User-Account
@@ -367,7 +352,7 @@ function connect_users($studip_id, $ilias_id, $is_created = 0)
 * @param		string	$preferred_language	language
 * @return		boolean	returns true or false
 */
-function edit_ilias_user ($u_id, $benutzername, $geschlecht, $vorname, $nachname, $title_front, $institution, /*$telefon,*/ $email, $status, $preferred_language)
+function edit_ilias_user ($u_id, $benutzername, $geschlecht, $vorname, $nachname, $title_front, $institution, $email, $status, $preferred_language)
 {
 	global $ilias_status, $ilias_systemgroup, $username_prefix;
 	$ilias_db = New DB_Ilias;
