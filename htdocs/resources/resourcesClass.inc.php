@@ -115,7 +115,7 @@ class AssignObject {
 					if (!$explain)
 						return $this->db->f("Name");
 					else
-						return $this->db->f("Name")." (Institut)";
+						return $this->db->f("Name")." (Einrichtung)";
 			break;
 			case "fak":
 				$query = sprintf("SELECT Name FROM Fakultaeten WHERE Fakultaets_id='%s' ",$id);
@@ -370,28 +370,32 @@ class AssignObject {
 					."assign_user_id='%s', user_free_name='%s', begin='%s', end='%s', repeat_end='%s', "
 					."repeat_quantity='%s', repeat_interval='%s', repeat_month_of_year='%s', repeat_day_of_month='%s',  "
 					."repeat_month='%s', repeat_week_of_month='%s', repeat_day_of_week='%s', repeat_week='%s', "
-					."mkdate='%s', chdate='%s' "
+					."mkdate='%s' "
 							 , $this->id, $this->resource_id, $this->assign_user_id, $this->user_free_name, $this->begin
 							 , $this->end, $this->repeat_end, $this->repeat_quantity, $this->repeat_interval
 							 , $this->repeat_month_of_year, $this->repeat_day_of_month, $this->repeat_month
 							 , $this->repeat_week_of_month, $this->repeat_day_of_week, $this->repeat_week
-							 , $mkdate, $chdate);
+							 , $mkdate);
 			} else {
 				$query = sprintf("UPDATE resources_assign SET resource_id='%s', " 
 					."assign_user_id='%s', user_free_name='%s', begin='%s', end='%s', repeat_end='%s', "
 					."repeat_quantity='%s', repeat_interval='%s', repeat_month_of_year='%s', repeat_day_of_month='%s',  "
-					."repeat_month='%s', repeat_week_of_month='%s', repeat_day_of_week='%s', repeat_week='%s', "
-					."chdate='%s' WHERE assign_id='%s'"
+					."repeat_month='%s', repeat_week_of_month='%s', repeat_day_of_week='%s', repeat_week='%s' "
+					." WHERE assign_id='%s' "
 							 , $this->resource_id, $this->assign_user_id, $this->user_free_name, $this->begin 
 							 , $this->end, $this->repeat_end, $this->repeat_quantity, $this->repeat_interval
 							 , $this->repeat_month_of_year, $this->repeat_day_of_month, $this->repeat_month
 							 , $this->repeat_week_of_month, $this->repeat_day_of_week, $this->repeat_week
-							 , $chdate, $this->id);
+							 , $this->id);
 			}
 			
-			if($this->db->query($query))
+			$this->db->query($query);
+			if ($this->db->affected_rows()) {
+				$query = sprintf("UPDATE resources_assign SET chdate='%s' WHERE assign_id='%s' ", $chdate, $this->id);
+				$this->db->query($query);
 				return TRUE;
-			return FALSE;
+			} else
+				return FALSE;
 		}
 		return FALSE;
 	}
@@ -631,7 +635,7 @@ class ResourcesUserRoomsList {
 		
 		//if perm is root, load all rooms
 		if ($perm->have_perm ("root")) {
-			$query = sprintf ("SELECT resource_id FROM resources_categories LEFT JOIN resources_objects USING (category_id) WHERE resources_categories.name = 'Raum' ");
+			$query = sprintf ("SELECT resource_id FROM resources_categoriesres LEFT JOIN resources_objects USING (category_id) WHERE resources_categories.name = 'Raum' ");
 			$db->query($query);
 			while ($db->next_record()) {
 				$resource_object = new ResourceObject ($db->f("resource_id"));
@@ -771,8 +775,13 @@ class resourceObject {
 	}
 
 	function setOwnerId($owner_id){
+		$old_value = $this->owner_id;
 		$this->owner_id=$owner_id;
 		$this->chng_flag = TRUE;
+		if ($old_value != $owner_id)
+			return TRUE;
+		else
+			return FALSE;
 	}
 	
 
@@ -893,7 +902,7 @@ class resourceObject {
 					if (!$explain)
 						return $this->db->f("Name");
 					else
-						return $this->db->f("Name")." (Institut)";
+						return $this->db->f("Name")." (Einrichtung)";
 			break;
 			case "fak":
 				$query = sprintf("SELECT Name FROM Fakultaeten WHERE Fakultaets_id='%s' ",$id);
@@ -1043,13 +1052,17 @@ class resourceObject {
 			else
 				$query = sprintf("UPDATE resources_objects SET root_id='%s'," 
 					."parent_id='%s', category_id='%s', owner_id='%s', name='%s', description='%s', "
-					."inventar_num='%s', parent_bind='%s', chdate='%s' WHERE resource_id='%s' "
+					."inventar_num='%s', parent_bind='%s' WHERE resource_id='%s' "
 							 , $this->root_id, $this->parent_id, $this->category_id, $this->owner_id
 							 , $this->name, $this->description, $this->inventar_num, $this->parent_bind
-							 , $chdate, $this->id);
-			if($this->db->query($query))
+							 , $this->id);
+			$this->db->query($query);
+			if ($this->db->affected_rows()) {
+				$query = sprintf("UPDATE resources_objects SET chdate='%s' WHERE resource_id='%s' ", $chdate, $this->id);
+				$this->db->query($query);
 				return TRUE;
-			return FALSE;
+			} else
+				return FALSE;
 		}
 		return FALSE;
 	}
@@ -1196,15 +1209,16 @@ class ResourcesObjectPerms extends ResourcesPerms {
 		
 		//else check all the other possibilities
 		if ($this->perm != "admin") {
-			$my_objects=get_my_administrable_objects();
-			
-			//add the user_id
-			$my_objects[$this->user_id]="user"; //myself is administrable, too...
+			$my_objects=search_administrable_objects();
+			//echo serialize ($my_objects);
 			//check if one of my administrable (system) objects owner of the resourcen object, so that I am too...
 			foreach ($my_objects as $key=>$val) {
 				$this->db->query("SELECT owner_id FROM resources_objects WHERE owner_id='$key' AND resource_id = '$this->resource_id' ");
 				if ($this->db->next_record())
-					$this->perm="admin";
+					if ($val["perms"] == "admin")
+						$this->perm="admin";
+					else
+						$this->perm="user";
 				
 				if ($this->perm=="admin")
 					break;
@@ -1218,7 +1232,7 @@ class ResourcesObjectPerms extends ResourcesPerms {
 					break;
 			}
 		}
-			
+
 		//if all the check don't work, we have to take a look to the superordinated objects
 		if ($this->perm != "admin") {
 			foreach ($my_objects as $key=>$val) {
@@ -1228,22 +1242,26 @@ class ResourcesObjectPerms extends ResourcesPerms {
 	
 				$superordinated_id=$this->db->f("parent_id");
 				$top=FALSE;
-				
+
 				while ((!$top) && ($k<10000) && ($superordinated_id)) {
-					$this->db2->query("SELECT owner_id FROM resources_objects WHERE owner_id='$key' AND resource_id = '$superordinated_id' ");
-					if ($this->db2->next_record())
-						$this->perm="admin";
+					$this->db2->query("SELECT owner_id, resource_id FROM resources_objects WHERE owner_id='$key' AND resource_id = '$superordinated_id' ");
+					if ($this->db2->next_record()) {
+						if ($val["perms"] == "admin")
+							$this->perm="admin";
+						else
+							$this->perm="user";
+					}
 					$k++;
 					if ($this->perm=="admin")
 						break;
-			
+
 					//also check the additional perms...
 					$this->db2->query("SELECT perms FROM resources_user_resources  WHERE user_id='$key' AND resource_id = '$superordinated_id' ");
 					if ($this->db2->next_record())
 						$this->perm=$this->db2->f("perms");
 					if ($this->perm=="admin")
 						break;
-					
+
 					//select the next superordinated object
 					$query = sprintf ("SELECT parent_id FROM resources_objects WHERE resource_id = '%s' ", $superordinated_id);
 					$this->db->query($query);						
@@ -1253,8 +1271,10 @@ class ResourcesObjectPerms extends ResourcesPerms {
 					if ($this->db->f("parent_id") == "0")
 						$top = TRUE;
 				}
+
 				if ($this->perm=="admin")
 					break;
+				
 			}
 		}
 	}
@@ -1405,34 +1425,42 @@ class ResourcesRootThreads {
 }
 
 /*****************************************************************************
-ResourcesError, class for all the errormsg stuff
+ResourcesMsg, class for all the msg stuff
 /*****************************************************************************/
 
-class ResourcesError {
+class ResourcesMsg {
 	var $msg;
 	var $codes;
 	
 	//Konstruktor
-	function ResourcesError() {
-		$this->msg[1] = array (
-				"mode" => "error",
-				"titel" => "Fehlende Berechtigung",
-				"msg"=> "Sie haben leider keine Berechtigung, das Objekt zu bearbeiten");
+	function ResourcesMsg() {
+		global $RELATIVE_PATH_RESOURCES;
+		
+	 	include ($RELATIVE_PATH_RESOURCES."/views/msgs_resources.inc.php");
 	}
 				
 	function addMsg($msg_code) {
 		$this->codes[]=$msg_code;
 	}
 	
+	function checkMsgs() {
+		if ($this->codes)
+			return TRUE;
+		else 
+			return FALSE;
+	}
+	
 	function displayAllMsg($view_mode = "window") {
 		global $RELATIVE_PATH_STUDIP;
 		
-		foreach ($this->codes as $val)
-			$collected_msg.=($this->msg[$val]["mode"]."§".$this->msg[$val]["msg"]."§");
-		if ($view_mode == "window")
-			parse_window($collected_msg, "§", $this->msg[$this->codes[0]]["titel"], "<a href=\"$RELATIVE_PATH_STUDIP/resources.php\">"._("zur&uuml;ck")."</a>");
-		else
-			parse_msg($collected_msg);
+		if (is_array($this->codes)) {
+			foreach ($this->codes as $val)
+				$collected_msg.=($this->msg[$val]["mode"]."§".$this->msg[$val]["msg"]."§");
+			if ($view_mode == "window")
+				parse_window($collected_msg, "§", $this->msg[$this->codes[0]]["titel"], "<a href=\"$RELATIVE_PATH_STUDIP/resources.php\">"._("zur&uuml;ck")."</a>");
+			else
+				parse_msg($collected_msg);
+		}
 	}
 	
 	function displayMsg($msg_code, $view_mode = "window") {
