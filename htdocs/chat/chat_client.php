@@ -38,6 +38,12 @@
 * @const CLOSE_ON_LOGIN_SCREEN
 */
 define("CLOSE_ON_LOGIN_SCREEN",true);
+
+//disable output compression
+if(ini_get('zlib.output_compression')){
+      ini_set('zlib.output_compression', 'Off');
+}
+
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check("user");
 
