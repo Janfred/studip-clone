@@ -204,8 +204,7 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 		$admin_admission_data["admission_binding"]=TRUE;
 	settype($admin_admission_data["admission_binding"], integer);
 		
-	if (!$commit_no_admission_data)
-			$admin_admission_data["admission_turnout"]=$admission_turnout;	
+	$admin_admission_data["admission_turnout"]=$admission_turnout;	
 
 	$admin_admission_data["admission_prelim_txt"]=$admission_prelim_txt;
 
