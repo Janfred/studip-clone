@@ -359,7 +359,7 @@ function createVoteHeadline (&$vote, $open, $openID) {
       VOTE_ICON_VOTE;
    $icon = "&nbsp;<img src=\"".$icon."\" border=\"0\" ".
       "style=\"vertical-align:bottom;\">";
-   $voteInfo = "<b>".$number."</b> / <a href=\"about.php?username=".$authorUsername."\">\n"
+   $voteInfo = $number." / <a href=\"about.php?username=".$authorUsername."\">\n"
       . "  <font size=\"-1\" color=\"#333399\">".$authorName."</font>\n"
       . " </a>\n"
       . " <font size=\"-1\">&nbsp;".date ("d.m.Y", $date)."</font>&nbsp;";
