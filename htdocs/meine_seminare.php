@@ -289,7 +289,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 				"chdate" => $db->f("chdate"), "binding" => $db->f("admission_binding"), "modules" =>$Modules->getLocalModules($db->f("Seminar_id")));
 			
 			$value_list.="('".$db->f("Seminar_id")."',0".$loginfilenow[$db->f("Seminar_id")]."),";
-			if ($GLOBALS['CHAT_ENABLE']){
+			if (($GLOBALS['CHAT_ENABLE']) && ($my_inst[$db->f("Institut_id")]["modules"]["chat"])) {
 				$chatter = $chatServer->isActiveChat($db->f("Seminar_id"));
 				$chat_info[$db->f("Seminar_id")] = array("chatter" => $chatter, "chatuniqid" => $chatServer->chatDetail[$db->f("Seminar_id")]["id"],
 												"is_active" => $chatServer->isActiveUser($user->id,$db->f("Seminar_id")));
@@ -360,9 +360,9 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 				} else {
 					echo "<td class=\"".$cssSw->getClass()."\" align=\"center\" nowrap><font size=-1>", date("d.m.", $loginfilenow[$semid]),"</font></td>";
 				}
-			// Status-field
+				// Status-field
 				echo "<td class=\"".$cssSw->getClass()."\"  align=\"center\" nowrap><font size=-1>". $values["status"]."&nbsp;</font></td>";
-			// Teilnehmer
+				// Teilnehmer
 				$db2=new DB_Seminar;
 				$db2->query ("SELECT count(*) as teilnehmer FROM seminar_user WHERE Seminar_id ='$semid'");
 				 while($db2->next_record()) 

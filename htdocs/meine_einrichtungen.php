@@ -28,32 +28,39 @@ $perm->check("user");
 ob_start(); //Outputbuffering für maximal Performance
 
 function get_my_inst_values(&$my_inst) {
-	 global $user;
-	 $db2 = new DB_seminar();
-// Postings
+	global $user;
+	
+	$db2 = new DB_seminar();
+	
+	// Postings
 	$db2->query("SELECT b.Seminar_id,count(topic_id) as count, count(if((chdate > b.loginfilenow AND user_id !='".$user->id."'),a.topic_id,NULL)) AS neue 
 				FROM loginfilenow_".$user->id." b  LEFT JOIN px_topics a USING (Seminar_id) GROUP BY b.Seminar_id");
 	while($db2->next_record()) {
-		$my_inst[$db2->f("Seminar_id")]["neuepostings"]=$db2->f("neue");
-		$my_inst[$db2->f("Seminar_id")]["postings"]=$db2->f("count");
+		if ($my_inst[$db2->f("Seminar_id")]["modules"]["forum"]) {
+			$my_inst[$db2->f("Seminar_id")]["neuepostings"]=$db2->f("neue");
+			$my_inst[$db2->f("Seminar_id")]["postings"]=$db2->f("count");
+		}
 	}
 
-//dokumente
+	//dokumente
 	$db2->query("SELECT b.Seminar_id,count(dokument_id) as count, count(if((chdate > b.loginfilenow AND user_id !='".$user->id."'),a.dokument_id,NULL)) AS neue 
 				FROM loginfilenow_".$user->id." b  LEFT JOIN dokumente a USING (Seminar_id) GROUP BY b.Seminar_id");
 	while($db2->next_record()) {
-		$my_inst[$db2->f("Seminar_id")]["neuedokumente"]=$db2->f("neue");
-		$my_inst[$db2->f("Seminar_id")]["dokumente"]=$db2->f("count");
+		if ($my_inst[$db2->f("Seminar_id")]["modules"]["documents"]) {
+			$my_inst[$db2->f("Seminar_id")]["neuedokumente"]=$db2->f("neue");
+			$my_inst[$db2->f("Seminar_id")]["dokumente"]=$db2->f("count");
+		}
 	}
 
-//News
+	//News
 	$db2->query("SELECT b.Seminar_id,count(IF(date < UNIX_TIMESTAMP(),range_id,NULL)) as count, count(IF((date < UNIX_TIMESTAMP() AND date > b.loginfilenow AND user_id !='".$user->id."'),range_id,NULL)) AS neue 
 				FROM loginfilenow_".$user->id." b  LEFT JOIN news_range ON (b.Seminar_id=range_id) LEFT JOIN news  USING(news_id) GROUP BY b.Seminar_id");
 	while($db2->next_record()) {
 		$my_inst[$db2->f("Seminar_id")]["neuenews"]=$db2->f("neue");
 		$my_inst[$db2->f("Seminar_id")]["news"]=$db2->f("count");
 	}
-// Literatur?
+	
+	// Literatur?
 	$db2->query("SELECT b.Seminar_id,if(literatur !='' OR links != '',1,0) AS literatur,
 			if((chdate > b.loginfilenow AND user_id !='".$user->id."' AND (literatur !='' OR links != '')),1,0) AS neue 
 			FROM loginfilenow_".$user->id." b  LEFT JOIN literatur ON (range_id = b.Seminar_id)");
@@ -123,10 +130,11 @@ function print_institut_content($instid,$my_inst_values) {
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
-require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php"); 		// Klarnamen fuer den Veranstaltungsstatus
-require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php"); 		// htmlReady fuer die Veranstaltungsnamen
-require_once ("$ABSOLUTE_PATH_STUDIP/dates.inc.php"); 		// Semester-Namen fuer Admins
-require_once ("$ABSOLUTE_PATH_STUDIP/functions.php"); 		// Semester-Namen fuer Admins
+require_once ($ABSOLUTE_PATH_STUDIP."config.inc.php");			// Klarnamen fuer den Veranstaltungsstatus
+require_once ($ABSOLUTE_PATH_STUDIP."visual.inc.php");			// htmlReady fuer die Veranstaltungsnamen
+require_once ($ABSOLUTE_PATH_STUDIP."dates.inc.php");			// Semester-Namen fuer Admins
+require_once ($ABSOLUTE_PATH_STUDIP."/lib/classes/Modules.class.php");	// modul-config class
+
 require_once $ABSOLUTE_PATH_STUDIP."messaging.inc.php";
 
 if ($GLOBALS['CHAT_ENABLE']){
@@ -140,8 +148,10 @@ if ($GLOBALS['ILIAS_CONNECT_ENABLE']){
 }
 $cssSw=new cssClassSwitcher;                          					// Klasse für Zebra-Design
 $cssSw->enableHover();
+$Modules = new Modules;
 $db=new DB_Seminar;
 $db2=new DB_Seminar;
+
 // we are defintely not in an lexture or institute
 closeObject();
 $links_admin_data =''; 	//Auch im Adminbereich gesetzte Veranstaltungen muessen geloescht werden.
@@ -223,9 +233,9 @@ if ( !$perm->have_perm("root")) {
 		ob_end_flush(); //Buffer leeren, damit der Header zu sehen ist
 		ob_start();
 		while ($db->next_record()) {
-			$my_inst[$db->f("Institut_id")]=array(name=>$db->f("Name"),status=>$db->f("inst_perms"),type=>($db->f("type")) ? $db->f("type") : 1);
+			$my_inst[$db->f("Institut_id")]=array(name=>$db->f("Name"),status=>$db->f("inst_perms"),type=>($db->f("type")) ? $db->f("type") : 1, modules =>$Modules->getLocalModules($db->f("Institut_id")));
 			$value_list.="('".$db->f("Institut_id")."',0".$loginfilenow[$db->f("Institut_id")]."),";
-			if ($GLOBALS['CHAT_ENABLE']){
+			if (($GLOBALS['CHAT_ENABLE']) && ($my_inst[$db->f("Institut_id")]["modules"]["chat"])) {
 				$chatter = $chatServer->isActiveChat($db->f("Institut_id"));
 				$chat_info[$db->f("Institut_id")] = array("chatter" => $chatter, "chatuniqid" => $chatServer->chatDetail[$db->f("Institut_id")]["id"],
 												"is_active" => $chatServer->isActiveUser($user->id,$db->f("Institut_id")));
@@ -268,19 +278,19 @@ if ( !$perm->have_perm("root")) {
 			$lastVisit = $loginfilenow[$instid];
 			echo "<tr ".$cssSw->getHover().">";
 			echo "<td class=\"".$cssSw->getClass()."\">&nbsp; </td>";
-// Name-field		
+			// Name-field		
 			echo "<td class=\"".$cssSw->getClass()."\"><a href=\"institut_main.php?auswahl=$instid\">";
 			echo "<font size=-1>".htmlReady($INST_TYPE[$values["type"]]["name"] . ": " . $values["name"])."</font>";
 			print ("</a></td>");
-// Content-field
+			// Content-field
 			echo "<td class=\"".$cssSw->getClass()."\"  align=\"left\" nowrap>";
 			print_institut_content($instid, $values);
-			if ($GLOBALS['CHAT_ENABLE']){
+			if (($GLOBALS['CHAT_ENABLE']) && ($values["modules"]["chat"])) {
 				echo "<a href=\"".((!$auth->auth["jscript"]) ? "chat_online.php" : "#")."\" onClick=\"return open_chat(" . (($chat_info[$instid]['is_active']) ? "false" : "'$instid'") . ");\">&nbsp;";
 				echo chat_get_chat_icon($chat_info[$instid]['chatter'], $chat_invs[$chat_info[$instid]['chatuniqid']], $chat_info[$instid]['is_active'],true);
 				echo "</a>&nbsp;";
 			}
-			if ($GLOBALS['ILIAS_CONNECT_ENABLE']) {
+			if (($GLOBALS['ILIAS_CONNECT_ENABLE']) && ($values["modules"]["ilias_connect"])) {
 				$mod_count = get_seminar_modules($instid);
 				if ($mod_count) {
 					echo "<a href=\"institut_main.php?view=show&auswahl=$instid&redirect_to=seminar_lernmodule.php\">&nbsp;";
@@ -296,20 +306,20 @@ if ( !$perm->have_perm("root")) {
 			}
 			echo "</td>";
 
-// Extendet views:
+			// Extendet views:
 
-	// last visited-field
+			// last visited-field
 			if ($view=="ext") {
 				if ($loginfilenow[$instid]==0) {
 					echo "<td class=\"".$cssSw->getClass()."\" align=\"center\" nowrap><font size=-1>n.b.</font></td>";
 				} else  {
 				 	echo "<td class=\"".$cssSw->getClass()."\"align=\"center\" nowrap><font size=-1>", date("d.m.", $loginfilenow[$instid]),"</font></td>";
 				}
-	// Status-field
+			// Status-field
 			echo "<td class=\"".$cssSw->getClass()."\" align=\"center\" nowrap><font size=-1>". $values["status"]."&nbsp;</font></td>";
 			}
 
-// delete Entry from List:
+			// delete Entry from List:
 			if (($values["status"]=="dozent") || ($values["status"]=="tutor") || ($values["status"]=="admin") || ($values["status"]=="autor"))
 				echo "<td class=\"".$cssSw->getClass()."\" align=center>&nbsp;</td>";
 			else
