@@ -193,13 +193,13 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("roo
 								?>
 								<tr valign="top" align="center">
 									<th width="1%">&nbsp; </th>
-									<th width="86%" align="left"><a href="<? echo $PHP_SELF ?>?sortby=Name">Name</a></th>
+									<th width="86%" align="left"><a href="<? echo $PHP_SELF ?>?sortby=Name&view=<? echo $view?>">Name</a></th>
 									<th width="10%"><b>Inhalt</b></th>
 									<?
 									if ($view=="ext") { 
 									?>
 										<th width="10%"><b>&nbsp;besucht&nbsp;</b></th>
-										<th width="10%"><a href="<? echo $PHP_SELF ?>?sortby=status">&nbsp;Status&nbsp;</a></th>
+										<th width="10%"><a href="<? echo $PHP_SELF ?>?sortby=inst_perms&view=<? echo $view?>">&nbsp;Status&nbsp;</a></th>
 									<? }?>
 									<th width="3%"><b>&nbsp;X&nbsp;</b></th>
 								</tr>
