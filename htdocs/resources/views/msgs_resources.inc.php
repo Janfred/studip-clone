@@ -35,4 +35,8 @@ $this->msg[9] = array (
 		"mode" => "msg",
 		"titel" => _("Ressource verschoben"),
 		"msg"=> _("Die Ressource wurde verschoben"));
+$this->msg[10] = array (
+		"mode" => "error",
+		"msg"=> _("Bitte geben Sie einen Nutzer f&uuml;r die Belegung an, um diese Belegung zu speichern!"));
+		
 ?>
