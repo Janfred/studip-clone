@@ -120,7 +120,7 @@ if (!$db->num_rows()) {
 				$edit.="&nbsp;<a href=\"admin_news.php?cmd=kill&kill_news=".$db->f("news_id")."\">" . makeButton("loeschen") . "</a>";
 			}
 			
-			echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width='$width'><tr>";
+			echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" align=\"center\"><tr>";
 			printcontent(0,0, $content, $edit);
 			echo "</tr></table>	";
 		       	}
