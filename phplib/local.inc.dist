@@ -131,6 +131,9 @@ $MAIL_ENV_FROM = "";		//sender mail adress, defaults to wwwrun @ $MAIL_LOCAHOST
 $MAIL_FROM = "";			//name of sender, defaults to "Stud.IP"
 $MAIL_ABUSE = "";			//mail adress to reply to in case of abuse, defaults to abuse @  $MAIL_LOCAHOST
 
+$MAIL_VALIDATE_HOST = true;		//check for valid mail host when user enters email adress
+$MAIL_VALIDATE_BOX = true;		//check for valid mail account when user enters email adress; set to false if the webserver got no valid MX record
+
 $MESSAGING_FORWARD_AS_EMAIL = TRUE;	// enable to forward every internal message to the user-mail (the user is able to deactivate this function in his personal settings)
 $MESSAGING_FORWARD_DEFAULT = FALSE;	// the default setting: if TRUE, every message will be forwarded else the user has to switch it on (both only if above option is active)
 
@@ -251,6 +254,7 @@ $STUDIP_AUTH_PLUGIN[] = "Standard";
 $STUDIP_AUTH_CONFIG_LDAPREADER = array(		"host" => "localhost",
 										"base_dn" => "dc=studip,dc=de",
 										"protocol_version" => 3,
+										"start_tls" => false,
 										"username_attribute" => "uid",
 										"user_password_attribute" => "userpassword",
 										"reader_dn" => "uid=reader,dc=studip,dc=de",
@@ -263,6 +267,7 @@ $STUDIP_AUTH_CONFIG_LDAPREADER = array(		"host" => "localhost",
 $STUDIP_AUTH_CONFIG_LDAP = array(		"host" => "localhost",
 										"base_dn" => "dc=data-quest,dc=de",
 										"protocol_version" => 3,
+										"start_tls" => false,
 										"username_attribute" => "uid",
 										"anonymous_bind" => true,
 										"error_head" =>	"LDAP plugin",
