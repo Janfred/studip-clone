@@ -188,7 +188,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("roo
 				<table border="0" cellpadding="0" cellspacing="0" width="100%" align="center" class="blank">
 					<tr valign="top" align="center">
 						<td align="center">
-							<table border="0" cellpadding="2" cellspacing="0" width="98%" align="center" class="blank">
+							<table border="0" cellpadding="1" cellspacing="0" width="98%" align="center" class="blank">
 								<tr>
 									<td class="blank" colspan="2">&nbsp;
 									
@@ -201,10 +201,10 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("roo
 									<?
 									if ($view=="ext") { 
 									?>
-										<th width="10%"><b>besucht</b></th>
-										<th width="10%"><a href="<? echo $PHP_SELF ?>?sortby=status">Status</a></th>
+										<th width="10%"><b>&nbsp;besucht&nbsp;</b></th>
+										<th width="10%"><a href="<? echo $PHP_SELF ?>?sortby=status">&nbsp;Status&nbsp;</a></th>
 									<? }?>
-									<th width="3%"><b>X</b></th>
+									<th width="3%"><b>&nbsp;X&nbsp;</b></th>
 								</tr>
 	<?
 	ob_end_flush(); //Buffer leeren, damit der Header zu sehen ist

@@ -255,8 +255,8 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
                                                                         <th width="85%" align="left"><a href="<? echo $PHP_SELF ?>?sortby=Name">Name</a></th>
                                                                         <th width="10%"><b>Inhalt</b></th>
 <?                                                                        if ($view=="ext") { ?>
-                                                                                <th width="10%"><b>besucht&nbsp;&nbsp;</b></th>
-                                                                                <th width="10%"><a href="<? echo $PHP_SELF ?>?sortby=status">Status</a></th>
+                                                                                <th width="10%"><b>&nbsp;besucht&nbsp;</b></th>
+                                                                                <th width="10%"><a href="<? echo $PHP_SELF ?>?sortby=status">&nbsp;Status&nbsp;</a></th>
                                                                                 <th width="10%"><img src="pictures/nutzer.gif" alt="TeilnehmerInnen der Veranstaltung"></th>
                                                                         <?        }?>
                                                                         <th width="3%"><b>X&nbsp; </b></th>
