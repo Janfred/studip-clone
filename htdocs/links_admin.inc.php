@@ -51,7 +51,7 @@ if (($i_page== "adminarea_start.php") && ($admin_sem_id)) {
 	$SessSemName[1] = "";
 	}
 //neue Admin-Institut-Sitzung, ich komme mit einer seminar_id rein
-elseif ($admin_inst_id) {
+elseif (($admin_inst_id) && ($admin_inst_id != "NULL")){
 	$links_admin_data='';
 	$links_admin_data["inst_id"]=$admin_inst_id;
 	$links_admin_data["select_old"]=TRUE;
@@ -124,6 +124,10 @@ if ($srch_send) {
 	$links_admin_data["srch_on"]=TRUE;
 	$list=TRUE;
 	}
+
+//if the user selected the information field at institute-selection....
+if ($admin_inst_id == "NULL")
+	$list=TRUE;
 
 //Wenn nur ein Institut verwaltet werden kann, immer dieses waehlen (Auswahl unterdruecken)
 if ((!$links_admin_data["inst_id"]) && ($list) &&
@@ -396,9 +400,9 @@ if ((!$links_admin_data["inst_id"]) && ($list) &&
 		echo "</td></tr>";
 	}
 	?>
-	<form name="links_admin_search" action="<? echo $PHP_SELF,"?", "view=$view"?>" method="POST">
 	<tr>
 		<td class="blank" colspan=2>&nbsp;
+			<form name="links_admin_search" action="<? echo $PHP_SELF,"?", "view=$view"?>" method="POST">
 			<table cellpadding="0" cellspacing="0" border="0" width="99%" align="center">
 				<tr>
 					<td class="steel1">
@@ -407,16 +411,16 @@ if ((!$links_admin_data["inst_id"]) && ($list) &&
 				</tr>
 				<tr>
 					<td class="steel1">
-					<font size=-1><select class="steel1" name="admin_inst_id" size="1">
+					<font size=-1><select name="admin_inst_id" size="1">
 					<?
 					if ($perm->have_perm("root"))
 						$db->query("SELECT Institut_id, Name  FROM Institute ORDER BY Name");
 					else
 						$db->query("SELECT Institute.Institut_id, Name FROM Institute LEFT JOIN user_inst USING(Institut_id) WHERE user_id = '$user->id' AND inst_perms = 'admin' ORDER BY Name");
 					
-					printf ("<option value=\"0\">-- bitte Einrichtung ausw&auml;hlen --</option>\n");
+					printf ("<option value=\"NULL\">-- bitte Einrichtung ausw&auml;hlen --</option>\n");
 					while ($db->next_record())
-						printf ("><option %s value=\"%s\">%s </option></font>\n", $db->f("Institut_id") == $inst_id ? "selected" : "", $db->f("Institut_id"), htmlReady(substr($db->f("Name"), 0, 50)));
+						printf ("<option %s value=\"%s\">%s </option></font>\n", $db->f("Institut_id") == $inst_id ? "selected" : "", $db->f("Institut_id"), htmlReady(substr($db->f("Name"), 0, 50)));
 					?>
 				</select></font>&nbsp; 
 				<input type="IMAGE" src="./pictures/buttons/auswaehlen-button.gif" border=0 value="bearbeiten">
@@ -434,6 +438,9 @@ if ((!$links_admin_data["inst_id"]) && ($list) &&
 			</tr>
 		</table>
 		</form>
+	</tr>
+	</td>
+	</table>
 		<?
 		page_close();
 		die;
