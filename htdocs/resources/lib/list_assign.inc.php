@@ -33,16 +33,12 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-function list_restore_assign(&$this){
+function list_restore_assign(&$this, $resource_id, $user_id='', $range_id=''){
 	$db = new DB_Seminar();
-	
-	//recatch the values
+
 	$end = $this->end;
-	$start = $this->start;
-	$range_id = $this->range_id;
-	$user_id = $this->user_id;
-	$resource_id = $this->resource_id;
-	
+	$begin = $this->begin;
+
 	$year = date("Y", $this->start);
 	$month = date("n", $this->start);
 	
@@ -56,7 +52,7 @@ function list_restore_assign(&$this){
 	if ($user_id) $query.= sprintf("resources_assign.assign_user_id = '%s'  AND ", $user_id);
 	if ($range_id) $query.= sprintf("resources_user_resources.user_id = '%s'  AND ", $range_id);
 	$query .= sprintf("(begin BETWEEN %s AND %s OR (begin <= %s AND repeat_end > %s ))"
-				 . " ORDER BY begin ASC", $start, $end, $end, $start);
+				 . " ORDER BY begin ASC", $begin, $end, $end, $begin);
 
 	//send the query
 	$db->query($query);
@@ -64,11 +60,11 @@ function list_restore_assign(&$this){
 	//handle the assigns und create all the repeated stuff
 	while($db->next_record()) {
 		$assign_object = new AssignObject($db->f("assign_id"));
-		create_assigns($assign_object, $start, $end, $this);
+		create_assigns($assign_object, $this);
 	}
 }
 
-function create_assigns($assign_object, $start, $end, &$this) {
+function create_assigns($assign_object, &$this) {
 	$year_offset=0;
 	$week_offset=0;
 	$month_offset=0;
@@ -76,12 +72,15 @@ function create_assigns($assign_object, $start, $end, &$this) {
 	$quantity=0;
 	$temp_ts=0;
 
+	$end = $this->end;
+	$begin = $this->begin;
+
 	if ($assign_object->getRepeatMode() == "na") {
 		// date without repeatation, we have to create only one event (object = event)
 		$this->events[] = new AssignEvent($assign_object->getId(), $assign_object->getBegin(), $assign_object->getEnd(),
 								$assign_object->getResourceId(), $assign_object->getAssignUserId(), 
 								$assign_object->getUserFreeName());
-	} elseif (($assign_object -> getRepeatEnd() >= $start) && ($assign_object -> getBegin() <= $end))
+	} elseif (($assign_object -> getRepeatEnd() >= $begin) && ($assign_object -> getBegin() <= $end))
 		do { 
 		//create a temp_ts to try every possible repeatation
 		$temp_ts=mktime(date("G",$assign_object -> getBegin()), 
@@ -103,7 +102,7 @@ function create_assigns($assign_object, $start, $end, &$this) {
 		if ($assign_object->getRepeatMode() == "d") $day_offset++;
 		
 		//check if we want to show the event and if it is not outdated
-		if ($temp_ts >= $start) {
+		if ($temp_ts >= $begin) {
 			 if (($temp_ts <=$end) && ($temp_ts <= $assign_object -> getRepeatEnd()) && (($quantity < $assign_object->getRepeatQuantity()) || ($assign_object->getRepeatQuantity() == -1)))  {
 			 	$this->events[] = new AssignEvent($assign_object->getId(), $temp_ts, $temp_ts_end,
 										$assign_object->getResourceId(), $assign_object->getAssignUserId(), 
