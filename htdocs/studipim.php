@@ -40,17 +40,7 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" =>
 		$sess->register("messenger_data");
 		$sms= new messaging;
 		
-		$now = time(); // nach eingestellter Zeit (default = 5 Minuten ohne Aktion) zaehlt man als offline
-		$query = "SELECT " . $_fullname_sql['full'] . " AS full_name,($now-UNIX_TIMESTAMP(changed)) AS lastaction,a.username,a.user_id,contact_id 
-		FROM active_sessions LEFT JOIN auth_user_md5 a ON (a.user_id=sid) LEFT JOIN user_info USING(user_id) 
-		LEFT JOIN contact ON (owner_id='".$auth->auth["uid"]."' AND contact.user_id=a.user_id AND buddy=1)
-		WHERE changed > '".date("YmdHis",$now - ($my_messaging_settings["active_time"] * 60))."' 
-		AND sid != 'nobody' AND sid != '".$auth->auth["uid"]."' 
-		AND active_sessions.name = 'Seminar_User' ORDER BY changed DESC";
-		$db->query($query);
-		while ($db->next_record()){
-			$online[$db->f("username")] = array("name"=>$db->f("full_name"),"last_action"=>$db->f("lastaction"),"userid"=>$db->f("user_id"),"is_buddy" => $db->f("contact_id"));      
-		}
+		$online = get_users_online($my_messaging_settings["active_time"]);
 		
 		//Count new and old msg's
 		$old_msg = count_messages_from_user('in', " AND message_user.readed = 1 ");
