@@ -89,9 +89,64 @@ class AssignObject {
 		return $this->assign_user_id;
 	}
 
+	function getOwnerName($explain=FALSE, $id='') {
+		if (!$id)
+			$id=$this->owner_id;
+
+		switch (resourceObject::getOwnerType($id)) {
+			case "user";
+				if (!$explain)
+					return get_fullname($id);
+				else
+					return get_fullname($id)." (Nutzer)";
+			break;
+			case "inst":
+				$query = sprintf("SELECT Name FROM Institute WHERE Institut_id='%s' ",$id);
+				$this->db->query($query);
+				if ($this->db->next_record())
+					if (!$explain)
+						return $this->db->f("Name");
+					else
+						return $this->db->f("Name")." (Institut)";
+			break;
+			case "fak":
+				$query = sprintf("SELECT Name FROM Fakultaeten WHERE Fakultaets_id='%s' ",$id);
+				$this->db->query($query);
+				if ($this->db->next_record())
+					if (!$explain)
+						return $this->db->f("Name");
+					else
+						return $this->db->f("Name")." (Fakult&auml;t)";
+			break;
+			case "sem":
+				$query = sprintf("SELECT Name FROM seminare WHERE Seminar_id='%s' ",$id);
+				$this->db->query($query);
+				if ($this->db->next_record())
+					if (!$explain)
+						return $this->db->f("Name");
+					else
+						return $this->db->f("Name"). " (Veranstaltung)";	
+			break;
+			case "date":
+				$query = sprintf("SELECT content FROM termine WHERE termin_id='%s' ",$id);
+				$this->db->query($query);
+				if ($this->db->next_record())
+					if (!$explain)
+						return $this->db->f("content");
+					else
+						return $this->db->f("content"). " (Veranstaltungstermin)";	
+			break;
+			case "global":
+			default:
+				return "unbekannt";
+			break;
+		}
+	}
+	
+
 	function getUsername($use_free_name=TRUE) {
 		if ($this->assign_user_id) 
-			return resourceObject::getOwnerName(TRUE, $this->assign_user_id);
+			return $this->getOwnerName(TRUE, $this->assign_user_id);
 		elseif ($use_free_name)
 			return $this->getUserFreeName();
 		else 
@@ -351,7 +406,7 @@ class AssignEvent {
 	
 	function getUsername($use_free_name=TRUE) {
 		if ($this->assign_user_id) 
-			return resourceObject::getOwnerName(TRUE, $this->assign_user_id);
+			return assignObject::getOwnerName(TRUE, $this->assign_user_id);
 		elseif ($use_free_name)
 			return $this->getUserFreeName();
 		else 
@@ -722,23 +777,29 @@ class resourceObject {
 		if (!$id)
 			$id=$this->owner_id;
 			
+		//Ist es eine Veranstaltung?
+		$query = sprintf("SELECT Seminar_id FROM seminare WHERE Seminar_id='%s' ",$id);
+		$this->db->query($query);
+		if ($this->db->next_record())
+			return "sem";
+
 		//Ist es ein Nutzer?
 		$query = sprintf("SELECT user_id FROM auth_user_md5 WHERE user_id='%s' ",$id);
 		$this->db->query($query);
 		if ($this->db->next_record())
 			return "user";
 		
+		//Ist es ein Termin?
+		$query = sprintf("SELECT termin_id FROM termine WHERE termin_id='%s' ",$id);
+		$this->db->query($query);
+		if ($this->db->next_record())
+			return "date";
+
 		//Ist es ein Institut?
 		$query = sprintf("SELECT Institut_id FROM Institute WHERE Institut_id='%s' ",$id);
 		$this->db->query($query);
 		if ($this->db->next_record())
 			return "inst";
-
-		//Ist es eine Verabstaltung?
-		$query = sprintf("SELECT Seminar_id FROM seminare WHERE Seminar_id='%s' ",$id);
-		$this->db->query($query);
-		if ($this->db->next_record())
-			return "sem";
 
 		//Ist es eine Fakultaet?
 		$query = sprintf("SELECT Fakultaets_id FROM Fakultaeten WHERE Fakultaets_id='%s' ",$id);

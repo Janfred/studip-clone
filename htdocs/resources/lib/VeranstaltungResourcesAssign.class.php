@@ -65,7 +65,7 @@ class VeranstaltungResourcesAssign {
 	
 	function updateAssign() {
 		global $TERMIN_TYP;
-		
+
 		$query = sprintf("SELECT termin_id, date_typ FROM termine WHERE range_id = '%s' ", $this->seminar_id);
 		$this->db->query($query);
 		$course_session=FALSE;
@@ -85,13 +85,14 @@ class VeranstaltungResourcesAssign {
 
 	function changeMetaAssigns($resource_id='') {
 		global $SEMESTER;
+
 		//load data of the Veranstaltung
 		$query = sprintf("SELECT start_time, duration_time, metadata_dates FROM seminare WHERE Seminar_id = '%s'", $this->seminar_id);
 		$this->db->query($query);
 		$this->db->next_record();
 
 		$term_data = unserialize ($this->db->f("metadata_dates"));
-		
+
 		//determine first day of the start-week as sem_begin
 		if ($term_data["start_woche"] >= 0) {
 			foreach ($SEMESTER as $val)
@@ -150,7 +151,7 @@ class VeranstaltungResourcesAssign {
 		while ($this->db->next_record()) {
 			$changeAssign=new AssignObject($this->db->f("assign_id"));
 			if ($resource_id)
-				$createAssign->setResourceId($resource_id);
+				$changeAssign->setResourceId($resource_id);
 			
 			$changeAssign->setBegin($this->db->f("date"));
 			$changeAssign->setEnd($this->db->f("end_time"));
@@ -178,5 +179,16 @@ class VeranstaltungResourcesAssign {
 			$created_ids[] = $createAssign->getId();
 		}
 	}
+
+	function killDateAssign($termin_id) {
+		$query = sprintf ("SELECT assign_id FROM resources_assign LEFT JOIN resources_objects USING (resource_id) LEFT JOIN resources_categories USING (category_id) WHERE assign_user_id = '%s' AND resources_categories.name = 'Raum' ", $termin_id);
+		$this->db->query($query);
+		while ($this->db->next_record()) {
+			$killAssign=new AssignObject($this->db->f("assign_id"));
+			//createAssign->checkIsFree ° should performed here
+			$killAssign->delete();
+		}
+	}
+	
 }
 ?>

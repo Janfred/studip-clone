@@ -21,6 +21,20 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 /*****************************************************************************
+a quick function to get the resource_id (only rooms!) for a assigned date
+/*****************************************************************************/
+
+function getDateAssigenedRoom($date_id){
+	$db=new DB_Seminar;
+	$query = sprintf ("SELECT resources_assign.resource_id FROM resources_assign LEFT JOIN resources_objects USING (resource_id) LEFT JOIN resources_categories USING (category_id) WHERE assign_user_id = '%s' AND resources_categories.name = 'Raum' ", $date_id);
+	$db->query($query);
+	if ($db->next_record())
+		return $db->f("resource_id");
+	else
+		return FALSE;
+}
+
+/*****************************************************************************
 a quick function to get a name from a resources object
 /*****************************************************************************/
 
