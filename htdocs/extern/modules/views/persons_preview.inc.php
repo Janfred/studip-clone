@@ -133,8 +133,8 @@ foreach ($group_data as $groups) {
 	
 		$wert_daten = array(
 			"Nachname"         => sprintf("<a href=\"\"%s><font%s>%s</font></a>",
-												$this->config->getAttributes("Link", "a"),
-												$this->config->getAttributes("Link", "font"),
+												$this->config->getAttributes("LinkIntern", "a"),
+												$this->config->getAttributes("LinkIntern", "font"),
 												htmlReady($data["name"])),
 												
 			"Telefon"      => sprintf("<font%s>%s</font>",
@@ -151,8 +151,8 @@ foreach ($group_data as $groups) {
 			
 			"Email"       => sprintf("<a href=\"mailto:%s\"%s><font%s>%s</font></a>",
 												$data["email"],
-												$this->config->getAttributes("Link", "a"),
-												$this->config->getAttributes("Link", "font"),
+												$this->config->getAttributes("LinkIntern", "a"),
+												$this->config->getAttributes("LinkIntern", "font"),
 												$data["email"])
 		);
 		
