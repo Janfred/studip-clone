@@ -251,7 +251,7 @@ switch ($i_page) {
 				$reiter_view="lernmodule_edit";
 			break;
 			default :
-				$reiter_view="lernmodule_use";
+				$reiter_view="lernmodule_show";
 			break;
 		}
 	break;
