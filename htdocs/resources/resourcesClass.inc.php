@@ -468,6 +468,10 @@ class AssignObject {
 	}
 
 	function delete() {
+		/*
+		NOTE: this feature isn't used in the moment. I could be usuful, if a functionality to delete assings from
+		Veranstaltungen by an resources admin. So - we keep it for the future...
+		
 		//update the owner in the case it is a Veranstaltung (delete resource_id from the metadata array)
 		if ($this->getOwnerType() == "sem") {
 			$query = sprintf ("SELECT metadata_dates FROM seminare WHERE Seminar_id = '%s' ", $this->assign_user_id);
@@ -484,7 +488,7 @@ class AssignObject {
 			$serialized_metadata = serialize($metadata_termin);
 			$query = sprintf ("UPDATE seminare SET metadata_dates ='%s' WHERE Seminar_id = '%s' ", $serialized_metadata, $this->assign_user_id);
 			$this->db->query($query);
-		}
+		}*/
 		
 		$query = sprintf("DELETE FROM resources_assign WHERE assign_id='%s'", $this->id);
 		if($this->db->query($query))
