@@ -190,7 +190,7 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 		<tr>
 			<td colspan="2" valign="top" width="30%" class="steelgraulight"><?
 				// list of to-be-receiver 
-				echo "<form action=\"".$PHP_SELF."\" method=\"post\" style=\"display: inline\">";
+				echo "<form action=\"".$PHP_SELF."\" method=\"post\">";
 				if (sizeof($sms_data["p_rec"]) == "0") { 
 					echo "<font size=\"-1\">"._("Bitte w&auml;hlen Sie mindestens einen Empf&auml;nger aus.");
 					if (get_username($user->id) == $rec_uname) {
@@ -198,7 +198,7 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 					}
 					echo "</font>";
 				} else {
-					echo "<select size=\"5\" width= \"45\" name=\"del_receiver[]\" multiple>";
+					echo "<select size=\"5\" name=\"del_receiver[]\" multiple style=\"width: 200\">";
 					if ($sms_data["p_rec"]) {
 						foreach ($sms_data["p_rec"] as $a) {
 							echo "<option value=\"$a\">".get_fullname_from_uname($a)."</option>";
@@ -240,11 +240,15 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 					if ($x == "0") { // all adresses already added
 						print("Bereits alle Personen des Adressbuchs hinzugef&uuml;gt!");
 					} else { // show adresses-select
-						echo "<select size=\"3\" width=\"45\" name=\"add_receiver[]\" multiple>";
+						echo "<select size=\"3\" name=\"add_receiver[]\" multiple style=\"width: 200\">";
 						$db->query($query_for_adresses);
 						while ($db->next_record()) {
-							if (!in_array($db->f("username"), $sms_data["p_rec"])) {
+							if (empty($sms_data["p_rec"])) {
 								echo "<option value=\"".$db->f("username")."\">".htmlReady(my_substr($db->f("fullname"),0,35))."</option>";
+							} else {
+								if (!in_array($db->f("username"), $sms_data["p_rec"])) {
+									echo "<option value=\"".$db->f("username")."\">".htmlReady(my_substr($db->f("fullname"),0,35))."</option>";
+								}
 							}
 						}
 						echo "</select><br><input type=\"image\" name=\"add_receiver_button\" src=\"./pictures/move_left.gif\" border=\"0\" ".tooltip(_("fügt alle ausgewähtlen Personen der EmpfängerInnenliste hinzu")).">&nbsp;<font size=\"-1\">"._("ausgew&auml;hlte hinzufügen")."</font>";
@@ -257,15 +261,20 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 					SELECT username, ".$_fullname_sql['full_rev']." AS fullname FROM auth_user_md5 LEFT JOIN user_info USING(user_id) WHERE perms IN ('autor', 'tutor', 'dozent') AND (username LIKE '%$search_exp%' OR Vorname LIKE '%$search_exp%' OR Nachname LIKE '%$search_exp%') ORDER BY Nachname ASC";
 					$db->query($query); //
 					if (!$db->num_rows()) {
-						
 						echo "&nbsp;<input type=\"image\" name=\"reset_freesearch\" src=\"./pictures/rewind.gif\" border=\"0\" value=\""._("Suche zur&uuml;cksetzen")."\" ".tooltip(_("setzt die Suche zurück")).">";
 						echo "&nbsp;<font size=\"-1\">"._("keine Treffer")."</font>";
 					} else {
 						echo "<input type=\"image\" name=\"add_freesearch\" ".tooltip(_("zu Empfängerliste hinzufügen"))." value=\""._("zu Empf&auml;ngerliste hinzuf&uuml;gen")."\" src=\"./pictures/move_left.gif\" border=\"0\">&nbsp;";
 						echo "<select size=\"1\" width=\"100\" name=\"freesearch[]\">";
 						while ($db->next_record()) {
-							if (!in_array($db->f("username"), $sms_data["p_rec"]) && !in_array($db->f("username"), $adresses_array) && get_username($user->id) != $db->f("username")) {
-								echo "<option value=\"".$db->f("username")."\">".htmlReady(my_substr($db->f("fullname"),0,35))."</option>";
+							if (empty($sms_data["p_rec"])) {
+								if (get_username($user->id) != $db->f("username")) {
+									echo "<option value=\"".$db->f("username")."\">".htmlReady(my_substr($db->f("fullname"),0,35))."</option>";
+								}							
+							} else {
+								if (!in_array($db->f("username"), $sms_data["p_rec"]) && get_username($user->id) != $db->f("username")) {
+									echo "<option value=\"".$db->f("username")."\">".htmlReady(my_substr($db->f("fullname"),0,35))."</option>";
+								}
 							}
 						}
 						echo "</select>";
@@ -330,10 +339,6 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 	echo "</td>";	
 
 	echo"</form>";
-
-###
-#sprintf(_("Nutzen Sie die Buddy-Liste oder freien Suche um Empf&auml;nger hinzuf&uuml;gen. %s Klicken Sie %s hier %s um alle Buddies als Empf&auml;nger auszuw&auml;hlen"), "<br>", "<a href=\"".$PHP_SELF."?cmd=select_buddies\">", "</a>")
-###
 
 	echo "</td></tr></table>";
 	print "</td><td class=\"blank\" width=\"270\" align=\"right\" valign=\"top\">";
