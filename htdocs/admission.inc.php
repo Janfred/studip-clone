@@ -132,7 +132,7 @@ function update_admission ($seminar_id, $send_message=TRUE) {
 	
 	//Daten holen / Abfrage ob ueberhaupt begrenzt
 	$db->query("SELECT Seminar_id, Name, admission_endtime, admission_turnout, admission_type, start_time, admission_selection_take_place FROM seminare WHERE Seminar_id = '$seminar_id' ");
-	$db->next_record())
+	$db->next_record();
 	//Veranstaltung einfach auffuellen (nach Lostermin und Ender der Kontingentierung)
 	if ($db->f("admission_selection_take_place")) {
 		//anzahl der freien Plaetze holen
