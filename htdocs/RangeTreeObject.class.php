@@ -59,7 +59,17 @@ class RangeTreeObject {
 	* 
 	* @access	public
 	* @var		array $item_data
-	*/var $item_data;
+	*/
+	var $item_data;
+	
+	/**
+	* associative array with mapping for database fields
+	*
+	* 
+	* @access	public
+	* @var		array $item_data_mapping
+	*/
+	var $item_data_mapping = null;
 	
 	/**
 	* Factory method

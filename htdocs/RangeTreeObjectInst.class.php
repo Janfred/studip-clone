@@ -21,7 +21,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 require_once ($ABSOLUTE_PATH_STUDIP . "/RangeTreeObject.class.php");
-
+require_once ($ABSOLUTE_PATH_STUDIP . "/config.inc.php");
 /**
 * class for items in the "range tree"
 *
@@ -46,6 +46,10 @@ class RangeTreeObjectInst extends RangeTreeObject {
 		//parent::$base_class($item_id); //calling the baseclass constructor 
 		$this->$base_class($item_id); //calling the baseclass constructor PHP < 4.1.0
 		$this->initItemDetail();
+		$this->item_data_mapping = array('Strasse' => 'Straße', 'Plz' => 'Ort', 'telefon' => 'Tel.', 'fax' => 'Fax',
+										'url' => 'Homepage', 'email' => 'Kontakt');
+		$this->item_data['type'] = ($this->item_data['type']) ? $GLOBALS['INST_TYPE'][$this->item_data['type']]['name'] : $GLOBALS['INST_TYPE'][1]['name'];
+		
 	}
 	
 	

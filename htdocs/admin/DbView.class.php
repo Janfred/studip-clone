@@ -191,10 +191,7 @@ class DbView {
 			while($this->db->next_record()) {
 				$result[] = $this->db->Record[0];
 			}
-			if (count($result) == 1) 
-				$value_list = "'$result[0]'";
-			else 
-				$value_list = "'".join("','",$result)."'";
+			$value_list = $this->get_value_list($result);
 		}
 		return $value_list;
 	}
@@ -202,6 +199,15 @@ class DbView {
 	function get_uniqid(){
 		mt_srand((double)microtime()*1000000);
 		return md5(uniqid (mt_rand()));
+	}
+	
+	function get_value_list($list){
+		$value_list = false;
+		if (count($list) == 1) 
+			$value_list = "'$list[0]'";
+		else 
+			$value_list = "'".join("','",$list)."'";
+		return $value_list;
 	}
 	
 	function get_view($name,$param){

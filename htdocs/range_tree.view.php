@@ -22,7 +22,7 @@
 // +---------------------------------------------------------------------------+
 // $Id$
 $_views["TREE_KIDS"] = array("pk"=>"item_id","temp_table_type"=>"HEAP",
-							"query"=>"SELECT * FROM range_tree WHERE parent_id=? ORDER BY priority");
+							"query"=>"SELECT item_id FROM range_tree WHERE parent_id=? ORDER BY priority");
 $_views["TREE_GET_DATA"] = array("pk"=>"item_id","temp_table_type"=>"HEAP",
 							"query"=>"SELECT a.*, b.Name AS fak_name, c.Name as inst_name FROM range_tree a LEFT JOIN Fakultaeten b ON (a.studip_object = 'fak' AND a.studip_object_id = b.Fakultaets_id)
 LEFT JOIN Institute c ON (a.studip_object = 'inst' AND a.studip_object_id = c.Institut_id) ORDER BY priority");
@@ -32,4 +32,10 @@ $_views["TREE_OBJECT_DETAIL"] = array("pk"=>"","temp_table_type"=>"HEAP",
 							"query"=>"SELECT * FROM ! WHERE ! LIKE ? ");
 $_views["TREE_OBJECT_CAT"] = array("pk"=>"kategorie_id","temp_table_type"=>"MyISAM",
 							"query"=>"SELECT * FROM kategorien WHERE range_id LIKE ? ORDER BY priority");
-?>
+$_views["TREE_INST_STATUS"] = array("pk"=>"","temp_table_type"=>"HEAP",
+							"query"=>"SELECT Institut_id FROM user_inst WHERE Institut_id IN(&) AND user_id=? AND inst_perms='admin'");
+$_views["TREE_FAK_STATUS"] = array("pk"=>"","temp_table_type"=>"HEAP",
+							"query"=>"SELECT a.Fakultaets_id,Institut_id FROM fakultaet_user a LEFT JOIN Institute USING(Fakultaets_id) WHERE a.Fakultaets_id IN(&) AND user_id=? AND status='admin'");
+
+$_views["TREE_UPD_PRIO"] = array("query" => "UPDATE range_tree SET priority=! WHERE item_id=?");
+							?>

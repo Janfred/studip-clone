@@ -107,6 +107,7 @@ class StudipRangeTree {
 	* @access public
 	*/
 	function init(){
+		$this->tree_childs = array();
 		$db = $this->view->get_query("view:TREE_GET_DATA");
 		while ($db->next_record()){
 			$item_name = $db->f("name");
@@ -115,7 +116,7 @@ class StudipRangeTree {
 			} elseif ($db->f("studip_object") == "inst"){
 				$item_name = $db->f("inst_name");
 			}
-		$this->tree_data[$db->f("item_id")] = array("parent_id" => $db->f("parent_id"),"level" => $db->f("level"), 
+		$this->tree_data[$db->f("item_id")] = array("parent_id" => $db->f("parent_id"), 
 													"priority" => $db->f("priority"), "name" => $item_name,
 													"studip_object" => $db->f("studip_object"), "studip_object_id" => $db->f("studip_object_id"));
 		if ($db->f("parent_id") == "root") {
@@ -123,7 +124,7 @@ class StudipRangeTree {
 		}
 		}
 		$item_kids = count($this->tree_childs['root']);
-		$this->tree_data['root'] = array('parent_id' => null, 'level' => '0', 'name' => $this->root_name, 'studip_object_id' => 'root', 'kids' => $item_kids);
+		$this->tree_data['root'] = array('parent_id' => null, 'name' => $this->root_name, 'studip_object_id' => 'root');
 	}
 	/**
 	* returns all direct kids
@@ -140,7 +141,7 @@ class StudipRangeTree {
 			while ($db->next_record()){
 				$this->tree_childs[$item_id][] = $db->f("item_id");
 				}
-			if (!$db->num_fields())
+			if (!$db->num_rows())
 				$this->tree_childs[$item_id] = "none";
 			} 
 		return ($this->tree_childs[$item_id] == "none") ? null : $this->tree_childs[$item_id];
@@ -231,6 +232,8 @@ class StudipRangeTree {
 	* @return	string	is primary key from table "institute" or "fakultaeten"
 	*/
 	function getAdminRange($item_id){
+		if (!$this->tree_data[$item_id])
+			return false;
 		$ret_id = $item_id;
 		while (!$this->tree_data[$ret_id]['studip_object_id']){
 			$ret_id = $this->tree_data[$ret_id]['parent_id'];
