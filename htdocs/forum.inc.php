@@ -827,7 +827,7 @@ $query = "SELECT x.topic_id, x.name , x.author , x.mkdate, x.chdate as age, y.na
 	.", ((6-(IFNULL(AVG(rate),3))-3)*5)+(IFNULL(views,0)/(((UNIX_TIMESTAMP()-x.mkdate)/604800)+1)) as score "
 	."FROM px_topics x LEFT JOIN auth_user_md5 USING(user_id) LEFT JOIN object_views ON(object_views.object_id=x.topic_id) LEFT JOIN object_rate ON(object_rate.object_id=x.topic_id) "
 	."LEFT OUTER JOIN object_user ON(object_user.object_id=x.topic_id AND object_user.user_id='$user->id' AND flag='fav') , px_topics y "
-	."WHERE x.root_id = y.topic_id AND x.seminar_id = '$SessionSeminar'".$addon." "
+	."WHERE x.root_id = y.topic_id AND x.seminar_id = '$SessionSeminar' AND (x.chdate>=x.mkdate OR x.user_id='$user->id')".$addon." "
 	."GROUP by x.topic_id ORDER BY ".$forum["sort"]." ".$order;
 
 $query .= " LIMIT $flatviewstartposting,$postingsperside";
@@ -948,7 +948,7 @@ function DisplayFolders ($open=0, $update="", $zitat="") {
 	."FROM px_topics t LEFT JOIN px_topics s USING(root_id) "
 	."LEFT JOIN object_views ON(object_views.object_id=t.topic_id) LEFT JOIN object_rate ON(object_rate.object_id=t.topic_id) "
 	."LEFT OUTER JOIN object_user ON(object_user.object_id=t.root_id AND object_user.user_id='$user->id' AND flag='fav') "
-	."WHERE t.topic_id = t.root_id AND t.Seminar_id = '$SessionSeminar' GROUP BY t.root_id  ORDER BY $order";
+	."WHERE t.topic_id = t.root_id AND t.Seminar_id = '$SessionSeminar' AND (t.chdate>=t.mkdate OR t.user_id='$user->id') GROUP BY t.root_id  ORDER BY $order";
 	$db=new DB_Seminar;
 	$db->query($query);
 	if ($db->num_rows()==0) {  // Das Forum ist leer
@@ -1037,7 +1037,7 @@ function DisplayKids ($forumposting, $level=0) {
 		." LEFT JOIN object_views ON(object_views.object_id=topic_id) LEFT JOIN object_rate ON(object_rate.object_id=topic_id)"
 		." LEFT OUTER JOIN object_user ON(object_user.object_id=topic_id AND object_user.user_id='$user->id' AND flag='fav')"
 		." WHERE"
-		." parent_id = '$topic_id'"
+		." parent_id = '$topic_id' AND (px_topics.chdate>=px_topics.mkdate OR px_topics.user_id='$user->id')"
 		." GROUP BY topic_id ORDER by px_topics.mkdate";
 	$db=new DB_Seminar;
 	$db->query($query);

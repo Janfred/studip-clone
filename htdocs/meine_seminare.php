@@ -29,7 +29,7 @@ function get_my_sem_values(&$my_sem) {
 	$db2 = new DB_seminar;
 
 	// Postings
-	$db2->query("SELECT b.Seminar_id,count(topic_id) as count, count(IF((chdate > b.loginfilenow AND user_id !='".$user->id."'),a.topic_id,NULL)) AS neue 
+	$db2->query("SELECT b.Seminar_id,count(topic_id) as count, count(IF((chdate > b.loginfilenow AND chdate >= mkdate AND user_id !='".$user->id."'),a.topic_id,NULL)) AS neue 
 	FROM loginfilenow_".$user->id." b  LEFT JOIN px_topics a USING (Seminar_id) GROUP BY b.Seminar_id");
 	while($db2->next_record()) {
 		if ($my_sem[$db2->f("Seminar_id")]["modules"]["forum"]) {
