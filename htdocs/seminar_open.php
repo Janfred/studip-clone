@@ -129,6 +129,8 @@ if ($SessionStart==0) {
 	$sess->register("SessSemName");
 	$sess->register("messenger_started");
 	$sess->register("homepage_cache");
+	$sess->register("homepage_cache_own");
+	
 
 	// Language Settings
 	$sess->register("_language");

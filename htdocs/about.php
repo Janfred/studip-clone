@@ -115,6 +115,8 @@ if ($auth->auth["uid"]!=$user_id && $homepage_cache != $user_id) {
 	$homepage_cache = $user_id;
 }
 
+if ($auth->auth["uid"]==$user_id)
+	$homepage_cache_own = time();
 	
 $DataFields = new DataFields($user_id);
 

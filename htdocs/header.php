@@ -242,7 +242,32 @@ if ($auth->auth["uid"] == "nobody") { ?>
 			
 <?			
 		if ($perm->have_perm("autor")) {
-			echo MakeToolbar("pictures/einst.gif","about.php",_("Homepage"),_("Zu Ihrer Einstellungsseite"),40, "_top","right");
+			if ($homepage_cache_own)
+				$time = $homepage_cache_own;
+			else
+				$time = $LastLogin;
+			
+			$picture = "pictures/einst.gif";
+			$txt = _("Zu Ihrer Einstellungsseite");
+			
+			$db->query("SELECT COUNT(post_id) AS count
+				FROM guestbook 
+				WHERE range_id='".$user->id."' 
+				AND user_id!='".$user->id."' 
+				AND mkdate > '".$time."'");
+					
+			if ($db->next_record()) {
+				if ($db->f("count") == 1) {
+					$txt .= sprintf(_(", Sie haben %s neuen Eintrag im Gästebuch."), $db->f("count"));
+					$picture = "pictures/einst2.gif";
+				}
+				if ($db->f("count") > 1) {
+					$txt .= sprintf(_(", Sie haben %s neue Einträge im Gästebuch."), $db->f("count"));
+					$picture = "pictures/einst2.gif";
+				}
+			}
+			echo MakeToolbar($picture,"about.php",_("Homepage"),$txt,40, "_top","right");
+
 			echo MakeToolbar("pictures/suchen.gif","auswahl_suche.php",_("Suche"),_("Im System suchen"),40, "_top");
 		}
 
