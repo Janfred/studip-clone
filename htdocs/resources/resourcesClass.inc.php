@@ -1,23 +1,38 @@
 <?
-/*
-resourcesClass.php - 0.8
-Klassen fuer Ressourcenverwaltung von Stud.IP.
-Copyright (C) 2002 Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
-
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+/**
+* resourcesClass.php
+* 
+* the resources baseclasses
+* 
+*
+* @author		Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
+* @version		$Id$
+* @access		public
+* @modulegroup	resources
+* @module		resourcesClass.php
+* @package		resources
 */
+
+// +---------------------------------------------------------------------------+
+// This file is part of Stud.IP
+// resourcesClass.php
+// Basisklassen der Ressourcenverwaltung
+// Copyright (C) 2003 Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
+// +---------------------------------------------------------------------------+
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or any later version.
+// +---------------------------------------------------------------------------+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+// +---------------------------------------------------------------------------+
+
 
 /*****************************************************************************
 AssignObject, zentrale Klasse der Objekte der Belegung
@@ -106,7 +121,7 @@ class AssignObject {
 				if (!$explain)
 					return get_fullname($id);
 				else
-					return get_fullname($id)." (Nutzer)";
+					return get_fullname($id)." ("._("Nutzer").")";
 			break;
 			case "inst":
 				$query = sprintf("SELECT Name FROM Institute WHERE Institut_id='%s' ",$id);
@@ -115,7 +130,7 @@ class AssignObject {
 					if (!$explain)
 						return $this->db->f("Name");
 					else
-						return $this->db->f("Name")." (Einrichtung)";
+						return $this->db->f("Name")." ("._("Einrichtung").")";
 			break;
 			case "fak":
 				$query = sprintf("SELECT Name FROM Institute WHERE Institut_id='%s' AND fakultaets_id='%s' ",$id,$id);
@@ -124,7 +139,7 @@ class AssignObject {
 					if (!$explain)
 						return $this->db->f("Name");
 					else
-						return $this->db->f("Name")." (Fakult&auml;t)";
+						return $this->db->f("Name")." ("._("Fakult&auml;t").")";
 			break;
 			case "sem":
 				$query = sprintf("SELECT Name FROM seminare WHERE Seminar_id='%s' ",$id);
@@ -133,7 +148,7 @@ class AssignObject {
 					if (!$explain)
 						return $this->db->f("Name");
 					else
-						return $this->db->f("Name"). " (Veranstaltung)";	
+						return $this->db->f("Name"). " ("._("Veranstaltung").")";	
 			break;
 			case "date":
 				$query = sprintf("SELECT Name, content, date_typ FROM termine LEFT JOIN seminare ON (seminar_id = range_id) WHERE termin_id='%s' ",$id);
@@ -733,7 +748,7 @@ class ResourceObject {
 	var $db;					//Datenbankanbindung;
 	var $name;				//Name des Objects
 	var $description;			//Beschreibung des Objects;
-	var $owner_id;			//Owner_id;
+	var $owner_id;				//Owner_id;
 	var $category_id;			//Die Kategorie des Objects
 	var $category_name;		//name of the assigned catgory
 	var $category_iconnr;		//iconnumber of the assigned catgory
@@ -908,21 +923,21 @@ class ResourceObject {
 		switch (ResourceObject::getOwnerType($id)) {
 			case "all":
 				if (!$explain)
-					return "Jeder";
+					return _("Jeder");
 				else
-					return "Jeder (alle Nutzer)";
+					return _("Jeder (alle Nutzer)");
 			break;
 			case "global":
 				if (!$explain)
-					return "Global";
+					return _("Global");
 				else
-					return "Global (zentral verwaltet)";
+					return _("Global (zentral verwaltet)");
 			break;
 			case "user";
 				if (!$explain)
 					return get_fullname($id);
 				else
-					return get_fullname($id)." (Nutzer)";
+					return get_fullname($id)." ("._("Nutzer").")";
 			break;
 			case "inst":
 				$query = sprintf("SELECT Name FROM Institute WHERE Institut_id='%s' ",$id);
@@ -931,7 +946,7 @@ class ResourceObject {
 					if (!$explain)
 						return $this->db->f("Name");
 					else
-						return $this->db->f("Name")." (Einrichtung)";
+						return $this->db->f("Name")." ("._("Einrichtung").")";
 			break;
 			case "fak":
 				$query = sprintf("SELECT Name FROM Institute WHERE Institut_id='%s' AND fakultaets_id='%s' ",$id,$id);
@@ -940,7 +955,7 @@ class ResourceObject {
 					if (!$explain)
 						return $this->db->f("Name");
 					else
-						return $this->db->f("Name")." (Fakult&auml;t)";
+						return $this->db->f("Name")." ("._("Fakult&auml;t").")";
 			break;
 			case "sem":
 				$query = sprintf("SELECT Name FROM seminare WHERE Seminar_id='%s' ",$id);
@@ -949,7 +964,7 @@ class ResourceObject {
 					if (!$explain)
 						return $this->db->f("Name");
 					else
-						return $this->db->f("Name"). " (Veranstaltung)";	
+						return $this->db->f("Name"). " ("._("Veranstaltung").")";
 			break;
 		}
 	}
@@ -1504,7 +1519,7 @@ class ResourcesMsg {
 			foreach ($this->codes as $val)
 				$collected_msg.=($this->msg[$val]["mode"]."§".$this->msg[$val]["msg"]."§");
 			if ($view_mode == "window")
-				parse_window($collected_msg, "§", $this->msg[$this->codes[0]]["titel"], "<a href=\"resources.php\">"._("zur&uuml;ck")."</a>");
+				parse_window($collected_msg, "§", $this->msg[$this->codes[0]]["titel"], "<a href=\"resources.php?view=resources\">"._("zur&uuml;ck")."</a>");
 			else
 				parse_msg($collected_msg, "§", "blank", 1, FALSE);
 		}
@@ -1512,7 +1527,7 @@ class ResourcesMsg {
 	
 	function displayMsg($msg_code, $view_mode = "window") {
 		if ($view_mode == "window")
-			parse_window($this->msg[$msg_code]["mode"]."§".$this->msg[$msg_code]["msg"], "§", $this->msg[$msg_code]["titel"], "<a href=\"resources.php\">"._("zur&uuml;ck")."</a>");
+			parse_window($this->msg[$msg_code]["mode"]."§".$this->msg[$msg_code]["msg"], "§", $this->msg[$msg_code]["titel"], "<a href=\"resources.php?view=resources\">"._("zur&uuml;ck")."</a>");
 		else
 			parse_msg($this->msg[$msg_code]["mode"]."§".$this->msg[$msg_code]["msg"], "§", "blank", 1, FALSE);
 	}
