@@ -39,6 +39,8 @@ $sess->register("admin_dates_data");
 if (($i_page== "adminarea_start.php") && ($admin_sem_id)) {
 	$links_admin_data='';
 	$links_admin_data["sem_id"]=$admin_sem_id;
+	$links_admin_data["select_old"]=TRUE;
+	$links_admin_data["select_inactive"]=TRUE;
 	$sem_create_data='';
 	$admin_dates_data='';
 	$admin_admission_data='';
@@ -52,6 +54,8 @@ if (($i_page== "adminarea_start.php") && ($admin_sem_id)) {
 elseif ($admin_inst_id) {
 	$links_admin_data='';
 	$links_admin_data["inst_id"]=$admin_inst_id;
+	$links_admin_data["select_old"]=TRUE;
+	$links_admin_data["select_inactive"]=TRUE;
 	$sem_create_data='';
 	$admin_dates_data='';
 	$admin_admission_data='';
@@ -64,6 +68,8 @@ elseif ($admin_inst_id) {
 //neue Admin-Sitzung, ich komme frisch rein ($list==TRUE)
 elseif (($i_page== "adminarea_start.php") && ($list)) {
 	$links_admin_data='';
+	$links_admin_data["select_old"]=TRUE;
+	$links_admin_data["select_inactive"]=TRUE;
 	$sem_create_data='';
 	$admin_dates_data='';
 	$admin_admission_data='';	
@@ -76,6 +82,8 @@ elseif (($i_page== "adminarea_start.php") && ($list)) {
 //neue Admin-Seminar-Sitzung, ich komme aus einem Seminar rein ($new_sem==TRUE) 
 elseif ((($SessSemName[1]) && ($new_sem)) || ($SessSemName[1] && !$links_admin_data["sem_id"]  && $new_sem)) {
 	$links_admin_data='';
+	$links_admin_data["select_old"]=TRUE;
+	$links_admin_data["select_inactive"]=TRUE;
 	$links_admin_data["sem_id"]=$SessSemName[1];
 	$sem_create_data='';
 	$admin_dates_data='';
@@ -111,6 +119,8 @@ if ($srch_send) {
 	$links_admin_data["srch_inst"]=$srch_inst;
 	$links_admin_data["srch_fak"]=$srch_fak;	
 	$links_admin_data["srch_exp"]=$srch_exp;
+	$links_admin_data["select_old"]=$select_old;
+	$links_admin_data["select_inactive"]=$select_inactive;
 	$links_admin_data["srch_on"]=TRUE;
 	$list=TRUE;
 	}
@@ -141,9 +151,11 @@ if ($links_admin_data["sem_id"]) {
 		case "admin_metadates.php": 
 			$seminar_id=$links_admin_data["sem_id"];
 		break;
-		case "admin_literatur.php": 
-			$range_id=$links_admin_data["sem_id"];
-			$ebene="sem";
+		case "admin_literatur.php":
+			if ($links_admin_data["view"]=="sem") {
+				$range_id=$links_admin_data["sem_id"];
+				$ebene="sem";
+			}
 		break;
 		case "admin_news.php": 
 			$range_id=$links_admin_data["sem_id"];
@@ -155,7 +167,7 @@ if ($links_admin_data["sem_id"]) {
 		break;
 		}
 	}
-	
+
 //Wenn Institut_id gesetzt ist oder vorgewaehlt wurde, werden die spaeteren Seiten mit entsprechend gesetzten Werten aufgerufen
 if ($links_admin_data["inst_id"]) {
 	switch ($i_page) {
@@ -166,7 +178,10 @@ if ($links_admin_data["inst_id"]) {
 			$inst_id=$links_admin_data["inst_id"];
 		break;
 		case "admin_literatur.php": 
-			$range_id=$links_admin_data["inst_id"];
+			if ($links_admin_data["view"]=="inst") {
+				$range_id=$links_admin_data["inst_id"];
+				$ebene="inst";
+				}
 		break;
 		case "admin_news.php": 
 			$range_id=$links_admin_data["inst_id"];
@@ -216,7 +231,9 @@ if ($links_admin_data["inst_id"]) {
 	elseif ($links_admin_data["inst_id"]) 
 		echo " <a href=\"adminarea_start.php?list=TRUE\"><img alt=\"Auswahl der Einrichtung ", htmlReady($db->f("Name")), " aufheben\" align=\"absmiddle\" src=\"pictures/admin.gif\" border=0></a>";
 					
-	if ($i_page != "admin_dates.php" AND $i_page != "admin_literatur.php" AND $i_page != "admin_news.php" AND $i_page != "admin_seminare1.php" AND $i_page != "admin_seminare_assi.php" AND $i_page != "admin_metadates.php" AND $i_page != "admin_admission.php" AND $i_page != "adminarea_start.php" AND $i_page != "archiv_assi.php" OR $links_admin_data["sem_id"])
+	if ($i_page != "admin_dates.php" AND $i_page != "admin_literatur.php" AND $i_page != "admin_news.php" AND $i_page != "admin_seminare1.php" AND $i_page != "admin_seminare_assi.php" AND $i_page != "admin_metadates.php" AND $i_page != "admin_admission.php" AND $i_page != "adminarea_start.php" AND $i_page != "archiv_assi.php" 
+		OR $links_admin_data["sem_id"]
+		OR (($i_page == "admin_news.php" AND $links_admin_data["view"]=="inst") OR $i_page == "admin_institut.php" OR $i_page == "inst_admin.php" OR ($i_page == "admin_literatur.php" AND $links_admin_data["view"]=="inst")))
 		echo "&nbsp; <img src=\"pictures/reiter2.jpg\" align=absmiddle>";
 	else
 		echo "&nbsp; <img src=\"pictures/reiter1.jpg\" align=absmiddle>";
@@ -355,11 +372,9 @@ if ($i_page == "admin_fakultaet.php" OR $i_page == "admin_fach.php" OR $i_page =
 </tr>
 </table>
 <?
-
 //Einheitliches Auswahlmenu fuer Einrichtungen
 if ((!$links_admin_data["inst_id"]) && ($list) &&
-	(($i_page == "admin_institut.php" OR $i_page == "admin_literatur.php" OR $i_page == "inst_admin.php"))) {
-
+	(($i_page == "admin_institut.php" OR ($i_page == "admin_literatur.php" AND $links_admin_data["view"]=="inst") OR $i_page == "inst_admin.php"))) {
 	?>
 	<table width="100%" cellspacing=0 cellpadding=0 border=0>
 	<tr valign=top align=middle>
@@ -384,18 +399,18 @@ if ((!$links_admin_data["inst_id"]) && ($list) &&
 				</tr>
 				<tr>
 					<td class="steel1">
-					<select class="steel1" name="admin_inst_id" size="1">
+					<font size=-1><select class="steel1" name="admin_inst_id" size="1">
 					<?
 					if ($perm->have_perm("root"))
 						$db->query("SELECT Institut_id, Name  FROM Institute ORDER BY Name");
 					else
 						$db->query("SELECT Institute.Institut_id, Name FROM Institute LEFT JOIN user_inst USING(Institut_id) WHERE user_id = '$user->id' AND inst_perms = 'admin' ORDER BY Name");
 					
-					printf ("<option value=\"0\">-- bitte Einrichtung ausw&auml;hlen --\n");
+					printf ("<option value=\"0\">-- bitte Einrichtung ausw&auml;hlen --</option>\n");
 					while ($db->next_record())
-						printf ("<option %s value=\"%s\">%s \n", $db->f("Institut_id") == $inst_id ? "selected" : "", $db->f("Institut_id"), htmlReady(substr($db->f("Name"), 0, 50)));
+						printf ("><option %s value=\"%s\">%s </option></font>\n", $db->f("Institut_id") == $inst_id ? "selected" : "", $db->f("Institut_id"), htmlReady(substr($db->f("Name"), 0, 50)));
 					?>
-				</select>&nbsp; 
+				</select></font>&nbsp; 
 				<input type="IMAGE" src="./pictures/buttons/auswaehlen-button.gif" border=0 value="bearbeiten">
 				</td>
 			</tr>
@@ -540,11 +555,12 @@ if ((!$links_admin_data["sem_id"] || ($i_page == "archiv_assi.php")) && ($list) 
 							</td>
 							<td class="steel1">
 								<font size=-1>freie Suche:</font><br /><input type="TEXT" name="srch_exp" maxlength=255 size=20 value="<? echo $links_admin_data["srch_exp"] ?>" />
-							<input type="HIDDEN" name="srch_send" value="TRUE" />
+								<input type="HIDDEN" name="srch_send" value="TRUE" />
 						</td>
 						<td class="steel1" valign="bottom">
 								&nbsp; <br/>
 								<input type="IMAGE" src="./pictures/buttons/anzeigen-button.gif" border=0 name="anzeigen" value="Anzeigen" />
+								<input type="HIDDEN" name="view" value="<? echo $links_admin_data["view"]?>" />
 						</td>
 					</tr>
 					<?
@@ -553,10 +569,14 @@ if ((!$links_admin_data["sem_id"] || ($i_page == "archiv_assi.php")) && ($list) 
 					?>
 					<tr>
 						<td class="steel1" colspan=5>
-							<br />&nbsp;<font size=-1><input type="CHECKBOX" name="select_old" checked />&nbsp;nur alte Veranstaltungen ausw&auml;hlen (Endsemester verstrichen) </font><br />
-							&nbsp;<font size=-1><input type="CHECKBOX" name="select_inactive" checked />&nbsp;nur inaktive Veranstaltungen ausw&auml;hlen (letzte Aktion vor mehr als 6 Monaten) </font>
+							<br />&nbsp;<font size=-1><input type="CHECKBOX" name="select_old" <? if ($links_admin_data["select_old"]) echo checked ?> />&nbsp;nur alte Veranstaltungen ausw&auml;hlen (Endsemester verstrichen) </font><br />
+							<? //&nbsp;<font size=-1><input type="CHECKBOX" name="select_inactive" <? if ($links_admin_data["select_inactive"]) echo checked ?> />&nbsp;nur inaktive Veranstaltungen ausw&auml;hlen (letzte Aktion vor mehr als 6 Monaten) </font>
+							?>
 						</td>
 					</tr>
+					<? } else {?>
+					<input type="HIDDEN" name="select_old" value="<? if ($links_admin_data["select_old"]) echo "TRUE" ?> " />
+					<input type="HIDDEN" name="select_inactive" value="<? if ($links_admin_data["select_inactive"]) echo "TRUE" ?>" />
 					<? } ?>
 				<tr>
 					<td class="steel1" colspan=5>
@@ -635,7 +655,7 @@ if (($auth->auth["perm"] =="tutor") || ($auth->auth["perm"] == "dozent")){
 // ende Hotfix
 
 //Extension to the query, if we want to show lectures which are archiveable
-if ($i_page== "archiv_assi.php"){
+if (($i_page== "archiv_assi.php") && ($links_admin_data["select_old"])) {
 	if ($conditions)
 		$query.="AND ";
 	else
@@ -660,7 +680,7 @@ while ($db->next_record()) {
   	$user_id = $auth->auth["uid"];
 	$db2->query("select * from seminar_user WHERE Seminar_id = '$seminar_id' and user_id = '$user_id' AND (status = 'dozent' OR status = 'tutor')");
   	$db3->query("select * from seminare LEFT JOIN user_inst USING (Institut_id) where Seminar_id = '$seminar_id' and user_id = '$user_id' AND inst_perms = 'admin'");
-
+	
   	 if ($perm->have_perm("root") ||
 		($perm->have_perm("admin") && $db3->next_record()) || 
 		($db2->next_record()) ) {
@@ -700,7 +720,7 @@ while ($db->next_record()) {
 						<? } ?>&nbsp; 
 					</td>
 				</tr>
-				<? }
+				<? } 
 			}
 		$cssSw->switchClass();
 		echo "<tr><td class=\"".$cssSw->getClass()."\">".htmlReady(substr($db->f("Name"),0,100));
@@ -710,6 +730,8 @@ while ($db->next_record()) {
 		echo "<td align=\"center\" class=\"".$cssSw->getClass()."\"><font size=-1>";
 		$db4->query("SELECT Vorname, Nachname, username FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) where Seminar_id = '$seminar_id' and status = 'dozent'");
 		$k=0;
+		if (!$db4->num_rows())
+			echo "&nbsp; ";
 		while ($db4->next_record()) {
 			if ($k)
 				echo ", ";
@@ -764,7 +786,7 @@ while ($db->next_record()) {
 		}			
 	}
 	//Traurige Meldung wenn nichts gefunden wurde oder sonst irgendwie nichts da ist
-	if (!$db->num_rows()) {
+	if ($c<0) {
 		?>
 		<tr>
 			<?

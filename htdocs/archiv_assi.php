@@ -134,9 +134,9 @@ if ($kill) {
     	$run = FALSE;
     	}
 
-   //Trotzdem nochmal nachsehen   	
+   //Trotzdem nochmal nachsehen
     if (!$perm->have_perm("root")) {
-	$db2->query("select inst_perms from seminare LEFT JOIN user_inst USING(Institut_id) where Seminar_id = '$s_id' AND user_id = '$user_id'");
+	$db2->query("SELECT inst_perms FROM seminare LEFT JOIN user_inst USING(Institut_id) where Seminar_id = '$s_id' AND user_id = '$user->id'");
 		if (!$db2->next_record() || $db2->f("inst_perms") != "admin") {
 		      $msg .= "error§Sie haben keine Berechtigung diese Veranstaltung zu archivieren.§";
 		      $run = FALSE;
@@ -160,13 +160,12 @@ if ($kill) {
     ## Bevor es wirklich weg ist. kommt das Seminar doch noch schnell ins Archiv
     in_archiv($s_id);
     
-    $msg .= "info§<font size=-1>";
     ## Delete that Seminar.
 		## Alle Benutzer aus dem Seminar rauswerfen.
     $query = "DELETE from seminar_user where Seminar_id='$s_id'";
     $db->query($query);
     if (($db_ar = $db->affected_rows()) > 0) {
-      $msg .= "<li>$db_ar Veranstaltungsteilnehmer, Dozenten oder Tutoren archiviert.</li>";
+      $liste .= "<li>$db_ar Veranstaltungsteilnehmer, Dozenten oder Tutoren archiviert.</li>";
     }
 		## Alle Benutzer aus Wartelisten rauswerfen
     $query = "DELETE from admission_seminar_user where seminar_id='$s_id'";
@@ -176,33 +175,33 @@ if ($kill) {
 	  $query = "DELETE FROM seminar_inst where Seminar_id='$s_id'";
     $db->query($query);
     if (($db_ar = $db->affected_rows()) > 0) {
-      $msg .= "<li>$db_ar Zuordnungen zu Einrichtungen archiviert.</li>";
+      $liste .= "<li>$db_ar Zuordnungen zu Einrichtungen archiviert.</li>";
     }
 		## Alle Eintraege in der seminar_bereich rauswerfen
 	  $query = "DELETE FROM seminar_bereich where Seminar_id='$s_id'";
     $db->query($query);
     if (($db_ar = $db->affected_rows()) > 0) {
-      $msg .= "<li>$db_ar Zuordnungen zu Bereichen archiviert.</li>";
+      $liste .= "<li>$db_ar Zuordnungen zu Bereichen archiviert.</li>";
     }
 		## Alle Termine mit allem was dranhaengt zu diesem Seminar loeschen.
     if (($db_ar = delete_range_of_dates($s_id, TRUE)) > 0) {
-      $msg .= "<li>$db_ar Veranstaltungstermine archiviert.</li>";
+      $liste .= "<li>$db_ar Veranstaltungstermine archiviert.</li>";
     }
 		## Alle weiteren Postings zu diesem Seminar loeschen.
     $query = "DELETE from px_topics where Seminar_id='$s_id'";
     $db->query($query);
     if (($db_ar = $db->affected_rows()) > 0) {
-      $msg .= "<li>$db_ar Postings archiviert.</li>";
+      $liste .= "<li>$db_ar Postings archiviert.</li>";
     }
 		## Alle Dokumente im allgemeinen Ordner zu diesem Seminar loeschen.
     if (($db_ar = recursiv_folder_delete($s_id)) > 0) {
-      $msg .= "<li>$db_ar Dokumente und Ordner archiviert.</li>";
+      $liste .= "<li>$db_ar Dokumente und Ordner archiviert.</li>";
     }
 		## Literatur zu diesem Seminar löschen
 	  $query = "DELETE FROM literatur where range_id='$s_id'";
     $db->query($query);
     if (($db_ar = $db->affected_rows()) > 0) {
-      $msg .= "<li>Literatur und Links der Veranstaltung archiviert.</li>";
+      $liste .= "<li>Literatur und Links der Veranstaltung archiviert.</li>";
     }
 		## Alle News-Verweise auf dieses Seminar löschen
 	  $query = "DELETE FROM news_range where range_id='$s_id'";
@@ -222,9 +221,10 @@ if ($kill) {
       $tmp_news_deleted=$tmp_news_deleted+$db_ar;
     }
     if ($tmp_news_deleted)
-          $msg .= "<li>$tmp_news_deleted News gel&ouml;scht.</li>";
-    
-    $msg .= "</font>§";
+          $liste .= "<li>$tmp_news_deleted News gel&ouml;scht.</li>";
+
+    if ($liste)
+	    $msg .= "info§<font size=-1>$liste</font>§";
     
 		## und das Seminar loeschen.
     $query = "DELETE FROM seminare where Seminar_id= '$s_id'";
@@ -235,7 +235,7 @@ if ($kill) {
     }
     
     //Successful archived, if we are here
-    $msg .= "msg§<font size=-1>Die Veranstaltung <b>".htmlReady(stripslashes($tmp_name))."</b> wurde erfolgreich archiviert und aus den aktiven Veranstaltungen gel&ouml;scht.</font>§";
+    $msg .= "msg§Die Veranstaltung <b>".htmlReady(stripslashes($tmp_name))."</b> wurde erfolgreich archiviert und aus den aktiven Veranstaltungen gel&ouml;scht. Sie steht nun im Archiv zur Verf&uuml;gung§";
 
     //unset the checker, lecture is now killed!
     unset($archiv_assi_data["sem_check"][$s_id]);
@@ -261,7 +261,7 @@ if ($kill) {
 
 //Outputs...
 if (($archiv_assi_data["sems"]) && (sizeof($archiv_assi_data["sem_check"])>0)){
-	$msg.="info§<font color=\"red\" size=-1>Sie sind im Begriff, die untenstehende  Veranstaltung zu archivieren. Dieser Schritt kann nicht r&uuml;ckg&auml;ngig gemacht werden!";
+	$msg.="info§<font color=\"red\">Sie sind im Begriff, die untenstehende  Veranstaltung zu archivieren. Dieser Schritt kann nicht r&uuml;ckg&auml;ngig gemacht werden!";
 ?>
 <body>
 
@@ -350,6 +350,8 @@ if (($archiv_assi_data["sems"]) && (sizeof($archiv_assi_data["sem_check"])>0)){
 				<?
 				if ($db->f("VeranstaltungsNummer"))
 					printf ("<font size=-1><b>Veranstaltungsnummer:</b></font><br /><font size=-1>%s</font>",$db->f("VeranstaltungsNummer"));
+				else
+					print "&nbsp; ";
 				?>
 				</td>
 			</tr>
@@ -405,6 +407,8 @@ if (($archiv_assi_data["sems"]) && (sizeof($archiv_assi_data["sem_check"])>0)){
 				<?
 				if ($db->f("art"))
 					printf ("<font size=-1><b>Art/Form:</b></font><br /><font size=-1>%s</font>",$db->f("art"));
+				else
+					print "&nbsp; ";
 				?>
 				</td>
 			</tr>
