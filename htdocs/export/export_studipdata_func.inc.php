@@ -46,14 +46,14 @@ function export_range($range_id)
 {
 	global $db, $o_mode;
 
-	output_data ( xml_header(), $o_mode);
-
 //    Ist die Range-ID eine Instituts-ID?
 	$db=new DB_Seminar;
 
 	$db->query('SELECT * FROM Institute WHERE Institut_id = "' . $range_id . '"');
 	if (($db->next_record()) And ($db->f("Name") != "")) 
 	{
+		$range_name = $db->f("Name");
+		output_data ( xml_header(), $o_mode);
 		export_inst( $range_id );
 	}
 	
@@ -63,6 +63,8 @@ function export_range($range_id)
 	$db->query('SELECT * FROM seminare WHERE Seminar_id = "' . $range_id . '"');
 	if (($db->next_record()) And ($db->f("Name") != ""))
 	{
+		$range_name = $db->f("titel");
+		output_data ( xml_header(), $o_mode);
 		export_inst( $db->f("Institut_id"), $db->f("Seminar_id") );
 	}
 
@@ -73,16 +75,20 @@ function export_range($range_id)
 
 //    Tree-Item ist ein Institut:
 	if ($tree_object->item_data['studip_object'] == 'inst')
+	{
+		output_data ( xml_header(), $o_mode);
 		export_inst( $tree_object->item_data['studip_object_id'] );
-
+	}
 //    Tree-Item hat Institute als Kinder:
 	$inst_array = $tree_object->GetInstKids();
-	
-	while (list($key, $inst_ids) = each($inst_array))
+	if (sizeof($inst_array) > 0)
 	{
-		export_inst($inst_ids);
+		output_data ( xml_header(), $o_mode);
+		while (list($key, $inst_ids) = each($inst_array))
+		{
+			export_inst($inst_ids);
+		}
 	}
-
 	output_data ( xml_footer(), $o_mode);
 }
 
