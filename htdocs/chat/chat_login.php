@@ -168,7 +168,7 @@ $sms->delete_chatinv();
 	</frameset>
 <frame name="frm_status" src="chat_status.php?chatid=<?=$chatid?>" marginwidth=1 marginheight=2 >
 <frame name="frm_input" src="chat_input.php?chatid=<?=$chatid?>" marginwidth=1 marginheight=0 >
-<frame name="frm_dummy" src="chat_dummy.php?chatid=<?=$chatid?>" marginwidth=0 marginheight=0 scrolling=no noresize >
+<frame name="frm_dummy" src="chat_dummy.php/?chatid=<?=$chatid?>" marginwidth=0 marginheight=0 scrolling=no noresize >
 </frameset>
 </html>
 <?
