@@ -288,6 +288,9 @@ function quotes_decode($description)
 						}
 					$description = $before_start_tag . "<blockquote class=\"quote\">";
 					$description .= $between_tags . "</blockquote>";
+					if (substr($after_end_tag,0,6)=="<br />") {
+						$after_end_tag = substr($after_end_tag,6);
+					}
 					$description .= $after_end_tag;
 					if (sizeof($stack) > 0) {
 						$curr_pos = array_pop($stack);
