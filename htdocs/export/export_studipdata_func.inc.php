@@ -89,7 +89,7 @@ function export_range($range_id)
 
 function export_inst($inst_id, $ex_sem_id = "all")
 {
-	global $db, $ex_type, $o_mode, $xml_file, $xml_names_inst, $xml_groupnames_inst;
+	global $db, $ex_type, $o_mode, $xml_file, $xml_names_inst, $xml_groupnames_inst, $INST_TYPE;
 
 	$db=new DB_Seminar;
 
@@ -99,7 +99,9 @@ function export_inst($inst_id, $ex_sem_id = "all")
 	while ( list($key, $val) = each($xml_names_inst))
 	{
 		if ($val == "") $val = $key;
-		if ($db->f($key) != "") 
+		if (($key == "type") AND ($INST_TYPE[$db->f($key)] != ""))
+			$data_object .= xml_tag($val, $INST_TYPE[$db->f($key)]);
+		elseif ($db->f($key) != "") 
 			$data_object .= xml_tag($val, $db->f($key));
 	}
 	reset($xml_names_inst);
