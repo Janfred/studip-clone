@@ -333,7 +333,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 	<tr>
 	<td class="blank" colspan=2>
       	<?
-        ECHO "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" align=\"center\" class=\"blank\">";
+        ECHO "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"99%\" align=\"center\" class=\"blank\">";
         ECHO "<tr>";
             ECHO "<th width=\"2%\" nowrap colspan=2>&nbsp</th>";
 		    ECHO "<th width=\"64%\"><b>Name</b></th>";
