@@ -282,7 +282,7 @@ function show_seminar_modules_links($seminar_id)
 		
 			for ($i=0; $i<sizeof($out_str); $i++) 
 			{
-				$printlink = $out_str[$i]["link"];
+				$printlink = "<a href=\"".$PHP_SELF . "?$do_str=" . $out_str[$i]["key"] . "&view=edit&seminar_id=$seminar_id\" class=\"tree\">" . $out_str[$i]["link"] . "</a>";
 				$printimage = $out_str[$i]["image"];
 				$printcontent = $out_str[$i]["content"] . $out_str[$i]["button"];
 				$printdesc = $out_str[$i]["desc"];
