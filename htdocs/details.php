@@ -118,9 +118,9 @@ else
 	?>
 	<tr><td class="blank">
 		&nbsp; <br />
-		<table align="center" width="99%" border=0 cellpadding=2 cellspacing=0>
+		<table align="center" width="99%" border="0" cellpadding="2" cellspacing="0">
 			<tr>
-				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; <img src="./pictures/blank.gif" width="25" height="10" border="0">
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" valign="top" colspan=2 valign="top" width="70%">
 				<?
@@ -335,12 +335,12 @@ print_infobox ($infobox,"pictures/seminare.jpg");
 			<tr>
 				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
 				</td>
-				<td class="<? echo $cssSw->getClass() ?>" valign="top" width="35%">
+				<td class="<? echo $cssSw->getClass() ?>" valign="top" width="45%">
 				<?
 				printf ("<font size=-1><b>Zeit:</b></font><br /><font size=-1>%s</font>",htmlReady(view_turnus($sem_id, FALSE)));
 				?>
 				</td>
-				<td class="<? echo $cssSw->getClass() ?>" valign="top" width="35%">
+				<td class="<? echo $cssSw->getClass() ?>" valign="top" width="25%">
 				<?
 				printf ("<font size=-1><b>Semester:</b></font><br /><font size=-1>%s</font>",get_semester($sem_id));
 				?>
@@ -349,12 +349,12 @@ print_infobox ($infobox,"pictures/seminare.jpg");
 			<tr>
 				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
 				</td>
-				<td class="<? echo $cssSw->getClass() ?>" valign="top" width="35%">
+				<td class="<? echo $cssSw->getClass() ?>" valign="top" width="45%">
 				<?
 				printf ("<font size=-1><b>Erster Termin:</b></font><br /><font size=-1>%s</font>",veranstaltung_beginn($sem_id));
 				?>
 				</td>
-				<td class="<? echo $cssSw->getClass() ?>" valign="top" width="35%">
+				<td class="<? echo $cssSw->getClass() ?>" valign="top" width="25%">
 				<?
 				printf ("<font size=-1><b>Vorbesprechung:</b></font><br /><font size=-1>%s</font>", (vorbesprechung($sem_id)) ? vorbesprechung($sem_id) : "keine");
 				?>
@@ -363,12 +363,12 @@ print_infobox ($infobox,"pictures/seminare.jpg");
 			<tr>
 				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
 				</td>
-				<td class="<? echo $cssSw->getClass() ?>" width="35%" valign="top">
+				<td class="<? echo $cssSw->getClass() ?>" width="45%" valign="top">
 				<?
 				printf ("<font size=-1><b>Veranstaltungsort:</b></font><br /><font size=-1>%s</font>",($db2->f("Ort")) ? htmlReady($db2->f("Ort")) : "nicht angegeben");
 				?>
 				</td>
-				<td class="<? echo $cssSw->getClass() ?>" width="35%"  align="top">
+				<td class="<? echo $cssSw->getClass() ?>" width="25%"  align="top">
 				<?
 				if ($db2->f("VeranstaltungsNummer"))
 					printf ("<font size=-1><b>Veranstaltungsnummer:</b></font><br /><font size=-1>%s</font>",$db2->f("VeranstaltungsNummer"));
@@ -380,7 +380,7 @@ print_infobox ($infobox,"pictures/seminare.jpg");
 			<tr>
 				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
 				</td>
-				<td class="<? echo $cssSw->getClass() ?>" width="35%" valign="top">
+				<td class="<? echo $cssSw->getClass() ?>" width="45%" valign="top">
 				<?		
 			//wer macht den Dozenten?
 				$db->query ("SELECT Vorname, Nachname, seminar_user.user_id, username, status FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE seminar_user.Seminar_id = '$sem_id' AND status = 'dozent' ORDER BY Nachname");
@@ -422,9 +422,9 @@ print_infobox ($infobox,"pictures/seminare.jpg");
 		</table>
 		<table align="center" width="99%" border=0 cellpadding=2 cellspacing=0>
 			<tr>
-				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="1%">&nbsp; <img src="./pictures/blank.gif" width="25" height="10" border="0">
 				</td>
-				<td class="<? echo $cssSw->getClass() ?>" colspan=2 width="48%" valign="top">
+				<td class="<? echo $cssSw->getClass() ?>" colspan=2 width="51%" valign="top">
 				<?
 				printf ("<font size=-1><b>Veranstaltungstyp:</b></font><br /><font size=-1>%s in der Kategorie %s</font>",$SEM_TYPE[$db2->f("status")]["name"], $SEM_CLASS[$SEM_TYPE[$db2->f("status")]["class"]]["name"]);
 				?>
@@ -441,9 +441,9 @@ print_infobox ($infobox,"pictures/seminare.jpg");
 			<? if ($db2->f("Beschreibung") !="") {
 			?>
 			<tr>
-				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="1%">&nbsp; 
 				</td>
-				<td class="<? echo $cssSw->getClass() ?>" colspan=4 width="96%" valign="top">
+				<td class="<? echo $cssSw->getClass() ?>" colspan=4 width="99%" valign="top">
 				<?
 				printf ("<font size=-1><b>Kommentar/Beschreibung:</b></font><br /><font size=-1>%s</font>",htmlReady($db2->f("Beschreibung"), TRUE, TRUE));
 				?>
@@ -453,9 +453,9 @@ print_infobox ($infobox,"pictures/seminare.jpg");
 			if ($db2->f("teilnehmer") !="") {
 			?>
 			<tr>
-				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="1%">&nbsp; 
 				</td>
-				<td class="<? echo $cssSw->getClass() ?>" colspan=4 width="96%" valign="top">
+				<td class="<? echo $cssSw->getClass() ?>" colspan=4 width="99%" valign="top">
 				<?
 				printf ("<font size=-1><b>Teilnehmer:</b></font><br /><font size=-1>%s</font>",htmlReady($db2->f("teilnehmer"), TRUE, TRUE));
 				?>
@@ -465,9 +465,9 @@ print_infobox ($infobox,"pictures/seminare.jpg");
 			if ($db2->f("vorrausetzungen") !="") {
 			?>
 			<tr>
-				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="1%">&nbsp; 
 				</td>
-				<td class="<? echo $cssSw->getClass() ?>" colspan=4 width="96%" valign="top">
+				<td class="<? echo $cssSw->getClass() ?>" colspan=4 width="99%" valign="top">
 				<?
 				printf ("<font size=-1><b>Vorausetzungen:</b></font><br /><font size=-1>%s</font>",htmlReady($db2->f("vorrausetzungen"), TRUE, TRUE));
 				?>
@@ -477,9 +477,9 @@ print_infobox ($infobox,"pictures/seminare.jpg");
 			if ($db2->f("lernorga") !="") {
 			?>
 			<tr>
-				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="1%">&nbsp; 
 				</td>
-				<td class="<? echo $cssSw->getClass() ?>" colspan=4 width="96%" valign="top">
+				<td class="<? echo $cssSw->getClass() ?>" colspan=4 width="99%" valign="top">
 				<?
 				printf ("<font size=-1><b>Lernorganisation:</b></font><br /><font size=-1>%s</font>",htmlReady($db2->f("lernorga"), TRUE, TRUE));
 				?>
@@ -489,9 +489,9 @@ print_infobox ($infobox,"pictures/seminare.jpg");
 			if ($db2->f("leistungsnachweis") !="") {
 			?>
 			<tr>
-				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="1%">&nbsp; 
 				</td>
-				<td class="<? echo $cssSw->getClass() ?>" colspan=4 width="96%" valign="top">
+				<td class="<? echo $cssSw->getClass() ?>" colspan=4 width="99%" valign="top">
 				<?
 				printf ("<font size=-1><b>Leistungsnachweis:</b></font><br /><font size=-1>%s</font>",htmlReady($db2->f("leistungsnachweis"), TRUE, TRUE));
 				?>
@@ -501,9 +501,9 @@ print_infobox ($infobox,"pictures/seminare.jpg");
 			if ($db2->f("Sonstiges") !="") {
 			?>
 			<tr>
-				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="1%">&nbsp; 
 				</td>
-				<td class="<? echo $cssSw->getClass() ?>" colspan=4 width="96%" valign="top">
+				<td class="<? echo $cssSw->getClass() ?>" colspan=4 width="99%" valign="top">
 				<?
 				printf ("<font size=-1><b>Sonstiges:</b></font><br /><font size=-1>%s</font>",htmlReady($db2->f("Sonstiges"), TRUE, TRUE));
 				?>
@@ -513,9 +513,9 @@ print_infobox ($infobox,"pictures/seminare.jpg");
 			if ($db2->f("ects") !="") {
 			?>
 			<tr>
-				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="1%">&nbsp; 
 				</td>
-				<td class="<? echo $cssSw->getClass() ?>" colspan=4 width="96%" valign="top">
+				<td class="<? echo $cssSw->getClass() ?>" colspan=4 width="99%" valign="top">
 				<?
 				printf ("<font size=-1><b>ECTS-Kreditpunkte:</b></font><br /><font size=-1>%s</font>",htmlReady($db2->f("ects"), TRUE, TRUE));
 				?>
@@ -526,9 +526,9 @@ print_infobox ($infobox,"pictures/seminare.jpg");
 			if ($SEM_CLASS[$SEM_TYPE[$db2->f("status")]["class"]]["bereiche"]) {
 			?>
 			<tr>
-				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="1%">&nbsp; 
 				</td>
-				<td class="<? echo $cssSw->getClass() ?>" colspan=4 width="96%" valign="top">
+				<td class="<? echo $cssSw->getClass() ?>" colspan=4 width="99%" valign="top">
 				<?
 				$db3->query("SELECT bereiche.* FROM bereiche LEFT JOIN seminar_bereich USING(bereich_id) WHERE seminar_id = '$sem_id'");
 				if ($db3->num_rows() ==1)
@@ -547,9 +547,9 @@ print_infobox ($infobox,"pictures/seminare.jpg");
 			</tr>
 			<? } ?>
 			<tr>
-				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="1%">&nbsp; 
 				</td>
-				<td class="<? echo $cssSw->getClass() ?>" colspan=2 width="48%" valign="top">
+				<td class="<? echo $cssSw->getClass() ?>" colspan=2 width="51%" valign="top">
 				<?
 				$db3->query("SELECT Name, url, Institut_id FROM Institute WHERE Institut_id = '".$db2->f("Institut_id")."' ");
 				$db3->next_record();
@@ -581,9 +581,9 @@ print_infobox ($infobox,"pictures/seminare.jpg");
 			if ($db2->f("admission_type")) {
 			?>
 			<tr>
-				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="1%">&nbsp; 
 				</td>
-				<td class="<? echo $cssSw->getClass() ?>" colspan=2 width="48%" valign="top">
+				<td class="<? echo $cssSw->getClass() ?>" colspan=2 width="51%" valign="top">
 				<font size=-1><b>Anmeldeverfahren:</b></font><br />				
 				<?
 				if ($db2->f("admission_selection_take_place") == 1) {
@@ -616,9 +616,9 @@ print_infobox ($infobox,"pictures/seminare.jpg");
 			</tr>
 			<? } ?>
 			<tr>
-				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="1%">&nbsp; 
 				</td>
-				<td class="<? echo $cssSw->getClass() ?>" width="24%" valign="top">
+				<td class="<? echo $cssSw->getClass() ?>" width="27%" valign="top">
 				<?
 				//Statistikfunktionen
 				$db3->query("SELECT count(*) as anzahl FROM seminar_user WHERE Seminar_id = '$sem_id'");
