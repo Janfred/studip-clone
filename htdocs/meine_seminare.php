@@ -141,6 +141,7 @@ require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php"); 		// Klarnamen fuer den V
 require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php"); 		// htmlReady fuer die Veranstaltungsnamen
 require_once ("$ABSOLUTE_PATH_STUDIP/dates.inc.php"); 		// Semester-Namen fuer Admins
 require_once ("$ABSOLUTE_PATH_STUDIP/admission.inc.php");	//Funktionen der Teilnehmerbegrenzung
+$cssSw=new cssClassSwitcher;                                // Klasse für Zebra-Design
 ?>
 <body>
 
@@ -270,8 +271,30 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 	<tr>
 	<td class="blank" colspan=2>&nbsp;</td>
 	</tr>
+<?
+// Anzeige der Wartelisten
 
-	<tr>
+      $db->query("SELECT admission_seminar_user.*, seminare.Name, seminare.admission_endtime FROM admission_seminar_user LEFT JOIN seminare USING(seminar_id) WHERE user_id = '$user->id' AND admission_seminar_user.status = 'claiming'");
+      IF ($db->num_rows()) {
+            ECHO "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" align=\"center\" class=\"blank\">";
+            ECHO "<tr>";
+            ECHO "<th width=\"2%\"><b>&nbsp;</b>";
+		    ECHO "<th width=\"80%\"><b>Im Losverfahren:</b>";
+		    ECHO "<th width=\"18%\">Losdatum";
+       	    ECHO "<th width=\"2%\">X</tr>";
+      }
+      WHILE ($db->next_record()) {
+            $cssSw->switchClass();
+     		ECHO "<tr><td class=blank>100%</td><td class=".$cssSw->getClass().">&nbsp;&nbsp;";
+		    ECHO "<a href=details.php?sem_id=".$db->f("seminar_id").">".$db->f("Name")."</a>";
+		    ECHO "</td>";
+		    ECHO "<td class=".$cssSw->getClass().">".date("d.m.Y", $db->f("admission_endtime"))."</td>";
+            printf("<td class=\"%s\"  align=center align=center><a href=\"$PHP_SELF?auswahl=%s&cmd=kill_admission\"><img src=\"pictures/trash.gif\" alt=\"aus der Veranstaltung abmelden\" border=\"0\"></a>&nbsp;&nbsp;</td></tr>", $cssSw->getClass(),$db->f("seminar_id"));
+      }
+
+?>
+
+	</table><table border="0" cellpadding="0" cellspacing="0" width="100%" align="center" class="blank"><tr>
 	<td class="blank" align = left width="90%"><blockquote>
 <?
       $db->query("SELECT count(*) as count  FROM seminare");
