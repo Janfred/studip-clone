@@ -150,10 +150,10 @@ if ($change_object_schedules) {
 			else
 				$change_schedule_id=$change_object_schedules;
 			
-			if ($reset_search_user)
+			if ($reset_search_user_x)
 				$search_string_search_user=FALSE;
 
-			if (($submit_search_user) && ($submit_search_user !="FALSE") && (!$reset_search_user))
+			if (($send_search_user) && ($submit_search_user !="FALSE") && (!$reset_search_user_x))
 				$change_schedule_assign_user_id=$submit_search_user;
 
 			//check, if the owner of the assign object is a Veranstaltung, which has own dates to insert
@@ -346,16 +346,16 @@ if ($change_object_perms) {
 		if ($delete_user_perms)
 			$changeObject->deletePerms($delete_user_perms);
 	
-		if ($reset_search_owner)
+		if ($reset_search_owner_x)
 			$search_string_search_owner=FALSE;
 
-		if ($reset_search_perm_user)
+		if ($reset_search_perm_user_x)
 			$search_string_search_perm_user=FALSE;
 	
-		if (($submit_search_owner) && ($submit_search_owner !="FALSE") && (!$reset_search_owner)) 
+		if (($send_search_owner_x) && ($submit_search_owner !="FALSE") && (!$reset_search_owner_x)) 
  			$changeObject->setOwnerId($submit_search_owner);
 	
-		if (($submit_search_perm_user) && ($submit_search_perm_user !="FALSE") && (!$reset_search_perm_user))
+		if (($send_search_perm_user_x) && ($submit_search_perm_user !="FALSE") && (!$reset_search_perm_user_x))
 			$changeObject->storePerms($submit_search_perm_user);
 	
 		//Object speichern
@@ -444,10 +444,10 @@ if (($add_property) || ($delete_property) || ($send_property_type_id)) {
 //Globale Perms bearbeiten
 if (($add_root_user) || ($delete_root_user_id)){
 	//if ($ObjectPerms->getUserPerm () == "admin") { { --> da muss der Ressourcen Root check hin °
-		if ($reset_search_root_user)
+		if ($reset_search_root_user_x)
 			$search_string_search_root_user=FALSE;
 
-		if (($submit_search_root_user) && ($submit_search_root_user !="FALSE") && (!$reset_search_root_user))
+		if (($send_search_root_user_x) && ($submit_search_root_user !="FALSE") && (!$reset_search_root_user_x))
 			$db->query("INSERT resources_user_resources SET user_id='$submit_search_root_user', resource_id='all', perms='user' ");
 
 		if ($delete_root_user_id)		

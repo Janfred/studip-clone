@@ -127,12 +127,12 @@ function checkAssigns($id) {
 }
 
 /*****************************************************************************
-checkChangeOwnerOption checks, if I have the chance to change
+checkObjektAdminstrablePerms checks, if I have the chance to change
 the owner of the given object
 /*****************************************************************************/
 
-function checkChangeOwnerOption ($resource_object_owner_id, $user_id='') {
-	global $user, $perm;
+function checkObjektAdminstrablePerms ($resource_object_owner_id, $user_id='') {
+	global $user, $perm, $my_perms;
 	if (!$user_id)
 		$user_id = $user->id;
 	
@@ -140,12 +140,15 @@ function checkChangeOwnerOption ($resource_object_owner_id, $user_id='') {
 	if ($perm->have_perm("root"))
 		return TRUE;
 	
+	//for the resources admin too
+	if ($my_perms ->getGlobalPerms() == "admin")
+		return TRUE;
+	
 	//load all my administrable objects
 	$my_objects=search_administrable_objects ($search_string='_');
 	
 	//ok, we as a user aren't interesting...
 	unset ($my_objects[$user_id]);
-	
 	if (sizeof ($my_objects)) {
 		if (($my_objects[$resource_object_owner_id]) || ($resource_object_owner_id == $user_id))
 			return TRUE;
@@ -196,19 +199,17 @@ function search_administrable_objects ($search_string='', $user_id='') {
 				}
 			}
 			//Alle meine Institute (unabhaengig von Suche fuer Rechte)...
-			$db->query("SELECT Institute.Institut_id, Name, inst_perms FROM Institute LEFT JOIN user_inst USING (institut_id) WHERE Inst_perms IN ('tutor', 'dozent', 'admin')");
+			$db->query("SELECT Institute.Institut_id, Name, inst_perms FROM user_inst LEFT JOIN Institute USING (institut_id) WHERE inst_perms = 'admin' AND user_inst.user_id='$user_id' ");
 			while ($db->next_record()) {
-				if ($db->f("inst_perms") == "admin") {
-					//...alle Mitarbeiter meiner Institute, in denen ich Admin bin....
-					$db2->query ("SELECT auth_user_md5.user_id, Vorname, Nachname, username FROM auth_user_md5 LEFT JOIN user_inst USING (user_id) WHERE (username LIKE '%$search_string%' OR Vorname LIKE '%$search_string%' OR Nachname LIKE '%$search_string%' OR auth_user_md5.user_id = '$search_string') AND Institut_id = '".$db->f("Institut_id")."' AND inst_perms IN ('autor', 'tutor', 'dozent') ORDER BY Nachname");
-					while ($db2->next_record()) {
-						$my_objects_user[$db2->f("user_id")]=array("name"=>$db2->f("Nachname").", ".$db2->f("Vorname")." (".$db2->f("username").")", "art"=>"Personen");
-					}
-					//...alle Seminare meiner Institute, in denen ich Admin bin....
-					$db2->query("SELECT seminare.Seminar_id, Name FROM seminare LEFT JOIN seminar_inst USING (seminar_id) WHERE (Name LIKE '%$search_string%' OR Untertitel LIKE '%$search_string%' OR seminare.Seminar_id = '$search_string') AND seminar_inst.institut_id = '".$db->f("Institut_id")."' ORDER BY Name");
-					while ($db2->next_record()) {
-						$my_objects_sem[$db2->f("Seminar_id")]=array("name"=>$db2->f("Name"), "art"=>"Veranstaltungen");
-					}
+				//...alle Mitarbeiter meiner Institute, in denen ich Admin bin....
+				$db2->query ("SELECT auth_user_md5.user_id, Vorname, Nachname, username FROM auth_user_md5 LEFT JOIN user_inst USING (user_id) WHERE (username LIKE '%$search_string%' OR Vorname LIKE '%$search_string%' OR Nachname LIKE '%$search_string%' OR auth_user_md5.user_id = '$search_string') AND Institut_id = '".$db->f("Institut_id")."' AND inst_perms IN ('autor', 'tutor', 'dozent') ORDER BY Nachname");
+				while ($db2->next_record()) {
+					$my_objects_user[$db2->f("user_id")]=array("name"=>$db2->f("Nachname").", ".$db2->f("Vorname")." (".$db2->f("username").")", "art"=>"Personen");
+				}
+				//...alle Seminare meiner Institute, in denen ich Admin bin....
+				$db2->query("SELECT seminare.Seminar_id, Name FROM seminare LEFT JOIN seminar_inst USING (seminar_id) WHERE (Name LIKE '%$search_string%' OR Untertitel LIKE '%$search_string%' OR seminare.Seminar_id = '$search_string') AND seminar_inst.institut_id = '".$db->f("Institut_id")."' ORDER BY Name");
+				while ($db2->next_record()) {
+					$my_objects_sem[$db2->f("Seminar_id")]=array("name"=>$db2->f("Name"), "art"=>"Veranstaltungen");
 				}
 			}
 			if (is_array ($my_objects_user))
@@ -227,7 +228,7 @@ function search_administrable_objects ($search_string='', $user_id='') {
 		case "dozent": 
 			$my_objects[$user_id]=array("name"=>"aktueller Account"." (".get_username($user_id).")", "art"=>"Person");
 			//Alle meine Seminare
-			$db->query("SELECT seminare.Seminar_id FROM seminare LEFT JOIN seminar_user USING (seminar_id) WHERE (Name LIKE '%$search_string%' OR Untertitel LIKE '%$search_string%' OR seminare.Seminar_id = '$search_string') seminar_user.status IN ('tutor', 'dozent') ORDER BY Name");
+			$db->query("SELECT seminare.Seminar_id, Name FROM seminare LEFT JOIN seminar_user USING (seminar_id) WHERE (Name LIKE '%$search_string%' OR Untertitel LIKE '%$search_string%' OR seminare.Seminar_id = '$search_string') AND seminar_user.status IN ('tutor', 'dozent') ORDER BY Name");
 			while ($db->next_record())
 				$my_objects[$db->f("Seminar_id")]=array("name"=>$db->f("Name"), "art"=>"Veranstaltungen");
 			//Alle meine Institute...
@@ -339,13 +340,13 @@ function create_search_form($name, $search_string='', $user_only=FALSE, $adminis
 			$old_art=$val["art"];
 		}
 		?></select>
-			<font size=-1><input type="SUBMIT" name="<? echo $name ?>" value="&uuml;bernehmen" size=30 maxlength=255 /></font>
-			&nbsp; <font size=-1><input type="SUBMIT" name="<? echo "reset_".$name ?>" value="neue Suche" /></font>
+			<font size=-1><input type="IMAGE" name="<? echo "send_".$name ?>" <?=makeButton("uebernehmen", "src") ?> value="&uuml;bernehmen"  /></font>
+			&nbsp;<font size=-1><input type="IMAGE" name="<? echo "reset_".$name ?>" <?=makeButton("neuesuche", "src") ?> border=0 value="neue Suche" /></font>
 		<?
 	} else {
 		?>
 		<font size=-1><input type="TEXT" name="<? echo "search_string_".$name ?>" size=30 maxlength=255 /></font>
-		<font size=-1><input type="SUBMIT" name="<? echo "do_".$name ?>" value="suchen" /></font>
+		<font size=-1><input type="IMAGE" name="<? echo "do_".$name ?>" <?=makeButton("suchestarten", "src") ?> border=0 value="suchen" /></font>
 		<?
 	}
 }

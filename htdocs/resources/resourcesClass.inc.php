@@ -917,11 +917,15 @@ class resourceObject {
 	}
 	
 	function getOwnerLink($id='') {
+		global $PHP_SELF;
+		
 		if (!$id)
 			$id=$this->owner_id;
 		switch ($this->getOwnerType($id)) {
 			case "global":
-				return FALSE;
+				return $PHP_SELF;
+			case "all":
+				return $PHP_SELF;
 			break;
 			case "user":
 				return  sprintf ("about?username=%s",get_username($id));

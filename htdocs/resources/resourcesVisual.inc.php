@@ -1213,6 +1213,14 @@ class editObject extends cssClasses {
 	function create_perm_forms() {
 		global $PHP_SELF, $search_owner, $search_perm_user, $search_string_search_perm_user, $search_string_search_owner;
 		
+		$ObjectPerms = new ResourcesObjectPerms($this->resObject->getId());
+		
+		$owner_perms = checkObjektAdminstrablePerms ($this->resObject->getOwnerId());
+		
+		if ($owner_perms)
+			$admin_perms = TRUE;
+		else
+			$admin_perms = ($ObjectPerms->getUserPerm () == "admin") ? TRUE : FALSE;
 		?>
 		<table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
 		<form method="POST" action="<?echo $PHP_SELF ?>?change_object_perms=<? echo $this->resObject->getId() ?>">
@@ -1224,12 +1232,12 @@ class editObject extends cssClasses {
 				</td>
 				<td class="<? echo $this->getClass() ?>" width="60%">
 				<?
-				if (checkChangeOwnerOption ($this->resObject->getOwnerId())){
+				if ($owner_perms){
 					?>
 					<font size=-1>Besitzer &auml;ndern:</font><font size=-1 color="red"></font><br />
 					<? create_search_form("search_owner", $search_string_search_owner, FALSE,TRUE);
 				} else
-					print _("<img src=\"pictures/ausruf_small.gif\" align=\"absmiddle\" />&nbsp;<font size=-1><font size=\"-1\"> Sie k&ouml;nnen den Besitzer nicht &auml;ndern.</font>");
+					print "<img src=\"pictures/ausruf_small.gif\" align=\"absmiddle\" />&nbsp;<font size=-1><font size=\"-1\"> "._("Sie k&ouml;nnen den Besitzer nicht &auml;ndern.")."</font>";
 				?>
 				</td>
 			</tr>
@@ -1238,7 +1246,7 @@ class editObject extends cssClasses {
 				<td class="<? $this->switchClass(); echo $this->getClass() ?>" width="4%">&nbsp; 
 				</td>
 				<td class="<? echo $this->getClass() ?>" colspan=2 valign="top"><font size=-1>Berechtigungen:</font><br />
-				<td class="<? echo $this->getClass() ?>" width="60%" valign="top"><font size=-1>Berechtigungen hinzuf&uuml;gen</font><br />
+				<td class="<? echo $this->getClass() ?>" width="60%" valign="top"><font size=-1>Berechtigung hinzuf&uuml;gen</font><br />
 				<?create_search_form("search_perm_user", $search_string_search_perm_user, FALSE, FALSE, FALSE, TRUE) ?>
 				</td>
 			</tr>
@@ -1255,9 +1263,22 @@ class editObject extends cssClasses {
 				</td>
 				<td class="<? echo $this->getClass() ?>" width="*">
 					<font size=-1>&nbsp; 
-					<input type="RADIO" name="change_user_perms[<?echo $i ?>]" value="user"<? if ($this->db->f("perms") == "user") echo "checked" ?>  />user
-					<input type="RADIO" name="change_user_perms[<?echo $i ?>]" value="admin"<? if ($this->db->f("perms") == "admin") echo "checked" ?>  />admin
-					&nbsp; <a href="<? echo $PHP_SELF ?>?change_object_perms=<? echo $this->resObject->getId() ?>&delete_user_perms=<? echo $this->db->f("user_id") ?>"><img src="pictures/trash.gif" alt="Berechtigung l&ouml;schen" border=0></a>
+					<?
+					if (($admin_perms) && ((($this->db->f("perms") == "user") || ($owner_perms))))
+						printf ("<input type=\"RADIO\" name=\"change_user_perms[%s]\" value=\"user\" %s />user", $i, ($this->db->f("perms") == "user") ? "checked" : "");
+					else
+						printf ("<input type=\"RADIO\" disabled name=\"FALSE\" %s /><font color=\"#888888\">user</font>", ($this->db->f("perms") == "user") ? "checked" : "");
+					
+					if (($this->resObject->getOwnerType($this->db->f("user_id")) == "user") && ($owner_perms))
+						printf ("<input type=\"RADIO\" name=\"change_user_perms[%s]\" value=\"admin\" %s />admin", $i, ($this->db->f("perms") == "admin") ? "checked" : "");
+					else
+						printf ("<input type=\"RADIO\" disabled name=\"FALSE\" %s /><font color=\"#888888\">admin</font>", ($this->db->f("perms") == "admin") ? "checked" : "");
+
+					if (($owner_perms) || (($admin_perms) && ($this->db->f("perms") == "user")))
+						printf ("&nbsp; <a href=\"%s?change_object_perms=%s&delete_user_perms=%s\"><img src=\"pictures/trash.gif\" ".tooltip(_("Berechtigung l&ouml;schen"))." border=0></a>", $PHP_SELF, $this->resObject->getId(), $this->db->f("user_id"));
+					else
+						print "&nbsp; <img src=\"pictures/lighttrash.gif\" ".tooltip(_("Sie d&uuml;rfen diese Berechtigung leider nichtl&ouml;schen"))." border=0>";
+					?>
 				</td>
 				<td class="<? echo $this->getClass() ?>" width="60%" valign="top">&nbsp; 
 				</td>
