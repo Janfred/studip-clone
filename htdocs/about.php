@@ -298,9 +298,11 @@ if ($db->f("schwerp")!="") {
 $localFields = $DataFields->getLocalFields();
 	
 foreach ($localFields as $val) {
-	if ($val["content"]) {
-		echo "<table class=\"blank\" width=\"100%%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><b>&nbsp;" . htmlReady($val["name"]) . " </b></td></tr>";
-		printf ("<tr><td class=\"steel1\">&nbsp;</td></tr><tr><td class=\"steel1\"><blockquote>%s</blockquote></td></tr><tr><td class=\"steel1\">&nbsp;</td></tr></table><br>\n",formatReady($val["content"]));
+	if ($DataFields->checkPermission($perm, $val["view_perms"], $auth->auth["uid"], $user_id)) {
+		if ($val["content"]) {
+			echo "<table class=\"blank\" width=\"100%%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><b>&nbsp;" . htmlReady($val["name"]) . " </b></td></tr>";
+			printf ("<tr><td class=\"steel1\">&nbsp;</td></tr><tr><td class=\"steel1\"><blockquote>%s</blockquote></td></tr><tr><td class=\"steel1\">&nbsp;</td></tr></table><br>\n",formatReady($val["content"]));
+		}
 	}
 }
 
