@@ -308,7 +308,10 @@ switch($referrer_page) {
 			break;
 		}
 		break;
-	
+	case "seminar_lernmodule.php" :
+	case "migration2studip.php":
+		$help_page = "what_is_ilias.php";
+	break;
 	default :
 		;
 }
