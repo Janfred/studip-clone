@@ -47,9 +47,9 @@ include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php");
 require_once($ABSOLUTE_PATH_STUDIP . "config.inc.php");
 {
 // needed session-variables
-session_register("seminars");
-session_register("semestersAR");
-session_register("template");
+$sess->register("seminars");
+$sess->register("semestersAR");
+$sess->register("template");
 }
 
 /* **END*of*initialise*Stud.IP-Session*********************************** */
