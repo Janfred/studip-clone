@@ -877,7 +877,7 @@ CREATE TABLE vote (
   range_id varchar(32) NOT NULL default '',
   type enum('vote','test') NOT NULL default 'vote',
   title varchar(100) NOT NULL default '',
-  question varchar(255) NOT NULL default '',
+  question text NOT NULL default '',
   state enum('new','active','stopvis','stopinvis') NOT NULL default 'new',
   startdate int(20) default NULL,
   stopdate int(20) default NULL,
