@@ -517,8 +517,8 @@ function exportVCard($contacts){
 		if (sizeof($contacts[$i]["fak"]) > 1){
 			$vcard .= "NOTE;"
 				. "ENCODING=QUOTED-PRINTABLE:";
-			$vcard .= _("Weitere Arbeitsplätze").": ".$br;
-			for ($j=1;$j<=sizeof($contacts[$i]["fak"]);$j++){
+			$vcard .= _("Weitere Arbeitsplaetze").": ".$br;
+			for ($j=1;$j<=sizeof($contacts[$i]["fak"])-1;$j++){
 				// the work adress
 				$vcard .= $contacts[$i]["fak"][$j]["fak_name"];
 				$vcard .= $br;
@@ -555,7 +555,8 @@ function exportVCard($contacts){
 					$vcard .= $br;
 //					$vcard .= "";
 				}
-				$vcard .= "---".$br;
+				if (sizeof($contacts[$i]["fak"])-1 > $j+1)
+					$vcard .= "---".$br;
 			}
 			$vcard .= "\r\n";
 		}
