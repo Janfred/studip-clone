@@ -158,12 +158,14 @@ switch ($resources_data["view"]) {
 							"eintrag" => array (
 								array	("icon" => "pictures/forumrot.gif",
 									"text"  => (($resources_data["view_mode"] == "no_nav") || ($resources_data["search_array"])) ? "<a href=\"$PHP_SELF?view=search\">"._("zur&uuml;ck zur Suche")."</a>" : "<a href=\"$PHP_SELF?view=".(($SessSemName[1]) ? "openobject_main" : "resources")."\">"._("zur&uuml;ck zur &Uuml;bersicht")."</a>"))));
-		if ($currentObject->getCategoryId())
-			$infobox[0]["eintrag"][] = array ("icon" => "pictures/forumrot.gif",
-									"text"  =>sprintf (_("%sBelegungsplan%s anzeigen"), ($SessSemName[1]) ? "<a href=\"$PHP_SELF?view=openobject_schedule\">" : "<a href=\"$PHP_SELF?view=view_schedule".(($resources_data["view_mode"] == "no_nav") ? "&view_mode=no_nav" : "")."\">", "</a>"));
-		if (($ActualObjectPerms->havePerm("autor")) && ($currentObject->getCategoryId()))
-			$infobox[0]["eintrag"][] = array ("icon" => "pictures/forumrot.gif",
-									"text"  =>sprintf (_("Eine neue Belegung %serstellen%s"), ($SessSemName[1]) ? "<a href=\"$PHP_SELF?view=openobject_assign\">" : "<a href=\"$PHP_SELF?view=edit_object_assign\">", "</a>"));
+		if (is_object($currentObject)) {
+			if ($currentObject->getCategoryId())
+				$infobox[0]["eintrag"][] = array ("icon" => "pictures/forumrot.gif",
+										"text"  =>sprintf (_("%sBelegungsplan%s anzeigen"), ($SessSemName[1]) ? "<a href=\"$PHP_SELF?view=openobject_schedule\">" : "<a href=\"$PHP_SELF?view=view_schedule".(($resources_data["view_mode"] == "no_nav") ? "&view_mode=no_nav" : "")."\">", "</a>"));
+			if (($ActualObjectPerms->havePerm("autor")) && ($currentObject->getCategoryId()))
+				$infobox[0]["eintrag"][] = array ("icon" => "pictures/forumrot.gif",
+										"text"  =>sprintf (_("Eine neue Belegung %serstellen%s"), ($SessSemName[1]) ? "<a href=\"$PHP_SELF?view=openobject_assign\">" : "<a href=\"$PHP_SELF?view=edit_object_assign\">", "</a>"));
+		}
 		$infopic = "pictures/schedule.jpg";
 	break;
 	case "openobject_schedule":
