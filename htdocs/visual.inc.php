@@ -709,15 +709,21 @@ function FixLinks ($data = "", $fix_nl = TRUE, $nl_to_br = TRUE, $img = FALSE, $
 	$extern = $extern ? 'TRUE' : 'FALSE';
 	
 	// add protocol type and transform the domain names of links within Stud.IP
-	$domains = '';
-	foreach ($STUDIP_DOMAINS as $studip_domain)
-		$domains .= '|' . preg_quote($studip_domain);
-	$domains = substr($domains, 1);
-	$user_domain = preg_replace("'(https?\://($domains))(.*)'i", "\\1", $_SERVER['HTTP_REFERER']);
-	$pattern = array("/([ \t\]\n]|^)www\./i",
-				"/([ \t\]\n]|^)ftp\./i",
-				"'https?\://($domains)((/[^<\s]*[^\.\s<])*)'i");
-	$replace = array("\\1http://www.", "\\1ftp://ftp.", "$user_domain\\2");
+	if (is_array($STUDIP_DOMAINS)) {
+		$domains = '';
+		foreach ($STUDIP_DOMAINS as $studip_domain)
+			$domains .= '|' . preg_quote($studip_domain);
+		$domains = substr($domains, 1);
+		$user_domain = preg_replace("'(https?\://($domains))(.*)'i", "\\1", $_SERVER['HTTP_REFERER']);
+		$pattern = array("/([ \t\]\n]|^)www\./i",
+					"/([ \t\]\n]|^)ftp\./i",
+					"'https?\://($domains)((/[^<\s]*[^\.\s<])*)'i");
+		$replace = array("\\1http://www.", "\\1ftp://ftp.", "$user_domain\\2");
+	}
+	else {
+		$pattern = array("/([ \t\]\n]|^)www\./i", "/([ \t\]\n]|^)ftp\./i");
+		$replace = array("\\1http://www.", "\\1ftp://ftp.");
+	}
 	$fixed_text = preg_replace($pattern, $replace, $data);
 	
 	$pattern = array(
