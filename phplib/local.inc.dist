@@ -118,6 +118,7 @@ $MAIL_LOCALHOST = "";		// name of the mail sending machine (the web server) defa
 $MAIL_HOST_NAME = "";		// which mailserver should we use? (must allow mail-relaying from $MAIL_LOCALHOST, defaults to SERVER_NAME)
 
 $MESSAGING_FORWARD_AS_EMAIL = TRUE;	// enable to forward every internal message to the user-mail (the user is able to deactivate this function in his personal settings)
+$MESSAGING_FORWARD_DEFAULT = FALSE;	// the default setting: if TRUE, every message will be forwarded else the user has to switch it on (both only if above option is active) 
 
 
 /*advanced system settings
@@ -249,7 +250,7 @@ $ALLOW_CHANGE_EMAIL = TRUE;				//if true, users are allowed to change their emai
 $ALLOW_CHANGE_NAME = TRUE;				//if true, users are allowed to change their name
 $ENABLE_SELF_REGISTRATION = TRUE;			//should it be possible for an user to register himself
 
-//IDs of courses, in which users were entered when they were promoted to 'autor'
+//IDs of courses, in which users were entered when they are promoted to 'autor'
 //-----------------------------------------------------------------
 //$AUTO_INSERT_SEM[1]="<seminar_id>";
 //further courses can be added with their IDs here
