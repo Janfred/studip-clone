@@ -70,7 +70,7 @@ $data[] = array("dokument_id" => 9, "description" => _("Eine weitere Text-Datei.
 $data[] = array("dokument_id" => 10, "description" => _("Ein Bild im PNG-Format."),
 	"filename" => "picture_png_file.png", "mkdate" => ($time - 1000000), "chdate" => ($time - 950000),
 	"filesize" => 263784, "Vorname" => "John", "Nachname" => "Greely");
-$data[] = array("dokument_id" => 11, "description" => _("Das ist ein Adobe PDF-Dokument."),
+$data[] = array("dokument_id" => 11, "description" => _("Eine anderes Format."),
 	"filename" => "good_music.mp3", "mkdate" => ($time - 1150000), "chdate" => ($time - 653900),
 	"filesize" => 263784, "Vorname" => "Augustus", "Nachname" => "Barnard");
 
