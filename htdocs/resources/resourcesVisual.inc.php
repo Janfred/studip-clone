@@ -1066,8 +1066,8 @@ class EditObject extends cssClasses {
 						$this->db->query($query);
 						$this->db->next_record();
 					}
-					print "<br /><img src=\"pictures/ausruf_small2.gif\" align=\"absmiddle\" />&nbsp;<font size=-1>";
 					if ($resAssign->getOwnerType() == "sem") {
+						print "<br /><img src=\"pictures/ausruf_small2.gif\" align=\"absmiddle\" />&nbsp;<font size=-1>";
 						printf (_("Diese Belegung ist ein regelm&auml;&szlig;iger Termin der Veranstaltung %s, die in diesem Raum stattfindet."), 
 							($perm->have_studip_perm("user", $this->db->f("Seminar_id"))) ? 
 								"<a href=\"seminar_main.php?auswahl=".$this->db->f("Seminar_id")."\">".htmlReady($this->db->f("Name"))."</a>" : 
@@ -1076,6 +1076,7 @@ class EditObject extends cssClasses {
 							print "<br />"._("Um die Belegung zu ver&auml;ndern, &auml;ndern Sie bitte die Zeiten der Veranstaltung");
 						print "</font>";
 					} elseif ($resAssign->getOwnerType() == "date") {
+						print "<br /><img src=\"pictures/ausruf_small2.gif\" align=\"absmiddle\" />&nbsp;<font size=-1>";
 						printf (_("Diese Belegung ist ein Einzeltermin der Veranstaltung %s, die in diesem Raum stattfindet."), 
 							($perm->have_studip_perm("user", $this->db->f("Seminar_id"))) ? 
 								"<a href=\"seminar_main.php?auswahl=".$this->db->f("Seminar_id")."\">".htmlReady($this->db->f("Name"))."</a>" : 
@@ -1084,6 +1085,7 @@ class EditObject extends cssClasses {
 							print "<br />"._("Um die Belegung zu ver&auml;ndern, &auml;ndern Sie bitte den entsprechenden Termin in der Veranstaltung");
 						print "</font>";
 					} elseif (!$lockedAssign)
+						print "<br /><img src=\"pictures/ausruf_small2.gif\" align=\"absmiddle\" />&nbsp;<font size=-1>";
 						printf (_("Sie haben nicht die Berechtigung, diese Belegung zu bearbeiten."));
 				}
 				?>
