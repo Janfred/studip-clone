@@ -714,7 +714,7 @@ class UserManagement {
 
 		// delete all messages send or received by this user
 		$messaging=new messaging;
-		$messaging->delete_all_messages($this->user_data['auth_user_md5.user_id']);
+		$messaging->delete_all_messages($this->user_data['auth_user_md5.user_id'], TRUE);
 			
 		// delete user from all foreign adressbooks and empty own adressbook
 		$buddykills = RemoveUserFromBuddys($this->user_data['auth_user_md5.user_id']);
