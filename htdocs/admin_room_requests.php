@@ -182,7 +182,7 @@ $semObj = new Seminar($admin_rooms_data["sem_id"]);
 	<tr>
 		<td class="topic" colspan=2>&nbsp; <b>
 		<?
-		echo getHeaderLine($admin_rooms_data["sem_id"])." -  "._("Raumw&uuml;sche und gew&uuml;nschte Raumeigenschaften");
+		echo getHeaderLine($admin_rooms_data["sem_id"])." -  "._("Raumanfragen");
 		?>
 		</td>
 	</tr>
