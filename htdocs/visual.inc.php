@@ -512,7 +512,7 @@ function format ($text) {
 	$text = preg_replace("'\n?\r\n?'", "\n", $text);
 	$pattern = array(
 					"'^--+(\d?)$'me",               // Trennlinie
-					"'\[pre\](.+?)\[/pre\]'is",    // praeformatierter Text
+//					"'\[pre\](.+?)\[/pre\]'is",    // praeformatierter Text
 					"'(^|\s)%(?!%)(\S+%)+(?=(\s|$))'e",     // SL-kursiv
 					"'(^|\s)\*(?!\*)(\S+\*)+(?=(\s|$))'e",  // SL-fett
 					"'(^|\s)_(?!_)(\S+_)+(?=(\s|$))'e",     // SL-unterstrichen
@@ -538,7 +538,7 @@ function format ($text) {
 					);
 	$replace = array(
 					"'<hr noshade=\"noshade\" width=\"98%\" size=\"'.('\\1' ? '\\1' : '1').'\" align=\"center\" />'",
-					"<pre>\\1</pre>",
+//					"<pre>\\1</pre>",
 					"'\\1<i>'.substr(str_replace('%', ' ', '\\2'), 0, -1).'</i>'",
 					"'\\1<b>'.substr(str_replace('*', ' ', '\\2'), 0, -1).'</b>'",
 					"'\\1<u>'.substr(str_replace('_', ' ', '\\2'), 0, -1).'</u>'",
@@ -562,8 +562,8 @@ function format ($text) {
 					"'<blockquote>'.format('\\1').'</blockquote>'",
 					"\\1"
 					);
-
-	$regtxt = "!((\[[^\]\[]+\])?(https?|ftp)://[^\s<]+)!is";
+	$text = preg_replace('#\[pre\](.+?)\[/pre\]#is', '<pre>\\1</pre>', $text); // praeformatierter Text
+	$regtxt = '!((\[[^\]\[\n\f]+\])?(https?|ftp)://[^\s<]+)!is';
 	if (preg_match_all($regtxt, $text, $match)) {
 		$text = preg_replace($regtxt, 'ä', $text);
 		$text = preg_replace($pattern, $replace, $text);
