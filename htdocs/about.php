@@ -127,7 +127,7 @@ if ($msg)
 	if(!file_exists("./user/".$user_id.".jpg")) {
 		echo "&nbsp;<img src=\"./user/nobody.jpg\" width=\"200\" height=\"250\"" . tooltip("kein persönliches Bild vorhanden").">";
 	} else {
-		?>&nbsp;<img src="./user/<?echo $user_id; ?>.jpg" border=1 <?=tooltip($db->f("fullname"));?>"></td><?
+		?>&nbsp;<img src="./user/<?echo $user_id; ?>.jpg" border=1 <?=tooltip($db->f("fullname"));?>></td><?
 	}
     
 	// Hier der Teil fuer die Ausgabe der normalen Daten
