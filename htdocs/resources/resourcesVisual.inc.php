@@ -237,6 +237,9 @@ class ShowThread extends ShowTreeRow {
 
 			//Daten vorbereiten
 			$icon="<img src=\"pictures/cont_folder2.gif\" />";
+			if ($resources_data["move_object"])
+				$icon="&nbsp;<a href=\"$PHP_SELF?target_object=".$resObject->id."#a\"><img src=\"pictures/move.gif\" border=0 alt=\""._("Objekt in diese Ebene verschieben")."\" /></a>".$icon;
+			
 			if ($resources_data["structure_opens"][$resObject->id]) {
 				$link=$PHP_SELF."?structure_close=".$resObject->id."#a";
 				$open="open";
@@ -268,6 +271,8 @@ class ShowThread extends ShowTreeRow {
 			} else {
 				$content=htmlReady($resObject->getDescription());
 			}
+			if ($resources_data["move_object"] == $resObject->id) 
+				$content.="<br />Dieses Objekt wurde zum Verschieben markiert. Bitte w&auml;hlen sie das Einf&uuml;gen-Symbol <img src=\"pictures/move.gif\" border=0 alt=\"Klicken Sie dieses Symbol, um dieses Objekt in eine andere Ebene zu verschieben\">, um es in die gew&uuml;nschten Ebene zu verschieben.";
 			if (!$weitere) {
 				$edit.= "<a href=\"$PHP_SELF?kill_object=$resObject->id\"><img src=\"./pictures/buttons/loeschen-button.gif\" border=0></a>";
 			} else {

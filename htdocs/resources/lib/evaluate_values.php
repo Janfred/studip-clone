@@ -3,7 +3,7 @@
 empfangene Werte auswerten und Befehle ausfuehren
 /*****************************************************************************/
 
-//View uebernehmen
+//get view
 if ($view)
 	 $resources_data["view"]=$view;
 
@@ -11,15 +11,20 @@ if ($view)
 if ($resources_data["view"] == "resources")
 	closeObject();
 
-//Beitrag aufklappen
+//Open a level/resource
 if ($structure_open) {
 	$resources_data["actual_object"]=$structure_open;
 	$resources_data["structure_opens"][$structure_open] =TRUE;
 }
 
-//Beitrag schliessen
+//Close a level/resource
 if ($structure_close) {
 	unset($resources_data["structure_opens"][$structure_close]);
+}
+
+//switch to move mode
+if ($pre_move_object) {
+	$resources_data["move_object"]=$pre_move_object;
 }
 
 //Listenstartpunkt festlegen
@@ -40,6 +45,7 @@ if ($resources_data["view"]=="create_hierarchie" || $create_hierachie_level) {
 	}
 	$newHiearchie->create();
 	$edit_structure_object=$newHiearchie->id;
+	$resources_data["structure_opens"][$newHiearchie->id] =TRUE;
 	$resources_data["view"]="resources";
 	}
 
@@ -71,6 +77,32 @@ if ($kill_object) {
 		$msg->displayMsg(1);
 		die;
 	}
+}
+
+//move an object
+if ($target_object) {
+	$ObjectPerms = new ResourcesObjectPerms($kill_object);
+	if ($ObjectPerms->getUserPerm () == "admin") {
+		if ($target_object != $resources_data["move_object"]) {
+			//we want to move an object, so we have first to check if we want to move a object in a subordinated object
+			$db->query ("SELECT parent_id FROM resources_objects WHERE resource_id = '$target_object'");
+			while ($db->next_record()) {
+				if ($db->f("parent_id") == $resources_data["move_object"])
+					$target_is_child=TRUE;
+				$db->query ("SELECT parent_id FROM resources_objects WHERE resource_id = '".$db->f("parent_id")."' ");
+			}
+			if (!$target_is_child) {
+				$db->query ("UPDATE resources_objects SET parent_id='$target_object' WHERE resource_id = '".$resources_data["move_object"]."' ");
+				if ($db->nf()) {
+					$msg -> addMsg(9);
+				}
+			}
+		}
+		unset($resources_data["move_object"]);
+	} else {
+		$msg->displayMsg(1);
+		die;
+	}	
 }
 
 //Name und Beschreibung aendern
