@@ -198,4 +198,5 @@ else {
 }
 
 print_infobox($info_content, "pictures/einrichtungen.jpg");
+
 ?>

@@ -172,4 +172,5 @@ class ExternModuleNewsticker extends ExternModule {
 	}
 	
 }
-?> 
+
+?>

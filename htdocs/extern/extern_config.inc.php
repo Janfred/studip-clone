@@ -95,4 +95,5 @@ if (substr($EXTERN_SERVER_NAME, -1) != "/")
 
 if (substr($EXTERN_CONFIG_FILE_PATH, -1) != "/")
 	$EXTERN_CONFIG_FILE_PATH .= "/";
+
 ?>

@@ -332,4 +332,3 @@ print_infobox($info_content, "pictures/einrichtungen.jpg");
 print_footer();
 
 ?>
-
