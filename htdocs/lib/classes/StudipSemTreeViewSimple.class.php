@@ -92,7 +92,7 @@ class StudipSemTreeViewSimple {
 			if ($i == ceil($num_kids / 2)-1){
 				echo "</td>\n<td class=\"steel1\" align=\"left\" valign=\"top\">";
 			} else {
-				echo "<br>";
+				echo "<br><img src=\"pictures/blank.gif\"><br>";
 			}
 		}
 		if (!$num_kids){
