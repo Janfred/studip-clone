@@ -1,22 +1,22 @@
 <?
-		$subject="Passwort-Änderung Stud.IP-System";
+		$subject="Password modification in the Stud.IP-System";
 		
-		$mailbody="Dies ist eine Informationsmail des Stud.IP-Systems\n"
+		$mailbody="This is a Stud.IP system information mail\n"
 		."(Studienbegleitender Internetsupport von Präsenzlehre)\n"
 		."- $UNI_NAME_CLEAN -\n\n"
-		."Ihr Passwort wurde um $Zeit von einem der Administrierenden neu gesetzt.\n"
-		."Die aktuellen Angaben lauten:\n\n"
-		."Benutzername: $username\n"
-		."Passwort: $password\n"
+		."Your password was changed by an administrator at $Zeit.\n"
+		."The current information is:\n\n"
+		."Username: $username\n"
+		."Password: $password\n"
 		."Status: $permlist\n"
-		."Vorname: $Vorname\n"
-		."Nachname: $Nachname\n"
-		."E-Mail-Adresse: $Email\n\n"
-		."Das Passwort ist nur Ihnen bekannt. Bitte geben Sie es an niemanden\n"
-		."weiter (auch nicht an eine Administratorin oder einen Administrator),\n"
-		."damit nicht Dritte in Ihrem Namen Nachrichten\n"
-		."in das System einstellen können!\n\n"
-		."Hier kommen Sie direkt ins System:\n"
+		."Forename: $Vorname\n"
+		."Surname: $Nachname\n"
+		."E-mail address: $Email\n\n"
+		."The password is only known to you. Please do not pass it onto anyone\n"
+		."else(not even an administrator). This is to stop\n"
+		."third parties from posting messages\n"
+		."in the system under your name!\n\n"
+		."Here takes you directly into the system:\n"
 		."$url\n\n";
 
 ?>
