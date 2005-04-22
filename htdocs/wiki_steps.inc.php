@@ -110,6 +110,7 @@ function wiki_newstep($template_name) {
 	global $step_templates;
 	$template=$step_templates[$template_name];
 	foreach ($_REQUEST as $rkey=>$rvalue) { // locally set request-vars
+		print "newstep: <pre>#$rkey#=#$rvalue#</pre>";
 		eval("\$".$rkey."='".$rvalue."';"); // that might be used in template
 	}
 	$list=wiki_get_steppagelist($template);
