@@ -19,6 +19,7 @@ $step_templates['step']=array(
 	// body of form for new entries, is embedded in <form>..</form>
 	// environment. Make sure that field names match variable names
 	// in template (see below)
+	// All variables used MUST start with 'step_' !
 	"formbody"=>"<table>
 <tr><td>Zusammenfassung:</td>
 <td><input size=60 name=\"step_zusammenfassung\"></td></tr>
@@ -110,8 +111,10 @@ function wiki_newstep($template_name) {
 	global $step_templates;
 	$template=$step_templates[$template_name];
 	foreach ($_REQUEST as $rkey=>$rvalue) { // locally set request-vars
-		print "newstep: <pre>#$rkey#=#$rvalue#</pre>";
-		eval("\$".$rkey."='".$rvalue."';"); // that might be used in template
+		if (substr($rkey,0,4)=="step_") {
+			print "newstep: <pre>#$rkey#=#$rvalue#</pre>";
+			eval("\$".$rkey."='".$rvalue."';"); // that might be used in template
+		}
 	}
 	$list=wiki_get_steppagelist($template);
 	foreach ($list as $l) {
