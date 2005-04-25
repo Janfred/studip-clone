@@ -296,7 +296,7 @@ function create_ilias_user($studip_id)
 	$db->query($query_string);
 	if ($db->next_record())
 	{
-		$creation_result = new_ilias_user($db->f("username"), md5($db->f("password")), $db->f("geschlecht"), 
+		$creation_result = new_ilias_user($db->f("username"), md5(uniqid("uehvt3td",1)), $db->f("geschlecht"), 
 			$db->f("Vorname"), $db->f("Nachname"), $db->f("title_front"), 
 			"Stud.IP", $db->f("privatnr"), $db->f("Email"), 
 			$db->f("perms"), $db->f("preferred_language"));
