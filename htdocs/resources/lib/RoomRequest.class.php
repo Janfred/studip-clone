@@ -1,4 +1,5 @@
-<?/**
+<?php
+/**
 * RoomRequest.class.php
 * 
 * class for room requests and room-property requests
@@ -69,6 +70,7 @@ class RoomRequest {
 		return md5(uniqid("wintergoe",1));
 	}
 	
+	/* TEST: brauchen wir das wirklich irgendwo?
 	function create() {
 		$query = sprintf("SELECT assign_id FROM resources_assign WHERE assign_id ='%s' ", $this->id);
 		$this->db->query($query);
@@ -78,7 +80,7 @@ class RoomRequest {
 		} else
 			return $this->store(TRUE);
 	}
-
+	*/
 	function getId() {
 		return $this->id;
 	}
@@ -338,6 +340,7 @@ class RoomRequest {
 		return $changed;
 	}
 	
+	/* TEST: brauchen wir das wirklich irgendwo?
 	function checkOpen($also_change = FALSE) {
 		//an request for a date is easy...
 		if ($this->termin_id) {
@@ -355,6 +358,7 @@ class RoomRequest {
 			}
 		}
 	}
+	*/
 	
 	function copy() {
 		$this->id = $this->createId();
@@ -364,7 +368,7 @@ class RoomRequest {
 
 	function store(){
 		// save only, if changes were made or the object is new and we have a resource_id or properties
-		if ((($this->chng_flag) || ($create)) && (($this->resource_id) || ($this->getSettedPropertiesCount()))) {
+		if ($this->chng_flag || ($this->isNew() && ($this->resource_id || $this->getSettedPropertiesCount())) ) {
 			$chdate = time();
 			$mkdate = time();
 
@@ -403,21 +407,15 @@ class RoomRequest {
 	}
 
 	function delete() {
-		foreach ($this->properties as $key => $val) {
-			$properties[] = $key;
-		}
 		
-		if (is_array($properties)) {
-			$in="('".join("','",$properties)."')";
-			$query = sprintf("DELETE FROM resources_requests_properties WHERE property_id IN %s", $in);
-			$this->db->query($query);
-		}
+		$query = sprintf("DELETE FROM resources_requests_properties WHERE request_id='%s'", $this->id);
+		
+		$this->db->query($query);
 		
 		$query = sprintf("DELETE FROM resources_requests WHERE request_id='%s'", $this->id);
-		if($this->db->query($query))
-			return TRUE;
-		else
-			return FALSE;
+		$this->db->query($query);
+		return $this->db->affected_rows();
 	}
 
 }
+?>
