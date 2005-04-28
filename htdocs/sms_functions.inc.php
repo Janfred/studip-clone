@@ -69,7 +69,8 @@ function MessageIcon($message_hovericon) {
 }
 
 function count_x_messages_from_user($snd_rec, $folder, $where="") {
-	global $db, $user;
+	global $user;
+	$db = new DB_Seminar();
 	if ($snd_rec == "in" || $snd_rec == "out") {
 		if ($snd_rec == "in") {
 			$tmp_snd_rec = "rec";
@@ -98,7 +99,8 @@ function count_x_messages_from_user($snd_rec, $folder, $where="") {
 }
 
 function count_messages_from_user($snd_rec, $where="") {
-	global $db, $user;
+	global  $user;
+	$db = new DB_Seminar();
 	if ($snd_rec == "in" || $snd_rec == "out") {
 		if ($snd_rec == "in") {
 			$tmp_snd_rec = "rec";
@@ -411,7 +413,8 @@ function print_rec_message($prm) {
 }
 
 function print_messages() {
-	global $user, $my_messaging_settings, $PHP_SELF ,$sms_data, $sms_show, $db, $query_showfolder, $query_time_sort, $query_movetofolder, $query_time, $_fullname_sql, $srch_result, $no_message_text, $n, $count, $count_timefilter;
+	global $user, $my_messaging_settings, $PHP_SELF ,$sms_data, $sms_show, $query_showfolder, $query_time_sort, $query_movetofolder, $query_time, $_fullname_sql, $srch_result, $no_message_text, $n, $count, $count_timefilter;
+	$db = new DB_Seminar();
 	if ($query_time) $count = $count_timefilter;
 	$n = 0;
 	$user_id = $user->id;
