@@ -1191,7 +1191,7 @@ if ($save_state_x) {
 	elseif (is_array ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"])) {
 		$i=0;
 		//check, if one assignment should assigned to a room, which is only particularly free - so we have treat every single date
-		if (($semObj->getMetaDateType == 0) && (!isSchedule($semObj->getId(), FALSE))) {
+		if (($semObj->getMetaDateType() == 0) && (!isSchedule($semObj->getId(), FALSE))) {
 			foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"] as $key=>$val) {
 				if ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][$i]) {
 					$overlap_events_count = $val["overlap_events_count"][$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][$i]];
@@ -1235,10 +1235,10 @@ if ($save_state_x) {
 						} else
 							$skipped_termin_ids[$key2]=TRUE;
 					}
+					
 					if ($semObj->getMetaDateType() == 0) {
 						$semObj->setMetaDateValue($key, "resource_id", $val);
 					}
-					
 				}
 				$close_request = TRUE;
 				$semObj->store();
@@ -1382,7 +1382,7 @@ if ($save_state_x) {
 			
 			//update seminar-date (save the new resource_ids)
 			if ($succesful_assigned) {
-				if (($semObj->getMetaType == 0) && (!isSchedule($semObj->getId(), FALSE)))
+				if (($semObj->getMetaDateType() == 0) && (!isSchedule($semObj->getId(), FALSE)))
 					$semObj->store();
 			}
 			
@@ -1402,7 +1402,6 @@ if ($save_state_x) {
 				
 		}
 	}
-	
 	//set request to closed, if we have a room for every assign_object
 	$assigned_resources = 0;
 	foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"] as $val) {
@@ -1568,6 +1567,15 @@ if (($inc_request_x) || ($dec_request_x) || ($new_session_started) || ($marked_c
 			
 		$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"]=array();
 		if (is_array($assignObjects)) {
+			
+			//add already assigned resource_ids to the check-set and remember those assigns
+			foreach($assignObjects as $assObj){
+				if ($assObj->getResourceId()){
+					$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["considered_resources"][$assObj->getResourceId()] = array("type"=>"matching");
+					$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$assObj->getId()] = array("resource_id" => $assObj->getResourceId());
+				}
+			}
+			
 			//set the time range to check;
 			if (($semObj->getMetaDateType() == 1) || ($reqObj->getTerminId()) || (isSchedule($semObj->getId(), FALSE))) {
 				$multiOverlaps->setAutoTimeRange($assignObjects);
@@ -1581,6 +1589,8 @@ if (($inc_request_x) || ($dec_request_x) || ($new_session_started) || ($marked_c
 					$multiOverlaps->addResource($key);
 				}
 			}
+			
+			
 			//do checks
 			$result = array();
 			$first_event = FALSE;
