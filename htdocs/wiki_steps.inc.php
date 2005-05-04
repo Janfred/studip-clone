@@ -1,5 +1,5 @@
 <?
-
+require_once $ABSOLUTE_PATH_STUDIP . 'forum.inc.php';
 // wikiMarkups are used by the wikiDirective function
 // after all other conversions,
 // wikiMarkup patterns are replaced
@@ -28,6 +28,9 @@ $step_templates['step']=array(
 <td><select name=\"step_komplexitaet\"><option>gering</option><option>mittel</option><option>hoch</option></select></td></tr>
 <tr><td>Beschreibung:</td>
 <td><textarea name=\"step_beschreibung\" cols=60 rows=10></textarea></td></tr>
+<tr><td>Foren Thema erzeugen:</td>
+<td><input type=\"checkbox\" name=\"step_create_topic\" value=\"1\" checked></td></tr>
+
 <tr><td>&nbsp;</td><td><input type=image ".makeButton("eintragen","src")." border=0></td></tr>
 </table>",
 	// template is evaluated alter to form default text
@@ -126,6 +129,11 @@ function wiki_newstep($template_name) {
 	$query="INSERT INTO wiki SET range_id='$SessSemName[1]', keyword='$pagename', body='".addslashes($text)."', user_id='$userid', chdate='".time()."', version='1'";
 	$db->query($query);
 	$wiki_plugin_messages[]="msg§"._("Ein neuer Eintrag wurde angelegt. Sie können ihn nun weiter bearbeiten oder <a href=\"$PHP_SELF?keyword=$keyword\">zurück zur Ausgangsseite</a> gehen.");
+	if ($step_create_topic){
+		if(CreateTopic(addslashes($pagename . ': ' . $step_zusammenfassung), get_fullname($userid), addslashes($step_beschreibung), 0, 0, $SessSemName[1],$userid)){
+			$wiki_plugin_messages[]="msg§"._("Ein neues Thema im Forum wurde angelegt.");
+		}
+	}
 	$view='show';
 	$keyword=$pagename;
 	return;
