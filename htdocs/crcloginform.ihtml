@@ -139,7 +139,7 @@ $_language_path = init_i18n($_language);
 				if (isset($this->auth["uname"]))
 					print $this->auth["uname"];
 				else if (isset($shortcut))
-					print $shortcut;
+					print htmlReady($shortcut);
 			?>" size=20 maxlength=63></td>
 		</tr>
 
