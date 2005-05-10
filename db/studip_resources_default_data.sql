@@ -46,3 +46,16 @@ INSERT INTO `resources_properties` VALUES ('c4352a580051a81830ef5980941c9e06', '
 INSERT INTO `resources_properties` VALUES ('cb8140efbc2af5362b1159c65deeec9e', 'Hersteller', '', 'select', 'Sony;Philips;Technics;Telefunken;anderer', 0);
 INSERT INTO `resources_properties` VALUES ('39c73942e1c1650fa20c7259be96b3f3', 'Inventarnummer', '', 'num', '', 0);
 INSERT INTO `resources_properties` VALUES ('28addfe18e86cc3587205734c8bc2372', 'Verdunklung', '', 'bool', 'vorhanden', 0);
+
+#
+# Daten für Tabelle `config`
+#
+
+INSERT INTO `config` VALUES ('3d415eca600096df09e59407e4a7994d', 'RESOURCES_LOCKING_ACTIVE', '', '', 1100709567, '');
+INSERT INTO `config` VALUES ('b7a2817d142ddd185df2f5ac587fe218', 'RESOURCES_ALLOW_ROOM_REQUESTS', '', '', 1100709567, '');
+INSERT INTO `config` VALUES ('d821ffbff29ce636cef63ffe3fd8b427', 'RESOURCES_ALLOW_CREATE_ROOMS', '2', '', 1100709567, '');
+INSERT INTO `config` VALUES ('e48dacf9158cd0b936144f0f4cf8dfa3', 'RESOURCES_INHERITANCE_PERMS_ROOMS', '1', '2', 1100709567, '');
+INSERT INTO `config` VALUES ('45856b1e3407ceb37d87ec9b8fd32d7d', 'RESOURCES_INHERITANCE_PERMS', '1', '2', 1100709567, '');
+INSERT INTO `config` VALUES ('c353c73d8f37e3c301ae34e99c837af4', 'RESOURCES_ENABLE_ORGA_CLASSIFY', 'on', '', 1100709567, '');
+INSERT INTO `config` VALUES ('0821671742242add144595b1121699fb', 'RESOURCES_ALLOW_SINGLE_ASSIGN_PERCENTAGE', '50', '', 1100709567, '');
+INSERT INTO `config` VALUES ('94d1643209a8f404dfe71228aad828dd', 'RESOURCES_ALLOW_SINGLE_DATE_GROUPING', '5', '', 1100709567, '');

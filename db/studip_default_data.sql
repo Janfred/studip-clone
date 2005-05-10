@@ -97,4 +97,8 @@ INSERT INTO `semester_data` VALUES ('cc448ebc6edf11b180d288629f5acdc3', 'SS 2005
 INSERT INTO `semester_holiday` VALUES ('909092b07339bb9faa19c69941044b3c', '1', 'Weihnachtsferien 2003/2004', '', 1071874800, 1073257199);
 INSERT INTO `semester_holiday` VALUES ('c121c20d8bfb2381274fad682f401999', '1', 'Weihnachtsferien 2004/2005', '', 1103324400, 1104706799);
 
-    
+#
+# Daten für Tabelle `config`
+#
+
+INSERT INTO `config` VALUES ('074ccc86f0313dd695dc8e3ec3cebe73', 'HTML_HEAD_TITLE', 'Stud.IP', '', 0, '');
