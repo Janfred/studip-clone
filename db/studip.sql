@@ -1,6 +1,7 @@
-# Erstellungszeit: 14. Mai 2004 um 10:35
-# Server Version: 4.00.15
+# Erstellungszeit: 06. Dezember 2004 um 15:14
+# Server Version: 4.0.15
 # PHP-Version: 4.3.3
+# 
 # Datenbank: `studip`
 # $Id$
 # --------------------------------------------------------
@@ -9,6 +10,7 @@
 # Tabellenstruktur für Tabelle `Institute`
 #
 
+DROP TABLE IF EXISTS `Institute`;
 CREATE TABLE `Institute` (
   `Institut_id` varchar(32) NOT NULL default '',
   `Name` varchar(255) NOT NULL default '',
@@ -25,41 +27,46 @@ CREATE TABLE `Institute` (
   `chdate` int(20) NOT NULL default '0',
   `lit_plugin_name` varchar(255) default NULL,
   PRIMARY KEY  (`Institut_id`),
-  KEY `fakultaets_id` (`fakultaets_id`),
-  KEY `chdate` (`chdate`)
+  KEY `fakultaets_id` (`fakultaets_id`)
 ) TYPE=MyISAM PACK_KEYS=1;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `active_sessions`
 #
 
+DROP TABLE IF EXISTS `active_sessions`;
 CREATE TABLE `active_sessions` (
   `sid` varchar(32) NOT NULL default '',
   `name` varchar(32) NOT NULL default '',
   `val` mediumtext,
   `changed` varchar(14) NOT NULL default '',
-  PRIMARY KEY  (`name`,`sid`),
-  KEY `changed` (`changed`)
+  PRIMARY KEY  (`sid`,`name`),
+  KEY `name` (`name`,`changed`)
 ) TYPE=MyISAM PACK_KEYS=1;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `admission_seminar_studiengang`
 #
 
+DROP TABLE IF EXISTS `admission_seminar_studiengang`;
 CREATE TABLE `admission_seminar_studiengang` (
   `seminar_id` varchar(32) NOT NULL default '',
   `studiengang_id` varchar(32) NOT NULL default '',
   `quota` int(3) NOT NULL default '0',
   PRIMARY KEY  (`seminar_id`,`studiengang_id`)
 ) TYPE=MyISAM;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `admission_seminar_user`
 #
 
+DROP TABLE IF EXISTS `admission_seminar_user`;
 CREATE TABLE `admission_seminar_user` (
   `user_id` varchar(32) NOT NULL default '',
   `seminar_id` varchar(32) NOT NULL default '',
@@ -70,12 +77,14 @@ CREATE TABLE `admission_seminar_user` (
   `comment` tinytext,
   PRIMARY KEY  (`user_id`,`seminar_id`,`studiengang_id`)
 ) TYPE=MyISAM;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `archiv`
 #
 
+DROP TABLE IF EXISTS `archiv`;
 CREATE TABLE `archiv` (
   `seminar_id` varchar(32) NOT NULL default '',
   `name` varchar(255) NOT NULL default '',
@@ -94,15 +103,16 @@ CREATE TABLE `archiv` (
   `studienbereiche` text NOT NULL,
   `VeranstaltungsNummer` varchar(32) NOT NULL default '',
   PRIMARY KEY  (`seminar_id`),
-  UNIQUE KEY `seminar_id` (`seminar_id`),
   KEY `heimat_inst_id` (`heimat_inst_id`)
 ) TYPE=MyISAM PACK_KEYS=1;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `archiv_user`
 #
 
+DROP TABLE IF EXISTS `archiv_user`;
 CREATE TABLE `archiv_user` (
   `seminar_id` varchar(32) NOT NULL default '',
   `user_id` varchar(32) NOT NULL default '',
@@ -110,12 +120,14 @@ CREATE TABLE `archiv_user` (
   PRIMARY KEY  (`seminar_id`,`user_id`),
   KEY `user_id` (`user_id`)
 ) TYPE=MyISAM PACK_KEYS=1;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `auth_user_md5`
 #
 
+DROP TABLE IF EXISTS `auth_user_md5`;
 CREATE TABLE `auth_user_md5` (
   `user_id` varchar(32) NOT NULL default '',
   `username` varchar(64) NOT NULL default '',
@@ -128,12 +140,14 @@ CREATE TABLE `auth_user_md5` (
   PRIMARY KEY  (`user_id`),
   UNIQUE KEY `k_username` (`username`)
 ) TYPE=MyISAM PACK_KEYS=1;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `banner_ads`
 #
 
+DROP TABLE IF EXISTS `banner_ads`;
 CREATE TABLE `banner_ads` (
   `ad_id` varchar(32) NOT NULL default '',
   `banner_path` varchar(255) NOT NULL default '',
@@ -150,12 +164,14 @@ CREATE TABLE `banner_ads` (
   `chdate` int(20) NOT NULL default '0',
   PRIMARY KEY  (`ad_id`)
 ) TYPE=MyISAM;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `calendar_events`
 #
 
+DROP TABLE IF EXISTS `calendar_events`;
 CREATE TABLE `calendar_events` (
   `event_id` varchar(32) NOT NULL default '',
   `range_id` varchar(32) NOT NULL default '',
@@ -188,12 +204,28 @@ CREATE TABLE `calendar_events` (
   KEY `range_id` (`range_id`),
   KEY `autor_id` (`autor_id`)
 ) TYPE=MyISAM;
+
+# --------------------------------------------------------
+
+#
+# Tabellenstruktur für Tabelle `chat_data`
+#
+
+DROP TABLE IF EXISTS `chat_data`;
+CREATE TABLE `chat_data` (
+  `id` int(11) NOT NULL default '0',
+  `data` mediumblob NOT NULL,
+  `tstamp` timestamp(14) NOT NULL,
+  PRIMARY KEY  (`id`)
+) TYPE=MyISAM;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `config`
 #
 
+DROP TABLE IF EXISTS `config`;
 CREATE TABLE `config` (
   `config_id` varchar(32) NOT NULL default '',
   `key` varchar(255) NOT NULL default '',
@@ -203,28 +235,30 @@ CREATE TABLE `config` (
   `comment` text NOT NULL,
   PRIMARY KEY  (`config_id`)
 ) TYPE=MyISAM;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `contact`
 #
 
+DROP TABLE IF EXISTS `contact`;
 CREATE TABLE `contact` (
   `contact_id` varchar(32) NOT NULL default '',
   `owner_id` varchar(32) NOT NULL default '',
   `user_id` varchar(32) NOT NULL default '',
   `buddy` tinyint(4) NOT NULL default '1',
   PRIMARY KEY  (`contact_id`),
-  UNIQUE KEY `owner_user` (`owner_id`,`user_id`),
-  KEY `owner_id` (`owner_id`),
-  KEY `user_id` (`user_id`)
+  KEY `owner_id` (`owner_id`,`buddy`,`user_id`)
 ) TYPE=MyISAM;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `contact_userinfo`
 #
 
+DROP TABLE IF EXISTS `contact_userinfo`;
 CREATE TABLE `contact_userinfo` (
   `userinfo_id` varchar(32) NOT NULL default '',
   `contact_id` varchar(32) NOT NULL default '',
@@ -235,12 +269,14 @@ CREATE TABLE `contact_userinfo` (
   KEY `contact_id` (`contact_id`),
   KEY `priority` (`priority`)
 ) TYPE=MyISAM;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `datafields`
 #
 
+DROP TABLE IF EXISTS `datafields`;
 CREATE TABLE `datafields` (
   `datafield_id` varchar(32) NOT NULL default '',
   `name` varchar(255) default NULL,
@@ -254,12 +290,14 @@ CREATE TABLE `datafields` (
   PRIMARY KEY  (`datafield_id`),
   KEY `object_type` (`object_type`)
 ) TYPE=MyISAM;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `datafields_entries`
 #
 
+DROP TABLE IF EXISTS `datafields_entries`;
 CREATE TABLE `datafields_entries` (
   `datafield_id` varchar(32) NOT NULL default '',
   `range_id` varchar(32) NOT NULL default '',
@@ -268,12 +306,14 @@ CREATE TABLE `datafields_entries` (
   `chdate` int(20) unsigned default NULL,
   PRIMARY KEY  (`datafield_id`,`range_id`)
 ) TYPE=MyISAM;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `dokumente`
 #
 
+DROP TABLE IF EXISTS `dokumente`;
 CREATE TABLE `dokumente` (
   `dokument_id` varchar(32) NOT NULL default '',
   `range_id` varchar(32) NOT NULL default '',
@@ -296,12 +336,14 @@ CREATE TABLE `dokumente` (
   KEY `chdate` (`chdate`),
   KEY `mkdate` (`mkdate`)
 ) TYPE=MyISAM PACK_KEYS=1;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `eval`
 #
 
+DROP TABLE IF EXISTS `eval`;
 CREATE TABLE `eval` (
   `eval_id` varchar(32) NOT NULL default '',
   `author_id` varchar(32) NOT NULL default '',
@@ -317,34 +359,40 @@ CREATE TABLE `eval` (
   `shared` tinyint(1) NOT NULL default '0',
   PRIMARY KEY  (`eval_id`)
 ) TYPE=MyISAM PACK_KEYS=1;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `eval_range`
 #
 
+DROP TABLE IF EXISTS `eval_range`;
 CREATE TABLE `eval_range` (
   `eval_id` varchar(32) NOT NULL default '',
   `range_id` varchar(32) NOT NULL default '',
   PRIMARY KEY  (`eval_id`,`range_id`)
 ) TYPE=MyISAM PACK_KEYS=1;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `eval_user`
 #
 
+DROP TABLE IF EXISTS `eval_user`;
 CREATE TABLE `eval_user` (
   `eval_id` varchar(32) NOT NULL default '',
   `user_id` varchar(32) NOT NULL default '',
   PRIMARY KEY  (`eval_id`,`user_id`)
 ) TYPE=MyISAM;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `evalanswer`
 #
 
+DROP TABLE IF EXISTS `evalanswer`;
 CREATE TABLE `evalanswer` (
   `evalanswer_id` varchar(32) NOT NULL default '',
   `parent_id` varchar(32) NOT NULL default '',
@@ -357,23 +405,27 @@ CREATE TABLE `evalanswer` (
   PRIMARY KEY  (`evalanswer_id`),
   KEY `parent_id` (`parent_id`)
 ) TYPE=MyISAM;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `evalanswer_user`
 #
 
+DROP TABLE IF EXISTS `evalanswer_user`;
 CREATE TABLE `evalanswer_user` (
   `evalanswer_id` varchar(32) NOT NULL default '',
   `user_id` varchar(32) NOT NULL default '',
   PRIMARY KEY  (`evalanswer_id`,`user_id`)
 ) TYPE=MyISAM PACK_KEYS=1;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `evalgroup`
 #
 
+DROP TABLE IF EXISTS `evalgroup`;
 CREATE TABLE `evalgroup` (
   `evalgroup_id` varchar(32) NOT NULL default '',
   `parent_id` varchar(32) NOT NULL default '',
@@ -386,12 +438,14 @@ CREATE TABLE `evalgroup` (
   PRIMARY KEY  (`evalgroup_id`),
   KEY `parent_id` (`parent_id`)
 ) TYPE=MyISAM PACK_KEYS=1;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `evalquestion`
 #
 
+DROP TABLE IF EXISTS `evalquestion`;
 CREATE TABLE `evalquestion` (
   `evalquestion_id` varchar(32) NOT NULL default '',
   `parent_id` varchar(32) NOT NULL default '',
@@ -402,12 +456,14 @@ CREATE TABLE `evalquestion` (
   PRIMARY KEY  (`evalquestion_id`),
   KEY `parent_id` (`parent_id`)
 ) TYPE=MyISAM;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `extern_config`
 #
 
+DROP TABLE IF EXISTS `extern_config`;
 CREATE TABLE `extern_config` (
   `config_id` varchar(32) NOT NULL default '',
   `range_id` varchar(32) NOT NULL default '',
@@ -418,12 +474,14 @@ CREATE TABLE `extern_config` (
   `chdate` int(20) NOT NULL default '0',
   PRIMARY KEY  (`config_id`,`range_id`)
 ) TYPE=MyISAM;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `folder`
 #
 
+DROP TABLE IF EXISTS `folder`;
 CREATE TABLE `folder` (
   `folder_id` varchar(32) NOT NULL default '',
   `range_id` varchar(32) NOT NULL default '',
@@ -437,12 +495,14 @@ CREATE TABLE `folder` (
   KEY `range_id` (`range_id`),
   KEY `chdate` (`chdate`)
 ) TYPE=MyISAM PACK_KEYS=1;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `guestbook`
 #
 
+DROP TABLE IF EXISTS `guestbook`;
 CREATE TABLE `guestbook` (
   `post_id` varchar(32) NOT NULL default '',
   `range_id` varchar(32) NOT NULL default '',
@@ -450,16 +510,18 @@ CREATE TABLE `guestbook` (
   `mkdate` int(20) NOT NULL default '0',
   `content` text NOT NULL,
   PRIMARY KEY  (`post_id`),
-  KEY `post_id` (`post_id`),
   KEY `range_id` (`range_id`),
-  KEY `user_id` (`user_id`)
+  KEY `user_id` (`user_id`),
+  KEY `mkdate` (`mkdate`)
 ) TYPE=MyISAM;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `kategorien`
 #
 
+DROP TABLE IF EXISTS `kategorien`;
 CREATE TABLE `kategorien` (
   `kategorie_id` varchar(32) NOT NULL default '',
   `range_id` varchar(32) NOT NULL default '',
@@ -470,15 +532,17 @@ CREATE TABLE `kategorien` (
   `chdate` int(20) NOT NULL default '0',
   `priority` int(11) NOT NULL default '0',
   PRIMARY KEY  (`kategorie_id`),
-  KEY `kategorie_id_2` (`kategorie_id`,`range_id`),
-  KEY `priority` (`priority`)
+  KEY `priority` (`priority`),
+  KEY `range_id` (`range_id`)
 ) TYPE=MyISAM;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `lit_catalog`
 #
 
+DROP TABLE IF EXISTS `lit_catalog`;
 CREATE TABLE `lit_catalog` (
   `catalog_id` varchar(32) NOT NULL default '',
   `user_id` varchar(32) NOT NULL default '',
@@ -503,12 +567,14 @@ CREATE TABLE `lit_catalog` (
   `dc_rights` varchar(255) default NULL,
   PRIMARY KEY  (`catalog_id`)
 ) TYPE=MyISAM;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `lit_list`
 #
 
+DROP TABLE IF EXISTS `lit_list`;
 CREATE TABLE `lit_list` (
   `list_id` varchar(32) NOT NULL default '',
   `range_id` varchar(32) NOT NULL default '',
@@ -524,12 +590,14 @@ CREATE TABLE `lit_list` (
   KEY `priority` (`priority`),
   KEY `visibility` (`visibility`)
 ) TYPE=MyISAM;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `lit_list_content`
 #
 
+DROP TABLE IF EXISTS `lit_list_content`;
 CREATE TABLE `lit_list_content` (
   `list_element_id` varchar(32) NOT NULL default '',
   `list_id` varchar(32) NOT NULL default '',
@@ -544,58 +612,57 @@ CREATE TABLE `lit_list_content` (
   KEY `catalog_id` (`catalog_id`),
   KEY `priority` (`priority`)
 ) TYPE=MyISAM;
-# --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `lock_rules`
-#
-
-CREATE TABLE `lock_rules` (
-  `lock_id` varchar(32) NOT NULL default '',
-  `name` varchar(255) NOT NULL default '',
-  `description` text NOT NULL,
-  `attributes` text NOT NULL,
-  PRIMARY KEY  (`lock_id`)
-) TYPE=MyISAM;
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `message`
 #
 
+DROP TABLE IF EXISTS `message`;
 CREATE TABLE `message` (
   `message_id` varchar(32) NOT NULL default '',
   `chat_id` varchar(32) default NULL,
   `autor_id` varchar(32) NOT NULL default '',
+  `subject` varchar(255) NOT NULL default '',
   `message` text NOT NULL,
   `mkdate` int(20) NOT NULL default '0',
+  `readed` tinyint(1) NOT NULL default '0',
+  `reading_confirmation` tinyint(1) NOT NULL default '0',
   PRIMARY KEY  (`message_id`),
   KEY `chat_id` (`chat_id`),
-  KEY `autor_id` (`autor_id`)
+  KEY `mkdate` (`mkdate`)
 ) TYPE=MyISAM;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `message_user`
 #
 
+DROP TABLE IF EXISTS `message_user`;
 CREATE TABLE `message_user` (
-  `user_id` varchar(32) NOT NULL default '',
-  `message_id` varchar(32) NOT NULL default '',
+  `user_id` char(32) NOT NULL default '',
+  `message_id` char(32) NOT NULL default '',
   `readed` tinyint(1) NOT NULL default '0',
   `deleted` tinyint(1) NOT NULL default '0',
-  `snd_rec` char(3) NOT NULL default '',
-  `dont_delete` tinyint(1) default '0',
-  `folder` int(5) NOT NULL default '0',
-  PRIMARY KEY  (`user_id`,`message_id`,`snd_rec`),
-  KEY `message_id` (`message_id`)
+  `snd_rec` enum('rec','snd') NOT NULL default 'rec',
+  `dont_delete` tinyint(1) NOT NULL default '0',
+  `folder` tinyint(4) NOT NULL default '0',
+  `confirmed_read` tinyint(1) NOT NULL default '0',
+  `answered` tinyint(1) NOT NULL default '0',
+  PRIMARY KEY  (`message_id`,`snd_rec`,`user_id`),
+  KEY `user_id` (`user_id`,`snd_rec`,`deleted`,`readed`),
+  KEY `user_id_2` (`user_id`,`snd_rec`,`deleted`,`folder`)
 ) TYPE=MyISAM;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `news`
 #
 
+DROP TABLE IF EXISTS `news`;
 CREATE TABLE `news` (
   `news_id` varchar(32) NOT NULL default '',
   `topic` varchar(255) NOT NULL default '',
@@ -607,25 +674,28 @@ CREATE TABLE `news` (
   PRIMARY KEY  (`news_id`),
   KEY `date` (`date`)
 ) TYPE=MyISAM PACK_KEYS=1;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `news_range`
 #
 
+DROP TABLE IF EXISTS `news_range`;
 CREATE TABLE `news_range` (
   `news_id` varchar(32) NOT NULL default '',
   `range_id` varchar(32) NOT NULL default '',
   PRIMARY KEY  (`news_id`,`range_id`),
-  KEY `news_id` (`news_id`),
   KEY `range_id` (`range_id`)
 ) TYPE=MyISAM PACK_KEYS=1;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `object_rate`
 #
 
+DROP TABLE IF EXISTS `object_rate`;
 CREATE TABLE `object_rate` (
   `object_id` varchar(32) NOT NULL default '',
   `rate` int(10) NOT NULL default '0',
@@ -633,12 +703,14 @@ CREATE TABLE `object_rate` (
   KEY `object_id` (`object_id`),
   KEY `rate` (`rate`)
 ) TYPE=MyISAM;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `object_user`
 #
 
+DROP TABLE IF EXISTS `object_user`;
 CREATE TABLE `object_user` (
   `object_id` varchar(32) NOT NULL default '',
   `user_id` varchar(32) NOT NULL default '',
@@ -646,24 +718,45 @@ CREATE TABLE `object_user` (
   `mkdate` int(20) NOT NULL default '0',
   PRIMARY KEY  (`object_id`,`user_id`,`flag`)
 ) TYPE=MyISAM;
+
+# --------------------------------------------------------
+
+#
+# Tabellenstruktur für Tabelle `object_user_visits`
+#
+
+DROP TABLE IF EXISTS `object_user_visits`;
+CREATE TABLE `object_user_visits` (
+  `object_id` char(32) NOT NULL default '',
+  `user_id` char(32) NOT NULL default '',
+  `type` enum('vote','documents','forum','literature','schedule','scm','sem','wiki','news','eval','inst','ilias_connect') NOT NULL default 'vote',
+  `visitdate` int(20) NOT NULL default '0',
+  `last_visitdate` int(20) NOT NULL default '0',
+  PRIMARY KEY  (`object_id`,`user_id`,`type`)
+) TYPE=MyISAM;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `object_views`
 #
 
+DROP TABLE IF EXISTS `object_views`;
 CREATE TABLE `object_views` (
   `object_id` varchar(32) NOT NULL default '',
   `views` int(20) NOT NULL default '0',
   `chdate` int(20) NOT NULL default '0',
-  PRIMARY KEY  (`object_id`)
+  PRIMARY KEY  (`object_id`),
+  KEY `views` (`views`)
 ) TYPE=MyISAM;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `px_topics`
 #
 
+DROP TABLE IF EXISTS `px_topics`;
 CREATE TABLE `px_topics` (
   `topic_id` varchar(32) NOT NULL default '',
   `parent_id` varchar(32) NOT NULL default '',
@@ -684,12 +777,14 @@ CREATE TABLE `px_topics` (
   KEY `chdate` (`chdate`),
   KEY `mkdate` (`mkdate`)
 ) TYPE=MyISAM PACK_KEYS=1;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `range_tree`
 #
 
+DROP TABLE IF EXISTS `range_tree`;
 CREATE TABLE `range_tree` (
   `item_id` varchar(32) NOT NULL default '',
   `parent_id` varchar(32) NOT NULL default '',
@@ -703,12 +798,14 @@ CREATE TABLE `range_tree` (
   KEY `priority` (`priority`),
   KEY `studip_object_id` (`studip_object_id`)
 ) TYPE=MyISAM;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `resources_assign`
 #
 
+DROP TABLE IF EXISTS `resources_assign`;
 CREATE TABLE `resources_assign` (
   `assign_id` varchar(32) NOT NULL default '',
   `resource_id` varchar(32) NOT NULL default '',
@@ -729,12 +826,14 @@ CREATE TABLE `resources_assign` (
   KEY `resource_id` (`resource_id`),
   KEY `assign_user_id` (`assign_user_id`)
 ) TYPE=MyISAM;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `resources_categories`
 #
 
+DROP TABLE IF EXISTS `resources_categories`;
 CREATE TABLE `resources_categories` (
   `category_id` varchar(32) NOT NULL default '',
   `name` varchar(255) NOT NULL default '',
@@ -745,12 +844,14 @@ CREATE TABLE `resources_categories` (
   PRIMARY KEY  (`category_id`),
   KEY `is_room` (`is_room`)
 ) TYPE=MyISAM;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `resources_categories_properties`
 #
 
+DROP TABLE IF EXISTS `resources_categories_properties`;
 CREATE TABLE `resources_categories_properties` (
   `category_id` varchar(32) NOT NULL default '',
   `property_id` varchar(32) NOT NULL default '',
@@ -758,24 +859,28 @@ CREATE TABLE `resources_categories_properties` (
   `system` tinyint(4) NOT NULL default '0',
   PRIMARY KEY  (`category_id`,`property_id`)
 ) TYPE=MyISAM;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `resources_locks`
 #
 
+DROP TABLE IF EXISTS `resources_locks`;
 CREATE TABLE `resources_locks` (
   `lock_id` varchar(32) NOT NULL default '',
   `lock_begin` int(20) unsigned default NULL,
   `lock_end` int(20) unsigned default NULL,
   PRIMARY KEY  (`lock_id`)
 ) TYPE=MyISAM;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `resources_objects`
 #
 
+DROP TABLE IF EXISTS `resources_objects`;
 CREATE TABLE `resources_objects` (
   `resource_id` varchar(32) NOT NULL default '',
   `root_id` varchar(32) NOT NULL default '',
@@ -797,12 +902,14 @@ CREATE TABLE `resources_objects` (
   KEY `category_id` (`category_id`),
   KEY `owner_id` (`owner_id`)
 ) TYPE=MyISAM;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `resources_objects_properties`
 #
 
+DROP TABLE IF EXISTS `resources_objects_properties`;
 CREATE TABLE `resources_objects_properties` (
   `resource_id` varchar(32) NOT NULL default '',
   `property_id` varchar(32) NOT NULL default '',
@@ -810,12 +917,14 @@ CREATE TABLE `resources_objects_properties` (
   PRIMARY KEY  (`resource_id`,`property_id`),
   KEY `property_id` (`property_id`)
 ) TYPE=MyISAM;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `resources_properties`
 #
 
+DROP TABLE IF EXISTS `resources_properties`;
 CREATE TABLE `resources_properties` (
   `property_id` varchar(32) NOT NULL default '',
   `name` varchar(255) NOT NULL default '',
@@ -825,12 +934,14 @@ CREATE TABLE `resources_properties` (
   `system` tinyint(4) NOT NULL default '0',
   PRIMARY KEY  (`property_id`)
 ) TYPE=MyISAM;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `resources_requests`
 #
 
+DROP TABLE IF EXISTS `resources_requests`;
 CREATE TABLE `resources_requests` (
   `request_id` varchar(32) NOT NULL default '',
   `seminar_id` varchar(32) NOT NULL default '',
@@ -850,12 +961,14 @@ CREATE TABLE `resources_requests` (
   KEY `category_id` (`category_id`),
   KEY `closed` (`closed`)
 ) TYPE=MyISAM;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `resources_requests_properties`
 #
 
+DROP TABLE IF EXISTS `resources_requests_properties`;
 CREATE TABLE `resources_requests_properties` (
   `request_id` varchar(32) NOT NULL default '',
   `property_id` varchar(32) NOT NULL default '',
@@ -864,12 +977,14 @@ CREATE TABLE `resources_requests_properties` (
   `chdate` int(20) unsigned default NULL,
   PRIMARY KEY  (`request_id`,`property_id`)
 ) TYPE=MyISAM;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `resources_temporary_events`
 #
 
+DROP TABLE IF EXISTS `resources_temporary_events`;
 CREATE TABLE `resources_temporary_events` (
   `event_id` varchar(32) NOT NULL default '',
   `resource_id` varchar(32) NOT NULL default '',
@@ -883,24 +998,28 @@ CREATE TABLE `resources_temporary_events` (
   KEY `resource_id` (`resource_id`),
   KEY `assign_object_id` (`assign_id`)
 ) TYPE=HEAP;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `resources_user_resources`
 #
 
+DROP TABLE IF EXISTS `resources_user_resources`;
 CREATE TABLE `resources_user_resources` (
   `user_id` varchar(32) NOT NULL default '',
   `resource_id` varchar(32) NOT NULL default '',
   `perms` varchar(10) NOT NULL default '',
   PRIMARY KEY  (`user_id`,`resource_id`)
 ) TYPE=MyISAM;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `scm`
 #
 
+DROP TABLE IF EXISTS `scm`;
 CREATE TABLE `scm` (
   `scm_id` varchar(32) NOT NULL default '',
   `range_id` varchar(32) NOT NULL default '',
@@ -913,12 +1032,14 @@ CREATE TABLE `scm` (
   UNIQUE KEY `range_id` (`range_id`),
   KEY `chdate` (`chdate`)
 ) TYPE=MyISAM;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `sem_tree`
 #
 
+DROP TABLE IF EXISTS `sem_tree`;
 CREATE TABLE `sem_tree` (
   `sem_tree_id` varchar(32) NOT NULL default '',
   `parent_id` varchar(32) NOT NULL default '',
@@ -931,12 +1052,14 @@ CREATE TABLE `sem_tree` (
   KEY `priority` (`priority`),
   KEY `studip_object_id` (`studip_object_id`)
 ) TYPE=MyISAM;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `semester_data`
 #
 
+DROP TABLE IF EXISTS `semester_data`;
 CREATE TABLE `semester_data` (
   `semester_id` varchar(32) NOT NULL default '',
   `name` varchar(255) NOT NULL default '',
@@ -948,12 +1071,14 @@ CREATE TABLE `semester_data` (
   `vorles_ende` int(20) unsigned default NULL,
   PRIMARY KEY  (`semester_id`)
 ) TYPE=MyISAM;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `semester_holiday`
 #
 
+DROP TABLE IF EXISTS `semester_holiday`;
 CREATE TABLE `semester_holiday` (
   `holiday_id` varchar(32) NOT NULL default '',
   `semester_id` varchar(32) NOT NULL default '',
@@ -963,50 +1088,57 @@ CREATE TABLE `semester_holiday` (
   `ende` int(20) unsigned NOT NULL default '0',
   PRIMARY KEY  (`holiday_id`)
 ) TYPE=MyISAM;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `seminar_inst`
 #
 
+DROP TABLE IF EXISTS `seminar_inst`;
 CREATE TABLE `seminar_inst` (
   `seminar_id` varchar(32) NOT NULL default '',
   `institut_id` varchar(32) NOT NULL default '',
-  PRIMARY KEY  (`seminar_id`,`institut_id`)
+  PRIMARY KEY  (`seminar_id`,`institut_id`),
+  KEY `institut_id` (`institut_id`)
 ) TYPE=MyISAM PACK_KEYS=1;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `seminar_lernmodul`
 #
 
+DROP TABLE IF EXISTS `seminar_lernmodul`;
 CREATE TABLE `seminar_lernmodul` (
   `seminar_id` varchar(32) NOT NULL default '',
   `co_inst` bigint(20) NOT NULL default '0',
   `co_id` bigint(20) NOT NULL default '0',
   `status` tinyint(4) NOT NULL default '0',
-  PRIMARY KEY  (`seminar_id`,`co_id`),
-  KEY `seminar_id` (`seminar_id`)
+  PRIMARY KEY  (`seminar_id`,`co_id`)
 ) TYPE=MyISAM;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `seminar_sem_tree`
 #
 
+DROP TABLE IF EXISTS `seminar_sem_tree`;
 CREATE TABLE `seminar_sem_tree` (
   `seminar_id` varchar(32) NOT NULL default '',
   `sem_tree_id` varchar(32) NOT NULL default '',
   PRIMARY KEY  (`seminar_id`,`sem_tree_id`),
-  KEY `seminar_id` (`seminar_id`),
   KEY `sem_tree_id` (`sem_tree_id`)
 ) TYPE=MyISAM;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `seminar_user`
 #
 
+DROP TABLE IF EXISTS `seminar_user`;
 CREATE TABLE `seminar_user` (
   `Seminar_id` varchar(32) NOT NULL default '',
   `user_id` varchar(32) NOT NULL default '',
@@ -1017,21 +1149,23 @@ CREATE TABLE `seminar_user` (
   `comment` tinytext,
   PRIMARY KEY  (`Seminar_id`,`user_id`),
   KEY `user_id` (`user_id`),
-  KEY `Seminar_id` (`Seminar_id`)
+  KEY `status` (`status`,`Seminar_id`)
 ) TYPE=MyISAM PACK_KEYS=1;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `seminare`
 #
 
+DROP TABLE IF EXISTS `seminare`;
 CREATE TABLE `seminare` (
   `Seminar_id` varchar(32) NOT NULL default '0',
   `VeranstaltungsNummer` varchar(32) default NULL,
   `Institut_id` varchar(32) NOT NULL default '0',
   `Name` varchar(255) NOT NULL default '',
   `Untertitel` varchar(255) default NULL,
-  `status` varchar(32) NOT NULL default '1',
+  `status` tinyint(4) unsigned NOT NULL default '1',
   `Beschreibung` text NOT NULL,
   `Ort` varchar(255) default NULL,
   `Sonstiges` text,
@@ -1062,31 +1196,57 @@ CREATE TABLE `seminare` (
   `visible` tinyint(2) unsigned NOT NULL default '1',
   `showscore` tinyint(3) default '0',
   `modules` int(10) unsigned default NULL,
-  `lock_rule` varchar(32) NOT NULL default '',
-  `user_number` tinyint(4) default NULL,
   PRIMARY KEY  (`Seminar_id`),
   KEY `Institut_id` (`Institut_id`),
-  KEY `chdate` (`chdate`),
-  KEY `lock_rule` (`lock_rule`)
+  KEY `visible` (`visible`),
+  KEY `status` (`status`,`Seminar_id`)
 ) TYPE=MyISAM PACK_KEYS=1;
+
+# --------------------------------------------------------
+
+#
+# Tabellenstruktur für Tabelle `smiley`
+#
+
+DROP TABLE IF EXISTS `smiley`;
+CREATE TABLE `smiley` (
+  `smiley_id` bigint(20) NOT NULL auto_increment,
+  `smiley_name` varchar(50) NOT NULL default '',
+  `smiley_width` int(11) NOT NULL default '0',
+  `smiley_height` int(11) NOT NULL default '0',
+  `short_name` varchar(50) NOT NULL default '',
+  `smiley_counter` bigint(20) NOT NULL default '0',
+  `short_counter` bigint(20) NOT NULL default '0',
+  `fav_counter` bigint(20) NOT NULL default '0',
+  `mkdate` int(10) unsigned default NULL,
+  `chdate` int(10) unsigned default NULL,
+  PRIMARY KEY  (`smiley_id`),
+  UNIQUE KEY `name` (`smiley_name`),
+  KEY `short` (`short_name`)
+) TYPE=MyISAM AUTO_INCREMENT=255 ;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `statusgruppe_user`
 #
 
+DROP TABLE IF EXISTS `statusgruppe_user`;
 CREATE TABLE `statusgruppe_user` (
   `statusgruppe_id` varchar(32) NOT NULL default '',
   `user_id` varchar(32) NOT NULL default '',
   `position` int(11) NOT NULL default '0',
-  PRIMARY KEY  (`statusgruppe_id`,`user_id`)
+  PRIMARY KEY  (`statusgruppe_id`,`user_id`),
+  KEY `user_id` (`user_id`)
 ) TYPE=MyISAM;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `statusgruppen`
 #
 
+DROP TABLE IF EXISTS `statusgruppen`;
 CREATE TABLE `statusgruppen` (
   `statusgruppe_id` varchar(32) NOT NULL default '',
   `name` varchar(255) NOT NULL default '',
@@ -1100,12 +1260,14 @@ CREATE TABLE `statusgruppen` (
   KEY `range_id` (`range_id`),
   KEY `position` (`position`)
 ) TYPE=MyISAM;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `studiengaenge`
 #
 
+DROP TABLE IF EXISTS `studiengaenge`;
 CREATE TABLE `studiengaenge` (
   `studiengang_id` varchar(32) NOT NULL default '',
   `name` varchar(255) default NULL,
@@ -1114,12 +1276,14 @@ CREATE TABLE `studiengaenge` (
   `chdate` int(20) NOT NULL default '0',
   PRIMARY KEY  (`studiengang_id`)
 ) TYPE=MyISAM;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `studip_ilias`
 #
 
+DROP TABLE IF EXISTS `studip_ilias`;
 CREATE TABLE `studip_ilias` (
   `studip_user_id` varchar(32) NOT NULL default '',
   `ilias_user_id` bigint(20) NOT NULL default '0',
@@ -1127,12 +1291,14 @@ CREATE TABLE `studip_ilias` (
   PRIMARY KEY  (`studip_user_id`,`ilias_user_id`),
   KEY `is_created` (`is_created`)
 ) TYPE=MyISAM;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `support_contract`
 #
 
+DROP TABLE IF EXISTS `support_contract`;
 CREATE TABLE `support_contract` (
   `contract_id` varchar(32) NOT NULL default '',
   `institut_id` varchar(32) default NULL,
@@ -1145,12 +1311,14 @@ CREATE TABLE `support_contract` (
   PRIMARY KEY  (`contract_id`),
   KEY `contract_id` (`contract_id`,`institut_id`,`range_id`)
 ) TYPE=MyISAM;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `support_event`
 #
 
+DROP TABLE IF EXISTS `support_event`;
 CREATE TABLE `support_event` (
   `event_id` varchar(32) NOT NULL default '',
   `request_id` varchar(32) NOT NULL default '',
@@ -1163,12 +1331,14 @@ CREATE TABLE `support_event` (
   PRIMARY KEY  (`event_id`),
   KEY `event_id` (`event_id`,`user_id`,`mkdate`,`request_id`)
 ) TYPE=MyISAM;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `support_request`
 #
 
+DROP TABLE IF EXISTS `support_request`;
 CREATE TABLE `support_request` (
   `request_id` varchar(32) NOT NULL default '',
   `contract_id` varchar(32) NOT NULL default '',
@@ -1182,12 +1352,14 @@ CREATE TABLE `support_request` (
   PRIMARY KEY  (`request_id`),
   KEY `contract_id` (`contract_id`,`topic_id`,`user_id`)
 ) TYPE=MyISAM;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `termine`
 #
 
+DROP TABLE IF EXISTS `termine`;
 CREATE TABLE `termine` (
   `termin_id` varchar(32) NOT NULL default '',
   `range_id` varchar(32) NOT NULL default '',
@@ -1211,12 +1383,14 @@ CREATE TABLE `termine` (
   KEY `range_id` (`range_id`),
   KEY `autor_id` (`autor_id`)
 ) TYPE=MyISAM PACK_KEYS=1;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `user_info`
 #
 
+DROP TABLE IF EXISTS `user_info`;
 CREATE TABLE `user_info` (
   `user_id` varchar(32) NOT NULL default '',
   `hobby` varchar(255) NOT NULL default '',
@@ -1237,45 +1411,55 @@ CREATE TABLE `user_info` (
   `smsforward_rec` varchar(32) NOT NULL default '',
   `guestbook` tinyint(4) NOT NULL default '0',
   `email_forward` tinyint(4) NOT NULL default '0',
+  `smiley_favorite` varchar(255) NOT NULL default '',
+  `smiley_favorite_publish` tinyint(1) NOT NULL default '0',
   PRIMARY KEY  (`user_id`),
   KEY `score` (`score`)
 ) TYPE=MyISAM PACK_KEYS=1;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `user_inst`
 #
 
+DROP TABLE IF EXISTS `user_inst`;
 CREATE TABLE `user_inst` (
   `user_id` varchar(32) NOT NULL default '0',
   `Institut_id` varchar(32) NOT NULL default '0',
-  `inst_perms` varchar(255) default '0',
+  `inst_perms` varchar(10) NOT NULL default '',
   `sprechzeiten` varchar(200) NOT NULL default '',
-  `raum` varchar(32) NOT NULL default '',
+  `raum` varchar(200) NOT NULL default '',
   `Telefon` varchar(32) NOT NULL default '',
   `Fax` varchar(32) NOT NULL default '',
-  PRIMARY KEY  (`user_id`,`Institut_id`),
-  KEY `Institut_id` (`Institut_id`),
-  KEY `user_id` (`user_id`),
-  KEY `inst_perms` (`inst_perms`)
+  `externdefault` tinyint(3) unsigned NOT NULL default '0',
+  `priority` tinyint(3) unsigned NOT NULL default '0',
+  `visible` tinyint(3) unsigned NOT NULL default '1',
+  PRIMARY KEY  (`Institut_id`,`user_id`),
+  KEY `inst_perms` (`inst_perms`,`Institut_id`),
+  KEY `user_id` (`user_id`,`inst_perms`)
 ) TYPE=MyISAM PACK_KEYS=1;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `user_studiengang`
 #
 
+DROP TABLE IF EXISTS `user_studiengang`;
 CREATE TABLE `user_studiengang` (
   `user_id` varchar(32) NOT NULL default '',
   `studiengang_id` varchar(32) NOT NULL default '',
   PRIMARY KEY  (`user_id`,`studiengang_id`)
 ) TYPE=MyISAM;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `vote`
 #
 
+DROP TABLE IF EXISTS `vote`;
 CREATE TABLE `vote` (
   `vote_id` varchar(32) NOT NULL default '',
   `author_id` varchar(32) NOT NULL default '',
@@ -1304,24 +1488,29 @@ CREATE TABLE `vote` (
   KEY `chdate` (`chdate`),
   KEY `author_id` (`author_id`)
 ) TYPE=MyISAM PACK_KEYS=1;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `vote_user`
 #
 
+DROP TABLE IF EXISTS `vote_user`;
 CREATE TABLE `vote_user` (
   `vote_id` varchar(32) NOT NULL default '',
   `user_id` varchar(32) NOT NULL default '',
   `votedate` int(20) default NULL,
-  PRIMARY KEY  (`vote_id`,`user_id`)
+  PRIMARY KEY  (`vote_id`,`user_id`),
+  KEY `user_id` (`user_id`)
 ) TYPE=MyISAM PACK_KEYS=1;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `voteanswers`
 #
 
+DROP TABLE IF EXISTS `voteanswers`;
 CREATE TABLE `voteanswers` (
   `answer_id` varchar(32) NOT NULL default '',
   `vote_id` varchar(32) NOT NULL default '',
@@ -1333,39 +1522,46 @@ CREATE TABLE `voteanswers` (
   KEY `vote_id` (`vote_id`),
   KEY `position` (`position`)
 ) TYPE=MyISAM PACK_KEYS=1;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `voteanswers_user`
 #
 
+DROP TABLE IF EXISTS `voteanswers_user`;
 CREATE TABLE `voteanswers_user` (
   `answer_id` varchar(32) NOT NULL default '',
   `user_id` varchar(32) NOT NULL default '',
   `votedate` int(20) default NULL,
-  PRIMARY KEY  (`answer_id`,`user_id`)
+  PRIMARY KEY  (`answer_id`,`user_id`),
+  KEY `user_id` (`user_id`)
 ) TYPE=MyISAM PACK_KEYS=1;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `wap_sessions`
 #
 
+DROP TABLE IF EXISTS `wap_sessions`;
 CREATE TABLE `wap_sessions` (
   `user_id` char(32) NOT NULL default '',
   `session_id` char(32) NOT NULL default '',
   `creation_time` datetime default NULL
 ) TYPE=MyISAM;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `wiki`
 #
 
+DROP TABLE IF EXISTS `wiki`;
 CREATE TABLE `wiki` (
   `range_id` varchar(32) NOT NULL default '',
   `user_id` varchar(32) default NULL,
-  `keyword` varchar(128) NOT NULL default '',
+  `keyword` varchar(128) binary NOT NULL default '',
   `body` text,
   `chdate` int(11) default NULL,
   `version` int(11) NOT NULL default '0',
@@ -1373,31 +1569,34 @@ CREATE TABLE `wiki` (
   KEY `user_id` (`user_id`),
   KEY `chdate` (`chdate`)
 ) TYPE=MyISAM;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `wiki_links`
 #
 
+DROP TABLE IF EXISTS `wiki_links`;
 CREATE TABLE `wiki_links` (
   `range_id` char(32) NOT NULL default '',
-  `from_keyword` char(128) NOT NULL default '',
-  `to_keyword` char(128) NOT NULL default '',
+  `from_keyword` char(128) binary NOT NULL default '',
+  `to_keyword` char(128) binary NOT NULL default '',
   PRIMARY KEY  (`range_id`,`to_keyword`,`from_keyword`)
 ) TYPE=MyISAM;
+
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur für Tabelle `wiki_locks`
 #
 
+DROP TABLE IF EXISTS `wiki_locks`;
 CREATE TABLE `wiki_locks` (
   `user_id` varchar(32) NOT NULL default '',
   `range_id` varchar(32) NOT NULL default '',
-  `keyword` varchar(128) NOT NULL default '',
+  `keyword` varchar(128) binary NOT NULL default '',
   `chdate` int(11) NOT NULL default '0',
   PRIMARY KEY  (`range_id`,`user_id`,`keyword`),
   KEY `user_id` (`user_id`),
   KEY `chdate` (`chdate`)
 ) TYPE=MyISAM;
-
