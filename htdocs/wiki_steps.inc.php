@@ -126,11 +126,11 @@ function wiki_newstep($template_name) {
 // print "<p>Generierter Text:<br>$text"; // debug
 	$db=new DB_Seminar();
 	$userid=$auth->auth['uid'];
-	$query="INSERT INTO wiki SET range_id='$SessSemName[1]', keyword='$pagename', body='".addslashes($text)."', user_id='$userid', chdate='".time()."', version='1'";
+	$query="INSERT INTO wiki SET range_id='$SessSemName[1]', keyword='$pagename', body='".$text."', user_id='$userid', chdate='".time()."', version='1'";
 	$db->query($query);
 	$wiki_plugin_messages[]="msg§"._("Ein neuer Eintrag wurde angelegt. Sie können ihn nun weiter bearbeiten oder <a href=\"$PHP_SELF?keyword=$keyword\">zurück zur Ausgangsseite</a> gehen.");
 	if ($step_create_topic){
-		if(CreateTopic(addslashes($pagename . ': ' . $step_zusammenfassung), get_fullname($userid), addslashes($step_beschreibung), 0, 0, $SessSemName[1],$userid)){
+		if(CreateTopic($pagename . ': ' . $step_zusammenfassung, get_fullname($userid), $step_beschreibung, 0, 0, $SessSemName[1],$userid)){
 			$wiki_plugin_messages[]="msg§"._("Ein neues Thema im Forum wurde angelegt.");
 		}
 	}
@@ -149,7 +149,7 @@ function wiki_steplist($template_name,$opt) {
 	$steplist = wiki_get_steppagelist($template);
 	$out[] = "<table border='1' cellspacing='0' cellpadding='3'></tr>";
 	foreach ($template['listheader'] as $h) {
-		$out[]="<th><a href='$PHP_SELF?keyword=$keyword&order=".urlencode($h[order])."'>$h[heading]</a></th>";
+		$out[]="<th><a href='$PHP_SELF?keyword=$keyword&order=".urlencode($h['order'])."'>{$h['heading']}</a></th>";
 	}
 	$out[]="</tr>\n";
 	$terms = preg_split('/((?<!\\S)[-+]?[\'"].*?[\'"](?!\\S)|\\S+)/',
