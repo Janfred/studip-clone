@@ -42,6 +42,18 @@ require("$ABSOLUTE_PATH_STUDIP/html_head.inc.php");
 require("$ABSOLUTE_PATH_STUDIP/header.php");
 require($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/views/navigation.inc.php");
 
+function to_string_popupcalendar ($element, $disabled) {
+	// if javascript enabled display icon for popup calendar
+	if ($GLOBALS['auth']->auth['jscript'] && !$disabled) {
+		return "&nbsp;"
+			. "<img align=\"absmiddle\" src=\"{$GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']}pictures/popupkalender.gif\" border=\"0\" "
+			. "onClick=\"window.open('" . $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'] . $GLOBALS['RELATIVE_PATH_CALENDAR']
+			. "/views/insert_date_popup.php?element_switch=$element&atime={$GLOBALS['atime']}', 'InsertDate', "
+			. "'dependent=yes, width=210, height=210, left=500, top=150')\">";
+	}
+	return '';
+}
+
 echo "<table width=\"100%\" class=\"blank\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n";
 echo "<tr><td class=\"blank\" width=\"100%\" valign=\"top\">\n";
 echo "<table class=\"blank\" width=\"99%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" align=\"center\">\n";
@@ -57,11 +69,12 @@ echo "<tr><td class=\"blank\" width=\"99%\" valign=\"top\">\n";
 echo "<form name=\"Formular\" action=\"$PHP_SELF?cmd=edit\" method=\"post\">";
 echo "<table class=\"blank\" width=\"99%\" border=\"0\" cellspacing=\"0\" cellpadding=\"10\">\n";
 
-if (isset($atermin) && get_class($atermin) == "seminarevent")
+if (isset($atermin) && get_class($atermin) == "seminarevent") {
 	// form is not editable
 	$disabled = " style=\"color:#000000; background-color:#FFFFFF;\" disabled=\"disabled\"";
-else
+} else {
 	$disabled = '';
+}
 
 echo "<tr><th width=\"100%\" align=\"left\">";
 echo $edit_mode_out;
@@ -73,6 +86,7 @@ $css_switcher->switchClass();
 ########################################################################################
 
 if (!$set_recur_x) {
+	
 	if (isset($atermin) && get_class($atermin) == "seminarevent") {
 		echo "<tr>\n<td class=\"" . $css_switcher->getClass() . "\" width=\"100%\">\n";
 		echo "<font size=\"-1\">" . _("Veranstaltung") . ":&nbsp; ";
@@ -91,13 +105,7 @@ if (!$set_recur_x) {
 	echo " . <input type=\"text\" name=\"start_month\" size=\"2\" maxlength=\"2\" value=\"";
 	echo ((strlen($start_month) < 2) ? '0' . $start_month : $start_month) . "\"\"$disabled>\n";
 	echo " . <input type=\"text\" name=\"start_year\" size=\"4\" maxlength=\"4\" value=\"$start_year\"$disabled>\n";
-	$atimetxt = ($start_day && $start_month && $start_year)? '&atime='.mktime(12,0,0,$start_month,$start_day,$start_year):'';
-	echo "&nbsp;";
-//	echo "<img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/edit_transparent.gif\" border=\"0\" ";
-	echo "<img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/popupkalender.gif\" border=\"0\" ";
-	echo "onClick=\"window.open('" . $CANONICAL_RELATIVE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR;
-	echo "/views/insert_date_popup.php?element_switch=50${atimetxt}', 'InsertDate', ";
-	echo "'dependent=yes, width=210, height=210, left=500, top=150')\">";
+	echo to_string_popupcalendar(0, $disabled);
 	echo "&nbsp; &nbsp;";
 	echo _("Uhrzeit");
 	echo " <select name=\"start_h\" size=\"1\"$disabled>\n";
@@ -142,14 +150,7 @@ if (!$set_recur_x) {
 	echo " . <input type=\"text\" name=\"end_month\" size=\"2\" maxlength=\"2\" value=\"";
 	echo ((strlen($end_month) < 2) ? '0' . $end_month : $end_month) . "\"$disabled>\n";
 	echo " . <input type=\"text\" name=\"end_year\" size=\"4\" maxlength=\"4\" value=\"$end_year\"$disabled>\n";
-
-	$atimetxt = ($end_day && $end_month && $end_year)? '&atime='.mktime(12,0,0,$end_month,$end_day,$end_year):'';
-	echo '&nbsp;';
-	echo "<img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/popupkalender.gif\" border=\"0\" ";
-	echo "onClick=\"window.open('" . $CANONICAL_RELATIVE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR;
-	echo "/views/insert_date_popup.php?element_switch=51${atimetxt}', 'InsertDate', ";
-	echo "'dependent=yes, width=210, height=210, left=500, top=150')\">";
-
+	echo to_string_popupcalendar(8, $disabled);
 	echo "&nbsp; &nbsp;";
 	echo _("Uhrzeit");
 	echo " <select name=\"end_h\" size=\"1\"$disabled>\n";
@@ -393,13 +394,13 @@ else{
 			echo "<input type=\"checkbox\" name=\"wdays[]\" value=\"1\"";
 			if(in_array(1, $wdays)) echo " checked=\"checked\"";
 			echo "><font size=\"-1\">&nbsp;" . _("Montag") . "</font></td>\n";
-			echo "<td width=\"23%\"><input type=\"checkbox\" name=\"wdays[]\" value=\"2\"";
+			echo "<td width=\"23%\" nowrap=\"nowrap\"><input type=\"checkbox\" name=\"wdays[]\" value=\"2\"";
 			if(in_array(2, $wdays)) echo " checked=\"checked\"";
 			echo "><font size=\"-1\">&nbsp;" . _("Dienstag") . "</font></td>\n";
-			echo "<td width=\"23%\"><input type=\"checkbox\" name=\"wdays[]\" value=\"3\"";
+			echo "<td width=\"23%\" nowrap=\"nowrap\"><input type=\"checkbox\" name=\"wdays[]\" value=\"3\"";
 			if(in_array(3, $wdays)) echo " checked=\"checked\"";
 			echo "><font size=\"-1\">&nbsp;" . _("Mittwoch") . "</font></td>\n";
-			echo "<td width=\"23%\"><input type=\"checkbox\" name=\"wdays[]\" value=\"4\"";
+			echo "<td width=\"23%\" nowrap=\"nowrap\"><input type=\"checkbox\" name=\"wdays[]\" value=\"4\"";
 			if(in_array(4, $wdays)) echo " checked=\"checked\"";
 			echo "><font size=\"-1\">&nbsp;" . _("Donnerstag") . "</font></td>\n";
 			echo "</tr><tr>\n";
@@ -545,6 +546,7 @@ else{
 		echo "<input type=\"text\" size=\"4\" maxlength=\"4\" name=\"exp_year\" value=\"";
 		echo (($exp_year && $exp_c == "date") ? $exp_year : "JJJJ");
 		echo "\">" . ($err["exp_time"] ? $error_sign : "");
+		echo to_string_popupcalendar(11, $disabled);
 		echo "<br>&nbsp; <input type=\"radio\" name=\"exp_c\" value=\"count\"";
 		if ($exp_c == "count") echo " checked";
 		echo ">" . sprintf(_("nach %s Wiederholungen"),
@@ -567,8 +569,9 @@ else{
 		echo "&nbsp;.&nbsp;";
 		echo "<input type=\"text\" size=\"4\" maxlength=\"4\" name=\"exc_year\" value=\"JJJJ\">";
 		echo ($err["exc_time"] ? $error_sign : "");
+		echo to_string_popupcalendar(12, $disabled);
 		echo '&nbsp;&nbsp;';
-		echo "<input type=\"image\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/add_right.gif\"";
+		echo "<input align=\"absmiddle\" type=\"image\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/add_right.gif\"";
 		echo " name=\"add_exc\"" . tooltip(_("Ausnahme hinzufügen")) . ">";
 		echo "&nbsp; &nbsp;</font></td><td><font size=\"-1\">\n";
 		echo "<select name=\"exc_delete[]\" size=\"4\" multiple=\"multiple\" style=\"width:170px; vertical-align:middle;\">\n";
