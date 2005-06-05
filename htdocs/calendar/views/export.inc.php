@@ -1,6 +1,6 @@
 <?
 /**
-* sync.inc.php
+* export.inc.php
 * 
 * 
 *
@@ -20,7 +20,7 @@
 define("PHPDOC_DUMMY",true);
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
-// sync.inc.php
+// export.inc.php
 //
 // Copyright (c) 2003 Peter Tienel <pthienel@web.de> 
 // +---------------------------------------------------------------------------+
@@ -164,12 +164,30 @@ if (($expmod != 'exp' && $expmod != 'imp' && $expmod != 'sync') || ($expmod == '
 		print_infobox($info['all'], "pictures/dates.jpg");
 	}
 	else {
-	
+		
+		// if javascript enabled display icon for popup calendar
+		if ($auth->auth["jscript"]) {
+			$insert_date_start = "&nbsp;"
+				. "<img align=\"absmiddle\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/popupkalender.gif\" border=\"0\" "
+				. "onClick=\"window.open('" . $CANONICAL_RELATIVE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR
+				. "/views/insert_date_popup.php?element_switch=9', 'InsertDate', "
+				. "'dependent=yes, width=210, height=210, left=500, top=150')\">";
+			$insert_date_end = "&nbsp;"
+				. "<img align=\"absmiddle\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/popupkalender.gif\" border=\"0\" "
+				. "onClick=\"window.open('" . $CANONICAL_RELATIVE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR
+				. "/views/insert_date_popup.php?element_switch=10', 'InsertDate', "
+				. "'dependent=yes, width=210, height=210, left=500, top=150')\">";
+		}
+		else {
+			$insert_date_start = '';
+			$insert_date_end = '';
+		}
+		
 		echo "<tr><th align=\"left\" width=\"100%\">\n<font size=\"-1\">";
 		echo _("Exportieren Ihrer Kalenderdaten")."</font>\n</th></tr>\n";
 		
 		$tooltip = _("Es werden nur Termine von Veranstaltungen exportiert, die zuvor im Menüpunkt \"Veranstaltungstermine\" ausgewählt wurden.");
-		$params['form'] = "<form action=\"$PHP_SELF?cmd=export&atime=$atime\" method=\"post\">\n";
+		$params['form'] = "<form name=\"Formular\" action=\"$PHP_SELF?cmd=export&atime=$atime\" method=\"post\">\n";
 		$params['content'] = _("Bitte w&auml;hlen Sie, welche Termine exportiert werden sollen:") . "</font></div>\n"
 				. "<br>&nbsp; &nbsp; <select name=\"extype\" size=\"1\">\n"
 				. "<option value=\"PERS\"" . ($extype == 'PERS' ? 'selected="selected"' : '')
@@ -200,14 +218,15 @@ if (($expmod != 'exp' && $expmod != 'imp' && $expmod != 'sync') || ($expmod == '
 						. "<input type=\"text\" name=\"exstartyear\" size=\"4\" maxlength=\"4\" value=\""
 						. ($exstartyear ? $exstartyear : date("Y", time())) . "\">"
 						. ($err['exstart'] ? $error_sign : '')
-						. "&nbsp &nbsp; \n")
+						. $insert_date_start . "&nbsp &nbsp; \n")
 				. " &nbsp; <input type=\"text\" name=\"exendday\" size=\"2\" maxlength=\"2\" value=\""
 				. ($exendday ? $exendday : date("d", time())) . "\">.&nbsp;\n"
 				. "<input type=\"text\" name=\"exendmonth\" size=\"2\" maxlength=\"2\" value=\""
 				. ($exendmonth ? $exendmonth : date("m", time())) . "\">.&nbsp;\n"
 				. "<input type=\"text\" name=\"exendyear\" size=\"4\" maxlength=\"4\" value=\""
 				. ($exendyear ? $exendyear : date("Y", time()) + 1) . "\">\n"
-				. ($err['exend'] ? $error_sign : '');
+				. ($err['exend'] ? $error_sign : '')
+				. $insert_date_end;
 		$params['button'] = "<input type=\"image\" " . makeButton("export", "src"). " border=\"0\">";
 		$params['expmod'] = "exp";
 		print_cell($params);
