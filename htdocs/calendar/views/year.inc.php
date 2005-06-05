@@ -112,38 +112,28 @@ for ($i = 1; $i < 32; $i++) {
 					
 						case "1":
 							if (date("w", $aday) == "0") {
-								echo "<a class=\"sday\" href=\"$PHP_SELF?cmd=showday&atime=$aday\">";
-								echo "<b>$i</b></a> " . $weekday;
-								$count++;
-								}
-							else {
-								echo "<a class=\"day\" href=\"$PHP_SELF?cmd=showday&atime=$aday\">";
-								echo "<b>$i</b></a> " . $weekday;
+								$style_day = 'sday';
 							}
+							else
+								$style_day = 'day';
 							break;
 						case "2":
 						case "3":
 							if (date("w", $aday) == "0") {
-								echo "<a class=\"sday\" href=\"$PHP_SELF?cmd=showday&atime=$aday\">";
-								echo "<b>$i</b></a> " . $weekday;
-								$count++;
+								$style_day = 'sday';
 							}
-							else {
-								echo "<a class=\"hday\" href=\"$PHP_SELF?cmd=showday&atime=$aday\">";
-								echo "<b>$i</b></a> " . $weekday;
-							}
+							else
+								$style_day = 'hday';
 							break;
 						default:
 							if (date("w", $aday) == "0") {
-								echo "<a class=\"sday\" href=\"$PHP_SELF?cmd=showday&atime=$aday\">";
-								echo "<b>$i</b></a> " . $weekday;
-								$count++;
-								}
-							else {
-								echo "<a class=\"day\" href=\"$PHP_SELF?cmd=showday&atime=$aday\">";
-								echo "<b>$i</b></a> " . $weekday;
+								$style_day = 'sday';
 							}
+							else
+								$style_day = 'day';
 					}
+					echo "<a class=\"$style_day\" href=\"$PHP_SELF?cmd=showday&atime=$aday\" ";
+					echo tooltip($hday['name']) . "><b>$i</b></a> " . $weekday;
 					
 					if	($apps) {
 						if	($apps > 1) {
