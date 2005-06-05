@@ -66,7 +66,7 @@ echo "<td class=\"calhead\" width=\"80%\" class=\"cal\"><b>\n";
 echo $aday->toString("LONG") . ", " . $aday->getDate();
 // event. Feiertagsnamen ausgeben
 if ($hday = holiday($atime))
-	echo "<br>" . $hday["name"];
+	echo "<br>" . htmlReady($hday["name"]);
 
 echo "</b></td>\n";
 echo "<td align=\"center\" width=\"10%\"><a href=\"$PHP_SELF?cmd=showday&atime=";
