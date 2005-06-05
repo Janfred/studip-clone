@@ -555,7 +555,7 @@ if ($cmd == 'changeview') {
 	
 }
 	
-include($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/views/footer.inc.php");
+echo "</td></tr>\n</table>\n</body>\n</html>";
 
 // Save data back to database.
 page_close();
