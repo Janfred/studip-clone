@@ -98,7 +98,7 @@ else
 	$result = "" . $TMP_PATH . "/export/" . $result_file;
 	$xml_process_file = "" . $TMP_PATH . "/export/" . $xml_file_id;
 	$xslt_process_file = "" . $ABSOLUTE_PATH_STUDIP . $PATH_EXPORT . "/" . $xslt_files[$choose]["file"];
-	if (xslt_process($xh, $xml_process_file , $xslt_process_file, $result) AND ($o_mode != "passthrough")) 
+	if (xslt_process($xh, "file://$xml_process_file" , "file://$xslt_process_file", "file://$result") AND ($o_mode != "passthrough")) 
 	{
 		$export_msg .= sprintf(_("Die Daten wurden erfolgreich konvertiert. %s Sie k&ouml;nnen die Ausgabedatei jetzt herunterladen. %s"), "<br>", "<br>");
 		$xslt_info = _("Die Daten sind nun im gew&auml;hlten Format verf&uuml;gbar.");
