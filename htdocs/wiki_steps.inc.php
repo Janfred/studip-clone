@@ -6,7 +6,7 @@ require_once $ABSOLUTE_PATH_STUDIP . 'forum.inc.php';
 // args to wikiMarkup are passed to preg_replace
 //
 
-wikiMarkup('/\\(:stepform:\\)/e',"wiki_stepform('step')");
+wikiMarkup('/\\(:stepform:\\)/e',"wiki_stepform('step')", 'dozent');
 wikiMarkup('/\\(:steplist\\s*(.*?):\\)/e',"wiki_steplist('step',array('q'=>'$1'))");
 
 $step_templates['step']=array(
