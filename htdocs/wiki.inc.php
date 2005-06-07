@@ -294,9 +294,9 @@ $wiki_keyword_regex="(^|\s|\A|\>)(([A-Z]|&[AOU]uml;)([a-z0-9]|&[aou]uml;|&szlig;
 * @param       string  replace
 *
 **/
-function wikiMarkup($pattern, $replace) {
+function wikiMarkup($pattern, $replace, $needed_perm = 'autor') {
 	global $wiki_directives;
-	$wiki_directives[]=array($pattern, $replace);
+	$wiki_directives[]=array($pattern, $replace, $needed_perm);
 }
 
 /**
@@ -307,8 +307,15 @@ function wikiMarkup($pattern, $replace) {
 **/
 function wikiDirectives($str) {
 	global $wiki_directives; // array of pattern-replace-arrays
-	foreach ($wiki_directives as $direct) {
-		$str=preg_replace($direct[0],$direct[1],$str);
+	$failure_message = _("Sie haben keine Berechtigung diese Wiki Direktive auszuführen.");
+	if (is_array($wiki_directives)){
+		foreach ($wiki_directives as $direct) {
+			if ($GLOBALS['perm']->have_studip_perm($direct[2], $GLOBALS['SessSemName'][1])){
+				$str = preg_replace($direct[0],$direct[1],$str);
+			} else {
+				$str = preg_replace($direct[0], "sprintf('<i>%s ' . \$failure_message . '</i>', '\$0');", $str);
+			}
+		}
 	}
 	return $str;
 }
