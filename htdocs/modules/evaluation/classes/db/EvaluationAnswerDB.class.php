@@ -89,7 +89,7 @@ class EvaluationAnswerDB extends EvaluationObjectDB {
             _("Keine Antwort mit dieser ID gefunden."));
     if ($this->db->Errno)
       return $this->throwError (3,
-            _("Fehler beim Laden. Fehlermeldung: ").
+            _("Fehler beim Laden.") .' '. _("Fehlermeldung:"). ' '.
             $this->db->Error);
 
     $answerObject->setObjectID ($this->db->f("evalanswer_id"));
@@ -165,7 +165,7 @@ class EvaluationAnswerDB extends EvaluationObjectDB {
     }
     $this->db->query ($sql);
     if ($this->db->Errno)
-      return $this->throwError (1, _("Fehler beim Speichern. Fehlermeldung: ").
+      return $this->throwError (1, _("Fehler beim Speichern.") .' '. _("Fehlermeldung:"). ' '.
             $this->db->Error);
     /* ----------------------------------------------------- end: answersave */
 
@@ -180,8 +180,8 @@ class EvaluationAnswerDB extends EvaluationObjectDB {
        $this->db->query ($sql);
        if ($this->db->Errno)
           return $this->throwError (1,
-          _("Fehler beim Verknüpfen mit Benutzern. Fehlermeldung: ".
-          $this->db->Error));
+          _("Fehler beim Verknüpfen mit Benutzern.") . ' '. _("Fehlermeldung:"). ' '.
+          $this->db->Error);
     }
     /* ----------------------------------------------------- end: connecting */
 
@@ -214,7 +214,7 @@ class EvaluationAnswerDB extends EvaluationObjectDB {
 
     if ($this->db->Errno)
       return $this->throwError (2,
-       _("Fehler beim entfernen der Verknüfungen. Fehlermeldung: ").
+       _("Fehler beim entfernen der Verknüfungen.") .' '. _("Fehlermeldung:"). ' ' .
        $this->db->Error);
     /* ------------------------------------------------------- end: deleting */
   }
@@ -234,7 +234,7 @@ class EvaluationAnswerDB extends EvaluationObjectDB {
       " evalanswer_id = '".$answerObject->getObjectID ()."'";
     $this->db->query ($sql);
     if ($this->db->Errno)
-      return $this->throwError (1, _("Fehler beim Löschen. Fehlermeldung: ").
+      return $this->throwError (1, _("Fehler beim Löschen.") . ' ' _("Fehlermeldung:"). ' '.
             $this->db->Error);
     /* ------------------------------------------------------- end: deleting */
 
@@ -280,7 +280,7 @@ class EvaluationAnswerDB extends EvaluationObjectDB {
     $this->db->query ($sql);
     if ($this->db->Errno)
       return $this->throwError (1,
-            _("Fehler beim Laden. Fehlermeldung: ").
+            _("Fehler beim Laden.") .' ' . _("Fehlermeldung:").' '.
             $this->db->Error);
 
     $loadChildren = $parentObject->loadChildren == EVAL_LOAD_ALL_CHILDREN
@@ -362,7 +362,7 @@ class EvaluationAnswerDB extends EvaluationObjectDB {
       $this->db->query ($sql);
       if ($this->db->Errno)
          return $this->throwError (1,
-         _("AnswerDB::getUserAnswer -  Fehlermeldung: ").
+         "AnswerDB::getUserAnswer - ". _("Fehlermeldung:"). ' '.
          $this->db->Error);
       /* -------------------------------------------------------- end: asking */
 

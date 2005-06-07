@@ -152,14 +152,14 @@ function GetScoreContent($user_id) {
 		if ($gaeste == 1) 
 			$tmp = _("Gästebuch aktiviert mit 1 Eintrag");
 		else 
-			$tmp = _("Gästebuch aktiviert mit ". $gaeste ." Einträgen");
+			$tmp = sprintf(_("Gästebuch aktiviert mit %s Einträgen"), $gaeste);
 		$content .= "<a href=\"about.php?username=$username&guestbook=open#guest\"><img src=\"pictures/icon-guest.gif\" border=\"0\"".tooltip("$tmp")."></a>&nbsp;";
 	} else {
 		$content .= "<img src=\"pictures/blank.gif\" width=\"17\">";
 	}
 	
 	if ( ($news = $this->score_content_cache[$user_id]['newscount']) ) {
-		$content .= "<a href=\"about.php?username=$username\"><img src=\"pictures/icon-news.gif\" border=\"0\"".tooltip(_("$news persönliche News"))."></a>&nbsp;";
+		$content .= "<a href=\"about.php?username=$username\"><img src=\"pictures/icon-news.gif\" border=\"0\"".tooltip(sprintf(_("%s persönliche News"), $news))."></a>&nbsp;";
 	} else {
 		$content .= "<img src=\"pictures/blank.gif\" width=\"17\">";
 	}

@@ -146,9 +146,7 @@ $xslt_files["pdf-liste"]["fo"] = true;
 //$xslt_files["pdf-liste"]["veranstaltung"] = true;
 /*
 $xslt_files["pdf-kommentar2"]["name"] = _("Vorlesungskommentar, Layout 2");
-$xslt_files["pdf-kommentar2"]["desc"] = _("Modul zur Ausgabe von Veranstaltungsdaten als Vorlesungskommentar im Adobe PDF-Format. 
-	Deckblatt und Inhaltsverzeichnis werden automatisch generiert. 
-	Die Datei kann mit dem Acrobat Reader gelesen werden.");
+$xslt_files["pdf-kommentar2"]["desc"] = _("Modul zur Ausgabe von Veranstaltungsdaten als Vorlesungskommentar im Adobe PDF-Format. Deckblatt und Inhaltsverzeichnis werden automatisch generiert. Die Datei kann mit dem Acrobat Reader gelesen werden.");
 $xslt_files["pdf-kommentar2"]["file"] = "pdf-v-4.xsl";
 $xslt_files["pdf-kommentar2"]["fo"] = true;
 $xslt_files["pdf-kommentar2"]["veranstaltung"] = true;

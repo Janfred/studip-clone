@@ -965,6 +965,7 @@ function getShowPageInfobox($keyword, $latest_version) {
 	$comment_all="<a href=\"$PHP_SELF?keyword=".urlencode($keyword)."&wiki_comments=all\">"._("einblenden")."</a>";
 	$comment_icon="<a href=\"$PHP_SELF?keyword=".urlencode($keyword)."&wiki_comments=icon\">"._("als Icons einblenden")."</a>";
 	$comment_none="<a href=\"$PHP_SELF?keyword=".urlencode($keyword)."&wiki_comments=none\">"._("ausblenden")."</a>";
+	$comment_addon = '';
 	if ($show_wiki_comments=="none") {
 			$comment_addon=" ("._("ausgeblendet").") ";
 			$comment_text=$comment_all."<br>".$comment_icon;
@@ -973,7 +974,7 @@ function getShowPageInfobox($keyword, $latest_version) {
 	} elseif ($show_wiki_comments=="all") {
 			$comment_text=$comment_icon."<br>".$comment_none;
 	}
-	$infobox[] = array("kategorie"=> _("Kommentare".$comment_addon.":"),
+	$infobox[] = array("kategorie"=> _("Kommentare") . $comment_addon . ':',
 			"eintrag" => array(array("icon"=>"pictures/blank.gif",
 					"text"=>$comment_text)));
 	return $infobox;

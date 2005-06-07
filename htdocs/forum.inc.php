@@ -974,7 +974,7 @@ function print_rating($rate, $id, $username) {
  		 } else {
   		 	$random = rand();
     			$start = $forum["flatviewstartposting"];
-    			$txt  = _("Bewertung: $rate <br>Zum Abstimmen bitte klicken.");
+    			$txt  = sprintf(_("Bewertung: %sZum Abstimmen bitte klicken."),$rate . ' <br>');
     			$txt2 = _("Bitte werten:");
     			$txt3 = _("Bewertung des Beitrags");
     			$txt4 = _("Schulnote");

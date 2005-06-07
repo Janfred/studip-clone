@@ -1101,8 +1101,7 @@ geben konnte das in der Vergangenheit liegt
 					  (!empty ($this->timespan) && 
 					   $this->startdate + 
 					   $this->timespan < time ())) )
-	 $this->throwError (18, _("Laufender Vote hätte bereits beendet ".
-				  "werden müssen!"));
+	 $this->throwError (18, _("Laufender Vote hätte bereits beendet werden müssen!"));
       */
       /* ------------------------------------------------------------------- */
 

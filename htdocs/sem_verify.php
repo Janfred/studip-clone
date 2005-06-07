@@ -341,7 +341,7 @@ $db6=new DB_Seminar;
 
 			if ($seminar && $warteliste && !$platz) {
 				$meldung  = sprintf(_("Sie stehen bereits für die Veranstaltung %s auf der Warteliste und sind in die Veranstaltung %s eingetragen."), "<br/>&nbsp;<b>$warteliste_name (". htmlReady(view_turnus($warte_id)) .")</b><br/>", "<br/>&nbsp;<b>$seminar_name (". htmlReady(view_turnus($seminar_id)) .")</b><br/>");
-				$meldung .= "<p>". sprintf(_("Sie können sich hier erst eintragen, wenn sie sich von der Warteliste der Veranstaltung $s löschen."), "<br/>&nbsp;<b>$seminar_name (". htmlReady(view_turnus($seminar_id)) .")</b><br/>");
+				$meldung .= "<p>". sprintf(_("Sie können sich hier erst eintragen, wenn sie sich von der Warteliste der Veranstaltung %s löschen."), "<br/>&nbsp;<b>$seminar_name (". htmlReady(view_turnus($seminar_id)) .")</b><br/>");
 				if ($as_info) {
 					parse_msg("info§" . $meldung, "§", "blank",3);
 					echo "</td></tr></table>";

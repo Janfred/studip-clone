@@ -1080,14 +1080,15 @@ function printhead ($breite, $left, $link, $open, $new, $icon,
 	$print .= "&nbsp;<img src=\"";
 	if ($open == "open")
 		$titel = "<b>" . $titel . "</b>";
-	
+
 	if ($link) {
-		if ($index) $addon =  "($indikator: $index)";
+		$addon = '';
+		if ($index) $addon =  " ($indikator: $index)";
 		if ($open == "close")
-			$print .= "pictures/forumgrau2.gif\"" . tooltip(_("Objekt aufklappen $addon"));
+			$print .= "pictures/forumgrau2.gif\"" . tooltip(_("Objekt aufklappen") . $addon);
 	
 		if ($open == "open")
-			$print .= "pictures/forumgraurunt2.gif\"" . tooltip(_("Objekt zuklappen $addon"));
+			$print .= "pictures/forumgraurunt2.gif\"" . tooltip(_("Objekt zuklappen") . $addon);
 	}
 	else {
 		if ($open == "close") {

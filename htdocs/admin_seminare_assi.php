@@ -641,7 +641,7 @@ if (($form == 1) && ($jump_next_x))
 	if (($sem_create_data["sem_turnout"] < 1) && ($sem_create_data["sem_admission"]))
  		{
 		$level=1;
-		$errormsg=$errormsg."error§"._("Wenn Sie die Teilnahmebeschr&auml;nkung benutzen wollen, m&uuml;ssen Sie wenigstens einen Teilnehmer zulassen.§")."";
+		$errormsg=$errormsg."error§"._("Wenn Sie die Teilnahmebeschr&auml;nkung benutzen wollen, m&uuml;ssen Sie wenigstens einen Teilnehmer zulassen.")."§";
 		$sem_create_data["sem_turnout"] =1;
 		}
 	
@@ -3161,8 +3161,7 @@ if ($level == 5)
 						<td class="<? echo $cssSw->getClass() ?>" colspan=3>
 							&nbsp;&nbsp;<textarea name="sem_paytxt" cols=58 rows=4><? echo htmlReady(stripslashes($sem_create_data["sem_paytxt"])) ?></textarea>
 							<img  src="./pictures/info.gif" 
-								<? echo tooltip(_("Dieser Hinweistext erläutert Ihren TeilnehmerInnen was sie tun müssen, um endgültig für die Veranstaltung zugelassen zu werden. ".
-								"Beschreiben Sie genau, wie Beiträge zu entrichten sind, Leistungen nachgewiesen werden müssen, etc."), TRUE, TRUE) ?>
+			<? echo tooltip(_("Dieser Hinweistext erläutert Ihren TeilnehmerInnen was sie tun müssen, um endgültig für die Veranstaltung zugelassen zu werden. Beschreiben Sie genau, wie Beiträge zu entrichten sind, Leistungen nachgewiesen werden müssen, etc."), TRUE, TRUE) ?>
 							>
 						</td>
 					</tr>

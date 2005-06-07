@@ -261,12 +261,8 @@ switch( $command ) {
      
       if($nummer==0){
 	 $report = 
-	    EvalCommon::createReportMessage(_("Dem Template wurden keine  ".
-					      "Antworten zugewiesen oder ".
-					      "keine der Antworten  enthielt ".
-					      "einen Text. Fügen Sie ". 
-					      "Antworten an, oder ".
-					      "löschen Sie das Template."),
+	    EvalCommon::createReportMessage(
+	    _("Dem Template wurden keine Antworten zugewiesen oder keine der Antworten  enthielt einen Text. Fügen Sie Antworten an, oder löschen Sie das Template."),
 					    EVAL_PIC_ERROR,
 					    EVAL_CSS_ERROR);   
 	 $command = "continue_edit";
@@ -280,11 +276,8 @@ switch( $command ) {
 	 $text     = $template_answers[$i]['text'];
 	 if($text==""){
 	    $report = 
-	       EvalCommon::createReportMessage(_("Leere Antworten sind ".
-						 "nicht zulässig, löschen".
-						 " Sie betreffende Felder".
-						 " oder geben Sie einen ".
-						 " Text ein."),
+	       EvalCommon::createReportMessage(
+	       _("Leere Antworten sind nicht zulässig, löschen Sie betreffende Felder oder geben Sie einen Text ein."),
 					       EVAL_PIC_ERROR,
 					       EVAL_CSS_ERROR);	 
 	    $command = "continue_edit";
@@ -298,17 +291,15 @@ switch( $command ) {
    
    
    if ($template_residual && empty ($template_residual_text)) {
-      $report = EvalCommon::createReportMessage(_("Geben Sie eine Ausweichant".
-						  "wort ein oder deaktivieren".
-						  " Sie diese."),
+      $report = EvalCommon::createReportMessage(
+      _("Geben Sie eine Ausweichantwort ein oder deaktivieren Sie diese."),
 						EVAL_PIC_ERROR,EVAL_CSS_ERROR);
       $command = "continue_edit";
       break;
    }
-   
+
    if (!$onthefly && ! $question->getText()) {
-       $report = EvalCommon::createReportMessage(_("Geben Sie einen Namen für".
-						   " die Vorlage ein."),
+       $report = EvalCommon::createReportMessage(_("Geben Sie einen Namen für die Vorlage ein."),
 						 EVAL_PIC_ERROR,
 						 EVAL_CSS_ERROR);
        $command = "continue_edit";
@@ -323,22 +314,22 @@ switch( $command ) {
    $question->save();
    if($question->isError())
        $report = EvalCommon::createReportMessage(_("Fehler beim Speichern."),
-						 EVAL_PIC_ERROR, 
+						 EVAL_PIC_ERROR,
 						 EVAL_CSS_ERROR);
    /* --------------------------------------------------- end: save template */
    $command = "";
    $template_answers = "";
    break;
-   
+
   case "save2":
-  
+
    $question->save();
    if($question->isError())
       $report = EvalCommon::createReportMessage(_("Fehler beim Speichern."),
                    EVAL_PIC_ERROR, EVAL_CSS_ERROR);
    $command = "";
    $template_answers = "";
-   
+
    break;
 }
 
@@ -500,7 +491,7 @@ if( $command ) {
 	   if($i==0)
 	      $answer->setText(_("Anfang"));
 	   else
-	      $answer->setText(_("Ende"));  
+	      $answer->setText(_("Ende"));
 	   $question->addChild($answer);
 	}
 	//	$td->cont( $lib->createTemplateFormPol( $question ) );
