@@ -91,7 +91,12 @@ else
 	escapeshellcmd ( $TMP_PATH );
 	$pdf_file = md5(uniqid(rand())) .".pdf";
 	
-	$str = ". $JAVA_ENV_CALL && $FOP_SH_CALL $TMP_PATH/export/$result_file $TMP_PATH/export/$pdf_file ";
+	$str = "$FOP_SH_CALL $TMP_PATH/export/$result_file $TMP_PATH/export/$pdf_file ";
+	
+	if ($JAVA_ENV_CALL){
+		$str = ". $JAVA_ENV_CALL && " . $str;
+	}
+	
 	$out = exec( $str );
 	if ($out == "")
 		$out = $str;
