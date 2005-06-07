@@ -1,4 +1,4 @@
-<?
+<?php
 /**
 * Export-Subfile that exports data.
 *
@@ -184,23 +184,8 @@ function export_inst($inst_id, $ex_sem_id = "all")
 		if ($db->f("Name") != "") 
 			$data_object .= xml_tag($xml_groupnames_inst["childobject"], $db->f("Name"));
 	}
-// freie Datenfelder ausgeben
-	$d_fields = false;
-	$DataFields = new DataFields($inst_id);
-	$localFields = $DataFields->getLocalFields();
-	foreach ($localFields as $val) 
-		if ($val["content"] != "") 
-		{
-			if (!$d_fields)
-				$data_object .= xml_open_tag( $xml_groupnames_inst["childgroup2"] );
-			$data_object .= xml_open_tag($xml_groupnames_inst["childobject2"] , $val["name"]);
-			$data_object .= htmlspecialchars ($val["content"]);
-			$data_object .= xml_close_tag($xml_groupnames_inst["childobject2"]);
-			$d_fields = true;
-		}
-	if ($d_fields)
-		$data_object .= xml_close_tag( $xml_groupnames_inst["childgroup2"] );
-//	echo nl2br(htmlentities($data_object));
+	// freie Datenfelder ausgeben
+	$data_object .= export_datafields($inst_id, $xml_groupnames_inst["childgroup2"], $xml_groupnames_inst["childobject2"]);
 	output_data( $data_object, $o_mode );
 	$data_object = "";
 
@@ -366,22 +351,7 @@ function export_sem($inst_id, $ex_sem_id = "all")
 				}
 			$data_object .= xml_close_tag( $xml_groupnames_lecture["childgroup2"] );
 		// freie Datenfelder ausgeben
-			$d_fields = false;
-			$DataFields = new DataFields($db->f("Seminar_id"));
-			$localFields = $DataFields->getLocalFields();
-			foreach ($localFields as $val) 
-				if ($val["content"] != "") 
-				{
-					if (!$d_fields)
-						$data_object .= xml_open_tag( $xml_groupnames_lecture["childgroup4"] );
-					$data_object .= xml_open_tag($xml_groupnames_lecture["childobject4"] , $val["name"]);
-					$data_object .= htmlspecialchars ($val["content"]);
-					$data_object .= xml_close_tag($xml_groupnames_lecture["childobject4"]);
-					$d_fields = true;
-				}
-			if ($d_fields)
-				$data_object .= xml_close_tag( $xml_groupnames_lecture["childgroup4"] );
-
+			$data_object .= export_datafields($db->f("Seminar_id"), $xml_groupnames_lecture["childgroup4"], $xml_groupnames_lecture["childobject4"]);
 			$data_object .= xml_close_tag( $xml_groupnames_lecture["object"] );
 			reset($xml_names_lecture);
 			output_data($data_object, $o_mode);
@@ -483,22 +453,7 @@ function export_teilis($inst_id, $ex_sem_id = "no")
 							$data_object .= xml_tag($val, $db->f($key));
 					}
 				// freie Datenfelder ausgeben
-					$d_fields = false;
-					$DataFields = new DataFields($db->f("user_id"));
-					$localFields = $DataFields->getLocalFields();
-					foreach ($localFields as $val) 
-						if ($val["content"] != "") 
-						{
-							if (!$d_fields)
-								$data_object .= xml_open_tag( $xml_groupnames_person["childgroup1"] );
-							$data_object .= xml_open_tag($xml_groupnames_person["childobject1"] , $val["name"]);
-							$data_object .= htmlspecialchars ($val["content"]);
-							$data_object .= xml_close_tag($xml_groupnames_person["childobject1"]);
-							$d_fields = true;
-						}
-					if ($d_fields)
-						$data_object .= xml_close_tag( $xml_groupnames_person["childgroup1"] );
-
+					$data_object .= export_datafields($db->f("user_id"), $xml_groupnames_person["childgroup1"], $xml_groupnames_person["childobject1"]);
 					$data_object .= xml_close_tag( $xml_groupnames_person["object"] );
 					reset($xml_names_person);
 					$person_out[$db->f("user_id")] = true;
@@ -606,22 +561,7 @@ function export_pers($inst_id)
 				$data_object .= xml_tag($val, $db->f($key));
 		}
 	// freie Datenfelder ausgeben
-		$d_fields = false;
-		$DataFields = new DataFields($db->f("user_id"));
-		$localFields = $DataFields->getLocalFields();
-		foreach ($localFields as $val) 
-			if ($val["content"] != "") 
-			{
-				if (!$d_fields)
-					$data_object .= xml_open_tag( $xml_groupnames_person["childgroup1"] );
-				$data_object .= xml_open_tag($xml_groupnames_person["childobject1"] , $val["name"]);
-				$data_object .= htmlspecialchars ($val["content"]);
-				$data_object .= xml_close_tag($xml_groupnames_person["childobject1"]);
-				$d_fields = true;
-			}
-		if ($d_fields)
-			$data_object .= xml_close_tag( $xml_groupnames_person["childgroup1"] );
-
+		$data_object .= export_datafields($db->f("user_id"), $xml_groupnames_person["childgroup1"], $xml_groupnames_person["childobject1"]);
 		$data_object .= xml_close_tag( $xml_groupnames_person["object"] );
 		reset($xml_names_person);
 		output_data($data_object, $o_mode);
@@ -636,4 +576,30 @@ function export_pers($inst_id)
 	$data_object = "";
 }
 
+/**
+* helper function to export custom datafields
+*
+* only visible datafields are exported (depending on user perms)
+* @access	public        
+* @param	string	$range_id	id for object to export
+* @param	string	$childgroup_tag	name of outer tag
+* @param	string	$childobject_tag	name of inner tags
+*/
+function export_datafields($range_id, $childgroup_tag, $childobject_tag){
+	$ret = '';
+	$d_fields = false;
+	$DataFields = new DataFields($range_id);
+	foreach($DataFields->getLocalFields() as $val) {
+		if ( ($val['view_perms'] == 'all' || $GLOBALS['perm']->have_perm($val['view_perms']) || $range_id == $GLOBALS['user']->id)
+		&& $val["content"] ) {
+			if (!$d_fields) $ret .= xml_open_tag($childgroup_tag);
+			$ret .= xml_open_tag($childobject_tag , $val["name"]);
+			$ret .= htmlspecialchars ($val["content"]);
+			$ret .= xml_close_tag($childobject_tag);
+			$d_fields = true;
+		}
+	}
+	if ($d_fields) $ret .= xml_close_tag($childgroup_tag);
+	return $ret;
+}
 ?>
