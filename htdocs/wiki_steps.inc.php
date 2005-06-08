@@ -22,10 +22,10 @@ $step_templates['step']=array(
 	"formbody"=>"<table>
 <tr><td>Zusammenfassung:</td>
 <td><input size=60 name=\"step_zusammenfassung\"></td></tr>
-<tr><td>Release in Version:</td>
-<td><select size=0 name=\"step_version\"><option value=\"1.2\">1.2 (Okt. 2005)</option><option value=\"1.3\">1.3 (Apr. 2006)</option><option>langfristig</option></td></tr>
 <tr><td>Zuständig:</td>
 <td><input size=60 name=\"step_zustaendig\"></td></tr>
+<tr><td>Release in Version:</td>
+<td><select size=0 name=\"step_version\"><option value=\"1.2\">1.2 (Okt. 2005)</option><option value=\"1.3\">1.3 (Apr. 2006)</option><option>langfristig</option></td></tr>
 <tr><td>Komplexität:</td>
 <td><select name=\"step_komplexitaet\"><option>gering</option><option>mittel</option><option>hoch</option></select></td></tr>
 <tr><td>Beschreibung:</td>
