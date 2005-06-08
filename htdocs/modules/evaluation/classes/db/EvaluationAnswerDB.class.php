@@ -234,7 +234,7 @@ class EvaluationAnswerDB extends EvaluationObjectDB {
       " evalanswer_id = '".$answerObject->getObjectID ()."'";
     $this->db->query ($sql);
     if ($this->db->Errno)
-      return $this->throwError (1, _("Fehler beim Löschen.") . ' ' _("Fehlermeldung:"). ' '.
+      return $this->throwError (1, _("Fehler beim Löschen.") . ' ' . _("Fehlermeldung:"). ' '.
             $this->db->Error);
     /* ------------------------------------------------------- end: deleting */
 
