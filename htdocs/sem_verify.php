@@ -51,7 +51,7 @@ function temporaly_accepted($sem_name, $user_id, $sem_id, $ask = "TRUE", $studie
 		$db->query("SELECT admission_prelim_txt FROM seminare WHERE Seminar_id = '$sem_id'");
 		$db->next_record();
 		echo "<tr><td class=\"blank\">&nbsp;&nbsp;</td><td class=\"blank\">";
-		printf (_("Um endg&uuml;ltig in die Veranstaltung <b>%s</b> aufgenommen zu werden, m&uuml;ssen Sie noch weitere Voraussetzungen erf&uuml;llen."),htmlReady($sem_name));
+		printf (_("Um endg&uuml;ltig in die Veranstaltung %s aufgenommen zu werden, m&uuml;ssen Sie noch weitere Voraussetzungen erf&uuml;llen."),'<b>'.htmlReady($sem_name).'</b>');
 		if ($db->f("admission_prelim_txt")) {
 			print " "._("Lesen Sie bitte folgenden Hinweistext:")."<br />";
 			echo "<br/><table width=90%><tr><td>\n";
@@ -60,7 +60,7 @@ function temporaly_accepted($sem_name, $user_id, $sem_id, $ask = "TRUE", $studie
 		} else {
 			print " "._("Bitte erkundigen Sie sich bei dem Dozenten oder der Dozentin der Veranstaltung nach weiteren Teilnahmevoraussetzungen.");
 		}
-		printf (_("Wenn Sie auf \"eintragen\" klicken, werden Sie vorl&auml;ufig f&uuml;r diese Veranstaltung eingetragen. Erf&uuml;llen Sie die Anforderungen, um von der DozentIn fest in die Veranstaltung <b>%s</b> eingetragen zu werden."), htmlReady($sem_name));
+		printf (_("Wenn Sie auf \"eintragen\" klicken, werden Sie vorl&auml;ufig f&uuml;r diese Veranstaltung eingetragen. Erf&uuml;llen Sie die Anforderungen, um von der DozentIn fest in die Veranstaltung %s eingetragen zu werden."), '<b>'.htmlReady($sem_name).'</b>');
 		echo "<br/><br/>\n";
 
 		printf("<form action=\"%s\" method=\"post\">\n",$url);
@@ -77,7 +77,7 @@ function temporaly_accepted($sem_name, $user_id, $sem_id, $ask = "TRUE", $studie
 
 	} else {
 		$db->query("INSERT INTO admission_seminar_user SET user_id = '$user_id', seminar_id = '$sem_id', studiengang_id = '$studiengang_id', status = 'accepted', mkdate = '".time()."', position = NULL");
-		parse_msg (sprintf("msg§"._("Sie wurden mit dem Status <b>vorl&auml;ufig akzeptiert</b> in die Veranstaltung <b>%s</b> eingetragen. Damit haben Sie einen Platz sicher. F&uuml;r weitere Informationen lesen Sie den Abschnitt 'Anmeldeverfahren' in der &Uuml;bersichtsseite zu dieser Veranstaltung."),htmlReady($sem_name)));
+		parse_msg (sprintf("msg§"._("Sie wurden mit dem Status <b>vorl&auml;ufig akzeptiert</b> in die Veranstaltung %s eingetragen. Damit haben Sie einen Platz sicher. F&uuml;r weitere Informationen lesen Sie den Abschnitt 'Anmeldeverfahren' in der &Uuml;bersichtsseite zu dieser Veranstaltung."), '<b>'.htmlReady($sem_name).'</b>'));
 		echo "<tr><td class=\"blank\" colspan=2>";
 	}
 }
@@ -249,8 +249,8 @@ $db6=new DB_Seminar;
 
 			if (!$seminar && !$warteliste && $platz) {
 				$meldung  = sprintf(_("Sie bekommen einen Platz in der Veranstaltung %s."), "<br/>&nbsp;<b>$current_name (". htmlReady(view_turnus($sem_id)) .")</b>");
-				$meldung .= _("<p>Falls dies nicht ihre präferierte Veranstaltung dieser Gruppe ist, tragen Sie sich bitte ebenfalls für ihre präferierte Veranstaltung ein.</p>");
-				$meldung .= _("<p>Wenn Sie dort über die Warteliste nachrücken, wird ihre Eintragung in dieser Veranstaltung automatisch gelöscht.</p>");
+				$meldung .=  '<p>' . _("Falls dies nicht ihre präferierte Veranstaltung dieser Gruppe ist, tragen Sie sich bitte ebenfalls für ihre präferierte Veranstaltung ein.") . '</p>';
+				$meldung .= '<p>' . _("Wenn Sie dort über die Warteliste nachrücken, wird ihre Eintragung in dieser Veranstaltung automatisch gelöscht.") . '</p>';
 				if ($as_info) {
 					parse_msg("info§".$meldung, "§", "blank",3);
 				} else {
@@ -261,8 +261,8 @@ $db6=new DB_Seminar;
 			if (!$seminar && !$warteliste && !$platz) {
 				$meldung  = "<font color=\"#FF0000\">".  sprintf(_("Sie bekommen im Moment keinen Platz in der Veranstaltung %s."), "<br/>&nbsp;<b>$current_name (". htmlReady(view_turnus($sem_id)) .")</b><br/>");
 				$meldung .= _("Sie wurden jedoch auf die Warteliste gesetzt.")."</font>";
-				$meldung .= _("<p>Um sicher zu gehen, dass Sie einen Platz in einer Veranstaltung dieser Gruppe bekommen, sollten Sie sich zusätzlich in einer weiteren Veranstaltung fest eintragen.</p>");
-				$meldung .= _("<p>Sobald Sie in dieser Veranstaltung von der Warteliste aufrücken, wird ihre dortige Eintragung automatisch gelöscht.");
+				$meldung .= '<p>' . _("Um sicher zu gehen, dass Sie einen Platz in einer Veranstaltung dieser Gruppe bekommen, sollten Sie sich zusätzlich in einer weiteren Veranstaltung fest eintragen.") . '</p>';
+				$meldung .= '<p>' . _("Sobald Sie in dieser Veranstaltung von der Warteliste aufrücken, wird ihre dortige Eintragung automatisch gelöscht.");
 				if ($as_info) {
 					parse_msg("info&".$meldung, "§", "blank",3);
 				} else {
@@ -367,7 +367,7 @@ $db6=new DB_Seminar;
 			if ($db->f("Lesezugriff") <= 1 && $perm->have_perm("autor")) {
 				if (!seminar_preliminary($id,$user->id)) {  // we have to change behaviour, depending on preliminary
 					$db->query("INSERT INTO seminar_user SET Seminar_id = '$id', user_id = '$user->id', status = 'user', gruppe = '$group', mkdate = '".time()."'");
-					parse_msg (sprintf("msg§"._("Sie wurden mit dem Status <b>Leser</b> in die Veranstaltung <b>%s</b> eingetragen."), htmlReady($db->f("Name"))));
+					parse_msg (sprintf("msg§"._("Sie wurden mit dem Status <b>Leser</b> in die Veranstaltung %s eingetragen."), '<b>'.htmlReady($db->f("Name")).'</b>'));
 					echo"<tr><td class=\"blank\" colspan=2><a href=\"seminar_main.php?auswahl=$id\">&nbsp; &nbsp; "._("Hier kommen Sie zu der Veranstaltung")."</a>";
 				} else {
 					parse_msg (sprintf("msg§"._("Die Veranstaltung **%s** ist teilnahmebeschränkt. Sie können sich nicht als Leser eintragen lassen."),htmlReady($db->f("Name"))));
@@ -401,8 +401,8 @@ $db6=new DB_Seminar;
 		if ((isset($pass) && $pass!="" && (md5($pass)==$SemSecPass))  ||  (isset($hashpass) && $hashpass!="" && $hashpass==$SemSecPass)) {
 			if (($SemUserStatus=="user") && ($perm->have_perm("autor"))){
 				$db->query("UPDATE seminar_user SET status='autor' WHERE Seminar_id = '$id' AND user_id = '$user->id'");
-				parse_msg (sprintf("msg§"._("Sie wurden in der Veranstaltung <b>%s</b> auf den Status <b> Autor </b> hochgestuft."), $SeminarName));
-				echo"<tr><td class=\"blank\" colspan=2><a href=\"seminar_main.php?auswahl=$id\">&nbsp; &nbsp; "._("Hier kommen Sie zu der Veranstaltung")."</a>";
+				parse_msg (sprintf("msg§"._("Sie wurden in der Veranstaltung %s auf den Status <b> Autor </b> hochgestuft."), '<b>'.$SeminarName.'</b>'));
+				echo "<tr><td class=\"blank\" colspan=2><a href=\"seminar_main.php?auswahl=$id\">&nbsp; &nbsp; "._("Hier kommen Sie zu der Veranstaltung")."</a>";
 			    	if ($send_from_search)
 				    	echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">"._("Zur&uuml;ck zur letzten Auswahl")."</a>";
 				echo "<br><br></td></tr></table>";
@@ -412,7 +412,7 @@ $db6=new DB_Seminar;
 			elseif ($perm->have_perm("autor")) {
 				if (!seminar_preliminary($id,$user->id)) {
 					$db->query("INSERT INTO seminar_user SET Seminar_id = '$id', user_id = '$user->id', status = 'autor', gruppe = '$group', mkdate = '".time()."'");
-					parse_msg (sprintf("msg§"._("Sie wurden mit dem Status <b>Autor</b> in die Veranstaltung <b>%s</b> eingetragen."), $SeminarName));
+					parse_msg (sprintf("msg§"._("Sie wurden mit dem Status <b>Autor</b> in die Veranstaltung %s eingetragen."), '<b>'.$SeminarName.'</b>'));
 					echo"<tr><td class=\"blank\" colspan=2><a href=\"seminar_main.php?auswahl=$id\">&nbsp; &nbsp; "._("Hier kommen Sie zu der Veranstaltung")."</a>";
 					if ($send_from_search) echo "&nbsp; |";
 				} else {
@@ -435,7 +435,7 @@ $db6=new DB_Seminar;
 			if ($SemUserStatus=="user") { //Nur user? Dann muessen wir noch mal puefen
 				if ($SemSecLevelWrite==2) { //Schreiben nur per Passwort, der User darf es eingeben
 					if ($perm->have_perm("autor")) { //nur globale Autoren duerfen sich hochstufen!
-						printf ("<tr><td class=\"blank\" colspan=2>&nbsp; &nbsp; "._("Bitte geben Sie das Passwort f&uuml;r die Veranstaltung <b>%s</b> ein.") . "<br><br></td></tr>", $SeminarName);
+						printf ("<tr><td class=\"blank\" colspan=2>&nbsp; &nbsp; " . _("Bitte geben Sie das Passwort f&uuml;r die Veranstaltung %s ein.") . "<br><br></td></tr>", '<b>'.$SeminarName.'</b>');
 						?>
 						</td></tr>
 						<tr><td class="blank" colspan=2>
@@ -455,7 +455,7 @@ $db6=new DB_Seminar;
 						</td></tr></table>
 						<?
 					} else {
-						parse_msg (sprintf("info§"._("Um in der Veranstaltung <b>%s</b> schreiben zu d&uuml;rfen, m&uuml;ssen Sie zumindest auf die Registrierungsmail reagiert haben!"), $SeminarName));
+						parse_msg ("info§". sprintf(_("Um in der Veranstaltung %s schreiben zu d&uuml;rfen, m&uuml;ssen Sie zumindest auf die Registrierungsmail reagiert haben!"), '<b>'.$SeminarName . '</b>'));
 	   					echo"<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp;&nbsp; "._("Zur&uuml;ck zur Startseite")."</a>";
   						if ($send_from_search)
 						    	echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">"._("Zur&uuml;ck zur letzten Auswahl")."</a>";
@@ -467,7 +467,7 @@ $db6=new DB_Seminar;
 			  	elseif ($SemSecLevelWrite==1){//Hat sich der globale Status in der Zwischenzeit geaendert? Dann hochstufen
 					if ($perm->have_perm("autor")) {
 						$db->query("UPDATE seminar_user SET status='autor' WHERE Seminar_id = '$id' AND user_id = '$user->id'");
-						parse_msg(sprintf("info§"._("Sie wurden in der Veranstaltung <b>%s</b> hochgestuft auf den Status <b>Autor</b>."), $SeminarName));
+						parse_msg(sprintf("info§"._("Sie wurden in der Veranstaltung %s hochgestuft auf den Status <b>Autor</b>."), '<b>'.$SeminarName.'</b>'));
 						echo"<tr><td class=\"blank\" colspan=2><a href=\"seminar_main.php?auswahl=$id\">&nbsp; &nbsp; "._("Hier kommen Sie zu der Veranstaltung")."</a>";
 						if ($send_from_search)
 						    	echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">"._("Zur&uuml;ck zur letzten Auswahl")."</a>";
@@ -475,7 +475,7 @@ $db6=new DB_Seminar;
 						page_close();
 						die;
 					} else {//wenn nicht, informieren
-						parse_msg(sprintf("info§"._("Sie sind nur mit der Berechtigung <b>Leser</b> f&uuml;r die Veranstaltung <b>%s</b> freigeschaltet. Wenn Sie auf die Registrierungsmail antworten, k&ouml;nnen Sie in dieser Veranstaltung auch schreiben."), $SeminarName));
+						parse_msg(sprintf("info§"._("Sie sind nur mit der Berechtigung <b>Leser</b> f&uuml;r die Veranstaltung %s freigeschaltet. Wenn Sie auf die Registrierungsmail antworten, k&ouml;nnen Sie in dieser Veranstaltung auch schreiben."), '<b>'.$SeminarName.'</b>'));
 						echo"<tr><td class=\"blank\" colspan=2>&nbsp; &nbsp; <a href=\"seminar_main.php?auswahl=$id\">"._("Hier kommen Sie zu der Veranstaltung")."</a>";
 						if ($send_from_search)
 						    	echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">"._("Zur&uuml;ck zur letzten Auswahl")."</a>";
@@ -485,8 +485,8 @@ $db6=new DB_Seminar;
 					}
 				}
 			} else { //User ist schon Autor oder hoeher, soll den Quatsch mal lassen und weiter ins Seminar
-				parse_msg(sprintf("info§"._("Sie sind schon mit der Berechtigung <b>%s</b> f&uuml;r die Veranstaltung <b>%s</b> freigeschaltet."), $SemUserStatus, $SeminarName));
-				echo"<tr><td class=\"blank\" colspan=2>&nbsp; &nbsp; <a href=\"seminar_main.php?auswahl=$id\">&nbsp; &nbsp; "._("Hier kommen Sie zu der Veranstaltung")."</a>";
+				parse_msg('info§' . sprintf(_("Sie sind schon mit der Berechtigung %s f&uuml;r die Veranstaltung %s freigeschaltet."), '<b>'. $SemUserStatus . '</b>', '<b>'. $SeminarName . '</b>'));
+				echo "<tr><td class=\"blank\" colspan=2>&nbsp; &nbsp; <a href=\"seminar_main.php?auswahl=$id\">&nbsp; &nbsp; "._("Hier kommen Sie zu der Veranstaltung")."</a>";
 				if ($send_from_search)
 					echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">"._("Zur&uuml;ck zur letzten Auswahl")."</a>";
 				echo "<br><br></td></tr></table>";
@@ -497,7 +497,7 @@ $db6=new DB_Seminar;
 			if ($perm->have_perm("autor")) { //User ist global 'Autor'also normaler User
 				if (($SemSecLevelWrite==3) && ($SemSecLevelRead==3)) {//Teilnehmerbeschraenkte Veranstaltung, naehere Uberpruefungen erforderlich
 					if ($auth->auth["perm"]=="dozent") { //Dozenten duerfen sich nicht fuer Anmeldebeschraenkte Veranstaltungen anmelden
-						parse_msg (sprintf("info§"._("Sie d&uuml;rfen sich mit dem Status Dozent nicht f&uuml;r die teilnahmebeschr&auml;nkte Veranstaltung <b>%s</b> anmelden.<br />Wenn Sie dennoch eingetragen werden m&ouml;chten, wenden Sie sich bitte direkt an die Dozentin oder den Dozenten der Veranstaltung."), $SeminarName));
+						parse_msg ('info§'. sprintf(_("Sie d&uuml;rfen sich mit dem Status Dozent nicht f&uuml;r die teilnahmebeschr&auml;nkte Veranstaltung %s anmelden.<br />Wenn Sie dennoch eingetragen werden m&ouml;chten, wenden Sie sich bitte direkt an die Dozentin oder den Dozenten der Veranstaltung."), '<b>'.$SeminarName.'</b>'));
 						echo "<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp;&nbsp; "._("Zur&uuml;ck zur Startseite")."</a>";
 						if ($send_from_search)
 							echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">"._("Zur&uuml;ck zur letzten Auswahl")."</a>";
@@ -507,7 +507,7 @@ $db6=new DB_Seminar;
 						}
 					$db->query("SELECT studiengang_id FROM user_studiengang WHERE user_id = '$user->id' "); //Hat der Studie ueberhaupt Studiengaenge angegeben?
 					if (!$db->num_rows()) { //Es sind gar keine vorhanden! Hinweis wie man das eintragen kann
-						parse_msg (sprintf("info§"._("Die Veranstaltung <b>%s</b> ist teilnahmebeschr&auml;nkt. Um sich f&uuml;r teilnahmebeschr&auml;nkte Veranstaltungen eintragen zu k&ouml;nnen, m&uuml;ssen Sie einmalig Ihre Studieng&auml;nge angeben! <br> Bitte tragen Sie ihre Studieng&auml;nge auf ihrer <a href=\"edit_about.php?view=Karriere#studiengaenge\">pers&ouml;nlichen Homepage</a> ein!"), $SeminarName));
+						parse_msg ('info§' . sprintf(_("Die Veranstaltung %s ist teilnahmebeschr&auml;nkt. Um sich f&uuml;r teilnahmebeschr&auml;nkte Veranstaltungen eintragen zu k&ouml;nnen, m&uuml;ssen Sie einmalig Ihre Studieng&auml;nge angeben! <br> Bitte tragen Sie ihre Studieng&auml;nge auf ihrer %spers&ouml;nlichen Homepage%s ein!"), '<b>'.$SeminarName .'</b>', '<a href="edit_about.php?view=Karriere#studiengaenge">','</a>'));
 						echo "<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp;&nbsp; "._("Zur&uuml;ck zur Startseite")."</a>";
 						if ($send_from_search)
 							echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">"._("Zur&uuml;ck zur letzten Auswahl")."</a>";
@@ -518,7 +518,7 @@ $db6=new DB_Seminar;
 					//Wurden wir evtl. schon in die Veranstaltung als Wartender eingetragen?
 					$db->query("SELECT user_id FROM admission_seminar_user WHERE user_id = '$user->id' AND seminar_id = '$id' "); //Bin ich eingetragen?
 					if ($db->num_rows()) { //Es gibt einen Eintrag, da darf ich also nicht mehr rein
-						parse_msg (sprintf("info§"._("Sie stehen schon auf der Anmelde- bzw. Warteliste der Veranstaltung <b>%s</b>. <br />Wenn Sie sich neu oder f&uuml;r ein anderes Kontingent eintragen wollen, dann l&ouml;schen Sie bitte vorher die Zuordnug auf der der &Uuml;bersicht ihrer Veranstaltungen."), $SeminarName));
+						parse_msg ('info§' . sprintf(_("Sie stehen schon auf der Anmelde- bzw. Warteliste der Veranstaltung %s. <br />Wenn Sie sich neu oder f&uuml;r ein anderes Kontingent eintragen wollen, dann l&ouml;schen Sie bitte vorher die Zuordnug auf der der &Uuml;bersicht ihrer Veranstaltungen."), '<b>'.$SeminarName.'</b>'));
 						echo "<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp;&nbsp; "._("Zur&uuml;ck zur Startseite")."</a>";
 						if ($send_from_search)
 							echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">"._("Zur&uuml;ck zur letzten Auswahl")."</a>";
@@ -535,7 +535,7 @@ $db6=new DB_Seminar;
 							$db->next_record();
 							$sem_verify_suggest_studg=$db->f("studiengang_id");
 						} elseif ($db->num_rows() >1) { //Mehrere gefunden, fragen welcher es denn sein soll
-							printf ("<tr><td class=\"blank\" colspan=2>&nbsp; &nbsp; "._("Die Veranstaltung <b>%s</b> ist teilnahmebeschr&auml;nkt.")."<br><br></td></tr>", $SeminarName);
+							printf ('<tr><td class="blank" colspan=2>&nbsp; &nbsp; ' . _("Die Veranstaltung %s ist teilnahmebeschr&auml;nkt."). '<br><br></td></tr>', '<b>' . $SeminarName . '</b>');
 							print "<tr><td class=\"blank\" colspan=2>&nbsp; &nbsp; "._("Sie k&ouml;nnen sich f&uuml;r <b>eines</b> der m&ouml;glichen Kontingente anmelden.")."<br/><br />&nbsp; &nbsp; "._("Bitte w&auml;hlen Sie das f&uuml;r Sie am besten geeignete Kontingent aus:")." <br><br></td></tr>";
 							$db->query("SELECT admission_seminar_studiengang.studiengang_id, name, quota FROM admission_seminar_studiengang LEFT JOIN studiengaenge USING (studiengang_id)  WHERE seminar_id = '$id' ORDER BY name"); //Alle theoretisch moeglichen auswaehlen
 							?>
@@ -585,7 +585,7 @@ $db6=new DB_Seminar;
 						} else { //Keinen passenden Studiengaenge gefunden, abbruch
 							$db->query("SELECT studiengang_id FROM user_studiengang WHERE user_id = '$user->id' "); //Hat der Studie ueberhaupt Studiengaenge angegeben?
 							if ($db->num_rows() >=1) { //Es waren nur die falschen
-								parse_msg (sprintf("info§"._("Sie belegen leider keinen passenden Studiengang, um an der teilnahmebeschr&auml;nkten Veranstaltung <b>%s</b> teilnehmen zu k&ouml;nnen."), $SeminarName));
+								parse_msg ('info§' . sprintf(_("Sie belegen leider keinen passenden Studiengang, um an der teilnahmebeschr&auml;nkten Veranstaltung %s teilnehmen zu k&ouml;nnen."), '<b>'.$SeminarName.'</b>'));
 								echo "<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp;&nbsp; "._("Zur&uuml;ck zur Startseite")."</a>";
 								if ($send_from_search)
 						    			echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">"._("Zur&uuml;ck zur letzten Auswahl")."</a>";
@@ -600,7 +600,7 @@ $db6=new DB_Seminar;
 							if (get_free_admission($id)) { //Wir koennen einfach eintragen, Platz ist noch
 								if (!seminar_preliminary($id,$user->id)) {
 								 	$db4->query("INSERT INTO seminar_user SET user_id = '$user->id', Seminar_id = '$id', admission_studiengang_id = '$sem_verify_suggest_studg', status='autor', gruppe='$group', mkdate='".time()."' ");
-									parse_msg (sprintf("msg§"._("Sie wurden mit dem Status <b>Autor</b> in die Veranstaltung <b>%s</b> eingetragen. Damit sind Sie zugelassen."), $SeminarName));
+									parse_msg ('msg§' . sprintf(_("Sie wurden mit dem Status <b>Autor</b> in die Veranstaltung %s eingetragen. Damit sind Sie zugelassen."), '<b>' . $SeminarName .'</b>'));
 									echo"<tr><td class=\"blank\" colspan=2><a href=\"seminar_main.php?auswahl=$id\">&nbsp; &nbsp; "._("Hier kommen Sie zu der Veranstaltung")."</a>";
 									if ($send_from_search) echo "&nbsp; |";
 								} else {
@@ -616,7 +616,7 @@ $db6=new DB_Seminar;
 								$db5->next_record();
 								$position=$db5->f("position")+1;
 							 	$db4->query("INSERT INTO admission_seminar_user SET user_id = '$user->id', seminar_id = '$id', studiengang_id = '$sem_verify_suggest_studg', status='awaiting', mkdate='".time()."', position='".$position."'  ");
-								parse_msg (sprintf("info§"._("Es gibt zur Zeit keinen freien Platz in der teilnahmebeschr&auml;nkten Veranstaltung <b>%s</b>. Sie wurden jedoch auf Platz %s der Warteliste gesetzt.")." <br /> "._("Sie werden automatisch eingetragen, sobald ein Platz f&uuml;r Sie frei wird."), $SeminarName, $position));
+								parse_msg ('info§'. sprintf(_("Es gibt zur Zeit keinen freien Platz in der teilnahmebeschr&auml;nkten Veranstaltung %s. Sie wurden jedoch auf Platz %s der Warteliste gesetzt."), '<b>'.$SeminarName.'</b>', $position).' <br /> '._("Sie werden automatisch eingetragen, sobald ein Platz f&uuml;r Sie frei wird."));
 								echo "<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp;&nbsp; "._("Zur&uuml;ck zur Startseite")."</a>";
 								if ($send_from_search)
 					    				echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">"._("Zur&uuml;ck zur letzten Auswahl")."</a>";
@@ -783,9 +783,9 @@ $db6=new DB_Seminar;
 	}
 
   if ($SemSecLevelRead==0) {//nur wenn das Seminar wirklich frei ist geht's hier weiter
-	printf("<tr><td class=\"blank\" colspan=2>&nbsp; &nbsp; "._("Die Veranstaltung <b>%s</b> erfordert keine Anmeldung. %sHier kommen Sie zu der Veranstaltung</a>!")."<br><br></td></tr></table>", $SeminarName, "<a href=\"seminar_main.php?auswahl=$id\">");
+	printf('<tr><td class="blank" colspan=2>&nbsp; &nbsp; '._("Die Veranstaltung %s erfordert keine Anmeldung. %sHier kommen Sie zu der Veranstaltung%s!").'<br><br></td></tr></table>', '<b>'.$SeminarName.'</b>', "<a href=\"seminar_main.php?auswahl=$id\">", '</a>');
   }	else {//keine Rechte f&uuml;r das Seminar
-		parse_msg (sprintf("error§"._("Sie haben nicht die erforderlichen Rechte, um an der Veranstaltung <b>%s</b> teilnehmen zu d&uuml;rfen!"), $SeminarName));
+		parse_msg ('error§' . sprintf(_("Sie haben nicht die erforderlichen Rechte, um an der Veranstaltung %s teilnehmen zu d&uuml;rfen!"), '<b>'.$SeminarName.'</b>'));
 		echo "<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp;&nbsp; "._("Zur&uuml;ck zur Startseite")."</a>";
 		if ($send_from_search)
 	    		echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">"._("Zur&uuml;ck zur letzten Auswahl")."</a>";

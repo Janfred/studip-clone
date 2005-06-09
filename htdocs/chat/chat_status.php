@@ -101,7 +101,7 @@ $chatServer->caching = true;
 //darf ich überhaupt hier sein ?
 if (!$chatServer->isActiveUser($user->id,$chatid)) {
 	?><table width="100%"><tr><?
-	my_error(_("<font size=\"-1\">Sie sind nicht in diesem Chat angemeldet!</font>"),"chat",1,false);
+	my_error('<font size="-1">'._("Sie sind nicht in diesem Chat angemeldet!").'</font>','chat',1,false);
 	?></tr></table></body></html><?
 	page_close();
 	die;

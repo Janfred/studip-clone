@@ -421,8 +421,7 @@ function getZusatz($wikiData) {
 		return "";
 	}
 	$s = "<font size=-1>";
-	$s .=  _("Version ") . $wikiData[version];
-	$s .= sprintf(_(", ge&auml;ndert von %s am %s"), "</font><a href=\"about.php?username=".get_username ($wikiData[user_id])."\"><font size=-1 color=\"#333399\">".get_fullname ($wikiData[user_id],'full',1)."</font></a><font size=-1>", date("d.m.Y, H:i",$wikiData[chdate])."<font size=-1>&nbsp;"."</font>");
+	$s .= sprintf(_("Version %s, ge&auml;ndert von %s am %s"), $wikiData[version],"</font><a href=\"about.php?username=".get_username ($wikiData[user_id])."\"><font size=-1 color=\"#333399\">".get_fullname ($wikiData[user_id],'full',1)."</font></a><font size=-1>", date("d.m.Y, H:i",$wikiData[chdate])."<font size=-1>&nbsp;"."</font>");
 	return $s;
 }
 
@@ -549,14 +548,14 @@ function deleteWikiPage($keyword, $version, $range_id) {
 	$db=new DB_Seminar;
 	$db->query($q);
 	if (!keywordExists($keyword)) { // all versions have gone
-		$addmsg = sprintf(_("<br>Damit ist die Seite mit allen Versionen gel&ouml;scht."));
+		$addmsg = '<br>'. _("Damit ist die Seite mit allen Versionen gel&ouml;scht.");
 		$newkeyword = "WikiWikiWeb";
 	} else {
 		$newkeyword = $keyword;
 		$addmsg = "";
 	}
 	begin_blank_table();
-	parse_msg("info§" . sprintf(_("Version %s der Seite <b>%s</b> gel&ouml;scht."), $version, $keyword) . $addmsg);
+	parse_msg("info§" . sprintf(_("Version %s der Seite %s gel&ouml;scht."), $version, '<b>'.$keyword.'</b>') . $addmsg);
 	end_blank_table();
 	if ($dellatest) {
 		$lv=getLatestVersion($keyword, $SessSemName[1]);
@@ -590,7 +589,7 @@ function deleteAllWikiPage($keyword, $range_id) {
 	$db=new DB_Seminar;
 	$db->query($q);
 	begin_blank_table();
-	parse_msg("info§" . sprintf(_("Die Seite <b>%s</b> wurde mit allen Versionen gel&ouml;scht."), $keyword));
+	parse_msg("info§" . sprintf(_("Die Seite %s wurde mit allen Versionen gel&ouml;scht."), '<b>'.$keyword.'</b>'));
 	end_blank_table();
 	refreshBacklinks($keyword, "");
 	return "WikiWikiWeb";
@@ -804,11 +803,9 @@ function printWikiPage($keyword, $version) {
 	echo "<html><head><title>$keyword</title></head>";
 	echo "<body>";
 	echo "<p><em>$SessSemName[header_line]</em></p>";
-	echo "<h1>$keyword</h1>";
-	echo "<p><em>"._("Version")." ".$wikiData['version'];
-	echo ", "._("letzte Änderung")." ".date("d.m.Y, H:i", $wikiData['chdate']);
-	echo " "._("von")." ".get_fullname($wikiData['user_id'],'full',1).".</em></p>";
-	echo "<hr>";
+	echo "<h1>$keyword</h1><p><em>";
+	printf(_("Version %s, letzte Änderung %s von %s"),$wikiData['version'], date("d.m.Y, H:i", $wikiData['chdate']), get_fullname($wikiData['user_id'],'full',1));
+	echo "</em></p><hr>";
 	echo wikiReady($wikiData['body'],TRUE,FALSE,"none");
 	echo "<hr><p><font size=-1>created by Stud.IP Wiki-Module ";
 	echo date("d.m.Y, H:i", time());
@@ -917,7 +914,7 @@ function getShowPageInfobox($keyword, $latest_version) {
 	global $PHP_SELF, $show_wiki_comments;
 
 	$versions=getWikiPageVersions($keyword);
-	$versiontext="<a href=\"".$PHP_SELF."?keyword=".urlencode($keyword)."\">Aktuelle Version</a><br>";
+	$versiontext = '<a href="'.$PHP_SELF.'?keyword='.urlencode($keyword).'">'. _("Aktuelle Version").'</a><br>';
 	if ($versions) {
 		foreach ($versions as $v) {
 			$versiontext .= "<a href=\"".$PHP_SELF."?keyword=".urlencode($keyword)."&version=".$v['version']."\">"._("Version")." ".$v['version']."</a> - ".date("d.m.Y, H:i",$v['chdate'])."<br>";
@@ -953,7 +950,11 @@ function getShowPageInfobox($keyword, $latest_version) {
  $backlinktext));
 	$infobox = array ();
 	if (!$latest_version) {
-		$infobox[] = array("kategorie" => _("Information"), "eintrag" => array(array("icon"=>"pictures/ausruf_small.gif", "text"=>_("Sie betrachten eine alte Version, die nicht mehr geändert werden kann. Verwenden Sie dazu die <a href=\"".$PHP_SELF."?keyword=".urlencode($keyword)."\">aktuelle Version</a>."))));
+		$infobox[] = array('kategorie' => _("Information"),
+				'eintrag' => array(
+						array(	'icon'=>'pictures/ausruf_small.gif',
+							'text'=>sprintf(_("Sie betrachten eine alte Version, die nicht mehr geändert werden kann. Verwenden Sie dazu die %saktuelle Version%s."),'<a href="'.$PHP_SELF.'?keyword='.urlencode($keyword).'">','</a>')
+							)));
 	}
 	$infobox[] = array("kategorie"  => _("Ansicht:"), "eintrag" => $views);
 	if ($latest_version) { 
@@ -990,8 +991,8 @@ function getShowPageInfobox($keyword, $latest_version) {
 function getDiffPageInfobox($keyword) {
 	global $PHP_SELF;
 
-	$versions=getWikiPageVersions($keyword);
-	$versiontext="<a href=\"".$PHP_SELF."?keyword=".urlencode($keyword)."\">Aktuelle Version</a><br>";
+	$versions = getWikiPageVersions($keyword);
+	$versiontext = '<a href="'.$PHP_SELF.'?keyword='.urlencode($keyword).'">'. _("Aktuelle Version").'</a><br>';
 	if ($versions) {
 		foreach ($versions as $v) {
 			$versiontext .= "<a href=\"".$PHP_SELF."?keyword=".urlencode($keyword)."&version=".$v['version']."\">"._("Version")." ".$v['version']."</a> - ".date("d.m.Y, H:i",$v['chdate'])."<br>";

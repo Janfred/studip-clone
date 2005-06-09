@@ -617,15 +617,15 @@ if (isset($atermin) && get_class($atermin) == "seminarevent") {
 	$permission = get_perm($atermin->getSeminarId());
 	
 	// create infobox entries
-	$info_box['sem1'] = sprintf(_("Dieser Termin geh&ouml;rt zur Veranstaltung:<p>%s</p>Veranstaltungstermine k&ouml;nnen nicht im pers&ouml;nlichen Terminkalender bearbeitet werden.")
-			, $link_to_seminar);
-	$info_box['sem2'] = sprintf(_("<a href=\"%s?cmd=bind\">W&auml;hlen</a> Sie aus, welche Veranstaltungstermine in Ihrem Terminkalender angezeigt werden sollen.")
-			, $PHP_SELF);
+	$info_box['sem1'] = sprintf(_("Dieser Termin geh&ouml;rt zur Veranstaltung:%sVeranstaltungstermine k&ouml;nnen nicht im pers&ouml;nlichen Terminkalender bearbeitet werden.")
+			, '<p>'.$link_to_seminar.'</p>');
+	$info_box['sem2'] = sprintf(_("%sW&auml;hlen%s Sie aus, welche Veranstaltungstermine in Ihrem Terminkalender angezeigt werden sollen.")
+			, '<a href="' . $PHP_SELF . '?cmd=bind">', '</a>');
 	if ($permission == "tutor" || $permission == "dozent") {
 		$link_to_seminar = sprintf("<a href=\"%sadmin_dates.php?range_id=%s&show_id=%s\">"
 				, $CANONICAL_RELATIVE_PATH_STUDIP, $atermin->getSeminarId(), $atermin->getId());
-		$info_box['sem3'] = sprintf(_("Um diesen Termin zu bearbeiten, wechseln Sie bitte in die %sTerminverwaltung</a>.")
-				, $link_to_seminar);
+		$info_box['sem3'] = sprintf(_("Um diesen Termin zu bearbeiten, wechseln Sie bitte in die %sTerminverwaltung%s.")
+				, $link_to_seminar, '</a>');
 		
 		$info_box['all'][0]['kategorie'] = _("Information:");
 		$info_box['all'][0]['eintrag'][] = array("icon" => "pictures/ausruf_small.gif",

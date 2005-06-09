@@ -610,7 +610,7 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 } 
 
 
-$txt['001'] = _("aktuelle Empf&auml;ngerInnen"); 
+$txt['001'] = _("aktuelle Empf&auml;ngerInnen");
 $txt['002'] = _("m&ouml;gliche Empf&auml;ngerInnen");
 $txt['003'] = _("Signatur");
 $txt['004'] = _("Vorschau");
@@ -859,7 +859,7 @@ if ($send_view) {
 		} else {
 			$emailforwardinfo = _("Ihre Nachricht wird nicht auch als Email versand.");
 		}
-		if($tmp_link_01 == 1) $emailforwardinfo .= "<br>".sprintf(_("Nutzern Sie die <a href=\"%s?send_view=1\">Experten-Ansicht</a> um die Einstellung zu ändern."), $PHP_SELF);
+		if($tmp_link_01 == 1) $emailforwardinfo .= "<br>".sprintf(_("Nutzern Sie die %sExperten-Ansicht%s um die Einstellung zu ändern."), '<a href="'.$PHP_SELF.'?send_view=1">', '</a>');
 		$emailforwardinfo = array("kategorie" => _("Emailweiterleitung:"),"eintrag" => array(array("icon" => "pictures/nachricht1.gif", "text" => sprintf($emailforwardinfo))));
 	}
 

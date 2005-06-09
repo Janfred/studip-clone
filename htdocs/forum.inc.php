@@ -71,7 +71,7 @@ function forum_append_edit ($description) {
 function forum_parse_edit ($description) {
 	if (preg_match('/^.*(<admin_msg.*?)$/s',$description, $match)) { // wurde schon mal editiert
 		$tmp = explode('"',$match[1]);
-		$append = "\n\n%%["._("Zuletzt editiert von ").$tmp[1]." - ".date ("d.m.y - H:i", $tmp[3])."]%%";
+		$append = "\n\n%%["._("Zuletzt editiert von"). ' '.$tmp[1]." - ".date ("d.m.y - H:i", $tmp[3])."]%%";
 		$description = forum_kill_edit($description) . $append;
 	}
 	return $description;
@@ -597,7 +597,7 @@ function ForumEmpty () {
 		else
 			 $text = _("In diesem Forum wurde noch kein Themenordner angelegt.<br>Kontaktieren Sie den/die AdministratorIn der Einrichtung, um Themenordner anlegen zu lassen.");
 	}
-	$empty = parse_msg("info§$text");
+	$empty = parse_msg('info§'.$text);
 	return $empty;
 } 
 
@@ -746,7 +746,7 @@ function UpdateTopic ($name="[no name]", $topic_id, $description)
 			$query = "UPDATE px_topics SET name = '$name', description = '$description', chdate= '$chdate' WHERE topic_id = '$topic_id'";
 		$db->query ($query);
 		IF  ($db->affected_rows() == 0) {
-			print _("<p>Aktualisieren des Postings fehlgeschlagen</p>\n");
+			echo '<p>' . _("Aktualisieren des Postings fehlgeschlagen") . "</p>\n";
 		}
 	} else {
 		echo parse_msg("error§" . _("Ihnen fehlen die Rechte diesen Beitrag zu bearbeiten"));
@@ -1230,7 +1230,7 @@ function printposting ($forumposting) {
 					$addon .= "<input type=hidden name=flatviewstartposting value='".$forum["flatviewstartposting"]."'>";
 					$addon .= "<input type=image name=sidebar value='".$forumposting["id"]."' " . makeButton("bewerten", "src") . " align=\"absmiddle\" border=0>";
 				} else {
-					$addon .= "<font size=\"-1\">&nbsp;&nbsp;"._("Sie haben diesen&nbsp;<br>&nbsp;&nbsp;Beitrag bewertet.");
+					$addon .= "<font size=\"-1\">&nbsp;&nbsp;". sprintf(_("Sie haben diesen%sBeitrag bewertet."),'&nbsp;<br>&nbsp;&nbsp;');
 				}
 			}
 		} elseif ($user->id != "nobody" && !$delete_id)  // nur Aufklapppfeil
@@ -1697,7 +1697,7 @@ $searchfield = "
 	     		<td class=\"steelgraulight\">&nbsp;
 	     		</td>
 	     		<td class=\"steelgraulight\">
-	     			<input type=\"CHECKBOX\" name=\"check_name\" value=\"on\" checked><font size=\"-1\"> "._("Überschrift")." 
+	     			<input type=\"CHECKBOX\" name=\"check_name\" value=\"on\" checked><font size=\"-1\"> "._("Überschrift")."
 	     		</td>
 	     	</tr>
 	     	<tr>
@@ -1774,11 +1774,11 @@ function forum_move_navi ($topic_id) {
 			</tr>
 			<tr>
 				<td class="steel1" align="right" nowrap width="20%" valign="baseline">
-					<font size="-1"><?=_("in das Forum einer Veranstaltung:")?></font>&nbsp; &nbsp; 
+					<font size="-1"><?=_("in das Forum einer Veranstaltung:")?></font>&nbsp; &nbsp;
 				</td>
 				<td class="steel1" width="80%">
 			<? 		echo "<form action=\"".$PHP_SELF."\" method=\"POST\">"; ?>
-					<input type="image" name="SUBMIT" value="Verschieben" src="pictures/move.gif" border="0" <?=tooltip(_("dahin verschieben"))?>>&nbsp; 					
+					<input type="image" name="SUBMIT" value="Verschieben" src="pictures/move.gif" border="0" <?=tooltip(_("dahin verschieben"))?>>&nbsp;
 					<select Name="sem_id" size="1">
 			<?		while ($db->next_record()) {
 						$sem_name=htmlReady(substr($db->f("Name"), 0, 50));
@@ -1796,11 +1796,11 @@ function forum_move_navi ($topic_id) {
 		?>
 			<tr>
 				<td class="steel1" align="right" nowrap width="20%" valign="baseline">
-			  		<font size="-1"><?=_("in das Forum einer Einrichtung:")?></font>&nbsp; &nbsp; 
+			  		<font size="-1"><?=_("in das Forum einer Einrichtung:")?></font>&nbsp; &nbsp;
 			  	</td>
 				<td class="steel1" width="80%">
 			<? 		echo "<form action=\"".$PHP_SELF."\" method=\"POST\">"; ?>
-					<input type=image name="SUBMIT" value="Verschieben" src="pictures/move.gif" border=0 <?=tooltip(_("dahin verschieben"))?>>&nbsp; 						
+					<input type=image name="SUBMIT" value="Verschieben" src="pictures/move.gif" border=0 <?=tooltip(_("dahin verschieben"))?>>&nbsp;
 			  	<select Name="inst_id" size="1">
 			<?		while ($db2->next_record()) {
 						$inst_name=htmlReady(substr($db2->f("Name"), 0, 50));
