@@ -98,6 +98,12 @@ function parse_link($link, $level=0) {
 		$host = $url_parts["host"];
 
 		$port = $url_parts["port"];
+		if (substr($link,0,8) == 'https://') {
+                        $ssl = TRUE;
+                        if (empty($port)) $port = 443;
+                } else { 
+			$ssl = FALSE;
+		}
 		if (empty( $port ) ) $port = "80";
 
 		if (preg_match('/[^a-z0-9_.-]/i',$host)){ // exists umlauts ?
@@ -108,7 +114,7 @@ function parse_link($link, $level=0) {
 			$the_link = $url_parts['scheme'].'://'.$pwtxt.$host.':'.$port.$documentpath; 
 		}
 
-		$socket = @fsockopen( $host, $port, $errno, $errstr, 10 );
+		$socket = @fsockopen( ($ssl? 'ssl://':'').$host, $port, $errno, $errstr, 10 );
 		if (!$socket) {
 			//echo "$errstr ($errno)<br />\n";
 		} else {
@@ -951,9 +957,9 @@ function link_form ($range_id, $updating=FALSE) {
 	$print.= "\n<tr>";
 	$print.= "\n<td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("Dateipfad:") . "&nbsp;</font><br />";
 	if ($hiddenurl)
-		$print.= "&nbsp;<INPUT NAME=\"the_link\" TYPE=\"text\"  style=\"width: 70%\" SIZE=\"30\" value=\"***\">&nbsp;</td></td>";
+		$print.= '&nbsp;<INPUT NAME="the_link" TYPE="text"  style="width: 70%" SIZE="30" value="***">&nbsp;</td></td>';
 	else
-		$print.= "&nbsp;<INPUT NAME=\"the_link\" TYPE=\"text\"  style=\"width: 70%\" SIZE=\"30\" value=$the_link>&nbsp;</td></td>";
+		$print.= '&nbsp;<INPUT NAME="the_link" TYPE="text"  style="width: 70%" SIZE="30" value="'.$the_link.'">&nbsp;</td></td>';
 	$print.= "\n</tr>";
 	if (!$refresh) {
 
@@ -963,7 +969,7 @@ function link_form ($range_id, $updating=FALSE) {
 
 		$print.= "<tr><td class=\"steelgraudunkel\" colspan=2><font size=-1>" . _("3. Geben Sie eine kurze Beschreibung und einen Namen für die Datei ein.") . "</font></td></tr>";
 		$print.= "\n<tr><td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("Name:") . "&nbsp;</font><br>";
-		$print.= "\n&nbsp;<input type=\"TEXT\" name=\"name\" style=\"width: 70%\" size=\"40\" maxlength\"255\" value=$name></td></tr>";
+		$print.= "\n".'&nbsp;<input type="TEXT" name="name" style="width: 70%" size="40" maxlength"255" value="'.$name.'"></td></tr>';
 						
 		$print.= "\n<tr><td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("Beschreibung:") . "&nbsp;</font><br>";
 		$print.= "\n&nbsp;<TEXTAREA NAME=\"description\"  style=\"width: 70%\" COLS=40 ROWS=3 WRAP=PHYSICAL>$description</TEXTAREA>&nbsp;</td></tr>";
@@ -971,8 +977,8 @@ function link_form ($range_id, $updating=FALSE) {
 	} else
 		$print.= "\n<tr><td class=\"steelgraudunkel\"colspan=2 ><font size=-1>" . _("2. Klicken Sie auf <b>'absenden'</b>, um die Datei hochzuladen und damit die alte Version zu &uuml;berschreiben.") . "</font></td></tr>";
 	$print.= "\n<tr><td class=\"steel1\" colspan=2 align=\"center\" valign=\"center\">";	
-	$print.= "\n<input type=\"image\" " . makeButton("absenden", "src") . " value=\"Senden\" align=\"absmiddle\" onClick=\"return upload_start();\" name=\"create\" border=\"0\">";
-	$print.="&nbsp;<a href=\"$PHP_SELF?cancel_x=true\">" . makeButton("abbrechen", "img") . "</a></td></tr>";	
+	$print.= "\n<input type=\"image\" " . makeButton("absenden", "src") . ' value="Senden" align="absmiddle" name="create" border="0">';
+	$print.= '&nbsp;<a href="'.$_SERVER['PHP_SELF'].'?cancel_x=true">' . makeButton("abbrechen", "img") . "</a></td></tr>";	
 	
 	$print.= "\n<input type=\"hidden\" name=\"upload_seminar_id\" value=\"".$SessSemName[1]."\">";	
 	if ($updating == TRUE) {
