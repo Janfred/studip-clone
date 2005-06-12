@@ -172,7 +172,7 @@ $infobox = array	(
 	array  ("kategorie" => _("Aktionen:"),
 		"eintrag" => array	(	
 			array	 (	"icon" => "pictures/suchen.gif",
-								"text"  => sprintf(_("Um Informationen &uuml;ber andere archivierte Veranstaltungen anzuzeigen nutzen Sie die <br />%sSuche im Archiv</a>"), "<a href=\"archiv.php\">")
+								"text"  => sprintf(_("Um Informationen &uuml;ber andere archivierte Veranstaltungen anzuzeigen nutzen Sie die <br />%sSuche im Archiv%s"), '<a href="archiv.php">', '</a>')
 			)
 		)
 	)

@@ -267,7 +267,7 @@ function imaging($img,$img_size,$img_name) {
 		}
 		$this->msg = "msg§" . _("Die Bilddatei wurde erfolgreich hochgeladen. Eventuell sehen Sie das neue Bild erst, nachdem Sie diese Seite neu geladen haben (in den meisten Browsern F5 dr&uuml;cken).");
 		setTempLanguage($this->auth_user["user_id"]);
-		$this->priv_msg = _("Ein neues Bild wurde hochgeladen.\n");
+		$this->priv_msg = _("Ein neues Bild wurde hochgeladen."). "\n";
 		restoreLanguage();
 	}
 	return;
@@ -292,7 +292,7 @@ function studiengang_edit($studiengang_delete,$new_studiengang) {
 	if ( ($studiengang_delete || $new_studiengang) && !$this->msg) {
 		$this->msg = "msg§" . _("Die Zuordnung zu Studiengängen wurde ge&auml;ndert.");
 		setTempLanguage($this->auth_user["user_id"]);
-		$this->priv_msg= _("Die Zuordnung zu Studiengängen wurde geändert!\n");
+		$this->priv_msg= _("Die Zuordnung zu Studiengängen wurde geändert!"). "\n";
 		restoreLanguage();
 	}
 
@@ -319,7 +319,7 @@ function inst_edit($inst_delete,$new_inst) {
 	if ( ($inst_delete || $new_inst) && !$this->msg) {
 		$this->msg = "msg§" . _("Die Zuordnung zu Einrichtungen wurde ge&auml;ndert.");
 		setTempLanguage($this->auth_user["user_id"]);
-		$this->priv_msg= _("Die Zuordnung zu Einrichtungen wurde geändert!\n");
+		$this->priv_msg= _("Die Zuordnung zu Einrichtungen wurde geändert!"). "\n";
 		restoreLanguage();
 	}
 
@@ -338,7 +338,7 @@ function special_edit ($raum, $sprech, $tel, $fax, $name, $default_inst, $visibl
 			if ($this->db->affected_rows()) {
 				$this->msg = $this->msg . "msg§" . sprintf(_("Ihre Daten an der Einrichtung %s wurden ge&auml;ndert"), $name[$inst_id]) . "§";
 				setTempLanguage($this->auth_user["user_id"]);
-				$this->priv_msg = $this->priv_msg . sprintf(_("Ihre Daten an der Einrichtung %s wurden geändert.\n"), $name[$inst_id]);
+				$this->priv_msg = $this->priv_msg . sprintf(_("Ihre Daten an der Einrichtung %s wurden geändert."). "\n", $name[$inst_id]);
 				restoreLanguage();
 			}
 		}
@@ -361,7 +361,7 @@ function edit_leben($lebenslauf,$schwerp,$publi,$view, $datafield_content, $data
 		$this->db->query("UPDATE user_info SET lebenslauf='$lebenslauf', schwerp='$schwerp', publi='$publi', chdate='".time()."' WHERE user_id='".$this->auth_user["user_id"]."'");
 		$this->msg = $this->msg . "msg§" . _("Daten im Lebenslauf u.a. wurden ge&auml;ndert") . "§";
 		setTempLanguage($this->auth_user["user_id"]);
-		$this->priv_msg = _("Daten im Lebenslauf u.a. wurden geändert.\n");
+		$this->priv_msg = _("Daten im Lebenslauf u.a. wurden geändert."). "\n";
 		restoreLanguage();
 	}
 }
@@ -406,7 +406,7 @@ function edit_pers($password,$check_pass,$response,$new_username,$vorname,$nachn
 		if ($this->db->affected_rows()) {
 			$this->msg = $this->msg . "msg§" . _("Ihre pers&ouml;nlichen Daten wurden ge&auml;ndert.") . "§";
 			setTempLanguage($this->auth_user["user_id"]);
-			$this->priv_msg = _("Ihre persönlichen Daten wurden geändert.\n");
+			$this->priv_msg = _("Ihre persönlichen Daten wurden geändert."). "\n";
 			restoreLanguage();
 		}
 	}
@@ -516,7 +516,7 @@ function edit_pers($password,$check_pass,$response,$new_username,$vorname,$nachn
 					$this->msg=$this->msg . "error§" . sprintf(_("Die angegebene E-Mail-Adresse wird bereits von einem anderen User (%s %s) verwendet. Bitte geben Sie eine andere E-Mail-Adresse an."), $this->db->f("Vorname"), $this->db->f("Nachname")) . "§";
 					return false;
 				}
-				
+
 				if (!StudipAuthAbstract::CheckField("auth_user_md5.password", $this->auth_user['auth_plugin'])){
 						//email ist ok, user bekommt neues Passwort an diese Addresse, falls Passwort in Stud.IP DB
 						$newpass=$this->generate_password(6);
@@ -723,8 +723,8 @@ if ($logout)  // wir wurden gerade ausgeloggt...
 
 	$my_about->parse_msg($my_about->msg);
 	$temp_string = "<br><font color=\"black\">"
-		. sprintf(_("Um eine korrekte Authentifizierung mit ihren neuen Daten sicherzustellen, wurden sie automatisch ausgeloggt.<br>Wenn sie ihre E-Mail-Adresse ge&auml;ndert haben, m&uuml;ssen sie das Ihnen an diese Adresse zugesandte Passwort verwenden!<br><br>Ihr aktueller Username ist: <b>%s</b><br>"), $username)
-		. "---> <a href=\"index.php?again=yes\">" . _("Login") . "</a> <---</font>";
+		. sprintf(_("Um eine korrekte Authentifizierung mit ihren neuen Daten sicherzustellen, wurden sie automatisch ausgeloggt.<br>Wenn sie ihre E-Mail-Adresse ge&auml;ndert haben, m&uuml;ssen sie das Ihnen an diese Adresse zugesandte Passwort verwenden!<br><br>Ihr aktueller Username ist: %s"), '<b>'.$username.'</b>')
+		. '<br>---> <a href="index.php?again=yes">' . _("Login") . '</a> <---</font>';
 	$my_about->my_info($temp_string);
 
 
@@ -740,9 +740,9 @@ if (!$my_about->check)
 	// Start of Output
 	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
-	parse_window ("error§" . sprintf("Zugriff verweigert.<br /><font size=-1 color=black>Wahrscheinlich ist Ihre Session abgelaufen. Wenn sie sich länger als %s Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurück zur Anmeldung zu gelangen.<br /> <br /> Eine andere Ursache kann der Versuch des Zugriffs auf Userdaten, die Sie nicht bearbeiten d&uuml;rfen, sein. Nutzen Sie den untenstehenden Link, um zurück auf die Startseite zu gelangen.</font>", $AUTH_LIFETIME), "§",
-	_("Zugriff auf Userdaten verweigert"), 
-	_("<a href=\"index.php\"><b>&nbsp;Hier</b></a> geht es wieder zur Anmeldung beziehungsweise Startseite.<br />&nbsp;"));
+	parse_window ("error§" . sprintf(_("Zugriff verweigert. %s Wahrscheinlich ist Ihre Session abgelaufen. Wenn sie sich länger als %s Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurück zur Anmeldung zu gelangen.<br /> <br /> Eine andere Ursache kann der Versuch des Zugriffs auf Userdaten, die Sie nicht bearbeiten d&uuml;rfen, sein. Nutzen Sie den untenstehenden Link, um zurück auf die Startseite zu gelangen."),'<br /><font size=-1 color=black>' ,$AUTH_LIFETIME). '</font>', "§",
+	_("Zugriff auf Userdaten verweigert"),
+	sprintf(_("%sHier%s geht es wieder zur Anmeldung beziehungsweise Startseite."),'<a href="index.php"><b>&nbsp;','</b></a>') . '<br />&nbsp;');
 	
 	?>
 	</body>
@@ -829,7 +829,7 @@ if(check_ticket($ticket)){
 		if (($my_about->check != "user") && ($my_about->priv_msg != "")) {
 			$m_id=md5(uniqid("smswahn"));
 			setTempLanguage($my_about->auth_user["user_id"]);
-			$priv_msg = _("Ihre persönliche Seite wurde von einer Administratorin oder einem Administrator verändert.\n Folgende Veränderungen wurden vorgenommen:\n \n").$my_about->priv_msg;
+			$priv_msg = sprintf(_("Ihre persönliche Seite wurde von einer Administratorin oder einem Administrator verändert.%s Folgende Veränderungen wurden vorgenommen:"), "\n") . "\n \n" . $my_about->priv_msg;
 			restoreLanguage();
 			$my_about->insert_message($priv_msg, $my_about->auth_user["username"], "____%system%____", FALSE, FALSE, "1", FALSE, _("Systemnachricht:")." "._("persönliche Homepage verändert"));
 		}
@@ -1209,7 +1209,7 @@ if ($view=="Karriere") {
 		if (($perm->have_perm("tutor")) && (!$perm->have_perm("dozent"))) {
 			echo "<tr><td align=\"left\" valign=\"top\" class=\"blank\"><blockquote><br>" . _("Hier können Sie Angaben &uuml;ber ihre Studienkarriere und Daten an Einrichtungen, an denen Sie arbeiten, machen.");
 		} elseif ($perm->have_perm("dozent")) {
-			echo "<tr><td align=\"left\" valign=\"top\" class=\"blank\"><blockquote><br>" . _("Hier können Sie Angaben &uuml;ber Daten an Einrichtungen, in den Sie arbeiten, machen.");	
+			echo "<tr><td align=\"left\" valign=\"top\" class=\"blank\"><blockquote><br>" . _("Hier können Sie Angaben &uuml;ber Daten an Einrichtungen, in den Sie arbeiten, machen.");
 		} else {
 				if (!$ALLOW_SELFASSIGN_STUDYCOURSE) {
 					$message = "info§" . sprintf(formatReady(_("Sie haben keine Berechtigung diese Daten selbst zu ändern!")));

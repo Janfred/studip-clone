@@ -202,7 +202,7 @@ function object_add_rate ($object_id, $rate) {
 		$db=new DB_Seminar;
 		$db->query("INSERT INTO object_user (object_id, user_id, flag, mkdate) values ('$object_id', '$user->id', 'rate', '$now')");	
 		$db->query("INSERT INTO object_rate (object_id, rate, mkdate) values ('$object_id', '$rate', '$now')");	
-		$txt = _("Sie haben das Objekt mit \"$rate\"  bewertet.");
+		$txt = sprintf(_("Sie haben das Objekt mit %s bewertet."), '"'.$rate.'"');
 	} else {
 		$txt = _("Sie haben dieses Objekt bereits bewertet.");
 	}

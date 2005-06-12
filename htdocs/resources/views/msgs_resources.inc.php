@@ -118,7 +118,7 @@ $this->msg[24] = array (
 $this->msg[25] = array (
 		"mode" => "error",
 		"titel" => _("Fehlende Berechtigung"),
-		"msg"=> _("Sie haben leider keine Berechtigung, diese Funktion zu benutzen!"));		
+		"msg"=> _("Sie haben leider keine Berechtigung, diese Funktion zu benutzen!"));
 $this->msg[26] = array (
 		"mode" => "error",
 		"msg"=> _("Fehler in den Sperrzeiten, bitte korrigieren Sie die Zeiten!"));
@@ -140,20 +140,20 @@ $this->msg[30] = array (
 			."&nbsp;<a href=\"%s\">".makeButton("nein")."</a>");
 $this->msg[31] = array (
 		"mode" => "info",
-		"msg"=> "<font size=\"-1\">"._("<b>Ressourcenblockierung vom %s bis zum %s.</b>")."</font><br />".
+		"msg"=> "<font size=\"-1\"><b>"._("Ressourcenblockierung vom %s bis zum %s.")."</b></font><br />".
 			_("Sie versuchen, ein Objekt zu bearbeiten, das zur Zeit f&uuml;r eine Bearbeitung gesperrt ist. Nur der globale Ressourcenadministrator hat Zugriff auf dieses Objekt! <br />(Wenn Sie normalerweise Zugriff auf dieses Objekt haben, wird Ihnen der Zugriff nach Aufhebung der Blockierung wieder gew&auml;hrt.)"));
 $this->msg[32] = array (
 		"mode" => "msg",
 		"msg"=> _("Die ausgew&auml;hlten Eintr&auml;ge wurden in die aktuelle Anfrage &uuml;bernommen."));
 $this->msg[33] = array (
 		"mode" => "msg",
-		"msg"=> _("Folgende R&auml;ume wurden gebucht und der Veranstaltung zugewiesen: <font size=\"-1\" color=\"black\">%s</font>"));		
+		"msg"=> _("Folgende R&auml;ume wurden gebucht und der Veranstaltung zugewiesen:"). ' <font size="-1" color="black">%s</font>');
 $this->msg[34] = array (
 		"mode" => "error",
-		"msg"=> _("Folgende R&auml;ume konnten wegen &Uuml;berschneidungen nicht gebucht werden: <font size=\"-1\" color=\"black\">%s</font>"));
+		"msg"=> _("Folgende R&auml;ume konnten wegen &Uuml;berschneidungen nicht gebucht werden:"). ' <font size="-1" color="black">%s</font>');
 $this->msg[35] = array (
 		"mode" => "error",
-		"msg"=> _("Die folgende R&auml;ume konnten wegen &Uuml;berschneidungen nicht gebucht werden:")."<br />"._("Eine neue Anfrage, die einzeln bearbeitet werden mu&szlig;, wurde f&uuml;r jede Belegungszeit erstellt.  <font size=\"-1\" color=\"black\">%s</font>"));
+		"msg"=> _("Die folgende R&auml;ume konnten wegen &Uuml;berschneidungen nicht gebucht werden:")."<br />"._("Eine neue Anfrage, die einzeln bearbeitet werden mu&szlig;, wurde f&uuml;r jede Belegungszeit erstellt.") . ' <font size="-1" color="black">%s</font>');
 $this->msg[36] = array (
 		"mode" => "info",
 		"msg"=> _("Sie haben alle Anfragen, die Sie ausgew&auml;hlt haben, bearbeitet. Wollen Sie jetzt Nachrichten zu allen aufgel&ouml;sten Anfragen versenden?")

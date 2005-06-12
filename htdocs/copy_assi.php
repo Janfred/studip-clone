@@ -40,7 +40,7 @@ if ($SessSemName[1]) {
 	<tr><td class="blank" colspan=2>&nbsp;</td></tr>
 	<tr><td class="blank" colspan=2>
 	<blockquote>
-	<? echo _("Um die vorgewählte Veranstaltung zu kopieren klicken sie <a href=\"admin_seminare_assi.php?cmd=do_copy&cp_id=$SessSemName[1]&start_level=TRUE&class=1\">hier</a>."); ?>
+	<? printf(_("Um die vorgewählte Veranstaltung zu kopieren klicken sie %shier%s."),'<a href="admin_seminare_assi.php?cmd=do_copy&cp_id='.$SessSemName[1].'&start_level=TRUE&class=1">','</a>'); ?>
 	</blockquote>
 	<br />
 	</td></tr>
