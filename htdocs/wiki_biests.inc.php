@@ -37,12 +37,12 @@ $biest_templates['biest']=array(
 	// - $author for author name
 	// - $create_time for time at creation
 	"template"=>'!!!!$pagename
-	Autor: $author
-	Erstellt: $create_time
-	Zuständig: $biest_zustaendig
-	Zusammenfassung: $biest_zusammenfassung
-	Status: offen
-	Beschreibung: $biest_beschreibung', 
+Autor: $author
+Erstellt: $create_time
+Zuständig: $biest_zustaendig
+Zusammenfassung: $biest_zusammenfassung
+Status: offen
+Beschreibung: $biest_beschreibung', 
 	// list of fields to parse for list view, matching is case-insensitive
 	// order must be same as indicated by listheader
 	// first field (name) will be added
