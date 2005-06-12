@@ -224,11 +224,11 @@ function getLock($keyword) {
 	$num=$db->nf();
 	while ($db->next_record()) {
 		if ($count>0 && $count==$num-1) {
-			$lockstring .= _(" und ");
+			$lockstring .= ' ' . _("und"). ' ';
 		} else if ($count>0) {
 			$lockstring .= ", ";
 		}
-		$lockstring .= get_fullname($db->f("user_id"));
+		$lockstring .= get_fullname($db->f("user_id"), 'full', true);
 		$lockstring .= sprintf(_(" (seit %d Minuten)"), ceil((time()-$db->f("chdate"))/60));
 		$count++;
 	}
@@ -775,7 +775,7 @@ function wikiEdit($keyword, $wikiData, $user_id, $backpage=NULL) {
 	}
 
 	$cont .= "<p><form method=\"post\" action=\"".$PHP_SELF."?keyword=".urlencode($keyword)."&cmd=edit\">";
-	$cont .= "<textarea name=\"body\" cols=\"80\" rows=\"15\">$body</textarea>\n";
+	$cont .= '<textarea name="body" cols="80" rows="15">' . htmlready($body) . "</textarea>\n";
 	$cont .= "<input type=\"hidden\" name=\"wiki\" value=\"".urlencode($keyword)."\">";
 	$cont .= "<input type=\"hidden\" name=\"version\" value=\"$version\">";
 	$cont .= "<input type=\"hidden\" name=\"submit\" value=\"true\">";
@@ -784,7 +784,7 @@ function wikiEdit($keyword, $wikiData, $user_id, $backpage=NULL) {
 	$cont .= "</form>\n";
 	printcontent(0,0,$cont,"");
 	$infobox = array ();
-	$infobox[] = array("kategorie" => _("Information"), "eintrag" => array(array("icon"=>"pictures/ausruf_small.gif", "text"=> _("Sie k&ouml;nnen beliebigen Text einf&uuml;gen und vorhandenen Text &auml;ndern. Beachten Sie dabei die <a href=\"help/index.php?help_page=ix_forum6.htm\" target=\"_new\"> Formatierungsm&ouml;glichkeiten</a>. Links entstehen automatisch aus W&ouml;rtern, die mit Gro&szlig;buchstaben beginnen und einen Gro&szlig;buchstaben in der Wortmitte enthalten."))));
+	$infobox[] = array("kategorie" => _("Information"), "eintrag" => array(array("icon"=>"pictures/ausruf_small.gif", "text"=> sprintf(_("Sie k&ouml;nnen beliebigen Text einf&uuml;gen und vorhandenen Text &auml;ndern. Beachten Sie dabei die %s Formatierungsm&ouml;glichkeiten%s. Links entstehen automatisch aus W&ouml;rtern, die mit Gro&szlig;buchstaben beginnen und einen Gro&szlig;buchstaben in der Wortmitte enthalten."),'<a href="help/index.php?help_page=ix_forum6.htm" target="_new">','</a>'))));
 	end_blank_table();
 	echo "</td>"; // end of content area
 	showPageFrameEnd($infobox);
