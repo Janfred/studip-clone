@@ -5,6 +5,7 @@ require_once $ABSOLUTE_PATH_STUDIP . 'forum.inc.php';
 // wikiMarkup patterns are replaced
 // args to wikiMarkup are passed to preg_replace
 //
+// $Id$
 
 wikiMarkup('/\\(:stepform:\\)/e',"wiki_stepform('step')", 'dozent');
 wikiMarkup('/\\(:steplist\\s*(.*?):\\)/e',"wiki_steplist('step',array('q'=>'$1'))");
@@ -132,7 +133,7 @@ function wiki_newstep($template_name) {
 	$userid=$auth->auth['uid'];
 	$query="INSERT INTO wiki SET range_id='$SessSemName[1]', keyword='$pagename', body='".$text."', user_id='$userid', chdate='".time()."', version='1'";
 	$db->query($query);
-	$wiki_plugin_messages[]="msg§"._("Ein neuer Eintrag wurde angelegt. Sie können ihn nun weiter bearbeiten oder <a href=\"$PHP_SELF?keyword=$keyword\">zurück zur Ausgangsseite</a> gehen.");
+	$wiki_plugin_messages[]="msg§".sprintf(_("Ein neuer Eintrag wurde angelegt. Sie können ihn nun weiter bearbeiten oder %szurück zur Ausgangsseite%s gehen."),"<a href=\"$PHP_SELF?keyword=$keyword\">",'</a>');
 	if ($step_create_topic){
 		if(CreateTopic($pagename . ': ' . $step_zusammenfassung, get_fullname($userid), $step_beschreibung, 0, 0, $SessSemName[1],$userid)){
 			$wiki_plugin_messages[]="msg§"._("Ein neues Thema im Forum wurde angelegt.");
@@ -161,22 +162,23 @@ function wiki_steplist($template_name,$opt) {
 	foreach($terms as $t) {
 		if (trim($t)=='') continue;
 		if (preg_match('/([^\'":=]*)[:=]([\'"]?)(.*?)\\2$/',$t,$match))
-			$opt[strtolower($match[1])] = $match[3]; 
+			$opt[strtolower($match[1])] = $match[3];
 	}
 	$n=0; $slist=array();
 	foreach($steplist as $s) {
 		$page = getLatestVersion($s,$SessSemName[1]);
 		preg_match_all("/(^|\n)([A-Za-z][^:]*):([^\n]*)/",$page['body'],$match);
 		$fields = array();
-		for($i=0;$i<count($match[2]);$i++) 
+		for($i=0;$i<count($match[2]);$i++)
 			$fields[strtolower($match[2][$i])] = htmlentities($match[3][$i],ENT_QUOTES);
 		foreach(explode(',',$template['stdorder']) as $h) {
-			if (!@$opt[$h]) continue;
-			foreach(preg_split('/[ ,]/',$opt[$h]) as $t) {
+			$h_html = htmlentities($h);
+			if (!@$opt[$h_html]) continue;
+			foreach(preg_split('/[ ,]/',$opt[$h_html]) as $t) {
 				if (substr($t,0,1)!='-' && substr($t,0,1)!='!') {
-					if (strpos(strtolower(@$fields[$h]),strtolower($t))===false) 
+					if (strpos(strtolower(@$fields[$h]),strtolower($t))===false)
 						continue 3;
-				} else if (strpos(strtolower(@$fields[$h]), strtolower(substr($t,1)))!==false) 
+				} else if (strpos(strtolower(@$fields[$h]), strtolower(substr($t,1)))!==false)
 					continue 3;
 			}
 		}
