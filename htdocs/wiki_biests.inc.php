@@ -46,7 +46,7 @@ Beschreibung: $biest_beschreibung',
 	// list of fields to parse for list view, matching is case-insensitive
 	// order must be same as indicated by listheader
 	// first field (name) will be added
-	"listview"=>array('erstellt','autor','zust&auml;ndig','status','beschreibung'),
+	"listview"=>array('erstellt','autor','zust&auml;ndig','status','zusammenfassung'),
 	// standard order of fields for sort function
   	"stdorder"=>'-erstellt,status,autor,zust&auml;ndig,beschreibung',
 	// header for list tables, first column always is the pages name
@@ -122,8 +122,7 @@ function wiki_newbiest($template_name) {
 	$userid=$auth->auth['uid'];
 	$query="INSERT INTO wiki SET range_id='$SessSemName[1]', keyword='$pagename', body='".$text."', user_id='$userid', chdate='".time()."', version='1'";
 	$db->query($query);
-	$wiki_plugin_messages[]="msg§"._("Ein neuer Eintrag wurde angelegt. Sie k&ouml;nnen ihn nun weiter bearbeiten oder <a href=\"$PHP_SELF?keyword=$keyword\">zur&uuml;ck zur Ausgangsseite</a> gehen.");
-	if ($biest_create_topic){
+	$wiki_plugin_messages[]="msg§".sprintf(_("Ein neuer Eintrag wurde angelegt. Sie können ihn nun weiter bearbeiten oder %szurück zur Ausgangsseite%s gehen."),"<a href=\"$PHP_SELF?keyword=$keyword\">",'</a>');	if ($biest_create_topic){
 		if(CreateTopic($pagename . ': ' . $biest_zusammenfassung, get_fullname($userid), $biest_beschreibung, 0, 0, $SessSemName[1],$userid)){
 			$wiki_plugin_messages[]="msg§"._("Ein neues Thema im Forum wurde angelegt.");
 		}
@@ -151,22 +150,23 @@ function wiki_biestlist($template_name,$opt) {
 	foreach($terms as $t) {
 		if (trim($t)=='') continue;
 		if (preg_match('/([^\'":=]*)[:=]([\'"]?)(.*?)\\2$/',$t,$match))
-			$opt[strtolower($match[1])] = $match[3]; 
+			$opt[strtolower($match[1])] = $match[3];
 	}
 	$n=0; $slist=array();
 	foreach($biestlist as $s) {
 		$page = getLatestVersion($s,$SessSemName[1]);
 		preg_match_all("/(^|\n)([A-Za-z][^:]*):([^\n]*)/",$page['body'],$match);
 		$fields = array();
-		for($i=0;$i<count($match[2]);$i++) 
+		for($i=0;$i<count($match[2]);$i++)
 			$fields[strtolower($match[2][$i])] = htmlentities($match[3][$i],ENT_QUOTES);
 		foreach(explode(',',$template['stdorder']) as $h) {
-			if (!@$opt[$h]) continue;
-			foreach(preg_split('/[ ,]/',$opt[$h]) as $t) {
+			$h_html = htmlentities($h);
+			 if (!@$opt[$h_html]) continue;
+			 foreach(preg_split('/[ ,]/',$opt[$h_html]) as $t) {
 				if (substr($t,0,1)!='-' && substr($t,0,1)!='!') {
-					if (strpos(strtolower(@$fields[$h]),strtolower($t))===false) 
+					if (strpos(strtolower(@$fields[$h]),strtolower($t)) === false)
 						continue 3;
-				} else if (strpos(strtolower(@$fields[$h]), strtolower(substr($t,1)))!==false) 
+				} else if (strpos(strtolower(@$fields[$h]), strtolower(substr($t,1)))!==false)
 					continue 3;
 			}
 		}
