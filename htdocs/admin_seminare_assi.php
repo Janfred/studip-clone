@@ -2821,7 +2821,7 @@ if ($level == 4) {
 							<font size="-1"><b><?=_("freie Angaben zu R&auml;umen"); ?></b></font><br /><br />
 							<table border="0" width="100%" cellspaceing="2" cellpadding="0">
 								<?
-								printf ("<font size=\"-1\">"._("%sSie k&ouml;nnen zu jedem Termin freie Angaben zu Raum bzw. Ort machen:")."</font><br />", (($resList->roomsExist()) && ($RESOURCES_ENABLE)) ? "<i><u>"._("oder:")."</u></i>&nbsp;" : "");
+								printf ("<font size=\"-1\">"._("%sSie k&ouml;nnen zu jedem Termin freie Angaben zu Raum bzw. Ort machen:")."</font><br />", (($RESOURCES_ENABLE && $resList->roomsExist()) ? "<i><u>"._("oder:")."</u></i>&nbsp;" : ""));
 								if ($sem_create_data["term_art"] == 0) {
 									if (is_array($sem_create_data["metadata_termin"]["turnus_data"])) {
 										foreach ($sem_create_data["metadata_termin"]["turnus_data"] as $val) {
