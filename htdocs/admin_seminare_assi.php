@@ -811,7 +811,7 @@ if (($form == 3) && ($jump_next_x))
 				if ((($sem_create_data["term_turnus_start_stunde"][$i]>23) || ($sem_create_data["term_turnus_start_stunde"][$i]<0))  ||  (($sem_create_data["term_turnus_start_minute"][$i]>59) || ($sem_create_data["term_turnus_start_minute"][$i]<0))  ||  (($sem_create_data["term_turnus_end_stunde"][$i]>23) ||($sem_create_data["term_turnus_end_stunde"][$i]<0))  || (($sem_create_data["term_turnus_end_minute"][$i]>59) || ($sem_create_data["term_turnus_end_minute"][$i]<0)))
 						{
 						if (!$just_informed3)
-							$errormsg=$errormsg."error§"._("Sie haben eine ung&uuml;ltige Zeit eingegeben. Bitte korrigieren sie dies!")."§";
+							$errormsg=$errormsg."error§"._("Sie haben eine ung&uuml;ltige Zeit eingegeben. Bitte korrigieren Sie dies!")."§";
 						$just_informed3=TRUE;
 						}
 				if (mktime($sem_create_data["term_turnus_start_stunde"][$i], $sem_create_data["term_turnus_start_minute"][$i], 0, 1, 1, 2001) > mktime($sem_create_data["term_turnus_end_stunde"][$i], $sem_create_data["term_turnus_end_minute"][$i], 0, 1, 1, 2001))
@@ -847,12 +847,12 @@ if (($form == 3) && ($jump_next_x))
 				if ((($sem_create_data["term_start_stunde"][$i]>23) || ($sem_create_data["term_start_stunde"][$i]<0))  ||  (($sem_create_data["term_start_minute"][$i]>59) || ($sem_create_data["term_start_minute"][$i]<0))  ||  (($sem_create_data["term_end_stunde"][$i]>23) ||($sem_create_data["term_end_stunde"][$i]<0))  || (($sem_create_data["term_end_minute"][$i]>59) || ($sem_create_data["term_end_minute"][$i]<0)))
 						{
 						if (!$just_informed3)
-							$errormsg=$errormsg."error§"._("Sie haben eine ung&uuml;ltige Zeit eingegeben, bitte korrigieren sie dies!")."§";
+							$errormsg=$errormsg."error§"._("Sie haben eine ung&uuml;ltige Zeit eingegeben, bitte korrigieren Sie dies!")."§";
 						$just_informed3=TRUE;
 						}
 				if (mktime($sem_create_data["term_start_stunde"][$i], $sem_create_data["term_start_minute"][$i], 0, 1, 1, 2001) > mktime($sem_create_data["term_end_stunde"][$i], $sem_create_data["term_end_minute"][$i], 0, 1, 1, 2001))
 					if ((!$just_informed5) && (!$just_informed)) {
-						$errormsg=$errormsg."error§"._("Die Endzeitpunkt der Termine muss nach dem jeweiligen Startzeitpunkt liegen!")."§";
+						$errormsg=$errormsg."error§"._("Der Endzeitpunkt der Termine muss nach dem jeweiligen Startzeitpunkt liegen!")."§";
 						$just_informed5=TRUE;
 					}
 			}
