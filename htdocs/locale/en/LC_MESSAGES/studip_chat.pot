@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2004-10-13 23:09+0200\n"
+"POT-Creation-Date: 2005-06-30 22:56+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,9 +15,24 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#: chat/ChatServer.class.php:137
+#, c-format
+msgid "%s hat den Chat betreten!"
+msgstr ""
+
+#: chat/ChatServer.class.php:162
+#, c-format
+msgid "%s hat den Chat verlassen!"
+msgstr ""
+
+#: chat/ChatServer.class.php:227
+#, c-format
+msgid "%s hat sich aus Stud.IP ausgeloggt!"
+msgstr ""
+
 #: chat/chat_client.php:89
 #, c-format
-msgid "Ihre %sSchriftfarbe</font> wurde ge&auml;ndert!"
+msgid "Ihre %sSchriftfarbe%s wurde ge&auml;ndert!"
 msgstr ""
 
 #: chat/chat_client.php:99
@@ -55,7 +70,7 @@ msgstr ""
 
 #: chat/chat_client.php:142
 #, c-format
-msgid "<b>%s</b> ist in diesem Chat nicht bekannt."
+msgid "%s ist in diesem Chat nicht bekannt."
 msgstr ""
 
 #: chat/chat_client.php:144 chat/chat_client.php:179 chat/chat_client.php:190
@@ -78,7 +93,7 @@ msgstr ""
 
 #: chat/chat_client.php:196
 #, c-format
-msgid "Ihre Nachricht an <b>%s</b> wurde verschickt."
+msgid "Ihre Nachricht an %s wurde verschickt."
 msgstr ""
 
 #: chat/chat_client.php:198
@@ -91,7 +106,7 @@ msgstr ""
 
 #: chat/chat_client.php:216
 #, c-format
-msgid "Ihre Einladung an <b>%s</b> wurde verschickt."
+msgid "Ihre Einladung an %s wurde verschickt."
 msgstr ""
 
 #: chat/chat_client.php:218
@@ -108,14 +123,12 @@ msgstr ""
 
 #: chat/chat_client.php:233
 #, c-format
-msgid "Dieser Chat wurde soeben von <b>%s</b> mit einem Passwort gesichert."
+msgid "Dieser Chat wurde soeben von %s mit einem Passwort gesichert."
 msgstr ""
 
 #: chat/chat_client.php:237
 #, c-format
-msgid ""
-"Der Passwortschutz f&uuml;r diesen Chat wurde soeben von <b>%s</b> "
-"aufgehoben."
+msgid "Der Passwortschutz f&uuml;r diesen Chat wurde soeben von %s aufgehoben."
 msgstr ""
 
 #: chat/chat_client.php:241
@@ -141,12 +154,12 @@ msgstr ""
 
 #: chat/chat_client.php:276
 #, c-format
-msgid "Es wurde soeben von <b>%s</b> eine Aufzeichnung gestartet."
+msgid "Es wurde soeben von %s eine Aufzeichnung gestartet."
 msgstr ""
 
 #: chat/chat_client.php:283
 #, c-format
-msgid "Die Aufzeichnung von <b>%s</b> wurde beendet."
+msgid "Die Aufzeichnung von %s wurde beendet."
 msgstr ""
 
 #: chat/chat_client.php:284
@@ -171,27 +184,29 @@ msgstr ""
 
 #: chat/chat_client.php:316
 #, c-format
-msgid "Unbekanntes Kommando: <b>%s</b>"
+msgid "Unbekanntes Kommando: %s"
 msgstr ""
 
 #: chat/chat_client.php:382
 msgid "Sie mussten den Chat verlassen..."
 msgstr ""
 
-#: chat/chat_client.php:384 chat/chat_client.php:395
-msgid "Hier</a> k&ouml;nnen Sie versuchen wieder einzusteigen.<br>"
+#: chat/chat_client.php:383 chat/chat_client.php:393
+#, c-format
+msgid "%sHier%s k&ouml;nnen Sie versuchen wieder einzusteigen."
 msgstr ""
 
-#: chat/chat_client.php:392
-msgid "<b>IDLE TIMEOUT</b> - Sie wurden aus dem Chat entfernt!<br>"
+#: chat/chat_client.php:391
+#, c-format
+msgid "%sIDLE TIMEOUT%s - Sie wurden aus dem Chat entfernt!"
 msgstr ""
 
-#: chat/chat_client.php:423 chat/chat_input.php:121 chat/chat_nicklist.php:77
+#: chat/chat_client.php:421 chat/chat_input.php:121 chat/chat_nicklist.php:77
 #: chat/chat_status.php:104
-msgid "<font size=\"-1\">Sie sind nicht in diesem Chat angemeldet!</font>"
+msgid "Sie sind nicht in diesem Chat angemeldet!"
 msgstr ""
 
-#: chat/chat_client.php:429
+#: chat/chat_client.php:427
 #, c-format
 msgid "Hallo %s,<br> willkommen im Raum: %s"
 msgstr ""
@@ -420,21 +435,6 @@ msgstr ""
 
 #: chat/chat_nicklist.php:107
 msgid "diesem Nutzer / dieser Nutzerin eine private Botschaft senden"
-msgstr ""
-
-#: chat/ChatServer.class.php:137
-#, c-format
-msgid "%s hat den Chat betreten!"
-msgstr ""
-
-#: chat/ChatServer.class.php:162
-#, c-format
-msgid "%s hat den Chat verlassen!"
-msgstr ""
-
-#: chat/ChatServer.class.php:227
-#, c-format
-msgid "%s hat sich aus Stud.IP ausgeloggt!"
 msgstr ""
 
 #: chat/chat_status.php:121

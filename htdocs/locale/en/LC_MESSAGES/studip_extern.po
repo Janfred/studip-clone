@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: studip_extern\n"
-"POT-Creation-Date: 2004-10-13 23:09+0200\n"
+"POT-Creation-Date: 2005-06-30 22:56+0200\n"
 "PO-Revision-Date: 2004-09-27 13:57+GMT\n"
 "Last-Translator: \n"
 "Language-Team:  <de@li.org>\n"
@@ -832,47 +832,47 @@ msgstr "Link to the staff details module "
 msgid "Link zum Dateidownload"
 msgstr "Link to download file"
 
-#: extern/modules/ExternModuleDownload.class.php:241
+#: extern/modules/ExternModuleDownload.class.php:246
 msgid "Das ist eine Text-Datei."
 msgstr "That is a text file."
 
-#: extern/modules/ExternModuleDownload.class.php:244
+#: extern/modules/ExternModuleDownload.class.php:249
 msgid "Das ist eine Powerpoint-Datei."
 msgstr "That is a Powerpoint file."
 
-#: extern/modules/ExternModuleDownload.class.php:247
+#: extern/modules/ExternModuleDownload.class.php:252
 msgid "Das ist eine ZIP-Datei."
 msgstr "That is a ZIP file."
 
-#: extern/modules/ExternModuleDownload.class.php:250
+#: extern/modules/ExternModuleDownload.class.php:255
 msgid "Das ist eine Excel-Datei."
 msgstr "That is an Excel file."
 
-#: extern/modules/ExternModuleDownload.class.php:253
+#: extern/modules/ExternModuleDownload.class.php:258
 msgid "Das ist eine Bild-Datei."
 msgstr "That is a picture file."
 
-#: extern/modules/ExternModuleDownload.class.php:256
+#: extern/modules/ExternModuleDownload.class.php:261
 msgid "Das ist ein Dokument im Microsoft Rich-Text-Format."
 msgstr "That is a document in Microsoft Rich Text Format."
 
-#: extern/modules/ExternModuleDownload.class.php:259
+#: extern/modules/ExternModuleDownload.class.php:264
 msgid "Das ist ein Adobe PDF-Dokument."
 msgstr "That is an Adobe PDF document."
 
-#: extern/modules/ExternModuleDownload.class.php:262
+#: extern/modules/ExternModuleDownload.class.php:267
 msgid "Und noch ein ZIP-Archiv."
 msgstr "And another ZIP archive."
 
-#: extern/modules/ExternModuleDownload.class.php:265
+#: extern/modules/ExternModuleDownload.class.php:270
 msgid "Eine weitere Text-Datei."
 msgstr "Another text file."
 
-#: extern/modules/ExternModuleDownload.class.php:268
+#: extern/modules/ExternModuleDownload.class.php:273
 msgid "Ein Bild im PNG-Format."
 msgstr "A picture in PNG format."
 
-#: extern/modules/ExternModuleDownload.class.php:271
+#: extern/modules/ExternModuleDownload.class.php:276
 msgid "Eine anderes Format."
 msgstr "Another format."
 
@@ -1211,10 +1211,6 @@ msgstr "Message"
 #: extern/modules/ExternModuleNews.class.php:69
 msgid "Datenzeilen, Schrift von Name und Datum"
 msgstr "Data rows, font for name and date."
-
-#: extern/modules/ExternModuleNewsticker.class.php:68
-msgid "Newsticker - Vorschau"
-msgstr "Newsticker - preview"
 
 #: extern/modules/ExternModuleNewsticker.class.php:138
 #: extern/modules/views/newsticker_preview.inc.php:17
@@ -3463,6 +3459,9 @@ msgstr "under group names"
 #: extern/elements/main/ExternElementMainSemlecturetree.class.php:90
 msgid "Umschlie&szlig;ende Tabelle"
 msgstr "Enclosed table"
+
+#~ msgid "Newsticker - Vorschau"
+#~ msgstr "Newsticker - preview"
 
 #~ msgid "der Georg-August-Universit&auml;t G&ouml;ttingen"
 #~ msgstr "The Georg-August University Goettingen"

@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2004-10-13 23:09+0200\n"
+"POT-Creation-Date: 2005-06-30 22:56+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -774,47 +774,47 @@ msgstr ""
 msgid "Link zum Dateidownload"
 msgstr ""
 
-#: extern/modules/ExternModuleDownload.class.php:241
+#: extern/modules/ExternModuleDownload.class.php:246
 msgid "Das ist eine Text-Datei."
 msgstr ""
 
-#: extern/modules/ExternModuleDownload.class.php:244
+#: extern/modules/ExternModuleDownload.class.php:249
 msgid "Das ist eine Powerpoint-Datei."
 msgstr ""
 
-#: extern/modules/ExternModuleDownload.class.php:247
+#: extern/modules/ExternModuleDownload.class.php:252
 msgid "Das ist eine ZIP-Datei."
 msgstr ""
 
-#: extern/modules/ExternModuleDownload.class.php:250
+#: extern/modules/ExternModuleDownload.class.php:255
 msgid "Das ist eine Excel-Datei."
 msgstr ""
 
-#: extern/modules/ExternModuleDownload.class.php:253
+#: extern/modules/ExternModuleDownload.class.php:258
 msgid "Das ist eine Bild-Datei."
 msgstr ""
 
-#: extern/modules/ExternModuleDownload.class.php:256
+#: extern/modules/ExternModuleDownload.class.php:261
 msgid "Das ist ein Dokument im Microsoft Rich-Text-Format."
 msgstr ""
 
-#: extern/modules/ExternModuleDownload.class.php:259
+#: extern/modules/ExternModuleDownload.class.php:264
 msgid "Das ist ein Adobe PDF-Dokument."
 msgstr ""
 
-#: extern/modules/ExternModuleDownload.class.php:262
+#: extern/modules/ExternModuleDownload.class.php:267
 msgid "Und noch ein ZIP-Archiv."
 msgstr ""
 
-#: extern/modules/ExternModuleDownload.class.php:265
+#: extern/modules/ExternModuleDownload.class.php:270
 msgid "Eine weitere Text-Datei."
 msgstr ""
 
-#: extern/modules/ExternModuleDownload.class.php:268
+#: extern/modules/ExternModuleDownload.class.php:273
 msgid "Ein Bild im PNG-Format."
 msgstr ""
 
-#: extern/modules/ExternModuleDownload.class.php:271
+#: extern/modules/ExternModuleDownload.class.php:276
 msgid "Eine anderes Format."
 msgstr ""
 
@@ -1152,10 +1152,6 @@ msgstr ""
 
 #: extern/modules/ExternModuleNews.class.php:69
 msgid "Datenzeilen, Schrift von Name und Datum"
-msgstr ""
-
-#: extern/modules/ExternModuleNewsticker.class.php:68
-msgid "Newsticker - Vorschau"
 msgstr ""
 
 #: extern/modules/ExternModuleNewsticker.class.php:138

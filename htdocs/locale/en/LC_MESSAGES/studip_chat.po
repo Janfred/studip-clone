@@ -1,24 +1,39 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# translation of studip_chat.po to
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER.
+# Jens Schmelzer <jens.schmelzer@fh-jena.de>, 2005.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2004-10-13 23:09+0200\n"
-"PO-Revision-Date: 2003-10-01 11:20+0200\n"
-"Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
-"Language-Team: english\n"
+"Project-Id-Version: studip_chat\n"
+"POT-Creation-Date: 2005-06-30 22:56+0200\n"
+"PO-Revision-Date: 2005-06-29 23:05+0200\n"
+"Last-Translator: Jens Schmelzer <jens.schmelzer@fh-jena.de>\n"
+"Language-Team:  <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 0.9.6\n"
+"X-Generator: KBabel 1.10\n"
+
+#: chat/ChatServer.class.php:137
+#, c-format
+msgid "%s hat den Chat betreten!"
+msgstr "%s has entered the chat!"
+
+#: chat/ChatServer.class.php:162
+#, c-format
+msgid "%s hat den Chat verlassen!"
+msgstr "%s has left the chat!"
+
+#: chat/ChatServer.class.php:227
+#, c-format
+msgid "%s hat sich aus Stud.IP ausgeloggt!"
+msgstr "%s has logged out of Stud.IP!"
 
 #: chat/chat_client.php:89
 #, c-format
-msgid "Ihre %sSchriftfarbe</font> wurde ge&auml;ndert!"
-msgstr "Your %sfont colour</font> has been changed!"
+msgid "Ihre %sSchriftfarbe%s wurde ge&auml;ndert!"
+msgstr "Your %sfont colour%s has been changed!"
 
 #: chat/chat_client.php:99
 #, c-format
@@ -57,8 +72,8 @@ msgstr "A secret message from %s"
 
 #: chat/chat_client.php:142
 #, c-format
-msgid "<b>%s</b> ist in diesem Chat nicht bekannt."
-msgstr "<b>%s</b> is not known in this chat."
+msgid "%s ist in diesem Chat nicht bekannt."
+msgstr "%s is not known in this chat."
 
 #: chat/chat_client.php:144 chat/chat_client.php:179 chat/chat_client.php:190
 #: chat/chat_client.php:210 chat/chat_client.php:302
@@ -80,8 +95,8 @@ msgstr "You are not allowed to throw anyone out of here!"
 
 #: chat/chat_client.php:196
 #, c-format
-msgid "Ihre Nachricht an <b>%s</b> wurde verschickt."
-msgstr "Your message has been sent to <b>%s</b>."
+msgid "Ihre Nachricht an %s wurde verschickt."
+msgstr "Your message has been sent to %s."
 
 #: chat/chat_client.php:198
 msgid "Fehler: Ihre Nachricht konnte nicht verschickt werden!"
@@ -93,8 +108,8 @@ msgstr "Error: It doesn't make sense to send yourself messages!"
 
 #: chat/chat_client.php:216
 #, c-format
-msgid "Ihre Einladung an <b>%s</b> wurde verschickt."
-msgstr "Your invitation has been sent to <b>%s</b>."
+msgid "Ihre Einladung an %s wurde verschickt."
+msgstr "Your invitation has been sent to %s."
 
 #: chat/chat_client.php:218
 msgid "Fehler: Ihre Einladung konnte nicht verschickt werden!"
@@ -110,16 +125,13 @@ msgstr "You are not allowed to send any invitations for this chat!"
 
 #: chat/chat_client.php:233
 #, c-format
-msgid "Dieser Chat wurde soeben von <b>%s</b> mit einem Passwort gesichert."
-msgstr "This chat has just been secured with a password by <b>%s</b>."
+msgid "Dieser Chat wurde soeben von %s mit einem Passwort gesichert."
+msgstr "This chat has just been secured with a password by %s."
 
 #: chat/chat_client.php:237
 #, c-format
-msgid ""
-"Der Passwortschutz f&uuml;r diesen Chat wurde soeben von <b>%s</b> "
-"aufgehoben."
-msgstr ""
-"The password security for this chat has just been removed by <b>%s</b>. "
+msgid "Der Passwortschutz f&uuml;r diesen Chat wurde soeben von %s aufgehoben."
+msgstr "The password security for this chat has just been removed by %s. "
 
 #: chat/chat_client.php:241
 msgid "Dieser Chat ist nicht mit einem Passwort gesichert."
@@ -144,13 +156,13 @@ msgstr "You have let a recording run since %s."
 
 #: chat/chat_client.php:276
 #, c-format
-msgid "Es wurde soeben von <b>%s</b> eine Aufzeichnung gestartet."
-msgstr "A recording has just been started by <b>%s</b>."
+msgid "Es wurde soeben von %s eine Aufzeichnung gestartet."
+msgstr "A recording has just been started by %s."
 
 #: chat/chat_client.php:283
 #, c-format
-msgid "Die Aufzeichnung von <b>%s</b> wurde beendet."
-msgstr "The recording was ended by <b>%s</b>."
+msgid "Die Aufzeichnung von %s wurde beendet."
+msgstr "The recording was ended by %s."
 
 #: chat/chat_client.php:284
 msgid "Ihre Aufzeichnug wurde beendet und wird zu Ihrem Browser geschickt."
@@ -174,27 +186,29 @@ msgstr "You are not allowed to start a recording here!"
 
 #: chat/chat_client.php:316
 #, c-format
-msgid "Unbekanntes Kommando: <b>%s</b>"
-msgstr "Unknown command: <b>%s</b>"
+msgid "Unbekanntes Kommando: %s"
+msgstr "Unknown command: %s"
 
 #: chat/chat_client.php:382
 msgid "Sie mussten den Chat verlassen..."
 msgstr "You must leave the chat..."
 
-#: chat/chat_client.php:384 chat/chat_client.php:395
-msgid "Hier</a> k&ouml;nnen Sie versuchen wieder einzusteigen.<br>"
-msgstr "Here</a> you can try to enter the chat again.<br>"
+#: chat/chat_client.php:383 chat/chat_client.php:393
+#, c-format
+msgid "%sHier%s k&ouml;nnen Sie versuchen wieder einzusteigen."
+msgstr "%sHere%s you can try to enter the chat again."
 
-#: chat/chat_client.php:392
-msgid "<b>IDLE TIMEOUT</b> - Sie wurden aus dem Chat entfernt!<br>"
-msgstr "<b>IDLE TIMEOUT</b> - You have been removed from the chat!<br>"
+#: chat/chat_client.php:391
+#, c-format
+msgid "%sIDLE TIMEOUT%s - Sie wurden aus dem Chat entfernt!"
+msgstr "%sIDLE TIMEOUT%s - You have been removed from the chat!"
 
-#: chat/chat_client.php:423 chat/chat_input.php:121 chat/chat_nicklist.php:77
+#: chat/chat_client.php:421 chat/chat_input.php:121 chat/chat_nicklist.php:77
 #: chat/chat_status.php:104
-msgid "<font size=\"-1\">Sie sind nicht in diesem Chat angemeldet!</font>"
-msgstr "<font size=\"-1\">You are not registered in this chat!</font>"
+msgid "Sie sind nicht in diesem Chat angemeldet!"
+msgstr "You are not registered in this chat!"
 
-#: chat/chat_client.php:429
+#: chat/chat_client.php:427
 #, c-format
 msgid "Hallo %s,<br> willkommen im Raum: %s"
 msgstr "Hello %s,<br>welcome to room: %s"
@@ -442,21 +456,6 @@ msgstr "Throw this user out of the chat"
 msgid "diesem Nutzer / dieser Nutzerin eine private Botschaft senden"
 msgstr "Send this user a private message"
 
-#: chat/ChatServer.class.php:137
-#, c-format
-msgid "%s hat den Chat betreten!"
-msgstr "%s has entered the chat!"
-
-#: chat/ChatServer.class.php:162
-#, c-format
-msgid "%s hat den Chat verlassen!"
-msgstr "%s has left the chat!"
-
-#: chat/ChatServer.class.php:227
-#, c-format
-msgid "%s hat sich aus Stud.IP ausgeloggt!"
-msgstr "%s has logged out of Stud.IP!"
-
 #: chat/chat_status.php:121
 msgid "Zugangsschutz für diesen Chat aufheben"
 msgstr "Remove access protection for this chat"
@@ -496,6 +495,3 @@ msgstr "Show chat commands"
 #: chat/chat_status.php:165
 msgid "Alle verfügbaren Smileys anzeigen"
 msgstr "Show all available smileys"
-
-#~ msgid "Hier</a> k&oumlnnen Sie versuchen wieder einzusteigen.<br>"
-#~ msgstr "Here</a> you can try to enter the chat again.<br>"

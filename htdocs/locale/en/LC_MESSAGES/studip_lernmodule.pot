@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2004-10-13 23:09+0200\n"
+"POT-Creation-Date: 2005-06-30 22:56+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,125 +15,125 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: lernmodule/lernmodul_db_functions.inc.php:98
+#: lernmodule/lernmodul_db_functions.inc.php:150
 msgid "Stud.IP-User wurde nicht gefunden."
 msgstr ""
 
-#: lernmodule/lernmodul_db_functions.inc.php:103
+#: lernmodule/lernmodul_db_functions.inc.php:155
 msgid "Sie sind nicht als User im angebundenen ILIAS-System eingetragen."
 msgstr ""
 
-#: lernmodule/lernmodul_linking_functions.inc.php:16
+#: lernmodule/lernmodul_linking_functions.inc.php:47
 #, c-format
 msgid " (%s Seiten)"
 msgstr ""
 
-#: lernmodule/lernmodul_linking_functions.inc.php:18
+#: lernmodule/lernmodul_linking_functions.inc.php:49
 msgid " (1 Seite)"
 msgstr ""
 
-#: lernmodule/lernmodul_linking_functions.inc.php:21
+#: lernmodule/lernmodul_linking_functions.inc.php:52
 #, c-format
 msgid "Diese Lerneinheit enth&auml;lt %s Seiten. "
 msgstr ""
 
-#: lernmodule/lernmodul_linking_functions.inc.php:23
+#: lernmodule/lernmodul_linking_functions.inc.php:54
 msgid "Diese Lerneinheit enth&auml;lt eine Seite. "
 msgstr ""
 
-#: lernmodule/lernmodul_linking_functions.inc.php:25
+#: lernmodule/lernmodul_linking_functions.inc.php:56
 msgid "Es gibt eine Testfrage zu der Lerneinheit."
 msgstr ""
 
-#: lernmodule/lernmodul_linking_functions.inc.php:27
+#: lernmodule/lernmodul_linking_functions.inc.php:58
 #, c-format
 msgid "Es gibt %s Testfragen zu der Lerneinheit."
 msgstr ""
 
-#: lernmodule/lernmodul_user_functions.inc.php:103
+#: lernmodule/lernmodul_user_functions.inc.php:216
 #, c-format
 msgid "Der ILIAS-User '%s' existiert bereits!<br>"
 msgstr ""
 
-#: lernmodule/lernmodul_user_functions.inc.php:157
+#: lernmodule/lernmodul_user_functions.inc.php:270
 msgid "Datenbankoperation konnte nicht ausgeführt werden!"
 msgstr ""
 
-#: lernmodule/lernmodul_view_functions.inc.php:8
+#: lernmodule/lernmodul_view_functions.inc.php:29
 msgid "Es wurden keine Lernmodule zu diesem Suchbegriff gefunden."
 msgstr ""
 
-#: lernmodule/lernmodul_view_functions.inc.php:14
+#: lernmodule/lernmodul_view_functions.inc.php:35
 msgid "Es wurde ein Lernmodul gefunden:"
 msgstr ""
 
-#: lernmodule/lernmodul_view_functions.inc.php:16
+#: lernmodule/lernmodul_view_functions.inc.php:37
 #, c-format
 msgid "%s Lernmodule wurden gefunden:"
 msgstr ""
 
-#: lernmodule/lernmodul_view_functions.inc.php:64
-#: lernmodule/lernmodul_view_functions.inc.php:123
+#: lernmodule/lernmodul_view_functions.inc.php:93
+#: lernmodule/lernmodul_view_functions.inc.php:160
 msgid "Sie haben Zugriff auf folgende Lernmodule:"
 msgstr ""
 
-#: lernmodule/lernmodul_view_functions.inc.php:113
+#: lernmodule/lernmodul_view_functions.inc.php:142
 msgid "Sie haben bisher keine ILIAS-Lernmodule angelegt."
 msgstr ""
 
-#: lernmodule/lernmodul_view_functions.inc.php:173
-#: lernmodule/lernmodul_view_functions.inc.php:332
+#: lernmodule/lernmodul_view_functions.inc.php:210
+#: lernmodule/lernmodul_view_functions.inc.php:388
 msgid "Es sind keine Lernmodule vorhanden."
 msgstr ""
 
-#: lernmodule/lernmodul_view_functions.inc.php:187
+#: lernmodule/lernmodul_view_functions.inc.php:235
 msgid "Offizielle Lernmodule dieser Einrichtung:"
 msgstr ""
 
-#: lernmodule/lernmodul_view_functions.inc.php:189
+#: lernmodule/lernmodul_view_functions.inc.php:237
 msgid "Offizielle Lernmodule dieser Veranstaltung:"
 msgstr ""
 
-#: lernmodule/lernmodul_view_functions.inc.php:194
+#: lernmodule/lernmodul_view_functions.inc.php:242
 msgid "Inoffizielle Lernmodule zu dieser Einrichtung:"
 msgstr ""
 
-#: lernmodule/lernmodul_view_functions.inc.php:196
+#: lernmodule/lernmodul_view_functions.inc.php:244
 msgid "Inoffizielle Lernmodule zu dieser Veranstaltung:"
 msgstr ""
 
-#: lernmodule/lernmodul_view_functions.inc.php:273
+#: lernmodule/lernmodul_view_functions.inc.php:329
 msgid "Folgende Lernmodule können eingebunden werden:"
 msgstr ""
 
-#: lernmodule/lernmodul_view_functions.inc.php:326
+#: lernmodule/lernmodul_view_functions.inc.php:382
 msgid "Alle verf&uuml;gbaren Lernmodule sind der Einrichtung zugeordnet."
 msgstr ""
 
-#: lernmodule/lernmodul_view_functions.inc.php:328
+#: lernmodule/lernmodul_view_functions.inc.php:384
 msgid "Alle verf&uuml;gbaren Lernmodule sind der Veranstaltung zugeordnet."
 msgstr ""
 
-#: lernmodule/lernmodul_view_functions.inc.php:348
+#: lernmodule/lernmodul_view_functions.inc.php:413
 msgid "Diese Einrichtung ist mit einem Lernmodul verbunden:"
 msgstr ""
 
-#: lernmodule/lernmodul_view_functions.inc.php:350
+#: lernmodule/lernmodul_view_functions.inc.php:415
 msgid "Diese Veranstaltung ist mit einem Lernmodul verbunden:"
 msgstr ""
 
-#: lernmodule/lernmodul_view_functions.inc.php:356
+#: lernmodule/lernmodul_view_functions.inc.php:421
 msgid "Diese Einrichtung ist mit den folgenden Lernmodulen verbunden:"
 msgstr ""
 
-#: lernmodule/lernmodul_view_functions.inc.php:358
+#: lernmodule/lernmodul_view_functions.inc.php:423
 msgid "Diese Veranstaltung ist mit den folgenden Lernmodulen verbunden:"
 msgstr ""
 
-#: lernmodule/lernmodul_view_functions.inc.php:366
+#: lernmodule/lernmodul_view_functions.inc.php:431
 msgid "Offizielle Lernmodule:"
 msgstr ""
 
-#: lernmodule/lernmodul_view_functions.inc.php:368
+#: lernmodule/lernmodul_view_functions.inc.php:433
 msgid "Inoffizielle Lernmodule:"
 msgstr ""

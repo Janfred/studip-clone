@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: studip_support\n"
-"POT-Creation-Date: 2004-10-13 23:09+0200\n"
+"POT-Creation-Date: 2005-06-30 22:56+0200\n"
 "PO-Revision-Date: 2003-07-25 17:23+0200\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
@@ -18,53 +18,6 @@ msgstr ""
 #: support/views/Msg.class.php:67 support/views/Msg.class.php:75
 msgid "zur&uuml;ck"
 msgstr "back"
-
-#: support/views/msgs_support.inc.php:39
-msgid ""
-"Sie k&ouml;nnen die Punktzahl nicht kleiner als die bereits verbrauchten "
-"Punkte einstellen!"
-msgstr ""
-"You can set the credit points number at a lower value than the already spent "
-"credit points! "
-
-#: support/views/msgs_support.inc.php:42
-msgid "Ung&uuml;ltiges Anfangsdatum des Vertrages!"
-msgstr "Invalid start date for the contract!"
-
-#: support/views/msgs_support.inc.php:45
-msgid "Ung&uuml;ltiges Enddatum des Vertrages!"
-msgstr "Invalid end date for the contract!"
-
-#: support/views/msgs_support.inc.php:48
-msgid "Der Vertrag wurde gel&ouml;scht"
-msgstr "The contract has been deleted"
-
-#: support/views/msgs_support.inc.php:51
-msgid "Die Anfrage wurde gel&ouml;scht"
-msgstr "The request has been deleted"
-
-#: support/views/msgs_support.inc.php:54
-msgid "Ung&uuml;ltiges Datum der Anfrage!"
-msgstr "Invalid request date!"
-
-#: support/views/msgs_support.inc.php:57
-msgid ""
-"Bitte geben Sie einen Bearbeiter/eine Bearbeiterin f&uuml;r die "
-"Bearbeitungszeit an!"
-msgstr "Please enter a processor for the processing time!"
-
-#: support/views/msgs_support.inc.php:60
-msgid ""
-"Bitte w&auml;hlen Sie zun&auml;chst einen Vertrag aus, um die Anfragen "
-"einzusehen oder zu bearbeiten!"
-msgstr ""
-"Please first select a contract in order to see the request or to edit it!"
-
-#: support/views/msgs_support.inc.php:63
-msgid ""
-"Es existieren keine TutorInnen oder AutorInnen, die mit der Anfrage "
-"verkn&uuml;pft werden k&ouml;nnten."
-msgstr "No tutors or authors exist with which the request could be linked."
 
 #: support/views/Overview.class.php:87
 msgid "Laufzeit: "
@@ -94,77 +47,6 @@ msgstr "Processing:"
 #: support/views/Overview.class.php:145
 msgid "verbleibende Punkte:"
 msgstr "Remaining points:"
-
-#: support/views/page_intros.inc.php:40
-msgid ""
-"Hier k&ouml;nnen Sie Einzelheiten zu ihrem abgeschlossenen Supportvertrag "
-"(wie den Punktestand oder die Laufzeit) einsehen."
-msgstr ""
-"Here you view details of your completed support contract (e.g. point status "
-"or the validity period)."
-
-#: support/views/page_intros.inc.php:41
-msgid "&Uuml;berblick &uuml;ber ihre Supportvertr&auml;ge"
-msgstr "Overview of your support contracts"
-
-#: support/views/page_intros.inc.php:42 support/views/page_intros.inc.php:57
-msgid "Information:"
-msgstr "Information:"
-
-#: support/views/page_intros.inc.php:43
-#, c-format
-msgid "Insgesamt <b>%s</b> Punkte, davon noch <b>%s</b> verf&uuml;gbar"
-msgstr "Total of <b>%s</b> points, of which still <b>%s</b> available"
-
-#: support/views/page_intros.inc.php:45 support/views/page_intros.inc.php:60
-#: support/views/page_intros.inc.php:64 support/views/page_intros.inc.php:68
-msgid "Aktionen:"
-msgstr "Actions:"
-
-#: support/views/page_intros.inc.php:46
-#, c-format
-msgid "Einen neuen Vertrag %sanlegen%s"
-msgstr "%sAdd%s a new contract "
-
-#: support/views/page_intros.inc.php:53
-#, c-format
-msgid ""
-"Sie sehen hier die letzten Anfragen, die im Rahmen des Supportvertrages vom "
-"<b>%s</b> bis <b>%s</b> gestellt wurden."
-msgstr ""
-"Here you can see the last requests made from <b>%s</b> until <b>%s</b> made "
-"within the context of the support contract."
-
-#: support/views/page_intros.inc.php:56
-msgid "Anfragen"
-msgstr "Requests"
-
-#: support/views/page_intros.inc.php:58
-#, c-format
-msgid "Es liegen noch <b>%s</b> unbeantwortete Anfragen im Forum vor"
-msgstr "There are <b>%s</b> unanswered requests in the forum."
-
-#: support/views/page_intros.inc.php:58
-msgid ""
-"Im Augenblick sind alle Themen im Forum mit Anfragen verkn&uuml;pft oder es "
-"liegen keine Themen vor."
-msgstr ""
-"At the moment all topics in the forum are linked with requests or no topics "
-"are presented."
-
-#: support/views/page_intros.inc.php:61
-#, c-format
-msgid "Eine neue Anfrage %sanlegen%s"
-msgstr "%sAdd%s a new request"
-
-#: support/views/page_intros.inc.php:65
-msgid "neue Suche"
-msgstr "new search"
-
-#: support/views/page_intros.inc.php:69
-#, c-format
-msgid "%sAlle%s Anfragen anzeigen."
-msgstr "Show %sall%s requests."
 
 #: support/views/Request.class.php:113
 msgid "kein Titel"
@@ -280,3 +162,121 @@ msgstr "Process request"
 #: support/views/ShowTreeRow.class.php:15
 msgid "Keine Beschreibung"
 msgstr "No description"
+
+#: support/views/msgs_support.inc.php:39
+msgid ""
+"Sie k&ouml;nnen die Punktzahl nicht kleiner als die bereits verbrauchten "
+"Punkte einstellen!"
+msgstr ""
+"You can set the credit points number at a lower value than the already spent "
+"credit points! "
+
+#: support/views/msgs_support.inc.php:42
+msgid "Ung&uuml;ltiges Anfangsdatum des Vertrages!"
+msgstr "Invalid start date for the contract!"
+
+#: support/views/msgs_support.inc.php:45
+msgid "Ung&uuml;ltiges Enddatum des Vertrages!"
+msgstr "Invalid end date for the contract!"
+
+#: support/views/msgs_support.inc.php:48
+msgid "Der Vertrag wurde gel&ouml;scht"
+msgstr "The contract has been deleted"
+
+#: support/views/msgs_support.inc.php:51
+msgid "Die Anfrage wurde gel&ouml;scht"
+msgstr "The request has been deleted"
+
+#: support/views/msgs_support.inc.php:54
+msgid "Ung&uuml;ltiges Datum der Anfrage!"
+msgstr "Invalid request date!"
+
+#: support/views/msgs_support.inc.php:57
+msgid ""
+"Bitte geben Sie einen Bearbeiter/eine Bearbeiterin f&uuml;r die "
+"Bearbeitungszeit an!"
+msgstr "Please enter a processor for the processing time!"
+
+#: support/views/msgs_support.inc.php:60
+msgid ""
+"Bitte w&auml;hlen Sie zun&auml;chst einen Vertrag aus, um die Anfragen "
+"einzusehen oder zu bearbeiten!"
+msgstr ""
+"Please first select a contract in order to see the request or to edit it!"
+
+#: support/views/msgs_support.inc.php:63
+msgid ""
+"Es existieren keine TutorInnen oder AutorInnen, die mit der Anfrage "
+"verkn&uuml;pft werden k&ouml;nnten."
+msgstr "No tutors or authors exist with which the request could be linked."
+
+#: support/views/page_intros.inc.php:40
+msgid ""
+"Hier k&ouml;nnen Sie Einzelheiten zu ihrem abgeschlossenen Supportvertrag "
+"(wie den Punktestand oder die Laufzeit) einsehen."
+msgstr ""
+"Here you view details of your completed support contract (e.g. point status "
+"or the validity period)."
+
+#: support/views/page_intros.inc.php:41
+msgid "&Uuml;berblick &uuml;ber ihre Supportvertr&auml;ge"
+msgstr "Overview of your support contracts"
+
+#: support/views/page_intros.inc.php:42 support/views/page_intros.inc.php:57
+msgid "Information:"
+msgstr "Information:"
+
+#: support/views/page_intros.inc.php:43
+#, c-format
+msgid "Insgesamt <b>%s</b> Punkte, davon noch <b>%s</b> verf&uuml;gbar"
+msgstr "Total of <b>%s</b> points, of which still <b>%s</b> available"
+
+#: support/views/page_intros.inc.php:45 support/views/page_intros.inc.php:60
+#: support/views/page_intros.inc.php:64 support/views/page_intros.inc.php:68
+msgid "Aktionen:"
+msgstr "Actions:"
+
+#: support/views/page_intros.inc.php:46
+#, c-format
+msgid "Einen neuen Vertrag %sanlegen%s"
+msgstr "%sAdd%s a new contract "
+
+#: support/views/page_intros.inc.php:53
+#, c-format
+msgid ""
+"Sie sehen hier die letzten Anfragen, die im Rahmen des Supportvertrages vom "
+"<b>%s</b> bis <b>%s</b> gestellt wurden."
+msgstr ""
+"Here you can see the last requests made from <b>%s</b> until <b>%s</b> made "
+"within the context of the support contract."
+
+#: support/views/page_intros.inc.php:56
+msgid "Anfragen"
+msgstr "Requests"
+
+#: support/views/page_intros.inc.php:58
+#, c-format
+msgid "Es liegen noch <b>%s</b> unbeantwortete Anfragen im Forum vor"
+msgstr "There are <b>%s</b> unanswered requests in the forum."
+
+#: support/views/page_intros.inc.php:58
+msgid ""
+"Im Augenblick sind alle Themen im Forum mit Anfragen verkn&uuml;pft oder es "
+"liegen keine Themen vor."
+msgstr ""
+"At the moment all topics in the forum are linked with requests or no topics "
+"are presented."
+
+#: support/views/page_intros.inc.php:61
+#, c-format
+msgid "Eine neue Anfrage %sanlegen%s"
+msgstr "%sAdd%s a new request"
+
+#: support/views/page_intros.inc.php:65
+msgid "neue Suche"
+msgstr "new search"
+
+#: support/views/page_intros.inc.php:69
+#, c-format
+msgid "%sAlle%s Anfragen anzeigen."
+msgstr "Show %sall%s requests."

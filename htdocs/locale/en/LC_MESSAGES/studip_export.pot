@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2004-10-13 23:09+0200\n"
+"POT-Creation-Date: 2005-06-30 22:56+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,425 +15,425 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: export/export_choose_xslt.inc.php:44
+#: export/export_choose_xslt.inc.php:66
 msgid ""
 "Für dieses Format sind keine Ausgabemodule installiert.<br>Bitte wählen Sie "
 "ein anderes Ausgabeformat."
 msgstr ""
 
-#: export/export_choose_xslt.inc.php:58 export/export_run_xslt.inc.php:46
-#: export/export_xml.inc.php:41
+#: export/export_choose_xslt.inc.php:80 export/export_run_xslt.inc.php:67
+#: export/export_xml.inc.php:63
 msgid "Unzulässiger Seitenaufruf!"
 msgstr ""
 
-#: export/export_choose_xslt.inc.php:63
+#: export/export_choose_xslt.inc.php:85
 msgid "Konvertierung der Daten: "
 msgstr ""
 
-#: export/export_choose_xslt.inc.php:67
+#: export/export_choose_xslt.inc.php:89
 msgid "Es ist ein Fehler aufgetreten "
 msgstr ""
 
-#: export/export_choose_xslt.inc.php:69 export/export_choose_xslt.inc.php:140
-#: export/export_choose_xslt.inc.php:210 export/export_choose_xslt.inc.php:267
-#: export/export_run_fop.inc.php:49 export/export_run_fop.inc.php:119
-#: export/export_run_xslt.inc.php:61 export/export_run_xslt.inc.php:158
-#: export/export_start.inc.php:147 export/export_xml.inc.php:50
-#: export/export_xml.inc.php:137
+#: export/export_choose_xslt.inc.php:91 export/export_choose_xslt.inc.php:162
+#: export/export_choose_xslt.inc.php:232 export/export_choose_xslt.inc.php:289
+#: export/export_run_fop.inc.php:70 export/export_run_fop.inc.php:145
+#: export/export_run_xslt.inc.php:82 export/export_run_xslt.inc.php:179
+#: export/export_start.inc.php:159 export/export_xml.inc.php:72
+#: export/export_xml.inc.php:159
 msgid "Information:"
 msgstr ""
 
-#: export/export_choose_xslt.inc.php:72
+#: export/export_choose_xslt.inc.php:94
 msgid ""
 "Die Parameter, mit denen diese Seite aufgerufen wurde, sind fehlerhaft oder "
 "unvollständig."
 msgstr ""
 
-#: export/export_choose_xslt.inc.php:89
+#: export/export_choose_xslt.inc.php:111
 msgid "Auswahl des Dateiformats"
 msgstr ""
 
-#: export/export_choose_xslt.inc.php:108
+#: export/export_choose_xslt.inc.php:130
 msgid "Bitte wählen Sie, in welchem Format die Daten ausgegeben werden sollen!"
 msgstr ""
 
-#: export/export_choose_xslt.inc.php:113
+#: export/export_choose_xslt.inc.php:135
 msgid "Ausgabeformat:"
 msgstr ""
 
-#: export/export_choose_xslt.inc.php:123
+#: export/export_choose_xslt.inc.php:145
 msgid "Name der Datei (z.B. &raquo;Test&laquo;):"
 msgstr ""
 
-#: export/export_choose_xslt.inc.php:134 export/export_choose_xslt.inc.php:202
-#: export/export_choose_xslt.inc.php:255 export/export_run_xslt.inc.php:123
-#: export/export_xml.inc.php:129
+#: export/export_choose_xslt.inc.php:156 export/export_choose_xslt.inc.php:224
+#: export/export_choose_xslt.inc.php:277 export/export_run_xslt.inc.php:144
+#: export/export_xml.inc.php:151
 msgid "Zur&uuml;ck"
 msgstr ""
 
-#: export/export_choose_xslt.inc.php:143
+#: export/export_choose_xslt.inc.php:165
 #, c-format
 msgid "Diese Seite bereitet die Datenausgabe vor. %s Schritt 1/3 %s"
 msgstr ""
 
-#: export/export_choose_xslt.inc.php:149 export/export_choose_xslt.inc.php:219
-#: export/export_choose_xslt.inc.php:276 export/export_run_fop.inc.php:128
-#: export/export_run_xslt.inc.php:168 export/export_start.inc.php:156
-#: export/export_xml.inc.php:148
+#: export/export_choose_xslt.inc.php:171 export/export_choose_xslt.inc.php:241
+#: export/export_choose_xslt.inc.php:298 export/export_run_fop.inc.php:154
+#: export/export_run_xslt.inc.php:189 export/export_start.inc.php:168
+#: export/export_xml.inc.php:170
 msgid "Aktionen:"
 msgstr ""
 
-#: export/export_choose_xslt.inc.php:151
+#: export/export_choose_xslt.inc.php:173
 msgid ""
 "Bitte w&auml;hlen Sie das Dateiformat, in dem Ihre Daten ausgegeben werden "
 "sollen. Klicken Sie anschließend auf 'weiter'."
 msgstr ""
 
-#: export/export_choose_xslt.inc.php:160
+#: export/export_choose_xslt.inc.php:182
 msgid "Auswahl des Ausgabemoduls"
 msgstr ""
 
-#: export/export_choose_xslt.inc.php:162
+#: export/export_choose_xslt.inc.php:184
 msgid ""
 "W&auml;hlen Sie bitte eine der folgenden XSLT-Dateien und klicken Sie auf "
 "'weiter'"
 msgstr ""
 
-#: export/export_choose_xslt.inc.php:169
+#: export/export_choose_xslt.inc.php:191
 msgid "Ausgabemodul"
 msgstr ""
 
-#: export/export_choose_xslt.inc.php:170
+#: export/export_choose_xslt.inc.php:192
 msgid "Beschreibung"
 msgstr ""
 
-#: export/export_choose_xslt.inc.php:213
+#: export/export_choose_xslt.inc.php:235
 #, c-format
 msgid "Diese Seite bereitet die Datenausgabe vor. %s Schritt 2/3 %s"
 msgstr ""
 
-#: export/export_choose_xslt.inc.php:221
+#: export/export_choose_xslt.inc.php:243
 msgid ""
 "W&auml;hlen Sie bitte eines der zur Verf&uuml;gung stehenden Ausgabemodule. "
 "Klicken Sie dann auf 'weiter'."
 msgstr ""
 
-#: export/export_choose_xslt.inc.php:228
+#: export/export_choose_xslt.inc.php:250
 msgid "Download der Dateien"
 msgstr ""
 
-#: export/export_choose_xslt.inc.php:230
+#: export/export_choose_xslt.inc.php:252
 msgid "Die ben&ouml;tigten Dateien liegen nun zum Download bereit."
 msgstr ""
 
-#: export/export_choose_xslt.inc.php:235 export/export_run_fop.inc.php:109
-#: export/export_run_xslt.inc.php:140 export/export_xml.inc.php:132
+#: export/export_choose_xslt.inc.php:257 export/export_run_fop.inc.php:135
+#: export/export_run_xslt.inc.php:161 export/export_xml.inc.php:154
 msgid "XML-Daten"
 msgstr ""
 
-#: export/export_choose_xslt.inc.php:236 export/export_run_xslt.inc.php:141
-#: export/export_xml.inc.php:133
+#: export/export_choose_xslt.inc.php:258 export/export_run_xslt.inc.php:162
+#: export/export_xml.inc.php:155
 msgid ""
 "In dieser Datei sind die Daten als XML-Tags gespeichert. Diese Tags können "
 "mit einem XSLT-Script verarbeitet werden."
 msgstr ""
 
-#: export/export_choose_xslt.inc.php:240 export/export_run_xslt.inc.php:145
+#: export/export_choose_xslt.inc.php:262 export/export_run_xslt.inc.php:166
 msgid "XSLT-Datei"
 msgstr ""
 
-#: export/export_choose_xslt.inc.php:241
+#: export/export_choose_xslt.inc.php:263
 msgid ""
 "Dies ist das XSLT-Script zur Konvertierung der Daten. Klicken Sie auf den "
 "Dateinamen, um die Datei zu &ouml;ffnen."
 msgstr ""
 
-#: export/export_choose_xslt.inc.php:258
+#: export/export_choose_xslt.inc.php:280
 msgid ""
 "Um die Daten mit dem installierten XSLT-Prozessor in das gew&uuml;nschte "
 "Format zu bringen, klicken Sie bitte auf 'weiter'"
 msgstr ""
 
-#: export/export_choose_xslt.inc.php:270
+#: export/export_choose_xslt.inc.php:292
 #, c-format
 msgid "Diese Seite bereitet die Datenausgabe vor. %s Schritt 3/3 %s"
 msgstr ""
 
-#: export/export_choose_xslt.inc.php:278
+#: export/export_choose_xslt.inc.php:300
 msgid "Sie können sich die XML-Daten und das XSLT-Skript herunterladen."
 msgstr ""
 
-#: export/export_choose_xslt.inc.php:283
+#: export/export_choose_xslt.inc.php:305
 msgid ""
 "Wenn Sie auf 'weiter' klicken, wird mit dem installierten XSLT-Prozessor die "
 "Ausgabedatei erzeugt."
 msgstr ""
 
-#: export/export_linking_func.inc.php:11
+#: export/export_linking_func.inc.php:37
 msgid "Diese Daten exportieren: "
 msgstr ""
 
-#: export/export_linking_func.inc.php:23
+#: export/export_linking_func.inc.php:49
 msgid "Diese Daten Exportieren"
 msgstr ""
 
-#: export/export_linking_func.inc.php:48
+#: export/export_linking_func.inc.php:89
 msgid "Diese Daten exportieren"
 msgstr ""
 
-#: export/export_run_fop.inc.php:36 export/export_run_xslt.inc.php:37
+#: export/export_run_fop.inc.php:57 export/export_run_xslt.inc.php:58
 msgid "Fehlende Parameter!"
 msgstr ""
 
-#: export/export_run_fop.inc.php:52 export/export_xml.inc.php:53
+#: export/export_run_fop.inc.php:73 export/export_xml.inc.php:75
 msgid ""
 "Die Parametern, mit denen diese Seite aufgerufen wurde, sind fehlerhaft."
 msgstr ""
 
-#: export/export_run_fop.inc.php:61
+#: export/export_run_fop.inc.php:82
 msgid ""
 "Die Erweiterung zum Erzeugen von PDF-Dateien ist nicht aktiviert, es konnten "
 "daher nur Formatting Objects erzeugt werden."
 msgstr ""
 
-#: export/export_run_fop.inc.php:66
+#: export/export_run_fop.inc.php:87
 msgid "Download der PDF-Datei"
 msgstr ""
 
-#: export/export_run_fop.inc.php:82 export/export_run_xslt.inc.php:129
+#: export/export_run_fop.inc.php:108 export/export_run_xslt.inc.php:150
 msgid "Ausgabe-Datei: "
 msgstr ""
 
-#: export/export_run_fop.inc.php:91
+#: export/export_run_fop.inc.php:117
 msgid "PDF-Datei"
 msgstr ""
 
-#: export/export_run_fop.inc.php:92
+#: export/export_run_fop.inc.php:118
 msgid "Dies ist die fertige PDF-Datei."
 msgstr ""
 
-#: export/export_run_fop.inc.php:103
+#: export/export_run_fop.inc.php:129
 #, c-format
 msgid ""
 "Bei der Erzeugung der PDF-Datei ist ein Fehler aufgetreten. "
 "<br>Fehlermeldung: %s <br>Datei: %s"
 msgstr ""
 
-#: export/export_run_fop.inc.php:110
+#: export/export_run_fop.inc.php:136
 msgid ""
 "In dieser Datei sind die Daten als XML-Tags gespeichert. Diese Tags k&ouml;"
 "nnen mit einem XSLT-Script verarbeitet werden."
 msgstr ""
 
-#: export/export_run_fop.inc.php:114
+#: export/export_run_fop.inc.php:140
 msgid "Formatting-Objects-Datei"
 msgstr ""
 
-#: export/export_run_fop.inc.php:115
+#: export/export_run_fop.inc.php:141
 msgid ""
 "In dieser Datei sind die Formatting Objects zur Erzeugung der PDF-Datei "
 "gespeichert."
 msgstr ""
 
-#: export/export_run_fop.inc.php:130
+#: export/export_run_fop.inc.php:156
 #, c-format
 msgid "Um die Ausgabe-Datei herunterzuladen, klicken Sie %s hier %s."
 msgstr ""
 
-#: export/export_run_xslt.inc.php:55
+#: export/export_run_xslt.inc.php:76
 msgid "Download der Ausgabedatei"
 msgstr ""
 
-#: export/export_run_xslt.inc.php:64
+#: export/export_run_xslt.inc.php:85
 msgid "Die Parameter, mit denen diese Seite aufgerufen wurde, sind fehlerhaft."
 msgstr ""
 
-#: export/export_run_xslt.inc.php:82
+#: export/export_run_xslt.inc.php:103
 #, c-format
 msgid ""
 "Die Daten wurden erfolgreich konvertiert. %s Sie k&ouml;nnen die "
 "Ausgabedatei jetzt herunterladen. %s"
 msgstr ""
 
-#: export/export_run_xslt.inc.php:83
+#: export/export_run_xslt.inc.php:104
 msgid "Die Daten sind nun im gew&auml;hlten Format verf&uuml;gbar."
 msgstr ""
 
-#: export/export_run_xslt.inc.php:90
+#: export/export_run_xslt.inc.php:111
 #, c-format
 msgid ""
 "Bei der Konvertierung ist ein Fehler aufgetreten. %sDer XSLT-Prozessor "
 "meldet den Fehler Nr. %s: %s %s"
 msgstr ""
 
-#: export/export_run_xslt.inc.php:91
+#: export/export_run_xslt.inc.php:112
 msgid "Bei der Konvertierung ist ein Fehler aufgetreten."
 msgstr ""
 
-#: export/export_run_xslt.inc.php:146
+#: export/export_run_xslt.inc.php:167
 msgid ""
 "Dies ist das XSLT-Script zur Konvertierung der Daten. Klicken Sie auf den "
 "Dateinamen, um die Datei zu öffnen."
 msgstr ""
 
-#: export/export_run_xslt.inc.php:152
+#: export/export_run_xslt.inc.php:173
 msgid "Ausgabe-Datei"
 msgstr ""
 
-#: export/export_run_xslt.inc.php:153
+#: export/export_run_xslt.inc.php:174
 msgid "Dies ist die fertige Ausgabedatei."
 msgstr ""
 
-#: export/export_run_xslt.inc.php:170
+#: export/export_run_xslt.inc.php:191
 #, c-format
 msgid "Um die Ausgabe-Datei herunterzuladen, klicken Sie %shier%s."
 msgstr ""
 
-#: export/export_start.inc.php:34
+#: export/export_start.inc.php:46
 msgid "Datenexport - Startseite"
 msgstr ""
 
-#: export/export_start.inc.php:36
+#: export/export_start.inc.php:48
 msgid "Bitte wählen Sie Datenart und Einrichtung."
 msgstr ""
 
-#: export/export_start.inc.php:40
+#: export/export_start.inc.php:52
 msgid "Bitte w&auml;hlen Sie eine Einrichtung: "
 msgstr ""
 
-#: export/export_start.inc.php:93
+#: export/export_start.inc.php:105
 msgid "Art der auszugebenden Daten: "
 msgstr ""
 
-#: export/export_start.inc.php:98
+#: export/export_start.inc.php:110
 msgid "Veranstaltungsdaten"
 msgstr ""
 
-#: export/export_start.inc.php:103
+#: export/export_start.inc.php:115
 msgid "MitarbeiterInnendaten"
 msgstr ""
 
-#: export/export_start.inc.php:112
+#: export/export_start.inc.php:124
 msgid ""
 "Aus welchem Semester sollen die Daten exportiert werden (f&uuml;r "
 "Veranstaltungsexport): "
 msgstr ""
 
-#: export/export_start.inc.php:113
+#: export/export_start.inc.php:125
 msgid "Alle Semester"
 msgstr ""
 
-#: export/export_start.inc.php:126
+#: export/export_start.inc.php:138
 msgid "Welche Arten von Veranstaltungen sollen exportiert werden? "
 msgstr ""
 
-#: export/export_start.inc.php:150
+#: export/export_start.inc.php:162
 #, c-format
 msgid ""
 "Dies ist das Stud.IP-Exportmodul. Mit diesem Modul k&ouml;nnen Sie Daten in "
 "den folgenden Formaten ausgeben: %s."
 msgstr ""
 
-#: export/export_start.inc.php:158
+#: export/export_start.inc.php:170
 msgid ""
 "W&auml;hlen Sie die Art der Daten, die Sie exportieren wollen, und die "
 "Einrichtung, aus der die Daten gelesen werden sollen. Klicken Sie dann auf "
 "'weiter.'"
 msgstr ""
 
-#: export/export_studipdata_func.inc.php:168
+#: export/export_studipdata_func.inc.php:203
 msgid "KEINE BERECHTIGUNG!"
 msgstr ""
 
-#: export/export_studipdata_func.inc.php:172
+#: export/export_studipdata_func.inc.php:207
 msgid "Der gewählte Exportmodus wird nicht unterstützt."
 msgstr ""
 
-#: export/export_studipdata_func.inc.php:275
+#: export/export_studipdata_func.inc.php:323
 msgid "max."
 msgstr ""
 
-#: export/export_studipdata_func.inc.php:275
+#: export/export_studipdata_func.inc.php:323
 msgid "erw."
 msgstr ""
 
-#: export/export_studipdata_func.inc.php:351
+#: export/export_studipdata_func.inc.php:394
 msgid "keiner Funktion oder Gruppe zugeordnet"
 msgstr ""
 
-#: export/export_studipdata_func.inc.php:360
+#: export/export_studipdata_func.inc.php:403
 msgid "Alle Studieng&auml;nge"
 msgstr ""
 
-#: export/export_studipdata_func.inc.php:362
+#: export/export_studipdata_func.inc.php:405
 msgid "DozentInnen"
 msgstr ""
 
-#: export/export_studipdata_func.inc.php:363
+#: export/export_studipdata_func.inc.php:406
 msgid "TutorInnen"
 msgstr ""
 
-#: export/export_studipdata_func.inc.php:364
-#: export/export_studipdata_func.inc.php:369
+#: export/export_studipdata_func.inc.php:407
+#: export/export_studipdata_func.inc.php:412
 msgid "AutorInnen"
 msgstr ""
 
-#: export/export_studipdata_func.inc.php:365
-#: export/export_studipdata_func.inc.php:370
+#: export/export_studipdata_func.inc.php:408
+#: export/export_studipdata_func.inc.php:413
 msgid "LeserInnen"
 msgstr ""
 
-#: export/export_studipdata_func.inc.php:367
+#: export/export_studipdata_func.inc.php:410
 msgid "LeiterInnen"
 msgstr ""
 
-#: export/export_studipdata_func.inc.php:368
+#: export/export_studipdata_func.inc.php:411
 msgid "Mitglieder"
+msgstr ""
+
+#: export/export_xml.inc.php:40
+msgid "Datenexport"
+msgstr ""
+
+#: export/export_xml.inc.php:120
+msgid "Es wurden keine Daten gefunden!"
+msgstr ""
+
+#: export/export_xml.inc.php:121
+msgid ""
+"Es wurden keine Daten gefunden! Die &uuml;bergebene ID ist mit keinen "
+"Veranstaltungs- / Personendaten verbunden."
+msgstr ""
+
+#: export/export_xml.inc.php:131
+msgid "Die Daten wurden erfolgreich exportiert."
+msgstr ""
+
+#: export/export_xml.inc.php:133
+#, c-format
+msgid "%s Objekt wurde verarbeitet."
+msgstr ""
+
+#: export/export_xml.inc.php:135
+#, c-format
+msgid "%s Objekte wurden verarbeitet."
+msgstr ""
+
+#: export/export_xml.inc.php:172
+#, c-format
+msgid "Um die XML-Datei jetzt herunterzuladen klicken Sie %s hier %s."
 msgstr ""
 
 #: export/export_xml_func.inc.php:55
 msgid "Alle Einrichtungen"
 msgstr ""
 
-#: export/export_xml.inc.php:27
-msgid "Datenexport"
-msgstr ""
-
-#: export/export_xml.inc.php:98
-msgid "Es wurden keine Daten gefunden!"
-msgstr ""
-
-#: export/export_xml.inc.php:99
-msgid ""
-"Es wurden keine Daten gefunden! Die &uuml;bergebene ID ist mit keinen "
-"Veranstaltungs- / Personendaten verbunden."
-msgstr ""
-
-#: export/export_xml.inc.php:109
-msgid "Die Daten wurden erfolgreich exportiert."
-msgstr ""
-
-#: export/export_xml.inc.php:111
-#, c-format
-msgid "%s Objekt wurde verarbeitet."
-msgstr ""
-
-#: export/export_xml.inc.php:113
-#, c-format
-msgid "%s Objekte wurden verarbeitet."
-msgstr ""
-
-#: export/export_xml.inc.php:150
-#, c-format
-msgid "Um die XML-Datei jetzt herunterzuladen klicken Sie %s hier %s."
-msgstr ""
-
-#: export/export_xslt_vars.inc.php:3 export/export_xslt_vars.inc.php:25
-#: export/export_xslt_vars.inc.php:65 export/export_xslt_vars.inc.php:103
+#: export/export_xslt_vars.inc.php:17 export/export_xslt_vars.inc.php:39
+#: export/export_xslt_vars.inc.php:79 export/export_xslt_vars.inc.php:117
 msgid "Standardmodul"
 msgstr ""
 
-#: export/export_xslt_vars.inc.php:4
+#: export/export_xslt_vars.inc.php:18
 msgid ""
 "Standardmodul zur Ausgabe von Personen- oder Veranstaltungsdaten im "
 "Textformat. Die Daten werden nur mit Tabulatoren und Bindestrichen "
@@ -441,22 +441,22 @@ msgid ""
 "werden."
 msgstr ""
 
-#: export/export_xslt_vars.inc.php:10
+#: export/export_xslt_vars.inc.php:24
 msgid "Unformatierte Ausgabe"
 msgstr ""
 
-#: export/export_xslt_vars.inc.php:11
+#: export/export_xslt_vars.inc.php:25
 msgid ""
 "Modul zur Ausgabe von Personen- oder Veranstaltungsdaten im Textformat. Die "
 "Daten werden nicht formatiert. Die Ausgabe-Datei kann in einer "
 "Textverarbeitung bearbeitet werden."
 msgstr ""
 
-#: export/export_xslt_vars.inc.php:17
+#: export/export_xslt_vars.inc.php:31
 msgid "Unformatiert mit Veranstaltungsnummern"
 msgstr ""
 
-#: export/export_xslt_vars.inc.php:18
+#: export/export_xslt_vars.inc.php:32
 msgid ""
 "Modul zur Ausgabe von Personen- oder Veranstaltungsdaten im Textformat. Die "
 "Daten werden nicht formatiert. Es werden auch die Veranstaltungsnummern "
@@ -464,29 +464,29 @@ msgid ""
 "werden."
 msgstr ""
 
-#: export/export_xslt_vars.inc.php:26
+#: export/export_xslt_vars.inc.php:40
 msgid ""
 "Standardmodul zur Ausgabe von Personen- oder Veranstaltungsdaten als HTML-"
 "Seite. Personendaten werden als Tabelle angezeigt. Die Ausgabe-Datei kann in "
 "einem Web-Browser angezeigt werden."
 msgstr ""
 
-#: export/export_xslt_vars.inc.php:33
+#: export/export_xslt_vars.inc.php:47
 msgid "Druckmodul"
 msgstr ""
 
-#: export/export_xslt_vars.inc.php:34
+#: export/export_xslt_vars.inc.php:48
 msgid ""
 "Modul zur Ausgabe von Personen- oder Veranstaltungsdaten als HTML-Seite. Es "
 "wird eine druckbare HTML-Seite ohne Farben erzeugt. Die Ausgabe-Datei kann "
 "in einem Web-Browser angezeigt und ausgedruckt werden."
 msgstr ""
 
-#: export/export_xslt_vars.inc.php:41 export/export_xslt_vars.inc.php:72
+#: export/export_xslt_vars.inc.php:55 export/export_xslt_vars.inc.php:86
 msgid "&Uuml;bersicht"
 msgstr ""
 
-#: export/export_xslt_vars.inc.php:42
+#: export/export_xslt_vars.inc.php:56
 msgid ""
 "Modul zur Ausgabe von Personen- oder Veranstaltungsdaten als HTML-Seite. Es "
 "werden nur die Veranstaltungs-Grunddaten bzw. Namen, Telefonnummern und E-"
@@ -494,35 +494,35 @@ msgid ""
 "Web-Browser angezeigt werden."
 msgstr ""
 
-#: export/export_xslt_vars.inc.php:49
+#: export/export_xslt_vars.inc.php:63
 msgid "Standardmodul mit Veranstaltungsnummern"
 msgstr ""
 
-#: export/export_xslt_vars.inc.php:50
+#: export/export_xslt_vars.inc.php:64
 msgid ""
 "Standardmodul zur Ausgabe von Veranstaltungsdaten als HTML-Seite. Es werden "
 "auch die Veranstaltungsnummern ausgegeben. Die Ausgabe-Datei kann in einem "
 "Web-Browser angezeigt werden."
 msgstr ""
 
-#: export/export_xslt_vars.inc.php:56 export/export_xslt_vars.inc.php:91
+#: export/export_xslt_vars.inc.php:70 export/export_xslt_vars.inc.php:105
 msgid "TeilnehmerInnenliste"
 msgstr ""
 
-#: export/export_xslt_vars.inc.php:57
+#: export/export_xslt_vars.inc.php:71
 msgid ""
 "Modul zur Ausgabe von Personendaten als HTML-Seite. Es werden die Grunddaten "
 "der TeilnehmerInnen einer einzelnen Veranstaltung in eine Tabelle "
 "geschrieben. Die Ausgabe-Datei kann in einem Web-Browser angezeigt werden."
 msgstr ""
 
-#: export/export_xslt_vars.inc.php:66
+#: export/export_xslt_vars.inc.php:80
 msgid ""
 "Standardmodul zur Ausgabe von Personen- oder Veranstaltungsdaten als RTF-"
 "Datei. Die Ausgabe-Datei kann in einer Textverarbeitung bearbeitet werden."
 msgstr ""
 
-#: export/export_xslt_vars.inc.php:73
+#: export/export_xslt_vars.inc.php:87
 msgid ""
 "Modul zur Ausgabe von Personen- oder Veranstaltungsdaten als RTF-Datei. Es "
 "werden nur die Grunddaten in eine Tabelle geschrieben (DozentInnen, Titel, "
@@ -531,11 +531,11 @@ msgid ""
 "Textverarbeitung bearbeitet werden."
 msgstr ""
 
-#: export/export_xslt_vars.inc.php:79 export/export_xslt_vars.inc.php:110
+#: export/export_xslt_vars.inc.php:93 export/export_xslt_vars.inc.php:124
 msgid "Vorlesungskommentar"
 msgstr ""
 
-#: export/export_xslt_vars.inc.php:80 export/export_xslt_vars.inc.php:86
+#: export/export_xslt_vars.inc.php:94 export/export_xslt_vars.inc.php:100
 msgid ""
 "Modul zur Ausgabe von Veranstaltungsdaten als Vorlesungskommentar im Rich-"
 "Text-Format. Der Kommentar enth&auml;lt die Veranstaltungs-Details-Daten. Es "
@@ -543,11 +543,11 @@ msgid ""
 "Textverarbeitung bearbeitet werden."
 msgstr ""
 
-#: export/export_xslt_vars.inc.php:85 export/export_xslt_vars.inc.php:116
+#: export/export_xslt_vars.inc.php:99 export/export_xslt_vars.inc.php:130
 msgid "Vorlesungskommentar mit Veranstaltungsnummern"
 msgstr ""
 
-#: export/export_xslt_vars.inc.php:92
+#: export/export_xslt_vars.inc.php:106
 msgid ""
 "Modul zur Ausgabe von Personendaten als RTF-Datei. Es werden die Grunddaten "
 "der TeilnehmerInnen einer einzelnen Veranstaltung in eine Tabelle "
@@ -556,11 +556,11 @@ msgid ""
 "werden."
 msgstr ""
 
-#: export/export_xslt_vars.inc.php:96
+#: export/export_xslt_vars.inc.php:110
 msgid "Liste der Guppen und Funktionen"
 msgstr ""
 
-#: export/export_xslt_vars.inc.php:97
+#: export/export_xslt_vars.inc.php:111
 msgid ""
 "Modul zur Ausgabe von Personendaten als RTF-Datei. Es werden die Grunddaten "
 "der TeilnehmerInnen einer einzelnen Veranstaltung in eine Tabelle "
@@ -568,14 +568,14 @@ msgid ""
 "werden."
 msgstr ""
 
-#: export/export_xslt_vars.inc.php:104
+#: export/export_xslt_vars.inc.php:118
 msgid ""
 "Standardmodul zur Ausgabe von Veranstaltungs- und Personendaten als "
 "Vorlesungskommentar bzw. MitarbeiterInnenlisten mit Seitenzahlen im Adobe "
 "PDF-Format. Die Datei kann mit dem Acrobat PDF-Reader gelesen werden."
 msgstr ""
 
-#: export/export_xslt_vars.inc.php:111
+#: export/export_xslt_vars.inc.php:125
 msgid ""
 "Modul zur Ausgabe von Veranstaltungsdaten als Vorlesungskommentar im Adobe "
 "PDF-Format. Die Seiten enthalten eine Kopfzeile und eine Fu&szlig;zeile mit "
@@ -583,7 +583,7 @@ msgid ""
 "generiert. Die Datei kann mit dem Acrobat PDF-Reader gelesen werden."
 msgstr ""
 
-#: export/export_xslt_vars.inc.php:117
+#: export/export_xslt_vars.inc.php:131
 msgid ""
 "Modul zur Ausgabe von Veranstaltungsdaten als Vorlesungskommentar im Adobe "
 "PDF-Format. Die Seiten enthalten eine Kopfzeile und eine Fu&szlig;zeile mit "
@@ -592,11 +592,11 @@ msgid ""
 "kann mit dem Acrobat PDF-Reader gelesen werden."
 msgstr ""
 
-#: export/export_xslt_vars.inc.php:122
+#: export/export_xslt_vars.inc.php:136
 msgid "MitarbeiterInnenlisten"
 msgstr ""
 
-#: export/export_xslt_vars.inc.php:123
+#: export/export_xslt_vars.inc.php:137
 msgid ""
 "Modul zur Ausgabe von Personendaten als MitarbeiterInnenlisten im Adobe PDF-"
 "Format. Die Grunddaten der Personen (Name, Telefon, Sprechzeiten, Raum, E-"
@@ -606,11 +606,11 @@ msgid ""
 "PDF-Acrobat Reader gelesen werden."
 msgstr ""
 
-#: export/export_xslt_vars.inc.php:128
+#: export/export_xslt_vars.inc.php:142
 msgid "Vorlesungsverzeichnis"
 msgstr ""
 
-#: export/export_xslt_vars.inc.php:129
+#: export/export_xslt_vars.inc.php:143
 msgid ""
 "Modul zur Ausgabe von Veranstaltungsdaten als Vorlesungsverzeichnis im Adobe "
 "PDF-Format. Die Grunddaten der Veranstaltungen (DozentInnen, Titel, Status, "

@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2004-10-13 23:09+0200\n"
+"POT-Creation-Date: 2005-06-30 22:56+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -220,37 +220,37 @@ msgstr ""
 msgid "Es wurden keine Votes mit der angegebenen ID gefunden."
 msgstr ""
 
-#: vote/VoteDB.class.php:546 vote/vote_overview.inc.php:137
+#: vote/VoteDB.class.php:548 vote/vote_overview.inc.php:137
 msgid "Systemweite Votings/Tests"
 msgstr ""
 
-#: vote/VoteDB.class.php:568
+#: vote/VoteDB.class.php:570
 msgid "Keinen User mit der ID gefunden"
 msgstr ""
 
-#: vote/VoteDB.class.php:622 vote/VoteDB.class.php:648
+#: vote/VoteDB.class.php:624 vote/VoteDB.class.php:650
 msgid "Vote konnte nicht gestartet werden"
 msgstr ""
 
-#: vote/VoteDB.class.php:677
+#: vote/VoteDB.class.php:679
 msgid "Vote konnte nicht fortgesetzt werden"
 msgstr ""
 
-#: vote/VoteDB.class.php:699
+#: vote/VoteDB.class.php:701
 msgid "Vote konnte nicht neu gestartet werden"
 msgstr ""
 
-#: vote/VoteDB.class.php:746
+#: vote/VoteDB.class.php:748
 msgid "DB: Vote nicht gefunden oder ist bereits sichtbar"
 msgstr ""
 
-#: vote/VoteDB.class.php:856 vote/VoteDB.class.php:1303
+#: vote/VoteDB.class.php:858 vote/VoteDB.class.php:1305
 msgid ""
 "Sie haben mehrmals auf 'Speichern' gedr&uuml;ckt. Das Voting bzw. der Test "
 "wurde bereits in die Datenbank geschrieben."
 msgstr ""
 
-#: vote/VoteDB.class.php:1013
+#: vote/VoteDB.class.php:1015
 msgid "DB: Keine gültige Antwort gewählt"
 msgstr ""
 

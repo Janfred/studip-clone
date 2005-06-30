@@ -1,32 +1,53 @@
-# translation of studip_eval.po to 
+# translation of studip_eval.po to
 # translation of studip_eval.po to
 # translation of studip_eval.po to
 # translation of studip_eval.po to
 # translation of studip_eval.po to
 # This file is distributed under the same license as the PACKAGE package.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER, 2004.
+# Jens Schmelzer <jens.schmelzer@fh-jena.de>, 2005.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: studip_eval\n"
-"POT-Creation-Date: 2004-10-13 23:09+0200\n"
-"PO-Revision-Date: 2004-09-23 21:31+GMT\n"
-"Last-Translator: \n"
+"POT-Creation-Date: 2005-06-30 22:56+0200\n"
+"PO-Revision-Date: 2005-06-29 22:31+0200\n"
+"Last-Translator: Jens Schmelzer <jens.schmelzer@fh-jena.de>\n"
 "Language-Team:  <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.0.2\n"
+"X-Generator: KBabel 1.10\n"
+
+#: modules/evaluation/evaluation.lib.php:225
+msgid "Es sind Fehler aufgetreten."
+msgstr "Errors have occurred."
+
+#: modules/evaluation/evaluation.lib.php:226
+msgid "Es ist ein Fehler aufgetreten."
+msgstr "An error has occurred."
+
+#: modules/evaluation/evaluation.lib.php:233
+msgid "Es ist kein Fehler aufgetreten"
+msgstr "No error has occured"
+
+#: modules/evaluation/evaluation.lib.php:249
+msgid "Datei: "
+msgstr "File: "
+
+#: modules/evaluation/evaluation.lib.php:252
+msgid "Zeile: "
+msgstr "Line: "
 
 #: modules/evaluation/evaluation_admin_edit.inc.php:60
-#: modules/evaluation/evaluation_admin_overview.lib.php:1564
+#: modules/evaluation/evaluation_admin_overview.lib.php:1566
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:64
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:2370
 msgid "Neue Evaluation"
 msgstr "New evaluation"
 
 #: modules/evaluation/evaluation_admin_edit.inc.php:66
-#: modules/evaluation/evaluation_admin_overview.lib.php:1572
+#: modules/evaluation/evaluation_admin_overview.lib.php:1574
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:70
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:2373
 msgid "Erster Gruppierungsblock"
@@ -96,7 +117,7 @@ msgid "Datenbankfehler"
 msgstr "Data base error"
 
 #: modules/evaluation/evaluation_admin_overview.inc.php:104
-#: modules/evaluation/evaluation_admin_overview.lib.php:926
+#: modules/evaluation/evaluation_admin_overview.lib.php:928
 msgid "Sie haben keinen Zugriff auf diesen Bereich."
 msgstr "You do not have access to this area."
 
@@ -132,7 +153,7 @@ msgid "Ansehen"
 msgstr "View"
 
 #: modules/evaluation/evaluation_admin_overview.inc.php:148
-#: modules/evaluation/evaluation_admin_overview.lib.php:249
+#: modules/evaluation/evaluation_admin_overview.lib.php:251
 msgid "Kopieren"
 msgstr "Copy"
 
@@ -212,109 +233,109 @@ msgstr "Terminated evaluations:"
 msgid "Keine gestoppten Evaluationen vorhanden."
 msgstr "No stopped evaluations available."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:32
+#: modules/evaluation/evaluation_admin_overview.lib.php:34
 msgid "Evaluations-Verwaltung"
 msgstr "Evalution administration"
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:237
+#: modules/evaluation/evaluation_admin_overview.lib.php:239
 msgid "Vorschau dieser öffentlichen Evaluationsvorlage"
 msgstr "Preview of this public evaluation template"
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:240
+#: modules/evaluation/evaluation_admin_overview.lib.php:242
 #: modules/evaluation/evaluation_admin_template.lib.php:446
 #: modules/evaluation/evaluation_admin_template.lib.php:706
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:2668
 msgid "ja"
 msgstr "yes"
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:241
+#: modules/evaluation/evaluation_admin_overview.lib.php:243
 #: modules/evaluation/evaluation_admin_template.lib.php:455
 #: modules/evaluation/evaluation_admin_template.lib.php:729
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:2658
 msgid "nein"
 msgstr "no"
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:250
+#: modules/evaluation/evaluation_admin_overview.lib.php:252
 msgid ""
 "Diese öffentliche Evaluationsvorlagen zu den eigenen Evaluationsvorlagen "
 "kopieren"
 msgstr ""
 "Copy this public evaluation template to your private evaluation templates "
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:257
-#: modules/evaluation/evaluation_admin_overview.lib.php:285
-#: modules/evaluation/evaluation_admin_overview.lib.php:305
-#: modules/evaluation/evaluation_admin_overview.lib.php:321
+#: modules/evaluation/evaluation_admin_overview.lib.php:259
+#: modules/evaluation/evaluation_admin_overview.lib.php:287
+#: modules/evaluation/evaluation_admin_overview.lib.php:307
+#: modules/evaluation/evaluation_admin_overview.lib.php:323
 msgid "Aufklappen"
 msgstr "Open"
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:265
+#: modules/evaluation/evaluation_admin_overview.lib.php:267
 msgid "als öffentliche Evaluationsvorlage Freigeben"
 msgstr "release evaluation template as public"
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:265
+#: modules/evaluation/evaluation_admin_overview.lib.php:267
 msgid "Freigabe entziehen"
 msgstr "withdraw release"
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:266
+#: modules/evaluation/evaluation_admin_overview.lib.php:268
 msgid "Die Freigabe für diese Evaluationsvorlage entziehen"
 msgstr "Withdraw release of this evaluation template"
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:266
+#: modules/evaluation/evaluation_admin_overview.lib.php:268
 msgid "Diese Evaluationsvorlage öffentlich freigeben"
 msgstr "Release this evaluation template as public"
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:270
+#: modules/evaluation/evaluation_admin_overview.lib.php:272
 msgid "Evaluationsvorlage kopieren"
 msgstr "Copy evaluation template"
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:275
-#: modules/evaluation/evaluation_admin_overview.lib.php:294
+#: modules/evaluation/evaluation_admin_overview.lib.php:277
+#: modules/evaluation/evaluation_admin_overview.lib.php:296
 msgid "Evaluation bearbeiten"
 msgstr "Edit evaluation"
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:280
-#: modules/evaluation/evaluation_admin_overview.lib.php:299
-#: modules/evaluation/evaluation_admin_overview.lib.php:315
-#: modules/evaluation/evaluation_admin_overview.lib.php:330
+#: modules/evaluation/evaluation_admin_overview.lib.php:282
+#: modules/evaluation/evaluation_admin_overview.lib.php:301
+#: modules/evaluation/evaluation_admin_overview.lib.php:317
+#: modules/evaluation/evaluation_admin_overview.lib.php:332
 msgid "Evaluation löschen"
 msgstr "Delete evaluation"
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:289
+#: modules/evaluation/evaluation_admin_overview.lib.php:291
 msgid "Evaluation starten"
 msgstr "Start evaluation"
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:309
+#: modules/evaluation/evaluation_admin_overview.lib.php:311
 msgid "Evaluation stoppen"
 msgstr "Stop evaluation"
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:312
-#: modules/evaluation/evaluation_admin_overview.lib.php:313
-#: modules/evaluation/evaluation_admin_overview.lib.php:327
-#: modules/evaluation/evaluation_admin_overview.lib.php:328
+#: modules/evaluation/evaluation_admin_overview.lib.php:314
+#: modules/evaluation/evaluation_admin_overview.lib.php:315
+#: modules/evaluation/evaluation_admin_overview.lib.php:329
+#: modules/evaluation/evaluation_admin_overview.lib.php:330
 msgid "Evaluation zurücksetzen"
 msgstr "Reset evaluation"
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:314
-#: modules/evaluation/evaluation_admin_overview.lib.php:329
+#: modules/evaluation/evaluation_admin_overview.lib.php:316
+#: modules/evaluation/evaluation_admin_overview.lib.php:331
 msgid "Evaluation exportieren"
 msgstr "Export evaluation"
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:325
+#: modules/evaluation/evaluation_admin_overview.lib.php:327
 msgid "Evaluation fortsetzen"
 msgstr "Continue evaluation"
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:395
+#: modules/evaluation/evaluation_admin_overview.lib.php:397
 #: modules/evaluation/evaluation_admin_template.lib.php:1016
 msgid "Vorschau"
 msgstr "Preview"
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:547
-#: modules/evaluation/evaluation_admin_overview.lib.php:557
+#: modules/evaluation/evaluation_admin_overview.lib.php:549
+#: modules/evaluation/evaluation_admin_overview.lib.php:559
 msgid "Einstellungen speichern"
 msgstr "Save values"
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:591
+#: modules/evaluation/evaluation_admin_overview.lib.php:593
 msgid ""
 "Auf dieser Seite haben Sie eine Übersicht aller in dem ausgewählten Bereich "
 "existierenden Evaluationen sowie Ihrer eigenen Evaluationsvorlagen."
@@ -322,7 +343,7 @@ msgstr ""
 "This page provides you with an overview on all evaluations in the selected "
 "area as well as your own evaluation templates."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:594
+#: modules/evaluation/evaluation_admin_overview.lib.php:596
 msgid ""
 "Sie können eine Evaluation aufklappen und dann Bereichen zuordnen und ihre "
 "Laufzeit bestimmen."
@@ -330,71 +351,71 @@ msgstr ""
 "You can open an evaluation, associate it to some areas and determine its run "
 "time."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:597
+#: modules/evaluation/evaluation_admin_overview.lib.php:599
 #: modules/evaluation/evaluation_admin_template.lib.php:1046
 #: modules/evaluation/evaluation_show.lib.php:107
 msgid "Information:"
 msgstr "Information:"
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:744
+#: modules/evaluation/evaluation_admin_overview.lib.php:746
 msgid "Eine neue Evaluationsvorlage "
 msgstr "New evaluation template "
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:766
+#: modules/evaluation/evaluation_admin_overview.lib.php:768
 msgid "Neue Evaluation erstellen"
 msgstr "Create a new evaluation"
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:791
+#: modules/evaluation/evaluation_admin_overview.lib.php:793
 msgid "Evaluationen aus dem Bereich "
 msgstr "Evaluations in the area "
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:820
+#: modules/evaluation/evaluation_admin_overview.lib.php:822
 msgid "Evaluationen aus gewähltem Bereich anzeigen"
 msgstr "View evaluations in the selected area"
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:826
+#: modules/evaluation/evaluation_admin_overview.lib.php:828
 msgid "Nach weiteren Bereichen suchen:"
 msgstr "Search for other areas:"
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:832
+#: modules/evaluation/evaluation_admin_overview.lib.php:834
 msgid "Weitere Bereiche suchen"
 msgstr "Search for further areas"
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:848
+#: modules/evaluation/evaluation_admin_overview.lib.php:850
 msgid "Öffentliche Evaluationsvorlage suchen: "
 msgstr "Search public evaluation templates: "
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:858
+#: modules/evaluation/evaluation_admin_overview.lib.php:860
 msgid "Öffentliche Vorlage suchen"
 msgstr "Search public templates"
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:941
+#: modules/evaluation/evaluation_admin_overview.lib.php:943
 #, c-format
 msgid "Bitte einen Suchbegriff mit mindestens %d Buchstaben eingeben."
 msgstr "Enter a search string with at least %d characters, please."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:943
+#: modules/evaluation/evaluation_admin_overview.lib.php:945
 msgid "Es wurden keine passenden öffentlichen Evaluationsvorlagen gefunden."
 msgstr "No fitting public evaluation template has been found."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:946
+#: modules/evaluation/evaluation_admin_overview.lib.php:948
 #, c-format
 msgid "Es wurde(n) %d passende öffentliche Evaluationsvorlagen gefunden."
 msgstr "%d fitting public evaluation templates have been found."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:958
+#: modules/evaluation/evaluation_admin_overview.lib.php:960
 msgid "Sie haben nicht die Berechtigung diese Evaluation zu exportieren."
 msgstr "You do not have the right to export this evaluation."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:977
+#: modules/evaluation/evaluation_admin_overview.lib.php:979
 msgid "auf diese Verknüpfung"
 msgstr "on this composition"
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:983
+#: modules/evaluation/evaluation_admin_overview.lib.php:985
 msgid "Fehler beim Exportieren"
 msgstr "Error while exporting"
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:985
+#: modules/evaluation/evaluation_admin_overview.lib.php:987
 msgid ""
 "Die Daten wurden erfolgreich exportiert. Sie können die Ausgabedatei jetzt "
 "herunterladen."
@@ -402,12 +423,12 @@ msgstr ""
 "All datas have successfully been exported. You may now download the export "
 "file."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:987
+#: modules/evaluation/evaluation_admin_overview.lib.php:989
 #, c-format
 msgid "Bitte klicken Sie %s um die Datei herunter zu laden."
 msgstr "Please click %s for downloading this file."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1013
+#: modules/evaluation/evaluation_admin_overview.lib.php:1015
 #, c-format
 msgid ""
 "Die Evaluation <b>%s</b> ist einem Bereich zugeordnet für den Sie keine "
@@ -416,7 +437,7 @@ msgstr ""
 "The evaluation <b>%s</b> has been associated to some area you are not "
 "allowed to modify."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1015
+#: modules/evaluation/evaluation_admin_overview.lib.php:1017
 #, c-format
 msgid ""
 "Die Evaluation <b>%s</b> ist %s Bereichen zugeordnet für die Sie keine "
@@ -425,25 +446,25 @@ msgstr ""
 "The evaluation <b>%s</b> has been associated to %s areas you are not allowed "
 "to modify."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1019
+#: modules/evaluation/evaluation_admin_overview.lib.php:1021
 msgid "Der Besitzer wurde durch eine systeminterne Nachricht informiert."
 msgstr "The user has been informed by internal system message."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1023
+#: modules/evaluation/evaluation_admin_overview.lib.php:1025
 #, c-format
 msgid ""
 "Benutzer **%s** hat versucht eine unzulässige Änderung an Ihrer Evaluation **"
 "%s** vorzunehmen."
 msgstr "User **%s** has illegally tried to modify your evaluation %s**."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1036
+#: modules/evaluation/evaluation_admin_overview.lib.php:1038
 #, c-format
 msgid ""
 "Benutzer **%s** hat versucht eine unzulässige Änderung an Ihrem Template **%"
 "s** vorzunehmen."
 msgstr "User **%s** has illegally tried to modify your template %s**."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1039
+#: modules/evaluation/evaluation_admin_overview.lib.php:1041
 #, c-format
 msgid ""
 "Sie besitzen keine Rechte für das Tempate <b>%s</b>. Der Besitzer wurde "
@@ -452,7 +473,7 @@ msgstr ""
 "You do not have the rights to modify template <b>%s</b>. The owner has been "
 "informed by internal system message."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1053
+#: modules/evaluation/evaluation_admin_overview.lib.php:1055
 #, c-format
 msgid ""
 "Die Evaluationsvorlage <b>%s</b> kann jetzt nicht mehr von anderen Benutzern "
@@ -460,14 +481,14 @@ msgid ""
 msgstr ""
 "Now the evaluation template <b>%s</b> no longer is public to other users."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1061
+#: modules/evaluation/evaluation_admin_overview.lib.php:1063
 #, c-format
 msgid ""
 "Die Evaluationsvorlage <b>%s</b> kann jetzt von anderen Benutzern gefunden "
 "werden."
 msgstr "Now the evaluation template <b>%s</b> is public to other users."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1079
+#: modules/evaluation/evaluation_admin_overview.lib.php:1081
 #, c-format
 msgid ""
 "Die öffentliche Evaluationsvorlage <b>%s</b> wurde zu den eigenen "
@@ -476,39 +497,39 @@ msgstr ""
 "The public evaluation template <b>%s</b> has been copied to your private "
 "evaluation templates."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1085
+#: modules/evaluation/evaluation_admin_overview.lib.php:1087
 msgid "Die Evaluation wurde nicht gestartet."
 msgstr "This evaluation has not been started yet."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1093
+#: modules/evaluation/evaluation_admin_overview.lib.php:1095
 #, c-format
 msgid "Die Evaluation <b>%s</b> wurde gestartet."
 msgstr "The evaluation <b>%s</b> has been started."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1100
+#: modules/evaluation/evaluation_admin_overview.lib.php:1102
 msgid "Die Evaluation wurde nicht beendet."
 msgstr "The evaluation has not been terminated."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1109
+#: modules/evaluation/evaluation_admin_overview.lib.php:1111
 #, c-format
 msgid "Die Evaluation <b>%s</b> wurde beendet."
 msgstr "The evaluation <b>%s</b> has been terminated."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1116
+#: modules/evaluation/evaluation_admin_overview.lib.php:1118
 msgid "Die Evaluation wurde nicht fortgesetzt."
 msgstr "The evaluation has not been continued. "
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1125
+#: modules/evaluation/evaluation_admin_overview.lib.php:1127
 #, c-format
 msgid "Die Evaluation <b>%s</b> wurde fortgesetzt."
 msgstr "The evaluation <b>%s</b> has been continued."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1132
-#: modules/evaluation/evaluation_admin_overview.lib.php:1141
+#: modules/evaluation/evaluation_admin_overview.lib.php:1134
+#: modules/evaluation/evaluation_admin_overview.lib.php:1143
 msgid "Die Evaluation wurde nicht zurücksetzen."
 msgstr "The evaluation has not been reset."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1134
+#: modules/evaluation/evaluation_admin_overview.lib.php:1136
 #, c-format
 msgid ""
 "Die Evaluation <b>%s</b> wirklich zurücksetzen? Dabei werden alle bisher "
@@ -517,62 +538,62 @@ msgstr ""
 "Do you really want to reset the evaluation <b>%s</b>? All replies given yet "
 "will be deleted!"
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1154
+#: modules/evaluation/evaluation_admin_overview.lib.php:1156
 #, c-format
 msgid "Die Evaluation <b>%s</b> wurde zur&uuml;ckgesetzt."
 msgstr "The evaluation <b>%s</b> has been reset."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1159
+#: modules/evaluation/evaluation_admin_overview.lib.php:1161
 #, c-format
 msgid "Die Evaluation <b>%s</b> wurde nicht zur&uuml;ckgesetzt."
 msgstr "The evaluation <b>%s</b> has not been reset."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1171
+#: modules/evaluation/evaluation_admin_overview.lib.php:1173
 #, c-format
 msgid "Die Evaluationsvorlage <b>%s</b> wurde kopiert."
 msgstr "The evaluation <b>%s</b> has been copied."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1177
-#: modules/evaluation/evaluation_admin_overview.lib.php:1189
+#: modules/evaluation/evaluation_admin_overview.lib.php:1179
+#: modules/evaluation/evaluation_admin_overview.lib.php:1191
 msgid "Die Evaluation wurde nicht gelöscht."
 msgstr "The evaluation has not been deleted."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1180
+#: modules/evaluation/evaluation_admin_overview.lib.php:1182
 #, c-format
 msgid "Die Evaluationsvorlage <b>%s </b>wirklich l&ouml;schen?"
 msgstr "Do you really want to delete the evaluation template <b>%s </b>?"
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1181
+#: modules/evaluation/evaluation_admin_overview.lib.php:1183
 #, c-format
 msgid "Die Evaluation <b>%s </b>wirklich l&ouml;schen?"
 msgstr "Do you really want to delete the evaluation <b>%s </b>?"
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1199
+#: modules/evaluation/evaluation_admin_overview.lib.php:1201
 #, c-format
 msgid "Die Evaluationsvorlage <b>%s</b> wurde gel&ouml;scht."
 msgstr "The evaluation template <b>%s</b> has been deleted."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1200
+#: modules/evaluation/evaluation_admin_overview.lib.php:1202
 #, c-format
 msgid "Die Evaluation <b>%s</b> wurde gel&ouml;scht."
 msgstr "The evaluation <b>%s</b> has been deleted."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1207
+#: modules/evaluation/evaluation_admin_overview.lib.php:1209
 #, c-format
 msgid "Die Evaluationsvorlage <b>%s</b> wurde nicht gel&ouml;scht."
 msgstr "The evaluation template <b>%s</b> has not been deleted."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1208
+#: modules/evaluation/evaluation_admin_overview.lib.php:1210
 #, c-format
 msgid "Die Evaluation <b>%s</b> wurde nicht gel&ouml;scht."
 msgstr "The evaluation <b>%s</b> has not been deleted."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1213
+#: modules/evaluation/evaluation_admin_overview.lib.php:1215
 #, c-format
 msgid "Die Evaluation <b>%s</b> wurde nicht verändert."
 msgstr "The evaluation <b>%s</b> has not been changed."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1220
+#: modules/evaluation/evaluation_admin_overview.lib.php:1222
 msgid ""
 "Die Evaluation wurde nicht ausgehängt und zu den eigenen Evaluationsvorlagen "
 "verschoben."
@@ -580,7 +601,7 @@ msgstr ""
 "The evaluation has not been removed and copied to your private evaluation "
 "templates."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1234
+#: modules/evaluation/evaluation_admin_overview.lib.php:1236
 #, c-format
 msgid ""
 "Die Evaluation <b>%s</b> wurde aus allen Bereichen ausgehängt und zu den "
@@ -589,57 +610,57 @@ msgstr ""
 "The evaluation <b>%s</b> has been removed from all areas and copied to your "
 "private evaluation templates."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1239
+#: modules/evaluation/evaluation_admin_overview.lib.php:1241
 #, c-format
 msgid "Die Evaluation <b>%s</b> wurde angelegt."
 msgstr "The evaluation <b>%s</b> has been created."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1246
+#: modules/evaluation/evaluation_admin_overview.lib.php:1248
 #, c-format
 msgid "Die Evaluation <b>%s</b> wurde mit den Ver&auml;nderungen gespeichert."
 msgstr "The evaluation <b>%s</b> and the changes has been saved."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1274
+#: modules/evaluation/evaluation_admin_overview.lib.php:1276
 msgid "Die Einstellungen zur Startzeit wurden nicht verändert."
 msgstr "The values for the start date have not been changed."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1305
+#: modules/evaluation/evaluation_admin_overview.lib.php:1307
 msgid "Die Einstellungen zur Endzeit wurden nicht verändert."
 msgstr "The values for the termination date have not been changed."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1320
+#: modules/evaluation/evaluation_admin_overview.lib.php:1322
 #, c-format
 msgid "Die Evaluationsvorlage <b>%s</b> wurde als Evaluation angelegt."
 msgstr "The evaluation template <b>%s</b> has been created as evaluation."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1341
+#: modules/evaluation/evaluation_admin_overview.lib.php:1343
 msgid "Fehler beim Einhängen von Bereichen."
 msgstr "Error while associating areas."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1347
+#: modules/evaluation/evaluation_admin_overview.lib.php:1349
 #, c-format
 msgid "Die Evaluation wurde in %s Bereiche eingehängt."
 msgstr "The evaluation has been associated to %s areas."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1348
+#: modules/evaluation/evaluation_admin_overview.lib.php:1350
 msgid "Die Evaluation wurde in einen Bereich eingehängt."
 msgstr "The evaluation has been associated to one area."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1374
-#: modules/evaluation/evaluation_admin_overview.lib.php:1460
+#: modules/evaluation/evaluation_admin_overview.lib.php:1376
+#: modules/evaluation/evaluation_admin_overview.lib.php:1462
 msgid "Fehler beim Kopieren von Evaluationen in Bereiche."
 msgstr "Error while copying evaluations to areas."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1381
+#: modules/evaluation/evaluation_admin_overview.lib.php:1383
 #, c-format
 msgid "Die Evaluation wurde in %s Bereiche kopiert."
 msgstr "The evaluation has been copied to %s areas."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1382
+#: modules/evaluation/evaluation_admin_overview.lib.php:1384
 msgid "Die Evaluation wurde in einen Bereich kopiert."
 msgstr "The evaluation has been copied to one area."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1391
+#: modules/evaluation/evaluation_admin_overview.lib.php:1393
 #, c-format
 msgid ""
 "Sie wollen die Evaluation <b>%s</b> aus allen ihr zugeordneten Bereichen "
@@ -650,7 +671,7 @@ msgstr ""
 "associated to. <br> Do you really want to delete the evaluation or do you "
 "want to move it to your private evaluation templates?"
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1420
+#: modules/evaluation/evaluation_admin_overview.lib.php:1422
 msgid ""
 "Sie wollen die Evaluation aus einem Bereich aushängen für den sie keine "
 "Berechtigung besitzten.<br> Die Aktion wurde nicht ausgeführt."
@@ -658,7 +679,7 @@ msgstr ""
 "You have tried to remove the evaluation from at least one area you are not "
 "allowed to modify. <br> Action has not been executed."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1422
+#: modules/evaluation/evaluation_admin_overview.lib.php:1424
 msgid ""
 "Sie wollen die Evaluation aus %s% Bereichen aushängen für die sie keine "
 "Berechtigung besitzten.<br> Die Aktion wurde nicht ausgeführt."
@@ -666,20 +687,20 @@ msgstr ""
 "You have tried to remove the evaluation from %s% areas you are not allowed "
 "to modify. <br> Action has not been executed."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1443
+#: modules/evaluation/evaluation_admin_overview.lib.php:1445
 msgid "Fehler beim Aushängen von Bereichen."
 msgstr "Error while removing areas."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1449
+#: modules/evaluation/evaluation_admin_overview.lib.php:1451
 #, c-format
 msgid "Die Evaluation wurde aus %s Bereichen ausgehängt."
 msgstr "The evaluation has been removed from %s areas."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1450
+#: modules/evaluation/evaluation_admin_overview.lib.php:1452
 msgid "Die Evaluation wurde aus einem Bereich ausgehängt."
 msgstr "The evaluation has been removed from one area."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1454
+#: modules/evaluation/evaluation_admin_overview.lib.php:1456
 msgid ""
 "Sie ist nun keinem Bereich mehr zugeordnet und wurde zu den eigenen "
 "Evaluationsvorlagen verschoben."
@@ -687,7 +708,7 @@ msgstr ""
 "It is no longer associated to any area and has been moved to your private "
 "evaluation templates."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1470
+#: modules/evaluation/evaluation_admin_overview.lib.php:1472
 #, c-format
 msgid ""
 "Sie haben die Evaluation <b>%s</b> aus allen ihren Bereichen ausgehängt."
@@ -695,95 +716,95 @@ msgstr ""
 "You have removed the evaluation <b>%s</b> from all areas it has been "
 "associated to."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1474
+#: modules/evaluation/evaluation_admin_overview.lib.php:1476
 msgid ""
 "Fehler beim Aushängen einer Evaluationen aus allen Bereichen auf die Sie "
 "Zugriff haben."
 msgstr ""
 "Error while removing an evaluation from all areas you are allowed to modify."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1485
+#: modules/evaluation/evaluation_admin_overview.lib.php:1487
 #, c-format
 msgid ""
 "Es wurden keine Ver&auml;nderungen an der Evaluationsvorlage <b>%s</b> "
 "gespeichert."
 msgstr "No changes to evaluation template <b>%s</b> have been saved."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1491
+#: modules/evaluation/evaluation_admin_overview.lib.php:1493
 msgid "Es wurden keine Ver&auml;nderungen gespeichert."
 msgstr "No changes have been saved."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1499
+#: modules/evaluation/evaluation_admin_overview.lib.php:1501
 msgid "Die Evaluation wurde gestartet."
 msgstr "The evaluation has been started."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1511
+#: modules/evaluation/evaluation_admin_overview.lib.php:1513
 msgid "Die Evaluation wurde beendet."
 msgstr "The evaluation has been terminated."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1546
+#: modules/evaluation/evaluation_admin_overview.lib.php:1548
 msgid "Sie besitzen keine Berechtigung eine Suche durchzuführen."
 msgstr "You are not allowed to search."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1552
+#: modules/evaluation/evaluation_admin_overview.lib.php:1554
 msgid "Bitte einen Suchbegriff eingeben."
 msgstr "Please, enter a search string."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1554
+#: modules/evaluation/evaluation_admin_overview.lib.php:1556
 #, c-format
 msgid "Es wurde kein Bereich gefunden, der den Suchbegriff <b>%s</b> enthält."
 msgstr "No area containing the search string <b>%s</b has been found."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1556
+#: modules/evaluation/evaluation_admin_overview.lib.php:1558
 #, c-format
 msgid ""
 "Es wurden %s Bereiche gefunden, die den Suchbegriff <b>%s</b> enthalten."
 msgstr "%s areas containing the search string <b>%s</b> have been found."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1592
+#: modules/evaluation/evaluation_admin_overview.lib.php:1594
 msgid "Die Erstellung einer Evaluation wurde abgebrochen."
 msgstr "Creation of the evaluation has been cancelled."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1599
+#: modules/evaluation/evaluation_admin_overview.lib.php:1601
 msgid "Fehler! Es wurde versucht, eine nicht vorhandene Aktion auszuführen."
 msgstr "Error! You are trying to carry out an action that is not available."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1607
+#: modules/evaluation/evaluation_admin_overview.lib.php:1609
 #, c-format
 msgid ""
 "An Ihrer Evaluation \"%s\" wurden von dem Administrator oder der "
 "Administratorin %s Änderungen vorgenommen."
 msgstr "Your evaluation \"%s\" has been modified by admininstrator %s."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1636
+#: modules/evaluation/evaluation_admin_overview.lib.php:1638
 msgid "Zum vorherigen Bereich zur&uuml;ckkehren."
 msgstr "Go back to the previous area."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1637
+#: modules/evaluation/evaluation_admin_overview.lib.php:1639
 msgid "Ja!"
 msgstr "Yes!"
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1638
+#: modules/evaluation/evaluation_admin_overview.lib.php:1640
 msgid "Nein!"
 msgstr "No!"
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1639
+#: modules/evaluation/evaluation_admin_overview.lib.php:1641
 msgid "Löschen."
 msgstr "Delete."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1640
+#: modules/evaluation/evaluation_admin_overview.lib.php:1642
 msgid "Zu den eigenen Evaluationsvorlagen verschieben."
 msgstr "Move to your own evaluation templates."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1641
+#: modules/evaluation/evaluation_admin_overview.lib.php:1643
 msgid "Abbrechen."
 msgstr "Cancel."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1767
+#: modules/evaluation/evaluation_admin_overview.lib.php:1769
 msgid "Einstellungen zur Start- und Endzeit:"
 msgstr "Values for start and termination date:"
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1770
+#: modules/evaluation/evaluation_admin_overview.lib.php:1772
 msgid ""
 "Legen Sie  fest, von wann bis wann alle eingehängten und kopierten Instanzen "
 "dieser Evaluationsvorlage in Stud.IP öffentlich sichtbar sein sollen."
@@ -791,185 +812,185 @@ msgstr ""
 "Determine the period when all copied or associated instances of this "
 "evaluation template should be public within Stud.IP."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1771
+#: modules/evaluation/evaluation_admin_overview.lib.php:1773
 msgid ""
 "Legen Sie  fest, von wann bis wann die Evaluation in Stud.IP öffentlich "
 "sichtbar sein soll."
 msgstr ""
 "Determine the period when this evaluation should be public within Stud.IP."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1785
-#: modules/evaluation/evaluation_admin_template.inc.php:501
+#: modules/evaluation/evaluation_admin_overview.lib.php:1787
+#: modules/evaluation/evaluation_admin_template.inc.php:492
 msgid "Anfang"
 msgstr "Begin"
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1794
+#: modules/evaluation/evaluation_admin_overview.lib.php:1796
 msgid "sp&auml;ter manuell starten"
 msgstr "Start manually later"
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1799
+#: modules/evaluation/evaluation_admin_overview.lib.php:1801
 msgid "Startzeitpunkt:"
 msgstr "Start date:"
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1803
-#: modules/evaluation/evaluation_admin_overview.lib.php:1853
+#: modules/evaluation/evaluation_admin_overview.lib.php:1805
+#: modules/evaluation/evaluation_admin_overview.lib.php:1855
 #, c-format
 msgid "um %s Uhr"
 msgstr "at %s "
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1810
+#: modules/evaluation/evaluation_admin_overview.lib.php:1812
 msgid "sofort"
 msgstr "immediately"
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1818
+#: modules/evaluation/evaluation_admin_overview.lib.php:1820
 #, c-format
 msgid "Startzeitpunkt war der <b>%s</b> um <b>%s</b> Uhr."
 msgstr "Start date was <b>%s</b> at <b>%s</b>."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1834
-#: modules/evaluation/evaluation_admin_template.inc.php:503
+#: modules/evaluation/evaluation_admin_overview.lib.php:1836
+#: modules/evaluation/evaluation_admin_template.inc.php:494
 msgid "Ende"
 msgstr "End"
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1843
+#: modules/evaluation/evaluation_admin_overview.lib.php:1845
 msgid "manuell beenden"
 msgstr "terminate manually"
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1847
+#: modules/evaluation/evaluation_admin_overview.lib.php:1849
 msgid "Endzeitpunkt:"
 msgstr "Termination date:"
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1863
+#: modules/evaluation/evaluation_admin_overview.lib.php:1865
 msgid "Zeitspanne"
 msgstr "Period"
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1876
+#: modules/evaluation/evaluation_admin_overview.lib.php:1878
 #, c-format
 msgid "%s Woche"
 msgstr "%s week"
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1876
+#: modules/evaluation/evaluation_admin_overview.lib.php:1878
 #, c-format
 msgid "%s Wochen"
 msgstr "%s weeks"
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1886
+#: modules/evaluation/evaluation_admin_overview.lib.php:1888
 msgid "Endzeitpunkt neu berechnen."
 msgstr "Calculate termination date again."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1887
+#: modules/evaluation/evaluation_admin_overview.lib.php:1889
 #, c-format
 msgid " (<b>%s</b> um <b>%s</b> Uhr)"
 msgstr " (<b>%s</b> at <b>%s</b>)"
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1898
+#: modules/evaluation/evaluation_admin_overview.lib.php:1900
 #, c-format
 msgid "Endzeitpunkt war der <b>%s</b> um <b>%s</b> Uhr."
 msgstr "Termination date was <b>%s</b> at <b>%s</b>."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1938
-#: modules/evaluation/evaluation_admin_overview.lib.php:2305
+#: modules/evaluation/evaluation_admin_overview.lib.php:1940
+#: modules/evaluation/evaluation_admin_overview.lib.php:2307
 #: modules/evaluation/classes/db/EvaluationObjectDB.class.php:95
 msgid "Systemweite Evaluationen"
 msgstr "System wide evaluation"
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1940
-#: modules/evaluation/evaluation_admin_overview.lib.php:2307
+#: modules/evaluation/evaluation_admin_overview.lib.php:1942
+#: modules/evaluation/evaluation_admin_overview.lib.php:2309
 #: modules/evaluation/classes/db/EvaluationObjectDB.class.php:115
 #: modules/evaluation/classes/db/EvaluationObjectDB.class.php:201
 msgid "Persönliche Homepage"
 msgstr "Personal homepage"
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1949
-#: modules/evaluation/evaluation_admin_overview.lib.php:1952
-#: modules/evaluation/evaluation_admin_overview.lib.php:1957
-#: modules/evaluation/evaluation_admin_overview.lib.php:1963
-#: modules/evaluation/evaluation_admin_overview.lib.php:2315
-#: modules/evaluation/evaluation_admin_overview.lib.php:2322
-msgid "Benutzer"
-msgstr "User"
-
-#: modules/evaluation/evaluation_admin_overview.lib.php:1953
-#: modules/evaluation/evaluation_admin_overview.lib.php:1958
-#: modules/evaluation/evaluation_admin_overview.lib.php:1964
-#: modules/evaluation/evaluation_admin_overview.lib.php:2316
-#: modules/evaluation/evaluation_admin_overview.lib.php:2323
-msgid "Veranstaltung"
-msgstr "Course"
-
+#: modules/evaluation/evaluation_admin_overview.lib.php:1951
 #: modules/evaluation/evaluation_admin_overview.lib.php:1954
 #: modules/evaluation/evaluation_admin_overview.lib.php:1959
 #: modules/evaluation/evaluation_admin_overview.lib.php:1965
 #: modules/evaluation/evaluation_admin_overview.lib.php:2317
 #: modules/evaluation/evaluation_admin_overview.lib.php:2324
-msgid "Einrichtung"
-msgstr "Institute"
+msgid "Benutzer"
+msgstr "User"
 
+#: modules/evaluation/evaluation_admin_overview.lib.php:1955
 #: modules/evaluation/evaluation_admin_overview.lib.php:1960
 #: modules/evaluation/evaluation_admin_overview.lib.php:1966
 #: modules/evaluation/evaluation_admin_overview.lib.php:2318
 #: modules/evaluation/evaluation_admin_overview.lib.php:2325
+msgid "Veranstaltung"
+msgstr "Course"
+
+#: modules/evaluation/evaluation_admin_overview.lib.php:1956
+#: modules/evaluation/evaluation_admin_overview.lib.php:1961
+#: modules/evaluation/evaluation_admin_overview.lib.php:1967
+#: modules/evaluation/evaluation_admin_overview.lib.php:2319
+#: modules/evaluation/evaluation_admin_overview.lib.php:2326
+msgid "Einrichtung"
+msgstr "Institute"
+
+#: modules/evaluation/evaluation_admin_overview.lib.php:1962
+#: modules/evaluation/evaluation_admin_overview.lib.php:1968
+#: modules/evaluation/evaluation_admin_overview.lib.php:2320
+#: modules/evaluation/evaluation_admin_overview.lib.php:2327
 msgid "Fakultät"
 msgstr "Faculty"
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1967
-#: modules/evaluation/evaluation_admin_overview.lib.php:2326
+#: modules/evaluation/evaluation_admin_overview.lib.php:1969
+#: modules/evaluation/evaluation_admin_overview.lib.php:2328
 msgid "System"
 msgstr "System"
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:1993
+#: modules/evaluation/evaluation_admin_overview.lib.php:1995
 msgid "Bereich"
 msgstr "Area"
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:2003
+#: modules/evaluation/evaluation_admin_overview.lib.php:2005
 msgid "aushängen"
 msgstr "Remove"
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:2043
+#: modules/evaluation/evaluation_admin_overview.lib.php:2045
 msgid ""
 "Sie haben keine Berechtigung die Evaluation aus diesem Bereich auszuhängen."
 msgstr "You are not authorized to remove the evaluation fromt this area."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:2060
+#: modules/evaluation/evaluation_admin_overview.lib.php:2062
 msgid "Diese Evaluation wurde keinem Bereich zugeordnet."
 msgstr "This evaluation has not been associated to any area."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:2080
+#: modules/evaluation/evaluation_admin_overview.lib.php:2082
 msgid "Diese Evaluation ist folgenden Bereichen zugeordnet:"
 msgstr "This evaluation has been associated to the following areas:"
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:2083
+#: modules/evaluation/evaluation_admin_overview.lib.php:2085
 msgid " können Sie Ihre Evaluation aus den verknüpften Bereichen entfernen."
 msgstr " you may delete your evaluation from all associated areas."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:2140
+#: modules/evaluation/evaluation_admin_overview.lib.php:2142
 msgid "einhängen"
 msgstr "Associate to"
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:2151
+#: modules/evaluation/evaluation_admin_overview.lib.php:2153
 msgid "kopieren"
 msgstr "Copy"
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:2207
+#: modules/evaluation/evaluation_admin_overview.lib.php:2209
 msgid "Die Evaluation ist bereits diesem Bereich zugeordnet."
 msgstr "The evaluation has already been associated to this area."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:2233
-#: modules/evaluation/evaluation_admin_overview.lib.php:2449
+#: modules/evaluation/evaluation_admin_overview.lib.php:2235
+#: modules/evaluation/evaluation_admin_overview.lib.php:2451
 msgid "Es wurden keine Ergebnisse aus diesem Bereich gefunden."
 msgstr "No results in this area have been found."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:2250
+#: modules/evaluation/evaluation_admin_overview.lib.php:2252
 msgid ""
 "Sie können die Evaluation folgenden Bereichen zuordnen (Suchergebnisse):"
 msgstr ""
 "You may associate the evaluation to the following areas (search results):"
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:2252
+#: modules/evaluation/evaluation_admin_overview.lib.php:2254
 msgid "Sie können die Evaluation folgenden Bereichen zuordnen:"
 msgstr "You may associate the evaluation to the following areas:"
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:2256
+#: modules/evaluation/evaluation_admin_overview.lib.php:2258
 msgid ""
 "Hängen Sie  die Evaluation in die gewünschten Bereiche ein (abhängige Kopie "
 "mit gemeinsamer Auswertung) oder kopieren Sie sie in Bereiche (unabhängige "
@@ -979,19 +1000,19 @@ msgstr ""
 "reporting) or copy it to areas (as independent instances with separate "
 "reporting)."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:2260
+#: modules/evaluation/evaluation_admin_overview.lib.php:2262
 msgid "Die Suche ergab keine Treffer."
 msgstr "No results for this search."
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:2272
+#: modules/evaluation/evaluation_admin_overview.lib.php:2274
 msgid "Nach Bereichen suchen:"
 msgstr "Search for areas:"
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:2283
+#: modules/evaluation/evaluation_admin_overview.lib.php:2285
 msgid "Bereiche suchen"
 msgstr "Search areas"
 
-#: modules/evaluation/evaluation_admin_overview.lib.php:2428
+#: modules/evaluation/evaluation_admin_overview.lib.php:2430
 msgid "Diesen Bereich anzeigen."
 msgstr "Show this area."
 
@@ -1007,90 +1028,47 @@ msgstr "This option is not available."
 msgid "Unbekanntes Objekt"
 msgstr "Unkown object"
 
-#: modules/evaluation/evaluation_admin_template.inc.php:264
-msgid "Dem Template wurden keine  "
-msgstr "This template hasn't been any"
-
 #: modules/evaluation/evaluation_admin_template.inc.php:265
-msgid "Antworten zugewiesen oder "
-msgstr "reply associated to or"
+msgid ""
+"Dem Template wurden keine Antworten zugewiesen oder keine der Antworten  "
+"enthielt einen Text. Fügen Sie Antworten an, oder löschen Sie das Template."
+msgstr ""
 
-#: modules/evaluation/evaluation_admin_template.inc.php:266
-msgid "keine der Antworten  enthielt "
-msgstr "none of the replies has contained"
+#: modules/evaluation/evaluation_admin_template.inc.php:280
+msgid ""
+"Leere Antworten sind nicht zulässig, löschen Sie betreffende Felder oder "
+"geben Sie einen Text ein."
+msgstr ""
 
-#: modules/evaluation/evaluation_admin_template.inc.php:267
-msgid "einen Text. Fügen Sie "
-msgstr "some text. Enter"
-
-#: modules/evaluation/evaluation_admin_template.inc.php:268
-msgid "Antworten an, oder "
-msgstr "a reply or "
-
-#: modules/evaluation/evaluation_admin_template.inc.php:269
-msgid "löschen Sie das Template."
-msgstr "delete this template."
-
-#: modules/evaluation/evaluation_admin_template.inc.php:283
-msgid "Leere Antworten sind "
-msgstr "Empty replies are"
-
-#: modules/evaluation/evaluation_admin_template.inc.php:284
-msgid "nicht zulässig, löschen"
-msgstr "not admissable, delete"
-
-#: modules/evaluation/evaluation_admin_template.inc.php:285
-msgid " Sie betreffende Felder"
-msgstr "the fields concerned"
-
-#: modules/evaluation/evaluation_admin_template.inc.php:286
-msgid " oder geben Sie einen "
-msgstr " or enter "
-
-#: modules/evaluation/evaluation_admin_template.inc.php:287
-msgid " Text ein."
-msgstr " some text."
-
-#: modules/evaluation/evaluation_admin_template.inc.php:301
-msgid "Geben Sie eine Ausweichant"
-msgstr "Enter some fallback reply"
+#: modules/evaluation/evaluation_admin_template.inc.php:295
+msgid "Geben Sie eine Ausweichantwort ein oder deaktivieren Sie diese."
+msgstr ""
 
 #: modules/evaluation/evaluation_admin_template.inc.php:302
-msgid "wort ein oder deaktivieren"
-msgstr " or deactivate"
+msgid "Geben Sie einen Namen für die Vorlage ein."
+msgstr ""
 
-#: modules/evaluation/evaluation_admin_template.inc.php:303
-msgid " Sie diese."
-msgstr " it."
-
-#: modules/evaluation/evaluation_admin_template.inc.php:310
-msgid "Geben Sie einen Namen für"
-msgstr "Enter a name for"
-
-#: modules/evaluation/evaluation_admin_template.inc.php:311
-msgid " die Vorlage ein."
-msgstr " the template."
-
-#: modules/evaluation/evaluation_admin_template.inc.php:325
-#: modules/evaluation/evaluation_admin_template.inc.php:337
-#: modules/evaluation/evaluation_admin_template.inc.php:733
+#: modules/evaluation/evaluation_admin_template.inc.php:316
+#: modules/evaluation/evaluation_admin_template.inc.php:328
+#: modules/evaluation/evaluation_admin_template.inc.php:724
+#: modules/evaluation/classes/db/EvaluationAnswerDB.class.php:168
 msgid "Fehler beim Speichern."
 msgstr "Error while saving."
 
-#: modules/evaluation/evaluation_admin_template.inc.php:364
+#: modules/evaluation/evaluation_admin_template.inc.php:355
 msgid "Antwortenvorlagen"
 msgstr "Reply templates"
 
-#: modules/evaluation/evaluation_admin_template.inc.php:445
+#: modules/evaluation/evaluation_admin_template.inc.php:436
 msgid "Zurück zur Auswahl"
 msgstr "Back to selection"
 
-#: modules/evaluation/evaluation_admin_template.inc.php:451
+#: modules/evaluation/evaluation_admin_template.inc.php:442
 #, c-format
 msgid "Weisen Sie der links %sausgewählten%s Frage hier Antworten zu:"
 msgstr "Associated replies to the question %sselected%s on the left:"
 
-#: modules/evaluation/evaluation_admin_template.inc.php:594
+#: modules/evaluation/evaluation_admin_template.inc.php:585
 msgid "Freitext"
 msgstr "Arbitrary text"
 
@@ -1257,26 +1235,6 @@ msgstr "Back to %s administrating the evaluations %s"
 msgid "Aktionen:"
 msgstr "Actions:"
 
-#: modules/evaluation/evaluation.lib.php:225
-msgid "Es sind Fehler aufgetreten."
-msgstr "Errors have occurred."
-
-#: modules/evaluation/evaluation.lib.php:226
-msgid "Es ist ein Fehler aufgetreten."
-msgstr "An error has occurred."
-
-#: modules/evaluation/evaluation.lib.php:233
-msgid "Es ist kein Fehler aufgetreten"
-msgstr "No error has occured"
-
-#: modules/evaluation/evaluation.lib.php:249
-msgid "Datei: "
-msgstr "File: "
-
-#: modules/evaluation/evaluation.lib.php:252
-msgid "Zeile: "
-msgstr "Line: "
-
 #: modules/evaluation/evaluation_show.inc.php:96
 msgid "Stud.IP Online-Evaluation"
 msgstr "Stud.IP Online-Evaluation"
@@ -1424,14 +1382,6 @@ msgstr "Continue evaluation."
 msgid "Evaluation exportieren."
 msgstr "Export evaluation."
 
-#: modules/evaluation/classes/EvaluationAnswer.class.php:210
-msgid ""
-"Nur pseudonyme Abstimmung erlaubt! Neue ID mit StudipObject::createNewID () "
-"erzeugen"
-msgstr ""
-"Pseudonymous voting allowed, only! Create new ID with StudipObject::"
-"createNewID ()"
-
 #: modules/evaluation/classes/Evaluation.class.php:167
 msgid "Das Startdatum ist nach dem Stoppdatum."
 msgstr "Start date is later than termination date."
@@ -1463,6 +1413,14 @@ msgstr "Object not valid: A voting for a template has taken place."
 #: modules/evaluation/classes/Evaluation.class.php:468
 msgid "Ungültiges Objekt: Eine aktive Evaluation wurde freigegeben."
 msgstr "Object not valid: An active evaluation has been released."
+
+#: modules/evaluation/classes/EvaluationAnswer.class.php:210
+msgid ""
+"Nur pseudonyme Abstimmung erlaubt! Neue ID mit StudipObject::createNewID () "
+"erzeugen"
+msgstr ""
+"Pseudonymous voting allowed, only! Create new ID with StudipObject::"
+"createNewID ()"
 
 #: modules/evaluation/classes/EvaluationExportManager.class.php:175
 #: modules/evaluation/classes/EvaluationExportManager.class.php:234
@@ -1524,7 +1482,7 @@ msgstr "ExportManager::Question type not valid."
 msgid "Es existiert kein DB-Objekt"
 msgstr "No DB-Object existing."
 
-#: modules/evaluation/classes/EvaluationTree.class.php:84
+#: modules/evaluation/classes/EvaluationTree.class.php:83
 msgid "Fehler in EvaluationTree: Es wurde keine evalID übergeben"
 msgstr "Error in evaluation tree: No evalID has been passed on"
 
@@ -2040,9 +1998,8 @@ msgid "Fragenblock mit"
 msgstr "Question block with"
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:2345
-#, fuzzy
 msgid "Einen neuen Fragenblock erstellen"
-msgstr "Create a new content block"
+msgstr ""
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:2423
 msgid "Titel der Evaluation"
@@ -2207,12 +2164,12 @@ msgstr "Multiple choice:"
 msgid "Freitextantworten:"
 msgstr "Arbitrary text reply:"
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:3438
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:3441
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:3439
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:3442
 msgid "Fehler beim verschieben."
 msgstr "Error while moving."
 
-#: modules/evaluation/classes/EvaluationTreeShowUser.class.php:481
+#: modules/evaluation/classes/EvaluationTreeShowUser.class.php:482
 msgid "Dieser Frage wurden keine Antworten zugeordnet!"
 msgstr "No reply has been associated to this question!"
 
@@ -2222,6 +2179,35 @@ msgstr "No reply with this ID found."
 
 #: modules/evaluation/classes/db/EvaluationAnswerDB.class.php:92
 #: modules/evaluation/classes/db/EvaluationAnswerDB.class.php:283
+msgid "Fehler beim Laden."
+msgstr ""
+
+#: modules/evaluation/classes/db/EvaluationAnswerDB.class.php:92
+#: modules/evaluation/classes/db/EvaluationAnswerDB.class.php:168
+#: modules/evaluation/classes/db/EvaluationAnswerDB.class.php:183
+#: modules/evaluation/classes/db/EvaluationAnswerDB.class.php:217
+#: modules/evaluation/classes/db/EvaluationAnswerDB.class.php:237
+#: modules/evaluation/classes/db/EvaluationAnswerDB.class.php:283
+#: modules/evaluation/classes/db/EvaluationAnswerDB.class.php:365
+msgid "Fehlermeldung:"
+msgstr "Error message:"
+
+#: modules/evaluation/classes/db/EvaluationAnswerDB.class.php:183
+msgid "Fehler beim Verknüpfen mit Benutzern."
+msgstr "Error while linking with user."
+
+#: modules/evaluation/classes/db/EvaluationAnswerDB.class.php:217
+msgid "Fehler beim entfernen der Verknüfungen."
+msgstr "Error while deleting links."
+
+#: modules/evaluation/classes/db/EvaluationAnswerDB.class.php:237
+msgid "Fehler beim Löschen."
+msgstr ""
+
+#: modules/evaluation/classes/db/EvaluationDB.class.php:111
+msgid "Keine Evaluation mit dieser ID gefunden."
+msgstr "No evaluation with this ID found."
+
 #: modules/evaluation/classes/db/EvaluationDB.class.php:114
 #: modules/evaluation/classes/db/EvaluationGroupDB.class.php:95
 #: modules/evaluation/classes/db/EvaluationGroupDB.class.php:226
@@ -2230,37 +2216,11 @@ msgstr "No reply with this ID found."
 msgid "Fehler beim Laden. Fehlermeldung: "
 msgstr "Error while loading. Error message: "
 
-#: modules/evaluation/classes/db/EvaluationAnswerDB.class.php:168
 #: modules/evaluation/classes/db/EvaluationDB.class.php:220
 #: modules/evaluation/classes/db/EvaluationGroupDB.class.php:163
 #: modules/evaluation/classes/db/EvaluationQuestionDB.class.php:146
 msgid "Fehler beim Speichern. Fehlermeldung: "
 msgstr "Error while saving. Error message: "
-
-#: modules/evaluation/classes/db/EvaluationAnswerDB.class.php:183
-msgid "Fehler beim Verknüpfen mit Benutzern. Fehlermeldung: "
-msgstr "Error while linking with user. Error message: "
-
-#: modules/evaluation/classes/db/EvaluationAnswerDB.class.php:217
-#: modules/evaluation/classes/db/EvaluationDB.class.php:275
-#: modules/evaluation/classes/db/EvaluationDB.class.php:287
-msgid "Fehler beim entfernen der Verknüfungen. Fehlermeldung: "
-msgstr "Error while deleting links. Error message: "
-
-#: modules/evaluation/classes/db/EvaluationAnswerDB.class.php:237
-#: modules/evaluation/classes/db/EvaluationDB.class.php:262
-#: modules/evaluation/classes/db/EvaluationGroupDB.class.php:184
-#: modules/evaluation/classes/db/EvaluationQuestionDB.class.php:166
-msgid "Fehler beim Löschen. Fehlermeldung: "
-msgstr "Error while deleting. Error message: "
-
-#: modules/evaluation/classes/db/EvaluationAnswerDB.class.php:365
-msgid "AnswerDB::getUserAnswer -  Fehlermeldung: "
-msgstr "AnswerDB::getUserAnswer - error message: "
-
-#: modules/evaluation/classes/db/EvaluationDB.class.php:111
-msgid "Keine Evaluation mit dieser ID gefunden."
-msgstr "No evaluation with this ID found."
 
 #: modules/evaluation/classes/db/EvaluationDB.class.php:232
 msgid "Fehler beim Löschen von Bereichen. Fehlermeldung: "
@@ -2269,6 +2229,17 @@ msgstr "Error while deleting areas. Error message: "
 #: modules/evaluation/classes/db/EvaluationDB.class.php:243
 msgid "Fehler beim Verknüpfen mit Bereichen. Fehlermeldung: "
 msgstr "Error while linking with areas. Error message: "
+
+#: modules/evaluation/classes/db/EvaluationDB.class.php:262
+#: modules/evaluation/classes/db/EvaluationGroupDB.class.php:184
+#: modules/evaluation/classes/db/EvaluationQuestionDB.class.php:166
+msgid "Fehler beim Löschen. Fehlermeldung: "
+msgstr "Error while deleting. Error message: "
+
+#: modules/evaluation/classes/db/EvaluationDB.class.php:275
+#: modules/evaluation/classes/db/EvaluationDB.class.php:287
+msgid "Fehler beim entfernen der Verknüfungen. Fehlermeldung: "
+msgstr "Error while deleting links. Error message: "
 
 #: modules/evaluation/classes/db/EvaluationDB.class.php:385
 msgid "Fehler beim Verknüpfen mit Benutzer. Fehlermeldung: "
@@ -2317,12 +2288,3 @@ msgstr "Error while searching. Error message:"
 #: modules/evaluation/classes/db/EvaluationQuestionDB.class.php:90
 msgid "Keine Frage mit dieser ID gefunden."
 msgstr "No question with this ID found."
-
-#~ msgid "Fehler beim Einlesen (Gruppe)"
-#~ msgstr "Error while reading (group)"
-
-#~ msgid "Fehler beim Anlegen einer neuen Untergruppe."
-#~ msgstr "Error while creating a new content sub-block."
-
-#~ msgid "Neue Fragengruppe"
-#~ msgstr "New group of questions"
