@@ -24,6 +24,8 @@ $biest_templates['biest']=array(
 	<td><input size=60 name=\"biest_zusammenfassung\"></td></tr>
 	<tr><td>Zuständig:</td>
 	<td><input size=60 name=\"biest_zustaendig\"><br>
+	<tr><td>Version:</td>
+	<td><input size=60 name=\"biest_version\"><br>
 	<font size=\"-1\">Bitte den Nachnamen des zuständigen Programmierers eintragen, mehrere Personen k&ouml;nnen genannt werden</font><td></tr>
 	<tr><td>Beschreibung:</td>
 	<td><textarea name=\"biest_beschreibung\" cols=60 rows=10></textarea></td></tr>
@@ -41,13 +43,14 @@ $biest_templates['biest']=array(
 Autor: $author
 Erstellt: $create_time
 Zuständig: $biest_zustaendig
+Version: $biest_version
 Zusammenfassung: $biest_zusammenfassung
 Status: offen
 Beschreibung: $biest_beschreibung', 
 	// list of fields to parse for list view, matching is case-insensitive
 	// order must be same as indicated by listheader
 	// first field (name) will be added
-	"listview"=>array('erstellt','autor','zuständig','status','zusammenfassung'),
+	"listview"=>array('erstellt','autor','zuständig','version','status','zusammenfassung'),
 	// standard order of fields for sort function
   	"stdorder"=>'-erstellt,status,autor,zuständig,beschreibung',
 	// header for list tables, first column always is the pages name
@@ -56,6 +59,7 @@ Beschreibung: $biest_beschreibung',
 		array("order"=>"erstellt", "heading"=>"Erstellt"),
 		array("order"=>"autor", "heading"=>"Autor"),
 		array("order"=>"zuständig", "heading"=>"Zuständig"),
+		array("order"=>"version", "heading"=>"Version"),
 		array("order"=>"status", "heading"=>"Status"),
 		array("order"=>"zusammenfassung", "heading"=>"Zusammenfassung"))
 );
