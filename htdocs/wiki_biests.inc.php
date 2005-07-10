@@ -24,9 +24,9 @@ $biest_templates['biest']=array(
 	<td><input size=60 name=\"biest_zusammenfassung\"></td></tr>
 	<tr><td>Zuständig:</td>
 	<td><input size=60 name=\"biest_zustaendig\"><br>
-	<tr><td>Version:</td>
-	<td><input size=60 name=\"biest_version\"><br>
 	<font size=\"-1\">Bitte den Nachnamen des zuständigen Programmierers eintragen, mehrere Personen k&ouml;nnen genannt werden</font><td></tr>
+	<tr><td>Version:</td>
+	<td><input size=60 name=\"biest_version\"></td></tr>
 	<tr><td>Beschreibung:</td>
 	<td><textarea name=\"biest_beschreibung\" cols=60 rows=10></textarea></td></tr>
 	<tr><td>Foren-Thema erzeugen:</td>
