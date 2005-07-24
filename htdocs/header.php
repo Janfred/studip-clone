@@ -82,8 +82,8 @@ if ($auth->auth["uid"] == "nobody") { ?>
 				<tr>
 
 <?
-				echo MakeToolbar("pictures/home.gif","index.php",_("Start"),_("Zur Startseite"),40,"_top","left");
-				echo MakeToolbar("pictures/meinesem.gif","freie.php",_("Freie"),_("Freie Veranstaltungen"),40, "_top","left");
+				echo MakeToolbar("pictures/home.gif","index.php",_("Start"),_("Zur Startseite"),40,"_top","left", "FALSE", "1");
+				echo MakeToolbar("pictures/meinesem.gif","freie.php",_("Freie"),_("Freie Veranstaltungen"),40, "_top","left", "FALSE", "2");
 				
 ?>				
 				</td></tr></table></td>
@@ -92,7 +92,7 @@ if ($auth->auth["uid"] == "nobody") { ?>
 				<tr>
 
 
-<?				echo MakeToolbar("pictures/logo2.gif","impressum.php",_("Impressum"),$UNI_NAME_CLEAN." - "._("Informationen über das System"),40,"_top");
+<?				echo MakeToolbar("pictures/logo2.gif","impressum.php",_("Impressum"),$UNI_NAME_CLEAN." - "._("Informationen über das System"),40,"_top", "center", "FALSE", "5");
 ?>
 				</td></tr></table></td>
 			<td class="toolbar" align="right">											
@@ -100,8 +100,8 @@ if ($auth->auth["uid"] == "nobody") { ?>
 				<tr>
 
 
-<?				echo MakeToolbar("pictures/hilfe.gif","./help/index.php$help_query",_("Hilfe"),_("Hilfe zu dieser Seite"),40, "_new","right");
-				echo MakeToolbar("pictures/login.gif","index.php?again=yes",_("Login"),_("Am System anmelden"),40,"_top","right");
+<?				echo MakeToolbar("pictures/hilfe.gif","./help/index.php$help_query",_("Hilfe"),_("Hilfe zu dieser Seite"),40, "_new","right", "FALSE", "9");
+				echo MakeToolbar("pictures/login.gif","index.php?again=yes",_("Login"),_("Am System anmelden"),40,"_top","right", "FALSE", "0");
 
 ?>
 			</td></tr></table></td>
@@ -166,8 +166,8 @@ if ($auth->auth["uid"] == "nobody") { ?>
 	$home_icon = ($global_obj['eval']['neue'] || $global_obj['vote']['neue'] || $global_obj['news']['neue'] ? "pictures/home_red.gif" : "pictures/home.gif");
 	$home_info .= ($global_obj['news']['neue'] ? " - " . sprintf(_(" %s neue News"), $global_obj['news']['neue']) : "");
 	$home_info .= (($global_obj['vote']['neue'] + $global_obj['eval']['neue']) ? " - " . sprintf(_(" %s neue Umfrage(n)"), ($global_obj['vote']['neue'] + $global_obj['eval']['neue'])) : "");
-	echo MakeToolbar($home_icon  ,"index.php",_("Start"),_("Zur Startseite") . $home_info,40,"_top");
-	echo MakeToolbar("pictures/meinesem.gif",($perm->have_perm("root")) ? "sem_portal.php" : "meine_seminare.php",_("Veranstaltungen"),_("Meine Veranstaltungen & Einrichtungen"),90, "_top","left");
+	echo MakeToolbar($home_icon  ,"index.php",_("Start"),_("Zur Startseite") . $home_info,40,"_top", "left", "FALSE", "1");
+	echo MakeToolbar("pictures/meinesem.gif",($perm->have_perm("root")) ? "sem_portal.php" : "meine_seminare.php",_("Veranstaltungen"),_("Meine Veranstaltungen & Einrichtungen"),90, "_top","left", "FALSE", "2");
 
 //Nachrichten anzeigen
 	$text = _("Post");
@@ -196,13 +196,13 @@ if ($auth->auth["uid"] == "nobody") { ?>
 		$tip = _("Sie haben keine alten empfangenen Nachrichten.");
 	}
 
-	echo MakeToolbar($icon,$link,$text,$tip,40, "_top");
+	echo MakeToolbar($icon,$link,$text,$tip,40, "_top", "center", "FALSE");
 
 		if (!($perm->have_perm("admin") || $perm->have_perm("root"))) {
 			if ($GLOBALS['CALENDAR_ENABLE'])
-				echo MakeToolbar("pictures/meinetermine.gif","./calendar.php?caluserid=self",_("Planer"),_("Termine und Kontakte"),40, "_top");
+				echo MakeToolbar("pictures/meinetermine.gif","./calendar.php?caluserid=self",_("Planer"),_("Termine und Kontakte"),40, "_top", "center", "FALSE", "3");
 			else
-				echo MakeToolbar("pictures/meinetermine.gif","./mein_stundenplan.php",_("Planer"),_("Stundenplan und Kontakte"),40, "_top");
+				echo MakeToolbar("pictures/meinetermine.gif","./mein_stundenplan.php",_("Planer"),_("Stundenplan und Kontakte"),40, "_top", "center", "FALSE", "3");
 		}		
 
 		if ($GLOBALS['CHAT_ENABLE']) {
@@ -259,7 +259,7 @@ if ($auth->auth["uid"] == "nobody") { ?>
 		<table class="toolbar" border="0" width="100%" cellspacing="0" cellpadding="0">
 		<tr align="center">
 <? //create (javascript) info tooltip/window
-				echo MakeToolbar("pictures/logo2.gif","impressum.php",_("Impressum"),$UNI_NAME_CLEAN." - "._("Informationen über das System"),112, "_top");
+				echo MakeToolbar("pictures/logo2.gif","impressum.php",_("Impressum"),$UNI_NAME_CLEAN." - "._("Informationen über das System"),112, "_top", "center", "FALSE", "5");
 ?>
 	</tr>
 	</table>
@@ -300,13 +300,13 @@ if ($auth->auth["uid"] == "nobody") { ?>
 					$hp_link .= "?guestbook=open#guest";
 				}
 			}
-			echo MakeToolbar($picture,$hp_link,_("Homepage"),$hp_txt,40, "_top","right");
+			echo MakeToolbar($picture,$hp_link,_("Homepage"),$hp_txt,40, "_top","right", "FALSE", "6");
 
-			echo MakeToolbar("pictures/suchen.gif","auswahl_suche.php",_("Suche"),_("Im System suchen"),40, "_top");
+			echo MakeToolbar("pictures/suchen.gif","auswahl_suche.php",_("Suche"),_("Im System suchen"),40, "_top", "center", "FALSE", "7");
 		}
 
 		if ($perm->have_perm("tutor")) {
-			echo MakeToolbar("pictures/admin.gif","adminarea_start.php?list=TRUE",_("Admin"),_("Zu Ihrer Administrationsseite"),40, "_top");
+			echo MakeToolbar("pictures/admin.gif","adminarea_start.php?list=TRUE",_("Admin"),_("Zu Ihrer Administrationsseite"),40, "_top", "center", "FALSE", "8");
 		} else {
 			?>
 			<td class="toolbar">
@@ -323,8 +323,8 @@ if ($auth->auth["uid"] == "nobody") { ?>
 		echo MakeToolbar("pictures/info_header.gif","#",trim(mila($auth->auth["uname"],7)),$infotext,68, "","left","TRUE");
 ?>
 <?		
-		echo MakeToolbar("pictures/hilfe.gif","./help/index.php$help_query",_("Hilfe"),_("Hilfe zu dieser Seite"),40, "_new","right");
-		echo MakeToolbar("pictures/logout.gif","logout.php",_("Logout"),_("Aus dem System abmelden"),40, "_top");
+		echo MakeToolbar("pictures/hilfe.gif","./help/index.php$help_query",_("Hilfe"),_("Hilfe zu dieser Seite"),40, "_new","right","FALSE", "9");
+		echo MakeToolbar("pictures/logout.gif","logout.php",_("Logout"),_("Aus dem System abmelden"),40, "_top", "right", "FALSE", "0");
 
 ?>
 	</tr>

@@ -1246,8 +1246,8 @@ function tooltip ($text, $with_alt = TRUE, $with_popup = FALSE) {
 * Returns a an entry in the top navigation bar
 *
 * 
-* @access        public        
-* @param        string $icon       	 Path to the icon
+* @access       public        
+* @param        string $icon       	Path to the icon
 * @param        string $URL		URL on button
 * @param        string $text		Hovertext under the Button
 * @param        string $tooltip		for Tooltip Window
@@ -1255,18 +1255,26 @@ function tooltip ($text, $with_alt = TRUE, $with_popup = FALSE) {
 * @param        string $target		same or new window...
 * @param        string $align		
 * @param        string $toolwindow	For a special Toolwindow
-* @return        string
+* @accesskey	string			key used for the shortcut
+* @return       string
 */
-function MakeToolbar ($icon,$URL,$text,$tooltip,$size,$target="_top",$align="center",$toolwindow="FALSE") {
+function MakeToolbar ($icon,$URL,$text,$tooltip,$size,$target="_top",$align="center",$toolwindow="FALSE", $accesskey=FALSE) {
+	global $user;
+	$ucfg = new UserConfig($user->id, "ACCESSKEY_ENABLE");
+
+	if (!$ucfg->getValue())
+		$accesskey = FALSE;
+	if ($accesskey !== FALSE)
+		$accesskey_tooltip = "  [ALT] + ".strtoupper($accesskey);
 	if ($toolwindow == "FALSE") {
-		$tool = tooltip($tooltip);
+		$tool = tooltip($tooltip.$accesskey_tooltip);
 	} else {
 		$tool = tooltip($tooltip,TRUE,TRUE);
 	}
 	$toolbar = "<td class=\"toolbar\" align=\"$align\">";
 
 	$toolbar .= "<img border=\"0\" src=\"pictures/blank.gif\" height=\"1\" width=\"45\"><br>"
-			  ."<a class=\"toolbar\" href=\"$URL\" target=\"$target\"><img border=\"0\" src=\"$icon\" ".$tool."><br>"
+			  ."<a class=\"toolbar\" href=\"$URL\" target=\"$target\" ".(($accesskey !== FALSE) ? "accesskey=\"$accesskey\"" : "")."><img border=\"0\" src=\"$icon\" ".$tool."><br>"
 			  ."<img border=\"0\" src=\"pictures/blank.gif\" height=\"6\" width=\"$size\"><br>"
 			  ."<b><font size=\"2\">".$text."</font></b></a><br>"
 			  ."<img border=\"0\" src=\"pictures/blank.gif\" height=\"4\" width=\"30\">";
