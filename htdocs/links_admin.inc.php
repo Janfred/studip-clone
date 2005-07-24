@@ -300,6 +300,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 	if ($perm->have_perm("root")) {
 		$structure["studiengang"]=array ('topKat'=>"global", 'name'=>_("Studieng&auml;nge"), 'link'=>"admin_studiengang.php", 'active'=>FALSE);
 		$structure["datafields"]=array ('topKat'=>"global", 'name'=>_("Datenfelder"), 'link'=>"admin_datafields.php", 'active'=>FALSE);
+		$structure["config"]=array ('topKat'=>"global", 'name'=>_("Konfiguration"), 'link'=>"admin_config.php", 'active'=>FALSE);
 		$structure["sessions"]=array ('topKat'=>"modules", 'name'=>_("Sessions"), 'link'=>"view_sessions.php", 'active'=>FALSE);
 		$structure["integrity"]=array ('topKat'=>"modules", 'name'=>_("DB&nbsp;Integrit&auml;t"), 'link'=>"admin_db_integrity.php", 'active'=>FALSE);
 		if ($BANNER_ADS_ENABLE)  {
@@ -471,6 +472,9 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 		case "admin_smileys.php":
 			$reiter_view = "smileyadmin";
 		break;
+		case "admin_config.php":
+			$reiter_view = "config";
+		break;		
 	}
 	
 	$reiter->create($structure, $reiter_view, $tooltip, $addText);
