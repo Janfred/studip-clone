@@ -34,7 +34,7 @@ require_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_ADMIN_MODULES."/IntegrityCheck
 * @package	Admin
 * @see		IntegrityCheckAbstract
 */
-class IntegrityCheckUser extends IntegrityCheckAbstract{
+class IntegrityCheckUser extends IntegrityCheckAbstract {
 	
 	/**
 	* constructor
@@ -59,12 +59,15 @@ class IntegrityCheckUser extends IntegrityCheckAbstract{
 									'query' => 'view:USER_ARCHIVUSER:');
 		$this->checklist[] = array('detail_table' => 'admission_seminar_user',
 									'query' => 'view:USER_ADMISSIONUSER:');
-		$this->checklist[] = array('detail_table' => 'active_sessions',
+		$this->checklist[] = array('detail_table' => PHPLIB_USERDATA_TABLE,
 									'query' => 'view:USER_SESSION:');
 		$this->checklist[] = array('detail_table' => 'contact',
 									'query' => 'view:USER_CONTACT:');
 		$this->checklist[] = array('detail_table' => 'statusgruppe_user',
 									'query' => 'view:USER_STATUSGRUPPEUSER:');
+		$this->checklist[] = array('detail_table' => 'object_user_visits',
+									'query' => 'view:USER_OBJECT_USER_VISIT:');
+									
 		
 	}
 

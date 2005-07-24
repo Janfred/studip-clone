@@ -52,7 +52,7 @@ include $ABSOLUTE_PATH_STUDIP."header.php";   //hier wird der "Kopf" nachgeladen
 include $ABSOLUTE_PATH_STUDIP."links_admin.inc.php";  //Linkleiste fuer admins
 
 //global variables
-$_integrity_plugins = array("User","Seminar","Institut","Archiv","Studiengang","Termin");
+$_integrity_plugins = array("User","Seminar","Institut","Archiv","Studiengang");
 $_csw = new cssClassSwitcher();
 
 ?>

@@ -37,10 +37,12 @@ $_views["USER_ARCHIVUSER"]= array("pk"=>"user_id","temp_table_type"=>"HEAP",
 $_views["USER_ADMISSIONUSER"]= array("pk"=>"user_id","temp_table_type"=>"HEAP",
 							"query"=>"SELECT   a.user_id FROM admission_seminar_user a LEFT JOIN auth_user_md5 b USING(user_id) WHERE ISNULL(b.user_id)");
 $_views["USER_SESSION"]= array("pk"=>"sid","temp_table_type"=>"HEAP",
-							"query"=>"SELECT a.sid FROM active_sessions a LEFT JOIN auth_user_md5 b ON(a.sid=b.user_id) WHERE ISNULL(b.user_id) AND a.sid NOT LIKE 'nobody' AND name='Seminar_User'");
+							"query"=>"SELECT a.sid FROM " . PHPLIB_USERDATA_TABLE . " a LEFT JOIN auth_user_md5 b ON(a.sid=b.user_id) WHERE ISNULL(b.user_id) AND a.sid NOT LIKE 'nobody'");
 $_views["USER_STATUSGRUPPEUSER"]= array("pk"=>"user_id","temp_table_type"=>"HEAP",
 							"query"=>"SELECT   a.user_id FROM statusgruppe_user a LEFT JOIN auth_user_md5 b USING(user_id) WHERE ISNULL(b.user_id)");
-
+$_views["USER_OBJECT_USER_VISIT"]= array("pk"=>"object_id","temp_table_type"=>"HEAP",
+							"query"=>"SELECT object_id FROM `object_user_visits` a LEFT JOIN auth_user_md5 b USING(user_id)
+							WHERE ISNULL(b.user_id)");
 //Seminar
 $_views["SEM_SEMUSER"]= array("pk"=>"Seminar_id","temp_table_type"=>"HEAP",
 							"query"=>"SELECT   a.Seminar_id FROM seminar_user a LEFT JOIN seminare b USING(Seminar_id) WHERE ISNULL(b.Seminar_id)");
@@ -50,12 +52,21 @@ $_views["SEM_ADMISSIONUSER"]= array("pk"=>"Seminar_id","temp_table_type"=>"HEAP"
 							"query"=>"SELECT   a.Seminar_id FROM admission_seminar_user a LEFT JOIN seminare b USING(Seminar_id) WHERE ISNULL(b.Seminar_id)");
 $_views["SEM_SEMINST"]= array("pk"=>"Seminar_id","temp_table_type"=>"HEAP",
 							"query"=>"SELECT   a.Seminar_id FROM seminar_inst a LEFT JOIN seminare b USING(Seminar_id) WHERE ISNULL(b.Seminar_id)");
-
+$_views["SEM_TERMINE"]= array("pk"=>"range_id","temp_table_type"=>"HEAP",
+							"query"=>"SELECT range_id FROM termine a LEFT JOIN  seminare b ON (range_id=Seminar_id) WHERE ISNULL(b.Seminar_id)");
+$_views["SEM_SEM_TREE"]= array("pk"=>"seminar_id","temp_table_type"=>"HEAP",
+							"query"=>"SELECT a.seminar_id FROM seminar_sem_tree a LEFT JOIN  seminare b USING(Seminar_id) WHERE ISNULL(b.Seminar_id)");
+$_views["SEM_OBJECT_USER_VISIT"]= array("pk"=>"object_id","temp_table_type"=>"HEAP",
+							"query"=>"SELECT object_id FROM `object_user_visits` LEFT JOIN seminare b ON(object_id=Seminar_id ) 
+							WHERE b.Seminar_id is null AND type='sem' ");
 //Institut
 $_views["INST_USER"]= array("pk"=>"Institut_id","temp_table_type"=>"HEAP",
 							"query"=>"SELECT   a.Institut_id FROM user_inst a LEFT JOIN Institute b USING(Institut_id) WHERE ISNULL(b.Institut_id)");
 $_views["INST_SEM"]= array("pk"=>"Institut_id","temp_table_type"=>"HEAP",
 							"query"=>"SELECT   a.Institut_id FROM seminar_inst a LEFT JOIN Institute b USING(Institut_id) WHERE ISNULL(b.Institut_id)");
+$_views["INST_OBJECT_USER_VISIT"]= array("pk"=>"object_id","temp_table_type"=>"HEAP",
+							"query"=>"SELECT object_id FROM `object_user_visits` a LEFT JOIN Institute b ON(object_id=Institut_id ) 
+							WHERE b.Institut_id is null AND a.type='inst' ");
 
 
 //Archiv
@@ -70,13 +81,6 @@ $_views["STUD_ADMISSONUSER"]= array("pk"=>"studiengang_id","temp_table_type"=>"H
 $_views["STUD_USER"]= array("pk"=>"studiengang_id","temp_table_type"=>"HEAP",
 							"query"=>"SELECT   a.studiengang_id FROM user_studiengang a LEFT JOIN studiengaenge b USING(studiengang_id) WHERE ISNULL(b.studiengang_id)");
 
-
-//UNION Termine
-
-$_views["TERMINE_USER"]= array("pk"=>"range_id","temp_table_type"=>"HEAP",
-							"query"=>"SELECT DISTINCT range_id FROM termine  INNER JOIN  auth_user_md5  ON (range_id=user_id)");
-$_views["TERMINE_SEM"]= array("pk"=>"range_id","temp_table_type"=>"HEAP",
-							"query"=>"SELECT DISTINCT range_id FROM termine  INNER JOIN  seminare  ON (range_id=Seminar_id)");
 
 //UNION dokumente
 $_views["DOCS_SEM"]= array("pk"=>"Seminar_id","temp_table_type"=>"HEAP",

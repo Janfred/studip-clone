@@ -51,6 +51,9 @@ class IntegrityCheckInstitut extends IntegrityCheckAbstract{
 									'query' => 'view:INST_USER:');
 		$this->checklist[] = array('detail_table' => 'seminar_inst',
 									'query' => 'view:INST_SEM:');
+		$this->checklist[] = array('detail_table' => 'object_user_visits',
+									'query' => 'view:INST_OBJECT_USER_VISIT:');
+							
 	}
 
 }
