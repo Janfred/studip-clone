@@ -748,13 +748,13 @@ function write_config ($key='', $val='', $arr='') {
 	if (is_array($arr)) {
 		foreach ($arr as $key=>$val) {
 			$GLOBALS[$key] = $val;
-			$query = sprintf ("SELECT * FROM config WHERE `key` = '%s' ", $key);
+			$query = sprintf ("SELECT * FROM config WHERE `field` = '%s' AND `is_default` != '1' ", $key);
 			$db->query($query);
 		
 			if ($db->nf()) {
-				$query = sprintf ("UPDATE config SET `key` = '%s', value = '%s', chdate = '%s' WHERE `key` = '%s' ", $key, $val, time(), $key);
+				$query = sprintf ("UPDATE config SET `field` = '%s', value = '%s', chdate = '%s' WHERE `field` = '%s' AND `is_default` != '1' ", $key, $val, time(), $key);
 			} else {
-				$query = sprintf ("INSERT INTO config SET config_id = '%s', `key` = '%s', value = '%s', chdate = '%s'", md5(uniqid("configID")), $key, $val, time());
+				$query = sprintf ("INSERT INTO config SET config_id = '%s', `field` = '%s', value = '%s', chdate = '%s'", md5(uniqid("configID")), $key, $val, time());
 			}
 			$db->query($query);
 		}
@@ -772,22 +772,34 @@ function write_config ($key='', $val='', $arr='') {
  * @param	string	the key for the config entry
  * @param	boolean	if set, the default value will we returned
  *
- * @return	sttring	the value
+ * @return	string	the value
  *
  **/
-function get_config ($key, $default = FALSE) {
-	$db = new DB_Seminar;
+function get_config($key, $default = FALSE) {
+	if (isset($GLOBALS[$key]) && !isset($_REQUEST[$key]) && !$default){
+		return $GLOBALS[$key];
+	} else {
+		$db = new DB_Seminar;
+		$query = sprintf ("SELECT value, is_default FROM config WHERE `field` = '%s' ", $key);
+		$db->query($query);
 	
-	$query = sprintf ("SELECT value, default_value FROM config WHERE `key` = '%s' ", $key);
-	$db->query($query);
-	if ($db->next_record()) {
-		if ($default)
-			return $db->f("default_value");
-		else
-			return $db->f("value");
-	} else
+		while ($db->next_record()) {
+			if ($db->f("is_default")) {
+				$default_value = $db->f("value");
+			} else {
+				$value = $db->f("value");
+			}
+		}
+	
+		if (($default) || (!isset($value))) {
+			return $default_value;
+		} else {
+			return $value;
+		}		
 		return FALSE;
+	}
 }
+
 
 // folgende Funktion ist nur notwendig, wenn die zu kopierende Veranstaltung nicht vom Dozenten selbst,
 // sondern vom Admin oder vom root kopiert wird (sonst wird das Dozentenfeld leer gelassen, was ja keiner will...)
