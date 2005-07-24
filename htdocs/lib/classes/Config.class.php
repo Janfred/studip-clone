@@ -157,7 +157,7 @@ class Config {
 		if (!isset ($this->defaults[$key])) {
 			$this->_retrieve($key); // retrieve
 		}
-		return $defaults[$key];
+		return $this->defaults[$key];
 	}
 
 	/**
@@ -221,10 +221,10 @@ class Config {
 		while ($this->db->next_record()) { // get value and default
 			if ($this->db->f("is_default")) {
 				$this->defaults[$key] = $this->db->f("value");
-				$has_value = TRUE;
+				$has_default_value = TRUE;
 			} else {
 				$this->data[$key] = $this->db->f("value");
-				$has_default_value = TRUE;
+				$has_value = TRUE;
 			}
 		} 
 		if (!$has_value) {
