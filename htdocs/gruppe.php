@@ -25,13 +25,18 @@ include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Sessio
 // -- here you have to put initialisations for the current page
 require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
 require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
+require_once ($ABSOLUTE_PATH_STUDIP. "meine_seminare_func.inc.php");
 
 // Start of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 
 $db=new DB_Seminar;
-      
+
+if (isset($_REQUEST['open_my_sem'])) $_my_sem_open[$_REQUEST['open_my_sem']] = true;
+	
+if (isset($_REQUEST['close_my_sem'])) unset($_my_sem_open[$_REQUEST['close_my_sem']]);
+	
 
 //es wird eine Tabelle aufgebaut, in der die Gruppenzugehoerigkeit festgelegt wird.
 
@@ -41,37 +46,109 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 	<tr>
 		<td class="topic">&nbsp;&nbsp;<img src="pictures/gruppe.gif" alt="Gruppe &auml;ndern" border=0>&nbsp;&nbsp;<b><?=_("Gruppenzuordnung")?></></td>
 	</tr>
-	<tr><td class="blank"><br><blockquote><?=_("Hier k&ouml;nnen Sie Ihre Veranstaltungen in Gruppen einordnen. Die Gruppen werden farbig gegliedert - die Darstellung unter <b>meine Veranstaltungen</b> wird entsprechend den Gruppen sortiert.")?></blockquote><br>
+	<FORM method=post action="meine_seminare.php">
+	<tr><td class="blank">
+	<p style="margin:20px;">
+	<?=_("Hier k&ouml;nnen Sie Ihre Veranstaltungen in Gruppen einordnen. Die Gruppen werden farbig gegliedert - die Darstellung unter <b>meine Veranstaltungen</b> wird entsprechend den Gruppen sortiert.")?>
+	
+	</p>
+	</td>
+	</tr>
+	<tr><td class="blank">
 	<FORM method=post action="meine_seminare.php">
 	<table border="0" cellpadding="0" cellspacing="0" width="90%" align="center">
+	<tr><td class="blank" align="right">
+	<?=_("Allgemeine Gruppierung ausw&auml;hlen:")?>
+	&nbsp;
+	<select name="select_group_field">
+		<option value="not_grouped" <?=($_my_sem_group_field == 'not_grouped' ? 'selected' : '')?>><?=_("keine Gruppierung")?></option>
+		<option value="sem_number" <?=($_my_sem_group_field == 'sem_number' ? 'selected' : '')?>><?=_("Semester")?></option>
+		<option value="sem_tree_id" <?=($_my_sem_group_field == 'sem_tree_id' ? 'selected' : '')?>><?=_("Studienbereich")?></option>
+		<option value="sem_status" <?=($_my_sem_group_field == 'sem_status' ? 'selected' : '')?>><?=_("Typ")?></option>
+		<option value="gruppe" <?=($_my_sem_group_field == 'gruppe' ? 'selected' : '')?>><?=_("Farbengruppen")?></option>
+	</select>
+	</td><td class="blank" align="center" colspan="8">
+	<INPUT type="IMAGE" <?=makeButton("absenden", "src") ?> border="0" value="absenden">
+	</td></tr>
+	<tr><td class="blank" align="right" colspan="9">
+	&nbsp;
+	</td></tr>
 	<tr valign"top" align="center">
 	<th width="90%"><?=_("Veranstaltung")?></th>
 
-<? FOR ($i=0; $i<8; $i++)
-	ECHO "<th class=\"gruppe".$i."\" width=\"10px\"><b>&nbsp;</b></th>";
+<?
+FOR ($i=0; $i<8; $i++)
+	ECHO "<th class=\"gruppe".$i."\" >&nbsp;<img src=\"pictures/blank.gif\" height=\"15px\" width=\"20px\"></th>";
 	ECHO "</tr>";
-	$db->query ("SELECT seminare.Name,seminare.visible, seminare.Seminar_id, seminar_user.status, seminar_user.gruppe FROM seminare LEFT JOIN seminar_user USING (Seminar_id) WHERE seminar_user.user_id = '$user->id' GROUP BY Seminar_id ORDER BY gruppe,Name");
-	$c=0;
-	while ($db->next_record())
-		{
- 	  	if ($c % 2)
-			$class="steel1";
-		else
-			$class="steelgraulight"; 
-
-		printf("<tr><td class=\"$class\">&nbsp;<a href=\"seminar_main.php?auswahl=%s\">%s</a>%s</td>",
-		$db->f("Seminar_id"),htmlReady(my_substr($db->f("Name"),0,50)),
-		(!$db->f('visible') ? "&nbsp;<font size=\"-1\">" . _("(versteckt)") . "</font>" : ""));
-		FOR ($i=0; $i<8; $i++)
-			{
-			ECHO "<td class=\"$class\"><INPUT type=radio name=gruppe[".$db->f('Seminar_id')."] value=".$i;
-			IF ($db->f("gruppe")==$i) ECHO " checked";
-			ECHO "></td>";
-			}
-		ECHO "</tr>";	
-		$c++;
+	$group_field = $_my_sem_group_field;
+	$groups = array();
+	$db->query ("SELECT sem_tree_id,seminare.Name, seminare.Seminar_id, seminare.status as sem_status, seminar_user.gruppe, seminare.visible, 
+	{$_views['sem_number_sql']} as sem_number, {$_views['sem_number_end_sql']} as sem_number_end 
+	FROM seminar_user LEFT JOIN seminare  USING (Seminar_id) 
+	LEFT JOIN seminar_sem_tree sst ON (sst.seminar_id=seminar_user.seminar_id)
+	WHERE seminar_user.user_id = '$user->id'");
+	while ($db->next_record()){
+		$my_sem[$db->f("Seminar_id")] = array("obj_type" => "sem", "name" => $db->f("Name"), "visible" => $db->f("visible"), "gruppe" => $db->f("gruppe"),
+		"sem_status" => $db->f("sem_status"),"sem_number" => $db->f("sem_number"),"sem_number_end" => $db->f("sem_number_end") );
+		if ($group_field){
+			fill_groups($groups, $db->f($group_field), array('seminar_id' => $db->f('Seminar_id'), 'name' => $db->f("Name"), 'gruppe' => $db->f('gruppe')));
 		}
-		ECHO "<tr><td class=\"blank\">&nbsp; </td><td class=\"blank\" align=center colspan=8><br><INPUT type=\"IMAGE\" " . makeButton("absenden", "src") . " border=0 value=absenden><INPUT type=hidden name=gruppesent value=1><br />&nbsp; </td></tr></form>";
+	}
+	
+	if ($group_field == 'sem_number') {
+		correct_group_sem_number($groups, $my_sem);
+	} else {
+		add_sem_name($my_sem);
+	}
+	
+	
+	$c=0;
+	sort_groups($group_field, $groups);
+	$group_names = get_group_names($group_field, $groups);
+	
+	foreach ($groups as $group_id => $group_members){
+		if ($group_field != 'not_grouped'){
+			echo '<tr><td class="steelkante" valign="top" height="20" colspan="9">';
+			if (isset($_my_sem_open[$group_id])){
+				echo '<a class="tree" style="font-weight:bold" name="' . $group_id . '" href="' . $PHP_SELF . '?close_my_sem=' . $group_id . '#' .$group_id . '" ' . tooltip(_("Gruppierung schließen"), true) . '>';
+				echo '<img src="pictures/forumgraurunt2.gif"   hspace="3" border="0">';
+			} else {
+				echo '<a class="tree"  name="' . $group_id . '" href="' . $PHP_SELF . '?open_my_sem=' . $group_id . '#' .$group_id . '" ' . tooltip(_("Gruppierung öffnen"), true) . '>';
+				echo '<img src="pictures/forumgrau2.gif"  hspace="3" border="0">';
+			}
+			if (is_array($group_names[$group_id])){
+				$group_name = $group_names[$group_id][1] . " > " . $group_names[$group_id][0];
+			} else {
+				$group_name = $group_names[$group_id];
+			}
+			echo htmlReady(my_substr($group_name,0,70));
+			
+			echo '</a></td></tr>';
+		}
+		if (isset($_my_sem_open[$group_id])){
+			
+			foreach ($group_members as $member){
+				$values = $my_sem[$member['seminar_id']];
+				if ($c % 2)
+				$class="steel1";
+				else
+				$class="steelgraulight"; 
+				
+				printf("<tr><td class=\"$class\"><font size=\"-1\">&nbsp;<a href=\"seminar_main.php?auswahl=%s\">%s</a>%s</font></td>",
+				$member['seminar_id'] ,htmlReady(my_substr($values["name"],0,70)),
+				(!$values["visible"] ? "&nbsp;" . _("(versteckt)")  : ""));
+				FOR ($i=0; $i<8; $i++)
+				{
+					ECHO "<td class=\"gruppe".$i."\"><INPUT type=radio name=gruppe[".$member['seminar_id']."] value=".$i;
+					IF ($values["gruppe"]==$i) ECHO " checked";
+					ECHO "></td>";
+				}
+				ECHO "</tr>";	
+				$c++;
+			}
+		}
+	}
+	ECHO "<tr><td class=\"blank\">&nbsp; </td><td class=\"blank\" align=center colspan=8><br><INPUT type=\"IMAGE\" " . makeButton("absenden", "src") . " border=0 value=absenden><INPUT type=hidden name=gruppesent value=1><br />&nbsp; </td></tr></form>";
 	echo "</table></td></tr>";
 }
 
