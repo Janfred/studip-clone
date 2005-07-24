@@ -150,6 +150,24 @@ function change_general_view() {
 				<?
 				}
 				?>
+				<tr  <? $cssSw->switchClass() ?>>
+					<td  align="right" class="blank" style="border-bottom:1px dotted black;">
+						<font size="-1"><?print _("Tastenkombinationen f&uuml;r Hauptfunktionen");?></font><br />
+						<br><div align="left"><font size="-1">
+						<?print _("Mit dieser Einstellung k&ouml;nnen Sie f&uuml;r die meisten in der Kopfzeile erreichbaren Hauptfunktionen eine Bedienung &uuml;ber Tastenkombinationen aktivieren. <br>Die Tastenkombination wird im Tooltip des jweiligen Icons angezeigt.");?>
+						</font></div>
+					</td>
+					<td <?=$cssSw->getFullClass()?>>
+						<?
+						echo "<input type=CHECKBOX name='accesskey_enable' value=1";
+						IF ($ucfg->getValue($user->id, "ACCESSKEY_ENABLE")) {
+							echo " checked";
+						}
+						echo ">";
+						?>
+						</font><br><br>
+					</td>
+				</tr>	
 				<tr <? $cssSw->switchClass() ?>>
 					<td  <?=$cssSw->getFullClass()?> colspan=2 align="middle">
 						<font size=-1><input type="IMAGE" <?=makeButton("uebernehmen", "src") ?> border=0 value="<?_("&Auml;nderungen &uuml;bernehmen")?>"></font>&nbsp;	
