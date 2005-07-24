@@ -34,7 +34,12 @@
 * Shared Memory Key, must be unique  (used only with ChatShmServer)
 * @const CHAT_SHM_KEY
 */
-define("CHAT_SHM_KEY",98374);    //muss eindeutig sein!!!
+if (function_exists('ftok')){
+	define("CHAT_SHM_KEY", ftok(__FILE__, 'S')); //works with PHP > 4.2.0
+} else {
+	define("CHAT_SHM_KEY",98374);    //muss eindeutig sein!!!
+}
+
 /**
 * Shared Memory Size, in Kbytes (used only with ChatShmServer)
 * @const CHAT_SHM_SIZE
