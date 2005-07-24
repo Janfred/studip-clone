@@ -526,6 +526,7 @@ function format ($text) {
 					"'(^|\n)\!{3}([^!].*)'m",           // Ueberschrift 2. Ordnung
 					"'(^|\n)\!{4}([^!].*)'m",           // Ueberschrift 1. Ordnung
 					"'(\n|\A)(([-=]+ .+(\n|\Z))+)'e",    // Listen
+                                        "'(\n|\A)((\\|.+(\n|\Z))+)'e",    // Tabellen
 					"'%%(\S|\S.*?\S)%%'s",               // ML-kursiv
 					"'\*\*(\S|\S.*?\S)\*\*'s",           // ML-fett
 					"'__(\S|\S.*?\S)__'s",                     // ML-unterstrichen
@@ -552,6 +553,7 @@ function format ($text) {
 					"\n<h2>\\2</h2>",
 					"\n<h1>\\2</h1>",
 					"preg_call_format_list('\\2')",
+					"preg_call_format_table('\\2')",
 					"<i>\\1</i>",
 					"<b>\\1</b>",
 					"<u>\\1</u>",
@@ -661,9 +663,15 @@ function preg_call_format_list ($content) {
 * @param	string	string containing a table in quick-format-syntax
 * @return	string
 */
-function preg_call_table_format ($content) {
-	return preg_replace("'\|(.+?)(\|\s*\n(?=\|)|\|\Z)'se",
-			"'<tr><td>'.preg_replace('/\|/','</td><td>','\\1').'</td></tr>'", $tbr);
+function preg_call_format_table($content) {
+	$lines = explode("\n", $content);
+	$tcode=array();
+	$tcode[]="<table style=\"border-collapse: collapse\" cellpadding=3>";
+	foreach ($lines as $l) {
+		$tcode[]=preg_replace("'\|(.+?)(\|\s*\n(?=\|)|\|\Z)'se","'<tr><td style=\"border: thin solid #666666\"><font size=-1>'.preg_replace('/\|/','</font></td><td style=\"border: thin solid #666666\"><font size=-1>','\\1').'</font></td></tr>'", $l);
+	}
+	$tcode[]="</table>";
+	return implode("",$tcode)."\n";
 }
 
 
