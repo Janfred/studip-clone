@@ -25,6 +25,7 @@
 
 require_once("$ABSOLUTE_PATH_STUDIP/language.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/auth_plugins/StudipAuthAbstract.class.php");
+require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/Config.class.php");
 
 if (strpos( PHP_OS,"WIN") !== false && $CHAT_ENABLE == true && $CHAT_SERVER_NAME == "ChatShmServer")	//Attention: file based chat for windows installations (slow)
 	$CHAT_SERVER_NAME = "ChatFileServer";
@@ -45,7 +46,7 @@ $GLOBALS['_fullname_sql']['no_title_rev'] = "CONCAT(Nachname ,', ', Vorname)";
 $GLOBALS['_fullname_sql']['no_title_short'] = "CONCAT(Nachname,', ',UCASE(LEFT(TRIM(Vorname),1)),'.')";
 
 //software version - please leave it as it is!
-$SOFTWARE_VERSION="1.1.5 beta cvs";
+$SOFTWARE_VERSION="1.2 alpha cvs";
 
 /*classes for database access
 ----------------------------------------------------------------
@@ -78,15 +79,13 @@ class DB_Ilias extends DB_Sql {
 }
 
 
-/*get params from the CONFIG table
+/*class for config; load config in globals (should be deprecated in future)
 ----------------------------------------------------------------*/
-$db = new DB_Seminar;
-$query = ("SELECT * FROM config");
-$db->query($query);
-while ($db->next_record()) {
-	$GLOBALS[$db->f("key")] = $db->f("value");
-}
-unset ($db);
+$cfg = new Config;
+$cfg-> extractAllGlobal(FALSE);
+
+//we leave the $cfg class for general use later...
+
 
 /*mail settings
 ----------------------------------------------------------------*/
