@@ -74,8 +74,9 @@ function select_language($selected_language = "") {
 function change_general_view() {
 	global $PHP_SELF, $_language, $auth, $perm, $forum, $user, $my_studip_settings;
 		
-	$db=new DB_Seminar;
-	$cssSw=new cssClassSwitcher;
+	$db = new DB_Seminar;
+	$cssSw = new cssClassSwitcher;
+	$ucfg = new UserConfig();
 	?>
 	<table width="100%" border="0" cellpadding="0" cellspacing="0" align="center">
 		<tr>
