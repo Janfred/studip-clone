@@ -5,6 +5,7 @@
 require_once($ABSOLUTE_PATH_STUDIP.'config.inc.php');
 require_once($ABSOLUTE_PATH_STUDIP.'cssClassSwitcher.inc.php');
 include_once($ABSOLUTE_PATH_STUDIP.'lib/classes/idna_convert.class.php');
+include_once($ABSOLUTE_PATH_STUDIP.'lib/classes/UserConfig.class.php');
 
 /*****************************************************************************
 get_ampel_state is a helper function for get_ampel_write and get_ampel_read.
