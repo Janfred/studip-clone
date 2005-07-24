@@ -36,6 +36,7 @@ require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
 require_once("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/language.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/DataFields.class.php"); 
+require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/UserConfig.class.php"); 
 
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
