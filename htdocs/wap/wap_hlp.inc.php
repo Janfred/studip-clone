@@ -75,7 +75,8 @@
 	*						required global variable
 	* @return	boolean	FALSE, if the user could not be found
 	*/
-	function wap_hlp_get_global_user_var($user_id, $var_string)
+	
+	function wap_hlp_get_global_user_var_old($user_id, $var_string)
 	{
 		$q_string  = "SELECT val ";
 		$q_string .= "FROM active_sessions ";
@@ -101,4 +102,15 @@
 			}
 		}
 	}
+	
+	function wap_hlp_get_global_user_var_new($user_id, $var_string){
+		$user =& new Seminar_User($user_id);
+		$GLOBALS[$var_string] = $user->user_vars[$var_string];
+		return true;
+	}
+	
+	function wap_hlp_get_global_user_var($user_id, $var_string){
+		return ('active_sessions' == PHPLIB_USERDATA_TABLE ? wap_hlp_get_global_user_var_old($user_id, $var_string) : wap_hlp_get_global_user_var_new($user_id, $var_string));
+	}
+
 ?>
