@@ -13,8 +13,8 @@
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 //
-// Copyright (C) 2005 André Noack <noack@data-quest>,
-// Suchi & Berg GmbH <info@data-quest.de>
+// Copyright (C) 2005 Tobias Thelen ,	<tthelen@uni-osnabrueck.de>
+// 
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -37,7 +37,6 @@ define('STUDIPCOMMENTS_DB_TABLE', 'comments');
 class StudipComments extends SimpleORMap {
 
 	function StudipComments($id = null){
-		$this->db_table = STUDIPCOMMENTS_DB_TABLE;
 		parent::SimpleORMap($id);
 	}
 
@@ -59,6 +58,15 @@ class StudipComments extends SimpleORMap {
 			$comments[]=array($db->f("content"), $db->f("fullname"), $db->f("username"), date("d.m.Y - H:i",$db->f("mkdate")), $db->f("comment_id"));
 		}
 		return $comments;
+	}
+	
+	function DeleteCommentsByObject($object_ids){
+		if (!is_array($object_ids)){
+			$object_ids = array($object_ids);
+		}
+		$query = "DELETE FROM comments WHERE object_id IN ('" . join("','", $object_ids). "')";
+		$db = new DB_Seminar($query);
+		return $db->affected_rows();
 	}
 }
 
