@@ -17,14 +17,6 @@
 * along with this program; if not, write to the Free Software
 * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
-
-page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
-$auth->login_if($auth->auth["uid"] == "nobody");
-$perm->check("admin");
-
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
-
-// -- here you have to put initialisations for the current page
 require_once($ABSOLUTE_PATH_STUDIP . "dates.inc.php"); // Funktionen zum Loeschen von Terminen
 require_once($ABSOLUTE_PATH_STUDIP . "datei.inc.php"); // Funktionen zum Loeschen von Dokumenten
 require_once($ABSOLUTE_PATH_STUDIP . "archiv.inc.php");
@@ -34,6 +26,17 @@ require_once($ABSOLUTE_PATH_STUDIP . "visual.inc.php");
 require_once($ABSOLUTE_PATH_STUDIP . "statusgruppe.inc.php"); //Enthaelt Funktionen fuer Statusgruppen
 require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/DataFields.class.php"); //Enthaelt Funktionen fuer Statusgruppen
 require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/StudipLitList.class.php");
+
+page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
+$auth->login_if($auth->auth["uid"] == "nobody");
+
+$check_perm = (get_config('ALLOW_DOZENT_ARCHIV') ? 'dozent' : 'admin');
+
+$perm->check($check_perm);
+
+include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+
+// -- here you have to put initialisations for the current page
 
 if ($RESOURCES_ENABLE) {
 	include_once ($RELATIVE_PATH_RESOURCES . "/lib/DeleteResourcesUser.class.php");
@@ -98,13 +101,13 @@ if ($archive_kill) {
 	$run = TRUE;
 	$s_id = $archiv_assi_data["sems"][$archiv_assi_data["pos"]]["id"]; 
 	// # Do we have permission to do so?
-	// Admin sollte man schon sein
-	if (!$perm->have_perm("admin")) {
+
+	if (!$perm->have_perm($check_perm)) {
 		$msg .= "error§" . _("Sie haben keine Berechtigung zum archivieren von Veranstaltungen.") . "§";
 		$run = FALSE;
 	} 
 	// Trotzdem nochmal nachsehen
-	if (!$perm->have_studip_perm("admin", $s_id)) {
+	if (!$perm->have_studip_perm($check_perm , $s_id)) {
 		$msg .= "error§" . _("Sie haben keine Berechtigung diese Veranstaltung zu archivieren.") . "§";
 		$run = FALSE;
 	} 
@@ -161,8 +164,8 @@ if ($archive_kill) {
 			$liste .= "<li>" . sprintf(_("%s Postings archiviert."), $db_ar) . "</li>";
 		} 
 		
-		// Alle Dokumente im allgemeinen Ordner zu diesem Seminar loeschen.
-		if (($db_ar = recursiv_folder_delete($s_id)) > 0) {
+		// Alle Dokumente zu diesem Seminar loeschen.
+		if (($db_ar = delete_all_documents($s_id)) > 0) {
 			$liste .= "<li>" . sprintf(_("%s Dokumente und Ordner archiviert."), $db_ar) . "</li>";
 		} 
 		
@@ -182,21 +185,20 @@ if ($archive_kill) {
 		// Alle News-Verweise auf dieses Seminar löschen
 		$query = "DELETE FROM news_range where range_id='$s_id'";
 		$db->query($query); 
-		
+		if (($db_ar = $db->num_rows()) > 0) {
+			$liste .= "<li>" . sprintf(_("%s News gel&ouml;scht."), $db_ar) . "</li>";
+		} 
+
 		// Die News durchsehen, ob es da jetzt verweiste Einträge gibt...
-		$query = "SELECT news.news_id FROM news LEFT OUTER JOIN news_range USING (news_id) where range_id IS NULL";
+		/*$query = "SELECT news.news_id FROM news LEFT OUTER JOIN news_range USING (news_id) where range_id IS NULL";
 		$db->query($query);
 		while ($db->next_record()) { // Diese News hängen an nix mehr...
 			$tempNews_id = $db->f("news_id");
 			$query = "DELETE FROM news where news_id = '$tempNews_id'";
 			$db2->query($query);
-		} 
-		if (($db_ar = $db->num_rows()) > 0) {
-			$liste .= "<li>" . sprintf(_("%s News gel&ouml;scht."), $db_ar) . "</li>";
-		} 
-
-		if ($liste)
-			$msg .= "info§<font size=-1>$liste</font>§"; 
+		}
+		*/
+		StudipNews::DoGarbageCollect();
 		
 		//kill the datafields
 		$DataFields = new DataFields($s_id);
@@ -205,6 +207,9 @@ if ($archive_kill) {
 		//kill all wiki-pages
 		$query = sprintf ("DELETE FROM wiki WHERE range_id='%s'", $s_id);
 		$db->query($query);
+		if (($db_wiki = $db->affected_rows()) > 0) {
+			$liste .= "<li>" . sprintf(_("%s Wiki-Seiten archiviert."), $db_wiki) . "</li>";
+		}
 
 		$query = sprintf ("DELETE FROM wiki_links WHERE range_id='%s'", $s_id);
 		$db->query($query);
@@ -217,10 +222,12 @@ if ($archive_kill) {
 			$killAssign = new DeleteResourcesUser($s_id);
 			$killAssign->delete();
 		} 
+
+		if ($liste)
+			$msg .= "info§<font size=-1>$liste</font>§"; 
 		
 		//kill the object_user_vists for this seminar
-		$query = sprintf ("DELETE FROM object_user_visits WHERE object_id = '%s' ", $s_id);
-		$db->query($query);
+		object_kill_visits(null, $s_id);
 								
 		// und das Seminar loeschen.
 		$query = "DELETE FROM seminare where Seminar_id= '$s_id'";

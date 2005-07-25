@@ -23,6 +23,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/dates.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/datei.inc.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/wiki.inc.php"); // getAllWikiPages for dump
 require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/language.inc.php");
@@ -314,37 +315,16 @@ function dump_sem($sem_id) {
 	if ($Modules["documents"]) {
 		$i=0;
 	
-		//Auslesen aller allgemeine Dokumente zum Seminar
-		$doc_ids=doc_challenge($sem_id);
-		if (count($doc_ids))
-			foreach ($doc_ids as $a) {
-				$db->query ("SELECT dokument_id, dokumente.description, filename, dokumente.mkdate, filesize, dokumente.user_id, username, Nachname, dokumente.url  FROM dokumente LEFT JOIN auth_user_md5 ON auth_user_md5.user_id = dokumente.user_id WHERE dokument_id = '$a'");
-				$db->next_record();
-				if ($db->f("url")!="")
-					$linktxt = _("Hinweis: Diese Datei wurde nicht archiviert, da sie lediglich verlinkt wurde.");
-				else
-					$linktxt = "";	
-				$dbresult[$i]=array("mkdate"=>$db->f("mkdate"), "dokument_id"=>$db->f("dokument_id"), "description"=>$linktxt.$db->f("description"), "filename"=>$db->f("filename"), "filesize"=>$db->f("filesize"),"user_id"=> $db->f("user_id"), "username"=>$db->f("username"), "nachname"=>$db->f("Nachname"));
-				$i++;
-			}
-			
-		//Auslesen der Dokumente zu Terminen
-		$db->query ("SELECT termin_id FROM termine WHERE range_id ='$sem_id'");
-		while ($db->next_record()) {
-			$doc_ids=doc_challenge($db->f("termin_id"));
-			if (count($doc_ids))
-				foreach ($doc_ids as $a) {
-					$db2->query ("SELECT dokument_id, dokumente.description, filename, dokumente.mkdate, filesize, dokumente.user_id, username, Nachname, dokumente.url  FROM dokumente LEFT JOIN auth_user_md5 ON auth_user_md5.user_id = dokumente.user_id WHERE dokument_id = '$a'");
-					$db2->next_record();
-					if ($db2->f("url")!="")
-						$linktxt = _("Hinweis: Diese Datei wurde nicht archiviert, da sie lediglich verlinkt wurde.");
-					else
-						$linktxt = "";	
-					$dbresult[$i]=array("mkdate"=>$db2->f("mkdate"), "dokument_id"=>$db2->f("dokument_id"), "description"=>$linktxt.$db2->f("description"), "filename"=>$db2->f("filename"), "filesize"=>$db2->f("filesize"),"user_id"=> $db2->f("user_id"), "username"=>$db2->f("username"), "nachname"=>$db2->f("Nachname"));	
-					$i++;
-				}
+		$db->query("SELECT dokument_id, dokumente.description, filename, dokumente.mkdate, filesize, dokumente.user_id, username, Nachname, dokumente.url  FROM dokumente LEFT JOIN auth_user_md5 ON auth_user_md5.user_id = dokumente.user_id WHERE seminar_id = '$sem_id'");
+		while($db->next_record()){
+			if ($db->f("url")!="")
+				$linktxt = _("Hinweis: Diese Datei wurde nicht archiviert, da sie lediglich verlinkt wurde.");
+			else
+				$linktxt = "";	
+			$dbresult[$i]=array("mkdate"=>$db->f("mkdate"), "dokument_id"=>$db->f("dokument_id"), "description"=>$linktxt.$db->f("description"), "filename"=>$db->f("filename"), "filesize"=>$db->f("filesize"),"user_id"=> $db->f("user_id"), "username"=>$db->f("username"), "nachname"=>$db->f("Nachname"));
+			$i++;
 		}
-		
+			
 		if (!sizeof($dbresult)==0) {
 			$dump.="<br>";	  
   			$dump.="<table width=100% border=1 cellpadding=2 cellspacing=0>";
@@ -361,7 +341,7 @@ function dump_sem($sem_id) {
 				$size = "(".$sizetmp." KB)";
 	
      				$dump.="<tr><td width='100%'><b>".htmlReady($dbresult[$i]["filename"])."</b><br>".htmlReady($dbresult[$i]["description"])."&nbsp;".$size."</td><td>".
-					$dbresult[$i]["nachname"] . "&nbsp;</td><td>&nbsp;".date("d.m.Y", $dbresult[$i]["mkdate"])."</td></tr>\n";
+					htmlReady($dbresult[$i]["nachname"]) . "&nbsp;</td><td>&nbsp;".date("d.m.Y", $dbresult[$i]["mkdate"])."</td></tr>\n";
 			}
 			$dump.="</table>\n";
 		}
@@ -609,6 +589,9 @@ function in_archiv ($sem_id) {
 
 	$forumdump = addslashes(export_topic($sem_id));
 	
+	// Wikidump holen
+	$wikidump=addslashes(getAllWikiPages($sem_id, $name, FALSE));
+
 	restoreLanguage();
 	include ("$ABSOLUTE_PATH_STUDIP/config.inc.php");
 
@@ -625,9 +608,10 @@ function in_archiv ($sem_id) {
 	
 	//OK, letzter Schritt: ZIPpen der Dateien des Seminars und Verschieben in eigenes Verzeichnis
 
-	$query = sprintf ("SELECT dokument_id FROM dokumente WHERE seminar_id = '%s' AND url = ''", $seminar_id);
+	$query = sprintf ("SELECT count(dokument_id) FROM dokumente WHERE seminar_id = '%s' AND url = ''", $seminar_id);
 	$db->query ($query);
-	if ((file_exists($ZIP_PATH) || ini_get('safe_mode')) && $db->affected_rows()) {
+	$db->next_record();
+	if ((file_exists($ZIP_PATH) || ini_get('safe_mode')) && $db->f(0)) {
 		$archiv_file_id = md5(uniqid($hash_secret,1));
 		$docs = 0;
 		
@@ -637,14 +621,13 @@ function in_archiv ($sem_id) {
 		
 		$query = sprintf ("SELECT termin_id FROM termine WHERE range_id = '%s'", $seminar_id);
 		$db->query ($query);
-		$list = "('".$seminar_id."'";
+		$list[] = $seminar_id;
+		$list[] = md5($seminar_id.'top_folder');
 		while ($db->next_record()) {
-			$list .= ", '".$db->f("termin_id")."' ";
+			$list[] = $db->f("termin_id");
 		}
-		$list.= ")";
-		
 		//copy documents in the temporary folder-system
-		$query = sprintf ("SELECT folder_id, name FROM folder WHERE range_id IN %s ORDER BY name", $list);
+		$query = sprintf ("SELECT folder_id, name FROM folder WHERE range_id IN ('%s') ORDER BY name", join("','", $list));
 		$db->query ($query);
 		$folder = 0;
 		while ($db->next_record()) {
@@ -658,7 +641,7 @@ function in_archiv ($sem_id) {
 		$archiv_full_path = "$ARCHIV_PATH/$archiv_file_id";
 		$zippara = (ini_get('safe_mode')) ? ' -R ':' -r ';
 		chdir ($tmp_full_path);
-		exec ($ZIP_PATH . $zippara . $archiv_full_path . ' * ');
+		exec ($ZIP_PATH . ' -K ' . $zippara . $archiv_full_path . ' * ');
 		chdir($ABSOLUTE_PATH_STUDIP);
 	 	@rename($archiv_full_path . '.zip', $archiv_full_path);
 		rmdirr($tmp_full_path);	 	
@@ -667,9 +650,9 @@ function in_archiv ($sem_id) {
 	
 	//Reinschreiben von diversem Klumpatsch in die Datenbank
 	$db->query("INSERT INTO archiv (seminar_id,name,untertitel,beschreibung,start_time,semester,heimat_inst_id,
-				institute,dozenten,fakultaet,dump,archiv_file_id,mkdate,forumdump,studienbereiche) VALUES 
+				institute,dozenten,fakultaet,dump,archiv_file_id,mkdate,forumdump,wikidump,studienbereiche) VALUES 
 				('$seminar_id', '$name', '$untertitel', '$beschreibung', '$start_time', '$semester_tmp', '$heimat_inst_id', 
-				'$institute', '$dozenten', '$fakultaet', '$dump', '$archiv_file_id', '".time()."','$forumdump',
+				'$institute', '$dozenten', '$fakultaet', '$dump', '$archiv_file_id', '".time()."','$forumdump','$wikidump',
 				'$studienbereiche')");
 }
 

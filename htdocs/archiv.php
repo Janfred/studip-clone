@@ -27,7 +27,7 @@ include("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
 if ($druck)
 	$_include_stylesheet = "style_print.css"; 
-elseif (($dump_id) || ($forum_dump_id))
+elseif (($dump_id) || ($forum_dump_id) || ($wiki_dump_id))
 	$_include_stylesheet = "style_dump.css";
 
 // Start of Output
@@ -167,6 +167,25 @@ elseif (!empty($forum_dump_id)) {
 				echo "<div align=center> <a href='$PHP_SELF?forum_dump_id=".$forum_dump_id."&druck=1' target=_self><b>" . _("Druckversion") . "</b></a><br><br></div>";
 			}
 			echo $db->f('forumdump');
+		}
+	} else {
+		echo _("Netter Versuch, vielleicht beim n&auml;chsten Mal");
+	}
+}
+
+// oder vielleicht den Wikidump?
+
+elseif (!empty($wiki_dump_id)) {
+	if (archiv_check_perm($wiki_dump_id)){
+		$query = "SELECT wikidump FROM archiv WHERE archiv.seminar_id = '$wiki_dump_id'"; 
+		$db->query ($query);
+		if ($db->next_record()) {
+			if (!isset($druck)) {
+				echo "<div align=center> <a href='$PHP_SELF?wiki_dump_id=".$wiki_dump_id."&druck=1' target=_self><b>" . _("Druckversion") . "</b></a><br><br></div>";
+			}
+			echo "<table class=blank width=95% align=center><tr><td>";
+			echo stripslashes($db->f('wikidump'));
+			echo "</td></tr></table>";
 		}
 	} else {
 		echo _("Netter Versuch, vielleicht beim n&auml;chsten Mal");
@@ -328,9 +347,9 @@ if ($archiv_data["perform_search"]) {
 	if (!$archiv_data["sortby"])
 		$archiv_data["sortby"]="Name";
 	if ($archiv_data["pers"])
-		$query ="SELECT archiv.seminar_id, name, untertitel,  beschreibung, start_time, semester, studienbereiche, heimat_inst_id, institute, dozenten, fakultaet, archiv_file_id, forumdump FROM archiv LEFT JOIN archiv_user USING (seminar_id) WHERE user_id = '".$user->id."' AND ";
+		$query ="SELECT archiv.seminar_id, name, untertitel,  beschreibung, start_time, semester, studienbereiche, heimat_inst_id, institute, dozenten, fakultaet, archiv_file_id, forumdump, wikidump FROM archiv LEFT JOIN archiv_user USING (seminar_id) WHERE user_id = '".$user->id."' AND ";
 	else
-		$query ="SELECT seminar_id, name, untertitel,  beschreibung, start_time, semester, studienbereiche, heimat_inst_id, institute, dozenten, fakultaet, archiv_file_id, forumdump FROM archiv WHERE ";
+		$query ="SELECT seminar_id, name, untertitel,  beschreibung, start_time, semester, studienbereiche, heimat_inst_id, institute, dozenten, fakultaet, archiv_file_id, forumdump, wikidump FROM archiv WHERE ";
 	if ($archiv_data["all"]) {
 		$query .= "name LIKE '%".trim($archiv_data["all"])."%'";
 		$query .= " OR untertitel LIKE '%".trim($archiv_data["all"])."%'";
@@ -450,6 +469,8 @@ if ($archiv_data["perform_search"]) {
 					echo "<br><br><li><a href=\"$PHP_SELF?dump_id=".$db->f('seminar_id')."\" target=_blank><font size=\"-1\">" . _("&Uuml;bersicht der Veranstaltungsinhalte") . "</font></a></li>";
 					if (!$db->f('forumdump')=='')
 						echo "<li><font size=\"-1\"><a href=\"$PHP_SELF?forum_dump_id=".$db->f('seminar_id')."\" target=_blank>" . _("Beitr&auml;ge des Forums") . "</a></font></li>";
+					if (!$db->f('wikidump')=='')
+						echo "<li><font size=\"-1\"><a href=\"$PHP_SELF?wiki_dump_id=".$db->f('seminar_id')."\" target=_blank>" . _("Wikiseiten") . "</a></font></li>";
 					if (!$db->f('archiv_file_id')=='')
 						echo "<li><font size=\"-1\"><a href=\"sendfile.php?type=1&file_id=".$db->f('archiv_file_id')."&file_name=".rawurlencode($file_name)."\">" . _("Download der Dateisammlung") . "</a></font></li>";
 					if (archiv_check_perm($db->f("seminar_id")) == "admin")
