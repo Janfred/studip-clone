@@ -47,14 +47,22 @@ require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'] . "/lib/classes/StudipLitList.clas
 
 
 if ($GLOBALS['CHAT_ENABLE']){
-	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php"; 	
+	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php";
 	if ($_REQUEST['kill_chat']){
 		chat_kill_chat($_REQUEST['kill_chat']);
 	}
-	
+
 }
 if ($GLOBALS['VOTE_ENABLE']) {
 	include_once ("$ABSOLUTE_PATH_STUDIP/show_vote.php");
+}
+if (get_config('NEWS_RSS_EXPORT_ENABLE')){
+	$news_author_id = StudipNews::GetRssIdFromUserId(get_userid($_REQUEST['username']));
+	if($news_author_id){
+		$stmp = new studip_smtp_class();
+		$_include_additional_header = '<link rel="alternate" type="application/rss+xml" '
+									.'title="RSS" href="' . $stmp->url . 'rss.php?id='.$news_author_id.'"/>';
+	}
 }
 
 // Start  of Output
@@ -91,11 +99,7 @@ if ($dclose)
 	$about_data["dopen"]='';
 
 //Auf und Zuklappen News
-if ($nopen)
-	$about_data["nopen"]=$nopen;
-
-if ($nclose)
-	$about_data["nopen"]='';
+process_news_commands($about_data);
 
 if ($sms_msg)
 $msg=rawurldecode($sms_msg);
@@ -122,11 +126,11 @@ if ($auth->auth["uid"]!=$user_id) {
 
 if ($auth->auth["uid"]==$user_id)
 	$homepage_cache_own = time();
-	
+
 $DataFields = new DataFields($user_id);
 
 //Wenn er noch nicht in user_info eingetragen ist, kommt er ohne Werte rein
-$db->query("SELECT * FROM user_info WHERE user_id ='$user_id'");
+$db->query("SELECT user_id FROM user_info WHERE user_id ='$user_id'");
 if ($db->num_rows()==0) {
 	$db->query("INSERT INTO user_info (user_id) VALUES ('$user_id')");
 }
@@ -138,7 +142,7 @@ if ($db->num_rows())
 	$admin_darf = TRUE;
 if ($perm->is_fak_admin()){
 	$db->query("SELECT c.user_id FROM user_inst a LEFT JOIN Institute b ON(a.Institut_id=b.fakultaets_id)  LEFT JOIN user_inst c USING(Institut_id) WHERE a.user_id='$user->id' AND a.inst_perms='admin' AND c.user_id='$user_id'");
-	if ($db->next_record()) 
+	if ($db->next_record())
 	$admin_darf = TRUE;
 }
 if ($perm->have_perm("root")) {
@@ -152,7 +156,7 @@ $db->next_record();
 
 //daten anzeigen
 IF (($user_id==$user->id AND $perm->have_perm("autor")) OR $perm->have_perm("root") OR $admin_darf == TRUE) { // Es werden die Editreiter angezeigt, wenn ich &auml;ndern darf
-	include ("$ABSOLUTE_PATH_STUDIP/links_about.inc.php");  
+	include ("$ABSOLUTE_PATH_STUDIP/links_about.inc.php");
 }
 
 ?>
@@ -229,7 +233,7 @@ while ($db3->next_record()) {
 		echo "<b><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; " . _("Telefon:") . " </b>", htmlReady($db3->f("Telefon"));
 	IF ($db3->f("Fax")!="")
 		echo "<b><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; " . _("Fax:") . " </b>", htmlReady($db3->f("Fax"));
-	
+
 	echo "</font><br>";
 }
 echo "</blockquote></td></tr>"
@@ -244,14 +248,14 @@ echo "<font size=\"-1\">&nbsp;"._("Besucher dieser Homepage:")."&nbsp;".object_r
 $score = new Score(get_userid($username));
 
 if ($score->IsMyScore()) {
-	echo "&nbsp;<a href=\"score.php\" " . tooltip(_("Zur Highscoreliste")) . "><font size=\"-1\">" 
-		. _("Ihr Stud.IP-Score:") . " ".$score->ReturnMyScore()."<br>&nbsp;" 
+	echo "&nbsp;<a href=\"score.php\" " . tooltip(_("Zur Highscoreliste")) . "><font size=\"-1\">"
+		. _("Ihr Stud.IP-Score:") . " ".$score->ReturnMyScore()."<br>&nbsp;"
 		. _("Ihr Rang:") . " ".$score->ReturnMyTitle()."</a></font><br />";
 } elseif ($score->ReturnPublik()) {
 	$scoretmp = $score->GetScore(get_userid($username));
 	$title = $score->gettitel($scoretmp, $score->GetGender(get_userid($username)));
-	echo "&nbsp;<a href=\"score.php\"><font size=\"-1\">" 
-	. _("Stud.IP-Score:") . " ".$scoretmp."<br>&nbsp;" 
+	echo "&nbsp;<a href=\"score.php\"><font size=\"-1\">"
+	. _("Stud.IP-Score:") . " ".$scoretmp."<br>&nbsp;"
 	. _("Rang:") . " ".$title."</a></font><br />";
 }
 
@@ -262,7 +266,7 @@ if ($username==$auth->auth["uname"]) {
 	if (CheckBuddy($username)==FALSE)
 		echo "<br /><font size=\"-1\">&nbsp;<a href=\"$PHP_SELF?cmd=add_user&add_uname=$username&username=$username\">" . _("zu Buddies hinzuf&uuml;gen") . "</a></font>";
 	echo "<br /><font size=\"-1\"> <a href=\"sms_send.php?sms_source_page=about.php&rec_uname=", $db->f("username"),"\">&nbsp;" . _("Nachricht an Nutzer") . "&nbsp;<img style=\"vertical-align:middle\" src=\"pictures/nachricht1.gif\" " . tooltip(_("Nachricht an Nutzer verschicken")) . " border=0 align=texttop></a></font>";
-		
+
 }
 
 // Export dieses Users als Vcard
@@ -276,7 +280,7 @@ echo "</tr></table><br>\n";
 // News zur person anzeigen!!!
 
 ($perm->have_perm("autor") AND $auth->auth["uid"]==$user_id) ? $show_admin=TRUE : $show_admin=FALSE;
-if (show_news($user_id, $show_admin, 0, $about_data["nopen"]))
+if (show_news($user_id, $show_admin, 0, $about_data["nopen"], "100%", 0, $about_data))
 	echo "<br>";
 
 
@@ -290,6 +294,14 @@ if ($GLOBALS['CALENDAR_ENABLE']) {
 		if (show_personal_dates($user_id, $start_zeit, -1, FALSE, $show_admin, $about_data["dopen"]))
 			echo "<br>";
 	}
+}
+
+// include and show friend-of-a-friend list
+// (direct/indirect connection via buddy list)
+if ($GLOBALS['FOAF_ENABLE'] && ($auth->auth['uid']!=$user_id)) {
+        include("lib/classes/FoafDisplay.class.php");
+        $foaf=new FoafDisplay($auth->auth['uid'], $user_id, $username);
+        $foaf->show($_REQUEST['foaf_open']);
 }
 
 // include and show votes and tests
@@ -357,7 +369,7 @@ if ($db->f("schwerp")!="") {
 
 //add the free administrable datafields (these field are system categories - the user is not allowed to change the catgeories)
 $localFields = $DataFields->getLocalFields();
-	
+
 foreach ($localFields as $val) {
 	if ($DataFields->checkPermission($perm, $val["view_perms"], $auth->auth["uid"], $user_id)) {
 		if ($val["content"]) {
