@@ -31,6 +31,7 @@
 // +---------------------------------------------------------------------------+
 
 require_once $ABSOLUTE_PATH_STUDIP . '/lib/classes/SimpleORMap.class.php';
+require_once $ABSOLUTE_PATH_STUDIP . '/lib/classes/StudipComments.class.php';
 require_once $ABSOLUTE_PATH_STUDIP . 'object.inc.php';
 
 
@@ -129,6 +130,8 @@ class StudipNews extends SimpleORMap {
 			$db->query("DELETE FROM news_range WHERE news_id IN $kill_news");
 			
 			object_kill_visits(null, array_keys($result));
+			
+			StudipComments::DeleteCommentsByObject(array_keys($result));
 		}
 		return $killed;
 	}
@@ -221,6 +224,7 @@ class StudipNews extends SimpleORMap {
 		$this->ranges = array();
 		$this->storeRanges();
 		object_kill_visits(null, $this->getId());
+		StudipComments::DeleteCommentsByObject($this->getId());
 		parent::delete();
 		return true;
 	}
