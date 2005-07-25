@@ -250,10 +250,16 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 	if ($perm->have_perm("dozent")) {
 		$structure["copysem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Veranstaltung&nbsp;kopieren"), 'link'=>"copy_assi.php?list=TRUE&new_session=TRUE", 'active'=>FALSE, 'isolator'=>TRUE);
 		$structure["new_sem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("neue&nbsp;Veranstaltung&nbsp;anlegen"), 'link'=>"admin_seminare_assi.php?new_session=TRUE", 'active'=>FALSE);
+		if (get_config('ALLOW_DOZENT_ARCHIV')){
+			$structure["archiv"]=array ('topKat'=>"veranstaltungen", 'name'=>_("archivieren"), 'link'=>"archiv_assi.php?list=TRUE&new_session=TRUE", 'active'=>FALSE);
+		}
+		if (get_config('ALLOW_DOZENT_VISIBILITY')){
+			$structure["visibility"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Sichtbarkeit"), 'link'=>"admin_visibility.php?list=TRUE&new_session=TRUE", 'active'=>FALSE, 'newline'=>TRUE);
+		}
 	}
 	if ($perm->have_perm("admin")) {
-		$structure["visibility"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Sichtbarkeit"), 'link'=>"admin_visibility.php?list=TRUE&new_session=TRUE", 'active'=>FALSE, 'newline'=>TRUE);
 		$structure["archiv"]=array ('topKat'=>"veranstaltungen", 'name'=>_("archivieren"), 'link'=>"archiv_assi.php?list=TRUE&new_session=TRUE", 'active'=>FALSE);
+		$structure["visibility"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Sichtbarkeit"), 'link'=>"admin_visibility.php?list=TRUE&new_session=TRUE", 'active'=>FALSE, 'newline'=>TRUE);
 	} 
 	
 	//
@@ -301,7 +307,9 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 		$structure["studiengang"]=array ('topKat'=>"global", 'name'=>_("Studieng&auml;nge"), 'link'=>"admin_studiengang.php", 'active'=>FALSE);
 		$structure["datafields"]=array ('topKat'=>"global", 'name'=>_("Datenfelder"), 'link'=>"admin_datafields.php", 'active'=>FALSE);
 		$structure["config"]=array ('topKat'=>"global", 'name'=>_("Konfiguration"), 'link'=>"admin_config.php", 'active'=>FALSE);
-		$structure["sessions"]=array ('topKat'=>"modules", 'name'=>_("Sessions"), 'link'=>"view_sessions.php", 'active'=>FALSE);
+		if('active_sessions' == PHPLIB_SESSIONDATA_TABLE){
+			$structure["sessions"]=array ('topKat'=>"modules", 'name'=>_("Sessions"), 'link'=>"view_sessions.php", 'active'=>FALSE);
+		}
 		$structure["integrity"]=array ('topKat'=>"modules", 'name'=>_("DB&nbsp;Integrit&auml;t"), 'link'=>"admin_db_integrity.php", 'active'=>FALSE);
 		if ($BANNER_ADS_ENABLE)  {
 			$structure["bannerads"]=array ('topKat'=>"global", 'name'=>_("Werbebanner"), 'link'=>"admin_banner_ads.php", 'active'=>FALSE);
@@ -364,7 +372,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 		case "admin_fach.php" : 
 			$reiter_view="fach"; 
 		break;
-		case "admin_semester.php";
+		case "admin_semester.php":
 			$reiter_view ="semester";
 		break;
 	
@@ -474,7 +482,8 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 		break;
 		case "admin_config.php":
 			$reiter_view = "config";
-		break;		
+		break;
+
 	}
 	
 	$reiter->create($structure, $reiter_view, $tooltip, $addText);
@@ -778,8 +787,9 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 			} elseif (($auth->auth["perm"] =="tutor") || ($auth->auth["perm"] == "dozent")) {
 					$query="SELECT  seminare.*, Institute.Name AS Institut FROM seminar_user LEFT JOIN seminare USING (Seminar_id) 
 						LEFT JOIN Institute USING (institut_id) 
-						WHERE seminar_user.status IN ('dozent','tutor') 
-						AND seminar_user.user_id='$user->id' ";
+						WHERE seminar_user.status IN ('dozent'"
+						.(($i_page != 'archiv_assi.php' && $i_page != 'admin_visibility.php') ? ",'tutor'" : "")
+						. ") AND seminar_user.user_id='$user->id' ";
 		
 			// should never be reached
 			} else {
@@ -938,7 +948,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 					printf("<font size=-1>" . _("Veranstaltung") . "<br /><a href=\"admin_seminare_assi.php?cmd=do_copy&cp_id=%s&start_level=TRUE&class=1\">%s</a></font>", $seminar_id, makeButton("kopieren"));
 					break;
 				case "admin_visibility.php": 
-					if ($perm->have_perm("admin")) {
+					if ($perm->have_perm("admin") || (get_config('ALLOW_DOZENT_VISIBILITY') && $perm->have_perm('dozent'))) {
 					?>
 					<input type="HIDDEN" name="all_sem[]" value="<? echo $seminar_id ?>" />
 					<input type="CHECKBOX" name="visibility_sem[<? echo $seminar_id ?>]" <? if (!$select_none && ($select_all || $db->f("visible"))) echo ' checked'; ?> />
@@ -946,7 +956,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 					}
 					break;
 				case "archiv_assi.php": 
-					if ($perm->have_perm("admin")) {
+					if ($perm->have_perm("admin") || (get_config('ALLOW_DOZENT_ARCHIV') && $perm->have_perm('dozent'))) {
 					?>
 					<input type="HIDDEN" name="archiv_sem[]" value="_id_<? echo $seminar_id ?>" />
 					<input type="CHECKBOX" name="archiv_sem[]" <? if ($select_all) echo ' checked'; ?> />
