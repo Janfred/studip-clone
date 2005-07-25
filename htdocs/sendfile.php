@@ -90,7 +90,7 @@ if ($zip && is_file($path_file)) {
 	$zip_path_file = "$TMP_PATH/$tmp_id";
 	$tmp_file_name = escapeshellcmd("$TMP_PATH/$file_name");
 	@copy($path_file, $tmp_file_name);
-	exec ("$ZIP_PATH -9 -j {$zip_path_file}.zip $tmp_file_name");
+	exec ("$ZIP_PATH -K -j {$zip_path_file}.zip $tmp_file_name");
 	$file_name = $file_name . ".zip";
 	$path_file = $zip_path_file . ".zip";
 	@unlink($tmp_file_name);
@@ -310,18 +310,19 @@ if ($type == 6) {
 
 header("Expires: Mon, 12 Dec 2001 08:00:00 GMT");
 header("Last-Modified: " . gmdate ("D, d M Y H:i:s") . " GMT");
-header("Cache-Control: no-store, no-cache, must-revalidate");   // HTTP/1.1
-header("Cache-Control: post-check=0, pre-check=0", false);
-if ($_SERVER['HTTPS'] == "on")
+if ($_SERVER['HTTPS'] == "on"){
 	header("Pragma: public");
-else
+	header("Cache-Control: private");
+} else {
 	header("Pragma: no-cache");
-header("Cache-Control: private");
-header("Expires: 0");
-
+	header("Cache-Control: no-store, no-cache, must-revalidate");   // HTTP/1.1
+}
+header("Cache-Control: post-check=0, pre-check=0", false);
 header("Content-Type: $content_type; name=\"$file_name\"");
-if ($filesize != FALSE)
-	header("Content-Length: $filesize");
+header("Content-Description: File Transfer");
+header("Content-Transfer-Encoding: binary");
+header("Accept-Ranges: bytes");
+if ($filesize != FALSE) header("Content-Length: $filesize");
 header("Content-Disposition: $content_disposition; filename=\"$file_name\"");
 if ($type != 5){
 	@readfile($path_file);

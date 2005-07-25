@@ -96,13 +96,13 @@ function parse_link($link, $level=0) {
 			$documentpath .= "?" . $url_parts["query"];
 		}
 		$host = $url_parts["host"];
-
 		$port = $url_parts["port"];
-		if (substr($link,0,8) == 'https://') {
+		
+		if (substr($link,0,8) == "https://") {
                         $ssl = TRUE;
                         if (empty($port)) $port = 443;
-                } else { 
-			$ssl = FALSE;
+                } else {
+		       $ssl = FALSE;
 		}
 		if (empty( $port ) ) $port = "80";
 
@@ -113,7 +113,6 @@ function parse_link($link, $level=0) {
 			$pwtxt = ($url_parts['user'] && $url_parts['pass'])? $url_parts['user'].':'. $url_parts['pass'].'@':'';
 			$the_link = $url_parts['scheme'].'://'.$pwtxt.$host.':'.$port.$documentpath; 
 		}
-
 		$socket = @fsockopen( ($ssl? 'ssl://':'').$host, $port, $errno, $errstr, 10 );
 		if (!$socket) {
 			//echo "$errstr ($errno)<br />\n";
@@ -124,16 +123,15 @@ function parse_link($link, $level=0) {
 				$user = $url_parts["user"];
 				$urlString .= "Authorization: Basic ".base64_encode("$user:$pass")."\r\n";
 			}
-                       $urlString .= "\r\n";
+               $urlString .= "Connection: close\r\n\r\n";
 		       fputs($socket, $urlString);
 		       socket_set_timeout($socket,2);
 		       while (!feof($socket)) {
-			       $response .= fgets($socket,4096);
+			       $response .= fgets($socket,128);
 			}
 			fclose($socket);
 		}
 		$parsed_link = parse_header($response);
-
 		// Weg über einen Locationheader:
 		if (($parsed_link["HTTP/1.1 302 Found"] || $parsed_link["HTTP/1.0 302 Found"]) && $parsed_link["Location"]) {
 			$the_file_name = basename($url_parts["path"]);
@@ -154,7 +152,7 @@ function createSelectedZip ($file_ids, $perm_check = TRUE) {
 
 		//create temporary Folder
 		$tmp_full_path = "$TMP_PATH/$zip_file_id";
-		mkdir($tmp_full_path);
+		mkdir($tmp_full_path,0700);
 
 		//create folder content
 		$in = "('".join("','",$file_ids)."')";
@@ -168,7 +166,7 @@ function createSelectedZip ($file_ids, $perm_check = TRUE) {
 		//zip stuff
 		$zippara = (ini_get('safe_mode')) ? ' -R ':' -r ';
 		@chdir($tmp_full_path);
-		exec ($ZIP_PATH . $zippara . $tmp_full_path . ' *');
+		exec ($ZIP_PATH . ' -K ' . $zippara . $tmp_full_path . ' *');
 		@chdir($ABSOLUTE_PATH_STUDIP);
 		rmdirr($tmp_full_path);
 		@rename($tmp_full_path .".zip" , $tmp_full_path);
@@ -185,7 +183,7 @@ function createFolderZip ($folder_id) {
 
 		//create temporary Folder
 		$tmp_full_path = "$TMP_PATH/$zip_file_id";
-		mkdir($tmp_full_path);
+		mkdir($tmp_full_path,0700);
 
 		//create folder comntent
 		createTempFolder($folder_id, $tmp_full_path);
@@ -193,7 +191,7 @@ function createFolderZip ($folder_id) {
 		//zip stuff
 		$zippara = (ini_get('safe_mode')) ? ' -R ':' -r ';
 		chdir ($tmp_full_path);
-		exec ($ZIP_PATH . $zippara . $tmp_full_path . ' * ');
+		exec ($ZIP_PATH . ' -K ' . $zippara . $tmp_full_path . ' * ');
 		chdir($ABSOLUTE_PATH_STUDIP);
 		rmdirr($tmp_full_path);
 		@rename($tmp_full_path .".zip" , $tmp_full_path);
@@ -228,7 +226,7 @@ function createTempFolder($folder_id, $tmp_full_path, $perm_check = TRUE) {
 	while ($db->next_record()) {
 		$folders++;
 		$tmp_sub_full_path = $tmp_full_path.'/['.$folders.']_'.escapeshellcmd(prepareFilename($db->f('name'), FALSE));
-		mkdir($tmp_sub_full_path);
+		mkdir($tmp_sub_full_path, 0700);
 		createTempFolder($db->f("folder_id"), $tmp_sub_full_path, $perm_check);
 	}
 	return TRUE;
@@ -298,30 +296,168 @@ function doc_challenge ($parent_id){
 	return $result;
 }
 
-function move_item ($item_id, $new_parent) {
+function move_item($item_id, $new_parent, $change_sem = false) {
 
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
-	
+	if ($change_sem){
+		$db->query("SELECT folder_id FROM folder WHERE range_id='$new_parent'");
+		if ($db->next_record()){
+			$new_folder_id = $db->f(0);
+		} else {
+			return false;
+		}
+	}
+				
 	if ($item_id != $new_parent) {
-		$db->query ("UPDATE dokumente SET range_id='$new_parent' WHERE dokument_id = '$item_id'");
+		$db->query ("UPDATE dokumente SET " 
+					. (($change_sem && $new_folder_id) ? "range_id='$new_folder_id', seminar_id='$new_parent' " : "range_id='$new_parent'")
+					. " WHERE dokument_id = '$item_id'");
 		if (!$db->affected_rows()) {
 			//we want to move a folder, so we have first to check if we want to move a folder in a subordinated folder
-			$db2->query ("SELECT range_id FROM folder WHERE folder_id = '$new_parent'");
-			while ($db2->next_record()) {
-				if ($db2->f("range_id") == $item_id)
-					$target_is_child=TRUE;
-				$db2->query ("SELECT range_id FROM folder WHERE folder_id = '".$db2->f("range_id")."' ");
+			$folder = getFolderId($item_id);
+			
+			if (is_array($folder) && in_array($new_parent, $folder)) $target_is_child = true;
+			
+			if (!$target_is_child){
+				if ($change_sem && $new_folder_id){
+					$db->query("UPDATE folder SET range_id='".$new_folder_id."' WHERE folder_id = '$item_id'");
+					$folder[] = $item_id;
+					$db->query("UPDATE dokumente SET seminar_id='$new_parent' WHERE range_id IN('".join("','", $folder)."')");
+					return array(count($folder), (int)$db->affected_rows());
+				} else {
+					$db->query("UPDATE folder SET range_id='$new_parent' WHERE folder_id = '$item_id'");
+					return array(1, doc_count($item_id));
+				}
 			}
-			if (!$target_is_child)
-				$db->query ("UPDATE folder SET range_id='$new_parent' WHERE folder_id = '$item_id'");
+			
+		} else {
+			return array(0,1);
 		}
-	}	
-		
-	if ($db->affected_rows());		
-		return TRUE;
 	}
+	return false;
+}
+
+function copy_item($item_id, $new_parent, $change_sem = false) {
 	
+	$db=new DB_Seminar;
+	
+	if ($change_sem){
+		$db->query("SELECT folder_id FROM folder WHERE range_id='$new_parent'");
+		if ($db->next_record()){
+			$new_folder_id = $db->f(0);
+		} else {
+			return false;
+		}
+	}
+				
+	if ($item_id != $new_parent) {
+		$db->query("SELECT dokument_id FROM dokumente WHERE dokument_id = '$item_id'");
+		if ($db->next_record()){
+			$ret = copy_doc($item_id, 
+							(($change_sem && $new_folder_id) ? $new_folder_id : $new_parent),
+							(($change_sem && $new_folder_id) ? $new_parent : false));
+						
+			return ($ret ? array(0,1) : false);
+		} else {
+			//we want to move a folder, so we have first to check if we want to move a folder in a subordinated folder
+			$folder = getFolderId($item_id);
+			
+			if (is_array($folder) && in_array($new_parent, $folder)) $target_is_child = true;
+			
+			$seed = md5(uniqid('blaofuasof',1));
+		
+			if (!$target_is_child){
+				if ($change_sem && $new_folder_id){
+					if (!($folder_count = copy_folder($item_id, $new_folder_id, $seed)) ){
+						return false;
+					}
+				} else {
+					if (!($folder_count = copy_folder($item_id, $new_parent, $seed)) ){
+						return false;
+					}
+				}
+				$folder[] = $item_id;
+				$db->query("SELECT dokument_id, range_id FROM dokumente WHERE range_id IN('".join("','", $folder)."')");
+				while($db->next_record()){
+					$doc_count += copy_doc($db->f('dokument_id'), md5($db->f('range_id').$seed), (($change_sem && $new_folder_id) ? $new_parent : false));
+				}
+				return array($folder_count, $doc_count);
+			}
+		}
+	}
+	return false;
+}
+
+function copy_doc($doc_id, $new_range, $new_sem = false){
+	global $UPLOAD_PATH;
+	$db = new DB_Seminar();
+	$new_id = md5(uniqid('blaofuasof',1));
+	$db->query("SELECT * FROM dokumente WHERE dokument_id = '$doc_id'");
+	if ($db->next_record()){
+		if ( !$db->f('url') ){
+			if (!@copy($UPLOAD_PATH . '/' . $doc_id, $UPLOAD_PATH . '/' . $new_id)){
+				return false;
+			}
+		}
+		$db->query("INSERT INTO dokumente (seminar_id, range_id,dokument_id,
+					user_id, name, description, filename, mkdate, chdate,
+					filesize, autor_host, downloads, url, protected) VALUES ( "
+					. ($new_sem ? "'$new_sem'," : "'" . $db->f('seminar_id')."',")
+					. "'$new_range','$new_id', '" . $db->f('user_id')
+					."','".mysql_escape_string($db->f('name'))."','"
+					.mysql_escape_string($db->f('description'))."', '"
+					.mysql_escape_string($db->f('filename'))."', ".$db->f('mkdate')
+					.",". time().",".$db->f('filesize').", '".$db->f('autor_host')
+					."', 0,'".mysql_escape_string($db->f('url'))."',". $db->f('protected').")");
+		return $db->affected_rows();
+	} else {
+		return false;
+	}
+}
+
+function copy_folder($folder_id, $new_range, $seed = false){
+	$db = new DB_Seminar();
+	if (!$seed){
+		$seed = md5(uniqid('blaofuasof',1));
+	}
+	$db->query("SELECT MD5(CONCAT(folder_id,'$seed')), '$new_range', user_id, name,
+				description, mkdate, " .time(). " FROM folder WHERE folder_id='$folder_id'");
+	if ($db->next_record()){
+		$record = $db->Record;
+		$record[3] = mysql_escape_string($record[3]);
+		$record[4] = mysql_escape_string($record[4]);
+		$db->query("INSERT INTO folder (folder_id, range_id, user_id, name, 
+					description, mkdate, chdate) VALUES ( '{$record[0]}','{$record[1]}',
+					'{$record[2]}','{$record[3]}','{$record[4]}',{$record[5]},
+					{$record[6]})");
+		if (!$db->affected_rows()){
+			return false;
+		} else {
+			$count = 1;
+			$folder = getFolderId($folder_id);
+			if (is_array($folder)){
+				foreach($folder as $id){
+					$db->query("SELECT MD5(CONCAT(folder_id,'$seed')), MD5(CONCAT(range_id,'$seed')), user_id, name,
+								description, mkdate, " .time(). " FROM folder WHERE folder_id='$id'");
+					if ($db->next_record()){
+						$record = $db->Record;
+						$record[3] = mysql_escape_string($record[3]);
+						$record[4] = mysql_escape_string($record[4]);
+						$db->query("INSERT INTO folder (folder_id, range_id, user_id,
+									name, description, mkdate, chdate) VALUES (
+									'{$record[0]}','{$record[1]}','{$record[2]}',
+									'{$record[3]}','{$record[4]}',{$record[5]},
+									{$record[6]})");
+						$count += $db->affected_rows();
+					}
+				}
+			}
+			return $count;
+		}
+	}
+}
+
 function edit_item ($item_id, $type, $name, $description, $protected=0, $url = "", $filesize="") {
 	$db=new DB_Seminar;
 	if ($url != ""){
@@ -344,7 +480,7 @@ function create_folder ($name, $description, $parent_id) {
 	global $user;
 	
 	$db=new DB_Seminar;
-	$id=md5(uniqid("salmonellen"));
+	$id=md5(uniqid("salmonellen",1));
 	
 	$db->query("INSERT INTO folder SET name='$name', folder_id='$id', description='$description', range_id='$parent_id', user_id='".$user->id."', mkdate='".time()."', chdate='".time()."'");
 	if ($db->affected_rows()) {
@@ -634,7 +770,7 @@ function upload($the_file) {
 	else { # cool, es geht weiter
 
 		//Dokument_id erzeugen
-		$dokument_id=md5(uniqid(rand()));
+		$dokument_id=md5(uniqid('dokumente',1));
 
 		//Erzeugen des neuen Speicherpfads
 		$newfile = "$UPLOAD_PATH/$dokument_id";
@@ -887,7 +1023,7 @@ function link_item ($range_id, $create = FALSE, $echo = FALSE, $refresh = FALSE,
 
 	if ($create) {
 		$link_data = parse_link($the_link);
-		if ($link_data["HTTP/1.0 200 OK"] || $link_data["HTTP/1.1 200 OK"] || $link_data["HTTP/1.1 302 Found"] || $parsed_link["HTTP/1.0 302 Found"]) {
+		if ($link_data["HTTP/1.0 200 OK"] || $link_data["HTTP/1.1 200 OK"] || $link_data["HTTP/1.1 302 Found"] || $link_data["HTTP/1.0 302 Found"]) {
 			if (!$link_update) {
 				if (insert_link_db($range_id, $link_data["Content-Length"], $refresh))
 					if ($refresh)
@@ -957,7 +1093,7 @@ function link_form ($range_id, $updating=FALSE) {
 	$print.= "\n<tr>";
 	$print.= "\n<td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("Dateipfad:") . "&nbsp;</font><br />";
 	if ($hiddenurl)
-		$print.= '&nbsp;<INPUT NAME="the_link" TYPE="text"  style="width: 70%" SIZE="30" value="***">&nbsp;</td></td>';
+		$print.= "&nbsp;<INPUT NAME=\"the_link\" TYPE=\"text\"  style=\"width: 70%\" SIZE=\"30\" value=\"***\">&nbsp;</td></td>";
 	else
 		$print.= '&nbsp;<INPUT NAME="the_link" TYPE="text"  style="width: 70%" SIZE="30" value="'.$the_link.'">&nbsp;</td></td>';
 	$print.= "\n</tr>";
@@ -977,9 +1113,8 @@ function link_form ($range_id, $updating=FALSE) {
 	} else
 		$print.= "\n<tr><td class=\"steelgraudunkel\"colspan=2 ><font size=-1>" . _("2. Klicken Sie auf <b>'absenden'</b>, um die Datei hochzuladen und damit die alte Version zu &uuml;berschreiben.") . "</font></td></tr>";
 	$print.= "\n<tr><td class=\"steel1\" colspan=2 align=\"center\" valign=\"center\">";	
-	$print.= "\n<input type=\"image\" " . makeButton("absenden", "src") . ' value="Senden" align="absmiddle" name="create" border="0">';
-	$print.= '&nbsp;<a href="'.$_SERVER['PHP_SELF'].'?cancel_x=true">' . makeButton("abbrechen", "img") . "</a></td></tr>";	
-	
+	$print.= "\n<input type=\"image\" " . makeButton("absenden", "src") . " value=\"Senden\" align=\"absmiddle\" name=\"create\" border=\"0\">";
+	$print.="&nbsp;<a href=\"$PHP_SELF?cancel_x=true\">" . makeButton("abbrechen", "img") . "</a></td></tr>";	
 	$print.= "\n<input type=\"hidden\" name=\"upload_seminar_id\" value=\"".$SessSemName[1]."\">";	
 	if ($updating == TRUE) {
 		$print.= "\n<input type=\"hidden\" name=\"cmd\" value=\"link_update\">";	
@@ -1000,6 +1135,11 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 	global $_fullname_sql,$SessionSeminar,$SessSemName, $rechte, $anfang, $PHP_SELF, 
 		$user, $SemSecLevelWrite, $SemUserStatus, $check_all;
 
+	static $dont_move_to;
+	
+	
+	if (!isset($dont_move_to)) $dont_move_to = array();
+	
 	if (!$anfang)
 		$anfang = $folder_id;
 	
@@ -1046,9 +1186,22 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 			$newest_document = doc_newest($db->f("folder_id"));
 			$dok_letzter = $documents_count; // wenn $dok_letzter = 0 ist gibt es keine Dokumente in dem Ordner
 		}
+		if ($move == $db->f('folder_id')){
+			$dont_move_to = getFolderId($db->f("folder_id"));
+			$dont_move_to[] = $db->f('folder_id');
+		}
 		
+		$anker = '';
+		//Ankerlogik
+		if (($change) || ($move) || ($upload)) {
+			if (($change == $db->f("folder_id")) ||  ($move == $db->f("folder_id")) ||  ($upload == $db->f("folder_id")))
+				$anker = " name='anker' ";
+			}
+		elseif ($open['anker'] == $db->f("folder_id"))
+				$anker = " name='anker' ";
+			
 		//Ordner aufgeklappt
-		if ((strstr($open,$db->f("folder_id"))) || ($all)) { 
+		if (isset($open[$db->f("folder_id")]) || $all) { 
 			$content='';
 			
 			//Icon auswaehlen
@@ -1059,21 +1212,22 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 			else
 				$icon="<img src=\"pictures/cont_folder2.gif\">";				
 			
-			if ($move)
-				$icon="&nbsp;<a href=\"$PHP_SELF?open=".$db->f("folder_id")."_md_\"><img src=\"pictures/move.gif\" border=0 " . tooltip(_("Objekt in diesen Ordner verschieben")) . "/></a>".$icon;
-			
+			if ($move && !in_array($db->f('folder_id'), $dont_move_to)){
+				
+				$icon="&nbsp;<a href=\"$PHP_SELF?open=".$db->f("folder_id")."_md_\"><img src=\"pictures/move.gif\" border=0></a>".$icon;
+			}
 			//Link erstellen
 			$link=$PHP_SELF."?close=".$db->f("folder_id")."#anker";
 
 			//Titelbereich erstellen
 			$tmp_titel=htmlReady(mila($db->f("name")));
 			if ($change == $db->f("folder_id")) { //Aenderungsmodus, Anker + Formular machen, Font tag direkt ausgeben (muss ausserhalb einer td stehen!
-				$titel= "<input style=\"{font-size:8 pt; width: 100%;}\" type=\"text\" size=20 maxlength=255 name=\"change_name\" value=\"".htmlReady($db->f("name"))."\" />";
+				$titel= "<a $anker ></a><input style=\"{font-size:8 pt; width: 100%;}\" type=\"text\" size=20 maxlength=255 name=\"change_name\" value=\"".htmlReady($db->f("name"))."\" />";
 				}
 			else {
 				//create a link onto the titel, too
 				if ($link)
-					$tmp_titel = "<a href=\"$link\" class=\"tree\" >$tmp_titel</a>";
+					$tmp_titel = "<a $anker href=\"$link\" class=\"tree\" >$tmp_titel</a>";
 
 				if ($documents_count > 1)
 					$titel= $tmp_titel."&nbsp;&nbsp;" . sprintf(_("(%s Dokumente)"), $documents_count);
@@ -1112,13 +1266,6 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 			else 
 				$striche2.= "<td class=\"blank\" nowrap background=\"pictures/steel1.jpg\"><img src=\"pictures/forumleer.gif\"></td>";
 			
-			//Ankerlogik
-			if (($change) || ($move) || ($upload)) {
-				if (($change == $db->f("folder_id")) ||  ($move == $db->f("folder_id")) ||  ($upload == $db->f("folder_id")))
-					echo "<a name='anker'></a>";
-				}
-			elseif ($db->f("folder_id") == substr($open, strlen($open) -32, strlen ($open)))
-					echo "<a name='anker'></a>";
 			
 			//Contentbereich erstellen
 			if ($change == $db->f("folder_id")) { //Aenderungsmodus, zweiter Teil
@@ -1134,7 +1281,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 				$content= _("Keine Beschreibung vorhanden");
 			
 			if ($move == $db->f("folder_id")) 
-				$content.="<br />" . sprintf(_("Dieser Ordner wurde zum Verschieben markiert. Bitte w&auml;hlen Sie das Einf&uuml;gen-Symbol %s, um ihn in den gew&uuml;nschten Ordner zu verschieben."), "<img src=\"pictures/move.gif\" border=0 " . tooltip(_("Klicken Sie auf dieses Symbol, um diesen Ordner in einen anderen Ordner einzufügen.")) . ">");
+				$content.="<br />" . sprintf(_("Dieser Ordner wurde zum Verschieben / Kopieren markiert. Bitte w&auml;hlen Sie das Einf&uuml;gen-Symbol %s, um ihn in den gew&uuml;nschten Ordner zu verschieben. Wenn Sie den Ordner in eine andere Veranstaltung verschieben / kopieren möchten, wählen Sie die gewünschte Veranstaltung oben auf der Seite aus."), "<img src=\"pictures/move.gif\" border=0 " . tooltip(_("Klicken Sie auf dieses Symbol, um diesen Ordner in einen anderen Ordner einzufügen.")) . ">");
 			
 			if ($upload == $db->f("folder_id")) {
 				$content.=upload_item ($upload,FALSE,FALSE,$refresh);
@@ -1159,16 +1306,15 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 						$edit.= "&nbsp;&nbsp;&nbsp;<a href=\"$PHP_SELF?folderzip=".$db->f("folder_id")."\">" . makeButton("ordneralszip", "img") . "</a>";
 					if ($rechte) {
 						$edit.= "&nbsp;&nbsp;&nbsp;<a href=\"$PHP_SELF?open=".$db->f("folder_id")."_n_#anker\">" . makeButton("neuerordner", "img") . "</a>"; 
-						if (($letzter == 0) && ($dok_letzter == 0) && ($db->f("range_id") != $SessSemName[1])) {						
+						if (!$level==0 || $db->f('range_id') == md5($SessSemName[1] . 'top_folder')){
 							$edit.= " <a href=\"$PHP_SELF?open=".$db->f("folder_id")."_d_\">" . makeButton("loeschen", "img") . "</a>";
-							$edit.= " <a href=\"$PHP_SELF?open=".$db->f("folder_id")."_m_#anker\">" . makeButton("verschieben", "img") . "</a>";	
-							
-							}
-						if (!$level==0)
 							$edit.= " <a href=\"$PHP_SELF?open=".$db->f("folder_id")."_c_#anker\">" . makeButton("bearbeiten", "img") . "</a>";
+							$edit.= " <a href=\"$PHP_SELF?open=".$db->f("folder_id")."_m_#anker\">" . makeButton("verschieben", "img") . "</a>";	
+							$edit.= " <a href=\"$PHP_SELF?open=".$db->f("folder_id")."_co_#anker\">" . makeButton("kopieren", "img") . "</a>";	
 						}
 					}
 				}
+			}
 
 			if (!$all) {?><td class="blank" width="*">&nbsp;</td></tr></table><table width="100%" cellpadding=0 cellspacing=0 border=0><tr><?}
 
@@ -1199,42 +1345,35 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 					} else {
 						$type = 0;
 					}
-										
-						//Icon auswaehlen
-						if ((getFileExtension(strtolower($db3->f("filename"))) == "rtf") || (getFileExtension(strtolower($db3->f("filename"))) == "doc"))
-						$icon="<a href=\"sendfile.php/?type=$type&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\"><img src='pictures/rtf-icon.gif' border=0></a>";
-						elseif (getFileExtension(strtolower($db3->f("filename"))) == "xls")
-						$icon="<a href=\"sendfile.php/?type=$type&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\"><img src='pictures/xls-icon.gif' border=0></a>";
-						elseif ((getFileExtension(strtolower($db3->f("filename"))) == "zip") || (getFileExtension(strtolower($db3->f("filename"))) == "tgz") || (getFileExtension(strtolower($db3->f("filename"))) == "gz") || (getFileExtension(strtolower($db3->f("filename"))) == "bz2"))
-						$icon="<a href=\"sendfile.php/?type=$type&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\"><img src='pictures/zip-icon.gif' border=0></a>";
-						elseif (getFileExtension(strtolower($db3->f("filename"))) == "ppt")
-						$icon="<a href=\"sendfile.php/?type=$type&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\"><img src='pictures/ppt-icon.gif' border=0></a>";
-						elseif (getFileExtension(strtolower($db3->f("filename"))) == "pdf")
-						$icon="<a href=\"sendfile.php/?type=$type&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\"><img src='pictures/pdf-icon.gif' border=0></a>";
-						elseif ((getFileExtension(strtolower($db3->f("filename"))) == "gif") || (getFileExtension(strtolower($db3->f("filename"))) == "jpg") ||  (getFileExtension(strtolower($db3->f("filename"))) == "jpe") ||  (getFileExtension(strtolower($db3->f("filename"))) == "jpeg") || (getFileExtension(strtolower($db3->f("filename"))) == "png") || (getFileExtension(strtolower($db3->f("filename"))) == "bmp"))
-						$icon="<a href=\"sendfile.php/?type=$type&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\"><img src='pictures/pic-icon.gif' border=0></a>";
-						else
-						$icon="<a href=\"sendfile.php/?type=$type&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\"><img src='pictures/txt-icon.gif' border=0></a>";
-					
+					$doc_anker = '';
+					//Ankerlogik
+					if (($change) || ($move) || ($upload)) {
+						if (($change == $db3->f("dokument_id")) ||  ($move == $db3->f("dokument_id")) ||  ($upload == $db3->f("dokument_id")))
+						$doc_anker = ' name="anker" ';
+					} elseif ($open['anker'] == $db3->f("dokument_id"))
+						$doc_anker = ' name="anker" ';
+					//Icon auswaehlen
+					$icon = '<a href="' . GetDownloadLink($db3->f("dokument_id"), $db3->f("filename"), $type) . '">' 
+							. GetFileIcon(getFileExtension($db3->f("filename")), true) . '</a>';
 					//Link erstellen
-					if (strstr($open,$db3->f("dokument_id"))) 
-					$link=$PHP_SELF."?close=".$db3->f("dokument_id")."#anker";
+					if (isset($open[$db3->f("dokument_id")])) 
+						$link=$PHP_SELF."?close=".$db3->f("dokument_id")."#anker";
 					else
-					$link=$PHP_SELF."?open=".$db3->f("dokument_id")."#anker";
+						$link=$PHP_SELF."?open=".$db3->f("dokument_id")."#anker";
 					
 					//Workaround for older data from previous versions (chdate is 0)
 					$chdate = (($db3->f("chdate")) ? $db3->f("chdate") : $db3->f("mkdate"));
 					
 					//Titelbereich erstellen
 					$box = "";
-					if ($change == $db3->f("dokument_id"))
+					if ($change == $db3->f("dokument_id")){
 						$titel= "<input style=\"{font-size:8 pt; width: 100%;}\" type=\"text\" size=20 maxlength=255 name=\"change_name\" value=\"".htmlReady($db3->f("name"))."\" />";
-					else {
+					} else {
 						$tmp_titel=htmlReady(mila($db3->f("t_name")));
 						
 						//create a link onto the titel, too
 						if ($link)
-						$tmp_titel = "<a href=\"$link\" class=\"tree\" >$tmp_titel</a>";
+							$tmp_titel = "<a $doc_anker href=\"$link\" class=\"tree\" >$tmp_titel</a>";
 						
 						//add the size
 						if (($db3->f("filesize") /1024 / 1024) >= 1)
@@ -1245,12 +1384,12 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 						//add number of downloads
 						$titel .= " / ".(($db3->f("downloads") == 1) ? $db3->f("downloads")." "._("Download") : $db3->f("downloads")." "._("Downloads")).")";
 						
-						//Zusatzangaben erstellen
-						$zusatz="<a href=\"about.php?username=".$db3->f("username")."\"><font color=\"#333399\">".htmlReady($db3->f("fullname"))."</font></a>&nbsp;".date("d.m.Y - H:i", $chdate);
 						if (($all) && (!$upload) && ($db3->f("url")=="")) {
 							$box = sprintf ("<input type=\"CHECKBOX\" %s name=\"download_ids[]\" value=\"%s\" />",($check_all) ? "checked" : "" , $db3->f("dokument_id"));
 						}
 					}
+					//Zusatzangaben erstellen
+					$zusatz="<a href=\"about.php?username=".$db3->f("username")."\"><font color=\"#333399\">".htmlReady($db3->f("fullname"))."</font></a>&nbsp;".date("d.m.Y - H:i", $chdate);
 					
 					?><td class="blank" width="*">&nbsp;</td></tr></table><table width="100%" cellpadding=0 cellspacing=0 border=0><tr><?
 					
@@ -1273,13 +1412,13 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 					$zusatz .= $box;
 					
 					//Dokumenttitelzeile ausgeben
-					if (strstr($open,$db3->f("dokument_id"))) 
-					printhead ("90%", 0, $link, "open", $neue_datei, $icon, $titel, $zusatz, $chdate);
+					if (isset($open[$db3->f("dokument_id")])) 
+						printhead ("90%", 0, $link, "open", $neue_datei, $icon, $titel, $zusatz, $chdate);
 					else
-					printhead ("90%", 0, $link, "close", $neue_datei, $icon, $titel, $zusatz, $chdate);
+						printhead ("90%", 0, $link, "close", $neue_datei, $icon, $titel, $zusatz, $chdate);
 					
 					//Dokumentansicht aufgeklappt 
-					if (strstr($open,$db3->f("dokument_id"))) {  
+					if (isset($open[$db3->f("dokument_id")])) {  
 						$content='';
 						
 						if (($dok_letzter == $s) && (!$letzter))
@@ -1287,13 +1426,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 						else
 						$striche4="<td class=\"blank\" nowrap background='pictures/forumstrich.gif'><img src='pictures/forumleer2.gif'></td>";					
 						
-						//Ankerlogik
-						if (($change) || ($move) || ($upload)) {
-							if (($change == $db3->f("dokument_id")) ||  ($move == $db3->f("dokument_id")) ||  ($upload == $db3->f("dokument_id")))
-							echo "<a name='anker'></a>";
-						}
-						elseif ($db3->f("dokument_id") == substr($open, strlen($open) -32, strlen ($open)))
-						echo "<a name='anker'></a>";
+						
 						
 						if ($change == $db3->f("dokument_id")) { 	//Aenderungsmodus, Formular aufbauen
 							if ($db3->f("protected")==1)
@@ -1315,7 +1448,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 						}
 						
 						if ($move == $db3->f("dokument_id"))
-						$content.="<br />" . sprintf(_("Diese Datei wurde zum Verschieben markiert. Bitte w&auml;hlen Sie das Einf&uuml;gen-Symbol %s, um diese Datei in den gew&uuml;nschten Ordner zu verschieben."), "<img src=\"pictures/move.gif\" border=0 " . tooltip(_("Klicken Sie dieses Symbol, um diese Datei in einen anderen Ordner einzufügen")) . ">");
+						$content.="<br />" . sprintf(_("Diese Datei wurde zum Verschieben / Kopieren markiert. Bitte w&auml;hlen Sie das Einf&uuml;gen-Symbol %s, um diese Datei in den gew&uuml;nschten Ordner zu verschieben / kopieren. Wenn Sie diese Datei in eine andere Veranstaltung verschieben / kopieren möchten, wählen Sie die gewünschte Veranstaltung oben auf der Seite aus."), "<img src=\"pictures/move.gif\" border=0 " . tooltip(_("Klicken Sie dieses Symbol, um diese Datei in einen anderen Ordner einzufügen")) . ">");
 						
 						$content.= "\n";
 						
@@ -1342,8 +1475,10 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 									$edit.= "&nbsp;&nbsp;&nbsp;<a href=\"$PHP_SELF?open=".$db3->f("dokument_id")."_led_&rnd=".rand()."#anker \">" . makeButton("bearbeiten", "img") . "</a>";
 								else
 									$edit.= "&nbsp;<a href=\"$PHP_SELF?open=".$db3->f("dokument_id")."_rfu_#anker \">" . makeButton("aktualisieren", "img") . "</a>";
-								if (!$all)
-									$edit.= "&nbsp;<a href=\"$PHP_SELF?open=".$db3->f("dokument_id")."_m_#anker \">" . makeButton("verschieben", "img") . "</a>";	
+								if (!$all){
+									$edit.= "&nbsp;<a href=\"$PHP_SELF?open=".$db3->f("dokument_id")."_m_#anker \">" . makeButton("verschieben", "img") . "</a>";
+									$edit.= "&nbsp;<a href=\"$PHP_SELF?open=".$db3->f("dokument_id")."_co_#anker \">" . makeButton("kopieren", "img") . "</a>";
+								}
 								$edit.= "&nbsp;<a href=\"$PHP_SELF?open=".$db3->f("dokument_id")."_fd_\">" . makeButton("loeschen", "img") . "</a>";
 							}
 						}
@@ -1384,9 +1519,9 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 				$icon="<img src=\"pictures/cont_folder2.gif\">";				
 
 			
-			if ($move)
-				$icon="&nbsp;<a href=\"$PHP_SELF?open=".$db->f("folder_id")."_md_\"><img src=\"pictures/move.gif\" border=0 " . tooltip(_("Objekt in diesen Ordner verschieben")) . " /></a>".$icon;
-			
+			if ($move && !in_array($db->f('folder_id'), $dont_move_to)){
+				$icon="&nbsp;<a href=\"$PHP_SELF?open=".$db->f("folder_id")."_md_\"><img src=\"pictures/move.gif\" border=0 " . tooltip(_("Objekt in diesen Ordner verschieben / kopieren")) . " /></a>".$icon;
+			}
 			//Link erstellen
 			$link=$PHP_SELF."?open=".$db->f("folder_id")."#anker";
 			
@@ -1395,7 +1530,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 
 			//create a link onto the titel, too
 			if ($link)
-				$tmp_titel = "<a href=\"$link\" class=\"tree\" >$tmp_titel</a>";
+				$tmp_titel = "<a $anker href=\"$link\" class=\"tree\" >$tmp_titel</a>";
 			
 			if ($documents_count > 1)
 				$titel= $tmp_titel."&nbsp;&nbsp;" . sprintf(_("(%s Dokumente)"), $documents_count);
@@ -1443,6 +1578,48 @@ function getLinkPath($file_id) {
 	return $url;
 }
 
+function GetFileIcon($ext, $with_img_tag = false){
+	$extension = strtolower($ext);
+	//Icon auswaehlen
+	switch ($extension){
+		case 'rtf':
+		case 'doc':
+			$icon = 'rtf-icon.gif';
+		break;
+		case 'xls':
+		case 'csv':
+			$icon = 'xls-icon.gif';
+		break;
+		case 'zip':
+		case 'tgz':
+		case 'gz':
+		case 'bz2':
+			$icon = 'zip-icon.gif';
+		break;
+		case 'ppt':
+			$icon = 'ppt-icon.gif';
+		break;
+		case 'pdf':
+			$icon = 'pdf-icon.gif';
+		break;
+		case 'gif':
+		case 'jpg':
+		case 'jpe':
+		case 'jpeg':
+		case 'png':
+		case 'bmp':
+			$icon = 'pic-icon.gif';
+		break;
+		default:
+			$icon = 'txt-icon.gif';
+		break;
+	}
+	return ($with_img_tag ? '<img src="pictures/'.$icon.'" border="0">' : $icon);
+}
+
+function GetDownloadLink($dokument_id, $filename, $type = 0){
+	return "sendfile.php/?type=$type&file_id=".$dokument_id."&file_name=".rawurlencode($filename);
+}
 /*
 Die function delete_document löscht ein hochgeladenes Dokument.
 Der erste Parameter ist die dokument_id des zu löschenden Dokuments.
@@ -1453,31 +1630,28 @@ Es erfolgt keine Überprüfung der Berechtigung innerhalb der Funktion,
 dies muss das aufrufende Script sicherstellen.
 */
 
-function delete_document ($dokument_id, $delete_only_file = FALSE) {
-	global $UPLOAD_PATH, $msg; // brauchen wir fuer den Pfad zu den Dokumenten
+function delete_document($dokument_id, $delete_only_file = FALSE) {
+	global $UPLOAD_PATH; // brauchen wir fuer den Pfad zu den Dokumenten
 
 	$db = new DB_Seminar;
 	$db->query("SELECT * FROM dokumente WHERE dokument_id='$dokument_id'");
 	if ($db->next_record()) { 
-		if ($db->f("url")=="") {   //Bei verlinkten Datein nicht nachsehen ob es Datei gibt!
-			if (!@unlink("$UPLOAD_PATH/$dokument_id"))
-				return FALSE;
-			elseif ($delete_only_file)
+		if ($db->f("url") == "") {   //Bei verlinkten Datein nicht nachsehen ob es Datei gibt!
+			@unlink("$UPLOAD_PATH/$dokument_id");
+			if ($delete_only_file){
 				return TRUE;
+			}
 		}
 	}
-		
+
+	
 	// eintrag aus der Datenbank werfen
 	$db->query("DELETE FROM dokumente WHERE dokument_id='$dokument_id'");
 	
-	if ($db->affected_rows())
-		return TRUE;
-	else 
-		return FALSE;
-	}
+	return $db->affected_rows();
+}
 
-
-function delete_link ($dokument_id) {
+function delete_link($dokument_id) {
 	$db = new DB_Seminar;
 	// eintrag aus der Datenbank werfen
 	$db->query("DELETE FROM dokumente WHERE dokument_id='$dokument_id'");
@@ -1497,36 +1671,51 @@ Es erfolgt keine Überprüfung der Berechtigung innerhalb der Funktion,
 dies muss das aufrufende Script sicherstellen.
 */
 
-function delete_folder ($folder_id) {
-	global $msg; 
+function delete_folder($folder_id, $delete_subfolders = false) {
+	
+	global $msg;
 	
 	$db = new DB_Seminar;
 	
-	$db->query("SELECT dokument_id FROM dokumente WHERE range_id='$folder_id'");
-	while ($db->next_record())
-		if ($delete_document($db->f("dokument_id")))
-			$deleted++;
-
-	$db->query("DELETE FROM folder WHERE folder_id='$folder_id'");
-	if ($db->affected_rows()) {
-		if ($deleted)
-			$msg.="info§" . sprintf(_("Der Dateiordner und %s Dokumente wurden gel&ouml;scht"), $deleted) . "§";
-		else
-			$msg.="info§" . _("Der Dateiordner wurde gel&ouml;scht") . "§";
-		return TRUE;
-		}
-	else {
-		if ($deleted)
-			$msg.="error§" . sprintf(_("Probleme beim L&ouml;schen des Ordners. %s Dokumente wurden gel&ouml;scht"), $deleted) . "§";
-		else
-			$msg.="error§" . _("Probleme beim L&ouml;schen des Ordners") . "§";
-		return FALSE;
+	if ($delete_subfolders){
+		list($subfolders, $num_subfolders) = getFolderChildren($folder_id);
+		if ($num_subfolders){
+			foreach ($subfolders as $one_folder){
+				delete_folder($one_folder, true);
+			}
 		}
 	}
 	
-
+	$db->query("SELECT name,folder_id FROM folder WHERE folder_id='$folder_id'");
+	if ($db->next_record()){
+		$foldername = $db->f('name');
+		$db->query("SELECT dokument_id FROM dokumente WHERE range_id='$folder_id'");
+		while ($db->next_record()){
+			if (delete_document($db->f("dokument_id"))){
+				$deleted++;
+			}
+		}
+		$db->query("DELETE FROM folder WHERE folder_id='$folder_id'");
+		if ($db->affected_rows()) {
+			if ($deleted){
+				$msg.="info§" . sprintf(_("Der Dateiordner <b>%s</b> und %s Dokument(e) wurden gel&ouml;scht"), htmlReady($foldername), $deleted) . "§";
+			} else {
+				$msg.="info§" . sprintf(_("Der Dateiordner <b>%s</b> wurde gel&ouml;scht"),htmlReady($foldername)) . "§";
+				return TRUE;
+			}
+		} else {
+			if ($deleted){
+				$msg.="error§" . sprintf(_("Probleme beim L&ouml;schen des Ordners <b>%s</b>. %s Dokument(e) wurden gel&ouml;scht"),htmlReady($foldername), $deleted) . "§";
+			}else{
+				$msg.="error§" . sprintf(_("Probleme beim L&ouml;schen des Ordners <b>%s</b>"),htmlReady($foldername)) . "§";
+			}
+			return FALSE;
+		}
+	}
+}
+	
 //Rekursive Loeschfunktion, loescht erst jeweils enthaltene Dokumente und dann den entsprechenden Ordner
-function recursiv_folder_delete ($parent_id) {
+function recursiv_folder_delete($parent_id) {
 	
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
@@ -1550,6 +1739,24 @@ function recursiv_folder_delete ($parent_id) {
 	return $doc_count;
 	}
 
+function delete_all_documents($range_id){
+	if (!$range_id){
+		return false;
+	}
+	$db = new DB_Seminar;
+
+	//first, delete the folders with parent = range
+	$count += recursiv_folder_delete($range_id);
+	//delete top level folders
+	$count += recursiv_folder_delete(md5($range_id.'top_folder'));
+	$query = sprintf ("SELECT termin_id FROM termine WHERE range_id = '%s' ", $range_id);
+	$db->query($query);
+	//then delete the folder with parent = termin_id
+	while ($db->next_record()) {
+		$count += recursiv_folder_delete($db->f("termin_id"));
+	}
+	return $count;
+}
 /**
 * Delete a file, or a folder and its contents
 *

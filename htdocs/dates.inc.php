@@ -178,9 +178,7 @@ function veranstaltung_beginn ($seminar_id='', $art='', $semester_start_time='',
 	global $TERMIN_TYP;
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;	
-	$semester = new SemesterData;
-	$holiday = new HolidayData;
-	$all_semester = $semester->getAllSemesterData();
+	$all_semester = SemesterData::GetSemesterArray();
 	
 	if ((func_num_args()==1) || (func_num_args()==2)){
 		$seminar_id=func_get_arg(0);
@@ -255,7 +253,7 @@ function veranstaltung_beginn ($seminar_id='', $art='', $semester_start_time='',
 							$end_termin = mktime($term_data["turnus_data"][0]["end_stunde"], date("i",$end_termin), 0, date("n",$end_termin), date("j",$end_termin),  date("Y",$end_termin));
 						
 						//check for holidays. You should use it only for special holidays
-						$all_holiday = $holiday->getAllHolidays(); // fetch all Holidays
+						$all_holiday = HolidayData::GetAllHolidaysArray(); // fetch all Holidays
 						// get all holidays from db
 						foreach ($all_holiday as $val)
 							if (($val["beginn"] <= $start_termin) && ($start_termin <=$val["ende"]))
@@ -386,7 +384,7 @@ function view_turnus ($seminar_id, $short = FALSE, $meta_data = false, $start_ti
 	if ($meta_data === false){
 		$db->query("SELECT metadata_dates FROM seminare WHERE Seminar_id = '$seminar_id'");
 		$db->next_record();
-		$term_data=unserialize($db->f("metadata_dates"));
+		$term_data = unserialize($db->f("metadata_dates"));
 	} else {
 		$term_data = unserialize($meta_data);
 	}
@@ -909,7 +907,7 @@ Es erfolgt keine Überprüfung der Berechtigung innerhalb der Funktion,
 dies muss das aufrufende Script sicherstellen.
 */
 
-function delete_date ($termin_id, $topic_delete = TRUE, $folder_move = TRUE, $sem_id=0) {
+function delete_date($termin_id, $topic_delete = TRUE, $folder_move = TRUE, $sem_id=0) {
 	global $RESOURCES_ENABLE, $RELATIVE_PATH_RESOURCES;
 	
 	if ($RESOURCES_ENABLE) {
@@ -917,9 +915,7 @@ function delete_date ($termin_id, $topic_delete = TRUE, $folder_move = TRUE, $se
 	}
 	
 	$db = new DB_Seminar;
-	$db2 = new DB_Seminar;
-	$db3 = new DB_Seminar;	
-
+	
 	## Eventuell rekursiv Postings loeschen
 	/*if ($topic_delete) { //deprecated at the moment because of bad usabilty (delete date kill whole topic in forum without a notice, that's bad...)
 		$db->query("SELECT topic_id FROM termine WHERE termin_id ='$termin_id'");
@@ -932,21 +928,17 @@ function delete_date ($termin_id, $topic_delete = TRUE, $folder_move = TRUE, $se
 	if (!$folder_move) {
 		## Dateiordner muessen weg!
 		recursiv_folder_delete ($termin_id);
-		}
-	else {
+	} else {
 		## Dateiordner werden verschoben, wenn Ordner nicht leer, ansonsten auch weg
-		if (!doc_count($termin_id, 0))
-			recursiv_folder_delete ($termin_id);		
+		if (!doc_count($termin_id))
+			recursiv_folder_delete($termin_id);		
 		else {
-			$db->query("SELECT folder_id FROM folder WHERE range_id ='$sem_id'");
+			$db->query("SELECT folder_id FROM folder WHERE range_id = '$termin_id'");
 			$db->next_record();
-			$db2->query("SELECT folder_id FROM folder WHERE range_id = '$termin_id'");
-			while ($db2->next_record()) {
-				move_item ($db2->f("folder_id"), $db->f("folder_id"));
-				$db3->query ("UPDATE folder SET name='" . _("Dateiordner zu gelöschtem Termin") . "', description='" . _("Dieser Ordner enthält Dokumente und Termine eines gelöschten Termins") . "' WHERE folder_id='".$db2->f("folder_id")."'");
-				}
-			}
+			move_item($db->f("folder_id"), $sem_id, true);
+			$db->query("UPDATE folder SET name='" . _("Dateiordner zu gelöschtem Termin") . "', description='" . _("Dieser Ordner enthält Dokumente und Termine eines gelöschten Termins") . "' WHERE folder_id='".$db->f("folder_id")."'");
 		}
+	}
 
 	## Und den Termin selbst loeschen
 	$query = "DELETE FROM termine WHERE termin_id='$termin_id'";
@@ -973,7 +965,7 @@ Es erfolgt keine Überprüfung der Berechtigung innerhalb der Funktion,
 dies muss das aufrufende Script sicherstellen.
 */
 
-function delete_range_of_dates ($range_id, $topics = FALSE) {
+function delete_range_of_dates($range_id, $topics = FALSE) {
 
 	$db = new DB_Seminar;
 	$count = 0;
@@ -982,11 +974,8 @@ function delete_range_of_dates ($range_id, $topics = FALSE) {
 	$query = "SELECT termin_id, topic_id FROM termine WHERE range_id='$range_id'";
 	$db->query($query);
 	while ($db->next_record()) {       // ...und nacheinander...
-		if ($topics)
-			delete_date($db->f("termin_id"), $db->f("topic_id"));  // ...mit topics loeschen
-		else
-			delete_date($db->f("termin_id"), FALSE);  // ...ohne topics loeschen
-		$count ++;
+		delete_date($db->f("termin_id"), $topics, true, $range_id);  
+		$count++;
 	}
 
 	return $count;
@@ -1013,7 +1002,6 @@ function dateAssi($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full = 
 	$db = new DB_Seminar;
 	$db2 = new DB_Seminar;
 	$semester = new SemesterData;
-	$holiday = new HolidayData;
 
 	//load data of the Veranstaltung
 	$query = sprintf("SELECT start_time, duration_time, metadata_dates FROM seminare WHERE Seminar_id = '%s'", $sem_id);
@@ -1120,7 +1108,7 @@ function dateAssi($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full = 
 	
 	// get all holidays from db
 	
-	$all_holiday = $holiday->getAllHolidays(); // fetch all Holidays
+	$all_holiday = HolidayData::GetAllHolidaysArray(); // fetch all Holidays
 	
 	//create the dates
 	$affected_dates=0;
@@ -1340,7 +1328,8 @@ function isDatesMultiSem ($sem_id) {
 *
 */
 function getMetadateCorrespondingDates ($sem_id, $presence_dates_only) {
-	$semObj = new Seminar($sem_id);
+	
+	$semObj =& Seminar::GetInstance($sem_id);
 	$db = new DB_Seminar;
 	
 	//first, we load all dates that exists
@@ -1393,7 +1382,8 @@ function isMetadateCorrespondingDate ($termin_id, $begin = '', $end = '', $semin
 		$end = $db->f("end_time");
 		$seminar_id = $db->f("range_id");
 	}
-	$semObj = new Seminar($seminar_id);
+	
+	$semObj =& Seminar::GetInstance($seminar_id);
 
 	//than we check, if the date matches a metadate
 	if (is_array($semObj->getMetaDates())) {
@@ -1409,7 +1399,7 @@ function isMetadateCorrespondingDate ($termin_id, $begin = '', $end = '', $semin
 				(date("i", $begin) == $val["start_minute"]) &&
 				(date("G", $end) == $val["end_hour"]) &&
 				(date("i", $db->f("end_time")) == $val["end_minute"]))
-				$result = TRUE;
+				$result = $seminar_id;
 		}
 	}
 	return $result;

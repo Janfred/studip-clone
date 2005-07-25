@@ -83,10 +83,14 @@ object_set_visit_module("documents");
 
 include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
 
+//obskuren id+_?_ string zerpflücken
+if (strpos($open, "_") !== false){
+	list($open_id, $open_cmd) = explode('_', $open);
+}
 
 //Wenn nicht Rechte und Operation uebermittelt: Ist das mein Dokument?
-if ((!$rechte) && strpos($open, "_")) {
-	$db->query("SELECT user_id FROM dokumente WHERE dokument_id = '".substr($open, 0, strpos($open, "_"))."'");
+if ((!$rechte) && $open_cmd) {
+	$db->query("SELECT user_id FROM dokumente WHERE dokument_id = '".$open_id."'");
 	$db->next_record();
 	if (($db->f("user_id") == $user->id) && ($db->f("user_id") != "nobody"))
 		$owner=TRUE;
@@ -97,78 +101,99 @@ if ((!$rechte) && strpos($open, "_")) {
 
 if (($rechte) || ($owner)) {
 	//wurde Code fuer Anlegen von Ordnern ubermittelt (=id+"_n_"), wird entsprechende Funktion aufgerufen
-	if ((strpos($open, "_n_")) && (!$cancel_x)) {
-		$change=create_folder(_("Neuer Ordner"), '', substr($open, (strpos($open, "_n_"))-32, (strpos($open, "_n_"))));
-		$open=$change;
+	if ($open_cmd == 'n' && (!$cancel_x)) {
+		$change = create_folder(_("Neuer Ordner"), '', $open_id );
+		$open = $change;
+		$open_cmd = null;
 		}
 
 	//wurde Code fuer Anlegen von Ordnern der obersten Ebene ubermittelt (=id+"_a_"), wird entsprechende Funktion aufgerufen
-	if (strpos($open, "_a_")) {
-		if (substr($open, (strpos($open, "_a_"))-32, (strpos($open, "_a_"))) == $SessionSeminar) {
+	if ($open_cmd == 'a') {
+		if ($open_id == $SessionSeminar) {
 			$titel=_("Allgemeiner Dateiordner");
 			$description= sprintf(_("Ablage für allgemeine Ordner und Dokumente der %s"), $SessSemName["art_generic"]);
-			}
-		
-		$db->query("SELECT date, date_typ, content FROM termine WHERE termin_id='".substr($open, (strpos($open, "_a_"))-32, (strpos($open, "_a_")))."'");
-		if ($db->next_record()) {
-			//Titel basteln
-			$titel=$TERMIN_TYP[$db->f("date_typ")]["name"].": ".substr($db->f("content"), 0, 35);
-			if (strlen($db->f("content")) >=35)
-				$titel.="...";
-			$titel.=" " . _("am") . " ".date("d.m.Y ", $db->f("date"));
-			$description= _("Ablage für Ordner und Dokumente zu diesem Termin");
-			}
-			
-		$change=create_folder(addslashes($titel), $description, substr($open, (strpos($open, "_a_"))-32, (strpos($open, "_a_"))));
+		} else if ($open_id == md5('new_top_folder')){
+			$titel = $_REQUEST['top_folder_name'] ? stripslashes($_REQUEST['top_folder_name']) : _("Neuer Ordner");
+			$open_id = md5($SessionSeminar . 'top_folder');
+		} else {
+			$db->query("SELECT date, date_typ, content FROM termine WHERE termin_id='".$open_id."'");
+			if ($db->next_record()) {
+				//Titel basteln
+				$titel=$TERMIN_TYP[$db->f("date_typ")]["name"].": ".substr($db->f("content"), 0, 35);
+				if (strlen($db->f("content")) >=35)
+					$titel.="...";
+				$titel.=" " . _("am") . " ".date("d.m.Y ", $db->f("date"));
+				$description= _("Ablage für Ordner und Dokumente zu diesem Termin");
+				}
+		}
+		$change = create_folder(addslashes($titel), $description, $open_id);
+		$folder_system_data['open']['anker'] = $change;
 		}
 
 	//wurde Code fuer Loeschen von Ordnern ubermittelt (=id+"_d_"), wird entsprechende Funktion aufgerufen
-	if (strpos($open, "_d_")) {
-		delete_folder(substr($open, (strpos($open, "_d_"))-32, (strpos($open, "_d_"))));
+	if ($open_cmd == 'd') {
+		if ( ($count = doc_count($open_id)) ){
+			$msg="info§" . sprintf(_("Der ausgewählte Ordner enthält %s Datei(en). Wollen Sie den Ordner wirklich löschen?"), $count) . "<br>";
+			$msg.="<b><a href=\"$PHP_SELF?open=".$open_id."_rd_\">" . makeButton("ja2", "img") . "</a>&nbsp;&nbsp; <a href=\"$PHP_SELF\">" . makeButton("nein", "img") . "</a>§";
+		} else {
+			delete_folder($open_id, true);
 		}
+	}
+	
+	//Loeschen von Ordnern im wirklich-ernst Mode
+	if ($open_cmd == 'rd') {
+		delete_folder($open_id, true);
+	}
 	
 	//wurde Code fuer Loeschen von Dateien ubermittelt (=id+"_fd_"), wird erstmal nachgefragt
-	if (strpos($open, "_fd_")) {
-		$db->query("SELECT filename, ". $_fullname_sql['full'] ." AS fullname, username FROM dokumente LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE dokument_id ='".substr($open, (strpos($open, "_fd_"))-32, (strpos($open, "_fd_")))."'");
+	if ($open_cmd == 'fd') {
+		$db->query("SELECT filename, ". $_fullname_sql['full'] ." AS fullname, username FROM dokumente LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE dokument_id ='".$open_id."'");
 		$db->next_record();
-		if (getLinkPath(substr($open, (strpos($open, "_fd_"))-32, (strpos($open, "_fd_"))))) {
-			$msg="info§" . sprintf("Wollen sie die Verlinkung zu <b>%s</b> von %s wirklich löschen?", htmlentities(stripslashes($db->f("filename"))), "<a href=\"about.php?username=".$db->f("username")."\">".htmlReady($db->f("fullname"))."</a>") . "<br>";
-			$msg.="<b><a href=\"$PHP_SELF?open=".substr($open, (strpos($open, "_fd_"))-32, (strpos($open, "_fd_")))."_rl_\">" . makeButton("ja2", "img") . "</a>&nbsp;&nbsp; <a href=\"$PHP_SELF\">" . makeButton("nein", "img") . "</a>§";
+		if (getLinkPath($open_id)) {
+			$msg="info§" . sprintf(_("Wollen sie die Verlinkung zu <b>%s</b> von %s wirklich löschen?"), htmlReady($db->f("filename")), "<a href=\"about.php?username=".$db->f("username")."\">".htmlReady($db->f("fullname"))."</a>") . "<br>";
+			$msg.="<b><a href=\"$PHP_SELF?open=".$open_id."_rl_\">" . makeButton("ja2", "img") . "</a>&nbsp;&nbsp; <a href=\"$PHP_SELF\">" . makeButton("nein", "img") . "</a>§";
 		} else {
-			$msg="info§" . sprintf("Wollen sie die Datei <b>%s</b> von %s wirklich löschen?", htmlentities(stripslashes($db->f("filename"))), "<a href=\"about.php?username=".$db->f("username")."\">".htmlReady($db->f("fullname"))."</a>") . "<br>";
-			$msg.="<b><a href=\"$PHP_SELF?open=".substr($open, (strpos($open, "_fd_"))-32, (strpos($open, "_fd_")))."_rm_\">" . makeButton("ja2", "img") . "</a>&nbsp;&nbsp; <a href=\"$PHP_SELF\">" . makeButton("nein", "img") . "</a>§";
+			$msg="info§" . sprintf(_("Wollen sie die Datei <b>%s</b> von %s wirklich löschen?"), htmlReady($db->f("filename")), "<a href=\"about.php?username=".$db->f("username")."\">".htmlReady($db->f("fullname"))."</a>") . "<br>";
+			$msg.="<b><a href=\"$PHP_SELF?open=".$open_id."_rm_\">" . makeButton("ja2", "img") . "</a>&nbsp;&nbsp; <a href=\"$PHP_SELF\">" . makeButton("nein", "img") . "</a>§";
 		}
 	}
 
 	//Loeschen von Dateien im wirklich-ernst Mode
-	if (strpos($open, "_rm_")) {
-		if (delete_document(substr($open, (strpos($open, "_rm_"))-32, (strpos($open, "_rm_")))))
+	if ($open_cmd == 'rm') {
+		if (delete_document($open_id))
 			$msg.="msg§" . _("Die Datei wurde gel&ouml;scht") . "§";
 		else
 			$msg.="error§" . _("Die Datei konnte nicht gel&ouml;scht werden") . "§";
 		} 
 
 	//Loeschen von verlinkten Dateien im wirklich-ernst Mode
-	if (strpos($open, "_rl_")) {
-		if (delete_link(substr($open, (strpos($open, "_rl_"))-32, (strpos($open, "_rl_")))))
+	if ($open_cmd == 'rl') {
+		if (delete_link($open_id))
 			$msg.="msg§" . _("Die Verlinkung wurde gelöscht") . "§";
 		else
 			$msg.="error§" . _("Die Verlinkung konnte nicht gelöscht werden") . "§";
 		}
 
 	//wurde Code fuer Aendern des Namens und der Beschreibung von Ordnern oder Dokumenten ubermittelt (=id+"_c_"), wird entsprechende Funktion aufgerufen
-	if (strpos($open, "_c_")) {
-		$change=substr($open, (strpos($open, "_c_"))-32, (strpos($open, "_c_")));
+	if ($open_cmd ==  'c') {
+		$change=$open_id;
 		}
 
 	//wurde Code fuer Speichern von Aenderungen uebermittelt (=id+"_sc_"), wird entsprechende Funktion aufgerufen
-	if ((strpos($open, "_sc_")) && (!$cancel_x)) {
-		edit_item (substr($open, (strpos($open, "_sc_"))-32, (strpos($open, "_sc_"))), $type, $change_name, $change_description, $change_protected);
+	if ($open_cmd == 'sc' && (!$cancel_x)) {
+		edit_item($open_id, $type, $change_name, $change_description, $change_protected);
 		}
 
 	//wurde Code fuer Verschieben-Vorwaehlen uebermittelt (=id+"_m_"), wird entsprechende Funktion aufgerufen
-	if ((strpos($open, "_m_")) && (!$cancel_c)) {
-		$folder_system_data["move"]=substr($open, (strpos($open, "_m_"))-32, (strpos($open, "_m_")));
+	if ($open_cmd == 'm' && (!$cancel_c)) {
+		$folder_system_data["move"]=$open_id;
+		$folder_system_data["mode"]='move';
+		}
+	
+	//wurde Code fuer Kopieren-Vorwaehlen uebermittelt (=id+"_co_"), wird entsprechende Funktion aufgerufen
+	if ($open_cmd == 'co' && (!$cancel_c)) {
+		$folder_system_data["move"]=$open_id;
+		$folder_system_data["mode"]='copy';
 		}
 	}
 
@@ -176,24 +201,24 @@ if (($rechte) || ($owner)) {
 //Upload, Check auf Konsistenz mit Seminar-Schreibberechtigung
 if (($SemUserStatus == "autor") || ($rechte)) {
 	//wurde Code fuer Hochladen uebermittelt (=id+"_u_"), wird entsprechende Variable gesetzt
-	if ((strpos($open, "_u_")) && (!$cancel_x)) {
-		$folder_system_data["upload"]=substr($open, (strpos($open, "_u_"))-32, (strpos($open, "_u_")));
+	if ($open_cmd == 'u' && (!$cancel_x)) {
+		$folder_system_data["upload"]=$open_id;
 		}	
 
 	//wurde Code fuer Verlinken uebermittelt (=id+"_l_"), wird entsprechende Variable gesetzt
-	if ((strpos($open, "_l_")) && (!$cancel_x)) {
-		$folder_system_data["link"]=substr($open, (strpos($open, "_l_"))-32, (strpos($open, "_l_")));
+	if ($open_cmd == 'l' && (!$cancel_x)) {
+		$folder_system_data["link"]=$open_id;
 	}
 
 	//wurde Code fuer Aktualisieren-Hochladen uebermittelt (=id+"_rfu_"), wird entsprechende Variable gesetzt
-	if ((strpos($open, "_rfu_")) && (!$cancel_x)) {
-		$folder_system_data["upload"]=substr($open, (strpos($open, "_rfu_"))-32, (strpos($open, "_rfu_")));
-		$folder_system_data["refresh"]=substr($open, (strpos($open, "_rfu_"))-32, (strpos($open, "_rfu_")));
+	if ($open_cmd == 'rfu' && (!$cancel_x)) {
+		$folder_system_data["upload"]=$open_id;
+		$folder_system_data["refresh"]=$open_id;
 		}	
 		
 	//wurde Code fuer Aktualisieren-Verlinken uebermittelt (=id+"_led_"), wird entsprechende Variable gesetzt
-	if ((strpos($open, "_led_")) && (!$cancel_x)) {
-		$folder_system_data["link"]=substr($open, (strpos($open, "_led_"))-32, (strpos($open, "_led_")));
+	if ($open_cmd == 'led' && (!$cancel_x)) {
+		$folder_system_data["link"]=$open_id;
 		$folder_system_data["update_link"]=TRUE;
 	}
 	
@@ -234,40 +259,72 @@ if (($SemUserStatus == "autor") || ($rechte)) {
 			$folder_system_data["linkerror"]=TRUE;	
 		}
 	}
+	
+	if ($_POST['move_to_sem_x'] || $_POST['move_to_inst_x']){
+		$new_range_id = ($_POST['move_to_sem_x'] ? $_POST['sem_move_id'] : $_POST['inst_move_id']);
+		if ($new_range_id){
+			if ($folder_system_data["mode"] == 'move'){
+				$done = move_item($folder_system_data["move"], $new_range_id, true);
+				if (!$done){
+					$msg .= "error§" . _("Verschiebung konnte nicht durchgeführt werden.") . "§";
+				} else {
+					$msg .= "msg§" . sprintf(_("%s Ordner, %s Datei(en) wurden verschoben."), $done[0], $done[1]) . '§';
+				}
+			} else {
+				$done = copy_item($folder_system_data["move"], $new_range_id, true);
+				if (!$done){
+					$msg .= "error§" . _("Kopieren konnte nicht durchgeführt werden.") . "§";
+				} else {
+					$msg .= "msg§" . sprintf(_("%s Ordner, %s Datei(en) wurden kopiert."), $done[0], $done[1]) . '§';
+				}
+			}
+		}
+		$folder_system_data["move"]='';
+		$folder_system_data["mode"]='';
+	}
 		
 	if ($cancel_x)  {
 		$folder_system_data["upload"]='';
 		$folder_system_data["refresh"]='';
 		$folder_system_data["link"]='';
-		$folder_system_data["update_link"]='';	
+		$folder_system_data["update_link"]='';
+		$folder_system_data["move"]='';
+		$folder_system_data["mode"]='';
 		unset($cmd);
 	}
 }
 	
 //wurde Code fuer Starten der Verschiebung uebermittelt (=id+"_md_"), wird entsprechende Funktion aufgerufen (hier kein Rechtecheck noetig, da Dok_id aus Sess_Variable.
-if ((strpos($open, "_md_")) && (!$cancel_x)) {
-	move_item ($folder_system_data["move"], substr($open, (strpos($open, "_md_"))-32, (strpos($open, "_md_"))));
-	$folder_system_data["move"]='';
-	}
-
-//wurde ein weiteres Objekt aufgeklappt?
-if ($folder_system_data["open"]) {
-	if ((!strstr($folder_system_data["open"], $open)) &&  (!strpos($open, "_"))) {
-		$folder_system_data["open"].=$open;
+if ($open_cmd == 'md' && (!$cancel_x)) {
+	if ($folder_system_data["mode"] == 'move'){
+		$done = move_item($folder_system_data["move"], $open_id);
+		if (!$done){
+			$msg .= "error§" . _("Verschiebung konnte nicht durchgeführt werden.") . "§";
+		} else {
+			$msg .= "msg§" . sprintf(_("%s Ordner, %s Datei(en) wurden verschoben."), $done[0], $done[1]) . '§';
+		}
+	} else {
+		$done = copy_item($folder_system_data["move"], $open_id);
+		if (!$done){
+			$msg .= "error§" . _("Kopieren konnte nicht durchgeführt werden.") . "§";
+		} else {
+			$msg .= "msg§" . sprintf(_("%s Ordner, %s Datei(en) wurden kopiert."), $done[0], $done[1]) . '§';
 		}
 	}
-else
-	$folder_system_data["open"]=$open;
+	$folder_system_data["move"]='';
+	$folder_system_data["mode"]='';
+}
 
+//wurde ein weiteres Objekt aufgeklappt?
+if (!$open_cmd && isset($open)) {
+	$folder_system_data["open"][$open] = true;
+	$folder_system_data["open"]['anker'] = $open;
+}
 //wurde ein Objekt zugeklappt?
 if ($close) {
-	$pos=strpos($folder_system_data["open"], $close);
-	if ($pos)
-		$folder_system_data["open"]=substr($folder_system_data["open"], 0, $pos).substr($folder_system_data["open"], $pos+32, strlen($folder_system_data["open"])); 
-		
-	else
-		$folder_system_data["open"]=substr($folder_system_data["open"], 32, strlen($folder_system_data["open"])); 	
-	}
+	unset($folder_system_data["open"][$close]);
+	$folder_system_data["open"]['anker'] = $close;
+}	
 
 // Hauptteil
 
@@ -275,12 +332,11 @@ if ($close) {
  	$range_id = $SessionSeminar ;
 
 ?>
-
 <table cellspacing="0" cellpadding="0" border="0" width="100%">
-<tr><td class="topic" colspan="2"><b>&nbsp;<img src="pictures/icon-disc.gif" align=absmiddle>&nbsp; <? echo $SessSemName["header_line"] . " - " . _("Dateien"); ?></b></td></tr>
+<tr><td class="topic" colspan="3"><b>&nbsp;<img src="pictures/icon-disc.gif" align=absmiddle>&nbsp; <? echo $SessSemName["header_line"] . " - " . _("Dateien"); ?></b></td></tr>
 
 		<tr>
-			<td class="blank" colspan=2>&nbsp;
+			<td class="blank" colspan=3>&nbsp;
 				<?
 				if ($msg) parse_msg($msg);
 				?>
@@ -290,40 +346,99 @@ if ($close) {
 
 <?
 	//Ordner die fehlen, anlegen: Allgemeiner, wenn nicht da, Ordner zu Terminen, die keinen Ordner haben
-	if (($rechte) && ($folder_system_data["cmd"]=="tree")) {
-		$db2->query("SELECT name FROM folder WHERE range_id='$range_id'");
-		if (!$db2->affected_rows())
-			$select="<option value=\"".$range_id."_a_\">" . _("Allgemeiner Dateiordner") . "</option>";
-		
-		$db2->query("SELECT termine.date, folder.name, termin_id, date_typ FROM termine LEFT JOIN folder ON (termin_id = folder.range_id) WHERE termine.range_id='$range_id' ORDER BY name, termine.date");
-		while (($db2->next_record()) && (!$db2->f("name"))) {
-			$select.="<option value=\"".$db2->f("termin_id")."_a_\">" . sprintf(_("Dateiordner zum Termin am %s [%s]"), date("d.m.Y", $db2->f("date")), $TERMIN_TYP[$db2->f("date_typ")]["name"]) . "</option>";
+	if ($rechte){
+		if ($folder_system_data['mode']){
+			$module_check = new Modules();
+			$my_sem = $my_inst = array();
+			foreach(search_range('%') as $key => $value){
+				if ($module_check->getStatus('documents', $key, $value['type']) && $key != $SessionSeminar){
+					if ($value['type'] == 'sem'){
+						$my_sem[$key] = $value['name'];
+					} else {
+						$my_inst[$key] = $value['name'];
+					}
+				}
 			}
+			asort($my_sem, SORT_STRING);
+			asort($my_inst, SORT_STRING);
+			$button_name = ($folder_system_data["mode"] == 'move' ? 'verschieben' : 'kopieren');
+			echo '<form action="'.$PHP_SELF.'" method="post">';
+			echo "\n" . '<tr><td class="blank" colspan="3" width="100%" style="font-size:80%;">';
+			echo "\n" . '<div style="margin-left:25px;">';
+			echo "\n<b>" . ($folder_system_data["mode"] == 'move' ? _("Verschiebemodus") : _("Kopiermodus")) . "</b><br>";
+			echo _("Ausgewähltes Objekt in den Allgemeinen Dateiordner einer anderen Veranstaltung oder einer anderen Einrichtung verschieben / kopieren:");
+			echo "\n</div></td></tr><tr>";
+			echo "\n" .'<td class="blank" width="20%" style="font-size:80%;">';
+			echo "\n" . '<div style="margin-left:25px;">';
+			echo _("Veranstaltung") .':';
+			echo '</div></td><td class="blank" width="60%">';
+			echo "\n" . '<input type="image" border="0" src="pictures/move.gif" name="move_to_sem" ' . tooltip(_("In diese Veranstaltung verschieben / kopieren")) . '>';
+			echo "\n" . '<select name="sem_move_id" style="width:90%">';
+			foreach ($my_sem as $id => $name){
+				echo "\n" . '<option value="'.$id.'">' . htmlReady(my_substr($name,0,70)) . '</option>';
+			}
+			echo "\n" . '</select>';
+			echo "\n</td>";
+			echo "\n" . '<td class="blank"><input type="image" border="0" vspace="2"' . makeButton($button_name,'src') . ' name="move_to_sem" ' . tooltip(_("In diese Veranstaltung verschieben / kopieren")) . '>';
+			
+			echo "\n</td></tr><tr>";
+			echo "\n" .'<td class="blank" width="20%"  style="font-size:80%;">';
+			echo "\n" . '<div style="margin-left:25px;">';
+			echo _("Einrichtung").':';
+			echo '</div></td><td class="blank" width="60%">';
+			echo "\n" . '<input type="image" border="0" src="pictures/move.gif" name="move_to_inst" ' . tooltip(_("In diese Einrichtung verschieben / kopieren")) . '>';
+			echo "\n" . '<select name="inst_move_id" style="width:90%">';
+			foreach ($my_inst as $id => $name){
+				echo "\n" . '<option value="'.$id.'">' . htmlReady(my_substr($name,0,70)) . '</option>';
+			}
+			echo "\n" . '</select>';
+			echo "\n</td>";
+			echo "\n" . '<td class="blank"><input type="image" border="0" vspace="2" ' . makeButton($button_name,'src') . ' name="move_to_inst" ' . tooltip(_("In diese Einrichtung verschieben / kopieren")) . '>';
 
-		if ($select) {
-			?>
-			<tr>
-			<td class="blank" colspan="2" width="100%">			
-			<blockquote>
-			<p valign="middle">
-			<form action="<? echo $PHP_SELF?>" method="POST">
-				<input type="image" name="anlegen" value="<?=_("Neuer Ordner")?>" align="absmiddle" <?=makeButton("neuerordner", "src")?> border=0 />&nbsp;
-				<select name="open" style="vertical-align:middle">
-					<? echo $select ?>				
-				</select>
-			</form>
-			</p>
-			</blockquote>
-			<?
+			echo "\n</td></tr><tr>";
+			echo "\n" . '<td class="blank" align="center" colspan="3" width="100%" >';
+			echo "\n" . '<input type="image" border="0" vspace="2" '.makeButton("abbrechen", "src").' name="cancel" ' . tooltip(_("Verschieben / Kopieren abbrechen")) . '>';
+			echo "\n" . '</td></tr></form>';
+			
+			
+		} elseif($folder_system_data["cmd"]=="tree") {
+			$select = '<option value="' . md5("new_top_folder") . '_a_">' . _("ausw&auml;hlen oder wie Eingabe").' --&gt;</option>';
+			$db2->query("SELECT name FROM folder WHERE range_id='$range_id'");
+			if (!$db2->affected_rows())
+				$select.="\n<option value=\"".$range_id."_a_\">" . _("Allgemeiner Dateiordner") . "</option>";
+			
+			$db2->query("SELECT termine.date, folder.name, termin_id, date_typ FROM termine LEFT JOIN folder ON (termin_id = folder.range_id) WHERE termine.range_id='$range_id' ORDER BY name, termine.date");
+			while (($db2->next_record()) && (!$db2->f("name"))) {
+				$select.="\n<option value=\"".$db2->f("termin_id")."_a_\">" . sprintf(_("Dateiordner zum Termin am %s [%s]"), date("d.m.Y", $db2->f("date")), $TERMIN_TYP[$db2->f("date_typ")]["name"]) . "</option>";
+				}
+	
+			if ($select) {
+				?>
+				<tr>
+				<td class="blank" colspan="3" width="100%">			
+				<blockquote>
+				<p valign="middle">
+				<form action="<? echo $PHP_SELF?>#anker" method="POST">
+					<select name="open" style="vertical-align:middle">
+						<? echo $select ?>				
+					</select>
+					<input type="text" name="top_folder_name" size="50">
+					&nbsp;&nbsp;
+					<input type="image" name="anlegen" value="<?=_("Neuer Ordner")?>" align="absmiddle" <?=makeButton("neuerordner", "src")?> border=0 />
+				</form>
+				</p>
+				</blockquote>
+				<?
+				}
 			}
-		}
+	}
 
 	//when changing, uploading or show all (for download selector), create a form
 	if ((($change) || ($folder_system_data["cmd"]=="all")) && (!$folder_system_data["upload"])) {
 		echo "<form method=\"post\" action=\"$PHP_SELF\">";
 		}
 	
-	print "<tr><td class=\"blank\" colspan=\"2\" width=\"100%\">";
+	print "<tr><td class=\"blank\" colspan=\"3\" width=\"100%\">";
 
 
 	if ($folder_system_data["cmd"]=="all") {
@@ -336,13 +451,15 @@ if ($close) {
 			print ("<div align=\"right\"><a href=\"$PHP_SELF?check_all=TRUE\">".makeButton("alleauswaehlen")."</a>&nbsp;<input style=\"vertical-align: middle;\" type=\"IMAGE\" name=\"download_selected\" border=\"0\" ".makeButton("herunterladen", "src")." />&nbsp;</div>");		
 		}
 		
-	//Alle Termine der Veranstaltung holen
-	$db->query("SELECT termin_id FROM termine INNER JOIN folder ON(termin_id=folder.range_id) WHERE termine.range_id='$range_id' ORDER BY date");
-	
 	//Treeview
 	if ($folder_system_data["cmd"]=="tree") {
 		//Seminar...
 		display_folder_system($range_id, 0,$folder_system_data["open"], '', $change, $folder_system_data["move"], $folder_system_data["upload"], FALSE, $folder_system_data["refresh"], $folder_system_data["link"]);
+		
+		display_folder_system(md5($SessionSeminar . 'top_folder'), 0,$folder_system_data["open"], '', $change, $folder_system_data["move"], $folder_system_data["upload"], FALSE, $folder_system_data["refresh"], $folder_system_data["link"]);
+		
+		//Alle Termine der Veranstaltung holen
+		$db->query("SELECT termin_id FROM termine INNER JOIN folder ON(termin_id=folder.range_id) WHERE termine.range_id='$range_id' ORDER BY date");
 		while ($db->next_record()) {
 			//und einzelne Termine	
 			display_folder_system($db->f("termin_id"), 0,$folder_system_data["open"], '', $change, $folder_system_data["move"], $folder_system_data["upload"], FALSE, $folder_system_data["refresh"], $folder_system_data["link"]);
@@ -367,10 +484,9 @@ if ($close) {
 </tr>
 </table>
 <br>
-<?
-
-  // Save data back to database.
-  page_close()
+<?php
+// Save data back to database.
+page_close();
 ?>
 </body>
 </html>
