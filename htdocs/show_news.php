@@ -52,7 +52,7 @@ function commentbox($num, $authorname, $authoruname, $date, $dellink, $content) 
 	$out[].="<tr style=\"background:#ffffcc\">";
 	$out[].="<td align=left style=\"border-bottom: 1px black dotted\">";
 	$out[].="<font size=-1>#$num - ";
-	$out[].="<a href=\"about.php?username=$authoruname\">$authorname</a> ";
+	$out[].="<a href=\"about.php?username=$authoruname\">".htmlReady($authorname)."</a> ";
 	$out[].=sprintf(_("hat am %s geschrieben:"),$date);
 	$out[].="</font>";
 	$out[].="</td>";
@@ -64,34 +64,29 @@ function commentbox($num, $authorname, $authoruname, $date, $dellink, $content) 
 	}
 	$out[].="</td></tr>";
 	$out[].="<tr style=\"background:#ffffcc;\">";
-	$out[].="<td colspan=2><font size=-1>".formatReady($content)."<br>&nbsp;</font></td></tr>";
+	$out[].="<td colspan=2><font size=-1>".quotes_decode(formatReady($content))."<br>&nbsp;</font></td></tr>";
 	$out[].="</table>";
 	return implode("\n",$out);
 }
 
 function delete_comment($comment_id) {
 	global $auth, $perm;
-	$ok=0;
-	$db=new DB_Seminar();
-	$q="SELECT * FROM comments WHERE comment_id='$comment_id'";
-	$db->query($q);
-	if ($db->next_record()) {
+	$ok = 0;
+	$comment = new StudipComments($comment_id);
+	if (!$comment->is_new) {
 		if ($perm->have_perm("root")) {
-			$ok=1;
-		} else if ($db->f("user_id")!=$auth->auth["uid"]) {
-			$db2=new DB_Seminar();
-			$q2="SELECT * FROM news WHERE news_id='".$db->f("object_id")."'";
-			$db2->query($q2);
-			if ($db2->next_record() && $db2->f("user_id")==$auth->auth["uid"]) {
-				$ok=1;
+			$ok = 1;
+		} else if ($comment->getValue("user_id") != $auth->auth["uid"]) {
+			$news = new StudipNews($comment->getValue("object_id"));
+			if (!$news->is_new && $news->getValue("user_id") == $auth->auth["uid"]) {
+				$ok = 1;
 			}
 		} else {
-			$ok=1;
+			$ok = 1;
 		}
-	}
-	if ($ok) {
-			$q="DELETE FROM comments WHERE comment_id='$comment_id'";
-			$db->query($q);
+		if ($ok) {
+			$ok = $comment->delete();
+		}
 	}
 	return $ok;
 }
@@ -237,7 +232,7 @@ function show_news($range_id, $show_admin=FALSE,$limit="", $open, $width="100%",
 							foreach ($c as $comment) {
 								$comments.="<tr><td>";
 								if (get_userid($comment[2])==$auth->auth["uid"] || $news_detail['user_id']==$auth->auth["uid"] || $show_admin) {
-									$dellink="$PHP_SELF?comdel=".$comment[4]."&comdelnews=".$news_detail['news_id'];
+									$dellink="$PHP_SELF?comdel=".$comment[4]."&comdelnews=".$news_detail['news_id']."#anker";
 								} else {
 									$dellink=NULL;
 								}
@@ -248,7 +243,7 @@ function show_news($range_id, $show_admin=FALSE,$limit="", $open, $width="100%",
 						}
 						$comments.="</table>";
 						$content.=$comments;
-						$formular="&nbsp;<br>\n<form action=\"".$PHP_SELF."\" method=\"get\">";
+						$formular="&nbsp;<br>\n<form action=\"".$PHP_SELF."#anker\" method=\"get\">";
 						$formular.="<input type=hidden name=\"comsubmit\" value=\"".$news_detail['news_id']."\">";
 						$formular.="<input type=hidden name=\"username\" value=\"$uname\">";
 						$formular.="<p align=\"center\">"._("Geben Sie hier Ihren Kommentar ein!")."</p>";
@@ -261,7 +256,7 @@ function show_news($range_id, $show_admin=FALSE,$limit="", $open, $width="100%",
 						$content.=$formular;
 					} else {
 						$numcomments=StudipComments::NumCommentsForObject($news_detail['news_id']);
-						$cmdline="<p align=center><font size=-1><a href=".$PHP_SELF."?comopen=".$news_detail['news_id'].$unamelink.">".sprintf(_("Kommentare lesen (%s) / Kommentar schreiben"),$numcomments)."</a></font></p>";
+						$cmdline="<p align=center><font size=-1><a href=".$PHP_SELF."?comopen=".$news_detail['news_id'].$unamelink."#anker>".sprintf(_("Kommentare lesen (%s) / Kommentar schreiben"),$numcomments)."</a></font></p>";
 						$content.=$cmdline;
 					}
 				}
