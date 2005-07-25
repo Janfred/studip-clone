@@ -1,4 +1,4 @@
-<?
+<?php
 /**
 * ResourcesBrowse.class.php
 * 
@@ -52,10 +52,10 @@ class ResourcesBrowse {
 	var $cssSw;			//the cssClassSwitcher
 	
 	function ResourcesBrowse() {
-		$this->db = new DB_Seminar;
-		$this->db2 = new DB_Seminar;
-		$this->db3 = new DB_Seminar;
-		$this->cssSw = new cssClassSwitcher;
+		$this->db = new DB_Seminar();
+		$this->db2 = new DB_Seminar();
+		$this->db3 = new DB_Seminar();
+		$this->cssSw = new cssClassSwitcher();
 		$this->list = new ShowList;
 		
 		$this->list->setRecurseLevels(0);
@@ -79,7 +79,11 @@ class ResourcesBrowse {
 	function setCheckAssigns($value) {
 		$this->check_assigns=$value;
 	}
-
+	
+	function setSearchOnlyRooms($value){
+		$this->search_only_rooms = $this->list->show_only_rooms = $value;
+	}
+	
 	function setSearchArray($array) {
 		$this->searchArray=$array;
 	}
@@ -90,7 +94,17 @@ class ResourcesBrowse {
 		<tr>
 			<td <? $this->cssSw->switchClass(); echo $this->cssSw->getFullClass() ?> align="center" <? echo ($this->mode == "browse") ? "colspan=\"2\"" : "" ?>>
 				<font size=-1>freie Suche:&nbsp;
-				<input name="search_exp"  type="TEXT" style="{vertikal-align: middle;}" size=30 maxlength=255 value="<? echo stripslashes($this->searchArray["search_exp"]); ?>" />
+				<? if ($this->mode == "browse"){?>
+					<select name="resources_search_range" style="vertical-align:middle">
+					<option value="0" selected><?=htmlReady($GLOBALS['UNI_NAME'])?></option>
+					<?if ($this->open_object){
+						$res =& ResourceObject::Factory($this->open_object);
+						?>
+						<option value="<?=$this->open_object?>" selected><?=htmlReady($res->getName())?></option>
+					<?}?>
+					</select>
+				<?}?>
+				<input name="search_exp"  type="TEXT" style="{vertical-align: middle;}" size=30 maxlength=255 value="<? echo stripslashes($this->searchArray["search_exp"]); ?>" />
 				<input type="IMAGE" align="absmiddle"  <? echo makeButton ("suchestarten", "src") ?> name="start_search" border=0 value="<?=_("Suche starten")?>">
 			</td>
 		</tr>
@@ -99,16 +113,16 @@ class ResourcesBrowse {
 	
 	//private
 	function getHistory($id, $view = FALSE) {
-		global $PHP_SELF, $UNI_URL, $UNI_NAME, $view, $view_mode;
+		global $PHP_SELF, $UNI_URL, $UNI_NAME_CLEAN, $view, $view_mode;
 		$top=FALSE;
 		$k=0;
 		while ((!$top) && ($id)) {
 			$k++;
-			$query = sprintf ("SELECT name, parent_id, resource_id FROM resources_objects WHERE resource_id = '%s' ", $id);
+			$query = sprintf ("SELECT name, parent_id, resource_id, owner_id FROM resources_objects WHERE resource_id = '%s' ", $id);
 			$this->db2->query($query);
 			$this->db2->next_record();
 
-			$result_arr[] = array("id" => $this->db2->f("resource_id"), "name" => $this->db2->f("name"));
+			$result_arr[] = array("id" => $this->db2->f("resource_id"), "name" => $this->db2->f("name"), 'owner_id' => $this->db2->f('owner_id'));
 			$id=$this->db2->f("parent_id");
 
 			if ($this->db2->f("parent_id") == "0") {
@@ -117,9 +131,9 @@ class ResourcesBrowse {
 		}
 
 		if (is_array($result_arr))
-			switch (ResourceObject::getOwnerType($result_arr[0]["owner_id"])) {
+			switch (ResourceObject::getOwnerType($result_arr[count($result_arr)-1]["owner_id"])) {
 				case "global": 
-					$top_level_name = $UNI_NAME;
+					$top_level_name = $UNI_NAME_CLEAN;
 				break;
 				case "sem":
 					$top_level_name = _("Veranstaltungsressourcen");
@@ -134,11 +148,10 @@ class ResourcesBrowse {
 					$top_level_name = _("pers&ouml;nliche Ressourcen");
 				break;
 			}
-					
-			$result = printf (" <font size = -1>%s %s%s</font>", (!$view) ? "<a href=\"$PHP_SELF?quick_view=search&quick_view_mode=$view_mode&reset=TRUE\">" : "", (!$view) ? "</a>" : "", $top_level_name);
+			$result = sprintf (" <font size=\"-1\">%s %s %s</font>", ($view=='search') ? "<a href=\"$PHP_SELF?quick_view=search&quick_view_mode=$view_mode&reset=TRUE\">" : "", $top_level_name, ($view=='search') ? "</a>" : "");
 			for ($i = sizeof($result_arr)-1; $i>=0; $i--) {
 				if ($view)
-					$result.= sprintf (" > <a href=\"%s?quick_view=%s&quick_view_mode=%s&%s=%s\"><font size = -1>%s</font></a>", $PHP_SELF, (!$view) ? "search" : $view, $view_mode, (!$view) ? "open_level" : "actual_object", $result_arr[$i]["id"], htmlReady($result_arr[$i]["name"]));
+					$result.= sprintf (" > <a href=\"%s?quick_view=%s&quick_view_mode=%s&%s=%s\"><font size = -1>%s</font></a>", $PHP_SELF, (!$view) ? "search" : $view, $view_mode, ($view=='search') ? "open_level" : "actual_object", $result_arr[$i]["id"], htmlReady($result_arr[$i]["name"]));
 				else
 					$result.= sprintf (" > %s", htmlReady($result_arr[$i]["name"]));
 			}
@@ -192,55 +205,62 @@ class ResourcesBrowse {
 					$this->db->query($query);
 					$k=0;
 					while ($this->db->next_record()) {
-						print "<tr>\n";
-						print "<td colspan=\"2\"> \n";
-						if ($k)
-							print "<hr /><br />";
-						printf ("<font size=-1><b>%s:</b></font>", htmlReady($this->db->f("name")));
-						print "</td>\n";
-						print "</tr> \n";
-						print "<tr>\n";
-						print "<td width=\"50%\" valign=\"top\">";
-						$query = sprintf("SELECT resources_properties.property_id, name, type, options FROM resources_categories_properties LEFT JOIN resources_properties USING (property_id) WHERE category_id = '%s' ORDER BY name ", $this->db->f("category_id"));
+						$query = sprintf("SELECT resources_properties.property_id, name, type, options 
+										FROM resources_categories_properties LEFT JOIN resources_properties 
+										USING (property_id) WHERE category_id = '%s' 
+										%s ORDER BY name ", $this->db->f("category_id"),
+										(get_config('RESOURCES_SEARCH_ONLY_REQUESTABLE_PROPERTY') ? " AND requestable=1 ": ""));
 						$this->db2->query($query);
-						if ($this->db2->num_rows() % 2 == 1)
-							$i=0;
-						else
-							$i=1;
-						$switched = FALSE;
-						while ($this->db2->next_record()) {
-							if (($i > ($this->db2->num_rows() /2 )) && (!$switched)) {
-								print "</td><td width=\"50%\" valign=\"top\">";
-								$switched = TRUE;
+						if ($this->db2->num_rows()){
+						
+							print "<tr>\n";
+							print "<td colspan=\"2\"> \n";
+							if ($k)
+								print "<hr /><br />";
+							printf ("<font size=-1><b>%s:</b></font>", htmlReady($this->db->f("name")));
+							print "</td>\n";
+							print "</tr> \n";
+							print "<tr>\n";
+							print "<td width=\"50%\" valign=\"top\">";
+							if ($this->db2->num_rows() % 2 == 1)
+								$i=0;
+							else
+								$i=1;
+							$switched = FALSE;
+							while ($this->db2->next_record()) {
+								if (($i > ($this->db2->num_rows() /2 )) && (!$switched)) {
+									print "</td><td width=\"50%\" valign=\"top\">";
+									$switched = TRUE;
+								}
+								print "<table width=\"100%\" border=\"0\"><tr>";
+								printf ("<td width=\"50%%\">%s</td>", htmlReady($this->db2->f("name")));
+								print "<td width=\"50%\">";
+								printf ("<input type=\"HIDDEN\" name=\"search_property_val[]\" value=\"%s\" />", "_id_".$this->db2->f("property_id"));
+								switch ($this->db2->f("type")) {
+									case "bool":
+										printf ("<input type=\"CHECKBOX\" name=\"search_property_val[]\" %s /><font size=-1>&nbsp;%s</font>", ($value) ? "checked":"", htmlReady($this->db2->f("options")));
+									break;
+									case "num":
+										printf ("<input type=\"TEXT\" name=\"search_property_val[]\" value=\"%s\" size=20 maxlength=255 />", htmlReady($value));
+									break;
+									case "text";
+										printf ("<textarea name=\"search_property_val[]\" cols=20 rows=2 >%s</textarea>", htmlReady($value));
+									break;
+									case "select";
+										$options=explode (";",$this->db2->f("options"));
+										print "<select name=\"search_property_val[]\">";
+										print	"<option value=\"\">--</option>";
+										foreach ($options as $a) {
+											printf ("<option %s value=\"%s\">%s</option>", ($value == $a) ? "selected":"", $a, htmlReady($a));
+										}
+										printf ("</select>");
+									break;
+								}
+								print "</td></tr></table>";
+								$i++;
 							}
-							print "<table width=\"100%\" border=\"0\"><tr>";
-							printf ("<td width=\"50%%\">%s</td>", htmlReady($this->db2->f("name")));
-							print "<td width=\"50%\">";
-							printf ("<input type=\"HIDDEN\" name=\"search_property_val[]\" value=\"%s\" />", "_id_".$this->db2->f("property_id"));
-							switch ($this->db2->f("type")) {
-								case "bool":
-									printf ("<input type=\"CHECKBOX\" name=\"search_property_val[]\" %s /><font size=-1>&nbsp;%s</font>", ($value) ? "checked":"", htmlReady($this->db2->f("options")));
-								break;
-								case "num":
-									printf ("<input type=\"TEXT\" name=\"search_property_val[]\" value=\"%s\" size=20 maxlength=255 />", htmlReady($value));
-								break;
-								case "text";
-									printf ("<textarea name=\"search_property_val[]\" cols=20 rows=2 >%s</textarea>", htmlReady($value));
-								break;
-								case "select";
-									$options=explode (";",$this->db2->f("options"));
-									print "<select name=\"search_property_val[]\">";
-									print	"<option value=\"\">--</option>";
-									foreach ($options as $a) {
-										printf ("<option %s value=\"%s\">%s</option>", ($value == $a) ? "selected":"", $a, htmlReady($a));
-									}
-									printf ("</select>");
-								break;
-							}
-							print "</td></tr></table>";
-							$i++;
-						}
 						$k++;
+						}
 					}
 					?>
 				</table>
@@ -262,7 +282,7 @@ class ResourcesBrowse {
 			if ($this->db2->f("parent_id") != "0")
 				$way_back=$this->db2->f("parent_id");
 		} else {
-			$resRoots=new ResourcesRootThreads($range_id);
+			$resRoots=new ResourcesUserRoots($range_id);
 	
 			$roots=$resRoots->getRoots();
 			if (is_array($roots)) 
@@ -377,14 +397,14 @@ class ResourcesBrowse {
 				<?
 				$this->searchForm();
 				if (!$this->searchArray) {
-					/*if ($this->mode == "browse")
-						$this->browseLevels();*/
+					if ($this->mode == "browse")
+						$this->browseLevels();
 					if ($this->check_assigns)
 						$this->showTimeRange();
 					if ($this->mode == "properties")
 						$this->showProperties();
-					/*if ($this->mode == "browse")
-						$this->showList();*/
+					if ($this->mode == "browse")
+						$this->showList();
 				} else {
 					if ($this->check_assigns)
 						$this->showTimeRange();
