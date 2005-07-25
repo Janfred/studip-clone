@@ -143,12 +143,9 @@ while ( is_array($HTTP_POST_VARS)
 		}
 		
 		//Update the additional data-fields
-		if (is_array($datafield_id)) {
-			foreach ($datafield_id as $key=>$val) {
-				$DataFields->storeContent($datafield_content[$key], $val, $SessSemName[1]);
-			}
+		if (StudipForm::IsSended('edit')) {
+			$DataFields->storeContentFromForm('edit', $i_id, 'inst');
 		}
-    
 		$msg="msg§<b>" . sprintf(_("Die Daten der Einrichtung \"%s\" wurden ver&auml;ndert."), htmlReady(stripslashes($Name))) . "</b>";
 		break;
 
@@ -206,6 +203,7 @@ while ( is_array($HTTP_POST_VARS)
 		$query = "DELETE FROM news_range where range_id='$i_id'";
 		$db->query($query);
 		// check News, if there are now entries without range...
+		/*
 		$query = "SELECT news.news_id FROM news LEFT OUTER JOIN news_range USING (news_id) where range_id IS NULL";
 		$db->query($query);
 		while ($db->next_record()) {			  // this News are unconnected...
@@ -213,7 +211,9 @@ while ( is_array($HTTP_POST_VARS)
 			$query = "DELETE FROM news where news_id = '$tempNews_id'";
 			$db2->query($query);
 		}
-	
+		*/
+		StudipNews::DoGarbageCollect();
+		
 		//updating range_tree
 		$query = "UPDATE range_tree SET name='$Name " . _("(in Stud.IP gelöscht)") . "',studip_object='',studip_object_id='' WHERE studip_object_id='$i_id'";
 		$db->query($query);
@@ -262,14 +262,14 @@ while ( is_array($HTTP_POST_VARS)
 			$msg.="msg§" . sprintf(_("%s Postings aus dem Forum der Einrichtung gel&ouml;scht."), $db_ar) . "§";
     		}
     		
-		$db_ar = recursiv_folder_delete($i_id);
+		$db_ar = delete_all_documents($i_id);
 		if ($db_ar > 0)
 			$msg.="msg§" . sprintf(_("%s Dokumente gel&ouml;scht."), $db_ar) . "§";
 		
 		//kill the object_user_vists for this institut
-		$query = sprintf ("DELETE FROM object_user_visits WHERE object_id = '%s' ", $i_id);
-		$db->query($query);
 		
+		object_kill_visits(null, $i_id);
+
 		// Delete that Institut.
 		$query = "DELETE FROM Institute WHERE Institut_id='$i_id'";
 		$db->query($query);
@@ -418,26 +418,26 @@ if ($perm->have_studip_perm("admin",$i_view) || $i_view == "new") {
 		</td></tr>
 		<?
 	}
-	//add the free administrable datafields
-	$localFields = $DataFields->getLocalFields($i_id, "inst");
-	foreach ($localFields as $val) {
-		?>
-		<tr>
-			<td class="<? $cssSw->switchClass(); echo $cssSw->getClass(); ?>" ><?=htmlReady($val["name"])?>: </td>
-			<td class="<? echo $cssSw->getClass() ?>" >
-				<?
-				if ($perm->have_perm($val["edit_perms"])) {
-					?>
-					<input type="text" name="datafield_content[]" style="width:98%" size=32 maxlength=255 value="<?php echo htmlReady($val["content"]) ?>">
-					<input type="HIDDEN" name="datafield_id[]" value="<?= $val["datafield_id"] ?>">
-					<?
-				} else {
-					print $val["content"];
-				}
-	}
+	
+	//add the free adminstrable datafields
+			$datafield_form =& $DataFields->getLocalFieldsFormObject('edit', $i_id, "inst");
+			$datafield_form->field_attributes_default = array('style' => 'width:98%');
+			echo $datafield_form->getHiddenField(md5("is_sended"),1);
+			foreach ($datafield_form->getFormFieldsByName() as $field_id) {
+				$cssSw->switchClass();
+			
+			?>
+			<tr>
+				<td class="<? echo $cssSw->getClass() ?>">
+					<?=$datafield_form->getFormFieldCaption($field_id)?>:
+				</td>
+				<td class="<? echo $cssSw->getClass() ?>">
+				<?=$datafield_form->getFormField($field_id);?>
+				</td>
+			</tr>
+			<?
+			}
 	?>
-		</td>
-	</tr>
 	<tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" colspan=2 align="center">
 	
 	<? 

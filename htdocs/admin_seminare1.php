@@ -312,10 +312,8 @@ if ($s_send) {
 		$db3->query($query);
 
 		//Update the additional data-fields
-		if (is_array($datafield_id)) {
-			foreach ($datafield_id as $key=>$val) {
-				$DataFields->storeContent($datafield_content[$key], $val);
-			}
+		if (StudipForm::IsSended('details')) {
+			$DataFields->storeContentFromForm('details');
 		}
 	}  // end if ($run)
 		
@@ -710,8 +708,28 @@ if (($s_id) && (auth_check())) {
 					<input <? if ($SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["bereiche"]) echo "onClick=\"checkdata('edit'); return false;\" "; ?> type="image" <? echo makeButton ("uebernehmen", "src") ?> border=0 name="s_edit" value=" Ver&auml;ndern ">
 				<input type="hidden" name="s_send" value="TRUE">
 				</td>
-
-			<tr <?$cssSw->switchClass() ?>>
+			</tr>
+			<?
+			//add the free adminstrable datafields
+			$cssSw->switchClass();
+			$datafield_form =& $DataFields->getLocalFieldsFormObject('details');
+			$datafield_form->field_attributes_default = array('cols' => 58);
+			echo $datafield_form->getHiddenField(md5("is_sended"),1);
+			foreach ($datafield_form->getFormFieldsByName() as $field_id) {
+			?>
+			<tr>
+				<td class="<? echo $cssSw->getClass() ?>" align=right>
+					<?=$datafield_form->getFormFieldCaption($field_id)?>
+				</td>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>
+					&nbsp;
+				<?=$datafield_form->getFormField($field_id);?>
+				</td>
+			</tr>
+			<?
+			}
+			?>
+			<tr>
 				<td class="<? echo $cssSw->getClass() ?>" align=right><?=_("TeilnehmerInnen")?></td>
 				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <textarea name="teilnehmer" cols=58 rows=3><?php echo htmlReady($db->f("teilnehmer")) ?></textarea></td>
 			</tr>
@@ -734,35 +752,6 @@ if (($s_id) && (auth_check())) {
 				<br />&nbsp; <font size="-1"><b><?=_("Achtung:")."&nbsp;</b>"._("Diese Ortsangabe wird nur angezeigt, wenn keine Angaben aus Zeiten oder Sitzungsterminen gemacht werden k&ouml;nnen.");?></font>
 				</td>
 			</tr>
-			<?
-			//add the free adminstrable datafields
-			$localFields = $DataFields->getLocalFields($s_id);
-	
-			foreach ($localFields as $val) {
-			?>
-			<tr>
-				<td class="<? echo $cssSw->getClass() ?>" align=right>
-					<?=htmlReady($val["name"])?>
-				</td>
-				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>
-					<?
-					if ($perm->have_perm($val["edit_perms"])) {
-					?>
-					&nbsp; <textarea name="datafield_content[]" cols=58 rows=3><?php echo htmlReady($val["content"]) ?></textarea>
-					<input type="HIDDEN" name="datafield_id[]" value="<?=$val["datafield_id"]?>" />
-					<?
-					} else {
-					?>
-					&nbsp; <?= ($val["content"]) ? htmlReady($val["content"]) : "<font size=\"-1\"><b><i>"._("keine Inhalte vorhanden")."</i></b></font>";?><br />
-					<font size="-1>">&nbsp; <?="<i>"._("(Das Feld ist f&uuml;r die Bearbeitung gesperrt und kann nur durch einen Administrator ver&auml;ndert werden.)")."</i>"?></font>
-					<?
-					}
-					?>
-				</td>
-			</tr>
-			<?
-			}
-			?>
 			<tr>
 				<td class="<? echo $cssSw->getClass() ?>" align=right><?=_("Sonstiges")?></td>
 				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <textarea name="Sonstiges" cols=58 rows=3><?php echo htmlReady($db->f("Sonstiges")) ?></textarea></td>

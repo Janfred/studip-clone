@@ -529,10 +529,10 @@ if ($form == 5) {
 	$sem_create_data["sem_paytxt"]=$sem_paytxt;
   	$sem_create_data["sem_datafields"]='';
 
-	if (is_array($sem_datafield_id)) {
-		foreach ($sem_datafield_id as $key=>$val) {
-			$sem_create_data["sem_datafields"][$val] = $sem_datafield_content[$key];
-		}
+	//Update the additional data-fields
+	if (StudipForm::IsSended('form_5')) {
+		$datafield_form =& $DataFields->getLocalFieldsFormObject('form_5', false, "sem", $sem_create_data["sem_status"]);
+		$sem_create_data["sem_datafields"] = $datafield_form->form_values;
 	}
 
 	//Hat der User an den automatischen Werte rumgepfuscht? Dann denkt er sich wohl was :) (und wir benutzen die Automatik spaeter nicht!)
@@ -1427,7 +1427,7 @@ if (($form == 6) && ($jump_next_x))
 			//Store the additional datafields
 			if (is_array($sem_create_data["sem_datafields"])) {
 				foreach ($sem_create_data["sem_datafields"] as $key=>$val) {
-					$DataFields->storeContent($val, $key, $sem_create_data["sem_id"]);
+					$DataFields->storeContent(mysql_escape_string($val), $key, $sem_create_data["sem_id"]);
 				}
 			}
 
@@ -3161,14 +3161,48 @@ if ($level == 5)
 						<td class="<? echo $cssSw->getClass() ?>" colspan=3>
 							&nbsp;&nbsp;<textarea name="sem_paytxt" cols=58 rows=4><? echo htmlReady(stripslashes($sem_create_data["sem_paytxt"])) ?></textarea>
 							<img  src="./pictures/info.gif"
-			<? echo tooltip(_("Dieser Hinweistext erläutert Ihren TeilnehmerInnen was sie tun müssen, um endgültig für die Veranstaltung zugelassen zu werden. Beschreiben Sie genau, wie Beiträge zu entrichten sind, Leistungen nachgewiesen werden müssen, etc."), TRUE, TRUE) ?>
+							<? echo tooltip(_("Dieser Hinweistext erläutert Ihren TeilnehmerInnen was sie tun müssen, um endgültig für die Veranstaltung zugelassen zu werden. Beschreiben Sie genau, wie Beiträge zu entrichten sind, Leistungen nachgewiesen werden müssen, etc."), TRUE, TRUE) ?>
 							>
 						</td>
 					</tr>
 
 					<?
 					}
-
+					//add the free adminstrable datafields
+					$datafield_form =& $DataFields->getLocalFieldsFormObject('form_5', false, "sem", $sem_create_data["sem_status"]);
+					$datafield_form->form_values = $sem_create_data["sem_datafields"];
+					$datafield_form->field_attributes_default = array('cols' => 58);
+					echo $datafield_form->getHiddenField(md5("is_sended"),1);
+						foreach ($datafield_form->getFormFieldsByName() as $field_id) {
+						$cssSw->switchClass();
+						?>
+						<tr>
+							<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
+								<?=$datafield_form->getFormFieldCaption($field_id)?>:
+							</td>
+							<td class="<? echo $cssSw->getClass() ?>" width="90%" colspan="3">
+							<?
+							if ($datafield_form->form_fields[$field_id]['type'] == 'noform'){
+							?>
+								&nbsp;<font size="-1"><?=_("Diese Daten werden von ihrem zust&auml;ndigen Administrator erfasst.")?></font>
+								<img  src="./pictures/info.gif"
+								<? echo tooltip(_("Diese Felder werden zentral durch die zuständigen Administratoren erfasst."), TRUE, TRUE) ?>
+								>
+							<?
+							} else {
+							?>
+								&nbsp;
+							<?=$datafield_form->getFormField($field_id);?>
+							<img  src="./pictures/info.gif"
+								<? echo tooltip(_("Bitte geben Sie in dieses Feld die entsprechenden Daten ein."), TRUE, TRUE) ?>
+							>
+							<?php
+							}
+							?>
+							</td>
+						</tr>
+						<?
+					}
 					if (!$SEM_CLASS[$sem_create_data["sem_class"]]["compact_mode"]) {
 					?>
 					<tr <? $cssSw->switchClass() ?>>
@@ -3213,39 +3247,6 @@ if ($level == 5)
 							<img  src="./pictures/info.gif"
 								<? echo tooltip(_("Bitte geben Sie hier ein, welche Leistungsnachweise erbracht werden müssen."), TRUE, TRUE) ?>
 							>
-						</td>
-					</tr>
-					<?
-					}
-					//add the free adminstrable datafields
-					$localFields = $DataFields->getLocalFields('', "sem", $sem_create_data["sem_class"]);
-
-					foreach ($localFields as $key=>$val) {
-					?>
-					</tr>
-					<tr <? $cssSw->switchClass() ?>>
-						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
-							<?=htmlReady($val["name"]) ?>
-						</td>
-						<td class="<? echo $cssSw->getClass() ?>" width="90%" colspan=3>
-							<?
-							if ($perm->have_perm($val["edit_perms"])) {
-							?>
-							&nbsp; <textarea name="sem_datafield_content[]" cols=58 rows=4><? echo htmlReady(stripslashes($sem_create_data["sem_datafields"][$val["datafield_id"]])) ?></textarea>
-							<input type="HIDDEN" name="sem_datafield_id[]" value="<?= $val["datafield_id"] ?>">
-							<img  src="./pictures/info.gif"
-								<? echo tooltip(_("Bitte geben Sie in dieses Feld die entsprechenden Daten ein."), TRUE, TRUE) ?>
-							>
-							<?
-							} else {
-							?>
-							&nbsp;<font size="-1"><?=_("Diese Daten werden von ihrem zust&auml;ndigen Administrator erfasst.")?></font>
-							<img  src="./pictures/info.gif"
-								<? echo tooltip(_("Diese Felder werden zentral durch die zuständigen Administratoren erfasst."), TRUE, TRUE) ?>
-							>
-							<?
-							}
-							?>
 						</td>
 					</tr>
 					<?
