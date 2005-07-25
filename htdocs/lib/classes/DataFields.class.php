@@ -1,4 +1,4 @@
-<?
+<?php
 /**
 * DataFields.class.php
 * 
@@ -33,8 +33,9 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-require_once $ABSOLUTE_PATH_STUDIP.("functions.php");
-require_once $ABSOLUTE_PATH_STUDIP.("config.inc.php");
+require_once $ABSOLUTE_PATH_STUDIP."functions.php";
+require_once $ABSOLUTE_PATH_STUDIP."config.inc.php";
+require_once $ABSOLUTE_PATH_STUDIP."lib/classes/StudipForm.class.php";
 
 class DataFields {
 	var $db;
@@ -48,6 +49,7 @@ class DataFields {
 		"root" => 32,
 		"self" => 64,);
 	var $range_id;			//range_id from the stud.ip object
+	var $form_obj = array();
 	
 	function DataFields($range_id = '') {
 		$this->range_id = $range_id;
@@ -124,7 +126,7 @@ class DataFields {
 						$query = sprintf ("SELECT type FROM Institute WHERE Institut_id = '%s' ", $range_id);
 					break;
 					case "user":
-						$query = sprintf ("SELECT perms FROM auth_user_md5 WHERE user_id = '%s' ", $range_id);
+						$query = sprintf ("SELECT perms as type FROM auth_user_md5 WHERE user_id = '%s' ", $range_id);
 					break;
 				}
 
@@ -146,25 +148,14 @@ class DataFields {
 						$clause = "object_class IS NULL";
 				break;
 				case "user":
-					$clause = "((object_class & ".$this->perms_mask[$this->db->f("perms")].") OR object_class IS NULL)";
+					$clause = "((object_class & ".$this->perms_mask[$object_type].") OR object_class IS NULL)";
 				break;
 			}
 
 
-			if ($object_type == "fak")
-				$object_type = "inst";
-
 			if ($object_class == "fak")
 				$object_class = "inst";
-			/* (das verstehe wer will :)
-			$query = sprintf ("SELECT datafield_id, name, NULL as content, edit_perms, view_perms FROM datafields WHERE object_type ='%s' AND (%s) ORDER BY object_class, priority", $object_class, $clause);
-
-			$this->db->query($query);
-
-			while ($this->db->next_record()) {
-				$local_datafields[$this->db->f("datafield_id")] = $this->db->Record;
-			}
-			*/
+		
 			$query2 = sprintf ("SELECT a.datafield_id, name, content, edit_perms, view_perms FROM datafields a LEFT JOIN datafields_entries b ON (a.datafield_id=b.datafield_id AND range_id = '%s') WHERE object_type ='%s' AND (%s) ORDER BY object_class, priority", $range_id, $object_class, $clause);
 
 			$this->db2->query($query2);
@@ -176,6 +167,51 @@ class DataFields {
 		return $local_datafields;		
 	}
 
+	function &getLocalFieldsFormObject($form_name = 'datafield_form', $range_id = null, $object_class = null, $object_type = null, $user_id = null){
+		@include $GLOBALS['ABSOLUTE_PATH_STUDIP']."config_datafields.inc.php";
+		if (!$range_id){
+			$range_id = $this->range_id;
+		}
+		if (!$user_id){
+			$user_id = $GLOBALS['auth']->auth['uid'];
+		}
+		if (!is_null($this->form_obj[$range_id])){
+			return $this->form_obj[$range_id];
+		}
+		$form_fields = array();
+		foreach ($this->getLocalFields($range_id, $object_class, $object_type) as $id => $value){
+			if ($value['view_perms'] == 'all' || $GLOBALS['perm']->have_perm($value['view_perms']) || $range_id == $user_id){
+				if ($DATAFIELDS[$id]){
+					$form_fields[$id] = $DATAFIELDS[$id];
+				} else {
+					$form_fields[$id]['type'] = 'textarea';
+					$form_fields[$id]['attributes']['rows'] = 3;
+				}
+				$form_fields[$id]['default_value'] = $value['content'];
+				if (!$GLOBALS['perm']->have_perm($value['edit_perms'])){
+					$form_fields[$id]['type'] = 'noform';
+					if (!$value['content']){
+						$form_fields[$id]['default_value'] = _("keine Inhalte vorhanden");
+					}
+					$form_fields[$id]['info'] = _("Das Feld ist für die Bearbeitung gesperrt und kann nur durch einen Administrator verändert werden.");
+					$form_fields[$id]['attributes']['style'] = 'font-size:80%;font-weight:bold;font-style:italic;';
+				}
+				$form_fields[$id]['caption'] = $value['name'];
+			} 
+		}
+		$this->form_obj[$range_id] =& new StudipForm($form_fields, array(), $form_name, false);
+		return $this->form_obj[$range_id];
+	}
+	
+	function storeContentFromForm($form_name = 'datafield_form', $range_id = null, $object_class = null, $object_type = null, $user_id = null){
+		$form =& $this->getLocalFieldsFormObject($form_name, $range_id, $object_class, $object_type, $user_id);
+		foreach ($form->getFormFieldsByName($only_editable = true) as $field_id){
+			$ret += $this->storeContent(mysql_escape_string($form->getFormFieldValue($field_id)), $field_id, $range_id);
+		}
+		$form = null;
+		return $ret;
+	}
+	
 	function storeContent($content, $datafield_id, $range_id = '') {
 		if (!$range_id)
 			$range_id = $this->range_id;
@@ -269,3 +305,4 @@ class DataFields {
 		}
 	}
 }
+?>

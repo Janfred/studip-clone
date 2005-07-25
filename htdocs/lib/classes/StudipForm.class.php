@@ -51,6 +51,20 @@ class StudipForm {
 	
 	var $value_changed = array();
 	
+	
+	function TimestampToSQLDate($tstamp){
+		return date("Y-m-d", $tstamp);
+	}
+	
+	function SQLDateToTimestamp($sqldate){
+		$date_values = explode("-", $sqldate); //YYYY-MM-DD
+		if (checkdate($date_values[1],$date_values[2],$date_values[0])){
+			return mktime(12,0,0,$date_values[1],$date_values[2],$date_values[0], 0);
+		} else {
+			return false;
+		}
+	}
+	
 	function StudipForm($form_fields, $form_buttons, $form_name = "studipform", $persistent_values = true){
 		global $_REQUEST, $sess;
 		
@@ -67,40 +81,69 @@ class StudipForm {
 		}
 		if ($this->isSended()){
 			foreach ($this->form_fields as $name => $foo){
-				if (isset($_REQUEST[$this->form_name . "_" . $name])){
-					if (is_array($_REQUEST[$this->form_name . "_" . $name])){
-						foreach ($_REQUEST[$this->form_name . "_" . $name] as $key => $value){
-							$new_form_values[$name][$key] = trim(stripslashes($value));
+				if (!$foo['disabled']){
+					if (isset($_REQUEST[$this->form_name . "_" . $name])){
+						if (is_array($_REQUEST[$this->form_name . "_" . $name])){
+							foreach ($_REQUEST[$this->form_name . "_" . $name] as $key => $value){
+								$new_form_values[$name][$key] = trim(stripslashes($value));
+							}
+						} else {
+							$new_form_values[$name] = trim(stripslashes($_REQUEST[$this->form_name . "_" . $name]));
 						}
 					} else {
-						$new_form_values[$name] = trim(stripslashes($_REQUEST[$this->form_name . "_" . $name]));
+						$new_form_values[$name] = null;
 					}
-				} else {
-					$new_form_values[$name] = null;
 				}
 			}
 			foreach ($this->form_fields as $name => $value){
-				if ($value['type'] == 'combo'){
-					if ($this->form_values[$name] != $new_form_values[$value['text']]){ //textfeld wurde verändert
-						$new_form_values[$name] = $new_form_values[$value['text']];
-					} else if ($this->form_values[$name] != $new_form_values[$value['select']] && !$new_form_values[$value['text']]){ //textfeld nicht geändert, select geändert
-						$new_form_values[$name] = $new_form_values[$value['select']];
-					} else {
-						$new_form_values[$name] = $this->form_values[$name];
+				if (!$value['disabled']){
+					if ($value['type'] == 'combo'){
+						if ($this->form_values[$name] != $new_form_values[$value['text']]){ //textfeld wurde verändert
+							$new_form_values[$name] = $new_form_values[$value['text']];
+						} else if ($this->form_values[$name] != $new_form_values[$value['select']] && !$new_form_values[$value['text']]){ //textfeld nicht geändert, select geändert
+							$new_form_values[$name] = $new_form_values[$value['select']];
+						} else {
+							$new_form_values[$name] = $this->form_values[$name];
+						}
 					}
-				}
-				if ($value['type'] == 'date'){
-					$new_form_values[$name] = trim(stripslashes($_REQUEST[$this->form_name . "_" . $name . "_year"])) . "-" 
-											. trim(stripslashes($_REQUEST[$this->form_name . "_" . $name . "_month"])) . "-" 
-											. trim(stripslashes($_REQUEST[$this->form_name . "_" . $name . "_day"]));
-				}
-				if ( (isset($this->form_values[$name]) && $this->form_values[$name] != $new_form_values[$name]) 
-					|| (!isset($this->form_values[$name]) && $new_form_values[$name] != $this->form_fields[$name]['default_value']) ){ 
-					$this->value_changed[$name] = true;
+					if ($value['type'] == 'date'){
+						$new_form_values[$name] = trim(stripslashes($_REQUEST[$this->form_name . "_" . $name . "_year"])) . "-" 
+												. trim(stripslashes($_REQUEST[$this->form_name . "_" . $name . "_month"])) . "-" 
+												. trim(stripslashes($_REQUEST[$this->form_name . "_" . $name . "_day"]));
+					}
+					if ($value['type'] == 'checkbox'){
+						if (!isset($_REQUEST[$this->form_name . "_" . $name])){
+							$new_form_values[$name] = 0;
+						}
+					}
+					if ( (isset($this->form_values[$name]) && $this->form_values[$name] != $new_form_values[$name]) 
+						|| (!isset($this->form_values[$name]) && $new_form_values[$name] != $this->form_fields[$name]['default_value']) ){ 
+						$this->value_changed[$name] = true;
+					}
 				}
 			}
 			$this->form_values = array_merge($this->form_values, $new_form_values);
 		}
+	}
+	
+	function getDefaultValues(){
+		foreach ($this->form_fields as $name => $value){
+			$this->form_values[$name] = $value['default_value'];
+		}
+	}
+	
+	function checkDefaultValues(){
+		if (is_array($this->form_values)){
+			foreach ($this->form_fields as $name => $value){
+				if (!$value['ignore_check']){
+					if((is_null($this->form_values[$name]) ? 0 : $this->form_values[$name]) 
+						!= (is_null($value['default_value']) ? 0 : $value['default_value']) ){
+						return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 	
 	function getFormField($name, $attributes = false, $default = false, $subtype = false){
@@ -115,21 +158,39 @@ class StudipForm {
 				$default = $this->form_fields[$name]['default_value'];
 			}
 		}
+		if (is_array($this->form_fields[$name]['attributes'])){
+			$attributes = array_merge($attributes, $this->form_fields[$name]['attributes']);
+		}
+		
+		if ($this->form_fields[$name]['disabled']){
+			$attributes['disabled'] = 'disabled';
+		}
+		
 		if($this->form_fields[$name]['type']){
 			$method = "getFormField" . $this->form_fields[$name]['type'];
 			return $this->$method($name,$attributes,$default,$subtype);
 		}
 	}
 	
+	function getFormFieldNoForm($name, $attributes, $default){
+		$ret = "\n<span ";
+		$ret .= $this->getAttributes($attributes);
+		$ret .= ">";
+		$ret .= htmlReady($default,1,1);
+		$ret .= $this->getFormFieldInfo($name); 
+		$ret .= "</span>";
+		return $ret;
+	}
+	
 	function getFormFieldText($name, $attributes, $default){
-		$ret = "\n<input type=\"text\" name=\"{$this->form_name}_{$name}\" " . (($default) ? "value=\"$default\" " : "");
+		$ret = "\n<input type=\"text\" name=\"{$this->form_name}_{$name}\" " . (($default) ? "value=\"".htmlReady($default)."\" " : "");
 		$ret .= $this->getAttributes($attributes);
 		$ret .= ">";
 		return $ret;
 	}
 	
 	function getFormFieldCheckbox($name, $attributes, $default){
-		$ret = "\n<input type=\"checkbox\" name=\"{$this->form_name}_{$name}\" value=\"{$this->form_fields[$name]['value']}\"" . (($default) ? " checked " : "");
+		$ret = "\n<input type=\"checkbox\" name=\"{$this->form_name}_{$name}\" value=\"1\"" . (($default) ? " checked " : "");
 		$ret .= $this->getAttributes($attributes);
 		$ret .= ">";
 		return $ret;
@@ -164,7 +225,7 @@ class StudipForm {
 		$ret = "\n<textarea wrap=\"virtual\"  name=\"{$this->form_name}_{$name}\" ";
 		$ret .= $this->getAttributes($attributes);
 		$ret .= ">";
-		$ret .= $default;
+		$ret .= htmlReady($default);
 		$ret .= "</textarea>";
 		return $ret;
 	}
@@ -194,7 +255,7 @@ class StudipForm {
 		if (is_array($this->form_fields[$name]['options'])){
 			$options = $this->form_fields[$name]['options'];
 		} else if ($this->form_fields[$name]['options_callback']){
-			$options = call_user_func($this->form_fields[$name]['options_callback'],$this,$name);
+			$options = call_user_func($this->form_fields[$name]['options_callback'],&$this,$name);
 		}
 		for ($i = 0; $i < count($options); ++$i){
 			$options_name = (is_array($options[$i])) ? $options[$i]['name'] : $options[$i];
@@ -204,8 +265,11 @@ class StudipForm {
 			|| (!is_array($default) && ($default == "" . $options_value))){
 				$selected = true;
 			}
-			$ret .= "\n<option value=\"$options_value\" " . (($selected) ? " selected " : "");
-			$ret .= ">$options_name</option>";
+			if ($this->form_fields[$name]['max_length']){
+				$options_name = my_substr($options_name,0, $this->form_fields[$name]['max_length']);
+			}
+			$ret .= "\n<option value=\"".htmlReady($options_value)."\" " . (($selected) ? " selected " : "");
+			$ret .= ">".htmlReady($options_name)."</option>";
 		}
 		$ret .= "\n</select>";
 		return $ret;
@@ -234,8 +298,13 @@ class StudipForm {
 	}
 		
 	function getFormButton($name, $attributes = false){
-		$ret = "\n<input type=\"image\" name=\"{$this->form_name}_{$name}\" " . makeButton($this->form_buttons[$name]['type'],"src") 
-			. tooltip($this->form_buttons[$name]['info']);
+		$ret = "\n<input type=\"image\" name=\"{$this->form_name}_{$name}\" ";
+		if (!$this->form_buttons[$name]['is_picture']){
+			$ret .= makeButton($this->form_buttons[$name]['type'],"src");
+		} else {
+			$ret .= ' src="pictures/' . $this->form_buttons[$name]['type'] . '" ';
+		}
+		$ret .= tooltip($this->form_buttons[$name]['info']);
 		$ret .= $this->getAttributes($attributes);
 		$ret .= " border=\"0\">";
 		return $ret;
@@ -281,6 +350,16 @@ class StudipForm {
 		return $value;
 	}
 	
+	function getFormFieldsByName($only_editable = false){
+		$ret = array();
+		foreach ($this->form_fields as $name => $detail){
+			if( !($only_editable && ($detail['type'] == 'noform' || $detail['disabled'])) ){
+				$ret[] = $name;
+			}
+		}
+		return $ret;
+	}
+	
 	function getHiddenField($name, $value = false){
 		if (!$value){
 			$value = $this->getFormFieldValue($name);
@@ -297,6 +376,13 @@ class StudipForm {
 		return isset($this->value_changed[$name]);
 	}
 	
+	function GetRawFieldValue($field_name, $form_name = false){
+		if ($form_name === false){
+			$form_name = $this->form_name;
+		}
+		return ($_REQUEST[$form_name. '_' . $field_name] ? $_REQUEST[$form_name. '_' . $field_name] : $GLOBALS["_" . $form_name . "_values"][$field_name]);
+	}
+	
 	function IsSended($form_name = false){
 		global $_REQUEST;
 		if ($form_name === false){
@@ -311,6 +397,17 @@ class StudipForm {
 			$form_name = $this->form_name;
 		}
 		return isset($_REQUEST[$form_name . "_" . $button . "_x"]);
+	}
+	
+	function getClickedKillButton(){
+		foreach($this->form_buttons as $name => $value){
+			if ($value['is_kill_button']){
+				if ($this->isClicked($name)){
+					return $name;
+				}
+			}
+		}
+		return false;
 	}
 	
 	function getAttributes($attributes){
