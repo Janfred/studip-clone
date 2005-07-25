@@ -202,7 +202,7 @@ function object_add_rate ($object_id, $rate) {
 		$db=new DB_Seminar;
 		$db->query("INSERT INTO object_user (object_id, user_id, flag, mkdate) values ('$object_id', '$user->id', 'rate', '$now')");	
 		$db->query("INSERT INTO object_rate (object_id, rate, mkdate) values ('$object_id', '$rate', '$now')");	
-		$txt = sprintf(_("Sie haben das Objekt mit %s bewertet."), '"'.$rate.'"');
+		$txt = _("Sie haben das Objekt mit \"$rate\"  bewertet.");
 	} else {
 		$txt = _("Sie haben dieses Objekt bereits bewertet.");
 	}
@@ -219,6 +219,8 @@ function object_print_rate ($object_id) {
 		}
 	return $tmp;
 }
+
+
 
 function object_print_rates_detail ($object_id) {
 	$db=new DB_Seminar;
@@ -240,5 +242,14 @@ function object_return_views ($object_id) {
 	return $views;
 }
 
+function object_return_ratecount ($object_id) {
+	$db=new DB_Seminar;
+	$db->query("SELECT count(rate) as count FROM object_rate WHERE object_id = '$object_id'");
+	if ($db->next_record())
+		$ratecount = $db->f("count");
+	else
+		$ratecount = 0;
+	return $ratecount;
+}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ?>

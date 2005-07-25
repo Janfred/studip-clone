@@ -27,16 +27,18 @@ wird eine eigene Tabellenzelle geoeffnet
 
 
 //Displays Errormessages (kritischer Abbruch, Symbol "X")
-function my_error($msg, $class="blank", $colspan=2, $add_row=TRUE) {
+function my_error($msg, $class="blank", $colspan=2, $add_row=TRUE, $small = false) {
 	global $CANONICAL_RELATIVE_PATH_STUDIP;
+	$pic = ($small ? 'x_small2.gif' : 'x.gif');
+	$width = ($small ? 22 : 50);
 
 ?>
 	<tr>
 		<td class="<? echo $class?>" colspan=<? echo $colspan?>>
 			<table border=0 cellspacing=0 cellpadding=2>
 				<tr>
-					<td class="<? echo $class?>" align="center" width=50><img src="<? echo $CANONICAL_RELATIVE_PATH_STUDIP."pictures/x.gif" ?>"></td>
-					<td class="<? echo $class?>" align="left"><font color="#FF2020"><?php print $msg ?></font></td>
+					<td class="<? echo $class?>" align="center" width="<?=$width?>"><img src="<? echo $CANONICAL_RELATIVE_PATH_STUDIP."pictures/$pic" ?>"></td>
+					<td class="<? echo $class?>" align="left"><font color="#FF2020" <?=($small ? 'size="-1"' : '')?>><?php print $msg ?></font></td>
 				</tr>
 			</table>
 		</td>
@@ -51,15 +53,17 @@ function my_error($msg, $class="blank", $colspan=2, $add_row=TRUE) {
 
 //Displays Successmessages (Information ueber erfolgreiche Aktion, Symbol Haken)
 
-function my_msg($msg, $class="blank", $colspan=2, $add_row=TRUE) {
+function my_msg($msg, $class="blank", $colspan=2, $add_row=TRUE, $small = false) {
 	global $CANONICAL_RELATIVE_PATH_STUDIP;
+	$pic = ($small ? 'ok_small2.gif' : 'ok.gif');
+	$width = ($small ? 22 : 50);
 	?>
 	<tr>
 		<td class="<? echo $class?>" colspan=<? echo $colspan?>>
 			<table border=0 cellspacing=0 cellpadding=2>
 				<tr>
-					<td class="<? echo $class?>" align="center" width=50><img src="<? echo $CANONICAL_RELATIVE_PATH_STUDIP."pictures/ok.gif" ?>"></td>
-					<td class="<? echo $class?>" align="left"><font color="#008000"><?php print $msg ?></font></td>
+					<td class="<? echo $class?>" align="center" width="<?=$width?>"><img src="<? echo $CANONICAL_RELATIVE_PATH_STUDIP."pictures/$pic" ?>"></td>
+					<td class="<? echo $class?>" align="left"><font color="#008000" <?=($small ? 'size="-1"' : '')?>><?php print $msg ?></font></td>
 				</tr>
 			</table>
 		</td>
@@ -73,15 +77,17 @@ function my_msg($msg, $class="blank", $colspan=2, $add_row=TRUE) {
 
 //Displays Informationmessages  (Hinweisnachrichten, Symbol Ausrufungszeichen)
 
-function my_info($msg, $class="blank", $colspan=2, $add_row=TRUE) {
+function my_info($msg, $class="blank", $colspan=2, $add_row=TRUE, $small = false) {
 	global $CANONICAL_RELATIVE_PATH_STUDIP;
+	$pic = ($small ? 'ausruf_small2.gif' : 'ausruf.gif');
+	$width = ($small ? 22 : 50);
 	?>
 	<tr>
 		<td class="<? echo $class?>" colspan=<? echo $colspan?>>
 			<table border=0 cellspacing=0 cellpadding=2>
 				<tr>
-					<td class="<? echo $class?>" align="center" width=50><img src="<? echo $CANONICAL_RELATIVE_PATH_STUDIP."pictures/ausruf.gif" ?>"></td>
-					<td class="<? echo $class?>" align="left"><font color="#000000"><?php print $msg ?></font></td>
+					<td class="<? echo $class?>" align="center" width="<?=$width?>"><img src="<? echo $CANONICAL_RELATIVE_PATH_STUDIP."pictures/$pic" ?>"></td>
+					<td class="<? echo $class?>" align="left"><font color="#000000" <?=($small ? 'size="-1"' : '')?>><?php print $msg ?></font></td>
 				</tr>
 			</table>
 		</td>
@@ -94,16 +100,41 @@ function my_info($msg, $class="blank", $colspan=2, $add_row=TRUE) {
 }
 
 //Kombinierte Nachrichten zerlegen
-function parse_msg($long_msg,$separator="§", $class="blank", $colspan=2, $add_row=TRUE) {
+function parse_msg($long_msg,$separator="§", $class="blank", $colspan=2, $add_row=TRUE, $small = false) {
   $msg = explode ($separator,$long_msg);
 	for ($i=0; $i < count($msg); $i=$i+2) {
 		switch ($msg[$i]) {
-			case "error" : my_error($msg[$i+1], $class, $colspan, $add_row); break;
-			case "info" : my_info($msg[$i+1], $class, $colspan, $add_row); break;
-			case "msg" : my_msg($msg[$i+1], $class, $colspan, $add_row); break;
+			case "error" : my_error($msg[$i+1], $class, $colspan, $add_row, $small); break;
+			case "info" : my_info($msg[$i+1], $class, $colspan, $add_row, $small); break;
+			case "msg" : my_msg($msg[$i+1], $class, $colspan, $add_row, $small); break;
 		}
 	}
   return;
+}
+
+function parse_msg_array($msg, $class = "blank", $colspan = 2, $add_row = true, $small = false){
+	if(is_array($msg)){
+		foreach($msg as $one_msg){
+			list($type, $content) = $one_msg;
+			call_user_func('my_' . $type, $content, $class, $colspan, $add_row, $small);
+		}
+	}
+}
+
+function parse_msg_to_string($long_msg, $separator="§", $class="blank", $colspan=2, $add_row=TRUE, $small = false){
+	ob_start();
+	parse_msg($long_msg, $separator, $class, $colspan, $add_row, $small);
+	$out = ob_get_contents();
+	ob_end_clean();
+	return $out;
+}
+
+function parse_msg_array_to_string($msg, $class = "blank", $colspan = 2, $add_row = true, $small = false){
+	ob_start();
+	parse_msg_array($msg, $class, $colspan, $add_row, $small);
+	$out = ob_get_contents();
+	ob_end_clean();
+	return $out;
 }
 
 //Kombinierte Nachrichten zerlegen und in eigenem Fenster anzeigen
@@ -141,3 +172,4 @@ if ($add_msg == "")
 <?
   return;
 }
+?>

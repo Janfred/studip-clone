@@ -188,7 +188,7 @@ class messaging {
 
 	function sendingEmail($rec_uname, $snd_user_id, $message, $subject) {
 		
-		global $GLOBALS, $user;
+		global $user;
 
 		$db4 = new DB_Seminar("SELECT user_id, Email FROM auth_user_md5 WHERE username = '$rec_uname' OR user_id = '$rec_uname';");
 		$db4->next_record();
@@ -199,7 +199,7 @@ class messaging {
 			
 		setTempLanguage($db4->f("user_id"));	
 			
-		$title = _("[Stud.IP] ").stripslashes(kill_format($subject));
+		$title = "[" . $GLOBALS['UNI_NAME'] . "] ".stripslashes(kill_format($subject));
 				
 		if ($snd_user_id != "____%system%____") {
 			$snd_fullname = get_fullname($snd_user_id);
@@ -207,7 +207,7 @@ class messaging {
 			$db4->next_record();
 			$reply_to = "\"".$smtp->QuotedPrintableEncode($snd_fullname,1)."\" <".$db4->f("Email").">";
 		} else {
-			$snd_fullname = "Stud.IP";
+			$snd_fullname = $GLOBALS['UNI_NAME'];
 			$reply_to = $GLOBALS["UNI_CONTACT"];
 		}
 
@@ -222,6 +222,8 @@ class messaging {
 		// generate signature of the message
 		$mailmessage .= sprintf(_("Diese E-Mail ist eine Kopie einer systeminternen Nachricht, die in Stud.IP an %s versendet wurde."), $rec_fullname)."\n";
 		$mailmessage .= sprintf(_("Antworten Sie nicht auf diese E-Mail, sondern benutzen Sie Stud.IP unter %s"), $smtp->url);
+		//rescue escaped newlines if mysql_escape_string() was used
+		$mailmessage = str_replace('\n', "\n", $mailmessage);
 		$mailmessage = stripslashes($mailmessage);
 			
 		restoreLanguage();

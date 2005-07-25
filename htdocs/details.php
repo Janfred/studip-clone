@@ -69,7 +69,6 @@ $db2->next_record();
 // nachfragen, ob das Seminar abonniert werden soll
 if ($sem_id) {
 	if ($perm->have_studip_perm("admin",$sem_id)) {
-		$abo_msg=_("direkt zur Veranstaltung");
 		$skip_verify=TRUE;
 	} elseif ($perm->have_perm("user") && !$perm->have_perm("admin")) { //Add lecture only if logged in
 		$db->query("SELECT status FROM seminar_user WHERE user_id ='$user->id' AND Seminar_id = '$sem_id'");		
@@ -185,6 +184,7 @@ else
 			if ((!$mein_status) && (!$admission_status)) {
 				$tmp_text = "<font color = red>".$tmp_text."<font>";
 			}
+			
 
 	$db4->query("SELECT admission_prelim FROM seminare WHERE Seminar_id = '$sem_id'");
 	$db4->next_record();
@@ -209,15 +209,15 @@ else
 		)
 	);
 
-if ($abo_msg || $back_msg || $delete_msg || $info_msg) {
+if ($abo_msg || $back_msg || $delete_msg || $info_msg || $mein_status) {
 	$infobox[2]["kategorie"] = _("Aktionen:");
 	if (($abo_msg) && (!$skip_verify)) {
 		$infobox[2]["eintrag"][] = array (	"icon" => "./pictures/link_intern.gif" ,
 									"text"	=> "<a href=\"sem_verify.php?id=".$sem_id."&send_from_search=$send_from_search&send_from_search_page=$send_from_search_page\">".$abo_msg. "</a>"
 								);
-	} elseif ($abo_msg) {
+	} elseif ($perm->have_studip_perm("admin",$sem_id) || ($mein_status && !$admission_status)) {
 		$infobox[2]["eintrag"][] = array (	"icon" => "./pictures/link_intern.gif" ,
-									"text"	=> "<a href=\"seminar_main.php?auswahl=".$sem_id."\">".$abo_msg. "</a>"
+									"text"	=> "<a href=\"seminar_main.php?auswahl=".$sem_id."\">"._("direkt zur Veranstaltung"). "</a>"
 								);
 	}
 	if ($delete_msg) {
