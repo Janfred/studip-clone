@@ -113,10 +113,8 @@ if ($auth->auth["uid"] == "nobody") { ?>
 
 		$db=new DB_Seminar;
 
-		// wer ist ausser mir online
-		$online = get_users_online($my_messaging_settings["active_time"]);
+		$myuname=$auth->auth["uname"]; //checken, ob noch gebraucht!
 		
-		$myuname=$auth->auth["uname"];
 		$tmp_last_visit = ($my_messaging_settings["last_visit"]) ?  $my_messaging_settings["last_visit"] : time();
 		$db->query("SELECT STRAIGHT_JOIN count(*) FROM message LEFT JOIN message_user USING (message_id) WHERE message_user.user_id = '{$user->id}' AND snd_rec = 'rec' AND chat_id IS NOT NULL");
 		$db->next_record();
@@ -127,7 +125,7 @@ if ($auth->auth["uid"] == "nobody") { ?>
 		
 		//globale Objekte z‰hlen
 		$db->query("SELECT  COUNT((IF(date < UNIX_TIMESTAMP(),range_id,NULL))) as count,
-					COUNT(IF((date > IFNULL(b.visitdate,0) AND nw.user_id !='{$user->id}'),
+					COUNT(IF((chdate > IFNULL(b.visitdate,0) AND nw.user_id !='{$user->id}'),
 					(IF(date < UNIX_TIMESTAMP(),range_id,NULL)), NULL)) AS neue 
 					FROM   news_range a  LEFT JOIN news nw USING(news_id)
 					LEFT JOIN object_user_visits b ON (b.object_id = nw.news_id AND b.user_id = '{$user->id}' AND b.type ='news')
@@ -236,13 +234,14 @@ if ($auth->auth["uid"] == "nobody") { ?>
 		}
 
 		// Ist sonst noch wer da?
-		if (!count($online))
-			echo MakeToolbar("pictures/nutzer.gif","online.php",_("Online"),_("Nur Sie sind online"),55, "_top","left");
+		$user_count = get_users_online_count($my_messaging_settings["active_time"]);
+		if (!$user_count)
+			echo MakeToolbar("pictures/nutzer.gif","online.php",_("Online"),_("Nur Sie sind online"),55, "_top","left", "FALSE", "4");
 		else {
-			if (count($online)==1) {
-				echo MakeToolbar("pictures/nutzeronline.gif","online.php",_("Online"),_("Auﬂer Ihnen ist eine Person online"),55, "_top","left");
+			if ($user_count == 1) {
+				echo MakeToolbar("pictures/nutzeronline.gif","online.php",_("Online"),_("Auﬂer Ihnen ist eine Person online"),55, "_top","left", "FALSE", "4");
 			} else {
-				echo MakeToolbar("pictures/nutzeronline.gif","online.php",_("Online"),sprintf(_("Es sind auﬂer Ihnen %s Personen online"), count($online)),55, "_top","left");
+				echo MakeToolbar("pictures/nutzeronline.gif","online.php",_("Online"),sprintf(_("Es sind auﬂer Ihnen %s Personen online"), count($online)),55, "_top","left", "FALSE", "4");
 			}
 		}
 

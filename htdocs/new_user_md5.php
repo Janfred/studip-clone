@@ -207,7 +207,7 @@ if (isset($_GET['details'])) {
 
 	} else { // alten Benutzer bearbeiten
 	
-		$db->query("SELECT auth_user_md5.*, changed, mkdate, title_rear, title_front, geschlecht FROM auth_user_md5 LEFT JOIN active_sessions ON auth_user_md5.user_id = sid LEFT JOIN user_info ON (auth_user_md5.user_id = user_info.user_id) WHERE username ='$details'");
+		$db->query("SELECT auth_user_md5.*, changed, mkdate, title_rear, title_front, geschlecht FROM auth_user_md5 LEFT JOIN ".$GLOBALS['user']->that->database_table." ON auth_user_md5.user_id = sid LEFT JOIN user_info ON (auth_user_md5.user_id = user_info.user_id) WHERE username ='$details'");
 		while ($db->next_record()) {
 			if ($db->f("changed") != "") {
 				$stamp = mktime(substr($db->f("changed"),8,2),substr($db->f("changed"),10,2),substr($db->f("changed"),12,2),substr($db->f("changed"),4,2),substr($db->f("changed"),6,2),substr($db->f("changed"),0,4));
@@ -476,7 +476,7 @@ if (isset($_GET['details'])) {
 		}
 
 		// Traverse the result set
-		$db->query("SELECT auth_user_md5.*, changed, mkdate FROM auth_user_md5 LEFT JOIN active_sessions ON auth_user_md5.user_id = sid LEFT JOIN user_info ON (auth_user_md5.user_id = user_info.user_id) $pers_browse_search_string ORDER BY $new_user_md5_sortby");
+		$db->query("SELECT auth_user_md5.*, changed, mkdate FROM auth_user_md5 LEFT JOIN ".$GLOBALS['user']->that->database_table." ON auth_user_md5.user_id = sid LEFT JOIN user_info ON (auth_user_md5.user_id = user_info.user_id) $pers_browse_search_string ORDER BY $new_user_md5_sortby");
 
 		if ($db->num_rows() == 0) { // kein Suchergebnis
 			print "<table border=0 bgcolor=\"#eeeeee\" align=\"center\" cellspacing=0 cellpadding=2 width=\"80%\">";

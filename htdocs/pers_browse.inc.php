@@ -52,13 +52,13 @@ function crit_select($name,$default) {
 
 // Check auf neue Übergabe und Variablen-Registrierung
 if (isset($pers_browse_search)) {
-	$pers_browse_old[username] = $pers_browse_username;
-	$pers_browse_old[Vorname] = $pers_browse_Vorname;
-	$pers_browse_old[Email] = $pers_browse_Email;
-	$pers_browse_old[Nachname] = $pers_browse_Nachname;
-	$pers_browse_old[perms] = $pers_browse_perms;
-	$pers_browse_old[crit] = $pers_browse_crit;
-	$pers_browse_old[changed] = $pers_browse_changed;
+	$pers_browse_old['username'] = $pers_browse_username;
+	$pers_browse_old['Vorname'] = $pers_browse_Vorname;
+	$pers_browse_old['Email'] = $pers_browse_Email;
+	$pers_browse_old['Nachname'] = $pers_browse_Nachname;
+	$pers_browse_old['perms'] = $pers_browse_perms;
+	$pers_browse_old['crit'] = $pers_browse_crit;
+	$pers_browse_old['changed'] = $pers_browse_changed;
 	$sess->register("pers_browse_old");
 
 	// Parser
@@ -74,8 +74,8 @@ if (isset($pers_browse_search)) {
 	if (isset($pers_browse_perms) && $pers_browse_perms != _("alle"))
 		$pers_browse_search_string .= "perms = '$pers_browse_perms' AND ";
 	if (isset($pers_browse_changed) && $pers_browse_changed != "" && $pers_browse_changed >=0) {
-		$searchdate = date("YmdHis",time()-$pers_browse_changed*3600*24);
-		$searchdate2 = date("YmdHis",time()-($pers_browse_changed+1)*3600*24);
+		$searchdate = date("YmdHis",  time()-$pers_browse_changed*3600*24);
+		$searchdate2 = date("YmdHis",  time()-($pers_browse_changed+1)*3600*24);
 			if ($pers_browse_crit == "<") {
 				$searchcrit = ">";
 				$pers_browse_search_string .= "changed $searchcrit '$searchdate' AND ";
@@ -94,6 +94,8 @@ if (isset($pers_browse_search)) {
 	if ($pers_browse_search_string != "") {
 		$pers_browse_search_string = " WHERE " . $pers_browse_search_string;	
 		$pers_browse_search_string = substr($pers_browse_search_string,0,-4);
+		if ($pers_browse_crit == _("nie") || ($pers_browse_changed != "" && $pers_browse_changed >=0))
+			$pers_browse_search_string .= $GLOBALS['user']->that->get_where_clause($GLOBALS['user']->name);
 		$sess->register("pers_browse_search_string");
 	} else {
 		$sess->unregister("pers_browse_search_string");

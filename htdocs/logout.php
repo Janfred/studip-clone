@@ -29,8 +29,6 @@ if ($GLOBALS['CHAT_ENABLE']){
 }
 if ($auth->auth["uid"]!="nobody") {   //nur wenn wir angemeldet sind sollten wir dies tun!
 
-	$db=new DB_Seminar;
-	$db2=new DB_Seminar;
 	$sms = new messaging();
 	//User aus allen Chatraeumen entfernen
 	if ($CHAT_ENABLE) {
@@ -53,26 +51,17 @@ if ($auth->auth["uid"]!="nobody") {   //nur wenn wir angemeldet sind sollten wir
 	//Logout aus dem Sessionmanagement
 	$auth->logout();
 	$sess->delete();
-	//evtl verbleibende Session Variablen löschen
-	foreach($sess->pt as $key => $value){
-		$$key = null;
-	}
 	
 	page_close();
 
 	//Session changed zuruecksetzen
 	$timeout=(time()-(15 * 60));
-	$sqldate = date("YmdHis", $timeout);
-	$query = "UPDATE active_sessions SET changed = '$sqldate' WHERE sid = '$logout_user'";
-	$db->query($query); 
+	$user->set_last_action($timeout);
 	
 	header("Location:$PHP_SELF?_language=$logout_language"); //Seite neu aufrufen um eine nobody Session zu erzeugen
 
 } else {        //wir sind nobody, also wahrscheinlich gerade ausgeloggt
 
-	header("Pragma: no-cache");
-	header("Expires: 0");
-	
 	include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
 	// -- here you have to put initialisations for the current page

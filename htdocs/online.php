@@ -45,6 +45,8 @@ include ("$ABSOLUTE_PATH_STUDIP/links_sms.inc.php");
 
 ob_start();
 
+$online = get_users_online($my_messaging_settings['active_time']);
+
 if ($sms_msg)
 	$msg=rawurldecode($sms_msg);
 

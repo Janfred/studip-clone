@@ -127,6 +127,7 @@ $_language_path = init_i18n($_language);
 
 	<!-- Set up the form with the challenge value and an empty reply value -->
 	<input type="hidden" name="challenge" value="<?php print $challenge ?>">
+	<input type="hidden" name="login_ticket" value="<?php print Seminar_Session::get_ticket();?>">
 	<input type="hidden" name="response"  value="">
 	<input type="hidden" name="resolution"  value="">
 

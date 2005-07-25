@@ -800,7 +800,6 @@ function get_config($key, $default = FALSE) {
 	}
 }
 
-
 // folgende Funktion ist nur notwendig, wenn die zu kopierende Veranstaltung nicht vom Dozenten selbst,
 // sondern vom Admin oder vom root kopiert wird (sonst wird das Dozentenfeld leer gelassen, was ja keiner will...)
 function get_seminar_dozent($seminar_id) {
@@ -837,33 +836,7 @@ function get_seminar_tutor($seminar_id) {
 }
 
 function get_seminar_sem_tree_entries($seminar_id) {
-	// get sem_tree_entries for copy 
-	/*
-	$db = new DB_Seminar;
-	$sql = "SELECT sem_tree_id FROM seminar_sem_tree WHERE seminar_id='".$seminar_id."'";
-	if (!$db->query($sql)) {
-		return 0;
-	}
-	$i=0;
-	while ($db->next_record()) {
-		$sem_tree[$i] = $db->f("sem_tree_id");
-		$i++;
-	}
-	$i=0;
-	// check whether entries exist in sem_tree
-	// we do not need to copy non-existent entries
-	for ($j=0;$j<count($sem_tree);$j++) {
-		$sql = "SELECT * FROM sem_tree WHERE sem_tree_id='".$sem_tree[$j]."'";
-		if (!$db->query($sql)) {
-			echo "FEHLER beim Holen der sem_tree";
-		}
-		if ($db->num_rows()) {
-			$sem_tree_final[$i] = $sem_tree[$j];
-			$i++;
-		}
-	}
-	return $sem_tree_final;
-	*/
+
 	$view = new DbView();
 	$ret = null;
 	$view->params[0] = $seminar_id;
@@ -947,16 +920,18 @@ function archiv_check_perm($seminar_id){
 }
 
 function get_users_online($active_time = 5){
-	global $auth, $_fullname_sql;
+	global $user, $_fullname_sql;
 	$online = null;
 	$db = new DB_Seminar();
+	$user_table = $user->that->database_table;
 	$now = time(); // nach eingestellter Zeit (default = 5 Minuten ohne Aktion) zaehlt man als offline
 	$query = "SELECT " . $_fullname_sql['full'] . " AS full_name,($now-UNIX_TIMESTAMP(changed)) AS lastaction,a.username,a.user_id,contact_id 
-		FROM active_sessions LEFT JOIN auth_user_md5 a ON (a.user_id=sid) LEFT JOIN user_info USING(user_id) 
-		LEFT JOIN contact ON (owner_id='".$auth->auth["uid"]."' AND contact.user_id=a.user_id AND buddy=1)
-		WHERE changed > '".date("YmdHis",$now - ($active_time * 60))."' 
-		AND sid != 'nobody' AND sid != '".$auth->auth["uid"]."' 
-		AND active_sessions.name = 'Seminar_User' ORDER BY changed DESC";
+		FROM $user_table LEFT JOIN auth_user_md5 a ON (a.user_id=sid) LEFT JOIN user_info USING(user_id) 
+		LEFT JOIN contact ON (owner_id='".$user->id."' AND contact.user_id=a.user_id AND buddy=1)
+		WHERE changed > '" . date("YmdHis", ($now - ($active_time * 60)))."' 
+		AND sid != '".$user->id."' AND sid !='nobody'
+		" . $GLOBALS['user']->that->get_where_clause($GLOBALS['user']->name) . "
+		ORDER BY changed DESC";
 	$db->query($query);
 	while ($db->next_record()){
 		$online[$db->f("username")] = array("name"=>$db->f("full_name"),"last_action"=>$db->f("lastaction"),"userid"=>$db->f("user_id"),"is_buddy" => $db->f("contact_id"));      
@@ -964,28 +939,97 @@ function get_users_online($active_time = 5){
 	return $online;
 }
 
-function get_ticket(){
-	global $sess, $last_ticket;
-	static $ticket;
-	if (!$sess->is_registered('last_ticket')){
-		$sess->register('last_ticket');
-	}
-	if (!$ticket){
-		$ticket = $last_ticket = md5(uniqid('ticket',1));
-	}
+function get_users_online_count($active_time = 5){
+	$db = new DB_Seminar();
+	$db->query("SELECT COUNT(*) FROM " . $GLOBALS['user']->that->database_table . " WHERE 
+				changed > '".date("YmdHis", (time() - ($active_time * 60))) . "' AND sid !='nobody'
+ 				 AND sid != '".$GLOBALS['user']->id."' " . $GLOBALS['user']->that->get_where_clause($GLOBALS['user']->name));
+	$db->next_record();
+	return $db->f(0);
+}
 
-	return $ticket;
+function get_ticket(){
+	return Seminar_Session::get_ticket();
 }
 
 function check_ticket($ticket){
-	global $sess, $last_ticket;
-	if (!$sess->is_registered('last_ticket')){
-		$sess->register('last_ticket');
-		$last_ticket = null;
-	}
-	$check = ($last_ticket && $last_ticket == $ticket);
-	$last_ticket = null;
-	return $check;
+	return Seminar_Session::check_ticket($ticket);
 }
 
+function search_range($search_str = false, $search_user = false) {
+	
+	global $perm, $user, $_fullname_sql;
+	
+	$db = new DB_Seminar();
+	
+	$search_result = null;
+	
+	if ($search_str && $perm->have_perm("root")) {
+		
+		if ($search_user){
+			$query = "SELECT a.user_id,". $_fullname_sql['full'] . " AS full_name,username FROM auth_user_md5 a LEFT JOIN user_info USING(user_id) WHERE CONCAT(Vorname,' ',Nachname,' ',username) LIKE '%$search_str%'";
+			$db->query($query);
+			while($db->next_record()) {
+				$search_result[$db->f("user_id")]=array("type"=>"user","name"=>$db->f("full_name")."(".$db->f("username").")");
+			}
+		}
+		
+		$query = "SELECT Seminar_id,IF(visible=0,CONCAT(Name, ' "._("(versteckt)")."'), Name) AS Name FROM seminare WHERE Name LIKE '%$search_str%'";
+		$db->query($query);
+		while($db->next_record()) {
+			$search_result[$db->f("Seminar_id")]=array("type"=>"sem","name"=>$db->f("Name"));
+		}
+		$query="SELECT Institut_id,Name, IF(Institut_id=fakultaets_id,'fak','inst') AS inst_type FROM Institute WHERE Name LIKE '%$search_str%'";
+		$db->query($query);
+		while($db->next_record()) {
+			$search_result[$db->f("Institut_id")]=array("type"=>$db->f("inst_type"),"name"=>$db->f("Name"));
+		}
+	} elseif ($search_str && $perm->have_perm("admin")) {
+		$query="SELECT b.Seminar_id,IF(visible=0,CONCAT(b.Name, ' "._("(versteckt)")."'), b.Name) AS Name from user_inst AS a LEFT JOIN  seminare AS b USING (Institut_id) WHERE a.user_id='$user->id' AND a.inst_perms='admin' AND	b.Name LIKE '%$search_str%'";
+		$db->query($query);
+		while($db->next_record()) {
+			$search_result[$db->f("Seminar_id")]=array("type"=>"sem","name"=>$db->f("Name"));
+		}
+		$query="SELECT b.Institut_id,b.Name from user_inst AS a LEFT JOIN	Institute AS b USING (Institut_id) WHERE a.user_id='$user->id' AND a.inst_perms='admin' AND a.institut_id!=b.fakultaets_id AND  b.Name LIKE '%$search_str%'";
+		$db->query($query);
+		while($db->next_record()) {
+			$search_result[$db->f("Institut_id")]=array("type"=>"inst","name"=>$db->f("Name"));
+		}
+		if ($perm->is_fak_admin()) {
+			$query = "SELECT d.Seminar_id,IF(visible=0,CONCAT(d.Name, ' "._("(versteckt)")."'), d.Name) AS Name FROM user_inst a LEFT JOIN Institute b ON(a.Institut_id=b.Institut_id AND b.Institut_id=b.fakultaets_id)  
+			LEFT JOIN Institute c ON(c.fakultaets_id = b.institut_id AND c.fakultaets_id!=c.institut_id) LEFT JOIN seminare d USING(Institut_id) 
+			WHERE a.user_id='$user->id' AND a.inst_perms='admin' AND NOT ISNULL(b.Institut_id) AND d.Name LIKE '%$search_str%'";
+			$db->query($query);
+			while($db->next_record()){
+				$search_result[$db->f("Seminar_id")]=array("type"=>"sem","name"=>$db->f("Name"));
+			}
+			$query = "SELECT c.Institut_id,c.Name FROM user_inst a LEFT JOIN Institute b ON(a.Institut_id=b.Institut_id AND b.Institut_id=b.fakultaets_id)  
+			LEFT JOIN Institute c ON(c.fakultaets_id = b.institut_id AND c.fakultaets_id!=c.institut_id) 
+			WHERE a.user_id='$user->id' AND a.inst_perms='admin' AND NOT ISNULL(b.Institut_id) AND c.Name LIKE '%$search_str%'";
+			$db->query($query);
+			while($db->next_record()){
+				$search_result[$db->f("Institut_id")]=array("type"=>"inst","name"=>$db->f("Name"));
+			}
+			$query = "SELECT b.Institut_id,b.Name FROM user_inst a LEFT JOIN Institute b ON(a.Institut_id=b.Institut_id AND b.Institut_id=b.fakultaets_id)  
+			WHERE a.user_id='$user->id' AND a.inst_perms='admin' AND NOT ISNULL(b.Institut_id) AND b.Name LIKE '%$search_str%'";
+			$db->query($query);
+			while($db->next_record()){
+				$search_result[$db->f("Institut_id")]=array("type"=>"fak","name"=>$db->f("Name"));
+			}
+		}
+		
+	} elseif ($perm->have_perm("tutor")) {
+		$query="SELECT b.Seminar_id,IF(visible=0,CONCAT(b.Name, ' "._("(versteckt)")."'), b.Name) AS Name from seminar_user AS a LEFT JOIN  seminare AS b USING (Seminar_id)	WHERE a.user_id='$user->id' AND a.status IN ('dozent','tutor') ";
+		$db->query($query);
+		while($db->next_record()) {
+			$search_result[$db->f("Seminar_id")]=array("type"=>"sem","name"=>$db->f("Name"));
+		}
+		$query="SELECT b.Institut_id,b.Name from user_inst AS a LEFT JOIN  Institute AS b USING (Institut_id) WHERE a.user_id='$user->id' AND a.inst_perms IN ('dozent','tutor') ";
+		$db->query($query);
+		while($db->next_record()) {
+			$search_result[$db->f("Institut_id")]=array("type"=>"inst","name"=>$db->f("Name"));
+		}
+	}
+	return $search_result;
+}
 ?>

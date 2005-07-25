@@ -39,11 +39,7 @@ function check_terms($userid, $_language_path) {
 	global $i_accept_the_terms;
 
 	if ($i_accept_the_terms == "yes") return;
-	$db = new DB_Seminar;
-	$db2 = new DB_Seminar;
-
-	$db->query("SELECT * FROM active_sessions WHERE sid = '".$userid."'");
-	if (!$db->next_record()) {
+	if (!$GLOBALS['user']->get_last_action()) {
 		?>
 		<table width="80%" align="center" border=0 cellpadding=0 cellspacing=0>
 		<tr><td class="topic"><img src="pictures/login.gif" border="0"><b>&nbsp;<?=_("Nutzungsbedingungen")?></b></td></tr>
@@ -64,8 +60,7 @@ function check_terms($userid, $_language_path) {
 		<br/>
 		</blockquote>
 		</table>	
-		<? page_close();
-		$db2->query("DELETE FROM active_sessions WHERE sid = '".$userid."'");
+		<?
 		die;
 	}
 }

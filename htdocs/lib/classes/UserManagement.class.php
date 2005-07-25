@@ -758,10 +758,9 @@ class UserManagement {
 		// delete all remaining user data
 		$query = "DELETE FROM kategorien WHERE range_id = '" . $this->user_data['auth_user_md5.user_id'] . "'";
 		$this->db->query($query);
-		$query = "DELETE FROM active_sessions WHERE sid = '" . $this->user_data['auth_user_md5.user_id'] . "'";
-		$this->db->query($query);
 		$query = "DELETE FROM user_info WHERE user_id= '" . $this->user_data['auth_user_md5.user_id'] . "'";
 		$this->db->query($query);
+		$GLOBALS['user']->that->ac_delete($this->user_data['auth_user_md5.user_id'], $GLOBALS['user']->name);
 		object_kill_visits($this->user_data['auth_user_md5.user_id']);
 		
 		// delete picture

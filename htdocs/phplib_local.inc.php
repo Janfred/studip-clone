@@ -22,10 +22,17 @@
 // +---------------------------------------------------------------------------+
 //$Id$
 
+//compatibility section
+if (!defined('PHPLIB_SESSIONDATA_TABLE')){
+	define('PHPLIB_SESSIONDATA_TABLE', 'active_sessions');
+	define('PHPLIB_USERDATA_TABLE', 'active_sessions');
+}
+//end compat
 
 require_once("$ABSOLUTE_PATH_STUDIP/language.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/auth_plugins/StudipAuthAbstract.class.php");
 require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/Config.class.php");
+require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipNews.class.php");
 
 if (strpos( PHP_OS,"WIN") !== false && $CHAT_ENABLE == true && $CHAT_SERVER_NAME == "ChatShmServer")	//Attention: file based chat for windows installations (slow)
 	$CHAT_SERVER_NAME = "ChatFileServer";
@@ -46,7 +53,7 @@ $GLOBALS['_fullname_sql']['no_title_rev'] = "CONCAT(Nachname ,', ', Vorname)";
 $GLOBALS['_fullname_sql']['no_title_short'] = "CONCAT(Nachname,', ',UCASE(LEFT(TRIM(Vorname),1)),'.')";
 
 //software version - please leave it as it is!
-$SOFTWARE_VERSION="1.2 alpha cvs";
+$SOFTWARE_VERSION="1.1.5+ alpha cvs-unstable";
 
 /*classes for database access
 ----------------------------------------------------------------
@@ -121,7 +128,7 @@ class studip_smtp_class extends smtp_class {
 
 class Seminar_CT_Sql extends CT_Sql {
 	var $database_class = "DB_Seminar";	  // Which database to connect...
-	var $database_table = "active_sessions"; // and find our session data in this table.
+	var $database_table = PHPLIB_SESSIONDATA_TABLE; // and find our session data in this table.
 }
 
 
@@ -131,49 +138,60 @@ class Seminar_Session extends Session {
 	var $cookiename     = "Seminar_Session"; // defaults to classname
 	var $magic	  = "sdfghjdfdf";      // ID seed
 	var $mode	   = "cookie";	  // We propagate session IDs with cookies
-	//var $fallback_mode  = "get";
+	var $fallback_mode  = "cookie";
 	var $lifetime       = 0;		 // 0 = do session cookies, else minutes
 	var $that_class     = "Seminar_CT_Sql"; // name of data storage container
 	var $gc_probability = 2;
-	var $allowcache = "no";
+	var $allowcache = "nocache";
 	
+	
+	function get_ticket(){
+		global $sess, $last_ticket;
+		static $ticket;
+		if (!$sess->is_registered('last_ticket')){
+			$sess->register('last_ticket');
+		}
+		if (!$ticket){
+			$ticket = $last_ticket = md5(uniqid('ticket',1));
+		}
+		
+		return $ticket;
+	}
+	
+	function check_ticket($ticket){
+		global $sess, $last_ticket;
+		if (!$sess->is_registered('last_ticket')){
+			$sess->register('last_ticket');
+			$last_ticket = null;
+		}
+		$check = ($last_ticket && $last_ticket == $ticket);
+		$last_ticket = null;
+		return $check;
+	}
+
 	
 	function Seminar_Session(){
 		$this->cookie_path = $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'];
+		if (method_exists($this, 'Session')){
+			$this->Session();
+		}
 	}
 	
+	/* does not work anymore, use ob_start() instead
 	//modifizierte function put_headers(),ermöglicht den Verzicht auf Headers seitens der PHPLib
 	function put_headers(){
 		if ($GLOBALS["dont_put_headers"]) return;
 		//put_headers der SuperKlasse aufrufen
 		Session::put_headers();
 	}
+	*/
 	
 	//erweiterter Garbage Collector
 	function gc(){
 		mt_srand((double)microtime()*1000000);
 		$zufall = mt_rand();
 		if (($zufall % 100) < $this->gc_probability){
-			//Alte News, oder News ohne range_id löschen
-			$db=new DB_Seminar("SELECT news.news_id FROM news where (date+expire)<UNIX_TIMESTAMP() ");
-			while($db->next_record()) {
-				$result[$db->Record[0]] = true;
-			}
-			$db->query("SELECT news_range.news_id FROM news_range LEFT JOIN news using(news_id) WHERE ISNULL(news.news_id)");
-			while($db->next_record()) {
-				$result[$db->Record[0]] = true;
-			}
-			$db->query("SELECT news.news_id FROM news LEFT OUTER JOIN news_range USING (news_id) WHERE range_id IS NULL");
-			while($db->next_record()) {
-				$result[$db->Record[0]] = true;
-			}
-			if (is_array($result)) {
-				$kill_news = "('".join("','",array_keys($result))."')";
-				$db->query("DELETE FROM news WHERE news_id IN $kill_news");
-				$db->query("DELETE FROM news_range WHERE news_id IN $kill_news");
-			}
-			unset($result);
-			
+			StudipNews::DoGarbageCollect();
 		}
 		if (($zufall % 1000) < $this->gc_probability){
 			//unsichtbare forenbeiträge die älter als 2 Stunden sind löschen
@@ -216,17 +234,88 @@ class Seminar_Session extends Session {
 			
 			unset($result);
 			
-			//weiter mit gc() in der Super Klasse
-			Session::gc();
 		}
+	//weiter mit gc() in der Super Klasse
+	parent::gc();
+	}
+}
+
+class Seminar_User_CT_Sql extends CT_Sql {
+	var $database_class = "DB_Seminar";	  // Which database to connect...
+	var $database_table = PHPLIB_USERDATA_TABLE;
+	
+	function ac_get_changed($id, $name = null){
+		$this->db->query(sprintf("SELECT UNIX_TIMESTAMP(changed) FROM %s WHERE  sid='%s'  %s",
+		$this->database_table,
+		$id,
+		$this->get_where_clause($name)));
+		$this->db->next_record();
+		return $this->db->f(0);
+	}
+	
+	function ac_set_changed($id, $name = null, $timestamp){
+		$this->db->query(sprintf("UPDATE %s SET changed = '%s' WHERE  sid='%s'  %s",
+		$this->database_table,
+		date("YmdHis", $timestamp),
+		$id,
+		$this->get_where_clause($name)));
+		return $this->db->affected_rows();
+	}
+	
+	function get_where_clause($name = null){
+		$ret = "";
+		if (PHPLIB_USERDATA_TABLE === PHPLIB_SESSIONDATA_TABLE){
+			$ret .= " AND name='$name' ";
+		}
+		return $ret;
 	}
 }
 
 class Seminar_User extends User {
 	var $classname = "Seminar_User";
-	
 	var $magic	  = "dsfgakdfld";     // ID seed
-	var $that_class     = "Seminar_CT_Sql"; // data storage container
+	var $that_class     = "Seminar_User_CT_Sql"; // data storage container
+	var $fake_user = false;
+	
+	
+	function Seminar_User($uid = null){
+		if ($uid){
+			if (!is_object($GLOBALS['auth']) ||
+			(is_object($GLOBALS['auth']) && $uid != $GLOBALS['auth']->auth['uid'])){
+				$this->fake_user = true;
+				$this->register_globals = false;
+				$this->start($uid);
+			}
+		}
+	}
+	
+	function freeze(){
+		if ($this->fake_user){
+			$this->fake_freeze();
+			return true;
+		} else {
+			return parent::freeze();
+		}
+	}
+	
+	function fake_freeze(){
+		$changed = $this->get_last_action();
+		if(!$this->that->ac_store($this->id, $this->name, $this->serialize())){
+			$this->that->ac_halt("User: freeze() failed.");
+		}
+		$this->set_last_action($changed);
+	}
+	
+	function get_last_action(){
+		return $this->that->ac_get_changed($this->id, $this->name);
+	}
+	
+	function set_last_action($timestamp){
+		if ($timestamp <= 0){
+			$timestamp = time();
+		}
+		$this->that->ac_set_changed($this->id, $this->name, $timestamp);
+	}
 }
 
 
@@ -255,12 +344,21 @@ class Seminar_Auth extends Auth {
 	
 	function login_if($ok){
 		if ($ok){
-			Auth::login_if($ok);
+			parent::login_if($ok);
 			if (is_object($GLOBALS['user'])){
 				$GLOBALS['user']->start($this->auth['uid']);
 			}
 		}
 		return true;
+	}
+	
+	function is_authenticated(){
+		//check if the user got kicked meanwhile
+		if ($this->auth['uid'] && !in_array($this->auth['uid'], array('form','nobody'))){
+			$this->db->query(sprintf("select user_id from %s where user_id = '%s'", $this->database_table, $this->auth['uid']));
+			if (!$this->db->next_record()) return false;
+		}
+		return parent::is_authenticated();
 	}
 	
 	function auth_preauth() {
@@ -327,13 +425,18 @@ class Seminar_Auth extends Auth {
         $challenge = md5(uniqid($this->magic));
         $sess->register("challenge");
     }
-	
+
 		include("$ABSOLUTE_PATH_STUDIP/crcloginform.ihtml");
 	}
 	
 	function auth_validatelogin() {
 		global $username, $password, $challenge, $response, $resolution;
-		global $_language, $_language_path;
+		global $_language, $_language_path, $login_ticket;
+
+		//prevent replay attack
+		if (!Seminar_Session::check_ticket($login_ticket)){
+			return false;
+		}
 		
 		// check for direct link  
 		if (!isset($_language) || $_language == "") {
@@ -342,13 +445,14 @@ class Seminar_Auth extends Auth {
 		
 		$_language_path = init_i18n($_language);
 		
-		
 		$this->auth["uname"] = $username;	// This provides access for "loginform.ihtml"
 		$this->auth["jscript"] = ($resolution != "");
 		if ($this->auth['jscript'] && $challenge){
 			$password = $response;
 		}
+	
 		$check_auth = StudipAuthAbstract::CheckAuthentication($username,$password,$this->auth['jscript']);
+
 		if ($check_auth['uid']){
 			$uid = $check_auth['uid'];
 			$this->db->query(sprintf("select username,perms,auth_plugin from %s where user_id = '%s'",$this->database_table,$uid));
@@ -490,14 +594,11 @@ class Seminar_Register_Auth extends Seminar_Auth {
 			}
 		}
 		
-		$this->db->query(sprintf("select user_id ".
-		"from %s where username = '%s'",
-		$this->database_table,
-		addslashes($username)));
-		
-		while($this->db->next_record()) {
+		$check_uname = StudipAuthAbstract::CheckUsername($username);
+
+		if ($check_uname['found']){
 			//   error_log("username schon vorhanden", 0);
-			$this->error_msg=$this->error_msg. _("Der gewählte Username ist bereits vorhanden!") . "<br>";
+			$this->error_msg = $this->error_msg. _("Der gewählte Username ist bereits vorhanden!") . "<br>";
 			return false;				   // username schon vorhanden
 		}
 		
