@@ -27,16 +27,16 @@ include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Sessio
 require_once "$ABSOLUTE_PATH_STUDIP/dates.inc.php"; //Funktionen zur Anzeige der Terminstruktur
 require_once "$ABSOLUTE_PATH_STUDIP/datei.inc.php";
 require_once "$ABSOLUTE_PATH_STUDIP/config.inc.php";
-require_once "$ABSOLUTE_PATH_STUDIP/visual.inc.php"; 
-require_once "$ABSOLUTE_PATH_STUDIP/functions.php"; 
-require_once "$ABSOLUTE_PATH_STUDIP/lib/classes/DataFields.class.php"; 
+require_once "$ABSOLUTE_PATH_STUDIP/visual.inc.php";
+require_once "$ABSOLUTE_PATH_STUDIP/functions.php";
+require_once "$ABSOLUTE_PATH_STUDIP/lib/classes/DataFields.class.php";
 
 if ($GLOBALS['CHAT_ENABLE']){
 	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php";
 	if ($_REQUEST['kill_chat']){
 		chat_kill_chat($_REQUEST['kill_chat']);
 	}
-	
+
 }
 if ($GLOBALS['VOTE_ENABLE']) {
 	include_once ("$ABSOLUTE_PATH_STUDIP/show_vote.php");
@@ -87,17 +87,13 @@ checkObject();
 
 include "links_openobject.inc.php";
 include "show_news.php";
-  	
+
 $sess->register("institut_main_data");
 $DataFields = new DataFields($SessSemName[1]);
-  	
+
 //Auf und Zuklappen News
-if ($nopen)
-	$institut_main_data["nopen"]=$nopen;
-        
-if ($nclose)
-	$institut_main_data["nopen"]='';
-        
+process_news_commands($institut_main_data);
+
 ?>
 
 <table width="100%" border=0 cellpadding=0 cellspacing=0>
@@ -110,46 +106,46 @@ if ($nclose)
 		<blockquote>
 	<br />
 	<?
-	
+
 	$db->query ("SELECT a.*, b.Name AS fakultaet_name  FROM Institute a LEFT JOIN Institute b ON (b.Institut_id = a.fakultaets_id) WHERE a.Institut_id='$auswahl'");
 	$db->next_record();
-	
+
 	if ($db->f("Strasse")) {
 		echo "<font size=\"-1\"><b>" . _("Straﬂe:") . " </b>"; echo htmlReady($db->f("Strasse")); echo"<br></font>";
 	}
-		
+
 	if ($db->f("Plz")) {
 		echo "<font size=\"-1\"><b>" . _("Ort:") . " </b>"; echo htmlReady($db->f("Plz")); echo"<br></font>";
 	}
-	
+
 	if ($db->f("telefon")) {
 		echo "<font size=\"-1\"><b>" . _("Tel.:") . " </b>"; echo htmlReady($db->f("telefon")); echo"<br></font>";
 	}
-	
+
 	if ($db->f("fax")) {
 		echo "<font size=\"-1\"><b>" . _("Fax:") . " </b>"; echo htmlReady($db->f("fax")); echo"<br></font>";
 	}
-	
+
 	if ($db->f("url")) {
 		echo "<font size=\"-1\"><b>" . _("Homepage:") . " </b>"; echo formatReady($db->f("url")); echo"<br></font>";
 	}
-	
+
 	if ($db->f("email")) {
 		echo "<font size=\"-1\"><b>" . _("E-Mail:") . " </b>"; echo formatReady($db->f("email")); echo"<br></font>";
 	}
-	
+
 	if ($db->f("fakultaet_name")) {
 		echo "<font size=\"-1\"><b>" . _("Fakult&auml;t:") . " </b>"; echo htmlReady($db->f("fakultaet_name")); echo"<br></font>";
 	}
-	
+
 	$localFields = $DataFields->getLocalFields();
-	
+
 	foreach ($localFields as $val) {
 		if ($DataFields->checkPermission($perm, $val["view_perms"])) {
 			echo "<font size=\"-1\"><b>" .htmlReady($val["name"]) . ": </b>"; echo htmlReady($val["content"]); echo"<br>";
 		}
 	}
-	
+
 ?>
 			</blockquote>
 		</td>
@@ -165,9 +161,9 @@ if ($nclose)
 
 // Anzeige von News
 ($rechte) ? $show_admin=TRUE : $show_admin=FALSE;
-if (show_news($auswahl,$show_admin, 0, $institut_main_data["nopen"], "100%", object_get_visit($SessSemName[1], "inst")))
+if (show_news($auswahl,$show_admin, 0, $institut_main_data["nopen"], "100%", object_get_visit($SessSemName[1], "inst"), $institut_main_data))
 	echo"<br>";
-	
+
 //show chat info
 if (($GLOBALS['CHAT_ENABLE']) && ($modules["chat"])){
 	if (chat_show_info($auswahl))

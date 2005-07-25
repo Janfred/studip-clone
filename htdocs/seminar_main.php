@@ -93,12 +93,8 @@ if ($dclose)
 	$smain_data["dopen"]='';
 
 //Auf und Zuklappen News
-if ($nopen)
-	$smain_data["nopen"]=$nopen;
+process_news_commands($smain_data);
 
-if ($nclose)
-	$smain_data["nopen"]='';
-	
 //calculate a "quarter" year, to avoid showing dates that are older than a quarter year (only for irregular dates)
 $quarter_year = 60 * 60 * 24 * 90;
 
@@ -114,7 +110,7 @@ $quarter_year = 60 * 60 * 24 * 90;
 	<?
 
 	if ($SessSemName[3]) {
-		echo "<br /><font size=\"-1\"><b>" . _("Untertitel:") . " </b>"; 
+		echo "<br /><font size=\"-1\"><b>" . _("Untertitel:") . " </b>";
 		echo htmlReady($SessSemName[3])."</font>"; echo "<br>";
 	}
 
@@ -140,7 +136,7 @@ $quarter_year = 60 * 60 * 24 * 90;
 		if ($db->affected_rows() > 10)
 			print(htmlReady($db->f("shortname")) ."</a>");
 		else
-			print(htmlReady($db->f("fullname")) ."</a>");		
+			print(htmlReady($db->f("fullname")) ."</a>");
 		$i++;
 	}
 
@@ -162,7 +158,7 @@ $quarter_year = 60 * 60 * 24 * 90;
 // Anzeige von News
 
 ($rechte) ? $show_admin=TRUE : $show_admin=FALSE;
-if (show_news($auswahl,$show_admin, 0, $smain_data["nopen"], "100%", object_get_visit($SessSemName[1], "sem")))
+if (show_news($auswahl,$show_admin, 0, $smain_data["nopen"], "100%", object_get_visit($SessSemName[1], "sem"), $smain_data))
 		echo"<br>";
 
 // Anzeige von Terminen

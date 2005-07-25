@@ -55,11 +55,8 @@ closeObject();
 $sess->register('index_data');
 
 //Auf und Zuklappen News
-if ($nopen)
-	$index_data['nopen']=$nopen;
-
-if ($nclose)
-	$index_data['nopen']='';
+require_once ("$ABSOLUTE_PATH_STUDIP/show_news.php");
+process_news_commands($index_data);
 
 // Auf- und Zuklappen Termine
 if ($dopen)
@@ -196,8 +193,7 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 		'</tr>',"\n", '</table> <br>', "\n";
 
 	// display news
-	include ('show_news.php');
-	if (show_news('studip', $perm->have_perm('root'), 0, $index_data['nopen'], "70%", $LastLogin))
+	if (show_news('studip', $perm->have_perm('root'), 0, $index_data['nopen'], "70%", $LastLogin, $index_data))
 		echo "<br />\n";
 	// display dates
 	if (!$perm->have_perm('admin')) { // only dozent, tutor, autor, user
@@ -270,10 +266,8 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 	$db->next_record();
 	$anzahl = $db->f(0);
 	echo "<tr><td class=\"steel1\"><font size=\"2\" color=\"#555555\">&nbsp; "._("Registrierte NutzerInnen").":</font></td><td class=\"steel1\" align=right><font size=\"2\" color=\"#555555\">&nbsp; $anzahl&nbsp; </font></td><td class=\"blank\">&nbsp; &nbsp; </td></tr>";
-	$now = time()-600;
-	$db->query("SELECT count(*) FROM active_sessions WHERE changed > '".date("YmdHis",$now)."' AND active_sessions.name = 'Seminar_User' AND sid != 'nobody'");
-	$db->next_record();
-	$anzahl = $db->f(0);
+	$active_time = 10; //minutes
+	$anzahl = get_users_online_count($active_time);
 	echo "<tr><td class=\"steel1\"><font size=\"2\" color=\"#555555\">&nbsp; "._("Davon online").":</font></td><td class=\"steel1\" align=right><font size=\"2\" color=\"#555555\">&nbsp; $anzahl&nbsp; </font></td><td class=\"blank\">&nbsp; &nbsp; </td></tr>";
 	echo "<tr><td height=\"30\" class=\"blank\" valign=\"middle\">";
 	// choose language
