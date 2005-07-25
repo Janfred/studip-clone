@@ -340,9 +340,9 @@ class RoomRequest {
 		return $changed;
 	}
 	
-	/* TEST: brauchen wir das wirklich irgendwo?
 	function checkOpen($also_change = FALSE) {
-		//an request for a date is easy...
+		$existing_assign = false;
+		//a request for a date is easy...
 		if ($this->termin_id) {
 			$query = sprintf ("SELECT assign_id FROM resources_assign WHERE assign_user_id = '%s' ", $this->termin_id);
 			$this->db->query($query);
@@ -350,15 +350,50 @@ class RoomRequest {
 				$existing_assign = TRUE;
 		//seminar request
 		} else {
-			$semObj = new Seminar($this->seminar_id);
+			$semObj =& Seminar::GetInstance($this->seminar_id);
 			//regularly metadates
-			if ($semObj->getMetaDateType()) {
-			//not regularly metadates
+			if ($semObj->getMetaDateType() == 0) {
+				if (isSchedule($this->seminar_id)){
+					$metadates = getMetadateCorrespondingDates($this->seminar_id, true);
+					if (is_array($metadates)){
+						$resultdates = array();
+						foreach($metadates as $dates){
+							if (is_array($dates)){
+								$resultdates = array_merge($resultdates,array_keys($dates));
+							}
+						}
+						$query = sprintf ("SELECT count(assign_id) FROM resources_assign WHERE assign_user_id IN('%s') ", join("','", $resultdates));
+						$this->db->query($query);
+						$this->db->next_record();
+						if ($this->db->f(0) == count($resultdates)){
+							$existing_assign = TRUE;
+						}
+					}
+				} else {
+					$query = sprintf ("SELECT count(assign_id) FROM resources_assign WHERE assign_user_id ='%s' ", $this->seminar_id);
+					$this->db->query($query);
+					$this->db->next_record();
+					if ($this->db->f(0) == $semObj->getMetaDateCount()){
+						$existing_assign = TRUE;
+					}
+				}
 			} else {
+				$query = sprintf("SELECT count(termin_id)=count(assign_id) FROM termine LEFT JOIN resources_assign ON(termin_id=assign_user_id)
+								WHERE range_id='%s' AND date_typ IN".getPresenceTypeClause(), $this->seminar_id);
+				$this->db->query($query);
+				$this->db->next_record();
+				if ($this->db->f(0)){
+					$existing_assign = TRUE;
+				}
 			}
 		}
+		if($existing_assign && $also_change){
+			$this->setClosed(1);
+			$this->store();
+		}
+		return $existing_assign;
 	}
-	*/
+	
 	
 	function copy() {
 		$this->id = $this->createId();

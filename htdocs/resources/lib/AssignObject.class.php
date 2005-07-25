@@ -34,8 +34,8 @@
 // +---------------------------------------------------------------------------+
 
 require_once ($GLOBALS["ABSOLUTE_PATH_STUDIP"]."/lib/classes/SemesterData.class.php");
-require_once ($GLOBALS["RELATIVE_PATH_RESOURCES"]."/lib/list_assign.inc.php");
-require_once ($GLOBALS["RELATIVE_PATH_RESOURCES"]."/resourcesFunc.inc.php");
+require_once $GLOBALS['ABSOLUTE_PATH_STUDIP'] . $GLOBALS['RELATIVE_PATH_RESOURCES'] . "/lib/list_assign.inc.php";
+require_once $GLOBALS['ABSOLUTE_PATH_STUDIP'] . $GLOBALS['RELATIVE_PATH_RESOURCES'] . "/resourcesFunc.inc.php";
 
 
 /*****************************************************************************
@@ -178,9 +178,9 @@ class AssignObject {
 		switch (get_object_type($id)) {
 			case "user":
 				if (!$explain)
-					return get_fullname($id,'full',1);
+					return get_fullname($id,'full');
 				else
-					return get_fullname($id,'full',1)." ("._("NutzerIn").")";
+					return get_fullname($id,'full')." ("._("NutzerIn").")";
 			break;
 			case "inst":
 			case "fak":
@@ -218,11 +218,11 @@ class AssignObject {
 	}
 	
 
-	function getUsername($use_free_name=TRUE) {
+	function getUsername($use_free_name=TRUE, $explain=true) {
 		if ($this->assign_user_id) 
-			return $this->getOwnerName(TRUE, $this->assign_user_id);
+			return $this->getOwnerName($explain, $this->assign_user_id);
 		elseif ($use_free_name)
-			return $this->getUserFreeName();
+			return $this->getUserFreeName(). ($explain ? " (" . _("direkter Eintrag") . ")" : "");
 		else 
 			return FALSE;
 	}
@@ -293,7 +293,7 @@ class AssignObject {
 				return "na";
 		} elseif ($this->repeat_month_of_year)
 			return "y";
-		elseif ($this->repeat_week_of_moth || $this->repeat_day_of_month)
+		elseif ($this->repeat_week_of_month || $this->repeat_day_of_month)
 			return "m";
 		elseif ($this->repeat_day_of_week)
 			return "w";

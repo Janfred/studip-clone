@@ -43,7 +43,7 @@ $reiter=new reiter;
 //Create Reitersystem
 
 //oberen Reiter 
-$structure["resources"]=array (topKat=>"", name=>_("&Uuml;bersicht"), link=>"resources.php?view=resources#a", active=>FALSE);
+$structure["resources"]=array (topKat=>"", name=>_("&Uuml;bersicht"), link=>"resources.php?view=search&reset=TRUE", active=>FALSE);
 if ($resources_data["list_open"])
 	$structure["lists"]=array (topKat=>"", name=>_("Liste"), link=>"resources.php?view=lists#a", active=>FALSE);
 if ($resources_data["actual_object"])
@@ -61,9 +61,14 @@ if ((getGlobalPerms($user->id) == "admin") || ($perm->have_perm("root"))){ //Gru
 }
 
 //Reiter "Uebersicht"
-$structure["_resources"]=array (topKat=>"resources", name=>_("Struktur"), link=>"resources.php?view=_resources#a", active=>FALSE);
 $structure["search"]=array (topKat=>"resources", name=>_("Suchen"), link=>"resources.php?view=search&new_search=TRUE", active=>FALSE);
-$structure["create_hierarchie"]=array (topKat=>"resources", name=>_("Neue&nbsp;Hierarchieebene&nbsp;erzeugen"), link=>"resources.php?view=create_hierarchie#a", active=>FALSE);
+$structure["_resources"]=array (topKat=>"resources", name=>_("Struktur"), link=>"resources.php?view=_resources#a", active=>FALSE);
+if (get_config('RESOURCES_ALLOW_CREATE_TOP_LEVEL') || getGlobalPerms($user->id) == "admin"){
+	$structure["create_hierarchie"]=array (topKat=>"resources", name=>_("Neue&nbsp;Hierarchieebene&nbsp;erzeugen"), link=>"resources.php?view=create_hierarchie#a", active=>FALSE);
+}
+if (get_config('RESOURCES_ENABLE_GROUPING')){
+	$structure["view_group_schedule"]=array (topKat=>"resources", name=>_("Gruppen-Belegungspl&auml;ne"), link=>"resources.php?view=view_group_schedule", active=>FALSE);
+}
 
 //Reiter "Listen"
 if ($resources_data["list_open"]) {
@@ -81,6 +86,9 @@ if ($resources_data["actual_object"]) {
 	}
 	if (getResourceObjectCategory($resources_data["actual_object"])) {
 		$structure["view_schedule"]=array (topKat=>"objects", name=>_("Belegungsplan"), link=>"resources.php?view=view_schedule", active=>FALSE);
+		if (get_config('RESOURCES_ENABLE_SEM_SCHEDULE')){
+			$structure["view_sem_schedule"]=array (topKat=>"objects", name=>_("Semester-Belegungsplan"), link=>"resources.php?view=view_sem_schedule", active=>FALSE);
+		}
 		if ($ActualObjectPerms->havePerm ("autor"))
 			$structure["edit_object_assign"]=array (topKat=>"objects", name=>_("Belegung&nbsp;bearbeiten"), link=>"resources.php?view=edit_object_assign", active=>FALSE);
 		else
@@ -92,8 +100,16 @@ if ($resources_data["actual_object"]) {
 if ($top_kat_tools) {
 	$structure["requests_start"]=array (topKat=>"room_planning", name=>_("&Uuml;bersicht"), link=>"resources.php?view=requests_start&cancel_edit_request_x=1", active=>FALSE);
 	$structure["edit_request"]=array (topKat=>"room_planning", name=>_("Anfragen&nbsp;bearbeiten"), link=>"resources.php?view=edit_request", active=>FALSE, "disabled"=>(($resources_data["requests_working_on"]) ? FALSE : TRUE));
+	$structure["list_requests"]=array (topKat=>"room_planning", name=>_("Anfragenliste"), link=>"resources.php?view=list_requests", active=>FALSE, "disabled"=>(($resources_data["requests_working_on"]) ? FALSE : TRUE));
 }
 
+/*StEP00016,StEP00014,StEP00013
+if ((getGlobalPerms($user->id) == "admin") || ($perm->have_perm("root"))) { //Spezielle Tools fuer alle Ressourcen Admins
+	$structure["plan"]=array (topKat=>"room_planning", name=>_("Wochenplan"), link=>"resources.php?view=plan", active=>FALSE);
+	$structure["regular"]=array (topKat=>"room_planning", name=>_("Semesterplan"), link=>"resources.php?view=regular", active=>FALSE);
+	$structure["diff"]=array (topKat=>"room_planning", name=>_("w&ouml;chentlichen Differenzplan"), link=>"resources.php?view=diff", active=>FALSE);
+}
+*/
 
 //Reiter "Anpassen"
 

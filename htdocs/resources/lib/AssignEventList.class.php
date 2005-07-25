@@ -50,7 +50,7 @@ class AssignEventList{
 	
 	// Konstruktor
 	// if activated without timestamps, we take the current semester
-	function AssignEventList($begin = 0, $end = 0, $resource_id='', $range_id='', $user_id='', $sort = TRUE, $filter = FALSE){
+	function AssignEventList($begin = 0, $end = 0, $resource_id='', $range_id='', $user_id='', $sort = TRUE, $filter = FALSE, $day_of_week = false){
 	 	global $RELATIVE_PATH_RESOURCES, $SEM_ID, $user;
 	 	
 	 	require_once ($RELATIVE_PATH_RESOURCES."/lib/list_assign.inc.php");
@@ -64,7 +64,7 @@ class AssignEventList{
 		if (!$end )
 			$end = $all_semester[$SEM_ID]["ende"];
 		
-		
+		$this->dow = $day_of_week;
 		$this->begin = $begin;
 		$this->end = $end;
 		$this->filter = $filter;
@@ -103,7 +103,7 @@ class AssignEventList{
 	
 	// private
 	function restore() {
-		list_restore_assign($this, $this->resource_id,  $this->begin, $this->end, FALSE, FALSE, $this->filter);
+		list_restore_assign($this, $this->resource_id,  $this->begin, $this->end, FALSE, FALSE, $this->filter, $this->dow);
 	}
 	
 	// public

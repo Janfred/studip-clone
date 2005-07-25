@@ -46,16 +46,15 @@ class ResourcesUserRoots {
 	function ResourcesUserRoots($range_id='') {
 		global $user, $perm, $auth;
 		
+		if($range_id){
+			$this->range_id = $range_id;
+		}
+		
 		if (!$this->range_id)
 			$this->range_id=$user->id;
 
 		$db=new DB_Seminar;
-		$db2=new DB_Seminar;
-		$db3=new DB_Seminar;
 		
-		if(func_num_args() == 1){
-			$this->range_id = func_get_arg(0);
-		}
 		
 		if (get_object_type($this->range_id) == "user") {
 			//load the global perms in the resources-system (check if the user ist resources-root)
@@ -68,7 +67,7 @@ class ResourcesUserRoots {
 			else
 				$global_perm=$this->user_global_perm;
 		}
-		
+
 		//root or resoures root are able to see all resources (roots in tree)
 		if ($global_perm == "root") {
 			$db->query("SELECT resource_id FROM resources_objects WHERE resource_id = root_id");
@@ -147,3 +146,4 @@ class ResourcesUserRoots {
 		return $this->my_roots;
 	}
 }
+?>

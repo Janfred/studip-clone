@@ -33,7 +33,8 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-require_once ($RELATIVE_PATH_RESOURCES."/lib/ResourceObject.class.php");
+require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'] . $GLOBALS['RELATIVE_PATH_RESOURCES']."/lib/ResourceObject.class.php");
+require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'] . $GLOBALS['RELATIVE_PATH_RESOURCES']."/lib/RoomGroups.class.php");
 
 
 if ($resources_data["actual_object"]) {
@@ -44,8 +45,22 @@ if ($resources_data["actual_object"]) {
 	$currentObjectTitelAdd=": ".$currentObject->getName()."&nbsp;<font size=-1>(".$currentObject->getOwnerName().")</font>";
 }
 
+
 switch ($view) {
 	//Reiter "Uebersicht"
+	case "plan":
+		$page_intro=_("Auf dieser Seite k&ouml;nnen Sie sich einen Wochenplan als CSV-Datei ausgeben lassen.");
+		$title=_("Spezielle Funktionen");
+	break;
+	case "regular":
+		$page_intro=_("Auf dieser Seite k&ouml;nnen Sie sich einen Semesterplan als CSV-Datei ausgeben lassen.");
+		$title=_("Spezielle Funktionen");
+	break;
+	case "diff":
+		$page_intro=_("Auf dieser Seite k&ouml;nnen Sie sich die w&ouml;chentliche Differenzliste der Belegung aller R&auml;ume als CSV-Datei ausgeben lassen.");
+		$title=_("Spezielle Funktionen");
+	break;
+					
 	case "resources":
 	case "_resources":
 		$page_intro=_("Auf dieser Seite k&ouml;nnen Sie durch alle Ressourcen bzw. Ebenen, auf die Sie Zugriff haben, navigieren und Ressourcen verwalten.");
@@ -61,12 +76,13 @@ switch ($view) {
 									"text"  => (($resources_data["search_mode"] == "browse") || (!$resources_data["search_mode"]))? sprintf(_("Gew&uuml;nschte Eigenschaften <br />%sangeben%s"), "<a href=\"$PHP_SELF?quick_view=search&quick_view_mode=".$view_mode."&mode=properties\">", "</a>") :  sprintf(_("Gew&uuml;nschte Eigenschaften <br />%snicht angeben%s"), "<a href=\"$PHP_SELF?view=search&quick_view_mode=".$view_mode."&mode=browse\">", "</a>")),
 								array	("icon" => "pictures/meinetermine.gif",
 									"text"  => (!$resources_data["check_assigns"])? sprintf(_("Gew&uuml;nschte Belegungszeit %sber&uuml;cksichtigen%s"), "<a href=\"$PHP_SELF?quick_view=search&quick_view_mode=".$view_mode."&check_assigns=TRUE\">", "</a>") :  sprintf(_("Gew&uuml;nschte Belegungszeit <br />%snicht ber&uuml;cksichtigen%s"), "<a href=\"$PHP_SELF?view=search&quick_view_mode=".$view_mode."&check_assigns=FALSE\">", "</a>")),
+								array	("icon" => "resources/pictures/cont_res5.gif",
+									"text"  => ($resources_data["search_only_rooms"])? sprintf(_("Nur R&auml;ume %sanzeigen%s"), "<a href=\"$PHP_SELF?quick_view=search&quick_view_mode=".$view_mode."&search_only_rooms=0\">", "</a>") :  sprintf(_("Alle Ressourcen %sanzeigen%s"), "<a href=\"$PHP_SELF?view=search&quick_view_mode=".$view_mode."&search_only_rooms=1\">", "</a>")),
 								array("icon" => "pictures/blank.gif",
 									"text"  => "<br /><a href=\"$PHP_SELF?quick_view=search&quick_view_mode=".$view_mode."&reset=TRUE\">".makeButton("neuesuche")."</a>"))));
 		$infopic = "pictures/rooms.jpg";
 		$clipboard = TRUE;
 	break;
-	
 	//Reiter "Listen"
 	case "lists":
 	case "_lists":
@@ -140,7 +156,51 @@ switch ($view) {
 									
 		//$infopic = "pictures/schedule.jpg";		
 	break;
-	
+	case "view_sem_schedule":
+		$page_intro=_("Hier k&ouml;nnen Sie sich die Belegungszeiten der Ressource anzeigen  und auf unterschiedliche Art darstellen lassen.");
+		$title=_("Belegungszeiten pro Semester ausgeben").$currentObjectTitelAdd;
+		
+		$infobox[0]["kategorie"] = _("Aktionen:");
+		$infobox[0]["eintrag"][] = array ("icon" => "pictures/link_intern.gif",
+								"text"  => "<a href=\"$PHP_SELF?view=view_sem_schedule&print_view=1\" target=\"_blank\">"
+											. _("Druckansicht")
+											. "</a>");
+		$infobox[0]["eintrag"][] = array ("icon" => "pictures/link_intern.gif",
+								"text"  => sprintf (_("%sEigenschaften%s anzeigen"), "<a href=\"$PHP_SELF?quick_view=view_details&quick_view_mode=".$view_mode."\">", "</a>"));
+		if (($ActualObjectPerms->havePerm("autor")) && ($currentObject->getCategoryId()))
+			$infobox[0]["eintrag"][] = array ("icon" => "pictures/link_intern.gif",
+									"text"  =>sprintf (_("Eine neue Belegung %serstellen%s"), ($view_mode == "oobj") ? "<a href=\"$PHP_SELF?cancel_edit_assign=1&quick_view=openobject_assign&quick_view_mode=".$view_mode."\">" : "<a href=\"$PHP_SELF?cancel_edit_assign=1&quick_view=edit_object_assign&quick_view_mode=".$view_mode."\">", "</a>"));
+
+		if ($view_mode == "search")
+			$infobox[0]["eintrag"][] = array ("icon" => "pictures/link_intern.gif",
+									"text"  =>"<a href=\"$PHP_SELF?quick_view=search&quick_view_mode=".$view_mode."\">"._("zur&uuml;ck zur Suche")."</a>");
+
+		if ($view_mode == "no_nav")
+			$infobox[0]["eintrag"][] = array ("icon" => "pictures/link_intern.gif",
+									"text"  =>"<a href=\"$PHP_SELF?quick_view=search&quick_view_mode=".$view_mode."\">"._("zur Ressourcensuche")."</a>");
+
+		if ($view_mode != "search" && $view_mode != "no_nav") {
+			if ($SessSemName["class"] == "sem")
+				$infobox[0]["eintrag"][] = array ("icon" => "pictures/link_intern.gif",
+										"text"  => "<a href=\"seminar_main.php\">"._("zur&uuml;ck zur Veranstaltung")."</a>");
+			if ($SessSemName["class"] == "inst")
+				$infobox[0]["eintrag"][] = array ("icon" => "pictures/link_intern.gif",
+										"text"  => "<a href=\"institut_main.php\">"._("zur&uuml;ck zur Einrichtung")."</a>");
+		}
+									
+		//$infopic = "pictures/schedule.jpg";		
+	break;
+	case "view_group_schedule":
+		$room_groups =& RoomGroups::GetInstance();
+		$page_intro=_("Hier k&ouml;nnen Sie sich die Belegungszeiten einer Raumgruppe anzeigen lassen.");
+		$title=_("Belegungszeiten einer Raumgruppe pro Semester ausgeben:") . '&nbsp;' . htmlReady($room_groups->getGroupName($resources_data['actual_room_group']));
+		
+		$infobox[0]["kategorie"] = _("Aktionen:");
+		$infobox[0]["eintrag"][] = array ("icon" => "pictures/link_intern.gif",
+								"text"  => "<a href=\"$PHP_SELF?view=view_group_schedule&print_view=1\" target=\"_blank\">"
+											. _("Druckansicht")
+											. "</a>");
+	break;
 	//Reiter "Anpassen"	
 	case "settings":
 	case "edit_types":

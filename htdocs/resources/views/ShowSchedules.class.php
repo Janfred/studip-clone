@@ -1,4 +1,4 @@
-<?
+<?php
 /**
 * ShowSchedules.class.php
 * 
@@ -89,7 +89,7 @@ class ShowSchedules {
 	}
 	
 	function navigator () {
-		global $cssSw, $view_mode;
+		global $cssSw, $view_mode, $PHP_SELF;
 		
 	 	//match start_time & end_time for a whole week
 	 	$dow = date ("w", $this->start_time);
@@ -127,13 +127,14 @@ class ShowSchedules {
 						<option <? if ($this->length_unit  == "w") echo "selected" ?> value="w"><?=_("Woche(n)")?></option>
 						<option <? if ($this->length_unit  == "m") echo "selected" ?> value="m"><?=_("Monat(e)")?></option>
 						<option <? if ($this->length_unit  == "y") echo "selected" ?> value="y"><?=_("Jahre(e)")?></option>
-					</select>&nbsp; als Liste
+					</select>
+					&nbsp;<?=_("als Liste ausgeben")?>
 					&nbsp; <input type="IMAGE" name="start_list" <?=makeButton("ausgeben", "src") ?> border=0 vallue="<?=_("ausgeben")?>" /><br />
 				</td>
 			</tr>
 			<tr>
 					<td class="<? echo $cssSw->getClass() ?>" width="66%" valign="top"><font size=-1>
-					<i>oder</i>&nbsp;  eine Woche grafisch
+					<?=_("<i>oder</i> eine Woche grafisch ausgeben")?>
 					&nbsp; <input type="IMAGE" name="start_graphical" <?=makeButton("ausgeben", "src") ?> border=0 vallue="<?=_("ausgeben")?>" /><br />&nbsp; 
 				</td>
 			</tr>
@@ -222,6 +223,7 @@ class ShowSchedules {
 		}
 
 	 	$schedule=new ScheduleWeek($start_hour, $end_hour, FALSE, TRUE, $start_time);
+
 	 	if ($ActualObjectPerms->havePerm("autor"))
 		 	$schedule->add_link = "resources.php?cancel_edit_assign=1&view=edit_object_assign&add_ts=";
 	 	
@@ -298,3 +300,4 @@ class ShowSchedules {
 	<?
 	}
 }
+?>

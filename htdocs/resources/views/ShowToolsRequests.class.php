@@ -35,6 +35,7 @@
 
 require_once ($ABSOLUTE_PATH_STUDIP."/cssClassSwitcher.inc.php");
 require_once ($RELATIVE_PATH_RESOURCES."/lib/RoomRequest.class.php");
+require_once ($RELATIVE_PATH_RESOURCES."/lib/RoomGroups.class.php");
 require_once ($ABSOLUTE_PATH_STUDIP."/lib/classes/Seminar.class.php");
 
 
@@ -184,6 +185,7 @@ class ShowToolsRequests {
 								print "<br /><br /><input type=\"RADIO\" name=\"resolve_requests_order\" value=\"complex\" checked />&nbsp;"._("komplexere zuerst (Raumgr&ouml;&szlig;e und  gew&uuml;nschte Eigenschaften)");
 								print "<br /><input type=\"RADIO\" name=\"resolve_requests_order\" value=\"oldest\" />&nbsp;"._("&auml;ltere zuerst");
 								print "<br /><input type=\"RADIO\" name=\"resolve_requests_order\" value=\"newest\" />&nbsp;"._("neue zuerst");
+								print "<br /><input type=\"RADIO\" name=\"resolve_requests_order\" value=\"urgent\" />&nbsp;"._("dringendere zuerst");
 								?>
 								</font>
 							</td>
@@ -218,6 +220,71 @@ class ShowToolsRequests {
 		<?
 	}
 	
+	function showRequestList() {
+		global $resources_data, $_fullname_sql, $ABSOLUTE_PATH_STUDIP;
+		require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/ZebraTable.class.php");
+	
+		$i = 0;
+		$zt = new ZebraTable(array('width' => '100%', 'padding' => '1'));
+		echo $zt->openRow();
+		echo $zt->cell("&nbsp;", array("class" => "topic"));
+		echo $zt->cell("<font size=\"-1\"><b>Z&auml;hler</b></font>", array("class" => "topic"));
+		echo $zt->cell("<font size=\"-1\"><b>V.-Nummer</b></font>", array("class" => "topic"));
+		echo $zt->cell("<font size=\"-1\"><b>Titel</b></font>", array("class" => "topic"));
+		echo $zt->cell("<font size=\"-1\"><b>Dozenten</b></font>", array("class" => "topic"));
+		echo $zt->cell("<font size=\"-1\"><b>Anfrager</b></font>", array("class" => "topic"));
+		echo $zt->cell("<font size=\"-1\"><b>Start-Semester<b></font>", array("class" => "topic"));
+		$zt->closeRow();
+		?>
+		<?
+		foreach ($resources_data['requests_working_on'] as $key => $val) {
+			$i++;
+			$reqObj = new RoomRequest($val['request_id']);
+			$semObj = new Seminar($reqObj->getSeminarId());
+			
+			$db = new DB_Seminar();
+			$db->query("SELECT user_id FROM seminar_user WHERE seminar_id = '".$semObj->id."' AND status = 'dozent'");
+			$dozent = array();
+			while ($db->next_record()) {
+				$dozent[] = get_fullname($db->f('user_id'));
+			}
+			if ($semObj->getName() != "") {
+				echo $zt->openRow();
+				echo "<font size=\"-1\">";
+				echo $zt->cell("&nbsp;");
+				echo $zt->cell("<font size=\"-1\">$i.</font>");
+				echo $zt->cell("<font size=\"-1\">".$semObj->seminar_number."</font>");
+				echo $zt->cell("<font size=\"-1\"><a href=\"resources.php?view=edit_request&edit=".$val['request_id']."\">".my_substr(htmlReady($semObj->getName()),0,50)."</a><br/></font>");
+				echo $zt->openCell();
+				echo "<font size=\"-1\">";
+				$k = false;
+				foreach ($dozent as $val) {
+					if ($k) echo ", ";
+					echo "$val";
+					$k = true;
+				}
+				echo "</font>";
+				$this->selectSemInstituteNames($semObj->getInstitutId());
+				if (!$this->all_semester) {
+					$semester = new SemesterData();
+					$this->all_semester = $semester->getAllSemesterData();
+				}
+				foreach ($this->all_semester as $val) {
+					if ($val['beginn'] == $semObj->semester_start_time) {
+						$cursem = $val['name'];
+					}
+				}
+
+				echo $zt->closeCell();
+				echo $zt->cell("<font size=\"-1\">".get_fullname($reqObj->user_id)."</font>");
+				echo $zt->cell("<font size=\"-1\">$cursem</font>");
+				echo $zt->closeRow();
+			}
+		}
+		$zt->close();
+	}
+	
+
 	function showRequest($request_id) {
 		global $PHP_SELF, $cssSw, $resources_data, $perm;
 		$reqObj = new RoomRequest($request_id);
@@ -283,7 +350,7 @@ class ShowToolsRequests {
 							if ($this->db->nf()) {
 								$i=1;
 								while ($this->db->next_record()) {
-									printf ("<font color=\"blue\"><i><b>%s</b></i></font>. %s%s<br />", $i, date("d.m.Y, H:i", $this->db->f("date")), ($this->db->f("date") != $this->db->f("end_time")) ? " - ".date("H:i", $this->db->f("end_time")) : "");
+									printf ("<font color=\"blue\"><i><b>%s</b></i></font>. %s%s<br />", $i, strftime("%a, %d.%m.%Y, %H:%M", $this->db->f("date")), ($this->db->f("date") != $this->db->f("end_time")) ? " - ".date("H:i", $this->db->f("end_time")) : "");
 									$resObj =& ResourceObject::Factory($this->db->f("resource_id"));
 									if ($link = $resObj->getFormattedLink($this->db->f("date")))
 											print "&nbsp;&nbsp;&nbsp;&nbsp;$link<br />";
@@ -297,7 +364,7 @@ class ShowToolsRequests {
 						if ($this->db->nf() ) {
 							$i=1;
 							while ($this->db->next_record()) {
-								printf ("<font color=\"blue\"><i><b>%s</b></i></font>. %s%s<br />", $i, date("d.m.Y, H:i", $this->db->f("date")), ($this->db->f("date") != $this->db->f("end_time")) ? " - ".date("H:i", $this->db->f("end_time")) : "");
+								printf ("<font color=\"blue\"><i><b>%s</b></i></font>. %s%s<br />", $i, strftime("%a, %d.%m.%Y, %H:%M", $this->db->f("date")), ($this->db->f("date") != $this->db->f("end_time")) ? " - ".date("H:i", $this->db->f("end_time")) : "");
 								$resObj =& ResourceObject::Factory($this->db->f("resource_id"));
 								if ($link = $resObj->getFormattedLink($this->db->f("date")))
 									print "&nbsp;&nbsp;&nbsp;&nbsp;$link<br />";
@@ -316,6 +383,7 @@ class ShowToolsRequests {
 								<font size="-1"><b><?=_("angeforderter Raum:")?></b></font>
 							</td>
 							<?
+							unset($resObj);
 							$cols=0;
 							if ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["grouping"]) {
 								if (is_array($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["groups"]))
@@ -408,6 +476,113 @@ class ShowToolsRequests {
 								?>
 							</td>
 						</tr>
+						<?
+						if (get_config('RESOURCES_ENABLE_GROUPING')){
+							$room_group =& RoomGroups::GetInstance();
+							$group_id = $resources_data['actual_room_group'];
+							?>						
+						<tr>
+							<td style="border-top:1px solid;" width="100%" colspan="<?=$cols+2?>">
+								<font size="-1"><b><?=_("Raumgruppe berücksichtigen:")?></b></font>
+							</td>
+						</tr>
+						<tr>
+						<td colspan="<?=$cols?>"><font size="-1">
+						<select name="request_tool_choose_group">
+						<option <?=(is_null($group_id) ? 'selected' : '')?> value="-"><?=_("Keine Raumgruppe anzeigen")?></option>
+						<?
+						foreach(array_keys($room_group->room_groups) as $gid){
+						echo '<option value="'.$gid.'" '
+							. (!is_null($group_id) && $group_id == $gid ? 'selected' : '') . '>'
+							.htmlReady(my_substr($room_group->getGroupName($gid),0,45))
+							.' ('.$room_group->getGroupCount($gid).')</option>';
+						}
+						?>					
+						</select>
+						</font>
+						</td>
+						<td colspan="2"><font size="-1">
+						<input type="IMAGE" name="request_tool_group" align="middle" <?=makeButton("auswaehlen", "src") ?> border=0  /><br />
+						</font>
+						</td>
+						</tr>
+						<?
+						if (is_array($room_group->room_groups[$group_id]['rooms'])){
+							foreach ($room_group->room_groups[$group_id]['rooms'] as $key) {
+						?>
+						<tr>
+							<td width="70%"><font size="-1">
+								<?
+								$resObj =& ResourceObject::Factory($key);
+								print "<img src=\"./pictures/info.gif\" ".tooltip(_("Der ausgewählte Raum bietet folgende der wünschbaren Eigenschaften:")." \n".$resObj->getPlainProperties(TRUE), TRUE, TRUE)." />";
+								print "&nbsp;".$resObj->getFormattedLink($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["first_event"]);
+							?>
+							</td>
+							<?
+							$i=0;
+							if ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["grouping"]) {
+								if (is_array($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["groups"])) {
+									foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["groups"] as $key2 => $val2) {
+										print "<td width=\"1%\" nowrap><font size=\"-1\">";
+										if ($key == $val2["resource_id"]) {
+											print "<img src=\"pictures/haken_transparent.gif\" ".tooltip(_("Dieser Raum ist augenblicklich gebucht"), TRUE, TRUE)." />";
+										} else {
+											$overlap_status = $this->showGroupOverlapStatus($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["detected_overlaps"][$key], $val2["events_count"], $val2["overlap_events_count"][$resObj->getId()], $val2["termin_ids"]);
+											print $overlap_status["html"];
+											printf ("<input type=\"radio\" name=\"selected_resource_id[%s]\" value=\"%s\" %s %s/>",
+											(($semObj->getMetaDateType() == 1) && (!$reqObj->getTerminId())) ? $val2["termin_id"] : $i,
+											$key,
+											($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][$i] == $key) ? "checked" : "",
+											($overlap_status["status"] == 2 || !ResourcesUserRoomsList::CheckUserResource($key)) ? "disabled" : "");
+										}
+										print "</font></td>";
+										$i++;
+									}
+								}
+							} else {									
+								if (is_array($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"])) {
+									foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"] as $key2 => $val2) {
+										print "<td width=\"1%\" nowrap><font size=\"-1\">";
+										if ($key == $val2["resource_id"]) {
+											print "<img src=\"pictures/haken_transparent.gif\" ".tooltip(_("Dieser Raum ist augenblicklich gebucht"), TRUE, TRUE)." />";
+										} else {
+											$overlap_status = $this->showOverlapStatus($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["detected_overlaps"][$key][$key2], $val2["events_count"], $val2["overlap_events_count"][$resObj->getId()]);
+											print $overlap_status["html"];
+											printf ("<input type=\"radio\" name=\"selected_resource_id[%s]\" value=\"%s\" %s %s/>",
+											($semObj->getMetaDateType() == 1) ? $val2["termin_id"] : $i,
+											$key,
+											($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][($semObj->getMetaDateType() == 1) ? $val2["termin_id"] : $i] == $key) ? "checked" : "",
+											($overlap_status["status"] == 2 || !ResourcesUserRoomsList::CheckUserResource($key)) ? "disabled" : "");
+										}
+										print "</font></td>";
+										$i++;
+									}
+								}
+							}
+							?>
+							<td width="29%" align="right">
+								<?
+								if (is_object($resObj)) {
+									$seats = $resObj->getSeats();
+									$requested_seats = $reqObj->getSeats();
+									if ((is_numeric($seats)) && (is_numeric($requested_seats))) {
+										$percent_diff = (100 / $requested_seats) * $seats;
+										if ($percent_diff > 0)
+											$percent_diff = "+".$percent_diff;
+										if ($percent_diff < 0)
+											$percent_diff = "-".$percent_diff;
+										print "<font style=\"font-size:10px;\">".round($percent_diff)."%</font>";
+									}
+								}
+								?>
+							</td>
+						</font></td>
+						</tr>
+						<?
+								}
+							}
+						}
+						?>
 						<tr>
 							<td style="border-top:1px solid;" width="100%" colspan="<?=$cols+2?>">
 								<font size="-1"><b><?=_("weitere passende R&auml;ume:")?></b>
@@ -515,6 +690,8 @@ class ShowToolsRequests {
 							<?
 						} else
 							print "<tr><td width=\"100%\" colspan=\"".($cols+1)."\"><font size=\"-1\">"._("keine gefunden")."</font></td></tr>";
+						
+						
 						//Clipped Rooms
 						if (sizeof($clipped_rooms)) {
 						?>						
@@ -560,7 +737,7 @@ class ShowToolsRequests {
 									foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"] as $key2 => $val2) {
 										print "<td width=\"1%\" nowrap><font size=\"-1\">";
 										if ($key == $val2["resource_id"]) {
-											print "<img src=\"pictures/haken.gif\" ".tooltip(_("Dieser Raum ist augenblicklich gebucht"), TRUE, TRUE)." />";
+											print "<img src=\"pictures/haken_transparent.gif\" ".tooltip(_("Dieser Raum ist augenblicklich gebucht"), TRUE, TRUE)." />";
 										} else {
 											$overlap_status = $this->showOverlapStatus($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["detected_overlaps"][$key][$key2], $val2["events_count"], $val2["overlap_events_count"][$resObj->getId()]);
 											print $overlap_status["html"];
@@ -576,7 +753,7 @@ class ShowToolsRequests {
 								}
 							}
 							?>
-							<td width="29%">
+							<td width="29%" align="right">
 								<?
 								if (is_object($resObj)) {
 									$seats = $resObj->getSeats();

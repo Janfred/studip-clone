@@ -33,7 +33,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-require_once ($RELATIVE_PATH_RESOURCES."/lib/ResourceObjectPerms.class.php");
+require_once $GLOBALS['ABSOLUTE_PATH_STUDIP'] . $GLOBALS['RELATIVE_PATH_RESOURCES'] . "/lib/ResourceObjectPerms.class.php";
 
 
 /*
@@ -472,7 +472,6 @@ function cmp_resources($a, $b){
 	return 1;
 }
 
-
 /*
 * checkAvailableResources
 *
@@ -488,29 +487,13 @@ function checkAvailableResources($id) {
 	$db = new DB_Seminar;
 	
 	//check if owner
-	$db->query("SELECT COUNT(owner_id) AS count FROM resources_objects WHERE owner_id='$id' ");
-	if ($count)
-		return TRUE;
+	$db->query("SELECT resource_id FROM resources_objects WHERE owner_id='$id' LIMIT 1");
+	if ($db->next_record()) return TRUE;
 	
 	//or additional perms avaiable
-	$db->query("SELECT COUNT(perms) AS count FROM resources_user_resources  WHERE user_id='$id' ");
-	if ($count)
-		return TRUE;
+	$db->query("SELECT perms FROM resources_user_resources  WHERE user_id='$id' ");
+	if ($db->next_record()) return TRUE;
 	
-	return FALSE;	
-}
-
-/*****************************************************************************
-checkAssigns, a quick function to check if for a ressource
-exists assigns
-/*****************************************************************************/
-
-function checkAssigns($id) {
-	$db = new DB_Seminar;
-	
-	$db->query("SELECT COUNT(assign_id) AS count FROM resources_assign WHERE resource_id='$id' ");
-	if ($count)
-		return TRUE;
 	return FALSE;	
 }
 

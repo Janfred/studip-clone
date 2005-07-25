@@ -177,7 +177,7 @@ class EditResourceData {
 		
 		?>
 		<table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
-		<form method="POST" action="<?echo $PHP_SELF ?>?change_object_schedules=<? printf ("%s", (!$resAssign->isNew()) ?  $resAssign->getId() : "NEW"); ?>">
+		<form name="Formular" method="POST" action="<?echo $PHP_SELF ?>?change_object_schedules=<? printf ("%s", (!$resAssign->isNew()) ?  $resAssign->getId() : "NEW"); ?>">
 			<input type="HIDDEN" name="quick_view" value="<?=$this->used_view ?>" />
 			<input type="HIDDEN" name="quick_view_mode" value="<?=$view_mode ?>" />
 			<input type="HIDDEN" name="change_schedule_resource_id" value="<? printf ("%s", (!$resAssign->isNew()) ? $resAssign->getResourceId() : $resources_data["actual_object"]); ?>" />			
@@ -196,7 +196,7 @@ class EditResourceData {
 				?>
 					<br />&nbsp;
 					<input type="IMAGE" align="absmiddle"  <?=makeButton("uebernehmen", "src") ?> border=0 name="submit" value="&Uuml;bernehmen">
-					&nbsp;<a href="<?=$PHP_SELF."?cancel_edit_assign=1&quick_view=".$this->used_view."&quick_view_mode=".$view_mode ?>"><?=makeButton("abbrechen", "img") ?></a>
+					&nbsp;<a href="<?=$PHP_SELF."?cancel_edit_assign=1&view=view_schedule&quick_view_mode=".$view_mode ?>"><?=makeButton("abbrechen", "img") ?></a>
 				<?
 				}
 				if ($killButton) {
@@ -255,10 +255,11 @@ class EditResourceData {
 					<input name="change_schedule_day" value="<? echo date("d",$resAssign->getBegin()); ?>" size=2 maxlength="2" />
 					.<input name="change_schedule_month" value="<? echo date("m",$resAssign->getBegin()); ?>" size=2 maxlength="2" />
 					.<input name="change_schedule_year" value="<? echo date("Y",$resAssign->getBegin()); ?>" size=4 maxlength="4" />
+				</font>
+				<?=Termin_Eingabe_javascript(8,0,$resAssign->getBegin());?>
 				<?
 				}
 				?>
-				</font>
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="40%"><font size=-1><?=_("Art der Wiederholung:")?></font><br />
 				<font size=-1>
@@ -451,7 +452,7 @@ class EditResourceData {
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" colspan=2 align="center"><br />&nbsp; 
 					<input type="IMAGE" align="absmiddle" <?=makeButton("uebernehmen", "src") ?> border=0 name="submit" value="<?=_("&Uuml;bernehmen")?>">
-					&nbsp;<a href="<?=$PHP_SELF."?cancel_edit_assign=1&quick_view=".$this->used_view."&quick_view_mode=".$view_mode?>"><?=makeButton("abbrechen", "img") ?></a>
+					&nbsp;<a href="<?=$PHP_SELF."?cancel_edit_assign=1&view=view_schedule&quick_view_mode=".$view_mode?>"><?=makeButton("abbrechen", "img") ?></a>
 				<?
 				if ($killButton) {
 					?>&nbsp;<input type="IMAGE" align="absmiddle" <?=makeButton("loeschen", "src") ?> border=0 name="kill_assign" value="<?=_("l&ouml;schen")?>"><?
@@ -556,7 +557,7 @@ class EditResourceData {
 				<td class="<? echo $cssSw->getClass() ?>" width="40%"><font size=-1><?=_("Typ des Objektes:")?></font><br />
 				<font size=-1>
 					<?
-					if (!checkAssigns($this->resObject->getId())) {
+					if (!$this->resObject->isAssigned()) {
 						?>
 						<select name="change_category_id">
 						<?
@@ -677,10 +678,10 @@ class EditResourceData {
 							else
 								printf ("<input type=\"TEXT\" name=\"change_property_val[]\" value=\"%s\" size=30 maxlength=255 />", htmlReady($this->db2->f("state")));
 						break;
-						case "text";
+						case "text":
 							printf ("<textarea name=\"change_property_val[]\" cols=30 rows=2 >%s</textarea>", htmlReady($this->db2->f("state")));
 						break;
-						case "select";
+						case "select":
 							$options=explode (";",$this->db->f("options"));
 							printf ("<select name=\"change_property_val[]\">");
 							foreach ($options as $a) {
@@ -873,3 +874,4 @@ class EditResourceData {
 		<?
 	}	
 }
+?>

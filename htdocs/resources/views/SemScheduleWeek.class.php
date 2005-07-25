@@ -34,7 +34,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-class ScheduleWeek {
+class SemScheduleWeek {
 	var $events;				//the events that will be shown
 	var $cell_allocations;			//internal Array
 	var $start_hour;			//First hour to display from
@@ -51,7 +51,7 @@ class ScheduleWeek {
 		);
 	
 	//Kontruktor
-	function ScheduleWeek ($start_hour = '', $end_hour = '', $show_days = '', $show_dates = '', $start_date = '') {
+	function SemScheduleWeek ($start_hour = '', $end_hour = '', $show_days = '', $show_dates = '', $start_date = '') {
 		$this->start_hour=$start_hour;
 		$this->end_hour=$end_hour;
 		
@@ -73,10 +73,13 @@ class ScheduleWeek {
 			
 		if ($start_date)
 			$this->start_date=$start_date;
-		if ((!$show_dates) && ($start_date))
-			$this->show_dates=TRUE;	
+		
 		//the base_date have to be 0:00
-		$this->base_date = mktime(0, 0, 0, date("n", $this->start_date), date("j",$this->start_date),  date("Y",$this->start_date));		
+		$first_monday = date("j",$this->start_date)  - (date("w", $this->start_date) - 1);
+		if (date("w", $this->start_date) > 1){
+			$first_monday += 7;
+		}
+		$this->base_date = mktime(0, 0, 0, date("n", $this->start_date), $first_monday ,  date("Y", $this->start_date));		
 	}
 
 
@@ -197,7 +200,7 @@ class ScheduleWeek {
 	}
 	
 	//private
-	function createHtmlOutput() {
+	function createHtmlOutput($print_view=false) {
 		$glb_colspan=0;
 		if ($this->show_days[1]) $glb_colspan++;
 		if ($this->show_days[2]) $glb_colspan++;
@@ -208,7 +211,7 @@ class ScheduleWeek {
 		if ($this->show_days[7]) $glb_colspan++;
 		
 		?>
-		<table <? if ($this->print_view) { ?> bgcolor="#eeeeee" <? } ?> width ="99%" align="center" cellspacing=1 cellpadding=0 border=0>
+		<table <? if ($print_view) { ?> bgcolor="#eeeeee" <? } ?> width ="99%" align="center" cellspacing=1 cellpadding=0 border=0>
 			<tr>
 				<td width="10%" align="center" class="rahmen_steelgraulight" ><?=_("Zeit");?>
 				</td>
@@ -282,39 +285,52 @@ class ScheduleWeek {
 					if (($this->cell_allocations[$idx]) && ($cell_content[0]["start_cell"])) {
 						$r=0;
 						foreach ($cell_content as $cc) {
+							if (!$print_view){
+								$font_color = '#FFFFFF';
+								$cc_border_color = $this->categories[$this->events[$cc["id"]]["category"]]["border-color"];
+								$cc_bg_picture = $this->categories[$this->events[$cc["id"]]["category"]]["bg-picture"];
+								$cc0_border_color = $this->categories[$this->events[$cell_content[0]["id"]]["category"]]["border-color"];
+								$cc0_bg_picture = $this->categories[$this->events[$cell_content[0]["id"]]["category"]]["bg-picture"];
+							} else {
+								$font_color = '#000000';
+								$cc_border_color = $cc0_border_color = '#FFFFFF';
+								$cc_bg_picture = $cc0_bg_picture = '';
+							}
+							
 							if ($r==0) {
-								printf ("style=\"vertical-align:top; font-size:10px; color:#FFFFFF; background-image:url(%s); border-style:solid; border-width:1px; border-color:%s;\" valign=\"top\" rowspan=\"%s\" >",
-									$this->categories[$this->events[$cell_content[0]["id"]]["category"]]["bg-picture"], $this->categories[$this->events[$cell_content[0]["id"]]["category"]]["border-color"], $this->events[$cell_content[0]["id"]]["rows"]);
+								printf ("style=\"vertical-align:top; font-size:10px; color:$font_color; %s valign=\"top\" rowspan=\"%s\" >",
+									$print_view ? "background-color:#FFFFFF;border-style:solid; border-width:1px; border-color:#FFFFFF" : "background-image:url($cc0_bg_picture); border-style:solid; border-width:1px; border-color:$cc0_border_color;"
+									, $this->events[$cell_content[0]["id"]]["rows"]);
 								echo "<table width=\"100%\" cellspacing=0 cellpadding=0 border=0><tr>";
 							} else
 								echo "</td></tr><tr>";
-							printf ("<td style=\"vertical-align:top; font-size:10px; height:15px; color:#FFFFFF; background-image:url(%s); border-style:solid; border-width:1px; border-color:%s;\" >", 
-								$this->categories[$this->events[$cell_content[0]["id"]]["category"]]["bg-picture"], $this->categories[$this->events[$cell_content[0]["id"]]["category"]]["border-color"]);
+							printf ("<td style=\"vertical-align:top; font-size:10px; height:15px; color:$font_color; %s\" >", 
+								$print_view ? "background-color:#FFFFFF;" : "background-image:url($cc0_bg_picture); border-style:solid; border-width:1px; border-color:$cc0_border_color;");
 							if (($print_view) && ($r!=0))
 								echo "<hr width=\"100%\">";
 							$r++;
-							printf ("<div style=\"font-size:10px; height:15px; background-color:%s; ",
-								$this->categories[$this->events[$cell_content[0]["id"]]["category"]]["border-color"]);
-							if (!$print_view)
-								echo "color:#FFFFFF;";
+							printf ("<div style=\"font-size:10px; height:15px; color:$font_color; background-color:%s; ",
+								$cc_border_color);
 							echo " \">".date ("H:i",  $this->events[$cc["id"]]["start_time"]);
 							if  ($this->events[$cc["id"]]["start_time"] <> $this->events[$cc["id"]]["end_time"]) 
 								echo " - ",  date ("H:i",  $this->events[$cc["id"]]["end_time"]);
-							//if ($this->events[$cc["id"]]["ort"]) echo ",  ", $this->events[$cc["id"]]["ort"];
 							echo "</div>";
-							echo "</td></tr><tr><td>";
-								echo  "<a style=\"color: #FFFFFF;font-size:10px;\" href=\"".$this->events[$cc["id"]]["link"]."\"><font size=-1>";
-								echo htmlReady(substr($this->events[$cc["id"]]["name"], 0,50));
-								if (strlen($this->events[$cc["id"]]["name"])>50)
-									echo "..."; 
-								echo"</font></a>";
-							//if ($this->events[$cc["id"]]["dozenten"]) echo "<br><div align=\"right\"><font size=-1>", $this->events[$cc["id"]]["dozenten"], "</font></div>";
-							//if ($this->events[$cc["id"]]["personal_sem"]) echo "<div align=\"right\"><a href=\"",$PHP_SELF, "?cmd=delete&d_sem_id=",$this->events[$cc["id"]]["id"], "\"><img border=0 src=\"./pictures/trash.gif\" alt=\"Dieses Feld aus der Auswahl l&ouml;schen\">&nbsp;</a></div>";
+							echo "</td></tr><tr>";
+							printf("<td style=\"vertical-align:top; font-size:10px; color:$font_color; background-image:url(%s); \">",
+								$cc_bg_picture);
+							if (!$print_view) echo  "<a style=\"color:$font_color;font-size:10px;\" href=\"".$this->events[$cc["id"]]["link"]."\">";
+							echo "<font size=-1>";
+							echo htmlReady(substr($this->events[$cc["id"]]["name"], 0,50));
+							if (strlen($this->events[$cc["id"]]["name"])>50)
+								echo "...";
+								if ($this->events[$cc["id"]]["add_info"]) echo "<br>" . $this->events[$cc["id"]]["add_info"];
+							echo "</font>";
+							if (!$print_view) echo "</a>";
 						}
 						echo "</td></tr></table></td>";
 					}
 					if (!$this->cell_allocations[$idx]) {
-						if (($k == 3) && ($this->add_link)) {
+						if (($k == 3) && ($this->add_link) && !$print_view) {
 							$add_link_timestamp = $this->base_date + (($l-1) * 24 * 60 * 60) + ($i * 60 * 60);
 							echo sprintf ("class=\"steel1\" align=\"right\" valign=\"bottom\"><a href=\"%s%s\"><img src=\"pictures/calplus.gif\" %s border=\"0\"/></a></td>", 
 									$this->add_link, $add_link_timestamp, tooltip(sprintf(_("Eine neue Belegung von %s bis %s Uhr anlegen"), date ("H:i", $add_link_timestamp), date ("H:i", $add_link_timestamp + (2 * 60 * 60)))));
@@ -327,7 +343,7 @@ class ScheduleWeek {
 		}
 
 		if ($print_view) {
-			echo "<tr><td colspan=$glb_colspan><i><font size=-1>&nbsp; "._("Erstellt am")." ",date("d.m.y", time())," um ", date("G:i", time())," Uhr.</font></i></td><td align=\"right\"><font size=-2><img src=\"pictures/logo2b.gif\"><br />&copy; ", date("Y", time())," v.$SOFTWARE_VERSION&nbsp; &nbsp; </font></td></tr></tr>";
+			echo "<tr><td colspan=$glb_colspan><i><font size=-1>&nbsp; "._("Erstellt am")." ",date("d.m.y", time())," um ", date("G:i", time())," Uhr.</font></i></td><td align=\"right\"><font size=-2><img src=\"pictures/logo2b.gif\"><br />&copy; ", date("Y", time())," v.{$GLOBALS['SOFTWARE_VERSION']}&nbsp; &nbsp; </font></td></tr></tr>";
 		} else {;
 			//print view bottom
 		}
@@ -336,15 +352,15 @@ class ScheduleWeek {
 		</tr>
 	</table>
 	<?
-	}
+	}	
 	
-	function showSchedule($mode="html") {
+	function showSchedule($mode="html", $print_view=false) {
 		$this->createCellAllocation();
 		$this->handleOverlaps();
 		switch ($mode) {
 			case "html":
 			default:
-				$this->createHtmlOutput();
+				$this->createHtmlOutput($print_view);
 		}
 	}
 }

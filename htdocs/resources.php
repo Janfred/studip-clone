@@ -33,7 +33,9 @@
 // +---------------------------------------------------------------------------+
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
-$perm->check("user"); //Noch anpassen!!!
+$auth->login_if($auth->auth['uid'] == 'nobody');
+
+$perm->check("autor");
 
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 

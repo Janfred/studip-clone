@@ -208,7 +208,10 @@ class ShowList extends ShowTreeRow{
 		$db2=new DB_Seminar;
 		
 		//Let's start and load all the threads
-		$query = sprintf ("SELECT resource_id FROM resources_objects WHERE parent_id = '%s' %s", $start_id, ($this->supress_hierachy_levels) ? "AND category_id != ''" : "");
+		$query = sprintf ("SELECT resource_id FROM resources_objects ro LEFT JOIN resources_categories USING (category_id) WHERE parent_id = '%s' %s %s",
+						$start_id,
+						($this->supress_hierachy_levels) ? "AND ro.category_id != ''" : "",
+						$this->show_only_rooms ? " AND is_room = 1" : "");
 		$db->query($query);
 		
 		//if we have an empty result
@@ -258,8 +261,18 @@ class ShowList extends ShowTreeRow{
 		$db=new DB_Seminar;	
 
 		//create the query
+		if ($search_array['resources_search_range']){
+			$search_only = $this->getResourcesSearchRange($search_array['resources_search_range']);
+		}
+		
 		if (($search_array["search_exp"]) && (!$search_array["search_properties"]))
-			$query = sprintf ("SELECT resource_id FROM resources_objects WHERE name LIKE '%%%s%%' ORDER BY name", $search_array["search_exp"]);
+			$query = sprintf ("SELECT resource_id FROM resources_objects ro LEFT JOIN resources_categories USING (category_id)
+								WHERE ro.name LIKE '%%%s%%' %s %s %s ORDER BY ro.name",
+								$search_array["search_exp"],
+								$this->supress_hierachy_levels ? "AND ro.category_id != ''" : "",
+								$this->show_only_rooms ? " AND is_room = 1" : "",
+								$search_array['resources_search_range'] ? " AND ro.resource_id IN('".join("','", $search_only)."')" : "");
+								
 
 		if ($search_array["properties"]) {
 			$query = sprintf ("SELECT a.resource_id %s FROM resources_objects_properties a LEFT JOIN resources_objects b USING (resource_id) %s ", ($search_array["properties"]) ? ", COUNT(a.resource_id) AS resource_id_count" : "", (($search_array["properties"]) || ($search_array["search_exp"])) ? "WHERE" : "");
@@ -337,4 +350,18 @@ class ShowList extends ShowTreeRow{
 		
 	return $result_count;
 	}
+	
+	function getResourcesSearchRange($resource_id){
+		static $children = array();
+		$this->db->query("SELECT resource_id FROM resources_objects WHERE parent_id='$resource_id'");
+		while($this->db->next_record()){
+			$to_add[] = $this->db->f(0);
+		}
+		foreach ($to_add as $rid){
+			$children[] = $rid;
+			$this->getResourcesSearchRange($rid);
+		}
+		return $children;
+	}
 }
+?>

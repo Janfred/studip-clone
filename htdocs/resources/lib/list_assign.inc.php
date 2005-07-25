@@ -33,16 +33,18 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-require_once ($RELATIVE_PATH_RESOURCES."/lib/AssignObject.class.php");
-require_once ($RELATIVE_PATH_RESOURCES."/lib/AssignEvent.class.php");
+require_once $GLOBALS['ABSOLUTE_PATH_STUDIP'] . $GLOBALS['RELATIVE_PATH_RESOURCES'] . "/lib/AssignObject.class.php";
+require_once $GLOBALS['ABSOLUTE_PATH_STUDIP'] . $GLOBALS['RELATIVE_PATH_RESOURCES'] . "/lib/AssignEvent.class.php";
 
 
-function list_restore_assign(&$assEvtLst, $resource_id, $begin, $end, $user_id='', $range_id='', $filter = FALSE){
+function list_restore_assign(&$assEvtLst, $resource_id, $begin, $end, $user_id='', $range_id='', $filter = FALSE,$day_of_week = false){
 	$db = new DB_Seminar();
 
 	$year = date("Y", $begin);
 	$month = date("n", $begin);
-	
+	if ($day_of_week){
+		$day_of_week = (++$day_of_week == 8 ? 1 : $day_of_week);
+	}
 	//create the query
 	$query = sprintf("SELECT assign_id, resource_id, begin, end, repeat_end, repeat_quantity, "
 				."repeat_interval, repeat_month_of_year, repeat_day_of_month, "
@@ -53,7 +55,8 @@ function list_restore_assign(&$assEvtLst, $resource_id, $begin, $end, $user_id='
 	if ($user_id) $query.= sprintf("resources_assign.assign_user_id = '%s'  AND ", $user_id);
 	if ($range_id) $query.= sprintf("resources_user_resources.user_id = '%s'  AND ", $range_id);
 	$query .= sprintf("(begin BETWEEN %s AND %s OR (begin <= %s AND (repeat_end > %s OR end > %s)))"
-				 . " ORDER BY begin ASC", $begin, $end, $end, $begin, $begin);
+				 . "%s ORDER BY begin ASC", $begin, $end, $end, $begin, $begin,
+				 ($day_of_week ? " AND DAYOFWEEK(FROM_UNIXTIME(begin)) = $day_of_week " : "") );
 
 	//send the query
 	$db->query($query);
@@ -66,7 +69,6 @@ function list_restore_assign(&$assEvtLst, $resource_id, $begin, $end, $user_id='
 }
 
 function create_assigns($assign_object, &$assEvtLst, $begin='', $end='', $filter = FALSE) {
-	static $all_holidays;
 	$year_offset=0;
 	$week_offset=0;
 	$month_offset=0;
@@ -75,11 +77,8 @@ function create_assigns($assign_object, &$assEvtLst, $begin='', $end='', $filter
 	$temp_ts=0;
 	
 	// fetch all Holidays
-	if (!$all_holidays) {
-		$holiday = new HolidayData;
-		$all_holidays = $holiday->getAllHolidays(); 
-	}
-
+	$all_holidays = HolidayData::GetAllHolidaysArray(); 
+	
 	//if no begin/end-date submitted, we create all the assigns from the given assign-object
 	if (!$begin)
 		$begin = $assign_object->getBegin();
@@ -199,6 +198,11 @@ function create_assigns($assign_object, &$assEvtLst, $begin='', $end='', $filter
 				if (($val["beginn"] <= $temp_ts) && ($temp_ts <=$val["ende"]))
 					$holiday_skipping = TRUE;
 			}
+			if ($red_letter_day = holiday($temp_ts)){
+				if ($red_letter_day["col"]==3){
+					$holiday_skipping = TRUE;
+				}
+			} 
 		}
 		
 		if (!$holiday_skipping) {
@@ -239,6 +243,63 @@ function isFiltered($filter, $mode) {
 			return TRUE;
 	} else
 		return FALSE;
+}
+
+function createNormalizedAssigns($resource_id, $begin, $end, $day_of_week = false){
+	$db = new DB_Seminar();
+	$a_obj = new AssignObject(null);
+	$events = array();
+	if ($day_of_week){
+		$day_of_week = (++$day_of_week == 8 ? 1 : $day_of_week);
+	}
+	$query.= "SELECT assign_id FROM resources_assign WHERE ";
+	$query.= sprintf("resources_assign.resource_id = '%s' AND ", $resource_id);
+	$query .= sprintf("(begin BETWEEN %s AND %s OR (begin <= %s AND (repeat_end > %s OR end > %s)))"
+				 . " %s ORDER BY begin ASC", $begin, $end, $end, $begin, $begin,
+				 ($day_of_week ? " AND DAYOFWEEK(FROM_UNIXTIME(begin)) = $day_of_week " : "") );
+	$db->query($query);
+	while($db->next_record()){
+		if($a_obj->restore($db->f(0))){
+			$repmode = $a_obj->getRepeatMode();
+			if ($repmode == 'na' && $a_obj->getAssignUserId() 
+			&& ($seminar_id = isMetadateCorrespondingDate($a_obj->getAssignUserId())) ){
+				$repmode = 'meta';
+				$sem_obj =& Seminar::GetInstance($seminar_id);
+			}
+			if($repmode == 'meta'){
+				$event_id = getNormalizedEventId($a_obj->getBegin(),$a_obj->getEnd());
+				if (!isset($events[$event_id])){
+					$events[$event_id] = array('begin' => $a_obj->getBegin(),
+												'end' => $a_obj->getEnd(),
+												'assign_id' => $a_obj->getId(),
+												'assign_user_id' => $a_obj->getAssignUserId(),
+												'repeat_mode' => $repmode,
+												'is_meta' => 1,
+												'repeat_interval' => $sem_obj->cycle,
+												'seminar_id' => $seminar_id,
+												'name' => $a_obj->getUserName(false,false)
+												);
+												
+				}
+			} else if ($repmode == 'w'){
+				$events[$a_obj->getId()] = array('begin' => $a_obj->getBegin(),
+												'end' => $a_obj->getEnd(),
+												'assign_id' => $a_obj->getId(),
+												'assign_user_id' => $a_obj->getAssignUserId(),
+												'repeat_mode' => $repmode,
+												'repeat_interval' => $a_obj->getRepeatInterval(),
+												'is_meta' => 0,
+												'name' => $a_obj->getUserName(true,false)
+												);
+			}
+			
+		}
+	}
+	return $events;
+}
+
+function getNormalizedEventId($begin,$end){
+	return md5(date('G', $begin).':'.date('i', $begin).':'.date('s', $begin).':'.date('w',$begin).':'.date('G', $end).':'.date('i', $end).':'.date('s', $end).':'.date('w',$end));
 }
 
 ?>

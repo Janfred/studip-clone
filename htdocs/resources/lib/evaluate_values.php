@@ -37,6 +37,7 @@ require_once ($RELATIVE_PATH_RESOURCES."/lib/AssignObject.class.php");
 require_once ($RELATIVE_PATH_RESOURCES."/lib/AssignObjectPerms.class.php");
 require_once ($RELATIVE_PATH_RESOURCES."/lib/ResourceObject.class.php");
 require_once ($RELATIVE_PATH_RESOURCES."/lib/ResourceObjectPerms.class.php");
+require_once ($RELATIVE_PATH_RESOURCES."/lib/RoomGroups.class.php");
 require_once ($ABSOLUTE_PATH_STUDIP."/dates.inc.php");
 
 //a temp session-variable...
@@ -77,9 +78,10 @@ handle the view-logic
 /*****************************************************************************/
 
 //got a fresh session?
-if ((sizeof ($_REQUEST) == 1) && (!$view) && (!$quick_view)) {
+if ( ((sizeof ($_REQUEST) == 1) && (!$view) && (!$quick_view))
+	|| !isset($resources_data['view']) ) {
 	$resources_data='';
-	$resources_data["view"]="resources";
+	$resources_data["view"]="search";
 	$resources_data["view_mode"]=FALSE;
 	closeObject();
 }
@@ -179,7 +181,7 @@ if (($view == "search") || ($view == "edit_request")) {
 	$clipObj = & ClipBoard::GetInstance("search");
 	$clipFormObj =& $clipObj->getFormObject();
 	if ($view == "edit_request") {
-		array_unshift ($clipFormObj->form_fields['clip_cmd']['options'], array('name' => _("In aktueller Anfrage mit ber&uuml;cksichtigen"), 'value' => 'add'));
+		array_unshift ($clipFormObj->form_fields['clip_cmd']['options'], array('name' => _("In aktueller Anfrage mit berücksichtigen"), 'value' => 'add'));
 		$clipFormObj->form_buttons['clip_reload'] = array('type' => 'aktualisieren', 'info' => _("neu laden"));
 		
 		
@@ -1036,10 +1038,13 @@ if ($view == "search") {
 		
 	if ($check_assigns == "FALSE")
 		$resources_data["check_assigns"]=FALSE;
-	
+	if (isset($_REQUEST['search_only_rooms']))
+		$resources_data["search_only_rooms"] = $_REQUEST['search_only_rooms'];
+		
 	if ((isset($start_search_x)) || ($search_send)) {
 		unset($resources_data["search_array"]);
 		$resources_data["search_array"]["search_exp"]=$search_exp;
+		$resources_data["search_array"]["resources_search_range"]=$_REQUEST['resources_search_range'];
 		if (is_array($search_property_val))
 			foreach ($search_property_val as $key=>$val) {
 				if ((substr($val, 0, 4) == "_id_") && (substr($search_property_val[$key+1], 0, 4) != "_id_") && ($search_property_val[$key+1]))
@@ -1130,22 +1135,81 @@ if (($start_multiple_mode_x) || ($single_request)) {
 			$order = "a.mkdate DESC";
 		if ($resolve_requests_order == "oldest")
 			$order = "a.mkdate ASC";
+		if ($resolve_requests_order == "urgent")
+			$order = "a.mkdate DESC";
 	
-		$query = sprintf ("SELECT a.request_id, a.resource_id, COUNT(b.property_id) AS complexity, MAX(d.state) AS seats
-				FROM resources_requests a 
+		$query = sprintf ("SELECT a.seminar_id, a.termin_id, a.request_id, a.resource_id, COUNT(b.property_id) AS complexity, MAX(d.state) AS seats
+				FROM resources_requests a
 				LEFT JOIN resources_requests_properties b USING (request_id)
 				LEFT JOIN resources_properties c ON (b.property_id = c.property_id AND c.system = 2)
 				LEFT JOIN resources_requests_properties d ON (c.property_id = d.property_id AND a.request_id = d.request_id)
 				WHERE a.request_id IN %s
 				GROUP BY a.request_id
 				ORDER BY %s", $in, $order);
-		
+
 		$db->query($query);
+
+		while ($db->next_record()) {
+			$db_requests[] = array('request_id' => $db->f('request_id'), 'termin_id' => $db->f('termin_id'), 'seminar_id' => $db->f('seminar_id'));
+		}
+
+		if ($resolve_requests_order == "urgent") {	// if the sorting order ist 'urgent first'
+			$db_requests_neu = array();
+			$semester_data = new SemesterData();
+			$cursem = $semester_data->getCurrentSemesterData();
+			$now = $cursem['beginn'];
+			$days = array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
+			foreach ($db_requests as $val) {
+				if ($val['termin_id'] == "") {					// if it is a seminar
+					$db->query("SELECT start_time, Seminar_id, metadata_dates FROM seminare WHERE Seminar_id = '".$val['seminar_id']."'"); ## RAUMZEIT
+					$db->next_record();
+					$sid = $db->f('Seminar_id');
+					$metadates = unserialize($db->f('metadata_dates')); 
+
+					$db->query("SELECT date FROM termine WHERE range_id = '$sid' ORDER BY date ASC");
+					if ($db->num_rows() > 0) {
+						$db->next_record();
+						$db_requests_neu[$val['request_id']] = $db->f('date');
+					} else {
+						if (isset($metadates['turnus_data'])) {
+							foreach ($metadates['turnus_data'] as $md_val) {
+								$next = strtotime("this ".$days[$md_val['day']]);
+								$semdates[] = mktime($md_val['start_stunde'], $md_val['start_minute'], 0, date('n', $next), date('j', $next), date('Y', $next));
+							}
+							sort($semdates);
+							if ($db->f('start_time') > $semdates[0]) {
+								$semdates[0] = $db->f('start_time');
+							}
+							$db_requests_neu[$val['request_id']] = $semdates[0];
+						}
+					}
+				} else {																// otherwise we take the start_date for the single date
+					$db->query("SELECT date FROM termine WHERE termin_id = '".$val['termin_id']."'");
+					$db->next_record();
+					$db_requests_neu[$val['request_id']] = $db->f('date');
+				}
+			}
+
+			asort($db_requests_neu);
+			$db_requests = array();
+			//$i = 0;
+			//echo "<pre>";
+			foreach ($db_requests_neu as $key => $val) {
+				if (($val != '') && ($val >= $now)) {
+					$i++;
+					//echo "$i\t[$key] => $val\n";
+					$db_requests[] = array('request_id' => $key);
+				}
+			}
+			//echo "</pre>";
+		}
+
+		// insert sorted requests into resources_data-Array
+		foreach ($db_requests as $val) {
+			$resources_data["requests_working_on"][] = array("request_id" => $val['request_id'], "closed" => FALSE);
+			$resources_data["requests_open"][$val['request_id']] = TRUE;
+		}
 		
-		while($db->next_record()) {
-			$resources_data["requests_working_on"][] = array("request_id" => $db->f("request_id"), "closed" => FALSE);
-			$resources_data["requests_open"][$db->f("request_id")] = TRUE;
-		} 
 	}
 	if (is_array($resources_data['requests_open']) && count($resources_data['requests_open'])){
 		$resources_data["view"] = "edit_request";
@@ -1509,6 +1573,16 @@ if ($matching_rooms_limit_submit_x) {
 	$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["reload"] = TRUE;
 }
 
+if (isset($_REQUEST['request_tool_group_x'])){
+	if ($_REQUEST['request_tool_choose_group'] == '-'){
+		$resources_data['actual_room_group'] = null;
+	} else {
+		$resources_data['actual_room_group'] = $_REQUEST['request_tool_choose_group'];
+	}
+	$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["reload"] = TRUE;
+}
+
+
 //create the (overlap)data for all resources that should checked for a request
 if (($inc_request_x) || ($dec_request_x) || ($new_session_started) || ($marked_clip_ids) || ($save_state_x) || $auto_inc || $auto_dec || $resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["reload"]) {
 	require_once ($RELATIVE_PATH_RESOURCES."/lib/RoomRequest.class.php");
@@ -1538,6 +1612,17 @@ if (($inc_request_x) || ($dec_request_x) || ($new_session_started) || ($marked_c
 		if ($reqObj->getResourceId())
 			$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["considered_resources"][$reqObj->getResourceId()] = array("type"=>"requested");
 	
+		//add resource_ids from room groups
+		if (get_config('RESOURCES_ENABLE_GROUPING')){
+			$room_group =& RoomGroups::GetInstance();
+			$group_id = $resources_data['actual_room_group'];
+			if (is_array($room_group->room_groups[$group_id]['rooms'])){
+				foreach ($room_group->room_groups[$group_id]['rooms'] as $val) {
+					$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["considered_resources"][$val] = array("type"=>"grouped");
+				}
+			}
+		}
+		
 		//add the matching ressources to selection
 		if (getGlobalPerms($user->id) != "admin")
 			$resList = new ResourcesUserRoomsList ($user->id, FALSE, FALSE);
@@ -1556,6 +1641,7 @@ if (($inc_request_x) || ($dec_request_x) || ($new_session_started) || ($marked_c
 				if (!$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["considered_resources"][$val])
 					$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["considered_resources"][$val] = array("type"=>"clipped");
 		
+					
 		//create the assign-objects for the seminar (virtual!)
 		$assignObjects = array();
 		if ($reqObj->getTerminId()) {
@@ -1571,7 +1657,8 @@ if (($inc_request_x) || ($dec_request_x) || ($new_session_started) || ($marked_c
 			//add already assigned resource_ids to the check-set and remember those assigns
 			foreach($assignObjects as $assObj){
 				if ($assObj->getResourceId()){
-					$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["considered_resources"][$assObj->getResourceId()] = array("type"=>"matching");
+					if(!$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["considered_resources"][$assObj->getResourceId()])
+						$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["considered_resources"][$assObj->getResourceId()] = array("type"=>"matching");
 					$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$assObj->getId()] = array("resource_id" => $assObj->getResourceId());
 				}
 			}
@@ -1736,7 +1823,7 @@ if ($snd_closed_request_sms) {
 					if ($semObj->getCycle() == 1)
 						$message.= "\n"._("wöchentlich");
 					elseif ($semObj->getCycle() == 2)
-						$message.= "\n"._("zweiw&ouml;chentlich");
+						$message.= "\n"._("zweiwöchentlich");
 					$message.= ", "._("ab:")." ".date("d.m.Y", $semObj->getFirstDate());
 				}
 			} else {
@@ -1782,6 +1869,79 @@ if ($reset_set) {
 	unset($resources_data["requests_open"]);
 }
 
+/*****************************************************************************
+evaluate the commands from schedule navigator (sem mode)
+/*****************************************************************************/
+if ($view == "view_sem_schedule" || $view == "view_group_schedule") {
+	
+	if ($_REQUEST['next_sem']){
+		$sem_array = SemesterData::GetSemesterArray();
+		foreach ($sem_array as $id => $one_sem){
+			if ($one_sem['semester_id'] == $resources_data['sem_schedule_semester_id'] && isset($sem_array[$id+1])){
+				$resources_data['sem_schedule_semester_id'] = $sem_array[$id+1]['semester_id'];
+				break;
+			}
+		}
+	}
+	if ($_REQUEST['previous_sem']){
+		$sem_array = SemesterData::GetSemesterArray();
+		foreach ($sem_array as $id => $one_sem){
+			if ($one_sem['semester_id'] == $resources_data['sem_schedule_semester_id'] && ($id-1) && isset($sem_array[$id-1])){
+				$resources_data['sem_schedule_semester_id'] = $sem_array[$id-1]['semester_id'];
+				break;
+			}
+		}
+	}
+	if ($_REQUEST['previous_day']){
+		$resources_data['group_schedule_dow'] = (--$resources_data['group_schedule_dow'] == 0 ? 7 : $resources_data['group_schedule_dow']);
+	}
+	if ($_REQUEST['next_day']){
+		$resources_data['group_schedule_dow'] = (++$resources_data['group_schedule_dow'] == 8 ? 1 : $resources_data['group_schedule_dow']);
+	}
+	
+	if ($_REQUEST['navigate']) {
+		if (isset($_REQUEST['sem_time_choose'])){
+			$resources_data['sem_schedule_timespan'] = $_REQUEST['sem_time_choose'];
+		}
+		if (isset($_REQUEST['sem_schedule_choose'])){
+			$resources_data['sem_schedule_semester_id'] = $_REQUEST['sem_schedule_choose'];
+		}
+		if (($sem_schedule_start_list_x) || (($jump_x) && ($resources_data["schedule_mode"] == "list"))){
+			$resources_data["schedule_mode"] = "list";
+		} elseif (($sem_schedule_start_graphical_x) || (!$resources_data["schedule_mode"]) || (($jump_x) && ($resources_data["schedule_mode"] == "graphical"))) {
+			$resources_data["schedule_mode"] = "graphical";			
+		}
+		
+		if (isset($_REQUEST['group_schedule_start_x'])){
+			$resources_data['actual_room_group'] = (int)$_REQUEST['group_schedule_choose_group'];
+		}
+	}
+	if (!$resources_data['sem_schedule_semester_id']){
+		$semester = new SemesterData();
+		$current_sem = $semester->getCurrentSemesterData();
+		$resources_data['sem_schedule_semester_id'] = $current_sem['semester_id'];
+		$resources_data['sem_schedule_timespan'] = 'course_time';
+		$resources_data["schedule_mode"] = "graphical";
+		$resources_data["show_repeat_mode"] = 'all';
+	}
+	if (!isset($resources_data['actual_room_group'])){
+		$resources_data['actual_room_group'] = 0;
+		$resources_data["schedule_mode"] = "graphical";
+		$resources_data["show_repeat_mode"] = 'all';
+		$resources_data['group_schedule_dow'] = 1;
+	}
+}
+
+if (($show_repeat_mode) && ($send_schedule_repeat_mode_x)) {
+	$resources_data["show_repeat_mode"] = $show_repeat_mode;
+}
+
+if ($time_range) {
+	if ($time_range == "FALSE")
+		$resources_data["schedule_time_range"] = '';
+	else
+		$resources_data["schedule_time_range"] = $time_range;
+}
 
 /*****************************************************************************
 some other stuff ;-)
@@ -1828,4 +1988,7 @@ if ($edit_object) {
 		$view = $resources_data["view"];
 	}
 }
+
+if ($resources_data['view'] == 'resources') $resources_data['view'] = $view = '_resources';
+
 ?>

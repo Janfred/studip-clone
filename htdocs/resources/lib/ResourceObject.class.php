@@ -33,7 +33,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-require_once ($RELATIVE_PATH_RESOURCES."/lib/AssignObject.class.php");
+require_once $GLOBALS['ABSOLUTE_PATH_STUDIP'] . $GLOBALS['RELATIVE_PATH_RESOURCES'] . "/lib/AssignObject.class.php";
 
 
 /*****************************************************************************
@@ -49,7 +49,7 @@ class ResourceObject {
 				if (is_object($ressource_object_pool[$id]) && $ressource_object_pool[$id]->getId() == $id){
 					return $ressource_object_pool[$id];
 				} else {
-					$ressource_object_pool[$id] =& new ResourceObject($id);
+					$ressource_object_pool[$id] = new ResourceObject($id);
 					return $ressource_object_pool[$id];
 				}
 			}
@@ -124,7 +124,7 @@ class ResourceObject {
 				$this->root_id = $this->id;
 				$this->parent_id = "0";
 			}
-			$this->changeFlg=FALSE;
+			$this->chng_flag=FALSE;
 
 		}
 	}
@@ -365,9 +365,9 @@ class ResourceObject {
 			$id=$this->owner_id;
 		switch ($this->getOwnerType($id)) {
 			case "global":
-				return $PHP_SELF;
+				return '#a';
 			case "all":
-				return $PHP_SELF;
+				return '#a';
 			break;
 			case "user":
 				return  sprintf ("about.php?username=%s",get_username($id));
@@ -416,16 +416,12 @@ class ResourceObject {
 	}
 
 	function isDeletable() {
-		if ($this->isParent())
-			return FALSE;
-		else
-			return TRUE;
+		return (!$this->isParent() && !$this->isAssigned());
 	}
 
 	function isParent() {
 		if (is_null($this->is_parent)){
-			$db = new DB_Seminar;
-			$query = sprintf ("SELECT resource_id FROM resources_objects WHERE parent_id = '%s'", $this->id);
+			$query = sprintf ("SELECT resource_id FROM resources_objects WHERE parent_id = '%s' LIMIT 1", $this->id);
 			$this->db->query($query);
 			if ($this->db->next_record()){
 				$this->is_parent = true;
@@ -434,9 +430,19 @@ class ResourceObject {
 		return (!is_null($this->is_parent));
 	}
 	
+	function isAssigned() {
+		if (is_null($this->is_assigned)){
+			$query = sprintf ("SELECT assign_id FROM resources_assign WHERE resource_id = '%s' LIMIT 1", $this->id);
+			$this->db->query($query);
+			if ($this->db->next_record()){
+				$this->is_assigned = true;
+			}
+		}
+		return (!is_null($this->is_assigned));
+	}
+	
 	function isRoom() {
 		if (is_null($this->is_room)){
-			$db = new DB_Seminar;
 			$query = sprintf ("SELECT is_room FROM resources_objects LEFT JOIN resources_categories USING (category_id) WHERE resource_id = '%s'", $this->id);
 			$this->db->query($query);
 			$this->db->next_record();
@@ -638,4 +644,29 @@ class ResourceObject {
 		$query2 = sprintf("DELETE FROM resources_objects WHERE resource_id = '%s' ", $id);
 		$db2->query($query2);			
 	}
+	
+	function getPathArray($include_self = false){
+		$id = $this->getId();
+		if ($include_self){
+			$result_arr[$id] = $this->getName();
+		} else {
+			$result_arr = array();
+		}
+		while($id){
+			$query = sprintf ("SELECT name, parent_id, resource_id, owner_id FROM resources_objects WHERE resource_id = '%s' ", $id);
+			$this->db->query($query);
+			if ($this->db->next_record()){
+				$id = $this->db->f("parent_id");
+				$result_arr[$this->db->f("resource_id")] = $this->db->f("name");
+			} else {
+				break;
+			}
+		}
+		return $result_arr;
+	}
+	
+	function getPathToString($include_self = false, $delimeter = '/'){
+		return join($delimeter, array_reverse(array_values($this->getPathArray($include_self))));
+	}
 }
+?>

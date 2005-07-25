@@ -68,20 +68,27 @@ include ("$RELATIVE_PATH_RESOURCES/views/page_intros.inc.php");
 /*****************************************************************************
 Kopf der Ausgabe
 /*****************************************************************************/
+if (isset($_REQUEST['print_view'])){
+	$_include_stylesheet = "style_print.css"; // use special stylesheet for printing
+}
+
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php");
-if ($quick_view_mode != "no_nav")
+if ($quick_view_mode != "no_nav" && !isset($_REQUEST['print_view']))
 	include ("$ABSOLUTE_PATH_STUDIP/header.php");
 
 //load correct nav
 if ($view_mode == "oobj")
 	include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
-elseif (($view_mode == "no_nav") || ($view_mode == "search"))
+elseif (($view_mode == "no_nav") || ($view_mode == "search") || isset($_REQUEST['print_view']))
 	;
 else
 	include ("$RELATIVE_PATH_RESOURCES/views/links_resources.inc.php");
 
 ?>
 <table width="100%" cellspacing="0" cellpadding="0" border="0">
+	<?
+	if (!isset($_REQUEST['print_view'])){
+	?>
 	<tr>
 		<td class="topic" >&nbsp;<img src="pictures/meinetermine.gif" border="0" align="absmiddle" alt="Ressourcen"><b>&nbsp;<? echo $title; ?></b></td>
 	</tr>
@@ -121,9 +128,10 @@ else
 						</tr>	
 						<?
 						}
-						?>
-						<tr>
-							<td class="blank" valign ="top">
+	}
+	?>
+	<tr>
+		<td class="blank" valign ="top">
 	
 	<?	
 
@@ -375,6 +383,94 @@ if ($view == "view_schedule" || $view == "openobject_schedule") {
 }
 
 /*****************************************************************************
+Belegungen ausgeben, views: view_schedule, openobject_schedule
+/*****************************************************************************/
+if ($view == "view_sem_schedule") {
+	require_once ($RELATIVE_PATH_RESOURCES."/views/ShowSemSchedules.class.php");
+	if ($resources_data["actual_object"]) {
+		$ViewSchedules =& new ShowSemSchedules($resources_data["actual_object"], $resources_data['sem_schedule_semester_id'],$resources_data['sem_schedule_timespan']);
+		$ViewSchedules->setLengthFactor($resources_data["schedule_length_factor"]);
+		$ViewSchedules->setLengthUnit($resources_data["schedule_length_unit"]);	
+		$ViewSchedules->setWeekOffset($resources_data["schedule_week_offset"]);	
+		$ViewSchedules->setUsedView($view);	
+		$ViewSchedules->navigator($_REQUEST['print_view']);
+		$suppress_infobox = TRUE;
+		?>						</td>
+							</tr>
+						</table>
+					</td>
+				<?
+				if ($infobox && !isset($_REQUEST['print_view'])) {
+					?>
+					<td class="blank" width="270" align="right" valign="top">
+						<? print_infobox ($infobox, $infopic);?>
+					</td>
+					<?
+				}
+			?>				
+				</tr>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td class="blank" valign ="top">
+			<table width="100%" cellspacing="0" cellpadding="0" border="0">
+			<tr>
+				<td valign ="top">
+			<?
+		if (($resources_data["schedule_start_time"]) && ($resources_data["schedule_end_time"]))
+			if ($resources_data["schedule_mode"] == "list") //view List
+				$ViewSchedules->showScheduleList($_REQUEST['print_view']);
+			else
+				$ViewSchedules->showScheduleGraphical($_REQUEST['print_view']);
+	} else {
+		echo "</td></tr>";
+		$msg->displayMsg(15);
+	}
+}
+
+if ($view == "view_group_schedule") {
+	require_once ($RELATIVE_PATH_RESOURCES."/views/ShowGroupSchedules.class.php");
+	if (isset($resources_data["actual_room_group"])) {
+		$ViewSchedules =& new ShowGroupSchedules($resources_data['actual_room_group'], $resources_data['sem_schedule_semester_id'],$resources_data['sem_schedule_timespan'], $resources_data['group_schedule_dow']);
+		$ViewSchedules->setLengthFactor($resources_data["schedule_length_factor"]);
+		$ViewSchedules->setLengthUnit($resources_data["schedule_length_unit"]);	
+		$ViewSchedules->setWeekOffset($resources_data["schedule_week_offset"]);	
+		$ViewSchedules->setUsedView($view);	
+		$ViewSchedules->navigator($_REQUEST['print_view']);
+		$suppress_infobox = TRUE;
+		?>						</td>
+							</tr>
+						</table>
+					</td>
+				<?
+				if ($infobox && !isset($_REQUEST['print_view'])) {
+					?>
+					<td class="blank" width="270" align="right" valign="top">
+						<? print_infobox ($infobox, $infopic);?>
+					</td>
+					<?
+				}
+			?>				
+				</tr>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td class="blank" valign ="top">
+			<table width="100%" cellspacing="0" cellpadding="0" border="0">
+			<tr>
+				<td valign ="top">
+			<?
+		if (isset($resources_data['actual_room_group']))
+			$ViewSchedules->showScheduleGraphical($_REQUEST['print_view']);
+	} else {
+		echo "</td></tr>";
+		$msg->displayMsg(15);
+	}
+}
+
+/*****************************************************************************
 persoenliche Einstellungen verwalten, views: edit_personal_settings
 /*****************************************************************************/
 if ($view == "edit_settings") {
@@ -394,6 +490,7 @@ if ($view == "search") {
 	$search->setStartLevel('');
 	$search->setMode($resources_data["search_mode"]);
 	$search->setCheckAssigns($resources_data["check_assigns"]);
+	$search->setSearchOnlyRooms($resources_data["search_only_rooms"]);
 	$search->setSearchArray($resources_data["search_array"]);
 	
 	if ($resources_data["browse_open_level"])
@@ -416,6 +513,184 @@ if ($view == "edit_request") {
 	
 	$toolReq=new ShowToolsRequests;
 	$toolReq->showRequest($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["request_id"]);
+}
+
+if ($view == "list_requests") {
+        require_once ($RELATIVE_PATH_RESOURCES."/views/ShowToolsRequests.class.php");
+
+        $toolReq=new ShowToolsRequests;
+        $toolReq->showRequestList();
+}
+
+
+/*****************************************************************************
+export of weakly diff-plan
+/*****************************************************************************/
+if ($view == "regular") {
+	if (!isset($sd) ||!isset($sm) || !isset($sy))
+	{
+		$start_time = strtotime("Monday 0:00:0",time());
+		$sd = date("d", time());
+		$sm = date("m", time());
+		$sy = date("Y", time());
+	} 
+				if ($error)
+				{
+					parse_msg("error§Achtung, seit Erzeugung des letzten Semesterplans wurden regelm&auml;ßige Buchungen ver&auml;ndert. Bitte erst die Liste der aktuellen &Auml;nderungen herunterladen!");
+				}
+?>
+<FORM action="<?=$PHP_SELF?>" method="post">
+<TABLE cellpadding=3>
+<TR><TD>
+	<TABLE border="0" cellspacing="0" cellpadding="3" width=50%>
+		<TR class=steel1 >
+			<TD><?=_("gew&uuml;nschtes Semester:")?></TD>
+			<TD align=right>
+				<SELECT name=start_time>
+				<?
+					$semesterData = new SemesterData();
+					if (!isset($_POST["start_time"]))
+					{
+						$current_term = $semesterData->getCurrentSemesterData();
+					} else
+					{
+						$current_term = $semesterData->getSemesterDataByDate($_POST["start_time"]);
+					}
+					$terms = $semesterData->getAllSemesterData();
+					for($i=0, $max=sizeof($terms); $i<$max; $i++)
+					{
+						echo "<OPTION ".($terms[$i]["semester_id"]==$current_term["semester_id"]?"selected=selected":"")." value='".$terms[$i]["vorles_beginn"]."'>".$terms[$i]["name"]."</OPTION>";
+					}
+				?>
+				</SELECT></TD><TD>
+				<INPUT type="submit" value="<?=_("OK")?>">
+				<INPUT type="hidden" name="cmd" value="generate">
+				<INPUT type="hidden" name="view" value="regular">
+			</TD>
+		</TR>
+		<TR class=steel1 >
+			<TD colspan="3">
+				<BR/>
+			</TD>
+		</TR>
+	<?
+	if ($cmd=="generate") {
+		$start_time = strtotime("Monday 0:00:0", mktime(0,0,0,$sm,$sd,$sy));
+		$semesterData = new SemesterData();
+		$semester_details = $semesterData->getSemesterDataByDate($_POST["start_time"]);
+		echo "<TR><TD CLASS=steelgraulight COLSPAN=3 nowrap>";
+		require_once("glt.inc.php");
+		$tmp = new AssignmentData(); 
+		$tmp->createTableIfNeeded();
+		$db = new DB_Seminar();
+		$db->query("SELECT * FROM resources_regular_assignments WHERE copy=0 AND range_start='".$_POST["start_time"]."' GROUP BY mktime ORDER BY mktime");
+		$saved_schedule = false;
+		if ($db->next_record())
+		{
+			echo "Für das gewählte Semester wurde zuletzt am ".date("d.m.Y",$db->f("mktime"))." ein Semesterplan erzeugt.<BR><BR>";
+			$saved_schedule = true;
+		} else
+		{
+			echo "Für das gewählte Semester wurde noch kein Semesterplan erzeugt.<BR><BR>";
+		}
+		echo "</TD></TR>";
+		if (isset($_POST["recalc_regular"]))
+		{
+			echo "<TR class=steelgraulight><TD COLSPAN=3><a href='glt.php?cmd=regular&rebuild_db=1&start_time=".$semester_details["vorles_beginn"]."&end_time=".$semester_details["vorles_ende"]."'>Den neuen Semesterplan herunterladen </a><BR><BR><FONT COLOR='#ff0000'>(Achtung: Der bisher gespeicherte Semesterplan wird damit &uuml;berschrieben. Bitte stellen Sie sicher, dass alle &Auml;nderungen seit Erzeugung des letzten gespeicherten Semesterplans ber&uuml;cksichtigt worden sind.)</FONT></TD></TR>";
+		} else
+		{
+			if ($saved_schedule)
+			{
+				echo "<TR><TD COLSPAN=3 class=steelgraulight><a href='glt.php?cmd=regular&rebuild_db=0&start_time=".$semester_details["vorles_beginn"]."&end_time=".$semester_details["vorles_ende"]."'>Gespeicherten Semesterplan herunterladen</A><BR><BR></TD></TR>";
+				echo "<TR><TD COLSPAN=3 class=steelgraulight><a href='glt.php?cmd=diff_regular&rebuild_db=0&start_time=".$semester_details["vorles_beginn"]."&end_time=".$semester_details["vorles_ende"]."'>Änderungen seit Erzeugung des gespeicherten Semesterplans herunterladen</A><BR><BR></TD></TR>";
+			} else
+			{
+				echo "<TR><TD COLSPAN=3 class=steelgraulight><a href='glt.php?cmd=diff_regular&rebuild_db=0&start_time=".$semester_details["vorles_beginn"]."&end_time=".$semester_details["vorles_ende"]."'>Änderungen im Semesterplan herunterladen</A><BR><BR></TD></TR>";
+			}
+		}
+			if ($perm->have_perm("root") && !$error && !$_POST["recalc_regular"])
+			{
+				echo "<TR CLASS=steel1><TD >Einen neuen Semesterplan erzeugen</TD><TD align=left> <INPUT type='checkbox' name='rebuild_db' ".(isset($_POST["recalc_regular"])?"checked=checked":"").">&nbsp</TD><TD ALIGN=LEFT>";
+				if ($error)
+				{
+					$cmd="generate";
+					$regular = 1;
+				}
+			echo "<INPUT type='submit' name=recalc_regular value='"._('OK')."'>";
+			echo "</TD></TR>";
+			echo "<TR class=steel1><TD COLSPAN=3 ><FONT color='FF0000'>(Achtung: Der bisher gespeicherte Semesterplan wird damit &uuml;berschrieben. Bitte stellen Sie sicher, dass alle &Auml;nderungen seit Erzeugung des letzten gespeicherten Semesterplans ber&uuml;cksichtigt worden sind.)</FONT>";
+			echo "</TD></TR>";
+			}
+	}
+		?>
+	</TABLE>
+	</TD><TR></TABLE>
+</FORM>
+<?
+}
+if ($view == "diff") {
+	if (!isset($sd) ||!isset($sm) || !isset($sy))
+	{
+		$start_time = strtotime("Monday 0:00:0",time());
+		$sd = date("d", $start_time);
+		$sm = date("m", $start_time);
+		$sy = date("Y", $start_time);
+	} 
+?>
+<FORM action="<?=$PHP_SELF?>" method="post">
+<TABLE cellpadding=3>
+<TR><TD>
+	<TABLE border="0" cellspacing="0" cellpadding="3" width=100%>
+		<TR class=steel1>
+			<TD><?=_("Kalenderwoche:")?></TD>
+			<TD>
+			<?
+			echo "<SELECT name='start_time'>";
+			if (!$_POST["start_time"])
+			{
+				$selected_start_time = strtotime("Monday 0:00:0",time());
+			} else
+			{
+				$selected_start_time = $_POST["start_time"];
+			}
+			for ($i=-2;$i<6;$i++)
+			{
+				$tmp_start_time = strtotime("$i week Monday 0:00:0 ", time());
+				$tmp_end_time = strtotime("+ 1 week", $tmp_start_time);
+				if ($tmp_start_time == $selected_start_time)
+				{
+					echo "<OPTION value='$tmp_start_time' selected='selected'> ".date("d.m.Y",$tmp_start_time)." - ".date("d.m.Y",$tmp_end_time)." (KW ".date("W",$tmp_start_time).")</OPTION>";
+				} else
+				{
+					echo "<OPTION value='$tmp_start_time'> ".date("d.m.Y",$tmp_start_time)." - ".date("d.m.Y",$tmp_end_time)." (KW ".date("W",$tmp_start_time).")</OPTION>";
+				}
+			}
+			echo "</SELECT>";
+			?>
+			</TD>
+			<TD>
+				&nbsp;&nbsp;
+			</TD>
+		</TR>
+		<INPUT type="hidden" name="cmd" value="generate">
+		<INPUT type="hidden" name="view" value="diff">
+		<TR class=steel1>
+			<TD colspan="5">
+				<BR/>
+				<INPUT type="submit" value="<?=_("Differenzplan generieren")?>">
+			</TD>
+		</TR>
+	</TABLE>
+	</TD></TR>
+	</TABLE>
+</FORM>
+	<?
+	if ($cmd=="generate") {
+	//$start_time = strtotime("Monday 0:00:0", mktime(0,0,0,$sm,$sd,$sy));
+	$start_time =  $_POST["start_time"];
+	$end_time = strtotime("+ 1 week", $start_time);
+	echo "<br />&nbsp;<a href='glt.php?cmd=diff&start_time=$start_time&end_time=$end_time'> Differenzliste für den Zeitraum ".date("d.m.Y",$start_time)." - ".date("d.m.Y",strtotime("+ 1 week",$start_time))." als .CSV-Datei herunterladen</a>";
+	}
 }
 
 
@@ -463,6 +738,11 @@ if (!$suppress_infobox) {
 	</tr>
 </table>
 <?
+/*<debug>
+echo "<pre>";
+print_r($resources_data);
+print_r($_REQUEST);
+</debug>*/
 $resources_data = serialize($resources_data);
 page_close();
 ?>

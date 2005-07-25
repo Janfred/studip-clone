@@ -34,7 +34,7 @@
 // +---------------------------------------------------------------------------+
 
 require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP']."datei.inc.php");
-require_once ($GLOBALS['RELATIVE_PATH_RESOURCES']."/lib/AssignObject.class.php");
+require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'] . $GLOBALS['RELATIVE_PATH_RESOURCES'] . "/lib/AssignObject.class.php");
 
 /*****************************************************************************
 AssignEvent, the assigned events 

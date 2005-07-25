@@ -33,7 +33,8 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-require_once ($RELATIVE_PATH_RESOURCES."/lib/ResourceObject.class.php");
+require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'].$GLOBALS['RELATIVE_PATH_RESOURCES']."/lib/ResourceObject.class.php");
+require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'].$GLOBALS['RELATIVE_PATH_RESOURCES']."/resourcesFunc.inc.php");
 
 
 /*****************************************************************************
@@ -42,7 +43,7 @@ ResourcesUserRoomsList, creates a list for all resources for one user
 
 class ResourcesUserRoomsList {
 	var $user_id;    	// userId from PhpLib (String)
-	var $resources;		// the results
+	var $resources = array();		// the results
 	var $return_objects;	// should the complete objects be returned?
 	var $only_rooms;	// we can do this stuff for rooms ar for all resources
 	
@@ -63,7 +64,6 @@ class ResourcesUserRoomsList {
 	// Konstruktor
 	function ResourcesUserRoomsList ($user_id ='', $sort= TRUE, $return_objects = TRUE, $only_rooms = TRUE) {
 	 	global $RELATIVE_PATH_RESOURCES, $user;
-	 	require_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
 
 		$this->user_id = $user_id;
 		if (!$this->user_id)

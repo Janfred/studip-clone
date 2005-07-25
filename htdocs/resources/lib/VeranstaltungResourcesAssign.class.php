@@ -87,6 +87,13 @@ class VeranstaltungResourcesAssign {
 			}
 			$result = array_merge($result, $result2);
 		}
+		//Raumanfrage als bearbeitet markieren, wenn vorhanden
+		if(get_config('RESOURCES_ALLOW_ROOM_REQUESTS')){
+			$request = new RoomRequest(getSeminarRoomRequest($this->seminar_id));
+			if (!$request->isNew()){
+				$request->checkOpen(true);
+			}
+		}
 		return $result;
 	}
 	
@@ -330,6 +337,13 @@ class VeranstaltungResourcesAssign {
 			if ((!$check_only) && (!$overlaps)) {
 				$changeAssign->store();
 				$result[$changeAssign->getId()]=array("overlap_assigns"=>FALSE, "resource_id"=>$resource_id, "termin_id"=>$termin_id);
+				//Raumanfrage als bearbeitet markieren, wenn vorhanden
+				if(get_config('RESOURCES_ALLOW_ROOM_REQUESTS')){
+					$request = new RoomRequest(getDateRoomRequest($termin_id));
+					if (!$request->isNew()){
+						$request->checkOpen(true);
+					}
+				}
 			}
 		}
 		return $result;
