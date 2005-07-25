@@ -1,4 +1,4 @@
-<?
+<?php
 /**
 * admin_visibility.php - Sichtbarkeits-Administration von Stud.IP.
 * Copyright (C) 2002 Cornelis Kater <ckater@gwdg.de>, data-quest <info@data-quest.de>, (C) 2003 Tobias Thelen <tthelen@uni-osnabrueck.de>
@@ -18,19 +18,21 @@
 * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
-$auth->login_if($auth->auth["uid"] == "nobody");
-$perm->check("admin");
-
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
-
-// -- here you have to put initialisations for the current page
 require_once($ABSOLUTE_PATH_STUDIP . "dates.inc.php"); // Funktionen zum Loeschen von Terminen
 require_once($ABSOLUTE_PATH_STUDIP . "datei.inc.php"); // Funktionen zum Loeschen von Dokumenten
 require_once($ABSOLUTE_PATH_STUDIP . "functions.php");
 require_once($ABSOLUTE_PATH_STUDIP . "visual.inc.php");
 require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/Table.class.php");
 require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/ZebraTable.class.php");
+
+page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
+$auth->login_if($auth->auth["uid"] == "nobody");
+
+$needed_perm = (get_config('ALLOW_DOZENT_VISIBILITY') ? 'dozent' : 'admin');
+
+$perm->check($needed_perm);
+
+include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
 // Start of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
@@ -155,4 +157,4 @@ echo $containerTable->close();
 echo "</body>";
 echo "</html>";
 page_close();
-
+?>
