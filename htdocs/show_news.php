@@ -261,9 +261,7 @@ function show_news($range_id, $show_admin=FALSE,$limit="", $open, $width="100%",
 						$content.=$formular;
 					} else {
 						$numcomments=StudipComments::NumCommentsForObject($news_detail['news_id']);
-						if ($numcomments) {
-							$cmdline="<p align=center><font size=-1><a href=".$PHP_SELF."?comopen=".$news_detail['news_id'].$unamelink.">Kommentare lesen ($numcomments)</a></font></p>";
-						}
+						$cmdline="<p align=center><font size=-1><a href=".$PHP_SELF."?comopen=".$news_detail['news_id'].$unamelink.">".sprintf(_("Kommentare lesen (%s) / Kommentar schreiben"),$numcomments)."</a></font></p>";
 						$content.=$cmdline;
 					}
 				}
