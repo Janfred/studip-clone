@@ -1,4 +1,4 @@
-<?
+<?php
 
 /**
 * displays editable personal messaging-settings
@@ -35,6 +35,11 @@ require_once ($ABSOLUTE_PATH_STUDIP."/functions.php");
 require_once ($ABSOLUTE_PATH_STUDIP."/visual.inc.php");
 require_once ($ABSOLUTE_PATH_STUDIP."/messaging.inc.php");
 require_once ($ABSOLUTE_PATH_STUDIP."/contact.inc.php");
+require_once ($ABSOLUTE_PATH_STUDIP."/lib/classes/UserConfig.class.php");
+
+// access to user's config setting
+$user_cfg=new UserConfig();
+
 check_messaging_default();
 $db2=new DB_Seminar;
 $db3=new DB_Seminar;
@@ -55,21 +60,34 @@ if ($del_forwardrec_x) {
 
 $query = "SELECT * FROM user_info WHERE user_id='".$user->id."'";
 $db2->query($query);
-while ($db2->next_record()) {
-	$smsforward['copy'] = $db2->f("smsforward_copy");
-	$smsforward['rec'] = $db2->f("smsforward_rec");
-}
-
-// get email_forward
-$db2->query("SELECT email_forward FROM user_info WHERE user_id = '".$user->id."'");
 $db2->next_record();
+
+$smsforward['copy'] = $db2->f("smsforward_copy");
+$smsforward['rec'] = $db2->f("smsforward_rec");
+
 $email_forward = $db2->f("email_forward");
+
 if ($email_forward == "0") $email_forward = $GLOBALS["MESSAGING_FORWARD_DEFAULT"];
+
+$news_author_id = $db2->f("news_author_id");
+
+if($messaging_cmd=="change_view_insert"){
+	if(!$news_author_id){
+		$news_author_id = md5(uniqid("Newsexport",1));
+	}
+	if (!$export_news_as_rss){
+		$news_author_id = '';
+	}
+	$db2->query("UPDATE user_info SET news_author_id ='$news_author_id' WHERE user_id = '".$user->id."'");
+}
 
 //vorgenommene Anpassungen der Ansicht in Uservariablen schreiben
 if ($messaging_cmd=="change_view_insert" && !$set_msg_default_x && $newmsgset_x) {
 		$db2->query("UPDATE user_info SET email_forward = '".$send_as_email."' WHERE user_id = '".$user->id."'");
 		$email_forward = $send_as_email;
+ 
+	// write to user config table
+	$user_cfg->setValue($foaf_show_identity, $user->id, "FOAF_SHOW_IDENTITY");
 
 	$my_messaging_settings["changed"] = TRUE;
 	$my_messaging_settings["show_only_buddys"] = $show_only_buddys;
@@ -124,7 +142,7 @@ if ($do_add_user_x)
 ## FUNCTION ##
 
 function change_messaging_view() {
-	global $_fullname_sql,$my_messaging_settings, $PHP_SELF, $perm, $user, $search_exp, $add_user, $add_user_x, $do_add_user_x, $new_search_x, $i_page, $search_exp, $gosearch_x, $smsforward, $reset_txt, $email_forward;
+	global $_fullname_sql,$my_messaging_settings, $PHP_SELF, $perm, $user, $search_exp, $add_user, $add_user_x, $do_add_user_x, $new_search_x, $i_page, $search_exp, $gosearch_x, $smsforward, $reset_txt, $email_forward, $user_cfg, $FOAF_ENABLE;
 	$msging=new messaging;
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
@@ -326,13 +344,29 @@ function change_messaging_view() {
 						<input type="checkbox" name="start_messenger_at_startup" <? if ($my_messaging_settings["start_messenger_at_startup"]) echo " checked"; ?> >
 					</td>
 				</tr>
-
+				<?php
+				if (get_config('NEWS_RSS_EXPORT_ENABLE')){
+				?>
+				<tr <? $cssSw->resetClass() ?>>
+					<td colspan="2" align="center" class="steelgraulight" style="border-bottom:1px dotted black;border-top:1px dotted black;"><font size="-1"><b><?=_("Stud.IP-News")?></b></font></td>
+				</tr>
+				<tr <? $cssSw->switchClass() ?>>
+					<td align="right" class="blank">
+						<font size=-1><?=_("Stud.IP-News per RSS-Feed exportieren")?></font>
+					</td>
+					<td <?=$cssSw->getFullClass()?>>
+						<input type="checkbox" name="export_news_as_rss" <? if ($GLOBALS['news_author_id']) echo " checked"; ?> >
+					</td>
+				</tr>
+				<?php
+				}
+				?>
 				<tr <? $cssSw->switchClass() ?>>
 					<td colspan="2" align="center" class="steelgraulight" style="border-bottom:1px dotted black;border-top:1px dotted black;"><font size="-1"><b><?=_("Buddies/ Wer ist online?")?></b></font></td>
 				</tr>
 				<? if (GetNumberOfBuddies()) { ?>                      
 				<tr <? $cssSw->switchClass() ?>>
-					<td align="right" class="blank">
+					<td  align="right" class="blank" style="border-bottom:1px dotted black;">
 						<font size=-1><?=_("Nur Buddies in der &Uuml;bersicht der aktiven Benutzer anzeigen")?></font>
 					</td>
 					<td <?=$cssSw->getFullClass()?>>
@@ -340,8 +374,18 @@ function change_messaging_view() {
 					</td>
 				</tr>
 				<? } ?>
+				<? if ($FOAF_ENABLE) { ?>
 				<tr <? $cssSw->switchClass() ?>>
-					<td align="right" class="blank">
+					<td  align="right" class="blank" style="border-bottom:1px dotted black;">
+						<font size=-1><?=_("Eigene Identität in Verbindungsketten zwischen Nutzern (\"Friend of a friend\"-Liste) offenlegen")?></font>
+					</td>
+					<td <?=$cssSw->getFullClass()?>>
+						<input type="checkbox" name="foaf_show_identity"<? if ($user_cfg->getValue($user->id,"foaf_show_identity")) echo " checked"; ?> >
+					</td>
+				</tr>
+				<? } ?>
+				<tr <? $cssSw->switchClass() ?>>
+					<td  align="right" class="blank" style="border-bottom:1px dotted black;">
 						<font size=-1><?=_("Dauer bis inaktiv:")?></font>
 					</td>
 					<td <?=$cssSw->getFullClass()?>>
@@ -377,3 +421,4 @@ function change_messaging_view() {
 <?
 } 
 ?>
+
