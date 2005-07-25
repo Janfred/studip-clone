@@ -24,10 +24,10 @@ require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/language.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/object.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipNews.class.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipComments.class.php");
 
 function process_news_commands(&$cmd_data) {
 	global $nopen, $nclose, $comopen, $comnew, $comsubmit, $comdel, $comdelnews;
-
 	//Auf und Zuklappen News
 
 	$cmd_data["comopen"]='';
@@ -45,31 +45,28 @@ function process_news_commands(&$cmd_data) {
 	if ($comdelnews) $cmd_data["comdelnews"]=$comdelnews;
 }
 
-function get_num_comments($object_id) {
-	$query="SELECT COUNT(*) AS count FROM comments WHERE object_id='$object_id'";
-	$db=new DB_Seminar();
-	$db->query($query);
-	$db->next_record();
-	return $db->f("count");
-}
-
-function get_comments($object_id) {
-	global $_fullname_sql;
-	$comments=array();
-	$query="SELECT comments.content, comments.mkdate, " . $_fullname_sql['full'] ." AS fullname, a.username AS username, comments.comment_id FROM comments LEFT JOIN auth_user_md5 a USING (user_id) LEFT JOIN user_info USING (user_id) WHERE object_id='$object_id' ORDER BY comments.mkdate";
-	$db=new DB_Seminar();
-	$db->query($query);
-	while ($db->next_record()) {
-		$comments[]=array($db->f("content"), $db->f("fullname"), $db->f("username"), date("d.m.Y, H:i",$db->f("mkdate")), $db->f("comment_id"));
+function commentbox($num, $authorname, $authoruname, $date, $dellink, $content) {
+	global $PHP_SELF;
+	$out=array();
+	$out[]="<table style=\"border: 1px black solid;\" cellpadding=3 cellspacing=0 width=100%>";
+	$out[].="<tr style=\"background:#ffffcc\">";
+	$out[].="<td align=left style=\"border-bottom: 1px black dotted\">";
+	$out[].="<font size=-1>#$num - ";
+	$out[].="<a href=\"about.php?username=$authoruname\">$authorname</a> ";
+	$out[].=sprintf(_("hat am %s geschrieben:"),$date);
+	$out[].="</font>";
+	$out[].="</td>";
+	$out[].="<td align=right style=\"border-bottom: 1px black dotted\">";
+	if ($dellink) {
+		$out[].="<a href=\"$dellink\"><img src=\"pictures/trash.gif\" border=0></a>";
+	} else {
+		$out[]="&nbsp;";
 	}
-	return $comments;
-}
-
-function insert_comment($object_id, $content) {
-	global $auth;
-	$db=new DB_Seminar();
-	$q="INSERT INTO comments SET object_id='$object_id', user_id='".$auth->auth['uid']."', comment_id='".md5(uniqid("ohohokommentarohoh",1))."', content='$content', mkdate='".time()."', chdate='".time()."'";
-	$db->query($q);
+	$out[].="</td></tr>";
+	$out[].="<tr style=\"background:#ffffcc;\">";
+	$out[].="<td colspan=2><font size=-1>".formatReady($content)."<br>&nbsp;</font></td></tr>";
+	$out[].="</table>";
+	return implode("\n",$out);
 }
 
 function delete_comment($comment_id) {
@@ -179,8 +176,8 @@ function show_news($range_id, $show_admin=FALSE,$limit="", $open, $width="100%",
 			$uname = $db2->f('username');
 
 			if ($news_detail['allow_comments']==1) {
-				$num_comments=get_num_comments($news_detail['news_id']);
-				$zusatz.=" <font color=\"#aaaa66\">".$num_comments."</font><font color=\"black\"> |</font>";
+				$numcomments=StudipComments::NumCommentsForObject($news_detail['news_id']);
+				$zusatz.=" <font color=\"#aaaa66\">".$numcomments."</font><font color=\"black\"> |</font>";
 			}
 
 			if ($link)
@@ -218,65 +215,54 @@ function show_news($range_id, $show_admin=FALSE,$limit="", $open, $width="100%",
 				// Kommentare
 				//
 				if ($news_detail['allow_comments']==1) {
-					$cmdline="<p align=center><font size=-1><a href=".$PHP_SELF."?comnew=".$news_detail['news_id'].$unamelink.">"._("Kommentar schreiben")."</a></font></p>";
 					$showcomments=0;
 					if ($cmd_data["comsubmit"]==$news_detail['news_id']) {
 						global $comment_content;
-						insert_comment($news_detail['news_id'], $comment_content);
+						$comment=new StudipComments();
+						$comment->setValue('object_id', $news_detail['news_id']);
+						$comment->setValue('user_id', $auth->auth['uid']);
+						$comment->setValue('content', $comment_content);
+						$comment->store();
 						$showcomments=1;
 					} else if ($cmd_data["comdelnews"]==$news_detail['news_id']) {
 						delete_comment($cmd_data["comdel"]);
 						$showcomments=1;
-					} else if ($cmd_data["comnew"]==$news_detail['news_id']) {
-						$formular="&nbsp;<br>\n<form action=\"".$PHP_SELF."\" method=\"get\">";
-						$formular.="<table cellpadding=\"2\" cellspacing=\"0\" width=\"80%\" align=\"center\" style=\"background:#ffffcc; border: 1px black solid;\">";
-						$formular.="<input type=hidden name=\"comsubmit\" value=\"".$news_detail['news_id']."\">";
-						$formular.="<input type=hidden name=\"username\" value=\"$uname\">";
-						$formular.="<tr><td style=\"border-bottom: 1px black dotted;\"><font size=-1>"._("Bitte Kommentar eingeben:")."</font></td></tr>";
-						$formular.="<tr><td align=\"center\">";
-						$formular.="<textarea name=\"comment_content\" rows=10 cols=50></textarea>";
-						$formular.="</td></tr>";
-						$formular.="<tr><td align=\"center\">";
-						$formular.="<input type=\"image\" ".makeButton("absenden","src").">";
-						$formular.="</td></tr>";
-						$formular.="</table></form><p>&nbsp;</p>";
-						$content.=$formular;
-						$showcomments=1;
-						$newcomment=1;
-
 					}
 					if ($showcomments || $cmd_data["comopen"]==$news_detail['news_id']) {
-						$comments="\n<table border=\"0\" cellpadding=\"2\" cellspacing=\"0\" width=\"80%\" align=\"center\">";
-						$c=get_comments($news_detail['news_id']);
+						$comments="\n<table border=\"0\" cellpadding=\"2\" cellspacing=\"0\" width=\"90%\" align=\"center\" style=\"margin-top:10px\">";
+						$comments.="<tr align=center><td><font size=-1><b>"._("Kommentare")."<b></font></td></tr>";
+						$c=StudipComments::GetCommentsForObject($news_detail['news_id']);
 						if (count($c)) {
+							$num=0;
 							foreach ($c as $comment) {
-
 								$comments.="<tr><td>";
-								$comments.="<table style=\"border: 1px black solid;\" cellpadding=3 cellspacing=0 width=100%>";
-								$comments.="<tr style=\"background:#ffffcc\"><td align=right style=\"border-bottom: 1px black dotted\">";
-								$comments.="<font size=-1><a href=\"about.php?username=$comment[2]\">$comment[1]</a>  $comment[3]</font>";
-								if (get_userid($comment[2])==$auth->auth["uid"] || $news_detail['user_id']==$auth->auth["uid"]) {
-									$comments.="&nbsp;&nbsp;<a href=\"$PHP_SELF?comdel=".$comment[4]."&comdelnews=".$news_detail['news_id']."\"><img src=\"pictures/trash.gif\" border=0></a>&nbsp;";
+								if (get_userid($comment[2])==$auth->auth["uid"] || $news_detail['user_id']==$auth->auth["uid"] || $show_admin) {
+									$dellink="$PHP_SELF?comdel=".$comment[4]."&comdelnews=".$news_detail['news_id'];
+								} else {
+									$dellink=NULL;
 								}
+
+								$comments.=commentbox(++$num, $comment[1], $comment[2], $comment[3], $dellink, $comment[0]);
 								$comments.="</td></tr>";
-								$comments.="<tr style=\"background:#ffffcc;\"><td><font size=-1>".formatReady($comment[0])."<br>&nbsp;</font></td></tr>";
-								$comments.="</table></td></tr>";
 							}
 						}
 						$comments.="</table>";
-						if (!$newcomment) {
-							$content.=$cmdline.$comments;
-							$numcomments=get_num_comments($news_detail['news_id']);
-							if (!$cmd_data['comdel'] || $numcomments>=1) {
-								$content.=$cmdline;
-							}
-						} else {
-							$content.=$comments;
-						}
+						$content.=$comments;
+						$formular="&nbsp;<br>\n<form action=\"".$PHP_SELF."\" method=\"get\">";
+						$formular.="<input type=hidden name=\"comsubmit\" value=\"".$news_detail['news_id']."\">";
+						$formular.="<input type=hidden name=\"username\" value=\"$uname\">";
+						$formular.="<p align=\"center\">"._("Geben Sie hier Ihren Kommentar ein!")."</p>";
+						$formular.="<div align=\"center\">";
+						$formular.="<textarea name=\"comment_content\" style=\"width:70%\" rows=8 cols=38 wrap=virtual></textarea>";
+						$formular.="<br><br>";
+						$formular.="<input type=\"image\" ".makeButton("absenden","src").">";
+						$formular.="&nbsp;&nbsp;&nbsp;<a href=\"show_smiley.php\" target=\"new\"><font size=\"-1\">"._("Smileys")."</a>&nbsp;&nbsp;<a href=\"help/index.php?help_page=ix_forum6.htm\" target=\"new\"><font size=\"-1\">"._("Formatierungshilfen")."</a><br><br>";
+						$formular.="</div></form><p>&nbsp;</p>";
+						$content.=$formular;
 					} else {
-						$numcomments=get_num_comments($news_detail['news_id']);
+						$numcomments=StudipComments::NumCommentsForObject($news_detail['news_id']);
 						if ($numcomments) {
-							$cmdline="<p align=center><font size=-1><a href=".$PHP_SELF."?comopen=".$news_detail['news_id'].$unamelink.">Kommentare lesen ($numcomments)</a>&nbsp;|&nbsp;<a href=".$PHP_SELF."?comnew=".$news_detail['news_id'].$unamelink.">"._("Kommentar schreiben")."</a></font></p>";
+							$cmdline="<p align=center><font size=-1><a href=".$PHP_SELF."?comopen=".$news_detail['news_id'].$unamelink.">Kommentare lesen ($numcomments)</a></font></p>";
 						}
 						$content.=$cmdline;
 					}
@@ -284,7 +270,7 @@ function show_news($range_id, $show_admin=FALSE,$limit="", $open, $width="100%",
 
 				echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" align=\"center\"><tr>";
 				printcontent(0,0, $content, $edit);
-				echo "</tr></table>	";
+				echo "</tr></table>";
 			}
 	  	}
 	}
