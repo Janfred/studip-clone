@@ -37,14 +37,13 @@
 class SemesterData {
 	var $db;
 
-
 	function GetSemesterArray(){
 		static $all_semester;
 		if (is_null($all_semester)){
 			$semester = new SemesterData;
 			$all_semester = $semester->getAllSemesterData();
 			array_unshift($all_semester,0);
-			$all_semester[0] = array("name" => sprintf(_("vor dem %s"),$all_semester[1]['name']));
+			$all_semester[0] = array("name" => sprintf(_("vor dem %s"),$all_semester[1]['name']),'past' => true);
 		}
 		return $all_semester;
 	}

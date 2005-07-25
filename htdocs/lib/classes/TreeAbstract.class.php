@@ -91,7 +91,7 @@ class TreeAbstract {
 	* @param	mixed	$args			argumentlist passed to the constructor in the tree_class (if needed)
 	* @return	mixed	always an object, type is one of AbstractTree s childclasses 
 	*/
-	function &GetInstance($class_name, $args = null){
+	function &GetInstance($class_name, $args = null, $invalidate_cache = false){
 		static $tree_instance;
 		
 		if ($args){
@@ -110,7 +110,7 @@ class TreeAbstract {
 		} else {
 			$class_hash = $class_name;
 		}
-		if (!is_object($tree_instance[$class_hash])){
+		if (!is_object($tree_instance[$class_hash]) || $invalidate_cache){
 			$tree_instance[$class_hash] = new $class_name($args);
 		}
 		return $tree_instance[$class_hash];
@@ -139,7 +139,7 @@ class TreeAbstract {
 		$this->tree_num_childs = array();
 		$this->tree_data = array();
 		$this->index_offset = 0;
-		$this->tree_data['root'] = array('parent_id' => null, 'name' => $this->root_name, 'index' => 0);
+		$this->tree_data['root'] = array('parent_id' => null, 'name' => &$this->root_name, 'index' => 0);
 	}
 	
 	/**
@@ -159,6 +159,7 @@ class TreeAbstract {
 		$this->tree_data[$item_id]["priority"] = $priority;
 		$this->tree_data[$item_id]["name"] = $name;
 		$this->tree_childs[$parent_id][] = $item_id;
+		++$this->tree_num_childs[$parent_id];
 		return;
 	}
 	
@@ -388,6 +389,31 @@ class TreeAbstract {
 		$children = $this->getKids($parent_id);
 		$last = $this->getNumKids($parent_id) - 1;
 		return (int)$this->tree_data[$children[$last]]['priority'];
+	}
+
+	function getNumEntries($item_id, $num_entries_from_kids = false){
+		if (!$num_entries_from_kids || !$this->hasKids($item_id)){
+				return $this->tree_data[$item_id]["entries"];
+		} else {
+
+			return $this->getNumEntriesKids($item_id);
+		}
+	}
+	
+	function getNumEntriesKids($item_id, $in_recursion = false){
+		static $num_entries;
+		if (!$in_recursion){
+			$num_entries = 0;
+		}
+		$num_entries += $this->tree_data[$item_id]["entries"];
+		$num_kids = $this->getNumKids($item_id);
+		if ($num_kids){
+			$kids = $this->getKids($item_id);
+			for ($i = 0; $i < $num_kids; ++$i){
+				$this->getNumEntriesKids($kids[$i],true);
+			}
+		}
+		return (!$in_recursion) ? $num_entries : null;
 	}
 }
 ?>

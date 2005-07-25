@@ -35,8 +35,17 @@
 
 
 class HolidayData {
+	
 	var $db;
-
+	
+	function GetAllHolidaysArray(){
+		static $all_holiday;
+		if (is_null($all_holiday)){
+			$holiday = new HolidayData();
+			$all_holiday = $holiday->getAllHolidays();
+		}
+		return $all_holiday;
+	}
 
 	function HolidayData() {
 		$this->db = new DB_Seminar;

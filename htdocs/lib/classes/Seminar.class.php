@@ -43,6 +43,25 @@ class Seminar {
 	var $db;     //unsere Datenbankverbindung
 	var $db2;     //unsere Datenbankverbindung
 	
+	function &GetInstance($id = false, $refresh_cache = false){
+		
+		static $seminar_object_pool;
+		
+		if ($id){
+			if ($refresh_cache){
+				$seminar_object_pool[$id] = null;
+			}
+			if (is_object($seminar_object_pool[$id]) && $seminar_object_pool[$id]->getId() == $id){
+				return $seminar_object_pool[$id];
+			} else {
+				$seminar_object_pool[$id] = new Seminar($id);
+				return $seminar_object_pool[$id];
+			}
+		} else {
+			return new Seminar(false);
+		}
+	}
+	
 	/**
 	* Constructor
 	*
@@ -341,7 +360,7 @@ class Seminar {
 
 			//write the default module-config
 			$Modules = new Modules;
-			$Modules->writeDefaultStatus($sem_create_data["sem_id"]);
+			$Modules->writeDefaultStatus($this->id);
 		} else {
 			$query = "UPDATE seminare SET
 				VeranstaltungsNummer = '".		mysql_escape_string($this->seminar_number)."', 
