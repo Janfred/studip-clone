@@ -82,7 +82,7 @@ if ($auth->auth["uid"] == "nobody") { ?>
 				<tr>
 
 <?
-				echo MakeToolbar("pictures/home.gif","index.php",_("Start"),_("Zur Startseite"),40,"_top","left", "FALSE", "1");
+				echo MakeToolbar("pictures/home.gif","index.php",_("Start"),_("Zur Startseite"),40,"_top","center", "FALSE", "1");
 				echo MakeToolbar("pictures/meinesem.gif","freie.php",_("Freie"),_("Freie Veranstaltungen"),40, "_top","left", "FALSE", "2");
 				
 ?>				
@@ -164,7 +164,7 @@ if ($auth->auth["uid"] == "nobody") { ?>
 	$home_icon = ($global_obj['eval']['neue'] || $global_obj['vote']['neue'] || $global_obj['news']['neue'] ? "pictures/home_red.gif" : "pictures/home.gif");
 	$home_info .= ($global_obj['news']['neue'] ? " - " . sprintf(_(" %s neue News"), $global_obj['news']['neue']) : "");
 	$home_info .= (($global_obj['vote']['neue'] + $global_obj['eval']['neue']) ? " - " . sprintf(_(" %s neue Umfrage(n)"), ($global_obj['vote']['neue'] + $global_obj['eval']['neue'])) : "");
-	echo MakeToolbar($home_icon  ,"index.php",_("Start"),_("Zur Startseite") . $home_info,40,"_top", "left", "FALSE", "1");
+	echo MakeToolbar($home_icon  ,"index.php",_("Start"),_("Zur Startseite") . $home_info,40,"_top", "center", "FALSE", "1");
 	echo MakeToolbar("pictures/meinesem.gif",($perm->have_perm("root")) ? "sem_portal.php" : "meine_seminare.php",_("Veranstaltungen"),_("Meine Veranstaltungen & Einrichtungen"),90, "_top","left", "FALSE", "2");
 
 //Nachrichten anzeigen
@@ -323,7 +323,7 @@ if ($auth->auth["uid"] == "nobody") { ?>
 ?>
 <?		
 		echo MakeToolbar("pictures/hilfe.gif","./help/index.php$help_query",_("Hilfe"),_("Hilfe zu dieser Seite"),40, "_new","right","FALSE", "9");
-		echo MakeToolbar("pictures/logout.gif","logout.php",_("Logout"),_("Aus dem System abmelden"),40, "_top", "right", "FALSE", "0");
+		echo MakeToolbar("pictures/logout.gif","logout.php",_("Logout"),_("Aus dem System abmelden"),40, "_top", "center", "FALSE", "0");
 
 ?>
 	</tr>
