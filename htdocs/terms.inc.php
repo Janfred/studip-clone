@@ -39,7 +39,7 @@ function check_terms($userid, $_language_path) {
 	global $i_accept_the_terms;
 
 	if ($i_accept_the_terms == "yes") return;
-	if (!$GLOBALS['user']->get_last_action()) {
+	if ($GLOBALS['auth']->auth['uid'] != 'nobody' && !$GLOBALS['user']->get_last_action()) {
 		?>
 		<table width="80%" align="center" border=0 cellpadding=0 cellspacing=0>
 		<tr><td class="topic"><img src="pictures/login.gif" border="0"><b>&nbsp;<?=_("Nutzungsbedingungen")?></b></td></tr>
