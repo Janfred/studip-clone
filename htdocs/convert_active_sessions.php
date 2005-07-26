@@ -55,7 +55,7 @@ class ConvertSeminarUser{
 echo "<pre>";
 $converter = new ConvertSeminarUser();
 $db = new DB_Seminar();
-$db->query("SELECT sid,username FROM active_sessions LEFT JOIN auth_user_md5 ON(sid=user_id) WHERE name='Seminar_User'");
+$db->query("SELECT sid,username FROM active_sessions INNER JOIN auth_user_md5 ON(sid=user_id) WHERE name='Seminar_User'");
 while ($db->next_record()){
 	echo $db->f('sid') . " : " . $db->f('username') . " ";
 	$converter->user_id = $db->f('sid');
@@ -64,6 +64,8 @@ while ($db->next_record()){
 	echo "\n";
 	flush();
 }
+echo "Optimiere Tabelle: " . PHPLIB_USERDATA_TABLE . "\n";
+$db->query("OPTIMIZE TABLE " . PHPLIB_USERDATA_TABLE);
 echo "uff, geschafft!";
 page_close();
 ?>
