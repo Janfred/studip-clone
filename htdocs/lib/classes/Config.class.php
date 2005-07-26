@@ -39,6 +39,21 @@ class Config {
 	var $key; // key
 	var $data; // assoc. array for caching ([$key]=>value ) 
 	var $defaults; // assoc. arry for defaults ([$key]=>value)
+	
+	function &GetInstance($refresh_cache = false){
+		
+		static $config_object;
+		
+		if ($refresh_cache){
+			$config_object = null;
+		}
+		if (is_object($config_object)){
+			return $config_object;
+		} else {
+			$config_object = new Config();
+			return $config_object;
+		}
+	}
 
 	/**
 	 * Construct Config object.

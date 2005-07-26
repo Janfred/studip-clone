@@ -88,7 +88,7 @@ class DB_Ilias extends DB_Sql {
 
 /*class for config; load config in globals (should be deprecated in future)
 ----------------------------------------------------------------*/
-$cfg = new Config;
+$cfg = &Config::GetInstance();
 $cfg-> extractAllGlobal(FALSE);
 
 //we leave the $cfg class for general use later...
@@ -425,14 +425,14 @@ class Seminar_Auth extends Auth {
         $challenge = md5(uniqid($this->magic));
         $sess->register("challenge");
     }
-
+	
 		include("$ABSOLUTE_PATH_STUDIP/crcloginform.ihtml");
 	}
 	
 	function auth_validatelogin() {
 		global $username, $password, $challenge, $response, $resolution;
 		global $_language, $_language_path, $login_ticket;
-
+		
 		//prevent replay attack
 		if (!Seminar_Session::check_ticket($login_ticket)){
 			return false;
@@ -444,6 +444,7 @@ class Seminar_Auth extends Auth {
 		}		
 		
 		$_language_path = init_i18n($_language);
+		
 		
 		$this->auth["uname"] = $username;	// This provides access for "loginform.ihtml"
 		$this->auth["jscript"] = ($resolution != "");
