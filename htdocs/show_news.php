@@ -216,7 +216,7 @@ function show_news($range_id, $show_admin=FALSE,$limit="", $open, $width="100%",
 						$comment=new StudipComments();
 						$comment->setValue('object_id', $news_detail['news_id']);
 						$comment->setValue('user_id', $auth->auth['uid']);
-						$comment->setValue('content', $comment_content);
+						$comment->setValue('content', stripslashes($comment_content));
 						$comment->store();
 						$showcomments=1;
 					} else if ($cmd_data["comdelnews"]==$news_detail['news_id']) {
@@ -243,7 +243,7 @@ function show_news($range_id, $show_admin=FALSE,$limit="", $open, $width="100%",
 						}
 						$comments.="</table>";
 						$content.=$comments;
-						$formular="&nbsp;<br>\n<form action=\"".$PHP_SELF."#anker\" method=\"get\">";
+						$formular="&nbsp;<br>\n<form action=\"".$PHP_SELF."#anker\" method=\"POST\">";
 						$formular.="<input type=hidden name=\"comsubmit\" value=\"".$news_detail['news_id']."\">";
 						$formular.="<input type=hidden name=\"username\" value=\"$uname\">";
 						$formular.="<p align=\"center\">"._("Geben Sie hier Ihren Kommentar ein!")."</p>";
