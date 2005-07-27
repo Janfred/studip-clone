@@ -124,7 +124,7 @@ class StudipLitSearchPluginZ3950Abstract extends StudipLitSearchPluginAbstract{
         yaz_range($this->z_id, $this->z_start_range, 5);
         yaz_syntax($this->z_id, $this->z_syntax);
 		yaz_search($this->z_id,"rpn", $rpn);
-        yaz_wait(array('timeout' => $this->z_timeout));
+        yaz_wait(($options = array('timeout' => $this->z_timeout)));
 		if (yaz_errno($this->z_id)){
 			$this->addError("error", sprintf(_("Fehler bei der Suche: %s"), yaz_error($this->z_id)));
 			$this->doResetSearch();
