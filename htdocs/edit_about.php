@@ -704,7 +704,6 @@ if (!$username) $username = $auth->auth["uname"];
 $my_about = new about($username,$msg);
 $cssSw = new cssClassSwitcher;
 $DataFields = new DataFields($my_about->auth_user["user_id"]);
-$ucfg = new UserConfig;
 
 if ($logout)  // wir wurden gerade ausgeloggt...
 	{
@@ -804,7 +803,8 @@ if(check_ticket($ticket)){
 		$_language = $forced_language;
 		$forum["jshover"]=$jshover; 
 		$my_studip_settings["startpage_redirect"] = $personal_startpage;
-		$ucfg->setValue($_REQUEST['accesskey_enable'], $user->id, "ACCESSKEY_ENABLE");
+		$user->cfg->setValue((int)$_REQUEST['accesskey_enable'], $user->id, "ACCESSKEY_ENABLE");
+		$user->cfg->setValue((int)$_REQUEST['showsem_enable'], $user->id, "SHOWSEM_ENABLE");
 	}
 	
 	if ($my_about->logout_user)

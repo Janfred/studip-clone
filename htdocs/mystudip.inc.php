@@ -76,7 +76,6 @@ function change_general_view() {
 		
 	$db = new DB_Seminar;
 	$cssSw = new cssClassSwitcher;
-	$ucfg = new UserConfig();
 	?>
 	<table width="100%" border="0" cellpadding="0" cellspacing="0" align="center">
 		<tr>
@@ -160,8 +159,26 @@ function change_general_view() {
 					</td>
 					<td <?=$cssSw->getFullClass()?>>
 						<?
-						echo "<input type=CHECKBOX name='accesskey_enable' value=1";
-						IF ($ucfg->getValue($user->id, "ACCESSKEY_ENABLE")) {
+						echo "<input type=\"CHECKBOX\" name=\"accesskey_enable\" value=\"1\"";
+						IF ($user->cfg->getValue($user->id, "ACCESSKEY_ENABLE")) {
+							echo " checked";
+						}
+						echo ">";
+						?>
+						</font><br><br>
+					</td>
+				</tr>
+				<tr  <? $cssSw->switchClass() ?>>
+					<td  align="right" class="blank" style="border-bottom:1px dotted black;">
+						<font size="-1"><?print _("Semesteranzeige auf &raquo;Meine Veranstaltungen&laquo;");?></font><br />
+						<br><div align="left"><font size="-1">
+						<?print _("Mit dieser Einstellung k&ouml;nnen Sie auf der Seite &raquo;Meine Veranstaltungen&laquo; die Einblendung des Start- und Endsemesters hinter jeder Veranstaltung aktivieren.");?>
+						</font></div>
+					</td>
+					<td <?=$cssSw->getFullClass()?>>
+						<?
+						echo "<input type=\"CHECKBOX\" name=\"showsem_enable\" value=\"1\"";
+						IF ($user->cfg->getValue($user->id, "SHOWSEM_ENABLE")) {
 							echo " checked";
 						}
 						echo ">";
