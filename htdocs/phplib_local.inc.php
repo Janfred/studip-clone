@@ -32,6 +32,7 @@ if (!defined('PHPLIB_SESSIONDATA_TABLE')){
 require_once("$ABSOLUTE_PATH_STUDIP/language.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/auth_plugins/StudipAuthAbstract.class.php");
 require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/Config.class.php");
+require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/UserConfig.class.php");
 require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipNews.class.php");
 
 if (strpos( PHP_OS,"WIN") !== false && $CHAT_ENABLE == true && $CHAT_SERVER_NAME == "ChatShmServer")	//Attention: file based chat for windows installations (slow)
@@ -89,7 +90,8 @@ class DB_Ilias extends DB_Sql {
 /*class for config; load config in globals (should be deprecated in future)
 ----------------------------------------------------------------*/
 $cfg = &Config::GetInstance();
-$cfg-> extractAllGlobal(FALSE);
+$cfg->extractAllGlobal(FALSE);
+unset($cfg);
 
 //we leave the $cfg class for general use later...
 
@@ -276,9 +278,10 @@ class Seminar_User extends User {
 	var $magic	  = "dsfgakdfld";     // ID seed
 	var $that_class     = "Seminar_User_CT_Sql"; // data storage container
 	var $fake_user = false;
-	
+	var $cfg = null; //UserConfig object
 	
 	function Seminar_User($uid = null){
+		$this->cfg =& new UserConfig();
 		if ($uid){
 			if (!is_object($GLOBALS['auth']) ||
 			(is_object($GLOBALS['auth']) && $uid != $GLOBALS['auth']->auth['uid'])){
@@ -287,6 +290,11 @@ class Seminar_User extends User {
 				$this->start($uid);
 			}
 		}
+	}
+	
+	function start($uid){
+		parent::start($uid);
+		$this->cfg->setUserId($uid);
 	}
 	
 	function freeze(){
