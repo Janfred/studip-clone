@@ -1269,9 +1269,7 @@ function tooltip ($text, $with_alt = TRUE, $with_popup = FALSE) {
 */
 function MakeToolbar ($icon,$URL,$text,$tooltip,$size,$target="_top",$align="center",$toolwindow="FALSE", $accesskey=FALSE) {
 	global $user;
-	$ucfg = new UserConfig($user->id, "ACCESSKEY_ENABLE");
-
-	if (!$ucfg->getValue())
+	if (is_object($user) && !$user->cfg->getValue(null,"ACCESSKEY_ENABLE"))
 		$accesskey = FALSE;
 	if ($accesskey !== FALSE)
 		$accesskey_tooltip = "  [ALT] + ".strtoupper($accesskey);
