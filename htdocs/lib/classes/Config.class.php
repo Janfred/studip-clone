@@ -37,8 +37,8 @@
 class Config {
 	var $db; // DB connection
 	var $key; // key
-	var $data; // assoc. array for caching ([$key]=>value ) 
-	var $defaults; // assoc. arry for defaults ([$key]=>value)
+	var $data = array(); // assoc. array for caching ([$key]=>value ) 
+	var $defaults = array(); // assoc. arry for defaults ([$key]=>value)
 	
 	function &GetInstance($refresh_cache = false){
 		
@@ -63,8 +63,8 @@ class Config {
 	 */
 	function Config($key = NULL) {
 		$this->key = $key;
-		$this->data = array ();
 		$this->db = new DB_Seminar();
+		$this->_retrieveAll();
 	}
 
 	/**
@@ -79,14 +79,10 @@ class Config {
 	function getValue($key = NULL) {
 		if ($key == NULL)
 			$key = $this->key;
-		if (!isset ($this->data[$key])) { // check for cached value
+		if (!isset ($this->data[$key]) && !isset ($this->defaults[$key])) { // check for cached value
 			$this->_retrieve($key); // otherwise, retrieve
 		}
-		if (!isset ($this->data[$key])) { // check for cached value again
-			return $this->getDefault($key); // return default, if no value in db
-		} else {
-			return $this->data[$key]; // return value from db
-		}
+		return (isset($this->data[$key]) ? $this->data[$key] : $this->defaults[$key]);
 	}
 
 	/**
@@ -96,9 +92,36 @@ class Config {
 		$sql = "SELECT config_id, field, value, type, description, comment, message_template FROM `config` ORDER BY field, position";
 		$this->db->query($sql);
 		while ($this->db->next_record()) {
-			$arr[$this->db->f("field")] = array("value" =>$this->db->f("value"), "id"=>$this->db->f("config_id"), "type" =>$this->db->f("type"), "comment" =>$this->db->f("comment"), "description" =>$this->db->f("description"), "message_template" =>$this->db->f("message_template"));
+			$arr[$this->db->f("field")] = array("value" =>$this->db->f("value"), "id"=>$this->db->f("config_id"), "type" =>$this->db->f("type"), "comment" =>$this->db->f("comment"), "description" =>$this->db->f("description"), "message_template" =>$this->db->f("message_template"), "section"=>$this->db->f("section"));
 		}
 		return $arr;
+	}
+	
+	/**
+	 * Return array with all default fields
+	 * 
+	 * @param   string
+	 * @return	array	array with the fields based on config-table
+	 */
+	function getAllDefaults($range = null) {
+		$arr=array();
+		$query_range = ($range ? " AND range='$range' " : "");
+		$sql = "SELECT config_id, field, value, description, type, section FROM config WHERE is_default = '1' $query_range";
+		$this->db->query($sql);
+		while ($this->db->next_record()) {
+			$arr[$this->db->f("field")] = array("value" =>$this->db->f("value"), "id"=>$this->db->f("config_id"), "description"=>$this->db->f("description"), "comment"=>$this->db->f("comment"), "message_template"=>$this->db->f("message_template"), "type"=>$this->db->f("type"), "section"=>$this->db->f("section"));
+		}
+		return $arr;
+	}
+	
+	function getAllFieldNames($range){
+		$ret = array();
+		$query_range = ($range ? " WHERE range='$range' " : "");
+		$this->db->query("SELECT DISTINCT(field) FROM config $query_range");
+		while($this->db->next_record()){
+			$ret[] = $this->db->f(0);
+		}
+		return $ret;
 	}
 
 	/**
@@ -208,10 +231,9 @@ class Config {
 	 * @param	bool	If true: check if variable already set and skip (default: FALSE)
 	 */
 	function extractAllGlobal($check=FALSE) {
-		$arr=$this->getAll();
-		foreach ($arr as $key=>$value) {
+		foreach ($this->getAllFieldNames('global') as $key) {
 			if (!($check && isset($GLOBALS[$key]))) {
-				$GLOBALS[$key]=$this->getValue($key);
+				$GLOBALS[$key] = $this->getValue($key);
 			}
 		}			
 	}
@@ -248,6 +270,20 @@ class Config {
 		if (!$has_default_value) {
 			unset ($this->defaults[$key]);
 		}
+	}
+	
+	function _retrieveAll() {
+		$this->defaults = array();
+		$this->data = array();
+		$sql = "SELECT `value`, `is_default`,`field` FROM `config`";
+		$this->db->query($sql);
+		while ($this->db->next_record()) { // get value and default
+			if ($this->db->f("is_default")) {
+				$this->defaults[$this->db->f("field")] = $this->db->f("value");
+			} else {
+				$this->data[$this->db->f("field")] = $this->db->f("value");
+			}
+		} 
 	}
 }
 

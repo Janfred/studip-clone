@@ -52,6 +52,9 @@ class UserConfig {
     	$this->key=$key;
     	$this->data=array();
     	$this->db=new DB_Seminar();
+		if ($this->user_id){
+			$this->_retrieveAll();
+		}
     }
 
 
@@ -68,30 +71,13 @@ class UserConfig {
 	function getValue($user_id=NULL, $key=NULL) {
 		if ($user_id==NULL) $user_id=$this->user_id;
 		if ($key==NULL) $key=$this->key;
-		if (!isset($this->data[$user_id][$key])) { // check for cached value
+		if (!isset ($this->data[$user_id][$key]) && !isset ($this->defaults[$key])) { // check for cached value
 			$this->_retrieve($user_id, $key); // otherwise, retrieve
 		}
-		if (!isset($this->data[$user_id][$key])) { // check for cached value again
-			return $this->getDefault($key);	// return default, if no value in db
-		} else {
-			return $this->data[$user_id][$key]; // return value from db
-		}
+		return (isset($this->data[$user_id][$key]) ? $this->data[$user_id][$key] : $this->defaults[$key]);
 	}
 
-	/**
-	 * Return array with all fields, setted for range "user" in the config-table
-	 * 
-	 * @return	array	array with the fields based on config-table
-	 */
-	function getAllDefaults() {
-		$arr=array();
-		$sql="SELECT config_id, field, value, description, type, section FROM config WHERE range='user' AND is_default = '1'";
-		$this->db->query($sql);
-		while ($this->db->next_record()) {
-			$arr[$this->db->f("field")] = array("value" =>$this->db->f("value"), "id"=>$this->db->f("config_id"), "description"=>$this->db->f("description"), "comment"=>$this->db->f("comment"), "message_template"=>$this->db->f("message_template"), "type"=>$this->db->f("type"), "section"=>$this->db->f("section"));
-		}
-		return $arr;
-	}
+	
 
 
 	/**
@@ -102,7 +88,8 @@ class UserConfig {
 	function getAll($user_id=NULL) {
 		if ($user_id==NULL) $user_id=$this->user_id;
 		//first, get all default values from config#
-		$arr = $this->getAllDefaults();
+		$cfg =& Config::GetInstance();
+		$arr = $cfg->getAllDefaults('user');
 
 		$sql="SELECT userconfig_id, field, value, comment FROM user_config WHERE user_id='$user_id'";
 		$this->db->query($sql);
@@ -186,10 +173,10 @@ class UserConfig {
 	 */
 	function getDefault($key) {
 	 	if (!isset($this->defaults[$key])) {
-	 		$cfg=new Config($key);
-	    		$this->defaults[$key]=$cfg->getValue();
+	 		$cfg =& Config::GetInstance();
+	    	$this->defaults[$key] = $cfg->getValue($key);
 		}
-		return $defaults[$key];
+		return $this->defaults[$key];
 	}
 
 	/**
@@ -199,7 +186,8 @@ class UserConfig {
 	 * @return	void
 	 */
 	function setUserId($user_id) {
-		$this->user_id=$user_id;
+		$this->user_id = $user_id;
+		$this->_retrieveAll();
 	}
 	
 	/**
@@ -234,6 +222,21 @@ class UserConfig {
     		$this->data[$user_id][$key]=$this->db->f("value");
     	} else {
     		unset($this->data[$user_id][$key]);
+			$this->getDefault($key);
+    	}
+    }
+	
+	function _retrieveAll() {
+		$this->data[$this->user_id] = array();
+		$this->defaults[$this->user_id] = array();
+		$cfg =& Config::GetInstance();
+		foreach ($cfg->getAllFieldNames('user') as $key) {
+			$this->getDefault($key);
+		}
+    	$sql = "SELECT field, value FROM user_config WHERE user_id='{$this->user_id}'";
+    	$this->db->query($sql);
+		while($this->db->next_record()){
+    		$this->data[$this->user_id][$this->db->f("field")] = $this->db->f("value");
     	}
     }
     
