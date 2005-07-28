@@ -676,12 +676,17 @@ function forum_print_navi ($forum) {
 *
 **/
 function CreateTopic ($name="[no name]", $author="[no author]", $description="", $parent_id="0", $root_id="0", $tmpSessionSeminar=0, $user_id=FALSE, $writeextern=TRUE)
-
-{	global $SessionSeminar,$auth, $PHP_SELF, $user, $perm;
+{	
+	static $count;
+	
+	global $SessionSeminar,$auth, $PHP_SELF, $user, $perm;
 	if (!$tmpSessionSeminar)
 		$tmpSessionSeminar=$SessionSeminar;
 	$db=new DB_Seminar;
 	$mkdate = time();
+	
+	$mkdate += $count++; //übler Hack,um Sortierreihenfolge für den DateAssi zu bekommen :)
+	
 	if ($writeextern == FALSE) {
 		$chdate = $mkdate-1;   	// der Beitrag wird für alle ausser dem Author "versteckt"
 	}
