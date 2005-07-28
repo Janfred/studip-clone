@@ -672,7 +672,6 @@ function listPages($mode, $sortby=NULL) {
 	if ($mode=="all") {
 		$q="SELECT keyword, MAX(chdate) AS lastchange, MAX(version) AS lastversion FROM wiki WHERE range_id='$SessSemName[1]' GROUP BY keyword " . $sort;
 	} else if ($mode=="new") {
-		$lastlogindate = $loginfilelast[$SessSemName[1]];
 		$q="SELECT keyword, MAX(chdate) AS lastchange, MAX(version) AS lastversion FROM wiki WHERE range_id='$SessSemName[1]' AND chdate > '$lastlogindate' GROUP BY keyword " . $sort;
 	}
 	$result=$db->query($q);
