@@ -97,7 +97,7 @@ class ShowList extends ShowTreeRow{
 
 		if ($this->simple_list){
 			//create a simple list intead of printhead/printcontent-design
-			$return="<li><a href=\"$PHP_SELF?view=view_details&actual_object=".$resObject->getId().$link_add."\">".$resObject->getName()."</a></li>\n";
+			$return="<li><a href=\"$PHP_SELF?view=view_details&actual_object=".$resObject->getId().$link_add."\">".htmlReady($resObject->getName())."</a></li>\n";
 			print $return;
 		} else {
 			//Daten vorbereiten
@@ -131,9 +131,9 @@ class ShowList extends ShowTreeRow{
 				$titel = "<a href=\"$link\" class=\"tree\" >$titel</a>";
 			
 			if ($resObject->getOwnerLink())
-				$zusatz=sprintf (_("verantwortlich:")." <a href=\"%s\"><font color=\"#333399\">%s</font></a>", $resObject->getOwnerLink(), $resObject->getOwnerName());
+				$zusatz=sprintf (_("verantwortlich:")." <a href=\"%s\"><font color=\"#333399\">%s</font></a>", $resObject->getOwnerLink(), htmlReady($resObject->getOwnerName()));
 			else			
-				$zusatz=sprintf (_("verantwortlich:")." %s", $resObject->getOwnerName());
+				$zusatz=sprintf (_("verantwortlich:")." %s", htmlReady($resObject->getOwnerName()));
 			
 			if ($perm->have_perm('root') || getGlobalPerms($user->id) == "admin"){
 				$simple_perms = 'admin';
@@ -177,7 +177,7 @@ class ShowList extends ShowTreeRow{
 					} 
 					$edit.= "&nbsp;&nbsp;&nbsp;&nbsp;";
 				} 
-				if ($resources_data["view_mode"] == "oobj"){
+				if ($view_mode == "oobj"){
 					if ($simple_perms) 
 						if ($resObject->getCategoryId())
 							$edit.= "<a href=\"$PHP_SELF?show_object=$resObject->id&view=openobject_schedule\">".makeButton("belegung")."</a>&nbsp;";
