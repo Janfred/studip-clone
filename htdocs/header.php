@@ -241,7 +241,7 @@ if ($auth->auth["uid"] == "nobody") { ?>
 			if ($user_count == 1) {
 				echo MakeToolbar("pictures/nutzeronline.gif","online.php",_("Online"),_("Auﬂer Ihnen ist eine Person online"),55, "_top","left", "FALSE", "4");
 			} else {
-				echo MakeToolbar("pictures/nutzeronline.gif","online.php",_("Online"),sprintf(_("Es sind auﬂer Ihnen %s Personen online"), count($online)),55, "_top","left", "FALSE", "4");
+				echo MakeToolbar("pictures/nutzeronline.gif","online.php",_("Online"),sprintf(_("Es sind auﬂer Ihnen %s Personen online"), $user_count),55, "_top","left", "FALSE", "4");
 			}
 		}
 
