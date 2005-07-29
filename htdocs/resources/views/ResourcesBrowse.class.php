@@ -93,8 +93,7 @@ class ResourcesBrowse {
 		?>
 		<tr>
 			<td <? $this->cssSw->switchClass(); echo $this->cssSw->getFullClass() ?> align="center" <? echo ($this->mode == "browse") ? "colspan=\"2\"" : "" ?>>
-				<font size=-1>freie Suche:&nbsp;
-				<? if ($this->mode == "browse"){?>
+				<font size=-1><?=_("freie Suche")?>:&nbsp;
 					<select name="resources_search_range" style="vertical-align:middle">
 					<option value="0" selected><?=htmlReady($GLOBALS['UNI_NAME'])?></option>
 					<?if ($this->open_object){
@@ -103,9 +102,10 @@ class ResourcesBrowse {
 						<option value="<?=$this->open_object?>" selected><?=htmlReady($res->getName())?></option>
 					<?}?>
 					</select>
-				<?}?>
-				<input name="search_exp"  type="TEXT" style="{vertical-align: middle;}" size=30 maxlength=255 value="<? echo stripslashes($this->searchArray["search_exp"]); ?>" />
+				<input name="search_exp"  type="TEXT" style="{vertical-align: middle;}" size=35 maxlength=255 value="<? echo stripslashes($this->searchArray["search_exp"]); ?>" />
 				<input type="IMAGE" align="absmiddle"  <? echo makeButton ("suchestarten", "src") ?> name="start_search" border=0 value="<?=_("Suche starten")?>">
+				&nbsp;
+				<a href="<?=$PHP_SELF?>?quick_view=search&quick_view_mode=<?=$GLOBALS['view_mode']?>&reset=TRUE"><?=makeButton("neuesuche")?></a>
 			</td>
 		</tr>
 		<?
@@ -160,15 +160,16 @@ class ResourcesBrowse {
 	
 	//private
 	function showTimeRange() {
+		$colspan = $this->mode == 'browse' ? ' colspan="2" ' : '';
 		?>	
 		<tr>
-			<td <? $this->cssSw->switchClass(); echo $this->cssSw->getFullClass() ?> >
+			<td <? $this->cssSw->switchClass(); echo $this->cssSw->getFullClass() ?> <?=$colspan?> >
 				<font size="-1"><?=_("gefundene Ressourcen sollen zu folgender Zeit <u>nicht</u> belegt sein:")?></font>
 			<br />
 			</td>
 		</tr>
 		<tr>	
-			<td <? $this->cssSw->switchClass(); echo $this->cssSw->getFullClass() ?> >
+			<td <? $this->cssSw->switchClass(); echo $this->cssSw->getFullClass() ?> <?=$colspan?> >
 			<font size="-1">
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				<?=_("Datum")?>:
