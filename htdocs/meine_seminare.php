@@ -220,7 +220,7 @@ function print_seminar_content ($semid, $my_obj_values, $type = 'seminar') {
   // Wikiseiten
   if ($GLOBALS['WIKI_ENABLE']) {  
 	  if ($my_obj_values["neuewikiseiten"])
-			echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to=wiki.php?view=listnew\"><img src='pictures/icon-wiki2.gif' border=0 ".tooltip(sprintf(_("%s WikiSeiten, %s Änderungen"), $my_obj_values["wikiseiten"], $my_obj_values["neuewikiseiten"]))."></a>";
+			echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to=wiki.php&view=listnew\"><img src='pictures/icon-wiki2.gif' border=0 ".tooltip(sprintf(_("%s WikiSeiten, %s Änderungen"), $my_obj_values["wikiseiten"], $my_obj_values["neuewikiseiten"]))."></a>";
 	  elseif ($my_obj_values["wikiseiten"])
 			echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to=wiki.php\"><img src='pictures/icon-wiki.gif' border=0 ".tooltip(sprintf(_("%s WikiSeiten"), $my_obj_values["wikiseiten"]))."></a>";
 	  else
