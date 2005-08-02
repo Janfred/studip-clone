@@ -36,7 +36,7 @@ if (ini_get('zlib.output_compression')){
 if (!ini_get('allow_url_fopen')){
 	@ini_set('allow_url_fopen','1');
 }
-$dont_put_headers=TRUE;
+ob_start();
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 
 require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php");
@@ -204,6 +204,10 @@ if ($force_download) {
 			$content_type="application/zip";
 			$content_disposition="inline";		
 		break;
+		case "swf": 
+			$content_type="application/x-shockwave-flash";
+			$content_disposition="inline";		
+		break;
 		default:
 			$content_type="application/octet-stream";
 			$content_disposition="inline";		
@@ -326,7 +330,9 @@ if ($filesize != FALSE) header("Content-Length: $filesize");
 header("Content-Disposition: $content_disposition; filename=\"$file_name\"");
 if ($type != 5){
 	@readfile($path_file);
-	TrackAccess($file_id);
+	if(!in_array($type, array(1,2,3,4,5))){
+		TrackAccess($file_id, 'dokument');
+	}
 } else {
 	echo $the_data;
 }

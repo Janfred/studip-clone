@@ -161,6 +161,7 @@ function createSelectedZip ($file_ids, $perm_check = TRUE) {
 		while ($db->next_record()) {
 			$docs++;
 			@copy($UPLOAD_PATH . '/' . $db->f('dokument_id'), $tmp_full_path . '/[' . $docs . ']_' . escapeshellcmd(prepareFilename($db->f("filename"), FALSE)));
+			TrackAccess($db->f('dokument_id'),'dokument');
 		}
 
 		//zip stuff
@@ -213,6 +214,7 @@ function createTempFolder($folder_id, $tmp_full_path, $perm_check = TRUE) {
 		} else {
 			$docs++;
 			@copy( $UPLOAD_PATH.'/'.$db->f('dokument_id'), $tmp_full_path.'/['.$docs.']_'.escapeshellcmd(prepareFilename($db->f('filename'), FALSE)));
+			TrackAccess($db->f('dokument_id'),'dokument');
 		}
 	}
 	if ($linkinfo) {

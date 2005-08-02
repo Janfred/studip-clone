@@ -638,9 +638,11 @@ function get_userid($username="") {
 * @param		string	the id of of the object to track
 *
 */
-function TrackAccess ($id) {
-
-	switch (get_object_type($id)) { 		// what kind ob object shall we track
+function TrackAccess ($id, $object_type = null) {
+	if (!$object_type){
+		$object_type = get_object_type($id);
+	}
+	switch ($object_type) { 		// what kind ob object shall we track
 		case "dokument": 				// the object is a dokument, so downloads will be increased
 			$db=new DB_Seminar;
 			$db->query ("UPDATE dokumente SET downloads = downloads + 1 WHERE dokument_id = '$id'");
