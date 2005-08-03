@@ -128,23 +128,28 @@ $reiter->create($structure, $view);
 		<td class="steel1"colspan=2>
 			<br>&nbsp; &nbsp; <?=_("<b>Die folgenden Entwickler</b> sind mit der st&auml;ndigen Pflege und Weiterentwicklung des Systems befasst:")?><br>
 			<blockquote>
-			<font size=-1><b>Alexander Berg</b>, E-Mail: <a href="mailto:berg@data-quest.de">berg@data-quest.de</a> <?=_("(Projektmanagement)")?></font>
-			<br><font size=-1><b>Marco Bohnsack</b>, E-Mail: <a href="mailto:mbohnsa@stud.uni-goettingen.de">mbohnsa@stud.uni-goettingen.de</a> <?=_("(Hilfe)")?></font>
+			<font size=-1><b>Marco Bohnsack</b>, E-Mail: <a href="mailto:bohnsack@data-quest.de">bohnsack@data-quest.de</a> <?=_("(Projektmanagement, Hilfe)")?></font>
+			<br><font size=-1><b>Cornelius Hempel</b>, E-Mail: <a href="mailto:cornelius.hempel@studip.uni-halle.de">cornelius.hempel@studip.uni-halle.de</a> <?=_("(Qualit&auml;tssicherung)")?></font>
 			<br><font size=-1><b>Philipp H&uuml;gelmeyer</b>, E-Mail: <a href="mailto:phuegelm@uos.de">phuegelm@uos.de</a> <?=_("(Distribution)")?></font>
 			<br><font size=-1><b>Cornelis Kater</b>, E-Mail: <a href="mailto:kater@data-quest.de">kater@data-quest.de</a> <?=_("(Ressourcenverwaltung, Terminverwaltung, Adminbereich, Design)")?></font>
+			<br><font size=-1><b>Hartje Kriete</b>, E-Mail: <a href="mailto:kriete@math.uni-goettingen.de">kriete@math.uni-goettingen.de</a> <?=_("(&Uuml;bersetzung)")?></font>
+			<br><font size=-1><b>Jan Kulmann</b>, E-Mail: <a href="mailto:jankul@tzi.de">jankul@tzi.de</a> <?=_("(Evaluationen)")?></font>
 			<br><font size=-1><b>André Noack</b>, E-Mail: <a href="mailto:noack@data-quest.de">noack@data-quest.de</a> <?=_("(Newsverwaltung, Chat, Einrichtungsverzeichnis, Vorlesungsverzeichnis)")?></font>
-			<br><font size=-1><b>Arne Schr&ouml;der</b>, E-Mail: <a href="mailto:23arne@web.de">schroeder@data-quest.de</a> <?=_("(Export-Schnittstellen, ILIAS-Anbindung)")?></font>
-			<br><font size=-1><b>Ralf Stockmann</b>, E-Mail: <a href="mailto:rstockm@gwdg.de">rstockm@uni-goettingen.de</a> <?=_("(Forensystem, pers&ouml;nliche Seiten, Adressbuch, Design)")?></font>
+			<br><font size=-1><b>Frank Ollermann</b>, E-Mail: <a href="mailto:follerma@uni-osnabrueck.de">follerma@uni-osnabrueck.de</a> <?=_("(Usability)")?></font>
+			<br><font size=-1><b>Dennis Reil</b>, E-Mail: <a href="mailto:Dennis.Reil@offis.de">Dennis.Reil@offis.de</a> <?=_("(PlugIn-Schnittstelle)")?></font>
+			<br><font size=-1><b>Jens Schmelzer</b>, E-Mail: <a href="mailto:jens.schmelzer@fh-jena.de">jens.schmelzer@fh-jena.de</a> <?=_("(Security)")?></font>
+			<br><font size=-1><b>Ralf Stockmann</b>, E-Mail: <a href="mailto:rstockm@uni-goettingen.de">rstockm@uni-goettingen.de</a> <?=_("(Forensystem, pers&ouml;nliche Seiten, Adressbuch, Design)")?></font>
 			<br><font size=-1><b>Stefan Suchi</b>, E-Mail: <a href="mailto:suchi@data-quest.de">suchi@data-quest.de</a> <?=_("(Datenbankstruktur, Rechtesystem, Adminbereich, Internationalisierung)")?></font>
 			<br><font size=-1><b>Tobias Thelen</b>, E-Mail: <a href="mailto:tthelen@uni-osnabrueck.de">tthelen@uni-osnabrueck.de</a> <?=_("(WikiWeb)")?></font>
 			<br><font size=-1><b>Peter Thienel</b>, E-Mail: <a href="mailto:thienel@data-quest.de">thienel@data-quest.de</a> <?=_("(Externe Seiten, Terminkalender)")?></font>
 			<br><font size=-1><b>Nils Kolja Windisch</b>, E-Mail: <a href="mailto:info@nkwindisch.de">info@nkwindisch.de</a> <?=_("(Systeminterne Nachrichten)")?></font>
-			<br></blockquote>
+			<br></blockquote><br>
 			&nbsp; &nbsp; <?=_("Sie erreichen uns auch &uuml;ber folgende <b>Mailinglisten:")?></b><br>
 			<blockquote>
 			<font size=-1><b><?=_("Nutzer-Anfragen")?></b>, E-Mail: <a href="mailto:studip-users@lists.sourceforge.net">studip-users@lists.sourceforge.net</a>: <?=_("Fragen, Anregungen und Vorschl&auml;ge an die Entwickler - bitte <u>keine</u> Passwort Anfragen!")?></font><br />
-			<font size=-1><b><?=_("Developer-Mailingliste")?></b>, E-Mail: <a target="new" href="http://lists.sourceforge.net/mailman/listinfo/studip-devel">studip-devel@lists.sourceforge.net</a>: <?=_("Mailingliste f&uuml;r alle Entwickler (Eintragung notwendig)")?></font><br />
 			<font size=-1><b><?=_("News-Mailingsliste")?></b>, E-Mail: <a target="new" href="http://lists.sourceforge.net/mailman/listinfo/studip-news">studip-news@lists.sourceforge.net</a>: <?=_("News rund um Stud.IP (Eintragung notwendig)")?></font><br />
+			<br>
+			<? printf(_("Wir laden alle Entwickler, Betreiber und Nutzer von Stud.IP ein, sich auf dem Developer-Server %s an den Diskussionen rund um die Weiterentwicklung und Nutzung der Plattform zu beteiligen."), "<a href=\"http://develop.studip.de\" target=\"_blank\">http://develop.studip.de</a>")?>
 			</blockquote>
 		</td>
 	</tr>
