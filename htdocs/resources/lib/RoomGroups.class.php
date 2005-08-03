@@ -65,9 +65,18 @@ class RoomGroups {
 	}
 	
 	function createConfigGroups(){
-		@include "config_room_groups.inc.php";
+		@include $GLOBALS['ABSOLUTE_PATH_STUDIP'] . $GLOBALS['RELATIVE_PATH_RESOURCES'] . "/config_room_groups.inc.php";
 		if (is_array($room_groups)){
-			$this->room_groups = array_merge($this->room_groups, $room_groups);
+			$room_list = new ResourcesUserRoomsList($GLOBALS['user']->id, false, false, true);
+			if ($room_list->numberOfRooms()){
+				$my_rooms = array_keys($room_list->getRooms());
+				foreach ($room_groups as $key => $value){
+					$rooms = array_intersect($value['rooms'], $my_rooms);
+					if (count($rooms)){
+						$this->room_groups[] = array('name' => $value['name'], 'rooms' => $rooms);
+					}
+				}
+			}
 		}
 	}
 	

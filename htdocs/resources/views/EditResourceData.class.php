@@ -110,7 +110,7 @@ class EditResourceData {
 	}
 
 	function showScheduleForms($assign_id='') {
-		global $PHP_SELF, $perm, $resources_data, $new_assign_object, $search_user, $search_string_search_user,
+		global $PHP_SELF, $perm, $user, $resources_data, $new_assign_object, $search_user, $search_string_search_user,
 			$CANONICAl_RELATIVE_PATH_STUDIP, $RELATIVE_PATH_RESOURCES, $cssSw, $view_mode, $add_ts,
 			$search_exp_room, $search_room_x, $search_properties_x;
 		
@@ -196,7 +196,7 @@ class EditResourceData {
 				?>
 					<br />&nbsp;
 					<input type="IMAGE" align="absmiddle"  <?=makeButton("uebernehmen", "src") ?> border=0 name="submit" value="&Uuml;bernehmen">
-					&nbsp;<a href="<?=$PHP_SELF."?cancel_edit_assign=1&view=view_schedule&quick_view_mode=".$view_mode ?>"><?=makeButton("abbrechen", "img") ?></a>
+					&nbsp;<a href="<?=$PHP_SELF?>?cancel_edit_assign=1&quick_view_mode=<?=$view_mode?>"><?=makeButton("abbrechen", "img") ?></a>
 				<?
 				}
 				if ($killButton) {
@@ -220,19 +220,19 @@ class EditResourceData {
 						print "<img src=\"pictures/ausruf_small2.gif\" align=\"absmiddle\" />&nbsp;<font size=-1>";
 						printf (_("Diese Belegung ist ein regelm&auml;&szlig;iger Termin der Veranstaltung %s, die in diesem Raum stattfindet."), 
 							($perm->have_studip_perm("user", $this->db->f("Seminar_id"))) ? 
-								"<a href=\"seminar_main.php?auswahl=".$this->db->f("Seminar_id")."\">".htmlReady($this->db->f("Name"))."</a>" : 
-								"<a href=\"details.php?&sem_id=".$this->db->f("Seminar_id")."\">".htmlReady($this->db->f("Name"))."</a>");
+								"<a href=\"seminar_main.php?auswahl=".$this->db->f("Seminar_id")."\" onClick=\"return check_opener(this)\">".htmlReady($this->db->f("Name"))."</a>" : 
+								"<a href=\"details.php?&sem_id=".$this->db->f("Seminar_id")."\" onClick=\"return check_opener(this)\">".htmlReady($this->db->f("Name"))."</a>");
 						if ($perm->have_studip_perm("tutor", $this->db->f("Seminar_id")))
-							printf ("<br />"._("Um die Belegung zu ver&auml;ndern, &auml;ndern Sie die %sZeiten%s der Veranstaltung"), "<img src=\"pictures/link_intern.gif\" border=\"0\"/>&nbsp;<a href=\"admin_metadates.php?seminar_id=".$this->db->f("Seminar_id")."\">", "</a>");
+							printf ("<br />"._("Um die Belegung zu ver&auml;ndern, &auml;ndern Sie die %sZeiten%s der Veranstaltung"), "<img src=\"pictures/link_intern.gif\" border=\"0\"/>&nbsp;<a href=\"admin_metadates.php?select_sem_id=".$this->db->f("Seminar_id")."\" onClick=\"return check_opener(this)\">", "</a>");
 						print "</font>";
 					} elseif ($owner_type == "date") {
 						print "<img src=\"pictures/ausruf_small2.gif\" align=\"absmiddle\" />&nbsp;<font size=-1>";
 						printf (_("Diese Belegung ist ein Einzeltermin der Veranstaltung %s, die in diesem Raum stattfindet."), 
 							($perm->have_studip_perm("user", $this->db->f("Seminar_id"))) ? 
-								"<a href=\"seminar_main.php?auswahl=".$this->db->f("Seminar_id")."\">".htmlReady($this->db->f("Name"))."</a>" : 
-								"<a href=\"details.php?&sem_id=".$this->db->f("Seminar_id")."\">".htmlReady($this->db->f("Name"))."</a>");
+								"<a href=\"seminar_main.php?auswahl=".$this->db->f("Seminar_id")."\" onClick=\"return check_opener(this)\">".htmlReady($this->db->f("Name"))."</a>" : 
+								"<a href=\"details.php?&sem_id=".$this->db->f("Seminar_id")."\" onClick=\"return check_opener(this)\">".htmlReady($this->db->f("Name"))."</a>");
 						if ($perm->have_studip_perm("tutor", $this->db->f("Seminar_id")))
-							printf ("<br />"._("Um die Belegung zu ver&auml;ndern, &auml;ndern Sie bitte den Termin im %sAblaufplan%s der Veranstaltung"), "<img src=\"pictures/link_intern.gif\" border=\"0\"/>&nbsp;<a href=\"admin_dates.php?range_id=".$this->db->f("Seminar_id")."\">", "</a>");
+							printf ("<br />"._("Um die Belegung zu ver&auml;ndern, &auml;ndern Sie bitte den Termin im %sAblaufplan%s der Veranstaltung"), "<img src=\"pictures/link_intern.gif\" border=\"0\"/>&nbsp;<a href=\"admin_dates.php?select_sem_id=".$this->db->f("Seminar_id")."\" onClick=\"return check_opener(this)\">", "</a>");
 						print "</font>";
 					} else {
 						print "<br /><img src=\"pictures/ausruf_small2.gif\" align=\"absmiddle\" />&nbsp;<font size=-1>";
@@ -452,7 +452,7 @@ class EditResourceData {
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" colspan=2 align="center"><br />&nbsp; 
 					<input type="IMAGE" align="absmiddle" <?=makeButton("uebernehmen", "src") ?> border=0 name="submit" value="<?=_("&Uuml;bernehmen")?>">
-					&nbsp;<a href="<?=$PHP_SELF."?cancel_edit_assign=1&view=view_schedule&quick_view_mode=".$view_mode?>"><?=makeButton("abbrechen", "img") ?></a>
+					&nbsp;<a href="<?=$PHP_SELF."?cancel_edit_assign=1&quick_view_mode=".$view_mode?>"><?=makeButton("abbrechen", "img") ?></a>
 				<?
 				if ($killButton) {
 					?>&nbsp;<input type="IMAGE" align="absmiddle" <?=makeButton("loeschen", "src") ?> border=0 name="kill_assign" value="<?=_("l&ouml;schen")?>"><?
@@ -523,6 +523,14 @@ class EditResourceData {
 					<font size=-1>
 					<b><?=_("Regelm&auml;&szlig;ige Belegung in Einzeltermine umwandeln:")?></b><br /><br />
 					<?=_("Nutzen Sie diese Funktion, um eine Terminserie in Einzeltermine umzuwandeln. Diese Einzeltermine k&ouml;nnen dann getrennt bearbeitet werden. Ein Ablaufplan wird dabei angelegt.");?>
+					<br /><br /><input type="IMAGE" align="absmiddle" <?=makeButton("umwandeln", "src") ?> border=0 name="change_meta_to_single_assigns" value="<?=_("umwandeln")?>">
+					</font>
+				<?
+				} elseif (!in_array($resAssign->getRepeatMode(), array('na','sd'))) {
+					?>
+					<font size=-1>
+					<b><?=_("Regelm&auml;&szlig;ige Belegung in Einzeltermine umwandeln:")?></b><br /><br />
+					<?=_("Nutzen Sie diese Funktion, um eine Terminserie in Einzeltermine umzuwandeln. Diese Einzeltermine k&ouml;nnen dann getrennt bearbeitet werden.");?>
 					<br /><br /><input type="IMAGE" align="absmiddle" <?=makeButton("umwandeln", "src") ?> border=0 name="change_meta_to_single_assigns" value="<?=_("umwandeln")?>">
 					</font>
 				<?

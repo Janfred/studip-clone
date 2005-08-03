@@ -58,7 +58,7 @@ class ShowGroupSchedules extends ShowSemSchedules {
 		if (!$print_view){
 	 	?>
 		<table border="0" celpadding="2" cellspacing="0" width="99%" align="center">
-		<form method="POST" action="<?echo $PHP_SELF ?>?navigate=TRUE&quick_view=view_group_schedule&quick_view_mode=<?=$view_mode?>">
+		<form method="POST" name="schedule_form" action="<?echo $PHP_SELF ?>?navigate=TRUE&quick_view=view_group_schedule&quick_view_mode=<?=$view_mode?>">
 			<tr>
 				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp;
 				</td>
@@ -70,7 +70,7 @@ class ShowGroupSchedules extends ShowSemSchedules {
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="40%" valign="top">
 				<font size="-1">
-				<select name="sem_schedule_choose">
+				<select name="sem_schedule_choose" onChange="document.schedule_form.submit()">
 				<?
 				foreach($semester as $one_sem){
 					echo "\n<option value=\"{$one_sem['semester_id']}\" "
@@ -94,14 +94,14 @@ class ShowGroupSchedules extends ShowSemSchedules {
 			<tr>
 			<td class="<? echo $cssSw->getClass() ?>" width="40%" valign="center">
 				<font size="-1">
-				<input type="radio" style="vertical-align:bottom" <?=($this->timespan == 'sem_time' ? 'checked' : '')?> name="sem_time_choose" value="sem_time">
-				<?=_("Semesterzeit")?>
-				<input type="radio" style="vertical-align:bottom" <?=($this->timespan == 'course_time' ? 'checked' : '')?> name="sem_time_choose" value="course_time">
+				<input type="radio" onChange="document.schedule_form.submit()" style="vertical-align:bottom" <?=($this->timespan == 'course_time' ? 'checked' : '')?> name="sem_time_choose" value="course_time">
 				<?=_("Vorlesungszeit")?>
+				<input type="radio" onChange="document.schedule_form.submit()" style="vertical-align:bottom" <?=($this->timespan == 'sem_time' ? 'checked' : '')?> name="sem_time_choose" value="sem_time">
+				<?=_("vorlesungsfreie Zeit")?>
 				</font>
 				</td>
 					<td class="<? echo $cssSw->getClass() ?>" width="60%" valign="center"><font size="-1">
-					<select name="group_schedule_choose_group">
+					<select name="group_schedule_choose_group" onChange="document.schedule_form.submit()">
 					<?
 					$room_group = RoomGroups::GetInstance();
 					foreach(array_keys($room_group->room_groups) as $gid){
@@ -166,9 +166,12 @@ class ShowGroupSchedules extends ShowSemSchedules {
 		
 		$schedule=new SemGroupScheduleDayOfWeek($start_hour, $end_hour,$room_group->room_groups[$this->group_id]['rooms'], $start_time, $this->dow);
 
-	 	$schedule->add_link = "resources.php?cancel_edit_assign=1&view=edit_object_assign&add_ts=";
+	 	$schedule->add_link = "resources.php?cancel_edit_assign=1&quick_view=$view&quick_view_mode=".$view_mode."&add_ts=";
+
 		$num_rep_events = 0;
 		$num_single_events = 0;
+		$num = 1;
+
 		foreach ($room_group->room_groups[$this->group_id]['rooms'] as $room_to_show_id => $room_id){
 	
 			if ($resources_data["show_repeat_mode"] == 'repeated' || $resources_data["show_repeat_mode"] == 'all'){
@@ -176,15 +179,18 @@ class ShowGroupSchedules extends ShowSemSchedules {
 				foreach($events as $id => $event){
 					$repeat_mode = $event['repeat_mode'];
 					$add_info = ($event['repeat_interval'] == 2 ? '('._("zweiwöchentlich").')' : '');
-					$schedule->addEvent($room_to_show_id, $event['name'], $event['begin'], $event['end'], 
+					if ($event['sem_doz_names']) $name = $event['sem_doz_names'].': '. $event['name'];
+					else $name = $event['name'];
+					$schedule->addEvent($room_to_show_id, $name, $event['begin'], $event['end'], 
 								"$PHP_SELF?show_object=$room_id&cancel_edit_assign=1&quick_view=$view&quick_view_mode=".$view_mode."&edit_assign_object=".$event['assign_id'], $add_info, $categories[$repeat_mode]);
 					++$num_rep_events;
 				}
 			}
 			//nur zukünftige Einzelbelegungen, print_view braucht noch Sonderbehandlung <!!!>
 			if ( ($end_time > time()) && ($resources_data["show_repeat_mode"] == 'single' || $resources_data["show_repeat_mode"] == 'all')){
-				$assign_events = new AssignEventList (time(), $end_time, $room_id, '', '', TRUE, 'single', $this->dow);
-				$num = 1;
+				$a_start_time = ($start_time > time() ? $start_time : time());
+				$a_end_time = ($print_view ? $a_start_time + 86400 * 14 : $end_time);	
+				$assign_events = new AssignEventList ($a_start_time, $a_end_time, $room_id, '', '', TRUE, 'single', $this->dow);
 				while ($event = $assign_events->nextEvent()) {
 					$schedule->addEvent($room_to_show_id, 'EB'.$num++.':' . $event->getName(), $event->getBegin(), $event->getEnd(), 
 							"$PHP_SELF?show_object=$room_id&cancel_edit_assign=1&quick_view=$view&quick_view_mode=".$view_mode."&edit_assign_object=".$event->getAssignId(), FALSE, $categories[$event->repeat_mode]);
@@ -314,7 +320,7 @@ class ShowGroupSchedules extends ShowSemSchedules {
 				<td>
 				<strong>
 				<?=_("Einzelbelegungen:")?>
-				&nbsp;(<?=strftime("%d.%m.%Y",$start_time) . ' - ' . strftime("%d.%m.%Y",$end_time)?>)
+				&nbsp;(<?=strftime("%d.%m.%Y",$a_start_time) . ' - ' . strftime("%d.%m.%Y",$a_end_time)?>)
 				</strong>
 				<br>
 				<?

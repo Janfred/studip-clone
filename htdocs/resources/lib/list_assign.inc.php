@@ -260,11 +260,24 @@ function createNormalizedAssigns($resource_id, $begin, $end, $day_of_week = fals
 	$db->query($query);
 	while($db->next_record()){
 		if($a_obj->restore($db->f(0))){
+			$seminar_id = $sem_doz_names = false;
+			unset($sem_obj);
 			$repmode = $a_obj->getRepeatMode();
 			if ($repmode == 'na' && $a_obj->getAssignUserId() 
 			&& ($seminar_id = isMetadateCorrespondingDate($a_obj->getAssignUserId())) ){
 				$repmode = 'meta';
 				$sem_obj =& Seminar::GetInstance($seminar_id);
+			}
+			if ($a_obj->getOwnerType() == 'sem'){
+				$seminar_id = $a_obj->getAssignUserId();
+				$sem_obj =& Seminar::GetInstance($seminar_id);
+			}
+			if ($seminar_id){
+				foreach($sem_obj->getMembers('dozent') as $dozent){
+					$sem_doz_names[] = $dozent['Nachname'];
+					if (++$c > 3) break;
+				}
+				$sem_doz_names = join(', ' , $sem_doz_names);
 			}
 			if($repmode == 'meta'){
 				$event_id = getNormalizedEventId($a_obj->getBegin(),$a_obj->getEnd());
@@ -277,7 +290,8 @@ function createNormalizedAssigns($resource_id, $begin, $end, $day_of_week = fals
 												'is_meta' => 1,
 												'repeat_interval' => $sem_obj->cycle,
 												'seminar_id' => $seminar_id,
-												'name' => $a_obj->getUserName(false,false)
+												'name' => $a_obj->getUserName(false,true),
+												'sem_doz_names' => $sem_doz_names
 												);
 												
 				}
@@ -289,7 +303,8 @@ function createNormalizedAssigns($resource_id, $begin, $end, $day_of_week = fals
 												'repeat_mode' => $repmode,
 												'repeat_interval' => $a_obj->getRepeatInterval(),
 												'is_meta' => 0,
-												'name' => $a_obj->getUserName(true,false)
+												'name' => $a_obj->getUserName(true,true),
+												'sem_doz_names' => $sem_doz_names
 												);
 			}
 			

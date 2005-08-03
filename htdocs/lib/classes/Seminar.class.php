@@ -115,12 +115,33 @@ class Seminar {
 					"end_hour" => $val["end_stunde"],
 					"end_minute" => $val["end_minute"],
 					"room_description" => $val["room"],
-					"resource_id" =>$val["resource_id"]
+					"resource_id" =>$val["resource_id"],
+					"desc" => $val['desc']
 					);
 		}
 		
 	}
-
+	
+	function getMembers($status = 'dozent'){
+		if (!isset($this->members[$status])){
+			$this->restoreMembers($status);
+		}
+		return $this->members[$status];
+	}
+	
+	function restoreMembers($status = 'dozent'){
+		$this->members[$status] = array();
+		$this->db->query("SELECT su.user_id,username,Vorname,Nachname,
+						".$GLOBALS['_fullname_sql']['full']." as fullname
+							FROM seminar_user su INNER JOIN auth_user_md5 USING(user_id)
+							LEFT JOIN user_info USING(user_id)
+							WHERE status='$status' AND su.seminar_id='".$this->getId()."' ORDER BY su.mkdate");
+		while($this->db->next_record()){
+			$this->members[$status][$this->db->f('user_id')] = $this->db->Record;
+		}
+		return $this->db->num_rows();
+	}
+	
 	function getId() {
 		return $this->id;
 	}
@@ -201,6 +222,9 @@ class Seminar {
 					else
 						$return_string[$key].=$val["end_minute"];
 				}
+				if ($val['desc']){
+					$return_string[$key].= " ({$val['desc']})";
+				}
 			}
 			return $return_string;
 		} else
@@ -214,7 +238,26 @@ class Seminar {
 	function getMetaDates() {
 		return $this->meta_times;
 	}
-
+	
+	function getMetaDatesKey($begin, $end){
+		$ret = null;
+		$day_of_week = date("w", $begin);
+		$day_of_week = ($day_of_week == 0 ? 7 : $day_of_week);
+		if (is_array($meta_dates = $this->getMetaDates())){
+			foreach($meta_dates as $key => $value){
+				if (($value['day'] == $day_of_week)
+				&& ($value['start_hour'] == date('G', $begin))
+				&& ($value['start_minute'] == date('i', $begin))
+				&& ($value['end_hour'] == date('G', $end))
+				&& ($value['end_minute'] == date('i', $end))){
+					$ret = $key;
+					break;
+				}
+			}
+		}
+		return $ret;
+	}
+	
 	function getMetaDateValue($key, $value_name) {
 		return $this->meta_times[$key][$value_name];
 	}
@@ -246,7 +289,8 @@ class Seminar {
 						"end_stunde" => $val["end_hour"],
 						"end_minute" => $val["end_minute"],
 						"room" => $val["room_description"],
-						"resource_id" =>$val["resource_id"]
+						"resource_id" =>$val["resource_id"],
+						'desc' => $val['desc']
 						);
 					}
 			}
@@ -409,3 +453,4 @@ class Seminar {
 			return FALSE;
 	}
 }
+?>

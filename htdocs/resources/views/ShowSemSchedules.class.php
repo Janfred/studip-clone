@@ -57,8 +57,9 @@ class ShowSemSchedules extends ShowSchedules {
 		}
 		$this->timespan = $timespan;
 		if  ($this->timespan == 'sem_time'){
-			$this->start_time = $this->semester['beginn'];
-			$this->end_time = $this->semester['ende'];
+			$next_sem = $sem->getNextSemesterData($this->semester['vorles_ende']);
+			$this->start_time = $this->semester['vorles_ende'];
+			$this->end_time = is_array($next_sem) ? $next_sem['vorles_beginn'] : $this->semester['ende'];
 		} else {
 			$this->start_time = $this->semester['vorles_beginn'];
 			$this->end_time = $this->semester['vorles_ende'];
@@ -73,7 +74,7 @@ class ShowSemSchedules extends ShowSchedules {
 		if (!$print_view){
 	 	?>
 		<table border="0" celpadding="2" cellspacing="0" width="99%" align="center">
-		<form method="POST" action="<?echo $PHP_SELF ?>?navigate=TRUE&quick_view=view_sem_schedule&quick_view_mode=<?=$view_mode?>">
+		<form method="POST" name="schedule_form" action="<?echo $PHP_SELF ?>?navigate=TRUE&quick_view=view_sem_schedule&quick_view_mode=<?=$view_mode?>">
 			<tr>
 				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp;
 				</td>
@@ -85,7 +86,7 @@ class ShowSemSchedules extends ShowSchedules {
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="40%" valign="top">
 				<font size="-1">
-				<select name="sem_schedule_choose">
+				<select name="sem_schedule_choose" onChange="document.schedule_form.submit()">
 				<?
 				foreach($semester as $one_sem){
 					echo "\n<option value=\"{$one_sem['semester_id']}\" "
@@ -110,10 +111,10 @@ class ShowSemSchedules extends ShowSchedules {
 			<tr>
 			<td class="<? echo $cssSw->getClass() ?>" width="40%" valign="center">
 				<font size="-1">
-				<input type="radio" style="vertical-align:bottom" <?=($this->timespan == 'sem_time' ? 'checked' : '')?> name="sem_time_choose" value="sem_time">
-				<?=_("Semesterzeit")?>
-				<input type="radio" style="vertical-align:bottom" <?=($this->timespan == 'course_time' ? 'checked' : '')?> name="sem_time_choose" value="course_time">
+				<input type="radio" onChange="document.schedule_form.submit()" style="vertical-align:bottom" <?=($this->timespan == 'course_time' ? 'checked' : '')?> name="sem_time_choose" value="course_time">
 				<?=_("Vorlesungszeit")?>
+				<input type="radio" onChange="document.schedule_form.submit()" style="vertical-align:bottom" <?=($this->timespan == 'sem_time' ? 'checked' : '')?> name="sem_time_choose" value="sem_time">
+				<?=_("vorlesungsfreie Zeit")?>
 				</font>
 				</td>
 					<td class="<? echo $cssSw->getClass() ?>" width="30%" valign="top"><font size="-1">
@@ -172,20 +173,24 @@ class ShowSemSchedules extends ShowSchedules {
 		$num_rep_events = 0;
 		$num_single_events = 0;
 	 	if ($ActualObjectPerms->havePerm("autor"))
-		 	$schedule->add_link = "resources.php?cancel_edit_assign=1&view=edit_object_assign&add_ts=";
+		 	$schedule->add_link = "resources.php?cancel_edit_assign=1&quick_view=$view&quick_view_mode=".$view_mode."&add_ts=";
 		if ($resources_data["show_repeat_mode"] == 'repeated' || $resources_data["show_repeat_mode"] == 'all'){
 			$events = createNormalizedAssigns($this->resource_id, $start_time, $end_time);
 			foreach($events as $id => $event){
 				$repeat_mode = $event['repeat_mode'];
 				$add_info = ($event['repeat_interval'] == 2 ? '('._("zweiwöchentlich").')' : '');
-				$schedule->addEvent($event['name'], $event['begin'], $event['end'], 
+				if ($event['sem_doz_names']) $name = $event['sem_doz_names'].': '. $event['name'];
+				else $name = $event['name'];
+				$schedule->addEvent($name, $event['begin'], $event['end'], 
 							"$PHP_SELF?cancel_edit_assign=1&quick_view=$view&quick_view_mode=".$view_mode."&edit_assign_object=".$event['assign_id'], $add_info, $categories[$repeat_mode]);
 			}
 			$num_rep_events = count($events);
 		}
 		//nur zukünftige Einzelbelegungen, print_view braucht noch Sonderbehandlung <!!!>
 		if ( ($end_time > time()) && ($resources_data["show_repeat_mode"] == 'single' || $resources_data["show_repeat_mode"] == 'all')){
-			$assign_events = new AssignEventList (time(), $end_time, $this->resource_id, '', '', TRUE, 'single');
+			$a_start_time = ($start_time > time() ? $start_time : time());
+			$a_end_time = ($print_view ? $a_start_time + 86400 * 14 : $end_time);
+			$assign_events = new AssignEventList ($a_start_time, $a_end_time, $this->resource_id, '', '', TRUE, 'single');
 			$num = 1;
 			while ($event = $assign_events->nextEvent()) {
 				$schedule->addEvent('EB'.$num++.':' . $event->getName(), $event->getBegin(), $event->getEnd(), 
@@ -277,7 +282,7 @@ class ShowSemSchedules extends ShowSchedules {
 				reset($assign_events->events);
 				$num = 1;
 				while($event = $assign_events->nextEvent()) {
-					echo "<a href=\"$PHP_SELF?quick_view=".$view."&quick_view_mode=".$quick_view_mode."&edit_assign_object=".$event->getAssignId()."\">".makeButton("eigenschaften")."</a>";
+					echo "<a href=\"$PHP_SELF?quick_view=".$view."&quick_view_mode=".$view_mode."&edit_assign_object=".$event->getAssignId()."\">".makeButton("eigenschaften")."</a>";
 					printf ("&nbsp; <font size=-1>"._("%s ist von <b>%s</b> bis <b>%s</b>, belegt von <b>%s</b>")."</font><br />",'EB'.$num++, strftime("%A, %d.%m.%Y %H:%M", $event->getBegin()), strftime("%A, %d.%m.%Y %H:%M", $event->getEnd()), $event->getName());
 				}
 				?>
@@ -313,7 +318,7 @@ class ShowSemSchedules extends ShowSchedules {
 				<td>
 				<strong>
 				<?=_("Einzelbelegungen:")?>
-				&nbsp;(<?=strftime("%d.%m.%Y",$start_time) . ' - ' . strftime("%d.%m.%Y",$end_time)?>)
+				&nbsp;(<?=strftime("%d.%m.%Y",$a_start_time) . ' - ' . strftime("%d.%m.%Y",$a_end_time)?>)
 				</strong>
 				<br>
 				<?

@@ -10,10 +10,10 @@ foreach($snap->getGroupedResult('parent_id') as $parent_id => $rooms){
 	if (is_array($rooms['resource_id'])){
 		$res_obj->restore($parent_id);
 		echo "//--------------------------------------------------------------------\n";
-		echo "\$room_groups[]['name'] = '" . $res_obj->getPathToString(true) . "';\n";
+		echo "\$room_groups[\$c]['name'] = '" . $res_obj->getPathToString(true) . "';\n";
 		foreach (array_keys($rooms['resource_id']) as $room_id){
 			$res_obj->restore($room_id);
-			echo "\$room_groups[]['rooms'][] = '$room_id';  //" . $res_obj->getPathToString(true) . "\n";
+			echo "\$room_groups[\$c]['rooms'][] = '$room_id';  //" . $res_obj->getPathToString(true) . "\n";
 		}		
 	}
 }

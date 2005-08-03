@@ -35,7 +35,7 @@
 // +---------------------------------------------------------------------------+
 
 class SemGroupScheduleDayOfWeek {
-	var $events;				//the events that will be shown
+	var $events = array();				//the events that will be shown
 	var $cell_allocations;			//internal Array
 	var $start_hour;			//First hour to display from
 	var $end_hour;				//Last hout to display to
@@ -43,11 +43,11 @@ class SemGroupScheduleDayOfWeek {
 	var $show_dates;			//If setted, the dates of each day will be shown
 	var $start_date;			//the timestamp of the first day (monday) of the viewed week 
 	var $categories = array(		//the categories configuration (color's and bg-image)
-		"0"=>array("bg-picture"=>"pictures/calendar/category5_small.jpg", "border-color"=>"#505064"),
-		"1"=>array("bg-picture"=>"pictures/calendar/category3_small.jpg", "border-color"=>"#5C2D64"),
-		"2"=>array("bg-picture"=>"pictures/calendar/category9_small.jpg", "border-color"=>"#957C29"),
-		"3"=>array("bg-picture"=>"pictures/calendar/category11_small.jpg", "border-color"=>"#66954F"),
-		"4"=>array("bg-picture"=>"pictures/calendar/category13_small.jpg", "border-color"=>"#951408"),
+		"0"=>array("bg-picture"=>"pictures/calendar/category5.jpg", "border-color"=>"#505064"),
+		"1"=>array("bg-picture"=>"pictures/calendar/category3.jpg", "border-color"=>"#5C2D64"),
+		"2"=>array("bg-picture"=>"pictures/calendar/category9.jpg", "border-color"=>"#957C29"),
+		"3"=>array("bg-picture"=>"pictures/calendar/category11.jpg", "border-color"=>"#66954F"),
+		"4"=>array("bg-picture"=>"pictures/calendar/category13.jpg", "border-color"=>"#951408"),
 		);
 	
 	//Kontruktor
@@ -96,18 +96,34 @@ class SemGroupScheduleDayOfWeek {
 			}
 			$sort_index = date("G", $start_time)+$idx_corr_h . '-' . (int)((date("i", $start_time)+$idx_corr_m) / 15) .'-'. ($room_to_show_id + 1);			
 			$id = md5(uniqid("rss",1));
-			$this->events[$id]=array (
-							"sort_index" => $sort_index,
-							"id" =>$id,
-							"rows" => $rows,
-							"name" => $name,
-							"start_time" => $start_time,
-							"end_time" => $end_time,
-							"link" => $link,
-							"add_info" => $add_info,
-							"category" => $category
-							);
+			
+			if( ($collision_id = $this->checkCollision($sort_index,$category)) ){
+				$this->events[$collision_id]['collisions'][] = array('name' => $name, 'link' => $link,'add_info' => $add_info);
+			} else {
+				$this->events[$id]=array (
+								"sort_index" => $sort_index,
+								"id" =>$id,
+								"rows" => $rows,
+								"name" => $name,
+								"start_time" => $start_time,
+								"end_time" => $end_time,
+								"link" => $link,
+								"add_info" => $add_info,
+								"category" => $category
+								);
+			}
 		}
+	}
+	
+	function checkCollision($index,$category){
+		$first_id = false;
+		foreach ($this->events as $id => $event){
+			if ($index == $event['sort_index']
+				&& $category == $event['category']){
+				if (!$first_id) $first_id = $id;
+			}
+		}
+		return $first_id;
 	}
 	
 	//private
@@ -263,14 +279,7 @@ class SemGroupScheduleDayOfWeek {
 							echo "</td></tr><tr>";
 							printf("<td style=\"vertical-align:top; font-size:10px; color:$font_color; background-image:url(%s); \">",
 								$cc_bg_picture);
-							if (!$print_view) echo  "<a style=\"color:$font_color;font-size:10px;\" href=\"".$this->events[$cc["id"]]["link"]."\">";
-							echo "<font size=-1>";
-							echo htmlReady(substr($this->events[$cc["id"]]["name"], 0,50));
-							if (strlen($this->events[$cc["id"]]["name"])>50)
-								echo "...";
-								if ($this->events[$cc["id"]]["add_info"]) echo "<br>" . $this->events[$cc["id"]]["add_info"];
-							echo "</font>";
-							if (!$print_view) echo "</a>";
+							echo $this->getEventName($cc["id"], $font_color, $print_view);
 						}
 						echo "</td></tr></table></td>";
 					}
@@ -298,7 +307,55 @@ class SemGroupScheduleDayOfWeek {
 		</tr>
 	</table>
 	<?
-	}	
+	}
+	
+	function getEventName($id,$font_color,$print_view){
+		$out = "\n<div style=\"margin-left:2px;margin-right:2px;\"><font size=\"-1\">";
+		if (!is_array($this->events[$id]['collisions'])){
+			if (!$print_view) $out.= "\n<a style=\"color:$font_color;\" href=\"".$this->events[$id]["link"]."\">";
+			else $out .= "\n<b>";
+			$out .= htmlReady(substr($this->events[$id]["name"], 0,50));
+			if (strlen($this->events[$id]["name"])>50) $out.= "...";
+			if ($this->events[$id]["add_info"]) $out.= "\n<br>" . $this->events[$id]["add_info"];
+			if (!$print_view) $out.= "\n</a>";
+			else $out .= "</b>";
+		} else {
+			if(count($this->events[$id]['collisions']) < 3){
+				if (!$print_view) $out.= "\n<a style=\"color:$font_color;\" href=\"".$this->events[$id]["link"]."\">";
+				else $out .= "\n<b>";
+				$out .= htmlReady(substr($this->events[$id]["name"], 0,50));
+				if (strlen($this->events[$id]["name"])>50) $out.= "...";
+				if ($this->events[$id]["add_info"]) $out.= "\n<br>" . $this->events[$id]["add_info"];
+				if (!$print_view) $out.= "\n</a>";
+				else $out .= "</b>";
+				foreach($this->events[$id]['collisions'] as $event){
+					if (!$print_view) $out.= "\n<a style=\"color:$font_color;\" href=\"".$event["link"]."\">";
+					else $out .= "\n<b>";
+					$out .= "\n<br>" . htmlReady(substr($event["name"], 0,50));
+					if (strlen($event["name"])>50) $out.= "...";
+					if ($event["add_info"]) $out.= "<br>" . $event["add_info"];
+					if (!$print_view) $out.= "\n</a>";
+					else $out .= "</b>";
+				}
+			} else {
+				if (!$print_view) $out.= "<a style=\"color:$font_color;\" href=\"".$this->events[$id]["link"]."\"
+											title=\"".htmlReady($this->events[$id]["name"])."\">";
+				else $out .= "<b>";
+				$out .= htmlReady(substr($this->events[$id]["name"], 0, strpos($this->events[$id]["name"],':')));
+				if (!$print_view) $out.= "</a>";
+				else $out .= "</b>";
+				foreach($this->events[$id]['collisions'] as $event){
+					if (!$print_view) $out.= "<a style=\"color:$font_color;\" href=\"".$event["link"]."\"
+											title=\"".htmlReady($event["name"])."\">, ";
+					else $out .= "<b>, ";
+					$out .= htmlReady(substr($event["name"], 0, strpos($event["name"],':')));
+					if (!$print_view) $out.= "</a>";
+					else $out .= "</b>";
+				}
+			}
+		}
+		return $out . "</font></div>";
+	}
 	
 	function showSchedule($mode="html", $print_view=false) {
 		$this->createCellAllocation();
@@ -308,6 +365,7 @@ class SemGroupScheduleDayOfWeek {
 			default:
 				$this->createHtmlOutput($print_view);
 		}
+		
 	}
 }
 ?>

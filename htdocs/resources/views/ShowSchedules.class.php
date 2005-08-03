@@ -225,7 +225,7 @@ class ShowSchedules {
 	 	$schedule=new ScheduleWeek($start_hour, $end_hour, FALSE, TRUE, $start_time);
 
 	 	if ($ActualObjectPerms->havePerm("autor"))
-		 	$schedule->add_link = "resources.php?cancel_edit_assign=1&view=edit_object_assign&add_ts=";
+		 	$schedule->add_link = "resources.php?cancel_edit_assign=1&quick_view=$view&quick_view_mode=".$view_mode."&add_ts=";
 	 	
 		//fill the schedule
 		$assign_events=new AssignEventList ($start_time, $end_time, $this->resource_id, '', '', TRUE, $resources_data["show_repeat_mode"]);

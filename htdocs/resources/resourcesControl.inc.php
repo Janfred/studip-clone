@@ -84,7 +84,18 @@ elseif (($view_mode == "no_nav") || ($view_mode == "search") || isset($_REQUEST[
 else
 	include ("$RELATIVE_PATH_RESOURCES/views/links_resources.inc.php");
 
+
 ?>
+<script type="text/javascript">
+function check_opener(obj){
+	if (window.opener && obj.href){
+		window.opener.location.href = obj.href;
+		window.opener.focus();
+		return false;
+	}
+	return true;
+}
+</script>
 <table width="100%" cellspacing="0" cellpadding="0" border="0">
 	<?
 	if (!isset($_REQUEST['print_view'])){
@@ -738,11 +749,12 @@ if (!$suppress_infobox) {
 	</tr>
 </table>
 <?
-/*<debug>
+//<debug>
+/*
 echo "<pre>";
 print_r($resources_data);
-print_r($_REQUEST);
-</debug>*/
+*/
+//</debug>
 $resources_data = serialize($resources_data);
 page_close();
 ?>

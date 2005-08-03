@@ -169,11 +169,15 @@ class AssignObject {
 		return $this->assign_user_id;
 	}
 
-	function GetOwnerName($explain=FALSE, $id='') {
+	function GetOwnerName($explain=FALSE, $event_obj = null) {
 		global $TERMIN_TYP;
 		$db = new DB_Seminar();
-		if (!$id)
-			$id=$this->assign_user_id;
+		if (is_null($event_obj)){
+			$id = $this->assign_user_id;
+			$event_obj =& $this;
+		} else {
+			$id = $event_obj->assign_user_id;
+		}
 			
 		switch (get_object_type($id)) {
 			case "user":
@@ -193,6 +197,7 @@ class AssignObject {
 						return $db->f("Name")." ("._("Einrichtung").")";
 			break;
 			case "sem":
+				/*
 				$query = sprintf("SELECT Name FROM seminare WHERE Seminar_id='%s' ",$id);
 				$db->query($query);
 				if ($db->next_record())
@@ -200,6 +205,24 @@ class AssignObject {
 						return $db->f("Name");
 					else
 						return $db->f("Name"). " ("._("Veranstaltung").")";	
+				*/
+				$sem_obj =& Seminar::GetInstance($id);
+				if (!$sem_obj->is_new){
+					if (!$explain){
+						return $sem_obj->getName();
+					} else {
+						$meta_dates = $sem_obj->getMetaDates();
+						$key = $sem_obj->getMetaDatesKey($event_obj->begin, $event_obj->end);
+						if ($meta_dates[$key]['desc']){
+							$name = $sem_obj->getName() . ' ('.$meta_dates[$key]['desc'].')';
+						} else {
+							$name = $sem_obj->getName() . " ("._("Veranstaltung").")";
+						}
+						return $name;
+					}
+				} else {
+					return "unbekannt";
+				}
 			break;
 			case "date":
 				$query = sprintf("SELECT Name, content, date_typ FROM termine LEFT JOIN seminare ON (seminar_id = range_id) WHERE termin_id='%s' ",$id);
@@ -220,7 +243,7 @@ class AssignObject {
 
 	function getUsername($use_free_name=TRUE, $explain=true) {
 		if ($this->assign_user_id) 
-			return $this->getOwnerName($explain, $this->assign_user_id);
+			return $this->getOwnerName($explain);
 		elseif ($use_free_name)
 			return $this->getUserFreeName(). ($explain ? " (" . _("direkter Eintrag") . ")" : "");
 		else 
@@ -614,21 +637,13 @@ class AssignObject {
 	function syncronizeMetaDates(){
 		$changed = false;
 		if ($this->getOwnerType() == "sem") {
-			$sem = new Seminar($this->getAssignUserId());
+			$sem =& Seminar::GetInstance($this->getAssignUserId());
 			if (!$sem->is_new){
-				foreach($sem->getMetaDates() as $key => $value){
-					if (($value['day'] == $this->repeat_day_of_week)
-						&& ($value['start_hour'] == date('G', $this->begin))
-						&& ($value['start_minute'] == date('i', $this->begin))
-						&& ($value['end_hour'] == date('G', $this->end))
-						&& ($value['end_minute'] == date('i', $this->end))){
-						$sem->setMetaDateValue($key, 'resource_id', $this->resource_id);
-						$sem->setMetaDateValue($key, 'room_description', '');
-						$changed = true;
-						}
-				}
-				if ($changed){
-					$sem->store();
+				$key = $sem->getMetaDatesKey($this->begin, $this->end);
+				if (!is_null($key)){
+					$sem->setMetaDateValue($key, 'resource_id', $this->resource_id);
+					$sem->setMetaDateValue($key, 'room_description', '');
+					$changed = $sem->store();	
 				}
 			}
 		}

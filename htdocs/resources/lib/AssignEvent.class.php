@@ -99,7 +99,7 @@ class AssignEvent {
 	
 	function getUsername($use_free_name=TRUE) {
 		if ($this->assign_user_id) 
-			return assignObject::getOwnerName(TRUE, $this->assign_user_id);
+			return assignObject::getOwnerName(TRUE, $this);
 		elseif ($use_free_name)
 			return $this->getUserFreeName();
 		else 

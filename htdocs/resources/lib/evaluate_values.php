@@ -331,15 +331,35 @@ if ($change_object_schedules) {
 		}
 	}
 	
-	if (($ObjectPerms->havePerm("admin")) && ($change_meta_to_single_assigns_x)) {
+	if (($ObjectPerms->havePerm("tutor")) && ($change_meta_to_single_assigns_x)) {
 		$assObj =& AssignObject::Factory($change_object_schedules);	
-		$semResAssign = new VeranstaltungResourcesAssign($assObj->getAssignUserId());
-		$semResAssign->deleteAssignedRooms();
-		
-		$resultAssi = dateAssi ($assObj->getAssignUserId(), "insert", FALSE, FALSE, FALSE, FALSE);
-		if ($resultAssi["changed"]) {
-			$return_schedule = TRUE;
-			header (sprintf("Location:resources.php?quick_view=%s&quick_view_mode=%s&show_msg=37", ($view_mode == "oobj") ? "openobject_schedule" : "view_schedule", $view_mode));
+		if ($assObj->getOwnerType() == 'sem'){
+			$semResAssign = new VeranstaltungResourcesAssign($assObj->getAssignUserId());
+			$semResAssign->deleteAssignedRooms();
+			
+			$resultAssi = dateAssi ($assObj->getAssignUserId(), "insert", FALSE, FALSE, FALSE, FALSE);
+			if ($resultAssi["changed"]) {
+				$return_schedule = TRUE;
+				header (sprintf("Location:resources.php?quick_view=%s&quick_view_mode=%s&show_msg=37", ($view_mode == "oobj") ? "openobject_schedule" : "view_schedule", $view_mode));
+			}
+		} else {
+			$events = $assObj->getEvents();
+			if (is_array($events)){
+				$create_assign = new AssignObject(false);
+				$create_assign->setResourceId($assObj->getResourceId());
+				$create_assign->setAssignUserId($assObj->getAssignUserId());
+				$create_assign->setUserFreeName($assObj->getUserFreeName());
+				$assObj->delete();
+				foreach($events as $one_event){
+					$create_assign->setBegin($one_event->begin);
+					$create_assign->setEnd($one_event->end);
+					$create_assign->id = $one_event->id;
+					$create_assign->store(true);
+				}
+				$return_schedule = TRUE;
+				$change_object_schedules = $events[0]->id;
+				header (sprintf("Location:resources.php?quick_view=%s&quick_view_mode=%s&show_msg=37", ($view_mode == "oobj") ? "openobject_sem_schedule" : "view_sem_schedule", $view_mode));
+			}
 		}
 	}
 
@@ -1234,7 +1254,7 @@ if ($save_state_x) {
 	require_once ($ABSOLUTE_PATH_STUDIP."/lib/classes/Seminar.class.php");
 	
 	$reqObj = new RoomRequest($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["request_id"]);
-	$semObj = new Seminar($reqObj->getSeminarId());
+	$semObj =& Seminar::GetInstance($reqObj->getSeminarId());
 	$semResAssign = new VeranstaltungResourcesAssign($semObj->getId());
 	
 	//if not single date-mode, we have to load all termin_ids from other requests of this seminar, because these dates don't have to be touched (they have an own request!)
@@ -1370,6 +1390,7 @@ if ($save_state_x) {
 			
 			//create msgs, normal metadate mode, and update the matadata (we save the resource there too), if no overlaps detected and create msg's
 			} elseif (($semObj->getMetaDateType() == 0) && (!$particular_free) && (!isSchedule($semObj->getId(), FALSE))) {
+				/*
 				$i=0;
 				$assign_ids = array_keys($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"]);
 				foreach ($result as $key=>$val) {
@@ -1385,7 +1406,23 @@ if ($save_state_x) {
 					}
 					$i++;
 				}
-	
+				*/
+				$assign_ids = array_keys($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"]);
+				foreach ($assign_ids as $i=>$ass_id) {
+					if ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][$i]){
+						list($key,$val) = each($result);
+						$resObj =& ResourceObject::Factory($val["resource_id"]);
+						if (!$val["overlap_assigns"]) {
+							$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$ass_id]["resource_id"] = $resObj->getId();
+							$good_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[$i]->getFormattedShortInfo());
+							$succesful_assigned++;
+						} else {
+							$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$ass_id]["resource_id"] = FALSE;				
+							$bad_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[$i]->getFormattedShortInfo());
+						}
+					}
+				}
+				
 			//create msgs, metadate mode, but create individual dates (a complete schedule) in case of trouble with the suggested room (it isn't free at all, but for most dates ok)
 			} elseif ($semObj->getMetaDateType() == 0) {
 				$i=0;
@@ -1604,7 +1641,7 @@ if (($inc_request_x) || ($dec_request_x) || ($new_session_started) || ($marked_c
 		$all_semester = $semester->getAllSemesterData();
 		
 		$reqObj = new RoomRequest($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["request_id"]);
-		$semObj = new Seminar($reqObj->getSeminarId());
+		$semObj =& Seminar::GetInstance($reqObj->getSeminarId());
 		$multiOverlaps = new CheckMultipleOverlaps;
 		$semResAssign = new VeranstaltungResourcesAssign($semObj->getId());
 		
@@ -1659,8 +1696,8 @@ if (($inc_request_x) || ($dec_request_x) || ($new_session_started) || ($marked_c
 				if ($assObj->getResourceId()){
 					if(!$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["considered_resources"][$assObj->getResourceId()])
 						$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["considered_resources"][$assObj->getResourceId()] = array("type"=>"matching");
-					$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$assObj->getId()] = array("resource_id" => $assObj->getResourceId());
 				}
+				$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$assObj->getId()] = array("resource_id" => $assObj->getResourceId());
 			}
 			
 			//set the time range to check;
@@ -1912,7 +1949,7 @@ if ($view == "view_sem_schedule" || $view == "view_group_schedule") {
 			$resources_data["schedule_mode"] = "graphical";			
 		}
 		
-		if (isset($_REQUEST['group_schedule_start_x'])){
+		if (isset($_REQUEST['group_schedule_choose_group'])){
 			$resources_data['actual_room_group'] = (int)$_REQUEST['group_schedule_choose_group'];
 		}
 	}

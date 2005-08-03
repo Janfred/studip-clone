@@ -124,6 +124,17 @@ class SemesterData {
 	function getCurrentSemesterData() {
 		return $this->getSemesterDataByDate(time());
 	}
+	
+	function getNextSemesterData($timestamp = false) {
+		if (!$timestamp){
+			$timestamp = time();
+		}
+		$this->db->query("SELECT * FROM semester_data WHERE beginn > $timestamp LIMIT 1");
+		if ($this->db->next_record()){
+			return $this->wrapSemesterData();
+		}
+		return false;
+	}
 
 	function insertNewSemester($semesterdata) {
 		// Diese Funktion fÃgt ein neues Semester ein!
