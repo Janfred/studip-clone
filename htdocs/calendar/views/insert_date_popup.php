@@ -1,21 +1,14 @@
 <?
 /**
-* insert_date_popup.php
+* popup calendar for studip
 *
 * popup calendar for studip
 *
 * @author			Peter Tienel <pthienel@web.de>
 * @version			$Id$
 * @access			public
-* @module			insert_date_popup.php
+* @module			insert_date_popup.ph
 */
-/**
-* workaround for PHPDoc
-*
-* Use this if module contains no elements to document !
-* @const PHPDOC_DUMMY
-*/
-define("PHPDOC_DUMMY",true);
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // insert_date_popup.php
@@ -39,14 +32,14 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" =>
 include ($ABSOLUTE_PATH_STUDIP . '/seminar_open.php'); // initialise Stud.IP-Session
 require_once ($ABSOLUTE_PATH_STUDIP. '/config.inc.php');
 
-$element_switch = (isset($_REQUEST['element_switch'])) ? $_REQUEST['element_switch'] : 0; // Wert von 1 - 7 für Auswahl der Feldbezeichner
-$c = (isset($_REQUEST['c'])) ? $_REQUEST['c'] : 0;                   // Zähler wenn mehrere gleiche Eingabefelder im Zielformular
-$mcount = (isset($_REQUEST['mcount'])) ? $_REQUEST['mcount'] : 1;    // Anzahl der anzuzeigenden Monate
-$ss = (isset($_REQUEST['ss'])) ? sprintf('%02d',$_REQUEST['ss']) : ''; // Startstunde
-$sm = (isset($_REQUEST['sm'])) ? sprintf('%02d',$_REQUEST['sm']) : ''; // Startminute
-$es = (isset($_REQUEST['es'])) ? sprintf('%02d',$_REQUEST['es']) : ''; // Endstunde
-$em = (isset($_REQUEST['em'])) ? sprintf('%02d',$_REQUEST['em']) : ''; // Endminute
-$q = ($ss !== '') ? "&ss=$ss&sm=$sm&es=$es&em=$em" : '';
+$element_switch = (isset($_REQUEST['element_switch']))? $_REQUEST['element_switch']:0; // Wert von 1 - 7 für Auswahl der Feldbezeichner
+$c = (isset($_REQUEST['c']))? $_REQUEST['c'] : 0;                   // Zähler wenn mehrere gleiche Eingabefelder im Zielformular
+$mcount = (isset($_REQUEST['mcount']))? $_REQUEST['mcount'] : 1;    // Anzahl der anzuzeigenden Monate
+$ss = (isset($_REQUEST['ss']))? sprintf('%02d',$_REQUEST['ss']):''; // Startstunde
+$sm = (isset($_REQUEST['sm']))? sprintf('%02d',$_REQUEST['sm']):''; // Startminute
+$es = (isset($_REQUEST['es']))? sprintf('%02d',$_REQUEST['es']):''; // Endstunde
+$em = (isset($_REQUEST['em']))? sprintf('%02d',$_REQUEST['em']):''; // Endminute
+$q = ($ss !== '')? "&ss=$ss&sm=$sm&es=$es&em=$em":'';
 
 // Array mit Standardzeiten vorhanden?
 if (isset($GLOBALS['TIME_PRESETS']) && is_array($GLOBALS['TIME_PRESETS']) && count($GLOBALS['TIME_PRESETS']) > 0) {
@@ -133,28 +126,27 @@ switch ($element_switch){  // Auswahl der Zielparameter
 		$zeiten = false;
 		$kalender = true;
 		break;
-	case 8: // edit.inc.php (calendar) end time
+	case 8:  // resources.php&view=edit_object_assign 
+		$txt_day   = 'change_schedule_day';
+		$txt_month = 'change_schedule_month';
+		$txt_year  = 'change_schedule_year';
+		$txt_ss = 'change_schedule_start_hour';
+		$txt_sm = 'change_schedule_start_minute';
+		$txt_es = 'change_schedule_end_hour';
+		$txt_em = 'change_schedule_end_minute';
+		$zeiten = true;
+		$kalender = true;
+		break;
+	case 51: // calendar.php (edit.inc.php) Enddate
 		$txt_month = 'end_month';
 		$txt_day   = 'end_day';
 		$txt_year  = 'end_year';
-		$zeiten = FALSE;
-		$kalender = TRUE;
+		$zeiten = false;
+		$kalender = true;
 		break;
-	case 9: // export.inc.php (calendar) start time
-		$txt_month = 'exstartmonth';
-		$txt_day   = 'exstartday';
-		$txt_year  = 'exstartyear';
-		$zeiten = FALSE;
-		$kalender = TRUE;
-		break;
-	case 10: // export.inc.php (calendar) end time
-		$txt_month = 'exendmonth';
-		$txt_day   = 'exendday';
-		$txt_year  = 'exendyear';
-		$zeiten = FALSE;
-		$kalender = TRUE;
-		break;
-	default: // z.b. edit.inc.php (calendar) start time
+	case 0:
+	case 50:
+	default: // calendar.php (edit.inc.php) Startdate
 		$txt_month = 'start_month';
 		$txt_day   = 'start_day';
 		$txt_year  = 'start_year';
