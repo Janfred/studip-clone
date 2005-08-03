@@ -64,7 +64,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 	
 	
 	//a Veranstaltung was selected in the admin-search kann viellecht weg
-	if (($i_page== "adminarea_start.php") && ($select_sem_id)) {
+	if (isset($select_sem_id)) {
 		reset_all_data();
 		closeObject();
 		openSem($select_sem_id);
