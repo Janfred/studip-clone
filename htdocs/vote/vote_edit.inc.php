@@ -319,10 +319,12 @@ if( isset( $saveButton_x ) ) {
 	    // user's vote has been modified by admin/root
 	    // --> send notification sms
 	    $sms = new messaging();
+			setTempLanguage($vote->getAuthorID());
 	    $smsText = sprintf( _("An Ihrem Vote/Test '%s' wurden von dem/der Administrator/in %s Änderungen vorgenommen."),
 				$vote->getTitle(),
 				$vote->voteDB->getAuthorRealname($auth->auth["uid"]) );
-		$sms->insert_message(mysql_escape_string( $smsText ), $vote->voteDB->getAuthorUsername($vote->getAuthorID()), "____%system%____", FALSE, FALSE, "1");
+			$sms->insert_message(mysql_escape_string( $smsText ), $vote->voteDB->getAuthorUsername($vote->getAuthorID()), "____%system%____", FALSE, FALSE, "1", FALSE, _("Systemnachricht:")." "._("Vote/Test geändert"));
+			restoreLanguage();
 	}
     }
 
