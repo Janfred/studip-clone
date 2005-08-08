@@ -653,7 +653,7 @@ if (!sizeof($term_data["turnus_data"])) {
 									$content.= "<br /><font size=-1><select name=\"resource_id\"></font>";
 									$content.= ("<option value=\"FALSE\">[" . _("ausw&auml;hlen oder wie Eingabe") . "]</option>");
 									while ($res = $resList->next())
-										$content.= sprintf("<option %s value=\"%s\">%s</option>", ($new_date_resource_id && $new_date_resource_id == $res["resource_id"]) ? "selected" : "", $res["resource_id"], my_substr(htmlReady($res["name"]), 0, 25));
+										$content.= sprintf("<option %s value=\"%s\">%s</option>", ($new_date_resource_id && $new_date_resource_id == $res["resource_id"]) ? "selected" : "", $res["resource_id"], htmlReady(my_substr($res["name"], 0, 25)));
 									$content.= "</select></font>";
 								}
 							}
@@ -843,7 +843,7 @@ if (!sizeof($term_data["turnus_data"])) {
 											if ($resource_id)
 												$content.= "<option value=\"FALSE\">["._("kein gebuchter Raum") ."]</option>";
 											while ($res = $resList->next())
-												$content.= sprintf("<option value=\"%s\">%s</option>", $res["resource_id"], my_substr(htmlReady($res["name"]), 0, 25));
+												$content.= sprintf("<option value=\"%s\">%s</option>", $res["resource_id"], htmlReady(my_substr($res["name"], 0, 25)));
 											$content.= "</select><br>";
 										} else
 											$content.="<input type=\"HIDDEN\" name=\"resource_id[$c]\" value=\"NULL\">";
