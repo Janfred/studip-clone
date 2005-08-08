@@ -84,6 +84,12 @@ class Seminar {
 		
 	}
 	
+	function GetSemIdByDateId($date_id){
+		$db = new DB_Seminar("SELECT range_id FROM termine WHERE termin_id = '$date_id'");
+		$db->next_record();
+		return $db->f(0);
+	}
+	
 	/**
 	*
 	* creates an new id for this object
