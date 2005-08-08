@@ -175,12 +175,12 @@ class ShowGroupSchedules extends ShowSemSchedules {
 		foreach ($room_group->room_groups[$this->group_id]['rooms'] as $room_to_show_id => $room_id){
 	
 			if ($resources_data["show_repeat_mode"] == 'repeated' || $resources_data["show_repeat_mode"] == 'all'){
-				$events = createNormalizedAssigns($room_id, $start_time, $end_time, $this->dow);
+				$events = createNormalizedAssigns($room_id, $start_time, $end_time,get_config('RESOURCES_SCHEDULE_EXPLAIN_USER_NAME'), $this->dow);
 				foreach($events as $id => $event){
 					$repeat_mode = $event['repeat_mode'];
-					$add_info = ($event['repeat_interval'] == 2 ? '('._("zweiwöchentlich").')' : '');
-					if ($event['sem_doz_names']) $name = $event['sem_doz_names'].': '. $event['name'];
-					else $name = $event['name'];
+					$add_info = ($event['sem_doz_names'] ? '('.$event['sem_doz_names'].') ' : '');
+					$add_info .= ($event['repeat_interval'] == 2 ? '('._("zweiwöchentlich").')' : '');
+					$name = $event['name'];
 					$schedule->addEvent($room_to_show_id, $name, $event['begin'], $event['end'], 
 								"$PHP_SELF?show_object=$room_id&cancel_edit_assign=1&quick_view=$view&quick_view_mode=".$view_mode."&edit_assign_object=".$event['assign_id'], $add_info, $categories[$repeat_mode]);
 					++$num_rep_events;
@@ -188,11 +188,15 @@ class ShowGroupSchedules extends ShowSemSchedules {
 			}
 			//nur zukünftige Einzelbelegungen, print_view braucht noch Sonderbehandlung <!!!>
 			if ( ($end_time > time()) && ($resources_data["show_repeat_mode"] == 'single' || $resources_data["show_repeat_mode"] == 'all')){
-				$a_start_time = ($start_time > time() ? $start_time : time());
+				if (!$print_view){
+					$a_start_time = ($start_time > time() ? $start_time : time());
+				} else {
+					$a_start_time = $this->getNextMonday();
+				}
 				$a_end_time = ($print_view ? $a_start_time + 86400 * 14 : $end_time);	
 				$assign_events = new AssignEventList ($a_start_time, $a_end_time, $room_id, '', '', TRUE, 'single', $this->dow);
 				while ($event = $assign_events->nextEvent()) {
-					$schedule->addEvent($room_to_show_id, 'EB'.$num++.':' . $event->getName(), $event->getBegin(), $event->getEnd(), 
+					$schedule->addEvent($room_to_show_id, 'EB'.$num++.':' . $event->getName(get_config('RESOURCES_SCHEDULE_EXPLAIN_USER_NAME')), $event->getBegin(), $event->getEnd(), 
 							"$PHP_SELF?show_object=$room_id&cancel_edit_assign=1&quick_view=$view&quick_view_mode=".$view_mode."&edit_assign_object=".$event->getAssignId(), FALSE, $categories[$event->repeat_mode]);
 					++$num_single_events;
 					$single_assigns[] = $event;

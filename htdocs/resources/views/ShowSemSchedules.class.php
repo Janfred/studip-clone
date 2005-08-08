@@ -175,12 +175,12 @@ class ShowSemSchedules extends ShowSchedules {
 	 	if ($ActualObjectPerms->havePerm("autor"))
 		 	$schedule->add_link = "resources.php?cancel_edit_assign=1&quick_view=$view&quick_view_mode=".$view_mode."&add_ts=";
 		if ($resources_data["show_repeat_mode"] == 'repeated' || $resources_data["show_repeat_mode"] == 'all'){
-			$events = createNormalizedAssigns($this->resource_id, $start_time, $end_time);
+			$events = createNormalizedAssigns($this->resource_id, $start_time, $end_time, get_config('RESOURCES_SCHEDULE_EXPLAIN_USER_NAME'));
 			foreach($events as $id => $event){
 				$repeat_mode = $event['repeat_mode'];
-				$add_info = ($event['repeat_interval'] == 2 ? '('._("zweiwöchentlich").')' : '');
-				if ($event['sem_doz_names']) $name = $event['sem_doz_names'].': '. $event['name'];
-				else $name = $event['name'];
+				$add_info = ($event['sem_doz_names'] ? '('.$event['sem_doz_names'].') ' : '');
+				$add_info .= ($event['repeat_interval'] == 2 ? '('._("zweiwöchentlich").')' : '');
+				$name = $event['name'];
 				$schedule->addEvent($name, $event['begin'], $event['end'], 
 							"$PHP_SELF?cancel_edit_assign=1&quick_view=$view&quick_view_mode=".$view_mode."&edit_assign_object=".$event['assign_id'], $add_info, $categories[$repeat_mode]);
 			}
@@ -188,12 +188,16 @@ class ShowSemSchedules extends ShowSchedules {
 		}
 		//nur zukünftige Einzelbelegungen, print_view braucht noch Sonderbehandlung <!!!>
 		if ( ($end_time > time()) && ($resources_data["show_repeat_mode"] == 'single' || $resources_data["show_repeat_mode"] == 'all')){
-			$a_start_time = ($start_time > time() ? $start_time : time());
+			if (!$print_view){
+				$a_start_time = ($start_time > time() ? $start_time : time());
+			} else {
+				$a_start_time = $this->getNextMonday();
+			}
 			$a_end_time = ($print_view ? $a_start_time + 86400 * 14 : $end_time);
 			$assign_events = new AssignEventList ($a_start_time, $a_end_time, $this->resource_id, '', '', TRUE, 'single');
 			$num = 1;
 			while ($event = $assign_events->nextEvent()) {
-				$schedule->addEvent('EB'.$num++.':' . $event->getName(), $event->getBegin(), $event->getEnd(), 
+				$schedule->addEvent('EB'.$num++.':' . $event->getName(get_config('RESOURCES_SCHEDULE_EXPLAIN_USER_NAME')), $event->getBegin(), $event->getEnd(), 
 						"$PHP_SELF?cancel_edit_assign=1&quick_view=$view&quick_view_mode=".$view_mode."&edit_assign_object=".$event->getAssignId(), FALSE, $categories[$event->repeat_mode]);
 			}
 			$num_single_events = $assign_events->numberOfEvents();
@@ -335,5 +339,15 @@ class ShowSemSchedules extends ShowSchedules {
 			<?
 		}
 	}
+	
+	function getNextMonday(){
+		$now = time();
+		$this_monday = date("j", $now)  - (date("w", $now) - 1);
+		if (date("w", $now)+1 > 4){
+			$this_monday += 7;
+		}
+		return mktime(2, 0, 1, date("n", $now), $this_monday ,  date("Y", $now));
+	}
+	
 }
 ?>

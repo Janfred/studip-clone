@@ -245,7 +245,7 @@ function isFiltered($filter, $mode) {
 		return FALSE;
 }
 
-function createNormalizedAssigns($resource_id, $begin, $end, $day_of_week = false){
+function createNormalizedAssigns($resource_id, $begin, $end, $explain_user_name = false, $day_of_week = false){
 	$db = new DB_Seminar();
 	$a_obj = new AssignObject(null);
 	$events = array();
@@ -275,7 +275,7 @@ function createNormalizedAssigns($resource_id, $begin, $end, $day_of_week = fals
 			if ($seminar_id){
 				foreach($sem_obj->getMembers('dozent') as $dozent){
 					$sem_doz_names[] = $dozent['Nachname'];
-					if (++$c > 3) break;
+					if (++$c > 2) break;
 				}
 				$sem_doz_names = join(', ' , $sem_doz_names);
 			}
@@ -290,7 +290,7 @@ function createNormalizedAssigns($resource_id, $begin, $end, $day_of_week = fals
 												'is_meta' => 1,
 												'repeat_interval' => $sem_obj->cycle,
 												'seminar_id' => $seminar_id,
-												'name' => $a_obj->getUserName(false,true),
+												'name' => $a_obj->getUserName(false,$explain_user_name),
 												'sem_doz_names' => $sem_doz_names
 												);
 												
@@ -303,7 +303,7 @@ function createNormalizedAssigns($resource_id, $begin, $end, $day_of_week = fals
 												'repeat_mode' => $repmode,
 												'repeat_interval' => $a_obj->getRepeatInterval(),
 												'is_meta' => 0,
-												'name' => $a_obj->getUserName(true,true),
+												'name' => $a_obj->getUserName(true,$explain_user_name),
 												'sem_doz_names' => $sem_doz_names
 												);
 			}

@@ -142,7 +142,7 @@ class ShowSchedules {
 	<?
 	}
 
-	function showScheduleList() {
+	function showScheduleList($print_view = false) {
 		global $PHP_SELF, $cssSw, $view_mode;
 
 		 //select view to jump from the schedule
@@ -156,9 +156,22 @@ class ShowSchedules {
 			<tr>
 				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp;
 				</td>
-				<td class="<? echo $cssSw->getClass() ?>" width="96%" align="center"><br />
-					<? echo "<b>Anzeige vom ", date ("d.m.Y", $this->start_time), " bis ", date ("d.m.Y", $this->end_time)."</b><br />";?>
-					<br />
+				<td class="<? echo $cssSw->getClass() ?>" width="96%" align="center">
+				<b>	
+				<? 
+				if ($print_view){
+					$room =& ResourceObject::Factory($this->resource_id);
+					echo htmlReady($room->getName().' - ' .$this->semester['name']);
+				} else {
+					if ($this->semester){
+						printf(_("Anzeige des Semesters: %s"), htmlReady($this->semester['name']));
+					} else {
+						echo _("Anzeige des Zeitraums:");
+					}
+				}
+				echo '<br>' . date ("d.m.Y", $this->start_time), " - ", date ("d.m.Y", $this->end_time);
+				?>
+				</b>
 				</td>
 			</tr>
 			<tr>
@@ -169,9 +182,32 @@ class ShowSchedules {
 					$assign_events=new AssignEventList ($this->start_time, $this->end_time, $this->resource_id, '', '', TRUE);
 					echo "<br /><font size=-1>"._("Anzahl der Belegungen in diesem Zeitraum:")." ", $assign_events->numberOfEvents()."</font>";
 					echo "<br /><br />";
-					while ($event=$assign_events->nextEvent()) {
-						echo "<a href=\"$PHP_SELF?quick_view=".$view."&quick_view_mode=".$quick_view_mode."&edit_assign_object=".$event->getAssignId()."\">".makeButton("eigenschaften")."</a>";
-						printf ("&nbsp; <font size=-1>"._("Belegung ist von <b>%s</b> bis <b>%s</b>, belegt von <b>%s</b>")."</font><br />", strftime("%A, %d.%m.%Y %H:%M", $event->getBegin()), strftime("%A, %d.%m.%Y %H:%M", $event->getEnd()), $event->getName());
+					$num = 1;
+					while ($event = $assign_events->nextEvent()) {
+						$add_info = '';
+						if (in_array($event->getOwnerType(), array('sem','date'))){
+							$sem_doz_names = array();
+							if ($event->getOwnerType() == 'sem'){
+								$sem_obj =& Seminar::GetInstance($event->getAssignUserId());
+							} else {
+								$sem_obj =& Seminar::GetInstance(Seminar::GetSemIdByDateId($event->getAssignUserId()));
+							}
+							foreach($sem_obj->getMembers('dozent') as $dozent){
+								$sem_doz_names[] = $dozent['Nachname'];
+								if (++$c > 2) break;
+							}
+							$add_info = ', (' . join(', ' , $sem_doz_names) . ')';
+						}
+						if (!$print_view){
+							echo "<a href=\"$PHP_SELF?quick_view=".$view."&quick_view_mode=".$quick_view_mode."&edit_assign_object=".$event->getAssignId()."\">".makeButton("eigenschaften")."</a><font size=-1>";
+						} else {
+						 echo '<font size=-1>' . sprintf("%02d" , $num++) . '.';
+						}
+						printf ("&nbsp;"
+								._("Belegung ist von <b>%s</b> bis <b>%s</b>, belegt von <b>%s</b>")
+								."</font><br />", strftime("%A, %d.%m.%Y %H:%M", $event->getBegin())
+								, strftime("%A, %d.%m.%Y %H:%M", $event->getEnd())
+								, $event->getName(get_config('RESOURCES_SCHEDULE_EXPLAIN_USER_NAME')) . $add_info);
 					}
 					?>
 				</td>
@@ -222,7 +258,7 @@ class ShowSchedules {
  			$end_hour = 22;
 		}
 
-	 	$schedule=new ScheduleWeek($start_hour, $end_hour, FALSE, TRUE, $start_time);
+	 	$schedule=new ScheduleWeek($start_hour, $end_hour, FALSE, $start_time, true);
 
 	 	if ($ActualObjectPerms->havePerm("autor"))
 		 	$schedule->add_link = "resources.php?cancel_edit_assign=1&quick_view=$view&quick_view_mode=".$view_mode."&add_ts=";
@@ -231,8 +267,22 @@ class ShowSchedules {
 		$assign_events=new AssignEventList ($start_time, $end_time, $this->resource_id, '', '', TRUE, $resources_data["show_repeat_mode"]);
 		while ($event=$assign_events->nextEvent()) {
 			$repeat_mode = $event->getRepeatMode(TRUE);
-			$schedule->addEvent($event->getName(), $event->getBegin(), $event->getEnd(), 
-						"$PHP_SELF?cancel_edit_assign=1&quick_view=$view&quick_view_mode=".$view_mode."&edit_assign_object=".$event->getAssignId(), FALSE, $categories[$repeat_mode]);
+			$add_info = '';
+			if (in_array($event->getOwnerType(), array('sem','date'))){
+				$sem_doz_names = array();
+				if ($event->getOwnerType() == 'sem'){
+					$sem_obj =& Seminar::GetInstance($event->getAssignUserId());
+				} else {
+					$sem_obj =& Seminar::GetInstance(Seminar::GetSemIdByDateId($event->getAssignUserId()));
+				}
+				foreach($sem_obj->getMembers('dozent') as $dozent){
+					$sem_doz_names[] = $dozent['Nachname'];
+					if (++$c > 2) break;
+				}
+				$add_info = '(' . join(', ' , $sem_doz_names) . ')';
+			}
+			$schedule->addEvent($event->getName(get_config('RESOURCES_SCHEDULE_EXPLAIN_USER_NAME')), $event->getBegin(), $event->getEnd(), 
+						"$PHP_SELF?cancel_edit_assign=1&quick_view=$view&quick_view_mode=".$view_mode."&edit_assign_object=".$event->getAssignId(), $add_info, $categories[$repeat_mode]);
 		}
 		?>
 		<table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
@@ -279,7 +329,7 @@ class ShowSchedules {
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="96%" colspan="3">
 					<?					
-					$schedule->showSchedule("html");
+					$schedule->showSchedule("html", $print_view);
 					?>
 				</td>
 			</tr>

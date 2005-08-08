@@ -95,7 +95,7 @@ class ResourcesBrowse {
 			<td <? $this->cssSw->switchClass(); echo $this->cssSw->getFullClass() ?> align="center" <? echo ($this->mode == "browse") ? "colspan=\"2\"" : "" ?>>
 				<font size=-1><?=_("freie Suche")?>:&nbsp;
 					<select name="resources_search_range" style="vertical-align:middle">
-					<option value="0" selected><?=htmlReady($GLOBALS['UNI_NAME'])?></option>
+					<option value="0" selected><?=htmlReady($GLOBALS['UNI_NAME_CLEAN'])?></option>
 					<?if ($this->open_object){
 						$res =& ResourceObject::Factory($this->open_object);
 						?>

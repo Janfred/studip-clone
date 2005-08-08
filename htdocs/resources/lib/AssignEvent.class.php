@@ -97,17 +97,26 @@ class AssignEvent {
 		return $this->user_free_name;
 	}
 	
-	function getUsername($use_free_name=TRUE) {
+	function getOwnerType() {
+		if ($this->getAssignUserId()){
+			$type = get_object_type($this->getAssignUserId());
+			return $type == "fak" ? "inst" : $type;
+		} else {
+			return false;
+		}
+	}
+	
+	function getUsername($use_free_name=TRUE, $explain=true) {
 		if ($this->assign_user_id) 
-			return assignObject::getOwnerName(TRUE, $this);
+			return assignObject::getOwnerName($explain, $this);
 		elseif ($use_free_name)
 			return $this->getUserFreeName();
 		else 
 			return FALSE;
 	}
 	
-	function getName() {
-		return $this->getUsername();
+	function getName($explain = true) {
+		return $this->getUsername(true, $explain);
 	}
 
 	function getBegin() {

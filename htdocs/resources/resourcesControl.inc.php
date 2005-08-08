@@ -400,9 +400,6 @@ if ($view == "view_sem_schedule") {
 	require_once ($RELATIVE_PATH_RESOURCES."/views/ShowSemSchedules.class.php");
 	if ($resources_data["actual_object"]) {
 		$ViewSchedules =& new ShowSemSchedules($resources_data["actual_object"], $resources_data['sem_schedule_semester_id'],$resources_data['sem_schedule_timespan']);
-		$ViewSchedules->setLengthFactor($resources_data["schedule_length_factor"]);
-		$ViewSchedules->setLengthUnit($resources_data["schedule_length_unit"]);	
-		$ViewSchedules->setWeekOffset($resources_data["schedule_week_offset"]);	
 		$ViewSchedules->setUsedView($view);	
 		$ViewSchedules->navigator($_REQUEST['print_view']);
 		$suppress_infobox = TRUE;
@@ -429,7 +426,7 @@ if ($view == "view_sem_schedule") {
 			<tr>
 				<td valign ="top">
 			<?
-		if (($resources_data["schedule_start_time"]) && ($resources_data["schedule_end_time"]))
+		if (($resources_data["sem_schedule_semester_id"]) && ($resources_data["sem_schedule_timespan"]))
 			if ($resources_data["schedule_mode"] == "list") //view List
 				$ViewSchedules->showScheduleList($_REQUEST['print_view']);
 			else
@@ -444,9 +441,6 @@ if ($view == "view_group_schedule") {
 	require_once ($RELATIVE_PATH_RESOURCES."/views/ShowGroupSchedules.class.php");
 	if (isset($resources_data["actual_room_group"])) {
 		$ViewSchedules =& new ShowGroupSchedules($resources_data['actual_room_group'], $resources_data['sem_schedule_semester_id'],$resources_data['sem_schedule_timespan'], $resources_data['group_schedule_dow']);
-		$ViewSchedules->setLengthFactor($resources_data["schedule_length_factor"]);
-		$ViewSchedules->setLengthUnit($resources_data["schedule_length_unit"]);	
-		$ViewSchedules->setWeekOffset($resources_data["schedule_week_offset"]);	
 		$ViewSchedules->setUsedView($view);	
 		$ViewSchedules->navigator($_REQUEST['print_view']);
 		$suppress_infobox = TRUE;
