@@ -445,6 +445,10 @@ if ($form == 4) {
 
 	if (($RESOURCES_ENABLE) && (is_object($sem_create_data["resRequest"]))) {
 		//Room-Requests
+		if ($_REQUEST['skip_room_request'] == 1){
+			$sem_create_data['skip_room_request'] = true;
+		}
+		
 		if ($send_room_x)
 			$sem_create_data["resRequest"]->setResourceId($select_room);
 		if ($reset_resource_id_x)
@@ -900,7 +904,10 @@ if (($search_room_x) ||($search_properties_x) || ($reset_room_search_x) || ($res
 if (($form == 4) && ($jump_next_x)) {
 	//checks for room-request
 	if (is_object($sem_create_data["resRequest"])) {
-		if ((!$sem_create_data["resRequest"]->getSettedPropertiesCount()) && (!$sem_create_data["resRequest"]->getResourceId()) && (!$perm->have_perm("admin"))) {
+		if ((!$sem_create_data["resRequest"]->getSettedPropertiesCount()) 
+		&& (!$sem_create_data["resRequest"]->getResourceId()) 
+		&& (!$perm->have_perm("admin"))
+		&& (!(get_config('RESOURCES_ALLOW_SEMASSI_SKIP_REQUEST') && $sem_create_data['skip_room_request']))) {
 			$errormsg.="error§"._("Die Anfrage konnte nicht gespeichert werden, da Sie mindestens einen Raumwunsch oder eine gew&uuml;nschte Eigenschaft (z.B. Anzahl der Sitzpl&auml;tze) angeben m&uuml;ssen!");
 			$dont_anchor = TRUE;
 		}
@@ -1267,7 +1274,7 @@ if (($form == 6) && ($jump_next_x))
 					}
 
 					//store room-quests and room-property-requests
-					if (is_object($sem_create_data["resRequest"])) {
+					if (!$sem_create_data['skip_room_request'] && is_object($sem_create_data["resRequest"])) {
 						$sem_create_data["resRequest"]->setSeminarId($sem_create_data["sem_id"]);
 						$sem_create_data["resRequest"]->store();
 					}
@@ -2533,6 +2540,12 @@ if ($level == 4) {
 							<?
 							print _("Sie haben die M&ouml;glichkeit, sich Raumeigenschaften sowie einen konkreten Raum zu w&uuml;nschen. Diese Raumw&uuml;nsche werden von der zentralen Raumverwaltung bearbeitet.");
 							print "<br />"._("<b>Achtung:</b> Um sp&auml;ter einen passenden Raum f&uuml;r Ihre Veranstaltung zu bekommen, geben Sie bitte <u>immer</u> die gew&uuml;nschten Eigenschaften mit an!");
+							if (get_config('RESOURCES_ALLOW_SEMASSI_SKIP_REQUEST')){
+								echo "<br>" .("Keinen Raumwunsch angeben") . "&nbsp;&nbsp;";
+								echo "<input type=\"checkbox\" name=\"skip_room_request\" value=\"1\" ";
+								if ($sem_create_data['skip_room_request']) echo " checked ";
+								echo ">";
+							}
 							?>
 						<td>
 					</tr>
