@@ -462,6 +462,8 @@ class Seminar_Auth extends Auth {
 	
 		$check_auth = StudipAuthAbstract::CheckAuthentication($username,$password,$this->auth['jscript']);
 
+		$GLOBALS['sess']->unregister('challenge');
+		
 		if ($check_auth['uid']){
 			$uid = $check_auth['uid'];
 			$this->db->query(sprintf("select username,perms,auth_plugin from %s where user_id = '%s'",$this->database_table,$uid));
