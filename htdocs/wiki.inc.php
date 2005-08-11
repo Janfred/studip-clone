@@ -486,7 +486,7 @@ function showDeleteDialog($keyword, $version) {
 	$lnk = "?keyword=".urlencode($keyword); // what to do when delete is aborted
 	if (!$islatest) $lnk .= "&version=$version"; 
 	$msg.="<a href=\"".$PHP_SELF."$lnk\">" . makeButton("nein", "img") . "</a>\n";
-	$msg.="<p>Um alle Versionen einer Seite auf einmal zu löschen, klicken Sie <a href=\"".$PHP_SELF."?cmd=delete_all&keyword=".urlencode($keyword)."\">hier</a>.";
+	$msg.='<p>'. sprintf(_("Um alle Versionen einer Seite auf einmal zu löschen, klicken Sie %shier%s."),'<a href="'.$PHP_SELF.'?cmd=delete_all&keyword='.urlencode($keyword).'">','</a>');
 	parse_msg($msg, '§', 'blank', '1', FALSE);
 	end_blank_table();
 	return $version;
@@ -562,14 +562,14 @@ function deleteWikiPage($keyword, $version, $range_id) {
 	$db=new DB_Seminar;
 	$db->query($q);
 	if (!keywordExists($keyword)) { // all versions have gone
-		$addmsg = sprintf(_("<br>Damit ist die Seite mit allen Versionen gel&ouml;scht."));
+		$addmsg = '<br>' . sprintf(_("Damit ist die Seite %s mit allen Versionen gel&ouml;scht."),'<b>'.$keyword.'</b>');
 		$newkeyword = "WikiWikiWeb";
 	} else {
 		$newkeyword = $keyword;
 		$addmsg = "";
 	}
 	begin_blank_table();
-	parse_msg("info§" . sprintf(_("Version %s der Seite <b>%s</b> gel&ouml;scht."), $version, $keyword) . $addmsg);
+	parse_msg("info§" . sprintf(_("Version %s der Seite %s gel&ouml;scht."), $version, '<b>'.$keyword.'</b>') . $addmsg);
 	end_blank_table();
 	if ($dellatest) {
 		$lv=getLatestVersion($keyword, $SessSemName[1]);
@@ -603,7 +603,7 @@ function deleteAllWikiPage($keyword, $range_id) {
 	$db=new DB_Seminar;
 	$db->query($q);
 	begin_blank_table();
-	parse_msg("info§" . sprintf(_("Die Seite <b>%s</b> wurde mit allen Versionen gel&ouml;scht."), $keyword));
+	parse_msg("info§" . sprintf(_("Die Seite %s wurde mit allen Versionen gel&ouml;scht."), '<b>'.$keyword.'</b>'));
 	end_blank_table();
 	refreshBacklinks($keyword, "");
 	return "WikiWikiWeb";
@@ -798,7 +798,7 @@ function wikiEdit($keyword, $wikiData, $user_id, $backpage=NULL) {
 	$cont .= "</form>\n";
 	printcontent(0,0,$cont,"");
 	$infobox = array ();
-	$infobox[] = array("kategorie" => _("Information"), "eintrag" => array(array("icon"=>"pictures/ausruf_small.gif", "text"=> _("Sie k&ouml;nnen beliebigen Text einf&uuml;gen und vorhandenen Text &auml;ndern. Beachten Sie dabei die <a href=\"help/index.php?help_page=ix_forum6.htm\" target=\"_new\"> Formatierungsm&ouml;glichkeiten</a>. Links entstehen automatisch aus W&ouml;rtern, die mit Gro&szlig;buchstaben beginnen und einen Gro&szlig;buchstaben in der Wortmitte enthalten."))));
+	$infobox[] = array("kategorie" => _("Information"), "eintrag" => array(array("icon"=>"pictures/ausruf_small.gif", "text"=> sprintf(_("Sie k&ouml;nnen beliebigen Text einf&uuml;gen und vorhandenen Text &auml;ndern. Beachten Sie dabei die %sFormatierungsm&ouml;glichkeiten%s. Links entstehen automatisch aus W&ouml;rtern, die mit Gro&szlig;buchstaben beginnen und einen Gro&szlig;buchstaben in der Wortmitte enthalten."),'<a href="help/index.php?help_page=ix_forum6.htm" target="_new">','</a>'))));
 	end_blank_table();
 	echo "</td>"; // end of content area
 	showPageFrameEnd($infobox);
@@ -818,9 +818,9 @@ function printWikiPage($keyword, $version) {
 	echo "<body>";
 	echo "<p><em>$SessSemName[header_line]</em></p>";
 	echo "<h1>$keyword</h1>";
-	echo "<p><em>"._("Version")." ".$wikiData['version'];
-	echo ", "._("letzte Änderung")." ".date("d.m.Y, H:i", $wikiData['chdate']);
-	echo " "._("von")." ".get_fullname($wikiData['user_id'],'full',1).".</em></p>";
+	echo "<p><em>";
+	echo sprintf(_("Version %s, letzte Änderung %s von %s."), $wikiData['version'], date("d.m.Y, H:i", $wikiData['chdate']), get_fullname($wikiData['user_id'],'full',1));
+	echo "</em></p>";
 	echo "<hr>";
 	echo wikiReady($wikiData['body'],TRUE,FALSE,"none");
 	echo "<hr><p><font size=-1>created by Stud.IP Wiki-Module ";
@@ -868,7 +868,13 @@ function printAllWikiPages($range_id, $header) {
 *
 **/
 function getAllWikiPages($range_id, $header, $fullhtml=TRUE) {
-	
+	global $SessSemName;
+	$db = new DB_Seminar();
+	$q = 'SELECT DISTINCT keyword FROM wiki WHERE range_id="' . $SessSemName[1] . '"  ORDER BY keyword DESC';
+	$db->query($q);
+	while($db->next_record()){
+		$allpages[] = $db->f('keyword');
+	}	
 	$out=array();
 	$visited=array(); // holds names of already visited pages
 	$tovisit=array(); // holds names of pages yetto visit/expand
@@ -885,21 +891,31 @@ function getAllWikiPages($range_id, $header, $fullhtml=TRUE) {
 				$linklist=getWikiLinks($pagedata["body"]);
 				foreach ($linklist as $l) {
 					// add pages not visited yet to queue
-						if (! in_array($l, $visited)) {
+					if (! in_array($l, $visited)) {
 						$tovisit[] = $l; // breadth-first
 					}
 				}
 				$out[]="<hr><a name=\"$pagename\"></a><h1>$pagename</h1>";
-				$out[]="<font size=-1><p><em>Version ".$pagedata['version'];
-				$out[]=", letzte Änderung ".date("d.m.Y, H:i", $pagedata['chdate']);
-				$out[]=" von ".get_fullname($pagedata['user_id'],'full',1).".</em></p></font>";
+				$out[]="<font size=-1><p><em>";
+				$out[] = sprintf(_("Version %s, letzte Änderung %s von %s."), $pagedata['version'], date("d.m.Y, H:i", $pagedata['chdate']), get_fullname($pagedata['user_id'], 'full', 1));
+				$out[] = "</em></p></font>";
 				// output is html without comments
 				$out[]=wikiLinks(wikiReady($pagedata['body'],TRUE,FALSE,"none"),$pagename,"inline",$range_id);
-				$out[]="<p><font size=-1>(<a href=\"#top\">nach oben</a>)</font></p>";
+				$out[] = '<p><font size=-1>(<a href="#top">' . _("nach oben") . '</a>)</font></p>';
 			}
 		} 
+		if (empty($tovisit)){
+			while(! empty($allpages)){
+				$l = array_pop($allpages);
+				if (! in_array($l, $visited)) {
+					$tovisit[] = $l;
+					break;
+				}
+			}
+		}
 	}
-	$out[]="<hr><p><font size=-1>exportiert vom Stud.IP Wiki-Modul, ";
+
+	$out[]= '<hr><p><font size=-1>' . _("exportiert vom Stud.IP Wiki-Modul").' , ';
 	$out[]=date("d.m.Y, H:i", time());
 	$out[]=" </font></p>";
 	if ($fullhtml) $out[]="</body></html>";
@@ -946,7 +962,7 @@ function getShowPageInfobox($keyword, $latest_version) {
 	global $PHP_SELF, $show_wiki_comments;
 
 	$versions=getWikiPageVersions($keyword);
-	$versiontext="<a href=\"".$PHP_SELF."?keyword=".urlencode($keyword)."\">Aktuelle Version</a><br>";
+	$versiontext = '<a href="'.$PHP_SELF.'?keyword='.urlencode($keyword).'">' . _("Aktuelle Version"). '</a><br>';
 	if ($versions) {
 		foreach ($versions as $v) {
 			$versiontext .= "<a href=\"".$PHP_SELF."?keyword=".urlencode($keyword)."&version=".$v['version']."\">"._("Version")." ".$v['version']."</a> - ".date("d.m.Y, H:i",$v['chdate'])."<br>";
@@ -982,7 +998,7 @@ function getShowPageInfobox($keyword, $latest_version) {
  $backlinktext));
 	$infobox = array ();
 	if (!$latest_version) {
-		$infobox[] = array("kategorie" => _("Information"), "eintrag" => array(array("icon"=>"pictures/ausruf_small.gif", "text"=>_("Sie betrachten eine alte Version, die nicht mehr geändert werden kann. Verwenden Sie dazu die <a href=\"".$PHP_SELF."?keyword=".urlencode($keyword)."\">aktuelle Version</a>."))));
+		$infobox[] = array("kategorie" => _("Information"), "eintrag" => array(array("icon"=>"pictures/ausruf_small.gif", "text"=> sprintf(_("Sie betrachten eine alte Version, die nicht mehr geändert werden kann. Verwenden Sie dazu die %saktuelle Version%s."), '<a href="'.$PHP_SELF.'?keyword='.urlencode($keyword).'">','</a>'))));
 	}
 	$infobox[] = array("kategorie"  => _("Ansicht:"), "eintrag" => $views);
 	if ($latest_version) { 
@@ -1002,7 +1018,7 @@ function getShowPageInfobox($keyword, $latest_version) {
 	} elseif ($show_wiki_comments=="all") {
 			$comment_text=$comment_icon."<br>".$comment_none;
 	}
-	$infobox[] = array("kategorie"=> _("Kommentare".$comment_addon.":"),
+	$infobox[] = array("kategorie"=> _("Kommentare").$comment_addon.":",
 			"eintrag" => array(array("icon"=>"pictures/blank.gif",
 					"text"=>$comment_text)));
 // export
@@ -1022,7 +1038,7 @@ function getDiffPageInfobox($keyword) {
 	global $PHP_SELF;
 
 	$versions=getWikiPageVersions($keyword);
-	$versiontext="<a href=\"".$PHP_SELF."?keyword=".urlencode($keyword)."\">Aktuelle Version</a><br>";
+	$versiontext = '<a href="'.$PHP_SELF.'?keyword='.urlencode($keyword).'">'. _("Aktuelle Version").'</a><br>';
 	if ($versions) {
 		foreach ($versions as $v) {
 			$versiontext .= "<a href=\"".$PHP_SELF."?keyword=".urlencode($keyword)."&version=".$v['version']."\">"._("Version")." ".$v['version']."</a> - ".date("d.m.Y, H:i",$v['chdate'])."<br>";
@@ -1082,7 +1098,7 @@ function showWikiPage($keyword, $version, $special="", $show_comments="icon") {
 
 	if ($perm->have_studip_perm("autor", $SessSemName[1])) { 
 		if (!$latest_version) {
-			$edit="<img src=\"pictures/ausruf_small2.gif\"> Ältere Version, nicht bearbeitbar!";
+			$edit='<img src="pictures/ausruf_small2.gif">'. _("Ältere Version, nicht bearbeitbar!");
 		} else {
 			$edit="";
 			if ($perm->have_studip_perm("autor", $SessSemName[1])) {
@@ -1110,7 +1126,7 @@ function showWikiPage($keyword, $version, $special="", $show_comments="icon") {
 	$num_body_lines=substr_count($wikiData['body'], "\n");
 	if ($num_body_lines<15) {
 		$cont .= "<p>";
-		$cont .= str_repeat("&nbsp<br>", 15-$num_body_lines);
+		$cont .= str_repeat("&nbsp;<br>", 15-$num_body_lines);
 	}
 	printcontent(0,0, $cont, $edit);
 	end_blank_table(); 
@@ -1173,7 +1189,7 @@ function showDiffs($keyword, $versions_since) {
 		echo "<tr>";
 		$current = $db->f("body");
 		$currentversion = $db->f("version");
-		$diffarray = "<b><font size=-1>Änderungen zu </font> $zusatz</b><p>";
+		$diffarray = '<b><font size=-1>'. _("Änderungen zu") . " </font> $zusatz</b><p>";
 		$diffarray .= "<table cellpadding=0 cellspacing=0 border=0 width=\"100%\">\n";
 		$diffarray .= do_diff($current, $last);
 		$diffarray .= "</table>\n";
@@ -1286,7 +1302,7 @@ function showComboDiff($keyword, $db=NULL) {
 				echo "<tr bgcolor=$col>";
 				echo "<td width=30 align=center valign=top>";
 				echo "<img src=\"pictures/blank.gif\" height=3 width=3><br>";
-				echo "<img src=\"pictures/info.gif\" ". tooltip("Änderung von " . get_fullname($last_author), TRUE, TRUE). ">";
+				echo "<img src=\"pictures/info.gif\" ". tooltip(_("Änderung von").' ' . get_fullname($last_author), TRUE, TRUE). ">";
 				echo "</td>";
 				echo "<td><font size=-1>";
 				echo wikiReady($collect);
