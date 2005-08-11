@@ -47,7 +47,14 @@ class SemScheduleWeek  extends ScheduleWeek {
 		if (date("w", $this->start_date) > 1){
 			$first_monday += 7;
 		}
-		$this->base_date = mktime(0, 0, 0, date("n", $this->start_date), $first_monday ,  date("Y", $this->start_date));		
+		$this->base_date = mktime(0, 0, 0, date("n", $this->start_date), $first_monday ,  date("Y", $this->start_date));
 	}
+	
+	function getColumnName($id){
+		$ts = mktime (0,0,0,date("n",$this->base_date), date("j",$this->base_date)+$id-1, date("Y",$this->base_date));
+		$out = strftime("%A", $ts);
+		return $out;
+	}
+	
 }
 ?>
