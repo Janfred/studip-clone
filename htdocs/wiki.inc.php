@@ -873,8 +873,8 @@ function getAllWikiPages($range_id, $header, $fullhtml=TRUE) {
 	$q = 'SELECT DISTINCT keyword FROM wiki WHERE range_id="' . $SessSemName[1] . '"  ORDER BY keyword DESC';
 	$db->query($q);
 	while($db->next_record()){
-		$allpages[] = $db->f('keyword');
-	}	
+		$allpages[] = htmlReady($db->f('keyword'));
+	}
 	$out=array();
 	$visited=array(); // holds names of already visited pages
 	$tovisit=array(); // holds names of pages yetto visit/expand
@@ -912,9 +912,8 @@ function getAllWikiPages($range_id, $header, $fullhtml=TRUE) {
 					break;
 				}
 			}
-		}
+		} 
 	}
-
 	$out[]= '<hr><p><font size=-1>' . _("exportiert vom Stud.IP Wiki-Modul").' , ';
 	$out[]=date("d.m.Y, H:i", time());
 	$out[]=" </font></p>";
