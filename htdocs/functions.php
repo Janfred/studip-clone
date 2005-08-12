@@ -768,8 +768,7 @@ function write_config ($key='', $val='', $arr='') {
 /**
  * get_config
  *
- * gets an entry from the studip configuration table - deprecated, because all values from table
- * are set as globals now
+ * gets an entry from the studip configuration table
  *
  * @param	string	the key for the config entry
  * @param	boolean	if set, the default value will we returned
@@ -781,24 +780,8 @@ function get_config($key, $default = FALSE) {
 	if (isset($GLOBALS[$key]) && !isset($_REQUEST[$key]) && !$default){
 		return $GLOBALS[$key];
 	} else {
-		$db = new DB_Seminar;
-		$query = sprintf ("SELECT value, is_default FROM config WHERE `field` = '%s' ", $key);
-		$db->query($query);
-	
-		while ($db->next_record()) {
-			if ($db->f("is_default")) {
-				$default_value = $db->f("value");
-			} else {
-				$value = $db->f("value");
-			}
-		}
-	
-		if (($default) || (!isset($value))) {
-			return $default_value;
-		} else {
-			return $value;
-		}		
-		return FALSE;
+		$cfg =& Config::GetInstance();
+		return ($default ? $cfg->getDefault($key) : $cfg->getValue($key));
 	}
 }
 
