@@ -280,7 +280,7 @@ function createNormalizedAssigns($resource_id, $begin, $end, $explain_user_name 
 				$sem_doz_names = join(', ' , $sem_doz_names);
 			}
 			if($repmode == 'meta'){
-				$event_id = getNormalizedEventId($a_obj->getBegin(),$a_obj->getEnd());
+				$event_id = getNormalizedEventId($a_obj->getBegin(),$a_obj->getEnd(),$seminar_id);
 				if (!isset($events[$event_id])){
 					$events[$event_id] = array('begin' => $a_obj->getBegin(),
 												'end' => $a_obj->getEnd(),
@@ -313,8 +313,8 @@ function createNormalizedAssigns($resource_id, $begin, $end, $explain_user_name 
 	return $events;
 }
 
-function getNormalizedEventId($begin,$end){
-	return md5(date('G', $begin).':'.date('i', $begin).':'.date('s', $begin).':'.date('w',$begin).':'.date('G', $end).':'.date('i', $end).':'.date('s', $end).':'.date('w',$end));
+function getNormalizedEventId($begin,$end,$sem_id){
+	return md5($sem_id . ':'.date('G', $begin).':'.date('i', $begin).':'.date('s', $begin).':'.date('w',$begin).':'.date('G', $end).':'.date('i', $end).':'.date('s', $end).':'.date('w',$end));
 }
 
 ?>
