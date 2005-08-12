@@ -33,7 +33,7 @@
 require_once $ABSOLUTE_PATH_STUDIP . '/lib/classes/SimpleORMap.class.php';
 require_once $ABSOLUTE_PATH_STUDIP . '/lib/classes/StudipComments.class.php';
 require_once $ABSOLUTE_PATH_STUDIP . 'object.inc.php';
-
+require_once $ABSOLUTE_PATH_STUDIP . 'functions.php';
 
 define('STUDIPNEWS_DB_TABLE', 'news');
 
@@ -111,31 +111,46 @@ class StudipNews extends SimpleORMap {
 	}
 
 	function DoGarbageCollect(){
-		$db =& new DB_Seminar("SELECT news.news_id FROM news where (date+expire)<UNIX_TIMESTAMP() ");
-		while($db->next_record()) {
-			$result[$db->Record[0]] = true;
+		$db =& new DB_Seminar();
+		if (!get_config('NEWS_DISABLE_GARBAGE_COLLECT')){
+			$db->query("SELECT news.news_id FROM news where (date+expire)<UNIX_TIMESTAMP() ");
+			while($db->next_record()) {
+				$result[$db->Record[0]] = true;
+			}
+			$db->query("SELECT news_range.news_id FROM news_range LEFT JOIN news USING (news_id) WHERE ISNULL(news.news_id)");
+			while($db->next_record()) {
+				$result[$db->Record[0]] = true;
+			}
+			$db->query("SELECT news.news_id FROM news LEFT JOIN news_range USING (news_id) WHERE range_id IS NULL");
+			while($db->next_record()) {
+				$result[$db->Record[0]] = true;
+			}
+			if (is_array($result)) {
+				$kill_news = "('".join("','",array_keys($result))."')";
+				$db->query("DELETE FROM news WHERE news_id IN $kill_news");
+				$killed = $db->affected_rows();
+				$db->query("DELETE FROM news_range WHERE news_id IN $kill_news");
+				object_kill_visits(null, array_keys($result));
+				StudipComments::DeleteCommentsByObject(array_keys($result));
+			}
+			return $killed;
 		}
-		$db->query("SELECT news_range.news_id FROM news_range LEFT JOIN news USING (news_id) WHERE ISNULL(news.news_id)");
-		while($db->next_record()) {
-			$result[$db->Record[0]] = true;
-		}
-		$db->query("SELECT news.news_id FROM news LEFT JOIN news_range USING (news_id) WHERE range_id IS NULL");
-		while($db->next_record()) {
-			$result[$db->Record[0]] = true;
-		}
-		if (is_array($result)) {
-			$kill_news = "('".join("','",array_keys($result))."')";
-			$db->query("DELETE FROM news WHERE news_id IN $kill_news");
-			$killed = $db->affected_rows();
-			$db->query("DELETE FROM news_range WHERE news_id IN $kill_news");
-			
-			object_kill_visits(null, array_keys($result));
-			
-			StudipComments::DeleteCommentsByObject(array_keys($result));
-		}
-		return $killed;
 	}
 
+	function DeleteNewsRanges($range_id){
+		$db =& new DB_Seminar("DELETE FROM news_range WHERE range_id='$range_id'");
+		$ret = $db->affected_rows();
+		StudipNews::DoGarbageCollect();
+		return $ret;
+	}
+	
+	function DeleteNewsByAuthor($user_id){
+		foreach (StudipNews::GetNewsByAuthor($user_id, true) as $news){
+			$deleted += $news->delete();
+		}
+		return $deleted;
+	}
+	
 	function StudipNews($id = null){
 		$this->db_table = STUDIPNEWS_DB_TABLE;
 		parent::SimpleORMap($id);
