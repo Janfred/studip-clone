@@ -32,8 +32,8 @@
 
 require_once $ABSOLUTE_PATH_STUDIP . '/lib/classes/SimpleORMap.class.php';
 require_once $ABSOLUTE_PATH_STUDIP . '/lib/classes/StudipComments.class.php';
+require_once $ABSOLUTE_PATH_STUDIP . '/lib/classes/Config.class.php';
 require_once $ABSOLUTE_PATH_STUDIP . 'object.inc.php';
-require_once $ABSOLUTE_PATH_STUDIP . 'functions.php';
 
 define('STUDIPNEWS_DB_TABLE', 'news');
 
@@ -112,7 +112,8 @@ class StudipNews extends SimpleORMap {
 
 	function DoGarbageCollect(){
 		$db =& new DB_Seminar();
-		if (!get_config('NEWS_DISABLE_GARBAGE_COLLECT')){
+		$cfg =& Config::GetInstance();
+		if (!$cfg->getValue('NEWS_DISABLE_GARBAGE_COLLECT')){
 			$db->query("SELECT news.news_id FROM news where (date+expire)<UNIX_TIMESTAMP() ");
 			while($db->next_record()) {
 				$result[$db->Record[0]] = true;
