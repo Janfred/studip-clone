@@ -26,6 +26,8 @@ require_once($ABSOLUTE_PATH_STUDIP . "visual.inc.php");
 require_once($ABSOLUTE_PATH_STUDIP . "statusgruppe.inc.php"); //Enthaelt Funktionen fuer Statusgruppen
 require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/DataFields.class.php"); //Enthaelt Funktionen fuer Statusgruppen
 require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/StudipLitList.class.php");
+require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/StudipNews.class.php");
+
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
 $auth->login_if($auth->auth["uid"] == "nobody");
@@ -183,23 +185,10 @@ if ($archive_kill) {
 		}
 		
 		// Alle News-Verweise auf dieses Seminar löschen
-		$query = "DELETE FROM news_range where range_id='$s_id'";
-		$db->query($query); 
-		if (($db_ar = $db->num_rows()) > 0) {
+		if ( ($db_ar = StudipNews::DeleteNewsRanges($s_id)) ) {
 			$liste .= "<li>" . sprintf(_("%s News gel&ouml;scht."), $db_ar) . "</li>";
 		} 
 
-		// Die News durchsehen, ob es da jetzt verweiste Einträge gibt...
-		/*$query = "SELECT news.news_id FROM news LEFT OUTER JOIN news_range USING (news_id) where range_id IS NULL";
-		$db->query($query);
-		while ($db->next_record()) { // Diese News hängen an nix mehr...
-			$tempNews_id = $db->f("news_id");
-			$query = "DELETE FROM news where news_id = '$tempNews_id'";
-			$db2->query($query);
-		}
-		*/
-		StudipNews::DoGarbageCollect();
-		
 		//kill the datafields
 		$DataFields = new DataFields($s_id);
 		$DataFields->killAllEntries();

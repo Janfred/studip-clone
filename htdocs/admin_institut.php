@@ -42,6 +42,8 @@ require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/Modules.class.php");
 require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/DataFields.class.php");
 require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/StudipLitList.class.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipLitSearch.class.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipNews.class.php");
+
 
 if ($RESOURCES_ENABLE) {
 	include_once($RELATIVE_PATH_RESOURCES."/lib/DeleteResourcesUser.class.php");
@@ -200,19 +202,7 @@ while ( is_array($HTTP_POST_VARS)
 		}
 		
 		// delete news-links
-		$query = "DELETE FROM news_range where range_id='$i_id'";
-		$db->query($query);
-		// check News, if there are now entries without range...
-		/*
-		$query = "SELECT news.news_id FROM news LEFT OUTER JOIN news_range USING (news_id) where range_id IS NULL";
-		$db->query($query);
-		while ($db->next_record()) {			  // this News are unconnected...
-			$tempNews_id = $db->f("news_id");
-			$query = "DELETE FROM news where news_id = '$tempNews_id'";
-			$db2->query($query);
-		}
-		*/
-		StudipNews::DoGarbageCollect();
+		StudipNews::DeleteNewsRanges($i_id);
 		
 		//updating range_tree
 		$query = "UPDATE range_tree SET name='$Name " . _("(in Stud.IP gelöscht)") . "',studip_object='',studip_object_id='' WHERE studip_object_id='$i_id'";

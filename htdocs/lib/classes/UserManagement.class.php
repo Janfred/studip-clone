@@ -44,6 +44,7 @@ require_once $ABSOLUTE_PATH_STUDIP.("messaging.inc.php");	// remove messages sen
 require_once $ABSOLUTE_PATH_STUDIP.("contact.inc.php");	// remove user from adressbooks
 require_once $ABSOLUTE_PATH_STUDIP.("lib/classes/DataFields.class.php");	// remove extra data of user
 require_once $ABSOLUTE_PATH_STUDIP.("lib/classes/auth_plugins/StudipAuthAbstract.class.php");
+require_once $ABSOLUTE_PATH_STUDIP.("lib/classes/StudipNews.class.php");
 require_once $ABSOLUTE_PATH_STUDIP.("object.inc.php");
 if ($RESOURCES_ENABLE) {
 	include_once ($ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_RESOURCES."/lib/DeleteResourcesUser.class.php");
@@ -700,23 +701,14 @@ class UserManagement {
 			$this->msg .= "info§" . sprintf(_("%s Eintr&auml;ge aus den Zugriffsberechtigungen f&uuml;r das Archiv gel&ouml;scht."), $db_ar) . "§";
 		}
 
-		// delete links to all personal news from this user
-		$query = "DELETE FROM news_range WHERE range_id='" . $this->user_data['auth_user_md5.user_id'] . "'";
-		$this->db->query($query);
-		if (($db_ar = $this->db->affected_rows()) > 0) {
-			$this->msg .= "info§" . sprintf(_("%s Verweise auf News gel&ouml;scht."), $db_ar) . "§";
-		}
-		// check news for unlinked entries
-		$query = "SELECT news.news_id FROM news LEFT OUTER JOIN news_range USING (news_id) where range_id IS NULL";
-		$this->db->query($query);
-		while ($this->db->next_record()) {	// this news are not linked any longer...
-			$query = "DELETE FROM news WHERE news_id = '" . $this->db->f("news_id") . "'";
-			$this->db2->query($query);
-		}
-		if (($db_ar = $this->db->num_rows()) > 0) {
+		// delete all personal news from this user
+		if (($db_ar = StudipNews::DeleteNewsByAuthor($this->user_data['auth_user_md5.user_id']))) {
 			$this->msg .= "info§" . sprintf(_("%s Eintr&auml;ge aus den News gel&ouml;scht."), $db_ar) . "§";
 		}
-
+		if (($db_ar = StudipNews::DeleteNewsRanges($this->user_data['auth_user_md5.user_id']))) {
+			$this->msg .= "info§" . sprintf(_("%s Verweise auf News gel&ouml;scht."), $db_ar) . "§";
+		}
+		
 		// delete 'Studiengaenge'
 		$query = "DELETE FROM user_studiengang WHERE user_id='" . $this->user_data['auth_user_md5.user_id'] . "'";
 		$this->db->query($query);
