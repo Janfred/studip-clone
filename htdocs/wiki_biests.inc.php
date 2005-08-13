@@ -1,4 +1,6 @@
 <?
+// $Id$
+
 require_once $ABSOLUTE_PATH_STUDIP . 'forum.inc.php';
 // wikiMarkups are used by the wikiDirective function
 // after all other conversions,
@@ -52,7 +54,7 @@ Beschreibung: $biest_beschreibung',
 	// first field (name) will be added
 	"listview"=>array('erstellt','autor','zuständig','version','status','zusammenfassung'),
 	// standard order of fields for sort function
-  	"stdorder"=>'-erstellt,status,autor,zuständig,beschreibung',
+  	"stdorder"=>'-erstellt,status,autor,zuständig,version,beschreibung',
 	// header for list tables, first column always is the pages name
 	// order defines order criterion for sort action
 	"listheader"=>array(array("order"=>"-name","heading"=>"BIEST#"),
