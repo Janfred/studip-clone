@@ -92,7 +92,7 @@ if ($auth->auth["uid"] == "nobody") { ?>
 				<tr>
 
 
-<?				echo MakeToolbar("pictures/logo2.gif","impressum.php",_("Impressum"),$UNI_NAME_CLEAN." - "._("Informationen über das System"),40,"_top", "center", "FALSE", "5");
+<?				echo MakeToolbar("pictures/logo2.gif","impressum.php",_("Impressum"),$UNI_NAME_CLEAN." - "._("Informationen über das System"),40,"_top", "center", "FALSE");
 ?>
 				</td></tr></table></td>
 			<td class="toolbar" align="right">											
@@ -194,13 +194,13 @@ if ($auth->auth["uid"] == "nobody") { ?>
 		$tip = _("Sie haben keine alten empfangenen Nachrichten.");
 	}
 
-	echo MakeToolbar($icon,$link,$text,$tip,40, "_top", "center", "FALSE");
+	echo MakeToolbar($icon,$link,$text,$tip,40, "_top", "center", "FALSE", "3");
 
 		if (!($perm->have_perm("admin") || $perm->have_perm("root"))) {
 			if ($GLOBALS['CALENDAR_ENABLE'])
-				echo MakeToolbar("pictures/meinetermine.gif","./calendar.php?caluserid=self",_("Planer"),_("Termine und Kontakte"),40, "_top", "center", "FALSE", "3");
+				echo MakeToolbar("pictures/meinetermine.gif","./calendar.php?caluserid=self",_("Planer"),_("Termine und Kontakte"),40, "_top", "center", "FALSE", "4");
 			else
-				echo MakeToolbar("pictures/meinetermine.gif","./mein_stundenplan.php",_("Planer"),_("Stundenplan und Kontakte"),40, "_top", "center", "FALSE", "3");
+				echo MakeToolbar("pictures/meinetermine.gif","./mein_stundenplan.php",_("Planer"),_("Stundenplan und Kontakte"),40, "_top", "center", "FALSE", "4");
 		}		
 
 		if ($GLOBALS['CHAT_ENABLE']) {
@@ -236,12 +236,12 @@ if ($auth->auth["uid"] == "nobody") { ?>
 		// Ist sonst noch wer da?
 		$user_count = get_users_online_count($my_messaging_settings["active_time"]);
 		if (!$user_count)
-			echo MakeToolbar("pictures/nutzer.gif","online.php",_("Online"),_("Nur Sie sind online"),55, "_top","left", "FALSE", "4");
+			echo MakeToolbar("pictures/nutzer.gif","online.php",_("Online"),_("Nur Sie sind online"),55, "_top","left", "FALSE", "5");
 		else {
 			if ($user_count == 1) {
-				echo MakeToolbar("pictures/nutzeronline.gif","online.php",_("Online"),_("Außer Ihnen ist eine Person online"),55, "_top","left", "FALSE", "4");
+				echo MakeToolbar("pictures/nutzeronline.gif","online.php",_("Online"),_("Außer Ihnen ist eine Person online"),55, "_top","left", "FALSE", "5");
 			} else {
-				echo MakeToolbar("pictures/nutzeronline.gif","online.php",_("Online"),sprintf(_("Es sind außer Ihnen %s Personen online"), $user_count),55, "_top","left", "FALSE", "4");
+				echo MakeToolbar("pictures/nutzeronline.gif","online.php",_("Online"),sprintf(_("Es sind außer Ihnen %s Personen online"), $user_count),55, "_top","left", "FALSE", "5");
 			}
 		}
 
@@ -258,7 +258,7 @@ if ($auth->auth["uid"] == "nobody") { ?>
 		<table class="toolbar" border="0" width="100%" cellspacing="0" cellpadding="0">
 		<tr align="center">
 <? //create (javascript) info tooltip/window
-				echo MakeToolbar("pictures/logo2.gif","impressum.php",_("Impressum"),$UNI_NAME_CLEAN." - "._("Informationen über das System"),112, "_top", "center", "FALSE", "5");
+				echo MakeToolbar("pictures/logo2.gif","impressum.php",_("Impressum"),$UNI_NAME_CLEAN." - "._("Informationen über das System"),112, "_top", "center", "FALSE");
 ?>
 	</tr>
 	</table>
