@@ -522,7 +522,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 		foreach ($groups as $group_id => $group_members){
 			if ($group_field != 'not_grouped'){
 				$last_modified = check_group_new($group_members, $my_obj);
-				echo '<tr><td class="steelkante" valign="top" height="20" colspan="2"><img src="pictures/blank.gif" style="vertical-align: middle;" width="1px" height="20px">'; 
+				echo '<tr><td class="blue_gradient" valign="top" height="20" colspan="2"><img src="pictures/blank.gif" style="vertical-align: middle;" width="1px" height="20px">'; 
 				if (isset($_my_sem_open[$group_id])){
 					echo '<a class="tree" style="font-weight:bold"  name="' . $group_id . '" href="' . $PHP_SELF . '?view=' . $view . '&close_my_sem=' . $group_id . '#' .$group_id . '" ' . tooltip(_("Gruppierung schließen"), true) . '>';
 					if ($last_modified){
@@ -549,14 +549,14 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 					$group_name = $group_names[$group_id];
 				}
 		
-				echo '</td><td class="steelkante" valign="middle" colspan="' . ($view == 'ext' ? 3 : 1) . '">';
+				echo '</td><td class="blue_gradient" valign="middle" colspan="' . ($view == 'ext' ? 3 : 1) . '">';
 				echo '<a class="tree" '.(($_my_sem_open[$group_id]) ? 'style="font-weight:bold"' : '' ).' name="' . $group_id . '" href="' . $PHP_SELF . '?view=' . $view . '&'.(($_my_sem_open[$group_id]) ? 'close' : 'open' ).'_my_sem=' . $group_id . '#' .$group_id . '" ' . tooltip(_("Gruppierung öffnen"), true) . '>';
 				echo htmlReady(($group_field == "sem_tree_id") ? $group_names[$group_id][0] : $group_names[$group_id]);
 				echo '</a>';
 				if ($group_field == "sem_tree_id")
 					echo "<br><span style=\"font-size:0.8em\"><sup>(".htmlReady($group_name).")</sup></span>";
 				
-				echo '</td><td class="steelkante" align= "right" valign="top" colspan="4" nowrap>';
+				echo '</td><td class="blue_gradient" align= "right" valign="top" colspan="4" nowrap>';
 		
 				if ($last_modified){
 					echo '&nbsp;<span style="font-size:0.8em"><sup>letzte &Auml;nderung:&nbsp;</sup></span><span style="color:red;font-size:0.8em"><sup>' . date("d.m.Y, H:m",$last_modified) . '</sup></span>';
