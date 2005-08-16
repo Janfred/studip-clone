@@ -97,7 +97,7 @@ class ExternSemLectureTree extends StudipSemTreeViewSimple {
 		$ret .= "<td". $this->config->getAttributes("TreePath", "td") . ">";
 		$ret .= "<font". $this->config->getAttributes("TreePath", "td") . ">";
 		$parents = $this->tree->getParents($this->start_item_id);
-		$parents_root = $this->tree->getParents($this->root_id);
+		$parents_root[] = $this->tree->getParents($this->root_id);
 		if (is_array($parents)) {
 			$parents = array_diff($parents, $parents_root);
 			while ($parent = array_pop($parents)) {

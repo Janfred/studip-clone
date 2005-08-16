@@ -65,6 +65,10 @@ class ExternElementMain extends ExternElement {
 		$this->config =& $config;
 		$this->data_fields =& $data_fields;
 		$this->field_names =& $field_names;
+		if ($GLOBALS['EXTERN_SRI_ENABLE'] && (!$GLOBALS['EXTERN_SRI_ENABLE_BY_ROOT'] ||
+				(sri_is_enabled($this->config->range_id) && $GLOBALS['EXTERN_SRI_ENABLE_BY_ROOT']))) {
+			$this->attributes[] = 'sriurl';
+		}
 	}
 	
 	/**
@@ -102,6 +106,19 @@ class ExternElementMain extends ExternElement {
 		return $element_headline . $out;
 	}
 	
+	function getSRIFormContent (&$edit_form) {
+		$content = '';
+		if ($GLOBALS['EXTERN_SRI_ENABLE'] && (!$GLOBALS['EXTERN_SRI_ENABLE_BY_ROOT'] ||
+				(sri_is_enabled($this->config->range_id) && $GLOBALS['EXTERN_SRI_ENABLE_BY_ROOT']))) {
+			$headline = $edit_form->editHeadline(_("URL des SRI-Templates"));
+			$info = _("Nur bei Benutzung der SRI-Schnittstelle für dieses Modul: Geben Sie hier die vollständige URL der Seite an, in die die Ausgabe des Moduls eingefügt werden soll.");
+			$table = $edit_form->editTextfieldGeneric("sriurl", '', $info, 70, 350);
+			$content = $edit_form->editContentTable($headline, $table);
+			$content .= $edit_form->editBlankContent();
+		}
+		return $content;
+	}
+		
 }
 
 ?>

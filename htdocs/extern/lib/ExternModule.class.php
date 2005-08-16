@@ -203,7 +203,7 @@ class ExternModule {
 		
 		foreach ($this->elements as $element) {
 			if ($element->isEditable()) {
-				if ($open_elements[$element->getName()] == TRUE)
+				if ($open_elements[$element->getName()])
 					$out .= $element->toStringEdit($post_vars, $faulty_values, $edit_form, $anker);
 				else {
 					$edit_form->setElementName($element->getName());

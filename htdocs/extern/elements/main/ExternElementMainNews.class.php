@@ -101,9 +101,10 @@ class ExternElementMainNews extends ExternElementMain {
 		
 		$headline = $edit_form->editHeadline(_("Name der Konfiguration"));
 		$table = $edit_form->editName("name");
-		
 		$content_table = $edit_form->editContentTable($headline, $table);
 		$content_table .= $edit_form->editBlankContent();
+		
+		$content_table .= $this->getSRIFormContent($edit_form);
 		
 		$headline = $edit_form->editHeadline(_("Allgemeine Angaben zum Tabellenaufbau"));
 		

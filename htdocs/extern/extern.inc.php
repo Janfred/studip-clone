@@ -76,12 +76,16 @@ if ($range_id && $module) {
 		if ($id = get_standard_config($range_id, $type))
 			$config_id = $id;
 		else {
-			// use default configuraion
-			$default = "DEFAULT";
-			$config_id = "";
+			if ($EXTERN_ALLOW_ACCESS_WITHOUT_CONFIG) {
+				// use default configuraion
+				$default = 'DEFAULT';
+				$config_id = '';
+			} else {
+				echo $EXTERN_ERROR_MESSAGE;
+				exit;
+			}
 		}
 	}
-	
 	// the module itself validates the rest
 }
 else {

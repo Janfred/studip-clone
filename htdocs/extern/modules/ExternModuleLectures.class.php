@@ -53,7 +53,7 @@ class ExternModuleLectures extends ExternModule {
 			"LecturesInnerTable",
 			"SemLink" => "LinkInternSimple",
 			"LecturerLink" => "LinkInternSimple");
-	var $args = array();
+	var $args = array('group');
 
 	/**
 	*
@@ -88,7 +88,7 @@ class ExternModuleLectures extends ExternModule {
 		
 		$start_item_id = get_start_item_id($this->config->range_id);
 		$browser =& new ExternSemBrowse($this, $start_item_id);
-		$browser->print_result();
+		$browser->print_result($args);
 		
 		if ($this->config->getValue("Main", "wholesite"))
 			echo html_footer();

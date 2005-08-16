@@ -115,6 +115,8 @@ class ExternElementMainDownload extends ExternElementMain {
 		$content_table = $edit_form->editContentTable($headline, $table);
 		$content_table .= $edit_form->editBlankContent();
 		
+		$content_table .= $this->getSRIFormContent($edit_form);
+		
 		$headline = $edit_form->editHeadline(_("Allgemeine Angaben zum Tabellenaufbau"));
 		
 		$edit_function = $this->edit_function;

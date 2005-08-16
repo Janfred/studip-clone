@@ -140,14 +140,31 @@ if ($com == "delete") {
 	}
 }
 
+if ($EXTERN_SRI_ENABLE_BY_ROOT && $_REQUEST['com'] == 'enable_sri'
+		&& $perm->have_perm('root')) {
+	enable_sri($SessSemName[1], $_REQUEST['sri_enable']);
+}
+
 echo "<table class=\"blank\" border=\"0\" width=\"95%\" ";
 echo "align=\"left\" cellspacing=\"0\" cellpadding=\"0\">\n";
-echo "<tr><td class=\"blank\" colspan=\"0\">\n<blockquote>";
+echo "<tr><td class=\"blank\" colspan=\"0\">\n<blockquote><b>";
 echo _("Übersicht über alle angelegten Konfigurationen.");
-echo "</blockquote>\n</td></tr>\n";
-echo "<tr><td class=\"blank\">&nbsp;</td></tr>\n";
-echo "<tr><td class=\"blank\">&nbsp;</td></tr>\n";
-
+echo "</b></blockquote>\n</td></tr>\n";
+if ($EXTERN_SRI_ENABLE_BY_ROOT && $perm->have_perm('root')) {
+	echo "<tr><td class=\"blank\">\n";
+	echo "<form method=\"post\" action=\"$PHP_SELF?com=enable_sri\">\n";
+	echo '<blockquote><font size="2">';
+	echo _("SRI-Schnittstelle freigeben");
+	echo ' <input type="checkbox" name="sri_enable" value="1"';
+	if (sri_is_enabled($SessSemName[1])) {
+		echo ' checked="checked"';
+	}
+	echo '/> &nbsp;<input type="image" border="0" align="absmiddle" ';
+	echo makeButton('uebernehmen', 'src');
+	echo "></font></blockquote></form>\n</td></tr>\n";
+} else {
+	echo "<tr><td class=\"blank\">&nbsp;</td></tr>\n";
+}
 echo "<tr><td class=\"blank\">\n";
 
 $configurations = get_all_configurations($range_id);
@@ -186,7 +203,6 @@ else {
 }
 
 echo "</td></tr>\n";
-echo "<tr><td class=\"blank\">&nbsp;</td></tr>\n";
 
 if (!$have_config) {
 	echo "<tr><td class=\"blank\">\n<blockquote>\n<font size=\"2\">";

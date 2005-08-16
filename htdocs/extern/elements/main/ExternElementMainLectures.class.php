@@ -41,10 +41,10 @@ require_once($ABSOLUTE_PATH_STUDIP."lib/classes/SemesterData.class.php");
 
 class ExternElementMainLectures extends ExternElementMain {
 
-	var $attributes = array("name", "grouping", "semrange", "semstart", "semswitch",
-			"allseminars", "rangepathlevel", "addinfo", "time", "lecturer", "semclasses",
-			"textlectures", "textgrouping", "textnogroups", "aliasesgrouping", "wholesite",
-			"nameformat", "language", "urlcss", "title", "copyright", "author");
+	var $attributes = array('name', 'grouping', 'semrange', 'semstart', 'semswitch',
+			'allseminars', 'rangepathlevel', 'addinfo', 'time', 'lecturer', 'semclasses',
+			'textlectures', 'textgrouping', 'textnogroups', 'aliasesgrouping', 'wholesite',
+			'nameformat', 'language', 'urlcss', 'title', 'copyright', 'author');
 	var $edit_function = "editMainSettings";
 	
 	/**
@@ -113,9 +113,10 @@ class ExternElementMainLectures extends ExternElementMain {
 		
 		$headline = $edit_form->editHeadline(_("Name der Konfiguration"));
 		$table = $edit_form->editName("name");
-		
 		$content_table = $edit_form->editContentTable($headline, $table);
 		$content_table .= $edit_form->editBlankContent();
+		
+		$content_table .= $this->getSRIFormContent($edit_form);
 		
 		$headline = $edit_form->editHeadline(_("Allgemeine Angaben Seitenaufbau"));
 		

@@ -80,9 +80,10 @@ class ExternElementMainRangeLectureTree extends ExternElementMain {
 		
 		$headline = $edit_form->editHeadline(_("Name der Konfiguration"));
 		$table = $edit_form->editName("name");
-		
 		$content_table = $edit_form->editContentTable($headline, $table);
 		$content_table .= $edit_form->editBlankContent();
+		
+		$content_table .= $this->getSRIFormContent($edit_form);
 		
 		$attributes = array("table_width", "table_align", "table_border", "table_bgcolor",
 				"table_bordercolor", "table_cellpadding", "table_cellspacing", "table_class",

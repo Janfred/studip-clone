@@ -584,4 +584,25 @@ function get_default_generic_datafields (&$default_config, $object_type) {
 	return FALSE;
 }
 
+function enable_sri ($i_id, $enable) {
+	$db =& new DB_Seminar();
+	if ($enable) {
+		$query = "UPDATE Institute SET srienabled = 1 WHERE Institut_id = '$i_id'";
+		$db->query($query);
+	} else {
+		$query = "UPDATE Institute SET srienabled = 0 WHERE Institut_id = '$i_id'";
+		$db->query($query);
+	}
+}
+
+function sri_is_enabled ($i_id) {
+	$db =& new DB_Seminar();
+	$query = "SELECT srienabled FROM Institute WHERE Institut_id = '$i_id' AND srienabled = 1";
+	$db->query($query);
+	if ($db->next_record()) {
+		return 1;
+	}
+	return 0;
+}
+
 ?>

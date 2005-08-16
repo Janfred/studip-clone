@@ -34,12 +34,17 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
+if (!$EXTERN_SRI_ENABLE) {
+	echo $EXTERN_ERROR_MESSAGE;
+	exit;
+}
+
 if (!ini_get('allow_url_fopen')){
 	@ini_set('allow_url_fopen','1');
 }
 // this script is included in extern.inc.php
 
-$semester = new SemesterData;
+$semester = new SemesterData();
 $all_semester = $semester->getAllSemesterData();
 
 if ($sri_file = @file($page_url))
@@ -54,7 +59,6 @@ $sri_pattern = "'(.*)(\<studip_remote_include\>.*\<\/studip_remote_include\>)(.*
 
 if (!preg_match($sri_pattern, $sri_page, $sri_matches)) {
 	echo $EXTERN_ERROR_MESSAGE;
-	echo $sri_page;
 	exit;
 }
 
@@ -78,9 +82,7 @@ foreach ($allowed_xml_tags as $xml_tag) {
 // check given data
 // no range_id? sorry...
 if (!$range_id) {
-	echo $sri_matches[1];
 	echo $EXTERN_ERROR_MESSAGE;
-	echo $sri_matches[3];
 	exit;
 }
 
@@ -94,9 +96,7 @@ foreach ($EXTERN_MODULE_TYPES as $module_type => $module_data) {
 }
 // Wrong module name!
 if (!$type) {
-	echo $sri_matches[1];
 	echo $EXTERN_ERROR_MESSAGE;
-	echo $sri_matches[3];
 	exit;
 }
 
@@ -104,9 +104,7 @@ if (!$type) {
 if ($config_name) {
 	// check for valid configuration name and convert it into a config_id
 	if (!$config_id = get_config_by_name($range_id, $type, $config_name)) {
-		echo $sri_matches[1];
 		echo $EXTERN_ERROR_MESSAGE;
-		echo $sri_matches[3];
 		exit;
 	}
 }
@@ -115,9 +113,14 @@ elseif (!$config_id) {
 	if ($id = get_standard_config($range_id, $type))
 		$config_id = $id;
 	else {
-		// use default configuration
-		$default = "DEFAULT";
-		$config_id = "";
+		if ($EXTERN_ALLOW_ACCESS_WITHOUT_CONFIG) {
+			// use default configuraion
+			$default = 'DEFAULT';
+			$config_id = '';
+		} else {
+			echo $EXTERN_ERROR_MESSAGE;
+			exit;
+		}
 	}
 }
 
@@ -125,9 +128,7 @@ elseif (!$config_id) {
 if ($global_name) {
 	// check for valid configuration name and convert it into a config_id
 	if (!$global_id = get_config_by_name($range_id, $type, $config_name)) {
-		echo $sri_matches[1];
 		echo $EXTERN_ERROR_MESSAGE;
-		echo $sri_matches[3];
 		exit;
 	}
 }
@@ -172,6 +173,12 @@ foreach ($EXTERN_MODULE_TYPES as $type) {
 		require_once($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_EXTERN . "/modules/$class_name.class.php");
 		$module_obj =& new ExternModule($range_id, $module_name, $config_id, $default, $global_id);
 	}
+}
+
+if ($_REQUEST['page_url'] != $module_obj->config->getValue('Main', 'sriurl')
+		|| !sri_is_enabled($module_obj->config->range_id)) {
+	echo $EXTERN_ERROR_MESSAGE;
+	exit;
 }
 
 $args = $module_obj->getArgs();
