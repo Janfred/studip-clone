@@ -353,6 +353,7 @@ class ShowList extends ShowTreeRow{
 	
 	function getResourcesSearchRange($resource_id){
 		static $children = array();
+		$to_add = array();
 		$this->db->query("SELECT resource_id FROM resources_objects WHERE parent_id='$resource_id'");
 		while($this->db->next_record()){
 			$to_add[] = $this->db->f(0);

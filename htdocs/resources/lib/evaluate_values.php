@@ -1064,7 +1064,7 @@ if ($view == "search") {
 	if ((isset($start_search_x)) || ($search_send)) {
 		unset($resources_data["search_array"]);
 		$resources_data["search_array"]["search_exp"]=$search_exp;
-		$resources_data["search_array"]["resources_search_range"]=$_REQUEST['resources_search_range'];
+		$resources_data["search_array"]["resources_search_range"]=$resources_data["browse_open_level"]=$_REQUEST['resources_search_range'];
 		if (is_array($search_property_val))
 			foreach ($search_property_val as $key=>$val) {
 				if ((substr($val, 0, 4) == "_id_") && (substr($search_property_val[$key+1], 0, 4) != "_id_") && ($search_property_val[$key+1]))
