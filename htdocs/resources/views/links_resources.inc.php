@@ -103,14 +103,6 @@ if ($top_kat_tools) {
 	$structure["list_requests"]=array (topKat=>"room_planning", name=>_("Anfragenliste"), link=>"resources.php?view=list_requests", active=>FALSE, "disabled"=>(($resources_data["requests_working_on"]) ? FALSE : TRUE));
 }
 
-/*StEP00016,StEP00014,StEP00013
-if ((getGlobalPerms($user->id) == "admin") || ($perm->have_perm("root"))) { //Spezielle Tools fuer alle Ressourcen Admins
-	$structure["plan"]=array (topKat=>"room_planning", name=>_("Wochenplan"), link=>"resources.php?view=plan", active=>FALSE);
-	$structure["regular"]=array (topKat=>"room_planning", name=>_("Semesterplan"), link=>"resources.php?view=regular", active=>FALSE);
-	$structure["diff"]=array (topKat=>"room_planning", name=>_("w&ouml;chentlichen Differenzplan"), link=>"resources.php?view=diff", active=>FALSE);
-}
-*/
-
 //Reiter "Anpassen"
 
 if ((getGlobalPerms($user->id) == "admin") || ($perm->have_perm("root"))){ //Grundlegende Einstellungen fuer alle Ressourcen Admins
