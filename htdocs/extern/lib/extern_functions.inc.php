@@ -596,11 +596,16 @@ function enable_sri ($i_id, $enable) {
 }
 
 function sri_is_enabled ($i_id) {
-	$db =& new DB_Seminar();
-	$query = "SELECT srienabled FROM Institute WHERE Institut_id = '$i_id' AND srienabled = 1";
-	$db->query($query);
-	if ($db->next_record()) {
-		return 1;
+	if ($GLOBALS['EXTERN_SRI_ENABLE']) {
+		if (!$GLOBALS['EXTERN_SRI_ENABLE_BY_ROOT']) {
+			return 1;
+		}
+		$db =& new DB_Seminar();
+		$query = "SELECT srienabled FROM Institute WHERE Institut_id = '$i_id' AND srienabled = 1";
+		$db->query($query);
+		if ($db->next_record()) {
+			return 1;
+		}
 	}
 	return 0;
 }
