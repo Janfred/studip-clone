@@ -224,61 +224,68 @@ class ShowToolsRequests {
 		global $resources_data, $_fullname_sql, $ABSOLUTE_PATH_STUDIP;
 		require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/ZebraTable.class.php");
 	
+		//echo '<pre>', print_r($resources_data, true), '</pre>';
+	
 		$i = 0;
-		$zt = new ZebraTable(array('width' => '100%', 'padding' => '1'));
+		$zt = new ZebraTable(array('width' => '99%', 'padding' => '1', 'align' => 'center'));
+		$zt->switchClass();
 		echo $zt->openRow();
-		echo $zt->cell("&nbsp;", array("class" => "topic"));
-		echo $zt->cell("<font size=\"-1\"><b>Z&auml;hler</b></font>", array("class" => "topic"));
-		echo $zt->cell("<font size=\"-1\"><b>V.-Nummer</b></font>", array("class" => "topic"));
-		echo $zt->cell("<font size=\"-1\"><b>Titel</b></font>", array("class" => "topic"));
-		echo $zt->cell("<font size=\"-1\"><b>Dozenten</b></font>", array("class" => "topic"));
-		echo $zt->cell("<font size=\"-1\"><b>Anfrager</b></font>", array("class" => "topic"));
-		echo $zt->cell("<font size=\"-1\"><b>Start-Semester<b></font>", array("class" => "topic"));
+		echo $zt->cell("&nbsp;", array("class" => "steelkante"));
+		echo $zt->cell("<font size=\"-1\"><b>Z&auml;hler</b></font>", array("class" => "steelkante", 'colspan' => '3'));
+		echo $zt->cell("<font size=\"-1\"><b>V.-Nummer</b></font>", array("class" => "steelkante"));
+		echo $zt->cell("<font size=\"-1\"><b>Titel</b></font>", array("class" => "steelkante"));
+		echo $zt->cell("<font size=\"-1\"><b>Dozenten</b></font>", array("class" => "steelkante"));
+		echo $zt->cell("<font size=\"-1\"><b>Anfrager</b></font>", array("class" => "steelkante"));
+		echo $zt->cell("<font size=\"-1\"><b>Start-Semester<b></font>", array("class" => "steelkante"));
 		$zt->closeRow();
 		?>
 		<?
 		foreach ($resources_data['requests_working_on'] as $key => $val) {
 			$i++;
-			$reqObj = new RoomRequest($val['request_id']);
-			$semObj = new Seminar($reqObj->getSeminarId());
-			
-			$db = new DB_Seminar();
-			$db->query("SELECT user_id FROM seminar_user WHERE seminar_id = '".$semObj->id."' AND status = 'dozent'");
-			$dozent = array();
-			while ($db->next_record()) {
-				$dozent[] = get_fullname($db->f('user_id'));
-			}
-			if ($semObj->getName() != "") {
-				echo $zt->openRow();
-				echo "<font size=\"-1\">";
-				echo $zt->cell("&nbsp;");
-				echo $zt->cell("<font size=\"-1\">$i.</font>");
-				echo $zt->cell("<font size=\"-1\">".$semObj->seminar_number."</font>");
-				echo $zt->cell("<font size=\"-1\"><a href=\"resources.php?view=edit_request&edit=".$val['request_id']."\">".my_substr(htmlReady($semObj->getName()),0,50)."</a><br/></font>");
-				echo $zt->openCell();
-				echo "<font size=\"-1\">";
-				$k = false;
-				foreach ($dozent as $val) {
-					if ($k) echo ", ";
-					echo "$val";
-					$k = true;
-				}
-				echo "</font>";
-				$this->selectSemInstituteNames($semObj->getInstitutId());
-				if (!$this->all_semester) {
-					$semester = new SemesterData();
-					$this->all_semester = $semester->getAllSemesterData();
-				}
-				foreach ($this->all_semester as $val) {
-					if ($val['beginn'] == $semObj->semester_start_time) {
-						$cursem = $val['name'];
-					}
-				}
+			if ($resources_data['requests_open'][$val['request_id']] || !$resources_data['skip_closed_requests']) {
+				$reqObj = new RoomRequest($val['request_id']);
+				$semObj = new Seminar($reqObj->getSeminarId());
 
-				echo $zt->closeCell();
-				echo $zt->cell("<font size=\"-1\">".get_fullname($reqObj->user_id)."</font>");
-				echo $zt->cell("<font size=\"-1\">$cursem</font>");
-				echo $zt->closeRow();
+				$db = new DB_Seminar();
+				$db->query("SELECT seminar_user.user_id, auth_user_md5.username FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE seminar_id = '".$semObj->id."' AND status = 'dozent'");
+				$dozent = array();
+				while ($db->next_record()) {
+					$dozent[$db->f('username')] = get_fullname($db->f('user_id'));
+				}
+				if ($semObj->getName() != "") {
+					echo $zt->openRow();
+					//echo "<font size=\"-1\">";
+					echo $zt->cell("&nbsp;");
+					echo $zt->cell("<font size=\"-1\">$i.</font>");
+					echo $zt->cell("<a href=\"resources.php?view=edit_request&edit=".$val['request_id']."\"><img src=\"pictures/edit_transparent.gif\" border=\"0\"".tooltip('Anfrage bearbeiten')."></a>");
+					echo $zt->cell((($resources_data['requests_open'][$val['request_id']]) ? '' : '<img src="pictures/haken_transparent.gif">')."</font>");
+					echo $zt->cell("<font size=\"-1\">".$semObj->seminar_number."</font>");
+					echo $zt->cell("<font size=\"-1\"><a href=\"seminar_main.php?auswahl=".$semObj->getId()."\">".my_substr(htmlReady($semObj->getName()),0,50)."</a><br/></font>");
+					echo $zt->openCell();
+					echo "<font size=\"-1\">";
+					$k = false;
+					foreach ($dozent as $key => $val) {
+						if ($k) echo ", ";
+						echo "<a href=\"about.php?username=$key\">$val</a>";
+						$k = true;
+					}
+					echo "</font>";
+					$this->selectSemInstituteNames($semObj->getInstitutId());
+					if (!$this->all_semester) {
+						$semester = new SemesterData();
+						$this->all_semester = $semester->getAllSemesterData();
+					}
+					foreach ($this->all_semester as $val) {
+						if ($val['beginn'] == $semObj->semester_start_time) {
+							$cursem = $val['name'];
+						}
+					}
+
+					echo $zt->closeCell();
+					echo $zt->cell("<font size=\"-1\"><a href=\"about.php?username=".get_username($reqObj->user_id)."\">".get_fullname($reqObj->user_id)."</a></font>");
+					echo $zt->cell("<font size=\"-1\">$cursem</font>");
+					echo $zt->closeRow();
+				}
 			}
 		}
 		$zt->close();
