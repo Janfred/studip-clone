@@ -763,7 +763,7 @@ function validate_upload($the_file) {
 } 
 
 //der eigentliche Upload
-function upload($the_file) {
+function upload($the_file, $refresh = false) {
 	global $UPLOAD_PATH, $dokument_id,$the_file_name, $msg;
 
 	if (!validate_upload($the_file)) {
@@ -782,6 +782,11 @@ function upload($the_file) {
 			$msg.= "error§" . _("Datei&uuml;bertragung gescheitert!");
 			return FALSE;
 		} else {
+			if ($refresh){
+				@copy($newfile, "$UPLOAD_PATH/$refresh");
+				@unlink($newfile);
+				$dokument_id = $refresh;
+			}
 			$msg="msg§" . _("Die Datei wurde erfolgreich auf den Server &uuml;bertragen!");
 			return TRUE;
 		}
@@ -962,10 +967,9 @@ function upload_item ($range_id, $create = FALSE, $echo = FALSE, $refresh = FALS
 	global $the_file;
 
 	if ($create) {
-		if (upload($the_file))
-			if (insert_entry_db($range_id, 0, $refresh))
-				if ($refresh)
-					delete_document($refresh, TRUE);
+		if (upload($the_file, $refresh))
+			insert_entry_db($range_id, 0, $refresh);
+				
 		return;
 		} 
 	 else {
