@@ -344,10 +344,12 @@ class Seminar_Auth extends Auth {
 
 	//constructor
 	function Seminar_Auth() {
+	}
+	
+	function start(){
 		//load the lifetime from the settings
-		global $AUTH_LIFETIME;
-
-		$this->lifetime = $AUTH_LIFETIME;
+		$this->lifetime = $GLOBALS['AUTH_LIFETIME'];
+		return parent::start();
 	}
 	
 	function login_if($ok){
