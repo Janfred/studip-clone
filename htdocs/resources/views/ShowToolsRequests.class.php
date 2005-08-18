@@ -221,7 +221,7 @@ class ShowToolsRequests {
 	}
 	
 	function showRequestList() {
-		global $resources_data, $_fullname_sql, $ABSOLUTE_PATH_STUDIP;
+		global $resources_data, $_fullname_sql, $ABSOLUTE_PATH_STUDIP, $CANONICAL_RELATIVE_PATH_STUDIP;
 		require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/ZebraTable.class.php");
 	
 		//echo '<pre>', print_r($resources_data, true), '</pre>';
@@ -260,7 +260,7 @@ class ShowToolsRequests {
 					echo $zt->cell("<a href=\"resources.php?view=edit_request&edit=".$val['request_id']."\"><img src=\"pictures/edit_transparent.gif\" border=\"0\"".tooltip('Anfrage bearbeiten')."></a>");
 					echo $zt->cell((($resources_data['requests_open'][$val['request_id']]) ? '' : '<img src="pictures/haken_transparent.gif">')."</font>");
 					echo $zt->cell("<font size=\"-1\">".$semObj->seminar_number."</font>");
-					echo $zt->cell("<font size=\"-1\"><a href=\"details.php?sem_id=".$semObj->getId()."\">".my_substr(htmlReady($semObj->getName()),0,50)."</a><br/></font>");
+					echo $zt->cell("<font size=\"-1\"><a href=\"details.php?sem_id=".$semObj->getId()."&send_from_search=true&send_from_search_page=".urlencode($CANONICAL_RELATIVE_PATH_STUDIP."resources.php?view=list_requests")."\">".my_substr(htmlReady($semObj->getName()),0,50)."</a><br/></font>");
 					echo $zt->openCell();
 					echo "<font size=\"-1\">";
 					$k = false;
