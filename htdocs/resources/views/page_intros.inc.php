@@ -252,6 +252,10 @@ switch ($view) {
 		$infopic = "pictures/rooms.jpg";
 		$clipboard = TRUE;
 	break;
+	case 'list_requests':
+		$page_intro = sprintf(_("Sie sehen hier eine Liste aller offenen Anfragen, die Sortierung folgt der Einstellung unter %s&Uuml;bersicht%s."), '<a href="resources.php?view=requests_start&cancel_edit_request_x=1">', '</a>'). '<br/>'._("Ein Klick auf das Symbol nebem dem Z&auml;hler erlaubt es Ihnen, direkt zu der Anfrage zu springen.");
+		$title = _("Anfragenliste");
+	break;
 	//all the intros in an open object (Veranstaltung, Einrichtung)
 	case "openobject_main":
 		$page_intro=sprintf(_("Auf dieser Seite sehen sie alle der %s zugeordneten Ressourcen."), $SessSemName["art_generic"]);

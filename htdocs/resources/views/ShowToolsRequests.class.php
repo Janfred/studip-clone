@@ -260,7 +260,7 @@ class ShowToolsRequests {
 					echo $zt->cell("<a href=\"resources.php?view=edit_request&edit=".$val['request_id']."\"><img src=\"pictures/edit_transparent.gif\" border=\"0\"".tooltip('Anfrage bearbeiten')."></a>");
 					echo $zt->cell((($resources_data['requests_open'][$val['request_id']]) ? '' : '<img src="pictures/haken_transparent.gif">')."</font>");
 					echo $zt->cell("<font size=\"-1\">".$semObj->seminar_number."</font>");
-					echo $zt->cell("<font size=\"-1\"><a href=\"seminar_main.php?auswahl=".$semObj->getId()."\">".my_substr(htmlReady($semObj->getName()),0,50)."</a><br/></font>");
+					echo $zt->cell("<font size=\"-1\"><a href=\"details.php?sem_id=".$semObj->getId()."\">".my_substr(htmlReady($semObj->getName()),0,50)."</a><br/></font>");
 					echo $zt->openCell();
 					echo "<font size=\"-1\">";
 					$k = false;
