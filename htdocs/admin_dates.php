@@ -475,7 +475,7 @@ if (!sizeof($term_data["turnus_data"])) {
 		<td class="topic" colspan=2>&nbsp;<b>
 		<?
 		if ($admin_dates_data["assi"]) {
-			printf(_("Schritt 7: Ablaufplan und Termine der Veranstaltung: %s"),htmlReady(substr($db->f("Name"), 0, 40)));
+			printf(_("Schritt 8: Ablaufplan und Termine der Veranstaltung: %s"),htmlReady(substr($db->f("Name"), 0, 40)));
 		if (strlen($db->f("Name")) > 40)
 			echo "... ";
 		} else
