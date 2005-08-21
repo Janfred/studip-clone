@@ -329,6 +329,7 @@ if ($GLOBALS['CHAT_ENABLE']){
 		echo "<br>";
 }
 
+
 //test Ausgabe von Literaturlisten
 if ( ($lit_list = StudipLitList::GetFormattedListsByRange($user_id)) ) {
 	echo "<table class=\"blank\" width=\"100%%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><b>&nbsp;" . _("Literaturlisten") . " </b></td>";
@@ -340,6 +341,7 @@ if ( ($lit_list = StudipLitList::GetFormattedListsByRange($user_id)) ) {
 	printf ("</tr><tr><td colspan=\"$cs\" class=\"steel1\">&nbsp;</td></tr><tr><td colspan=\"$cs\" class=\"steel1\"><blockquote>%s</blockquote></td></tr><tr><td colspan=\"$cs\" class=\"steel1\">&nbsp;</td></tr></table><br>\n",$lit_list);
 	unset($cs);
 }
+
 // Hier wird der Lebenslauf ausgegeben:
 if ($db->f("lebenslauf")!="") {
 	echo "<table class=\"blank\" width=\"100%%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><b>&nbsp;" . _("Lebenslauf") . " </b></td></tr>";
@@ -368,7 +370,7 @@ if ($db->f("schwerp")!="") {
 }
 
 //add the free administrable datafields (these field are system categories - the user is not allowed to change the catgeories)
-$localFields = $DataFields->getLocalFields();
+$localFields = $DataFields->getLocalFields($user->id, 'user', $auth->auth['perm']);
 
 foreach ($localFields as $val) {
 	if ($DataFields->checkPermission($perm, $val["view_perms"], $auth->auth["uid"], $user_id)) {
@@ -393,35 +395,35 @@ while ($db2->next_record())  {
 	}
 }
 // Anzeige der Seminare
-$all_semester = $semester->getAllSemesterData();
-array_unshift($all_semester,array("name" => sprintf(_("vor dem %s"),$all_semester[0]['name'])));
-
-$view = new DbView();
-for ($i = count($all_semester)-1; $i >= 0; --$i){
-	$view->params[0] = $user_id;
-	$view->params[1] = "dozent";
-	$view->params[2] = " HAVING (sem_number <= $i AND (sem_number_end >= $i OR sem_number_end = -1)) ";
-	$snap = new DbSnapshot($view->get_query("view:SEM_USER_GET_SEM"));
-	if ($snap->numRows){
-		$sem_name = $all_semester[$i]['name'];
-		$output .= "<br><font size=\"+1\"><b>$sem_name</b></font><br><br>";
-		$snap->sortRows("Name");
-		while ($snap->nextRow()) {
-			$ver_name = $snap->getField("Name");
-			$sem_number_start = $snap->getField("sem_number");
-			$sem_number_end = $snap->getField("sem_number_end");
-			if ($sem_number_start != $sem_number_end){
-				$ver_name .= " (" . $all_semester[$sem_number_start]['name'] . " - ";
-				$ver_name .= (($sem_number_end == -1) ? _("unbegrenzt") : $all_semester[$sem_number_end]['name']) . ")";
+if ($perm->get_perm($user_id) == 'dozent'){
+	$all_semester = SemesterData::GetSemesterArray();
+	$view = new DbView();
+	for ($i = count($all_semester)-1; $i >= 0; --$i){
+		$view->params[0] = $user_id;
+		$view->params[1] = "dozent";
+		$view->params[2] = " HAVING (sem_number <= $i AND (sem_number_end >= $i OR sem_number_end = -1)) ";
+		$snap = new DbSnapshot($view->get_query("view:SEM_USER_GET_SEM"));
+		if ($snap->numRows){
+			$sem_name = $all_semester[$i]['name'];
+			$output .= "<br><font size=\"+1\"><b>$sem_name</b></font><br><br>";
+			$snap->sortRows("Name");
+			while ($snap->nextRow()) {
+				$ver_name = $snap->getField("Name");
+				$sem_number_start = $snap->getField("sem_number");
+				$sem_number_end = $snap->getField("sem_number_end");
+				if ($sem_number_start != $sem_number_end){
+					$ver_name .= " (" . $all_semester[$sem_number_start]['name'] . " - ";
+					$ver_name .= (($sem_number_end == -1) ? _("unbegrenzt") : $all_semester[$sem_number_end]['name']) . ")";
+				}
+				$output .= "<b><a href=\"details.php?sem_id=" . $snap->getField("Seminar_id") . "\">" . htmlReady($ver_name) . "</a></b><br>";
 			}
-			$output .= "<b><a href=\"details.php?sem_id=" . $snap->getField("Seminar_id") . "\">" . htmlReady($ver_name) . "</a></b><br>";
 		}
 	}
-}
-if ($output){
-	echo "<table class=\"blank\" width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><b>&nbsp;" . _("Veranstaltungen") . "</b></td></tr><tr><td class=\"steel1\"><blockquote>";
-	echo $output;
-	echo "</blockquote></td></tr><tr><td class=\"steel1\">&nbsp;</td></tr></table><br>\n";
+	if ($output){
+		echo "<table class=\"blank\" width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><b>&nbsp;" . _("Veranstaltungen") . "</b></td></tr><tr><td class=\"steel1\"><blockquote>";
+		echo $output;
+		echo "</blockquote></td></tr><tr><td class=\"steel1\">&nbsp;</td></tr></table><br>\n";
+	}
 }
 
 // Save data back to database.
