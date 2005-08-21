@@ -37,6 +37,7 @@
 
 require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."/lib/ExternModule.class.php");
 require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."/views/extern_html_templates.inc.php");
+require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"]."/lib/classes/StudipNews.class.php");
 
 class ExternModuleNewsticker extends ExternModule {
 
@@ -82,13 +83,10 @@ class ExternModuleNewsticker extends ExternModule {
 		$out .= "newsticker_tl = new textlist(";
 		
 		$topics = array();
-		$now = time();
-		$db = new DB_Seminar();
-		$db->query("SELECT news.topic FROM news_range LEFT JOIN news USING(news_id) WHERE range_id LIKE '{$this->config->range_id}' AND date < $now AND (date+expire) > $now ORDER BY date DESC");
-		while ($db->next_record())
-			$topics[] = "'" . addslashes($db->f("topic")) . "'";
-		
-		if (!$db->num_rows())
+		foreach(StudipNews::GetNewsByRange($this->config->range_id, true) as $news_content){
+			$topics[] = "'" . addslashes($news_content["topic"]) . "'";
+		}
+		if (!count($topics))
 			$topics[] = "'" . $this->config->getValue("Main", "nodatatext") . "'";
 		if ($this->config->getValue("Main", "endtext"))
 			$topics[] = "'" . $this->config->getValue("Main", "endtext") . "'";

@@ -1,5 +1,6 @@
 <?
 require_once($ABSOLUTE_PATH_STUDIP . "visual.inc.php");
+require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"]."/lib/classes/StudipNews.class.php");
 
 $db =& new DB_Seminar();
 $error_message = "";
@@ -9,7 +10,7 @@ $query = "SELECT Name FROM Institute WHERE Institut_id=\"{$this->config->range_i
 $db->query($query);
 if(!$db->next_record())
 	$error_message = $GLOBALS["EXTERN_ERROR_MESSAGE"];
-
+/*
 $sort = $this->config->getValue("Main", "sort");
 
 $query_order = "";
@@ -21,29 +22,14 @@ if ($query_order) {
 	ksort($query_order, SORT_NUMERIC);
 	$query_order = " ORDER BY " . implode(",", $query_order) . " DESC";
 }
+*/
 
 if (!$nameformat = $this->config->getValue("Main", "nameformat"))
 	$nameformat = "no_title";
-$now = time();
-if ($nametitel == "last") {
-	$query = "SELECT n.*, aum.Nachname AS name, aum.username FROM news_range nr LEFT JOIN "
-			. "news n USING(news_id) LEFT JOIN auth_user_md5 aum USING(user_id) "
-			. "WHERE range_id='{$this->config->range_id}' AND n.date <= $now AND "
-			. "n.date + n.expire >= $now" . $query_order;
-}
-else {
-	global $_fullname_sql;
-	$query = "SELECT n.*, {$_fullname_sql[$nameformat]} AS name, "
-			. "aum.username FROM news_range nr LEFT JOIN "
-			. "news n USING(news_id) LEFT JOIN auth_user_md5 aum USING(user_id) "
-			. "LEFT JOIN user_info USING(user_id) "
-			. "WHERE range_id='{$this->config->range_id}' AND n.date <= $now AND "
-			. "n.date + n.expire >= $now" . $query_order;
-}
+if ($nameformat == 'last') $GLOBALS['_fullname_sql']['last'] = ' Nachname ';
 
-$db->query($query);
-
-if (!$db->num_rows())
+$news =& StudipNews::GetNewsByRange($this->config->range_id, true);
+if (!count($news))
 	$error_message = $this->config->getValue("Main", "nodatatext");
 
 if ($this->config->getValue("Main", "studiplink")) {
@@ -86,8 +72,8 @@ else {
 	$show_date_author = $this->config->getValue("Main", "showdateauthor");
 	$not_author_link = $this->config->getValue("Main", "notauthorlink");
 	
-	while($db->next_record()){
-		list ($content, $admin_msg) = explode("<admin_msg>", $db->f("body"));
+	foreach($news as $news_id => $news_detail){
+		list ($content, $admin_msg) = explode("<admin_msg>", $news_detail["body"]);
 		if ($admin_msg) {
 			$admin_msg = preg_replace('# \(.*?\)#', '', $admin_msg);
 			$content .= "\n--%%{$admin_msg}%%--";
@@ -98,27 +84,27 @@ else {
 		// this is for compatibiliy reasons only
 		if ($show_date_author != 'date') {
 			if ($not_author_link)
-				$author_name = htmlReady($db->f("name"));
+				$author_name = htmlReady(get_fullname($news_detail["user_id"], $nameformat));
 			else
 				$author_name = $this->elements["LinkInternSimple"]->toString(array(
-										"content" => htmlReady($db->f("name")),
-										"link_args" => "username=" . $db->f("username"),
+										"content" => htmlReady(get_fullname($news_detail["user_id"], $nameformat)),
+										"link_args" => "username=" . get_username($news_detail['user_id']),
 										"module" => "Persondetails"));
 		}
 		
 		switch ($show_date_author) {
 			case 'date' :
-				$data["content"]["date"] = strftime($dateform, $db->f("date"));
+				$data["content"]["date"] = strftime($dateform, $news_detail["date"]);
 				break;
 			case 'author' :
 				$data["content"]["date"] = $author_name;
 				break;
 			default :
-				$data["content"]["date"] = strftime($dateform, $db->f("date")) . "<br>" . $author_name;
+				$data["content"]["date"] = strftime($dateform, $news_detail["date"]) . "<br>" . $author_name;
 		}
 				
 		$data["content"]["topic"] = $this->elements["ContentNews"]->toString(array("content" =>
-									array("topic" => htmlReady($db->f("topic")),
+									array("topic" => htmlReady($news_detail["topic"]),
 									"body" => formatReady($content, TRUE, TRUE))));
 		
 		$this->elements["TableRow"]->printout($data);
