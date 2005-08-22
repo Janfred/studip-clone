@@ -49,7 +49,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 	<FORM method=post action="meine_seminare.php">
 	<tr><td class="blank">
 	<p style="margin:20px;">
-	<?=_("Hier k&ouml;nnen Sie Ihre Veranstaltungen in Gruppen einordnen. Die Gruppen werden farbig gegliedert - die Darstellung unter <b>meine Veranstaltungen</b> wird entsprechend den Gruppen sortiert.")?>
+	<?=_("Hier k&ouml;nnen Sie Ihre Veranstaltungen in Farbgruppen einordnen und eine Gliederung nach Kategorien festlegen. <br>Die Darstellung unter <b>meine Veranstaltungen</b> wird entsprechend den Gruppen sortiert bzw. entsprechend der gew&auml;hlten Kategorie gegliedert.")?>
 	
 	</p>
 	</td>
@@ -61,11 +61,11 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 	<?=_("Kategorie zur Gliederung:")?>
 	&nbsp;
 	<select name="select_group_field">
-		<option value="not_grouped" <?=($_my_sem_group_field == 'not_grouped' ? 'selected' : '')?>><?=_("keine Gruppierung")?></option>
+		<option value="not_grouped" <?=($_my_sem_group_field == 'not_grouped' ? 'selected' : '')?>><?=_("keine Gliederung")?></option>
 		<option value="sem_number" <?=($_my_sem_group_field == 'sem_number' ? 'selected' : '')?>><?=_("Semester")?></option>
 		<option value="sem_tree_id" <?=($_my_sem_group_field == 'sem_tree_id' ? 'selected' : '')?>><?=_("Studienbereich")?></option>
 		<option value="sem_status" <?=($_my_sem_group_field == 'sem_status' ? 'selected' : '')?>><?=_("Typ")?></option>
-		<option value="gruppe" <?=($_my_sem_group_field == 'gruppe' ? 'selected' : '')?>><?=_("Farbengruppen")?></option>
+		<option value="gruppe" <?=($_my_sem_group_field == 'gruppe' ? 'selected' : '')?>><?=_("Farbgruppen")?></option>
 	</select>
 	</td><td class="blank" align="center" colspan="8">
 	<INPUT type="IMAGE" <?=makeButton("absenden", "src") ?> border="0" value="absenden">
