@@ -58,7 +58,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 	<FORM method=post action="meine_seminare.php">
 	<table border="0" cellpadding="0" cellspacing="0" width="90%" align="center">
 	<tr><td class="blank" align="right">
-	<?=_("Allgemeine Gruppierung ausw&auml;hlen:")?>
+	<?=_("Kategorie zur Gliederung:")?>
 	&nbsp;
 	<select name="select_group_field">
 		<option value="not_grouped" <?=($_my_sem_group_field == 'not_grouped' ? 'selected' : '')?>><?=_("keine Gruppierung")?></option>
@@ -108,13 +108,14 @@ FOR ($i=0; $i<8; $i++)
 	
 	foreach ($groups as $group_id => $group_members){
 		if ($group_field != 'not_grouped'){
-			echo '<tr><td class="steelkante" valign="top" height="20" colspan="9">';
+			echo '<tr><td class="blank" colspan="9"><img src="pictures/blank.gif" width="1px" height="5px"></td></tr>';
+			echo '<tr><td class="blue_gradient" valign="middle" height="20" colspan="9">';
 			if (isset($_my_sem_open[$group_id])){
 				echo '<a class="tree" style="font-weight:bold" name="' . $group_id . '" href="' . $PHP_SELF . '?close_my_sem=' . $group_id . '#' .$group_id . '" ' . tooltip(_("Gruppierung schließen"), true) . '>';
-				echo '<img src="pictures/forumgraurunt2.gif"   hspace="3" border="0">';
+				echo '<img src="pictures/forumgraurunt.gif"   hspace="3" border="0">';
 			} else {
 				echo '<a class="tree"  name="' . $group_id . '" href="' . $PHP_SELF . '?open_my_sem=' . $group_id . '#' .$group_id . '" ' . tooltip(_("Gruppierung öffnen"), true) . '>';
-				echo '<img src="pictures/forumgrau2.gif"  hspace="3" border="0">';
+				echo '<img src="pictures/forumgrau.gif"  hspace="3" border="0">';
 			}
 			if (is_array($group_names[$group_id])){
 				$group_name = $group_names[$group_id][1] . " > " . $group_names[$group_id][0];
