@@ -93,9 +93,6 @@ $cfg = &Config::GetInstance();
 $cfg->extractAllGlobal(FALSE);
 unset($cfg);
 
-//we leave the $cfg class for general use later...
-
-
 /*mail settings
 ----------------------------------------------------------------*/
 
