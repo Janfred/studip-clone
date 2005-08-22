@@ -87,7 +87,7 @@ class UserConfig {
 	 */
 	function getAll($user_id=NULL) {
 		if ($user_id==NULL) $user_id=$this->user_id;
-		//first, get all default values from config#
+		//first, get all default values from config
 		$cfg =& Config::GetInstance();
 		$arr = $cfg->getAllDefaults('user');
 
@@ -95,7 +95,7 @@ class UserConfig {
 		$this->db->query($sql);
 		while ($this->db->next_record()) {
 			$arr[$this->db->f("field")]["value"] = $this->db->f("value");
-			$arr[$this->db->f("field")]["id"] = $this->db->f("id");
+			$arr[$this->db->f("field")]["id"] = $this->db->f("userconfig_id");
 			$arr[$this->db->f("field")]["comment"] = $this->db->f("comment");
 		}
 		return $arr;

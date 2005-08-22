@@ -89,10 +89,15 @@ class Config {
 	 * Return array with all key/value pairs
 	 */
 	function getAll() {
-		$sql = "SELECT config_id, field, value, type, description, comment, message_template FROM `config` ORDER BY field, position";
+		//first, get all default values from config
+		$arr = $this->getAllDefaults();
+
+		$sql = "SELECT config_id, field, value, comment FROM `config` ORDER BY is_default DESC, field, position";
 		$this->db->query($sql);
 		while ($this->db->next_record()) {
-			$arr[$this->db->f("field")] = array("value" =>$this->db->f("value"), "id"=>$this->db->f("config_id"), "type" =>$this->db->f("type"), "comment" =>$this->db->f("comment"), "description" =>$this->db->f("description"), "message_template" =>$this->db->f("message_template"), "section"=>$this->db->f("section"));
+			$arr[$this->db->f("field")]["value"] = $this->db->f("value");
+			$arr[$this->db->f("field")]["id"] = $this->db->f("config_id");
+			$arr[$this->db->f("field")]["comment"] = $this->db->f("comment");
 		}
 		return $arr;
 	}
