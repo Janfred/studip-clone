@@ -504,10 +504,10 @@ $pages[] = array	(	"name" => _("Suchen"),
 																				"text" => _("Fakultäten, Institute, ..."),
 																				"page" => "xii_suche_einr.htm"
 																			),
-																array	(	"name" => _("Suchen nach Ressourcen"),
+/*																array	(	"name" => _("Suchen nach Ressourcen"),
 																				"text" => _("Suche nach Räumen, Ausstattung, etc."),
 																				"page" => "xii_suche_res.htm"
-																			),
+																			),*/
 																array	(	"name" => _("Suchen im Archiv"),
 																				"text" => _("Veranstaltungen vergangener Semester"),
 																				"page" => "xii_suchen3.htm"
