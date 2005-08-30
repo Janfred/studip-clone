@@ -38,7 +38,8 @@ class FoafDisplay {
 	var $target_id; // end of connecting chain
 	var $foaf_list; // steps of connection
 	var $target_username; // used for open/close link on target user's hp
-
+	var $depth = 5; //max number of hops, 5 is max
+	
 	/**
 	* Initialise FoafDisplay object and calculate list.
 	*
@@ -65,57 +66,61 @@ class FoafDisplay {
 	* @access	private
 	*/
 	function calculate() {
-	   
-		$sql="SELECT * FROM contact WHERE owner_id='".$this->user_id."' AND buddy='1'";
+		
+		$sql="SELECT count(*) FROM contact WHERE owner_id='".$this->user_id."' AND buddy=1 AND user_id='".$this->target_id."'";
 		$this->db->query($sql);
-
-		// user has no buddies at all -> fail (-1)
-		if ($this->db->num_rows()==0) {
-			$this->foaf_list=array();
+		$this->db->next_record();
+		$this->foaf_list=array();
+		
+		// check for direct connection
+		if ($this->db->f(0)) {
+			$this->foaf_list=array($this->user_id,$this->target_id);
 			return;
 		}
-
-		// check for direct connection
-		while ($this->db->next_record()) {	
-			if ($this->db->f("user_id")==$this->target_id) {
-				$this->foaf_list=array($this->user_id,$this->target_id);
+		
+		
+		//Anfangen Tabellen zu verknuepfen
+		// 1 - 2 - 3
+		if ($this->depth > 1){
+			$sql   =   "SELECT t1.user_id as c1 FROM contact as t1, contact as t2 where t1.owner_id='".$this->user_id."' and t2.user_id='".$this->target_id."' and t1.user_id=t2.owner_id and t1.buddy=1 and t2.buddy=1 limit 1";
+			$this->db->query($sql);
+			if ($this->db->next_record()) {
+				$this->foaf_list=array($this->user_id,$this->db->f("c1"),$this->target_id);
 				return;
 			}
 		}
-
-	   
-		//Anfangen Tabellen zu verknuepfen
-		// 1 - 2 - 3
-		$sql   =   "SELECT t1.user_id as c1 FROM contact as t1, contact as t2 where t1.owner_id='".$this->user_id."' and t2.user_id='".$this->target_id."' and t1.user_id=t2.owner_id and t1.buddy='1' and t2.buddy='1' limit 1";
-		$this->db->query($sql);
-		if ($this->db->next_record()) {
-			$this->foaf_list=array($this->user_id,$this->db->f("c1"),$this->target_id);
-			return;
-		}
-
+		
 		// 1 - 2 - 3 - 4
-		$sql="SELECT t1.user_id as c1,t2.user_id as c2 FROM contact as t1,contact as t2,contact as t3 where t1.owner_id='".$this->user_id."' and t3.user_id='".$this->target_id."' and t1.user_id=t2.owner_id and t2.user_id=t3.owner_id and t1.buddy='1' and t2.buddy='1' and t3.buddy='1' limit 1";
-		$this->db->query($sql);
-		if ($this->db->next_record()) {
-			$this->foaf_list=array($this->user_id,$this->db->f("c1"),$this->db->f("c2"),$this->target_id);
-			return;
+		if ($this->depth > 2){
+			
+			$sql="SELECT t1.user_id as c1,t2.user_id as c2 FROM contact as t1,contact as t2,contact as t3 where t1.owner_id='".$this->user_id."' and t3.user_id='".$this->target_id."' and t1.user_id=t2.owner_id and t2.user_id=t3.owner_id and t1.buddy=1 and t2.buddy=1 and t3.buddy=1 limit 1";
+			$this->db->query($sql);
+			if ($this->db->next_record()) {
+				$this->foaf_list=array($this->user_id,$this->db->f("c1"),$this->db->f("c2"),$this->target_id);
+				return;
+			}
 		}
-
+		
 		// 1 - 2 - 3 - 4 - 5
-		$sql="SELECT t1.user_id as c1,t2.user_id as c2,t3.user_id as c3 FROM contact as t1,contact as t2,contact as t3,contact as t4 where t1.owner_id='".$this->user_id."' and t4.user_id='".$this->target_id."' and t1.user_id=t2.owner_id and t2.user_id=t3.owner_id and t3.user_id=t4.owner_id and t1.buddy='1' and t2.buddy='1' and t3.buddy='1' and t4.buddy='1' limit 1";
-		$this->db->query($sql);
-		if ($this->db->next_record()) {
-			$this->foaf_list=array($this->user_id,$this->db->f("c1"),$this->db->f("c2"),$this->db->f("c3"),$this->target_id);
-			return;
+		if ($this->depth > 3){
+			
+			$sql="SELECT t1.user_id as c1,t2.user_id as c2,t3.user_id as c3 FROM contact as t1,contact as t2,contact as t3,contact as t4 where t1.owner_id='".$this->user_id."' and t4.user_id='".$this->target_id."' and t1.user_id=t2.owner_id and t2.user_id=t3.owner_id and t3.user_id=t4.owner_id and t1.buddy=1 and t2.buddy=1 and t3.buddy=1 and t4.buddy=1 limit 1";
+			$this->db->query($sql);
+			if ($this->db->next_record()) {
+				$this->foaf_list=array($this->user_id,$this->db->f("c1"),$this->db->f("c2"),$this->db->f("c3"),$this->target_id);
+				return;
+			}
 		}
-
+		
 		// 1 - 2 - 3 - 4 - 5 - 6
-		$sql="SELECT t1.user_id as c1,t2.user_id as c2,t3.user_id as c3,t4.user_id as c4 FROM contact as t1,contact as t2,contact as t3,contact as t4,contact as t5 where t1.owner_id='".$this->user_id."' and t5.user_id='".$this->target_id."' and t1.user_id=t2.owner_id and t2.user_id=t3.owner_id and t3.user_id=t4.owner_id and t4.user_id=t5.owner_id and t1.buddy='1' and t2.buddy='1' and t3.buddy='1' and t4.buddy='1' and t5.buddy='1' limit 1";
-		$this->db->query($sql);
-		if ($this->db->next_record()) {
-			$this->foaf_list=array($this->user_id,$this->db->f("c1"),$this->db->f("c2"),$this->db->f("c3"),$this->db->f("c4"),$this->target_id);
+		if ($this->depth > 4){
+			
+			$sql="SELECT t1.user_id as c1,t2.user_id as c2,t3.user_id as c3,t4.user_id as c4 FROM contact as t1,contact as t2,contact as t3,contact as t4,contact as t5 where t1.owner_id='".$this->user_id."' and t5.user_id='".$this->target_id."' and t1.user_id=t2.owner_id and t2.user_id=t3.owner_id and t3.user_id=t4.owner_id and t4.user_id=t5.owner_id and t1.buddy=1 and t2.buddy=1 and t3.buddy=1 and t4.buddy=1 and t5.buddy=1 limit 1";
+			$this->db->query($sql);
+			if ($this->db->next_record()) {
+				$this->foaf_list=array($this->user_id,$this->db->f("c1"),$this->db->f("c2"),$this->db->f("c3"),$this->db->f("c4"),$this->target_id);
+			}
 		}
-
 		return;
 	}
 
@@ -225,11 +230,11 @@ class FoafDisplay {
 		$vis=$ucfg->getValue();
 		$msg="<table width=95% align=center><tr><td>";
 		$msg.="<font size=-1><p>";
-		$msg.=_("Die Verbindungskette (Friend-of-a-Friend-Liste) wertet Buddy-Listen-Einträge aus, um festzustellen, über wieviele Stufen (maximal fünf) sich zwei BenutzerInnen direkt oder indirekt \"kennen\".");
+		$msg.=sprintf(_("Die Verbindungskette (Friend-of-a-Friend-Liste) wertet Buddy-Listen-Einträge aus, um festzustellen, über wieviele Stufen (maximal %s) sich zwei BenutzerInnen direkt oder indirekt \"kennen\"."), $this->depth);
 		$msg.=" ".sprintf(_("Die Zwischenglieder werden nur nach Zustimmung mit Namen und Bild ausgegeben. Sie selbst erscheinen derzeit in solchen Ketten %s. Klicken Sie %shier%s, um die Einstellung zu ändern."), "<b>".($vis ? _("nicht anonym") : _("anonym"))."</b>", "<a href=\"edit_about.php?view=Messaging\">","</a>");
 		$msg.="</p></td></tr></table>";
 		return $msg;
 	}
 
 }
-
+?>
