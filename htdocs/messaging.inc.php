@@ -199,7 +199,7 @@ class messaging {
 			
 		setTempLanguage($db4->f("user_id"));	
 			
-		$title = "[" . $GLOBALS['UNI_NAME'] . "] ".stripslashes(kill_format($subject));
+		$title = "[Stud.IP - " . $GLOBALS['UNI_NAME_CLEAN'] . "] ".stripslashes(kill_format($subject));
 				
 		if ($snd_user_id != "____%system%____") {
 			$snd_fullname = get_fullname($snd_user_id);
@@ -207,7 +207,7 @@ class messaging {
 			$db4->next_record();
 			$reply_to = "\"".$smtp->QuotedPrintableEncode($snd_fullname,1)."\" <".$db4->f("Email").">";
 		} else {
-			$snd_fullname = $GLOBALS['UNI_NAME'];
+			$snd_fullname = 'Stud.IP - ' . $GLOBALS['UNI_NAME_CLEAN'];
 			$reply_to = $GLOBALS["UNI_CONTACT"];
 		}
 
