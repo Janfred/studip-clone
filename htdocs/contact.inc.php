@@ -167,7 +167,7 @@ function AddNewContact ($user_id)
 	$db=new DB_Seminar;
 	$db->query ("SELECT contact_id FROM contact WHERE owner_id = '$owner_id' AND user_id = '$user_id'");	
 	if (!$db->next_record()) 	// nur wenn es die Kombination owner/user noch nicht gibt
-		$db->query("INSERT INTO contact SET contact_id = '$contact_id', owner_id = '$owner_id', user_id= '$user_id', buddy='1'");
+		$db->query("INSERT INTO contact SET contact_id = '$contact_id', owner_id = '$owner_id', user_id= '$user_id', buddy=0");
 	return $contact_id;	
 } 
 
