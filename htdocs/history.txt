@@ -1,3 +1,26 @@
+30.08.2005 v 1.2
+- neuer Zugriff per Tastenkombination auf die wichtigsten Systembereiche
+- Friend-of-Friend Anzeige (Verbindungsketten zu anderen Nutzern) auf der 
+  Homepage
+- RSS-Feed für private News
+- News-Kommentare für alle news im System
+- neue Gruppierungsfunktion der Seite "Meine Veranstaltungen" nach Farbruppen,
+  Semestern, Type und Studienbereichen
+- Verschieben von Dateien und Ordnern in anderen Veranstaltungen oder
+  Einrichtungen ist nun möglich
+- Sichtbarkeit und Archivieren kann für Dozenten freigeschaltet werden
+- Erweiterungen an der Ressourcenverwaltung: Listenansicht für Raumanfragen,
+  Sortierung von Raumanfragen nach Dringlichkeit, Belegungsübersichten für 
+  Semester, externe Darstellung von Raumplänen, Raumgruppen nund weitere
+  Detailverbesserungen
+- freie Datenfelder können nun weitergehend konfiguriert werden
+- neues Sessionmanagement: Die Stud.IP-PhpLib kann nun mit PHP4 arbeiten
+- neues Datenbankbasiertes Konfiguratiossystem
+- Erweiterung der Schnellformatierung um Tabellendarstellung
+- Wiki-Seiten werden nun archiviert
+- Performance-Verbesserungen (Datenbankabfragen und -struktur)
+- weitere Detailverbesserungen und Bugfixes
+
 26.09.2004 v 1.1.5
 - Neue Messaging-Funktionen: Betreff für systeminterne Nachrichten, 
   erzwungene/ optionale eMail-Weiterleitung, differenzierte Lesebestätigung, 
