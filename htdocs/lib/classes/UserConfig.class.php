@@ -91,7 +91,7 @@ class UserConfig {
 		$cfg =& Config::GetInstance();
 		$arr = $cfg->getAllDefaults('user');
 
-		$sql="SELECT userconfig_id, field, value, comment FROM user_config WHERE user_id='$user_id'";
+		$sql="SELECT userconfig_id, field, value, comment FROM user_config WHERE user_id='$user_id' ORDER BY field";
 		$this->db->query($sql);
 		while ($this->db->next_record()) {
 			$arr[$this->db->f("field")]["value"] = $this->db->f("value");
@@ -216,7 +216,7 @@ class UserConfig {
 	 * @return	void
 	 */    
     function _retrieve($user_id, $key) {
-    	$sql="SELECT value FROM user_config WHERE user_id='$user_id' AND field='$key'";
+    	$sql="SELECT value FROM user_config WHERE user_id='$user_id' AND field='$key' ORDER BY field";
     	$this->db->query($sql);
     	if ($this->db->next_record()) { // get and return value
     		$this->data[$user_id][$key]=$this->db->f("value");
@@ -233,7 +233,7 @@ class UserConfig {
 		foreach ($cfg->getAllFieldNames('user') as $key) {
 			$this->getDefault($key);
 		}
-    	$sql = "SELECT field, value FROM user_config WHERE user_id='{$this->user_id}'";
+    	$sql = "SELECT field, value FROM user_config WHERE user_id='{$this->user_id}' ORDER BY field";
     	$this->db->query($sql);
 		while($this->db->next_record()){
     		$this->data[$this->user_id][$this->db->f("field")] = $this->db->f("value");

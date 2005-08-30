@@ -111,7 +111,7 @@ class Config {
 	function getAllDefaults($range = null) {
 		$arr=array();
 		$query_range = ($range ? " AND range='$range' " : "");
-		$sql = "SELECT config_id, field, value, description, type, section FROM config WHERE is_default = '1' $query_range";
+		$sql = "SELECT config_id, field, value, description, type, section FROM config WHERE is_default = '1' $query_range ORDER BY field";
 		$this->db->query($sql);
 		while ($this->db->next_record()) {
 			$arr[$this->db->f("field")] = array("value" =>$this->db->f("value"), "id"=>$this->db->f("config_id"), "description"=>$this->db->f("description"), "comment"=>$this->db->f("comment"), "message_template"=>$this->db->f("message_template"), "type"=>$this->db->f("type"), "section"=>$this->db->f("section"));
@@ -122,7 +122,7 @@ class Config {
 	function getAllFieldNames($range){
 		$ret = array();
 		$query_range = ($range ? " WHERE range='$range' " : "");
-		$this->db->query("SELECT DISTINCT(field) FROM config $query_range");
+		$this->db->query("SELECT DISTINCT(field) FROM config $query_range ORDER BY field");
 		while($this->db->next_record()){
 			$ret[] = $this->db->f(0);
 		}
@@ -258,7 +258,7 @@ class Config {
 	 * @return	void
 	 */
 	function _retrieve($key) {
-		$sql = "SELECT `value`, `is_default` FROM `config` WHERE `field`='$key'";
+		$sql = "SELECT `value`, `is_default` FROM `config` WHERE `field`='$key' ORDER BY field";
 		$this->db->query($sql);
 		while ($this->db->next_record()) { // get value and default
 			if ($this->db->f("is_default")) {
@@ -280,7 +280,7 @@ class Config {
 	function _retrieveAll() {
 		$this->defaults = array();
 		$this->data = array();
-		$sql = "SELECT `value`, `is_default`,`field` FROM `config`";
+		$sql = "SELECT `value`, `is_default`,`field` FROM `config` ORDER BY field";
 		$this->db->query($sql);
 		while ($this->db->next_record()) { // get value and default
 			if ($this->db->f("is_default")) {
