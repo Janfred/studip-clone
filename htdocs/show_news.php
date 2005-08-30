@@ -76,13 +76,11 @@ function delete_comment($comment_id) {
 	if (!$comment->is_new) {
 		if ($perm->have_perm("root")) {
 			$ok = 1;
-		} else if ($comment->getValue("user_id") != $auth->auth["uid"]) {
+		} else {
 			$news = new StudipNews($comment->getValue("object_id"));
 			if (!$news->is_new && $news->getValue("user_id") == $auth->auth["uid"]) {
 				$ok = 1;
 			}
-		} else {
-			$ok = 1;
 		}
 		if ($ok) {
 			$ok = $comment->delete();
@@ -212,12 +210,13 @@ function show_news($range_id, $show_admin=FALSE,$limit="", $open, $width="100%",
 				if ($news_detail['allow_comments']==1) {
 					$showcomments=0;
 					if ($cmd_data["comsubmit"]==$news_detail['news_id']) {
-						global $comment_content;
-						$comment=new StudipComments();
-						$comment->setValue('object_id', $news_detail['news_id']);
-						$comment->setValue('user_id', $auth->auth['uid']);
-						$comment->setValue('content', stripslashes($comment_content));
-						$comment->store();
+						if (trim($_REQUEST['comment_content'])){
+							$comment=new StudipComments();
+							$comment->setValue('object_id', $news_detail['news_id']);
+							$comment->setValue('user_id', $auth->auth['uid']);
+							$comment->setValue('content', stripslashes(trim($_REQUEST['comment_content'])));
+							$comment->store();
+						}
 						$showcomments=1;
 					} else if ($cmd_data["comdelnews"]==$news_detail['news_id']) {
 						delete_comment($cmd_data["comdel"]);
@@ -231,7 +230,8 @@ function show_news($range_id, $show_admin=FALSE,$limit="", $open, $width="100%",
 							$num=0;
 							foreach ($c as $comment) {
 								$comments.="<tr><td>";
-								if (get_userid($comment[2])==$auth->auth["uid"] || $news_detail['user_id']==$auth->auth["uid"] || $show_admin) {
+								//if (get_userid($comment[2])==$auth->auth["uid"] || $news_detail['user_id']==$auth->auth["uid"] || $show_admin) {
+								if ($show_admin){
 									$dellink="$PHP_SELF?comdel=".$comment[4]."&comdelnews=".$news_detail['news_id']."#anker";
 								} else {
 									$dellink=NULL;
