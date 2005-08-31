@@ -298,7 +298,9 @@ if ($GLOBALS['CALENDAR_ENABLE']) {
 
 // include and show friend-of-a-friend list
 // (direct/indirect connection via buddy list)
-if ($GLOBALS['FOAF_ENABLE'] && ($auth->auth['uid']!=$user_id)) {
+if ($GLOBALS['FOAF_ENABLE'] 
+	&& ($auth->auth['uid']!=$user_id)
+	&& $user->cfg->getValue($user_id, 'FOAF_SHOW_IDENTITY')) {
         include("lib/classes/FoafDisplay.class.php");
         $foaf=new FoafDisplay($auth->auth['uid'], $user_id, $username);
         $foaf->show($_REQUEST['foaf_open']);
