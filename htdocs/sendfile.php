@@ -328,6 +328,8 @@ header("Content-Transfer-Encoding: binary");
 header("Accept-Ranges: bytes");
 if ($filesize != FALSE) header("Content-Length: $filesize");
 header("Content-Disposition: $content_disposition; filename=\"$file_name\"");
+ob_end_flush();
+
 if ($type != 5){
 	@readfile($path_file);
 	if(!in_array($type, array(1,2,3,4,5))){
