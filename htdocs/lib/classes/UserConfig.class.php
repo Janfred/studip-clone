@@ -71,7 +71,7 @@ class UserConfig {
 	function getValue($user_id=NULL, $key=NULL) {
 		if ($user_id==NULL) $user_id=$this->user_id;
 		if ($key==NULL) $key=$this->key;
-		if (!isset ($this->data[$user_id][$key]) && !isset ($this->defaults[$key])) { // check for cached value
+		if (!isset ($this->data[$user_id][$key])) { // check for cached value
 			$this->_retrieve($user_id, $key); // otherwise, retrieve
 		}
 		return (isset($this->data[$user_id][$key]) ? $this->data[$user_id][$key] : $this->defaults[$key]);
@@ -216,19 +216,18 @@ class UserConfig {
 	 * @return	void
 	 */    
     function _retrieve($user_id, $key) {
-    	$sql="SELECT value FROM user_config WHERE user_id='$user_id' AND field='$key' ORDER BY field";
+    	$sql="SELECT value FROM user_config WHERE user_id='$user_id' AND field='$key'";
     	$this->db->query($sql);
     	if ($this->db->next_record()) { // get and return value
     		$this->data[$user_id][$key]=$this->db->f("value");
     	} else {
-    		unset($this->data[$user_id][$key]);
-			$this->getDefault($key);
+			$this->data[$user_id][$key] = $this->getDefault($key);
     	}
     }
 	
 	function _retrieveAll() {
 		$this->data[$this->user_id] = array();
-		$this->defaults[$this->user_id] = array();
+		$this->defaults = array();
 		$cfg =& Config::GetInstance();
 		foreach ($cfg->getAllFieldNames('user') as $key) {
 			$this->getDefault($key);
