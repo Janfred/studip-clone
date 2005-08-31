@@ -39,6 +39,8 @@ class FoafDisplay {
 	var $foaf_list; // steps of connection
 	var $target_username; // used for open/close link on target user's hp
 	var $depth = 5; //max number of hops, 5 is max
+	var $dont_show_anonymous = false;
+	var $ucfg; //UserConfig object
 	
 	/**
 	* Initialise FoafDisplay object and calculate list.
@@ -53,7 +55,7 @@ class FoafDisplay {
 		$this->target_id=$target_id;
 		$this->target_username=$target_username;
 		$this->foaf_list=array();
-
+		$this->ucfg=new UserConfig($this->user_id, "FOAF_SHOW_IDENTITY");
 		$this->calculate();
 	}
 
@@ -78,52 +80,42 @@ class FoafDisplay {
 			return;
 		}
 		
-		
-		//Anfangen Tabellen zu verknuepfen
-		// 1 - 2 - 3
-		if ($this->depth > 1){
-			$sql   =   "SELECT t1.user_id as c1 FROM contact as t1, contact as t2 where t1.owner_id='".$this->user_id."' and t2.user_id='".$this->target_id."' and t1.user_id=t2.owner_id and t1.buddy=1 and t2.buddy=1 limit 1";
-			$this->db->query($sql);
-			if ($this->db->next_record()) {
-				$this->foaf_list=array($this->user_id,$this->db->f("c1"),$this->target_id);
+		for($i = 2; $i <= $this->depth; ++$i){
+			if ($ret = $this->doCalculate($i)){
+				$this->foaf_list = $ret;
 				return;
-			}
-		}
-		
-		// 1 - 2 - 3 - 4
-		if ($this->depth > 2){
-			
-			$sql="SELECT t1.user_id as c1,t2.user_id as c2 FROM contact as t1,contact as t2,contact as t3 where t1.owner_id='".$this->user_id."' and t3.user_id='".$this->target_id."' and t1.user_id=t2.owner_id and t2.user_id=t3.owner_id and t1.buddy=1 and t2.buddy=1 and t3.buddy=1 limit 1";
-			$this->db->query($sql);
-			if ($this->db->next_record()) {
-				$this->foaf_list=array($this->user_id,$this->db->f("c1"),$this->db->f("c2"),$this->target_id);
-				return;
-			}
-		}
-		
-		// 1 - 2 - 3 - 4 - 5
-		if ($this->depth > 3){
-			
-			$sql="SELECT t1.user_id as c1,t2.user_id as c2,t3.user_id as c3 FROM contact as t1,contact as t2,contact as t3,contact as t4 where t1.owner_id='".$this->user_id."' and t4.user_id='".$this->target_id."' and t1.user_id=t2.owner_id and t2.user_id=t3.owner_id and t3.user_id=t4.owner_id and t1.buddy=1 and t2.buddy=1 and t3.buddy=1 and t4.buddy=1 limit 1";
-			$this->db->query($sql);
-			if ($this->db->next_record()) {
-				$this->foaf_list=array($this->user_id,$this->db->f("c1"),$this->db->f("c2"),$this->db->f("c3"),$this->target_id);
-				return;
-			}
-		}
-		
-		// 1 - 2 - 3 - 4 - 5 - 6
-		if ($this->depth > 4){
-			
-			$sql="SELECT t1.user_id as c1,t2.user_id as c2,t3.user_id as c3,t4.user_id as c4 FROM contact as t1,contact as t2,contact as t3,contact as t4,contact as t5 where t1.owner_id='".$this->user_id."' and t5.user_id='".$this->target_id."' and t1.user_id=t2.owner_id and t2.user_id=t3.owner_id and t3.user_id=t4.owner_id and t4.user_id=t5.owner_id and t1.buddy=1 and t2.buddy=1 and t3.buddy=1 and t4.buddy=1 and t5.buddy=1 limit 1";
-			$this->db->query($sql);
-			if ($this->db->next_record()) {
-				$this->foaf_list=array($this->user_id,$this->db->f("c1"),$this->db->f("c2"),$this->db->f("c3"),$this->db->f("c4"),$this->target_id);
 			}
 		}
 		return;
 	}
-
+	
+	function doCalculate($depth = 0){
+		$ret = null;
+		if ($depth){
+			$values = "t1.user_id as c1";
+			$from = "contact as t1";
+			for ($i = 2; $i <= $depth; ++$i){
+				if($i > 2 ) $values .= ",t".($i-1).".user_id as c".($i-1)." ";
+				$from .= " INNER JOIN contact as t{$i} ON(t".($i-1).".user_id=t{$i}.owner_id AND t{$i}.buddy=1 "
+						. ($i == $depth ? " AND t{$i}.user_id='".$this->target_id."'" : "") . ") ";
+				if ($this->dont_show_anonymous){
+					$from .= " INNER JOIN user_config uc{$i} ON(t{$i}.owner_id = uc{$i}.user_id AND uc{$i}.field='FOAF_SHOW_IDENTITY' AND uc{$i}.value='1') ";
+				}
+			}
+			$sql = "SELECT $values FROM $from WHERE t1.owner_id='".$this->user_id."' 
+					AND t1.buddy=1 LIMIT 1";
+			$this->db->query($sql);
+			if ($this->db->next_record()) {
+				$ret[] = $this->user_id;
+				for ($i = 1; $i < $depth; ++$i){
+					$ret[] = $this->db->f("c{$i}");
+				}
+				$ret[] = $this->target_id;
+			}
+		}
+		return $ret;
+	}
+	
 	/**
 	* Show Topic bar and header/content for foaf display.
 	*
@@ -201,8 +193,7 @@ class FoafDisplay {
 	function user_info($user_id, $ignore_ok) {
 		global $_fullname_sql;
 		$ret="";
-		$ucfg=new UserConfig($user_id, "foaf_show_identity");
-		if ($ignore_ok || $ucfg->getValue()) {
+		if ($ignore_ok || $this->ucfg->getValue($user_id)) {
 			$sql="SELECT username, $_fullname_sql[full] AS fullname FROM auth_user_md5 LEFT JOIN user_info USING (user_id) WHERE auth_user_md5.user_id='$user_id'";
 			$this->db->query($sql);
 			$this->db->next_record();
@@ -226,12 +217,11 @@ class FoafDisplay {
 	*
 	*/
 	function info_text() {
-		$ucfg=new UserConfig($this->user_id, "FOAF_SHOW_IDENTITY");
-		$vis=$ucfg->getValue();
+		$vis=$this->ucfg->getValue();
 		$msg="<table width=95% align=center><tr><td>";
 		$msg.="<font size=-1><p>";
 		$msg.=sprintf(_("Die Verbindungskette (Friend-of-a-Friend-Liste) wertet Buddy-Listen-Einträge aus, um festzustellen, über wieviele Stufen (maximal %s) sich zwei BenutzerInnen direkt oder indirekt \"kennen\"."), $this->depth);
-		$msg.=" ".sprintf(_("Die Zwischenglieder werden nur nach Zustimmung mit Namen und Bild ausgegeben. Sie selbst erscheinen derzeit in solchen Ketten %s. Klicken Sie %shier%s, um die Einstellung zu ändern."), "<b>".($vis ? _("nicht anonym") : _("anonym"))."</b>", "<a href=\"edit_about.php?view=Messaging\">","</a>");
+		$msg.=" ".sprintf(_("Die Zwischenglieder werden nur nach Zustimmung mit Namen und Bild ausgegeben. Sie selbst erscheinen derzeit in solchen Ketten %s. Klicken Sie %shier%s, um die Einstellung zu ändern."), "<b>".($vis ? _("nicht anonym") : ($this->dont_show_anonymous ? _("überhaupt nicht") :  _("anonym")))."</b>", "<a href=\"edit_about.php?view=Messaging\">","</a>");
 		$msg.="</p></td></tr></table>";
 		return $msg;
 	}
