@@ -421,4 +421,3 @@ function change_messaging_view() {
 <?
 } 
 ?>
-
