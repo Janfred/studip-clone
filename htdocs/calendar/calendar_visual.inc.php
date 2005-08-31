@@ -749,22 +749,22 @@ function fit_title ($title, $cols, $rows, $max_length, $end_str = "...", $pad = 
 	global $auth;
 	if ($auth->auth["jscript"])
 		$max_length = $max_length * ($auth->auth["xres"] / 1024);
-		
+	
 	$title_length = strlen($title);
 	$length = ceil($max_length / $cols);
 	$new_title = substr($title, 0, $length * $rows);
 	
 	if (strlen($new_title) < $title_length)
 		$new_title = substr($new_title, 0, - (strlen($end_str))) . $end_str;
-		
-	$new_title = htmlentities(chunk_split($new_title, $length, "\n"),ENT_QUOTES);
-	$new_title = substr(str_replace("\n","<br>",$new_title), 0, -4);
+	
+	$new_title = htmlentities(wordwrap($new_title, $length, "\n", TRUE), ENT_QUOTES);
+	$new_title = str_replace("\n", "<br>", $new_title);
 	
 	if ($pad && $title_length < $length)
 		$new_title .= str_repeat("&nbsp;", $length - $title_length);
 		
 	return $new_title;
-}	
+}
 
 function js_hover ($aterm) {
 	global $forum, $auth;
