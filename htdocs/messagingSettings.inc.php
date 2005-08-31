@@ -87,7 +87,7 @@ if ($messaging_cmd=="change_view_insert" && !$set_msg_default_x && $newmsgset_x)
 		$email_forward = $send_as_email;
  
 	// write to user config table
-	$user_cfg->setValue($foaf_show_identity, $user->id, "FOAF_SHOW_IDENTITY");
+	$user_cfg->setValue((int)isset($foaf_show_identity), $user->id, "FOAF_SHOW_IDENTITY");
 
 	$my_messaging_settings["changed"] = TRUE;
 	$my_messaging_settings["show_only_buddys"] = $show_only_buddys;
@@ -380,7 +380,7 @@ function change_messaging_view() {
 						<font size=-1><?=_("Eigene Identität in Verbindungsketten zwischen Nutzern (\"Friend of a friend\"-Liste) offenlegen")?></font>
 					</td>
 					<td <?=$cssSw->getFullClass()?>>
-						<input type="checkbox" name="foaf_show_identity"<? if ($user_cfg->getValue($user->id,"foaf_show_identity")) echo " checked"; ?> >
+						<input type="checkbox" name="foaf_show_identity"<? if ($user_cfg->getValue($user->id,"FOAF_SHOW_IDENTITY")) echo " checked"; ?> >
 					</td>
 				</tr>
 				<? } ?>
