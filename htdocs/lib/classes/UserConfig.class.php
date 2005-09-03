@@ -113,8 +113,7 @@ class UserConfig {
 	function setValue($value, $user_id=NULL, $key=NULL, $comment='') {
 		if ($user_id==NULL) $user_id=$this->user_id;
 		if ($key==NULL) $key=$this->key;
-		$this->_retrieve($user_id, $key); // otherwise, retrieve
-		if (isset($this->data[$user_id][$key])) {
+		if ($this->_retrieve($user_id, $key)) {
 			$sql=sprintf("UPDATE user_config SET value='%s', chdate='%s', comment='%s'  WHERE user_id='%s' AND field ='%s'", $value, time(), $comment, $user_id, $key);
 		} else {
 			$sql=sprintf("INSERT INTO user_config SET userconfig_id='%s', parent_id=NULL, user_id='%s', field='%s', value='%s', mkdate='%s', chdate='%s', comment='%s' ", 
@@ -220,8 +219,10 @@ class UserConfig {
     	$this->db->query($sql);
     	if ($this->db->next_record()) { // get and return value
     		$this->data[$user_id][$key]=$this->db->f("value");
+			return true;
     	} else {
 			$this->data[$user_id][$key] = $this->getDefault($key);
+			return false;
     	}
     }
 	
