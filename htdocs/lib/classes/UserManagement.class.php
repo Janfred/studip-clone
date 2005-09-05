@@ -319,7 +319,7 @@ class UserManagement {
 		// include language-specific subject and mailbody
 		$user_language = getUserLanguagePath($this->user_data['auth_user_md5.user_id']); // user has been just created, so we will get $DEFAULT_LANGUAGE
 		$Zeit=date("H:i:s, d.m.Y",time());
-		include_once("$ABSOLUTE_PATH_STUDIP"."locale/$user_language/LC_MAILS/create_mail.inc.php");
+		include("$ABSOLUTE_PATH_STUDIP"."locale/$user_language/LC_MAILS/create_mail.inc.php");
 
 		// send mail
 		$this->smtp->SendMessage(
