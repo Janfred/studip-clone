@@ -959,7 +959,7 @@ function print_rating($rate, $id, $username) {
 	 	$bar = "<img src=\"pictures/rate_leer.gif\" width=\"50\" border=\"0\" height=\"11\">";
 	} else {
 		$ratecount = object_return_ratecount ($id);
-		if ($ratcount > 10)
+		if ($ratecount > 10)
 			$ratecount = 10;
 		$ratecount = round($ratecount / 2);
 		$rate = StringToFloat($rate);
