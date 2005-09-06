@@ -7,7 +7,7 @@
 
  * @author      Christian Bauer <alfredhitchcock@gmx.net>
 
- * @version     $id$
+ * @version     $id: $
 
  * @copyright   2003 Stud.IP-Project
 
@@ -216,7 +216,7 @@ elseif($mode == "pdf_assortment"){
 }
 elseif($mode == "create_pdf"){
 	global $record_of_study_templates;
-	$pdf_file["full_path"] = "http://" . getenv('SERVER_NAME') . $CANONICAL_RELATIVE_PATH_STUDIP . $PATH_EXPORT . "/".$record_of_study_templates[$template]["template"];
+	$pdf_file["full_path"] = "http://" . $_SERVER['HTTP_HOST'] . $CANONICAL_RELATIVE_PATH_STUDIP . $PATH_EXPORT . "/".$record_of_study_templates[$template]["template"];
 	$pdf_file["filename"] = $record_of_study_templates[$template]["template"];
 	$fdfAR = createFdfAR($seminars);
 };
