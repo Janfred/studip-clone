@@ -372,7 +372,7 @@ if ($db->f("schwerp")!="") {
 }
 
 //add the free administrable datafields (these field are system categories - the user is not allowed to change the catgeories)
-$localFields = $DataFields->getLocalFields($user->id, 'user', $auth->auth['perm']);
+$localFields = $DataFields->getLocalFields($user_id, 'user', $auth->auth['perm']);
 
 foreach ($localFields as $val) {
 	if ($DataFields->checkPermission($perm, $val["view_perms"], $auth->auth["uid"], $user_id)) {
