@@ -78,8 +78,8 @@ handle the view-logic
 /*****************************************************************************/
 
 //got a fresh session?
-if ( ((sizeof ($_REQUEST) == 1) && (!$view) && (!$quick_view))
-	|| !isset($resources_data['view']) ) {
+if (((!$view) && (!$quick_view) && (sizeof($_POST) == 0) && (sizeof($_GET) == 0))
+	|| (!isset($resources_data['view']))) {
 	$resources_data='';
 	$resources_data["view"]="search";
 	$resources_data["view_mode"]=FALSE;
@@ -89,29 +89,34 @@ if ( ((sizeof ($_REQUEST) == 1) && (!$view) && (!$quick_view))
 //get views/view_modes
 if ($view)
 	$resources_data["view"]=$view;
+else //or we take back the persistant view from $resources_data
+	$view = $resources_data["view"];
+	
 if ($view_mode)	
 	$resources_data["view_mode"]=$view_mode;
-if (strpos($view, "openobject") !== FALSE)
-	$resources_data["view_mode"]="oobj";
+else //or... see above ;)
+	$view_mode = $resources_data["view_mode"];
+	
+if (strpos($view, "openobject") !== FALSE) {
+	$resources_data["view_mode"] = "oobj";
+	$view_mode = "oobj";
+}
 
 //if quick_view, we take this view (only one page long, until the next view is given!)
 if ($quick_view)
 	$view = $quick_view;
-//or we take back the persitant view from $resources_data
-else
-	$view = $resources_data["view"];
-	
+
 //we do so for the view_mode too
 if ($quick_view_mode)
 	$view_mode = $quick_view_mode;
 else
 	$quick_view_mode = $resources_data["view_mode"];
 
-//reset edit the assign (was soll dieser kranke Blödsinn ??? in $_REQUEST steht GET/POST/COOKIE/SESSION ! Wie soll man sich da auf die Anzahl verlassen können ? )
-if ((sizeof ($_REQUEST) == 3) && (($view == "edit_object_assign") || ($view == "openobject_assign"))) {
+//reset edit the assign... (Zugegeben, immer noch krank: Hier wird ein "sauberer" Seitenaufruf anhand der Anzahl der Parameter ermittelt... )
+if (((sizeof($_POST) + sizeof($_GET)) == 2) && (($view == "edit_object_assign") || ($view == "openobject_assign"))) {
 	$new_assign_object=FALSE;
 }
-if ((sizeof ($_REQUEST) == 4) && ($edit_assign_object) && (($view == "edit_object_assign") || ($view == "openobject_assign"))) {
+if (((sizeof($_POST) + sizeof($_GET)) == 3) && ($edit_assign_object) && (($view == "edit_object_assign") || ($view == "openobject_assign"))) {
 	$new_assign_object=FALSE;
 }
 if ($cancel_edit_assign) {
