@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: studip_chat\n"
-"POT-Creation-Date: 2005-06-30 22:56+0200\n"
+"POT-Creation-Date: 2005-09-07 11:16+0200\n"
 "PO-Revision-Date: 2005-06-29 23:05+0200\n"
 "Last-Translator: Jens Schmelzer <jens.schmelzer@fh-jena.de>\n"
 "Language-Team:  <de@li.org>\n"
@@ -14,21 +14,6 @@ msgstr ""
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.10\n"
-
-#: chat/ChatServer.class.php:137
-#, c-format
-msgid "%s hat den Chat betreten!"
-msgstr "%s has entered the chat!"
-
-#: chat/ChatServer.class.php:162
-#, c-format
-msgid "%s hat den Chat verlassen!"
-msgstr "%s has left the chat!"
-
-#: chat/ChatServer.class.php:227
-#, c-format
-msgid "%s hat sich aus Stud.IP ausgeloggt!"
-msgstr "%s has logged out of Stud.IP!"
 
 #: chat/chat_client.php:89
 #, c-format
@@ -213,30 +198,30 @@ msgstr "You are not registered in this chat!"
 msgid "Hallo %s,<br> willkommen im Raum: %s"
 msgstr "Hello %s,<br>welcome to room: %s"
 
-#: chat/chat_config.php:126
+#: chat/chat_config.php:131
 msgid " [msg] - Sie verlassen den Chat mit der Botschaft [msg]"
 msgstr " [msg] - You leave the chat with the message [msg] "
 
-#: chat/chat_config.php:127
+#: chat/chat_config.php:132
 msgid " [colorcode] - Ihre Schriftfarbe wird auf [colorcode] gesetzt"
 msgstr " [colorcode] - Your font colour is set at  [colorcode] "
 
-#: chat/chat_config.php:128
+#: chat/chat_config.php:133
 msgid " [msg] - Ihr Name wird zusammen mit [msg] vom Chatbot ausgegeben"
 msgstr ""
 " [msg] - Your name will be printed together with [msg] from the Chatbot"
 
-#: chat/chat_config.php:129
+#: chat/chat_config.php:134
 msgid ""
 " [username][msg] - Die Botschaft [msg] wird geheim an [username] übermittelt"
 msgstr ""
 "[username][msg] - The message [msg] will be sent secretly to [username] "
 
-#: chat/chat_config.php:130
+#: chat/chat_config.php:135
 msgid " - Zeigt diesen Hilfetext"
 msgstr " - Show this help text"
 
-#: chat/chat_config.php:131
+#: chat/chat_config.php:136
 msgid ""
 " [username] - Wirft [username] aus dem Chat wenn sie Chat-Admin sind, mit /"
 "kick all werfen sie alle anderen Nutzer aus dem Chat"
@@ -244,12 +229,12 @@ msgstr ""
 " [username] - Throw [username] out of the chat if they are the chat-admin, "
 "with / kick all throw all other users out of the chat"
 
-#: chat/chat_config.php:132
+#: chat/chat_config.php:137
 msgid ""
 " [username][msg] - Verschickt eine systeminterne SMS [msg] an [username]"
 msgstr "[username] [msg] - Send an internal system SMS [msg] to [username]"
 
-#: chat/chat_config.php:133
+#: chat/chat_config.php:138
 msgid ""
 " [username][msg] - Verschickt eine Chat-Einladung an [username] mit "
 "optionaler Nachricht [msg]"
@@ -257,7 +242,7 @@ msgstr ""
 " [username][msg] -Send a chat invitation to [username] with optional message "
 "[msg]"
 
-#: chat/chat_config.php:134
+#: chat/chat_config.php:139
 msgid ""
 " - Setzt ein zufälliges Paßwort und wirft alle NutzerInnen aus dem Chat, die "
 "nicht Chat-Admins sind."
@@ -265,7 +250,7 @@ msgstr ""
 " - Set up a coincidental password and throw all users out, who aren't chat "
 "admins."
 
-#: chat/chat_config.php:135
+#: chat/chat_config.php:140
 msgid ""
 " - Ein eventuell gesetztes Passwort wird gelöscht, der Chat wird damit "
 "wieder frei zugänglich."
@@ -273,7 +258,7 @@ msgstr ""
 " - A previously entered password will be deleted and the chat will once "
 "again have free access."
 
-#: chat/chat_config.php:136
+#: chat/chat_config.php:141
 msgid ""
 " [password] - Setzt das Passwort für den Chat, wenn [password] leer ist wird "
 "ein eventuell vorhandenes Passwort gelöscht"
@@ -281,7 +266,7 @@ msgstr ""
 "[password] -Set up a password for the chat. If [password] is empty, any "
 "previously existing password will be deleted. "
 
-#: chat/chat_config.php:137
+#: chat/chat_config.php:142
 msgid ""
 " [start | stop | send] - Startet, beendet oder versendet eine Aufzeichnung, "
 "wenn sie Chat-Admin sind"
@@ -455,6 +440,21 @@ msgstr "Throw this user out of the chat"
 #: chat/chat_nicklist.php:107
 msgid "diesem Nutzer / dieser Nutzerin eine private Botschaft senden"
 msgstr "Send this user a private message"
+
+#: chat/ChatServer.class.php:137
+#, c-format
+msgid "%s hat den Chat betreten!"
+msgstr "%s has entered the chat!"
+
+#: chat/ChatServer.class.php:162
+#, c-format
+msgid "%s hat den Chat verlassen!"
+msgstr "%s has left the chat!"
+
+#: chat/ChatServer.class.php:227
+#, c-format
+msgid "%s hat sich aus Stud.IP ausgeloggt!"
+msgstr "%s has logged out of Stud.IP!"
 
 #: chat/chat_status.php:121
 msgid "Zugangsschutz für diesen Chat aufheben"

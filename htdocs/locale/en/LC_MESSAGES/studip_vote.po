@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: studip_vote\n"
-"POT-Creation-Date: 2005-06-30 22:56+0200\n"
+"POT-Creation-Date: 2005-09-07 11:16+0200\n"
 "PO-Revision-Date: 2004-04-01 13:35+GMT\n"
 "Last-Translator: \n"
 "Language-Team:  <de@li.org>\n"
@@ -312,12 +312,20 @@ msgstr ""
 "In the meantime someone has voted! Therefore you cannot apply most of the "
 "changes. "
 
-#: vote/vote_edit.inc.php:322
+#: vote/vote_edit.inc.php:323
 #, c-format
 msgid ""
 "An Ihrem Vote/Test '%s' wurden von dem/der Administrator/in %s Änderungen "
 "vorgenommen."
 msgstr "In your vote/test '%s' changes have been made by the administrator %s."
+
+#: vote/vote_edit.inc.php:326 vote/vote_overview.inc.php:409
+msgid "Systemnachricht:"
+msgstr ""
+
+#: vote/vote_edit.inc.php:326 vote/vote_overview.inc.php:409
+msgid "Vote/Test geändert"
+msgstr ""
 
 #: vote/vote_overview.inc.php:96
 msgid "Fehler: Sie haben keine Berechtigung f&uuml;r diese Seite."
@@ -540,214 +548,214 @@ msgstr "The test \"%s\" has been saved with the changes."
 msgid "Fehler! Es wurde versucht, eine nicht vorhandene Aktion auszuführen."
 msgstr "Error! You are trying to carry out an action that is not available."
 
-#: vote/vote_overview.inc.php:405
+#: vote/vote_overview.inc.php:406
 #, c-format
 msgid ""
 "An Ihrem %s \"%s\" wurden von dem Administrator oder der Administratorin %s "
 "Änderungen vorgenommen."
 msgstr "Changes have been applied to your %s \"%s\" by the administrator %s."
 
-#: vote/vote_overview.inc.php:406
+#: vote/vote_overview.inc.php:407
 msgid "Test"
 msgstr "Test"
 
-#: vote/vote_overview.inc.php:406
+#: vote/vote_overview.inc.php:407
 msgid "Voting"
 msgstr "Vote"
 
-#: vote/vote_overview.inc.php:508
+#: vote/vote_overview.inc.php:510
 msgid "eigene Homepage"
 msgstr "Own homepage"
 
-#: vote/vote_overview.inc.php:570
+#: vote/vote_overview.inc.php:572
 msgid "Voting-Verwaltung"
 msgstr "Vote administration"
 
-#: vote/vote_overview.inc.php:573
+#: vote/vote_overview.inc.php:575
 msgid "Zum vorherigen Bereich zur&uuml;ckkehren."
 msgstr "Go back to the previous area"
 
-#: vote/vote_overview.inc.php:576
+#: vote/vote_overview.inc.php:578
 msgid "Ein neues Voting"
 msgstr "A new vote"
 
-#: vote/vote_overview.inc.php:577
+#: vote/vote_overview.inc.php:579
 msgid "Einen neuen Test"
 msgstr "A new test"
 
-#: vote/vote_overview.inc.php:578
+#: vote/vote_overview.inc.php:580
 msgid "in"
 msgstr "in"
 
-#: vote/vote_overview.inc.php:580
+#: vote/vote_overview.inc.php:582
 msgid "Voting oder Test erstellen."
 msgstr "Create vote or test"
 
-#: vote/vote_overview.inc.php:581
+#: vote/vote_overview.inc.php:583
 msgid "Votings/Tests aus "
 msgstr "Votes/Tests off"
 
-#: vote/vote_overview.inc.php:582
+#: vote/vote_overview.inc.php:584
 msgid "allen Bereichen"
 msgstr "all areas"
 
-#: vote/vote_overview.inc.php:584
+#: vote/vote_overview.inc.php:586
 msgid "Bereich der angezeigten Votings und Tests ausw&auml;hlen."
 msgstr "Select the area for shown votes and tests."
 
-#: vote/vote_overview.inc.php:587
+#: vote/vote_overview.inc.php:589
 msgid "Suchergebnisse"
 msgstr "Search results"
 
-#: vote/vote_overview.inc.php:588
+#: vote/vote_overview.inc.php:590
 msgid "Bitte geben sie ein l&auml;ngeres Suchmuster ein."
 msgstr "Please enter a longer search search term."
 
-#: vote/vote_overview.inc.php:589
+#: vote/vote_overview.inc.php:591
 msgid "Keine Suchergebnisse."
 msgstr "No search results."
 
-#: vote/vote_overview.inc.php:590
+#: vote/vote_overview.inc.php:592
 msgid "Keine Suchergebnisse in diesem Bereich."
 msgstr "No search results in this area."
 
-#: vote/vote_overview.inc.php:593
+#: vote/vote_overview.inc.php:595
 msgid "Ja!"
 msgstr "Yes!"
 
-#: vote/vote_overview.inc.php:594
+#: vote/vote_overview.inc.php:596
 msgid "Nein!"
 msgstr "No!"
 
-#: vote/vote_overview.inc.php:598
+#: vote/vote_overview.inc.php:600
 msgid "Nach weiteren Bereichen suchen: "
 msgstr "Search for other areas:"
 
-#: vote/vote_overview.inc.php:600
+#: vote/vote_overview.inc.php:602
 msgid "Hier können Sie nach weiteren Bereichen suchen."
 msgstr "Here you can search for other areas."
 
-#: vote/vote_overview.inc.php:603
+#: vote/vote_overview.inc.php:605
 msgid "Votings und Tests aus dem Bereich"
 msgstr "Votes and tests from the area"
 
-#: vote/vote_overview.inc.php:604
+#: vote/vote_overview.inc.php:606
 msgid "Noch nicht gestartete Votings/Tests:"
 msgstr "Not yet started votes/tests:"
 
-#: vote/vote_overview.inc.php:605
+#: vote/vote_overview.inc.php:607
 msgid "Laufende Votings/Tests:"
 msgstr "Running votes/tests:"
 
-#: vote/vote_overview.inc.php:606
+#: vote/vote_overview.inc.php:608
 msgid "Gestoppte Votings/Tests:"
 msgstr "Terminated votes/tests:"
 
-#: vote/vote_overview.inc.php:608
+#: vote/vote_overview.inc.php:610
 msgid "Diesen Eintrag aufklappen."
 msgstr "Open this entry."
 
-#: vote/vote_overview.inc.php:609
+#: vote/vote_overview.inc.php:611
 msgid "Diesen Eintrag zuklappen."
 msgstr "Close this entry."
 
-#: vote/vote_overview.inc.php:610
+#: vote/vote_overview.inc.php:612
 msgid "Alle Votings und Tests &ouml;ffnen!"
 msgstr "Open all votes and tests!"
 
-#: vote/vote_overview.inc.php:611
+#: vote/vote_overview.inc.php:613
 msgid "Alle Votings und Tests schliessen!"
 msgstr "Close all votes and tests!"
 
-#: vote/vote_overview.inc.php:614
+#: vote/vote_overview.inc.php:616
 msgid "Titel"
 msgstr "Title"
 
-#: vote/vote_overview.inc.php:615
+#: vote/vote_overview.inc.php:617
 msgid "Bereich"
 msgstr "Area"
 
-#: vote/vote_overview.inc.php:616
+#: vote/vote_overview.inc.php:618
 msgid "Autor"
 msgstr "Author"
 
-#: vote/vote_overview.inc.php:618
+#: vote/vote_overview.inc.php:620
 msgid "Startdatum"
 msgstr "Start date"
 
-#: vote/vote_overview.inc.php:619
+#: vote/vote_overview.inc.php:621
 msgid "Ablaufdatum"
 msgstr "Termination date"
 
-#: vote/vote_overview.inc.php:621
+#: vote/vote_overview.inc.php:623
 msgid "Sichtbarkeit"
 msgstr "Visibility"
 
-#: vote/vote_overview.inc.php:623
+#: vote/vote_overview.inc.php:625
 msgid "Dieser Eintrag ist f&uuml;r die User unsichtbar."
 msgstr "This entry is invisible to the user."
 
-#: vote/vote_overview.inc.php:624
+#: vote/vote_overview.inc.php:626
 msgid "Dieser Eintrag ist f&uuml;r User sichtbar."
 msgstr "This entry is visible to the user."
 
-#: vote/vote_overview.inc.php:626
+#: vote/vote_overview.inc.php:628
 msgid "Diesen Eintrag f&uuml;r die User sichtbar machen."
 msgstr "Make this entry visible to the user."
 
-#: vote/vote_overview.inc.php:627
+#: vote/vote_overview.inc.php:629
 msgid "Diesen Eintrag f&uuml;r die User unsichtbar machen."
 msgstr "Make this entry invisible to the user."
 
-#: vote/vote_overview.inc.php:629
+#: vote/vote_overview.inc.php:631
 msgid "Status"
 msgstr "Status"
 
-#: vote/vote_overview.inc.php:631
+#: vote/vote_overview.inc.php:633
 msgid "Diesen Eintrag jetzt starten."
 msgstr "Start this entry now."
 
-#: vote/vote_overview.inc.php:633
+#: vote/vote_overview.inc.php:635
 msgid "Diesen Eintrag jetzt stoppen."
 msgstr "Stop this entry now."
 
-#: vote/vote_overview.inc.php:635
+#: vote/vote_overview.inc.php:637
 msgid "Diesen Eintrag jetzt fortsetzen."
 msgstr "Continue this entry now."
 
-#: vote/vote_overview.inc.php:638
+#: vote/vote_overview.inc.php:640
 msgid "Alle abgegebenen Stimmen l&ouml;schen."
 msgstr "Delete all given votes."
 
-#: vote/vote_overview.inc.php:640
+#: vote/vote_overview.inc.php:642
 msgid "Bearbeiten"
 msgstr "Edit"
 
-#: vote/vote_overview.inc.php:642
+#: vote/vote_overview.inc.php:644
 msgid "Diesen Eintrag bearbeiten."
 msgstr "Edit this entry."
 
-#: vote/vote_overview.inc.php:646
+#: vote/vote_overview.inc.php:648
 msgid "Diesen Eintrag jetzt als Kopie neu erstellen."
 msgstr "Re-create this entry now as a copy."
 
-#: vote/vote_overview.inc.php:648 vote/view/vote_edit.lib.php:284
+#: vote/vote_overview.inc.php:650 vote/view/vote_edit.lib.php:284
 msgid "L&ouml;schen"
 msgstr "Delete"
 
-#: vote/vote_overview.inc.php:650
+#: vote/vote_overview.inc.php:652
 msgid "Diesen Eintrag l&ouml;schen."
 msgstr "Delete this entry."
 
-#: vote/vote_overview.inc.php:651
+#: vote/vote_overview.inc.php:653
 msgid "Keine nicht gestarteten Votings oder Tests vorhanden."
 msgstr "No votes or tests available which have not yet been started."
 
-#: vote/vote_overview.inc.php:652
+#: vote/vote_overview.inc.php:654
 msgid "Keine laufenden Votings oder Tests vorhanden."
 msgstr "No running votes or tests available."
 
-#: vote/vote_overview.inc.php:653
+#: vote/vote_overview.inc.php:655
 msgid "Keine gestoppten Votings oder Tests vorhanden."
 msgstr "No terminated votes or tests available."
 

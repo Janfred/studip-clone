@@ -8,7 +8,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: studip_resources\n"
-"POT-Creation-Date: 2005-06-30 22:56+0200\n"
+"POT-Creation-Date: 2005-09-07 11:16+0200\n"
 "PO-Revision-Date: 2005-06-29 22:26+0200\n"
 "Last-Translator: Jens Schmelzer <jens.schmelzer@fh-jena.de>\n"
 "Language-Team:  <de@li.org>\n"
@@ -49,186 +49,259 @@ msgid ""
 "bernommen."
 msgstr ""
 
-#: resources/resourcesFunc.inc.php:581 resources/resourcesFunc.inc.php:597
-#: resources/resourcesFunc.inc.php:606 resources/resourcesFunc.inc.php:678
-#: resources/resourcesFunc.inc.php:720 resources/resourcesFunc.inc.php:733
-#: resources/resourcesFunc.inc.php:782 resources/resourcesFunc.inc.php:833
+#: resources/resourcesFunc.inc.php:564 resources/resourcesFunc.inc.php:580
+#: resources/resourcesFunc.inc.php:589 resources/resourcesFunc.inc.php:661
+#: resources/resourcesFunc.inc.php:703 resources/resourcesFunc.inc.php:716
+#: resources/resourcesFunc.inc.php:765 resources/resourcesFunc.inc.php:816
 msgid "Veranstaltungen"
 msgstr "Courses"
 
-#: resources/resourcesFunc.inc.php:664
+#: resources/resourcesFunc.inc.php:647
 #: resources/lib/ResourceObject.class.php:291
 msgid "Global"
 msgstr "Global"
 
-#: resources/resourcesFunc.inc.php:673 resources/resourcesFunc.inc.php:712
-#: resources/resourcesFunc.inc.php:742 resources/resourcesFunc.inc.php:805
-#: resources/resourcesFunc.inc.php:828
+#: resources/resourcesFunc.inc.php:656 resources/resourcesFunc.inc.php:695
+#: resources/resourcesFunc.inc.php:725 resources/resourcesFunc.inc.php:788
+#: resources/resourcesFunc.inc.php:811
 msgid "Personen"
 msgstr "Persons"
 
-#: resources/resourcesFunc.inc.php:683 resources/resourcesFunc.inc.php:689
-#: resources/resourcesFunc.inc.php:696 resources/resourcesFunc.inc.php:738
-#: resources/resourcesFunc.inc.php:788 resources/resourcesFunc.inc.php:838
+#: resources/resourcesFunc.inc.php:666 resources/resourcesFunc.inc.php:672
+#: resources/resourcesFunc.inc.php:679 resources/resourcesFunc.inc.php:721
+#: resources/resourcesFunc.inc.php:771 resources/resourcesFunc.inc.php:821
 msgid "Einrichtungen"
 msgstr "Institutions"
 
-#: resources/resourcesFunc.inc.php:864
+#: resources/resourcesFunc.inc.php:847
 msgid "diesen Eintrag übernehmen"
 msgstr "accept this entry"
 
-#: resources/resourcesFunc.inc.php:868
+#: resources/resourcesFunc.inc.php:851
 msgid "jedeR"
 msgstr "everyone"
 
-#: resources/resourcesFunc.inc.php:883
+#: resources/resourcesFunc.inc.php:866
 msgid "Suche zurücksetzen"
 msgstr "Reset search"
 
-#: resources/resourcesFunc.inc.php:888
+#: resources/resourcesFunc.inc.php:871
 msgid "Starten Sie hier Ihre Suche"
 msgstr "Start your search here"
 
-#: resources/lib/AssignObject.class.php:183
+#: resources/lib/AssignObject.class.php:187
 #: resources/lib/ResourceObject.class.php:299
 msgid "NutzerIn"
 msgstr "User"
 
-#: resources/lib/AssignObject.class.php:193
+#: resources/lib/AssignObject.class.php:197
 #: resources/lib/ResourceObject.class.php:275
 #: resources/lib/ResourceObject.class.php:308
 msgid "Einrichtung"
 msgstr "Institution"
 
-#: resources/lib/AssignObject.class.php:202
+#: resources/lib/AssignObject.class.php:219
 #: resources/lib/ResourceObject.class.php:317
 msgid "Veranstaltung"
 msgstr "Course"
 
-#: resources/lib/AssignObject.class.php:436
-#: resources/views/EditResourceData.class.php:376
+#: resources/lib/AssignObject.class.php:248
+msgid "direkter Eintrag"
+msgstr ""
+
+#: resources/lib/AssignObject.class.php:459
+#: resources/views/EditResourceData.class.php:377
 msgid "jeden Tag"
 msgstr "every day"
 
-#: resources/lib/AssignObject.class.php:437
-#: resources/views/EditResourceData.class.php:377
+#: resources/lib/AssignObject.class.php:460
+#: resources/views/EditResourceData.class.php:378
 msgid "jeden zweiten Tag"
 msgstr "every other day"
 
-#: resources/lib/AssignObject.class.php:438
-#: resources/views/EditResourceData.class.php:378
+#: resources/lib/AssignObject.class.php:461
+#: resources/views/EditResourceData.class.php:379
 msgid "jeden dritten Tag"
 msgstr "every third day"
 
-#: resources/lib/AssignObject.class.php:439
-#: resources/views/EditResourceData.class.php:379
+#: resources/lib/AssignObject.class.php:462
+#: resources/views/EditResourceData.class.php:380
 msgid "jeden vierten Tag"
 msgstr "every fourth day"
 
-#: resources/lib/AssignObject.class.php:440
-#: resources/views/EditResourceData.class.php:380
+#: resources/lib/AssignObject.class.php:463
+#: resources/views/EditResourceData.class.php:381
 msgid "jeden f&uuml;nften Tag"
 msgstr "every fifth day"
 
-#: resources/lib/AssignObject.class.php:441
-#: resources/views/EditResourceData.class.php:381
+#: resources/lib/AssignObject.class.php:464
+#: resources/views/EditResourceData.class.php:382
 msgid "jeden sechsten Tag"
 msgstr "every sixth day"
 
-#: resources/lib/AssignObject.class.php:445
-#: resources/views/EditResourceData.class.php:385
+#: resources/lib/AssignObject.class.php:468
+#: resources/views/EditResourceData.class.php:386
 msgid "jede Woche"
 msgstr "every week"
 
-#: resources/lib/AssignObject.class.php:446
-#: resources/views/EditResourceData.class.php:386
+#: resources/lib/AssignObject.class.php:469
+#: resources/views/EditResourceData.class.php:387
 msgid "jede zweite Woche"
 msgstr "every other week"
 
-#: resources/lib/AssignObject.class.php:447
-#: resources/views/EditResourceData.class.php:387
+#: resources/lib/AssignObject.class.php:470
+#: resources/views/EditResourceData.class.php:388
 msgid "jede dritte Woche"
 msgstr "every third week"
 
-#: resources/lib/AssignObject.class.php:451
-#: resources/views/EditResourceData.class.php:391
+#: resources/lib/AssignObject.class.php:474
+#: resources/views/EditResourceData.class.php:392
 msgid "jeden Monat"
 msgstr "every month"
 
-#: resources/lib/AssignObject.class.php:452
-#: resources/views/EditResourceData.class.php:392
+#: resources/lib/AssignObject.class.php:475
+#: resources/views/EditResourceData.class.php:393
 msgid "jeden zweiten Monat"
 msgstr "every other month"
 
-#: resources/lib/AssignObject.class.php:453
-#: resources/views/EditResourceData.class.php:393
+#: resources/lib/AssignObject.class.php:476
+#: resources/views/EditResourceData.class.php:394
 msgid "jeden dritten Monat"
 msgstr "every third month"
 
-#: resources/lib/AssignObject.class.php:454
-#: resources/views/EditResourceData.class.php:394
+#: resources/lib/AssignObject.class.php:477
+#: resources/views/EditResourceData.class.php:395
 msgid "jeden vierten Monat"
 msgstr "every fourth month"
 
-#: resources/lib/AssignObject.class.php:455
-#: resources/views/EditResourceData.class.php:395
+#: resources/lib/AssignObject.class.php:478
+#: resources/views/EditResourceData.class.php:396
 msgid "jeden f&uuml;nften Monat"
 msgstr "every fifth month"
 
-#: resources/lib/AssignObject.class.php:456
-#: resources/views/EditResourceData.class.php:396
+#: resources/lib/AssignObject.class.php:479
+#: resources/views/EditResourceData.class.php:397
 msgid "jeden sechsten Monat"
 msgstr "every sixth month"
 
-#: resources/lib/AssignObject.class.php:457
-#: resources/views/EditResourceData.class.php:397
+#: resources/lib/AssignObject.class.php:480
+#: resources/views/EditResourceData.class.php:398
 msgid "jeden siebten Monat"
 msgstr "every seventh month"
 
-#: resources/lib/AssignObject.class.php:458
-#: resources/views/EditResourceData.class.php:398
+#: resources/lib/AssignObject.class.php:481
+#: resources/views/EditResourceData.class.php:399
 msgid "jeden achten Monat"
 msgstr "every eighth month"
 
-#: resources/lib/AssignObject.class.php:459
-#: resources/views/EditResourceData.class.php:399
+#: resources/lib/AssignObject.class.php:482
+#: resources/views/EditResourceData.class.php:400
 msgid "jeden neunten Monat"
 msgstr "every ninth month"
 
-#: resources/lib/AssignObject.class.php:460
-#: resources/views/EditResourceData.class.php:400
+#: resources/lib/AssignObject.class.php:483
+#: resources/views/EditResourceData.class.php:401
 msgid "jeden zehnten Monat"
 msgstr "every tenth month"
 
-#: resources/lib/AssignObject.class.php:461
-#: resources/views/EditResourceData.class.php:401
+#: resources/lib/AssignObject.class.php:484
+#: resources/views/EditResourceData.class.php:402
 msgid "jeden elften Monat"
 msgstr "every eleventh month"
 
-#: resources/lib/AssignObject.class.php:465
-#: resources/views/EditResourceData.class.php:405
+#: resources/lib/AssignObject.class.php:488
+#: resources/views/EditResourceData.class.php:406
 msgid "jedes Jahr"
 msgstr "every year"
 
-#: resources/lib/AssignObject.class.php:466
-#: resources/views/EditResourceData.class.php:406
+#: resources/lib/AssignObject.class.php:489
+#: resources/views/EditResourceData.class.php:407
 msgid "jedes zweite Jahr"
 msgstr "every other year"
 
-#: resources/lib/AssignObject.class.php:467
-#: resources/views/EditResourceData.class.php:407
+#: resources/lib/AssignObject.class.php:490
+#: resources/views/EditResourceData.class.php:408
 msgid "jedes dritte Jahr"
 msgstr "every third year"
 
-#: resources/lib/AssignObject.class.php:468
-#: resources/views/EditResourceData.class.php:408
+#: resources/lib/AssignObject.class.php:491
+#: resources/views/EditResourceData.class.php:409
 msgid "jedes vierte Jahr"
 msgstr "every fourth year"
 
-#: resources/lib/AssignObject.class.php:469
-#: resources/views/EditResourceData.class.php:409
+#: resources/lib/AssignObject.class.php:492
+#: resources/views/EditResourceData.class.php:410
 msgid "jedes f&uuml;nfte Jahr"
 msgstr "every fifth year"
+
+#: resources/lib/evaluate_values.php:189
+#, fuzzy
+msgid "In aktueller Anfrage mit berücksichtigen"
+msgstr "To be considered in the actual request"
+
+#: resources/lib/evaluate_values.php:190
+msgid "neu laden"
+msgstr "reload"
+
+#: resources/lib/evaluate_values.php:1371
+#: resources/lib/evaluate_values.php:1375
+#: resources/lib/evaluate_values.php:1385
+#: resources/lib/evaluate_values.php:1387
+#: resources/lib/evaluate_values.php:1422
+#: resources/lib/evaluate_values.php:1426
+#: resources/lib/evaluate_values.php:1451
+#: resources/lib/evaluate_values.php:1454
+#: resources/lib/evaluate_values.php:1470
+#: resources/lib/evaluate_values.php:1473
+#, c-format
+msgid "%s, Belegungszeit: %s"
+msgstr "%s, allocation period: %s"
+
+#: resources/lib/evaluate_values.php:1483
+msgid "Belegungszeit:"
+msgstr "allocation period:"
+
+#: resources/lib/evaluate_values.php:1484
+msgid "Status:"
+msgstr "Status:"
+
+#: resources/lib/evaluate_values.php:1484
+msgid "noch nicht bearbeitet"
+msgstr ""
+
+#: resources/lib/evaluate_values.php:1484
+msgid "bereits bearbeitet"
+msgstr ""
+
+#: resources/lib/evaluate_values.php:1849
+#, c-format
+msgid "Ihre Raumanfrage zur Veranstaltung %s wurde bearbeitet."
+msgstr "Your room request for the course %s has been processed."
+
+#: resources/lib/evaluate_values.php:1849
+msgid "Für folgende Belegungszeiten wurde der jeweils angegebene Raum gebucht:"
+msgstr ""
+"The marked rooms have been booked for the following allocation periods:"
+
+#: resources/lib/evaluate_values.php:1866
+msgid "wöchentlich"
+msgstr "weekly"
+
+#: resources/lib/evaluate_values.php:1868
+#: resources/views/ShowGroupSchedules.class.php:182
+#: resources/views/ShowSemSchedules.class.php:182
+#, fuzzy
+msgid "zweiwöchentlich"
+msgstr "weekly"
+
+#: resources/lib/evaluate_values.php:1869
+#: resources/views/ShowToolsRequests.class.php:352
+msgid "ab:"
+msgstr "from:"
+
+#: resources/lib/evaluate_values.php:1899
+msgid "Raumanfrage bearbeitet"
+msgstr ""
 
 #: resources/lib/ResourceObject.class.php:285
 msgid "jederR"
@@ -246,73 +319,6 @@ msgstr "global (centrally administrated)"
 #: resources/views/ShowTreeRow.class.php:48
 msgid "Keine Beschreibung"
 msgstr "No description"
-
-#: resources/lib/evaluate_values.php:182
-msgid "In aktueller Anfrage mit ber&uuml;cksichtigen"
-msgstr "To be considered in the actual request"
-
-#: resources/lib/evaluate_values.php:183
-msgid "neu laden"
-msgstr "reload"
-
-#: resources/lib/evaluate_values.php:1282
-#: resources/lib/evaluate_values.php:1286
-#: resources/lib/evaluate_values.php:1296
-#: resources/lib/evaluate_values.php:1298
-#: resources/lib/evaluate_values.php:1316
-#: resources/lib/evaluate_values.php:1320
-#: resources/lib/evaluate_values.php:1345
-#: resources/lib/evaluate_values.php:1348
-#: resources/lib/evaluate_values.php:1364
-#: resources/lib/evaluate_values.php:1367
-#, c-format
-msgid "%s, Belegungszeit: %s"
-msgstr "%s, allocation period: %s"
-
-#: resources/lib/evaluate_values.php:1377
-msgid "Belegungszeit:"
-msgstr "allocation period:"
-
-#: resources/lib/evaluate_values.php:1378
-msgid "Status:"
-msgstr "Status:"
-
-#: resources/lib/evaluate_values.php:1378
-msgid "noch nicht bearbeitet"
-msgstr ""
-
-#: resources/lib/evaluate_values.php:1378
-msgid "bereits bearbeitet"
-msgstr ""
-
-#: resources/lib/evaluate_values.php:1720
-#, c-format
-msgid "Ihre Raumanfrage zur Veranstaltung %s wurde bearbeitet."
-msgstr "Your room request for the course %s has been processed."
-
-#: resources/lib/evaluate_values.php:1720
-msgid "Für folgende Belegungszeiten wurde der jeweils angegebene Raum gebucht:"
-msgstr ""
-"The marked rooms have been booked for the following allocation periods:"
-
-#: resources/lib/evaluate_values.php:1737
-msgid "wöchentlich"
-msgstr "weekly"
-
-#: resources/lib/evaluate_values.php:1739
-#: resources/views/EditResourceData.class.php:269
-#: resources/views/ShowToolsRequests.class.php:277
-msgid "zweiw&ouml;chentlich"
-msgstr "fortnightly"
-
-#: resources/lib/evaluate_values.php:1740
-#: resources/views/ShowToolsRequests.class.php:278
-msgid "ab:"
-msgstr "from:"
-
-#: resources/lib/evaluate_values.php:1770
-msgid "Raumanfrage bearbeitet"
-msgstr ""
 
 #: resources/views/EditResourceData.class.php:173
 msgid ""
@@ -367,68 +373,73 @@ msgstr "You do not have the authorisation to edit this allocation."
 msgid "Datum/erster Termin:"
 msgstr "Date/first appointment:"
 
-#: resources/views/EditResourceData.class.php:263
+#: resources/views/EditResourceData.class.php:264
 msgid "Art der Wiederholung:"
 msgstr "Type of repetition:"
 
-#: resources/views/EditResourceData.class.php:271
-#: resources/views/ShowToolsRequests.class.php:275
+#: resources/views/EditResourceData.class.php:270
+#: resources/views/ShowToolsRequests.class.php:351
+msgid "zweiw&ouml;chentlich"
+msgstr "fortnightly"
+
+#: resources/views/EditResourceData.class.php:272
+#: resources/views/ShowToolsRequests.class.php:349
 msgid "w&ouml;chentlich"
 msgstr "weekly"
 
-#: resources/views/EditResourceData.class.php:274
+#: resources/views/EditResourceData.class.php:275
 msgid "Einzeltermin zu regelm&auml;&szlig;igen Veranstaltungszeiten"
 msgstr "Single appointment to regular course schedule"
 
-#: resources/views/EditResourceData.class.php:276
+#: resources/views/EditResourceData.class.php:277
 msgid "keine Wiederholung (Einzeltermin)"
 msgstr "no repetition (single appointment)"
 
-#: resources/views/EditResourceData.class.php:295
+#: resources/views/EditResourceData.class.php:296
 msgid "Beginn/Ende:"
 msgstr "Begin/end:"
 
-#: resources/views/EditResourceData.class.php:303
-#: resources/views/EditResourceData.class.php:305
-#: resources/views/ResourcesBrowse.class.php:167
-#: resources/views/ResourcesBrowse.class.php:170
-#: resources/views/ScheduleWeek.class.php:258
+#: resources/views/EditResourceData.class.php:304
+#: resources/views/EditResourceData.class.php:306
+#: resources/views/ResourcesBrowse.class.php:181
+#: resources/views/ResourcesBrowse.class.php:184
+#: resources/views/ScheduleView.class.php:231
 msgid "Uhr"
 msgstr "o'clock"
 
-#: resources/views/EditResourceData.class.php:313
+#: resources/views/EditResourceData.class.php:314
 msgid "Wiederholung bis sp&auml;testens:"
 msgstr "Repetition until (latest possible date):"
 
-#: resources/views/EditResourceData.class.php:313
+#: resources/views/EditResourceData.class.php:314
 msgid "Letzter Termin:"
 msgstr "Last appointment:"
 
-#: resources/views/EditResourceData.class.php:324
+#: resources/views/EditResourceData.class.php:325
 msgid "Ende der Vorlesungszeit"
 msgstr "End of lecture period"
 
-#: resources/views/EditResourceData.class.php:338
+#: resources/views/EditResourceData.class.php:339
 msgid "eingetragen f&uuml;r die Belegung:"
 msgstr "Registered for the allocation:"
 
-#: resources/views/EditResourceData.class.php:345
+#: resources/views/EditResourceData.class.php:346
 msgid "keinE Stud.IP NutzerIn eingetragen"
 msgstr "No Stud.IP user entered"
 
-#: resources/views/EditResourceData.class.php:349
+#: resources/views/EditResourceData.class.php:350
 msgid "einen anderen User (NutzerIn oder Einrichtung) eintragen:"
 msgstr "enter another user (person or institution):"
 
-#: resources/views/EditResourceData.class.php:351
+#: resources/views/EditResourceData.class.php:352
 msgid "einen Nutzer (Person oder Einrichtung) eintragen:"
 msgstr "enter a user (person or institution): "
 
-#: resources/views/EditResourceData.class.php:354
+#: resources/views/EditResourceData.class.php:355
 msgid "freie Eingabe zur Belegung:"
 msgstr "free description of allocation:"
 
-#: resources/views/EditResourceData.class.php:356
+#: resources/views/EditResourceData.class.php:357
 msgid ""
 "<b>Beachten Sie:</b> Wenn Sie einen NutzerIn oder eine Einrichtung "
 "eintragen, kann diese NutzerIn oder berechtigte Personen die Belegung "
@@ -439,33 +450,33 @@ msgstr ""
 "authorised person can independently delete the allocation. Alternatively, "
 "you can a free description of allocation."
 
-#: resources/views/EditResourceData.class.php:366
+#: resources/views/EditResourceData.class.php:367
 msgid "Wiederholungsturnus:"
 msgstr "Repetition regularity:"
 
-#: resources/views/EditResourceData.class.php:426
+#: resources/views/EditResourceData.class.php:427
 msgid "begrenzte Anzahl der Wiederholungen:"
 msgstr "limited number of repetitions:"
 
-#: resources/views/EditResourceData.class.php:430
-#: resources/views/EditResourceData.class.php:434
+#: resources/views/EditResourceData.class.php:431
+#: resources/views/EditResourceData.class.php:435
 #, c-format
 msgid "max. %s Mal wiederholen"
 msgstr "repeat for at most %s times"
 
-#: resources/views/EditResourceData.class.php:436
+#: resources/views/EditResourceData.class.php:437
 msgid "unbegrenzt"
 msgstr "unlimited"
 
-#: resources/views/EditResourceData.class.php:475
+#: resources/views/EditResourceData.class.php:476
 msgid "weitere Aktionen:"
 msgstr "further actions:"
 
-#: resources/views/EditResourceData.class.php:483
+#: resources/views/EditResourceData.class.php:484
 msgid "Belegung in anderen Raum verschieben:"
 msgstr "Move allocation to a different room:"
 
-#: resources/views/EditResourceData.class.php:484
+#: resources/views/EditResourceData.class.php:485
 msgid ""
 "Sie k&ouml;nnen diese Belegung in einen anderen Raum verschieben. <br />Alle "
 "anderen Angaben bleiben unver&auml;ndert."
@@ -473,46 +484,47 @@ msgstr ""
 "Now you may move this allocation to a different room. <br /> All further "
 "data will remain unchanged."
 
-#: resources/views/EditResourceData.class.php:493
+#: resources/views/EditResourceData.class.php:494
 msgid "Ressourcen gefunden:"
 msgstr "Resources found:"
 
-#: resources/views/EditResourceData.class.php:493
+#: resources/views/EditResourceData.class.php:494
 msgid "passende R&auml;ume gefunden"
 msgstr "fitting rooms found:"
 
-#: resources/views/EditResourceData.class.php:499
+#: resources/views/EditResourceData.class.php:500
 msgid "neue Suche starten"
 msgstr "start new search"
 
-#: resources/views/EditResourceData.class.php:500
+#: resources/views/EditResourceData.class.php:501
 msgid "Die Belegung ist den ausgew&auml;hlten Raum verschieben"
 msgstr "Move the allocation to the selected room"
 
-#: resources/views/EditResourceData.class.php:502
+#: resources/views/EditResourceData.class.php:503
 msgid ""
 "(Diese Resourcen/R&auml;ume erf&uuml;llen die Wunschkriterien einer "
 "Raumanfrage.)"
 msgstr ""
 "(These resources/rooms satisfy the selection criteria of a room search.)"
 
-#: resources/views/EditResourceData.class.php:509
+#: resources/views/EditResourceData.class.php:510
 msgid "<b>Keine</b> Ressource gefunden."
 msgstr "<b>No</b> resources found."
 
-#: resources/views/EditResourceData.class.php:511
+#: resources/views/EditResourceData.class.php:512
 msgid "Geben Sie zur Suche den Namen der Ressource ganz oder teilweise ein:"
 msgstr "For the search, please, enter (parts of) the name of the resource:"
 
-#: resources/views/EditResourceData.class.php:513
+#: resources/views/EditResourceData.class.php:514
 msgid "Suche starten"
 msgstr "Start search"
 
-#: resources/views/EditResourceData.class.php:523
+#: resources/views/EditResourceData.class.php:524
+#: resources/views/EditResourceData.class.php:532
 msgid "Regelm&auml;&szlig;ige Belegung in Einzeltermine umwandeln:"
 msgstr "Change regular allocation into single appointments:"
 
-#: resources/views/EditResourceData.class.php:524
+#: resources/views/EditResourceData.class.php:525
 msgid ""
 "Nutzen Sie diese Funktion, um eine Terminserie in Einzeltermine umzuwandeln. "
 "Diese Einzeltermine k&ouml;nnen dann getrennt bearbeitet werden. Ein "
@@ -522,26 +534,36 @@ msgstr ""
 "single appointments. Then these single appointments can be modified "
 "separately. A schedule will be created."
 
-#: resources/views/EditResourceData.class.php:553
+#: resources/views/EditResourceData.class.php:533
+#, fuzzy
+msgid ""
+"Nutzen Sie diese Funktion, um eine Terminserie in Einzeltermine umzuwandeln. "
+"Diese Einzeltermine k&ouml;nnen dann getrennt bearbeitet werden."
+msgstr ""
+"Apply this function in order to change a series of regular allocations into "
+"single appointments. Then these single appointments can be modified "
+"separately. A schedule will be created."
+
+#: resources/views/EditResourceData.class.php:562
 #: resources/views/ShowObject.class.php:79
 msgid "Name:"
 msgstr "Name:"
 
-#: resources/views/EditResourceData.class.php:556
+#: resources/views/EditResourceData.class.php:565
 msgid "Typ des Objektes:"
 msgstr "Object type:"
 
-#: resources/views/EditResourceData.class.php:565
+#: resources/views/EditResourceData.class.php:574
 msgid "nicht zugeordnet"
 msgstr "not allocated"
 
-#: resources/views/EditResourceData.class.php:585
+#: resources/views/EditResourceData.class.php:594
 #: resources/views/ShowObject.class.php:96
 msgid "Beschreibung:"
 msgstr "Description:"
 
-#: resources/views/EditResourceData.class.php:589
-#: resources/views/EditResourceData.class.php:754
+#: resources/views/EditResourceData.class.php:598
+#: resources/views/EditResourceData.class.php:763
 #: resources/views/ShowList.class.php:134
 #: resources/views/ShowList.class.php:136
 #: resources/views/ShowObject.class.php:82
@@ -550,25 +572,25 @@ msgstr "Description:"
 msgid "verantwortlich:"
 msgstr "responsible:"
 
-#: resources/views/EditResourceData.class.php:596
-#: resources/views/links_resources.inc.php:77
+#: resources/views/EditResourceData.class.php:605
+#: resources/views/links_resources.inc.php:82
 msgid "Eigenschaften"
 msgstr "Properties"
 
-#: resources/views/EditResourceData.class.php:605
+#: resources/views/EditResourceData.class.php:614
 msgid "organisatorische Einordnung:"
 msgstr "organisational classification:"
 
-#: resources/views/EditResourceData.class.php:606
-#: resources/views/EditResourceData.class.php:614
+#: resources/views/EditResourceData.class.php:615
+#: resources/views/EditResourceData.class.php:623
 msgid "keine Zuordnung"
 msgstr "no assignment"
 
-#: resources/views/EditResourceData.class.php:629
+#: resources/views/EditResourceData.class.php:638
 msgid "Sie k&ouml;nnen die Einordnung in die Orga-Struktur nicht &auml;ndern."
 msgstr "You can not modify the classification in the organisation structure."
 
-#: resources/views/EditResourceData.class.php:700
+#: resources/views/EditResourceData.class.php:709
 msgid ""
 "Das Objekt wurde noch keinem Typ zugewiesen. Um Eigenschaften bearbeiten zu "
 "k&ouml;nnen, m&uuml;ssen Sie vorher einen Typ festlegen!"
@@ -576,11 +598,11 @@ msgstr ""
 "The object hasn't been assigned to any type, yet. In order to edit "
 "properties, you firstly have to determine a type!"
 
-#: resources/views/EditResourceData.class.php:709
+#: resources/views/EditResourceData.class.php:718
 msgid "gleichzeitige Belegung"
 msgstr "coincident allocation"
 
-#: resources/views/EditResourceData.class.php:710
+#: resources/views/EditResourceData.class.php:719
 msgid ""
 "Die Ressource darf mehrfach zur gleichen Zeit belegt werden - <br />&Uuml;"
 "berschneidungschecks finden <u>nicht</u> statt!"
@@ -588,31 +610,31 @@ msgstr ""
 "It is possible to multiply allocate this resource for the same period - "
 "checks for overlapping will not be made!"
 
-#: resources/views/EditResourceData.class.php:761
+#: resources/views/EditResourceData.class.php:770
 msgid "verantworlicheN NutzerIn &auml;ndern:"
 msgstr "change responsible user:"
 
-#: resources/views/EditResourceData.class.php:764
+#: resources/views/EditResourceData.class.php:773
 msgid "Sie k&ouml;nnen den/die verantwortlicheN NutzerIn nicht &auml;ndern."
 msgstr "You may not modify the responsible user."
 
-#: resources/views/EditResourceData.class.php:772
+#: resources/views/EditResourceData.class.php:781
 msgid "Berechtigungen:"
 msgstr "Authorisations:"
 
-#: resources/views/EditResourceData.class.php:773
+#: resources/views/EditResourceData.class.php:782
 msgid "Berechtigung hinzuf&uuml;gen"
 msgstr "Add authorisation"
 
-#: resources/views/EditResourceData.class.php:812
+#: resources/views/EditResourceData.class.php:821
 msgid "Berechtigung löschen"
 msgstr "Delete authorisation"
 
-#: resources/views/EditResourceData.class.php:814
+#: resources/views/EditResourceData.class.php:823
 msgid "Sie d&uuml;rfen diese Berechtigung leider nicht löschen"
 msgstr "Unfortunately, you are not allowed to delete this authorisation"
 
-#: resources/views/EditResourceData.class.php:825
+#: resources/views/EditResourceData.class.php:834
 msgid ""
 "Nutzer ist <b>Admin</b> und kann s&auml;mtliche Belegungen und Eigenschaften "
 "&auml;ndern und Rechte vergeben."
@@ -620,23 +642,23 @@ msgstr ""
 "User is <b>Admin</b> and (s)he can modify all allocations and properties and "
 "determine all permissions."
 
-#: resources/views/EditResourceData.class.php:828
+#: resources/views/EditResourceData.class.php:837
 msgid "Nutzer ist <b>Tutor</b> und kann s&auml;mtliche Belegungen &auml;ndern."
 msgstr "User is <b>tutor</b> and (s)he can modify all allocations."
 
-#: resources/views/EditResourceData.class.php:831
+#: resources/views/EditResourceData.class.php:840
 msgid "Nutzer ist <b>Autor</b> und kann nur eigene Belegungen &auml;ndern."
 msgstr "User is <b>author</b> and can modify her/his own allocations, only."
 
-#: resources/views/EditResourceData.class.php:847
+#: resources/views/EditResourceData.class.php:856
 msgid "Es sind keine weiteren Berechtigungen eingetragen"
 msgstr "No further authorisations have been entered"
 
-#: resources/views/EditResourceData.class.php:856
+#: resources/views/EditResourceData.class.php:865
 msgid "Blockierung:"
 msgstr "Obstruction:"
 
-#: resources/views/EditResourceData.class.php:857
+#: resources/views/EditResourceData.class.php:866
 msgid ""
 "Diesen Raum bei globaler Blockierung gegen eine Bearbeitung durch lokale "
 "Administratoren und andere Personen sperren:"
@@ -644,15 +666,15 @@ msgstr ""
 "In case of global obstruction, block this room from modification by local "
 "administrators and other persons:"
 
-#: resources/views/EditResourceData.class.php:859
+#: resources/views/EditResourceData.class.php:868
 msgid "<b>aktueller Zustand</b>:"
 msgstr "<b>present status</b>:"
 
-#: resources/views/EditResourceData.class.php:859
+#: resources/views/EditResourceData.class.php:868
 msgid "Raum <u>kann</u> blockiert werden"
 msgstr "Room <u>may</u> be blocked"
 
-#: resources/views/EditResourceData.class.php:859
+#: resources/views/EditResourceData.class.php:868
 msgid "Raum kann <u>nicht</u> blockiert werden"
 msgstr "Room can <u>not</u> be blocked"
 
@@ -991,477 +1013,8 @@ msgstr ""
 "Participants in courses or members of institutions will get the following "
 "rights on <i>rooms</i> which belong to these courses or institutes:"
 
-#: resources/views/Msg.class.php:73 resources/views/Msg.class.php:81
-msgid "zur&uuml;ck"
-msgstr "back"
-
-#: resources/views/ResourcesBrowse.class.php:125
-msgid "Veranstaltungsressourcen"
-msgstr "Course resources"
-
-#: resources/views/ResourcesBrowse.class.php:128
-msgid "Einrichtungsressourcen"
-msgstr "Institution resources"
-
-#: resources/views/ResourcesBrowse.class.php:131
-msgid "Fakult&auml;tsressourcen"
-msgstr "Faculty resources"
-
-#: resources/views/ResourcesBrowse.class.php:134
-msgid "pers&ouml;nliche Ressourcen"
-msgstr "Personal resources"
-
-#: resources/views/ResourcesBrowse.class.php:153
-msgid "gefundene Ressourcen sollen zu folgender Zeit <u>nicht</u> belegt sein:"
-msgstr ""
-
-#: resources/views/ResourcesBrowse.class.php:161
-msgid "Datum"
-msgstr "Date"
-
-#: resources/views/ResourcesBrowse.class.php:165
-msgid "Beginn"
-msgstr "Begin"
-
-#: resources/views/ResourcesBrowse.class.php:168
-msgid "Ende"
-msgstr "End"
-
-#: resources/views/ResourcesBrowse.class.php:183
-msgid ""
-"folgende Eigenschaften soll die Ressource besitzen (leer bedeutet egal):"
-msgstr ""
-"The resource should have the following properties (empty means that it "
-"doesn't matter):"
-
-#: resources/views/ResourcesBrowse.class.php:301
-msgid "eine Ebene zur&uuml;ck"
-msgstr "One level up"
-
-#: resources/views/ResourcesBrowse.class.php:310
-msgid "Auf dieser Ebene existieren keine weiteren Unterebenen"
-msgstr "No further sub-level exists at this level"
-
-#: resources/views/ResourcesBrowse.class.php:335
-msgid "Ressourcen auf dieser Ebene:"
-msgstr "Resources at this level:"
-
-#: resources/views/ResourcesBrowse.class.php:349
-msgid "Es existieren keine Eintr&auml;ge auf dieser Ebene."
-msgstr "At this level, no entry exists."
-
-#: resources/views/ResourcesBrowse.class.php:364
-msgid "Es wurden keine Eintr&auml;ge zu Ihren Suchkriterien gefunden."
-msgstr "No entry matching your search criteria was found."
-
-#: resources/views/ScheduleWeek.class.php:215
-msgid "Zeit"
-msgstr "Time"
-
-#: resources/views/ScheduleWeek.class.php:218
-msgid "Montag"
-msgstr "Monday"
-
-#: resources/views/ScheduleWeek.class.php:222
-msgid "Dienstag"
-msgstr "Tuesday"
-
-#: resources/views/ScheduleWeek.class.php:226
-msgid "Mittwoch"
-msgstr "Wednesday"
-
-#: resources/views/ScheduleWeek.class.php:230
-msgid "Donnerstag"
-msgstr "Thursday"
-
-#: resources/views/ScheduleWeek.class.php:234
-msgid "Freitag"
-msgstr "Friday"
-
-#: resources/views/ScheduleWeek.class.php:238
-msgid "Samstag"
-msgstr "Saturday"
-
-#: resources/views/ScheduleWeek.class.php:242
-msgid "Sonntag"
-msgstr "Sunday"
-
-#: resources/views/ScheduleWeek.class.php:322
-#, c-format
-msgid "Eine neue Belegung von %s bis %s Uhr anlegen"
-msgstr "Create a new allocation from %s until %s o'clock"
-
-#: resources/views/ScheduleWeek.class.php:332
-msgid "Erstellt am"
-msgstr "Created on"
-
-#: resources/views/ShowList.class.php:149
-#: resources/views/ShowList.class.php:195
-msgid "Aus der Merkliste entfernen"
-msgstr "Delete from memorandum list"
-
-#: resources/views/ShowList.class.php:151
-#: resources/views/ShowList.class.php:197
-msgid "In Merkliste aufnehmen"
-msgstr "Add to memorandum list"
-
-#: resources/views/ShowList.class.php:166
-#: resources/views/ShowThread.class.php:121
-msgid "&Auml;nderungen speichern"
-msgstr "Save changes"
-
-#: resources/views/ShowObject.class.php:80
-#: resources/views/page_intros.inc.php:41
-#: resources/views/page_intros.inc.php:205
-msgid "Hierachieebene"
-msgstr "Hierarchy level"
-
-#: resources/views/ShowObject.class.php:106
-msgid "Einordnung:"
-msgstr "Classification:"
-
-#: resources/views/ShowObject.class.php:112
-msgid "Untergeordnete Objekte:"
-msgstr "Subordinated objects:"
-
-#: resources/views/ShowObject.class.php:125
-msgid "Eigenschaften:"
-msgstr "Properties:"
-
-#: resources/views/ShowSchedules.class.php:110
-msgid "Zeitraum:"
-msgstr "Period:"
-
-#: resources/views/ShowSchedules.class.php:126
-msgid "Tag(e)"
-msgstr "Day(s)"
-
-#: resources/views/ShowSchedules.class.php:127
-msgid "Woche(n)"
-msgstr "Week(s)"
-
-#: resources/views/ShowSchedules.class.php:128
-msgid "Monat(e)"
-msgstr "Month(s)"
-
-#: resources/views/ShowSchedules.class.php:129
-msgid "Jahre(e)"
-msgstr "Year(s)"
-
-#: resources/views/ShowSchedules.class.php:169
-#: resources/views/ShowSchedules.class.php:261
-msgid "Anzahl der Belegungen in diesem Zeitraum:"
-msgstr "Number of allocations in this period:"
-
-#: resources/views/ShowSchedules.class.php:173
-#, c-format
-msgid "Belegung ist von <b>%s</b> bis <b>%s</b>, belegt von <b>%s</b>"
-msgstr "Allocation is from <b>%s</b> until <b>%s</b>, allocated by <b>%s</b>"
-
-#: resources/views/ShowSchedules.class.php:242
-msgid "Vorherige Woche anzeigen"
-msgstr "View previous week"
-
-#: resources/views/ShowSchedules.class.php:245
-msgid "Woche"
-msgstr "Week"
-
-#: resources/views/ShowSchedules.class.php:249
-msgid "Nächste Woche anzeigen"
-msgstr "View next week"
-
-#: resources/views/ShowSchedules.class.php:256
-msgid "Frühere Belegungen anzeigen"
-msgstr "View previous allocations"
-
-#: resources/views/ShowSchedules.class.php:267
-msgid "alle Belegungen"
-msgstr "all allocations"
-
-#: resources/views/ShowSchedules.class.php:268
-msgid "nur Einzeltermine"
-msgstr "single appointments only"
-
-#: resources/views/ShowSchedules.class.php:269
-msgid "nur Wiederholungstermine"
-msgstr "periodical appointments only"
-
-#: resources/views/ShowSchedules.class.php:271
-msgid "Ansicht umschalten"
-msgstr "Change view"
-
-#: resources/views/ShowSchedules.class.php:288
-msgid "Spätere Belegungen anzeigen"
-msgstr "View later allocations"
-
-#: resources/views/ShowThread.class.php:80
-msgid "Objekt in diese Ebene verschieben"
-msgstr "Move object to this level"
-
-#: resources/views/ShowThread.class.php:129
-#, c-format
-msgid ""
-"Dieses Objekt wurde zum Verschieben markiert. Bitte w&auml;hlen sie das "
-"Einf&uuml;gen-Symbol %s, um es in die gew&uuml;nschte Ebene zu verschieben."
-msgstr ""
-"This object has been selected to move. In order to move it to the requested "
-"level, please select the insertion symbol %s."
-
-#: resources/views/ShowThread.class.php:129
-msgid ""
-"Klicken Sie auf dieses Symbol, um dieses Objekt in eine andere Ebene zu "
-"verschieben"
-msgstr "Click on this symbol in order to move this object to another level."
-
-#: resources/views/ShowToolsRequests.class.php:140
-msgid "aktueller Status"
-msgstr "actual status"
-
-#: resources/views/ShowToolsRequests.class.php:143
-#, c-format
-msgid ""
-"Es liegen insgesamt <b>%s</b> nicht aufgel&ouml;ste Anfragen vor - <br /"
-">davon <b>%s</b> von Veranstaltungen und <b>%s</b> auf Ressourcen, auf die "
-"Sie Zugriff haben."
-msgstr ""
-"There is a total of <b>%s</b> unresolved requests - <br />among them <b>%s</"
-"b> from courses and <b>%s</b> on resources you are authorised to acess."
-
-#: resources/views/ShowToolsRequests.class.php:145
-#, c-format
-msgid "<b>%s</b> Anfragen haben keine Zeiten eingetragen!"
-msgstr ""
-
-#: resources/views/ShowToolsRequests.class.php:148
-msgid "Es liegen im Augenblick keine unaufgel&ouml;sten Anfragen vor."
-msgstr "At the present there aren't any unresolved requests."
-
-#: resources/views/ShowToolsRequests.class.php:160
-msgid "Optionen beim Aufl&ouml;sen"
-msgstr "Option for resolving"
-
-#: resources/views/ShowToolsRequests.class.php:162
-msgid ""
-"Sie k&ouml;nnen die vorliegenden Anfragen mit folgenden Optionen aufl&ouml;"
-"sen:"
-msgstr ""
-"Using the following options you are able to resolve the present requests:"
-
-#: resources/views/ShowToolsRequests.class.php:170
-msgid "Art der Anfragen:"
-msgstr "Type of request:"
-
-#: resources/views/ShowToolsRequests.class.php:171
-msgid "alle Anfragen"
-msgstr "all requests"
-
-#: resources/views/ShowToolsRequests.class.php:172
-msgid "nur Anfragen von meinen Veranstaltungen"
-msgstr "requests from my personal courses only"
-
-#: resources/views/ShowToolsRequests.class.php:173
-msgid "nur Anfragen auf meine R&auml;ume"
-msgstr "requests for my rooms only"
-
-#: resources/views/ShowToolsRequests.class.php:183
-msgid "Sortierung der Anfragen:"
-msgstr "Sort of the requests"
-
-#: resources/views/ShowToolsRequests.class.php:184
-msgid ""
-"komplexere zuerst (Raumgr&ouml;&szlig;e und  gew&uuml;nschte Eigenschaften)"
-msgstr "more complex first (room size and requested properties)"
-
-#: resources/views/ShowToolsRequests.class.php:185
-msgid "&auml;ltere zuerst"
-msgstr "older first"
-
-#: resources/views/ShowToolsRequests.class.php:186
-msgid "neue zuerst"
-msgstr "new ones first"
-
-#: resources/views/ShowToolsRequests.class.php:195
-msgid "Anfragen ohne eingetragene Zeiten ausblenden"
-msgstr ""
-
-#: resources/views/ShowToolsRequests.class.php:244
-msgid "Art der Anfrage:"
-msgstr "type of request:"
-
-#: resources/views/ShowToolsRequests.class.php:244
-msgid "Einzeltermin einer Veranstaltung"
-msgstr "Single appointment of a course"
-
-#: resources/views/ShowToolsRequests.class.php:244
-msgid "alle Termine einer unregelm&auml;&szlig;igen Veranstaltung"
-msgstr "all appointments of a non-periodical course"
-
-#: resources/views/ShowToolsRequests.class.php:244
-msgid "regelm&auml;&szlig;ige Veranstaltungszeiten"
-msgstr "periodical course"
-
-#: resources/views/ShowToolsRequests.class.php:245
-msgid "Erstellt von:"
-msgstr "Created by:"
-
-#: resources/views/ShowToolsRequests.class.php:246
-msgid "verantwortliche Einrichtung:"
-msgstr "responsible institution:"
-
-#: resources/views/ShowToolsRequests.class.php:247
-msgid "verantwortliche Fakult&auml;t:"
-msgstr "responsible faculty:"
-
-#: resources/views/ShowToolsRequests.class.php:256
-msgid "angeforderte Belegungszeiten:"
-msgstr "requested allocation period:"
-
-#: resources/views/ShowToolsRequests.class.php:280
-#: resources/views/ShowToolsRequests.class.php:293
-#: resources/views/ShowToolsRequests.class.php:307
-msgid "nicht angegeben"
-msgstr "unspecified"
-
-#: resources/views/ShowToolsRequests.class.php:316
-msgid "angeforderter Raum:"
-msgstr "requested room:"
-
-#: resources/views/ShowToolsRequests.class.php:344
-#: resources/views/ShowToolsRequests.class.php:433
-#: resources/views/ShowToolsRequests.class.php:533
-msgid "Der ausgewählte Raum bietet folgende der wünschbaren Eigenschaften:"
-msgstr ""
-"The selected room provides the following of the requestable properties:"
-
-#: resources/views/ShowToolsRequests.class.php:347
-msgid "Es wurde kein Raum angefordert."
-msgstr "No room has been requested."
-
-#: resources/views/ShowToolsRequests.class.php:359
-#: resources/views/ShowToolsRequests.class.php:378
-#: resources/views/ShowToolsRequests.class.php:444
-#: resources/views/ShowToolsRequests.class.php:461
-#: resources/views/ShowToolsRequests.class.php:544
-#: resources/views/ShowToolsRequests.class.php:563
-msgid "Dieser Raum ist augenblicklich gebucht"
-msgstr "Presently this room is booked"
-
-#: resources/views/ShowToolsRequests.class.php:413
-msgid "weitere passende R&auml;ume:"
-msgstr "further suitable rooms:"
-
-#: resources/views/ShowToolsRequests.class.php:501
-msgid "zeige R&auml;ume"
-msgstr ""
-
-#: resources/views/ShowToolsRequests.class.php:502
-#: resources/views/ShowToolsRequests.class.php:507
-msgid "-10"
-msgstr ""
-
-#: resources/views/ShowToolsRequests.class.php:504
-#: resources/views/ShowToolsRequests.class.php:509
-msgid "+10"
-msgstr ""
-
-#: resources/views/ShowToolsRequests.class.php:511
-msgid "ausgewählten Bereich anzeigen"
-msgstr ""
-
-#: resources/views/ShowToolsRequests.class.php:517
-msgid "keine gefunden"
-msgstr "nothing found"
-
-#: resources/views/ShowToolsRequests.class.php:523
-msgid "R&auml;ume aus der Merkliste:"
-msgstr "Rooms from the memorandum list:"
-
-#: resources/views/ShowToolsRequests.class.php:608
-msgid "gew&uuml;nschte Raumeigenschaften:"
-msgstr "requested properties:"
-
-#: resources/views/ShowToolsRequests.class.php:649
-msgid "Es wurden keine Raumeigenschaften gew&uuml;nscht."
-msgstr "No room properties have been requested."
-
-#: resources/views/ShowToolsRequests.class.php:658
-msgid "Kommentar des Anfragenden:"
-msgstr "Comment by the requesting person:"
-
-#: resources/views/ShowToolsRequests.class.php:663
-msgid "Es wurde kein Kommentar eingegeben"
-msgstr "No comment available"
-
-#: resources/views/ShowToolsRequests.class.php:706
-#, c-format
-msgid ""
-"<b>%s</b> von <b>%s</b> Anfragen in der Bearbeitung wurden noch nicht "
-"aufgel&ouml;st."
-msgstr ""
-"<b>%s</b> out of <b>%s</b> requests in progress have not been resolved."
-
-#: resources/views/ShowToolsRequests.class.php:707
-msgid "Aktueller Request: "
-msgstr "Actual request: "
-
-#: resources/views/ShowToolsRequests.class.php:721
-#: resources/views/ShowToolsRequests.class.php:761
-#, c-format
-msgid "%s, %s Uhr bis %s, %s Uhr"
-msgstr ""
-
-#: resources/views/ShowToolsRequests.class.php:724
-#: resources/views/ShowToolsRequests.class.php:764
-msgid "Sperrzeit(en):\n"
-msgstr ""
-
-#: resources/views/ShowToolsRequests.class.php:729
-#: resources/views/ShowToolsRequests.class.php:769
-msgid "Es besteht eine Belegungssperre zur gewünschten Belegungszeit."
-msgstr ""
-
-#: resources/views/ShowToolsRequests.class.php:731
-#: resources/views/ShowToolsRequests.class.php:771
-msgid "Es existieren Überschneidungen zur gewünschten Belegungszeit."
-msgstr "For the requested allocation period there exists some overlap."
-
-#: resources/views/ShowToolsRequests.class.php:733
-#: resources/views/ShowToolsRequests.class.php:773
-#, fuzzy, c-format
-msgid ""
-"Es existieren Überschneidungen oder Belegungssperren zu mehr als %s%% aller "
-"gewünschten Belegungszeiten."
-msgstr ""
-"Overlaps exists for more than %s%% of all the requested allocation periods."
-
-#: resources/views/ShowToolsRequests.class.php:737
-#: resources/views/ShowToolsRequests.class.php:777
-#, fuzzy
-msgid ""
-"Einige der gewünschten Belegungszeiten überschneiden sich mit eingetragenen "
-"Belegungen bzw. Sperrzeiten:\n"
-msgstr ""
-"Some of the requested allocation periods overlap with entered allocations:\n"
-
-#: resources/views/ShowToolsRequests.class.php:742
-#: resources/views/ShowToolsRequests.class.php:780
-#, c-format
-msgid "%s, %s Uhr bis %s, %s Uhr (Sperrzeit)"
-msgstr ""
-
-#: resources/views/ShowToolsRequests.class.php:744
-#: resources/views/ShowToolsRequests.class.php:782
-#, c-format
-msgid "%s von %s bis %s Uhr"
-msgstr "%s from %s until %s o'clock"
-
-#: resources/views/ShowToolsRequests.class.php:750
-#: resources/views/ShowToolsRequests.class.php:788
-msgid "Es existieren keine Überschneidungen"
-msgstr "No overlaps exist"
-
 #: resources/views/links_resources.inc.php:46
-#: resources/views/links_resources.inc.php:93
+#: resources/views/links_resources.inc.php:101
 msgid "&Uuml;bersicht"
 msgstr "Overview"
 
@@ -1482,60 +1035,80 @@ msgid "Anpassen"
 msgstr "Customise"
 
 #: resources/views/links_resources.inc.php:64
-msgid "Struktur"
-msgstr "Structure"
-
-#: resources/views/links_resources.inc.php:65
 msgid "Suchen"
 msgstr "Search"
 
-#: resources/views/links_resources.inc.php:66
+#: resources/views/links_resources.inc.php:65
+msgid "Struktur"
+msgstr "Structure"
+
+#: resources/views/links_resources.inc.php:67
 msgid "Neue&nbsp;Hierarchieebene&nbsp;erzeugen"
 msgstr "Create&nbsp;a&nbsp;new&nbsp;hierarchy&nbsp;level."
 
 #: resources/views/links_resources.inc.php:70
+#, fuzzy
+msgid "Gruppen-Belegungspl&auml;ne"
+msgstr "Allocation plan"
+
+#: resources/views/links_resources.inc.php:75
 msgid "Listenausgabe"
 msgstr "List view"
 
-#: resources/views/links_resources.inc.php:79
+#: resources/views/links_resources.inc.php:84
 msgid "Eigenschaften&nbsp;bearbeiten"
 msgstr "Edit&nbsp;properties"
 
-#: resources/views/links_resources.inc.php:80
+#: resources/views/links_resources.inc.php:85
 msgid "Rechte&nbsp;bearbeiten"
 msgstr "Edit&nbsp;rights"
 
-#: resources/views/links_resources.inc.php:83
+#: resources/views/links_resources.inc.php:88
 msgid "Belegungsplan"
 msgstr "Allocation plan"
 
-#: resources/views/links_resources.inc.php:85
+#: resources/views/links_resources.inc.php:90
+#, fuzzy
+msgid "Semester-Belegungsplan"
+msgstr "Allocation plan"
+
+#: resources/views/links_resources.inc.php:93
 msgid "Belegung&nbsp;bearbeiten"
 msgstr "Edit&nbsp;allocation"
 
-#: resources/views/links_resources.inc.php:87
+#: resources/views/links_resources.inc.php:95
 msgid "Belegung&nbsp;anzeigen"
 msgstr "View&nbsp;allocation"
 
-#: resources/views/links_resources.inc.php:94
+#: resources/views/links_resources.inc.php:102
 msgid "Anfragen&nbsp;bearbeiten"
 msgstr ""
 
-#: resources/views/links_resources.inc.php:101
+#: resources/views/links_resources.inc.php:103
+#: resources/views/page_intros.inc.php:257
+#, fuzzy
+msgid "Anfragenliste"
+msgstr "all requests"
+
+#: resources/views/links_resources.inc.php:109
 msgid "Typen&nbsp;verwalten"
 msgstr "Administer&nbsp;types"
 
-#: resources/views/links_resources.inc.php:102
+#: resources/views/links_resources.inc.php:110
 msgid "Eigenschaften&nbsp;verwalten"
 msgstr "Administer&nbsp;properties"
 
-#: resources/views/links_resources.inc.php:103
+#: resources/views/links_resources.inc.php:111
 msgid "globale&nbsp;Einstellungen&nbsp;verwalten"
 msgstr "administer&nbsp;global&nbsp;settings"
 
-#: resources/views/links_resources.inc.php:106
+#: resources/views/links_resources.inc.php:114
 msgid "globale&nbsp;Rechte&nbsp;verwalten"
 msgstr "Administer&nbsp;global&nbsp;rights"
+
+#: resources/views/Msg.class.php:73 resources/views/Msg.class.php:81
+msgid "zur&uuml;ck"
+msgstr "back"
 
 #: resources/views/msgs_resources.inc.php:39
 #: resources/views/msgs_resources.inc.php:120
@@ -1763,8 +1336,8 @@ msgstr ""
 "subordinated rooms as <u>non</u> blockable, too?"
 
 #: resources/views/msgs_resources.inc.php:143
-#, c-format
-msgid "Ressourcenblockierung vom %s bis zum %s."
+#, fuzzy, c-format
+msgid "<b>Ressourcenblockierung vom %s bis zum %s.</b>"
 msgstr "Blocking of resources from %s until %s."
 
 #: resources/views/msgs_resources.inc.php:144
@@ -1787,13 +1360,17 @@ msgid ""
 msgstr "The selected entries have been passed on to the current request"
 
 #: resources/views/msgs_resources.inc.php:150
-msgid "Folgende R&auml;ume wurden gebucht und der Veranstaltung zugewiesen:"
+#, fuzzy, c-format
+msgid ""
+"Folgende R&auml;ume wurden gebucht und der Veranstaltung zugewiesen: <font "
+"size=\"-1\" color=\"black\">%s</font>"
 msgstr "The following rooms have been booked and associated to the course:"
 
 #: resources/views/msgs_resources.inc.php:153
-#, fuzzy
+#, fuzzy, c-format
 msgid ""
-"Folgende R&auml;ume konnten wegen &Uuml;berschneidungen nicht gebucht werden:"
+"Folgende R&auml;ume konnten wegen &Uuml;berschneidungen nicht gebucht "
+"werden: <font size=\"-1\" color=\"black\">%s</font>"
 msgstr "Because of some overlap, the following rooms could not be booked:"
 
 #: resources/views/msgs_resources.inc.php:156
@@ -1803,9 +1380,10 @@ msgid ""
 msgstr "Because of some overlap, the following rooms could not be booked:"
 
 #: resources/views/msgs_resources.inc.php:156
+#, fuzzy, c-format
 msgid ""
 "Eine neue Anfrage, die einzeln bearbeitet werden mu&szlig;, wurde f&uuml;r "
-"jede Belegungszeit erstellt."
+"jede Belegungszeit erstellt.  <font size=\"-1\" color=\"black\">%s</font>"
 msgstr ""
 "A new request which has to be processed independently has been created for "
 "each allocation period."
@@ -1869,7 +1447,41 @@ msgid ""
 "Sperrzeiten kollidiert:"
 msgstr ""
 
-#: resources/views/page_intros.inc.php:51
+#: resources/views/page_intros.inc.php:42
+#: resources/views/page_intros.inc.php:277
+#: resources/views/ShowObject.class.php:80
+msgid "Hierachieebene"
+msgstr "Hierarchy level"
+
+#: resources/views/page_intros.inc.php:52
+#, fuzzy
+msgid ""
+"Auf dieser Seite k&ouml;nnen Sie sich einen Wochenplan als CSV-Datei "
+"ausgeben lassen."
+msgstr "Here you can display the allocation periods of the resource %s"
+
+#: resources/views/page_intros.inc.php:53
+#: resources/views/page_intros.inc.php:57
+#: resources/views/page_intros.inc.php:61
+#, fuzzy
+msgid "Spezielle Funktionen"
+msgstr "further actions:"
+
+#: resources/views/page_intros.inc.php:56
+#, fuzzy
+msgid ""
+"Auf dieser Seite k&ouml;nnen Sie sich einen Semesterplan als CSV-Datei "
+"ausgeben lassen."
+msgstr "Here you can display the allocation periods of the resource %s"
+
+#: resources/views/page_intros.inc.php:60
+#, fuzzy
+msgid ""
+"Auf dieser Seite k&ouml;nnen Sie sich die w&ouml;chentliche Differenzliste "
+"der Belegung aller R&auml;ume als CSV-Datei ausgeben lassen."
+msgstr "Here you can display the allocation periods of the resource %s"
+
+#: resources/views/page_intros.inc.php:66
 msgid ""
 "Auf dieser Seite k&ouml;nnen Sie durch alle Ressourcen bzw. Ebenen, auf die "
 "Sie Zugriff haben, navigieren und Ressourcen verwalten."
@@ -1877,12 +1489,12 @@ msgstr ""
 "On this page you may navigate through all resources and levels to which you "
 "have access, and administer resources."
 
-#: resources/views/page_intros.inc.php:52
-#: resources/views/page_intros.inc.php:260
+#: resources/views/page_intros.inc.php:67
+#: resources/views/page_intros.inc.php:332
 msgid "&Uuml;bersicht der Ressourcen"
 msgstr "Resources overview"
 
-#: resources/views/page_intros.inc.php:55
+#: resources/views/page_intros.inc.php:70
 msgid ""
 "Sie k&ouml;nnen hier nach Ressourcen suchen. Sie haben die M&ouml;glichkeit, "
 "&uuml;ber ein Stichwort oder bestimmte Eigenschaften Ressourcen zu suchen "
@@ -1892,77 +1504,89 @@ msgstr ""
 "particular resource property. Alternatively, you may navigate through the "
 "levels."
 
-#: resources/views/page_intros.inc.php:56
+#: resources/views/page_intros.inc.php:71
 msgid "Suche nach Ressourcen"
 msgstr "Search for resources"
 
-#: resources/views/page_intros.inc.php:58
-#: resources/views/page_intros.inc.php:85
-#: resources/views/page_intros.inc.php:99
-#: resources/views/page_intros.inc.php:117
-#: resources/views/page_intros.inc.php:176
-#: resources/views/page_intros.inc.php:212
+#: resources/views/page_intros.inc.php:73
+#: resources/views/page_intros.inc.php:101
+#: resources/views/page_intros.inc.php:115
+#: resources/views/page_intros.inc.php:133
+#: resources/views/page_intros.inc.php:167
+#: resources/views/page_intros.inc.php:206
+#: resources/views/page_intros.inc.php:244
+#: resources/views/page_intros.inc.php:284
 msgid "Aktionen:"
 msgstr "Actions:"
 
-#: resources/views/page_intros.inc.php:61
+#: resources/views/page_intros.inc.php:76
 #, c-format
 msgid "Gew&uuml;nschte Eigenschaften <br />%sangeben%s"
 msgstr ""
 
-#: resources/views/page_intros.inc.php:61
+#: resources/views/page_intros.inc.php:76
 #, c-format
 msgid "Gew&uuml;nschte Eigenschaften <br />%snicht angeben%s"
 msgstr ""
 
-#: resources/views/page_intros.inc.php:63
+#: resources/views/page_intros.inc.php:78
 #, c-format
 msgid "Gew&uuml;nschte Belegungszeit %sber&uuml;cksichtigen%s"
 msgstr ""
 
-#: resources/views/page_intros.inc.php:63
+#: resources/views/page_intros.inc.php:78
 #, c-format
 msgid "Gew&uuml;nschte Belegungszeit <br />%snicht ber&uuml;cksichtigen%s"
 msgstr ""
 
-#: resources/views/page_intros.inc.php:76
+#: resources/views/page_intros.inc.php:80
+#, c-format
+msgid "Nur R&auml;ume %sanzeigen%s"
+msgstr ""
+
+#: resources/views/page_intros.inc.php:80
+#, fuzzy, c-format
+msgid "Alle Ressourcen %sanzeigen%s"
+msgstr "Show resource properties"
+
+#: resources/views/page_intros.inc.php:92
 #, c-format
 msgid "Sie sehen alle Eintr&auml;ge in der Ebene <b>%s</b>"
 msgstr "You see all entries in the level <b>%s</b>."
 
-#: resources/views/page_intros.inc.php:77
+#: resources/views/page_intros.inc.php:93
 msgid "Bearbeiten und ausgeben von Listen"
 msgstr "Edit and export of lists"
 
-#: resources/views/page_intros.inc.php:79
+#: resources/views/page_intros.inc.php:95
 msgid "Ebene"
 msgstr "Level"
 
-#: resources/views/page_intros.inc.php:81
-#: resources/views/page_intros.inc.php:172
-#: resources/views/page_intros.inc.php:192
+#: resources/views/page_intros.inc.php:97
+#: resources/views/page_intros.inc.php:240
+#: resources/views/page_intros.inc.php:264
 msgid "Information:"
 msgstr "Information:"
 
-#: resources/views/page_intros.inc.php:84
+#: resources/views/page_intros.inc.php:100
 msgid "Untergeordnete Ebenen werden ausgegeben."
 msgstr "Subordinate levels will be shown."
 
-#: resources/views/page_intros.inc.php:84
+#: resources/views/page_intros.inc.php:100
 msgid "Untergeordnete Ebenen werden <u>nicht</u> ausgegeben."
 msgstr "Subordinate levels will <u>not</u> be shown. "
 
-#: resources/views/page_intros.inc.php:88
+#: resources/views/page_intros.inc.php:104
 #, c-format
 msgid "Ressourcen in untergeordneten Ebenen %snicht ausgeben%s."
 msgstr "%sDo not show%s resources in subordinate levels."
 
-#: resources/views/page_intros.inc.php:88
+#: resources/views/page_intros.inc.php:104
 #, c-format
 msgid "Ressourcen in untergeordneten Ebenen %s(mit) ausgeben%s"
 msgstr "%sShow%s resources in subordinate levels."
 
-#: resources/views/page_intros.inc.php:95
+#: resources/views/page_intros.inc.php:111
 msgid ""
 "Sie sehen hier die Einzelheiten der Belegung. Falls Sie &uuml;ber "
 "entsprechende Rechte verf&uuml;gen, k&ouml;nnen Sie sie bearbeiten oder eine "
@@ -1971,31 +1595,31 @@ msgstr ""
 "Here you can view the details of the allocation. If you possess the required "
 "authorisation, you can edit the allocation or add a new one."
 
-#: resources/views/page_intros.inc.php:96
+#: resources/views/page_intros.inc.php:112
 msgid "Belegungen anzeigen/bearbeiten"
 msgstr "Display/edit allocations"
 
-#: resources/views/page_intros.inc.php:102
+#: resources/views/page_intros.inc.php:118
 msgid "zur&uuml;ck zum Belegungsplan"
 msgstr "Back to allocation plan"
 
-#: resources/views/page_intros.inc.php:106
+#: resources/views/page_intros.inc.php:122
 msgid "Hier k&ouml;nnen Sie Ressourcen-Eigenschaften bearbeiten."
 msgstr "Here you can edit resource properties."
 
-#: resources/views/page_intros.inc.php:107
-#: resources/views/page_intros.inc.php:111
-#: resources/views/page_intros.inc.php:152
+#: resources/views/page_intros.inc.php:123
+#: resources/views/page_intros.inc.php:127
+#: resources/views/page_intros.inc.php:220
 msgid "Eigenschaften bearbeiten"
 msgstr "Edit properties"
 
-#: resources/views/page_intros.inc.php:110
+#: resources/views/page_intros.inc.php:126
 msgid ""
 "Hier k&ouml;nnen Sie Berechtigungen f&uuml;r den Zugriff auf die Ressource "
 "vergeben."
 msgstr "Here you can assign the authorisation for the resource access."
 
-#: resources/views/page_intros.inc.php:110
+#: resources/views/page_intros.inc.php:126
 msgid ""
 "<b>Achtung:</b> Alle hier erteilten Berechtigungen gelten ebenfalls f&uuml;r "
 "die Ressourcen, die der gew&auml;hlten Ressource untergeordnet sind!"
@@ -2003,7 +1627,8 @@ msgstr ""
 "<b>Warning</b> All authorisations granted here are also valid for all the "
 "resources which are subordinated to the selected resource! "
 
-#: resources/views/page_intros.inc.php:114
+#: resources/views/page_intros.inc.php:130
+#: resources/views/page_intros.inc.php:164
 msgid ""
 "Hier k&ouml;nnen Sie sich die Belegungszeiten der Ressource anzeigen  und "
 "auf unterschiedliche Art darstellen lassen."
@@ -2011,42 +1636,81 @@ msgstr ""
 "Here you can display the resource allocation periods and view them in "
 "different ways."
 
-#: resources/views/page_intros.inc.php:115
+#: resources/views/page_intros.inc.php:131
 msgid "Belegungszeiten ausgeben"
 msgstr "Show allocation periods"
 
-#: resources/views/page_intros.inc.php:119
+#: resources/views/page_intros.inc.php:135
+#: resources/views/page_intros.inc.php:170
 #, c-format
 msgid "%sEigenschaften%s anzeigen"
 msgstr "Display %sproperties%s"
 
-#: resources/views/page_intros.inc.php:122
-#: resources/views/page_intros.inc.php:220
+#: resources/views/page_intros.inc.php:138
+#: resources/views/page_intros.inc.php:173
+#: resources/views/page_intros.inc.php:292
 #, c-format
 msgid "Eine neue Belegung %serstellen%s"
 msgstr "%sCreate%s a new allocation"
 
-#: resources/views/page_intros.inc.php:126
-#: resources/views/page_intros.inc.php:238
+#: resources/views/page_intros.inc.php:142
+#: resources/views/page_intros.inc.php:177
+#: resources/views/page_intros.inc.php:310
 msgid "zur&uuml;ck zur Suche"
 msgstr "Back to search"
 
-#: resources/views/page_intros.inc.php:130
-#: resources/views/page_intros.inc.php:225
+#: resources/views/page_intros.inc.php:146
+#: resources/views/page_intros.inc.php:181
+#: resources/views/page_intros.inc.php:297
 msgid "zur Ressourcensuche"
 msgstr ""
 
-#: resources/views/page_intros.inc.php:135
-#: resources/views/page_intros.inc.php:230
+#: resources/views/page_intros.inc.php:149
+#, fuzzy, c-format
+msgid "%sSemesterplan%s anzeigen"
+msgstr "Show %sallocation plan%s."
+
+#: resources/views/page_intros.inc.php:155
+#: resources/views/page_intros.inc.php:189
+#: resources/views/page_intros.inc.php:302
 msgid "zur&uuml;ck zur Veranstaltung"
 msgstr "Back to the course"
 
-#: resources/views/page_intros.inc.php:138
-#: resources/views/page_intros.inc.php:233
+#: resources/views/page_intros.inc.php:158
+#: resources/views/page_intros.inc.php:192
+#: resources/views/page_intros.inc.php:305
 msgid "zur&uuml;ck zur Einrichtung"
 msgstr "Back to the institution"
 
-#: resources/views/page_intros.inc.php:147
+#: resources/views/page_intros.inc.php:165
+#, fuzzy
+msgid "Belegungszeiten pro Semester ausgeben"
+msgstr "Show allocation periods"
+
+#: resources/views/page_intros.inc.php:183
+#: resources/views/page_intros.inc.php:289
+#, c-format
+msgid "%sBelegungsplan%s anzeigen"
+msgstr "Show %sallocation plan%s."
+
+#: resources/views/page_intros.inc.php:195
+#: resources/views/page_intros.inc.php:209
+msgid "Druckansicht"
+msgstr ""
+
+#: resources/views/page_intros.inc.php:203
+#, fuzzy
+msgid ""
+"Hier k&ouml;nnen Sie sich die Belegungszeiten einer Raumgruppe anzeigen "
+"lassen."
+msgstr "Here you can display the allocation periods of the resource %s"
+
+#: resources/views/page_intros.inc.php:204
+#, fuzzy
+msgid "Belegungszeiten einer Raumgruppe pro Semester ausgeben:"
+msgstr "Move allocation to a different room:"
+
+#: resources/views/page_intros.inc.php:215
 msgid ""
 "Verwalten Sie auf dieser Seite die Ressourcen-Typen, wie etwa R&auml;ume, "
 "Ger&auml;te oder Geb&auml;ude. Sie k&ouml;nnen jedem Typ beliebig viele "
@@ -2055,11 +1719,11 @@ msgstr ""
 "On this page, administer the resource types such as rooms, equipment or "
 "buildings. To each type you can assign several properties."
 
-#: resources/views/page_intros.inc.php:148
+#: resources/views/page_intros.inc.php:216
 msgid "Typen bearbeiten"
 msgstr "Edit types"
 
-#: resources/views/page_intros.inc.php:151
+#: resources/views/page_intros.inc.php:219
 msgid ""
 "Verwalten Sie auf dieser Seite die einzelnen Eigenschaften. Diese "
 "Eigenschaften k&ouml;nnen Sie beliebigen Ressourcen-Typen zuweisen."
@@ -2067,7 +1731,7 @@ msgstr ""
 "On this page, you can administer the different properties. These properties "
 "can be assigned to different resource types."
 
-#: resources/views/page_intros.inc.php:155
+#: resources/views/page_intros.inc.php:223
 msgid ""
 "Verwalten Sie hier AdministratorInnen des Systems, die Rechte &uuml;ber alle "
 "Ressourcen erhalten."
@@ -2075,19 +1739,19 @@ msgstr ""
 "Here you can administer the system administrators, who have full access to "
 "all resources."
 
-#: resources/views/page_intros.inc.php:156
+#: resources/views/page_intros.inc.php:224
 msgid "Ressourcen-AdministratorInnen bearbeiten"
 msgstr "Edit resource administrators"
 
-#: resources/views/page_intros.inc.php:159
+#: resources/views/page_intros.inc.php:227
 msgid "Verwalten Sie hier grundlegende Einstellungen der Ressourcenverwaltung."
 msgstr "Here you can administer the basic settings of the resource management."
 
-#: resources/views/page_intros.inc.php:160
+#: resources/views/page_intros.inc.php:228
 msgid "Einstellungen der Ressourcenverwaltung"
 msgstr "Settings of the resource management"
 
-#: resources/views/page_intros.inc.php:165
+#: resources/views/page_intros.inc.php:233
 msgid ""
 "Auf dieser Seite wird Ihnen der Status der Anfragen aus Ihren Bereichen "
 "angezeigt. Sie k&ouml;nnen das Bearbeiten der Anfragen von hier aus starten."
@@ -2095,11 +1759,11 @@ msgstr ""
 "On this page, you can view the status of requests in your areas. Here, you "
 "can start processing the requests."
 
-#: resources/views/page_intros.inc.php:166
+#: resources/views/page_intros.inc.php:234
 msgid "&Uuml;bersicht des Raumplanungs-Status"
 msgstr "Overview on the room plan status"
 
-#: resources/views/page_intros.inc.php:169
+#: resources/views/page_intros.inc.php:237
 msgid ""
 "Sie k&ouml;nnen hier die einzelnen Anfragen einsehen und passenden R&auml;"
 "ume ausw&auml;hlen sowie zuweisen."
@@ -2107,47 +1771,60 @@ msgstr ""
 "Here you can view specific requests and select suitable rooms and assign "
 "them."
 
-#: resources/views/page_intros.inc.php:170
+#: resources/views/page_intros.inc.php:238
 msgid "Bearbeiten der Anfragen"
 msgstr "Processing the request"
 
-#: resources/views/page_intros.inc.php:175
+#: resources/views/page_intros.inc.php:243
 msgid "Bereits bearbeitete Anfragen werden <u>nicht</u> angezeigt."
 msgstr ""
 
-#: resources/views/page_intros.inc.php:175
+#: resources/views/page_intros.inc.php:243
 msgid "Bereits bearbeitete Anfragen werden weiterhin angezeigt."
 msgstr "Processed requests will still be viewed."
 
-#: resources/views/page_intros.inc.php:179
+#: resources/views/page_intros.inc.php:247
 msgid "Ressourcen suchen"
 msgstr ""
 
-#: resources/views/page_intros.inc.php:181
+#: resources/views/page_intros.inc.php:249
 #, c-format
 msgid "Bearbeitete Anfragen %sanzeigen%s."
 msgstr "%sView%s processed requestes."
 
-#: resources/views/page_intros.inc.php:181
+#: resources/views/page_intros.inc.php:249
 #, c-format
 msgid "Bearbeitete Anfragen %snicht anzeigen%s"
 msgstr "Do %snot%s view processed requests"
 
-#: resources/views/page_intros.inc.php:183
+#: resources/views/page_intros.inc.php:251
 #, c-format
 msgid "Nachrichten zu zugewiesenen Anfragen %sversenden%s."
 msgstr "%ssend%s messages for assigned requests."
 
-#: resources/views/page_intros.inc.php:189
+#: resources/views/page_intros.inc.php:256
+#, c-format
+msgid ""
+"Sie sehen hier eine Liste aller offenen Anfragen, die Sortierung folgt der "
+"Einstellung unter %s&Uuml;bersicht%s."
+msgstr ""
+
+#: resources/views/page_intros.inc.php:256
+msgid ""
+"Ein Klick auf das Symbol nebem dem Z&auml;hler erlaubt es Ihnen, direkt zu "
+"der Anfrage zu springen."
+msgstr ""
+
+#: resources/views/page_intros.inc.php:261
 #, c-format
 msgid "Auf dieser Seite sehen sie alle der %s zugeordneten Ressourcen."
 msgstr "On this page you can see all the %s allocated resources."
 
-#: resources/views/page_intros.inc.php:190
+#: resources/views/page_intros.inc.php:262
 msgid "Ressourcen&uuml;bersicht"
 msgstr "Resource overview"
 
-#: resources/views/page_intros.inc.php:196
+#: resources/views/page_intros.inc.php:268
 msgid ""
 "Als Teilnehmer der Veranstaltung haben Sie die M&ouml;glichkeit, diese "
 "Ressourcen frei zu belegen oder den Belegungsplan einzusehen."
@@ -2155,7 +1832,7 @@ msgstr ""
 "As a participant in the course, you may freely allocate these resources or "
 "open the allocation plan."
 
-#: resources/views/page_intros.inc.php:197
+#: resources/views/page_intros.inc.php:269
 msgid ""
 "Als Mitarbeiter der Einrichtung haben Sie die M&ouml;glichkeit, diese "
 "Ressourcen frei zu belegen oder den Belegungsplan einzusehen."
@@ -2163,7 +1840,7 @@ msgstr ""
 "As a member of staff of the institution, you may allocate these resources or "
 "see the allocation plan."
 
-#: resources/views/page_intros.inc.php:198
+#: resources/views/page_intros.inc.php:270
 msgid ""
 "Sie k&ouml;nnen hier die Details und den Belegungsplan der dieser "
 "Veranstaltung zugeordneten Ressourcen einsehen."
@@ -2171,7 +1848,7 @@ msgstr ""
 "Here you can see the details and allocation plan of the resources allocated "
 "to this course."
 
-#: resources/views/page_intros.inc.php:199
+#: resources/views/page_intros.inc.php:271
 msgid ""
 "Sie k&ouml;nnen hier den Details und Belegungsplan der dieser Einrichtung "
 "zugeordneten Ressourcen einsehen."
@@ -2179,36 +1856,31 @@ msgstr ""
 "Here you can see details and the allocation plan of the resources allocated "
 "to this institute."
 
-#: resources/views/page_intros.inc.php:205
+#: resources/views/page_intros.inc.php:277
 #, c-format
 msgid "Hier sehen Sie detaillierte Informationen der Ressource %s"
 msgstr "Here you can see detailed information on the resource %s."
 
-#: resources/views/page_intros.inc.php:207
+#: resources/views/page_intros.inc.php:279
 msgid "Ressourcendetails"
 msgstr "Resource details"
 
-#: resources/views/page_intros.inc.php:209
+#: resources/views/page_intros.inc.php:281
 msgid "Anzeige der Ressourceneigenschaften"
 msgstr "Show resource properties"
 
-#: resources/views/page_intros.inc.php:217
-#, c-format
-msgid "%sBelegungsplan%s anzeigen"
-msgstr "Show %sallocation plan%s."
-
-#: resources/views/page_intros.inc.php:244
+#: resources/views/page_intros.inc.php:316
 #, c-format
 msgid ""
 "Hier k&ouml;nnen Sie sich die Belegungszeiten der Ressource %s ausgeben "
 "lassen"
 msgstr "Here you can display the allocation periods of the resource %s"
 
-#: resources/views/page_intros.inc.php:245
+#: resources/views/page_intros.inc.php:317
 msgid "Ressourcenbelegung"
 msgstr "Resources allocation"
 
-#: resources/views/page_intros.inc.php:249
+#: resources/views/page_intros.inc.php:321
 #, c-format
 msgid ""
 "Anzeigen der der Belegung der Ressource %s. Sie k&ouml;nnen die Belegung "
@@ -2218,20 +1890,608 @@ msgstr ""
 "Display the allocations for the resource %s. In case you have the necessary "
 "authorisations, you can also edit the allocation, or create a new one. "
 
-#: resources/views/page_intros.inc.php:254
+#: resources/views/page_intros.inc.php:326
 #, c-format
 msgid "Vergeben von Rechten auf die Ressource %s"
 msgstr "Assign authorisations for the resource %s"
 
-#: resources/views/page_intros.inc.php:255
+#: resources/views/page_intros.inc.php:327
 #, c-format
 msgid "Vergeben von Berechtigungen - Objekt%s"
 msgstr "Assign authorisations - object%s"
 
-#: resources/views/page_intros.inc.php:259
+#: resources/views/page_intros.inc.php:331
 msgid ""
 "Sie befinden sich in der Ressourcenverwaltung von Stud.IP. Sie k&ouml;nnen "
 "hier R&auml;ume, Geb&auml;ude, Ger&auml;te und andere Ressourcen verwalten."
 msgstr ""
 "You are in the Stud.IP resource administration. Here you can administer "
 "rooms, buildings, equipment and other resources."
+
+#: resources/views/ResourcesBrowse.class.php:96
+#, fuzzy
+msgid "freie Suche"
+msgstr "no rights"
+
+#: resources/views/ResourcesBrowse.class.php:139
+msgid "Veranstaltungsressourcen"
+msgstr "Course resources"
+
+#: resources/views/ResourcesBrowse.class.php:142
+msgid "Einrichtungsressourcen"
+msgstr "Institution resources"
+
+#: resources/views/ResourcesBrowse.class.php:145
+msgid "Fakult&auml;tsressourcen"
+msgstr "Faculty resources"
+
+#: resources/views/ResourcesBrowse.class.php:148
+msgid "pers&ouml;nliche Ressourcen"
+msgstr "Personal resources"
+
+#: resources/views/ResourcesBrowse.class.php:167
+msgid "gefundene Ressourcen sollen zu folgender Zeit <u>nicht</u> belegt sein:"
+msgstr ""
+
+#: resources/views/ResourcesBrowse.class.php:175
+msgid "Datum"
+msgstr "Date"
+
+#: resources/views/ResourcesBrowse.class.php:179
+msgid "Beginn"
+msgstr "Begin"
+
+#: resources/views/ResourcesBrowse.class.php:182
+msgid "Ende"
+msgstr "End"
+
+#: resources/views/ResourcesBrowse.class.php:197
+msgid ""
+"folgende Eigenschaften soll die Ressource besitzen (leer bedeutet egal):"
+msgstr ""
+"The resource should have the following properties (empty means that it "
+"doesn't matter):"
+
+#: resources/views/ResourcesBrowse.class.php:322
+msgid "eine Ebene zur&uuml;ck"
+msgstr "One level up"
+
+#: resources/views/ResourcesBrowse.class.php:331
+msgid "Auf dieser Ebene existieren keine weiteren Unterebenen"
+msgstr "No further sub-level exists at this level"
+
+#: resources/views/ResourcesBrowse.class.php:356
+msgid "Ressourcen auf dieser Ebene:"
+msgstr "Resources at this level:"
+
+#: resources/views/ResourcesBrowse.class.php:370
+msgid "Es existieren keine Eintr&auml;ge auf dieser Ebene."
+msgstr "At this level, no entry exists."
+
+#: resources/views/ResourcesBrowse.class.php:385
+msgid "Es wurden keine Eintr&auml;ge zu Ihren Suchkriterien gefunden."
+msgstr "No entry matching your search criteria was found."
+
+#: resources/views/ScheduleView.class.php:208
+msgid "Zeit"
+msgstr "Time"
+
+#: resources/views/ScheduleView.class.php:299
+msgid "Erstellt am"
+msgstr "Created on"
+
+#: resources/views/ScheduleView.class.php:313
+#: resources/views/SemGroupScheduleDayOfWeek.class.php:77
+#, c-format
+msgid "Eine neue Belegung von %s bis %s Uhr anlegen"
+msgstr "Create a new allocation from %s until %s o'clock"
+
+#: resources/views/ShowGroupSchedules.class.php:65
+#: resources/views/ShowSemSchedules.class.php:81
+msgid "Semester:"
+msgstr ""
+
+#: resources/views/ShowGroupSchedules.class.php:87
+msgid "Eine Raumgruppe ausw&auml;hlen"
+msgstr ""
+
+#: resources/views/ShowGroupSchedules.class.php:98
+#: resources/views/ShowSemSchedules.class.php:115
+#, fuzzy
+msgid "Vorlesungszeit"
+msgstr "End of lecture period"
+
+#: resources/views/ShowGroupSchedules.class.php:100
+#: resources/views/ShowSemSchedules.class.php:117
+msgid "vorlesungsfreie Zeit"
+msgstr ""
+
+#: resources/views/ShowGroupSchedules.class.php:214
+#, fuzzy
+msgid "Vorherigen Tag anzeigen"
+msgstr "View previous week"
+
+#: resources/views/ShowGroupSchedules.class.php:218
+#: resources/views/ShowGroupSchedules.class.php:309
+#, c-format
+msgid "Wochentag: %s"
+msgstr ""
+
+#: resources/views/ShowGroupSchedules.class.php:226
+#, fuzzy
+msgid "Nächsten Tag anzeigen"
+msgstr "View next week"
+
+#: resources/views/ShowGroupSchedules.class.php:233
+#: resources/views/ShowSchedules.class.php:308
+#: resources/views/ShowSemSchedules.class.php:232
+msgid "Frühere Belegungen anzeigen"
+msgstr "View previous allocations"
+
+#: resources/views/ShowGroupSchedules.class.php:240
+#: resources/views/ShowSemSchedules.class.php:238
+#, fuzzy
+msgid "Anzahl der regelmäßigen Belegungen in diesem Zeitraum:"
+msgstr "Number of allocations in this period:"
+
+#: resources/views/ShowGroupSchedules.class.php:243
+#: resources/views/ShowSemSchedules.class.php:241
+#, fuzzy
+msgid "Anzahl der Einzelbelegungen in diesem Zeitraum:"
+msgstr "Number of allocations in this period:"
+
+#: resources/views/ShowGroupSchedules.class.php:251
+#: resources/views/ShowSchedules.class.php:319
+#: resources/views/ShowSemSchedules.class.php:249
+msgid "alle Belegungen"
+msgstr "all allocations"
+
+#: resources/views/ShowGroupSchedules.class.php:252
+#: resources/views/ShowSchedules.class.php:320
+#: resources/views/ShowSemSchedules.class.php:250
+msgid "nur Einzeltermine"
+msgstr "single appointments only"
+
+#: resources/views/ShowGroupSchedules.class.php:253
+#: resources/views/ShowSchedules.class.php:321
+#: resources/views/ShowSemSchedules.class.php:251
+msgid "nur Wiederholungstermine"
+msgstr "periodical appointments only"
+
+#: resources/views/ShowGroupSchedules.class.php:255
+#: resources/views/ShowSchedules.class.php:323
+#: resources/views/ShowSemSchedules.class.php:253
+msgid "Ansicht umschalten"
+msgstr "Change view"
+
+#: resources/views/ShowGroupSchedules.class.php:272
+#: resources/views/ShowSchedules.class.php:340
+#: resources/views/ShowSemSchedules.class.php:270
+msgid "Spätere Belegungen anzeigen"
+msgstr "View later allocations"
+
+#: resources/views/ShowGroupSchedules.class.php:285
+#: resources/views/ShowGroupSchedules.class.php:326
+#: resources/views/ShowSemSchedules.class.php:283
+#: resources/views/ShowSemSchedules.class.php:324
+#, fuzzy
+msgid "Einzelbelegungen:"
+msgstr "all allocations"
+
+#: resources/views/ShowGroupSchedules.class.php:291
+#: resources/views/ShowGroupSchedules.class.php:333
+#: resources/views/ShowSemSchedules.class.php:290
+#: resources/views/ShowSemSchedules.class.php:332
+#, fuzzy, c-format
+msgid "%s ist von <b>%s</b> bis <b>%s</b>, belegt von <b>%s</b>"
+msgstr "Allocation is from <b>%s</b> until <b>%s</b>, allocated by <b>%s</b>"
+
+#: resources/views/ShowList.class.php:149
+#: resources/views/ShowList.class.php:195
+msgid "Aus der Merkliste entfernen"
+msgstr "Delete from memorandum list"
+
+#: resources/views/ShowList.class.php:151
+#: resources/views/ShowList.class.php:197
+msgid "In Merkliste aufnehmen"
+msgstr "Add to memorandum list"
+
+#: resources/views/ShowList.class.php:166
+#: resources/views/ShowThread.class.php:121
+msgid "&Auml;nderungen speichern"
+msgstr "Save changes"
+
+#: resources/views/ShowObject.class.php:106
+msgid "Einordnung:"
+msgstr "Classification:"
+
+#: resources/views/ShowObject.class.php:112
+msgid "Untergeordnete Objekte:"
+msgstr "Subordinated objects:"
+
+#: resources/views/ShowObject.class.php:125
+msgid "Eigenschaften:"
+msgstr "Properties:"
+
+#: resources/views/ShowSchedules.class.php:110
+msgid "Zeitraum:"
+msgstr "Period:"
+
+#: resources/views/ShowSchedules.class.php:126
+msgid "Tag(e)"
+msgstr "Day(s)"
+
+#: resources/views/ShowSchedules.class.php:127
+msgid "Woche(n)"
+msgstr "Week(s)"
+
+#: resources/views/ShowSchedules.class.php:128
+msgid "Monat(e)"
+msgstr "Month(s)"
+
+#: resources/views/ShowSchedules.class.php:129
+msgid "Jahre(e)"
+msgstr "Year(s)"
+
+#: resources/views/ShowSchedules.class.php:131
+#, fuzzy
+msgid "als Liste ausgeben"
+msgstr "List view"
+
+#: resources/views/ShowSchedules.class.php:137
+msgid "<i>oder</i> eine Woche grafisch ausgeben"
+msgstr ""
+
+#: resources/views/ShowSchedules.class.php:167
+#: resources/views/ShowSemSchedules.class.php:217
+#, c-format
+msgid "Anzeige des Semesters: %s"
+msgstr ""
+
+#: resources/views/ShowSchedules.class.php:169
+#, fuzzy
+msgid "Anzeige des Zeitraums:"
+msgstr "Number of allocations in this period:"
+
+#: resources/views/ShowSchedules.class.php:183
+#: resources/views/ShowSchedules.class.php:313
+msgid "Anzahl der Belegungen in diesem Zeitraum:"
+msgstr "Number of allocations in this period:"
+
+#: resources/views/ShowSchedules.class.php:207
+#, c-format
+msgid "Belegung ist von <b>%s</b> bis <b>%s</b>, belegt von <b>%s</b>"
+msgstr "Allocation is from <b>%s</b> until <b>%s</b>, allocated by <b>%s</b>"
+
+#: resources/views/ShowSchedules.class.php:294
+msgid "Vorherige Woche anzeigen"
+msgstr "View previous week"
+
+#: resources/views/ShowSchedules.class.php:297
+msgid "Woche"
+msgstr "Week"
+
+#: resources/views/ShowSchedules.class.php:301
+msgid "Nächste Woche anzeigen"
+msgstr "View next week"
+
+#: resources/views/ShowSemSchedules.class.php:103
+msgid "Ein Semester als Liste ausgeben"
+msgstr ""
+
+#: resources/views/ShowSemSchedules.class.php:121
+msgid "<i>oder</i> ein Semester grafisch ausgeben"
+msgstr ""
+
+#: resources/views/ShowSemSchedules.class.php:213
+#, fuzzy
+msgid "Vorheriges Semester anzeigen"
+msgstr "View previous week"
+
+#: resources/views/ShowSemSchedules.class.php:225
+#, fuzzy
+msgid "Nächstes Semester anzeigen"
+msgstr "View next week"
+
+#: resources/views/ShowThread.class.php:80
+msgid "Objekt in diese Ebene verschieben"
+msgstr "Move object to this level"
+
+#: resources/views/ShowThread.class.php:129
+#, c-format
+msgid ""
+"Dieses Objekt wurde zum Verschieben markiert. Bitte w&auml;hlen sie das "
+"Einf&uuml;gen-Symbol %s, um es in die gew&uuml;nschte Ebene zu verschieben."
+msgstr ""
+"This object has been selected to move. In order to move it to the requested "
+"level, please select the insertion symbol %s."
+
+#: resources/views/ShowThread.class.php:129
+msgid ""
+"Klicken Sie auf dieses Symbol, um dieses Objekt in eine andere Ebene zu "
+"verschieben"
+msgstr "Click on this symbol in order to move this object to another level."
+
+#: resources/views/ShowToolsRequests.class.php:141
+msgid "aktueller Status"
+msgstr "actual status"
+
+#: resources/views/ShowToolsRequests.class.php:144
+#, c-format
+msgid ""
+"Es liegen insgesamt <b>%s</b> nicht aufgel&ouml;ste Anfragen vor - <br /"
+">davon <b>%s</b> von Veranstaltungen und <b>%s</b> auf Ressourcen, auf die "
+"Sie Zugriff haben."
+msgstr ""
+"There is a total of <b>%s</b> unresolved requests - <br />among them <b>%s</"
+"b> from courses and <b>%s</b> on resources you are authorised to acess."
+
+#: resources/views/ShowToolsRequests.class.php:146
+#, c-format
+msgid "<b>%s</b> Anfragen haben keine Zeiten eingetragen!"
+msgstr ""
+
+#: resources/views/ShowToolsRequests.class.php:149
+msgid "Es liegen im Augenblick keine unaufgel&ouml;sten Anfragen vor."
+msgstr "At the present there aren't any unresolved requests."
+
+#: resources/views/ShowToolsRequests.class.php:161
+msgid "Optionen beim Aufl&ouml;sen"
+msgstr "Option for resolving"
+
+#: resources/views/ShowToolsRequests.class.php:163
+msgid ""
+"Sie k&ouml;nnen die vorliegenden Anfragen mit folgenden Optionen aufl&ouml;"
+"sen:"
+msgstr ""
+"Using the following options you are able to resolve the present requests:"
+
+#: resources/views/ShowToolsRequests.class.php:171
+msgid "Art der Anfragen:"
+msgstr "Type of request:"
+
+#: resources/views/ShowToolsRequests.class.php:172
+msgid "alle Anfragen"
+msgstr "all requests"
+
+#: resources/views/ShowToolsRequests.class.php:173
+msgid "nur Anfragen von meinen Veranstaltungen"
+msgstr "requests from my personal courses only"
+
+#: resources/views/ShowToolsRequests.class.php:174
+msgid "nur Anfragen auf meine R&auml;ume"
+msgstr "requests for my rooms only"
+
+#: resources/views/ShowToolsRequests.class.php:184
+msgid "Sortierung der Anfragen:"
+msgstr "Sort of the requests"
+
+#: resources/views/ShowToolsRequests.class.php:185
+msgid ""
+"komplexere zuerst (Raumgr&ouml;&szlig;e und  gew&uuml;nschte Eigenschaften)"
+msgstr "more complex first (room size and requested properties)"
+
+#: resources/views/ShowToolsRequests.class.php:186
+msgid "&auml;ltere zuerst"
+msgstr "older first"
+
+#: resources/views/ShowToolsRequests.class.php:187
+msgid "neue zuerst"
+msgstr "new ones first"
+
+#: resources/views/ShowToolsRequests.class.php:188
+#, fuzzy
+msgid "dringendere zuerst"
+msgstr "new ones first"
+
+#: resources/views/ShowToolsRequests.class.php:197
+msgid "Anfragen ohne eingetragene Zeiten ausblenden"
+msgstr ""
+
+#: resources/views/ShowToolsRequests.class.php:318
+msgid "Art der Anfrage:"
+msgstr "type of request:"
+
+#: resources/views/ShowToolsRequests.class.php:318
+msgid "Einzeltermin einer Veranstaltung"
+msgstr "Single appointment of a course"
+
+#: resources/views/ShowToolsRequests.class.php:318
+msgid "alle Termine einer unregelm&auml;&szlig;igen Veranstaltung"
+msgstr "all appointments of a non-periodical course"
+
+#: resources/views/ShowToolsRequests.class.php:318
+msgid "regelm&auml;&szlig;ige Veranstaltungszeiten"
+msgstr "periodical course"
+
+#: resources/views/ShowToolsRequests.class.php:319
+msgid "Erstellt von:"
+msgstr "Created by:"
+
+#: resources/views/ShowToolsRequests.class.php:320
+msgid "verantwortliche Einrichtung:"
+msgstr "responsible institution:"
+
+#: resources/views/ShowToolsRequests.class.php:321
+msgid "verantwortliche Fakult&auml;t:"
+msgstr "responsible faculty:"
+
+#: resources/views/ShowToolsRequests.class.php:330
+msgid "angeforderte Belegungszeiten:"
+msgstr "requested allocation period:"
+
+#: resources/views/ShowToolsRequests.class.php:354
+#: resources/views/ShowToolsRequests.class.php:367
+#: resources/views/ShowToolsRequests.class.php:381
+msgid "nicht angegeben"
+msgstr "unspecified"
+
+#: resources/views/ShowToolsRequests.class.php:390
+msgid "angeforderter Raum:"
+msgstr "requested room:"
+
+#: resources/views/ShowToolsRequests.class.php:419
+#: resources/views/ShowToolsRequests.class.php:524
+#: resources/views/ShowToolsRequests.class.php:617
+#: resources/views/ShowToolsRequests.class.php:719
+msgid "Der ausgewählte Raum bietet folgende der wünschbaren Eigenschaften:"
+msgstr ""
+"The selected room provides the following of the requestable properties:"
+
+#: resources/views/ShowToolsRequests.class.php:422
+msgid "Es wurde kein Raum angefordert."
+msgstr "No room has been requested."
+
+#: resources/views/ShowToolsRequests.class.php:434
+#: resources/views/ShowToolsRequests.class.php:453
+#: resources/views/ShowToolsRequests.class.php:535
+#: resources/views/ShowToolsRequests.class.php:554
+#: resources/views/ShowToolsRequests.class.php:628
+#: resources/views/ShowToolsRequests.class.php:645
+#: resources/views/ShowToolsRequests.class.php:730
+#: resources/views/ShowToolsRequests.class.php:749
+msgid "Dieser Raum ist augenblicklich gebucht"
+msgstr "Presently this room is booked"
+
+#: resources/views/ShowToolsRequests.class.php:493
+msgid "Raumgruppe berücksichtigen:"
+msgstr ""
+
+#: resources/views/ShowToolsRequests.class.php:499
+msgid "Keine Raumgruppe anzeigen"
+msgstr ""
+
+#: resources/views/ShowToolsRequests.class.php:595
+msgid "weitere passende R&auml;ume:"
+msgstr "further suitable rooms:"
+
+#: resources/views/ShowToolsRequests.class.php:685
+msgid "zeige R&auml;ume"
+msgstr ""
+
+#: resources/views/ShowToolsRequests.class.php:686
+#: resources/views/ShowToolsRequests.class.php:691
+msgid "-10"
+msgstr ""
+
+#: resources/views/ShowToolsRequests.class.php:688
+#: resources/views/ShowToolsRequests.class.php:693
+msgid "+10"
+msgstr ""
+
+#: resources/views/ShowToolsRequests.class.php:695
+msgid "ausgewählten Bereich anzeigen"
+msgstr ""
+
+#: resources/views/ShowToolsRequests.class.php:701
+msgid "keine gefunden"
+msgstr "nothing found"
+
+#: resources/views/ShowToolsRequests.class.php:709
+msgid "R&auml;ume aus der Merkliste:"
+msgstr "Rooms from the memorandum list:"
+
+#: resources/views/ShowToolsRequests.class.php:794
+msgid "gew&uuml;nschte Raumeigenschaften:"
+msgstr "requested properties:"
+
+#: resources/views/ShowToolsRequests.class.php:835
+msgid "Es wurden keine Raumeigenschaften gew&uuml;nscht."
+msgstr "No room properties have been requested."
+
+#: resources/views/ShowToolsRequests.class.php:844
+msgid "Kommentar des Anfragenden:"
+msgstr "Comment by the requesting person:"
+
+#: resources/views/ShowToolsRequests.class.php:849
+msgid "Es wurde kein Kommentar eingegeben"
+msgstr "No comment available"
+
+#: resources/views/ShowToolsRequests.class.php:892
+#, c-format
+msgid ""
+"<b>%s</b> von <b>%s</b> Anfragen in der Bearbeitung wurden noch nicht "
+"aufgel&ouml;st."
+msgstr ""
+"<b>%s</b> out of <b>%s</b> requests in progress have not been resolved."
+
+#: resources/views/ShowToolsRequests.class.php:893
+msgid "Aktueller Request: "
+msgstr "Actual request: "
+
+#: resources/views/ShowToolsRequests.class.php:907
+#: resources/views/ShowToolsRequests.class.php:947
+#, c-format
+msgid "%s, %s Uhr bis %s, %s Uhr"
+msgstr ""
+
+#: resources/views/ShowToolsRequests.class.php:910
+#: resources/views/ShowToolsRequests.class.php:950
+msgid "Sperrzeit(en):\n"
+msgstr ""
+
+#: resources/views/ShowToolsRequests.class.php:915
+#: resources/views/ShowToolsRequests.class.php:955
+msgid "Es besteht eine Belegungssperre zur gewünschten Belegungszeit."
+msgstr ""
+
+#: resources/views/ShowToolsRequests.class.php:917
+#: resources/views/ShowToolsRequests.class.php:957
+msgid "Es existieren Überschneidungen zur gewünschten Belegungszeit."
+msgstr "For the requested allocation period there exists some overlap."
+
+#: resources/views/ShowToolsRequests.class.php:919
+#: resources/views/ShowToolsRequests.class.php:959
+#, fuzzy, c-format
+msgid ""
+"Es existieren Überschneidungen oder Belegungssperren zu mehr als %s%% aller "
+"gewünschten Belegungszeiten."
+msgstr ""
+"Overlaps exists for more than %s%% of all the requested allocation periods."
+
+#: resources/views/ShowToolsRequests.class.php:923
+#: resources/views/ShowToolsRequests.class.php:963
+#, fuzzy
+msgid ""
+"Einige der gewünschten Belegungszeiten überschneiden sich mit eingetragenen "
+"Belegungen bzw. Sperrzeiten:\n"
+msgstr ""
+"Some of the requested allocation periods overlap with entered allocations:\n"
+
+#: resources/views/ShowToolsRequests.class.php:928
+#: resources/views/ShowToolsRequests.class.php:966
+#, c-format
+msgid "%s, %s Uhr bis %s, %s Uhr (Sperrzeit)"
+msgstr ""
+
+#: resources/views/ShowToolsRequests.class.php:930
+#: resources/views/ShowToolsRequests.class.php:968
+#, c-format
+msgid "%s von %s bis %s Uhr"
+msgstr "%s from %s until %s o'clock"
+
+#: resources/views/ShowToolsRequests.class.php:936
+#: resources/views/ShowToolsRequests.class.php:974
+msgid "Es existieren keine Überschneidungen"
+msgstr "No overlaps exist"
+
+#~ msgid "Montag"
+#~ msgstr "Monday"
+
+#~ msgid "Dienstag"
+#~ msgstr "Tuesday"
+
+#~ msgid "Mittwoch"
+#~ msgstr "Wednesday"
+
+#~ msgid "Donnerstag"
+#~ msgstr "Thursday"
+
+#~ msgid "Freitag"
+#~ msgstr "Friday"
+
+#~ msgid "Samstag"
+#~ msgstr "Saturday"
+
+#~ msgid "Sonntag"
+#~ msgstr "Sunday"

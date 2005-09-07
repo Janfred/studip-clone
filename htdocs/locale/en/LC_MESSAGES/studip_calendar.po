@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: studip_calendar\n"
-"POT-Creation-Date: 2005-06-30 22:56+0200\n"
+"POT-Creation-Date: 2005-09-07 11:16+0200\n"
 "PO-Revision-Date: 2005-06-29 23:08+0200\n"
 "Last-Translator: Jens Schmelzer <jens.schmelzer@fh-jena.de>\n"
 "Language-Team:  <de@li.org>\n"
@@ -451,10 +451,6 @@ msgstr "The appointment will not be repeated."
 msgid "ganztägig"
 msgstr "full-time"
 
-#: calendar/lib/Event.class.php:80
-msgid "Keine Titel"
-msgstr "no title "
-
 #: calendar/lib/calendar_misc_func.inc.php:75
 msgid "Daten-Export"
 msgstr "Export data"
@@ -463,6 +459,10 @@ msgstr "Export data"
 #, c-format
 msgid "Die Daten werden exportiert. %sBitte haben sie etwas Geduld!"
 msgstr "The data are being exported. %s Please be patient!"
+
+#: calendar/lib/Event.class.php:80
+msgid "Keine Titel"
+msgstr "no title "
 
 #: calendar/views/bind.inc.php:70
 msgid "Gruppe ändern"
@@ -894,34 +894,34 @@ msgstr "The synchronization could not be carried out!"
 msgid "Die Synchronisation wurde erfolgreich durchgef&uuml;hrt!"
 msgstr "The synchronization was successfully carried out!"
 
-#: calendar/views/insert_date_popup.php:58
+#: calendar/views/insert_date_popup.php:51
 msgid "Ihr Systemverwalter hat leider keine Standardzeiten vorgegeben."
 msgstr ""
 
-#: calendar/views/insert_date_popup.php:166
+#: calendar/views/insert_date_popup.php:158
 msgid "Kalender"
 msgstr "Calendar"
 
-#: calendar/views/insert_date_popup.php:256
-#: calendar/views/insert_date_popup.php:261
+#: calendar/views/insert_date_popup.php:248
+#: calendar/views/insert_date_popup.php:253
 msgid "Uhr"
 msgstr " "
 
-#: calendar/views/insert_date_popup.php:256
+#: calendar/views/insert_date_popup.php:248
 msgid "eintragen"
 msgstr ""
 
-#: calendar/views/insert_date_popup.php:261
+#: calendar/views/insert_date_popup.php:253
 msgid "zurücksetzen auf"
 msgstr ""
 
-#: calendar/views/insert_date_popup.php:275
-#: calendar/views/insert_date_popup.php:276
+#: calendar/views/insert_date_popup.php:267
+#: calendar/views/insert_date_popup.php:268
 msgid "Monate zurück"
 msgstr ""
 
-#: calendar/views/insert_date_popup.php:282
-#: calendar/views/insert_date_popup.php:283
+#: calendar/views/insert_date_popup.php:274
+#: calendar/views/insert_date_popup.php:275
 msgid "Monate vor"
 msgstr ""
 

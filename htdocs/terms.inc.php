@@ -45,7 +45,7 @@ function check_terms($userid, $_language_path) {
 		<tr><td class="topic"><img src="pictures/login.gif" border="0"><b>&nbsp;<?=_("Nutzungsbedingungen")?></b></td></tr>
 		<tr><td class="blank">
 		<blockquote><br><br>
-		<?=_("Stud.IP ist ein Open Source Projekt und steht unter der Gnu Public Licence (GPL). Das System befindet sich in der st&auml;ndigen Weiterentwicklung.")?>
+		<?=_("Stud.IP ist ein Open Source Projekt und steht unter der Gnu General Public License (GPL). Das System befindet sich in der st&auml;ndigen Weiterentwicklung.")?>
 		<br><br>
 		<?=_("Um den vollen Funktionsumfang von Stud.IP nutzen zu k&ouml;nnen, m&uuml;ssen Sie sich am System anmelden.")?><br>
 		<?=_("Das hat viele Vorz&uuml;ge:")?><br>

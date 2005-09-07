@@ -10,7 +10,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: studip_eval\n"
-"POT-Creation-Date: 2005-06-30 22:56+0200\n"
+"POT-Creation-Date: 2005-09-07 11:16+0200\n"
 "PO-Revision-Date: 2005-06-29 22:31+0200\n"
 "Last-Translator: Jens Schmelzer <jens.schmelzer@fh-jena.de>\n"
 "Language-Team:  <de@li.org>\n"
@@ -18,26 +18,6 @@ msgstr ""
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.10\n"
-
-#: modules/evaluation/evaluation.lib.php:225
-msgid "Es sind Fehler aufgetreten."
-msgstr "Errors have occurred."
-
-#: modules/evaluation/evaluation.lib.php:226
-msgid "Es ist ein Fehler aufgetreten."
-msgstr "An error has occurred."
-
-#: modules/evaluation/evaluation.lib.php:233
-msgid "Es ist kein Fehler aufgetreten"
-msgstr "No error has occured"
-
-#: modules/evaluation/evaluation.lib.php:249
-msgid "Datei: "
-msgstr "File: "
-
-#: modules/evaluation/evaluation.lib.php:252
-msgid "Zeile: "
-msgstr "Line: "
 
 #: modules/evaluation/evaluation_admin_edit.inc.php:60
 #: modules/evaluation/evaluation_admin_overview.lib.php:1566
@@ -1235,6 +1215,26 @@ msgstr "Back to %s administrating the evaluations %s"
 msgid "Aktionen:"
 msgstr "Actions:"
 
+#: modules/evaluation/evaluation.lib.php:225
+msgid "Es sind Fehler aufgetreten."
+msgstr "Errors have occurred."
+
+#: modules/evaluation/evaluation.lib.php:226
+msgid "Es ist ein Fehler aufgetreten."
+msgstr "An error has occurred."
+
+#: modules/evaluation/evaluation.lib.php:233
+msgid "Es ist kein Fehler aufgetreten"
+msgstr "No error has occured"
+
+#: modules/evaluation/evaluation.lib.php:249
+msgid "Datei: "
+msgstr "File: "
+
+#: modules/evaluation/evaluation.lib.php:252
+msgid "Zeile: "
+msgstr "Line: "
+
 #: modules/evaluation/evaluation_show.inc.php:96
 msgid "Stud.IP Online-Evaluation"
 msgstr "Stud.IP Online-Evaluation"
@@ -1382,6 +1382,14 @@ msgstr "Continue evaluation."
 msgid "Evaluation exportieren."
 msgstr "Export evaluation."
 
+#: modules/evaluation/classes/EvaluationAnswer.class.php:210
+msgid ""
+"Nur pseudonyme Abstimmung erlaubt! Neue ID mit StudipObject::createNewID () "
+"erzeugen"
+msgstr ""
+"Pseudonymous voting allowed, only! Create new ID with StudipObject::"
+"createNewID ()"
+
 #: modules/evaluation/classes/Evaluation.class.php:167
 msgid "Das Startdatum ist nach dem Stoppdatum."
 msgstr "Start date is later than termination date."
@@ -1413,14 +1421,6 @@ msgstr "Object not valid: A voting for a template has taken place."
 #: modules/evaluation/classes/Evaluation.class.php:468
 msgid "Ungültiges Objekt: Eine aktive Evaluation wurde freigegeben."
 msgstr "Object not valid: An active evaluation has been released."
-
-#: modules/evaluation/classes/EvaluationAnswer.class.php:210
-msgid ""
-"Nur pseudonyme Abstimmung erlaubt! Neue ID mit StudipObject::createNewID () "
-"erzeugen"
-msgstr ""
-"Pseudonymous voting allowed, only! Create new ID with StudipObject::"
-"createNewID ()"
 
 #: modules/evaluation/classes/EvaluationExportManager.class.php:175
 #: modules/evaluation/classes/EvaluationExportManager.class.php:234

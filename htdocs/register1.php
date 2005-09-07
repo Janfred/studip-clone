@@ -49,7 +49,7 @@ if ($auth->is_authenticated() && $user->id != "nobody") {
 <tr><td class="topic"><img src="pictures/login.gif" border="0"><b>&nbsp;<?=_("Nutzungsbedingungen")?></b></td></tr>
 <tr><td class="blank">
 <blockquote><br><br>
-<?=_("Stud.IP ist ein Open Source Projekt und steht unter der Gnu Public Licence (GPL). Das System befindet sich in der st&auml;ndigen Weiterentwicklung.")?>
+<?=_("Stud.IP ist ein Open Source Projekt und steht unter der Gnu General Public License (GPL). Das System befindet sich in der st&auml;ndigen Weiterentwicklung.")?>
 
 <? printf(_("F&uuml;r Vorschl&auml;ge und Kritik findet sich immer ein Ohr. Wenden Sie sich hierzu entweder an die %sStud.IP Crew%s oder direkt an die %sEntwickler%s."),"<a href=\"mailto:studip-users@lists.sourceforge.net\">", "</a>", "<a href=\"impressum.php\">", "</a>")?>
 <br><br>

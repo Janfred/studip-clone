@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2005-06-30 22:56+0200\n"
+"POT-Creation-Date: 2005-09-07 11:16+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -444,10 +444,6 @@ msgstr ""
 msgid "ganztägig"
 msgstr ""
 
-#: calendar/lib/Event.class.php:80
-msgid "Keine Titel"
-msgstr ""
-
 #: calendar/lib/calendar_misc_func.inc.php:75
 msgid "Daten-Export"
 msgstr ""
@@ -455,6 +451,10 @@ msgstr ""
 #: calendar/lib/calendar_misc_func.inc.php:78
 #, c-format
 msgid "Die Daten werden exportiert. %sBitte haben sie etwas Geduld!"
+msgstr ""
+
+#: calendar/lib/Event.class.php:80
+msgid "Keine Titel"
 msgstr ""
 
 #: calendar/views/bind.inc.php:70
@@ -856,34 +856,34 @@ msgstr ""
 msgid "Die Synchronisation wurde erfolgreich durchgef&uuml;hrt!"
 msgstr ""
 
-#: calendar/views/insert_date_popup.php:58
+#: calendar/views/insert_date_popup.php:51
 msgid "Ihr Systemverwalter hat leider keine Standardzeiten vorgegeben."
 msgstr ""
 
-#: calendar/views/insert_date_popup.php:166
+#: calendar/views/insert_date_popup.php:158
 msgid "Kalender"
 msgstr ""
 
-#: calendar/views/insert_date_popup.php:256
-#: calendar/views/insert_date_popup.php:261
+#: calendar/views/insert_date_popup.php:248
+#: calendar/views/insert_date_popup.php:253
 msgid "Uhr"
 msgstr ""
 
-#: calendar/views/insert_date_popup.php:256
+#: calendar/views/insert_date_popup.php:248
 msgid "eintragen"
 msgstr ""
 
-#: calendar/views/insert_date_popup.php:261
+#: calendar/views/insert_date_popup.php:253
 msgid "zurücksetzen auf"
 msgstr ""
 
-#: calendar/views/insert_date_popup.php:275
-#: calendar/views/insert_date_popup.php:276
+#: calendar/views/insert_date_popup.php:267
+#: calendar/views/insert_date_popup.php:268
 msgid "Monate zurück"
 msgstr ""
 
-#: calendar/views/insert_date_popup.php:282
-#: calendar/views/insert_date_popup.php:283
+#: calendar/views/insert_date_popup.php:274
+#: calendar/views/insert_date_popup.php:275
 msgid "Monate vor"
 msgstr ""
 

@@ -7,33 +7,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2005-06-30 22:56+0200\n"
+"POT-Creation-Date: 2005-09-07 11:16+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
-
-#: modules/evaluation/evaluation.lib.php:225
-msgid "Es sind Fehler aufgetreten."
-msgstr ""
-
-#: modules/evaluation/evaluation.lib.php:226
-msgid "Es ist ein Fehler aufgetreten."
-msgstr ""
-
-#: modules/evaluation/evaluation.lib.php:233
-msgid "Es ist kein Fehler aufgetreten"
-msgstr ""
-
-#: modules/evaluation/evaluation.lib.php:249
-msgid "Datei: "
-msgstr ""
-
-#: modules/evaluation/evaluation.lib.php:252
-msgid "Zeile: "
-msgstr ""
 
 #: modules/evaluation/evaluation_admin_edit.inc.php:60
 #: modules/evaluation/evaluation_admin_overview.lib.php:1566
@@ -1172,6 +1152,26 @@ msgstr ""
 msgid "Aktionen:"
 msgstr ""
 
+#: modules/evaluation/evaluation.lib.php:225
+msgid "Es sind Fehler aufgetreten."
+msgstr ""
+
+#: modules/evaluation/evaluation.lib.php:226
+msgid "Es ist ein Fehler aufgetreten."
+msgstr ""
+
+#: modules/evaluation/evaluation.lib.php:233
+msgid "Es ist kein Fehler aufgetreten"
+msgstr ""
+
+#: modules/evaluation/evaluation.lib.php:249
+msgid "Datei: "
+msgstr ""
+
+#: modules/evaluation/evaluation.lib.php:252
+msgid "Zeile: "
+msgstr ""
+
 #: modules/evaluation/evaluation_show.inc.php:96
 msgid "Stud.IP Online-Evaluation"
 msgstr ""
@@ -1316,6 +1316,12 @@ msgstr ""
 msgid "Evaluation exportieren."
 msgstr ""
 
+#: modules/evaluation/classes/EvaluationAnswer.class.php:210
+msgid ""
+"Nur pseudonyme Abstimmung erlaubt! Neue ID mit StudipObject::createNewID () "
+"erzeugen"
+msgstr ""
+
 #: modules/evaluation/classes/Evaluation.class.php:167
 msgid "Das Startdatum ist nach dem Stoppdatum."
 msgstr ""
@@ -1346,12 +1352,6 @@ msgstr ""
 
 #: modules/evaluation/classes/Evaluation.class.php:468
 msgid "Ungültiges Objekt: Eine aktive Evaluation wurde freigegeben."
-msgstr ""
-
-#: modules/evaluation/classes/EvaluationAnswer.class.php:210
-msgid ""
-"Nur pseudonyme Abstimmung erlaubt! Neue ID mit StudipObject::createNewID () "
-"erzeugen"
 msgstr ""
 
 #: modules/evaluation/classes/EvaluationExportManager.class.php:175
