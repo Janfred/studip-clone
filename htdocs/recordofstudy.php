@@ -216,7 +216,8 @@ elseif($mode == "pdf_assortment"){
 }
 elseif($mode == 'create_pdf'){
 	global $record_of_study_templates;
-	$pdf_file['full_path'] = (($_SERVER['SERVER_PORT'] == 443)? 'https':'http').'://' . $_SERVER['HTTP_HOST'] . $CANONICAL_RELATIVE_PATH_STUDIP . $PATH_EXPORT . '/'.$record_of_study_templates[$template]['template'];
+	$smtp = new studip_smtp_class();
+	$pdf_file['full_path'] = $smtp->url . $PATH_EXPORT . '/' . $record_of_study_templates[$template]['template']; 
 	$pdf_file['filename'] = $record_of_study_templates[$template]['template'];
 	$fdfAR = createFdfAR($seminars);
 };
