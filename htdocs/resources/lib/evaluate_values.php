@@ -390,7 +390,8 @@ if ($change_object_schedules) {
 			$killAssign =& AssignObject::Factory($change_object_schedules);
 			$killAssign->delete();
 			$new_assign_object='';
-			$msg ->addMsg(5);
+			$msg->addMsg(5);
+			$change_schedule_id = $change_object_schedules = $resources_data['actual_assign'] = FALSE;
 		} elseif (!$return_schedule && !isset($search_room_x) && !isset($reset_room_search_x)) {
 			if ($change_object_schedules == "NEW")
 				$change_schedule_id=FALSE;
