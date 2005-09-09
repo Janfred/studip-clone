@@ -169,7 +169,7 @@ class ShowSemSchedules extends ShowSchedules {
  			$end_hour = 22;
 		}
 
-		$schedule=new SemScheduleWeek($start_hour, $end_hour, FALSE, FALSE, $start_time);
+		$schedule=new SemScheduleWeek($start_hour, $end_hour ,false , $start_time);
 		$num_rep_events = 0;
 		$num_single_events = 0;
 	 	if ($ActualObjectPerms->havePerm("autor"))
@@ -186,12 +186,11 @@ class ShowSemSchedules extends ShowSchedules {
 			}
 			$num_rep_events = count($events);
 		}
-		//nur zukünftige Einzelbelegungen, print_view braucht noch Sonderbehandlung <!!!>
+		//nur zukünftige Einzelbelegungen, print_view hat Sonderbehandlung <!!!>
 		if ( ($end_time > time()) && ($resources_data["show_repeat_mode"] == 'single' || $resources_data["show_repeat_mode"] == 'all')){
-			if (!$print_view){
-				$a_start_time = ($start_time > time() ? $start_time : time());
-			} else {
-				$a_start_time = $this->getNextMonday();
+			$a_start_time = ($start_time > time() ? $start_time : time());
+			if ($print_view && ($start_time < time())){
+				$a_start_time = $this->getNextMonday($a_start_time);
 			}
 			$a_end_time = ($print_view ? $a_start_time + 86400 * 14 : $end_time);
 			$assign_events = new AssignEventList ($a_start_time, $a_end_time, $this->resource_id, '', '', TRUE, 'single');
@@ -340,13 +339,13 @@ class ShowSemSchedules extends ShowSchedules {
 		}
 	}
 	
-	function getNextMonday(){
-		$now = time();
-		$this_monday = date("j", $now)  - (date("w", $now) - 1);
-		if (date("w", $now)+1 > 4){
+	function getNextMonday($start_time = null){
+		$start_time = ($start_time ? $start_time : time());
+		$this_monday = date("j", $start_time)  - (date("w", $start_time) - 1);
+		if (date("w", $start_time)+1 > 4){
 			$this_monday += 7;
 		}
-		return mktime(2, 0, 1, date("n", $now), $this_monday ,  date("Y", $now));
+		return mktime(2, 0, 1, date("n", $start_time), $this_monday ,  date("Y", $start_time));
 	}
 	
 }

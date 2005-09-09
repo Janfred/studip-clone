@@ -188,16 +188,16 @@ class ShowGroupSchedules extends ShowSemSchedules {
 			}
 			//nur zukünftige Einzelbelegungen, print_view braucht noch Sonderbehandlung <!!!>
 			if ( ($end_time > time()) && ($resources_data["show_repeat_mode"] == 'single' || $resources_data["show_repeat_mode"] == 'all')){
-				if (!$print_view){
-					$a_start_time = ($start_time > time() ? $start_time : time());
-				} else {
-					$a_start_time = $this->getNextMonday();
+				$a_start_time = ($start_time > time() ? $start_time : time());
+				if ($print_view && ($start_time < time())){
+					$a_start_time = $this->getNextMonday($a_start_time);
 				}
+				
 				$a_end_time = ($print_view ? $a_start_time + 86400 * 14 : $end_time);	
 				$assign_events = new AssignEventList ($a_start_time, $a_end_time, $room_id, '', '', TRUE, 'single', $this->dow);
 				while ($event = $assign_events->nextEvent()) {
 					$schedule->addEvent($room_to_show_id, 'EB'.$num++.':' . $event->getName(get_config('RESOURCES_SCHEDULE_EXPLAIN_USER_NAME')), $event->getBegin(), $event->getEnd(), 
-							"$PHP_SELF?show_object=$room_id&cancel_edit_assign=1&quick_view=$view&quick_view_mode=".$view_mode."&edit_assign_object=".$event->getAssignId(), FALSE, $categories[$event->repeat_mode]);
+					"$PHP_SELF?show_object=$room_id&cancel_edit_assign=1&quick_view=$view&quick_view_mode=".$view_mode."&edit_assign_object=".$event->getAssignId(), FALSE, $categories[$event->repeat_mode]);
 					++$num_single_events;
 					$single_assigns[] = $event;
 				}
