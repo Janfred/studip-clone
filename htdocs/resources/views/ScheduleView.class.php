@@ -296,7 +296,8 @@ class ScheduleView {
 		}
 
 		if ($print_view) {
-			echo "<tr><td colspan=$glb_colspan><i><font size=-1>&nbsp; "._("Erstellt am")." ",date("d.m.y", time())," um ", date("G:i", time())," Uhr.</font></i></td><td align=\"right\"><font size=-2><img src=\"pictures/logo2b.gif\"><br />&copy; ", date("Y", time())," v.{$GLOBALS['SOFTWARE_VERSION']}&nbsp; &nbsp; </font></td></tr></tr>";
+			echo "<tr><td colspan=$glb_colspan><i><font size=-1>&nbsp; "._("Erstellt am")." ",date("d.m.y", time())," um ", date("G:i", time())," Uhr.</font></i></td>
+			<td align=\"right\"><font size=-2><img src=\"{$GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']}pictures/logo2b.gif\"><br />&copy; ", date("Y", time())," v.{$GLOBALS['SOFTWARE_VERSION']}&nbsp; &nbsp; </font></td></tr></tr>";
 		} else {;
 			//print view bottom
 		}

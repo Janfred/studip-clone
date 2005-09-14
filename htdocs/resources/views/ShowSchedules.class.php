@@ -33,9 +33,9 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-require_once ($RELATIVE_PATH_RESOURCES."/lib/AssignEventList.class.php");
-require_once ($RELATIVE_PATH_RESOURCES."/views/ScheduleWeek.class.php");
-require_once ($ABSOLUTE_PATH_STUDIP."/cssClassSwitcher.inc.php");
+require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'] . $GLOBALS['RELATIVE_PATH_RESOURCES']."/lib/AssignEventList.class.php");
+require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'] . $GLOBALS['RELATIVE_PATH_RESOURCES']."/views/ScheduleWeek.class.php");
+require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'] . "/cssClassSwitcher.inc.php");
 
 $cssSw = new cssClassSwitcher;
 

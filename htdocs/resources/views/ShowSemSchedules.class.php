@@ -31,8 +31,8 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-require_once ($RELATIVE_PATH_RESOURCES."/views/ShowSchedules.class.php");
-require_once ($RELATIVE_PATH_RESOURCES."/views/SemScheduleWeek.class.php");
+require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'] . $GLOBALS['RELATIVE_PATH_RESOURCES']."/views/ShowSchedules.class.php");
+require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'] . $GLOBALS['RELATIVE_PATH_RESOURCES']."/views/SemScheduleWeek.class.php");
 
 require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'] . "/lib/classes/SemesterData.class.php");
 
@@ -302,8 +302,12 @@ class ShowSemSchedules extends ShowSchedules {
 			<table border="0" cellpadding="0" cellspacing="0" width="100%" align="center">
 			<tr>
 				<td align="center">
-				<div style="font-size:150%;font-weight:bold;margin-bottom:10px;">
+				<div style="font-size:150%;font-weight:bold;">
 				<?=htmlReady($room->getName().' - ' .$this->semester['name'])?>
+				</div>
+				<div style="font-size:100%;font-weight:bold;margin-bottom:10px;">
+				<?=date ("d.m.Y", $start_time). " - ". date ("d.m.Y", $end_time)?>
+				&nbsp;(<?=($this->timespan == 'course_time' ? _("Vorlesungszeit") : _("vorlesungsfreie Zeit"))?>)
 				</div>
 				</td>
 			</tr>

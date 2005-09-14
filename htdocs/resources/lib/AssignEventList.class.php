@@ -34,6 +34,8 @@
 // +---------------------------------------------------------------------------+
 
 require_once($ABSOLUTE_PATH_STUDIP."/lib/classes/SemesterData.class.php");
+require_once $GLOBALS['ABSOLUTE_PATH_STUDIP'] . $GLOBALS['RELATIVE_PATH_RESOURCES']."/lib/list_assign.inc.php";
+require_once $GLOBALS['ABSOLUTE_PATH_STUDIP'] . $GLOBALS['RELATIVE_PATH_RESOURCES']."/resourcesFunc.inc.php";
 
 /*****************************************************************************
 AssignEventList, creates a event-list for an assignobject
@@ -53,8 +55,6 @@ class AssignEventList{
 	function AssignEventList($begin = 0, $end = 0, $resource_id='', $range_id='', $user_id='', $sort = TRUE, $filter = FALSE, $day_of_week = false){
 	 	global $RELATIVE_PATH_RESOURCES, $SEM_ID, $user;
 	 	
-	 	require_once ($RELATIVE_PATH_RESOURCES."/lib/list_assign.inc.php");
-	 	require_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
 	 	
 	 	$semester = new SemesterData;
 		$all_semester = $semester->getAllSemesterData();

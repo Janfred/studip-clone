@@ -35,6 +35,7 @@
 
 require_once $GLOBALS['ABSOLUTE_PATH_STUDIP'] . $GLOBALS['RELATIVE_PATH_RESOURCES'] . "/lib/AssignObject.class.php";
 require_once $GLOBALS['ABSOLUTE_PATH_STUDIP'] . $GLOBALS['RELATIVE_PATH_RESOURCES'] . "/lib/AssignEvent.class.php";
+require_once $GLOBALS['ABSOLUTE_PATH_STUDIP'] . "dates.inc.php";
 
 
 function list_restore_assign(&$assEvtLst, $resource_id, $begin, $end, $user_id='', $range_id='', $filter = FALSE,$day_of_week = false){
