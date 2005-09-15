@@ -78,8 +78,9 @@ handle the view-logic
 /*****************************************************************************/
 
 //got a fresh session?
-if (((!$view) && (!$quick_view) && (sizeof($_POST) == 0) && (sizeof($_GET) == 0))
-	|| (!isset($resources_data['view']))) {
+if ((!$view && !$quick_view && !isset($resources_data['view']))
+	|| ( sizeof($_POST) == 0 && sizeof($_GET) == 0 
+	&& (!isset($resources_data['view']) || $resources_data['view_mode'] == 'oobj' || $resources_data['view_mode'] == 'search') ) ) {
 	$resources_data='';
 	$resources_data["view"]="search";
 	$resources_data["view_mode"]=FALSE;
