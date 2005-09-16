@@ -970,7 +970,7 @@ function search_range($search_str = false, $search_user = false) {
 			$search_result[$db->f("Institut_id")]=array("type"=>$db->f("inst_type"),"name"=>$db->f("Name"));
 		}
 	} elseif ($search_str && $perm->have_perm("admin")) {
-		$query="SELECT b.Seminar_id,IF(visible=0,CONCAT(b.Name, ' "._("(versteckt)")."'), b.Name) AS Name from user_inst AS a LEFT JOIN  seminare AS b USING (Institut_id) WHERE a.user_id='$user->id' AND a.inst_perms='admin' AND	b.Name LIKE '%$search_str%'";
+		$query="SELECT b.Seminar_id,IF(b.visible=0,CONCAT(b.Name, ' "._("(versteckt)")."'), b.Name) AS Name from user_inst AS a LEFT JOIN  seminare AS b USING (Institut_id) WHERE a.user_id='$user->id' AND a.inst_perms='admin' AND	b.Name LIKE '%$search_str%'";
 		$db->query($query);
 		while($db->next_record()) {
 			$search_result[$db->f("Seminar_id")]=array("type"=>"sem","name"=>$db->f("Name"));
@@ -981,7 +981,7 @@ function search_range($search_str = false, $search_user = false) {
 			$search_result[$db->f("Institut_id")]=array("type"=>"inst","name"=>$db->f("Name"));
 		}
 		if ($perm->is_fak_admin()) {
-			$query = "SELECT d.Seminar_id,IF(visible=0,CONCAT(d.Name, ' "._("(versteckt)")."'), d.Name) AS Name FROM user_inst a LEFT JOIN Institute b ON(a.Institut_id=b.Institut_id AND b.Institut_id=b.fakultaets_id)  
+			$query = "SELECT d.Seminar_id,IF(d.visible=0,CONCAT(d.Name, ' "._("(versteckt)")."'), d.Name) AS Name FROM user_inst a LEFT JOIN Institute b ON(a.Institut_id=b.Institut_id AND b.Institut_id=b.fakultaets_id)  
 			LEFT JOIN Institute c ON(c.fakultaets_id = b.institut_id AND c.fakultaets_id!=c.institut_id) LEFT JOIN seminare d USING(Institut_id) 
 			WHERE a.user_id='$user->id' AND a.inst_perms='admin' AND NOT ISNULL(b.Institut_id) AND d.Name LIKE '%$search_str%'";
 			$db->query($query);
