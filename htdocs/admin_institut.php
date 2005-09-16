@@ -297,7 +297,7 @@ if ($SessSemName[1])
 ?>
 <table border=0 bgcolor="#000000" align="center" cellspacing=0 cellpadding=0 width=100%>
 <tr valign=top align=middle>
-	<td class="topic"colspan=2 align="left"><b>&nbsp;<b>
+	<td class="topic"colspan=2 align="left"><b>&nbsp;
 	<?
 	if ($i_view == "new") {
 		echo _("Anlegen einer neuen Einrichtung");
