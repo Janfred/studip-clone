@@ -390,7 +390,8 @@ class EditResourceData {
 							$str[1]= _("jede Woche");
 							$str[2]= _("jede zweite Woche");
 							$str[3]= _("jede dritte Woche");
-							$max=3;
+							$str[4]= _("jede vierte Woche");
+							$max=4;
 						break;
 						case "m": 
 							$str[1]= _("jeden Monat");

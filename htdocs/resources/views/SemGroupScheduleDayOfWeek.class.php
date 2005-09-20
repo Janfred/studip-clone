@@ -66,8 +66,16 @@ class SemGroupScheduleDayOfWeek extends ScheduleView {
 		parent::addEvent($room_to_show_id + 1, $name, $start_time, $end_time, $link, $add_info, $category);
 	}
 	
-	function getColumnName($id){
-		return htmlReady(getResourceObjectName($this->show_columns[$id]));
+	function getColumnName($id, $print_view = false){
+		$res_obj =& ResourceObject::Factory($this->show_columns[$id]);
+		if (!$print_view){
+			$ret = '<a class="tree" href="' . $GLOBALS['PHP_SELF'] . '?show_object=' . $this->show_columns[$id] . '&view=view_sem_schedule">'
+					. htmlReady($res_obj->getName()) . '</a>'
+					. '<br><span style="font-size:10pt;">(' . $res_obj->getSeats() . ')</span>';
+		} else {
+			$ret = '<span style="font-size:12pt;">' . htmlReady($res_obj->getName()) . '</span>';
+		}
+		return $ret . chr(10);
 	}
 
 	function getAddLink($l, $i){

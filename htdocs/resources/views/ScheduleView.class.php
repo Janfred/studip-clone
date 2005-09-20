@@ -195,7 +195,7 @@ class ScheduleView {
 		}	
 	}
 
-	function getColumnName($id){
+	function getColumnName($id, $print_view = false){
 		return htmlReady($id . " Column");
 	}
 	
@@ -205,13 +205,13 @@ class ScheduleView {
 		?>
 		<table <? if ($print_view) { ?> bgcolor="#eeeeee" <? } ?> width ="99%" align="center" cellspacing=1 cellpadding=0 border=0>
 			<tr>
-				<td width="10%" align="center" class="rahmen_steelgraulight" ><?=_("Zeit");?>
+				<td width="5%" align="center" class="rahmen_steelgraulight" ><?=_("Zeit");?>
 				</td>
 				<?php
 				foreach($this->show_columns as $column_id => $column_value){
 					?>
-					<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight">
-					<?=$this->getColumnName($column_id);?>
+					<td width="<?echo round (95/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight">
+					<?=$this->getColumnName($column_id, $print_view);?>
 					</td>
 					<?
 				}
@@ -228,7 +228,7 @@ class ScheduleView {
 				if ($k==0)  {
 					echo "<tr><td align=\"center\" class=\"rahmen_steelgraulight\" rowspan=4>"; 
 					if ($i<10) echo "0";
-					echo $i, ":00 "._("Uhr")."</td>";
+					echo $i, ":00 </td>";
 				}
 				else echo "<tr>";
 				
