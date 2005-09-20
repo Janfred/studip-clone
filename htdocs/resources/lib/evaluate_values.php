@@ -428,9 +428,7 @@ if ($change_object_schedules) {
 				$change_schedule_begin=mktime($change_schedule_start_hour, $change_schedule_start_minute, 0, $change_schedule_month, $change_schedule_day, $change_schedule_year);
 				$change_schedule_end=mktime($change_schedule_end_hour, $change_schedule_end_minute, 0, $change_schedule_month, $change_schedule_day, $change_schedule_year);
 				if ($change_schedule_begin > $change_schedule_end) {
-					echo lala, $change_schedule_repeat_mode, $change_schedule_repeat_severaldays_x;
 					if (($change_schedule_repeat_mode != "sd") && (!$change_schedule_repeat_severaldays_x)) {
-						echo wieso;
 						$illegal_dates=TRUE;
 						$msg -> addMsg(20);
 					}
