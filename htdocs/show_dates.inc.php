@@ -29,7 +29,7 @@ if ($GLOBALS["CALENDAR_ENABLE"])
 	
 function show_dates ($date_start, $date_end, $open, $range_id = "", $show_not = 0,
 		$show_docs = TRUE, $show_admin = FALSE, $full_width = TRUE, $show_as_window = TRUE) { 
-	global $PHP_SELF, $SessSemName, $user, $TERMIN_TYP, $username;	
+	global $PHP_SELF, $TERMIN_TYP, $SessSemName, $user, $username, $rechte;
 	
 	// wenn man keinen Start und Endtag angibt, soll wohl alles angezeigt werden
 	// "0" bedeutet jeweils "open end"
@@ -157,13 +157,17 @@ function show_dates ($date_start, $date_end, $open, $range_id = "", $show_not = 
 		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" align=\"center\">";
 
 		//open/close all (show header to switch)
-		print "\n<tr><td class=\"steelgraulight\" align=\"center\">";
 		if (!$show_as_window) {
+			print "\n<tr>";
+			print "\n<td width=\"5%\" class=\"steelgraulight\" align=\"left\">&nbsp;";
+			if ($rechte)
+				print "<a href=\"admin_dates.php?insert_new=TRUE#anchor\"><img style=\"vertical-align:middle;\" src=\"pictures/add_sheet.gif\"".tooltip(_("Einen neuen Termin anlegen"))." border=0></a></td>";
+			print "\n<td class=\"steelgraulight\" align=\"center\">";
 			if ($open == "all")
 				print "<a href=\"$PHP_SELF?dclose=1\"><img style=\"vertical-align:middle;\" src=\"pictures/close_all.gif\" ".tooltip(_("Alle schließen"))." border=\"0\"></a>";
 			else
 				print "<a href=\"$PHP_SELF?dopen=all\"><img style=\"vertical-align:middle;\" src=\"pictures/open_all.gif\" ".tooltip(_("Alle öffnen"))."border=\"0\"></a>";
-		print "\n</tr></td>\n<tr><td class=\"blank\">";
+		print "\n</tr></td>\n<tr><td class=\"blank\" colspan=2>";
 		}
 
 		if ($username) 
@@ -189,8 +193,14 @@ function show_dates ($date_start, $date_end, $open, $range_id = "", $show_not = 
 			if ($show_docs) {
 				$num_docs = doc_count($db->f("termin_id"));
 			}
+			
+			$titel = '';
+			
+			if ($open == $db->f("termin_id")) {
+				$titel.= "<a name=\"a\">&nbsp;</a>";
+			}
 
-			$titel = substr(strftime("%a",$db->f("date")),0,2);
+			$titel .= substr(strftime("%a",$db->f("date")),0,2);
 			$titel .= date(". d.m.Y, H:i", $db->f("date"));
 			if ($db->f("date") < $db->f("end_time"))
 				$titel .= " - " . date("H:i", $db->f("end_time"));
@@ -250,8 +260,6 @@ function show_dates ($date_start, $date_end, $open, $range_id = "", $show_not = 
 
 			echo "</tr></table>	";
 			if (($open == $db->f("termin_id")) || ($open == "all") || ($new)) {
-				echo "<a name=\"a\"></a>";
-			
 				$content='';			
 				if ($db->f("description"))
 					$content.= formatReady($db->f("description"), TRUE, FALSE)."<br /><br />";

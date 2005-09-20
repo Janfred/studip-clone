@@ -496,7 +496,7 @@ if (!sizeof($term_data["turnus_data"])) {
 					<?
 					if ($result) {
 						parse_msg($result, "§", "blank", 1, FALSE);
-						print "<a href=\"anchor\"></a>";
+						print "<a href=\"anchor\">&nbsp;</a>";
 					}
 					?>
 					</table>				
@@ -607,6 +607,7 @@ if (!sizeof($term_data["turnus_data"])) {
 									
 							//Titel erstellen
 							$titel = '';
+						 	$titel .= "<a name=\"anchor\">&nbsp;</a>";
 							$titel .= "&nbsp;<input type=\"TEXT\" style=\"font-size:8 pt;vertical-align:bottom\" name=\"tag\" maxlength=2 size=2 value=\"".$temp_default[1]."\"><font style=\"font-size:10 pt;vertical-align:bottom\">.</font>";
 							$titel .= "<input type=\"TEXT\" style=\"font-size:8 pt;vertical-align:bottom\" name=\"monat\" maxlength=2 size=2 value=\"".$temp_default[2]."\"><font style=\"font-size:10 pt;vertical-align:bottom\">.</font>";
 							$titel .= "<input type=\"TEXT\" style=\"font-size:8 pt;vertical-align:bottom\" name=\"jahr\" maxlength=4 size=4  value=\"".$temp_default[3]."\"><font style=\"font-size:10 pt;vertical-align:bottom\">&nbsp;" . _("von") . "&nbsp;</font>";
@@ -689,7 +690,6 @@ if (!sizeof($term_data["turnus_data"])) {
 							$content.="</tr></td></table></td></tr>\n<tr><td class=\"steel1\" align=\"center\" colspan=2>";
 							$content.="<input type=\"IMAGE\" name=\"send\" border=0 " . makeButton("uebernehmen", "src") . " align=\"absmiddle\" value=\"speichern\">&nbsp;";
 							$content.="<a href=\"$PHP_SELF?cancel=TRUE\">" . makeButton("abbrechen", "img") . "</a><br />";
-						 	$content.= "<a name=\"anchor\"></a>";
 						
 						
 							echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"99%\" align=\"center\"><tr>";
