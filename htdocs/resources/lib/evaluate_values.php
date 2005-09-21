@@ -245,6 +245,7 @@ if ($kill_object) {
 		 	$msg -> addMsg(7);
 		$resources_data["view"]="resources";
 		$view = $resources_data["view"];
+		unset($resources_data['actual_object']);
 	} else {
 		$msg->addMsg(1);
 	}
@@ -258,6 +259,7 @@ if ($cancel_edit) {
 		$cancel_edit->delete();
 		$resources_data["view"]="resources";
 		$view = $resources_data["view"];
+		unset($resources_data['actual_object']);
 	} else {
 		$msg->addMsg(1);
 	}
