@@ -496,7 +496,7 @@ if (!sizeof($term_data["turnus_data"])) {
 					<?
 					if ($result) {
 						parse_msg($result, "§", "blank", 1, FALSE);
-						print "<a href=\"anchor\">&nbsp;</a>";
+						print "<a name=\"anchor\">&nbsp;</a>";
 					}
 					?>
 					</table>				
