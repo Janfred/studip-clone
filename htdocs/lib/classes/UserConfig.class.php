@@ -215,7 +215,7 @@ class UserConfig {
 	 * @return	void
 	 */    
     function _retrieve($user_id, $key) {
-    	$sql="SELECT value FROM user_config WHERE user_id='$user_id' AND field='$key'";
+    	$sql="SELECT value FROM user_config WHERE user_id='$user_id' AND field='$key' ORDER BY field";
     	$this->db->query($sql);
     	if ($this->db->next_record()) { // get and return value
     		$this->data[$user_id][$key]=$this->db->f("value");
