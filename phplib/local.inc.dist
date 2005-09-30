@@ -4,8 +4,8 @@
 you find here the basic system settings. You shouldn't have to touch much of them...
 please note the CONFIG.INC.PHP in the system folder for the indivual settings of your installation!*/
 
-$UNI_NAME_CLEAN = "Stud.IP 1.2";	//the clean-name of your master-faculty (e.g. University of Göttingen), without html-entities (used for mail-system)
-$AUTH_LIFETIME = 60;			//the length of a session in minutes, zero means unlimited lifetime
+$UNI_NAME_CLEAN = "Stud.IP 1.2";						//the clean-name of your master-faculty (e.g. University of Göttingen), without html-entities (used for mail-system)
+$AUTH_LIFETIME = 60;									//the length of a session in minutes, zero means unlimited lifetime
 
 
 /*settings for database access
@@ -33,7 +33,7 @@ activate or deactivate some basic system-functions here*/
 
 $LATEXRENDER_ENABLE = TRUE;								//enable to use the LaTexrenderer (Please note the further LaTeX template-settings below)
 $WIKI_ENABLE = TRUE;									//enable WikiWiki-Webs
-$SCM_ENABLE = TRUE;									//enable Simple-Content functionality
+$SCM_ENABLE = TRUE;										//enable Simple-Content functionality
 $SMILEYADMIN_ENABLE = TRUE;								//enable Smiley-administration
 $SMILEY_COUNTER = FALSE;								//enable Smiley-counter
 
@@ -45,7 +45,7 @@ enable or disable the Stud.IP internal modules, set and basic settings*/
 $RESOURCES_ENABLE = TRUE;								//Stud.IP module: resource management
 
 $CALENDAR_ENABLE = TRUE;								//Stud.IP module: calendar 
-$CALENDAR_DRIVER = "MySQL"; 								//calendar driver: database to use (MySQL in default installation)*/
+$CALENDAR_DRIVER = "MySQL"; 							//calendar driver: database to use (MySQL in default installation)*/
 
 $CHAT_ENABLE = TRUE;									//Stud.IP module: chat
 $CHAT_SERVER_NAME = "ChatShmServer";
@@ -53,15 +53,18 @@ $CHAT_SERVER_NAME = "ChatShmServer";
 $EXPORT_ENABLE = TRUE;									//Stud.IP module: export
 $XSLT_ENABLE = TRUE;
 $FOP_ENABLE = TRUE;
-$FOP_SH_CALL = "/usr/local/fop-0.20.5rc/fop.sh";    					//path to fop
-$JAVA_ENV_CALL = "/etc/profile.d/alljava.sh";     					//used to set environment for JRE
+$FOP_SH_CALL = "/usr/local/fop-0.20.5rc/fop.sh";    	//path to fop
+$JAVA_ENV_CALL = "/etc/profile.d/alljava.sh";     		//used to set environment for JRE
 
-$ILIAS_CONNECT_ENABLE = FALSE;								//Stud.IP module: ilias connect
+$ILIAS_CONNECT_ENABLE = FALSE;							//Stud.IP module: ilias connect
 $ABSOLUTE_PATH_ILIAS = "http://<your.server.name/ilias/>";
 
-$EXTERN_ENABLE = TRUE;									//Stud.IP module: SRI-System
+$EXTERN_ENABLE = TRUE;									//Stud.IP module: "external pages" and SRI-System
 $EXTERN_SERVER_NAME = "";								//define name, if you use special setup
 $EXTERN_CONFIG_FILE_PATH = "/var/lib/studip/extern_config/";				//path to store configs (wwwrun needs write-perm there)		
+$EXTERN_SRI_ENABLE = TRUE;								//allow the usage of SRI-interface (Stud.IP Remote Include)
+$EXTERN_SRI_ENABLE_BY_ROOT = FALSE;						//only root allows the usage of SRI-interface for specific institutes
+$EXTERN_ALLOW_ACCESS_WITHOUT_CONFIG = FALSE;			//free access to external pages (without the need of a configuration), independent of SRI settings above
 
 $SUPPORT_ENABLE = FALSE;								//Stud.IP module: SupportDB (not part of the main distribution)
 
@@ -74,15 +77,15 @@ configure Stud.IP folders*/
 
 $ABSOLUTE_PATH_STUDIP = "/srv/www/htdocs/studip/";
 //where ro store documents and the archive
-$UPLOAD_PATH = "/var/lib/studip/upload_doc";						//path to uploaded documents (wwwrun needs write-perm there)
-$ARCHIV_PATH = "/var/lib/studip/archiv";						//path to Stud.IP archive (wwwrun needs write-perm there)
+$UPLOAD_PATH = "/var/lib/studip/upload_doc";			//path to uploaded documents (wwwrun needs write-perm there)
+$ARCHIV_PATH = "/var/lib/studip/archiv";				//path to Stud.IP archive (wwwrun needs write-perm there)
 
 //path to smileys and symbols
-$SMILE_PATH = "pictures/smile";								//smileys
-$SYMBOL_PATH = "pictures/symbol";							//symbols
+$SMILE_PATH = "pictures/smile";							//smileys
+$SYMBOL_PATH = "pictures/symbol";						//symbols
 
 //path to the temporary folder
-$TMP_PATH ="/tmp";									//the system temp path
+$TMP_PATH ="/tmp";										//the system temp path
 
 //paths to the command line tools, used in Stud.IP
 $ZIP_PATH = "/usr/bin/zip";								//zip tool
@@ -98,16 +101,16 @@ $CONVERT_PATH = "/usr/bin/convert";
 $IDENTIFY_PATH = "/usr/bin/identify";
 
 //path to Stud.IP modules (this folders only have to exist, if the corresponcing module is active)
-$RELATIVE_PATH_RESOURCES = "./resources";						//Stud.IP module: resourge management
-$RELATIVE_PATH_CALENDAR = "./calendar";							//Stud.IP module: calendar
-$RELATIVE_PATH_CHAT = "chat"; 								//Stud.IP module: chat
-$RELATIVE_PATH_ADMIN_MODULES = "admin";				 			//Stud.IP module: admin tools
-$RELATIVE_PATH_EXTERN = "extern"; 							//Stud.IP module: SRI-System for including Stud.IP data in other websites
-$RELATIVE_PATH_LEARNINGMODULES = "lernmodule";						//Stud.IP module: Ilias lerningmodules-connection
-$RELATIVE_PATH_SUPPORT = "./support";							//Stud.IP module: SupportDB (not part of the main distribution)
+$RELATIVE_PATH_RESOURCES = "resources";					//Stud.IP module: resourge management
+$RELATIVE_PATH_CALENDAR = "calendar";					//Stud.IP module: calendar
+$RELATIVE_PATH_CHAT = "chat"; 							//Stud.IP module: chat
+$RELATIVE_PATH_ADMIN_MODULES = "admin";				 	//Stud.IP module: admin tools
+$RELATIVE_PATH_EXTERN = "extern"; 						//Stud.IP module: SRI-System for including Stud.IP data in other websites
+$RELATIVE_PATH_LEARNINGMODULES = "lernmodule";			//Stud.IP moule: Ilias lerningmodules-connection
+$RELATIVE_PATH_SUPPORT = "support";						//Stud.IP module: SupportDB (not part of the main distribution)
 $PATH_EXPORT = "export";								//Stud.IP module: export
 
-$FAVICON = "http://www.studip.de/favicon.ico";						//the place where the favicon is stored. 
+$FAVICON = "http://www.studip.de/favicon.ico";			//the place where the favicon is stored. 
 
 
 /*domain name and path translation
@@ -133,18 +136,18 @@ and add all used domain names. Below, some examples are given.
 ----------------------------------------------------------------
 leave blank if localhost is also the mailserver*/
 
-$MAIL_LOCALHOST = "";			// name of the mail sending machine (the web server) defaults to SERVER_NAME
-$MAIL_HOST_NAME = "";			// which mailserver should we use? (must allow mail-relaying from $MAIL_LOCALHOST, defaults to SERVER_NAME)
-$MAIL_CHARSET = "";			//character set of mail body, defaults to ISO-8859-1
-$MAIL_ENV_FROM = "";			//sender mail adress, defaults to wwwrun @ $MAIL_LOCAHOST
-$MAIL_FROM = "";			//name of sender, defaults to "Stud.IP"
-$MAIL_ABUSE = "";			//mail adress to reply to in case of abuse, defaults to abuse @  $MAIL_LOCAHOST
+$MAIL_LOCALHOST = "";									//name of the mail sending machine (the web server) defaults to SERVER_NAME
+$MAIL_HOST_NAME = "";									//which mailserver should we use? (must allow mail-relaying from $MAIL_LOCALHOST, defaults to SERVER_NAME)
+$MAIL_CHARSET = "";										//character set of mail body, defaults to ISO-8859-1
+$MAIL_ENV_FROM = "";									//sender mail adress, defaults to wwwrun @ $MAIL_LOCAHOST
+$MAIL_FROM = "";										//name of sender, defaults to "Stud.IP"
+$MAIL_ABUSE = "";										//mail adress to reply to in case of abuse, defaults to abuse @  $MAIL_LOCAHOST
 
-$MAIL_VALIDATE_HOST = TRUE;		//check for valid mail host when user enters email adress
-$MAIL_VALIDATE_BOX = TRUE;		//check for valid mail account when user enters email adress; set to false if the webserver got no valid MX record
+$MAIL_VALIDATE_HOST = TRUE;								//check for valid mail host when user enters email adress
+$MAIL_VALIDATE_BOX = TRUE;								//check for valid mail account when user enters email adress; set to false if the webserver got no valid MX record
 
-$MESSAGING_FORWARD_AS_EMAIL = TRUE;	// enable to forward every internal message to the user-mail (the user is able to deactivate this function in his personal settings)
-$MESSAGING_FORWARD_DEFAULT = 1;		// the default setting: if 1, the user has to switch it on; if 2, every message will be forwarded; if 3 every message will be forwarded on request of the sender
+$MESSAGING_FORWARD_AS_EMAIL = TRUE;						//enable to forward every internal message to the user-mail (the user is able to deactivate this function in his personal settings)
+$MESSAGING_FORWARD_DEFAULT = 1;							//the default setting: if 1, the user has to switch it on; if 2, every message will be forwarded; if 3 every message will be forwarded on request of the sender
 
 
 /*advanced system settings
@@ -153,31 +156,25 @@ this are some settings to activate some special features, special
 behaviour of some features and other advanced options. Change on your 
 own risk :) */
 
-$ALLOW_GROUPING_SEMINARS = TRUE;			//if true, administrators can group seminars - students
-							//will only be able to register for one of the grouped seminars
+$ALLOW_GROUPING_SEMINARS = TRUE;						//if true, administrators can group seminars - students
+														//will only be able to register for one of the grouped seminars
 
-$ALLOW_SELFASSIGN_STUDYCOURSE = TRUE; 			//if true, students are allowed to set or change 
-							//their studycourse (studiengang)
+$ALLOW_SELFASSIGN_STUDYCOURSE = TRUE; 					//if true, students are allowed to set or change 
+														//their studycourse (studiengang)
 
-$SHOW_TERMS_ON_FIRST_LOGIN = FALSE;			//if true, the user has to accept the terms on his first login
-							//(this feature makes only sense, if you use disable $ENABLE_SELF_REGISTRATION).
+$SHOW_TERMS_ON_FIRST_LOGIN = FALSE;						//if true, the user has to accept the terms on his first login
+														//(this feature makes only sense, if you use disable $ENABLE_SELF_REGISTRATION).
 							
-$BANNER_ADS_ENABLE = FALSE; 				//enable the Banner ads functions (config as root in "global settings")
-							//you'll need an additional folder in the pictures folder named banner. The Webserver
-							//needs write accees for this folder.
+$BANNER_ADS_ENABLE = FALSE; 							//enable the Banner ads functions (config as root in "global settings")
+														//you'll need an additional folder in the pictures folder named banner. The Webserver
+														//needs write accees for this folder.
 							
-$FOAF_ENABLE = FALSE;                                    // enable friend-of-a-fr
-iend-lists on user homepage
-                                                        // i.e. displaying the d
-irect or indirect connection
-                                                        // between users in term
-s of buddy list hops
+$CONVERT_IDNA_URL = TRUE;								//if true, urls with german "umlauts" are converted
 
-$CONVERT_IDNA_URL = TRUE;				//if true, urls with german "umlauts" are converted
+$ALLOW_DOZENT_ARCHIV = FALSE;							//if true, users with the role 'dozent' are allowed to archive their courses
 
-$ALLOW_DOZENT_ARCHIV = FALSE;		//if true, users with the role 'dozent' are allowed to archive their courses
+$ALLOW_DOZENT_VISIBILITY = FALSE;  						//if true, users with the role 'dozent' are allowed to hide their courses
 
-$ALLOW_DOZENT_VISIBILITY = FALSE;   //if true, users with the role 'dozent' are allowed to hide their courses
 
 /*language settings
 ----------------------------------------------------------------*/
@@ -333,10 +330,10 @@ $STUDIP_AUTH_CONFIG_STANDARDEXTERN = array(	"db_host" => "localhost",
 //some additional authification-settings
 //NOTE: you MUST enable Standard authentication-plugin for this settings to take effect!
 
-$ALLOW_CHANGE_USERNAME = TRUE;				//if true, users are allowed to change their username
-$ALLOW_CHANGE_EMAIL = TRUE;				//if true, users are allowed to change their email-address
-$ALLOW_CHANGE_NAME = TRUE;				//if true, users are allowed to change their name
-$ENABLE_SELF_REGISTRATION = TRUE;			//should it be possible for an user to register himself
+$ALLOW_CHANGE_USERNAME = TRUE;							//if true, users are allowed to change their username
+$ALLOW_CHANGE_EMAIL = TRUE;								//if true, users are allowed to change their email-address
+$ALLOW_CHANGE_NAME = TRUE;								//if true, users are allowed to change their name
+$ENABLE_SELF_REGISTRATION = TRUE;						//should it be possible for an user to register himself
 
 
 /*IDs of courses, in which users were entered when they are promoted to 'autor'
@@ -369,17 +366,7 @@ $LATEX_FORMATS = array(
 
 	Arab font (needs LaTeX package arabtex installed):
   		"arab" => array("tag" => "arab", "template" => "\documentclass[12pt]{article}\n \usepackage[latin1]{inputenc}\n \usepackage{arabtex,atrans}\n \pagestyle{empty}\n \begin{document}\n \begin{arabtext}%s\end{arabtext}\n \end{document}\n")
-*/
 
-// WIKI PLUGINS
-// - plugins are loaded from the wiki module
-// - plugins can define own wiki markup applied after general markup rules
-//
-// uncomment/change below to activate
-//
-//$WIKI_PLUGINS=array(
-//	"wiki_steps.inc.php"  // Stud.IP Enhancement Proposal System
-//);
 
 /*path generation 
 -----------------------------------------------------------------
