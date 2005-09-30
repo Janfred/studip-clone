@@ -1,0 +1,13 @@
+Q: Wie kann ich eine Person einer Einrichtung zuordnen?
+
+A: Zuerst eine entsprechende Stud.IP-Einrichtung auswählen. Dann über die Rubrik "Mitarbeiter" 
+die Person in die Einrichtung aufnehmen. Über "Gruppen/Funktionen" kann sie anschließend entsprechend 
+ihrem Status im Personalverzeichnis einsortiert werden.
+Alternativ kann die Person aus direkt über "freie Personensuche" innerhalb von "Gruppe/Funktionen" 
+zugeordnet werden.
+
+Q: Wie lege ich ein bestimmte Sorte von Veranstaltungen an ?
+
+A: Dies erfolgt innerhalb der Datei config.php im Abschnitt $SEM_TYPE & $SEM_CLASS.
+
+- The Stud.IP Crew <crew@studip.de> 2005
