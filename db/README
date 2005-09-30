@@ -22,11 +22,12 @@ Wenn Sie das System zunächst testen wollen, können Sie die folgenden Demo-Daten
 einspielen:
 
 - studip_demo_data.sql: Mit diesem Dump werden einige Demonstrations-Daten ins
-  Systen eimgespielt. Das Einspielen dieses Dumps ist obligatorisch, zum Betrieb 
-  ist er nicht notwendig.
+  Systen eimgespielt. Das Einspielen dieses Dumps ist zum Betrieb nicht notwendig.
   Enthalten sind die folgenden Testaccounts:
   test_admin, test_dozent, test_tutor und test_autor. Bei allen Accounts ist 
   das Passwort ebenfalls testing.
+  Diese Accounts sollten gelöscht werden, wenn das System in einen produktiven Einsatz
+  geht oder die Testphase beendet wird.
 - studip_resources_demo_data.sql: Mit diesem Dump werden einige Demonstrations-Daten 
   für die Ressourcenverwaltung ins System eingespielt. Das Einspielen dieses Dumps 
-  ist obligatorisch, zum Betrieb ist er nicht notwendig.
+  ist zum Betrieb nicht notwendig.

@@ -1,7 +1,7 @@
-# Erstellungszeit: 30. September 2005 um 11:27
+# Erstellungszeit: 06. Dezember 2004 um 15:14
 # Server Version: 4.0.15
 # PHP-Version: 4.3.3
-# Stud.IP Version: 1.2
+# 
 # Datenbank: `studip`
 # $Id$
 # --------------------------------------------------------
@@ -21,14 +21,29 @@ CREATE TABLE `Institute` (
   `telefon` varchar(32) NOT NULL default '',
   `email` varchar(255) NOT NULL default '',
   `fax` varchar(32) NOT NULL default '',
-  `type` tinyint(3) unsigned NOT NULL default '0',
+  `type` int(10) NOT NULL default '0',
   `modules` int(10) unsigned default NULL,
   `mkdate` int(20) NOT NULL default '0',
   `chdate` int(20) NOT NULL default '0',
   `lit_plugin_name` varchar(255) default NULL,
-  `srienabled` tinyint(4) NOT NULL default '0',
   PRIMARY KEY  (`Institut_id`),
   KEY `fakultaets_id` (`fakultaets_id`)
+) TYPE=MyISAM PACK_KEYS=1;
+
+# --------------------------------------------------------
+
+#
+# Tabellenstruktur für Tabelle `active_sessions`
+#
+
+DROP TABLE IF EXISTS `active_sessions`;
+CREATE TABLE `active_sessions` (
+  `sid` varchar(32) NOT NULL default '',
+  `name` varchar(32) NOT NULL default '',
+  `val` mediumtext,
+  `changed` varchar(14) NOT NULL default '',
+  PRIMARY KEY  (`sid`,`name`),
+  KEY `name` (`name`,`changed`)
 ) TYPE=MyISAM PACK_KEYS=1;
 
 # --------------------------------------------------------
@@ -85,7 +100,6 @@ CREATE TABLE `archiv` (
   `archiv_file_id` varchar(32) NOT NULL default '',
   `mkdate` int(20) NOT NULL default '0',
   `forumdump` longtext NOT NULL,
-  `wikidump` longtext,
   `studienbereiche` text NOT NULL,
   `VeranstaltungsNummer` varchar(32) NOT NULL default '',
   PRIMARY KEY  (`seminar_id`),
@@ -102,9 +116,9 @@ DROP TABLE IF EXISTS `archiv_user`;
 CREATE TABLE `archiv_user` (
   `seminar_id` varchar(32) NOT NULL default '',
   `user_id` varchar(32) NOT NULL default '',
-  `status` enum('user','autor','tutor','dozent') NOT NULL default 'user',
+  `status` varchar(32) NOT NULL default '',
   PRIMARY KEY  (`seminar_id`,`user_id`),
-  KEY `user_id` (`user_id`,`status`)
+  KEY `user_id` (`user_id`)
 ) TYPE=MyISAM PACK_KEYS=1;
 
 # --------------------------------------------------------
@@ -118,7 +132,7 @@ CREATE TABLE `auth_user_md5` (
   `user_id` varchar(32) NOT NULL default '',
   `username` varchar(64) NOT NULL default '',
   `password` varchar(32) NOT NULL default '',
-  `perms` enum('user','autor','tutor','dozent','admin','root') NOT NULL default 'user',
+  `perms` varchar(255) default NULL,
   `Vorname` varchar(64) default NULL,
   `Nachname` varchar(64) default NULL,
   `Email` varchar(64) default NULL,
@@ -187,8 +201,8 @@ CREATE TABLE `calendar_events` (
   `chdate` int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (`event_id`),
   UNIQUE KEY `uid_range` (`uid`,`range_id`),
-  KEY `autor_id` (`autor_id`),
-  KEY `range_id` (`range_id`,`class`)
+  KEY `range_id` (`range_id`),
+  KEY `autor_id` (`autor_id`)
 ) TYPE=MyISAM;
 
 # --------------------------------------------------------
@@ -208,46 +222,18 @@ CREATE TABLE `chat_data` (
 # --------------------------------------------------------
 
 #
-# Tabellenstruktur für Tabelle `comments`
-#
-
-DROP TABLE IF EXISTS `comments`;
-CREATE TABLE `comments` (
-  `comment_id` varchar(32) NOT NULL default '',
-  `object_id` varchar(32) NOT NULL default '',
-  `user_id` varchar(32) NOT NULL default '',
-  `content` text NOT NULL,
-  `mkdate` int(20) NOT NULL default '0',
-  `chdate` int(20) NOT NULL default '0',
-  PRIMARY KEY  (`comment_id`),
-  KEY `object_id` (`object_id`)
-) TYPE=MyISAM;
-
-# --------------------------------------------------------
-
-#
 # Tabellenstruktur für Tabelle `config`
 #
 
 DROP TABLE IF EXISTS `config`;
 CREATE TABLE `config` (
   `config_id` varchar(32) NOT NULL default '',
-  `parent_id` varchar(32) NOT NULL default '',
-  `field` varchar(255) NOT NULL default '',
+  `key` varchar(255) NOT NULL default '',
   `value` varchar(255) NOT NULL default '',
-  `is_default` tinyint(4) NOT NULL default '0',
-  `type` enum('boolean','integer','string') NOT NULL default 'boolean',
-  `range` enum('global','user') NOT NULL default 'global',
-  `section` varchar(255) NOT NULL default '',
-  `position` int(11) NOT NULL default '0',
-  `mkdate` int(20) NOT NULL default '0',
+  `default_value` varchar(255) NOT NULL default '',
   `chdate` int(20) NOT NULL default '0',
-  `description` varchar(255) NOT NULL default '',
   `comment` text NOT NULL,
-  `message_template` varchar(255) NOT NULL default '',
-  PRIMARY KEY  (`config_id`),
-  KEY `parent_id` (`parent_id`),
-  KEY `field` (`field`,`range`)
+  PRIMARY KEY  (`config_id`)
 ) TYPE=MyISAM;
 
 # --------------------------------------------------------
@@ -297,7 +283,7 @@ CREATE TABLE `datafields` (
   `object_type` enum('sem','inst','user') default NULL,
   `object_class` varchar(10) default NULL,
   `edit_perms` enum('user','autor','tutor','dozent','admin','root') default NULL,
-  `view_perms` enum('all','user','autor','tutor','dozent','admin','root') NOT NULL default 'all',
+  `view_perms` varchar(10) default NULL,
   `priority` tinyint(3) unsigned NOT NULL default '0',
   `mkdate` int(20) unsigned default NULL,
   `chdate` int(20) unsigned default NULL,
@@ -524,8 +510,9 @@ CREATE TABLE `guestbook` (
   `mkdate` int(20) NOT NULL default '0',
   `content` text NOT NULL,
   PRIMARY KEY  (`post_id`),
+  KEY `range_id` (`range_id`),
   KEY `user_id` (`user_id`),
-  KEY `range_id` (`range_id`,`mkdate`)
+  KEY `mkdate` (`mkdate`)
 ) TYPE=MyISAM;
 
 # --------------------------------------------------------
@@ -684,13 +671,8 @@ CREATE TABLE `news` (
   `date` int(11) NOT NULL default '0',
   `user_id` varchar(32) NOT NULL default '',
   `expire` int(11) NOT NULL default '0',
-  `allow_comments` tinyint(1) NOT NULL default '0',
-  `chdate` int(10) unsigned NOT NULL default '0',
-  `chdate_uid` varchar(32) NOT NULL default '',
-  `mkdate` int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (`news_id`),
-  KEY `date` (`date`),
-  KEY `chdate` (`chdate`)
+  KEY `date` (`date`)
 ) TYPE=MyISAM PACK_KEYS=1;
 
 # --------------------------------------------------------
@@ -750,8 +732,7 @@ CREATE TABLE `object_user_visits` (
   `type` enum('vote','documents','forum','literature','schedule','scm','sem','wiki','news','eval','inst','ilias_connect') NOT NULL default 'vote',
   `visitdate` int(20) NOT NULL default '0',
   `last_visitdate` int(20) NOT NULL default '0',
-  PRIMARY KEY  (`object_id`,`user_id`,`type`),
-  KEY `user_id` (`user_id`)
+  PRIMARY KEY  (`object_id`,`user_id`,`type`)
 ) TYPE=MyISAM;
 
 # --------------------------------------------------------
@@ -792,9 +773,9 @@ CREATE TABLE `px_topics` (
   KEY `root_id` (`root_id`),
   KEY `Seminar_id` (`Seminar_id`),
   KEY `parent_id` (`parent_id`),
+  KEY `user_id` (`user_id`),
   KEY `chdate` (`chdate`),
-  KEY `mkdate` (`mkdate`),
-  KEY `user_id` (`user_id`,`Seminar_id`)
+  KEY `mkdate` (`mkdate`)
 ) TYPE=MyISAM PACK_KEYS=1;
 
 # --------------------------------------------------------
@@ -890,7 +871,6 @@ CREATE TABLE `resources_locks` (
   `lock_id` varchar(32) NOT NULL default '',
   `lock_begin` int(20) unsigned default NULL,
   `lock_end` int(20) unsigned default NULL,
-  `type` varchar(15) NOT NULL default '',
   PRIMARY KEY  (`lock_id`)
 ) TYPE=MyISAM;
 
@@ -1013,7 +993,6 @@ CREATE TABLE `resources_temporary_events` (
   `termin_id` varchar(32) NOT NULL default '',
   `begin` int(20) NOT NULL default '0',
   `end` int(20) NOT NULL default '0',
-  `type` varchar(15) NOT NULL default '',
   `mkdate` int(20) NOT NULL default '0',
   PRIMARY KEY  (`event_id`),
   KEY `resource_id` (`resource_id`),
@@ -1163,14 +1142,14 @@ DROP TABLE IF EXISTS `seminar_user`;
 CREATE TABLE `seminar_user` (
   `Seminar_id` varchar(32) NOT NULL default '',
   `user_id` varchar(32) NOT NULL default '',
-  `status` enum('user','autor','tutor','dozent') NOT NULL default 'user',
+  `status` varchar(32) NOT NULL default '',
   `gruppe` tinyint(4) NOT NULL default '0',
   `admission_studiengang_id` varchar(32) NOT NULL default '',
   `mkdate` int(20) NOT NULL default '0',
-  `comment` varchar(255) NOT NULL default '',
+  `comment` tinytext,
   PRIMARY KEY  (`Seminar_id`,`user_id`),
-  KEY `status` (`status`,`Seminar_id`),
-  KEY `user_id` (`user_id`,`status`)
+  KEY `user_id` (`user_id`),
+  KEY `status` (`status`,`Seminar_id`)
 ) TYPE=MyISAM PACK_KEYS=1;
 
 # --------------------------------------------------------
@@ -1226,21 +1205,6 @@ CREATE TABLE `seminare` (
 # --------------------------------------------------------
 
 #
-# Tabellenstruktur für Tabelle `session_data`
-#
-
-DROP TABLE IF EXISTS `session_data`;
-CREATE TABLE `session_data` (
-  `sid` varchar(32) NOT NULL default '',
-  `val` mediumtext NOT NULL,
-  `changed` timestamp(14) NOT NULL,
-  PRIMARY KEY  (`sid`),
-  KEY `changed` (`changed`)
-) TYPE=MyISAM;
-
-# --------------------------------------------------------
-
-#
 # Tabellenstruktur für Tabelle `smiley`
 #
 
@@ -1259,7 +1223,7 @@ CREATE TABLE `smiley` (
   PRIMARY KEY  (`smiley_id`),
   UNIQUE KEY `name` (`smiley_name`),
   KEY `short` (`short_name`)
-) TYPE=MyISAM;
+) TYPE=MyISAM AUTO_INCREMENT=255 ;
 
 # --------------------------------------------------------
 
@@ -1408,46 +1372,17 @@ CREATE TABLE `termine` (
   `chdate` int(20) NOT NULL default '0',
   `date_typ` tinyint(4) NOT NULL default '0',
   `topic_id` varchar(32) default NULL,
+  `expire` int(20) default NULL,
+  `repeat` varchar(128) default NULL,
+  `color` varchar(20) default NULL,
+  `priority` tinyint(4) default NULL,
   `raum` varchar(255) default NULL,
   PRIMARY KEY  (`termin_id`),
-  KEY `autor_id` (`autor_id`),
-  KEY `range_id` (`range_id`,`topic_id`)
+  KEY `chdate` (`chdate`),
+  KEY `date_typ` (`date_typ`),
+  KEY `range_id` (`range_id`),
+  KEY `autor_id` (`autor_id`)
 ) TYPE=MyISAM PACK_KEYS=1;
-
-# --------------------------------------------------------
-
-#
-# Tabellenstruktur für Tabelle `user_config`
-#
-
-DROP TABLE IF EXISTS `user_config`;
-CREATE TABLE `user_config` (
-  `userconfig_id` varchar(32) NOT NULL default '',
-  `parent_id` varchar(32) default NULL,
-  `user_id` varchar(32) NOT NULL default '',
-  `field` varchar(255) NOT NULL default '',
-  `value` text NOT NULL,
-  `mkdate` int(11) NOT NULL default '0',
-  `chdate` int(11) NOT NULL default '0',
-  `comment` text NOT NULL,
-  PRIMARY KEY  (`userconfig_id`),
-  KEY `user_id` (`user_id`,`field`,`value`(5))
-) TYPE=MyISAM;
-
-# --------------------------------------------------------
-
-#
-# Tabellenstruktur für Tabelle `user_data`
-#
-
-DROP TABLE IF EXISTS `user_data`;
-CREATE TABLE `user_data` (
-  `sid` varchar(32) NOT NULL default '',
-  `val` mediumtext NOT NULL,
-  `changed` timestamp(14) NOT NULL,
-  PRIMARY KEY  (`sid`),
-  KEY `changed` (`changed`)
-) TYPE=MyISAM;
 
 # --------------------------------------------------------
 
@@ -1478,10 +1413,8 @@ CREATE TABLE `user_info` (
   `email_forward` tinyint(4) NOT NULL default '0',
   `smiley_favorite` varchar(255) NOT NULL default '',
   `smiley_favorite_publish` tinyint(1) NOT NULL default '0',
-  `news_author_id` varchar(32) NOT NULL default '',
   PRIMARY KEY  (`user_id`),
-  KEY `score` (`score`),
-  KEY `news_author_id` (`news_author_id`)
+  KEY `score` (`score`)
 ) TYPE=MyISAM PACK_KEYS=1;
 
 # --------------------------------------------------------
@@ -1494,7 +1427,7 @@ DROP TABLE IF EXISTS `user_inst`;
 CREATE TABLE `user_inst` (
   `user_id` varchar(32) NOT NULL default '0',
   `Institut_id` varchar(32) NOT NULL default '0',
-  `inst_perms` enum('user','autor','tutor','dozent','admin') NOT NULL default 'user',
+  `inst_perms` varchar(10) NOT NULL default '',
   `sprechzeiten` varchar(200) NOT NULL default '',
   `raum` varchar(200) NOT NULL default '',
   `Telefon` varchar(32) NOT NULL default '',
@@ -1615,8 +1548,7 @@ DROP TABLE IF EXISTS `wap_sessions`;
 CREATE TABLE `wap_sessions` (
   `user_id` char(32) NOT NULL default '',
   `session_id` char(32) NOT NULL default '',
-  `creation_time` datetime default NULL,
-  PRIMARY KEY  (`session_id`)
+  `creation_time` datetime default NULL
 ) TYPE=MyISAM;
 
 # --------------------------------------------------------
