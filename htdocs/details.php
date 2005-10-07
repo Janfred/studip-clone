@@ -55,7 +55,7 @@ if (!isset($sem_id)) {
 }
 
 //wenn Seminar gesetzt und kein externer Aufruf uebernahme der SessionVariable
-if (($SessSemName[1] <>"") && (!isset($sem_id))) {
+if (($SessSemName[1] != "") && (!isset($sem_id) || $SessSemName[1] == $sem_id)) {
 	include "links_openobject.inc.php";
 	$sem_id=$SessSemName[1];
 }
@@ -99,9 +99,6 @@ if ($sem_id) {
 if ($send_from_search)
 	$back_msg.=_("Zur&uuml;ck zur letzten Auswahl");
 
-//Namen holen
-$db2->query("SELECT * FROM seminare WHERE Seminar_id = '$sem_id'");
-$db2->next_record();
 
  //calculate a "quarter" year, to avoid showing dates that are older than a quarter year (only for irregular dates)
 $quarter_year = 60 * 60 * 24 * 90;
@@ -209,13 +206,13 @@ else
 		)
 	);
 
-if ($abo_msg || $back_msg || $delete_msg || $info_msg || $mein_status) {
+if ($abo_msg || $back_msg || $delete_msg || $info_msg || $mein_status || $perm->have_studip_perm("admin",$sem_id) ) {
 	$infobox[2]["kategorie"] = _("Aktionen:");
 	if (($abo_msg) && (!$skip_verify)) {
 		$infobox[2]["eintrag"][] = array (	"icon" => "./pictures/link_intern.gif" ,
 									"text"	=> "<a href=\"sem_verify.php?id=".$sem_id."&send_from_search=$send_from_search&send_from_search_page=$send_from_search_page\">".$abo_msg. "</a>"
 								);
-	} elseif ($perm->have_studip_perm("admin",$sem_id) || ($mein_status && !$admission_status)) {
+	} elseif ($sem_id != $SessSemName[1] && ($perm->have_studip_perm("admin",$sem_id) || ($mein_status && !$admission_status)) ) {
 		$infobox[2]["eintrag"][] = array (	"icon" => "./pictures/link_intern.gif" ,
 									"text"	=> "<a href=\"seminar_main.php?auswahl=".$sem_id."\">"._("direkt zur Veranstaltung"). "</a>"
 								);
@@ -711,9 +708,4 @@ print_infobox ($infobox,"pictures/details.jpg");
 
 // Save data back to database.
 page_close();
- ?>
-
-
-
-
-
+?>
