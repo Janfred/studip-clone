@@ -41,7 +41,7 @@ if ($folderzip) {
 	$db->query($query);
 	$db->next_record();
 	$zip_name = prepareFilename(_("Dateiordner ").$db->f("name").".zip");
-	header("Location: sendfile.php/?type=4&file_id=$zip_file_id&file_name=$zip_name");
+	header("Location: sendfile.php?type=4&file_id=$zip_file_id&file_name=$zip_name");
 	page_close();
 	die;
 }
@@ -50,7 +50,7 @@ if ($download_selected_x) {
 	if (is_array($download_ids)) {
 		$zip_file_id = createSelectedZip($download_ids);
 		$zip_name = prepareFilename($SessSemName[0]." - "._("Dokumente").".zip");
-		header("Location: sendfile.php/?type=4&file_id=$zip_file_id&file_name=$zip_name");
+		header("Location: sendfile.php?type=4&file_id=$zip_file_id&file_name=$zip_name");
 		page_close();
 		die;
 	}

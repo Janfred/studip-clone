@@ -1470,9 +1470,9 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 							} else {
 								$type = 0;
 							}
-							$edit= "&nbsp;<a href=\"sendfile.php/?type=$type&force_download=TRUE&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\">" . makeButton("herunterladen", "img") . "</a>";
+							$edit= "&nbsp;<a href=\"sendfile.php?type=$type&force_download=TRUE&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\">" . makeButton("herunterladen", "img") . "</a>";
 							if (($type != "6") && (getFileExtension(strtolower($db3->f("filename"))) != "zip") && (getFileExtension(strtolower($db3->f("filename"))) != "tgz") && (getFileExtension(strtolower($db3->f("filename"))) != "gz") && (getFileExtension(strtolower($db3->f("filename"))) != "bz2"))
-								$edit.= "&nbsp;<a href=\"sendfile.php/?zip=TRUE&type=$type&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\">" . makeButton("alsziparchiv", "img") . "</a>";
+								$edit.= "&nbsp;<a href=\"sendfile.php?zip=TRUE&type=$type&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\">" . makeButton("alsziparchiv", "img") . "</a>";
 							
 							if (($rechte) || ($db3->f("user_id")==$user->id)) {
 								if ($type!=6)
@@ -1624,7 +1624,7 @@ function GetFileIcon($ext, $with_img_tag = false){
 }
 
 function GetDownloadLink($dokument_id, $filename, $type = 0){
-	return "sendfile.php/?type=$type&file_id=".$dokument_id."&file_name=".rawurlencode($filename);
+	return "sendfile.php?type=$type&file_id=".$dokument_id."&file_name=".rawurlencode($filename);
 }
 /*
 Die function delete_document löscht ein hochgeladenes Dokument.
