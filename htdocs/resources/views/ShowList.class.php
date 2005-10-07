@@ -178,13 +178,11 @@ class ShowList extends ShowTreeRow{
 					$edit.= "&nbsp;&nbsp;&nbsp;&nbsp;";
 				} 
 				if ($view_mode == "oobj"){
-					if ($simple_perms) 
-						if ($resObject->getCategoryId())
+					if ($resObject->getCategoryId())
 							$edit.= "<a href=\"$PHP_SELF?show_object=$resObject->id&view=openobject_schedule\">".makeButton("belegung")."</a>&nbsp;";
 					$edit.= "<a href=\"$PHP_SELF?show_object=$resObject->id&view=openobject_details\">".makeButton("eigenschaften")."</a>";
 				} else {
-					if ($simple_perms) 
-						if ($resObject->getCategoryId())
+					if ($resObject->getCategoryId())
 							$edit.= sprintf ("<a href=\"%s?show_object=%s&%sview=view_schedule%s\">".makeButton("belegung")."</a>&nbsp;", $PHP_SELF, $resObject->id, ($view_mode == "no_nav") ? "quick_" : "", ($view_mode == "no_nav") ? "&quick_view_mode=$view_mode" : "");
 					$edit.= sprintf ("<a href=\"%s?show_object=%s&%sview=view_details%s\">".makeButton("eigenschaften")."</a>", $PHP_SELF, $resObject->id, ($view_mode == "no_nav") ? "quick_" : "", ($view_mode == "no_nav") ? "&quick_view_mode=$view_mode" : "");
 				}

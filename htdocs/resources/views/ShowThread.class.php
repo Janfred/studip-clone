@@ -128,11 +128,10 @@ class ShowThread extends ShowTreeRow {
 				if ($resources_data["move_object"] == $resObject->id) 
 					$content.= sprintf ("<br />"._("Dieses Objekt wurde zum Verschieben markiert. Bitte w&auml;hlen sie das Einf&uuml;gen-Symbol %s, um es in die gew&uuml;nschte Ebene zu verschieben."), "<img src=\"pictures/move.gif\" border=0 alt=\""._("Klicken Sie auf dieses Symbol, um dieses Objekt in eine andere Ebene zu verschieben")."\">");
 				
-				if (($perms == "autor") || ($perms == "admin") || ($perms == "tutor")) {
-					if ($resObject->getCategoryId())
-						$edit.= "<a href=\"$PHP_SELF?show_object=$resObject->id&view=view_schedule\">".makeButton("belegung")."</a>&nbsp;";
+				if ($resObject->getCategoryId())
+					$edit.= "<a href=\"$PHP_SELF?show_object=$resObject->id&view=view_schedule\">".makeButton("belegung")."</a>&nbsp;";
 				$edit.= "<a href=\"$PHP_SELF?show_object=$resObject->id&view=view_details\">".makeButton("eigenschaften")."</a>";
-				}
+				
 				
 				if ($perms == "admin") {
 					$edit.= "&nbsp;&nbsp;&nbsp;&nbsp;";				
