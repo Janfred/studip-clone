@@ -406,15 +406,15 @@ class CalendarEvent extends Event {
 		$index = $this->getCategory();
 		if ($index) {
 			return array('image' => $image_size == 'small' ?
-				"{$CANONICAL_RELATIVE_PATH_STUDIP}calendar/pictures/category{$index}_small.jpg" :
-				"{$CANONICAL_RELATIVE_PATH_STUDIP}calendar/pictures/category{$index}.jpg",
+				$CANONICAL_RELATIVE_PATH_STUDIP . 'pictures/calendar/category'.$index.'_small.jpg' :
+				$CANONICAL_RELATIVE_PATH_STUDIP . 'pictures/calendar/category'.$index.'.jpg',
 				'color' => $PERS_TERMIN_KAT[$index]['color']);
 		
 		}
 		
 		return array('image' => $image_size == 'small' ?
-				"{$CANONICAL_RELATIVE_PATH_STUDIP}calendar/pictures/category1_small.jpg" :
-				"{$CANONICAL_RELATIVE_PATH_STUDIP}calendar/pictures/category1.jpg",
+				$CANONICAL_RELATIVE_PATH_STUDIP.'pictures/calendar/category1_small.jpg' :
+				$CANONICAL_RELATIVE_PATH_STUDIP.'pictures/calendar/category1.jpg',
 				'color' => $PERS_TERMIN_KAT[1]['color']);
 	}
 	

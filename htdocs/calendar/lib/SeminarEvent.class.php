@@ -171,8 +171,8 @@ class SeminarEvent extends Event {
 		
 		$index = $this->getProperty('STUDIP_CATEGORY');
 		return array('image' => $image_size == 'small' ?
-					"{$CANONICAL_RELATIVE_PATH_STUDIP}calendar/pictures/category_sem{$index}_small.jpg" :
-					"{$CANONICAL_RELATIVE_PATH_STUDIP}calendar/pictures/category_sem{$index}.jpg",
+					$CANONICAL_RELATIVE_PATH_STUDIP .'pictures/calendar/category_sem'.$index.'_small.jpg' :
+					$CANONICAL_RELATIVE_PATH_STUDIP .'pictures/calendar/category_sem'.$index.'.jpg',
 					'color' => $TERMIN_TYP[$index]['color']);
 	}
 	
