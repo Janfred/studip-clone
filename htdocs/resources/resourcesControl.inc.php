@@ -456,7 +456,8 @@ if ($view == "view_sem_schedule") {
 
 if ($view == "view_group_schedule") {
 	require_once ($RELATIVE_PATH_RESOURCES."/views/ShowGroupSchedules.class.php");
-	if (isset($resources_data["actual_room_group"])) {
+	$room_group = RoomGroups::GetInstance();
+	if (isset($room_group->room_groups[$resources_data["actual_room_group"]]['rooms'])) {
 		$ViewSchedules =& new ShowGroupSchedules($resources_data['actual_room_group'], $resources_data['sem_schedule_semester_id'],$resources_data['sem_schedule_timespan'], $resources_data['group_schedule_dow']);
 		$ViewSchedules->setUsedView($view);	
 		$ViewSchedules->navigator($_REQUEST['print_view']);
@@ -488,7 +489,8 @@ if ($view == "view_group_schedule") {
 			$ViewSchedules->showScheduleGraphical($_REQUEST['print_view']);
 	} else {
 		echo "</td></tr>";
-		$msg->displayMsg(15);
+		$msg->displayMsg(25);
+		$suppress_infobox = TRUE;
 	}
 }
 
