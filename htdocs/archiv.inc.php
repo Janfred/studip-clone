@@ -499,7 +499,7 @@ function Export_Topic ($sem_id) {
 //Funktion zum archivieren eines Seminars, sollte in der Regel vor dem Loeschen ausgfuehrt werden.
 function in_archiv ($sem_id) {
 
-	global $SEM_CLASS,$SEM_TYPE,$ABSOLUTE_PATH_STUDIP, $UPLOAD_PATH, $ARCHIV_PATH, $TMP_PATH, $ZIP_PATH, $_fullname_sql;
+	global $SEM_CLASS,$SEM_TYPE,$ABSOLUTE_PATH_STUDIP, $UPLOAD_PATH, $ARCHIV_PATH, $TMP_PATH, $ZIP_PATH, $ZIP_OPTIONS, $_fullname_sql;
 	
 	$hash_secret="frauen";
 
@@ -641,7 +641,7 @@ function in_archiv ($sem_id) {
 		$archiv_full_path = "$ARCHIV_PATH/$archiv_file_id";
 		$zippara = (ini_get('safe_mode')) ? ' -R ':' -r ';
 		chdir ($tmp_full_path);
-		exec ($ZIP_PATH . ' -K ' . $zippara . $archiv_full_path . ' * ');
+		exec ($ZIP_PATH . ' ' . $ZIP_OPTIONS . ' ' . $zippara . $archiv_full_path . ' * ');
 		chdir($ABSOLUTE_PATH_STUDIP);
 	 	@rename($archiv_full_path . '.zip', $archiv_full_path);
 		rmdirr($tmp_full_path);	 	

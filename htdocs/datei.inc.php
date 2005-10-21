@@ -144,7 +144,7 @@ function parse_link($link, $level=0) {
 
 
 function createSelectedZip ($file_ids, $perm_check = TRUE) {
-	global $TMP_PATH, $UPLOAD_PATH, $ZIP_PATH, $SessSemName, $ABSOLUTE_PATH_STUDIP;
+	global $TMP_PATH, $UPLOAD_PATH, $ZIP_PATH,$ZIP_OPTIONS, $SessSemName, $ABSOLUTE_PATH_STUDIP;
 	$zip_file_id = false;
 	if ((file_exists($ZIP_PATH) || ini_get('safe_mode')) && is_array($file_ids)){
 		$db = new DB_Seminar();
@@ -167,7 +167,7 @@ function createSelectedZip ($file_ids, $perm_check = TRUE) {
 		//zip stuff
 		$zippara = (ini_get('safe_mode')) ? ' -R ':' -r ';
 		@chdir($tmp_full_path);
-		exec ($ZIP_PATH . ' -K ' . $zippara . $tmp_full_path . ' *');
+		exec ($ZIP_PATH . ' ' . $ZIP_OPTIONS . ' ' . $zippara . $tmp_full_path . ' *');
 		@chdir($ABSOLUTE_PATH_STUDIP);
 		rmdirr($tmp_full_path);
 		@rename($tmp_full_path .".zip" , $tmp_full_path);
@@ -176,7 +176,7 @@ function createSelectedZip ($file_ids, $perm_check = TRUE) {
 }
 
 function createFolderZip ($folder_id) {
-	global $TMP_PATH, $ZIP_PATH, $ABSOLUTE_PATH_STUDIP;
+	global $TMP_PATH, $ZIP_PATH,$ZIP_OPTIONS, $ABSOLUTE_PATH_STUDIP;
 	$zip_file_id = false;
 	if (file_exists($ZIP_PATH) || ini_get('safe_mode')){
 
@@ -192,7 +192,7 @@ function createFolderZip ($folder_id) {
 		//zip stuff
 		$zippara = (ini_get('safe_mode')) ? ' -R ':' -r ';
 		chdir ($tmp_full_path);
-		exec ($ZIP_PATH . ' -K ' . $zippara . $tmp_full_path . ' * ');
+		exec ($ZIP_PATH . ' ' . $ZIP_OPTIONS . ' ' . $zippara . $tmp_full_path . ' * ');
 		chdir($ABSOLUTE_PATH_STUDIP);
 		rmdirr($tmp_full_path);
 		@rename($tmp_full_path .".zip" , $tmp_full_path);

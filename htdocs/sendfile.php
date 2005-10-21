@@ -91,7 +91,7 @@ if ($zip && is_file($path_file)) {
 	$zip_path_file = "$TMP_PATH/$tmp_id";
 	$tmp_file_name = escapeshellcmd("$TMP_PATH/$file_name");
 	@copy($path_file, $tmp_file_name);
-	exec ("$ZIP_PATH -K -j {$zip_path_file}.zip $tmp_file_name");
+	exec ("$ZIP_PATH $ZIP_OPTIONS -j {$zip_path_file}.zip $tmp_file_name");
 	$file_name = $file_name . ".zip";
 	$path_file = $zip_path_file . ".zip";
 	@unlink($tmp_file_name);
