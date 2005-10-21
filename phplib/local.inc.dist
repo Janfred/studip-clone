@@ -89,6 +89,7 @@ $TMP_PATH ="/tmp";										//the system temp path
 
 //paths to the command line tools, used in Stud.IP
 $ZIP_PATH = "/usr/bin/zip";								//zip tool
+$ZIP_OPTIONS = "";										//command line options for zip, e.g. when using SuSE try "-K" to correct long filenames for windows
 
 //latexrender settings
 $TEXCACHE_PATH = "pictures/tex";
