@@ -195,7 +195,14 @@ class Session {
     $this->set_container();
 	$this->set_tokenname();
     $this->put_headers();
-
+	
+	//check for illegal cookiename
+	if (isset($_COOKIE[$this->name])){
+		if (strlen($_COOKIE[$this->name]) != 32 || ereg('[^0-9a-f]+', $_COOKIE[$this->name])){
+			session_id(md5(uniqid($this->name,1)));
+		}
+	}
+	
     $ok = session_start();
     $this->id = session_id();
    
