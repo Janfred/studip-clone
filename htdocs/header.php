@@ -124,10 +124,10 @@ if ($auth->auth["uid"] == "nobody") { ?>
 		$neux = count_x_messages_from_user('in', 'all', "AND message.mkdate > ".(int)$my_messaging_settings["last_box_visit"]." AND message_user.readed = 0 ");
 		
 		//globale Objekte zählen
-		$db->query("SELECT  COUNT((IF(date < UNIX_TIMESTAMP(),range_id,NULL))) as count,
+		$db->query("SELECT  COUNT(nw.news_id) as count,
 					COUNT(IF((chdate > IFNULL(b.visitdate,0) AND nw.user_id !='{$user->id}'),
-					(IF(date < UNIX_TIMESTAMP(),range_id,NULL)), NULL)) AS neue 
-					FROM   news_range a  LEFT JOIN news nw USING(news_id)
+					nw.news_id, NULL)) AS neue 
+					FROM   news_range a  LEFT JOIN news nw ON(a.news_id=nw.news_id AND UNIX_TIMESTAMP() BETWEEN date AND (date+expire)) 
 					LEFT JOIN object_user_visits b ON (b.object_id = nw.news_id AND b.user_id = '{$user->id}' AND b.type ='news')
 					WHERE a.range_id='studip' GROUP BY a.range_id");
 		if ($db->next_record()){
