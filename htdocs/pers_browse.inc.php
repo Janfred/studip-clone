@@ -118,26 +118,26 @@ if (isset($pers_browse_clear)) {
 print "<form action=\"$PHP_SELF\" method=\"post\">\n";
 print "<table border=0 align=\"center\" cellspacing=0 cellpadding=2 width = \"80%\">\n";
 print "<tr><th colspan=5>" . _("Suchformular") . "</th></tr>";
-print "<tr><td class=steel1 align=\"right\" width=\"15%\">" . _("Benutzername:") . " </td>";
-print "<td class=steel1 align=\"left\" width=\"35%\"><input name=\"pers_browse_username\" type=\"text\" value=\"$pers_browse_old[username]\" size=30 maxlength=255></td>\n";
-print "<td class=steel1 align=\"right\" width=\"15%\">" . _("Vorname:") . " </td>";
-print "<td class=steel1 colspan=2 align=\"left\" width=\"35%\"><input name=\"pers_browse_Vorname\" type=\"text\" value=\"$pers_browse_old[Vorname]\" size=30 maxlength=255></td></tr>\n";
-print "<td class=steel1 align=\"right\" width=\"15%\">" . _("E-Mail:") . " </td>";
-print "<td class=steel1 align=\"left\" width=\"35%\"><input name=\"pers_browse_Email\" type=\"text\" value=\"$pers_browse_old[Email]\" size=30 maxlength=255></td>\n";
-print "<td class=steel1 align=\"right\" width=\"15%\">" . _("Nachname:") . " </td>";
-print "<td class=steel1 colspan=2 align=\"left\" width=\"35%\"><input name=\"pers_browse_Nachname\" type=\"text\" value=\"$pers_browse_old[Nachname]\" size=30 maxlength=255></td></tr>\n";
-print "<td class=steel1 align=\"right\" width=\"15%\">" . _("Status:") . " </td>";
-print "<td class=steel1 align=\"left\" width=\"35%\">";
+print "\n<tr><td class=steel1 align=\"right\" width=\"15%\">" . _("Benutzername:") . " </td>";
+print "\n<td class=steel1 align=\"left\" width=\"35%\"><input name=\"pers_browse_username\" type=\"text\" value=\"$pers_browse_old[username]\" size=30 maxlength=255></td>\n";
+print "\n<td class=steel1 align=\"right\" width=\"15%\">" . _("Vorname:") . " </td>";
+print "\n<td class=steel1 colspan=2 align=\"left\" width=\"35%\"><input name=\"pers_browse_Vorname\" type=\"text\" value=\"$pers_browse_old[Vorname]\" size=30 maxlength=255></td></tr>\n";
+print "\n<tr><td class=steel1 align=\"right\" width=\"15%\">" . _("E-Mail:") . " </td>";
+print "\n<td class=steel1 align=\"left\" width=\"35%\"><input name=\"pers_browse_Email\" type=\"text\" value=\"$pers_browse_old[Email]\" size=30 maxlength=255></td>\n";
+print "\n<td class=steel1 align=\"right\" width=\"15%\">" . _("Nachname:") . " </td>";
+print "\n<td class=steel1 colspan=2 align=\"left\" width=\"35%\"><input name=\"pers_browse_Nachname\" type=\"text\" value=\"$pers_browse_old[Nachname]\" size=30 maxlength=255></td></tr>\n";
+print "\n<tr><td class=steel1 align=\"right\" width=\"15%\">" . _("Status:") . " </td>";
+print "\n<td class=steel1 align=\"left\" width=\"35%\">";
 	perm_select("pers_browse_perms",$pers_browse_old[perms]);
 print "</td>\n";
-print "<td class=steel1 align=\"right\" width=\"15%\">" . _("inaktiv:") . " </td>";
-print "<td class=steel1 align=\"left\" width=\"10%\">";
+print "\n<td class=steel1 align=\"right\" width=\"15%\">" . _("inaktiv:") . " </td>";
+print "\n<td class=steel1 align=\"left\" width=\"10%\">";
 	crit_select("pers_browse_crit",$pers_browse_old[crit]);
 print "</td>";
-print "<td class=steel1 align=\"left\" width=\"25%\"><input name=\"pers_browse_changed\" type=\"text\" value=\"$pers_browse_old[changed]\" size=10 maxlength=50> Tage</td></tr>\n";
-print "<tr><td class=steel1>&nbsp</td><td class=steel1 align=\"left\"><input type=\"IMAGE\" " . makeButton("suchestarten", "src") .  tooltip(_("Suche starten")) . " border=0><input type=\"HIDDEN\" name=\"pers_browse_search\" value=\"TRUE\"></td>\n";
-print "<td class=steel1>&nbsp</td><td class=steel1 colspan=2 align=\"left\"><a href=\"$PHP_SELF?pers_browse_clear=TRUE\"" . tooltip(_("Formular zurücksetzen")) . ">" . makeButton("zuruecksetzen", "img") . "</a></td></tr>\n";
+print "\n<td class=steel1 align=\"left\" width=\"25%\"><input name=\"pers_browse_changed\" type=\"text\" value=\"$pers_browse_old[changed]\" size=10 maxlength=50> Tage</td></tr>\n";
+print "\n<tr><td class=steel1>&nbsp</td><td class=steel1 align=\"left\"><input type=\"IMAGE\" " . makeButton("suchestarten", "src") .  tooltip(_("Suche starten")) . " border=0><input type=\"HIDDEN\" name=\"pers_browse_search\" value=\"TRUE\"></td>\n";
+print "\n<td class=steel1>&nbsp</td><td class=steel1 colspan=2 align=\"left\"><a href=\"$PHP_SELF?pers_browse_clear=TRUE\"" . tooltip(_("Formular zurücksetzen")) . ">" . makeButton("zuruecksetzen", "img") . "</a></td></tr>\n";
 
-print "</table></form>\n";
+print "\n</table></form>\n";
 
 ?>
