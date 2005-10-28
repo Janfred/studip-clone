@@ -336,6 +336,7 @@ class AssignObject {
 	}
 	
 	function getEvents() {
+		$this->events = array();
 		create_assigns($this, $this);
 		return $this->events;
 	}
