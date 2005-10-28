@@ -1013,7 +1013,7 @@ function dateAssi($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full = 
 	$veranstaltung_duration_time = $db->f("duration_time");
 	
 	if (($mode == "update") && (!$old_turnus))
-		$old_turnus = $term_data;
+		$old_turnus = $term_data['turnus_data'];
 	
 	//load the ids from already created dates
 	if ($mode == "update") {
