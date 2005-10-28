@@ -113,15 +113,16 @@ if (($seminar_id) && (!$uebernehmen_x) && (!$add_turnus_field_x) &&(!$delete_tur
 	if (!$term_metadata["sem_vor_termin"]) $term_metadata["sem_vor_termin"] =-1;
 	if (!$term_metadata["sem_vor_end_termin"]) $term_metadata["sem_vor_end_termin"] =-1;
 	$term_metadata["original"]=get_snapshot();
-	$term_metadata["original_turnus"]=$term_metadata["turnus_data"];
+	$term_metadata["original_turnus_data"]=$term_metadata["turnus_data"];
+	$term_metadata["original_turnus"]=$term_metadata["turnus"];
 	$term_metadata["original_art"]=$term_metadata["art"];
 	$term_metadata["original_start_time"]=$db->f("start_time");
-	$term_metadata["original_duration_time"]=$db->f("start_time");
+	$term_metadata["original_duration_time"]=$db->f("duration_time");
 	$term_metadata["original_start_woche"]=$term_metadata["start_woche"];
 	$term_metadata["original_start_termin"]=$term_metadata["start_termin"];
 	$term_metadata["original_resource_id"] = array();
-	if (is_array($term_metadata["original_turnus"]))
-		foreach ($term_metadata["original_turnus"] as $val)
+	if (is_array($term_metadata["original_turnus_data"]))
+		foreach ($term_metadata["original_turnus_data"] as $val)
 			$term_metadata["original_resource_id"][] = $val["resource_id"];
 	$term_metadata["update_dates"]=TRUE;
 	}
@@ -171,7 +172,6 @@ if ($turnus_refresh)
 	//Arrays fuer Turnus loeschen
 	$temp_turnus_data = $term_metadata["turnus_data"];
 	$term_metadata["turnus_data"]='';
-
 	//Alle eingegebenen Turnus-Daten in Sessionvariable uebernehmen
 	for ($i=0; $i<$term_metadata["turnus_count"]; $i++)
 		{
@@ -202,7 +202,6 @@ if ($turnus_refresh)
 		settype($term_metadata["turnus_data"][$i]["end_minute"], "integer");
 		}
 	}
-	
 if (($turnus_refresh) || ($term_metadates["start_woche"] ==-1))
 	{
 	//Datum fuer ersten Termin umwandeln. Checken muessen wir es auch leider direkt hier, da wir es sonst nicht umwandeln duerfen
@@ -300,15 +299,21 @@ if (($uebernehmen_x) && (!$errormsg)) {
 	$metadata_termin["start_termin"]=$term_metadata["start_termin"];
 	$metadata_termin["start_woche"]=$term_metadata["start_woche"];
 	$metadata_termin["turnus"]=$term_metadata["turnus"];
+	$metadates_deleted = $metadates_new = $metadates_unchanged = array();
 
 	//check if change of mode
-	if (($term_metadata["original_art"] != $term_metadata["art"]) && ($RESOURCES_ENABLE)) {
-		$art_changed = TRUE;
+	if ($RESOURCES_ENABLE){ 
+		//check for changes by deleted entries, changes to semesterdata an start termin
+		//$count_meta_changed	= (sizeof($tmp_metadata_termin["turnus_data"]) <  sizeof($term_metadata["original_turnus_data"])); 
+		$start_termin_changed =	($term_metadata["original_start_woche"] != $term_metadata["start_woche"]) || ($term_metadata["original_start_termin"] != $term_metadata["start_termin"]);
+		$sem_changed = ($term_metadata["original_start_time"] != $term_metadata["sem_start_time"]) ||($term_metadata["original_duration_time"] != $term_metadata["sem_duration_time"]);
+		$art_changed = ($term_metadata["original_art"] != $term_metadata["art"]);
+		$turnus_changed = ($term_metadata["original_turnus"] != $term_metadata["turnus"]);
 		//determine, if the resources are owned by the user
-		if (is_array($term_metadata["original_turnus"])) {
-			foreach ($term_metadata["original_turnus"] as $key=>$val) {
-				if ($term_metadata["original_turnus"][$key]["resource_id"]) {
-					$resObjPrm =& ResourceObjectPerms::Factory($term_metadata["original_turnus"][$key]["resource_id"]);
+		if (is_array($term_metadata["original_turnus_data"])) {
+			foreach ($term_metadata["original_turnus_data"] as $key=>$val) {
+				if ($term_metadata["original_turnus_data"][$key]["resource_id"]) {
+					$resObjPrm =& ResourceObjectPerms::Factory($term_metadata["original_turnus_data"][$key]["resource_id"]);
 					if (!$resObjPrm->havePerm("autor"))
 						$foreign_resources = TRUE;
 				}
@@ -339,52 +344,52 @@ if (($uebernehmen_x) && (!$errormsg)) {
 				}
 			}
 		}	
-
+		
 		//check for changes to the old (saved) metadates (for each metadate)
 		if (is_array($tmp_metadata_termin["turnus_data"])) {
 			$art_changed = FALSE;
 			$metadates_changed = FALSE;
 			foreach ($tmp_metadata_termin["turnus_data"] as $key => $val) {
-				if (($tmp_metadata_termin["turnus_data"][$key]["start_stunde"] != $term_metadata["original_turnus"][$key]["start_stunde"])
-					|| ($tmp_metadata_termin["turnus_data"][$key]["start_minute"] != $term_metadata["original_turnus"][$key]["start_minute"])
-					|| ($tmp_metadata_termin["turnus_data"][$key]["end_stunde"] != $term_metadata["original_turnus"][$key]["end_stunde"])
-					|| ($tmp_metadata_termin["turnus_data"][$key]["end_minute"] != $term_metadata["original_turnus"][$key]["end_minute"])
-					|| ($tmp_metadata_termin["turnus_data"][$key]["day"] != $term_metadata["original_turnus"][$key]["day"])
-					|| ($tmp_metadata_termin["turnus_data"][$key]["resource_id"] != $term_metadata["original_turnus"][$key]["resource_id"])) {
-				$metadates_changed[$key] = TRUE;
+				foreach ($term_metadata["original_turnus_data"] as $old_key => $old_val){
+					$found = false;
+					if (serialize($val) == serialize($old_val)) {
+						$metadates_unchanged[] = $val;
+						$found = true;
+						break;
+					}
 				}
+				if (!$found) $metadates_new[] = $val;
 			}
+			foreach ($term_metadata["original_turnus_data"] as $old_key => $old_val) {
+				foreach ($tmp_metadata_termin["turnus_data"] as $key => $val){
+					$found = false;
+					if (serialize($val) == serialize($old_val)) {
+						$found = true;
+						break;
+					}
+				}
+				if (!$found) $metadates_deleted[] = $old_val;
+			}
+			
 		}
-
-		//check for changes by deleted entries, changes to semesterdata an start termin
-		if (($RESOURCES_ENABLE) && 
-			((sizeof($tmp_metadata_termin["turnus_data"]) !=  sizeof($term_metadata["original_turnus"])) ||
-			($term_metadata["original_start_woche"] != $term_metadata["start_woche"]) ||
-			($term_metadata["original_start_time"] != $term_metadata["sem_start_time"]) ||
-			($term_metadata["original_duration_time"] != $term_metadata["sem_duration_time"]) ||
-			($term_metadata["original_start_termin"] != $term_metadata["start_termin"])))
-			$update_resources = TRUE;
 	}
-
 	//check for the rights, the user has on the selected resource-objects
-	if ($RESOURCES_ENABLE && ($metadates_changed || $art_changed)) {
-		$foreign_resources = FALSE;
+	if ($RESOURCES_ENABLE && (count($metadates_deleted) || count($metadates_new) || $art_changed || $turnus_changed || $sem_changed || $start_termin_changed )) {
 		$update_resources = FALSE;
 		$update_dates_kill_resources = TRUE;
 		//check if change inside regular times
-		if (is_array($metadates_changed)) {
-			foreach ($metadates_changed as $key=>$val) {
-				if (($tmp_metadata_termin["turnus_data"][$key]["resource_id"]) || ($term_metadata["original_turnus"][$key]["resource_id"])) {
-					$assigned_resources = TRUE;
-					if ($tmp_metadata_termin["turnus_data"][$key]["resource_id"]){
-						$resObjPrm =& ResourceObjectPerms::Factory($tmp_metadata_termin["turnus_data"][$key]["resource_id"]);
-						if (!$resObjPrm->havePerm("autor"))
-							$foreign_resources = TRUE;
-					}
-				}
+		if (count($metadates_deleted) || count($metadates_new)) {
+			$check_metadates = array_merge($metadates_deleted,$metadates_new);
+		} else {
+			$check_metadates = array_merge($term_metadata['turnus_data'], $term_metadata['original_turnus_data']);
+		}
+		foreach ($check_metadates as $val) {
+			if ($val["resource_id"]){
+				$assigned_resources = TRUE;
+				$resObjPrm =& ResourceObjectPerms::Factory($val["resource_id"]);
+				if (!$resObjPrm->havePerm("autor")) $foreign_resources = TRUE;
 			}
 		}
-		
 		//ok, what do we here? If foreign requests and the ability to create a room request, do this. Else (no requests available or rights on the resource), we try so save the assign.
 		if (($foreign_resources) && ($RESOURCES_ALLOW_ROOM_REQUESTS) && (!$change_metadates_open_request)) {
 			$update_resources = FALSE;
@@ -393,6 +398,12 @@ if (($uebernehmen_x) && (!$errormsg)) {
 
 			if ($art_changed) 
 				$errormsg.="info§"._("Sie haben die Art der Veranstaltungszeiten ge&auml;ndert.")." ";
+			elseif ($turnus_changed)
+				$errormsg.="info§"._("Sie haben den Turnus der Veranstaltung ge&auml;ndert.")." ";
+			elseif ($sem_changed)
+				$errormsg.="info§"._("Sie haben das Semester ge&auml;ndert.")." ";
+			elseif ($start_termin_changed)
+				$errormsg.="info§"._("Sie haben den Veranstaltungsbeginn ge&auml;ndert.")." ";
 			else
 				$errormsg.="info§"._("Sie haben die Belegungszeiten eines zugewiesenen Raums ge&auml;ndert.")." ";
 
@@ -427,8 +438,7 @@ if (($uebernehmen_x) && (!$errormsg)) {
 		//update the dates in the assi.... (we update if user wants to or the changes to times/rooms/request-system causes killing all the date-assigns)
 		if (($term_metadata["update_dates"]) || (($term_metadata["update_dates"]) && ($update_dates_kill_resources))) {
 			$multisem = isDatesMultiSem($term_metadata["sem_id"]);
-			$result = dateAssi($term_metadata["sem_id"], $mode="update", FALSE, FALSE, $multisem, $term_metadata["original_turnus"], FALSE, $update_resources);
-			$term_metadata["original_turnus"] = $metadata_termin["turnus_data"];
+			$result = dateAssi($term_metadata["sem_id"], $mode="update", FALSE, FALSE, $multisem, $term_metadata["original_turnus_data"], FALSE, ($update_resources && !$change_metadates_open_request));
 			if ($result["changed"]) {
 				$errormsg.= sprintf ("msg§"._("%s Termine des Ablaufplans aktualisiert.")."§", $result["changed"]);
 			}
@@ -441,33 +451,6 @@ if (($uebernehmen_x) && (!$errormsg)) {
 		if (($RESOURCES_ENABLE) && ($update_resources)) {
 		 	$veranstAssign = new VeranstaltungResourcesAssign($term_metadata["sem_id"]);
     		$updateResult = array_merge ($updateResult, $veranstAssign->updateAssign());
-			//are there overlaps, in the meanwhile since the regular check? In the case the sem is regular, we have to touch the metadata
-			if ((is_array($updateResult)) && ($sem_create_data["term_art"] != -1)) {
-				$overlaps_detected=FALSE;
-				foreach ($updateResult as $key=>$val)
-					if ($val["overlap_assigns"] == TRUE) {
-						list($key2, $val2) = each($val["overlap_assigns"]);
-						$begin = $val2["begin"];
-						$end = $val2["end"];
-						$resource_id = $val["resource_id"];
-						foreach ($metadata_termin["turnus_data"] as $key3 =>$val3) {
-							$day = date("w", $begin);
-							if (!$day )
-								$day = 7;
-							if (($val3["day"] == $day) && ($val3["start_stunde"] == date("G", $begin)) && ($val3["start_minute"] == date("i", $begin)) && ($val3["end_stunde"] == date("G", $end)) && ($val3["end_minute"] == date("i", $end)) && ($val["resource_id"] == $resource_id)) {
-								$metadata_termin["turnus_data"][$key3]["resource_id"]='';
-								$metadata_termin["turnus_data"][$key3]["room"]='';
-								$metadata_changed = TRUE;
-							}
-						}
-					}
-				//ok, we have a need to update the metadata again...
-				if ($metadata_changed) {
-					$serialized_metadata=mysql_escape_string(serialize ($metadata_termin));
-					$query = sprintf ("UPDATE seminare SET metadata_dates = '%s' WHERE Seminar_id = '%s' ", $serialized_metadata, $term_metadata["sem_id"]);
-					$db->query($query);
-				}
-			}
 			//produce the messages from result
 			$errormsg.=getFormattedResult($updateResult, "booth");
 		}
@@ -477,13 +460,13 @@ if (($uebernehmen_x) && (!$errormsg)) {
  			//kill the assigns
  			$veranstAssign = new VeranstaltungResourcesAssign($term_metadata["sem_id"]);
  			$veranstAssign->deleteAssignedRooms();
- 			$semObj = new Seminar($term_metadata["sem_id"]);
- 			foreach ($semObj->getMetaDates() as $key=>$val) {
-				$semObj->setMetaDateValue($key, "resource_id", FALSE);
-				$metadata_termin["turnus_data"][$key]["resource_id"] = FALSE;
+			$veranstAssign->clearTurnusData();
+			foreach(getMetadateCorrespondingDates($term_metadata["sem_id"], true) as $meta){
+				foreach(array_keys($meta) as $termin_id){
+					$veranstAssign->killDateAssign($termin_id);
+				}
 			}
-			$semObj->store();
-
+ 			
  			//no request... user should create self an request
  			if (!$term_metadata["request_id"]) {
 				$errormsg.= sprintf ("info§"._("Um R&auml;ume f&uuml;r Ihre Veranstaltung zu bekommen, m&uuml;ssen Sie eine %sRaumanfrage%s erstellen.")."§", "<a href=\"admin_room_requests.php?seminar_id=\"".$term_metadata["sem_id"]."\">", "</a>");
@@ -495,25 +478,26 @@ if (($uebernehmen_x) && (!$errormsg)) {
 				$errormsg.= sprintf ("info§"._("Die Raumanfrage der Veranstaltung wurde an den zust&auml;ndigen Raumadministrator gesandt. Um die Anfrage einzusehen oder zu bearbeiten, gehen Sie auf %sRaumanfragen%s.")."§", "<a href=\"admin_room_requests.php?seminar_id=\"".$term_metadata["sem_id"]."\">", "</a>");
  			}
  		}
-		$term_metadata["turnus_data"] = $metadata_termin["turnus_data"];
 	}
-	
+	$sem_obj =& Seminar::GetInstance($term_metadata["sem_id"], true);
+	$term_metadata['turnus_data'] = $sem_obj->metadata['turnus_data'];
+
 	
 	//Save the current state as snapshot to compare with current data and other original data for comparisons
 	$term_metadata["original"] = get_snapshot();
-	$term_metadata["original_turnus"] = $term_metadata["turnus_data"];
+	$term_metadata["original_turnus_data"] = $term_metadata["turnus_data"];
+	$term_metadata["original_turnus"] = $term_metadata["turnus"];
 	$term_metadata["original_art"] = $term_metadata["art"];
 	$term_metadata["original_start_time"]=$term_metadata["sem_start_time"];
 	$term_metadata["original_duration_time"]=$term_metadata["sem_duration_time"];
 	$term_metadata["original_start_woche"]=$term_metadata["start_woche"];
 	$term_metadata["original_start_termin"]=$term_metadata["start_termin"];
 	$term_metadata["original_resource_id"] = array();
-	if (is_array($term_metadata["original_turnus"]))
-		foreach ($term_metadata["original_turnus"] as $val)
+	if (is_array($term_metadata["original_turnus_data"]))
+		foreach ($term_metadata["original_turnus_data"] as $val)
 			$term_metadata["original_resource_id"][] = $val["resource_id"];
 	
 	$metadata_saved=TRUE;
-	
 }
  
  if (($errormsg) && (($open_reg_x) || ($open_ureg_x) || ($enter_start_termin_x) || ($nenter_start_termin_x) || ($add_turnus_field_x) || ($delete_turnus_field)))
