@@ -1432,12 +1432,10 @@ if ($save_state_x) {
 				
 			//create msgs, metadate mode, but create individual dates (a complete schedule) in case of trouble with the suggested room (it isn't free at all, but for most dates ok)
 			} elseif ($semObj->getMetaDateType() == 0) {
-				$i=0;
 				$assign_ids = array_keys($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"]);
 				foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"] as $key=>$val) {
-					$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$assign_ids[$i]]["resource_id"] = $val;
-					$semObj->setMetaDateValue($i, "resource_id", $val);
-					$i++;
+					$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$assign_ids[$key]]["resource_id"] = $val;
+					$semObj->setMetaDateValue($key, "resource_id", $val);
 				}
 				$semObj->store();
 				
