@@ -112,13 +112,14 @@ Datei studip_max_configuration.txt im Verzeichnis studip-doc.
 
 1.2 Dateien entpacken
 ---------------------
-Die heruntergeladene Datei sollte mit bunzip2 in ein temporäres Verzeichnis
-entpackt werden. Dieses Verzeichnis kann nach erfolgreicher Installation
-gelöscht oder als Referenz aufbewahrt werden.
+Die heruntergeladene Datei sollte mit 
+  tar xjvf studip-1.2.0-1.tar.bz2
+in ein temporäres Verzeichnis entpackt werden. Dieses Verzeichnis kann 
+nach erfolgreicher Installation gelöscht oder als Referenz aufbewahrt werden.
 
 Kurzübersicht der im Paket vorhandenen Verzeichnisse:
 
-- studip-db			SQL-Dumps für mysql-Datenbankeinrichtung und 
+- studip-db		SQL-Dumps für mysql-Datenbankeinrichtung und 
 					Dumps mit Demo-Daten.
 - studip-doc		Dokumentationen zur Installation
 - studip-config		Default-Konfigurationsdateien (local.inc, config.inc.php)
@@ -190,10 +191,11 @@ sollten überprüft werden:
 - Liegen die Stud.IP-Programmdateien nicht innerhalb des document root des Apache,
   ist also $ABSOLUTE_PATH_STUDIP kein Unterverzeichnis von $_SERVER["DOCUMENT_ROOT"],
   dann schlägt die automatische Generierung der Variablen $CANONICAL_RELATIVE_PATH_STUDIP
-  am Ende der local.inc.php fehl.
-  In diesem Fall müssen Sie die Variable von Hand auf das korrekte relative Verzeichnis
-  setzen, unter dem Stud.IP im Verhältnis zur Adresse des Webservers zu erreichen ist
-  ("/" am Ende nicht vergessen).
+  am Ende der local.inc fehl. Das führt dazu, dass der Session Cookie nicht
+  korrekt gesetzt werden kann.
+  In diesem Fall müssen Sie die Variable (local.inc, ab Zeile 375) von Hand 
+  auf das korrekte relative Verzeichnis setzen, unter dem Stud.IP im Verhältnis 
+  zur Adresse des Webservers zu erreichen ist ("/" am Ende nicht vergessen).
 - Kann die Stud.IP Installation über mehrere Adresse (etwa der reale Server-
   Name und ein virtueller Webserver) erreicht werden, sollte Sie im Abschnitt
   "domain and path translation" alle verfügbare Servernamen bzw. Pfadangaben
