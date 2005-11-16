@@ -40,11 +40,11 @@ if (!ini_get('allow_url_fopen')){
 ob_start();
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 
-require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/datei.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
-require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/StudipLitList.class.php");
+require_once ($ABSOLUTE_PATH_STUDIP . 'config.inc.php');
+require_once ($ABSOLUTE_PATH_STUDIP . 'datei.inc.php');
+require_once ($ABSOLUTE_PATH_STUDIP . 'visual.inc.php');
+require_once ($ABSOLUTE_PATH_STUDIP . 'functions.php');
+require_once ($ABSOLUTE_PATH_STUDIP . 'lib/classes/StudipLitList.class.php');
 
 $db=new DB_Seminar;
 $db2=new DB_Seminar;
@@ -84,7 +84,7 @@ switch ($type) {
 }
 
 //replace bad charakters to avoid problems when saving the file
-$file_name = prepareFilename(rawurldecode(basename($file_name)));
+$file_name = prepareFilename(basename(stripslashes(rawurldecode($file_name))));
 
 if ($zip && is_file($path_file)) {
 	$tmp_id = md5(uniqid("suppe"));
@@ -287,7 +287,7 @@ if ($no_access) {
 
 // Check bei verlinkten Dateien ob sie erreichbar sind
 
-if ($type ==6) {
+if ($type == 6) {
 	$link_data = parse_link($path_file);
 	if (!($link_data['HTTP/1.0 200 OK'] || $link_data['HTTP/1.1 200 OK'])) {
 		include ($ABSOLUTE_PATH_STUDIP.'html_head.inc.php'); // Output of html head
