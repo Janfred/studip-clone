@@ -20,9 +20,8 @@
 
 # Include all required files ================================================ #
 require_once($ABSOLUTE_PATH_STUDIP."lib/classes/DatabaseObject.class.php");
-require_once($ABSOLUTE_PATH_STUDIP."lib/classes/DbPermissions.class.php");
 require_once($ABSOLUTE_PATH_STUDIP."modules/evaluation/evaluation.config.php");
-require_once($ABSOLUTE_PATH_STUDIP."phplib_local.inc.php");
+require_once($ABSOLUTE_PATH_STUDIP."functions.php");
 # ====================================================== end: including files #
 
 
@@ -222,7 +221,7 @@ class EvaluationObjectDB extends DatabaseObject {
 
     /* is tutor or dozent ------------------------------------------------- */
     else if ($permObj->have_perm ("dozent") || $permObj->have_perm ("tutor")) {
-      if ($ranges = DbPermissions::search_range ("")) {
+      if ($ranges = search_range ("")) {
          $result += $ranges;
       }
     }
