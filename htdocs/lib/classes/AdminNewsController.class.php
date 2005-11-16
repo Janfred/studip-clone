@@ -120,6 +120,7 @@ class AdminNewsController {
 
 	function get_one_news($news_id) {
 		global $perm,$_fullname_sql;
+		
 		$this->news_query = null;
 		$news_obj =& new StudipNews($news_id);
 		if (!$news_obj->is_new) {
@@ -196,18 +197,32 @@ class AdminNewsController {
 	function edit_news($news_id=0) {
 		global $perm;
 		$aktuell=mktime(0,0,0,strftime("%m",time()),strftime("%d",time()),strftime("%y",time()));
-		if ($news_id AND $news_id!="new_entry")
+		if ($news_id && $news_id != "new_entry")
 			$this->get_one_news($news_id);
 		else {
-			$this->news_query = array("news_id"=>"new_entry", "topic" => "", "body" => "", "date" => $aktuell, "user_id" =>$this->user_id, "author" =>$this->full_username, "expire" => "604800");
+			$this->news_query = array("news_id"=>"new_entry",
+										"topic" => "",
+										"body" => "",
+										"date" => $aktuell,
+										"user_id" => $this->user_id,
+										"author" => $this->full_username,
+										"expire" => 604800,
+										"allow_comments" => 0);
 			if ($perm->have_perm("admin")){
 				$this->search_range(mysql_escape_string($this->range_name));
 			}
 		}
+		if (isset($_REQUEST['news_range_search_x'])) {
+			$this->news_query['topic'] = stripslashes($_REQUEST['topic']);
+			$this->news_query['body'] = stripslashes($_REQUEST['body']);
+			$this->news_query['date'] = $_REQUEST['date'];
+			$this->news_query['expire'] = $_REQUEST['expire'];
+			$this->news_query['allow_comments'] = $_REQUEST['allow_comments'];
+		}
 		if ($this->news_query["user_id"]==$this->user_id)
 			$this->modus="";
 		echo "\n<tr> <td class=\"blank\" align=\"center\"><br />";
-		echo "\n<form action=\"".$this->p_self("cmd=news_submit")."\" method=\"POST\">";
+		echo "\n<form action=\"".$this->p_self("cmd=news_edit")."\" method=\"POST\">";
 		echo "\n<input type=\"HIDDEN\" name=\"news_id\" value=\"".$this->news_query["news_id"]."\">";
 		echo "\n<input type=\"HIDDEN\" name=\"user_id\" value=\"".$this->news_query["user_id"]."\">";
 		echo "\n<input type=\"HIDDEN\" name=\"author\" value=\"".$this->news_query["author"]."\">";
@@ -215,7 +230,7 @@ class AdminNewsController {
 		echo "\n<tr> <td class=\"blank\" align=\"center\"><br />";
 		echo "\n<table width=\"99%\" cellspacing=\"0\" cellpadding=\"6\" border=\"0\">";
 		echo "\n<tr><td class=\"steel1\" width=\"70%\"><b>" . _("Autor:") . "</b>&nbsp;". htmlReady($this->news_query["author"]) ."<br><br><b>" . _("&Uuml;berschrift")
-			. "</b><br><input type=\"TEXT\" style=\"width: 50%\" size=\"".floor($this->max_col*.5*.8)."\" maxlength=\"255\" name=\"topic\" value=\""
+			. "</b><br><input type=\"TEXT\" style=\"width: 100%\" size=\"".floor($this->max_col*.5*.8)."\" maxlength=\"255\" name=\"topic\" value=\""
 			.htmlReady($this->news_query["topic"])."\"><br>";
 		list ($body,$admin_msg)=explode("<admin_msg>",$this->news_query["body"]);
 		echo "\n<br><b>" . _("Inhalt") . "</b><br><textarea name=\"body\" style=\"width: 100%\" cols=\"".floor($this->max_col*.8*.8)."\" rows=\"10\"	  wrap=\"virtual\">"
@@ -293,17 +308,16 @@ class AdminNewsController {
 		$this->list_range_details("inst");
 		$this->list_range_details("fak");
 		echo "\n<tr><td class=\"blank\"> &nbsp; </td>";
-		echo "\n</form></td></tr>";
+		echo "\n</td></tr>";
 		if ($perm->have_perm("admin")) {
 			echo "<tr><td class=\"blank\" colspan=2>";
 			echo "<table class=\"blank\" width=\"100%\" cellspacing=\"0\" cellpadding=\"2\" border=\"0\" align=\"center\">";
-			echo "\n<form action=\"".$this->p_self("cmd=edit")."\" method=\"POST\"><input type=\"HIDDEN\" name=\"edit_news\" value=\"".$this->news_query["news_id"]."\">";
 			echo "\n<tr><td class=\"blank\"><b>" . _("Einen weiteren Bereich hinzuf&uuml;gen:") . "<br /></td></tr>";
 			echo "\n<tr><td class=\"steel1\"><font size=-1>" . _("Hier k&ouml;nnen Sie weitere Bereiche, auf die Sie Zugriff haben, der Auswahl hinzuf&uuml;gen") . "</font><br />";
-			echo "<br><input style=\"vertical-align:middle;\" type=\"TEXT\"  name=\"search\" size=\"20\">&nbsp; <input type=\"IMAGE\" name=\"submit\""
+			echo "<br><input style=\"vertical-align:middle;\" type=\"TEXT\"  name=\"search\" size=\"20\">&nbsp; <input type=\"IMAGE\" name=\"news_range_search\""
 				. makeButton("suchestarten","src") . tooltip(_("Suche starten")) . " border=\"0\" style=\"vertical-align:middle;\"></div></td></tr></form></table><br />";
 		}
-		echo "</table>";
+		echo "</form></table>";
 	}
 
 
@@ -384,12 +398,15 @@ class AdminNewsController {
 						if (!$this->range_detail[$add_range[$i]]["name"]) {
 							if($this->news_perm[$add_range[$i]]["perm"] OR $auth->auth["perm"]=="root") {
 								if ($news_obj->addRange($add_range[$i])) {
+									if ( !($range_name = $this->news_perm[$add_range[$i]]["name"]) ){
+										list($range_name,) = array_values(get_object_name($add_range[$i], get_object_type($add_range[$i])));
+									}
 									if ($this->modus=="admin" AND $user_id!=$this->user_id) {
 											setTempLanguage($user_id);
-											$msg .="\n" .sprintf(_("Der Bereich: %s wurde hinzugefügt."),$this->news_perm[$add_range[$i]]["name"]);
+											$msg .="\n" .sprintf(_("Der Bereich: %s wurde hinzugefügt."),$range_name);
 											restoreLanguage();
 										} else {
-											$msg .="\n" .sprintf(_("Der Bereich: %s wurde hinzugefügt."),$this->news_perm[$add_range[$i]]["name"]);
+											$msg .="\n" .sprintf(_("Der Bereich: %s wurde hinzugefügt."),$range_name);
 										}
 								}
 							}
@@ -437,8 +454,8 @@ class AdminNewsController {
 		else $this->msg.="error§" . _("Sie haben keine News zum l&ouml;schen ausgew&auml;hlt!") . "§";
 	}
 
-	function search_range($search_str) {
-		$this->search_result = search_range($search_str, true);
+	function search_range($search_str = false) {
+		$this->search_result = array_merge($this->search_result, search_range($search_str, true));
 		if (is_array($this->search_result) && count($this->search_result)){
 			$query="SELECT range_id,COUNT(range_id) AS anzahl FROM news_range WHERE range_id IN ('".implode("','",array_keys($this->search_result))."') GROUP BY range_id";
 			$this->db->query($query);
@@ -520,50 +537,54 @@ class AdminNewsController {
 	function get_news_perm() {
 		global $auth,$perm;
 		$this->news_perm[$this->user_id]=array("name"=>$this->full_username,"perm"=>3);
-		$query="SELECT seminare.Seminar_id AS id,seminar_user.status,Name FROM seminar_user LEFT JOIN seminare USING (Seminar_id) WHERE seminar_user.user_id='".$this->user_id."' AND seminar_user.status IN ('dozent','tutor')";
-		$this->db->query($query);
-		while($this->db->next_record()) {
-			if ($this->db->f("status")=="tutor") $this->news_perm[$this->db->f("id")]=array("name"=>$this->db->f("Name"),"perm"=>2);
-			if ($this->db->f("status")=="dozent") $this->news_perm[$this->db->f("id")]=array("name"=>$this->db->f("Name"),"perm"=>2);
-		}
-		if ($auth->auth["perm"]=="admin") {
-			$query="SELECT b.Seminar_id AS id,b.Name from user_inst AS a LEFT JOIN	 seminare AS b USING (Institut_id) WHERE a.user_id='$this->user_id' AND a.inst_perms='admin'";
+		if ($auth->auth["perm"]=="root"){
+			$this->news_perm["studip"]=array("name"=>"Stud.IP News","perm"=>3);
+		} else {
+			if (in_array($auth->auth["perm"], array("dozent","tutor"))){
+				$query="SELECT seminare.Seminar_id AS id,seminar_user.status,Name FROM seminar_user LEFT JOIN seminare USING (Seminar_id) WHERE seminar_user.user_id='".$this->user_id."' AND seminar_user.status IN ('dozent','tutor')";
+				$this->db->query($query);
+				while($this->db->next_record()) {
+					if ($this->db->f("status")=="tutor") $this->news_perm[$this->db->f("id")]=array("name"=>$this->db->f("Name"),"perm"=>2);
+					if ($this->db->f("status")=="dozent") $this->news_perm[$this->db->f("id")]=array("name"=>$this->db->f("Name"),"perm"=>2);
+				}
+			}
+			if ($auth->auth["perm"]=="admin") {
+				$query="SELECT b.Seminar_id AS id,b.Name from user_inst AS a LEFT JOIN	 seminare AS b USING (Institut_id) WHERE a.user_id='$this->user_id' AND a.inst_perms='admin'";
+				$this->db->query($query);
+				while($this->db->next_record()) {
+					$this->news_perm[$this->db->f("id")]=array("name"=>$this->db->f("Name"),"perm"=>3);
+				}
+			}
+			$query="SELECT Institute.Institut_id AS id,Name,user_inst.inst_perms AS status	FROM user_inst LEFT JOIN Institute USING (Institut_id) WHERE user_inst.user_id='".$this->user_id."' AND user_inst.inst_perms IN ('admin','dozent','tutor','autor')";
 			$this->db->query($query);
 			while($this->db->next_record()) {
-				$this->news_perm[$this->db->f("id")]=array("name"=>$this->db->f("Name"),"perm"=>3);
+				if ($this->db->f("status")=="tutor" OR $this->db->f("status")=="autor" OR $this->db->f("status")=="dozent") $this->news_perm[$this->db->f("id")]=array("name"=>$this->db->f("Name"),"perm"=>2);
+				if ($this->db->f("status")=="admin") $this->news_perm[$this->db->f("id")]=array("name"=>$this->db->f("Name"),"perm"=>3);
 			}
-		}
-		$query="SELECT Institute.Institut_id AS id,Name,user_inst.inst_perms AS status	FROM user_inst LEFT JOIN Institute USING (Institut_id) WHERE user_inst.user_id='".$this->user_id."' AND user_inst.inst_perms IN ('admin','dozent','tutor','autor')";
-		$this->db->query($query);
-		while($this->db->next_record()) {
-			if ($this->db->f("status")=="tutor" OR $this->db->f("status")=="autor" OR $this->db->f("status")=="dozent") $this->news_perm[$this->db->f("id")]=array("name"=>$this->db->f("Name"),"perm"=>2);
-			if ($this->db->f("status")=="admin") $this->news_perm[$this->db->f("id")]=array("name"=>$this->db->f("Name"),"perm"=>3);
-		}
-		$query = "SELECT b.Institut_id,b.Name,a.inst_perms AS status FROM user_inst a LEFT JOIN Institute b ON(a.Institut_id=b.Institut_id AND b.Institut_id=b.fakultaets_id)
-		WHERE a.user_id='$this->user_id' AND a.inst_perms IN ('admin','autor') AND NOT ISNULL(b.Institut_id)";
-		$this->db->query($query);
-		while($this->db->next_record()) {
-			if ($this->db->f("status")=="autor") $this->news_perm[$this->db->f("id")]=array("name"=>$this->db->f("Name"),"perm"=>1);
-			if ($this->db->f("status")=="admin") $this->news_perm[$this->db->f("id")]=array("name"=>$this->db->f("Name"),"perm"=>3);
-		}
-		if ($perm->is_fak_admin()){
-			$query = "SELECT d.Seminar_id,d.Name FROM user_inst a LEFT JOIN Institute b ON(a.Institut_id=b.Institut_id AND b.Institut_id=b.fakultaets_id)
-			LEFT JOIN Institute c ON(c.fakultaets_id = b.institut_id AND c.fakultaets_id!=c.institut_id) LEFT JOIN seminare d USING(Institut_id)
-			WHERE a.user_id='$this->user_id' AND a.inst_perms='admin' AND NOT ISNULL(b.Institut_id)";
+			$query = "SELECT b.Institut_id,b.Name,a.inst_perms AS status FROM user_inst a LEFT JOIN Institute b ON(a.Institut_id=b.Institut_id AND b.Institut_id=b.fakultaets_id)
+			WHERE a.user_id='$this->user_id' AND a.inst_perms IN ('admin','autor') AND NOT ISNULL(b.Institut_id)";
 			$this->db->query($query);
-			while($this->db->next_record()){
-				$this->news_perm[$this->db->f("Seminar_id")]=array("name"=>$this->db->f("Name"),"perm"=>3);
+			while($this->db->next_record()) {
+				if ($this->db->f("status")=="autor") $this->news_perm[$this->db->f("id")]=array("name"=>$this->db->f("Name"),"perm"=>1);
+				if ($this->db->f("status")=="admin") $this->news_perm[$this->db->f("id")]=array("name"=>$this->db->f("Name"),"perm"=>3);
 			}
-			$query = "SELECT c.Institut_id,c.Name FROM user_inst a LEFT JOIN Institute b ON(a.Institut_id=b.Institut_id AND b.Institut_id=b.fakultaets_id)
-			LEFT JOIN Institute c ON(c.fakultaets_id = b.institut_id AND c.fakultaets_id!=c.institut_id)
-			WHERE a.user_id='$this->user_id' AND a.inst_perms='admin' AND NOT ISNULL(b.Institut_id)";
-			$this->db->query($query);
-			while($this->db->next_record()){
-				$this->news_perm[$this->db->f("Institut_id")]=array("name"=>$this->db->f("Name"),"perm"=>3);
+			if ($perm->is_fak_admin()){
+				$query = "SELECT d.Seminar_id,d.Name FROM user_inst a LEFT JOIN Institute b ON(a.Institut_id=b.Institut_id AND b.Institut_id=b.fakultaets_id)
+				LEFT JOIN Institute c ON(c.fakultaets_id = b.institut_id AND c.fakultaets_id!=c.institut_id) LEFT JOIN seminare d USING(Institut_id)
+				WHERE a.user_id='$this->user_id' AND a.inst_perms='admin' AND NOT ISNULL(b.Institut_id)";
+				$this->db->query($query);
+				while($this->db->next_record()){
+					$this->news_perm[$this->db->f("Seminar_id")]=array("name"=>$this->db->f("Name"),"perm"=>3);
+				}
+				$query = "SELECT c.Institut_id,c.Name FROM user_inst a LEFT JOIN Institute b ON(a.Institut_id=b.Institut_id AND b.Institut_id=b.fakultaets_id)
+				LEFT JOIN Institute c ON(c.fakultaets_id = b.institut_id AND c.fakultaets_id!=c.institut_id)
+				WHERE a.user_id='$this->user_id' AND a.inst_perms='admin' AND NOT ISNULL(b.Institut_id)";
+				$this->db->query($query);
+				while($this->db->next_record()){
+					$this->news_perm[$this->db->f("Institut_id")]=array("name"=>$this->db->f("Name"),"perm"=>3);
+				}
 			}
 		}
-		if ($auth->auth["perm"]=="root")
-			$this->news_perm["studip"]=array("name"=>"Stud.IP News","perm"=>3);
 	}
 
 	function check_news_perm($news_id,$check=2) {
@@ -591,10 +612,7 @@ class AdminNewsController {
 	function send_sms() {
 		$msg_object = new messaging();
 		while (list($user_id,$msg) = each($this->sms)) {
-			$this->db->query("SELECT username FROM auth_user_md5 WHERE user_id='$user_id'");
-			$this->db->next_record();
-			$user_name=$this->db->f("username");
-			$msg_object->insert_message(mysql_escape_string($msg), $user_name, "____%system%____", FALSE, FALSE, "1", FALSE, _("Systemnachricht:")." "._("News geändert"));
+			$msg_object->insert_message(mysql_escape_string($msg), get_username($user_id) , "____%system%____", FALSE, FALSE, "1", FALSE, _("Systemnachricht:")." "._("News geändert"));
 		}
 	}
 

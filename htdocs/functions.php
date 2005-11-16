@@ -1,4 +1,4 @@
-<?
+<?php
 /**
 * functions.php
 * 
@@ -34,13 +34,13 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipSemTree.class.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipRangeTree.class.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/Modules.class.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/SemesterData.class.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/HolidayData.class.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/object.inc.php");
+require_once ($ABSOLUTE_PATH_STUDIP."lib/classes/StudipSemTree.class.php");
+require_once ($ABSOLUTE_PATH_STUDIP."lib/classes/StudipRangeTree.class.php");
+require_once ($ABSOLUTE_PATH_STUDIP."lib/classes/Modules.class.php");
+require_once ($ABSOLUTE_PATH_STUDIP."lib/classes/SemesterData.class.php");
+require_once ($ABSOLUTE_PATH_STUDIP."lib/classes/HolidayData.class.php");
+require_once ($ABSOLUTE_PATH_STUDIP."visual.inc.php");
+require_once ($ABSOLUTE_PATH_STUDIP."object.inc.php");
 
 /**
 * This function creates the header line for studip-objects
@@ -941,13 +941,17 @@ function check_ticket($ticket){
 	return Seminar_Session::check_ticket($ticket);
 }
 
-function search_range($search_str = false, $search_user = false) {
+function search_range($search_str = false, $search_user = false, $show_sem = true) {
 	
 	global $perm, $user, $_fullname_sql;
 	
 	$db = new DB_Seminar();
 	
 	$search_result = null;
+	$show_sem_sql1 = ",sd1.name AS startsem,IF(s.duration_time=-1, '"._("unbegrenzt")."', sd2.name) AS endsem ";
+	$show_sem_sql2 = "LEFT JOIN semester_data sd1 ON ( start_time BETWEEN sd1.beginn AND sd1.ende)
+					LEFT JOIN semester_data sd2 ON ((start_time + duration_time) BETWEEN sd2.beginn AND sd2.ende)";
+	
 	
 	if ($search_str && $perm->have_perm("root")) {
 		
@@ -959,10 +963,19 @@ function search_range($search_str = false, $search_user = false) {
 			}
 		}
 		
-		$query = "SELECT Seminar_id,IF(visible=0,CONCAT(Name, ' "._("(versteckt)")."'), Name) AS Name FROM seminare WHERE Name LIKE '%$search_str%'";
+		$query = "SELECT Seminar_id,IF(visible=0,CONCAT(s.Name, ' "._("(versteckt)")."'), s.Name) AS Name "
+				. ($show_sem ? $show_sem_sql1 : "")
+				." FROM seminare s "
+				. ($show_sem ? $show_sem_sql2 : "")
+				." WHERE s.Name LIKE '%$search_str%'";
 		$db->query($query);
 		while($db->next_record()) {
-			$search_result[$db->f("Seminar_id")]=array("type"=>"sem","name"=>$db->f("Name"));
+			$name = $db->f("Name")
+				. ($show_sem ? " (".$db->f('startsem')
+				. ($db->f('startsem') != $db->f('endsem') ? " - ".$db->f('endsem') : "")
+				. ")" : "");
+			$search_result[$db->f("Seminar_id")]=array("type"=>"sem",
+														"name"=>$name);
 		}
 		$query="SELECT Institut_id,Name, IF(Institut_id=fakultaets_id,'fak','inst') AS inst_type FROM Institute WHERE Name LIKE '%$search_str%'";
 		$db->query($query);
@@ -970,10 +983,19 @@ function search_range($search_str = false, $search_user = false) {
 			$search_result[$db->f("Institut_id")]=array("type"=>$db->f("inst_type"),"name"=>$db->f("Name"));
 		}
 	} elseif ($search_str && $perm->have_perm("admin")) {
-		$query="SELECT b.Seminar_id,IF(b.visible=0,CONCAT(b.Name, ' "._("(versteckt)")."'), b.Name) AS Name from user_inst AS a LEFT JOIN  seminare AS b USING (Institut_id) WHERE a.user_id='$user->id' AND a.inst_perms='admin' AND	b.Name LIKE '%$search_str%'";
+		$query="SELECT s.Seminar_id,IF(s.visible=0,CONCAT(s.Name, ' "._("(versteckt)")."'), s.Name) AS Name "
+				. ($show_sem ? $show_sem_sql1 : "")
+				. " FROM user_inst AS a LEFT JOIN  seminare AS s USING (Institut_id) "
+				. ($show_sem ? $show_sem_sql2 : "")
+				. " WHERE a.user_id='$user->id' AND a.inst_perms='admin' AND s.Name LIKE '%$search_str%'";
 		$db->query($query);
 		while($db->next_record()) {
-			$search_result[$db->f("Seminar_id")]=array("type"=>"sem","name"=>$db->f("Name"));
+			$name = $db->f("Name")
+				. ($show_sem ? " (".$db->f('startsem')
+				. ($db->f('startsem') != $db->f('endsem') ? " - ".$db->f('endsem') : "")
+				. ")" : "");
+			$search_result[$db->f("Seminar_id")]=array("type"=>"sem",
+														"name"=>$name);
 		}
 		$query="SELECT b.Institut_id,b.Name from user_inst AS a LEFT JOIN	Institute AS b USING (Institut_id) WHERE a.user_id='$user->id' AND a.inst_perms='admin' AND a.institut_id!=b.fakultaets_id AND  b.Name LIKE '%$search_str%'";
 		$db->query($query);
@@ -981,12 +1003,21 @@ function search_range($search_str = false, $search_user = false) {
 			$search_result[$db->f("Institut_id")]=array("type"=>"inst","name"=>$db->f("Name"));
 		}
 		if ($perm->is_fak_admin()) {
-			$query = "SELECT d.Seminar_id,IF(d.visible=0,CONCAT(d.Name, ' "._("(versteckt)")."'), d.Name) AS Name FROM user_inst a LEFT JOIN Institute b ON(a.Institut_id=b.Institut_id AND b.Institut_id=b.fakultaets_id)  
-			LEFT JOIN Institute c ON(c.fakultaets_id = b.institut_id AND c.fakultaets_id!=c.institut_id) LEFT JOIN seminare d USING(Institut_id) 
-			WHERE a.user_id='$user->id' AND a.inst_perms='admin' AND NOT ISNULL(b.Institut_id) AND d.Name LIKE '%$search_str%'";
+			$query = "SELECT s.Seminar_id,IF(s.visible=0,CONCAT(s.Name, ' "._("(versteckt)")."'), s.Name) AS Name"
+				. ($show_sem ? $show_sem_sql1 : "")
+				. " FROM user_inst a LEFT JOIN Institute b ON(a.Institut_id=b.Institut_id AND b.Institut_id=b.fakultaets_id)  
+				LEFT JOIN Institute c ON(c.fakultaets_id = b.institut_id AND c.fakultaets_id!=c.institut_id)
+				LEFT JOIN seminare s USING(Institut_id) "
+				. ($show_sem ? $show_sem_sql2 : "")
+				. "	WHERE a.user_id='$user->id' AND a.inst_perms='admin' AND NOT ISNULL(b.Institut_id) AND s.Name LIKE '%$search_str%'";
 			$db->query($query);
 			while($db->next_record()){
-				$search_result[$db->f("Seminar_id")]=array("type"=>"sem","name"=>$db->f("Name"));
+				$name = $db->f("Name")
+					. ($show_sem ? " (".$db->f('startsem')
+					. ($db->f('startsem') != $db->f('endsem') ? " - ".$db->f('endsem') : "")
+					. ")" : "");
+				$search_result[$db->f("Seminar_id")]=array("type"=>"sem",
+														"name"=>$name);
 			}
 			$query = "SELECT c.Institut_id,c.Name FROM user_inst a LEFT JOIN Institute b ON(a.Institut_id=b.Institut_id AND b.Institut_id=b.fakultaets_id)  
 			LEFT JOIN Institute c ON(c.fakultaets_id = b.institut_id AND c.fakultaets_id!=c.institut_id) 
@@ -1004,10 +1035,19 @@ function search_range($search_str = false, $search_user = false) {
 		}
 		
 	} elseif ($perm->have_perm("tutor")) {
-		$query="SELECT b.Seminar_id,IF(visible=0,CONCAT(b.Name, ' "._("(versteckt)")."'), b.Name) AS Name from seminar_user AS a LEFT JOIN  seminare AS b USING (Seminar_id)	WHERE a.user_id='$user->id' AND a.status IN ('dozent','tutor') ";
+		$query="SELECT s.Seminar_id,IF(visible=0,CONCAT(s.Name, ' "._("(versteckt)")."'), s.Name) AS Name"
+				. ($show_sem ? $show_sem_sql1 : "")
+				. "	FROM seminar_user AS a LEFT JOIN seminare AS s USING (Seminar_id)"
+				. ($show_sem ? $show_sem_sql2 : "")
+				. "	WHERE a.user_id='$user->id' AND a.status IN ('dozent','tutor') ";
 		$db->query($query);
 		while($db->next_record()) {
-			$search_result[$db->f("Seminar_id")]=array("type"=>"sem","name"=>$db->f("Name"));
+			$name = $db->f("Name")
+				. ($show_sem ? " (".$db->f('startsem')
+				. ($db->f('startsem') != $db->f('endsem') ? " - ".$db->f('endsem') : "")
+				. ")" : "");
+			$search_result[$db->f("Seminar_id")]=array("type"=>"sem",
+														"name"=>$name);
 		}
 		$query="SELECT b.Institut_id,b.Name from user_inst AS a LEFT JOIN  Institute AS b USING (Institut_id) WHERE a.user_id='$user->id' AND a.inst_perms IN ('dozent','tutor') ";
 		$db->query($query);

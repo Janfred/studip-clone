@@ -90,6 +90,13 @@ if ($perm->have_perm("admin"))	{
 	}
 }
 
+if ($cmd == 'news_edit'){
+	if (isset($_REQUEST['news_submit_x'])) $cmd = 'news_submit';
+	if (isset($_REQUEST['news_range_search_x'])){
+		$cmd = 'edit';
+		$edit_news = $_REQUEST['news_id'];
+	}
+}
 
 if ($cmd=="news_submit") {
 	$edit_news=$news->update_news($news_id,$author,$topic,$body,$user_id,$date,$expire,$add_range, $allow_comments) ;
@@ -117,7 +124,8 @@ if ($cmd=="edit") {
 		}
 	}
 	if ($auth->auth["perm"]=="dozent" OR $auth->auth["perm"]=="tutor")
-		$news->search_range("blah");
+		$news->search_range();
+	
 	$news->edit_news($edit_news);
 }
 
