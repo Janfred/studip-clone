@@ -145,9 +145,9 @@ class reiter {
 			$view=$index;
 		}
 		$structure[$view]["active"]=TRUE;
-		if ($structure[$view]["topKat"])
+		if ($structure[$view]["topKat"]){
 			$structure[$structure[$view]["topKat"]]["active"]=TRUE;
-		else {
+		} else {
 			reset ($structure);
 			while (list($loch)=each($structure)) {
 				if ($structure[$loch]["topKat"] == $view) {
