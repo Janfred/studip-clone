@@ -45,9 +45,15 @@ include_once($ABSOLUTE_PATH_STUDIP . "seminar_open.php");
 include_once($ABSOLUTE_PATH_STUDIP . "html_head.inc.php");
 include_once($ABSOLUTE_PATH_STUDIP . "header.php");
 
+if ($list || $view)
+	include ($ABSOLUTE_PATH_STUDIP . "links_admin.inc.php");
+else
+	include ($ABSOLUTE_PATH_STUDIP . "links_about.inc.php");
 
-
-$the_range = $_REQUEST['rangeID'];
+if (($SessSemName[1]) && (($view == "vote_sem") || ($view == "vote_inst"))) 
+	$the_range = $SessSemName[1];
+else
+	$the_range = $_REQUEST['rangeID'];
 
 if ($the_range){
 	if (get_Username($the_range))
@@ -69,10 +75,7 @@ if ($the_range != $auth->auth['uname'] && $the_range != 'studip' && !$isUserrang
 	if ($view_mode == "fak"){
 		$view_mode = "inst";
 	}
-	include ($ABSOLUTE_PATH_STUDIP . "links_admin.inc.php");
-} else {
-	include ($ABSOLUTE_PATH_STUDIP . "links_about.inc.php");
-}
+} 
 
 if (array_key_exists ("page", $_REQUEST) && $_REQUEST["page"] == "edit")
 	include (EVAL_PATH.EVAL_FILE_EDIT);
