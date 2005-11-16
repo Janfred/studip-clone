@@ -381,6 +381,27 @@ Die beiden Parameter $MESSAGING_FORWARD_AS_EMAIL und $MESSAGING_FORWARD_DEFAULT
 erlauben es, systeminterne Nachrichten die gespeicherte eMail-Adresse eines Nutzers
 weiterzuleiten und dafür einen Default festzulegen.
 
+1.5.1 Emailbenachrichtigungen einrichten
+Im Administrationsbereich von Stud.IP gibt es einen neuen Menupunkt 
+/globale Einstellungen/Konfiguration. Hier können
+einige Einstellungen zur Laufzeit vorgenommen werden. Die Option
+MAIL_NOTIFICATION_ENABLE schaltet die Benachrichtigungsfunktion ein. Das
+eigentliche verschicken der Mails erfolgt über das Skript
+send_mail_notifications.php, welches im Verzeichnis der Phplib zu finden ist.
+Wenn das neue Sessionmanagement nicht benutzt wird, muss dieses Skript noch
+angepasst werden, es muss in Zeile 33 "prepend4.php" in "prepend.php" geändert
+werden. Wenn das php binary in /usr/bin/php zu finden ist, und die Datei
+ausführbar gemacht ist, kann man das Skript direkt in einen cronjob einbauen.
+Zum testen sollte es einmal direkt aufgerufen werden, nachdem man mit einem
+Account die Benachrichtigungen für bestimmte Veranstaltungen aktiviert hat.
+In der local.inc muss $ABSOLUTE_URI_STUDIP konfiguriert werden, wenn das Skript 
+zum verschicken von Mailbenachrichtigungen benutzt wird. Sollten die Einträge
+von $MAIL_LOCALHOST und $MAIL_HOST_NAME leer sein (d.h. der Webserver
+selbst verschickt Mails) müssen auch hier korrekte Einträge gemacht
+werden. (Da das Skript zum verschicken der Benachrichtigungen als php
+shell skript ausgeführt wird, können diese Angaben nicht aus der
+Umgebungsvariablen SERVER_NAME hergeleitet werden.)
+	  
 
 1.6 Anlegen der MySQL Datenbank 
 -------------------------------
