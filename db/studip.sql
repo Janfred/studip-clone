@@ -644,7 +644,6 @@ CREATE TABLE `message` (
   `reading_confirmation` tinyint(1) NOT NULL default '0',
   PRIMARY KEY  (`message_id`),
   KEY `chat_id` (`chat_id`),
-  KEY `mkdate` (`mkdate`)
 ) TYPE=MyISAM;
 
 # --------------------------------------------------------
@@ -664,10 +663,12 @@ CREATE TABLE `message_user` (
   `folder` tinyint(4) NOT NULL default '0',
   `confirmed_read` tinyint(1) NOT NULL default '0',
   `answered` tinyint(1) NOT NULL default '0',
+  `mkdate` int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (`message_id`,`snd_rec`,`user_id`),
-  KEY `user_id` (`user_id`,`snd_rec`,`deleted`,`readed`),
-  KEY `user_id_2` (`user_id`,`snd_rec`,`deleted`,`folder`)
+  KEY `user_id` (`user_id`,`snd_rec`,`deleted`,`readed`,`mkdate`),
+  KEY `user_id_2` (`user_id`,`snd_rec`,`deleted`,`folder`,`mkdate`)
 ) TYPE=MyISAM;
+
 
 # --------------------------------------------------------
 
@@ -1166,6 +1167,7 @@ CREATE TABLE `seminar_user` (
   `status` enum('user','autor','tutor','dozent') NOT NULL default 'user',
   `gruppe` tinyint(4) NOT NULL default '0',
   `admission_studiengang_id` varchar(32) NOT NULL default '',
+  `notification` int(10) NOT NULL default '0',
   `mkdate` int(20) NOT NULL default '0',
   `comment` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`Seminar_id`,`user_id`),
