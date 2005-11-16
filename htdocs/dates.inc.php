@@ -511,6 +511,7 @@ function view_turnus ($seminar_id, $short = FALSE, $meta_data = false, $start_ti
 					if ($k) 
 						$return_string.=", ";
 					$k++;
+					
 					switch ($data["day"])
 						{
 						case "1": $return_string.= _("Montag"); break;
@@ -540,6 +541,9 @@ function view_turnus ($seminar_id, $short = FALSE, $meta_data = false, $start_ti
 						}
 					else
 						$return_string.=" ";
+					if ($data['desc']){
+						$return_string.= " ({$data['desc']})" ;
+					}
 					}
 				}
 			else {
@@ -676,7 +680,7 @@ function edit_dates($stunde,$minute,$monat,$tag,$jahr,$end_stunde, $end_minute, 
 	$db3=new DB_Seminar;
 	$db4=new DB_Seminar;
 	$semester = new SemesterData;
-	$semObj = new Seminar($range_id);
+	$semObj =& Seminar::GetInstance($range_id);
 
 	if ($RESOURCES_ENABLE) {
 		include_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
@@ -1167,7 +1171,11 @@ function dateAssi($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full = 
 					$date_id=md5(uniqid("lisa",1));
 					$folder_id=md5(uniqid("alexandra",1));
 					$aktuell=time();
-
+					
+					if ($val['desc']){
+						$date_typ = get_guessed_date_type($val['desc']);
+					}
+					
 					//if we have a resource_id, we take the room name from resource_id
 					if (($val["resource_id"]) && ($RESOURCES_ENABLE))	
 						$room = getResourceObjectName($val["resource_id"]);
@@ -1189,12 +1197,12 @@ function dateAssi($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full = 
 					$action = '';
 					//insert/update dates
 					if (!$saved_dates[md5($start_time.$end_time)]) {
-						$query2 = "INSERT INTO termine SET termin_id='$date_id', range_id='$sem_id', autor_id='$user->id', content='" . _("Kein Titel") . "', date='$start_time', mkdate='$aktuell', chdate='$aktuell', date_typ='$date_typ', topic_id='$topic_id', end_time='$end_time', raum='$room' ";
+						$query2 = "INSERT INTO termine SET termin_id='$date_id', range_id='$sem_id', autor_id='$user->id', content='" . _("Kein Titel") . "', date='$start_time', mkdate='$aktuell', chdate='$aktuell', date_typ='$date_typ', topic_id='$topic_id', end_time='$end_time', raum='".mysql_escape_string($room)."' ";
 						$db2->query($query2);
 						$action = 'insert';
 					} else {
 						$action = 'update';
-						$query2 = "UPDATE termine SET chdate='$aktuell', raum='$room' WHERE termin_id='".$saved_dates[md5($start_time.$end_time)]."'";
+						$query2 = "UPDATE termine SET chdate='$aktuell', raum='".mysql_escape_string($room)."' ,date_typ='$date_typ' WHERE termin_id='".$saved_dates[md5($start_time.$end_time)]."'";
 						$db2->query($query2);
 					}
 					//insert an entry for the linked resource, if resource management activ
@@ -1467,4 +1475,16 @@ function Termin_Eingabe_javascript ($t = 0, $n = 0, $atime=0, $ss = '', $sm = ''
 	return  $txt;
 }
 
+function get_guessed_date_type($desc){
+	$ret = 1;
+	if (is_array($GLOBALS['TERMIN_TYP'])){
+		foreach($GLOBALS['TERMIN_TYP'] as $key => $value){
+			if (trim(strtolower($desc)) == strtolower($value['name'])){
+				$ret = $key;
+				break;
+			}
+		}
+	}
+	return $ret;
+}
 ?>

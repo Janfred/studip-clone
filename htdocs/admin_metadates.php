@@ -175,6 +175,7 @@ if ($turnus_refresh)
 	//Alle eingegebenen Turnus-Daten in Sessionvariable uebernehmen
 	for ($i=0; $i<$term_metadata["turnus_count"]; $i++)
 		{
+		$term_metadata["turnus_data"][$i]['desc'] = ($turnus_desc[$i] ? $turnus_desc[$i] : $turnus_desc_chooser[$i]);
 		$term_metadata["turnus_data"][$i]["day"]=$turnus_day[$i]; 
 		$term_metadata["turnus_data"][$i]["start_stunde"]=$turnus_start_stunde[$i];
 		$term_metadata["turnus_data"][$i]["start_minute"]=$turnus_start_minute[$i]; 
@@ -325,7 +326,15 @@ if (($uebernehmen_x) && (!$errormsg)) {
 	if ($term_metadata["art"] == 0) {
 		for ($i=0; $i<$term_metadata["turnus_count"]; $i++)
 			if (($term_metadata["turnus_data"][$i]["start_stunde"])  && ($term_metadata["turnus_data"][$i]["end_stunde"]))
-				$tmp_metadata_termin["turnus_data"][]=array("idx"=>$term_metadata["turnus_data"][$i]["day"].(($term_metadata["turnus_data"][$i]["start_stunde"] <10) ?  "0" : "").$term_metadata["turnus_data"][$i]["start_stunde"].(($term_metadata["turnus_data"][$i]["start_minute"]< 10) ?  "0" : "").$term_metadata["turnus_data"][$i]["start_minute"], "day" => $term_metadata["turnus_data"][$i]["day"], "start_stunde" => $term_metadata["turnus_data"][$i]["start_stunde"], "start_minute" => $term_metadata["turnus_data"][$i]["start_minute"], "end_stunde" => $term_metadata["turnus_data"][$i]["end_stunde"], "end_minute" => $term_metadata["turnus_data"][$i]["end_minute"], "room" => $term_metadata["turnus_data"][$i]["room"], "resource_id" => $term_metadata["turnus_data"][$i]["resource_id"]);
+				$tmp_metadata_termin["turnus_data"][]=array("idx"=>$term_metadata["turnus_data"][$i]["day"].(($term_metadata["turnus_data"][$i]["start_stunde"] <10) ?  "0" : "").$term_metadata["turnus_data"][$i]["start_stunde"].(($term_metadata["turnus_data"][$i]["start_minute"]< 10) ?  "0" : "").$term_metadata["turnus_data"][$i]["start_minute"],
+															"day" => $term_metadata["turnus_data"][$i]["day"], 
+															"start_stunde" => $term_metadata["turnus_data"][$i]["start_stunde"], 
+															"start_minute" => $term_metadata["turnus_data"][$i]["start_minute"], 
+															"end_stunde" => $term_metadata["turnus_data"][$i]["end_stunde"], 
+															"end_minute" => $term_metadata["turnus_data"][$i]["end_minute"], 
+															"room" => $term_metadata["turnus_data"][$i]["room"], 
+															"resource_id" => $term_metadata["turnus_data"][$i]["resource_id"],
+															"desc" => $term_metadata["turnus_data"][$i]["desc"]);
 	
 		//check for dublettes
 		if ($tmp_metadata_termin["turnus_data"]) {
@@ -344,7 +353,7 @@ if (($uebernehmen_x) && (!$errormsg)) {
 				}
 			}
 		}	
-		
+
 		//check for changes to the old (saved) metadates (for each metadate)
 		if (is_array($tmp_metadata_termin["turnus_data"])) {
 			$art_changed = FALSE;
@@ -460,7 +469,7 @@ if (($uebernehmen_x) && (!$errormsg)) {
  			//kill the assigns
  			$veranstAssign = new VeranstaltungResourcesAssign($term_metadata["sem_id"]);
  			$veranstAssign->deleteAssignedRooms();
-			$veranstAssign->clearTurnusData();
+ 			$veranstAssign->clearTurnusData();
 			foreach(getMetadateCorrespondingDates($term_metadata["sem_id"], true) as $meta){
 				foreach(array_keys($meta) as $termin_id){
 					$veranstAssign->killDateAssign($termin_id);
@@ -649,13 +658,30 @@ if (($uebernehmen_x) && (!$errormsg)) {
 									echo '&nbsp; <a href="', $PHP_SELF, '?delete_turnus_field=', $i+1,'"><img border=0 src="./pictures/trash.gif" ', tooltip(_("Dieses Feld aus der Auswahl löschen")), '></a>', "\n";
 								}
 								echo Termin_Eingabe_javascript(3,$i,0,$ss,$sm,$es,$em);
+								//Beschreibung
+								echo "\n<br>&nbsp;" . _("Beschreibung:") . "&nbsp;";
+								echo "\n<select name=\"turnus_desc_chooser[$i]\" ";
+								echo "onChange=\"document.Formular.elements['turnus_desc[$i]'].value=document.Formular.elements['turnus_desc_chooser[$i]'].options[Formular.elements['turnus_desc_chooser[$i]'].selectedIndex].value;\" ";
+								echo ">";
+								echo "\n<option value=\"\">" . _("ausw&auml;hlen oder wie Eingabe") . " --></option>";
+								foreach($TERMIN_TYP as $ttyp){
+									if ($ttyp['sitzung']) {
+										echo "\n<option ";
+										if ($term_metadata['turnus_data'][$i]['desc'] == $ttyp['name']) echo "selected";
+										echo " value=\"" . htmlReady($ttyp['name']) . "\">" . htmlReady($ttyp['name']) . "</option>";
+									}
+								}
+								echo "\n</select>";
+								echo "&nbsp;";
+								echo "\n<input type=\"text\" name=\"turnus_desc[$i]\" size=\"30\" value=\"{$term_metadata['turnus_data'][$i]['desc']}\">";
+								
 								echo '<br />&nbsp;', _("Raum:"), '&nbsp; ';
 
 								if ($RESOURCES_ENABLE) {
 									$resList->reset();
 									if ($resList->numberOfRooms()) {
 										print "<font size=-1><select name=\"turnus_resource_id[]\"></font>";
-										print " ></font>";
+
 										printf ("<option %s value=\"NULL\">[".(($term_metadata["original_resource_id"][$i]) ? _("gebuchter Raum oder ausw&auml;hlen") : _("ausw&auml;hlen oder wie Eingabe")." -->")."]</option>", (!$term_metadata["original_resource_id"][$i]) ? "selected" : "");
 										if ($term_metadata["original_resource_id"][$i])
 											print "<option value=\"FALSE\">["._("kein gebuchter Raum") ."]</option>";
@@ -826,5 +852,5 @@ if (($uebernehmen_x) && (!$errormsg)) {
 </td>
 </tr>
 </table>
-</body>
+	</body>
 </html>

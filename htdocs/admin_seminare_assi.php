@@ -139,6 +139,7 @@ if (isset($cmd) && ($cmd=="do_copy")) {
 		$sem_create_data["term_turnus_resource_id"][$i] = $term_turnus[$i]["resource_id"];
 		$sem_create_data["term_turnus_room"][$i] = $term_turnus[$i]["room"];
 		$sem_create_data["term_turnus_date"][$i] = $term_turnus[$i]["day"];
+		$sem_create_data["term_turnus_desc"][$i] = $term_turnus[$i]["desc"];
 	}
 
 	// Sonstiges
@@ -320,6 +321,7 @@ if ($form == 3)
 		$sem_create_data["term_turnus_start_minute"]='';
 		$sem_create_data["term_turnus_end_stunde"]='';
 		$sem_create_data["term_turnus_end_minute"]='';
+		$sem_create_data["term_turnus_desc"]='';
 
 		//Alle eingegebenen Turnus-Daten in Sessionvariable uebernehmen
 		for ($i=0; $i<$sem_create_data["turnus_count"]; $i++) {
@@ -328,6 +330,7 @@ if ($form == 3)
 			$sem_create_data["term_turnus_start_minute"][$i]=$term_turnus_start_minute[$i];
 			$sem_create_data["term_turnus_end_stunde"][$i]=$term_turnus_end_stunde[$i];
 			$sem_create_data["term_turnus_end_minute"][$i]=$term_turnus_end_minute[$i];
+			$sem_create_data["term_turnus_desc"][$i]=($term_turnus_desc[$i] ? $term_turnus_desc[$i] : $term_turnus_desc_chooser[$i]);
 
 			//diese Umwandlung muessen hier passieren, damit Werte mit fuehrender Null nicht als String abgelegt werden und so spaeter Verwirrung stiften
 			settype($sem_create_data["term_turnus_start_stunde"][$i], "integer");
@@ -355,7 +358,16 @@ if ($form == 3)
 					if ($sem_create_data["term_turnus_start_minute"][$i] < 10)
 						$tmp_idx.="0";
 					$tmp_idx.=$sem_create_data["term_turnus_start_minute"][$i];
-					$tmp_metadata_termin["turnus_data"][]=array("idx"=>$tmp_idx, "day" => $sem_create_data["term_turnus_date"][$i], "start_stunde" => $sem_create_data["term_turnus_start_stunde"][$i], "start_minute" => $sem_create_data["term_turnus_start_minute"][$i], "end_stunde" => $sem_create_data["term_turnus_end_stunde"][$i], "end_minute" => $sem_create_data["term_turnus_end_minute"][$i], "room"=>$sem_create_data["term_turnus_room"][$i], "resource_id"=>$sem_create_data["term_turnus_resource_id"][$i],);
+					$tmp_metadata_termin["turnus_data"][]=array("idx"=>$tmp_idx,
+																"day" => $sem_create_data["term_turnus_date"][$i],
+																"start_stunde" => $sem_create_data["term_turnus_start_stunde"][$i],
+																"start_minute" => $sem_create_data["term_turnus_start_minute"][$i],
+																"end_stunde" => $sem_create_data["term_turnus_end_stunde"][$i],
+																"end_minute" => $sem_create_data["term_turnus_end_minute"][$i],
+																"room"=>$sem_create_data["term_turnus_room"][$i],
+																"resource_id"=>$sem_create_data["term_turnus_resource_id"][$i],
+																"desc"=>$sem_create_data["term_turnus_desc"][$i]
+																);
 				}
 
 			if (is_array($tmp_metadata_termin["turnus_data"])) {
@@ -754,6 +766,7 @@ if ($delete_turnus_field)
 			$tmp_term_turnus_end_minute[]=$sem_create_data["term_turnus_end_minute"][$i];
 			$tmp_term_turnus_resource_id[]=$sem_create_data["term_turnus_resource_id"][$i];
 			$tmp_term_turnus_room[]=$sem_create_data["term_turnus_room"][$i];
+			$tmp_term_turnus_desc[]=$sem_create_data["term_turnus_desc"][$i];
 			}
 	$sem_create_data["term_turnus_date"]=$tmp_term_turnus_date;
 	$sem_create_data["term_turnus_start_stunde"]=$tmp_term_turnus_start_stunde;
@@ -762,6 +775,7 @@ if ($delete_turnus_field)
 	$sem_create_data["term_turnus_end_minute"]=$tmp_term_turnus_end_minute;
 	$sem_create_data["term_turnus_resource_id"]=$tmp_term_turnus_resource_id;
 	$sem_create_data["term_turnus_room"]=$tmp_term_turnus_room;
+	$sem_create_data["term_turnus_desc"]=$tmp_term_turnus_desc;
 
 	$sem_create_data["turnus_count"]--;
 	$level=3;
@@ -2358,6 +2372,23 @@ if ($level == 3) {
 											<?
 										}
 										echo  Termin_Eingabe_javascript(4, $i, 0, $ss,$sm,$es,$em);
+										//Beschreibung
+										echo "\n<br>&nbsp; " . _("Beschreibung:") . "&nbsp;";
+										echo "\n<select name=\"term_turnus_desc_chooser[$i]\" ";
+										echo "onChange=\"document.Formular.elements['term_turnus_desc[$i]'].value=document.Formular.elements['term_turnus_desc_chooser[$i]'].options[Formular.elements['term_turnus_desc_chooser[$i]'].selectedIndex].value;\" ";
+										echo ">";
+										echo "\n<option value=\"\">" . _("ausw&auml;hlen oder wie Eingabe") . " --></option>";
+										foreach($TERMIN_TYP as $ttyp){
+											if ($ttyp['sitzung']) {
+												echo "\n<option ";
+												if ($sem_create_data['term_turnus_desc'][$i] == $ttyp['name']) echo "selected";
+												echo " value=\"" . htmlReady($ttyp['name']) . "\">" . htmlReady($ttyp['name']) . "</option>";
+											}
+										}
+										echo "\n</select>";
+										echo "&nbsp;";
+										echo "\n<input type=\"text\" name=\"term_turnus_desc[$i]\" size=\"30\" value=\"{$sem_create_data['term_turnus_desc'][$i]}\">";
+									
 									}
 									?>
 									<br />&nbsp; <input type="IMAGE" name="add_turnus_field" <?=makeButton("feldhinzufuegen", "src"); ?> border=0 value="Feld hinzuf&uuml;gen">&nbsp;
