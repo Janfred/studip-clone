@@ -337,6 +337,71 @@ if ((($cmd=="admission_rein") || ($cmd=="add_user")) && ($username)){
 	else $msg ="error§" . _("Netter Versuch! vielleicht beim n&auml;chsten Mal!") . "§";
 }
 
+// import users from a csv-list
+$csv_not_found = array();
+if ($_REQUEST['cmd'] == 'csv') {
+	$csv_mult_founds = array();
+	$csv_count_insert = 0;
+	$csv_count_multiple = 0;
+	if ($_REQUEST['csv_import']) {
+		$csv_lines = preg_split('/(\n\r|\r\n|\n|\r)/', trim($_REQUEST['csv_import']));
+		foreach ($csv_lines as $csv_line) {
+			$csv_name = preg_split('/[,\t]/', substr($csv_line, 0, 100),-1,PREG_SPLIT_NO_EMPTY);
+			$csv_nachname = trim($csv_name[0]);
+			$csv_vorname = trim($csv_name[1]);
+			if ($csv_nachname){
+				$db->query("SELECT a.user_id, username, " . $_fullname_sql['full_rev'] ." AS fullname, perms FROM auth_user_md5 a ".
+				"LEFT JOIN user_info USING(user_id) LEFT JOIN seminar_user b ON (b.user_id=a.user_id AND b.seminar_id='$SessSemName[1]')  ".
+				"WHERE perms IN ('autor','tutor','dozent') AND ISNULL(b.seminar_id) AND ".
+				"(Nachname LIKE '" . $csv_nachname . "'"
+				. ($csv_vorname ? " AND Vorname LIKE '" . $csv_vorname . "'" : '')
+				. ") ORDER BY Nachname");
+				if ($db->num_rows() > 1) {
+					while ($db->next_record()) {
+						$csv_mult_founds[$csv_line][] = $db->Record;
+					}
+					$csv_count_multiple++;
+				} else if ($db->num_rows() > 0) {
+					$db->next_record();
+					insert_seminar_user($id, $db->f('user_id'), 'autor');
+					$csv_count_insert++;
+				} else {
+					// not found
+					$csv_not_found[] = stripslashes($csv_nachname) . ($csv_vorname ? ', ' . stripslashes($csv_vorname) : '');
+				}
+			}
+		}
+	}
+	if (sizeof($_REQUEST['selected_users'])) {
+		foreach ($_REQUEST['selected_users'] as $selected_user) {
+			if ($selected_user) {
+				insert_seminar_user($id, get_userid($selected_user), 'autor');
+				$csv_count_insert++;
+			}
+		}
+	}
+	$msg = '';
+	if (!$csv_count_multiple) {
+		$_REQUEST['cmd'] = '';
+	}
+	if (!sizeof($csv_lines) && !sizeof($_REQUEST['selected_users'])) {
+		$msg = 'error§' . _("Keine NutzerIn gefunden!") . '§';
+		$_REQUEST['cmd'] = '';
+	} else {
+		if ($csv_count_insert) {
+			$msg .=  'msg§' . sprintf(_("%s NutzerInnen als AutorIn in die Veranstaltung eingetragen!"),
+					$csv_count_insert) . '§';
+		}
+		if ($csv_count_multiple) {
+			$msg .= 'info§' . sprintf(_("%s NutzerInnen konnten <b>nicht eindeutig</b> zugeordnet werden! Nehmen Sie die Zuordnung am Ende dieser Seite manuell vor."),
+					$csv_count_multiple) . '§';
+		}
+		if (sizeof($csv_not_found)) {
+			$msg .= 'error§' . sprintf(_("%s NutzerInnen konnten <b>nicht</b> zugeordnet werden! Am Ende dieser Seite finden Sie die Namen, die nicht zugeordnet werden konnten."),
+					sizeof($csv_not_found)) . '§';
+		}
+	}
+}
 
 // so bin auch ich berufen?
 
@@ -706,9 +771,9 @@ while (list ($key, $val) = each ($gruppe)) {
 // Aktivitaet berechnen
 
 	if ($showscore == TRUE) {
-		if ($activity_index_seminar == 0){ 
-		    $aktivity_index_user = 0; // to avoid div by zero
-		} else {
+		if ($activity_index_seminar == 0){
+	            $aktivity_index_user = 0; // to avoid div by zero
+                } else {
 		    $aktivity_index_user =  (($postings_user + (5 * $Dokumente)) / $aktivity_index_seminar) * 100;
 		}
 		if ($aktivity_index_user > 100) {
@@ -955,7 +1020,10 @@ if ($rechte) {
 
 // Der Dozent braucht mehr Unterstuetzung, also Tutor aus der(n) Einrichtung(en) berufen...
 //Note the option "only_inst_user" from the config.inc. If it is NOT setted, this Option is disabled (the functionality will do in this case do seachform below)
-if ($rechte AND $SemUserStatus!="tutor" AND $SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["only_inst_user"]) {
+if ($rechte
+		&& $SemUserStatus!="tutor"
+		&& $SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["only_inst_user"]
+		&& $_REQUEST['cmd'] != 'csv') {
 	$query = "SELECT a.user_id, username, " . $_fullname_sql['full_rev'] ." AS fullname, inst_perms, perms FROM seminar_inst d LEFT JOIN user_inst a USING(Institut_id) ".
 	"LEFT JOIN auth_user_md5  b USING(user_id) LEFT JOIN user_info USING(user_id) ".
 	"LEFT JOIN seminar_user c ON (c.user_id=a.user_id AND c.seminar_id='$SessSemName[1]')  ".
@@ -990,6 +1058,7 @@ if ($rechte AND $SemUserStatus!="tutor" AND $SEM_CLASS[$SEM_TYPE[$SessSemName["a
 
 //insert autors via free search form
 if ($rechte) {
+	if ($_REQUEST['cmd'] != 'csv') {
 	if ($search_exp) {
 		$search_exp = trim($search_exp);
 		$query = "SELECT a.user_id, username, " . $_fullname_sql['full_rev'] ." AS fullname, perms FROM auth_user_md5 a ".
@@ -1004,12 +1073,12 @@ if ($rechte) {
 		<td class="blank" colspan="2">&nbsp;
 		</td>
 	</tr>
-	<tr><td class=blank colspan=2>
+	<tr><td class="blank" colspan="2">
 	<a name="freesearch"></a>
 	<table width="99%" border="0" cellpadding="2" cellspacing="0" border=0 align="center">
 	<form action="<? echo $PHP_SELF ?>?cmd=add_user" method="POST">
 	<tr>
-		<td class="steel1" width="40%" align="left">&nbsp; <font size=-1><b><?=_("Gefundene Nutzer")?></b></font></td>
+		<td class="steel1" width="40%" align="left">&nbsp; <font size="-1"><b><?=_("Gefundene Nutzer")?></b></font></td>
 		<td class="steel1" width="40%" align="left"><select name="username" size="1">
 		<?
 		printf("<option value=\"0\">- -  %s - -\n", _("bitte ausw&auml;hlen"));
@@ -1018,7 +1087,7 @@ if ($rechte) {
 		?>
 		</select></td>
 		<td class="steel1" width="20%" align="center"><font size=-1><? if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["only_inst_user"]) print _("als AutorIn") ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><br />
-		<input type="IMAGE" name="add_user" <?=makeButton("eintragen", "src")?> align="absmiddle" border=0 value=" <?=_("Als AutorIn berufen")?> ">&nbsp;<a href="<? echo $PHP_SELF ?>"><?=makeButton("neuesuche")?></a></td>
+		<input type="image" name="add_user" <?=makeButton("eintragen", "src")?> align="absmiddle" border=0 value=" <?=_("Als AutorIn berufen")?> ">&nbsp;<a href="<? echo $PHP_SELF ?>"><?=makeButton("neuesuche")?></a></td>
 
 	</tr></form></table>
 		<?
@@ -1040,23 +1109,97 @@ if ($rechte) {
 		<input type="IMAGE" name="start_search" <?=makeButton("suchestarten", "src")?> border=0 value=" <?=_("Suche starten")?> "></td>
 	</tr></form></table>
 	<?
-		if (($EXPORT_ENABLE) AND ($perm->have_studip_perm("tutor", $SessSemName[1])))
-		{
-			include_once($ABSOLUTE_PATH_STUDIP . $PATH_EXPORT . "/export_linking_func.inc.php");
-//			echo "<table width=\"99%\"><tr><td colspan=$colspan align=right class=\"steel1\"><br>" . export_button($SessSemName[1], "person", $SessSemName[0], "html", "html-teiln") . "</td></tr></table>";
-			echo "<br><b>&nbsp;<font size=\"-1\">" . export_link($SessSemName[1], "person", $SessSemName[0], "rtf", "rtf-teiln") . "</font></b>";
+}
+}
+	// import new members (as "autor") from a CSV-list
+	echo "<tr>\n<td class=\"blank\" colspan=\"2\">&nbsp;</td></tr>\n";
+	echo "<tr><td class=\"blank\" colspan=\"2\">\n";
+	echo "<form action=\"$PHP_SELF\" method=\"post\">\n";
+	echo "<input type=\"hidden\" name=\"cmd\" value=\"csv\">\n";
+	echo "<table width=\"99%\" border=\"0\" cellpadding=\"2\" cellspacing=\"0\" border=\"0\" ";
+	echo "align=\"center\">\n";
+	if (!sizeof($csv_mult_founds)) {
+		echo "<tr><td width=\"40%\" class=\"steel1\">\n<div style=\"font-size: small; margin-left:6px; width:250px;\">";
+		echo '<b>' . _("Teilnehmerliste übernehmen") . '</b><br>';
+		echo _("In das nebenstehende Textfeld können Sie eine Liste mit Namen von NutzerInnen eingeben, die in die Veranstaltung aufgenommen werden sollen.");
+		echo '<br />' . _("Geben Sie in jede Zeile den Nachnamen und (optional) den Vornamen getrennt durch ein Komma oder ein Tabulatorzeichen ein."); 
+		echo '<br>' . _("Eingabeformat: <b>Nachname, Vorname &crarr;<b>");
+		echo "</div></td>\n";
+		echo "<td width=\"40%\" class=\"steel1\">";
+		echo "<textarea name=\"csv_import\" rows=\"6\" cols=\"40\">";
+			foreach($csv_not_found as $line) echo htmlReady($line) . chr(10);
+			echo "</textarea></td>\n";
+		echo "<td width=\"20%\" class=\"steel1\" align=\"center\"><input type=\"image\" name=\"submit\" ";
+		echo makeButton('eintragen', 'src') . " border=\"0\">";
+		if (sizeof($csv_not_found)) {
+			echo "<br><br><a href=\"$PHP_SELF\">";
+			echo "<img border=\"0\" " . makeButton('loeschen', 'src');
+			echo "></a>";
 		}
-
+		echo "\n</td></tr>\n";
+	} else {
+	//	if (sizeof($csv_mult_founds)) {
+			echo "<tr><td class=\"steel1\" colspan=\"2\">";
+			echo "<div style=\"font-size: small; margin-left:8px; width:350px;\">";
+			echo '<b>' . _("Manuelle Zuordnung") . '</b><br>';
+			echo _("Folgende NutzerInnen konnten <b>nicht eindeutig</b> zugewiesen werden. Bitte wählen Sie aus der jeweiligen Trefferliste:");
+			echo "</div></td></tr>\n";
+			$cssSw->resetClass();
+			foreach ($csv_mult_founds as $csv_key => $csv_mult_found) {
+				printf("<tr%s><td%s width=\"40%%\"><div style=\"font-size:small; margin-left:8px;\">%s</div></td>",
+						$cssSw->getHover(), $cssSw->getFullClass(),
+						htmlReady(mila($csv_key, 50)));
+				printf("<td%s width=\"60%%\">", $cssSw->getFullClass());
+				echo "<select name=\"selected_users[]\">\n";
+				echo '<option value=""> - - ' . _("bitte ausw&auml;hlen") . " - - </option>\n";
+				foreach ($csv_mult_found as $csv_found) {
+					echo "<option value=\"{$csv_found['username']}\">";
+					echo htmlReady(my_substr($csv_found['fullname'], 0, 50)) . " ({$csv_found['username']}) - {$csv_found['perms']}</option>\n";
+				}
+				echo "</select>\n</td></tr>\n";
+				$cssSw->switchClass();
+			}
+			$cssSw->resetClass();
+			$cssSw->switchClass();
+			echo "<tr><td class=\"steel1\" colspan=\"2\" align=\"right\" nowrap=\"nowrap\">";
+			echo '<input type="image" border="0" ' . makeButton('eintragen', 'src');
+			echo ' />&nbsp; &nbsp; ';
+			echo "<a href=\"$PHP_SELF\"><img border=\"0\" ";
+			echo makeButton('abbrechen', 'src') . '></a>';
+			echo "&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </td></tr>\n";
+		
+		if (sizeof($csv_not_found)) {
+			echo "<tr><td width=\"40%\" class=\"steel1\">\n<div style=\"font-size: small; margin-left:8px; width:250px;\">";
+			echo '<b>' . _("Nicht gefundene NutzerInnen") . '</b><br>';
+			echo _("Im nebenstehende Textfeld sehen Sie eine Auflistung der Suchanfragen, zu denen <b>keine</b> NutzerInnen gefunden wurden.");
+			echo "</div></td>\n";
+			echo "<td width=\"40%\" class=\"steel1\">";
+			echo "<textarea name=\"csv_import\" rows=\"6\" cols=\"40\">";
+			foreach($csv_not_found as $line) echo htmlReady($line) . chr(10);
+			echo "</textarea></td>\n";
+			echo "<td width=\"20%\" class=\"steel1\" align=\"center\">&nbsp;";
+			echo "\n</td></tr>\n";
+		}
 	}
+
+	echo "</table>\n</form>";
+	
+	if (($EXPORT_ENABLE) AND ($perm->have_studip_perm("tutor", $SessSemName[1]))) {
+		include_once($ABSOLUTE_PATH_STUDIP . $PATH_EXPORT . "/export_linking_func.inc.php");
+//			echo "<table width=\"99%\"><tr><td colspan=$colspan align=right class=\"steel1\"><br>" . export_button($SessSemName[1], "person", $SessSemName[0], "html", "html-teiln") . "</td></tr></table>";
+		echo "<br><b>&nbsp;<font size=\"-1\">" . export_link($SessSemName[1], "person", $SessSemName[0], "rtf", "rtf-teiln") . "</font></b>";
+	}
+
+	
 	?>
 	<tr>
-		<td class=blank colspan=2>&nbsp;
+		<td class="blank" colspan="2">&nbsp;
 		</td>
 	</tr>
 	<?
-
 } // end insert autor
-
+		
+		
 echo "</td></tr></table>";
 
 // Save data back to database.
@@ -1064,4 +1207,3 @@ page_close()
 ?>
 </body>
 </html>
-
