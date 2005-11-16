@@ -4,7 +4,7 @@
 you find here the basic system settings. You shouldn't have to touch much of them...
 please note the CONFIG.INC.PHP in the system folder for the indivual settings of your installation!*/
 
-$UNI_NAME_CLEAN = "Stud.IP 1.2";						//the clean-name of your master-faculty (e.g. University of Göttingen), without html-entities (used for mail-system)
+$UNI_NAME_CLEAN = "Stud.IP 1.3";						//the clean-name of your master-faculty (e.g. University of Göttingen), without html-entities (used for mail-system)
 $AUTH_LIFETIME = 60;									//the length of a session in minutes, zero means unlimited lifetime
 
 
@@ -113,6 +113,16 @@ $PATH_EXPORT = "export";								//Stud.IP module: export
 
 $FAVICON = "http://www.studip.de/favicon.ico";			//the place where the favicon is stored. 
 
+/*URL
+----------------------------------------------------------------
+Your Stud.IP url
+ie
+http://www.your_web.net/path_to_your_studip_directory/
+In most cases you can leave this variable empty, as the correct value
+will be detected automatically.
+If you activate the MAIL_NOTIFICATION feature, you MUST set this variable!
+*/
+$ABSOLUTE_URI_STUDIP = "";
 
 /*domain name and path translation
 ----------------------------------------------------------------
@@ -171,11 +181,6 @@ $BANNER_ADS_ENABLE = FALSE; 							//enable the Banner ads functions (config as 
 														//needs write accees for this folder.
 							
 $CONVERT_IDNA_URL = TRUE;								//if true, urls with german "umlauts" are converted
-
-$ALLOW_DOZENT_ARCHIV = FALSE;							//if true, users with the role 'dozent' are allowed to archive their courses
-
-$ALLOW_DOZENT_VISIBILITY = FALSE;  						//if true, users with the role 'dozent' are allowed to hide their courses
-
 
 /*language settings
 ----------------------------------------------------------------*/
