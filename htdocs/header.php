@@ -121,7 +121,7 @@ if ($auth->auth["uid"] == "nobody") { ?>
 		$chatm = $db->f(0);
 		$neum = count_messages_from_user('in', " AND message_user.readed = 0 ");
 		$altm = count_messages_from_user('in', " AND message_user.readed = 1 ");
-		$neux = count_x_messages_from_user('in', 'all', "AND message.mkdate > ".(int)$my_messaging_settings["last_box_visit"]." AND message_user.readed = 0 ");
+		$neux = count_x_messages_from_user('in', 'all', "AND mkdate > ".(int)$my_messaging_settings["last_box_visit"]." AND message_user.readed = 0 ");
 		
 		//globale Objekte zählen
 		$db->query("SELECT  COUNT(nw.news_id) as count,
@@ -244,7 +244,7 @@ if ($auth->auth["uid"] == "nobody") { ?>
 				echo MakeToolbar("pictures/nutzeronline.gif","online.php",_("Online"),sprintf(_("Es sind außer Ihnen %s Personen online"), $user_count),55, "_top","left", "FALSE", "5");
 			}
 		}
-
+		
 ?>
 		<td class="toolbar" width="99%">
 		&nbsp; 

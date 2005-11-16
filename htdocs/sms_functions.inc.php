@@ -88,7 +88,6 @@ function count_x_messages_from_user($snd_rec, $folder, $where="") {
 	}
 	$query = "SELECT COUNT(*)
 		FROM message_user 
-			LEFT JOIN message using(message_id)
 		WHERE message_user.snd_rec = '".$tmp_snd_rec."'
 			AND message_user.user_id = '".$user_id."' 
 			AND message_user.deleted = 0
@@ -219,7 +218,7 @@ function print_snd_message($psm) {
 		if ($x >= 2) { // if more than one receiver add appendix
 			$content .= "<br><br>--<br>"._("gesendet an:")."<br>";
 			$query = "
-			SELECT message_user.*, auth_user_md5.username, " .$_fullname_sql['full'] ." AS fullname
+			SELECT  auth_user_md5.username, " .$_fullname_sql['full'] ." AS fullname
 				FROM message_user 
 				LEFT JOIN auth_user_md5 USING(user_id) 
 				LEFT JOIN user_info USING(user_id) 
@@ -251,9 +250,8 @@ function print_snd_message($psm) {
 		}
 	}
 
-	$titel = "<a name=".$psm['message_id']."><a href=\"$link\" class=\"tree\" >".htmlready(stripslashes($psm['message_subject']))."</a></a>";
-	$message_hovericon['titel'] = quotes_decode(stripslashes($psm['message_subject']));
-
+	$titel = "<a name=".$psm['message_id']."><a href=\"$link\" class=\"tree\" >".htmlready($psm['message_subject'])."</a></a>";
+	$message_hovericon['titel'] = $psm['message_subject'];
 	// (hover) icon 
 	$message_hovericon['openclose'] = $open;
 	$message_hovericon['content'] = $psm['message'];
@@ -336,54 +334,54 @@ function print_rec_message($prm) {
 	$zusatz .= "&nbsp;".$move_option."<a href=\"".$PHP_SELF."?cmd=".$tmp_cmd."&sel_lock=".$prm['message_id']."#".$prm['message_id']."\"><img src=\"./pictures/".$tmp_picture.".gif\" border=0 ".$tmp_tooltip."></a><img src=\"./pictures/blank.gif\" width=\"2\">".$trash."<input type=\"checkbox\" name=\"sel_sms[]\" value=\"".$prm['message_id']."\" ".CheckChecked($cmd, "select_all").">";
 	$zusatz .= "</font>";
 
-	$titel = "<a name=".$prm['message_id']."><a href=\"$link\" class=\"tree\" >".htmlready(stripslashes($prm['message_subject']))."</a></a>";
-	$message_hovericon['titel'] = quotes_decode(stripslashes($prm['message_subject']));
+	$titel = "<a name=".$prm['message_id']."><a href=\"$link\" class=\"tree\" >".htmlready($prm['message_subject'])."</a></a>";
 	
-	$content = quotes_decode(formatReady($prm['message']));
-
+	if ($open == 'open'){
+		$content = quotes_decode(formatReady($prm['message']));
+		if ($my_messaging_settings["confirm_reading"] != 1 && $prm['message_reading_confirmation'] == 1) { // yeah i'm interested in readingconfirmations and the message has a readingrequested
+			if ($my_messaging_settings["confirm_reading"] == 3 && $prm['confirmed_read'] != 1) { // let me decided what to do
+				$content .= "<br>--<br>"._("Der Absender / Die Absenderin hat eine Lesebestätigung angefordert.");
+				$content .= "<br><a href=\"".$PHP_SELF."?readingconfirmation=".$prm['message_id']."&uname_snd=".$prm['uname_snd']."#".$prm['message_id']."\">"._("Klicken Sie hier um das Lesen der Nachricht zu bestätigen")."</a>";
+			} else if ($my_messaging_settings["confirm_reading"] == 2 && $prm['confirmed_read'] != 1) { // automatic confirm my reading and don't nag me
+				$dbX = new DB_Seminar;
+				$user_id = $user->id;
+				$user_fullname = get_fullname($user_id);	
+				$query = "
+					UPDATE message_user SET 
+						confirmed_read = '1' 
+						WHERE message_id = '".$prm['message_id']."'
+							AND user_id = '".$user_id."'";	
+				if($dbX->query($query)) {
+					$subject = sprintf (_("Lesebestätigung von %s"), $user_fullname);
+					$message = sprintf (_("Ihre Nachricht an %s mit dem Betreff: %s vom %s wurde gelesen."), "%%".$user_fullname."%%", "%%".$prm['message_subject']."%%", "%%".date("d.m.y, H:i", $prm['mkdate'])."%%");
+					$msging->insert_message(mysql_escape_string($message), $prm['uname_snd'], "____%system%____", FALSE, FALSE, 1, FALSE, mysql_escape_string($subject));	
+				}				
+			}
+		} 
+		
+		if($my_messaging_settings['show_sndpicture'] == 1) {
+			$tmp_snd_id = get_userid($prm['uname_snd']);
+			if(file_exists("user/".$tmp_snd_id.".jpg") && $prm['user_id_snd'] != "____%system%____") {
+				$content = "<table width=\"100%\" cellpadding=0 cellmargin=0><tr><td valign=\"top\" width=\"99%\"><font size=\"-1\">".$content."</font><td>";
+				$content .= "<td align=\"right\" style=\"border-left: 1px dotted black;\">&nbsp;<img src=\"user/".$tmp_snd_id.".jpg\" width=\"80\" border=0 alt=\"\">&nbsp;</td>";
+				$content .= "</tr></table>";			
+			}
 	
-	if ($my_messaging_settings["confirm_reading"] != 1 && $prm['message_reading_confirmation'] == 1) { // yeah i'm interested in readingconfirmations and the message has a readingrequested
-		if ($my_messaging_settings["confirm_reading"] == 3 && $prm['confirmed_read'] != 1) { // let me decided what to do
-			$content .= "<br>--<br>"._("Der Absender / Die Absenderin hat eine Lesebestätigung angefordert.");
-			$content .= "<br><a href=\"".$PHP_SELF."?readingconfirmation=".$prm['message_id']."&uname_snd=".$prm['uname_snd']."#".$prm['message_id']."\">"._("Klicken Sie hier um das Lesen der Nachricht zu bestätigen")."</a>";
-		} else if ($my_messaging_settings["confirm_reading"] == 2 && $prm['confirmed_read'] != 1) { // automatic confirm my reading and don't nag me
-			$dbX = new DB_Seminar;
-			$user_id = $user->id;
-			$user_fullname = get_fullname($user_id);	
-			$query = "
-				UPDATE message_user SET 
-					confirmed_read = '1' 
-					WHERE message_id = '".$prm['message_id']."'
-						AND user_id = '".$user_id."'";	
-			if($dbX->query($query)) {
-				$subject = sprintf (_("Lesebestätigung von %s"), $user_fullname);
-				$message = sprintf (_("Ihre Nachricht an %s mit dem Betreff: %s vom %s wurde gelesen."), "%%".$user_fullname."%%", "%%".$prm['message_subject']."%%", "%%".date("d.m.y, H:i", $prm['mkdate'])."%%");
-				$msging->insert_message($message, $prm['uname_snd'], "____%system%____", FALSE, FALSE, 1, FALSE, $subject);	
-			}				
 		}
-	} 
 	
-	if($my_messaging_settings['show_sndpicture'] == 1) {
-		$tmp_snd_id = get_userid($prm['uname_snd']);
-		if(file_exists("user/".$tmp_snd_id.".jpg") && $prm['user_id_snd'] != "____%system%____") {
-			$content = "<table width=\"100%\" cellpadding=0 cellmargin=0><tr><td valign=\"top\" width=\"99%\"><font size=\"-1\">".$content."</font><td>";
-			$content .= "<td align=\"right\" style=\"border-left: 1px dotted black;\">&nbsp;<img src=\"user/".$tmp_snd_id.".jpg\" width=\"80\" border=0 alt=\"\">&nbsp;</td>";
-			$content .= "</tr></table>";			
+		// mk buttons
+		$edit = "";
+		if ($prm['user_id_snd'] != "____%system%____") {
+			$edit .= "<a href=\"sms_send.php?cmd=write&answer_to=".$prm['message_id']."\">".makeButton("antworten", "img")."</a>";
+			$edit .= "&nbsp;<a href=\"sms_send.php?cmd=write&quote=".$prm['message_id']."&answer_to=".$prm['message_id']."\">".makeButton("zitieren", "img")."</a>";
 		}
-
-	}
-
-	// mk buttons
-	$edit = "";
-	if ($prm['user_id_snd'] != "____%system%____") {
-		$edit .= "<a href=\"sms_send.php?cmd=write&answer_to=".$prm['message_id']."\">".makeButton("antworten", "img")."</a>";
-		$edit .= "&nbsp;<a href=\"sms_send.php?cmd=write&quote=".$prm['message_id']."&answer_to=".$prm['message_id']."\">".makeButton("zitieren", "img")."</a>";
-	}
-	$edit.= "&nbsp;<a href=\"".$PHP_SELF."?cmd=delete_selected&sel_sms[1]=".$prm['message_id']."\">".makeButton("loeschen", "img")."</a>";
-	if (have_msgfolder($sms_data['view']) == TRUE) {
-		$edit .= "&nbsp;<a href=\"".$PHP_SELF."?move_to_folder[1]=".$prm['message_id']."\" ".tooltip(_("Diese Nachricht in einen frei wählbaren Ordner verschieben.")).">".makeButton("verschieben", "img")."</a><br><br>";
+		$edit.= "&nbsp;<a href=\"".$PHP_SELF."?cmd=delete_selected&sel_sms[1]=".$prm['message_id']."\">".makeButton("loeschen", "img")."</a>";
+		if (have_msgfolder($sms_data['view']) == TRUE) {
+			$edit .= "&nbsp;<a href=\"".$PHP_SELF."?move_to_folder[1]=".$prm['message_id']."\" ".tooltip(_("Diese Nachricht in einen frei wählbaren Ordner verschieben.")).">".makeButton("verschieben", "img")."</a><br><br>";
+		}
 	}
 	// (hover) icon 
+	$message_hovericon['titel'] = $prm['message_subject'];
 	$message_hovericon['openclose'] = $open;
 	$message_hovericon['content'] = $prm['message'];
 	$message_hovericon['id'] = $prm['message_id'];
@@ -419,15 +417,16 @@ function print_messages() {
 	$n = 0;
 	$user_id = $user->id;
 	if ($sms_data['view'] == "in") { // postbox in
-		$query = "SELECT message.*, message_user.*, auth_user_md5.* FROM message_user
+		$query = "SELECT message.*, folder,confirmed_read,answered,message_user.readed,dont_delete,Vorname,Nachname,username FROM message_user
 				LEFT JOIN message USING (message_id) LEFT JOIN auth_user_md5 ON (autor_id=auth_user_md5.user_id)
 				WHERE message_user.user_id = '".$user_id."' AND message_user.snd_rec = 'rec'
 				AND message_user.deleted = 0 ".$query_movetofolder." ".$query_showfolder." ".$query_time;
 		$db->query($query);		
+		$tmp_move_to_folder = sizeof($sms_data['tmp']['move_to_folder']);
 		while ($db->next_record()) {
-			$count = ($count-1);
+			--$count;
 			$prm['count'] = $count;	
-			$prm['count_2'] = sizeof($sms_data['tmp']['move_to_folder'])-($n+1);
+			$prm['count_2'] = $tmp_move_to_folder - ($n+1);
 			$prm['user_id_snd'] = $db->f("autor_id");
 			$prm['folder'] = $my_messaging_settings['folder']['active']['in'];	
 			$prm['mkdate'] = $db->f("mkdate");
@@ -447,18 +446,21 @@ function print_messages() {
 			ob_end_flush();
 		}
 	} else if ($sms_data['view'] == "out") { // postbox out
-		$db->query("SELECT message.*, message_user.*,auth_user_md5.user_id as rec_uid, auth_user_md5.vorname as rec_vorname,
-					auth_user_md5.nachname as rec_nachname, auth_user_md5.username as rec_uname, count(mu.message_id) as num_rec
-					FROM message_user 
-					LEFT JOIN message USING (message_id)
-					LEFT JOIN message_user as mu ON(message.message_id = mu.message_id AND mu.snd_rec = 'rec')
-					LEFT JOIN auth_user_md5 USING (user_id)  WHERE message_user.user_id = '".$user_id."' 
+		$db->query("SELECT message. * , message_user.folder,message_user.dont_delete , auth_user_md5.user_id AS rec_uid,
+					auth_user_md5.vorname AS rec_vorname, auth_user_md5.nachname AS rec_nachname,
+					auth_user_md5.username AS rec_uname, count( mu.message_id )  AS num_rec
+					FROM message_user
+					LEFT  JOIN message_user AS mu ON ( message_user.message_id = mu.message_id AND mu.snd_rec =  'rec'  ) 
+					LEFT  JOIN message ON ( message.message_id = message_user.message_id ) 
+					LEFT  JOIN auth_user_md5 ON ( mu.user_id = auth_user_md5.user_id ) 
+					WHERE message_user.user_id = '".$user_id."' 
 					AND message_user.snd_rec = 'snd' AND message_user.deleted = 0 "
-					.$query_movetofolder." ".$query_showfolder. $query_time_sort . " GROUP BY (message_user.message_id) ORDER BY message.mkdate DESC");
+					.$query_movetofolder." ".$query_showfolder. $query_time_sort . " GROUP BY (message_user.message_id) ORDER BY message_user.mkdate DESC");
+		$tmp_move_to_folder = sizeof($sms_data['tmp']['move_to_folder']);
 		while ($db->next_record()) {
-			$count = ($count-1);
-			$psm['count'] = $count;
-			$psm['count_2'] = sizeof($sms_data['tmp']['move_to_folder'])-($n+1);
+			--$count;
+			$psm['count'] = $count;	
+			$psm['count_2'] = $tmp_move_to_folder - ($n+1);
 			$psm['mkdate'] = $db->f("mkdate");
 			$psm['folder'] = $my_messaging_settings['folder']['active']['out'];	
 			$psm['message_id'] = $db->f("message_id");
@@ -494,15 +496,13 @@ function show_nachrichtencount($count, $count_timefilter) {
 
 function have_msgfolder($view) {
 	global $my_messaging_settings;
-	if (sizeof(array_unique($my_messaging_settings["folder"][$view])) == 1) {
-		if (array_search("dummy", array_unique($my_messaging_settings["folder"][$view])) == "dummy") {
-			$x = 1;
-		}			
-	}
-	if ($x) {
-		return FALSE;
+	static $have_folder = null;
+	if (isset($have_folder[$view])) return $have_folder[$view];
+	$dummies = array_unique($my_messaging_settings["folder"][$view]);
+	if (sizeof($dummies) == 1 && $dummies[0] == 'dummy') {
+		return ($have_folder[$view] = false);
 	} else {
-		return TRUE;
+		return ($have_folder[$view] = true);
 	}
 }
 

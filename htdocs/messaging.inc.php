@@ -317,17 +317,17 @@ class messaging {
 
 			
 			// insert message
-			$db3->query("INSERT message SET message_id = '".$tmp_message_id."', mkdate = '".$time."', message = '".$message."', autor_id = '".$snd_user_id."', subject = '".$subject."', reading_confirmation = '".$reading_confirmation."'");
+			$db3->query("INSERT INTO message SET message_id = '".$tmp_message_id."', mkdate = '".$time."', message = '".$message."', autor_id = '".$snd_user_id."', subject = '".$subject."', reading_confirmation = '".$reading_confirmation."'");
 				
 			// insert snd
 			if (!$set_deleted) { // safe message
 				if($sms_data["tmp_save_snd_folder"]) { // safe in specific folder (sender)
-					$db3->query("INSERT message_user SET message_id='".$tmp_message_id."', user_id='".$snd_user_id."', snd_rec='snd', folder='".$sms_data["tmp_save_snd_folder"]."'");
+					$db3->query("INSERT INTO message_user SET message_id='".$tmp_message_id."',mkdate = '".$time."', user_id='".$snd_user_id."', snd_rec='snd', folder='".$sms_data["tmp_save_snd_folder"]."'");
 				} else { // don't safe message in specific folder
-					$db3->query("INSERT message_user SET message_id='".$tmp_message_id."', user_id='".$snd_user_id."', snd_rec='snd'");
+					$db3->query("INSERT INTO message_user SET message_id='".$tmp_message_id."',mkdate = '".$time."', user_id='".$snd_user_id."', snd_rec='snd'");
 				}
 			} else { // save as deleted
-				$db3->query("INSERT message_user SET message_id='".$tmp_message_id."', user_id='".$snd_user_id."', snd_rec='snd', deleted='1'");
+				$db3->query("INSERT INTO message_user SET message_id='".$tmp_message_id."',mkdate = '".$time."', user_id='".$snd_user_id."', snd_rec='snd', deleted='1'");
 			}
 
 			// heben wir kein array bekommen, machen wir einfach eins ...
@@ -356,7 +356,7 @@ class messaging {
 		
 			// hier gehen wir alle empfaenger durch, schreiben das in die db und schicken eine mail
 			for($x=0; $x<sizeof($rec_id); $x++) {
-				$db3->query("INSERT message_user SET message_id='".$tmp_message_id."', user_id='".$rec_id[$x]."', snd_rec='rec'");
+				$db3->query("INSERT message_user SET message_id='".$tmp_message_id."',mkdate = '".$time."', user_id='".$rec_id[$x]."', snd_rec='rec'");
 				if ($GLOBALS["MESSAGING_FORWARD_AS_EMAIL"]) {	
 					// mail to original receiver
 					$mailstatus_original = $this->user_wants_email($rec_id[$x]);
@@ -458,12 +458,14 @@ class messaging {
 			$query = "
 				INSERT IGNORE INTO message_user SET 
 					message_id='$m_id', 
+					mkdate = '".time()."',
 					user_id='".get_userid($rec_uname)."', 
 					snd_rec='rec'";
 			$db3->query ($query);
 			$query = "
 				INSERT IGNORE INTO message_user SET 
 					message_id='$m_id', 
+					mkdate = '".time()."',
 					user_id='".get_userid($rec_uname)."', 
 					snd_rec='snd', 
 					deleted='1'";
