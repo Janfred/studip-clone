@@ -32,52 +32,57 @@ if (!$username){
 //Create Reitersystem
 
 //Topkats
-$structure["alle"]=array (topKat=>"", name=>_("Alle"), link=>"about.php?username=$username", active=>FALSE);
-$structure["bild"]=array (topKat=>"", name=>_("Bild"), link=>"edit_about.php?view=Bild&username=$username", active=>FALSE);
-$structure["daten"]=array (topKat=>"", name=>_("Nutzerdaten"), link=>"edit_about.php?view=Daten&username=$username", active=>FALSE);
-$structure["karriere"]=array (topKat=>"", name=>_("universit&auml;re Daten"), link=>"edit_about.php?view=Karriere&username=$username", active=>FALSE);
-$structure["lebenslauf"]=array (topKat=>"", name=>_("weitere Daten"), link=>"edit_about.php?view=Lebenslauf&username=$username", active=>FALSE);
-$structure["sonstiges"]=array (topKat=>"", name=>_("eigene Kategorien"), link=>"edit_about.php?view=Sonstiges&username=$username", active=>FALSE);
-$structure["tools"]=array (topKat=>"", name=>_("Tools"), link=>"admin_news.php?range_id=self&username=$username", active=>FALSE);
-if ($username==$auth->auth["uname"]) {
+$structure["alle"] = array('topKat' => '', 'name' => _("Alle"), 'link' => "about.php?username=$username", 'active' => FALSE);
+$structure["bild"] = array('topKat' => '', 'name' => _("Bild"), 'link' => "edit_about.php?view=Bild&username=$username", 'active' => FALSE);
+$structure["daten"] = array('topKat' => '', 'name' => _("Nutzerdaten"), 'link' => "edit_about.php?view=Daten&username=$username", 'active' => FALSE);
+$structure["karriere"] = array('topKat' => '', 'name' => _("universit&auml;re Daten"), 'link' => "edit_about.php?view=Karriere&username=$username", 'active' => FALSE);
+$structure["lebenslauf"] = array('topKat' => "", 'name' => _("weitere Daten"), 'link' => "edit_about.php?view=Lebenslauf&username=$username", 'active' => FALSE);
+$structure["sonstiges"] = array('topKat' => "", 'name' => _("eigene Kategorien"), 'link' => "edit_about.php?view=Sonstiges&username=$username", 'active' => FALSE);
+$structure['tools'] = array('topKat' => "", 'name' => _("Tools"), 'link' => "admin_news.php?range_id=self&username=$username", 'active' => FALSE);
+if ($username == $auth->auth["uname"]) {
 // if (!$perm->have_perm("admin"))
-	$structure["mystudip"]=array (topKat=>"", name=>_("My Stud.IP"), link=>"edit_about.php?view=allgemein&username=$username", active=>FALSE);
+	$structure['mystudip'] = array('topKat' => "", 'name' => _("My Stud.IP"), 'link' => "edit_about.php?view=allgemein&username=$username", 'active' => FALSE);
 }
 //Bottomkats
-$structure["_alle"]=array (topKat=>"alle", name=>_("Pers&ouml;nliche Homepage"), link=>"about.php?username=$username", active=>FALSE);
-$structure["_bild"]=array (topKat=>"bild", name=>_("Hochladen des pers&ouml;nlichen Bildes"), link=>"edit_about.php?view=Bild&username=$username", active=>FALSE);
-$structure["_daten"]=array (topKat=>"daten", name=>_("Nutzerdaten bearbeiten"), link=>"edit_about.php?view=Daten&username=$username", active=>FALSE);
-$structure["_karriere"]=array (topKat=>"karriere", name=>_("universit&auml;re Daten"), link=>"edit_about.php?view=Karriere&username=$username", active=>FALSE);
+$structure["_alle"] = array('topKat' => "alle", 'name' => _("Pers&ouml;nliche Homepage"), 'link' => "about.php?username=$username", 'active' => FALSE);
+$structure["_bild"] = array('topKat' => "bild", 'name' => _("Hochladen des pers&ouml;nlichen Bildes"), 'link' => "edit_about.php?view=Bild&username=$username", 'active' => FALSE);
+$structure["_daten"] = array('topKat' => "daten", 'name' => _("Nutzerdaten bearbeiten"), 'link' => "edit_about.php?view=Daten&username=$username", 'active' => FALSE);
+$structure["_karriere"] = array('topKat' => "karriere", 'name' => _("universit&auml;re Daten"), 'link' => "edit_about.php?view=Karriere&username=$username", 'active' => FALSE);
 if (!$perm->have_perm ("dozent")) {
-	$structure["studiengaenge"]=array (topKat=>"karriere", name=>_("Zuordnung zu Studieng&auml;ngen"), link=>"edit_about.php?view=Karriere&username=$username#studiengaenge", active=>FALSE);
-	$structure["einrichtungen"]=array (topKat=>"karriere", name=>_("Zuordnung zu Einrichtungen"), link=>"edit_about.php?view=Karriere&username=$username#einrichtungen", active=>FALSE);
+	$structure["studiengaenge"] = array('topKat' => "karriere", 'name' => _("Zuordnung zu Studieng&auml;ngen"), 'link' => "edit_about.php?view=Karriere&username=$username#studiengaenge", 'active' => FALSE);
+	$structure["einrichtungen"] = array('topKat' => "karriere", 'name' => _("Zuordnung zu Einrichtungen"), 'link' => "edit_about.php?view=Karriere&username=$username#einrichtungen", 'active' => FALSE);
 }
-$structure["_lebenslauf"]=array (topKat=>"lebenslauf", name=>_("Lebenslauf"), link=>"edit_about.php?view=Lebenslauf&username=$username", active=>FALSE);
+$structure["_lebenslauf"] = array('topKat' => "lebenslauf", 'name' => _("Lebenslauf"), 'link' => "edit_about.php?view=Lebenslauf&username=$username", 'active' => FALSE);
 if ($auth->auth['perm'] == "dozent") {
-	$structure["schwerpunkte"]=array (topKat=>"lebenslauf", name=>_("Schwerpunkte"), link=>"edit_about.php?view=Lebenslauf&username=$username#schwerpunkte", active=>FALSE);
-	$structure["publikationen"]=array (topKat=>"lebenslauf", name=>_("Publikationen"), link=>"edit_about.php?view=Lebenslauf&username=$username#publikationen", active=>FALSE);
+	$structure["schwerpunkte"] = array('topKat' => "lebenslauf", 'name' => _("Schwerpunkte"), 'link' => "edit_about.php?view=Lebenslauf&username=$username#schwerpunkte", 'active' => FALSE);
+	$structure["publikationen"] = array('topKat' => "lebenslauf", 'name' => _("Publikationen"), 'link' => "edit_about.php?view=Lebenslauf&username=$username#publikationen", 'active' => FALSE);
 }
-$structure["_sonstiges"]=array (topKat=>"sonstiges", name=>_("Eigene Kategorien bearbeiten"), link=>"edit_about.php?view=Sonstiges&username=$username", active=>FALSE);
-$structure["news"]=array (topKat=>"tools", name=>_("News"), link=>"admin_news.php?range_id=self&username=$username", active=>FALSE);
-$structure["lit"]=array (topKat=>"tools", name=>_("Literatur"), link=>"admin_lit_list.php?_range_id=self&username=$username", active=>FALSE);
-$structure["vote"]=array (topKat=>"tools", name=>_("Votings und Tests"), link=>"admin_vote.php?page=overview&showrangeID=$username&username=$username", active=>FALSE);
-$structure["eval"]=array (topKat=>"tools", name=>_("Evaluationen"), link=>"admin_evaluation.php?rangeID=$username", active=>FALSE);
+$structure["_sonstiges"] = array('topKat' => "sonstiges", 'name' => _("Eigene Kategorien bearbeiten"), 'link' => "edit_about.php?view=Sonstiges&username=$username", 'active' => FALSE);
+$structure["news"] = array('topKat' => 'tools', 'name' => _("News"), 'link' => "admin_news.php?range_id=self&username=$username", 'active' => FALSE);
+$structure["lit"] = array('topKat' => 'tools', 'name' => _("Literatur"), 'link' => "admin_lit_list.php?_range_id=self&username=$username", 'active' => FALSE);
+$structure["vote"] = array('topKat' => 'tools', 'name' => _("Votings und Tests"), 'link' => "admin_vote.php?page=overview&showrangeID=$username&username=$username", 'active' => FALSE);
+$structure["eval"] = array('topKat' => 'tools', 'name' => _("Evaluationen"), 'link' => "admin_evaluation.php?rangeID=$username", 'active' => FALSE);
 
-$structure["allgemein"]=array (topKat=>"mystudip", name=>_("Allgemeines"), link=>"edit_about.php?view=allgemein&username=$username", active=>FALSE);
-$structure["forum"]=array (topKat=>"mystudip", name=>_("Forum"), link=>"edit_about.php?view=Forum&username=$username", active=>FALSE);
+$structure["allgemein"] = array('topKat' => 'mystudip', 'name' => _("Allgemeines"), 'link' => "edit_about.php?view=allgemein&username=$username", 'active' => FALSE);
+$structure["forum"] = array('topKat' => 'mystudip', 'name' => _("Forum"), 'link' => "edit_about.php?view=Forum&username=$username", 'active' => FALSE);
 if (!$perm->have_perm("admin")) {
 	if ($CALENDAR_ENABLE)
-		$structure["calendar"]=array (topKat=>"mystudip", name=>_("Terminkalender"), link=>"edit_about.php?view=calendar&username=$username", active=>FALSE);
-	$structure["stundenplan"]=array (topKat=>"mystudip", name=>_("Stundenplan"), link=>"edit_about.php?view=Stundenplan&username=$username", active=>FALSE);
+		$structure["calendar"] = array('topKat' => 'mystudip', 'name' => _("Terminkalender"), 'link' => "edit_about.php?view=calendar&username=$username", 'active' => FALSE);
+	$structure["stundenplan"] = array('topKat' => 'mystudip', 'name' => _("Stundenplan"), 'link' => "edit_about.php?view=Stundenplan&username=$username", 'active' => FALSE);
 }
-$structure["messaging"]=array (topKat=>"mystudip", name=>_("Messaging"), link=>"edit_about.php?view=Messaging&username=$username", active=>FALSE);
+$structure["messaging"] = array('topKat' => 'mystudip', 'name' => _("Messaging"), 'link' => "edit_about.php?view=Messaging&username=$username", 'active' => FALSE);
+if ($MAIL_NOTIFICATION_ENABLE && !$perm->have_perm('admin')) {
+	$structure['notification'] = array('topKat' => 'mystudip', 'name' => _("Benachrichtigung"), 'link' => 'edit_about.php?view=notification', 'active' => FALSE);
+}
 if ($perm->have_perm("autor") AND $ILIAS_CONNECT_ENABLE) {
-	$structure["ilias"]=array (topKat=>"mystudip", name=>_("Mein ILIAS-Account"), link=>"migration2studip.php", active=>FALSE);
+	$structure["ilias"] = array('topKat' => 'mystudip', 'name' => _("Mein ILIAS-Account"), 'link' => "migration2studip.php", 'active' => FALSE);
+}
+if ($perm->have_perm("autor") AND $ELEARNING_INTERFACE_ENABLE) {
+	$structure["elearning"]=array (topKat=>"tools", name=>_("Meine Lernmodule"), link=>"my_elearning.php", active=>FALSE);
 }
 if (!$perm->have_perm("admin")) {
-	$structure["login"]=array (topKat=>"mystudip", name=>_("Login"), link=>"edit_about.php?view=Login&username=$username", active=>FALSE);
+	$structure["login"] = array('topKat' => 'mystudip', 'name' => _("Login"), 'link' => "edit_about.php?view=Login&username=$username", 'active' => FALSE);
 }
-//$structure["ilias"]=array (topKat=>"mystudip", name=>_("Mein ILIAS-Account"), link=>"migration2studip.php", active=>FALSE);
 
 //View festlegen
 switch ($i_page) {
@@ -86,6 +91,9 @@ switch ($i_page) {
 	break;
 	case "migration2studip.php" : 
 		$reiter_view="ilias"; 
+	break;
+	case "my_elearning.php" : 
+		$reiter_view="elearning"; 
 	break;
 	case "edit_about.php" : 
 		switch ($view) {
@@ -122,6 +130,10 @@ switch ($i_page) {
 			break;
 			case "Messaging":
 				$reiter_view="messaging";
+				break;
+			case 'notification' :
+					$reiter_view = 'notification';
+				break;
 		}
 	break;
 	case "admin_news.php":

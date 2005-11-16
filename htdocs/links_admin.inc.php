@@ -288,6 +288,8 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 	//
 	if ($EXPORT_ENABLE)
 		$structure["export"]=array ('topKat'=>"modules", 'name'=>_("Export"), 'link'=>"export.php", 'active'=>FALSE);
+	if ($ELEARNING_INTERFACE_ENABLE)
+		$structure["elearning_interface"]=array ('topKat'=>"modules", 'name'=>_("Lernmodul-Schnittstelle"), 'link'=>"admin_elearning_interface.php", 'active'=>FALSE);
 	if ($ILIAS_CONNECT_ENABLE)
 		$structure["lernmodule"]=array ('topKat'=>"modules", 'name'=>_("Lernmodule"), 'link'=>"admin_lernmodule.php", 'active'=>FALSE);
 	if ($RESOURCES_ENABLE)
@@ -458,6 +460,9 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 		break;
 		case "export.php": 
 			$reiter_view="export"; 
+		break;
+		case "admin_elearning_interface.php": 
+			$reiter_view="elearning_interface"; 
 		break;
 		case "admin_lernmodule.php": 
 			$reiter_view="lernmodule"; 

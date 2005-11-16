@@ -1,4 +1,4 @@
-<?
+<?php
 /**
 * links_openobject.inc.php
 * 
@@ -72,6 +72,10 @@ if ($ILIAS_CONNECT_ENABLE) {
 	include_once ("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_LEARNINGMODULES/lernmodul_user_functions.inc.php");
 }
 
+if ($ELEARNING_INTERFACE_ENABLE) {
+	include_once ("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_ELEARNING_INTERFACE/ObjectConnections.class.php");
+}
+
 //Topkats
 if ($SessSemName["class"]=="inst") {
 	$structure["institut_main"]=array (topKat=>"", name=>_("&Uuml;bersicht"), link=>"institut_main.php", active=>FALSE);
@@ -134,11 +138,49 @@ if (($ILIAS_CONNECT_ENABLE) && ($modules["ilias_connect"])) {
 			$structure["lernmodule"]=array (topKat=>"", name=>_("Lernmodule"), link=>"migration2studip.php", active=>FALSE);/**/
 }
 
+//topkats for contentmodules, if elearning-interface is activated
+if (($ELEARNING_INTERFACE_ENABLE) && ($modules["elearning_interface"])) {
+	if (ObjectConnections::isConnected($SessSemName[1]))
+		$structure["elearning_interface"]=array (topKat=>"", name=>_("Lernmodule"), link=>"elearning_interface.php?view=show&seminar_id=".$SessSemName[1], active=>FALSE);
+	elseif  ($perm->have_studip_perm("tutor",$SessSemName[1]))
+		$structure["elearning_interface"]=array (topKat=>"", name=>_("Lernmodule"), link=>"elearning_interface.php?view=edit&seminar_id=".$SessSemName[1], active=>FALSE);
+ mysql_select_db("studip");
+}
+
 //topkats for SupportDB, if module is activated
 if (($SUPPORT_ENABLE) && ($modules["support"])) {
 	$structure["support"]=array (topKat=>"", name=>_("SupportDB"), link=>"support.php", active=>FALSE);
 }
 
+// last topkats, insert new topkats in front of this statement
+// create the structure array for activated plugins
+if ($PLUGINS_ENABLE){
+	// list all activated plugins
+	
+	$plugins = $Modules->pluginengine->getAllActivatedPlugins();
+	
+	if (is_array($plugins)){
+		foreach ($plugins as $plugin){
+			if ($plugin->hasNavigation()){
+				$pluginnavi = $plugin->getNavigation();
+				$structure["plugin_" . $plugin->getPluginId()] = array(topKat=>"", name=>$pluginnavi->getDisplayname(),link=>PluginEngine::getLink($plugin),active=>false);
+				
+				$pluginsubmenu["_plugin_" . $plugin->getPluginId()] = array(topKat=>"plugin_" . $plugin->getPluginId(), name=>$pluginnavi->getDisplayname(),link=>PluginEngine::getLink($plugin),active=>false);
+				$submenu = $pluginnavi->getSubMenu();
+				// create bottomkats for activated plugins
+				foreach ($submenu as $submenuitem){
+					// create entries in a temporary structure and add it to structure later
+					$pluginsubmenu["plugin_" . $plugin->getPluginId() . "_" . $submenuitem->getDisplayname()] = array (topKat=>"plugin_" . $plugin->getPluginId(), name=>$submenuitem->getDisplayname(), link=>PluginEngine::getLink($plugin,$submenuitem->getLinkParams()), active=>false); 
+				}
+			}
+			else {
+				// there's no navigation, show nothing
+			}
+		}
+		// now insert the bottomkats
+		$structure = array_merge($structure,$pluginsubmenu);
+	}
+}
 
 //Bottomkats
 if ($SessSemName["class"]=="inst") {
@@ -258,6 +300,19 @@ if (($ILIAS_CONNECT_ENABLE) && ($modules["ilias_connect"])){
 		$structure["lernmodule_edit"]=array (topKat=>"lernmodule", name=>_("Lernmodule hinzuf&uuml;gen / entfernen"), link=>"seminar_lernmodule.php?view=edit&seminar_id=" . $SessSemName[1], active=>FALSE);
 }
 
+//bottomkats for Ilias-connect, if modul is activated
+if (($ELEARNING_INTERFACE_ENABLE) && ($modules["elearning_interface"])){
+	if (ObjectConnections::isConnected($SessSemName[1]))
+	{
+		if ($SessSemName["class"]=="inst") 
+			$structure["elearning_interface_show"]=array (topKat=>"elearning_interface", name=>_("Content-Module dieser Einrichtung"), link=>"elearning_interface.php?view=show&seminar_id=" . $SessSemName[1], active=>FALSE);
+		else		
+			$structure["elearning_interface_show"]=array (topKat=>"elearning_interface", name=>_("Content-Module dieser Veranstaltung"), link=>"elearning_interface.php?view=show&seminar_id=" . $SessSemName[1], active=>FALSE);
+	}
+	if  ($perm->have_studip_perm("tutor",$SessSemName[1]))
+		$structure["elearning_interface_edit"]=array (topKat=>"elearning_interface", name=>_("Content-Module hinzuf&uuml;gen / entfernen"), link=>"elearning_interface.php?view=edit&seminar_id=" . $SessSemName[1], active=>FALSE);
+}
+
 //bottomkats for SupportDB, if modul is activated
 if (($SUPPORT_ENABLE) && ($modules["support"])){
 	$structure["support_overview"]=array (topKat=>"support", name=>_("&Uuml;bersicht"), link=>"support.php?view=overview", active=>FALSE);
@@ -266,7 +321,6 @@ if (($SUPPORT_ENABLE) && ($modules["support"])){
 		$structure["support_events"]=array (topKat=>"resources", name=>_("Supportleistungen bearbeiten"), link=>"support.php?view=edit_events", active=>FALSE);
 }
 
-
 //Infofenstereintraege erzeugen
 if ($SessSemName["class"]=="inst") {
 	$tooltip = sprintf(_("Sie befinden sich in der Einrichtung: %s, letzter Besuch: %s, Ihr Status in dieser Einrichtung: %s"), $SessSemName[0], date("d.m.Y - H:i:s", object_get_visit($SessSemName[1], $SessSemName["class"])), $SemUserStatus);
@@ -274,183 +328,192 @@ if ($SessSemName["class"]=="inst") {
 	$tooltip = sprintf(_("Sie befinden sich in der Veranstaltung: %s, letzter Besuch: %s, Ihr Status in dieser Veranstaltung: %s"), $SessSemName[0], date("d.m.Y - H:i:s", object_get_visit($SessSemName[1], $SessSemName["class"])), $SemUserStatus);
 }
 
-//View festlegen
-switch ($i_page) {
-	case "show_bereich.php" : 
-		$reiter_view="institut_veranstaltungen"; 
-	break;
-	case "institut_main.php" : 
-		$reiter_view="institut_main"; 
-	break;
-	case "institut_members.php" :
-		$reiter_view = "institut_members";
-	break;
-	case "seminar_main.php" : 
-		$reiter_view="seminar_main"; 
-	break;
-	case "details.php" : 
-		$reiter_view="details"; 
-	break;
-	case "teilnehmer.php" : 
-		$reiter_view="teilnehmer"; 
-	break;
-	case "statusgruppen.php" : 
-		$reiter_view="statusgruppen"; 
-	break;
-	case "institut_details.php": 
-		$reiter_view="institut_details"; 
-	break;
-	case "inst_admin.php": 
-		$reiter_view="inst_admin"; 
-	break;
-	case "admin_institut.php": 
-		$reiter_view="admin_institut"; 
-	break;
-	case "admin_literatur.php": 
-		$reiter_view="admin_literatur"; 
-	break;
-	case "admin_news.php": 
-		$reiter_view="admin_news"; 
-	break;
-	case "forum.php": 
-		switch ($view) {
-			case "":
-				$reiter_view="forum";
-			break;
-			case "mixed":
-				$reiter_view="forum";
-			break;
-			case "flatfolder":
-				$reiter_view="forum";
-			break;
-			case "neue":
-				$reiter_view="neue";
-			break;
-			case "flat":
-				$reiter_view="flat";
-			break;
-			case "search":
-				$reiter_view="search";
-			break;
-			default :
-				$reiter_view="forum";
-			break;
-		}
-	break;
-	case "dates.php": 
-		switch ($show_not) {
-			case "":
-				$reiter_view="dates";
-			break;
-			case "sem":
-				$reiter_view="sitzung";
-			break;
-			case "other":
-				$reiter_view="andere_t";
-			break;
-			default :
-				$reiter_view="dates";
-			break;
-		}
-	break;
-	case "folder.php": 
-		switch ($folder_system_data["cmd"]) {
-			case "":
-				$reiter_view="folder";
-			break;
-			case "tree":
-				$reiter_view="folder";
-			break;
-			case "all":
-				$reiter_view="alle_dateien";
-			break;
-			default :
-				$reiter_view="folder";
-			break;
-		}
-	break;
-	case "suchen.php": 
-		$reiter_view="suchen"; 
-	break;	
-	case "mein_stundenplan.php": 
-		$reiter_view="timetable"; 
-	break;	
-	case "scm.php":
-		$reiter_view="scm";
-	break;
-	case "literatur.php": 
-		$reiter_view="literatur";
-	break;
-	case "migration2studip.php": 
-		$reiter_view="lernmodule_user";
-	break;
-	case "seminar_lernmodule.php": 
-		switch ($view) {
-			case "edit":
-				$reiter_view="lernmodule_edit";
-			break;
-			default :
-				$reiter_view="lernmodule_show";
-			break;
-		}
-	break;
-	case "resources.php": 
-		switch ($view) {
-			case "openobject_main":
-				$reiter_view="resources";
-			break;
-			case "openobject_details":
-				$reiter_view="resources_details";
-			break;
-			case "openobject_schedule":
-				$reiter_view="resources_schedule";
-			break;
-			case "openobject_assign":
-				$reiter_view="resources_assign";
-			break;
-			default :
-				$reiter_view="resources";
-			break;
-		}
-	break;
-	case "support.php": 
-		switch ($supportdb_data["view"]) {
-			case "overview":
-				$reiter_view="support_overview";
-			break;
-			case "requests":
-				$reiter_view="support_requests";
-			break;
-			case "edit_events":
-				$reiter_view="support_events";
-			break;
-		}
-	break;
-	case "wiki.php":
-		switch ($view){
-			case "listall":
-				$reiter_view="wiki_listall";
-			break;
-			case "listnew":
-				$reiter_view="wiki_listnew";
-			break;
-			case "export":
-				$reiter_view="wiki_export";
-			break;
-			default:
-				$reiter_view="wiki";
-			break;
-		}
-	break;
-	default:
-		if ($SessSemName["class"]=="inst")
-			$reiter_view="institut_main";
-		else
-			$reiter_view="seminar_main";
-	break;
-}
-
-$reiter->create($structure, $reiter_view, $tooltip);
+	//View festlegen
+	switch ($i_page) {
+		case "show_bereich.php" : 
+			$reiter_view="institut_veranstaltungen"; 
+		break;
+		case "institut_main.php" : 
+			$reiter_view="institut_main"; 
+		break;
+		case "institut_members.php" :
+			$reiter_view = "institut_members";
+		break;
+		case "seminar_main.php" : 
+			$reiter_view="seminar_main"; 
+		break;
+		case "details.php" : 
+			$reiter_view="details"; 
+		break;
+		case "teilnehmer.php" : 
+			$reiter_view="teilnehmer"; 
+		break;
+		case "statusgruppen.php" : 
+			$reiter_view="statusgruppen"; 
+		break;
+		case "institut_details.php": 
+			$reiter_view="institut_details"; 
+		break;
+		case "inst_admin.php": 
+			$reiter_view="inst_admin"; 
+		break;
+		case "admin_institut.php": 
+			$reiter_view="admin_institut"; 
+		break;
+		case "admin_literatur.php": 
+			$reiter_view="admin_literatur"; 
+		break;
+		case "admin_news.php": 
+			$reiter_view="admin_news"; 
+		break;
+		case "forum.php": 
+			switch ($view) {
+				case "":
+					$reiter_view="forum";
+				break;
+				case "mixed":
+					$reiter_view="forum";
+				break;
+				case "flatfolder":
+					$reiter_view="forum";
+				break;
+				case "neue":
+					$reiter_view="neue";
+				break;
+				case "flat":
+					$reiter_view="flat";
+				break;
+				case "search":
+					$reiter_view="search";
+				break;
+				default :
+					$reiter_view="forum";
+				break;
+			}
+		break;
+		case "dates.php": 
+			switch ($show_not) {
+				case "":
+					$reiter_view="dates";
+				break;
+				case "sem":
+					$reiter_view="sitzung";
+				break;
+				case "other":
+					$reiter_view="andere_t";
+				break;
+				default :
+					$reiter_view="dates";
+				break;
+			}
+		break;
+		case "folder.php": 
+			switch ($folder_system_data["cmd"]) {
+				case "":
+					$reiter_view="folder";
+				break;
+				case "tree":
+					$reiter_view="folder";
+				break;
+				case "all":
+					$reiter_view="alle_dateien";
+				break;
+				default :
+					$reiter_view="folder";
+				break;
+			}
+		break;
+		case "suchen.php": 
+			$reiter_view="suchen"; 
+		break;	
+		case "mein_stundenplan.php": 
+			$reiter_view="timetable"; 
+		break;	
+		case "scm.php":
+			$reiter_view="scm";
+		break;
+		case "literatur.php": 
+			$reiter_view="literatur";
+		break;
+		case "migration2studip.php": 
+			$reiter_view="lernmodule_user";
+		break;
+		case "seminar_lernmodule.php": 
+			switch ($view) {
+				case "edit":
+					$reiter_view="lernmodule_edit";
+				break;
+				default :
+					$reiter_view="lernmodule_show";
+				break;
+			}
+		break;
+		case "elearning_interface.php": 
+			switch ($view) {
+				case "edit":
+					$reiter_view="elearning_interface_edit";
+				break;
+				default :
+					$reiter_view="elearning_interface_show";
+				break;
+			}
+		break;
+		case "resources.php": 
+			switch ($view) {
+				case "openobject_main":
+					$reiter_view="resources";
+				break;
+				case "openobject_details":
+					$reiter_view="resources_details";
+				break;
+				case "openobject_schedule":
+					$reiter_view="resources_schedule";
+				break;
+				case "openobject_assign":
+					$reiter_view="resources_assign";
+				break;
+				default :
+					$reiter_view="resources";
+				break;
+			}
+		break;
+		case "support.php": 
+			switch ($supportdb_data["view"]) {
+				case "overview":
+					$reiter_view="support_overview";
+				break;
+				case "requests":
+					$reiter_view="support_requests";
+				break;
+				case "edit_events":
+					$reiter_view="support_events";
+				break;
+			}
+		break;
+		case "wiki.php":
+			switch ($view){
+				case "listall":
+					$reiter_view="wiki_listall";
+				break;
+				case "listnew":
+					$reiter_view="wiki_listnew";
+				break;
+				case "export":
+					$reiter_view="wiki_export";
+				break;
+				default:
+					$reiter_view="wiki";
+				break;
+			}
+		break;
+		default:
+			if ($SessSemName["class"]=="inst")
+				$reiter_view="institut_main";
+			else
+				$reiter_view="seminar_main";
+		break;
+	}
+	
+	$reiter->create($structure, $reiter_view, $tooltip);
 }
 ?>
-
