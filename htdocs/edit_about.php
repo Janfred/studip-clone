@@ -127,7 +127,7 @@ function get_user_details() {
 		}
 	}
 
-	$this->db->query("SELECT user_studiengang.*,studiengaenge.name FROM user_studiengang LEFT JOIN studiengaenge USING (studiengang_id) WHERE user_id = '".$this->auth_user["user_id"]."' ORDER BY studiengang_id");
+	$this->db->query("SELECT user_studiengang.*,studiengaenge.name FROM user_studiengang LEFT JOIN studiengaenge USING (studiengang_id) WHERE user_id = '".$this->auth_user["user_id"]."' ORDER BY name");
 	while ($this->db->next_record()) {
 		$this->user_studiengang[$this->db->f("studiengang_id")] = array("name" => $this->db->f("name"));
 	}
@@ -755,7 +755,7 @@ if(check_ticket($ticket)){
 		}
 	
 	//Veränderungen an Studiengängen
-	if ($cmd == "studiengang_edit" && ($ALLOW_SELFASSIGN_STUDYCOURSE || $perm->have_perm("admin")))
+	if ($cmd == "studiengang_edit" && (!StudipAuthAbstract::CheckField("studiengang_id", $my_about->auth_user['auth_plugin'])) && ($ALLOW_SELFASSIGN_STUDYCOURSE || $perm->have_perm("admin")))
 	 {
 		$my_about->studiengang_edit($studiengang_delete,$new_studiengang);
 		}
@@ -965,7 +965,12 @@ if (!$cmd)
 include ("$ABSOLUTE_PATH_STUDIP/links_about.inc.php");  
 
 //Kopfzeile bei allen eigenen Modulen ausgeben
-if ($view!="Forum" AND $view!="calendar" AND $view!="Stundenplan" AND $view!="Messaging" AND $view!= "allgemein") {
+if ($view != 'Forum'
+		&& $view != 'calendar'
+		&& $view != 'Stundenplan'
+		&& $view != 'Messaging'
+		&& $view != 'allgemein'
+		&& $view != 'notification') {
 	echo "<table class=\"blank\" cellspacing=0 cellpadding=0 border=0 width=\"100%\">";
 		
 	if ($username!=$auth->auth["uname"]) 
@@ -1310,7 +1315,9 @@ if ($view=="Karriere") {
 		echo "<tr><td class=\"blank\">";
 		echo "<b>&nbsp; " . _("Ich bin in folgenden Studieng&auml;ngen eingeschrieben:") . "</b>";
 		echo "<table width= \"99%\" align=\"center\" border=0 cellpadding=2 cellspacing=0>\n";
-		echo "<form action=\"$PHP_SELF?cmd=studiengang_edit&username=$username&view=$view&ticket=".get_ticket()."#studiengaenge\" method=\"POST\">";
+		if (!StudipAuthAbstract::CheckField("studiengang_id", $my_about->auth_user['auth_plugin'])){
+			echo "<form action=\"$PHP_SELF?cmd=studiengang_edit&username=$username&view=$view&ticket=".get_ticket()."#studiengaenge\" method=\"POST\">";
+		}
 		echo "<tr><td width=\"30%\" valign=\"top\"><table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"2\">";
 		reset ($my_about->user_studiengang);
 		$flag=FALSE;
@@ -1321,24 +1328,35 @@ if ($view=="Karriere") {
 				echo "<tr><td class=\"steelgraudunkel\" width=\"80%\">" . _("Studiengang") . "</td><td class=\"steelgraudunkel\" width=\"30%\">" . _("austragen") . "</ts></tr>";
 			}
 			$cssSw->switchClass();
-			echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"80%\">".htmlReady($details["name"])."</td><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"center\"><input type=\"CHECKBOX\" name=\"studiengang_delete[]\" value=\"$studiengang_id\"></td><tr>";
+			echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"80%\">".htmlReady($details["name"])."</td><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"center\">";
+			if (!StudipAuthAbstract::CheckField("studiengang_id", $my_about->auth_user['auth_plugin'])){
+				echo "<input type=\"CHECKBOX\" name=\"studiengang_delete[]\" value=\"$studiengang_id\">";
+			} else {
+				echo "<img src=\"pictures/haken_transparent.gif\" border=\"0\">";
+			}
+			echo "</td><tr>";
 			$i++;
 			$flag=TRUE;
 		}
 
-		if (!$flag) {
+		if (!$flag && !StudipAuthAbstract::CheckField("studiengang_id", $my_about->auth_user['auth_plugin'])) {
 			echo "<tr><td class=\"".$cssSw->getClass()."\" colspan=\"2\"><br /><font size=-1><b>" . _("Sie haben sich noch keinem Studiengang zugeordnet.") . "</b><br /><br />" . _("Tragen Sie bitte hier die Angaben aus Ihrem Studierendenausweis ein!") . "</font></td><tr>";
 		}
 		$cssSw->resetClass();
 		$cssSw->switchClass();
-		echo "</table></td><td class=\"".$cssSw->getClass()."\" width=\"70%\" align=\"left\" valign=\"top\"><blockquote><br />" . _("Wählen Sie die Studiengänge in Ihrem Studierendenausweis aus der folgenden Liste aus:") . "<br>";
-		echo "<br><div align=\"center\">";
-		echo "<a name=\"studiengaenge\"></a>";   
-		$my_about->select_studiengang();
-		echo "</div><br></b>" . _("Wenn Sie einen Studiengang wieder austragen möchten, markieren Sie die entsprechenden Felder in der linken Tabelle.") . "<br>";
-		echo _("Mit einem Klick auf <b>&Uuml;bernehmen</b> werden die gewählten Änderungen durchgeführt.") . "<br /><br /> ";
-		echo "<input type=\"IMAGE\" " . makeButton("uebernehmen", "src") . " value=\"" . _("Änderungen übernehmen") . "\"></blockquote></td></tr>";
-		echo "</form>";
+		echo "</table></td><td class=\"".$cssSw->getClass()."\" width=\"70%\" align=\"left\" valign=\"top\"><blockquote><br />";
+		if(!StudipAuthAbstract::CheckField("studiengang_id", $my_about->auth_user['auth_plugin'])){
+			echo _("Wählen Sie die Studiengänge in Ihrem Studierendenausweis aus der folgenden Liste aus:") . "<br>";
+			echo "<br><div align=\"center\">";
+			echo "<a name=\"studiengaenge\"></a>";   
+			$my_about->select_studiengang();
+			echo "</div><br></b>" . _("Wenn Sie einen Studiengang wieder austragen möchten, markieren Sie die entsprechenden Felder in der linken Tabelle.") . "<br>";
+			echo _("Mit einem Klick auf <b>&Uuml;bernehmen</b> werden die gewählten Änderungen durchgeführt.") . "<br /><br /> ";
+			echo "<input type=\"IMAGE\" " . makeButton("uebernehmen", "src") . " value=\"" . _("Änderungen übernehmen") . "\"></blockquote></td></tr>";
+			echo "</form>";
+		} else {
+			echo _("Die Informationen zu Ihrem Studiengang werden vom System verwaltet, und k&ouml;nnen daher von Ihnen nicht ge&auml;ndert werden.");
+		}
 	}
 	echo "</td></tr></table>";
 
@@ -1434,34 +1452,54 @@ if ($view=="Sonstiges") {
 }
 
 // Ab hier die Views der MyStudip-Sektion
+
+// set FALSE if the form is allready closed in the included script
+$close_form = TRUE;
+
 if($view == "allgemein") {
 	require_once("mystudip.inc.php");
 	change_general_view();
+	$close_form = FALSE;
 }
 
 if($view == "Forum") {
 	require_once("forumsettings.inc.php");
+	$close_form = FALSE;
 }
 
 if ($view == "Stundenplan") {
-	require_once ("ms_stundenplan.inc.php");
+	require_once("ms_stundenplan.inc.php");
 	check_schedule_default();
 	change_schedule_view();
+	$close_form = FALSE;
 }
 	
 if($view == "calendar" && $CALENDAR_ENABLE) {
 	require_once("$RELATIVE_PATH_CALENDAR/calendar_settings.inc.php");
+	$close_form = FALSE;
 }
 
 if ($view == "Messaging") {
-	require_once ("messagingSettings.inc.php");
+	require_once("messagingSettings.inc.php");
 	check_messaging_default();
 	change_messaging_view();
+	$close_form = FALSE;
+}
+
+if ($view == 'notification') {
+	echo "<table width=\"100%\" class=\"blank\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n";
+	echo '<tr><td class="topic" width="100%">';
+	echo '<img src="pictures/einst.gif" border="0" align="texttop"><b>&nbsp;';
+	echo _("Benachrichtigung anpassen") . "</b></td></tr>\n";
+	echo "<tr><td class=\"blank\" width=\"100%\">\n";
+	require_once('sem_notification.php');
+	echo "</td></tr>\n";
+	$close_form = FALSE;
 }
 
 if ($view=="Login") {
 	if ($my_about->check=="user" && !$perm->have_perm("admin")) {
-		echo "<tr><td colspan=2 class=blank><blockquote>";
+		echo "<tr><td colspan=\"2\" class=\"blank\"><blockquote>";
 		echo "<br><br>" . _("Um die automatische Anmeldung zu nutzen, m&uuml;ssen Sie ihre pers&ouml;nliche Login-Datei auf ihren Rechner kopieren. Mit dem folgenden Link &ouml;ffnet sich ein Fenster, indem Sie ihr Passwort eingeben m&uuml;ssen.") . " ";
 		echo _("Dann wird die Datei erstellt und zu Ihrem Rechner geschickt.") . "<br><br>";
 		echo "<center><b><a href=\"javascript:oeffne();\">" . _("Auto-Login-Datei erzeugen") . "</a></b></center>";
@@ -1471,16 +1509,17 @@ if ($view=="Login") {
 		printf ("<center><b><a href=\"%s\">%s</a></b></center><br>", sprintf("index.php?again=yes&shortcut=%s", $auth->auth["uname"]), sprintf(_("Stud.IP - Login (%s)"), $auth->auth["uname"]));
 		echo _("Speichern Sie diesen Link als Bookmark oder Favoriten.") . "<br>";
 		echo _("Er f&uuml;hrt Sie direkt zum Login-Bildschirm von Stud.IP mit Ihrem schon eingetragenen Benutzernamen. Sie m&uuml;ssen nur noch Ihr Passwort eingeben.");
-		echo "</blockquote></td></tr>";
+		echo "</blockquote><br></td></tr>";
 	} else {
 		echo "<blockquote><br><br>" . _("Als Administrator d&uuml;rfen Sie dieses Feature nicht nutzen - Sie tragen Verantwortung!");
-		echo "</blockquote></td></tr>";
+		echo "</blockquote><br></td></tr>";
 	}
-}	
+	$close_form = FALSE;
+}
 
-////////////////
-
-	echo "\n</table></td></tr></form>";
+	if ($close_form) {
+		echo "\n</table></td></tr></form>";
+	}
 	echo "\n</table>";
 	echo "</body>";
 	echo "</html>";
