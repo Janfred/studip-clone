@@ -33,29 +33,29 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-require_once $ABSOLUTE_PATH_STUDIP.("functions.php");
-require_once $ABSOLUTE_PATH_STUDIP.("language.inc.php");
-require_once $ABSOLUTE_PATH_STUDIP.("config.inc.php"); 		// We need the uni name for emails
-require_once $ABSOLUTE_PATH_STUDIP.("admission.inc.php");	// remove user from waiting lists
-require_once $ABSOLUTE_PATH_STUDIP.("datei.inc.php");	// remove documents of user
-require_once $ABSOLUTE_PATH_STUDIP.("statusgruppe.inc.php");	// remove user from statusgroups
-require_once $ABSOLUTE_PATH_STUDIP.("dates.inc.php");	// remove appointments of user
-require_once $ABSOLUTE_PATH_STUDIP.("messaging.inc.php");	// remove messages send or recieved by user
-require_once $ABSOLUTE_PATH_STUDIP.("contact.inc.php");	// remove user from adressbooks
-require_once $ABSOLUTE_PATH_STUDIP.("lib/classes/DataFields.class.php");	// remove extra data of user
-require_once $ABSOLUTE_PATH_STUDIP.("lib/classes/auth_plugins/StudipAuthAbstract.class.php");
-require_once $ABSOLUTE_PATH_STUDIP.("lib/classes/StudipNews.class.php");
-require_once $ABSOLUTE_PATH_STUDIP.("object.inc.php");
-if ($RESOURCES_ENABLE) {
-	include_once ($ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_RESOURCES."/lib/DeleteResourcesUser.class.php");
+require_once $GLOBALS['ABSOLUTE_PATH_STUDIP']."functions.php";
+require_once $GLOBALS['ABSOLUTE_PATH_STUDIP']."language.inc.php";
+require_once $GLOBALS['ABSOLUTE_PATH_STUDIP']."config.inc.php"; 		// We need the uni name for emails
+require_once $GLOBALS['ABSOLUTE_PATH_STUDIP']."admission.inc.php";	// remove user from waiting lists
+require_once $GLOBALS['ABSOLUTE_PATH_STUDIP']."datei.inc.php";	// remove documents of user
+require_once $GLOBALS['ABSOLUTE_PATH_STUDIP']."statusgruppe.inc.php";	// remove user from statusgroups
+require_once $GLOBALS['ABSOLUTE_PATH_STUDIP']."dates.inc.php";	// remove appointments of user
+require_once $GLOBALS['ABSOLUTE_PATH_STUDIP']."messaging.inc.php";	// remove messages send or recieved by user
+require_once $GLOBALS['ABSOLUTE_PATH_STUDIP']."contact.inc.php";	// remove user from adressbooks
+require_once $GLOBALS['ABSOLUTE_PATH_STUDIP']."lib/classes/DataFields.class.php";	// remove extra data of user
+require_once $GLOBALS['ABSOLUTE_PATH_STUDIP']."lib/classes/auth_plugins/StudipAuthAbstract.class.php";
+require_once $GLOBALS['ABSOLUTE_PATH_STUDIP']."lib/classes/StudipNews.class.php";
+require_once $GLOBALS['ABSOLUTE_PATH_STUDIP']."object.inc.php";
+if ($GLOBALS['RESOURCES_ENABLE']) {
+	include_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'].$GLOBALS['RELATIVE_PATH_RESOURCES']."/lib/DeleteResourcesUser.class.php");
 }
-if ($ILIAS_CONNECT_ENABLE) {
-	include_once ($ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_LEARNINGMODULES."/lernmodul_db_functions.inc.php");
-	include_once ($ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_LEARNINGMODULES."/lernmodul_user_functions.inc.php");
+if ($GLOBALS['ILIAS_CONNECT_ENABLE']) {
+	include_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'].$GLOBALS['RELATIVE_PATH_LEARNINGMODULES']."/lernmodul_db_functions.inc.php");
+	include_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'].$GLOBALS['RELATIVE_PATH_LEARNINGMODULES']."/lernmodul_user_functions.inc.php");
 }
-if ($CALENDAR_ENABLE) {
-	include_once ($ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CALENDAR
-			. "/lib/driver/$CALENDAR_DRIVER/CalendarDriver.class.php");
+if ($GLOBALS['CALENDAR_ENABLE']) {
+	include_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'].$GLOBALS['RELATIVE_PATH_CALENDAR']
+	. "/lib/driver/{$GLOBALS['CALENDAR_DRIVER']}/CalendarDriver.class.php");
 }
 
 
@@ -319,7 +319,7 @@ class UserManagement {
 		// include language-specific subject and mailbody
 		$user_language = getUserLanguagePath($this->user_data['auth_user_md5.user_id']); // user has been just created, so we will get $DEFAULT_LANGUAGE
 		$Zeit=date("H:i:s, d.m.Y",time());
-		include("$ABSOLUTE_PATH_STUDIP"."locale/$user_language/LC_MAILS/create_mail.inc.php");
+		include_once($GLOBALS['ABSOLUTE_PATH_STUDIP']."locale/$user_language/LC_MAILS/create_mail.inc.php");
 
 		// send mail
 		$this->smtp->SendMessage(
@@ -441,7 +441,7 @@ class UserManagement {
 		// include language-specific subject and mailbody
 		$user_language = getUserLanguagePath($this->user_data['auth_user_md5.user_id']);
 		$Zeit=date("H:i:s, d.m.Y",time());
-		include_once("$ABSOLUTE_PATH_STUDIP"."locale/$user_language/LC_MAILS/change_mail.inc.php");
+		include_once($GLOBALS['ABSOLUTE_PATH_STUDIP']."locale/$user_language/LC_MAILS/change_mail.inc.php");
 
 		// send mail
 		$this->smtp->SendMessage(
@@ -559,7 +559,7 @@ class UserManagement {
 		// include language-specific subject and mailbody
 		$user_language = getUserLanguagePath($this->user_data['auth_user_md5.user_id']);
 		$Zeit=date("H:i:s, d.m.Y",time());
-		include_once("$ABSOLUTE_PATH_STUDIP"."locale/$user_language/LC_MAILS/password_mail.inc.php");
+		include_once($GLOBALS['ABSOLUTE_PATH_STUDIP']."locale/$user_language/LC_MAILS/password_mail.inc.php");
 
 		// send mail
 		$this->smtp->SendMessage(
@@ -784,7 +784,7 @@ class UserManagement {
 		if ($this->checkMail($this->user_data['auth_user_md5.Email'])) {
 			// include language-specific subject and mailbody
 			$Zeit=date("H:i:s, d.m.Y",time());
-			include_once("$ABSOLUTE_PATH_STUDIP"."locale/$user_language/LC_MAILS/delete_mail.inc.php");
+			include_once($GLOBALS['ABSOLUTE_PATH_STUDIP']."locale/$user_language/LC_MAILS/delete_mail.inc.php");
 
 			// send mail
 			$this->smtp->SendMessage(
