@@ -111,9 +111,14 @@ class studip_smtp_class extends smtp_class {
 		$this->env_from = ($GLOBALS['MAIL_ENV_FROM'] == "") ? "wwwrun@".$this->localhost : $GLOBALS['MAIL_ENV_FROM']; // Envelope-From:
 		$this->from = ($GLOBALS['MAIL_FROM'] == "") ? "\"Stud.IP\" <" . $this->env_from . ">" : $this->QuotedPrintableEncode('"' . $GLOBALS['MAIL_FROM'] . '"',1) . ' <' . $this->env_from . '>'; // From: Mailheader
 		$this->abuse = ($GLOBALS['MAIL_ABUSE'] == "") ? "abuse@" . $this->localhost : $GLOBALS['MAIL_ABUSE']; // Reply-To: Mailheader
-		$this->url = (($_SERVER["SERVER_PORT"] == 443 || $_SERVER["HTTPS"] == "on") ? "https://" : "http://") 
+		if ($GLOBALS['ABSOLUTE_URI_STUDIP']){
+			$this->url = $GLOBALS['ABSOLUTE_URI_STUDIP'];
+		} else {
+			$this->url = ( ($_SERVER["SERVER_PORT"] == 443 || $_SERVER["HTTPS"] == "on") ? "https://" : "http://") 
 					. $_SERVER["SERVER_NAME"] . (($_SERVER["SERVER_PORT"] != 443 && $_SERVER["SERVER_PORT"] != 80) ? ":" . $_SERVER["SERVER_PORT"] : "") 
 					. $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']; // link to system
+			 $GLOBALS['ABSOLUTE_URI_STUDIP'] = $this->url;
+		}
 		$this->additional_headers = array("MIME-Version: 1.0",
 										"Content-Type: text/plain; charset=\"{$this->charset}\"",
 										"Content-Transfer-Encoding: 8bit");
@@ -460,7 +465,7 @@ class Seminar_Auth extends Auth {
 		}
 	
 		$check_auth = StudipAuthAbstract::CheckAuthentication($username,$password,$this->auth['jscript']);
-
+		
 		$GLOBALS['sess']->unregister('challenge');
 		
 		if ($check_auth['uid']){
