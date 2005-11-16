@@ -97,15 +97,20 @@ function init_i18n($_language) {
 * is used for international buttons.
 *
 * @access	public        
-* @param		string	the (german) button name
-* @param		string	if mode = img, the functions return the full tag, if mode = src, it return only the src-part (for graphic submits)
-* @return		string	html output of the button
+* @param	string	the (german) button name
+* @param	string	if mode = img, the functions return the full tag, if mode = src, it return only the src-part , if mode = input returns full input tag
+* @param	string	tooltip text, if tooltip should be included in tag
+* @param	string 	if mode=input this param defines the name attribut
+* @return	string	html output of the button
 */
-function makeButton ($name, $mode = "img") {
+function makeButton($name, $mode = "img", $tooltip = false, $inputname = false) {
 	global $_language_path, $CANONICAL_RELATIVE_PATH_STUDIP;
 	$path = "{$CANONICAL_RELATIVE_PATH_STUDIP}locale/$_language_path/LC_BUTTONS";
+	$tooltext = ($tooltip ? tooltip($tooltip) : '');
 	if ($mode == "img")
-		$tag = sprintf ("<img src=\"%s/%s-button.gif\" border=\"0\" align=\"absmiddle\" alt=\"%s\"/>", $path, $name, $name);
+		$tag = sprintf ("\n<img src=\"%s/%s-button.gif\" %s border=\"0\" align=\"absmiddle\"/>", $path, $name, $tooltext);
+	elseif ($mode == 'input')
+		$tag = sprintf ("\n<input type=\"image\" src=\"%s/%s-button.gif\" %s border=\"0\" name=\"%s\" align=\"absmiddle\"/>", $path, $name, $tooltext, $inputname);
 	else
 		$tag = sprintf ("src=\"%s/%s-button.gif\"", $path, $name);
 
