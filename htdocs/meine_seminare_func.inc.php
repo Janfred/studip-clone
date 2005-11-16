@@ -181,4 +181,158 @@ function fill_groups(&$groups, $group_key, $group_entry){
 		return false;
 	}
 }
+
+function get_obj_clause ($table_name, $range_field, $count_field, $if_clause,
+		$type = false, $add_fields = false, $add_on = false, $object_field = false,
+		$user_id = NULL) {
+	
+	if (is_null($user_id)) {
+		$user_id = $GLOBALS['user']->id;
+	}
+	
+	$type_sql = ($type) ? "='$type'" : "IN('sem','inst')";
+	$object_field = ($object_field) ? $object_field : "my.object_id";
+	$on_clause = " ON(my.object_id=a.{$range_field} $add_on) ";
+	if (strpos($table_name,'{ON_CLAUSE}') !== false){
+		$table_name = str_replace('{ON_CLAUSE}', $on_clause, $table_name);
+	} else {
+		$table_name .= $on_clause;
+	}
+	$max_field = 'chdate';
+	return "SELECT " . ($add_fields ? $add_fields . ", " : "" ) . " my.object_id, COUNT($count_field) as count, COUNT(IF($if_clause, $count_field, NULL)) AS neue,
+	MAX(IF($if_clause, $max_field, 0)) AS last_modified FROM myobj_{$user_id} my LEFT JOIN object_user_visits b ON (b.object_id = $object_field AND b.user_id = '$user_id' AND b.type $type_sql)
+	INNER JOIN $table_name GROUP BY my.object_id";
+}
+
+
+function get_my_obj_values (&$my_obj, $user_id, $modules = NULL) {
+	
+	$db2 = new DB_seminar;
+	$db2->query("CREATE TEMPORARY TABLE IF NOT EXISTS myobj_".$user_id." ( object_id char(32) NOT NULL, PRIMARY KEY (object_id)) TYPE=HEAP");
+	$db2->query("REPLACE INTO  myobj_" . $user_id . " (object_id) VALUES ('" . join("'),('", array_keys($my_obj)) . "')");
+	// Postings
+	$db2->query(get_obj_clause('px_topics a','Seminar_id','topic_id',"(chdate > IFNULL(b.visitdate,0) AND chdate >= mkdate AND a.user_id !='$user_id')", 'forum'));
+	while($db2->next_record()) {
+		if ($my_obj[$db2->f("object_id")]["modules"]["forum"]) {
+			$my_obj[$db2->f("object_id")]["neuepostings"]=$db2->f("neue");
+			$my_obj[$db2->f("object_id")]["postings"]=$db2->f("count");
+			if ($my_obj[$db2->f("object_id")]['last_modified'] < $db2->f('last_modified')){
+				$my_obj[$db2->f("object_id")]['last_modified'] = $db2->f('last_modified');
+			}
+		}
+	}
+	
+	//dokumente
+	$db2->query(get_obj_clause('dokumente a','Seminar_id','dokument_id',"(chdate > IFNULL(b.visitdate,0) AND a.user_id !='$user_id')", 'documents'));
+	while($db2->next_record()) {
+		if ($my_obj[$db2->f("object_id")]["modules"]["documents"]) {
+			$my_obj[$db2->f("object_id")]["neuedokumente"]=$db2->f("neue");
+			$my_obj[$db2->f("object_id")]["dokumente"]=$db2->f("count");
+			if ($my_obj[$db2->f("object_id")]['last_modified'] < $db2->f('last_modified')){
+				$my_obj[$db2->f("object_id")]['last_modified'] = $db2->f('last_modified');
+			}
+		}
+	}
+	
+	//News
+	$db2->query(get_obj_clause('news_range a {ON_CLAUSE} LEFT JOIN news nw ON(a.news_id=nw.news_id AND UNIX_TIMESTAMP() BETWEEN date AND (date+expire))','range_id','nw.news_id',"(chdate > IFNULL(b.visitdate,0) AND nw.user_id !='$user_id')",'news',false,false,'a.news_id'));
+	while($db2->next_record()) {
+		$my_obj[$db2->f("object_id")]["neuenews"]=$db2->f("neue");
+		$my_obj[$db2->f("object_id")]["news"]=$db2->f("count");
+		if ($my_obj[$db2->f("object_id")]['last_modified'] < $db2->f('last_modified')){
+			$my_obj[$db2->f("object_id")]['last_modified'] = $db2->f('last_modified');
+		}
+	}
+	
+	// scm?
+	$db2->query(get_obj_clause('scm a','range_id',"IF(content !='',1,0)","(chdate > IFNULL(b.visitdate,0) AND a.user_id !='$user_id')", "scm", 'tab_name'));
+	while($db2->next_record()) {
+		if ($my_obj[$db2->f("object_id")]["modules"]["scm"]) {	
+			$my_obj[$db2->f("object_id")]["neuscmcontent"]=$db2->f("neue");
+			$my_obj[$db2->f("object_id")]["scmcontent"]=$db2->f("count");
+			$my_obj[$db2->f("object_id")]["scmtabname"]=$db2->f("tab_name");
+			if ($my_obj[$db2->f("object_id")]['last_modified'] < $db2->f('last_modified')){
+				$my_obj[$db2->f("object_id")]['last_modified'] = $db2->f('last_modified');
+			}
+		}
+	}
+	
+	//Literaturlisten
+	$db2->query(get_obj_clause('lit_list a','range_id','list_id',"(chdate > IFNULL(b.visitdate,0) AND a.user_id !='$user_id')", 'literature', false, " AND a.visibility=1"));
+	while($db2->next_record()) {
+		if ($my_obj[$db2->f("object_id")]["modules"]["literature"]) {	
+			$my_obj[$db2->f("object_id")]["neuelitlist"]=$db2->f("neue");
+			$my_obj[$db2->f("object_id")]["litlist"]=$db2->f("count");
+			if ($my_obj[$db2->f("object_id")]['last_modified'] < $db2->f('last_modified')){
+				$my_obj[$db2->f("object_id")]['last_modified'] = $db2->f('last_modified');
+			}
+		}
+	}
+	
+	//Termine?
+	$db2->query(get_obj_clause('termine a','range_id','termin_id',"(chdate > IFNULL(b.visitdate,0) AND autor_id !='$user_id')", 'schedule'));
+	while($db2->next_record()) {
+		if ($my_obj[$db2->f("object_id")]["modules"]["schedule"]) {	
+			$my_obj[$db2->f("object_id")]["neuetermine"]=$db2->f("neue");
+			$my_obj[$db2->f("object_id")]["termine"]=$db2->f("count");
+			if ($my_obj[$db2->f("object_id")]['last_modified'] < $db2->f('last_modified')){
+				$my_obj[$db2->f("object_id")]['last_modified'] = $db2->f('last_modified');
+			}
+		}
+	}
+	
+	//Wiki-Eintraege?
+	if ($GLOBALS['WIKI_ENABLE']) {
+		$db2->query(get_obj_clause('wiki a','range_id','keyword',"(chdate > IFNULL(b.visitdate,0) AND a.user_id !='$user_id')", 'wiki', "COUNT(DISTINCT keyword) as count_d"));
+		while($db2->next_record()) {
+			if ($my_obj[$db2->f("object_id")]["modules"]["wiki"]) {	
+				$my_obj[$db2->f("object_id")]["neuewikiseiten"]=$db2->f("neue");
+				$my_obj[$db2->f("object_id")]["wikiseiten"]=$db2->f("count_d");
+				if ($my_obj[$db2->f("object_id")]['last_modified'] < $db2->f('last_modified')){
+					$my_obj[$db2->f("object_id")]['last_modified'] = $db2->f('last_modified');
+				}
+			}
+		}
+	}
+	
+	//Lernmodule?
+	if ($GLOBALS['ELEARNING_INTERFACE_ENABLE']) {
+		$db2->query(get_obj_clause('object_contentmodules a','object_id','module_id',"(chdate > IFNULL(b.visitdate,0) AND a.module_type !='crs')", 'elearning_interface'));
+		while($db2->next_record()) {
+			if ($my_obj[$db2->f("object_id")]["modules"]["elearning_interface"]) {	
+				$my_obj[$db2->f("object_id")]["neuecontentmodule"]=$db2->f("neue");
+				$my_obj[$db2->f("object_id")]["contentmodule"]=$db2->f("count");
+				if ($my_obj[$db2->f("object_id")]['last_modified'] < $db2->f('last_modified')){
+					$my_obj[$db2->f("object_id")]['last_modified'] = $db2->f('last_modified');
+				}
+			}
+		}
+	}
+	
+	//Umfragen
+	if ($GLOBALS['VOTE_ENABLE']) {
+		$db2->query(get_obj_clause('vote a','range_id','vote_id',"(chdate > IFNULL(b.visitdate,0) AND a.author_id !='$user_id' AND a.state != 'stopvis')",
+									'vote', false , " AND a.state IN('active','stopvis')",'vote_id'));
+		while($db2->next_record()) {
+				$my_obj[$db2->f("object_id")]["neuevotes"] = $db2->f("neue");
+				$my_obj[$db2->f("object_id")]["votes"] = $db2->f("count");
+				if ($my_obj[$db2->f("object_id")]['last_modified'] < $db2->f('last_modified')){
+					$my_obj[$db2->f("object_id")]['last_modified'] = $db2->f('last_modified');
+				}
+		}
+		
+		$db2->query(get_obj_clause('eval_range a {ON_CLAUSE} INNER JOIN eval d ON ( a.eval_id = d.eval_id AND d.startdate < UNIX_TIMESTAMP( ) AND (d.stopdate > UNIX_TIMESTAMP( ) OR d.startdate + d.timespan > UNIX_TIMESTAMP( ) OR (d.stopdate IS NULL AND d.timespan IS NULL)))',
+									'range_id','a.eval_id',"(chdate > IFNULL(b.visitdate,0) AND d.author_id !='$user_id' )",'eval',false,false,'a.eval_id'));
+		while($db2->next_record()) {
+				$my_obj[$db2->f("object_id")]["neuevotes"] += $db2->f("neue");
+				$my_obj[$db2->f("object_id")]["votes"] += $db2->f("count");
+				if ($my_obj[$db2->f("object_id")]['last_modified'] < $db2->f('last_modified')){
+					$my_obj[$db2->f("object_id")]['last_modified'] = $db2->f('last_modified');
+				}
+		}
+	}
+	
+	$db2->query("DROP TABLE IF EXISTS myobj_" . $user_id);
+	return;
+}
 ?>

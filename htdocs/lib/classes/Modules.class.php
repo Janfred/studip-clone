@@ -1,4 +1,4 @@
-<?
+<?php
 /**
 * Modules.class.php
 * 
@@ -37,21 +37,22 @@ require_once $ABSOLUTE_PATH_STUDIP.("functions.php");
 require_once $ABSOLUTE_PATH_STUDIP.("config.inc.php");
 
 class Modules {
-	var $registered_modules = array (
-		"forum" => array("id" => 0, "const" => "", "sem" => TRUE, "inst" => TRUE),
-		"documents" => array("id" => 1, "const" => "", "sem" => TRUE, "inst" => TRUE),
-		"schedule" => array("id" => 2, "const" => "", "sem" => TRUE, "inst" => FALSE),
-		"participants" => array("id" => 3, "const" => "", "sem" => TRUE, "inst" => FALSE),
-		"personal" => array("id" => 4, "const" => "", "sem" => FALSE, "inst" => TRUE),
-		"literature" => array("id" => 5, "const" => "", "sem" => TRUE, "inst" => TRUE),
-		"ilias_connect" => array("id" => 6, "const" => "ILIAS_CONNECT_ENABLE", "sem" => TRUE, "inst" => TRUE),
-		"chat" => array("id" => 7, "const" => "CHAT_ENABLE", "sem" => TRUE, "inst" => TRUE),
-		"wiki" => array("id" => 8, "const" => "WIKI_ENABLE", "sem" => TRUE, "inst" => TRUE),
-		"support" => array("id" => 9, "const" => "SUPPORT_ENABLE", "sem" => TRUE, "inst" => FALSE),
-		"vips" => array("id" => 10, "const" => "VIPS_ENABLE", "sem" => TRUE, "inst" => FALSE),
-		"impuls_ec" => array("id" => 11, "const" => "IMPULS_EC_ENABLE", "sem" => TRUE, "inst" => FALSE),
-		"scm" => array("id" => 12, "const" => "SCM_ENABLE", "sem" => TRUE, "inst" => TRUE)
-	);
+	var $registered_modules = array(
+				"forum" => array("id" => 0, "const" => "", "sem" => TRUE, "inst" => TRUE),
+				"documents" => array("id" => 1, "const" => "", "sem" => TRUE, "inst" => TRUE),
+				"schedule" => array("id" => 2, "const" => "", "sem" => TRUE, "inst" => FALSE),
+				"participants" => array("id" => 3, "const" => "", "sem" => TRUE, "inst" => FALSE),
+				"personal" => array("id" => 4, "const" => "", "sem" => FALSE, "inst" => TRUE),
+				"literature" => array("id" => 5, "const" => "", "sem" => TRUE, "inst" => TRUE),
+				"ilias_connect" => array("id" => 6, "const" => "ILIAS_CONNECT_ENABLE", "sem" => TRUE, "inst" => TRUE),
+				"chat" => array("id" => 7, "const" => "CHAT_ENABLE", "sem" => TRUE, "inst" => TRUE),
+				"wiki" => array("id" => 8, "const" => "WIKI_ENABLE", "sem" => TRUE, "inst" => TRUE),
+				"support" => array("id" => 9, "const" => "SUPPORT_ENABLE", "sem" => TRUE, "inst" => FALSE),
+				"vips" => array("id" => 10, "const" => "VIPS_ENABLE", "sem" => TRUE, "inst" => FALSE),
+				"impuls_ec" => array("id" => 11, "const" => "IMPULS_EC_ENABLE", "sem" => TRUE, "inst" => FALSE),
+				"scm" => array("id" => 12, "const" => "SCM_ENABLE", "sem" => TRUE, "inst" => TRUE),
+				"elearning_interface" => array("id" => 13, "const" => "ELEARNING_INTERFACE_ENABLE", "sem" => TRUE, "inst" => TRUE)
+				);
 	var $db;
 	
 	function Modules() {
@@ -313,17 +314,17 @@ class Modules {
 		// | ist nicht das logische ODER sondern das BIT-oder 
 		$bitField |= (0x01 << ($n)); 
 		return true; 
-	} 
+	}
 
 	function clearBit(&$bitField,$n) { 
 		// Loescht ein Bit oder ein Bitfeld 
 		// & ist nicht das logische UND sondern das BIT-and 
 		$bitField &= ~(0x01 << ($n)); 
 		return true; 
-	} 
+	}
 
 	function isBit($bitField,$n) { 
 		// Ist die x-te Stelle eine 1? 
 		return (($bitField & (0x01 << ($n)))); 
-	} 	
+	}
 }

@@ -38,84 +38,79 @@ require_once $ABSOLUTE_PATH_STUDIP.("forum.inc.php");
 require_once $ABSOLUTE_PATH_STUDIP.("config.inc.php");
 require_once $ABSOLUTE_PATH_STUDIP.("datei.inc.php");
 require_once $ABSOLUTE_PATH_STUDIP.("dates.inc.php");
-require_once $ABSOLUTE_PATH_STUDIP.("lib/classes/Modules.class.php");
+require_once $ABSOLUTE_PATH_STUDIP.("lib/classes/ModulesNotification.class.php");
 require_once $ABSOLUTE_PATH_STUDIP.("lib/classes/StudipLitList.class.php");
 
 
-class AdminModules extends Modules {
+class AdminModules extends ModulesNotification {
 	var $db;
 	var $db2;
 	
 	function AdminModules() {
+		Modules::Modules();
 		$this->db = new DB_Seminar;
 		$this->db2 = new DB_Seminar;
+		parent::ModulesNotification();
 		//please add here the special messages for modules you need consistency checks (defined below in this class)
-		$this->registered_modules["forum"]["name"] = _("Forum");
 		$this->registered_modules["forum"]["msg_warning"] = _("Wollen Sie wirklich das Forum deaktivieren und damit alle Diskussionbeitr&auml;ge l&ouml;schen?");
 		$this->registered_modules["forum"]["msg_pre_warning"] = _("Achtung: Beim Deaktivieren des Forums werden <b>%s</b> Postings ebenfalls gel&ouml;scht!");
 		$this->registered_modules["forum"]["msg_activate"] = _("Das Forum kann jederzeit aktiviert werden.");
 		$this->registered_modules["forum"]["msg_deactivate"] = _("Das Forum kann jederzeit deaktiviert werden.");
 
 
-		$this->registered_modules["documents"]["name"] = _("Dateiordner");
 		$this->registered_modules["documents"]["msg_warning"] = _("Wollen Sie wirklich den Dateiordner deaktivieren und damit alle hochgeladenen Dokumente und alle Ordner l&ouml;schen?");
 		$this->registered_modules["documents"]["msg_pre_warning"] = _("Achtung: Beim Deaktivieren des Dateiordners werden <b>%s</b> Dateien und Ordner ebenfalls gel&ouml;scht!");
 		$this->registered_modules["documents"]["msg_activate"] = _("Der Dateiordner kann jederzeit aktiviert werden.");
 		$this->registered_modules["documents"]["msg_deactivate"] = _("Der Dateiordner kann jederzeit deaktiviert werden.");
 
-		$this->registered_modules["schedule"]["name"] = _("Ablaufplan");
 		$this->registered_modules["schedule"]["msg_warning"] = _("Wollen Sie wirklich den Ablaufplan deaktivieren und damit alle Termine l&ouml;schen?");
 		$this->registered_modules["schedule"]["msg_pre_warning"] = _("Achtung: Beim Deaktivieren des Ablaufplans werden <b>%s</b> Termine ebenfalls gel&ouml;scht!");
 		$this->registered_modules["schedule"]["msg_activate"] = _("Die Ablaufplanverwaltung kann jederzeit aktiviert werden.");
 		$this->registered_modules["schedule"]["msg_deactivate"] = _("Die Ablaufplanverwaltung kann jederzeit deaktiviert werden.");
 
-		$this->registered_modules["participants"]["name"] = _("TeilnehmerInnen");
 		$this->registered_modules["participants"]["msg_activate"] = _("Die TeilnehmerInnenverwaltung kann jederzeit aktiviert werden.");
 		$this->registered_modules["participants"]["msg_deactivate"] = _("Die TeilnehmerInnenverwaltung kann jederzeit deaktiviert werden. Bachten Sie, dass Sie dann keine normalen Teilnehmer verwalten k&ouml;nnen!");
 
-		$this->registered_modules["personal"]["name"] = _("Personal");
 		$this->registered_modules["personal"]["msg_activate"] = _("Die Personalliste kann jederzeit aktiviert werden.");
 		$this->registered_modules["personal"]["msg_deactivate"] = _("Die Personalliste kann jederzeit deaktiviert werden.");
 
-		$this->registered_modules["literature"]["name"] = _("Literatur");
 		$this->registered_modules["literature"]["msg_warning"] = _("Wollen Sie wirklich die Literaturverwaltung deaktivieren und damit die erfassten Literaturlisten l&ouml;schen?");
 		$this->registered_modules["literature"]["msg_pre_warning"] = _("Achtung: Beim Deaktivieren der Literaturverwaltung werden <b>%s</b> &ouml;ffentliche / nicht &ouml;ffentliche Literaturlisten ebenfalls gel&ouml;scht!");
 		$this->registered_modules["literature"]["msg_activate"] = _("Die Literaturverwaltung kann jederzeit aktiviert werden.");
 		$this->registered_modules["literature"]["msg_deactivate"] = _("Die Literaturverwaltung kann jederzeit deaktiviert werden.");
 
-		$this->registered_modules["ilias_connect"]["name"] = _("Lernmodule");
 		$this->registered_modules["ilias_connect"]["msg_warning"] = _("Wollen Sie wirklich die Anbindung an ILIAS-Lernmodule deaktivieren und damit alle bestehenden Verkn&uuml;pfungen mit Lernmodulen l&ouml;schen?");
 		$this->registered_modules["ilias_connect"]["msg_pre_warning"] = _("Achtung: Beim Deaktivieren der Anbindung an ILIAS-Lernmodule werden <b>%s</b> Verkn&uuml;pfungen mit Lernmodulen aufgel&ouml;st!");
 		$this->registered_modules["ilias_connect"]["msg_activate"] = _("Die Anbindung zu Ilias Lernmodulen  kann jederzeit aktiviert werden.");
 		$this->registered_modules["ilias_connect"]["msg_deactivate"] = _("Die Anbindung zu Ilias Lernmodulen kann jederzeit deaktiviert werden.");
 
-		$this->registered_modules["chat"]["name"] = _("Chat");
 		$this->registered_modules["chat"]["msg_activate"] = _("Der Chat kann jederzeit aktiviert werden.");
 		$this->registered_modules["chat"]["msg_deactivate"] = _("Der Chat kann jederzeit deaktiviert werden.");
 
-		$this->registered_modules["support"]["name"] = _("SupportDB");
 		$this->registered_modules["support"]["msg_activate"] = _("Die SupportDB kann jederzeit aktiviert werden.");
 		$this->registered_modules["support"]["msg_deactivate"] = _("Die SupportDB kann jederzeit deaktiviert werden.");
 
-		$this->registered_modules["wiki"]["name"] = _("Wiki-Web");
 		$this->registered_modules["wiki"]["msg_warning"] = _("Wollen Sie wirklich das Wiki deaktivieren und damit alle Seitenversionen l&ouml;schen?");
 		$this->registered_modules["wiki"]["msg_pre_warning"] = _("Achtung: Beim Deaktivieren des Wiki-Webs werden <b>%s</b> Seitenversionen ebenfalls gel&ouml;scht!");
 		$this->registered_modules["wiki"]["msg_activate"] = _("Das Wiki-Web kann jederzeit aktiviert werden.");
 		$this->registered_modules["wiki"]["msg_deactivate"] = _("Das Wiki-Web kann jederzeit deaktiviert werden.");
 
-		$this->registered_modules["impuls_ec"]["name"] = _("Impuls EC");
 		$this->registered_modules["impuls_ec"]["msg_activate"] = _("Die Impuls-Module können jederzeit aktiviert werden.");
 		$this->registered_modules["impuls_ec"]["msg_deactivate"] = _("Die Impuls-Module können jederzeit deaktiviert werden.");
 
-		$this->registered_modules["vips"]["name"] = _("ViPS (Virtuelles Prüfungssystem)");
 		$this->registered_modules["vips"]["msg_activate"] = _("ViPS kann jederzeit aktiviert werden.");
 		$this->registered_modules["vips"]["msg_deactivate"] = _("ViPS kann jederzeit deaktiviert werden.");
 
-		$this->registered_modules["scm"]["name"] = _("Freie Informationsseite");
 		$this->registered_modules["scm"]["msg_activate"] = _("Die freie Informationsseite kann jederzeit aktiviert werden.");
 		$this->registered_modules["scm"]["msg_warning"] = _("Wollen Sie wirklich die freie Informationsseite deaktivieren und damit den erfassten Inhalt l&ouml;schen?");
 		$this->registered_modules["scm"]["msg_pre_warning"] = _("Achtung: Beim Deaktivieren der freien Informationsseite werden die eingestellten Inhalte gel&ouml;scht!");
 		$this->registered_modules["scm"]["msg_deactivate"] = _("Die freie Informationsseite kann jederzeit deaktiviert werden.");
+
+		$this->registered_modules["elearning_interface"]["name"] = _("Lernmodul-Schnittstelle");
+		$this->registered_modules["elearning_interface"]["msg_warning"] = _("Wollen Sie wirklich die Schnittstelle f&uuml;r die Integration von Content-Modulen deaktivieren und damit alle bestehenden Verkn&uuml;pfungen mit Lernmodulen l&ouml;schen?");
+		$this->registered_modules["elearning_interface"]["msg_pre_warning"] = _("Achtung: Beim Deaktivieren der Schnittstelle f&uuml;r die Integration von Content-Modulen werden <b>%s</b> Verkn&uuml;pfungen mit Lernmodulen aufgel&ouml;st!");
+		$this->registered_modules["elearning_interface"]["msg_activate"] = _("Die Schnittstelle f&uuml;r die Integration von Content-Modulen kann jederzeit aktiviert werden.");
+		$this->registered_modules["elearning_interface"]["msg_deactivate"] = _("Die Schnittstelle f&uuml;r die Integration von Content-Modulen kann jederzeit deaktiviert werden.");
 	}
 	
 	function getModuleForumExistingItems($range_id) {
@@ -283,6 +278,22 @@ class AdminModules extends Modules {
 		$this->db->query("INSERT IGNORE INTO scm SET scm_id='".md5(uniqid("simplecontentmodule"))."', range_id='".$range_id."', user_id='".$user->id."', tab_name='".$SCM_PRESET[1]["name"]."', content='', mkdate='".time()."', chdate='".time()."'");
 	}
 
+	function getModuleElearning_interfaceExistingItems($range_id) {
+		$query = sprintf ("SELECT COUNT(object_id) as items FROM object_contentmodules WHERE object_id = '%s' AND module_type != 'crs'", $range_id);
+
+		$this->db->query($query);
+		$this->db->next_record();
+		
+		return $this->db->f("items");
+	}
+
+	function moduleElearning_interfaceDeactivate($range_id) {
+		$db = new DB_Seminar;
+
+		$query = sprintf ("DELETE FROM object_contentmodules WHERE object_id='%s'", $range_id);
+		$db->query($query);
+	}
+	
 	function moduleImpuls_ECDeactivate($range_id) {
 		return 0;
 	}

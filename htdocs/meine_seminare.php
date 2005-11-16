@@ -24,144 +24,6 @@ $perm->check("user");
 
 ob_start(); //Outputbuffering für maximal Performance
 
-function get_obj_clause ($table_name, $range_field, $count_field, $if_clause,
-		$type = false, $add_fields = false, $add_on = false, $object_field = false) {
-	
-	$type_sql = ($type) ? "='$type'" : "IN('sem','inst')";
-	$object_field = ($object_field) ? $object_field : "my.object_id";
-	$on_clause = " ON(my.object_id=a.{$range_field} $add_on) ";
-	if (strpos($table_name,'{ON_CLAUSE}') !== false){
-		$table_name = str_replace('{ON_CLAUSE}', $on_clause, $table_name);
-	} else {
-		$table_name .= $on_clause;
-	}
-	$max_field = 'chdate';
-	return "SELECT " . ($add_fields ? $add_fields . ", " : "" ) . " my.object_id, COUNT($count_field) as count, COUNT(IF($if_clause, $count_field, NULL)) AS neue,
-	MAX(IF($if_clause, $max_field, 0)) AS last_modified FROM myobj_".$GLOBALS['user']->id." my LEFT JOIN object_user_visits b ON (b.object_id = $object_field AND b.user_id = '".$GLOBALS['user']->id."' AND b.type $type_sql)
-	INNER JOIN $table_name GROUP BY my.object_id";
-	
-}
-
-
-function get_my_obj_values (&$my_obj) {
-	
-	$user_id = $GLOBALS['user']->id;
-	$db2 = new DB_seminar;
-	$db2->query("CREATE TEMPORARY TABLE IF NOT EXISTS myobj_".$user_id." ( object_id char(32) NOT NULL, PRIMARY KEY (object_id)) TYPE=HEAP");
-	$db2->query("REPLACE INTO  myobj_" . $user_id . " (object_id) VALUES ('" . join("'),('", array_keys($my_obj)) . "')");
-	// Postings
-	$db2->query(get_obj_clause('px_topics a','Seminar_id','topic_id',"(chdate > IFNULL(b.visitdate,0) AND chdate >= mkdate AND a.user_id !='$user_id')", 'forum'));
-	while($db2->next_record()) {
-		if ($my_obj[$db2->f("object_id")]["modules"]["forum"]) {
-			$my_obj[$db2->f("object_id")]["neuepostings"]=$db2->f("neue");
-			$my_obj[$db2->f("object_id")]["postings"]=$db2->f("count");
-			if ($my_obj[$db2->f("object_id")]['last_modified'] < $db2->f('last_modified')){
-				$my_obj[$db2->f("object_id")]['last_modified'] = $db2->f('last_modified');
-			}
-		}
-	}
-	
-	//dokumente
-	$db2->query(get_obj_clause('dokumente a','Seminar_id','dokument_id',"(chdate > IFNULL(b.visitdate,0) AND a.user_id !='$user_id')", 'documents'));
-	while($db2->next_record()) {
-		if ($my_obj[$db2->f("object_id")]["modules"]["documents"]) {
-			$my_obj[$db2->f("object_id")]["neuedokumente"]=$db2->f("neue");
-			$my_obj[$db2->f("object_id")]["dokumente"]=$db2->f("count");
-			if ($my_obj[$db2->f("object_id")]['last_modified'] < $db2->f('last_modified')){
-				$my_obj[$db2->f("object_id")]['last_modified'] = $db2->f('last_modified');
-			}
-		}
-	}
-	
-	//News
-	$db2->query(get_obj_clause('news_range a {ON_CLAUSE} LEFT JOIN news nw ON(a.news_id=nw.news_id AND UNIX_TIMESTAMP() BETWEEN date AND (date+expire))','range_id','nw.news_id',"(chdate > IFNULL(b.visitdate,0) AND nw.user_id !='$user_id')",'news',false,false,'a.news_id'));
-	while($db2->next_record()) {
-		$my_obj[$db2->f("object_id")]["neuenews"]=$db2->f("neue");
-		$my_obj[$db2->f("object_id")]["news"]=$db2->f("count");
-		if ($my_obj[$db2->f("object_id")]['last_modified'] < $db2->f('last_modified')){
-			$my_obj[$db2->f("object_id")]['last_modified'] = $db2->f('last_modified');
-		}
-	}
-	
-	// scm?
-	$db2->query(get_obj_clause('scm a','range_id',"IF(content !='',1,0)","(chdate > IFNULL(b.visitdate,0) AND a.user_id !='$user_id')", "scm", 'tab_name'));
-	while($db2->next_record()) {
-		if ($my_obj[$db2->f("object_id")]["modules"]["scm"]) {	
-			$my_obj[$db2->f("object_id")]["neuscmcontent"]=$db2->f("neue");
-			$my_obj[$db2->f("object_id")]["scmcontent"]=$db2->f("count");
-			$my_obj[$db2->f("object_id")]["scmtabname"]=$db2->f("tab_name");
-			if ($my_obj[$db2->f("object_id")]['last_modified'] < $db2->f('last_modified')){
-				$my_obj[$db2->f("object_id")]['last_modified'] = $db2->f('last_modified');
-			}
-		}
-	}
-	
-	//Literaturlisten
-	$db2->query(get_obj_clause('lit_list a','range_id','list_id',"(chdate > IFNULL(b.visitdate,0) AND a.user_id !='$user_id')", 'literature', false, " AND a.visibility=1"));
-	while($db2->next_record()) {
-		if ($my_obj[$db2->f("object_id")]["modules"]["literature"]) {	
-			$my_obj[$db2->f("object_id")]["neuelitlist"]=$db2->f("neue");
-			$my_obj[$db2->f("object_id")]["litlist"]=$db2->f("count");
-			if ($my_obj[$db2->f("object_id")]['last_modified'] < $db2->f('last_modified')){
-				$my_obj[$db2->f("object_id")]['last_modified'] = $db2->f('last_modified');
-			}
-		}
-	}
-	
-	//Termine?
-	$db2->query(get_obj_clause('termine a','range_id','termin_id',"(chdate > IFNULL(b.visitdate,0) AND autor_id !='$user_id')", 'schedule'));
-	while($db2->next_record()) {
-		if ($my_obj[$db2->f("object_id")]["modules"]["schedule"]) {	
-			$my_obj[$db2->f("object_id")]["neuetermine"]=$db2->f("neue");
-			$my_obj[$db2->f("object_id")]["termine"]=$db2->f("count");
-			if ($my_obj[$db2->f("object_id")]['last_modified'] < $db2->f('last_modified')){
-				$my_obj[$db2->f("object_id")]['last_modified'] = $db2->f('last_modified');
-			}
-		}
-	}
-	
-	//Wiki-Eintraege?
-	if ($GLOBALS['WIKI_ENABLE']) {
-		$db2->query(get_obj_clause('wiki a','range_id','keyword',"(chdate > IFNULL(b.visitdate,0) AND a.user_id !='$user_id')", 'wiki', "COUNT(DISTINCT keyword) as count_d"));
-		while($db2->next_record()) {
-			if ($my_obj[$db2->f("object_id")]["modules"]["wiki"]) {	
-				$my_obj[$db2->f("object_id")]["neuewikiseiten"]=$db2->f("neue");
-				$my_obj[$db2->f("object_id")]["wikiseiten"]=$db2->f("count_d");
-				if ($my_obj[$db2->f("object_id")]['last_modified'] < $db2->f('last_modified')){
-					$my_obj[$db2->f("object_id")]['last_modified'] = $db2->f('last_modified');
-				}
-			}
-		}
-	}
-	
-	//Umfragen
-	if ($GLOBALS['VOTE_ENABLE']) {
-		$db2->query(get_obj_clause('vote a','range_id','vote_id',"(chdate > IFNULL(b.visitdate,0) AND a.author_id !='$user_id' AND a.state != 'stopvis')",
-									'vote', false , " AND a.state IN('active','stopvis')",'vote_id'));
-		while($db2->next_record()) {
-				$my_obj[$db2->f("object_id")]["neuevotes"] = $db2->f("neue");
-				$my_obj[$db2->f("object_id")]["votes"] = $db2->f("count");
-				if ($my_obj[$db2->f("object_id")]['last_modified'] < $db2->f('last_modified')){
-					$my_obj[$db2->f("object_id")]['last_modified'] = $db2->f('last_modified');
-				}
-		}
-		
-		$db2->query(get_obj_clause('eval_range a {ON_CLAUSE} INNER JOIN eval d ON ( a.eval_id = d.eval_id AND d.startdate < UNIX_TIMESTAMP( ) AND (d.stopdate > UNIX_TIMESTAMP( ) OR d.startdate + d.timespan > UNIX_TIMESTAMP( ) OR (d.stopdate IS NULL AND d.timespan IS NULL)))',
-									'range_id','a.eval_id',"(chdate > IFNULL(b.visitdate,0) AND d.author_id !='$user_id' )",'eval',false,false,'a.eval_id'));
-		while($db2->next_record()) {
-				$my_obj[$db2->f("object_id")]["neuevotes"] += $db2->f("neue");
-				$my_obj[$db2->f("object_id")]["votes"] += $db2->f("count");
-				if ($my_obj[$db2->f("object_id")]['last_modified'] < $db2->f('last_modified')){
-					$my_obj[$db2->f("object_id")]['last_modified'] = $db2->f('last_modified');
-				}
-		}
-	}
-	
-	$db2->query("DROP TABLE IF EXISTS myobj_" . $user_id);
-	return;
-}
-
-
 function print_seminar_content ($semid, $my_obj_values, $type = 'seminar') {
   $link = $type."_main.php";
   
@@ -227,7 +89,17 @@ function print_seminar_content ($semid, $my_obj_values, $type = 'seminar') {
 			echo "&nbsp; <img src=\"pictures/icon-leer.gif\" width=\"20\" height=\"17\" border=\"0\">";
   }
 	
-  //votes
+   //elearning
+  if ($GLOBALS['ELEARNING_INTERFACE_ENABLE']) {
+  	if ($my_obj_values["neuecontentmodule"])
+			echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to=elearning_interface.php&view=show\"><img src='pictures/icon-lern2.gif' border=0 ".tooltip(sprintf(_("%s Content-Modul(e), %s neue"), $my_obj_values["contentmodule"], $my_obj_values["neuecontentmodule"]))."></a>";
+	  elseif ($my_obj_values["contentmodule"])
+			echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to=elearning_interface.php&view=show\"><img src='pictures/icon-lern.gif' border=0 ".tooltip(sprintf(_("%s Content-Modul(e)"), $my_obj_values["contentmodule"]))."></a>";
+	  else
+			echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
+  }
+
+ //votes
   if ($GLOBALS['VOTE_ENABLE']) {
   	if ($my_obj_values["neuevotes"])
 			echo "&nbsp; <a href=\"$link?auswahl=$semid#vote\"><img src='pictures/icon-vote2.gif' border=0 ".tooltip(sprintf(_("%s Umfrage(n), %s neue"), $my_obj_values["votes"], $my_obj_values["neuevotes"]))."></a>";
@@ -251,6 +123,7 @@ require_once ($ABSOLUTE_PATH_STUDIP."dates.inc.php");			// Semester-Namen fuer A
 require_once ($ABSOLUTE_PATH_STUDIP."admission.inc.php");		// Funktionen der Teilnehmerbegrenzung
 require_once ($ABSOLUTE_PATH_STUDIP."messaging.inc.php");
 require_once ($ABSOLUTE_PATH_STUDIP."lib/classes/Modules.class.php");	// modul-config class
+require_once ($ABSOLUTE_PATH_STUDIP."lib/classes/ModulesNotification.class.php");
 require_once ($ABSOLUTE_PATH_STUDIP."statusgruppe.inc.php");		// Funktionen für Statusgruppen
 require_once ($ABSOLUTE_PATH_STUDIP."object.inc.php");
 require_once ($ABSOLUTE_PATH_STUDIP. "meine_seminare_func.inc.php");
@@ -264,10 +137,10 @@ if ($GLOBALS['ILIAS_CONNECT_ENABLE']){
 	include_once ($ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_LEARNINGMODULES."/lernmodul_db_functions.inc.php"); 
 }
 
-$cssSw = new cssClassSwitcher;									// Klasse für Zebra-Design
+$cssSw = new cssClassSwitcher();									// Klasse für Zebra-Design
 $cssSw->enableHover();
-$db = new DB_Seminar;
-$Modules = new Modules;
+$db = new DB_Seminar();
+$Modules = new Modules();
 
 // we are defintely not in an lexture or institute
 closeObject();
@@ -370,7 +243,7 @@ if ($cmd=="inst_kill") {
 
 
 // Update der Gruppen
-if ($gruppesent=="1"){
+if ($gruppesent == '1'){
 	$_my_sem_group_field = $_REQUEST['select_group_field'];
 	if (is_array($_REQUEST['gruppe'])){
 		foreach($_REQUEST['gruppe'] as $key => $value){
@@ -379,6 +252,13 @@ if ($gruppesent=="1"){
 	}
 }
 
+// Update der Benachrichtigungsfunktion
+if ($cmd == 'set_sem_notification') {
+	if (is_array($_REQUEST['m_checked'])) {
+		$m_notification =& new ModulesNotification();
+		$m_notification->setModuleNotification($_REQUEST['m_checked'], 'sem');
+	}
+}
 
 //Anzeigemodul fuer eigene Seminare (nur wenn man angemeldet und nicht root oder admin ist!)
 if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("admin")) {
@@ -447,7 +327,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 			}
 		}
 		
-	$sortby="Name";
+	$sortby = "Name";
 	if ($sortby == "count")
 		$sortby = "count DESC";
 	$db->query ("SELECT b.Name, b.Institut_id,b.type, user_inst.inst_perms,if(b.Institut_id=b.fakultaets_id,1,0) AS is_fak,
@@ -456,21 +336,21 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 				WHERE user_inst.user_id = '$user->id' GROUP BY Institut_id ORDER BY $sortby");
 	$num_my_inst = $db->num_rows();
 	while ($db->next_record()) {
-			$my_obj[$db->f("Institut_id")]= array("name" => $db->f("Name"),"status" => $db->f("inst_perms"), 
-												"type" =>($db->f("type")) ? $db->f("type") : 1, "modules" => $Modules->getLocalModules($db->f("Institut_id"),"inst",$db->f("modules"),($db->f("type") ? $db->f("type") : 1)),
-												"obj_type" => "inst","visitdate" => $db->f("visitdate"));
-			if (($GLOBALS['CHAT_ENABLE']) && ($my_obj[$db->f("Institut_id")]["modules"]["chat"])) {
-				$chatter = $chatServer->isActiveChat($db->f("Institut_id"));
-				$chat_info[$db->f("Institut_id")] = array("chatter" => $chatter, "chatuniqid" => $chatServer->chatDetail[$db->f("Institut_id")]["id"],
-												"is_active" => $chatServer->isActiveUser($user->id,$db->f("Institut_id")));
-				if ($chatter){
-					$active_chats[$chatServer->chatDetail[$db->f("Institut_id")]["id"]] = $db->f("Institut_id");
-				}
+		$my_obj[$db->f("Institut_id")]= array("name" => $db->f("Name"),"status" => $db->f("inst_perms"), 
+											"type" =>($db->f("type")) ? $db->f("type") : 1, "modules" => $Modules->getLocalModules($db->f("Institut_id"),"inst",$db->f("modules"),($db->f("type") ? $db->f("type") : 1)),
+											"obj_type" => "inst","visitdate" => $db->f("visitdate"));
+		if (($GLOBALS['CHAT_ENABLE']) && ($my_obj[$db->f("Institut_id")]["modules"]["chat"])) {
+			$chatter = $chatServer->isActiveChat($db->f("Institut_id"));
+			$chat_info[$db->f("Institut_id")] = array("chatter" => $chatter, "chatuniqid" => $chatServer->chatDetail[$db->f("Institut_id")]["id"],
+											"is_active" => $chatServer->isActiveUser($user->id,$db->f("Institut_id")));
+			if ($chatter){
+				$active_chats[$chatServer->chatDetail[$db->f("Institut_id")]["id"]] = $db->f("Institut_id");
 			}
 		}
-		if (($num_my_sem + $num_my_inst) > 0){
-			get_my_obj_values($my_obj);
-		}
+	}
+	if (($num_my_sem + $num_my_inst) > 0){
+		get_my_obj_values($my_obj, $GLOBALS['user']->id);
+	}
 	if ($GLOBALS['CHAT_ENABLE']){
 		if (is_array($active_chats)){
 			$chat_invs = $sms->check_list_of_chatinv(array_keys($active_chats));
@@ -648,8 +528,8 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 					printf("<td class=\"".$cssSw->getClass()."\"  align=center nowrap><a href=\"$PHP_SELF?auswahl=%s&cmd=suppose_to_kill\"><img src=\"pictures/logout_seminare.gif\" ".tooltip(_("aus der Veranstaltung abmelden"))." border=\"0\"></a>&nbsp;</td>", $semid);
 				echo "</tr>\n";
 			}
-		  }
-	}
+		}
+	} 
 }
 	echo "</table><br><br>";
 
@@ -912,6 +792,11 @@ if ( !$perm->have_perm("root")) {
 												_("Gruppierung der angezeigten Veranstaltungen %s&auml;ndern%s."),
 												"<a href=\"gruppe.php\">", "</a>")
 												)));
+	if (get_config('MAIL_NOTIFICATION_ENABLE')){
+		$infobox[count($infobox)-1]['eintrag'][] = array(	'icon' => 'pictures/cont_nachricht_pfeil.gif',
+															'text' => sprintf(_("Benachrichtigung über neue Inhalte %sanpassen%s."),
+																	'<a href="sem_notification.php">', '</a>'));
+	}
 					
 
 // print the info_box
@@ -1064,7 +949,7 @@ elseif ($auth->auth["perm"]=="admin") {
 					$db->f("modules"),
 					$db->f("status")));
 		}
-		get_my_obj_values(&$my_sem);
+		get_my_obj_values(&$my_sem, $GLOBALS['user']->id);
 		$cssSw->enableHover();
 		foreach ($my_sem as $semid=>$values){
 			$cssSw->switchClass();
