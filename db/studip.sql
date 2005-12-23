@@ -643,7 +643,7 @@ CREATE TABLE `message` (
   `readed` tinyint(1) NOT NULL default '0',
   `reading_confirmation` tinyint(1) NOT NULL default '0',
   PRIMARY KEY  (`message_id`),
-  KEY `chat_id` (`chat_id`),
+  KEY `chat_id` (`chat_id`)
 ) TYPE=MyISAM;
 
 # --------------------------------------------------------
