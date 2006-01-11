@@ -315,6 +315,7 @@ class EvalOverview {
       : EvalCommon::createSubmitButton ("zuruecksetzen", _("Evaluation zurücksetzen"), "restart_confirmed_button");
      $content[4] = EvalCommon::createSubmitButton ("export", _("Evaluation exportieren"), "export_request_button");
      $content[5] = EvalCommon::createSubmitButton ("loeschen", _("Evaluation löschen"), "delete_request_button");
+     $content[6] = EvalCommon::createSubmitButton ("auswertung", _("Auswertung"), "export_gfx_request_button");
     }
      break;
 
@@ -330,6 +331,7 @@ class EvalOverview {
       : EvalCommon::createSubmitButton ("zuruecksetzen", _("Evaluation zurücksetzen"), "restart_confirmed_button");
      $content[4] = EvalCommon::createSubmitButton ("export", _("Evaluation exportieren"), "export_request_button");
      $content[5] = EvalCommon::createSubmitButton ("loeschen", _("Evaluation löschen"), "delete_request_button");
+     $content[6] = EvalCommon::createSubmitButton ("auswertung", _("Auswertung"), "export_gfx_request_button");
     }
      break;
       }
@@ -417,7 +419,8 @@ class EvalOverview {
       }
        $tr->addContent ($td);
       /* the content fields */
-      for( $i = 0; $i < 6; $i++ ) {
+      //for( $i = 0; $i < 6; $i++ ) {
+     for( $i = 0; $i < 7; $i++ ) {
      $td = new HTML ("td");
      $td->addAttr ("width", "96");
      $td->addAttr ("class", $style);
@@ -949,6 +952,22 @@ class EvalOverview {
          }
          $safeguard .= $report->createContent ();
          return $safeguard;
+
+
+	case "export_gfx_request":
+            $haveNoPerm = YES;
+            $eval       = new Evaluation ($evalID, NULL, EVAL_LOAD_NO_CHILDREN);
+            $haveNoPerm = EvaluationObjectDB::getEvalUserRangesWithNoPermission ($eval);
+            if ($haveNoPerm == YES) {
+               $report = EvalCommon::createReportMessage  (_("Sie haben nicht die Berechtigung diese Evaluation zu exportieren."), EVAL_PIC_ERROR, EVAL_CSS_ERROR);
+               return $report->createContent ();
+            }
+
+            echo "<script language=\"JavaScript\">";
+            echo "  document.location.href=\"eval_summary.php?eval_id=".$evalID."\"";
+            echo "</script>";
+
+            return "";
 
 
          case "export_request":
