@@ -78,6 +78,18 @@ switch($referrer_page) {
 		$help_page = "ii_bestaetigungsmail.htm";
 		break;
 	
+	case "admin_evaluation.php" :
+                $help_page = "iii_homeeval.htm";
+                break;
+
+        case "eval_summary.php" :
+                $help_page = "iii_homeeval.htm";
+                break;
+
+        case "eval_config.php" :
+                $help_page = "iii_homeeval.htm";
+                break;
+
 	case "about.php" :
 		$help_page = "iii_homepage.htm";
 		break;
