@@ -125,7 +125,7 @@ if ($_REQUEST["change_config"]) {
 			if (!$admin_config_data["range_id"]) {
 				$out[] = '&nbsp;<b>'._("Systemkonfiguration und -defaults").'</b>';
 			} else {
-				$out[] = '&nbsp;<b>'.get_fullname($admin_config_data["range_id"]).'</b>';
+				$out[] = '&nbsp;<b>'.htmlReady(get_fullname($admin_config_data["range_id"])).'</b>';
 				$out[] = '&nbsp;<a href="'.$PHP_SELF.'?reset_range=1"><img src="./pictures/rewind.gif" '.tooltip(_("Gew&auml;hlten Bereich l&ouml;schen und zur&uuml;ck zu Systemkonfiguration")).' border="0"></a>';
 			}
 			$out[] = '</font></td>';
@@ -135,7 +135,7 @@ if ($_REQUEST["change_config"]) {
 				$db->query ("SELECT username, ". $_fullname_sql['full_rev'] ." AS fullname FROM auth_user_md5 LEFT JOIN user_info USING(user_id) WHERE (username LIKE '%".$_REQUEST["search_exp"]."%' OR Vorname LIKE '%".$_REQUEST["search_exp"]."%' OR Nachname LIKE '%".$_REQUEST["search_exp"]."%') ORDER BY Nachname");
 				if ($db->num_rows()) {
 					$out[] = '<a name="a"></a>';
-					$out[] = sprintf ('<br>&nbsp;<font size=-1><b>%s</b> '._('NutzerInnen gefunden:').'<br />', $db->num_rows());
+					$out[] = sprintf ('<br>&nbsp;<font size=-1><b>%s</b> '._("NutzerInnen gefunden:").'<br />', $db->num_rows());
 					$out[] = '&nbsp;<select style="font-size: 8pt" name="select_username">';
 					while ($db->next_record()) {
 						$out[].= sprintf ('<option value="%s">%s </option>', $db->f("username"), htmlReady(my_substr($db->f("fullname").' ('.$db->f("username").')', 0, 30)));
@@ -151,8 +151,8 @@ if ($_REQUEST["change_config"]) {
 					$out[] = _("KeineN NutzerIn gefunden.").'<a name="a"></a>';
 				$out[] = '</font><br />';
 				$out[] = '&nbsp;<input type="TEXT" size="30" maxlength="255" name="search_exp" />&nbsp;';
-				$out[] = '<input type="IMAGE" src="./pictures/suchen.gif"'.tooltip(_('Suche starten')).' border="0" name="search_user" /><br />';
-				$out[] = '&nbsp;<font size=-1>'._('Geben Sie zur Suche den Vor-, Nach- oder Usernamen ein.').'</font>';
+				$out[] = '<input type="IMAGE" src="./pictures/suchen.gif"'.tooltip(_("Suche starten")).' border="0" name="search_user" /><br />';
+				$out[] = '&nbsp;<font size=-1>'._("Geben Sie zur Suche den Vor-, Nach- oder Usernamen ein.").'</font>';
 			}
 			$out[] = '</td></tr></table>';
 			$out[] = '</form>';
@@ -196,7 +196,7 @@ if ($_REQUEST["change_config"]) {
 						} else {
 							$out[].= '<textarea style="font-size: 8pt" cols=20 cols=4 name="change_config['.$key.']">'.$val["value"].'</textarea>';
 						}
-						$out[].= '<br><font size="-1">Kommentar:</font><br>';
+						$out[].= '<br><font size="-1">'. _("Kommentar:") .'</font><br>';
 						$out[].= '<textarea style="font-size: 8pt" cols=20 cols=4 name="change_comment['.$key.']">'.$val["comment"].'</textarea>';	
 					} elseif ($val["type"] == "boolean") {
 						if ($val["value"]) {
@@ -210,7 +210,7 @@ if ($_REQUEST["change_config"]) {
 					
 					$out[].= '</font></td>';
 					$out[] = '<td width="10%"><font size="-1">&nbsp;'.$val["type"].'</font></td>';
-					$out[] = '<td width="30%" class="steelgraulight"><font size="-1">&nbsp;'.($val["description"] ? $val["description"] : _('Keine Beschreibung vorhanden')).'</font></td>';
+					$out[] = '<td width="30%" class="steelgraulight"><font size="-1">&nbsp;'.($val["description"] ? $val["description"] : _("Keine Beschreibung vorhanden")).'</font></td>';
 					$out[] = '</tr>';
 					$out[] = '</table></td></tr>';
 				}
