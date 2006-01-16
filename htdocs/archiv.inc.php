@@ -611,7 +611,7 @@ function in_archiv ($sem_id) {
 	$query = sprintf ("SELECT count(dokument_id) FROM dokumente WHERE seminar_id = '%s' AND url = ''", $seminar_id);
 	$db->query ($query);
 	$db->next_record();
-	if ((file_exists($ZIP_PATH) || ini_get('safe_mode')) && $db->f(0)) {
+	if ($db->f(0)) {
 		$archiv_file_id = md5(uniqid($hash_secret,1));
 		$docs = 0;
 		
@@ -639,11 +639,8 @@ function in_archiv ($sem_id) {
 		
 		//zip all the stuff
 		$archiv_full_path = "$ARCHIV_PATH/$archiv_file_id";
-		$zippara = (ini_get('safe_mode')) ? ' -R ':' -r ';
-		chdir ($tmp_full_path);
-		exec ($ZIP_PATH . ' ' . $ZIP_OPTIONS . ' ' . $zippara . $archiv_full_path . ' * ');
-		chdir($ABSOLUTE_PATH_STUDIP);
-	 	@rename($archiv_full_path . '.zip', $archiv_full_path);
+		create_zip_from_directory($tmp_full_path);
+	 	@rename($tmp_full_path . '.zip', $archiv_full_path);
 		rmdirr($tmp_full_path);	 	
 	} else
 		$archiv_file_id = "";

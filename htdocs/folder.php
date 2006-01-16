@@ -22,26 +22,26 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 ob_start();
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 
-require_once("$ABSOLUTE_PATH_STUDIP/datei.inc.php");
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+require_once($GLOGALS['ABSOLUTE_PATH_STUDIP'] . 'datei.inc.php');
+include ($GLOGALS['ABSOLUTE_PATH_STUDIP'] . 'seminar_open.php'); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
-require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
+require_once($GLOGALS['ABSOLUTE_PATH_STUDIP'] . 'msg.inc.php');
+require_once($GLOGALS['ABSOLUTE_PATH_STUDIP'] . 'visual.inc.php');
+require_once($GLOGALS['ABSOLUTE_PATH_STUDIP'] . 'config.inc.php');
+require_once($GLOGALS['ABSOLUTE_PATH_STUDIP'] . 'functions.php');
 
-$sess->register("folder_system_data");
+$sess->register('folder_system_data');
 $db=new DB_Seminar;
 $db2=new DB_Seminar;
 
 if ($folderzip) {
 	$zip_file_id = createFolderZip($folderzip);
-	$query = sprintf ("SELECT name FROM folder WHERE folder_id = '%s' ", $folderzip);
+	$query = sprintf ('SELECT name FROM folder WHERE folder_id = "%s" ', $folderzip);
 	$db->query($query);
 	$db->next_record();
-	$zip_name = prepareFilename(_("Dateiordner ").$db->f("name").".zip");
-	header("Location: sendfile.php?type=4&file_id=$zip_file_id&file_name=$zip_name");
+	$zip_name = prepareFilename(_("Dateiordner").'_'.$db->f('name').'.zip');
+	header('Location: ' . getDownloadLink( $zip_file_id, $zip_name, 4)); 
 	page_close();
 	die;
 }
@@ -49,39 +49,34 @@ if ($folderzip) {
 if ($download_selected_x) {
 	if (is_array($download_ids)) {
 		$zip_file_id = createSelectedZip($download_ids);
-		$zip_name = prepareFilename($SessSemName[0]." - "._("Dokumente").".zip");
-		header("Location: sendfile.php?type=4&file_id=$zip_file_id&file_name=$zip_name");
+		$zip_name = prepareFilename($SessSemName[0].'-'._("Dokumente").'.zip');
+		header('Location: ' . getDownloadLink( $zip_file_id, $zip_name, 4)); 
 		page_close();
 		die;
 	}
 }
 
 //Switch fuer die Ansichten
-if ($cmd=="tree") {
-	$folder_system_data='';
-	$folder_system_data["cmd"]="tree";
+if ($cmd == 'tree') {
+	$folder_system_data = '';
+	$folder_system_data['cmd'] = 'tree';
 	}
-if ($cmd=="all") {
-	$folder_system_data='';
-	$folder_system_data["cmd"]="all";
+if ($cmd == 'all') {
+	$folder_system_data = '';
+	$folder_system_data['cmd'] = 'all';
 	}
 
 // Start of Output
-include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-
-//JS Routinen einbinden, wenn benoetigt. Wird in der Funktion gecheckt, ob noetig...
-JS_for_upload();
-//we need this <body> tag, sad but true :)
-echo "\n<body onUnLoad=\"upload_end()\">"; 
+include ($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'html_head.inc.php'); // Output of html head
 
 
-include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+include ($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'header.php');   // Output of Stud.IP head
 
 checkObject();
-checkObjectModule("documents");
-object_set_visit_module("documents");
+checkObjectModule('documents');
+object_set_visit_module('documents');
 
-include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
+include ($GLOBALS['ABSOLUTE_PATH_STUDIP']. 'links_openobject.inc.php');
 
 //obskuren id+_?_ string zerpflücken
 if (strpos($open, "_") !== false){
@@ -203,7 +198,13 @@ if (($SemUserStatus == "autor") || ($rechte)) {
 	//wurde Code fuer Hochladen uebermittelt (=id+"_u_"), wird entsprechende Variable gesetzt
 	if ($open_cmd == 'u' && (!$cancel_x)) {
 		$folder_system_data["upload"]=$open_id;
-		}	
+		unset($folder_system_data["zipupload"]);
+	}
+	if ($open_cmd == 'z' && $rechte  && !$cancel_x) {
+		$folder_system_data["upload"]=$open_id;
+		$folder_system_data["zipupload"]=$open_id;
+	}	
+
 
 	//wurde Code fuer Verlinken uebermittelt (=id+"_l_"), wird entsprechende Variable gesetzt
 	if ($open_cmd == 'l' && (!$cancel_x)) {
@@ -214,7 +215,8 @@ if (($SemUserStatus == "autor") || ($rechte)) {
 	if ($open_cmd == 'rfu' && (!$cancel_x)) {
 		$folder_system_data["upload"]=$open_id;
 		$folder_system_data["refresh"]=$open_id;
-		}	
+		unset($folder_system_data["zipupload"]);
+	}	
 		
 	//wurde Code fuer Aktualisieren-Verlinken uebermittelt (=id+"_led_"), wird entsprechende Variable gesetzt
 	if ($open_cmd == 'led' && (!$cancel_x)) {
@@ -224,11 +226,17 @@ if (($SemUserStatus == "autor") || ($rechte)) {
 	
 	//wurde eine Datei hochgeladen/aktualisiert?
 	if (($cmd=="upload") && (!$cancel_x) && ($folder_system_data["upload"])) {
-		upload_item ($folder_system_data["upload"], TRUE, FALSE, $folder_system_data["refresh"]);
-		$open = $dokument_id;
-		$close = $folder_system_data["refresh"];
-		$folder_system_data["upload"]='';
-		$folder_system_data["refresh"]='';		
+		if (!$folder_system_data["zipupload"]){
+			upload_item ($folder_system_data["upload"], TRUE, FALSE, $folder_system_data["refresh"]);
+			$open = $dokument_id;
+			$close = $folder_system_data["refresh"];
+			$folder_system_data["upload"]='';
+			$folder_system_data["refresh"]='';	
+		} elseif ($rechte && get_config('ZIP_UPLOAD_ENABLE')) {
+			upload_zip_item();
+			$folder_system_data["upload"]='';
+			$folder_system_data["zipupload"]='';
+		}
 		unset($cmd);
 		}
 		
@@ -290,6 +298,7 @@ if (($SemUserStatus == "autor") || ($rechte)) {
 		$folder_system_data["update_link"]='';
 		$folder_system_data["move"]='';
 		$folder_system_data["mode"]='';
+		$folder_system_data["zipupload"]='';
 		unset($cmd);
 	}
 }
@@ -331,6 +340,10 @@ if ($close) {
  if (!isset($range_id))
  	$range_id = $SessionSeminar ;
 
+//JS Routinen einbinden, wenn benoetigt. Wird in der Funktion gecheckt, ob noetig...
+JS_for_upload();
+//we need this <body> tag, sad but true :)
+echo "\n<body onUnLoad=\"upload_end()\">"; 
 ?>
 <table cellspacing="0" cellpadding="0" border="0" width="100%">
 <tr><td class="topic" colspan="3"><b>&nbsp;<img src="pictures/icon-disc.gif" align=absmiddle>&nbsp; <? echo $SessSemName["header_line"] . " - " . _("Dateien"); ?></b></td></tr>

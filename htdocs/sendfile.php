@@ -91,7 +91,7 @@ if ($zip && is_file($path_file)) {
 	$zip_path_file = "$TMP_PATH/$tmp_id";
 	$tmp_file_name = escapeshellcmd("$TMP_PATH/$file_name");
 	@copy($path_file, $tmp_file_name);
-	exec ("$ZIP_PATH $ZIP_OPTIONS -j {$zip_path_file}.zip $tmp_file_name");
+	create_zip_from_file( $tmp_file_name, "$zip_path_file.zip");
 	$file_name = $file_name . ".zip";
 	$path_file = $zip_path_file . ".zip";
 	@unlink($tmp_file_name);
@@ -207,6 +207,10 @@ if ($force_download) {
 		break;
 		case "swf": 
 			$content_type="application/x-shockwave-flash";
+			$content_disposition="inline";		
+		break;
+		case "csv": 
+			$content_type="text/csv";
 			$content_disposition="inline";		
 		break;
 		default:

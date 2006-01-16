@@ -20,7 +20,9 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-include_once($ABSOLUTE_PATH_STUDIP.'lib/classes/idna_convert.class.php');
+require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'].'lib/classes/idna_convert.class.php');
+require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'].'lib/classes/StudipDocument.class.php');
+require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'].'lib/pclzip/pclzip.lib.php');
 
 function parse_header($header){
 	if (!is_array($header)){
@@ -144,9 +146,9 @@ function parse_link($link, $level=0) {
 
 
 function createSelectedZip ($file_ids, $perm_check = TRUE) {
-	global $TMP_PATH, $UPLOAD_PATH, $ZIP_PATH,$ZIP_OPTIONS, $SessSemName, $ABSOLUTE_PATH_STUDIP;
+	global $TMP_PATH, $UPLOAD_PATH, $ZIP_PATH, $SessSemName, $ABSOLUTE_PATH_STUDIP;
 	$zip_file_id = false;
-	if ((file_exists($ZIP_PATH) || ini_get('safe_mode')) && is_array($file_ids)){
+	if ( is_array($file_ids)){
 		$db = new DB_Seminar();
 		$zip_file_id = md5(uniqid("jabba",1));
 
@@ -165,39 +167,31 @@ function createSelectedZip ($file_ids, $perm_check = TRUE) {
 		}
 
 		//zip stuff
-		$zippara = (ini_get('safe_mode')) ? ' -R ':' -r ';
-		@chdir($tmp_full_path);
-		exec ($ZIP_PATH . ' ' . $ZIP_OPTIONS . ' ' . $zippara . $tmp_full_path . ' *');
-		@chdir($ABSOLUTE_PATH_STUDIP);
+		create_zip_from_directory($tmp_full_path);
 		rmdirr($tmp_full_path);
 		@rename($tmp_full_path .".zip" , $tmp_full_path);
 	}
- 	return $zip_file_id;
+	return $zip_file_id;
 }
 
 function createFolderZip ($folder_id) {
-	global $TMP_PATH, $ZIP_PATH,$ZIP_OPTIONS, $ABSOLUTE_PATH_STUDIP;
+	global $TMP_PATH, $ZIP_PATH, $ABSOLUTE_PATH_STUDIP;
 	$zip_file_id = false;
-	if (file_exists($ZIP_PATH) || ini_get('safe_mode')){
-
-		$zip_file_id = md5(uniqid("jabba",1));
-
-		//create temporary Folder
-		$tmp_full_path = "$TMP_PATH/$zip_file_id";
-		mkdir($tmp_full_path,0700);
-
-		//create folder comntent
-		createTempFolder($folder_id, $tmp_full_path);
-		
-		//zip stuff
-		$zippara = (ini_get('safe_mode')) ? ' -R ':' -r ';
-		chdir ($tmp_full_path);
-		exec ($ZIP_PATH . ' ' . $ZIP_OPTIONS . ' ' . $zippara . $tmp_full_path . ' * ');
-		chdir($ABSOLUTE_PATH_STUDIP);
-		rmdirr($tmp_full_path);
-		@rename($tmp_full_path .".zip" , $tmp_full_path);
-	}
- 	return $zip_file_id;
+	
+	$zip_file_id = md5(uniqid("jabba",1));
+	
+	//create temporary Folder
+	$tmp_full_path = "$TMP_PATH/$zip_file_id";
+	mkdir($tmp_full_path,0700);
+	
+	//create folder comntent
+	createTempFolder($folder_id, $tmp_full_path);
+	
+	//zip stuff
+	create_zip_from_directory($tmp_full_path);
+	rmdirr($tmp_full_path);
+	@rename($tmp_full_path .".zip" , $tmp_full_path);
+	return $zip_file_id;
 }
 
 function createTempFolder($folder_id, $tmp_full_path, $perm_check = TRUE) {
@@ -494,27 +488,24 @@ function create_folder ($name, $description, $parent_id) {
 
 //Ausgabe des Formulars
 function form($refresh = FALSE) {
-	global $PHP_SELF,$UPLOAD_TYPES,$range_id,$SessSemName,$SemUserStatus,$user;
+	global $PHP_SELF,$UPLOAD_TYPES,$range_id,$SessSemName,$user,$folder_system_data;
 	
-	//Hier kommt wohl ein root oder admin, der nicht in der Seminartabelle steht... also uebernehmen wir globale Rechte
-	if (!$SemUserStatus) {
-		$db=new DB_Seminar;
-		$db->query("SELECT perms FROM auth_user_md5 WHERE user_id = '".$user->id."'");
-		$db->next_record();
-		$SemUserStatus=$db->f("perms");
-		}
-		
+	$sem_status = $GLOBALS['perm']->get_studip_perm($SessSemName[1]);
+	
 	//erlaubte Dateigroesse aus Regelliste der Config.inc.php auslesen
 	if ($UPLOAD_TYPES[$SessSemName["art_num"]]) {
-		$max_filesize=$UPLOAD_TYPES[$SessSemName["art_num"]]["file_sizes"][$SemUserStatus];
+		$max_filesize=$UPLOAD_TYPES[$SessSemName["art_num"]]["file_sizes"][$sem_status];
 		}
 	else {
-		$max_filesize=$UPLOAD_TYPES["default"]["file_sizes"][$SemUserStatus];
+		$max_filesize=$UPLOAD_TYPES["default"]["file_sizes"][$sem_status];
 		}
 	
 	$c=1;
 	
-	if (!$refresh)
+	if ($folder_system_data['zipupload'])
+		$print="\n<br /><br />" . _("Sie haben diesen Ordner zum Upload ausgew&auml;hlt:") 
+			. '<br>' . _("Die Dateien und Ordner, die im hochzuladenden Ziparchiv enthalten sind, werden in diesen Ordner entpackt.") .  "<br /><br /><center><table width=\"90%\" style=\"{border-style: solid; border-color: #000000;  border-width: 1px;}\" border=0 cellpadding=2 cellspacing=3>";
+	else if (!$refresh)
 		$print="\n<br /><br />" . _("Sie haben diesen Ordner zum Upload ausgew&auml;hlt:") . "<br /><br /><center><table width=\"90%\" style=\"{border-style: solid; border-color: #000000;  border-width: 1px;}\" border=0 cellpadding=2 cellspacing=3>";
 	else
 		$print="\n<br /><br />" . _("Sie haben diese Datei zum Aktualisieren ausgew&auml;hlt. Sie <b>&uuml;berschreiben</b> damit die vorhandene Datei durch eine neue Version!") . "<br /><br /><center><table width=\"90%\" style=\"{border-style: solid; border-color: #000000;  border-width: 1px;}\" border=0 cellpadding=2 cellspacing=3>";	
@@ -522,67 +513,81 @@ function form($refresh = FALSE) {
 	$print.="\n<tr><td class=\"steel1\" width=\"20%\"><font size=-1><b>";
 	
 	//erlaubte Upload-Typen aus Regelliste der Config.inc.php auslesen
-	if ($UPLOAD_TYPES[$SessSemName["art_num"]]) {
-		if ($UPLOAD_TYPES[$SessSemName["art_num"]]["type"] == "allow") {
-			$i=1;
-			$print.= _("Unzul&auml;ssige Dateitypen:") . "</b><font></td><td class=\"steel1\" width=\"80%\"><font size=-1>";
-			foreach ($UPLOAD_TYPES[$SessSemName["art_num"]]["file_types"] as $ft) {
-				if ($i !=1)
-					$print.= ", ";				
-				$print.= strtoupper ($ft);
-				$i++;
+	if (!$folder_system_data['zipupload']) {
+		if ($UPLOAD_TYPES[$SessSemName["art_num"]]) {
+			if ($UPLOAD_TYPES[$SessSemName["art_num"]]["type"] == "allow") {
+				$i=1;
+				$print.= _("Unzul&auml;ssige Dateitypen:") . "</b><font></td><td class=\"steel1\" width=\"80%\"><font size=-1>";
+				foreach ($UPLOAD_TYPES[$SessSemName["art_num"]]["file_types"] as $ft) {
+					if ($i !=1)
+						$print.= ", ";				
+					$print.= strtoupper ($ft);
+					$i++;
+					}
+				}
+			else {
+				$i=1;
+				$print.= _("Zul&auml;ssige Dateitypen:") . "</b><font></td><td class=\"steel1\" width=\"80%\"><font size=-1>";
+				foreach ($UPLOAD_TYPES[$SessSemName["art_num"]]["file_types"] as $ft) {
+					if ($i !=1)
+						$print.= ", ";				
+					$print.= strtoupper ($ft);
+					$i++;
+					}		
 				}
 			}
 		else {
-			$i=1;
-			$print.= _("Zul&auml;ssige Dateitypen:") . "</b><font></td><td class=\"steel1\" width=\"80%\"><font size=-1>";
-			foreach ($UPLOAD_TYPES[$SessSemName["art_num"]]["file_types"] as $ft) {
-				if ($i !=1)
-					$print.= ", ";				
-				$print.= strtoupper ($ft);
-				$i++;
-				}		
-			}
-		}
-	else {
-		if ($UPLOAD_TYPES["default"]["type"] == "allow") {
-			$i=1;
-			$print.= _("Unzul&auml;ssige Dateitypen:") . "</b><font></td><td class=\"steel1\" width=\"80%\"><font size=-1>";
-			foreach ($UPLOAD_TYPES["default"]["file_types"] as $ft) {
-				if ($i !=1)
-					$print.= ", ";				
-				$print.= strtoupper ($ft);
-				$i++;
+			if ($UPLOAD_TYPES["default"]["type"] == "allow") {
+				$i=1;
+				$print.= _("Unzul&auml;ssige Dateitypen:") . "</b><font></td><td class=\"steel1\" width=\"80%\"><font size=-1>";
+				foreach ($UPLOAD_TYPES["default"]["file_types"] as $ft) {
+					if ($i !=1)
+						$print.= ", ";				
+					$print.= strtoupper ($ft);
+					$i++;
+					}
+				}
+			else {
+				$i=1;
+				$print.= _("Zul&auml;ssige Dateitypen:") . "</b></td><font><td class=\"steel1\" width=\"80%\"><font size=-1>";
+				foreach ($UPLOAD_TYPES["default"]["file_types"] as $ft) {
+					if ($i !=1)
+						$print.= ", ";				
+					$print.= strtoupper ($ft);
+					$i++;
+					}
 				}
 			}
-		else {
-			$i=1;
-			$print.= _("Zul&auml;ssige Dateitypen:") . "</b></td><font><td class=\"steel1\" width=\"80%\"><font size=-1>";
-			foreach ($UPLOAD_TYPES["default"]["file_types"] as $ft) {
-				if ($i !=1)
-					$print.= ", ";				
-				$print.= strtoupper ($ft);
-				$i++;
-				}
-			}
-		}
+	} else {
+		$print.= _("Zul&auml;ssige Dateitypen:") . "</b></td><font><td class=\"steel1\" width=\"80%\"><font size=-1>";
+		$print .= 'ZIP';
+	}
 	$print.="</font></td></tr>";
 	$print.="\n<tr><td class=\"steel1\" width=\"20%\"><font size=-1><b>" . _("Maximale Gr&ouml;&szlig;e:") . "</b></font></td><td class=\"steel1\" width=\"80%\"><font size=-1><b>".($max_filesize / 1048576)." </b>" . _("Megabyte") . "</font></td></tr>";
+	if ($folder_system_data['zipupload']){
+		$print.="\n<tr><td class=\"steel1\" width=\"20%\"><font size=-1><b>" . _("Maximaler Inhalt des Ziparchivs:") 
+			. "</b></font></td><td class=\"steel1\" width=\"80%\"><font size=-1>"
+			. sprintf(_("<b>%d</b> Dateien und <b>%d</b> Ordner"),get_config('ZIP_UPLOAD_MAX_FILES'), get_config('ZIP_UPLOAD_MAX_DIRS'))
+			. "</font></td></tr>";
+	}
 	$print.= "\n<form enctype=\"multipart/form-data\" NAME=\"upload_form\" action=\"" . $PHP_SELF . "\" method=\"post\">";
 	$print.= "<tr><td class=\"steelgraudunkel\" colspan=2><font size=-1>" . _("1. Klicken Sie auf <b>'Durchsuchen...'</b>, um eine Datei auszuw&auml;hlen.") . " </font></td></tr>";
 	$print.= "\n<tr>";
 	$print.= "\n<td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("Dateipfad:") . "&nbsp;</font><br />";
 	$print.= "&nbsp;<INPUT NAME=\"the_file\" TYPE=\"file\"  style=\"width: 70%\" SIZE=\"30\">&nbsp;</td></td>";
 	$print.= "\n</tr>";
-	if (!$refresh) {
+	if (!$refresh && !$folder_system_data['zipupload']) {
 		$print.= "<tr><td class=\"steelgraudunkel\" colspan=2><font size=-1>" . _("2. Geben Sie eine kurze Beschreibung und einen Namen f&uuml;r die Datei ein.") . "</font></td></tr>";
 		$print.= "\n<tr><td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("Name:") . "&nbsp;</font><br>";
 		$print.= "\n&nbsp;<input type=\"TEXT\" name=\"name\" style=\"width: 70%\" size=\"40\" maxlength\"255\" /></td></tr>";
 		$print.= "\n<tr><td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("Beschreibung:") . "&nbsp;</font><br>";
 		$print.= "\n&nbsp;<TEXTAREA NAME=\"description\"  style=\"width: 70%\" COLS=40 ROWS=3 WRAP=PHYSICAL></TEXTAREA>&nbsp;</td></tr>";
 		$print.= "\n<tr><td class=\"steelgraudunkel\"colspan=2 ><font size=-1>" . _("3. Klicken Sie auf <b>'absenden'</b>, um die Datei hochzuladen") . "</font></td></tr>";
-	} else
+	} else if ($folder_system_data['zipupload']){
+		$print.= "\n<tr><td class=\"steelgraudunkel\"colspan=2 ><font size=-1>" . _("2. Klicken Sie auf <b>'absenden'</b>, um das Ziparchiv hochzuladen und in diesem Ordner zu entpacken.") . "</font></td></tr>";
+	} else {
 		$print.= "\n<tr><td class=\"steelgraudunkel\"colspan=2 ><font size=-1>" . _("2. Klicken Sie auf <b>'absenden'</b>, um die Datei hochzuladen und damit die alte Version zu &uuml;berschreiben.") . "</font></td></tr>";
+	}
 	$print.= "\n<tr><td class=\"steel1\" colspan=2 align=\"center\" valign=\"center\">";	
 	$print.= "\n<input type=\"image\" " . makeButton("absenden", "src") . " value=\"Senden\" align=\"absmiddle\" onClick=\"return upload_start();\" name=\"create\" border=\"0\">";
 	$print.="&nbsp;<a href=\"$PHP_SELF?cancel_x=true\">" . makeButton("abbrechen", "img") . "</a></td></tr>";	
@@ -623,22 +628,16 @@ function getFileExtension($str) {
 
 //Check auf korrekten Upload
 function validate_upload($the_file) {
-	global $UPLOAD_TYPES,$the_file_size, $msg, $the_file_name, $SessSemName,$SemUserStatus, $user, $auth;
+	global $UPLOAD_TYPES,$the_file_size, $msg, $the_file_name, $SessSemName, $user, $auth;
 
-	//Hier kommt wohl ein root oder admin, der nicht in der Seminartabelle steht... also uebernehmen wir globale Rechte
-	if (!$SemUserStatus) {
-		$db=new DB_Seminar;
-		$db->query("SELECT perms FROM auth_user_md5 WHERE user_id = '".$user->id."'");
-		$db->next_record();
-		$SemUserStatus=$db->f("perms");
-		}
+	$sem_status = $GLOBALS['perm']->get_studip_perm($SessSemName[1]);
 	
 	//erlaubte Dateigroesse aus Regelliste der Config.inc.php auslesen
 	if ($UPLOAD_TYPES[$SessSemName["art_num"]]) {
-		$max_filesize=$UPLOAD_TYPES[$SessSemName["art_num"]]["file_sizes"][$SemUserStatus];
+		$max_filesize=$UPLOAD_TYPES[$SessSemName["art_num"]]["file_sizes"][$sem_status];
 		}
 	else {
-		$max_filesize=$UPLOAD_TYPES["default"]["file_sizes"][$SemUserStatus];
+		$max_filesize=$UPLOAD_TYPES["default"]["file_sizes"][$sem_status];
 		}
 
 	$error = FALSE;
@@ -798,8 +797,11 @@ function upload($the_file, $refresh = false) {
 function insert_entry_db($range_id, $sem_id=0, $refresh = FALSE) {
 	global $the_file_name, $the_file_size, $dokument_id, $description, $name, $user, $upload_seminar_id;
 	
-	$date = time();				//Systemzeit
-	$user_id = $user->id;			// user_id erfragen...
+	$fn1 = strrchr($the_file_name,"/");  // Unix-Pfadtrenner
+	$fn2 = strrchr($the_file_name,"\\"); // Windows-Pfadtrenner
+	if ($fn1) $the_file_name = $fn1;
+	else if ($fn2) $the_file_name = $fn2; 
+	
 	$range_id = trim($range_id); 		// laestige white spaces loswerden
 	$description = trim($description);  	// laestige white spaces loswerden
 	$name = trim($name);  			// laestige white spaces loswerden
@@ -808,34 +810,28 @@ function insert_entry_db($range_id, $sem_id=0, $refresh = FALSE) {
 		$name = $the_file_name;
 	
 	if ($the_file_size > 0) {
-		$db=new DB_Seminar;
-	
-		if (!$refresh)
-			$query	 = sprintf ("INSERT INTO dokumente SET dokument_id='%s', description='%s', mkdate='%s', chdate='%s', range_id='%s', filename='%s', name='%s', "
-					. "user_id='%s', seminar_id='%s', filesize='%s', autor_host='%s'",
-					$dokument_id, $description, $date, $date, $range_id, $the_file_name, $name, 
-					$user_id, $upload_seminar_id, $the_file_size, getenv("REMOTE_ADDR"));
-		else	
-			$query	 = sprintf ("UPDATE dokumente SET dokument_id='%s', chdate='%s', filename='%s', "
-					. "user_id='%s', filesize='%s', autor_host='%s' WHERE dokument_id = '%s' ",
-					$dokument_id, $date, $the_file_name, $user_id, $the_file_size, getenv("REMOTE_ADDR"), $refresh);
-	
-		$db->query($query);
-		if ($db->affected_rows())
-			return TRUE;
-		else
-			return FALSE;
-	} else
-		return FALSE;
+		$doc =& new StudipDocument($dokument_id);
+		$doc->setValue('description' , stripslashes($description));
+		$doc->setValue('filename' , stripslashes($the_file_name));
+		$doc->setValue('name' , stripslashes($name));
+		$doc->setValue('filesize' , $the_file_size);
+		$doc->setValue('autor_host' , $_SERVER['REMOTE_ADDR']);
+		$doc->setValue('user_id' , $user->id);
+		if (!$refresh){
+			$doc->setValue('range_id' , $range_id);
+			$doc->setValue('seminar_id' , $upload_seminar_id);
+		}
+		return $doc->store();
+	} else {
+		return false;
+	}
 }
-
-
 
 
 
 function JS_for_upload() {
 
-	global $UPLOAD_TYPES, $SessSemName;
+	global $UPLOAD_TYPES, $SessSemName, $folder_system_data;
 	
 	?>
 	 <SCRIPT LANGUAGE="JavaScript">
@@ -860,11 +856,11 @@ function JS_for_upload() {
 	{
 	file_name=document.upload_form.the_file.value
 	if (!file_name)
-	     {
-	     alert("<?=_("Bitte wählen Sie eine Datei aus!")?>");
-	     document.upload_form.the_file.focus();
-	     return false;
-	     }
+		 {
+		 alert("<?=_("Bitte wählen Sie eine Datei aus!")?>");
+		 document.upload_form.the_file.focus();
+		 return false;
+		 }
 
 	if (file_name.charAt(file_name.length-1)=="\"") {
 	 ende=file_name.length-1; }
@@ -875,6 +871,8 @@ function JS_for_upload() {
 	ext=ext.toLowerCase();
 		
 	if (<?
+	if (!$folder_system_data["zipupload"]){
+
 	if ($UPLOAD_TYPES[$SessSemName["art_num"]]) {
 		if ($UPLOAD_TYPES[$SessSemName["art_num"]]["type"] == "allow") {
 			$i=1;
@@ -925,26 +923,29 @@ function JS_for_upload() {
 				}
 			}
 		}
+	} else {
+		echo "ext != \"zip\"";
+	}
 	?>)
-	     {
-	     alert("<?=_("Dieser Dateityp ist nicht zugelassen!")?>");
-	     document.upload_form.the_file.focus();
-	     <? if ($deny_doc) { ?>
+		 {
+		 alert("<?=_("Dieser Dateityp ist nicht zugelassen!")?>");
+		 document.upload_form.the_file.focus();
+		 <? if ($deny_doc) { ?>
 		if (ext == "doc")
 			open_helptext();
-	     <? } ?>
-	     
-	     return false;
-	     }
+		 <? } ?>
+		 
+		 return false;
+		 }
 
 	if (file_name.lastIndexOf("/") > 0)
-	     {
-	     file_only=file_name.substring(file_name.lastIndexOf("/")+1,ende);
-	     }
+		 {
+		 file_only=file_name.substring(file_name.lastIndexOf("/")+1,ende);
+		 }
 	if (file_name.lastIndexOf("\\") > 0)
-	     {
-	     file_only=file_name.substring(file_name.lastIndexOf("\\")+1,ende);
-	     }
+		 {
+		 file_only=file_name.substring(file_name.lastIndexOf("\\")+1,ende);
+		 }
 
 	msg_window=window.open("","messagewindow","height=250,width=200,left=20,top=20,scrollbars=no,resizable=no,toolbar=no");
 	msg_window.document.write("<html><head><title>Datei Upload</title></head>");
@@ -1290,7 +1291,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 				$content.="<br />" . sprintf(_("Dieser Ordner wurde zum Verschieben / Kopieren markiert. Bitte w&auml;hlen Sie das Einf&uuml;gen-Symbol %s, um ihn in den gew&uuml;nschten Ordner zu verschieben. Wenn Sie den Ordner in eine andere Veranstaltung verschieben / kopieren möchten, wählen Sie die gewünschte Veranstaltung oben auf der Seite aus."), "<img src=\"pictures/move.gif\" border=0 " . tooltip(_("Klicken Sie auf dieses Symbol, um diesen Ordner in einen anderen Ordner einzufügen.")) . ">");
 			
 			if ($upload == $db->f("folder_id")) {
-				$content.=upload_item ($upload,FALSE,FALSE,$refresh);
+				$content .= form($refresh);
 				}
 				
 			// Abfrage ob Dateilink eingeleitet
@@ -1312,7 +1313,11 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 						$edit.= "&nbsp;&nbsp;&nbsp;<a href=\"$PHP_SELF?folderzip=".$db->f("folder_id")."\">" . makeButton("ordneralszip", "img") . "</a>";
 					if ($rechte) {
 						$edit.= "&nbsp;&nbsp;&nbsp;<a href=\"$PHP_SELF?open=".$db->f("folder_id")."_n_#anker\">" . makeButton("neuerordner", "img") . "</a>"; 
-						if (!$level==0 || $db->f('range_id') == md5($SessSemName[1] . 'top_folder')){
+						if(get_config('ZIP_UPLOAD_ENABLE')) {
+							$edit .= "&nbsp;&nbsp;&nbsp;<a href=\"$PHP_SELF?open=".$db->f("folder_id")."_z_&rand="
+								. rand()."#anker\">" . makeButton("ziphochladen", "img") . "</a>";
+						}
+						if (!$level==0 || $db->f('range_id') == md5($SessSemName[1] . 'top_folder') || Seminar::GetSemIdByDateId($db->f('range_id'))){
 							$edit.= " <a href=\"$PHP_SELF?open=".$db->f("folder_id")."_d_\">" . makeButton("loeschen", "img") . "</a>";
 							$edit.= " <a href=\"$PHP_SELF?open=".$db->f("folder_id")."_c_#anker\">" . makeButton("bearbeiten", "img") . "</a>";
 							$edit.= " <a href=\"$PHP_SELF?open=".$db->f("folder_id")."_m_#anker\">" . makeButton("verschieben", "img") . "</a>";	
@@ -1346,11 +1351,8 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 					else
 					$striche3="<td class=\"blank\" nowrap background='pictures/forumleer.gif'><img src='pictures/forumstrich3.gif'></td>"; //Verzweigung
 					
-					if ($db3->f("url")!="") {
-						$type = 6;
-					} else {
-						$type = 0;
-					}
+					$type = ($db3->f('url') != '')? 6 : 0;
+
 					$doc_anker = '';
 					//Ankerlogik
 					if (($change) || ($move) || ($upload)) {
@@ -1359,8 +1361,8 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 					} elseif ($open['anker'] == $db3->f("dokument_id"))
 						$doc_anker = ' name="anker" ';
 					//Icon auswaehlen
-					$icon = '<a href="' . GetDownloadLink($db3->f("dokument_id"), $db3->f("filename"), $type) . '">' 
-							. GetFileIcon(getFileExtension($db3->f("filename")), true) . '</a>';
+					$icon = '<a href="' . GetDownloadLink($db3->f('dokument_id'), $db3->f('filename'), $type) . '">' 
+							. GetFileIcon(getFileExtension($db3->f('filename')), true) . '</a>';
 					//Link erstellen
 					if (isset($open[$db3->f("dokument_id")])) 
 						$link=$PHP_SELF."?close=".$db3->f("dokument_id")."#anker";
@@ -1465,15 +1467,12 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 						//Editbereich ertstellen
 						$edit='';
 						if (($change != $db3->f("dokument_id")) && ($upload != $db3->f("dokument_id")) && $filelink != $db3->f("dokument_id")) {
-							if ($db3->f("url")!="") {
-								$type = 6;
-							} else {
-								$type = 0;
+							$type = ($db3->f('url') != '')? 6 : 0;
+							$edit= '&nbsp;<a href="' . GetDownloadLink( $db3->f('dokument_id'), $db3->f('filename'), $type, 'force') .'">' . makeButton('herunterladen', 'img') . '</a>';
+							$fext = getFileExtension(strtolower($db3->f('filename')));
+							if (($type != '6') && ($fext != 'zip') && ($fext != 'tgz') && ($fext != 'gz') && ($fext != 'bz2')) {
+								$edit.= '&nbsp;<a href="'. GetDownloadLink( $db3->f('dokument_id'), $db3->f('filename'), $type, 'zip') . '">' . makeButton('alsziparchiv', 'img') . '</a>';
 							}
-							$edit= "&nbsp;<a href=\"sendfile.php?type=$type&force_download=TRUE&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\">" . makeButton("herunterladen", "img") . "</a>";
-							if (($type != "6") && (getFileExtension(strtolower($db3->f("filename"))) != "zip") && (getFileExtension(strtolower($db3->f("filename"))) != "tgz") && (getFileExtension(strtolower($db3->f("filename"))) != "gz") && (getFileExtension(strtolower($db3->f("filename"))) != "bz2"))
-								$edit.= "&nbsp;<a href=\"sendfile.php?zip=TRUE&type=$type&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\">" . makeButton("alsziparchiv", "img") . "</a>";
-							
 							if (($rechte) || ($db3->f("user_id")==$user->id)) {
 								if ($type!=6)
 									$edit.= "&nbsp;&nbsp;&nbsp;<a href=\"$PHP_SELF?open=".$db3->f("dokument_id")."_c_#anker \">" . makeButton("bearbeiten", "img") . "</a>";
@@ -1623,9 +1622,65 @@ function GetFileIcon($ext, $with_img_tag = false){
 	return ($with_img_tag ? '<img src="pictures/'.$icon.'" border="0">' : $icon);
 }
 
-function GetDownloadLink($dokument_id, $filename, $type = 0){
-	return "sendfile.php?type=$type&file_id=".$dokument_id."&file_name=".rawurlencode($filename);
+/**
+* Erzeugt einen Downloadlink abhaengig von der Konfiguration des Systems
+* ($GLOBALS['SENDFILE_LINK_MODE'] = 'normal'|'old'|'rewrite')
+*
+* @param	string	$file_id
+* @param	string	$file_name
+* @param	integer	$type	sendfile type 1,2,3,4,5 or 6
+* @param	string	$dltype	'normal', 'zip' or 'force' (or 'force_download')
+* @return	string	downloadlink
+*/
+function GetDownloadLink($file_id, $file_name, $type = 0, $dltype = 'normal', $range_id = '', $list_id = ''){
+	$mode = (isset($GLOBALS['SENDFILE_LINK_MODE']))? $GLOBALS['SENDFILE_LINK_MODE']:'old';
+	$link[] = $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'];
+	$wa = '';
+	switch($mode) {
+	case 'rewrite':
+		$link[] = 'download/';
+		switch ($dltype) {
+		case 'zip':
+			$link[] = 'zip/';
+			break;
+		case 'force':
+		case 'force_download':
+			$link[] = 'force_download/';
+			break;
+		case 'normal':
+		default:
+			$link[] = 'normal/';
+		}
+		$link[] = $type . '/';
+		if ($type == 5) {
+			$link[] = rawurlencode($range_id) . '/' . rawurlencode($list_id);
+		} else {
+			$link[] =  rawurlencode(prepareFilename($file_id));
+		}
+		$link[] = '/' . rawurlencode(prepareFilename($file_name));
+		break;
+	case 'old':  // workaround for old browser (IE)
+		$wa = '/';
+	case 'normal':
+	default:
+		$link[] = 'sendfile.php?' . $wa;
+		if ($dltype == 'zip'){
+			$link[] = 'zip=1&';
+		} elseif ($dltype == 'force_download' || $dltype == 'force') {
+			$link[] = 'force_download=1&';
+		}
+		$link[] = 'type='.$type;
+		if ($type == 5) {
+			$link[] = '&range_id=' . rawurlencode($range_id) . '&list_id=' . rawurlencode($list_id);
+		} else {
+			$link[] = '&file_id=' . rawurlencode(prepareFilename($file_id));
+		}
+		$link[] = '&file_name=' . rawurlencode(prepareFilename($file_name ));
+	}
+	return implode('', $link);
 }
+
+
 /*
 Die function delete_document löscht ein hochgeladenes Dokument.
 Der erste Parameter ist die dokument_id des zu löschenden Dokuments.
@@ -1781,7 +1836,7 @@ function rmdirr($dirname){
 
     // Loop through the folder
     $dir = dir($dirname);
-    while (false !== $entry = $dir->read()) {
+    while (false !== ($entry = $dir->read())) {
         // Skip pointers
         if ($entry == '.' || $entry == '..') {
             continue;
@@ -1799,4 +1854,199 @@ function rmdirr($dirname){
     return @rmdir($dirname);
 }
 
+function create_zip_from_file($file_name, $zip_file_name){
+	if ($GLOBALS['ZIP_USE_INTERNAL']){
+		$archiv = new PclZip($zip_file_name);
+		$v_list = $archiv->create($file_name, PCLZIP_OPT_REMOVE_ALL_PATH);
+		return $v_list;
+	} else if (@file_exists($GLOBALS['ZIP_PATH']) || ini_get('safe_mode')){
+		exec($GLOBALS['ZIP_PATH'] . ' -q ' . $GLOBALS['ZIP_OPTIONS'] . " -j {$zip_file_name} $file_name", $output, $ret);
+		return $ret;
+	}
+}
+
+function create_zip_from_directory($fullpath){
+	if ($GLOBALS['ZIP_USE_INTERNAL']){
+		$archiv = new PclZip($fullpath . '.zip');
+		$v_list = $archiv->create($fullpath, PCLZIP_OPT_REMOVE_PATH,$fullpath);
+		return $v_list;
+	} else if (@file_exists($GLOBALS['ZIP_PATH']) || ini_get('safe_mode')){
+		//zip stuff
+		$zippara = (ini_get('safe_mode')) ? ' -R ':' -r ';
+		@chdir($fullpath);
+		exec ($GLOBALS['ZIP_PATH'] . ' -q ' . $GLOBALS['ZIP_OPTIONS'] . ' ' . $zippara . $fullpath . ' *',$output, $ret);
+		@chdir($GLOBALS['ABSOLUTE_PATH_STUDIP']);
+		return $ret;
+	}
+}
+
+function unzip_file($file_name, $dir_name = '', $testonly = false){
+	$ret = true;
+	if ($GLOBALS['ZIP_USE_INTERNAL']){
+		$archive = new PclZip($file_name);
+		if ($testonly){
+			$prop = $archive->properties();
+			$ret = (!is_array($prop));
+		} else {
+			$ok = $archive->extract(PCLZIP_OPT_PATH, $dir_name);
+			$ret = (!is_array($ok));
+		}
+	} else if (@file_exists($GLOBALS['UNZIP_PATH']) || ini_get('safe_mode')){
+		if ($testonly){
+			exec($GLOBALS['UNZIP_PATH'] . " -t -qq $file_name ", $output, $ret);
+		} else {
+			exec($GLOBALS['UNZIP_PATH'] . " -qq $file_name " . ($dir_name ? "-d $dir_name" : ""), $output, $ret);
+		}
+	}
+	return $ret;
+}
+
+function upload_zip_item() {
+	global $msg;
+	
+	if(!$_FILES['the_file']['name']) {
+		$msg .= "error§" . _("Sie haben keine Datei zum Hochladen ausgew&auml;hlt!") . "§";
+		return FALSE; 
+	}
+	$ext = strtolower(getFileExtension($_FILES['the_file']['name']));
+	if($ext != "zip") {
+		$msg .= "error§" . _("Die Datei kann nicht entpackt werden: Sie d&uuml;rfen nur den Dateityp .ZIP hochladen!") . "§";
+		return FALSE;
+	}
+	$tmpname = md5(uniqid('zipupload',1));
+	if (move_uploaded_file($_FILES['the_file']['tmp_name'], $GLOBALS['TMP_PATH'] . '/' . $tmpname)){
+		if(unzip_file($GLOBALS['TMP_PATH'] . '/' . $tmpname, false, true)) {
+			$msg .= "error§" . _("Die ZIP-Datei kann nicht ge&ouml;ffnet werden!") . "§";
+			@unlink($GLOBALS['TMP_PATH'] . '/' . $tmpname);
+			return FALSE;
+		}
+		$tmpdirname = $GLOBALS['TMP_PATH'] . '/' . md5(uniqid('zipupload',1));
+		@mkdir($tmpdirname);
+		if (unzip_file($GLOBALS['TMP_PATH'] . '/' . $tmpname , $tmpdirname)){
+			$msg .= "error§" . _("Die ZIP-Datei kann nicht ge&ouml;ffnet werden!") . "§";
+			@rmdirr($tmpdirname);
+			@unlink($GLOBALS['TMP_PATH'] . '/' . $tmpname);
+			return FALSE;
+		}
+		$ret = upload_recursively($GLOBALS['folder_system_data']['upload'], $tmpdirname);
+		if ($ret['files'] || $ret['subdirs'] ){
+			$msg .= 'msg§' . sprintf(_("Es wurden %d Dateien und %d Ordner erfolgreich entpackt."),$ret['files'], $ret['subdirs'] ) . '§';
+			@rmdirr($tmpdirname);
+			@unlink($GLOBALS['TMP_PATH'] . '/' . $tmpname);
+			return true;
+		}
+	}
+	@rmdirr($tmpdirname);
+	@unlink($GLOBALS['TMP_PATH'] . '/' . $tmpname);
+	$msg .= "error§" . _("Die Datei konnte nicht entpackt werden.") . "§";
+	return false;
+}
+
+
+/**
+ * Laedt eine bestehende Verzeichnisstruktur in das System.
+ * Die ganze Struktur wird samt Dateien und Unterverzeichnissen rekursiv
+ * eingefuegt: 1. Den aktuellen Ordner erstellen. -- 2. Die Dateien in
+ * alphabetischer Reihenfolge einfuegen. -- 3. Die Verzeichnisstruktur jedes 
+ * Unterordners einfuegen (Rekursion).
+ * Nach Einfuegen einer Datei / eines Verzeichnisses wird die Datei oder das
+ * Verzeichnis geloescht.
+ * 
+ * @param range_id Die ID des Ordners unter dem die Verzeichnisstruktur
+ * @param dir
+ * @return (no return value)
+ */
+function upload_recursively($range_id, $dir) {
+	static $count = array();
+	
+	$max_files = get_config('ZIP_UPLOAD_MAX_FILES');
+	$max_dirs = get_config('ZIP_UPLOAD_MAX_DIRS');
+	
+	$files = array ();
+	$subdirs = array ();
+	
+	if ($count['files'] >= $max_files || $count['subdirs'] >= $max_dirs) return;
+	
+	// Versuchen, das Verzeichnis zu oeffnen
+	if ($handle = @opendir($dir)) {
+
+		// Alle Eintraege des Verzeichnisses durchlaufen
+		while (false !== ($file = readdir($handle))) {
+
+			// Verzeichnisverweise . und .. ignorieren
+			if ($file != "." && $file != "..") {
+				// Namen vervollstaendigen
+				$file = $dir."/".$file;
+
+				if (is_file($file)) {
+					// Datei in Dateiliste einfuegen
+					$files[] = $file;
+				}
+				elseif (is_dir($file)) {
+					// Verzeichnis in Verzeichnisliste einfuegen
+					$subdirs[] = $file;
+				}
+			}
+		}
+		closedir($handle);
+	}
+
+	// Listen der Dateien und Unterverzeichnisse sortieren.
+	sort($files);
+	sort($subdirs);
+	
+	// Alle Dateien hinzufuegen.
+	while (list ($nr, $file) = each($files)) {
+		if ($count['files'] >= $max_files) break;
+		$count['files'] += upload_zip_file($range_id, $file);
+	}
+
+	// Alle Unterverzeichnisse hinzufuegen.
+	while (list ($nr, $subdir) = each($subdirs)) {
+		if ($count['subdirs'] >= $max_dirs) break;
+		// Verzeichnis erstellen
+		$pos = strrpos($subdir, "/");
+		$name = addslashes(substr($subdir, $pos + 1, strlen($subdir) - $pos));
+		$dir_id = create_folder($name, "", $range_id);
+		$count['subdirs']++;
+		// Verzeichnis hochladen.
+		upload_recursively($dir_id, $subdir);
+	}
+	return $count;
+}
+
+
+/**
+ * Eine einzelne Datei in das Verzeichnis mit der dir_id einfuegen. 
+ */
+function upload_zip_file($dir_id, $file) {
+	
+	global $UPLOAD_PATH, $user, $upload_seminar_id;
+	
+	$doc =& new StudipDocument();
+	
+	// Dokument_id erzeugen
+	$dokument_id = $doc->getNewId();
+	$doc->setId($dokument_id);
+
+	// Erzeugen des neuen Speicherpfads
+	$newfile = "$UPLOAD_PATH/$dokument_id";
+	
+	if (@copy($file, $newfile)){
+		$pos = strrpos($file, "/");
+		$file_name = substr($file, $pos+1, strlen($file) - $pos);
+		$file_size = filesize($file);
+		if ($file_size > 0) {
+			$doc->setValue('filename' , $file_name);
+			$doc->setValue('name' , $file_name);
+			$doc->setValue('filesize' , $file_size);
+			$doc->setValue('autor_host' , $_SERVER['REMOTE_ADDR']);
+			$doc->setValue('user_id' , $user->id);
+			$doc->setValue('range_id' , $dir_id);
+			$doc->setValue('seminar_id' , $upload_seminar_id);
+			return $doc->store();
+		}
+	} 
+	return false;
+}
 ?>
