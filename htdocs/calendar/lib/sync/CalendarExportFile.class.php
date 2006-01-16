@@ -85,8 +85,7 @@ class CalendarExportFile extends CalendarExport {
 		global $CANONICAL_RELATIVE_PATH_STUDIP, $_calendar_error;
 		
 		if (file_exists($this->path . $this->tmp_file_name)) {
-			header("Location: {$CANONICAL_RELATIVE_PATH_STUDIP}sendfile.php"
-				. "?type=2&file_id={$this->tmp_file_name}&file_name={$this->file_name}&force_download=1");
+			header('Location: ' . GetDownloadLink($this->tmp_file_name, $this->file_name, 2, 'force'));
 		}
 		else {
 			$_calendar_error->throwError(ERROR_FATAL,

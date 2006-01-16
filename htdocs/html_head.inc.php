@@ -24,7 +24,7 @@
 * Use this if module contains no elements to document !
 * @const PHPDOC_DUMMY
 */
-define("PHPDOC_DUMMY",true);
+define('PHPDOC_DUMMY',true);
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // html_head.inc.php
@@ -48,25 +48,35 @@ define("PHPDOC_DUMMY",true);
 <html>
 	<head>
 <?
-if ($AUTH_LIFETIME && (basename($_SERVER['SCRIPT_NAME']) != 'logout.php')) {
-	echo "\t\t",'<meta http-equiv="REFRESH" CONTENT="',$AUTH_LIFETIME*60,'; URL=logout.php">', "\n";
+switch (basename($_SERVER['SCRIPT_NAME'])) {
+	case 'logout.php':
+		break;
+	case 'sendfile.php' :
+		echo "\t\t".'<base href="' . $GLOBALS['ABSOLUTE_URI_STUDIP'] . '">'. "\n";
+	default:
+	if ($AUTH_LIFETIME) {
+		echo "\t\t".'<meta http-equiv="REFRESH" CONTENT="'.$AUTH_LIFETIME*60 .'; URL=logout.php">'. "\n";
+	}
 }
-?>
-		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-		<meta name="copyright" content="Stud.IP-Crew (crew@studip.de)">
-<?php
+
+echo "\t\t".'<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">'. "\n";
+echo "\t\t".'<meta name="copyright" content="Stud.IP-Crew (crew@studip.de)">'. "\n";
+
 if (isset($FAVICON))
-		printf("\t\t<link rel=\"SHORTCUT ICON\" href=\"%s\">\n", $FAVICON);
+		echo "\t\t".'<link rel="SHORTCUT ICON" href="'. $FAVICON.'">'."\n";
+
 if (!isset($_html_head_title))  // if not set, use default title
-	$_html_head_title = ($HTML_HEAD_TITLE) ? $HTML_HEAD_TITLE : "Stud.IP";
-printf("\t\t<title>%s</title>\n",$_html_head_title);
+	$_html_head_title = ($HTML_HEAD_TITLE) ? $HTML_HEAD_TITLE : 'Stud.IP';
+echo "\t\t".'<title>'.$_html_head_title.'</title>'."\n";
+
 if (!isset($_include_stylesheet))  // if not set, use default stylesheet
-	$_include_stylesheet ="style.css";
-if ($_include_stylesheet != "")  // if empty, use no stylesheet
-	printf("\t\t<link rel=\"stylesheet\" href=\"%s\" type=\"text/css\">\n", $_include_stylesheet);
+	$_include_stylesheet = 'style.css';
+
+if ($_include_stylesheet != '')  // if empty, use no stylesheet
+	echo "\t\t".'<link rel="stylesheet" href="'.$_include_stylesheet.'" type="text/css">'."\n";
 
 if (isset ($_include_extra_stylesheet))
-	printf("\t\t<link rel=\"stylesheet\" href=\"%s\" type=\"text/css\">\n", $_include_extra_stylesheet);
+	echo "\t\t".'<link rel="stylesheet" href="'.$_include_extra_stylesheet.'" type="text/css">'."\n";
 if (isset ($_include_additional_header)){
 	echo "\t\t" . $_include_additional_header . "\n";
 }
@@ -74,13 +84,9 @@ unset ($_include_extra_stylesheet);
 unset ($_include_stylesheet);
 unset ($_html_head_title);
 unset ($_include_additional_header);
-?>
-	</head>
-	<body>
-<?
 
 //start messenger, if set
-if (($my_messaging_settings["start_messenger_at_startup"]) && ($auth->auth["jscript"]) && (!$messenger_started) && (!$seminar_open_redirected)) {
+if (($my_messaging_settings['start_messenger_at_startup']) && ($auth->auth['jscript']) && (!$messenger_started) && (!$seminar_open_redirected)) {
 
 	?>
 	<script language="Javascript">
@@ -90,3 +96,5 @@ if (($my_messaging_settings["start_messenger_at_startup"]) && ($auth->auth["jscr
 	$messenger_started = TRUE;
 }
 ?>
+	</head>
+	<body>

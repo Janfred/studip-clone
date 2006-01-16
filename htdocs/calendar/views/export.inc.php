@@ -141,8 +141,7 @@ if (($expmod != 'exp' && $expmod != 'imp' && $expmod != 'sync') || ($expmod == '
 				'text' => $info['export']);
 		
 		if ($calendar_sess_export['count_export']) {
-			$send_sync = "{$CANONICAL_RELATIVE_PATH_STUDIP}sendfile.php"
-					. "?type=2&file_id=$tmpfile&file_name=$file&force_download=1";
+			$send_sync = GetDownloadLink($tmpfile, $file, 2, 'force');
 			$params['content'] = _("Klicken Sie auf den Button, um die Datei mit den synchronisierten Kalenderdaten herunterzuladen.")
 					. _("Die Daten liegen ebenfalls in einer iCalendar-Datei vor, die Sie in Ihren lokalen Terminkalender (z.B. MS Outlook) importieren können.");
 			$params['button'] = "<input type=\"image\" " . makeButton("herunterladen", "src"). " border=\"0\">";

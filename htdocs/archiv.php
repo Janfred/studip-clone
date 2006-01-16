@@ -21,22 +21,24 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check("user");
 
-include("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+include($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'seminar_open.php'); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
 
 if ($druck)
-	$_include_stylesheet = "style_print.css"; 
+	$_include_stylesheet = 'style_print.css'; 
 elseif (($dump_id) || ($forum_dump_id) || ($wiki_dump_id))
-	$_include_stylesheet = "style_dump.css";
+	$_include_stylesheet = 'style_dump.css';
 
 // Start of Output
-include("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
+include($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'html_head.inc.php'); // Output of html head
 
-require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
+require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'msg.inc.php');
+require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'config.inc.php');
+require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'visual.inc.php');
+require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'functions.php');
+require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'datei.inc.php');
+require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'log_events.inc.php');
 
 $db=new DB_Seminar;
 $db2=new DB_Seminar;
@@ -196,7 +198,7 @@ else {
 
 // dann eben den Rest...
 
-include "header.php";   //hier wird der "Kopf" nachgeladen 
+include($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'header.php');   //hier wird der "Kopf" nachgeladen 
 ?>
 <table width="100%" border=0 cellpadding=0 cellspacing=0 border=0>
 	<tr>
@@ -316,7 +318,7 @@ include "header.php";   //hier wird der "Kopf" nachgeladen
 					   		<td class="<? echo $cssSw->getClass() ?>" width="90%">
 					   			<center>
 					   				<input type="IMAGE" border=0 <?=makeButton("suchestarten", "src")?> value="<?=_("Suche starten")?>">
-					   			</center
+					   			</center>
 					   		</td>
 						</tr>
 					</table>
@@ -443,8 +445,9 @@ if ($archiv_data["perform_search"]) {
 			if ($view == 1) {
 				echo "<td class=\"$class\" width=\"3%\">&nbsp;<a href=\"$PHP_SELF?dump_id=".$db->f('seminar_id')."\" target=_blank><img src=\"pictures/i.gif\" " . tooltip(_("Komplettansicht")) . " border=\"0\"></a></td>";
 				echo "<td class=\"$class\" width=\"3%\">&nbsp;";
-				if (!$db->f('archiv_file_id')=='')
-					echo "<a href=\"sendfile.php?type=1&file_id=".$db->f('archiv_file_id')."&file_name=".rawurlencode($file_name)."\"><img src=\"pictures/files.gif\" " . tooltip(_("Dateisammlung")) . " border=\"0\"></a>";
+				if (!$db->f('archiv_file_id')=='') {
+					echo '<a href="' . GetDownloadLink($db->f('archiv_file_id'), $file_name, 1) .'"><img src="pictures/files.gif" ' . tooltip(_("Dateisammlung")) . ' border="0"></a>';
+				}
 				echo "</td><td class=\"$class\" width=\"3%\">&nbsp;";
 				if (archiv_check_perm($db->f("seminar_id")) == "admin")
 					echo "<a href=\"$PHP_SELF?delete_id=".$db->f('seminar_id')."\">&nbsp;<img border=0 src=\"./pictures/trash.gif\" " . tooltip(_("Diese Veranstaltung aus dem Archiv entfernen")) . "></a>";
@@ -471,8 +474,9 @@ if ($archiv_data["perform_search"]) {
 						echo "<li><font size=\"-1\"><a href=\"$PHP_SELF?forum_dump_id=".$db->f('seminar_id')."\" target=_blank>" . _("Beitr&auml;ge des Forums") . "</a></font></li>";
 					if (!$db->f('wikidump')=='')
 						echo "<li><font size=\"-1\"><a href=\"$PHP_SELF?wiki_dump_id=".$db->f('seminar_id')."\" target=_blank>" . _("Wikiseiten") . "</a></font></li>";
-					if (!$db->f('archiv_file_id')=='')
-						echo "<li><font size=\"-1\"><a href=\"sendfile.php?type=1&file_id=".$db->f('archiv_file_id')."&file_name=".rawurlencode($file_name)."\">" . _("Download der Dateisammlung") . "</a></font></li>";
+					if (!$db->f('archiv_file_id')=='') {
+						echo '<li><font size="-1"><a href="' . GetDownloadLink($db->f('archiv_file_id'), $file_name, 1) .'">' . _("Download der Dateisammlung") . '</a></font></li>';
+					}
 					if (archiv_check_perm($db->f("seminar_id")) == "admin")
 						echo "<li><a href=\"$PHP_SELF?delete_id=".$db->f('seminar_id')."\"><font size=\"-1\">" . _("Diese Veranstaltung unwiderruflich aus dem Archiv entfernen") . "</font></a></li>";
 					if (archiv_check_perm($db->f("seminar_id")) == "admin") {

@@ -969,7 +969,6 @@ class EvalOverview {
 
             return "";
 
-
          case "export_request":
             /* Check permissions ------------------------------------------- */
             $haveNoPerm = YES;
@@ -990,7 +989,7 @@ class EvalOverview {
 
             /* Create link ------------------------------------------------- */
             $link = new HTML ("a");
-            $link->addAttr ("href", "sendfile.php?type=2&file_id=".$exportManager->getTempFilename ()."&file_name=".$exportManager->getFilename ());
+            $link->addAttr ('href', GetDownloadLink($exportManager->getTempFilename(), $exportManager->getFilename(), 2));
             $img = new HTMLempty ("img");
             $img->addAttr("border","0");
             $img->addAttr("src", EVAL_PIC_EXPORT_FILE);

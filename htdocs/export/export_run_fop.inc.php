@@ -38,7 +38,9 @@ $FOP_ENABLE = true;
 if (($o_mode != "direct") AND ($o_mode != "passthrough")) 
 	$perm->check("tutor");
 
-
+require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'datei.inc.php');
+	
+	
 /**
 * Checks given parameters
 *
@@ -98,24 +100,23 @@ else
 	}
 	
 	$out = exec( $str );
-	if ($out == "")
+	if ($out == '')
 		$out = $str;
-		if (file_exists($TMP_PATH."/export/".$pdf_file))
+		if (file_exists($TMP_PATH.'/export/'.$pdf_file))
 		{
-			$link2 = "<a href=\"sendfile.php?type=2&file_id=" . $pdf_file  . "&file_name=" . $xslt_filename . ".pdf\">";
-	
-			$export_pagecontent = "<table cellspacing=\"0\" cellpadding=\"0\" border=\"0\" width=\"40%\"><tr align=\"center\"><td>";
-			$export_pagecontent .= "<b>" . _("Ausgabe-Datei: ") . "</b>";
-			$export_pagecontent .= "</td><td>" . $link2 . $xslt_filename . ".pdf</a>";
+			$link2 = '<a href="'. GetDownloadLink($pdf_file, $xslt_filename . '.pdf', 2).'">';
+			$export_pagecontent = '<table cellspacing="0" cellpadding="0" border="0" width="40%"><tr align="center"><td>';
+			$export_pagecontent .= '<b>' . _("Ausgabe-Datei: ") . '</b>';
+			$export_pagecontent .= '</td><td>' . $link2 . $xslt_filename . '.pdf</a>';
 //			$export_pagecontent .= "</td><td>" . $result_file . "</td></tr><tr><td colspan=\"2\">";
 //			$export_pagecontent .= "&nbsp;&nbsp;&nbsp;&nbsp; - &nbsp;&nbsp;" . $link1 . _("Datei &ouml;ffnen") . "</a></td></tr><tr><td colspan=\"2\">";
 //			$export_pagecontent .= "&nbsp;&nbsp;&nbsp;&nbsp; - &nbsp;&nbsp;" . $link2 . _("Datei herunterladen") . "</a></td></tr>";
-			$export_pagecontent .= "</td></tr></table><br>";
+			$export_pagecontent .= '</td></tr></table><br>';
 	
-			$result_printimage = "<a href=\"sendfile.php?type=2&file_id=" . $pdf_file . "&file_name=" . $xslt_filename . ".pdf" . "\"><img src=\"./pictures/" . $export_icon["pdf"] . "\" border=0></a>";
-			$result_printlink = "<a href=\"sendfile.php?type=2&file_id=" . $pdf_file . "&file_name=" . $xslt_filename . ".pdf" . "\" class=\"tree\">" . $xslt_filename . ".pdf" . "</a>";
+			$result_printimage = '<a href="' . GetDownloadLink($pdf_file, $xslt_filename . '.pdf', 2). '"><img src="pictures/' . $export_icon['pdf'] . '" border=0></a>';
+			$result_printlink = '<a href="'. GetDownloadLink($pdf_file, $xslt_filename . '.pdf', 2).   '" class="tree">' . $xslt_filename . '.pdf</a>';
 			$result_printdesc = _("PDF-Datei");
-			$result_printcontent = _("Dies ist die fertige PDF-Datei.") . "<br>";	
+			$result_printcontent = _("Dies ist die fertige PDF-Datei.") . '<br>';	
 		}	
 		else
 		{	
@@ -130,13 +131,13 @@ else
 			$export_error_num ++;
 		}
 	
-		$xml_printimage = "<a href=\"sendfile.php?type=2&file_id=$xml_file_id&file_name=$xml_filename\"><img src=\"./pictures/" . $export_icon["xml"] . "\" border=0></a>";
-		$xml_printlink = "<a href=\"sendfile.php?type=2&file_id=$xml_file_id&file_name=$xml_filename\" class=\"tree\">" . $xml_filename . "</a>";
+		$xml_printimage = '<a href="'. GetDownloadLink($xml_file_id, $xml_filename, 2). '"><img src="pictures/' . $export_icon['xml'] . '" border=0></a>';
+		$xml_printlink = '<a href="'. GetDownloadLink($xml_file_id, $xml_filename, 2) .  '" class="tree">' . $xml_filename . '</a>';
 		$xml_printdesc = _("XML-Daten");
 		$xml_printcontent = _("In dieser Datei sind die Daten als XML-Tags gespeichert. Diese Tags k&ouml;nnen mit einem XSLT-Script verarbeitet werden.") . "<br>";	
 	
-		$xslt_printimage = "<a href=\"sendfile.php?type=2&file_id=" . $result_file . "&file_name=" . $xslt_filename . "." . $format . "\"><img src=\"./pictures/" . $export_icon[$format] . "\" border=0></a>";
-		$xslt_printlink = "<a href=\"sendfile.php?type=2&file_id=" . $result_file . "&file_name=" . $xslt_filename . "." . $format . "\" class=\"tree\">" . $xslt_filename . "." . $format . "</a>";
+		$xslt_printimage = '<a href="'. GetDownloadLink($result_file,$xslt_filename .'.'. $format,2) . '"><img src="pictures/' . $export_icon[$format] . '" border=0></a>';
+		$xslt_printlink = '<a href="'. GetDownloadLink($result_file,$xslt_filename .'.'. $format,2) . '" class="tree">' . $xslt_filename .'.'. $format . '</a>';
 		$xslt_printdesc = _("Formatting-Objects-Datei");
 		$xslt_printcontent = _("In dieser Datei sind die Formatting Objects zur Erzeugung der PDF-Datei gespeichert.") . "<br>";	
 	

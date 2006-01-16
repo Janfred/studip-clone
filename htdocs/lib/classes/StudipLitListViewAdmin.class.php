@@ -21,9 +21,10 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/TreeView.class.php");
-require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/StudipLitList.class.php");
-require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/StudipLitClipBoard.class.php");
+require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'lib/classes/TreeView.class.php');
+require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'lib/classes/StudipLitList.class.php');
+require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'lib/classes/StudipLitClipBoard.class.php');
+require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'datei.inc.php');
 
 /**
 * 
@@ -391,7 +392,7 @@ class StudipLitListViewAdmin extends TreeView{
 						$content .= "<a href=\"" . $this->getSelf("cmd=CopyList&item_id=$item_id") . "\">"
 						. "<img " .makeButton("kopieerstellen","src") . tooltip(_("Eine Kopie dieser Liste erstellen"))
 						. " border=\"0\"></a>&nbsp;";
-						$content .= "<a href=\"sendfile.php?range_id={$this->tree->range_id}&list_id=$item_id&type=5&force_download=1&file_name=".rawurlencode($this->tree->tree_data[$item_id]['name'] . ".txt")."\">"
+						$content .= '<a href="' . GetDownloadLink('', $this->tree->tree_data[$item_id]['name'] . '.txt', 5, 'force', $this->tree->range_id, $item_id) . '">'
 						. "<img " .makeButton("export","src") . tooltip(_("Export der Liste in EndNote kompatiblem Format"))
 						. " border=\"0\"></a>&nbsp;";
 					}

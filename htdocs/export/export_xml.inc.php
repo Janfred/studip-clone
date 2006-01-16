@@ -149,8 +149,8 @@ if (($o_mode == "file") OR ($o_mode == "choose"))
 		$export_pagecontent .= "<input type=\"hidden\" name=\"xslt_filename\" value=\"" . $xslt_filename . "\">";
 	
 		$export_weiter_button = "<br><br><center><input type=\"IMAGE\" " . makeButton("zurueck", "src") . " value=\"" . _("Zur&uuml;ck") . "\" name=\"back\">&nbsp;</center></form>";
-		$xml_printimage = "<a href=\"sendfile.php?type=2&file_id=$xml_file_id&file_name=$xml_filename\"><img src=\"./pictures/" . $export_icon["xml"] . "\" border=0></a>";
-		$xml_printlink = "<a href=\"sendfile.php?type=2&file_id=$xml_file_id&file_name=$xml_filename\" class=\"tree\">" . $xml_filename . "</a>";
+		$xml_printimage = '<a href="'. GetDownloadLink($xml_file_id, $xml_filename, 2) .  '"><img src="pictures/' . $export_icon['xml'] . '" border=0></a>';
+		$xml_printlink = '<a href="'. GetDownloadLink($xml_file_id, $xml_filename, 2). '" class="tree">' . $xml_filename . '</a>';
 		$xml_printdesc = _("XML-Daten");
 		$xml_printcontent = _("In dieser Datei sind die Daten als XML-Tags gespeichert. Diese Tags können mit einem XSLT-Script verarbeitet werden.") . "<br>";	
 	}
@@ -166,7 +166,7 @@ if (($o_mode == "file") OR ($o_mode == "choose"))
 	);
 	if ($object_counter > 0)
 	{
-		$link = "<a href=\"sendfile.php?type=2&file_id=$xml_file_id&file_name=$xml_filename\">";
+		$link = '<a href="'. GetDownloadLink($xml_file_id, $xml_filename, 2) .' ">';
 		$infobox[1]["kategorie"] = _("Aktionen:");
 			$infobox[1]["eintrag"][] = array (	"icon" => "pictures/icon-disc.gif" ,
 										"text"  => sprintf(_("Um die XML-Datei jetzt herunterzuladen klicken Sie %s hier %s."), $link, "</a>")

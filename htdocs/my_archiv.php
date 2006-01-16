@@ -37,13 +37,14 @@
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check("user");
 
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+include ($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'seminar_open.php'); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
-require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");			 // htmlReady fuer die Veranstaltungsnamen
-require_once ("$ABSOLUTE_PATH_STUDIP/dates.inc.php");			 // Semester-Namen fuer Admins
+require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'visual.inc.php');		// htmlReady fuer die Veranstaltungsnamen
+require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'dates.inc.php');		// Semester-Namen fuer Admins
+require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'datei.inc.php');
 
-$cssSw = new cssClassSwitcher;									// Klasse für Zebra-Design
+$cssSw = new cssClassSwitcher;							// Klasse für Zebra-Design
 $cssSw->enableHover();
 $db = new DB_Seminar;
 
@@ -52,13 +53,13 @@ closeObject();
 $links_admin_data='';	 //Auch im Adminbereich gesetzte Veranstaltungen muessen geloescht werden.
 
 // Start of Output
-include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+include ($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'html_head.inc.php'); // Output of html head
+include ($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'header.php');   // Output of Stud.IP head
 
 echo "\n" . $cssSw->GetHoverJSFunction() . "\n";
 
-if (!$perm->have_perm("root"))
-	include ("$ABSOLUTE_PATH_STUDIP/links_seminare.inc.php");	   //hier wird die Navigation nachgeladen
+if (!$perm->have_perm('root'))
+	include ($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'links_seminare.inc.php');	   //hier wird die Navigation nachgeladen
 	 
 if (!isset($sortby))
 	$sortby="name";
@@ -116,12 +117,13 @@ if ($num_my_sem) {
 		else
 			echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
 		 //documents-field
- 		$file_name=rawurlencode(_("Dateisammlung") . " ".substr($db->f("name"),0,200).".zip");
-		if ($db->f("archiv_file_id"))
-			echo "<a href=\"sendfile.php?type=1&file_id=".$db->f("archiv_file_id")."&file_name=".$file_name."\">&nbsp; <img src=\"pictures/icon-disc.gif\" border=0 ".tooltip(_("Dateisammlung der Veranstaltung herunterladen"))."></a>";
-		else
-			echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
-		echo "</td>";
+ 		$file_name = _("Dateisammlung") . '-' . substr($db->f('name'),0,200) . '.zip';
+		if ($db->f('archiv_file_id')) {
+			echo '<a href="'. GetDownloadLink($db->f('archiv_file_id'), $file_name, 1) . '">&nbsp; <img src="pictures/icon-disc.gif" border=0 '.tooltip(_("Dateisammlung der Veranstaltung herunterladen")).'></a>';
+		} else {
+			echo '&nbsp; <img src="pictures/icon-leer.gif" border=0>';
+		}
+		echo '</td>';
 		//status-field
 		echo "<td class=\"".$cssSw->getClass()."\"  align=\"center\" nowrap><font size=-1>". $db->f("status")."&nbsp;</font></td>";
 		$last_sem=$db->f("semester");
