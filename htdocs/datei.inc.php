@@ -22,7 +22,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'].'lib/classes/idna_convert.class.php');
 require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'].'lib/classes/StudipDocument.class.php');
-require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'].'lib/pclzip/pclzip.lib.php');
+
+if ($GLOBALS['ZIP_USE_INTERNAL']) include_once($GLOBALS['ABSOLUTE_PATH_STUDIP'].'lib/pclzip/pclzip.lib.php');
 
 function parse_header($header){
 	if (!is_array($header)){
