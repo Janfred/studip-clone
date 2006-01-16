@@ -1634,7 +1634,7 @@ function GetFileIcon($ext, $with_img_tag = false){
 * @return	string	downloadlink
 */
 function GetDownloadLink($file_id, $file_name, $type = 0, $dltype = 'normal', $range_id = '', $list_id = ''){
-	$mode = (isset($GLOBALS['SENDFILE_LINK_MODE']))? $GLOBALS['SENDFILE_LINK_MODE']:'old';
+	$mode = (isset($GLOBALS['SENDFILE_LINK_MODE']))? $GLOBALS['SENDFILE_LINK_MODE']:'normal';
 	$link[] = $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'];
 	$wa = '';
 	switch($mode) {
