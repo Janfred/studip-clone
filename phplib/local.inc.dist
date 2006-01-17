@@ -149,6 +149,7 @@ $RELATIVE_PATH_CHAT = "chat"; 							//Stud.IP module: chat
 $RELATIVE_PATH_ADMIN_MODULES = "admin";				 	//Stud.IP module: admin tools
 $RELATIVE_PATH_EXTERN = "extern"; 						//Stud.IP module: SRI-System for including Stud.IP data in other websites
 $RELATIVE_PATH_LEARNINGMODULES = "lernmodule";			//Stud.IP moule: Ilias 2 lerningmodules-connection
+$RELATIVE_PATH_ELEARNING_INTERFACE = "elearning";		//Stud.IP module: Ilias 3 lerningmodules-connection
 $RELATIVE_PATH_SUPPORT = "support";						//Stud.IP module: SupportDB (not part of the main distribution)
 $PATH_EXPORT = "export";								//Stud.IP module: export
 
