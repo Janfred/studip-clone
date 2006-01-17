@@ -297,7 +297,9 @@ function get_my_obj_values (&$my_obj, $user_id, $modules = NULL) {
 	
 	//Lernmodule?
 	if ($GLOBALS['ELEARNING_INTERFACE_ENABLE']) {
-		$db2->query(get_obj_clause('object_contentmodules a','object_id','module_id',"(chdate > IFNULL(b.visitdate,0) AND a.module_type !='crs')", 'elearning_interface'));
+		$db2->query(get_obj_clause('object_contentmodules a','object_id','module_id',"(chdate > IFNULL(b.visitdate,0) AND a.module_type != 'crs')",
+									'elearning_interface', false , " AND a.module_type != 'crs'"));
+//		$db2->query(get_obj_clause('object_contentmodules a','object_id','module_id',"(chdate > IFNULL(b.visitdate,0))", 'elearning_interface'));
 		while($db2->next_record()) {
 			if ($my_obj[$db2->f("object_id")]["modules"]["elearning_interface"]) {	
 				$my_obj[$db2->f("object_id")]["neuecontentmodule"]=$db2->f("neue");

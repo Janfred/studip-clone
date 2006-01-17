@@ -144,7 +144,6 @@ if (($ELEARNING_INTERFACE_ENABLE) && ($modules["elearning_interface"])) {
 		$structure["elearning_interface"]=array (topKat=>"", name=>_("Lernmodule"), link=>"elearning_interface.php?view=show&seminar_id=".$SessSemName[1], active=>FALSE);
 	elseif  ($perm->have_studip_perm("tutor",$SessSemName[1]))
 		$structure["elearning_interface"]=array (topKat=>"", name=>_("Lernmodule"), link=>"elearning_interface.php?view=edit&seminar_id=".$SessSemName[1], active=>FALSE);
- mysql_select_db("studip");
 }
 
 //topkats for SupportDB, if module is activated
@@ -305,12 +304,12 @@ if (($ELEARNING_INTERFACE_ENABLE) && ($modules["elearning_interface"])){
 	if (ObjectConnections::isConnected($SessSemName[1]))
 	{
 		if ($SessSemName["class"]=="inst") 
-			$structure["elearning_interface_show"]=array (topKat=>"elearning_interface", name=>_("Content-Module dieser Einrichtung"), link=>"elearning_interface.php?view=show&seminar_id=" . $SessSemName[1], active=>FALSE);
+			$structure["elearning_interface_show"]=array (topKat=>"elearning_interface", name=>_("Lernmodule dieser Einrichtung"), link=>"elearning_interface.php?view=show&seminar_id=" . $SessSemName[1], active=>FALSE);
 		else		
-			$structure["elearning_interface_show"]=array (topKat=>"elearning_interface", name=>_("Content-Module dieser Veranstaltung"), link=>"elearning_interface.php?view=show&seminar_id=" . $SessSemName[1], active=>FALSE);
+			$structure["elearning_interface_show"]=array (topKat=>"elearning_interface", name=>_("Lernmodule dieser Veranstaltung"), link=>"elearning_interface.php?view=show&seminar_id=" . $SessSemName[1], active=>FALSE);
 	}
 	if  ($perm->have_studip_perm("tutor",$SessSemName[1]))
-		$structure["elearning_interface_edit"]=array (topKat=>"elearning_interface", name=>_("Content-Module hinzuf&uuml;gen / entfernen"), link=>"elearning_interface.php?view=edit&seminar_id=" . $SessSemName[1], active=>FALSE);
+		$structure["elearning_interface_edit"]=array (topKat=>"elearning_interface", name=>_("Lernmodule hinzuf&uuml;gen / entfernen"), link=>"elearning_interface.php?view=edit&seminar_id=" . $SessSemName[1], active=>FALSE);
 }
 
 //bottomkats for SupportDB, if modul is activated
@@ -327,6 +326,47 @@ if ($SessSemName["class"]=="inst") {
 } else {
 	$tooltip = sprintf(_("Sie befinden sich in der Veranstaltung: %s, letzter Besuch: %s, Ihr Status in dieser Veranstaltung: %s"), $SessSemName[0], date("d.m.Y - H:i:s", object_get_visit($SessSemName[1], $SessSemName["class"])), $SemUserStatus);
 }
+
+
+
+// check if view is maintained by a plugin
+$found = false;
+if ($PLUGINS_ENABLE){
+	if (is_array($plugins)){
+		$pluginid = $_GET["id"];
+		// Namen der aufgerufenen Datei aus der URL herausschneiden
+		if (strlen($i_page) <= 0){
+			$i_page = basename($PHP_SELF);
+		} 
+		if ($i_page == "plugins.php"){
+			foreach ($plugins as $plugin){
+				if ($plugin->hasNavigation() && ($plugin->getPluginId() == $pluginid)){
+					// Hauptmenü gefunden
+					$reiter_view="plugin_" . $plugin->getPluginId();
+					$navi = $plugin->getNavigation();
+					$submenu = $navi->getSubMenu();
+					
+					if (submenu != null){
+    					foreach ($submenu as $submenuitem){
+    						$params = $submenuitem->getLinkParams();
+    						    						
+    						foreach ($params as $key => $val){
+        						if (isset($_GET["$key"]) && $_GET["$key"] == $val){
+        						   $reiter_view="plugin_" . $plugin->getPluginId() . "_" . $submenuitem->getDisplayname();
+        						   break;
+        						}
+        					}
+    					}
+    				}
+					$found= true;
+					break;
+				}
+			}
+		}
+	}
+}
+
+if (!$found){
 
 	//View festlegen
 	switch ($i_page) {
@@ -514,6 +554,10 @@ if ($SessSemName["class"]=="inst") {
 		break;
 	}
 	
+	
+	}
+	
 	$reiter->create($structure, $reiter_view, $tooltip);
 }
 ?>
+
