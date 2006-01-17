@@ -56,7 +56,7 @@ $FOP_ENABLE = TRUE;
 $FOP_SH_CALL = "/usr/local/fop-0.20.5rc/fop.sh";    	//path to fop
 $JAVA_ENV_CALL = "/etc/profile.d/alljava.sh";     		//used to set environment for JRE
 
-$ILIAS_CONNECT_ENABLE = FALSE;							//Stud.IP module: ilias connect
+$ILIAS_CONNECT_ENABLE = FALSE;							//Stud.IP module: ilias 2 connect
 $ABSOLUTE_PATH_ILIAS = "http://<your.server.name/ilias/>";
 
 $EXTERN_ENABLE = TRUE;									//Stud.IP module: "external pages" and SRI-System
@@ -70,7 +70,47 @@ $SUPPORT_ENABLE = FALSE;								//Stud.IP module: SupportDB (not part of the mai
 
 $VOTE_ENABLE = TRUE;									//Stud.IP module: Votingsystem
 
+$ELEARNING_INTERFACE_ENABLE = TRUE;						//Stud.IP module: elearning interface
+$SOAP_ENABLE = TRUE;
 
+$ELEARNING_INTERFACE_MODULES = array(
+"ilias3" =>	array(
+	"name" => "ILIAS 3",
+	"ABSOLUTE_PATH_ELEARNINGMODULES" => "http://<your Ilias3 installation>/",
+	"ABSOLUTE_PATH_SOAP" => "http://<your Ilias3 installation>/webservice/soap/server.php?wsdl",
+	"CLASS_PREFIX" => "Ilias3",
+	"auth_necessary" => true,
+	"USER_PREFIX" => "studip_",
+	"target_file" => "studip_referrer.php",
+	"logo_file" => "pictures/ilias_logo.png",
+	"soap_data" => array(
+					"username" => "<username>",		//this credentials are used to communicate with your Ilias 3 installation over SOAP
+					"password" => "<password>",
+					"client" => "<ilias client id>"),
+	"types" => 	array(
+					"htlm" => array("name" => "HTML-Lerneinheit", "icon" => "pictures/icon-lern.gif"),
+					"sahs" => array("name" => "SCORM/AICC-Lerneinheit", "icon" => "pictures/icon-lern.gif"),
+					"lm" => array("name" => "ILIAS-Lerneinheit", "icon" => "pictures/icon-lern.gif"),
+					"tst" => array("name" => "ILIAS-Test", "icon" => "pictures/icon-lern.gif")
+					),
+	"global_roles" => array(4,5,14), // put here the ilias role-ids for User, Guest and Anonymous
+	"roles" =>	array(
+					"autor" => "4",
+					"tutor" => "4",
+					"dozent" => "4",
+					"admin" => "4",
+					"root" => "2"
+					),
+	"crs_roles" =>	array(
+					"autor" => "member",
+					"tutor" => "tutor",
+					"dozent" => "admin",
+					"admin" => "admin",
+					"root" => "admin"
+					)
+	)
+);
+						
 /*paths
 ----------------------------------------------------------------
 configure Stud.IP folders*/
@@ -108,7 +148,7 @@ $RELATIVE_PATH_CALENDAR = "calendar";					//Stud.IP module: calendar
 $RELATIVE_PATH_CHAT = "chat"; 							//Stud.IP module: chat
 $RELATIVE_PATH_ADMIN_MODULES = "admin";				 	//Stud.IP module: admin tools
 $RELATIVE_PATH_EXTERN = "extern"; 						//Stud.IP module: SRI-System for including Stud.IP data in other websites
-$RELATIVE_PATH_LEARNINGMODULES = "lernmodule";			//Stud.IP moule: Ilias lerningmodules-connection
+$RELATIVE_PATH_LEARNINGMODULES = "lernmodule";			//Stud.IP moule: Ilias 2 lerningmodules-connection
 $RELATIVE_PATH_SUPPORT = "support";						//Stud.IP module: SupportDB (not part of the main distribution)
 $PATH_EXPORT = "export";								//Stud.IP module: export
 
