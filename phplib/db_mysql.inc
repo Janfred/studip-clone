@@ -385,5 +385,18 @@ class DB_Sql {
      }
    return $return;
   }
+  
+  /* public: perform a query using format string*/
+  function queryf($format /* , .. */) {
+
+    // get args
+    $args = func_get_args();
+
+    // get format string
+    $format = array_shift($args);
+
+    // do something
+    return $this->query(vsprintf($format, $args));
+  } 
 }
 ?>
