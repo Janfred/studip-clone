@@ -151,6 +151,8 @@ $RELATIVE_PATH_EXTERN = "extern"; 						//Stud.IP module: SRI-System for includi
 $RELATIVE_PATH_LEARNINGMODULES = "lernmodule";			//Stud.IP moule: Ilias 2 lerningmodules-connection
 $RELATIVE_PATH_ELEARNING_INTERFACE = "elearning";		//Stud.IP module: Ilias 3 lerningmodules-connection
 $RELATIVE_PATH_SUPPORT = "support";						//Stud.IP module: SupportDB (not part of the main distribution)
+$RELATIVE_PATH_SOAP = "soap";
+
 $PATH_EXPORT = "export";								//Stud.IP module: export
 
 $FAVICON = "http://www.studip.de/favicon.ico";			//the place where the favicon is stored. 
