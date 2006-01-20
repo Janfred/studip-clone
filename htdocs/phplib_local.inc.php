@@ -22,6 +22,8 @@
 // +---------------------------------------------------------------------------+
 //$Id$
 
+ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . $ABSOLUTE_PATH_STUDIP);
+
 //compatibility section
 if (!defined('PHPLIB_SESSIONDATA_TABLE')){
 	define('PHPLIB_SESSIONDATA_TABLE', 'active_sessions');
@@ -46,6 +48,12 @@ if ($EXTERN_ENABLE) {
 	$EXTERN_SERVER_NAME = $_SERVER["HTTP_HOST"] . $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'];
 }
 
+if (!$GLOBALS['ABSOLUTE_URI_STUDIP']){
+	$GLOBALS['ABSOLUTE_URI_STUDIP'] = ( ($_SERVER["SERVER_PORT"] == 443 || $_SERVER["HTTPS"] == "on") ? "https://" : "http://") 
+									. $_SERVER["SERVER_NAME"] . (($_SERVER["SERVER_PORT"] != 443 && $_SERVER["SERVER_PORT"] != 80) ? ":" . $_SERVER["SERVER_PORT"] : "") 
+									. $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']; // link to system
+}
+
 //Besser hier globale Variablen definieren...
 $GLOBALS['_fullname_sql']['full'] = "TRIM(CONCAT(title_front,' ',Vorname,' ',Nachname,IF(title_rear!='',CONCAT(', ',title_rear),'')))";
 $GLOBALS['_fullname_sql']['full_rev'] = "TRIM(CONCAT(Nachname,', ',Vorname,IF(title_front!='',CONCAT(', ',title_front),''),IF(title_rear!='',CONCAT(', ',title_rear),'')))";
@@ -54,7 +62,7 @@ $GLOBALS['_fullname_sql']['no_title_rev'] = "CONCAT(Nachname ,', ', Vorname)";
 $GLOBALS['_fullname_sql']['no_title_short'] = "CONCAT(Nachname,', ',UCASE(LEFT(TRIM(Vorname),1)),'.')";
 
 //software version - please leave it as it is!
-$SOFTWARE_VERSION = '1.3 alpha cvs';
+$SOFTWARE_VERSION="1.3 alpha cvs";
 
 /*classes for database access
 ----------------------------------------------------------------
@@ -93,6 +101,7 @@ $cfg = &Config::GetInstance();
 $cfg->extractAllGlobal(FALSE);
 unset($cfg);
 
+
 /*mail settings
 ----------------------------------------------------------------*/
 
@@ -111,14 +120,7 @@ class studip_smtp_class extends smtp_class {
 		$this->env_from = ($GLOBALS['MAIL_ENV_FROM'] == "") ? "wwwrun@".$this->localhost : $GLOBALS['MAIL_ENV_FROM']; // Envelope-From:
 		$this->from = ($GLOBALS['MAIL_FROM'] == "") ? "\"Stud.IP\" <" . $this->env_from . ">" : $this->QuotedPrintableEncode('"' . $GLOBALS['MAIL_FROM'] . '"',1) . ' <' . $this->env_from . '>'; // From: Mailheader
 		$this->abuse = ($GLOBALS['MAIL_ABUSE'] == "") ? "abuse@" . $this->localhost : $GLOBALS['MAIL_ABUSE']; // Reply-To: Mailheader
-		if ($GLOBALS['ABSOLUTE_URI_STUDIP']){
-			$this->url = $GLOBALS['ABSOLUTE_URI_STUDIP'];
-		} else {
-			$this->url = ( ($_SERVER["SERVER_PORT"] == 443 || $_SERVER["HTTPS"] == "on") ? "https://" : "http://") 
-					. $_SERVER["SERVER_NAME"] . (($_SERVER["SERVER_PORT"] != 443 && $_SERVER["SERVER_PORT"] != 80) ? ":" . $_SERVER["SERVER_PORT"] : "") 
-					. $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']; // link to system
-			 $GLOBALS['ABSOLUTE_URI_STUDIP'] = $this->url;
-		}
+		$this->url = $GLOBALS['ABSOLUTE_URI_STUDIP'];
 		$this->additional_headers = array("MIME-Version: 1.0",
 										"Content-Type: text/plain; charset=\"{$this->charset}\"",
 										"Content-Transfer-Encoding: 8bit");
@@ -180,15 +182,6 @@ class Seminar_Session extends Session {
 			$this->Session();
 		}
 	}
-	
-	/* does not work anymore, use ob_start() instead
-	//modifizierte function put_headers(),ermöglicht den Verzicht auf Headers seitens der PHPLib
-	function put_headers(){
-		if ($GLOBALS["dont_put_headers"]) return;
-		//put_headers der SuperKlasse aufrufen
-		Session::put_headers();
-	}
-	*/
 	
 	//erweiterter Garbage Collector
 	function gc(){
@@ -365,10 +358,29 @@ class Seminar_Auth extends Auth {
 	}
 	
 	function is_authenticated(){
+		global $ABSOLUTE_PATH_STUDIP;
+		$cfg =& Config::GetInstance();
 		//check if the user got kicked meanwhile
 		if ($this->auth['uid'] && !in_array($this->auth['uid'], array('form','nobody'))){
-			$this->db->query(sprintf("select user_id from %s where user_id = '%s'", $this->database_table, $this->auth['uid']));
-			if (!$this->db->next_record()) return false;
+			$this->db->query(sprintf("select username,perms from %s where user_id = '%s'", $this->database_table, $this->auth['uid']));
+			if (!$this->db->next_record()){
+				$this->unauth();
+			} else {
+				$actual_perms = $this->db->f('perms');
+			}
+		} elseif ($cfg->getValue('MAINTENANCE_MODE_ENABLE') && isset($_REQUEST['username'])) {
+			$this->db->query(sprintf("select username,perms from %s where username = '%s' AND perms='root'", $this->database_table, $_REQUEST['username']));
+			$this->db->next_record();
+			$this->auth["uname"] = $this->db->f('username');
+			$actual_perms = $this->db->f('perms');
+		}
+		if ($cfg->getValue('MAINTENANCE_MODE_ENABLE') && $actual_perms != 'root'){
+			$this->unauth();
+			include_once $ABSOLUTE_PATH_STUDIP . 'msg.inc.php';
+			include_once $ABSOLUTE_PATH_STUDIP . 'html_head.inc.php';
+			parse_window('error§' . _("Das System befindet sich im Wartungsmodus. Zur Zeit ist kein Zugriff möglich."), '§', $GLOBALS['UNI_NAME'] . ' ' . _("Wartungsmodus"), '&nbsp;');
+			include_once $ABSOLUTE_PATH_STUDIP . 'html_end.inc.php';
+			die;
 		}
 		return parent::is_authenticated();
 	}
