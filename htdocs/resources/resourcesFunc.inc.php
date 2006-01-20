@@ -197,12 +197,13 @@ function getGlobalPerms($user_id) {
 	static $cache;
 	global $perm;
 	
-	if ($cache[$user_id])
-		return $cache[$user_id];
 	
 	if (!$user_id){
 		$user_id = $GLOBALS['user']->id;
 	}
+	
+	if ($cache[$user_id])
+		return $cache[$user_id];
 	
 	$db = new DB_Seminar;
 	
@@ -873,3 +874,4 @@ function showSearchForm($name, $search_string='', $user_only=FALSE, $administrab
 	}
 }
 ?>
+

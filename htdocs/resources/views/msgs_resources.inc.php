@@ -187,5 +187,9 @@ $this->msg[44] = array (
 		"mode" => "error",
 		"msg"=> _("Die Belegungen konnte nicht gespeichert werden, da sie mit folgenden Sperrzeiten kollidiert:")
 			."<br><font size=\"-1\" color=\"black\">%s</font>");
-			
+$this->msg[45] = array (
+		"mode" => "msg",
+		"msg"=> _("Es wurden %s Raumanfragen gel&ouml;scht."));
+
 ?>
+

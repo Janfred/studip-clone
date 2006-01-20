@@ -38,6 +38,7 @@ require_once ($RELATIVE_PATH_RESOURCES."/lib/AssignObjectPerms.class.php");
 require_once ($RELATIVE_PATH_RESOURCES."/lib/ResourceObject.class.php");
 require_once ($RELATIVE_PATH_RESOURCES."/lib/ResourceObjectPerms.class.php");
 require_once ($RELATIVE_PATH_RESOURCES."/lib/RoomGroups.class.php");
+require_once ($RELATIVE_PATH_RESOURCES."/lib/RoomRequest.class.php");
 require_once ($ABSOLUTE_PATH_STUDIP."/dates.inc.php");
 
 //a temp session-variable...
@@ -1534,13 +1535,31 @@ if ($save_state_x) {
 	}
 }
 
+if (isset($_REQUEST['do_delete_requests_x']) && get_config('RESOURCES_ALLOW_DELETE_REQUESTS') && getGlobalPerms($GLOBALS['user']->id) == 'admin'){
+	if (is_array($_REQUEST['requests_marked_to_kill'])){
+		foreach($_REQUEST['requests_marked_to_kill'] as $rid){
+			$req_obj = new RoomRequest($rid);
+			$count += ($req_obj->delete() != 0);
+			unset($resources_data["requests_open"][$rid]);
+			foreach($resources_data['requests_working_on'] as $number => $rwo){
+				if ($rwo['request_id'] == $rid){
+					unset($resources_data['requests_working_on'][$number]);
+					break;
+				}
+			}
+		}
+		$resources_data['requests_working_pos'] = 0;
+		$resources_data['requests_working_on'] = array_values($resources_data['requests_working_on']);
+		$msg->addMsg(45, array($count));
+	}
+}
+
 if ($suppose_decline_request_x) {
 	$msg->addMsg(43, array($PHP_SELF, $PHP_SELF));
 	$view = "edit_request";
 }
 
 if ($decline_request) {
-	require_once ($RELATIVE_PATH_RESOURCES."/lib/RoomRequest.class.php");
 	
 	$reqObj = new RoomRequest($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["request_id"]);
 
@@ -1959,9 +1978,7 @@ if ($view == "view_sem_schedule" || $view == "view_group_schedule") {
 		}
 	}
 	if (!$resources_data['sem_schedule_semester_id']){
-		$semester = new SemesterData();
-		$current_sem = $semester->getCurrentSemesterData();
-		$resources_data['sem_schedule_semester_id'] = $current_sem['semester_id'];
+		$resources_data['sem_schedule_semester_id'] = $GLOBALS['_default_sem'];
 		$resources_data['sem_schedule_timespan'] = 'course_time';
 		$resources_data["schedule_mode"] = "graphical";
 		$resources_data["show_repeat_mode"] = 'all';
@@ -1972,6 +1989,7 @@ if ($view == "view_sem_schedule" || $view == "view_group_schedule") {
 		$resources_data["show_repeat_mode"] = 'all';
 		$resources_data['group_schedule_dow'] = 1;
 	}
+	$GLOBALS['_default_sem'] = $resources_data['sem_schedule_semester_id'];
 }
 
 if (($show_repeat_mode) && ($send_schedule_repeat_mode_x)) {
@@ -2034,3 +2052,4 @@ if ($edit_object) {
 if ($resources_data['view'] == 'resources') $resources_data['view'] = $view = '_resources';
 
 ?>
+

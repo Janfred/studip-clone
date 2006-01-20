@@ -599,3 +599,4 @@ print_r($resources_data);
 $resources_data = serialize($resources_data);
 page_close();
 ?>
+
