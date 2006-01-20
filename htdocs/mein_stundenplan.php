@@ -64,10 +64,8 @@ if (!$print_view) {
 	if ($inst_id) //Links if we show in the instiute-object-view
 		include "$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php";
 	elseif (!$perm->have_perm("admin")) //if not in the adminview, it's the user view!
-		# include "$RELATIVE_PATH_CALENDAR/calendar_links.inc.php";
 		include ("$ABSOLUTE_PATH_STUDIP/links_sms.inc.php");
 	else
-		# include "$ABSOLUTE_PATH_STUDIP/links_seminare.inc.php";	
 		include ("$ABSOLUTE_PATH_STUDIP/links_sms.inc.php");
 	}
 
@@ -162,9 +160,7 @@ if ($inst_id) {
 }
 //richtiges Semester ausw&auml;hlen
 if ($view=="inst") {
-	if (!$instview_sem) {
-	} else
-		$tmp_sem_nr=$instview_sem;
+	$tmp_sem_nr = $_REQUEST['instview_sem'];
 } else {
 	$k=0;
 	foreach ($all_semester as $a) {
@@ -179,11 +175,11 @@ if ($view=="inst") {
 	}
 }
 
-if (!$tmp_sem_nr) {
+if (!isset($tmp_sem_nr)) {
 	if (time() < $VORLES_ENDE) {
-		$tmp_sem_beginn=$SEM_BEGINN;
-		$tmp_sem_ende=$SEM_ENDE;
-		$tmp_sem_nr=$SEM_ID;
+		$tmp_sem_beginn = $SEM_BEGINN;
+		$tmp_sem_ende = $SEM_ENDE;
+		$tmp_sem_nr = $SEM_ID;
 	} else {
 		$tmp_sem_beginn=$SEM_BEGINN_NEXT;
 		$tmp_sem_ende=$SEM_ENDE_NEXT;
@@ -209,10 +205,6 @@ while ($db->next_record())
 	//Bestimmen, ob die Veranstaltung in dem Semester liegt, was angezeigt werden soll
 	$use_this=FALSE;
 	$term_data=unserialize($db->f("metadata_dates"));
-	/*if (!strncmp($db->f("Name"),"Informatik",6)) {
-		echo "DB: ".$db->f("start_time")."&nbsp;TMP: ".$tmp_sem_beginn."<br>";
-	}*/
-
 	if (($db->f("start_time") <=$tmp_sem_beginn) && ($tmp_sem_beginn <= ($db->f("start_time") + $db->f("duration_time")))) {
 		$use_this=TRUE; 
 	}
@@ -436,7 +428,7 @@ if (!$print_view) {
 			<? 
 		}
 		if ($view !="user")
-			printf ("<br><font size=-1><a target=\"_new\" href=\"%s?print_view=TRUE%s\">"._("Druckansicht dieser Seite (wird in einem neuen Browserfenster ge&ouml;ffnet).")."</a></font>", $PHP_SELF, ($inst_id) ? "&inst_id=".$inst_id : "");
+			printf ("<br><font size=-1><a target=\"_new\" href=\"%s?print_view=TRUE%s\">"._("Druckansicht dieser Seite (wird in einem neuen Browserfenster ge&ouml;ffnet).")."</a></font>", $PHP_SELF, ($inst_id) ? "&inst_id=$inst_id&instview_sem=$instview_sem" : "");
 		?>
 		<br>
 		</blockquote>
