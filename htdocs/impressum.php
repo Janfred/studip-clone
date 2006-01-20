@@ -364,20 +364,17 @@ if ($view=="statistik") {?>
 			echo "</blockquote></table></td></tr>";
 	}
 	
-if ($view=="history") {?>
+if ($view == 'history') {?>
 	
 	<tr>
 		<td valign="center" class="blank">
 		<blockquote>
 		<b>Stud.IP history.txt</b><br /><br />		
 		<? 
-		$i = 0;
-		$history = file("history.txt");
-		while ($i <sizeof($history)){
-			echo $history[$i]."<br>";
-			$i++;
-			}
+		$history = file('history.txt');
+		echo formatReady(implode('',$history));
 		?>
+		</blockquote>
 		</td>
 	</tr>
 	<?}
@@ -405,7 +402,7 @@ if ($view=="ansprechpartner") {?>
 		<br><font size="-1">
 		<?=_("<b>allgemeine Anfragen</b> wie Passwort-Anforderungen u.a. richten Sie bitte an:")?><br>
 		</font>
-		<font size="-1"><a href="mailto:<?=$UNI_CONTACT?>"><?=$UNI_CONTACT?>	</a></font ><br /><br />
+		<font size="-1"><a href="mailto:<?=$UNI_CONTACT?>"><?=$UNI_CONTACT?>	</a></font ><br /><br /></blockquote>
 		</td>
 		<td class="blank" align="center" valign="middle">
 			<a target="_new" href="http://www.studip.de"><img src="pictures/studipanim.gif" border="0"></a>
@@ -419,11 +416,12 @@ if ($view=="ansprechpartner") {?>
 	<tr>
 		<td class="steel1" colspan=2>
 		<blockquote><br><b><font size="-1"><?=_("Folgende Einrichtungen sind beteiligt:")?></font></b><br><font size=-1><?=_("(Genannt werden die jeweiligen Administratoren der Einrichtungen f&uuml;r entsprechende Anfragen)")?></font>
+		</blockquote>
 		</td>
 	</table><table width="100%" border=0 cellpadding=0 cellspacing=0>
 	</tr>
 	<tr>
-		<td class="steel1" valign="top"width="55%">
+		<td class="steel1" valign="top" width="55%">
 		<blockquote>
 		
 <?
