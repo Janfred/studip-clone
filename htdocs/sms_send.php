@@ -246,6 +246,27 @@ if ($course_id) {
 
 }
 
+// if send message at inst
+if ($inst_id) {
+
+	// be sure to send it as email
+	if($emailrequest == 1) $sms_data['tmpemailsnd'] = 1;
+	
+	// predefine subject
+	if($subject) $messagesubject = $subject;	
+	$db = new DB_Seminar;
+	$db->query ("SELECT username FROM user_inst LEFT JOIN auth_user_md5 USING(user_id) WHERE institut_id = '".$inst_id."'");
+	while ($db->next_record()) {
+		$add_course_members[] = $db->f("username");
+	}
+
+	$sms_data["p_rec"] = "";
+	$sms_data["p_rec"] = array_add_value($add_course_members, $sms_data["p_rec"]);
+	
+	// append signature
+	$sms_data["sig"] = $my_messaging_settings["addsignature"];
+
+}
 
 // attach signature
 if (!isset($sms_data["sig"])) {
