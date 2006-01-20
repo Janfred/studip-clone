@@ -72,17 +72,23 @@ class VeranstaltungResourcesAssign {
 		
 		//if no schedule-date exits, we take the metadates (only in this case! else we take only the concrete dates from the termin table!)
 		if (!isSchedule($this->seminar_id,true,true)){
+			$seminar =& Seminar::GetInstance($this->seminar_id);
 			$result2 = array_merge($result, $this->changeMetaAssigns('', '', '', FALSE, FALSE, $check_locks));
 			if (is_array($result2)){
 				$clear_turnus = false;
 				foreach($result2 as $key => $value){
-					if ($value['overlap_assigns']){
-						$clear_turnus = true;
-						break;
+					if (is_array($value['overlap_assigns'])){
+						foreach($value['overlap_assigns'] as $overlap){
+							$meta_key = $seminar->getMetaDatesKey($overlap["begin"],$overlap["end"]);
+							if (!is_null($meta_key)){
+								$keys_to_clear[] = $meta_key;
+								$clear_turnus = true;
+							}
+						}
 					}
 				}
 				if ($clear_turnus){
-					$this->clearTurnusData(); //die, dreaded resource_id, die!!!
+					$this->clearTurnusData(array_unique($keys_to_clear)); //die, dreaded resource_id, die!!!
 				}
 			}
 			$result = array_merge($result, $result2);
@@ -98,18 +104,16 @@ class VeranstaltungResourcesAssign {
 	}
 	
 	//kills resource_id in metadata_dates
-	function clearTurnusData(){
-		$query = sprintf ("SELECT metadata_dates FROM seminare WHERE Seminar_id = '%s' ", $this->seminar_id);
-		$this->db->query($query);
-		$this->db->next_record();
-		$metadata_termin = unserialize ($this->db->f("metadata_dates"));
-		foreach ($metadata_termin["turnus_data"] as $key =>$val){
-			$metadata_termin["turnus_data"][$key]["resource_id"]=FALSE;
-			$metadata_termin["turnus_data"][$key]["room"]=FALSE;
+	function clearTurnusData($keys_to_clear = null){
+		$seminar =& Seminar::GetInstance($this->seminar_id);
+		foreach ($seminar->getMetaDates() as $key => $val){
+			if (is_null($keys_to_clear) || in_array($key, $keys_to_clear)){
+				$seminar->setMetaDateValue($key,'resource_id','');
+				$seminar->setMetaDateValue($key,'room_description','');
+			}
 		}
-		$serialized_metadata = serialize($metadata_termin);
-		$query = sprintf ("UPDATE seminare SET metadata_dates ='%s' WHERE Seminar_id = '%s' ", $serialized_metadata, $this->seminar_id);
-		$this->db->query($query);
+		$seminar->store();
+		$seminar->restore();
 		$this->turnus_cleared = true;
 	}
 	

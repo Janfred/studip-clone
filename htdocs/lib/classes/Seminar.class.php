@@ -360,6 +360,7 @@ class Seminar {
 			$this->showscore = $this->db->f("showscore");
 			$this->modules = $this->db->f("modules");
 			$this->is_new = false;
+			$this->members = array();
 			return TRUE;
 		}
 		return FALSE;
@@ -431,7 +432,7 @@ class Seminar {
 				vorrausetzungen = '".			mysql_escape_string($this->requirements)."', 
 				lernorga = '".				mysql_escape_string($this->orga)."', 
 				leistungsnachweis = '".			mysql_escape_string($this->leistungsnachweis)."', 
-				metadata_dates= '".			$this->getSerializedMetadata()."', 
+				metadata_dates= '".			mysql_escape_string($this->getSerializedMetadata())."', 
 				chdate = '".				time()."', 
 				ects = '".				mysql_escape_string($this->ects)."', 
 				admission_endtime = '".			$this->admission_endtime."', 
