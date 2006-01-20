@@ -468,7 +468,7 @@ if ($db->next_record()) {
   fputs($fo_file,"    Erstellt mit Stud.IP $SOFTWARE_VERSION - Seite <fo:page-number/>\n");
   fputs($fo_file,"    </fo:block>\n");
   fputs($fo_file,"    <fo:block text-align=\"center\" font-size=\"8pt\" font-family=\"serif\" line-height=\"14pt\" >\n");
-  fputs($fo_file,"      <fo:basic-link color=\"blue\" external-destination=\"$UNI_URL\">$UNI_URL</fo:basic-link>\n");
+  fputs($fo_file,"      <fo:basic-link color=\"blue\" external-destination=\"$ABSOLUTE_URI_STUDIP\">$UNI_NAME_CLEAN</fo:basic-link>\n");
   fputs($fo_file,"    </fo:block>\n");
   fputs($fo_file,"  </fo:static-content>\n");
   fputs($fo_file,"  <fo:flow flow-name=\"xsl-region-body\">\n");
