@@ -1,4 +1,4 @@
-<?
+<?php
 
 // $Id$
 
@@ -818,8 +818,17 @@ function FixLinks ($data = "", $fix_nl = TRUE, $nl_to_br = TRUE, $img = FALSE, $
 function preg_call_link ($params, $mod, $img, $extern = FALSE) {
 	global $auth, $STUDIP_DOMAINS;
 	$chars= '&;_a-z0-9-';
+	
+	$pu = parse_url($params[4]);
+	if (($pu['scheme'] == 'http' || $pu['scheme'] == 'https')
+	&& $pu['host'] == $_SERVER['HTTP_HOST']
+	&& strpos($pu['path'], $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']) === 0){
+		$intern = true;
+	}
 	if ($extern)
 		$link_pic = '';
+	elseif ($intern)
+		$link_pic = "<img src=\"{$GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']}pictures/link_intern.gif\" border=\"0\" hspace=\"2\" />";
 	else
 		$link_pic = "<img src=\"{$GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']}pictures/link_extern.gif\" border=\"0\" />";
 
@@ -829,13 +838,12 @@ function preg_call_link ($params, $mod, $img, $extern = FALSE) {
 				$params[3] = $params[4];
 			else $params[3] = format($params[3]);
 			$params[4] = str_replace('&amp;', '&', $params[4]);
-			$tbr = '<a href="'.idna_link($params[4])."\" target=\"_blank\">$link_pic{$params[3]}</a>";
+			$tbr = '<a href="'.idna_link($params[4]).'"'.($intern ? '' : ' target="_blank"').">$link_pic{$params[3]}</a>";
 		}
 		elseif ($img) { 
 			// Don't execute scripts
-			$pu = parse_url($params[4]);
-			if ((basename($pu['path']) != 'sendfile.php') && preg_match("'{$_SERVER['HTTP_HOST']}.*?\/.+?[\?\&]'i", $params[4]))
-				return $params[0] ;
+			if ((basename($pu['path']) != 'sendfile.php') && $intern && $pu['query'])
+				return $params[0];
 			else if (!preg_match(':.+(\.jpg|\.jpeg|\.png|\.gif)$:i', $params[0]))
 				$tbr = $params[0];
 			else {
@@ -858,7 +866,7 @@ function preg_call_link ($params, $mod, $img, $extern = FALSE) {
 				$tbr = '<img src="'.idna_link($params[4])."\" $width border=\"0\" $style alt=\"{$params[1]}\" title=\"{$params[1]}\">";
 
 				if (preg_match('#(((https?://|ftp://)(['.$chars.':]+@)?)['.$chars.']+(\.['.$chars.':]+)+(/[^<\s]*[^\.\s<])*)#i', $params[7])) {
-					$tbr = '<a href="'.idna_link($params[7]).'" target="_blank">'.$tbr.'</a>';
+					$tbr = '<a href="'.idna_link($params[7]).'"'.($intern ? '' : ' target="_blank"').'>'.$tbr.'</a>';
 				}
 				if ($params[6])
 					$tbr = "<div align=\"{$params[6]}\">$tbr</div>";

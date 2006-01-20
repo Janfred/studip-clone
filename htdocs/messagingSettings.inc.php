@@ -72,13 +72,11 @@ if ($email_forward == "0") $email_forward = $GLOBALS["MESSAGING_FORWARD_DEFAULT"
 $news_author_id = $db2->f("news_author_id");
 
 if($messaging_cmd=="change_view_insert"){
-	if(!$news_author_id){
-		$news_author_id = md5(uniqid("Newsexport",1));
+	if ($export_news_as_rss){
+		StudipNews::SetRssId($user->id,'user');
+	} else {
+		StudipNews::UnsetRssId($user->id);
 	}
-	if (!$export_news_as_rss){
-		$news_author_id = '';
-	}
-	$db2->query("UPDATE user_info SET news_author_id ='$news_author_id' WHERE user_id = '".$user->id."'");
 }
 
 //vorgenommene Anpassungen der Ansicht in Uservariablen schreiben
@@ -355,7 +353,7 @@ function change_messaging_view() {
 						<font size=-1><?=_("Stud.IP-News per RSS-Feed exportieren")?></font>
 					</td>
 					<td <?=$cssSw->getFullClass()?>>
-						<input type="checkbox" name="export_news_as_rss" <? if ($GLOBALS['news_author_id']) echo " checked"; ?> >
+						<input type="checkbox" name="export_news_as_rss" <? if (StudipNews::GetRssIdFromUserId($user->id)) echo " checked"; ?> >
 					</td>
 				</tr>
 				<?php

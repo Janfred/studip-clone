@@ -99,11 +99,29 @@ if ($cmd == 'news_edit'){
 }
 
 if ($cmd=="news_submit") {
-	$edit_news=$news->update_news($news_id,$author,$topic,$body,$user_id,$date,$expire,$add_range, $allow_comments) ;
-	if ($edit_news)
-		$cmd="edit";
-	else
-		$cmd="";
+	if (!trim(stripslashes($topic)) && trim(stripslashes($body))) $topic = addslashes(substr(trim(stripslashes($body)),0,30) . '...');
+	if ($topic != "") {
+		$edit_news = $news->update_news($news_id, $author, $topic, $body, $user_id, $date, $expire, $add_range, $allow_comments);
+		if ($edit_news) $cmd = "edit";
+		else $cmd = "";
+	} else {
+		$cmd = "edit";
+		$news->msg .= "error§"._("Leere News k&ouml;nnen nicht gespeichert werden! Geben Sie immer &Uuml;berschrift oder Inhalt an!")."§";
+	}
+} 
+if ($cmd=="new_entry" &&
+	isset($_REQUEST['change_rss_x']) && 
+	get_config('NEWS_RSS_EXPORT_ENABLE') && 
+	$news->get_news_range_perm($news_range_id) > 1){
+		if (StudipNews::GetRssIdFromRangeId($news_range_id)){
+			StudipNews::UnSetRssId($news_range_id);
+			$news->msg .= "info§" . _("Der RSS Export wurde für diesen Bereich ausgeschaltet!") . "§";
+		} else {
+			StudipNews::SetRssId($news_range_id);
+			$news->msg .= "info§" . _("Der RSS Export wurde für diesen Bereich eingeschaltet!") 
+						. '<br>' . _("Bitte beachten Sie, dass damit die News dieses Bereiches auch von Personen die nicht im Stud.IP angemeldet sind abgerufen werden k&ouml;nnen!") . "§";
+		}
+		$cmd = '';
 }
 
 if ($news->msg) {
@@ -142,9 +160,9 @@ if ($news->msg) {
 $news->msg="";
 
 if ($cmd=="new_entry") {
-	if ($auth->auth["perm"]=="dozent" OR $auth->auth["perm"]=="tutor")
-		$news->search_range("blah");
+	if ($auth->auth["perm"]=="dozent" OR $auth->auth["perm"]=="tutor") $news->search_range();
 	$news->edit_news();
+	
 }
 
 if (!$cmd OR $cmd=="show") {
@@ -214,9 +232,16 @@ if (!$cmd OR $cmd=="show") {
 	echo "\n<tr><td class=\"blank\"><br /><blockquote>";
 	echo "<form action=\"".$news->p_self("cmd=new_entry&range_id=$news_range_id&view_mode=$view_mode")."\" method=\"POST\">";
 	echo "<hr width=\"100%\"><br /><b>" . _("gew&auml;hlter Bereich:") . " </b>".htmlReady($news_range_name). "<br /><br />";
-	echo "<font size=\"-1\" style=\"vertical-align:middle;\">" . _("Eine neue News im gew&auml;hlten Bereich erstellen") . "</font>&nbsp;";
-	echo "<input type=\"IMAGE\" style=\"vertical-align:middle;\" name=\"new_entry\" " .makeButton("erstellen","src") . tooltip(_("Eine neue News erstellen")) . " border=\"0\">";
-	echo "</b></blockquote></form></td></tr>\n ";
+	if (get_config('NEWS_RSS_EXPORT_ENABLE') && $news->get_news_range_perm($news_range_id) > 1){
+		echo "<img src=\"pictures/rss.gif\" border=\"0\" align=\"absmiddle\">&nbsp;";
+		echo "\n<font size=\"-1\" style=\"vertical-align:middle;\">" . _("Die News des gew&auml;hlten Bereiches als RSS-feed zur Verf&uuml;gung stellen") . "</font>&nbsp;";
+		vprintf("\n<input type=\"image\" src=\"pictures/%s\" %s border=\"0\" name=\"change_rss\" align=\"absmiddle\"/>",
+				(StudipNews::GetRssIdFromRangeId($news_range_id) ? array('haken.gif',tooltip(_("RSS Export ist eingeschaltet"))) : array('x2.gif',tooltip(_("RSS Export ist ausgeschaltet")))));
+		echo "\n<br><br>";
+	}
+	echo "\n<font size=\"-1\" style=\"vertical-align:middle;\">" . _("Eine neue News im gew&auml;hlten Bereich erstellen") . "</font>&nbsp;";
+	echo makeButton('erstellen', 'input', _("Eine neue News erstellen"), 'new_entry');
+	echo "</b>\n</blockquote>\n</form>\n</td>\n</tr>\n ";
 	if (!$news->show_news($news_range_id)) {
 		echo "\n<tr><td class=\"blank\"><blockquote>";
 		echo "<font size=\"-1\" style=\"vertical-align:middle;\">" . _("Im gew&auml;hlten Bereich sind keine News vorhanden!") . "<br><br>";

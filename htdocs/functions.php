@@ -318,13 +318,16 @@ function lastActivity ($sem_id) {
 * Einrichtungen, Veranstaltungen, Statusgruppen and Fakultaeten
 * 
 * @param		string	id	the id of the object
-* @return		string	return "ins" (Einrichtung), "sem" (Veranstaltung), "fak" (Fakultaeten), "group" (Statusgruppe), "dokument" (Dateien)
+* @return		string	return "inst" (Einrichtung), "sem" (Veranstaltung), "fak" (Fakultaeten), "group" (Statusgruppe), "dokument" (Dateien)
 *
 */
 function get_object_type($id) {
 	static $object_type_cache;
 	if ($id){
 		if (!$object_type_cache[$id]){
+			if ($id == 'studip'){
+				return 'global';
+			}
 			$db=new DB_Seminar;
 			$db->query("SELECT Seminar_id FROM seminare WHERE Seminar_id = '$id' ");
 			if ($db->next_record())

@@ -160,7 +160,7 @@ class DbSnapshot {
 				return true;
 			}
 		}
-		return true;
+		return false;
 	}
 		
 	function getRow($row = false){

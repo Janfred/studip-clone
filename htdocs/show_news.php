@@ -97,7 +97,7 @@ function show_news($range_id, $show_admin=FALSE,$limit="", $open, $width="100%",
 	$aktuell=time();
 
 	if (get_config('NEWS_RSS_EXPORT_ENABLE')){
-		$news_author_id = StudipNews::GetRssIdFromUserId($range_id);
+		$rss_id = StudipNews::GetRssIdFromRangeId($range_id);
 	}
 
 	$news =& StudipNews::GetNewsByRange($range_id, true);
@@ -129,10 +129,10 @@ function show_news($range_id, $show_admin=FALSE,$limit="", $open, $width="100%",
 		//Ausgabe der Kopfzeile vor erster auszugebener News
 		echo"\n<table  border=\"0\" bgcolor=\"#FFFFFF\" cellspacing=\"0\" cellpadding=\"2\" align=\"center\" width=\"$width\" >";
 		echo"\n<tr><td class=\"topic\" colspan=\"2\" width=\"99%\"><img src=\"./pictures/news2.gif\" border=\"0\"". tooltip(_("Newsticker. Klicken Sie auf die Pfeile (rechts), um neue News in diesen Bereich einzustellen. Klicken Sie auf die Pfeile am linken Rand, um den ganzen Nachrichtentext zu lesen.")) . "align=\"texttop\"><b>&nbsp;" . _("News") . "</b></td>";
-		if ($news_author_id) {
+		if ($rss_id) {
 			$colspan++;
 			echo "\n<td align=\"right\" width=\"36\" class=\"topic\">";
-			echo "\n<a href=\"rss.php?id=$news_author_id\"><img src=\"pictures/rss.gif\" border=\"0\"" . tooltip(_("RSS-Feed")) . "></a>";
+			echo "\n<a href=\"rss.php?id=$rss_id\"><img src=\"pictures/rss.gif\" border=\"0\"" . tooltip(_("RSS-Feed")) . "></a>";
 			echo "\n</td>";
 		}
 		if ($show_admin) {
@@ -272,34 +272,61 @@ function show_news($range_id, $show_admin=FALSE,$limit="", $open, $width="100%",
 	return TRUE;
 }
 
-function show_rss_news($id){
+function show_rss_news($range_id, $type){
 	$RssTimeFmt = '%Y-%m-%dT%H:%MZ';
-	$smtp = new studip_smtp_class();
-	$studip_url = $smtp->url . "about.php?username=".get_username($id);
+	$last_changed = 0;
+	switch ($type){
+		case 'user':
+			$studip_url = $GLOBALS['ABSOLUTE_URI_STUDIP'] . "about.php?username=" . get_username($range_id);
+			$title = get_fullname($range_id) . ' (Stud.IP - ' . $GLOBALS['UNI_NAME_CLEAN'] . ')';
+			$RssChannelDesc = _("Persönliche Neuigkeiten") . ' ' . $title;
+		break;
+		case 'sem':
+			$studip_url = $GLOBALS['ABSOLUTE_URI_STUDIP'] . "seminar_main.php?auswahl=" . $range_id;
+			$object_name = get_object_name($range_id, $type);
+			$title = $object_name['name'] . ' (Stud.IP - ' . $GLOBALS['UNI_NAME_CLEAN'] . ')';
+			$RssChannelDesc = _("Neuigkeiten der Veranstaltung") . ' ' . $title;
+		
+		break;
+		case 'inst':
+			$studip_url = $GLOBALS['ABSOLUTE_URI_STUDIP'] . "institut_main.php?auswahl=" . $range_id;
+			$object_name = get_object_name($range_id, $type);
+			$title = $object_name['name'] . ' (Stud.IP - ' . $GLOBALS['UNI_NAME_CLEAN'] . ')';
+			$RssChannelDesc = _("Neuigkeiten der Einrichtung") . ' ' . $title;
+		break;
+		case 'global':
+			$studip_url = $GLOBALS['ABSOLUTE_URI_STUDIP'] . "index.php?again=yes";
+			$title = 'Stud.IP - ' . $GLOBALS['UNI_NAME_CLEAN'];
+			$RssChannelDesc = _("Allgemeine Neuigkeiten") . ' ' . $title;
+		break;
+		
+	}
+	foreach(StudipNews::GetNewsByRange($range_id, true) as  $news_id => $details) {
+		list ($body,$admin_msg) = explode("<admin_msg>",$details["body"]);
+		$items .= "<item>
+		<title>".utf8_encode($details["topic"])."</title>
+		<link>".utf8_encode($studip_url . "&#38;nopen=$news_id&#35;anker")."</link>";
+		$items .= "<description>"."<![CDATA[".utf8_encode(formatready($body,1,1))."]]>"."</description>
+		<dc:contributor>"."<![CDATA[".utf8_encode(htmlready($details['author']))."]]>"."</dc:contributor>
+		<dc:date>".gmstrftime($RssTimeFmt,($details['date'] > $details['chdate'] ? $details['date'] : $details['chdate']))."</dc:date>
+		</item>";
+		if ($last_changed < $details['chdate']) $last_changed = $details['chdate'];
+	}
 	header("Content-type: text/xml; charset=utf-8");
 	echo "<?xml version=\"1.0\"?>
 	<rss version=\"2.0\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\">
 	<channel>
-	<title>Stud.IP - ".get_username($id). " rss feed</title>
+	<title>".utf8_encode($title)."</title>
 	<link>$studip_url</link>
 	<image>
 	<url>http://www.studip.de/images/studip_logo.gif</url>
-	<title>Stud.IP - ".get_username($id). " rss feed</title>
+	<title>".utf8_encode($title)."</title>
 	<link>$studip_url</link>
 	</image>
-	<description>$RssChannelDesc</description>
-	<lastBuildDate>".date("r")."</lastBuildDate>
+	<description>".utf8_encode($RssChannelDesc)."</description>
+	<lastBuildDate>".date("r",$last_changed)."</lastBuildDate>
 	<generator>". utf8_encode('Stud.IP - ' . $GLOBALS['SOFTWARE_VERSION']) . "</generator>";
-	foreach(StudipNews::GetNewsByRange($id, true) as  $news_id => $details) {
-		echo "<item>
-		<title>".utf8_encode($details["topic"])."</title>
-		<link>".utf8_encode($studip_url . "&#38;nopen=$news_id&#35;anker")."</link>";
-		list ($body,$admin_msg) = explode("<admin_msg>",$details["body"]);
-		echo"<description>"."<![CDATA[".utf8_encode(formatready($body,1,1))."]]>"."</description>
-		<dc:contributor>"."<![CDATA[".utf8_encode(htmlready($details['author']))."]]>"."</dc:contributor>
-		<dc:date>".gmstrftime($RssTimeFmt,$details['date'])."</dc:date>
-		</item>";
-	}
+	echo chr(10).$items;
     echo "</channel>\n</rss>";
 	return TRUE;
 }

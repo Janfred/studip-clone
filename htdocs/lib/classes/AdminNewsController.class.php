@@ -272,10 +272,11 @@ class AdminNewsController {
 			printf(_("%s Wochen (%s)"),$i ,strftime("%d.%m.%y",($temp + $news_date)));
 			echo "</option>";
 		}
-		echo "</select></td></tr></table></td></tr>";
-		echo "<tr><td class=\"blank\"><input name=\"allow_comments\" value=\"1\" type=checkbox";
+		echo "</select></td></tr>";
+		echo "<tr><td class=\"blank\">"._("Kommentare zulassen")."&nbsp;<input name=\"allow_comments\" value=\"1\" type=\"checkbox\" style=\"vertical-align:middle\"";
 		if ($this->news_query["allow_comments"]) print " checked";
-		echo "> "._("Kommentare zulassen")."</td></tr>";
+		echo "></td></tr>";
+		echo "\n</table></td></tr>";
 		echo "\n<tr><td class=\"blank\"><hr width=\"99%\"></td></tr>";
 		echo "\n<tr><td class=\"blank\">&nbsp; <b>" . _("In diesen Bereichen wird die News angezeigt:") . "</b><br /><br /></td></tr>";
 		echo "\n<tr><td class=\"blank\"><table class=\"blank\" width=\"99%\" cellspacing=\"0\" cellpadding=\"2\" border=\"0\" align=\"center\">";
@@ -609,6 +610,10 @@ class AdminNewsController {
 		return FALSE;
 	}
 
+	function get_news_range_perm($range_id){
+		return ($GLOBALS['perm']->get_perm() == 'root' ? 3 : $this->news_perm[$range_id]["perm"]);
+	}
+	
 	function send_sms() {
 		$msg_object = new messaging();
 		while (list($user_id,$msg) = each($this->sms)) {

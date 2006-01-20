@@ -74,6 +74,13 @@ if(isset($redirect_to) && $redirect_to != "") {
 		die;
 }
 
+if (get_config('NEWS_RSS_EXPORT_ENABLE') && $SessSemName[1]){
+	$rss_id = StudipNews::GetRssIdFromRangeId($SessSemName[1]);
+	if($rss_id){
+		$_include_additional_header = '<link rel="alternate" type="application/rss+xml" '
+									.'title="RSS" href="' . $GLOBALS['ABSOLUTE_URI_STUDIP'] . 'rss.php?id='.$rss_id.'"/>';
+	}
+}
 // Start of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head

@@ -21,9 +21,13 @@ ob_end_clean();
 ob_start();
 require_once("$ABSOLUTE_PATH_STUDIP/show_news.php");
 if (get_config('NEWS_RSS_EXPORT_ENABLE')){
-	if ($user_id = StudipNews::GetUserIDFromRssID($_REQUEST['id'])){
-		show_rss_news($user_id);
+	$range = StudipNews::GetRangeFromRssID($_REQUEST['id']);
+	if (is_array($range)){
+		show_rss_news($range['range_id'], $range['range_type']);
+	} else {
+		header("Content-type: text/xml; charset=utf-8");
+		echo "<?xml version=\"1.0\"?>";
 	}
-}
+}	
 ob_end_flush();
 ?>

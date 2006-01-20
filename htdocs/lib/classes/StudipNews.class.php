@@ -91,21 +91,50 @@ class StudipNews extends SimpleORMap {
 	}
 
 	function GetUserIdFromRssID($rss_id){
-		if ($rss_id){
-			$db = new DB_Seminar("SELECT user_id FROM user_info WHERE news_author_id='$rss_id'");
-			$db->next_record();
-			return $db->f(0);
-		} else {
-			return false;
-		}
+		$ret = StudipNews::GetRangeIdFromRssID($rss_id);
+		return $ret['range_id'];
 	}
 
 	function GetRssIdFromUserId($user_id){
-			$db = new DB_Seminar("SELECT news_author_id FROM user_info WHERE user_id='$user_id'");
-			$db->next_record();
-			return $db->f(0);
+		return StudipNews::GetRssIdFromRangeId($user_id);
 	}
-
+	
+	function GetRangeFromRssID($rss_id){
+		if ($rss_id){
+			$db = new DB_Seminar("SELECT range_id,range_type FROM news_rss_range WHERE rss_id='$rss_id'");
+			if ($db->next_record())	return array('range_id' => $db->f(0), 'range_type' => $db->f(1));
+		}
+		return false;
+	}
+	
+	function GetRangeIdFromRssID($rss_id){
+		$ret = StudipNews::GetRangeIdFromRssID($rss_id);
+		return $ret['range_id'];
+	}
+	
+	function GetRssIdFromRangeId($range_id){
+		$db = new DB_Seminar("SELECT rss_id FROM news_rss_range WHERE range_id='$range_id'");
+		$db->next_record();
+		return $db->f(0);
+	}
+	
+	function SetRssId($range_id, $type = false){
+		if (!$type){
+			$type = get_object_type($range_id);
+			if ($type == 'fak') $type = 'inst';
+		}
+		$rss_id = md5('StudipRss'.$range_id);
+		$db = new DB_Seminar("REPLACE INTO news_rss_range (range_id,rss_id,range_type) VALUES ('$range_id','$rss_id','$type')");
+		$db->next_record();
+		return $db->affected_rows();
+	}
+	
+	function UnsetRssId($range_id){
+		$db = new DB_Seminar("DELETE FROM news_rss_range WHERE range_id='$range_id'");
+		$db->next_record();
+		return $db->affected_rows();
+	}
+	
 	function GetAdminMsg($user_id, $date){
 		return sprintf(_("Zuletzt aktualisiert von %s (%s) am %s"),get_fullname($user_id) ,get_username($user_id) ,date("d.m.y",$date));
 	}
