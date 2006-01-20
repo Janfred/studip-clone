@@ -71,6 +71,7 @@ if (!$perm->have_perm("admin")) {
 	$structure["stundenplan"] = array('topKat' => 'mystudip', 'name' => _("Stundenplan"), 'link' => "edit_about.php?view=Stundenplan&username=$username", 'active' => FALSE);
 }
 $structure["messaging"] = array('topKat' => 'mystudip', 'name' => _("Messaging"), 'link' => "edit_about.php?view=Messaging&username=$username", 'active' => FALSE);
+$structure["rss"]=array (topKat=>"mystudip", name=>_("RSS Feeds"), link=>"edit_about.php?view=rss&username=$username", active=>FALSE);
 if ($MAIL_NOTIFICATION_ENABLE && !$perm->have_perm('admin')) {
 	$structure['notification'] = array('topKat' => 'mystudip', 'name' => _("Benachrichtigung"), 'link' => 'edit_about.php?view=notification', 'active' => FALSE);
 }
@@ -112,6 +113,10 @@ switch ($i_page) {
 			case "Sonstiges":
 				$reiter_view="sonstiges"; 
 			break;
+			case "rss":
+                                $reiter_view="rss";
+                        break;
+
 			case "Login":
 				$reiter_view="login"; 
 			break;

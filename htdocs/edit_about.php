@@ -28,6 +28,7 @@ $auth->login_if(!$logout && ($auth->auth["uid"] == "nobody"));
 if ($usr_name)  $username=$usr_name; //wenn wir von den externen Seiten kommen, nehmen wir den Usernamen aus usr_name, falls dieser gesetzt ist, um die Anmeldeprozedur nicht zu verwirren....
 
 require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/my_rss_feed.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/kategorien.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/messaging.inc.php");
@@ -1455,6 +1456,15 @@ if ($view=="Sonstiges") {
 
 // set FALSE if the form is allready closed in the included script
 $close_form = TRUE;
+
+if ($view=="rss") {
+        if ($rss=="create_rss") create_rss();
+        if ($rss=="delete_rss") delete_rss($rss_id);
+        if ($rss=="update_rss") update_rss();
+        if ($rss=="order_rss") order_rss($cat_id,$direction,$username);
+        print_rss($username);
+}
+
 
 if($view == "allgemein") {
 	require_once("mystudip.inc.php");

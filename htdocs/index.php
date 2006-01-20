@@ -47,6 +47,7 @@ include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Sessio
 require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
+include_once("$ABSOLUTE_PATH_STUDIP/lib/classes/RSSFeed.class.php");
 // -- hier muessen Seiten-Initialisierungen passieren --
 
 // -- wir sind jetzt definitiv in keinem Seminar, also... --
@@ -211,6 +212,26 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 		include ('show_vote.php');
 		show_votes ('studip', $auth->auth['uid'], $perm);
 	}
+
+	$db->query(sprintf("SELECT * FROM rss_feeds WHERE user_id='%s' AND hidden=0 ORDER BY priority",$auth->auth["uid"]));
+        while ($db->next_record()) {
+                if ($db->f("name")!="" && $db->f("url")!="") {
+                        $feed = new RSSFeed($db->f("url"));
+                        if($db->f('fetch_title') && $feed->ausgabe->channel['title']) $feedtitle = $feed->ausgabe->channel['title'];
+                        else $feedtitle = $db->f("name");
+                        echo "<table class=\"blank\" width=\"70%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">";
+                        echo "<tr><td class=\"topic\"><b>&nbsp;<FONT COLOR=\"white\">" . htmlReady($feedtitle) . "</FONT></b></td></tr>";
+                        echo "<tr><td class=\"steel1\">&nbsp;</td></tr><tr><td class=\"steel1\"><blockquote>";
+
+                        $feed->rssfeed_start();
+
+                        echo "</blockquote></td></tr>";
+                        echo "<tr><td class=\"steel1\">&nbsp;</td></tr>";
+                        echo "</table><br>\n";
+                }
+        }
+
+
 
 } else { //displaymodul for nobody
 	$mtxt  = '<img src="pictures/blank.gif" width="13" height="50" border="0" align="left"><br>'. "\n";
