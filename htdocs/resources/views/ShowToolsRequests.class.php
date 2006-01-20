@@ -224,34 +224,58 @@ class ShowToolsRequests {
 		global $resources_data, $_fullname_sql, $ABSOLUTE_PATH_STUDIP, $CANONICAL_RELATIVE_PATH_STUDIP;
 		require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/ZebraTable.class.php");
 	
-		//echo '<pre>', print_r($resources_data, true), '</pre>';
-	
+		$license_to_kill = (get_config('RESOURCES_ALLOW_DELETE_REQUESTS') && getGlobalPerms($GLOBALS['user']->id) == 'admin');
+		if ($license_to_kill){
+			echo chr(10) . '<script type="text/javascript">';
+			echo chr(10) . '
+			function auswahl_umkehr(){
+				my_elements = document.forms[\'list_requests_form\'].elements[\'requests_marked_to_kill[]\'];
+				if(!my_elements.length){
+					if(my_elements.checked)
+						my_elements.checked = false;
+					else
+						my_elements.checked = true;
+				} else {
+					for(i = 0; i < my_elements.length; ++i){
+						if(my_elements[i].checked)
+						my_elements[i].checked = false;
+						else
+						my_elements[i].checked = true;
+					}
+				}
+			}';
+			echo chr(10) . '</script>';
+			echo chr(10) . '<form name="list_requests_form" method="post" action="'.$GLOBALS['PHP_SELF'].'">';
+			echo chr(10) . '<div align="right">
+				<a href="#" onClick="auswahl_umkehr();return false;">'
+				. makeButton('auswahlumkehr', 'img', _("Auswahl umkehren")) 
+				. '</a>&nbsp;&nbsp;'
+				. makeButton('loeschen', 'input', _("Ausgewählte Anfragen löschen"), 'do_delete_requests')
+				. '&nbsp;</div><br>';
+		}
 		$i = 0;
 		$zt = new ZebraTable(array('width' => '99%', 'padding' => '1', 'align' => 'center'));
 		$zt->switchClass();
 		echo $zt->openRow();
 		echo $zt->cell("&nbsp;", array("class" => "steelkante"));
-		echo $zt->cell("<font size=\"-1\"><b>Z&auml;hler</b></font>", array("class" => "steelkante", 'colspan' => '3'));
-		echo $zt->cell("<font size=\"-1\"><b>V.-Nummer</b></font>", array("class" => "steelkante"));
-		echo $zt->cell("<font size=\"-1\"><b>Titel</b></font>", array("class" => "steelkante"));
-		echo $zt->cell("<font size=\"-1\"><b>Dozenten</b></font>", array("class" => "steelkante"));
-		echo $zt->cell("<font size=\"-1\"><b>Anfrager</b></font>", array("class" => "steelkante"));
-		echo $zt->cell("<font size=\"-1\"><b>Start-Semester<b></font>", array("class" => "steelkante"));
-		$zt->closeRow();
+		echo $zt->cell("<font size=\"-1\"><b>" . _("Z&auml;hler") . "</b></font>", array("class" => "steelkante", 'colspan' => '3'));
+		echo $zt->cell("<font size=\"-1\"><b>" . _("V.-Nummer") . "</b></font>", array("class" => "steelkante"));
+		echo $zt->cell("<font size=\"-1\"><b>" . _("Titel") . "</b></font>", array("class" => "steelkante"));
+		echo $zt->cell("<font size=\"-1\"><b>" . _("Dozenten") . "</b></font>", array("class" => "steelkante"));
+		echo $zt->cell("<font size=\"-1\"><b>" . _("Anfrager") . "</b></font>", array("class" => "steelkante"));
+		echo $zt->cell("<font size=\"-1\"><b>" . _("Start-Semester") . "<b></font>", array("class" => "steelkante"));
+		if ($license_to_kill){
+			echo $zt->cell("<font size=\"-1\"><b>" . _("l&ouml;schen") . "<b></font>", array("class" => "steelkante", 'width' => '5%'));
+		}
+		echo $zt->closeRow();
 		?>
 		<?
 		foreach ($resources_data['requests_working_on'] as $key => $val) {
 			$i++;
 			if ($resources_data['requests_open'][$val['request_id']] || !$resources_data['skip_closed_requests']) {
 				$reqObj = new RoomRequest($val['request_id']);
-				$semObj = new Seminar($reqObj->getSeminarId());
+				$semObj =& Seminar::GetInstance($reqObj->getSeminarId());
 
-				$db = new DB_Seminar();
-				$db->query("SELECT seminar_user.user_id, auth_user_md5.username FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE seminar_id = '".$semObj->id."' AND status = 'dozent'");
-				$dozent = array();
-				while ($db->next_record()) {
-					$dozent[$db->f('username')] = get_fullname($db->f('user_id'));
-				}
 				if ($semObj->getName() != "") {
 					echo $zt->openRow();
 					//echo "<font size=\"-1\">";
@@ -259,14 +283,14 @@ class ShowToolsRequests {
 					echo $zt->cell("<font size=\"-1\">$i.</font>");
 					echo $zt->cell("<a href=\"resources.php?view=edit_request&edit=".$val['request_id']."\"><img src=\"pictures/edit_transparent.gif\" border=\"0\"".tooltip('Anfrage bearbeiten')."></a>");
 					echo $zt->cell((($resources_data['requests_open'][$val['request_id']]) ? '' : '<img src="pictures/haken_transparent.gif">')."</font>");
-					echo $zt->cell("<font size=\"-1\">".$semObj->seminar_number."</font>");
+					echo $zt->cell("<font size=\"-1\">".htmlReady($semObj->seminar_number)."</font>");
 					echo $zt->cell("<font size=\"-1\"><a href=\"details.php?sem_id=".$semObj->getId()."&send_from_search=true&send_from_search_page=".urlencode($CANONICAL_RELATIVE_PATH_STUDIP."resources.php?view=list_requests")."\">".my_substr(htmlReady($semObj->getName()),0,50)."</a><br/></font>");
 					echo $zt->openCell();
 					echo "<font size=\"-1\">";
 					$k = false;
-					foreach ($dozent as $key => $val) {
+					foreach ($semObj->getMembers('dozent') as $doz) {
 						if ($k) echo ", ";
-						echo "<a href=\"about.php?username=$key\">$val</a>";
+						echo "<a href=\"about.php?username={$doz['username']}\">".HtmlReady($doz['fullname'])."</a>";
 						$k = true;
 					}
 					echo "</font>";
@@ -275,20 +299,26 @@ class ShowToolsRequests {
 						$semester = new SemesterData();
 						$this->all_semester = $semester->getAllSemesterData();
 					}
-					foreach ($this->all_semester as $val) {
-						if ($val['beginn'] == $semObj->semester_start_time) {
-							$cursem = $val['name'];
+					foreach ($this->all_semester as $one_sem) {
+						if ($one_sem['beginn'] == $semObj->semester_start_time) {
+							$cursem = $one_sem['name'];
 						}
 					}
-
+					
 					echo $zt->closeCell();
 					echo $zt->cell("<font size=\"-1\"><a href=\"about.php?username=".get_username($reqObj->user_id)."\">".get_fullname($reqObj->user_id)."</a></font>");
 					echo $zt->cell("<font size=\"-1\">$cursem</font>");
+					if ($license_to_kill){
+						echo $zt->cell("<font size=\"-1\"><input type=\"checkbox\" name=\"requests_marked_to_kill[]\" value=\"{$val['request_id']}\"></font>", array('align' => 'center'));
+					}
 					echo $zt->closeRow();
 				}
 			}
 		}
-		$zt->close();
+		echo $zt->close();
+		if ($license_to_kill){
+			echo chr(10) . '</form>';
+		}
 	}
 	
 
@@ -978,3 +1008,5 @@ class ShowToolsRequests {
 	}
 	
 }
+?>
+

@@ -202,7 +202,10 @@ if (((time() - $sem_create_data["timestamp"]) >$auth->lifetime*60) || ($new_sess
 	$sem_create_data["sem_admission_start_date"]=-1;
 	$sem_create_data["sem_admission_end_date"]=-1;
 	$sem_create_data["sem_payment"]=0;
-
+	if ($_default_sem){
+		$one_sem = $semester->getSemesterData($_default_sem);
+		if ($one_sem["vorles_ende"] > time()) $sem_create_data['sem_start_time'] = $one_sem['beginn'];
+	}
 	$sem_create_data["timestamp"]=time();
 	}
 else
@@ -250,7 +253,10 @@ if ($form == 1)
 	$sem_create_data["sem_inst_id"]=$sem_inst_id;
 	$sem_create_data["term_art"]=$term_art;
 	$sem_create_data["sem_start_time"]=$sem_start_time;
-
+	if (isset($_default_sem)){
+		$one_sem = $semester->getSemesterDataByDate($sem_create_data["sem_start_time"]);
+		$_default_sem = $one_sem['semester_id'];
+	}
 	if (($sem_duration_time == 0) || ($sem_duration_time == -1))
 		$sem_create_data["sem_duration_time"]=$sem_duration_time;
 	else
@@ -1245,6 +1251,7 @@ if (($form == 6) && ($jump_next_x))
     			} else {
     				//completing the internal settings....
     				$successful_entry=1;
+
 				$sem_create_data["sem_entry"]=TRUE;
 				openSem($sem_create_data["sem_id"]); //open Veranstaltung to administrate in the admin-area
 				$links_admin_data["referred_from"]="assi";
@@ -1253,7 +1260,7 @@ if (($form == 6) && ($jump_next_x))
 				//write the default module-config
 				$Modules = new Modules;
 				$Modules->writeDefaultStatus($sem_create_data["sem_id"]);
-				$Modules->writeStatus("scm", $sem_create_data["sem_id"], FALSE); //the scm has to be turned off, because an empty free informations page isn't funny
+				//$Modules->writeStatus("scm", $sem_create_data["sem_id"], FALSE); //the scm has to be turned off, because an empty free informations page isn't funny
 
     				//update/insert the assigned roomes
     				if ($RESOURCES_ENABLE) {
@@ -1456,6 +1463,11 @@ if (($form == 6) && ($jump_next_x))
 			//if room-reqquest stored in the session, destroy (we don't need it anymore)
 			if (is_object($sem_create_data["resRequest"]))
 				$sem_create_data["resRequest"] = '';
+			if ($sem_create_data["modules_list"]["scm"]){
+				$sem_create_data["sem_scm_name"] = ($SCM_PRESET[1] ? $SCM_PRESET[1] : _("Informationen"));
+				$sem_create_data["sem_scm_id"] = md5(uniqid($hash_secret));
+				$db->query("INSERT INTO scm SET scm_id='".$sem_create_data["sem_scm_id"]."', tab_name='".$sem_create_data["sem_scm_name"]."', range_id='".$sem_create_data["sem_id"]."', user_id='$user_id', content='".$sem_create_data["sem_scm_content"]."', mkdate='".time()."', chdate='".time()."' ");
+			}
 
 			//end of the seminar-creation process
 		} else {
@@ -1480,14 +1492,14 @@ if (($form == 7) && ($jump_next_x)) {
 
 //Eintragen der Simple-Content Daten
 if (($form == 8) && ($jump_next_x)) {
-	if ($sem_create_data["sem_scm_content"]) {
+	if (1 || $sem_create_data["sem_scm_content"]) {
 		//if content is created, we enable the module again (it was turned off above)
 		$Modules->writeStatus("scm", $sem_create_data["sem_id"], TRUE);
 		if ($sem_create_data["sem_scm_id"]) {
 			$db->query("UPDATE scm SET content='".$sem_create_data["sem_scm_content"]."', tab_name='".$sem_create_data["sem_scm_name"]."', chdate='".time()."' WHERE scm_id='".$sem_create_data["sem_scm_id"]."'");
 		} else {
 			$sem_create_data["sem_scm_id"]=md5(uniqid($hash_secret));
-			$db->query("INSERT INTO scm SET scm_id='".$sem_create_data["sem_scm_id"]."', range_id='".$sem_create_data["sem_id"]."', user_id='$user_id', content='".$sem_create_data["sem_scm_content"]."', mkdate='".time()."', chdate='".time()."' ");
+			$db->query("INSERT INTO scm SET scm_id='".$sem_create_data["sem_scm_id"]."', tab_name='".$sem_create_data["sem_scm_name"]."', range_id='".$sem_create_data["sem_id"]."', user_id='$user_id', content='".$sem_create_data["sem_scm_content"]."', mkdate='".time()."', chdate='".time()."' ");
 		}
 		if ($db->affected_rows()) {
 			if ($sem_create_data["modules_list"]["schedule"])

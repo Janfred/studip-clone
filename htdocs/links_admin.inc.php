@@ -40,7 +40,6 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 	$sess->register("links_admin_data");
 	$sess->register("sem_create_data");
 	$sess->register("admin_dates_data");
-	
 	/**
 	* We use this helper-function, to reset all the data in the adminarea
 	*
@@ -58,8 +57,8 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 		$admin_rooms_data='';
 		$archiv_assi_data='';
 		$term_metadata='';
-	
 		$links_admin_data["select_old"]=TRUE;
+		$links_admin_data['srch_sem'] =& $GLOBALS['_default_sem'];
 	}
 	
 	
@@ -598,20 +597,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 					<tr>
 						<td class="steel1">
 							<font size=-1><?=_("Semester:")?></font><br />
-							<select name="srch_sem">
-								<option value=0><?=_("alle")?></option>
-								<?
-								$all_semester = $semester->getAllSemesterData();
-								$i=1;
-								foreach ($all_semester as $a) {
-									$i++;
-									if ($links_admin_data["srch_sem"]==$a["name"])
-										echo "<option selected value=\"".$a["name"]."\">".$a["name"]."</option>";
-									else
-										echo "<option value=\"".$a["name"]."\">".$a["name"]."</option>";
-								}
-								?>
-							</select>
+							<?=SemesterData::GetSemesterSelector(array('name'=>'srch_sem'), $links_admin_data["srch_sem"])?>
 						</td>
 							
 						<td class="steel1">
@@ -743,20 +729,20 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 	
 		// Creation of Seminar-Query
 		if ($links_admin_data["srch_on"]) {
-	
-			$query="SELECT DISTINCT seminare.*, Institute.Name AS Institut FROM seminar_user LEFT JOIN seminare USING (seminar_id) LEFT JOIN Institute USING (institut_id) LEFT JOIN auth_user_md5 ON (seminar_user.user_id = auth_user_md5.user_id) WHERE seminar_user.status = 'dozent' ";
-			// old $query="SELECT DISTINCT seminare.*, Institute.Name AS Institut FROM seminare LEFT JOIN Institute USING (institut_id) LEFT JOIN seminar_user ON (seminare.Seminar_id=seminar_user.Seminar_id AND seminar_user.status='dozent') LEFT JOIN auth_user_md5 USING (user_id)";
+			$query="SELECT DISTINCT seminare.*, Institute.Name AS Institut,
+					sd1.name AS startsem,IF(duration_time=-1, '"._("unbegrenzt")."', sd2.name) AS endsem  
+					FROM seminar_user LEFT JOIN seminare USING (seminar_id) 
+					LEFT JOIN Institute USING (institut_id) 
+					LEFT JOIN auth_user_md5 ON (seminar_user.user_id = auth_user_md5.user_id)
+					LEFT JOIN semester_data sd1 ON ( start_time BETWEEN sd1.beginn AND sd1.ende)
+					LEFT JOIN semester_data sd2 ON ((start_time + duration_time) BETWEEN sd2.beginn AND sd2.ende)
+					WHERE seminar_user.status = 'dozent' ";
 			$conditions=0;
 	
 			if ($links_admin_data["srch_sem"]) {
-				$all_semester = $semester->getAllSemesterData();
-				for ($i=0; $i<sizeof($all_semester); $i++) {
-					if ($all_semester[$i]["name"] == $links_admin_data["srch_sem"]) {
-						$query.="AND seminare.start_time <=".$all_semester[$i]["beginn"]." AND (".$all_semester[$i]["beginn"]." <= (seminare.start_time + seminare.duration_time) OR seminare.duration_time = -1) ";
-			// old			$query.="WHERE seminare.start_time <=".$all_semester[$i]["beginn"]." AND (".$all_semester[$i]["beginn"]." <= (seminare.start_time + seminare.duration_time) OR seminare.duration_time = -1) ";
-						$conditions++;
-					}
-				}
+				$one_semester = $semester->getSemesterData($links_admin_data["srch_sem"]);
+				$query.="AND seminare.start_time <=".$one_semester["beginn"]." AND (".$one_semester["beginn"]." <= (seminare.start_time + seminare.duration_time) OR seminare.duration_time = -1) ";
+				$conditions++;
 			}
 	
 			if (is_array($my_inst) && $auth->auth["perm"] != "root") {
@@ -790,8 +776,12 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 	
 			// tutors and dozents only have a plain list
 			} elseif (($auth->auth["perm"] =="tutor") || ($auth->auth["perm"] == "dozent")) {
-					$query="SELECT  seminare.*, Institute.Name AS Institut FROM seminar_user LEFT JOIN seminare USING (Seminar_id) 
+					$query="SELECT  seminare.*, Institute.Name AS Institut ,
+							sd1.name AS startsem,IF(duration_time=-1, '"._("unbegrenzt")."', sd2.name) AS endsem 
+						FROM seminar_user LEFT JOIN seminare USING (Seminar_id) 
 						LEFT JOIN Institute USING (institut_id) 
+						LEFT JOIN semester_data sd1 ON ( start_time BETWEEN sd1.beginn AND sd1.ende)
+						LEFT JOIN semester_data sd2 ON ((start_time + duration_time) BETWEEN sd2.beginn AND sd2.ende)
 						WHERE seminar_user.status IN ('dozent'"
 						.(($i_page != 'archiv_assi.php' && $i_page != 'admin_visibility.php') ? ",'tutor'" : "")
 						. ") AND seminar_user.user_id='$user->id' ";
@@ -802,7 +792,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 			}
 		
 			$query.=" ORDER BY  ".$links_admin_data["sortby"];	
-			
+			if ($links_admin_data["sortby"] == 'start_time') $query .= ' DESC';
 			$db->query($query);
 	
 		?>
@@ -816,7 +806,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 			<tr height=28>
 				<td width="%10" class="steel" valign=bottom>
 					<img src="pictures/blank.gif" width=1 height=20>
-					&nbsp;<b><?=_("Semester")?></b></a>
+					&nbsp;<a href="<? echo $PHP_SELF ?>?adminarea_sortby=start_time"><b><?=_("Semester")?></b></a>
 				</td>
 				<td width="5%" class="steel" valign=bottom>
 					<img src="pictures/blank.gif" width=1 height=20>
@@ -891,9 +881,9 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 	
 			$cssSw->switchClass();
 			echo "<tr>";
-			$sem=new SemesterData;
-			$semdata=$sem->getSemesterDataByDate($db->f("start_time"));
-			echo "<td align=\"center\" class=\"".$cssSw->getClass()."\"><font size=-1>".htmlReady($semdata["name"])."</font></td>";
+			echo "<td align=\"center\" class=\"".$cssSw->getClass()."\"><font size=-1>".htmlReady($db->f('startsem'));
+			if ($db->f('startsem') != $db->f('endsem')) echo '<br>( - '.htmlReady($db->f('endsem')).')'; 
+			echo "</font></td>";
 			echo "<td class=\"".$cssSw->getClass()."\">".htmlReady($db->f("VeranstaltungsNummer"))."</td>";
 			echo "<td class=\"".$cssSw->getClass()."\">".htmlReady(substr($db->f("Name"),0,100));
 			if (strlen ($db->f("Name")) > 100)

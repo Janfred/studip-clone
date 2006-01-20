@@ -53,8 +53,6 @@ class ShowGroupSchedules extends ShowSemSchedules {
 	
 	function navigator ($print_view = false) {
 		global $cssSw, $view_mode, $PHP_SELF;
-		$semester = SemesterData::GetSemesterArray();
-		unset($semester[0]);
 		if (!$print_view){
 	 	?>
 		<table border="0" celpadding="2" cellspacing="0" width="99%" align="center">
@@ -70,15 +68,7 @@ class ShowGroupSchedules extends ShowSemSchedules {
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="40%" valign="top">
 				<font size="-1">
-				<select name="sem_schedule_choose" onChange="document.schedule_form.submit()">
-				<?
-				foreach($semester as $one_sem){
-					echo "\n<option value=\"{$one_sem['semester_id']}\" "
-						. ($one_sem['semester_id'] == $this->semester['semester_id'] ? "selected" : "")
-						. ">" . htmlReady($one_sem['name']) . "</option>";
-				}
-				?>
-				</select>
+				<?=SemesterData::GetSemesterSelector(array('name' => 'sem_schedule_choose', 'onChange' => 'document.schedule_form.submit()'), $this->semester['semester_id'],'semester_id',false)?>
 				<input type="IMAGE" name="jump" align="absbottom" border="0"<? echo makeButton("auswaehlen", "src") ?> /><br />
 				</font>
 				</td>

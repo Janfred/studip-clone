@@ -19,6 +19,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Id$
 */
+require_once $GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'lib/classes/SemesterData.class.php';
+require_once $GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'functions.php';
 
 // set default Values for messaging
 function check_messaging_default() {
@@ -108,6 +110,14 @@ function check_calendar_default(){
 	}
 }
 
+function check_semester_default(){
+	if ($GLOBALS['perm']->have_perm('dozent')){
+		$GLOBALS['sess']->register("_default_sem");
+		$semester =& SemesterData::GetInstance();
+		$actual_sem = $semester->getCurrentSemesterData();// $semester->getNextSemesterData(time() - (get_config('SEMESTER_TIME_SWITCH') * 7 * 24 * 60 * 60));
+		$GLOBALS['_default_sem'] = $actual_sem['semester_id'];
+	}
+}
 //redirect the user whre he want to go today....
 function startpage_redirect($page_code) {
 	switch ($page_code) {
@@ -163,7 +173,7 @@ if ($SessionStart==0) {
 		$_language = get_accepted_languages();
 	if (!$_language)
 		$_language = $DEFAULT_LANGUAGE; // else use system default
-}		
+}
 	
 // user init starts here
 if ($auth->is_authenticated() && $user->id != "nobody") {
@@ -185,6 +195,8 @@ if ($auth->is_authenticated() && $user->id != "nobody") {
 		// call default functions
 		check_messaging_default();
 		check_schedule_default();
+		check_semester_default();
+		
 		if($CALENDAR_ENABLE){
 			$user->register("calendar_user_control_data");
 			check_calendar_default();

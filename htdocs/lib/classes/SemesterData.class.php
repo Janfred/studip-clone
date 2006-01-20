@@ -37,15 +37,51 @@
 class SemesterData {
 	var $db;
 
+	function &GetInstance($refresh_cache = false){
+		
+		static $semester_object;
+		
+		if ($refresh_cache){
+			$semester_object = null;
+		}
+		if (is_object($semester_object)){
+			return $semester_object;
+		} else {
+			$semester_object = new SemesterData();
+			return $semester_object;
+		}
+	}
+	
 	function GetSemesterArray(){
 		static $all_semester;
 		if (is_null($all_semester)){
-			$semester = new SemesterData;
+			$semester =& SemesterData::GetInstance();
 			$all_semester = $semester->getAllSemesterData();
 			array_unshift($all_semester,0);
 			$all_semester[0] = array("name" => sprintf(_("vor dem %s"),$all_semester[1]['name']),'past' => true);
 		}
 		return $all_semester;
+	}
+	
+	function GetSemesterSelector($select_attributes = null, $default = 0, $option_value = 'semester_id', $include_all = true){
+		$semester = SemesterData::GetSemesterArray();
+		unset($semester[0]);
+		if($include_all) $semester[] = array('name' => _("alle"), 'semester_id' => 0);
+		$semester = array_reverse($semester, true);
+		if(!$select_attributes['name']) $select_attributes['name'] = 'sem_select';
+		$out = chr(10) . '<select ';
+		foreach($select_attributes as $key => $value){
+			$out .= ' ' . $key .'="'.$value.'" ';
+		}
+		$out .= '>';
+		foreach($semester as $sem_key => $one_sem){
+			$one_sem['key'] = $sem_key;
+			$out .= "\n<option value=\"{$one_sem[$option_value]}\" "
+				. ($one_sem[$option_value] == $default ? "selected" : "")
+				. ">" . htmlReady($one_sem['name']) . "</option>";
+		}
+		$out .= chr(10) . '</select>';
+		return $out;
 	}
 	
 	function SemesterData() {

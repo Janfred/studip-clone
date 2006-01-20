@@ -819,15 +819,23 @@ if ( !$perm->have_perm("root")) {
 elseif ($auth->auth["perm"]=="admin") {
 
 	$db2=new DB_Seminar();
-
+	
+	if(isset($_REQUEST['select_sem'])){
+			$_default_sem = $_REQUEST['select_sem'];
+	}
+	if ($_default_sem){
+		$semester =& SemesterData::GetInstance();
+		$one_semester = $semester->getSemesterData($_default_sem);
+		$sem_condition = "AND seminare.start_time <=".$one_semester["beginn"]." AND (".$one_semester["beginn"]." <= (seminare.start_time + seminare.duration_time) OR seminare.duration_time = -1) ";
+	}
 	$db->query("SELECT a.Institut_id,b.Name, IF(b.Institut_id=b.fakultaets_id,1,0) AS is_fak,count(seminar_id) AS num_sem FROM user_inst a LEFT JOIN Institute b USING (Institut_id)  
-				LEFT JOIN seminare using(Institut_id)	WHERE a.user_id='$user->id' AND a.inst_perms='admin' GROUP BY a.Institut_id ORDER BY is_fak,Name,num_sem DESC");
+				LEFT JOIN seminare ON(seminare.Institut_id=b.Institut_id $sem_condition )	WHERE a.user_id='$user->id' AND a.inst_perms='admin' GROUP BY a.Institut_id ORDER BY is_fak,Name,num_sem DESC");
 
 	while($db->next_record()){
 		$_my_inst[$db->f("Institut_id")] = array("name" => $db->f("Name"), "is_fak" => $db->f("is_fak"), "num_sem" => $db->f("num_sem"));
 		if ($db->f("is_fak")){
 			$db2->query("SELECT a.Institut_id, a.Name,count(seminar_id) AS num_sem FROM Institute a 
-					LEFT JOIN seminare USING(Institut_id) WHERE fakultaets_id='" . $db->f("Institut_id") . "' AND a.Institut_id!='" .$db->f("Institut_id") . "' 
+					LEFT JOIN seminare ON(seminare.Institut_id=a.Institut_id $sem_condition ) WHERE fakultaets_id='" . $db->f("Institut_id") . "' AND a.Institut_id!='" .$db->f("Institut_id") . "' 
 					GROUP BY a.Institut_id ORDER BY a.Name,num_sem DESC");
 			$num_inst = 0;
 			while ($db2->next_record()){
@@ -855,9 +863,14 @@ elseif ($auth->auth["perm"]=="admin") {
 		if (!isset($sortby)) $sortby="start_time DESC, Name ASC";
 		if ($sortby == "teilnehmer")
 		$sortby = "teilnehmer DESC";
-		$db->query("SELECT Institute.Name AS Institut, seminare.*, COUNT(seminar_user.user_id) AS teilnehmer,IFNULL(visitdate,0) as visitdate
-					FROM Institute INNER JOIN seminare USING(Institut_id) INNER JOIN seminar_user USING(Seminar_id) 
+		$db->query("SELECT Institute.Name AS Institut, seminare.Seminar_id,seminare.Name,seminare.status,seminare.chdate,
+					seminare.start_time,seminare.admission_binding,seminare.visible,
+					COUNT(seminar_user.user_id) AS teilnehmer,IFNULL(visitdate,0) as visitdate,
+					sd1.name AS startsem,IF(duration_time=-1, '"._("unbegrenzt")."', sd2.name) AS endsem			
+					FROM Institute INNER JOIN seminare ON(seminare.Institut_id=Institute.Institut_id $sem_condition ) INNER JOIN seminar_user USING(Seminar_id) 
 					LEFT JOIN object_user_visits ouv ON (ouv.object_id=seminare.Seminar_id AND ouv.user_id='$user->id' AND ouv.type='sem')
+					LEFT JOIN semester_data sd1 ON ( start_time BETWEEN sd1.beginn AND sd1.ende)
+					LEFT JOIN semester_data sd2 ON ((start_time + duration_time) BETWEEN sd2.beginn AND sd2.ende)
 					WHERE Institute.Institut_id='$_my_admin_inst_id' GROUP BY seminare.Seminar_id ORDER BY $sortby");
 		$num_my_sem=$db->num_rows();
 		if (!$num_my_sem) 
@@ -870,7 +883,7 @@ elseif ($auth->auth["perm"]=="admin") {
 		<table width="100%" border=0 cellpadding=0 cellspacing=0>
 		<tr>
 			<td class="topic" ><img src="pictures/meinesem.gif" border="0" align="texttop">
-			&nbsp;<b><?=_("Veranstaltungen an meinen Einrichtungen"); print($_my_admin_inst_id) ? " - ".htmlReady($_my_inst[$_my_admin_inst_id]['name']) : ""?></b></td>
+			&nbsp;<b><?=_("Veranstaltungen an meinen Einrichtungen") .($_my_admin_inst_id ? " - ".htmlReady($_my_inst[$_my_admin_inst_id]['name']) : "")?></b></td>
 		</tr>
 
 	<tr>
@@ -909,6 +922,7 @@ elseif ($auth->auth["perm"]=="admin") {
 					}
 					?>
 					</select>&nbsp;
+					<?=SemesterData::GetSemesterSelector(array('name'=>'select_sem', 'style'=>'vertical-align:middle;'), $_default_sem)?>
 					<input <?=makeButton("auswaehlen","src")?> <?=tooltip(_("Einrichtung auswählen"))?> type="image" border="0" style="vertical-align:middle;">
 					<br>&nbsp;
 				</div>
@@ -942,6 +956,8 @@ elseif ($auth->auth["perm"]=="admin") {
 					'status' => $db->f("status"),
 					'chdate' => $db->f("chdate"),
 					'start_time' => $db->f("start_time"),
+					'startsem' => $db->f('startsem'),
+					'endsem' => $db->f('endsem'),
 					'binding' => $db->f("admission_binding"),
 					'visible' => $db->f('visible'),
 					'modules' => $Modules->getLocalModules($db->f("Seminar_id"),
@@ -962,16 +978,22 @@ elseif ($auth->auth["perm"]=="admin") {
 			if ($lastVisit <= $values["chdate"])
 				print ("<font color=\"red\">");
 			echo htmlReady($values["name"]);
-			echo " (" . get_sem_name($values["start_time"]) .")";
 			if ($lastVisit <= $values["chdate"])
 				echo "</font>";
 			echo "</a>";
+			if (!$_default_sem || $values['startsem'] != $values['endsem']){
+				echo "<font size=-1>&nbsp;";
+				echo htmlReady(" (".$values['startsem']
+					. ($values['startsem'] != $values['endsem'] ? " - ".$values['endsem'] : "")
+					. ")");
+				echo "</font>";
+			}
 			if ($values["visible"] == 0) {
 					echo "<font size=-1>&nbsp;"._("(versteckt)")."</font>";
 				}
 			echo "</td>";
 	
-			echo "<td class=\"$class\" align=\"center\">&nbsp;" . $SEM_TYPE[$values["status"]]["name"] . "&nbsp;</td>";
+			echo "<td class=\"$class\" align=\"center\"><font size=\"-1\">&nbsp;" . $SEM_TYPE[$values["status"]]["name"] . "&nbsp;</font></td>";
 			// Dozenten
 			$db2->query ("SELECT Nachname, username FROM  seminar_user LEFT JOIN auth_user_md5  USING (user_id) WHERE Seminar_id='$semid' AND status='dozent' ORDER BY Nachname ASC");
 			$temp = "";
@@ -979,7 +1001,7 @@ elseif ($auth->auth["perm"]=="admin") {
 				$temp .= "<a href=\"about.php?username=" . $db2->f("username") . "\">" . $db2->f("Nachname") . "</a>, ";
 			}
 			$temp = substr($temp, 0, -2);
-			print ("<td class=\"$class\" align=\"center\">&nbsp;$temp</td>");
+			print ("<td class=\"$class\" align=\"center\"><font size=\"-1\">&nbsp;$temp</font></td>");
 	
 			// Inhalt
 			echo "<td class=\"$class\" align=\"left\" nowrap>";

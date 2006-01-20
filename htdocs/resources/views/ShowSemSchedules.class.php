@@ -86,15 +86,7 @@ class ShowSemSchedules extends ShowSchedules {
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="40%" valign="top">
 				<font size="-1">
-				<select name="sem_schedule_choose" onChange="document.schedule_form.submit()">
-				<?
-				foreach($semester as $one_sem){
-					echo "\n<option value=\"{$one_sem['semester_id']}\" "
-						. ($one_sem['semester_id'] == $this->semester['semester_id'] ? "selected" : "")
-						. ">" . htmlReady($one_sem['name']) . "</option>";
-				}
-				?>
-				</select>
+				<?=SemesterData::GetSemesterSelector(array('name' => 'sem_schedule_choose', 'onChange' => 'document.schedule_form.submit()'), $this->semester['semester_id'],'semester_id',false)?>
 				<input type="IMAGE" name="jump" align="absbottom" border="0"<? echo makeButton("auswaehlen", "src") ?> /><br />
 				</font>
 				</td>
