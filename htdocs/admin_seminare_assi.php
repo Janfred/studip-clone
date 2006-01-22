@@ -35,6 +35,7 @@ require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");		//noch mehr Stuff
 require_once ("$ABSOLUTE_PATH_STUDIP/forum.inc.php");		//damit wir Themen anlegen koennen
 require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");		//Aufbereitungsfunktionen
 require_once ("$ABSOLUTE_PATH_STUDIP/dates.inc.php");		//Terminfunktionen
+require_once ("$ABSOLUTE_PATH_STUDIP/log_events.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipSemTreeSearch.class.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/Modules.class.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/DataFields.class.php");
@@ -1251,6 +1252,10 @@ if (($form == 6) && ($jump_next_x))
     			} else {
     				//completing the internal settings....
     				$successful_entry=1;
+
+				// logging
+				log_event("SEM_CREATE",$sem_create_data['sem_id'],NULL,NULL,$query);
+				log_event(($visible ? "SEM_VISIBLE" : "SEM_INVISIBLE"), $sem_create_data['sem_id'],NULL,NULL,'admin_seminare_assi',"SYSTEM");
 
 				$sem_create_data["sem_entry"]=TRUE;
 				openSem($sem_create_data["sem_id"]); //open Veranstaltung to administrate in the admin-area

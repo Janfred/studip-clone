@@ -24,6 +24,7 @@ require_once($ABSOLUTE_PATH_STUDIP . "functions.php");
 require_once($ABSOLUTE_PATH_STUDIP . "config_tools_semester.inc.php");
 require_once($ABSOLUTE_PATH_STUDIP . "visual.inc.php");
 require_once($ABSOLUTE_PATH_STUDIP . "statusgruppe.inc.php"); //Enthaelt Funktionen fuer Statusgruppen
+require_once($ABSOLUTE_PATH_STUDIP . "log_events.inc.php"); // Logging
 require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/DataFields.class.php"); //Enthaelt Funktionen fuer Statusgruppen
 require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/StudipLitList.class.php");
 require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/StudipNews.class.php");
@@ -217,6 +218,17 @@ if ($archive_kill) {
 		
 		//kill the object_user_vists for this seminar
 		object_kill_visits(null, $s_id);
+
+                // Logging...
+                $query="SELECT seminare.name as name, seminare.VeranstaltungsNummer as number, semester_data.name as semester FROM seminare LEFT JOIN semester_data ON (seminare.start_time = semester_data.beginn) WHERE seminare.Seminar_id='$s_id'";
+                $db->query($query);
+                if ($db->next_record()) {
+                        $semlogname=$db->f('number')." ".$db->f('name')." (".$db->f('semester').")";
+                } else {
+                        $semlogname="unknown sem_id: $s_id";
+                }
+                log_event("SEM_ARCHIVE",$s_id,NULL,$semlogname);
+                // ...logged
 								
 		// und das Seminar loeschen.
 		$query = "DELETE FROM seminare where Seminar_id= '$s_id'";

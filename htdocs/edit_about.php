@@ -38,6 +38,7 @@ require_once("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/language.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/DataFields.class.php"); 
 require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/UserConfig.class.php"); 
+require_once("$ABSOLUTE_PATH_STUDIP/log_events.inc.php"); 
 
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
@@ -531,6 +532,7 @@ function edit_pers($password,$check_pass,$response,$new_username,$vorname,$nachn
 						$this->logout_user = TRUE;
 						$this->msg = $this->msg . "msg§" . _("Ihre E-Mail-Adresse wurde ge&auml;ndert!") . "§info§" . _("ACHTUNG!<br>Aus Sicherheitsgr&uuml;nden wurde auch ihr Passwort ge&auml;ndert. Es wurde an die neue E-Mail-Adresse geschickt!") . "§";
 						$this->db->query("UPDATE auth_user_md5 SET Email='$email', password='$hashpass' WHERE user_id='".$this->auth_user["user_id"]."'");
+						log_event("USER_NEWPWD",$this->auth_user["user_id"]); // logging    
 					} else {
 						$this->msg = $this->msg . "msg§" . _("Ihre E-Mail-Adresse wurde ge&auml;ndert!") . "§";
 						$this->db->query("UPDATE auth_user_md5 SET Email='$email' WHERE user_id='".$this->auth_user["user_id"]."'");

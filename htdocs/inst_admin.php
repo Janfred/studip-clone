@@ -35,6 +35,7 @@ require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php"); //Ausgaberoutinen an den User
 require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php"); //Grunddaten laden
 require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php"); //htmlReady
 require_once ("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");	//Funktionen der Statusgruppen
+require_once ("$ABSOLUTE_PATH_STUDIP/log_events.inc.php");	// Logging
 	
 $db=new DB_Seminar;
 $db2=new DB_Seminar;
@@ -188,6 +189,7 @@ else {
 				else {
 					$db2->query("DELETE from user_inst WHERE Institut_id = '$ins_id' AND user_id = '$u_id'");
 					my_msg ("<b>" . sprintf(_("%s wurde aus der Einrichtung ausgetragen."), $Fullname) . "</b>");
+					log_event("INST_USER_DEL",$ins_id,$u_id); // logging
 					// remove from all Statusgruppen
 					RemovePersonStatusgruppeComplete (get_username($u_id), $ins_id);
 				}
@@ -220,6 +222,9 @@ else {
 						$query = "UPDATE user_inst SET inst_perms='$perms', raum='$raum', Telefon='$Telefon', Fax='$Fax', sprechzeiten='$sprechzeiten' WHERE Institut_id = '$ins_id' AND user_id = '$u_id'";
 						$db2->query($query);
 						my_msg("<b>" . sprintf(_("Status&auml;nderung f&uuml;r %s durchgef&uuml;hrt."), $Fullname) . "</b>");
+						if ($scherge!=$perms) { // log status change
+							log_event("INST_USER_STATUS",$ins_id,$u_id,"$scherge -> $perms"); 
+						}
 					}
 				}
 			}
@@ -260,10 +265,12 @@ else {
 					} else {
 						$db2->query("INSERT into user_inst (user_id, Institut_id, inst_perms) values ('$u_id', '$ins_id', '$insert_perms')");
 					}
-					if ($db2->affected_rows())
+					if ($db2->affected_rows()) {
 						my_msg("<b>" . sprintf(_("%s wurde als \"%s\" in die Einrichtung aufgenommen. Bitte verwenden Sie die untere Tabelle, um Rechte etc. zu &auml;ndern!"), $Fullname, $insert_perms) . "</b>");
-					else
+						log_event("INST_USER_ADD",$ins_id,$u_id,$insert_perms); // logging
+					} else {
 						parse_msg ("error§<b>" . sprintf(_("%s konnte nicht in die Einrichtung aufgenommen werden!"), $Fullname) . "§");
+					}
 				}
 			}
 		}
@@ -427,7 +434,6 @@ if ($inst_id != "" && $inst_id !="0") {
 			echo "</table><br><b>" . _("Rundmail an alle MitarbeiterInnen verschicken") . "</b><br><br>&nbsp;";
 			printf(_("Bitte hier %sklicken%s"), "<a href=\"mailto:" . join(",",$mail_list) . "?subject=" . urlencode(_("MitarbeiterInnen-Rundmail")) .  "\">", "</a>");
 			echo "<br /><br /></blockquote></td></tr>";
-
 			print("</table>");
 		} else { // wir haben kein Ergebnis
 			print("</table>" . _("Es wurde niemand gefunden! Bevor Sie die MitarbeiterInnenliste dieser Einrichtung bearbeiten k&ouml;nnen, m&uuml;ssen Sie der Einrichtung zuerst MitarbeiterInnen zuordnen.") . "<br /><br />");

@@ -43,6 +43,7 @@ require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/DataFields.class.php");
 require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/StudipLitList.class.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipLitSearch.class.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipNews.class.php");
+require_once("$ABSOLUTE_PATH_STUDIP/log_events.inc.php");
 
 
 if ($RESOURCES_ENABLE) {
@@ -105,6 +106,7 @@ while ( is_array($HTTP_POST_VARS)
 	  	$msg="error§<b>" . _("Datenbankoperation gescheitert:") . " " . $query . "</b>";
 			break;
 		}
+	log_event("INST_CREATE",$i_id); // logging
 
 		// Set the default list of modules
 		$Modules->writeDefaultStatus($i_id);
@@ -269,6 +271,7 @@ while ( is_array($HTTP_POST_VARS)
 		} else {
 			$msg.="msg§" . sprintf(_("Die Einrichtung \"%s\" wurde gel&ouml;scht!"), htmlReady(stripslashes($Name))) . "§";
 			$i_view="delete";
+			log_event("INST_DEL",$i_id,NULL,$Name); // logging - put institute's name in info - it's no longer derivable from id afterwards
 		}
     
 		// We deleted that intitute, so we have to unset the selection 

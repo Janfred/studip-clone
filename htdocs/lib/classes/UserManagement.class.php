@@ -57,6 +57,7 @@ if ($GLOBALS['CALENDAR_ENABLE']) {
 	include_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'].$GLOBALS['RELATIVE_PATH_CALENDAR']
 	. "/lib/driver/{$GLOBALS['CALENDAR_DRIVER']}/CalendarDriver.class.php");
 }
+require_once $GLOBALS['ABSOLUTE_PATH_STUDIP']."log_events.inc.php";	// Event logging
 
 
 class UserManagement {
@@ -113,6 +114,7 @@ class UserManagement {
 				$this->user_data["user_info.".$field_name] = $this->db->f("$field_name");
 			}
 		}
+		$this->original_user_data=$this->user_data; // save original setting for logging purposes
 	}
 	
 
@@ -130,10 +132,11 @@ class UserManagement {
 			if ($this->db->affected_rows() == 0) {
 				return FALSE;
 			}
-			$this->db->query("INSERT INTO user_info SET user_id = '".$this->user_data['auth_user_md5.user_id']."', mkdate='".time()."'");
+			$this->db->query("INSERT INTO user_info SET user_id = '".$this->user_data['auth_user_md5.user_id']."', mkdate='".time()."',  chdate='".time()."'");
 			if ($this->db->affected_rows() == 0) {
 				return FALSE;
 			}
+			log_event("USER_CREATE",$this->user_data['auth_user_m5.user_id']);
 		}
 		
 		if (!$this->user_data['auth_user_md5.auth_plugin']) {
@@ -143,8 +146,39 @@ class UserManagement {
 			$split = explode(".",$key);
 			$table = $split[0];
 			$field = $split[1];
-			$value = mysql_escape_string($value);
-			$this->db->query("UPDATE $table SET $field = '$value' WHERE user_id = '".$this->user_data['auth_user_md5.user_id']."'");
+			// update changed fields only
+			if ($this->original_user_data["$table.$field"]!=$value) {
+				$value_escaped = mysql_escape_string($value);
+				$this->db->query("UPDATE $table SET $field = '$value_escaped' WHERE user_id = '".$this->user_data['auth_user_md5.user_id']."'");
+				// logging >>>>>>
+				if ($this->db->affected_rows() != 0) {
+					switch ($field) {
+						case 'username':
+							log_event("USER_CHANGE_USERNAME",$this->user_data['auth_user_md5.user_id'],NULL,$this->original_user_data['auth_user_md5.username']." -> ".$value);	
+							break;
+						case 'Vorname':
+							log_event("USER_CHANGE_NAME",$this->user_data['auth_user_md5.user_id'],NULL,"Vorname: ".$this->original_user_data['auth_user_md5.Vorname']." -> ".$value);	
+							break;
+						case 'Nachname':
+							log_event("USER_CHANGE_NAME",$this->user_data['auth_user_md5.user_id'],NULL,"Nachname: ".$this->original_user_data['auth_user_md5.Nachname']." -> ".$value);	
+							break;
+						case 'perms':
+							log_event("USER_CHANGE_PERMS",$this->user_data['auth_user_md5.user_id'],NULL,$this->original_user_data['auth_user_md5.perms']." -> ".$value);	
+							break;
+						case 'Email':
+							log_event("USER_CHANGE_EMAIL",$this->user_data['auth_user_md5.user_id'],NULL,$this->original_user_data['auth_user_md5.Email']." -> ".$value);
+							break;
+						case 'title_front':
+							log_event("USER_CHANGE_TITLE",$this->user_data['auth_user_md5.user_id'],NULL,"title_front: ".$this->original_user_data['user_info.title_front']." -> ".$value);
+							break;
+						case 'title_rear':
+							log_event("USER_CHANGE_TITLE",$this->user_data['auth_user_md5.user_id'],NULL,"title_rear: ".$this->original_user_data['user_info.title_front']." -> ".$value);
+							break;
+					}
+				}
+				// <<<<<<< logging
+			}
+
 		}
 		$this->db->query("UPDATE user_info SET chdate='".time()."' WHERE user_id = '".$this->user_data['auth_user_md5.user_id']."'");
 		if ($this->db->affected_rows() == 0) {
@@ -571,6 +605,7 @@ class UserManagement {
 						"Subject: " . $subject),
 				$mailbody);
 		
+		log_event("USER_NEWPWD",$this->user_data['auth_user_md5.user_id']);
 		return TRUE;
 
 	}

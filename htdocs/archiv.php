@@ -98,6 +98,7 @@ if (($delete_id) && ($delete_really)){
 		$db->query("DELETE FROM archiv WHERE seminar_id = '$delete_id'");
 		if ($db->affected_rows()){
 			$msg = sprintf("msg§" . _("Die Veranstaltung %s wurde aus dem Archiv gel&ouml;scht") . "§", htmlReady($db2->f("name")));
+                        log_event("SEM_DELETE_FROM_ARCHIVE",$delete_id,NULL,$db2->f("name")." (".$db2->f("semester").")"); // ...logging...
 		}
 		if ($db2->f("archiv_file_id")) {
 			if (unlink ($ARCHIV_PATH."/".$db2->f("archiv_file_id"))){

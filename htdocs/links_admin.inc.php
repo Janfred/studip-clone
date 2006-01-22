@@ -219,6 +219,11 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 		$structure["einrichtungen"]=array ('topKat'=>"", 'name'=>_("Einrichtungen"), 'link'=>"admin_institut.php?list=TRUE", 'active'=>FALSE);
 		$structure["global"]=array ('topKat'=>"", 'name'=>_("globale Einstellungen"), 'link'=>"new_user_md5.php", 'active'=>FALSE);
 	}
+
+	// "Log" tab for log view and administration (Root only)
+	if ($perm->have_perm("root") && $LOG_ENABLE) {
+		$structure["log"]=array ('topKat'=>"", 'name'=>_("Log"), 'link'=>"show_log.php", 'active'=>FALSE);
+	}
 	
 	$structure["modules"]=array ('topKat'=>"", 'name'=>_("Tools"), 'link'=>"export.php", 'active'=>FALSE);
 	
@@ -320,7 +325,11 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 		}
 			
 		$structure["semester"]=array ('topKat'=>"global", 'name'=>_("Semester"), 'link'=>"admin_semester.php", 'active'=>FALSE);
+		if ($LOG_ENABLE) {
+			$structure["show_log"]=array ('topKat'=>"log", 'name'=>_("Log"), 'link'=>"show_log.php", 'active'=>FALSE);
+			$structure["admin_log"]=array ('topKat'=>"log", 'name'=>_("Einstellungen"), 'link'=>"admin_log.php", 'active'=>FALSE);
 		}
+	}
 	
 	//Reitersystem Ende
 	
@@ -486,6 +495,12 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 		break;
 		case "admin_config.php":
 			$reiter_view = "config";
+			break;
+		case "show_log.php":
+			$reiter_view = "show_log";
+			break;
+		case "admin_log.php":
+			$reiter_view = "admin_log";
 		break;
 
 	}

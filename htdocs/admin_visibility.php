@@ -22,6 +22,7 @@ require_once($ABSOLUTE_PATH_STUDIP . "dates.inc.php"); // Funktionen zum Loesche
 require_once($ABSOLUTE_PATH_STUDIP . "datei.inc.php"); // Funktionen zum Loeschen von Dokumenten
 require_once($ABSOLUTE_PATH_STUDIP . "functions.php");
 require_once($ABSOLUTE_PATH_STUDIP . "visual.inc.php");
+require_once($ABSOLUTE_PATH_STUDIP . "log_events.inc.php");
 require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/Table.class.php");
 require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/ZebraTable.class.php");
 
@@ -132,11 +133,13 @@ if ($SessSemName[1] && (!$change_visible)) {
 				echo $zt->row(array(htmlready($db->f("VeranstaltungsNummer")), htmlready($db->f("Name")), visibility_change_message($db->f("visible"), 1)));
 				$q="UPDATE seminare SET visible=1 WHERE Seminar_id='". $all_sem[$i] . "'";
 				$db->query($q);
+				log_event("SEM_VISIBLE",$all_sem[$i]);
 			} else if ($visible && ($db->f("visible")==1)) {
 				echo $zt->row(array(htmlready($db->f("VeranstaltungsNummer")), htmlready($db->f("Name")), visibility_change_message($db->f("visible"), 1)));
 			} else if (!$visible && $db->f("visible") != 0) {
 				$q = "UPDATE seminare SET visible=0 WHERE Seminar_id='".$all_sem[$i]."'";
 				$db->query($q);
+				log_event("SEM_INVISIBLE",$all_sem[$i]);
 				 echo $zt->row(array(htmlready($db->f("VeranstaltungsNummer")), htmlready($db->f("Name")), visibility_change_message($db->f("visible"), 0)));
 			} else {
 				echo $zt->row(array(htmlready($db->f("VeranstaltungsNummer")), htmlready($db->f("Name")), visibility_change_message($db->f("visible"), 0)));
