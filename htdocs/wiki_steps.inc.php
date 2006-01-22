@@ -10,38 +10,44 @@ require_once $ABSOLUTE_PATH_STUDIP . 'forum.inc.php';
 wikiMarkup('/\\(:stepform:\\)/e',"wiki_stepform('step')", 'dozent');
 wikiMarkup('/\\(:steplist\\s*(.*?):\\)/e',"wiki_steplist('step',array('q'=>'$1'))");
 
-$step_templates['step']=array(
+$step_templates['step'] = array(
 	// common prefix to alle newly created pages
 	// must be a WikiWord and should be unique to
 	// avoid conflicts with other templates
-	"prefix"=>"StEP", 
+	'prefix' => 'StEP', 
 	// Some Text to display as form heading
-	"formheading"=>"<h2>"._("Neuer StEP-Eintrag")."</h2><p>"._("Name des Autoren und Erstellungszeit werden automatisch hinzugefügt.")."</p>",
+	'formheading' => '<h2>'._("Neuer StEP-Eintrag").'</h2><p>'._("Name des Autoren und Erstellungszeit werden automatisch hinzugefügt.").'</p>',
 	// body of form for new entries, is embedded in <form>..</form>
 	// environment. Make sure that field names match variable names
 	// in template (see below)
-	"formbody"=>"<table>
+	'formbody' => '<table>
 <tr><td>Zusammenfassung:</td>
-<td><input size=60 name=\"step_zusammenfassung\"></td></tr>
+<td><input size=60 name="step_zusammenfassung"></td></tr>
 <tr><td>Zuständig:</td>
-<td><input size=60 name=\"step_zustaendig\"></td></tr>
+<td><input size=60 name="step_zustaendig"></td></tr>
 <tr><td>Release in Version:</td>
-<td><select size=0 name=\"step_version\"><option value=\"1.2\">1.2 (Okt. 2005)</option><option value=\"1.3\">1.3 (Apr. 2006)</option><option>langfristig</option></td></tr>
+<td><select size=0 name="step_version">
+<option value="1.4">1.4 (Okt. 2006)</option>
+<option value="1.5">1.5 (Apr. 2007)</option>
+<option>langfristig</option></td></tr>
 <tr><td>Komplexität:</td>
-<td><select name=\"step_komplexitaet\"><option>gering</option><option>mittel</option><option>hoch</option></select></td></tr>
+<td><select name="step_komplexitaet">
+<option>gering</option>
+<option>mittel</option>
+<option>hoch</option></select></td></tr>
 <tr><td>Beschreibung:</td>
-<td><textarea name=\"step_beschreibung\" cols=60 rows=10></textarea></td></tr>
+<td><textarea name="step_beschreibung" cols="60" rows="10"></textarea></td></tr>
 <tr><td>Foren-Thema erzeugen:</td>
-<td><input type=\"checkbox\" name=\"step_create_topic\" value=\"1\" checked></td></tr>
+<td><input type="checkbox" name="step_create_topic" value="1" checked></td></tr>
 
-<tr><td>&nbsp;</td><td><input type=image ".makeButton("eintragen","src")." border=0></td></tr>
-</table>",
+<tr><td>&nbsp;</td><td><input type=image '.makeButton('eintragen','src') . ' border=0></td></tr>
+</table>',
 	// template is evaluated alter to form default text
 	// important: make sure that variables evaluate at the right time
 	// you may use predefined: 
 	// - $author for author name
 	// - $create_time for time at creation
-	"template"=>'!!!!$pagename
+	'template' => '!!!!$pagename
 Zusammenfassung: $step_zusammenfassung
 Autor: $author
 Version: $step_version
@@ -116,31 +122,34 @@ function wiki_newstep($template_name) {
 	global $SessSemName, $auth;
 	global $keyword, $view, $wiki_plugin_messages;
 	global $step_templates;
-	$template=$step_templates[$template_name];
+	$template = $step_templates[$template_name]; 
 	extract($_POST,EXTR_SKIP); // locally set post-vars for template
-	$list=wiki_get_steppagelist($template);
+	$list = wiki_get_steppagelist($template);
 	foreach ($list as $l) {
 		$issue=max(@$issue, substr($l,strlen($template['prefix'])));
 	}
-	$pagename=sprintf("%s%05d",$template['prefix'],@$issue+1);
-	$create_time=date('Y-m-d H:i',time());
-	$author=get_fullname(NULL,'no_title_short');
+	$pagename = sprintf("%s%05d", $template['prefix'], @$issue+1);
+	$create_time = date('Y-m-d H:i',time());
+	$author = get_fullname(NULL, 'no_title_short');
 // print "<p>template ist: <pre>"; print_r($template); print "</pre>";
 // print "<p>evaling: <pre>"."\$text=".$template['template'].";"."</pre>";
-	eval("\$text=\"".$template['template']."\";");
+	eval('$text="'. $template['template']. '";');
 // print "<p>Generierter Text:<br>$text"; // debug
-	$db=new DB_Seminar();
+	$db = new DB_Seminar();
 	$userid=$auth->auth['uid'];
-	$query="INSERT INTO wiki SET range_id='$SessSemName[1]', keyword='$pagename', body='".$text."', user_id='$userid', chdate='".time()."', version='1'";
-	$db->query($query);
-	$wiki_plugin_messages[]="msg§".sprintf(_("Ein neuer Eintrag wurde angelegt. Sie können ihn nun weiter bearbeiten oder %szurück zur Ausgangsseite%s gehen."),"<a href=\"$PHP_SELF?keyword=$keyword\">",'</a>');
+	$wiki_text = $text;
 	if ($step_create_topic){
-		if(CreateTopic($pagename . ': ' . $step_zusammenfassung, get_fullname($userid), $step_beschreibung, 0, 0, $SessSemName[1],$userid)){
-			$wiki_plugin_messages[]="msg§"._("Ein neues Thema im Forum wurde angelegt.");
+		$forum_text = sprintf(_("Die aktuellste Fassung dieses StEPs finden Sie immer im %sWiki%s"),'[',']'.$GLOBALS['ABSOLUTE_URI_STUDIP'].'wiki.php?keyword='.$pagename) . " \n--\n". $step_beschreibung;
+		if($tt = CreateTopic($pagename . ': ' . $step_zusammenfassung, get_fullname($userid), $forum_text, 0, 0, $SessSemName[1],$userid)) {
+			$wiki_plugin_messages[]='msg§'._("Ein neues Thema im Forum wurde angelegt.");
+			$wiki_text = '['._("Link zum zugeh&ouml;rigen Foreneintrag").']' . $GLOBALS['ABSOLUTE_URI_STUDIP'] . 'forum.php?open=' . $tt . '#anker ' . "\n--\n" . $wiki_text;
 		}
 	}
-	$view='show';
-	$keyword=$pagename;
+	$query="INSERT INTO wiki SET range_id='$SessSemName[1]', keyword='$pagename', body='".$wiki_text."', user_id='$userid', chdate='".time()."', version='1'";
+	$db->query($query);
+	$wiki_plugin_messages[]='msg§' . sprintf(_("Ein neuer Eintrag wurde angelegt. Sie können ihn nun weiter bearbeiten oder %szurück zur Ausgangsseite%s gehen."),'<a href="'.$_SERVER['PHP_SELF'].'?keyword='.$keyword.'">','</a>');
+	$view = 'show';
+	$keyword = $pagename;
 	return;
 }
 
