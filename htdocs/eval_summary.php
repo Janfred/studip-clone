@@ -260,7 +260,7 @@ function answers ($parent_id, $anz_nutzer, $question_type) {
 		array_push($summary, array($antwort_nummer."(".$prozente."%)",$answer_counter));
 
 		array_push($ret_array["antwort_texte"], ($db_answers->f("text")!="" ? $db_answers->f("text") : $db_answers->f("value")));
-		array_push($ret_array["auswertung"], array($answer_counter, $prozente, $prozente_wo_residual));
+		array_push($ret_array["auswertung"], array($answer_counter, $prozente, ($db_answers->f("residual")==0 ? $prozente_wo_residual : null)));
 		if ($has_residual) $ret_array["has_residual"] = 1;
 
 		$i = 0;
