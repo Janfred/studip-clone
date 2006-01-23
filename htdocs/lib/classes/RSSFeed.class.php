@@ -57,7 +57,7 @@ class RSSFeed {
 		}
 		$parsed_url = parse_url($rssfeed_url);
 		$this->domain = $parsed_url["host"];
-		$this->internal_feed = ($parsed_url['host'] == $_SERVER['HTTP_HOST'] && strpos($parsed_url['path'], $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']) === 0);
+		$this->internal_feed = (($parsed_url['host'] == $_SERVER['HTTP_HOST'] || $parsed_url['host'].':'.$parsed_url['port'] == $_SERVER['HTTP_HOST']) && strpos($parsed_url['path'], $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']) === 0);
 		$this->max_items = $max_items;
 		$this->class_id = md5($rssfeed_url); 
 		

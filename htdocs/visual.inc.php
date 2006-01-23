@@ -821,7 +821,7 @@ function preg_call_link ($params, $mod, $img, $extern = FALSE) {
 	
 	$pu = parse_url($params[4]);
 	if (($pu['scheme'] == 'http' || $pu['scheme'] == 'https')
-	&& $pu['host'] == $_SERVER['HTTP_HOST']
+	&& ($pu['host'] == $_SERVER['HTTP_HOST'] || $pu['host'].':'.$pu['port'] == $_SERVER['HTTP_HOST'])
 	&& strpos($pu['path'], $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']) === 0){
 		$intern = true;
 	}
