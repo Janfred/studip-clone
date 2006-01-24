@@ -179,7 +179,6 @@ function veranstaltung_beginn ($seminar_id='', $art='', $semester_start_time='',
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;	
 	$all_semester = SemesterData::GetSemesterArray();
-	
 	if ((func_num_args()==1) || (func_num_args()==2)){
 		$seminar_id=func_get_arg(0);
 		if (func_num_args()==2)
@@ -200,7 +199,7 @@ function veranstaltung_beginn ($seminar_id='', $art='', $semester_start_time='',
 	//Regelmaessige Termine. also Turnus aus Metadaten
 	if ($term_data["art"]==0) {
 		if (($term_data["start_woche"] ==0) || ($term_data["start_woche"] ==1)) // Startzeitpunkt 1. oder 2. Semesterwoche
-			if (sizeof($term_data["turnus_data"])) {
+			if (is_array($term_data["turnus_data"])) {
 				//first, determine the correct the start for $vorles_bginn
 				foreach ($all_semester as $sem)
 					if (($term_data["start_time"] >= $sem["beginn"]) AND ($term_data["start_time"] <= $sem["ende"]))
@@ -225,11 +224,10 @@ function veranstaltung_beginn ($seminar_id='', $art='', $semester_start_time='',
 				}
 				
 				//now create possible start dates and do checks for holidays or calculatable off-days			
-				$cycle=0;				
+				$cycle=0;
 				do {
 					foreach ($term_data["turnus_data"] as $turnus_arr) {
 						$date_ok = TRUE;
-
 						$start_termin=$vorles_beginn+(($turnus_arr["day"]-1)*24*60*60)+($turnus_arr["start_stunde"]*60*60)+($turnus_arr["start_minute"]*60) + (($term_data["start_woche"] + $cycle) * 7 * 24 * 60 *60);
 						$end_termin=$vorles_beginn+(($turnus_arr["day"]-1)*24*60*60)+($turnus_arr["end_stunde"]*60*60)+($turnus_arr["end_minute"]*60) + (($term_data["start_woche"] + $cycle) * 7 * 24 * 60 *60);
 		
@@ -270,8 +268,7 @@ function veranstaltung_beginn ($seminar_id='', $art='', $semester_start_time='',
 							break;
 					}
 					$cycle ++;
-				} while ((!$date_ok) || ($cycle>50));
-				
+				} while (!$date_ok &&  $cycle < 50);
 				$return_string=date ("d.m.Y, G:i", $start_termin);
 				$return_int=$start_termin;
 				if ($start_termin != $end_termin) 
@@ -388,7 +385,6 @@ function view_turnus ($seminar_id, $short = FALSE, $meta_data = false, $start_ti
 	} else {
 		$term_data = unserialize($meta_data);
 	}
-	
 	if ($term_data["art"] == 1)
 		{
 		//Load all TERMIN_TYPs that are "Sitzungstermine" and build query-clause
@@ -462,7 +458,7 @@ function view_turnus ($seminar_id, $short = FALSE, $meta_data = false, $start_ti
 	else
 		{
 		if ($short)
-			if (sizeof($term_data["turnus_data"])) {
+			if (is_array($term_data["turnus_data"])) {
 				$k=0;
 				foreach ($term_data["turnus_data"] as $data)
 					{
@@ -504,7 +500,7 @@ function view_turnus ($seminar_id, $short = FALSE, $meta_data = false, $start_ti
 				$return_string= _("Zeiten: n. A.");
 				}
 		else
-			if (sizeof($term_data["turnus_data"])) {
+			if (is_array($term_data["turnus_data"])) {
 				$k=0;
 				foreach ($term_data["turnus_data"] as $data)
 					{
