@@ -874,4 +874,3 @@ function showSearchForm($name, $search_string='', $user_only=FALSE, $administrab
 	}
 }
 ?>
-
