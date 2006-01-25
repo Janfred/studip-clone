@@ -913,7 +913,7 @@ function get_users_online($active_time = 5){
 	$db = new DB_Seminar();
 	$user_table = $user->that->database_table;
 	$now = time(); // nach eingestellter Zeit (default = 5 Minuten ohne Aktion) zaehlt man als offline
-	$query = "SELECT " . $_fullname_sql['full'] . " AS full_name,($now-UNIX_TIMESTAMP(changed)) AS lastaction,a.username,a.user_id,contact_id 
+	$query = "SELECT " . $_fullname_sql['full'] . " AS full_name,UNIX_TIMESTAMP()-UNIX_TIMESTAMP(changed) AS lastaction,a.username,a.user_id,contact_id 
 		FROM $user_table LEFT JOIN auth_user_md5 a ON (a.user_id=sid) LEFT JOIN user_info USING(user_id) 
 		LEFT JOIN contact ON (owner_id='".$user->id."' AND contact.user_id=a.user_id AND buddy=1)
 		WHERE changed > '" . date("YmdHis", ($now - ($active_time * 60)))."' 
