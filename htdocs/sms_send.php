@@ -219,7 +219,7 @@ if ($group_id) {
 }
 
 // if send message at course
-if ($course_id) {
+if ($course_id && $perm->have_studip_perm('tutor', $course_id)) {
 
 	// be sure to send it as email
 	if($emailrequest == 1) $sms_data['tmpemailsnd'] = 1;
@@ -246,8 +246,8 @@ if ($course_id) {
 
 }
 
-// if send message at inst
-if ($inst_id) {
+// if send message at inst, only for admins
+if ($inst_id && $perm->have_studip_perm('admin', $inst_id)) {
 
 	// be sure to send it as email
 	if($emailrequest == 1) $sms_data['tmpemailsnd'] = 1;
