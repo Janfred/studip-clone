@@ -433,6 +433,9 @@ if ($inst_id != "" && $inst_id !="0") {
 	
 			echo "</table><br><b>" . _("Rundmail an alle MitarbeiterInnen verschicken") . "</b><br><br>&nbsp;";
 			printf(_("Bitte hier %sklicken%s"), "<a href=\"mailto:" . join(",",$mail_list) . "?subject=" . urlencode(_("MitarbeiterInnen-Rundmail")) .  "\">", "</a>");
+			echo "<br /><br /></blockquote>";
+			echo "<br><blockquote><b>" . _("Stud.IP Nachricht an alle MitarbeiterInnen verschicken") . "</b><br><br>&nbsp;";
+			printf(_("Bitte hier %sklicken%s"), "<a href=\"sms_send.php?inst_id=$inst_id&emailrequest=1&subject=".urlencode(_("MitarbeiterInnen-Rundmail:") . ' ' . $inst_name)."\">", "</a>");
 			echo "<br /><br /></blockquote></td></tr>";
 			print("</table>");
 		} else { // wir haben kein Ergebnis
