@@ -262,14 +262,13 @@ class ModulesNotification extends Modules {
 				break;
 			case 'elearning_interface' :
 				if ($GLOBALS['ELEARNING_INTERFACE_ENABLE']) {
-					$mod_count = get_seminar_modules($range_id);
-					if ($mod_count > 1) {
-						$text = sprintf(_("%s Content-Module sind mit der Veranstaltung verbunden:"), $mod_count);
-					} else if ($mod_count > 0) {
-						$text = _("1 Content-Modul ist mit der Veranstaltung verbunden:");
-					}
+					if ($r_data['neuecontentmodule'] > 1) {
+						$text = sprintf(_("%s neue Content-Module angelegt"), $r_data['neuecontentmodule']);
+					} else if ($r_data['neuecontentmodule'] > 0) {
+						$text = _("1 neues Content-Modul angelegt");
+					}	
+					$redirect = "&redirect_to=elearning_interface.php&seminar_id=$range_id&view=show";
 				}
-				$redirect = "&redirect_to=elearning_interface.php&seminar_id=$range_id&view=show";
 				break;
 			case 'wiki' :
 				if ($r_data['neuewikiseiten'] > 1) {
