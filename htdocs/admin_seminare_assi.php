@@ -1265,6 +1265,7 @@ if (($form == 6) && ($jump_next_x))
 				//write the default module-config
 				$Modules = new Modules;
 				$Modules->writeDefaultStatus($sem_create_data["sem_id"]);
+				//BIEST00072
 				//$Modules->writeStatus("scm", $sem_create_data["sem_id"], FALSE); //the scm has to be turned off, because an empty free informations page isn't funny
 
     				//update/insert the assigned roomes
@@ -1468,8 +1469,9 @@ if (($form == 6) && ($jump_next_x))
 			//if room-reqquest stored in the session, destroy (we don't need it anymore)
 			if (is_object($sem_create_data["resRequest"]))
 				$sem_create_data["resRequest"] = '';
+			//BIEST00072
 			if ($sem_create_data["modules_list"]["scm"]){
-				$sem_create_data["sem_scm_name"] = ($SCM_PRESET[1] ? $SCM_PRESET[1] : _("Informationen"));
+				$sem_create_data["sem_scm_name"] = ($SCM_PRESET[1]['name'] ? $SCM_PRESET[1]['name'] : _("Informationen"));
 				$sem_create_data["sem_scm_id"] = md5(uniqid($hash_secret));
 				$db->query("INSERT INTO scm SET scm_id='".$sem_create_data["sem_scm_id"]."', tab_name='".$sem_create_data["sem_scm_name"]."', range_id='".$sem_create_data["sem_id"]."', user_id='$user_id', content='".$sem_create_data["sem_scm_content"]."', mkdate='".time()."', chdate='".time()."' ");
 			}
@@ -1497,7 +1499,7 @@ if (($form == 7) && ($jump_next_x)) {
 
 //Eintragen der Simple-Content Daten
 if (($form == 8) && ($jump_next_x)) {
-	if (1 || $sem_create_data["sem_scm_content"]) {
+	if ($sem_create_data["sem_scm_content"]) { //BIEST00072
 		//if content is created, we enable the module again (it was turned off above)
 		$Modules->writeStatus("scm", $sem_create_data["sem_id"], TRUE);
 		if ($sem_create_data["sem_scm_id"]) {
@@ -1521,7 +1523,7 @@ if (($form == 8) && ($jump_next_x)) {
 			}
 	} else {
 		//if no content is created yet, we disable the module and jump to the schedule (if activated)
-		$Modules->writeStatus("scm", $sem_create_data["sem_id"], FALSE);
+		//$Modules->writeStatus("scm", $sem_create_data["sem_id"], FALSE); //BIEST00072
 		if ($sem_create_data["modules_list"]["schedule"])
 			header ("Location: admin_dates.php?assi=yes&ebene=sem&range_id=".$sem_create_data["sem_id"]);
 		else
