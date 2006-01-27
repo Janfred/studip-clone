@@ -16,7 +16,7 @@ class PluginAdministrationVisualization extends AbstractStudIPPluginVisualizatio
 	function showPluginInstallationSuccess(){
 		StudIPTemplateEngine::makeHeadline(_("Installation erfolgreich"));
 		StudIPTemplateEngine::startContentTable();
-		StudIPTemplateEngine::showErrorMessage(_("Die Installation des Plugins war erfolgreich"));
+		StudIPTemplateEngine::showSuccessMessage(_("Die Installation des Plugins war erfolgreich"));
 		StudIPTemplateEngine::endContentTable();
 	}
 	
@@ -35,20 +35,6 @@ class PluginAdministrationVisualization extends AbstractStudIPPluginVisualizatio
 			default: StudIPTemplateEngine::showErrorMessage(sprintf(_("Die Installation ist fehlgeschlagen. <a href=\"%s\">%s</a>"),PluginEngine::getLinkToAdministrationPlugin(),makeButton("zurueck","img")));
 		}
 		StudIPTemplateEngine::endContentTable();
-		/*
-		StudIPTemplateEngine::makeHeadline(_("Fehlendes Manifest"));
-			StudIPTemplateEngine::startContentTable();
-			StudIPTemplateEngine::showErrorMessage(_("Das Plugin-Paket enthält kein Manifest. Erstellen Sie ein zugehöriges Manifest und versuchen Sie es noch einmal."));
-			StudIPTemplateEngine::endContentTable();
-			*/
-		
-		/*
-		StudIPTemplateEngine::makeHeadline(_("Plugin bereits vorhanden"));
-    					StudIPTemplateEngine::startContentTable();
-    					$error = sprintf (_("Das Plugin ist bereits in der Version %s vorhanden.<br>Soll das Plugin aktualisiert werden?"),$plugininfos["version"]);
-    					StudIPTemplateEngine::showErrorMessage($error);
-    					StudIPTemplateEngine::endContentTable();
-		*/
 	}
 	
 	function showPluginPackageDownloadView($packagelink){

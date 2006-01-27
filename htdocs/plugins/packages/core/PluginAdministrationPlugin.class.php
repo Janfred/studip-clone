@@ -123,6 +123,7 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
     	  	// process the upload 
     	  	// and register plugin in the database;
     	  	$result = $this->pluginmgmt->installPlugin($upload_file);
+    	  	
     	  	if ($result == PLUGIN_INSTALLATION_SUCCESSFUL){
     	  		$this->pluginvis->showPluginInstallationSuccess();
     	  	}

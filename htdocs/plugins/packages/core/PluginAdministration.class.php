@@ -31,31 +31,7 @@ class PluginAdministration {
 	 */
 	function deletePlugindir($dir) {
 		if (file_exists($dir)){
-			if (is_dir($dir)){
-				if (!@rmdir($dir)){
-					// directory is not empty
-					if ($dh = opendir($dir)) {
-				       while (($file = readdir($dh)) !== false) {
-				       	  if ($file == "." | $file == ".."){
-				       	  	continue;
-				       	  }
-				       	  if (is_file($file)){
-				       	  	@unlink($file);
-				       	  }
-				       	  else {
-				       	  	$this->deletePlugindir($file);
-				       	  }				        
-				       }
-				       closedir($dh);
-				    }
-				}
-				// directory deleted
-				return;
-			}
-			if (is_file($dir)){
-				@unlink($dir);
-				return;
-			}
+			rmdirr($dir);
 		}
 	} 
 	
@@ -141,8 +117,7 @@ class PluginAdministration {
     				}
 				}
 				// everything fine, install it
-   				$this->installPlugin($tmppackagedir,$newpluginpath,$pluginclassname,$pluginrelativepath,$pluginengine);
-   				
+  
    				// copy files
    				$this->copyr($tmppackagedir,$newpluginpath);
    				// delete the temporary path
