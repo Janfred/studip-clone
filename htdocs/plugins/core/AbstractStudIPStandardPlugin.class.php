@@ -1,0 +1,199 @@
+<?php
+/**
+ * Starting point for creating "normal" course or institute plugins.
+ * @author Dennis Reil <dennis.reil@offis.de>
+ * @version $Revision$
+ */
+require_once("lib/classes/TreeAbstract.class.php");
+class AbstractStudIPStandardPlugin extends AbstractStudIPPlugin{
+
+	var $changeindicatoriconname; 	// relativer Name des Icons für Änderungen an diesem Plugin
+	/**
+	* @todo umbenennen in poiid
+	*/
+	var $id; 						// Id, der dieses Plugin zugeordnet ist (bspw. Veranstaltung oder Institution)
+	var $overview; 					// wird dieses Plugin in der Übersicht (z.B. meine_seminare) angezeigt
+	
+	/**
+	 */
+    function AbstractStudIPStandardPlugin() {
+    	// Konstruktor der Basisklasse aufrufen
+    	AbstractStudIPPlugin::AbstractStudIPPlugin();
+    	$this->pluginiconname = "";
+    	$this->changeindicatoriconname = "";
+    	$this->id = -1;
+    	$this->overview = false;
+    	$this->pluginengine = PluginEngine::getPluginPersistence("Standard");
+    	// create the standard AdminInfo
+    	$admininfo = new AdminInfo();
+    	$this->setPluginAdminInfo($admininfo);
+    }
+    
+    function setId($newid){
+	    $this->id=$newid;
+    }
+    
+    function getId(){
+	    return $this->id;
+    }
+    
+    /**
+     * Hat sich seit dem letzten Login etwas geändert? 
+     * @param lastlogin - letzter Loginzeitpunkt des Benutzers
+     */
+    function hasChanged($lastlogin){
+    	return false;
+    }
+    
+    /**
+     * Wird dieses Plugin in der Übersicht angezeigt?
+     */
+    function isShownInOverview(){
+    	return $this->overview;
+    }
+    
+    /**
+     * Liefert die Änderungsmeldungen für die übergebenen ids zurück
+     * @param lastlogin - letzter Loginzeitpunkt des Benutzers
+     * @param ids - ein Array von Veranstaltungs- bzw. Institutionsids, zu denen
+     * die Änderungsnachricht bestimmt werden soll.
+     * @return Änderungsmeldungen
+     */
+    function getChangeMessages($lastlogin, $ids){
+    	return array();
+    }
+    
+    /**
+     * Getter- und Setter für die Attribute
+     */
+    
+    
+    function getChangeindicatoriconname(){
+    	return $this->changeindicatoriconname;
+    }
+    
+    function setChangeindicatoriconname($newicon){
+    	// TODO: Icon testen
+    	$this->changeindicatoriconname = $newicon;
+    }
+    
+    function setShownInOverview($value=true){
+    	$this->overview = $value;
+    }
+    
+    
+    /**
+    * Shows the standard configuration.
+    */
+    function showConfigurationPage(){
+    
+    	$user = $this->getUser();
+    	$permission = $user->getPermission();
+    	
+    	if (!$permission->hasAdminPermission()){
+    		StudIPTemplateEngine::startContentTable();
+    		StudIPTemplateEngine::showErrorMessage(_("Sie besitzen keine Berechtigung, um dieses Plugin zu konfigurieren."));
+    		StudIPTemplateEngine::endContentTable();
+		}
+		else {
+			StudIPTemplateEngine::makeHeadline(sprintf(_("Default-Aktivierung von %s"),$this->getPluginname()));
+			StudIPTemplateEngine::startContentTable();
+			
+			$sel_institutes = $_POST["sel_institutes"];
+			if ($_GET["selected"]){
+				if ($_POST["nodefault"] == true){
+					if ($this->pluginengine->removeDefaultActivations($this)){
+						StudIPTemplateEngine::showSuccessMessage(_("Die Voreinstellungen wurden erfolgreich gelöscht."));
+						$sel_institutes = array();
+					}
+					else {
+						StudIPTemplateEngine::showErrorMessage(_("Die Voreinstellungen konnten nicht gelöscht werden"));
+					}
+				}
+				else {
+					// save selected institutes
+					if ($this->pluginengine->saveDefaultActivations($this,$sel_institutes)){
+						// show info
+						if (count($sel_institutes) > 1){
+							StudIPTemplateEngine::showSuccessMessage(_("Für die ausgewählten Institute wurde das Plugin standardmäßig aktiviert!"));
+						}
+						else {
+							StudIPTemplateEngine::showSuccessMessage(_("Für das ausgewählte Institut wurde das Plugin standardmäßig aktiviert!"));
+						}	
+					}
+					else {
+						StudIPTemplateEngine::showErrorMessage(_("Das Abspeichern der Default-Einstellungen ist fehlgeschlagen"));
+					}
+				}
+			}
+			else {
+				// load old config
+				$sel_institutes = $this->pluginengine->getDefaultActivations($this);
+			}
+			
+			?>
+			<tr>
+				<td>
+					<?
+					echo _("Wählen Sie die Einrichtungen, in deren Veranstaltungen das Plugin automatisch aktiviert sein soll.<p>"); 
+					$institutes = StudIPCore::getInstitutes();
+					?>
+					<form action="<?= PluginEngine::getLink($this,array("selected" => true),"showConfigurationPage") ?>" method="POST">
+					<select name="sel_institutes[]" multiple size="20">
+					<?
+					
+					foreach ($institutes as $institute) {
+						// if id is in selected institutes, the mark it as selected
+					
+						if (array_search($institute->getId(),$sel_institutes) !== false){
+							$selected = "selected";
+						}
+						else {
+							$selected = "";
+						}
+						echo(sprintf("<option value=\"%s\" %s> %s </option>",$institute->getId(),$selected, $institute->getName()));
+						$childs = $institute->getAllChildInstitutes();
+						foreach ($childs as $child) {
+							if (array_search($child->getId(),$sel_institutes) !== false){
+								$selected = "selected";
+							}
+							else {
+								$selected = "";
+							}
+							echo(sprintf("<option value=\"%s\" %s>&nbsp;&nbsp;&nbsp;&nbsp; %s </option>",$child->getId(),$selected, $child->getName()));
+						}
+					}
+					
+					?>
+					</select><br>
+					<input type="checkbox" name="nodefault"><?= _("keine Voreinstellung wählen") ?>
+					<p>
+					
+					<?= makeButton("uebernehmen","input") ?>
+					<a href="<?= PluginEngine::getLinkToAdministrationPlugin() ?>"><?= makeButton("zurueck","img") ?></a>
+					</form>
+				</td>
+			</tr>
+			
+			<?php
+			
+			StudIPTemplateEngine::createInfoBoxTableCell();
+			$infobox = array	(	
+						array  ("kategorie"  => _("Hinweise:"),
+								"eintrag" => array	(	
+									array (	"icon" => "pictures/ausruf_small.gif",
+													"text"  => _("Wählen Sie die Institute, in deren Veranstaltungen das Plugin standardmäßig eingeschaltet werden soll.")
+									),
+									array (	"icon" => "pictures/ausruf_small.gif",
+													"text"  => _("Eine Mehrfachauswahl ist durch Drücken der Strg-Taste möglich.")
+									)
+								)
+						)
+				);
+			print_infobox ($infobox);
+			StudIPTemplateEngine::endInfoBoxTableCell();
+			StudIPTemplateEngine::endContentTable();
+		}
+    }
+}
+?>

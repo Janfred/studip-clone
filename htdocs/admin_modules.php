@@ -51,7 +51,9 @@ $cssSw=new cssClassSwitcher;
 $sess->register("admin_modules_data");
 $messaging=new messaging;
 $amodules=new AdminModules;
-
+if ($PLUGINS_ENABLE){
+	$plugins = $amodules->pluginengine->getAllEnabledPlugins(); // get all installed and enabled plugins
+}
 
 if ($perm->have_studip_perm("tutor", $admin_modules_data["range_id"])) {
 	//Sicherheitscheck ob ueberhaupt was zum Bearbeiten gewaehlt ist.
@@ -102,6 +104,19 @@ if ($perm->have_studip_perm("tutor", $admin_modules_data["range_id"])) {
 				} else {
 					$amodules->clearBit($admin_modules_data["changed_bin"], $amodules->registered_modules[$key]["id"]);
 				}
+			}
+			if ($PLUGINS_ENABLE){
+				foreach ($plugins as $plugin){
+					$key = "plugin_".$plugin->getPluginId();
+					if ($$key == "TRUE"){
+						$plugin->setActivated(true);
+					}
+					else {
+						$plugin->setActivated(false);
+					}				
+					$amodules->pluginengine->savePlugin($plugin);
+				}
+				$plugins = $amodules->pluginengine->getAllEnabledPlugins();
 			}
 			
 		//consistency checks
@@ -251,6 +266,55 @@ if ($admin_modules_data["range_id"]) {
 			</tr>
 			<? }
 			
+		}
+		if ($PLUGINS_ENABLE){
+			$plugins = $amodules->pluginengine->getAllEnabledPlugins();
+					
+			if ($plugins == null){
+				$plugins = array();
+			}
+			foreach ($plugins as $plugin){			
+				?>
+				<tr <? $cssSw->switchClass() ?> rowspan=2>
+				<td class="<? echo $cssSw->getClass() ?>" width="4%" align="right">
+						&nbsp;
+					</td>
+					<td class="<? echo $cssSw->getClass() ?>"  width="10%" align="left">
+						<font size=-1><b><?=$plugin->getPluginname()?></b><br /></font>
+					</td>
+					<td class="<? echo $cssSw->getClass() ?>" width="16%">
+						<input type="RADIO" name="plugin_<?=$plugin->getPluginid()?>" value="TRUE" <?= ($plugin->isActivated()==true) ? "checked" : "" ?>>
+						<!-- mark old state -->
+						<font size=-1><?=_("an")?></font>
+						<input type="RADIO" name="plugin_<?=$plugin->getPluginid()?>" value="FALSE" <?= ($plugin->isActivated()==true) ? "" : "checked" ?>>
+						<font size=-1><?=_("aus")?><br /></font>
+					</td>
+					<td class="<? echo $cssSw->getClass() ?>" width="70%">
+						<font size=-1><?
+						$admininfo = $plugin->getPluginAdminInfo();
+						if (!is_null($admininfo)){
+							if ($plugin->isActivated() || $globalactivated){
+								// TODO: Fallunterscheidung, welches AdminInfo angezeigt werden muss.
+								if ($globalactivated){
+									print ("(per Voreinstellung aktiviert) <font color=\"red\">".$admininfo->getMsg_pre_warning()."</font>");
+								}
+								else {
+									print ("<font color=\"red\">".$admininfo->getMsg_pre_warning()."</font>");
+								}
+							}
+							else {
+								print ($admininfo->getMsg_activate());
+							}
+						}
+						else {
+							// kein AdminInfo vorhanden, also nichts ausgeben
+							print ("Dieses Plugin hat keinen Hilfetext bereitgestellt.");
+						}
+						?></font>
+					</td>
+				</tr>
+				<?php
+			}
 		}
 		?>
 		<tr>

@@ -39,6 +39,9 @@ if ($SHOW_TERMS_ON_FIRST_LOGIN){
 	check_terms($user->id, $_language_path);	
 } 
 
+if ($GLOBALS["PLUGINS_ENABLE"]){
+	$pluginengine = PluginEngine::getPluginPersistence("System");
+}
 
 ob_start();
 //Daten fuer Onlinefunktion einbinden
@@ -244,6 +247,18 @@ if ($auth->auth["uid"] == "nobody") { ?>
 				echo MakeToolbar("pictures/nutzeronline.gif","online.php",_("Online"),sprintf(_("Es sind außer Ihnen %s Personen online"), $user_count),55, "_top","left", "FALSE", "5");
 			}
 		}
+		
+		if ($GLOBALS["PLUGINS_ENABLE"]){
+			$plugins = $pluginengine->getAllActivatedPlugins(); 
+			
+			foreach ($plugins as $plugin){
+				
+				if ($plugin->hasNavigation()){
+					$navi = $plugin->getNavigation();
+					echo MakeToolbar($plugin->getPluginiconname(),$pluginengine->getLink($plugin),$navi->getDisplayname(),$navi->getDisplayname(),40, "_top");
+		 		}
+			}
+		 }
 		
 ?>
 		<td class="toolbar" width="99%">

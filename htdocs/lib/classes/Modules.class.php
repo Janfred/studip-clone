@@ -54,9 +54,17 @@ class Modules {
 				"elearning_interface" => array("id" => 13, "const" => "ELEARNING_INTERFACE_ENABLE", "sem" => TRUE, "inst" => TRUE)
 				);
 	var $db;
+	var $pluginengine; // the pluginengine for integrating plugins into courses / institutions
 	
 	function Modules() {
 		$this->db = new DB_Seminar;
+		// create a new instance of the pluginengine
+		if ($GLOBALS["PLUGINS_ENABLE"]){
+			$id = $GLOBALS["SessSemName"]["class"] . $GLOBALS["SessSemName"][1];
+			
+			$this->pluginengine = PluginEngine::getPluginPersistence("Standard");
+			$this->pluginengine->setPoiid($id);
+		}
 	}
 
 	function getStatus($modul, $range_id, $range_type='') {

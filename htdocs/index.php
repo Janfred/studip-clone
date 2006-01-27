@@ -108,7 +108,22 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 	$menue[40] = array( _("Veranstaltungs&uuml;bersicht"), 'sem_portal.php', false);
 	$menue[41] = array( _("Verwaltung globaler Einstellungen"), 'new_user_md5.php', false);
 
-
+	if ($GLOBALS["PLUGINS_ENABLE"] && $perm->have_perm('admin')){
+		// plugins activated
+		$pluginengine = PluginEngine::getPluginPersistence("Administration");
+		$activatedplugins = $pluginengine->getAllActivatedPlugins();
+		if (!is_array($activatedplugins)){
+			$activatedplugins = array();
+		}
+		foreach ($activatedplugins as $activatedplugin){
+			if ($activatedplugin->hasTopNavigation()){
+				$pluginnav = $activatedplugin->getTopNavigation();
+				$pluginid = $activatedplugin->getPluginid();
+				$menue["pluginnav_" . $pluginid] = array($pluginnav->getDisplayname(),PluginEngine::getLink($activatedplugin),false);
+				$pluginmenue[] = "pluginnav_" . $activatedplugin->getPluginid();
+			}
+		}
+	}
 
 	if ($perm->have_perm('root')) { // root
 		$ueberschrift = _("Startseite f&uuml;r Root bei Stud.IP");
@@ -118,6 +133,16 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 		$menue_auswahl[] = array(32, array());
 		$menue_auswahl[] = array(41, array());
 		$menue_auswahl[] = array(9, array(10, 11));
+		
+		//insert plugin menus
+		if ($GLOBALS["PLUGINS_ENABLE"]){
+			if (!is_array($pluginmenue)){
+				$pluginmenue = array();
+			}
+			foreach($pluginmenue as $item){
+				$menue_auswahl[] = array($item, array());
+			}
+		}
 
 	} elseif ($perm->have_perm('admin')) { // admin
 		$ueberschrift = _("Startseite f&uuml;r AdministratorInnen bei Stud.IP");
@@ -126,6 +151,12 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 		$menue_auswahl[] = array(32, array());
 		$menue_auswahl[] = array( 9, array(10, 11));
 		$menue_auswahl[] = array(33, array());
+		//insert plugin menus
+		if ($GLOBALS["PLUGINS_ENABLE"]){
+			foreach($pluginmenue as $item){
+				$menue_auswahl[] = array($item, array());
+			}
+		}
 
 	} elseif ($perm->have_perm('dozent')) { // dozent
 		$ueberschrift = _("Startseite f&uuml;r DozentInnen bei Stud.IP");

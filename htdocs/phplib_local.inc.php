@@ -837,4 +837,8 @@ class Seminar_Perm extends Perm {
 		}
 	}
 }
+
+if ($GLOBALS['PLUGINS_ENABLE']){
+	require_once("plugins/plugins.inc.php");
+}
 ?>
