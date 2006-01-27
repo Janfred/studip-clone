@@ -190,6 +190,7 @@ class AbstractPluginIntegratorEnginePersistence {
     
     function deinstallPlugin($plugin){
 		$this->connection->execute("Delete from plugins where pluginid=?", array($plugin->getPluginid()));
+		$this->connection->execute("Delete from plugins_activated where pluginid=?", array($plugin->getPluginid()));
 	}
 	
 	/**

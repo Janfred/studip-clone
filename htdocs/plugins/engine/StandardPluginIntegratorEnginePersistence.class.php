@@ -213,7 +213,6 @@ class StandardPluginIntegratorEnginePersistence extends AbstractPluginIntegrator
     function deinstallPlugin($plugin){
 	    parent::deinstallPlugin($plugin);
 	    // kill the activation information
-	    $this->connection->execute("delete from plugins_activated where pluginid=?",array($plugin->getPluginid()));
 	    $this->connection->execute("delete from plugins_default_activations where pluginid=?",array($plugin->getPluginid()));
     }
     
