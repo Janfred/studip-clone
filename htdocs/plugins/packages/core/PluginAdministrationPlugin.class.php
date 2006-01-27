@@ -118,7 +118,7 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
     		}
     		 
     	  } else if ($action == "install"){
-    	  	if ($update == "force")
+    	  	// if ($update == "force")
     	  	$upload_file = $_FILES["upload_file"]["tmp_name"];
     	  	// process the upload 
     	  	// and register plugin in the database;
