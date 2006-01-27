@@ -111,6 +111,8 @@ $ELEARNING_INTERFACE_MODULES = array(
 					)
 	)
 );
+
+$PLUGINS_ENABLE=FALSE;
 						
 /*paths
 ----------------------------------------------------------------
