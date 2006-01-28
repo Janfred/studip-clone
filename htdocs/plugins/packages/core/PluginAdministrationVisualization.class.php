@@ -93,7 +93,6 @@ class PluginAdministrationVisualization extends AbstractStudIPPluginVisualizatio
 		  	<input type="hidden" name="action" value="config" />
 			<tr>
 				<th align="left"><?= _("Name")?></th>
-				<!--<th align="left"><?= _("Klasse")?></th>-->
 				<th align="left"><?= _("Typ") ?></th>
 				<th align="center"><?= _("Verfügbarkeit") ?></th>
 				<th align="left"><?= _("Entfernen") ?></th>
@@ -121,8 +120,15 @@ class PluginAdministrationVisualization extends AbstractStudIPPluginVisualizatio
 			$pluginid = $plugin->getPluginid();
 		?>
 			<tr>
-				<td width="35%" align="left"><a href="<?= PluginEngine::getLink($plugin,array(),"showDescriptionalPage") ?>"><?= $plugin->getPluginname() ?></a>&nbsp;<br><a href="<?= PluginEngine::getLink($plugin,array(),"showConfigurationPage") ?>"><?= _("(Default-Aktivierung)")?></a></td>
-				<!--<td width="35%" align="left"><?= $plugin->getPluginclassname() ?></td>-->
+				<td width="35%" align="left"><a href="<?= PluginEngine::getLink($plugin,array(),"showDescriptionalPage") ?>"><?= $plugin->getPluginname() ?></a>&nbsp;
+				<?php
+				if (PluginEngine::getTypeOfPlugin($plugin) == "Standard"){
+				?>
+					<br>
+					<a href="<?= PluginEngine::getLink($plugin,array(),"showConfigurationPage") ?>"><?= _("(Default-Aktivierung)")?></a></td>
+				<?php
+				}
+				?>
 				<td width="5%" align="left"><?= $type ?></td>
 				<td align="center">
 					<select name="available_<?= $pluginid?>"> 
@@ -141,7 +147,7 @@ class PluginAdministrationVisualization extends AbstractStudIPPluginVisualizatio
 		  	 	 <td colspan="7" height="5"></td>
 		  	 </tr>
 		  	 <tr>
-		  	 	 <td colspan="7" align="center"><input type="image" <?= $absenden ?></td>
+		  	 	 <td colspan="7" align="center"><?= $absenden ?></td>
 		  	 </tr>
 		  	 <tr>
 		  	 	 <td colspan="7" height="5"></td>
@@ -156,6 +162,9 @@ class PluginAdministrationVisualization extends AbstractStudIPPluginVisualizatio
 								"eintrag" => array	(	
 									array (	"icon" => "pictures/ausruf_small.gif",
 													"text"  => _("Verfügbarkeit bedeutet bei Standard-Plugins, dass sie vom Dozenten in Veranstaltungen und Einrichtungen aktiviert werden können. Bei System- und Administrationsplugins wird zwischen Aktivierung und Verfügbarkeit nicht unterschieden.")
+									),
+									array (	"icon" => "pictures/ausruf_small.gif",
+													"text"  => _("Per Default-Aktivierung lassen sich Standard-Plugins automatisch in allen Veranstaltungen einer Einrichtung aktivieren.")
 									),
 									array (	"icon" => "pictures/ausruf_small.gif",
 													"text"  => _("Position gibt die Reihenfolge des Plugins in der Navigation an. <b>Erlaubt sind nur Werte größer 0.</b>")
@@ -182,8 +191,6 @@ class PluginAdministrationVisualization extends AbstractStudIPPluginVisualizatio
 		
 		</form>
 		<?php
-		
-		
 		StudIPTemplateEngine::endContentTable();
 	}
 }

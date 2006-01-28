@@ -69,7 +69,7 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 		$zip = $_GET["zip"];
 		$deinstall = $_GET["deinstall"];
 		$action = $_POST["action"]; 
-		$update = $_GET["force"];
+		$forceupdate = $_POST["update"];
 		
 		if (isset($action)){
 		  if ($action == "config"){
@@ -122,12 +122,13 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
     	  	$upload_file = $_FILES["upload_file"]["tmp_name"];
     	  	// process the upload 
     	  	// and register plugin in the database;
-    	  	$result = $this->pluginmgmt->installPlugin($upload_file);
+    	  	$result = $this->pluginmgmt->installPlugin($upload_file,$forceupdate);
     	  	
     	  	if ($result == PLUGIN_INSTALLATION_SUCCESSFUL){
     	  		$this->pluginvis->showPluginInstallationSuccess();
     	  	}
     	  	else {
+    	  		// there was an error
     	  		$this->pluginvis->showPluginInstallationError($result);
     	  	}
 		  }

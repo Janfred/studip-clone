@@ -43,7 +43,7 @@ class PluginAdministration {
 	 * @param string $uploadfilename the name of the uploaded file
 	 * @return ERROR_CODE/SUCCESS_CODE
 	 */
-	function installPlugin($uploadfilename){
+	function installPlugin($uploadfilename,$forceupdate=false){
 		$currdate = mktime();
 		$pluginstmpdir = $GLOBALS["TMP_PATH"] . "/plugins_tmp/";
 		$tmppackagedir = $pluginstmpdir . $currdate . "/";
@@ -112,8 +112,18 @@ class PluginAdministration {
 					   @mkdir($newpluginpath);
 					}
 					else {
-						// plugin is registered and installed
-					 	return PLUGIN_ALLREADY_INSTALLED_ERROR;
+						if ($forceupdate){
+							// delete the plugin
+							$oldpluginid = $persistence->getPluginId($pluginname);
+							$oldplugin = $persistence->getPlugin($oldpluginid);
+							$persistence->deinstallPlugin($oldplugin);
+							@mkdir($newpluginpath);
+						}
+						else {
+							// plugin is registered and installed
+							// and we don't request to do an forced update
+					 		return PLUGIN_ALLREADY_INSTALLED_ERROR;
+						}
     				}
 				}
 				// everything fine, install it

@@ -6,6 +6,7 @@
  * $Id$
  * @package pluginengine
  */
+define("UNKNOWN_PLUGIN_ID",-1);
 
 class AbstractPluginIntegratorEnginePersistence {
 	var $connection;
@@ -206,6 +207,24 @@ class AbstractPluginIntegratorEnginePersistence {
 		else {
 			 $result->Close();
 			 return true;
+		}
+	}
+	
+	/**
+	* Searches for $pluginname in the plugins database
+	* @return the id of the plugin
+	*/
+	function getPluginId($pluginname){
+		$result = &$this->connection->execute("select * from plugins where pluginname=?", array($pluginname));
+		if (!$result){
+		   return UNKNOWN_PLUGIN_ID;
+		}
+		else {
+			if (!$result->EOF){
+				return $result->fields("pluginid");
+			}
+			$result->Close();
+			return true;
 		}
 	}
 }
