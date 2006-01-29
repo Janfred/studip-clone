@@ -33,11 +33,15 @@ foreach (SemesterData::GetSemesterArray() as $key => $value){
 $_views['sem_number_sql'] = "INTERVAL(start_time," . join(",",$sem_start_times) .")";
 $_views['sem_number_end_sql'] = "IF(duration_time=-1,-1,INTERVAL(start_time+duration_time," . join(",",$sem_start_times) ."))";
 
-$_views["SEM_TREE_GET_DATA"] = array("pk"=>"sem_tree_id","temp_table_type"=>"MyISAM",
-							"query"=>"SELECT a.*, c.Name AS studip_object_name, c.Institut_id, count(§) AS entries 
-							 FROM sem_tree a LEFT JOIN seminar_sem_tree st USING(sem_tree_id)
-							LEFT JOIN seminare b ON(st.seminar_id = b.Seminar_id AND b.status IN(&) AND §) LEFT JOIN Institute c ON (a.studip_object_id = c.Institut_id)
-							GROUP BY a.sem_tree_id ORDER BY priority");
+$_views["SEM_TREE_GET_DATA_NO_ENTRIES"] = array("pk"=>"sem_tree_id","temp_table_type"=>"HEAP",
+							"query"=>"SELECT a.*, c.Name AS studip_object_name 
+							 FROM sem_tree a LEFT JOIN Institute c ON (a.studip_object_id = c.Institut_id)
+							ORDER BY priority");
+$_views["SEM_TREE_GET_ENTRIES"] = array("pk"=>"sem_tree_id","temp_table_type"=>"HEAP",
+							"query" => "SELECT st.sem_tree_id, count(§) AS entries 
+									FROM seminare b INNER JOIN seminar_sem_tree st ON(st.seminar_id = b.Seminar_id)
+									WHERE b.status IN(&) AND §
+									GROUP BY st.sem_tree_id"); 
 $_views["SEM_TREE_GET_SEMIDS"] = array("pk"=>"seminar_id","temp_table_type"=>"HEAP",
 							"query" => "SELECT  b.seminar_id, " . $_views['sem_number_sql'] . " AS sem_number, " . $_views['sem_number_end_sql'] . " AS sem_number_end FROM seminar_sem_tree b INNER JOIN seminare c ON(b.seminar_id=c.Seminar_id AND c.status IN(&) AND §) WHERE sem_tree_id IN(&) §");
 $_views["SEM_TREE_GET_SEMDATA"] = array("query" => "SELECT a.seminar_id,IF(visible=0,CONCAT(Name, ' "._("(versteckt)")."'), Name) AS Name,username AS doz_uname, Nachname AS doz_name, " . $_views['sem_number_sql'] . " AS sem_number , " . $_views['sem_number_end_sql'] . " AS sem_number_end

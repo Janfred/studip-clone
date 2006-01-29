@@ -113,6 +113,7 @@ class TreeAbstract {
 		if (!is_object($tree_instance[$class_hash]) || $invalidate_cache){
 			$tree_instance[$class_hash] = new $class_name($args);
 		}
+		
 		return $tree_instance[$class_hash];
 	}
 	
@@ -395,7 +396,6 @@ class TreeAbstract {
 		if (!$num_entries_from_kids || !$this->hasKids($item_id)){
 				return $this->tree_data[$item_id]["entries"];
 		} else {
-
 			return $this->getNumEntriesKids($item_id);
 		}
 	}

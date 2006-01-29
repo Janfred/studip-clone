@@ -91,14 +91,12 @@ class StudipSemTree extends TreeAbstract {
 	*/
 	function init(){
 		parent::init();
-		$this->view->params[] = isset($this->sem_number) ? " IF(" . $GLOBALS['_views']['sem_number_sql'] . " IN(" . join(",",$this->sem_number) . "),b.seminar_id,NULL)"  : "b.seminar_id";
-		$this->view->params[] = $this->sem_status;
-		$this->view->params[] = $this->visible_only ? "visible=1" : "1";
-		$db = $this->view->get_query("view:SEM_TREE_GET_DATA");
-		$view = new DbView();
+		
+		$db = $this->view->get_query("view:SEM_TREE_GET_DATA_NO_ENTRIES");
+		
 		while ($db->next_record()){
 			$this->tree_data[$db->f("sem_tree_id")] = array("info" => $db->f("info"),"studip_object_id" => $db->f("studip_object_id"),
-															"entries" => $db->f("entries"));
+															"entries" => 0);
 			if ($db->f("studip_object_id")){
 				$name = $db->f("studip_object_name");
 			} else {
@@ -106,6 +104,17 @@ class StudipSemTree extends TreeAbstract {
 			}
 			$this->storeItem($db->f("sem_tree_id"), $db->f("parent_id"), $name, $db->f("priority"));
 		}
+	}
+	
+	function initEntries(){
+		$this->view->params[] = isset($this->sem_number) ? " IF(" . $GLOBALS['_views']['sem_number_sql'] . " IN(" . join(",",$this->sem_number) . "),b.seminar_id,NULL)"  : "b.seminar_id";
+		$this->view->params[] = $this->sem_status;
+		$this->view->params[] = $this->visible_only ? "visible=1" : "1";
+		$db = $this->view->get_query("view:SEM_TREE_GET_ENTRIES");
+		while ($db->next_record()){
+			$this->tree_data[$db->f("sem_tree_id")]['entries'] = $db->f('entries');
+		}
+		$this->entries_init_done = true;
 	}
 	
 	function getSemIds($item_id,$ids_from_kids = false){
@@ -152,6 +161,8 @@ class StudipSemTree extends TreeAbstract {
 	function getNumEntries($item_id, $num_entries_from_kids = false){
 		if (!$this->tree_data[$item_id])
 			return false;
+		if (!$this->entries_init_done) $this->initEntries();
+		
 		if ($this->enable_lonely_sem && $this->tree_data[$item_id]["studip_object_id"] && !isset($this->tree_data[$item_id]["lonely_sem"])){
 			$this->view->params[0] = $this->sem_status;
 			$this->view->params[1] = $this->visible_only ? "visible=1" : "1";
@@ -162,7 +173,9 @@ class StudipSemTree extends TreeAbstract {
 				$this->tree_data[$item_id]['entries'] += $db2->f(0);
 				$this->tree_data[$item_id]['lonely_sem'] += $db2->f(0);
 			}
-		}			
+		}
+		return parent::getNumEntries($item_id, $num_entries_from_kids);
+		/*
 		if (!$num_entries_from_kids){
 			return $this->tree_data[$item_id]["entries"];
 		} else {
@@ -175,6 +188,7 @@ class StudipSemTree extends TreeAbstract {
 			}
 			return $ret;
 		}
+		*/
 	}
 	
 	function getAdminRange($item_id){

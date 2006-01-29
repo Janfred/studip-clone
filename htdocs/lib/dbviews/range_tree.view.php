@@ -35,10 +35,10 @@ $_views["TREE_KIDS"] = array("pk"=>"item_id","temp_table_type"=>"HEAP",
 $_views["TREE_GET_DATA"] = array("pk"=>"item_id","temp_table_type"=>"HEAP",
 							"query"=>"SELECT a.*, b.Name AS studip_object_name, b.fakultaets_id FROM range_tree a 
 									LEFT JOIN Institute b ON (a.studip_object_id = b.Institut_id) ORDER BY priority");
-$_views["TREE_GET_DATA_WITH_SEM"] = array("pk"=>"item_id","temp_table_type"=>"HEAP",
-							"query"=>"SELECT a.*, b.Name AS studip_object_name, b.fakultaets_id,count(§) AS entries FROM range_tree a 
-									LEFT JOIN Institute b ON (a.studip_object_id = b.Institut_id) LEFT JOIN seminar_inst c USING(Institut_id)
-									 LEFT JOIN seminare d ON(c.seminar_id=d.Seminar_id  §) GROUP BY a.item_id ORDER BY priority");
+$_views["TREE_GET_SEM_ENTRIES"] = array("pk"=>"item_id","temp_table_type"=>"HEAP",
+							"query"=>"SELECT item_id,count(§) AS entries FROM range_tree a 
+									INNER JOIN seminar_inst c ON (a.studip_object_id = c.institut_id)
+									 INNER JOIN seminare d ON(c.seminar_id=d.Seminar_id  §) GROUP BY a.item_id");
 
 $_views["TREE_OBJECT_NAME"] = array("pk"=>"","temp_table_type"=>"HEAP",
 							"query"=>"SELECT Name FROM § WHERE § LIKE ? ");

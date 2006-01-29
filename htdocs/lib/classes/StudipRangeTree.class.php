@@ -73,10 +73,7 @@ class StudipRangeTree extends TreeAbstract {
 	function init(){
 		parent::init();
 		$this->tree_data['root']['studip_object_id'] = 'root';
-		$this->view->params[0] = (isset($this->sem_number)) ? " IF(" . $GLOBALS['_views']['sem_number_sql'] . " IN(" . join(",",$this->sem_number) . "),d.Seminar_id,NULL)"  : "d.Seminar_id";
-		$this->view->params[1] = (isset($this->sem_status)) ? " AND d.status IN('" . join("','", $this->sem_status) . "')" : " ";
-		$this->view->params[1] .= $this->visible_only ? " AND visible=1 " : "";
-		$db = $this->view->get_query("view:TREE_GET_DATA_WITH_SEM");
+		$db = $this->view->get_query("view:TREE_GET_DATA");
 		while ($db->next_record()){
 			$item_name = $db->f("name");
 			if ($db->f("studip_object")){
@@ -84,10 +81,22 @@ class StudipRangeTree extends TreeAbstract {
 			}
 			$this->tree_data[$db->f("item_id")] = array("studip_object" => $db->f("studip_object"),
 													"studip_object_id" => $db->f("studip_object_id"),
-													"fakultaets_id" => $db->f("fakultaets_id"),"entries" => $db->f("entries"));
+													"fakultaets_id" => $db->f("fakultaets_id"),"entries" => 0);
 			$this->storeItem($db->f("item_id"), $db->f("parent_id"), $item_name, $db->f("priority"));
 		}
 	}
+	
+	function initEntries(){
+		$this->view->params[0] = (isset($this->sem_number)) ? " IF(" . $GLOBALS['_views']['sem_number_sql'] . " IN(" . join(",",$this->sem_number) . "),d.Seminar_id,NULL)"  : "d.Seminar_id";
+		$this->view->params[1] = (isset($this->sem_status)) ? " AND d.status IN('" . join("','", $this->sem_status) . "')" : " ";
+		$this->view->params[1] .= $this->visible_only ? " AND visible=1 " : "";
+		$db = $this->view->get_query("view:TREE_GET_SEM_ENTRIES");
+		while ($db->next_record()){
+			$this->tree_data[$db->f("item_id")]['entries'] = $db->f('entries');
+		}
+		$this->entries_init_done = true;
+	}
+	
 	/**
 	* Returns Stud.IP range_id of the next "real" object
 	*
@@ -166,18 +175,9 @@ class StudipRangeTree extends TreeAbstract {
 	function getNumEntries($item_id, $num_entries_from_kids = false){
 		if (!$this->tree_data[$item_id])
 			return false;
-		if (!$num_entries_from_kids){
-			return $this->tree_data[$item_id]["entries"];
-		} else {
-			$item_list = $this->getKidsKids($item_id);
-			$item_list[] = $item_id;
-			$ret = 0;
-			$num_items = count($item_list);
-			for ($i = 0; $i < $num_items; ++$i){
-				$ret += $this->tree_data[$item_list[$i]]["entries"];
-			}
-			return $ret;
-		}
+		if (!$this->entries_init_done) $this->initEntries();
+		
+		return parent::getNumEntries($item_id, $num_entries_from_kids);
 	}
 	
 	function InsertItem($item_id, $parent_id, $item_name, $priority,$studip_object,$studip_object_id){

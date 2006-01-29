@@ -360,7 +360,7 @@ class SemBrowse {
 				LEFT JOIN user_info USING (user_id) 
 				LEFT JOIN seminar_sem_tree ON (seminare.Seminar_id = seminar_sem_tree.seminar_id $sem_tree_query)
 				LEFT JOIN seminar_inst ON (seminare.Seminar_id = seminar_inst.Seminar_id) 
-				LEFT JOIN Institute USING (Institut_id) 
+				LEFT JOIN Institute ON (Institute.Institut_id = seminar_inst.institut_id)
 				WHERE seminare.Seminar_id IN('" . join("','", array_keys($this->sem_browse_data['search_result'])) . "')");
 			$db = new DB_Seminar($query);
 			$snap = new DbSnapShot($db);

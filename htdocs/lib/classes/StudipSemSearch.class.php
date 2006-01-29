@@ -301,7 +301,7 @@ class StudipSemSearch {
 		
 		if (isset($_REQUEST[$this->form_name . "_scope_choose"]) && $_REQUEST[$this->form_name . "_scope_choose"] != 'root'){
 			if(!is_object($this->sem_tree)){
-				$this->sem_tree =& TreeAbstract::GetInstance("StudipSemTree");
+				$this->sem_tree =& TreeAbstract::GetInstance("StudipSemTree", false);
 			}
 			$this->view->params[0] = (is_array($sem_types) ? $sem_types : $this->sem_tree->sem_status);
 			$this->view->params[1] = $this->visible_only ? "visible=1" : "1";
