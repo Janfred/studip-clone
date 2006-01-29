@@ -769,27 +769,14 @@ function FixLinks ($data = "", $fix_nl = TRUE, $nl_to_br = TRUE, $img = FALSE, $
 
 	$img = $img ? 'TRUE' : 'FALSE';
 	$extern = $extern ? 'TRUE' : 'FALSE';
-	// add protocol type and transform the domain names of links within Stud.IP
-	if (is_array($STUDIP_DOMAINS)) {
-		$domains = '';
-		foreach ($STUDIP_DOMAINS as $studip_domain)
-			$domains .= '|' . preg_quote($studip_domain);
-		//$domains = preg_replace("'(\|.+?)((/.*?)|\|)'", "\\1.*?\\2", $domains);
-		$domains = preg_replace("'(\|.+?)((/.*?)|\|)'", "\\1[^/]*?\\2", $domains);
-		$domains = substr($domains, 1);
-		$user_domain = preg_replace("'^($domains)(.*)$'i", "\\1",
-				$_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
-		$pattern = array("/([ \t\]\n]|^)www\./i",
-					"/([ \t\]\n]|^)ftp\./i",
-					"'http(s?)\://($domains)((/[^<\s]*[^\.\s<])*)'i");
-		$replace = array("\\1http://www.", "\\1ftp://ftp.", "http\\1://$user_domain\\3");
-	}
-	else {
-		$pattern = array("/([ \t\]\n]|^)www\./i", "/([ \t\]\n]|^)ftp\./i");
-		$replace = array("\\1http://www.", "\\1ftp://ftp.");
-	}
+	// add protocol type
+	$pattern = array("/([ \t\]\n]|^)www\./i", "/([ \t\]\n]|^)ftp\./i");
+	$replace = array("\\1http://www.", "\\1ftp://ftp.");
 	$fixed_text = preg_replace($pattern, $replace, $data);
-
+	
+	//transform the domain names of links within Stud.IP
+	$fixed_text = TransformInternalLinks($fixed_text);
+	
 	$pattern = array(
 					'#((\[(img)(\=([^\n\f:]+?))?(:(\d{1,3}%?))?(:(center|right))?(:([^\]]+))?\]|\[(?!img)([^\n\f\[]+)\])?(((https?://|ftp://)(['.$chars.':]+@)?)['.$chars.']+(\.['.$chars.':]+)*/?([^<\s]*[^\.\s<])*))#ie',
 					'#(?<=\s|^|\>)(\[([^\n\f]+?)\])?(['.$chars.']+(\.['.$chars.']+)*@(['.$chars.']+(\.['.$chars.']+)+))#ie'
@@ -1295,5 +1282,28 @@ function MakeToolbar ($icon,$URL,$text,$tooltip,$size,$target="_top",$align="cen
 			  .'<img border="0" src="'. $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'] . 'pictures/blank.gif" height="4" width="30">';
 	$toolbar .= "</td>\n";
 	return $toolbar;
+}
+
+/**
+* detects internal links in a given string and convert used domain to the domain
+* actually used (only necessary if more than one domain exists)
+*
+* @param	string	text to convert
+* @return	string  text with convertes internal links
+*/
+function TransformInternalLinks($str){
+	static $domain_data = null;
+	if (is_array($GLOBALS['STUDIP_DOMAINS']) && count($GLOBALS['STUDIP_DOMAINS']) > 1) {
+		if (is_null($domain_data)){	
+			$domain_data['domains'] = '';
+			foreach ($GLOBALS['STUDIP_DOMAINS'] as $studip_domain) $domain_data['domains'] .= '|' . preg_quote($studip_domain);
+			$domain_data['domains'] = preg_replace("'(\|.+?)((/.*?)|\|)'", "\\1[^/]*?\\2", $domain_data['domains']);
+			$domain_data['domains'] = substr($domain_data['domains'], 1);
+			$domain_data['user_domain'] = preg_replace("'^({$domain_data['domains']})(.*)$'i", "\\1", $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+		}
+		return preg_replace("'http(s?)\://({$domain_data['domains']})((/[^<\s]*[^\.\s<])*)'i", "http\\1://{$domain_data['user_domain']}\\3", $str);
+	} else {
+		return $str;
+	}
 }
 ?>

@@ -30,6 +30,7 @@
 define('MAGPIE_CACHE_DIR', $TMP_PATH.'/magpie_cache');
 
 require_once('magpierss/rss_fetch.inc');
+require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'visual.inc.php');
 
 class RSSFeed {
 
@@ -43,18 +44,8 @@ class RSSFeed {
 	/** Constructor
 	*/
 	function RSSFeed($rssfeed_url, $max_items = 15) {
-		if ($rssfeed_url=="")
-		die(_("Bitte eine gültige URL angeben!"));
-		
-		if (is_array($GLOBALS['STUDIP_DOMAINS'])) {
-			$domains = '';
-			foreach ($GLOBALS['STUDIP_DOMAINS'] as $studip_domain)
-			$domains .= '|' . preg_quote($studip_domain);
-			$domains = preg_replace("'(\|.+?)((/.*?)|\|)'", "\\1[^/]*?\\2", $domains);
-			$domains = substr($domains, 1);
-			$user_domain = preg_replace("'^($domains)(.*)$'i", "\\1", $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
-			$rssfeed_url = preg_replace("'http(s?)\://($domains)((/[^<\s]*[^\.\s<])*)'i", "http\\1://$user_domain\\3", $rssfeed_url);
-		}
+		if ($rssfeed_url=="") die(_("Bitte eine gültige URL angeben!"));
+		$rssfeed_url = TransformInternalLinks($rssfeed_url);
 		$parsed_url = parse_url($rssfeed_url);
 		$this->domain = $parsed_url["host"];
 		$this->internal_feed = (($parsed_url['host'] == $_SERVER['HTTP_HOST'] || $parsed_url['host'].':'.$parsed_url['port'] == $_SERVER['HTTP_HOST']) && strpos($parsed_url['path'], $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']) === 0);
@@ -86,7 +77,7 @@ class RSSFeed {
 					<IMG SRC=\"pictures/".(!$this->internal_feed ? 'link_extern.gif' : 'link_intern.gif" hspace="2')."\">
 					</TD>
 					<TD ALIGN=\"left\" VALIGN=\"TOP\">
-					<A HREF=\"".$v["link"]."\" ".(!$this->internal_feed  ? "TARGET=\"_blank\"" : "") . " TITLE=\"".htmlReady($desc)."\" ALT=\"".htmlReady($v["description"])."\">
+					<A HREF=\"".TransformInternalLinks($v["link"])."\" ".(!$this->internal_feed  ? "TARGET=\"_blank\"" : "") . " TITLE=\"".htmlReady($desc)."\" ALT=\"".htmlReady($v["description"])."\">
 					<FONT SIZE=\"-1\">".htmlReady($v["title"])."</FONT>
 					</A></TD></TR>\n";
 				if ($desc ) {
