@@ -168,7 +168,7 @@ function createSelectedZip ($file_ids, $perm_check = TRUE) {
 		}
 
 		//zip stuff
-		create_zip_from_directory($tmp_full_path);
+		create_zip_from_directory($tmp_full_path, $tmp_full_path);
 		rmdirr($tmp_full_path);
 		@rename($tmp_full_path .".zip" , $tmp_full_path);
 	}
@@ -189,7 +189,7 @@ function createFolderZip ($folder_id) {
 	createTempFolder($folder_id, $tmp_full_path);
 	
 	//zip stuff
-	create_zip_from_directory($tmp_full_path);
+	create_zip_from_directory($tmp_full_path, $tmp_full_path);
 	rmdirr($tmp_full_path);
 	@rename($tmp_full_path .".zip" , $tmp_full_path);
 	return $zip_file_id;
@@ -1856,6 +1856,7 @@ function rmdirr($dirname){
 }
 
 function create_zip_from_file($file_name, $zip_file_name){
+	if (strtolower(substr($zip_file_name, -3)) != 'zip' ) $zip_file_name = $zip_file_name . '.zip';
 	if ($GLOBALS['ZIP_USE_INTERNAL']){
 		$archiv = new PclZip($zip_file_name);
 		$v_list = $archiv->create($file_name, PCLZIP_OPT_REMOVE_ALL_PATH);
@@ -1866,17 +1867,19 @@ function create_zip_from_file($file_name, $zip_file_name){
 	}
 }
 
-function create_zip_from_directory($fullpath){
+function create_zip_from_directory($fullpath, $zip_file_name){
+	if (strtolower(substr($zip_file_name, -3)) != 'zip' ) $zip_file_name = $zip_file_name . '.zip';
 	if ($GLOBALS['ZIP_USE_INTERNAL']){
-		$archiv = new PclZip($fullpath . '.zip');
-		$v_list = $archiv->create($fullpath, PCLZIP_OPT_REMOVE_PATH,$fullpath);
+		$archiv = new PclZip($zip_file_name);
+		$v_list = $archiv->create($fullpath, PCLZIP_OPT_REMOVE_PATH, $fullpath);
 		return $v_list;
 	} else if (@file_exists($GLOBALS['ZIP_PATH']) || ini_get('safe_mode')){
 		//zip stuff
 		$zippara = (ini_get('safe_mode')) ? ' -R ':' -r ';
-		@chdir($fullpath);
-		exec ($GLOBALS['ZIP_PATH'] . ' -q ' . $GLOBALS['ZIP_OPTIONS'] . ' ' . $zippara . $fullpath . ' *',$output, $ret);
-		@chdir($GLOBALS['ABSOLUTE_PATH_STUDIP']);
+		if (@chdir($fullpath)) {
+			exec ($GLOBALS['ZIP_PATH'] . ' -q -D ' . $GLOBALS['ZIP_OPTIONS'] . ' ' . $zippara . $zip_file_name . ' *',$output, $ret);
+			@chdir($GLOBALS['ABSOLUTE_PATH_STUDIP']);
+		}
 		return $ret;
 	}
 }

@@ -639,7 +639,7 @@ function in_archiv ($sem_id) {
 		
 		//zip all the stuff
 		$archiv_full_path = "$ARCHIV_PATH/$archiv_file_id";
-		create_zip_from_directory($tmp_full_path);
+		create_zip_from_directory($tmp_full_path, $tmp_full_path);
 	 	@rename($tmp_full_path . '.zip', $archiv_full_path);
 		rmdirr($tmp_full_path);	 	
 	} else
