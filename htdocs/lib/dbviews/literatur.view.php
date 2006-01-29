@@ -36,7 +36,7 @@ $GLOBALS['_views']["LIT_DEL_ELEMENT"] = array("query" => "DELETE FROM lit_catalo
 $GLOBALS['_views']["LIT_GET_CLIP_ELEMENTS"] = array("query" => "SELECT catalog_id, " . $GLOBALS['_views']['element_name_short_sql'] . " as short_name 
 													FROM  lit_catalog WHERE catalog_id IN(&) ORDER BY short_name");
 $GLOBALS['_views']["LIT_GET_LIST_BY_RANGE"] = array("query" => "SELECT a.*," . $_fullname_sql['no_title_short'] . " AS fullname,username FROM lit_list a 
-													LEFT JOIN auth_user_md5  USING(user_id) LEFT JOIN user_info USING(user_id) WHERE range_id=? 
+													LEFT JOIN auth_user_md5  USING(user_id) LEFT JOIN user_info ON ( auth_user_md5.user_id = user_info.user_id )  WHERE range_id=? 
 													ORDER BY priority");
 $GLOBALS['_views']["LIT_GET_LIST_COUNT_BY_RANGE"] = array("query" => "SELECT COUNT(IF(visibility=1,list_id,NULL)) AS visible_list, COUNT(IF(visibility=0,list_id,NULL)) AS invisible_list 
 													FROM lit_list WHERE range_id=? GROUP BY range_id
@@ -46,7 +46,7 @@ $GLOBALS['_views']["LIT_GET_LIST"] = array("query" => "SELECT * FROM lit_list WH
 $GLOBALS['_views']["LIT_GET_LIST_CONTENT"] = array("query" => "SELECT a.*," . $GLOBALS['_views']['element_name_short_sql'] . " as short_name ,"
 													. $_fullname_sql['no_title_short'] . " AS fullname, username  FROM lit_list_content a 
 													LEFT JOIN lit_catalog USING(catalog_id) LEFT JOIN auth_user_md5 ON(auth_user_md5.user_id=a.user_id) 
-													LEFT JOIN user_info USING(user_id) 
+													LEFT JOIN user_info ON ( auth_user_md5.user_id = user_info.user_id ) 
 													WHERE list_id IN(&) ORDER BY list_id,priority");
 $GLOBALS['_views']["LIT_UPD_LIST_CONTENT"] = array("query" => "UPDATE lit_list_content SET list_id=?, catalog_id=?, user_id=?,note=?,priority=?, chdate=UNIX_TIMESTAMP() WHERE list_element_id=?");
 $GLOBALS['_views']["LIT_INS_LIST_CONTENT"] = array("query" => "INSERT INTO lit_list_content (list_id,catalog_id,user_id,note,priority,chdate,mkdate,list_element_id) VALUES (?,?,?,?,?,UNIX_TIMESTAMP(),UNIX_TIMESTAMP(),?)");

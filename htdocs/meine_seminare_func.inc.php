@@ -200,8 +200,8 @@ function get_obj_clause ($table_name, $range_field, $count_field, $if_clause,
 	}
 	$max_field = 'chdate';
 	return "SELECT " . ($add_fields ? $add_fields . ", " : "" ) . " my.object_id, COUNT($count_field) as count, COUNT(IF($if_clause, $count_field, NULL)) AS neue,
-	MAX(IF($if_clause, $max_field, 0)) AS last_modified FROM myobj_{$user_id} my LEFT JOIN object_user_visits b ON (b.object_id = $object_field AND b.user_id = '$user_id' AND b.type $type_sql)
-	INNER JOIN $table_name GROUP BY my.object_id";
+	MAX(IF($if_clause, $max_field, 0)) AS last_modified FROM myobj_{$user_id} my INNER JOIN $table_name LEFT JOIN object_user_visits b ON (b.object_id = $object_field AND b.user_id = '$user_id' AND b.type $type_sql)
+	GROUP BY my.object_id";
 }
 
 
