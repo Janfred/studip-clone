@@ -211,13 +211,8 @@ class PluginAdministration {
 		$persistence = PluginEngine::getPluginPersistence();
 		$plugin = $persistence->getPlugin($pluginid);
 		$file_id = "pluginpackage_" . $pluginid . ".zip";
-		create_zip_from_directory($this->environment->getBasepath() . $plugin->getPluginpath());
-		// copy the generated file into the download location
-		@copy($this->environment->getBasepath() . $plugin->getPluginpath() . ".zip",$GLOBALS["TMP_PATH"] . "/" . $file_id);
-		// delete the generated file
-		@unlink($this->environment->getBasepath() . $plugin->getPluginpath() . ".zip");
-		$link = $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . "sendfile.php?file_id=" . $file_id . "&type=4";
-		return $link;
+		create_zip_from_directory($this->environment->getBasepath() . $plugin->getPluginpath(), $GLOBALS["TMP_PATH"] . "/" . $file_id);
+		return GetDownloadLink($file_id, $file_id, 4, 'force');
 	}
 }
 ?>
