@@ -1,7 +1,7 @@
 <?
 // first of all init I18N because seminar_open is not called here...
-require_once("$ABSOLUTE_PATH_STUDIP/language.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
+require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'].'language.inc.php');
+require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'].'visual.inc.php');
 global $_language, $_language_path, $fail_count;
 if (!isset($_language))
 	$_language = get_accepted_languages();
@@ -13,9 +13,14 @@ $_language_path = init_i18n($_language);
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 	<meta name="copyright" content="Stud.IP-Crew (crew@studip.de)">
-  <title>Stud.IP</title>
-	<link rel="stylesheet" href="style.css" type="text/css">
-<script type="text/javascript" language="javascript" src="md5.js"></script>
+<?
+if (!isset($_html_head_title))  // if not set, use default title
+	$_html_head_title = ($GLOBALS['HTML_HEAD_TITLE']) ? $GLOBALS['HTML_HEAD_TITLE'] : 'Stud.IP';
+
+echo '<title>'.$_html_head_title.'</title>'."\n";
+?>
+	<link rel="stylesheet" href="<?=$GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']?>style.css" type="text/css">
+<script type="text/javascript" language="javascript" src="<?=$GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']?>md5.js"></script>
 <script type="text/javascript" language="javascript">
 <!--
   function doChallengeResponse() {
@@ -39,14 +44,14 @@ $_language_path = init_i18n($_language);
 	<table class="toolbar" border="0" width="100%" cellspacing="0" cellpadding="0" height="25">
 		<tr>
 <?
-		echo MakeToolbar("pictures/logo2.gif","#"," "," ",40,"_top");
+		echo MakeToolbar($GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'].'pictures/logo2.gif',"#"," "," ",40,"_top");
 ?>
 		</tr>
 	</table>
 
 
 <table width="75%" align="center" border=0 cellpadding=0 cellspacing=0>
-<tr><td class="topic"><img src="pictures/login.gif" border="0"><b>&nbsp;<?=_("Stud.IP - Login")?></b></td></tr>
+<tr><td class="topic"><img src="<?=$GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']?>pictures/login.gif" border="0"><b>&nbsp;<?=_("Stud.IP - Login")?></b></td></tr>
 <tr><td class="blank">
 
 	<? 
@@ -158,8 +163,8 @@ $_language_path = init_i18n($_language);
 
 	</table>
 	</blockquote></td>
-	<td align=right class=blank valign=top><img src="pictures/maus.jpg"></td></tr>
-	<tr><td class=blank colspan=2 align=center><br><br><img src="./locale/<?=$_language_path ?>/LC_PICTURES/willkommen.gif" /></td></tr>
+	<td align=right class=blank valign=top><img src="<?=$GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']?>pictures/maus.jpg"></td></tr>
+	<tr><td class=blank colspan=2 align=center><br><br><img src="<?=$GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']?>locale/<?=$_language_path ?>/LC_PICTURES/willkommen.gif" /></td></tr>
 	<tr><td class=blank colspan=2>&nbsp;</td></tr>
 	</table>
 	</form>

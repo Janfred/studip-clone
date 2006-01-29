@@ -1286,13 +1286,13 @@ function MakeToolbar ($icon,$URL,$text,$tooltip,$size,$target="_top",$align="cen
 	} else {
 		$tool = tooltip($tooltip,TRUE,TRUE);
 	}
-	$toolbar = "<td class=\"toolbar\" align=\"$align\">";
+	$toolbar = '<td class="toolbar" align="'.$align.'">';
 
-	$toolbar .= "<img border=\"0\" src=\"pictures/blank.gif\" height=\"1\" width=\"45\"><br>"
-			  ."<a class=\"toolbar\" href=\"$URL\" target=\"$target\" ".(($accesskey !== FALSE) ? "accesskey=\"$accesskey\"" : "")."><img border=\"0\" src=\"$icon\" ".$tool."><br>"
-			  ."<img border=\"0\" src=\"pictures/blank.gif\" height=\"6\" width=\"$size\"><br>"
-			  ."<b><font size=\"2\">".$text."</font></b></a><br>"
-			  ."<img border=\"0\" src=\"pictures/blank.gif\" height=\"4\" width=\"30\">";
+	$toolbar .= '<img border="0" src="'. $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'] . 'pictures/blank.gif" height="1" width="45"><br>'
+			  .'<a class="toolbar" href="'.$URL.'" target="'.$target.'" '.(($accesskey !== FALSE) ? "accesskey=\"$accesskey\"" : '').'><img border="0" src="'.$icon.'" '.$tool.'><br>'
+			  .'<img border="0" src="'. $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'] .'pictures/blank.gif" height="6" width="'.$size.'"><br>'
+			  .'<b><font size="2">'.$text.'</font></b></a><br>'
+			  .'<img border="0" src="'. $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'] . 'pictures/blank.gif" height="4" width="30">';
 	$toolbar .= "</td>\n";
 	return $toolbar;
 }
