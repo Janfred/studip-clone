@@ -591,7 +591,7 @@ if ($form == 5) {
 	if ($tag == _("tt")) $tag=0;
 	if ($jahr == _("jjjj")) $jahr=0;
 
-	if ((!checkdate($monat, $tag, $jahr)) && ($monat) && ($tag) && ($jahr))
+	if ((!checkdate((int)$monat, (int)$tag, (int)$jahr)) && ($monat) && ($tag) && ($jahr))
 		{
 		$errormsg=$errormsg."error§"._("Bitte geben Sie ein g&uuml;ltiges Datum ein!")."§";
 		$sem_create_data["sem_start_termin"] = -1;
@@ -861,7 +861,7 @@ if (($form == 3) && ($jump_next_x))
 							$errormsg=$errormsg."error§"._("Bitte f&uuml;llen Sie beide Felder f&uuml;r Start- und Endzeit der jeweiligen Termine aus!")."§";
 						$just_informed=TRUE;
 						}
-				if (!checkdate ($sem_create_data["term_monat"][$i], $sem_create_data["term_tag"][$i], $sem_create_data["term_jahr"][$i]))
+				if (!checkdate ((int)$sem_create_data["term_monat"][$i], (int)$sem_create_data["term_tag"][$i], (int)$sem_create_data["term_jahr"][$i]))
 						{
 						if (!$just_informed2)
 							$errormsg=$errormsg."error§"._("Sie haben ein ung&uuml;ltiges Datum eingegeben. Bitte korrigieren Sie das Datum!")."§";

@@ -297,7 +297,7 @@ class EvalCommon {
    */
   function date2timestamp ($day, $month, $year, 
 			   $hour = 0, $minute = 0, $second = 0) {
-      if (!checkdate ($month, $day, $year) ||
+      if (!checkdate ((int)$month, (int)$day, (int)$year) ||
 	  $hour < 0 || $hour > 24 ||
 	  $minute < 0 || $minute > 59 ||
 	  $second < 0 || $second > 59) {

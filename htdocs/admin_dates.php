@@ -191,7 +191,7 @@ if ($new) {
 	if ($resource_id == "FALSE")
 		$resource_id = FALSE;
 	
-	if (!checkdate($monat,$tag,$jahr)) {
+	if (!checkdate((int)$monat,(int)$tag,(int)$jahr)) {
 		$do=FALSE;
 		$result="error§" . _("Bitte geben Sie ein g&uuml;ltiges Datum ein!") . "§";
 	}
@@ -210,7 +210,7 @@ if ($new) {
 	}
 	
 	//check, if a single date should be created when it is forbidden (no single dates corresponding to metadates are allowed when using resources, only a whole schedule creating with date-assi is fine...!)
-	if ($GLOBALS["RESOURCES_ENABLE"]) {
+	if ($GLOBALS["RESOURCES_ENABLE"] && $do) {
 		if ((isMetadateCorrespondingDate($termin_id, $start_time, $end_time, $admin_dates_data["range_id"])) && (!$term_data["art"]) && (!isSchedule($admin_dates_data["range_id"]))) {
 			$do = FALSE;
 				if ($TERMIN_TYP[$art]["sitzung"])
@@ -218,7 +218,7 @@ if ($new) {
 				else
 					$result .= "info§" . sprintf(_("Sie wollen einen Sondertermin (%s) zu den regelm&auml;&szlig;igen Veranstaltungszeiten anlegen. Bitte verwenden zun&auml;chst den Ablaufplanassistenten und &auml;ndern dann die Terminart f&uuml;r den gew&uuml;nschten Termin in %s "), $TERMIN_TYP[$art]["name"], $TERMIN_TYP[$art]["name"]) . "§";
 
-		} elseif ($GLOBALS["RESOURCES_ALLOW_ROOM_REQUESTS"]) {
+		} elseif ($GLOBALS["RESOURCES_ALLOW_ROOM_REQUESTS"] && $do) {
 			$resObjPrm =& ResourceObjectPerms::Factory($resource_id);
 			if (!$resObjPrm->havePerm("autor"))
 				$result .= "info§" . sprintf(_("Sie haben einen neuen Termin angelegt. Um f&uuml;r diesen Termin einen Raum zu buchen, m&uuml;ssen Sie f&uuml;r diesen Termin eine %sRaumanfrage%s an den zust&auml;ndigen Raumadministrator stellen."), "<a href=\"admin_room_requests.php?seminar_id=".$admin_dates_data["range_id"]."&termin_id=".$termin_id."\">", "</a>") . "§";

@@ -213,7 +213,7 @@ if (($turnus_refresh) || ($term_metadates["start_woche"] ==-1))
 	if ($tag == _("tt")) $tag=0;
 	if ($jahr == _("jjjj")) $jahr=0;	
 
-	if (!checkdate($monat, $tag, $jahr) && ($monat) && ($tag) && ($jahr))
+	if (!checkdate((int)$monat, (int)$tag, (int)$jahr) && ($monat) && ($tag) && ($jahr))
 		{
 		$errormsg=$errormsg."error§"._("Bitte geben Sie ein g&uuml;ltiges Datum ein!")."§";
 		$check=FALSE;			

@@ -685,7 +685,7 @@ function edit_dates($stunde,$minute,$monat,$tag,$jahr,$end_stunde, $end_minute, 
 	}
 	
 	$do=TRUE;
-	if (!checkdate($monat,$tag,$jahr)) {
+	if (!checkdate((int)$monat,(int)$tag,(int)$jahr)) {
 		$do=FALSE;
 		$result= "error§" . _("Bitte geben Sie ein g&uuml;ltiges Datum ein!"). "§";
 	}
