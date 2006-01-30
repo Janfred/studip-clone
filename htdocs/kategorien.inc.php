@@ -1,4 +1,25 @@
 <?
+// +---------------------------------------------------------------------------+
+// This file is part of Stud.IP
+// kategorien.inc.php
+// 
+// Copyright (C) 2000 
+// +---------------------------------------------------------------------------+
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or any later version.
+// +---------------------------------------------------------------------------+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+// +---------------------------------------------------------------------------+
+// $Id$
+
 function print_freie($username) {	
 	
 	global $view,$PHP_SELF,$auth;
@@ -9,66 +30,66 @@ function print_freie($username) {
 	
 	$db->query("SELECT * FROM auth_user_md5 LEFT JOIN kategorien ON(range_id=user_id) WHERE username='$username' AND NOT ISNULL(range_id) ORDER BY priority ");
 
-	echo "<tr><td align=\"left\" valign=\"top\" class=\"blank\"><blockquote><br>";
+	echo '<tr><td align="left" valign="top" class="blank"><blockquote><br />'. "\n";
 	echo _("Hier können Sie beliebige eigene Kategorien anlegen. Diese Kategorien erscheinen auf Ihrer pers&ouml;nlichen Homepage. Mit den Pfeilsymbolen k&ouml;nnen sie die Reihenfolge, in der die Kategorien angezeigt werden, ver&auml;ndern.");
-	echo "<br>\n";
+	echo "<br />\n";
 	echo _("Verwenden Sie die Option \"f&uuml;r andere unsichtbar\", um Memos anzulegen, die nur f&uuml;r Sie selbst auf der Homepage sichtbar werden - andere Nutzer k&ouml;nnen diese Daten nicht einsehen.");
-	echo "\n<br><br></blockquote></td></tr>\n<tr><td class=blank><table width=100% class=blank border=0 cellpadding=0 cellspacing=0>";
-	echo "<form action=\"$PHP_SELF?freie=update_freie&username=$username&view=$view\" method=\"POST\" name=\"edit_freie\">";
+	echo "\n<br /><br /></blockquote></td></tr>\n".'<tr><td class="blank">';
+	echo '<form action="'.$PHP_SELF.'?freie=update_freie&username='.$username.'&view='.$view.'" method="POST" name="edit_freie">';
+	echo '<table width="100%" class="blank" border="0" cellpadding="0" cellspacing="0">';
 	if (!$db->num_rows())
-		echo "<tr><td class=\"".$cssSw->getClass()."\"><font size=-1><b><blockquote>" . _("Es existieren zur Zeit keine eigenen Kategorien.") . "</blockquote></b></font></blockquote></td></tr>\n";
-	echo "<tr><td class=\"".$cssSw->getClass()."\"><blockquote>" . _("Kategorie") . "&nbsp; <a href='$PHP_SELF?freie=create_freie&view=$view&username=$username'>" . makeButton("neuanlegen") . "</a></blockquote></td></tr>";
+		echo '<tr><td class="'.$cssSw->getClass().'"><font size="-1"><b><blockquote>' . _("Es existieren zur Zeit keine eigenen Kategorien.") . "</blockquote></b></font></td></tr>\n";
+	echo '<tr><td class="'.$cssSw->getClass().'"> <blockquote>' . _("Kategorie") . '&nbsp; <a href="'.$PHP_SELF.'?freie=create_freie&view='.$view.'&username='.$username.'">' . makeButton("neuanlegen") . "</a></blockquote></td></tr>\n";
 	$count = 0;
 	$hidden_count = 0;
 	while ($db->next_record() ){
 		
-		IF ((($auth->auth["perm"]=="root") OR ($auth->auth["perm"]=="admin")) AND $db->f("hidden")=='1' AND $username!=$auth->auth["uname"]) {
+		IF ((($auth->auth["perm"] == "root") OR ($auth->auth["perm"] == "admin")) AND $db->f("hidden") == '1' AND $username != $auth->auth["uname"]) {
 			$hidden_count++;
 			}
 		ELSE {
 			$cssSw->switchClass();
 			$id = $db->f("kategorie_id");
-			echo "<tr><td class=\"".$cssSw->getClass()."\">";
+			echo '<tr><td class="'.$cssSw->getClass().'">';
 			if ($count)
-				echo "<br />";
-			echo "<input type=\"hidden\" name=\"freie_id[]\" value=\"".$db->f("kategorie_id")."\">\n";
-			echo "<blockquote><input type='text' name='freie_name[]' style=\"width: 50%\" value='".htmlReady($db->f("name"))."' size=40>";
-			echo "&nbsp; &nbsp; &nbsp; <input type=checkbox name='freie_secret[$count]' value='1'";
-			IF ($db->f("hidden")=='1') 
+				echo "<br />\n";
+			echo '<input type="hidden" name="freie_id[]" value="'.$db->f("kategorie_id")."\">\n";
+			echo '<blockquote><input type="text" name="freie_name[]" style="width: 50%" value="' . htmlReady($db->f("name")).'" size="40">';
+			echo '&nbsp; &nbsp; &nbsp; <input type=checkbox name="freie_secret['.$count.']" value="1"';
+			IF ($db->f("hidden") == '1') 
 				echo " checked";
 			echo ">" . _("f&uuml;r andere unsichtbar") . "&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;";
 			if ($count){
-				echo "\n<a href=\"$PHP_SELF?freie=order_freie&direction=up&username=$username&view=$view&cat_id=" . $db->f("kategorie_id")
-				. "\"><img src=\"pictures/move_up.gif\" hspace=\"4\" width=\"13\" height=\"11\" border=\"0\" " 
-				. tooltip(_("Kategorie nach oben verschieben")) ."></a>";
+				echo "\n".'<a href="'.$PHP_SELF.'?freie=order_freie&direction=up&username='.$username.'&view='.$view.'&cat_id=' . $db->f('kategorie_id')
+				. '"><img src="pictures/move_up.gif" hspace="4" width="13" height="11" border="0" ' 
+				. tooltip(_("Kategorie nach oben verschieben")) .'></a>';
 			}
 			if (($count+$hidden_count) != ($db->num_rows()-1) ){
-				echo "\n<a href=\"$PHP_SELF?freie=order_freie&direction=down&username=$username&view=$view&cat_id=" . $db->f("kategorie_id")
-				. "\"><img src=\"pictures/move_down.gif\" hspace=\"4\" width=\"13\" height=\"11\" border=\"0\" " 
-				. tooltip(_("Kategorie nach unten verschieben")) ."></a>";
+				echo "\n".'<a href="'.$PHP_SELF.'?freie=order_freie&direction=down&username='.$username.'&view='.$view.'&cat_id=' . $db->f("kategorie_id")
+				. '"><img src="pictures/move_down.gif" hspace="4" width="13" height="11" border="0" ' 
+				. tooltip(_("Kategorie nach unten verschieben")) .'></a>';
 			}
-			echo "<br>&nbsp;</td></tr>";
+			echo "<br />\n&nbsp;</blockquote></td></tr>\n";
 			// Breite für textarea
-			$cols = $auth->auth["jscript"]?ceil($auth->auth["xres"]/13):50;
-			echo "<tr><td class=\"".$cssSw->getClass()."\"><blockquote><textarea  name='freie_content[]' style=\"width: 90%\" cols=\"$cols\" rows=7 wrap=virtual>".htmlReady($db->f("content"))."</textarea>";
-			echo "<br><br><input type='IMAGE' name='update' border=0 align=\"absmiddle\"" . makeButton("uebernehmen", "src") . " value='" . _("ver&auml;ndern") . "'>";
-			echo "&nbsp;<a href='$PHP_SELF?freie=delete_freie&freie_id=$id&view=$view&username=$username'>";
-			echo makeButton("loeschen") . "</a><br />&nbsp; </td></tr>";
+			$cols = ($auth->auth["jscript"])? ceil($auth->auth["xres"]/13):50;
+			echo '<tr><td class="'.$cssSw->getClass(). '"><blockquote><textarea  name="freie_content[]" style="width: 90%" cols="' . $cols . '" rows="7" wrap="virtual">' . htmlReady($db->f('content')) . '</textarea>';
+			echo '<br /><br /><input type="IMAGE" name="update" border="0" align="absmiddle" ' . makeButton("uebernehmen", "src") . ' value="' . _("ver&auml;ndern") . '">';
+			echo '&nbsp;<a href="'.$PHP_SELF.'?freie=delete_freie&freie_id='.$id.'&view='.$view.'&username='.$username.'">';
+			echo makeButton("loeschen") . "</a><br />\n&nbsp; </blockquote></td></tr>\n";
 			$count++;
 			}
 		}
 	if ($hidden_count) {
+		echo '<tr><td class="'.$cssSw->getClass().'"><font size="-1"><b><blockquote>';
 		if ($hidden_count > 1) {
-			echo "<tr><td class=\"".$cssSw->getClass()."\"><font size=-1><b><blockquote>";
 			printf(_("Es existiereren zus&auml;tzlich %s Kategorien, die Sie nicht einsehen und bearbeiten k&ouml;nnen."), $hidden_count);
-			echo "</b></font></blockquote></td></tr>\n";
 		} else {
-			echo "<tr><tdclass=\"".$cssSw->getClass()."\" ><font size=-1><b><blockquote>";
 			print(_("Es existiert zus&auml;tzlich eine Kategorie, die Sie nicht einsehen und bearbeiten k&ouml;nnen."));
-			echo "</b></font></blockquote></td></tr>\n";
+			
 	 	}
+	 	echo '</blockquote></b></font></td></tr>'."\n";
 	}
-	echo "</form></td></tr></table></td></tr>";
+	echo '</td></tr></table></form></td></tr>'."\n";
 }
 
 function create_freie() {
