@@ -47,7 +47,7 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" =>
 		//Count new and old msg's
 		$old_msg = count_messages_from_user('in', " AND message_user.readed = 1 ");
 		$new_msg = count_messages_from_user('in', " AND message_user.readed = 0 ");
-		
+		$new_msgs = array();
 		if ($new_msg){
 			//load the data from new messages
 			$query =  "SELECT message.message_id, message.mkdate, autor_id, message, subject 
@@ -113,7 +113,7 @@ function again_and_again()
 
 setTimeout('again_and_again();',<? print($refresh*1000);?>);
 <?
-($new_msgs[0] OR $cmd) ? print ("self.focus();\n") : print ("self.blur();\n");
+if ($new_msgs[0] OR $cmd)  print ("self.focus();\n");
 ?>
 //-->
 </script>
