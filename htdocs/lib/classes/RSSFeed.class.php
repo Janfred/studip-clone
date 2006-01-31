@@ -72,22 +72,26 @@ class RSSFeed {
 					echo "<TR><TD ALIGN=\"left\" VALIGN=\"TOP\" COLSPAN=\"2\"<A HREF=\"$PHP_SELF?more=".$this->class_id."#news_anchor\"><FONT SIZE=\"-1\"><I>mehr...</I></FONT></A></TD></TR>\n";
 					break;
 				}
-	                echo "<TR>
-					<TD WIDTH=\"1\" ALIGN=\"left\" VALIGN=\"TOP\">
-					<IMG SRC=\"pictures/".(!$this->internal_feed ? 'link_extern.gif' : 'link_intern.gif" hspace="2')."\">
-					</TD>
-					<TD ALIGN=\"left\" VALIGN=\"TOP\">
-					<A HREF=\"".TransformInternalLinks($v["link"])."\" ".(!$this->internal_feed  ? "TARGET=\"_blank\"" : "") . " TITLE=\"".htmlReady($desc)."\" ALT=\"".htmlReady($v["description"])."\">
-					<FONT SIZE=\"-1\">".htmlReady($v["title"])."</FONT>
-					</A></TD></TR>\n";
+				echo "<TR>
+				<TD WIDTH=\"1\" ALIGN=\"left\">
+				<IMG SRC=\"pictures/".(!$this->internal_feed ? 'link_extern.gif' : 'link_intern.gif" hspace="2')."\">
+				</TD>
+				<TD ALIGN=\"left\" VALIGN=\"TOP\">
+				<A HREF=\"".TransformInternalLinks($v["link"])."\" ".(!$this->internal_feed  ? "TARGET=\"_blank\"" : "") . " TITLE=\"".htmlReady($desc)."\" ALT=\"".htmlReady($v["description"])."\">
+				<FONT SIZE=\"-1\">".htmlReady($v["title"])."</FONT>
+				</A></TD></TR>\n";
+				if ($v['enclosure_url']) {
+					echo "<TR><TD WIDTH=\"1\" ALIGN=\"left\" VALIGN=\"TOP\">&nbsp;</TD>
+					<TD ALIGN=\"left\" VALIGN=\"TOP\"><a href=\"{$v['enclosure_url']}\" TARGET=\"_blank\"><img src=\"pictures/podcast_icon.gif\" border=\"0\" align=\"absmiddle\"></a>
+					<FONT SIZE=\"-2\">".htmlReady('('.$v['enclosure_type'] . ' - ' . floor($v['enclosure_length']/1024) . ' kb)')."</FONT>
+					</TD></TR>\n";
+				}
 				if ($desc ) {
 					echo "<TR><TD WIDTH=\"1\" ALIGN=\"left\" VALIGN=\"TOP\">&nbsp;</TD><TD ALIGN=\"left\" VALIGN=\"TOP\"><FONT SIZE=\"-2\">".htmlReady($desc)."</FONT></TD></TR>\n";
 				}
 				$i++;
 			}
-	        }
-
-
+	    }
 		echo "</TABLE>\n";
 	}
 

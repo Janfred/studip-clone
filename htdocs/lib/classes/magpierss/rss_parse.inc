@@ -245,11 +245,19 @@ class MagpieRSS {
                 $link_el = 'link_' . $attrs['rel'];
 			}
             else {
-                $link_el = 'link';;
+                $link_el = 'link';
             }
             
             $this->append($link_el, $attrs['href']);
         }
+		elseif ($this->feed_type == RSS
+				&& $el == 'enclosure'
+				&& $this->initem
+				&& $attrs['url'])
+		{
+			foreach ($attrs as $a => $v)
+				$this->append($el.'_'.$a, $v);
+		}
         // set stack[0] to current element
         else {
             array_unshift($this->stack, $el);
