@@ -333,6 +333,20 @@ function get_my_obj_values (&$my_obj, $user_id, $modules = NULL) {
 				}
 		}
 	}
+	// Check plugins, which are enabled in current seminar
+	if ($GLOBALS["PLUGINS_ENABLE"]){
+		$persistence = PluginEngine::getPluginPersistence("Standard"); // we only need plugins integrated into seminars or institutes
+		// inserts every activated plugin as new entry
+		foreach ($my_obj as $poiid => $my_obj_item) {		
+			$persistence->setPoiid($my_obj_item["obj_type"] . $poiid);
+			$activated_plugins = $persistence->getAllActivatedPlugins();			
+			foreach ($activated_plugins as $plugin){				
+				if ($plugin->isShownInOverview()) {
+					$my_obj[$poiid][activatedplugins][] = $plugin;
+				}
+			}
+		}
+	}	
 	
 	$db2->query("DROP TABLE IF EXISTS myobj_" . $user_id);
 	return;
