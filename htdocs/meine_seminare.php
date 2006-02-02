@@ -503,11 +503,18 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 						  	
 						  	if ($plugin->hasChanged($values["visitdate"])){
 						  		// something new
-						  		echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to=plugins.php&cmd=show&id=" . $plugin->getPluginId() . "\"><img src='" . $plugin->getChangeindicatoriconname() . "' border=0 ".tooltip(sprintf(_("%s Plugins, %s neue"), $values["termine"], $values["neuetermine"]))."></a>";			
+						  		$chmgs = $plugin->getChangeMessages($values["visitdate"],array($semid));
+						  		if (count($chmgs) == 1){
+						  			$chmsg = $chmgs[0];
+						  		}
+						  		else {
+						  			$chmsg = sprintf(_("%s verfügt über neue Elemente"),$plugin->getPluginname());
+						  		}
+						  		echo "&nbsp; <a href=\"seminar_main.php?auswahl=$semid&redirect_to=plugins.php&cmd=show&id=" . $plugin->getPluginId() . "\"><img src='" . $plugin->getChangeindicatoriconname() . "' border=0 ".tooltip($chmsg)."></a>";			
 						  	}
 						  	else {
 						  		// nothing changed, show empty icon
-								echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to=plugins.php&cmd=show&id=" . $plugin->getPluginId() . "\"><img src='" . $plugin->getPluginiconname() . "' border=0 ".tooltip(sprintf(_("%s Plugins, %s neue"), $values["termine"], $values["neuetermine"]))."></a>";					  		
+								echo "&nbsp; <a href=\"seminar_main.php?auswahl=$semid&redirect_to=plugins.php&cmd=show&id=" . $plugin->getPluginId() . "\"><img src='" . $plugin->getPluginiconname() . "' border=0 ".tooltip(sprintf(_("%s verfügt über keine neuen Elemente"),$plugin->getPluginname()))."></a>";					  		
 						  	}
 						  }
 				  	  }
@@ -692,6 +699,35 @@ if ( !$perm->have_perm("root")) {
 					else
 					echo "&nbsp;<img src=\"pictures/icon-leer.gif\" width=\"18\" height=\"20\" border=\"0\">";
 				}
+				
+				// plugins
+				  if ($GLOBALS["PLUGINS_ENABLE"]){
+				  	  
+				  	  if (is_array($values["activatedplugins"])){
+						  foreach ($values["activatedplugins"] as $plugin){
+						  	
+						  	if ($plugin->hasChanged($values["visitdate"])){
+						  		// something new
+						  		$chmgs = $plugin->getChangeMessages($values["visitdate"],array($semid));
+						  		if (count($chmgs) == 1){
+						  			$chmsg = $chmgs[0];
+						  		}
+						  		else {
+						  			$chmsg = sprintf(_("%s verfügt über neue Elemente"),$plugin->getPluginname());
+						  		}
+						  		echo "&nbsp; <a href=\"institut_main.php?auswahl=$semid&redirect_to=plugins.php&cmd=show&id=" . $plugin->getPluginId() . "\"><img src='" . $plugin->getChangeindicatoriconname() . "' border=0 ".tooltip($chmsg)."></a>";			
+						  	}
+						  	else {
+						  		// nothing changed, show empty icon
+								echo "&nbsp; <a href=\"institut_main.php?auswahl=$semid&redirect_to=plugins.php&cmd=show&id=" . $plugin->getPluginId() . "\"><img src='" . $plugin->getPluginiconname() . "' border=0 ".tooltip(sprintf(_("%s verfügt über keine neuen Elemente"),$plugin->getPluginname()))."></a>";					  		
+						  	}
+						  }
+				  	  }
+				  	  else {
+				  	  	 
+				  	  	 echo '&nbsp; <img src="pictures/icon-leer.gif" width="13" height="17" border=0>';
+				  	  }	  
+				  }	  
 				echo "</td>";
 				
 				// Extendet views:
