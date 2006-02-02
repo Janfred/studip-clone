@@ -107,29 +107,7 @@ function print_seminar_content ($semid, $my_obj_values, $type = 'seminar') {
 			echo "&nbsp; <a href=\"$link?auswahl=$semid#vote\"><img src='pictures/icon-vote.gif' border=0 ".tooltip(sprintf(_("%s Umfrage(n)"), $my_obj_values["votes"]))."></a>";
 	  else
 			echo '&nbsp; <img src="pictures/icon-leer.gif" width="13" height="17" border=0>';
-  }
-
-  // plugins
-  if ($GLOBALS["PLUGINS_ENABLE"]){
-  	  
-  	  if (is_array($my_obj_values["activatedplugins"])){
-		  foreach ($my_obj_values["activatedplugins"] as $plugin){
-		  	
-		  	if ($plugin->hasChanged($my_obj_values["visitdate"])){
-		  		// something new
-		  		echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to=plugins.php&cmd=show&id=" . $plugin->getPluginId() . "\"><img src='" . $plugin->getChangeindicatoriconname() . "' border=0 ".tooltip(sprintf(_("%s Plugins, %s neue"), $my_obj_values["termine"], $my_obj_values["neuetermine"]))."></a>";			
-		  	}
-		  	else {
-		  		// nothing changed, show empty icon
-				echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to=plugins.php&cmd=show&id=" . $plugin->getPluginId() . "\"><img src='" . $plugin->getPluginiconname() . "' border=0 ".tooltip(sprintf(_("%s Plugins, %s neue"), $my_obj_values["termine"], $my_obj_values["neuetermine"]))."></a>";					  		
-		  	}
-		  }
-  	  }
-  	  else {
-  	  	 
-  	  	 echo '&nbsp; <img src="pictures/icon-leer.gif" width="13" height="17" border=0>';
-  	  }	  
-  }	  
+  }  
   echo "&nbsp;";  
 
 } // Ende function print_seminar_content
@@ -517,6 +495,27 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 					else
 						echo "&nbsp;<img src=\"pictures/icon-leer.gif\" width=\"18\" height=\"20\" border=\"0\">";
 				}
+				// plugins
+				  if ($GLOBALS["PLUGINS_ENABLE"]){
+				  	  
+				  	  if (is_array($values["activatedplugins"])){
+						  foreach ($values["activatedplugins"] as $plugin){
+						  	
+						  	if ($plugin->hasChanged($values["visitdate"])){
+						  		// something new
+						  		echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to=plugins.php&cmd=show&id=" . $plugin->getPluginId() . "\"><img src='" . $plugin->getChangeindicatoriconname() . "' border=0 ".tooltip(sprintf(_("%s Plugins, %s neue"), $values["termine"], $values["neuetermine"]))."></a>";			
+						  	}
+						  	else {
+						  		// nothing changed, show empty icon
+								echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to=plugins.php&cmd=show&id=" . $plugin->getPluginId() . "\"><img src='" . $plugin->getPluginiconname() . "' border=0 ".tooltip(sprintf(_("%s Plugins, %s neue"), $values["termine"], $values["neuetermine"]))."></a>";					  		
+						  	}
+						  }
+				  	  }
+				  	  else {
+				  	  	 
+				  	  	 echo '&nbsp; <img src="pictures/icon-leer.gif" width="13" height="17" border=0>';
+				  	  }	  
+				  }	  
 				echo "</td>";
 		
 		

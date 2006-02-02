@@ -95,7 +95,8 @@ class AbstractPluginIntegratorEnginePersistence {
     function &executePluginQuery($filter,$params=array()){
     	// cache results for 60*60 seconds
     	$plugins = array();
-    	$result = &$this->connection->CacheExecute(3600,"Select * from plugins " . $filter,$params);
+    	//$result = &$this->connection->CacheExecute(3600,"Select * from plugins " . $filter,$params);
+    	$result = &$this->connection->Execute("Select * from plugins " . $filter,$params);
     	if (!$result){
     		// TODO: Fehlermeldung ausgeben
     		return array();

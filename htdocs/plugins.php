@@ -14,11 +14,12 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" =>
 
 $auth->login_if($auth->auth["uid"] == "nobody");
 
-// create plugin persistence objects
-$pluginengine = PluginEngine::getPluginPersistence();
 // read in the command and pluginid
 $cmd = $_GET["cmd"];
 $pluginid = $_GET["id"];
+
+// create plugin persistence objects
+$pluginengine = PluginEngine::getPluginPersistence();
 
 // create an instance of the queried pluginid
 $plugin = $pluginengine->getPlugin($pluginid);
