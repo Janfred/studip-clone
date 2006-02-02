@@ -1014,6 +1014,9 @@ if ($view != 'Forum'
 		case ("Sonstiges") :
 			echo _("Eigene Kategorien bearbeiten");
 		break;
+		case ("rss") :
+                       echo _("Eigene RSS Feeds bearbeiten");
+                break;
 		case ("Login") :
 			echo _("Auto-Login einrichten");
 		break;
