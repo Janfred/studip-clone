@@ -136,7 +136,9 @@ function update_rss() {
 			$db->query("UPDATE rss_feeds SET name='$name', url='$url', hidden='$secret',fetch_title='$fetch_title', chdate='$now' WHERE feed_id='$id'");
 		}
 	}
-	parse_msg ("msg§" . _("RSS Feeds ge&auml;ndert!"));
+	//parse_msg ("msg§" . _("RSS Feeds ge&auml;ndert!"));
+	$msg[] = array('msg', ("RSS Feeds ge&auml;ndert!"));
+	parse_msg_array ($msg,'blank',2,0,1);
 }
 
 function check_rss() {
@@ -180,7 +182,9 @@ function order_rss($cat_id,$direction,$username){
 	for ($i = 0; $i < count($items_to_order); ++$i) {
 		$db->query("UPDATE rss_feeds SET priority=$i WHERE feed_id='$items_to_order[$i]'");
 	}
-	parse_msg("msg§" . _("RSS Feeds wurden neu geordnet"));
+	//parse_msg("msg§" . _("RSS Feeds wurden neu geordnet"));
+	$msg[] = array('msg', ("RSS Feeds wurden neu geordnet"));
+	parse_msg_array ($msg,'blank',2,0,1);
 }
 
 ?>
