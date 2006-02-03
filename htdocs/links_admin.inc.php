@@ -516,6 +516,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 			break;
 		case "admin_log.php":
 			$reiter_view = "admin_log";
+			break;
 		case "plugins.php":			
 			// check if view is delegated to a bottomkat
 		    $pid = $_GET["id"];
