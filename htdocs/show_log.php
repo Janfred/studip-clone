@@ -16,6 +16,7 @@ include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Sessio
 
 require_once ("$ABSOLUTE_PATH_STUDIP/msg.inc.php"); //Funktionen fuer Nachrichtenmeldungen
 require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/log_events.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/Table.class.php");
@@ -156,7 +157,7 @@ function showlog_format_resource($res_id) {
 function showlog_format_username($uid) {
 	$uname=get_username($uid);
 	if ($uname) {
-		return "<a href=\"about.php?username=$uname\">".get_fullname($uid)."</a>";
+		return "<a href=\"about.php?username=$uname\">".htmlReady(get_fullname($uid))."</a>";
 	} else {
 		return $uid;
 	}
@@ -167,7 +168,7 @@ function showlog_format_sem($sem_id, $maxlen=100) {
 	$q="SELECT seminare.Name as title, seminare.VeranstaltungsNummer as number, semester_data.name as semester FROM seminare LEFT JOIN semester_data ON (seminare.start_time=semester_data.beginn) WHERE Seminar_id='$sem_id'";
 	$db->query($q);
 	if ($db->next_record()) {
-		$title=my_substr($db->f('title'),0,$maxlen);
+		$title=htmlReady(my_substr($db->f('title'),0,$maxlen));
 		return "<a href=\"adminarea_start.php?select_sem_id=$sem_id\">".$db->f('number')." ".$title." (".$db->f('semester').")</a>";
 	} else {
 		return $sem_id;
@@ -179,7 +180,7 @@ function showlog_format_institute($inst_id, $maxlen=100) {
 	$q="SELECT Institute.Name as title FROM Institute WHERE Institut_id='$inst_id'";
 	$db->query($q);
 	if ($db->next_record()) {
-		$title=my_substr($db->f('title'),0,$maxlen);
+		$title=htmlReady(my_substr($db->f('title'),0,$maxlen));
 		return "<a href=\"institut_main.php?auswahl=$inst_id\">".$title."</a>";
 	} else {
 		return $inst_id;
@@ -198,9 +199,9 @@ function showlog_format_studyarea($area_id) {
 			$db->query(sprintf($q,$db->f('parent_id')));
 			if ($db->next_record()) {
 				if (!$db->f('name')) {
-					$path[]=$db->f('iname');
+					$path[]=htmlReady($db->f('iname'));
 				} else {
-					$path[]=$db->f('name');
+					$path[]=htmlReady($db->f('name'));
 				}
 			} else {
 				break; // ERROR
