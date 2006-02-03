@@ -101,7 +101,7 @@ class PluginAdministrationVisualization extends AbstractStudIPPluginVisualizatio
 			</tr>
 		<?php
 		
-		$absenden = makeButton("absenden","input");
+		$absenden = makeButton("speichern","input");
 		$lasttype = "";
 		foreach($plugins as $plugin){
 			if (($plugin->getPluginname() == "PluginAdministration") || ($plugin->getPluginid() == 1)){
@@ -136,9 +136,9 @@ class PluginAdministrationVisualization extends AbstractStudIPPluginVisualizatio
 						<option <? if (!($plugin->isEnabled())) echo ("selected") ?>><?= _("aus")?></option>
 					</select>
 				</td>
-				<td align="left"><a href="<?= PluginEngine::getLink($this->pluginref,array("deinstall" => $pluginid)) ?>"><img src="<?= $relativepath?>/img/x2.gif" border="0" /><?= _("Deinstallieren") ?></a></td>
+				<td align="left"><a href="<?= PluginEngine::getLink($this->pluginref,array("deinstall" => $pluginid)) ?>"><img src="<?= $relativepath?>/img/trash.gif" border="0" alt="<?= _("Deinstallieren") ?>"/></a></td>
 				<td align="right" width="5%"><input name="navposition_<?= $pluginid?>" type="text" size="5" value="<?= $plugin->getNavigationPosition()?>"></td>
-				<td align="right"><a href="<?= PluginEngine::getLink($this->pluginref,array("zip" => $pluginid)) ?>"><img src="<?= $relativepath?>/img/icon-disc2.gif" border="0" /></a></td>
+				<td align="right"><a href="<?= PluginEngine::getLink($this->pluginref,array("zip" => $pluginid)) ?>"><img src="<?= $relativepath?>/img/icon-disc.gif" border="0" alt="<?= _("Plugin zippen")?>"/></a></td>
 			</tr>
 		<?php
 		}
