@@ -57,7 +57,7 @@ class AbstractPluginIntegratorEnginePersistence {
 	function registerPlugin($plugin, $pluginclassname, $pluginpath){
 		$type = PluginEngine::getTypeOfPlugin($plugin);
 		if (strlen($type) > 0){
-			$result =& $this->connection->execute("insert into plugins (pluginid,pluginclassname,pluginname,pluginpath,plugintype,enabled,navigationpos) select 0,?,?,?,?,'no',max(navigationpos)+1 from plugins where plugintype=?", array($pluginclassname,$plugin->getName(), $pluginpath,$type,$type));
+			$result =& $this->connection->execute("insert into plugins (pluginid,pluginclassname,pluginname,pluginpath,plugintype,enabled,navigationpos) select 0,?,?,?,?,'no',max(navigationpos)+1 from plugins where plugintype=?", array($pluginclassname,$plugin->getPluginname(), $pluginpath,$type,$type));
 			/*
 			if (!result){
 				// echo ("ERROR!!!");
@@ -97,8 +97,8 @@ class AbstractPluginIntegratorEnginePersistence {
     function &executePluginQuery($filter,$params=array()){
     	// cache results for 60*60 seconds
     	$plugins = array();
-    	//$result = &$this->connection->CacheExecute(3600,"Select * from plugins " . $filter,$params);
-    	$result = &$this->connection->Execute("Select * from plugins " . $filter,$params);
+    	$result = &$this->connection->CacheExecute(3600,"Select * from plugins " . $filter,$params);
+    	// $result = &$this->connection->Execute("Select * from plugins " . $filter,$params);
     	if (!$result){
     		// TODO: Fehlermeldung ausgeben
     		return array();
