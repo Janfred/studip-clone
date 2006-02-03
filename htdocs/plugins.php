@@ -17,7 +17,6 @@ $auth->login_if($auth->auth["uid"] == "nobody");
 // read in the command and pluginid
 $cmd = $_GET["cmd"];
 $pluginid = $_GET["id"];
-
 // create plugin persistence objects
 $pluginengine = PluginEngine::getPluginPersistence();
 
@@ -76,6 +75,8 @@ if ($type == "Standard"){
 else if ($type == "Administration") {
 	// Administration-Plugins only accessible by users with admin rights
 	if ($perm->have_perm("admin")){
+	   // display the admin menu
+	   include ("links_admin.inc.php");
 	   // let the plugin show its view   
 	   echo ("<div align=\"center\">");
 	   echo ("<table width=\"100%\">");

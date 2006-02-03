@@ -232,6 +232,10 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 	elseif (($SessSemName["class"] == "sem") && (!$archive_kill) && (!$links_admin_data["assi"]))
 		$structure["back_jump"]=array ('topKat'=>"", 'name'=>$back_jump, 'link'=>"seminar_main.php?auswahl=".$SessSemName[1], 'active'=>FALSE);
 	
+	if ($perm->have_perm("root") && $GLOBALS["PLUGINS_ENABLE"]) {
+		$structure["plugins"]=array ('topKat'=>"", 'name'=>_("Plugins"), 'link'=>"plugins.php?cmd=show&id=1", 'active'=>FALSE);		
+	}		
+		
 	//Bottomkats
 	$structure["grunddaten_sem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Grunddaten"), 'link'=>"admin_seminare1.php?list=TRUE", 'active'=>FALSE);
 	$structure["zeiten"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Zeiten"), 'link'=>"admin_metadates.php?list=TRUE", 'active'=>FALSE, 'isolator'=>TRUE);
@@ -330,7 +334,18 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 			$structure["admin_log"]=array ('topKat'=>"log", 'name'=>_("Einstellungen"), 'link'=>"admin_log.php", 'active'=>FALSE);
 		}
 	}
-	
+	// create sublinks for administration plugins
+	if ($GLOBALS["PLUGINS_ENABLE"] && $perm->have_perm("root")){
+		$persist = PluginEngine::getPluginPersistence("Administration");
+		$plugins = $persist->getAllActivatedPlugins();
+		if (is_array($plugins)){
+			foreach ($plugins as $adminplugin) {
+				$nav = $adminplugin->getTopNavigation();
+				$structure["plugins_" . $adminplugin->getPluginid()]=array ('topKat'=>"plugins", 'name'=>$nav->getDisplayname(), 'link'=>"plugins.php?cmd=show&id=" . $adminplugin->getPluginid(), 'active'=>FALSE);		
+			}
+		}
+		
+	}
 	//Reitersystem Ende
 	
 	
@@ -501,6 +516,10 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 			break;
 		case "admin_log.php":
 			$reiter_view = "admin_log";
+		case "plugins.php":			
+			// check if view is delegated to a bottomkat
+		    $pid = $_GET["id"];
+			$reiter_view = "plugins_" . $pid;											
 		break;
 
 	}
