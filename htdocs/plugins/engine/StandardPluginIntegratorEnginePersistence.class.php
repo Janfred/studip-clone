@@ -60,8 +60,7 @@ class StandardPluginIntegratorEnginePersistence extends AbstractPluginIntegrator
 					   . "select p.pluginid,?,'on' from seminar_inst s join Institute i on i.Institut_id=s.institut_id join plugins_default_activations pa on i.fakultaets_id=pa.institutid or i.Institut_id=pa.institutid join plugins p on pa.pluginid=p.pluginid where s.seminar_id=? and p.pluginid=?",array($plugin->getPluginid(),$this->poiid,$this->poiid,$id,$plugin->getPluginid()));
     		if ($result){
     			// 
-    			if (!$result->EOF){
-    				// echo("DEBUG: " . $result->fields("pluginid") . " - " . $result->fields("state") . "<br>");
+    			if (!$result->EOF){    				
     				if ($result->fields("state") == "on"){
     					$plugin->setActivated(true);
     				}
@@ -98,13 +97,25 @@ class StandardPluginIntegratorEnginePersistence extends AbstractPluginIntegrator
      * @return all activated plugins
      */
     function getAllActivatedPlugins(){
-    	// Veranstaltungsid aus poiid bestimmen
-		$id = trim(str_replace($GLOBALS["SessSemName"]["class"],"",$this->poiid));
+    	// Veranstaltungsid aus poiid bestimmen    	
+    	if (isset($GLOBALS["SessSemName"]["class"]) && strlen(trim($GLOBALS["SessSemName"]["class"])) >0){
+			$id = trim(str_replace($GLOBALS["SessSemName"]["class"],"",$this->poiid));
+    	}
+    	else {
+    	
+    		$id = trim(str_replace("sem","",$this->poiid));
+    		$id = trim(str_replace("inst","",$id));
+    		
+    	}
+	
+    	
 		$result =& $this->connection->execute("select p.* from plugins_activated pat inner join plugins p using (pluginid) where pat.poiid=? and pat.state='on' "
 					   . "union "
-					   . "select distinct p.* from seminar_inst s, plugins p join Institute i on i.Institut_id=s.institut_id join plugins_default_activations pa on i.fakultaets_id=pa.institutid or i.Institut_id=pa.institutid left join plugins_activated pad on p.pluginid=pad.pluginid where s.seminar_id=? and pa.pluginid=p.pluginid and ((pad.state <> 'off' and pad.poiid=?) or pad.pluginid is null)",array($this->poiid,$id,$this->poiid));
+				       . "select distinct p.* from seminar_inst s, plugins p join Institute i on i.Institut_id=s.institut_id join plugins_default_activations pa on i.fakultaets_id=pa.institutid or i.Institut_id=pa.institutid left join plugins_activated pad on p.pluginid=pad.pluginid and (pad.poiid=concat('sem',s.seminar_id) or pad.poiid=concat('inst',s.seminar_id))where s.seminar_id=? and pa.pluginid=p.pluginid and ((pad.poiid=? and (pad.state <> 'off')) or pad.pluginid is null)",array($this->poiid,$id,$this->poiid));
+					   
 // etwas übersichtlicher für MySQL 4.1 
 // where s.seminar_id=? and p.pluginid not in (select pluginid from plugins_activated pad where pad.poiid=? and state='off'
+
     	if (!$result){
     		// TODO: Fehlermeldung ausgeben
     		// echo ("keine aktivierten Plugins<br>");

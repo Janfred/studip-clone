@@ -21,7 +21,7 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 	function PluginAdministrationPlugin(){
 		AbstractStudIPAdministrationPlugin::AbstractStudIPAdministrationPlugin();
 		$tab = new PluginNavigation();
-		$tab->setDisplayname(_("Plugin-Administration"));
+		$tab->setDisplayname(_("Verwaltung von Plugins"));
 		$this->setNavigation($tab); 
 		$this->setTopNavigation($tab);
 	}

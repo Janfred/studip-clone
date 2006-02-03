@@ -63,28 +63,40 @@ $pluginparams = $_GET["plugin_subnavi_params"];
 if ($type == "Standard"){
 	// display the course menu
 	include ("links_openobject.inc.php");
-	// let the plugin show its view
-	echo ("<div align=\"center\">");
-	echo ("<table width=\"100%\">");
-	echo("<tr><td>");
+	// let the plugin show its view	
+	$pluginnav = $plugin->getNavigation();
+	if (is_object($pluginnav)){
+		if (isset($SessSemName["header_line"])){
+			StudIPTemplateEngine::makeHeadline(sprintf(_("%s - %s"),$SessSemName["header_line"],$pluginnav->getDisplayname()),true,$plugin->getPluginiconname());
+		}
+		else {
+			StudIPTemplateEngine::makeHeadline(sprintf(_("%s"),$pluginnav->getDisplayname()),true,$plugin->getPluginiconname());			
+		}
+	}
+	else {
+		StudIPTemplateEngine::makeHeadline($plugin->getPluginname(),true,$plugin->getPluginiconname());
+	}
+	StudIPTemplateEngine::startContentTable(true);
 	$plugin->$cmd($pluginparams);
-	echo ("</td></tr>");
-	echo("</table>");
-	echo ("</div>");
+	StudIPTemplateEngine::endContentTable();	
 }
 else if ($type == "Administration") {
 	// Administration-Plugins only accessible by users with admin rights
 	if ($perm->have_perm("admin")){
 	   // display the admin menu
 	   include ("links_admin.inc.php");
-	   // let the plugin show its view   
+	   // let the plugin show its view 
+	   /*  
 	   echo ("<div align=\"center\">");
 	   echo ("<table width=\"100%\">");
 	   echo("<tr><td>");
+	   */
 	   $plugin->$cmd($pluginparams);   
+	   /*
 	   echo ("</td></tr>");
 	   echo("</table>");
 	   echo ("</div>");
+	   */
 	}
 	else {
 		StudIPTemplateEngine::makeHeadline(_("fehlende Rechte"));
@@ -93,13 +105,17 @@ else if ($type == "Administration") {
 }
 else if ($type == "System") {
 	 // let the plugin show its view
+	 /*
 	 echo ("<div align=\"center\">");
 	 echo ("<table width=\"100%\">");
 	 echo("<tr><td>");
+	 */
 	 $plugin->$cmd($pluginparams);
+	 /*
 	 echo ("</td></tr>");
 	 echo("</table>");
 	 echo ("</div>");
+	 */
 }
 else {
 	 // Further plugin types have to be integrated here

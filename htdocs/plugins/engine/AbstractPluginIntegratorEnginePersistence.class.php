@@ -57,13 +57,15 @@ class AbstractPluginIntegratorEnginePersistence {
 	function registerPlugin($plugin, $pluginclassname, $pluginpath){
 		$type = PluginEngine::getTypeOfPlugin($plugin);
 		if (strlen($type) > 0){
-			$result =& $this->connection->execute("insert into plugins (pluginid,pluginclassname,pluginname,pluginpath,plugintype,enabled,navigationpos) select 0,?,?,?,?,'no',max(navigationpos)+1 from plugins", array($pluginclassname,$plugin->getName(), $pluginpath,$type));
+			$result =& $this->connection->execute("insert into plugins (pluginid,pluginclassname,pluginname,pluginpath,plugintype,enabled,navigationpos) select 0,?,?,?,?,'no',max(navigationpos)+1 from plugins where plugintype=?", array($pluginclassname,$plugin->getName(), $pluginpath,$type,$type));
+			/*
 			if (!result){
-				echo ("ERROR!!!");
+				// echo ("ERROR!!!");
 			}
 			else {
 				// letzte ID bestimmen
 			}
+			*/
 			// delete the result cache
 			$this->connection->CacheFlush();
 		}

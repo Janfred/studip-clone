@@ -496,8 +496,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 						echo "&nbsp;<img src=\"pictures/icon-leer.gif\" width=\"18\" height=\"20\" border=\"0\">";
 				}
 				// plugins
-				  if ($GLOBALS["PLUGINS_ENABLE"]){
-				  	  
+				  if ($GLOBALS["PLUGINS_ENABLE"]){						  					  		  	  
 				  	  if (is_array($values["activatedplugins"])){
 						  foreach ($values["activatedplugins"] as $plugin){
 						  	
