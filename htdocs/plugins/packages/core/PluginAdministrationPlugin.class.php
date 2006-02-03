@@ -24,6 +24,7 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 		$tab->setDisplayname(_("Verwaltung von Plugins"));
 		$this->setNavigation($tab); 
 		$this->setTopNavigation($tab);
+		$this->setPluginiconname("img/einst.gif");
 	}
 	
 	/**
@@ -39,10 +40,10 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 		}
 	}
 	
-	function showDefaultView($pluginengine){
+	function showDefaultView($pluginengine,$msg=""){
 		// $this->init();
 		$plugins = $pluginengine->getAllInstalledPlugins();
-		$this->pluginvis->showPluginAdministrationList($plugins);
+		$this->pluginvis->showPluginAdministrationList($plugins,$msg);
 	}
 	
 	/**
@@ -59,9 +60,8 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 		
 		// check if user has the permission to check in / update plugins
 		if (!$permission->hasRootPermission() && $permission->hasAdminPermission()){
-		   // only admins should come to this point
-		   // just show the list of enabled plugins.
-		   $this->pluginvis->showPluginList($pluginengine->getAllEnabledPlugins());
+		   // show nothing
+		   // $this->pluginvis->showPluginList($pluginengine->getAllEnabledPlugins());
 		   return;
 		}
 		
@@ -123,7 +123,7 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
     	  	// process the upload 
     	  	// and register plugin in the database;
     	  	$result = $this->pluginmgmt->installPlugin($upload_file,$forceupdate);
-    	  	
+    	  	/*
     	  	if ($result == PLUGIN_INSTALLATION_SUCCESSFUL){
     	  		$this->pluginvis->showPluginInstallationSuccess();
     	  	}
@@ -131,6 +131,7 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
     	  		// there was an error
     	  		$this->pluginvis->showPluginInstallationError($result);
     	  	}
+    	  	*/
 		  }
 		}
 				
@@ -167,7 +168,7 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 		else {
 			 // the plugin was called without any parameters
 			 // show the default view
-			$this->showDefaultView($pluginengine);
+			$this->showDefaultView($pluginengine,$result);
 		}
 	}
 }
