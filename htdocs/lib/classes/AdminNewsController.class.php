@@ -423,9 +423,9 @@ class AdminNewsController {
 													."\n" . get_fullname() . ' ('.get_username().')'. "\n" . $msg;
 						}
 					}
+				$news_obj->storeRanges();
 				}
 			}
-			$news_obj->storeRanges();
 		} else {
 			$this->msg="error§" . _("Fehler: Keine news_id &uuml;bergeben!") . "§";
 		}
