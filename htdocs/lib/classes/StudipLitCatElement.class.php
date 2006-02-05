@@ -235,10 +235,14 @@ class StudipLitCatElement {
 	}
 	
 	function setValues($fields){
-		foreach ($fields as $name => $value){
-			$this->fields[$name]['value'] = $value;
+		if (is_array($fields)){
+			foreach ($fields as $name => $value){
+				if ($this->fields[$name]) $this->fields[$name]['value'] = $value;
+			}
+			return true;
+		} else {
+			return false;
 		}
-		return true;
 	}
 	
 	function insertData(){
