@@ -61,6 +61,10 @@ textdomain($domain);
 $pluginparams = $_GET["plugin_subnavi_params"];
 
 if ($type == "Standard"){
+	// diplay the admin_menu
+	if (($cmd == "showConfigurationPage") && $perm->have_perm("admin")){
+		include("links_admin.inc.php");
+	}
 	// display the course menu
 	include ("links_openobject.inc.php");
 	// let the plugin show its view	
@@ -76,6 +80,7 @@ if ($type == "Standard"){
 	else {
 		StudIPTemplateEngine::makeHeadline($plugin->getPluginname(),true,$plugin->getPluginiconname());
 	}
+	
 	StudIPTemplateEngine::startContentTable(true);
 	$plugin->$cmd($pluginparams);
 	StudIPTemplateEngine::endContentTable();	
@@ -101,17 +106,7 @@ else if ($type == "Administration") {
 }
 else if ($type == "System") {
 	 // let the plugin show its view
-	 /*
-	 echo ("<div align=\"center\">");
-	 echo ("<table width=\"100%\">");
-	 echo("<tr><td>");
-	 */
 	 $plugin->$cmd($pluginparams);
-	 /*
-	 echo ("</td></tr>");
-	 echo("</table>");
-	 echo ("</div>");
-	 */
 }
 else {
 	 // Further plugin types have to be integrated here

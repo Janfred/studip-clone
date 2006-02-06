@@ -521,6 +521,11 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 			// check if view is delegated to a bottomkat
 		    $pid = $_GET["id"];
 			$reiter_view = "plugins_" . $pid;											
+			$ppersist = PluginEngine::getPluginPersistence();
+			$viewplugin = $ppersist->getPlugin($pid);
+			if (PluginEngine::getTypeOfPlugin($viewplugin) <> "Administration"){
+				$reiter_view = "plugins";
+			}
 		break;
 
 	}

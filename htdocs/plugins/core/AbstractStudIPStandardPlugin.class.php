@@ -85,8 +85,7 @@ class AbstractStudIPStandardPlugin extends AbstractStudIPPlugin{
     /**
     * Shows the standard configuration.
     */
-    function showConfigurationPage(){
-    
+    function showConfigurationPage(){    
     	$user = $this->getUser();
     	$permission = $user->getPermission();
     	
@@ -94,7 +93,7 @@ class AbstractStudIPStandardPlugin extends AbstractStudIPPlugin{
     		StudIPTemplateEngine::showErrorMessage(_("Sie besitzen keine Berechtigung, um dieses Plugin zu konfigurieren."));
 		}
 		else {
-			echo(sprintf("<tr><th>%s</th></tr>",_("Default-Aktivierung")));
+			StudIPTemplateEngine::makeContentHeadline(_("Default-Aktivierung"));
 			$sel_institutes = $_POST["sel_institutes"];
 			if ($_GET["selected"]){
 				if ($_POST["nodefault"] == true){
