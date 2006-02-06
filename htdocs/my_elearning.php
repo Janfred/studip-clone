@@ -151,7 +151,7 @@ if ($ELEARNING_INTERFACE_ENABLE)
 							}
 						}
 						else
-							echo "<font size=\"-1\">" . sprintf(_("Sie haben im System %s keine eigenen Lernmodule."), $connected_cms[$cms]->getName()) . "<br>\n<br>\n</font>";
+							echo "<table border=\"0\" cellspacing=\"0\" cellpadding=\"6\"><tr><td><font size=\"-1\">" . sprintf(_("Sie haben im System %s keine eigenen Lernmodule."), $connected_cms[$cms]->getName()) . "<br>\n<br>\n</font></td></tr></table>";
 							
 						echo "<br>\n";
 						echo $new_module_form[$cms];

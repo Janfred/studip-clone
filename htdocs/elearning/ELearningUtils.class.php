@@ -95,8 +95,8 @@ class ELearningUtils
 			parse_window ("error§" . $msg, "§", _("Konfigurationsfehler"));
 			die();
 		}
-		$output .= "<table border=\"0\" cellspacing=0 cellpadding=0 width = \"99%\">";
 		$output .=  "<form method=\"POST\" action=\"" . $PHP_SELF . "#anker\">\n";
+		$output .= "<table border=\"0\" cellspacing=0 cellpadding=0 width = \"99%\">";
 		$output .= "<tr><td class=\"steel1\" align=\"center\" valign=\"middle\" ><font size=\"-1\">";
 		$output .= "<br>\n";
 		$output .= $message;
@@ -123,9 +123,9 @@ class ELearningUtils
 		$output .=  "<input type=\"IMAGE\"" . makeButton("auswaehlen", "src") . " name=\"\" style=\"vertical-align:middle\">\n";
 		$output .= "<br>\n";
 		$output .= "<br>\n";
-		$output .= "</font></td></tr>";
+		$output .= "</font>";
+		$output .=  "</td></tr></table>";
 		$output .=  "</form>";
-		$output .=  "</table>";
 		return $output;
 	}
 	
@@ -175,8 +175,8 @@ class ELearningUtils
 	function getSearchfield($message)
 	{
 		global $PHP_SELF, $cms_select, $search_key, $view;
-		$output .= "<table border=\"0\" cellspacing=0 cellpadding=0 width = \"99%\">";
 		$output .=  "<form method=\"POST\" action=\"" . $PHP_SELF . "#anker\">\n";
+		$output .= "<table border=\"0\" cellspacing=0 cellpadding=0 width = \"99%\">";
 		$output .= "<tr><td class=\"steel1\" align=\"center\" valign=\"middle\" ><font size=\"-1\">";
 		$output .= "<br>\n";
 		$output .= $message;
@@ -193,9 +193,9 @@ class ELearningUtils
 		$output .=  "<input type=\"IMAGE\"" . makeButton("suchen", "src") . " name=\"\" style=\"vertical-align:middle\">\n";
 		$output .= "<br>\n";
 		$output .= "<br>\n";
-		$output .= "</font></td></tr>";
+		$output .= "</font>";
+		$output .=  "</td></tr></table>";
 		$output .=  "</form>";
-		$output .=  "</table>";
 		return $output;
 	}
 
@@ -218,22 +218,23 @@ class ELearningUtils
 		if ($link == false)
 			return false;
 		$output .= ELearningUtils::getHeader(sprintf(_("Neues Lernmodul erstellen")));	
-		$output .= "<table border=\"0\" cellspacing=\"0\" cellpadding=\"4\" width=\"100%\">";
 		$output .=  "<form method=\"POST\" action=\"" . $PHP_SELF . "#anker\">\n";
+		$output .= "<table border=\"0\" cellspacing=\"0\" cellpadding=\"6\" width=\"100%\">";
+		$output .= "<tr><td>";
 		foreach ($ELEARNING_INTERFACE_MODULES as $cms_type => $cms_data)
 			$output .= "<input type=\"HIDDEN\" name=\"module_type_" . $cms_type . "\" value=\"" . $GLOBALS["module_type_" . $cms_type] . "\">\n";
 //		$output .= "<input type=\"HIDDEN\" name=\"module_type_cms\" value=\"" . $cms . "\">\n";
-		$output .= "<tr><td>";
 		$output .= "<font size=\"-1\">";
 		$output .= sprintf(_("Typ f&uuml;r neues Lernmodul: %s"), ELearningUtils::getTypeSelectbox($cms));
+		$output .= "</font>";
 //		$output .= "&nbsp;</td><td align=\"left\">";
 		$output .= "</td><td align=\"right\" valign=\"middle\">";
 		if (sizeof($ELEARNING_INTERFACE_MODULES[$cms]["types"]) > 1)
 			$output .=  "<input type=\"IMAGE\"" . makeButton("auswaehlen", "src") . " name=\"choose\" value=\"" . _("Ausw&auml;hlen") . "\" style=\"vertical-align:middle;\">";
 		$output .= $link;
 		$output .= "</td></tr>";
-		$output .=  "</form>\n";
 		$output .= "</table>";
+		$output .=  "</form>\n";
 		return $output;
 	}
 
@@ -250,8 +251,8 @@ class ELearningUtils
 	{
 		global $PHP_SELF, $connected_cms;
 
-		$output .= "<table border=\"0\" cellspacing=\"0\" cellpadding=\"4\" width=\"100%\">";
 		$output .=  "<form method=\"POST\" action=\"" . $PHP_SELF . "#anker\">\n";
+		$output .= "<table border=\"0\" cellspacing=\"0\" cellpadding=\"6\" width=\"100%\">";
 		$output .= "<tr><td>";
 		$output .= "<font size=\"-1\">";
 		$output .= $message;
@@ -264,8 +265,8 @@ class ELearningUtils
 		else
 			$output .=  "<input type=\"IMAGE\"" . makeButton("erstellen", "src") . " name=\"create\" value=\"" . _("Erstellen") . "\">";
 		$output .= "</td></tr>";
-		$output .=  "</form>\n";
 		$output .= "</table>";
+		$output .=  "</form>\n";
 		return $output;
 	}
 
@@ -281,9 +282,12 @@ class ELearningUtils
 	{
 		global $PHP_SELF, $connected_cms, $cms_select, $search_key, $view, $new_account_step, $current_module,
 			$start, $next, $go_back, $assign, $ext_username, $ext_password, $ext_password_2, $messages, $ref_id, $module_type, $assign,
-			$ABSOLUTE_PATH_STUDIP, $RELATIVE_PATH_ELEARNING_INTERFACE, $ELEARNING_INTERFACE_MODULES;
+			$ABSOLUTE_PATH_STUDIP, $RELATIVE_PATH_ELEARNING_INTERFACE, $ELEARNING_INTERFACE_MODULES, $HTTP_POST_VARS;
 		
 		ELearningUtils::loadClass($new_account_cms);
+		
+//		echo "nas:$new_account_step.cm:$current_module.n:$next.gb:$go_back.a:$assign.<br>";
+//		print_r($HTTP_POST_VARS);
 		
 		//Password was sent, but is to short
 		if (isset($ext_password_2) AND ! ($go_back != "") AND ($next != "") AND (strlen($ext_password_2) < 6))
@@ -346,22 +350,29 @@ class ELearningUtils
 		if (($new_account_step == 2) AND ($assign != ""))
 		{
 			// Assign existing Account
-			$output .= "<table border=\"0\" cellspacing=0 cellpadding=0 width = \"99%\">";
-			$output .=  "<form method=\"POST\" action=\"" . $PHP_SELF . "\">\n";
-			$output .= "<tr><td class=\"steel1\" align=\"left\" valign=\"middle\" colspan=\"2\"><br>&nbsp;\n";
+			$output .= "<a name='anker'></a>";
+			$output .=  "<form method=\"POST\" action=\"" . $PHP_SELF . "#anker\">\n";
+			$output .= "<table border=\"0\" cellspacing=0 cellpadding=6 width = \"99%\">";
+			$output .= "<tr><td class=\"steel1\" align=\"left\" valign=\"middle\" colspan=\"2\"><br>\n";
+			$output .= "<font size=\"-1\">";
 			$output .= sprintf(_("Geben Sie nun Benutzernamen und Passwort Ihres Benutzeraccounts in %s ein."),  $connected_cms[$new_account_cms]->getName()) . "";
+			$output .= "</font>";
 			$output .= "<br></td></tr>\n";
 			$output .=  "<tr><td class=\"steel1\" align=\"right\" valign=\"middle\" colspan=\"2\">";
 			$output .= "<br></td></tr>\n";
 			$output .=  "<tr><td class=\"steel1\" align=\"right\" valign=\"middle\" width=\"20%\">";
+			$output .= "<font size=\"-1\">";
 			$output .= "&nbsp;" . _("Benutzername: ") . "&nbsp;\n";
+			$output .= "</font>";
 			$output .= "</td><td class=\"steel1\" align=\"left\" valign=\"middle\">";
 			$output .= "" . "<input name=\"ext_username\" size=\"30\" style=\"vertical-align:middle;font-size:9pt;\" value=\"" . $ext_username . "\">";
 			$output .= "</td></tr>";
 			$output .=  "<tr><td class=\"steel1\" align=\"right\" valign=\"middle\" colspan=\"2\">";
 			$output .= "<br></td></tr>\n";
 			$output .=  "<tr><td class=\"steel1\" align=\"right\" valign=\"middle\" width=\"20%\">";
+			$output .= "<font size=\"-1\">";
 			$output .= "&nbsp;" . _("Passwort: ") . "&nbsp;\n";
+			$output .= "</font>";
 			$output .= "</td><td class=\"steel1\" align=\"left\" valign=\"middle\">";
 			$output .= "" . "<input name=\"ext_password\" type=\"PASSWORD\" size=\"30\" style=\"vertical-align:middle;font-size:9pt;\" value=\"" ."\">";
 			$output .= "</td></tr><tr><td class=\"steel1\">&nbsp;</td><td class=\"steel1\" align=\"left\" valign=\"middle\">";
@@ -378,32 +389,39 @@ class ELearningUtils
 			$output .= "<input type=\"HIDDEN\" name=\"search_key\" value=\"" . $search_key . "\">\n";
 			$output .=  "<input type=\"IMAGE\"" . makeButton("zurueck", "src") . " name=\"go_back\" value=\"" . _("Zur&uuml;ck") . "\"><br>\n";
 			$output .= "</td></tr>";
-			$output .=  "</form>\n";
 			$output .=  "</table>\n";
+			$output .=  "</form>\n";
 			
 //			getLoginForm();
 		}
 		elseif (($new_account_step == 2) AND ($next != ""))
 		{
 			// Create new Account: ask for new password
-			$output .= "<table border=\"0\" cellspacing=0 cellpadding=0 width = \"99%\">";
-			$output .=  "<form method=\"POST\" action=\"" . $PHP_SELF . "\">\n";
-			$output .= "<tr><td class=\"steel1\" align=\"left\" valign=\"middle\" colspan=\"2\"><br>&nbsp;\n";
+			$output .= "<a name='anker'></a>";
+			$output .=  "<form method=\"POST\" action=\"" . $PHP_SELF . "#anker\">\n";
+			$output .= "<table border=\"0\" cellspacing=0 cellpadding=6 width = \"99%\">";
+			$output .= "<tr><td class=\"steel1\" align=\"left\" valign=\"middle\" colspan=\"2\"><br>\n";
+			$output .= "<font size=\"-1\">";
 			$output .= sprintf(_("Geben Sie nun ein Passwort f&uuml;r Ihren neuen Benutzeraccount in %s ein."),  $connected_cms[$new_account_cms]->getName());
+			$output .= "</font>";
 			$output .= "<br></td></tr>\n";
 			$output .=  "<tr><td class=\"steel1\" align=\"right\" valign=\"middle\" colspan=\"2\">";
 			$output .= "<br></td></tr>\n";
 			$output .=  "<tr><td class=\"steel1\" align=\"right\" valign=\"middle\" width=\"20%\">";
-			$output .= "&nbsp;" . _("Passwort: ") . "&nbsp;\n";
+			$output .= "<font size=\"-1\">";
+			$output .= "&nbsp;" . _("Passwort:") . "\n";
+			$output .= "</font>";
 			$output .= "</td><td class=\"steel1\" align=\"left\" valign=\"middle\">";
-			$output .= "" . "<input name=\"ext_password\" type=\"PASSWORD\" size=\"30\" style=\"vertical-align:middle;font-size:9pt;\" value=\"" ."\">";
+			$output .= "" . "&nbsp;<input name=\"ext_password\" type=\"PASSWORD\" size=\"30\" style=\"vertical-align:middle;font-size:9pt;\" value=\"" ."\">";
 			$output .= "</td></tr>";
 			$output .=  "<tr><td class=\"steel1\" align=\"right\" valign=\"middle\" colspan=\"2\">";
 			$output .= "<br></td></tr>\n";
-			$output .=  "<tr><td class=\"steel1\" align=\"right\" valign=\"middle\" width=\"20%\">";
-			$output .= "&nbsp;" . _("Passwort-Wiederholung: ") . "&nbsp;\n";
+			$output .=  "<tr><td class=\"steel1\" align=\"right\" valign=\"middle\" width=\"20%\" nowrap>";
+			$output .= "<font size=\"-1\">";
+			$output .= "&nbsp;" . _("Passwort-Wiederholung:") . "\n";
+			$output .= "</font>";
 			$output .= "</td><td class=\"steel1\" align=\"left\" valign=\"middle\">";
-			$output .= "" . "<input name=\"ext_password_2\" type=\"PASSWORD\" size=\"30\" style=\"vertical-align:middle;font-size:9pt;\" value=\"" ."\">";
+			$output .= "" . "&nbsp;<input name=\"ext_password_2\" type=\"PASSWORD\" size=\"30\" style=\"vertical-align:middle;font-size:9pt;\" value=\"" ."\">";
 			$output .= "</td></tr><tr><td class=\"steel1\">&nbsp;</td><td class=\"steel1\" align=\"left\" valign=\"middle\">";
 			$output .=  "<br>&nbsp;<input type=\"IMAGE\"" . makeButton("bestaetigen", "src") . " name=\"next\" value=\"" . _("Best&auml;tigen") . "\"><br>";
 			$output .= "</td></tr>";
@@ -418,12 +436,13 @@ class ELearningUtils
 			$output .= "<input type=\"HIDDEN\" name=\"search_key\" value=\"" . $search_key . "\">\n";
 			$output .=  "<input type=\"IMAGE\"" . makeButton("zurueck", "src") . " name=\"go_back\" value=\"" . _("Zur&uuml;ck") . "\"><br>\n";
 			$output .= "</td></tr>";
-			$output .=  "</form>\n";
 			$output .=  "</table>\n";
+			$output .=  "</form>\n";
 			
 		}
 		elseif (($new_account_step == 3) AND ($next != ""))
 		{
+			$output .= "<a name='anker'></a>";
 			// Create new Account
 			$connected_cms[$new_account_cms]->user->setPassword($ext_password);
 			if ($connected_cms[$new_account_cms]->user->newUser() != false)
@@ -432,10 +451,12 @@ class ELearningUtils
 				if ($ref_id != "")
 				{	
 					$connected_cms[$new_account_cms]->newContentModule($ref_id, $module_type, true);
+					$output .= "<font size=\"-1\">";
 					$output .= sprintf( _("Hier gelangen Sie zum gew&auml;hlten Lernmodul \"%s\":"), $connected_cms[$new_account_cms]->content_module[$current_module]->getTitle() ) . "<br>\n<br>\n";
 					$output .= $connected_cms[$new_account_cms]->link->getUserModuleLinks();
 					$output .= "<br>";
 					$output .= "<br>";
+					$output .= "</font>";
 				}
 			}
 			$new_account_cms = "";
@@ -443,6 +464,11 @@ class ELearningUtils
 		}
 		else
 		{
+			$output .= "<a name='anker'></a>";
+			$output .=  "<form method=\"POST\" action=\"" . $PHP_SELF . "#anker\">\n";
+			$output .= "<table border=\"0\" cellspacing=0 cellpadding=6 width = \"99%\">";
+			$output .= "<tr><td>\n";
+			$output .= "<font size=\"-1\">";
 			if ($start != "")
 				$messages["info"] = sprintf(_("Sie versuchen zum erstem Mal ein Lernmodul des angebundenen Systems %s zu starten. Bevor Sie das Modul nutzen k&ouml;nnen, muss Ihrem Stud.IP-Benutzeraccount ein Account im angebundenen System zugeordnet werden."), $connected_cms[$new_account_cms]->getName()) . "<br><br>\n\n";
 			if ($connected_cms[$new_account_cms]->user->isConnected())
@@ -453,7 +479,6 @@ class ELearningUtils
 			}
 			else
 				$output .= sprintf(_("Wenn Sie innerhalb von %s bereits &uuml;ber einen BenutzerInnen-Account verf&uuml;gen, k&ouml;nnen Sie ihn jetzt \"zuordnen\". Anderenfalls wird automatisch ein neuer Account in %s f&uuml;r Sie erstellt, wenn sie auf \"weiter\" klicken."),  $connected_cms[$new_account_cms]->getName(),  $connected_cms[$new_account_cms]->getName()) . "<br>\n<br>\n";
-			$output .=  "<form method=\"POST\" action=\"" . $PHP_SELF . "\">\n";
 			$output .= "<input type=\"HIDDEN\" name=\"new_account_step\" value=\"" . $new_account_step . "\">\n";
 			$output .= "<input type=\"HIDDEN\" name=\"view\" value=\"" . $view . "\">\n";
 			$output .= "<input type=\"HIDDEN\" name=\"ref_id\" value=\"" . $ref_id . "\">\n";
@@ -468,8 +493,12 @@ class ELearningUtils
 			if (! $connected_cms[$new_account_cms]->user->isConnected())
 				$output .=  "&nbsp;<input type=\"IMAGE\"" . makeButton("weiter", "src") . " name=\"next\" value=\"" . _("Weiter") . "\">";
 			$output .=  "</center>\n";
-			$output .=  "</form>";
+			$output .= "</font>";
+			$output .= "</td></tr>";
+			$output .=  "</table>\n";
+			$output .=  "</form>\n";
 		}
+//		echo "nas:$new_account_step.cm:$current_module.n:$next.gb:$go_back.a:$assign.<br>";
 		return $output;
 	}
 
@@ -596,4 +625,22 @@ class ELearningUtils
 		echo "Gesamtzeit: " . ($timearray[$i-1]["zeit"]-$timearray[0]["zeit"]);
 	}
 }
+
+
+// Workaround for IE form-bug
+if ($next_x != "")
+	$next = $next_x;
+if ($assign_x != "")
+	$assign = $assign_x;
+if ($go_back_x != "")
+	$go_back = $go_back_x;
+if ($start_x != "")
+	$start = $start_x;
+if ($remove_x != "")
+	$remove = $remove_x;
+if ($delete_x != "")
+	$delete = $delete_x;
+if ($add_x != "")
+	$add = $add_x;
+
 ?>
