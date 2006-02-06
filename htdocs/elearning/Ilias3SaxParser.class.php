@@ -205,6 +205,7 @@ class Ilias3SaxParser
 		if(!$parseOk
 		   && (xml_get_error_code($a_xml_parser) != XML_ERROR_NONE))
 		{
+			echo $this->getXMLContent();
 			echo "XML Parse Error: ".xml_get_error_code($a_xml_parser);
 		}
 		return true;

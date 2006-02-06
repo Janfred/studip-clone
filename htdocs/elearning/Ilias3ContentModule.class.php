@@ -67,6 +67,7 @@ class Ilias3ContentModule extends ContentModule
 		{
 			// If module doesn't exist, show errormessage
 			$this->createDummyForErrormessage("not found");
+			$this->allowed_operations = $connected_cms[$this->cms_type]->permissions->getOperationArray(array(OPERATION_VISIBLE, OPERATION_READ, OPERATION_DELETE) );
 		}
 	}
 
@@ -201,10 +202,11 @@ class Ilias3ContentModule extends ContentModule
 
 		$connected_cms[$this->cms_type]->soap_client->setCachingStatus(false);
 		{	
-			$connected_cms[$this->cms_type]->soap_client->deleteObject($this->getId());
+			if ( $this->getObjectId() != false)
+				$connected_cms[$this->cms_type]->soap_client->deleteObject($this->getId());
 			return parent::unsetConnection($seminar_id);
 		}
-		$messages["error"] .= _("Die Zuordnung konnte nicht gespeichert werden.");
+		$messages["error"] .= _("Die Zuordnung konnte nicht entfernt werden.");
 		return false;
 	}
 
