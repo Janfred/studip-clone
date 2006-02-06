@@ -97,7 +97,7 @@ function create_rss() {
 	$db->next_record();
 	$user_id = $db->f("user_id");
 	$db->query("UPDATE rss_feeds SET priority=priority+1 WHERE user_id='$user_id'");
-	$db->query("INSERT INTO rss_feeds (feed_id,name, url, mkdate, chdate, user_id,priority,fetch_title) VALUES ('$feed_id','" . _("neuer Feed") . "','" . _("URL") . "','$now','$now','$user_id',0,1)");
+	$db->query("INSERT INTO rss_feeds (feed_id,name, url, mkdate, chdate, user_id,priority,fetch_title,hidden) VALUES ('$feed_id','" . _("neuer Feed") . "','" . _("URL") . "','$now','$now','$user_id',0,1,1)");
 	if ($db->affected_rows() == 0) {
 		parse_msg ("info§" . _("Anlegen fehlgeschlagen"));
 		die;
