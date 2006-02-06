@@ -164,6 +164,7 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 		else if (isset($zip)){
 			 $link = $this->pluginmgmt->zipPluginPackage($zip);
 			 $this->pluginvis->showPluginPackageDownloadView($link);
+			 $this->showDefaultView($pluginengine);
 		}	
 		else {
 			 // the plugin was called without any parameters

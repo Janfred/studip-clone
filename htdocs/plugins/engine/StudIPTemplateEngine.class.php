@@ -81,6 +81,10 @@ class StudIPTemplateEngine {
 		<?php
 	}
 	
+	function makeContentHeadline($title,$colspan=1){
+		echo(sprintf("<tr><th colspan=$colspan>%s</th></tr>",$title));
+	}
+	
 	function showErrorMessage($text,$colspan=2){
 		my_error($text,"blank",$colspan);
 	}

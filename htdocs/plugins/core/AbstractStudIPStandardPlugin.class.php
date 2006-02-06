@@ -90,15 +90,11 @@ class AbstractStudIPStandardPlugin extends AbstractStudIPPlugin{
     	$user = $this->getUser();
     	$permission = $user->getPermission();
     	
-    	if (!$permission->hasAdminPermission()){
-    		StudIPTemplateEngine::startContentTable();
+    	if (!$permission->hasAdminPermission()){    		
     		StudIPTemplateEngine::showErrorMessage(_("Sie besitzen keine Berechtigung, um dieses Plugin zu konfigurieren."));
-    		StudIPTemplateEngine::endContentTable();
 		}
 		else {
-			StudIPTemplateEngine::makeHeadline(sprintf(_("Default-Aktivierung von %s"),$this->getPluginname()));
-			StudIPTemplateEngine::startContentTable();
-			
+			echo(sprintf("<tr><th>%s</th></tr>",_("Default-Aktivierung")));
 			$sel_institutes = $_POST["sel_institutes"];
 			if ($_GET["selected"]){
 				if ($_POST["nodefault"] == true){
@@ -169,8 +165,8 @@ class AbstractStudIPStandardPlugin extends AbstractStudIPPlugin{
 					<input type="checkbox" name="nodefault"><?= _("keine Voreinstellung wählen") ?>
 					<p>
 					
-					<?= makeButton("uebernehmen","input") ?>
-					<a href="<?= PluginEngine::getLinkToAdministrationPlugin() ?>"><?= makeButton("zurueck","img") ?></a>
+					<?= makeButton("uebernehmen","input",_("Einstellungen speichern")) ?>
+					<a href="<?= PluginEngine::getLinkToAdministrationPlugin() ?>"><?= makeButton("zurueck","img",_("Zurück zur Plugin-Verwaltung")) ?></a>
 					</form>
 				</td>
 			</tr>
@@ -191,8 +187,7 @@ class AbstractStudIPStandardPlugin extends AbstractStudIPPlugin{
 						)
 				);
 			print_infobox ($infobox);
-			StudIPTemplateEngine::endInfoBoxTableCell();
-			StudIPTemplateEngine::endContentTable();
+			StudIPTemplateEngine::endInfoBoxTableCell();			
 		}
     }
 }

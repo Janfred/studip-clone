@@ -19,42 +19,27 @@ class PluginAdministrationVisualization extends AbstractStudIPPluginVisualizatio
 				StudIPTemplateEngine::showSuccessMessage(_("Die Installation des Plugins war erfolgreich"));
 				break;
 			case PLUGIN_UPLOAD_ERROR: 
-				StudIPTemplateEngine::showErrorMessage(sprintf(_("Der Upload des Plugins ist fehlgeschlagen. <a href=\"%s\">%s</a>"),PluginEngine::getLinkToAdministrationPlugin(),makeButton("zurueck","img")));
+				StudIPTemplateEngine::showErrorMessage(sprintf(_("Der Upload des Plugins ist fehlgeschlagen.")));
 				break;
 			case PLUGIN_MANIFEST_ERROR: 
-				StudIPTemplateEngine::showErrorMessage(sprintf(_("Das Manifest des Plugins ist nicht korrekt. <a href=\"%s\">%s</a>"),PluginEngine::getLinkToAdministrationPlugin(),makeButton("zurueck","img")));
+				StudIPTemplateEngine::showErrorMessage(sprintf(_("Das Manifest des Plugins ist nicht korrekt.")));
 				break;			
 			case PLUGIN_MISSING_MANIFEST_ERROR: 
-				StudIPTemplateEngine::showErrorMessage(sprintf(_("Das Manifest des Plugins fehlt. <a href=\"%s\">%s</a>"),PluginEngine::getLinkToAdministrationPlugin(),makeButton("zurueck","img")));
+				StudIPTemplateEngine::showErrorMessage(sprintf(_("Das Manifest des Plugins fehlt.")));
 				break;
 			case PLUGIN_ALLREADY_INSTALLED_ERROR: 
-				StudIPTemplateEngine::showErrorMessage(sprintf(_("Das Plugin ist bereits installiert. <a href=\"%s\">%s</a>"),PluginEngine::getLinkToAdministrationPlugin(),makeButton("zurueck","img")));
+				StudIPTemplateEngine::showErrorMessage(sprintf(_("Das Plugin ist bereits installiert.")));
 				break;
 			default:
 				break;			
 		}	
 	}
 	
-	function showPluginPackageDownloadView($packagelink){
-		 StudIPTemplateEngine::makeHeadline(_("Plugin-Paket downloaden"));	 
-		 StudIPTemplateEngine::startContentTable();
-		 StudIPTemplateEngine::showSuccessMessage(_("Plugin-Paket erfolgreich erzeugt"));
-		 ?>
-		 <tr>
-		 	 <td><?= sprintf(_("Sie können das Pluginpaket <a href=\"%s\">hier herunterladen.</a>"),$packagelink)?></td>
-		 </tr>
-		 <tr>
-		 	 <td><a href="<?= PluginEngine::getLinkToAdministrationPlugin() ?>">zurück zur PluginAdministration</a></td>
-		 </tr>
-		 <?php
-		 StudIPTemplateEngine::endContentTable();
+	function showPluginPackageDownloadView($packagelink){			
+		 StudIPTemplateEngine::showSuccessMessage(sprintf(_("Das Plugin-Paket erfolgreich erzeugt.<br>Sie können das Pluginpaket <a href=\"%s\">hier herunterladen.</a>"),$packagelink));		 
 	}
 	
-	function showPluginList($plugins){
-		StudIPTemplateEngine::makeHeadline(_("Installierte Plugins"));
-
-		StudIPTemplateEngine::startContentTable();
-		
+	function showPluginList($plugins){		
 		$relativepath = $this->pluginref->getPluginpath();
 		?>
 			<tr>
@@ -75,8 +60,7 @@ class PluginAdministrationVisualization extends AbstractStudIPPluginVisualizatio
 				<td align="left"><img src="<?= $relativepath?>/img/haken.gif" border="0" /><?= _("Aktiviert") ?></td>
 			</tr>
 		<?php
-		}
-		StudIPTemplateEngine::endContentTable();
+		}		
 	}
 	
 	function showPluginAdministrationList($plugins,$msg=""){
@@ -85,11 +69,7 @@ class PluginAdministrationVisualization extends AbstractStudIPPluginVisualizatio
 		echo "\n" . $cssSw->GetHoverJSFunction() . "\n";
 		$cssSw->resetClass();
 		// default view
-		$nav = $this->pluginref->getTopNavigation();
-		StudIPTemplateEngine::makeHeadline($nav->getDisplayname(),true,$this->pluginref->getPluginiconname());
-
-		StudIPTemplateEngine::startContentTable(true);
-		
+		$nav = $this->pluginref->getTopNavigation();	
 		$this->showMessage($msg);
 		
 		$relativepath = $this->pluginref->getPluginpath();
@@ -108,7 +88,7 @@ class PluginAdministrationVisualization extends AbstractStudIPPluginVisualizatio
 			
 		<?php
 		
-		$absenden = makeButton("speichern","input");
+		$absenden = makeButton("speichern","input",_("Einstellungen speichern"));
 		$lasttype = "";
 		foreach($plugins as $plugin){
 			$cssSw->switchClass();
@@ -169,10 +149,9 @@ class PluginAdministrationVisualization extends AbstractStudIPPluginVisualizatio
 			 				<td>
 							 	<form action="<?= PluginEngine::getLink($this->pluginref)?>" enctype="multipart/form-data" method="post">
 								<input type="hidden" value="install" name="action">
-								<input name="upload_file" type="file" size="50" maxlength="100000">
-								<input type="image" <?= makeButton("hinzufuegen","image") ?>><br>
-								<input type="checkbox" name="update" value="force"><?= _("Aktualisieren, falls Plugin schon vorhanden.")?>
-								
+								<input name="upload_file" type="file" size="50" maxlength="100000">								
+								<?= makeButton("hinzufuegen","input",_("neues Plugin installieren")) ?><br>
+								<input type="checkbox" name="update" value="force"><?= _("Aktualisieren, falls Plugin schon vorhanden.")?>								
 								</form>
 							</td>
 						</tr>
@@ -199,8 +178,7 @@ class PluginAdministrationVisualization extends AbstractStudIPPluginVisualizatio
 						)
 				);
 		print_infobox ($infobox,$relativepath . "/img/modules.jpg");
-		StudIPTemplateEngine::endInfoBoxTableCell();
-		StudIPTemplateEngine::endContentTable();
+		StudIPTemplateEngine::endInfoBoxTableCell();		
 	}
 }
 ?>

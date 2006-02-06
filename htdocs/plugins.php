@@ -85,18 +85,14 @@ else if ($type == "Administration") {
 	if ($perm->have_perm("admin")){
 	   // display the admin menu
 	   include ("links_admin.inc.php");
-	   // let the plugin show its view 
-	   /*  
-	   echo ("<div align=\"center\">");
-	   echo ("<table width=\"100%\">");
-	   echo("<tr><td>");
-	   */
+	   
+	   // let the plugin show its view	
+	   $pluginnav = $plugin->getNavigation();
+	   StudIPTemplateEngine::makeHeadline($pluginnav->getDisplayname(),true,$plugin->getPluginiconname());
+	   StudIPTemplateEngine::startContentTable(true);
 	   $plugin->$cmd($pluginparams);   
-	   /*
-	   echo ("</td></tr>");
-	   echo("</table>");
-	   echo ("</div>");
-	   */
+	   StudIPTemplateEngine::endContentTable();
+	   
 	}
 	else {
 		StudIPTemplateEngine::makeHeadline(_("fehlende Rechte"));

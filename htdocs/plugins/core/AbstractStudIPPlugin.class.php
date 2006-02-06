@@ -67,32 +67,33 @@ class AbstractStudIPPlugin {
 	   $version = $plugininfos["version"];
 	   $vendor = $plugininfos["origin"];
 	   $origname = $plugininfos["pluginname"];
-	   StudIPTemplateEngine::makeHeadline(_("Plugin-Details"));
-	   StudIPTemplateEngine::startContentTable();
+	   StudIPTemplateEngine::makeContentHeadline(_("Plugin-Details"),2);	   
 		?>
 				<tr>
 					<td>Name:</td>
-					<td align="left"><?= $this->pluginname ?></td>
+					<td align="left">&nbsp;<?= $this->pluginname ?></td>
 				</tr>
 				<tr>
 					<td>Name (original):</td>
-					<td align="left"><?= $origname ?></td>
+					<td align="left">&nbsp;<?= $origname ?></td>
 				</tr>
 				<tr>
 					<td>Klasse:</td>
-					<td align="left"><?= $this->getPluginclassname() ?></td>
+					<td align="left">&nbsp;<?= $this->getPluginclassname() ?></td>
 				</tr>
 				<tr>
 					<td>Origin:</td>
-					<td align="left"><?= $vendor ?></td>
+					<td align="left">&nbsp;<?= $vendor ?></td>
 				</tr>
 				<tr>
 					<td>Version:</td>
-					<td align="left"><?= $version ?></td>
+					<td align="left">&nbsp;<?= $version ?></td>
 				</tr>
-				
+				<tr>
+					<td colspan="2" align="center"><a href="<?= PluginEngine::getLinkToAdministrationPlugin()?>"><?= makeButton("zurueck","img",_("zurück zur Plugin-Verwaltung"))?></a></td>
+				</tr>
 		<?php
-		StudIPTemplateEngine::endContentTable();
+		
 	}
 	
 	function showAdministrationPage(){
