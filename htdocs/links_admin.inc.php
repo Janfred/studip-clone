@@ -233,7 +233,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 		$structure["back_jump"]=array ('topKat'=>"", 'name'=>$back_jump, 'link'=>"seminar_main.php?auswahl=".$SessSemName[1], 'active'=>FALSE);
 	
 	if ($perm->have_perm("root") && $GLOBALS["PLUGINS_ENABLE"]) {
-		$structure["plugins"]=array ('topKat'=>"", 'name'=>_("Plugins"), 'link'=>"plugins.php?cmd=show&id=1", 'active'=>FALSE);		
+		$structure["plugins"]=array ('topKat'=>"", 'name'=>_("Administrations-Plugins"), 'link'=>"plugins.php?cmd=show&id=1", 'active'=>FALSE);		
 	}		
 		
 	//Bottomkats
@@ -254,7 +254,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 	$structure["zugang"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Zugangsberechtigungen"), 'link'=>"admin_admission.php?list=TRUE", 'active'=>FALSE, 'isolator'=>TRUE);
 	if (($modules["participants"]) || (!$SessSemName[1]))
 		$structure["statusgruppe_sem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Gruppen&nbsp;/&nbsp;Funktionen"), 'link'=>"admin_statusgruppe.php?list=TRUE&view=statusgruppe_sem", active=>FALSE);
-	$structure["modules_sem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Module"), 'link'=>"admin_modules.php?list=TRUE&view=modules_sem", 'active'=>FALSE);
+	$structure["modules_sem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Module/Plugins"), 'link'=>"admin_modules.php?list=TRUE&view=modules_sem", 'active'=>FALSE);
 	if ($perm->have_perm("dozent")) {
 		$structure["copysem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Veranstaltung&nbsp;kopieren"), 'link'=>"copy_assi.php?list=TRUE&new_session=TRUE", 'active'=>FALSE, 'isolator'=>TRUE);
 		$structure["new_sem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("neue&nbsp;Veranstaltung&nbsp;anlegen"), 'link'=>"admin_seminare_assi.php?new_session=TRUE", 'active'=>FALSE);

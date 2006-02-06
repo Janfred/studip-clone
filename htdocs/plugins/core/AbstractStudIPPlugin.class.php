@@ -92,8 +92,7 @@ class AbstractStudIPPlugin {
 				<tr>
 					<td colspan="2" align="center"><a href="<?= PluginEngine::getLinkToAdministrationPlugin()?>"><?= makeButton("zurueck","img",_("zurück zur Plugin-Verwaltung"))?></a></td>
 				</tr>
-		<?php
-		
+		<?php		
 	}
 	
 	function showAdministrationPage(){
@@ -186,12 +185,6 @@ class AbstractStudIPPlugin {
 	 * Liefert die Persistenzschnittstelle zu diesem Plugin zurück.
 	 * @return die Persisitenzschnittstelle vom Typ AbstractPluginPersistence
 	 */
-	/*
-	function getPersistencePlugin(){
-		return $this->pluginpersistence;
-	}
-	*/
-	
 	
 	/**
 	 * Getter und Setter für die Attribute der Klasse
@@ -201,6 +194,9 @@ class AbstractStudIPPlugin {
 	}
 	
 	function getPluginname(){
+		if ($this->pluginname == ""){
+			$this->pluginname = get_class($this);
+		}
 		return $this->pluginname;
 	}
 	
@@ -266,19 +262,6 @@ class AbstractStudIPPlugin {
 	function getPluginpath(){
 		return $this->pluginpath;
 	}
-	
-	/*
-	function setPluginengine($engine){
-		if (is_a($engine,'PluginIntegratorEngine') || is_subclass_of($engine,'PluginIntegratorEngine')){
-		   $this->pluginengine=$engine;
-		}
-	}
-	
-	
-	function getPluginengine(){
-		return $this->pluginengine;
-	}
-	*/
 	
 	/**
 	* @param $subnavigationparam - set if a subnavigation item was clicked. The value is plugin dependant and specified by the plugins subnavigation link params.

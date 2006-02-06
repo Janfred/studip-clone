@@ -296,19 +296,19 @@ if ($admin_modules_data["range_id"]) {
 							if ($plugin->isActivated() || $globalactivated){
 								// TODO: Fallunterscheidung, welches AdminInfo angezeigt werden muss.
 								if ($globalactivated){
-									print ("(per Voreinstellung aktiviert) <font color=\"red\">".$admininfo->getMsg_pre_warning()."</font>");
+									print ("(per Voreinstellung aktiviert) <font color=\"red\">".$admininfo->getWarningBeforeDeactivation()."</font>");
 								}
 								else {
-									print ("<font color=\"red\">".$admininfo->getMsg_pre_warning()."</font>");
+									print ("<font color=\"red\">".$admininfo->getWarningBeforeDeactivation()."</font>");
 								}
 							}
 							else {
-								print ($admininfo->getMsg_activate());
+								print ($admininfo->getWarningBeforeActivation());
 							}
 						}
 						else {
 							// kein AdminInfo vorhanden, also nichts ausgeben
-							print ("Dieses Plugin hat keinen Hilfetext bereitgestellt.");
+							print (_("Dieses Plugin hat keinen Hilfetext bereitgestellt."));
 						}
 						?></font>
 					</td>

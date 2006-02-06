@@ -10,10 +10,10 @@ class AdminInfo {
 
     function AdminInfo() {
     	$this->desc = "";
-    	$this->msg_pre_warning = "Beim Deaktivieren dieses Plugins gehen möglicherweise Einstellungen verloren.";
-    	$this->msg_warning = "";
-    	$this->msg_activate = "Dieses Plugin kann jederzeit aktiviert werden.";
-    	$this->msg_deactivate = "Dieses Plugin kann jederzeit deaktiviert werden";
+    	$this->msg_pre_warning = _("Achtung: Beim Deaktivieren dieses Plugins gehen möglicherweise Einstellungen verloren.");
+    	$this->msg_warning = _("");
+    	$this->msg_activate = _("Dieses Plugin kann jederzeit aktiviert werden.");
+    	$this->msg_deactivate = _("Dieses Plugin kann jederzeit deaktiviert werden");
     }
     
     function getDesc(){
@@ -54,6 +54,14 @@ class AdminInfo {
     
     function setMsg_deactivate($newmsg){
     	$this->msg_deactivate = $newmsg;
+    }
+    
+    function getWarningBeforeDeactivation(){
+    	return $this->getMsg_deactivate();
+    }
+    
+    function getWarningBeforeActivation(){
+    	return $this->getMsg_activate();
     }
 }
 ?>
