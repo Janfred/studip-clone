@@ -13,6 +13,25 @@ class PluginAdministrationVisualization extends AbstractStudIPPluginVisualizatio
 		parent::AbstractStudIPPluginVisualization($adminplugin);
 	}
 	
+	function showDeinstallQuestion($plugin) {
+		if (!is_object($plugin)){
+			return;
+		}
+		?>
+		<tr>
+			<td valign="top"><img src="/pictures/ausruf.gif"></td>
+			<td valign="top">
+			<?= sprintf(_("Wollen Sie wirklich <b>%s</b> deinstallieren? <br>"), htmlReady($plugin->getPluginname()))?>
+			<?= sprintf("<a href=\"%s\">" . makeButton("ja2") . "</a>&nbsp; \n",PluginEngine::getLink($this->pluginref,array("deinstall" => $plugin->getPluginid(),"forcedeinstall" => true)))?>
+			<?= sprintf("<a href=\"%s\">" . makeButton("nein") . "</a>\n",PluginEngine::getLinkToAdministrationPlugin())?>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" height="5">&nbsp;</td>
+		</tr>		
+		<?php
+	}
+	
 	function showMessage($errorcode) {
 		switch ($errorcode) {
 			case PLUGIN_INSTALLATION_SUCCESSFUL:

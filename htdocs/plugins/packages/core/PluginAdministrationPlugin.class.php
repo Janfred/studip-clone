@@ -70,6 +70,7 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 		$deinstall = $_GET["deinstall"];
 		$action = $_POST["action"]; 
 		$forceupdate = $_POST["update"];
+		$forcedeinstall = $_REQUEST["forcedeinstall"];
 		
 		if (isset($action)){
 		  if ($action == "config"){
@@ -138,20 +139,26 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 		if (isset($deinstall)){
 			$plugin = $pluginengine->getPlugin($deinstall);
 			if (is_object($plugin)){
-			   $type = PluginEngine::getTypeOfPlugin($plugin);
-			   	if ($type == "Administration"){
-			   	   $adminpluginengine->deinstallPlugin($plugin);
-			   	}
-			   	else if ($type == "Standard") {
-					 $standardpluginengine->deinstallPlugin($plugin);
+			   if (isset($forcedeinstall)){
+ 				    $type = PluginEngine::getTypeOfPlugin($plugin);
+				   	if ($type == "Administration"){
+				   	   $adminpluginengine->deinstallPlugin($plugin);
+				   	}
+				   	else if ($type == "Standard") {
+						 $standardpluginengine->deinstallPlugin($plugin);
+					}
+					else if ($type == "System"){
+						 $systempluginengine->deinstallPlugin($plugin);
+					}
+					
+					$pluginenv = $plugin->getEnvironment();
+					// the old plugin directory has to be deleted
+					@exec("rm -rf " . escapeshellarg($pluginenv->getBasepath()) . "/" . escapeshellarg($plugin->getPluginpath()));
 				}
-				else if ($type == "System"){
-					 $systempluginengine->deinstallPlugin($plugin);
+				else {
+					// ask, if it should really be deleted
+					$this->pluginvis->showDeinstallQuestion($plugin);
 				}
-				
-				$pluginenv = $plugin->getEnvironment();
-				// the old plugin directory has to be deleted
-				@exec("rm -rf " . escapeshellarg($pluginenv->getBasepath()) . "/" . escapeshellarg($plugin->getPluginpath()));
 			}
 			// show the default view
 			$this->showDefaultView($pluginengine);

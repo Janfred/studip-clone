@@ -81,7 +81,7 @@ class StudIPTemplateEngine {
 		<?php
 	}
 	
-	function makeContentHeadline($title,$colspan=1){
+	function makeContentHeadline($title,$colspan=2){
 		echo(sprintf("<tr><th colspan=$colspan>%s</th></tr>",$title));
 	}
 	
@@ -95,6 +95,24 @@ class StudIPTemplateEngine {
 	
 	function showInfoMessage($text,$colspan=2){
 		my_info($text,"blank",$colspan);
+	}
+	
+	function showQuestionMessage($text,$colspan=2,$newrow=true){
+		$colspan = $colspan -1;
+		?>
+		
+		<tr>
+			<td valign="top"><img src="/pictures/ausruf.gif"></td>
+			<td valign="top" colspan=<?= $colspan?>>
+			<?= sprintf(_("%s <br>"), htmlReady($text))?>
+			<?= sprintf("<a href=\"%s\">" . makeButton("ja2") . "</a>&nbsp; \n",$GLOBALS["PHP_SELF"])?>
+			<?= sprintf("<a href=\"$PHP_SELF\">" . makeButton("nein") . "</a>\n")?>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="<?=$colspan?>" height="5">&nbsp;</td>
+		</tr>
+		<?php		
 	}
 }
 ?>

@@ -105,8 +105,13 @@ else if ($type == "Administration") {
 	}
 }
 else if ($type == "System") {
-	 // let the plugin show its view
-	 $plugin->$cmd($pluginparams);
+	$pluginnav = $plugin->getNavigation();
+	
+	StudIPTemplateEngine::makeHeadline($pluginnav->getDisplayname(),true,$plugin->getPluginiconname());
+	StudIPTemplateEngine::startContentTable();
+	// let the plugin show its view	 
+	$plugin->$cmd($pluginparams);
+	StudIPTemplateEngine::endContentTable();
 }
 else {
 	 // Further plugin types have to be integrated here
