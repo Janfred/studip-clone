@@ -115,6 +115,7 @@ if ($ELEARNING_INTERFACE_ENABLE)
 				echo ELearningUtils::getCMSHeader($connected_cms[$cms]->getName());
 				echo "<font size=\"-1\">";
 				echo "<br>\n";
+				echo "</font>";
 
 				echo ELearningUtils::getHeader(sprintf(_("Mein Benutzeraccount")));
 				if ($connected_cms[$cms]->user->isConnected())
@@ -129,7 +130,7 @@ if ($ELEARNING_INTERFACE_ENABLE)
 
 				if ($new_account_cms != $cms)
 				{
-					echo ELearningUtils::getMyAccountForm($account_message, $cms);
+					echo ELearningUtils::getMyAccountForm("<font size=\"-1\">" . $account_message . "</font>", $cms);
 
 					echo "<br>\n";
 
@@ -150,7 +151,7 @@ if ($ELEARNING_INTERFACE_ENABLE)
 							}
 						}
 						else
-							echo sprintf(_("Sie haben im System %s keine eigenen Lernmodule."), $connected_cms[$cms]->getName()) . "<br>\n<br>\n";
+							echo "<font size=\"-1\">" . sprintf(_("Sie haben im System %s keine eigenen Lernmodule."), $connected_cms[$cms]->getName()) . "<br>\n<br>\n</font>";
 							
 						echo "<br>\n";
 						echo $new_module_form[$cms];
@@ -164,7 +165,6 @@ if ($ELEARNING_INTERFACE_ENABLE)
 				}
 
 //				echo "<br>\n";
-				echo "</font>";
 				echo ELearningUtils::getCMSFooter($connected_cms[$cms]->getLogo());
 				echo "<br>\n";
 				ELearningUtils::bench("fetch data from $cms");
