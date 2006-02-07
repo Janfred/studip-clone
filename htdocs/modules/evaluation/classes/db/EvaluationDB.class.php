@@ -443,14 +443,14 @@ class EvaluationDB extends EvaluationObjectDB {
    * @param  array    $answerIDs  The answerIDs to get the pseudonym users
    * @return integer  The number of users
    */
-   function getUserVoted ($evalID, $answerIDs = array ()) {
+   function getUserVoted ($evalID, $answerIDs = array (), $questionIDs = array ()) {
       if (!is_object ($this->db))
          $this->db = DatabaseObject::getDBObject ();
 
       $result = array ();
 
       /* ask database ------------------------------------------------------- */
-      if (empty ($answerIDs)) {
+      if (empty ($answerIDs) && empty ($questionIDs)) {
           $sql =
             "SELECT DISTINCT".
             " user_id ".
@@ -458,22 +458,24 @@ class EvaluationDB extends EvaluationObjectDB {
             " eval_user ".
             "WHERE".
             " eval_id = '".$evalID."'";
-       } else {
-         $answerList = "";
-         foreach ($answerIDs as $answerID) {
-            $answerList .= "'".$answerID."',";
-         }
-         $answerList = substr ($answerList, 0, strlen ($answerList) - 1);
-
+       } elseif (empty ($questionIDs)) {
          $sql =
             "SELECT DISTINCT".
             " user_id ".
             "FROM".
             " evalanswer_user ".
             "WHERE".
-            " evalanswer_id IN (".$answerList.")";
-       }
-
+            " evalanswer_id IN ('".join("','", $answerIDs)."')";
+       } else {
+	    $sql =
+            "SELECT DISTINCT".
+            " user_id ".
+            "FROM".
+            " evalanswer INNER JOIN evalanswer_user USING(evalanswer_id) ".
+            "WHERE".
+            " parent_id IN ('".join("','", $questionIDs)."')";
+	   }
+	   
       $this->db->query ($sql);
        if ($this->db->Errno)
          return $this->throwError (1, _("EvalDB::getUserVoted - Fehlermeldung: ").$this->db->Error);

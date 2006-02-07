@@ -134,6 +134,8 @@ class EvaluationExportManagerCSV extends EvaluationExportManager {
       fputs ($this->filehandle, EVALEXPORT_DELIMITER._("Benutzername").EVALEXPORT_DELIMITER.EVALEXPORT_SEPERATOR);
       fputs ($this->filehandle, EVALEXPORT_DELIMITER._("Vorname").EVALEXPORT_DELIMITER.EVALEXPORT_SEPERATOR);
       fputs ($this->filehandle, EVALEXPORT_DELIMITER._("Nachname").EVALEXPORT_DELIMITER.EVALEXPORT_SEPERATOR);
+    
+	  $db      = new EvaluationAnswerDB ();
 
       /* for each question -------------------------------------------------- */
       foreach ($this->evalquestions as $evalquestion) {
@@ -142,6 +144,7 @@ class EvaluationExportManagerCSV extends EvaluationExportManager {
 
          /* Questiontype: likert scale -------------------------------------- */
          if ($type == EVALQUESTION_TYPE_LIKERT) {
+			 $db->addChildren($evalquestion);
             $header = $evalquestion->getText ().":";
             while ($answer = &$evalquestion->getNextChild ()) {
                if ($answer->isResidual ()) {
@@ -164,7 +167,8 @@ class EvaluationExportManagerCSV extends EvaluationExportManager {
 
          /* Questiontype: pol scale ----------------------------------------- */
          } elseif ($type == EVALQUESTION_TYPE_POL) {
-            $header = $evalquestion->getText ().":";
+			$db->addChildren($evalquestion);
+			$header = $evalquestion->getText ().":";
             $answer = $evalquestion->getNextChild ();
             $header .= $answer->getText ();
             $header .= "(".$answer->getPosition ().")";
@@ -246,15 +250,15 @@ class EvaluationExportManagerCSV extends EvaluationExportManager {
                $hasResidual = NO;
                $entry       = "";
                $residual    = 0;
-               while ($answer = &$evalquestion->getNextChild ()) {
-                  if ($answer->isResidual ())
+               foreach($db->getAllAnswers($evalquestion->getObjectID(), $userID) as $answer) {
+                  if ($answer['residual'])
                      $hasResidual = YES;
 
-                  if ($db->hasVoted ($answer->getObjectID (), $userID) == YES) {
-                     if ($answer->isResidual ()) {
+                  if ($answer['has_voted']) {
+                     if ($answer['residual']) {
                         $residual = 1;
                      } else {
-                        $entry = $answer->getPosition ();
+                        $entry = $answer['position'];
                      }
                   }
                }
@@ -270,19 +274,17 @@ class EvaluationExportManagerCSV extends EvaluationExportManager {
             /* Questiontype: multiple chioice ------------------------------ */
             elseif ($type == EVALQUESTION_TYPE_MC) {
                if ($evalquestion->isMultiplechoice ()) {
-                  while ($answer = &$evalquestion->getNextChild ()) {
-                     if ($db->hasVoted ($answer->getObjectID (), $userID) == YES)
-                        $entry = 1;
+				   foreach($db->getAllAnswers($evalquestion->getObjectID(), $userID) as $answer) {
+                     if ($answer['has_voted']) 
+						$entry = 1;
                      else
                         $entry = 0;
                      $this->addCol ($entry);
                   }
                } else {
                   $entry = "";
-                  while ($answer = &$evalquestion->getNextChild ()) {
-                     if ($db->hasVoted ($answer->getObjectID (), $userID) == YES)
-                        $entry = preg_replace ("(\r\n|\n|\r)", " ",
-                                                $answer->getText ());
+                  foreach($db->getAllAnswers($evalquestion->getObjectID(), $userID, true) as $answer) {
+					  if ($answer['has_voted']) $entry = preg_replace ("(\r\n|\n|\r)", " ", $answer['text']);
                   }
                   $this->addCol ($entry);
                }

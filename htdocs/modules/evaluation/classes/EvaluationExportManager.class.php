@@ -136,7 +136,7 @@ class EvaluationExportManager extends Object {
     $this->filename      = "";
     $this->filehandle    = "";
     $this->evalID        = $evalID;
-    $this->eval          = new Evaluation ($evalID, NULL, EVAL_LOAD_ALL_CHILDREN);
+    $this->eval          = new Evaluation ($evalID, NULL, EVAL_LOAD_FIRST_CHILDREN);
     $this->evalquestions = array ();
     $this->extension     = EVALEXPORT_EXTENSION;
 
@@ -177,12 +177,12 @@ class EvaluationExportManager extends Object {
       if (!$this->eval->isAnonymous ()) {
          $this->users = EvaluationDB::getUserVoted ($this->eval->getObjectID ());
       } else {
-         $answers = $this->eval->getSpecialChildobjects ($this->eval, INSTANCEOF_EVALANSWER);
-         $answerIDs = array ();
-         foreach ($answers as $answer) {
-            array_push ($answerIDs, $answer->getObjectID ());
+         $questions = $this->eval->getSpecialChildobjects ($this->eval, INSTANCEOF_EVALQUESTION);
+         $questionIDs = array ();
+         foreach ($questions as $question) {
+            array_push ($questionIDs , $question->getObjectID ());
          }
-         $this->users = EvaluationDB::getUserVoted ($this->eval->getObjectID (), $answerIDs);
+         $this->users = EvaluationDB::getUserVoted ($this->eval->getObjectID (), null ,$questionIDs );
       }
 
       if (empty ($this->users))

@@ -396,6 +396,22 @@ class EvaluationAnswerDB extends EvaluationObjectDB {
 
     return $this->db->next_record () ? YES : NO;
   }
+  
+   function getAllAnswers ($question_id, $userID, $only_user_answered = false) {
+   $sql =
+      "SELECT".
+      " evalanswer.*, COUNT(IF(user_id='$userID',1,NULL)) AS has_voted ".
+      "FROM".
+      " evalanswer LEFT JOIN " .
+	  " evalanswer_user USING(evalanswer_id) ".
+      "WHERE".
+      " parent_id = '".$question_id."'".
+      ($only_user_answered ?  " AND user_id = '".$userID."' " : "") .
+	  " GROUP BY evalanswer.evalanswer_id ORDER BY position";
+    $this->db->query ($sql);
+	$ret = array();
+	while($this->db->next_record ()) $ret[] = $this->db->Record;
+    return $ret;
+  }
 }
-
 ?>
