@@ -17,7 +17,7 @@
 * along with this program; if not, write to the Free Software
 * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
-// $Id$
+// $ Id:  $
 
 require_once($ABSOLUTE_PATH_STUDIP . "dates.inc.php"); // Funktionen zum Loeschen von Terminen
 require_once($ABSOLUTE_PATH_STUDIP . "datei.inc.php"); // Funktionen zum Loeschen von Dokumenten
@@ -27,19 +27,19 @@ require_once($ABSOLUTE_PATH_STUDIP . "config_tools_semester.inc.php");
 require_once($ABSOLUTE_PATH_STUDIP . "visual.inc.php");
 require_once($ABSOLUTE_PATH_STUDIP . "statusgruppe.inc.php"); //Enthaelt Funktionen fuer Statusgruppen
 require_once($ABSOLUTE_PATH_STUDIP . "log_events.inc.php"); // Logging
-require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/DataFields.class.php"); //Enthaelt Funktionen fuer Statusgruppen
-require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/StudipLitList.class.php");
-require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/StudipNews.class.php");
+require_once($ABSOLUTE_PATH_STUDIP . "lib/classes/DataFields.class.php"); //Enthaelt Funktionen fuer Statusgruppen
+require_once($ABSOLUTE_PATH_STUDIP . "lib/classes/StudipLitList.class.php");
+require_once($ABSOLUTE_PATH_STUDIP . "lib/classes/StudipNews.class.php");
 
 
-page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
+page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", 'user' => "Seminar_User"));
 $auth->login_if($auth->auth["uid"] == "nobody");
 
 $check_perm = (get_config('ALLOW_DOZENT_ARCHIV') ? 'dozent' : 'admin');
 
 $perm->check($check_perm);
 
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+include ($ABSOLUTE_PATH_STUDIP . 'seminar_open.php'); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
 
@@ -55,9 +55,9 @@ $db4 = new DB_Seminar;
 $sess->register("archiv_assi_data");
 $cssSw = new cssClassSwitcher; 
 // Start of Output
-include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-include ("$ABSOLUTE_PATH_STUDIP/header.php"); // Output of Stud.IP head
-include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php"); //Linkleiste fuer admins
+include ($ABSOLUTE_PATH_STUDIP.'html_head.inc.php'); // Output of html head
+include ($ABSOLUTE_PATH_STUDIP.'header.php'); // Output of Stud.IP head
+include ($ABSOLUTE_PATH_STUDIP.'links_admin.inc.php'); //Linkleiste fuer admins
 
 // single delete (a Veranstaltung is open)
 if ($SessSemName[1]) {
@@ -66,8 +66,10 @@ if ($SessSemName[1]) {
 } 
 // Handlings....
 // Kill current list and stuff
+
 if ($new_session)
 	$archiv_assi_data = '';
+
 // A list was sent
 if (is_array($archiv_sem)) {
 	unset($archiv_assi_data["sems"]);
@@ -493,7 +495,8 @@ if (($archiv_assi_data["sems"]) && (sizeof($archiv_assi_data["sem_check"]) > 0))
 					print("&nbsp;<a href=\"$PHP_SELF?dec=TRUE\">" . makeButton("vorherige", "img") . "</a>");
 				} 
 				if (!$links_admin_data["sem_id"]) {
-					print("&nbsp;<a href=\"$PHP_SELF?list=TRUE&new_session=TRUE\">" . makeButton("abbrechen", "img") . "</a>");
+					echo '&nbsp;<a href="' .
+					 (($SessSemName[1]) ?  $GLOBALS['ABSOLUTE_URI_STUDIP'].'admin_seminare1.php?list=TRUE' : $_SERVER['PHP_SELF'].'?list=TRUE&new_session=TRUE'). '">' . makeButton('abbrechen', 'img') . '</a>';
 				} 
 				print("&nbsp;<a href=\"$PHP_SELF?archive_kill=TRUE\">" . makeButton("archivieren", "img") . "</a>"); 
 				// can we inc?
