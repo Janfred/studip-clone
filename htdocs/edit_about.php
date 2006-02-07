@@ -379,11 +379,11 @@ function edit_pers($password, $check_pass, $response, $new_username, $vorname, $
 	if (!StudipAuthAbstract::CheckField("user_info.privatnr", $this->auth_user['auth_plugin'])){
 		$query .= "privatnr='$telefon',";
 	}
-/*	// vorbereitet fuer StEP00045
+
 	if (!StudipAuthAbstract::CheckField("user_info.privatcell", $this->auth_user['auth_plugin'])){
 		$query .= "privatcell='$cell',";
 	}
-*/
+
 	if (!StudipAuthAbstract::CheckField("user_info.privadr", $this->auth_user['auth_plugin'])){
 		$query .= "privadr='$anschrift',";
 	}
