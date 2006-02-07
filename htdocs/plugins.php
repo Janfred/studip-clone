@@ -13,6 +13,9 @@
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 
 $auth->login_if($auth->auth["uid"] == "nobody");
+include ("seminar_open.php"); 		// initialise Stud.IP-Session
+include ("html_head.inc.php");
+include ("header.php");
 
 // read in the command and pluginid
 $cmd = $_GET["cmd"];
@@ -22,11 +25,6 @@ $pluginengine = PluginEngine::getPluginPersistence();
 
 // create an instance of the queried pluginid
 $plugin = $pluginengine->getPlugin($pluginid);
-
-include ("seminar_open.php"); 		// initialise Stud.IP-Session
-include ("html_head.inc.php");
-include ("header.php");
-
 
 // TODO: insert custom error handling for plugin engine
 // allowed commands
