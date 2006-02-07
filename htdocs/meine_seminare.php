@@ -96,7 +96,7 @@ function print_seminar_content ($semid, $my_obj_values, $type = 'seminar') {
 	  elseif ($my_obj_values["contentmodule"])
 			echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to=elearning_interface.php&view=show\"><img src='pictures/icon-lern.gif' border=0 ".tooltip(sprintf(_("%s Content-Modul(e)"), $my_obj_values["contentmodule"]))."></a>";
 	  else
-			echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
+			echo "&nbsp; <img src='pictures/icon-leer.gif' width=\"18\" height=\"17\" border=0>";
   }
 
  //votes
