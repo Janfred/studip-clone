@@ -420,7 +420,7 @@ if (($archiv_assi_data["sems"]) && (sizeof($archiv_assi_data["sem_check"]) > 0))
 				<td class="<? echo $cssSw->getClass() ?>" width="48%" valign="top">
 				<?
 				if ($db->f("art"))
-					printf ("<font size=-1><b>" . _("Art/Form:") . "</b></font><br /><font size=-1>%s</font>", $db->f("art"));
+					printf ("<font size=-1><b>" . _("Art/Form:") . "</b></font><br /><font size=-1>%s</font>", htmlReady($db->f("art")));
 				else
 					print "&nbsp; ";
 				?>
