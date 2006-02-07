@@ -1182,13 +1182,13 @@ if ($view == 'Daten') {
 	$cssSw->switchClass();
 	echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"100%\" colspan=3 align=\"center\"><b>" . _("Freiwillige Angaben") . "</b></td></tr>\n";
 	 $cssSw->switchClass();
-	echo '<tr><td class="'.$cssSw->getClass(). '" width="25%" align="left"><blockquote><b>' . _("Telefon (privat):") . ' </b></blockquote></td><td class="' . $cssSw->getClass(). '"  width="25%" align="left"><font size="-1">&nbsp; '. _("Festnetz"). "</font><br />\n";
+	echo '<tr><td class="'.$cssSw->getClass(). '" width="25%" align="left"><blockquote><b>' . _("Telefon (privat):") . ' </b></blockquote></td><td class="' . $cssSw->getClass(). '"  width="25%" align="left"><font size="-1">&nbsp; '. _("Festnetz"). ":</font><br />\n";
 	if (StudipAuthAbstract::CheckField('user_info.privatnr', $my_about->auth_user['auth_plugin'])) {
 		echo '&nbsp;' . htmlReady($my_about->user_info['privatnr']);
 	} else {
 		echo '&nbsp; <input type="text" size="' .round($max_col*0.25).'" name="telefon" value="'. htmlReady($my_about->user_info["privatnr"]). '">';
 	}
-	echo '<td class="'.$cssSw->getClass(). '"  width="50%" align="left"><font size="-1">&nbsp; '. _("Mobiltelefon"). "</font><br />\n";
+	echo '<td class="'.$cssSw->getClass(). '"  width="50%" align="left"><font size="-1">&nbsp; '. _("Mobiltelefon"). ":</font><br />\n";
 	if (StudipAuthAbstract::CheckField('user_info.privatcell', $my_about->auth_user['auth_plugin'])) {
 		echo '&nbsp;' . htmlReady($my_about->user_info['privatcell']);
 	} else {
