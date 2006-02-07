@@ -189,6 +189,7 @@ if(!file_exists("./user/".$user_id.".jpg")) {
 <? echo "<b><font size=7>".htmlReady($db->f("fullname"))."</font></b><br><br>";?>
 <? echo "<b>&nbsp;" . _("E-mail:") . " </b><a href=\"mailto:". $db->f("Email")."\">".htmlReady($db->f("Email"))."</a><br>";
 IF ($db->f("privatnr")!="") echo "<b>&nbsp;" . _("Telefon (privat):") . " </b>". htmlReady($db->f("privatnr"))."<br>";
+IF ($db->f("privatcell")!="") echo "<b>&nbsp;" . _("Mobiltelefon:") . " </b>". htmlReady($db->f("privatcell"))."<br>";
 IF ($db->f("privadr")!="") echo "<b>&nbsp;" . _("Adresse (privat):") . " </b>". htmlReady($db->f("privadr"))."<br>";
 IF ($db->f("Home")!="") {
 	$home=$db->f("Home");
