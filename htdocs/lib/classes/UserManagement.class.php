@@ -132,11 +132,11 @@ class UserManagement {
 			if ($this->db->affected_rows() == 0) {
 				return FALSE;
 			}
-			$this->db->query("INSERT INTO user_info SET user_id = '".$this->user_data['auth_user_md5.user_id']."', mkdate='".time()."',  chdate='".time()."'");
+			$this->db->query("INSERT INTO user_info SET user_id = '".$this->user_data['auth_user_md5.user_id']."', mkdate='".time()."'");
 			if ($this->db->affected_rows() == 0) {
 				return FALSE;
 			}
-			log_event("USER_CREATE",$this->user_data['auth_user_m5.user_id']);
+			log_event("USER_CREATE",$this->user_data['auth_user_md5.user_id']);
 		}
 		
 		if (!$this->user_data['auth_user_md5.auth_plugin']) {
@@ -814,6 +814,7 @@ class UserManagement {
 		} else {
 			$this->msg .= "msg§" . sprintf(_("User \"%s\" gel&ouml;scht."), $this->user_data['auth_user_md5.username']) . "§";
 		}
+		log_event("USER_DEL",$this->user_data['auth_user_md5.user_id'],NULL,sprintf("%s %s (%s)", $this->user_data['auth_user_md5.Vorname'], $this->user_data['auth_user_md5.Nachname'], $this->user_data['auth_user_md5.username'])); //log with Vorname Nachname (username) as info string
 
 		// Can we reach the email?
 		if ($this->checkMail($this->user_data['auth_user_md5.Email'])) {
