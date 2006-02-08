@@ -353,7 +353,7 @@ class UserManagement {
 		// include language-specific subject and mailbody
 		$user_language = getUserLanguagePath($this->user_data['auth_user_md5.user_id']); // user has been just created, so we will get $DEFAULT_LANGUAGE
 		$Zeit=date("H:i:s, d.m.Y",time());
-		include_once($GLOBALS['ABSOLUTE_PATH_STUDIP']."locale/$user_language/LC_MAILS/create_mail.inc.php");
+		include($GLOBALS['ABSOLUTE_PATH_STUDIP']."locale/$user_language/LC_MAILS/create_mail.inc.php");
 
 		// send mail
 		$this->smtp->SendMessage(
@@ -475,7 +475,7 @@ class UserManagement {
 		// include language-specific subject and mailbody
 		$user_language = getUserLanguagePath($this->user_data['auth_user_md5.user_id']);
 		$Zeit=date("H:i:s, d.m.Y",time());
-		include_once($GLOBALS['ABSOLUTE_PATH_STUDIP']."locale/$user_language/LC_MAILS/change_mail.inc.php");
+		include($GLOBALS['ABSOLUTE_PATH_STUDIP']."locale/$user_language/LC_MAILS/change_mail.inc.php");
 
 		// send mail
 		$this->smtp->SendMessage(
@@ -593,7 +593,7 @@ class UserManagement {
 		// include language-specific subject and mailbody
 		$user_language = getUserLanguagePath($this->user_data['auth_user_md5.user_id']);
 		$Zeit=date("H:i:s, d.m.Y",time());
-		include_once($GLOBALS['ABSOLUTE_PATH_STUDIP']."locale/$user_language/LC_MAILS/password_mail.inc.php");
+		include($GLOBALS['ABSOLUTE_PATH_STUDIP']."locale/$user_language/LC_MAILS/password_mail.inc.php");
 
 		// send mail
 		$this->smtp->SendMessage(
@@ -791,8 +791,8 @@ class UserManagement {
 		object_kill_visits($this->user_data['auth_user_md5.user_id']);
 		
 		// delete picture
-		if(file_exists("./user/" . $this->user_data['auth_user_md5.user_id'] . ".jpg")) {
-			if (unlink("./user/" . $this->user_data['auth_user_md5.user_id'] . ".jpg"))
+		if(@file_exists($GLOBALS['ABSOLUTE_PATH_STUDIP'] . "user/" . $this->user_data['auth_user_md5.user_id'] . ".jpg")) {
+			if (@unlink($GLOBALS['ABSOLUTE_PATH_STUDIP'] . "user/" . $this->user_data['auth_user_md5.user_id'] . ".jpg"))
 				$this->msg .= "info§" . _("Bild gel&ouml;scht.") . "§";
 			else
 				$this->msg .= "error§" . _("Bild konnte nicht gel&ouml;scht werden.") . "§";
@@ -820,7 +820,7 @@ class UserManagement {
 		if ($this->checkMail($this->user_data['auth_user_md5.Email'])) {
 			// include language-specific subject and mailbody
 			$Zeit=date("H:i:s, d.m.Y",time());
-			include_once($GLOBALS['ABSOLUTE_PATH_STUDIP']."locale/$user_language/LC_MAILS/delete_mail.inc.php");
+			include($GLOBALS['ABSOLUTE_PATH_STUDIP']."locale/$user_language/LC_MAILS/delete_mail.inc.php");
 
 			// send mail
 			$this->smtp->SendMessage(
