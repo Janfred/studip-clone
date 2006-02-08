@@ -215,6 +215,8 @@ function showlog_format_studyarea($area_id) {
 }
 
 function showlog_format_infotemplate($action, $user_id, $affected, $coaffected, $info, $dbg_info) {
+	$info = htmlReady($info);
+	$dbg_info = htmlReady($dbg_info);
 	$text=$action['info_template'];
 	$text=preg_replace('/%sem\(%affected\)/',showlog_format_sem($affected),$text);
 	$text=preg_replace('/%sem\(%coaffected\)/',showlog_format_sem($coaffected),$text);

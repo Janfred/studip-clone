@@ -486,6 +486,19 @@ if (isset($_GET['details'])) {
 
 		} else { // wir haben ein Suchergebnis
 			print "<table border=0 bgcolor=\"#eeeeee\" align=\"center\" cellspacing=0 class=blank cellpadding=2 width=\"100%\">";
+
+			if ($GLOBALS["PLUGINS_ENABLE"]){
+				// plugins activated
+				$userkillplugin = null;
+				$pluginengine = PluginEngine::getPluginPersistence("Administration");
+				foreach ($pluginengine->getAllActivatedPlugins() as $activatedplugin){
+					if (strtolower($activatedplugin->getPluginclassname()) == 'userkillplugin') $userkillplugin =& $activatedplugin;
+				}
+				if (is_object($userkillplugin)){
+					echo "<tr valign=\"top\"><td colspan=\"7\"><a href=\"" . PluginEngine::getLink($userkillplugin,array('transfer_search' => 1))."\">"._("Suchergebnis in Löschformular übernehmen")."</a></td></tr>";
+				}
+			}
+			
 			print "<tr valign=\"top\" align=\"middle\">";
 				if ($db->num_rows() == 1)
 			 		print("<td colspan=7>" . _("Suchergebnis: Es wurde <b>1</b> Person gefunden.") . "</td></tr>\n");
@@ -514,10 +527,10 @@ if (isset($_GET['details'])) {
 				?>
 				<tr valign=middle align=left>
 					<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>"><a href="<?php echo $PHP_SELF . "?details=" . $db->f("username") ?>"><?php $db->p("username") ?></a></td>
-					<td class="<? echo $cssSw->getClass() ?>"><?php $db->p("perms") ?></td>
-					<td class="<? echo $cssSw->getClass() ?>"><?php $db->p("Vorname") ?>&nbsp;</td>
-					<td class="<? echo $cssSw->getClass() ?>"><?php $db->p("Nachname") ?>&nbsp;</td>
-					<td class="<? echo $cssSw->getClass() ?>"><?php $db->p("Email")?></td>
+					<td class="<? echo $cssSw->getClass() ?>"><?=$db->f("perms") ?></td>
+					<td class="<? echo $cssSw->getClass() ?>"><?=htmlReady($db->f("Vorname")) ?>&nbsp;</td>
+					<td class="<? echo $cssSw->getClass() ?>"><?=htmlReady($db->f("Nachname")) ?>&nbsp;</td>
+					<td class="<? echo $cssSw->getClass() ?>"><?=htmlReady($db->f("Email"))?></td>
 					<td class="<? echo $cssSw->getClass() ?>" align="center"><?php echo $inactive ?></td>
 					<td class="<? echo $cssSw->getClass() ?>" align="center"><? if ($db->f("mkdate")) echo date("d.m.y, G:i", $db->f("mkdate")); else echo _("unbekannt"); ?></td>
 					<td class="<? echo $cssSw->getClass() ?>" align="center"><?=($db->f("auth_plugin") ? $db->f("auth_plugin") : "Standard")?></td>
