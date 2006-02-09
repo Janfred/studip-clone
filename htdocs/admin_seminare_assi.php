@@ -1270,10 +1270,17 @@ if (($form == 6) && ($jump_next_x))
 
     				//update/insert the assigned roomes
     				if ($RESOURCES_ENABLE) {
+						//store room-quests and room-property-requests
+						if (!$sem_create_data['skip_room_request'] && is_object($sem_create_data["resRequest"])) {
+							$sem_create_data["resRequest"]->setSeminarId($sem_create_data["sem_id"]);
+							$sem_create_data["resRequest"]->store();
+						}
     					$updateAssign = new VeranstaltungResourcesAssign($sem_create_data["sem_id"]);
     					$updateResult=$updateAssign->updateAssign();
 
-	    				//are there overlaps, in the meanwhile since the check at step 4? In the case the sem is regular, we have to touch the metadata
+	    			//are there overlaps, in the meanwhile since the check at step 4? In the case the sem is regular, we have to touch the metadata
+					//dieser check wird in VeranstaltungResourcesAssign::updateAssign() grundsätzlich durchgeführt
+					/*
 					if ((is_array($updateResult)) && ($sem_create_data["term_art"] != -1)) {
 						$overlaps_detected=FALSE;
 						foreach ($updateResult as $key=>$val)
@@ -1300,12 +1307,7 @@ if (($form == 6) && ($jump_next_x))
 							$db->query($query);
 						}
 					}
-
-					//store room-quests and room-property-requests
-					if (!$sem_create_data['skip_room_request'] && is_object($sem_create_data["resRequest"])) {
-						$sem_create_data["resRequest"]->setSeminarId($sem_create_data["sem_id"]);
-						$sem_create_data["resRequest"]->store();
-					}
+					*/
     				}
 			}
 
@@ -1429,10 +1431,12 @@ if (($form == 6) && ($jump_next_x))
 				}
 
 				//create a request
-				if (is_object($sem_create_data["resRequest"])) {
+				if (!$sem_create_data['skip_room_request'] && is_object($sem_create_data["resRequest"])) {
 					$sem_create_data["resRequest"]->copy();
+					$sem_create_data["resRequest"]->setSeminarId($sem_create_data["sem_id"]);
 					$sem_create_data["resRequest"]->setTerminId($termin_id);
 					$sem_create_data["resRequest"]->store();
+					$sem_create_data["resRequest"]->checkOpen(true);
 				}
 			}
 
@@ -2743,7 +2747,7 @@ if ($level == 4) {
 												print "&nbsp;<input type=\"IMAGE\" src=\"./pictures/haken_transparent.gif\" ".tooltip(_("Den Raum als Wunschraum auswählen"))." border=\"0\" name=\"send_room\" />";
 												print "&nbsp;&nbsp;<input type=\"IMAGE\" src=\"./pictures/rewind.gif\" ".tooltip(_("neue Suche starten"))." border=\"0\" name=\"reset_room_search\" />";
 												if ($search_properties_x)
-													print "<br /><br />"._("(Diese R&auml;ume erf&uuml;llen die Wunschkriterien, die Sie rechts angegeben haben.)");
+													print "<br /><br />"._("(Diese R&auml;ume erf&uuml;llen die Wunschkriterien, die Sie links angegeben haben.)");
 											}
 										}
 										if (((!$search_exp_room) && (!$search_properties_x)) || (($search_exp_room) && (!$result)) || (($search_properties_x) && (!$result))) {
