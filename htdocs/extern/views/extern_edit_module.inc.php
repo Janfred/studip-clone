@@ -58,7 +58,7 @@ if ($com == "new") {
 						, $EXTERN_MAX_CONFIGURATIONS);
 				my_error($message, "blank", 1);
 				echo "<tr><td class=\"blank\" align=\"center\">\n";
-				echo "<a href=\"$PHP_SELF??list=TRUE&view=extern_inst\">";
+				echo "<a href=\"$PHP_SELF?list=TRUE&view=extern_inst\">";
 				echo makeButton("zurueck");
 				echo "</a>\n</td></tr>\n</table>\n";
 				print_footer();
