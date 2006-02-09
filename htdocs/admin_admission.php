@@ -588,7 +588,7 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 						printf ("<font size=-1>"._("Sie haben ein Anmeldeverfahren aktiviert. Dieser Schritt kann %s nicht %s r&uuml;ckg&auml;ngig gemacht werden! Bei Problemen wenden sie sich bitte an eineN der hier aufgef&uuml;hrten AdministratorInnen.")."<br /></font>", "</font><font size=-1 color=\"red\"><b>", "</b></font><font size=-1>");
 					printf ("<input type=\"HIDDEN\" name=\"commit_no_admission_data\" value=\"TRUE\" />");
 					while ($db->next_record()) {
-						printf ("<li><font size=-1><a href=\"about?username=%s\">%s</a></font></li>", $db->f("username"), htmlReady($db->f("fullname")));
+						printf ("<li><font size=-1><a href=\"about.php?username=%s\">%s</a></font></li>", $db->f("username"), htmlReady($db->f("fullname")));
 					}
 				} else { ?>
 				<font size=-1><?=_("Sie k&ouml;nnen hier eine Teilnahmebeschr&auml;nkung per Anmeldeverfahren festlegen. Sie k&ouml;nnen per Losverfahren beschr&auml;nken oder Anmeldungen in der Reihenfolge ihres Eintreffens (chronologische Anmeldung) zulassen.")?><br /></font>
@@ -657,7 +657,7 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 							echo _("Bei Problemen wenden sie sich bitte an eineN der hier aufgef&uuml;hrten AdministratorInnen.");
 						printf ("<input type=\"HIDDEN\" name=\"commit_no_admission_data\" value=\"TRUE\" />");
 						while ($db->next_record()) {
-							printf ("<li><font size=-1><a href=\"about?username=%s\">%s</a></font></li>", $db->f("username"), htmlReady($db->f("fullname")));
+							printf ("<li><font size=-1><a href=\"about.php?username=%s\">%s</a></font></li>", $db->f("username"), htmlReady($db->f("fullname")));
 						}
 					} else { ?>
 						<b><?=_("Anmeldemodus:")?></b><br />
