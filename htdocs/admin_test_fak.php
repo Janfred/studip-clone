@@ -289,7 +289,7 @@ if ($_REQUEST['cmd'] == "user_course_change"){
 		echo "\n<table width=\"99%\" border=\"0\" cellpadding=\"2\" cellspacing=\"2\" style=\"font-size:10pt;\">";
 		echo "\n<tr><th>" . _("Name der Veranstaltung") . "</th><th>" . _("Status in der Veranstaltung") . "</th><th><a href=\"#\" onClick=\"return invert_selection('user_course_form');\" title=\"Auswahl umkehren\">" . _("Entfernen") . "</a></th></tr>";
 		while ($_user_course->nextRow()){
-			echo "\n<tr><td class=\"steel1\"><a href=\"seminar_main?auswahl=" . $_user_course->getField('Seminar_id') ."\">" 
+			echo "\n<tr><td class=\"steel1\"><a href=\"seminar_main.php?auswahl=" . $_user_course->getField('Seminar_id') ."\">" 
 			. htmlReady($_user_course->getField('Name'))
 			. "</a></td>";
 			echo "\n<td class=\"steel1\" align=\"center\">" . $_user_course->getField('status') ."</td>";
@@ -353,7 +353,7 @@ if ($_REQUEST['cmd'] == "user_course_change"){
 		echo "\n<table width=\"99%\" border=\"0\" cellpadding=\"2\" cellspacing=\"2\" style=\"font-size:10pt;\">";
 		echo "\n<tr><th>" . _("Name") . "</th><th>" . _("angelegt am") . "</th><th>" . _("Anzahl Nutzende") . "</th><th><a href=\"#\" onClick=\"return invert_selection('course_form');\" title=\"Auswahl umkehren\">" . _("L&ouml;schen") . "</a></th></tr>";
 		while ($_test_courses->nextRow()){
-			echo "\n<tr><td class=\"steel1\"><a href=\"seminar_main?auswahl=" . $_test_courses->getField('Seminar_id') ."\">" 
+			echo "\n<tr><td class=\"steel1\"><a href=\"seminar_main.php?auswahl=" . $_test_courses->getField('Seminar_id') ."\">" 
 			. htmlReady($_test_courses->getField('Name'))
 			. "</a></td>";
 			echo "\n<td class=\"steel1\" align=\"center\">" . strftime("%d.%m.%y",$_test_courses->getField('mkdate')) ."</td>";
