@@ -90,7 +90,7 @@ class StudIPTemplateEngine {
 	}
 	
 	function makeContentHeadline($title,$colspan=2){
-		echo(sprintf("<tr><th colspan=$colspan>%s</th></tr>",$title));
+		echo(sprintf("<table width=\"100%%\"><tr><th>%s</th></tr></table>",$title));
 	}
 	
 	function showErrorMessage($text,$colspan=2){
