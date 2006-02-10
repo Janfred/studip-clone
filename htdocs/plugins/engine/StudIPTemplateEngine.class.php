@@ -9,7 +9,7 @@ require_once("msg.inc.php");
 
 class StudIPTemplateEngine {
 	
-	function makeHeadline($title,$full_width=false,$img=""){
+	function makeHeadline($title,$full_width=true,$img=""){
 		if (!$full_width) {
 			echo "\n<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" class=\"blank\" width=\"70%\">";
 		} else {
@@ -23,26 +23,26 @@ class StudIPTemplateEngine {
 			print("\n<tr><td class=\"topic\" width=\"99%%\">&nbsp;<b>&nbsp;&nbsp;");
 		}
 		printf($title);
-		printf("</b></td>\n<td align = \"right\" class=\"topic\">&nbsp;&nbsp;</td></tr>");
+		printf("</b></td>\n<td align = \"right\" class=\"topic\">&nbsp;&nbsp;</td></tr>");		
 	}
 	
-	function startContentTable($full_width=false){
+	function startContentTable($full_width=true){
 		if (!$full_width){
-			echo ("<table border=\"0\" width=\"70%\" cellspacing=\"0\" cellpadding=\"0\" bgcolor=\"#ffffff\">");
+			echo ("<tr><td colspan=\"2\"><table border=\"0\" width=\"70%\" cellspacing=\"0\" cellpadding=\"0\" bgcolor=\"#ffffff\">");
 		}
 		else {
-			echo ("<table border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" bgcolor=\"#ffffff\">");
+			echo ("<tr><td colspan=\"2\"><table border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" bgcolor=\"#ffffff\">");
 		}
 		?>
 		<tr>
-			<td height="5" colspan="2"></td>
+			<td height="5" colspan="3"></td>
 	    </tr>
 		<tr>
 			<td width="5">
 			<!-- Pixelrand 1%??-->
 			</td>
 			<td valign="top">
-				<table border="0" cellpadding="0" cellspacing="0">
+				<table border="0" cellpadding="0" cellspacing="0" width="100%">
 				<tr>
 					<td>
 		<?php
@@ -67,7 +67,7 @@ class StudIPTemplateEngine {
 			<!-- Pixelrand 1%??-->
 			</td>
 			<td valign="top">
-				<table border="0" cellpadding="0" cellspacing="0">
+				<table border="0" cellpadding="0" cellspacing="0" width="100%">
 				<tr>
 					<td>
 		<?php
@@ -86,11 +86,13 @@ class StudIPTemplateEngine {
 			<td height="5" colspan="2"></td>
 		</tr>
 		</table>
+		</td>
+		</tr>
 		<?php
 	}
 	
 	function makeContentHeadline($title,$colspan=2){
-		echo(sprintf("<table width=\"100%%\"><tr><th>%s</th></tr></table>",$title));
+		echo(sprintf("<table width=\"100%%\" cellpadding=0 cellspacing=0><tr><th>%s</th></tr></table>",$title));
 	}
 	
 	function showErrorMessage($text,$colspan=2){
