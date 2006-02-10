@@ -251,14 +251,14 @@ if ($auth->auth["uid"] == "nobody") { ?>
 		if ($GLOBALS["PLUGINS_ENABLE"]){
 			$plugins = $pluginengine->getAllActivatedPlugins(); 
 			
-			foreach ($plugins as $plugin){
-				
+			foreach ($plugins as $plugin){				
 				if ($plugin->hasNavigation()){
 					$navi = $plugin->getNavigation();
-					echo MakeToolbar($plugin->getPluginiconname(),PluginEngine::getLink($plugin),$navi->getDisplayname(),$navi->getDisplayname(),40, "_top");
+					echo MakeToolbar($plugin->getPluginiconname(),htmlReady(PluginEngine::getLink($plugin)),$navi->getDisplayname(),$navi->getDisplayname(),40,"_top","left");
 		 		}
 			}
 		 }
+		 
 		
 ?>
 		<td class="toolbar" width="99%">

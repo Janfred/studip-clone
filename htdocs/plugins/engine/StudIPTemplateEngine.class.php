@@ -43,11 +43,15 @@ class StudIPTemplateEngine {
 			</td>
 			<td valign="top">
 				<table border="0" cellpadding="0" cellspacing="0">
+				<tr>
+					<td>
 		<?php
 	}
 	
 	function createInfoBoxTableCell(){
-		?>		
+		?>			
+					</td>
+				</tr>
 				</table>
 		  	 </td>
 			<td align="right" valign="top" width="270" class="blank">
@@ -64,11 +68,15 @@ class StudIPTemplateEngine {
 			</td>
 			<td valign="top">
 				<table border="0" cellpadding="0" cellspacing="0">
+				<tr>
+					<td>
 		<?php
 	}
 	
 	function endContentTable(){
 		?>
+					</td>
+				</tr>
 		  	 	</table>
 			</td>
 			<td width="5">

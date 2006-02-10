@@ -137,7 +137,12 @@ class PluginEngine{
 			$result = fscanf($manifest,"%[^=]=%[^\n]");
 			if ($result){
 				if ($result[0] == "pluginclassname"){
-					$plugininfos["class"] = trim($result[1]);
+					if ($plugininfos["class"] != "") {
+						$plugininfos["additionalclasses"][] = trim($result[1]);
+					}
+					else {
+						$plugininfos["class"] = trim($result[1]);
+					}
 				}
 				else if ($result[0] == "origin"){
 					$plugininfos["origin"] = trim($result[1]);
@@ -147,6 +152,9 @@ class PluginEngine{
 				}
 				else if ($result[0] == "pluginname"){
 					$plugininfos["pluginname"] = trim($result[1]);
+				}
+				else if ($result[0] == "dbscheme"){
+					$plugininfos["dbscheme"] = trim($result[1]);
 				}
 			}
 		}

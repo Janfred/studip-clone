@@ -147,6 +147,16 @@ class PluginAdministration {
 					 if (array_search('show',$methods)){
 					 	// now register the plugin in the database
 					 	$persistence->registerPlugin($plugin,$pluginclassname,$pluginrelativepath);
+					 	// create database if needed
+					 	$conn = PluginEngine::getPluginDatabaseConnection();
+					 	if ($plugininfos["dbscheme"] != ""){
+					 		$fp = fopen($newpluginpath . "/" . $plugininfos["dbscheme"],"r");
+					 		while (!feof($fp)){
+					 			$zeile = fgets($fp);					 			
+					 			$conn->execute($zeile);					 			
+					 		}
+					 		fclose($fp);
+					 	}					 	
 					 }
 					 else {
 						$this->deletePlugindir($newpluginpath);	 	

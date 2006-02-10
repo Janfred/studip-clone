@@ -36,6 +36,6 @@ class StudIPUser {
     
     function getUsername(){
     	return $this->username;
-    }
+    }      
 }
 ?>
