@@ -36,7 +36,7 @@ class AbstractStudIPPlugin {
 		$this->pluginname = "";
 		$this->pluginid = "-1";
 		$this->pluginadmininfo = null;
-		$this->pluginiconname = "";
+		$this->pluginiconname = "/pictures/leer.gif";
 		$this->helpinfo = null;
 		$this->navigation = null;
 		$this->activated = false;
@@ -177,7 +177,7 @@ class AbstractStudIPPlugin {
 	 * Liefert den relativen Namen des Icons dieses Plugins zurück
 	 * @return den relativen Namen des Icons
 	 */
-	function getPluginiconname(){
+	function getPluginiconname(){		
 		return $this->getPluginpath() . "/" . $this->pluginiconname;
 	}
 	
