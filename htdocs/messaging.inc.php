@@ -402,95 +402,68 @@ class messaging {
 	function insert_chatinv($msg, $rec_uname, $chat_id, $user_id = false) {
 
 		global $user,$_fullname_sql,$CHAT_ENABLE;
-
+		
 		if ($CHAT_ENABLE){
 
 			$chatServer =& ChatServer::GetInstance($GLOBALS['CHAT_SERVER_NAME']);
 			$db=new DB_Seminar;
-			$db2=new DB_Seminar;
-			$db3=new DB_Seminar;
-			
+			$snd = 0;
+			if (!is_array($rec_uname)) $rec_uname = array($rec_uname);
 			if (!$user_id) {
 				$user_id = $user->id;
 			}
-
+			$username = get_username($user_id);
+			$fullname = get_fullname($user_id);
 			$chat_uniqid = $chatServer->chatDetail[$chat_id]['id'];
-
 			if (!$chat_uniqid) {
 				return false;	//no active chat
 			}
-
-			$query = "
-				SELECT username," . $_fullname_sql['full'] ." AS fullname 
-					FROM auth_user_md5 a 
-					LEFT JOIN user_info USING (user_id) 
-					WHERE a.user_id = '".$user_id."'";
-			$db->query ($query);
-			$db->next_record();
-			
-			$query = "
-				SELECT user_id 
-					FROM auth_user_md5 
-					WHERE username = '".$rec_uname."'";
-			$db2->query ($query);
-
-			if (!$db2->next_record()){
-				return false;	//no user found
-			}
-
-			setTempLanguage($db2->f("user_id"));
-
-			$message = sprintf(_("Sie wurden von %s in den Chatraum %s eingeladen!"),$db->f("fullname")." (".$db->f("username").")",$chatServer->chatDetail[$chat_id]['name']) 
-				. "\n - - - \n" . stripslashes($msg);
-			
-			$m_id = md5(uniqid("voyeurism"));
-			
-			$query = "
+			foreach ($rec_uname as $one_rec){
+				$one_rec_id = get_userid($one_rec);
+				if (!$one_rec_id) break;	//no user found
+				setTempLanguage($one_rec_id);
+				$subject = sprintf(_("Chateinladung von %s"), $fullname);
+				$message = sprintf(_("Sie wurden von %s in den Chatraum %s eingeladen!"),$fullname ." (".$username.")",$chatServer->chatDetail[$chat_id]['name']) . "\n - - - \n" . stripslashes($msg);
+				$m_id = md5(uniqid("voyeurism",1));
+				$query = "
 				INSERT INTO message SET 
 					message_id = '$m_id', 
 					autor_id = '".$user_id."', 
 					mkdate = '".time()."', 
-					subject = '".sprintf(_("Chateinladung von %s"), mysql_escape_string($db->f("fullname")))."', 
+					subject = '".mysql_escape_string($subject)."', 
 					message = '".mysql_escape_string($message)."', 
 					chat_id = '$chat_uniqid'";
-			$db3->query ($query);
-			
-			$query = "
-				INSERT IGNORE INTO message_user SET 
+				$db->query($query);
+				$snd += $db->affected_rows();
+				$query = "
+				INSERT INTO message_user SET 
 					message_id='$m_id', 
 					mkdate = '".time()."',
-					user_id='".get_userid($rec_uname)."', 
+					user_id='".$one_rec_id."',
 					snd_rec='rec'";
-			$db3->query ($query);
-			$query = "
+				$db->query($query);
+				$query = "
 				INSERT IGNORE INTO message_user SET 
 					message_id='$m_id', 
 					mkdate = '".time()."',
-					user_id='".get_userid($rec_uname)."', 
-					snd_rec='snd', 
+					user_id='".$user_id."', 
+					snd_rec='snd',
 					deleted='1'";
-			$db3->query ($query);
-			
-			//Benachrichtigung in alle Chaträume schicken
-			$chatMsg = sprintf(_("Sie wurden von <b>%s</b> in den Chatraum <b>%s</b> eingeladen!"),htmlReady($db->f("fullname")." (".$db->f("username").")"),htmlReady($chatServer->chatDetail[$chat_id]['name']));
-			$chatMsg .= "<br></i>" . formatReady(stripslashes($msg))."<i>";
-
-			restoreLanguage();
-
-			foreach($chatServer->chatDetail as $chatid => $wert){
-				if ($wert['users'][$db2->f("user_id")]){
-					$chatServer->addMsg("system:".$db2->f("user_id"),$chatid,$chatMsg);
+				$db->query($query);
+				//Benachrichtigung in alle Chaträume schicken
+				$chatMsg = sprintf(_("Sie wurden von <b>%s</b> in den Chatraum <b>%s</b> eingeladen!"),htmlReady($fullname ." (".$username.")"),htmlReady($chatServer->chatDetail[$chat_id]['name']));
+				$chatMsg .= "<br></i>" . formatReady(stripslashes($msg))."<i>";
+				foreach($chatServer->chatDetail as $chatid => $wert){
+					if ($wert['users'][$one_rec_id]){
+						$chatServer->addMsg("system:".$one_rec_id,$chatid,$chatMsg);
+					}
 				}
 			}
-
-			return TRUE;
-
+			restoreLanguage();
+			return $snd;
 		} else {
-
 			return FALSE;
-
 		}
-
 	}
 
 	function delete_chatinv($user_id = false){

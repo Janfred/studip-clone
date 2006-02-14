@@ -109,26 +109,11 @@ if ($cmd_insert_x) {
 		$time = date("U");
 		$tmp_message_id = md5(uniqid("321losgehtes"));
 		if ($chat_id) {
-			$count = $msging->insert_message($message, $sms_data["p_rec"], $chat_id, $time, $tmp_message_id, FALSE, $signature, $messagesubject);
+			$count = $msging->insert_chatinv($message, $sms_data["p_rec"], $chat_id);
 		} else {
 			$count = $msging->insert_message($message, $sms_data["p_rec"], FALSE, $time, $tmp_message_id, FALSE, $signature, $messagesubject);
 		}
 	}
-
-	/*
-	if (!empty($sms_data["p_rec"])) {
-		$count = "";
-		$time = date("U");
-		$tmp_message_id = md5(uniqid("321losgehtes"));
-		foreach ($sms_data["p_rec"] as $a) {
-			if ($chat_id) {
-				$count = ($count+$msging->insert_chatinv($message, $a, $chat_id));
-			} else {
-				$count = ($count+$msging->insert_message($message, $a, FALSE, $time, $tmp_message_id, FALSE, $signature, $messagesubject));
-			}
-		}
-	}
-	*/
 
 	if ($count) {
 
@@ -456,10 +441,10 @@ function show_addrform() {
 
 function show_msgform() {
 
-	global $PHP_SELF, $sms_data, $user, $quote, $tmp_sms_content, $quote_username, $message, $messagesubject;
+	global $PHP_SELF, $sms_data, $user, $quote, $tmp_sms_content, $quote_username, $message, $messagesubject, $cmd;
 
 	$tmp = "&nbsp;<font size=\"-1\"><b>"._("Betreff:")."</b></font>";
-	$tmp .= "<div align=\"center\"><input type=\"text\" name=\"messagesubject\" value=\"".trim(htmlready(stripslashes($messagesubject)))."\"style=\"width: 99%\"></div>";
+	$tmp .= "<div align=\"center\"><input type=\"text\" ". ($cmd == "write_chatinv" ? "disabled" : "") ." name=\"messagesubject\" value=\"".trim(htmlready(stripslashes($messagesubject)))."\"style=\"width: 99%\"></div>";
 
 	$tmp .= "<br>&nbsp;<font size=\"-1\"><b>"._("Nachricht:")."</b></font>";
 	$tmp .= "<div align=\"center\"><textarea name=\"message\" style=\"width: 99%\" cols=80 rows=10 wrap=\"virtual\">\n";
@@ -590,7 +575,7 @@ function show_msgreadconfirmoptionsform() {
 
 function show_chatselector() {
 
-	global $_REQUEST, $admin_chats, $cmd;
+	global $admin_chats, $cmd;
 
 	if ($cmd == "write_chatinv") {
 
