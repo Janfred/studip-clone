@@ -148,12 +148,15 @@ process_news_commands($institut_main_data);
 	$localFields = $DataFields->getLocalFields();
 
 	foreach ($localFields as $val) {
-		if ($DataFields->checkPermission($perm, $val["view_perms"])) {
-			echo "<font size=\"-1\"><b>" .htmlReady($val["name"]) . ": </b>"; echo htmlReady($val["content"]); echo"<br>";
+		if ($DataFields->checkPermission($perm, $val["view_perms"]) && $val["content"]) {
+			echo "<font size=\"-1\"><b>" .htmlReady($val["name"]) . ": </b>";
+			echo htmlReady($val["content"]);
+			echo"<br></font>";
 		}
 	}
 
 ?>
+			<br />
 			</blockquote>
 		</td>
 		<td class="blank" align="right" valign="top">
