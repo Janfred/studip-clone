@@ -991,10 +991,7 @@ class EvalOverview {
             /* Create link ------------------------------------------------- */
             $link = new HTML ("a");
             $link->addAttr ('href', GetDownloadLink($exportManager->getTempFilename(), $exportManager->getFilename(), 2));
-            $img = new HTMLempty ("img");
-            $img->addAttr("border","0");
-            $img->addAttr("src", EVAL_PIC_EXPORT_FILE);
-            $link->addContent ($img);
+            $link->addHTMLContent (GetFileIcon('csv', true));
             $link->addContent (_("auf diese Verknüpfung"));
             /* -------------------------------------------- end: create link */
 
