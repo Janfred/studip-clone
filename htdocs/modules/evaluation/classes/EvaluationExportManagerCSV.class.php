@@ -132,9 +132,9 @@ class EvaluationExportManagerCSV extends EvaluationExportManager {
 
       fputs ($this->filehandle, EVALEXPORT_DELIMITER._("Nummer").EVALEXPORT_DELIMITER.EVALEXPORT_SEPERATOR);
       fputs ($this->filehandle, EVALEXPORT_DELIMITER._("Benutzername").EVALEXPORT_DELIMITER.EVALEXPORT_SEPERATOR);
-      fputs ($this->filehandle, EVALEXPORT_DELIMITER._("Vorname").EVALEXPORT_DELIMITER.EVALEXPORT_SEPERATOR);
       fputs ($this->filehandle, EVALEXPORT_DELIMITER._("Nachname").EVALEXPORT_DELIMITER.EVALEXPORT_SEPERATOR);
-    
+      fputs ($this->filehandle, EVALEXPORT_DELIMITER._("Vorname").EVALEXPORT_DELIMITER.EVALEXPORT_SEPERATOR);
+
 	  $db      = new EvaluationAnswerDB ();
 
       /* for each question -------------------------------------------------- */
