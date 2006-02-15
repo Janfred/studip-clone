@@ -20,6 +20,7 @@ include ("header.php");
 // read in the command and pluginid
 $cmd = $_GET["cmd"];
 $pluginid = $_GET["id"];
+
 // create plugin persistence objects
 $pluginengine = PluginEngine::getPluginPersistence();
 
@@ -34,12 +35,27 @@ if ($cmd != ("show" || "showDescriptionalPage")) {
 }
 
 if ($plugin == null){
-	StudIPTemplateEngine::makeHeadline(_("Plugin nicht vorhanden"));
-	StudIPTemplateEngine::showErrorMessage(_("Das angeforderte Plugin ist nicht vorhanden."));
-	die();
+	// maybe the pluginid is not a number
+	// try to find a plugin class, satisfying the request
+	$pluginid = $pluginengine->getPluginId($pluginid);
+
+	if ($pluginid == UNKNOWN_PLUGIN_ID){
+		StudIPTemplateEngine::makeHeadline(_("Plugin nicht vorhanden"));
+		StudIPTemplateEngine::showErrorMessage(_("Das angeforderte Plugin ist nicht vorhanden."));
+		die();
+	}
+	else {
+		// create an instance of the queried pluginid
+		$plugin = $pluginengine->getPlugin($pluginid);
+		if ($plugin == null){
+			StudIPTemplateEngine::makeHeadline(_("Plugin nicht vorhanden"));
+			StudIPTemplateEngine::showErrorMessage(_("Das angeforderte Plugin ist nicht vorhanden."));
+			die();
+		}
+	}	
 }
 
-if (!array_search(strtolower($cmd),get_class_methods($plugin))){
+if (!array_search(strtolower($cmd),get_class_methods($plugin))){	
 	die(_("Das Plugin verfügt nicht über die gewünschte Operation"));
 }
 

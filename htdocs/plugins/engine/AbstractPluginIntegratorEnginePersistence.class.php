@@ -217,8 +217,8 @@ class AbstractPluginIntegratorEnginePersistence {
 	* Searches for $pluginname in the plugins database
 	* @return the id of the plugin
 	*/
-	function getPluginId($pluginname){
-		$result = &$this->connection->execute("select * from plugins where pluginname=?", array($pluginname));
+	function getPluginId($pluginclassname){
+		$result = &$this->connection->execute("select * from plugins where pluginclassname=?", array($pluginclassname));
 		if (!$result){
 		   return UNKNOWN_PLUGIN_ID;
 		}
