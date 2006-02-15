@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2005-09-07 11:16+0200\n"
+"POT-Creation-Date: 2006-02-15 14:53+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -483,8 +483,8 @@ msgstr ""
 
 #: calendar/views/bind.inc.php:133 calendar/views/edit.inc.php:630
 #: calendar/views/edit.inc.php:640 calendar/views/edit.inc.php:696
-#: calendar/views/export.inc.php:137 calendar/views/export.inc.php:270
-#: calendar/views/export.inc.php:275
+#: calendar/views/export.inc.php:137 calendar/views/export.inc.php:269
+#: calendar/views/export.inc.php:274
 msgid "Information:"
 msgstr ""
 
@@ -743,116 +743,116 @@ msgid ""
 "iCalendar-Datei. Es wurde keine Ausgabedatei erzeugt."
 msgstr ""
 
-#: calendar/views/export.inc.php:146
+#: calendar/views/export.inc.php:145
 msgid ""
 "Klicken Sie auf den Button, um die Datei mit den synchronisierten "
 "Kalenderdaten herunterzuladen."
 msgstr ""
 
-#: calendar/views/export.inc.php:147
+#: calendar/views/export.inc.php:146
 msgid ""
 "Die Daten liegen ebenfalls in einer iCalendar-Datei vor, die Sie in Ihren "
 "lokalen Terminkalender (z.B. MS Outlook) importieren können."
 msgstr ""
 
-#: calendar/views/export.inc.php:159
+#: calendar/views/export.inc.php:158
 msgid "Herunterladen der synchronisierten Kalenderdaten"
 msgstr ""
 
-#: calendar/views/export.inc.php:187
+#: calendar/views/export.inc.php:186
 msgid "Exportieren Ihrer Kalenderdaten"
 msgstr ""
 
-#: calendar/views/export.inc.php:189
+#: calendar/views/export.inc.php:188
 msgid ""
 "Es werden nur Termine von Veranstaltungen exportiert, die zuvor im Menüpunkt "
 "\"Veranstaltungstermine\" ausgewählt wurden."
 msgstr ""
 
-#: calendar/views/export.inc.php:191
+#: calendar/views/export.inc.php:190
 msgid "Bitte w&auml;hlen Sie, welche Termine exportiert werden sollen:"
 msgstr ""
 
-#: calendar/views/export.inc.php:194
+#: calendar/views/export.inc.php:193
 msgid "Nur meine pers&ouml;nlichen Termine"
 msgstr ""
 
-#: calendar/views/export.inc.php:196
+#: calendar/views/export.inc.php:195
 msgid "Nur meine Veranstaltungstermine"
 msgstr ""
 
-#: calendar/views/export.inc.php:198 calendar/views/export.inc.php:207
+#: calendar/views/export.inc.php:197 calendar/views/export.inc.php:206
 msgid "Alle Termine"
 msgstr ""
 
-#: calendar/views/export.inc.php:202
+#: calendar/views/export.inc.php:201
 msgid "Geben Sie an, aus welchem Zeitbereich Termine exportiert werden sollen:"
 msgstr ""
 
-#: calendar/views/export.inc.php:213
+#: calendar/views/export.inc.php:212
 #, c-format
 msgid "Nur Termine vom:%sbis zum:"
 msgstr ""
 
-#: calendar/views/export.inc.php:235
+#: calendar/views/export.inc.php:234
 msgid "Importieren Ihrer Kalenderdaten"
 msgstr ""
 
-#: calendar/views/export.inc.php:239
+#: calendar/views/export.inc.php:238
 msgid ""
 "Sie k&ouml;nnen Termine importieren, die sich in einer iCalendar-Datei "
 "befinden."
 msgstr ""
 
-#: calendar/views/export.inc.php:240 calendar/views/export.inc.php:253
+#: calendar/views/export.inc.php:239 calendar/views/export.inc.php:252
 msgid "Klicken Sie auf \"Durchsuchen\", um eine Datei auszuwählen."
 msgstr ""
 
-#: calendar/views/export.inc.php:248
+#: calendar/views/export.inc.php:247
 msgid "Synchronisieren Ihrer Kalenderdaten"
 msgstr ""
 
-#: calendar/views/export.inc.php:252
+#: calendar/views/export.inc.php:251
 msgid ""
 "Sie k&ouml;nnen Termine synchronisieren, die sich in einer iCalendar-Datei "
 "befinden."
 msgstr ""
 
-#: calendar/views/export.inc.php:262
+#: calendar/views/export.inc.php:261
 #, c-format
 msgid "Es wurden %s Termine importiert."
 msgstr ""
 
-#: calendar/views/export.inc.php:267
+#: calendar/views/export.inc.php:266
 msgid "Es wurden keine Termine importiert."
 msgstr ""
 
-#: calendar/views/export.inc.php:277
+#: calendar/views/export.inc.php:276
 msgid ""
 "Sie k&ouml;nnen Termindaten importieren, exportieren und synchronisieren."
 msgstr ""
 
-#: calendar/views/export.inc.php:314
+#: calendar/views/export.inc.php:313
 msgid "Der Export konnte nicht durchgef&uuml;hrt werden!"
 msgstr ""
 
-#: calendar/views/export.inc.php:341 calendar/views/export.inc.php:353
+#: calendar/views/export.inc.php:340 calendar/views/export.inc.php:352
 msgid "Der Import konnte nicht durchgef&uuml;hrt werden!"
 msgstr ""
 
-#: calendar/views/export.inc.php:349
+#: calendar/views/export.inc.php:348
 msgid "Der Import wurde erfolgreich durchgef&uuml;hrt!"
 msgstr ""
 
-#: calendar/views/export.inc.php:354
+#: calendar/views/export.inc.php:353
 msgid "Die zu importierende Datei enth&auml;lt zuviele Termine."
 msgstr ""
 
-#: calendar/views/export.inc.php:377
+#: calendar/views/export.inc.php:376
 msgid "Die Synchronisation konnte nicht durgef&uuml;hrt werden!"
 msgstr ""
 
-#: calendar/views/export.inc.php:388
+#: calendar/views/export.inc.php:387
 msgid "Die Synchronisation wurde erfolgreich durchgef&uuml;hrt!"
 msgstr ""
 
@@ -934,22 +934,22 @@ msgstr ""
 msgid "Es wurden %s Termine exportiert"
 msgstr ""
 
-#: calendar/lib/sync/CalendarExportFile.class.php:93
-#: calendar/lib/sync/CalendarExportFile.class.php:141
+#: calendar/lib/sync/CalendarExportFile.class.php:92
+#: calendar/lib/sync/CalendarExportFile.class.php:140
 msgid "Die Export-Datei konnte nicht erstellt werden!"
 msgstr ""
 
-#: calendar/lib/sync/CalendarExportFile.class.php:122
+#: calendar/lib/sync/CalendarExportFile.class.php:121
 msgid "Das Export-Verzeichnis konnte nicht angelegt werden!"
 msgstr ""
 
-#: calendar/lib/sync/CalendarExportFile.class.php:127
+#: calendar/lib/sync/CalendarExportFile.class.php:126
 msgid ""
 "Die Zugriffsrechte auf das Export-Verzeichnis konnten nicht ge&auml;ndert "
 "werden!"
 msgstr ""
 
-#: calendar/lib/sync/CalendarExportFile.class.php:135
+#: calendar/lib/sync/CalendarExportFile.class.php:134
 msgid "Eine bestehende Export-Datei konnte nicht gel&ouml;scht werden!"
 msgstr ""
 

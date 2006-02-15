@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2005-09-07 11:16+0200\n"
+"POT-Creation-Date: 2006-02-15 14:53+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -244,7 +244,7 @@ msgstr ""
 msgid "DB: Vote nicht gefunden oder ist bereits sichtbar"
 msgstr ""
 
-#: vote/VoteDB.class.php:858 vote/VoteDB.class.php:1305
+#: vote/VoteDB.class.php:858 vote/VoteDB.class.php:1153
 msgid ""
 "Sie haben mehrmals auf 'Speichern' gedr&uuml;ckt. Das Voting bzw. der Test "
 "wurde bereits in die Datenbank geschrieben."
@@ -290,28 +290,28 @@ msgstr ""
 msgid "Zugriff auf Editierseite verweigert"
 msgstr ""
 
-#: vote/vote_edit.inc.php:174
+#: vote/vote_edit.inc.php:175
 msgid " (Kopie)"
 msgstr ""
 
-#: vote/vote_edit.inc.php:247
+#: vote/vote_edit.inc.php:248
 msgid ""
 "Inzwischen hat jemand abgestimmt! Sie k&ouml;nnen daher die meisten &Auml;"
 "nderungen nicht mehr vornehmen."
 msgstr ""
 
-#: vote/vote_edit.inc.php:323
+#: vote/vote_edit.inc.php:324
 #, c-format
 msgid ""
 "An Ihrem Vote/Test '%s' wurden von dem/der Administrator/in %s Änderungen "
 "vorgenommen."
 msgstr ""
 
-#: vote/vote_edit.inc.php:326 vote/vote_overview.inc.php:409
+#: vote/vote_edit.inc.php:327 vote/vote_overview.inc.php:409
 msgid "Systemnachricht:"
 msgstr ""
 
-#: vote/vote_edit.inc.php:326 vote/vote_overview.inc.php:409
+#: vote/vote_edit.inc.php:327 vote/vote_overview.inc.php:409
 msgid "Vote/Test geändert"
 msgstr ""
 

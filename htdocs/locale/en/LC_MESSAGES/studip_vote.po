@@ -1,13 +1,10 @@
-# translation of studip_vote.po to 
-# translation of studip_vote.po to
-# translation of studip_vote.po to
 # This file is distributed under the same license as the PACKAGE package.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER, 2003,2004
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: studip_vote\n"
-"POT-Creation-Date: 2005-09-07 11:16+0200\n"
+"POT-Creation-Date: 2006-02-15 14:53+0100\n"
 "PO-Revision-Date: 2004-04-01 13:35+GMT\n"
 "Last-Translator: \n"
 "Language-Team:  <de@li.org>\n"
@@ -250,7 +247,7 @@ msgstr "Vote could not be re-started."
 msgid "DB: Vote nicht gefunden oder ist bereits sichtbar"
 msgstr "DB: Vote not found or is already visible"
 
-#: vote/VoteDB.class.php:858 vote/VoteDB.class.php:1305
+#: vote/VoteDB.class.php:858 vote/VoteDB.class.php:1153
 msgid ""
 "Sie haben mehrmals auf 'Speichern' gedr&uuml;ckt. Das Voting bzw. der Test "
 "wurde bereits in die Datenbank geschrieben."
@@ -300,11 +297,11 @@ msgstr "Access denied."
 msgid "Zugriff auf Editierseite verweigert"
 msgstr "Access to editing page denied"
 
-#: vote/vote_edit.inc.php:174
+#: vote/vote_edit.inc.php:175
 msgid " (Kopie)"
 msgstr ".(copy)"
 
-#: vote/vote_edit.inc.php:247
+#: vote/vote_edit.inc.php:248
 msgid ""
 "Inzwischen hat jemand abgestimmt! Sie k&ouml;nnen daher die meisten &Auml;"
 "nderungen nicht mehr vornehmen."
@@ -312,18 +309,18 @@ msgstr ""
 "In the meantime someone has voted! Therefore you cannot apply most of the "
 "changes. "
 
-#: vote/vote_edit.inc.php:323
+#: vote/vote_edit.inc.php:324
 #, c-format
 msgid ""
 "An Ihrem Vote/Test '%s' wurden von dem/der Administrator/in %s Änderungen "
 "vorgenommen."
 msgstr "In your vote/test '%s' changes have been made by the administrator %s."
 
-#: vote/vote_edit.inc.php:326 vote/vote_overview.inc.php:409
+#: vote/vote_edit.inc.php:327 vote/vote_overview.inc.php:409
 msgid "Systemnachricht:"
 msgstr ""
 
-#: vote/vote_edit.inc.php:326 vote/vote_overview.inc.php:409
+#: vote/vote_edit.inc.php:327 vote/vote_overview.inc.php:409
 msgid "Vote/Test geändert"
 msgstr ""
 
