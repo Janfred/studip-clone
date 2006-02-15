@@ -93,7 +93,7 @@ $sess->register("links_admin_data");
 
 // Kopieren einer vorhandenen Veranstaltung
 //
-if (isset($cmd) && ($cmd=="do_copy")) {
+if (isset($cmd) && ($cmd == 'do_copy') && $perm->have_studip_perm('dozent', $cp_id)) {
 
 	$sem_create_data = ''; // Zur Sicherheit: erstmal leeren
 
@@ -231,14 +231,14 @@ if ($start_level) { //create defaults
 		}
 	}
 
-	if ($SEM_CLASS[$class]["turnus_default"])
-		$sem_create_data["term_art"] = $SEM_CLASS[$class]["turnus_default"];
+	if ($SEM_CLASS[$class]['turnus_default'] && !array_key_exists('term_art', $sem_create_data))
+		$sem_create_data['term_art'] = $SEM_CLASS[$class]['turnus_default'];
 
-	if ($SEM_CLASS[$class]["default_read_level"])
-		$sem_create_data["sem_sec_lese"] = $SEM_CLASS[$class]["default_read_level"];
+	if ($SEM_CLASS[$class]['default_read_level'] && !array_key_exists('sem_sec_lese', $sem_create_data))
+		$sem_create_data['sem_sec_lese'] = $SEM_CLASS[$class]['default_read_level'];
 
-	if ($SEM_CLASS[$class]["default_write_level"])
-		$sem_create_data["sem_sec_schreib"] = $SEM_CLASS[$class]["default_write_level"];
+	if ($SEM_CLASS[$class]['default_write_level'] && !array_key_exists('sem_sec_schreib', $sem_create_data))
+		$sem_create_data['sem_sec_schreib'] = $SEM_CLASS[$class]['default_write_level'];
 
 	if ($auth->auth["perm"] == "dozent")
 		$sem_create_data["sem_doz"][$user->id]=TRUE;
