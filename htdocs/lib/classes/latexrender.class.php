@@ -258,7 +258,7 @@ class LatexRender {
         $latex_hash = md5($latex_text);
         $filename = $this->getPicturePath()."/".$latex_hash.".png";
 
-        $status_code = copy($this->_tmp_filename.".png",$filename);
+        $status_code = @copy($this->_tmp_filename.".png",$filename);
 
         $this->cleanTemporaryDirectory();	
 
@@ -275,12 +275,12 @@ class LatexRender {
         $current_dir = getcwd();
         chdir($this->_tmp_dir);
 
-        unlink($this->_tmp_dir."/".$this->_tmp_filename.".tex");
-        unlink($this->_tmp_dir."/".$this->_tmp_filename.".aux");
-        unlink($this->_tmp_dir."/".$this->_tmp_filename.".log");
-        unlink($this->_tmp_dir."/".$this->_tmp_filename.".dvi");
-        unlink($this->_tmp_dir."/".$this->_tmp_filename.".ps");
-        unlink($this->_tmp_dir."/".$this->_tmp_filename.".png");
+        @unlink($this->_tmp_dir."/".$this->_tmp_filename.".tex");
+        @unlink($this->_tmp_dir."/".$this->_tmp_filename.".aux");
+        @unlink($this->_tmp_dir."/".$this->_tmp_filename.".log");
+        @unlink($this->_tmp_dir."/".$this->_tmp_filename.".dvi");
+        @unlink($this->_tmp_dir."/".$this->_tmp_filename.".ps");
+        @unlink($this->_tmp_dir."/".$this->_tmp_filename.".png");
 
         chdir($current_dir);
     }
