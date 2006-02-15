@@ -20,25 +20,25 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // $Id$
 
- page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
- $perm->check("dozent");
+ page_open(array('sess' => 'Seminar_Session', 'auth' => 'Seminar_Auth', 'perm' => 'Seminar_Perm', 'user' => 'Seminar_User'));
+ $perm->check('dozent');
 
 // Set this to something, just something different...
 $hash_secret = "nirhtak";
 
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); 	//hier werden die sessions initialisiert
+include ($GLOBALS['ABSOLUTE_PATH_STUDIP'].'seminar_open.php'); 	//hier werden die sessions initialisiert
 
-require_once ("$ABSOLUTE_PATH_STUDIP/msg.inc.php"); 		//Funktionen fuer Nachrichtenmeldungen
-require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php"); 		//wir brauchen die Seminar-Typen
-require_once ("$ABSOLUTE_PATH_STUDIP/config_tools_semester.inc.php");  //Bereitstellung weiterer Daten
-require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");		//noch mehr Stuff
-require_once ("$ABSOLUTE_PATH_STUDIP/forum.inc.php");		//damit wir Themen anlegen koennen
-require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");		//Aufbereitungsfunktionen
-require_once ("$ABSOLUTE_PATH_STUDIP/dates.inc.php");		//Terminfunktionen
-require_once ("$ABSOLUTE_PATH_STUDIP/log_events.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipSemTreeSearch.class.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/Modules.class.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/DataFields.class.php");
+require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'].'msg.inc.php'); 		//Funktionen fuer Nachrichtenmeldungen
+require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'].'config.inc.php'); 		//wir brauchen die Seminar-Typen
+require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'].'config_tools_semester.inc.php');  //Bereitstellung weiterer Daten
+require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'].'functions.php');		//noch mehr Stuff
+require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'].'forum.inc.php');		//damit wir Themen anlegen koennen
+require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'].'visual.inc.php');		//Aufbereitungsfunktionen
+require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'].'dates.inc.php');		//Terminfunktionen
+require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'].'log_events.inc.php');
+require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'].'lib/classes/StudipSemTreeSearch.class.php');
+require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'].'lib/classes/Modules.class.php');
+require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'].'lib/classes/DataFields.class.php');
 
 if ($RESOURCES_ENABLE) {
 	include_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
@@ -93,7 +93,7 @@ $sess->register("links_admin_data");
 
 // Kopieren einer vorhandenen Veranstaltung
 //
-if (isset($cmd) && ($cmd == 'do_copy') && $perm->have_studip_perm('dozent', $cp_id)) {
+if (isset($cmd) && ($cmd == 'do_copy') && $perm->have_studip_perm('tutor',$cp_id)) {
 
 	$sem_create_data = ''; // Zur Sicherheit: erstmal leeren
 
@@ -176,7 +176,11 @@ if (isset($cmd) && ($cmd == 'do_copy') && $perm->have_studip_perm('dozent', $cp_
 	$sem_create_data["timestamp"] = time(); // wichtig, da sonst beim ersten Aufruf sofort sem_create_data resetted wird!
 	// eintragen der sem_tree_ids
 	$sem_create_data["sem_bereich"] = get_seminar_sem_tree_entries($cp_id);
-
+	
+	// Modulkonfiguration übernehmen
+	$sem_create_data['modules_list'] = $Modules->getLocalModules($cp_id,'sem'); 
+	$sem_create_data['sem_modules'] = $db->f('modules');
+	
 	// Dozenten und Tutoren eintragen
 	$sem_create_data["sem_doz"] = get_seminar_dozent($cp_id);
 	if (!$sem_create_data["sem_tut"] = get_seminar_tutor($cp_id)) {
@@ -223,11 +227,15 @@ if (($sem_create_data["sem_entry"]) && (!$form))
 
 //empfangene Variablen aus diversen Formularen auswerten
 if ($start_level) { //create defaults
-	$sem_create_data["sem_class"]=$class;
-	foreach ($SEM_TYPE as $key => $val) {
-		if ($val["class"] == $class) {
-			$sem_create_data["modules_list"] = $Modules->getLocalModules("", "sem", false, $key);
-			break;
+	if (!array_key_exists('sem_class', $sem_create_data))
+		$sem_create_data['sem_class'] = $class;
+		
+	if (!array_key_exists('sem_modules', $sem_create_data)){
+		foreach ($SEM_TYPE as $key => $val) {
+			if ($val['class'] == $class) {
+				$sem_create_data['modules_list'] = $Modules->getLocalModules('', 'sem', false, $key);
+				break;
+			}
 		}
 	}
 
@@ -240,8 +248,8 @@ if ($start_level) { //create defaults
 	if ($SEM_CLASS[$class]['default_write_level'] && !array_key_exists('sem_sec_schreib', $sem_create_data))
 		$sem_create_data['sem_sec_schreib'] = $SEM_CLASS[$class]['default_write_level'];
 
-	if ($auth->auth["perm"] == "dozent")
-		$sem_create_data["sem_doz"][$user->id]=TRUE;
+	if ($auth->auth['perm'] == 'dozent')
+		$sem_create_data['sem_doz'][$user->id] = TRUE;
 }
 
 if ($form == 1)
@@ -1238,8 +1246,7 @@ if (($form == 6) && ($jump_next_x))
 				admission_endtime_sem = '".		$sem_create_data["sem_admission_end_date"]."',
 				visible =  '". 				(($visible) ? 1 : 0) . "',
 				showscore =				'0',
-				modules = 				NULL";
-
+				modules = '" .				((array_key_exists('sem_modules', $sem_create_data))? $sem_create_data['sem_modules']:'NULL') . "'";
 
 		//und jetzt wirklich eintragen
 		if (!$sem_create_data["sem_entry"]) {
@@ -1261,10 +1268,12 @@ if (($form == 6) && ($jump_next_x))
 				openSem($sem_create_data["sem_id"]); //open Veranstaltung to administrate in the admin-area
 				$links_admin_data["referred_from"]="assi";
 				$links_admin_data["assi"]=FALSE; //protected Assi-mode off
-
-				//write the default module-config
-				$Modules = new Modules;
-				$Modules->writeDefaultStatus($sem_create_data["sem_id"]);
+				
+				if (!array_key_exists('sem_modules', $sem_create_data)){
+					//write the default module-config
+					$Modules = new Modules;
+					$Modules->writeDefaultStatus($sem_create_data["sem_id"]);
+				}
 				//BIEST00072
 				//$Modules->writeStatus("scm", $sem_create_data["sem_id"], FALSE); //the scm has to be turned off, because an empty free informations page isn't funny
 
@@ -3721,7 +3730,6 @@ if ($level == 8)
 if (is_object($sem_create_data["resRequest"])) {
 	$sem_create_data["resRequest"] = serialize ($sem_create_data["resRequest"]);
 }
-
 
 //save all the data back to database
 page_close();
