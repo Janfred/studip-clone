@@ -13,6 +13,7 @@ define("PLUGIN_INSTANTIATION_EROR",5);
 define("PLUGIN_MISSING_METHOD_ERROR",6);
 define("PLUGIN_INSTALLATION_SUCCESSFUL",7);
 define("PLUGIN_MISSING_MANIFEST_ERROR",8);
+define("PLUGIN_ALREADY_REGISTERED_ERROR",9);
 class PluginAdministration {
 	var $environment;
 	
@@ -125,26 +126,12 @@ class PluginAdministration {
 							// only delete the plugin directory
 							// registration info will be updated automatically
 							$this->deletePlugindir($newpluginpath);
-						}
-						/*
-						if ($forceupdate){							
-							// delete the plugin
-							$oldpluginid = $persistence->getPluginId($pluginclassname);
-							$oldplugin = $persistence->getPlugin($oldpluginid);
-							$persistence->deinstallPlugin($oldplugin);
-							@mkdir($newpluginpath);
-						}
-						else {
-							// plugin is registered and installed
-							// and we didn't request to do an forced update
-					 		return PLUGIN_ALLREADY_INSTALLED_ERROR;
-						}
-						*/
+						}						
     				}
 				}
 				// check to see, if the plugin is already registered
 				if ($pluginregistered && !$forceupdate){
-					return PLUGIN_ALLREADY_INSTALLED_ERROR;
+					return PLUGIN_ALREADY_REGISTERED_ERROR;
 				}				
 				// everything fine, install it
  
@@ -240,7 +227,7 @@ class PluginAdministration {
 		// zip the plugin-Directory and send it to the client
 		$persistence = PluginEngine::getPluginPersistence();
 		$plugin = $persistence->getPlugin($pluginid);
-		$file_id = "pluginpackage_" . $pluginid . ".zip";
+		$file_id = get_class($plugin) . "_" . $pluginid . ".zip";
 		create_zip_from_directory($this->environment->getBasepath() . $plugin->getPluginpath(), $GLOBALS["TMP_PATH"] . "/" . $file_id);
 		return GetDownloadLink($file_id, $file_id, 4, 'force');
 	}

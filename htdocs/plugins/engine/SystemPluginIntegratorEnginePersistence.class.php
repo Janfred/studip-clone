@@ -53,9 +53,11 @@ class SystemPluginIntegratorEnginePersistence extends AbstractPluginIntegratorEn
     			$pluginpath = $result->fields("pluginpath");
             	// Klasse instanziieren
             	$plugin = PluginEngine::instantiatePlugin($pluginclassname,$pluginpath);
-            	$plugin->setPluginid($result->fields("pluginid"));
-            	$plugin->setPluginname($result->fields("pluginname"));
-            	$plugin->setUser($this->getUser());
+            	if ($plugin != null){
+	            	$plugin->setPluginid($result->fields("pluginid"));
+	            	$plugin->setPluginname($result->fields("pluginname"));
+	            	$plugin->setUser($this->getUser());	
+            	}
         	}    
         	$result->Close();
         	return $plugin; 

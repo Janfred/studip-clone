@@ -52,6 +52,7 @@ class AdministrationPluginIntegratorEnginePersistence extends AbstractPluginInte
     		$this->connection = PluginEngine::getPluginDatabaseConnection();
     	}
     	//$result = &$this->connection->execute("SELECT p.* FROM plugins_administration_activated a left join plugins p on p.pluginid=a.pluginid where p.plugintype='Administration' order by p.navigationpos");
+    	$plugins = array();
     	$result = &$this->connection->execute("SELECT p.* FROM plugins_activated a left join plugins p on p.pluginid=a.pluginid where a.poiid=? and p.plugintype='Administration' order by p.navigationpos",array(PLUGIN_ADMINISTRATION_POIID));
     	if (!$result){
     		// TODO: Fehlermeldung ausgeben
@@ -64,11 +65,13 @@ class AdministrationPluginIntegratorEnginePersistence extends AbstractPluginInte
     			$pluginpath = $result->fields("pluginpath");
             	// Klasse instanziieren
             	$plugin = PluginEngine::instantiatePlugin($pluginclassname,$pluginpath);
-        		$plugin->setPluginid($result->fields("pluginid"));
-        		$plugin->setPluginname($result->fields("pluginname"));
-        		$plugin->setActivated(true);
-        		$plugin->setUser($this->getUser());
-        		$plugins[] = $plugin; 
+            	if ($plugin != null){
+            		$plugin->setPluginid($result->fields("pluginid"));
+	        		$plugin->setPluginname($result->fields("pluginname"));
+	        		$plugin->setActivated(true);
+	        		$plugin->setUser($this->getUser());
+	        		$plugins[] = $plugin; 
+            	}
             	$result->MoveNext();
         	}    
         	$result->Close();
@@ -94,11 +97,13 @@ class AdministrationPluginIntegratorEnginePersistence extends AbstractPluginInte
     			$pluginpath = $result->fields("pluginpath");
             	// Klasse instanziieren
             	$plugin = PluginEngine::instantiatePlugin($pluginclassname,$pluginpath);
-            	$plugin->setPluginid($result->fields("pluginid"));
-            	$plugin->setPluginname($result->fields("pluginname"));
-            	$plugin->setActivated(false);
-            	$plugin->setUser($this->getUser());
-            	$plugins[] = $plugin; 
+            	if ($plugin != null){
+	            	$plugin->setPluginid($result->fields("pluginid"));
+	            	$plugin->setPluginname($result->fields("pluginname"));
+	            	$plugin->setActivated(false);
+	            	$plugin->setUser($this->getUser());
+	            	$plugins[] = $plugin; 
+            	}
             	$result->MoveNext();
         	}    
         	$result->Close();
@@ -145,9 +150,11 @@ class AdministrationPluginIntegratorEnginePersistence extends AbstractPluginInte
     			$pluginpath = $result->fields("pluginpath");
             	// Klasse instanziieren
             	$plugin = PluginEngine::instantiatePlugin($pluginclassname,$pluginpath);
-            	$plugin->setPluginid($result->fields("pluginid"));
-            	$plugin->setPluginname($result->fields("pluginname"));
-            	$plugin->setUser($this->getUser());
+            	if ($plugin != null){
+	            	$plugin->setPluginid($result->fields("pluginid"));
+	            	$plugin->setPluginname($result->fields("pluginname"));
+	            	$plugin->setUser($this->getUser());
+            	}
         	}    
         	$result->Close();
         	return $plugin; 

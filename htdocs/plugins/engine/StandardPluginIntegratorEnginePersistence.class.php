@@ -113,7 +113,7 @@ class StandardPluginIntegratorEnginePersistence extends AbstractPluginIntegrator
 					   . "union "
 				       . "select distinct p.* from seminar_inst s, plugins p join Institute i on i.Institut_id=s.institut_id join plugins_default_activations pa on i.fakultaets_id=pa.institutid or i.Institut_id=pa.institutid left join plugins_activated pad on p.pluginid=pad.pluginid and (pad.poiid=concat('sem',s.seminar_id) or pad.poiid=concat('inst',s.seminar_id))where s.seminar_id=? and pa.pluginid=p.pluginid and ((pad.poiid=? and (pad.state <> 'off')) or pad.pluginid is null)",array($this->poiid,$id,$this->poiid));
 					   
-// etwas übersichtlicher für MySQL 4.1 
+// etwas übersichtlicher ab MySQL 4.1 
 // where s.seminar_id=? and p.pluginid not in (select pluginid from plugins_activated pad where pad.poiid=? and state='off'
 
     	if (!$result){
@@ -128,12 +128,13 @@ class StandardPluginIntegratorEnginePersistence extends AbstractPluginIntegrator
     			$pluginpath = $result->fields("pluginpath");
     			// Klasse instanziieren
     			$plugin = PluginEngine::instantiatePlugin($pluginclassname, $pluginpath);
-            	$plugin->setPluginid($result->fields("pluginid"));
-            	$plugin->setPluginname($result->fields("pluginname"));
-            	$plugin->setUser($this->getUser());
-            	$plugin->setActivated(true);
-            	$plugins[] = $plugin;
-    			
+    			if ($plugin !=null){
+	            	$plugin->setPluginid($result->fields("pluginid"));
+	            	$plugin->setPluginname($result->fields("pluginname"));
+	            	$plugin->setUser($this->getUser());
+	            	$plugin->setActivated(true);
+	            	$plugins[] = $plugin;
+    			}    			
             	$result->MoveNext();
         	}    
         	$result->Close();
@@ -154,18 +155,19 @@ class StandardPluginIntegratorEnginePersistence extends AbstractPluginIntegrator
     		// TODO: Fehlermeldung ausgeben
     		return array();
     	}
-    	else {
+    	else {    		
     		while (!$result->EOF) {
     			$pluginclassname = $result->fields("pluginclassname");
     			$pluginpath = $result->fields("pluginpath");
             	// Klasse instanziieren
             	$plugin = PluginEngine::instantiatePlugin($pluginclassname, $pluginpath);
-            	$plugin->setPluginid($result->fields("pluginid"));
-            	$plugin->setPluginname($result->fields("pluginname"));
-            	$plugin->setActivated(false);
-            	$plugin->setUser($this->getUser());
-            	$plugins[] = $plugin;
-            	
+            	if ($plugin != null){
+	            	$plugin->setPluginid($result->fields("pluginid"));
+	            	$plugin->setPluginname($result->fields("pluginname"));
+	            	$plugin->setActivated(false);
+	            	$plugin->setUser($this->getUser());
+	            	$plugins[] = $plugin;
+            	}            	
             	$result->MoveNext();
         	}    
         	$result->Close();
@@ -212,9 +214,11 @@ class StandardPluginIntegratorEnginePersistence extends AbstractPluginIntegrator
     			$pluginpath = $result->fields("pluginpath");
             	// Klasse instanziieren
             	$plugin = PluginEngine::instantiatePlugin($pluginclassname, $pluginpath);
-            	$plugin->setPluginid($result->fields("pluginid"));
-            	$plugin->setPluginname($result->fields("pluginname"));
-            	$plugin->setUser($this->getUser());
+            	if ($plugin != null){
+	            	$plugin->setPluginid($result->fields("pluginid"));
+	            	$plugin->setPluginname($result->fields("pluginname"));
+	            	$plugin->setUser($this->getUser());
+            	}
         	}    
         	$result->Close();
         	return $plugin; 
@@ -310,11 +314,12 @@ class StandardPluginIntegratorEnginePersistence extends AbstractPluginIntegrator
     			$pluginpath = $result->fields("pluginpath");
     			// Klasse instanziieren
     			$plugin = PluginEngine::instantiatePlugin($pluginclassname, $pluginpath);
-            	$plugin->setPluginid($result->fields("pluginid"));
-            	$plugin->setPluginname($result->fields("pluginname"));
-            	$plugin->setUser($this->getUser());
-            	$plugins[] = $plugin;
-    			
+    			if ($plugin != null){
+	            	$plugin->setPluginid($result->fields("pluginid"));
+	            	$plugin->setPluginname($result->fields("pluginname"));
+	            	$plugin->setUser($this->getUser());
+	            	$plugins[] = $plugin;
+    			}    			
             	$result->MoveNext();
         	}    
         	$result->Close();
