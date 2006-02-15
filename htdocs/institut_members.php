@@ -317,9 +317,9 @@ if ($sms_msg) {
 echo "\n<tr><td class=\"blank\"><br /><blockquote>\n";
 
 if ($count > 0)
-	printf("%s <b>%s</b>", _("Alle MitarbeiterInnen der Einrichtung"), $SessSemName[0]);
+	printf("%s <b>%s</b>", _("Alle MitarbeiterInnen der Einrichtung"), htmlReady($SessSemName[0]));
 else {
-	printf(_("Der Einrichtung <b>%s</b> wurden noch keine MitarbeiterInnen zugeordnet!"), $SessSemName[0]);
+	printf(_("Der Einrichtung <b>%s</b> wurden noch keine MitarbeiterInnen zugeordnet!"), htmlReady($SessSemName[0]));
 	echo "\n<br /><br /></blockquote>\n";
 	echo "</td></tr></table\n";
 	echo "</body></html>";
