@@ -55,18 +55,18 @@ class AbstractPluginIntegratorEnginePersistence {
 		@return the pluginid
 	*/ 
 	function registerPlugin($plugin, $pluginclassname, $pluginpath){
-		$type = PluginEngine::getTypeOfPlugin($plugin);
-		if (strlen($type) > 0){
-			$result =& $this->connection->execute("insert into plugins (pluginid,pluginclassname,pluginname,pluginpath,plugintype,enabled,navigationpos) select 0,?,?,?,?,'no',max(navigationpos)+1 from plugins where plugintype=?", array($pluginclassname,$plugin->getPluginname(), $pluginpath,$type,$type));
-			/*
-			if (!result){
-				// echo ("ERROR!!!");
+		$type = PluginEngine::getTypeOfPlugin($plugin);		
+		if (strlen($type) > 0){			
+			// try to find an existing entry to update
+			$result =& $this->connection->execute("select pluginid from plugins where pluginclassname=? and plugintype=?",array($pluginclassname,$type));
+			if ($result){
+				$pluginid = $result->fields("pluginid");
+				// try to update this entry
+				$result =& $this->connection->execute("update plugins set pluginpath=? where plugintype=? and pluginid=?", array($pluginpath,$type,$pluginid));									
 			}
 			else {
-				// letzte ID bestimmen
+				$result =& $this->connection->execute("insert into plugins (pluginid,pluginclassname,pluginname,pluginpath,plugintype,enabled,navigationpos) select 0,?,?,?,?,'no',max(navigationpos)+1 from plugins where plugintype=?", array($pluginclassname,$plugin->getPluginname(), $pluginpath,$type,$type));					
 			}
-			*/
-			// delete the result cache
 			$this->connection->CacheFlush();
 		}
 	}
@@ -198,12 +198,12 @@ class AbstractPluginIntegratorEnginePersistence {
 	}
 	
 	/**
-	* Searches for $pluginname in the plugins database
-	* @return true - plugin called $pluginname was found in the database
+	* Searches for $pluginclassname in the plugins database
+	* @return true - plugin called $pluginclassname was found in the database
 	*  		  false - plugin not found
 	*/
-	function isPluginRegistered($pluginname){
-		$result = &$this->connection->execute("select * from plugins where pluginname=?", array($pluginname));
+	function isPluginRegistered($pluginclassname){
+		$result = &$this->connection->execute("select * from plugins where pluginclassname=?", array($pluginclassname));
 		if (!$result){
 		   return false;
 		}

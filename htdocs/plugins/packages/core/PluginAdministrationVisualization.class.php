@@ -166,7 +166,7 @@ class PluginAdministrationVisualization extends AbstractStudIPPluginVisualizatio
 			 			<tr><th align="left"><?=_("Installation neuer Plugins")?></th> </tr>
 			 			<tr>
 			 				<td>
-							 	<form action="<?= PluginEngine::getLink($this->pluginref)?>" enctype="multipart/form-data" method="post">
+							 	<form action="<?= PluginEngine::getLink($this->pluginref,array(),"installPlugin")?>" enctype="multipart/form-data" method="post">
 								<input type="hidden" value="install" name="action">
 								<input name="upload_file" type="file" size="50" maxlength="100000">								
 								<?= makeButton("hinzufuegen","input",_("neues Plugin installieren")) ?><br>

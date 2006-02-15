@@ -78,8 +78,7 @@ class PluginAdministration {
 				
 		if ((strlen($plugininfos["class"]) > 0) && (strlen($plugininfos["origin"]) > 0) && (strlen($plugininfos["version"]) > 0)){
 			// Plugin-Hauptclasse instanziieren
-			$pluginclassname = trim($plugininfos["class"]);
-			$pluginname = trim($plugininfos["pluginname"]);
+			$pluginclassname = trim($plugininfos["class"]);			
 						
 			// Klasse instanziieren
 			if (strlen($pluginclassname) > 0){ 
@@ -92,19 +91,22 @@ class PluginAdministration {
 				
 				// Neuen Pfad bestimmen
 				$vendordir = $this->environment->getPackagebasepath() . "/" . $plugininfos["origin"];
-				$newpluginpath = $vendordir . "/" . $pluginname . "_" . $plugininfos["version"];
-				$pluginrelativepath = $plugininfos["origin"] . "/" . $pluginname . "_" . $plugininfos["version"];
+				$newpluginpath = $vendordir . "/" . $pluginclassname . "_" . $plugininfos["version"];
+				$pluginrelativepath = $plugininfos["origin"] . "/" . $pluginclassname . "_" . $plugininfos["version"];
 				$persistence = PluginEngine::getPluginPersistence();
+				$pluginregistered = $persistence->isPluginRegistered($pluginclassname);
 				if (!file_exists($vendordir)){
 					@mkdir($vendordir);
 				}
+				
 				if (!file_exists($newpluginpath)){
+					// ok, plugin in exact this version is not installed
 					@mkdir($newpluginpath);
 				}
 				else {
 					// directory exists
 					// is the plugin already installed?
-					if (!$persistence->isPluginRegistered($pluginname)){
+					if (!$pluginregistered){
 					   // not registered in database
 					   // delete directory
 					   $this->deletePlugindir($newpluginpath);					   
@@ -112,22 +114,40 @@ class PluginAdministration {
 					   @mkdir($newpluginpath);
 					}
 					else {
-						if ($forceupdate){
+						// Plugin is already registered
+						if (!$forceupdate){
+							// plugin is registered and installed
+							// and we didn't request to do an forced update
+					 		return PLUGIN_ALLREADY_INSTALLED_ERROR;
+						}
+						else {
+							// forced update
+							// only delete the plugin directory
+							// registration info will be updated automatically
+							$this->deletePlugindir($newpluginpath);
+						}
+						/*
+						if ($forceupdate){							
 							// delete the plugin
-							$oldpluginid = $persistence->getPluginId($pluginname);
+							$oldpluginid = $persistence->getPluginId($pluginclassname);
 							$oldplugin = $persistence->getPlugin($oldpluginid);
 							$persistence->deinstallPlugin($oldplugin);
 							@mkdir($newpluginpath);
 						}
 						else {
 							// plugin is registered and installed
-							// and we don't request to do an forced update
+							// and we didn't request to do an forced update
 					 		return PLUGIN_ALLREADY_INSTALLED_ERROR;
 						}
+						*/
     				}
 				}
+				// check to see, if the plugin is already registered
+				if ($pluginregistered && !$forceupdate){
+					return PLUGIN_ALLREADY_INSTALLED_ERROR;
+				}				
 				// everything fine, install it
-  
+ 
    				// copy files
    				$this->copyr($tmppackagedir,$newpluginpath);
    				// delete the temporary path
@@ -145,7 +165,7 @@ class PluginAdministration {
 					 // check if certain methods exist in the plugin
 					 $methods = get_class_methods($plugin);
 					 if (array_search('show',$methods)){
-					 	// now register the plugin in the database
+					 	// now register the plugin in the database					 	
 					 	$persistence->registerPlugin($plugin,$pluginclassname,$pluginrelativepath);
 					 	// create database if needed
 					 	$conn = PluginEngine::getPluginDatabaseConnection();

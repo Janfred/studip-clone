@@ -46,6 +46,23 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 		$this->pluginvis->showPluginAdministrationList($plugins,$msg);
 	}
 	
+	function installPlugin(){
+		$forceupdate = $_POST["update"];
+		$user = $this->getUser();
+		$permission = $user->getPermission();
+		// check if user has the permission to check in / update plugins
+		if (!$permission->hasRootPermission() && $permission->hasAdminPermission()){
+		   // show nothing		   
+		   return;
+		}
+		$upload_file = $_FILES["upload_file"]["tmp_name"];
+    	// process the upload 
+    	// and register plugin in the database;
+    	$result = $this->pluginmgmt->installPlugin($upload_file,$forceupdate);  
+    	$pluginengine = PluginEngine::getPluginPersistence();
+    	$this->showDefaultView($pluginengine,$result);
+	}
+	
 	/**
 	 * Shows the plugins view
 	 *
@@ -123,16 +140,7 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
     	  	$upload_file = $_FILES["upload_file"]["tmp_name"];
     	  	// process the upload 
     	  	// and register plugin in the database;
-    	  	$result = $this->pluginmgmt->installPlugin($upload_file,$forceupdate);
-    	  	/*
-    	  	if ($result == PLUGIN_INSTALLATION_SUCCESSFUL){
-    	  		$this->pluginvis->showPluginInstallationSuccess();
-    	  	}
-    	  	else {
-    	  		// there was an error
-    	  		$this->pluginvis->showPluginInstallationError($result);
-    	  	}
-    	  	*/
+    	  	$result = $this->pluginmgmt->installPlugin($upload_file,$forceupdate);    	  	
 		  }
 		}
 				
