@@ -22,14 +22,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 ob_start();
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 
-require_once($GLOGALS['ABSOLUTE_PATH_STUDIP'] . 'datei.inc.php');
-include ($GLOGALS['ABSOLUTE_PATH_STUDIP'] . 'seminar_open.php'); // initialise Stud.IP-Session
+require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'datei.inc.php');
+include ($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'seminar_open.php'); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
-require_once($GLOGALS['ABSOLUTE_PATH_STUDIP'] . 'msg.inc.php');
-require_once($GLOGALS['ABSOLUTE_PATH_STUDIP'] . 'visual.inc.php');
-require_once($GLOGALS['ABSOLUTE_PATH_STUDIP'] . 'config.inc.php');
-require_once($GLOGALS['ABSOLUTE_PATH_STUDIP'] . 'functions.php');
+require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'msg.inc.php');
+require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'visual.inc.php');
+require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'config.inc.php');
+require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'functions.php');
 
 $sess->register('folder_system_data');
 $db=new DB_Seminar;
