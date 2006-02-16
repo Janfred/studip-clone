@@ -41,13 +41,23 @@ class StudipComments extends SimpleORMap {
 	}
 
 	function NumCommentsForObject($object_id) {
-		$query="SELECT COUNT(*) AS count FROM comments WHERE object_id='$object_id'";
-		$db=new DB_Seminar();
+		$query = "SELECT COUNT(*) AS count FROM comments WHERE object_id='$object_id'";
+		$db = new DB_Seminar();
 		$db->query($query);
 		$db->next_record();
 		return $db->f("count");
 	}
-
+	
+	function NumCommentsForObjectSinceLastVisit($object_id, $comments_since = 0, $exclude_user_id = null) {
+		$query = "SELECT COUNT(*) AS count FROM comments WHERE object_id='$object_id'";
+		$query .= " AND chdate > $comments_since";
+		if ($exclude_user_id) $query .= " AND user_id != '$exclude_user_id'";
+		$db = new DB_Seminar();
+		$db->query($query);
+		$db->next_record();
+		return $db->f("count");
+	}
+	
 	function GetCommentsForObject($object_id) {
 		global $_fullname_sql;
 		$comments=array();
