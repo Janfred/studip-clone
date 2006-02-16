@@ -297,7 +297,7 @@ function GetMyScore() {
 	if ($age <1 ) $age = 1;
 		
 	if ($GLOBALS['VOTE_ENABLE']) {
-		$db->query("SELECT count(*) FROM vote WHERE range_id = '$user_id'");
+		$db->query("SELECT count(*) FROM vote WHERE range_id = '$user_id' AND state IN ('active', 'stopvis')");
 		$db->next_record();
 		$vote = $db->f(0)*2;
 		
