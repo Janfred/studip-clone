@@ -172,8 +172,7 @@ function show_news($range_id, $show_admin=FALSE,$limit="", $open, $width="100%",
 			if ($news_detail['allow_comments']==1) {
 				$numcomments = StudipComments::NumCommentsForObject($news_detail['news_id']);
 				$numnewcomments = StudipComments::NumCommentsForObjectSinceLastVisit($news_detail['news_id'], object_get_visit($news_detail['news_id'],'news',false,false), $auth->auth['uid']);
-				$zusatz .= " <font color=\"#aaaa66\">".$numcomments."</font><font color=\"black\"> |</font>";
-				if ($numnewcomments) $zusatz .= " <font color=\"red\">".$numnewcomments."</font><font color=\"black\"> |</font>";
+				$zusatz .= " <font ".($numnewcomments ? tooltip(sprintf(_("%s neue(r) Kommentar(e)"),$numnewcomments),false) : '')." color=\"".($numnewcomments ? 'red' : '#aaaa66')."\">".$numcomments."</font><font color=\"black\"> |</font>";
 			}
 
 			if ($link)
