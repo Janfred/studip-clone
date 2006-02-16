@@ -1,5 +1,5 @@
 <?
-
+// $Id$
 /*
 calendar_settings.inc 0.8-20020701
 Persoenlicher Terminkalender in Stud.IP.
@@ -27,17 +27,18 @@ if ($i_page == "calendar.php") {
 require_once($ABSOLUTE_PATH_STUDIP . "visual.inc.php");
 
 // store user-settings
-if($cmd_cal == "chng_cal_settings"){
+if($cmd_cal == 'chng_cal_settings'){
 	$calendar_user_control_data = array(
-		"view"           => $cal_view,
-		"start"          => $cal_start,
-		"end"            => $cal_end,
-		"step_day"       => $cal_step_day,
-		"step_week"      => $cal_step_week,
-		"type_week"      => $cal_type_week,
-		"holidays"       => $cal_holidays,
-		"sem_data"       => $cal_sem_data,
-		"link_edit"      => $cal_link_edit
+		'view'		=> $cal_view,
+		'start'		=> $cal_start,
+		'end'			=> $cal_end,
+		'step_day'		=> $cal_step_day,
+		'step_week'	=> $cal_step_week,
+		'type_week'	=> $cal_type_week,
+		'holidays'		=> $cal_holidays,
+		'sem_data'	=> $cal_sem_data,
+		'link_edit'		=> $cal_link_edit,
+		'delete'		=> $cal_delete
 	);
 }
 
