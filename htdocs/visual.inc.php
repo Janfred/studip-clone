@@ -931,7 +931,8 @@ function smile ($text = "", $extern = FALSE) {
 		$replace .= "$path$SMILE_PATH/\\2.gif\"></a>\\3";
 	}
 	else {
-		$path = (($_SERVER["SERVER_PORT"] == 443 || $_SERVER["HTTPS"] == "on") ? "https://" : "http://") . $EXTERN_SERVER_NAME;
+		if ($EXTERN_SERVER_NAME) $path = (($_SERVER["SERVER_PORT"] == 443 || $_SERVER["HTTPS"] == "on") ? "https://" : "http://") . $EXTERN_SERVER_NAME;
+		else $path = $CANONICAL_RELATIVE_PATH_STUDIP;
 		$replace .= "<img alt=\"\\2\" title=\"\\2\" border=\"0\" src=\"";
 		$replace .= "$path$SMILE_PATH/\\2.gif\">\\3";
 	}
@@ -978,7 +979,7 @@ function symbol ($text = "", $extern = FALSE) {
 	if(empty($text))
 		return $text;
 	
-	if ($extern)
+	if ($extern && $EXTERN_SERVER_NAME)
 		$path = (($_SERVER["SERVER_PORT"] == 443 || $_SERVER["HTTPS"] == "on") ? "https://" : "http://") . $EXTERN_SERVER_NAME;
 	else
 		$path = $CANONICAL_RELATIVE_PATH_STUDIP;
