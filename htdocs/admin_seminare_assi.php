@@ -1186,10 +1186,13 @@ if (($form == 6) && ($jump_next_x))
 		$sem_create_data["sem_id"]=md5(uniqid($hash_secret));
 
 		//Termin-Metadaten-Array zusammenmatschen zum besseren speichern in der Datenbank
-		if ($sem_create_data["term_art"] == -1)
-			$serialized_metadata='';
-		else
-			$serialized_metadata=mysql_escape_string(serialize($sem_create_data["metadata_termin"]));
+		if ($sem_create_data['term_art'] == -1) {
+			$sem_create_data['metadata_termin'] = array();
+			$sem_create_data['metadata_termin']['art'] = 1;
+			//set temporary entry (for skip dates field) to the right value
+			$sem_create_data['term_art'] = 1;
+		}
+		$serialized_metadata = mysql_escape_string(serialize($sem_create_data['metadata_termin']));
 
 		//for admission it have to always 3
 		if ($sem_create_data["sem_admission"]) {
@@ -1197,9 +1200,7 @@ if (($form == 6) && ($jump_next_x))
 			$sem_create_data["sem_sec_schreib"]=3;
 		}
 
-		//set temporary entry (for skip dates field) to the right value
-		if ($sem_create_data["term_art"]==-1)
-			$sem_create_data["term_art"]=1;
+
 
 		if ($Schreibzugriff < $Lesezugriff) // hier wusste ein Dozent nicht, was er tat
 			$Schreibzugriff = $Lesezugriff;
