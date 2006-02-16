@@ -141,7 +141,7 @@ $db->query("SELECT b.inst_perms FROM user_inst AS a LEFT JOIN user_inst AS b USI
 if ($db->num_rows())
 	$admin_darf = TRUE;
 if ($perm->is_fak_admin()){
-	$db->query("SELECT c.user_id FROM user_inst a LEFT JOIN Institute b ON(a.Institut_id=b.fakultaets_id)  LEFT JOIN user_inst c USING(Institut_id) WHERE a.user_id='$user->id' AND a.inst_perms='admin' AND c.user_id='$user_id'");
+	$db->query("SELECT c.user_id FROM user_inst a LEFT JOIN Institute b ON(a.Institut_id=b.fakultaets_id)  LEFT JOIN user_inst c ON(b.Institut_id=c.Institut_id) WHERE a.user_id='$user->id' AND a.inst_perms='admin' AND c.user_id='$user_id'");
 	if ($db->next_record())
 	$admin_darf = TRUE;
 }
