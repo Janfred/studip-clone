@@ -148,20 +148,7 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 			$plugin = $pluginengine->getPlugin($deinstall);
 			if (is_object($plugin)){
 			   if (isset($forcedeinstall)){
- 				    $type = PluginEngine::getTypeOfPlugin($plugin);
-				   	if ($type == "Administration"){
-				   	   $adminpluginengine->deinstallPlugin($plugin);
-				   	}
-				   	else if ($type == "Standard") {
-						 $standardpluginengine->deinstallPlugin($plugin);
-					}
-					else if ($type == "System"){
-						 $systempluginengine->deinstallPlugin($plugin);
-					}
-					
-					$pluginenv = $plugin->getEnvironment();
-					// the old plugin directory has to be deleted
-					@exec("rm -rf " . escapeshellarg($pluginenv->getBasepath()) . "/" . escapeshellarg($plugin->getPluginpath()));
+ 				    $this->pluginmgmt->deinstallPlugin($plugin);
 				}
 				else {
 					// ask, if it should really be deleted

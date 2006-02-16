@@ -54,6 +54,41 @@ class AbstractStudIPPlugin {
 	}
 	
 	/**
+	 * This function is called by the plugin engine directly before uninstallation.
+	 * Normally a plugin would drop all tables created and used by the plugin.
+	 *
+	 */
+	function prepareUninstallation(){		
+		$manifest = PluginEngine::getPluginManifest($this->environment->getBasepath() . "/" . $this->getPluginpath());
+		if (is_array($manifest)){
+			if (isset($manifest["uninstalldbscheme"])) {
+				$schemafile = $this->getPluginpath() . "/" . $manifest["uninstalldbscheme"];				
+				$conn = PluginEngine::getPluginDatabaseConnection();				
+				$fp = fopen($schemafile,"r");
+				$sqlstatement = "";
+		 		while (!feof($fp)){
+		 			$line = trim(fgets($fp));			 			
+		 			if (strpos($line,"--") === 0){
+		 				// commentary skip entry
+		 				continue;
+		 			}
+		 			else {
+		 				// add it to the 
+		 				$sqlstatement .= $line; 	 				
+		 				if (strpos($sqlstatement,";") === (strlen($sqlstatement)-1)){
+		 					// we reached the end of the statement
+		 					// execute it
+		 					$conn->execute($sqlstatement);					 					
+		 					$sqlstatement="";
+		 				}
+		 			} 			
+		 		}
+		 		fclose($fp);		
+			}
+		}
+	}
+	
+	/**
 	* Shows a page describing the plugin's functionality, dependence on other plugins, ... 
 	*/
 	function showDescriptionalPage(){	
@@ -64,7 +99,6 @@ class AbstractStudIPPlugin {
 		   	  return;
 		   }
 		}
-
 	   $plugininfos = PluginEngine::getPluginManifest($this->environment->getBasepath() . $this->pluginpath . "/");
 	   $version = $plugininfos["version"];
 	   $vendor = $plugininfos["origin"];

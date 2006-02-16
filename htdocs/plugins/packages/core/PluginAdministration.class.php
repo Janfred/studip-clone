@@ -35,6 +35,23 @@ class PluginAdministration {
 			rmdirr($dir);
 		}
 	} 
+
+	/**
+	 * Does the uninstallation of a plugin.
+	 *
+	 * @param unknown_type $plugin
+	 */
+	function deinstallPlugin($plugin){
+		$type = PluginEngine::getTypeOfPlugin($plugin);
+		$plugin->prepareUninstallation();
+		$engine = PluginEngine::getPluginPersistence($type);
+		if (is_object($engine)){
+			$engine->deinstallPlugin($plugin);
+		}			
+		$pluginenv = $plugin->getEnvironment();
+		// the old plugin directory has to be deleted
+		$this->deletePlugindir($pluginenv->getBasepath() . "/" . $plugin->getPluginpath());			
+	}
 	
 	
 	/**
@@ -158,15 +175,9 @@ class PluginAdministration {
 					 if (array_search('show',$methods)){
 					 	// now register the plugin in the database					 	
 					 	$persistence->registerPlugin($plugin,$pluginclassname,$pluginrelativepath);
-					 	// create database if needed
-					 	$conn = PluginEngine::getPluginDatabaseConnection();
+					 	// create database if needed					 	
 					 	if ($plugininfos["dbscheme"] != ""){
-					 		$fp = fopen($newpluginpath . "/" . $plugininfos["dbscheme"],"r");
-					 		while (!feof($fp)){
-					 			$zeile = fgets($fp);					 			
-					 			$conn->execute($zeile);					 			
-					 		}
-					 		fclose($fp);
+					 		$this->createDBSchemeForPlugin($newpluginpath . "/" . $plugininfos["dbscheme"]);
 					 	}					 	
 					 }
 					 else {
@@ -181,6 +192,38 @@ class PluginAdministration {
 			return PLUGIN_MANIFEST_ERROR;
 		}
 	}
+	
+	/**
+	 * Enter description here...
+	 *
+	 * @param string $schemafile the absolute path to the schemafile
+	 */
+	function createDBSchemeForPlugin($schemafile){
+		$conn = PluginEngine::getPluginDatabaseConnection();
+		echo("Trying to create db schema.");
+		$fp = fopen($schemafile,"r");
+		$sqlstatement = "";
+ 		while (!feof($fp)){
+ 			$line = trim(fgets($fp));			 			
+ 			if (strpos($line,"--") === 0){
+ 				// commentary skip entry
+ 				continue;
+ 			}
+ 			else {
+ 				// add it to the 
+ 				$sqlstatement .= $line; 	 				
+ 				if (strpos($sqlstatement,";") === (strlen($sqlstatement)-1)){
+ 					// we reached the end of the statement
+ 					// execute it
+ 					$conn->execute($sqlstatement);					 					
+ 					$sqlstatement="";
+ 				}
+ 			} 			
+ 		}
+ 		fclose($fp);		
+	}
+	
+	
 	
 	/**
 	 * recursive copy 
@@ -230,8 +273,9 @@ class PluginAdministration {
 	function zipPluginPackage($pluginid){
 		// zip the plugin-Directory and send it to the client
 		$persistence = PluginEngine::getPluginPersistence();
-		$plugin = $persistence->getPlugin($pluginid);
-		$file_id = get_class($plugin) . "_" . $pluginid . ".zip";
+		$plugin = $persistence->getPlugin($pluginid);		
+		$manifest = PluginEngine::getPluginManifest($this->environment->getBasepath() . $plugin->getPluginpath());
+		$file_id = get_class($plugin) . "_" . $manifest["version"] . ".zip";
 		create_zip_from_directory($this->environment->getBasepath() . $plugin->getPluginpath(), $GLOBALS["TMP_PATH"] . "/" . $file_id);
 		return GetDownloadLink($file_id, $file_id, 4, 'force');
 	}

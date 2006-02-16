@@ -127,10 +127,12 @@ class PluginEngine{
 	* @return array containing the manifest information
 	* @todo Klasse für die Rückgabe realisieren
 	*/
-	function getPluginManifest($pluginpath){
-	   if (!file_exists($pluginpath . "plugin.manifest")){
+	function getPluginManifest($pluginpath){		
+	   $pluginpath = trim($pluginpath);	   
+	   if (!(strrpos($pluginpath,"/") == strlen($pluginpath)-1)) $pluginpath .= "/";
+	   if (!file_exists($pluginpath . "plugin.manifest")){	
 	   	  return array();
-	   }
+	   }	 
 	   $manifest = fopen($pluginpath . "plugin.manifest","r");
 	   $plugininfos = array();		
 		while (!feof($manifest)){
@@ -156,6 +158,9 @@ class PluginEngine{
 				}
 				else if ($result[0] == "dbscheme"){
 					$plugininfos["dbscheme"] = trim($result[1]);
+				}
+				else if ($result[0] == "uninstalldbscheme") {
+					$plugininfos["uninstalldbscheme"] = trim($result[1]);
 				}
 			}
 		}
