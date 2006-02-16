@@ -49,6 +49,9 @@ class PluginAdministrationVisualization extends AbstractStudIPPluginVisualizatio
 			case PLUGIN_ALLREADY_INSTALLED_ERROR: 
 				StudIPTemplateEngine::showErrorMessage(sprintf(_("Das Plugin ist bereits installiert.")));
 				break;
+			case PLUGIN_ALREADY_REGISTERED_ERROR: 
+				StudIPTemplateEngine::showErrorMessage(sprintf(_("Das Plugin ist bereits in der Datenbank registriert.")));
+				break;
 			default:
 				break;			
 		}	
@@ -111,8 +114,8 @@ class PluginAdministrationVisualization extends AbstractStudIPPluginVisualizatio
 		$lasttype = "";
 		foreach($plugins as $plugin){
 			$cssSw->switchClass();
-			if (($plugin->getPluginname() == "PluginAdministration") || ($plugin->getPluginid() == 1)){
-				continue;
+			if (is_a($plugin,"PluginAdministrationPlugin") || is_subclass_of($plugin,"PluginAdministrationPlugin")){
+				continue;				
 			}
 			$type = PluginEngine::getTypeOfPlugin($plugin);
 			if ($type != $lasttype){

@@ -59,7 +59,7 @@ class AbstractPluginIntegratorEnginePersistence {
 		if (strlen($type) > 0){			
 			// try to find an existing entry to update
 			$result =& $this->connection->execute("select pluginid from plugins where pluginclassname=? and plugintype=?",array($pluginclassname,$type));
-			if ($result){
+			if ($result && !$result->EOF){
 				$pluginid = $result->fields("pluginid");
 				// try to update this entry
 				$result =& $this->connection->execute("update plugins set pluginpath=? where plugintype=? and pluginid=?", array($pluginpath,$type,$pluginid));									
@@ -204,12 +204,19 @@ class AbstractPluginIntegratorEnginePersistence {
 	*/
 	function isPluginRegistered($pluginclassname){
 		$result = &$this->connection->execute("select * from plugins where pluginclassname=?", array($pluginclassname));
-		if (!$result){
+		
+		if (!$result){			
 		   return false;
 		}
 		else {
-			 $result->Close();
-			 return true;
+			 $id = $result->fields("pluginid");
+			 if (is_numeric($id)){
+			 	$result->Close();
+			 	return true;
+			 }
+			 else {
+			 	return false;
+			 }
 		}
 	}
 	

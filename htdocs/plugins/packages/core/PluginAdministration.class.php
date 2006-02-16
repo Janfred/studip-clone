@@ -92,10 +92,11 @@ class PluginAdministration {
 				
 				// Neuen Pfad bestimmen
 				$vendordir = $this->environment->getPackagebasepath() . "/" . $plugininfos["origin"];
-				$newpluginpath = $vendordir . "/" . $pluginclassname . "_" . $plugininfos["version"];
-				$pluginrelativepath = $plugininfos["origin"] . "/" . $pluginclassname . "_" . $plugininfos["version"];
+				$newpluginpath = $vendordir . "/" . $pluginclassname; // . "_" . $plugininfos["version"];
+				$pluginrelativepath = $plugininfos["origin"] . "/" . $pluginclassname; //  . "_" . $plugininfos["version"];
 				$persistence = PluginEngine::getPluginPersistence();
 				$pluginregistered = $persistence->isPluginRegistered($pluginclassname);
+			
 				if (!file_exists($vendordir)){
 					@mkdir($vendordir);
 				}
@@ -103,6 +104,7 @@ class PluginAdministration {
 				if (!file_exists($newpluginpath)){
 					// ok, plugin in exact this version is not installed
 					@mkdir($newpluginpath);
+					// do we have to delete the old plugin directory?
 				}
 				else {
 					// directory exists
@@ -141,7 +143,9 @@ class PluginAdministration {
    				$this->deletePlugindir($tmppackagedir);
    						
 				// instantiate plugin
-				require_once($newpluginpath . '/' . $pluginclassname . ".class.php");
+				if (!$pluginregistered){
+					require_once($newpluginpath . '/' . $pluginclassname . ".class.php");
+				}
 				$plugin = new $pluginclassname();
 				if ($plugin == null){
 					// delete Plugin directory

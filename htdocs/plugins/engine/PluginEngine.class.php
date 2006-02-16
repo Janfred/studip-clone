@@ -113,10 +113,11 @@ class PluginEngine{
 	    else {
 			//anoack: unschöner workaround, aber auf die Schnelle kaum anders zu lösen, solange Plugins auch vorhandenen Stud.IP code nutzen wollen :)
 			global $ABSOLUTE_PATH_STUDIP, $RELATIVE_PATH_RESOURCES, $RELATIVE_PATH_CALENDAR,$RELATIVE_PATH_LEARNINGMODULES,$RELATIVE_PATH_CHAT;
-			include_once($absolutepluginfile);
+			require_once($absolutepluginfile);
 		    $plugin =& new $pluginclassname();
-		    $plugin->setEnvironment($env);
+		    $plugin->setEnvironment($env);		    
 		    $plugin->setPluginpath($env->getRelativepackagepath() . "/" . $pluginpath);
+		    $plugin->setBasepluginpath($pluginpath);
 		    return $plugin;
 	    }
    }

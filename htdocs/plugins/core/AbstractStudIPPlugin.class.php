@@ -15,6 +15,7 @@ class AbstractStudIPPlugin {
 	var $pluginname;
 	var $pluginid;
 	var $pluginpath;
+	var $basepluginpath; // the pluginpath without the plugins_directory
 	
 	
 	var $pluginadmininfo;
@@ -43,6 +44,7 @@ class AbstractStudIPPlugin {
 		$this->user=new StudIPUser();
 		$this->environment=null;
 		$this->pluginpath = "";
+		$this->basepluginpath = "";
 		$this->enabled = false;
 		$this->navposition = 99999; // a high value to put it at the end of the list
 	}
@@ -261,6 +263,14 @@ class AbstractStudIPPlugin {
 	
 	function getPluginpath(){
 		return $this->pluginpath;
+	}
+	
+	function setBasepluginpath($newpath){
+		$this->basepluginpath = $newpath;
+	}
+	
+	function getBasepluginpath(){
+		return $this->basepluginpath;
 	}
 	
 	/**
