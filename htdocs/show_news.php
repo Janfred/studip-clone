@@ -35,14 +35,15 @@ function process_news_commands(&$cmd_data) {
 	$cmd_data["comsubmit"]='';
 	$cmd_data["comdel"]='';
 	$cmd_data["comdelnews"]='';
-
+	
+	if ($comsubmit) $cmd_data["comsubmit"]=$comopen=$comsubmit;
+	if ($comdelnews) $cmd_data["comdelnews"]=$comopen=$comdelnews;
+	if ($comopen) $cmd_data["comopen"]=$nopen=$comopen;
 	if ($nopen) $cmd_data["nopen"]=$nopen;
 	if ($nclose)  $cmd_data["nopen"]='';
-	if ($comopen) $cmd_data["comopen"]=$comopen;
 	if ($comnew) $cmd_data["comnew"]=$comnew;
-	if ($comsubmit) $cmd_data["comsubmit"]=$comsubmit;
 	if ($comdel) $cmd_data["comdel"]=$comdel;
-	if ($comdelnews) $cmd_data["comdelnews"]=$comdelnews;
+	
 }
 
 function commentbox($num, $authorname, $authoruname, $date, $dellink, $content) {
@@ -149,9 +150,9 @@ function show_news($range_id, $show_admin=FALSE,$limit="", $open, $width="100%",
 			$titel='';
 			if ($open == $news_id) {
 				$link=$PHP_SELF."?nclose=true";
-				$titel=$tmp_titel."<a name='anker'>";
-				if ($news_detail["user_id"] != $auth->auth["uid"])
-				object_add_view($news_id);  //Counter for news - not my own
+				if ($cmd_data['comopen'] != $news_id) $titel = $tmp_titel."<a name=\"anker\"> </a>";
+				else $titel = $tmp_titel;
+				if ($news_detail["user_id"] != $auth->auth["uid"]) object_add_view($news_id);  //Counter for news - not my own
 				object_set_visit($news_id, "news"); //and, set a visittime
 			} else {
 				$link=$PHP_SELF."?nopen=".$news_id;
@@ -169,8 +170,10 @@ function show_news($range_id, $show_admin=FALSE,$limit="", $open, $width="100%",
 			$uname = $db2->f('username');
 
 			if ($news_detail['allow_comments']==1) {
-				$numcomments=StudipComments::NumCommentsForObject($news_detail['news_id']);
-				$zusatz.=" <font color=\"#aaaa66\">".$numcomments."</font><font color=\"black\"> |</font>";
+				$numcomments = StudipComments::NumCommentsForObject($news_detail['news_id']);
+				$numnewcomments = StudipComments::NumCommentsForObjectSinceLastVisit($news_detail['news_id'], object_get_visit($news_detail['news_id'],'news',false,false), $auth->auth['uid']);
+				$zusatz .= " <font color=\"#aaaa66\">".$numcomments."</font><font color=\"black\"> |</font>";
+				if ($numnewcomments) $zusatz .= " <font color=\"red\">".$numnewcomments."</font><font color=\"black\"> |</font>";
 			}
 
 			if ($link)
@@ -224,7 +227,7 @@ function show_news($range_id, $show_admin=FALSE,$limit="", $open, $width="100%",
 					}
 					if ($showcomments || $cmd_data["comopen"]==$news_detail['news_id']) {
 						$comments="\n<table border=\"0\" cellpadding=\"2\" cellspacing=\"0\" width=\"90%\" align=\"center\" style=\"margin-top:10px\">";
-						$comments.="<tr align=center><td><font size=-1><b>"._("Kommentare")."<b></font></td></tr>";
+						$comments.="<tr align=center><td><font size=-1><b>"._("Kommentare")."<b></font><a name=\"anker\"> </a></td></tr>";
 						$c=StudipComments::GetCommentsForObject($news_detail['news_id']);
 						if (count($c)) {
 							$num=0;
@@ -255,9 +258,9 @@ function show_news($range_id, $show_admin=FALSE,$limit="", $open, $width="100%",
 						$formular.="</div></form><p>&nbsp;</p>";
 						$content.=$formular;
 					} else {
-						$numcomments=StudipComments::NumCommentsForObject($news_detail['news_id']);
-						$cmdline="<p align=center><font size=-1><a href=".$PHP_SELF."?comopen=".$news_detail['news_id'].$unamelink."#anker>".sprintf(_("Kommentare lesen (%s) / Kommentar schreiben"),$numcomments)."</a></font></p>";
-						$content.=$cmdline;
+						$cmdline = "<p align=center><font size=-1><a href=".$PHP_SELF."?comopen=".$news_detail['news_id'].$unamelink."#anker>"
+									.sprintf(_("Kommentare lesen (%s) / Kommentar schreiben"), $numcomments)."</a></font></p>";
+						$content .= $cmdline;
 					}
 				}
 
