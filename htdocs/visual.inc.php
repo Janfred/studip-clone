@@ -561,7 +561,7 @@ function format ($text) {
 					"preg_call_format_text('\\1', format('\\4'))",
 					"<sup>\\1</sup>",
 					"<sub>\\1</sub>",
-					"'<blockquote>'.format('\\1').'</blockquote>'",
+					"'<blockquote>'.format(stripslashes('\\1')).'</blockquote>'",
 					"\\1"
 					);
 	$text = preg_replace('#\[pre\](.+?)\[/pre\]#is', '<pre>\\1</pre>', $text); // praeformatierter Text
