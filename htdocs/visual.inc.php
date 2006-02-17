@@ -565,7 +565,7 @@ function format ($text) {
 					"\\1"
 					);
 	$text = preg_replace('#\[pre\](.+?)\[/pre\]#is', '<pre>\\1</pre>', $text); // praeformatierter Text
-	$regtxt = '!((\[[^\]\[\n\f]+\])?(https?|ftp)://[^\s<]+)!is';
+	$regtxt = '!(((\[[^\]\[\n\f]+\])?(https?|ftp)://[^\s<]+)|(\[tex\].*?\[/tex\]))!is';
 	if (preg_match_all($regtxt, $text, $match)) {
 		$text = preg_replace($regtxt, 'ä', $text);
 		$text = preg_replace($pattern, $replace, $text);
