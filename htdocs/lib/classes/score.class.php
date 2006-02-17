@@ -108,7 +108,6 @@ function CheckScore ($user_id) {
 		return FALSE;
 }
 
-
 function doRefreshScoreContentCache(){
 	$db = new DB_Seminar("SELECT a.user_id,username FROM user_info a LEFT JOIN auth_user_md5 b USING (user_id) WHERE score > 0");
 	while ($db->next_record()){
@@ -298,7 +297,7 @@ function GetMyScore() {
 	if ($age <1 ) $age = 1;
 		
 	if ($GLOBALS['VOTE_ENABLE']) {
-		$db->query("SELECT count(*) FROM vote WHERE range_id = '$user_id' AND state IN ('active', 'stopvis')");
+		$db->query("SELECT count(*) FROM vote WHERE range_id = '$user_id' AND state IN('active','stopvis')");
 		$db->next_record();
 		$vote = $db->f(0)*2;
 		
@@ -314,9 +313,13 @@ function GetMyScore() {
 		$db->next_record();
 		$vote += $db->f(0);
 						
-		$db->query("SELECT count(*) FROM eval WHERE author_id = '$user_id'");
+		$db->query("SELECT count(*) FROM eval WHERE author_id = '$user_id' AND startdate < UNIX_TIMESTAMP( ) AND (stopdate > UNIX_TIMESTAMP( ) OR startdate + timespan > UNIX_TIMESTAMP( ) OR (stopdate IS NULL AND timespan IS NULL))");
 		$db->next_record();
 		$vote += 2*$db->f(0);
+		
+		$db->query("SELECT count(*) FROM eval_user WHERE user_id = '$user_id'");
+		$db->next_record();
+		$vote += $db->f(0);
 	}
 	
 	if ($GLOBALS['WIKI_ENABLE']) {
