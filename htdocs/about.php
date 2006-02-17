@@ -393,7 +393,7 @@ while ($db2->next_record())  {
 		printf ("<table class=\"blank\" width=\"100%%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><b>&nbsp;%s </b></td></tr>", htmlReady($head));
 		printf ("<tr><td class=\"steel1\">&nbsp;</td></tr><tr><td class=\"steel1\"><blockquote>%s</blockquote></td></tr><tr><td class=\"steel1\">&nbsp;</td></tr></table><br>\n",formatReady($body));
 	} elseif ($db->f("user_id")==$user->id) {  // nur ich darf sehen
-		printf ("<table class=\"blank\" width=\"100%%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><b>&nbsp;%s </b></td></tr>", htmlReady($head));
+		printf ("<table class=\"blank\" width=\"100%%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><b>&nbsp;%s </b> (%s)</td></tr>", htmlReady($head), _("f&uuml;r andere unsichtbar"));
 		printf ("<tr><td class=\"steel1\">&nbsp;</td></tr><tr><td class=\"steel1\"><blockquote>%s</blockquote></td></tr><tr><td class=\"steel1\">&nbsp;</td></tr></table><br>\n",formatReady($body));
 	}
 }

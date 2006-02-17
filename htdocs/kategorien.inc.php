@@ -127,14 +127,21 @@ function delete_freie($kategorie_id) {
 
 function update_freie() {
 	global $freie_id,$freie_name,$freie_content,$freie_secret;
-
+	$db = new DB_Seminar;
 	$max = sizeof($freie_id);
-	FOR ($i=0;$i<$max;$i++) {
+	FOR ($i=0; $i < $max; $i++) {
 		$now = time();
-		$db=new DB_Seminar;
 		$name = $freie_name[$i];
+		if ($name === '') {
+			parse_msg ('error§' . _("Kategorien ohne Namen k&ouml;nnen nicht gespeichert werden!"));
+			continue;
+		}
 		$content = $freie_content[$i];
-		$secret=$freie_secret[$i];
+		$secret = $freie_secret[$i];
+		if ($content === '' && !$secret) {
+			$secret = 1;
+			parse_msg ('info§' . _("Kategorie ohne Inhalt wurde versteckt!"));
+		}
 		$id = $freie_id[$i];
 		$db->query("UPDATE kategorien SET name='$name', content='$content', hidden='$secret', chdate='$now' WHERE kategorie_id='$id'");
 	}
