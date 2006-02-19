@@ -1,9 +1,12 @@
 <?
+// $Id$
 
 function list_restore(&$this){
 	$db = new DB_Seminar();
 	$end = $this->getEnd();
 	$start = $this->getStart();
+	$time_offset = (date('G') > 11)? 43200 : 0; // workaround BIEST00065
+	
 	$query = "SELECT * FROM calendar_events WHERE range_id='" . $this->range_id . "' AND ";
 	if (!$this->show_private)
 		$query .= "class = 'PUBLIC' AND ";
@@ -56,11 +59,9 @@ function list_restore(&$this){
 			// wöchentliche Wiederholung
 			case "WEEKLY" :
 				if ($db->f("start") >= $start) {
-					$adate = mktime(12, 0, 0, date("n",$db->f("start")), date("j",$db->f("start")),
-							date("Y",$db->f("start")), 0);
+					$adate = mktime(12, 0, 0, date("n",$db->f("start")), date("j",$db->f("start")), date("Y",$db->f("start")), 0);
 					if ($rep["ts"] != $adate)
 						new_event($this, $db, $adate);
-						
 					$aday = strftime("%u", $adate) - 1;
 					for ($i = 0; $i < strlen($rep["wdays"]); $i++) {
 						$awday = (int) substr($rep["wdays"], $i, 1) - 1;
@@ -88,7 +89,7 @@ function list_restore(&$this){
 						$wdate = $adate + $awday * 86400;
 						if ($wdate > $end || $wdate > $expire)
 							break 2;
-						if ($wdate < $start)
+						if ($wdate + $time_offset < $start)
 							continue;
 						new_event($this, $db, $wdate);
 					}
@@ -138,8 +139,8 @@ function list_restore(&$this){
 					$adate = $rep["ts"] + ($rep["day"] ? ($rep["day"] - 1) * 86400 : 0);
 					$amonth = date("n", $rep["ts"]);
 				}
-					
-				while ($adate <= $expire && $adate <= $end && $adate >= $start) {
+				
+				while ($adate <= $expire && $adate <= $end  && $adate + $time_offset >= $start) {
 					// verhindert die Anzeige an Tagen, die außerhalb des Monats liegen (am 29. bis 31.)
 					if (!$rep["wdays"] ? date("j", $adate) == $rep["day"] : TRUE)
 						new_event($this, $db, $adate);
@@ -218,11 +219,11 @@ function list_restore(&$this){
 						$xdate = mktime(12, 0, 0, date("n", $adate), date("j", $adate), date("Y", $adate) - 1, 0)
 										+ ($rep['duration'] - 1) * 86400;
 					}
-					if ($xdate <= $end && $xdate >= $start && $xdate <= $expire)
+					if ($xdate <= $end && $xdate + $time_offset >= $start && $xdate <= $expire)
 						new_event($this, $db, $xdate);
 				}
 				
-				if ($adate <= $end && $adate >= $start && $adate <= $expire)
+				if ($adate <= $end && $adate + $time_offset >= $start && $adate <= $expire)
 					new_event($this, $db, $adate);
 				break;
 		}
