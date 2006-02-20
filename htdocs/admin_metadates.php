@@ -177,10 +177,10 @@ if ($turnus_refresh)
 		{
 		$term_metadata["turnus_data"][$i]['desc'] = ($turnus_desc[$i] ? $turnus_desc[$i] : $turnus_desc_chooser[$i]);
 		$term_metadata["turnus_data"][$i]["day"]=$turnus_day[$i]; 
-		$term_metadata["turnus_data"][$i]["start_stunde"]=$turnus_start_stunde[$i];
-		$term_metadata["turnus_data"][$i]["start_minute"]=$turnus_start_minute[$i]; 
-		$term_metadata["turnus_data"][$i]["end_stunde"]=$turnus_end_stunde[$i]; 
-		$term_metadata["turnus_data"][$i]["end_minute"]=$turnus_end_minute[$i]; 
+		$term_metadata["turnus_data"][$i]["start_stunde"] = (strlen($turnus_start_stunde[$i]))? intval($turnus_start_stunde[$i]) : '';
+		$term_metadata["turnus_data"][$i]["start_minute"] = (strlen($turnus_start_minute[$i]))? intval($turnus_start_minute[$i]) : ''; 
+		$term_metadata["turnus_data"][$i]["end_stunde"] = (strlen($turnus_end_stunde[$i]))? intval($turnus_end_stunde[$i]) : ''; 
+		$term_metadata["turnus_data"][$i]["end_minute"] = (strlen($turnus_end_minute[$i]))? intval($turnus_end_minute[$i]) : ''; 
 		$term_metadata["turnus_data"][$i]["room"]=$turnus_room[$i]; 
 		if (($turnus_resource_id[$i]) && ($turnus_resource_id[$i] != "NULL") && ($turnus_resource_id[$i] != "FALSE")) {
 			$term_metadata["turnus_data"][$i]["resource_id"] = $turnus_resource_id[$i];
@@ -196,11 +196,6 @@ if ($turnus_refresh)
 			$term_metadata["turnus_data"][$i]["room"]=$resObject->getName();
 		}*/
 		
-		//diese Umwandlung muessen hier passieren, damit Werte mit fuehrender Null nicht als String abgelegt werden und so spaeter Verwirrung stiften
-		settype($term_metadata["turnus_data"][$i]["start_stunde"], "integer");
-		settype($term_metadata["turnus_data"][$i]["start_minute"], "integer");  
-		settype($term_metadata["turnus_data"][$i]["end_stunde"], "integer");		
-		settype($term_metadata["turnus_data"][$i]["end_minute"], "integer");
 		}
 	}
 if (($turnus_refresh) || ($term_metadates["start_woche"] ==-1))
@@ -255,9 +250,9 @@ if (($term_metadata["sem_duration_time"]<0) && ($term_metadata["sem_duration_tim
 if ($term_metadata["art"]==0)
 	{
 	for ($i=0; $i<$term_metadata["turnus_count"]; $i++)
-		if ((($term_metadata["turnus_data"][$i]["start_stunde"]) || ($term_metadata["turnus_data"][$i]["end_stunde"])))
+		if ((($term_metadata["turnus_data"][$i]["start_stunde"] !== '') || ($term_metadata["turnus_data"][$i]["end_stunde"] !== '')))
 			{
-			if ((($term_metadata["turnus_data"][$i]["start_stunde"]) && (!$term_metadata["turnus_data"][$i]["end_stunde"])) || ((!$term_metadata["turnus_data"][$i]["start_stunde"]) && ($term_metadata["end_stunde"])))
+			if (($term_metadata['turnus_data'][$i]['start_stunde'] === '') xor ($term_metadata['turnus_data'][$i]['end_stunde'] === ''))
 					{
 					if (!$just_informed)
 						$errormsg=$errormsg."error§"._("Bitte f&uuml;llen Sie beide Felder f&uuml;r Start- und Endzeit der regul&auml;ren Veranstaltungstermine aus!")."§";
@@ -269,14 +264,14 @@ if ($term_metadata["art"]==0)
 						$errormsg=$errormsg."error§"._("Sie haben eine ung&uuml;ltige Zeit eingegeben. Bitte &auml;ndern Sie die entsprechenden Angaben!")."§";	
 					$just_informed3=TRUE;
 					}
-			if (mktime($term_metadata["turnus_data"][$i]["start_stunde"], $term_metadata["turnus_data"][$i]["start_minute"], 0, 1, 1, 2001) > mktime($term_metadata["turnus_data"][$i]["end_stunde"], $term_metadata["turnus_data"][$i]["end_minute"], 0, 1, 1, 2001)) 
+			if (mktime($term_metadata["turnus_data"][$i]["start_stunde"], $term_metadata["turnus_data"][$i]["start_minute"], 0, 1, 1, 2001) >= mktime($term_metadata["turnus_data"][$i]["end_stunde"], $term_metadata["turnus_data"][$i]["end_minute"], 0, 1, 1, 2001)) 
 				if ((!$just_informed5) && (!$just_informed)) {
 					$errormsg=$errormsg."error§"._("Der Endzeitpunkt der regul&auml;ren Termine muss nach dem jeweiligen Startzeitpunkt liegen!")."§";
 					$just_informed5=TRUE;				
 				}
 			}
 			elseif(!$just_informed4) 
-				if ((!$term_metadata["turnus_data"][$i]["start_stunde"]) && (!$term_metadata["turnus_data"][$i]["start_minute"]) && (!$term_metadata["turnus_data"][$i]["end_stunde"]) && (!$term_metadata["turnus_data"][$i]["end_minute"]))
+				if (($term_metadata["turnus_data"][$i]["start_stunde"] === '') && ($term_metadata["turnus_data"][$i]["start_minute"] === '') && ($term_metadata["turnus_data"][$i]["end_stunde"] === '') && ($term_metadata["turnus_data"][$i]["end_minute"] === ''))
 					$empty_fields++;
 				else
 					{
@@ -325,7 +320,7 @@ if (($uebernehmen_x) && (!$errormsg)) {
 	//indiziertes (=sortierbares) temporaeres Array erzeugen
 	if ($term_metadata["art"] == 0) {
 		for ($i=0; $i<$term_metadata["turnus_count"]; $i++)
-			if (($term_metadata["turnus_data"][$i]["start_stunde"])  && ($term_metadata["turnus_data"][$i]["end_stunde"]))
+			if (($term_metadata["turnus_data"][$i]["start_stunde"] !== '')  && ($term_metadata["turnus_data"][$i]["end_stunde"] !== ''))
 				$tmp_metadata_termin["turnus_data"][]=array("idx"=>$term_metadata["turnus_data"][$i]["day"].(($term_metadata["turnus_data"][$i]["start_stunde"] <10) ?  "0" : "").$term_metadata["turnus_data"][$i]["start_stunde"].(($term_metadata["turnus_data"][$i]["start_minute"]< 10) ?  "0" : "").$term_metadata["turnus_data"][$i]["start_minute"],
 															"day" => $term_metadata["turnus_data"][$i]["day"], 
 															"start_stunde" => $term_metadata["turnus_data"][$i]["start_stunde"], 
@@ -633,18 +628,18 @@ if (($uebernehmen_x) && (!$errormsg)) {
 									echo '</option>';
 								}
 								echo "</select>\n";
-								$ss = ($term_metadata["turnus_data"][$i]["start_stunde"])? sprintf('%02d',$term_metadata['turnus_data'][$i]['start_stunde']):'';
-								if($term_metadata['turnus_data'][$i]['start_minute']) {
+								$ss = (strlen($term_metadata["turnus_data"][$i]["start_stunde"]))? sprintf('%02d',$term_metadata['turnus_data'][$i]['start_stunde']) : '';
+								if(strlen($term_metadata['turnus_data'][$i]['start_minute'])) {
 									$sm = sprintf('%02d', $term_metadata['turnus_data'][$i]['start_minute'] );
-								} elseif ($term_metadata['turnus_data'][$i]['start_stunde']) {
+								} elseif (strlen($term_metadata['turnus_data'][$i]['start_stunde'])) {
 									$sm = '00';
 								} else {
 									$sm ='';
 								}
-								$es = ($term_metadata["turnus_data"][$i]["end_stunde"])? sprintf('%02d',$term_metadata["turnus_data"][$i]["end_stunde"]):'';
-								if (($term_metadata['turnus_data'][$i]['end_minute'])) {
+								$es = (strlen($term_metadata["turnus_data"][$i]["end_stunde"]))? sprintf('%02d',$term_metadata["turnus_data"][$i]["end_stunde"]) : '';
+								if (strlen($term_metadata['turnus_data'][$i]['end_minute'])) {
 									$em =  sprintf('%02d', $term_metadata['turnus_data'][$i]['end_minute']);
-								} elseif ($term_metadata['turnus_data'][$i]['end_stunde']) {
+								} elseif (strlen($term_metadata['turnus_data'][$i]['end_stunde'])) {
 									$em = '00';
 								} else {
 									$em = '';

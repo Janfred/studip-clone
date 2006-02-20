@@ -341,17 +341,11 @@ if ($form == 3)
 		//Alle eingegebenen Turnus-Daten in Sessionvariable uebernehmen
 		for ($i=0; $i<$sem_create_data["turnus_count"]; $i++) {
 			$sem_create_data["term_turnus_date"][$i]=$term_turnus_date[$i];
-			$sem_create_data["term_turnus_start_stunde"][$i]=$term_turnus_start_stunde[$i];
-			$sem_create_data["term_turnus_start_minute"][$i]=$term_turnus_start_minute[$i];
-			$sem_create_data["term_turnus_end_stunde"][$i]=$term_turnus_end_stunde[$i];
-			$sem_create_data["term_turnus_end_minute"][$i]=$term_turnus_end_minute[$i];
+			$sem_create_data["term_turnus_start_stunde"][$i] = (strlen($term_turnus_start_stunde[$i]))? intval($term_turnus_start_stunde[$i]) : '';
+			$sem_create_data["term_turnus_start_minute"][$i] = (strlen($term_turnus_start_minute[$i]))? intval($term_turnus_start_minute[$i]) : '';
+			$sem_create_data["term_turnus_end_stunde"][$i] = (strlen($term_turnus_end_stunde[$i]))? intval($term_turnus_end_stunde[$i]) : '';
+			$sem_create_data["term_turnus_end_minute"][$i] = (strlen($term_turnus_end_minute[$i]))? intval($term_turnus_end_minute[$i]) : '';
 			$sem_create_data["term_turnus_desc"][$i]=($term_turnus_desc[$i] ? $term_turnus_desc[$i] : $term_turnus_desc_chooser[$i]);
-
-			//diese Umwandlung muessen hier passieren, damit Werte mit fuehrender Null nicht als String abgelegt werden und so spaeter Verwirrung stiften
-			settype($sem_create_data["term_turnus_start_stunde"][$i], "integer");
-			settype($sem_create_data["term_turnus_start_minute"][$i], "integer");
-			settype($sem_create_data["term_turnus_end_stunde"][$i], "integer");
-			settype($sem_create_data["term_turnus_end_minute"][$i], "integer");
 		}
 
 		//Turnus-Metadaten-Array erzeugen
@@ -364,7 +358,7 @@ if ($form == 3)
 		if ($sem_create_data["term_art"] == 0)
 			{
 			for ($i=0; $i<$sem_create_data["turnus_count"]; $i++)
-				if (($sem_create_data["term_turnus_start_stunde"][$i])  && ($sem_create_data["term_turnus_end_stunde"][$i])) {
+				if (($sem_create_data["term_turnus_start_stunde"][$i] !== '')  && ($sem_create_data["term_turnus_end_stunde"][$i] !== '')) {
 					//Index erzeugen
 					$tmp_idx=$sem_create_data["term_turnus_date"][$i];
 					if ($sem_create_data["term_turnus_start_stunde"][$i] < 10)
@@ -430,16 +424,10 @@ if ($form == 3)
 			$sem_create_data["term_tag"][$i]=$term_tag[$i];
 			$sem_create_data["term_monat"][$i]=$term_monat[$i];
 			$sem_create_data["term_jahr"][$i]=$term_jahr[$i];
-			$sem_create_data["term_start_stunde"][$i]=$term_start_stunde[$i];
-			$sem_create_data["term_start_minute"][$i]=$term_start_minute[$i];
-			$sem_create_data["term_end_stunde"][$i]=$term_end_stunde[$i];
-			$sem_create_data["term_end_minute"][$i]=$term_end_minute[$i];
-
-			//diese Umwandlung muss hier sein, da fuehrende 0 bei Minutenangaben sonst nur Verwirrung stiftet...
-			settype($sem_create_data["term_start_stunde"][$i], "integer");
-			settype($sem_create_data["term_start_minute"][$i], "integer");
-			settype($sem_create_data["term_end_stunde"][$i], "integer");
-			settype($sem_create_data["term_end_minute"][$i], "integer");
+			$sem_create_data["term_start_stunde"][$i] = (strlen($term_start_stunde[$i]))? intval($term_start_stunde[$i]) : '';
+			$sem_create_data["term_start_minute"][$i] = (strlen($term_start_minute[$i]))? intval($term_start_minute[$i]) : '';
+			$sem_create_data["term_end_stunde"][$i] = (strlen($term_end_stunde[$i]))? intval($term_end_stunde[$i]) : '';
+			$sem_create_data["term_end_minute"][$i] = (strlen($term_end_minute[$i]))? intval($term_end_minute[$i]) : '';
 
 			//erster Termin wird gepeichert, wird fuer spaetere Checks benoetigt
 			if ((($sem_create_data["term_first_date"] == 0)
@@ -831,9 +819,9 @@ if (($form == 3) && ($jump_next_x))
 	if ($sem_create_data["term_art"]==0)
 		{
 		for ($i=0; $i<$sem_create_data["turnus_count"]; $i++)
-			if ((($sem_create_data["term_turnus_start_stunde"][$i]) || ($sem_create_data["term_turnus_end_stunde"][$i])))
+			if ((($sem_create_data["term_turnus_start_stunde"][$i] !== '') || ($sem_create_data["term_turnus_end_stunde"][$i] !== '')))
 				{
-				if ((($sem_create_data["term_turnus_start_stunde"][$i]) && (!$sem_create_data["term_turnus_end_stunde"][$i])) || ((!$sem_create_data["term_turnus_start_stunde"][$i]) && ($sem_create_data["term_turnus_end_stunde"][$i])))
+				if (($sem_create_data["term_turnus_start_stunde"][$i] !== '') xor ($sem_create_data["term_turnus_end_stunde"][$i]) !== '') 
 						{
 						if (!$just_informed)
 							$errormsg=$errormsg."error§"._("Bitte f&uuml;llen Sie beide Felder f&uuml;r Start- und Endzeit der regul&auml;ren Termine aus!")."§";
@@ -845,14 +833,14 @@ if (($form == 3) && ($jump_next_x))
 							$errormsg=$errormsg."error§"._("Sie haben eine ung&uuml;ltige Zeit eingegeben. Bitte korrigieren Sie dies!")."§";
 						$just_informed3=TRUE;
 						}
-				if (mktime($sem_create_data["term_turnus_start_stunde"][$i], $sem_create_data["term_turnus_start_minute"][$i], 0, 1, 1, 2001) > mktime($sem_create_data["term_turnus_end_stunde"][$i], $sem_create_data["term_turnus_end_minute"][$i], 0, 1, 1, 2001))
+				if (mktime($sem_create_data["term_turnus_start_stunde"][$i], $sem_create_data["term_turnus_start_minute"][$i], 0, 1, 1, 2001) >= mktime($sem_create_data["term_turnus_end_stunde"][$i], $sem_create_data["term_turnus_end_minute"][$i], 0, 1, 1, 2001))
 					if ((!$just_informed5) && (!$just_informed)) {
 						$errormsg=$errormsg."error§"._("Der Endzeitpunkt eines regul&auml;ren Termins muss nach dem jeweiligen Startzeitpunkt liegen!")."§";
 						$just_informed5=TRUE;
 					}
 				}
 				elseif(!$just_informed4)
-					if ((!$sem_create_data["term_turnus_start_stunde"][$i]) && (!$sem_create_data["term_turnus_start_minute"][$i]) && (!$sem_create_data["term_turnus_end_stunde"][$i]) && (!$sem_create_data["term_turnus_end_minute"][$i]))
+					if (($sem_create_data["term_turnus_start_stunde"][$i] === '') && ($sem_create_data["term_turnus_start_minute"][$i] === '') && ($sem_create_data["term_turnus_end_stunde"][$i] === '') && ($sem_create_data["term_turnus_end_minute"][$i] === ''))
 						$empty_fields++;
 					else
 						{
@@ -862,8 +850,8 @@ if (($form == 3) && ($jump_next_x))
 		}
 	else {
 		for ($i=0; $i<$sem_create_data["term_count"]; $i++)
-			if ((($sem_create_data["term_start_stunde"][$i]) || ($sem_create_data["term_end_stunde"][$i])) && (($sem_create_data["term_monat"][$i]) && ($sem_create_data["term_tag"][$i]) && ($sem_create_data["term_jahr"][$i]))) {
-				if ((($sem_create_data["term_start_stunde"][$i]) && (!$sem_create_data["term_end_stunde"][$i])) || ((!$sem_create_data["term_start_stunde"][$i]) && ($sem_create_data["term_end_stunde"][$i])))
+			if ((($sem_create_data["term_start_stunde"][$i] !== '') || ($sem_create_data["term_end_stunde"][$i] !== '')) && (($sem_create_data["term_monat"][$i]) && ($sem_create_data["term_tag"][$i]) && ($sem_create_data["term_jahr"][$i]))) {
+				if (($sem_create_data["term_start_stunde"][$i] !== '') xor ($sem_create_data["term_end_stunde"][$i] !== '')) 
 						{
 						if (!$just_informed)
 							$errormsg=$errormsg."error§"._("Bitte f&uuml;llen Sie beide Felder f&uuml;r Start- und Endzeit der jeweiligen Termine aus!")."§";
@@ -888,7 +876,7 @@ if (($form == 3) && ($jump_next_x))
 					}
 			}
 			elseif(!$just_informed4)
-				if ((!$sem_create_data["term_tag"][$i]) && (!$sem_create_data["term_monat"][$i]) && (!$sem_create_data["term_jahr"][$i]) && (!$sem_create_data["term_start_stunde"][$i]) && (!$sem_create_data["term_start_minute"][$i]) && (!$sem_create_data["term_end_stunde"][$i]) && (!$sem_create_data["term_end_minute"][$i]))
+				if (($sem_create_data["term_tag"][$i] === '') && ($sem_create_data["term_monat"][$i] === '') && ($sem_create_data["term_jahr"][$i] === '') && ($sem_create_data["term_start_stunde"][$i] === '') && ($sem_create_data["term_start_minute"][$i] === '') && ($sem_create_data["term_end_stunde"][$i] === '') && ($sem_create_data["term_end_minute"][$i] === ''))
 					$empty_fields++;
 				else {
 					$errormsg=$errormsg."error§"._("Sie haben nicht alle Felder bei der Termineingabe ausgef&uuml;llt. Bitte f&uuml;llen Sie alle Felder aus!")."§";
@@ -898,7 +886,7 @@ if (($form == 3) && ($jump_next_x))
 
 	if ($sem_create_data["sem_vor_termin"] == -1);
 	else {
-		if ((($vor_stunde) && (!$vor_end_stunde)) || ((!$vor_stunde) && ($vor_end_stunde)))
+		if ($vor_stunde xor $vor_end_stunde)
 			$errormsg=$errormsg."error§"._("Bitte f&uuml;llen Sie beide Felder f&uuml;r Start- und Endzeit der Vorbesprechung aus!")."§";
 
 		//check for room management: we dont allow the preliminary discussion matches a turnus date (in this case, a schedule schoudl be used!)
@@ -1453,7 +1441,7 @@ if (($form == 6) && ($jump_next_x))
 			//Wenn der Veranstaltungs-Termintyp Blockseminar ist, dann tragen wir diese Termine auch schon mal ein
 			if ($sem_create_data["term_art"] ==1) {
 				for ($i=0; $i<$sem_create_data["term_count"]; $i++)
-					if (($sem_create_data["term_tag"][$i]) && ($sem_create_data["term_monat"][$i]) && ($sem_create_data["term_jahr"][$i]) && ($sem_create_data["term_start_stunde"][$i]) && ($sem_create_data["term_end_stunde"][$i])) {
+					if (($sem_create_data["term_tag"][$i]) && ($sem_create_data["term_monat"][$i]) && ($sem_create_data["term_jahr"][$i]) && ($sem_create_data["term_start_stunde"][$i] !== '') && ($sem_create_data["term_end_stunde"][$i] !== '')) {
 						$termin_id=md5(uniqid($hash_secret));
 						$mkdate=time();
 						$date=mktime($sem_create_data["term_start_stunde"][$i], $sem_create_data["term_start_minute"][$i], 0, $sem_create_data["term_monat"][$i], $sem_create_data["term_tag"][$i], $sem_create_data["term_jahr"][$i]);
@@ -2378,26 +2366,26 @@ if ($level == 3) {
 											echo '</option>';
 										}
 										echo "</select>\n";
-										$ss = ($sem_create_data["term_turnus_start_stunde"][$i])? sprintf('%02d', $sem_create_data["term_turnus_start_stunde"][$i]):'';
-										if ($sem_create_data["term_turnus_start_minute"][$i]) {
+										$ss = (strlen($sem_create_data["term_turnus_start_stunde"][$i]))? sprintf('%02d', $sem_create_data["term_turnus_start_stunde"][$i]) : '';
+										if (strlen($sem_create_data["term_turnus_start_minute"][$i])) {
 											$sm = sprintf('%02d', $sem_create_data["term_turnus_start_minute"][$i]);
-										} elseif ($sem_create_data["term_turnus_start_stunde"][$i]) {
+										} elseif (strlen($sem_create_data["term_turnus_start_stunde"][$i])) {
 											$sm = '00';
 										} else {
 											$sm ='';
 										}
-										$es = ($sem_create_data["term_turnus_end_stunde"][$i])? sprintf('%02d', $sem_create_data["term_turnus_end_stunde"][$i]):'';
-										if ($sem_create_data["term_turnus_end_minute"][$i]) {
+										$es = (strlen($sem_create_data["term_turnus_end_stunde"][$i]))? sprintf('%02d', $sem_create_data["term_turnus_end_stunde"][$i]) : '';
+										if (strlen($sem_create_data["term_turnus_end_minute"][$i])) {
 											$em = sprintf('%02d', $sem_create_data["term_turnus_end_minute"][$i]);
-										} elseif ($sem_create_data["term_turnus_end_stunde"][$i]) {
+										} elseif (strlen($sem_create_data["term_turnus_end_stunde"][$i])) {
 											$em = '00';
 										} else {
 											$em = '';
 										}
-										echo '&nbsp; <input type="text" name="term_turnus_start_stunde[',$i,']" size=2 maxlength=2 value="', $ss, '"> : ';
-										echo '<input type="text" name="term_turnus_start_minute[',$i,']" size=2 maxlength=2 value="', $sm, '">&nbsp;', _("Uhr bis");
-										echo '&nbsp; <input type="text" name="term_turnus_end_stunde[',$i,']" size=2 maxlength=2 value="', $es. '"> : ';
-										echo '<input type="text" name="term_turnus_end_minute[',$i,']" size=2 maxlength=2 value="', $em, '">&nbsp;', _("Uhr"), "\n";
+										echo '&nbsp; <input type="text" name="term_turnus_start_stunde['. $i. ']" size=2 maxlength=2 value="'. $ss. '"> : ';
+										echo '<input type="text" name="term_turnus_start_minute['. $i. ']" size=2 maxlength=2 value="'. $sm. '">&nbsp;', _("Uhr bis");
+										echo '&nbsp; <input type="text" name="term_turnus_end_stunde['. $i.']" size=2 maxlength=2 value="'. $es. '"> : ';
+										echo '<input type="text" name="term_turnus_end_minute['. $i. ']" size=2 maxlength=2 value="'. $em. '">&nbsp;', _("Uhr"), "\n";
 
 										if ($sem_create_data["turnus_count"]>1) {
 											?>
@@ -2450,18 +2438,18 @@ if ($level == 3) {
 									for ($i=0; $i<$sem_create_data["term_count"]; $i++)
 										{
 										if ($i>0) echo "<br>";
-										$ss = ($sem_create_data["term_start_stunde"][$i])? sprintf('%02d',$sem_create_data["term_start_stunde"][$i]):'';
-										if ($sem_create_data["term_start_minute"][$i]) {
+										$ss = (strlen($sem_create_data["term_start_stunde"][$i]))? sprintf('%02d',$sem_create_data["term_start_stunde"][$i]) : '';
+										if (strlen($sem_create_data["term_start_minute"][$i])) {
 											$sm = sprintf('%02d', $sem_create_data["term_start_minute"][$i]);
-										} elseif ($sem_create_data["term_start_stunde"][$i]) {
+										} elseif (strlen($sem_create_data["term_start_stunde"][$i])) {
 											$sm = '00';
 										} else {
 											$sm = '';
 										}
-										$es = ($sem_create_data["term_end_stunde"][$i])? sprintf('%02d',$sem_create_data["term_end_stunde"][$i]):'';
-										if ($sem_create_data["term_end_minute"][$i]) {
+										$es = (strlen($sem_create_data["term_end_stunde"][$i]))? sprintf('%02d',$sem_create_data["term_end_stunde"][$i]):'';
+										if (strlen($sem_create_data["term_end_minute"][$i])) {
 											$em = sprintf('%02d', $sem_create_data["term_end_minute"][$i]);
-										} elseif ($sem_create_data["term_end_stunde"][$i]) {
+										} elseif (strlen($sem_create_data["term_end_stunde"][$i])) {
 											$em = '00';
 										} else {
 											$em = '';
@@ -2472,10 +2460,10 @@ if ($level == 3) {
 										if ($sem_create_data["term_monat"][$i]) echo sprintf('%02d',$sem_create_data["term_monat"][$i]);
 										echo '">. <input type="text" name="term_jahr[',$i,']" size=4 maxlength=4 value="';
 										if ($sem_create_data["term_jahr"][$i]) echo $sem_create_data["term_jahr"][$i];
-										echo '"> &nbsp;', _("um"), '<input type="text" name="term_start_stunde[',$i,']" size=2 maxlength=2 value="', $ss, '"> : ';
-										echo '<input type="text" name="term_start_minute[',$i,']" size=2 maxlength=2 value="', $sm, '">&nbsp;', _("Uhr bis");
-										echo '<input type="text" name="term_end_stunde[',$i,']" size=2 maxlength=2 value="', $es, '"> : ';
-										echo '<input type="text" name="term_end_minute[',$i,']" size=2 maxlength=2 value="', $em, '">&nbsp;', _("Uhr"), '</font>', "\n";
+										echo '"> &nbsp;'. _("um"). '<input type="text" name="term_start_stunde['.$i.']" size=2 maxlength=2 value="'. $ss. '"> : ';
+										echo '<input type="text" name="term_start_minute['.$i.']" size=2 maxlength=2 value="'. $sm. '">&nbsp;'. _("Uhr bis");
+										echo '<input type="text" name="term_end_stunde['.$i.']" size=2 maxlength=2 value="'. $es. '"> : ';
+										echo '<input type="text" name="term_end_minute['.$i.']" size=2 maxlength=2 value="'. $em. '">&nbsp;'. _("Uhr"). '</font>'. "\n";
 
 										if ($sem_create_data["term_count"]>1)
 											{
@@ -2849,7 +2837,7 @@ if ($level == 4) {
 									}
 								} elseif ($sem_create_data["term_art"] == 1) {
 									for ($i=0; $i<$sem_create_data["term_count"]; $i++) {
-										if (($sem_create_data["term_tag"][$i]) && ($sem_create_data["term_monat"][$i]) && ($sem_create_data["term_jahr"][$i]) && ($sem_create_data["term_start_stunde"][$i]) && ($sem_create_data["term_end_stunde"][$i])) {
+										if (($sem_create_data["term_tag"][$i]) && ($sem_create_data["term_monat"][$i]) && ($sem_create_data["term_jahr"][$i]) && ($sem_create_data["term_start_stunde"][$i] !== '') && ($sem_create_data["term_end_stunde"][$i] !== '')) {
 											print "<tr><td width=\"50%\"><font size=\"-1\">";
 											printf (_("am %02d.%02d.%s von %02d:%02d Uhr bis %02d:%02d Uhr"), $sem_create_data["term_tag"][$i], $sem_create_data["term_monat"][$i], $sem_create_data["term_jahr"][$i], $sem_create_data["term_start_stunde"][$i], $sem_create_data["term_start_minute"][$i], $sem_create_data["term_end_stunde"][$i], $sem_create_data["term_end_minute"][$i]);
 											print "</font></td><td width=\"50%\"><font size=\"-1\">";
@@ -2921,7 +2909,7 @@ if ($level == 4) {
 									}
 								} elseif ($sem_create_data["term_art"] == 1) {
 									for ($i=0; $i<$sem_create_data["term_count"]; $i++) {
-										if (($sem_create_data["term_tag"][$i]) && ($sem_create_data["term_monat"][$i]) && ($sem_create_data["term_jahr"][$i]) && ($sem_create_data["term_start_stunde"][$i]) && ($sem_create_data["term_end_stunde"][$i])) {
+										if (($sem_create_data["term_tag"][$i]) && ($sem_create_data["term_monat"][$i]) && ($sem_create_data["term_jahr"][$i]) && ($sem_create_data["term_start_stunde"][$i] !== '') && ($sem_create_data["term_end_stunde"][$i] !== '')) {
 											print "<tr><td width=\"50%\"><font size=\"-1\">";
 											printf (_("am %02d.%02d.%s von %02d:%02d Uhr bis %02d:%02d Uhr"), $sem_create_data["term_tag"][$i], $sem_create_data["term_monat"][$i], $sem_create_data["term_jahr"][$i], $sem_create_data["term_start_stunde"][$i], $sem_create_data["term_start_minute"][$i], $sem_create_data["term_end_stunde"][$i], $sem_create_data["term_end_minute"][$i]);
 											print "</font></td><td width=\"50%\"><font size=\"-1\">";
