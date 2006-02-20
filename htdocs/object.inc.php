@@ -170,6 +170,13 @@ function object_add_view ($object_id) {
 	return $views;
 }
 
+function object_kill_views($object_id){
+	if (!is_array($object_id)) $cond = " object_id='$object_id'";
+	else $cond = "object_id IN('".join("','", $object_id)."')";
+	$db = new DB_Seminar("DELETE FROM object_views WHERE $cond ");
+	return $db->affected_rows();
+}
+
 function object_switch_fav ($object_id) {
 	global $user;
 	$now = time();

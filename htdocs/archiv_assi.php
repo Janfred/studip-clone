@@ -192,8 +192,10 @@ if ($archive_kill) {
 		// Alle News-Verweise auf dieses Seminar löschen
 		if ( ($db_ar = StudipNews::DeleteNewsRanges($s_id)) ) {
 			$liste .= "<li>" . sprintf(_("%s News gel&ouml;scht."), $db_ar) . "</li>";
-		} 
-
+		}
+		//delete entry in news_rss_range
+		StudipNews::UnsetRssId($s_id);
+		
 		//kill the datafields
 		$DataFields = new DataFields($s_id);
 		$DataFields->killAllEntries();

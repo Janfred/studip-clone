@@ -161,6 +161,7 @@ class StudipNews extends SimpleORMap {
 				$killed = $db->affected_rows();
 				$db->query("DELETE FROM news_range WHERE news_id IN $kill_news");
 				object_kill_visits(null, array_keys($result));
+				object_kill_views(array_keys($result));
 				StudipComments::DeleteCommentsByObject(array_keys($result));
 			}
 			return $killed;
@@ -269,6 +270,7 @@ class StudipNews extends SimpleORMap {
 		$this->ranges = array();
 		$this->storeRanges();
 		object_kill_visits(null, $this->getId());
+		object_kill_views($this->getId());
 		StudipComments::DeleteCommentsByObject($this->getId());
 		parent::delete();
 		return true;

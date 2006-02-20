@@ -206,6 +206,9 @@ while ( is_array($HTTP_POST_VARS)
 		// delete news-links
 		StudipNews::DeleteNewsRanges($i_id);
 		
+		//delete entry in news_rss_range
+		StudipNews::UnsetRssId($i_id);
+		
 		//updating range_tree
 		$query = "UPDATE range_tree SET name='$Name " . _("(in Stud.IP gelöscht)") . "',studip_object='',studip_object_id='' WHERE studip_object_id='$i_id'";
 		$db->query($query);
