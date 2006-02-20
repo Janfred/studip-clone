@@ -178,6 +178,10 @@ class Ilias3ConnectedUser extends ConnectedUser
 		$user_data["active"] = 1;
 		$user_data["approve_date"] = date('Y-m-d H:i:s');
 		$user_data["accepted_agreement"] = true;
+		if ($connected_cms[$this->cms_type]->user_style != "")
+			$user_data["user_style"] = $connected_cms[$this->cms_type]->user_style;
+		if ($connected_cms[$this->cms_type]->user_skin != "")
+			$user_data["user_skin"] = $connected_cms[$this->cms_type]->user_skin;
 
 		$role_id = $connected_cms[$this->cms_type]->roles[$auth->auth["perm"]];
 
