@@ -323,7 +323,7 @@ function format_help($what, $trim = TRUE, $extern = FALSE, $wiki = FALSE, $show_
 		$what = preg_replace("'\[code\].+\[/code\]'isU", 'ü', $what);
 		if ($wiki == TRUE)
 			//$what = wiki_format(symbol(smile(FixLinks(format(latex($what, $extern)), FALSE, TRUE, TRUE, $extern), $extern), $extern), $show_comments);
-			$what = wiki_format(symbol(smile(latex(FixLinks(format($what), FALSE, FALSE, TRUE, $extern), $extern), $extern), $extern), $show_comments);
+			$what = wiki_format(symbol(smile(latex(FixLinks(format($what), FALSE, FALSE, TRUE, $extern, TRUE), $extern), $extern), $extern), $show_comments);
 		else
 			//$what = symbol(smile(FixLinks(format(latex($what, $extern)), FALSE, TRUE, TRUE, $extern), $extern), $extern);
 			$what = symbol(smile(latex(FixLinks(format($what), FALSE, FALSE, TRUE, $extern), $extern), $extern), $extern);
@@ -345,7 +345,7 @@ function format_help($what, $trim = TRUE, $extern = FALSE, $wiki = FALSE, $show_
 	if ($wiki == TRUE)
 		//return symbol(smile(FixLinks(wiki_format(format(latex($what, $extern)), $show_comments), FALSE, TRUE, TRUE, $extern), $extern), $extern);
 		//return wiki_format(symbol(smile(FixLinks(format(latex($what, $extern)), FALSE, TRUE, TRUE, $extern), $extern), $extern), $show_comments);
-		return wiki_format(symbol(smile(latex(FixLinks(format($what), FALSE, FALSE, TRUE, $extern), $extern), $extern), $extern), $show_comments);
+		return wiki_format(symbol(smile(latex(FixLinks(format($what), FALSE, FALSE, TRUE, $extern, TRUE), $extern), $extern), $extern), $show_comments);
 	else
 	//	return symbol(smile(FixLinks(format(latex($what, $extern)), FALSE, TRUE, TRUE, $extern), $extern), $extern);
 		return symbol(smile(latex(FixLinks(format($what), FALSE, FALSE, TRUE, $extern), $extern), $extern), $extern);
@@ -758,7 +758,7 @@ function kill_format ($text) {
 * @param	boolean TRUE if called from external pages ('externe Seiten')
 * @return	string
 */
-function FixLinks ($data = "", $fix_nl = TRUE, $nl_to_br = TRUE, $img = FALSE, $extern = FALSE) {
+function FixLinks ($data = "", $fix_nl = TRUE, $nl_to_br = TRUE, $img = FALSE, $extern = FALSE, $wiki = FALSE) {
 	global $STUDIP_DOMAINS;
 	$chars= '&;_a-z0-9-';
 	if (empty($data)) {
@@ -766,7 +766,7 @@ function FixLinks ($data = "", $fix_nl = TRUE, $nl_to_br = TRUE, $img = FALSE, $
 	}
 	if ($fix_nl)
 		$data = preg_replace("/\n?\r\n?/", "\n", $data); // newline fixen
-
+	if (!$wiki) $wiki = 0;  // schei.. php
 	$img = $img ? 'TRUE' : 'FALSE';
 	$extern = $extern ? 'TRUE' : 'FALSE';
 	// add protocol type
@@ -782,8 +782,8 @@ function FixLinks ($data = "", $fix_nl = TRUE, $nl_to_br = TRUE, $img = FALSE, $
 					'#(?<=\s|^|\>)(\[([^\n\f]+?)\])?(['.$chars.']+(\.['.$chars.']+)*@(['.$chars.']+(\.['.$chars.']+)+))#ie'
 					);
 	$replace = array(
-			"preg_call_link(array('\\1', '\\5', '\\7', '\\12', '\\13', '\\3', '\\9', '\\11'), 'LINK', $img, $extern)",
-			"preg_call_link(array('\\2', '\\3'), 'MAIL', false, $extern)");
+			"preg_call_link(array('\\1', '\\5', '\\7', '\\12', '\\13', '\\3', '\\9', '\\11'), 'LINK', $img, $extern, $wiki)",
+			"preg_call_link(array('\\2', '\\3'), 'MAIL', false, $extern, $wiki)");
 	$fixed_text = preg_replace($pattern, $replace, $fixed_text);
 
 	if ($nl_to_br)
@@ -802,7 +802,7 @@ function FixLinks ($data = "", $fix_nl = TRUE, $nl_to_br = TRUE, $img = FALSE, $
 * @param	boolean	$extern	TRUE if called from external pages ('externe Seiten')
 * @return	string
 */
-function preg_call_link ($params, $mod, $img, $extern = FALSE) {
+function preg_call_link ($params, $mod, $img, $extern = FALSE, $wiki = FALSE) {
 	global $auth, $STUDIP_DOMAINS;
 	$chars= '&;_a-z0-9-';
 	
@@ -869,7 +869,7 @@ function preg_call_link ($params, $mod, $img, $extern = FALSE) {
 		else
 			$tbr = '<a href="mailto:'.idna_link($params[1], true)."\">$link_pic{$params[1]}</a>";
 	}
-
+	if ($wiki) $tbr = '<nowikilink>'.$tbr.'</nowikilink>';
 	return $tbr;
 }
 
