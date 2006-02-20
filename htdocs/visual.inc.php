@@ -565,7 +565,7 @@ function format ($text) {
 					"\\1"
 					);
 	$text = preg_replace('#\[pre\](.+?)\[/pre\]#is', '<pre>\\1</pre>', $text); // praeformatierter Text
-	$regtxt = '!(((\[[^\]\[\n\f]+\])?(https?|ftp)://[^\s<]+)|(\[tex\].*?\[/tex\]))!is';
+	$regtxt = '!(((\[[^\]\[\n\f]+\])?(https?|ftp)://[^\s\]<]+)|(\[tex\].*?\[/tex\]))!is';
 	if (preg_match_all($regtxt, $text, $match)) {
 		$text = preg_replace($regtxt, 'ä', $text);
 		$text = preg_replace($pattern, $replace, $text);
@@ -770,7 +770,7 @@ function FixLinks ($data = "", $fix_nl = TRUE, $nl_to_br = TRUE, $img = FALSE, $
 	$img = $img ? 'TRUE' : 'FALSE';
 	$extern = $extern ? 'TRUE' : 'FALSE';
 	// add protocol type
-	$pattern = array("/([ \t\]\n]|^)www\./i", "/([ \t\]\n]|^)ftp\./i");
+	$pattern = array("/([ \t\]\n=]|^)www\./i", "/([ \t\]\n]|^)ftp\./i");
 	$replace = array("\\1http://www.", "\\1ftp://ftp.");
 	$fixed_text = preg_replace($pattern, $replace, $data);
 	
@@ -778,7 +778,7 @@ function FixLinks ($data = "", $fix_nl = TRUE, $nl_to_br = TRUE, $img = FALSE, $
 	$fixed_text = TransformInternalLinks($fixed_text);
 	
 	$pattern = array(
-					'#((\[(img)(\=([^\n\f:]+?))?(:(\d{1,3}%?))?(:(center|right))?(:([^\]]+))?\]|\[(?!img)([^\n\f\[]+)\])?(((https?://|ftp://)(['.$chars.':]+@)?)['.$chars.']+(\.['.$chars.':]+)*/?([^<\s]*[^\.\s<])*))#ie',
+					'#((\[(img)(\=([^\n\f:]+?))?(:(\d{1,3}%?))?(:(center|right))?(:([^\]]+))?\]|\[(?!img)([^\n\f\[]+)\])?(((https?://|ftp://)(['.$chars.':]+@)?)['.$chars.']+(\.['.$chars.':]+)*/?([^<\s]*[^\.\s\]<])*))#ie',
 					'#(?<=\s|^|\>)(\[([^\n\f]+?)\])?(['.$chars.']+(\.['.$chars.']+)*@(['.$chars.']+(\.['.$chars.']+)+))#ie'
 					);
 	$replace = array(
