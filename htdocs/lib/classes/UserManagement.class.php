@@ -744,6 +744,9 @@ class UserManagement {
 			$this->msg .= "info§" . sprintf(_("%s Verweise auf News gel&ouml;scht."), $db_ar) . "§";
 		}
 		
+		//delete entry in news_rss_range
+		StudipNews::UnsetRssId($this->user_data['auth_user_md5.user_id']);
+		
 		// delete 'Studiengaenge'
 		$query = "DELETE FROM user_studiengang WHERE user_id='" . $this->user_data['auth_user_md5.user_id'] . "'";
 		$this->db->query($query);
@@ -783,12 +786,15 @@ class UserManagement {
 		$DataFields->killAllEntries();				
 			
 		// delete all remaining user data
+		$query = "DELETE FROM rss_feeds WHERE user_id='" . $this->user_data['auth_user_md5.user_id'] . "'";
+		$this->db->query($query);
 		$query = "DELETE FROM kategorien WHERE range_id = '" . $this->user_data['auth_user_md5.user_id'] . "'";
 		$this->db->query($query);
 		$query = "DELETE FROM user_info WHERE user_id= '" . $this->user_data['auth_user_md5.user_id'] . "'";
 		$this->db->query($query);
 		$GLOBALS['user']->that->ac_delete($this->user_data['auth_user_md5.user_id'], $GLOBALS['user']->name);
 		object_kill_visits($this->user_data['auth_user_md5.user_id']);
+		object_kill_views($this->user_data['auth_user_md5.user_id']);
 		
 		// delete picture
 		if(@file_exists($GLOBALS['ABSOLUTE_PATH_STUDIP'] . "user/" . $this->user_data['auth_user_md5.user_id'] . ".jpg")) {
