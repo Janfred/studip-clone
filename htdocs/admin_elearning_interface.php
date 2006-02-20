@@ -67,7 +67,7 @@ if ($ELEARNING_INTERFACE_ENABLE)
 		<td class="topic" colspan="3">&nbsp;<img src="./pictures/icon-lern.gif" align="texttop">&nbsp;
 		<b>
 	<? 
-			echo _("Administration der ELearning-Schnittstelle"); 
+			echo _("Administration der Lernmodul-Schnittstelle"); 
 	?>
 		</b>
 		</td>
