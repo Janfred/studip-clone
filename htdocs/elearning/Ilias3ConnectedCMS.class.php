@@ -19,6 +19,8 @@ class Ilias3ConnectedCMS extends ConnectedCMS
 	var $root_user_sid;
 	var $main_category_node_id;
 	var $user_role_template_id;
+	var $user_skin;
+	var $user_style;
 	var $crs_roles;
 	var $global_roles;
 	
@@ -64,13 +66,13 @@ class Ilias3ConnectedCMS extends ConnectedCMS
 			$this->db_class_course = new $classname();
 		}
 /**/
-//		if (ELearningUtils::getConfigValue("category_id", $cms) == "")
-//			ELearningUtils::setConfigValue("category_id", "1", $cms);
 		$this->main_category_node_id = ELearningUtils::getConfigValue("category_id", $cms);
 
 		if ((ELearningUtils::getConfigValue("user_role_template_id", $cms) == "") AND ($GLOBALS["role_template_name"] == ""))
 			$GLOBALS["role_template_name"] = "Author";
 		$this->user_role_template_id = ELearningUtils::getConfigValue("user_role_template_id", $cms);
+		$this->user_skin = ELearningUtils::getConfigValue("user_skin", $cms);
+		$this->user_style = ELearningUtils::getConfigValue("user_style", $cms);
 
 		$this->crs_roles = $ELEARNING_INTERFACE_MODULES[$cms]["crs_roles"];
 		$this->client_id = $ELEARNING_INTERFACE_MODULES[$cms]["soap_data"]["client"];
@@ -87,7 +89,7 @@ class Ilias3ConnectedCMS extends ConnectedCMS
 	*/
 	function getPreferences()
 	{
-		global $connected_cms, $role_template_name, $cat_name;
+		global $connected_cms, $submit, $role_template_name, $cat_name, $style_setting;
 	
 		$this->soap_client->setCachingStatus(false);
 		
@@ -115,6 +117,16 @@ class Ilias3ConnectedCMS extends ConnectedCMS
 				$this->user_role_template_id = $role_template["obj_id"];
 			}
 		}
+
+		if ($submit != "")
+		{
+			ELearningUtils::setConfigValue("user_style", $style_setting, $this->cms_type);
+			ELearningUtils::setConfigValue("user_skin", $style_setting, $this->cms_type);
+		}
+		else
+			if (ELearningUtils::getConfigValue("user_style", $this->cms_type) != "")
+				$style_setting = ELearningUtils::getConfigValue("user_style", $this->cms_type);
+
 /**/
 		if ($messages["error"] != "")
 			echo "<b><img src=\"pictures/x_small2.gif\" alt=\"Fehler\">&nbsp;" . $messages["error"] . "</b><br><br>";
@@ -128,15 +140,13 @@ class Ilias3ConnectedCMS extends ConnectedCMS
 			echo sprintf(_("Beim Herstellen der SOAP-Verbindung trat folgender Fehler auf:")) . "<br><br>" . $error;
 		else
 			echo sprintf(_("Die SOAP-Verbindung zum Klienten \"%s\" wurde hergestellt, der Name des Administrator-Accounts ist \"%s\"."), $this->soap_data["client"], $this->soap_data["username"]);
-//		echo "</td></tr><tr><td></td><td><font size=\"-1\">";
 		echo "<br>\n";
 		echo "<br>\n";
 		echo "</td></tr><tr><td  width=30% align=\"left\"><font size=\"-1\">";
 
-//		$cat = $this->db_class_object->getObjectByReference( $this->main_category_node_id, $this->db );
 		$cat = $this->soap_client->getObjectByReference( $this->main_category_node_id );
 		echo "<b>" . _("Kategorie: ") . "</b>";
-		echo "</td><td>&nbsp;";
+		echo "</td><td>";
 		echo "<input type=\"text\" size=\"20\" border=0 value=\"" . $cat["title"] . "\" name=\"cat_name\">&nbsp;";
 		echo "<img  src=\"./pictures/info.gif\" " . tooltip(_("Geben Sie hier den Namen einer bestehenden ILIAS 3 - Kategorie ein, in der die Lernmodule und User-Kategorien abgelegt werden sollen."), TRUE, TRUE) . ">";
 		echo "</td></tr><tr><td></td><td><font size=\"-1\">";
@@ -149,9 +159,8 @@ class Ilias3ConnectedCMS extends ConnectedCMS
 		echo "</td></tr><tr><td  width=30% align=\"left\"><font size=\"-1\">";
 
 
-//		$role_template = $this->user->db_class->readUser( $this->root_user_id, $this->db );
 		echo "<b>" . _("Rollen-Template f&uuml;r die per&ouml;nliche Kategorie: ") . "</b>";
-		echo "</td><td>&nbsp;";
+		echo "</td><td>";
 		echo "<input type=\"text\" size=\"20\" border=0 value=\"" . ELearningUtils::getConfigValue("user_role_template_name", $this->cms_type) . "\" name=\"role_template_name\">&nbsp;";
 		echo "<img  src=\"./pictures/info.gif\" " . tooltip(_("Geben Sie den Namen des Rollen-Templates ein, das für die persönliche Kategorie von DozentInnen verwendet werden soll (z.B. \"Author\")."), TRUE, TRUE) . ">"	;
 		echo "</td></tr><tr><td></td><td><font size=\"-1\">";
@@ -159,6 +168,20 @@ class Ilias3ConnectedCMS extends ConnectedCMS
 		echo ")";
 		echo "<br>\n";
 		echo "<br>\n";
+		echo "</td></tr><tr><td  width=30% align=\"left\"><font size=\"-1\">";
+
+		echo "<b>" . _("Style / Skin: ") . "</b>";
+		echo "</td><td><font size=\"-1\">";
+		echo "<input type=\"checkbox\" border=0 value=\"studip\" name=\"style_setting\"";
+		if ($style_setting == "studip")
+			echo " checked";
+		echo ">&nbsp;" . _("Stud.IP-Style f&uuml;r neue Nutzer-Accounts voreinstellen.");
+		echo "<img  src=\"./pictures/info.gif\" " . tooltip(_("Wählen Sie diese Option, wenn für alle von Stud.IP angelegten ILIAS-Accounts das Stud.IP-Layout als System-Style eingetragen werden soll. ILIAS-seitig angelegte Accounts erhalten weiterhin den Standard-Style."), TRUE, TRUE) . ">";
+		echo "</td></tr><tr><td></td><td><font size=\"-1\">";
+		echo "<br>\n";
+		echo "<br>\n";
+
+
 /**/
 
 		echo "</td></tr>";
