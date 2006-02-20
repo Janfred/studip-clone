@@ -806,7 +806,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 			}
 	
 			if ($links_admin_data["srch_exp"]) {
-				$query.="AND (seminare.Name LIKE '%".$links_admin_data["srch_exp"]."%' OR seminare.Untertitel LIKE '%".$links_admin_data["srch_exp"]."%' OR seminare.Beschreibung LIKE '%".$links_admin_data["srch_exp"]."%' OR auth_user_md5.Nachname LIKE '%".$links_admin_data["srch_exp"]."%') ";
+				$query.="AND (seminare.Name LIKE '%".$links_admin_data["srch_exp"]."%' OR seminare.VeranstaltungsNummer LIKE '%".$links_admin_data["srch_exp"]."%' OR seminare.Untertitel LIKE '%".$links_admin_data["srch_exp"]."%' OR seminare.Beschreibung LIKE '%".$links_admin_data["srch_exp"]."%' OR auth_user_md5.Nachname LIKE '%".$links_admin_data["srch_exp"]."%') ";
 				$conditions++;
 			}
 	
@@ -923,17 +923,17 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 	
 			$cssSw->switchClass();
 			echo "<tr>";
-			echo "<td align=\"center\" class=\"".$cssSw->getClass()."\"><font size=-1>".htmlReady($db->f('startsem'));
+			echo "<td align=\"center\" class=\"".$cssSw->getClass()."\"><font size=\"-1\">".htmlReady($db->f('startsem'));
 			if ($db->f('startsem') != $db->f('endsem')) echo '<br>( - '.htmlReady($db->f('endsem')).')'; 
 			echo "</font></td>";
-			echo "<td class=\"".$cssSw->getClass()."\">".htmlReady($db->f("VeranstaltungsNummer"))."</td>";
-			echo "<td class=\"".$cssSw->getClass()."\">".htmlReady(substr($db->f("Name"),0,100));
+			echo "<td class=\"".$cssSw->getClass()."\"><font size=\"-1\">".htmlReady($db->f("VeranstaltungsNummer"))."</font></td>";
+			echo "<td class=\"".$cssSw->getClass()."\"><font size=\"-1\">".htmlReady(substr($db->f("Name"),0,100));
 			if (strlen ($db->f("Name")) > 100)
 				echo "(...)";
 			if ($db->f("visible")==0) {
 				echo "&nbsp;". _("(versteckt)");
 			}
-			echo "</td>";
+			echo "</font></td>";
 			echo "<td align=\"center\" class=\"".$cssSw->getClass()."\"><font size=-1>";
 			$db4->query("SELECT ". $_fullname_sql['full'] ." AS fullname, username FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) where Seminar_id = '$seminar_id' and status = 'dozent'");
 			$k=0;
