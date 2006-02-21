@@ -53,6 +53,7 @@ class PluginAdministrationVisualization extends AbstractStudIPPluginVisualizatio
 				StudIPTemplateEngine::showErrorMessage(sprintf(_("Das Plugin ist bereits in der Datenbank registriert.")));
 				break;
 			default:
+				StudIPTemplateEngine::showErrorMessage(sprintf(_("Bei der Installation des Plugins ist ein Fehler aufgetreten.")));
 				break;			
 		}	
 	}
