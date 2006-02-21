@@ -354,27 +354,30 @@ if (($uebernehmen_x) && (!$errormsg)) {
 			$art_changed = FALSE;
 			$metadates_changed = FALSE;
 			foreach ($tmp_metadata_termin["turnus_data"] as $key => $val) {
-				foreach ($term_metadata["original_turnus_data"] as $old_key => $old_val){
-					$found = false;
-					if (serialize($val) == serialize($old_val)) {
-						$metadates_unchanged[] = $val;
-						$found = true;
-						break;
+				if (is_array($term_metadata["original_turnus_data"])){
+					foreach ($term_metadata["original_turnus_data"] as $old_key => $old_val){
+						$found = false;
+						if (serialize($val) == serialize($old_val)) {
+							$metadates_unchanged[] = $val;
+							$found = true;
+							break;
+						}
 					}
 				}
 				if (!$found) $metadates_new[] = $val;
 			}
-			foreach ($term_metadata["original_turnus_data"] as $old_key => $old_val) {
-				foreach ($tmp_metadata_termin["turnus_data"] as $key => $val){
-					$found = false;
-					if (serialize($val) == serialize($old_val)) {
-						$found = true;
-						break;
+			if (is_array($term_metadata["original_turnus_data"])){
+				foreach ($term_metadata["original_turnus_data"] as $old_key => $old_val) {
+					foreach ($tmp_metadata_termin["turnus_data"] as $key => $val){
+						$found = false;
+						if (serialize($val) == serialize($old_val)) {
+							$found = true;
+							break;
+						}
 					}
+					if (!$found) $metadates_deleted[] = $old_val;
 				}
-				if (!$found) $metadates_deleted[] = $old_val;
 			}
-			
 		}
 	}
 	//check for the rights, the user has on the selected resource-objects
