@@ -34,6 +34,8 @@ class PluginAdministrationVisualization extends AbstractStudIPPluginVisualizatio
 	
 	function showMessage($errorcode) {
 		switch ($errorcode) {
+			case 0:
+				break;
 			case PLUGIN_INSTALLATION_SUCCESSFUL:
 				StudIPTemplateEngine::showSuccessMessage(_("Die Installation des Plugins war erfolgreich"));
 				break;
