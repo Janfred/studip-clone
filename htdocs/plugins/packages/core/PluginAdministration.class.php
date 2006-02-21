@@ -199,8 +199,7 @@ class PluginAdministration {
 	 * @param string $schemafile the absolute path to the schemafile
 	 */
 	function createDBSchemeForPlugin($schemafile){
-		$conn = PluginEngine::getPluginDatabaseConnection();
-		echo("Trying to create db schema.");
+		$conn = PluginEngine::getPluginDatabaseConnection();		
 		$fp = fopen($schemafile,"r");
 		$sqlstatement = "";
  		while (!feof($fp)){
