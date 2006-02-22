@@ -255,7 +255,12 @@ if ($auth->auth["uid"] == "nobody") { ?>
 				// does the plugin have a navigation entry?
 				if ($plugin->hasNavigation()){
 					$navi = $plugin->getNavigation();
-					echo MakeToolbar($plugin->getPluginiconname(),htmlReady(PluginEngine::getLink($plugin)),$navi->getDisplayname(),$navi->getDisplayname(),40,"_top","left");
+					if ($navi->hasIcon()){
+						echo MakeToolbar($navi->getIcon(),htmlReady(PluginEngine::getLink($plugin)),$navi->getDisplayname(),$navi->getDisplayname(),40,"_top","left");						
+					}
+					else {
+						echo MakeToolbar($plugin->getPluginiconname(),htmlReady(PluginEngine::getLink($plugin)),$navi->getDisplayname(),$navi->getDisplayname(),40,"_top","left");
+					}
 		 		}
 		 		// now ask for background tasks
 		 		if ($plugin->hasBackgroundTasks()){

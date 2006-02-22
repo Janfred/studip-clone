@@ -14,6 +14,7 @@ class PluginNavigation {
 	var $submenu;
 	var $active;
 	var $linkparams;
+	var $icon;
 
     function PluginNavigation() {
     	$this->displayname = "";
@@ -21,6 +22,7 @@ class PluginNavigation {
     	$this->submenu = array();
     	$this->active = false;
     	$this->linkparams = array();
+    	$this->icon = "";
     }
     
     /**
@@ -89,6 +91,18 @@ class PluginNavigation {
      */
     function clearSubmenu(){
     	$this->submenu = array();
+    }
+    
+     function getIcon(){
+    	return $this->icon;
+    }
+    
+    function setIcon($newicon){
+    	$this->icon = trim($newicon);
+    }
+    
+    function hasIcon(){
+    	return (strlen($this->icon) > 0);
     }
 }
 ?>
