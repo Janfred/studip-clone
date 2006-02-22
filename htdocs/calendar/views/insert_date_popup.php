@@ -137,6 +137,20 @@ switch ($element_switch){  // Auswahl der Zielparameter
 		$zeiten = true;
 		$kalender = true;
 		break;
+	case 11: // calendar.php (edit.inc.php) End of recurrence
+		$txt_month = 'exp_month';
+		$txt_day   = 'exp_day';
+		$txt_year  = 'exp_year';
+		$zeiten = false;
+		$kalender = true;
+		break;
+	case 12: // calendar.php (edit.inc.php) exceptions
+		$txt_month = 'exc_month';
+		$txt_day   = 'exc_day';
+		$txt_year  = 'exc_year';
+		$zeiten = false;
+		$kalender = true;
+		break;
 	case 51: // calendar.php (edit.inc.php) Enddate
 		$txt_month = 'end_month';
 		$txt_day   = 'end_day';
