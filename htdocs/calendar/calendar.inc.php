@@ -189,8 +189,7 @@ if ($cmd == 'add' || $cmd == 'edit') {
 	else
 		$calendar_sess_control_data['mod'] = '';
 	// checkbox-values
-	if (!$set_recur_x)
-		$calendar_sess_forms_data['wholeday'] = $HTTP_POST_VARS['wholeday'];
+	$calendar_sess_forms_data['wholeday'] = $HTTP_POST_VARS['wholeday'];
 }
 elseif ($cmd != 'export') {
 	unset($calendar_sess_forms_data);
