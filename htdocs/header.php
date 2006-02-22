@@ -256,7 +256,7 @@ if ($auth->auth["uid"] == "nobody") { ?>
 				if ($plugin->hasNavigation()){
 					$navi = $plugin->getNavigation();
 					if ($navi->hasIcon()){
-						echo MakeToolbar($navi->getIcon(),htmlReady(PluginEngine::getLink($plugin)),$navi->getDisplayname(),$navi->getDisplayname(),40,"_top","left");						
+						echo MakeToolbar($plugin->getPluginpath() . "/" . $navi->getIcon(),htmlReady(PluginEngine::getLink($plugin)),$navi->getDisplayname(),$navi->getDisplayname(),40,"_top","left");						
 					}
 					else {
 						echo MakeToolbar($plugin->getPluginiconname(),htmlReady(PluginEngine::getLink($plugin)),$navi->getDisplayname(),$navi->getDisplayname(),40,"_top","left");
