@@ -121,7 +121,7 @@ $quarter_year = 60 * 60 * 24 * 90;
 		echo htmlReady($SessSemName[3])."</font>"; echo "<br>";
 	}
 
-	echo "<br><font size=\"-1\"><b>" . _("Zeit:") . " </b>".view_turnus($SessionSeminar, FALSE, FALSE, (time() - $quarter_year))."</font>";
+	echo "<br><font size=\"-1\"><b>" . _("Zeit:") . " </b>".htmlReady(view_turnus($SessionSeminar, FALSE, FALSE, (time() - $quarter_year)))."</font>";
 
 	if (getRoom($SessSemName[1],true,0,"sem")) {
 		echo "<br><font size=\"-1\"><b>" . _("Ort:") . " </b>".getRoom($SessSemName[1], TRUE, (time() - $quarter_year),"sem")."</font>";

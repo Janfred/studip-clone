@@ -266,7 +266,7 @@ if ($perm->have_perm("admin"))
 					print _("alle Ablaufplan-Termine der Veranstaltung (unregelm&auml;&szlig;ige Belegung)");
 				} else {
 					print _("alle Veranstaltungszeiten (regelm&auml;&szlig;ige Belegung)");
-					print "<br />"._("am:")."&nbsp;".$semObj->getFormattedTurnus();
+					print "<br />"._("am:")."&nbsp;".htmlReady($semObj->getFormattedTurnus());
 				}
 				?>
 			</td>

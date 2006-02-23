@@ -962,9 +962,9 @@ if (!sizeof($term_data["turnus_data"])) {
 		} else {
 			$times_inf =  _("<b>Typ:</b> regelm&auml;&szlig;ige Veranstaltung");
 			if (view_turnus($admin_dates_data["range_id"]))
-				$times_inf .= "<br>".trim(view_turnus($admin_dates_data["range_id"]));
+				$times_inf .= "<br>".trim(htmlReady(view_turnus($admin_dates_data["range_id"])));
 			if (veranstaltung_beginn($admin_dates_data["range_id"]))
-				$times_inf .= "<br><b>" . _("Erster Termin:") . "</b> ". veranstaltung_beginn($admin_dates_data["range_id"]);
+				$times_inf .= "<br><b>" . _("Erster Termin:") . "</b> ". htmlReady(veranstaltung_beginn($admin_dates_data["range_id"]));
 			if (get_semester($admin_dates_data["range_id"]))
 				$times_inf .= "<br /><b>" . _("Semester:") . "</b> ". get_semester($admin_dates_data["range_id"]);
 		}

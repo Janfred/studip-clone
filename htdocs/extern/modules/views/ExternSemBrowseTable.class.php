@@ -267,12 +267,12 @@ class ExternSemBrowseTable extends SemBrowse {
 						//create Turnus field
 						$data["content"]["zeiten"] = view_turnus($seminar_id, TRUE ,key($sem_data[$seminar_id]["metadata_dates"]));
 						//Shorten, if string too long
-						if (strlen($data["zeiten"]) >70) {
+						if (strlen($data["content"]["zeiten"]) >70) {
 							$data["content"]["zeiten"] = substr($data["content"]["zeiten"], 0,
-									strpos(substr($data["zeiten"], 70, strlen($data["content"]["zeiten"])), ",") +71);
+									strpos(substr($data["content"]["zeiten"], 70, strlen($data["content"]["zeiten"])), ",") +71);
 							$data["content"]["zeiten"] .= "...";
 						}
-						
+						$data["content"]["zeiten"] = htmlReady($data["content"]["zeiten"]);
 						$doz_name = array_keys($sem_data[$seminar_id]['fullname']);
 						$doz_uname = array_keys($sem_data[$seminar_id]['username']);
 						if (is_array($doz_name)){

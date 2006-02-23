@@ -332,7 +332,7 @@ class ExternSemBrowse extends SemBrowse {
 							if ($show_time) {
 								echo "<td$td_time>";
 								echo "<font" . $this->config->getAttributes("LecturesInnerTable", "font2") . ">";
-								echo $temp_turnus_string . "</font></td>\n";
+								echo htmlReady($temp_turnus_string) . "</font></td>\n";
 							}
 							if ($show_lecturer) {
 								echo "<td$td_lecturer>";

@@ -333,7 +333,7 @@ if (($archiv_assi_data["sems"]) && (sizeof($archiv_assi_data["sem_check"]) > 0))
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" valign="top" width="48%">
 				<?
-				printf ("<font size=-1><b>" . _("Zeit:") . "</b></font><br /><font size=-1>%s</font>", view_turnus($archiv_assi_data["sems"][$archiv_assi_data["pos"]]["id"], FALSE));
+				printf ("<font size=-1><b>" . _("Zeit:") . "</b></font><br /><font size=-1>%s</font>", htmlReady(view_turnus($archiv_assi_data["sems"][$archiv_assi_data["pos"]]["id"], FALSE)));
 				?>
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" valign="top" width="48%">
@@ -352,7 +352,7 @@ if (($archiv_assi_data["sems"]) && (sizeof($archiv_assi_data["sem_check"]) > 0))
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" valign="top" width="48%">
 				<?
-				printf ("<font size=-1><b>" . _("Vorbesprechung:") . "</b></font><br /><font size=-1>%s</font>", (vorbesprechung($archiv_assi_data["sems"][$archiv_assi_data["pos"]]["id"])) ? vorbesprechung($archiv_assi_data["sems"][$archiv_assi_data["pos"]]["id"]) : _("keine"));
+				printf ("<font size=-1><b>" . _("Vorbesprechung:") . "</b></font><br /><font size=-1>%s</font>", (vorbesprechung($archiv_assi_data["sems"][$archiv_assi_data["pos"]]["id"])) ? htmlReady(vorbesprechung($archiv_assi_data["sems"][$archiv_assi_data["pos"]]["id"])) : _("keine"));
 				?>
 				</td>
 			</tr>

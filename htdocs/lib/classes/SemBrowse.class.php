@@ -497,7 +497,7 @@ class SemBrowse {
 						$temp_turnus_string = view_turnus($seminar_id, true, key($sem_data[$seminar_id]["metadata_dates"]),(!$this->sem_browse_data["group_by"]) ? $this->search_obj->sem_dates[$group_field]['beginn'] : false);
 						//Shorten, if string too long (add link for details.php)
 						if (strlen($temp_turnus_string) >70) {
-							$temp_turnus_string = substr($temp_turnus_string, 0, strpos(substr($temp_turnus_string, 70, strlen($temp_turnus_string)), ",") +71);
+							$temp_turnus_string = htmlReady(substr($temp_turnus_string, 0, strpos(substr($temp_turnus_string, 70, strlen($temp_turnus_string)), ",") +71));
 							$temp_turnus_string .= "...&nbsp;<a href=\"".$this->target_url."?".$this->target_id."=".$seminar_id."&send_from_search=1&send_from_search_page={$PHP_SELF}?keep_result_set=1\">(mehr) </a>";
 						}
 						echo "</font><font size=\"-2\">" . $temp_turnus_string . "</font></td>";

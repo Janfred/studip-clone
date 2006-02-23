@@ -60,7 +60,7 @@ function dump_sem($sem_id) {
 		$dump.="<tr><td width=\"15%\"><b>" . _("Untertitel:") . " </b></td><td>".htmlReady($db2->f('Untertitel'),1,1)."</td></tr>\n";
 	
 	if (view_turnus($sem_id, FALSE))
-		$dump.="<tr><td width=\"15%\"><b>" . _("Zeit:") . " </b></td><td>".view_turnus($sem_id, FALSE)."</td></tr>\n";
+		$dump.="<tr><td width=\"15%\"><b>" . _("Zeit:") . " </b></td><td>".htmlReady(view_turnus($sem_id, FALSE))."</td></tr>\n";
 	
 	if (get_semester($sem_id))
 		$dump.="<tr><td width=\"15%\"><b>" . _("Semester:") . " </b></td><td>".get_semester($sem_id)."</td></tr>\n";
@@ -69,7 +69,7 @@ function dump_sem($sem_id) {
 		$dump.="<tr><td width=\"15%\"><b>" . _("Erster Termin:") . " </b></td><td>".veranstaltung_beginn($sem_id)."</td></tr>\n";
 		
 	if (vorbesprechung($sem_id))
-		$dump.="<tr><td width=\"15%\"><b>" . _("Vorbesprechung:") . " </b></td><td>".vorbesprechung($sem_id)."</td></tr>\n";
+		$dump.="<tr><td width=\"15%\"><b>" . _("Vorbesprechung:") . " </b></td><td>".htmlReady(vorbesprechung($sem_id))."</td></tr>\n";
 		
 	if (getRoom($sem_id, FALSE))  
 		$dump.="<tr><td width=\"15%\"><b>" . _("Ort:") . " </b></td><td>".getRoom($sem_id, FALSE)."</td></tr>\n";

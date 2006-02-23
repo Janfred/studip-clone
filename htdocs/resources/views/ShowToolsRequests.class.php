@@ -365,7 +365,7 @@ class ShowToolsRequests {
 								$i=0;
 								$tmp_assign_ids = array_keys($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"]);
 								foreach ($metadates as $key=>$val) {
-									printf ("<font color=\"blue\"><i><b>%s</b></i></font>. %s<br />", $key+1, $val);
+									printf ("<font color=\"blue\"><i><b>%s</b></i></font>. %s<br />", $key+1, htmlReady($val));
 									if ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["grouping"])
 										$resObj =& ResourceObject::Factory($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["groups"][$i]["resource_id"]);
 									else
