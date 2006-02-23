@@ -250,6 +250,7 @@ class ModulesNotification extends Modules {
 				$redirect = '&redirect_to=literatur.php';
 				break;
 			case 'ilias_connect' :
+				/* sinnlos...
 				if ($GLOBALS['ILIAS_CONNECT_ENABLE']) {
 					$mod_count = get_seminar_modules($range_id);
 					if ($mod_count > 1) {
@@ -259,6 +260,7 @@ class ModulesNotification extends Modules {
 					}
 				}
 				$redirect = "&redirect_to=seminar_lernmodule.php&seminar_id=$range_id";
+				*/
 				break;
 			case 'elearning_interface' :
 				if ($GLOBALS['ELEARNING_INTERFACE_ENABLE']) {
