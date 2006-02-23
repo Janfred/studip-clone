@@ -659,7 +659,15 @@ while (list ($key, $val) = each ($gruppe)) {
 		$tbl3 = "S";
 	}
 
-	$db->query ("SELECT $tbl.mkdate, comment, $tbl.user_id, ". $_fullname_sql['full'] ." AS fullname, username, status, count(topic_id) AS doll,  studiengaenge.name, ".$tbl.".".$tbl2."studiengang_id AS studiengang_id FROM $tbl LEFT JOIN px_topics USING (user_id,".$tbl3."eminar_id) LEFT JOIN auth_user_md5 ON (".$tbl.".user_id=auth_user_md5.user_id) LEFT JOIN user_info USING (user_id) LEFT JOIN studiengaenge ON (".$tbl.".".$tbl2."studiengang_id = studiengaenge.studiengang_id) WHERE ".$tbl.".".$tbl3."eminar_id = '$SessionSeminar' AND status = '$key'  GROUP by ".$tbl.".user_id $sort");
+	$db->query ("SELECT $tbl.mkdate, comment, $tbl.user_id, ". $_fullname_sql['full'] ." AS fullname,
+				username, status, count(topic_id) AS doll,  studiengaenge.name, ".$tbl.".".$tbl2."studiengang_id
+				AS studiengang_id 
+				FROM $tbl LEFT JOIN px_topics USING (user_id,".$tbl3."eminar_id)
+				LEFT JOIN auth_user_md5 ON (".$tbl.".user_id=auth_user_md5.user_id)
+				LEFT JOIN user_info ON (auth_user_md5.user_id=user_info.user_id)
+				LEFT JOIN studiengaenge ON (".$tbl.".".$tbl2."studiengang_id = studiengaenge.studiengang_id)
+				WHERE ".$tbl.".".$tbl3."eminar_id = '$SessionSeminar' 
+				AND status = '$key' GROUP by ".$tbl.".user_id $sort");
 
 	if ($db->num_rows()) { //Only if Users were found...
 	// die eigentliche Teil-Tabelle
@@ -1003,7 +1011,7 @@ if ($rechte) {
 			}
 
 			$cssSw->switchClass();
-			printf ("<tr><td width=\"%s%%\" class=\"%s\" align=\"left\"><font size=\"-1\"><a href=\"about.php?username=%s\">%s</a></font></td>",  ($db3->f("admission_type") == 1 && $db3->f("admission_selection_take_place") !=1) ? "40" : "30", $cssSw->getClass(), $db->f("username"), htmlReady($db->f("fullname")));
+			printf ("<tr><td width=\"%s%%\" class=\"%s\" align=\"left\"><font size=\"-1\"><a name=\"%s\" href=\"about.php?username=%s\">%s</a></font></td>",  ($db3->f("admission_type") == 1 && $db3->f("admission_selection_take_place") !=1) ? "40" : "30", $cssSw->getClass(), $db->f("username"), $db->f("username"), htmlReady($db->f("fullname")));
 			if ($db3->f("admission_type") == 2 || $db3->f("admission_selection_take_place")==1)
 				printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><font size=\"-1\">%s</font></td>", $cssSw->getClass(), $db->f("position"));
 			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\">&nbsp; </td>", $cssSw->getClass());
