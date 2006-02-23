@@ -112,13 +112,18 @@ $ELEARNING_INTERFACE_MODULES = array(
 	)
 );
 
-$PLUGINS_ENABLE=FALSE;
+$PLUGINS_ENABLE=TRUE;
+$PLUGINS_UPLOAD_ENABLE=TRUE; // Upload of Plugins is enabled
+			     // if disabled for security reasons, uploads have to go into $NEW_PLUGINS_PATH
+$NEW_PLUGINS_PATH=""; // The place from which new plugins should be loaded
 						
 /*paths
 ----------------------------------------------------------------
 configure Stud.IP folders*/
 
 $ABSOLUTE_PATH_STUDIP = "/srv/www/htdocs/studip/";
+// where to store plugins
+$PLUGINS_PATH = $ABSOLUTE_PATH_STUDIP . "plugins/packages";
 //where ro store documents and the archive
 $UPLOAD_PATH = "/var/lib/studip/upload_doc";			//path to uploaded documents (wwwrun needs write-perm there)
 $ARCHIV_PATH = "/var/lib/studip/archiv";				//path to Stud.IP archive (wwwrun needs write-perm there)
