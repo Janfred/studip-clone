@@ -88,7 +88,7 @@ class PluginAdministrationVisualization extends AbstractStudIPPluginVisualizatio
 		}		
 	}
 	
-	function showPluginAdministrationList($plugins,$msg=""){
+	function showPluginAdministrationList($plugins,$msg="",$installableplugins=array()){
 		$cssSw = new cssClassSwitcher();									// Klasse für Zebra-Design
 		$cssSw->enableHover();
 		echo "\n" . $cssSw->GetHoverJSFunction() . "\n";
@@ -168,19 +168,8 @@ class PluginAdministrationVisualization extends AbstractStudIPPluginVisualizatio
 			 <tr>
 			 	
 			 	<td colspan="7">
-			 		<table border="0" width="100%">
-			 			<tr><th align="left"><?=_("Installation neuer Plugins")?></th> </tr>
-			 			<tr>
-			 				<td>
-							 	<form action="<?= PluginEngine::getLink($this->pluginref,array(),"installPlugin")?>" enctype="multipart/form-data" method="post">
-								<input type="hidden" value="install" name="action">
-								<input name="upload_file" type="file" size="50" maxlength="100000">								
-								<?= makeButton("hinzufuegen","input",_("neues Plugin installieren")) ?><br>
-								<input type="checkbox" name="update" value="force"><?= _("Aktualisieren, falls Plugin schon vorhanden.")?>								
-								</form>
-							</td>
-						</tr>
-					</table>
+			 		<?= $this->showInstallationForm($installableplugins);?>
+			 		
 			 	</td>
 			 </tr>
 		<?php
@@ -204,6 +193,55 @@ class PluginAdministrationVisualization extends AbstractStudIPPluginVisualizatio
 				);
 		print_infobox ($infobox,$relativepath . "/img/modules.jpg");
 		StudIPTemplateEngine::endInfoBoxTableCell();		
+	}
+	
+	function showInstallationForm($installableplugins=array()){		
+		StudIPTemplateEngine::makeContentHeadline(_("Installation neuer Plugins"));
+		if (isset($GLOBALS["PLUGINS_UPLOAD_ENABLE"]) && $GLOBALS["PLUGINS_UPLOAD_ENABLE"]){
+		?>
+		<form action="<?= PluginEngine::getLink($this->pluginref,array(),"installPlugin")?>" enctype="multipart/form-data" method="post">
+			<input type="hidden" value="install" name="action">
+			<input name="upload_file" type="file" size="50" maxlength="100000">								
+			<?= makeButton("hinzufuegen","input",_("neues Plugin installieren")) ?><br>
+			<input type="checkbox" name="update" value="force"><?= _("Aktualisieren, falls Plugin schon vorhanden.")?>								
+		</form>
+		<?php
+		}
+		else {
+			// Upload von Plugins ist nicht erlaubt			
+		?>
+		<form action="<?= PluginEngine::getLink($this->pluginref,array(),"installPlugin")?>" enctype="multipart/form-data" method="post">
+			<input type="hidden" value="install" name="action">
+			<table>
+			
+			<?php
+			foreach ($installableplugins as $pluginfilename){
+				?>
+				<tr>
+					<td>
+						<input type="radio" name="pluginfilename" value="<?= $pluginfilename?>">
+					</td>
+					<td>
+						<?= $pluginfilename?>
+					</td>
+				</tr>
+				<?php				
+			}
+			?>
+				<tr>
+					<td>
+						<input type="radio" name="pluginfilename" value="kein">
+					</td>
+					<td>
+						<?= _("Kein Plugin wählen")?>
+					</td>
+				</tr>
+			</table>			
+			<?= makeButton("hinzufuegen","input",_("neues Plugin installieren")) ?><br>
+			<input type="checkbox" name="update" value="force"><?= _("Aktualisieren, falls Plugin schon vorhanden.")?>								
+		</form>
+		<?php
+		}
 	}
 }
 ?>

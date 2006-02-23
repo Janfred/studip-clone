@@ -43,11 +43,13 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 	function showDefaultView($pluginengine,$msg=""){
 		// $this->init();
 		$plugins = $pluginengine->getAllInstalledPlugins();
-		$this->pluginvis->showPluginAdministrationList($plugins,$msg);
+		$installableplugins = PluginEngine::getInstallablePlugins();
+		$this->pluginvis->showPluginAdministrationList($plugins,$msg,$installableplugins);
 	}
 	
 	function installPlugin(){
 		$forceupdate = $_POST["update"];
+		$pluginfilename = $_POST["pluginfilename"];		
 		$user = $this->getUser();
 		$permission = $user->getPermission();
 		// check if user has the permission to check in / update plugins
@@ -55,12 +57,27 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 		   // show nothing		   
 		   return;
 		}
-		$upload_file = $_FILES["upload_file"]["tmp_name"];
-    	// process the upload 
-    	// and register plugin in the database;
-    	$result = $this->pluginmgmt->installPlugin($upload_file,$forceupdate);  
-    	$pluginengine = PluginEngine::getPluginPersistence();
-    	$this->showDefaultView($pluginengine,$result);
+		
+		if ($GLOBALS['PLUGINS_UPLOAD_ENABLE']){
+			$upload_file = $_FILES["upload_file"]["tmp_name"];
+	    	// process the upload 
+	    	// and register plugin in the database;
+	    	$result = $this->pluginmgmt->installPlugin($upload_file,$forceupdate);  
+	    	$pluginengine = PluginEngine::getPluginPersistence();
+	    	$this->showDefaultView($pluginengine,$result);
+		}
+		else {
+			// no plugin upload enabled
+			if (isset($pluginfilename) && isset($GLOBALS['NEW_PLUGINS_PATH'])){
+				$newpluginfilename = $GLOBALS['NEW_PLUGINS_PATH'] . "/" . $pluginfilename;
+				$result = $this->pluginmgmt->installPlugin($newpluginfilename,$forceupdate);  	    		
+			}
+			else {
+				// nothing to do			
+			}
+			$pluginengine = PluginEngine::getPluginPersistence();
+	    	$this->showDefaultView($pluginengine,$result);
+		}
 	}
 	
 	/**

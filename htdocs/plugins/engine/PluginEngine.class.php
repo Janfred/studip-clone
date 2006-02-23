@@ -167,6 +167,34 @@ class PluginEngine{
 		fclose($manifest);
 		return $plugininfos;
 	}
+	
+	/**
+	 * Searches for plugins in the plugins installation directory, if enabled in local.inc
+	 * @return list of installable names of plugin packages
+	 *
+	 */
+	function getInstallablePlugins(){
+		$newpluginsdir = $GLOBALS["NEW_PLUGINS_PATH"];
+
+		if (!isset($newpluginsdir)){
+			// there's no dir defined in the local.inc
+			return array();
+		}
+		else {
+			if (!file_exists($newpluginsdir)){
+				// the directory doesn't exist
+				return array();
+			}
+			$dir = dir($newpluginsdir);
+			$installableplugins = array();
+			while ($file = readdir($dir->handle)){
+				if (preg_match("/(.*)\.zip/",$file) > 0){
+					$installableplugins[] = $file;
+				}
+			}
+			return $installableplugins;
+		}
+	}
 }
 
 ?>
