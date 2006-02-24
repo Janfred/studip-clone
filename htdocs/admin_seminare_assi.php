@@ -297,10 +297,12 @@ if ($form == 1)
 
 if ($form == 2)
 	{
-
-	if(isset($sem_bereich_chooser) && !$st_search->search_done){
-		$st_search->sem_tree_ranges = array();
-		$st_search->sem_tree_ids = array();
+	$st_search->sem_tree_ranges = array();
+	$st_search->sem_tree_ids = array();
+	$st_search->selected = array();
+	$sem_create_data["sem_bereich"] = array();
+	
+	if(isset($sem_bereich_chooser)){ // && !$st_search->search_done){
 		for ($i = 0; $i < count($sem_bereich_chooser); $i++){
 			if($sem_bereich_chooser[$i] != '0'){
 				$st_search->selected[$sem_bereich_chooser[$i]] = true;
