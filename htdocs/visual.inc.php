@@ -850,10 +850,15 @@ function preg_call_link ($params, $mod, $img, $extern = FALSE, $wiki = FALSE) {
 						$width = ($params[2] < $max_width) ? " width=\"{$params[2]}\"" : " width=\"$max_width\"";
 					}
 				}
-				$tbr = '<img src="'.idna_link($params[4])."\" $width border=\"0\" $style alt=\"{$params[1]}\" title=\"{$params[1]}\">";
-
-				if (preg_match('#(((https?://|ftp://)(['.$chars.':]+@)?)['.$chars.']+(\.['.$chars.':]+)+(/[^<\s]*[^\.\s<])*)#i', $params[7])) {
-					$tbr = '<a href="'.idna_link($params[7]).'"'.($intern ? '' : ' target="_blank"').'>'.$tbr.'</a>';
+				$tbr = '<img src="'.idna_link($params[4])."\" $width border=\"0\" alt=\"{$params[1]}\" title=\"{$params[1]}\">";
+				if (preg_match('#(((https?://|ftp://)(['.$chars.':]+@)?)['.$chars.']+(\.['.$chars.':]+)*/?([^<\s]*[^\.\s\]<])*)#i', $params[7])) {
+					$pum = parse_url($params[7]);
+					if (($pum['scheme'] == 'http' || $pum['scheme'] == 'https')
+					&& ($pum['host'] == $_SERVER['HTTP_HOST'] || $pum['host'].':'.$pum['port'] == $_SERVER['HTTP_HOST'])
+					&& strpos($pum['path'], $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']) === 0){
+						$imgintern = true;
+					}
+					$tbr = '<a href="'.idna_link($params[7]).'"'.($imgintern ? '' : ' target="_blank"').'>'.$tbr.'</a>';
 				}
 				if ($params[6])
 					$tbr = "<div align=\"{$params[6]}\">$tbr</div>";
