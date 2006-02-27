@@ -1306,8 +1306,9 @@ function TransformInternalLinks($str){
 			$domain_data['domains'] = preg_replace("'(\|.+?)((/.*?)|\|)'", "\\1[^/]*?\\2", $domain_data['domains']);
 			$domain_data['domains'] = substr($domain_data['domains'], 1);
 			$domain_data['user_domain'] = preg_replace("'^({$domain_data['domains']})(.*)$'i", "\\1", $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+			$domain_data['user_domain_scheme'] = 'http' . (($_SERVER['HTTPS'] || $_SERVER['SERVER_PORT'] == 443) ? 's' : '') . '://';
 		}
-		return preg_replace("'http(s?)\://({$domain_data['domains']})((/[^<\s]*[^\.\s<])*)'i", "http\\1://{$domain_data['user_domain']}\\3", $str);
+		return preg_replace("'https?\://({$domain_data['domains']})((/[^<\s]*[^\.\s<])*)'i", "{$domain_data['user_domain_scheme']}{$domain_data['user_domain']}\\2", $str);
 	} else {
 		return $str;
 	}
