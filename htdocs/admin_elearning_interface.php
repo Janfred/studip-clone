@@ -44,11 +44,11 @@ if ($ELEARNING_INTERFACE_ENABLE)
 	{	
 		$connected_cms[$cms_select] = new ConnectedCMS();
 		$connection_status = $connected_cms[$cms_select]->getConnectionStatus($cms_select);
-		if ($activate != "")
+		if (isset($activate_x))
 		{
 			ELearningUtils::setConfigValue("ACTIVE", "1", $cms_select);
 		}
-		if ($deactivate != "")
+		if (isset($deactivate_x))
 		{
 			ELearningUtils::setConfigValue("ACTIVE", "0", $cms_select);
 		}
