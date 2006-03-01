@@ -188,7 +188,7 @@ function dump_sem($sem_id) {
 	$iid=$db2->f("Institut_id");
 	$db3->query("SELECT Name, url FROM Institute WHERE Institut_id = '$iid'");
 	$db3->next_record();
-	$dump.="<tr><td width=\"15%\"><b>" . _("Heimat-Einrichtung:") . "&nbsp;</b></td><td>".$db3->f("Name")."</td></tr>\n";
+	$dump.="<tr><td width=\"15%\"><b>" . _("Heimat-Einrichtung:") . "&nbsp;</b></td><td>".htmlReady($db3->f("Name"))."</td></tr>\n";
 	$db3->query("SELECT Name, url FROM seminar_inst LEFT JOIN Institute USING (institut_id) WHERE seminar_id = '$sem_id' AND Institute.institut_id != '$iid'");
 	$cd=$db3->affected_rows();
 	if ($db3->affected_rows() == 1)
@@ -244,7 +244,7 @@ function dump_sem($sem_id) {
 				$dump.= "&nbsp;</td></tr>\n";
 				if ($db->f("description")) {
 					$dump.="<tr><td width=\"25%\">&nbsp;</td>";
-					$dump.= "<td width=\"75%\">".htmlReady($db->f("description"),1,1)."</td></tr>\n";
+					$dump.= "<td width=\"75%\">".formatReady($db->f("description"),1,1)."</td></tr>\n";
 				}
 			}
 		$dump .= "</table>\n";
@@ -269,7 +269,7 @@ function dump_sem($sem_id) {
 				$dump.= "&nbsp;</td></tr>\n";
 				if ($db->f("description")) {
 					$dump.="<tr><td width=\"25%\">&nbsp;</td>";
-					$dump.= "<td width=\"75%\">".htmlReady($db->f("description"),1,1)."</td></tr>\n";
+					$dump.= "<td width=\"75%\">".formatReady($db->f("description"),1,1)."</td></tr>\n";
 				}
 			}
 		$dump .= "</table>\n";
