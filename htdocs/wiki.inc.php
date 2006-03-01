@@ -145,7 +145,7 @@ function getWikiPageVersions($keyword, $limit=10, $getfirst=0) {
 	$db = new DB_Seminar;
 	$db->query("SELECT version,chdate FROM wiki WHERE keyword = '$keyword' AND range_id='$SessSemName[1]' ORDER BY version DESC LIMIT $limit");
 	if ($db->affected_rows() == 0) {
-		return "";
+		return array();
 	}
 	$versions=array();
 	if (!$getfirst) {
@@ -822,7 +822,7 @@ function printWikiPage($keyword, $version) {
 	echo sprintf(_("Version %s, letzte Änderung %s von %s."), $wikiData['version'], date("d.m.Y, H:i", $wikiData['chdate']), get_fullname($wikiData['user_id'],'full',1));
 	echo "</em></p>";
 	echo "<hr>";
-	echo wikiReady($wikiData['body'],TRUE,FALSE,"none");
+	echo wikiDirectives(wikiReady($wikiData['body'],TRUE,FALSE,"none"));
 	echo "<hr><p><font size=-1>created by Stud.IP Wiki-Module ";
 	echo date("d.m.Y, H:i", time());
 	echo " </font></p>";
