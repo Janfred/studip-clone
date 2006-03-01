@@ -30,4 +30,20 @@ Konvertierungsscripte werden bei diesem Update nicht benutzt.
 2. Anmerkungen & Neuerungen zur aktuellen Version
 -------------------------------------------------
 
+studip-httpd.conf:
+Der Eintrag "php_value memory_limit" sollte beim Update erhöht werden, falls er 
+noch auf 8M steht. Minimum sind ca. 12M.
+Wenn 'SENDFILE_LINK_MODE' auf 'rewrite' gesetzt wird, muss das Apache Modul mod_rewrite
+aktiviert sein. Zusätzlich müssen in der studip-httpd.conf die entsprechenden 
+rewrite Regeln aktiviert werden.
+
+Emailbenachrichtigungen:
+Wenn Emailbenachrichtigungen (MAIL_NOTIFICATION_ENABLE) verschickt werden sollen
+muss auf dem Server ein php binary vorhanden sein (which php ausprobieren). Das 
+Skript send_mail_notifications.php (im phplib Ordner) verschickt die Mails. Wenn
+noch prepend.php benutzt wird, muss das Skript angepasst werden!
+
+Evaluationsauswertung:
+Die grafische Evaluationsauswertung benötigt zwingend ein aktiviertes gd Modul 
+im PHP. Die PDF Erzeugung benutzt die FOP Einstellungen des Exportmoduls.
 
