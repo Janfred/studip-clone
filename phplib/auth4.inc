@@ -13,7 +13,7 @@
 
 class Auth {
   var $classname = "Auth";
-  var $persistent_slots = array("auth");
+  var $persistent_slots = array("auth","classname");
   
   var $lifetime = 15;             ## Max allowed idle time before
                                   ## reauthentication is necessary.
@@ -115,6 +115,7 @@ class Auth {
           $this->auth["uid"] = $uid;
           $this->auth["exp"] = time() + (60 * $this->lifetime);
           $this->auth["refresh"] = time() + (60 * $this->refresh);
+		  $sess->freeze();
           return true;
         }
         
@@ -180,6 +181,7 @@ class Auth {
               $this->auth["uid"] = $uid;
               $this->auth["exp"] = time() + (60 * $this->lifetime);
               $this->auth["refresh"] = time() + (60 * $this->refresh);
+	  		  $sess->freeze();
               return true;
             } else {
               $this->auth_loginform();
@@ -232,7 +234,6 @@ class Auth {
   }
 
   function __sleep () {
-    $this->persistent_slots[]="classname";
     return $this->persistent_slots;
    }
 
