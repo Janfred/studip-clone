@@ -1,14 +1,20 @@
-# Erstellungszeit: 30. September 2005 um 11:27
-# Server Version: 4.0.15
-# PHP-Version: 4.3.3
-# Stud.IP Version: 1.2
-# Datenbank: `studip`
-# $Id$
-# --------------------------------------------------------
+-- phpMyAdmin SQL Dump
+-- version 2.7.0-pl1
+-- http://www.phpmyadmin.net
+-- 
+-- Host: localhost
+-- Erstellungszeit: 01. März 2006 um 12:24
+-- Server Version: 4.0.18
+-- PHP-Version: 4.4.2
+-- 
+-- Datenbank: `studip13`
+-- 
 
-#
-# Tabellenstruktur für Tabelle `Institute`
-#
+-- --------------------------------------------------------
+
+-- 
+-- Tabellenstruktur für Tabelle `Institute`
+-- 
 
 DROP TABLE IF EXISTS `Institute`;
 CREATE TABLE `Institute` (
@@ -29,13 +35,13 @@ CREATE TABLE `Institute` (
   `srienabled` tinyint(4) NOT NULL default '0',
   PRIMARY KEY  (`Institut_id`),
   KEY `fakultaets_id` (`fakultaets_id`)
-) TYPE=MyISAM PACK_KEYS=1;
+) TYPE=MyISAM;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `admission_seminar_studiengang`
-#
+-- 
+-- Tabellenstruktur für Tabelle `admission_seminar_studiengang`
+-- 
 
 DROP TABLE IF EXISTS `admission_seminar_studiengang`;
 CREATE TABLE `admission_seminar_studiengang` (
@@ -45,11 +51,11 @@ CREATE TABLE `admission_seminar_studiengang` (
   PRIMARY KEY  (`seminar_id`,`studiengang_id`)
 ) TYPE=MyISAM;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `admission_seminar_user`
-#
+-- 
+-- Tabellenstruktur für Tabelle `admission_seminar_user`
+-- 
 
 DROP TABLE IF EXISTS `admission_seminar_user`;
 CREATE TABLE `admission_seminar_user` (
@@ -63,11 +69,11 @@ CREATE TABLE `admission_seminar_user` (
   PRIMARY KEY  (`user_id`,`seminar_id`,`studiengang_id`)
 ) TYPE=MyISAM;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `archiv`
-#
+-- 
+-- Tabellenstruktur für Tabelle `archiv`
+-- 
 
 DROP TABLE IF EXISTS `archiv`;
 CREATE TABLE `archiv` (
@@ -92,11 +98,11 @@ CREATE TABLE `archiv` (
   KEY `heimat_inst_id` (`heimat_inst_id`)
 ) TYPE=MyISAM PACK_KEYS=1;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `archiv_user`
-#
+-- 
+-- Tabellenstruktur für Tabelle `archiv_user`
+-- 
 
 DROP TABLE IF EXISTS `archiv_user`;
 CREATE TABLE `archiv_user` (
@@ -107,11 +113,29 @@ CREATE TABLE `archiv_user` (
   KEY `user_id` (`user_id`,`status`)
 ) TYPE=MyISAM PACK_KEYS=1;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `auth_user_md5`
-#
+-- 
+-- Tabellenstruktur für Tabelle `auth_extern`
+-- 
+
+DROP TABLE IF EXISTS `auth_extern`;
+CREATE TABLE `auth_extern` (
+  `studip_user_id` varchar(32) NOT NULL default '',
+  `external_user_id` varchar(32) NOT NULL default '',
+  `external_user_name` varchar(64) NOT NULL default '',
+  `external_user_password` varchar(32) NOT NULL default '',
+  `external_user_category` varchar(32) NOT NULL default '',
+  `external_user_system_type` varchar(32) NOT NULL default '',
+  `external_user_type` smallint(6) NOT NULL default '0',
+  PRIMARY KEY  (`studip_user_id`,`external_user_system_type`)
+) TYPE=MyISAM;
+
+-- --------------------------------------------------------
+
+-- 
+-- Tabellenstruktur für Tabelle `auth_user_md5`
+-- 
 
 DROP TABLE IF EXISTS `auth_user_md5`;
 CREATE TABLE `auth_user_md5` (
@@ -127,11 +151,11 @@ CREATE TABLE `auth_user_md5` (
   UNIQUE KEY `k_username` (`username`)
 ) TYPE=MyISAM PACK_KEYS=1;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `banner_ads`
-#
+-- 
+-- Tabellenstruktur für Tabelle `banner_ads`
+-- 
 
 DROP TABLE IF EXISTS `banner_ads`;
 CREATE TABLE `banner_ads` (
@@ -151,11 +175,11 @@ CREATE TABLE `banner_ads` (
   PRIMARY KEY  (`ad_id`)
 ) TYPE=MyISAM;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `calendar_events`
-#
+-- 
+-- Tabellenstruktur für Tabelle `calendar_events`
+-- 
 
 DROP TABLE IF EXISTS `calendar_events`;
 CREATE TABLE `calendar_events` (
@@ -191,11 +215,11 @@ CREATE TABLE `calendar_events` (
   KEY `range_id` (`range_id`,`class`)
 ) TYPE=MyISAM;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `chat_data`
-#
+-- 
+-- Tabellenstruktur für Tabelle `chat_data`
+-- 
 
 DROP TABLE IF EXISTS `chat_data`;
 CREATE TABLE `chat_data` (
@@ -205,11 +229,11 @@ CREATE TABLE `chat_data` (
   PRIMARY KEY  (`id`)
 ) TYPE=MyISAM;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `comments`
-#
+-- 
+-- Tabellenstruktur für Tabelle `comments`
+-- 
 
 DROP TABLE IF EXISTS `comments`;
 CREATE TABLE `comments` (
@@ -223,11 +247,11 @@ CREATE TABLE `comments` (
   KEY `object_id` (`object_id`)
 ) TYPE=MyISAM;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `config`
-#
+-- 
+-- Tabellenstruktur für Tabelle `config`
+-- 
 
 DROP TABLE IF EXISTS `config`;
 CREATE TABLE `config` (
@@ -250,11 +274,11 @@ CREATE TABLE `config` (
   KEY `field` (`field`,`range`)
 ) TYPE=MyISAM;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `contact`
-#
+-- 
+-- Tabellenstruktur für Tabelle `contact`
+-- 
 
 DROP TABLE IF EXISTS `contact`;
 CREATE TABLE `contact` (
@@ -266,11 +290,11 @@ CREATE TABLE `contact` (
   KEY `owner_id` (`owner_id`,`buddy`,`user_id`)
 ) TYPE=MyISAM;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `contact_userinfo`
-#
+-- 
+-- Tabellenstruktur für Tabelle `contact_userinfo`
+-- 
 
 DROP TABLE IF EXISTS `contact_userinfo`;
 CREATE TABLE `contact_userinfo` (
@@ -284,11 +308,11 @@ CREATE TABLE `contact_userinfo` (
   KEY `priority` (`priority`)
 ) TYPE=MyISAM;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `datafields`
-#
+-- 
+-- Tabellenstruktur für Tabelle `datafields`
+-- 
 
 DROP TABLE IF EXISTS `datafields`;
 CREATE TABLE `datafields` (
@@ -305,11 +329,11 @@ CREATE TABLE `datafields` (
   KEY `object_type` (`object_type`)
 ) TYPE=MyISAM;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `datafields_entries`
-#
+-- 
+-- Tabellenstruktur für Tabelle `datafields_entries`
+-- 
 
 DROP TABLE IF EXISTS `datafields_entries`;
 CREATE TABLE `datafields_entries` (
@@ -321,11 +345,11 @@ CREATE TABLE `datafields_entries` (
   PRIMARY KEY  (`datafield_id`,`range_id`)
 ) TYPE=MyISAM;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `dokumente`
-#
+-- 
+-- Tabellenstruktur für Tabelle `dokumente`
+-- 
 
 DROP TABLE IF EXISTS `dokumente`;
 CREATE TABLE `dokumente` (
@@ -351,11 +375,11 @@ CREATE TABLE `dokumente` (
   KEY `mkdate` (`mkdate`)
 ) TYPE=MyISAM PACK_KEYS=1;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `eval`
-#
+-- 
+-- Tabellenstruktur für Tabelle `eval`
+-- 
 
 DROP TABLE IF EXISTS `eval`;
 CREATE TABLE `eval` (
@@ -374,11 +398,25 @@ CREATE TABLE `eval` (
   PRIMARY KEY  (`eval_id`)
 ) TYPE=MyISAM PACK_KEYS=1;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `eval_range`
-#
+-- 
+-- Tabellenstruktur für Tabelle `eval_group_template`
+-- 
+
+DROP TABLE IF EXISTS `eval_group_template`;
+CREATE TABLE `eval_group_template` (
+  `evalgroup_id` varchar(32) NOT NULL default '',
+  `user_id` varchar(32) NOT NULL default '',
+  `group_type` varchar(250) NOT NULL default 'normal',
+  PRIMARY KEY  (`evalgroup_id`,`user_id`)
+) TYPE=MyISAM;
+
+-- --------------------------------------------------------
+
+-- 
+-- Tabellenstruktur für Tabelle `eval_range`
+-- 
 
 DROP TABLE IF EXISTS `eval_range`;
 CREATE TABLE `eval_range` (
@@ -387,11 +425,64 @@ CREATE TABLE `eval_range` (
   PRIMARY KEY  (`eval_id`,`range_id`)
 ) TYPE=MyISAM PACK_KEYS=1;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `eval_user`
-#
+-- 
+-- Tabellenstruktur für Tabelle `eval_templates`
+-- 
+
+DROP TABLE IF EXISTS `eval_templates`;
+CREATE TABLE `eval_templates` (
+  `template_id` varchar(32) NOT NULL default '',
+  `user_id` varchar(32) default NULL,
+  `institution_id` varchar(32) default NULL,
+  `name` varchar(255) NOT NULL default '',
+  `show_questions` tinyint(1) NOT NULL default '1',
+  `show_total_stats` tinyint(1) NOT NULL default '1',
+  `show_graphics` tinyint(1) NOT NULL default '1',
+  `show_questionblock_headline` tinyint(1) NOT NULL default '1',
+  `show_group_headline` tinyint(1) NOT NULL default '1',
+  `polscale_gfx_type` varchar(255) NOT NULL default 'bars',
+  `likertscale_gfx_type` varchar(255) NOT NULL default 'bars',
+  `mchoice_scale_gfx_type` varchar(255) NOT NULL default 'bars',
+  `kurzbeschreibung` varchar(255) default NULL,
+  PRIMARY KEY  (`template_id`),
+  KEY `user_id` (`user_id`,`institution_id`,`name`)
+) TYPE=MyISAM;
+
+-- --------------------------------------------------------
+
+-- 
+-- Tabellenstruktur für Tabelle `eval_templates_eval`
+-- 
+
+DROP TABLE IF EXISTS `eval_templates_eval`;
+CREATE TABLE `eval_templates_eval` (
+  `eval_id` varchar(32) NOT NULL default '',
+  `template_id` varchar(32) NOT NULL default '',
+  PRIMARY KEY  (`eval_id`),
+  KEY `eval_id` (`eval_id`)
+) TYPE=MyISAM;
+
+-- --------------------------------------------------------
+
+-- 
+-- Tabellenstruktur für Tabelle `eval_templates_user`
+-- 
+
+DROP TABLE IF EXISTS `eval_templates_user`;
+CREATE TABLE `eval_templates_user` (
+  `eval_id` varchar(32) NOT NULL default '',
+  `template_id` varchar(32) NOT NULL default '',
+  `user_id` varchar(32) NOT NULL default '',
+  KEY `eval_id` (`eval_id`)
+) TYPE=MyISAM;
+
+-- --------------------------------------------------------
+
+-- 
+-- Tabellenstruktur für Tabelle `eval_user`
+-- 
 
 DROP TABLE IF EXISTS `eval_user`;
 CREATE TABLE `eval_user` (
@@ -400,11 +491,11 @@ CREATE TABLE `eval_user` (
   PRIMARY KEY  (`eval_id`,`user_id`)
 ) TYPE=MyISAM;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `evalanswer`
-#
+-- 
+-- Tabellenstruktur für Tabelle `evalanswer`
+-- 
 
 DROP TABLE IF EXISTS `evalanswer`;
 CREATE TABLE `evalanswer` (
@@ -420,11 +511,11 @@ CREATE TABLE `evalanswer` (
   KEY `parent_id` (`parent_id`)
 ) TYPE=MyISAM;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `evalanswer_user`
-#
+-- 
+-- Tabellenstruktur für Tabelle `evalanswer_user`
+-- 
 
 DROP TABLE IF EXISTS `evalanswer_user`;
 CREATE TABLE `evalanswer_user` (
@@ -433,11 +524,11 @@ CREATE TABLE `evalanswer_user` (
   PRIMARY KEY  (`evalanswer_id`,`user_id`)
 ) TYPE=MyISAM PACK_KEYS=1;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `evalgroup`
-#
+-- 
+-- Tabellenstruktur für Tabelle `evalgroup`
+-- 
 
 DROP TABLE IF EXISTS `evalgroup`;
 CREATE TABLE `evalgroup` (
@@ -453,11 +544,11 @@ CREATE TABLE `evalgroup` (
   KEY `parent_id` (`parent_id`)
 ) TYPE=MyISAM PACK_KEYS=1;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `evalquestion`
-#
+-- 
+-- Tabellenstruktur für Tabelle `evalquestion`
+-- 
 
 DROP TABLE IF EXISTS `evalquestion`;
 CREATE TABLE `evalquestion` (
@@ -471,11 +562,11 @@ CREATE TABLE `evalquestion` (
   KEY `parent_id` (`parent_id`)
 ) TYPE=MyISAM;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `extern_config`
-#
+-- 
+-- Tabellenstruktur für Tabelle `extern_config`
+-- 
 
 DROP TABLE IF EXISTS `extern_config`;
 CREATE TABLE `extern_config` (
@@ -489,11 +580,11 @@ CREATE TABLE `extern_config` (
   PRIMARY KEY  (`config_id`,`range_id`)
 ) TYPE=MyISAM;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `folder`
-#
+-- 
+-- Tabellenstruktur für Tabelle `folder`
+-- 
 
 DROP TABLE IF EXISTS `folder`;
 CREATE TABLE `folder` (
@@ -510,11 +601,11 @@ CREATE TABLE `folder` (
   KEY `chdate` (`chdate`)
 ) TYPE=MyISAM PACK_KEYS=1;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `guestbook`
-#
+-- 
+-- Tabellenstruktur für Tabelle `guestbook`
+-- 
 
 DROP TABLE IF EXISTS `guestbook`;
 CREATE TABLE `guestbook` (
@@ -528,11 +619,11 @@ CREATE TABLE `guestbook` (
   KEY `range_id` (`range_id`,`mkdate`)
 ) TYPE=MyISAM;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `kategorien`
-#
+-- 
+-- Tabellenstruktur für Tabelle `kategorien`
+-- 
 
 DROP TABLE IF EXISTS `kategorien`;
 CREATE TABLE `kategorien` (
@@ -549,11 +640,11 @@ CREATE TABLE `kategorien` (
   KEY `range_id` (`range_id`)
 ) TYPE=MyISAM;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `lit_catalog`
-#
+-- 
+-- Tabellenstruktur für Tabelle `lit_catalog`
+-- 
 
 DROP TABLE IF EXISTS `lit_catalog`;
 CREATE TABLE `lit_catalog` (
@@ -581,11 +672,11 @@ CREATE TABLE `lit_catalog` (
   PRIMARY KEY  (`catalog_id`)
 ) TYPE=MyISAM;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `lit_list`
-#
+-- 
+-- Tabellenstruktur für Tabelle `lit_list`
+-- 
 
 DROP TABLE IF EXISTS `lit_list`;
 CREATE TABLE `lit_list` (
@@ -604,11 +695,11 @@ CREATE TABLE `lit_list` (
   KEY `visibility` (`visibility`)
 ) TYPE=MyISAM;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `lit_list_content`
-#
+-- 
+-- Tabellenstruktur für Tabelle `lit_list_content`
+-- 
 
 DROP TABLE IF EXISTS `lit_list_content`;
 CREATE TABLE `lit_list_content` (
@@ -626,11 +717,47 @@ CREATE TABLE `lit_list_content` (
   KEY `priority` (`priority`)
 ) TYPE=MyISAM;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `message`
-#
+-- 
+-- Tabellenstruktur für Tabelle `log_actions`
+-- 
+
+DROP TABLE IF EXISTS `log_actions`;
+CREATE TABLE `log_actions` (
+  `action_id` varchar(32) NOT NULL default '',
+  `name` varchar(128) NOT NULL default '',
+  `description` varchar(64) default NULL,
+  `info_template` text,
+  `active` tinyint(1) NOT NULL default '1',
+  `expires` int(20) default NULL,
+  PRIMARY KEY  (`action_id`)
+) TYPE=MyISAM;
+
+-- --------------------------------------------------------
+
+-- 
+-- Tabellenstruktur für Tabelle `log_events`
+-- 
+
+DROP TABLE IF EXISTS `log_events`;
+CREATE TABLE `log_events` (
+  `event_id` varchar(32) NOT NULL default '',
+  `user_id` varchar(32) NOT NULL default '',
+  `action_id` varchar(32) NOT NULL default '',
+  `affected_range_id` varchar(32) default NULL,
+  `coaffected_range_id` varchar(32) default NULL,
+  `info` text,
+  `dbg_info` text,
+  `mkdate` int(20) NOT NULL default '0',
+  PRIMARY KEY  (`event_id`)
+) TYPE=MyISAM;
+
+-- --------------------------------------------------------
+
+-- 
+-- Tabellenstruktur für Tabelle `message`
+-- 
 
 DROP TABLE IF EXISTS `message`;
 CREATE TABLE `message` (
@@ -646,11 +773,11 @@ CREATE TABLE `message` (
   KEY `chat_id` (`chat_id`)
 ) TYPE=MyISAM;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `message_user`
-#
+-- 
+-- Tabellenstruktur für Tabelle `message_user`
+-- 
 
 DROP TABLE IF EXISTS `message_user`;
 CREATE TABLE `message_user` (
@@ -669,12 +796,11 @@ CREATE TABLE `message_user` (
   KEY `user_id_2` (`user_id`,`snd_rec`,`deleted`,`folder`,`mkdate`)
 ) TYPE=MyISAM;
 
+-- --------------------------------------------------------
 
-# --------------------------------------------------------
-
-#
-# Tabellenstruktur für Tabelle `news`
-#
+-- 
+-- Tabellenstruktur für Tabelle `news`
+-- 
 
 DROP TABLE IF EXISTS `news`;
 CREATE TABLE `news` (
@@ -694,11 +820,11 @@ CREATE TABLE `news` (
   KEY `chdate` (`chdate`)
 ) TYPE=MyISAM PACK_KEYS=1;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `news_range`
-#
+-- 
+-- Tabellenstruktur für Tabelle `news_range`
+-- 
 
 DROP TABLE IF EXISTS `news_range`;
 CREATE TABLE `news_range` (
@@ -708,11 +834,43 @@ CREATE TABLE `news_range` (
   KEY `range_id` (`range_id`)
 ) TYPE=MyISAM PACK_KEYS=1;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `object_rate`
-#
+-- 
+-- Tabellenstruktur für Tabelle `news_rss_range`
+-- 
+
+DROP TABLE IF EXISTS `news_rss_range`;
+CREATE TABLE `news_rss_range` (
+  `range_id` char(32) NOT NULL default '',
+  `rss_id` char(32) NOT NULL default '',
+  `range_type` enum('user','sem','inst','global') NOT NULL default 'user',
+  PRIMARY KEY  (`range_id`),
+  KEY `rss_id` (`rss_id`)
+) TYPE=MyISAM;
+
+-- --------------------------------------------------------
+
+-- 
+-- Tabellenstruktur für Tabelle `object_contentmodules`
+-- 
+
+DROP TABLE IF EXISTS `object_contentmodules`;
+CREATE TABLE `object_contentmodules` (
+  `object_id` varchar(32) NOT NULL default '',
+  `module_id` varchar(32) NOT NULL default '',
+  `system_type` varchar(32) NOT NULL default '',
+  `module_type` varchar(32) NOT NULL default '',
+  `mkdate` int(20) NOT NULL default '0',
+  `chdate` int(20) NOT NULL default '0',
+  PRIMARY KEY  (`object_id`,`module_id`,`system_type`)
+) TYPE=MyISAM;
+
+-- --------------------------------------------------------
+
+-- 
+-- Tabellenstruktur für Tabelle `object_rate`
+-- 
 
 DROP TABLE IF EXISTS `object_rate`;
 CREATE TABLE `object_rate` (
@@ -723,11 +881,11 @@ CREATE TABLE `object_rate` (
   KEY `rate` (`rate`)
 ) TYPE=MyISAM;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `object_user`
-#
+-- 
+-- Tabellenstruktur für Tabelle `object_user`
+-- 
 
 DROP TABLE IF EXISTS `object_user`;
 CREATE TABLE `object_user` (
@@ -738,28 +896,28 @@ CREATE TABLE `object_user` (
   PRIMARY KEY  (`object_id`,`user_id`,`flag`)
 ) TYPE=MyISAM;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `object_user_visits`
-#
+-- 
+-- Tabellenstruktur für Tabelle `object_user_visits`
+-- 
 
 DROP TABLE IF EXISTS `object_user_visits`;
 CREATE TABLE `object_user_visits` (
   `object_id` char(32) NOT NULL default '',
   `user_id` char(32) NOT NULL default '',
-  `type` enum('vote','documents','forum','literature','schedule','scm','sem','wiki','news','eval','inst','ilias_connect') NOT NULL default 'vote',
+  `type` enum('vote','documents','forum','literature','schedule','scm','sem','wiki','news','eval','inst','ilias_connect','elearning_interface') NOT NULL default 'vote',
   `visitdate` int(20) NOT NULL default '0',
   `last_visitdate` int(20) NOT NULL default '0',
   PRIMARY KEY  (`object_id`,`user_id`,`type`),
   KEY `user_id` (`user_id`)
 ) TYPE=MyISAM;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `object_views`
-#
+-- 
+-- Tabellenstruktur für Tabelle `object_views`
+-- 
 
 DROP TABLE IF EXISTS `object_views`;
 CREATE TABLE `object_views` (
@@ -770,11 +928,57 @@ CREATE TABLE `object_views` (
   KEY `views` (`views`)
 ) TYPE=MyISAM;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `px_topics`
-#
+-- 
+-- Tabellenstruktur für Tabelle `plugins`
+-- 
+
+DROP TABLE IF EXISTS `plugins`;
+CREATE TABLE `plugins` (
+  `pluginid` int(10) unsigned NOT NULL auto_increment,
+  `pluginclassname` varchar(255) NOT NULL default '',
+  `pluginpath` varchar(255) NOT NULL default '',
+  `pluginname` varchar(45) NOT NULL default '',
+  `plugindesc` varchar(45) NOT NULL default '',
+  `plugintype` enum('Standard','Administration','System') NOT NULL default 'Standard',
+  `enabled` enum('yes','no') NOT NULL default 'no',
+  `navigationpos` int(10) unsigned NOT NULL default '4294967295',
+  PRIMARY KEY  (`pluginid`)
+) TYPE=MyISAM;
+
+-- --------------------------------------------------------
+
+-- 
+-- Tabellenstruktur für Tabelle `plugins_activated`
+-- 
+
+DROP TABLE IF EXISTS `plugins_activated`;
+CREATE TABLE `plugins_activated` (
+  `pluginid` int(10) unsigned NOT NULL default '0',
+  `poiid` varchar(255) NOT NULL default '',
+  `state` enum('on','off') NOT NULL default 'on',
+  PRIMARY KEY  (`pluginid`,`poiid`)
+) TYPE=MyISAM;
+
+-- --------------------------------------------------------
+
+-- 
+-- Tabellenstruktur für Tabelle `plugins_default_activations`
+-- 
+
+DROP TABLE IF EXISTS `plugins_default_activations`;
+CREATE TABLE `plugins_default_activations` (
+  `pluginid` int(10) unsigned NOT NULL default '0',
+  `institutid` varchar(32) NOT NULL default '',
+  PRIMARY KEY  (`pluginid`,`institutid`)
+) TYPE=MyISAM COMMENT='default activations of standard plugins';
+
+-- --------------------------------------------------------
+
+-- 
+-- Tabellenstruktur für Tabelle `px_topics`
+-- 
 
 DROP TABLE IF EXISTS `px_topics`;
 CREATE TABLE `px_topics` (
@@ -798,11 +1002,11 @@ CREATE TABLE `px_topics` (
   KEY `user_id` (`user_id`,`Seminar_id`)
 ) TYPE=MyISAM PACK_KEYS=1;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `range_tree`
-#
+-- 
+-- Tabellenstruktur für Tabelle `range_tree`
+-- 
 
 DROP TABLE IF EXISTS `range_tree`;
 CREATE TABLE `range_tree` (
@@ -819,11 +1023,11 @@ CREATE TABLE `range_tree` (
   KEY `studip_object_id` (`studip_object_id`)
 ) TYPE=MyISAM;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `resources_assign`
-#
+-- 
+-- Tabellenstruktur für Tabelle `resources_assign`
+-- 
 
 DROP TABLE IF EXISTS `resources_assign`;
 CREATE TABLE `resources_assign` (
@@ -847,11 +1051,11 @@ CREATE TABLE `resources_assign` (
   KEY `assign_user_id` (`assign_user_id`)
 ) TYPE=MyISAM;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `resources_categories`
-#
+-- 
+-- Tabellenstruktur für Tabelle `resources_categories`
+-- 
 
 DROP TABLE IF EXISTS `resources_categories`;
 CREATE TABLE `resources_categories` (
@@ -865,11 +1069,11 @@ CREATE TABLE `resources_categories` (
   KEY `is_room` (`is_room`)
 ) TYPE=MyISAM;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `resources_categories_properties`
-#
+-- 
+-- Tabellenstruktur für Tabelle `resources_categories_properties`
+-- 
 
 DROP TABLE IF EXISTS `resources_categories_properties`;
 CREATE TABLE `resources_categories_properties` (
@@ -880,11 +1084,11 @@ CREATE TABLE `resources_categories_properties` (
   PRIMARY KEY  (`category_id`,`property_id`)
 ) TYPE=MyISAM;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `resources_locks`
-#
+-- 
+-- Tabellenstruktur für Tabelle `resources_locks`
+-- 
 
 DROP TABLE IF EXISTS `resources_locks`;
 CREATE TABLE `resources_locks` (
@@ -895,11 +1099,11 @@ CREATE TABLE `resources_locks` (
   PRIMARY KEY  (`lock_id`)
 ) TYPE=MyISAM;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `resources_objects`
-#
+-- 
+-- Tabellenstruktur für Tabelle `resources_objects`
+-- 
 
 DROP TABLE IF EXISTS `resources_objects`;
 CREATE TABLE `resources_objects` (
@@ -924,11 +1128,11 @@ CREATE TABLE `resources_objects` (
   KEY `owner_id` (`owner_id`)
 ) TYPE=MyISAM;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `resources_objects_properties`
-#
+-- 
+-- Tabellenstruktur für Tabelle `resources_objects_properties`
+-- 
 
 DROP TABLE IF EXISTS `resources_objects_properties`;
 CREATE TABLE `resources_objects_properties` (
@@ -939,11 +1143,11 @@ CREATE TABLE `resources_objects_properties` (
   KEY `property_id` (`property_id`)
 ) TYPE=MyISAM;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `resources_properties`
-#
+-- 
+-- Tabellenstruktur für Tabelle `resources_properties`
+-- 
 
 DROP TABLE IF EXISTS `resources_properties`;
 CREATE TABLE `resources_properties` (
@@ -956,11 +1160,11 @@ CREATE TABLE `resources_properties` (
   PRIMARY KEY  (`property_id`)
 ) TYPE=MyISAM;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `resources_requests`
-#
+-- 
+-- Tabellenstruktur für Tabelle `resources_requests`
+-- 
 
 DROP TABLE IF EXISTS `resources_requests`;
 CREATE TABLE `resources_requests` (
@@ -983,11 +1187,11 @@ CREATE TABLE `resources_requests` (
   KEY `closed` (`closed`)
 ) TYPE=MyISAM;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `resources_requests_properties`
-#
+-- 
+-- Tabellenstruktur für Tabelle `resources_requests_properties`
+-- 
 
 DROP TABLE IF EXISTS `resources_requests_properties`;
 CREATE TABLE `resources_requests_properties` (
@@ -999,11 +1203,11 @@ CREATE TABLE `resources_requests_properties` (
   PRIMARY KEY  (`request_id`,`property_id`)
 ) TYPE=MyISAM;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `resources_temporary_events`
-#
+-- 
+-- Tabellenstruktur für Tabelle `resources_temporary_events`
+-- 
 
 DROP TABLE IF EXISTS `resources_temporary_events`;
 CREATE TABLE `resources_temporary_events` (
@@ -1021,11 +1225,11 @@ CREATE TABLE `resources_temporary_events` (
   KEY `assign_object_id` (`assign_id`)
 ) TYPE=HEAP;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `resources_user_resources`
-#
+-- 
+-- Tabellenstruktur für Tabelle `resources_user_resources`
+-- 
 
 DROP TABLE IF EXISTS `resources_user_resources`;
 CREATE TABLE `resources_user_resources` (
@@ -1035,11 +1239,32 @@ CREATE TABLE `resources_user_resources` (
   PRIMARY KEY  (`user_id`,`resource_id`)
 ) TYPE=MyISAM;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `scm`
-#
+-- 
+-- Tabellenstruktur für Tabelle `rss_feeds`
+-- 
+
+DROP TABLE IF EXISTS `rss_feeds`;
+CREATE TABLE `rss_feeds` (
+  `feed_id` varchar(32) NOT NULL default '',
+  `user_id` varchar(32) NOT NULL default '',
+  `name` varchar(255) NOT NULL default '',
+  `url` text NOT NULL,
+  `mkdate` int(20) NOT NULL default '0',
+  `chdate` int(20) NOT NULL default '0',
+  `priority` int(11) NOT NULL default '0',
+  `hidden` tinyint(4) NOT NULL default '0',
+  `fetch_title` tinyint(3) unsigned NOT NULL default '0',
+  PRIMARY KEY  (`feed_id`),
+  KEY `user_id` (`user_id`)
+) TYPE=MyISAM;
+
+-- --------------------------------------------------------
+
+-- 
+-- Tabellenstruktur für Tabelle `scm`
+-- 
 
 DROP TABLE IF EXISTS `scm`;
 CREATE TABLE `scm` (
@@ -1055,11 +1280,11 @@ CREATE TABLE `scm` (
   KEY `chdate` (`chdate`)
 ) TYPE=MyISAM;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `sem_tree`
-#
+-- 
+-- Tabellenstruktur für Tabelle `sem_tree`
+-- 
 
 DROP TABLE IF EXISTS `sem_tree`;
 CREATE TABLE `sem_tree` (
@@ -1075,11 +1300,11 @@ CREATE TABLE `sem_tree` (
   KEY `studip_object_id` (`studip_object_id`)
 ) TYPE=MyISAM;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `semester_data`
-#
+-- 
+-- Tabellenstruktur für Tabelle `semester_data`
+-- 
 
 DROP TABLE IF EXISTS `semester_data`;
 CREATE TABLE `semester_data` (
@@ -1094,11 +1319,11 @@ CREATE TABLE `semester_data` (
   PRIMARY KEY  (`semester_id`)
 ) TYPE=MyISAM;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `semester_holiday`
-#
+-- 
+-- Tabellenstruktur für Tabelle `semester_holiday`
+-- 
 
 DROP TABLE IF EXISTS `semester_holiday`;
 CREATE TABLE `semester_holiday` (
@@ -1111,11 +1336,11 @@ CREATE TABLE `semester_holiday` (
   PRIMARY KEY  (`holiday_id`)
 ) TYPE=MyISAM;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `seminar_inst`
-#
+-- 
+-- Tabellenstruktur für Tabelle `seminar_inst`
+-- 
 
 DROP TABLE IF EXISTS `seminar_inst`;
 CREATE TABLE `seminar_inst` (
@@ -1125,11 +1350,11 @@ CREATE TABLE `seminar_inst` (
   KEY `institut_id` (`institut_id`)
 ) TYPE=MyISAM PACK_KEYS=1;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `seminar_lernmodul`
-#
+-- 
+-- Tabellenstruktur für Tabelle `seminar_lernmodul`
+-- 
 
 DROP TABLE IF EXISTS `seminar_lernmodul`;
 CREATE TABLE `seminar_lernmodul` (
@@ -1140,11 +1365,11 @@ CREATE TABLE `seminar_lernmodul` (
   PRIMARY KEY  (`seminar_id`,`co_id`)
 ) TYPE=MyISAM;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `seminar_sem_tree`
-#
+-- 
+-- Tabellenstruktur für Tabelle `seminar_sem_tree`
+-- 
 
 DROP TABLE IF EXISTS `seminar_sem_tree`;
 CREATE TABLE `seminar_sem_tree` (
@@ -1154,11 +1379,11 @@ CREATE TABLE `seminar_sem_tree` (
   KEY `sem_tree_id` (`sem_tree_id`)
 ) TYPE=MyISAM;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `seminar_user`
-#
+-- 
+-- Tabellenstruktur für Tabelle `seminar_user`
+-- 
 
 DROP TABLE IF EXISTS `seminar_user`;
 CREATE TABLE `seminar_user` (
@@ -1175,11 +1400,11 @@ CREATE TABLE `seminar_user` (
   KEY `user_id` (`user_id`,`status`)
 ) TYPE=MyISAM PACK_KEYS=1;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `seminare`
-#
+-- 
+-- Tabellenstruktur für Tabelle `seminare`
+-- 
 
 DROP TABLE IF EXISTS `seminare`;
 CREATE TABLE `seminare` (
@@ -1225,11 +1450,11 @@ CREATE TABLE `seminare` (
   KEY `status` (`status`,`Seminar_id`)
 ) TYPE=MyISAM PACK_KEYS=1;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `session_data`
-#
+-- 
+-- Tabellenstruktur für Tabelle `session_data`
+-- 
 
 DROP TABLE IF EXISTS `session_data`;
 CREATE TABLE `session_data` (
@@ -1240,11 +1465,11 @@ CREATE TABLE `session_data` (
   KEY `changed` (`changed`)
 ) TYPE=MyISAM;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `smiley`
-#
+-- 
+-- Tabellenstruktur für Tabelle `smiley`
+-- 
 
 DROP TABLE IF EXISTS `smiley`;
 CREATE TABLE `smiley` (
@@ -1263,11 +1488,11 @@ CREATE TABLE `smiley` (
   KEY `short` (`short_name`)
 ) TYPE=MyISAM;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `statusgruppe_user`
-#
+-- 
+-- Tabellenstruktur für Tabelle `statusgruppe_user`
+-- 
 
 DROP TABLE IF EXISTS `statusgruppe_user`;
 CREATE TABLE `statusgruppe_user` (
@@ -1278,11 +1503,11 @@ CREATE TABLE `statusgruppe_user` (
   KEY `user_id` (`user_id`)
 ) TYPE=MyISAM;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `statusgruppen`
-#
+-- 
+-- Tabellenstruktur für Tabelle `statusgruppen`
+-- 
 
 DROP TABLE IF EXISTS `statusgruppen`;
 CREATE TABLE `statusgruppen` (
@@ -1299,11 +1524,11 @@ CREATE TABLE `statusgruppen` (
   KEY `position` (`position`)
 ) TYPE=MyISAM;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `studiengaenge`
-#
+-- 
+-- Tabellenstruktur für Tabelle `studiengaenge`
+-- 
 
 DROP TABLE IF EXISTS `studiengaenge`;
 CREATE TABLE `studiengaenge` (
@@ -1315,11 +1540,11 @@ CREATE TABLE `studiengaenge` (
   PRIMARY KEY  (`studiengang_id`)
 ) TYPE=MyISAM;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `studip_ilias`
-#
+-- 
+-- Tabellenstruktur für Tabelle `studip_ilias`
+-- 
 
 DROP TABLE IF EXISTS `studip_ilias`;
 CREATE TABLE `studip_ilias` (
@@ -1330,11 +1555,11 @@ CREATE TABLE `studip_ilias` (
   KEY `is_created` (`is_created`)
 ) TYPE=MyISAM;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `support_contract`
-#
+-- 
+-- Tabellenstruktur für Tabelle `support_contract`
+-- 
 
 DROP TABLE IF EXISTS `support_contract`;
 CREATE TABLE `support_contract` (
@@ -1350,11 +1575,11 @@ CREATE TABLE `support_contract` (
   KEY `contract_id` (`contract_id`,`institut_id`,`range_id`)
 ) TYPE=MyISAM;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `support_event`
-#
+-- 
+-- Tabellenstruktur für Tabelle `support_event`
+-- 
 
 DROP TABLE IF EXISTS `support_event`;
 CREATE TABLE `support_event` (
@@ -1370,11 +1595,11 @@ CREATE TABLE `support_event` (
   KEY `event_id` (`event_id`,`user_id`,`mkdate`,`request_id`)
 ) TYPE=MyISAM;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `support_request`
-#
+-- 
+-- Tabellenstruktur für Tabelle `support_request`
+-- 
 
 DROP TABLE IF EXISTS `support_request`;
 CREATE TABLE `support_request` (
@@ -1391,11 +1616,11 @@ CREATE TABLE `support_request` (
   KEY `contract_id` (`contract_id`,`topic_id`,`user_id`)
 ) TYPE=MyISAM;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `termine`
-#
+-- 
+-- Tabellenstruktur für Tabelle `termine`
+-- 
 
 DROP TABLE IF EXISTS `termine`;
 CREATE TABLE `termine` (
@@ -1416,11 +1641,11 @@ CREATE TABLE `termine` (
   KEY `range_id` (`range_id`,`topic_id`)
 ) TYPE=MyISAM PACK_KEYS=1;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `user_config`
-#
+-- 
+-- Tabellenstruktur für Tabelle `user_config`
+-- 
 
 DROP TABLE IF EXISTS `user_config`;
 CREATE TABLE `user_config` (
@@ -1436,11 +1661,11 @@ CREATE TABLE `user_config` (
   KEY `user_id` (`user_id`,`field`,`value`(5))
 ) TYPE=MyISAM;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `user_data`
-#
+-- 
+-- Tabellenstruktur für Tabelle `user_data`
+-- 
 
 DROP TABLE IF EXISTS `user_data`;
 CREATE TABLE `user_data` (
@@ -1451,11 +1676,11 @@ CREATE TABLE `user_data` (
   KEY `changed` (`changed`)
 ) TYPE=MyISAM;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `user_info`
-#
+-- 
+-- Tabellenstruktur für Tabelle `user_info`
+-- 
 
 DROP TABLE IF EXISTS `user_info`;
 CREATE TABLE `user_info` (
@@ -1466,6 +1691,7 @@ CREATE TABLE `user_info` (
   `schwerp` text NOT NULL,
   `Home` varchar(200) NOT NULL default '',
   `privatnr` varchar(32) NOT NULL default '',
+  `privatcell` varchar(32) NOT NULL default '',
   `privadr` varchar(64) NOT NULL default '',
   `score` bigint(20) NOT NULL default '0',
   `geschlecht` tinyint(4) NOT NULL default '0',
@@ -1480,17 +1706,16 @@ CREATE TABLE `user_info` (
   `email_forward` tinyint(4) NOT NULL default '0',
   `smiley_favorite` varchar(255) NOT NULL default '',
   `smiley_favorite_publish` tinyint(1) NOT NULL default '0',
-  `news_author_id` varchar(32) NOT NULL default '',
   PRIMARY KEY  (`user_id`),
   KEY `score` (`score`),
-  KEY `news_author_id` (`news_author_id`)
+  KEY `guestbook` (`guestbook`,`user_id`)
 ) TYPE=MyISAM PACK_KEYS=1;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `user_inst`
-#
+-- 
+-- Tabellenstruktur für Tabelle `user_inst`
+-- 
 
 DROP TABLE IF EXISTS `user_inst`;
 CREATE TABLE `user_inst` (
@@ -1509,11 +1734,11 @@ CREATE TABLE `user_inst` (
   KEY `user_id` (`user_id`,`inst_perms`)
 ) TYPE=MyISAM PACK_KEYS=1;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `user_studiengang`
-#
+-- 
+-- Tabellenstruktur für Tabelle `user_studiengang`
+-- 
 
 DROP TABLE IF EXISTS `user_studiengang`;
 CREATE TABLE `user_studiengang` (
@@ -1522,11 +1747,11 @@ CREATE TABLE `user_studiengang` (
   PRIMARY KEY  (`user_id`,`studiengang_id`)
 ) TYPE=MyISAM;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `vote`
-#
+-- 
+-- Tabellenstruktur für Tabelle `vote`
+-- 
 
 DROP TABLE IF EXISTS `vote`;
 CREATE TABLE `vote` (
@@ -1558,11 +1783,11 @@ CREATE TABLE `vote` (
   KEY `author_id` (`author_id`)
 ) TYPE=MyISAM PACK_KEYS=1;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `vote_user`
-#
+-- 
+-- Tabellenstruktur für Tabelle `vote_user`
+-- 
 
 DROP TABLE IF EXISTS `vote_user`;
 CREATE TABLE `vote_user` (
@@ -1573,11 +1798,11 @@ CREATE TABLE `vote_user` (
   KEY `user_id` (`user_id`)
 ) TYPE=MyISAM PACK_KEYS=1;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `voteanswers`
-#
+-- 
+-- Tabellenstruktur für Tabelle `voteanswers`
+-- 
 
 DROP TABLE IF EXISTS `voteanswers`;
 CREATE TABLE `voteanswers` (
@@ -1592,11 +1817,11 @@ CREATE TABLE `voteanswers` (
   KEY `position` (`position`)
 ) TYPE=MyISAM PACK_KEYS=1;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `voteanswers_user`
-#
+-- 
+-- Tabellenstruktur für Tabelle `voteanswers_user`
+-- 
 
 DROP TABLE IF EXISTS `voteanswers_user`;
 CREATE TABLE `voteanswers_user` (
@@ -1607,11 +1832,11 @@ CREATE TABLE `voteanswers_user` (
   KEY `user_id` (`user_id`)
 ) TYPE=MyISAM PACK_KEYS=1;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `wap_sessions`
-#
+-- 
+-- Tabellenstruktur für Tabelle `wap_sessions`
+-- 
 
 DROP TABLE IF EXISTS `wap_sessions`;
 CREATE TABLE `wap_sessions` (
@@ -1621,11 +1846,11 @@ CREATE TABLE `wap_sessions` (
   PRIMARY KEY  (`session_id`)
 ) TYPE=MyISAM;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `wiki`
-#
+-- 
+-- Tabellenstruktur für Tabelle `wiki`
+-- 
 
 DROP TABLE IF EXISTS `wiki`;
 CREATE TABLE `wiki` (
@@ -1640,11 +1865,11 @@ CREATE TABLE `wiki` (
   KEY `chdate` (`chdate`)
 ) TYPE=MyISAM;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `wiki_links`
-#
+-- 
+-- Tabellenstruktur für Tabelle `wiki_links`
+-- 
 
 DROP TABLE IF EXISTS `wiki_links`;
 CREATE TABLE `wiki_links` (
@@ -1654,11 +1879,11 @@ CREATE TABLE `wiki_links` (
   PRIMARY KEY  (`range_id`,`to_keyword`,`from_keyword`)
 ) TYPE=MyISAM;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Tabellenstruktur für Tabelle `wiki_locks`
-#
+-- 
+-- Tabellenstruktur für Tabelle `wiki_locks`
+-- 
 
 DROP TABLE IF EXISTS `wiki_locks`;
 CREATE TABLE `wiki_locks` (
@@ -1670,3 +1895,4 @@ CREATE TABLE `wiki_locks` (
   KEY `user_id` (`user_id`),
   KEY `chdate` (`chdate`)
 ) TYPE=MyISAM;
+
