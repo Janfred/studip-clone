@@ -136,9 +136,10 @@ $SYMBOL_PATH = "pictures/symbol";						//symbols
 $TMP_PATH ="/tmp";										//the system temp path
 
 //paths to the command line tools, used in Stud.IP
+$ZIP_USE_INTERNAL = false;								//set to true, if command-line zip/unzip is not available
 $ZIP_PATH = "/usr/bin/zip";								//zip tool
-$ZIP_OPTIONS = "";										//command line options for zip, e.g. when using SuSE try "-K" to correct long filenames for windows
-$UNZIP_PATH = "/usr/bin/unzip";							//unzip tool
+$ZIP_OPTIONS = "-K";									//command line options for zip, e.g. when using SuSE try "-K" to correct long filenames for windows
+$UNZIP_PATH = "/usr/bin/unzip";
 
 //latexrender settings
 $TEXCACHE_PATH = "pictures/tex";
@@ -341,6 +342,7 @@ $STUDIP_AUTH_CONFIG_LDAPREADER = array(		"host" => "localhost",
 										"base_dn" => "dc=studip,dc=de",
 										"protocol_version" => 3,
 										"start_tls" => false,
+										"bad_char_regex" => '/[^0-9_a-zA-Z]/',
 										"username_attribute" => "uid",
 										"user_password_attribute" => "userpassword",
 										"reader_dn" => "uid=reader,dc=studip,dc=de",
@@ -354,6 +356,7 @@ $STUDIP_AUTH_CONFIG_LDAP = array(		"host" => "localhost",
 										"base_dn" => "dc=data-quest,dc=de",
 										"protocol_version" => 3,
 										"start_tls" => false,
+										"bad_char_regex" => '/[^0-9_a-zA-Z]/',
 										"username_attribute" => "uid",
 										"anonymous_bind" => true,
 										"error_head" =>	"LDAP plugin",
@@ -445,7 +448,6 @@ $UNI_NAME=htmlentities($UNI_NAME_CLEAN, ENT_QUOTES);
 
 
 require_once $ABSOLUTE_PATH_STUDIP . "/phplib_local.inc.php";
-
 
 //$Id$
 ?>
