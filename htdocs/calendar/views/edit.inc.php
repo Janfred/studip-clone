@@ -134,7 +134,7 @@ if (!$set_recur_x) {
 	
 	echo "</select>";
 	echo ($err["start_time"] ? $error_sign : "");
-	echo "&nbsp; &nbsp; <input type=\"checkbox\" name=\"wholeday\"";
+	echo "&nbsp; &nbsp; <input type=\"checkbox\" name=\"wholeday\" value=\"1\"";
 	echo ($wholeday ? ' checked="checked"' : '') . "$disabled> &nbsp;";
 	echo _("ganzt&auml;gig");
 	$info = _("Als ganztägig markierte Termine beginnen um 00:00 Uhr am angegebenen Starttag und enden um 23.59 am angegeben Endtag.");
