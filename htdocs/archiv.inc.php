@@ -315,13 +315,13 @@ function dump_sem($sem_id) {
 	if ($Modules["documents"]) {
 		$i=0;
 	
-		$db->query("SELECT dokument_id, dokumente.description, filename, dokumente.mkdate, filesize, dokumente.user_id, username, Nachname, dokumente.url  FROM dokumente LEFT JOIN auth_user_md5 ON auth_user_md5.user_id = dokumente.user_id WHERE seminar_id = '$sem_id'");
+		$db->query("SELECT dokument_id, dokumente.description, dokumente.name , filename, dokumente.mkdate, filesize, dokumente.user_id, username, Nachname, dokumente.url  FROM dokumente LEFT JOIN auth_user_md5 ON auth_user_md5.user_id = dokumente.user_id WHERE seminar_id = '$sem_id'");
 		while($db->next_record()){
 			if ($db->f("url")!="")
 				$linktxt = _("Hinweis: Diese Datei wurde nicht archiviert, da sie lediglich verlinkt wurde.");
 			else
 				$linktxt = "";	
-			$dbresult[$i]=array("mkdate"=>$db->f("mkdate"), "dokument_id"=>$db->f("dokument_id"), "description"=>$linktxt.$db->f("description"), "filename"=>$db->f("filename"), "filesize"=>$db->f("filesize"),"user_id"=> $db->f("user_id"), "username"=>$db->f("username"), "nachname"=>$db->f("Nachname"));
+			$dbresult[$i]=array("mkdate"=>$db->f("mkdate"), "dokument_id"=>$db->f("dokument_id"), "description"=>$linktxt.$db->f("description"),"name" => $db->f("name"), "filename"=>$db->f("filename"), "filesize"=>$db->f("filesize"),"user_id"=> $db->f("user_id"), "username"=>$db->f("username"), "nachname"=>$db->f("Nachname"));
 			$i++;
 		}
 			
@@ -339,8 +339,8 @@ function dump_sem($sem_id) {
 				$sizetmp = $dbresult[$i]["filesize"];
 				$sizetmp = ROUND($sizetmp / 1024);
 				$size = "(".$sizetmp." KB)";
-	
-     				$dump.="<tr><td width='100%'><b>".htmlReady($dbresult[$i]["filename"])."</b><br>".htmlReady($dbresult[$i]["description"])."&nbsp;".$size."</td><td>".
+				$name = ($dbresult[$i]['name'] && $dbresult[$i]['name'] != $dbresult[$i]['filename'] ? $dbresult[$i]['name'] . ' ('.$dbresult[$i]['filename'].')' : $dbresult[$i]["filename"]);
+     			$dump.="<tr><td width='100%'><b>".htmlReady($name)."</b><br>".htmlReady($dbresult[$i]["description"])."&nbsp;".$size."</td><td>".
 					htmlReady($dbresult[$i]["nachname"]) . "&nbsp;</td><td>&nbsp;".date("d.m.Y", $dbresult[$i]["mkdate"])."</td></tr>\n";
 			}
 			$dump.="</table>\n";
