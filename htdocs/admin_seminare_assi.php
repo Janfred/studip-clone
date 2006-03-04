@@ -129,7 +129,7 @@ if (isset($cmd) && ($cmd == 'do_copy') && $perm->have_studip_perm('tutor',$cp_id
 	$sem_create_data["turnus_count"] = count($term_turnus);
 	$sem_create_data["term_art"] = $data["art"];
 
-	if (($data['art'] == 1) { //unregelmaessige Veranstaltung oder Block -> Termine kopieren
+	if ($data['art'] == 1) { //unregelmaessige Veranstaltung oder Block -> Termine kopieren
 		// Sitzungen
 		$db2->query('SELECT * FROM termine WHERE range_id="'. $cp_id . '" AND date_typ="1" ORDER by date');
 		$db2_term_count = 0;
