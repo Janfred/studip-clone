@@ -119,10 +119,6 @@ if (isset($cmd) && ($cmd == 'do_copy') && $perm->have_studip_perm('tutor',$cp_id
 	$db->query($sql);
 	$db->next_record();
 
-	// Keine Vorbesprechungstermine kopieren
-	$sem_create_data["sem_vor_end_termin"] = -1;
-	$sem_create_data["sem_vor_termin"] = -1;
-
 	// Termine
 	$serialized_metadata = $db->f("metadata_dates");
 	$data = unserialize($serialized_metadata);
@@ -133,6 +129,42 @@ if (isset($cmd) && ($cmd == 'do_copy') && $perm->have_studip_perm('tutor',$cp_id
 	$sem_create_data["turnus_count"] = count($term_turnus);
 	$sem_create_data["term_art"] = $data["art"];
 
+	if (($data['art'] == 1) { //unregelmaessige Veranstaltung oder Block -> Termine kopieren
+		// Sitzungen
+		$db2->query('SELECT * FROM termine WHERE range_id="'. $cp_id . '" AND date_typ="1" ORDER by date');
+		$db2_term_count = 0;
+		while ($db2->next_record()) {
+			$db2_start_date = $db2->f('date');
+			$db2_end_date = $db2->f('end_time');
+			$db2_raum = $db2->f('raum');
+			$sem_create_data['term_tag'][$db2_term_count] = intval(date('j', $db2_start_date));
+			$sem_create_data['term_monat'][$db2_term_count] = intval(date('n', $db2_start_date));
+			$sem_create_data['term_jahr'][$db2_term_count] = intval(date('Y', $db2_start_date));
+			$sem_create_data['term_start_stunde'][$db2_term_count] = intval(date('G', $db2_start_date));
+			$sem_create_data['term_start_minute'][$db2_term_count] = intval(date('i', $db2_start_date));
+			$sem_create_data['term_end_stunde'][$db2_term_count] = intval(date('G', $db2_end_date));
+			$sem_create_data['term_end_minute'][$db2_term_count] = intval(date('i', $db2_end_date));
+			$sem_create_data['term_room'][$db2_term_count] = ($db2_raum)? $db2_raum : '';
+			$db2_term_count++;
+		}
+		$sem_create_data['term_count'] = $db2_term_count;
+		// Vorbesprechung
+//		$db2->query('SELECT * FROM termine WHERE range_id="' . $cp_id. '" AND date_typ="2" ORDER by date');
+//		if ($db2->next_record()) {
+//			$sem_create_data['sem_vor_termin'] = $db2->f('date');
+//			$sem_create_data['sem_vor_end_termin']  = $db2->f('end_time');
+//			if ($db2->f('raum'))
+//				$sem_create_data['sem_vor_raum'] = $db2->f('raum');
+//		} else {
+			$sem_create_data['sem_vor_end_termin'] = -1;
+			$sem_create_data['sem_vor_termin'] = -1;
+//		}
+	} else {
+		// Keine Vorbesprechungstermine kopieren
+		$sem_create_data['sem_vor_end_termin'] = -1;
+		$sem_create_data['sem_vor_termin'] = -1;
+	}
+	
 	for ($i=0;$i<$sem_create_data["turnus_count"];$i++) {
 		$sem_create_data["term_turnus_start_stunde"][$i] = $term_turnus[$i]["start_stunde"];
 		$sem_create_data["term_turnus_start_minute"][$i] = $term_turnus[$i]["start_minute"];
