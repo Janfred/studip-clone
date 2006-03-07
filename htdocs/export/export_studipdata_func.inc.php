@@ -436,29 +436,33 @@ function export_teilis($inst_id, $ex_sem_id = "no")
 				LEFT JOIN user_info USING(user_id) 
 				LEFT JOIN auth_user_md5 USING(user_id) 
 				WHERE seminar_id = '$ex_sem_id' AND seminar_user.status = '" . $key1 . "'  ORDER BY Nachname");
+		$data_object_tmp = '';
+		$object_counter_tmp = $object_counter;
 		if ($db->num_rows())
-		{
-			$data_object .= xml_open_tag($xml_groupnames_person["subgroup1"], $val1);
-			while ($db->next_record()) 
+		{ 
+			$data_object_tmp .= xml_open_tag($xml_groupnames_person["subgroup1"], $val1);
+			while ($db->next_record()) {
 				if (($key1 != "no") OR ($person_out[$db->f("user_id")] != true)) // Nur Personen ausgeben, die entweder einer Gruppe angehoeren oder zur Veranstaltung gehoeren und noch nicht ausgegeben wurden.
 				{
 					$object_counter++;
-					$data_object .= xml_open_tag($xml_groupnames_person["object"], $db->f("username"));
+					$data_object_tmp .= xml_open_tag($xml_groupnames_person["object"], $db->f("username"));
 					while ( list($key, $val) = each($xml_names_person))
 					{
 						if ($val == "") $val = $key;
 						if (($key == "admission_studiengang_id") AND ($db->f($key) != ""))
-							$data_object .= xml_tag($val, $studiengang[$db->f($key)]);
+							$data_object_tmp .= xml_tag($val, $studiengang[$db->f($key)]);
 						elseif ($db->f($key) != "") 
-							$data_object .= xml_tag($val, $db->f($key));
+							$data_object_tmp .= xml_tag($val, $db->f($key));
 					}
 				// freie Datenfelder ausgeben
-					$data_object .= export_datafields($db->f("user_id"), $xml_groupnames_person["childgroup1"], $xml_groupnames_person["childobject1"]);
-					$data_object .= xml_close_tag( $xml_groupnames_person["object"] );
+					$data_object_tmp .= export_datafields($db->f("user_id"), $xml_groupnames_person["childgroup1"], $xml_groupnames_person["childobject1"]);
+					$data_object_tmp .= xml_close_tag( $xml_groupnames_person["object"] );
 					reset($xml_names_person);
 					$person_out[$db->f("user_id")] = true;
 				}
-			$data_object .= xml_close_tag($xml_groupnames_person["subgroup1"]);
+			}
+			$data_object_tmp .= xml_close_tag($xml_groupnames_person["subgroup1"]);
+			if ($object_counter_tmp != $object_counter) $data_object .= $data_object_tmp;
 		}	
 	}
 
