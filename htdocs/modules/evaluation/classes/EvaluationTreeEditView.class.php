@@ -160,13 +160,6 @@ var $itemID;
 var $evalID;
 
 /**
- * Holds the item to be moved
- * @access   private
- * @var      integer $itemID
- */
-var $itemID;
-
-/**
  * The itemID instance
  * @access   private
  * @var      string  $itemInstance
@@ -1202,7 +1195,6 @@ function getSelf ( $param = "", $with_start_item = true ){
 * @access  private
 */
 function parseCommand(){
-	global $_REQUEST;
 
 	if ($_REQUEST['cmd']){
 		# extract the command from Request (array) =========================== #
@@ -1249,7 +1241,7 @@ function parseCommand(){
  * @return   boolean  true (reinits the tree)
  */
 function execCommandCancel(){
-	global $_REQUEST;
+	
 
 	$itemID = $_REQUEST['startItemID'];
 
@@ -1267,7 +1259,7 @@ function execCommandCancel(){
 * @return  boolean  true (reinits the tree)
 */
 function execCommandUpdateItem ( $no_delete = false ){
-	global $_REQUEST;
+	
 	
 	$mode = $this->getInstance($this->itemID);
 
@@ -1296,7 +1288,7 @@ function execCommandUpdateItem ( $no_delete = false ){
 		break;
 	 case ARRANGMENT_BLOCK:
 
-		$group = &$this->tree->getGroupObject($this->itemID);
+		$group = &$this->tree->getGroupObject($this->itemID, true);
 
 		$group->setTitle($title, QUOTED);
 		$group->setText($text, QUOTED);
@@ -1306,20 +1298,21 @@ function execCommandUpdateItem ( $no_delete = false ){
 				_("Fehler beim Einlesen (Block)"));
 		$this->msg[$this->itemID] = "msg§"
 			. _("Veränderungen wurden gespeichert.");
+		$group = null;
 		break;
 	 case QUESTION_BLOCK:
 
-		$group = &$this->tree->getGroupObject($this->itemID);
+		$group = &$this->tree->getGroupObject($this->itemID, true );
 		$group->setTitle($title, QUOTED);
 		$group->setText($text, QUOTED);
 		$group->setMandatory($_REQUEST['mandatory']);
 		$group->save();
-
+		
 		// update the questions
 		$msg = $this->execCommandUpdateQuestions();
 		
 		$no_answers = 0;
-		$group = &$this->tree->getGroupObject($this->itemID);
+		$group = &$this->tree->getGroupObject($this->itemID, true);
 		// info about missing answers
 		if ($group->getChildren() && $group->getTemplateID() == NULL){
 			foreach ($group->getChildren() as $question){
@@ -1373,7 +1366,7 @@ function execCommandUpdateItem ( $no_delete = false ){
 * @return    boolean  false
  */
 function execCommandAssertDeleteItem(){
-	global $_REQUEST;
+	
 
 	$group = &$this->tree->getGroupObject($this->itemID);
 	if ($group->getChildType() == "EvaluationQuestion")
@@ -1437,7 +1430,6 @@ function execCommandAssertDeleteItem(){
  * @return   boolean  true (reinits the tree)
  */
 function execCommandDeleteItem(){
-	global $_REQUEST;
 
 	$title = $this->tree->tree_data[$this->itemID]['name'];
 	$parentID = $this->tree->tree_data[$this->itemID]['parent_id'];
@@ -1455,13 +1447,13 @@ function execCommandDeleteItem(){
 			_("Fehler beim Löschen eines Block."));
 
 	if ($group->getChildType() == "EvaluationQuestion"){
-		if ($number_of_kids){
+		if ($numberofchildren){
 			$this->msg[$parentID] = "msg§" . sprintf(_("Der Fragenblock <b>%s</b> und alle darin enthaltenen Fragen (insgesamt %s) wurden gel&ouml;scht. "),$title,$numberofchildren);
 		} else {
 			$this->msg[$parentID] = "msg§" . sprintf(_("Der Fragenblock <b>%s</b> wurden gel&ouml;scht. "), $title);	
 		}
 	} else {
-		if ($number_of_kids){
+		if ($numberofchildren){
 			$this->msg[$parentID] = "msg§" . sprintf(_("Der Gruppierungsblock <b>%s</b> und alle Unterblöcke (insgesamt %s) wurden gel&ouml;scht. "),$title,$numberofchildren);
 		} else {
 			$this->msg[$parentID] = "msg§" . sprintf(_("Der Gruppierungsblock <b>%s</b> wurden gel&ouml;scht. "), $title);	
@@ -1483,7 +1475,7 @@ function execCommandDeleteItem(){
  * @return   boolean  true (reinits the tree)
  */
 function execCommandAddGroup(){
-	global $_REQUEST;
+	
 
 	$group = &new EvaluationGroup();
 	$group->setTitle( NEW_ARRANGMENT_BLOCK_TITLE , QUOTED);
@@ -1523,7 +1515,7 @@ function execCommandAddGroup(){
  * @return   boolean  true (reinits the tree)
  */
 function execCommandAddQGroup(){
-	global $_REQUEST;
+	
 
 	$group = &new EvaluationGroup();
 	$group->setTitle( NEW_QUESTION_BLOCK_BLOCK_TITLE , QUOTED);
@@ -1589,7 +1581,7 @@ function execCommandAddQGroup(){
  * @return   boolean  true (reinits the tree)
  */
 function execCommandChangeTemplate(){
-	global $_REQUEST;
+	
 	
 	$this->execCommandUpdateItem();
 	
@@ -1625,10 +1617,10 @@ function execCommandChangeTemplate(){
  * @return  string   the udpatemessage
  */
 function execCommandUpdateQuestions ( $no_delete = false ){
-	global $_REQUEST;
 
 	$questions = $_REQUEST['questions'];
-	
+	$deleteQuestions = $_REQUEST['DeleteQuestions'];
+
 	// remove any empty questions
 	$deletecount = 0;
 
@@ -1641,21 +1633,23 @@ function execCommandUpdateQuestions ( $no_delete = false ){
 		
 	for( $i=0; $i<count($questions); $i++ ) {
 
-	    $question = &new EvaluationQuestion($questions[$i]['questionID'], NULL,
+	    if (!isset($deleteQuestions[$i])){
+			$question = &new EvaluationQuestion($questions[$i]['questionID'], NULL,
 			EVAL_LOAD_FIRST_CHILDREN);
-		
-		// remove any empty questions
-		if( (empty( $questions[$i]['text'] )) && $delete_empty_questions ) {
-
-			$question->delete();
-			$deletecount++;
 			
-		// upadate the questiontext to the db
-	    } else { 
-		
-			$question->setText($questions[$i]['text'], QUOTED);
-			$question->save();
-		} 
+			// remove any empty questions
+			if( (empty( $questions[$i]['text'] )) && $delete_empty_questions ) {
+				
+				$question->delete();
+				$deletecount++;
+				
+				// upadate the questiontext to the db
+			} else { 
+				
+				$question->setText($questions[$i]['text'], QUOTED);
+				$question->save();
+			} 
+		}
 	}
 	$msg = NULL;
 	if ($deletecount == 1)
@@ -1673,7 +1667,6 @@ function execCommandUpdateQuestions ( $no_delete = false ){
  * @return   boolean  true (reinits the tree)
  */
 function execCommandAddQuestions(){
-	global $_REQUEST;
 	
 	$addquestions = $_REQUEST['newQuestionFields'];
 	
@@ -1710,7 +1703,6 @@ function execCommandAddQuestions(){
  * @return   boolean  true (reinits the tree)
  */
 function execCommandDeleteQuestions(){
-	global $_REQUEST;
 
 	$questions = $_REQUEST['questions'];
 	$deleteQuestions = $_REQUEST['DeleteQuestions'];
@@ -1730,7 +1722,7 @@ function execCommandDeleteQuestions(){
 	
 	if ($deletecount == "1")
 		$this->msg[$this->itemID] = "msg§"
-			. _("Es wurden eine Frage gelöscht.");
+			. _("Es wurde eine Frage gelöscht.");
 	elseif ($deletecount > 1)
 		$this->msg[$this->itemID] = "msg§"
 			. sprintf(_("Es wurden %s Fragen gelöscht."),$deletecount);
@@ -1750,7 +1742,6 @@ function execCommandDeleteQuestions(){
  * @return   boolean  true (reinits the tree)
  */
 function execCommandQuestionAnswersCreate(){
-	global $_REQUEST;
 	
 	$this->execCommandUpdateItem();
 		
@@ -1781,7 +1772,6 @@ function execCommandQuestionAnswersCreate(){
  * @return   boolean  false
  */
 function execCommandQuestionAnswersCreated(){
-	global $_REQUEST;
 
 	$id = $this->itemID;
 	
@@ -1803,7 +1793,6 @@ function execCommandQuestionAnswersCreated(){
  * @return   boolean  true (reinits the tree)
  */
 function execCommandMoveQuestionUp(){
-	global $_REQUEST;
 
 	$this->execCommandUpdateItem();
 
@@ -1836,7 +1825,6 @@ function execCommandMoveQuestionUp(){
  * @return   boolean  true (reinits the tree)
  */
 function execCommandMoveQuestionDown(){
-	global $_REQUEST;
 
 	$this->execCommandUpdateItem();
 
@@ -1870,7 +1858,6 @@ function execCommandMoveQuestionDown(){
  * @return   boolean  true (reinits the tree)
  */
 function execCommandMove(){
-	global $_REQUEST;
 	
 	$direction = $_REQUEST['direction'];
 
@@ -1912,7 +1899,7 @@ function execCommandMove(){
  * @return   boolean  true (reinits the tree)
  */
 function execCommandMoveGroup(){
-	global $_REQUEST;
+	
 	
 	$moveGroupeID = $_REQUEST['moveGroupeID'];
 	
