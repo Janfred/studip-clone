@@ -287,7 +287,7 @@ function GetMyScore() {
 	$db->query("SELECT count(kategorie_id) as katcount FROM kategorien WHERE range_id = '$user_id' AND hidden = 0 ");
 	$db->next_record();
 	$katcount = $db->f("katcount");
-
+	if ($katcount > 50) $katcount = 50;
 	$db->query("SELECT mkdate FROM user_info WHERE user_id = '$user_id' ");
 	$db->next_record();
 	$age = $db->f("mkdate");
