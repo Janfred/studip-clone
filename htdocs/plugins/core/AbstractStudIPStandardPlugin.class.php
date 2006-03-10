@@ -189,5 +189,13 @@ class AbstractStudIPStandardPlugin extends AbstractStudIPPlugin{
 			StudIPTemplateEngine::endInfoBoxTableCell();			
 		}
     }
+    
+    /**
+     * returns the score which the current user get's for activities in this plugin
+     *
+     */
+    function getScore(){
+    	return 0;
+    }
 }
 ?>
