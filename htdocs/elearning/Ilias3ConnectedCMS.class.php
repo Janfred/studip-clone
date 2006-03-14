@@ -267,8 +267,8 @@ class Ilias3ConnectedCMS extends ConnectedCMS
 						if (in_array(OPERATION_WRITE, $user_modules[$object_data["obj_id"]]["operations"]))
 							continue;
 					$user_modules[$object_data["obj_id"]] = $object_data;
-					$user_modules[$object_data["obj_id"]]["title"] = stripslashes(utf8_decode($object_data["title"]));
-					$user_modules[$object_data["obj_id"]]["description"] = stripslashes(utf8_decode($object_data["description"]));
+					//$user_modules[$object_data["obj_id"]]["title"] = stripslashes(utf8_decode($object_data["title"]));
+					//$user_modules[$object_data["obj_id"]]["description"] = stripslashes(utf8_decode($object_data["description"]));
 					$obj_ids[] = $result[$key]["obj_id"];
 				}
 		return $user_modules;
@@ -293,12 +293,14 @@ class Ilias3ConnectedCMS extends ConnectedCMS
 		}
 		
 		$result = $this->soap_client->searchObjects($types, $key,"and", $connected_cms[$this->cms_type]->user->getId());
+		/*
 		if (is_array($result))
 			foreach($result as $key => $object_data)
 			{
 				$result[$key]["title"] = stripslashes(utf8_decode($result[$key]["title"]));
 				$result[$key]["description"] = stripslashes(utf8_decode($result[$key]["description"]));
 			}
+		*/
 		return $result;
 	}
 	

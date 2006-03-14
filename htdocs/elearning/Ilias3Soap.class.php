@@ -197,7 +197,23 @@ class Ilias3Soap extends StudipSoapClient
 	{
 		$xml_parser = new Ilias3ObjectXMLParser( utf8_encode($data) );
 		$xml_parser->startParsing();
-		return $xml_parser->getObjectData();
+		return $this->utf8_decode_array_values($xml_parser->getObjectData());
+	}
+	
+	function utf8_decode_array_values($ar){
+		if (is_array($ar)){
+			$decoded = array();
+			foreach($ar as $key => $value){
+				if (!is_array($value)){
+					$decoded[$key] = utf8_decode($value);
+				} else {
+					$decoded[$key] = $this->utf8_decode_array_values($value);
+				}
+			}
+			return $decoded;
+		} else {
+			return null;
+		}
 	}
 	
 	/**
@@ -316,6 +332,7 @@ class Ilias3Soap extends StudipSoapClient
 		$result = $this->call('getObjectByReference', $param);
 		if ($result != false)
 		{
+					
 			$objects = $this->parseXML($result);
 			foreach($objects as $count => $object_data)
 				if (is_array($object_data["references"]))
@@ -499,6 +516,7 @@ class Ilias3Soap extends StudipSoapClient
 		$result = $this->call('getTreeChilds', $param);
 		if ($result != false)
 		{
+			
 			$objects = $this->parseXML($result);
 			foreach($objects as $count => $object_data)
 				if (is_array($object_data["references"]))
@@ -810,9 +828,11 @@ class Ilias3Soap extends StudipSoapClient
 		    'user_id'         => $user_id,
 		    );
 		$result = $this->call('getUser', $param); // returns user-data-array
+		/*
 		if (is_array($result))	
 			foreach($result as $key => $value)
 				$result[$key] = utf8_decode($result[$key]);
+		*/
 		return $result;
 	}
 

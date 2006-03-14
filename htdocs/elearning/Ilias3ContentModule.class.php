@@ -52,8 +52,8 @@ class Ilias3ContentModule extends ContentModule
 				
 			//set module data
 			$this->setObjectId($object_data["obj_id"]);
-			$this->setTitle(stripslashes(utf8_decode($object_data["title"])));
-			$this->setDescription(stripslashes(utf8_decode($object_data["description"])));
+			$this->setTitle($object_data["title"]);
+			$this->setDescription($object_data["description"]);
 			if ($object_data["owner"] != "")
 			{
 				$user_data = $connected_cms[$this->cms_type]->soap_client->getUser($object_data["owner"]);

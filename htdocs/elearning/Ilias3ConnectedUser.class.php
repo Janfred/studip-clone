@@ -54,7 +54,7 @@ class Ilias3ConnectedUser extends ConnectedUser
 			return false;
 
 		$this->id = $user_data["usr_id"];
-		$this->login = utf8_decode($user_data["login"]);
+		$this->login = $user_data["login"];
 		$this->external_password = $user_data["passwd"];
 		return true;
 	}
