@@ -329,22 +329,26 @@ if ($form == 1)
 
 if ($form == 2)
 	{
-	$st_search->sem_tree_ranges = array();
-	$st_search->sem_tree_ids = array();
-	$st_search->selected = array();
-	$sem_create_data["sem_bereich"] = array();
-	
-	if(isset($sem_bereich_chooser)){ // && !$st_search->search_done){
-		for ($i = 0; $i < count($sem_bereich_chooser); $i++){
-			if($sem_bereich_chooser[$i] != '0'){
-				$st_search->selected[$sem_bereich_chooser[$i]] = true;
-				$st_search->sem_tree_ranges[$st_search->tree->tree_data[$sem_bereich_chooser[$i]]['parent_id']][] = $sem_bereich_chooser[$i];
-				$st_search->sem_tree_ids[] = $sem_bereich_chooser[$i];
-			} else {
-				$false_mark = true;
+		if(isset($sem_bereich_chooser)){
+			if (!$st_search->search_done){
+				$st_search->sem_tree_ranges = array();
+				$st_search->sem_tree_ids = array();
 			}
-		}
-		$sem_create_data["sem_bereich"] = $st_search->sem_tree_ids;
+			$st_search->selected = array();
+			for ($i = 0; $i < count($sem_bereich_chooser); $i++){
+				if($sem_bereich_chooser[$i] != '0'){
+					$selected[$sem_bereich_chooser[$i]] = true;
+					$sem_tree_ranges[$st_search->tree->tree_data[$sem_bereich_chooser[$i]]['parent_id']][] = $sem_bereich_chooser[$i];
+					$sem_tree_ids[] = $sem_bereich_chooser[$i];
+				} else {
+					$false_mark = true;
+				}
+			}
+			$st_search->selected = array_merge($st_search->selected,$selected);
+			$st_search->sem_tree_ranges = array_merge_recursive($st_search->sem_tree_ranges, $sem_tree_ranges);
+			array_walk($st_search->sem_tree_ranges, create_function('&$value,$key', '$value = array_values(array_unique($value));'));
+			$st_search->sem_tree_ids = array_unique(array_merge($st_search->sem_tree_ids, $sem_tree_ids));
+			$sem_create_data["sem_bereich"] = $sem_tree_ids;
 	}
 
 	if (!$sem_create_data["sem_admission"]) {
