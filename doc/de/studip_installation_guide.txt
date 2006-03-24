@@ -473,9 +473,11 @@ mysql -e "GRANT USAGE ON *.* TO 'studip'@'localhost' IDENTIFIED BY '<password>'"
 mysql -e "GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP,CREATE TEMPORARY TABLES
 ON studip.* TO 'studip'@'localhost'"
 
-Am Ende bitte nicht vergessen, die MySQL Datenbank neu zu starten (reload!).
+Am Ende bitte nicht vergessen, die MySQL Datenbank neu zu starten (oder
+"FLUSH PRIVILEGES" ausführen).
 
-Als einfach zu bedienendes Tool haben sich bei uns kmysqladmin und
+Als einfach zu bedienendes Tool haben sich bei uns "MySQL Query Browser" 
+(http://dev.mysql.com/downloads/query-browser/) und
 phpMyAdmin (http://www.phpwizard.net/projects/phpMyAdmin/) bewährt. 
 
 
@@ -695,7 +697,30 @@ studip-httpd.conf, es müssen nur die Kommentarzeichen vor der gewünschten
 Variante entfernt werden.
 
 Plugin Schnittstelle:
-[Hinweise zur Konfiguration]
+Die PluginEngine lässt sich über verschiedene Konfigurationsvariablen in der
+local.inc anpassen. Zur Aktivierung der PluginEngine muss die Variable
+$PLUGINS_ENABLE auf true gesetzt werden. Danach erscheint auf der Startseite des
+root-Administrators der Menüeintrag Verwaltung von Plugins.
+In der Standardkonfiguration können hier nur Pluginpakete aus einem definierten
+Verzeichnis auf dem Webserver in Stud.IP importiert werden. Dieses Verzeichnis
+lässt sich über die Variable $NEW_PLUGINS_PATH ändern. Hier muss ein absoluter
+Pfad angegeben werden. Dieses Verzeichnis muss vom Webserver-Benutzer lesbar
+sein.
+Über die Variable $PLUGINS_UPLOAD_ENABLE lässt sich ein Upload-Formular
+freischalten, so dass der root-Administrator Plugin-Pakete direkt per Upload in
+das System laden kann. Sollte der root-Administratoren-Account jedoch gehackt
+werden, so stellt dies eine nicht zu unterschätzende Sicherheitslücke dar, denn
+einem Hacker werden hier weitreichende Möglichkeiten eröffnet, indem nahezu
+beliebiger Sourcecode in das System geladen werden kann.
+Um auch bei aktiviertem Upload-Formular dennoch eine gewisse Sicherheit zu
+erreichen, ist der Einsatz des php-Safemodes zu empfehlen. Ebenso sollte der
+WebServer niemals mit dem Benutzer root gestartet werden. Der Einsatz einer
+chroot-Umgebung für den Webserver ist ratsam.
+Plugins werden in der Standardkonfiguration in ein Verzeichnis plugins/packages
+abgelegt, welches sich unterhalb des studip-htdocs-Verzeichnisses befindet.
+Dieses Verzeichnis muss für den Webserver-Nutzer schreibbar sein. Dem
+Verzeichnis sollten die Rechte 755 eingeräumt werden.
+
 
 Weitere Module wie der Kalender, die Ressourcenverwaltung, das Wiki- oder die
 Vote- und Evaluations-Module benötigen keine spezielle Konfiguration oder Zusatzsoftware.
