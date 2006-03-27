@@ -2090,14 +2090,14 @@ class soap_transport_http extends nusoap_base {
 	  	// "regular" socket.
 	  	// TODO: disabled for now because OpenSSL must be *compiled* in (not just
 	  	//       loaded), and until PHP5 stream_get_wrappers is not available.
-//	  	if ($this->scheme == 'https') {
-//		  	if (version_compare(phpversion(), '4.3.0') >= 0) {
-//		  		if (extension_loaded('openssl')) {
-//		  			$this->scheme = 'ssl';
-//		  			$this->debug('Using SSL over OpenSSL');
-//		  		}
-//		  	}
-//		}
+		if ($this->scheme == 'https') {
+		  	if (version_compare(phpversion(), '4.3.0') >= 0) {
+		  		if (extension_loaded('openssl')) {
+		  			$this->scheme = 'ssl';
+		  			$this->debug('Using SSL over OpenSSL');
+		  		}
+		  	}
+		}
 		$this->debug("connect connection_timeout $connection_timeout, response_timeout $response_timeout, scheme $this->scheme, host $this->host, port $this->port");
 	  if ($this->scheme == 'http' || $this->scheme == 'ssl') {
 		// use persistent connection
