@@ -94,6 +94,12 @@ if ((!$rechte) && $open_cmd) {
 } else
 	$owner=FALSE;
 
+//verschiebemodus abbrechen, wenn andere Aktion ausgewählt wurde
+if($folder_system_data["mode"] != '' && ($open_cmd && !in_array($open_cmd, array('n','md')))){
+	$folder_system_data["move"]='';
+	$folder_system_data["mode"]='';
+}
+
 if (($rechte) || ($owner)) {
 	//wurde Code fuer Anlegen von Ordnern ubermittelt (=id+"_n_"), wird entsprechende Funktion aufgerufen
 	if ($open_cmd == 'n' && (!$cancel_x)) {
