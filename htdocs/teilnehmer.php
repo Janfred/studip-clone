@@ -779,7 +779,7 @@ while (list ($key, $val) = each ($gruppe)) {
 // Aktivitaet berechnen
 
 	if ($showscore == TRUE) {
-		if ($activity_index_seminar == 0){
+		if ($aktivity_index_seminar == 0){
 	            $aktivity_index_user = 0; // to avoid div by zero
                 } else {
 		    $aktivity_index_user =  (($postings_user + (5 * $Dokumente)) / $aktivity_index_seminar) * 100;
