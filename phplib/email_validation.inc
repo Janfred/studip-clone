@@ -10,9 +10,9 @@ class email_validation_class
 {
 	var $username_regular_expression="^([a-zA-Z0-9_@-]{4,})\$";
 	var $password_regular_expression="^([[:print:]]{4,})\$";
-	var $name_regular_expression="^([a-zA-ZÄÖÜ][^0-9\\/\\\\\'\\`\\´\(\)]+)\$";
+	var $name_regular_expression='^[-_ a-zA-ZÀ-ÿ]+$';
 	var $telefon_regular_expression="^([0-9 \(\)\\/+_-]*)\$";
-	var $email_regular_expression="^([-!#\$%&'*+./0-9=?A-Z^_`a-z{|}~])+@([-!#\$%&'*+/0-9=?A-Z^_`a-z{|}~]+\\.)+[a-zA-Z]{2,6}\$";
+	var $email_regular_expression='^([-.0-9=?A-Z_a-z{|}~])+@([-.0-9=?A-Z_a-z{|}~])+\.[a-zA-Z]{2,6}$';
 	var $timeout=10;
 	var $data_timeout=10;
 	var $localhost="";
