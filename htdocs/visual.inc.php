@@ -806,7 +806,7 @@ function preg_call_link ($params, $mod, $img, $extern = FALSE, $wiki = FALSE) {
 	global $auth, $STUDIP_DOMAINS;
 	$chars= '&;_a-z0-9-';
 	
-	$pu = parse_url($params[4]);
+	$pu = @parse_url($params[4]);
 	if (($pu['scheme'] == 'http' || $pu['scheme'] == 'https')
 	&& ($pu['host'] == $_SERVER['HTTP_HOST'] || $pu['host'].':'.$pu['port'] == $_SERVER['HTTP_HOST'])
 	&& strpos($pu['path'], $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']) === 0){
@@ -852,7 +852,7 @@ function preg_call_link ($params, $mod, $img, $extern = FALSE, $wiki = FALSE) {
 				}
 				$tbr = '<img src="'.idna_link($params[4])."\" $width border=\"0\" alt=\"{$params[1]}\" title=\"{$params[1]}\">";
 				if (preg_match('#(((https?://|ftp://)(['.$chars.':]+@)?)['.$chars.']+(\.['.$chars.':]+)*/?([^<\s]*[^\.\s\]<])*)#i', $params[7])) {
-					$pum = parse_url($params[7]);
+					$pum = @parse_url($params[7]);
 					if (($pum['scheme'] == 'http' || $pum['scheme'] == 'https')
 					&& ($pum['host'] == $_SERVER['HTTP_HOST'] || $pum['host'].':'.$pum['port'] == $_SERVER['HTTP_HOST'])
 					&& strpos($pum['path'], $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']) === 0){
