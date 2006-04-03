@@ -116,10 +116,8 @@ function correct_group_sem_number(&$groups, &$my_obj){
 		//end($sem_data);
 		//$max_sem = key($sem_data);
 		foreach ($sem_data as $sem_key => $one_sem){
-			if (!$one_sem['past']){
-				$current_sem = $sem_key;
-				break;
-			}
+			$current_sem = $sem_key;			
+			if (!$one_sem['past']) break;
 		}
 		if (isset($sem_data[$current_sem + 1])){
 			$max_sem = $current_sem + 1;
