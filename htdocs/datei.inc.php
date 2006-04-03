@@ -807,21 +807,24 @@ function insert_entry_db($range_id, $sem_id=0, $refresh = FALSE) {
 	$description = trim($description);  	// laestige white spaces loswerden
 	$name = trim($name);  			// laestige white spaces loswerden
 	
-	if (!$name)
-		$name = $the_file_name;
+	if (!$name)	$name = $the_file_name;
 	
 	if ($the_file_size > 0) {
 		$doc =& new StudipDocument($dokument_id);
-		$doc->setValue('description' , stripslashes($description));
-		$doc->setValue('filename' , stripslashes($the_file_name));
-		$doc->setValue('name' , stripslashes($name));
-		$doc->setValue('filesize' , $the_file_size);
-		$doc->setValue('autor_host' , $_SERVER['REMOTE_ADDR']);
-		$doc->setValue('user_id' , $user->id);
 		if (!$refresh){
 			$doc->setValue('range_id' , $range_id);
 			$doc->setValue('seminar_id' , $upload_seminar_id);
+			$doc->setValue('description' , stripslashes($description));
+			$doc->setValue('name' , stripslashes($name));
+		} else {
+			if (!$doc->getValue('name') || $doc->getValue('filename') == $doc->getValue('name')){
+				$doc->setValue('name' , stripslashes($name));
+			}
 		}
+		$doc->setValue('filename' , stripslashes($the_file_name));
+		$doc->setValue('filesize' , $the_file_size);
+		$doc->setValue('autor_host' , $_SERVER['REMOTE_ADDR']);
+		$doc->setValue('user_id' , $user->id);
 		return $doc->store();
 	} else {
 		return false;
@@ -1122,7 +1125,7 @@ function link_form ($range_id, $updating=FALSE) {
 		$print.= "\n<tr><td class=\"steelgraudunkel\"colspan=2 ><font size=-1>" . _("2. Klicken Sie auf <b>'absenden'</b>, um die Datei hochzuladen und damit die alte Version zu &uuml;berschreiben.") . "</font></td></tr>";
 	$print.= "\n<tr><td class=\"steel1\" colspan=2 align=\"center\" valign=\"center\">";	
 	$print.= "\n<input type=\"image\" " . makeButton("absenden", "src") . " value=\"Senden\" align=\"absmiddle\" name=\"create\" border=\"0\">";
-	$print.="&nbsp;<a href=\"$PHP_SELF?cancel_x=true\">" . makeButton("abbrechen", "img") . "</a></td></tr>";	
+	$print.="&nbsp;<a href=\"{$_SERVER['PHP_SELF']}?cancel_x=true\">" . makeButton("abbrechen", "img") . "</a></td></tr>";	
 	$print.= "\n<input type=\"hidden\" name=\"upload_seminar_id\" value=\"".$SessSemName[1]."\">";	
 	if ($updating == TRUE) {
 		$print.= "\n<input type=\"hidden\" name=\"cmd\" value=\"link_update\">";	
