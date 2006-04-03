@@ -3,6 +3,7 @@
 require_once("$ABSOLUTE_PATH_STUDIP/language.inc.php");
 global $_language,$_language_path;
 $_language_path = init_i18n($_language);
+$validator = new email_validation_class;
 ?>
 <html>
 <head>
@@ -15,7 +16,7 @@ $_language_path = init_i18n($_language);
 <script type="text/javascript" language="javaScript">
 <!--
 function checkusername(){
- var re_username = /^([a-zA-Z0-9_@-]*)$/;
+ var re_username = /<?=$validator->username_regular_expression?>/;
  var checked = true;
  if (document.login.username.value.length<4) {
     alert("<?=_("Der Benutzername ist zu kurz \\n- er sollte mindestens 4 Zeichen lang sein.")?>");
@@ -51,7 +52,7 @@ if (document.login.password.value != document.login.password2.value) {
 }
 
 function checkVorname(){
- var re_vorname = /^([a-zA-ZÄÖÜ][^0-9"´'`\/\\\(\)\[\]]+)$/;
+ var re_vorname = /<?=$validator->name_regular_expression?>/;
  var checked = true;
  if (re_vorname.test(document.login.Vorname.value)==false) {
     alert("<?=_("Bitte geben Sie Ihren tatsächlichen Vornamen an.")?>");
@@ -62,7 +63,7 @@ function checkVorname(){
 }
 
 function checkNachname(){
- var re_nachname = /^([a-zA-ZÄÖÜ][^0-9"´'`\/\\\(\)\[\]]+)$/;
+ var re_nachname = /<?=$validator->name_regular_expression?>/;
  var checked = true;
  if (re_nachname.test(document.login.Nachname.value)==false) {
     alert("<?=_("Bitte geben Sie Ihren tatsächlichen Nachnamen an.")?>");
@@ -73,7 +74,7 @@ function checkNachname(){
 }
 
 function checkEmail(){
- var re_email = /^([_a-zA-Z0-9-]+)(\.[_a-zA-Z0-9-]+)*@([_a-zA-Z0-9-]+\.)+([a-zA-Z]{2,4})$/;
+ var re_email = /<?=$validator->email_regular_expression?>/;
  var Email = document.login.Email.value;
  var checked = true;
  if ((re_email.test(Email))==false || Email.length==0) {

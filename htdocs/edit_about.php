@@ -528,7 +528,7 @@ function edit_pers($password, $check_pass, $response, $new_username, $vorname, $
 						$url = $smtp->url;
 					
 						// include language-specific subject and mailbody
-						include_once("$ABSOLUTE_PATH_STUDIP"."locale/$_language_path/LC_MAILS/change_self_mail.inc.php");
+						include_once($GLOBALS['ABSOLUTE_PATH_STUDIP']."locale/$_language_path/LC_MAILS/change_self_mail.inc.php");
 					
 						$smtp->SendMessage(
 						$smtp->env_from, array($to),
@@ -848,7 +848,8 @@ if(check_ticket($ticket)){
 include ($GLOBALS['ABSOLUTE_PATH_STUDIP'].'html_head.inc.php'); // Output of html head
 
 if ($auth->auth["jscript"]) { // nur wenn JS aktiv 
-if ($view == 'Daten') { 
+if ($view == 'Daten') {
+	$validator=new email_validation_class;
 ?>
 <script type="text/javascript" language="javascript" src="md5.js"></script>
 
@@ -856,7 +857,7 @@ if ($view == 'Daten') {
 <!--
 
 function checkusername(){
- var re_username = /^([a-zA-Z0-9_@-]*)$/;
+ var re_username = /<?=$validator->username_regular_expression?>/;
  var checked = true;
  if (document.pers.new_username.value.length<4) {
 	alert("<?=_("Der Benutzername ist zu kurz - er sollte mindestens 4 Zeichen lang sein.")?>");
@@ -889,9 +890,9 @@ function checkpassword(){
 }
 
 function checkvorname(){
- var re_vorname = /^([a-zA-ZÄÖÜ][^0-9"´'`\/\\\(\)\[\]]+)$/;
+ var re_vorname = /<?=$validator->name_regular_expression?>/;
  var checked = true;
- if (re_vorname.test(document.pers.vorname.value)==false) {
+ if (document.pers.vorname.value!='<?=$my_about->auth_user["Vorname"]?>' && re_vorname.test(document.pers.vorname.value)==false) {
 	alert("<?=_("Bitte geben Sie Ihren tatsächlichen Vornamen an.")?>");
 	 document.pers.vorname.focus();
 	checked = false;
@@ -900,9 +901,9 @@ function checkvorname(){
 }
 
 function checknachname(){
- var re_nachname = /^([a-zA-ZÄÖÜ][^0-9"´'`\/\\\(\)\[\]]+)$/;
+ var re_nachname = /<?=$validator->name_regular_expression?>/;
  var checked = true;
- if (re_nachname.test(document.pers.nachname.value)==false) {
+ if (document.pers.nachname.value!='<?=$my_about->auth_user["Nachname"]?>' && re_nachname.test(document.pers.nachname.value)==false) {
 	alert("<?=_("Bitte geben Sie Ihren tatsächlichen Nachnamen an.")?>");
 	 document.pers.nachname.focus();
 	checked = false;
@@ -911,10 +912,10 @@ function checknachname(){
 }
 
 function checkemail(){
- var re_email = /^([_a-zA-Z0-9-]+)(\.[_a-zA-Z0-9-]+)*@([_a-zA-Z0-9-]+\.)+([a-zA-Z]{2,4})$/;
+ var re_email = /<?=$validator->email_regular_expression?>/;
  var email = document.pers.email.value;
  var checked = true;
- if ((re_email.test(email))==false || email.length==0) {
+ if (email!='<?=$my_about->auth_user["Email"]?>' && re_email.test(email)==false || email.length==0) {
 	alert("<?=_("Die E-Mail-Adresse ist nicht korrekt!")?>");
 	 document.pers.email.focus();
 	checked = false;
