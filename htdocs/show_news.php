@@ -25,6 +25,7 @@ require_once ("$ABSOLUTE_PATH_STUDIP/language.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/object.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipNews.class.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipComments.class.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/Seminar.class.php");
 
 function process_news_commands(&$cmd_data) {
 	global $nopen, $nclose, $comopen, $comnew, $comsubmit, $comdel, $comdelnews;
@@ -279,14 +280,15 @@ function show_rss_news($range_id, $type){
 	$last_changed = 0;
 	switch ($type){
 		case 'user':
-			$studip_url = $GLOBALS['ABSOLUTE_URI_STUDIP'] . "about.php?username=" . get_username($range_id);
+			$studip_url = $GLOBALS['ABSOLUTE_URI_STUDIP'] . "about.php?again=yes&#38;rssusername=" . get_username($range_id);
 			$title = get_fullname($range_id) . ' (Stud.IP - ' . $GLOBALS['UNI_NAME_CLEAN'] . ')';
 			$RssChannelDesc = _("Persönliche Neuigkeiten") . ' ' . $title;
 		break;
 		case 'sem':
 			$studip_url = $GLOBALS['ABSOLUTE_URI_STUDIP'] . "seminar_main.php?auswahl=" . $range_id;
-			$object_name = get_object_name($range_id, $type);
-			$title = $object_name['name'] . ' (Stud.IP - ' . $GLOBALS['UNI_NAME_CLEAN'] . ')';
+			$sem_obj =& Seminar::GetInstance($range_id);
+			if ($sem_obj->read_level > 0) $studip_url .= "&#38;again=yes";
+			$title = $sem_obj->getName() . ' (Stud.IP - ' . $GLOBALS['UNI_NAME_CLEAN'] . ')';
 			$RssChannelDesc = _("Neuigkeiten der Veranstaltung") . ' ' . $title;
 		
 		break;

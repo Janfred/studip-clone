@@ -19,8 +19,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Id$
 */
-
-page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
+page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
+$auth->login_if($again && ($auth->auth["uid"] == "nobody"));
 $perm->check("user");
 
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
@@ -68,6 +68,8 @@ if (get_config('NEWS_RSS_EXPORT_ENABLE')){
 // Start  of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");
+
+if ($rssusername) $username = $rssusername;
 ?>
 <script language="Javascript">
 function open_im()

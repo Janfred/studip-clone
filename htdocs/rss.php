@@ -26,7 +26,7 @@ if (get_config('NEWS_RSS_EXPORT_ENABLE')){
 		show_rss_news($range['range_id'], $range['range_type']);
 	} else {
 		header("Content-type: text/xml; charset=utf-8");
-		echo "<?xml version=\"1.0\"?>";
+		echo "<?xml version=\"1.0\"?>\n<rss version=\"2.0\">\n</rss>\n";
 	}
 }	
 ob_end_flush();
