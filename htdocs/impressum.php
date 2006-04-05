@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
+// $Id$ 
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $auth->login_if($again && ($auth->auth["uid"] == "nobody"));
@@ -136,7 +137,7 @@ $reiter->create($structure, $view);
 			<br><font size=-1><b>André Noack</b>, E-Mail: <a href="mailto:noack@data-quest.de">noack@data-quest.de</a> <?=_("(Newsverwaltung, Chat, Einrichtungsverzeichnis, Vorlesungsverzeichnis)")?></font>
 			<br><font size=-1><b>Frank Ollermann</b>, E-Mail: <a href="mailto:follerma@uni-osnabrueck.de">follerma@uni-osnabrueck.de</a> <?=_("(Usability)")?></font>
 			<br><font size=-1><b>Dennis Reil</b>, E-Mail: <a href="mailto:Dennis.Reil@offis.de">Dennis.Reil@offis.de</a> <?=_("(PlugIn-Schnittstelle)")?></font>
-			<br><font size=-1><b>Jens Schmelzer</b>, E-Mail: <a href="mailto:jens.schmelzer@fh-jena.de">jens.schmelzer@fh-jena.de</a> <?=_("(Security)")?>, <?=_("(Distribution)")?></font>
+			<br><font size=-1><b>Jens Schmelzer</b>, E-Mail: <a href="mailto:jens.schmelzer@fh-jena.de">jens.schmelzer@fh-jena.de</a> <?=_("(Security, Distribution)")?></font>
 			<br><font size=-1><b>Ralf Stockmann</b>, E-Mail: <a href="mailto:rstockm@uni-goettingen.de">rstockm@uni-goettingen.de</a> <?=_("(Forensystem, pers&ouml;nliche Seiten, Adressbuch, Design)")?></font>
 			<br><font size=-1><b>Stefan Suchi</b>, E-Mail: <a href="mailto:suchi@data-quest.de">suchi@data-quest.de</a> <?=_("(Datenbankstruktur, Rechtesystem, Adminbereich, Internationalisierung)")?></font>
 			<br><font size=-1><b>Tobias Thelen</b>, E-Mail: <a href="mailto:tthelen@uni-osnabrueck.de">tthelen@uni-osnabrueck.de</a> <?=_("(WikiWeb)")?></font>
@@ -505,4 +506,3 @@ printf(_("Das System wird ständig weiterentwickelt und an die Wünsche unserer Nu
 // Save data back to database.
 page_close();
  ?>
-<!-- $Id$ -->
