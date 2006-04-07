@@ -1,30 +1,33 @@
+# translation of studip_eval.po to 
+# translation of studip_eval.po to
 # This file is distributed under the same license as the PACKAGE package.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER, 2004.
 # Jens Schmelzer <jens.schmelzer@fh-jena.de>, 2005.
+# Stefan Suchi <suchi@data-quest.de>, 2006.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: studip_eval\n"
-"POT-Creation-Date: 2006-02-15 14:53+0100\n"
-"PO-Revision-Date: 2005-06-29 22:31+0200\n"
-"Last-Translator: Jens Schmelzer <jens.schmelzer@fh-jena.de>\n"
+"POT-Creation-Date: 2006-04-07 16:52+0200\n"
+"PO-Revision-Date: 2006-04-07 16:36+GMT\n"
+"Last-Translator: Stefan Suchi <suchi@data-quest.de>\n"
 "Language-Team:  <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.10\n"
+"X-Generator: KBabel 1.0.2\n"
 
 #: modules/evaluation/evaluation_admin_edit.inc.php:60
 #: modules/evaluation/evaluation_admin_overview.lib.php:1582
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:64
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2370
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2357
 msgid "Neue Evaluation"
 msgstr "New evaluation"
 
 #: modules/evaluation/evaluation_admin_edit.inc.php:66
 #: modules/evaluation/evaluation_admin_overview.lib.php:1590
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:70
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2373
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2360
 msgid "Erster Gruppierungsblock"
 msgstr "First content block"
 
@@ -59,8 +62,8 @@ msgid ""
 "Sie haben in einem Bereich, in welchem diese Evaluation hängt, nicht "
 "aussreichene Rechte, um diese Eval zu bearbeiten."
 msgstr ""
-"You do not have the rights necessary to make changes in all areas this "
-"evaluation has been added to."
+"There is an area this evaluation has been added to but where you do not have "
+"permission to modify this evaluation."
 
 #: modules/evaluation/evaluation_admin_edit.inc.php:211
 #, c-format
@@ -68,6 +71,8 @@ msgid ""
 "Sie haben in %s Bereichen, in denen diese Evaluation hängt, nicht "
 "aussreichene Rechte, um diese Eval zu bearbeiten."
 msgstr ""
+"There are %s areas this evalution has been added to but where you do not "
+"have permission to modify this evaluation."
 
 #: modules/evaluation/evaluation_admin_edit.inc.php:234
 msgid "Zur Evaluations-Verwaltung"
@@ -149,7 +154,7 @@ msgstr "Edit"
 #: modules/evaluation/evaluation_admin_overview.inc.php:309
 #: modules/evaluation/evaluation_admin_overview.inc.php:345
 #: modules/evaluation/evaluation_admin_overview.inc.php:380
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2780
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2767
 msgid "Löschen"
 msgstr "Delete"
 
@@ -201,7 +206,7 @@ msgstr "Export"
 #: modules/evaluation/evaluation_admin_overview.lib.php:319
 #: modules/evaluation/evaluation_admin_overview.lib.php:335
 msgid "Auswertung"
-msgstr ""
+msgstr "Reporting"
 
 #: modules/evaluation/evaluation_admin_overview.inc.php:355
 msgid "Keine laufenden Evaluationen vorhanden."
@@ -226,14 +231,14 @@ msgstr "Preview of this public evaluation template"
 #: modules/evaluation/evaluation_admin_overview.lib.php:243
 #: modules/evaluation/evaluation_admin_template.lib.php:446
 #: modules/evaluation/evaluation_admin_template.lib.php:706
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2668
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2655
 msgid "ja"
 msgstr "yes"
 
 #: modules/evaluation/evaluation_admin_overview.lib.php:244
 #: modules/evaluation/evaluation_admin_template.lib.php:455
 #: modules/evaluation/evaluation_admin_template.lib.php:729
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2658
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2645
 msgid "nein"
 msgstr "no"
 
@@ -1016,20 +1021,23 @@ msgid ""
 "Dem Template wurden keine Antworten zugewiesen oder keine der Antworten  "
 "enthielt einen Text. Fügen Sie Antworten an, oder löschen Sie das Template."
 msgstr ""
+"No answer has been assigned to this template or none of the answers contains "
+"any text. Add at least one answer or delete the template."
 
 #: modules/evaluation/evaluation_admin_template.inc.php:280
 msgid ""
 "Leere Antworten sind nicht zulässig, löschen Sie betreffende Felder oder "
 "geben Sie einen Text ein."
 msgstr ""
+"Answers should not be empty. Delete the respective fields or enter a text."
 
 #: modules/evaluation/evaluation_admin_template.inc.php:295
 msgid "Geben Sie eine Ausweichantwort ein oder deaktivieren Sie diese."
-msgstr ""
+msgstr "Enter a evasion answer or deactivate it."
 
 #: modules/evaluation/evaluation_admin_template.inc.php:302
 msgid "Geben Sie einen Namen für die Vorlage ein."
-msgstr ""
+msgstr "Enter a name for this template."
 
 #: modules/evaluation/evaluation_admin_template.inc.php:316
 #: modules/evaluation/evaluation_admin_template.inc.php:328
@@ -1134,7 +1142,7 @@ msgstr "Multiple reply allowed"
 #: modules/evaluation/evaluation_admin_template.lib.php:460
 #: modules/evaluation/evaluation_admin_template.lib.php:523
 #: modules/evaluation/evaluation_admin_template.lib.php:618
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2791
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2778
 msgid "Antworten"
 msgstr "Replies"
 
@@ -1509,7 +1517,7 @@ msgstr "New content block"
 msgid "Neuer Fragenblock"
 msgstr "New question block"
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:308
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:301
 #, c-format
 msgid ""
 "Sie haben den Gruppierungsblock <b>%s</b> zum Verschieben ausgewählt. Sie "
@@ -1520,7 +1528,7 @@ msgstr ""
 "it to an empty content block, a content block without question blocks or to "
 "the most upper level."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:317
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:310
 #, c-format
 msgid ""
 "Sie haben den Fragenblock <b>%s</b> zum Verschieben ausgewählt. Sie können "
@@ -1531,158 +1539,157 @@ msgstr ""
 "it to an empty content block or in a content block with other question "
 "blocks."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:322
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:315
 msgid "Es wurde ein ungültiger Block zum verschieben ausgewählt."
 msgstr "The chosen content block is not allowed to be moved."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:355
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:348
 #, c-format
 msgid "Benutzen sie dieses %s Symbol, um den Block zu verschieben."
 msgstr "Please, use the symbol %s in order to move the content block."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:356
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:349
 msgid "Block verschieben Symbol"
 msgstr "Symbol for moving blocks"
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:358
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:351
 msgid "Oder wollen sie die Aktion abbrechen?"
 msgstr "or do you want to cancel the action?"
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:361
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1427
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:354
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1420
 msgid "abbrechen"
 msgstr "cancel"
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:506
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:499
 msgid "Sie sind hier:"
 msgstr "You are here:"
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:517
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:510
 msgid "Evaluation"
 msgstr "Evaluation"
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:566
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:559
 msgid "Dieser Block ist geöffnet."
 msgstr "This content block has been opened."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:579
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:572
 msgid "Diesen Block öffnen."
 msgstr "Open this content block."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:593
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:586
 msgid "Dies ist ihre Evaluation."
 msgstr "This is your evaluation."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:602
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:595
 msgid "Dieser Gruppierungsblock enthält keine Blöcke."
 msgstr "This content block doesn't contain any blocks."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:603
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:596
 #, c-format
 msgid "Dieser Grupppierungsblock enthält %s Blöcke."
 msgstr "This content block contains %s blocks."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:617
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:610
 msgid "Dieser Fragenblock enthält keine Fragen."
 msgstr "This question block doesn't contain any questions."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:618
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:611
 #, c-format
 msgid "Dieser Fragenblock enthält %s Fragen."
 msgstr "This question block contains %s questions."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:629
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:622
 msgid "Kein Blocktyp."
 msgstr "No block type."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:997
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:990
 msgid "Vorlage"
 msgstr "Template"
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1004
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:997
 msgid "Diesen Block öffnen"
 msgstr "Open this block."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1039
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1032
 msgid "Den ausgwählten Block in diesen Block verschieben"
 msgstr "Move the selected block into this block."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1076
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1069
 msgid "Block nach oben verschieben"
 msgstr "Move this block up"
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1080
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1073
 msgid "Block nach unten verschieben"
 msgstr "Move this block down"
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1258
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1250
 msgid "Die Aktion wurde abgebrochen."
 msgstr "Action has been cancelled."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1276
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1268
 msgid "Kein Titel angegeben."
 msgstr "No title has been entered."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1292
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1284
 msgid "Fehler beim Einlesen (root-item)"
 msgstr "Error while reading (root-item)"
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1294
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1308
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1347
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1350
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1772
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1828
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1862
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1286
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1300
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1340
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1343
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1763
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1817
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1850
 msgid "Veränderungen wurden gespeichert."
 msgstr "Changes have been saved."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1306
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1298
 msgid "Fehler beim Einlesen (Block)"
 msgstr "Error while reading (block)"
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1331
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1324
 msgid "Einer Frage wurden noch keine Antwortenmöglichkeiten zugewiesen."
-msgstr ""
+msgstr "No possible reply has been associated to this question."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1333
-#, fuzzy
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1326
 msgid "Einer Frage  wurden noch keine Antwortenmöglichkeiten zugewiesen."
-msgstr "There is a question no reply has been associated to."
+msgstr "There is at least one question no reply has been associated to. "
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1336
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1338
-#, fuzzy, c-format
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1329
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1331
+#, c-format
 msgid "%s Fragen wurden noch keine Antwortenmöglichkeiten zugewiesen."
 msgstr "There are %s questions no replies have been associated to."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1345
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1338
 msgid "Fehler beim Einlesen (Fragenblock)"
 msgstr "Error while reading (question block)"
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1359
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1352
 msgid "Falscher Blocktyp. Es wurden keine Veränderungen vorgenommen."
 msgstr "Wrong block type. No changes have been made."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1393
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1399
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1386
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1392
 #, c-format
 msgid ""
 "Sie beabsichtigen den Fragenblock <b>%s</b> inklusive aller Fragen zu l&ouml;"
 "schen. "
 msgstr "You intend to delete question block <b>%s</b> including all questions."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1395
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1388
 #, c-format
 msgid "Es werden insgesamt %s Fragen gel&ouml;scht!"
 msgstr "A total of %s questions will be deleted."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1403
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1396
 msgid "Wollen sie diesen Fragenblock wirklich l&ouml;schen?"
 msgstr "Do you really want to delete this question block?"
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1408
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1414
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1401
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1407
 #, c-format
 msgid ""
 "Sie beabsichtigen den Gruppierungsblock <b>%s</b> inklusive aller "
@@ -1691,25 +1698,24 @@ msgstr ""
 "You intend to delete content block <b>%s</b> including all content sub-"
 "blocks."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1410
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1403
 #, c-format
 msgid "Es werden insgesamt %s Unterbl&ouml;cke gel&ouml;scht!"
 msgstr "A total of %s content sub-blocks will be deleted."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1418
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1411
 msgid "Wollen sie diesen Gruppierungsblock wirklich l&ouml;schen?"
 msgstr "Do you really want to delete this content block?"
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1423
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1416
 msgid "löschen"
 msgstr "delete"
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1455
-#, fuzzy
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1447
 msgid "Fehler beim Löschen eines Block."
-msgstr "Error while deleting a group."
+msgstr "Error while deleting a block."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1459
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1451
 #, c-format
 msgid ""
 "Der Fragenblock <b>%s</b> und alle darin enthaltenen Fragen (insgesamt %s) "
@@ -1718,12 +1724,12 @@ msgstr ""
 "Question block <b>%s</b> including all questions contained in it (a total of "
 "%s) has been deleted."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1461
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1453
 #, c-format
 msgid "Der Fragenblock <b>%s</b> wurden gel&ouml;scht. "
 msgstr "Question block <b>%s</b> has been deleted. "
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1465
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1457
 #, c-format
 msgid ""
 "Der Gruppierungsblock <b>%s</b> und alle Unterblöcke (insgesamt %s) wurden "
@@ -1732,145 +1738,144 @@ msgstr ""
 "Content block <b>%s</b> and all content sub-blocks (a total of %s) have been "
 "deleted. "
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1467
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1459
 #, c-format
 msgid "Der Gruppierungsblock <b>%s</b> wurden gel&ouml;scht. "
 msgstr "The content block <b>%s</b> has been deleted."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1499
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1509
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1560
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1570
-#, fuzzy
-msgid "Fehler beim Anlegen eines neuen Blocks."
-msgstr "Error while creating a new group."
-
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1491
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:1501
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1511
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1552
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1562
+msgid "Fehler beim Anlegen eines neuen Blocks."
+msgstr "Error while creating a new block."
+
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1493
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1503
 msgid "Ein neuer Gruppierungsblock wurde angelegt."
 msgstr "A new content block has been created."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1562
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1554
 msgid "Ein neuer Fragenblock wurde angelegt."
 msgstr "A new question block has been created."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1573
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1565
 #, c-format
 msgid ""
 "Ein neuer Fragenblock mit der Antwortenvorlage <b>%s</b> wurde angelegt."
 msgstr "A new question block with reply template <b>%s</b> has been created."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1577
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1569
 msgid "Ein neuer Fragenblock mit keiner Antwortenvorlage wurde angelegt."
 msgstr "A new question block without any reply template has been created."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1602
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1594
 msgid "Fehler beim Zuordnen eines Templates."
 msgstr "Error while associating a template."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1614
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1606
 #, c-format
 msgid "Die Vorlage <b>%s</b> wurde dem Fragenblock zugeordnet."
 msgstr "Template <b>%s</b> has been associated to this question block."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1662
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1656
 msgid "Es wurde eine leere Frage entfernt."
 msgstr "An empty question has been deleted."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1664
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1658
 #, c-format
 msgid "Es wurden %s leere Fragen entfernt."
 msgstr "%s emtpy questions have been deleted."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1691
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1684
 msgid "Fehler beim Anlegen neuer Fragen."
 msgstr "Error while creating a new question."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1696
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1689
 msgid "Es wurde eine neue Frage hinzugefügt."
 msgstr "A new question has been added."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1699
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1692
 #, c-format
 msgid "Es wurden %s neue Fragen hinzugefügt."
 msgstr "%s new questions have been added."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1733
-msgid "Es wurden eine Frage gelöscht."
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1725
+msgid "Es wurde eine Frage gelöscht."
 msgstr "One question has been deleted."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1736
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1728
 #, c-format
 msgid "Es wurden %s Fragen gelöscht."
 msgstr "%s questions have been deleted."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1739
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1731
 msgid "Es wurde keine Frage gelöscht."
 msgstr "No questions have been deleted."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1792
-#, fuzzy, c-format
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1782
+#, c-format
 msgid "Der Frage <b>%s</b> wurden Antwortenmöglichkeiten zugewiesen."
-msgstr "Replies have been associated to question <b>%s</b>."
+msgstr "Possible replies have been associated to question <b>%s</b>."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1823
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1812
 msgid "Die Frage wurde von Position 1 an die letzte Stelle verschoben."
 msgstr "The question has been moved from first to last position."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1826
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1860
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1815
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1848
 #, c-format
 msgid "Die Frage wurde von Position %s nach oben verschoben."
 msgstr "The question has been moved up from position %s."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1856
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1844
 #, c-format
 msgid "Die Frage wurde von Position %s an die erste Stelle verschoben."
 msgstr "The question has been moved from position %s to the first position"
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1886
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1873
 msgid "Fragenblock"
 msgstr "Question block"
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1888
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2335
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1875
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2322
 msgid "Gruppierungsblock"
 msgstr "Content block"
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1892
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1879
 msgid " wurde von Position 1 an die letzte Stelle verschoben."
 msgstr " has been moved from first to last position."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1896
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1883
 #, c-format
 msgid " wurde von Position %s an die erste Stelle verschoben."
 msgstr " has been moved from position %s to the first position."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1900
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1887
 #, c-format
 msgid " wurde von Position %s nach oben verschoben."
 msgstr " has been moved up from position %s."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1901
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1888
 #, c-format
 msgid " wurde von Position %s nach unten verschoben."
 msgstr " has been moved down from position %s."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1921
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1908
 msgid ""
 "Fehler beim Verschieben eines Blocks. Es wurde kein Block zum verschieben "
 "ausgewählt."
 msgstr "Error while moving a block. No block has been chosen to be moved."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1929
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1937
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1916
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1924
 msgid "Fehler beim Verschieben eines Blocks. Der Zielblock besitzt keinen Typ."
 msgstr ""
 "Error while moving a block. The destination block doesn't have any type."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1952
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2002
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2057
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1939
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1989
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2044
 msgid ""
 "Fehler beim Verschieben eines Blocks. Der ausgewählte Block und der "
 "Zielblock besitzen verschiedene Typen."
@@ -1878,38 +1883,37 @@ msgstr ""
 "Error while moving a block. The selected block and the destination block are "
 "of different type."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1969
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1980
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1983
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1986
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1989
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2019
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2028
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2033
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2036
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2039
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2042
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2090
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2093
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2096
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2099
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2102
-#, fuzzy
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1956
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1967
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1970
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1973
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1976
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2006
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2015
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2020
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2023
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2026
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2029
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2077
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2080
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2083
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2086
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2089
 msgid "Fehler beim Verschieben eines Blocks."
-msgstr "Error while moving a group."
+msgstr "Error while moving a block."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1992
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:1979
 #, c-format
 msgid "Der Block <b>%s</b> wurde in die Hauptebene verschoben."
 msgstr "The block <b>%s</b> has been moved onto the main level."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2046
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2033
 #, c-format
 msgid "Der Block <b>%s</b> wurde in diesen Gruppierungsblock verschoben."
 msgstr "The block <b>%s</b> has been moved into this content block. "
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2066
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2071
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2053
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2058
 msgid ""
 "Fehler beim Verschieben eines Blocks. Ein Fragenblock kann nicht auf die "
 "oberste Ebene verschoben werden."
@@ -1917,28 +1921,28 @@ msgstr ""
 "Error while moving a block. A question block cannot been moved to the most "
 "upper level."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2105
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2092
 #, c-format
 msgid "Der Block <b>%s</b> wurde in diesen Fragenblock verschoben."
 msgstr "The block <b>%s</b> has been moved into this question block."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2137
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2124
 msgid "Sie können ..."
 msgstr "You may ..."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2159
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2146
 msgid "Die Veränderungen innerhalb des Blockes speichern."
 msgstr "Save changes in this block."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2163
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2150
 msgid "- die Veränderungen dieses Blocks speichern."
 msgstr "- save changes of this block."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2170
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2157
 msgid "Einen neuen Gruppierungsblock erstellen."
 msgstr "Create a new content block."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2173
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2160
 msgid ""
 "- einen neuen Gruppierungsblock innerhalb dieses Blockes erstellen, in "
 "welchem sie weitere Gruppierungs- oder Fragenblöcke anlegen können."
@@ -1946,12 +1950,12 @@ msgstr ""
 "- create a new content block within this block, in this new content block "
 "you may create further content blocks of question blocks."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2182
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2169
 msgid ""
 "Einen neuen Fragenblock mit der ausgewählten Antwortenvorlage erstellen."
 msgstr "Create a new question block with the selected reply template."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2185
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2172
 msgid ""
 "- einen neuen Fragenblock innherhalb dieses Blockes erstellen. Geben sie "
 "dazu bitte eine Antwortenvorlage an, welche für alle Fragen des neuen "
@@ -1960,114 +1964,114 @@ msgstr ""
 "- create a new question block within this content block. Please, enter a "
 "reply template to be associtiated to all questions of the new question block."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2200
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2210
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2214
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2187
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2197
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2201
 msgid "Diesen Block verschieben."
 msgstr "Move this block."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2218
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2205
 msgid "- diesen Block zum Verschieben markieren."
 msgstr "- mark this block for to be moved."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2232
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2521
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2219
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2508
 msgid "Diesen Block und alle seine Unterblöcke löschen."
 msgstr "Delete this block and all its sub-blocks."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2238
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2225
 msgid "Diesen Block (und alle seine Unterblöcke) löschen.."
 msgstr "Delete this block (including all its sub-blocks).."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2243
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2230
 msgid "- diesen Block und seine Unterblöcke löschen."
 msgstr "- delete this block and all its sub-blocks."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2271
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2394
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2258
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2381
 msgid "Erstellung einer Evaluation abbrechen"
 msgstr "Abort creating an evaluation"
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2278
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2265
 msgid "Die Erstellung dieser Evaluation abbrechen."
 msgstr "Abort creating this evaluation."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2339
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2326
 msgid "Einen neuen Gruppierungsblock erstellen"
 msgstr "Create a new content block"
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2342
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2329
 msgid "Fragenblock mit"
 msgstr "Question block with"
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2345
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2332
 msgid "Einen neuen Fragenblock erstellen"
-msgstr ""
+msgstr "Create a new block of questions."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2423
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2410
 msgid "Titel der Evaluation"
 msgstr "Title of the evaluation"
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2425
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2433
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2442
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2412
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2420
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2429
 msgid "Zusätzlicher Text"
 msgstr "Additional text"
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2430
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2417
 msgid "Titel des Gruppierungsblocks"
 msgstr "Title of content block"
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2438
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2425
 msgid "Titel des Fragenblocks"
 msgstr "Title of question block"
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2439
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2426
 msgid "Die Angabe des Titels ist bei einem Fragenblock optional."
 msgstr "Entering a title of a question block is optional."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2446
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2433
 msgid "Die Angabe des zusätzlichen Textes ist optional."
 msgstr "Entering an additional text is optional."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2515
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2502
 msgid "Änderungen übernehmen."
 msgstr "Accept changes."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2519
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2506
 msgid "Diesen Block"
 msgstr "This block"
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2553
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2540
 msgid "Globale Eigenschaften"
 msgstr "Global properties"
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2564
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2551
 msgid "Die Auswertung der Evaluation läuft"
 msgstr "Report of this evaluation is running"
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2587
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2574
 msgid "anonym"
 msgstr "anonymous"
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2590
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2577
 msgid "personalisiert"
 msgstr "personalised"
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2633
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2620
 msgid "Eigenschaften"
 msgstr "Properties"
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2644
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2631
 msgid "Die Fragen dieses Blocks müssen beantwortet werden (Pflichtfelder):"
 msgstr "All questions in this block must be answered (mandatory fields):"
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2677
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2664
 #, c-format
 msgid "Diesem Fragenblock ist die Antwortenvorlage <b>%s</b> zugewiesen."
 msgstr "This question block uses reply template <b>%s</b>."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2679
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2666
 msgid ""
 "Das Zuweisen einer Antwortenvorlage ändert alle Antwortenmöglichkeiten der "
 "Fragen dieses Fragenblocks."
@@ -2075,7 +2079,7 @@ msgstr ""
 "Associating a reply template to this question will cause all replies to this "
 "question block to get lost."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2681
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2668
 msgid ""
 "Da dieser Fragenblock keine Antwortenvorlage benutzt, würde ein Zuweisen "
 "einer Antwortenvorlage zum Verlust aller eingegebenen Antworten führen."
@@ -2083,35 +2087,35 @@ msgstr ""
 "This question block doesn't use any reply template. Thus associating a reply "
 "template to it would cause all entered replies to get lost."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2694
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2681
 msgid "Eine andere Antwortenvorlage für diesen Fragenblock auswählen"
 msgstr "Choose a different reply template for this question block"
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2754
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2741
 msgid "Frage"
 msgstr "Question"
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2764
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2751
 msgid "Position"
 msgstr "Position"
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2871
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2858
 msgid "Diese Frage mit der letzten Frage vertauschen."
 msgstr "Exchange this and the last questions."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2873
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2860
 msgid "Diese Frage eine Position nach oben verschieben."
 msgstr "Move up this question by one position."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2876
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2863
 msgid "Diese Frage mit der ersten Frage vertauschen."
 msgstr "Exchange this and the first questions."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2878
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2865
 msgid "Diese Frage eine Position nach unten verschieben."
 msgstr "Move down this question by one position."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2929
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2916
 msgid ""
 "Dieser Frage wurden noch keine Antwortenmöglichkeiten zugewiesen. Drücken "
 "sie auf den Doppelfpeil, um dies jetzt zu tun."
@@ -2119,56 +2123,56 @@ msgstr ""
 "No replies have been associated to this question, yet. Click on the double "
 "arrow to do so."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2930
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2917
 msgid "Dieser Frage Antwortenmöglichkeiten zuweisen."
 msgstr "Associate reply possibilities to this question."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2933
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2920
 msgid "Dieser Frage wurden bereits folgende Antwortenmöglichkeiten zugewiesen:"
 msgstr "The following replies have already been associated to this question:"
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2935
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2922
 msgid "Die zugewiesenen Antwortenmöglichkeiten bearbeiten."
 msgstr "Modify the associated reply possibilities."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2981
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2968
 msgid "Dieser Block besitzt keine Fragen."
 msgstr "This block doesn't contain any questions."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:3031
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:3018
 msgid "Frage/en"
 msgstr "question/questions"
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:3036
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:3023
 msgid "Fragen hinzufügen"
 msgstr "Add questions"
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:3046
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:3033
 msgid "markierte Fragen "
 msgstr "marked questions "
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:3052
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:3039
 msgid "Markierte Fragen löschen"
 msgstr "Delete marked questions."
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:3281
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:3268
 msgid "Polskalen:"
 msgstr "Pole scales:"
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:3300
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:3287
 msgid "Likertskalen:"
 msgstr "Lickert scales:"
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:3319
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:3306
 msgid "Multiple Choice:"
 msgstr "Multiple choice:"
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:3338
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:3325
 msgid "Freitextantworten:"
 msgstr "Arbitrary text reply:"
 
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:3439
-#: modules/evaluation/classes/EvaluationTreeEditView.class.php:3442
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:3426
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:3429
 msgid "Fehler beim verschieben."
 msgstr "Error while moving."
 
@@ -2183,7 +2187,7 @@ msgstr "No reply with this ID found."
 #: modules/evaluation/classes/db/EvaluationAnswerDB.class.php:92
 #: modules/evaluation/classes/db/EvaluationAnswerDB.class.php:283
 msgid "Fehler beim Laden."
-msgstr ""
+msgstr "Error while loading."
 
 #: modules/evaluation/classes/db/EvaluationAnswerDB.class.php:92
 #: modules/evaluation/classes/db/EvaluationAnswerDB.class.php:168
@@ -2205,7 +2209,7 @@ msgstr "Error while deleting links."
 
 #: modules/evaluation/classes/db/EvaluationAnswerDB.class.php:237
 msgid "Fehler beim Löschen."
-msgstr ""
+msgstr "Error while deleting."
 
 #: modules/evaluation/classes/db/EvaluationDB.class.php:111
 msgid "Keine Evaluation mit dieser ID gefunden."

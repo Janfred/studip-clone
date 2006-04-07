@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2006-02-15 14:53+0100\n"
+"POT-Creation-Date: 2006-04-07 16:52+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,157 +15,161 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: about.php:116
+#: about.php:118
 msgid "Es wurde kein Nutzer unter dem angegebenen Nutzernamen gefunden!"
 msgstr ""
 
-#: about.php:116
+#: about.php:118
 msgid ""
 " Wenn Sie auf einen Link geklickt haben, kann es sein, dass sich der "
 "Username des gesuchten Nutzers ge&auml;ndert hat, oder der Nutzer gel&ouml;"
 "scht wurde."
 msgstr ""
 
-#: about.php:116
+#: about.php:118
 msgid "Benutzer nicht gefunden"
 msgstr ""
 
-#: about.php:181 forum.inc.php:1210 lib/classes/FoafDisplay.class.php:203
+#: about.php:183 forum.inc.php:1210 lib/classes/FoafDisplay.class.php:203
 msgid "kein persönliches Bild vorhanden"
 msgstr ""
 
-#: about.php:190
+#: about.php:192
 msgid "E-mail:"
 msgstr ""
 
-#: about.php:191 edit_about.php:1185
+#: about.php:193 edit_about.php:1186
 msgid "Telefon (privat):"
 msgstr ""
 
-#: about.php:192
+#: about.php:194
 msgid "Mobiltelefon:"
 msgstr ""
 
-#: about.php:193 edit_about.php:1199
+#: about.php:195 edit_about.php:1200
 msgid "Adresse (privat):"
 msgstr ""
 
-#: about.php:197 admin_institut.php:398 edit_about.php:1207
+#: about.php:199 admin_institut.php:401 edit_about.php:1208
 #: institut_main.php:137
 msgid "Homepage:"
 msgstr ""
 
-#: about.php:204
+#: about.php:206
 msgid "Wo ich studiere:"
 msgstr ""
 
-#: about.php:216
+#: about.php:218
 msgid "Wo ich arbeite:"
 msgstr ""
 
-#: about.php:230 admin_dates.php:646 admin_dates.php:836
-#: admin_metadates.php:678 edit_about.php:1300 inst_admin.php:127
+#: about.php:232 admin_dates.php:646 admin_dates.php:836
+#: admin_metadates.php:676 edit_about.php:1301 inst_admin.php:127
 #: mein_stundenplan.php:648 show_dates.inc.php:188 show_dates.inc.php:364
 #: show_dates.inc.php:608
 msgid "Raum:"
 msgstr ""
 
-#: about.php:232 edit_about.php:1306
+#: about.php:234 edit_about.php:1307
 msgid "Sprechzeit:"
 msgstr ""
 
-#: about.php:234 edit_about.php:1312 inst_admin.php:135
+#: about.php:236 edit_about.php:1313 inst_admin.php:135
 msgid "Telefon:"
 msgstr ""
 
-#: about.php:236 edit_about.php:1318 inst_admin.php:139 institut_main.php:133
+#: about.php:238 edit_about.php:1319 inst_admin.php:139 institut_main.php:133
 msgid "Fax:"
 msgstr ""
 
-#: about.php:246
+#: about.php:248
 msgid "Besucher dieser Homepage:"
 msgstr ""
 
-#: about.php:252
+#: about.php:254
 msgid "Zur Highscoreliste"
 msgstr ""
 
-#: about.php:253
+#: about.php:255
 msgid "Ihr Stud.IP-Score:"
 msgstr ""
 
-#: about.php:254
+#: about.php:256
 msgid "Ihr Rang:"
 msgstr ""
 
-#: about.php:259
+#: about.php:261
 msgid "Stud.IP-Score:"
 msgstr ""
 
-#: about.php:260
+#: about.php:262
 msgid "Rang:"
 msgstr ""
 
-#: about.php:265
+#: about.php:267
 msgid "Stud.IP Messenger starten"
 msgstr ""
 
-#: about.php:268
+#: about.php:270
 msgid "zu Buddies hinzuf&uuml;gen"
 msgstr ""
 
-#: about.php:269
+#: about.php:271
 msgid "Nachricht an Nutzer"
 msgstr ""
 
-#: about.php:269
+#: about.php:271
 msgid "Nachricht an Nutzer verschicken"
 msgstr ""
 
-#: about.php:274
+#: about.php:276
 msgid "vCard herunterladen"
 msgstr ""
 
-#: about.php:274 contact.php:270
+#: about.php:276 contact.php:270
 msgid "als vCard exportieren"
 msgstr ""
 
-#: about.php:338 archiv.inc.php:307
+#: about.php:340 archiv.inc.php:307
 msgid "Literaturlisten"
 msgstr ""
 
-#: about.php:341 admin_lit_element.php:291 admin_lit_list.php:126
+#: about.php:343 admin_lit_element.php:291 admin_lit_list.php:126
 #: lit_search.php:302
 msgid "Literaturlisten bearbeiten"
 msgstr ""
 
-#: about.php:350 links_about.inc.php:55 help/structure.inc.php:131
+#: about.php:352 links_about.inc.php:55 help/structure.inc.php:131
 msgid "Lebenslauf"
 msgstr ""
 
-#: about.php:357
+#: about.php:359
 msgid "Hobbies"
 msgstr ""
 
-#: about.php:364 links_about.inc.php:58
+#: about.php:366 links_about.inc.php:58
 msgid "Publikationen"
 msgstr ""
 
-#: about.php:371
+#: about.php:373
 msgid "Arbeitsschwerpunkte"
 msgstr ""
 
-#: about.php:419 admin_banner_ads.php:119 admin_metadates.php:827
-#: admin_metadates.php:829 admin_seminare_assi.php:1809
-#: admin_seminare_assi.php:1811 admin_sem_tree.php:201 functions.php:954
-#: meine_seminare_func.inc.php:143 meine_seminare_func.inc.php:159
+#: about.php:398 kategorien.inc.php:61
+msgid "f&uuml;r andere unsichtbar"
+msgstr ""
+
+#: about.php:421 admin_banner_ads.php:119 admin_metadates.php:825
+#: admin_metadates.php:827 admin_seminare_assi.php:1853
+#: admin_seminare_assi.php:1855 admin_sem_tree.php:201 functions.php:954
+#: meine_seminare_func.inc.php:141 meine_seminare_func.inc.php:157
 #: lib/classes/SemBrowse.class.php:490
 #: lib/classes/StudipSemTreeViewAdmin.class.php:612
 #: lib/classes/StudipSemTreeView.class.php:187
 msgid "unbegrenzt"
 msgstr ""
 
-#: about.php:426 admin_studiengang.php:260 admin_test_fak.php:349
+#: about.php:428 admin_studiengang.php:260 admin_test_fak.php:349
 #: browse.php:126 header.php:171 links_admin.inc.php:212
 #: links_admin.inc.php:214 links_openobject.inc.php:189
 #: lib/classes/AdminNewsController.class.php:476
@@ -207,13 +211,13 @@ msgid ""
 "Kontingentierung ein!"
 msgstr ""
 
-#: admin_admission.php:286 admin_seminare_assi.php:739
+#: admin_admission.php:286 admin_seminare_assi.php:781
 msgid ""
 "Es macht keinen Sinn, die Sicherheitsstufe f&uuml;r den Lesezugriff h&ouml;"
 "her zu setzen als f&uuml;r den Schreibzugriff!"
 msgstr ""
 
-#: admin_admission.php:304 admin_seminare_assi.php:1044
+#: admin_admission.php:304 admin_seminare_assi.php:1086
 msgid "Sie haben kein Passwort eingegeben! Bitte geben Sie ein Passwort ein!"
 msgstr ""
 
@@ -223,7 +227,7 @@ msgid ""
 "berein!"
 msgstr ""
 
-#: admin_admission.php:316 admin_seminare_assi.php:665
+#: admin_admission.php:316 admin_seminare_assi.php:707
 msgid ""
 "Wenn Sie die Teilnahmebeschr&auml;nkung benutzen wollen, m&uuml;ssen Sie "
 "wenigstens einen Teilnehmer zulassen."
@@ -236,13 +240,13 @@ msgid ""
 "einen Platz in der Veranstaltung erhalten haben, manuell entfernen!"
 msgstr ""
 
-#: admin_admission.php:349 admin_seminare_assi.php:1012
+#: admin_admission.php:349 admin_seminare_assi.php:1054
 msgid ""
 "Die Werte der einzelnen Kontigente &uuml;bersteigen 100%. Bitte &auml;ndern "
 "Sie die Kontigente!"
 msgstr ""
 
-#: admin_admission.php:367 admin_seminare_assi.php:1067
+#: admin_admission.php:367 admin_seminare_assi.php:1109
 #, c-format
 msgid ""
 "Das Losdatum liegt nach dem ersten Veranstaltungstermin am %s. Bitte &auml;"
@@ -267,7 +271,7 @@ msgid ""
 "ndern Sie das Datum!"
 msgstr ""
 
-#: admin_admission.php:379 admin_seminare_assi.php:1087
+#: admin_admission.php:379 admin_seminare_assi.php:1129
 msgid ""
 "Das Losdatum liegt zu nah am aktuellen Datum. Bitte &auml;ndern Sie das "
 "Losdatum!"
@@ -363,12 +367,12 @@ msgid ""
 "Anmeldeverfahren f&uuml;r die Veranstaltung festzulegen."
 msgstr ""
 
-#: admin_admission.php:572 admin_metadates.php:562 admin_modules.php:232
+#: admin_admission.php:572 admin_metadates.php:560 admin_modules.php:232
 #: admin_room_requests.php:238
 msgid "Diese Daten sind noch nicht gespeichert."
 msgstr ""
 
-#: admin_admission.php:582 admin_seminare_assi.php:3089 details.php:529
+#: admin_admission.php:582 admin_seminare_assi.php:3133 details.php:529
 msgid "Anmeldeverfahren:"
 msgstr ""
 
@@ -406,33 +410,33 @@ msgid ""
 "die Veranstaltung m&ouml;glich ist."
 msgstr ""
 
-#: admin_admission.php:618 admin_seminare_assi.php:3034
+#: admin_admission.php:618 admin_seminare_assi.php:3078
 msgid "Startdatum f&uuml;r Anmeldungen"
 msgstr ""
 
 #: admin_admission.php:623 admin_admission.php:633 admin_admission.php:882
-#: admin_seminare_assi.php:2465 admin_seminare_assi.php:2504
-#: admin_seminare_assi.php:3039 admin_seminare_assi.php:3053
-#: admin_seminare_assi.php:3125
+#: admin_seminare_assi.php:2509 admin_seminare_assi.php:2548
+#: admin_seminare_assi.php:3083 admin_seminare_assi.php:3097
+#: admin_seminare_assi.php:3169
 msgid "um"
 msgstr ""
 
 #: admin_admission.php:625 admin_admission.php:635 admin_admission.php:884
-#: admin_dates.php:618 admin_dates.php:781 admin_metadates.php:655
-#: admin_seminare_assi.php:2390 admin_seminare_assi.php:2468
-#: admin_seminare_assi.php:2507 admin_seminare_assi.php:3041
-#: admin_seminare_assi.php:3055 admin_seminare_assi.php:3127
+#: admin_dates.php:618 admin_dates.php:781 admin_metadates.php:653
+#: admin_seminare_assi.php:2434 admin_seminare_assi.php:2512
+#: admin_seminare_assi.php:2551 admin_seminare_assi.php:3085
+#: admin_seminare_assi.php:3099 admin_seminare_assi.php:3171
 #: mein_stundenplan.php:489 mein_stundenplan.php:626 mein_stundenplan.php:644
 #: ms_stundenplan.inc.php:173 ms_stundenplan.inc.php:195
 msgid "Uhr"
 msgstr ""
 
-#: admin_admission.php:628 admin_seminare_assi.php:3048
+#: admin_admission.php:628 admin_seminare_assi.php:3092
 msgid "Enddatum f&uuml;r Anmeldungen"
 msgstr ""
 
 #: admin_admission.php:651 admin_admission.php:663
-#: admin_seminare_assi.php:1732
+#: admin_seminare_assi.php:1776
 msgid "Anmeldemodus:"
 msgstr ""
 
@@ -483,27 +487,27 @@ msgid ""
 msgstr ""
 
 #: admin_admission.php:701 admin_admission.php:714 admin_admission.php:718
-#: admin_seminare_assi.php:2199 admin_seminare_assi.php:2222
-#: admin_seminare_assi.php:2227
+#: admin_seminare_assi.php:2243 admin_seminare_assi.php:2266
+#: admin_seminare_assi.php:2271
 msgid "freier Zugriff"
 msgstr ""
 
 #: admin_admission.php:702 admin_admission.php:722
-#: admin_seminare_assi.php:2200 admin_seminare_assi.php:2231
+#: admin_seminare_assi.php:2244 admin_seminare_assi.php:2275
 msgid "in Stud.IP angemeldet"
 msgstr ""
 
 #: admin_admission.php:703 admin_admission.php:723
-#: admin_seminare_assi.php:2201 admin_seminare_assi.php:2232
+#: admin_seminare_assi.php:2245 admin_seminare_assi.php:2276
 msgid "nur mit Passwort"
 msgstr ""
 
-#: admin_admission.php:707 admin_seminare_assi.php:2213
+#: admin_admission.php:707 admin_seminare_assi.php:2257
 msgid "Schreibzugriff:"
 msgstr ""
 
-#: admin_admission.php:732 crcloginform.ihtml:153 crcregister.ihtml:208
-#: edit_about.php:1090 edit_about.php:1126 migration2studip.php:49
+#: admin_admission.php:732 crcloginform.ihtml:153 crcregister.ihtml:209
+#: edit_about.php:1091 edit_about.php:1127 migration2studip.php:49
 #: migration2studip.php:119
 msgid "Passwort:"
 msgstr ""
@@ -515,12 +519,12 @@ msgid ""
 msgstr ""
 
 #: admin_admission.php:737 admin_admission.php:742
-#: admin_seminare_assi.php:3074 admin_seminare_assi.php:3076
-#: edit_about.php:1094
+#: admin_seminare_assi.php:3118 admin_seminare_assi.php:3120
+#: edit_about.php:1095
 msgid "Passwort-Wiederholung:"
 msgstr ""
 
-#: admin_admission.php:758 admin_seminare_assi.php:1721
+#: admin_admission.php:758 admin_seminare_assi.php:1765
 msgid "maximale Teilnehmeranzahl:"
 msgstr ""
 
@@ -544,30 +548,30 @@ msgid ""
 "zugelassen sind."
 msgstr ""
 
-#: admin_admission.php:779 admin_seminare_assi.php:3109
+#: admin_admission.php:779 admin_seminare_assi.php:3153
 msgid "Alle anderen Studieng&auml;nge"
 msgstr ""
 
-#: admin_admission.php:779 admin_seminare_assi.php:3109
+#: admin_admission.php:779 admin_seminare_assi.php:3153
 msgid "Alle Studieng&auml;nge"
 msgstr ""
 
-#: admin_admission.php:812 admin_seminare_assi.php:3163
+#: admin_admission.php:812 admin_seminare_assi.php:3207
 msgid "Den Studiengang aus der Liste löschen"
 msgstr ""
 
-#: admin_admission.php:830 admin_seminare_assi.php:2832
-#: admin_seminare_assi.php:2849 admin_seminare_assi.php:2866
-#: admin_seminare_assi.php:3179 teilnehmer.php:1047 teilnehmer.php:1084
-#: teilnehmer.php:1154
+#: admin_admission.php:830 admin_seminare_assi.php:2876
+#: admin_seminare_assi.php:2893 admin_seminare_assi.php:2910
+#: admin_seminare_assi.php:3223 teilnehmer.php:1055 teilnehmer.php:1092
+#: teilnehmer.php:1162
 msgid "bitte ausw&auml;hlen"
 msgstr ""
 
-#: admin_admission.php:865 admin_seminare_assi.php:3120
+#: admin_admission.php:865 admin_seminare_assi.php:3164
 msgid "Losdatum"
 msgstr ""
 
-#: admin_admission.php:865 admin_seminare_assi.php:3120
+#: admin_admission.php:865 admin_seminare_assi.php:3164
 msgid "Enddatum der Kontingentierung"
 msgstr ""
 
@@ -687,9 +691,9 @@ msgid "sofort"
 msgstr ""
 
 #: admin_banner_ads.php:119 admin_dates.php:616 admin_dates.php:779
-#: admin_metadates.php:819 admin_metadates.php:821 admin_metadates.php:824
-#: admin_seminare_assi.php:1801 admin_seminare_assi.php:1803
-#: admin_seminare_assi.php:1806
+#: admin_metadates.php:817 admin_metadates.php:819 admin_metadates.php:822
+#: admin_seminare_assi.php:1845 admin_seminare_assi.php:1847
+#: admin_seminare_assi.php:1850
 msgid "bis"
 msgstr ""
 
@@ -715,20 +719,20 @@ msgstr ""
 #: admin_banner_ads.php:369 admin_banner_ads.php:372 admin_banner_ads.php:419
 #: admin_banner_ads.php:422 admin_banner_ads.php:424 admin_banner_ads.php:427
 #: admin_dates.php:44 admin_dates.php:47 admin_dates.php:49
-#: admin_metadates.php:212 admin_seminare_assi.php:590 functions.php:705
+#: admin_metadates.php:207 admin_seminare_assi.php:632 functions.php:705
 #: functions.php:709
 msgid "mm"
 msgstr ""
 
 #: admin_banner_ads.php:135 admin_banner_ads.php:365 admin_banner_ads.php:371
 #: admin_banner_ads.php:421 admin_banner_ads.php:426 admin_dates.php:43
-#: admin_metadates.php:213 admin_seminare_assi.php:591 functions.php:706
+#: admin_metadates.php:208 admin_seminare_assi.php:633 functions.php:706
 msgid "tt"
 msgstr ""
 
 #: admin_banner_ads.php:135 admin_banner_ads.php:367 admin_banner_ads.php:373
 #: admin_banner_ads.php:423 admin_banner_ads.php:428 admin_dates.php:45
-#: admin_metadates.php:214 admin_seminare_assi.php:592 functions.php:707
+#: admin_metadates.php:209 admin_seminare_assi.php:634 functions.php:707
 msgid "jjjj"
 msgstr ""
 
@@ -807,7 +811,7 @@ msgstr ""
 
 #: admin_banner_ads.php:278 admin_dates.php:444 admin_news.php:191
 #: admin_seminare1.php:352 admin_statusgruppe.php:289 details.php:109
-#: folder.php:386 functions.php:73 functions.php:78 functions.php:130
+#: folder.php:392 functions.php:73 functions.php:78 functions.php:130
 #: functions.php:134 gruppe.php:77 links_admin.inc.php:955
 #: links_admin.inc.php:976 links_admin.inc.php:985 sem_notification.php:154
 #: show_admission.php:171 show_log.php:83 show_log.php:102
@@ -815,8 +819,8 @@ msgid "Veranstaltung"
 msgstr ""
 
 #: admin_banner_ads.php:279 admin_news.php:191 config.inc.php:297
-#: config.inc.php.dist:186 contact.inc.php:223 edit_about.php:1406
-#: folder.php:400 freie.php:197 functions.php:87 functions.php:174
+#: config.inc.php.dist:186 contact.inc.php:223 edit_about.php:1407
+#: folder.php:406 freie.php:197 functions.php:87 functions.php:174
 #: sem_browse.inc.php:377 show_bereich.php:76 show_log.php:84 show_log.php:108
 #: lib/classes/SemBrowse.class.php:30
 msgid "Einrichtung"
@@ -956,25 +960,25 @@ msgstr ""
 msgid "NutzerInnen gefunden:"
 msgstr ""
 
-#: admin_config.php:144 admin_seminare_assi.php:2034
-#: admin_seminare_assi.php:2101
+#: admin_config.php:144 admin_seminare_assi.php:2078
+#: admin_seminare_assi.php:2145
 msgid "Den/die BenutzerIn hinzufügen"
 msgstr ""
 
 #: admin_config.php:145 admin_room_requests.php:428 admin_seminare1.php:656
-#: admin_seminare_assi.php:2107 admin_seminare_assi.php:2748
+#: admin_seminare_assi.php:2151 admin_seminare_assi.php:2792
 msgid "neue Suche starten"
 msgstr ""
 
-#: admin_config.php:151 admin_seminare_assi.php:2046
-#: admin_seminare_assi.php:2113
+#: admin_config.php:151 admin_seminare_assi.php:2090
+#: admin_seminare_assi.php:2157
 msgid "KeineN NutzerIn gefunden."
 msgstr ""
 
 #: admin_config.php:154 admin_news.php:180 admin_room_requests.php:440
 #: admin_seminare1.php:600 admin_seminare1.php:665
-#: admin_seminare_assi.php:2049 admin_seminare_assi.php:2116
-#: admin_seminare_assi.php:2760 archiv.php:525 forum.inc.php:1722
+#: admin_seminare_assi.php:2093 admin_seminare_assi.php:2160
+#: admin_seminare_assi.php:2804 archiv.php:525 forum.inc.php:1722
 #: institut_browse.php:103 pers_browse.inc.php:138
 #: lib/classes/AdminNewsController.class.php:319
 #: lib/classes/StudipLitSearch.class.php:83
@@ -983,7 +987,7 @@ msgid "Suche starten"
 msgstr ""
 
 #: admin_config.php:155 admin_seminare1.php:601 admin_seminare1.php:666
-#: admin_seminare_assi.php:2117
+#: admin_seminare_assi.php:2161
 msgid "Geben Sie zur Suche den Vor-, Nach- oder Usernamen ein."
 msgstr ""
 
@@ -992,7 +996,7 @@ msgstr ""
 msgid "Kommentar:"
 msgstr ""
 
-#: admin_config.php:213 datei.inc.php:1289 datei.inc.php:1454
+#: admin_config.php:213 datei.inc.php:1292 datei.inc.php:1457
 #: show_dates.inc.php:267 show_dates.inc.php:425 show_dates.inc.php:592
 msgid "Keine Beschreibung vorhanden"
 msgstr ""
@@ -1077,8 +1081,8 @@ msgid "alle"
 msgstr ""
 
 #: admin_datafields.php:268 admin_datafields.php:484 admin_datafields.php:703
-#: edit_about.php:1224 edit_about.php:1327 edit_about.php:1379
-#: edit_about.php:1434 edit_about.php:1479
+#: edit_about.php:1225 edit_about.php:1328 edit_about.php:1380
+#: edit_about.php:1435 edit_about.php:1480
 #: lib/classes/AdminNewsController.class.php:241
 #: lib/classes/StudipRangeTreeViewAdmin.class.php:681
 msgid "Änderungen übernehmen"
@@ -1143,7 +1147,7 @@ msgstr ""
 msgid "Der Ablaufplan wurde erstellt. Es wurden %s Termine erstellt."
 msgstr ""
 
-#: admin_dates.php:196 admin_metadates.php:218 admin_seminare_assi.php:596
+#: admin_dates.php:196 admin_metadates.php:213 admin_seminare_assi.php:638
 #: dates.inc.php:690
 msgid "Bitte geben Sie ein g&uuml;ltiges Datum ein!"
 msgstr ""
@@ -1201,7 +1205,7 @@ msgstr ""
 
 #: admin_dates.php:274 admin_dates.php:277 admin_dates.php:350
 #: admin_dates.php:356 archiv.inc.php:433 dates.inc.php:835 dates.inc.php:1183
-#: folder.php:120
+#: folder.php:126
 msgid "am"
 msgstr ""
 
@@ -1209,7 +1213,7 @@ msgstr ""
 msgid "Hier kann zu diesem Termin diskutiert werden"
 msgstr ""
 
-#: admin_dates.php:278 admin_dates.php:357 dates.inc.php:1188 folder.php:121
+#: admin_dates.php:278 admin_dates.php:357 dates.inc.php:1188 folder.php:127
 msgid "Ablage für Ordner und Dokumente zu diesem Termin"
 msgstr ""
 
@@ -1236,7 +1240,7 @@ msgid ""
 "auf %sRaumanfragen%s."
 msgstr ""
 
-#: admin_dates.php:420 admin_metadates.php:481
+#: admin_dates.php:420 admin_metadates.php:479
 #, c-format
 msgid ""
 "Um R&auml;ume f&uuml;r Ihre Veranstaltung zu bekommen, m&uuml;ssen Sie eine %"
@@ -1344,23 +1348,23 @@ msgid "von"
 msgstr ""
 
 #: admin_dates.php:634 admin_dates.php:830 admin_literatur_overview.php:401
-#: admin_seminare_assi.php:3660 admin_sem_tree.php:147 crcregister.ihtml:218
-#: edit_about.php:1133 lit_overview_print_view.php:97 lit_search.php:237
+#: admin_seminare_assi.php:3704 admin_sem_tree.php:147 crcregister.ihtml:219
+#: edit_about.php:1134 lit_overview_print_view.php:97 lit_search.php:237
 #: new_user_md5.php:166 new_user_md5.php:277 sem_browse.inc.php:239
 #: lib/classes/SemBrowse.class.php:250
 msgid "Titel:"
 msgstr ""
 
-#: admin_dates.php:638 admin_dates.php:831 admin_metadates.php:662
+#: admin_dates.php:638 admin_dates.php:831 admin_metadates.php:660
 #: admin_semester.inc.php:179 admin_semester.inc.php:678
-#: admin_seminare_assi.php:2399 admin_studiengang.php:185 archiv.inc.php:124
-#: archiv.php:292 archiv.php:464 datei.inc.php:584 datei.inc.php:1118
+#: admin_seminare_assi.php:2443 admin_studiengang.php:185 archiv.inc.php:124
+#: archiv.php:292 archiv.php:464 datei.inc.php:584 datei.inc.php:1121
 #: mein_stundenplan.php:645
 msgid "Beschreibung:"
 msgstr ""
 
-#: admin_dates.php:656 admin_dates.php:843 admin_metadates.php:666
-#: admin_metadates.php:685 admin_seminare_assi.php:2403 folder.php:418
+#: admin_dates.php:656 admin_dates.php:843 admin_metadates.php:664
+#: admin_metadates.php:683 admin_seminare_assi.php:2447 folder.php:424
 msgid "ausw&auml;hlen oder wie Eingabe"
 msgstr ""
 
@@ -1380,16 +1384,16 @@ msgstr ""
 msgid "Dateiordner anlegen"
 msgstr ""
 
-#: admin_dates.php:843 admin_metadates.php:685
+#: admin_dates.php:843 admin_metadates.php:683
 msgid "gebuchter Raum oder ausw&auml;hlen"
 msgstr ""
 
-#: admin_dates.php:845 admin_dates.php:863 admin_metadates.php:687
-#: admin_metadates.php:703
+#: admin_dates.php:845 admin_dates.php:863 admin_metadates.php:685
+#: admin_metadates.php:701
 msgid "kein gebuchter Raum"
 msgstr ""
 
-#: admin_dates.php:858 admin_metadates.php:698
+#: admin_dates.php:858 admin_metadates.php:696
 msgid "gebuchter Raum:"
 msgstr ""
 
@@ -1413,8 +1417,8 @@ msgstr ""
 msgid "<b>Typ:</b> unregelm&auml;&szlig;ige Veranstaltung"
 msgstr ""
 
-#: admin_dates.php:960 admin_dates.php:969 admin_seminare_assi.php:1763
-#: admin_sem_tree.php:171 archiv_assi.php:339 archiv.inc.php:66
+#: admin_dates.php:960 admin_dates.php:969 admin_seminare_assi.php:1807
+#: admin_sem_tree.php:171 archiv_assi.php:341 archiv.inc.php:66
 #: details.php:264 links_admin.inc.php:641 sem_browse.inc.php:248
 #: lib/classes/SemBrowse.class.php:259
 msgid "Semester:"
@@ -1424,7 +1428,7 @@ msgstr ""
 msgid "<b>Typ:</b> regelm&auml;&szlig;ige Veranstaltung"
 msgstr ""
 
-#: admin_dates.php:967 archiv_assi.php:348 archiv.inc.php:69 details.php:273
+#: admin_dates.php:967 archiv_assi.php:350 archiv.inc.php:69 details.php:273
 msgid "Erster Termin:"
 msgstr ""
 
@@ -1533,7 +1537,7 @@ msgid "gegen"
 msgstr ""
 
 #: admin_elearning_interface.php:70
-msgid "Administration der ELearning-Schnittstelle"
+msgid "Administration der Lernmodul-Schnittstelle"
 msgstr ""
 
 #: admin_elearning_interface.php:102 admin_elearning_interface.php:104
@@ -1678,23 +1682,23 @@ msgstr ""
 msgid "Sie haben nicht die Berechtigung neue Fakult&auml;ten zu erstellen"
 msgstr ""
 
-#: admin_institut.php:106 admin_institut.php:145 admin_institut.php:269
+#: admin_institut.php:106 admin_institut.php:145 admin_institut.php:272
 #: admin_studiengang.php:89 admin_studiengang.php:140
 msgid "Datenbankoperation gescheitert:"
 msgstr ""
 
-#: admin_institut.php:115 admin_seminare_assi.php:1410
+#: admin_institut.php:115 admin_seminare_assi.php:1454
 #: lib/classes/AdminModules.class.php:145
 msgid "Allgemeine Diskussionen"
 msgstr ""
 
-#: admin_institut.php:115 admin_seminare_assi.php:1410
+#: admin_institut.php:115 admin_seminare_assi.php:1454
 #: lib/classes/AdminModules.class.php:145
 msgid "Hier ist Raum für allgemeine Diskussionen"
 msgstr ""
 
-#: admin_institut.php:116 admin_seminare_assi.php:1414 folder.php:108
-#: folder.php:421 lib/classes/AdminModules.class.php:199
+#: admin_institut.php:116 admin_seminare_assi.php:1458 folder.php:114
+#: folder.php:427 lib/classes/AdminModules.class.php:199
 msgid "Allgemeiner Dateiordner"
 msgstr ""
 
@@ -1755,112 +1759,112 @@ msgstr ""
 msgid "Freie Seite der Einrichtung gel&ouml;scht"
 msgstr ""
 
-#: admin_institut.php:210
+#: admin_institut.php:213
 msgid "(in Stud.IP gelöscht)"
 msgstr ""
 
-#: admin_institut.php:213
+#: admin_institut.php:216
 #, c-format
 msgid "%s Bereiche im Einrichtungsbaum angepasst."
 msgstr ""
 
-#: admin_institut.php:218
+#: admin_institut.php:221
 #, c-format
 msgid "%s Funktionen/Gruppen gel&ouml;scht"
 msgstr ""
 
-#: admin_institut.php:245
+#: admin_institut.php:248
 #, c-format
 msgid "%s Konfigurationsdateien gel&ouml;scht."
 msgstr ""
 
-#: admin_institut.php:254
+#: admin_institut.php:257
 #, c-format
 msgid "%s Postings aus dem Forum der Einrichtung gel&ouml;scht."
 msgstr ""
 
-#: admin_institut.php:259 lib/classes/UserManagement.class.php:667
+#: admin_institut.php:262 lib/classes/UserManagement.class.php:667
 #, c-format
 msgid "%s Dokumente gel&ouml;scht."
 msgstr ""
 
-#: admin_institut.php:272
+#: admin_institut.php:275
 #, c-format
 msgid "Die Einrichtung \"%s\" wurde gel&ouml;scht!"
 msgstr ""
 
-#: admin_institut.php:306
+#: admin_institut.php:309
 msgid "Anlegen einer neuen Einrichtung"
 msgstr ""
 
-#: admin_institut.php:308
+#: admin_institut.php:311
 msgid "Einrichtung gel&ouml;scht"
 msgstr ""
 
-#: admin_institut.php:310 admin_seminare1.php:364 links_admin.inc.php:240
+#: admin_institut.php:313 admin_seminare1.php:364 links_admin.inc.php:240
 #: links_admin.inc.php:275 help/structure.inc.php:344
 msgid "Grunddaten"
 msgstr ""
 
-#: admin_institut.php:332
+#: admin_institut.php:335
 msgid "Die ausgewählte Einrichtung wurde gel&ouml;scht."
 msgstr ""
 
-#: admin_institut.php:333
+#: admin_institut.php:336
 #, c-format
 msgid ""
 "Bitte wählen Sie über das Schlüsselsymbol %s eine andere Einrichtung aus."
 msgstr ""
 
-#: admin_institut.php:333
+#: admin_institut.php:336
 msgid "Neue Auswahl"
 msgstr ""
 
-#: admin_institut.php:354 datei.inc.php:582 datei.inc.php:1115
-#: edit_about.php:1099 edit_about.php:1128 inst_admin.php:100
+#: admin_institut.php:357 datei.inc.php:582 datei.inc.php:1118
+#: edit_about.php:1100 edit_about.php:1129 inst_admin.php:100
 msgid "Name:"
 msgstr ""
 
-#: admin_institut.php:355 archiv.php:466 institut_main.php:145
+#: admin_institut.php:358 archiv.php:466 institut_main.php:145
 #: links_admin.inc.php:710
 msgid "Fakult&auml;t:"
 msgstr ""
 
-#: admin_institut.php:360 admin_institut.php:366
+#: admin_institut.php:363 admin_institut.php:369
 msgid "Diese Einrichtung hat den Status einer Fakult&auml;t."
 msgstr ""
 
-#: admin_institut.php:361
+#: admin_institut.php:364
 #, c-format
 msgid "Es wurden bereits %s andere Einrichtungen zugeordnet."
 msgstr ""
 
-#: admin_institut.php:382
+#: admin_institut.php:385
 msgid "Bezeichnung:"
 msgstr ""
 
-#: admin_institut.php:393
+#: admin_institut.php:396
 msgid "Strasse:"
 msgstr ""
 
-#: admin_institut.php:394 archiv.inc.php:75 institut_main.php:125
+#: admin_institut.php:397 archiv.inc.php:75 institut_main.php:125
 #: seminar_main.php:127 show_dates.inc.php:610
 msgid "Ort:"
 msgstr ""
 
-#: admin_institut.php:395
+#: admin_institut.php:398
 msgid "Telefonnummer:"
 msgstr ""
 
-#: admin_institut.php:396
+#: admin_institut.php:399
 msgid "Faxnummer:"
 msgstr ""
 
-#: admin_institut.php:397
+#: admin_institut.php:400
 msgid "Emailadresse:"
 msgstr ""
 
-#: admin_institut.php:402
+#: admin_institut.php:405
 msgid "Bevorzugter Bibliothekskatalog:"
 msgstr ""
 
@@ -2172,7 +2176,7 @@ msgstr ""
 #: admin_seminare1.php:765 forum.inc.php:119 functions.php:501
 #: functions.php:527 functions.php:557 functions.php:577
 #: lit_overview_print_view.php:117 new_user_md5.php:358 new_user_md5.php:535
-#: teilnehmer.php:838 write_topic.php:121
+#: teilnehmer.php:846 write_topic.php:121
 msgid "unbekannt"
 msgstr ""
 
@@ -2257,87 +2261,87 @@ msgid ""
 "Sie k&ouml;nnen hier einen Teil der Logging-Funktionen direkt ver&auml;ndern."
 msgstr ""
 
-#: admin_metadates.php:252
+#: admin_metadates.php:247
 msgid ""
 "Das Endsemester darf nicht vor dem Startsemester liegen. Bitte &auml;ndern "
 "Sie die entsprechenden Angaben!"
 msgstr ""
 
-#: admin_metadates.php:263
+#: admin_metadates.php:258
 msgid ""
 "Bitte f&uuml;llen Sie beide Felder f&uuml;r Start- und Endzeit der "
 "regul&auml;ren Veranstaltungstermine aus!"
 msgstr ""
 
-#: admin_metadates.php:269
+#: admin_metadates.php:264
 msgid ""
 "Sie haben eine ung&uuml;ltige Zeit eingegeben. Bitte &auml;ndern Sie die "
 "entsprechenden Angaben!"
 msgstr ""
 
-#: admin_metadates.php:274
+#: admin_metadates.php:269
 msgid ""
 "Der Endzeitpunkt der regul&auml;ren Termine muss nach dem jeweiligen "
 "Startzeitpunkt liegen!"
 msgstr ""
 
-#: admin_metadates.php:283
+#: admin_metadates.php:278
 msgid ""
 "Sie haben nicht alle Felder f&uuml;r regul&auml;ren Termine ausgef&uuml;llt. "
 "bitte korrigieren sie dies!"
 msgstr ""
 
-#: admin_metadates.php:289 admin_seminare_assi.php:1096
+#: admin_metadates.php:284 admin_seminare_assi.php:1138
 msgid "Bitte geben Sie einen ersten Termin an!"
 msgstr ""
 
-#: admin_metadates.php:292 admin_seminare_assi.php:1099
+#: admin_metadates.php:287 admin_seminare_assi.php:1141
 msgid ""
 "Bitte f&uuml;llen Sie beide Felder f&uuml;r Start- und Endzeit des ersten "
 "Termins aus!"
 msgstr ""
 
-#: admin_metadates.php:409
+#: admin_metadates.php:407
 msgid "Sie haben die Art der Veranstaltungszeiten ge&auml;ndert."
 msgstr ""
 
-#: admin_metadates.php:411
+#: admin_metadates.php:409
 msgid "Sie haben den Turnus der Veranstaltung ge&auml;ndert."
 msgstr ""
 
-#: admin_metadates.php:413
+#: admin_metadates.php:411
 msgid "Sie haben das Semester ge&auml;ndert."
 msgstr ""
 
-#: admin_metadates.php:415
+#: admin_metadates.php:413
 msgid "Sie haben den Veranstaltungsbeginn ge&auml;ndert."
 msgstr ""
 
-#: admin_metadates.php:417
+#: admin_metadates.php:415
 msgid "Sie haben die Belegungszeiten eines zugewiesenen Raums ge&auml;ndert."
 msgstr ""
 
-#: admin_metadates.php:419
+#: admin_metadates.php:417
 msgid ""
 "Dabei verlieren Sie die Buchung des zugewiesenen Raums. Der zust&auml;ndige "
 "Raumadministrator mu&szlig; Ihnen den Raum erneut zuweisen, daf&uuml;r wird "
 "eine Raumanfrage ben&ouml;tigt."
 msgstr ""
 
-#: admin_metadates.php:420
+#: admin_metadates.php:418
 msgid "Wollen Sie die Zeiten dennoch &auml;ndern?"
 msgstr ""
 
-#: admin_metadates.php:444
+#: admin_metadates.php:442
 msgid "Die allgemeinen Termindaten wurden aktualisiert."
 msgstr ""
 
-#: admin_metadates.php:452
+#: admin_metadates.php:450
 #, c-format
 msgid "%s Termine des Ablaufplans aktualisiert."
 msgstr ""
 
-#: admin_metadates.php:487
+#: admin_metadates.php:485
 #, c-format
 msgid ""
 "Die Raumanfrage der Veranstaltung wurde an den zust&auml;ndigen "
@@ -2345,163 +2349,163 @@ msgid ""
 "gehen Sie auf %sRaumanfragen%s."
 msgstr ""
 
-#: admin_metadates.php:521
+#: admin_metadates.php:519
 msgid "allgemeine Zeiten"
 msgstr ""
 
-#: admin_metadates.php:539
+#: admin_metadates.php:537
 msgid "Zeiten der Veranstaltung bearbeiten"
 msgstr ""
 
-#: admin_metadates.php:540
+#: admin_metadates.php:538
 msgid "Sie k&ouml;nnen hier die allgemeinen Zeiten bearbeiten."
 msgstr ""
 
-#: admin_metadates.php:542
+#: admin_metadates.php:540
 #, c-format
 msgid ""
 "Spezifische Termine zur Anzeige im Ablaufplan (z.B. Vorbesprechungstermine) "
 "legen Sie unter dem Men&uuml;punkt %s Ablaufplan </a> fest."
 msgstr ""
 
-#: admin_metadates.php:572
+#: admin_metadates.php:570
 msgid "Allgemeine Zeiten:"
 msgstr ""
 
-#: admin_metadates.php:573
+#: admin_metadates.php:571
 msgid ""
 "Sie k&ouml;nnen hier angeben, ob die Veranstaltung regelm&auml;&szlig;ig "
 "stattfindet oder ob die Termine unregelm&auml;&szlig;ig sind (etwa bei einer "
 "Blockveranstaltung)."
 msgstr ""
 
-#: admin_metadates.php:587 admin_metadates.php:589
-#: admin_seminare_assi.php:2319 admin_seminare_assi.php:2321
+#: admin_metadates.php:585 admin_metadates.php:587
+#: admin_seminare_assi.php:2363 admin_seminare_assi.php:2365
 msgid "w&ouml;chentlich"
 msgstr ""
 
-#: admin_metadates.php:591 admin_metadates.php:593
-#: admin_seminare_assi.php:2323 admin_seminare_assi.php:2325
+#: admin_metadates.php:589 admin_metadates.php:591
+#: admin_seminare_assi.php:2367 admin_seminare_assi.php:2369
 msgid "zweiw&ouml;chentlich"
 msgstr ""
 
-#: admin_metadates.php:596 admin_seminare_assi.php:2347
+#: admin_metadates.php:594 admin_seminare_assi.php:2391
 msgid "Die Veranstaltung findet immer zu diesen Zeiten statt:"
 msgstr ""
 
-#: admin_metadates.php:600
+#: admin_metadates.php:598
 msgid "Ablaufplantermine aktualisieren"
 msgstr ""
 
-#: admin_metadates.php:624 admin_seminare_assi.php:2359
-#: admin_seminare_assi.php:2820 admin_seminare_assi.php:2899 dates.inc.php:514
+#: admin_metadates.php:622 admin_seminare_assi.php:2403
+#: admin_seminare_assi.php:2864 admin_seminare_assi.php:2943 dates.inc.php:514
 #: mein_stundenplan.php:455 mein_stundenplan.php:604
 #: ms_stundenplan.inc.php:204 lib/classes/Seminar.class.php:208
 msgid "Dienstag"
 msgstr ""
 
-#: admin_metadates.php:625 admin_seminare_assi.php:2360
-#: admin_seminare_assi.php:2821 admin_seminare_assi.php:2900 dates.inc.php:515
+#: admin_metadates.php:623 admin_seminare_assi.php:2404
+#: admin_seminare_assi.php:2865 admin_seminare_assi.php:2944 dates.inc.php:515
 #: mein_stundenplan.php:458 mein_stundenplan.php:605
 #: ms_stundenplan.inc.php:205 lib/classes/Seminar.class.php:209
 msgid "Mittwoch"
 msgstr ""
 
-#: admin_metadates.php:626 admin_seminare_assi.php:2361
-#: admin_seminare_assi.php:2822 admin_seminare_assi.php:2901 dates.inc.php:516
+#: admin_metadates.php:624 admin_seminare_assi.php:2405
+#: admin_seminare_assi.php:2866 admin_seminare_assi.php:2945 dates.inc.php:516
 #: mein_stundenplan.php:461 mein_stundenplan.php:606
 #: ms_stundenplan.inc.php:206 lib/classes/Seminar.class.php:210
 msgid "Donnerstag"
 msgstr ""
 
-#: admin_metadates.php:627 admin_seminare_assi.php:2362
-#: admin_seminare_assi.php:2823 admin_seminare_assi.php:2902 dates.inc.php:517
+#: admin_metadates.php:625 admin_seminare_assi.php:2406
+#: admin_seminare_assi.php:2867 admin_seminare_assi.php:2946 dates.inc.php:517
 #: mein_stundenplan.php:464 mein_stundenplan.php:607
 #: ms_stundenplan.inc.php:207 lib/classes/Seminar.class.php:211
 msgid "Freitag"
 msgstr ""
 
-#: admin_metadates.php:628 admin_seminare_assi.php:2363
-#: admin_seminare_assi.php:2824 admin_seminare_assi.php:2903 dates.inc.php:518
+#: admin_metadates.php:626 admin_seminare_assi.php:2407
+#: admin_seminare_assi.php:2868 admin_seminare_assi.php:2947 dates.inc.php:518
 #: mein_stundenplan.php:467 mein_stundenplan.php:608
 #: ms_stundenplan.inc.php:208 lib/classes/Seminar.class.php:212
 msgid "Samstag"
 msgstr ""
 
-#: admin_metadates.php:629 admin_seminare_assi.php:2364
-#: admin_seminare_assi.php:2825 admin_seminare_assi.php:2904 dates.inc.php:519
+#: admin_metadates.php:627 admin_seminare_assi.php:2408
+#: admin_seminare_assi.php:2869 admin_seminare_assi.php:2948 dates.inc.php:519
 #: mein_stundenplan.php:470 mein_stundenplan.php:609
 #: ms_stundenplan.inc.php:209 lib/classes/Seminar.class.php:213
 msgid "Sonntag"
 msgstr ""
 
-#: admin_metadates.php:631 admin_seminare_assi.php:2366
-#: admin_seminare_assi.php:2819 admin_seminare_assi.php:2898 dates.inc.php:513
+#: admin_metadates.php:629 admin_seminare_assi.php:2410
+#: admin_seminare_assi.php:2863 admin_seminare_assi.php:2942 dates.inc.php:513
 #: mein_stundenplan.php:452 mein_stundenplan.php:603
 #: ms_stundenplan.inc.php:203 lib/classes/Seminar.class.php:207
 msgid "Montag"
 msgstr ""
 
-#: admin_metadates.php:653 admin_seminare_assi.php:2388
-#: admin_seminare_assi.php:2466 admin_seminare_assi.php:2505
+#: admin_metadates.php:651 admin_seminare_assi.php:2432
+#: admin_seminare_assi.php:2510 admin_seminare_assi.php:2549
 msgid "Uhr bis"
 msgstr ""
 
-#: admin_metadates.php:658 admin_seminare_assi.php:2394
-#: admin_seminare_assi.php:2473
+#: admin_metadates.php:656 admin_seminare_assi.php:2438
+#: admin_seminare_assi.php:2517
 msgid "Dieses Feld aus der Auswahl löschen"
 msgstr ""
 
-#: admin_metadates.php:722
+#: admin_metadates.php:720
 msgid ""
 "Bitte geben Sie die einzelnen Sitzungstermine unter dem Men&uuml;punkt "
 "Ablaufplan ein!"
 msgstr ""
 
-#: admin_metadates.php:737
+#: admin_metadates.php:735
 msgid "Veranstaltungsbeginn"
 msgstr ""
 
-#: admin_metadates.php:738
+#: admin_metadates.php:736
 msgid ""
 "Bei einer regelm&auml;&szlig;igen Veranstaltung k&ouml;nnen Sie den ersten "
 "Termin entweder selbst eingeben oder automatisch berechnen lassen."
 msgstr ""
 
-#: admin_metadates.php:749
+#: admin_metadates.php:747
 msgid "Veranstaltungsbeginn in der"
 msgstr ""
 
-#: admin_metadates.php:752 admin_metadates.php:754
-#: admin_seminare_assi.php:2332 admin_seminare_assi.php:2334
+#: admin_metadates.php:750 admin_metadates.php:752
+#: admin_seminare_assi.php:2376 admin_seminare_assi.php:2378
 msgid "1. Semesterwoche"
 msgstr ""
 
-#: admin_metadates.php:756 admin_metadates.php:758
-#: admin_seminare_assi.php:2337 admin_seminare_assi.php:2339
+#: admin_metadates.php:754 admin_metadates.php:756
+#: admin_seminare_assi.php:2381 admin_seminare_assi.php:2383
 msgid "2. Semesterwoche"
 msgstr ""
 
-#: admin_metadates.php:770
+#: admin_metadates.php:768
 msgid "Bitte geben Sie hier das Datum des ersten Termins ein:"
 msgstr ""
 
-#: admin_metadates.php:786 links_about.inc.php:39
+#: admin_metadates.php:784 links_about.inc.php:39
 msgid "weitere Daten"
 msgstr ""
 
-#: admin_metadates.php:791 archiv.php:247 archiv.php:410 gruppe.php:65
+#: admin_metadates.php:789 archiv.php:247 archiv.php:410 gruppe.php:65
 #: links_admin.inc.php:331 links_admin.inc.php:851 sem_browse.inc.php:373
 #: sem_browse.inc.php:451 lib/classes/SemBrowse.class.php:26
 msgid "Semester"
 msgstr ""
 
-#: admin_metadates.php:807
+#: admin_metadates.php:805
 msgid "Dauer"
 msgstr ""
 
-#: admin_metadates.php:811 admin_metadates.php:813
-#: admin_seminare_assi.php:1792 admin_seminare_assi.php:1794
+#: admin_metadates.php:809 admin_metadates.php:811
+#: admin_seminare_assi.php:1836 admin_seminare_assi.php:1838
 msgid "1 Semester"
 msgstr ""
 
@@ -2679,7 +2683,7 @@ msgid ""
 "zentralen Raumverwaltung bearbeitet."
 msgstr ""
 
-#: admin_room_requests.php:251 admin_seminare_assi.php:2603
+#: admin_room_requests.php:251 admin_seminare_assi.php:2647
 msgid ""
 "<b>Achtung:</b> Um sp&auml;ter einen passenden Raum f&uuml;r Ihre "
 "Veranstaltung zu bekommen, geben Sie bitte <u>immer</u> die gew&uuml;nschten "
@@ -2719,11 +2723,11 @@ msgstr ""
 msgid "Die Anfrage wurde bearbeitet"
 msgstr ""
 
-#: admin_room_requests.php:295 admin_seminare_assi.php:2618
+#: admin_room_requests.php:295 admin_seminare_assi.php:2662
 msgid "verantwortlich:"
 msgstr ""
 
-#: admin_room_requests.php:296 admin_seminare_assi.php:2619
+#: admin_room_requests.php:296 admin_seminare_assi.php:2663
 msgid "den ausgewählten Raum löschen"
 msgstr ""
 
@@ -2731,43 +2735,43 @@ msgstr ""
 msgid "Der ausgewählte Raum bietet folgende der wünschbaren Eigenschaften:"
 msgstr ""
 
-#: admin_room_requests.php:319 admin_seminare_assi.php:2638
+#: admin_room_requests.php:319 admin_seminare_assi.php:2682
 msgid "Raumeigenschaften angeben:"
 msgstr ""
 
 #: admin_room_requests.php:347 admin_room_requests.php:406
-#: admin_seminare_assi.php:2666 admin_seminare_assi.php:2726
+#: admin_seminare_assi.php:2710 admin_seminare_assi.php:2770
 msgid "Raumtyp ausw&auml;hlen"
 msgstr ""
 
 #: admin_room_requests.php:347 admin_room_requests.php:406
-#: admin_seminare_assi.php:2666 admin_seminare_assi.php:2726
+#: admin_seminare_assi.php:2710 admin_seminare_assi.php:2770
 msgid "Raumtyp auswählen"
 msgstr ""
 
-#: admin_room_requests.php:348 admin_seminare_assi.php:2667
+#: admin_room_requests.php:348 admin_seminare_assi.php:2711
 msgid "alle Angaben zurücksetzen"
 msgstr ""
 
-#: admin_room_requests.php:351 admin_seminare_assi.php:2670
+#: admin_room_requests.php:351 admin_seminare_assi.php:2714
 msgid "Folgende Eigenschaften sind w&uuml;nschbar:"
 msgstr ""
 
-#: admin_room_requests.php:371 admin_seminare_assi.php:2688
+#: admin_room_requests.php:371 admin_seminare_assi.php:2732
 msgid "max. Teilnehmeranzahl &uuml;bernehmen"
 msgstr ""
 
-#: admin_room_requests.php:400 admin_seminare_assi.php:2720
+#: admin_room_requests.php:400 admin_seminare_assi.php:2764
 msgid ""
 "Bitte geben Sie zun&auml;chst einen Raumtyp an, der f&uuml;r Sie am besten "
 "geeignet ist:"
 msgstr ""
 
-#: admin_room_requests.php:417 admin_seminare_assi.php:2737
+#: admin_room_requests.php:417 admin_seminare_assi.php:2781
 msgid "Raum suchen:"
 msgstr ""
 
-#: admin_room_requests.php:421 admin_seminare_assi.php:2741
+#: admin_room_requests.php:421 admin_seminare_assi.php:2785
 msgid "R&auml;ume gefunden:"
 msgstr ""
 
@@ -2775,25 +2779,25 @@ msgstr ""
 msgid "passende R&auml;ume gefunden."
 msgstr ""
 
-#: admin_room_requests.php:427 admin_seminare_assi.php:2747
+#: admin_room_requests.php:427 admin_seminare_assi.php:2791
 msgid "Den Raum als Wunschraum auswählen"
 msgstr ""
 
-#: admin_room_requests.php:430 admin_seminare_assi.php:2750
+#: admin_room_requests.php:430 admin_seminare_assi.php:2794
 msgid ""
 "(Diese R&auml;ume erf&uuml;llen die Wunschkriterien, die Sie links angegeben "
 "haben.)"
 msgstr ""
 
-#: admin_room_requests.php:436 admin_seminare_assi.php:2756
+#: admin_room_requests.php:436 admin_seminare_assi.php:2800
 msgid "<b>Keinen</b> Raum gefunden."
 msgstr ""
 
-#: admin_room_requests.php:438 admin_seminare_assi.php:2758
+#: admin_room_requests.php:438 admin_seminare_assi.php:2802
 msgid "Geben Sie zur Suche den Raumnamen ganz oder teilweise ein:"
 msgstr ""
 
-#: admin_room_requests.php:453 admin_seminare_assi.php:2773
+#: admin_room_requests.php:453 admin_seminare_assi.php:2817
 msgid "passende Räume suchen"
 msgstr ""
 
@@ -3106,7 +3110,7 @@ msgstr ""
 msgid "Typ der Veranstaltung"
 msgstr ""
 
-#: admin_seminare1.php:404 admin_seminare_assi.php:2136 archiv.inc.php:103
+#: admin_seminare1.php:404 admin_seminare_assi.php:2180 archiv.inc.php:103
 msgid "in der Kategorie"
 msgstr ""
 
@@ -3175,7 +3179,7 @@ msgstr ""
 msgid "NutzerIn hinzufügen"
 msgstr ""
 
-#: admin_seminare1.php:591 admin_seminare_assi.php:2040
+#: admin_seminare1.php:591 admin_seminare_assi.php:2084
 #: lib/classes/StudipSemSearch.class.php:232
 msgid "Neue Suche starten"
 msgstr ""
@@ -3184,19 +3188,19 @@ msgstr ""
 msgid "Keinen Nutzenden gefunden."
 msgstr ""
 
-#: admin_seminare1.php:597 admin_seminare_assi.php:2046
+#: admin_seminare1.php:597 admin_seminare_assi.php:2090
 msgid "DozentIn hinzuf&uuml;gen"
 msgstr ""
 
-#: admin_seminare1.php:597 admin_seminare_assi.php:2046
+#: admin_seminare1.php:597 admin_seminare_assi.php:2090
 msgid "LeiterIn hinzuf&uuml;gen"
 msgstr ""
 
-#: admin_seminare1.php:662 admin_seminare_assi.php:2113
+#: admin_seminare1.php:662 admin_seminare_assi.php:2157
 msgid "TutorIn hinzuf&uuml;gen"
 msgstr ""
 
-#: admin_seminare1.php:662 admin_seminare_assi.php:2113
+#: admin_seminare1.php:662 admin_seminare_assi.php:2157
 msgid "Mitglied hinzuf&uuml;gen"
 msgstr ""
 
@@ -3204,17 +3208,17 @@ msgstr ""
 msgid "Studienbereich(e)"
 msgstr ""
 
-#: admin_seminare1.php:694 admin_seminare_assi.php:2170
+#: admin_seminare1.php:694 admin_seminare_assi.php:2214
 msgid "Geben Sie zur Suche den Namen des Studienbereiches ein."
 msgstr ""
 
-#: admin_seminare1.php:696 admin_seminare_assi.php:2175 lit_search.php:66
+#: admin_seminare1.php:696 admin_seminare_assi.php:2219 lit_search.php:66
 #: lib/classes/StudipRangeTreeViewAdmin.class.php:219
 #, c-format
 msgid "Ihre Suche ergab %s Treffer."
 msgstr ""
 
-#: admin_seminare1.php:696 admin_seminare_assi.php:2175
+#: admin_seminare1.php:696 admin_seminare_assi.php:2219
 msgid " (Suchergebnisse werden blau angezeigt)"
 msgstr ""
 
@@ -3259,56 +3263,60 @@ msgid ""
 "am %s"
 msgstr ""
 
-#: admin_seminare_assi.php:450
+#: admin_seminare_assi.php:489
 msgid ""
 "Bitte geben Sie g&uuml;ltige Zeiten f&uuml;r Start- und Endzeit der "
 "Vorbesprechung ein!"
 msgstr ""
 
-#: admin_seminare_assi.php:530
+#: admin_seminare_assi.php:491
+msgid "Die Endzeit der Vorbesprechung darf nicht vor der Startzeit liegen!"
+msgstr ""
+
+#: admin_seminare_assi.php:572
 msgid ""
 "Bitte geben Sie ein g&uuml;ltiges Datum f&uuml;r den Start des "
 "Anmeldezeitraums ein!"
 msgstr ""
 
-#: admin_seminare_assi.php:533
+#: admin_seminare_assi.php:575
 msgid ""
 "Bitte geben Sie ein g&uuml;ltiges Datum f&uuml;r das Ende des "
 "Anmeldezeitraums ein!"
 msgstr ""
 
-#: admin_seminare_assi.php:538
+#: admin_seminare_assi.php:580
 msgid ""
 "Bitte geben Sie ein g&uuml;ltiges Datum f&uuml;r das Ende des "
 "Teilnahmeverfahrens ein!"
 msgstr ""
 
-#: admin_seminare_assi.php:541
+#: admin_seminare_assi.php:583
 msgid "Das Enddatum des Teilnahmeverfahrens muss nach dem Startdatum liegen!"
 msgstr ""
 
-#: admin_seminare_assi.php:580
+#: admin_seminare_assi.php:622
 msgid "Bitte geben Sie g&uuml;ltige Werte f&uuml;r das Losdatum ein!"
 msgstr ""
 
-#: admin_seminare_assi.php:582
+#: admin_seminare_assi.php:624
 msgid ""
 "Bitte geben Sie g&uuml;ltige Werte f&uuml;r das Enddatum der "
 "Kontingentierung ein!"
 msgstr ""
 
-#: admin_seminare_assi.php:650
+#: admin_seminare_assi.php:692
 msgid ""
 "Das Endsemester darf nicht vor dem Startsemester liegen. Bitte &auml;ndern "
 "Sie die entsprechenden Einstellungen!"
 msgstr ""
 
-#: admin_seminare_assi.php:655
+#: admin_seminare_assi.php:697
 msgid ""
 "Bitte geben Sie einen g&uuml;ltigen Namen f&uuml;r die Veranstaltung ein!"
 msgstr ""
 
-#: admin_seminare_assi.php:660
+#: admin_seminare_assi.php:702
 #, c-format
 msgid ""
 "Da Ihr Account keiner Einrichtung zugeordnet ist, k&ouml;nnen Sie leider "
@@ -3317,95 +3325,95 @@ msgid ""
 "des Systems!"
 msgstr ""
 
-#: admin_seminare_assi.php:705
+#: admin_seminare_assi.php:747
 msgid ""
 "Sie d&uuml;rfen dieselben DozentInnen nicht gleichzeitig als TutorInnen "
 "eintragen!"
 msgstr ""
 
-#: admin_seminare_assi.php:711
+#: admin_seminare_assi.php:753
 msgid ""
 "Bitte geben Sie mindestens einen Dozent oder eine Dozentin f&uuml;r die "
 "Veranstaltung an!"
 msgstr ""
 
-#: admin_seminare_assi.php:717
+#: admin_seminare_assi.php:759
 msgid ""
 "Sie m&uuml;ssen wenigstens sich selbst als DozentIn f&uuml;r diese "
 "Veranstaltung angeben! Der Eintrag wird automatisch gesetzt."
 msgstr ""
 
-#: admin_seminare_assi.php:725
+#: admin_seminare_assi.php:767
 msgid ""
 "Bitte geben Sie mindestens einen Studienbereich f&uuml;r die Veranstaltung "
 "an!"
 msgstr ""
 
-#: admin_seminare_assi.php:732
+#: admin_seminare_assi.php:774
 msgid ""
 "Sie haben eine oder mehrere Fach&uuml;berschriften (unterstrichen) "
 "ausgew&auml;hlt. Diese dienen nur der Orientierung und k&ouml;nnen nicht "
 "ausgew&auml;hlt werden!"
 msgstr ""
 
-#: admin_seminare_assi.php:831
+#: admin_seminare_assi.php:873
 msgid ""
 "Bitte f&uuml;llen Sie beide Felder f&uuml;r Start- und Endzeit der "
 "regul&auml;ren Termine aus!"
 msgstr ""
 
-#: admin_seminare_assi.php:837
+#: admin_seminare_assi.php:879
 msgid ""
 "Sie haben eine ung&uuml;ltige Zeit eingegeben. Bitte korrigieren Sie dies!"
 msgstr ""
 
-#: admin_seminare_assi.php:842
+#: admin_seminare_assi.php:884
 msgid ""
 "Der Endzeitpunkt eines regul&auml;ren Termins muss nach dem jeweiligen "
 "Startzeitpunkt liegen!"
 msgstr ""
 
-#: admin_seminare_assi.php:851
+#: admin_seminare_assi.php:893
 msgid ""
 "Sie haben nicht alle Felder der regul&auml;ren Termine ausgef&uuml;llt. "
 "Bitte f&uuml;llen Sie alle Felder aus!"
 msgstr ""
 
-#: admin_seminare_assi.php:861
+#: admin_seminare_assi.php:903
 msgid ""
 "Bitte f&uuml;llen Sie beide Felder f&uuml;r Start- und Endzeit der "
 "jeweiligen Termine aus!"
 msgstr ""
 
-#: admin_seminare_assi.php:867
+#: admin_seminare_assi.php:909
 msgid ""
 "Sie haben ein ung&uuml;ltiges Datum eingegeben. Bitte korrigieren Sie das "
 "Datum!"
 msgstr ""
 
-#: admin_seminare_assi.php:873
+#: admin_seminare_assi.php:915
 msgid ""
 "Sie haben eine ung&uuml;ltige Zeit eingegeben, bitte korrigieren Sie dies!"
 msgstr ""
 
-#: admin_seminare_assi.php:878
+#: admin_seminare_assi.php:920
 msgid ""
 "Der Endzeitpunkt der Termine muss nach dem jeweiligen Startzeitpunkt liegen!"
 msgstr ""
 
-#: admin_seminare_assi.php:886
+#: admin_seminare_assi.php:928
 msgid ""
 "Sie haben nicht alle Felder bei der Termineingabe ausgef&uuml;llt. Bitte "
 "f&uuml;llen Sie alle Felder aus!"
 msgstr ""
 
-#: admin_seminare_assi.php:894
+#: admin_seminare_assi.php:936
 msgid ""
 "Bitte f&uuml;llen Sie beide Felder f&uuml;r Start- und Endzeit der "
 "Vorbesprechung aus!"
 msgstr ""
 
-#: admin_seminare_assi.php:907
+#: admin_seminare_assi.php:949
 msgid ""
 "Der Termin f&uuml;r die Vorbesprechung findet zu den gleichen Zeiten wie die "
 "Veranstaltung statt. Bitte legen Sie in diesem Fall einen Ablaufplan in "
@@ -3413,50 +3421,50 @@ msgid ""
 "\"Vorbesprechung\""
 msgstr ""
 
-#: admin_seminare_assi.php:930
+#: admin_seminare_assi.php:972
 msgid ""
 "Die Anfrage konnte nicht gespeichert werden, da Sie mindestens einen "
 "Raumwunsch oder eine gew&uuml;nschte Eigenschaft (z.B. Anzahl der "
 "Sitzpl&auml;tze) angeben m&uuml;ssen!"
 msgstr ""
 
-#: admin_seminare_assi.php:932
+#: admin_seminare_assi.php:974
 msgid ""
 "Wenn Sie keinen Raumwunsch angeben m&ouml;chten, aktivieren Sie die "
 "entsprechende Option. Die freien Angaben zu R&auml;umen werden auch ohne "
 "Raumwunsch gespeichert."
 msgstr ""
 
-#: admin_seminare_assi.php:1049
+#: admin_seminare_assi.php:1091
 msgid ""
 "Das eingegebene Passwort und das Passwort zur Best&auml;tigung stimmen nicht "
 "&uuml;berein!"
 msgstr ""
 
-#: admin_seminare_assi.php:1059
+#: admin_seminare_assi.php:1101
 msgid "Bitte geben Sie einen Termin f&uuml;r das Losdatum an!"
 msgstr ""
 
-#: admin_seminare_assi.php:1061
+#: admin_seminare_assi.php:1103
 msgid ""
 "Bitte geben Sie einen Termin f&uuml;r das Enddatum der Kontingentierung an!"
 msgstr ""
 
-#: admin_seminare_assi.php:1070
+#: admin_seminare_assi.php:1112
 #, c-format
 msgid ""
 "Das Enddatum der Kontingentierung liegt nach dem ersten Veranstaltungstermin "
 "am %s. Bitte &auml;ndern Sie das Enddatum der Kontingentierung!"
 msgstr ""
 
-#: admin_seminare_assi.php:1074
+#: admin_seminare_assi.php:1116
 #, c-format
 msgid ""
 "Das Losdatum liegt nach dem eingetragenen Veranstaltungsbeginn am %s. Bitte "
 "&auml;ndern Sie das Losdatum!"
 msgstr ""
 
-#: admin_seminare_assi.php:1076
+#: admin_seminare_assi.php:1118
 #, c-format
 msgid ""
 "Das Enddatum der Kontingentierung liegt nach dem eingetragenen "
@@ -3464,38 +3472,38 @@ msgid ""
 "Kontingentierung!"
 msgstr ""
 
-#: admin_seminare_assi.php:1081
+#: admin_seminare_assi.php:1123
 msgid ""
 "Das Losdatum liegt in der Vergangenheit. Bitte &auml;ndern sie das Losdatum!"
 msgstr ""
 
-#: admin_seminare_assi.php:1083
+#: admin_seminare_assi.php:1125
 msgid ""
 "Das Enddatum der Kontingentierung liegt in der Vergangenheit. Bitte &auml;"
 "ndern Sie das Enddatum der Kontingentierung!"
 msgstr ""
 
-#: admin_seminare_assi.php:1089
+#: admin_seminare_assi.php:1131
 msgid ""
 "Das Enddatum der Kontingentierung liegt zu nah am aktuellen Datum. Bitte "
 "&auml;ndern sie das Enddatum der Kontingentierung!"
 msgstr ""
 
-#: admin_seminare_assi.php:1110
+#: admin_seminare_assi.php:1152
 msgid ""
 "Folgende gew&uuml;nschte Raumbelegungen &uuml;berschneiden sich mit bereits "
 "vorhandenen Belegungen. Bitte &auml;ndern Sie die R&auml;ume oder Zeiten!"
 msgstr ""
 
-#: admin_seminare_assi.php:1119
+#: admin_seminare_assi.php:1161
 msgid "und weitere"
 msgstr ""
 
-#: admin_seminare_assi.php:1120
+#: admin_seminare_assi.php:1162
 msgid "Raumplan anzeigen"
 msgstr ""
 
-#: admin_seminare_assi.php:1141
+#: admin_seminare_assi.php:1183
 msgid ""
 "Sie haben keine Berechtigung Veranstaltungen anzulegen Um eine Veranstaltung "
 "anlegen zu k&ouml;nnen, ben&ouml;tigen Sie mindestens den globalen Status "
@@ -3503,246 +3511,246 @@ msgid ""
 "ndigeN AdministratorIn."
 msgstr ""
 
-#: admin_seminare_assi.php:1146
+#: admin_seminare_assi.php:1188
 msgid ""
 "Sie haben keine Berechtigung f&uuml;r diese Einrichtung Veranstaltungen "
 "anzulegen."
 msgstr ""
 
-#: admin_seminare_assi.php:1153
+#: admin_seminare_assi.php:1195
 msgid "Bitte geben Sie einen Namen f&uuml;r die Veranstaltung ein!"
 msgstr ""
 
-#: admin_seminare_assi.php:1159
+#: admin_seminare_assi.php:1201
 msgid "Bitte geben Sie eine Heimat-Einrichtung f&uuml;r die Veranstaltung an!"
 msgstr ""
 
-#: admin_seminare_assi.php:1165
+#: admin_seminare_assi.php:1207
 msgid ""
 "Bitte geben Sie wenigstens einen Studienbereich f&uuml;r die Veranstaltung "
 "an!"
 msgstr ""
 
-#: admin_seminare_assi.php:1172
+#: admin_seminare_assi.php:1214
 msgid ""
 "Bitte geben Sie wenigstens eine Dozentin oder einen Dozenten f&uuml;r die "
 "Veranstaltung an!"
 msgstr ""
 
-#: admin_seminare_assi.php:1248
+#: admin_seminare_assi.php:1290
 msgid "<b>Fehler:</b>"
 msgstr ""
 
-#: admin_seminare_assi.php:1414 lib/classes/AdminModules.class.php:199
+#: admin_seminare_assi.php:1458 lib/classes/AdminModules.class.php:199
 msgid "Ablage für allgemeine Ordner und Dokumente der Veranstaltung"
 msgstr ""
 
-#: admin_seminare_assi.php:1478 config.inc.php.dist:283
+#: admin_seminare_assi.php:1522 config.inc.php.dist:283
 msgid "Informationen"
 msgstr ""
 
-#: admin_seminare_assi.php:1485
+#: admin_seminare_assi.php:1529
 msgid "<b>Fehler:</b> Die Veranstaltung wurde schon eingetragen!"
 msgstr ""
 
-#: admin_seminare_assi.php:1525
+#: admin_seminare_assi.php:1569
 msgid "Fehler! Der Eintrag konnte nicht erfolgreich vorgenommen werden!"
 msgstr ""
 
-#: admin_seminare_assi.php:1572
+#: admin_seminare_assi.php:1616
 msgid "Veranstaltungs-Assistent - Veranstaltungskategorie ausw&auml;hlen"
 msgstr ""
 
-#: admin_seminare_assi.php:1581
+#: admin_seminare_assi.php:1625
 msgid ""
 "Willkommen beim Veranstaltungs-Assistenten. Der Veranstaltungs-Assistent "
 "wird Sie Schritt f&uuml;r Schritt durch die notwendigen Schritte zum Anlegen "
 "einer neuen Veranstaltung in Stud.IP leiten."
 msgstr ""
 
-#: admin_seminare_assi.php:1582
+#: admin_seminare_assi.php:1626
 msgid ""
 "Bitte geben Sie zun&auml;chst an, welche Art von Veranstaltung Sie neu "
 "anlegen m&ouml;chten:"
 msgstr ""
 
-#: admin_seminare_assi.php:1615
+#: admin_seminare_assi.php:1659
 msgid "Veranstaltungs-Assistent - Schritt 1: Grunddaten"
 msgstr ""
 
-#: admin_seminare_assi.php:1628
+#: admin_seminare_assi.php:1672
 msgid ""
 "Willkommen beim Veranstaltungs-Assistenten. Der Veranstaltungs-Assistent "
 "wird Sie nun Schritt f&uuml;r Schritt durch die notwendigen Schritte zum "
 "Anlegen einer neuen Veranstaltung in Stud.IP leiten."
 msgstr ""
 
-#: admin_seminare_assi.php:1631
+#: admin_seminare_assi.php:1675
 msgid ""
 "Die Daten der zu kopierenden Veranstaltung werden &uuml;bernommen. Bitte "
 "&auml;ndern Sie die Informationen, die sich f&uuml;r die kopierte "
 "Veranstaltung ergeben."
 msgstr ""
 
-#: admin_seminare_assi.php:1634
+#: admin_seminare_assi.php:1678
 msgid "Schritt 1: Grunddaten der Veranstaltung angeben"
 msgstr ""
 
-#: admin_seminare_assi.php:1635 admin_seminare_assi.php:1967
-#: admin_seminare_assi.php:2284 admin_seminare_assi.php:2994
+#: admin_seminare_assi.php:1679 admin_seminare_assi.php:2011
+#: admin_seminare_assi.php:2328 admin_seminare_assi.php:3038
 #, c-format
 msgid ""
 "Alle mit einem Sternchen%smarkierten Felder <b>m&uuml;ssen</b> ausgef&uuml;"
 "llt werden, um eine Veranstaltung anlegen zu k&ouml;nnen."
 msgstr ""
 
-#: admin_seminare_assi.php:1657 archiv.php:231
+#: admin_seminare_assi.php:1701 archiv.php:231
 msgid "Name der Veranstaltung:"
 msgstr ""
 
-#: admin_seminare_assi.php:1662
+#: admin_seminare_assi.php:1706
 msgid ""
 "Bitte geben Sie hier einen aussagekräftigen, aber möglichst knappen Titel "
 "für die Veranstaltung ein. Dieser Eintrag erscheint innerhalb Stud.IPs "
 "durchgehend zur Identifikation der Veranstaltung."
 msgstr ""
 
-#: admin_seminare_assi.php:1669 admin_sem_tree.php:150 archiv_assi.php:323
+#: admin_seminare_assi.php:1713 admin_sem_tree.php:150 archiv_assi.php:325
 #: archiv.inc.php:60 archiv.php:462 sem_browse.inc.php:245
 #: seminar_main.php:120 lib/classes/SemBrowse.class.php:256
 msgid "Untertitel:"
 msgstr ""
 
-#: admin_seminare_assi.php:1674
+#: admin_seminare_assi.php:1718
 msgid "Der Untertitel ermöglicht eine genauere Beschreibung der Veranstaltung."
 msgstr ""
 
-#: admin_seminare_assi.php:1683 archiv_assi.php:368 archiv.inc.php:113
+#: admin_seminare_assi.php:1727 archiv_assi.php:370 archiv.inc.php:113
 #: details.php:293
 msgid "Veranstaltungsnummer:"
 msgstr ""
 
-#: admin_seminare_assi.php:1688
+#: admin_seminare_assi.php:1732
 msgid ""
 "Fall Sie eine eindeutige Veranstaltungsnummer für diese Veranstaltung "
 "kennen, geben Sie diese bitte hier ein."
 msgstr ""
 
-#: admin_seminare_assi.php:1692 archiv.inc.php:119
+#: admin_seminare_assi.php:1736 archiv.inc.php:119
 msgid "ECTS-Punkte:"
 msgstr ""
 
-#: admin_seminare_assi.php:1697
+#: admin_seminare_assi.php:1741
 msgid "ECTS-Kreditpunkte, die in dieser Veranstaltung erreicht werden können."
 msgstr ""
 
-#: admin_seminare_assi.php:1707
+#: admin_seminare_assi.php:1751
 msgid "Teilnahme- beschr&auml;nkung:"
 msgstr ""
 
-#: admin_seminare_assi.php:1711 archiv_assi.php:353 archiv_assi.php:402
+#: admin_seminare_assi.php:1755 archiv_assi.php:355 archiv_assi.php:404
 #: details.php:278 details.php:659 details.php:660 details.php:661
 #: details.php:662 details.php:686 details.php:693 institut_members.php:352
 #: institut_members.php:583 mystudip.inc.php:141
 msgid "keine"
 msgstr ""
 
-#: admin_seminare_assi.php:1713
+#: admin_seminare_assi.php:1757
 msgid "nach Anmeldereihenfolge"
 msgstr ""
 
-#: admin_seminare_assi.php:1715
+#: admin_seminare_assi.php:1759
 msgid "per Losverfahren"
 msgstr ""
 
-#: admin_seminare_assi.php:1717
+#: admin_seminare_assi.php:1761
 msgid ""
 "Sie können die Anzahl der Teilnehmenden beschränken. Möglich ist die "
 "Zulassung von Interessierten über das Losverfahren oder über die Reihenfolge "
 "der Anmeldung. Sie können später Angaben über zugelassene Teilnehmer machen."
 msgstr ""
 
-#: admin_seminare_assi.php:1726
+#: admin_seminare_assi.php:1770
 msgid ""
 "Geben Sie hier die erwartete Teilnehmerzahl an. Stud.IP kann auf Wunsch für "
 "Sie ein Anmeldeverfahren starten, wenn Sie »Teilnahmebeschränkung: per "
 "Losverfahren / nach Anmeldereihenfolge« benutzen."
 msgstr ""
 
-#: admin_seminare_assi.php:1736
+#: admin_seminare_assi.php:1780
 msgid "direkter Eintrag"
 msgstr ""
 
-#: admin_seminare_assi.php:1738
+#: admin_seminare_assi.php:1782
 msgid "Neue Teilnehmer werden direkt in die Veranstaltung eingetragen."
 msgstr ""
 
-#: admin_seminare_assi.php:1741
+#: admin_seminare_assi.php:1785
 msgid "vorl&auml;ufiger Eintrag"
 msgstr ""
 
-#: admin_seminare_assi.php:1743
+#: admin_seminare_assi.php:1787
 msgid ""
 "Neue Teilnehmer bekommen den Status \"vorläufig aktzeptiert\". Sie können "
 "von Hand die zugelassenen Teilnehmer auswählen. Vorläufig akzeptierte "
 "Teilnehmer haben keinen Zugriff auf die Veranstaltung."
 msgstr ""
 
-#: admin_seminare_assi.php:1752
+#: admin_seminare_assi.php:1796
 msgid "Beschreibung/ Kommentar:"
 msgstr ""
 
-#: admin_seminare_assi.php:1757
+#: admin_seminare_assi.php:1801
 msgid ""
 "Hier geben Sie bitte den eigentlichen Kommentartext der Veranstaltung "
 "(analog zum Vorlesungskommentar) ein."
 msgstr ""
 
-#: admin_seminare_assi.php:1781
+#: admin_seminare_assi.php:1825
 msgid ""
 "Bitte geben Sie hier ein, welchem Semester die Veranstaltung zugeordnet "
 "werden soll."
 msgstr ""
 
-#: admin_seminare_assi.php:1786
+#: admin_seminare_assi.php:1830
 msgid "Dauer:"
 msgstr ""
 
-#: admin_seminare_assi.php:1815
+#: admin_seminare_assi.php:1859
 msgid ""
 "Falls die Veranstaltung mehrere Semester läuft, können Sie hier das "
 "Endsemester wählen. Dauerveranstaltungen können über die entsprechende "
 "Einstellung markiert werden."
 msgstr ""
 
-#: admin_seminare_assi.php:1821 admin_seminare_assi.php:2315
+#: admin_seminare_assi.php:1865 admin_seminare_assi.php:2359
 msgid "Turnus:"
 msgstr ""
 
-#: admin_seminare_assi.php:1827 admin_seminare_assi.php:1829
+#: admin_seminare_assi.php:1871 admin_seminare_assi.php:1873
 msgid "regelm&auml;&szlig;ig"
 msgstr ""
 
-#: admin_seminare_assi.php:1832 admin_seminare_assi.php:1834
+#: admin_seminare_assi.php:1876 admin_seminare_assi.php:1878
 msgid "unregelm&auml;&szlig;ig oder Blockveranstaltung"
 msgstr ""
 
-#: admin_seminare_assi.php:1837 admin_seminare_assi.php:1839
+#: admin_seminare_assi.php:1881 admin_seminare_assi.php:1883
 msgid "keine Termine eingeben"
 msgstr ""
 
-#: admin_seminare_assi.php:1843
+#: admin_seminare_assi.php:1887
 msgid ""
 "Bitte wählen Sie hier aus, ob die Veranstaltung regelmäßig stattfindet, oder "
 "ob es nur Sitzungen an bestimmten Terminen gibt (etwa bei einem Blockseminar)"
 msgstr ""
 
-#: admin_seminare_assi.php:1850 archiv_assi.php:456 archiv.inc.php:191
+#: admin_seminare_assi.php:1894 archiv_assi.php:458 archiv.inc.php:191
 #: details.php:499
 msgid "Heimat-Einrichtung:"
 msgstr ""
 
-#: admin_seminare_assi.php:1879
+#: admin_seminare_assi.php:1923
 #, c-format
 msgid ""
 "Ihr Account wurde noch keiner Einrichtung zugeordnet. Bitte wenden Sie sich "
@@ -3750,18 +3758,18 @@ msgid ""
 "sAdministratoren%s des Systems!"
 msgstr ""
 
-#: admin_seminare_assi.php:1882
+#: admin_seminare_assi.php:1926
 msgid ""
 "Die Heimat-Einrichtung ist die Einrichtung, die offiziell für die "
 "Veranstaltung zuständig ist."
 msgstr ""
 
-#: admin_seminare_assi.php:1889 archiv_assi.php:467 archiv.inc.php:197
+#: admin_seminare_assi.php:1933 archiv_assi.php:469 archiv.inc.php:197
 #: details.php:509 impressum.php:241
 msgid "beteiligte Einrichtungen:"
 msgstr ""
 
-#: admin_seminare_assi.php:1916
+#: admin_seminare_assi.php:1960
 msgid ""
 "Bitte markieren Sie hier alle Einrichtungen, an denen die Veranstaltung "
 "ebenfalls angeboten wird. Bitte beachten Sie: Sie können später nur "
@@ -3771,77 +3779,77 @@ msgid ""
 "die Einträge klicken."
 msgstr ""
 
-#: admin_seminare_assi.php:1945
+#: admin_seminare_assi.php:1989
 msgid ""
 "Veranstaltungs-Assistent - Schritt 2: Personendaten, Typ, Sicherheit und "
 "Bereiche"
 msgstr ""
 
-#: admin_seminare_assi.php:1947
+#: admin_seminare_assi.php:1991
 msgid "Veranstaltungs-Assistent - Schritt 2: Personendaten, Typ und Sicherheit"
 msgstr ""
 
-#: admin_seminare_assi.php:1963
+#: admin_seminare_assi.php:2007
 msgid ""
 "Schritt 2: Personendaten, Studienbereiche und weitere Angaben zur "
 "Veranstaltung"
 msgstr ""
 
-#: admin_seminare_assi.php:1965
+#: admin_seminare_assi.php:2009
 msgid "Schritt 2: Personendaten und weitere Angaben zur Veranstaltung"
 msgstr ""
 
-#: admin_seminare_assi.php:1991 archiv_assi.php:382 archiv.inc.php:81
+#: admin_seminare_assi.php:2035 archiv_assi.php:384 archiv.inc.php:81
 msgid "DozentInnen:"
 msgstr ""
 
-#: admin_seminare_assi.php:1993
+#: admin_seminare_assi.php:2037
 msgid "LeiterInnen:"
 msgstr ""
 
-#: admin_seminare_assi.php:2004
+#: admin_seminare_assi.php:2048
 msgid "Keine LeiterIn gew&auml;hlt."
 msgstr ""
 
-#: admin_seminare_assi.php:2006
+#: admin_seminare_assi.php:2050
 msgid "Keine DozentIn gew&auml;hlt."
 msgstr ""
 
-#: admin_seminare_assi.php:2012
+#: admin_seminare_assi.php:2056
 msgid ""
 "Die Namen der DozentInnen, die die Veranstaltung leiten. Nutzen Sie die "
 "Suchfunktion, um weitere Eintragungen vorzunehmen oder das Mülltonnensymbol, "
 "um Einträge zu löschen."
 msgstr ""
 
-#: admin_seminare_assi.php:2014
+#: admin_seminare_assi.php:2058
 msgid ""
 "Die Namen der LeiterInnen der Veranstaltung. Nutzen Sie die Suchfunktion, um "
 "weitere Eintragungen vorzunehmen oder das Mülltonnensymbol, um Einträge zu "
 "löschen."
 msgstr ""
 
-#: admin_seminare_assi.php:2033 admin_seminare_assi.php:2100
+#: admin_seminare_assi.php:2077 admin_seminare_assi.php:2144
 msgid "NutzerIn gefunden:"
 msgstr ""
 
-#: admin_seminare_assi.php:2059 archiv_assi.php:400 archiv.inc.php:92
+#: admin_seminare_assi.php:2103 archiv_assi.php:402 archiv.inc.php:92
 msgid "TutorInnen:"
 msgstr ""
 
-#: admin_seminare_assi.php:2061
+#: admin_seminare_assi.php:2105
 msgid "Mitglieder:"
 msgstr ""
 
-#: admin_seminare_assi.php:2072
+#: admin_seminare_assi.php:2116
 msgid "Kein Mitglied gew&auml;hlt."
 msgstr ""
 
-#: admin_seminare_assi.php:2074
+#: admin_seminare_assi.php:2118
 msgid "Keine TutorIn gew&auml;hlt."
 msgstr ""
 
-#: admin_seminare_assi.php:2080
+#: admin_seminare_assi.php:2124
 msgid ""
 "Die Namen der TutorInnen, die in der Veranstaltung weitergehende Rechte "
 "erhalten (meist studentische Hilfskräfte). Nutzen Sie die Suchfunktion "
@@ -3849,89 +3857,89 @@ msgid ""
 "Mülltonnensymbol, um Einträge zu löschen."
 msgstr ""
 
-#: admin_seminare_assi.php:2082
+#: admin_seminare_assi.php:2126
 msgid ""
 "Die Namen der Mitglieder der Veranstaltung. Nutzen Sie die Suchfunktion "
 "(Lupensymbol), um weitere Eintragungen vorzunehmen oder das "
 "Mülltonnensymbol, um Einträge zu löschen."
 msgstr ""
 
-#: admin_seminare_assi.php:2125 archiv.inc.php:102
+#: admin_seminare_assi.php:2169 archiv.inc.php:102
 msgid "Typ der Veranstaltung:"
 msgstr ""
 
-#: admin_seminare_assi.php:2138
+#: admin_seminare_assi.php:2182
 msgid ""
 "Über den Typ der Veranstaltung werden die Veranstaltungen innerhalb von "
 "Listen gruppiert."
 msgstr ""
 
-#: admin_seminare_assi.php:2145 archiv.inc.php:107
+#: admin_seminare_assi.php:2189 archiv.inc.php:107
 msgid "Art der Veranstaltung:"
 msgstr ""
 
-#: admin_seminare_assi.php:2149
+#: admin_seminare_assi.php:2193
 msgid "(eigene Beschreibung)"
 msgstr ""
 
-#: admin_seminare_assi.php:2151
+#: admin_seminare_assi.php:2195
 msgid ""
 "Hier können Sie eine frei wählbare Bezeichnung für die Art der Veranstaltung "
 "wählen."
 msgstr ""
 
-#: admin_seminare_assi.php:2162 details.php:477
+#: admin_seminare_assi.php:2206 details.php:477
 #: lib/classes/StudipSemTreeViewAdmin.class.php:437
 #: lib/classes/StudipSemTreeViewSimple.class.php:69
 msgid "Studienbereiche:"
 msgstr ""
 
-#: admin_seminare_assi.php:2164
+#: admin_seminare_assi.php:2208
 msgid "(&Uuml;berschriften k&ouml;nnen nicht ausgew&auml;hlt werden!)"
 msgstr ""
 
-#: admin_seminare_assi.php:2181
+#: admin_seminare_assi.php:2225
 msgid ""
 "Hier können Sie die Studienbereiche, in denen die Veranstaltung angeboten "
 "wird, markieren. Sie können mehrere Einträge markieren, indem sie die STRG "
 "bzw. APPLE Taste gedrückt halten und dann auf die Einträge klicken."
 msgstr ""
 
-#: admin_seminare_assi.php:2191
+#: admin_seminare_assi.php:2235
 msgid "Lesezugriff:"
 msgstr ""
 
-#: admin_seminare_assi.php:2203
+#: admin_seminare_assi.php:2247
 msgid ""
 "Hier geben Sie an, ob der Lesezugriff auf die Veranstaltung frei (jeder), "
 "normal beschränkt (nur registrierte Stud.IP-User) oder nur mit einem "
 "speziellen Passwort möglich ist."
 msgstr ""
 
-#: admin_seminare_assi.php:2207
+#: admin_seminare_assi.php:2251
 msgid "Leseberechtigung nach erfolgreichem Anmeldeprozess"
 msgstr ""
 
-#: admin_seminare_assi.php:2234
+#: admin_seminare_assi.php:2278
 msgid ""
 "Hier geben Sie an, ob der Schreibzugriff auf die Veranstaltung frei (jeder), "
 "normal beschränkt (nur registrierte Stud.IP-User) oder nur mit einem "
 "speziellen Passwort möglich ist."
 msgstr ""
 
-#: admin_seminare_assi.php:2238
+#: admin_seminare_assi.php:2282
 msgid "Schreibberechtigung nach erfolgreichem Anmeldeprozess"
 msgstr ""
 
-#: admin_seminare_assi.php:2265
+#: admin_seminare_assi.php:2309
 msgid "Veranstaltungs-Assistent - Schritt 3: Termine"
 msgstr ""
 
-#: admin_seminare_assi.php:2278
+#: admin_seminare_assi.php:2322
 msgid "Schritt 3: Termindaten"
 msgstr ""
 
-#: admin_seminare_assi.php:2280
+#: admin_seminare_assi.php:2324
 msgid ""
 "Bitte geben Sie hier ein, an welchen Tagen die Veranstaltung stattfindet. "
 "Wenn Sie nur einen Wochentag wissen, brauchen Sie nur diesen angeben.<br>Sie "
@@ -3939,41 +3947,41 @@ msgid ""
 "Terminen anzugeben."
 msgstr ""
 
-#: admin_seminare_assi.php:2282
+#: admin_seminare_assi.php:2326
 msgid ""
 "Bitte geben Sie hier die einzelnen Termine an, an denen die Veranstaltung "
 "stattfindet.<br> Sie haben sp&auml;ter noch die M&ouml;glichkeit, weitere "
 "Einzelheiten zu diesen Terminen anzugeben."
 msgstr ""
 
-#: admin_seminare_assi.php:2310 admin_seminare_assi.php:2431
+#: admin_seminare_assi.php:2354 admin_seminare_assi.php:2475
 msgid "Daten &uuml;ber die Termine:"
 msgstr ""
 
-#: admin_seminare_assi.php:2313
+#: admin_seminare_assi.php:2357
 msgid "Regelm&auml;&szlig;ige Veranstaltung"
 msgstr ""
 
-#: admin_seminare_assi.php:2314 admin_seminare_assi.php:2435
+#: admin_seminare_assi.php:2358 admin_seminare_assi.php:2479
 msgid ""
 "Wenn Sie den Typ der Veranstaltung &auml;ndern m&ouml;chten, gehen Sie bitte "
 "auf die erste Seite zur&uuml;ck."
 msgstr ""
 
-#: admin_seminare_assi.php:2327
+#: admin_seminare_assi.php:2371
 msgid "erster Termin in der"
 msgstr ""
 
-#: admin_seminare_assi.php:2332 admin_seminare_assi.php:2334
-#: admin_seminare_assi.php:2339
+#: admin_seminare_assi.php:2376 admin_seminare_assi.php:2378
+#: admin_seminare_assi.php:2383
 msgid "ab"
 msgstr ""
 
-#: admin_seminare_assi.php:2341 admin_seminare_assi.php:2343
+#: admin_seminare_assi.php:2385 admin_seminare_assi.php:2387
 msgid "anderer Startzeitpunkt"
 msgstr ""
 
-#: admin_seminare_assi.php:2419
+#: admin_seminare_assi.php:2463
 msgid ""
 "Wenn es sich um eine regelmäßige Veranstaltung handelt, so können Sie hier "
 "genau angeben, an welchen Tagen, zu welchen Zeiten und in welchem Raum die "
@@ -3981,137 +3989,137 @@ msgid ""
 "Sie auf »keine Zeiten speichern«."
 msgstr ""
 
-#: admin_seminare_assi.php:2434
+#: admin_seminare_assi.php:2478
 msgid "Veranstaltung an unregelm&auml;&szlig;igen Terminen"
 msgstr ""
 
-#: admin_seminare_assi.php:2436
+#: admin_seminare_assi.php:2480
 msgid "Die Veranstaltung findet an diesen Terminen statt:"
 msgstr ""
 
-#: admin_seminare_assi.php:2459 admin_seminare_assi.php:2500
-#: admin_seminare_assi.php:3343
+#: admin_seminare_assi.php:2503 admin_seminare_assi.php:2544
+#: admin_seminare_assi.php:3387
 msgid "Datum:"
 msgstr ""
 
-#: admin_seminare_assi.php:2481
+#: admin_seminare_assi.php:2525
 msgid ""
 "In diesem Feldern können Sie alle Veranstaltungstermine eingeben. Wenn die "
 "Termine noch nicht feststehen, lassen Sie die Felder einfach frei."
 msgstr ""
 
-#: admin_seminare_assi.php:2492 archiv_assi.php:353 archiv.inc.php:72
+#: admin_seminare_assi.php:2536 archiv_assi.php:355 archiv.inc.php:72
 #: details.php:278
 msgid "Vorbesprechung:"
 msgstr ""
 
-#: admin_seminare_assi.php:2500
+#: admin_seminare_assi.php:2544
 msgid "Wenn es eine Vorbesprechung gibt, tragen Sie diese bitte hier ein:"
 msgstr ""
 
-#: admin_seminare_assi.php:2509
+#: admin_seminare_assi.php:2553
 msgid ""
 "Dieses Feld müssen Sie nur ausfüllen, wenn es eine verbindliche "
 "Vorbesprechung zu der Veranstaltung gibt."
 msgstr ""
 
-#: admin_seminare_assi.php:2541
+#: admin_seminare_assi.php:2585
 msgid "Veranstaltungs-Assistent - Schritt 4: R&auml;ume"
 msgstr ""
 
-#: admin_seminare_assi.php:2554
+#: admin_seminare_assi.php:2598
 msgid "Schritt 4: Raumangaben"
 msgstr ""
 
-#: admin_seminare_assi.php:2559
+#: admin_seminare_assi.php:2603
 msgid ""
 "Bitte geben Sie hier ein, welche Angaben zu R&auml;umen gemacht werden, "
 "buchen Sie konkrete R&auml;ume oder stellen sie Raumw&uuml;nsche an die "
 "zentrale Raumverwaltung."
 msgstr ""
 
-#: admin_seminare_assi.php:2561
+#: admin_seminare_assi.php:2605
 msgid ""
 "Bitte geben Sie hier ein, welche Angaben zu R&auml;umen gemacht werden oder "
 "stellen Sie Raumw&uuml;nsche an die zentrale Raumverwaltung."
 msgstr ""
 
-#: admin_seminare_assi.php:2563
+#: admin_seminare_assi.php:2607
 msgid ""
 "Bitte geben Sie hier ein, welche Angaben zu R&auml;umen gemacht werden oder "
 "buchen Sie konkrete R&auml;ume."
 msgstr ""
 
-#: admin_seminare_assi.php:2565
+#: admin_seminare_assi.php:2609
 msgid "Bitte geben Sie hier die, welche Angaben zu R&auml;umen gemacht werden."
 msgstr ""
 
-#: admin_seminare_assi.php:2594 links_admin.inc.php:967
+#: admin_seminare_assi.php:2638 links_admin.inc.php:967
 msgid "Raumw&uuml;nsche"
 msgstr ""
 
-#: admin_seminare_assi.php:2602
+#: admin_seminare_assi.php:2646
 msgid ""
 "Sie haben die M&ouml;glichkeit, sich Raumeigenschaften sowie einen konkreten "
 "Raum zu w&uuml;nschen. Diese Raumw&uuml;nsche werden von der zentralen "
 "Raumverwaltung bearbeitet."
 msgstr ""
 
-#: admin_seminare_assi.php:2741
+#: admin_seminare_assi.php:2785
 msgid "passende R&auml;ume gefunden"
 msgstr ""
 
-#: admin_seminare_assi.php:2793
+#: admin_seminare_assi.php:2837
 msgid ""
 "Sie k&ouml;nnen hier eine Nachricht an den Raumadministrator verfassen, um "
 "weitere W&uuml;nsche oder Bermerkungen zur gew&uuml;nschten Raumbelegung "
 "anzugeben."
 msgstr ""
 
-#: admin_seminare_assi.php:2810
+#: admin_seminare_assi.php:2854
 msgid "Raumbuchungen"
 msgstr ""
 
-#: admin_seminare_assi.php:2813
+#: admin_seminare_assi.php:2857
 msgid ""
 "Sie k&ouml;nnen zu jedem Termin einen Raum eintragen. Diese Eintragung wird "
 "beim Speichern der Veranstaltung in der Raumverwaltung gebucht."
 msgstr ""
 
-#: admin_seminare_assi.php:2827 admin_seminare_assi.php:2906
+#: admin_seminare_assi.php:2871 admin_seminare_assi.php:2950
 #, c-format
 msgid "von %02d:%02d Uhr bis %02d:%02d Uhr"
 msgstr ""
 
-#: admin_seminare_assi.php:2844 admin_seminare_assi.php:2916
+#: admin_seminare_assi.php:2888 admin_seminare_assi.php:2960
 #, c-format
 msgid "am %02d.%02d.%s von %02d:%02d Uhr bis %02d:%02d Uhr"
 msgstr ""
 
-#: admin_seminare_assi.php:2861 admin_seminare_assi.php:2926
+#: admin_seminare_assi.php:2905 admin_seminare_assi.php:2970
 #, c-format
 msgid "Vorbesprechung am %s von %s Uhr bis %s Uhr"
 msgstr ""
 
-#: admin_seminare_assi.php:2889
+#: admin_seminare_assi.php:2933
 msgid "freie Angaben zu R&auml;umen"
 msgstr ""
 
-#: admin_seminare_assi.php:2892
+#: admin_seminare_assi.php:2936
 #, c-format
 msgid ""
 "%sSie k&ouml;nnen zu jedem Termin freie Angaben zu Raum bzw. Ort machen:"
 msgstr ""
 
-#: admin_seminare_assi.php:2892
+#: admin_seminare_assi.php:2936
 msgid "oder:"
 msgstr ""
 
-#: admin_seminare_assi.php:2944
+#: admin_seminare_assi.php:2988
 msgid "Sie k&ouml;nnen hier eine unspezifische Ortsangabe machen:"
 msgstr ""
 
-#: admin_seminare_assi.php:2947
+#: admin_seminare_assi.php:2991
 msgid ""
 "Sie können hier einen Ort eingeben, der nur angezeigt wird, wenn keine "
 "genaueren Angaben aus Zeiten oder Sitzungsterminen gemacht werden können "
@@ -4119,218 +4127,218 @@ msgid ""
 "angezeigt werden."
 msgstr ""
 
-#: admin_seminare_assi.php:2949
+#: admin_seminare_assi.php:2993
 msgid ""
 "<b>Achtung:</b> Diese Ortsangabe wird nur angezeigt, wenn keine genaueren "
 "Angaben aus Zeiten oder Sitzungsterminen gemacht werden k&ouml;nnen."
 msgstr ""
 
-#: admin_seminare_assi.php:2980
+#: admin_seminare_assi.php:3024
 msgid "Veranstaltungs-Assistent - Schritt 5: Sonstige Daten"
 msgstr ""
 
-#: admin_seminare_assi.php:2993
+#: admin_seminare_assi.php:3037
 msgid "Schritt 5: Sonstige Daten zu der Veranstaltung"
 msgstr ""
 
-#: admin_seminare_assi.php:3020
+#: admin_seminare_assi.php:3064
 msgid "Anmeldezeitraum:"
 msgstr ""
 
-#: admin_seminare_assi.php:3024
+#: admin_seminare_assi.php:3068
 msgid ""
 "Bitte geben Sie hier ein Datum an, ab wann und bis wann sich Teilnehmer für "
 "die Veranstaltung eintragen d&uuml;rfen."
 msgstr ""
 
-#: admin_seminare_assi.php:3026
+#: admin_seminare_assi.php:3070
 msgid ""
 "Wenn sich die Teilnehmer sofort nach erstellen dieser Veranstaltung "
 "eintragen d&uuml;rfen, lassen Sie das Datum einfach unver&auml;ndert."
 msgstr ""
 
-#: admin_seminare_assi.php:3028
+#: admin_seminare_assi.php:3072
 msgid ""
 "Wenn es kein Ende der Anmeldefrist geben soll, lassen Sie das Enddatum "
 "unver&auml;ndert."
 msgstr ""
 
-#: admin_seminare_assi.php:3043
+#: admin_seminare_assi.php:3087
 msgid ""
 "Teilnehmer dürfen sich erst ab diesem Datum in die Veranstaltung eintragen."
 msgstr ""
 
-#: admin_seminare_assi.php:3057
+#: admin_seminare_assi.php:3101
 msgid ""
 "Teilnehmer dürfen sich nur bis zu diesem Datum in die Veranstaltung "
 "eintragen."
 msgstr ""
 
-#: admin_seminare_assi.php:3069
+#: admin_seminare_assi.php:3113
 msgid "Passwort f&uuml;r Freischaltung:"
 msgstr ""
 
-#: admin_seminare_assi.php:3079
+#: admin_seminare_assi.php:3123
 msgid ""
 "Bitte geben Sie hier ein Passwort für die Veranstaltung sowie dasselbe "
 "Passwort nochmal zur Bestätigung ein. Dieses wird später von den "
 "Teilnehmenden benötigt, um die Veranstaltung abonnieren zu können."
 msgstr ""
 
-#: admin_seminare_assi.php:3094
+#: admin_seminare_assi.php:3138
 msgid ""
 "Sie haben vorher das Stud.IP Anmeldeverfahren nach dem Losverfahren "
 "aktiviert."
 msgstr ""
 
-#: admin_seminare_assi.php:3096
+#: admin_seminare_assi.php:3140
 msgid ""
 "Sie haben vorher das Stud.IP Anmeldeverfahren nach der Reihenfolge der "
 "Anmeldungen aktiviert."
 msgstr ""
 
-#: admin_seminare_assi.php:3100
+#: admin_seminare_assi.php:3144
 msgid ""
 "Bitte geben Sie hier an, welche Studieng&auml;nge mit welchen Kontingenten "
 "zugelassen sind und wann das Losdatum ist:"
 msgstr ""
 
-#: admin_seminare_assi.php:3102
+#: admin_seminare_assi.php:3146
 msgid ""
 "Bitte geben Sie hier an, welche Studieng&auml;nge mit welchen Kontingenten "
 "zugelassen sind und wann das Enddatum der Kontingentierung ist:"
 msgstr ""
 
-#: admin_seminare_assi.php:3132
+#: admin_seminare_assi.php:3176
 msgid ""
 "Bitte geben Sie hier ein, wann die Anwärter auf der Anmeldeliste in die "
 "Veranstaltung gelost werden. Freigebliebene Plätze werden nach diesem Termin "
 "per Warteliste an andere interessierte Personen vergeben."
 msgstr ""
 
-#: admin_seminare_assi.php:3138
+#: admin_seminare_assi.php:3182
 msgid ""
 "Bitte geben Sie hier ein, wann das Anmeldeverfahren die Kontingentierung "
 "aufheben soll. Ab diesem Zeitpunkt werden freie Plätze an interessierten "
 "Personen aus der Warteliste vergeben."
 msgstr ""
 
-#: admin_seminare_assi.php:3199
+#: admin_seminare_assi.php:3243
 msgid ""
 "Bitte geben Sie hier ein, für welche Studiengänge die Veranstaltung mit "
 "welchen Kontingenten beschränkt sein soll und bis wann eine Anmeldung über "
 "das Stud.IP Anmeldeverfahren möglich ist."
 msgstr ""
 
-#: admin_seminare_assi.php:3217
+#: admin_seminare_assi.php:3261
 #, c-format
 msgid ""
 "%sAchtung: %sWenn Sie ein Anmeldeverfahren starten, so kann dieser Schritt "
 "sp&auml;ter nicht r&uuml;ckg&auml;ngig gemacht werden."
 msgstr ""
 
-#: admin_seminare_assi.php:3217
+#: admin_seminare_assi.php:3261
 msgid ""
 "Sie k&ouml;nnen jedoch die Anzahl der Teilnehmer jederzeit unter "
 "<i>Grunddaten</i> anpassen."
 msgstr ""
 
-#: admin_seminare_assi.php:3227
+#: admin_seminare_assi.php:3271
 msgid "Hinweistext bei vorl&auml;ufigen Eintr&auml;gen:"
 msgstr ""
 
-#: admin_seminare_assi.php:3232
+#: admin_seminare_assi.php:3276
 msgid ""
 "Dieser Hinweistext erläutert Ihren TeilnehmerInnen was sie tun müssen, um "
 "endgültig für die Veranstaltung zugelassen zu werden. Beschreiben Sie genau, "
 "wie Beiträge zu entrichten sind, Leistungen nachgewiesen werden müssen, etc."
 msgstr ""
 
-#: admin_seminare_assi.php:3255
+#: admin_seminare_assi.php:3299
 msgid "Diese Daten werden von ihrem zust&auml;ndigen Administrator erfasst."
 msgstr ""
 
-#: admin_seminare_assi.php:3257
+#: admin_seminare_assi.php:3301
 msgid ""
 "Diese Felder werden zentral durch die zuständigen Administratoren erfasst."
 msgstr ""
 
-#: admin_seminare_assi.php:3265
+#: admin_seminare_assi.php:3309
 msgid "Bitte geben Sie in dieses Feld die entsprechenden Daten ein."
 msgstr ""
 
-#: admin_seminare_assi.php:3278
+#: admin_seminare_assi.php:3322
 msgid "Teilnehmer- beschreibung:"
 msgstr ""
 
-#: admin_seminare_assi.php:3283
+#: admin_seminare_assi.php:3327
 msgid ""
 "Bitte geben Sie hier ein, für welchen Teilnehmerkreis die Veranstaltung "
 "geeignet ist."
 msgstr ""
 
-#: admin_seminare_assi.php:3289 archiv.inc.php:134 details.php:391
+#: admin_seminare_assi.php:3333 archiv.inc.php:134 details.php:391
 msgid "Voraussetzungen:"
 msgstr ""
 
-#: admin_seminare_assi.php:3294
+#: admin_seminare_assi.php:3338
 msgid ""
 "Bitte geben Sie hier ein, welche Voraussetzungen für die Veranstaltung nötig "
 "sind."
 msgstr ""
 
-#: admin_seminare_assi.php:3300 archiv.inc.php:139 details.php:403
+#: admin_seminare_assi.php:3344 archiv.inc.php:139 details.php:403
 msgid "Lernorganisation:"
 msgstr ""
 
-#: admin_seminare_assi.php:3305
+#: admin_seminare_assi.php:3349
 msgid ""
 "Bitte geben Sie hier ein, mit welcher Lernorganisation die Veranstaltung "
 "durchgeführt wird."
 msgstr ""
 
-#: admin_seminare_assi.php:3311 archiv.inc.php:144 details.php:415
+#: admin_seminare_assi.php:3355 archiv.inc.php:144 details.php:415
 msgid "Leistungsnachweis:"
 msgstr ""
 
-#: admin_seminare_assi.php:3316
+#: admin_seminare_assi.php:3360
 msgid ""
 "Bitte geben Sie hier ein, welche Leistungsnachweise erbracht werden müssen."
 msgstr ""
 
-#: admin_seminare_assi.php:3325 archiv.inc.php:160 details.php:447
+#: admin_seminare_assi.php:3369 archiv.inc.php:160 details.php:447
 msgid "Sonstiges:"
 msgstr ""
 
-#: admin_seminare_assi.php:3330
+#: admin_seminare_assi.php:3374
 msgid "Hier ist Platz für alle sonstigen Informationen zur Veranstaltung."
 msgstr ""
 
-#: admin_seminare_assi.php:3340
+#: admin_seminare_assi.php:3384
 msgid "erster Termin:"
 msgstr ""
 
-#: admin_seminare_assi.php:3343
+#: admin_seminare_assi.php:3387
 msgid ""
 "Sie haben angegeben, an einem anderen Zeitpunkt mit der Veranstaltung zu "
 "beginnen. Bitte geben Sie hier den ersten Termin ein."
 msgstr ""
 
-#: admin_seminare_assi.php:3348
+#: admin_seminare_assi.php:3392
 msgid ""
 "Bitte geben Sie hier ein, wann der erste Termin der Veranstaltung "
 "stattfindet."
 msgstr ""
 
-#: admin_seminare_assi.php:3377
+#: admin_seminare_assi.php:3421
 msgid "Veranstaltungs-Assistent - Schritt 6: Anlegen der Veranstaltung"
 msgstr ""
 
-#: admin_seminare_assi.php:3390
+#: admin_seminare_assi.php:3434
 msgid "Schritt 6: Bereit zum Anlegen der Veranstaltung"
 msgstr ""
 
-#: admin_seminare_assi.php:3391
+#: admin_seminare_assi.php:3435
 msgid ""
 "Sie haben nun alle n&ouml;tigen Daten zum Anlegen der Veranstaltung "
 "eingegeben. Wenn Sie auf &raquo;anlegen&laquo; klicken, wird die "
@@ -4339,186 +4347,186 @@ msgid ""
 "Eingaben auf den vorhergehenden Seiten."
 msgstr ""
 
-#: admin_seminare_assi.php:3412
+#: admin_seminare_assi.php:3456
 msgid "Veranstaltungs-Assistent"
 msgstr ""
 
-#: admin_seminare_assi.php:3428
+#: admin_seminare_assi.php:3472
 msgid "Die Veranstaltung konnte nicht angelegt werden."
 msgstr ""
 
-#: admin_seminare_assi.php:3429
+#: admin_seminare_assi.php:3473
 msgid "Bitte korrigieren Sie die Daten."
 msgstr ""
 
-#: admin_seminare_assi.php:3447
+#: admin_seminare_assi.php:3491
 msgid "Sie haben die Veranstaltung bereits angelegt."
 msgstr ""
 
-#: admin_seminare_assi.php:3450
+#: admin_seminare_assi.php:3494
 msgid ""
 "Sie k&ouml;nnen nun mit der Informationsseite und dem Termin-Assistenten "
 "fortfahren oder an diesem Punkt abbrechen."
 msgstr ""
 
-#: admin_seminare_assi.php:3452
+#: admin_seminare_assi.php:3496
 msgid ""
 "Sie k&ouml;nnen nun mit dem Termin-Assistenten fortfahren oder an diesem "
 "Punkt abbrechen."
 msgstr ""
 
-#: admin_seminare_assi.php:3454
+#: admin_seminare_assi.php:3498
 msgid ""
 "Sie k&ouml;nnen nun mit der Informationsseite fortfahren oder an diesem "
 "Punkt abbrechen."
 msgstr ""
 
-#: admin_seminare_assi.php:3455
+#: admin_seminare_assi.php:3499
 msgid ""
 "Sie haben jederzeit die M&ouml;glichkeit, die bereits erfassten Daten zu "
 "&auml;ndern und diese Schritte sp&auml;ter nachzuholen."
 msgstr ""
 
-#: admin_seminare_assi.php:3483
+#: admin_seminare_assi.php:3527
 msgid "Die Daten der Veranstaltung wurden in das System &uuml;bernommen"
 msgstr ""
 
-#: admin_seminare_assi.php:3485
+#: admin_seminare_assi.php:3529
 msgid "Die Veranstaltung ist jetzt eingerichtet."
 msgstr ""
 
-#: admin_seminare_assi.php:3487
+#: admin_seminare_assi.php:3531
 msgid ""
 "Wenn Sie nun auf &raquo;weiter >>&laquo; klicken, k&ouml;nnen Sie weitere -"
 "optionale- Daten f&uuml;r die Veranstaltung eintragen."
 msgstr ""
 
-#: admin_seminare_assi.php:3489
+#: admin_seminare_assi.php:3533
 msgid ""
 "Sie haben die M&ouml;glichkeit, eine Informationsseite anzulegen und k&ouml;"
 "nnen mit Hilfe des Termin-Assisten einen Ablaufplan erstellen."
 msgstr ""
 
-#: admin_seminare_assi.php:3491
+#: admin_seminare_assi.php:3535
 msgid ""
 "Sie haben die M&ouml;glichkeit, mit Hilfe des Termin-Assisten einen "
 "Ablaufplan zu erstellen."
 msgstr ""
 
-#: admin_seminare_assi.php:3493
+#: admin_seminare_assi.php:3537
 msgid "Sie haben die M&ouml;glichkeit,  eine Informationsseite anzulegen."
 msgstr ""
 
-#: admin_seminare_assi.php:3494
+#: admin_seminare_assi.php:3538
 msgid ""
 "Sie haben jederzeit die M&ouml;glichkeit, die bereits erfassten Daten zu "
 "&auml;ndern und die n&auml;chsten Schritte sp&auml;ter nachzuholen."
 msgstr ""
 
-#: admin_seminare_assi.php:3523
+#: admin_seminare_assi.php:3567
 #, c-format
 msgid "Veranstaltung <b>%s</b> erfolgreich angelegt."
 msgstr ""
 
-#: admin_seminare_assi.php:3525
+#: admin_seminare_assi.php:3569
 msgid "Veranstaltung f&uuml;r <b>1</b> beteiligte Einrichtung angelegt."
 msgstr ""
 
-#: admin_seminare_assi.php:3527
+#: admin_seminare_assi.php:3571
 #, c-format
 msgid "Veranstaltung f&uuml;r <b>%s</b> beteiligte Einrichtungen angelegt."
 msgstr ""
 
-#: admin_seminare_assi.php:3529
+#: admin_seminare_assi.php:3573
 msgid "<b>1</b> DozentIn f&uuml;r die Veranstaltung eingetragen."
 msgstr ""
 
-#: admin_seminare_assi.php:3531
+#: admin_seminare_assi.php:3575
 #, c-format
 msgid "<b>%s</b> DozentInnen f&uuml;r die Veranstaltung eingetragen."
 msgstr ""
 
-#: admin_seminare_assi.php:3533
+#: admin_seminare_assi.php:3577
 msgid "<b>1</b> TutorIn f&uuml;r die Veranstaltung eingetragen."
 msgstr ""
 
-#: admin_seminare_assi.php:3535
+#: admin_seminare_assi.php:3579
 #, c-format
 msgid "<b>%s</b> TutorInnen f&uuml;r die Veranstaltung eingetragen."
 msgstr ""
 
-#: admin_seminare_assi.php:3537
+#: admin_seminare_assi.php:3581
 msgid "<b>1</b> Bereich f&uuml;r die Veranstaltung eingetragen."
 msgstr ""
 
-#: admin_seminare_assi.php:3539
+#: admin_seminare_assi.php:3583
 #, c-format
 msgid "<b>%s</b> Bereiche f&uuml;r die Veranstaltung eingetragen."
 msgstr ""
 
-#: admin_seminare_assi.php:3562
+#: admin_seminare_assi.php:3606
 #, c-format
 msgid ""
 "Die Belegung des Raums %s wurde in die Ressourcenverwaltung eingetragen."
 msgstr ""
 
-#: admin_seminare_assi.php:3564
+#: admin_seminare_assi.php:3608
 #, c-format
 msgid ""
 "Die Belegung der R&auml;ume %s wurde in die Ressourcenverwaltung eingetragen."
 msgstr ""
 
-#: admin_seminare_assi.php:3577
+#: admin_seminare_assi.php:3621
 #, c-format
 msgid ""
 "Eine oder mehrere Belegungen des Raumes %s konnte wegen &Uuml;"
 "berschneidungen nicht in die Ressourcenverwaltung eingetragen werden!"
 msgstr ""
 
-#: admin_seminare_assi.php:3579
+#: admin_seminare_assi.php:3623
 #, c-format
 msgid ""
 "Eine oder mehrere Belegungen der R&auml;ume %s konnten wegen &Uuml;"
 "berschneidungen nicht in die Ressourcenverwaltung eingetragen werden!"
 msgstr ""
 
-#: admin_seminare_assi.php:3580
+#: admin_seminare_assi.php:3624
 msgid "Bitte &uuml;berpr&uuml;fen Sie manuell die Belegungen!"
 msgstr ""
 
-#: admin_seminare_assi.php:3607
+#: admin_seminare_assi.php:3651
 msgid "Veranstaltungs-Assistent - Schritt 7: Freie Informatiosseite"
 msgstr ""
 
-#: admin_seminare_assi.php:3621
+#: admin_seminare_assi.php:3665
 msgid "Schritt 7: Erstellen einer Informationsseite"
 msgstr ""
 
-#: admin_seminare_assi.php:3622
+#: admin_seminare_assi.php:3666
 #, c-format
 msgid ""
 "Sie k&ouml;nnen nun eine frei gestaltbare Infomationsseite f&uuml;r die eben "
 "angelegte Veranstaltung <b>%s</b> eingeben."
 msgstr ""
 
-#: admin_seminare_assi.php:3623
+#: admin_seminare_assi.php:3667
 msgid ""
 "Sie k&ouml;nnen die Bezeichnug dieser Seite frei bestimmten. Nutzen sie Sie "
 "etwa, um ungeordnete Literaturlisten oder weitere Informationen anzugeben."
 msgstr ""
 
-#: admin_seminare_assi.php:3625
+#: admin_seminare_assi.php:3669
 msgid ""
 "Wenn Sie auf &raquo;weiter&laquo; klicken, haben Sie die M&ouml;glichkeit, "
 "mit dem Termin-Assistenten einen Ablaufplan f&uuml;r die Veranstaltung "
 "anzulegen."
 msgstr ""
 
-#: admin_seminare_assi.php:3668
+#: admin_seminare_assi.php:3712
 msgid "oder geben Sie einen beliebigen Titel ein:"
 msgstr ""
 
-#: admin_seminare_assi.php:3671
+#: admin_seminare_assi.php:3715
 msgid ""
 "Sie können entweder einen vordefinierten Titel für die freie Kursseite "
 "auswählen oder einen eigenen Titel frei wählen. Diese Titel erscheint im "
@@ -4526,28 +4534,28 @@ msgid ""
 "Informationsseite"
 msgstr ""
 
-#: admin_seminare_assi.php:3677
+#: admin_seminare_assi.php:3721
 msgid "Inhalt der Seite:"
 msgstr ""
 
-#: admin_seminare_assi.php:3685
+#: admin_seminare_assi.php:3729
 msgid ""
 "Sie k&ouml;nnen auf dieser Seite s&auml;mtliche Stud.IP Formatierungen "
 "verwenden. Sie k&ouml;nnen Links normal einegeben, diesen werden automatisch "
 "sp&auml;ter als Hyperlinks dargestellt."
 msgstr ""
 
-#: admin_seminare_assi.php:3686
+#: admin_seminare_assi.php:3730
 msgid "Hilfe zur Formatierung von Texten"
 msgstr ""
 
-#: admin_seminare_assi.php:3687
+#: admin_seminare_assi.php:3731
 msgid ""
 "Um eine geordnete Literaturliste zu erstellen, benutzen Sie bitte die "
 "Literaturverwaltung."
 msgstr ""
 
-#: admin_seminare_assi.php:3691
+#: admin_seminare_assi.php:3735
 msgid ""
 "In dieses Feld können Sie beliebigen Text zur Anzeige auf der "
 "Informationsseite eingeben."
@@ -4604,7 +4612,7 @@ msgstr ""
 msgid "Einfügesymbol"
 msgstr ""
 
-#: admin_sem_tree.php:112 folder.php:413
+#: admin_sem_tree.php:112 folder.php:419
 #: lib/classes/StudipSemTreeViewAdmin.class.php:504
 msgid "Verschieben / Kopieren abbrechen"
 msgstr ""
@@ -4617,7 +4625,7 @@ msgstr ""
 msgid "Veranstaltungssuche:"
 msgstr ""
 
-#: admin_sem_tree.php:156 archiv_assi.php:384 archiv.inc.php:83
+#: admin_sem_tree.php:156 archiv_assi.php:386 archiv.inc.php:83
 #: links_admin.inc.php:682 mein_stundenplan.php:650 sem_browse.inc.php:256
 #: lib/classes/SemBrowse.class.php:267
 msgid "DozentIn:"
@@ -5148,16 +5156,16 @@ msgstr ""
 msgid "%s News gel&ouml;scht."
 msgstr ""
 
-#: archiv_assi.php:205
+#: archiv_assi.php:207
 #, c-format
 msgid "%s Wiki-Seiten archiviert."
 msgstr ""
 
-#: archiv_assi.php:241
+#: archiv_assi.php:243
 msgid "Fehler beim L&ouml;schen der Veranstaltung"
 msgstr ""
 
-#: archiv_assi.php:245
+#: archiv_assi.php:247
 #, c-format
 msgid ""
 "Die Veranstaltung %s wurde erfolgreich archiviert und aus der Liste der "
@@ -5165,80 +5173,80 @@ msgid ""
 "gung."
 msgstr ""
 
-#: archiv_assi.php:272
+#: archiv_assi.php:274
 msgid ""
 "Sie sind im Begriff, die untenstehende  Veranstaltung zu archivieren. Dieser "
 "Schritt kann nicht r&uuml;ckg&auml;ngig gemacht werden!"
 msgstr ""
 
-#: archiv_assi.php:275
+#: archiv_assi.php:277
 msgid ""
 "Das Archivieren k&ouml;nnte unter Umst&auml;nden nicht sinnvoll sein, da es "
 "sich um eine dauerhafte Veranstaltung handelt."
 msgstr ""
 
-#: archiv_assi.php:277
+#: archiv_assi.php:279
 msgid ""
 "Das Archivieren k&ouml;nnte unter Umst&auml;nden nicht sinnvoll sein, da das "
 "oder die Semester, in denen die Veranstaltung stattfindet, noch nicht "
 "verstrichen sind."
 msgstr ""
 
-#: archiv_assi.php:289
+#: archiv_assi.php:291
 msgid "Archivieren der Veranstaltung"
 msgstr ""
 
-#: archiv_assi.php:310
+#: archiv_assi.php:312
 msgid "letzte Ver&auml;nderung am:"
 msgstr ""
 
-#: archiv_assi.php:334 archiv.inc.php:63 details.php:259 seminar_main.php:124
+#: archiv_assi.php:336 archiv.inc.php:63 details.php:259 seminar_main.php:124
 msgid "Zeit:"
 msgstr ""
 
-#: archiv_assi.php:362 details.php:287
+#: archiv_assi.php:364 details.php:287
 msgid "Veranstaltungsort:"
 msgstr ""
 
-#: archiv_assi.php:402 archiv_assi.php:404 archiv.inc.php:94
+#: archiv_assi.php:404 archiv_assi.php:406 archiv.inc.php:94
 msgid "TutorIn:"
 msgstr ""
 
-#: archiv_assi.php:421 details.php:348
+#: archiv_assi.php:423 details.php:348
 msgid "Veranstaltungstyp:"
 msgstr ""
 
-#: archiv_assi.php:427 details.php:354
+#: archiv_assi.php:429 details.php:354
 msgid "Art/Form:"
 msgstr ""
 
-#: archiv_assi.php:441 details.php:367
+#: archiv_assi.php:443 details.php:367
 msgid "Kommentar/Beschreibung:"
 msgstr ""
 
-#: archiv_assi.php:465 archiv.inc.php:195 details.php:507
+#: archiv_assi.php:467 archiv.inc.php:195 details.php:507
 msgid "beteiligte Einrichtung:"
 msgstr ""
 
-#: archiv_assi.php:514
+#: archiv_assi.php:516
 #, c-format
 msgid ""
 "noch <b>%s</b> von <b>%s</b> Veranstaltungen zum Archivieren ausgew&auml;hlt."
 msgstr ""
 
-#: archiv_assi.php:530
+#: archiv_assi.php:532
 msgid "Die Veranstaltung wurde archiviert."
 msgstr ""
 
-#: archiv_assi.php:536
+#: archiv_assi.php:538
 msgid "Sie haben alle ausgew&auml;hlten Veranstaltungen archiviert!"
 msgstr ""
 
-#: archiv_assi.php:550
+#: archiv_assi.php:552
 msgid "Keine Veranstaltung zum Archivieren gew&auml;hlt"
 msgstr ""
 
-#: archiv_assi.php:557
+#: archiv_assi.php:559
 msgid "Sie haben keine Veranstaltung zum Archivieren gew&auml;hlt."
 msgstr ""
 
@@ -5299,11 +5307,11 @@ msgstr ""
 msgid "LeserInnen"
 msgstr ""
 
-#: archiv.inc.php:374 freie.php:88 teilnehmer.php:692
+#: archiv.inc.php:374 freie.php:88 teilnehmer.php:700
 msgid "Postings"
 msgstr ""
 
-#: archiv.inc.php:375 folder.php:52 freie.php:93 teilnehmer.php:693
+#: archiv.inc.php:375 folder.php:52 freie.php:93 teilnehmer.php:701
 msgid "Dokumente"
 msgstr ""
 
@@ -5684,7 +5692,7 @@ msgstr ""
 
 #: browse.php:334 institut_members.php:649 institut_members.php:650
 #: online.php:89 online.php:189 online.php:206 online.php:233 studipim.php:137
-#: teilnehmer.php:851 teilnehmer.php:1011
+#: teilnehmer.php:859 teilnehmer.php:1019
 msgid "Nachricht an User verschicken"
 msgstr ""
 
@@ -6108,7 +6116,7 @@ msgstr ""
 msgid "Weitere Arbeitsplaetze"
 msgstr ""
 
-#: contact_export.php:539 teilnehmer.php:982
+#: contact_export.php:539 teilnehmer.php:990
 msgid "Position"
 msgstr ""
 
@@ -6123,7 +6131,7 @@ msgstr ""
 msgid "Sprechstunde"
 msgstr ""
 
-#: contact.inc.php:204 header.php:317
+#: contact.inc.php:204 header.php:328
 #: lib/classes/RangeTreeObjectFak.class.php:48
 #: lib/classes/RangeTreeObjectInst.class.php:48
 msgid "Homepage"
@@ -6399,11 +6407,11 @@ msgstr ""
 msgid "Stud.IP - Login"
 msgstr ""
 
-#: crcloginform.ihtml:71 crcregister.ihtml:133
+#: crcloginform.ihtml:71 crcregister.ihtml:134
 msgid "Cookies sind nicht aktiviert!"
 msgstr ""
 
-#: crcloginform.ihtml:71 crcregister.ihtml:133
+#: crcloginform.ihtml:71 crcregister.ihtml:134
 #, c-format
 msgid ""
 "Die Anmeldung für Stud.IP ist nur möglich, wenn Sie das Setzen von Cookies "
@@ -6411,11 +6419,11 @@ msgid ""
 "wiederholen Sie den %sLogin%s"
 msgstr ""
 
-#: crcloginform.ihtml:75 crcregister.ihtml:138
+#: crcloginform.ihtml:75 crcregister.ihtml:139
 msgid "Was sind Cookies?"
 msgstr ""
 
-#: crcloginform.ihtml:77 crcregister.ihtml:140
+#: crcloginform.ihtml:77 crcregister.ihtml:141
 msgid ""
 "Cookies werden normalerweise benutzt, damit der Browser BenutzerInnen der "
 "Seiten beim wiederholten Aufrufen dieser Seiten wiedererkennen kann "
@@ -6424,11 +6432,11 @@ msgid ""
 "m&uuml;ssten Sie sich beim Betreten jeder Seite neu anmelden!"
 msgstr ""
 
-#: crcloginform.ihtml:80 crcregister.ihtml:143
+#: crcloginform.ihtml:80 crcregister.ihtml:144
 msgid "Sind Cookies gef&auml;hrlich?"
 msgstr ""
 
-#: crcloginform.ihtml:82 crcregister.ihtml:145
+#: crcloginform.ihtml:82 crcregister.ihtml:146
 msgid ""
 "Das Zulassen von Cookies stellt - leider - ein geringf&uuml;giges "
 "Sicherheitsrisiko dar. Jedoch sollten Sie Ihr Augenmerk darauf richten, dass "
@@ -6443,43 +6451,43 @@ msgid ""
 "zu machen!"
 msgstr ""
 
-#: crcloginform.ihtml:85 crcregister.ihtml:159
+#: crcloginform.ihtml:85 crcregister.ihtml:160
 msgid "Hinweise f&uuml;r BenutzerInnen des Netscape Navigator 4.x"
 msgstr ""
 
-#: crcloginform.ihtml:87 crcregister.ihtml:161
+#: crcloginform.ihtml:87 crcregister.ihtml:162
 msgid ""
 "Wenn Sie den Netscape Navigator 4.x benutzen, k&ouml;nnen Sie das Annehmen "
 "von Cookies auf folgende Weise einschalten:"
 msgstr ""
 
-#: crcloginform.ihtml:90 crcregister.ihtml:164
+#: crcloginform.ihtml:90 crcregister.ihtml:165
 msgid "&Ouml;ffnen Sie das Menu \"Bearbeiten\" in der Kopfzeile des Browsers"
 msgstr ""
 
-#: crcloginform.ihtml:91 crcregister.ihtml:165
+#: crcloginform.ihtml:91 crcregister.ihtml:166
 msgid "Gehen Sie auf \"Einstellungen\""
 msgstr ""
 
-#: crcloginform.ihtml:92 crcregister.ihtml:166
+#: crcloginform.ihtml:92 crcregister.ihtml:167
 msgid ""
 "W&auml;hlen Sie jetzt auf der linken Seite der Einstellungsseite den "
 "Menüpunkt \"Erweitert\""
 msgstr ""
 
-#: crcloginform.ihtml:93 crcregister.ihtml:167
+#: crcloginform.ihtml:93 crcregister.ihtml:168
 msgid "Aktivieren Sie jetzt auf der rechten Seite die Punkte:"
 msgstr ""
 
-#: crcloginform.ihtml:95 crcregister.ihtml:169
+#: crcloginform.ihtml:95 crcregister.ihtml:170
 msgid "\"Benutze JavaScript\""
 msgstr ""
 
-#: crcloginform.ihtml:96 crcregister.ihtml:170
+#: crcloginform.ihtml:96 crcregister.ihtml:171
 msgid "\"Benutze Style Sheets\""
 msgstr ""
 
-#: crcloginform.ihtml:97 crcregister.ihtml:171
+#: crcloginform.ihtml:97 crcregister.ihtml:172
 msgid ""
 "\"Erlaube Cookies nur von dem Server, von dem die aktuelle Seite stammt\""
 msgstr ""
@@ -6497,94 +6505,94 @@ msgstr ""
 msgid "Bitte wenden Sie sich bei Problemen an: <br />%s"
 msgstr ""
 
-#: crcloginform.ihtml:143 crcregister.ihtml:203 migration2studip.php:47
+#: crcloginform.ihtml:143 crcregister.ihtml:204 migration2studip.php:47
 #: migration2studip.php:117 new_user_md5.php:150 new_user_md5.php:230
 #: pers_browse.inc.php:121
 msgid "Benutzername:"
 msgstr ""
 
-#: crcregister.ihtml:119
+#: crcregister.ihtml:120
 msgid "Stud.IP - Registrierung"
 msgstr ""
 
-#: crcregister.ihtml:148
+#: crcregister.ihtml:149
 msgid "Hinweise f&uuml;r Benutzer des Internet Explorers 6.0"
 msgstr ""
 
-#: crcregister.ihtml:150
+#: crcregister.ihtml:151
 msgid ""
 "Wenn Sie den Internet Explorer 6.0 benutzen, kann es vorkommen, dass Sie auf "
 "diese Seite gelangen, da der Browser Cookies vom Stud.IP-System nicht "
 "akzeptiert<br>Gehen Sie dann bitte so vor:"
 msgstr ""
 
-#: crcregister.ihtml:152
+#: crcregister.ihtml:153
 msgid "&Ouml;ffnen Sie das Menu \"Extras\" in der Kopfzeile des Browsers"
 msgstr ""
 
-#: crcregister.ihtml:153
+#: crcregister.ihtml:154
 msgid "Gehen Sie auf \"Internetoptionen\""
 msgstr ""
 
-#: crcregister.ihtml:154
+#: crcregister.ihtml:155
 msgid "W&auml;hlen Sie den Punkt \"Datenschutz\""
 msgstr ""
 
-#: crcregister.ihtml:155
+#: crcregister.ihtml:156
 msgid "Stellen Sie den Regler auf die Einstellung \"Alle Cookies annehmen\""
 msgstr ""
 
-#: crcregister.ihtml:185
+#: crcregister.ihtml:186
 msgid "Herzlich Willkommen!"
 msgstr ""
 
-#: crcregister.ihtml:186
+#: crcregister.ihtml:187
 msgid "Bitte f&uuml;llen Sie zur Anmeldung das Formular aus:"
 msgstr ""
 
-#: crcregister.ihtml:193
+#: crcregister.ihtml:194
 msgid "Bei der Registrierung ist ein Fehler aufgetreten:"
 msgstr ""
 
-#: crcregister.ihtml:193
+#: crcregister.ihtml:194
 msgid "Bitte korrigieren Sie Ihre Eingaben und versuchen Sie es erneut"
 msgstr ""
 
-#: crcregister.ihtml:213
+#: crcregister.ihtml:214
 msgid "Passwortbest&auml;tigung:"
 msgstr ""
 
-#: crcregister.ihtml:232 edit_about.php:1150 new_user_md5.php:177
+#: crcregister.ihtml:233 edit_about.php:1151 new_user_md5.php:177
 #: new_user_md5.php:301
 msgid "Titel nachgest.:"
 msgstr ""
 
-#: crcregister.ihtml:247 edit_about.php:1099 new_user_md5.php:158
+#: crcregister.ihtml:248 edit_about.php:1100 new_user_md5.php:158
 #: new_user_md5.php:254 pers_browse.inc.php:123
 msgid "Vorname:"
 msgstr ""
 
-#: crcregister.ihtml:252 edit_about.php:1105 new_user_md5.php:162
+#: crcregister.ihtml:253 edit_about.php:1106 new_user_md5.php:162
 #: new_user_md5.php:266 pers_browse.inc.php:127
 msgid "Nachname:"
 msgstr ""
 
-#: crcregister.ihtml:257 edit_about.php:1167 new_user_md5.php:188
+#: crcregister.ihtml:258 edit_about.php:1168 new_user_md5.php:188
 #: new_user_md5.php:325
 msgid "Geschlecht:"
 msgstr ""
 
-#: crcregister.ihtml:258 edit_about.php:1169 edit_about.php:1171
+#: crcregister.ihtml:259 edit_about.php:1170 edit_about.php:1172
 #: new_user_md5.php:189 new_user_md5.php:329 new_user_md5.php:332
 msgid "m&auml;nnlich"
 msgstr ""
 
-#: crcregister.ihtml:258 edit_about.php:1169 edit_about.php:1175
+#: crcregister.ihtml:259 edit_about.php:1170 edit_about.php:1176
 #: new_user_md5.php:190 new_user_md5.php:329 new_user_md5.php:333
 msgid "weiblich"
 msgstr ""
 
-#: crcregister.ihtml:262 edit_about.php:1115 edit_about.php:1130
+#: crcregister.ihtml:263 edit_about.php:1116 edit_about.php:1131
 #: institut_main.php:141 new_user_md5.php:193 new_user_md5.php:340
 #: pers_browse.inc.php:125
 msgid "E-Mail:"
@@ -6642,7 +6650,7 @@ msgid ""
 "1. Klicken Sie auf <b>'Durchsuchen...'</b>, um eine Datei auszuw&auml;hlen."
 msgstr ""
 
-#: datei.inc.php:577 datei.inc.php:1102
+#: datei.inc.php:577 datei.inc.php:1105
 msgid "Dateipfad:"
 msgstr ""
 
@@ -6661,13 +6669,13 @@ msgid ""
 "diesem Ordner zu entpacken."
 msgstr ""
 
-#: datei.inc.php:590 datei.inc.php:1122
+#: datei.inc.php:590 datei.inc.php:1125
 msgid ""
 "2. Klicken Sie auf <b>'absenden'</b>, um die Datei hochzuladen und damit die "
 "alte Version zu &uuml;berschreiben."
 msgstr ""
 
-#: datei.inc.php:646 datei.inc.php:1912
+#: datei.inc.php:646 datei.inc.php:1915
 msgid "Sie haben keine Datei zum Hochladen ausgew&auml;hlt!"
 msgstr ""
 
@@ -6726,58 +6734,58 @@ msgstr ""
 msgid "Die Datei wurde erfolgreich auf den Server &uuml;bertragen!"
 msgstr ""
 
-#: datei.inc.php:1089
+#: datei.inc.php:1092
 msgid ""
 "&nbsp;FEHLER: unter der angegebenen Adresse wurde keine Datei gefunden."
 "<br>&nbsp;Bitte kontrollieren Sie die Pfadangabe!"
 msgstr ""
 
-#: datei.inc.php:1096
+#: datei.inc.php:1099
 msgid "Sie haben diesen Ordner zum Upload ausgewählt:"
 msgstr ""
 
-#: datei.inc.php:1100
+#: datei.inc.php:1103
 msgid ""
 "1. Geben Sie hier den <b>vollständigen Pfad</b> zu der Datei an die sie "
 "verlinken wollen."
 msgstr ""
 
-#: datei.inc.php:1110
+#: datei.inc.php:1113
 msgid ""
 "2. Sie können hier angeben, ob es sich um eine urheberrechtlich geschützte "
 "Datei handelt."
 msgstr ""
 
-#: datei.inc.php:1111
+#: datei.inc.php:1114
 msgid "Geschützt:"
 msgstr ""
 
-#: datei.inc.php:1114
+#: datei.inc.php:1117
 msgid "3. Geben Sie eine kurze Beschreibung und einen Namen für die Datei ein."
 msgstr ""
 
-#: datei.inc.php:1120
+#: datei.inc.php:1123
 msgid "4. Klicken Sie auf <b>'absenden'</b>, um die Datei zu verlinken"
 msgstr ""
 
-#: datei.inc.php:1241 datei.inc.php:1542
+#: datei.inc.php:1244 datei.inc.php:1545
 #, c-format
 msgid "(%s Dokumente)"
 msgstr ""
 
-#: datei.inc.php:1243 datei.inc.php:1544
+#: datei.inc.php:1246 datei.inc.php:1547
 msgid "(1 Dokument)"
 msgstr ""
 
-#: datei.inc.php:1281 datei.inc.php:1445
+#: datei.inc.php:1284 datei.inc.php:1448
 msgid "&Auml;nderungen speichern"
 msgstr ""
 
-#: datei.inc.php:1282 datei.inc.php:1446
+#: datei.inc.php:1285 datei.inc.php:1449
 msgid "Abbrechen"
 msgstr ""
 
-#: datei.inc.php:1292
+#: datei.inc.php:1295
 #, c-format
 msgid ""
 "Dieser Ordner wurde zum Verschieben / Kopieren markiert. Bitte w&auml;hlen "
@@ -6787,43 +6795,43 @@ msgid ""
 "aus."
 msgstr ""
 
-#: datei.inc.php:1292
+#: datei.inc.php:1295
 msgid ""
 "Klicken Sie auf dieses Symbol, um diesen Ordner in einen anderen Ordner "
 "einzufügen."
 msgstr ""
 
-#: datei.inc.php:1394
+#: datei.inc.php:1397
 msgid "Download"
 msgstr ""
 
-#: datei.inc.php:1394
+#: datei.inc.php:1397
 msgid "Downloads"
 msgstr ""
 
-#: datei.inc.php:1417
+#: datei.inc.php:1420
 msgid "Diese Datei ist urheberrechtlich geschützt!"
 msgstr ""
 
-#: datei.inc.php:1419
+#: datei.inc.php:1422
 msgid "Diese Datei wird von einem externen Server geladen!"
 msgstr ""
 
-#: datei.inc.php:1443
+#: datei.inc.php:1446
 msgid "geschützter Inhalt"
 msgstr ""
 
-#: datei.inc.php:1455
+#: datei.inc.php:1458
 #, c-format
 msgid "<b>Dateigr&ouml;&szlig;e:</b> %s kB"
 msgstr ""
 
-#: datei.inc.php:1456
+#: datei.inc.php:1459
 #, c-format
 msgid "<b>Dateiname:</b> %s "
 msgstr ""
 
-#: datei.inc.php:1460
+#: datei.inc.php:1463
 #, c-format
 msgid ""
 "Diese Datei wurde zum Verschieben / Kopieren markiert. Bitte w&auml;hlen Sie "
@@ -6833,59 +6841,59 @@ msgid ""
 "auf der Seite aus."
 msgstr ""
 
-#: datei.inc.php:1460
+#: datei.inc.php:1463
 msgid ""
 "Klicken Sie dieses Symbol, um diese Datei in einen anderen Ordner einzufügen"
 msgstr ""
 
-#: datei.inc.php:1502
+#: datei.inc.php:1505
 msgid ""
 "Diese Datei ist urheberrechtlich geschützt.<br>Sie darf nur im Rahmen dieser "
 "Veranstaltung verwendet werden, jede weitere Verbreitung ist strafbar!"
 msgstr ""
 
-#: datei.inc.php:1529
+#: datei.inc.php:1532
 msgid "Objekt in diesen Ordner verschieben / kopieren"
 msgstr ""
 
-#: datei.inc.php:1763
+#: datei.inc.php:1766
 #, c-format
 msgid "Der Dateiordner <b>%s</b> und %s Dokument(e) wurden gel&ouml;scht"
 msgstr ""
 
-#: datei.inc.php:1765
+#: datei.inc.php:1768
 #, c-format
 msgid "Der Dateiordner <b>%s</b> wurde gel&ouml;scht"
 msgstr ""
 
-#: datei.inc.php:1770
+#: datei.inc.php:1773
 #, c-format
 msgid ""
 "Probleme beim L&ouml;schen des Ordners <b>%s</b>. %s Dokument(e) wurden "
 "gel&ouml;scht"
 msgstr ""
 
-#: datei.inc.php:1772
+#: datei.inc.php:1775
 #, c-format
 msgid "Probleme beim L&ouml;schen des Ordners <b>%s</b>"
 msgstr ""
 
-#: datei.inc.php:1917
+#: datei.inc.php:1920
 msgid ""
 "Die Datei kann nicht entpackt werden: Sie d&uuml;rfen nur den Dateityp .ZIP "
 "hochladen!"
 msgstr ""
 
-#: datei.inc.php:1923 datei.inc.php:1930
+#: datei.inc.php:1926 datei.inc.php:1933
 msgid "Die ZIP-Datei kann nicht ge&ouml;ffnet werden!"
 msgstr ""
 
-#: datei.inc.php:1937
+#: datei.inc.php:1940
 #, c-format
 msgid "Es wurden %d Dateien und %d Ordner erfolgreich entpackt."
 msgstr ""
 
-#: datei.inc.php:1945
+#: datei.inc.php:1948
 msgid "Die Datei konnte nicht entpackt werden."
 msgstr ""
 
@@ -7144,11 +7152,11 @@ msgstr ""
 msgid "Sie sind in die %s der Veranstaltung eingetragen."
 msgstr ""
 
-#: details.php:172 teilnehmer.php:980
+#: details.php:172 teilnehmer.php:988
 msgid "Anmeldeliste"
 msgstr ""
 
-#: details.php:172 show_admission.php:175 teilnehmer.php:980
+#: details.php:172 show_admission.php:175 teilnehmer.php:988
 msgid "Warteliste"
 msgstr ""
 
@@ -7300,8 +7308,8 @@ msgstr ""
 msgid "Kontingent f&uuml;r %s (%s Pl&auml;tze / %s belegt)"
 msgstr ""
 
-#: details.php:632 sem_verify.php:554 sem_verify.php:556 teilnehmer.php:909
-#: teilnehmer.php:1015
+#: details.php:632 sem_verify.php:554 sem_verify.php:556 teilnehmer.php:917
+#: teilnehmer.php:1023
 msgid "alle Studieng&auml;nge"
 msgstr ""
 
@@ -7565,335 +7573,335 @@ msgstr ""
 msgid "persönliche Homepage verändert"
 msgstr ""
 
-#: edit_about.php:997
+#: edit_about.php:998
 msgid "Hochladen eines pers&ouml;nlichen Bildes"
 msgstr ""
 
-#: edit_about.php:1000
+#: edit_about.php:1001
 msgid "Benutzerdaten bearbeiten"
 msgstr ""
 
-#: edit_about.php:1004
+#: edit_about.php:1005
 msgid "Studienkarriere und Einrichtungen bearbeiten"
 msgstr ""
 
-#: edit_about.php:1006
+#: edit_about.php:1007
 msgid "Studienkarriere bearbeiten"
 msgstr ""
 
-#: edit_about.php:1010
+#: edit_about.php:1011
 msgid "Lebenslauf, Arbeitsschwerpunkte und Publikationen bearbeiten"
 msgstr ""
 
-#: edit_about.php:1012
+#: edit_about.php:1013
 msgid "Lebenslauf bearbeiten"
 msgstr ""
 
-#: edit_about.php:1015 links_about.inc.php:60
+#: edit_about.php:1016 links_about.inc.php:60
 msgid "Eigene Kategorien bearbeiten"
 msgstr ""
 
-#: edit_about.php:1018
+#: edit_about.php:1019
 msgid "Eigene RSS Feeds bearbeiten"
 msgstr ""
 
-#: edit_about.php:1021
+#: edit_about.php:1022
 msgid "Auto-Login einrichten"
 msgstr ""
 
-#: edit_about.php:1027
+#: edit_about.php:1028
 #, c-format
 msgid "Daten von: %s %s (%s), Status: %s"
 msgstr ""
 
-#: edit_about.php:1044
+#: edit_about.php:1045
 msgid ""
 "Auf dieser Seite k&ouml;nnen Sie ein pers&ouml;nliches Bild f&uuml;r Ihre "
 "Homepage hochladen."
 msgstr ""
 
-#: edit_about.php:1046
+#: edit_about.php:1047
 msgid "Aktuell angezeigtes Bild:"
 msgstr ""
 
-#: edit_about.php:1049
+#: edit_about.php:1050
 msgid "Kein pers&ouml;nliches Bild vorhanden"
 msgstr ""
 
-#: edit_about.php:1056
+#: edit_about.php:1057
 msgid "Hochladen eines Bildes:"
 msgstr ""
 
-#: edit_about.php:1056
+#: edit_about.php:1057
 msgid ""
 "1. Wählen sie mit <b>Durchsuchen</b> eine Bilddatei von ihrer Festplatte aus."
 msgstr ""
 
-#: edit_about.php:1058
+#: edit_about.php:1059
 msgid "2. Klicken sie auf <b>absenden</b>, um das Bild hochzuladen."
 msgstr ""
 
-#: edit_about.php:1059
+#: edit_about.php:1060
 msgid "absenden"
 msgstr ""
 
-#: edit_about.php:1060
+#: edit_about.php:1061
 msgid "ACHTUNG!"
 msgstr ""
 
-#: edit_about.php:1061
+#: edit_about.php:1062
 #, c-format
 msgid ""
 "Die Bilddatei darf max. %s KB groß sein, es sind nur Dateien mit den "
 "Endungen %s, %s oder %s erlaubt!"
 msgstr ""
 
-#: edit_about.php:1068
+#: edit_about.php:1069
 msgid "Hier k&ouml;nnen sie Ihre Benutzerdaten ver&auml;ndern."
 msgstr ""
 
-#: edit_about.php:1069
+#: edit_about.php:1070
 #, c-format
 msgid ""
 "Alle mit einem Sternchen %s markierten Felder m&uuml;ssen ausgef&uuml;llt "
 "werden."
 msgstr ""
 
-#: edit_about.php:1071
+#: edit_about.php:1072
 #, c-format
 msgid ""
 "Ihre Authentifizierung (%s) benutzt nicht die Stud.IP Datenbank, daher "
 "k&ouml;nnen sie einige Felder nicht ver&auml;ndern!"
 msgstr ""
 
-#: edit_about.php:1082 edit_about.php:1124
+#: edit_about.php:1083 edit_about.php:1125
 msgid "Username:"
 msgstr ""
 
-#: edit_about.php:1094
+#: edit_about.php:1095
 msgid "neues Passwort:"
 msgstr ""
 
-#: edit_about.php:1124
+#: edit_about.php:1125
 msgid "Adminzugriff hier nicht möglich!"
 msgstr ""
 
-#: edit_about.php:1183
+#: edit_about.php:1184
 msgid "Freiwillige Angaben"
 msgstr ""
 
-#: edit_about.php:1185
+#: edit_about.php:1186
 msgid "Festnetz"
 msgstr ""
 
-#: edit_about.php:1191
+#: edit_about.php:1192
 msgid "Mobiltelefon"
 msgstr ""
 
-#: edit_about.php:1216
+#: edit_about.php:1217
 msgid "Hobbies:"
 msgstr ""
 
-#: edit_about.php:1231
+#: edit_about.php:1232
 msgid "Als Root haben Sie bereits genug Karriere gemacht ;-)"
 msgstr ""
 
-#: edit_about.php:1235
+#: edit_about.php:1236
 msgid ""
 "Hier können Sie Angaben &uuml;ber ihre Studienkarriere und Daten an "
 "Einrichtungen, an denen Sie arbeiten, machen."
 msgstr ""
 
-#: edit_about.php:1237
+#: edit_about.php:1238
 msgid ""
 "Hier können Sie Angaben &uuml;ber Daten an Einrichtungen, in den Sie "
 "arbeiten, machen."
 msgstr ""
 
-#: edit_about.php:1239
+#: edit_about.php:1240
 msgid "Hier können Sie Angaben &uuml;ber ihre Studienkarriere machen."
 msgstr ""
 
-#: edit_about.php:1248
+#: edit_about.php:1249
 msgid "Ich arbeite an folgenden Einrichtungen:"
 msgstr ""
 
-#: edit_about.php:1261
+#: edit_about.php:1262
 msgid "Standard-Adresse:"
 msgstr ""
 
-#: edit_about.php:1265
+#: edit_about.php:1266
 msgid ""
 "Angaben, die im Adressbuch und auf den externen Seiten als Standard benutzt "
 "werden."
 msgstr ""
 
-#: edit_about.php:1267
+#: edit_about.php:1268
 msgid "Diese Einrichtung ausblenden:"
 msgstr ""
 
-#: edit_about.php:1271
+#: edit_about.php:1272
 msgid ""
 "Die Angaben zu dieser Einrichtung werden nicht auf Ihrer Homepage und in "
 "Adressbüchern ausgegeben."
 msgstr ""
 
-#: edit_about.php:1278 wiki.inc.php:904
+#: edit_about.php:1279 wiki.inc.php:904
 msgid "nach oben"
 msgstr ""
 
-#: edit_about.php:1284
+#: edit_about.php:1285
 msgid "nach unten"
 msgstr ""
 
-#: edit_about.php:1292
+#: edit_about.php:1293
 msgid "Funktion(en):"
 msgstr ""
 
-#: edit_about.php:1339
+#: edit_about.php:1340
 msgid "Ich bin in folgenden Studieng&auml;ngen eingeschrieben:"
 msgstr ""
 
-#: edit_about.php:1351
+#: edit_about.php:1352
 msgid "Studiengang"
 msgstr ""
 
-#: edit_about.php:1352 edit_about.php:1407
+#: edit_about.php:1353 edit_about.php:1408
 msgid "austragen"
 msgstr ""
 
-#: edit_about.php:1368
+#: edit_about.php:1369
 msgid "Sie haben sich noch keinem Studiengang zugeordnet."
 msgstr ""
 
-#: edit_about.php:1368
+#: edit_about.php:1369
 msgid "Tragen Sie bitte hier die Angaben aus Ihrem Studierendenausweis ein!"
 msgstr ""
 
-#: edit_about.php:1374
+#: edit_about.php:1375
 msgid ""
 "Wählen Sie die Studiengänge in Ihrem Studierendenausweis aus der folgenden "
 "Liste aus:"
 msgstr ""
 
-#: edit_about.php:1377
+#: edit_about.php:1378
 msgid ""
 "Wenn Sie einen Studiengang wieder austragen möchten, markieren Sie die "
 "entsprechenden Felder in der linken Tabelle."
 msgstr ""
 
-#: edit_about.php:1378 edit_about.php:1433
+#: edit_about.php:1379 edit_about.php:1434
 msgid ""
 "Mit einem Klick auf <b>&Uuml;bernehmen</b> werden die gewählten Änderungen "
 "durchgeführt."
 msgstr ""
 
-#: edit_about.php:1382
+#: edit_about.php:1383
 msgid ""
 "Die Informationen zu Ihrem Studiengang werden vom System verwaltet, und "
 "k&ouml;nnen daher von Ihnen nicht ge&auml;ndert werden."
 msgstr ""
 
-#: edit_about.php:1396
+#: edit_about.php:1397
 msgid "Ich studiere an folgenden Einrichtungen:"
 msgstr ""
 
-#: edit_about.php:1423
+#: edit_about.php:1424
 msgid "Sie haben sich noch keinen Einrichtungen zugeordnet."
 msgstr ""
 
-#: edit_about.php:1423
+#: edit_about.php:1424
 msgid ""
 "Wenn Sie auf ihrer Homepage die Einrichtungen, an denen Sie studieren, "
 "auflisten wollen, k&ouml;nnen Sie diese Einrichtungen hier entragen."
 msgstr ""
 
-#: edit_about.php:1429
+#: edit_about.php:1430
 msgid ""
 "Um sich als Student einer Einrichtung zuzuordnen, wählen Sie die "
 "entsprechende Einrichtung aus der folgenden Liste aus:"
 msgstr ""
 
-#: edit_about.php:1432
+#: edit_about.php:1433
 msgid ""
 "Wenn sie aus Einrichtungen wieder ausgetragen werden möchten, markieren Sie "
 "die entsprechenden Felder in der linken Tabelle."
 msgstr ""
 
-#: edit_about.php:1436
+#: edit_about.php:1437
 msgid ""
 "Die Informationen zu Ihrer Einrichtung werden vom System verwaltet, und "
 "k&ouml;nnen daher von Ihnen nicht ge&auml;ndert werden."
 msgstr ""
 
-#: edit_about.php:1448
+#: edit_about.php:1449
 msgid ""
 "Hier k&ouml;nnen Sie Lebenslauf, Publikationen und Arbeitschwerpunkte "
 "bearbeiten."
 msgstr ""
 
-#: edit_about.php:1450
+#: edit_about.php:1451
 msgid "Hier k&ouml;nnen Sie Ihren Lebenslauf bearbeiten."
 msgstr ""
 
-#: edit_about.php:1467
+#: edit_about.php:1468
 msgid "Lebenslauf:"
 msgstr ""
 
-#: edit_about.php:1471
+#: edit_about.php:1472
 msgid "Schwerpunkte:"
 msgstr ""
 
-#: edit_about.php:1474
+#: edit_about.php:1475
 msgid "Publikationen:"
 msgstr ""
 
-#: edit_about.php:1530
+#: edit_about.php:1531
 msgid "Benachrichtigung anpassen"
 msgstr ""
 
-#: edit_about.php:1539
+#: edit_about.php:1540
 msgid ""
 "Um die automatische Anmeldung zu nutzen, m&uuml;ssen Sie ihre pers&ouml;"
 "nliche Login-Datei auf ihren Rechner kopieren. Mit dem folgenden Link &ouml;"
 "ffnet sich ein Fenster, indem Sie ihr Passwort eingeben m&uuml;ssen."
 msgstr ""
 
-#: edit_about.php:1540
+#: edit_about.php:1541
 msgid "Dann wird die Datei erstellt und zu Ihrem Rechner geschickt."
 msgstr ""
 
-#: edit_about.php:1541
+#: edit_about.php:1542
 msgid "Auto-Login-Datei erzeugen"
 msgstr ""
 
-#: edit_about.php:1542
+#: edit_about.php:1543
 msgid ""
 "<b>ACHTUNG!</b> Die automatische Anmeldung stellt eine große "
 "Sicherheitslücke dar. Jeder, der Zugriff auf Ihren Rechner hat, kann sich "
 "damit unter Ihrem Namen in Stud.IP einloggen!"
 msgstr ""
 
-#: edit_about.php:1544
+#: edit_about.php:1545
 msgid "Eine sichere Variante besteht aus folgendem Link:"
 msgstr ""
 
-#: edit_about.php:1545
+#: edit_about.php:1546
 #, c-format
 msgid "Stud.IP - Login (%s)"
 msgstr ""
 
-#: edit_about.php:1546
+#: edit_about.php:1547
 msgid "Speichern Sie diesen Link als Bookmark oder Favoriten."
 msgstr ""
 
-#: edit_about.php:1547
+#: edit_about.php:1548
 msgid ""
 "Er f&uuml;hrt Sie direkt zum Login-Bildschirm von Stud.IP mit Ihrem schon "
 "eingetragenen Benutzernamen. Sie m&uuml;ssen nur noch Ihr Passwort eingeben."
 msgstr ""
 
-#: edit_about.php:1549
+#: edit_about.php:1550
 msgid ""
 "Als Administrator d&uuml;rfen Sie dieses Feature nicht nutzen - Sie tragen "
 "Verantwortung!"
@@ -7946,7 +7954,7 @@ msgstr ""
 msgid "Ihre Lernmodule in %s"
 msgstr ""
 
-#: elearning_interface.php:261 header.php:319
+#: elearning_interface.php:261 header.php:330
 msgid "Suche"
 msgstr ""
 
@@ -8256,98 +8264,98 @@ msgstr ""
 msgid "Dateiordner"
 msgstr ""
 
-#: folder.php:100 folder.php:111
+#: folder.php:106 folder.php:117
 msgid "Neuer Ordner"
 msgstr ""
 
-#: folder.php:109
+#: folder.php:115
 #, c-format
 msgid "Ablage für allgemeine Ordner und Dokumente der %s"
 msgstr ""
 
-#: folder.php:131
+#: folder.php:137
 #, c-format
 msgid ""
 "Der ausgewählte Ordner enthält %s Datei(en). Wollen Sie den Ordner wirklich "
 "löschen?"
 msgstr ""
 
-#: folder.php:148
+#: folder.php:154
 #, c-format
 msgid "Wollen sie die Verlinkung zu <b>%s</b> von %s wirklich löschen?"
 msgstr ""
 
-#: folder.php:151
+#: folder.php:157
 #, c-format
 msgid "Wollen sie die Datei <b>%s</b> von %s wirklich löschen?"
 msgstr ""
 
-#: folder.php:159
+#: folder.php:165
 msgid "Die Datei wurde gel&ouml;scht"
 msgstr ""
 
-#: folder.php:161
+#: folder.php:167
 msgid "Die Datei konnte nicht gel&ouml;scht werden"
 msgstr ""
 
-#: folder.php:167
+#: folder.php:173
 msgid "Die Verlinkung wurde gelöscht"
 msgstr ""
 
-#: folder.php:169
+#: folder.php:175
 msgid "Die Verlinkung konnte nicht gelöscht werden"
 msgstr ""
 
-#: folder.php:277 folder.php:311
+#: folder.php:283 folder.php:317
 msgid "Verschiebung konnte nicht durchgeführt werden."
 msgstr ""
 
-#: folder.php:279 folder.php:313
+#: folder.php:285 folder.php:319
 #, c-format
 msgid "%s Ordner, %s Datei(en) wurden verschoben."
 msgstr ""
 
-#: folder.php:284 folder.php:318
+#: folder.php:290 folder.php:324
 msgid "Kopieren konnte nicht durchgeführt werden."
 msgstr ""
 
-#: folder.php:286 folder.php:320
+#: folder.php:292 folder.php:326
 #, c-format
 msgid "%s Ordner, %s Datei(en) wurden kopiert."
 msgstr ""
 
-#: folder.php:349 links_openobject.inc.php:87 links_openobject.inc.php:110
+#: folder.php:355 links_openobject.inc.php:87 links_openobject.inc.php:110
 msgid "Dateien"
 msgstr ""
 
-#: folder.php:381
+#: folder.php:387
 msgid "Verschiebemodus"
 msgstr ""
 
-#: folder.php:381
+#: folder.php:387
 msgid "Kopiermodus"
 msgstr ""
 
-#: folder.php:382
+#: folder.php:388
 msgid ""
 "Ausgewähltes Objekt in den Allgemeinen Dateiordner einer anderen "
 "Veranstaltung oder einer anderen Einrichtung verschieben / kopieren:"
 msgstr ""
 
-#: folder.php:388 folder.php:395
+#: folder.php:394 folder.php:401
 msgid "In diese Veranstaltung verschieben / kopieren"
 msgstr ""
 
-#: folder.php:402 folder.php:409
+#: folder.php:408 folder.php:415
 msgid "In diese Einrichtung verschieben / kopieren"
 msgstr ""
 
-#: folder.php:425
+#: folder.php:431
 #, c-format
 msgid "Dateiordner zum Termin am %s [%s]"
 msgstr ""
 
-#: folder.php:460
+#: folder.php:466
 #, c-format
 msgid ""
 "Hier sehen Sie alle Dateien, die zu dieser %s eingestellt wurden. Wenn Sie "
@@ -8377,13 +8385,13 @@ msgstr ""
 msgid "Zuletzt editiert von"
 msgstr ""
 
-#: forum.inc.php:105 links_admin.inc.php:328 show_news.php:254
+#: forum.inc.php:105 links_admin.inc.php:328 show_news.php:257
 #: write_topic.php:133 lib/classes/guestbook.class.php:225
 #: lib/classes/smiley.class.php:385
 msgid "Smileys"
 msgstr ""
 
-#: forum.inc.php:105 show_news.php:254 write_topic.php:133
+#: forum.inc.php:105 show_news.php:257 write_topic.php:133
 #: lib/classes/guestbook.class.php:225
 msgid "Formatierungshilfen"
 msgstr ""
@@ -8763,8 +8771,8 @@ msgid "Wochen"
 msgstr ""
 
 #: freie.php:98 links_about.inc.php:61 links_admin.inc.php:246
-#: links_admin.inc.php:281 links_admin.inc.php:982 show_news.php:116
-#: show_news.php:131 lib/classes/ModulesNotification.class.php:52
+#: links_admin.inc.php:281 links_admin.inc.php:982 show_news.php:118
+#: show_news.php:133 lib/classes/ModulesNotification.class.php:52
 msgid "News"
 msgstr ""
 
@@ -9010,19 +9018,19 @@ msgstr ""
 msgid "Freie Veranstaltungen"
 msgstr ""
 
-#: header.php:98 header.php:276
+#: header.php:98 header.php:287
 msgid "Impressum"
 msgstr ""
 
-#: header.php:98 header.php:276
+#: header.php:98 header.php:287
 msgid "Informationen über das System"
 msgstr ""
 
-#: header.php:106 header.php:340 index.php:97 index.php:297
+#: header.php:106 header.php:351 index.php:97 index.php:297
 msgid "Hilfe"
 msgstr ""
 
-#: header.php:106 header.php:340
+#: header.php:106 header.php:351
 msgid "Hilfe zu dieser Seite"
 msgstr ""
 
@@ -9126,131 +9134,127 @@ msgstr ""
 msgid "Es sind außer Ihnen %s Personen online"
 msgstr ""
 
-#: header.php:296
+#: header.php:307
 msgid "Zu Ihrer Einstellungsseite"
 msgstr ""
 
-#: header.php:307
+#: header.php:318
 #, c-format
 msgid ", Sie haben %s neuen Eintrag im Gästebuch."
 msgstr ""
 
-#: header.php:312
+#: header.php:323
 #, c-format
 msgid ", Sie haben %s neue Einträge im Gästebuch."
 msgstr ""
 
-#: header.php:319
+#: header.php:330
 msgid "Im System suchen"
 msgstr ""
 
-#: header.php:323 institut_members.php:454
+#: header.php:334 institut_members.php:454
 msgid "Admin"
 msgstr ""
 
-#: header.php:323
+#: header.php:334
 msgid "Zu Ihrer Administrationsseite"
 msgstr ""
 
-#: header.php:332
+#: header.php:343
 #, c-format
 msgid ""
 "Sie sind angemeldet als: %s mit der Berechtigung: %s. Beginn der Session: %"
 "s,  letztes Login: %s, %s,  Auflösung: %sx%s, eingestellte Sprache: %s"
 msgstr ""
 
-#: header.php:334
+#: header.php:345
 msgid "JavaScript eingeschaltet"
 msgstr ""
 
-#: header.php:334
+#: header.php:345
 msgid "JavaScript ausgeschaltet"
 msgstr ""
 
-#: header.php:341
+#: header.php:352
 msgid "Logout"
 msgstr ""
 
-#: header.php:341
+#: header.php:352
 msgid "Aus dem System abmelden"
 msgstr ""
 
-#: impressum.php:47 impressum.php:69 impressum.php:206
+#: impressum.php:48 impressum.php:70 impressum.php:206
 msgid "zuletzt angelegt"
 msgstr ""
 
-#: impressum.php:84 lib/classes/RangeTreeObjectFak.class.php:48
+#: impressum.php:85 lib/classes/RangeTreeObjectFak.class.php:48
 #: lib/classes/RangeTreeObjectInst.class.php:48
 msgid "Kontakt"
 msgstr ""
 
-#: impressum.php:85
+#: impressum.php:86
 msgid "&Uuml;ber Stud.IP"
 msgstr ""
 
-#: impressum.php:87
+#: impressum.php:88
 msgid "Ansprechpartner"
 msgstr ""
 
-#: impressum.php:88
+#: impressum.php:89
 msgid "Entwickler"
 msgstr ""
 
-#: impressum.php:89
+#: impressum.php:90
 msgid "Technik"
 msgstr ""
 
-#: impressum.php:90 impressum.php:217
+#: impressum.php:91 impressum.php:217
 msgid "Statistik"
 msgstr ""
 
-#: impressum.php:91
+#: impressum.php:92
 msgid "History"
 msgstr ""
 
-#: impressum.php:108
+#: impressum.php:109
 msgid ""
 "Stud.IP ist ein Open Source Projekt zur Unterst&uuml;tzung von Pr&auml;"
 "senzlehre an der Universit&auml;t G&ouml;ttingen."
 msgstr ""
 
-#: impressum.php:109
+#: impressum.php:110
 msgid ""
 "Das System wird entwickelt vom Zentrum f&uuml;r interdisziplin&auml;re "
 "Medienwissenschaft (ZiM), Universit&auml;t G&ouml;ttingen und der Suchi "
 "&amp; Berg GmbH (data-quest), G&ouml;ttingen."
 msgstr ""
 
-#: impressum.php:110
+#: impressum.php:111
 msgid ""
 "Stud.IP steht unter der GNU General Public License, Version 2 oder neuer."
 msgstr ""
 
-#: impressum.php:111
+#: impressum.php:112
 #, c-format
 msgid "Weitere Informationen finden sie auf %swww.studip.de%s"
 msgstr ""
 
-#: impressum.php:123 impressum.php:409
+#: impressum.php:124 impressum.php:409
 msgid "Version:"
 msgstr ""
 
-#: impressum.php:129
+#: impressum.php:130
 msgid ""
 "<b>Die folgenden Entwickler</b> sind mit der st&auml;ndigen Pflege und "
 "Weiterentwicklung des Systems befasst:"
 msgstr ""
 
-#: impressum.php:131
+#: impressum.php:132
 msgid "(Projektmanagement, Hilfe)"
 msgstr ""
 
-#: impressum.php:132
-msgid "(Qualit&auml;tssicherung)"
-msgstr ""
-
 #: impressum.php:133
-msgid "(Distribution)"
+msgid "(Fehlersuche)"
 msgstr ""
 
 #: impressum.php:134
@@ -9278,7 +9282,7 @@ msgid "(PlugIn-Schnittstelle)"
 msgstr ""
 
 #: impressum.php:140
-msgid "(Security)"
+msgid "(Security, Distribution)"
 msgstr ""
 
 #: impressum.php:141
@@ -9916,8 +9920,8 @@ msgstr ""
 #: institut_members.php:120 institut_members.php:141 institut_members.php:161
 #: institut_members.php:182 institut_members.php:201 institut_members.php:224
 #: institut_members.php:241 institut_members.php:257 institut_members.php:274
-#: institut_members.php:289 sms_send.php:623 teilnehmer.php:694
-#: teilnehmer.php:984
+#: institut_members.php:289 sms_send.php:623 teilnehmer.php:702
+#: teilnehmer.php:992
 msgid "Nachricht"
 msgstr ""
 
@@ -9979,10 +9983,6 @@ msgstr ""
 msgid "Kategorie"
 msgstr ""
 
-#: kategorien.inc.php:61
-msgid "f&uuml;r andere unsichtbar"
-msgstr ""
-
 #: kategorien.inc.php:65
 msgid "Kategorie nach oben verschieben"
 msgstr ""
@@ -10028,11 +10028,19 @@ msgstr ""
 msgid "Kategorie gel&ouml;scht!"
 msgstr ""
 
-#: kategorien.inc.php:141
+#: kategorien.inc.php:136
+msgid "Kategorien ohne Namen k&ouml;nnen nicht gespeichert werden!"
+msgstr ""
+
+#: kategorien.inc.php:143
+msgid "Kategorie ohne Inhalt wurde versteckt!"
+msgstr ""
+
+#: kategorien.inc.php:148
 msgid "Kategorien ge&auml;ndert!"
 msgstr ""
 
-#: kategorien.inc.php:165
+#: kategorien.inc.php:172
 msgid "Kategorien wurden neu geordnet"
 msgstr ""
 
@@ -11820,11 +11828,11 @@ msgstr ""
 msgid "Authentifizierung"
 msgstr ""
 
-#: object.inc.php:205
+#: object.inc.php:212
 msgid "Sie haben das Objekt mit \"$rate\"  bewertet."
 msgstr ""
 
-#: object.inc.php:207
+#: object.inc.php:214
 msgid "Sie haben dieses Objekt bereits bewertet."
 msgstr ""
 
@@ -13250,66 +13258,71 @@ msgstr ""
 msgid "Anzeige der Log-Events"
 msgstr ""
 
-#: show_news.php:56
+#: show_news.php:58
 #, c-format
 msgid "hat am %s geschrieben:"
 msgstr ""
 
-#: show_news.php:116 show_news.php:131
+#: show_news.php:118 show_news.php:133
 msgid ""
 "Newsticker. Klicken Sie auf die Pfeile (rechts), um neue News in diesen "
 "Bereich einzustellen. Klicken Sie auf die Pfeile am linken Rand, um den "
 "ganzen Nachrichtentext zu lesen."
 msgstr ""
 
-#: show_news.php:118
+#: show_news.php:120
 msgid "News einstellen"
 msgstr ""
 
-#: show_news.php:120
+#: show_news.php:122
 msgid ""
 "Es sind keine aktuellen News vorhanden. Um neue News zu erstellen, klicken "
 "Sie auf die Doppelpfeile."
 msgstr ""
 
-#: show_news.php:135
+#: show_news.php:137
 msgid "RSS-Feed"
 msgstr ""
 
-#: show_news.php:141
+#: show_news.php:143
 msgid "News bearbeiten"
 msgstr ""
 
-#: show_news.php:198
+#: show_news.php:176
+#, c-format
+msgid "%s neue(r) Kommentar(e)"
+msgstr ""
+
+#: show_news.php:201
 msgid "Keine Beschreibung vorhanden."
 msgstr ""
 
-#: show_news.php:227 wiki.inc.php:1020
+#: show_news.php:230 wiki.inc.php:1020
 msgid "Kommentare"
 msgstr ""
 
-#: show_news.php:249
+#: show_news.php:252
 msgid "Geben Sie hier Ihren Kommentar ein!"
 msgstr ""
 
-#: show_news.php:259
+#: show_news.php:262
 #, c-format
 msgid "Kommentare lesen (%s) / Kommentar schreiben"
 msgstr ""
 
-#: show_news.php:282
+#: show_news.php:285
 msgid "Persönliche Neuigkeiten"
 msgstr ""
 
-#: show_news.php:288
+#: show_news.php:292
 msgid "Neuigkeiten der Veranstaltung"
 msgstr ""
 
-#: show_news.php:295
+#: show_news.php:299
 msgid "Neuigkeiten der Einrichtung"
 msgstr ""
 
-#: show_news.php:300
+#: show_news.php:304
 msgid "Allgemeine Neuigkeiten"
 msgstr ""
 
@@ -14348,7 +14361,7 @@ msgstr ""
 msgid "Sortierung:"
 msgstr ""
 
-#: teilnehmer.php:559 teilnehmer.php:566 teilnehmer.php:688
+#: teilnehmer.php:559 teilnehmer.php:566 teilnehmer.php:696
 msgid "Anmeldedatum"
 msgstr ""
 
@@ -14356,139 +14369,139 @@ msgstr ""
 msgid "Aktivität"
 msgstr ""
 
-#: teilnehmer.php:675
+#: teilnehmer.php:683
 msgid "Informationsfelder wieder hochklappen"
 msgstr ""
 
-#: teilnehmer.php:678
+#: teilnehmer.php:686
 msgid "Alle Informationsfelder aufklappen"
 msgstr ""
 
-#: teilnehmer.php:714
+#: teilnehmer.php:722
 msgid "Mitglied entlassen"
 msgstr ""
 
-#: teilnehmer.php:716
+#: teilnehmer.php:724
 msgid "TutorIn entlassen"
 msgstr ""
 
-#: teilnehmer.php:724
+#: teilnehmer.php:732
 msgid "als Mitglied eintragen"
 msgstr ""
 
-#: teilnehmer.php:726
+#: teilnehmer.php:734
 msgid "als TutorIn eintragen"
 msgstr ""
 
-#: teilnehmer.php:728
+#: teilnehmer.php:736
 msgid "Schreibrecht entziehen"
 msgstr ""
 
-#: teilnehmer.php:730 teilnehmer.php:987
+#: teilnehmer.php:738 teilnehmer.php:995
 msgid "Kontingent"
 msgstr ""
 
-#: teilnehmer.php:734
+#: teilnehmer.php:742
 msgid "Schreibrecht erteilen"
 msgstr ""
 
-#: teilnehmer.php:735 teilnehmer.php:742
+#: teilnehmer.php:743 teilnehmer.php:750
 msgid "BenutzerIn entfernen"
 msgstr ""
 
-#: teilnehmer.php:741
+#: teilnehmer.php:749
 msgid "Akzeptieren"
 msgstr ""
 
-#: teilnehmer.php:810
+#: teilnehmer.php:818
 msgid "Aktivität: "
 msgstr ""
 
-#: teilnehmer.php:828
+#: teilnehmer.php:836
 #, c-format
 msgid "Weitere Informationen über %s"
 msgstr ""
 
-#: teilnehmer.php:925
+#: teilnehmer.php:933
 msgid "Bemerkungen:"
 msgstr ""
 
-#: teilnehmer.php:932
+#: teilnehmer.php:940
 msgid "&Auml;nderungen"
 msgstr ""
 
-#: teilnehmer.php:985
+#: teilnehmer.php:993
 msgid "eintragen"
 msgstr ""
 
-#: teilnehmer.php:986
+#: teilnehmer.php:994
 msgid "entfernen"
 msgstr ""
 
-#: teilnehmer.php:1044
+#: teilnehmer.php:1052
 msgid "MitarbeiterInnen der Einrichtung(en)"
 msgstr ""
 
-#: teilnehmer.php:1052
+#: teilnehmer.php:1060
 msgid "als TutorIn"
 msgstr ""
 
-#: teilnehmer.php:1052
+#: teilnehmer.php:1060
 msgid "als Mitglied"
 msgstr ""
 
-#: teilnehmer.php:1081
+#: teilnehmer.php:1089
 msgid "Gefundene Nutzer"
 msgstr ""
 
-#: teilnehmer.php:1089
+#: teilnehmer.php:1097
 msgid "als AutorIn"
 msgstr ""
 
-#: teilnehmer.php:1104
+#: teilnehmer.php:1112
 msgid "Nutzer in die Veranstaltung eintragen"
 msgstr ""
 
-#: teilnehmer.php:1105
+#: teilnehmer.php:1113
 #, c-format
 msgid "Bitte geben Sie den Vornamen, Nachnamen %s oder Usernamen zur Suche ein"
 msgstr ""
 
-#: teilnehmer.php:1123
+#: teilnehmer.php:1131
 msgid "Teilnehmerliste übernehmen"
 msgstr ""
 
-#: teilnehmer.php:1124
+#: teilnehmer.php:1132
 msgid ""
 "In das nebenstehende Textfeld können Sie eine Liste mit Namen von "
 "NutzerInnen eingeben, die in die Veranstaltung aufgenommen werden sollen."
 msgstr ""
 
-#: teilnehmer.php:1125
+#: teilnehmer.php:1133
 msgid ""
 "Geben Sie in jede Zeile den Nachnamen und (optional) den Vornamen getrennt "
 "durch ein Komma oder ein Tabulatorzeichen ein."
 msgstr ""
 
-#: teilnehmer.php:1126
+#: teilnehmer.php:1134
 msgid "Eingabeformat: <b>Nachname, Vorname &crarr;<b>"
 msgstr ""
 
-#: teilnehmer.php:1144
+#: teilnehmer.php:1152
 msgid "Manuelle Zuordnung"
 msgstr ""
 
-#: teilnehmer.php:1145
+#: teilnehmer.php:1153
 msgid ""
 "Folgende NutzerInnen konnten <b>nicht eindeutig</b> zugewiesen werden. Bitte "
 "wählen Sie aus der jeweiligen Trefferliste:"
 msgstr ""
 
-#: teilnehmer.php:1173
+#: teilnehmer.php:1181
 msgid "Nicht gefundene NutzerInnen"
 msgstr ""
 
-#: teilnehmer.php:1174
+#: teilnehmer.php:1182
 msgid ""
 "Im nebenstehende Textfeld sehen Sie eine Auflistung der Suchanfragen, zu "
 "denen <b>keine</b> NutzerInnen gefunden wurden."
@@ -14549,15 +14562,15 @@ msgstr ""
 msgid "Kommentar von"
 msgstr ""
 
-#: visual.inc.php:1092
+#: visual.inc.php:1098
 msgid "Objekt aufklappen"
 msgstr ""
 
-#: visual.inc.php:1095
+#: visual.inc.php:1101
 msgid "Objekt zuklappen"
 msgstr ""
 
-#: visual.inc.php:1132
+#: visual.inc.php:1138
 msgid "Bewertungsbereich öffnen"
 msgstr ""
 
@@ -15544,57 +15557,48 @@ msgstr ""
 msgid "1 neue Literaturliste angelegt"
 msgstr ""
 
-#: lib/classes/ModulesNotification.class.php:256
-#, c-format
-msgid "%s Lernmodule sind mit der Veranstaltung verbunden:"
-msgstr ""
-
-#: lib/classes/ModulesNotification.class.php:258
-msgid "1 Lernmodul ist mit der Veranstaltung verbunden:"
-msgstr ""
-
-#: lib/classes/ModulesNotification.class.php:266
+#: lib/classes/ModulesNotification.class.php:268
 #, c-format
 msgid "%s neue Content-Module angelegt"
 msgstr ""
 
-#: lib/classes/ModulesNotification.class.php:268
+#: lib/classes/ModulesNotification.class.php:270
 msgid "1 neues Content-Modul angelegt"
 msgstr ""
 
-#: lib/classes/ModulesNotification.class.php:275
+#: lib/classes/ModulesNotification.class.php:277
 #, c-format
 msgid "%s Wikiseiten wurden angelegt oder bearbeitet:"
 msgstr ""
 
-#: lib/classes/ModulesNotification.class.php:277
+#: lib/classes/ModulesNotification.class.php:279
 msgid "1 Wikiseite wurde angelegt oder bearbeitet:"
 msgstr ""
 
-#: lib/classes/ModulesNotification.class.php:283
+#: lib/classes/ModulesNotification.class.php:285
 #, c-format
 msgid "Die Seite \"%s\" wurde neu angelegt oder bearbeitet:"
 msgstr ""
 
-#: lib/classes/ModulesNotification.class.php:290
+#: lib/classes/ModulesNotification.class.php:292
 #, c-format
 msgid "%s neue Umfragen oder Evaluationen wurden angelegt:"
 msgstr ""
 
-#: lib/classes/ModulesNotification.class.php:292
+#: lib/classes/ModulesNotification.class.php:294
 msgid "1 neue Umfrage oder Evaluation wurde angelegt:"
 msgstr ""
 
-#: lib/classes/ModulesNotification.class.php:299
+#: lib/classes/ModulesNotification.class.php:301
 #, c-format
 msgid "%s neu News wurden angelegt:"
 msgstr ""
 
-#: lib/classes/ModulesNotification.class.php:301
+#: lib/classes/ModulesNotification.class.php:303
 msgid "1 neue News wurde angelegt:"
 msgstr ""
 
-#: lib/classes/ModulesNotification.class.php:307
+#: lib/classes/ModulesNotification.class.php:309
 msgid "Die Grunddaten wurden geändert:"
 msgstr ""
 
@@ -17214,13 +17218,13 @@ msgid "%s Eintr&auml;ge aus Wartelisten gel&ouml;scht."
 msgstr ""
 
 #: lib/classes/UserManagement.class.php:518
-#: lib/classes/UserManagement.class.php:751
+#: lib/classes/UserManagement.class.php:754
 #, c-format
 msgid "%s Zuordnungen zu Studieng&auml;ngen gel&ouml;scht."
 msgstr ""
 
 #: lib/classes/UserManagement.class.php:522
-#: lib/classes/UserManagement.class.php:757
+#: lib/classes/UserManagement.class.php:760
 #, c-format
 msgid "%s Eintr&auml;ge aus den Terminen gel&ouml;scht."
 msgstr ""
@@ -17290,29 +17294,29 @@ msgstr ""
 msgid "%s Verweise auf News gel&ouml;scht."
 msgstr ""
 
-#: lib/classes/UserManagement.class.php:767
+#: lib/classes/UserManagement.class.php:770
 #, c-format
 msgid "%s Eintr&auml;ge aus Adressb&uuml;chern gel&ouml;scht."
 msgstr ""
 
-#: lib/classes/UserManagement.class.php:778
+#: lib/classes/UserManagement.class.php:781
 #, c-format
 msgid "%s Eintr&auml;ge aus dem Gästebuch gel&ouml;scht."
 msgstr ""
 
-#: lib/classes/UserManagement.class.php:796
+#: lib/classes/UserManagement.class.php:802
 msgid "Bild gel&ouml;scht."
 msgstr ""
 
-#: lib/classes/UserManagement.class.php:798
+#: lib/classes/UserManagement.class.php:804
 msgid "Bild konnte nicht gel&ouml;scht werden."
 msgstr ""
 
-#: lib/classes/UserManagement.class.php:812
+#: lib/classes/UserManagement.class.php:818
 msgid "Fehlgeschlagen:"
 msgstr ""
 
-#: lib/classes/UserManagement.class.php:815
+#: lib/classes/UserManagement.class.php:821
 #, c-format
 msgid "User \"%s\" gel&ouml;scht."
 msgstr ""

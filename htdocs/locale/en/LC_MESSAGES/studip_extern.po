@@ -1,3 +1,5 @@
+# translation of studip_extern.po to 
+# translation of studip_extern.po to
 # This file is distributed under the same license as the PACKAGE package.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER, 2003,2004.
 # shariful <shariful@math.uni-goettingen.de>, 2004.
@@ -6,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: studip_extern\n"
-"POT-Creation-Date: 2006-02-15 14:53+0100\n"
-"PO-Revision-Date: 2006-02-15 14:38+GMT\n"
+"POT-Creation-Date: 2006-04-07 16:52+0200\n"
+"PO-Revision-Date: 2006-04-07 16:38+GMT\n"
 "Last-Translator: Stefan Suchi <suchi@data-quest.de>\n"
 "Language-Team:  <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -33,9 +35,8 @@ msgid "Übersicht über alle angelegten Konfigurationen."
 msgstr "Overview of all configurations created."
 
 #: extern/admin_extern.inc.php:157
-#, fuzzy
 msgid "SRI-Schnittstelle freigeben"
-msgstr "Link to SRI interface."
+msgstr "Enable SRI interface"
 
 #: extern/admin_extern.inc.php:186
 msgid "Neue globale Konfiguration anlegen."
@@ -1515,7 +1516,7 @@ msgstr "Sub title for course 3"
 
 #: extern/modules/views/persondetails_preview.inc.php:104
 msgid "HochschullehrerIn"
-msgstr ""
+msgstr "Lecturer"
 
 #: extern/modules/views/persondetails_preview.inc.php:105
 msgid "Mustereinrichtung"
@@ -1590,7 +1591,7 @@ msgstr "In the basic settings you can change the general data of the element."
 
 #: extern/lib/ExternElementMain.class.php:113
 msgid "URL des SRI-Templates"
-msgstr ""
+msgstr "URL of the SRI template."
 
 #: extern/lib/ExternElementMain.class.php:114
 msgid ""
@@ -1598,6 +1599,8 @@ msgid ""
 "vollständige URL der Seite an, in die die Ausgabe des Moduls eingefügt "
 "werden soll."
 msgstr ""
+"Only when using the SRI interface: Enter the complete URL of the webpage the "
+"output of the modul should be added to."
 
 #: extern/elements/ExternElementBody.class.php:54
 msgid "Seitenkörper"
@@ -1664,7 +1667,7 @@ msgstr "Heading of the contact data"
 #: extern/elements/main/ExternElementMainGlobal.class.php:166
 #: extern/elements/main/ExternElementMainPersons.class.php:163
 msgid "Standard-Adresse:"
-msgstr ""
+msgstr "Default address"
 
 #: extern/elements/ExternElementContact.class.php:104
 #: extern/elements/main/ExternElementMainGlobal.class.php:167
@@ -1675,33 +1678,38 @@ msgid ""
 "Sie diese Option nicht, wenn immer die Adresse der Einrichtung ausgegeben "
 "werden soll."
 msgstr ""
+"If you choose this option, then the output will be the default address each "
+"person may choose within the university datas. Don't choose this option if "
+"the output should always be the institution's address. "
 
 #: extern/elements/ExternElementContact.class.php:107
 msgid "Personenname ausblenden:"
-msgstr ""
+msgstr "Hide person's name:"
 
 #: extern/elements/ExternElementContact.class.php:108
 msgid "Unterdrückt die Anzeige des Namens im Adressfeld."
-msgstr ""
+msgstr "Do not show the name in the address field."
 
 #: extern/elements/ExternElementContact.class.php:111
 msgid "Funktionen anzeigen:"
-msgstr ""
+msgstr "View functions:"
 
 #: extern/elements/ExternElementContact.class.php:112
 msgid ""
 "Ausgabe der Funktionen der Mitarbeiterin/des Mitarbeiters in der Einrichtung."
-msgstr ""
+msgstr "View the person's function within the institution."
 
 #: extern/elements/ExternElementContact.class.php:115
 msgid "Einrichtungsname:"
-msgstr ""
+msgstr "Institution's name:"
 
 #: extern/elements/ExternElementContact.class.php:116
 msgid ""
 "Anzeige des Einrichtungsnamens. Der Name kann auch als Link auf die in Stud."
 "IP angegebene URL (unter Grunddaten der Einrichtung) angezeigt werden."
 msgstr ""
+"View the institution's name. This name can be viewed as link to the URL "
+"(basic data of the institution) as entered in Stud.IP."
 
 #: extern/elements/ExternElementContact.class.php:118
 #: extern/elements/main/ExternElementMainPersondetails.class.php:130
@@ -1710,21 +1718,23 @@ msgstr "Do not display"
 
 #: extern/elements/ExternElementContact.class.php:118
 msgid "anzeigen"
-msgstr ""
+msgstr "view"
 
 #: extern/elements/ExternElementContact.class.php:118
 msgid "als Link anzeigen"
-msgstr ""
+msgstr "view as link "
 
 #: extern/elements/ExternElementContact.class.php:121
 msgid "Email und Hompage getrennt:"
-msgstr ""
+msgstr "email and homepage separated:"
 
 #: extern/elements/ExternElementContact.class.php:122
 msgid ""
 "Sinnvoll ist diese Option bei sehr langen Email-Adresse und Homepage-Links "
 "der Mitarbeiter. Diese werden dann unterhalb des Adressfeldes ausgegeben."
 msgstr ""
+"This option is useful in case of very long email-addresses and links to "
+"person's homepages. The output will then appear below the address field."
 
 #: extern/elements/ExternElementContact.class.php:125
 msgid "Adresszusatz:"
@@ -1922,15 +1932,15 @@ msgstr "Information for the configuration of the page header."
 
 #: extern/elements/ExternElementPersondetailsHeader.class.php:94
 msgid "Allgemeine Angaben zum Element Seitenkopf/Bild"
-msgstr ""
+msgstr "General information for the element page header/picture."
 
 #: extern/elements/ExternElementPersondetailsHeader.class.php:96
 msgid "&Uuml;berschrift (Name) ausblenden:"
-msgstr ""
+msgstr "Hide header (name):"
 
 #: extern/elements/ExternElementPersondetailsHeader.class.php:97
 msgid "Unterdrückt die Anzeige des Namens als Überschrift."
-msgstr ""
+msgstr "Do not display the name as header."
 
 #: extern/elements/ExternElementPersondetailsHeader.class.php:111
 msgid "Tabelle Seitenkopf/Bild (HTML-Tag &lt;table&gt;)"
@@ -3246,31 +3256,34 @@ msgstr "No current news"
 
 #: extern/elements/main/ExternElementMainNews.class.php:115
 msgid "Datum/Autor anzeigen:"
-msgstr ""
+msgstr "View date/author:"
 
 #: extern/elements/main/ExternElementMainNews.class.php:116
 msgid ""
 "Anzeige von Datum und Autor, nur Datum oder nur Autor in der Spalte Datum/"
 "Autor."
 msgstr ""
+"View date and author, date only or author only in the column date/author."
 
 #: extern/elements/main/ExternElementMainNews.class.php:118
 msgid "Datum und Autor"
-msgstr ""
+msgstr "Date and author"
 
 #: extern/elements/main/ExternElementMainNews.class.php:118
 msgid "nur Datum"
-msgstr ""
+msgstr "date only"
 
 #: extern/elements/main/ExternElementMainNews.class.php:121
 msgid "Autorenname nicht verlinken:"
-msgstr ""
+msgstr "Do not link author name:"
 
 #: extern/elements/main/ExternElementMainNews.class.php:122
 msgid ""
 "Wählen Sie diese Option, wenn der Autorenname nicht auf das Modul "
 "Personendetails verlinkt werden soll."
 msgstr ""
+"Choose this option if the author name should not be linked to the module "
+"personal details."
 
 #: extern/elements/main/ExternElementMainNews.class.php:172
 #: extern/elements/main/ExternElementMainNewsticker.class.php:116

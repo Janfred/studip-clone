@@ -1,43 +1,48 @@
+# translation of studip_resources.po to 
+# translation of studip_resources.po to
 # This file is distributed under the same license as the PACKAGE package.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER, 2004.
 # Jens Schmelzer <jens.schmelzer@fh-jena.de>, 2005.
+# Stefan Suchi <suchi@data-quest.de>, 2006.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: studip_resources\n"
-"POT-Creation-Date: 2006-02-15 14:53+0100\n"
-"PO-Revision-Date: 2005-06-29 22:26+0200\n"
-"Last-Translator: Jens Schmelzer <jens.schmelzer@fh-jena.de>\n"
+"POT-Creation-Date: 2006-04-07 16:52+0200\n"
+"PO-Revision-Date: 2006-04-07 16:44+GMT\n"
+"Last-Translator: Stefan Suchi <suchi@data-quest.de>\n"
 "Language-Team:  <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.10\n"
+"X-Generator: KBabel 1.0.2\n"
 
 #: resources/resourcesFunc.inc.php:257
 msgid ""
 "Folgende gew&uuml;nschte Raumbelegungen &uuml;berschneiden sich mit bereits "
 "vorhandenen Belegungen. Bitte &auml;ndern Sie die R&auml;ume oder Zeiten!"
 msgstr ""
+"The following room assignments overlap with previous ones. Please, modify "
+"rooms or times."
 
 #: resources/resourcesFunc.inc.php:266
 #, c-format
 msgid "und %s weitere &Uuml;berschneidungen"
-msgstr ""
+msgstr "and %s additional overlaps"
 
 #: resources/resourcesFunc.inc.php:267
 msgid "Raumplan anzeigen"
-msgstr ""
+msgstr "View room plan"
 
 #: resources/resourcesFunc.inc.php:272
 msgid "Die gew&uuml;nschten Belegungen kollidieren mit folgenden Sperrzeiten:"
-msgstr ""
+msgstr "The requested assignments collide with the following blocked periods:"
 
 #: resources/resourcesFunc.inc.php:298
 #, c-format
 msgid ""
 "Die Belegung des Raumes %s wurde in die Ressourcenverwaltung &uuml;bernommen."
-msgstr ""
+msgstr "The assignment of room %s has been added to the resource management."
 
 #: resources/resourcesFunc.inc.php:300
 #, c-format
@@ -45,6 +50,7 @@ msgid ""
 "Die Belegung der R&auml;ume %s wurden in die Ressourcenverwaltung &uuml;"
 "bernommen."
 msgstr ""
+"The assigment of the rooms %s has been added to the resource management."
 
 #: resources/resourcesFunc.inc.php:565 resources/resourcesFunc.inc.php:581
 #: resources/resourcesFunc.inc.php:590 resources/resourcesFunc.inc.php:662
@@ -104,7 +110,7 @@ msgstr "Course"
 
 #: resources/lib/AssignObject.class.php:248
 msgid "direkter Eintrag"
-msgstr ""
+msgstr "direct entry"
 
 #: resources/lib/AssignObject.class.php:460
 #: resources/views/EditResourceData.class.php:381
@@ -232,7 +238,6 @@ msgid "jedes f&uuml;nfte Jahr"
 msgstr "every fifth year"
 
 #: resources/lib/evaluate_values.php:191
-#, fuzzy
 msgid "In aktueller Anfrage mit berücksichtigen"
 msgstr "To be considered in the actual request"
 
@@ -264,11 +269,11 @@ msgstr "Status:"
 
 #: resources/lib/evaluate_values.php:1485
 msgid "noch nicht bearbeitet"
-msgstr ""
+msgstr "note done yet"
 
 #: resources/lib/evaluate_values.php:1485
 msgid "bereits bearbeitet"
-msgstr ""
+msgstr "already done"
 
 #: resources/lib/evaluate_values.php:1868
 #, c-format
@@ -287,9 +292,8 @@ msgstr "weekly"
 #: resources/lib/evaluate_values.php:1887
 #: resources/views/ShowGroupSchedules.class.php:173
 #: resources/views/ShowSemSchedules.class.php:174
-#, fuzzy
 msgid "zweiwöchentlich"
-msgstr "weekly"
+msgstr "biweekly"
 
 #: resources/lib/evaluate_values.php:1888
 #: resources/views/ShowToolsRequests.class.php:382
@@ -298,7 +302,7 @@ msgstr "from:"
 
 #: resources/lib/evaluate_values.php:1918
 msgid "Raumanfrage bearbeitet"
-msgstr ""
+msgstr "Resolved room request"
 
 #: resources/lib/ResourceObject.class.php:285
 msgid "jederR"
@@ -321,7 +325,7 @@ msgstr "No description"
 msgid ""
 "Sie haben nicht die Berechtigung, für diese Resource eine Belegung zu "
 "erstellen."
-msgstr ""
+msgstr "You don't have permission to create an assignment for this ressource."
 
 #: resources/views/EditResourceData.class.php:210
 msgid "Sie erstellen eine neue Belegung"
@@ -451,9 +455,8 @@ msgid "Wiederholungsturnus:"
 msgstr "Repetition regularity:"
 
 #: resources/views/EditResourceData.class.php:393
-#, fuzzy
 msgid "jede vierte Woche"
-msgstr "every third week"
+msgstr "every fourth week"
 
 #: resources/views/EditResourceData.class.php:432
 msgid "begrenzte Anzahl der Wiederholungen:"
@@ -536,14 +539,13 @@ msgstr ""
 "separately. A schedule will be created."
 
 #: resources/views/EditResourceData.class.php:538
-#, fuzzy
 msgid ""
 "Nutzen Sie diese Funktion, um eine Terminserie in Einzeltermine umzuwandeln. "
 "Diese Einzeltermine k&ouml;nnen dann getrennt bearbeitet werden."
 msgstr ""
-"Apply this function in order to change a series of regular allocations into "
-"single appointments. Then these single appointments can be modified "
-"separately. A schedule will be created."
+"Apply this function in order to change a series of appointments into single "
+"appointments. Then these single appointments can be modified separately. A "
+"schedule will be created."
 
 #: resources/views/EditResourceData.class.php:567
 #: resources/views/ShowObject.class.php:79
@@ -743,7 +745,7 @@ msgstr "New type:"
 
 #: resources/views/EditSettings.class.php:267
 msgid "wird als <i>Raum</i> behandelt"
-msgstr ""
+msgstr "will be treated as <i>room</i>"
 
 #: resources/views/EditSettings.class.php:268
 #, c-format
@@ -790,7 +792,7 @@ msgstr "requestable"
 #: resources/views/EditSettings.class.php:390
 msgid ""
 "Dieser Typ kann nicht gelöscht werden, da er von Ressourcen verwendet wird!"
-msgstr ""
+msgstr "This type can't be deleted because it is used by some ressouces."
 
 #: resources/views/EditSettings.class.php:412
 msgid "Eigenschaft"
@@ -847,13 +849,15 @@ msgstr ""
 
 #: resources/views/EditSettings.class.php:547
 msgid "Sperrzeiten f&uuml;r die Bearbeitung von <i>Raum</i>belegungen"
-msgstr ""
+msgstr "Blockout times for changing assignments of <i>room</i>"
 
 #: resources/views/EditSettings.class.php:548
 msgid ""
 "Die <b>Bearbeitung</b> von Belegungen soll f&uuml;r alle lokalen Ressourcen-"
 "Administratoren zu folgenden Bearbeitungszeiten geblockt werden:"
 msgstr ""
+"<b>Change</b> of assignments should be blocked for all local ressource "
+"administrators at following periods: "
 
 #: resources/views/EditSettings.class.php:549
 #: resources/views/EditSettings.class.php:631
@@ -921,15 +925,15 @@ msgstr "Edit this entry"
 
 #: resources/views/EditSettings.class.php:629
 msgid "Sperrzeiten f&uuml;r f&uuml;r <i>Raum</i>belegungen"
-msgstr ""
+msgstr "Blockout periods for <i>room</i> assignments"
 
 #: resources/views/EditSettings.class.php:630
-#, fuzzy
 msgid ""
 "Die <b>Belegung</b> soll f&uuml;r alle lokalen Ressourcen-Administratoren zu "
 "folgenden Belegungszeitenzeiten geblockt werden:"
 msgstr ""
-"Allocation of rooms can be blocked for all local resource administrators:"
+"<b>Allocation</b> of rooms should be blocked for all local ressource "
+"administrators at following periods:"
 
 #: resources/views/EditSettings.class.php:711
 msgid "Optionen beim Bearbeiten von Anfragen"
@@ -1048,9 +1052,8 @@ msgid "Neue&nbsp;Hierarchieebene&nbsp;erzeugen"
 msgstr "Create&nbsp;a&nbsp;new&nbsp;hierarchy&nbsp;level."
 
 #: resources/views/links_resources.inc.php:70
-#, fuzzy
 msgid "Gruppen-Belegungspl&auml;ne"
-msgstr "Allocation plan"
+msgstr "Group allocation plans"
 
 #: resources/views/links_resources.inc.php:75
 msgid "Listenausgabe"
@@ -1069,9 +1072,8 @@ msgid "Belegungsplan"
 msgstr "Allocation plan"
 
 #: resources/views/links_resources.inc.php:90
-#, fuzzy
 msgid "Semester-Belegungsplan"
-msgstr "Allocation plan"
+msgstr "Semester allocation plan"
 
 #: resources/views/links_resources.inc.php:93
 msgid "Belegung&nbsp;bearbeiten"
@@ -1083,13 +1085,12 @@ msgstr "View&nbsp;allocation"
 
 #: resources/views/links_resources.inc.php:102
 msgid "Anfragen&nbsp;bearbeiten"
-msgstr ""
+msgstr "Resolve requests"
 
 #: resources/views/links_resources.inc.php:103
 #: resources/views/page_intros.inc.php:257
-#, fuzzy
 msgid "Anfragenliste"
-msgstr "all requests"
+msgstr "List of requests"
 
 #: resources/views/links_resources.inc.php:109
 msgid "Typen&nbsp;verwalten"
@@ -1307,7 +1308,7 @@ msgstr "Error in the blocking period, correct the times, please!"
 
 #: resources/views/msgs_resources.inc.php:127
 msgid "Die Sperrzeiten wurden ge&auml;ndert."
-msgstr ""
+msgstr "The blockout periods have been modified."
 
 #: resources/views/msgs_resources.inc.php:130
 msgid ""
@@ -1337,9 +1338,9 @@ msgstr ""
 "subordinated rooms as <u>non</u> blockable, too?"
 
 #: resources/views/msgs_resources.inc.php:143
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Ressourcenblockierung vom %s bis zum %s.</b>"
-msgstr "Blocking of resources from %s until %s."
+msgstr "Blocking of ressources from %s until %s."
 
 #: resources/views/msgs_resources.inc.php:144
 msgid ""
@@ -1361,18 +1362,22 @@ msgid ""
 msgstr "The selected entries have been passed on to the current request"
 
 #: resources/views/msgs_resources.inc.php:150
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Folgende R&auml;ume wurden gebucht und der Veranstaltung zugewiesen: <font "
 "size=\"-1\" color=\"black\">%s</font>"
-msgstr "The following rooms have been booked and associated to the course:"
+msgstr ""
+"The following rooms have been booked and associated to the course: <font "
+"size=\"-1\" color=\"black\">%s</font>"
 
 #: resources/views/msgs_resources.inc.php:153
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Folgende R&auml;ume konnten wegen &Uuml;berschneidungen nicht gebucht "
 "werden: <font size=\"-1\" color=\"black\">%s</font>"
-msgstr "Because of some overlap, the following rooms could not be booked:"
+msgstr ""
+"Because of some overlap, the following rooms could not be booked: <font size="
+"\"-1\" color=\"black\">%s</font>"
 
 #: resources/views/msgs_resources.inc.php:156
 msgid ""
@@ -1381,13 +1386,13 @@ msgid ""
 msgstr "Because of some overlap, the following rooms could not be booked:"
 
 #: resources/views/msgs_resources.inc.php:156
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Eine neue Anfrage, die einzeln bearbeitet werden mu&szlig;, wurde f&uuml;r "
 "jede Belegungszeit erstellt.  <font size=\"-1\" color=\"black\">%s</font>"
 msgstr ""
-"A new request which has to be processed independently has been created for "
-"each allocation period."
+"A new request which has to be independently processed has been created for "
+"each allocation period.  <font size=\"-1\" color=\"black\">%s</font>"
 
 #: resources/views/msgs_resources.inc.php:159
 msgid ""
@@ -1411,12 +1416,11 @@ msgid "Belegung wurde in die Ressource &raquo;%s&laquo; verschoben."
 msgstr "Allocation has been moved to the resource &raquo;%s&laquo;"
 
 #: resources/views/msgs_resources.inc.php:170
-#, fuzzy
 msgid ""
 "Die Belegung konnte nicht verschoben werden, da Sie sich in der gew&uuml;"
 "nschten Ressource einer anderen Belegung &uuml;berschneidet!"
 msgstr ""
-"This allocation could not be saved because of an overlap with an allocation "
+"This allocation could not be moved because of an overlap with an allocation "
 "of another resource!"
 
 #: resources/views/msgs_resources.inc.php:173
@@ -1425,33 +1429,41 @@ msgid ""
 "Klicken Sie auf &raquo;absenden&laquo;, um Nachrichten zu aufgel&ouml;sten "
 "Anfragen versenden."
 msgstr ""
+"You have already processed selected requests. Click on &raquo;save&laquo; to "
+"send messages associated with resolved requests."
 
 #: resources/views/msgs_resources.inc.php:177
 msgid ""
 "Mit den von ihnen ausgewählten Einstellungen sind keine Anfragen, die Sie "
 "auflösen könnten, vorhanden."
 msgstr ""
+"With the chosen parameters there aren't any requests which can be resolved. "
 
 #: resources/views/msgs_resources.inc.php:180
 msgid ""
 "Folgenden Einzelterminen wurde kein Raum zugewiesen, da gesonderte Anfragen "
 "zu diesem Termine vorliegen, die einzeln bearbeitet werden m&uuml;ssen:"
 msgstr ""
+"The following single appointments no room has be assiciated to because the "
+"are special requests to these appointments which have to be processed "
+"individually."
 
 #: resources/views/msgs_resources.inc.php:183
 msgid "Wollen Sie die Anfrage wirklich ablehnen?"
-msgstr ""
+msgstr "Do really want to deny the request?"
 
 #: resources/views/msgs_resources.inc.php:188
 msgid ""
 "Die Belegungen konnte nicht gespeichert werden, da sie mit folgenden "
 "Sperrzeiten kollidiert:"
 msgstr ""
+"The assignments could not be saved because they collide with the following "
+"blockout periods:"
 
 #: resources/views/msgs_resources.inc.php:192
-#, fuzzy, c-format
+#, c-format
 msgid "Es wurden %s Raumanfragen gel&ouml;scht."
-msgstr "No room properties have been requested."
+msgstr "%s room requests have been deleted."
 
 #: resources/views/page_intros.inc.php:42
 #: resources/views/page_intros.inc.php:277
@@ -1460,32 +1472,30 @@ msgid "Hierachieebene"
 msgstr "Hierarchy level"
 
 #: resources/views/page_intros.inc.php:52
-#, fuzzy
 msgid ""
 "Auf dieser Seite k&ouml;nnen Sie sich einen Wochenplan als CSV-Datei "
 "ausgeben lassen."
-msgstr "Here you can display the allocation periods of the resource %s"
+msgstr "Here you can create a weekly plan as CSV file."
 
 #: resources/views/page_intros.inc.php:53
 #: resources/views/page_intros.inc.php:57
 #: resources/views/page_intros.inc.php:61
-#, fuzzy
 msgid "Spezielle Funktionen"
-msgstr "further actions:"
+msgstr "Special actions"
 
 #: resources/views/page_intros.inc.php:56
-#, fuzzy
 msgid ""
 "Auf dieser Seite k&ouml;nnen Sie sich einen Semesterplan als CSV-Datei "
 "ausgeben lassen."
-msgstr "Here you can display the allocation periods of the resource %s"
+msgstr "Here you can create a semester as CSV file."
 
 #: resources/views/page_intros.inc.php:60
-#, fuzzy
 msgid ""
 "Auf dieser Seite k&ouml;nnen Sie sich die w&ouml;chentliche Differenzliste "
 "der Belegung aller R&auml;ume als CSV-Datei ausgeben lassen."
-msgstr "Here you can display the allocation periods of the resource %s"
+msgstr ""
+"Here you can create the weekly list of differences of the assignments of all "
+"rooms as CSV file."
 
 #: resources/views/page_intros.inc.php:66
 msgid ""
@@ -1528,32 +1538,32 @@ msgstr "Actions:"
 #: resources/views/page_intros.inc.php:76
 #, c-format
 msgid "Gew&uuml;nschte Eigenschaften <br />%sangeben%s"
-msgstr ""
+msgstr "<br />%sEnter%s requested properties."
 
 #: resources/views/page_intros.inc.php:76
 #, c-format
 msgid "Gew&uuml;nschte Eigenschaften <br />%snicht angeben%s"
-msgstr ""
+msgstr "<br />%sDo not enter%s requested properties"
 
 #: resources/views/page_intros.inc.php:78
 #, c-format
 msgid "Gew&uuml;nschte Belegungszeit %sber&uuml;cksichtigen%s"
-msgstr ""
+msgstr "%sTake into account%s the requested allocation period"
 
 #: resources/views/page_intros.inc.php:78
 #, c-format
 msgid "Gew&uuml;nschte Belegungszeit <br />%snicht ber&uuml;cksichtigen%s"
-msgstr ""
+msgstr "<br />%sDon't take into account%s requested allocation period"
 
 #: resources/views/page_intros.inc.php:80
 #, c-format
 msgid "Nur R&auml;ume %sanzeigen%s"
-msgstr ""
+msgstr "%sDisplay%s rooms"
 
 #: resources/views/page_intros.inc.php:80
-#, fuzzy, c-format
+#, c-format
 msgid "Alle Ressourcen %sanzeigen%s"
-msgstr "Show resource properties"
+msgstr "%sDisplay%s all resources"
 
 #: resources/views/page_intros.inc.php:92
 #, c-format
@@ -1669,12 +1679,12 @@ msgstr "Back to search"
 #: resources/views/page_intros.inc.php:181
 #: resources/views/page_intros.inc.php:297
 msgid "zur Ressourcensuche"
-msgstr ""
+msgstr "to the resource search"
 
 #: resources/views/page_intros.inc.php:149
-#, fuzzy, c-format
+#, c-format
 msgid "%sSemesterplan%s anzeigen"
-msgstr "Show %sallocation plan%s."
+msgstr "Show %ssemester allocation plan%s"
 
 #: resources/views/page_intros.inc.php:155
 #: resources/views/page_intros.inc.php:189
@@ -1689,9 +1699,8 @@ msgid "zur&uuml;ck zur Einrichtung"
 msgstr "Back to the institution"
 
 #: resources/views/page_intros.inc.php:165
-#, fuzzy
 msgid "Belegungszeiten pro Semester ausgeben"
-msgstr "Show allocation periods"
+msgstr "Show allocation periods per semester"
 
 #: resources/views/page_intros.inc.php:183
 #: resources/views/page_intros.inc.php:289
@@ -1702,19 +1711,17 @@ msgstr "Show %sallocation plan%s."
 #: resources/views/page_intros.inc.php:195
 #: resources/views/page_intros.inc.php:209
 msgid "Druckansicht"
-msgstr ""
+msgstr "Print view"
 
 #: resources/views/page_intros.inc.php:203
-#, fuzzy
 msgid ""
 "Hier k&ouml;nnen Sie sich die Belegungszeiten einer Raumgruppe anzeigen "
 "lassen."
-msgstr "Here you can display the allocation periods of the resource %s"
+msgstr "Here you can display the allocation periods of group of rooms."
 
 #: resources/views/page_intros.inc.php:204
-#, fuzzy
 msgid "Belegungszeiten einer Raumgruppe pro Semester ausgeben:"
-msgstr "Move allocation to a different room:"
+msgstr "Display the allocation periods of a group of rooms per semester."
 
 #: resources/views/page_intros.inc.php:215
 msgid ""
@@ -1783,7 +1790,7 @@ msgstr "Processing the request"
 
 #: resources/views/page_intros.inc.php:243
 msgid "Bereits bearbeitete Anfragen werden <u>nicht</u> angezeigt."
-msgstr ""
+msgstr "Requests already resolved will <u>not</u> be displayed."
 
 #: resources/views/page_intros.inc.php:243
 msgid "Bereits bearbeitete Anfragen werden weiterhin angezeigt."
@@ -1791,7 +1798,7 @@ msgstr "Processed requests will still be viewed."
 
 #: resources/views/page_intros.inc.php:247
 msgid "Ressourcen suchen"
-msgstr ""
+msgstr "Search for ressources"
 
 #: resources/views/page_intros.inc.php:249
 #, c-format
@@ -1814,12 +1821,16 @@ msgid ""
 "Sie sehen hier eine Liste aller offenen Anfragen, die Sortierung folgt der "
 "Einstellung unter %s&Uuml;bersicht%s."
 msgstr ""
+"Here you find a list of all unresolved requests sorted according to the "
+"settings in the %soverview%s."
 
 #: resources/views/page_intros.inc.php:256
 msgid ""
 "Ein Klick auf das Symbol nebem dem Z&auml;hler erlaubt es Ihnen, direkt zu "
 "der Anfrage zu springen."
 msgstr ""
+"Clicking on the symbol next to the counter enables you to directly move to "
+"the request."
 
 #: resources/views/page_intros.inc.php:261
 #, c-format
@@ -1915,9 +1926,8 @@ msgstr ""
 "rooms, buildings, equipment and other resources."
 
 #: resources/views/ResourcesBrowse.class.php:96
-#, fuzzy
 msgid "freie Suche"
-msgstr "no rights"
+msgstr "free search"
 
 #: resources/views/ResourcesBrowse.class.php:139
 msgid "Veranstaltungsressourcen"
@@ -1938,6 +1948,7 @@ msgstr "Personal resources"
 #: resources/views/ResourcesBrowse.class.php:167
 msgid "gefundene Ressourcen sollen zu folgender Zeit <u>nicht</u> belegt sein:"
 msgstr ""
+"ressources found should <u>not</u> be allocated at the following period:"
 
 #: resources/views/ResourcesBrowse.class.php:175
 msgid "Datum"
@@ -1995,42 +2006,39 @@ msgstr "Create a new allocation from %s until %s o'clock"
 #: resources/views/ShowGroupSchedules.class.php:63
 #: resources/views/ShowSemSchedules.class.php:81
 msgid "Semester:"
-msgstr ""
+msgstr "semester"
 
 #: resources/views/ShowGroupSchedules.class.php:77
 msgid "Eine Raumgruppe ausw&auml;hlen"
-msgstr ""
+msgstr "Select a group of rooms"
 
 #: resources/views/ShowGroupSchedules.class.php:88
 #: resources/views/ShowGroupSchedules.class.php:307
 #: resources/views/ShowSemSchedules.class.php:107
 #: resources/views/ShowSemSchedules.class.php:302
-#, fuzzy
 msgid "Vorlesungszeit"
-msgstr "End of lecture period"
+msgstr "teaching period"
 
 #: resources/views/ShowGroupSchedules.class.php:90
 #: resources/views/ShowGroupSchedules.class.php:307
 #: resources/views/ShowSemSchedules.class.php:109
 #: resources/views/ShowSemSchedules.class.php:302
 msgid "vorlesungsfreie Zeit"
-msgstr ""
+msgstr "non-teaching period"
 
 #: resources/views/ShowGroupSchedules.class.php:208
-#, fuzzy
 msgid "Vorherigen Tag anzeigen"
-msgstr "View previous week"
+msgstr "View previous day"
 
 #: resources/views/ShowGroupSchedules.class.php:212
 #: resources/views/ShowGroupSchedules.class.php:303
 #, c-format
 msgid "Wochentag: %s"
-msgstr ""
+msgstr "day of the week: %s"
 
 #: resources/views/ShowGroupSchedules.class.php:220
-#, fuzzy
 msgid "Nächsten Tag anzeigen"
-msgstr "View next week"
+msgstr "View next day"
 
 #: resources/views/ShowGroupSchedules.class.php:227
 #: resources/views/ShowSchedules.class.php:308
@@ -2040,15 +2048,13 @@ msgstr "View previous allocations"
 
 #: resources/views/ShowGroupSchedules.class.php:234
 #: resources/views/ShowSemSchedules.class.php:229
-#, fuzzy
 msgid "Anzahl der regelmäßigen Belegungen in diesem Zeitraum:"
-msgstr "Number of allocations in this period:"
+msgstr "Number of regular allocations in this period:"
 
 #: resources/views/ShowGroupSchedules.class.php:237
 #: resources/views/ShowSemSchedules.class.php:232
-#, fuzzy
 msgid "Anzahl der Einzelbelegungen in diesem Zeitraum:"
-msgstr "Number of allocations in this period:"
+msgstr "Number of single allocations in this period:"
 
 #: resources/views/ShowGroupSchedules.class.php:245
 #: resources/views/ShowSchedules.class.php:319
@@ -2084,17 +2090,16 @@ msgstr "View later allocations"
 #: resources/views/ShowGroupSchedules.class.php:324
 #: resources/views/ShowSemSchedules.class.php:274
 #: resources/views/ShowSemSchedules.class.php:319
-#, fuzzy
 msgid "Einzelbelegungen:"
-msgstr "all allocations"
+msgstr "single allocations:"
 
 #: resources/views/ShowGroupSchedules.class.php:285
 #: resources/views/ShowGroupSchedules.class.php:331
 #: resources/views/ShowSemSchedules.class.php:281
 #: resources/views/ShowSemSchedules.class.php:327
-#, fuzzy, c-format
+#, c-format
 msgid "%s ist von <b>%s</b> bis <b>%s</b>, belegt von <b>%s</b>"
-msgstr "Allocation is from <b>%s</b> until <b>%s</b>, allocated by <b>%s</b>"
+msgstr "%s allocated from <b>%s</b> until <b>%s</b>, by <b>%s</b>"
 
 #: resources/views/ShowList.class.php:149
 #: resources/views/ShowList.class.php:193
@@ -2144,24 +2149,22 @@ msgid "Jahre(e)"
 msgstr "Year(s)"
 
 #: resources/views/ShowSchedules.class.php:131
-#, fuzzy
 msgid "als Liste ausgeben"
 msgstr "List view"
 
 #: resources/views/ShowSchedules.class.php:137
 msgid "<i>oder</i> eine Woche grafisch ausgeben"
-msgstr ""
+msgstr "<i>or</i> view a week as a graphic"
 
 #: resources/views/ShowSchedules.class.php:167
 #: resources/views/ShowSemSchedules.class.php:208
 #, c-format
 msgid "Anzeige des Semesters: %s"
-msgstr ""
+msgstr "View the semester: %s"
 
 #: resources/views/ShowSchedules.class.php:169
-#, fuzzy
 msgid "Anzeige des Zeitraums:"
-msgstr "Number of allocations in this period:"
+msgstr "View the period period:"
 
 #: resources/views/ShowSchedules.class.php:183
 #: resources/views/ShowSchedules.class.php:313
@@ -2187,21 +2190,19 @@ msgstr "View next week"
 
 #: resources/views/ShowSemSchedules.class.php:95
 msgid "Ein Semester als Liste ausgeben"
-msgstr ""
+msgstr "Display a semester as a list"
 
 #: resources/views/ShowSemSchedules.class.php:113
 msgid "<i>oder</i> ein Semester grafisch ausgeben"
-msgstr ""
+msgstr "<i>or</i> view the semester as a graphic"
 
 #: resources/views/ShowSemSchedules.class.php:204
-#, fuzzy
 msgid "Vorheriges Semester anzeigen"
-msgstr "View previous week"
+msgstr "View previous semester"
 
 #: resources/views/ShowSemSchedules.class.php:216
-#, fuzzy
 msgid "Nächstes Semester anzeigen"
-msgstr "View next week"
+msgstr "View next semester"
 
 #: resources/views/ShowThread.class.php:80
 msgid "Objekt in diese Ebene verschieben"
@@ -2239,7 +2240,7 @@ msgstr ""
 #: resources/views/ShowToolsRequests.class.php:146
 #, c-format
 msgid "<b>%s</b> Anfragen haben keine Zeiten eingetragen!"
-msgstr ""
+msgstr "There <b>%s</b> requesta without periods!"
 
 #: resources/views/ShowToolsRequests.class.php:149
 msgid "Es liegen im Augenblick keine unaufgel&ouml;sten Anfragen vor."
@@ -2290,54 +2291,48 @@ msgid "neue zuerst"
 msgstr "new ones first"
 
 #: resources/views/ShowToolsRequests.class.php:188
-#, fuzzy
 msgid "dringendere zuerst"
-msgstr "new ones first"
+msgstr "more urgent ones first"
 
 #: resources/views/ShowToolsRequests.class.php:197
 msgid "Anfragen ohne eingetragene Zeiten ausblenden"
-msgstr ""
+msgstr "Hide requests without periods entered"
 
 #: resources/views/ShowToolsRequests.class.php:251
 msgid "Auswahl umkehren"
-msgstr ""
+msgstr "Invert selection"
 
 #: resources/views/ShowToolsRequests.class.php:253
-#, fuzzy
 msgid "Ausgewählte Anfragen löschen"
-msgstr "Delete this entry"
+msgstr "Delete selected requests"
 
 #: resources/views/ShowToolsRequests.class.php:261
-#, fuzzy
 msgid "Z&auml;hler"
-msgstr "older first"
+msgstr "counter"
 
 #: resources/views/ShowToolsRequests.class.php:262
 msgid "V.-Nummer"
-msgstr ""
+msgstr "V number"
 
 #: resources/views/ShowToolsRequests.class.php:263
-#, fuzzy
 msgid "Titel"
-msgstr "List"
+msgstr "title"
 
 #: resources/views/ShowToolsRequests.class.php:264
 msgid "Dozenten"
-msgstr ""
+msgstr "lecturers"
 
 #: resources/views/ShowToolsRequests.class.php:265
-#, fuzzy
 msgid "Anfrager"
-msgstr "all requests"
+msgstr "requesting person"
 
 #: resources/views/ShowToolsRequests.class.php:266
 msgid "Start-Semester"
-msgstr ""
+msgstr "start semester"
 
 #: resources/views/ShowToolsRequests.class.php:268
-#, fuzzy
 msgid "l&ouml;schen"
-msgstr "weekly"
+msgstr "delete"
 
 #: resources/views/ShowToolsRequests.class.php:348
 msgid "Art der Anfrage:"
@@ -2406,11 +2401,11 @@ msgstr "Presently this room is booked"
 
 #: resources/views/ShowToolsRequests.class.php:523
 msgid "Raumgruppe berücksichtigen:"
-msgstr ""
+msgstr "Group of rooms to be taken into account:"
 
 #: resources/views/ShowToolsRequests.class.php:529
 msgid "Keine Raumgruppe anzeigen"
-msgstr ""
+msgstr "Hide all groups of rooms"
 
 #: resources/views/ShowToolsRequests.class.php:625
 msgid "weitere passende R&auml;ume:"
@@ -2418,21 +2413,21 @@ msgstr "further suitable rooms:"
 
 #: resources/views/ShowToolsRequests.class.php:715
 msgid "zeige R&auml;ume"
-msgstr ""
+msgstr "view rooms"
 
 #: resources/views/ShowToolsRequests.class.php:716
 #: resources/views/ShowToolsRequests.class.php:721
 msgid "-10"
-msgstr ""
+msgstr "-10"
 
 #: resources/views/ShowToolsRequests.class.php:718
 #: resources/views/ShowToolsRequests.class.php:723
 msgid "+10"
-msgstr ""
+msgstr "+10"
 
 #: resources/views/ShowToolsRequests.class.php:725
 msgid "ausgewählten Bereich anzeigen"
-msgstr ""
+msgstr "view selected area"
 
 #: resources/views/ShowToolsRequests.class.php:731
 msgid "keine gefunden"
@@ -2474,17 +2469,17 @@ msgstr "Actual request: "
 #: resources/views/ShowToolsRequests.class.php:977
 #, c-format
 msgid "%s, %s Uhr bis %s, %s Uhr"
-msgstr ""
+msgstr "%s, %s o'clock until %s, %s o'clock"
 
 #: resources/views/ShowToolsRequests.class.php:940
 #: resources/views/ShowToolsRequests.class.php:980
 msgid "Sperrzeit(en):\n"
-msgstr ""
+msgstr "blocking periods:\n"
 
 #: resources/views/ShowToolsRequests.class.php:945
 #: resources/views/ShowToolsRequests.class.php:985
 msgid "Es besteht eine Belegungssperre zur gewünschten Belegungszeit."
-msgstr ""
+msgstr "The requested allocation period is blocked."
 
 #: resources/views/ShowToolsRequests.class.php:947
 #: resources/views/ShowToolsRequests.class.php:987
@@ -2493,27 +2488,28 @@ msgstr "For the requested allocation period there exists some overlap."
 
 #: resources/views/ShowToolsRequests.class.php:949
 #: resources/views/ShowToolsRequests.class.php:989
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Es existieren Überschneidungen oder Belegungssperren zu mehr als %s%% aller "
 "gewünschten Belegungszeiten."
 msgstr ""
-"Overlaps exists for more than %s%% of all the requested allocation periods."
+"Overlaps or blockings exists for more than %s%% of all the requested "
+"allocation periods."
 
 #: resources/views/ShowToolsRequests.class.php:953
 #: resources/views/ShowToolsRequests.class.php:993
-#, fuzzy
 msgid ""
 "Einige der gewünschten Belegungszeiten überschneiden sich mit eingetragenen "
 "Belegungen bzw. Sperrzeiten:\n"
 msgstr ""
-"Some of the requested allocation periods overlap with entered allocations:\n"
+"Some of the requested allocation periods overlap with entered allocations or "
+"blockings:\n"
 
 #: resources/views/ShowToolsRequests.class.php:958
 #: resources/views/ShowToolsRequests.class.php:996
 #, c-format
 msgid "%s, %s Uhr bis %s, %s Uhr (Sperrzeit)"
-msgstr ""
+msgstr "%s, %s o'clock until %s, %s o'clock (blocked period)"
 
 #: resources/views/ShowToolsRequests.class.php:960
 #: resources/views/ShowToolsRequests.class.php:998

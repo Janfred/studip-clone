@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2006-02-15 14:53+0100\n"
+"POT-Creation-Date: 2006-04-07 16:52+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,182 +15,182 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: calendar/calendar.inc.php:254 calendar/calendar.inc.php:259
-#: calendar/calendar.inc.php:272
+#: calendar/calendar.inc.php:253 calendar/calendar.inc.php:258
+#: calendar/calendar.inc.php:271
 msgid "Mein pers&ouml;nlicher Terminkalender - Tagesansicht"
 msgstr ""
 
-#: calendar/calendar.inc.php:262 calendar/calendar.inc.php:294
+#: calendar/calendar.inc.php:261 calendar/calendar.inc.php:293
 msgid "Mein pers&ouml;nlicher Terminkalender - Wochenansicht"
 msgstr ""
 
-#: calendar/calendar.inc.php:265 calendar/calendar.inc.php:299
+#: calendar/calendar.inc.php:264 calendar/calendar.inc.php:298
 msgid "Mein pers&ouml;nlicher Terminkalender - Monatsansicht"
 msgstr ""
 
-#: calendar/calendar.inc.php:268 calendar/calendar.inc.php:304
+#: calendar/calendar.inc.php:267 calendar/calendar.inc.php:303
 msgid "Mein pers&ouml;nlicher Terminkalender - Jahresansicht"
 msgstr ""
 
-#: calendar/calendar.inc.php:309
+#: calendar/calendar.inc.php:308
 msgid ""
 "Mein pers&ouml;nlicher Terminkalender - Termindaten importieren, exportieren "
 "und synchronisieren"
 msgstr ""
 
-#: calendar/calendar.inc.php:313
+#: calendar/calendar.inc.php:312
 msgid "Mein pers&ouml;nlicher Terminkalender - Veranstaltungstermine einbinden"
 msgstr ""
 
-#: calendar/calendar.inc.php:328
+#: calendar/calendar.inc.php:327
 msgid "Mein pers&ouml;nlicher Terminkalender - Veranstaltungstermin"
 msgstr ""
 
-#: calendar/calendar.inc.php:334
+#: calendar/calendar.inc.php:333
 msgid "Mein pers&ouml;nlicher Terminkalender - Termin bearbeiten"
 msgstr ""
 
-#: calendar/calendar.inc.php:338
+#: calendar/calendar.inc.php:337
 msgid "Mein pers&ouml;nlicher Terminkalender - Termin anlegen/bearbeiten"
 msgstr ""
 
-#: calendar/calendar.inc.php:347 calendar/calendar.inc.php:359
+#: calendar/calendar.inc.php:346 calendar/calendar.inc.php:358
 msgid "Kein Titel"
 msgstr ""
 
-#: calendar/calendar.inc.php:499
+#: calendar/calendar.inc.php:498
 #, c-format
 msgid "Termin am %s"
 msgstr ""
 
-#: calendar/calendar.inc.php:502
+#: calendar/calendar.inc.php:501
 #, c-format
 msgid "Termin am %s bearbeiten"
 msgstr ""
 
-#: calendar/calendar.inc.php:506
+#: calendar/calendar.inc.php:505
 #, c-format
 msgid "Termin erstellen am %s"
 msgstr ""
 
-#: calendar/calendar_settings.inc.php:52
+#: calendar/calendar_settings.inc.php:53
 msgid "Einstellungen des Terminkalenders anpassen"
 msgstr ""
 
-#: calendar/calendar_settings.inc.php:62
+#: calendar/calendar_settings.inc.php:63
 msgid ""
 "Hier k&ouml;nnen Sie die Ansicht Ihres pers&ouml;nlichen Terminkalenders "
 "anpassen."
 msgstr ""
 
-#: calendar/calendar_settings.inc.php:67
+#: calendar/calendar_settings.inc.php:68
 msgid "Option"
 msgstr ""
 
-#: calendar/calendar_settings.inc.php:68
+#: calendar/calendar_settings.inc.php:69
 msgid "Auswahl"
 msgstr ""
 
-#: calendar/calendar_settings.inc.php:72
+#: calendar/calendar_settings.inc.php:73
 msgid "Startansicht anpassen:"
 msgstr ""
 
-#: calendar/calendar_settings.inc.php:79
+#: calendar/calendar_settings.inc.php:80
 msgid "Wochenansicht"
 msgstr ""
 
-#: calendar/calendar_settings.inc.php:83
+#: calendar/calendar_settings.inc.php:84
 msgid "Tagesansicht"
 msgstr ""
 
-#: calendar/calendar_settings.inc.php:87
+#: calendar/calendar_settings.inc.php:88
 msgid "Monatsansicht"
 msgstr ""
 
-#: calendar/calendar_settings.inc.php:91
+#: calendar/calendar_settings.inc.php:92
 msgid "Jahresansicht"
 msgstr ""
 
-#: calendar/calendar_settings.inc.php:97
+#: calendar/calendar_settings.inc.php:98
 msgid "Zeitraum der Tages- und Wochenansicht:"
 msgstr ""
 
-#: calendar/calendar_settings.inc.php:122
+#: calendar/calendar_settings.inc.php:123
 msgid "Uhr bis"
 msgstr ""
 
-#: calendar/calendar_settings.inc.php:144
+#: calendar/calendar_settings.inc.php:145
 msgid "Uhr."
 msgstr ""
 
-#: calendar/calendar_settings.inc.php:150
+#: calendar/calendar_settings.inc.php:151
 msgid "Zeitintervall der Tagesansicht:"
 msgstr ""
 
-#: calendar/calendar_settings.inc.php:157
+#: calendar/calendar_settings.inc.php:158
 msgid "10 Minuten"
 msgstr ""
 
-#: calendar/calendar_settings.inc.php:161
+#: calendar/calendar_settings.inc.php:162
 msgid "15 Minuten"
 msgstr ""
 
-#: calendar/calendar_settings.inc.php:165
-#: calendar/calendar_settings.inc.php:186
+#: calendar/calendar_settings.inc.php:166
+#: calendar/calendar_settings.inc.php:187
 msgid "30 Minuten"
 msgstr ""
 
-#: calendar/calendar_settings.inc.php:169
-#: calendar/calendar_settings.inc.php:190
+#: calendar/calendar_settings.inc.php:170
+#: calendar/calendar_settings.inc.php:191
 msgid "1 Stunde"
 msgstr ""
 
-#: calendar/calendar_settings.inc.php:173
-#: calendar/calendar_settings.inc.php:194
+#: calendar/calendar_settings.inc.php:174
+#: calendar/calendar_settings.inc.php:195
 msgid "2 Stunden"
 msgstr ""
 
-#: calendar/calendar_settings.inc.php:179
+#: calendar/calendar_settings.inc.php:180
 msgid "Zeitintervall der Wochenansicht:"
 msgstr ""
 
-#: calendar/calendar_settings.inc.php:200
+#: calendar/calendar_settings.inc.php:201
 msgid "Wochenansicht anpassen:"
 msgstr ""
 
-#: calendar/calendar_settings.inc.php:207
+#: calendar/calendar_settings.inc.php:208
 msgid "7 Tage-Woche"
 msgstr ""
 
-#: calendar/calendar_settings.inc.php:211
+#: calendar/calendar_settings.inc.php:212
 msgid "5 Tage-Woche"
 msgstr ""
 
-#: calendar/calendar_settings.inc.php:236
+#: calendar/calendar_settings.inc.php:237
 msgid "Extras:"
 msgstr ""
 
-#: calendar/calendar_settings.inc.php:243
+#: calendar/calendar_settings.inc.php:244
 msgid "Bearbeiten-Link in Wochenansicht"
 msgstr ""
 
-#: calendar/calendar_settings.inc.php:249
+#: calendar/calendar_settings.inc.php:250
 msgid "L&ouml;schen von Terminen:"
 msgstr ""
 
-#: calendar/calendar_settings.inc.php:257
+#: calendar/calendar_settings.inc.php:258
 msgid "12 Monate nach Ablauf"
 msgstr ""
 
-#: calendar/calendar_settings.inc.php:261
+#: calendar/calendar_settings.inc.php:262
 msgid "6 Monate nach Ablauf"
 msgstr ""
 
-#: calendar/calendar_settings.inc.php:265
+#: calendar/calendar_settings.inc.php:266
 msgid "3 Monate nach Ablauf"
 msgstr ""
 
-#: calendar/calendar_settings.inc.php:269 calendar/views/edit.inc.php:536
+#: calendar/calendar_settings.inc.php:270 calendar/views/edit.inc.php:536
 msgid "nie"
 msgstr ""
 
@@ -860,30 +860,30 @@ msgstr ""
 msgid "Ihr Systemverwalter hat leider keine Standardzeiten vorgegeben."
 msgstr ""
 
-#: calendar/views/insert_date_popup.php:158
+#: calendar/views/insert_date_popup.php:172
 msgid "Kalender"
 msgstr ""
 
-#: calendar/views/insert_date_popup.php:248
-#: calendar/views/insert_date_popup.php:253
+#: calendar/views/insert_date_popup.php:262
+#: calendar/views/insert_date_popup.php:267
 msgid "Uhr"
 msgstr ""
 
-#: calendar/views/insert_date_popup.php:248
+#: calendar/views/insert_date_popup.php:262
 msgid "eintragen"
 msgstr ""
 
-#: calendar/views/insert_date_popup.php:253
+#: calendar/views/insert_date_popup.php:267
 msgid "zurücksetzen auf"
 msgstr ""
 
-#: calendar/views/insert_date_popup.php:267
-#: calendar/views/insert_date_popup.php:268
+#: calendar/views/insert_date_popup.php:281
+#: calendar/views/insert_date_popup.php:282
 msgid "Monate zurück"
 msgstr ""
 
-#: calendar/views/insert_date_popup.php:274
-#: calendar/views/insert_date_popup.php:275
+#: calendar/views/insert_date_popup.php:288
+#: calendar/views/insert_date_popup.php:289
 msgid "Monate vor"
 msgstr ""
 
@@ -934,22 +934,22 @@ msgstr ""
 msgid "Es wurden %s Termine exportiert"
 msgstr ""
 
-#: calendar/lib/sync/CalendarExportFile.class.php:92
-#: calendar/lib/sync/CalendarExportFile.class.php:140
+#: calendar/lib/sync/CalendarExportFile.class.php:93
+#: calendar/lib/sync/CalendarExportFile.class.php:141
 msgid "Die Export-Datei konnte nicht erstellt werden!"
 msgstr ""
 
-#: calendar/lib/sync/CalendarExportFile.class.php:121
+#: calendar/lib/sync/CalendarExportFile.class.php:122
 msgid "Das Export-Verzeichnis konnte nicht angelegt werden!"
 msgstr ""
 
-#: calendar/lib/sync/CalendarExportFile.class.php:126
+#: calendar/lib/sync/CalendarExportFile.class.php:127
 msgid ""
 "Die Zugriffsrechte auf das Export-Verzeichnis konnten nicht ge&auml;ndert "
 "werden!"
 msgstr ""
 
-#: calendar/lib/sync/CalendarExportFile.class.php:134
+#: calendar/lib/sync/CalendarExportFile.class.php:135
 msgid "Eine bestehende Export-Datei konnte nicht gel&ouml;scht werden!"
 msgstr ""
 
@@ -977,7 +977,7 @@ msgstr ""
 
 #: calendar/lib/sync/CalendarParserICalendar.class.php:78
 #: calendar/lib/sync/CalendarParserICalendar.class.php:287
-#: calendar/lib/sync/CalendarParserICalendar.class.php:302
+#: calendar/lib/sync/CalendarParserICalendar.class.php:304
 msgid "Die Datei ist keine g&uuml;ltige iCalendar-Datei!"
 msgstr ""
 

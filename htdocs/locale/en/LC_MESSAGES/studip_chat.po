@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: studip_chat\n"
-"POT-Creation-Date: 2006-02-15 14:53+0100\n"
+"POT-Creation-Date: 2006-04-07 16:52+0200\n"
 "PO-Revision-Date: 2005-06-29 23:05+0200\n"
 "Last-Translator: Jens Schmelzer <jens.schmelzer@fh-jena.de>\n"
 "Language-Team:  <de@li.org>\n"
