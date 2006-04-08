@@ -192,4 +192,3 @@ $this->msg[45] = array (
 		"msg"=> _("Es wurden %s Raumanfragen gel&ouml;scht."));
 
 ?>
-
