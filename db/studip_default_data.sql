@@ -122,3 +122,15 @@ INSERT INTO `log_actions` (`action_id`, `name`, `description`, `info_template`, 
 INSERT INTO `log_actions` (`action_id`, `name`, `description`, `info_template`, `active`, `expires`) VALUES ('4dd6b4101f7bf3bd7fe8374042da95e9', 'USER_NEWPWD', 'Neues Passwort', '%user generiert neues Passwort für %user(%affected)', 1, NULL);
 INSERT INTO `log_actions` (`action_id`, `name`, `description`, `info_template`, `active`, `expires`) VALUES ('e8646729e5e04970954c8b9679af389b', 'USER_DEL', 'Benutzer löschen', '%user löscht %user(%affected) (%info)', 1, NULL);
 
+-- 
+-- Daten für Tabelle `plugins`
+-- 
+
+INSERT INTO `plugins` (`pluginid`, `pluginclassname`, `pluginpath`, `pluginname`, `plugindesc`, `plugintype`, `enabled`, `navigationpos`) VALUES (1, 'PluginAdministrationPlugin', 'core', 'Plugin-Administration', 'Administrationsoberfläche für Plugins', 'Administration', 'yes', 0);
+
+-- 
+-- Daten für Tabelle `plugins_activated`
+-- 
+
+INSERT INTO `plugins_activated` (`pluginid`, `poiid`, `state`) VALUES (1, 'admin', 'on');
+
