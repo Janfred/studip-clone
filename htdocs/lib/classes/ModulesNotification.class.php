@@ -223,7 +223,7 @@ class ModulesNotification extends Modules {
 				} else if ($r_data['neuepostings'] > 0) {
 					$text = ("1 neuer Beitrag im Forum:");
 				}
-				$redirect = '&redirect_to=forum.php&view=neue&sort=age';
+				$redirect = '&again=yes&redirect_to=forum.php&view=neue&sort=age';
 				break;
 			case 'documents' :
 				if ($r_data['neuedokumente'] > 1) {
@@ -231,7 +231,7 @@ class ModulesNotification extends Modules {
 				} else if ($r_data['neuedokumente'] > 0) {
 					$text = _("1 neues Dokument hochgeladen:");
 				}
-				$redirect = '&redirect_to=folder.php&cmd=all';
+				$redirect = '&again=yes&redirect_to=folder.php&cmd=all';
 				break;
 			case 'schedule' :
 				if ($r_data['neuetermine'] > 1) {
@@ -239,7 +239,7 @@ class ModulesNotification extends Modules {
 				} else if ($r_data['neuetermine'] > 0) {
 					$text = _("1 neuer Termin angelegt:");
 				}
-				$redirect = '&redirect_to=dates.php#a';
+				$redirect = '&again=yes&redirect_to=dates.php#a';
 				break;
 			case 'literature' :
 				if ($r_data['neuelitlist'] > 1) {
@@ -247,7 +247,7 @@ class ModulesNotification extends Modules {
 				} else if ($r_data['neuelitlist'] > 0) {
 					$text = _("1 neue Literaturliste angelegt");
 				}
-				$redirect = '&redirect_to=literatur.php';
+				$redirect = '&again=yes&redirect_to=literatur.php';
 				break;
 			case 'ilias_connect' :
 				/* sinnlos...
@@ -259,7 +259,7 @@ class ModulesNotification extends Modules {
 						$text = _("1 Lernmodul ist mit der Veranstaltung verbunden:");
 					}
 				}
-				$redirect = "&redirect_to=seminar_lernmodule.php&seminar_id=$range_id";
+				$redirect = "&again=yes&redirect_to=seminar_lernmodule.php&seminar_id=$range_id";
 				*/
 				break;
 			case 'elearning_interface' :
@@ -269,7 +269,7 @@ class ModulesNotification extends Modules {
 					} else if ($r_data['neuecontentmodule'] > 0) {
 						$text = _("1 neues Content-Modul angelegt");
 					}	
-					$redirect = "&redirect_to=elearning_interface.php&seminar_id=$range_id&view=show";
+					$redirect = "&again=yes&redirect_to=elearning_interface.php&seminar_id=$range_id&view=show";
 				}
 				break;
 			case 'wiki' :
@@ -278,13 +278,13 @@ class ModulesNotification extends Modules {
 				} else if ($r_data['neuewikiseiten'] > 0) {
 					$text = _("1 Wikiseite wurde angelegt oder bearbeitet:");
 				}
-				$redirect = '&redirect_to=wiki.php&view=listnew';
+				$redirect = '&again=yes&redirect_to=wiki.php&view=listnew';
 				break;
 			case 'scm' :
 				if ($r_data['neuscmcontent']) {
 					$text = sprintf(_("Die Seite \"%s\" wurde neu angelegt oder bearbeitet:"), $r_data['scmtabname']);
 				}
-				$redirect = '&redirect_to=scm.php';
+				$redirect = '&again=yes&redirect_to=scm.php';
 				break;
 			case 'votes' :
 				if ($GLOBALS['VOTE_ENABLE']) {
@@ -294,7 +294,7 @@ class ModulesNotification extends Modules {
 						$text = _("1 neue Umfrage oder Evaluation wurde angelegt:");
 					}
 				}
-				$redirect = '#votes';
+				$redirect = '&again=yes#votes';
 				break;
 			case 'news' :
 				if ($r_data['neuenews'] > 1) {
@@ -302,13 +302,13 @@ class ModulesNotification extends Modules {
 				} else if ($r_data['neuenews']) {
 					$text = _("1 neue News wurde angelegt:");
 				}
-				$redirect = '';
+				$redirect = '&again=yes';
 				break;
 			case 'basic_data' :
 				if ($r_data['chdate'] > $r_data['visitdate']) {
 					$text = _("Die Grunddaten wurden geändert:");
 				}
-				$redirect = '&redirect_to=details.php';
+				$redirect = '&again=yes&redirect_to=details.php';
 				break;
 			default :
 				$redirect = '';
