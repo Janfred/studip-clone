@@ -498,8 +498,8 @@ class Seminar_Auth extends Auth {
 	function auth_set_user_settings($uid){
 		global $resolution, $_language;
 		$divided = explode("x",$resolution);
-		$this->auth["xres"] = ($divided[0]) ? $divided[0] : 800; //default
-		$this->auth["yres"] = ($divided[1]) ? $divided[1] : 600; //default
+		$this->auth["xres"] = ($divided[0] != 0) ? $divided[0] : 800; //default
+		$this->auth["yres"] = ($divided[1] != 0) ? $divided[1] : 600; //default
 		// Change X-Resulotion on Multi-Screen Systems (as Matrox Graphic-Adapters are)
 		if (($this ->auth["xres"] / $this ->auth["yres"]) > 2){
 			$this->auth["xres"] = $this->auth["xres"] /2;
