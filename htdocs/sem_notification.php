@@ -119,6 +119,18 @@ if (isset($_REQUEST['close_my_sem']))
 
 if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("admin")) {
 	$db = new DB_Seminar();
+	$db->query("SELECT sem_tree_id,seminare.Name, seminare.Seminar_id, seminare.status as sem_status, seminar_user.gruppe, seminare.visible, 
+	{$_views['sem_number_sql']} as sem_number, {$_views['sem_number_end_sql']} as sem_number_end 
+	FROM seminar_user LEFT JOIN seminare  USING (Seminar_id) 
+	LEFT JOIN seminar_sem_tree sst ON (sst.seminar_id=seminar_user.seminar_id)
+	WHERE seminar_user.user_id = '$user->id'");
+	if (!$db->num_rows()) {
+		echo "<table class=\"blank\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n";
+		echo "<tr><td class=\"blank\">&nbsp;</td></tr>";
+		parse_msg("info§" . sprintf(_("Sie haben zur Zeit keine Veranstaltungen abonniert, an denen Sie teilnehmen k&ouml;nnen. Bitte nutzen Sie %s<b>Veranstaltung suchen / hinzuf&uuml;gen</b>%s um neue Veranstaltungen aufzunehmen."), "<a href=\"sem_portal.php\">", "</a>"),
+				'§', 'blank', 0);
+		echo "</table>";
+	}
 	
 	$modules =& new ModulesNotification();
 	// Update der Benachrichtigungsfunktion
@@ -172,11 +184,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 	}
 	
 	$groups = array();
-	$db->query("SELECT sem_tree_id,seminare.Name, seminare.Seminar_id, seminare.status as sem_status, seminar_user.gruppe, seminare.visible, 
-	{$_views['sem_number_sql']} as sem_number, {$_views['sem_number_end_sql']} as sem_number_end 
-	FROM seminar_user LEFT JOIN seminare  USING (Seminar_id) 
-	LEFT JOIN seminar_sem_tree sst ON (sst.seminar_id=seminar_user.seminar_id)
-	WHERE seminar_user.user_id = '$user->id'");
+	$my_sem = array();
 	while ($db->next_record()){
 		$my_sem[$db->f("Seminar_id")] = array("obj_type" => "sem", "name" => $db->f("Name"), "visible" => $db->f("visible"), "gruppe" => $db->f("gruppe"),
 		"sem_status" => $db->f("sem_status"),"sem_number" => $db->f("sem_number"),"sem_number_end" => $db->f("sem_number_end") );
