@@ -19,7 +19,7 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
-
+ob_start();
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
 $perm->check("autor");
 
@@ -46,7 +46,20 @@ if ($ELEARNING_INTERFACE_ENABLE)
 		// init session now
 		$sess_id = $connected_cms[$cms_select]->user->getSessionId();
 		$connected_cms[$cms_select]->terminate();
-		
+		ob_end_clean();
+		if (!$sess_id){
+			include ($ABSOLUTE_PATH_STUDIP.'html_head.inc.php'); // Output of html head
+			include ($ABSOLUTE_PATH_STUDIP.'header.php');   // Output of Stud.IP head
+			parse_window('error§' 
+					. sprintf(_("Automatischer Login für das System <b>%s</b> (Nutzername:%s) fehlgeschlagen."), htmlReady($connected_cms[$cms_select]->getName()), $connected_cms[$cms_select]->user->getUsername()),'§'
+					, _("Login nicht m&ouml;glich")
+					, '<div style="margin:10px">'
+					._("Dieser Fehler kann dadurch hervorgerufen werden, dass sie Ihr Passwort geändert haben. In diesem Fall versuchen sie bitte Ihren Account erneut zu verknüpfen.")
+					.  '<br>' . sprintf(_("%sZur&uuml;ck%s zu Meine Lernmodule"), '<a href="my_elearning.php"><b>', '</b></a>') . '</div>');
+			page_close();
+			echo '</body>';
+			die;
+		}
 		$parameters = "?sess_id=$sess_id";
 		if (isset($client_id))
 			$parameters .= "&client_id=$client_id";
@@ -61,11 +74,5 @@ if ($ELEARNING_INTERFACE_ENABLE)
 		header("Location: ".$ELEARNING_INTERFACE_MODULES[$cms_select]["ABSOLUTE_PATH_ELEARNINGMODULES"] . $ELEARNING_INTERFACE_MODULES[$cms_select]["target_file"] . $parameters);
 		exit();
 	}
-	 
-/**/	
-	if ($debug != "")
-	{
-		ELearningUtils::bench("error");
-		ELearningUtils::showbench();
-	}
 }
+?>
