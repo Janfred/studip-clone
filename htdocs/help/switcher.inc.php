@@ -304,9 +304,19 @@ switch($referrer_page) {
 		break;
 	
 	case "admin_lit_list.php": 
+	case "admin_lit_element.php": 
+	case "lit_search.php": 
 		$help_page = "iii_homelit.htm";
 		break;
-	
+
+	case "admin_lit_element.php": 
+		$help_page = "iii_homelit.htm";
+		break;
+		
+	case "lit_search.php": 
+		$help_page = "iii_homelit.htm";
+		break;
+
 	case "adminvote.php": 
 		$help_page = "iii_homevote.htm";
 		break;
