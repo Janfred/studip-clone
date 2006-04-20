@@ -244,7 +244,7 @@ for ($i = $_the_search->start_result; $i <= $end_result; ++$i){
 			if (($link = $element->getValue("external_link"))){
 				$content.= formatReady(" [" . $element->getValue("lit_plugin"). "]" . $link);
 			} else {
-				$content .= _("(Kein externer Link vorhanden.)");
+				$content .= _("(Kein Link zum Katalog vorhanden.)");
 			}
 			$content .= "<br>";
 		}

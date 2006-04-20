@@ -130,7 +130,7 @@ if ($_REQUEST['cmd'] == "check_entry"){
 			if (($link = $_the_element->getValue("external_link"))){
 				$content.= formatReady(" [" . $_the_element->getValue("lit_plugin"). "]" . $link);
 			} else {
-				$content .= _("(Kein externer Link vorhanden.)");
+				$content .= _("(Kein Link zum Katalog vorhanden.)");
 			}
 		} elseif (count($ret['error'])){
 			$content .= '<span style="color:red;">' . htmlReady($ret['error'][0]['msg']) . '</span>';
@@ -231,9 +231,9 @@ foreach ($_the_element->fields as $field_name => $field_detail){
 		if ($field_name == "lit_plugin"){
 			echo "&nbsp;&nbsp;<span style=\"font-size:10pt;\">";
 			if (($link = $_the_element->getValue("external_link"))){
-				echo formatReady("=) [Test externer Link]" . $link);
+				echo formatReady("=) [Link zum Katalog]" . $link);
 			} else {
-				echo _("(Kein externer Link vorhanden.)");
+				echo _("(Kein Link zum Katalog vorhanden.)");
 			}
 			echo "</span>";
 		}

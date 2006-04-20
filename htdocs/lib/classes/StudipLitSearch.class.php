@@ -50,13 +50,13 @@ class StudipLitSearch {
 		}
 		$this->start_result =& $GLOBALS['_start_result'];
 		
-		$this->form_template = array('search_term'	=> 	array('type' => 'text', 'caption' => _("Suchbegriff"), 'info' => _("Ein Suchbegriff")),
+		$this->form_template = array('search_term'	=> 	array('type' => 'text', 'caption' => _("Suchbegriff"), 'info' => _("Bitte geben Sie hier einen beliebigen Suchbegriff ein.")),
 									'search_field'	=> 	array('type' => 'select', 'caption' => _("Suchfeld"), 'info' => _("Mögliche Suchfelder"),
 															'options_callback' => array(&$this,"getSearchFields")),
-									'search_truncate'=>	array('type' => 'select', 'caption' => _("Trunkieren"), 
+									'search_truncate'=>	array('type' => 'select', 'caption' => _("Trunkieren"), 'info' => _("Wenn Sie eine der Trunkierungsoptionen wählen, werden alle Treffer angezeigt, die mit dem Suchbegriff beginnen (Rechts trunkieren) bzw. enden (Links trunkieren)."), 
 															'options' => array(array('name' => _("Nein"), "value" => 'none'),
 																				array('name' => _("Rechts trunkieren"), "value" => 'right'),
-																				array('name' => _("Links trunkieren"), "value" => 'left'))),
+																				/*array('name' => _("Links trunkieren"), "value" => 'left')*/)),
 									'search_operator'=> array('type' => 'radio', 'options' => array(array('name' =>_("UND"),'value' => 'AND'),
 																									array('name' =>_("ODER"),'value' => 'OR'),
 																									array('name' =>_("NICHT"),'value' => 'NOT')), 
