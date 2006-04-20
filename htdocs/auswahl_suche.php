@@ -37,13 +37,14 @@ include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 <tr>
 <td class="blank" width="100%">
 <blockquote>
-	<br><a href="browse.php"><b><?=_("Suchen nach Personen")?></b></a></br>
-	<font size=-1><?=_("Hier k&ouml;nnen Sie nach Ihren, in Stud.IP registrierten, KommilitonInnen und Dozierenden suchen.")?></font>
-	<br>
 	<br>
 	<a href="sem_portal.php">
 	<b><?=_("Suchen nach Veranstaltungen")?></b></a></br>
 	<font size=-1><?=_("Hier finden Sie alle Veranstaltungen in Stud.IP.")?></font>
+	<br>
+	<br>
+	<a href="browse.php"><b><?=_("Suchen nach Personen")?></b></a></br>
+	<font size=-1><?=_("Hier k&ouml;nnen Sie nach Ihren, in Stud.IP registrierten, KommilitonInnen und Dozierenden suchen.")?></font>
 	<br>
 	<br><a href="institut_browse.php"><b><?=_("Suchen nach Einrichtungen")?></b></a></br>
 	<font size=-1><?=_("Hier finden Sie alle Einrichtungen in Stud.IP.")?></font>
