@@ -247,6 +247,11 @@ function new_event (&$this, $db, $date) {
 	$date = mktime(date("G", $db->f("start")), date("i", $db->f("start")), 0,
 			date("n", $date), date("j", $date), date("Y", $date));
 	
+	// BIEST00065
+	if ($date < $this->start) {
+		return FALSE;
+	}
+	
 	$event = new CalendarEvent(array(
 			'DTSTART'         => $date,
 			'DTEND'           => $db->f('end') - $db->f('start') + $date,
