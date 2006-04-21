@@ -183,7 +183,7 @@ function freetype_answers ($parent_id, $anz_nutzer) {
 	$counter = 1;
 	while ($db_answers->next_record()) {
 		echo "      <TR>\n";
-		echo "        <TD WIDTH=\"1%\" VALIGN=\"TOP\"><FONT SIZE=\"-1\"><B>".$counter.".</B></FONT></TD><TD><FONT SIZE=\"-1\">".htmlspecialchars($db_answers->f("text"))."</FONT></TD>\n";
+		echo "        <TD WIDTH=\"1%\" VALIGN=\"TOP\"><FONT SIZE=\"-1\"><B>".$counter.".</B></FONT></TD><TD><FONT SIZE=\"-1\">".formatReady($db_answers->f("text"))."</FONT></TD>\n";
 		echo "      </TR>\n";
 	$counter++;
 	}
