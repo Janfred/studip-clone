@@ -74,9 +74,12 @@ function freetype_answers ($parent_id, $anz_nutzer) {
 	$db_answers = new DB_Seminar();
         $db_answers->query(sprintf("SELECT * FROM evalanswer WHERE parent_id='%s' AND text!='' ORDER BY position",$parent_id));
 	$counter = 1;
+	$pattern = array("'<img[\s]+[^>]*?src[\s]?=[\s\"\']+(.*?)[\"\']+.*?>'si");
+        $replace = array("<fo:external-graphic src=\"url(\\1)\"/>");
 	while ($db_answers->next_record()) {
 		fputs($fo_file,"                <fo:table-row>\n");
-		fputs($fo_file,"                  <fo:table-cell ><fo:block font-size=\"8pt\">".$counter.". ".htmlspecialchars($db_answers->f("text"))."</fo:block></fo:table-cell>\n");
+		// fputs($fo_file,"                  <fo:table-cell ><fo:block font-size=\"8pt\">".$counter.". ".htmlspecialchars($db_answers->f("text"))."</fo:block></fo:table-cell>\n");
+		fputs($fo_file,"                  <fo:table-cell ><fo:block font-size=\"8pt\">".$counter.". ".preg_replace($pattern,$replace,smile(htmlspecialchars($db_answers->f("text")),TRUE))."</fo:block></fo:table-cell>\n");
 		fputs($fo_file,"                </fo:table-row>\n");
 		$counter++;
 	}
