@@ -45,7 +45,7 @@ if ($ELEARNING_INTERFACE_ENABLE)
 	{	
 		$sess->unregister("elearning_open_close");
 		unset($elearning_open_close);
-	}/**/
+	}
 	$elearning_open_close["type"] = "user";
 	$elearning_open_close["id"] = $auth->auth["uid"];
 	if (isset($do_open))
