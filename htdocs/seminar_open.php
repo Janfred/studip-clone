@@ -20,7 +20,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 $Id$
 */
 require_once $GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'lib/classes/SemesterData.class.php';
-require_once $GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'functions.php';
 
 // set default Values for messaging
 function check_messaging_default() {
@@ -114,7 +113,8 @@ function check_semester_default(){
 	if ($GLOBALS['perm']->have_perm('dozent')){
 		$GLOBALS['sess']->register("_default_sem");
 		$semester =& SemesterData::GetInstance();
-		$actual_sem = $semester->getSemesterDataByDate(time() + get_config('SEMESTER_TIME_SWITCH') * 7 * 24 * 60 * 60);
+		$cfg =& Config::GetInstance();
+		$actual_sem = $semester->getSemesterDataByDate(time() + $cfg->getValue('SEMESTER_TIME_SWITCH') * 7 * 24 * 60 * 60);
 		if (!is_array($actual_sem)) $actual_sem = $semester->getCurrentSemesterData();
 		$GLOBALS['_default_sem'] = $actual_sem['semester_id'];
 	}
