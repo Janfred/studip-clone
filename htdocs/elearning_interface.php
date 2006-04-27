@@ -60,7 +60,7 @@ if ($ELEARNING_INTERFACE_ENABLE AND (($view == "edit") OR ($view == "show")))
 		unset($cache_data);
 		$sess->unregister("elearning_open_close");
 		unset($elearning_open_close);
-	}/**/
+	}
 	if ($open_all != "")
 		$elearning_open_close["all open"] = true;
 	elseif ($close_all != "")
@@ -185,13 +185,24 @@ if ($ELEARNING_INTERFACE_ENABLE AND (($view == "edit") OR ($view == "show")))
 		{
 			if (ELearningUtils::isCMSActive($connection["cms"]))
 			{
-				if ($module_count == 0)
-					echo ELearningUtils::getModuleHeader(_("Angebundene Lernmodule"));
-				$module_count++;
+
 				ELearningUtils::loadClass($connection["cms"]);
 
 				$connected_cms[$connection["cms"]]->newContentModule($connection["id"], $connection["type"], true);
-				
+				$connected_modules[$key]['title'] = $connected_cms[$connection["cms"]]->content_module[$connection["id"]]->getTitle();
+				$title_tmp[$key] = str_replace(array('ä','ö','ü','ß'),array('ae','oe','ue','ss'),strtolower($connected_modules[$key]['title']));
+				$type_tmp[$key] = ($connected_modules[$key]['type'] == 'tst' ? 2 : 1);
+			}
+		}
+		
+		array_multisort($type_tmp, SORT_ASC, $title_tmp, SORT_ASC, $connected_modules);
+			
+		foreach ($connected_modules as $connection)
+		{
+			$current_module = $connection["id"]; //Arrrghhhh
+			
+			if ($module_count == 0) echo ELearningUtils::getModuleHeader(_("Angebundene Lernmodule"));
+				$module_count++;
 				if ($open_all != "")
 					$elearning_open_close[$connected_cms[$connection["cms"]]->content_module[$connection["id"]]->getReferenceString()] = true;
 				elseif ($close_all != "")
@@ -207,10 +218,6 @@ if ($ELEARNING_INTERFACE_ENABLE AND (($view == "edit") OR ($view == "show")))
 					$connected_cms[$connection["cms"]]->content_module[$connection["id"]]->view->showAdmin();
 		
 				ELearningUtils::bench("module");
-			}
-			else
-			{
-			}
 		}
 		echo "<br>\n";
 		echo "<br>\n";
