@@ -240,7 +240,7 @@ if ($inst_id && $perm->have_studip_perm('admin', $inst_id)) {
 	// predefine subject
 	if($subject) $messagesubject = $subject;	
 	$db = new DB_Seminar;
-	$db->query ("SELECT username FROM user_inst LEFT JOIN auth_user_md5 USING(user_id) WHERE institut_id = '".$inst_id."'");
+	$db->query ("SELECT username FROM user_inst LEFT JOIN auth_user_md5 USING(user_id) WHERE inst_perms!='user' AND Institut_id = '".$inst_id."'");
 	while ($db->next_record()) {
 		$add_course_members[] = $db->f("username");
 	}
