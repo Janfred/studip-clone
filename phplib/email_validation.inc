@@ -15,8 +15,8 @@ class email_validation_class
 	var $email_regular_expression='^([-.0-9=?A-Z_a-z{|}~])+@([-.0-9=?A-Z_a-z{|}~])+\.[a-zA-Z]{2,6}$';
 	var $timeout=10;
 	var $data_timeout=10;
-	var $localhost="";
-	var $localuser="";
+	var $localhost="studip.de";
+	var $localuser="info";
 	var $debug=0;
 	var $html_debug=0;
 	var $exclude_address="";
