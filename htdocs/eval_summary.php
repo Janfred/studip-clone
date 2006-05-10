@@ -99,7 +99,7 @@ if (isset($cmd) && $EVAL_AUSWERTUNG_CONFIG_ENABLE) {
 
 
 function do_template($column) {
-	global $has_template, $db_template, $EVAL_AUSWERTUNG_CONFIG_ENABLE;  
+	global $has_template, $db_template, $EVAL_AUSWERTUNG_CONFIG_ENABLE;
 	if (!($EVAL_AUSWERTUNG_CONFIG_ENABLE)) return TRUE;
 	if ($has_template==0 || ($has_template==1 && $db_template->f($column)))
 		return true;
@@ -140,7 +140,7 @@ function do_graph($data, $evalquestion_id) {
 		$tmp2 = array();
 		$legend = array();
 		array_push($tmp,"Test");
-		foreach($data as $k=>$d) { 
+		foreach($data as $k=>$d) {
 	 		array_push($tmp, $d[1]);
 			array_push($legend, $d[0]);
 		}
@@ -254,19 +254,19 @@ function answers ($parent_id, $anz_nutzer, $question_type) {
 		if ($has_residual && ($db_answers_sum->f("anz")-$has_residual)>0) $prozente_wo_residual = ROUND($answer_counter*100/($db_answers_sum->f("anz")-$has_residual));
 		$prozente = 0;
 		if ($db_answers_sum->f("anz")>0) $prozente = ROUND($answer_counter*100/$db_answers_sum->f("anz"));
-		$edit .= "<TR CLASS=\"".($i==1?"steel1kante":$css->getClass())."\"><TD WIDTH=\"1%\"><FONT SIZE=\"-1\"><B>".$antwort_nummer.".&nbsp;</B></FONT></TD><TD WIDTH=\"70%\"><FONT SIZE=\"-1\">".($db_answers->f("text")!="" ? $db_answers->f("text") : $db_answers->f("value"))."</FONT></TD>";
+		$edit .= "<TR CLASS=\"".($i==1?"steel1kante":$css->getClass())."\"><TD WIDTH=\"1%\"><FONT SIZE=\"-1\"><B>".$antwort_nummer.".&nbsp;</B></FONT></TD><TD WIDTH=\"70%\"><FONT SIZE=\"-1\">".($db_answers->f("text")!="" ? formatReady($db_answers->f("text")) : $db_answers->f("value"))."</FONT></TD>";
 		if ($has_residual) $edit .= "<TD WIDTH=\"29%\"><FONT SIZE=\"-1\">".$answer_counter." (".$prozente."%) ".($db_answers->f("residual")==0 ? "(".$prozente_wo_residual."%)<B>*</B>" : "" )."</FONT></TD></TR>\n";
 		else $edit .= "<TD WIDTH=\"29%\"><FONT SIZE=\"-1\">".$answer_counter." (".$prozente."%)</FONT></TD></TR>\n";
 		array_push($summary, array($antwort_nummer."(".$prozente."%)",$answer_counter));
 
-		array_push($ret_array["antwort_texte"], ($db_answers->f("text")!="" ? $db_answers->f("text") : $db_answers->f("value")));
+		array_push($ret_array["antwort_texte"], ($db_answers->f("text")!="" ? formatReady($db_answers->f("text")) : $db_answers->f("value")));
 		array_push($ret_array["auswertung"], array($answer_counter, $prozente, ($db_answers->f("residual")==0 ? $prozente_wo_residual : null)));
 		if ($has_residual) $ret_array["has_residual"] = 1;
 
 		$i = 0;
 	}
 	do_graph($summary, $parent_id);
-	
+
 	if ($gesamte_antworten > 0 && $antwort_durchschnitt > 0) $antwort_durchschnitt = ROUND($antwort_durchschnitt / $gesamte_antworten, 3);
 
 	$ret_array["antwort_durchschnitt"] = $antwort_durchschnitt;
@@ -286,7 +286,7 @@ function answers ($parent_id, $anz_nutzer, $question_type) {
 		$txt .= "<TD COLSPAN=\"2\"><FONT SIZE=\"-1\"><B>&#x2205;</B>-"._("Antwort").": ".$antwort_durchschnitt.($has_residual==0 ? "" : "<B>*</B>")."</FONT></TD><TD>";
 	}
 	$txt .= "          <FONT SIZE=\"-1\">"._("Anzahl der Teilnehmer").": ".$anz_nutzer."</FONT></TD></TR>";
-	
+
 	if ($has_residual) $txt .= "        <TR CLASS=\"blank\"><TD COLSPAN=\"3\"><FONT SIZE=\"-1\"><B>*</B>"._("Werte ohne Enthaltungen").".</FONT></TD></TR>";
 	$txt .= "      </TABLE>";
         $txt .= "    </TD>\n";
@@ -323,9 +323,9 @@ function groups ($parent_id) {
 			$global_counter += 1;
                         $local_counter   = 0;
 
-			echo "  <TR><TD CLASS=\"".($ausgabeformat==1 ? "topic" : "blank")."\" ALIGN=\"LEFT\" COLSPAN=\"2\">\n"; 
+			echo "  <TR><TD CLASS=\"".($ausgabeformat==1 ? "topic" : "blank")."\" ALIGN=\"LEFT\" COLSPAN=\"2\">\n";
 			if (do_template("show_group_headline"))
-				echo "    <B>".$global_counter.". ".$db_groups->f("title")."</B>&nbsp;\n";
+				echo "    <B>".$global_counter.". ".formatReady($db_groups->f("title"))."</B>&nbsp;\n";
 			else echo "&nbsp;";
 		}
 		else {
@@ -338,11 +338,11 @@ function groups ($parent_id) {
 				$db_group_type->query(sprintf("SELECT * FROM eval_group_template WHERE evalgroup_id='%s'",$db_groups->f("evalgroup_id")));
 				if ($db_group_type->next_record()) $group_type = $db_group_type->f("group_type");
 			}
-	
+
 			echo "  <TR><TD CLASS=\"".($ausgabeformat==1 ? "steelgraulight" : "blank")."\" COLSPAN=\"2\">\n";
 			if (do_template("show_questionblock_headline")) {
-				echo "    <BR><TABLE WIDTH=\"100%\" BORDER=\"0\" CELLPADDING=\"0\" CELLSPACING=\"0\"><TR><TD ALIGN=\"left\"><B>".$global_counter.".".$local_counter.". ".$db_groups->f("title")."</B></TD>";
-				if ($EVAL_AUSWERTUNG_CONFIG_ENABLE) echo "<TD ALIGN=\"RIGHT\">".($ausgabeformat==1 && !($freetype) ? "<A HREF=\"$PHP_SELF?eval_id=$eval_id&evalgroup_id=".$db_groups->f("evalgroup_id")."&group_type=".($group_type=="normal" ? "table" : "normal")."&cmd=change_group_type#anker\"><IMG SRC=\"pictures/rewind3.gif\" TITLE=\""._("Zum Darstellungstyp")." ".($group_type=="normal"?_("Tabelle"):_("Normal"))." "._("wechseln").".\" BORDER=\"0\"></A>" : "&nbsp;"). "</TD>";
+				echo "    <BR><TABLE WIDTH=\"100%\" BORDER=\"0\" CELLPADDING=\"0\" CELLSPACING=\"0\"><TR><TD ALIGN=\"left\"><B>".$global_counter.".".$local_counter.". ".formatReady($db_groups->f("title"))."</B></TD>";
+				if ($EVAL_AUSWERTUNG_CONFIG_ENABLE) echo "<TD ALIGN=\"RIGHT\">".($ausgabeformat==1 && !($freetype) ? "<A HREF=\"$PHP_SELF?eval_id=$eval_id&evalgroup_id=".$db_groups->f("evalgroup_id")."&group_type=".($group_type=="normal" ? "table" : "normal")."&cmd=change_group_type#anker\"><IMG SRC=\"".$GLOBALS['ASSETS_URL']."images/rewind3.gif\" TITLE=\""._("Zum Darstellungstyp")." ".($group_type=="normal"?_("Tabelle"):_("Normal"))." "._("wechseln").".\" BORDER=\"0\"></A>" : "&nbsp;"). "</TD>";
 				else echo "<TD>&nbsp;</TD>";
 				echo "</TR></TABLE><BR><BR>\n";
 			} else echo "&nbsp;";
@@ -353,7 +353,7 @@ function groups ($parent_id) {
 		echo "  <TR><TD  CLASS=\"blank\" COLSPAN=\"2\">\n";
 
 		if ($db_groups->f("child_type")=="EvaluationQuestion") {
-			
+
 
 			$db_questions = new DB_Seminar();
 			$db_questions->query(sprintf("SELECT * FROM evalquestion WHERE parent_id='%s' ORDER BY position",$db_groups->f("evalgroup_id")));
@@ -369,10 +369,10 @@ function groups ($parent_id) {
 				$db_questions_user->next_record();
 
 				$local_question_counter += 1;
-				
+
 				if (do_template("show_questions") && $group_type=="normal") {
 					echo "    <TR><TD class=\"blank\" COLSPAN=\"2\">\n";
-					echo "      <B>".$global_counter.".".$local_counter.".".$local_question_counter.". ".$db_questions->f("text")."</B></FONT>\n";
+					echo "      <B>".$global_counter.".".$local_counter.".".$local_question_counter.". ".formatReady($db_questions->f("text"))."</B></FONT>\n";
 					echo "    </TD></TR>\n";
 				}
 
@@ -407,7 +407,7 @@ function groups ($parent_id) {
 						echo "<TD ALIGN=\"center\"><FONT SIZE=\"-1\"><B>&#x2211;</B></FONT></TD><TD ALIGN=\"center\"><FONT SIZE=\"-1\"><B>&#x2205;</B></FONT></TD><TD ALIGN=\"center\"><FONT SIZE=\"-1\">"._("Teilnehmer")."</FONT></TD>";
                                         	echo "</TR>";
                                         	$antworten_angezeigt = TRUE;
-                                        } 
+                                        }
 
 					echo "<TR CLASS=\"". ($i==1?"steel1kante":$css->getClass())."\">";
 					echo "  <TD><FONT SIZE=\"-1\">".$questions["frage"]."</FONT></TD>";
@@ -439,9 +439,9 @@ function groups ($parent_id) {
 
 $db = new DB_Seminar();
 
-if ($staff_member) 
+if ($staff_member)
 	$db->query(sprintf("SELECT * FROM eval WHERE eval_id='%s'",$eval_id));
-else 
+else
 	$db->query(sprintf("SELECT * FROM eval WHERE eval_id='%s' AND author_id='%s'",$eval_id,$auth->auth["uid"]));
 
 if ($db->next_record()) {
@@ -464,11 +464,11 @@ if ($db->next_record()) {
 
   // Evaluation existiert auch...
   echo "<TABLE BORDER=\"0\" WIDTH=\"100%\" CELLSPACING=\"0\" CELLPADDING=\"0\">\n";
-  echo "<tr><td class=\"topic\" align=\"left\"><FONT COLOR=\"".($ausgabeformat==1 ? "white" : "black")."\">".($ausgabeformat==1 ? "<IMG SRC=\"pictures/eval-icon.gif\" BORDER=\"0\">&nbsp;" : "" )."<B>"._("Evaluations-Auswertung")."</B></FONT></td>\n";
-  echo "<TD CLASS=\"".($ausgabeformat==1 ? "topic" : "blank" )."\" ALIGN=\"RIGHT\">".($ausgabeformat==1 ? "<A HREF=\"eval_summary_export.php?eval_id=".$eval_id."\" TARGET=\"_blank\"><FONT COLOR=\"WHITE\">"._("PDF-Export")."</FONT></A><B>&nbsp;|&nbsp;</B><A HREF=\"".$PHP_SELF."?eval_id=".$eval_id."&ausgabeformat=2\" TARGET=\"_blank\"><FONT COLOR=\"WHITE\">"._("Druckansicht")."</FONT></A>&nbsp;".($EVAL_AUSWERTUNG_CONFIG_ENABLE ? "&nbsp;<A HREF=\"eval_config.php?eval_id=".$eval_id."\"><IMG SRC=\"pictures/pfeillink.gif\" BORDER=\"0\" ALT=\""._("Auswertung konfigurieren")."\" TITLE=\""._("Auswertung konfigurieren")."\"></A>" : "") : "" ) ."&nbsp;</TD>\n";
+  echo "<tr><td class=\"topic\" align=\"left\"><FONT COLOR=\"".($ausgabeformat==1 ? "white" : "black")."\">".($ausgabeformat==1 ? "<IMG SRC=\"".$GLOBALS['ASSETS_URL']."images/eval-icon.gif\" BORDER=\"0\">&nbsp;" : "" )."<B>"._("Evaluations-Auswertung")."</B></FONT></td>\n";
+  echo "<TD CLASS=\"".($ausgabeformat==1 ? "topic" : "blank" )."\" ALIGN=\"RIGHT\">".($ausgabeformat==1 ? "<A HREF=\"eval_summary_export.php?eval_id=".$eval_id."\" TARGET=\"_blank\"><FONT COLOR=\"WHITE\">"._("PDF-Export")."</FONT></A><B>&nbsp;|&nbsp;</B><A HREF=\"".$PHP_SELF."?eval_id=".$eval_id."&ausgabeformat=2\" TARGET=\"_blank\"><FONT COLOR=\"WHITE\">"._("Druckansicht")."</FONT></A>&nbsp;".($EVAL_AUSWERTUNG_CONFIG_ENABLE ? "&nbsp;<A HREF=\"eval_config.php?eval_id=".$eval_id."\"><IMG SRC=\"".$GLOBALS['ASSETS_URL']."images/pfeillink.gif\" BORDER=\"0\" ALT=\""._("Auswertung konfigurieren")."\" TITLE=\""._("Auswertung konfigurieren")."\"></A>" : "") : "" ) ."&nbsp;</TD>\n";
   echo "</TR>\n";
   echo "<tr><td class=\"blank\" COLSPAN=\"2\" align=\"left\">&nbsp;</td></TR>\n";
-  echo "<tr><td class=\"blank\" COLSPAN=\"2\" align=\"left\"><FONT SIZE=\"+1\"><B>&nbsp;&nbsp;".$db->f("title")."</B></FONT></td>\n";
+  echo "<tr><td class=\"blank\" COLSPAN=\"2\" align=\"left\"><FONT SIZE=\"+1\"><B>&nbsp;&nbsp;".formatReady($db->f("title"))."</B></FONT></td>\n";
   echo "</TR>\n";
 
   echo "<tr><td class=\"blank\" COLSPAN=\"2\" align=\"left\">&nbsp;</FONT></td></TR>\n";
@@ -488,8 +488,8 @@ if ($db->next_record()) {
   echo "    <TABLE WIDTH=\"100%\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"8\">\n";
 
   groups($db->f("eval_id"));
- 
-  echo "    </TABLE>\n"; 
+
+  echo "    </TABLE>\n";
   echo "  </TD></TR>\n";
   echo "</TABLE>\n";
 
