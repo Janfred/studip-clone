@@ -58,6 +58,9 @@ $db5 = new DB_Seminar;
 $has_template = 0;
 $db_template = new DB_Seminar();
 
+$pattern = array("'<img[\s]+[^>]*?src[\s]?=[\s\"\']+(.*?)[\"\']+.*?>'si");
+$replace = array("<fo:external-graphic src=\"url(\\1)\"/>");
+
 
 function do_template($column) {
         global $has_template, $db_template, $EVAL_AUSWERTUNG_CONFIG_ENABLE;
@@ -70,12 +73,10 @@ function do_template($column) {
 
 
 function freetype_answers ($parent_id, $anz_nutzer) {
-	global $ausgabeformat, $fo_file;
+	global $ausgabeformat, $fo_file, $pattern, $replace;
 	$db_answers = new DB_Seminar();
         $db_answers->query(sprintf("SELECT * FROM evalanswer WHERE parent_id='%s' AND text!='' ORDER BY position",$parent_id));
 	$counter = 1;
-	$pattern = array("'<img[\s]+[^>]*?src[\s]?=[\s\"\']+(.*?)[\"\']+.*?>'si");
-        $replace = array("<fo:external-graphic src=\"url(\\1)\"/>");
 	while ($db_answers->next_record()) {
 		fputs($fo_file,"                <fo:table-row>\n");
 		// fputs($fo_file,"                  <fo:table-cell ><fo:block font-size=\"8pt\">".$counter.". ".htmlspecialchars($db_answers->f("text"))."</fo:block></fo:table-cell>\n");
@@ -104,7 +105,7 @@ function user_answers ($evalanswer_id) {
 }
 
 function answers ($parent_id, $anz_nutzer, $question_type) {
-	global $ABSOLUTE_PATH_STUDIP, $graph_switch, $auth, $ausgabeformat, $fo_file, $has_template;
+	global $ABSOLUTE_PATH_STUDIP, $graph_switch, $auth, $ausgabeformat, $fo_file, $has_template, $pattern, $replace;
 
 	 // Rueckgabearray, damit die Daten noch aufzutrennen sind...
         $ret_array = array("id"=>$parent_id,                         // Question-ID
@@ -146,7 +147,7 @@ function answers ($parent_id, $anz_nutzer, $question_type) {
 		$prozente_wo_residual = 0;
 		if ($has_residual && ($db_answers_sum->f("anz")-$has_residual)>0) $prozente_wo_residual = ROUND($answer_counter*100/($db_answers_sum->f("anz")-$has_residual));
 		$edit .= "                <fo:table-row>\n";
-		$edit .= "                  <fo:table-cell ><fo:block font-size=\"8pt\">".$antwort_nummer.". ".htmlspecialchars(($db_answers->f("text")!="" ? $db_answers->f("text") : $db_answers->f("value")))."</fo:block></fo:table-cell>\n";
+		$edit .= "                  <fo:table-cell ><fo:block font-size=\"8pt\">".$antwort_nummer.". ".preg_replace($pattern,$replace,smile(htmlspecialchars(($db_answers->f("text")!="" ? $db_answers->f("text") : $db_answers->f("value"))),TRUE))."</fo:block></fo:table-cell>\n";
 	
 		if ($has_residual) $edit .= "                  <fo:table-cell ><fo:block font-size=\"8pt\">".$answer_counter." (".$prozente."%) ".($db_answers->f("residual")==0 ? "(".$prozente_wo_residual."%)*" : "" )."</fo:block></fo:table-cell>\n";
 		else $edit .= "                  <fo:table-cell ><fo:block font-size=\"8pt\">".$answer_counter." (".$prozente."%)</fo:block></fo:table-cell>\n";
@@ -201,7 +202,7 @@ function answers ($parent_id, $anz_nutzer, $question_type) {
 }
 
 function groups ($parent_id) {
-	global $cssSw, $ausgabeformat, $fo_file, $auth, $global_counter, $local_counter, $TMP_PATH, $EVAL_AUSWERTUNG_CONFIG_ENABLE;
+	global $cssSw, $ausgabeformat, $fo_file, $auth, $global_counter, $local_counter, $TMP_PATH, $EVAL_AUSWERTUNG_CONFIG_ENABLE, $pattern, $replace;
 	$db_groups = new DB_Seminar();
 	$db_groups->query(sprintf("SELECT * FROM evalgroup WHERE parent_id='%s' ORDER BY position",$parent_id));
 	
@@ -222,7 +223,7 @@ function groups ($parent_id) {
 			fputs($fo_file,"    <!-- Groupblock -->\n");
 		 	fputs($fo_file,"    <fo:block font-variant=\"small-caps\" font-weight=\"bold\" text-align=\"start\" space-after.optimum=\"2pt\" background-color=\"lightblue\" space-before.optimum=\"10pt\">\n");
 			if (do_template("show_group_headline"))
-		 		fputs($fo_file,"      ".$global_counter.". ".htmlspecialchars($db_groups->f("title"))."\n");
+		 		fputs($fo_file,"      ".$global_counter.". ".preg_replace($pattern,$replace,smile(htmlspecialchars($db_groups->f("title")),TRUE))."\n");
 			fputs($fo_file,"    </fo:block>\n");
 		} else {
 			$local_counter += 1;
@@ -238,7 +239,7 @@ function groups ($parent_id) {
  			fputs($fo_file,"    <!-- Questionblock -->\n");
 			fputs($fo_file,"    <fo:block font-variant=\"small-caps\" font-weight=\"bold\" text-align=\"start\" background-color=\"grey\" color=\"white\" space-after.optimum=\"10pt\">\n");
 			if (do_template("show_questionblock_headline"))
-				fputs($fo_file,"      ".$global_counter.".".$local_counter.". ".htmlspecialchars($db_groups->f("title"))."\n");
+				fputs($fo_file,"      ".$global_counter.".".$local_counter.". ".preg_replace($pattern,$replace,smile(htmlspecialchars($db_groups->f("title")),TRUE))."\n");
 			fputs($fo_file,"    </fo:block>\n");
 		}
 		
@@ -261,7 +262,7 @@ function groups ($parent_id) {
 				fputs($fo_file,"    <!-- Question -->\n");
 				fputs($fo_file,"    <fo:block text-align=\"start\" font-weight=\"bold\" space-before.optimum=\"10pt\" space-after.optimum=\"10pt\">\n");
 				if (do_template("show_questions")) {
-					fputs($fo_file,"      ".$global_counter.".".$local_counter.".".$local_question_counter.". ".htmlspecialchars($db_questions->f("text"))."\n");
+					fputs($fo_file,"      ".$global_counter.".".$local_counter.".".$local_question_counter.". ".preg_replace($pattern,$replace,smile(htmlspecialchars($db_questions->f("text")),TRUE))."\n");
 				}
 				fputs($fo_file,"    </fo:block>\n");
 	 			fputs($fo_file,"    <!-- table start -->\n");	
@@ -351,7 +352,7 @@ function groups ($parent_id) {
 						fputs($fo_file,"          </fo:block></fo:table-cell >");
 						foreach ($questions["antwort_texte"] as $k2=>$v2) { // 1. Unterebene, hier sind die Antworttexte abgelegt
 							fputs($fo_file,"          <fo:table-cell ><fo:block space-before.optimum=\"10pt\" font-size=\"7pt\">\n");
-							fputs($fo_file, htmlspecialchars($v2));
+							fputs($fo_file, preg_replace($pattern,$replace,smile(htmlspecialchars($v2),TRUE)));
 							fputs($fo_file,"          </fo:block></fo:table-cell >");
 						}
 							
@@ -482,7 +483,7 @@ if ($db->next_record()) {
   fputs($fo_file,"    <!-- this defines a title level 2-->\n");
 
   fputs($fo_file,"    <fo:block font-size=\"16pt\" font-weight=\"bold\" font-family=\"sans-serif\" space-before.optimum=\"10pt\" space-after.optimum=\"15pt\" text-align=\"center\">\n");
-  fputs($fo_file,"      ".htmlspecialchars($db->f("title"))."\n");
+  fputs($fo_file,"      ".preg_replace($pattern,$replace,smile(htmlspecialchars($db->f("title")),TRUE))."\n");
   fputs($fo_file,"    </fo:block>\n");
 
   if (do_template("show_total_stats")) {
