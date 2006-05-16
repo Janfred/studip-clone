@@ -190,6 +190,7 @@ class EvaluationExportManagerCSV extends EvaluationExportManager {
          /* Questiontype: multiple chioice ---------------------------------- */
          } elseif ($type == EVALQUESTION_TYPE_MC) {
             if ($evalquestion->isMultiplechoice ()) {
+				$db->addChildren($evalquestion);
                while ($answer = &$evalquestion->getNextChild ()) {
                   $header = $evalquestion->getText ();
                   $header .= ":".$answer->getText ();
