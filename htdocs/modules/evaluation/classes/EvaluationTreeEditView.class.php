@@ -3218,8 +3218,8 @@ function createTemplateSelection ( $selected = NULL ){
 
 		$questiontext = $question->getText();
 
-		if( $question->getParentID() == 0) 
-			$questiontext .= " [R]";
+		if( $question->getParentID() == '0') 
+			$questiontext .= " " . EVAL_ROOT_TAG;
 
 		
 	   switch( $questiontyp ) {
