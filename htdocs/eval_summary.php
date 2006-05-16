@@ -29,7 +29,8 @@
 // +---------------------------------------------------------------------------+
 
 // Die Variable EVAL_AUSWERTUNG_CONFIG_ENABLE kann in der Datei local.inc gesetzt werden.
-if (!isset($EVAL_AUSWERTUNG_CONFIG_ENABLE)) $EVAL_AUSWERTUNG_CONFIG_ENABLE = FALSE;
+if (!isset($EVAL_AUSWERTUNG_CONFIG_ENABLE)) $EVAL_AUSWERTUNG_CONFIG_ENABLE = false;
+if (!isset($EVAL_AUSWERTUNG_GRAPH_FORMAT)) $EVAL_AUSWERTUNG_GRAPH_FORMAT = 'jpg';
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 
@@ -158,8 +159,8 @@ function do_graph($data, $evalquestion_id) {
 	$graph->SetPlotBgColor(array(222,222,222));
 
         $graph->SetDataType("text-data");
-        $graph->SetFileFormat("jpg");
-        $graph->SetOutputFile($TMP_PATH."/export/evalsum".$evalquestion_id.$auth->auth["uid"].".jpg");
+        $graph->SetFileFormat($GLOBALS['EVAL_AUSWERTUNG_GRAPH_FORMAT']);
+        $graph->SetOutputFile($TMP_PATH."/export/evalsum".$evalquestion_id.$auth->auth["uid"].".".$GLOBALS['EVAL_AUSWERTUNG_GRAPH_FORMAT']);
         $graph->SetIsInline(true);
         $graph->SetDataValues($data);
         $graph->SetPlotType($type);
@@ -292,7 +293,7 @@ function answers ($parent_id, $anz_nutzer, $question_type) {
         $txt .= "    </TD>\n";
 	$txt .= "    <TD WIDTH=\"30%\" VALIGN=\"TOP\" ALIGN=\"RIGHT\">\n";
 	if (do_template("show_graphics")) {
-		$txt .= '<IMG SRC="' . GetDownloadLink('evalsum'.$parent_id.$auth->auth['uid'].'.jpg', 'evalsum'.$parent_id.$auth->auth['uid'].'.jpg', 2) .'">'."\n";
+		$txt .= '<IMG SRC="' . GetDownloadLink('evalsum'.$parent_id.$auth->auth['uid'].'.'.$GLOBALS['EVAL_AUSWERTUNG_GRAPH_FORMAT'], 'evalsum'.$parent_id.$auth->auth['uid'].'.'.$GLOBALS['EVAL_AUSWERTUNG_GRAPH_FORMAT'], 2) .'">'."\n";
 	} else $txt .= "&nbsp;\n";
 	$txt .= "    </TD>\n";
 	$txt .= "  </TR>\n";
@@ -342,7 +343,7 @@ function groups ($parent_id) {
 			echo "  <TR><TD CLASS=\"".($ausgabeformat==1 ? "steelgraulight" : "blank")."\" COLSPAN=\"2\">\n";
 			if (do_template("show_questionblock_headline")) {
 				echo "    <BR><TABLE WIDTH=\"100%\" BORDER=\"0\" CELLPADDING=\"0\" CELLSPACING=\"0\"><TR><TD ALIGN=\"left\"><B>".$global_counter.".".$local_counter.". ".formatReady($db_groups->f("title"))."</B></TD>";
-				if ($EVAL_AUSWERTUNG_CONFIG_ENABLE) echo "<TD ALIGN=\"RIGHT\">".($ausgabeformat==1 && !($freetype) ? "<A HREF=\"$PHP_SELF?eval_id=$eval_id&evalgroup_id=".$db_groups->f("evalgroup_id")."&group_type=".($group_type=="normal" ? "table" : "normal")."&cmd=change_group_type#anker\"><IMG SRC=\"".$GLOBALS['ASSETS_URL']."images/rewind3.gif\" TITLE=\""._("Zum Darstellungstyp")." ".($group_type=="normal"?_("Tabelle"):_("Normal"))." "._("wechseln").".\" BORDER=\"0\"></A>" : "&nbsp;"). "</TD>";
+				if ($EVAL_AUSWERTUNG_CONFIG_ENABLE) echo "<TD ALIGN=\"RIGHT\">".($ausgabeformat==1 && !($freetype) ? "<A HREF=\"$PHP_SELF?eval_id=$eval_id&evalgroup_id=".$db_groups->f("evalgroup_id")."&group_type=".($group_type=="normal" ? "table" : "normal")."&cmd=change_group_type#anker\"><IMG SRC=\"pictures/rewind3.gif\" TITLE=\""._("Zum Darstellungstyp")." ".($group_type=="normal"?_("Tabelle"):_("Normal"))." "._("wechseln").".\" BORDER=\"0\"></A>" : "&nbsp;"). "</TD>";
 				else echo "<TD>&nbsp;</TD>";
 				echo "</TR></TABLE><BR><BR>\n";
 			} else echo "&nbsp;";
@@ -464,8 +465,8 @@ if ($db->next_record()) {
 
   // Evaluation existiert auch...
   echo "<TABLE BORDER=\"0\" WIDTH=\"100%\" CELLSPACING=\"0\" CELLPADDING=\"0\">\n";
-  echo "<tr><td class=\"topic\" align=\"left\"><FONT COLOR=\"".($ausgabeformat==1 ? "white" : "black")."\">".($ausgabeformat==1 ? "<IMG SRC=\"".$GLOBALS['ASSETS_URL']."images/eval-icon.gif\" BORDER=\"0\">&nbsp;" : "" )."<B>"._("Evaluations-Auswertung")."</B></FONT></td>\n";
-  echo "<TD CLASS=\"".($ausgabeformat==1 ? "topic" : "blank" )."\" ALIGN=\"RIGHT\">".($ausgabeformat==1 ? "<A HREF=\"eval_summary_export.php?eval_id=".$eval_id."\" TARGET=\"_blank\"><FONT COLOR=\"WHITE\">"._("PDF-Export")."</FONT></A><B>&nbsp;|&nbsp;</B><A HREF=\"".$PHP_SELF."?eval_id=".$eval_id."&ausgabeformat=2\" TARGET=\"_blank\"><FONT COLOR=\"WHITE\">"._("Druckansicht")."</FONT></A>&nbsp;".($EVAL_AUSWERTUNG_CONFIG_ENABLE ? "&nbsp;<A HREF=\"eval_config.php?eval_id=".$eval_id."\"><IMG SRC=\"".$GLOBALS['ASSETS_URL']."images/pfeillink.gif\" BORDER=\"0\" ALT=\""._("Auswertung konfigurieren")."\" TITLE=\""._("Auswertung konfigurieren")."\"></A>" : "") : "" ) ."&nbsp;</TD>\n";
+  echo "<tr><td class=\"topic\" align=\"left\"><FONT COLOR=\"".($ausgabeformat==1 ? "white" : "black")."\">".($ausgabeformat==1 ? "<IMG SRC=\"pictures/eval-icon.gif\" BORDER=\"0\">&nbsp;" : "" )."<B>"._("Evaluations-Auswertung")."</B></FONT></td>\n";
+  echo "<TD CLASS=\"".($ausgabeformat==1 ? "topic" : "blank" )."\" ALIGN=\"RIGHT\">".($ausgabeformat==1 ? "<A HREF=\"eval_summary_export.php?eval_id=".$eval_id."\" TARGET=\"_blank\"><FONT COLOR=\"WHITE\">"._("PDF-Export")."</FONT></A><B>&nbsp;|&nbsp;</B><A HREF=\"".$PHP_SELF."?eval_id=".$eval_id."&ausgabeformat=2\" TARGET=\"_blank\"><FONT COLOR=\"WHITE\">"._("Druckansicht")."</FONT></A>&nbsp;".($EVAL_AUSWERTUNG_CONFIG_ENABLE ? "&nbsp;<A HREF=\"eval_config.php?eval_id=".$eval_id."\"><IMG SRC=\"pictures/pfeillink.gif\" BORDER=\"0\" ALT=\""._("Auswertung konfigurieren")."\" TITLE=\""._("Auswertung konfigurieren")."\"></A>" : "") : "" ) ."&nbsp;</TD>\n";
   echo "</TR>\n";
   echo "<tr><td class=\"blank\" COLSPAN=\"2\" align=\"left\">&nbsp;</td></TR>\n";
   echo "<tr><td class=\"blank\" COLSPAN=\"2\" align=\"left\"><FONT SIZE=\"+1\"><B>&nbsp;&nbsp;".formatReady($db->f("title"))."</B></FONT></td>\n";

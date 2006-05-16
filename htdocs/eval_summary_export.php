@@ -30,6 +30,7 @@
 
 // Die Variable EVAL_AUSWERTUNG_CONFIG_ENABLE kann in der Datei local.inc gesetzt werden.
 if (!isset($EVAL_AUSWERTUNG_CONFIG_ENABLE)) $EVAL_AUSWERTUNG_CONFIG_ENABLE = FALSE;
+if (!isset($EVAL_AUSWERTUNG_GRAPH_FORMAT)) $EVAL_AUSWERTUNG_GRAPH_FORMAT = 'jpg';
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 
@@ -310,7 +311,7 @@ function groups ($parent_id) {
 					if (!($freetype)) {
 	 					fputs($fo_file,"          <fo:table-cell ><fo:block start-indent=\"3mm\" end-indent=\"3mm\" padding-left=\"3mm\" padding-right=\"3mm\" padding-top=\"4mm\" padding-bottom=\"4mm\">\n");	
 						if (do_template("show_graphics")) {
-	 						fputs($fo_file,"            <fo:external-graphic content-width=\"70pt\" content-height=\"60pt\" src=\"url(".$TMP_PATH."/export/evalsum".$db_questions->f("evalquestion_id").$auth->auth["uid"].".jpg)\"/>\n");
+	 						fputs($fo_file,"            <fo:external-graphic content-width=\"70pt\" content-height=\"60pt\" src=\"url(".$TMP_PATH."/export/evalsum".$db_questions->f("evalquestion_id").$auth->auth["uid"].".".$GLOBALS['EVAL_AUSWERTUNG_GRAPH_FORMAT'].")\"/>\n");
 						}	
 	 					fputs($fo_file,"          </fo:block></fo:table-cell>\n");	
 	 				}
