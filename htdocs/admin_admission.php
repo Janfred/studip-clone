@@ -207,6 +207,9 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 			$errormsg=$errormsg."error§"._("Gruppierte Veranstaltungen m&uuml;ssen das chronologische Anmeldeverfahren haben! Bei gruppierten Veranstaltungen können Sie das Anmeldeverfahren nicht mehr ändern.")."§";
 		} else {
 			$admin_admission_data["admission_type"]=0;
+			$admin_admission_data["sem_admission_end_date"]=-1;
+			$admin_admission_data["sem_admission_start_date"]=-1;
+			$admin_admission_data["admission_endtime"]=-1;
 		}
 	if ($adm_los_x)
 		if ($is_grouped) {
@@ -223,7 +226,7 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 	if ($admin_admission_data["admission_binding"])
 		$admin_admission_data["admission_binding"]=TRUE;
 	settype($admin_admission_data["admission_binding"], integer);
-		
+
 	$admin_admission_data["admission_turnout"]=$admission_turnout;	
 
 	$admin_admission_data["admission_prelim_txt"]=$admission_prelim_txt;
