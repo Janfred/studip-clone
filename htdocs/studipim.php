@@ -148,7 +148,7 @@ if (!$my_messaging_settings["show_only_buddys"]) {
 		printf ("&nbsp;<a href=\"javascript:coming_home('online.php')\"><font size=-1>" . _("Wer?") . "</font></a>");		
 	}
 	elseif((sizeof($online)-$c) > 1) {
-		printf ("<tr><td class=\"blank\" colspan=2 align=\"left\"><font size=-1>" . _("Es sind %s anderere Nutzer online.") , sizeof($online)-$c);
+		printf ("<tr><td class=\"blank\" colspan=2 align=\"left\"><font size=-1>" . _("Es sind %s andere Nutzer online.") , sizeof($online)-$c);
 		printf ("&nbsp;<a href=\"javascript:coming_home('online.php')\"><font size=-1>" . _("Wer?") . "</font></a>");		
 	}
 }
