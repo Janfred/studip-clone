@@ -288,36 +288,36 @@ function veranstaltung_beginn ($seminar_id='', $art='', $semester_start_time='',
 			} else {
 				$return_string.=date ("d.m.Y", $term_data["start_termin"]);
 				$return_int=$term_data["start_termin"];
-			}
-			//just an algorhytmus to fit the given start_termin (only a date without hour an minute!) to given meta_dates, if they are on the same day
-			if (is_array($term_data["turnus_data"]))
-				foreach ($term_data["turnus_data"] as $val) {
-					$dow = $val["day"];
-					if ($dow == 7)
-						$dow=0;
-					if ($dow == date("w", $term_data["start_termin"])) {
-						if ($val["start_stunde"]) {
-							$return_string.=", ". $val["start_stunde"]. ":"; 
-							if (($val["start_minute"] > 0)  &&  ($val["start_minute"] < 10))
-								$return_string.="0". $val["start_minute"];
-							elseif ($val["start_minute"] > 10)
-								$return_string.=$val["start_minute"];
-							if (!$val["start_minute"])
-								$return_string.="00";
-							if (!(($val["end_stunde"] != $val["start_stunde"]) && ($val["end_minute"] !=$val["start_minute"]))) {
-								$return_string.= " - ". $val["end_stunde"]. ":";
-								if (($val["end_minute"] > 0)  &&  ($val["end_minute"] < 10))
-									$return_string.="0".$val["end_minute"];
-								elseif ($val["end_minute"] > 10)
-									$return_string.=$val["end_minute"];
-								if (!$val["end_minute"])
+				//just an algorhytmus to fit the given start_termin (only a date without hour an minute!) to given meta_dates, if they are on the same day
+				if (is_array($term_data["turnus_data"]))
+					foreach ($term_data["turnus_data"] as $val) {
+						$dow = $val["day"];
+						if ($dow == 7)
+							$dow=0;
+						if ($dow == date("w", $term_data["start_termin"])) {
+							if ($val["start_stunde"]) {
+								$return_string.=", ". $val["start_stunde"]. ":"; 
+								if (($val["start_minute"] > 0)  &&  ($val["start_minute"] < 10))
+									$return_string.="0". $val["start_minute"];
+								elseif ($val["start_minute"] > 10)
+									$return_string.=$val["start_minute"];
+								if (!$val["start_minute"])
 									$return_string.="00";
-								}	
+								if (!(($val["end_stunde"] != $val["start_stunde"]) && ($val["end_minute"] !=$val["start_minute"]))) {
+									$return_string.= " - ". $val["end_stunde"]. ":";
+									if (($val["end_minute"] > 0)  &&  ($val["end_minute"] < 10))
+										$return_string.="0".$val["end_minute"];
+									elseif ($val["end_minute"] > 10)
+										$return_string.=$val["end_minute"];
+									if (!$val["end_minute"])
+										$return_string.="00";
+									}	
+								}
+							break;
 							}
-						break;
 						}
-					}
 				}
+			}
 		}
 	//Unregelmaessige Termine, also konkrete Termine aus Termintabelle
 	else {

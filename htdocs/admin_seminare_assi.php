@@ -937,16 +937,21 @@ if (($form == 3) && ($jump_next_x))
 
 		//check for room management: we dont allow the preliminary discussion matches a turnus date (in this case, a schedule schoudl be used!)
 		if ((!$sem_create_data["term_art"]) && ($RESOURCES_ENABLE)) {
-			$tmp_vor_day = date("w", $sem_create_data["sem_vor_termin"]);
-			if ($tmp_vor_day == 0)
-				$tmp_vor_day = 7;
-			for ($i=0; $i<$sem_create_data["turnus_count"]; $i++) {
-				if (($sem_create_data["term_turnus_start_stunde"][$i] == $vor_stunde) &&
-					($sem_create_data["term_turnus_end_stunde"][$i] == $vor_end_stunde) &&
-					($sem_create_data["term_turnus_start_minute"][$i] == $vor_start_minute) &&
-					($sem_create_data["term_turnus_end_minute"][$i] == $vor_end_minute) &&
-					($sem_create_data["term_turnus_date"][$i] == $tmp_vor_day))
-					$errormsg=$errormsg."error§"._("Der Termin f&uuml;r die Vorbesprechung findet zu den gleichen Zeiten wie die Veranstaltung statt. Bitte legen Sie in diesem Fall einen Ablaufplan in einem sp&auml;teren Schritt an und &auml;ndern einen Termin in den Typ \"Vorbesprechung\"")."§";
+			$sem_start_timestamp = veranstaltung_beginn($sem_create_data["term_art"],$sem_create_data["sem_start_time"],$sem_create_data['term_start_woche'],$sem_create_data['sem_start_termin'],$sem_create_data['metadata_termin']['turnus_data'],1,1);
+			if ($sem_start_timestamp > 0 && $sem_create_data["sem_vor_termin"] >= $sem_start_timestamp){
+				$tmp_vor_day = date("w", $sem_create_data["sem_vor_termin"]);
+				if ($tmp_vor_day == 0)
+					$tmp_vor_day = 7;
+				for ($i=0; $i<$sem_create_data["turnus_count"]; $i++) {
+					if (($sem_create_data["term_turnus_start_stunde"][$i] == $vor_stunde) &&
+						($sem_create_data["term_turnus_end_stunde"][$i] == $vor_end_stunde) &&
+						($sem_create_data["term_turnus_start_minute"][$i] == $vor_minute) &&
+						($sem_create_data["term_turnus_end_minute"][$i] == $vor_end_minute) &&
+						($sem_create_data["term_turnus_date"][$i] == $tmp_vor_day)){
+							$errormsg=$errormsg."error§"._("Der Termin f&uuml;r die Vorbesprechung findet zu den gleichen Zeiten wie die Veranstaltung statt. Bitte legen Sie in diesem Fall einen Ablaufplan in einem sp&auml;teren Schritt an und &auml;ndern einen Termin in den Typ \"Vorbesprechung\"")."§";
+							break;
+						}
+				}
 			}
 		}
 	}
