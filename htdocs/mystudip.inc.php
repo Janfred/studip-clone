@@ -154,7 +154,7 @@ function change_general_view() {
 					<td  align="right" class="blank" style="border-bottom:1px dotted black;">
 						<font size="-1"><?print _("Tastenkombinationen f&uuml;r Hauptfunktionen");?></font><br />
 						<br><div align="left"><font size="-1">
-						<?print _("Mit dieser Einstellung k&ouml;nnen Sie f&uuml;r die meisten in der Kopfzeile erreichbaren Hauptfunktionen eine Bedienung &uuml;ber Tastenkombinationen aktivieren. <br>Die Tastenkombination wird im Tooltip des jweiligen Icons angezeigt.");?>
+						<?print _("Mit dieser Einstellung k&ouml;nnen Sie f&uuml;r die meisten in der Kopfzeile erreichbaren Hauptfunktionen eine Bedienung &uuml;ber Tastenkombinationen aktivieren. <br>Die Tastenkombination wird im Tooltip des jeweiligen Icons angezeigt.");?>
 						</font></div>
 					</td>
 					<td <?=$cssSw->getFullClass()?>>
