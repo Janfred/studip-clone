@@ -47,8 +47,11 @@ ob_start();
 
 $online = get_users_online($my_messaging_settings['active_time']);
 
-if ($sms_msg)
-	$msg=rawurldecode($sms_msg);
+if ($sms_msg) {
+	$msg = $sms_msg;
+	$sms_msg = '';
+	$sess->unregister('sms_msg');
+}
 
 if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 	change_messaging_view();

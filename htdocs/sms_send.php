@@ -131,15 +131,16 @@ if ($cmd_insert_x) {
 	} else if ((!$count) && (!$group_count)) {
 		$msg = "error§" . _("Ihre Nachricht konnte nicht gesendet werden.");
 	}
-		
-	$sms_msg = rawurlencode ($msg);
-
+	
+	if (!preg_match('/^[a-zA-Z0-9_-]+\.php$/',$sms_source_page)) $sms_source_page = '';
 	if ($sms_source_page) {
-
+		$sess->register('sms_msg');
+		$sms_msg = $msg;
+		$sess->freeze();
 		if ($sms_source_page == "about.php") {
-			$header_info = "Location: ".$sms_source_page."?username=".$sms_data["p_rec"][0]."&sms_msg=".$sms_msg;
+			$header_info = "Location: ".$sms_source_page."?username=".$sms_data["p_rec"][0];
 		} else {
-			$header_info = "Location: ".$sms_source_page."?sms_msg=".$sms_msg;
+			$header_info = "Location: ".$sms_source_page;
 		}
 		header ($header_info);
 		die;
@@ -194,7 +195,7 @@ if ($group_id) {
 	if (is_array($add_group_members)) {
 		$sms_data["p_rec"] = array_add_value($add_group_members, $sms_data["p_rec"]);
 	} else {
-		$sms_msg = "error§"._("Die gewählte Adressbuchgruppe enthält keine Mitglieder.");
+		$msg = "error§"._("Die gewählte Adressbuchgruppe enthält keine Mitglieder.");
 		unset($sms_data["p_rec"]);
 	}
 	
@@ -647,9 +648,9 @@ if ($send_view) {
 </tr>
 <tr>	
 	<td class="blank" valign="top" align="center"> <?
-	if ($sms_msg) {
+	if ($msg) {
 		print ("<table cellpadding=\"5\" cellspacing=\"0\" border=\"0\" width=\"99%\"><tr><td valign=\"top\">");
-		parse_msg (rawurldecode($sms_msg));
+		parse_msg ($msg);
 		print ("</td></tr></table>");
 	}
 

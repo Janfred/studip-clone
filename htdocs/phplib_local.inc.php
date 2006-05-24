@@ -31,6 +31,16 @@ if (!defined('PHPLIB_SESSIONDATA_TABLE')){
 }
 //end compat
 
+//
+$_never_globalize_request_params = array('msg','_msg','errormsg','meldung','sms_msg','_html_head_title','_include_stylesheet',
+									'_include_extra_stylesheet','_include_additional_header'
+									);
+foreach($_never_globalize_request_params as $one_param){
+	if (isset($_REQUEST[$one_param])){
+		unset($GLOBALS[$one_param]);
+	}
+}
+
 require_once("$ABSOLUTE_PATH_STUDIP/language.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/auth_plugins/StudipAuthAbstract.class.php");
 require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/Config.class.php");

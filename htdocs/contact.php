@@ -160,7 +160,9 @@ if ($search_exp) {
 echo "</form></td></tr>";
 
 if ($sms_msg)	{
-	parse_msg (rawurldecode($sms_msg));
+	parse_msg ($sms_msg);
+	$sms_msg = '';
+	$sess->unregister('sms_msg');
 	}
 ?>
 </table>

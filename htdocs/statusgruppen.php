@@ -208,8 +208,11 @@ if ($delete_id)
 		<td class="blank" valign="top">
 		<table cellspacing="0" cellpadding="0" border="0" width="100%">
 	<?
-	if ($sms_msg)
-		parse_msg (rawurldecode($sms_msg));
+	if ($sms_msg){
+		parse_msg ($sms_msg);
+		$sms_msg = '';
+		$sess->unregister('sms_msg');
+	}
 	?>	
 	<tr valign="top">
      <td width="90%" NOWRAP class="blank">

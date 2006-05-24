@@ -68,8 +68,10 @@ if ($reset)
 if ($sms_msg)
 	{
 	echo"<tr><td class=\"blank\"colspan=2><br>";
-	parse_msg (rawurldecode($sms_msg));
+	parse_msg ($sms_msg);
 	echo"</td></tr>";
+	$sms_msg = '';
+	$sess->unregister('sms_msg');
 	}
 ?>
 <tr>

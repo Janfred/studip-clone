@@ -86,7 +86,8 @@ $db3 = new DB_Seminar;
 $semester = new SemesterData;
 
 $sess->register("about_data");
-$msging=new messaging;
+$msging = new messaging;
+$msg = "";
 
 //Buddie hinzufuegen
 if ($cmd=="add_user")
@@ -103,8 +104,11 @@ if ($dclose)
 //Auf und Zuklappen News
 process_news_commands($about_data);
 
-if ($sms_msg)
-$msg=rawurldecode($sms_msg);
+if ($sms_msg) {
+	$msg = $sms_msg;
+	$sms_msg = '';
+	$sess->unregister('sms_msg');
+}
 
 //Wenn kein Username uebergeben wurde, wird der eigene genommen:
 if (!isset($username) || $username == "")
@@ -403,6 +407,7 @@ while ($db2->next_record())  {
 if ($perm->get_perm($user_id) == 'dozent'){
 	$all_semester = SemesterData::GetSemesterArray();
 	$view = new DbView();
+	$output = '';
 	for ($i = count($all_semester)-1; $i >= 0; --$i){
 		$view->params[0] = $user_id;
 		$view->params[1] = "dozent";

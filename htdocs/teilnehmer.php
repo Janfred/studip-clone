@@ -46,8 +46,11 @@ include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
 $messaging=new messaging;
 $cssSw=new cssClassSwitcher;
 
-if ($sms_msg)
-	$msg=rawurldecode($sms_msg);
+if ($sms_msg) {
+	$msg = $sms_msg;
+	$sms_msg = '';
+	$sess->unregister('sms_msg');
+}
 
 // Aenderungen nur in dem Seminar, in dem ich gerade bin...
 	$id=$SessSemName[1];

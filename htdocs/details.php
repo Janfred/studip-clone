@@ -47,7 +47,10 @@ $db=new DB_Seminar;
 $db2=new DB_Seminar;
 $db3=new DB_Seminar;
 $db4=new DB_Seminar;
-
+$info_msg = $abo_msg = $delete_msg = $back_msg = '';
+$send_from_search = (int)isset($send_from_search);
+if (!(preg_match('/^('.preg_quote($CANONICAL_RELATIVE_PATH_STUDIP,'/').')([a-zA-Z0-9_-]+\.php)([a-zA-Z0-9_?&=-]*)$/', $send_from_search_page)
+	|| preg_match('/^([a-zA-Z0-9_-]+\.php)([a-zA-Z0-9_?&=-]*)$/', $send_from_search_page))) $send_from_search_page = '';
 
 //wenn kein Seminar gesetzt und auch kein externer Aufruf raus....
 if (!isset($sem_id)) {

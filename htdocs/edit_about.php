@@ -71,7 +71,7 @@ function about($username,$msg) {  // Konstruktor, prüft die Rechte
 	$this->db = new DB_Seminar;
 	$this->get_auth_user($username);
 	$this->DataFields = new DataFields($this->auth_user["user_id"]);	
-	$this->msg = rawurldecode($msg); //Meldungen restaurieren
+	$this->msg = $msg; //Meldungen restaurieren
 	
 	// der user selbst natürlich auch
 	if ($auth->auth["uname"] == $username AND $perm->have_perm("autor"))
@@ -708,12 +708,19 @@ function move ($inst_id, $direction) {
 
 // hier gehts los
 if (!$username) $username = $auth->auth["uname"];
-
+if($edit_about_msg){
+	$msg = $edit_about_msg;
+	$edit_about_msg = '';
+	$sess->unregister('edit_about_msg');
+}
+if($nobodymsg && $logout && $auth->auth["uid"] == "nobody"){
+	$msg = $nobodymsg;
+}
 $my_about = new about($username,$msg);
 $cssSw = new cssClassSwitcher;
 $DataFields = new DataFields($my_about->auth_user["user_id"]);
 
-if ($logout)  // wir wurden gerade ausgeloggt...
+if ($logout && $auth->auth["uid"] == "nobody")  // wir wurden gerade ausgeloggt...
 	{
 	
 	// Start of Output
@@ -819,10 +826,10 @@ if(check_ticket($ticket)){
 		$sess->delete();  // User logout vorbereiten
 		$auth->logout();
 		$timeout=(time()-(15 * 60));
-		$user->set_last_action($timeout);
-		$msg = rawurlencode($my_about->msg);
-		header("Location: $PHP_SELF?username=$username&msg=$msg&logout=1&view=$view"); //Seite neu aufrufen, damit user nobody wird...
+		$nobodymsg = rawurlencode($my_about->msg);
 		page_close();
+		$user->set_last_action($timeout);
+		header("Location: $PHP_SELF?username=$username&nobodymsg=$nobodymsg&logout=1&view=$view"); //Seite neu aufrufen, damit user nobody wird...
 		die;
 		}
 	
@@ -834,8 +841,9 @@ if(check_ticket($ticket)){
 			restoreLanguage();
 			$my_about->insert_message($priv_msg, $my_about->auth_user["username"], "____%system%____", FALSE, FALSE, "1", FALSE, _("Systemnachricht:")." "._("persönliche Homepage verändert"));
 		}
-		$msg = rawurlencode($my_about->msg);
-		header("Location: $PHP_SELF?username=$username&msg=$msg&view=$view");  //Seite neu aufrufen, um Parameter loszuwerden
+		$sess->register('edit_about_msg');
+		$edit_about_msg = $my_about->msg;
+		header("Location: $PHP_SELF?username=$username&view=$view");  //Seite neu aufrufen, um Parameter loszuwerden
 		page_close();
 		die;
 	}

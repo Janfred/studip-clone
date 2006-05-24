@@ -313,6 +313,8 @@ if ($sms_msg) {
 	echo "<tr><td class=\"blank\">";
 	echo "<img src=\"pictures/blank.gif\" width=\"1\" height=\"5\"></td></tr>\n";
 	parse_msg($sms_msg, "§", "blank", 1, FALSE);
+	$sms_msg = '';
+	$sess->unregister('sms_msg');
 }
 	
 echo "\n<tr><td class=\"blank\"><br /><blockquote>\n";
