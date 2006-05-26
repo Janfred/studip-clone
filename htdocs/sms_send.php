@@ -449,8 +449,8 @@ function show_msgform() {
 
 	$tmp .= "<br>&nbsp;<font size=\"-1\"><b>"._("Nachricht:")."</b></font>";
 	$tmp .= "<div align=\"center\"><textarea name=\"message\" style=\"width: 99%\" cols=80 rows=10 wrap=\"virtual\">\n";
-	if ($quote) { $tmp .= quotes_encode($tmp_sms_content, get_fullname_from_uname($quote_username)); }
-	if ($message) { $tmp .= stripslashes($message); }
+	if ($quote) { $tmp .= quotes_encode(htmlReady($tmp_sms_content), get_fullname_from_uname($quote_username)); }
+	if ($message) { $tmp .= htmlReady(stripslashes($message)); }
 	$tmp .= "</textarea>\n<br><br>";	
 	// send/ break-button
 	if (sizeof($sms_data["p_rec"]) > "0") { $tmp .= "<input type=\"image\" ".makeButton("abschicken", "src")." name=\"cmd_insert\" border=0 align=\"absmiddle\">"; }
@@ -862,7 +862,7 @@ if ($send_view) {
 
 	if($GLOBALS["MESSAGING_FORWARD_AS_EMAIL"] == TRUE) {
 		if($sms_data["tmpemailsnd"] == 1) {
-			$emailforwardinfo .= _("Die Nachricht wird auch als E-Mail weitergeleitet, sofern die EmpfängerIn sich nicht ausdrücklich gegen die E-Mail-Weiterleitung entschieden hat.");
+			$emailforwardinfo = _("Die Nachricht wird auch als E-Mail weitergeleitet, sofern die EmpfängerIn sich nicht ausdrücklich gegen die E-Mail-Weiterleitung entschieden hat.");
 		} else {
 			$emailforwardinfo = _("Ihre Nachricht wird nicht auch als Email versand.");
 		}

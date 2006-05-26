@@ -55,6 +55,7 @@ if ($GLOBALS['CHAT_ENABLE']){
 $sess->register("sms_data");
 $sess->register("sms_show");
 $msging = new messaging;
+$query_showfolder = $query_time_sort = $query_movetofolder = $query_time = '';
 
 // need kontact to mothership
 $db = new DB_Seminar;
@@ -205,7 +206,7 @@ if ($delete_folder && $delete_folder_button_x) {
 		$tmp_sndrec = "snd";
 	}
 	$msg = "msg§".sprintf(_("Der Ordner %s wurde gelöscht."), htmlready(stripslashes(return_val_from_key($my_messaging_settings["folder"][$sms_data["view"]], $delete_folder))));
-	$query = "UPDATE message_user SET folder='' WHERE folder='".$delete_folder."' AND snd_rec='".$tmp_sndrec."'";
+	$query = "UPDATE message_user SET folder='' WHERE folder='".$delete_folder."' AND snd_rec='".$tmp_sndrec."' AND user_id='{$user->id}'";
 	$db->query($query);
 	$my_messaging_settings["folder"][$sms_data["view"]][$delete_folder] = "dummy";
 }
