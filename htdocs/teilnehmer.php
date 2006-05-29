@@ -61,6 +61,8 @@ $db3=new DB_Seminar;
 $db4=new DB_Seminar;
 $db5=new DB_Seminar;
 
+$csv_not_found = array();
+
 echo "<table cellspacing=\"0\" border=\"0\" width=\"100%\">";
 
 /*
@@ -117,18 +119,6 @@ if ((($cmd == "moreinfos") || ($cmd == "lessinfos")) && ($rechte)) {
 	sort ($open_users);
 }
 
-// edit special seminar_info of an user
-
-if ($cmd == "change_userinfo") {
-	//first we have to check if he is really "Dozent" of this seminar
-	if ($rechte) {
-		$db->query("UPDATE admission_seminar_user SET comment = '$userinfo' WHERE seminar_id = '$id' AND user_id = '$user_id'");
-		$db->query("UPDATE seminar_user SET comment = '$userinfo' WHERE Seminar_id = '$id' AND user_id = '$user_id'");
-		$msg = "msg§" . _("Die Zusatzinformationen wurden ge&auml;ndert.") . "§";
-	}
-	$cmd = "moreinfos";
-}
-
 // Aktivitaetsanzeige an_aus
 
 if ($cmd=="showscore") {
@@ -147,325 +137,336 @@ if ($cmd=="hidescore") {
 	}
 }
 
-// Hier will jemand die Karriereleiter rauf...
-
-if ($cmd=="pleasure") {
-	//erst mal sehen, ob er hier wirklich Dozent ist... Tutoren d&uuml;rfen andere nicht zu Tutoren befoerdern!
-	if ($rechte AND $SemUserStatus!="tutor")  {
-		$db->query("SELECT " . $_fullname_sql['full'] . " AS fullname, a.* FROM auth_user_md5 a LEFT JOIN user_info USING (user_id) WHERE username = '$username' AND perms!='user' AND perms!='autor'");
-		if ($db->next_record()) {
-			$userchange=$db->f("user_id");
-			$fullname = $db->f("fullname");
-			$db->query("UPDATE seminar_user SET status='tutor' WHERE Seminar_id = '$id' AND user_id = '$userchange' AND status='autor'");
-			$msg = "msg§" . sprintf(_("Bef&ouml;rderung von %s durchgef&uuml;hrt"), htmlReady($fullname)) . "§";
+if (Seminar_Session::check_ticket($ticket)){
+	// edit special seminar_info of an user
+	if ($cmd == "change_userinfo") {
+		//first we have to check if he is really "Dozent" of this seminar
+		if ($rechte) {
+			$db->query("UPDATE admission_seminar_user SET comment = '$userinfo' WHERE seminar_id = '$id' AND user_id = '$user_id'");
+			$db->query("UPDATE seminar_user SET comment = '$userinfo' WHERE Seminar_id = '$id' AND user_id = '$user_id'");
+			$msg = "msg§" . _("Die Zusatzinformationen wurden ge&auml;ndert.") . "§";
 		}
-		else $msg ="error§" . _("Netter Versuch! vielleicht beim n&auml;chsten Mal!") . "§";
+		$cmd = "moreinfos";
 	}
-	else $msg ="error§" . _("Netter Versuch! vielleicht beim n&auml;chsten Mal!") . "§";
-}
-
-// jemand ist der anspruchsvollen Aufgabe eines Tutors nicht gerecht geworden...
-
-if ($cmd=="pain") {
-	//erst mal sehen, ob er hier wirklich Dozent ist... Tutoren d&uuml;rfen andere Tutoren nicht rauskicken!
-	if ($rechte AND $SemUserStatus!="tutor") {
-		$db->query("SELECT " . $_fullname_sql['full'] . " AS fullname, a.* FROM auth_user_md5 a LEFT JOIN user_info USING (user_id) WHERE username = '$username'");
-		$db->next_record();
-		$userchange=$db->f("user_id");
-		$fullname = $db->f("fullname");
-		$db->query("UPDATE seminar_user SET status='autor' WHERE Seminar_id = '$id' AND user_id = '$userchange' AND status='tutor'");
-		if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
-			$msg = "msg§" . sprintf (_("Das Mitglied %s wurde entlassen und auf den Status 'Autor' zur&uuml;ckgestuft."), htmlReady($fullname)) . "§";
-		} else {
-			$msg = "msg§" . sprintf (_("Der/die TutorIn %s wurde entlassen und auf den Status 'Autor' zur&uuml;ckgestuft."), htmlReady($fullname)) . "§";
-		}
-	}
-	else $msg ="error§" . _("Netter Versuch! vielleicht beim n&auml;chsten Mal!") . "§";
-}
-
-// jemand ist zu bloede, sein Seminar selbst zu abbonieren...
-
-if ($cmd=="schreiben") {
-	//erst mal sehen, ob er hier wirklich Dozent ist...
-	if ($rechte) {
-		$db->query("SELECT " . $_fullname_sql['full'] . " AS fullname, a.* FROM auth_user_md5 a LEFT JOIN user_info USING (user_id) WHERE username = '$username' AND perms != 'user'");
-		if ($db->next_record()) {
-			$userchange=$db->f("user_id");
-			$fullname = $db->f("fullname");
-			$db->query("UPDATE seminar_user SET status='autor' WHERE Seminar_id = '$id' AND user_id = '$userchange' AND status='user'");
-			$msg = "msg§" . sprintf(_("User %s wurde als Autor in die Veranstaltung aufgenommen."), htmlReady($fullname)) . "§";
-		}
-		else $msg ="error§" . _("Netter Versuch! vielleicht beim n&auml;chsten Mal!") . "§";
-	}
-	else $msg ="error§" . _("Netter Versuch! vielleicht beim n&auml;chsten Mal!") . "§";
-}
-
-// jemand sollte erst mal das Maul halten...
-
-if ($cmd=="lesen") {
-	//erst mal sehen, ob er hier wirklich Dozent ist...
-	if ($rechte) {
-		$db->query("SELECT " . $_fullname_sql['full'] . " AS fullname, a.* FROM auth_user_md5 a LEFT JOIN user_info USING (user_id) WHERE username = '$username'");
-		$db->next_record();
-		$userchange=$db->f("user_id");
-		$fullname = $db->f("fullname");
-		$db->query("UPDATE seminar_user SET status='user' WHERE Seminar_id = '$id' AND user_id = '$userchange' AND status='autor'");
-		$msg = "msg§" . sprintf(_("Der/die AutorIn %s wurde auf den Status 'Leser' zur&uuml;ckgestuft."), htmlReady($fullname)) . "§";
-		$msg.= "info§" . _("Um jemanden permanent am Schreiben zu hindern, m&uuml;ssen Sie die Veranstaltung auf \"Schreiben nur mit Passwort\" setzen und ein Veranstaltungs-Passwort vergeben.") . "<br>\n"
-				. _("Dann k&ouml;nnen sich weitere BenutzerInnen nur noch mit Kenntnis des Veranstaltungs-Passworts als 'Autor' anmelden.") . "§";
-	}
-	else $msg ="error§" . _("Netter Versuch! vielleicht beim n&auml;chsten Mal!") . "§";
-}
-
-// und tschuess...
-
-if ($cmd=="raus") {
-	//erst mal sehen, ob er hier wirklich Dozent ist...
-	if ($rechte) {
-		$db->query("SELECT " . $_fullname_sql['full'] . " AS fullname, a.* FROM auth_user_md5 a LEFT JOIN user_info USING (user_id) WHERE username = '$username'");
-		$db->next_record();
-		$userchange=$db->f("user_id");
-		$fullname = $db->f("fullname");
-		$db->query("DELETE FROM seminar_user WHERE Seminar_id = '$id' AND user_id = '$userchange' AND status='user'");
-
-		setTempLanguage($userchange);
-		if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
-			$message= sprintf(_("Ihr Abonnement der Veranstaltung **%s** wurde von einem/r LeiterIn oder AdministratorIn aufgehoben."), $SessSemName[0]);
-		} else {
-			$message= sprintf(_("Ihr Abonnement der Veranstaltung **%s** wurde von einem/r DozentIn oder AdministratorIn aufgehoben."), $SessSemName[0]);
-		}
-		restoreLanguage();
-
-		$messaging->insert_message($message, $username, "____%system%____", FALSE, FALSE, "1", FALSE, _("Systemnachricht:")." "._("Abonnement aufgehoben"), TRUE);
-
-		// raus aus allen Statusgruppen
-		RemovePersonStatusgruppeComplete ($username, $id);
-
-		//Pruefen, ob es Nachruecker gibt
-		update_admission($id);
-
-		$msg = "msg§" . sprintf(_("LeserIn %s wurde aus der Veranstaltung entfernt."), htmlReady($fullname)) . "§";
-		$msg.= "info§" . _("Um jemanden permanent am Lesen zu hindern, m&uuml;ssen Sie die Veranstaltung auf \"Lesen nur mit Passwort\" setzen und ein Veranstaltungs-Passwort vergeben.") . "<br>\n"
-				. _("Dann k&ouml;nnen sich weitere BenutzerInnen nur noch mit Kenntnis des Veranstaltungs-Passworts anmelden.") . "§";
-	}
-	else $msg ="error§" . _("Netter Versuch! vielleicht beim n&auml;chsten Mal!") . "§";
-}
-
-//aus der Anmelde- oder Warteliste entfernen
-if ($cmd=="admission_raus") {
-	//erst mal sehen, ob er hier wirklich Dozent ist...
-	if ($rechte) {
-		$db->query("SELECT " . $_fullname_sql['full'] . " AS fullname, a.* FROM auth_user_md5 a LEFT JOIN user_info USING (user_id) WHERE username = '$username'");
-		$db->next_record();
-		$userchange=$db->f("user_id");
-		$fullname = $db->f("fullname");
-		$db->query("DELETE FROM admission_seminar_user WHERE seminar_id = '$id' AND user_id = '$userchange'");
-
-		setTempLanguage($userchange);
-		if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
-			if (!$accepted) {
-				$message= sprintf(_("Sie wurden vom einem/r LeiterIn oder AdministratorIn von der Warteliste der Veranstaltung **%s** gestrichen und sind damit __nicht__ zugelassen worden."), $SessSemName[0]);
-			} else {
-				 $message= sprintf(_("Sie wurden vom einem/r LeiterIn oder AdministratorIn aus der Veranstaltung **%s** gestrichen und sind damit __nicht__ zugelassen worden."), $SessSemName[0]);
-			}
-		} else {
-			if (!$accepted) {
-				$message= sprintf(_("Sie wurden vom einem/r DozentIn oder AdministratorIn von der Warteliste der Veranstaltung **%s** gestrichen und sind damit __nicht__ zugelassen worden."), $SessSemName[0]);
-			} else {
-				 $message= sprintf(_("Sie wurden vom einem/r DozentIn oder AdministratorIn aus der Veranstaltung **%s** gestrichen und sind damit __nicht__ zugelassen worden."), $SessSemName[0]);
-			}
-		}
-		restoreLanguage();
-
-		$messaging->insert_message($message, $username, "____%system%____", FALSE, FALSE, "1", FALSE, _("Systemnachricht:")." "._("nicht zugelassen in Veranstaltung"), TRUE);
-
-		//Warteliste neu sortieren
-		renumber_admission($id);
-		if ($accepted)
-			update_admission($id);
-
-		$msg = "msg§" . sprintf(_("LeserIn %s wurde aus der Anmelde bzw. Warteliste entfernt."), htmlReady($fullname)) . "§";
-	}
-	else $msg ="error§" . _("Netter Versuch! vielleicht beim n&auml;chsten Mal!") . "§";
-}
-
-//aus der Anmelde- oder Warteliste in die Veranstaltung hochstufen / aus der freien Suche als Tutoren oder Autoren eintragen
-if ((($cmd=="admission_rein") || ($cmd=="add_user")) && ($username)){
-	//erst mal sehen, ob er hier wirklich Dozent ist...
-	if ($rechte) {
-
-		$db->query("SELECT " . $_fullname_sql['full'] . " AS fullname, a.* FROM auth_user_md5 a LEFT JOIN user_info USING (user_id) WHERE username = '$username'");
-		$db->next_record();
-		$userchange=$db->f("user_id");
-		$fullname = $db->f("fullname");
-
-		$status = (!$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["only_inst_user"] && (($db->f("perms") == "tutor" || $db->f("perms") == "dozent")) && ($perm->have_studip_perm("dozent", $id))) ? "tutor" : "autor";
-
-		if ($cmd == "add_user") $status="autor"; // otherwise, students with GLOBAL status tutor immediately have the status of a tutor in this seminar. Makes no sense!
-		//But: perhaps a better solution?
-
-		$admission_user = insert_seminar_user($id, $userchange, $status, ($accepted) ? TRUE : FALSE);
-		//Only if user was on the waiting list
-		if ($admission_user) {
-			setTempLanguage($userchange);
-			if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
-				if (!$accepted) {
-					$message = sprintf(_("Sie wurden vom einem/r LeiterIn oder AdministratorIn aus der Warteliste in die Veranstaltung **%s** aufgenommen und sind damit zugelassen."), $SessSemName[0]);
-				} else {
-					$message = sprintf(_("Sie wurden von einem/r LeiterIn oder AdministratorIn zum/r TeilnehmerIn der Veranstaltung **%s** hochgestuft und sind damit zugelassen."), $SessSemName[0]);
-				}
-			} else {
-				if (!$accepted) {
-					$message = sprintf(_("Sie wurden vom einem/r DozentIn oder AdministratorIn aus der Warteliste in die Veranstaltung **%s** aufgenommen und sind damit zugelassen."), $SessSemName[0]);
-				} else {
-				 	$message = sprintf(_("Sie wurden von einem/r DozentIn oder AdministratorIn vom Status **vorläufig akzeptiert** zum/r TeilnehmerIn der Veranstaltung **%s** hochgestuft und sind damit zugelassen."), $SessSemName[0]);
-				}
-			}
-			restoreLanguage();
-			$messaging->insert_message($message, $username, "____%system%____", FALSE, FALSE, "1", FALSE, _("Systemnachricht:")." "._("Eintragung in Veranstaltung"), TRUE);
-		}
-
-		//Warteliste neu sortieren
-		renumber_admission($id);
-
-		if ($cmd=="add_user")
-			$msg = "msg§" . sprintf(_("NutzerIn %s wurde in die Veranstaltung mit dem Status <b>%s</b> eingetragen."), htmlReady($fullname), $status) . "§";
-		else
-			if (!$accepted) {
-				$msg = "msg§" . sprintf(_("NutzerIn %s wurde aus der Anmelde bzw. Warteliste mit dem Status <b>%s</b> in die Veranstaltung eingetragen."), htmlReady($fullname), $status) . "§";
-			} else {
-				$msg = "msg§" . sprintf(_("NutzerIn %s wurde mit dem Status <b>%s</b> endgültig akzeptiert und damit in die Veranstaltung aufgenommen."), htmlReady($fullname), $status) . "§";
-			}
-	}
-	else $msg ="error§" . _("Netter Versuch! vielleicht beim n&auml;chsten Mal!") . "§";
-}
-
-// import users from a csv-list
-$csv_not_found = array();
-if ($_REQUEST['cmd'] == 'csv') {
-	$csv_mult_founds = array();
-	$csv_count_insert = 0;
-	$csv_count_multiple = 0;
-	if ($_REQUEST['csv_import']) {
-		$csv_lines = preg_split('/(\n\r|\r\n|\n|\r)/', trim($_REQUEST['csv_import']));
-		foreach ($csv_lines as $csv_line) {
-			$csv_name = preg_split('/[,\t]/', substr($csv_line, 0, 100),-1,PREG_SPLIT_NO_EMPTY);
-			$csv_nachname = trim($csv_name[0]);
-			$csv_vorname = trim($csv_name[1]);
-			if ($csv_nachname){
-				$db->query("SELECT a.user_id, username, " . $_fullname_sql['full_rev'] ." AS fullname, perms FROM auth_user_md5 a ".
-				"LEFT JOIN user_info USING(user_id) LEFT JOIN seminar_user b ON (b.user_id=a.user_id AND b.seminar_id='$SessSemName[1]')  ".
-				"WHERE perms IN ('autor','tutor','dozent') AND ISNULL(b.seminar_id) AND ".
-				"(Nachname LIKE '" . $csv_nachname . "'"
-				. ($csv_vorname ? " AND Vorname LIKE '" . $csv_vorname . "'" : '')
-				. ") ORDER BY Nachname");
-				if ($db->num_rows() > 1) {
-					while ($db->next_record()) {
-						$csv_mult_founds[$csv_line][] = $db->Record;
-					}
-					$csv_count_multiple++;
-				} else if ($db->num_rows() > 0) {
-					$db->next_record();
-					insert_seminar_user($id, $db->f('user_id'), 'autor');
-					$csv_count_insert++;
-				} else {
-					// not found
-					$csv_not_found[] = stripslashes($csv_nachname) . ($csv_vorname ? ', ' . stripslashes($csv_vorname) : '');
-				}
-			}
-		}
-	}
-	if (sizeof($_REQUEST['selected_users'])) {
-		foreach ($_REQUEST['selected_users'] as $selected_user) {
-			if ($selected_user) {
-				insert_seminar_user($id, get_userid($selected_user), 'autor');
-				$csv_count_insert++;
-			}
-		}
-	}
-	$msg = '';
-	if (!$csv_count_multiple) {
-		$_REQUEST['cmd'] = '';
-	}
-	if (!sizeof($csv_lines) && !sizeof($_REQUEST['selected_users'])) {
-		$msg = 'error§' . _("Keine NutzerIn gefunden!") . '§';
-		$_REQUEST['cmd'] = '';
-	} else {
-		if ($csv_count_insert) {
-			$msg .=  'msg§' . sprintf(_("%s NutzerInnen als AutorIn in die Veranstaltung eingetragen!"),
-					$csv_count_insert) . '§';
-		}
-		if ($csv_count_multiple) {
-			$msg .= 'info§' . sprintf(_("%s NutzerInnen konnten <b>nicht eindeutig</b> zugeordnet werden! Nehmen Sie die Zuordnung am Ende dieser Seite manuell vor."),
-					$csv_count_multiple) . '§';
-		}
-		if (sizeof($csv_not_found)) {
-			$msg .= 'error§' . sprintf(_("%s NutzerInnen konnten <b>nicht</b> zugeordnet werden! Am Ende dieser Seite finden Sie die Namen, die nicht zugeordnet werden konnten."),
-					sizeof($csv_not_found)) . '§';
-		}
-	}
-}
-
-// so bin auch ich berufen?
-
-if (isset($add_tutor_x)) {
-	//erst mal sehen, ob er hier wirklich Dozent ist...
-	if ($rechte AND $SemUserStatus!="tutor") {
-				// nur wenn wer ausgewaehlt wurde
-		if ($u_id != "0") {
-			$query = "SELECT DISTINCT b.user_id, username, Vorname, Nachname, inst_perms, perms FROM seminar_inst d LEFT JOIN user_inst a USING(Institut_id) ".
-			"LEFT JOIN auth_user_md5  b USING(user_id) ".
-			"LEFT JOIN seminar_user c ON (c.user_id=a.user_id AND c.seminar_id='$SessSemName[1]')  ".
-			"WHERE d.seminar_id = '$SessSemName[1]' AND a.inst_perms IN ('tutor','dozent') AND ISNULL(c.seminar_id) ORDER BY Nachname";
-			$db->query($query);
-				// wer versucht denn da wen nicht zugelassenen zu berufen?
+	
+	// Hier will jemand die Karriereleiter rauf...
+	
+	if ($cmd=="pleasure") {
+		//erst mal sehen, ob er hier wirklich Dozent ist... Tutoren d&uuml;rfen andere nicht zu Tutoren befoerdern!
+		if ($rechte AND $SemUserStatus!="tutor")  {
+			$db->query("SELECT " . $_fullname_sql['full'] . " AS fullname, a.* FROM auth_user_md5 a LEFT JOIN user_info USING (user_id) WHERE username = '$username' AND perms!='user' AND perms!='autor'");
 			if ($db->next_record()) {
-				// so, Berufung ist zulaessig
-				$db2->query("SELECT status FROM seminar_user WHERE Seminar_id = '$id' AND user_id = '$u_id'");
-				if ($db2->next_record()) {
-					// der Dozent hat Tomaten auf den Augen, der Mitarbeiter sitzt schon im Seminar. Na, auch egal...
-					if ($db2->f("status") == "autor" || $db2->f("status") == "user") {
-						// gehen wir ihn halt hier hochstufen
-						$db2->query("UPDATE seminar_user SET status='tutor' WHERE Seminar_id = '$id' AND user_id = '$u_id'");
-						if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
-							$msg = "msg§" . sprintf (_("%s wurde zum Mitglied bef&ouml;rdert."), get_fullname($u_id,'full',1)) . "§";
-						} else {
-							$msg = "msg§" . sprintf (_("%s wurde auf den Status 'Tutor' bef&ouml;rdert."), get_fullname($u_id,'full',1)) . "§";
-						}
-						//kill from waiting user
-						$db2->query("DELETE FROM admission_seminar_user WHERE seminar_id = '$id' AND user_id = '$u_id'");
-						//reordner waiting list
-						renumber_admission($id);
-					} else {
-						;	// na, das ist ja voellig witzlos, da tun wir einfach nix.
-							// Nicht das sich noch ein Dozent auf die Art und Weise selber degradiert!
-					}
-				} else {  // ok, einfach aufnehmen.
-					insert_seminar_user($id, $u_id, "tutor", FALSE);
-
-					if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
-						$msg = "msg§" . sprintf (_("%s wurde als Mitglied in die Veranstaltung aufgenommen."), get_fullname($u_id,'full',1));
-					} else {
-						$msg = "msg§" . sprintf (_("%s wurde als Tutor in die Veranstaltung aufgenommen."), get_fullname($u_id,'full',1));
-					}
-
-					setTempLanguage($userchange);
-					if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
-						$message= sprintf(_("Sie wurden vom einem/r LeiterIn oder AdministratorIn in die Veranstaltung **%s** aufgenommen."), $SessSemName[0]);
-					} else {
-						$message= sprintf(_("Sie wurden vom einem/r DozentIn oder AdministratorIn in die Veranstaltung **%s** aufgenommen."), $SessSemName[0]);
-					}
-					restoreLanguage();
-					$messaging->insert_message($message, get_username($u_id), "____%system%____", FALSE, FALSE, "1", FALSE, _("Systemnachricht:")." "._("Eintragung in Veranstaltung"), TRUE);
-				}
+				$userchange=$db->f("user_id");
+				$fullname = $db->f("fullname");
+				$db->query("UPDATE seminar_user SET status='tutor' WHERE Seminar_id = '$id' AND user_id = '$userchange' AND status='autor'");
+				$msg = "msg§" . sprintf(_("Bef&ouml;rderung von %s durchgef&uuml;hrt"), htmlReady($fullname)) . "§";
 			}
 			else $msg ="error§" . _("Netter Versuch! vielleicht beim n&auml;chsten Mal!") . "§";
 		}
 		else $msg ="error§" . _("Netter Versuch! vielleicht beim n&auml;chsten Mal!") . "§";
 	}
-	else $msg ="error§" . _("Netter Versuch! vielleicht beim n&auml;chsten Mal!") . "§";
+	
+	// jemand ist der anspruchsvollen Aufgabe eines Tutors nicht gerecht geworden...
+	
+	if ($cmd=="pain") {
+		//erst mal sehen, ob er hier wirklich Dozent ist... Tutoren d&uuml;rfen andere Tutoren nicht rauskicken!
+		if ($rechte AND $SemUserStatus!="tutor") {
+			$db->query("SELECT " . $_fullname_sql['full'] . " AS fullname, a.* FROM auth_user_md5 a LEFT JOIN user_info USING (user_id) WHERE username = '$username'");
+			$db->next_record();
+			$userchange=$db->f("user_id");
+			$fullname = $db->f("fullname");
+			$db->query("UPDATE seminar_user SET status='autor' WHERE Seminar_id = '$id' AND user_id = '$userchange' AND status='tutor'");
+			if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
+				$msg = "msg§" . sprintf (_("Das Mitglied %s wurde entlassen und auf den Status 'Autor' zur&uuml;ckgestuft."), htmlReady($fullname)) . "§";
+			} else {
+				$msg = "msg§" . sprintf (_("Der/die TutorIn %s wurde entlassen und auf den Status 'Autor' zur&uuml;ckgestuft."), htmlReady($fullname)) . "§";
+			}
+		}
+		else $msg ="error§" . _("Netter Versuch! vielleicht beim n&auml;chsten Mal!") . "§";
+	}
+	
+	// jemand ist zu bloede, sein Seminar selbst zu abbonieren...
+	
+	if ($cmd=="schreiben") {
+		//erst mal sehen, ob er hier wirklich Dozent ist...
+		if ($rechte) {
+			$db->query("SELECT " . $_fullname_sql['full'] . " AS fullname, a.* FROM auth_user_md5 a LEFT JOIN user_info USING (user_id) WHERE username = '$username' AND perms != 'user'");
+			if ($db->next_record()) {
+				$userchange=$db->f("user_id");
+				$fullname = $db->f("fullname");
+				$db->query("UPDATE seminar_user SET status='autor' WHERE Seminar_id = '$id' AND user_id = '$userchange' AND status='user'");
+				$msg = "msg§" . sprintf(_("User %s wurde als Autor in die Veranstaltung aufgenommen."), htmlReady($fullname)) . "§";
+			}
+			else $msg ="error§" . _("Netter Versuch! vielleicht beim n&auml;chsten Mal!") . "§";
+		}
+		else $msg ="error§" . _("Netter Versuch! vielleicht beim n&auml;chsten Mal!") . "§";
+	}
+	
+	// jemand sollte erst mal das Maul halten...
+	
+	if ($cmd=="lesen") {
+		//erst mal sehen, ob er hier wirklich Dozent ist...
+		if ($rechte) {
+			$db->query("SELECT " . $_fullname_sql['full'] . " AS fullname, a.* FROM auth_user_md5 a LEFT JOIN user_info USING (user_id) WHERE username = '$username'");
+			$db->next_record();
+			$userchange=$db->f("user_id");
+			$fullname = $db->f("fullname");
+			$db->query("UPDATE seminar_user SET status='user' WHERE Seminar_id = '$id' AND user_id = '$userchange' AND status='autor'");
+			$msg = "msg§" . sprintf(_("Der/die AutorIn %s wurde auf den Status 'Leser' zur&uuml;ckgestuft."), htmlReady($fullname)) . "§";
+			$msg.= "info§" . _("Um jemanden permanent am Schreiben zu hindern, m&uuml;ssen Sie die Veranstaltung auf \"Schreiben nur mit Passwort\" setzen und ein Veranstaltungs-Passwort vergeben.") . "<br>\n"
+					. _("Dann k&ouml;nnen sich weitere BenutzerInnen nur noch mit Kenntnis des Veranstaltungs-Passworts als 'Autor' anmelden.") . "§";
+		}
+		else $msg ="error§" . _("Netter Versuch! vielleicht beim n&auml;chsten Mal!") . "§";
+	}
+	
+	// und tschuess...
+	
+	if ($cmd=="raus") {
+		//erst mal sehen, ob er hier wirklich Dozent ist...
+		if ($rechte) {
+			$db->query("SELECT " . $_fullname_sql['full'] . " AS fullname, a.* FROM auth_user_md5 a LEFT JOIN user_info USING (user_id) WHERE username = '$username'");
+			$db->next_record();
+			$userchange=$db->f("user_id");
+			$fullname = $db->f("fullname");
+			$db->query("DELETE FROM seminar_user WHERE Seminar_id = '$id' AND user_id = '$userchange' AND status='user'");
+	
+			setTempLanguage($userchange);
+			if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
+				$message= sprintf(_("Ihr Abonnement der Veranstaltung **%s** wurde von einem/r LeiterIn oder AdministratorIn aufgehoben."), $SessSemName[0]);
+			} else {
+				$message= sprintf(_("Ihr Abonnement der Veranstaltung **%s** wurde von einem/r DozentIn oder AdministratorIn aufgehoben."), $SessSemName[0]);
+			}
+			restoreLanguage();
+	
+			$messaging->insert_message($message, $username, "____%system%____", FALSE, FALSE, "1", FALSE, _("Systemnachricht:")." "._("Abonnement aufgehoben"), TRUE);
+	
+			// raus aus allen Statusgruppen
+			RemovePersonStatusgruppeComplete ($username, $id);
+	
+			//Pruefen, ob es Nachruecker gibt
+			update_admission($id);
+	
+			$msg = "msg§" . sprintf(_("LeserIn %s wurde aus der Veranstaltung entfernt."), htmlReady($fullname)) . "§";
+			$msg.= "info§" . _("Um jemanden permanent am Lesen zu hindern, m&uuml;ssen Sie die Veranstaltung auf \"Lesen nur mit Passwort\" setzen und ein Veranstaltungs-Passwort vergeben.") . "<br>\n"
+					. _("Dann k&ouml;nnen sich weitere BenutzerInnen nur noch mit Kenntnis des Veranstaltungs-Passworts anmelden.") . "§";
+		}
+		else $msg ="error§" . _("Netter Versuch! vielleicht beim n&auml;chsten Mal!") . "§";
+	}
+	
+	//aus der Anmelde- oder Warteliste entfernen
+	if ($cmd=="admission_raus") {
+		//erst mal sehen, ob er hier wirklich Dozent ist...
+		if ($rechte) {
+			$db->query("SELECT " . $_fullname_sql['full'] . " AS fullname, a.* FROM auth_user_md5 a LEFT JOIN user_info USING (user_id) WHERE username = '$username'");
+			$db->next_record();
+			$userchange=$db->f("user_id");
+			$fullname = $db->f("fullname");
+			$db->query("DELETE FROM admission_seminar_user WHERE seminar_id = '$id' AND user_id = '$userchange'");
+	
+			setTempLanguage($userchange);
+			if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
+				if (!$accepted) {
+					$message= sprintf(_("Sie wurden vom einem/r LeiterIn oder AdministratorIn von der Warteliste der Veranstaltung **%s** gestrichen und sind damit __nicht__ zugelassen worden."), $SessSemName[0]);
+				} else {
+					 $message= sprintf(_("Sie wurden vom einem/r LeiterIn oder AdministratorIn aus der Veranstaltung **%s** gestrichen und sind damit __nicht__ zugelassen worden."), $SessSemName[0]);
+				}
+			} else {
+				if (!$accepted) {
+					$message= sprintf(_("Sie wurden vom einem/r DozentIn oder AdministratorIn von der Warteliste der Veranstaltung **%s** gestrichen und sind damit __nicht__ zugelassen worden."), $SessSemName[0]);
+				} else {
+					 $message= sprintf(_("Sie wurden vom einem/r DozentIn oder AdministratorIn aus der Veranstaltung **%s** gestrichen und sind damit __nicht__ zugelassen worden."), $SessSemName[0]);
+				}
+			}
+			restoreLanguage();
+	
+			$messaging->insert_message($message, $username, "____%system%____", FALSE, FALSE, "1", FALSE, _("Systemnachricht:")." "._("nicht zugelassen in Veranstaltung"), TRUE);
+	
+			//Warteliste neu sortieren
+			renumber_admission($id);
+			if ($accepted)
+				update_admission($id);
+	
+			$msg = "msg§" . sprintf(_("LeserIn %s wurde aus der Anmelde bzw. Warteliste entfernt."), htmlReady($fullname)) . "§";
+		}
+		else $msg ="error§" . _("Netter Versuch! vielleicht beim n&auml;chsten Mal!") . "§";
+	}
+	
+	//aus der Anmelde- oder Warteliste in die Veranstaltung hochstufen / aus der freien Suche als Tutoren oder Autoren eintragen
+	if ((($cmd=="admission_rein") || ($cmd=="add_user")) && ($username)){
+		//erst mal sehen, ob er hier wirklich Dozent ist...
+		if ($rechte) {
+	
+			$db->query("SELECT " . $_fullname_sql['full'] . " AS fullname, a.* FROM auth_user_md5 a LEFT JOIN user_info USING (user_id) WHERE username = '$username'");
+			$db->next_record();
+			$userchange=$db->f("user_id");
+			$fullname = $db->f("fullname");
+	
+			$status = (!$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["only_inst_user"] && (($db->f("perms") == "tutor" || $db->f("perms") == "dozent")) && ($perm->have_studip_perm("dozent", $id))) ? "tutor" : "autor";
+	
+			if ($cmd == "add_user") $status="autor"; // otherwise, students with GLOBAL status tutor immediately have the status of a tutor in this seminar. Makes no sense!
+			//But: perhaps a better solution?
+	
+			$admission_user = insert_seminar_user($id, $userchange, $status, ($accepted) ? TRUE : FALSE);
+			//Only if user was on the waiting list
+			if ($admission_user) {
+				setTempLanguage($userchange);
+				if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
+					if (!$accepted) {
+						$message = sprintf(_("Sie wurden vom einem/r LeiterIn oder AdministratorIn aus der Warteliste in die Veranstaltung **%s** aufgenommen und sind damit zugelassen."), $SessSemName[0]);
+					} else {
+						$message = sprintf(_("Sie wurden von einem/r LeiterIn oder AdministratorIn zum/r TeilnehmerIn der Veranstaltung **%s** hochgestuft und sind damit zugelassen."), $SessSemName[0]);
+					}
+				} else {
+					if (!$accepted) {
+						$message = sprintf(_("Sie wurden vom einem/r DozentIn oder AdministratorIn aus der Warteliste in die Veranstaltung **%s** aufgenommen und sind damit zugelassen."), $SessSemName[0]);
+					} else {
+						$message = sprintf(_("Sie wurden von einem/r DozentIn oder AdministratorIn vom Status **vorläufig akzeptiert** zum/r TeilnehmerIn der Veranstaltung **%s** hochgestuft und sind damit zugelassen."), $SessSemName[0]);
+					}
+				}
+				restoreLanguage();
+				$messaging->insert_message($message, $username, "____%system%____", FALSE, FALSE, "1", FALSE, _("Systemnachricht:")." "._("Eintragung in Veranstaltung"), TRUE);
+			}
+	
+			//Warteliste neu sortieren
+			renumber_admission($id);
+	
+			if ($cmd=="add_user")
+				$msg = "msg§" . sprintf(_("NutzerIn %s wurde in die Veranstaltung mit dem Status <b>%s</b> eingetragen."), htmlReady($fullname), $status) . "§";
+			else
+				if (!$accepted) {
+					$msg = "msg§" . sprintf(_("NutzerIn %s wurde aus der Anmelde bzw. Warteliste mit dem Status <b>%s</b> in die Veranstaltung eingetragen."), htmlReady($fullname), $status) . "§";
+				} else {
+					$msg = "msg§" . sprintf(_("NutzerIn %s wurde mit dem Status <b>%s</b> endgültig akzeptiert und damit in die Veranstaltung aufgenommen."), htmlReady($fullname), $status) . "§";
+				}
+		}
+		else $msg ="error§" . _("Netter Versuch! vielleicht beim n&auml;chsten Mal!") . "§";
+	}
+	
+	// import users from a csv-list
+	if ($_REQUEST['cmd'] == 'csv' && $rechte) {
+		$csv_mult_founds = array();
+		$csv_count_insert = 0;
+		$csv_count_multiple = 0;
+		if ($_REQUEST['csv_import']) {
+			$csv_lines = preg_split('/(\n\r|\r\n|\n|\r)/', trim($_REQUEST['csv_import']));
+			foreach ($csv_lines as $csv_line) {
+				$csv_name = preg_split('/[,\t]/', substr($csv_line, 0, 100),-1,PREG_SPLIT_NO_EMPTY);
+				$csv_nachname = trim($csv_name[0]);
+				$csv_vorname = trim($csv_name[1]);
+				if ($csv_nachname){
+					$db->query("SELECT a.user_id, username, " . $_fullname_sql['full_rev'] ." AS fullname, perms FROM auth_user_md5 a ".
+					"LEFT JOIN user_info USING(user_id) LEFT JOIN seminar_user b ON (b.user_id=a.user_id AND b.seminar_id='$SessSemName[1]')  ".
+					"WHERE perms IN ('autor','tutor','dozent') AND ISNULL(b.seminar_id) AND ".
+					"(Nachname LIKE '" . $csv_nachname . "'"
+					. ($csv_vorname ? " AND Vorname LIKE '" . $csv_vorname . "'" : '')
+					. ") ORDER BY Nachname");
+					if ($db->num_rows() > 1) {
+						while ($db->next_record()) {
+							$csv_mult_founds[$csv_line][] = $db->Record;
+						}
+						$csv_count_multiple++;
+					} else if ($db->num_rows() > 0) {
+						$db->next_record();
+						insert_seminar_user($id, $db->f('user_id'), 'autor');
+						$csv_count_insert++;
+					} else {
+						// not found
+						$csv_not_found[] = stripslashes($csv_nachname) . ($csv_vorname ? ', ' . stripslashes($csv_vorname) : '');
+					}
+				}
+			}
+		}
+		if (sizeof($_REQUEST['selected_users'])) {
+			foreach ($_REQUEST['selected_users'] as $selected_user) {
+				if ($selected_user) {
+					insert_seminar_user($id, get_userid($selected_user), 'autor');
+					$csv_count_insert++;
+				}
+			}
+		}
+		$msg = '';
+		if (!$csv_count_multiple) {
+			$_REQUEST['cmd'] = '';
+		}
+		if (!sizeof($csv_lines) && !sizeof($_REQUEST['selected_users'])) {
+			$msg = 'error§' . _("Keine NutzerIn gefunden!") . '§';
+			$_REQUEST['cmd'] = '';
+		} else {
+			if ($csv_count_insert) {
+				$msg .=  'msg§' . sprintf(_("%s NutzerInnen als AutorIn in die Veranstaltung eingetragen!"),
+						$csv_count_insert) . '§';
+			}
+			if ($csv_count_multiple) {
+				$msg .= 'info§' . sprintf(_("%s NutzerInnen konnten <b>nicht eindeutig</b> zugeordnet werden! Nehmen Sie die Zuordnung am Ende dieser Seite manuell vor."),
+						$csv_count_multiple) . '§';
+			}
+			if (sizeof($csv_not_found)) {
+				$msg .= 'error§' . sprintf(_("%s NutzerInnen konnten <b>nicht</b> zugeordnet werden! Am Ende dieser Seite finden Sie die Namen, die nicht zugeordnet werden konnten."),
+						sizeof($csv_not_found)) . '§';
+			}
+		}
+	}
+	
+	// so bin auch ich berufen?
+	
+	if (isset($add_tutor_x)) {
+		//erst mal sehen, ob er hier wirklich Dozent ist...
+		if ($rechte AND $SemUserStatus!="tutor") {
+					// nur wenn wer ausgewaehlt wurde
+			if ($u_id != "0") {
+				$query = "SELECT DISTINCT b.user_id, username, Vorname, Nachname, inst_perms, perms FROM seminar_inst d LEFT JOIN user_inst a USING(Institut_id) ".
+				"LEFT JOIN auth_user_md5  b USING(user_id) ".
+				"LEFT JOIN seminar_user c ON (c.user_id=a.user_id AND c.seminar_id='$SessSemName[1]')  ".
+				"WHERE d.seminar_id = '$SessSemName[1]' AND a.inst_perms IN ('tutor','dozent') AND ISNULL(c.seminar_id) ORDER BY Nachname";
+				$db->query($query);
+					// wer versucht denn da wen nicht zugelassenen zu berufen?
+				if ($db->next_record()) {
+					// so, Berufung ist zulaessig
+					$db2->query("SELECT status FROM seminar_user WHERE Seminar_id = '$id' AND user_id = '$u_id'");
+					if ($db2->next_record()) {
+						// der Dozent hat Tomaten auf den Augen, der Mitarbeiter sitzt schon im Seminar. Na, auch egal...
+						if ($db2->f("status") == "autor" || $db2->f("status") == "user") {
+							// gehen wir ihn halt hier hochstufen
+							$db2->query("UPDATE seminar_user SET status='tutor' WHERE Seminar_id = '$id' AND user_id = '$u_id'");
+							if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
+								$msg = "msg§" . sprintf (_("%s wurde zum Mitglied bef&ouml;rdert."), get_fullname($u_id,'full',1)) . "§";
+							} else {
+								$msg = "msg§" . sprintf (_("%s wurde auf den Status 'Tutor' bef&ouml;rdert."), get_fullname($u_id,'full',1)) . "§";
+							}
+							//kill from waiting user
+							$db2->query("DELETE FROM admission_seminar_user WHERE seminar_id = '$id' AND user_id = '$u_id'");
+							//reordner waiting list
+							renumber_admission($id);
+						} else {
+							;	// na, das ist ja voellig witzlos, da tun wir einfach nix.
+								// Nicht das sich noch ein Dozent auf die Art und Weise selber degradiert!
+						}
+					} else {  // ok, einfach aufnehmen.
+						insert_seminar_user($id, $u_id, "tutor", FALSE);
+	
+						if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
+							$msg = "msg§" . sprintf (_("%s wurde als Mitglied in die Veranstaltung aufgenommen."), get_fullname($u_id,'full',1));
+						} else {
+							$msg = "msg§" . sprintf (_("%s wurde als Tutor in die Veranstaltung aufgenommen."), get_fullname($u_id,'full',1));
+						}
+	
+						setTempLanguage($userchange);
+						if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
+							$message= sprintf(_("Sie wurden vom einem/r LeiterIn oder AdministratorIn in die Veranstaltung **%s** aufgenommen."), $SessSemName[0]);
+						} else {
+							$message= sprintf(_("Sie wurden vom einem/r DozentIn oder AdministratorIn in die Veranstaltung **%s** aufgenommen."), $SessSemName[0]);
+						}
+						restoreLanguage();
+						$messaging->insert_message($message, get_username($u_id), "____%system%____", FALSE, FALSE, "1", FALSE, _("Systemnachricht:")." "._("Eintragung in Veranstaltung"), TRUE);
+					}
+				}
+				else $msg ="error§" . _("Netter Versuch! vielleicht beim n&auml;chsten Mal!") . "§";
+			}
+			else $msg ="error§" . _("Netter Versuch! vielleicht beim n&auml;chsten Mal!") . "§";
+		}
+		else $msg ="error§" . _("Netter Versuch! vielleicht beim n&auml;chsten Mal!") . "§";
+	}
 }
-
 //Alle fuer das Losen anstehenden Veranstaltungen bearbeiten (wenn keine anstehen wird hier nahezu keine Performance verbraten!)
 check_admission();
 
@@ -608,6 +609,8 @@ if ($perm->have_perm("dozent")) {
 	<table width="99%" border="0"  cellpadding="2" cellspacing="0" align="center">
 
 <?
+$ticket = Seminar_Session::get_ticket();
+
 //Index berechnen
 $db3->query ("SELECT count(dokument_id) AS count_doc FROM dokumente WHERE seminar_id = '$SessionSeminar'");
 if ($db3->next_record()) {
@@ -871,7 +874,7 @@ while (list ($key, $val) = each ($gruppe)) {
 		if ($key == "tutor" AND $SemUserStatus!="tutor") {
 			echo "<td class=\"$class\">&nbsp</td>";
 			echo "<td class=\"$class\" align=\"center\">";
-			echo "<a href=\"$PHP_SELF?cmd=pain&username=$username\"><img border=\"0\" src=\"pictures/down.gif\" width=\"21\" height=\"16\"></a></td>";
+			echo "<a href=\"$PHP_SELF?cmd=pain&username=$username&ticket=$ticket\"><img border=\"0\" src=\"pictures/down.gif\" width=\"21\" height=\"16\"></a></td>";
 		}
 
 		elseif ($key == "autor") {
@@ -883,12 +886,12 @@ while (list ($key, $val) = each ($gruppe)) {
 					$db2->query ("SELECT user_id FROM auth_user_md5  WHERE perms IN ('tutor', 'dozent') AND user_id = '$UID' ");
 				if ($db2->next_record()) {
 					echo "<td class=\"$class\" align=\"center\">";
-					echo "<a href=\"$PHP_SELF?cmd=pleasure&username=$username\"><img border=\"0\" src=\"pictures/up.gif\" width=\"21\" height=\"16\"></a></td>";
+					echo "<a href=\"$PHP_SELF?cmd=pleasure&username=$username&ticket=$ticket\"><img border=\"0\" src=\"pictures/up.gif\" width=\"21\" height=\"16\"></a></td>";
 				} else echo "<td class=\"$class\" >&nbsp;</td>";
 			} else echo "<td class=\"$class\">&nbsp;</td>";
 			// Schreibrecht entziehen
 			echo "<td class=\"$class\" align=\"center\">";
-			echo "<a href=\"$PHP_SELF?cmd=lesen&username=$username\"><img border=\"0\" src=\"pictures/down.gif\" width=\"21\" height=\"16\"></a></td>";
+			echo "<a href=\"$PHP_SELF?cmd=lesen&username=$username&ticket=$ticket\"><img border=\"0\" src=\"pictures/down.gif\" width=\"21\" height=\"16\"></a></td>";
 		}
 
 		// Schreibrecht erteilen
@@ -896,19 +899,19 @@ while (list ($key, $val) = each ($gruppe)) {
 			$db2->query ("SELECT perms, user_id FROM auth_user_md5 WHERE user_id = '$UID' AND perms != 'user'");
 			if ($db2->next_record()) { // Leute, die sich nicht zurueckgemeldet haben duerfen auch nicht schreiben!
 				echo "<td class=\"$class\" align=\"center\">";
-				echo "<a href=\"$PHP_SELF?cmd=schreiben&username=$username\"><img border=\"0\" src=\"pictures/up.gif\" width=\"21\" height=\"16\"></a></td>";
+				echo "<a href=\"$PHP_SELF?cmd=schreiben&username=$username&ticket=$ticket\"><img border=\"0\" src=\"pictures/up.gif\" width=\"21\" height=\"16\"></a></td>";
 			} else echo "<td class=\"$class\">&nbsp;</td>";
 			// aus dem Seminar werfen
 			echo "<td class=\"$class\" align=\"center\">";
-			echo "<a href=\"$PHP_SELF?cmd=raus&username=$username\"><img border=\"0\" src=\"pictures/down.gif\" width=\"21\" height=\"16\"></a></td>";
+			echo "<a href=\"$PHP_SELF?cmd=raus&username=$username&ticket=$ticket\"><img border=\"0\" src=\"pictures/down.gif\" width=\"21\" height=\"16\"></a></td>";
 		}
 
 		elseif ($key == "accepted") { // temporarily accepted students
 			// forward to autor
-			printf ("<td width=\"15%%\" align=\"center\" class=\"%s\"><a href=\"$PHP_SELF?cmd=admission_rein&username=%s&accepted=1\"><img border=\"0\" src=\"pictures/up.gif\" width=\"21\" height=\"16\"></a></td>", $class, $username);
+			printf ("<td width=\"15%%\" align=\"center\" class=\"%s\"><a href=\"$PHP_SELF?cmd=admission_rein&username=%s&accepted=1&ticket=$ticket\"><img border=\"0\" src=\"pictures/up.gif\" width=\"21\" height=\"16\"></a></td>", $class, $username);
 			// kick
 			echo "<td class=\"$class\" align=\"center\">";
-			echo "<a href=\"$PHP_SELF?cmd=admission_raus&username=$username&accepted=1\"><img border=\"0\" src=\"pictures/down.gif\" width=\"21\" height=\"16\"></a></td>";
+			echo "<a href=\"$PHP_SELF?cmd=admission_raus&username=$username&accepted=1&ticket=$ticket\"><img border=\"0\" src=\"pictures/down.gif\" width=\"21\" height=\"16\"></a></td>";
 		}
 
 		else { // hier sind wir bei den Dozenten
@@ -945,6 +948,7 @@ while (list ($key, $val) = each ($gruppe)) {
 								<INPUT type="hidden" name="user_id" value="<?=$db->f("user_id")?>">
 								<INPUT type="hidden" name="cmd" value="change_userinfo">
 								<INPUT type="hidden" name="username" value="<?=$db->f("username")?>">
+								<INPUT type="hidden" name="ticket" value="<?=$ticket?>">
 							</td>
 						</tr>
 					</table>
@@ -1021,8 +1025,8 @@ if ($rechte) {
 
 			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><a href=\"sms_send.php?sms_source_page=teilnehmer.php&rec_uname=%s\"><img src=\"pictures/nachricht1.gif\" %s border=\"0\"></a></td>",$cssSw->getClass(), $db->f("username"), tooltip(_("Nachricht an User verschicken")));
 
-			printf ("<td width=\"15%%\" align=\"center\" class=\"%s\"><a href=\"$PHP_SELF?cmd=admission_rein&username=%s\"><img border=\"0\" src=\"pictures/up.gif\" width=\"21\" height=\"16\"></a></td>", $cssSw->getClass(), $db->f("username"));
-			printf ("<td width=\"15%%\" align=\"center\" class=\"%s\"><a href=\"$PHP_SELF?cmd=admission_raus&username=%s\"><img border=\"0\" src=\"pictures/down.gif\" width=\"21\" height=\"16\"></a></td>", $cssSw->getClass(), $db->f("username"));
+			printf ("<td width=\"15%%\" align=\"center\" class=\"%s\"><a href=\"$PHP_SELF?cmd=admission_rein&username=%s&ticket=$ticket\"><img border=\"0\" src=\"pictures/up.gif\" width=\"21\" height=\"16\"></a></td>", $cssSw->getClass(), $db->f("username"));
+			printf ("<td width=\"15%%\" align=\"center\" class=\"%s\"><a href=\"$PHP_SELF?cmd=admission_raus&username=%s&ticket=$ticket\"><img border=\"0\" src=\"pictures/down.gif\" width=\"21\" height=\"16\"></a></td>", $cssSw->getClass(), $db->f("username"));
 			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><font size=\"-1\">%s</font></td></tr>\n", $cssSw->getClass(), ($db->f("studiengang_id") == "all") ? _("alle Studieng&auml;nge") : $db->f("name"));
 		}
 		print "</table>";
@@ -1051,6 +1055,7 @@ if ($rechte
 
 	<table width="99%" border="0" cellpadding="2" cellspacing="0" border="0" align="center">
 	<form action="<? echo $PHP_SELF ?>" method="POST">
+	<INPUT type="hidden" name="ticket" value="<?=$ticket?>">
 	<tr>
 		<td class="steel1" width="40%" align="left">&nbsp; <font size="-1"><b><?=_("MitarbeiterInnen der Einrichtung(en)")?></b></font></td>
 		<td class="steel1" width="40%" align="left"><select name="u_id" size="1">
@@ -1088,6 +1093,7 @@ if ($rechte) {
 	<a name="freesearch"></a>
 	<table width="99%" border="0" cellpadding="2" cellspacing="0" border=0 align="center">
 	<form action="<? echo $PHP_SELF ?>?cmd=add_user" method="POST">
+	<INPUT type="hidden" name="ticket" value="<?=$ticket?>">
 	<tr>
 		<td class="steel1" width="40%" align="left">&nbsp; <font size="-1"><b><?=_("Gefundene Nutzer")?></b></font></td>
 		<td class="steel1" width="40%" align="left"><select name="username" size="1">
@@ -1127,6 +1133,7 @@ if ($rechte) {
 	echo "<tr><td class=\"blank\" colspan=\"2\">\n";
 	echo "<form action=\"$PHP_SELF\" method=\"post\">\n";
 	echo "<input type=\"hidden\" name=\"cmd\" value=\"csv\">\n";
+	echo "<input type=\"hidden\" name=\"ticket\" value=\"$ticket\">\n";
 	echo "<table width=\"99%\" border=\"0\" cellpadding=\"2\" cellspacing=\"0\" border=\"0\" ";
 	echo "align=\"center\">\n";
 	if (!sizeof($csv_mult_founds)) {
