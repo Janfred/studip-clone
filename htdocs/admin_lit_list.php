@@ -27,8 +27,12 @@ $perm->check("autor");
 require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipLitListViewAdmin.class.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipLitClipBoard.class.php");
+include_once("$ABSOLUTE_PATH_STUDIP/lit_import.inc.php");
 
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+
+//Literaturlisten-Import
+do_lit_import();
 
 // Start of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
@@ -142,6 +146,15 @@ if ($_msg)	{
 $_the_treeview->showTree();
 ?>
 </td></tr>
+<?
+// Literaturlisten-Import
+echo "<TR><TD>&nbsp;</TD></TR>\n";
+echo "<TR>\n";
+echo "  <TD>\n";
+print_lit_import_dlg();
+echo "  </TD>\n";
+echo "</TR>\n";
+?>
 </table>
 </td>
 <td class="blank" align="center" valign="top">
