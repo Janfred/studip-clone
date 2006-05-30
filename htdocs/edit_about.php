@@ -834,6 +834,15 @@ if(check_ticket($ticket)){
 		}
 	
 	if ($cmd) {
+		if ($view=="Bild" && $cmd=="bild_loeschen" && $_SERVER["REQUEST_METHOD"]=="POST") {
+                        if ($user_id==$auth->auth["uid"] || $perm->have_perm("admin")) {
+                                if (file_exists("./user/".$user_id.".jpg")) {
+                                        unlink("./user/".$user_id.".jpg");
+                                        $my_about->msg.="msg§"._("Das Bild wurde gel&ouml;scht");
+                                }
+                        }
+                }
+
 		if (($my_about->check != "user") && ($my_about->priv_msg != "")) {
 			$m_id=md5(uniqid("smswahn"));
 			setTempLanguage($my_about->auth_user["user_id"]);
@@ -1058,6 +1067,15 @@ if ($view == 'Bild') {
 		echo '<img src="./user/nobody.jpg" width="200" height="250" alt="' . _("Kein pers&ouml;nliches Bild vorhanden") . '" ><br />&nbsp; ';
 	} else {
 		echo '<img border="1" src="./user/'.$my_about->auth_user['user_id'] . '.jpg" alt="'. $my_about->auth_user['Vorname'].' '.$my_about->auth_user['Nachname']."\"><br />\n&nbsp; ";
+		if ($my_about->auth_user["user_id"]==$auth->auth["uid"] || $perm->have_perm("admin")) {
+                        echo "\n<FORM NAME=\"bild_loeschen\" METHOD=\"POST\" ACTION=\"$PHP_SELF?ticket=".get_ticket()."\">\n";
+                        echo "  <INPUT TYPE=\"hidden\" NAME=\"user_id\" VALUE=\"".$my_about->auth_user["user_id"]."\">\n";
+                        echo "  <INPUT TYPE=\"hidden\" NAME=\"username\" VALUE=\"$username\">\n";
+                        echo "  <INPUT TYPE=\"hidden\" NAME=\"view\" VALUE=\"Bild\">\n";
+                        echo "  <INPUT TYPE=\"hidden\" NAME=\"cmd\" VALUE=\"bild_loeschen\">\n";
+                        echo "  <FONT SIZE=\"-1\"><B>"._("Aktuelles Bild")."</B></FONT><BR><INPUT TYPE=\"image\" ".makeButton("loeschen","src")." BORDER=\"0\">\n";
+                        echo "</FORM>\n";
+                }
 	}
 			
 	echo '</td><td class="'.$cssSw->getClass().'" width="70%" align="left" valign="top"><blockquote>';
