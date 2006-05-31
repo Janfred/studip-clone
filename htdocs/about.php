@@ -117,7 +117,17 @@ if (!isset($username) || $username == "")
 
 //3 zeilen wegen username statt id zum aufruf... in $user_id steht jetzt die user_id (sic)
 $db->query("SELECT * FROM auth_user_md5  WHERE username ='$username'");
+$user_gesperrt = FALSE;
+if ($perm->have_perm("root"))
+        $db->query("SELECT * FROM auth_user_md5  WHERE username ='$username'");
+else
+        $db->query("SELECT * FROM auth_user_md5  WHERE username ='$username' AND gesperrt=0");
+
 $db->next_record();
+
+if ($perm->have_perm("root") && $db->f("gesperrt")==1)
+        $user_gesperrt = TRUE;
+
 if (!$db->nf()) {
 	parse_window ("error§"._("Es wurde kein Nutzer unter dem angegebenen Nutzernamen gefunden!")."<br />"._(" Wenn Sie auf einen Link geklickt haben, kann es sein, dass sich der Username des gesuchten Nutzers ge&auml;ndert hat, oder der Nutzer gel&ouml;scht wurde.")."§", "§", _("Benutzer nicht gefunden"));
 	die;
@@ -201,6 +211,10 @@ IF ($db->f("Home")!="") {
 	$home=$db->f("Home");
 	$home=FixLinks(htmlReady($home));
 	echo "<b>&nbsp;" . _("Homepage:") . " </b>".$home."<br>";
+}
+
+if ($perm->have_perm("root") && $user_gesperrt) {
+        echo "<BR><B><FONT COLOR=\"RED\" SIZE=\"+1\">"._("BENUTZER IST GESPERRT!")."</FONT></B><BR>\n";
 }
 
 // Anzeige der Institute an denen (hoffentlich) studiert wird:

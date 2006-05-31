@@ -370,10 +370,11 @@ class Seminar_Auth extends Auth {
 	function is_authenticated(){
 		global $ABSOLUTE_PATH_STUDIP;
 		$cfg =& Config::GetInstance();
-		//check if the user got kicked meanwhile
+		//check if the user got kicked meanwhile, or if user is locked out
 		if ($this->auth['uid'] && !in_array($this->auth['uid'], array('form','nobody'))){
-			$this->db->query(sprintf("select username,perms from %s where user_id = '%s'", $this->database_table, $this->auth['uid']));
-			if (!$this->db->next_record()){
+			$this->db->query(sprintf("select username,perms,gesperrt from %s where user_id = '%s'", $this->database_table, $this->auth['uid']));
+			$this->db->next_record();
+                        if (!$this->db->f('username') || $this->db->f('gesperrt')){
 				$this->unauth();
 			} else {
 				$actual_perms = $this->db->f('perms');

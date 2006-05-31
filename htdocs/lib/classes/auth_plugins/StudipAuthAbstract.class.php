@@ -181,6 +181,16 @@ class StudipAuthAbstract {
 	* @return	array	structure: array('uid'=>'string <Stud.IP user id>','error'=>'string <error message>','is_new_user'=>'bool')
 	*/
 	function CheckAuthentication($username,$password,$jscript = false){
+
+		$db = new DB_Seminar();
+                $db->query(sprintf("SELECT * FROM auth_user_md5 WHERE username='%s'",$username));
+                if ($db->next_record()) {
+                        if ($db->f("gesperrt")=="1") {
+                                $error .= _("Dieser Benutzer ist gesperrt! Wenden Sie sich bitte an die Administration.")."<BR>";
+                                return array('uid' => $uid,'error' => $error);
+                        }
+                }
+
 		$plugins =& StudipAuthAbstract::GetInstance();
 		$error = false;
 		$uid = false;

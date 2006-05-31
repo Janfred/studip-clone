@@ -101,7 +101,11 @@ if (check_ticket($ticket)){
 			}
 			if (isset($geschlecht))
 				$newuser['user_info.geschlecht'] = stripslashes(trim($geschlecht));
-				
+		
+			$newuser['auth_user_md5.gesperrt']     = (isset($gesperrt) ? $gesperrt : 0);
+                        $newuser['auth_user_md5.kommentar']    = (isset($kommentar) ? stripslashes(trim($kommentar)) : "");
+                        $newuser['auth_user_md5.gesperrt_von'] = ($gesperrt==1 ? $auth->auth["uid"] : "");
+		
 			$UserManagement->changeUser($newuser);
 			
 			break;
@@ -361,7 +365,26 @@ if (isset($_GET['details'])) {
 					<td colspan="2" class="steel1"><b>&nbsp;<?=_("Authentifizierung:")?></b></td>
 					<td class="steel1">&nbsp;<?=($db->f("auth_plugin") ? $db->f("auth_plugin") : "Standard")?></td>
 				</tr>
-				
+			
+				<?
+                                if ($perm->have_perm("root") || ($db->f("perms") != "admin" && $db->f("perms") != "root") || $db2->f("admin_ok")) {
+
+                                        echo "<tr>\n";
+                                        echo "  <td class=\"steel1\"><b>&nbsp;"._("Benutzer sperren:")."</b></td>\n";
+                                        echo "  <td class=\"steel1\">\n";
+                                        echo "    <INPUT TYPE=\"checkbox\" NAME=\"gesperrt\" VALUE=\"1\" ".($db->f("gesperrt")==1 ? "CHECKED" : "").">"._("sperren")."\n";
+                                        echo "  </td>\n";
+                                        echo "  <td class=\"steel1\">\n";
+                                        echo "    &nbsp;"._("Kommentar:")."&nbsp;\n";
+                                        echo "    <INPUT TYPE=\"text\" NAME=\"kommentar\" VALUE=\"".$db->f("kommentar")."\" SIZE=\"24\" MAXLENGTH=\"255\">\n";
+                                        echo "  </td>\n";
+                                        echo "</tr>\n";
+                                        if ($db->f("gesperrt")==1)
+                                                echo "<TR><TD CLASS=\"steel1\" COLSPAN=\"3\" ALIGN=\"center\"><FONT SIZE=\"-2\">"._("Gesperrt von:")." ".get_fullname($db->f("gesperrt_von"))." (<A HREF=\"about.php?username=".get_username($db->f("gesperrt_von"))."\">".get_username($db->f("gesperrt_von"))."</A>)</FONT></TD></TR>\n";
+                                }
+                                ?>
+
+	
 				<td class="steel1" colspan=3 align=center>&nbsp;
 				<input type="hidden" name="u_id"	 value="<?= $db->f("user_id") ?>">
 				<?
@@ -526,7 +549,9 @@ if (isset($_GET['details'])) {
 				}
 				?>
 				<tr valign=middle align=left>
-					<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>"><a href="<?php echo $PHP_SELF . "?details=" . $db->f("username") ?>"><?php $db->p("username") ?></a></td>
+					<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>"><a href="<?php echo $PHP_SELF . "?details=" . $db->f("username") ?>"><?php $db->p("username") ?></a>
+					<? if ($db->f("gesperrt")=="1") echo "<FONT SIZE=\"-1\" COLOR=\"RED\">&nbsp;<B>"._("gesperrt!")."</B></FONT>"; ?>
+					</td>
 					<td class="<? echo $cssSw->getClass() ?>"><?=$db->f("perms") ?></td>
 					<td class="<? echo $cssSw->getClass() ?>"><?=htmlReady($db->f("Vorname")) ?>&nbsp;</td>
 					<td class="<? echo $cssSw->getClass() ?>"><?=htmlReady($db->f("Nachname")) ?>&nbsp;</td>
