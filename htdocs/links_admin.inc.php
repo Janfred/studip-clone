@@ -340,8 +340,8 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 		$plugins = $persist->getAllActivatedPlugins();
 		if (is_array($plugins)){
 			foreach ($plugins as $adminplugin) {
-				if ($adminplugin->hasTopNavigation()){
-					$nav = $adminplugin->getTopNavigation();
+				if ($adminplugin->hasNavigation()){
+					$nav = $adminplugin->getNavigation();
 					$structure["plugins_" . $adminplugin->getPluginid()]=array ('topKat'=>"plugins", 'name'=>$nav->getDisplayname(), 'link'=>"plugins.php?cmd=show&id=" . $adminplugin->getPluginid(), 'active'=>FALSE);			
 				}
 			}
