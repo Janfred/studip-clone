@@ -443,7 +443,7 @@ function edit_pers($password, $check_pass, $response, $new_username, $vorname, $
 			$this->msg=$this->msg . "msg§" . _("Ihr Passwort wurde ge&auml;ndert!") . "§";
 		}
 		
-		if (!StudipAuthAbstract::CheckField("auth_user_md5.Vorname", $this->auth_user['auth_plugin']) && $vorname!=$this->auth_user["Vorname"]) { //Vornamen verändert ?
+		if (!StudipAuthAbstract::CheckField('auth_user_md5.Vorname', $this->auth_user['auth_plugin']) && $vorname != $this->auth_user['Vorname']) { //Vornamen verändert ?
 			if ($ALLOW_CHANGE_NAME) {
 				if (!$validator->ValidateName($vorname)) {
 					$this->msg=$this->msg . "error§" . _("Der Vorname fehlt oder ist unsinnig!") . "§";
@@ -451,10 +451,10 @@ function edit_pers($password, $check_pass, $response, $new_username, $vorname, $
 				}   // Vorname nicht korrekt oder fehlend
 				$this->db->query("UPDATE auth_user_md5 SET Vorname='$vorname' WHERE user_id='".$this->auth_user["user_id"]."'");
 				$this->msg=$this->msg . "msg§" . _("Ihr Vorname wurde ge&auml;ndert!") . "§";
-			}
+			} else $vorname = $this->auth_user['Vorname'];
 		}
 		
-		if (!StudipAuthAbstract::CheckField("auth_user_md5.Nachname", $this->auth_user['auth_plugin']) && $nachname!=$this->auth_user["Nachname"]) { //Namen verändert ?
+		if (!StudipAuthAbstract::CheckField('auth_user_md5.Nachname', $this->auth_user['auth_plugin']) && $nachname != $this->auth_user['Nachname']) { //Namen verändert ?
 			if ($ALLOW_CHANGE_NAME) {
 				if (!$validator->ValidateName($nachname)) {
 					$this->msg=$this->msg . "error§" . _("Der Nachname fehlt oder ist unsinnig!") . "§";
@@ -462,11 +462,11 @@ function edit_pers($password, $check_pass, $response, $new_username, $vorname, $
 				}   // Nachname nicht korrekt oder fehlend
 				$this->db->query("UPDATE auth_user_md5 SET Nachname='$nachname' WHERE user_id='".$this->auth_user["user_id"]."'");
 				$this->msg=$this->msg . "msg§" . _("Ihr Nachname wurde ge&auml;ndert!") . "§";
-			}
+			} else $nachname = $this->auth_user['Nachname'];
 		}
 		
 
-		if (!StudipAuthAbstract::CheckField("auth_user_md5.username", $this->auth_user['auth_plugin']) && $this->auth_user["username"] != $new_username) {
+		if (!StudipAuthAbstract::CheckField('auth_user_md5.username', $this->auth_user['auth_plugin']) && $this->auth_user['username'] != $new_username) {
 			if ($ALLOW_CHANGE_USERNAME) {
 				if (!$validator->ValidateUsername($new_username)) {
 					$this->msg=$this->msg . "error§" . _("Der gewählte Username ist nicht lang genug!") . "§";
@@ -482,7 +482,7 @@ function edit_pers($password, $check_pass, $response, $new_username, $vorname, $
 				$this->db->query("UPDATE auth_user_md5 SET username='$new_username' WHERE user_id='".$this->auth_user["user_id"]."'");
 				$this->msg=$this->msg . "msg§" . _("Ihr Username wurde ge&auml;ndert!") . "§";
 				$this->logout_user = TRUE;
-			}
+			} else $new_username = $this->auth_user['username'];
 		}
 
 
