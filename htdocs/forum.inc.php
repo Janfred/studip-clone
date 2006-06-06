@@ -225,17 +225,20 @@ function move_topic2($topic_id, $root, &$verschoben,$thema)  //rekursives Versch
 *
 **/
 function lonely($topic_id)  //Sucht nach Kindern und den Rechten (für editieren)
-{	global $user,$auth,$rechte;
+{	global $user,$auth,$rechte,$forumposting;
 	$lonely=TRUE;
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
 	$db2->query("SELECT topic_id FROM px_topics WHERE parent_id='$topic_id'");
 		if (!$db2->num_rows()) {
-			$db->query("SELECT user_id FROM px_topics WHERE topic_id='$topic_id'");
+			$db->query("SELECT user_id, chdate, mkdate FROM px_topics WHERE topic_id='$topic_id'");
 			if ($db->num_rows())
-				while ($db->next_record())
-					if ($db->f("user_id")==$user->id OR $rechte) 
+				while ($db->next_record()) {
+					if ($db->f("user_id")==$user->id OR $rechte)
 						$lonely=FALSE;
+                    elseif ($user->id=="nobody" AND $db->f("chdate") < $db->f("mkdate"))     // nobody schreibt an seinem anderen Beitrag, nachträgliches editieren nicht möglich
+                        $lonely=FALSE;
+                }
 			}
 				
  	return $lonely;
@@ -721,7 +724,8 @@ function CreateTopic ($name="[no name]", $author="[no author]", $description="",
 			echo parse_msg("error§" . _("Ihnen fehlen die Rechte in dieser Veranstaltung zu Schreiben."));
 			die;
 		}
-			
+        else
+      		$db->query ($query);
 	}
 	
 	if ($perm->have_perm("autor"))
@@ -749,7 +753,8 @@ function UpdateTopic ($name="[no name]", $topic_id, $description)
 			$query = "UPDATE px_topics SET name = '$name', description = '$description', chdate= '$chdate', author='$nobodysname' WHERE topic_id = '$topic_id'";
 		ELSE
 			$query = "UPDATE px_topics SET name = '$name', description = '$description', chdate= '$chdate' WHERE topic_id = '$topic_id'";
-		$db->query ($query);
+
+        $db->query ($query);
 		IF  ($db->affected_rows() == 0) {
 			echo '<p>' . _("Aktualisieren des Postings fehlgeschlagen") . "</p>\n";
 		}

@@ -373,6 +373,7 @@ if ($really_kill) {
 // neuer Beitrag als Antwort wird eingeleitet
 //////////////////////////////////////////////////////////////////////////////////
 
+
 if ($answer_id) {
 	$db=new DB_Seminar;
 	$db->query("SELECT name, topic_id, root_id FROM px_topics WHERE topic_id = '$answer_id'");
