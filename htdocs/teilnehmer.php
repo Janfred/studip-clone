@@ -629,6 +629,9 @@ if ($db3->next_record() && $db3->f("count_pers")) {
 $db3->query ("SELECT admission_type, admission_selection_take_place FROM seminare WHERE Seminar_id = '$SessionSeminar'");
 $db3->next_record();
 
+$accepted_columns = array('Nachname', 'mkdate', 'doll DESC');
+if (!isset($sortby)  || !in_array($sortby, $accepted_columns))  $sortby = '';
+
 while (list ($key, $val) = each ($gruppe)) {
 
 	if (!isset($sortby) || $sortby == "") {

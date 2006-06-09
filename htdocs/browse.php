@@ -45,9 +45,8 @@ if ($send) {
 	$browse_data["sem_id"] = $sem_id;
 }
 
-
-if ($sortby)
-	$browse_data["sortby"]=$sortby;
+$accepted_columns = array('Nachname', 'perms', 'status');
+if($sortby) $browse_data['sortby'] = in_array($sortby, $accepted_columns)? $sortby:'';
 	
 if ($group) {
 	$browse_data["group"]=$group;
