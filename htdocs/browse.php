@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
+// $Id$
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 
@@ -47,7 +48,7 @@ if ($send) {
 
 $accepted_columns = array('Nachname', 'perms', 'status');
 if($sortby) $browse_data['sortby'] = in_array($sortby, $accepted_columns)? $sortby:'';
-	
+
 if ($group) {
 	$browse_data["group"]=$group;
 	$browse_data["sortby"]='';
@@ -199,7 +200,7 @@ if ($perm->have_perm("admin")):
 endif;
 ?>
 <tr> 
-	<td class="steel1" align="left"width="100%" colspan=5>
+	<td class="steel1" align="left" width="100%" colspan="5">
 		<a href="<? echo $PHP_SELF ?>?reset=TRUE"><?=makeButton("neuesuche", "img")?></a></font>
   	</td>
 </tr></form>
