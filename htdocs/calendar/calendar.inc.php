@@ -198,7 +198,7 @@ elseif ($cmd != 'export') {
 	
 
 if ($source_page && ($cmd == 'edit' || $cmd == 'add' || $cmd == 'delete')) {
-	$calendar_sess_control_data['source'] = rawurldecode($source_page);
+	$calendar_sess_control_data['source'] = preg_replace('![^0-9a-z+_?&#/=.-]!i', '', rawurldecode($source_page));
 }
 
 // add an event to database *********************************************************

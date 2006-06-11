@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
+// $Id$ 
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $auth->login_if($again && ($auth->auth["uid"] == "nobody"));
@@ -75,6 +76,7 @@ if (isset($auswahl) && $auswahl!="") {
 		}
 		unset($redirect_to);
 		page_close();
+		$new_query = preg_replace('/[^0-9a-z+_?#&=.-]/i', '', $new_query);
 		header("Location: $new_query");
 		die;
 	}
@@ -192,4 +194,3 @@ if ($GLOBALS['VOTE_ENABLE']) {
   // Save data back to database.
   page_close()
  ?>
-<!-- $Id$ -->
