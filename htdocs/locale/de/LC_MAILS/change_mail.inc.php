@@ -5,8 +5,9 @@
 		."(Studienbegleitender Internetsupport von Präsenzlehre)\n"
 		."- " . $GLOBALS['UNI_NAME_CLEAN'] . " -\n\n"
 		."Ihr Account wurde um " . $Zeit . " von einer Administratorin oder einem\n"
-		."Administrator verändert.\n"
-		."Die aktuellen Angaben lauten:\n\n"
+		."Administrator verändert"
+		.($this->user_data['auth_user_md5.locked']==1 ? " und gesperrt" : "")
+		.".\nDie aktuellen Angaben lauten:\n\n"
 		."Benutzername: " . $this->user_data['auth_user_md5.username'] . "\n"
 		."Status: " . $this->user_data['auth_user_md5.perms'] . "\n"
 		."Vorname: " . $this->user_data['auth_user_md5.Vorname'] . "\n"

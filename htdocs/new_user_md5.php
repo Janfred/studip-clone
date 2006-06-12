@@ -102,9 +102,9 @@ if (check_ticket($ticket)){
 			if (isset($geschlecht))
 				$newuser['user_info.geschlecht'] = stripslashes(trim($geschlecht));
 		
-			$newuser['auth_user_md5.gesperrt']     = (isset($gesperrt) ? $gesperrt : 0);
-                        $newuser['auth_user_md5.kommentar']    = (isset($kommentar) ? stripslashes(trim($kommentar)) : "");
-                        $newuser['auth_user_md5.gesperrt_von'] = ($gesperrt==1 ? $auth->auth["uid"] : "");
+			$newuser['auth_user_md5.locked']     = (isset($locked) ? $locked : 0);
+                        $newuser['auth_user_md5.lock_comment']    = (isset($lock_comment) ? stripslashes(trim($lock_comment)) : "");
+                        $newuser['auth_user_md5.locked_by'] = ($locked==1 ? $auth->auth["uid"] : "");
 		
 			$UserManagement->changeUser($newuser);
 			
@@ -372,15 +372,15 @@ if (isset($_GET['details'])) {
                                         echo "<tr>\n";
                                         echo "  <td class=\"steel1\"><b>&nbsp;"._("Benutzer sperren:")."</b></td>\n";
                                         echo "  <td class=\"steel1\">\n";
-                                        echo "    <INPUT TYPE=\"checkbox\" NAME=\"gesperrt\" VALUE=\"1\" ".($db->f("gesperrt")==1 ? "CHECKED" : "").">"._("sperren")."\n";
+                                        echo "    <INPUT TYPE=\"checkbox\" NAME=\"locked\" VALUE=\"1\" ".($db->f("locked")==1 ? "CHECKED" : "").">"._("sperren")."\n";
                                         echo "  </td>\n";
                                         echo "  <td class=\"steel1\">\n";
                                         echo "    &nbsp;"._("Kommentar:")."&nbsp;\n";
-                                        echo "    <INPUT TYPE=\"text\" NAME=\"kommentar\" VALUE=\"".$db->f("kommentar")."\" SIZE=\"24\" MAXLENGTH=\"255\">\n";
+                                        echo "    <INPUT TYPE=\"text\" NAME=\"lock_comment\" VALUE=\"".$db->f("lock_comment")."\" SIZE=\"24\" MAXLENGTH=\"255\">\n";
                                         echo "  </td>\n";
                                         echo "</tr>\n";
-                                        if ($db->f("gesperrt")==1)
-                                                echo "<TR><TD CLASS=\"steel1\" COLSPAN=\"3\" ALIGN=\"center\"><FONT SIZE=\"-2\">"._("Gesperrt von:")." ".get_fullname($db->f("gesperrt_von"))." (<A HREF=\"about.php?username=".get_username($db->f("gesperrt_von"))."\">".get_username($db->f("gesperrt_von"))."</A>)</FONT></TD></TR>\n";
+                                        if ($db->f("locked")==1)
+                                                echo "<TR><TD CLASS=\"steel1\" COLSPAN=\"3\" ALIGN=\"center\"><FONT SIZE=\"-2\">"._("Gesperrt von:")." ".get_fullname($db->f("locked_by"))." (<A HREF=\"about.php?username=".get_username($db->f("locked_by"))."\">".get_username($db->f("locked_by"))."</A>)</FONT></TD></TR>\n";
                                 }
                                 ?>
 
@@ -550,7 +550,7 @@ if (isset($_GET['details'])) {
 				?>
 				<tr valign=middle align=left>
 					<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>"><a href="<?php echo $PHP_SELF . "?details=" . $db->f("username") ?>"><?php $db->p("username") ?></a>
-					<? if ($db->f("gesperrt")=="1") echo "<FONT SIZE=\"-1\" COLOR=\"RED\">&nbsp;<B>"._("gesperrt!")."</B></FONT>"; ?>
+					<? if ($db->f("locked")=="1") echo "<FONT SIZE=\"-1\" COLOR=\"RED\">&nbsp;<B>"._("gesperrt!")."</B></FONT>"; ?>
 					</td>
 					<td class="<? echo $cssSw->getClass() ?>"><?=$db->f("perms") ?></td>
 					<td class="<? echo $cssSw->getClass() ?>"><?=htmlReady($db->f("Vorname")) ?>&nbsp;</td>

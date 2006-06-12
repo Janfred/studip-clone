@@ -121,11 +121,11 @@ $user_gesperrt = FALSE;
 if ($perm->have_perm("root"))
         $db->query("SELECT * FROM auth_user_md5  WHERE username ='$username'");
 else
-        $db->query("SELECT * FROM auth_user_md5  WHERE username ='$username' AND gesperrt=0");
+        $db->query("SELECT * FROM auth_user_md5  WHERE username ='$username' AND locked=0");
 
 $db->next_record();
 
-if ($perm->have_perm("root") && $db->f("gesperrt")==1)
+if ($perm->have_perm("root") && $db->f("locked")==1)
         $user_gesperrt = TRUE;
 
 if (!$db->nf()) {

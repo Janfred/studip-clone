@@ -185,7 +185,7 @@ class StudipAuthAbstract {
 		$db = new DB_Seminar();
                 $db->query(sprintf("SELECT * FROM auth_user_md5 WHERE username='%s'",$username));
                 if ($db->next_record()) {
-                        if ($db->f("gesperrt")=="1") {
+                        if ($db->f("locked")=="1") {
                                 $error .= _("Dieser Benutzer ist gesperrt! Wenden Sie sich bitte an die Administration.")."<BR>";
                                 return array('uid' => $uid,'error' => $error);
                         }

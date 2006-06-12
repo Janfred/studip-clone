@@ -59,7 +59,7 @@ else
 // Liste aller die mutig (oder eitel?) genug sind
 
 $rang = 1;
-$db->query("SELECT a.user_id,username,score,geschlecht, " .$_fullname_sql['full'] ." AS fullname FROM user_info a LEFT JOIN auth_user_md5 b USING (user_id) WHERE score > 0 AND gesperrt=0 ORDER BY score DESC");
+$db->query("SELECT a.user_id,username,score,geschlecht, " .$_fullname_sql['full'] ." AS fullname FROM user_info a LEFT JOIN auth_user_md5 b USING (user_id) WHERE score > 0 AND locked=0 ORDER BY score DESC");
 if ($db->num_rows()) {
 	echo "<table width=\"99%\" align=\"center\" border=\"0\" cellpadding=\"2\" cellspacing=\"0\">";
 	while ($db->next_record()) {
