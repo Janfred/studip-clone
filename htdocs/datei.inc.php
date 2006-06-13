@@ -25,6 +25,33 @@ require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'].'lib/classes/StudipDocument.class.
 
 if ($GLOBALS['ZIP_USE_INTERNAL']) include_once($GLOBALS['ABSOLUTE_PATH_STUDIP'].'lib/pclzip/pclzip.lib.php');
 
+function readfile_chunked($filename,$retbytes=true) { 
+   $chunksize = 1*(1024*1024); // how many bytes per chunk 
+   $buffer = ''; 
+   $cnt =0; 
+   // $handle = fopen($filename, 'rb'); 
+   $handle = fopen($filename, 'rb'); 
+   if ($handle === false) { 
+       return false; 
+   } 
+   while (!feof($handle)) { 
+       $buffer = fread($handle, $chunksize); 
+       echo $buffer; 
+       ob_flush(); 
+       flush(); 
+       if ($retbytes) { 
+           $cnt += strlen($buffer); 
+       } 
+   } 
+       $status = fclose($handle); 
+   if ($retbytes && $status) { 
+       return $cnt; // return num. bytes delivered like readfile() does. 
+   } 
+   return $status; 
+
+} 
+
+
 function parse_header($header){
 	if (!is_array($header)){
 		$header = explode("\n",trim($header));

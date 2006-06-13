@@ -336,7 +336,7 @@ header("Content-Disposition: $content_disposition; filename=\"$file_name\"");
 ob_end_flush();
 
 if ($type != 5){
-	@readfile($path_file);
+	@readfile_chunked($path_file);
 	if(!in_array($type, array(1,2,3,4,5))){
 		TrackAccess($file_id, 'dokument');
 	}
