@@ -86,6 +86,7 @@ function print_module_icons ($m_enabled) {
 			case 'literature' :
 				$m_icon = 'pictures/icon-lit.gif';
 				break;
+			case 'elearning_interface' :
 			case 'ilias_connect' :
 				$m_icon = 'pictures/icon-lern.gif';
 				break;
