@@ -747,6 +747,7 @@ function includeMonth ($ptime, $href, $mod = "", $js_include = "") {
 
 function fit_title ($title, $cols, $rows, $max_length, $end_str = "...", $pad = TRUE) {
 	global $auth;
+	
 	if ($auth->auth["jscript"])
 		$max_length = $max_length * ($auth->auth["xres"] / 1024);
 	
