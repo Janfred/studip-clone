@@ -20,7 +20,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
 
-page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Register_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
+$my_auth = ($GLOBALS['ENABLE_SELF_REGISTRATION'] ? "Seminar_Register_Auth" : "Seminar_Default_Auth");
+
+page_open(array("sess" => "Seminar_Session", "auth" => $my_auth, "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 
 if (!$GLOBALS['ENABLE_SELF_REGISTRATION']){
 	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
