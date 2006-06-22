@@ -359,7 +359,7 @@ class ExternElement {
 					case "width" :
 						$fault[$form_name][$i] = (!preg_match("/^\d{0,4}$/", $value[$i])
 								|| $value[$i]> 2000 || $value[$i]< 0);
-						if ($HTTP_POST_VARS["{$form_name}pp"] == "%") {
+						if ($HTTP_POST_VARS["{$form_name}pp"] == "%" && $HTTP_POST_VARS[$form_name][$i] != '') {
 							if (is_array($HTTP_POST_VARS[$form_name]))
 								$HTTP_POST_VARS[$form_name][$i] = $HTTP_POST_VARS[$form_name][$i] . "%";
 							else
