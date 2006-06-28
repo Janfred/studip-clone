@@ -361,8 +361,6 @@ function dump_sem($sem_id) {
 			// die eigentliche Teil-Tabelle
 	
 				$sortby = "doll DESC";
-				$db=new DB_Seminar;
-				$db2=new DB_Seminar;
 				$db->query ("SELECT seminar_user.user_id, " . $_fullname_sql['full'] . " AS fullname, username, status, count(topic_id) AS doll FROM seminar_user LEFT JOIN px_topics USING (user_id,Seminar_id) LEFT JOIN auth_user_md5 ON (seminar_user.user_id=auth_user_md5.user_id) LEFT JOIN user_info USING (user_id) WHERE seminar_user.Seminar_id = '$sem_id' AND status = '$key'  GROUP by seminar_user.user_id ORDER BY $sortby");
 	
 				if (!$db->affected_rows() == 0) {//haben wir in der Personengattung ueberhaupt einen Eintrag?
