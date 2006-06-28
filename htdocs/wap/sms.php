@@ -17,7 +17,7 @@
 * @module		dates_search.php
 * @package		WAP
 */
-
+// $Id$
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // sms.php
@@ -72,12 +72,12 @@ if ($session_user_id)
 	$db = new DB_Seminar();
 	$q_string  = "SELECT COUNT(message_user.message_id) AS num_sms ";
 	$q_string .= "FROM message_user LEFT JOIN message USING (message_id) ";
-	$q_string .= "WHERE message_user.user_id = \"$session_user_id\" ";
-	$q_string .= "AND message_user.snd_rec = \"rec\" ";
-	$q_string .= "AND message_user.deleted = \"0\" ";
+	$q_string .= "WHERE message_user.user_id = '" . $session_user_id . "' ";
+	$q_string .= "AND message_user.snd_rec = 'rec' ";
+	$q_string .= "AND message_user.deleted = '0' ";
 	$q_string .= "AND message.mkdate > $CurrentLogin";
 
-	$db->query("$q_string");
+	$db->query($q_string);
 	$db->next_record();
 	$num_sms   = $db->f("num_sms");
 	$num_pages = ceil($num_sms / SMS_PER_PAGE);
@@ -87,13 +87,13 @@ if ($session_user_id)
 		$q_string  = "SELECT message_user.message_id, auth_user_md5.* ";
 		$q_string .= "FROM message_user LEFT JOIN message USING (message_id) ";
 		$q_string .= "LEFT JOIN auth_user_md5 ON (message.autor_id = auth_user_md5.user_id) ";
-		$q_string .= "WHERE message_user.user_id = \"$session_user_id\" ";
-		$q_string .= "AND message_user.snd_rec = \"rec\" ";
-		$q_string .= "AND message_user.deleted = \"0\" ";
+		$q_string .= "WHERE message_user.user_id = '" . $session_user_id . "' ";
+		$q_string .= "AND message_user.snd_rec = 'rec' ";
+		$q_string .= "AND message_user.deleted = '0' ";
 		$q_string .= "AND message.mkdate > $CurrentLogin ";
 		$q_string .= "LIMIT $progress_counter, " . SMS_PER_PAGE;
 
-		$db->query("$q_string");
+		$db->query($q_string);
 		$num_entries = $db->nf();
 		$progress_limit = $progress_counter + $num_entries;
 

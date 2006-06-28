@@ -9,7 +9,7 @@
 * @module		wap_hlp.inc.php
 * @package		WAP
 */
-
+// $Id$
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // wap_hlp.inc.php
@@ -80,11 +80,11 @@
 	{
 		$q_string  = "SELECT val ";
 		$q_string .= "FROM active_sessions ";
-		$q_string .= "WHERE sid = \"$user_id\" ";
-		$q_string .= "AND name = \"Seminar_User\"";
+		$q_string .= "WHERE sid = '" . $user_id . "' ";
+		$q_string .= "AND name = 'Seminar_User'";
 
 		$db = new DB_Seminar;
-		$db-> query("$q_string");
+		$db-> query($q_string);
 
 		if (!$db-> next_record())
 			return FALSE;

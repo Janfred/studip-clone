@@ -18,7 +18,7 @@
 * @module		event_news.php
 * @package		WAP
 */
-
+// $Id$
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // event_news.php
@@ -75,11 +75,11 @@
 
         $q_string  = "SELECT COUNT(news_range.news_id) AS num_news ";
         $q_string .= "FROM news_range LEFT JOIN news USING (news_id) ";
-        $q_string .= "WHERE news_range.range_id=\"$event_id\" ";
+        $q_string .= "WHERE news_range.range_id='" . $event_id . "' ";
         $q_string .= "AND date < $current_time AND (date + expire) > $current_time ";
         $q_string .= "AND date > $CurrentLogin";
 
-        $db-> query("$q_string");
+        $db-> query($q_string);
         $db-> next_record();
         $num_news  = $db-> f("num_news");
         $num_pages = ceil($num_news / NEWS_PER_PAGE);
@@ -88,13 +88,13 @@
         {
             $q_string  = "SELECT news.topic, news.news_id ";
             $q_string .= "FROM news_range LEFT JOIN news USING (news_id) ";
-            $q_string .= "WHERE news_range.range_id=\"$event_id\" ";
+            $q_string .= "WHERE news_range.range_id='" . $event_id . "' ";
             $q_string .= "AND date < $current_time AND (date + expire) > $current_time ";
             $q_string .= "AND date > $CurrentLogin ";
             $q_string .= "ORDER BY date DESC ";
             $q_string .= "LIMIT $progress_counter, " . NEWS_PER_PAGE;
 
-            $db-> query("$q_string");
+            $db-> query($q_string);
             $num_entries = $db-> nf();
             $progress_limit = $progress_counter + $num_entries;
 

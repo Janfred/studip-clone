@@ -18,7 +18,7 @@
 * @module		event_dates.php
 * @package		WAP
 */
-
+// $Id$
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // event_dates.php
@@ -74,10 +74,10 @@
         wap_hlp_get_global_user_var($session_user_id, "CurrentLogin");
 
         $q_string  = "SELECT COUNT(termin_id) AS num_dates FROM termine ";
-        $q_string .= "WHERE range_id = \"$event_id\" ";
+        $q_string .= "WHERE range_id = '" . $event_id . "' ";
         $q_string .= "AND chdate > $CurrentLogin";
 
-        $db-> query("$q_string");
+        $db-> query($q_string);
         $db-> next_record();
         $num_dates = $db-> f("num_dates");
         $num_pages = ceil($num_dates / DATES_PER_PAGE);
@@ -85,12 +85,12 @@
         if ($num_dates > 0)
         {
             $q_string  = "SELECT termin_id, content FROM termine ";
-            $q_string .= "WHERE range_id = \"$event_id\" ";
+            $q_string .= "WHERE range_id = '" . $event_id . "' ";
             $q_string .= "AND chdate > $CurrentLogin ";
             $q_string .= "ORDER BY date ";
             $q_string .= "LIMIT $progress_counter, " . DATES_PER_PAGE;
 
-            $db-> query("$q_string");
+            $db-> query($q_string);
             $num_entries = $db-> nf();
             $progress_limit = $progress_counter + $num_entries;
 
