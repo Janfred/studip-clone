@@ -1,4 +1,6 @@
 <?
+// $Id$
+
 require_once($ABSOLUTE_PATH_STUDIP . "visual.inc.php");
 require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"]."/lib/classes/StudipNews.class.php");
 
@@ -6,7 +8,7 @@ $db =& new DB_Seminar();
 $error_message = "";
 
 // stimmt die übergebene range_id?
-$query = "SELECT Name FROM Institute WHERE Institut_id=\"{$this->config->range_id}\"";
+$query = "SELECT Name FROM Institute WHERE Institut_id='" . $this->config->range_id . "'";
 $db->query($query);
 if(!$db->next_record())
 	$error_message = $GLOBALS["EXTERN_ERROR_MESSAGE"];
