@@ -18,7 +18,7 @@
 * @module		show_private.php
 * @package		WAP
 */
-
+// $Id$
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // show_private.php
@@ -56,8 +56,8 @@ wap_adm_start_card();
 $db = new DB_Seminar;
 $q_string  = "SELECT privatnr, privadr ";
 $q_string .= "FROM auth_user_md5 LEFT JOIN user_info ";
-$q_string .= "USING (user_id) WHERE username = \"$user_name\"";
-$db-> query("$q_string");
+$q_string .= "USING (user_id) WHERE username = '" . $user_name . "'";
+$db-> query($q_string);
 $db-> next_record();
 
 $private_nr  = $db-> f("privatnr");

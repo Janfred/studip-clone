@@ -21,7 +21,7 @@
 * @module		show_institute.php
 * @package		WAP
 */
-
+// $Id$
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // show_institute.php
@@ -66,8 +66,8 @@ if ($institutes_flag)
 else
 	$q_string = "SELECT Strasse, Plz ";
 $q_string .= "FROM Institute ";
-$q_string .= "WHERE Institut_id = \"$inst_id\"";
-$db->query("$q_string");
+$q_string .= "WHERE Institut_id = '" . $inst_id . "'";
+$db->query($q_string);
 $db->next_record();
 
 $inst_street = $db->f("Strasse");
@@ -83,10 +83,10 @@ if ($institutes_flag)
 
 	$q_string  = "SELECT COUNT(news_range.news_id) AS num_news ";
    $q_string .= "FROM news_range LEFT JOIN news USING (news_id) ";
-	$q_string .= "WHERE news_range.range_id=\"$inst_id\" ";
+	$q_string .= "WHERE news_range.range_id= '" . $inst_id . "' ";
    $q_string .= "AND date < $current_time AND (date + expire) > $current_time ";
    $q_string .= "AND date > $CurrentLogin";
-   $db->query("$q_string");
+   $db->query($q_string);
    $db->next_record();
    $num_news = $db->f("num_news");
 }
@@ -94,9 +94,9 @@ else
 {
 	$q_string  = "SELECT auth_user_md5.user_id, raum, Telefon, Fax, sprechzeiten ";
 	$q_string .= "FROM auth_user_md5 LEFT JOIN user_inst ";
-	$q_string .= "USING (user_id) WHERE username = \"$user_name\" ";
-	$q_string .= "AND Institut_id = \"$inst_id\"";
-	$db->query("$q_string");
+	$q_string .= "USING (user_id) WHERE username = '" . $user_name . "' ";
+	$q_string .= "AND Institut_id = '" . $inst_id . "'";
+	$db->query($q_string);
 	$db->next_record();
 
 	$user_room	  = $db->f("raum");

@@ -24,7 +24,7 @@
 * @module		show_news.php
 * @package		WAP
 */
-
+// $Id$
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // show_news.php
@@ -72,9 +72,9 @@
         $db = new DB_Seminar();
 
         $q_string  = "SELECT body, date, topic FROM news ";
-        $q_string .= "WHERE news_id=\"$news_id\"";
+        $q_string .= "WHERE news_id='" . $news_id . "'";
 
-        $db-> query("$q_string");
+        $db-> query($q_string);
         $db-> next_record();
         $news_title = $db-> f("topic");
         $news_body  = $db-> f("body");

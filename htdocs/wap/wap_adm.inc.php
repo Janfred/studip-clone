@@ -9,7 +9,7 @@
 * @module		wap_adm.inc.php
 * @package		WAP
 */
-
+// $Id$
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // wap_adm.inc.php
@@ -49,10 +49,10 @@ require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/auth_plugins/StudipAuthAbstract.
 			return FALSE;
 
 		$q_string  = "SELECT user_id FROM wap_sessions ";
-		$q_string .= "WHERE session_id = \"$session_id\"";
+		$q_string .= "WHERE session_id = '" . $session_id . "'";
 
 		$db = new DB_Seminar;
-		$db-> query ("$q_string");
+		$db-> query ($q_string);
 
 		if ($db-> next_record())
 			return $db-> f("user_id");
@@ -77,10 +77,10 @@ require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/auth_plugins/StudipAuthAbstract.
 			return FALSE;
 
 		$q_string  = "SELECT username FROM auth_user_md5 ";
-		$q_string .= "WHERE user_id = \"$user_id\"";
+		$q_string .= "WHERE user_id = '" . $user_id . "'";
 
 		$db = new DB_Seminar;
-		$db-> query ("$q_string");
+		$db-> query ($q_string);
 
 		if ($db-> next_record())
 			return $db-> f("username");
@@ -105,11 +105,11 @@ require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/auth_plugins/StudipAuthAbstract.
 		$user_id = wap_adm_get_user_id($session_id);
 
 		$q_string  = "DELETE FROM wap_sessions ";
-		$q_string .= "WHERE user_id = \"$user_id\" ";
-		$q_string .= "AND session_id = \"$session_id\"";
+		$q_string .= "WHERE user_id = '" . $user_id . "' ";
+		$q_string .= "AND session_id = '" . $session_id ."'";
 
 		$db = new DB_Seminar;
-		$db-> query("$q_string");
+		$db-> query($q_string);
 	}
 
 	/**
@@ -137,10 +137,10 @@ require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/auth_plugins/StudipAuthAbstract.
 
 		$q_string  = "SELECT user_id ";
 		$q_string .= "FROM auth_user_md5 ";
-		$q_string .= "WHERE username = \"$user_name\" ";
-		$q_string .= "AND password = \"$encoded_pass\"";
+		$q_string .= "WHERE username = '" . $user_name . "' ";
+		$q_string .= "AND password = '" . $encoded_pass . "'";
 
-		$db-> query ("$q_string");
+		$db-> query ($q_string);
 		*/
 		$check_auth = StudipAuthAbstract::CheckAuthentication($user_name,$user_pass,false);
 		if ($check_auth['uid']){
@@ -148,8 +148,8 @@ require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/auth_plugins/StudipAuthAbstract.
 			$new_session_id = md5(uniqid("WapSession", TRUE));
 			$q_string  = "INSERT INTO wap_sessions ";
 			$q_string .= "(user_id, session_id, creation_time) ";
-			$q_string .= "VALUES (\"$user_id\", \"$new_session_id\", NOW())";
-			$db-> query ("$q_string");
+			$q_string .= "VALUES ('$user_id', '$new_session_id', NOW())";
+			$db-> query ($q_string);
 
 			return $new_session_id;
 		}
@@ -206,10 +206,10 @@ require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/auth_plugins/StudipAuthAbstract.
 
 		$q_string  = "SELECT NOW() - creation_time AS session_duration ";
 		$q_string .= "FROM wap_sessions ";
-		$q_string .= "WHERE session_id = \"$session_id\"";
+		$q_string .= "WHERE session_id = '" . $session_id . "'";
 
 		$db = new DB_Seminar;
-		$db-> query("$q_string");
+		$db-> query($q_string);
 
 		if (!$db-> next_record())
 		{
@@ -250,8 +250,8 @@ require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/auth_plugins/StudipAuthAbstract.
 		{
 			$q_string  = "UPDATE wap_sessions ";
 			$q_string .= "SET creation_time = NOW() ";
-			$q_string .= "WHERE session_id = \"$session_id\"";
-			$db-> query("$q_string");
+			$q_string .= "WHERE session_id = '" . $session_id . "'";
+			$db-> query($q_string);
 
 			return $user_id;
 		}

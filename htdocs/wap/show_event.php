@@ -16,7 +16,7 @@
 * @module		show_event.php
 * @package		WAP
 */
-
+// $Id$
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // show_event.php
@@ -61,26 +61,26 @@
 
         $q_string  = "SELECT COUNT(news_range.news_id) AS num_news ";
         $q_string .= "FROM news_range LEFT JOIN news USING (news_id) ";
-        $q_string .= "WHERE news_range.range_id=\"$event_id\" ";
+        $q_string .= "WHERE news_range.range_id='" . $event_id . "' ";
         $q_string .= "AND date < $current_time AND (date + expire) > $current_time ";
         $q_string .= "AND date > $CurrentLogin";
 
-        $db-> query("$q_string");
+        $db-> query($q_string);
         $db-> next_record();
         $num_news = $db-> f("num_news");
 
         $q_string  = "SELECT COUNT(termin_id) AS num_dates FROM termine ";
-        $q_string .= "WHERE range_id = \"$event_id\" ";
+        $q_string .= "WHERE range_id = '" . $event_id . "' ";
         $q_string .= "AND chdate > $CurrentLogin";
 
-        $db-> query("$q_string");
+        $db-> query($q_string);
         $db-> next_record();
         $num_dates = $db-> f("num_dates");
 
         $q_string  = "SELECT Name FROM seminare ";
-        $q_string .= "WHERE Seminar_id = \"$event_id\"";
+        $q_string .= "WHERE Seminar_id = '" . $event_id . "'";
 
-        $db-> query("$q_string");
+        $db-> query($q_string);
         $db-> next_record();
         $event_name = $db-> f("Name");
         $short_name = wap_txt_shorten_text($event_name, WAP_TXT_LINE_LENGTH);

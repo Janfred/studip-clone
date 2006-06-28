@@ -15,7 +15,7 @@
 * @module		events.php
 * @package		WAP
 */
-
+// $Id$
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // events.php
@@ -72,9 +72,9 @@
 
         $q_string  = "SELECT COUNT(Seminar_id) AS num_events ";
         $q_string .= "FROM seminar_user ";
-        $q_string .= "WHERE user_id = \"$session_user_id\"";
+        $q_string .= "WHERE user_id = '" . $session_user_id . "'";
 
-        $db-> query("$q_string");
+        $db-> query($q_string);
         $db-> next_record();
         $num_events = $db-> f("num_events");
         $num_pages  = ceil($num_events / EVENTS_PER_PAGE);
@@ -83,9 +83,9 @@
         {
             $q_string  = "SELECT seminare.Seminar_id, seminare.Name ";
             $q_string .= "FROM seminar_user LEFT JOIN seminare USING (Seminar_id) ";
-            $q_string .= "WHERE seminar_user.user_id = \"$session_user_id\" ";
+            $q_string .= "WHERE seminar_user.user_id = '" . $session_user_id . "' ";
 			$q_string .= "ORDER BY seminar_user.gruppe, seminare.Name";
-            $db-> query("$q_string");
+            $db-> query($q_string);
 
             $event_new_array = array();
             $event_old_array = array();
@@ -98,17 +98,17 @@
 
 				$q_string  = "SELECT COUNT(news_range.news_id) AS num_news ";
     		    $q_string .= "FROM news_range LEFT JOIN news USING (news_id) ";
-        		$q_string .= "WHERE news_range.range_id=\"$entry_id\" ";
+        		$q_string .= "WHERE news_range.range_id='" . $entry_id . "' ";
 	        	$q_string .= "AND date < $current_time AND (date + expire) > $current_time ";
     	    	$q_string .= "AND date > $CurrentLogin";
-    	    	$db_entry-> query("$q_string");
+    	    	$db_entry-> query($q_string);
     	    	$db_entry-> next_record();
     	    	$num_news = $db_entry-> f("num_news");
 
 		        $q_string  = "SELECT COUNT(termin_id) AS num_dates FROM termine ";
-		        $q_string .= "WHERE range_id = \"$entry_id\" ";
+		        $q_string .= "WHERE range_id = '" . $entry_id . "' ";
 		        $q_string .= "AND chdate > $CurrentLogin";
-    	    	$db_entry-> query("$q_string");
+    	    	$db_entry-> query($q_string);
     	    	$db_entry-> next_record();
     	    	$num_dates = $db_entry-> f("num_dates");
 

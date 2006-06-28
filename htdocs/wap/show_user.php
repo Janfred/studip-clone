@@ -18,7 +18,7 @@
 * @module		dates_search.php
 * @package		WAP
 */
-
+// $Id$
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // show_user.php
@@ -58,8 +58,8 @@ $q_string  = "SELECT " . $_fullname_sql['full'] . " ";
 $q_string .= "AS komplett_name, Email ";
 $q_string .= "FROM auth_user_md5 ";
 $q_string .= "LEFT JOIN user_info USING (user_id) ";
-$q_string .= "WHERE auth_user_md5.username=\"$user_name\"";
-$db-> query("$q_string");
+$q_string .= "WHERE auth_user_md5.username='" . $user_name . "'";
+$db-> query($q_string);
 $db-> next_record();
 
 $complete_name = $db-> f("komplett_name");
@@ -67,8 +67,8 @@ $e_mail		= $db-> f("Email");
 
 $q_string  = "SELECT privatnr, privadr ";
 $q_string .= "FROM auth_user_md5 LEFT JOIN user_info ";
-$q_string .= "USING (user_id) WHERE username = \"$user_name\"";
-$db-> query("$q_string");
+$q_string .= "USING (user_id) WHERE username = '" . $user_name . "'";
+$db-> query($q_string);
 $db-> next_record();
 
 $private_nr  = $db-> f("privatnr");
@@ -86,7 +86,7 @@ $q_string .= "WHERE username = '$user_name' ";
   //  $q_string .= "AND user_inst.Institut_id = Institute.Institut_id ";
 $q_string .= "AND user_inst.inst_perms != 'user' ";
 $q_string .= "ORDER BY Institute.Name";
-$db->query("$q_string");
+$db->query($q_string);
 
 if ($back_to == "show_sms") {
 	$postfields_back_to = "		<postfield name=\"sms_id\" value=\"$sms_id\"/>\n";

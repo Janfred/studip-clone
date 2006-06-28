@@ -72,7 +72,7 @@
 
         $q_string  = "SELECT COUNT(Institut_id) AS num_insts ";
         $q_string .= "FROM user_inst ";
-        $q_string .= "WHERE user_id = \"$session_user_id\"";
+        $q_string .= "WHERE user_id = '" . $session_user_id . "'";
 
         $db-> query("$q_string");
         $db-> next_record();
@@ -83,7 +83,7 @@
         {
 		    $q_string  = "SELECT Institute.Institut_id, Institute.Name ";
 		    $q_string .= "FROM user_inst LEFT JOIN Institute USING (Institut_id) ";
-		    $q_string .= "WHERE user_inst.user_id = \"$session_user_id\" ";
+		    $q_string .= "WHERE user_inst.user_id = '" . $session_user_id . "' ";
 		    $q_string .= "ORDER BY Institute.Name";
             $db-> query("$q_string");
 
@@ -98,7 +98,7 @@
 
 		        $q_string  = "SELECT COUNT(news_range.news_id) AS num_news ";
     		    $q_string .= "FROM news_range LEFT JOIN news USING (news_id) ";
-		        $q_string .= "WHERE news_range.range_id=\"$entry_id\" ";
+		        $q_string .= "WHERE news_range.range_id='".$entry_id."' ";
     		    $q_string .= "AND date < $current_time AND (date + expire) > $current_time ";
         		$q_string .= "AND date > $CurrentLogin";
     	    	$db_entry-> query("$q_string");
