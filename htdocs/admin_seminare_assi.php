@@ -131,7 +131,7 @@ if (isset($cmd) && ($cmd == 'do_copy') && $perm->have_studip_perm('tutor',$cp_id
 
 	if ($data['art'] == 1) { //unregelmaessige Veranstaltung oder Block -> Termine kopieren
 		// Sitzungen
-		$db2->query('SELECT * FROM termine WHERE range_id="'. $cp_id . '" AND date_typ="1" ORDER by date');
+		$db2->query('SELECT * FROM termine WHERE range_id=\''. $cp_id . '\' AND date_typ=\'1\' ORDER by date');
 		$db2_term_count = 0;
 		while ($db2->next_record()) {
 			$db2_start_date = $db2->f('date');
@@ -149,7 +149,7 @@ if (isset($cmd) && ($cmd == 'do_copy') && $perm->have_studip_perm('tutor',$cp_id
 		}
 		$sem_create_data['term_count'] = $db2_term_count;
 		// Vorbesprechung
-//		$db2->query('SELECT * FROM termine WHERE range_id="' . $cp_id. '" AND date_typ="2" ORDER by date');
+//		$db2->query('SELECT * FROM termine WHERE range_id=\'' . $cp_id. '\' AND date_typ=\'2\' ORDER by date');
 //		if ($db2->next_record()) {
 //			$sem_create_data['sem_vor_termin'] = $db2->f('date');
 //			$sem_create_data['sem_vor_end_termin']  = $db2->f('end_time');
@@ -2687,7 +2687,7 @@ if ($level == 4) {
 										print "<b>"._("Raumeigenschaften angeben:")."</b><br /><br />";
 										if (!$dont_anchor)
 											print "<a name=\"anker\"></a>";
-										$query = sprintf("SELECT * FROM resources_categories  WHERE is_room = '1' ORDER BY name", $category_id);
+										$query = "SELECT * FROM resources_categories  WHERE is_room = '1' ORDER BY name";
 										$db->query($query);
 
 										if (($db->nf() == 1) || ($sem_create_data["resRequest"]->getCategoryId())) {

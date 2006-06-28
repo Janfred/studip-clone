@@ -319,7 +319,7 @@ if ($perm->have_perm("admin"))
 							print "<b>"._("Raumeigenschaften angeben:")."</b><br /><br />";
 							if (!$uebernehmen_x)
 								print "<a name=\"anker\"></a>";
-							$query = sprintf("SELECT * FROM resources_categories  WHERE is_room = '1' ORDER BY name", $category_id);
+							$query = "SELECT * FROM resources_categories  WHERE is_room = '1' ORDER BY name";
 							$db->query($query);
 							$room_categories = $db->nf();
 							
