@@ -333,31 +333,30 @@ if ((($edit_x) || ($save_changes_with_request)) && (!$admin_dates_data["termin_i
 			$tmp = $auth->auth["uname"];
 			$author=get_fullname();
 			
-			if ($tag[$i]<10)
-				$tag[$i]="0".$tag[$i];
-			if ($monat[$i]<10)
-				$monat[$i]="0".$monat[$i];
-			$tmp_datum=$tag[$i].".".$monat[$i].".".$jahr[$i];
+			if (strlen($tag[$i]) == 1) $tag[$i] = "0" . $tag[$i];
+			if (strlen($monat[$i]) == 1) $monat[$i] = "0" . $monat[$i];
+			$tmp_datum = $tag[$i] . "." . $monat[$i] . "." . $jahr[$i];
 
 			
  			if ($titel[$i]==$default_titel)
-				$tmp_titel="Kein Titel";
+				$tmp_titel= _("Kein Titel");
 			else
 				$tmp_titel=$titel[$i];
 
 		 	//nachtraegliches Anlegen von Ordner vornehmen
-		 	if ($insert_topic[$i]) {
-				$tmp_topic_id=CreateTopic($TERMIN_TYP[$art[$i]]["name"].": ".$tmp_titel." " . _("am") . " $tmp_datum", $author, _("Hier kann zu diesem Termin diskutiert werden"), 0, 0, $admin_dates_data["range_id"]);
-				$db3->query ("UPDATE termine SET topic_id = '$tmp_topic_id' WHERE termin_id = '$t_id'");
-			} else
-				$tmp_topic_id='';
-			if ($insert_folder[$i]) { 
-				$titel_f=$TERMIN_TYP[$art[$i]]["name"].": $tmp_titel";
-				$titel_f.=" " . _("am") . " $tmp_datum";
-				$description_f= _("Ablage für Ordner und Dokumente zu diesem Termin");		
-				$db3->query("INSERT INTO folder SET folder_id='$f_id', range_id='$t_id', description='$description_f', user_id='$user->id', name='$titel_f', mkdate='$aktuell', chdate='$aktuell'");
+		 	if ($tmp_result["changed"]){
+				if ($insert_topic[$i]) {
+					$tmp_topic_id=CreateTopic($TERMIN_TYP[$art[$i]]["name"].": ".$tmp_titel." " . _("am") . " $tmp_datum", $author, _("Hier kann zu diesem Termin diskutiert werden"), 0, 0, $admin_dates_data["range_id"]);
+					$db3->query ("UPDATE termine SET topic_id = '$tmp_topic_id' WHERE termin_id = '$t_id'");
+				} else
+					$tmp_topic_id='';
+				if ($insert_folder[$i]) { 
+					$titel_f=$TERMIN_TYP[$art[$i]]["name"].": $tmp_titel";
+					$titel_f.=" " . _("am") . " $tmp_datum";
+					$description_f= _("Ablage für Ordner und Dokumente zu diesem Termin");		
+					$db3->query("INSERT INTO folder SET folder_id='$f_id', range_id='$t_id', description='$description_f', user_id='$user->id', name='$titel_f', mkdate='$aktuell', chdate='$aktuell'");
+				}
 			}
-		 	
 		 	if (!$add_result) //Hinweisnachrichten nur einmal anzeigen
 		 		$add_result=$tmp_result["add_msg"];
 		 	
