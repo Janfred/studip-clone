@@ -38,6 +38,8 @@
 require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."/lib/ExternModule.class.php");
 require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."/views/extern_html_templates.inc.php");
 require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . "visual.inc.php");
+require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . "statusgruppe.inc.php");
+
 
 class ExternModuleDownload extends ExternModule {
 
@@ -74,7 +76,7 @@ class ExternModuleDownload extends ExternModule {
 		$range = get_object_type($range_id);
 		
 		if ($range == 'inst' || $range == 'fak')
-			return $range;
+			return TRUE;
 			
 		return FALSE;
 	}
@@ -110,11 +112,10 @@ class ExternModuleDownload extends ExternModule {
 		$error_message = "";
 		
 		// check for valid range_id
-		$range = $this->checkRangeId($this->config->range_id);
-		if($range != 'inst')
+		if(!$this->checkRangeId($this->config->range_id))
 			$error_message = $GLOBALS["EXTERN_ERROR_MESSAGE"];
 		// if $args['seminar_id'] is given, check for free access
-		else if ($args['seminar_id']) {
+		if ($args['seminar_id']) {
 			$seminar_id = $args['seminar_id'];
 			$query = "SELECT Lesezugriff FROM seminare s LEFT JOIN seminar_inst si ";
 			$query .= "USING(seminar_id) WHERE s.seminar_id='$seminar_id' ";
@@ -141,8 +142,8 @@ class ExternModuleDownload extends ExternModule {
 			$nameformat = "no_title_short";
 		$query = "SELECT dokument_id, description, filename, d.mkdate, d.chdate, filesize, ";
 		$query .= $GLOBALS["_fullname_sql"][$nameformat];
-		$query .= "AS fullname, username FROM dokumente d LEFT JOIN user_info USING (user_id) ";
-		$query .= "LEFT JOIN auth_user_md5 USING (user_id) WHERE ";
+		$query .= "AS fullname, username, aum.user_id FROM dokumente d LEFT JOIN user_info USING (user_id) ";
+		$query .= "LEFT JOIN auth_user_md5 aum USING (user_id) WHERE ";
 		$query .= "seminar_id='$seminar_id'$query_order";
 		
 		$db->query($query);
@@ -229,10 +230,16 @@ class ExternModuleDownload extends ExternModule {
 					"filesize"    => $db->f("filesize") > 1048576 ? round($db->f("filesize") / 1048576, 1) . " MB"
 														: round($db->f("filesize") / 1024, 1) . " kB",
 															
-					"fullname"    => $this->elements["LinkIntern"]->toString(array("content" =>
-														htmlReady($db->f("fullname")), "module" => "Persondetails",
-														"link_args" => "username=" . $db->f("username")))
 				);
+				// if user is member of a group then link name to details page
+				if (GetStatusgruppen($this->config->range_id, $db->f('user_id'))) {
+					$table_row_data['content']['fullname'] = 
+							$this->elements['LinkIntern']->toString(array('content' =>
+							htmlReady($db->f('fullname')), 'module' => 'Persondetails',
+							'link_args' => 'username=' . $db->f('username')));
+				} else {
+					$table_row_data['content']['fullname'] = htmlReady($db->f('fullname'));
+				}
 				$out .= $this->elements["TableRow"]->toString($table_row_data);
 			}
 		}
