@@ -356,8 +356,22 @@ all uppercase each item of the configuration array will become a member of your 
 //$STUDIP_AUTH_PLUGIN[] = "Ldap";
 //$STUDIP_AUTH_PLUGIN[] = "StandardExtern";
 $STUDIP_AUTH_PLUGIN[] = "Standard";
-
+// $STUDIP_AUTH_PLUGIN[] = "CAS";
 /*
+// create a config for your own user data mapping class
+$CASAbstractUserDataMapping_CONFIG = array();
+$STUDIP_AUTH_CONFIG_CAS = array("host" => "cas.studip.de",
+				"port" => 8443,
+				"uri"  => "cas",
+				"user_data_mapping_class" => "CASAbstractUserDataMapping",
+				"user_data_mapping" => // map_args are dependent on your own data mapping class
+						array(  "auth_user_md5.username" => array("callback" => "getUserData", "map_args" => "username"),
+                                "auth_user_md5.Vorname" => array("callback" => "getUserData", "map_args" => "givenname"),
+                                "auth_user_md5.Nachname" => array("callback" => "getUserData", "map_args" => "surname"),
+                                "auth_user_md5.Email" => array("callback" => "getUserData", "map_args" => "email"),
+                                "auth_user_md5.perms" => array("callback" => "getUserData", "map_args" => "status"))        
+				);
+
 $STUDIP_AUTH_CONFIG_LDAPREADER = array(		"host" => "localhost",
 										"base_dn" => "dc=studip,dc=de",
 										"protocol_version" => 3,
