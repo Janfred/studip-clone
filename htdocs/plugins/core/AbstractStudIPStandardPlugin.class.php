@@ -69,7 +69,7 @@ class AbstractStudIPStandardPlugin extends AbstractStudIPPlugin{
     
     
     function getChangeindicatoriconname(){
-    	return $this->changeindicatoriconname;
+    	return $this->getPluginpath() . "/" . $this->changeindicatoriconname;
     }
     
     function setChangeindicatoriconname($newicon){
