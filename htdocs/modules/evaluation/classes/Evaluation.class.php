@@ -112,6 +112,12 @@ class Evaluation extends EvaluationObject {
   var $numberRanges;
 # ============================================================ end: variables #
 
+  /**
+   * Can the Evaluation only be edited by admin/root?
+   *
+   * @var unknown_type
+   */
+  var $protected;
 
 # Define constructor and destructor ========================================= #
    /**
@@ -140,6 +146,7 @@ class Evaluation extends EvaluationObject {
     $this->shared       = NO;
     $this->isUsed       = NO;
     $this->rangeNum     = 0;
+    $this->protected 	= false; // only editable by admins or roots
     /* -------------------------------------------------------------------- */
 
     /* Connect to database ------------------------------------------------ */
@@ -279,6 +286,25 @@ class Evaluation extends EvaluationObject {
       return $this->anonymous == YES ? YES : NO;
    }
 
+   /**
+    * Gets protect status
+    * @access  public
+    * @return  string  The protect status
+    */
+   function isProtected () {
+      return $this->protected == YES ? YES : NO;
+   }
+   
+   /**
+    * Sets protection state
+    * @access  public
+    * @param   string  protected the protection statte
+    * @throws  error
+    */
+   function setProtected ($protected) {     
+     $this->protected = $protected == YES ? YES : NO;
+   }
+   
    /**
     * Sets visible
     * @access  public
@@ -468,8 +494,28 @@ class Evaluation extends EvaluationObject {
         $this->throwError (3, _("Ungültiges Objekt: Eine aktive Evaluation wurde freigegeben."));
 
    }
+   
+   
 # ==================================================== end: private functions #
+  
 
+   function isLinked(){
+   	 $evalID = $this->getObjectId();
+  	// prüfen, ob diese Evaluation mit anderen Evaluationen verknüpft wurde
+  	$studipdb = new DB_Seminar();
+  	$studipdb->query(sprintf("select * from eval_link where linked_eval_id='%s'",$evalID));
+    if ($studipdb->next_record()){
+   	 // ergebnis vorhanden
+   	 $linkedevalid = $studipdb->f("linked_eval_id");
+    }
+    
+    if (isset($linkedevalid) && $linkedevalid != ""){
+    	return true;
+    }
+    else {
+    	return false;
+    }
+   }
 }
 
 ?>

@@ -23,6 +23,7 @@ require_once($ABSOLUTE_PATH_STUDIP ."modules/evaluation/evaluation.config.php");
 require_once(EVAL_LIB_COMMON);
 require_once(EVAL_FILE_EVALTREE);
 require_once(EVAL_FILE_EVAL);
+require_once("EvaluationText.class.php");
 # ====================================================== end: including files #
 
 /**
@@ -98,6 +99,10 @@ define ("ARRANGMENT_BLOCK", ARRANGMENT_BLOCK);
  * @access private
  */
 define ("QUESTION_BLOCK", QUESTION_BLOCK);
+
+define("TEXT_BLOCK", TEXT_BLOCK);
+
+define("LINK_BLOCK", LINK_BLOCK);
 
 # =============================================================== end: defines #
 
@@ -700,7 +705,11 @@ function getItemContent($itemID){
 				$show = "both";
 		$content .=  $this->createButtonbar($show);
 		break;
-		
+	 case TEXT_BLOCK:
+			
+		$content .= $this->createTitleInput(TEXT_BLOCK);
+		$content .=  $this->createButtonbar($show);
+		break;	
 	 case QUESTION_BLOCK:
 	 
 		$content .= $this->createTitleInput(QUESTION_BLOCK)
@@ -1276,7 +1285,12 @@ function execCommandUpdateItem ( $no_delete = false ){
 		
 		//global features
 		$this->tree->eval->setAnonymous($_REQUEST['anonymous']);
-
+		if (isset($_REQUEST["protected"])){			
+			$this->tree->eval->protected = true;
+		}
+		else  {
+			$this->tree->eval->protected = false;
+		}
 		$this->tree->eval->save();
 		
 		if ($this->tree->eval->isError)
@@ -1299,6 +1313,19 @@ function execCommandUpdateItem ( $no_delete = false ){
 		$this->msg[$this->itemID] = "msg§"
 			. _("Veränderungen wurden gespeichert.");
 		$group = null;
+		break;
+	 
+	case TEXT_BLOCK:
+
+		$group = &$this->tree->getGroupObject($this->itemID);
+		$group->setTitle($title, QUOTED);
+		$group->setText($text, QUOTED);
+		$group->save();
+		if ($group->isError)
+			return EvalCommon::showErrorReport ($this->tree->eval,
+				_("Fehler beim Einlesen (Block)"));
+		$this->msg[$this->itemID] = "msg§"
+			. _("Veränderungen wurden gespeichert.");
 		break;
 	 case QUESTION_BLOCK:
 
@@ -1501,6 +1528,35 @@ function execCommandAddGroup(){
 				_("Fehler beim Anlegen eines neuen Blocks."));
 		$this->msg[$this->itemID] = "msg§"
 			. _("Ein neuer Gruppierungsblock wurde angelegt.");
+	}
+	
+	$this->execCommandUpdateItem();
+	
+	return true;
+}
+
+/**
+ * Creates a new Group and adds it to the tree 
+ * 
+ * @access   public
+ * @return   boolean  true (reinits the tree)
+ */
+function execCommandAddText(){
+
+	$group = &new EvaluationText();
+	$group->setTitle( "Neuer Textblock" , QUOTED);
+	$group->setText("");
+
+	$mode = $this->getInstance($this->itemID);
+
+	if ($mode == ROOT_BLOCK){
+		$this->tree->eval->addChild($group);
+		$this->tree->eval->save();
+		if ($this->tree->eval->isError)
+			return EvalCommon::showErrorReport ($this->tree->eval,
+				_("Fehler beim Anlegen eines neuen Textblocks."));
+		$this->msg[$this->itemID] = "msg§"
+			. _("Ein neuer Textblock wurde angelegt.");
 	}
 	
 	$this->execCommandUpdateItem();
@@ -2159,7 +2215,17 @@ function createButtonbar ( $show = ARRANGMENT_BLOCK ){
 	$infotext .= "\n"
 		. _("- einen neuen Gruppierungsblock innerhalb dieses Blockes erstellen, in welchem sie weitere Gruppierungs- oder Fragenblöcke anlegen können.");
    }
-
+   
+   // the new textblock-button
+   if ($show == ROOT_BLOCK){
+		$buttons .= $seperator
+		. $this->createButton(
+			"erstellen-group",
+			_("Einen neuen Textblock erstellen."),
+			"cmd[AddText]");
+	$infotext .= "\n"
+		. _("- einen neuen Textblock innerhalb dieses Blockes erstellen, in welchem sie Text eintragen können.");
+   }
 	// the new question-group-button
    if ($show == "both" || $show == QUESTION_BLOCK){
    
@@ -2325,7 +2391,12 @@ function createFormNew($show = ARRANGMENT_BLOCK){
 			"erstellen",
 			_("Einen neuen Gruppierungsblock erstellen"),
 			"cmd[AddGroup]");
-			
+	$text_selection = _("Textblock")
+		. "&nbsp;"
+		. $this->createButton(
+			"erstellen",
+			_("Einen neuen Textblock erstellen"),
+			"cmd[AddText]");		
 	$qgroup_selection = _("Fragenblock mit")
 		. "&nbsp;"
 		. $this->createTemplateSelection()
@@ -2420,7 +2491,15 @@ function createTitleInput($mode = ROOT_BLOCK){
 			$text_label	 = _("Zusätzlicher Text");
 			$text 		 = htmlentities ($group->getText());
 			break;
-			
+		
+		case TEXT_BLOCK:
+			$title_label = _("Titel des Textblocks");
+			$group 		 =  &$this->tree->getGroupObject($this->itemID);
+			$title 		 = htmlentities ($group->getTitle());
+			$text_label	 = _("Zusätzlicher Text");
+			$text 		 = htmlentities ($group->getText());
+			break;
+				
 		case QUESTION_BLOCK:
 			$title_label = _("Titel des Fragenblocks");
 			$title_info	 = _("Die Angabe des Titels ist bei einem Fragenblock optional.");
@@ -2543,6 +2622,28 @@ function createGlobalFeatures (){
 	$td->addContent ($b);
 	$tr->addContent ($td);
 	$table->addContent ($tr);
+	
+	$perm = $GLOBALS["perm"];
+	if ($perm->have_perm("admin")){
+		$tr = new HTML("tr");
+		$td = new HTML("td");
+		$td->addAttr ("style","border-bottom:0px dotted black;");
+		$td->addContent(_("Veränderung der Evaluation nur durch Admin/Root-Admins: "));
+		$tr->addContent($td);
+		$td = new HTML("td");
+		$td->addAttr ("style","border-bottom:0px dotted black;");
+		$input = new HTMLempty ("input");
+		$input->addAttr("type","checkbox");
+		// $input->addString("checked");
+		if ($this->tree->eval->protected){
+			$input->addString("checked");
+		}
+		//$input->addAttr("value",$this->tree->eval->protected);
+		$input->addAttr("name","protected");
+		$td->addContent($input);
+		$tr->addContent($td);
+		$table->addContent($tr);
+	}
 	
 	$tr = new HTML ("tr");
 	
@@ -3369,8 +3470,12 @@ function getInstance ( $itemID ){
 		
 		if ($childtype == "EvaluationQuestion")
 			return QUESTION_BLOCK;
-		else
+		else if ($childtype == "EvaluationText"){
+			return TEXT_BLOCK;
+		}
+		else {
 			return ARRANGMENT_BLOCK;
+		}
 	}
 }
 

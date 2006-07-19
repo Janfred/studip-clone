@@ -178,7 +178,7 @@ class EvaluationTreeShowUser {
 	echo "</td>\n";
 
 	/* show group headline, if it's not a question group */
-	if( $group->getChildType() != "EvaluationQuestion" ) {
+	if( ($group->getChildType() != "EvaluationQuestion") && ($group->getChildType() != "EvaluationText") && ($group->getChildType() != "EvaluationLink") ) {
 
 	    /* add space after a top-level group */
 	    $parent = $group->getParentObject();
@@ -191,14 +191,54 @@ class EvaluationTreeShowUser {
 		$chapter_num = ($this->tree->tree_data[$parent_id]['priority'] + 1) .".". $chapter_num;
 		$parent_id = $this->tree->tree_data[$parent_id]['parent_id'];
 	    }
-	    echo "&nbsp;".$chapter_num." ";
-	    echo "<b>";
+	    echo "&nbsp;<b>".$chapter_num." ";
+	    echo $this->tree->tree_data[$group_id]['name'];
+	    echo "</b>";
+	    echo "</td>";
+
+	    echo "<td width=\"1\">\n";
+	    echo "<img src=\"".$GLOBALS['ASSETS_URL']."images/forumleer.gif\" width=\"2\" height=\"1\" border=\"0\" alt=\"\"></td>";
+	    echo "</td>\n";
+
+	} elseif ($group->getChildType() == "EvaluationText") {
+		/* add space after a top-level group */
+	    $parent = $group->getParentObject();
+	    if( $parent->instanceof() == "Evaluation" && $group->getPosition() != 0 )
+		echo "<td colspan=\"2\" width=\"100%\"><br /></td><tr>";
+
+	    echo "<td align=\"left\" width=\"100%\" valign=\"bottom\" class=\"steelkante\" style=\"padding:1px;\">\n";
+	    $parent_id = $group_id;
+	    while( $parent_id != "root" ) {
+		$chapter_num = ($this->tree->tree_data[$parent_id]['priority'] + 1) .".". $chapter_num;
+		$parent_id = $this->tree->tree_data[$parent_id]['parent_id'];
+	    }
+	    echo "&nbsp;<b>";
 	    echo $this->tree->tree_data[$group_id]['name'];
 	    echo "</b>";
 	    echo "</td>";
 
 	    echo "<td width=\"1\">\n";
 	    echo "<img src=\"pictures/forumleer.gif\" width=\"2\" height=\"1\" border=\"0\" alt=\"\"></td>";
+	    echo "</td>\n";
+	}  elseif ($group->getChildType() == "EvaluationLink") {
+		/* add space after a top-level group */
+	    $parent = $group->getParentObject();
+	    if( $parent->instanceof() == "Evaluation" && $group->getPosition() != 0 )
+		echo "<td colspan=\"2\" width=\"100%\"><br /></td><tr>";
+
+	    echo "<td align=\"left\" width=\"100%\" valign=\"bottom\" class=\"steelkante\" style=\"padding:1px;\">\n";
+	    $parent_id = $group_id;
+	    while( $parent_id != "root" ) {
+		$chapter_num = ($this->tree->tree_data[$parent_id]['priority'] + 1) .".". $chapter_num;
+		$parent_id = $this->tree->tree_data[$parent_id]['parent_id'];
+	    }
+	    echo "&nbsp;<i>";
+	    echo $this->tree->tree_data[$group_id]['name'];
+	    echo "</i>";
+	    echo "</td>";
+
+	    echo "<td width=\"1\">\n";
+	    echo "<img src=\"".$GLOBALS['ASSETS_URL']."images/forumleer.gif\" width=\"2\" height=\"1\" border=\"0\" alt=\"\"></td>";
 	    echo "</td>\n";
 
 	} else {
@@ -238,13 +278,21 @@ class EvaluationTreeShowUser {
 	echo "<!-- printItemDetails ----------------- -->\n";
 	echo "<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" width=\"100%\">\n";
 	echo "<tr>\n".$level_output;
-	echo "<td class=\"printcontent\" width=\"100%\" ".
-	    ($group->getChildType() == "EvaluationQuestion"
-#	     ? "style=\"border-left:1px solid #d0d0d0; border-right:1px solid #d0d0d0;\">"
-	     ? ">"
-	     : ">");
-	echo $this->getGroupContent($group);
-	echo "</td></tr>\n";
+	if ($group->getChildType() == "EvaluationLink"){
+		echo "<td class=\"printcontent\" width=\"100%\" >";
+		echo (sprintf(_("Bitte beantworten Sie auch die veranstaltungsspezifischen Fragen. Klicken Sie dazu <a href=\"show_evaluation.php?evalID=%s&isPreview=0\" target=\"_top\">hier</a>"),$group->getText()));
+		echo(sprintf("<a href=\"javascript:openEval('%s');\">oder hier</a>",$group->getText()));
+		echo "</td></tr>\n";			
+	}
+	else {
+		echo "<td class=\"printcontent\" width=\"100%\" ".
+		    ($group->getChildType() == "EvaluationQuestion"
+	#	     ? "style=\"border-left:1px solid #d0d0d0; border-right:1px solid #d0d0d0;\">"
+		     ? ">"
+		     : ">");
+		echo $this->getGroupContent($group);
+		echo "</td></tr>\n";
+	}
 	echo "</table>\n";
 	return;
     }

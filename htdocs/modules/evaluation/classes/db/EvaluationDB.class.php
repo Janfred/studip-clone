@@ -125,6 +125,7 @@ class EvaluationDB extends EvaluationObjectDB {
     $evalObject->setAnonymous    ($this->db->f ("anonymous"));
     $evalObject->setVisible      ($this->db->f ("visible"));
     $evalObject->setShared       ($this->db->f ("shared"));
+    $evalObject->setProtected($this->db->f("protected"));
     /* --------------------------------------------------------- end: values */
 
 
@@ -193,7 +194,8 @@ class EvaluationDB extends EvaluationObjectDB {
    " chdate    = '".$evalObject->getChangedate ()."',".
    " anonymous = '".$evalObject->isAnonymous ()."',".
    " visible   = '".$evalObject->isVisible ()."',".
-   " shared    = '".$evalObject->isShared ()."'".
+   " shared    = '".$evalObject->isShared ()."',".
+   " protected = '".($evalObject->protected ? "1" : "0")."' ".
    "WHERE".
    " eval_id   = '".$evalObject->getObjectID ()."'";
     } else {
@@ -212,7 +214,8 @@ class EvaluationDB extends EvaluationObjectDB {
    " chdate    = '".$evalObject->getChangedate ()."',".
    " anonymous = '".$evalObject->isAnonymous ()."',".
    " visible   = '".$evalObject->isVisible ()."',".
-   " shared    = '".$evalObject->isShared ()."'";
+   " shared    = '".$evalObject->isShared ()."',".
+   " protected = '".($evalObject->protected ? "1" : "0") ."'";
     }
 
     $this->db->query ($sql);

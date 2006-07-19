@@ -77,8 +77,12 @@ if ($the_range != $auth->auth['uname'] && $the_range != 'studip' && !$isUserrang
 	}
 } 
 
-if (array_key_exists ("page", $_REQUEST) && $_REQUEST["page"] == "edit")
+if (array_key_exists ("page", $_REQUEST) && $_REQUEST["page"] == "edit"){
 	include (EVAL_PATH.EVAL_FILE_EDIT);
+}
+elseif (array_key_exists ("page", $_REQUEST) && $_REQUEST["page"] == "link"){
+	include("modules/evaluation/evaluation_admin_link.inc.php");
+}
 else
 	include (EVAL_PATH.EVAL_FILE_OVERVIEW);
 

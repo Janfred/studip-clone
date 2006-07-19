@@ -21,7 +21,6 @@
 
 # Include all required files ================================================ #
 require_once($ABSOLUTE_PATH_STUDIP."modules/evaluation/evaluation.config.php");
-require_once($ABSOLUTE_PATH_STUDIP."datei.inc.php");
 require_once (HTML);
 require_once (EVAL_LIB_COMMON);
 require_once (EVAL_LIB_SHOW);
@@ -47,7 +46,7 @@ define ("EVAL_TITLE", _("Evaluations-Verwaltung"));
  * @package     evaluation
  *
  */
-class EvalOverview {
+class EvalLinkOverview {
 
 # Define all required variables ============================================= #
   /**
@@ -81,7 +80,7 @@ class EvalOverview {
    * @param    object  Perm $perm  The permission object
    * @param    object  User $user  The user object
    */
-  function EvalOverview ($db, $perm, $user) {
+  function EvalLinkOverview ($db, $perm, $user) {
     /* Set default values ------------------------------------------------- */
     $this->db = $db;
     $this->perm = $perm;
@@ -196,7 +195,6 @@ class EvalOverview {
    * @param  boolean $returnRow
    */
   function createEvalRow ($eval, $number, $state, $open, $returnRow = false) {
-
       /* initialize variables -------- */
       $evalID        = $eval->getObjectID();
       $numberOfVotes = EvaluationDB::getNumberOfVotes ($evalID);
@@ -205,13 +203,14 @@ class EvalOverview {
 
      if ($eval->getAuthor() != $user->id &&  $no_permissons)
         $no_buttons = 1;
-	 
+	
      $perm = $GLOBALS["perm"];
+
      if (($eval->isProtected()) && !$perm->have_perm("admin")){
      	$no_buttons = true;
      }
-     
-     $style = ($number % 2)
+        
+      $style = ($number % 2)
      ? "steelgraulight"
      : ($number == 0  ? "steel1kante" : "steel1");
 
@@ -223,159 +222,56 @@ class EvalOverview {
      ? " "
      : date ("d.m.Y", $eval->getRealStopdate());
 
-      $link = $GLOBALS["PHP_SELF"]."?rangeID=".$GLOBALS["rangeID"];
-      if (($open == NO)){
-      	if ($eval->isProtected() && $perm->have_perm("admin")){
-      		$link .= "&openID=".$evalID."#open";
-      	}
-      	else if (!$eval->isProtected()){
-      		$link .= "&openID=".$evalID."#open";
-      	}
-      	else {
-      		$link .= "";
-      	}
-      }
-      
+      $link = $GLOBALS["PHP_SELF"]."?page=link&rangeID=".$GLOBALS["rangeID"];
+      if ($open == NO)
+     $link .= "&openID=".$evalID."#open";
+
       $openLink = new HTML ("a");
       $openLink->addAttr ("href", $link);
 
       $titleLink = $arrowLink = $openLink;
       $titleLink->addContent( $eval->getTitle () ? $eval->getTitle () : " " );
-
+      
       switch ($state) {
 
       case "public_template":
-     $arrowLink = "&nbsp;";
-     $titleLink = $eval->getTitle () ? $eval->getTitle () : " ";
-     $content[0] = $eval->getFullname () ? $eval->getFullname () : " ";
-     $content[1] = $eval->getChangedate() == NULL ? " " : date ("d.m.Y", $eval->getChangedate());
-     $content[4] = EvalCommon::createEvalShowLink( $evalID, "<img border=0 align=middle ".
-                     makeButton( "vorschau", "src" ).
-                     tooltip(_("Vorschau dieser öffentlichen Evaluationsvorlage")).">",
-                     YES );
-     $content[2] = $eval->isAnonymous()
-         ? EvalCommon::createImage( EVAL_PIC_YES, _("ja") )
-         : EvalCommon::createImage( EVAL_PIC_NO, _("nein") );
-
-     $copyButton = new HTMLempty ("input");
-     $copyButton->addAttr ("style", "vertical-align:middle;");
-     $copyButton->addAttr ("type", "image");
-     $copyButton->addAttr ("name", "copy_public_template_button");
-     $copyButton->addAttr ("src", PATH_PICTURES."move_down.gif");
-     $copyButton->addAttr ("border", "0");
-     $copyButton->addAttr ("alt", _("Kopieren"));
-     $copyButton->addAttr ("title", _("Diese öffentliche Evaluationsvorlagen zu den eigenen Evaluationsvorlagen kopieren"));
-     $content[5] = $copyButton;
+     
 
      break;
 
       case "user_template":
-     $arrowLink->addContent(EvalCommon::createImage (($open ? EVAL_PIC_ARROW_TEMPLATE_OPEN : EVAL_PIC_ARROW_TEMPLATE),
-                       _("Aufklappen")));
-          $isShared = $eval->isShared() ? YES : NO;
-     $shareButton = new HTMLempty ("input");
-     $shareButton->addAttr ("style", "vertical-align:middle;");
-     $shareButton->addAttr ("type", "image");
-     $shareButton->addAttr ("name", "share_template_button");
-     $shareButton->addAttr ("src", $isShared ? EVAL_PIC_SHARED : EVAL_PIC_NOTSHARED );
-     $shareButton->addAttr ("border", "0");
-     $shareButton->addAttr ("alt", $isShared ? _("als öffentliche Evaluationsvorlage Freigeben") : _("Freigabe entziehen"));
-     $shareButton->addAttr ("title", $isShared ? _("Die Freigabe für diese Evaluationsvorlage entziehen") : _("Diese Evaluationsvorlage öffentlich freigeben"));
-
-     $content[0] = $shareButton;
-     $content[3] = EvalCommon::createSubmitButton ("kopieerstellen",
-                     _("Evaluationsvorlage kopieren"), "copy_own_template_button");
-
-     $content[4] = new HTML( "a" );
-     $content[4]->addAttr( "href", "admin_evaluation.php?page=edit&evalID=".$evalID );
-       $img = new HTMLEmpty( "img" );
-       $img->addString( makeButton( "bearbeiten", "src" ).tooltip(_("Evaluation bearbeiten")) );
-       $img->addAttr( "border", "0" );
-       $img->addAttr( "align", "middle" );
-     $content[4]->addContent( $img );
-
-     $content[5] = EvalCommon::createSubmitButton ("loeschen", _("Evaluation löschen"), "delete_request_button");
-     break;
-
-      case EVAL_STATE_NEW:
-	     $arrowLink->addContent(EvalCommon::createImage (($open ? EVAL_PIC_ARROW_NEW_OPEN : EVAL_PIC_ARROW_NEW),
-	                       _("Aufklappen")));
-	     $content[0] = $eval->getFullname () ? $eval->getFullname () : " ";
-	     $content[1] = $startDate;
-	    if (!$no_buttons){
-	     $content[2] = EvalCommon::createSubmitButton ("starten", _("Evaluation starten"), "start_button");
-	
-	     $content[4] = new HTML( "a" );
-	     $content[4]->addAttr( "href", "admin_evaluation.php?page=edit&evalID=".$evalID );
-	       $img = new HTMLEmpty( "img" );
-	       $img->addString( makeButton( "bearbeiten", "src" ).tooltip(_("Evaluation bearbeiten")) );
-	       $img->addAttr( "border", "0" );
-	       $img->addAttr( "align", "middle" );
-	     $content[4]->addContent( $img );
-	
-	     $content[5] = EvalCommon::createSubmitButton ("loeschen", _("Evaluation löschen"), "delete_request_button");
-	    }
-	    else if ($perm->have_perm("dozent") && $eval->isProtected()){
-	    	// hier den Button zum Verknüpfen mit einer anderen Evaluation anzeigen	    	
-	    	$content[3] = new HTML( "a" );
-		    $content[3]->addAttr( "href", "admin_evaluation.php?page=link&evalID=".$evalID );
+		     $arrowLink->addContent(EvalCommon::createImage (($open ? EVAL_PIC_ARROW_TEMPLATE_OPEN : EVAL_PIC_ARROW_TEMPLATE),
+		                       _("Aufklappen")));
+		          $isShared = $eval->isShared() ? YES : NO;
+		     $shareButton = new HTMLempty ("input");
+		     $shareButton->addAttr ("style", "vertical-align:middle;");
+		     $shareButton->addAttr ("type", "image");
+		     $shareButton->addAttr ("name", "link_eval_button");
+		     $shareButton->addAttr ("src", $isShared ? EVAL_PIC_SHARED : EVAL_PIC_NOTSHARED );
+		     $shareButton->addAttr ("border", "0");
+		     $shareButton->addAttr ("alt", $isShared ? _("als öffentliche Evaluationsvorlage Freigeben") : _("Freigabe entziehen"));
+		     $shareButton->addAttr ("title", $isShared ? _("Die Freigabe für diese Evaluationsvorlage entziehen") : _("Diese Evaluationsvorlage öffentlich freigeben"));
+		
+		     $content[0] = $shareButton;
+		     /*
+		     $content[3] = EvalCommon::createSubmitButton ("kopieerstellen",
+		                     _("Evaluationsvorlage kopieren"), "copy_own_template_button");
+		                     */
+		     $content[4] = new HTML( "a" );
+		     $content[4]->addAttr( "href", "admin_evaluation.php?page=edit&evalID=".$evalID );
 		       $img = new HTMLEmpty( "img" );
-		       $img->addString( makeButton( "zuweisen", "src" ).tooltip(_("Evaluation mit anderer Evaluation verknüpfen")) );
+		       $img->addString( makeButton( "bearbeiten", "src" ).tooltip(_("Evaluation bearbeiten")) );
 		       $img->addAttr( "border", "0" );
 		       $img->addAttr( "align", "middle" );
-		    $content[3]->addContent( $img );
-	    	
-	    }
-     break;
-
-      case EVAL_STATE_ACTIVE:
-		     $arrowLink->addContent(EvalCommon::createImage (($open ? EVAL_PIC_ARROW_RUNNING_OPEN : EVAL_PIC_ARROW_RUNNING),
-		                       _("Aufklappen")));
-		     $content[0] = $eval->getFullname () ? $eval->getFullname () : " ";
-		     $content[1] = $stopDate;
-		    if (!$no_buttons){
-		     $content[2] = EvalCommon::createSubmitButton ("stop", _("Evaluation stoppen"), "stop_button");
-		   // Kann hier noch optimiert werden, da hasVoted () immer einen DB-Aufruf startet
-		     $content[3] = ($eval->hasVoted())
-		        ? EvalCommon::createSubmitButton ("zuruecksetzen", _("Evaluation zurücksetzen"), "restart_request_button")
-		      : EvalCommon::createSubmitButton ("zuruecksetzen", _("Evaluation zurücksetzen"), "restart_confirmed_button");
-		     $content[4] = EvalCommon::createSubmitButton ("export", _("Evaluation exportieren"), "export_request_button");
+		     $content[4]->addContent( $img );
+		
 		     $content[5] = EvalCommon::createSubmitButton ("loeschen", _("Evaluation löschen"), "delete_request_button");
-		     $content[6] = EvalCommon::createSubmitButton ("auswertung", _("Auswertung"), "export_gfx_request_button");
-		    }
-		    else if ($perm->have_perm("dozent") && $eval->isProtected()){
-	    		if ($eval->hasVoted() != YES){
-			    	// hier den Button zum Verknüpfen mit einer anderen Evaluation anzeigen	    	
-			    	$content[3] = new HTML( "a" );
-				    $content[3]->addAttr( "href", "admin_evaluation.php?page=link&evalID=".$evalID );
-				       $img = new HTMLEmpty( "img" );
-				       $img->addString( makeButton( "zuweisen", "src" ).tooltip(_("Evaluation mit anderer Evaluation verknüpfen")) );
-				       $img->addAttr( "border", "0" );
-				       $img->addAttr( "align", "middle" );
-				    $content[3]->addContent( $img );
-	    		}
-		    }
-     break;
+     		 break;
 
-      case EVAL_STATE_STOPPED:
-     $arrowLink->addContent(EvalCommon::createImage (($open ? EVAL_PIC_ARROW_STOPPED_OPEN : EVAL_PIC_ARROW_STOPPED),
-                       _("Aufklappen")));
-     $content[0] = $eval->getFullname () ? $eval->getFullname () : " ";
-     //$content[1] = $eval->isVisible() ? "yes" : "no";
-    if (!$no_buttons){
-     $content[2] = EvalCommon::createSubmitButton ("fortsetzen", _("Evaluation fortsetzen"), "continue_button");
-     $content[3] = ($eval->hasVoted())
-        ? EvalCommon::createSubmitButton ("zuruecksetzen", _("Evaluation zurücksetzen"), "restart_request_button")
-      : EvalCommon::createSubmitButton ("zuruecksetzen", _("Evaluation zurücksetzen"), "restart_confirmed_button");
-     $content[4] = EvalCommon::createSubmitButton ("export", _("Evaluation exportieren"), "export_request_button");
-     $content[5] = EvalCommon::createSubmitButton ("loeschen", _("Evaluation löschen"), "delete_request_button");
-     $content[6] = EvalCommon::createSubmitButton ("auswertung", _("Auswertung"), "export_gfx_request_button");
-    }
-     break;
       }
 
       $form = new HTML ("form");
-      $form->addAttr( "action", $GLOBALS["PHP_SELF"]."?rangeID=".$GLOBALS["rangeID"]);
+      $form->addAttr( "action", $GLOBALS["PHP_SELF"]."?page=link&rangeID=".$GLOBALS["rangeID"]);
       $form->addAttr( "method", "post" );
       $form->addAttr( "style", "display:inline;" );
 
@@ -457,8 +353,7 @@ class EvalOverview {
       }
        $tr->addContent ($td);
       /* the content fields */
-      //for( $i = 0; $i < 6; $i++ ) {
-     for( $i = 0; $i < 7; $i++ ) {
+      for( $i = 0; $i < 6; $i++ ) {
      $td = new HTML ("td");
      $td->addAttr ("width", "96");
      $td->addAttr ("class", $style);
@@ -630,10 +525,10 @@ class EvalOverview {
    */
   function createInfoBox ($imgLogo) {
     /* Define infobox text ------------------------------------------------ */
-      $info1 =  array ("icon" => EVAL_PIC_ICON,
+      $info1 =  array ("icon" => "eval-icon.gif",
              "text" => _("Auf dieser Seite haben Sie eine Übersicht aller in dem ausgewählten Bereich existierenden Evaluationen sowie Ihrer eigenen Evaluationsvorlagen."));
 
-      $info2 = array ("icon" => PATH_PICTURES."cont_folder4.gif",
+      $info2 = array ("icon" => "cont_folder4.gif",
             "text" => _("Sie können eine Evaluation aufklappen und dann Bereichen zuordnen und ihre Laufzeit bestimmen."));
 
 
@@ -992,21 +887,6 @@ class EvalOverview {
          return $safeguard;
 
 
-	case "export_gfx_request":
-            $haveNoPerm = YES;
-            $eval       = new Evaluation ($evalID, NULL, EVAL_LOAD_NO_CHILDREN);
-            $haveNoPerm = EvaluationObjectDB::getEvalUserRangesWithNoPermission ($eval);
-            if ($haveNoPerm == YES) {
-               $report = EvalCommon::createReportMessage  (_("Sie haben nicht die Berechtigung diese Evaluation zu exportieren."), EVAL_PIC_ERROR, EVAL_CSS_ERROR);
-               return $report->createContent ();
-            }
-
-            echo "<script language=\"JavaScript\">";
-            echo "  document.location.href=\"eval_summary.php?eval_id=".$evalID."\"";
-            echo "</script>";
-
-            return "";
-
          case "export_request":
             /* Check permissions ------------------------------------------- */
             $haveNoPerm = YES;
@@ -1027,8 +907,11 @@ class EvalOverview {
 
             /* Create link ------------------------------------------------- */
             $link = new HTML ("a");
-            $link->addAttr ('href', GetDownloadLink($exportManager->getTempFilename(), $exportManager->getFilename(), 2));
-            $link->addHTMLContent (GetFileIcon('csv', true));
+            $link->addAttr ("href", "sendfile.php?type=2&file_id=".$exportManager->getTempFilename ()."&file_name=".$exportManager->getFilename ());
+            $img = new HTMLempty ("img");
+            $img->addAttr("border","0");
+            $img->addAttr("src", EVAL_PIC_EXPORT_FILE);
+            $link->addContent ($img);
             $link->addContent (_("auf diese Verknüpfung"));
             /* -------------------------------------------- end: create link */
 

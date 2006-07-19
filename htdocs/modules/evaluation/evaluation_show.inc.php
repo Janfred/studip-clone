@@ -42,6 +42,7 @@ $perm->check ("autor");
 require_once ($ABSOLUTE_PATH_STUDIP."modules/evaluation/evaluation.config.php");
 require_once ($ABSOLUTE_PATH_STUDIP."seminar_open.php");
 require_once ($ABSOLUTE_PATH_STUDIP."html_head.inc.php");
+require_once ($ABSOLUTE_PATH_STUDIP."header.php");
 require_once ($ABSOLUTE_PATH_STUDIP."visual.inc.php");
 
 require_once( EVAL_FILE_EVAL );
@@ -93,7 +94,7 @@ $form = new HTM( "form" );
 $form->attr( "action", $PHP_SELF."?evalID=".$evalID );
 $form->attr( "method", "post" );
 
-$titlebar = EvalCommon::createTitle( _("Stud.IP Online-Evaluation"),
+$titlebar = EvalCommon::createTitle( _("Online-Evaluation: " . $eval->getTitle() . " in der " . $SessSemName["art_generic"] . " " . $SessSemName[0]),
 				     PATH_PICTURES."eval-icon.gif" );
 $form->cont( $titlebar );
 

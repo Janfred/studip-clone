@@ -41,8 +41,7 @@ unset ($_include_extra_stylesheet);
  * @access   public
  */
 
-function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
-
+function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {   
    /* Set variables -------------------------------------------------------- */
    $voteDB  = &new VoteDB ();
    if ($voteDB->isError ()) {
@@ -112,22 +111,236 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
 
    /* Show the vote box ---------------------------------------------------- */
    $width = ($isHomepage)? "100%" : "70%";
+   
+   // bei range_id = Studip 
+   // aktuelle Evaluationen des Benutzers anzeigen
+   // zunächst müssen dazu alle Veranstaltungen des Benutzers bestimmt werden
+   
+   if ($rangeID == "studip") {
+   
+   $db = new DB_Seminar();
+   $db->query ("SELECT sem_tree_id,seminare.Name, seminare.Seminar_id, seminare.status as sem_status, seminar_user.status, seminar_user.gruppe,
+				seminare.chdate, seminare.visible, admission_binding,modules,IFNULL(visitdate,0) as visitdate
+				FROM seminar_user LEFT JOIN seminare  USING (Seminar_id) 
+				LEFT JOIN object_user_visits ouv ON (ouv.object_id=seminar_user.Seminar_id AND ouv.user_id='$user->id' AND ouv.type='sem')
+				LEFT JOIN seminar_sem_tree sst ON (sst.seminar_id=seminar_user.seminar_id)
+				WHERE seminar_user.user_id = '". $userID . "'");
+   $currentid = 0;
+   
+   while ($db->next_record()){
+   	  $semid = $db->f("Seminar_id");
+   	  $evalids = $evalDB->getEvaluationIDs($semid,EVAL_STATE_ACTIVE);
+   	  //$evalids = array($evalDB->getEvaluationIDs($db->f("Seminar_id"),EVAL_STATE_ACTIVE),$db->f("Name"));
+   	  $semname = $db->f("Name");	  
+   	  if (count($evalids) > 0){
+   	  	
+   	  	$semarray[] = $evalids;
+   	  	$semarray[] = $semid;
+   	  	$semarray[] = $semname;
+   	  
+   	  	$activecourseEvals[] = $semarray;
+   	  }   	  
+   	  $semarray = array();
+   }
+   
+   if (count($activecourseEvals) > 0) {
+	   if ($perm->have_studip_perm ("tutor", $rangeID) OR
+	       get_username($userID) == $rangeID)
+	      echo createBoxHeader (_("Lehrveranstaltungsevaluationen zu meinen Veranstaltungen"), $width, "",
+				    VOTE_ICON_BIG, 
+				    _("Evaluationen..."), 
+				    VOTE_FILE_ADMIN."?page=overview&rangeID=".$rangeID.
+				    ($GLOBALS['SessSemName']["class"]=="sem"
+				     ? "&new_sem=TRUE&view=vote_sem"
+				     : "&new_inst=TRUE&view=vote_inst"),
+				    VOTE_ICON_ARROW, _("Umfragen bearbeiten"));
+	   else
+	      echo createBoxHeader (_("Lehrveranstaltungsevaluationen zu meinen Veranstaltungen"), $width, "",
+				    VOTE_ICON_BIG, 
+				    _("Evaluationen..."));
+  }
+  else {
+  	echo("<table border=\"0\" bgcolor=\"#FFFFFF\" cellspacing=\"0\" cellpadding=\"2\" align=\"center\" width=\"$width\"><tr><td class=\"steel1\" colspan=\"3\">");
+  }
 
-   if ($perm->have_studip_perm ("tutor", $rangeID) OR
-       get_username($userID) == $rangeID)
-      echo createBoxHeader (_("Umfragen"), $width, "",
-			    VOTE_ICON_BIG, 
-			    _("Umfragen und mehr..."), 
-			    VOTE_FILE_ADMIN."?page=overview&rangeID=".$rangeID.
-			    ($GLOBALS['SessSemName']["class"]=="sem"
-			     ? "&new_sem=TRUE&view=vote_sem"
-			     : "&new_inst=TRUE&view=vote_inst"),
-			    VOTE_ICON_ARROW, _("Umfragen bearbeiten"));
-   else
-      echo createBoxHeader (_("Umfragen"), $width, "",
-			    VOTE_ICON_BIG, 
-			    _("Umfragen und mehr..."));
+  
+  
+  	/* create an anchor ---------------------------------------------------- */
+   echo "<a name=\"vote\"></a>";
+   /* ---------------------------------------------------------------------- */
 
+   /* Javascript function for show-link */
+   echo EvalCommon::createEvalShowJS( NO, NO );
+   
+  /* Show all active evals for courses, the user is in------------------------------------------------ */
+  if (is_Array($activecourseEvals)){
+	  foreach ($activecourseEvals as $semarray){
+	   foreach ($semarray[0] as $evalID) {
+	      $eval = &new Evaluation ($evalID, NULL, EVAL_LOAD_NO_CHILDREN);
+		  $usersvoted = $evalDB->getUserVoted($evalID);
+		  if ($userID )
+	      if ($eval->isError ()) {
+	         echo createErrorReport ($vote, _("Fehler beim Einlesen der Evaluation"));
+	      }
+	      if (!$eval->isProtected()){
+		  	// überspringen, gehört nicht zu uniweiten Evaluationen
+		  	continue;
+		  }
+	      if ($eval->isLinked()){
+	      	// Bearbeitung beenden, nicht anzeigen.
+	      	continue;
+	      }
+	      
+	     
+	      $haveFullPerm = $haveFullPerm || ($userID == $eval->getAuthorID());
+	 	  
+	      /* Get post and get-variables ---------------------------------------- */
+	      $formID = $_REQUEST["voteformID"];
+	      $openID = $_REQUEST["voteopenID"];
+	      $open = (($openID == $evalID) || $_GET["openAllVotes"]) && (!$_GET["closeVotes"]);
+	      /* ------------------------------------------------------------------- */
+	      /* Show headlines ---------------------------------------------------- */
+	      echo createBoxLineHeader ();
+	      echo createVoteHeadline ( $eval, $open, $openID, $evalDB, $isHomepage,$semarray[2],$semarray[1]);
+	
+	      if ( $open ) {
+		 	 object_set_visit($evalID, "eval"); //set a visittime for this eval
+		 
+	         echo createBoxContentHeader ();
+	         echo createFormHeader ($eval);
+	         
+	     	/* User has already used the vote --------------------------------- */
+	         $hasVoted = $evalDB->hasVoted ($evalID, $userID);
+	         $numberOfVotes = $evalDB->getNumberOfVotes ($evalID);
+	         $evalNoPermissons = EvaluationObjectDB::getEvalUserRangesWithNoPermission($eval);
+	         
+	         $table = new HTML ("table");
+	         $table->addAttr("style", "font-size:1.2em;");
+	         $table->addAttr("width", "100%");
+	         $table->addAttr("border", "0");
+	         $tr = new HTML ("tr");
+	         $td = new HTML ("td");
+	         
+	         $maxTitleLength = ($isHomepage)
+	            ? VOTE_SHOW_MAXTITLELENGTH
+	            : VOTE_SHOW_MAXTITLELENGTH - 10;
+	
+	         if (strlen (formatReady($eval->getTitle())) > $maxTitleLength){
+	            $b = new HTML ("b");
+	            $b->addHTMLContent(formatReady($eval->getTitle(). " in " . $semarray[2]));
+	            
+	            $td->addContent($b);
+	            $td->addContent( new HTMLempty ("br") );
+	            $td->addContent( new HTMLempty ("br") );
+	         }
+	         
+		 $td->addAttr("style", "font-size:0.8em;");
+	         $td->addHTMLContent(formatReady($eval->getText ()));
+	         $td->addContent(new HTMLempty ("br"));
+	         $td->addContent(new HTMLempty ("br"));
+	         
+	         if (! $hasVoted ) {
+	            $div = new HTML ("div");
+	            $div->addAttr ("align", "center");
+	            $div->addContent (EvalShow::createVoteButton ($eval));
+	            $td->addContent ($div);
+	         }
+	         
+	         $tr->addContent ($td);
+	         $table->addContent ($tr);
+	         $table->addContent (EvalShow::createEvalMetaInfo ($eval, $hasVoted));
+	         
+	         if ($eval->isProtected() && !$perm->have_perm("admin")){
+	         		if ($perm->have_perm("dozent")){
+		         		$tr = new HTML ("tr");
+			            $td = new HTML ("td");
+			            $td->addAttr ("align", "left");
+			            $td->addAttr("style", "font-size:0.8em;color:#ff0000;");
+			            $td->addContent (_("Die Evaluation ist geschützt und darf nur durch den Administrator verändert werden."));
+			            $tr->addContent ($td);
+			            $table->addContent ($tr);
+			            
+		           
+		         		// ermöglicht, Evaluation mit dieser zu verknüpfen
+		         		$tr = new HTML ("tr");
+			            $td = new HTML ("td");
+			            $td->addAttr ("align", "left");
+			            $td->addAttr("style", "font-size:0.8em;color:#ff0000;");
+			            if ($eval->hasVoted()){
+			            	$td->addContent (_("Dieser Evaluation darf keine Verknüpfung mehr zu einem anderen Fragebogen hinzugefügt werden."));
+			            }
+			            else {
+			            	$link = new HTML( "a" );
+						    $link->addAttr( "href", "admin_evaluation.php?page=link&evalID=".$evalID );
+						    $img = new HTMLEmpty( "img" );
+						    $img->addString( makeButton( "zuweisen", "src" ).tooltip(_("Evaluation mit anderer Evaluation verknüpfen")) );
+						    $img->addAttr( "border", "0" );
+						    $img->addAttr( "align", "middle" );
+						    $link->addContent( $img );
+						    $td->addContent($link);
+			            }
+			            $tr->addContent ($td);
+			            $table->addContent ($tr);
+		         	}
+	         }
+	         else {
+	         	 if ( $haveFullPerm ) {
+		            if (!($range = get_username($rangeID2)))
+		               $range = $rangeID2;
+		            $tr = new HTML ("tr");
+		            $td = new HTML ("td");
+		            $td->addAttr ("align", "center");
+		            $td->addContent (EvalShow::createOverviewButton ($range, $eval->getObjectID ()));
+		
+		            if ( $evalNoPermissons == 0 ) {
+		            $td->addContent (EvalShow::createStopButton ($eval));
+		            $td->addContent (EvalShow::createDeleteButton ($eval));
+		            $td->addContent (EvalShow::createExportButton ($eval));
+		            }
+		            
+		            $tr->addContent ($td);
+		            $table->addContent ($tr);
+		         }
+		         
+		         
+	         }
+	         
+	         echo $table->createContent ();
+	         //echo createVoteForm ($eval, $userID);
+	     /* --------------------------------------------------------------- */
+	      //echo createFormFooter ($eval, $userID, $perm, $rangeID);
+	      echo createBoxContentFooter ();
+	      }
+	      /* ------------------------------------------------------------------- */
+	      
+	      echo createBoxLineFooter ();
+	   }
+	  }
+	 }
+      echo "<tr><td height=10><p></td></tr>";
+   }
+   // ende Übersicht über Evaluationen in meinen Veranstaltungen
+    
+   if (count($activeEvals) + count($stoppedEvals) > 0) {
+	   if ($perm->have_studip_perm ("tutor", $rangeID) OR
+	       get_username($userID) == $rangeID)
+	      echo createBoxHeader (_("Evaluationen"), $width, "",
+				    VOTE_ICON_BIG, 
+				    _("Evaluationen..."), 
+				    VOTE_FILE_ADMIN."?page=overview&rangeID=".$rangeID.
+				    ($GLOBALS['SessSemName']["class"]=="sem"
+				     ? "&new_sem=TRUE&view=vote_sem"
+				     : "&new_inst=TRUE&view=vote_inst"),
+				    VOTE_ICON_ARROW, _("Umfragen bearbeiten"));
+	   else
+	      echo createBoxHeader (_("Evaluationen"), $width, "",
+				    VOTE_ICON_BIG, 
+				    _("Evaluationen..."));
+
+  }
+  else {
+  	echo("<table border=\"0\" bgcolor=\"#FFFFFF\" cellspacing=\"0\" cellpadding=\"2\" align=\"center\" width=\"$width\"><tr><td class=\"steel1\" colspan=\"3\">");
+  }
    /* create an anchor ---------------------------------------------------- */
    echo "<a name=\"vote\"></a>";
    /* ---------------------------------------------------------------------- */
@@ -147,11 +360,14 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
   /* Show all active evals ------------------------------------------------ */
    foreach ($activeEvals as $evalID) {
       $eval = &new Evaluation ($evalID, NULL, EVAL_LOAD_NO_CHILDREN);
-
+	  
       if ($eval->isError ()) {
          echo createErrorReport ($vote, _("Fehler beim Einlesen der Evaluation"));
       }
-      
+      if ($eval->isLinked()){
+      	// Bearbeitung beenden, nicht anzeigen.
+      	continue;
+      }
       $haveFullPerm = $haveFullPerm || ($userID == $eval->getAuthorID());
 
       /* Get post and get-variables ---------------------------------------- */
@@ -170,7 +386,7 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
          echo createBoxContentHeader ();
          echo createFormHeader ($eval);
          
-     /* User has already used the vote --------------------------------- */
+     	/* User has already used the vote --------------------------------- */
          $hasVoted = $evalDB->hasVoted ($evalID, $userID);
          $numberOfVotes = $evalDB->getNumberOfVotes ($evalID);
          $evalNoPermissons = EvaluationObjectDB::getEvalUserRangesWithNoPermission($eval);
@@ -211,22 +427,59 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
          $table->addContent ($tr);
          $table->addContent (EvalShow::createEvalMetaInfo ($eval, $hasVoted));
          
-         if ( $haveFullPerm ) {
-            if (!($range = get_username($rangeID2)))
-               $range = $rangeID2;
-            $tr = new HTML ("tr");
-            $td = new HTML ("td");
-            $td->addAttr ("align", "center");
-            $td->addContent (EvalShow::createOverviewButton ($range, $eval->getObjectID ()));
-
-            if ( $evalNoPermissons == 0 ) {
-            $td->addContent (EvalShow::createStopButton ($eval));
-            $td->addContent (EvalShow::createDeleteButton ($eval));
-            $td->addContent (EvalShow::createExportButton ($eval));
-            }
-            
-            $tr->addContent ($td);
-            $table->addContent ($tr);
+         if ($eval->isProtected() && !$perm->have_perm("admin")){
+         		if ($perm->have_perm("dozent")){
+	         		$tr = new HTML ("tr");
+		            $td = new HTML ("td");
+		            $td->addAttr ("align", "left");
+		            $td->addAttr("style", "font-size:0.8em;color:#ff0000;");
+		            $td->addContent (_("Die Evaluation ist geschützt und darf nur durch den Administrator verändert werden."));
+		            $tr->addContent ($td);
+		            $table->addContent ($tr);
+		            
+	           
+	         		// ermöglicht, Evaluation mit dieser zu verknüpfen
+	         		$tr = new HTML ("tr");
+		            $td = new HTML ("td");
+		            $td->addAttr ("align", "left");
+		            $td->addAttr("style", "font-size:0.8em;color:#ff0000;");
+		            if ($eval->hasVoted()){
+		            	$td->addContent (_("Dieser Evaluation darf keine Verknüpfung mehr zu einem anderen Fragebogen hinzugefügt werden."));
+		            }
+		            else {
+		            	$link = new HTML( "a" );
+					    $link->addAttr( "href", "admin_evaluation.php?page=link&evalID=".$evalID );
+					    $img = new HTMLEmpty( "img" );
+					    $img->addString( makeButton( "zuweisen", "src" ).tooltip(_("Evaluation mit anderer Evaluation verknüpfen")) );
+					    $img->addAttr( "border", "0" );
+					    $img->addAttr( "align", "middle" );
+					    $link->addContent( $img );
+					    $td->addContent($link);
+		            }
+		            $tr->addContent ($td);
+		            $table->addContent ($tr);
+	         	}
+         }
+         else {
+         	 if ( $haveFullPerm ) {
+	            if (!($range = get_username($rangeID2)))
+	               $range = $rangeID2;
+	            $tr = new HTML ("tr");
+	            $td = new HTML ("td");
+	            $td->addAttr ("align", "center");
+	            $td->addContent (EvalShow::createOverviewButton ($range, $eval->getObjectID ()));
+	
+	            if ( $evalNoPermissons == 0 ) {
+	            $td->addContent (EvalShow::createStopButton ($eval));
+	            $td->addContent (EvalShow::createDeleteButton ($eval));
+	            $td->addContent (EvalShow::createExportButton ($eval));
+	            }
+	            
+	            $tr->addContent ($td);
+	            $table->addContent ($tr);
+	         }
+	         
+	         
          }
          
          echo $table->createContent ();
@@ -240,7 +493,23 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
       echo createBoxLineFooter ();
    }
    /* ---------------------------------------------------------------------- */
-  
+   if (count ($activeEvals) + count ($stoppedEvals) > 1)
+      echo createOpeningOrClosingArrow ();
+   echo "<tr><td height=10><p></td></tr>";
+   if ($perm->have_studip_perm ("tutor", $rangeID) OR
+       get_username($userID) == $rangeID)
+      echo createBoxHeader (_("Umfragen"), $width, "",
+			    VOTE_ICON_BIG, 
+			    _("Umfragen und mehr..."), 
+			    VOTE_FILE_ADMIN."?page=overview&rangeID=".$rangeID.
+			    ($GLOBALS['SessSemName']["class"]=="sem"
+			     ? "&new_sem=TRUE&view=vote_sem"
+			     : "&new_inst=TRUE&view=vote_inst"),
+			    VOTE_ICON_ARROW, _("Umfragen bearbeiten"));
+   else
+      echo createBoxHeader (_("Umfragen"), $width, "",
+			    VOTE_ICON_BIG, 
+			    _("Umfragen und mehr..."));
 
    /* Show all active Votes ------------------------------------------------ */
    foreach ($activeVotes as $tmpVote) {
@@ -331,6 +600,7 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
    }
    /* ---------------------------------------------------------------------- */
 
+   
 
    /* Show all stopped Votes ----------------------------------------------- */
    if (!empty ($stoppedVotes) || (!empty ($stoppedEvals) && $haveFullPerm)) {
@@ -407,10 +677,7 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
    /* ---------------------------------------------------------------------- */
 
      if ((count ($activeVotes) +
-	  count ($stoppedVotes) +
-	  count ($activeEvals) +
-	  count ($stoppedEvals)
-	  ) > 1)
+	  count ($stoppedVotes)) > 1)
        echo createOpeningOrClosingArrow ();
      
    echo createBoxFooter ();
