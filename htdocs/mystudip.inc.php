@@ -91,7 +91,7 @@ function change_general_view() {
 			<blockquote>
 				<font size="-1"><b><?print _("Hier k&ouml;nnen Sie die Ansicht von Stud.IP nach Ihren Vorstellungen anpassen.");?>
 			</blockquote>			
-			<form method="POST" action="<? echo $PHP_SELF ?>?cmd=change_general&ticket=<?=get_ticket()?>">
+			<form method="POST" action="<? echo $PHP_SELF ?>?cmd=change_general&studipticket=<?=get_ticket()?>">
 			<table width="70%" align="center"cellpadding=8 cellspacing=0 border=0>
 				<tr>
 					<th width="50%" align=center><?=_("Option")?></th>

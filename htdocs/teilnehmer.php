@@ -137,7 +137,7 @@ if ($cmd=="hidescore") {
 	}
 }
 
-if (Seminar_Session::check_ticket($ticket)){
+if (Seminar_Session::check_ticket($studipticket)){
 	// edit special seminar_info of an user
 	if ($cmd == "change_userinfo") {
 		//first we have to check if he is really "Dozent" of this seminar
@@ -609,7 +609,7 @@ if ($perm->have_perm("dozent")) {
 	<table width="99%" border="0"  cellpadding="2" cellspacing="0" align="center">
 
 <?
-$ticket = Seminar_Session::get_ticket();
+$studipticket = Seminar_Session::get_ticket();
 
 //Index berechnen
 $db3->query ("SELECT count(dokument_id) AS count_doc FROM dokumente WHERE seminar_id = '$SessionSeminar'");
@@ -877,7 +877,7 @@ while (list ($key, $val) = each ($gruppe)) {
 		if ($key == "tutor" AND $SemUserStatus!="tutor") {
 			echo "<td class=\"$class\">&nbsp</td>";
 			echo "<td class=\"$class\" align=\"center\">";
-			echo "<a href=\"$PHP_SELF?cmd=pain&username=$username&ticket=$ticket\"><img border=\"0\" src=\"pictures/down.gif\" width=\"21\" height=\"16\"></a></td>";
+			echo "<a href=\"$PHP_SELF?cmd=pain&username=$username&studipticket=$studipticket\"><img border=\"0\" src=\"pictures/down.gif\" width=\"21\" height=\"16\"></a></td>";
 		}
 
 		elseif ($key == "autor") {
@@ -889,12 +889,12 @@ while (list ($key, $val) = each ($gruppe)) {
 					$db2->query ("SELECT user_id FROM auth_user_md5  WHERE perms IN ('tutor', 'dozent') AND user_id = '$UID' ");
 				if ($db2->next_record()) {
 					echo "<td class=\"$class\" align=\"center\">";
-					echo "<a href=\"$PHP_SELF?cmd=pleasure&username=$username&ticket=$ticket\"><img border=\"0\" src=\"pictures/up.gif\" width=\"21\" height=\"16\"></a></td>";
+					echo "<a href=\"$PHP_SELF?cmd=pleasure&username=$username&studipticket=$studipticket\"><img border=\"0\" src=\"pictures/up.gif\" width=\"21\" height=\"16\"></a></td>";
 				} else echo "<td class=\"$class\" >&nbsp;</td>";
 			} else echo "<td class=\"$class\">&nbsp;</td>";
 			// Schreibrecht entziehen
 			echo "<td class=\"$class\" align=\"center\">";
-			echo "<a href=\"$PHP_SELF?cmd=lesen&username=$username&ticket=$ticket\"><img border=\"0\" src=\"pictures/down.gif\" width=\"21\" height=\"16\"></a></td>";
+			echo "<a href=\"$PHP_SELF?cmd=lesen&username=$username&studipticket=$studipticket\"><img border=\"0\" src=\"pictures/down.gif\" width=\"21\" height=\"16\"></a></td>";
 		}
 
 		// Schreibrecht erteilen
@@ -902,19 +902,19 @@ while (list ($key, $val) = each ($gruppe)) {
 			$db2->query ("SELECT perms, user_id FROM auth_user_md5 WHERE user_id = '$UID' AND perms != 'user'");
 			if ($db2->next_record()) { // Leute, die sich nicht zurueckgemeldet haben duerfen auch nicht schreiben!
 				echo "<td class=\"$class\" align=\"center\">";
-				echo "<a href=\"$PHP_SELF?cmd=schreiben&username=$username&ticket=$ticket\"><img border=\"0\" src=\"pictures/up.gif\" width=\"21\" height=\"16\"></a></td>";
+				echo "<a href=\"$PHP_SELF?cmd=schreiben&username=$username&studipticket=$studipticket\"><img border=\"0\" src=\"pictures/up.gif\" width=\"21\" height=\"16\"></a></td>";
 			} else echo "<td class=\"$class\">&nbsp;</td>";
 			// aus dem Seminar werfen
 			echo "<td class=\"$class\" align=\"center\">";
-			echo "<a href=\"$PHP_SELF?cmd=raus&username=$username&ticket=$ticket\"><img border=\"0\" src=\"pictures/down.gif\" width=\"21\" height=\"16\"></a></td>";
+			echo "<a href=\"$PHP_SELF?cmd=raus&username=$username&studipticket=$studipticket\"><img border=\"0\" src=\"pictures/down.gif\" width=\"21\" height=\"16\"></a></td>";
 		}
 
 		elseif ($key == "accepted") { // temporarily accepted students
 			// forward to autor
-			printf ("<td width=\"15%%\" align=\"center\" class=\"%s\"><a href=\"$PHP_SELF?cmd=admission_rein&username=%s&accepted=1&ticket=$ticket\"><img border=\"0\" src=\"pictures/up.gif\" width=\"21\" height=\"16\"></a></td>", $class, $username);
+			printf ("<td width=\"15%%\" align=\"center\" class=\"%s\"><a href=\"$PHP_SELF?cmd=admission_rein&username=%s&accepted=1&studipticket=$studipticket\"><img border=\"0\" src=\"pictures/up.gif\" width=\"21\" height=\"16\"></a></td>", $class, $username);
 			// kick
 			echo "<td class=\"$class\" align=\"center\">";
-			echo "<a href=\"$PHP_SELF?cmd=admission_raus&username=$username&accepted=1&ticket=$ticket\"><img border=\"0\" src=\"pictures/down.gif\" width=\"21\" height=\"16\"></a></td>";
+			echo "<a href=\"$PHP_SELF?cmd=admission_raus&username=$username&accepted=1&studipticket=$studipticket\"><img border=\"0\" src=\"pictures/down.gif\" width=\"21\" height=\"16\"></a></td>";
 		}
 
 		else { // hier sind wir bei den Dozenten
@@ -951,7 +951,7 @@ while (list ($key, $val) = each ($gruppe)) {
 								<INPUT type="hidden" name="user_id" value="<?=$db->f("user_id")?>">
 								<INPUT type="hidden" name="cmd" value="change_userinfo">
 								<INPUT type="hidden" name="username" value="<?=$db->f("username")?>">
-								<INPUT type="hidden" name="ticket" value="<?=$ticket?>">
+								<INPUT type="hidden" name="studipticket" value="<?=$studipticket?>">
 							</td>
 						</tr>
 					</table>
@@ -1028,8 +1028,8 @@ if ($rechte) {
 
 			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><a href=\"sms_send.php?sms_source_page=teilnehmer.php&rec_uname=%s\"><img src=\"pictures/nachricht1.gif\" %s border=\"0\"></a></td>",$cssSw->getClass(), $db->f("username"), tooltip(_("Nachricht an User verschicken")));
 
-			printf ("<td width=\"15%%\" align=\"center\" class=\"%s\"><a href=\"$PHP_SELF?cmd=admission_rein&username=%s&ticket=$ticket\"><img border=\"0\" src=\"pictures/up.gif\" width=\"21\" height=\"16\"></a></td>", $cssSw->getClass(), $db->f("username"));
-			printf ("<td width=\"15%%\" align=\"center\" class=\"%s\"><a href=\"$PHP_SELF?cmd=admission_raus&username=%s&ticket=$ticket\"><img border=\"0\" src=\"pictures/down.gif\" width=\"21\" height=\"16\"></a></td>", $cssSw->getClass(), $db->f("username"));
+			printf ("<td width=\"15%%\" align=\"center\" class=\"%s\"><a href=\"$PHP_SELF?cmd=admission_rein&username=%s&studipticket=$studipticket\"><img border=\"0\" src=\"pictures/up.gif\" width=\"21\" height=\"16\"></a></td>", $cssSw->getClass(), $db->f("username"));
+			printf ("<td width=\"15%%\" align=\"center\" class=\"%s\"><a href=\"$PHP_SELF?cmd=admission_raus&username=%s&studipticket=$studipticket\"><img border=\"0\" src=\"pictures/down.gif\" width=\"21\" height=\"16\"></a></td>", $cssSw->getClass(), $db->f("username"));
 			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><font size=\"-1\">%s</font></td></tr>\n", $cssSw->getClass(), ($db->f("studiengang_id") == "all") ? _("alle Studieng&auml;nge") : $db->f("name"));
 		}
 		print "</table>";
@@ -1058,7 +1058,7 @@ if ($rechte
 
 	<table width="99%" border="0" cellpadding="2" cellspacing="0" border="0" align="center">
 	<form action="<? echo $PHP_SELF ?>" method="POST">
-	<INPUT type="hidden" name="ticket" value="<?=$ticket?>">
+	<INPUT type="hidden" name="studipticket" value="<?=$studipticket?>">
 	<tr>
 		<td class="steel1" width="40%" align="left">&nbsp; <font size="-1"><b><?=_("MitarbeiterInnen der Einrichtung(en)")?></b></font></td>
 		<td class="steel1" width="40%" align="left"><select name="u_id" size="1">
@@ -1096,7 +1096,7 @@ if ($rechte) {
 	<a name="freesearch"></a>
 	<table width="99%" border="0" cellpadding="2" cellspacing="0" border=0 align="center">
 	<form action="<? echo $PHP_SELF ?>?cmd=add_user" method="POST">
-	<INPUT type="hidden" name="ticket" value="<?=$ticket?>">
+	<INPUT type="hidden" name="studipticket" value="<?=$studipticket?>">
 	<tr>
 		<td class="steel1" width="40%" align="left">&nbsp; <font size="-1"><b><?=_("Gefundene Nutzer")?></b></font></td>
 		<td class="steel1" width="40%" align="left"><select name="username" size="1">
@@ -1136,7 +1136,7 @@ if ($rechte) {
 	echo "<tr><td class=\"blank\" colspan=\"2\">\n";
 	echo "<form action=\"$PHP_SELF\" method=\"post\">\n";
 	echo "<input type=\"hidden\" name=\"cmd\" value=\"csv\">\n";
-	echo "<input type=\"hidden\" name=\"ticket\" value=\"$ticket\">\n";
+	echo "<input type=\"hidden\" name=\"studipticket\" value=\"$studipticket\">\n";
 	echo "<table width=\"99%\" border=\"0\" cellpadding=\"2\" cellspacing=\"0\" border=\"0\" ";
 	echo "align=\"center\">\n";
 	if (!sizeof($csv_mult_founds)) {

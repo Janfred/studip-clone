@@ -940,8 +940,8 @@ function get_ticket(){
 	return Seminar_Session::get_ticket();
 }
 
-function check_ticket($ticket){
-	return Seminar_Session::check_ticket($ticket);
+function check_ticket($studipticket){
+	return Seminar_Session::check_ticket($studipticket);
 }
 
 function search_range($search_str = false, $search_user = false, $show_sem = true) {

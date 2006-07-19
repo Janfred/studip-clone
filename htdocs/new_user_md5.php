@@ -43,7 +43,7 @@ $db = new DB_Seminar;
 $db2 = new DB_Seminar;
 
 // Check if there was a submission
-if (check_ticket($ticket)){
+if (check_ticket($studipticket)){
 	while ( is_array($HTTP_POST_VARS) 
 			 && list($key, $val) = each($HTTP_POST_VARS)) {
 		switch ($key) {
@@ -200,7 +200,7 @@ if (isset($_GET['details'])) {
 				<td colspan=3 align=center>&nbsp;
 				<input type="IMAGE" name="create" <?=makeButton("anlegen", "src")?> value=" <?=_("Benutzer anlegen")?> ">&nbsp;
 				<input type="IMAGE" name="nothing" <?=makeButton("abbrechen", "src")?> value=" <?=_("Abbrechen")?> ">
-				<input type="hidden" name="ticket" value="<?=get_ticket();?>">
+				<input type="hidden" name="studipticket" value="<?=get_ticket();?>">
 				&nbsp;</td></tr>
 			</form></table>
 			
@@ -414,7 +414,7 @@ if (isset($_GET['details'])) {
 				?>
 				<input type="IMAGE" name="nothing" <?=makeButton("abbrechen", "src")?> value=" <?=_("Abbrechen")?> ">
 				&nbsp;</td></tr>
-			<input type="hidden" name="ticket" value="<?=get_ticket();?>">
+			<input type="hidden" name="studipticket" value="<?=get_ticket();?>">
 			</form>
 			
 			<tr><td colspan=3 class="blank">&nbsp;</td></tr>

@@ -339,7 +339,7 @@ if (!$guestpage)
 $guest = new Guestbook($user_id,$admin_darf,$guestpage);
 
 if ($guestbook && $perm->have_perm('autor'))
-	$guest->actionsGuestbook($guestbook,$post,$deletepost,$ticket);
+	$guest->actionsGuestbook($guestbook,$post,$deletepost,$studipticket);
 
 if ($guest->active == TRUE || $guest->rights == TRUE) {
 	$guest->showGuestbook();

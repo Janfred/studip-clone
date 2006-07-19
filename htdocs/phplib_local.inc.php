@@ -163,24 +163,24 @@ class Seminar_Session extends Session {
 	
 	function get_ticket(){
 		global $sess, $last_ticket;
-		static $ticket;
+		static $studipticket;
 		if (!$sess->is_registered('last_ticket')){
 			$sess->register('last_ticket');
 		}
-		if (!$ticket){
-			$ticket = $last_ticket = md5(uniqid('ticket',1));
+		if (!$studipticket){
+			$studipticket = $last_ticket = md5(uniqid('studipticket',1));
 		}
 		
-		return $ticket;
+		return $studipticket;
 	}
 	
-	function check_ticket($ticket){
+	function check_ticket($studipticket){
 		global $sess, $last_ticket;
 		if (!$sess->is_registered('last_ticket')){
 			$sess->register('last_ticket');
 			$last_ticket = null;
 		}
-		$check = ($last_ticket && $last_ticket == $ticket);
+		$check = ($last_ticket && $last_ticket == $studipticket);
 		$last_ticket = null;
 		return $check;
 	}
@@ -398,7 +398,25 @@ class Seminar_Auth extends Auth {
 	
 	function auth_preauth() {
 		global $auto_user,$auto_response,$auto_id,$resolution,$TMP_PATH;
-		
+		// is Single Sign On activated?		
+		if ($GLOBALS["sso"]){
+			// then do login 
+			require_once("lib/classes/auth_plugins/StudipAuthCAS.class.php");
+			$authplugin = StudipAuthAbstract::GetInstance("CAS");
+			$authplugin->authenticateUser("","","");
+			if ($authplugin->getUser()){
+				$uid = $authplugin->getStudipUserid($authplugin->getUser());
+				$this->db->query(sprintf("select username,perms,auth_plugin from %s where user_id = '%s'",$this->database_table,$uid));
+				$this->db->next_record();
+				
+				$this->auth["perm"]  = $this->db->f("perms");
+				$this->auth["uname"] = $this->db->f("username");
+				$this->auth["auth_plugin"]  = $this->db->f("auth_plugin");
+				$this->auth_set_user_settings($uid);
+				return $uid;
+			}
+		}
+		// end of single sign on
 		if (!$auto_user OR !$auto_response OR !$auto_id){
 			return false;
 		}

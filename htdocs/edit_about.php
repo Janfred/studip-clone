@@ -761,7 +761,7 @@ if (!$my_about->check)
 	die;
 	}
 	
-if(check_ticket($ticket)){
+if(check_ticket($studipticket)){
 	//ein Bild wurde hochgeladen
 	if ($cmd == "copy")
 	 {
@@ -955,7 +955,7 @@ function checkdata(){
 	checked = false;
  if (checked) {
 	 document.pers.method = "post";
-	 document.pers.action = "<?php print ("$PHP_SELF?cmd=edit_pers&username=$username&view=$view&ticket=".get_ticket()) ?>";
+	 document.pers.action = "<?php print ("$PHP_SELF?cmd=edit_pers&username=$username&view=$view&studipticket=".get_ticket()) ?>";
 	 document.pers.response.value = MD5(document.pers.password.value);
 	 document.pers.password.value = "*****";
 	 document.pers.check_pass.value = "*****";
@@ -1068,7 +1068,7 @@ if ($view == 'Bild') {
 	} else {
 		echo '<img border="1" src="./user/'.$my_about->auth_user['user_id'] . '.jpg" alt="'. $my_about->auth_user['Vorname'].' '.$my_about->auth_user['Nachname']."\"><br />\n&nbsp; ";
 		if ($my_about->auth_user["user_id"]==$auth->auth["uid"] || $perm->have_perm("admin")) {
-                        echo "\n<FORM NAME=\"bild_loeschen\" METHOD=\"POST\" ACTION=\"$PHP_SELF?ticket=".get_ticket()."\">\n";
+                        echo "\n<FORM NAME=\"bild_loeschen\" METHOD=\"POST\" ACTION=\"$PHP_SELF?studipticket=".get_ticket()."\">\n";
                         echo "  <INPUT TYPE=\"hidden\" NAME=\"user_id\" VALUE=\"".$my_about->auth_user["user_id"]."\">\n";
                         echo "  <INPUT TYPE=\"hidden\" NAME=\"username\" VALUE=\"$username\">\n";
                         echo "  <INPUT TYPE=\"hidden\" NAME=\"view\" VALUE=\"Bild\">\n";
@@ -1079,7 +1079,7 @@ if ($view == 'Bild') {
 	}
 			
 	echo '</td><td class="'.$cssSw->getClass().'" width="70%" align="left" valign="top"><blockquote>';
-	echo '<form enctype="multipart/form-data" action="' . $_SERVER['PHP_SELF'] . '?cmd=copy&username=' . $username . '&view=Bild&ticket='.get_ticket().'" method="POST">';
+	echo '<form enctype="multipart/form-data" action="' . $_SERVER['PHP_SELF'] . '?cmd=copy&username=' . $username . '&view=Bild&studipticket='.get_ticket().'" method="POST">';
 	echo "<br />\n" . _("Hochladen eines Bildes:") . "<br /><br />\n" . _("1. Wählen sie mit <b>Durchsuchen</b> eine Bilddatei von ihrer Festplatte aus.") . "<br /><br />\n";
 	echo '&nbsp;&nbsp;<input name="imgfile" type="file" style="width: 80%" cols="'.round($max_col*0.7*0.8)."\"><br /><br />\n";
 	echo _("2. Klicken sie auf <b>absenden</b>, um das Bild hochzuladen.") . "<br /><br />\n";
@@ -1099,7 +1099,7 @@ if ($view == 'Daten') {
 	}
 	echo "<br /><br /></blockquote></td></tr>\n".'<tr><td class=blank>';
 	
-	echo '<form action="'. $PHP_SELF. '?cmd=edit_pers&username='. $username. '&view='. $view. '&ticket=' . get_ticket(). '" method="POST" name="pers"';
+	echo '<form action="'. $PHP_SELF. '?cmd=edit_pers&username='. $username. '&view='. $view. '&studipticket=' . get_ticket(). '" method="POST" name="pers"';
 	//Keine JavaScript überprüfung bei adminzugriff
 	if ($my_about->check == 'user' && $auth->auth['jscript'] ) {
 		echo ' onsubmit="return checkdata()" ';
@@ -1273,7 +1273,7 @@ if ($view == 'Karriere') {
 
 	 		echo '<tr><td class="blank"><a name="inst_data"></a>';
 	 		echo '<b>&nbsp; ' . _("Ich arbeite an folgenden Einrichtungen:") . '</b>';
-	 		echo '<form action="'.$PHP_SELF.'?cmd=special_edit&username='. $username.'&view='.$view.'&ticket=' .get_ticket(). '" method="POST">'."\n";
+	 		echo '<form action="'.$PHP_SELF.'?cmd=special_edit&username='. $username.'&view='.$view.'&studipticket=' .get_ticket(). '" method="POST">'."\n";
 	 		echo '<table cellspacing="0" cellpadding="2" border="0" align="center" width="99%">';
 			
 			$i = 1;
@@ -1300,13 +1300,13 @@ if ($view == 'Karriere') {
 					echo "<td class=\"" . $cssSw->getClass() . "\" align=\"left\">";
 					if ($i != 1) {
 						echo "<a href=\"$PHP_SELF?view=Karriere&username=$username&cmd=move";
-						echo "&direction=up&move_inst=$inst_id&ticket=".get_ticket().'">';
+						echo "&direction=up&move_inst=$inst_id&studipticket=".get_ticket().'">';
 						echo '<img src="'. $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'] . 'pictures/move_up.gif" ';
 						echo 'border="0"' . tooltip(_("nach oben")) . '></a>';
 					}
 					if ($i != sizeof($my_about->user_inst)) {
 						echo "<a href=\"$PHP_SELF?view=Karriere&username=$username&cmd=move";
-						echo "&direction=down&move_inst=$inst_id&ticket=".get_ticket().'">';
+						echo "&direction=down&move_inst=$inst_id&studipticket=".get_ticket().'">';
 						echo '<img src="' . $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'].'pictures/move_down.gif" ';
 						echo 'border="0"' . tooltip(_("nach unten")) . '></a>';
 					}
@@ -1365,7 +1365,7 @@ if ($view == 'Karriere') {
 		echo '<tr><td class="blank">';
 		echo '<b>&nbsp; ' . _("Ich bin in folgenden Studieng&auml;ngen eingeschrieben:") . '</b>';
 		if ($allow_change_sg){
-			echo '<form action="'. $_SERVER['PHP_SELF']. '?cmd=studiengang_edit&username=' . $username . '&view=' . $view . '&ticket=' . get_ticket() . '#studiengaenge" method="POST">';
+			echo '<form action="'. $_SERVER['PHP_SELF']. '?cmd=studiengang_edit&username=' . $username . '&view=' . $view . '&studipticket=' . get_ticket() . '#studiengaenge" method="POST">';
 		}
 		echo '<table width="99%" align="center" border="0" cellpadding="2" cellspacing="0">'."\n";
 		echo '<tr><td width="30%" valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="2">';
@@ -1421,7 +1421,7 @@ if ($view == 'Karriere') {
 		$cssSw->switchClass();
 		echo '<tr><td class="blank">';
 		echo "<br>\n<b>&nbsp; " . _("Ich studiere an folgenden Einrichtungen:") . "</b>";
-		if ($allow_change_in) echo '<form action="' . $_SERVER['PHP_SELF'] . '?cmd=inst_edit&username='.$username.'&view='.$view.'&ticket=' . get_ticket() . '#einrichtungen" method="POST">'. "\n";
+		if ($allow_change_in) echo '<form action="' . $_SERVER['PHP_SELF'] . '?cmd=inst_edit&username='.$username.'&view='.$view.'&studipticket=' . get_ticket() . '#einrichtungen" method="POST">'. "\n";
 		echo '<table width= "99%" align="center" border="0" cellpadding="2" cellspacing="0">'."\n";
 		echo '<tr><td width="30%" valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="2">';
 		reset ($my_about->user_inst);
@@ -1477,7 +1477,7 @@ if ($view == 'Lebenslauf') {
 		echo  _("Hier k&ouml;nnen Sie Ihren Lebenslauf bearbeiten.");
 	}  
 	echo "<br>&nbsp; </blockquote></td></tr>\n<tr><td class=blank>";
-	echo '<form action="' . $_SERVER['PHP_SELF'] . '?cmd=edit_leben&username=' . $username . '&view=' . $view . '&ticket=' . get_ticket() . '" method="POST" name="pers">';
+	echo '<form action="' . $_SERVER['PHP_SELF'] . '?cmd=edit_leben&username=' . $username . '&view=' . $view . '&studipticket=' . get_ticket() . '" method="POST" name="pers">';
 	echo '<table align="center" width="99%" align="center" border="0" cellpadding="2" cellspacing="0">' . "\n";
 	//add the free adminstrable datafields
 	$datafield_form =& $DataFields->getLocalFieldsFormObject('pers');

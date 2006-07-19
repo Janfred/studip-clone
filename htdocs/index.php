@@ -291,6 +291,10 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 		<td valign="middle" height="260" colspan=3 background="./pictures/startseite.jpg" alt="Stud.IP - <?=$UNI_NAME?>"">
 			<?
 			echo sprintf($mtxt, 'index.php?again=yes', _("Login"), _("f&uuml;r registrierte NutzerInnen"));
+			// show a button for single sign on
+			if (array_search("CAS",$GLOBALS["STUDIP_AUTH_PLUGIN"])){
+				echo sprintf($mtxt, 'index.php?again=yes&sso=true', _("Single Sign On"), _("f&uuml;r NutzerInnen des Central Authentication Services"));
+			}
 			if ($GLOBALS['ENABLE_SELF_REGISTRATION'])
 				echo sprintf($mtxt, 'register1.php', _("Registrieren"), _("um NutzerIn zu werden"));
 			echo sprintf($mtxt, 'freie.php', _("Freier Zugang"), _("ohne Registrierung"));
