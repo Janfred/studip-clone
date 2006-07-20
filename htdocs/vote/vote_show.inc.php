@@ -126,14 +126,13 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
 				LEFT JOIN seminar_sem_tree sst ON (sst.seminar_id=seminar_user.seminar_id)
 				WHERE seminar_user.user_id = '". $userID . "'");
    $currentid = 0;
-   
+   $activecourseEvals = array();
    while ($db->next_record()){
    	  $semid = $db->f("Seminar_id");
-   	  $evalids = $evalDB->getEvaluationIDs($semid,EVAL_STATE_ACTIVE);
+   	  $evalids = $evalDB->getEvaluationIDs($semid,EVAL_STATE_ACTIVE,true);
    	  //$evalids = array($evalDB->getEvaluationIDs($db->f("Seminar_id"),EVAL_STATE_ACTIVE),$db->f("Name"));
    	  $semname = $db->f("Name");	  
-   	  if (count($evalids) > 0){
-   	  	
+   	  if (count($evalids) > 0){   	  	
    	  	$semarray[] = $evalids;
    	  	$semarray[] = $semid;
    	  	$semarray[] = $semname;
@@ -145,8 +144,8 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
    
    if (count($activecourseEvals) > 0) {
 	   if ($perm->have_studip_perm ("tutor", $rangeID) OR
-	       get_username($userID) == $rangeID)
-	      echo createBoxHeader (_("Lehrveranstaltungsevaluationen zu meinen Veranstaltungen"), $width, "",
+	       get_username($userID) == $rangeID){
+	      		echo createBoxHeader (_("Lehrveranstaltungsevaluationen zu meinen Veranstaltungen"), $width, "",
 				    VOTE_ICON_BIG, 
 				    _("Evaluationen..."), 
 				    VOTE_FILE_ADMIN."?page=overview&rangeID=".$rangeID.
@@ -154,13 +153,16 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
 				     ? "&new_sem=TRUE&view=vote_sem"
 				     : "&new_inst=TRUE&view=vote_inst"),
 				    VOTE_ICON_ARROW, _("Umfragen bearbeiten"));
-	   else
-	      echo createBoxHeader (_("Lehrveranstaltungsevaluationen zu meinen Veranstaltungen"), $width, "",
+	   }
+	   else {
+	      	echo createBoxHeader (_("Lehrveranstaltungsevaluationen zu meinen Veranstaltungen"), $width, "",
 				    VOTE_ICON_BIG, 
 				    _("Evaluationen..."));
+	   }
   }
   else {
-  	echo("<table border=\"0\" bgcolor=\"#FFFFFF\" cellspacing=\"0\" cellpadding=\"2\" align=\"center\" width=\"$width\"><tr><td class=\"steel1\" colspan=\"3\">");
+  	echo ("<br>");
+  	//echo("<table border=\"0\" cellspacing=\"0\" cellpadding=\"2\" align=\"center\" width=\"$width\"><tr><td class=\"steel1\" colspan=\"3\">");
   }
 
   
@@ -339,7 +341,8 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
 
   }
   else {
-  	echo("<table border=\"0\" bgcolor=\"#FFFFFF\" cellspacing=\"0\" cellpadding=\"2\" align=\"center\" width=\"$width\"><tr><td class=\"steel1\" colspan=\"3\">");
+  	echo ("<br>");
+  	//echo("<table border=\"0\" cellspacing=\"0\" cellpadding=\"2\" align=\"center\" width=\"$width\"><tr><td class=\"steel1\" colspan=\"3\">");
   }
    /* create an anchor ---------------------------------------------------- */
    echo "<a name=\"vote\"></a>";
@@ -655,8 +658,6 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
 	       
 	    echo createBoxContentHeader ();
 	    echo createStoppedVoteHeader ($vote);
-#	       echo createBoxHeader (formatReady($vote->getTitle()), "90%", "",
-#				     "", "", "", "", "", "quote");
 	    echo createFormHeader ($vote);
 	    echo createVoteResult ($vote);
 	    echo createFormFooter ($vote, $userID, $perm, $rangeID);

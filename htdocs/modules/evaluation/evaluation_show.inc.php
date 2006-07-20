@@ -42,7 +42,7 @@ $perm->check ("autor");
 require_once ($ABSOLUTE_PATH_STUDIP."modules/evaluation/evaluation.config.php");
 require_once ($ABSOLUTE_PATH_STUDIP."seminar_open.php");
 require_once ($ABSOLUTE_PATH_STUDIP."html_head.inc.php");
-require_once ($ABSOLUTE_PATH_STUDIP."header.php");
+// require_once ($ABSOLUTE_PATH_STUDIP."header.php");
 require_once ($ABSOLUTE_PATH_STUDIP."visual.inc.php");
 
 require_once( EVAL_FILE_EVAL );
