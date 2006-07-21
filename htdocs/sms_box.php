@@ -2,7 +2,7 @@
 
 /**
 * displays messages in in- and outboxfolders
-* 
+*
 * @author				Nils K. Windisch <studip@nkwindisch.de>, Cornelis Kater <ckater@gwdg.de>
 * @access				public
 * @modulegroup	Messaging
@@ -35,7 +35,7 @@ $perm->check("user");
 
 // initialise session
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php");
-	
+
 // -- here you have to put initialisations for the current page
 require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
@@ -46,7 +46,7 @@ require_once ("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/reiter.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/sms_functions.inc.php");
 if ($GLOBALS['CHAT_ENABLE']){
-	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php"; 
+	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php";
 	$chatServer =& ChatServer::GetInstance($GLOBALS['CHAT_SERVER_NAME']);
 	$chatServer->caching = true;
 	$admin_chats = $chatServer->getAdminChats($auth->auth['uid']);
@@ -62,11 +62,17 @@ $db = new DB_Seminar;
 $db6 = new DB_Seminar;
 $db7 = new DB_Seminar;
 
+if ($change_view) {
+	$HELP_KEYWORD="Basis.MyStudIPMessaging";
+} else {
+	$HELP_KEYWORD="Basis.InteraktionNachrichten";
+}
+
 // Output of html head and Stud.IP head
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php");
 include ("$ABSOLUTE_PATH_STUDIP/header.php");
 
-// 
+//
 if ($neux) {
 	$sms_data["view"] = "in";
 	$show_folder = "all";
@@ -77,7 +83,7 @@ if ($sms_inout && !$neux) {
 	$sms_data["view"] = $sms_inout;
 } else if ($sms_data["view"] == "") {
 	$sms_data["view"] = "in";
-} 
+}
 
 // include
 include ("$ABSOLUTE_PATH_STUDIP/links_sms.inc.php");
@@ -89,7 +95,7 @@ check_messaging_default();
 if ($auth->auth["jscript"]) {
 	echo "<script language=\"JavaScript\">var ol_textfont = \"Arial\"</script>";
 	echo "<DIV ID=\"overDiv\" STYLE=\"position:absolute; visibility:hidden; z-index:1000;\"></DIV>";
-	echo "<SCRIPT LANGUAGE=\"JavaScript\" SRC=\"overlib.js\"></SCRIPT>";
+	echo "<SCRIPT LANGUAGE=\"JavaScript\" SRC=\"".$GLOBALS['ASSETS_URL']."javascripts/overlib.js\"></SCRIPT>";
 }
 
 if (($change_view) || ($delete_user) || ($view=="Messaging")) {
@@ -97,7 +103,7 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 	echo "</td></tr></table>";
 	page_close();
 	die;
-} 
+}
 
 if ($readingconfirmation) {
 	$sms_data['tmpreadsnd'] = "";
@@ -106,17 +112,17 @@ if ($readingconfirmation) {
 	$db6->next_record();
 	$date = date("d.m.y, H:i", $db6->f("mkdate"));
 	$orig_subject = $db6->f("subject");
-	
+
 	$user_id = $user->id;
 	$user_fullname = get_fullname($user_id);
-	
+
 	$query = "UPDATE message_user SET confirmed_read = '1' WHERE message_id = '".$readingconfirmation."'AND user_id = '".$user_id."'";
 	if($db->query($query)) {
 		setTempLanguage(get_userid($rec_userid));
-		$subject = sprintf (_("Lesebestätigung von %s"), $user_fullname);		
+		$subject = sprintf (_("Lesebestätigung von %s"), $user_fullname);
 		$message = sprintf (_("Ihre Nachricht an %s mit dem Betreff: %s vom %s wurde gelesen."), "%%".$user_fullname."%%", "%%".$orig_subject."%%", "%%".$date."%%");
 		restoreLanguage();
-		$msging->insert_message(mysql_escape_string($message), $uname_snd, "____%system%____", FALSE, FALSE, 1, FALSE, mysql_escape_string($subject));	
+		$msging->insert_message(mysql_escape_string($message), $uname_snd, "____%system%____", FALSE, FALSE, 1, FALSE, mysql_escape_string($subject));
 	}
 }
 
@@ -170,7 +176,7 @@ if ($show_folder == "close") { // close folder
 	$my_messaging_settings["folder"]['active'][$sms_data['view']] = $sms_show['folder'][$sms_data['view']];
 }
 
-// 
+//
 if (empty($sms_show['folder'][$sms_data['view']])) { // waehle den letzten besuchten ordner, falls keiner gewaehlt
 	$sms_show['folder'][$sms_data['view']] = $my_messaging_settings["folder"]['active'][$sms_data['view']];
 }
@@ -191,7 +197,7 @@ if ($sms_show['folder'][$sms_data['view']] != "all") { // ist ein persoenlicher
 // insert new folder
 if ($new_folder != "" && $new_folder_button_x) {
 	if ($msging->check_newmsgfoldername($new_folder) == FALSE) { // check auf erlaubte ordnernamen
-		$msg = "error§".sprintf(_("Der gewählte Ordnername ist vom System belegt. Bitte wählen sie einen anderen."));	
+		$msg = "error§".sprintf(_("Der gewählte Ordnername ist vom System belegt. Bitte wählen sie einen anderen."));
 	} else { // ordnername ok und los
 		$my_messaging_settings["folder"][$sms_data["view"]][] = $new_folder;
 		$msg = "msg§".sprintf(_("Der Ordner %s wurde angelegt."), htmlready(stripslashes($new_folder)));
@@ -223,12 +229,12 @@ if ($ren_folder_button_x) {
 }
 
 // determine if we like to see all messages opened
-if (empty($my_messaging_settings["openall"])) { 
+if (empty($my_messaging_settings["openall"])) {
 	$my_messaging_settings["openall"] = "2";
 }
 
 // determine and memorize timefilter
-if ($sms_time) { 
+if ($sms_time) {
 	$sms_data["time"] = $sms_time;
 } else if ($sms_data["time"] == "" && empty($my_messaging_settings["timefilter"])) {
 	$sms_data["time"] = "all";
@@ -239,26 +245,26 @@ if ($sms_time) {
 
 // determine several later displayed texts in relation to the selected view
 if ($sms_data['view'] == "in") {
-	$info_text_001 = "<img src=\"pictures/nachricht1.gif\" border=\"0\" align=\"texttop\"><b>&nbsp;"._("empfangene systeminterne Nachrichten anzeigen")."</b>";
+	$info_text_001 = "<img src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" border=\"0\" align=\"texttop\"><b>&nbsp;"._("empfangene systeminterne Nachrichten anzeigen")."</b>";
 	$info_text_002 = _("Posteingang");
 	$no_message_text_box = _("im Posteingang");
 	$tmp_snd_rec = "rec";
 } else if ($sms_data['view'] == "out") {
-	$info_text_001 = "<img src=\"pictures/nachricht1.gif\" border=\"0\" align=\"texttop\"><b>&nbsp;"._("gesendete systeminterne Nachrichten anzeigen")."</b>";
+	$info_text_001 = "<img src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" border=\"0\" align=\"texttop\"><b>&nbsp;"._("gesendete systeminterne Nachrichten anzeigen")."</b>";
 	$info_text_002 = _("Postausgang");
 	$no_message_text_box = _("im Postausgang");
 	$tmp_snd_rec = "snd";
 }
 
 // memorize del-lock for selected items
-if ($sel_lock) { 
+if ($sel_lock) {
 	if ($cmd == "safe_selected") { // close del-lock
 		$tmp_dont_delete = "1";
 		$msg = "msg§"._("Der Lösch-Schutz wurde für die gewählte Nachricht aktiviert.");
 	} else if ($cmd == "open_selected") { // open del-lock
 		$tmp_dont_delete = "0";
 		$msg = "msg§"._("Der Lösch-Schutz wurde für die gewählte Nachricht aufgehoben.");
-	}	
+	}
 	$db->query("UPDATE message_user SET dont_delete='".$tmp_dont_delete."' WHERE user_id='".$user->id."' AND message_id='".$sel_lock."' AND snd_rec='".$tmp_snd_rec."'");
 	$tmp_dont_delete = "";
 	$tmp_snd_rec = "";
@@ -275,7 +281,7 @@ if ($move_selected_button_x && !empty($sel_sms)) {
 }
 
 // let's move some messages
-if ($move_folder) { 
+if ($move_folder) {
 	$user_id = $user->id;
 	if ($move_folder == "free") {
 		$move_folder = "";
@@ -300,7 +306,7 @@ if ($move_folder) {
 	unset($sms_data['tmp']['move_to_folder']);
 	$move_folder = "";
 	$tmp_snd_rec = "";
-} 
+}
 
 // query wenn nachrichten verschieben
 if ($sms_data['tmp']['move_to_folder']) {
@@ -310,11 +316,11 @@ if ($sms_data['tmp']['move_to_folder']) {
 		} else {
 			$tmp_partquery = $sms_data['tmp']['move_to_folder'][1];
 		}
-		$query_movetofolder = "AND message.message_id='".$tmp_partquery."'"; // es wird nur diese nachricht angezeigt	
+		$query_movetofolder = "AND message.message_id='".$tmp_partquery."'"; // es wird nur diese nachricht angezeigt
 	} else {
 		$query_movetofolder = "AND (message.message_id='".$sms_data['tmp']['move_to_folder'][0]."'";
 		for($x=1;$x<sizeof($sms_data['tmp']['move_to_folder']);$x++) {
-			$query_movetofolder .= " OR message.message_id='".$sms_data['tmp']['move_to_folder'][$x]."'";		
+			$query_movetofolder .= " OR message.message_id='".$sms_data['tmp']['move_to_folder'][$x]."'";
 		}
 		$query_movetofolder .= ")";
 	}
@@ -323,7 +329,7 @@ if ($sms_data['tmp']['move_to_folder']) {
 // set timefilter and depanding displayed-texts
 if ($sms_data["time"] == "all") {
 	$query_time = " ORDER BY message_user.mkdate DESC";
-	$no_message_text = sprintf(_("Es liegen keine systeminternen Nachrichten%s %s vor."), $infotext_folder, $no_message_text_box);		
+	$no_message_text = sprintf(_("Es liegen keine systeminternen Nachrichten%s %s vor."), $infotext_folder, $no_message_text_box);
 } else if ($sms_data["time"] == "new") {
 	if ($sms_data["view"] == "in") {
 		$query_time = " AND message_user.mkdate > ".$LastLogin." ORDER BY message_user.mkdate DESC";
@@ -356,16 +362,16 @@ if ($sms_data["time"] == "all") {
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
 <tr><td class="topic" colspan="2"><?=$info_text_001?></td></tr>
 <tr><td class="blank" colspan="2">&nbsp;</td></tr>
-<tr>	
-	<td class="blank" valign="top"> <? 
+<tr>
+	<td class="blank" valign="top"> <?
 		if ($msg) { // if info ($msg) for user
 			print ("<table cellpadding=\"5\" cellspacing=\"0\" border=\"0\" width=\"99%\"><tr><td valign=\"top\">");
-			parse_msg($msg); 
+			parse_msg($msg);
 			print ("</td></tr></table>");
 		} ?>
 		<table cellpadding="3" cellspacing="0" border="0" width="100%">
 			<tr>
-				<td class="blank" align="left" valign="bottom">&nbsp; <? 
+				<td class="blank" align="left" valign="bottom">&nbsp; <?
 					if ($cmd != "admin_folder" && !$sms_data['tmp']['move_to_folder']) {
 						echo "<a href=\"".$PHP_SELF."?cmd=admin_folder&cmd_2=new\">".makeButton("neuerordner", "img")."</a>";
 					} else {
@@ -377,7 +383,7 @@ if ($sms_data["time"] == "all") {
 		</table> <?
 
 		// rename or make folder
-		if ($cmd == "admin_folder") { 
+		if ($cmd == "admin_folder") {
 			// we would like to make a new folder
 			if ($cmd_2 == "new") {
 				$tmp[0] = "new_folder";
@@ -396,7 +402,7 @@ if ($sms_data["time"] == "all") {
 			}
 			$titel = "	<input type=\"text\" name=\"".$tmp[0]."\"".$tmp[3]." style=\"font-size: 8pt\">";
 			echo "\n<form action=\"".$PHP_SELF."\" method=\"post\"><table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"99%\" align=\"center\"><tr>";
-			printhead(0, 0, FALSE, "open", FALSE, "<img src=\"pictures/cont_folder.gif\" border=0>", $titel, FALSE);
+			printhead(0, 0, FALSE, "open", FALSE, "<img src=\"".$GLOBALS['ASSETS_URL']."images/cont_folder.gif\" border=0>", $titel, FALSE);
 			echo "</tr></table>	";
 			$content_content = $tmp[1]."<div align=\"center\">".$tmp[4]."
 			<input type=\"image\" name=\"".$tmp[2]."\" border=\"0\" ".makeButton("uebernehmen", "src")." value=\"a\" align=\"absmiddle\">
@@ -421,10 +427,10 @@ if ($sms_data["time"] == "all") {
 			$link_add = "&cmd_show=openall";
 		}
 		$titel = "<a href=\"".$link."\" class=\"tree\" >".$info_text_002."</a>";
-		$symbol = "<a href=\"".$link.$link_add."\"><img src=\"pictures/".$picture."\" border=0></a>";
+		$symbol = "<a href=\"".$link.$link_add."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/".$picture."\" border=0></a>";
 		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"99%\" align=\"center\"><tr>";
 		$zusatz = show_nachrichtencount($count, $count_timefilter);
-		printhead(0, 0, $link, $open, FALSE, "<a href=\"".$link.$link_add."\"><img src=\"pictures/".$picture."\" border=0></a>", $titel, $zusatz);
+		printhead(0, 0, $link, $open, FALSE, "<a href=\"".$link.$link_add."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/".$picture."\" border=0></a>", $titel, $zusatz);
 		echo "</tr></table>";
 		if (!$move_to_folder) {
 			$content_content = "<div align=\"center\">
@@ -441,14 +447,14 @@ if ($sms_data["time"] == "all") {
 			if (folder_openclose($sms_show['folder'][$sms_data['view']], "all") == "open") {
 				echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"99%\" align=\"center\"><tr>";
 				if ($count_timefilter != "0") {
-					echo "<td class=\"blank\" background=\"pictures/forumstrichgrau.gif\"><img src=\"pictures/blank.gif\" height=\"100%\" width=\"10px\"></td>";
+					echo "<td class=\"blank\" background=\"".$GLOBALS['ASSETS_URL']."images/forumstrichgrau.gif\"><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" height=\"100%\" width=\"10px\"></td>";
 				}
 				printcontent("99%",0, $content_content, FALSE);
-				echo "</tr></table>	";		
+				echo "</tr></table>	";
 			}
 		}
 		if (folder_openclose($sms_show['folder'][$sms_data['view']], "all") == "open") print_messages();
-		
+
 		// do we have any personal folders? if, show them here
 		if (have_msgfolder($sms_data['view']) == TRUE) {
 			// walk throw personal folders
@@ -477,7 +483,7 @@ if ($sms_data["time"] == "all") {
 					$zusatz = show_nachrichtencount($count, $count_timefilter);
 					// display titel
 					echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"99%\" align=\"center\"><tr>";
-					printhead(0, 0, $link, $open, FALSE, "<a href=\"".$link.$link_add."\"><img src=\"pictures/".$picture."\" border=0></a>", $titel, $zusatz);
+					printhead(0, 0, $link, $open, FALSE, "<a href=\"".$link.$link_add."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/".$picture."\" border=0></a>", $titel, $zusatz);
 					echo "</tr></table>	";
 					// do we move messages?
 					if (!$move_to_folder) {
@@ -495,7 +501,7 @@ if ($sms_data["time"] == "all") {
 								</form>";
 							if ($count_timefilter != "0") {
 								$content_content .= "
-									<br><img src=\"pictures/blank.gif\" height=\"5\"><br>"._("markierte Nachrichten:")."
+									<br><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" height=\"5\"><br>"._("markierte Nachrichten:")."
 									<form action=\"".$PHP_SELF."\" method=\"post\" style=\"display: inline\">
 										<input type=\"hidden\" name=\"cmd\" value=\"select_all\">
 										<input type=\"image\" name=\"select\" border=\"0\" ".makeButton("alleauswaehlen", "src")." value=\"loeschen\" align=\"absmiddle\">
@@ -507,38 +513,38 @@ if ($sms_data["time"] == "all") {
 							$content_content .= "</div>";
 							echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"99%\" align=\"center\">\n\t<tr>";
 							if ($count_timefilter != "0") {
-								echo "\n\t<td class=\"blank\" background=\"pictures/forumstrichgrau.gif\"><img src=\"pictures/blank.gif\" height=\"100%\" width=\"10px\"></td>\n";
+								echo "\n\t<td class=\"blank\" background=\"".$GLOBALS['ASSETS_URL']."images/forumstrichgrau.gif\"><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" height=\"100%\" width=\"10px\"></td>\n";
 							}
 							printcontent("99%",0, $content_content, FALSE);
-							echo "</tr></table>	";		
+							echo "</tr></table>	";
 						}
 					}
 					// if folder is open show some messages
 					if (folder_openclose($sms_show['folder'][$sms_data['view']], $x) == "open") print_messages();
 				}
-			}	
-		} 
-		print("</form>"); 
+			}
+		}
+		print("</form>");
 		?>
 	</td>
 	<td class="blank" width="270" align="right" valign="top"> <?
-	
+
 		// build infobox_content > viewfilter
-		$time_by_links = ""; 
-		$time_by_links .= "<a href=\"".$PHP_SELF."?sms_time=all\"><img src=\"pictures/".show_icon($sms_data["time"], "all")."\" width=\"8\" border=\"0\">&nbsp;"._("alle Nachrichten")."</a><br><img src=\"./pictures/blank.gif\" border=\"0\" height=\"2\"><br>";
-		$time_by_links .= "<a href=\"".$PHP_SELF."?sms_time=24h\"><img src=\"pictures/".show_icon($sms_data["time"], "24h")."\" width=\"8\" border=\"0\">&nbsp;"._("letzte 24 Stunden")."</a><br><img src=\"./pictures/blank.gif\" border=\"0\" height=\"2\"><br>";
-		$time_by_links .= "<a href=\"".$PHP_SELF."?sms_time=7d\"><img src=\"pictures/".show_icon($sms_data["time"], "7d")."\" width=\"8\" border=\"0\">&nbsp;"._("letzte 7 Tage")."</a><br><img src=\"./pictures/blank.gif\" border=\"0\" height=\"2\"><br>";
-		$time_by_links .= "<a href=\"".$PHP_SELF."?sms_time=30d\"><img src=\"pictures/".show_icon($sms_data["time"], "30d")."\" width=\"8\" border=\"0\">&nbsp;"._("letzte 30 Tage")."</a><br><img src=\"./pictures/blank.gif\" border=\"0\" height=\"2\"><br>";
-		$time_by_links .= "<a href=\"".$PHP_SELF."?sms_time=older\"><img src=\"pictures/".show_icon($sms_data["time"], "older")."\" width=\"8\" border=\"0\">&nbsp;"._("&auml;lter als 30 Tage")."</a>";
-		
-		$view_by_links = ""; 
-		$view_by_links .= "<a href=\"".$PHP_SELF."?sms_time=new\"><img src=\"pictures/".show_icon($sms_data["time"], "new")."\" width=\"8\" border=\"0\">&nbsp;"._("neue Nachrichten")."</a><br><img src=\"./pictures/blank.gif\" border=\"0\" height=\"2\">";
-		
+		$time_by_links = "";
+		$time_by_links .= "<a href=\"".$PHP_SELF."?sms_time=all\"><img src=\"".$GLOBALS['ASSETS_URL']."images/".show_icon($sms_data["time"], "all")."\" width=\"8\" border=\"0\">&nbsp;"._("alle Nachrichten")."</a><br><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" border=\"0\" height=\"2\"><br>";
+		$time_by_links .= "<a href=\"".$PHP_SELF."?sms_time=24h\"><img src=\"".$GLOBALS['ASSETS_URL']."images/".show_icon($sms_data["time"], "24h")."\" width=\"8\" border=\"0\">&nbsp;"._("letzte 24 Stunden")."</a><br><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" border=\"0\" height=\"2\"><br>";
+		$time_by_links .= "<a href=\"".$PHP_SELF."?sms_time=7d\"><img src=\"".$GLOBALS['ASSETS_URL']."images/".show_icon($sms_data["time"], "7d")."\" width=\"8\" border=\"0\">&nbsp;"._("letzte 7 Tage")."</a><br><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" border=\"0\" height=\"2\"><br>";
+		$time_by_links .= "<a href=\"".$PHP_SELF."?sms_time=30d\"><img src=\"".$GLOBALS['ASSETS_URL']."images/".show_icon($sms_data["time"], "30d")."\" width=\"8\" border=\"0\">&nbsp;"._("letzte 30 Tage")."</a><br><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" border=\"0\" height=\"2\"><br>";
+		$time_by_links .= "<a href=\"".$PHP_SELF."?sms_time=older\"><img src=\"".$GLOBALS['ASSETS_URL']."images/".show_icon($sms_data["time"], "older")."\" width=\"8\" border=\"0\">&nbsp;"._("&auml;lter als 30 Tage")."</a>";
+
+		$view_by_links = "";
+		$view_by_links .= "<a href=\"".$PHP_SELF."?sms_time=new\"><img src=\"".$GLOBALS['ASSETS_URL']."images/".show_icon($sms_data["time"], "new")."\" width=\"8\" border=\"0\">&nbsp;"._("neue Nachrichten")."</a><br><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" border=\"0\" height=\"2\">";
+
 		// did we came from a ...?
 		if ($SessSemName[0] && $SessSemName["class"] == "inst") {
-			$tmp_array_1 = array("kategorie" => _("Zur&uuml;ck:"),"eintrag" => array(array("icon" => "pictures/ausruf_small.gif", "text" => "<a href=\"institut_main.php\">"._("Zur&uuml;ck zur ausgew&auml;hlten Einrichtung")."</a>")));
+			$tmp_array_1 = array("kategorie" => _("Zur&uuml;ck:"),"eintrag" => array(array('icon' => "ausruf_small.gif", "text" => "<a href=\"institut_main.php\">"._("Zur&uuml;ck zur ausgew&auml;hlten Einrichtung")."</a>")));
 		} else if ($SessSemName[0]) {
-			$tmp_array_1 = array("kategorie" => _("Zur&uuml;ck:"),"eintrag" => array(array("icon" => "pictures/ausruf_small.gif", "text" => "<a href=\"seminar_main.php\">"._("Zur&uuml;ck zur ausgew&auml;hlten Veranstaltung")."</a>")));
+			$tmp_array_1 = array("kategorie" => _("Zur&uuml;ck:"),"eintrag" => array(array('icon' => "ausruf_small.gif", "text" => "<a href=\"seminar_main.php\">"._("Zur&uuml;ck zur ausgew&auml;hlten Veranstaltung")."</a>")));
 		}
 		// how many items do we have?
 		$show_message_count = sprintf(_("Sie haben %s empfangene und %s gesendete Nachrichten."), ($altm+$neum), count_messages_from_user("snd"));
@@ -550,16 +556,16 @@ if ($sms_data["time"] == "all") {
 		// assemble infobox
 		$infobox = array($tmp_array_1,
 			array("kategorie" => _("Information:"),"eintrag" => array(
-				array("icon" => "pictures/ausruf_small.gif", "text" => $show_message_count))),
+				array('icon' => "ausruf_small.gif", "text" => $show_message_count))),
 			array("kategorie" => _("nach Zeit filtern:"),"eintrag" => array(
-				array("icon" => "pictures/suchen.gif", "text" => $time_by_links))),
+				array('icon' => "suchen.gif", "text" => $time_by_links))),
 			array("kategorie" => _("weitere Ansichten:"),"eintrag" => array(
-				array("icon" => "pictures/suchen.gif", "text" => $view_by_links))),
+				array('icon' => "suchen.gif", "text" => $view_by_links))),
 			array("kategorie" => _("Optionen:"),"eintrag" => array(
-				array("icon" => "pictures/link_intern.gif", "text" => sprintf("<a href=\"%s?cmd_show=openall\">"._("Alle Nachrichten aufklappen")."</a><br><img src=\"./pictures/blank.gif\" border=\"0\" height=\"2\"><br><a href=\"%s?cmd=mark_allsmsreaded\">"._("Alle als gelesen speichern")."</a><br><img src=\"./pictures/blank.gif\" border=\"0\" height=\"2\"><br>	<a href=\"%s?cmd=admin_folder&cmd_2=new\">"._("Neuen Ordner erstellen")."</a>", $PHP_SELF, $PHP_SELF, $PHP_SELF, $PHP_SELF))))		
+				array("icon" => "link_intern.gif", "text" => sprintf("<a href=\"%s?cmd_show=openall\">"._("Alle Nachrichten aufklappen")."</a><br><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" border=\"0\" height=\"2\"><br><a href=\"%s?cmd=mark_allsmsreaded\">"._("Alle als gelesen speichern")."</a><br><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" border=\"0\" height=\"2\"><br>    <a href=\"%s?cmd=admin_folder&cmd_2=new\">"._("Neuen Ordner erstellen")."</a>", $PHP_SELF, $PHP_SELF, $PHP_SELF, $PHP_SELF))))
 		);
 		// display infobox
-		print_infobox($infobox,"pictures/sms3.jpg"); ?>
+		print_infobox($infobox, "sms3.jpg"); ?>
 	</td>
 </tr>
 <tr>

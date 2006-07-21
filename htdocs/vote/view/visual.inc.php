@@ -84,7 +84,7 @@ function createBoxHeader ($title, $width, $extraTitle = "",
 	 " title=\"".$imgTitle."\" align=\"texttop\">";
    }
 
-   $html .= 
+   $html .=
       "<b>&nbsp;".$title."</b>";
 
    if ($extraTitle) {
@@ -97,18 +97,18 @@ function createBoxHeader ($title, $width, $extraTitle = "",
       "&nbsp;";
 
    if ($adminURL) {
-      $html .= 
+      $html .=
 	  "<a href=\"".$adminURL."\"><img src=\"".$adminImgURL."\" border=\"0\" ".
 	  " alt=\"".$adminTitle."\" title=\"".$adminTitle."\"></a>&nbsp;";
    }
 
-   $html .= 
+   $html .=
       "  </td>\n".
       " </tr>\n".
       " <tr>\n".
       "  <td class=\"".$cssClass."\" colspan=\"3\">\n";
-   
-   
+
+
    return $html;
 }
 
@@ -120,12 +120,12 @@ function createBoxHeader ($title, $width, $extraTitle = "",
  */
 
 function createBoxFooter () {
-   $html = 
+   $html =
       "  </td>\n".
       " </tr>\n".
       "</table>\n".
       "<br>\n";
-   
+
    return $html;
 }
 
@@ -137,7 +137,7 @@ function createBoxLineHeader () {
 
 function createBoxLineFooter () {
    $html = "";
-   $html .= 
+   $html .=
       "</table>\n";
    return $html;
 }
@@ -163,10 +163,10 @@ function createBoxLine ($title, $imgURL, $userName, $userID, $date) {
    $html = "";
    $timecolor = "#BBBBBB";
 
-   $htmlArrow = 
+   $htmlArrow =
       "  <td bgcolor=\"".$timecolor."\" class=\"printhead3\" nowrap ".
       "      width=\"1%\" align=\"left\" valign=\"top\">\n".
-      "   &nbsp;<img src=\"pictures/forumrotrunt.gif\">\n".
+      "   &nbsp;<img src=\"".$GLOBALS['ASSETS_URL']."images/forumrotrunt.gif\">\n".
       " </td>";
 
    $htmlIcon =
@@ -180,7 +180,7 @@ function createBoxLine ($title, $imgURL, $userName, $userID, $date) {
       "  &nbsp;".$title.
       " </td>";
 
-   $htmlUser = 
+   $htmlUser =
       "<td align=\"right\" class=\"printhead\" width=\"99%\" ".
       "    valign=\"bottom\">\n".
       " <a href=\"about.php?username=".$userID."\">\n".
@@ -190,9 +190,9 @@ function createBoxLine ($title, $imgURL, $userName, $userID, $date) {
       "</td>\n";
 
 
-   $html .= 
-      " <tr>" . 
-      $htmlArrow . $htmlIcon . $htmlTitle . $htmlUser . 
+   $html .=
+      " <tr>" .
+      $htmlArrow . $htmlIcon . $htmlTitle . $htmlUser .
       " </tr>";
 
    return $html;
@@ -201,7 +201,7 @@ function createBoxLine ($title, $imgURL, $userName, $userID, $date) {
 function createBoxContentHeader () {
    $html = "";
 
-   $html .= 
+   $html .=
       " <tr>\n".
       "  <td class=\"printcontent\" width=\"22\">&nbsp;&nbsp;&nbsp;".
       "&nbsp;&nbsp;\n".
@@ -214,7 +214,7 @@ function createBoxContentHeader () {
 function createBoxContentFooter () {
    $html = "";
 
-   $html .= 
+   $html .=
       "  </td>\n".
       " </tr>\n";
 
@@ -234,7 +234,7 @@ function createErrorReport (&$object, $errortitle = "") {
 	   : _("Es ist ein Fehler aufgetreten.");
    }
 
-   $html .=  createReportMessage ($errortitle, VOTE_ICON_ERROR, 
+   $html .=  createReportMessage ($errortitle, VOTE_ICON_ERROR,
 				  VOTE_COLOR_ERROR);
 
    $html .= "<ul>\n";

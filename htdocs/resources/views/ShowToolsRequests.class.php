@@ -1,9 +1,9 @@
 <?
 /**
 * ShowToolsRequests.class.php
-* 
+*
 * room-management tool for room-admins
-* 
+*
 *
 * @author		Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
 * @version		$Id$
@@ -44,7 +44,7 @@ $cssSw = new cssClassSwitcher;
 /**
 * ShowToolsRequests, room-management tool for room-admin
 *
-* @access	public	
+* @access	public
 * @author	Cornelis Kater <kater@data-quest.de>
 * @version	$Id$
 * @package	resources
@@ -54,12 +54,12 @@ class ShowToolsRequests {
 	var $db2;
 	var $cssSw;			//the cssClassSwitcher
 	var $requests;			//the requests i'am responsibel for
-	
+
 	function ShowToolsRequests() {
 		$this->db = new DB_Seminar;
 		$this->db2 = new DB_Seminar;
 	}
-	
+
 	function getMyOpenSemRequests() {
 		if (!$this->requests)
 			$this->requests = getMyRoomRequests();
@@ -72,7 +72,7 @@ class ShowToolsRequests {
 		}
 		return $count;
 	}
-	
+
 	function getMyOpenNoTimeRequests() {
 		if (!$this->requests)
 			$this->requests = getMyRoomRequests();
@@ -85,7 +85,7 @@ class ShowToolsRequests {
 		}
 		return $count;
 	}
-	
+
 	function getMyOpenResRequests() {
 		if (!$this->requests)
 			$this->requests = getMyRoomRequests();
@@ -98,11 +98,11 @@ class ShowToolsRequests {
 		}
 		return $count;
 	}
-	
+
 	function getMyOpenRequests() {
 		if (!$this->requests)
 			$this->requests = getMyRoomRequests();
-		
+
 		if (is_array($this->requests)) {
 			foreach ($this->requests as $val) {
 				if (!$val["closed"])
@@ -111,7 +111,7 @@ class ShowToolsRequests {
 		}
 		return $count;
 	}
-	
+
 	function selectSemInstituteNames($inst_id) {
 		$query = sprintf("SELECT a.Name AS inst_name, b.Name AS fak_name FROM Institute a LEFT JOIN Institute b ON (a.fakultaets_id = b.Institut_id) WHERE a.Institut_id = '%s' ", $inst_id);
 		$this->db->query($query);
@@ -120,23 +120,23 @@ class ShowToolsRequests {
 	}
 
 	function selectDates($seminar_id, $termin_id = '') {
-		$query = sprintf("SELECT *, resource_id FROM termine LEFT JOIN resources_assign ra ON (ra.assign_user_id = termine.termin_id) 
+		$query = sprintf("SELECT *, resource_id FROM termine LEFT JOIN resources_assign ra ON (ra.assign_user_id = termine.termin_id)
 						WHERE range_id = '%s' %s ORDER BY date, content", $seminar_id, ($termin_id) ? "AND termin_id = '".$termin_id."'" : "AND date_typ IN".getPresenceTypeClause());
 		$this->db->query($query);
 		return;
 	}
-	
+
 	function showToolStart() {
 		global $PHP_SELF, $cssSw;
-		
+
 		$open_requests = $this->getMyOpenRequests();
-		
+
 		?>
 		<table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
 		<form method="POST" action="<?echo $PHP_SELF ?>?tools_requests_start=1">
 			<input type="HIDDEN" name="view" value="edit_request" />
 			<tr>
-				<td class="<? echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? echo $cssSw->getClass() ?>" width="4%">&nbsp;
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>"><font size=-1><b><?=_("aktueller Status")?></b><br />
 					<?
@@ -156,7 +156,7 @@ class ShowToolsRequests {
 			if ($open_requests) {
 			?>
 			<tr>
-				<td class="<? echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? echo $cssSw->getClass() ?>" width="4%">&nbsp;
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>"><font size=-1><b><?=_("Optionen beim Aufl&ouml;sen")?></b><br />
 					<?
@@ -203,14 +203,14 @@ class ShowToolsRequests {
 			</tr>
 			<? $cssSw->switchClass(); ?>
 			<tr>
-				<td class="<? echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? echo $cssSw->getClass() ?>" width="4%">&nbsp;
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" align="center">
 					<?
 					print "<input type=\"IMAGE\" name=\"start_multiple_mode\" ".makeButton("starten", "src")." />";
 					?>
 			</td>
-			</tr>			
+			</tr>
 			<?
 			}
 			?>
@@ -219,11 +219,11 @@ class ShowToolsRequests {
 		<br /><br />
 		<?
 	}
-	
+
 	function showRequestList() {
 		global $resources_data, $_fullname_sql, $ABSOLUTE_PATH_STUDIP, $CANONICAL_RELATIVE_PATH_STUDIP;
 		require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/ZebraTable.class.php");
-	
+
 		$license_to_kill = (get_config('RESOURCES_ALLOW_DELETE_REQUESTS') && getGlobalPerms($GLOBALS['user']->id) == 'admin');
 		if ($license_to_kill){
 			echo chr(10) . '<script type="text/javascript">';
@@ -248,7 +248,7 @@ class ShowToolsRequests {
 			echo chr(10) . '<form name="list_requests_form" method="post" action="'.$GLOBALS['PHP_SELF'].'">';
 			echo chr(10) . '<div align="right">
 				<a href="#" onClick="auswahl_umkehr();return false;">'
-				. makeButton('auswahlumkehr', 'img', _("Auswahl umkehren")) 
+				. makeButton('auswahlumkehr', 'img', _("Auswahl umkehren"))
 				. '</a>&nbsp;&nbsp;'
 				. makeButton('loeschen', 'input', _("Ausgewählte Anfragen löschen"), 'do_delete_requests')
 				. '&nbsp;</div><br>';
@@ -281,8 +281,8 @@ class ShowToolsRequests {
 					//echo "<font size=\"-1\">";
 					echo $zt->cell("&nbsp;");
 					echo $zt->cell("<font size=\"-1\">$i.</font>");
-					echo $zt->cell("<a href=\"resources.php?view=edit_request&edit=".$val['request_id']."\"><img src=\"pictures/edit_transparent.gif\" border=\"0\"".tooltip('Anfrage bearbeiten')."></a>");
-					echo $zt->cell((($resources_data['requests_open'][$val['request_id']]) ? '' : '<img src="pictures/haken_transparent.gif">')."</font>");
+					echo $zt->cell("<a href=\"resources.php?view=edit_request&edit=".$val['request_id']."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/edit_transparent.gif\" border=\"0\"".tooltip('Anfrage bearbeiten')."></a>");
+					echo $zt->cell((($resources_data['requests_open'][$val['request_id']]) ? '' : '<img src="'.$GLOBALS['ASSETS_URL'].'images/haken_transparent.gif">')."</font>");
 					echo $zt->cell("<font size=\"-1\">".htmlReady($semObj->seminar_number)."</font>");
 					echo $zt->cell("<font size=\"-1\"><a href=\"details.php?sem_id=".$semObj->getId()."&send_from_search=true&send_from_search_page=".urlencode($CANONICAL_RELATIVE_PATH_STUDIP."resources.php?view=list_requests")."\">".my_substr(htmlReady($semObj->getName()),0,50)."</a><br/></font>");
 					echo $zt->openCell();
@@ -304,7 +304,7 @@ class ShowToolsRequests {
 							$cursem = $one_sem['name'];
 						}
 					}
-					
+
 					echo $zt->closeCell();
 					echo $zt->cell("<font size=\"-1\"><a href=\"about.php?username=".get_username($reqObj->user_id)."\">".get_fullname($reqObj->user_id)."</a></font>");
 					echo $zt->cell("<font size=\"-1\">$cursem</font>");
@@ -320,22 +320,22 @@ class ShowToolsRequests {
 			echo chr(10) . '</form>';
 		}
 	}
-	
+
 
 	function showRequest($request_id) {
 		global $PHP_SELF, $cssSw, $resources_data, $perm;
 		$reqObj = new RoomRequest($request_id);
 		$semObj = new Seminar($reqObj->getSeminarId());
-		$sem_link = $perm->have_studip_perm('tutor', $semObj->getId()) ? 
-			"seminar_main.php?auswahl=" . $semObj->getId() : 
-			"details.php?sem_id=" . $semObj->getId() . "&send_from_search=1&send_from_search_page=" 
+		$sem_link = $perm->have_studip_perm('tutor', $semObj->getId()) ?
+			"seminar_main.php?auswahl=" . $semObj->getId() :
+			"details.php?sem_id=" . $semObj->getId() . "&send_from_search=1&send_from_search_page="
 			. rawurlencode($PHP_SELF . "?working_on_request=$request_id");
 		?>
 		<table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
 		<form method="POST" action="<?echo $PHP_SELF ?>?working_on_request=<?=$request_id?>">
 			<input type="HIDDEN" name="view" value="edit_request" />
 			<tr>
-				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp;
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" colspan="2" width="96%" valign="top">
 					<a href="<?=$sem_link?>">
@@ -354,7 +354,7 @@ class ShowToolsRequests {
 				</td>
 			</tr>
 			<tr>
-				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp;
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="35%" valign="top">
 					<font size="-1"><b><?=_("angeforderte Belegungszeiten:")?></b><br /><br />
@@ -413,7 +413,7 @@ class ShowToolsRequests {
 					?>
 					</font>
 				</td>
-				<td style="border-left:1px dotted black; background-image: url('pictures/steel4.jpg')" width="51%" rowspan="3" valign="top">
+				<td style="border-left:1px dotted black; background-image: url('<?= $GLOBALS['ASSETS_URL'] ?>images/steel4.jpg')" width="51%" rowspan="3" valign="top">
 					<table cellpadding="2" cellspacing="0" border="0" width="90%">
 						<tr>
 							<td width="70%">
@@ -446,11 +446,11 @@ class ShowToolsRequests {
 							<?
 							if ($request_resource_id = $reqObj->getResourceId()) {
 								$resObj =& ResourceObject::Factory($request_resource_id);
-								print "<img src=\"./pictures/info.gif\" ".tooltip(_("Der ausgewählte Raum bietet folgende der wünschbaren Eigenschaften:")." \n".$resObj->getPlainProperties(TRUE), TRUE, TRUE)." />";
+								print "<img src=\"".$GLOBALS['ASSETS_URL']."images/info.gif\" ".tooltip(_("Der ausgewählte Raum bietet folgende der wünschbaren Eigenschaften:")." \n".$resObj->getPlainProperties(TRUE), TRUE, TRUE)." />";
 								print "&nbsp;".$resObj->getFormattedLink($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["first_event"]);
 							} else
 								print _("Es wurde kein Raum angefordert.");
-		
+
 							?>
 							</font>
 							</td>
@@ -461,7 +461,7 @@ class ShowToolsRequests {
 									print "<td width=\"1%\" nowrap><font size=\"-1\">";
 									if ($request_resource_id) {
 										if ($request_resource_id == $val["resource_id"]) {
-											print "<img src=\"pictures/haken_transparent.gif\" ".tooltip(_("Dieser Raum ist augenblicklich gebucht"), TRUE, TRUE)." />";
+											print "<img src=\"".$GLOBALS['ASSETS_URL']."images/haken_transparent.gif\" ".tooltip(_("Dieser Raum ist augenblicklich gebucht"), TRUE, TRUE)." />";
 										} else {
 											$overlap_status = $this->showGroupOverlapStatus($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["detected_overlaps"][$request_resource_id], $val["events_count"], $val["overlap_events_count"][$request_resource_id], $val["termin_ids"]);
 											print $overlap_status["html"];
@@ -480,7 +480,7 @@ class ShowToolsRequests {
 									print "<td width=\"1%\" nowrap><font size=\"-1\">";
 									if ($request_resource_id) {
 										if ($request_resource_id == $val["resource_id"]) {
-											print "<img src=\"pictures/haken_transparent.gif\" ".tooltip(_("Dieser Raum ist augenblicklich gebucht"), TRUE, TRUE)." />";
+											print "<img src=\"".$GLOBALS['ASSETS_URL']."images/haken_transparent.gif\" ".tooltip(_("Dieser Raum ist augenblicklich gebucht"), TRUE, TRUE)." />";
 										} else {
 											$overlap_status = $this->showOverlapStatus($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["detected_overlaps"][$request_resource_id][$key], $val["events_count"], $val["overlap_events_count"][$request_resource_id]);
 											print $overlap_status["html"];
@@ -517,7 +517,7 @@ class ShowToolsRequests {
 						if (get_config('RESOURCES_ENABLE_GROUPING')){
 							$room_group =& RoomGroups::GetInstance();
 							$group_id = $resources_data['actual_room_group'];
-							?>						
+							?>
 						<tr>
 							<td style="border-top:1px solid;" width="100%" colspan="<?=$cols+2?>">
 								<font size="-1"><b><?=_("Raumgruppe berücksichtigen:")?></b></font>
@@ -534,7 +534,7 @@ class ShowToolsRequests {
 							.htmlReady(my_substr($room_group->getGroupName($gid),0,45))
 							.' ('.$room_group->getGroupCount($gid).')</option>';
 						}
-						?>					
+						?>
 						</select>
 						</font>
 						</td>
@@ -551,7 +551,7 @@ class ShowToolsRequests {
 							<td width="70%"><font size="-1">
 								<?
 								$resObj =& ResourceObject::Factory($key);
-								print "<img src=\"./pictures/info.gif\" ".tooltip(_("Der ausgewählte Raum bietet folgende der wünschbaren Eigenschaften:")." \n".$resObj->getPlainProperties(TRUE), TRUE, TRUE)." />";
+								print "<img src=\"".$GLOBALS['ASSETS_URL']."images/info.gif\" ".tooltip(_("Der ausgewählte Raum bietet folgende der wünschbaren Eigenschaften:")." \n".$resObj->getPlainProperties(TRUE), TRUE, TRUE)." />";
 								print "&nbsp;".$resObj->getFormattedLink($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["first_event"]);
 							?>
 							</td>
@@ -562,7 +562,7 @@ class ShowToolsRequests {
 									foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["groups"] as $key2 => $val2) {
 										print "<td width=\"1%\" nowrap><font size=\"-1\">";
 										if ($key == $val2["resource_id"]) {
-											print "<img src=\"pictures/haken_transparent.gif\" ".tooltip(_("Dieser Raum ist augenblicklich gebucht"), TRUE, TRUE)." />";
+											print "<img src=\"".$GLOBALS['ASSETS_URL']."images/haken_transparent.gif\" ".tooltip(_("Dieser Raum ist augenblicklich gebucht"), TRUE, TRUE)." />";
 										} else {
 											$overlap_status = $this->showGroupOverlapStatus($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["detected_overlaps"][$key], $val2["events_count"], $val2["overlap_events_count"][$resObj->getId()], $val2["termin_ids"]);
 											print $overlap_status["html"];
@@ -576,12 +576,12 @@ class ShowToolsRequests {
 										$i++;
 									}
 								}
-							} else {									
+							} else {
 								if (is_array($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"])) {
 									foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"] as $key2 => $val2) {
 										print "<td width=\"1%\" nowrap><font size=\"-1\">";
 										if ($key == $val2["resource_id"]) {
-											print "<img src=\"pictures/haken_transparent.gif\" ".tooltip(_("Dieser Raum ist augenblicklich gebucht"), TRUE, TRUE)." />";
+											print "<img src=\"".$GLOBALS['ASSETS_URL']."images/haken_transparent.gif\" ".tooltip(_("Dieser Raum ist augenblicklich gebucht"), TRUE, TRUE)." />";
 										} else {
 											$overlap_status = $this->showOverlapStatus($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["detected_overlaps"][$key][$key2], $val2["events_count"], $val2["overlap_events_count"][$resObj->getId()]);
 											print $overlap_status["html"];
@@ -636,7 +636,7 @@ class ShowToolsRequests {
 								if ($val["type"] == "grouped")
 									$grouped_rooms[$key] = TRUE;
 							}
-									
+
 						if (sizeof($matching_rooms)) {
 							foreach ($matching_rooms as $key=>$val) {
 							?>
@@ -644,7 +644,7 @@ class ShowToolsRequests {
 							<td width="70%"><font size="-1">
 								<?
 								$resObj =& ResourceObject::Factory($key);
-								print "<img src=\"./pictures/info.gif\" ".tooltip(_("Der ausgewählte Raum bietet folgende der wünschbaren Eigenschaften:")." \n".$resObj->getPlainProperties(TRUE), TRUE, TRUE)." />";
+								print "<img src=\"".$GLOBALS['ASSETS_URL']."images/info.gif\" ".tooltip(_("Der ausgewählte Raum bietet folgende der wünschbaren Eigenschaften:")." \n".$resObj->getPlainProperties(TRUE), TRUE, TRUE)." />";
 								print "&nbsp;".$resObj->getFormattedLink($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["first_event"]);
 							?>
 							</td>
@@ -655,7 +655,7 @@ class ShowToolsRequests {
 									foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["groups"] as $key2 => $val2) {
 										print "<td width=\"1%\" nowrap><font size=\"-1\">";
 										if ($key == $val2["resource_id"]) {
-											print "<img src=\"pictures/haken_transparent.gif\" ".tooltip(_("Dieser Raum ist augenblicklich gebucht"), TRUE, TRUE)." />";
+											print "<img src=\"".$GLOBALS['ASSETS_URL']."images/haken_transparent.gif\" ".tooltip(_("Dieser Raum ist augenblicklich gebucht"), TRUE, TRUE)." />";
 										} else {
 											$overlap_status = $this->showGroupOverlapStatus($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["detected_overlaps"][$key], $val2["events_count"], $val2["overlap_events_count"][$resObj->getId()], $val2["termin_ids"]);
 											print $overlap_status["html"];
@@ -667,12 +667,12 @@ class ShowToolsRequests {
 										$i++;
 									}
 								}
-							} else {								
+							} else {
 								if (is_array($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"])) {
 									foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"] as $key2 => $val2) {
 										print "<td width=\"1%\" nowrap><font size=\"-1\">";
 										if ($key == $val2["resource_id"]) {
-											print "<img src=\"pictures/haken_transparent.gif\" ".tooltip(_("Dieser Raum ist augenblicklich gebucht"), TRUE, TRUE)." />";
+											print "<img src=\"".$GLOBALS['ASSETS_URL']."images/haken_transparent.gif\" ".tooltip(_("Dieser Raum ist augenblicklich gebucht"), TRUE, TRUE)." />";
 										} else {
 											$overlap_status = $this->showOverlapStatus($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["detected_overlaps"][$key][$key2], $val2["events_count"], $val2["overlap_events_count"][$resObj->getId()]);
 											print $overlap_status["html"];
@@ -713,27 +713,27 @@ class ShowToolsRequests {
 							<td colspan="<?=$cols+2?>" align="center">
 								<font size="-1">
 									<?=_("zeige R&auml;ume")?>
-									<a href="<?=$PHP_SELF?>?dec_limit_low=1"><img src="pictures/-.gif" border="0" <?=tooltip(_("-10"))?>/></a>
+									<a href="<?=$PHP_SELF?>?dec_limit_low=1"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/-.gif" border="0" <?=tooltip(_("-10"))?>/></a>
 									<input type="TEXT" name="search_rooms_limit_low" maxlength="2" size="1" style="font-size:8pt" value="<?=($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_low"] + 1)?>">
-									<a href="<?=$PHP_SELF?>?inc_limit_low=1"><img src="pictures/+.gif" border="0" <?=tooltip(_("+10"))?>/></a>
+									<a href="<?=$PHP_SELF?>?inc_limit_low=1"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/+.gif" border="0" <?=tooltip(_("+10"))?>/></a>
 
 									bis
-									<a href="<?=$PHP_SELF?>?dec_limit_high=1"><img src="pictures/-.gif" border="0" <?=tooltip(_("-10"))?>/></a>
+									<a href="<?=$PHP_SELF?>?dec_limit_high=1"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/-.gif" border="0" <?=tooltip(_("-10"))?>/></a>
 									<input type="TEXT" name="search_rooms_limit_high" maxlength="2" size="1" style="font-size:8pt" value="<?=$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_high"]?>">
-									<a href="<?=$PHP_SELF?>?inc_limit_high=1"><img src="pictures/+.gif" border="0" <?=tooltip(_("+10"))?>/></a>
+									<a href="<?=$PHP_SELF?>?inc_limit_high=1"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/+.gif" border="0" <?=tooltip(_("+10"))?>/></a>
 
-									<input type="IMAGE" name="matching_rooms_limit_submit" src="pictures/move_right.gif" border="0" <?=tooltip(_("ausgewählten Bereich anzeigen"))?>/>
+									<input type="IMAGE" name="matching_rooms_limit_submit" src="<?= $GLOBALS['ASSETS_URL'] ?>images/move_right.gif" border="0" <?=tooltip(_("ausgewählten Bereich anzeigen"))?>/>
 								</font>
 							</td>
 						</tr>
 							<?
 						} else
 							print "<tr><td width=\"100%\" colspan=\"".($cols+1)."\"><font size=\"-1\">"._("keine gefunden")."</font></td></tr>";
-						
-						
+
+
 						//Clipped Rooms
 						if (sizeof($clipped_rooms)) {
-						?>						
+						?>
 						<tr>
 							<td style="border-top:1px solid;" width="100%" colspan="<?=$cols+2?>">
 								<font size="-1"><b><?=_("R&auml;ume aus der Merkliste:")?></b></font>
@@ -746,7 +746,7 @@ class ShowToolsRequests {
 							<td width="70%"><font size="-1">
 								<?
 								$resObj =& ResourceObject::Factory($key);
-								print "<img src=\"./pictures/info.gif\" ".tooltip(_("Der ausgewählte Raum bietet folgende der wünschbaren Eigenschaften:")." \n".$resObj->getPlainProperties(TRUE), TRUE, TRUE)." />";
+								print "<img src=\"".$GLOBALS['ASSETS_URL']."images/info.gif\" ".tooltip(_("Der ausgewählte Raum bietet folgende der wünschbaren Eigenschaften:")." \n".$resObj->getPlainProperties(TRUE), TRUE, TRUE)." />";
 								print "&nbsp;".$resObj->getFormattedLink($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["first_event"]);
 							?>
 							</td>
@@ -757,7 +757,7 @@ class ShowToolsRequests {
 									foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["groups"] as $key2 => $val2) {
 										print "<td width=\"1%\" nowrap><font size=\"-1\">";
 										if ($key == $val2["resource_id"]) {
-											print "<img src=\"pictures/haken_transparent.gif\" ".tooltip(_("Dieser Raum ist augenblicklich gebucht"), TRUE, TRUE)." />";
+											print "<img src=\"".$GLOBALS['ASSETS_URL']."images/haken_transparent.gif\" ".tooltip(_("Dieser Raum ist augenblicklich gebucht"), TRUE, TRUE)." />";
 										} else {
 											$overlap_status = $this->showGroupOverlapStatus($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["detected_overlaps"][$key], $val2["events_count"], $val2["overlap_events_count"][$resObj->getId()], $val2["termin_ids"]);
 											print $overlap_status["html"];
@@ -771,12 +771,12 @@ class ShowToolsRequests {
 										$i++;
 									}
 								}
-							} else {									
+							} else {
 								if (is_array($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"])) {
 									foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"] as $key2 => $val2) {
 										print "<td width=\"1%\" nowrap><font size=\"-1\">";
 										if ($key == $val2["resource_id"]) {
-											print "<img src=\"pictures/haken_transparent.gif\" ".tooltip(_("Dieser Raum ist augenblicklich gebucht"), TRUE, TRUE)." />";
+											print "<img src=\"".$GLOBALS['ASSETS_URL']."images/haken_transparent.gif\" ".tooltip(_("Dieser Raum ist augenblicklich gebucht"), TRUE, TRUE)." />";
 										} else {
 											$overlap_status = $this->showOverlapStatus($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["detected_overlaps"][$key][$key2], $val2["events_count"], $val2["overlap_events_count"][$resObj->getId()]);
 											print $overlap_status["html"];
@@ -818,7 +818,7 @@ class ShowToolsRequests {
 				</td>
 			</tr>
 			<tr>
-				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp;
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="35%" valign="top">
 					<font size="-1"><b><?=_("gew&uuml;nschte Raumeigenschaften:")?></b><br /><br />
@@ -828,7 +828,7 @@ class ShowToolsRequests {
 					?>
 						<table width="99%" cellspacing="0" cellpadding="2" border="0">
 						<?
-						
+
 						foreach ($properties as $key=>$val) {
 							?>
 							<tr>
@@ -848,7 +848,7 @@ class ShowToolsRequests {
 									case "select":
 										$options=explode (";",$val["options"]);
 										foreach ($options as $a) {
-											if ($val["state"] == $a) 
+											if ($val["state"] == $a)
 												print htmlReady($a);
 										}
 									break;
@@ -857,7 +857,7 @@ class ShowToolsRequests {
 								</td>
 							</tr>
 							<?
-						}						
+						}
 						?>
 						</table>
 						<?
@@ -868,7 +868,7 @@ class ShowToolsRequests {
 				</td>
 			</tr>
 			<tr>
-				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp;
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="35%" valign="top">
 					<font size="-1"><b><?=_("Kommentar des Anfragenden:")?></b><br /><br />
@@ -880,12 +880,12 @@ class ShowToolsRequests {
 					?>
 					</font>
 				</td>
-			
+
 			<tr>
-				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp;
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" colspan="2" width="96%" valign="top" align="center">
-				<? 
+				<?
 				// can we dec?
 				if ($resources_data["requests_working_pos"] > 0) {
 					$d = -1;
@@ -894,17 +894,17 @@ class ShowToolsRequests {
 							$d--;
 					if ((sizeof($resources_data["requests_open"]) > 1) && (($resources_data["requests_open"][$resources_data["requests_working_on"][$resources_data["requests_working_pos"] + $d]["request_id"]]) || (!$resources_data["skip_closed_requests"])))
 						$inc_possible = TRUE;
-				} 
+				}
 				if ($inc_possible) {
 					print("&nbsp;<input type=\"IMAGE\" name=\"dec_request\" ".makeButton("zurueck", "src")." border=\"0\" />");
-				} 
+				}
 				print("&nbsp;<input type=\"IMAGE\" name=\"cancel_edit_request\" ".makeButton("abbrechen", "src")." border=\"0\" />");
 				if ((($reqObj->getResourceId()) || (sizeof($matching_rooms)) || (sizeof($clipped_rooms)) || (sizeof($grouped_rooms))) &&
 					((is_array($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["groups"])) || ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"]))) {
 					print("&nbsp;<input type=\"IMAGE\" name=\"save_state\" ".makeButton("speichern", "src")." border=\"0\" />");
 					print("&nbsp;<input type=\"IMAGE\" name=\"suppose_decline_request\" ".makeButton("ablehnen", "src")." border=\"0\" />");
 				}
-				
+
 				// can we inc?
 				if ($resources_data["requests_working_pos"] < sizeof($resources_data["requests_working_on"])-1) {
 					$i = 1;
@@ -913,11 +913,11 @@ class ShowToolsRequests {
 							$i++;
 					if ((sizeof($resources_data["requests_open"]) > 1) && (($resources_data["requests_open"][$resources_data["requests_working_on"][$resources_data["requests_working_pos"] + $i]["request_id"]]) || (!$resources_data["skip_closed_requests"])))
 						$dec_possible = TRUE;
-				} 
-								
+				}
+
 				if ($dec_possible) {
 					print("&nbsp;<input type=\"IMAGE\" name=\"inc_request\" ".makeButton("weiter", "src")." border=\"0\" />");
-				} 
+				}
 				if (sizeof($resources_data["requests_open"]) > 1)
 					printf ("<br /><font size=\"-1\">" . _("<b>%s</b> von <b>%s</b> Anfragen in der Bearbeitung wurden noch nicht aufgel&ouml;st.") . "</font>", sizeof($resources_data["requests_open"]), sizeof($resources_data["requests_working_on"]));
 					printf ("<br /><font size=\"-1\">" . _("Aktueller Request: ")."<b>%s</b></font>", $resources_data["requests_working_pos"]+1);
@@ -929,7 +929,7 @@ class ShowToolsRequests {
 		<br /><br />
 		<?
 	}
-	
+
 	function showGroupOverlapStatus($overlaps, $events_count, $overlap_events_count, $group_dates) {
 		if ($overlap_events_count) {
 			foreach ($overlaps as $val) {
@@ -938,7 +938,7 @@ class ShowToolsRequests {
 			}
 			if ($lock_desc)
 				$lock_desc = _("Sperrzeit(en):\n").$lock_desc;
-				
+
 			if ($overlap_events_count >= round($events_count * ($GLOBALS['RESOURCES_ALLOW_SINGLE_ASSIGN_PERCENTAGE'] / 100))) {
 				if ($overlap_events_count == 1)
 					if ($lock_desc)
@@ -947,23 +947,23 @@ class ShowToolsRequests {
 						$desc.=sprintf(_("Es existieren Überschneidungen zur gewünschten Belegungszeit.")."\n");
 				else
 					$desc.=sprintf(_("Es existieren Überschneidungen oder Belegungssperren zu mehr als %s%% aller gewünschten Belegungszeiten.")."\n".$lock_desc, $GLOBALS['RESOURCES_ALLOW_SINGLE_ASSIGN_PERCENTAGE']);
-				$html = "<img src=\"pictures/ampel_rot.gif\" ".tooltip($desc, TRUE, TRUE)." />";
+				$html = "<img src=\"".$GLOBALS['ASSETS_URL']."images/ampel_rot.gif\" ".tooltip($desc, TRUE, TRUE)." />";
 				$status = 2;
 			} else {
 				$desc.=sprintf(_("Einige der gewünschten Belegungszeiten überschneiden sich mit eingetragenen Belegungen bzw. Sperrzeiten:\n"));
-				foreach ($group_dates as $key=>$val) { 
+				foreach ($group_dates as $key=>$val) {
 					if ($overlaps[$key])
-						foreach ($overlaps[$key] as $key2=>$val2) 
+						foreach ($overlaps[$key] as $key2=>$val2)
 							if ($val2["lock"])
 								$desc.=sprintf(_("%s, %s Uhr bis %s, %s Uhr (Sperrzeit)")."\n", date("d.m.Y", $val2["begin"]), date("H:i", $val2["begin"]), date("d.m.Y", $val2["end"]), date("H:i", $val2["end"]));
-							else	
+							else
 								$desc.=sprintf(_("%s von %s bis %s Uhr")."\n", date("d.m.Y", $val2["begin"]), date("H:i", $val2["begin"]), date("H:i", $val2["end"]));
 				}
-				$html = "<img src=\"pictures/ampel_gelb.gif\" ".tooltip($desc, TRUE, TRUE)." />";
+				$html = "<img src=\"".$GLOBALS['ASSETS_URL']."images/ampel_gelb.gif\" ".tooltip($desc, TRUE, TRUE)." />";
 				$status = 1;
 			}
 		} else {
-			$html = "<img src=\"pictures/ampel_gruen.gif\" ".tooltip(_("Es existieren keine Überschneidungen"), TRUE, TRUE)."/>";
+			$html = "<img src=\"".$GLOBALS['ASSETS_URL']."images/ampel_gruen.gif\" ".tooltip(_("Es existieren keine Überschneidungen"), TRUE, TRUE)."/>";
 			$status = 0;
 		}
 		return array("html"=>$html, "status"=>$status);
@@ -978,7 +978,7 @@ class ShowToolsRequests {
 			}
 			if ($lock_desc)
 				$lock_desc = _("Sperrzeit(en):\n").$lock_desc;
-				
+
 			if ($overlap_events_count >= round($events_count * ($GLOBALS['RESOURCES_ALLOW_SINGLE_ASSIGN_PERCENTAGE'] / 100))) {
 				if ($overlap_events_count == 1)
 					if ($overlaps[0]["lock"])
@@ -987,26 +987,26 @@ class ShowToolsRequests {
 						$desc.=sprintf(_("Es existieren Überschneidungen zur gewünschten Belegungszeit.")."\n");
 				else
 					$desc.=sprintf(_("Es existieren Überschneidungen oder Belegungssperren zu mehr als %s%% aller gewünschten Belegungszeiten.")."\n".$lock_desc, $GLOBALS['RESOURCES_ALLOW_SINGLE_ASSIGN_PERCENTAGE']);
-				$html = "<img src=\"pictures/ampel_rot.gif\" ".tooltip($desc, TRUE, TRUE)." />";
+				$html = "<img src=\"".$GLOBALS['ASSETS_URL']."images/ampel_rot.gif\" ".tooltip($desc, TRUE, TRUE)." />";
 				$status = 2;
 			} else {
 				$desc.=sprintf(_("Einige der gewünschten Belegungszeiten überschneiden sich mit eingetragenen Belegungen bzw. Sperrzeiten:\n"));
 				foreach ($overlaps as $val) {
 					if ($val["lock"])
 						$desc.=sprintf(_("%s, %s Uhr bis %s, %s Uhr (Sperrzeit)")."\n", date("d.m.Y", $val["begin"]), date("H:i", $val["begin"]), date("d.m.Y", $val["end"]), date("H:i", $val["end"]));
-					else	
+					else
 						$desc.=sprintf(_("%s von %s bis %s Uhr")."\n", date("d.m.Y", $val["begin"]), date("H:i", $val["begin"]), date("H:i", $val["end"]));
 				}
-				$html = "<img src=\"pictures/ampel_gelb.gif\" ".tooltip($desc, TRUE, TRUE)." />";
+				$html = "<img src=\"".$GLOBALS['ASSETS_URL']."images/ampel_gelb.gif\" ".tooltip($desc, TRUE, TRUE)." />";
 				$status = 1;
 			}
 		} else {
-			$html = "<img src=\"pictures/ampel_gruen.gif\" ".tooltip(_("Es existieren keine Überschneidungen"), TRUE, TRUE)."/>";
+			$html = "<img src=\"".$GLOBALS['ASSETS_URL']."images/ampel_gruen.gif\" ".tooltip(_("Es existieren keine Überschneidungen"), TRUE, TRUE)."/>";
 			$status = 0;
 		}
 		return array("html"=>$html, "status"=>$status);
 	}
-	
+
 }
 ?>
 

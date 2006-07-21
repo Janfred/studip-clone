@@ -60,7 +60,7 @@ function commentbox($num, $authorname, $authoruname, $date, $dellink, $content) 
 	$out[].="</td>";
 	$out[].="<td align=right style=\"border-bottom: 1px black dotted\">";
 	if ($dellink) {
-		$out[].="<a href=\"$dellink\"><img src=\"pictures/trash.gif\" border=0></a>";
+		$out[].="<a href=\"$dellink\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" border=0></a>";
 	} else {
 		$out[]="&nbsp;";
 	}
@@ -115,9 +115,9 @@ function show_news($range_id, $show_admin=FALSE,$limit="", $open, $width="100%",
 	if (!count($news)) {
 		if ($show_admin) {
 			echo"\n<table  border=\"0\" bgcolor=\"#FFFFFF\" cellspacing=\"0\" cellpadding=\"2\" align=\"center\" width=\"$width\" >";
-			echo"\n<tr><td class=\"topic\" colspan=\"2\" width=\"99%\"><img src=\"./pictures/news2.gif\" border=\"0\"". tooltip(_("Newsticker. Klicken Sie auf die Pfeile (rechts), um neue News in diesen Bereich einzustellen. Klicken Sie auf die Pfeile am linken Rand, um den ganzen Nachrichtentext zu lesen.")) . "align=\"texttop\"><b>&nbsp;" . _("News") . "</b></td>";
+			echo"\n<tr><td class=\"topic\" colspan=\"2\" width=\"99%\"><img src=\"".$GLOBALS['ASSETS_URL']."images/news2.gif\" border=\"0\"". tooltip(_("Newsticker. Klicken Sie auf die Pfeile (rechts), um neue News in diesen Bereich einzustellen. Klicken Sie auf die Pfeile am linken Rand, um den ganzen Nachrichtentext zu lesen.")) . "align=\"texttop\"><b>&nbsp;" . _("News") . "</b></td>";
 			echo"\n<td align = \"right\" class=\"topic\">";
-			printf ("&nbsp;<a href=\"admin_news.php?%s&cmd=new_entry\"><img src=\"./pictures/pfeillink.gif\" border=\"0\"" . tooltip(_("News einstellen")) . "></a>&nbsp;", $admin_link);
+			printf ("&nbsp;<a href=\"admin_news.php?%s&cmd=new_entry\"><img src=\"".$GLOBALS['ASSETS_URL']."images/pfeillink.gif\" border=\"0\"" . tooltip(_("News einstellen")) . "></a>&nbsp;", $admin_link);
 			echo"\n</td></tr>";
 			echo "\n<tr><td class=\"steel1\" colspan=\"3\"><blockquote><br /><font size=\"-1\">" . _("Es sind keine aktuellen News vorhanden. Um neue News zu erstellen, klicken Sie auf die Doppelpfeile.") . "<br />&nbsp; </font></blockquote>";
 			echo "\n</td></tr></table>";
@@ -130,17 +130,17 @@ function show_news($range_id, $show_admin=FALSE,$limit="", $open, $width="100%",
 
 		//Ausgabe der Kopfzeile vor erster auszugebener News
 		echo"\n<table  border=\"0\" bgcolor=\"#FFFFFF\" cellspacing=\"0\" cellpadding=\"2\" align=\"center\" width=\"$width\" >";
-		echo"\n<tr><td class=\"topic\" colspan=\"2\" width=\"99%\"><img src=\"./pictures/news2.gif\" border=\"0\"". tooltip(_("Newsticker. Klicken Sie auf die Pfeile (rechts), um neue News in diesen Bereich einzustellen. Klicken Sie auf die Pfeile am linken Rand, um den ganzen Nachrichtentext zu lesen.")) . "align=\"texttop\"><b>&nbsp;" . _("News") . "</b></td>";
+		echo"\n<tr><td class=\"topic\" colspan=\"2\" width=\"99%\"><img src=\"".$GLOBALS['ASSETS_URL']."images/news2.gif\" border=\"0\"". tooltip(_("Newsticker. Klicken Sie auf die Pfeile (rechts), um neue News in diesen Bereich einzustellen. Klicken Sie auf die Pfeile am linken Rand, um den ganzen Nachrichtentext zu lesen.")) . "align=\"texttop\"><b>&nbsp;" . _("News") . "</b></td>";
 		if ($rss_id) {
 			$colspan++;
 			echo "\n<td align=\"right\" width=\"36\" class=\"topic\">";
-			echo "\n<a href=\"rss.php?id=$rss_id\"><img src=\"pictures/rss.gif\" border=\"0\"" . tooltip(_("RSS-Feed")) . "></a>";
+			echo "\n<a href=\"rss.php?id=$rss_id\"><img src=\"".$GLOBALS['ASSETS_URL']."images/rss.gif\" border=\"0\"" . tooltip(_("RSS-Feed")) . "></a>";
 			echo "\n</td>";
 		}
 		if ($show_admin) {
 			$colspan++;
 			echo"\n<td align = \"right\" width=\"1%\" class=\"topic\" nowrap>";
-			printf ("&nbsp;<a href=\"admin_news.php?%s&modus=admin&cmd=show\"><img src=\"./pictures/pfeillink.gif\" border=\"0\"" . tooltip(_("News bearbeiten")) . "></a>&nbsp;", $admin_link);
+			printf ("&nbsp;<a href=\"admin_news.php?%s&modus=admin&cmd=show\"><img src=\"".$GLOBALS['ASSETS_URL']."images/pfeillink.gif\" border=\"0\"" . tooltip(_("News bearbeiten")) . "></a>&nbsp;", $admin_link);
 			echo"\n</td>";
 		}
 		echo "\n</tr>\n<tr><td colspan=$colspan>";
@@ -160,13 +160,13 @@ function show_news($range_id, $show_admin=FALSE,$limit="", $open, $width="100%",
 				$titel=$tmp_titel;
 			}
 
-			$icon="&nbsp;<img src=\"./pictures/news-icon.gif\" border=0>";
+			$icon="&nbsp;<img src=\"".$GLOBALS['ASSETS_URL']."images/news-icon.gif\" border=0>";
 
 			$db2->query("SELECT username, " . $_fullname_sql['full'] ." AS fullname FROM auth_user_md5 a LEFT JOIN user_info USING (user_id) WHERE a.user_id='".$news_detail["user_id"]."'");
 			$db2->next_record();
 			$link .= "&username=".$db2->f("username") . "#anker";
 			$zusatz="<a href=\"about.php?username=".$db2->f("username")."\"><font size=-1 color=\"#333399\">".htmlReady($db2->f("fullname"))."</font></a><font size=-1>&nbsp;".date("d.m.Y",$news_detail["date"])." | <font color=\"#005500\">".object_return_views($news_id)."<font color=\"black\"> |</font>";
-			
+
 			$unamelink = '&username='.$db2->f('username');
 			$uname = $db2->f('username');
 
@@ -290,7 +290,7 @@ function show_rss_news($range_id, $type){
 			if ($sem_obj->read_level > 0) $studip_url .= "&#38;again=yes";
 			$title = $sem_obj->getName() . ' (Stud.IP - ' . $GLOBALS['UNI_NAME_CLEAN'] . ')';
 			$RssChannelDesc = _("Neuigkeiten der Veranstaltung") . ' ' . $title;
-		
+
 		break;
 		case 'inst':
 			$studip_url = $GLOBALS['ABSOLUTE_URI_STUDIP'] . "institut_main.php?auswahl=" . $range_id;
@@ -303,7 +303,7 @@ function show_rss_news($range_id, $type){
 			$title = 'Stud.IP - ' . $GLOBALS['UNI_NAME_CLEAN'];
 			$RssChannelDesc = _("Allgemeine Neuigkeiten") . ' ' . $title;
 		break;
-		
+
 	}
 	foreach(StudipNews::GetNewsByRange($range_id, true) as  $news_id => $details) {
 		list ($body,$admin_msg) = explode("<admin_msg>",$details["body"]);

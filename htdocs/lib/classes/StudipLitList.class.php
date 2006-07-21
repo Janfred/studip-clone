@@ -2,9 +2,9 @@
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // StudipLitList.class.php
-// 
-// 
-// Copyright (c) 2003 André Noack <noack@data-quest.de> 
+//
+//
+// Copyright (c) 2003 André Noack <noack@data-quest.de>
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -29,28 +29,28 @@ require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'] . "/config.inc.php");
 
 
 /**
-* class to handle the 
+* class to handle the
 *
-* This class provides 
+* This class provides
 *
 * @access	public
 * @author	André Noack <noack@data-quest.de>
 * @version	$Id$
-* @package	
+* @package
 */
 class StudipLitList extends TreeAbstract {
-	
+
 	var $format_default = "**{authors}** - {dc_title} - %%{published}%%";
 	var $cat_element;
 	var $range_id;
 	var $range_type;
-	
+
 	/**
 	* constructor
 	*
 	* do not use directly, call &TreeAbstract::GetInstance("StudipLitList", $range_id)
 	* @access private
-	*/ 
+	*/
 	function StudipLitList($range_id) {
 		if ($GLOBALS['LIT_LIST_FORMAT_TEMPLATE']){
 			$this->format_default = $GLOBALS['LIT_LIST_FORMAT_TEMPLATE'];
@@ -64,7 +64,7 @@ class StudipLitList extends TreeAbstract {
 			$this->root_name = $object_name['type'] . ": " . $object_name['name'];
 		}
 		$this->cat_element = new StudipLitCatElement();
-		parent::TreeAbstract(); //calling the baseclass constructor 
+		parent::TreeAbstract(); //calling the baseclass constructor
 	}
 
 	/**
@@ -102,18 +102,18 @@ class StudipLitList extends TreeAbstract {
 				$this->storeItem($rs->f("list_element_id"), $rs->f("list_id"), $rs->f("short_name"), $rs->f("priority"));
 			}
 		}
-		
-		
+
+
 	}
-	
+
 	function isElement($id){
 		return isset($this->tree_data[$id]['catalog_id']);
 	}
-	
+
 	function getListIds(){
 		return $this->getKids("root");
 	}
-	
+
 	function getVisibleListIds(){
 		$ret = false;
 		$lists = $this->getKids('root');
@@ -124,19 +124,19 @@ class StudipLitList extends TreeAbstract {
 		}
 		return $ret;
 	}
-	
+
 	function getListEntries($list_id){
 		return $this->getKids($list_id);
 	}
-	
+
 	function getNewListId(){
 		return md5(uniqid("listbla",1));
 	}
-	
+
 	function getNewListElementId(){
 		return  md5(uniqid("elementbla",1));
 	}
-	
+
 	function getFormattedEntry($item_id, $fields = null){
 		if ($this->isElement($item_id)){
 			$format = $this->tree_data[$this->tree_data[$item_id]['parent_id']]['format'];
@@ -154,7 +154,7 @@ class StudipLitList extends TreeAbstract {
 			return false;
 		}
 	}
-			
+
 	function copyList($list_id){
 		$this->view->params[] = $list_id;
 		$rs = $this->view->get_query("view:LIT_GET_LIST");
@@ -172,10 +172,10 @@ class StudipLitList extends TreeAbstract {
 				$rs = $this->view->get_query("view:LIT_INS_LIST_CONTENT_COPY");
 				return $new_list_values['list_id'];
 			}
-		} 
+		}
 		return false;
 	}
-	
+
 	function insertElementBulk($catalog_ids, $list_id){
 		if (!is_array($catalog_ids)){
 			$catalog_ids[] = $catalog_ids;
@@ -192,8 +192,8 @@ class StudipLitList extends TreeAbstract {
 		}
 		return $inserted;
 	}
-	
-		
+
+
 	function updateElement($fields){
 		if (isset($fields['list_element_id'])){
 			$list_element_id = $fields['list_element_id'];
@@ -212,7 +212,7 @@ class StudipLitList extends TreeAbstract {
 			return false;
 		}
 	}
-	
+
 	function insertElement($fields){
 		if (isset($fields['list_element_id'])){
 			$list_element_id = $fields['list_element_id'];
@@ -231,7 +231,7 @@ class StudipLitList extends TreeAbstract {
 			return false;
 		}
 	}
-	
+
 	function deleteElement($element_id){
 		$this->view->params[] = $element_id;
 		$rs = $this->view->get_query("view:LIT_DEL_LIST_CONTENT");
@@ -240,7 +240,7 @@ class StudipLitList extends TreeAbstract {
 		}
 		return $ar;
 	}
-	
+
 	function updateList($fields){
 		if (isset($fields['list_id'])){
 			$list_id = $fields['list_id'];
@@ -257,7 +257,7 @@ class StudipLitList extends TreeAbstract {
 			return false;
 		}
 	}
-	
+
 	function insertList($fields){
 		if (isset($fields['list_id'])){
 			$list_id = $fields['list_id'];
@@ -274,7 +274,7 @@ class StudipLitList extends TreeAbstract {
 			return false;
 		}
 	}
-	
+
 	function deleteList($list_id){
 		$deleted = 0;
 		$this->view->params[] = array($list_id);
@@ -285,14 +285,14 @@ class StudipLitList extends TreeAbstract {
 		$deleted += $rs->affected_rows();
 		return $deleted;
 	}
-	
+
 	function triggerListChdate($list_id){
 		$this->view->params[] = $GLOBALS['auth']->auth['uid'];
 		$this->view->params[] = $list_id;
 		$rs = $this->view->get_query("view:LIT_LIST_TRIGGER_UPDATE");
 		return $rs->affected_rows();
 	}
-	
+
 	function GetTabbedList($range_id, $list_id){
 		$end_note_map = array(	'dc_type' => 'Reference Type', 'dc_title' => 'Title', 'dc_creator' => 'Author',
 								'year' => 'Year', 'dc_contributor' => 'Secondary Author', 'dc_publisher' => 'Publisher',
@@ -313,7 +313,7 @@ class StudipLitList extends TreeAbstract {
 				$tree->cat_element->fields['note']['value'] = $tree->tree_data[$rs->f('list_element_id')]['note'];
 				foreach ($end_note_map as $studip_field => $end_note_field){
 					$value = $tree->cat_element->getValue($studip_field);
-					if ($studip_field == 'dc_type' 
+					if ($studip_field == 'dc_type'
 					&& ($value == '' || !in_array($value, $tree->cat_element->fields['dc_type']['select_list']))){
 						$value = "Book";
 					}
@@ -325,7 +325,7 @@ class StudipLitList extends TreeAbstract {
 		}
 		return $ret;
 	}
-	
+
 	function DeleteListsByRange($range_id){
 		$deleted = null;
 		$view = new DbView();
@@ -344,7 +344,7 @@ class StudipLitList extends TreeAbstract {
 		}
 		return $deleted;
 	}
-	
+
 	function GetListCountByRange($range_id){
 		$dbv = new DbView();
 		$dbv->params[0] = $range_id;
@@ -352,7 +352,7 @@ class StudipLitList extends TreeAbstract {
 		$rs->next_record();
 		return array("visible_list" => $rs->f("visible_list"),"invisible_list" => $rs->f("invisible_list"));;
 	}
-	
+
 	function GetListsByRange($range_id){
 		$view = new DbView();
 		$view->params[] = $range_id;
@@ -362,7 +362,7 @@ class StudipLitList extends TreeAbstract {
 		}
 		return $list_ids;
 	}
-	
+
 	function GetFormattedListsByRange($range_id, $last_modified_since = false, $copy_link = true){
 		$ret = false;
 		$dbv = new DbView();
@@ -371,7 +371,7 @@ class StudipLitList extends TreeAbstract {
 			for ($i = 0; $i < count($lists); ++$i){
 				if ( ($tree->tree_data[$lists[$i]]['user_id'] != $GLOBALS['auth']->auth['uid'])
 				&& ($last_modified_since !== false)
-				&& ($tree->tree_data[$lists[$i]]['chdate'] > $last_modified_since) ){ 
+				&& ($tree->tree_data[$lists[$i]]['chdate'] > $last_modified_since) ){
 					$ret .= '<div align="left" style="color:red" title="' . htmlReady(sprintf(_("Letzte Änderung am %s von %s"),
 					date('d M Y H:i',$tree->tree_data[$lists[$i]]['chdate']),
 					$tree->tree_data[$lists[$i]]['fullname'])) . '">';
@@ -381,7 +381,7 @@ class StudipLitList extends TreeAbstract {
 					$ret .= "\n<div align=\"left\"><b><u>" . htmlReady($tree->tree_data[$lists[$i]]['name']) . "</u></b></div>";
 				}
 				if ($copy_link){
-					$ret .= "\n<div align=\"right\" style=\"font-size:10pt\"><a href=\"admin_lit_list.php?cmd=CopyUserList&_range_id=self&user_list={$lists[$i]}#anchor\"><img src=\"pictures/link_intern.gif\" border=\"0\">"
+					$ret .= "\n<div align=\"right\" style=\"font-size:10pt\"><a href=\"admin_lit_list.php?cmd=CopyUserList&_range_id=self&user_list={$lists[$i]}#anchor\"><img src=\"".$GLOBALS['ASSETS_URL']."images/link_intern.gif\" border=\"0\">"
 						. "&nbsp;" . _("Literaturliste kopieren") . "</a></div>";
 				} else {
 					$ret .= "\n<br>\n";
@@ -393,7 +393,7 @@ class StudipLitList extends TreeAbstract {
 					while ($rs->next_record()){
 						if ( ($tree->tree_data[$rs->f('list_element_id')]['user_id'] != $GLOBALS['auth']->auth['uid'])
 						&& ($last_modified_since !== false)
-						&& ($tree->tree_data[$rs->f('list_element_id')]['chdate'] > $last_modified_since) ){ 
+						&& ($tree->tree_data[$rs->f('list_element_id')]['chdate'] > $last_modified_since) ){
 							$ret .= '<span style="color:red" title="' . htmlReady(sprintf(_("Letzte Änderung am %s von %s"),
 							date('d M Y H:i',$tree->tree_data[$rs->f('list_element_id')]['chdate']),
 							$tree->tree_data[$rs->f('list_element_id')]['fullname'])) . '">';

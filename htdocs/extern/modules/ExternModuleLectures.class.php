@@ -46,6 +46,7 @@ class ExternModuleLectures extends ExternModule {
 	var $data_fields = array();
 	var $registered_elements = array(
 			"ReplaceTextSemType",
+			"SelectSubjectAreas",
 			"Body",
 			"TableHeader",
 			"InfoCountSem" => "TableGroup",

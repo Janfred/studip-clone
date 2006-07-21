@@ -3,7 +3,7 @@
 // This file is part of Stud.IP
 // StudipSemTreeSearch.class.php
 // Class to build search formular and execute search
-// 
+//
 // Copyright (c) 2003 André Noack <noack@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -28,39 +28,39 @@ require_once($ABSOLUTE_PATH_STUDIP . "functions.php");
 /**
 * Class to build search formular and execute search
 *
-* 
 *
-* @access	public	
+*
+* @access	public
 * @author	André Noack <noack@data-quest.de>
 * @version	$Id$
 * @package	DBTools
 **/
 class StudipSemTreeSearch {
-	
+
 	var $view;
-	
+
 	var $num_search_result = false;
-	
+
 	var $num_inserted;
-	
+
 	var $num_deleted;
-	
+
 	var $form_name;
-	
+
 	var $tree;
-	
+
 	var $seminar_id;
-	
+
 	var $institut_id;
-	
+
 	var $sem_tree_ranges = array();
-	
+
 	var $sem_tree_ids = array();
-	
+
 	var $selected = array();
-	
+
 	var $search_result = array();
-	
+
 	function StudipSemTreeSearch($seminar_id,$form_name = "search_sem_tree", $auto_search = true){
 		global $_REQUEST;
 		$this->view = new DbView();
@@ -77,7 +77,7 @@ class StudipSemTreeSearch {
 			$this->doSearch();
 		}
 	}
-	
+
 	function init(){
 		$this->sem_tree_ranges = array();
 		$this->sem_tree_ids = array();
@@ -105,7 +105,7 @@ class StudipSemTreeSearch {
 		}
 	}
 	*/
-	
+
 	//not fuzzy
 	function getExpectedRanges(){
 		$this->view->params[0] = $this->institut_id;
@@ -121,13 +121,13 @@ class StudipSemTreeSearch {
 			}
 		}
 	}
-	
+
 	function prepRangePath($path, $cols) {
 		$parts=explode(">",$path);
 		$paths=array();
 		$currpath="";
 		foreach ($parts as $part) {
-			if (strlen($part)>$cols) {	
+			if (strlen($part)>$cols) {
 				$p=my_substr($part, 0, $cols);
 			} else {
 				$p = $part;
@@ -147,11 +147,11 @@ class StudipSemTreeSearch {
 		return $paths;
 	}
 
-	function getChooserField($attributes = array(), $cols = 70){
+	function getChooserField($attributes = array(), $cols = 70, $field_name = 'chooser'){
 		if ($this->institut_id){
 			$this->getExpectedRanges();
 		}
-		$ret = "\n<select name=\"{$this->form_name}_chooser[]\" multiple ";
+		$ret = "\n<select name=\"{$this->form_name}_{$field_name}[]\" multiple ";
 		foreach($attributes as $key => $value){
 			$ret .= "$key=\"$value\"";
 		}
@@ -165,7 +165,7 @@ class StudipSemTreeSearch {
 			//$ret .= "\n<option value=\"0\" style=\"font-weight:bold;color:red;\">" . htmlReady(my_substr($this->getPath($range_id),0,$cols)) ."</option>";
 			$ret .= "\n<option value=\"0\" style=\"font-weight:bold;color:red;\">" . str_repeat("¯",$cols) . "</option>";
 			for ($i = 0; $i < count($sem_tree_id); ++$i){
-				$ret .= "\n<option value=\"{$sem_tree_id[$i]}\" " 
+				$ret .= "\n<option value=\"{$sem_tree_id[$i]}\" "
 						. (($this->selected[$sem_tree_id[$i]]) ? " selected " : "")
 						. (($this->search_result[$sem_tree_id[$i]]) ? " style=\"color:blue;\" " : "")
 						. ">&nbsp;-&nbsp;";
@@ -176,12 +176,12 @@ class StudipSemTreeSearch {
 		$ret .= "</select>";
 		return $ret;
 	}
-	
+
 	function getPath($item_id,$delimeter = ">"){
 		return $this->tree->getShortPath($item_id);
 	}
 
-	
+
 	function getSearchField($attributes = array()){
 		$ret = "\n<input type=\"text\" name=\"{$this->form_name}_search_field\" ";
 		foreach($attributes as $key => $value){
@@ -190,16 +190,16 @@ class StudipSemTreeSearch {
 		$ret .= ">";
 		return $ret;
 	}
-	
+
 	function getSearchButton($attributes = array()){
-		$ret = "\n<input border=\"0\" type=\"image\" name=\"{$this->form_name}_do_search\" src=\"pictures/suchen.gif\"" . tooltip(_("Suche nach Studienbereichen starten"));
+		$ret = "\n<input border=\"0\" type=\"image\" name=\"{$this->form_name}_do_search\" src=\"".$GLOBALS['ASSETS_URL']."images/suchen.gif\"" . tooltip(_("Suche nach Studienbereichen starten"));
 		foreach($attributes as $key => $value){
 			$ret .= "$key=\"$value\"";
 		}
 		$ret .= ">";
 		return $ret;
 	}
-	
+
 	function getFormStart($action = ""){
 		if (!$action){
 			$action = $GLOBALS['PHP_SELF'];
@@ -207,12 +207,12 @@ class StudipSemTreeSearch {
 		$ret = "\n<form action=\"$action\" method=\"post\" name=\"{$this->form_name}\">";
 		return $ret;
 	}
-	
+
 	function getFormEnd(){
-		
+
 		return "\n<input type=\"hidden\" name=\"{$this->form_name}_send\" value=\"1\">\n</form>";
 	}
-	
+
 	function doSearch(){
 		global $_REQUEST;
 		if (isset($_REQUEST[$this->form_name . "_do_search_x"]) || isset($_REQUEST[$this->form_name . "_send"])){
@@ -231,7 +231,7 @@ class StudipSemTreeSearch {
 		}
 		return;
 	}
-	
+
 	function insertSelectedRanges($selected = null){
 		global $_REQUEST;
 		if (!$selected){

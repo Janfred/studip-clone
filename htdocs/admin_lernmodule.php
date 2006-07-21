@@ -1,10 +1,10 @@
 <?
 /**
 * Administration of learning-modules in the connected ILIAS-Installation.
-* 
-* This file includes administration tools for learning-modules. 
-* It allows to delete or edit learning-modules and to create new ones. 
-* 
+*
+* This file includes administration tools for learning-modules.
+* It allows to delete or edit learning-modules and to create new ones.
+*
 * @author		Arne Schroeder <schroeder@data.quest.de>
 * @version		$Id$
 * @access		public
@@ -16,7 +16,7 @@
 // This file is part of Stud.IP
 // admin_lernmodule.php
 //
-// Copyright (c) 2002 Arne Schroeder <schroeder@data-quest.de> 
+// Copyright (c) 2002 Arne Schroeder <schroeder@data-quest.de>
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -76,12 +76,12 @@ if ($ILIAS_CONNECT_ENABLE)
 		</td>
 	</tr>
 	<tr>
-		<td class="blank" colspan="3">&nbsp; 
+		<td class="blank" colspan="3">&nbsp;
 		</td>
 	</tr>
 	<tr valign="top">
                 <td width="1%" class="blank">
-                	&nbsp; 
+                	&nbsp;
                 </td>
      		<td width="90%" class="blank">
 		<?
@@ -96,28 +96,28 @@ if ($ILIAS_CONNECT_ENABLE)
 		echo _("F&uuml;r die Verwendung von Lernmodulen ist das Stud.IP mit einem ILIAS System verbunden. Damit Sie die Funktionen von ILIAS nutzen k&ouml;nnen, muss Ihrem Account in Stud.IP zun&auml;chst ein ILIAS-Account zugeordnet werden. Die Verwaltung des ILIAS-Accounts finden Sie auf ihrer Einstellungsseite (Werkzeugsymbol) unter \"My Stud.IP\". Dorthin gelangen Sie auch mit dem folgenden Link.");
 		echo "<br><br>";
 		echo "<a href=\"migration2studip.php?came_from=admin\"><b>" . _("Mein ILIAS-Account") . "</b></a>";
-		$infobox = array	(			
+		$infobox = array	(
 		array ("kategorie"  => _("Information:"),
-			"eintrag" => array	(	
-							array (	"icon" => "pictures/ausruf_small.gif",
+			"eintrag" => array	(
+							array (	"icon" => "ausruf_small.gif",
 									"text"  => _("Ihr Account wurde noch nicht mit dem angebundenen ILIAS-System verbunden.")
 								 )
 							)
 			)
 		);
 		$infobox[1]["kategorie"] = _("Aktionen:");
-			$infobox[1]["eintrag"][] = array (	"icon" => "pictures/forumgrau.gif" ,
+			$infobox[1]["eintrag"][] = array (	"icon" => "forumgrau.gif" ,
 										"text"  => sprintf(_("Hier k&ouml;nnen Sie Ihrem Stud.IP-Account einen %s ILIAS-Account zuweisen. %s"), "<a href=\"migration2studip.php\">", "</a>")
 									);
 		if ((get_connected_user_id($auth->auth["uid"]) != false) AND ($perm->have_studip_perm("autor",$seminar_id)))
-			$infobox[1]["eintrag"][] = array (	"icon" => "pictures/icon-lern.gif" ,
+			$infobox[1]["eintrag"][] = array (	"icon" => "icon-lern.gif" ,
 										"text"  => sprintf(_("Hier k&ouml;nnen Sie ein %s neues Lernmodul anlegen%s. Das Modul muss anschlie&szlig;end noch zugewiesen werden."), "<a href=\"" . link_new_module() ."\" target=\"_blank\">", "</a>")
 									);
 	}
 	else
 	{
 		if (isset($delete))
-		{	
+		{
 			echo "<table>";
 			my_info(sprintf(_("Wenn Sie fortfahren, wird das Lernmodul mit dem Titel %s unwiderruflich gel&ouml;scht. Soll dieses Lernmodul wirklich gel&ouml;scht werden?"), "<b>" . $del_title . "</b>"));
 			echo "</table>";
@@ -131,7 +131,7 @@ if ($ILIAS_CONNECT_ENABLE)
 			if (get_connected_user_id($auth->auth["uid"]) != false)
 				echo "<a href=\"" . link_new_module() ."\" target=\"_blank\">". _("Neues Lernmodul anlegen") ."</a><br><br>";
 
-			if ($perm->have_perm("admin"))  
+			if ($perm->have_perm("admin"))
 				show_admin_modules();
 			else
 				show_user_modules($auth->auth["uid"]);
@@ -141,11 +141,11 @@ if ($ILIAS_CONNECT_ENABLE)
 		<br>
 		</td>
 		<td width="270" NOWRAP class="blank" align="center" valign="top">
-		<? 
-		$infobox = array	(			
+		<?
+		$infobox = array	(
 		array ("kategorie"  => _("Information:"),
-			"eintrag" => array	(	
-							array (	"icon" => "pictures/ausruf_small.gif",
+			"eintrag" => array	(
+							array (	"icon" => "ausruf_small.gif",
 									"text"  => sprintf(_("Auf dieser Seite k&ouml;nnen Sie die Lernmodule administrieren."), "<br><i>", "</i>")
 								 )
 							)
@@ -153,29 +153,29 @@ if ($ILIAS_CONNECT_ENABLE)
 		);
 		$link = "<a href=\"./test.xml"."\">";
 		$infobox[1]["kategorie"] = _("Aktionen:");
-			$infobox[1]["eintrag"][] = array (	"icon" => "pictures/icon-posting.gif" ,
+			$infobox[1]["eintrag"][] = array (	"icon" => "icon-posting.gif" ,
 										"text"  => _("Sie k&ouml;nnen ein Lernmodul bearbeiten, wenn Sie als AutorIn oder Co-AutorIn daf&uuml;r eingetragen sind.")
 									);
-			$infobox[1]["eintrag"][] = array (	"icon" => "pictures/trash.gif" ,
+			$infobox[1]["eintrag"][] = array (	"icon" => "trash.gif" ,
 										"text"  => _("Sie k&ouml;nnen ein Lernmodul l&ouml;schen, indem Sie den Kasten des Moduls &ouml;ffnen und auf 'l&ouml;schen' klicken.")
 									);
 			if ((get_connected_user_id($auth->auth["uid"]) != false) AND ($perm->have_perm("autor")))
-				$infobox[1]["eintrag"][] = array (	"icon" => "pictures/icon-lern.gif" ,
+				$infobox[1]["eintrag"][] = array (	"icon" => "icon-lern.gif" ,
 											"text"  => sprintf(_("Hier k&ouml;nnen Sie ein %s neues Lernmodul anlegen %s"), "<a href=\"" . link_new_module() ."\" target=\"_blank\">", "</a>")
 										);
-				print_infobox ($infobox,"pictures/lernmodule.jpg");
+				print_infobox ($infobox,"lernmodule.jpg");
 	}
-		?>		
-		</td>		
+		?>
+		</td>
 	</tr>
 	<tr>
-		<td class="blank" colspan="3">&nbsp; 
+		<td class="blank" colspan="3">&nbsp;
 		</td>
 	</tr>
 	</table>
 <?
 }
-else 
+else
 {
 	// Start of Output
 	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head

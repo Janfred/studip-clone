@@ -84,7 +84,7 @@ function printJSfunctions ( ) {
 	    . "    document.voteform.namesVisibility[1].disabled = true;\n"
 	    . "  }\n"
 	    . "}\n"
-	    
+
 	    . "function markAllAnswers( answers ) {\n"
 	    . "  markAll = false;\n"
 	    . "  for( i=0; i<answers.length; i++ ) {\n"
@@ -145,7 +145,7 @@ function printJSfunctions ( ) {
 
 function printFormStart ( $voteID, $rangeID, $referer ) {
     global $pageMode, $type, $vote;
-    
+
     if( $pageMode != MODE_CREATE ) {
 	$task_string = ($type=="test")
 	    ? _("Gespeicherten Test bearbeiten")
@@ -163,7 +163,7 @@ function printFormStart ( $voteID, $rangeID, $referer ) {
 	. tooltip($GLOBALS["debug"], FALSE, TRUE)
 	. ">&nbsp;";
 #####################
-	
+
     $html = createBoxHeader (_("Voting-Verwaltung: "), "100%", $task_string,
 			     VOTE_PATH_PICTURES.$type."-icon.gif","","","","",
 			     "blank" );
@@ -200,7 +200,7 @@ function printTitleField ( $title = "" ) {
 
     if( strpos($_SERVER["HTTP_REFERER"], "page=edit") )
        $title = stripslashes($title);
-    
+
     $html = "<font size=-1><b>" . _("Titel:")	. "</b></font><br>"
 	. "<input type=text size=50 maxlength=100 name=\"title\" value=\"".htmlReady($title)."\" ".$js." tabindex=1>";
     $html .= "&nbsp;<img src=\"".VOTE_PATH_PICTURES."info.gif\" align=middle "
@@ -212,7 +212,7 @@ function printTitleField ( $title = "" ) {
 
     echo $html;
 }
-    
+
 /**
  * prints the question field for current vote
  *
@@ -262,7 +262,7 @@ function printQuestionField ( $question = "" ) {
 
 function printAnswerFields ( $answers ) {
     global $type, $pageMode, $auth;
-	
+
     $html = "<table cellspacing=0 cellpadding=0 border=0 width=\"100%\"><tr>\n"
 	. "<td align=left><b>"
 	. "<font size=-1>" . _("Antwortm&ouml;glichkeiten:") . "</font>"
@@ -273,7 +273,7 @@ function printAnswerFields ( $answers ) {
 
     // the table's header bar
     $html .= "<tr><th align=center width=15>#</th>";
-    if( $type == "test" ) 
+    if( $type == "test" )
 	$html .= "<th>" . _("Richtig") . "</th>";
 
     $html .= "<th align=left width=100%>" . _("Antwort") . "</th>";
@@ -315,7 +315,7 @@ function printAnswerFields ( $answers ) {
 
 #	if( $auth->auth["jscript"] )
 #	    $inputSize = round( $auth->auth["xres"] / 16 );
-#	else 
+#	else
 #	    $inputSize = 60 ; // default
 #	if( $type == "vote" )
 #	    $inputSize += 6;  // we have no column for the checkbox 'correct'
@@ -327,7 +327,7 @@ function printAnswerFields ( $answers ) {
 
 	$html .= "<td align=left>";
 	if( $pageMode != MODE_RESTRICTED ) {
-	    
+
 	    if( strpos($_SERVER["HTTP_REFERER"], "page=edit") )
 		$answers[$i]['text'] = stripslashes($answers[$i]['text']);
 
@@ -338,7 +338,7 @@ function printAnswerFields ( $answers ) {
 	}
 	else
 	    $html .= "<font size=-1>" . formatReady($answers[$i]['text']) . "</font>";
-	
+
 	$html .= "</td>\n";
 
 	// the "position" and "delete" columns
@@ -369,13 +369,13 @@ function printAnswerFields ( $answers ) {
 	$html .= "<select style=\"vertical-align:middle;\" name=\"newAnswerFields\" size=1>";
 	for( $i=1; $i<=10; $i++ )
 	    $html .= "<option value=\"$i\">$i</option>";
-	
+
 	$html .= "</select></td><td align=right><font size=-1>";
-    
+
 	if( count($answers) >= 10 && $auth->auth["jscript"])
 	    $html .= "(<a href=\"#markAll\" onClick=\"markAllAnswers(document.voteform.deleteCheckboxes);\" title=\""
 		. _("Alle Antworten zum L&ouml;schen (de)markieren")."\">". _("Alle markieren") . "</a>)&nbsp;";
-	
+
 	$html .= _("Markierte Antworten")
 	    . "</font> <input type=image style=\"vertical-align:middle;\" name=\"deleteAnswersButton\" "
 	    . makeButton("loeschen","src") . tooltip(_("Markierte Antworten löschen"))
@@ -388,9 +388,9 @@ function printAnswerFields ( $answers ) {
     $html .= "</td>";
 
     echo $html;
-	
+
 }
-    
+
 /**
  * prints the right-hand-side region of the page, with a nice infobox and save/cancel buttons
  *
@@ -400,7 +400,7 @@ function printAnswerFields ( $answers ) {
 
 function printRightRegion ( ) {
     global $type, $pageMode, $vote;
-	
+
     switch( $pageMode ) {
 
     case MODE_RESTRICTED:
@@ -414,7 +414,7 @@ function printRightRegion ( ) {
 	    : _("Sie k&ouml;nnen daher nur noch den Titel, den Endzeitpunkt, die Ergebnissichtbarkeit und die Revidierbarkeit ver&auml;ndern.");
 
 	break;
-	
+
     case MODE_MODIFY:
     /* -------------------------------------------------------- */
 	$info_text = ( $type == "test" )
@@ -442,26 +442,26 @@ function printRightRegion ( ) {
 
     $action_text2 = _("Im unteren Bereich k&ouml;nnen Sie weitere spezielle Einstellungen vornehmen.");
     $action_text3 = _("Wenn Sie zufrieden sind, klicken Sie auf 'speichern'.");
-    
+
     /* -------------------------------------------------------- */
-    $action_array[] = array ( "icon" => "pictures/icon-posting.gif",
+    $action_array[] = array ( "icon" => "icon-posting.gif",
 			      "text" => $action_text1 );
 
     if( $type == "test" && $pageMode != MODE_RESTRICTED ) {
 	    $action_text1_extra =
 		_("Deklarieren Sie mindestens eine Antwort als richtig, indem Sie einen Haken in die entsprechende Box setzen.");
-	    $action_array[] = array( "icon" => "pictures/symbol01.gif",
+	    $action_array[] = array( "icon" => "symbol01.gif",
 				     "text" => $action_text1_extra );
     }
 
     if( $pageMode != MODE_RESTRICTED )
-	$action_array[] = array ( "icon" => "pictures/vote-icon-visible.gif",
+	$action_array[] = array ( "icon" => "vote-icon-visible.gif",
 				  "text" => $action_text2 );
 
-    $action_array[] = array( "icon" => "pictures/icon-disc.gif",
+    $action_array[] = array( "icon" => "icon-disc.gif",
 			     "text" => $action_text3 );
 
-    $info_array[] = array( "icon" => "pictures/ausruf_small.gif",
+    $info_array[] = array( "icon" => "ausruf_small.gif",
 			   "text" => $info_text );
 
     $infobox = array( array( "kategorie" => _("Information:" ),
@@ -473,7 +473,7 @@ function printRightRegion ( ) {
 		      );
 
     echo "<td class=blank width=250 align=center valign=top>\n";
-    print_infobox( $infobox, "pictures/voting.jpg" );
+    print_infobox( $infobox, "voting.jpg" );
 
     echo "<br><input type=image style=\"vertical-align:middle;\" name=\"saveButton\""
 // 	. " onClick=\"finishInputs();\" "
@@ -588,7 +588,7 @@ function printRuntimeSettings ( $startMode = "manual",
 	$html .= "<font size=-1>" . _("sofort") . "</font>";
 	$html .= "</td></tr>";
     }
-    
+
     // restricted mode
     else {
 	$html .= "<tr><td><font size=\"+2\">&nbsp;</font></td></tr>";
@@ -626,7 +626,7 @@ function printRuntimeSettings ( $startMode = "manual",
 	$secs = $i * 604800;  // == weeks * seconds per week
 
 	$html .= "\n<option value=\"" . $secs . "\" ";
-	if( $timeSpan == $secs ) 
+	if( $timeSpan == $secs )
 	    $html .= "selected";
 	$html .= ">";
 	$html .= sprintf( $i==1 ? _("%s Woche") : _("%s Wochen"), $i );
@@ -637,13 +637,13 @@ function printRuntimeSettings ( $startMode = "manual",
 // 	. " <input name=computedStopTime type=text size=15 value=\"("
 // 	. strftime( "%d.%m.%y, %H:%m", $startDate + $timeSpan )
 // 	. ")\" readonly> "
-	
+
     if( $stopMode == "timeSpanBased" && $startMode != "manual" ) {
 
 	$startDate = ($startMode=="immediate") ? time() : $startDate;
 
 	$html .= "&nbsp;<input type=image name=\"updatetimespanbutton\" align=middle border=\"0\" "
-	    . "src=pictures/pfeiltransparent.gif" . tooltip(_("Endzeitpunkt neu berechnen.")) . ">";
+	    . "src='".$GLOBALS['ASSETS_URL']."images/pfeiltransparent.gif'" . tooltip(_("Endzeitpunkt neu berechnen.")) . ">";
 	$html .= "<font size=-1>";
 	$html .= sprintf( _(" (<b>%s</b> um <b>%s</b> Uhr)"),
 			  strftime( "%d.%m.%Y", $startDate + $timeSpan ),
@@ -742,7 +742,7 @@ function printProperties ( $multipleChoice,
 #	$line3 = image_if_true( $resultVisibility == VOTE_RESULTS_AFTER_END );
 #	$line4 = image_if_true( $resultVisibility == VOTE_RESULTS_NEVER );
 #    }
-	
+
     $html .= $line1 . _("immer") . "<br>";
     $html .= $line2 . _("erst nachdem er seine Stimme(n) abgegeben hat") . "<br>";
     $html .= $line3 . (($type=="test") ? _("erst nach Ablauf des Tests") : _("erst nach Ablauf des Votings")) . "<br>";
@@ -758,7 +758,7 @@ function printProperties ( $multipleChoice,
 	    . "</font>"
 	    . "&nbsp;&nbsp;</td><td align=left class=steel1>"
 	    . "<font size=-1>";
-    
+
 	if( $pageMode != MODE_RESTRICTED ) {
 	    $line1 = "<input type=radio value=\"".YES."\" name=co_visibility ".
 		( ($co_visibility) ? "checked" : "" ) . "> ";
@@ -768,7 +768,7 @@ function printProperties ( $multipleChoice,
 	else {
 	    $line1 = image_if_true( $co_visibility );
 	    $line2 = image_if_true( ! $co_visibility );
-	} 
+	}
 
 	$html .= $line1 . _("sofort") . "<br>";
 	$html .= $line2 . _("erst nach Ablauf des Tests");
@@ -789,7 +789,7 @@ function printProperties ( $multipleChoice,
 	? _("Die Auswertung des Tests l&auml;uft:") . "</font>&nbsp;&nbsp;</td><td align=left class=steelgraulight>"
 	: _("Die Auswertung des Votings l&auml;uft:") . "</font>&nbsp;&nbsp;</td><td align=left class=steel1>";
     $html .= "<font size=-1>";
-    
+
     if( $pageMode != MODE_RESTRICTED ) {
 	$line1 = "<input type=radio value=\"".YES."\" name=anonymous ".
 	    ( ($anonymous) ? "checked" : "" ) . " onClick=\"toggleChangeable();\"> ";
@@ -811,14 +811,14 @@ function printProperties ( $multipleChoice,
 	. tooltip(_("Diese Option ist nur möglich, wenn Sie die Auswertung auf 'personalisiert' schalten, und wenn die Ergebnissichtbarkeit nicht auf 'nie' steht. "),
 		  FALSE, TRUE)
 	. " border=0>&nbsp;";
-    
+
     $html .= "<font size=-1>";
     $html .= _("Die Namen der Teilnehmer werden &ouml;ffentlich sichtbar gemacht:") . "</font>&nbsp;&nbsp;";
     $html .= ($type == "test")
 	? "</td><td align=left class=steel1>"
 	: "</td><td align=left class=steelgraulight>";
     $html .= "<font size=-1>";
-    
+
     $line1 = "<input type=radio value=\"".YES."\" name=namesVisibility ".( $namesVisibility ? "checked" : "" )."> ";
     $line2 = "<input type=radio value=\"".NO."\" name=namesVisibility ".( !$namesVisibility ? "checked" : "" )."> ";
 
@@ -837,7 +837,7 @@ function printProperties ( $multipleChoice,
 			: "" ),
 		      FALSE, TRUE)
 	    . " border=0>&nbsp;";
-	
+
 	$html .= "<font size=-1>";
 	$html .= _("Der Teilnehmer darf seine gegebene(n) Antwort(en) beliebig oft revidieren:");
 	$html .= "</font>&nbsp;&nbsp;";
@@ -846,7 +846,7 @@ function printProperties ( $multipleChoice,
 	    ? "</td><td align=left class=steelgraulight>"
 	    : "</td><td align=left class=steel1>";
 	$html .= "<font size=-1>";
-	
+
 	$line1 = "<input type=radio value=\"".NO."\" name=changeable ".
 	    ( (!$changeable) ? "checked" : "" ) . "> ";
 	$line2 = "<input type=radio value=\"".YES."\" name=changeable ".
@@ -876,17 +876,17 @@ function printProperties ( $multipleChoice,
  */
 function printFormEnd ( ) {
     global $pageMode;
-	
+
     $html = "</form>" . createBoxFooter();
 
     if( $pageMode != MODE_RESTRICTED )
 	$html .= "<script type=\"text/javascript\" language=\"JavaScript\"><!--\n"
 	    . "toggleChangeable();\n"
 	    . "//--></script>\n";
-    
+
     $html .= "</body></html>";
 
-    
+
     echo $html;
 }
 
@@ -905,8 +905,8 @@ function image_if_true( $option ) {
 	return "&nbsp;<img width=11 height=12 src=\"".VOTE_PATH_PICTURES."symbol01.gif\" border=0 alt=\"x\">&nbsp;";
     else
 	return "&nbsp;<img width=11 height=12 src=\"".VOTE_PATH_PICTURES."blank.gif\" border=0 alt=\"\">&nbsp;";
-		
+
 }
-    
+
 ?>
 

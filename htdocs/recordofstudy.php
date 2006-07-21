@@ -96,12 +96,12 @@ else
 $infobox = createInfoxboxArray($mode);
 
 if ($mode == "new"){
-	// collect the current seminars and concerning semesters from the archiv	
+	// collect the current seminars and concerning semesters from the archiv
 	$semestersAR = getSemesters();
 }
 elseif ($mode == "edit"){
 	global $UNI_NAME;
-	
+
 	// get the basic data
 	if ($_POST['template']){
 		$template = $_POST['template'];
@@ -124,9 +124,9 @@ elseif ($mode == "edit"){
 		"fieldofstudy"	=> $fieldofstudy,
 		"studentname"	=> $studentname,
 		"semester"		=> $semester,
-		"semesternumber"=> $semesternumber	
+		"semesternumber"=> $semesternumber
 	);
-	
+
 	// get the seminars from the db
 	if ($semester = $_POST['semester_selected_x']){
 		$seminareAR = getSeminare($semesterid,$_POST['onlyseminars']);
@@ -136,7 +136,7 @@ elseif ($mode == "edit"){
 		$seminare_max = $_POST['seminare_max'];
 		$deletenumbers = 0;
 		for($i=0;$i+1<=$seminare_max;$i++){
-			
+
 			// delete this entry
 			if(($_POST['delete'.$i]) &&
 			  (!($_POST['add_seminars_x']) && (($_POST['delete'.$i])))){
@@ -148,19 +148,19 @@ elseif ($mode == "edit"){
 				$tutor = htmlReady($_POST['tutor'.$i]);
 				$sws = htmlReady($_POST['sws'.$i]);
 				$description = htmlReady($_POST['description'.$i]);
-			
+
 				$seminareAR[$i-$deletenumbers] = array(
 					"id" 			=> $i,
 					"seminarid" 	=> $seminarid,
 					"seminarnumber" => $seminarnumber,
 					"tutor" 		=> $tutor,
 					"sws"			=> $sws,
-					"description" 	=> $description 
+					"description" 	=> $description
 				);
 			}
 		}
 	}
-	
+
 	// this is the new max of seminar_fields
 	$seminars_max = $i;
 
@@ -170,14 +170,14 @@ elseif ($mode == "edit"){
 		for($i=1;$i<=$numberofnew;$i++){
 			$seminareAR[$i+$seminare_max] = array("id" => $i+$seminars_max);
 		}
-	
+
 	}
 }
 elseif($mode == "pdf_assortment"){
-	
+
 	// the last entry
 	$seminare_max = $_POST['seminare_max'];
-	
+
 	// the basic data
 	$university = $_POST['university'];
 	$fieldofstudy = $_POST['fieldofstudy'];
@@ -195,7 +195,7 @@ elseif($mode == "pdf_assortment"){
 	$runner = 10;
 	// $j is the current page
 	for($j=0;$j<=$seminare_max/10;$j++){
-		// $runner notices the last entry 
+		// $runner notices the last entry
 		if ($j+1>$seminare_max/10)
 			$runner = $seminare_max%10;
 		// $i is the current page-entry (0-9)
@@ -217,7 +217,7 @@ elseif($mode == "pdf_assortment"){
 elseif($mode == 'create_pdf'){
 	global $record_of_study_templates;
 	$smtp = new studip_smtp_class();
-	$pdf_file['full_path'] = $smtp->url . $PATH_EXPORT . '/' . $record_of_study_templates[$template]['template']; 
+	$pdf_file['full_path'] = $smtp->url . $PATH_EXPORT . '/' . $record_of_study_templates[$template]['template'];
 	$pdf_file['filename'] = $record_of_study_templates[$template]['template'];
 	$fdfAR = createFdfAR($seminars);
 };
@@ -236,13 +236,13 @@ if ($mode == "new"){
 }
 elseif ($mode == "edit"){
 	printSiteTitle($basicdata["semester"]);
-	
+
 	// display a notice for the user?
 	if (sizeof($seminareAR) > 10)
 		$notice = "above_limit";
 	elseif (sizeof($seminareAR) < 1)
 		$notice = "empty";
-	
+
 	printRecordOfStudies($infobox, $basicdata, $seminareAR, $notice);
 }
 elseif ($mode == "pdf_assortment"){
@@ -279,7 +279,7 @@ function createFdfAR($seminars){
 	$studentname = $seminars["studentname"];
 	$semester = $seminars["semester"];
 	$semesternumber = $seminars["semesternumber"];
-	
+
 	$fdfAR = array (
 		"university" => $university,
 		"fieldofstudy" => $fieldofstudy,
@@ -308,7 +308,7 @@ function createFdfAR($seminars){
 function printPDF ($pdf_file, $pdf_data) {
 	$fdf = "%FDF-1.2\n%‚„œ”\n";
 	$fdf .= "1 0 obj \n<< /FDF ";
-	$fdf .= "<< /Fields [\n"; 
+	$fdf .= "<< /Fields [\n";
 
 	foreach ($pdf_data as $key => $val)
 		$fdf .= "<< /V ($val)/T ($key) >> \n";
@@ -317,7 +317,7 @@ function printPDF ($pdf_file, $pdf_data) {
 	$fdf .= ">>\nendobj\ntrailer\n<<\n";
 	$fdf .= "/Root 1 0 R \n\n>>\n";
 	$fdf .= "%%EOF";
-	
+
 	// Now we display the FDF data which causes Acrobat to start
 	header("Expires: Mon, 12 Dec 2001 08:00:00 GMT");
 	header("Last-Modified: " . gmdate ("D, d M Y H:i:s") . " GMT");
@@ -344,7 +344,7 @@ function printPDF ($pdf_file, $pdf_data) {
 function convertSemester($semname){
 	global $SEMESTER;
 
-	if ($semname[0].$semname[1] == "WS")	
+	if ($semname[0].$semname[1] == "WS")
 		return str_replace("WS", _("Wintersemester"),$semname);
 	elseif ($semname[0].$semname[1] == "SS")
 		return str_replace("SS", _("Sommersemester"),$semname);
@@ -362,10 +362,10 @@ function convertSemester($semname){
  */
 function createInfoxboxArray($mode){
 	if ($mode == "new"){
-		$infobox = array	(	
+		$infobox = array	(
 			array ("kategorie"  => "Information:",
-				"eintrag" => array	(	
-						array	 (	"icon" => "pictures/ausruf_small.gif",
+				"eintrag" => array	(
+						array	 (	"icon" => "ausruf_small.gif",
 								"text"  => _("Um eine Druckansicht Ihrer Veranstaltungen zu erstellen, wählen Sie bitte zunächst das entsprechende Semester aus und engen gegebenenfalls ihre Suchabfrage ein.")
 								),
 						)
@@ -373,20 +373,20 @@ function createInfoxboxArray($mode){
 		);
 	}
 	elseif ($mode == "edit") {
-		$infobox = array(	
+		$infobox = array(
 			array  ("kategorie"  => "Information:",
 					"eintrag" =>	array (
-							array (	"icon" => "pictures/ausruf_small.gif",
+							array (	"icon" => "ausruf_small.gif",
 									"text"  => _("Erstellen sie ihre Veranstaltungsübersicht und bearbeiten sie fehlende oder falsche Einträge.")
 									),
 									)
 			),
 			array  ("kategorie" => "Aktionen:",
 					"eintrag" => array(
-						array (	"icon" => "pictures/trash.gif",
+						array (	"icon" => "trash.gif",
 								"text"  => _("Löschen sie nicht benötigte Veranstallungen mit Hilfe der Markierungsboxen und/oder fügen sie  beliebig viele neue Veranstallungen hinzu.")
 								),
-						array (	"icon" => "pictures/icon-disc.gif",
+						array (	"icon" => "icon-disc.gif",
 								"text"  => _("Nachdem alle Informationen korrekt angezeigt werden, erstellen sie ihre Veranstaltungsübersicht mit Hilfe des Buttons 'speichern'.")
 								),
 								)
@@ -394,17 +394,17 @@ function createInfoxboxArray($mode){
 		);
 	}
 	elseif ($mode == "pdf_assortment"){
-		$infobox = array(	
+		$infobox = array(
 			array  ("kategorie"  => "Information:",
 					"eintrag" =>	array (
-							array (	"icon" => "pictures/icon-posting.gif",
+							array (	"icon" => "icon-posting.gif",
 									"text"  => _("Über den/die Link(s) können sie sich ihre Veranstaltungsübersicht anzeigen lassen.")
 									),
 									)
 			)
 		);
 	};
-	
+
 	return $infobox;
 }
 
@@ -420,17 +420,17 @@ function createInfoxboxArray($mode){
  * @returns array				the sorted array
  *
  */
-function sortSemestersArray($array,$sort = 0,$order = "ASC",$left = 0,$right = -1){ 
+function sortSemestersArray($array,$sort = 0,$order = "ASC",$left = 0,$right = -1){
 	if ($right == -1){
 		$right = count($array);
 	}
-	
+
 	$left_dump = $left;
 	$right_dump = $right;
 	$mitte = $array[($left + $right) / 2][$sort];
 
 	if($right_dump > $left_dump){
-		do { 
+		do {
 			if ($order == "ASC"){
 				while($array[$left_dump][$sort]<$mitte) $left_dump++;
 				while($array[$right_dump][$sort]>$mitte) $right_dump--;
@@ -447,10 +447,10 @@ function sortSemestersArray($array,$sort = 0,$order = "ASC",$left = 0,$right = -
 
 		} while($left_dump <= $right_dump);
 
-		$array = sortSemestersArray($array,$sort,$order,$left, $right_dump); 
-		$array = sortSemestersArray($array,$sort,$order,$left_dump,$right); 
+		$array = sortSemestersArray($array,$sort,$order,$left, $right_dump);
+		$array = sortSemestersArray($array,$sort,$order,$left_dump,$right);
 	}
-	return $array; 
+	return $array;
 }
 
 ?>

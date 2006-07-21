@@ -21,8 +21,8 @@ if (! defined(__FUNCTION__))
 define ('MINY', -1);        // Indexes in $data (for DrawXDataLine())
 define ('MAXY', -2);
 
-// error_reporting(E_ALL);
-
+//error_reporting(E_ALL);
+//E_ALL ist keine gute Idee für Stud.IP :)
 
 class PHPlot {
 

@@ -17,7 +17,7 @@ function banner_show() {
 
 	$banners = array();
 	$now = time();
-	// collect banners to consider 
+	// collect banners to consider
 	// build banners array
 	while ($db->next_record()) {
 		if ($db->f("startdate") && $now < $db->f("startdate")) continue;
@@ -42,7 +42,7 @@ function banner_show() {
 		$db->query($q);
 		$db->next_record();
 		print '<table width="100%" cellpadding="5"><tr><td align="center">';
-		$pic='<img src="pictures/banner/'.$db->f('banner_path').'" border=0 ' . tooltip($db->f('alttext')) .'>';
+		$pic='<img src="'.$GLOBALS['ASSETS_URL'].'images/banner/'.$db->f('banner_path').'" border=0 ' . tooltip($db->f('alttext')) .'>';
 		switch ($db->f('target_type')) {
 			case 'url':
 				$link='<a href="'.$db->f('target').'" target="_new">'.$pic.'</a>';

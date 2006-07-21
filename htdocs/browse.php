@@ -29,9 +29,12 @@ require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php");   //wir brauchen die Auto
 require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
 require_once("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/user_visible.inc.php");
 if ($GLOBALS['CHAT_ENABLE']){
-	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php"; 
+	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php";
 }
+
+$HELP_KEYWORD="Basis.SuchenPersonen";
 
 // Start of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
@@ -62,7 +65,7 @@ if ($reset)
 <body>
 <table width="100%" border=0 cellpadding=0 cellspacing=0>
 <tr>
-	<td class="topic" colspan=2><img src="pictures/suchen.gif" border="0" align="texttop"><b>&nbsp;<?=_("Suche nach Personen")?></td>
+	<td class="topic" colspan=2><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/suchen.gif" border="0" align="texttop"><b>&nbsp;<?=_("Suche nach Personen")?></td>
 </tr>
 <?
 if ($sms_msg)
@@ -83,7 +86,7 @@ echo _("W&auml;hlen Sie den gew&uuml;nschen Bereich aus oder suchen Sie nach ein
 ?>
 <br><br><a href="score.php"><?=_("Zur Stud.IP-Rangliste")?></a>
 </blockquote></td>
-<td class="blank" align = right><img src="pictures/board2.jpg" border="0"></td>
+<td class="blank" align = right><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/board2.jpg" border="0"></td>
 </tr>
 <tr><td class="blank" colspan=2>
 <blockquote>
@@ -123,7 +126,7 @@ echo _("W&auml;hlen Sie den gew&uuml;nschen Bereich aus oder suchen Sie nach ein
 
 <!-- form zur wahl der seminare -->
 <form action="browse.php" method="POST">
-<tr> 
+<tr>
 	<td width="20%" class="steel1" align="left">
 		&nbsp;<b><font size=-1><?=_("Veranstaltungen")?></font></b>
 	</td>
@@ -153,14 +156,14 @@ echo _("W&auml;hlen Sie den gew&uuml;nschen Bereich aus oder suchen Sie nach ein
 	<td width="10%" class="steel1" align="center">
 		<input type="HIDDEN" name="group" value="Seminar">
   		<input type="IMAGE" value="Anzeigen" <?=makeButton("anzeigen", "src")?> border=0>
-		<input type="HIDDEN" name="send" value="TRUE">  		
+		<input type="HIDDEN" name="send" value="TRUE">
   	</td>
 </tr>
 </form>
 
 <!-- form zur freien Suche -->
 <form action="browse.php" method="POST">
-<tr> 
+<tr>
 	<td width="20%" class="steel1" align="left">
 		<b><font size=-1>&nbsp;<?=_("Vorname")?></font></b>
 	</td>
@@ -176,7 +179,7 @@ echo _("W&auml;hlen Sie den gew&uuml;nschen Bereich aus oder suchen Sie nach ein
 	<td width="10%" class="steel1" align="center">
 		<input type="HIDDEN" name="group" value="Search">
 		<input type="IMAGE" value="Suchen" <?=makeButton("suchen", "src")?> border=0>
-		<input type="HIDDEN" name="send" value="TRUE">		
+		<input type="HIDDEN" name="send" value="TRUE">
 	</td>
 </tr></form>
 
@@ -186,20 +189,20 @@ if ($perm->have_perm("admin")):
 <!-- alle Benutzer, ab global admin -->
 <!--deprecated, in big Installations this Options would be a killer - use the user management instead
 <form action="browse.php" method="POST">
-<tr> 
+<tr>
 	<td class="steel1" align="left"width="80%" colspan=4>
 		&nbsp;<b><font size=-1><?=_("Alle NutzerInnen")?></font></b>
 	</td>
 	<td class="steel1" width="20%" align="left">
 		<input type="HIDDEN" name="group" value="All">
   		<input type="IMAGE" value="Anzeigen" <?=makeButton("anzeigen", "src")?> border=0>
-		<input type="HIDDEN" name="send" value="TRUE">  		
+		<input type="HIDDEN" name="send" value="TRUE">
   	</td>
 </tr></form>-->
 <?php
 endif;
 ?>
-<tr> 
+<tr>
 	<td class="steel1" align="left" width="100%" colspan="5">
 		<a href="<? echo $PHP_SELF ?>?reset=TRUE"><?=makeButton("neuesuche", "img")?></a></font>
   	</td>
@@ -223,11 +226,12 @@ if ($browse_data["group"]=="All" && $perm->have_perm("admin")){  // nur global a
 
 // nach instituten
 if($browse_data["group"]=="Institut"){
+	$einrichtungssuche = true;
 	$db2->query("SELECT Institut_id FROM user_inst WHERE Institut_id = '".$browse_data["inst_id"]."' AND user_id = '$user->id'");
 	if ($db2->num_rows() > 0 || $perm->have_perm("admin")){  // entweder wir gehoeren auch zum Institut oder sind global admin
   	$query = "SELECT " . $_fullname_sql['full_rev'] ." AS fullname ,username,user_inst.inst_perms,user_inst.user_id,user_inst.Institut_id FROM user_inst LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE Institut_id ='".$browse_data["inst_id"]."' ORDER BY ".$browse_data["sortby"];
 	}
-} 
+}
 
 // nach seminaren
 if($browse_data["group"]=="Seminar"){
@@ -240,16 +244,16 @@ if($browse_data["group"]=="Seminar"){
 	if ($db2->num_rows() > 0 || $perm->have_perm("admin")){  // entweder wir gehoeren auch zum Seminar oder sind global admin
  		$query = "SELECT " . $_fullname_sql['full_rev'] ." AS fullname ,username,seminar_user.status,auth_user_md5.user_id FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE Seminar_id ='".$browse_data["sem_id"]."' ORDER BY ".$browse_data["sortby"];
 	}
-} 
+}
 
 // freie Suche
 if($browse_data["group"]=="Search"){
  	$query = "SELECT " . $_fullname_sql['full_rev'] ." AS fullname,username,perms,auth_user_md5.user_id FROM auth_user_md5 LEFT JOIN user_info USING (user_id)";
 	$browse_data["Vorname"] = str_replace("%", "\%", $browse_data["Vorname"]);	// tss, tss, tss
-	$browse_data["Vorname"] = str_replace("_", "\_", $browse_data["Vorname"]);	
-	$browse_data["Nachname"] = str_replace("%", "\%", $browse_data["Nachname"]);	
+	$browse_data["Vorname"] = str_replace("_", "\_", $browse_data["Vorname"]);
+	$browse_data["Nachname"] = str_replace("%", "\%", $browse_data["Nachname"]);
 	$browse_data["Nachname"] = str_replace("_", "\_", $browse_data["Nachname"]);
-	if ($browse_data["Vorname"] != "" && strlen($browse_data["Vorname"]) > 2){  
+	if ($browse_data["Vorname"] != "" && strlen($browse_data["Vorname"]) > 2){
 		if ($browse_data["Nachname"] != "" && strlen($browse_data["Nachname"]) > 2){ // wir haben Vornamen und Nachnamen zum Suchen
 	 		$query .= " WHERE Vorname LIKE '%".$browse_data["Vorname"]."%' AND Nachname LIKE '%".$browse_data["Nachname"]."%' ";
 		} else {              // wir haben einen Vornamen zum Suchen
@@ -263,19 +267,29 @@ if($browse_data["group"]=="Search"){
 		}
 	}
 	$query .= " ORDER BY ".$browse_data["sortby"];
-} 
+}
 if (!$browse_data["group"])
 	unset($query);
 
-if (isset($query)):
-    $db = new DB_Seminar;	
+if (isset($query)) {
+    $db = new DB_Seminar;
     $db->query($query);
 
 // ausgabe der tabellenueberschrift
 	print ("<table class=\"blank\" width=\"90%\" cellpadding=2 cellspacing=0 border=0>");
 	print ("<tr valign=top align=middle>");
 
-	if ($db->num_rows() > 0):
+	if ($db->num_rows() > 0) {
+		$visible = 0;				//VIS: first, we have to save all data, that needs to be displayed
+		$data = array();
+		while ($db->next_record()) {
+			if (get_visibility_by_id($db->f("user_id")) || ($einrichtungssuche && $db->f("perms") != "autor" && $db->f("perms") != "user")) {
+				$visible++;
+				$data[] = $db->Record;
+			}
+		}
+		if ($visible > 0) {
+
 // wir haben ein Ergebnis
 		switch ($browse_data["group"]) {
 			case "Seminar":
@@ -295,51 +309,55 @@ if (isset($query)):
 				echo "<td class=\"steel\" valign=bottom nowrap width=\"25%\"><a href=\"browse.php?sortby=perms\"><b>" . _("globaler Status") . "</b></a></td>";
 			break;
 		}
-		echo "<td class=\"steel\" nowrap width=\"25%\" valign=bottom align=\"center\"><b>" . _("Nachricht verschicken") . "</b><img src=\"pictures/blank.gif\" width=1 height=20></td>";
+		echo "<td class=\"steel\" nowrap width=\"25%\" valign=bottom align=\"center\"><b>" . _("Nachricht verschicken") . "</b><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" width=1 height=20></td>";
 		echo  "</tr>";
-  	
+
 		//anfuegen der daten an tabelle in schleife...
 	$c=0;
-  	while ($db->next_record()) {
+  	foreach ($data as $val) {		// now iterate trough data-array instead of database-array
 	  	if ($c % 2)
 			$class="steelgraulight";
 		else
-			$class="steel1"; 
+			$class="steel1";
 		$c++;
 			switch ($browse_data["group"]) {
 				case "Seminar":
 					print("<tr valign=middle align=left>");
-					printf("<td class=\"$class\"><font size=-1><a href=\"about.php?username=%s\"> &nbsp;%s</a></font></td>", $db->f("username"), htmlReady($db->f("fullname")));
-					printf("<td class=\"$class\"><font size=-1> &nbsp;%s</font></td>", htmlReady($db->f("status")));
+					printf("<td class=\"$class\"><font size=-1><a href=\"about.php?username=%s\"> &nbsp;%s</a></font></td>", $val["username"], htmlReady($val["fullname"]));
+					printf("<td class=\"$class\"><font size=-1> &nbsp;%s</font></td>", htmlReady($val["status"]));
 					break;
 				case "Institut":
 					print("<tr valign=middle align=left>");
-					printf("<td class=\"$class\"><font size=-1><a href=\"about.php?username=%s\"> &nbsp;%s</a></font></td>", $db->f("username"), htmlReady($db->f("fullname")));
-					if ($db->f("inst_perms") == "user")
+					printf("<td class=\"$class\"><font size=-1><a href=\"about.php?username=%s\"> &nbsp;%s</a></font></td>", $val["username"], htmlReady($val["fullname"]));
+					if ($val["inst_perms"] == "user")
 						print("<td class=\"$class\"><font size=-1> &nbsp;Studierender &nbsp;</font></td>");
 					else {
 						//statusgruppen
-						$gruppen = GetStatusgruppen($db->f("Institut_id"),$db->f("user_id"));
+						$gruppen = GetStatusgruppen($val["Institut_id"],$val["user_id"]);
 						(is_array($gruppen)) ? printf("<td class=\"$class\"><font size=-1> &nbsp;%s &nbsp;</font></td>", htmlReady(join(", ", array_values($gruppen)))) : printf("<td class=\"$class\"><font size=-1> &nbsp;" . _("keiner Funktion zugeordnet") . "&nbsp;</font></td>");
 					}
 					break;
 				default:
 					print("<tr valign=middle align=left>");
-					printf("<td class=\"$class\"><font size=-1><a href=\"about.php?username=%s\"> &nbsp;%s</a></font></td>", $db->f("username"), htmlReady($db->f("fullname")));
-					printf("<td class=\"$class\"><font size=-1> &nbsp;%s</font></td>", $db->f("perms"));
+					printf("<td class=\"$class\"><font size=-1><a href=\"about.php?username=%s\"> &nbsp;%s</a></font></td>", $val["username"], htmlReady($val["fullname"]));
+					printf("<td class=\"$class\"><font size=-1> &nbsp;%s</font></td>", $val["perms"]);
 					break;
 			}
 			echo "<td class=\"$class\" align=\"center\">";
 			if ($GLOBALS['CHAT_ENABLE']){
-				echo chat_get_online_icon($db->f("user_id"),$db->f("username")) . "&nbsp;";
+				echo chat_get_online_icon($val["user_id"],$val["username"]) . "&nbsp;";
 			}
-			echo "<a href=\"sms_send.php?sms_source_page=browse.php&rec_uname=", $db->f("username"),"\"><img src=\"pictures/nachricht1.gif\" " . tooltip(_("Nachricht an User verschicken")) . " border=0></a></td></tr>";
+			echo "<a href=\"sms_send.php?sms_source_page=browse.php&rec_uname=", $val["username"],"\"><img src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" " . tooltip(_("Nachricht an User verschicken")) . " border=0></a></td></tr>";
 		}
 		print("</table><br /><br />");
-	else: // wir haben kein Ergebnis
+		} else {
+
+			printf("<th nowrap>" . _("Niemand gefunden!") . "</th></tr></table><br /><br />");
+		}
+	} else { // wir haben kein Ergebnis
 		printf("<th nowrap>" . _("Niemand gefunden!") . "</th></tr></table><br /><br />");
-	endif;
-endif;
+	}
+}
 ?>
 
 </table>

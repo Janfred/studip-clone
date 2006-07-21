@@ -5,6 +5,8 @@ include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Sessio
 
 // -- here you have to put initialisations for the current page
 
+$HELP_KEYWORD="Basis.VerschiedenesScore"; // external help keyword
+
 // Start of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
@@ -13,10 +15,11 @@ require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
 require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/score.class.php");
 require_once("$ABSOLUTE_PATH_STUDIP/object.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/user_visible.inc.php");
 ?>
 <table width="100%" border=0 cellpadding=0 cellspacing=0>
 <tr>
-	<td class="topic" colspan=2><img src="pictures/suchen.gif" border="0" align="texttop"><b>&nbsp;<?=_("Stud.IP-Score")?></td>
+	<td class="topic" colspan=2><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/suchen.gif" border="0" align="texttop"><b>&nbsp;<?=_("Stud.IP-Score")?></td>
 </tr>
 <tr>
 <td class="blank" align = left valign="top" width="60%"><blockquote><br><font size="-1">
@@ -31,7 +34,7 @@ $score = new Score($user->id);
 IF ($cmd=="write") {
 	$score->PublishScore();
 }
-	
+
 IF ($cmd=="kill") {
 	$score->KillScore();
 }
@@ -44,12 +47,12 @@ if ($score->ReturnPublik())
 	echo "<br><br><a href=\"score.php?cmd=kill\">" . _("Ihren Wert von der Liste löschen") . "</a>";
 else
 	echo "<br><br><a href=\"score.php?cmd=write\">" . _("Diesen Wert auf der Liste veröffentlichen") . "</a>";
-	
+
 ?>
 <br><br><b>
 <?=_("Hier sehen Sie den Score der NutzerInnen, die Ihre Werte ver&ouml;ffentlicht haben:")?>
 <br><br></blockquote></td>
-		<td class="blank" align = right valign = "top"><img src="pictures/board2.jpg" border="0"></td>
+		<td class="blank" align = right valign = "top"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/board2.jpg" border="0"></td>
 	</tr>
 </table>
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
@@ -63,18 +66,20 @@ $db->query("SELECT a.user_id,username,score,geschlecht, " .$_fullname_sql['full'
 if ($db->num_rows()) {
 	echo "<table width=\"99%\" align=\"center\" border=\"0\" cellpadding=\"2\" cellspacing=\"0\">";
 	while ($db->next_record()) {
-		$kill = "";
-		$cssSw->switchClass();
-		if ($db->f("user_id")==$user->id) {
-			$kill = "&nbsp; &nbsp; <a href=\"score.php?cmd=kill\">" . _("[löschen]") . "</a>";
+		if (get_visibility_by_id($db->f("user_id"))) {	// VIS: show only users, who are visible
+			$kill = "";
+			$cssSw->switchClass();
+			if ($db->f("user_id")==$user->id) {
+				$kill = "&nbsp; &nbsp; <a href=\"score.php?cmd=kill\">" . _("[löschen]") . "</a>";
+			}
+			echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"1%\" nowrap align=\"right\"><font size=\"-1\">".$rang.".</td><td class=\"".$cssSw->getClass()."\" width=\"39%\" nowrap>"
+			."&nbsp; &nbsp; <a href='about.php?username=".$db->f("username")."'><font size=\"-1\">".htmlReady($db->f("fullname"))."</a></td>"
+			."<td class=\"".$cssSw->getClass()."\" width=\"10%\">".$score->GetScoreContent($db->f("user_id"))."</td>"
+			."<td class=\"".$cssSw->getClass()."\" width=\"20%\"><font size=\"-1\">".$db->f("score")."</td><td class=\"".$cssSw->getClass()."\" width=\"30%\"><font size=\"-1\">".$score->GetTitel($db->f("score"), $db->f("geschlecht"))
+			.$kill
+			."</td></tr>\n";
+			$rang++;
 		}
-		echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"1%\" nowrap align=\"right\"><font size=\"-1\">".$rang.".</td><td class=\"".$cssSw->getClass()."\" width=\"39%\" nowrap>"
-		."&nbsp; &nbsp; <a href='about.php?username=".$db->f("username")."'><font size=\"-1\">".htmlReady($db->f("fullname"))."</a></td>"
-		."<td class=\"".$cssSw->getClass()."\" width=\"10%\">".$score->GetScoreContent($db->f("user_id"))."</td>"
-		."<td class=\"".$cssSw->getClass()."\" width=\"20%\"><font size=\"-1\">".$db->f("score")."</td><td class=\"".$cssSw->getClass()."\" width=\"30%\"><font size=\"-1\">".$score->GetTitel($db->f("score"), $db->f("geschlecht"))
-		.$kill
-		."</td></tr>\n";
-		$rang++;
 	}
 	echo "</table>\n";
 	}

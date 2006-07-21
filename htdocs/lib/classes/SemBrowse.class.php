@@ -8,7 +8,7 @@ require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipSemTreeViewSimple.class.p
 require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipSemRangeTreeViewSimple.class.php");
 
 class SemBrowse {
-	
+
 	var $sem_browse_data;
 	var $persistent_fields = array("level","cmd","start_item_id","show_class","group_by","search_result","default_sem","sem_status","show_entries","sset");
 	var $search_obj;
@@ -22,7 +22,7 @@ class SemBrowse {
 
 	function SemBrowse($sem_browse_data_init = array()){
 		global $_REQUEST,$sem_browse_data,$sess;
-		
+
 		$this->group_by_fields = array(	array('name' => _("Semester"), 'group_field' => 'sem_number'),
 										array('name' => _("Bereich"), 'group_field' => 'bereich'),
 										array('name' => _("DozentIn"), 'group_field' => 'fullname', 'unique_field' => 'username'),
@@ -43,7 +43,7 @@ class SemBrowse {
 		$this->search_obj = new StudipSemSearch("search_sem", false, !(is_object($GLOBALS['perm']) && $GLOBALS['perm']->have_perm('root')));
 		$this->search_obj->search_fields['qs_choose']['content'] = array('title' => _("Titel"), 'lecturer' => _("DozentIn"), 'comment' => _("Kommentar"));
 		$this->search_obj->search_fields['type']['class'] = $this->sem_browse_data['show_class'];
-		
+
 		if (isset($_REQUEST[$this->search_obj->form_name . "_scope_choose"])){
 			$this->sem_browse_data["start_item_id"] = $_REQUEST[$this->search_obj->form_name . "_scope_choose"];
 		}
@@ -53,11 +53,11 @@ class SemBrowse {
 		if (isset($_REQUEST[$this->search_obj->form_name . "_sem"])){
 			$this->sem_browse_data['default_sem'] = $_REQUEST[$this->search_obj->form_name . "_sem"];
 		}
-		
+
 		if (isset($_REQUEST['keep_result_set']) || $this->sem_browse_data['sset'] || (count($this->sem_browse_data['search_result']) && $this->sem_browse_data['show_entries'])){
 			$this->show_result = true;
 		}
-		
+
 		if ($this->sem_browse_data['cmd'] == "xts"){
 			$this->sem_browse_data['level'] = "f";
 			if($this->search_obj->new_search_button_clicked){
@@ -66,17 +66,17 @@ class SemBrowse {
 				$this->sem_browse_data['search_result'] = array();
 			}
 		}
-		
+
 		if ($this->sem_browse_data['cmd'] == "qs"){
 			$this->sem_browse_data['default_sem'] = "all";
 		}
-		
+
 		if($this->sem_browse_data["default_sem"] != 'all'){
 			$this->sem_number[0] = $this->sem_browse_data["default_sem"];
 		} else {
 			$this->sem_number = false;
 		}
-		
+
 		$sem_status = (is_array($this->sem_browse_data['sem_status'])) ? $this->sem_browse_data['sem_status'] : false;
 
 		if ($this->sem_browse_data['level'] == "vv"){
@@ -106,8 +106,8 @@ class SemBrowse {
 				$this->sem_browse_data['sset'] = false;
 			}
 		}
-		
-		
+
+
 		if ($this->search_obj->search_button_clicked && !$this->search_obj->new_search_button_clicked){
 			$this->search_obj->override_sem = $this->sem_number;
 			$this->search_obj->doSearch();
@@ -120,8 +120,8 @@ class SemBrowse {
 			$this->sem_browse_data['show_entries'] = false;
 			$this->sem_browse_data['sset'] = true;
 		}
-		
-		
+
+
 		if ($_REQUEST['cmd'] == "show_sem_range"){
 			$tmp = explode("_",$_REQUEST['item_id']);
 			$this->get_sem_range($tmp[0],isset($tmp[1]));
@@ -137,20 +137,20 @@ class SemBrowse {
 			$this->sem_browse_data['show_entries'] = (isset($tmp[1])) ? "sublevels" : "level";
 			$this->sem_browse_data['sset'] = false;
 		}
-		
+
 		if (isset($_REQUEST['do_show_class']) && count($this->sem_browse_data['sem_status'])){
 			$this->get_sem_class();
 		}
-	
+
 		/*
 		echo "<hr><pre>";
 		print_r($this->sem_browse_data);
 		print var_dump($this->show_result);
 		echo "</pre><hr>";
 		*/
-		
+
 	}
-	
+
 	function show_class(){
 		if ($this->sem_browse_data['show_class'] == 'all'){
 			return true;
@@ -165,20 +165,20 @@ class SemBrowse {
 		}
 		return in_array($this->sem_browse_data['show_class'], $this->classes_show_class);
 	}
-	
+
 	function get_sem_class(){
 		$db = new DB_Seminar("SELECT Seminar_id from seminare WHERE "
-							. (!(is_object($GLOBALS['perm'] && $GLOBALS['perm']->have_perm('root'))) ? "seminare.visible=1 AND" : "" ) 
+							. (!(is_object($GLOBALS['perm'] && $GLOBALS['perm']->have_perm('root'))) ? "seminare.visible=1 AND" : "" )
 							. " seminare.status IN ('" . join("','", $this->sem_browse_data['sem_status']) . "')");
 		$snap = new DbSnapshot($db);
 		$sem_ids = $snap->getRows("Seminar_id");
 		if (is_array($sem_ids)){
 			$this->sem_browse_data['search_result'] = array_flip($sem_ids);
-		} 
+		}
 		$this->sem_browse_data['sset'] = true;
 		$this->show_result = true;
 	}
-	
+
 	function get_sem_range($item_id, $with_kids){
 		$sem_ids = $this->sem_tree->tree->getSemIds($item_id,$with_kids);
 		if (is_array($sem_ids)){
@@ -187,7 +187,7 @@ class SemBrowse {
 			$this->sem_browse_data['search_result'] = array();
 		}
 	}
-	
+
 	function get_sem_range_tree($item_id, $with_kids){
 		$range_object =& RangeTreeObject::GetInstance($item_id);
 		if ($with_kids){
@@ -196,7 +196,7 @@ class SemBrowse {
 		$inst_ids[] = $range_object->item_data['studip_object_id'];
 		$db_view = new DbView();
 		$db_view->params[0] = $inst_ids;
-		$db_view->params[1] = (is_object($GLOBALS['perm']) && $GLOBALS['perm']->have_perm('root')) ? '' : ' AND visible=1';
+		$db_view->params[1] = (is_object($GLOBALS['perm']) && $GLOBALS['perm']->have_perm('root')) ? '' : ' AND c.visible=1';
 		$db_view->params[1] .= (is_array($this->sem_browse_data['sem_status'])) ? " AND c.status IN('" . join("','",$this->sem_browse_data['sem_status']) ."')" : "";
 		$db_view->params[2] = (is_array($this->sem_number)) ? " HAVING sem_number IN (" . join(",",$this->sem_number) .") OR (sem_number <= " . $this->sem_number[count($this->sem_number)-1] . "  AND (sem_number_end > " . $this->sem_number[count($this->sem_number)-1] . " OR sem_number_end = -1)) " : "";
 		$db_snap = new DbSnapshot($db_view->get_query("view:SEM_INST_GET_SEM"));
@@ -207,7 +207,7 @@ class SemBrowse {
 			$this->sem_browse_data['search_result'] = array();
 		}
 	}
-		
+
 	function print_qs(){
 		global $_REQUEST,$PHP_SELF;
 		//Quicksort Formular... fuer die eiligen oder die DAUs....
@@ -217,7 +217,7 @@ class SemBrowse {
 		echo _("Schnellsuche:") . "&nbsp;";
 		echo $this->search_obj->getSearchField("qs_choose",array('style' => 'vertical-align:middle;font-size:9pt;'));
 		if ($this->sem_browse_data['level'] == "vv"){
-			$this->search_obj->sem_tree =& $this->sem_tree->tree; 
+			$this->search_obj->sem_tree =& $this->sem_tree->tree;
 			if ($this->sem_tree->start_item_id != 'root'){
 				$this->search_obj->search_scopes[] = $this->sem_tree->start_item_id;
 			}
@@ -225,7 +225,7 @@ class SemBrowse {
 			echo "\n<input type=\"hidden\" name=\"level\" value=\"vv\">";
 		}
 		if ($this->sem_browse_data['level'] == "ev"){
-			$this->search_obj->range_tree =& $this->range_tree->tree; 
+			$this->search_obj->range_tree =& $this->range_tree->tree;
 			if ($this->range_tree->start_item_id != 'root'){
 				$this->search_obj->search_ranges[] = $this->range_tree->start_item_id;
 			}
@@ -233,14 +233,14 @@ class SemBrowse {
 			echo "\n<input type=\"hidden\" name=\"level\" value=\"ev\">";
 		}
 		echo "&nbsp;";
-		
+
 		echo $this->search_obj->getSearchField("quick_search",array( 'style' => 'vertical-align:middle;font-size:9pt;','size' => 20));
 		echo $this->search_obj->getSearchButton(array('style' => 'vertical-align:middle'));
 		echo "</td></tr>";
 		echo $this->search_obj->getFormEnd();
 		echo "</table>\n";
 	}
-	
+
 	function print_xts(){
 		global $PHP_SELF;
 		$this->search_obj->attributes_default = array('style' => 'width:100%;font-size:10pt;');
@@ -285,7 +285,7 @@ class SemBrowse {
 		echo $this->search_obj->getFormEnd();
 		echo "</table>\n";
 	}
-	
+
 	function do_output(){
 		if ($this->sem_browse_data['cmd'] == "xts"){
 			$this->print_xts();
@@ -297,7 +297,7 @@ class SemBrowse {
 			$this->print_result();
 		}
 	}
-		
+
 	function print_level(){
 		ob_start();
 		global $PHP_SELF, $_language_path;
@@ -310,19 +310,19 @@ class SemBrowse {
 					printf(_(" / %sVorlesungsverzeichnis%s"),"<a href=\"$PHP_SELF?level=vv&cmd=qs&sset=0\">","</a>");
 				}
 			} else {
-				printf ("<table align=\"center\" cellspacing=\"10\"><tr><td nowrap align=\"center\"><a href=\"%s?level=ev&cmd=qs&sset=0\"><b>%s</b><br><br><img src=\"./pictures/institute.jpg\" %s border=\"0\" /></a></td>", $PHP_SELF, _("Suche in Einrichtungen"), $_language_path, tooltip(_("Suche im Einrichtungsverzeichnis")));
+				printf ("<table align=\"center\" cellspacing=\"10\"><tr><td nowrap align=\"center\"><a href=\"%s?level=ev&cmd=qs&sset=0\"><b>%s</b><br><br><img src=\"".$GLOBALS['ASSETS_URL']."images/institute.jpg\" %s border=\"0\" /></a></td>", $PHP_SELF, _("Suche in Einrichtungen"), $_language_path, tooltip(_("Suche im Einrichtungsverzeichnis")));
 				if ($this->show_class()){
-					printf ("<td nowrap align=\"center\"><a href=\"%s?level=vv&cmd=qs&sset=0\"><b>%s</b><br><br><img src=\"./pictures/kommentar.jpg\" %s border=\"0\" /></a></td>", $PHP_SELF, _("Suche im Vorlesungsverzeichnis"), $_language_path,tooltip(_("Suche im Vorlesungsverzeichnis")));
+					printf ("<td nowrap align=\"center\"><a href=\"%s?level=vv&cmd=qs&sset=0\"><b>%s</b><br><br><img src=\"".$GLOBALS['ASSETS_URL']."images/kommentar.jpg\" %s border=\"0\" /></a></td>", $PHP_SELF, _("Suche im Vorlesungsverzeichnis"), $_language_path,tooltip(_("Suche im Vorlesungsverzeichnis")));
 				}
 				printf ("</tr></table>");
 			}
-			echo "</font></div>"; 
+			echo "</font></div>";
 		}
 		if ($this->sem_browse_data['level'] == "vv"){
 			echo "\n<tr><td align=\"center\">";
 			$this->sem_tree->show_entries = $this->sem_browse_data['show_entries'];
 			$this->sem_tree->showSemTree();
-		}	
+		}
 		if ($this->sem_browse_data['level'] == "ev"){
 			echo "\n<tr><td align=\"center\">";
 			$this->range_tree->show_entries = $this->sem_browse_data['show_entries'];
@@ -331,11 +331,11 @@ class SemBrowse {
 		echo "</td></tr>\n</table>";
 		ob_end_flush();
 	}
-	
+
 	function print_result(){
 		ob_start();
 		global $_fullname_sql,$_views,$PHP_SELF,$SEM_TYPE,$SEM_CLASS;
-		
+
 		if (is_array($this->sem_browse_data['search_result']) && count($this->sem_browse_data['search_result'])) {
 			if ($this->sem_browse_data['group_by'] == 1){
 				if (!is_object($this->sem_tree)){
@@ -350,16 +350,16 @@ class SemBrowse {
 				}
 				$the_tree->buildIndex();
 			}
-					
-			$query = ("SELECT seminare.Seminar_id, seminare.status, IF(visible=0,CONCAT(seminare.Name, ' ". _("(versteckt)") ."'), seminare.Name) AS Name, seminare.metadata_dates 
+
+			$query = ("SELECT seminare.Seminar_id, seminare.status, IF(seminare.visible=0,CONCAT(seminare.Name, ' ". _("(versteckt)") ."'), seminare.Name) AS Name, seminare.metadata_dates
 				, Institute.Name AS Institut,Institute.Institut_id,
 				seminar_sem_tree.sem_tree_id AS bereich, " . $_fullname_sql['no_title_short'] ." AS fullname, auth_user_md5.username,
-				" . $_views['sem_number_sql'] . " AS sem_number, " . $_views['sem_number_end_sql'] . " AS sem_number_end FROM seminare 
-				LEFT JOIN seminar_user ON (seminare.Seminar_id=seminar_user.Seminar_id AND seminar_user.status='dozent') 
-				LEFT JOIN auth_user_md5 USING (user_id) 
-				LEFT JOIN user_info USING (user_id) 
+				" . $_views['sem_number_sql'] . " AS sem_number, " . $_views['sem_number_end_sql'] . " AS sem_number_end FROM seminare
+				LEFT JOIN seminar_user ON (seminare.Seminar_id=seminar_user.Seminar_id AND seminar_user.status='dozent')
+				LEFT JOIN auth_user_md5 USING (user_id)
+				LEFT JOIN user_info USING (user_id)
 				LEFT JOIN seminar_sem_tree ON (seminare.Seminar_id = seminar_sem_tree.seminar_id $sem_tree_query)
-				LEFT JOIN seminar_inst ON (seminare.Seminar_id = seminar_inst.Seminar_id) 
+				LEFT JOIN seminar_inst ON (seminare.Seminar_id = seminar_inst.Seminar_id)
 				LEFT JOIN Institute ON (Institute.Institut_id = seminar_inst.institut_id)
 				WHERE seminare.Seminar_id IN('" . join("','", array_keys($this->sem_browse_data['search_result'])) . "')");
 			$db = new DB_Seminar($query);
@@ -371,7 +371,7 @@ class SemBrowse {
 			}
 			$group_by_data = $snap->getGroupedResult($group_field, $data_fields);
 			$sem_data = $snap->getGroupedResult("Seminar_id");
-			
+
 			if ($this->sem_browse_data['group_by'] == 0){
 				$group_by_duration = $snap->getGroupedResult("sem_number_end", array("sem_number","Seminar_id"));
 				foreach ($group_by_duration as $sem_number_end => $detail){
@@ -405,11 +405,11 @@ class SemBrowse {
 					}
 				}
 			}
-			
+
 			//release memory
 			unset($snap);
 			unset($tmp_group_by_data);
-			
+
 			foreach ($group_by_data as $group_field => $sem_ids){
 				foreach ($sem_ids['Seminar_id'] as $seminar_id => $foo){
 					$name = strtolower(key($sem_data[$seminar_id]["Name"]));
@@ -420,27 +420,27 @@ class SemBrowse {
 				}
 				uasort($group_by_data[$group_field]['Seminar_id'], 'strnatcmp');
 			}
-			
+
 			echo "\n<table border=\"0\" align=\"center\" cellspacing=0 cellpadding=2 width = \"99%\">\n";
 			echo "\n<tr><td class=\"steelgraulight\" colspan=\"2\"><div style=\"margin-top:10px;margin-bottom:10px;\"><font size=\"-1\"><b>&nbsp;"
 				. sprintf(_(" %s Veranstaltungen gefunden %s, Gruppierung: %s"),count($sem_data),
 				(($this->sem_browse_data['sset']) ? _("(Suchergebnis)") : ""),
-				$this->group_by_fields[$this->sem_browse_data['group_by']]['name']) 
+				$this->group_by_fields[$this->sem_browse_data['group_by']]['name'])
 				. "</b></font></div></td></tr>";
-			
-			
+
+
 			switch ($this->sem_browse_data["group_by"]){
 					case 0:
 					krsort($group_by_data, SORT_NUMERIC);
 					break;
-					
+
 					case 1:
 					uksort($group_by_data, create_function('$a,$b',
 							'$the_tree =& TreeAbstract::GetInstance("StudipSemTree");
 							return (int)($the_tree->tree_data[$a]["index"] - $the_tree->tree_data[$b]["index"]);
 							'));
 					break;
-					
+
 					case 3:
 					uksort($group_by_data, create_function('$a,$b',
 							'global $SEM_CLASS,$SEM_TYPE;
@@ -450,16 +450,16 @@ class SemBrowse {
 					default:
 					uksort($group_by_data, 'strnatcasecmp');
 					break;
-					
+
 			}
-			
+
 			foreach ($group_by_data as $group_field => $sem_ids){
 				echo "\n<tr><td class=\"steelkante\" colspan=\"2\"><font size=-1><b>";
 				switch ($this->sem_browse_data["group_by"]){
 					case 0:
 					echo $this->search_obj->sem_dates[$group_field]['name'];
 					break;
-					
+
 					case 1:
 					if ($the_tree->tree_data[$group_field]) {
 						echo htmlReady($the_tree->getShortPath($group_field));
@@ -467,15 +467,15 @@ class SemBrowse {
 						echo _("keine Studienbereiche eingetragen");
 					}
 					break;
-					
+
 					case 3:
 					echo htmlReady($SEM_TYPE[$group_field]["name"]." (". $SEM_CLASS[$SEM_TYPE[$group_field]["class"]]["name"].")");
 					break;
-					
+
 					default:
 					echo htmlReady($group_field);
 					break;
-					
+
 				}
 				echo "</b></font></td></tr>";
 				ob_end_flush();

@@ -1,9 +1,9 @@
 <?
 /**
 * terms.inc.php
-* 
+*
 * show terms on first login and check if user accept them
-* 
+*
 *
 * @author		Zentrum VirtuOS, Osnabrueck
 * @version		$Id$
@@ -33,7 +33,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
- 
+
 function check_terms($userid, $_language_path) {
 
 	global $i_accept_the_terms;
@@ -42,7 +42,7 @@ function check_terms($userid, $_language_path) {
 	if ($GLOBALS['auth']->auth['uid'] != 'nobody' && !$GLOBALS['user']->get_last_action()) {
 		?>
 		<table width="80%" align="center" border=0 cellpadding=0 cellspacing=0>
-		<tr><td class="topic"><img src="pictures/login.gif" border="0"><b>&nbsp;<?=_("Nutzungsbedingungen")?></b></td></tr>
+		<tr><td class="topic"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/login.gif" border="0"><b>&nbsp;<?=_("Nutzungsbedingungen")?></b></td></tr>
 		<tr><td class="blank">
 		<blockquote><br><br>
 		<?=_("Stud.IP ist ein Open Source Projekt und steht unter der Gnu General Public License (GPL). Das System befindet sich in der st&auml;ndigen Weiterentwicklung.")?>
@@ -59,7 +59,7 @@ function check_terms($userid, $_language_path) {
 		<center><a href="index.php?i_accept_the_terms=yes"><b><?=_("Ich erkenne die Nutzungsbedingungen an")?></b></a></center>
 		<br/>
 		</blockquote>
-		</table>	
+		</table>
 		<?
 		die;
 	}

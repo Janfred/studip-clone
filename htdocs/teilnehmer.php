@@ -30,8 +30,50 @@ require_once ("$ABSOLUTE_PATH_STUDIP/admission.inc.php");	//Funktionen der Teiln
 require_once ("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");	//Funktionen der Statusgruppen
 require_once ("$ABSOLUTE_PATH_STUDIP/messaging.inc.php");	//Funktionen des Nachrichtensystems
 require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php");		//We need the config for some parameters of the class of the Veranstaltung
+require_once("$ABSOLUTE_PATH_STUDIP/user_visible.inc.php");
 if ($GLOBALS['CHAT_ENABLE']){
 	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php";
+}
+$db = new DB_Seminar;
+$db2 = new DB_Seminar;
+/*
+* set the user_visibility of all unkowns to their global visibility
+*/
+
+$db->query("SELECT user_id FROM admission_seminar_user WHERE visible = 'unknown' AND seminar_id = '".$SessSemName[1]."'");
+while ($db->next_record()) {
+	$visible = (get_visibility_by_id($db->f("user_id"))) ? "yes" : "no";
+	$db2->query("UPDATE admission_seminar_user SET visible = '$visible' WHERE user_id = '".$db->f("user_id")."' AND seminar_id = '".$SessSemName[1]."'");
+}
+
+$db->query("SELECT user_id FROM seminar_user WHERE visible = 'unknown' AND Seminar_id = '".$SessSemName[1]."'");
+while ($db->next_record()) {
+	$visible = (get_visibility_by_id($db->f("user_id"))) ? "yes" : "no";
+	$db2->query("UPDATE seminar_user SET visible = '$visible' WHERE user_id = '".$db->f("user_id")."' AND Seminar_id = '".$SessSemName[1]."'");
+}
+
+/* ---------------------------------- */
+
+if ($cmd == "make_me_visible") {
+	if ($mode == "autor") {
+		$db->query("UPDATE seminar_user SET visible = 'yes' WHERE user_id = '".$auth->auth['uid']."' AND Seminar_id = '".$SessSemName[1]."'");
+	} else {
+		$db->query("UPDATE admission_seminar_user SET visible = 'yes' WHERE user_id = '".$auth->auth['uid']."' AND seminar_id = '".$SessSemName[1]."'");
+	}
+}
+
+if ($cmd == "make_me_invisible") {
+	if ($mode == "autor") {
+		$db->query("UPDATE seminar_user SET visible = 'no' WHERE user_id = '".$auth->auth['uid']."' AND Seminar_id = '".$SessSemName[1]."'");
+	} else {
+		$db->query("UPDATE admission_seminar_user SET visible = 'no' WHERE user_id = '".$auth->auth['uid']."' AND seminar_id = '".$SessSemName[1]."'");
+	}
+}
+
+if ($rechte) {
+	$HELP_KEYWORD="Basis.VeranstaltungenVerwaltenTeilnehmer";
+} else {
+	$HELP_KEYWORD="Basis.InVeranstaltungTeilnehmer";
 }
 
 // Start  of Output
@@ -508,14 +550,14 @@ if ($perm->have_perm("dozent")) {
 			while ($db3->next_record()) {
 				if ($db3->f("showscore") == 1) {
 					if ($rechte) {
-						printf ("<a href=\"$PHP_SELF?cmd=hidescore\"><img src=\"pictures/showscore1.gif\" border=\"0\" %s>&nbsp; &nbsp; </a>", tooltip(_("Aktivitätsanzeige eingeschaltet. Klicken zum Ausschalten.")));
+						printf ("<a href=\"$PHP_SELF?cmd=hidescore\"><img src=\"".$GLOBALS['ASSETS_URL']."images/showscore1.gif\" border=\"0\" %s>&nbsp; &nbsp; </a>", tooltip(_("Aktivitätsanzeige eingeschaltet. Klicken zum Ausschalten.")));
 					} else {
 						echo "&nbsp; ";
 					}
 					$showscore = TRUE;
 				} else {
 					if ($rechte) {
-						printf ("<a href=\"$PHP_SELF?cmd=showscore\"><img src=\"pictures/showscore0.gif\" border=\"0\" %s>&nbsp; &nbsp; </a>", tooltip(_("Aktivitätsanzeige ausgeschaltet. Klicken zum Einschalten.")));
+						printf ("<a href=\"$PHP_SELF?cmd=showscore\"><img src=\"".$GLOBALS['ASSETS_URL']."images/showscore0.gif\" border=\"0\" %s>&nbsp; &nbsp; </a>", tooltip(_("Aktivitätsanzeige ausgeschaltet. Klicken zum Einschalten.")));
 					} else {
 						echo "&nbsp; ";
 					}
@@ -523,6 +565,62 @@ if ($perm->have_perm("dozent")) {
 				}
 			}
 		?>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2" class="blank">
+			<?
+			$db3->query("SELECT status, visible FROM seminar_user WHERE user_id = '".$auth->auth['uid']."' AND Seminar_id = '$SessionSeminar'");
+			$visible_mode = "false";
+
+			if ($db3->num_rows() > 0) {
+				$db3->next_record();
+				if ($db3->f("visible") == "yes") {
+					$iam_visible = true;
+				} else {
+					$iam_visible = false;
+				}
+				if ($db3->f("status") == "autor") {
+					$visible_mode = "autor";
+				} else {
+					$iam_visible = true;
+					$visible_mode = false;
+				}
+			}
+
+			$db3->query("SELECT status, visible FROM admission_seminar_user WHERE user_id = '".$auth->auth['uid']."' AND seminar_id = '$SessionSeminar'");
+			if ($db3->num_rows() > 0) {
+				if ($db3->f("visible") == "yes") {
+					$iam_visible = true;
+				} else {
+					$iam_visible = false;
+				}
+				$visible_mode = "awaiting";
+			}
+		if (!$perm->have_studip_perm('tutor',$SessSemName[1])) {
+			if ($iam_visible) {
+		?>
+		<br/>
+			<b><?=	_("Sie erscheinen für andere TeilnehmerInnen sichtbar auf der Teilnehmerliste."); ?></b><br/>
+			<a href="<?=$PHP_SELF?>?cmd=make_me_invisible&mode=<?=$visible_mode?>">
+			<img src="<?=$GLOBALS['ASSETS_URL']?>images/vote-icon-invisible.gif" border="0">
+			<?= _("Klicken Sie hier, um unsichtbar zu werden.") ?>
+			</a>
+		<br/>
+		<?
+			} else {
+		?>
+		<br/>
+			<b><?=	_("Sie erscheinen nicht auf der Teilnehmerliste."); ?></b><br/>
+			<a href="<?=$PHP_SELF?>?cmd=make_me_visible&mode=<?=$visible_mode?>">
+			<img src="<?=$GLOBALS['ASSETS_URL']?>images/vote-icon-visible.gif" border="0">
+			<?= _("Klicken Sie hier, um sichtbar zu werden.") ?>
+			</a>
+		<br/>
+		<?
+			}
+		}
+			?>
 		</td>
 	</tr>
 
@@ -537,21 +635,21 @@ if ($perm->have_perm("dozent")) {
 					</tr>
 					<tr>
       			<td class="steelkante2" valign="middle">
-							<img src="pictures/blank.gif" height="22" width="5">
+							<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" height="22" width="5">
 						</td>
       			<td class="steelkante2" valign="middle">
 							<font size="-1"><?=_("Sortierung:")?>&nbsp;</font>
 						<? if (isset($indikator) && ($indikator == "abc")) { ?>
      				</td>
 						<td nowrap class="steelgraulight_shadow" valign="middle">
-							&nbsp;<img src="pictures/forumrot_indikator.gif" align="absmiddle">
+							&nbsp;<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/forumrot_indikator.gif" align="absmiddle">
 							<font size="-1"><?=_("Alphabetisch")?></font>&nbsp;
 						<? } else { ?>
 						</td>
 						<td nowrap class="steelkante2" valign="middle">
 							&nbsp;
 							<a href="<?=$PHP_SELF?>?view_order=abc&cmd=change_view">
-								<img src="pictures/forum_indikator_grau.gif" border="0" align="absmiddle">
+								<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/forum_indikator_grau.gif" border="0" align="absmiddle">
 								<font size="-1" color="#555555"><?=_("Alphabetisch")?></font>
 							</a>
 							&nbsp;
@@ -559,14 +657,14 @@ if ($perm->have_perm("dozent")) {
 						<? if (isset($indikator) && ($indikator == "date")) { ?>
      				</td>
 						<td nowrap class="steelgraulight_shadow" valign="middle">
-							&nbsp;<img src="pictures/forumrot_indikator.gif" align="absmiddle">
+							&nbsp;<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/forumrot_indikator.gif" align="absmiddle">
 							<font size="-1"><?=_("Anmeldedatum")?></font>&nbsp;
 						<? } else { ?>
 						</td>
 						<td nowrap class="steelkante2" valign="middle">
 							&nbsp;
 							<a href="<?=$PHP_SELF?>?view_order=date&cmd=change_view">
-								<img src="pictures/forum_indikator_grau.gif" border="0" align="absmiddle">
+								<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/forum_indikator_grau.gif" border="0" align="absmiddle">
 								<font size="-1" color="#555555"><?=_("Anmeldedatum")?></font>
 							</a>
 							&nbsp;
@@ -574,20 +672,20 @@ if ($perm->have_perm("dozent")) {
 						<? if (isset($indikator) && ($indikator == "active")) { ?>
      				</td>
 						<td nowrap class="steelgraulight_shadow" valign="middle">
-							&nbsp;<img src="pictures/forumrot_indikator.gif" align="absmiddle">
+							&nbsp;<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/forumrot_indikator.gif" align="absmiddle">
 							<font size="-1"><?=_("Aktivität")?></font>&nbsp;
 						<? } else { ?>
 						</td>
 						<td nowrap class="steelkante2" valign="middle">
 							&nbsp;
 							<a href="<?=$PHP_SELF?>?view_order=active&cmd=change_view">
-								<img src="pictures/forum_indikator_grau.gif" border="0" align="absmiddle">
+								<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/forum_indikator_grau.gif" border="0" align="absmiddle">
 								<font size="-1" color="#555555"><?=_("Aktivität")?></font>
 							</a>
 							&nbsp;
 						<? } ?>
 						</td>
-						<td><img src="pictures/balken.jpg"></td>
+						<td><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/balken.jpg"></td>
 					<tr>
 				</table>
 			</form>
@@ -668,7 +766,7 @@ while (list ($key, $val) = each ($gruppe)) {
 		$tbl3 = "S";
 	}
 
-	$db->query ("SELECT $tbl.mkdate, comment, $tbl.user_id, ". $_fullname_sql['full'] ." AS fullname,
+	$db->query ("SELECT $tbl.visible, $tbl.mkdate, comment, $tbl.user_id, ". $_fullname_sql['full'] ." AS fullname,
 				username, status, count(topic_id) AS doll,  studiengaenge.name, ".$tbl.".".$tbl2."studiengang_id
 				AS studiengang_id 
 				FROM $tbl LEFT JOIN px_topics USING (user_id,".$tbl3."eminar_id)
@@ -676,7 +774,7 @@ while (list ($key, $val) = each ($gruppe)) {
 				LEFT JOIN user_info ON (auth_user_md5.user_id=user_info.user_id)
 				LEFT JOIN studiengaenge ON (".$tbl.".".$tbl2."studiengang_id = studiengaenge.studiengang_id)
 				WHERE ".$tbl.".".$tbl3."eminar_id = '$SessionSeminar' 
-				AND status = '$key' GROUP by ".$tbl.".user_id $sort");
+				AND status = '$key'$visio GROUP by ".$tbl.".user_id $sort");
 
 	if ($db->num_rows()) { //Only if Users were found...
 	// die eigentliche Teil-Tabelle
@@ -695,12 +793,12 @@ while (list ($key, $val) = each ($gruppe)) {
 			$tooltiptxt = _("Alle Informationsfelder aufklappen");
 		}
 		print "<a href=\"$PHP_SELF?cmd=allinfos&area=show_$key\">";
-		print "<img src=\"pictures/$image\" border=\"0\" ".tooltip($tooltiptxt)."></a>";
+		print "<img src=\"".$GLOBALS['ASSETS_URL']."images/$image\" border=\"0\" ".tooltip($tooltiptxt)."></a>";
 	} else {
 		print "&nbsp; ";
 	}
 	print "</td>";
-	printf("<td class=\"steel\" width=\"29%%\" align=\"left\"><img src=\"pictures/blank.gif\" width=\"1\" height=\"20\"><font size=\"-1\"><b>%s</b></font></td>", $val);
+	printf("<td class=\"steel\" width=\"29%%\" align=\"left\"><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" width=\"1\" height=\"20\"><font size=\"-1\"><b>%s</b></font></td>", $val);
 	if ($key != "dozent" && $rechte) {
 		printf("<td class=\"steel\" width=\"1%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>%s</b></font></td>", _("Anmeldedatum"));
 	} else if ($key == "dozent" && $rechte) {
@@ -765,7 +863,12 @@ while (list ($key, $val) = each ($gruppe)) {
 
 	echo "</tr>";
 	$c=1;
+	$i_see_everybody = $perm->have_studip_perm('dozent', $SessSemName[1]);
+
 	while ($db->next_record()) {
+		if (($db->Record['user_id'] == $user->id) && ($db->f('visible') != 'yes')) {
+			$db->Record['fullname'] .= ' ('._("unsichtbar").')';
+		}
 
 	if ($c % 2) {   // switcher fuer die Klassen
 		$class="steel1";
@@ -824,7 +927,7 @@ while (list ($key, $val) = each ($gruppe)) {
 	echo "<tr>";
 	if ($showscore == TRUE) {
 		printf("<td bgcolor=\"#%s%s%s\" class=\"%s\">", $red, $green,$blue, $class2);
-		printf("<img src=\"pictures/blank.gif\" %s width=\"10\" heigth=\"10\"></td>", tooltip(_("Aktivität: ").round($aktivity_index_user)."%"));
+		printf("<img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" %s width=\"10\" heigth=\"10\"></td>", tooltip(_("Aktivität: ").round($aktivity_index_user)."%"));
 	}
 
 	if ($rechte) {
@@ -836,18 +939,25 @@ while (list ($key, $val) = each ($gruppe)) {
 			$img = "forumgrau.gif";
 		}
 	}
-
-	$anker = "<A name=\"".$db->f("username")."\">";
+	if ($i_see_everybody) {
+		$anker = "<A name=\"".$db->f("username")."\">";
+	} else {
+		$anker = '';
+	}
 	printf ("<td class=\"%s\" nowrap>%s<font size=\"-1\">&nbsp;%s.</td>", $class, $anker, $c);
 	printf ("<td class=\"%s\">", $class);
 	if ($rechte) {
-		printf ("<A href=\"%s\"><img src=\"pictures/%s\" border=\"0\"", $link, $img);
+		printf ("<A href=\"%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/%s\" border=\"0\"", $link, $img);
 		echo tooltip(sprintf(_("Weitere Informationen über %s"), $db->f("username")));
 		echo ">&nbsp;</A>";
 	}
+	if ($db->f('visible') == 'yes' || $i_see_everybody || $db->f('user_id') == $user->id) {
+		printf ("<font size=\"-1\"><a href = about.php?username=%s>", $db->f("username"));
+		echo htmlReady($db->f("fullname")) ."</a></font></td>";
+	} else {
+		echo '<font size="-1" color="#666666">(unsichtbareR NutzerIn)</font>';
+	}
 
-	printf ("<font size=\"-1\"><a href = about.php?username=%s>", $db->f("username"));
-	echo htmlReady($db->f("fullname")) ."</a></font></td>";
 	if ($key != "dozent" && $rechte) {
 		if ($db->f("mkdate")) {
 			echo "<td class=\"$class\" align=\"center\"><font size=\"-1\">".date("d.m.y,",$db->f("mkdate"))."&nbsp;".date("H:i:s",$db->f("mkdate"))."</font></td>";
@@ -861,11 +971,13 @@ while (list ($key, $val) = each ($gruppe)) {
 	echo "<td class=\"$class\" align=\"center\"><font size=\"-1\">".$Dokumente."</font></td>";
 
 	echo "<td class=\"$class\" align=\"center\">";
-	if ($GLOBALS['CHAT_ENABLE']){
-		echo chat_get_online_icon($db->f("user_id"),$db->f("username"),$SessSemName[1]) . "&nbsp;";
-	}
+	if ($db->f('visible') == 'yes' || $i_see_everybody) {
+		if ($GLOBALS['CHAT_ENABLE']){
+			echo chat_get_online_icon($db->f("user_id"),$db->f("username"),$SessSemName[1]) . "&nbsp;";
+		}
 
-	printf ("<a href=\"sms_send.php?sms_source_page=teilnehmer.php&rec_uname=%s\"><img src=\"pictures/nachricht1.gif\" %s border=\"0\"></a>", $db->f("username"), tooltip(_("Nachricht an User verschicken")));
+		printf ("<a href=\"sms_send.php?sms_source_page=teilnehmer.php&rec_uname=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" %s border=\"0\"></a>", $db->f("username"), tooltip(_("Nachricht an User verschicken")));
+	}
 
 	echo "</td>";
 
@@ -877,7 +989,7 @@ while (list ($key, $val) = each ($gruppe)) {
 		if ($key == "tutor" AND $SemUserStatus!="tutor") {
 			echo "<td class=\"$class\">&nbsp</td>";
 			echo "<td class=\"$class\" align=\"center\">";
-			echo "<a href=\"$PHP_SELF?cmd=pain&username=$username&studipticket=$studipticket\"><img border=\"0\" src=\"pictures/down.gif\" width=\"21\" height=\"16\"></a></td>";
+			echo "<a href=\"$PHP_SELF?cmd=pain&username=$username&studipticket=$studipticket\"><img border=\"0\" src=\"".$GLOBALS['ASSETS_URL']."images/down.gif\" width=\"21\" height=\"16\"></a></td>";
 		}
 
 		elseif ($key == "autor") {
@@ -889,12 +1001,12 @@ while (list ($key, $val) = each ($gruppe)) {
 					$db2->query ("SELECT user_id FROM auth_user_md5  WHERE perms IN ('tutor', 'dozent') AND user_id = '$UID' ");
 				if ($db2->next_record()) {
 					echo "<td class=\"$class\" align=\"center\">";
-					echo "<a href=\"$PHP_SELF?cmd=pleasure&username=$username&studipticket=$studipticket\"><img border=\"0\" src=\"pictures/up.gif\" width=\"21\" height=\"16\"></a></td>";
+					echo "<a href=\"$PHP_SELF?cmd=pleasure&username=$username&studipticket=$studipticket\"><img border=\"0\" src=\"".$GLOBALS['ASSETS_URL']."images/up.gif\" width=\"21\" height=\"16\"></a></td>";
 				} else echo "<td class=\"$class\" >&nbsp;</td>";
 			} else echo "<td class=\"$class\">&nbsp;</td>";
 			// Schreibrecht entziehen
 			echo "<td class=\"$class\" align=\"center\">";
-			echo "<a href=\"$PHP_SELF?cmd=lesen&username=$username&studipticket=$studipticket\"><img border=\"0\" src=\"pictures/down.gif\" width=\"21\" height=\"16\"></a></td>";
+			echo "<a href=\"$PHP_SELF?cmd=lesen&username=$username&studipticket=$studipticket\"><img border=\"0\" src=\"".$GLOBALS['ASSETS_URL']."images/down.gif\" width=\"21\" height=\"16\"></a></td>";
 		}
 
 		// Schreibrecht erteilen
@@ -902,19 +1014,19 @@ while (list ($key, $val) = each ($gruppe)) {
 			$db2->query ("SELECT perms, user_id FROM auth_user_md5 WHERE user_id = '$UID' AND perms != 'user'");
 			if ($db2->next_record()) { // Leute, die sich nicht zurueckgemeldet haben duerfen auch nicht schreiben!
 				echo "<td class=\"$class\" align=\"center\">";
-				echo "<a href=\"$PHP_SELF?cmd=schreiben&username=$username&studipticket=$studipticket\"><img border=\"0\" src=\"pictures/up.gif\" width=\"21\" height=\"16\"></a></td>";
+				echo "<a href=\"$PHP_SELF?cmd=schreiben&username=$username&studipticket=$studipticket\"><img border=\"0\" src=\"".$GLOBALS['ASSETS_URL']."images/up.gif\" width=\"21\" height=\"16\"></a></td>";
 			} else echo "<td class=\"$class\">&nbsp;</td>";
 			// aus dem Seminar werfen
 			echo "<td class=\"$class\" align=\"center\">";
-			echo "<a href=\"$PHP_SELF?cmd=raus&username=$username&studipticket=$studipticket\"><img border=\"0\" src=\"pictures/down.gif\" width=\"21\" height=\"16\"></a></td>";
+			echo "<a href=\"$PHP_SELF?cmd=raus&username=$username&studipticket=$studipticket\"><img border=\"0\" src=\"".$GLOBALS['ASSETS_URL']."images/down.gif\" width=\"21\" height=\"16\"></a></td>";
 		}
 
 		elseif ($key == "accepted") { // temporarily accepted students
 			// forward to autor
-			printf ("<td width=\"15%%\" align=\"center\" class=\"%s\"><a href=\"$PHP_SELF?cmd=admission_rein&username=%s&accepted=1&studipticket=$studipticket\"><img border=\"0\" src=\"pictures/up.gif\" width=\"21\" height=\"16\"></a></td>", $class, $username);
+			printf ("<td width=\"15%%\" align=\"center\" class=\"%s\"><a href=\"$PHP_SELF?cmd=admission_rein&username=%s&accepted=1&studipticket=$studipticket\"><img border=\"0\" src=\"".$GLOBALS['ASSETS_URL']."images/up.gif\" width=\"21\" height=\"16\"></a></td>", $class, $username);
 			// kick
 			echo "<td class=\"$class\" align=\"center\">";
-			echo "<a href=\"$PHP_SELF?cmd=admission_raus&username=$username&accepted=1&studipticket=$studipticket\"><img border=\"0\" src=\"pictures/down.gif\" width=\"21\" height=\"16\"></a></td>";
+			echo "<a href=\"$PHP_SELF?cmd=admission_raus&username=$username&accepted=1&studipticket=$studipticket\"><img border=\"0\" src=\"".$GLOBALS['ASSETS_URL']."images/down.gif\" width=\"21\" height=\"16\"></a></td>";
 		}
 
 		else { // hier sind wir bei den Dozenten
@@ -987,15 +1099,16 @@ echo "</table>\n";
 echo "</td></tr>\n";  // Auflistung zuende
 
 // Warteliste
+$awaiting = false;
 if ($rechte) {
 	$db->query ("SELECT admission_seminar_user.user_id, " . $_fullname_sql['full'] . " AS fullname , username, studiengaenge.name, position, admission_seminar_user.studiengang_id, status FROM admission_seminar_user LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) LEFT JOIN studiengaenge ON (admission_seminar_user.studiengang_id=studiengaenge.studiengang_id)  WHERE admission_seminar_user.seminar_id = '$SessionSeminar' AND admission_seminar_user.status != 'accepted' ORDER BY position, name");
 	if ($db->num_rows()) { //Only if Users were found...
-
+		$awaiting = true;
 		// die eigentliche Teil-Tabelle
 		echo "<tr><td class=\"blank\" colspan=\"2\">";
 		echo "<table width=\"99%\" border=\"0\"  cellpadding=\"2\" cellspacing=\"0\" align=\"center\">";
 		echo "<tr height=\"28\">";
-		printf ("<td class=\"steel\" width=\"%s%%\" align=\"left\"><img src=\"pictures/blank.gif\" width=\"1\" height=\"20\"><font size=\"-1\"><b>%s</b></font></td>", ($db3->f("admission_type") == 1 && $db3->f("admission_selection_take_place") !=1) ? "40" : "30",  ($db3->f("admission_type") == 2 || $db3->f("admission_selection_take_place")==1) ? _("Warteliste") : _("Anmeldeliste"));
+		printf ("<td class=\"steel\" width=\"%s%%\" align=\"left\"><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" width=\"1\" height=\"20\"><font size=\"-1\"><b>%s</b></font></td>", ($db3->f("admission_type") == 1 && $db3->f("admission_selection_take_place") !=1) ? "40" : "30",  ($db3->f("admission_type") == 2 || $db3->f("admission_selection_take_place")==1) ? _("Warteliste") : _("Anmeldeliste"));
 		if ($db3->f("admission_type") == 2 || $db3->f("admission_selection_take_place")==1)
 			printf("<td class=\"steel\" width=\"10%%\" align=\"center\"><font size=\"-1\"><b>%s</b></font></td>", _("Position"));
 		printf("<td class=\"steel\" width=\"10%%\" align=\"center\">&nbsp; </td>");
@@ -1026,10 +1139,10 @@ if ($rechte) {
 				printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><font size=\"-1\">%s</font></td>", $cssSw->getClass(), $db->f("position"));
 			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\">&nbsp; </td>", $cssSw->getClass());
 
-			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><a href=\"sms_send.php?sms_source_page=teilnehmer.php&rec_uname=%s\"><img src=\"pictures/nachricht1.gif\" %s border=\"0\"></a></td>",$cssSw->getClass(), $db->f("username"), tooltip(_("Nachricht an User verschicken")));
+			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><a href=\"sms_send.php?sms_source_page=teilnehmer.php&rec_uname=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" %s border=\"0\"></a></td>",$cssSw->getClass(), $db->f("username"), tooltip(_("Nachricht an User verschicken")));
 
-			printf ("<td width=\"15%%\" align=\"center\" class=\"%s\"><a href=\"$PHP_SELF?cmd=admission_rein&username=%s&studipticket=$studipticket\"><img border=\"0\" src=\"pictures/up.gif\" width=\"21\" height=\"16\"></a></td>", $cssSw->getClass(), $db->f("username"));
-			printf ("<td width=\"15%%\" align=\"center\" class=\"%s\"><a href=\"$PHP_SELF?cmd=admission_raus&username=%s&studipticket=$studipticket\"><img border=\"0\" src=\"pictures/down.gif\" width=\"21\" height=\"16\"></a></td>", $cssSw->getClass(), $db->f("username"));
+			printf ("<td width=\"15%%\" align=\"center\" class=\"%s\"><a href=\"$PHP_SELF?cmd=admission_rein&username=%s&studipticket=$studipticket\"><img border=\"0\" src=\"".$GLOBALS['ASSETS_URL']."images/up.gif\" width=\"21\" height=\"16\"></a></td>", $cssSw->getClass(), $db->f("username"));
+			printf ("<td width=\"15%%\" align=\"center\" class=\"%s\"><a href=\"$PHP_SELF?cmd=admission_raus&username=%s&studipticket=$studipticket\"><img border=\"0\" src=\"".$GLOBALS['ASSETS_URL']."images/down.gif\" width=\"21\" height=\"16\"></a></td>", $cssSw->getClass(), $db->f("username"));
 			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><font size=\"-1\">%s</font></td></tr>\n", $cssSw->getClass(), ($db->f("studiengang_id") == "all") ? _("alle Studieng&auml;nge") : $db->f("name"));
 		}
 		print "</table>";
@@ -1135,15 +1248,15 @@ if ($rechte) {
 	echo "<tr>\n<td class=\"blank\" colspan=\"2\">&nbsp;</td></tr>\n";
 	echo "<tr><td class=\"blank\" colspan=\"2\">\n";
 	echo "<form action=\"$PHP_SELF\" method=\"post\">\n";
-	echo "<input type=\"hidden\" name=\"cmd\" value=\"csv\">\n";
 	echo "<input type=\"hidden\" name=\"studipticket\" value=\"$studipticket\">\n";
+	echo "<input type=\"hidden\" name=\"cmd\" value=\"csv\">\n";
 	echo "<table width=\"99%\" border=\"0\" cellpadding=\"2\" cellspacing=\"0\" border=\"0\" ";
 	echo "align=\"center\">\n";
 	if (!sizeof($csv_mult_founds)) {
 		echo "<tr><td width=\"40%\" class=\"steel1\">\n<div style=\"font-size: small; margin-left:6px; width:250px;\">";
 		echo '<b>' . _("Teilnehmerliste übernehmen") . '</b><br>';
 		echo _("In das nebenstehende Textfeld können Sie eine Liste mit Namen von NutzerInnen eingeben, die in die Veranstaltung aufgenommen werden sollen.");
-		echo '<br />' . _("Geben Sie in jede Zeile den Nachnamen und (optional) den Vornamen getrennt durch ein Komma oder ein Tabulatorzeichen ein."); 
+		echo '<br />' . _("Geben Sie in jede Zeile den Nachnamen und (optional) den Vornamen getrennt durch ein Komma oder ein Tabulatorzeichen ein.");
 		echo '<br>' . _("Eingabeformat: <b>Nachname, Vorname &crarr;<b>");
 		echo "</div></td>\n";
 		echo "<td width=\"40%\" class=\"steel1\">";
@@ -1188,7 +1301,7 @@ if ($rechte) {
 			echo "<a href=\"$PHP_SELF\"><img border=\"0\" ";
 			echo makeButton('abbrechen', 'src') . '></a>';
 			echo "&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </td></tr>\n";
-		
+
 		if (sizeof($csv_not_found)) {
 			echo "<tr><td width=\"40%\" class=\"steel1\">\n<div style=\"font-size: small; margin-left:8px; width:250px;\">";
 			echo '<b>' . _("Nicht gefundene NutzerInnen") . '</b><br>';
@@ -1204,14 +1317,16 @@ if ($rechte) {
 	}
 
 	echo "</table>\n</form>";
-	
+
 	if (($EXPORT_ENABLE) AND ($perm->have_studip_perm("tutor", $SessSemName[1]))) {
 		include_once($ABSOLUTE_PATH_STUDIP . $PATH_EXPORT . "/export_linking_func.inc.php");
 //			echo "<table width=\"99%\"><tr><td colspan=$colspan align=right class=\"steel1\"><br>" . export_button($SessSemName[1], "person", $SessSemName[0], "html", "html-teiln") . "</td></tr></table>";
-		echo "<br><b>&nbsp;<font size=\"-1\">" . export_link($SessSemName[1], "person", $SessSemName[0], "rtf", "rtf-teiln") . "</font></b>";
+		echo "<br><b>&nbsp;<font size=\"-1\">" . export_link($SessSemName[1], "person", $SessSemName[0], "rtf", "rtf-teiln", "", _("TeilnehmerInnen exportieren")) . "</font></b>";
+		if ($awaiting) echo "<br><b>&nbsp;<font size=\"-1\">" . export_link($SessSemName[1], "person", $SessSemName[0], "rtf", "rtf-warteliste","awaiting",_("Anmeldeliste exportieren")) . "</font></b>";
+
 	}
 
-	
+
 	?>
 	<tr>
 		<td class="blank" colspan="2">&nbsp;
@@ -1219,8 +1334,8 @@ if ($rechte) {
 	</tr>
 	<?
 } // end insert autor
-		
-		
+
+
 echo "</td></tr></table>";
 
 // Save data back to database.

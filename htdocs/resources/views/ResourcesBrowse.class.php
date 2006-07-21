@@ -1,9 +1,9 @@
 <?php
 /**
 * ResourcesBrowse.class.php
-* 
+*
 * search egine for resources
-* 
+*
 *
 * @author		Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
 * @version		$Id$
@@ -50,18 +50,18 @@ class ResourcesBrowse {
 	var $db2;
 	var $db3;
 	var $cssSw;			//the cssClassSwitcher
-	
+
 	function ResourcesBrowse() {
 		$this->db = new DB_Seminar();
 		$this->db2 = new DB_Seminar();
 		$this->db3 = new DB_Seminar();
 		$this->cssSw = new cssClassSwitcher();
 		$this->list = new ShowList;
-		
+
 		$this->list->setRecurseLevels(0);
 		$this->list->setViewHiearchyLevels(FALSE);
 	}
-	
+
 	function setStartLevel($resource_id) {
 		$this->start_object = $resource_id;
 	}
@@ -75,19 +75,19 @@ class ResourcesBrowse {
 		if (!$this->mode)
 			$this->mode="browse";
 	}
-	
+
 	function setCheckAssigns($value) {
 		$this->check_assigns=$value;
 	}
-	
+
 	function setSearchOnlyRooms($value){
 		$this->search_only_rooms = $this->list->show_only_rooms = $value;
 	}
-	
+
 	function setSearchArray($array) {
 		$this->searchArray=$array;
 	}
-	
+
 	//private
 	function searchForm() {
 		?>
@@ -110,7 +110,7 @@ class ResourcesBrowse {
 		</tr>
 		<?
 	}
-	
+
 	//private
 	function getHistory($id, $view = FALSE) {
 		global $PHP_SELF, $UNI_URL, $UNI_NAME_CLEAN, $view, $view_mode;
@@ -132,7 +132,7 @@ class ResourcesBrowse {
 
 		if (is_array($result_arr))
 			switch (ResourceObject::getOwnerType($result_arr[count($result_arr)-1]["owner_id"])) {
-				case "global": 
+				case "global":
 					$top_level_name = $UNI_NAME_CLEAN;
 				break;
 				case "sem":
@@ -157,18 +157,18 @@ class ResourcesBrowse {
 			}
 		return $result;
 	}
-	
+
 	//private
 	function showTimeRange() {
 		$colspan = $this->mode == 'browse' ? ' colspan="2" ' : '';
-		?>	
+		?>
 		<tr>
 			<td <? $this->cssSw->switchClass(); echo $this->cssSw->getFullClass() ?> <?=$colspan?> >
 				<font size="-1"><?=_("gefundene Ressourcen sollen zu folgender Zeit <u>nicht</u> belegt sein:")?></font>
 			<br />
 			</td>
 		</tr>
-		<tr>	
+		<tr>
 			<td <? $this->cssSw->switchClass(); echo $this->cssSw->getFullClass() ?> <?=$colspan?> >
 			<font size="-1">
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -186,12 +186,12 @@ class ResourcesBrowse {
 		</tr>
 		<?
 	}
-	
+
 	//private
 	function showProperties() {
 		global $PHP_SELF;
 
-		?>	
+		?>
 		<tr>
 			<td <? $this->cssSw->switchClass(); echo $this->cssSw->getFullClass() ?> >
 				<font size="-1"><?=_("folgende Eigenschaften soll die Ressource besitzen (leer bedeutet egal):")?></font>
@@ -200,20 +200,20 @@ class ResourcesBrowse {
 		</tr>
 		<tr>
 			<td <? $this->cssSw->switchClass(); echo $this->cssSw->getFullClass() ?> >
-				<table width="90%" cellpadding=5 cellspacing=0 border=0 align="center">			
+				<table width="90%" cellpadding=5 cellspacing=0 border=0 align="center">
 					<?
 					$query = sprintf("SELECT category_id, name FROM resources_categories ORDER BY name");
 					$this->db->query($query);
 					$k=0;
 					while ($this->db->next_record()) {
-						$query = sprintf("SELECT resources_properties.property_id, name, type, options 
-										FROM resources_categories_properties LEFT JOIN resources_properties 
-										USING (property_id) WHERE category_id = '%s' 
+						$query = sprintf("SELECT resources_properties.property_id, name, type, options
+										FROM resources_categories_properties LEFT JOIN resources_properties
+										USING (property_id) WHERE category_id = '%s'
 										%s ORDER BY name ", $this->db->f("category_id"),
 										(get_config('RESOURCES_SEARCH_ONLY_REQUESTABLE_PROPERTY') ? " AND requestable=1 ": ""));
 						$this->db2->query($query);
 						if ($this->db2->num_rows()){
-						
+
 							print "<tr>\n";
 							print "<td colspan=\"2\"> \n";
 							if ($k)
@@ -267,36 +267,36 @@ class ResourcesBrowse {
 				</table>
 			</td>
 		</tr>
-		<?	
+		<?
 	}
-	
+
 	//private
 	function browseLevels() {
 		global $PHP_SELF, $view_mode;
-		
+
 		if ($this->open_object) {
 			$query = sprintf ("SELECT a.resource_id, a.name, a.description FROM resources_objects a LEFT JOIN resources_objects b ON (b.parent_id = a.resource_id)  WHERE a.parent_id = '%s' AND (a.category_id IS NULL OR b.resource_id IS NOT NULL) GROUP BY resource_id ORDER BY name", $this->open_object);
 			$query2 = sprintf ("SELECT parent_id FROM resources_objects WHERE resource_id = '%s' ", $this->open_object);
-			
-			$this->db2->query($query2);			
+
+			$this->db2->query($query2);
 			$this->db2->next_record();
 			if ($this->db2->f("parent_id") != "0")
 				$way_back=$this->db2->f("parent_id");
 		} else {
 			$resRoots=new ResourcesUserRoots($range_id);
-	
+
 			$roots=$resRoots->getRoots();
-			if (is_array($roots)) 
+			if (is_array($roots))
 				$clause = "AND resource_id  IN('" . join("','",$roots) . "')";
 			else
 				$clause = "AND 1=2";
-	
+
 			$query = sprintf ("SELECT resource_id, name, description FROM resources_objects WHERE 1 %s ORDER BY name", $clause);
 			$way_back=-1;
 		}
 
 		$this->db->query($query);
-		
+
 		//check for sublevels in current level
 		$sublevels = FALSE;
 		while ($this->db->next_record()) {
@@ -307,7 +307,7 @@ class ResourcesBrowse {
 		}
 		if ($sublevels)
 			$this->db->seek(0);
-		
+
 		?>
 		<tr>
 			<td <? $this->cssSw->switchClass(); echo $this->cssSw->getFullClass() ?>>
@@ -318,8 +318,8 @@ class ResourcesBrowse {
 			<td <? echo $this->cssSw->getFullClass() ?>width="15%" align="right" nowrap valign="top">
 				<?
 				if ($way_back>=0) {
-					printf ("<a href = \"%s?quick_view=search&quick_view_mode=%s&%s\">", $PHP_SELF, $view_mode, (!$way_back) ? "reset=TRUE" : "open_level=$way_back"); 
-					print ("<img align=\"absmiddle\" src=\"./pictures/move_left.gif\" border=\"0\" />&nbsp; <font size=\"-1\">"._("eine Ebene zur&uuml;ck")."</font></a>");
+					printf ("<a href = \"%s?quick_view=search&quick_view_mode=%s&%s\">", $PHP_SELF, $view_mode, (!$way_back) ? "reset=TRUE" : "open_level=$way_back");
+					print ("<img align=\"absmiddle\" src=\"".$GLOBALS['ASSETS_URL']."images/move_left.gif\" border=\"0\" />&nbsp; <font size=\"-1\">"._("eine Ebene zur&uuml;ck")."</font></a>");
 				}
 				?>
 			</td>
@@ -328,7 +328,7 @@ class ResourcesBrowse {
 			<td <? $this->cssSw->switchClass(); echo $this->cssSw->getFullClass() ?> align="left" colspan="2">
 				<?
 				if ((!$this->db->num_rows()) || (!$sublevels)) {
-					echo "<br /><font size=-1><img align=\"absmiddle\" src=\"./pictures/ausruf_small2.gif\" />&nbsp; <b>"._("Auf dieser Ebene existieren keine weiteren Unterebenen")."</b><br />&nbsp; </font>";
+					echo "<br /><font size=-1><img align=\"absmiddle\" src=\"".$GLOBALS['ASSETS_URL']."images/ausruf_small2.gif\" />&nbsp; <b>"._("Auf dieser Ebene existieren keine weiteren Unterebenen")."</b><br />&nbsp; </font>";
 				} else {
 				?>
 				<table width="90%" cellpadding=5 cellspacing=0 border=0 align="center">
@@ -355,10 +355,10 @@ class ResourcesBrowse {
 			<td <? $this->cssSw->switchClass(); echo $this->cssSw->getFullClass() ?> align="left" colspan="2">
 				<font size="-1"><?=_("Ressourcen auf dieser Ebene:")?></font>
 			</td>
-		</tr>		
-		<? 
+		</tr>
+		<?
 	}
-	
+
 	//private
 	function showList() {
 		?>
@@ -369,11 +369,11 @@ class ResourcesBrowse {
 			?>
 				<font size=-1><b><?=_("Es existieren keine Eintr&auml;ge auf dieser Ebene.")?></b></font>
 			</td>
-		</tr>		
+		</tr>
 			<?
 		}
 }
-	
+
 	//private
 	function showSearchList($check_assigns = FALSE) {
 		?>
@@ -384,11 +384,11 @@ class ResourcesBrowse {
 			?>
 				<font size=-1><b><?=_("Es wurden keine Eintr&auml;ge zu Ihren Suchkriterien gefunden.")?></b></font>
 			</td>
-		</tr>		
+		</tr>
 			<?
 		}
 	}
-	
+
 	//private
 	function showSearch() {
 		global $view_mode, $resources_data;
@@ -416,5 +416,5 @@ class ResourcesBrowse {
 			</table>
 			<br />
 		<?
-	}	
+	}
 }

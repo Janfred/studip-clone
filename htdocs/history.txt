@@ -6,7 +6,7 @@ __22.02.2006 v 1.3.0__
 - neuer Dateiupload für mehrere Dateien per ZIP
 - grafische Evaluationsauswertung
 - neue Plugin-Schnittstelle
-- Loggingfunktionen für wichtige Systembereiche
+- Logginfunktionen für wichtige Systembereiche
 - Teilnehmer können aus Listen in Veranstaltungen importiert werden
 - Wartungsmodus
 - Diese history.txt wird nun formatiert ausgegeben ;-)

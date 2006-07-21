@@ -3,8 +3,8 @@
 // This file is part of Stud.IP
 // StudipSemTreeView.class.php
 // Class to print out the seminar tree
-// 
-// Copyright (c) 2003 André Noack <noack@data-quest.de> 
+//
+// Copyright (c) 2003 André Noack <noack@data-quest.de>
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -33,7 +33,7 @@ require_once($ABSOLUTE_PATH_STUDIP . "config.inc.php");
 * @access	public
 * @author	André Noack <noack@data-quest.de>
 * @version	$Id$
-* @package	
+* @package
 */
 class StudipSemTreeView extends TreeView {
 
@@ -49,9 +49,9 @@ class StudipSemTreeView extends TreeView {
 		if ($sem_number){
 			$args = array('sem_number' => $sem_number);
 		}
-		parent::TreeView("StudipSemTree", $args); //calling the baseclass constructor 
+		parent::TreeView("StudipSemTree", $args); //calling the baseclass constructor
 	}
-	
+
 	/**
 	* manages the session variables used for the open/close thing
 	*
@@ -59,7 +59,7 @@ class StudipSemTreeView extends TreeView {
 	*/
 	function handleOpenRanges(){
 		global $_REQUEST;
-		
+
 		$this->open_ranges[$this->start_item_id] = true;
 		if ($_REQUEST['close_item'] || $_REQUEST['open_item']){
 			$toggle_item = ($_REQUEST['close_item']) ? $_REQUEST['close_item'] : $_REQUEST['open_item'];
@@ -68,7 +68,7 @@ class StudipSemTreeView extends TreeView {
 			} else {
 				unset($this->open_items[$toggle_item]);
 			}
-			
+
 			if($this->tree->hasKids($_REQUEST['open_item'])){
 				$this->start_item_id = $_REQUEST['open_item'];
 				$this->open_ranges = null;
@@ -76,40 +76,40 @@ class StudipSemTreeView extends TreeView {
 				$this->open_items[$_REQUEST['open_item']] = true;
 				$this->open_ranges[$_REQUEST['open_item']] = true;
 			}
-			
+
 			$this->anchor = $toggle_item;
 		}
-		
+
 		if ($this->start_item_id == "root"){
 			$this->open_ranges = null;
 			$this->open_ranges[$this->start_item_id] = true;
 		}
 	}
-	
+
 	function showSemTree(){
 		echo "\n<table width=\"99%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">";
 		if ($this->start_item_id != 'root'){
-			echo "\n<tr><td class=\"printhead\" align=\"left\" valign=\"top\">" . $this->getSemPath() 
-			. "<img src=\"pictures/forumleer.gif\"  border=\"0\" height=\"20\" width=\"1\"></td></tr>";
+			echo "\n<tr><td class=\"printhead\" align=\"left\" valign=\"top\">" . $this->getSemPath()
+			. "<img src=\"".$GLOBALS['ASSETS_URL']."images/forumleer.gif\"  border=\"0\" height=\"20\" width=\"1\"></td></tr>";
 		}
 		echo "\n<tr><td class=\"blank\"  align=\"left\" valign=\"top\">";
 		$this->showTree($this->start_item_id);
 		echo "\n</td></tr></table>";
 	}
-	
+
 	function getSemPath(){
 		//$ret = "<a href=\"" . parent::getSelf("start_item_id=root") . "\">" .htmlReady($this->tree->root_name) . "</a>";
 		if ($parents = $this->tree->getParents($this->start_item_id)){
 			for($i = count($parents)-1; $i >= 0; --$i){
-				$ret .= " &gt; <a class=\"tree\" href=\"" . $this->getSelf("start_item_id={$parents[$i]}&open_item={$parents[$i]}",false) 
+				$ret .= " &gt; <a class=\"tree\" href=\"" . $this->getSelf("start_item_id={$parents[$i]}&open_item={$parents[$i]}",false)
 					. "\">" .htmlReady($this->tree->tree_data[$parents[$i]]["name"]) . "</a>";
 			}
 		}
 		return $ret;
 	}
-			
+
 	/**
-	* returns html for the icons in front of the name of the item 
+	* returns html for the icons in front of the name of the item
 	*
 	* @access	private
 	* @param	string	$item_id
@@ -120,25 +120,25 @@ class StudipSemTreeView extends TreeView {
 		$head .= "<a href=\"";
 		$head .= ($this->open_items[$item_id])? $this->getSelf("close_item={$item_id}") . "\"" . tooltip(_("Dieses Element schließen"),true) . ">"
 											: $this->getSelf("open_item={$item_id}") . "\"" . tooltip(_("Dieses Element öffnen"),true) . ">";
-		$head .= "<img src=\"pictures/";
+		$head .= "<img src=\"".$GLOBALS['ASSETS_URL']."images/";
 		$head .= ($this->open_items[$item_id]) ? "forumrotrunt.gif" : "forumgrau.gif";
 		$head .= "\" border=\"0\" align=\"baseline\" hspace=\"2\">";
-		$head .= (!$this->open_items[$item_id]) ? "<img  src=\"pictures/forumleer.gif\" width=\"5\" border=\"0\">" : ""; 
+		$head .= (!$this->open_items[$item_id]) ? "<img  src=\"".$GLOBALS['ASSETS_URL']."images/forumleer.gif\" width=\"5\" border=\"0\">" : "";
 		$head .= "</a>";
 		if ($this->tree->hasKids($item_id)){
-			$head .= "<img border=\"0\"  src=\"pictures/";
+			$head .= "<img border=\"0\"  src=\"".$GLOBALS['ASSETS_URL']."images/";
 			$head .= ($this->open_ranges[$item_id]) ? "cont_folder3.gif" : "cont_folder.gif";
 			$head .= "\" ";
 			$head .= (!$this->open_ranges[$item_id])? tooltip(_("Alle Unterelement öffnen")) : tooltip(_("Alle Unterelemente schliessen"));
 			$head .= ">";
-		} else { 
-			$head .= "<img src=\"pictures/";
+		} else {
+			$head .= "<img src=\"".$GLOBALS['ASSETS_URL']."images/";
 			$head .= ($this->open_items[$item_id]) ? "cont_folder4.gif" : "cont_folder2.gif";
 			$head .= "\" " . tooltip(_("Dieses Element hat keine Unterelemente")) . "border=\"0\">";
 		}
 	return $head;
 	}
-	
+
 	function getItemContent($item_id){
 		$content = "\n<table width=\"90%\" cellpadding=\"2\" cellspacing=\"0\" align=\"center\" style=\"font-size:10pt\">";
 		if ($item_id == "root"){
@@ -171,7 +171,7 @@ class StudipSemTreeView extends TreeView {
 		$content .= "</table>";
 		return $content;
 	}
-	
+
 	function getSemDetails($sem_data){
 		$content = "";
 		$sem_number = -1;
@@ -186,7 +186,7 @@ class StudipSemTreeView extends TreeView {
 				$sem_name .= " (" . $this->tree->sem_dates[$sem_number]['name'] . " - ";
 				$sem_name .= (($sem_number_end == -1) ? _("unbegrenzt") : $this->tree->sem_dates[$sem_number_end]['name']) . ")";
 			}
-			$content .= "<tr><td class=\"steel1\"><a href=\"details.php?sem_id=". $seminar_id 
+			$content .= "<tr><td class=\"steel1\"><a href=\"details.php?sem_id=". $seminar_id
 			."&send_from_search=true&send_from_search_page=" . rawurlencode($this->getSelf()) . "\">" . htmlReady($sem_name) . "</a>
 			</td><td class=\"steel1\" align=\"right\">(";
 			for ($i = 0; $i < count($data["doz_name"]); ++$i){
@@ -201,7 +201,7 @@ class StudipSemTreeView extends TreeView {
 			}
 			return $content;
 	}
-	
+
 	function getItemHead($item_id){
 		$head = "";
 		$head .= parent::getItemHead($item_id);
@@ -210,7 +210,7 @@ class StudipSemTreeView extends TreeView {
 		}
 		return $head;
 	}
-	
+
 	function getSelf($param = "", $with_start_item = true){
 		if ($param)
 			$url = $GLOBALS['PHP_SELF'] . (($with_start_item) ? "?start_item_id=" . $this->start_item_id . "&" : "?") . $param . "#anchor";

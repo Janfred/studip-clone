@@ -59,7 +59,16 @@ class PluginEngine{
 	* @return a link to the current plugin with the additional $params
 	*/
 	function getLink($plugin, $params=array(), $cmd="show"){
-		$link = "plugins.php?cmd=$cmd&id=" . urlencode($plugin->getPluginid()); 
+		if (is_null($plugin)){
+			return "";
+		}
+		$link = "plugins.php?cmd=$cmd&id=" . urlencode($plugin->getPluginid());
+		if (PluginEngine::getTypeOfPlugin($plugin) == "Homepage"){
+			$requser = $plugin->getRequestedUser();
+			if (is_object($requser)){
+				$params["requesteduser"] = $requser->getUsername();
+			}
+		}
 		// add Params
 		foreach ($params as $paramkey=>$paramval){
 			$link .= "&" . urlencode($paramkey) . "=" . urlencode($paramval);
@@ -93,7 +102,13 @@ class PluginEngine{
 			return "Administration";
 		} else if (is_a($plugin,'AbstractStudIPSystemPlugin') || is_subclass_of($plugin,'AbstractStudIPSystemPlugin')) {
 			return "System";
-		}
+		} else if (is_a($plugin, 'AbstractStudIPHomepagePlugin') || is_subclass_of($plugin, 'AbstractStudIPHomepagePlugin')){
+			return "Homepage";
+		} else if (is_a($plugin, 'AbstractStudIPPortalPlugin') || is_subclass_of($plugin, 'AbstractStudIPPortalPlugin')){
+			return "Portal";
+		} else if (is_a($plugin, 'AbstractStudIPCorePlugin') || is_subclass_of($plugin, 'AbstractStudIPCorePlugin')){
+			return "Core";
+		} 		
 		return UNKNOWN_PLUGINTYPE;
   }
   
@@ -115,7 +130,7 @@ class PluginEngine{
 			global $ABSOLUTE_PATH_STUDIP, $RELATIVE_PATH_RESOURCES, $RELATIVE_PATH_CALENDAR,$RELATIVE_PATH_LEARNINGMODULES,$RELATIVE_PATH_CHAT;
 			require_once($absolutepluginfile);
 		    $plugin =& new $pluginclassname();
-		    $plugin->setEnvironment($env);		    
+		    $plugin->setEnvironment($env);			    	    	    
 		    $plugin->setPluginpath($env->getRelativepackagepath() . "/" . $pluginpath);
 		    $plugin->setBasepluginpath($pluginpath);
 		    return $plugin;
@@ -194,7 +209,46 @@ class PluginEngine{
 			}
 			return $installableplugins;
 		}
+	}	
+	
+	/**
+	 * Saves a value to the global session
+	 *
+	 * @param AbstractStudIPPlugin $plugin - the plugin for which the value should be saved
+	 * @param string $key - a key for the value. has to be unique for the calling plugin
+	 * @param string $value - the value, which should be saved into the session
+	 */
+	function saveToSession($plugin,$key,$value){
+		$_SESSION["PLUGIN_SESSION_SPACE"][get_class($plugin)][$key] =serialize($value);
+	}
+	
+	
+	/**
+	 * Retrieves the value to key from the global plugin session
+	 *
+	 */
+	function getValueFromSession($plugin,$key){
+		return unserialize($_SESSION["PLUGIN_SESSION_SPACE"][get_class($plugin)][$key]);
+	}
+	
+	/**
+	 * for internal use only
+	 *
+	 * @param unknown_type $key
+	 * @return unknown
+	 */
+	function getEngineValueFromSession($key){
+		return unserialize($_SESSION["PLUGIN_SESSION_SPACE"]["PLUGINENGINE"][$key]);		
+	}
+	
+	/**
+	 * for internal use only
+	 *
+	 * @param unknown_type $key
+	 * @param unknown_type $value
+	 */
+	function saveEngineValueToSession($key,$value){
+		$_SESSION["PLUGIN_SESSION_SPACE"]["PLUGINENGINE"][$key] = serialize($value);
 	}
 }
-
 ?>

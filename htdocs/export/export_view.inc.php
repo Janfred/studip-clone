@@ -1,10 +1,10 @@
 <?
 /**
-* Visual presentation of the Export-module. 
+* Visual presentation of the Export-module.
 *
-* This file outputs the export-infobox, forms, messages and errors to the screen. 
+* This file outputs the export-infobox, forms, messages and errors to the screen.
 * The HTML-Design and table-Structure for export-pages are part of this file.
-* It is used for any part of the export-module. If $o_mode is "direct" or "passthrough" 
+* It is used for any part of the export-module. If $o_mode is "direct" or "passthrough"
 * it writes only the xml-stream or the output-file to the screen.
 *
 * @author		Arne Schroeder <schroeder@data.quest.de>
@@ -32,16 +32,16 @@ if (($o_mode != "direct") AND ($o_mode != "passthrough"))
 		</td>
 	</tr>
 	<tr>
-		<td class="blank" colspan="3">&nbsp; 
+		<td class="blank" colspan="3">&nbsp;
 		</td>
 	</tr>
 	<tr valign="top">
      		<td width="1%" class="blank">
-     		&nbsp; 
+     		&nbsp;
      		</td>
      		<td width="90%" class="blank">
 
-			<table>		
+			<table>
 <?
 
 				if (isset($export_error))
@@ -114,7 +114,7 @@ if (($o_mode != "direct") AND ($o_mode != "passthrough"))
 			<?
 			}
 			if (isset($export_weiter_button))
-			{	
+			{
 			?>
 			<br>
 			<br>
@@ -124,13 +124,13 @@ if (($o_mode != "direct") AND ($o_mode != "passthrough"))
 			?>
 		</td>
 		<td width="270" NOWRAP class="blank" align="center" valign="top">
-			<? 
-			print_infobox ($infobox,"pictures/export.jpg");
-			?>		
-		</td>		
+			<?
+			print_infobox ($infobox, "export.jpg");
+			?>
+		</td>
 	</tr>
 	<tr>
-		<td class="blank" colspan="3">&nbsp; 
+		<td class="blank" colspan="3">&nbsp;
 		</td>
 	</tr>
 	</table>

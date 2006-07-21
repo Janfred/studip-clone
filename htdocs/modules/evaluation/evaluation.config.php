@@ -53,7 +53,7 @@ define ("EVAL_PATH_RELATIV", "modules/evaluation/");
 define ("EVAL_PATH", $ABSOLUTE_PATH_STUDIP.EVAL_PATH_RELATIV);
 define ("EVAL_PATH_CLASSES", EVAL_PATH."classes/");
 define ("EVAL_PATH_DBCLASSES", EVAL_PATH_CLASSES."db/");
-define ("PATH_PICTURES", "pictures/");
+define ("PATH_PICTURES", $GLOBALS['ASSETS_URL'] . "images/");
 /* ----------------------------------------------------- end: path constatns */
 
 /* Class constants --------------------------------------------------------- */
@@ -96,7 +96,7 @@ define ("EVAL_LIB_SHOW", EVAL_PATH."evaluation_show.lib.php");
 define ("EVAL_PIC_ICON", PATH_PICTURES."eval-icon.gif");
 define ("EVAL_PIC_PREVIEW", PATH_PICTURES."preview.gif");
 define ("EVAL_PIC_ADMIN", PATH_PICTURES."administration.gif");
-define ("EVAL_PIC_LOGO", PATH_PICTURES."evaluation.jpg");
+define ("EVAL_PIC_LOGO", "evaluation.jpg");
 define ("EVAL_PIC_ARROW", PATH_PICTURES."forumgruen.gif");
 define ("EVAL_PIC_ARROW_ACTIVE", PATH_PICTURES."forumgruenrunt.gif");
 define ("EVAL_PIC_SUCCESS", PATH_PICTURES."ok.gif");

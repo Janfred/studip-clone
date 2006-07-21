@@ -1,8 +1,8 @@
 <?
 /**
 * Export-Subfile that contains the first page of the export-module.
-* 
-* This file shows the first page of the export-module where the type of export and the institute can be chosen. 
+*
+* This file shows the first page of the export-module where the type of export and the institute can be chosen.
 *
 * @author		Arne Schroeder <schroeder@data.quest.de>
 * @version		$Id$
@@ -15,8 +15,8 @@
 // This file is part of Stud.IP
 // export_run_xslt.inc.php
 // Integration of xslt-processor
-// 
-// Copyright (c) 2002 Arne Schroeder <schroeder@data-quest.de> 
+//
+// Copyright (c) 2002 Arne Schroeder <schroeder@data-quest.de>
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -38,7 +38,7 @@ require_once ($ABSOLUTE_PATH_STUDIP . "config.inc.php");   // Stud.IP - Konfigur
 require_once ("$ABSOLUTE_PATH_STUDIP$PATH_EXPORT/export_xslt_vars.inc.php");   // XSLT-Variablen
 require_once ("$ABSOLUTE_PATH_STUDIP/config_tools_semester.inc.php");   // Checken des aktuellen Semesters
 require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/SemesterData.class.php");   // Checken des aktuellen Semesters
-	
+
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
 	$semester = new SemesterData;
@@ -50,21 +50,21 @@ $export_pagename = _("Datenexport - Startseite");
 	$export_pagecontent .= "<form method=\"POST\" action=\"" . $PHP_SELF . "\">";
 
 	$export_pagecontent .="<br><b><font size=\"-1\">". _("Bitte w&auml;hlen Sie eine Einrichtung: ") .  "</font></b><br /><select name=\"range_id\">";
-	
+
 /*	if ($auth->auth['perm'] == "root")
 	{
 		$db->query("SELECT Institut_id, Name, 1 AS is_fak  FROM Institute WHERE Institut_id=fakultaets_id ORDER BY Name");
-	} 
-	elseif ($auth->auth['perm'] == "admin") 
+	}
+	elseif ($auth->auth['perm'] == "admin")
 	{
-		$db->query("SELECT a.Institut_id,Name, IF(b.Institut_id=b.fakultaets_id,1,0) AS is_fak FROM user_inst a LEFT JOIN Institute b USING (Institut_id)  
+		$db->query("SELECT a.Institut_id,Name, IF(b.Institut_id=b.fakultaets_id,1,0) AS is_fak FROM user_inst a LEFT JOIN Institute b USING (Institut_id)
 					WHERE a.user_id='$user->id' AND a.inst_perms='admin' ORDER BY is_fak,Name");
-	} 
-	else 
+	}
+	else
 	{
 		$db->query("SELECT a.Institut_id,Name FROM user_inst a LEFT JOIN Institute b USING (Institut_id) WHERE inst_perms IN('tutor','dozent') AND user_id='$user->id'");
 	}
-		
+
 	$export_pagecontent .= sprintf ("<option value=\"NULL\">-- " . _("bitte Einrichtung ausw&auml;hlen") . " --</option>\n");
 	while ($db->next_record())
 	{
@@ -83,7 +83,7 @@ $export_pagename = _("Datenexport - Startseite");
 	while ($db->next_record())
 	{
 		$export_pagecontent .= "<option style=\"font-weight:bold;\" ";
-		if ($range_id == $db->f("fakultaets_id")) 
+		if ($range_id == $db->f("fakultaets_id"))
 			$export_pagecontent .= " selected";
 		$export_pagecontent .= " value=\"" . $db->f("Institut_id") . "\">" . htmlReady(my_substr($db->f("Name"), 0, 60)) . "</option>";
 		if ($db->f("fakultaets_id") == $db->f("Institut_id"))
@@ -101,26 +101,26 @@ $export_pagename = _("Datenexport - Startseite");
 	if ($perm->have_perm("root"))
 		$export_pagecontent .= "<option style=\"font-weight:bold;\" value=\"root\">Alle Einrichtungen";
 	$export_pagecontent .= "</select><br><br>";
-	
+
 	$export_pagecontent .= "<b><font size=\"-1\">"._("Art der auszugebenden Daten: ") .  "</font></b><br /><select name=\"ex_type\">";
 
 	$export_pagecontent .= "<option";
-	if ($ex_type=="veranstaltung") 
+	if ($ex_type=="veranstaltung")
 		$export_pagecontent .= " selected";
 	$export_pagecontent .= " value=\"veranstaltung\">" . _("Veranstaltungsdaten") .  "</option>";
 
 	$export_pagecontent .= "<option";
-	if ($ex_type=="person") 
+	if ($ex_type=="person")
 		$export_pagecontent .= " selected";
 	$export_pagecontent .= " value=\"person\">" . _("MitarbeiterInnendaten") .  "</option>";
 
 /*	$export_pagecontent .= "<option";
-	if ($ex_type=="forschung") 
+	if ($ex_type=="forschung")
 		$export_pagecontent .= " selected";
 	$export_pagecontent .= " value=\"forschung\">" . _("Forschungsberichte") .  "</option>";/**/
 
 	$export_pagecontent .= "</select><br><br><br><br>";
-	
+
 	$export_pagecontent .="<b><font size=\"-1\">". _("Aus welchem Semester sollen die Daten exportiert werden (f&uuml;r Veranstaltungsexport): ") .  "</font></b><br /><select name=\"ex_sem\">";
 	$export_pagecontent .= "<option value=\"all\">" . _("Alle Semester") . "</option>";
 	$all_semester = $semester->getAllSemesterData();
@@ -129,21 +129,21 @@ $export_pagename = _("Datenexport - Startseite");
 	{
 		$export_pagecontent .= "<option";
 		if (($ex_sem == $key) OR
-			(($ex_sem == "") AND ($key == $SEM_ID))) 
+			(($ex_sem == "") AND ($key == $SEM_ID)))
 			$export_pagecontent .= " selected";
 		$export_pagecontent .= " value=\"" . $key . "\">" . $val["name"] . "</option>";
 	}
 	$export_pagecontent .= "</select><br><br>";
 
 	$export_pagecontent .="<b><font size=\"-1\">". _("Welche Arten von Veranstaltungen sollen exportiert werden? ") .  "</font></b><br />";
-	
-	if ($ex_sem_class == "") 
+
+	if ($ex_sem_class == "")
 		$ex_sem_class = "1000";
 	$count = 0;
-	foreach ($SEM_CLASS as $key=>$val) 
+	foreach ($SEM_CLASS as $key=>$val)
 	{
 		$export_pagecontent .= "<input type=\"checkbox\" name=\"ex_class_$count\" value=\"TRUE\"";
-		if ($ex_sem_class[$count] == "1") 
+		if ($ex_sem_class[$count] == "1")
 			$export_pagecontent .= " checked";
 		$export_pagecontent .= ">&nbsp;" . $val["name"] . "&nbsp;&nbsp;";
 		$count ++;
@@ -155,10 +155,10 @@ $export_pagename = _("Datenexport - Startseite");
 	$export_pagecontent .= "<input type=\"hidden\" name=\"format\" value=\"" . $format . "\">";
 
 	$export_weiter_button = "<center><input type=\"IMAGE\"" . makeButton("weiter", "src") . " name=\"\"></center></form>";
-		$infobox = array	(			
+		$infobox = array	(
 		array ("kategorie"  => _("Information:"),
-			"eintrag" => array	(	
-							array (	"icon" => "pictures/ausruf_small.gif",
+			"eintrag" => array	(
+							array (	"icon" => "ausruf_small.gif",
 									"text"  => sprintf(_("Dies ist das Stud.IP-Exportmodul. Mit diesem Modul k&ouml;nnen Sie Daten in den folgenden Formaten ausgeben: %s."), implode($output_formats, ", "))
 								 )
 							)
@@ -166,7 +166,7 @@ $export_pagename = _("Datenexport - Startseite");
 		);
 		{
 			$infobox[1]["kategorie"] = _("Aktionen:");
-				$infobox[1]["eintrag"][] = array (	"icon" => "pictures/forumrot.gif" ,
+				$infobox[1]["eintrag"][] = array (	"icon" => "forumrot.gif" ,
 											"text"  => sprintf(_("W&auml;hlen Sie die Art der Daten, die Sie exportieren wollen, und die Einrichtung, aus der die Daten gelesen werden sollen. Klicken Sie dann auf 'weiter.'"), $link2, "</a>")
 										);
 		}

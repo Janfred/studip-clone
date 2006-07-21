@@ -1,4 +1,4 @@
-<?
+<?php
 /**
 * AdminModules.class.php
 * 
@@ -40,7 +40,7 @@ require_once $ABSOLUTE_PATH_STUDIP.("datei.inc.php");
 require_once $ABSOLUTE_PATH_STUDIP.("dates.inc.php");
 require_once $ABSOLUTE_PATH_STUDIP.("lib/classes/ModulesNotification.class.php");
 require_once $ABSOLUTE_PATH_STUDIP.("lib/classes/StudipLitList.class.php");
-
+require_once $ABSOLUTE_PATH_STUDIP.("lib/classes/StudipDocumentTree.class.php");
 
 class AdminModules extends ModulesNotification {
 	var $db;
@@ -111,6 +111,13 @@ class AdminModules extends ModulesNotification {
 		$this->registered_modules["elearning_interface"]["msg_pre_warning"] = _("Achtung: Beim Deaktivieren der Schnittstelle f&uuml;r die Integration von Content-Modulen werden <b>%s</b> Verkn&uuml;pfungen mit Lernmodulen aufgel&ouml;st!");
 		$this->registered_modules["elearning_interface"]["msg_activate"] = _("Die Schnittstelle f&uuml;r die Integration von Content-Modulen kann jederzeit aktiviert werden.");
 		$this->registered_modules["elearning_interface"]["msg_deactivate"] = _("Die Schnittstelle f&uuml;r die Integration von Content-Modulen kann jederzeit deaktiviert werden.");
+		
+		$this->registered_modules["documents_folder_permissions"]['name'] = _("Dateiordnerberechtigungen");
+		$this->registered_modules["documents_folder_permissions"]["msg_activate"] = _("Die Dateiordnerberechtigungen k&ouml;nnen jederzeit aktiviert werden.");
+		$this->registered_modules["documents_folder_permissions"]["msg_warning"] = _("Wollen Sie wirklich die Dateiordnerberechtigungen deaktivieren und damit eventuell versteckte Inhalte zug&auml;nglich machen?");
+		$this->registered_modules["documents_folder_permissions"]["msg_deactivate"] = _("Die Dateiordnerberechtigungen k&ouml;nnen jederzeit deaktiviert werden.");
+		$this->registered_modules["documents_folder_permissions"]["msg_pre_warning"] = _("Achtung: Beim Deaktivieren der Dateiordnerberechtigungen werden <b>%s</b> gesch&uuml;tzte Ordner zug&auml;nglich!");
+		$this->registered_modules["documents_folder_permissions"]['preconditions'] = array('documents');
 	}
 	
 	function getModuleForumExistingItems($range_id) {
@@ -142,7 +149,7 @@ class AdminModules extends ModulesNotification {
 		global $user;
 
 		//create a default folder
-		CreateTopic(_("Allgemeine Diskussionen"), get_fullname($user_id), _("Hier ist Raum für allgemeine Diskussionen"), 0, 0, $range_id);
+		CreateTopic(_("Allgemeine Diskussionen"), get_fullname($user->id), _("Hier ist Raum für allgemeine Diskussionen"), 0, 0, $range_id);
 	}	
 	
 	function getModuleDocumentsExistingItems($range_id) {
@@ -175,19 +182,9 @@ class AdminModules extends ModulesNotification {
 	}
 
 	function moduleDocumentsDeactivate($range_id) {
-		$db = new DB_Seminar;
-
-		//first, delete the folders with parent = range
-		recursiv_folder_delete($range_id);
-		
-		$query = sprintf ("SELECT termin_id FROM termine WHERE range_id = '%s' ", $range_id);
-		
-		$db->query($query);
-		
-		//then delete the folder with parent = termin_id
-		while ($db->next_record()) {
-			recursiv_folder_delete($db->f("termin_id"));
-		}
+		delete_all_documents($range_id);
+		//Örgs, warum immer ich...
+		$this->clearBit($GLOBALS['admin_modules_data']["changed_bin"], $this->registered_modules['documents_folder_permissions']['id']);
 	}
 	
 	function moduleDocumentsActivate($range_id) {
@@ -297,4 +294,36 @@ class AdminModules extends ModulesNotification {
 	function moduleImpuls_ECDeactivate($range_id) {
 		return 0;
 	}
+	
+	function moduledocuments_folder_permissionsDeactivate($range_id){
+		$folder_tree =& TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $range_id));
+		foreach($folder_tree->getKidsKids('root') as $folder_id){
+			$folder_tree->setDefaultPermission($folder_id);
+		}
+	}
+	
+	function moduledocuments_folder_permissionsActivate($range_id){
+	}
+	
+	function getModuledocuments_folder_permissionsExistingItems($range_id) {
+		$folder_tree =& TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $range_id));
+		return count($folder_tree->getUnreadableFolders('xxx'));
+	}
+	
+	function moduledocuments_folder_permissionsPreconditions($range_id, $args){
+		if (is_array($args)){
+			$must_activate = array();
+			foreach($args as $m){
+				if (!$this->getStatus($m, $range_id)){
+					$must_activate[] = $this->registered_modules[$m]['name'];
+				}
+			}
+			if (count($must_activate)){
+				return sprintf(_("Die Dateiordnerberechtigungen erfordern die Aktivierung von: <b>%s</b>"), join(', ',$must_activate));
+			}
+		}
+		return null;
+	}
+	
+	
 }

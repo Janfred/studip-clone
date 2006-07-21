@@ -1,9 +1,9 @@
 <?
 /**
 * EditSettings.class.php
-* 
+*
 * all the forms/views to edit the settings
-* 
+*
 *
 * @author		Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
 * @version		$Id$
@@ -41,7 +41,7 @@ $cssSw = new cssClassSwitcher;
 class EditSettings {
 	var $db;
 	var $db2;
-	
+
 	//Konstruktor
 	function EditSettings() {
 		$this->db=new DB_Seminar;
@@ -81,19 +81,19 @@ class EditSettings {
 		else
 			return TRUE;
 	}
-	
+
 	//private
 	function selectProperties($category_id='', $all=FALSE) {
 		if (!$all)
 			$this->db2->query ("SELECT *  FROM resources_categories_properties LEFT JOIN resources_properties USING (property_id) WHERE category_id = '$category_id' ORDER BY name");
 		else
-			$this->db2->query ("SELECT *  FROM resources_properties ORDER BY name");		
+			$this->db2->query ("SELECT *  FROM resources_properties ORDER BY name");
 		if (!$this->db->nf())
 			return FALSE;
 		else
 			return TRUE;
 	}
-	
+
 	//private
 	function selectLocks($type) {
 		$this->db->query ("SELECT * FROM resources_locks WHERE type = '$type' ORDER BY lock_begin");
@@ -102,19 +102,19 @@ class EditSettings {
 		else
 			return TRUE;
 	}
-	
+
 
 	function showPermsForms() {
 		global $PHP_SELF, $search_string_search_root_user, $search_root_user, $cssSw;
-		
+
 		$resObject =& ResourceObject::Factory();
-			
+
 		?>
 		<table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
 			<form method="POST" action="<?echo $PHP_SELF ?>?add_root_user=TRUE">
 			<tr>
 				<td class="<? echo $cssSw->getHeaderClass() ?>" width="4%">
-					<img src="pictures/blank.gif" width=1 height=20>&nbsp; 
+					<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" width=1 height=20>&nbsp;
 				</td>
 				<td class="<? echo $cssSw->getHeaderClass() ?>" width="42%" align="left">
 					<font size=-1><b><?=_("Name")?></b></font>
@@ -126,23 +126,23 @@ class EditSettings {
 					<font size=-1><b><?=_("X")?></b></font>
 				</td>
 				<td class="<? echo $cssSw->getHeaderClass() ?>" width="4%">
-					<img src="pictures/blank.gif" width=1 height=20>&nbsp; 
+					<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" width=1 height=20>&nbsp;
 				</td>
 				<td class="<? echo $cssSw->getHeaderClass() ?>" width="30%" align="center">
 					<font size=-1><b><?=_("Suchen/hinzuf&uuml;gen")?></b></font>
 				</td>
 			</tr>
 			<tr>
-				<td class="<? echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? echo $cssSw->getClass() ?>" width="4%">&nbsp;
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="42%">
 					<font size=-1><?=_("Diese NutzerInnen sind als globale Ressourcen-Administratoren mit folgenden Rechten eingetragen:")?></font>
 				</td>
-				<td class="<? echo $cssSw->getClass() ?>" width="10%">&nbsp; 
+				<td class="<? echo $cssSw->getClass() ?>" width="10%">&nbsp;
 				</td>
-				<td class="<? echo $cssSw->getClass() ?>" width="10%">&nbsp; 
+				<td class="<? echo $cssSw->getClass() ?>" width="10%">&nbsp;
 				</td>
-				<td class="<? echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? echo $cssSw->getClass() ?>" width="4%">&nbsp;
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="30%" valign="top"><font size=-1><?=_("NutzerInnen hinzuf&uuml;gen")?></font><br />
 				<? showSearchForm("search_root_user", $search_string_search_root_user, TRUE, FALSE, TRUE) ?>
@@ -153,7 +153,7 @@ class EditSettings {
 			while ($this->db->next_record()) {
 			?>
 			<tr>
-				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp;
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="42%" valign="top">
 					<font size=-1><a href="<? echo $resObject->getOwnerLink($this->db->f("user_id"))."\">".$resObject->getOwnerName(TRUE, $this->db->f("user_id")) ?></a>
@@ -186,20 +186,20 @@ class EditSettings {
 				<td class="<? echo $cssSw->getClass() ?>" width="10%" valign="middle" align="center">
 					<font size=-1>
 						<a href="<? echo $PHP_SELF ?>?delete_root_user_id=<? echo $this->db->f("user_id") ?>">
-							<img src="./pictures/trash.gif" border="0" <?=tooltip(_("Berechtigungen l&ouml;schen")) ?> />
+							<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/trash.gif" border="0" <?=tooltip(_("Berechtigungen l&ouml;schen")) ?> />
 						</a>
 					</font>
 				</td>
-				<td class="<? echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? echo $cssSw->getClass() ?>" width="4%">&nbsp;
 				</td>
-				<td class="<? echo $cssSw->getClass() ?>" width="30%" align="center">&nbsp; 
+				<td class="<? echo $cssSw->getClass() ?>" width="30%" align="center">&nbsp;
 				</td>
 			</tr>
 			<? } ?>
 			<tr>
-				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp;
 				</td>
-				<td class="<? echo $cssSw->getClass() ?>" colspan=5 align="center"><br />&nbsp; <input type="IMAGE" <?=makeButton("uebernehmen", "src") ?> border=0 name="submit" value="<?=_("Zuweisen") ?>"><br />&nbsp; 
+				<td class="<? echo $cssSw->getClass() ?>" colspan=5 align="center"><br />&nbsp; <input type="IMAGE" <?=makeButton("uebernehmen", "src") ?> border=0 name="submit" value="<?=_("Zuweisen") ?>"><br />&nbsp;
 				</td>
 			</tr>
 		</table>
@@ -209,15 +209,15 @@ class EditSettings {
 
 	function showTypesForms() {
 		global $PHP_SELF, $RELATIVE_PATH_RESOURCES, $created_category_id, $cssSw;
-		
+
 		//the avaiable object-icons for every category
 		$availableIcons = array (1=>"cont_res1.gif",2=> "cont_res2.gif",3=> "cont_res3.gif", 4=>"cont_res4.gif",5=> "cont_res5.gif");
-			
+
 		?>
 		<table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
 			<tr>
 				<td class="<? echo $cssSw->getHeaderClass() ?>" width="4%">
-					<img src="pictures/blank.gif" width=1 height=20>&nbsp; 
+					<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" width=1 height=20>&nbsp;
 				</td>
 				<td class="<? echo $cssSw->getHeaderClass() ?>" width="25%" align="left">
 					<font size=-1><b><?=_("Typ")?></b></font>
@@ -231,7 +231,7 @@ class EditSettings {
 			</tr>
 			<form method="POST" action="<?echo $PHP_SELF ?>#a">
 			<tr>
-				<td class="<? echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? echo $cssSw->getClass() ?>" width="4%">&nbsp;
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="25%" align="left" valign="top">
 					<font size=-1><?=_("neuer Typ:")?></font>
@@ -240,13 +240,13 @@ class EditSettings {
 					<font size=-1><input type="TEXT" name="add_type" size=50 maxlength=255 value="<<?=_("bitte geben Sie hier den Namen ein")?>>" /></font>
 					&nbsp; <font size=-1><input type="IMAGE" name="_add_type" <?=makeButton("anlegen", "src")?> border=0 />
 					<br /><input type="CHECKBOX" name="resource_is_room">&nbsp;Ressourcen-Typ wird als Raum behandelt</font>
-					
-					
+
+
 				</td>
-			</tr>	
+			</tr>
 			</form>
 			<form method="POST" action="<?echo $PHP_SELF ?>?change_categories=TRUE">
-			<? 
+			<?
 			$this->selectTypes();
 			while ($this->db->next_record()) {
 				$depRes=$this->getDependingResources($this->db->f("category_id"));
@@ -254,21 +254,21 @@ class EditSettings {
 					print "<a name=\"a\"></a>";
 				?>
 			<tr>
-				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp;
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="25%" valign="top">
 					<font size=-1><input type="TEXT" name="change_category_name[<?=$this->db->f("category_id")?>]" value="<? echo $this->db->f("name") ?>" size="20" maxlength="255" /></font><br />
-					
+
 					<?
 					foreach ($availableIcons as $key => $val) {
-						printf ("<input type=\"RADIO\" name=\"change_category_iconnr[%s]\" %s value=\"%s\"><img src=\"%s/pictures/%s\" />&nbsp; ", $this->db->f("category_id"), ($this->db->f("iconnr") == $key) ? "checked" : "", $key, $RELATIVE_PATH_RESOURCES, $val);
+						printf ("<input type=\"RADIO\" name=\"change_category_iconnr[%s]\" %s value=\"%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/%s\" />&nbsp; ", $this->db->f("category_id"), ($this->db->f("iconnr") == $key) ? "checked" : "", $key, $val);
 					}
 					?>
 					<font size=-1><? ($this->db->f("is_room")) ? print "<br />"._("wird als <i>Raum</i> behandelt"):print("");?></font>
 					<font size=-1><? printf("<br />"._("wird von <b>%s</b> Objekten verwendet")."</font><br />", $depRes); ?>
 					<font size=-1><? ($this->db->f("system")) ? print( _("(systemobjekt)")."<br />") :print("") ?></font>
-					
-					
+
+
 					<input type="HIDDEN" name="change_properties_id[]" value="<?=$this->db->f("category_id")?>" />
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="65%" valign="top">
@@ -285,42 +285,42 @@ class EditSettings {
 								<font size=-1><? echo $this->db2->f("name") ?></font><br />
 							</td>
 							<td class="<? echo $cssSw->getClass() ?>" width="33%" nowrap>
-								<font size=-1><? 						
+								<font size=-1><?
 									switch ($this->db2->f("type")) {
 										case "bool":
 											echo _("Zustand Ja/Nein");
-										break; 
+										break;
 										case "text":
 											echo _("mehrzeiliges Textfeld");
-										break; 
+										break;
 										case "num":
 											echo _("einzeiliges Textfeld");
-										break; 
+										break;
 										case "select":
 											echo _("Auswahlfeld");
-										break; 
+										break;
 									}
 									?>
 								</font><br />
 							</td>
 							<td class="<? echo $cssSw->getClass() ?>" width="3%">
-								<? 
-								if (!$this->db2->f("system")) { 
+								<?
+								if (!$this->db2->f("system")) {
 									?>
 									<a href="<? echo $PHP_SELF ?>?delete_type_property_id=<? echo $this->db2->f("property_id") ?>&delete_type_category_id=<? echo $this->db2->f("category_id") ?>">
-									<img src="pictures/trash.gif" border="0" <?=tooltip(_("Eigenschaft löschen"))?> 
-									</a>										
+									<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/trash.gif" border="0" <?=tooltip(_("Eigenschaft löschen"))?>
+									</a>
 									<?
 								} else {
 									?>
-									<img src="pictures/lighttrash.gif" border="0" <?=tooltip(_("Löschen der Eigenschaft nicht möglich, Systemobjekt!"))?> 
+									<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/lighttrash.gif" border="0" <?=tooltip(_("Löschen der Eigenschaft nicht möglich, Systemobjekt!"))?>
 									<?
 								}
 								?>
 							</td>
 							<td class="<? echo $cssSw->getClass() ?>" width="31%">
-								<? 
-								if ($this->db->f("is_room")) { 
+								<?
+								if ($this->db->f("is_room")) {
 									?>
 									<input type="HIDDEN" name="requestable[]" value="_id1_<?=($this->db->f("category_id"))?>" />
 									<input type="HIDDEN" name="requestable[]" value="_id2_<?=($this->db2->f("property_id"))?>" />
@@ -337,7 +337,7 @@ class EditSettings {
 						<tr>
 							<td class="<? echo $cssSw->getClass() ?>" width="33%">
 							<?
-							$this->selectProperties($this->db->f("category_id"), TRUE);								
+							$this->selectProperties($this->db->f("category_id"), TRUE);
 							if (($this->db2->nf() != sizeof ($tmp_resvis)) || (!is_array($tmp_resvis))) {
 								?>
 								<select name="add_type_property_id[<?=$this->db->f("category_id")?>]">
@@ -345,7 +345,7 @@ class EditSettings {
 								//Noch nicht vergebene Properties zum Vergeben anbieten
 								while ($this->db2->next_record()) {
 									if (is_array($tmp_resvis))
-										if (!in_array($this->db2->f("property_id"), $tmp_resvis)) 
+										if (!in_array($this->db2->f("property_id"), $tmp_resvis))
 											$give_it=TRUE;
 										else
 											$give_it=FALSE;
@@ -356,21 +356,21 @@ class EditSettings {
 									<option value="<? echo $this->db2->f("property_id") ?>"><? echo htmlReady($this->db2->f("name")) ?></option>
 									</option>
 										<?
-											
+
 									}
 								}
 								?>
 								</select>
 							</td>
 								<td class="<? echo $cssSw->getClass() ?>" width="67%" colspan=2>
-									<input type="IMAGE" <?=makeButton("zuweisen", "src") ?> name="change_category_add_property<?=$this->db->f("category_id")?>" border=0 />&nbsp; 
+									<input type="IMAGE" <?=makeButton("zuweisen", "src") ?> name="change_category_add_property<?=$this->db->f("category_id")?>" border=0 />&nbsp;
 									<input type="IMAGE" name="change_types" <?=makeButton("uebernehmen", "src")?> border="0" /><br />
 							</td>
 							<?
 							} else {
 							?>
 							<td class="<? echo $cssSw->getClass() ?>" width="100%" colspan=3>
-									<input type="IMAGE" <?=makeButton("zuweisen", "src") ?> name="change_category_add_property<?=$this->db->f("category_id")?>" border=0 />&nbsp; 
+									<input type="IMAGE" <?=makeButton("zuweisen", "src") ?> name="change_category_add_property<?=$this->db->f("category_id")?>" border=0 />&nbsp;
 							</td>
 							<?
 							}
@@ -398,15 +398,15 @@ class EditSettings {
 		<br /><br />
 		<?
 	}
-	
+
 	function showPropertiesForms() {
 		global $PHP_SELF, $cssSw;
-			
+
 		?>
 		<table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
 			<tr>
 				<td class="<? echo $cssSw->getHeaderClass() ?>" width="4%">
-					<img src="pictures/blank.gif" width=1 height=20>&nbsp; 
+					<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" width=1 height=20>&nbsp;
 				</td>
 				<td class="<? echo $cssSw->getHeaderClass() ?>" width="25%" align="left">
 					<font size=-1><b><?=_("Eigenschaft")?></b></font>
@@ -420,7 +420,7 @@ class EditSettings {
 			</tr>
 			<form method="POST" action="<?echo $PHP_SELF ?>?add_type_category_id=<? echo $this->db2->f("category_id")?>">
 			<tr>
-				<td class="<? echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? echo $cssSw->getClass() ?>" width="4%">&nbsp;
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="25%" align="left">
 					<font size=-1><?=_("neue Eigenschaft:")?></font>
@@ -433,18 +433,18 @@ class EditSettings {
 						<font size=-1><option value="text"><?=_("mehrzeiligesTextfeld")?></option></font>
 						<font size=-1><option value="select"><?=_("Auswahlfeld")?></option></font>
 					</select>
-					&nbsp;<font size=-1><input type="IMAGE" name="_add_property" <?=makeButton("anlegen", "src")?> border=0 /></font>							
+					&nbsp;<font size=-1><input type="IMAGE" name="_add_property" <?=makeButton("anlegen", "src")?> border=0 /></font>
 				</td>
-			</tr>	
+			</tr>
 			</form>
 			<form method="POST" action="<?echo $PHP_SELF ?>?change_properties=TRUE">
-			<? 
+			<?
 			$this->selectProperties($dummy, TRUE);
 			while ($this->db2->next_record()) {
 				$depTyp=$this->getDependingTypes($this->db2->f("property_id"));
 				?>
 			<tr>
-				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp;
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="25%" valign="top">
 					<font size=-1><input type="TEXT" name="change_property_name[<?=$this->db2->f("property_id")?>]" value="<? echo htmlReady($this->db2->f("name")) ?>" size="20" maxlength="255" /></font><br />
@@ -498,7 +498,7 @@ class EditSettings {
 							}
 							?>
 						</td>
-						<td class="<? echo $cssSw->getClass() ?>" width="50%" valign="bottom">&nbsp; 
+						<td class="<? echo $cssSw->getClass() ?>" width="50%" valign="bottom">&nbsp;
 						 	<input type="IMAGE" name="_send_property_type" <?=makeButton("uebernehmen", "src") ?> border=0 />
 						</td>
 					</tr>
@@ -523,25 +523,25 @@ class EditSettings {
 		</table>
 		<br /><br />
 		<?
-	}	
+	}
 
 	function showSettingsForms() {
 		global $PHP_SELF, $cssSw, $resources_data;
-			
+
 		?>
 		<table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
 		<form method="POST" action="<?echo $PHP_SELF ?>?change_global_settings=TRUE">
 			<tr>
-				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp;
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="96%" align="left">
 					<font size=-1><b><?=_("Zulassen von <i>Raum</i>anfragen")?></b><br /><br />
 					&nbsp;&nbsp;&nbsp;<input type="CHECKBOX" name="allow_requests" <? print($GLOBALS["RESOURCES_ALLOW_ROOM_REQUESTS"]) ? "checked" : ""; print ">&nbsp;"._("NutzerInnen k&ouml;nnen im Rahmen der Veranstaltungsverwaltung Raumeigenschaften und konkrete R&auml;ume w&uuml;nschen.")?><br />
-					<br />				
+					<br />
 				</td>
 			</tr>
 			<tr>
-				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp;
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="96%" align="left">
 					<font size=-1><b><?=_("Sperrzeiten f&uuml;r die Bearbeitung von <i>Raum</i>belegungen")?></b><br /><br />
@@ -554,7 +554,7 @@ class EditSettings {
 					if ($this->db->nf()) {
 						$rows = 0;
 						?>
-						
+
 						<tr>
 							<td width="20%"><font size="-1">
 								<?=_("Beginn:")?>
@@ -570,10 +570,10 @@ class EditSettings {
 							if ($rows <= $this->db->nf()) {
 								?>
 						<tr>
-							<td colspan="3" style="{background-image: url('pictures/line.gif')}"><img src="pictures/blank.gif" width ="10" height="1" /></td>
+							<td colspan="3" style="{background-image: url('<?= $GLOBALS['ASSETS_URL'] ?>images/line.gif')}"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" width ="10" height="1" /></td>
 						</tr>
 						<tr>
-							<td colspan="3"><img src="pictures/blank.gif" width ="10" height="3" /></td>
+							<td colspan="3"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" width ="10" height="3" /></td>
 						</tr>
 								<?
 							}
@@ -589,7 +589,7 @@ class EditSettings {
 								printf ("<br /><input type=\"TEXT\" style=\"{font-size:8pt;}\" name=\"lock_begin_hour[]\" size=\"2\" maxlength=\"2\" value=\"%s\" />:", ($this->db->f("lock_begin")) ? date("H", $this->db->f("lock_begin")) : _("ss"));
 								printf ("<input type=\"TEXT\" style=\"{font-size:8pt;}\" name=\"lock_begin_min[]\" size=\"2\" maxlength=\"2\" value=\"%s\" />", ($this->db->f("lock_begin")) ? date("i", $this->db->f("lock_begin")) : _("mm"));
 								print "</font></td>";
-									
+
 								//edit lock end time
 								print "<td width=\"40%%\"><font size=\"-1\">";
 								printf ("<input type=\"TEXT\" style=\"{font-size:8pt;}\" name=\"lock_end_day[]\" size=\"2\" maxlength=\"2\" value=\"%s\" />.", ($this->db->f("lock_end")) ? date("d", $this->db->f("lock_end")) : _("tt"));
@@ -598,17 +598,17 @@ class EditSettings {
 								printf ("<br /><input type=\"TEXT\" style=\"{font-size:8pt;}\" name=\"lock_end_hour[]\" size=\"2\" maxlength=\"2\" value=\"%s\" />:", ($this->db->f("lock_end")) ? date("H", $this->db->f("lock_end")) : _("ss"));
 								printf ("<input type=\"TEXT\" style=\"{font-size:8pt;}\" name=\"lock_end_min[]\" size=\"2\" maxlength=\"2\" value=\"%s\" />", ($this->db->f("lock_end")) ? date("i", $this->db->f("lock_end")) : _("mm"));
 								print "</font></td>";
-			
+
 								print "<td width=\"20%%\" align=\"right\" valign=\"top\"><font size=\"-1\">";
 								print "<br /><input type=\"HIDDEN\" name=\"lock_id[]\" value=\"".$this->db->f("lock_id")."\" />";
-								print "<input type=\"IMAGE\" name=\"lock_sent\" src=\"pictures/haken_transparent.gif\" border=\"0\" ".tooltip(_("Diesen Eintrag speichern"))." />";
-								print "&nbsp;&nbsp;<a href=\"$PHP_SELF?kill_lock=".$this->db->f("lock_id")."\"><img src=\"pictures/trash.gif\" border=\"0\" ".tooltip(_("Diesen Eintrag löschen"))."/></a>";						
+								print "<input type=\"IMAGE\" name=\"lock_sent\" src=\"".$GLOBALS['ASSETS_URL']."images/haken_transparent.gif\" border=\"0\" ".tooltip(_("Diesen Eintrag speichern"))." />";
+								print "&nbsp;&nbsp;<a href=\"$PHP_SELF?kill_lock=".$this->db->f("lock_id")."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" border=\"0\" ".tooltip(_("Diesen Eintrag löschen"))."/></a>";
 								print "</td></tr>";
 							} else {
 								printf ("<td width=\"40%%\"><font size=\"-1\">%s</font></td>", date("d.m.Y H:i", $this->db->f("lock_begin")));
 								printf ("<td width=\"40%%\"><font size=\"-1\">%s</font></td>", date("d.m.Y H:i", $this->db->f("lock_end")));
-								print "<td width=\"10%%\" align=\"right\" valign=\"top\"><a href=\"$PHP_SELF?edit_lock=".$this->db->f("lock_id")."\"><img src=\"pictures/edit_transparent.gif\" border=\"0\" ".tooltip(_("Diesen Eintrag bearbeiten"))."/>&nbsp;&nbsp;</a>";
-								print "<a href=\"$PHP_SELF?kill_lock=".$this->db->f("lock_id")."\"><img src=\"pictures/trash.gif\" border=\"0\" ".tooltip(_("Diesen Eintrag löschen"))."/></a></td>";
+								print "<td width=\"10%%\" align=\"right\" valign=\"top\"><a href=\"$PHP_SELF?edit_lock=".$this->db->f("lock_id")."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/edit_transparent.gif\" border=\"0\" ".tooltip(_("Diesen Eintrag bearbeiten"))."/>&nbsp;&nbsp;</a>";
+								print "<a href=\"$PHP_SELF?kill_lock=".$this->db->f("lock_id")."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" border=\"0\" ".tooltip(_("Diesen Eintrag löschen"))."/></a></td>";
 							}
 						}
 						print "</tr>";
@@ -616,14 +616,14 @@ class EditSettings {
 					?>
 						<tr>
 							<td colspan="3">
-								<a href="<?=$PHP_SELF?>?create_lock=edit"><img src="pictures/add_right.gif" border="0" /></a>
+								<a href="<?=$PHP_SELF?>?create_lock=edit"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/add_right.gif" border="0" /></a>
 							</td>
 						</tr>
 					</table>
 				</td>
-			</tr>	
+			</tr>
 			<tr>
-				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp;
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="96%" align="left">
 					<font size=-1><b><?=_("Sperrzeiten f&uuml;r f&uuml;r <i>Raum</i>belegungen")?></b><br /><br />
@@ -636,7 +636,7 @@ class EditSettings {
 					if ($this->db->nf()) {
 						$rows = 0;
 						?>
-						
+
 						<tr>
 							<td width="20%"><font size="-1">
 								<?=_("Beginn:")?>
@@ -652,10 +652,10 @@ class EditSettings {
 							if ($rows <= $this->db->nf()) {
 								?>
 						<tr>
-							<td colspan="3" style="{background-image: url('pictures/line.gif')}"><img src="pictures/blank.gif" width ="10" height="1" /></td>
+							<td colspan="3" style="{background-image: url('<?= $GLOBALS['ASSETS_URL'] ?>images/line.gif')}"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" width ="10" height="1" /></td>
 						</tr>
 						<tr>
-							<td colspan="3"><img src="pictures/blank.gif" width ="10" height="3" /></td>
+							<td colspan="3"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" width ="10" height="3" /></td>
 						</tr>
 								<?
 							}
@@ -671,7 +671,7 @@ class EditSettings {
 								printf ("<br /><input type=\"TEXT\" style=\"{font-size:8pt;}\" name=\"lock_begin_hour[]\" size=\"2\" maxlength=\"2\" value=\"%s\" />:", ($this->db->f("lock_begin")) ? date("H", $this->db->f("lock_begin")) : _("ss"));
 								printf ("<input type=\"TEXT\" style=\"{font-size:8pt;}\" name=\"lock_begin_min[]\" size=\"2\" maxlength=\"2\" value=\"%s\" />", ($this->db->f("lock_begin")) ? date("i", $this->db->f("lock_begin")) : _("mm"));
 								print "</font></td>";
-									
+
 								//edit lock end time
 								print "<td width=\"40%%\"><font size=\"-1\">";
 								printf ("<input type=\"TEXT\" style=\"{font-size:8pt;}\" name=\"lock_end_day[]\" size=\"2\" maxlength=\"2\" value=\"%s\" />.", ($this->db->f("lock_end")) ? date("d", $this->db->f("lock_end")) : _("tt"));
@@ -680,17 +680,17 @@ class EditSettings {
 								printf ("<br /><input type=\"TEXT\" style=\"{font-size:8pt;}\" name=\"lock_end_hour[]\" size=\"2\" maxlength=\"2\" value=\"%s\" />:", ($this->db->f("lock_end")) ? date("H", $this->db->f("lock_end")) : _("ss"));
 								printf ("<input type=\"TEXT\" style=\"{font-size:8pt;}\" name=\"lock_end_min[]\" size=\"2\" maxlength=\"2\" value=\"%s\" />", ($this->db->f("lock_end")) ? date("i", $this->db->f("lock_end")) : _("mm"));
 								print "</font></td>";
-			
+
 								print "<td width=\"20%%\" align=\"right\" valign=\"top\"><font size=\"-1\">";
 								print "<br /><input type=\"HIDDEN\" name=\"lock_id[]\" value=\"".$this->db->f("lock_id")."\" />";
-								print "<input type=\"IMAGE\" name=\"lock_sent\" src=\"pictures/haken_transparent.gif\" border=\"0\" ".tooltip(_("Diesen Eintrag speichern"))." />";
-								print "&nbsp;&nbsp;<a href=\"$PHP_SELF?kill_lock=".$this->db->f("lock_id")."\"><img src=\"pictures/trash.gif\" border=\"0\" ".tooltip(_("Diesen Eintrag löschen"))."/></a>";						
+								print "<input type=\"IMAGE\" name=\"lock_sent\" src=\"".$GLOBALS['ASSETS_URL']."images/haken_transparent.gif\" border=\"0\" ".tooltip(_("Diesen Eintrag speichern"))." />";
+								print "&nbsp;&nbsp;<a href=\"$PHP_SELF?kill_lock=".$this->db->f("lock_id")."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" border=\"0\" ".tooltip(_("Diesen Eintrag löschen"))."/></a>";
 								print "</td></tr>";
 							} else {
 								printf ("<td width=\"40%%\"><font size=\"-1\">%s</font></td>", date("d.m.Y H:i", $this->db->f("lock_begin")));
 								printf ("<td width=\"40%%\"><font size=\"-1\">%s</font></td>", date("d.m.Y H:i", $this->db->f("lock_end")));
-								print "<td width=\"10%%\" align=\"right\" valign=\"top\"><a href=\"$PHP_SELF?edit_lock=".$this->db->f("lock_id")."\"><img src=\"pictures/edit_transparent.gif\" border=\"0\" ".tooltip(_("Diesen Eintrag bearbeiten"))."/>&nbsp;&nbsp;</a>";
-								print "<a href=\"$PHP_SELF?kill_lock=".$this->db->f("lock_id")."\"><img src=\"pictures/trash.gif\" border=\"0\" ".tooltip(_("Diesen Eintrag löschen"))."/></a></td>";
+								print "<td width=\"10%%\" align=\"right\" valign=\"top\"><a href=\"$PHP_SELF?edit_lock=".$this->db->f("lock_id")."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/edit_transparent.gif\" border=\"0\" ".tooltip(_("Diesen Eintrag bearbeiten"))."/>&nbsp;&nbsp;</a>";
+								print "<a href=\"$PHP_SELF?kill_lock=".$this->db->f("lock_id")."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" border=\"0\" ".tooltip(_("Diesen Eintrag löschen"))."/></a></td>";
 							}
 						}
 						print "</tr>";
@@ -698,24 +698,24 @@ class EditSettings {
 					?>
 						<tr>
 							<td colspan="3">
-								<a href="<?=$PHP_SELF?>?create_lock=assign"><img src="pictures/add_right.gif" border="0" /></a>
+								<a href="<?=$PHP_SELF?>?create_lock=assign"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/add_right.gif" border="0" /></a>
 							</td>
 						</tr>
 					</table>
 				</td>
-			</tr>				
+			</tr>
 			<tr>
-				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp;
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="96%" align="left">
 					<font size=-1><b><?=_("Optionen beim Bearbeiten von Anfragen")?></b><br /><br />
 					&nbsp;&nbsp;&nbsp;Anzahl der Belegungen, ab der R&auml;ume dennoch mit Einzelterminen passend belegt werden k&ouml;nnen: <input type="TEXT" size="5" maxlength="10" name="allow_single_assign_percentage" value="<? print($GLOBALS["RESOURCES_ALLOW_SINGLE_ASSIGN_PERCENTAGE"]);?>" />%<br />
 					&nbsp;&nbsp;&nbsp;Anzahl ab der Einzeltermine gruppiert bearbeitet werden sollen: <input type="TEXT" size="3" maxlength="5" name="allow_single_date_grouping" value="<? print($GLOBALS["RESOURCES_ALLOW_SINGLE_DATE_GROUPING"]);?>" /><br />
-					<br />				
+					<br />
 				</td>
-			</tr>			
+			</tr>
 			<tr>
-				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp;
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="96%" align="left">
 					<font size=-1><b><?=_("Einordnung von <i>R&auml;umen</i> in Orga-Struktur")?></b><br /><br />
@@ -723,11 +723,11 @@ class EditSettings {
 					<?
 					/*&nbsp;&nbsp;&nbsp;<input type="CHECKBOX" name="enable_orga_admin_notice" <? print($GLOBALS["RESOURCES_ENABLE_ORGA_ADMIN_NOTICE"]) ? "checked" : ""; print ">&nbsp;"._("Bei <i>Raum</i>w&uuml;nschen von DozentInnen auf <i>R&auml;ume</i> fremder Einrichtungen und Fakult&auml;ten die Administratoren benachrichtigen. ")?><br />*/
 					?>
-					<br />				
+					<br />
 				</td>
 			</tr>
 			<tr>
-				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp;
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="96%" align="left">
 					<font size=-1><b><?=_("Anlegen von <i>R&auml;umen</i>")?></b><br /><br />
@@ -741,7 +741,7 @@ class EditSettings {
 				</td>
 			</tr>
 			<tr>
-				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp;
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="96%" align="left">
 					<font size=-1><b><?=_("Vererbte Berechtigungen von Veranstaltungen und Einrichtungen f&uuml;r Ressourcen")?></b><br /><br />
@@ -752,9 +752,9 @@ class EditSettings {
 					</select>
 					<br />
 				</td>
-			</tr>			
+			</tr>
 			<tr>
-				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp;
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="96%" align="left">
 					<font size=-1><b><?=_("Vererbte Berechtigungen von Veranstaltungen und Einrichtungen f&uuml;r <i>R&auml;ume</i>")?></b><br /><br />
@@ -765,9 +765,9 @@ class EditSettings {
 					</select>
 					<br />
 				</td>
-			</tr>	
+			</tr>
 			<tr>
-				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" colspan="2" align="middle">&nbsp; 
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" colspan="2" align="middle">&nbsp;
 				 	<input type="IMAGE" name="_send_settings" <?=makeButton("uebernehmen", "src") ?> border=0 />
 				</td>
 			</tr>
@@ -775,15 +775,15 @@ class EditSettings {
 		</table>
 		<br /><br />
 		<?
-	}		
+	}
 	function showPesonalSettingsForms() {
 		global $PHP_SELF;
-		
+
 		?>
 		<table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
 		<form method="POST" action="<?echo $PHP_SELF ?>">
 		</table>
 		<br /><br />
 		<?
-	}	
+	}
 }

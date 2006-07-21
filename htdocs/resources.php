@@ -38,6 +38,7 @@ $auth->login_if($auth->auth['uid'] == 'nobody');
 $perm->check("autor");
 
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+$HELP_KEYWORD="Basis.Ressourcen";// META:in resourcesControl.inc.php verlagern,wenn detaillierter vorhanden
 
 if ($RESOURCES_ENABLE) {
 	//Steuerung der Ressourcenverwaltung einbinden

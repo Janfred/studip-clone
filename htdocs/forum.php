@@ -23,6 +23,24 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // -- here you have to put initialisations for the current page
 
+if ($forumsend && $forumsend!="bla") {
+	$HELP_KEYWORD="Basis.ForumEinstellungen";
+} else {
+	switch($view) {
+		case "neu": 
+			$HELP_KEYWORD="Basis.ForumNeu"; 
+			break;
+		case "letzte": 
+			$HELP_KEYWORD="Basis.Forumlast4"; 
+			break;
+		case "neuesthema": 
+			$HELP_KEYWORD="Basis.ForumBeteiligen"; 
+			break;
+		default:
+			$HELP_KEYWORD="Basis.Forum";
+	}
+}
+
 // Start of Output
 	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
@@ -52,12 +70,12 @@ function pruefe_name(){
 
 }
 
-if ($auth->auth["jscript"]) { // JS an 
+if ($auth->auth["jscript"]) { // JS an
 	echo "<script language=\"JavaScript\">";
 	echo "var ol_textfont = \"Arial\"";
 	echo "</script>";
 	echo "<DIV ID=\"overDiv\" STYLE=\"position:absolute; visibility:hidden; z-index:1000;\"></DIV>";
-	echo "<SCRIPT LANGUAGE=\"JavaScript\" SRC=\"overlib.js\"></SCRIPT>";
+	echo "<SCRIPT LANGUAGE=\"JavaScript\" SRC=\"".$GLOBALS['ASSETS_URL']."javascripts/overlib.js\"></SCRIPT>";
 }
 
 require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
@@ -65,7 +83,7 @@ require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/forum.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/object.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/dates.inc.php"); 
+require_once ("$ABSOLUTE_PATH_STUDIP/dates.inc.php");
 
 checkObject();
 checkObjectModule("forum");
@@ -77,7 +95,7 @@ object_set_visit_module("forum");
 
 function getMsTime(){
 	$microtime = explode(' ', microtime());
-	return (double)($microtime[1].substr($microtime[0],1)); 
+	return (double)($microtime[1].substr($microtime[0],1));
 }
 
 // $stoppuhr=getMsTime();
@@ -117,14 +135,14 @@ if ($forum["view"]=="mixed" && $open) {
 
 if (!$forum["themeview"])
 	$forum["themeview"]="tree";
-	
+
 if ($themeview) { // Umschaltung tree/flat über die Kopfleiste
 	$forum["themeview"]=$themeview;
 	if ($forum["presetview"]=="tree" || $forum["presetview"]=="mixed")
 		$forum["presetview"] = $themeview;
 }
 
-if ($presetview) {  
+if ($presetview) {
 	if ($presetview == "theme")
 		$forum["presetview"]=$forum["themeview"];
 	else
@@ -161,7 +179,7 @@ include "links_openobject.inc.php";
 //////////////////////////////////////////////////////////////////////////////////
 
 if ($suchbegriff!="") {
-	if($check_author) 
+	if($check_author)
 		$search_exp="x.author LIKE '%$suchbegriff%'";
 	if ($check_name) {
 		if ($search_exp)
@@ -173,11 +191,11 @@ if ($suchbegriff!="") {
 			$search_exp.=" OR";
 		$search_exp.=" x.description LIKE '%$suchbegriff%'";
 	}
-	$forum["search"] = $search_exp;	
+	$forum["search"] = $search_exp;
 }
 
 if ($reset=="1")	// es wurde neue Suche aktiviert, also Suchbegriff löschen
-	$forum["search"] = "";	
+	$forum["search"] = "";
 
 //////////////////////////////////////////////////////////////////////////////////
 // verschiedene GUI-Konstanten werden gesetzt
@@ -185,15 +203,15 @@ if ($reset=="1")	// es wurde neue Suche aktiviert, also Suchbegriff löschen
 
 if ($indikator)
 	$forum["indikator"] = $indikator;
-	
+
 if ($sort)
 	$forum["sort"] = $sort;
 if (!$forum["sort"])
 	$forum["sort"] = "age";
-	
+
 if (!$forum["indikator"])
 	$forum["indikator"] = "age";
-	
+
 if ($toolbar=="open")
 	$forum["toolbar"] = "open";
 if ($toolbar=="close")
@@ -220,7 +238,7 @@ if ($topic_id AND !$update) {
 	if (!$db->num_rows()) { // wir sind NICHT im richtigen Seminar!
 		echo "<br><br>";
 		parse_window ("error§" . _("Sie versuchen, mit zwei Browserfenstern innerhalb verschiedener Foren zu navigieren.") . "<br /><font size=-1 color=black>" . _("Um unerw&uuml;nschte Effekte - wie falsch einsortierten Postings - zu vermeiden,<br>empfehlen wir, Stud.IP nur in einem Browserfenster zu verwenden.") . "</font>", "§",
-				_("zuviele Browserfenster im Forenbereich!"), 
+				_("zuviele Browserfenster im Forenbereich!"),
 				"");
 		die;
 	}
@@ -230,7 +248,7 @@ if ($topic_id AND !$update) {
 	if (!$db->num_rows()) { // wir sind NICHT im richtigen Seminar!
 		echo "<br><br>";
 		parse_window ("error§" . _("Sie versuchen, mit zwei Browserfenstern innerhalb verschiedener Foren zu navigieren.") . "<br /><font size=-1 color=black>" . _("Um unerw&uuml;nschte Effekte - wie falsch einsortierten Postings - zu vermeiden,<br>empfehlen wir, Stud.IP nur in einem Browserfenster zu verwenden.") . "</font>", "§",
-				_("zuviele Browserfenster im Forenbereich!"), 
+				_("zuviele Browserfenster im Forenbereich!"),
 				"");
 		die;
 	}
@@ -240,7 +258,7 @@ if ($topic_id AND !$update) {
 	if (!$db->num_rows()) { // wir sind NICHT im richtigen Seminar!
 		echo "<br><br>";
 		parse_window ("error§" . _("Sie versuchen, mit zwei Browserfenstern innerhalb verschiedener Stud.IP Bereiche zu navigieren.") . "<br /><font size=-1 color=black>" . _("Um unerw&uuml;nschte Effekte - wie falsch einsortierten Postings - zu vermeiden,<br>empfehlen wir, Stud.IP nur in einem Browserfenster zu verwenden.") . "</font>", "§",
-				_("zuviele Browserfenster im Forenbereich!"), 
+				_("zuviele Browserfenster im Forenbereich!"),
 				"");
 		die;
 	}
@@ -254,7 +272,7 @@ if ($forum["lostposting"]!="" AND !isset($update)) {
 	$writemode = $forum["lostposting"];
 	$db=new DB_Seminar;
 	$db->query("SELECT topic_id FROM px_topics WHERE topic_id='$writemode' AND mkdate=chdate+1");
-	if ($db->num_rows()) { 
+	if ($db->num_rows()) {
 		$count = 0;
 		$result = forum_lonely(array('id'=>$writemode));
 		if ($result['lonely']==TRUE) // nur löschen wenn noch keine Antworten, sonst stehenlassen
@@ -305,15 +323,15 @@ if ($delete_id) {
 			echo "</table>";
 
 		// Darstellung des zu loeschenden Postings
-	
-			echo "<table width=\"100%\" class=blank border=0 cellpadding=0 cellspacing=0 align=center><tr><td class=blank><br><br>";	
-			echo "<table width=\"80%\" class=blank border=0 cellpadding=0 cellspacing=0 align=center><tr>";	
-	
 
-			
+			echo "<table width=\"100%\" class=blank border=0 cellpadding=0 cellspacing=0 align=center><tr><td class=blank><br><br>";
+			echo "<table width=\"80%\" class=blank border=0 cellpadding=0 cellspacing=0 align=center><tr>";
+
+
+
 			printposting($forumposting);
-			
-			echo "<br></td></tr></table>\n<br></td></tr></table>";	
+
+			echo "<br></td></tr></table>\n<br></td></tr></table>";
 			page_close();
 			die;
 		}
@@ -326,19 +344,19 @@ if ($delete_id) {
 // Verschieben von Postings
 //////////////////////////////////////////////////////////////////////////////////
 
-if ($target =="Seminar"){ //Es soll in ein anderes Seminar verschoben werden 
+if ($target =="Seminar"){ //Es soll in ein anderes Seminar verschoben werden
 	$verschoben = 0;
 	move_topic($topic_id,$sem_id,$topic_id,$verschoben);
 	$message = "move";
 }
-	
-if ($target =="Institut"){ //Es soll in ein Institut verschoben werden 
+
+if ($target =="Institut"){ //Es soll in ein Institut verschoben werden
 	$verschoben = 0;
 	move_topic($topic_id,$inst_id,$topic_id,$verschoben);
 	$message = "move";
 }
 
-if ($target =="Thema"){ //Es soll in ein anderes Thema verschoben werden 
+if ($target =="Thema"){ //Es soll in ein anderes Thema verschoben werden
 	$verschoben = 0;
 	move_topic2($move_id,$move_id,$verschoben,$parent_id);
 	$message = "move";
@@ -365,14 +383,13 @@ if ($really_kill) {
 				$message = "kill";
 			}
 			$forum["lostposting"]="";
-		}		
+		}
 	}
 }
 
 //////////////////////////////////////////////////////////////////////////////////
 // neuer Beitrag als Antwort wird eingeleitet
 //////////////////////////////////////////////////////////////////////////////////
-
 
 if ($answer_id) {
 	$db=new DB_Seminar;
@@ -419,8 +436,8 @@ if ($neuesthema==TRUE && ($rechte || $SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"
 
 if ($zitat==TRUE)
 	$zitat = $answer_id;
-	
-if ($edit_id) 
+
+if ($edit_id)
 	$open = $edit_id;
 
 if ($flatallopen=="TRUE")
@@ -444,7 +461,7 @@ if ($rate) { // Objekt bewerten
 if ($fav)   // zu den Favoriten hinzufügen/entfernen
 	$fav = object_switch_fav($fav);
 
-	
+
 
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -454,16 +471,16 @@ if ($fav)   // zu den Favoriten hinzufügen/entfernen
 if ($forumsend!="anpassen") {
 
 	forum_draw_topicline();
-	
+
 	// Ausgabe für Zusatzinfos
 	if ($message=="kill") echo parse_msg("msg§" . sprintf(_("%s Posting(s) gel&ouml;scht"), $count));
 	if ($message=="move") echo parse_msg("msg§" . sprintf(_("%s Posting(s) verschoben."), $verschoben));
 	if ($txt) echo parse_msg("msg§" . $txt);
 	if ($cmd == "move" && $topic_id !="" && $rechte)
 		forum_move_navi ($topic_id);
-		
+
 	if (!$cmd && !$reset) {
-	}	
+	}
 
 	echo "\n</table>\n";
 }
@@ -476,7 +493,7 @@ elseif ($user->id == "nobody" || $cmd=="move") {
 		echo "<form name=forumwrite onsubmit=\"return pruefe_name()\" method=post action=\"".$PHP_SELF."#anker\">";
 }
 //////////////////////////////////////////////////////////////////////////////////
-// Verzweigung zu den Anzeigemodi 
+// Verzweigung zu den Anzeigemodi
 //////////////////////////////////////////////////////////////////////////////////
 
 if ($forum["view"]=="flat" || $forum["view"]=="neue" || $forum["view"]=="flatfolder" || $forum["view"]=="search")

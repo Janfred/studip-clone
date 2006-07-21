@@ -50,10 +50,10 @@ class RSSFeed {
 		$this->domain = $parsed_url["host"];
 		$this->internal_feed = (($parsed_url['host'] == $_SERVER['HTTP_HOST'] || $parsed_url['host'].':'.$parsed_url['port'] == $_SERVER['HTTP_HOST']) && strpos($parsed_url['path'], $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']) === 0);
 		$this->max_items = $max_items;
-		$this->class_id = md5($rssfeed_url); 
-		
+		$this->class_id = md5($rssfeed_url);
+
 		$this->ausgabe = @fetch_rss($rssfeed_url);
-		
+
 	}
 
 
@@ -74,7 +74,7 @@ class RSSFeed {
 				}
 				echo "<TR>
 				<TD WIDTH=\"1\" ALIGN=\"left\">
-				<IMG SRC=\"pictures/".(!$this->internal_feed ? 'link_extern.gif' : 'link_intern.gif" hspace="2')."\">
+				<IMG SRC=\"". $GLOBALS['ASSETS_URL'] . "images/".(!$this->internal_feed ? 'link_extern.gif' : 'link_intern.gif" hspace="2')."\">
 				</TD>
 				<TD ALIGN=\"left\" VALIGN=\"TOP\">
 				<A HREF=\"".TransformInternalLinks($v["link"])."\" ".(!$this->internal_feed  ? "TARGET=\"_blank\"" : "") . " TITLE=\"".htmlReady($desc)."\" ALT=\"".htmlReady($v["description"])."\">
@@ -82,7 +82,7 @@ class RSSFeed {
 				</A></TD></TR>\n";
 				if ($v['enclosure_url']) {
 					echo "<TR><TD WIDTH=\"1\" ALIGN=\"left\" VALIGN=\"TOP\">&nbsp;</TD>
-					<TD ALIGN=\"left\" VALIGN=\"TOP\"><a href=\"{$v['enclosure_url']}\" TARGET=\"_blank\"><img src=\"pictures/podcast_icon.gif\" border=\"0\" align=\"absmiddle\"></a>
+					<TD ALIGN=\"left\" VALIGN=\"TOP\"><a href=\"{$v['enclosure_url']}\" TARGET=\"_blank\"><img src=\"". $GLOBALS['ASSETS_URL'] . "images/podcast_icon.gif\" border=\"0\" align=\"absmiddle\"></a>
 					<FONT SIZE=\"-2\">".htmlReady('('.$v['enclosure_type'] . ' - ' . floor($v['enclosure_length']/1024) . ' kb)')."</FONT>
 					</TD></TR>\n";
 				}

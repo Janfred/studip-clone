@@ -285,7 +285,7 @@ class Evaluation extends EvaluationObject {
    function isAnonymous () {
       return $this->anonymous == YES ? YES : NO;
    }
-
+   
    /**
     * Gets protect status
     * @access  public
@@ -304,7 +304,7 @@ class Evaluation extends EvaluationObject {
    function setProtected ($protected) {     
      $this->protected = $protected == YES ? YES : NO;
    }
-   
+
    /**
     * Sets visible
     * @access  public
@@ -495,10 +495,6 @@ class Evaluation extends EvaluationObject {
 
    }
    
-   
-# ==================================================== end: private functions #
-  
-
    function isLinked(){
    	 $evalID = $this->getObjectId();
   	// prüfen, ob diese Evaluation mit anderen Evaluationen verknüpft wurde
@@ -516,6 +512,8 @@ class Evaluation extends EvaluationObject {
     	return false;
     }
    }
+# ==================================================== end: private functions #
+
 }
 
 ?>

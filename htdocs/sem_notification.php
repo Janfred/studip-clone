@@ -1,9 +1,9 @@
 <?php
 /**
 * sem_notification.php
-* 
-* 
-* 
+*
+*
+*
 *
 * @author		Peter Thienel <thienel@data-quest.de>, Suchi & Berg GmbH <info@data-quest.de>
 * @version	$Id$
@@ -16,7 +16,7 @@
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // sem_notification.php
-// 
+//
 // Copyright (C) 2005 Peter Thienel <thienel@data-quest.de>,
 // data-quest Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
@@ -72,38 +72,38 @@ function print_module_icons ($m_enabled) {
 	foreach ($m_enabled as $m_name => $m_data) {
 		switch ($m_name) {
 			case 'news' :
-				$m_icon = 'pictures/icon-news.gif';
+				$m_icon = $GLOBALS['ASSETS_URL'].'images/icon-news.gif';
 				break;
 			case 'forum' :
-				$m_icon = 'pictures/icon-posting.gif';
+				$m_icon = $GLOBALS['ASSETS_URL'].'images/icon-posting.gif';
 				break;
 			case 'documents' :
-				$m_icon = 'pictures/icon-disc.gif';
+				$m_icon = $GLOBALS['ASSETS_URL'].'images/icon-disc.gif';
 				break;
 			case 'schedule' :
-				$m_icon = 'pictures/icon-uhr.gif';
+				$m_icon = $GLOBALS['ASSETS_URL'].'images/icon-uhr.gif';
 				break;
 			case 'literature' :
-				$m_icon = 'pictures/icon-lit.gif';
+				$m_icon = $GLOBALS['ASSETS_URL'].'images/icon-lit.gif';
 				break;
 			case 'elearning_interface' :
 			case 'ilias_connect' :
-				$m_icon = 'pictures/icon-lern.gif';
+				$m_icon = $GLOBALS['ASSETS_URL'].'images/icon-lern.gif';
 				break;
 			case 'wiki' :
-				$m_icon = 'pictures/icon-wiki.gif';
+				$m_icon = $GLOBALS['ASSETS_URL'].'images/icon-wiki.gif';
 				break;
 			case 'scm' :
-				$m_icon = 'pictures/icon-cont.gif';
+				$m_icon = $GLOBALS['ASSETS_URL'].'images/icon-cont.gif';
 				break;
 			case 'votes' :
-				$m_icon = 'pictures/icon-vote.gif';
+				$m_icon = $GLOBALS['ASSETS_URL'].'images/icon-vote.gif';
 				break;
 			case 'basic_data' :
-				$m_icon = 'pictures/icon-guest.gif';
+				$m_icon = $GLOBALS['ASSETS_URL'].'images/icon-guest.gif';
 				break;
 			default :
-				$m_icon = 'pictures/icon-posting.gif';
+				$m_icon = $GLOBALS['ASSETS_URL'].'images/icon-posting.gif';
 				break;
 		}
 		echo "<th><img border=\"0\" align=\"center\" src=\"$m_icon\" alt=\"";
@@ -120,9 +120,9 @@ if (isset($_REQUEST['close_my_sem']))
 
 if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("admin")) {
 	$db = new DB_Seminar();
-	$db->query("SELECT sem_tree_id,seminare.Name, seminare.Seminar_id, seminare.status as sem_status, seminar_user.gruppe, seminare.visible, 
-	{$_views['sem_number_sql']} as sem_number, {$_views['sem_number_end_sql']} as sem_number_end 
-	FROM seminar_user LEFT JOIN seminare  USING (Seminar_id) 
+	$db->query("SELECT sem_tree_id,seminare.Name, seminare.Seminar_id, seminare.status as sem_status, seminar_user.gruppe, seminare.visible,
+	{$_views['sem_number_sql']} as sem_number, {$_views['sem_number_end_sql']} as sem_number_end
+	FROM seminar_user LEFT JOIN seminare  USING (Seminar_id)
 	LEFT JOIN seminar_sem_tree sst ON (sst.seminar_id=seminar_user.seminar_id)
 	WHERE seminar_user.user_id = '$user->id'");
 	if (!$db->num_rows()) {
@@ -146,7 +146,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 	echo $css->GetHoverJSFunction();
 	echo "\n<table width=\"75%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" align=\"center\">\n";
 	if ($_REQUEST['view'] != 'notification') {
-		echo '<tr><td class="topic" width=\"100%\">&nbsp;&nbsp;<img src="pictures/gruppe.gif" alt="Gruppe &auml;ndern" border="0">';
+		echo '<tr><td class="topic" width=\"100%\">&nbsp;&nbsp;<img src="'.$GLOBALS['ASSETS_URL'].'images/gruppe.gif" alt="Gruppe &auml;ndern" border="0">';
 		echo '&nbsp;&nbsp;<b>' . _("Benachrichtigung") . "</td></tr>\n";
 		echo "<tr><td class=\"blank\" width=\"100%\" align=\"center\">\n";
 		echo "<table width=\"90%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n";
@@ -177,13 +177,13 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 		echo '';
 	}
 	echo "</th></tr>\n";
-	
+
 	if ($GLOBALS['auth']->auth['jscript']) {
 		$group_field = $_my_sem_group_field;
 	} else {
 		$group_field = 'not_grouped';
 	}
-	
+
 	$groups = array();
 	$my_sem = array();
 	while ($db->next_record()){
@@ -193,15 +193,15 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 			fill_groups($groups, $db->f($group_field), array('seminar_id' => $db->f('Seminar_id'), 'name' => $db->f("Name"), 'gruppe' => $db->f('gruppe')));
 		}
 	}
-	
+
 	$sem_ids_cs = "'" . implode("','", array_keys($my_sem)) . "'";
-	
+
 	if ($group_field == 'sem_number') {
 		correct_group_sem_number($groups, $my_sem);
 	} else {
 		add_sem_name($my_sem);
 	}
-	
+
 	sort_groups($group_field, $groups);
 	$group_names = get_group_names($group_field, $groups);
 	$m_notifications = $modules->getModuleNotification();
@@ -210,19 +210,19 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 	$out = '';
 	foreach ($groups as $group_id => $group_members){
 		if ($group_field != 'not_grouped') {
-			$out .= '<tr><td class="blank" colspan="'.(sizeof($enabled_modules) + 3).'"><img src="pictures/blank.gif" width="1px" height="5px"></td></tr>';
+			$out .= '<tr><td class="blank" colspan="'.(sizeof($enabled_modules) + 3).'"><img src="'.$GLOBALS['ASSETS_URL'].'images/blank.gif" width="1px" height="5px"></td></tr>';
 			$out .= '<tr><td class="blue_gradient" valign="top" height="20" colspan="';
 			$out .= (sizeof($enabled_modules) + 3) . '">';
 			if (isset($_my_sem_open[$group_id])){
 				$out .= '<a class="tree" style="font-weight:bold" name="' . $group_id;
 				$out .= '" href="' . $PHP_SELF . '?close_my_sem=' . $group_id . $link_param;
 				$out .= '#' .$group_id . '" ' . tooltip(_("Gruppierung schließen"), true) . '>';
-				$out .= '<img src="pictures/forumgraurunt.gif"   hspace="3" border="0">';
+				$out .= '<img src="'.$GLOBALS['ASSETS_URL'].'images/forumgraurunt.gif"   hspace="3" border="0">';
 			} else {
 				$out .= '<a class="tree"  name="' . $group_id . '" href="' . $PHP_SELF;
 				$out .= '?open_my_sem=' . $group_id . $link_param . '#' .$group_id;
 				$out .= '" ' . tooltip(_("Gruppierung öffnen"), true) . '>';
-				$out .= '<img src="pictures/forumgrau.gif"  hspace="3" border="0">';
+				$out .= '<img src="'.$GLOBALS['ASSETS_URL'].'images/forumgrau.gif"  hspace="3" border="0">';
 			}
 			if (is_array($group_names[$group_id])){
 				$group_name = $group_names[$group_id][1] . " > " . $group_names[$group_id][0];
@@ -232,15 +232,15 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 			$out .= htmlReady(my_substr($group_name,0,70));
 			$out .= "</a></td></tr>\n";
 		}
-	
+
 		if (isset($_my_sem_open[$group_id])) {
 			$css->resetClass();
 			$css->switchClass();
 			$s_count++;
 			foreach ($group_members as $member){
 				$values = $my_sem[$member['seminar_id']];
-	
-				$out .= sprintf("<tr%s>\n<td class=\"gruppe%s\"><img src=\"pictures/blank.gif\" border=\"0\" width=\"7\" height=\"12\"></td>",
+
+				$out .= sprintf("<tr%s>\n<td class=\"gruppe%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" border=\"0\" width=\"7\" height=\"12\"></td>",
 				$css->getHover(), $values['gruppe']);
 				$out .= sprintf("<td%s><font size=\"-1\">&nbsp;<a href=\"seminar_main.php?auswahl=%s\">%s</a>%s</font>",
 				$css->getFullClass(), $member['seminar_id'],
@@ -282,7 +282,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 			}
 		}
 	}
-	
+
 	?>
 	<script type="text/javascript">
 		<!--
@@ -296,7 +296,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 					}
 				}
 			}
-				
+
 			function selectRow (sem_id, c_box) {
   			var i;
 				var n;
@@ -312,7 +312,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 					}
 				}
 			}
-			
+
 			function selectColumn (mod_id, c_box) {
 				var i;
 				sem_ids = new Array(<? echo $sem_ids_cs; ?>);
@@ -320,7 +320,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 					selectSingle(sem_ids[i], mod_id, c_box)
 				}
 			}
-			
+
 			function selectAll (mod_count, c_box) {
 				var i;
 				var c_checked;
@@ -329,7 +329,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 					selectColumn(i, document.getElementById('mod_row_' + i));
 				}
 			}
-			
+
 			function checkRow (sem_id, g_id) {
 				var i;
 				var n = 0;
@@ -350,7 +350,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 	<?
 	echo $out;
 	if ($group_field != 'not_grouped') {
-		echo '<tr><td class="blank" colspan="'.(sizeof($enabled_modules) + 3).'"><img src="pictures/blank.gif" width="1px" height="5px"></td></tr>';
+		echo '<tr><td class="blank" colspan="'.(sizeof($enabled_modules) + 3).'"><img src="'.$GLOBALS['ASSETS_URL'].'images/blank.gif" width="1px" height="5px"></td></tr>';
 	}
 
 	echo '<tr><th colspan="2">&nbsp;</th>';

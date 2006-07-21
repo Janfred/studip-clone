@@ -32,7 +32,7 @@ echo "<title>" . _("Stud.IP - Hilfe") . "</title>";
 if (!isset($druck))
 	print("\t\t<link rel=\"stylesheet\" href=\"help_style.css\" type=\"text/css\">\n");
 else
-	print("\t\t<link rel=\"stylesheet\" href=\"../style_print.css\" type=\"text/css\">\n");
+	print("\t\t<link rel=\"stylesheet\" href=\"".$GLOBALS['ASSETS_URL']."stylesheets/style_print.css\" type=\"text/css\">\n");
 ?>
 	</head>
 	<body bgcolor=white>
@@ -63,7 +63,7 @@ include("kartei.inc.php");
 if (isset($help_page)) { // ok, eine normale Hilfeseite ausgeben
 
 	$help_page = basename($help_page);
-	
+
 	if (!isset($druck)) { // die Hilfe-Seite in eine Tabelle packen
 		print("\n<table cellspacing=0 cellpadding=10 border=0 width=\"100%\"><tr><td class=\"blank\">");
 		include("../locale/$_language_path/LC_HELP/pages/$help_page");
@@ -74,9 +74,9 @@ if (isset($help_page)) { // ok, eine normale Hilfeseite ausgeben
 		//Studipinfozeile
 		echo "<table width=100% border=0 cellpadding=2 cellspacing=0>";
 		echo "<tr><td colspan=2><hr></td></tr>";
-		echo "<tr><td><i><font size=-1>" . _("Stand:") . " ".date("d.m.y",time()).", ".date("G:i", time())." " . _("Uhr.") . "</font></i></td><td align=\"right\"><font size=-2><img src=\"../pictures/logo2b.gif\"><br />&copy; ".date("Y", time())." v.$SOFTWARE_VERSION&nbsp; &nbsp; </font></td></tr>";
+		echo "<tr><td><i><font size=-1>" . _("Stand:") . " ".date("d.m.y",time()).", ".date("G:i", time())." " . _("Uhr.") . "</font></i></td><td align=\"right\"><font size=-2><img src=\"".$GLOBALS['ASSETS_URL']."images/logo2b.gif\"><br />&copy; ".date("Y", time())." v.$SOFTWARE_VERSION&nbsp; &nbsp; </font></td></tr>";
 		echo  "</table>\n";
-	}	
+	}
 
 
 } else { // das Inhaltsverzeichnis ausgeben
@@ -112,7 +112,7 @@ if (isset($help_page)) { // ok, eine normale Hilfeseite ausgeben
 			print("</blockquote><br>");
 			}
 		}
-		
+
 		// und dann komplett
 		for ($i = 0; $i < count($pages); $i++) {
 			if ($pages[$i]["perm"] == "" || $perm->have_perm($pages[$i]["perm"])) {
@@ -128,9 +128,9 @@ if (isset($help_page)) { // ok, eine normale Hilfeseite ausgeben
 		//Studipinfozeile
 		echo "<table width=100% border=0 cellpadding=2 cellspacing=0>";
 		echo "<tr><td colspan=2><hr></td></tr>";
-		echo "<tr><td><i><font size=-1>" . _("Stand:") . " ".date("d.m.y",time()).", ".date("G:i", time())." " . _("Uhr.") . "</font></i></td><td align=\"right\"><font size=-2><img src=\"../pictures/logo2b.gif\"><br />&copy; ".date("Y", time())." v.$SOFTWARE_VERSION&nbsp; &nbsp; </font></td></tr>";
+		echo "<tr><td><i><font size=-1>" . _("Stand:") . " ".date("d.m.y",time()).", ".date("G:i", time())." " . _("Uhr.") . "</font></i></td><td align=\"right\"><font size=-2><img src=\"".$GLOBALS['ASSETS_URL']."images/logo2b.gif\"><br />&copy; ".date("Y", time())." v.$SOFTWARE_VERSION&nbsp; &nbsp; </font></td></tr>";
 		echo  "</table>\n";
-		}	
+		}
 	}
 
 }

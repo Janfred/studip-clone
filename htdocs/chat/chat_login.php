@@ -1,7 +1,7 @@
 <?
 /**
 * Login script for the Chat
-* 
+*
 * This script checks user permissions and builds a frameset for the chat
 *
 * @author		André Noack <andre.noack@gmx.net>
@@ -54,6 +54,11 @@ require_once $ABSOLUTE_PATH_STUDIP."messaging.inc.php";
 require_once $ABSOLUTE_PATH_STUDIP."functions.php";
 require_once $ABSOLUTE_PATH_STUDIP."visual.inc.php";
 
+//korrekte chatid ?
+if (!$chatid || !in_array(get_object_type($chatid), array('user','sem','inst','fak','global'))) {
+	page_close();
+	die;
+}
 $chatServer =& ChatServer::GetInstance($CHAT_SERVER_NAME);
 $chatServer->caching = true;
 $sms = new messaging();
@@ -75,14 +80,14 @@ if ($chat_entry_level != "admin" && $chatServer->isActiveChat($chatid) && ($chat
 		}
 	}
 	if (!$chat_entry_check && $chat_entry_level){
-		$msg .= "info§" . "<form name=\"chatlogin\" method=\"post\" onSubmit=\"doSubmit();return false;\"action=\"$PHP_SELF?chatid=$chatid\"><b>" ._("Passwort erforderlich") 
+		$msg .= "info§" . "<form name=\"chatlogin\" method=\"post\" onSubmit=\"doSubmit();return false;\"action=\"$PHP_SELF?chatid=$chatid\"><b>" ._("Passwort erforderlich")
 			. "</b><br><font size=\"-1\" color=\"black\">" . _("Um an diesem Chat teilnehmen zu k&ouml;nnen, m&uuml;ssen sie das Passwort eingeben.")
 			. "<br><input type=\"password\" style=\"vertical-align:middle;\" name=\"chat_password\">&nbsp;&nbsp;<input style=\"vertical-align:middle;\" type=\"image\" name=\"submit\""
 			. makeButton("absenden","src") . " border=\"0\" value=\"senden\"></font></form>§";
 			}
 }
 if (!$chat_entry_check && !$chat_entry_level){
-	$msg .= "error§" . "<b>" ._("Chatlogin nicht m&ouml;glich") 
+	$msg .= "error§" . "<b>" ._("Chatlogin nicht m&ouml;glich")
 		. "</b><br><font size=\"-1\" color=\"black\">" . _("Sie k&ouml;nnen ohne eine g&uuml;ltige Einladung nicht an diesem Chat teilnehmen.") . "</font>§";
 }
 
@@ -101,10 +106,10 @@ if (!$chat_entry_check){
 	<head>
 	 <title>Stud.IP</title>
 	<?php include $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_style.inc.php";?>
-	<script type="text/javascript" language="javascript" src="<?=$CANONICAL_RELATIVE_PATH_STUDIP?>md5.js"></script>
+	<script type="text/javascript" language="javascript" src="<?= $GLOBALS['ASSETS_URL'] ?>javascripts/md5.js"></script>
 	<script type="text/javascript">
 	/**
-	* JavaScript 
+	* JavaScript
 	*/
 	var chatuniqid = '<?=$chatServer->chatDetail[$chatid]["id"]?>';
 	function doSubmit() {
@@ -130,13 +135,16 @@ if (!$chat_entry_check){
 	</table>
 	</body>
 	</html>
-	
+
 	<?
 	page_close();
 	die;
 }
 //evtl Chateinladungen löschen
 $sms->delete_chatinv();
+if ($user->cfg->getValue($user->id, "CHAT_USE_AJAX_CLIENT") ){
+	include "chat_client_ajax.php";
+} else {
 
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN">
@@ -144,11 +152,11 @@ $sms->delete_chatinv();
 <head>
 	<title>Chat(<?=$auth->auth["uname"]?>) -
 	<?=htmlReady($chatServer->chatDetail[$chatid]["name"])?></title>
-	<script type="text/javascript" language="javascript" src="<?=$CANONICAL_RELATIVE_PATH_STUDIP?>md5.js"></script>
+	<script type="text/javascript" language="javascript" src="<?= $GLOBALS['ASSETS_URL'] ?>javascripts/md5.js"></script>
 <script type="text/javascript">
-	/**
-	* JavaScript 
-	*/
+	//
+	// JavaScript
+	//
 	var chatuniqid = '<?=$chatServer->chatDetail[$chatid]["id"]?>';
 	function coming_home(url) {
 		if (opener.closed) alert('<?=_("Das Hauptfenster wurde geschlossen,\\ndiese Funktion kann nicht mehr ausgeführt werden!")?>');
@@ -158,7 +166,7 @@ $sms->delete_chatinv();
 		}
 		return false;
 	}
-	
+
 	</script>
 </head>
 <frameset rows="83%,30,*,0" FRAMEBORDER=NO FRAMESPACING=0 FRAMEPADDING=0 border=0>
@@ -172,5 +180,6 @@ $sms->delete_chatinv();
 </frameset>
 </html>
 <?
+}
 page_close();
 ?>

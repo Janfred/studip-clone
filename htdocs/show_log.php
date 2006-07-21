@@ -53,7 +53,7 @@ function end_form($from) {
 	print "</form>";
 }
 
-function showlog_search_form($actionfilter, $searchmode, $objecttype, $objs, $searchobject, $object) {	
+function showlog_search_form($actionfilter, $searchmode, $objecttype, $objs, $searchobject, $object) {
 //print "<p>showlog_search_from($actionfilter, $searchmode, $objecttype, $objs, $searchobjects)";
 	$db=new DB_Seminar;
 	$db->query("SELECT action_id, description FROM log_actions");
@@ -91,7 +91,7 @@ function showlog_search_form($actionfilter, $searchmode, $objecttype, $objs, $se
 		echo "</span>";
 		echo $table->openCell();
 		echo "<span style='font-size:10px;'>";
-		echo "<input type=image src=\"./pictures/suchen.gif\" name=\"search\">";
+		echo "<input type=image src=\"".$GLOBALS['ASSETS_URL']."images/suchen.gif\" name=\"search\">";
 		echo "&nbsp;";
 		echo "</span>";
 	} elseif ($searchmode=='found') {
@@ -125,7 +125,7 @@ function showlog_search_form($actionfilter, $searchmode, $objecttype, $objs, $se
 		echo "</select>";
 		echo "</span>";
 		echo $table->openCell();
-		echo "<input type=image src=\"./pictures/rewind.gif\" name=\"rewind\" style=\"margin-top:-2px;\">";
+		echo "<input type=image src=\"".$GLOBALS['ASSETS_URL']."images/rewind.gif\" name=\"rewind\" style=\"margin-top:-2px;\">";
 	}
 	echo $table->openCell();
 	echo "<span style='font-size:10px;'>";
@@ -162,7 +162,7 @@ function showlog_format_username($uid) {
 		return $uid;
 	}
 }
-	
+
 function showlog_format_sem($sem_id, $maxlen=100) {
 	$db=new DB_Seminar();
 	$q="SELECT seminare.Name as title, seminare.VeranstaltungsNummer as number, semester_data.name as semester FROM seminare LEFT JOIN semester_data ON (seminare.start_time=semester_data.beginn) WHERE Seminar_id='$sem_id'";
@@ -261,8 +261,8 @@ function showlog_entries($from, $mode, $actionfilter, $searchmode, $object) {
 	$db->query($q);
 	$db->next_record();
 	$numentries=$db->f("c");
-	if ($from>$numentries) { 
-		$from = max(0,$numentries-50); 
+	if ($from>$numentries) {
+		$from = max(0,$numentries-50);
 	}
 
 	$q="SELECT * FROM log_events WHERE 1 $add ORDER BY mkdate DESC, event_id DESC LIMIT $from,$to";

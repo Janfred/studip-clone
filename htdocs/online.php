@@ -30,13 +30,16 @@ require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/messagingSettings.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/messaging.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/contact.inc.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/user_visible.inc.php");
 if ($GLOBALS['CHAT_ENABLE']){
-	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php"; 
+	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php";
 	$chatServer =& ChatServer::GetInstance($GLOBALS['CHAT_SERVER_NAME']);
 	$chatServer->caching = true;
 }
 $msging=new messaging;
 $cssSw=new cssClassSwitcher;
+
+$HELP_KEYWORD="Basis.InteraktionWhosOnline";
 
 // Start of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
@@ -45,7 +48,7 @@ include ("$ABSOLUTE_PATH_STUDIP/links_sms.inc.php");
 
 ob_start();
 
-$online = get_users_online($my_messaging_settings['active_time']);
+$online = get_users_online($my_messaging_settings['active_time'], $user->cfg->getValue($user->id, "ONLINE_NAME_FORMAT"));
 
 if ($sms_msg) {
 	$msg = $sms_msg;
@@ -72,9 +75,9 @@ if ($cmd=="delete_user"){
 ?>
 <table width="100%" border=0 cellpadding=0 cellspacing=0>
 <tr>
-	<td class="topic"><img src="pictures/nutzer.gif" border="0" align="texttop"><b>&nbsp;<?=_("Wer ist Online?")?></b></td>
-	<td nowrap class="topic" align="right"><?=_("Einstellungen &auml;ndern")?>&nbsp; <a href="<? echo $PHP_SELF ?>?change_view=TRUE"><img src="pictures/pfeillink.gif" border=0></a>
-	
+	<td class="topic"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/nutzer.gif" border="0" align="texttop"><b>&nbsp;<?=_("Wer ist Online?")?></b></td>
+	<td nowrap class="topic" align="right"><?=_("Einstellungen &auml;ndern")?>&nbsp; <a href="<? echo $PHP_SELF ?>?change_view=TRUE"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/pfeillink.gif" border=0></a>
+
 </tr>
 <?
 if ($msg)
@@ -89,7 +92,7 @@ if ($msg)
 		<td class="blank"><br><blockquote>
 		<?
 		print(_("Hier k&ouml;nnen Sie sehen, wer au&szlig;er Ihnen im Moment online ist.") . "<p>");
-		printf(_("Sie k&ouml;nnen diesen Usern eine Nachricht schicken %s oder sie zum Chatten %s einladen."), sprintf("<img src=\"pictures/nachricht1.gif\" width=\"24\" height=\"21\" %s border=\"0\"><br>", tooltip(_("Nachricht an User verschicken"))), sprintf("<img src=\"pictures/chat1.gif\" width=\"24\" height=\"21\" %s border=\"0\">", tooltip(_("zum Chatten einladen"))));
+		printf(_("Sie k&ouml;nnen diesen Usern eine Nachricht schicken %s oder sie zum Chatten %s einladen."), sprintf("<img src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" width=\"24\" height=\"21\" %s border=\"0\"><br>", tooltip(_("Nachricht an User verschicken"))), sprintf("<img src=\"".$GLOBALS['ASSETS_URL']."images/chat1.gif\" width=\"24\" height=\"21\" %s border=\"0\">", tooltip(_("zum Chatten einladen"))));
 		print("\n<br>" . _("Wenn Sie auf den Namen klicken, kommen Sie zur Homepage des Users."));
 
 		if ($SessSemName[0] && $SessSemName["class"] == "inst")
@@ -97,7 +100,7 @@ if ($msg)
 		elseif ($SessSemName[0])
 			echo "<br /><br /><a href=\"seminar_main.php\">" . _("Zur&uuml;ck zur ausgew&auml;hlten Veranstaltung") . "</a>";
 		?>
-		<td class="blank" align = right><img src="pictures/online.jpg" border="0"></td>
+		<td class="blank" align = right><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/online.jpg" border="0"></td>
 	</tr>
 	<tr>
 		<td class="blank" colspan=2 width="100%">
@@ -112,23 +115,29 @@ ob_start();
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
 
+	$weitere = 0;
+
 	if (is_array ($online)) { // wenn jemand online ist
 		foreach($online as $username=>$value) { //alle durchgehen die online sind
 			$user_id = $value["userid"];
-			if ($value['is_buddy']) { // er ist auf jeden Fall als Buddy eingetragen
-				$db2->query ("SELECT statusgruppen.position, name, statusgruppen.statusgruppe_id FROM statusgruppen LEFT JOIN statusgruppe_user USING(statusgruppe_id) WHERE range_id = '$owner_id' AND user_id = '$user_id' ORDER BY statusgruppen.position ASC LIMIT 1");	
-				if ($db2->next_record()) { // er ist auch einer Gruppe zugeordnet
-					$group_buddies[]=array($db2->f("position"), $db2->f("name"), $online[$username]["name"],$online[$username]["last_action"],$username,$db2->f("statusgruppe_id"),$user_id);
-				} else {	// buddy, aber keine Gruppe
-					$non_group_buddies[]=array($online[$username]["name"],$online[$username]["last_action"],$username,$user_id);
+			if ($value['is_visible']) {
+				if ($value['is_buddy']) { // er ist auf jeden Fall als Buddy eingetragen
+					$db2->query ("SELECT statusgruppen.position, name, statusgruppen.statusgruppe_id FROM statusgruppen LEFT JOIN statusgruppe_user USING(statusgruppe_id) WHERE range_id = '$owner_id' AND user_id = '$user_id' ORDER BY statusgruppen.position ASC LIMIT 1");
+					if ($db2->next_record()) { // er ist auch einer Gruppe zugeordnet
+						$group_buddies[]=array($db2->f("position"), $db2->f("name"), $online[$username]["name"],$online[$username]["last_action"],$username,$db2->f("statusgruppe_id"),$user_id);
+					} else {	// buddy, aber keine Gruppe
+						$non_group_buddies[]=array($online[$username]["name"],$online[$username]["last_action"],$username,$user_id);
+					}
+				} else { // online, aber kein buddy
+					$n_buddies[]=array($online[$username]["name"],$online[$username]["last_action"],$username,$user_id);
 				}
-			} else { // online, aber kein buddy
-				$n_buddies[]=array($online[$username]["name"],$online[$username]["last_action"],$username,$user_id);
+			} else {
+				$weitere++;
 			}
 		}
 	}
-	
-	
+
+
  if (is_array($group_buddies))
 	sort ($group_buddies);
 
@@ -143,14 +152,14 @@ if (is_array($n_buddies))
 	echo "<table width=\"99%\" align=\"center\"cellspacing=0 border=0 cellpadding=2>\n";
 
 	//Kopfzeile
-	if ($my_messaging_settings["show_only_buddys"]) 
-		echo "\n<tr><td class=\"".$cssSw->getHeaderClass()."\" width=\"50%\" align=\"center\"><img src=\"pictures/blank.gif\" width=1 height=20><font size=-1><b>" . _("Buddies") . "</b></font></td></tr>\n";
+	if ($my_messaging_settings["show_only_buddys"])
+		echo "\n<tr><td class=\"".$cssSw->getHeaderClass()."\" width=\"50%\" align=\"center\"><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" width=1 height=20><font size=-1><b>" . _("Buddies") . "</b></font></td></tr>\n";
 	else
-		echo "\n<tr><td class=\"".$cssSw->getHeaderClass()."\" width=\"50%\" align=\"center\"><img src=\"pictures/blank.gif\" width=1 height=20><font size=-1><b>" . _("Buddies") . "</b></font></td><td class=\"".$cssSw->getHeaderClass()."\" width=\"50%\" align=\"center\"><img src=\"pictures/blank.gif\" width=1 height=20><font size=-1><b>" . _("andere Nutzer") . "</b></font></td></tr>\n";
+		echo "\n<tr><td class=\"".$cssSw->getHeaderClass()."\" width=\"50%\" align=\"center\"><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" width=1 height=20><font size=-1><b>" . _("Buddies") . "</b></font></td><td class=\"".$cssSw->getHeaderClass()."\" width=\"50%\" align=\"center\"><img src=\"".$GLOBALS['ASSETS_URL']."/blank.gif\" width=1 height=20><font size=-1><b>" . _("andere Nutzer") . "</b></font></td></tr>\n";
 	echo "<tr>";
 
 	//Buddiespalte
-	
+
 	if (!GetNumberOfBuddies()) { // Nutzer hat gar keine buddies
 		echo "\n<td width=\"50%\" valign=\"top\">";
 		echo "\n<table width=\"100%\" cellspacing=0 cellpadding=1 border=0><tr>\n";
@@ -165,9 +174,9 @@ if (is_array($n_buddies))
 		echo "\n<td width=\"50%\" valign=\"top\">";
 		echo "\n<table width=\"100%\" cellspacing=0 cellpadding=1 border=0>\n";
 		if (($group_buddies) || ($non_group_buddies)) {
-			echo "\n<tr><td class=\"steelgraudunkel\" colspan=2 width=\"65%\"><font size=-1 color=\"white\">&nbsp;<b>" . _("Name") . "</b></font></td><td class=\"steelgraudunkel\"  width=\"20%\" colspan=4><font size=-1 color=\"white\"><b>" . _("letztes Lebenszeichen") . "</b></font></td></tr>"; 
+			echo "\n<tr><td class=\"steelgraudunkel\" colspan=2 width=\"65%\"><font size=-1 color=\"white\">&nbsp;<b>" . _("Name") . "</b></font></td><td class=\"steelgraudunkel\"  width=\"20%\" colspan=4><font size=-1 color=\"white\"><b>" . _("letztes Lebenszeichen") . "</b></font></td></tr>";
 		} else { // gar keine Buddies online
-			echo "\n<tr><td class=\"steelgraudunkel\" width=\"50%\" align=\"center\" colspan=6><font size=-1 color=\"white\"><b>" . _("Es sind keine Ihrer Buddies online.") ."</b></font></td></tr>";		
+			echo "\n<tr><td class=\"steelgraudunkel\" width=\"50%\" align=\"center\" colspan=6><font size=-1 color=\"white\"><b>" . _("Es sind keine Ihrer Buddies online.") ."</b></font></td></tr>";
 		}
 		if (sizeof($group_buddies)) {
 			reset ($group_buddies);
@@ -179,7 +188,7 @@ if (is_array($n_buddies))
 					printf("\n<tr><td colspan=\"6\" align=\"middle\" class=\"steelkante\"><a href=\"contact.php?view=gruppen&filter=%s\"><font size=\"2\" color=\"#555555\">%s</font></a></td></tr>",$statusgruppe_id, htmlready($gruppe));
 					$groupcount++;
 					if ($groupcount > 10) //irgendwann gehen uns die Farben aus
-						$groupcount = 1;  
+						$groupcount = 1;
 				}
 				$lastgroup = $gruppe;
 				printf("\n<tr><td  width=\"1%%\" class=\"gruppe%s\">&nbsp; </td><td class=\"steel1\" width=\"64%%\"><a href=\"about.php?username=%s\"><font size=-1>&nbsp; %s </font></a></td><td class=\"steel1\" width=\"20%%\"><font size=-1> %s:%s</font></td>", $groupcount, $tmp_online_uname, htmlReady($fullname), date("i",$zeit), date("s",$zeit));
@@ -189,8 +198,8 @@ if (is_array($n_buddies))
 				} else {
 					echo "&nbsp;";
 				}
-				echo "\n</td><td class=\"steel1\" width=\"5%\" align=center><a href=\"sms_send.php?sms_source_page=online.php&rec_uname=$tmp_online_uname\"><img src=\"pictures/nachricht1.gif\" ".tooltip(_("Nachricht an User verschicken"))." border=\"0\"></a></td><td class=\"steel1\" width=\"5%\" align=\"center\"><a href=\"$PHP_SELF?cmd=delete_user&delete_uname=$tmp_online_uname\"><img src=\"pictures/trash.gif\" ".tooltip(_("aus der Buddy-Liste entfernen"))." border=\"0\"></a></td></tr>";
-				$cssSw->switchClass();					
+				echo "\n</td><td class=\"steel1\" width=\"5%\" align=center><a href=\"sms_send.php?sms_source_page=online.php&rec_uname=$tmp_online_uname\"><img src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" ".tooltip(_("Nachricht an User verschicken"))." border=\"0\"></a></td><td class=\"steel1\" width=\"5%\" align=\"center\"><a href=\"$PHP_SELF?cmd=delete_user&delete_uname=$tmp_online_uname\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" ".tooltip(_("aus der Buddy-Liste entfernen"))." border=\"0\"></a></td></tr>";
+				$cssSw->switchClass();
 			}
 		}
 
@@ -206,7 +215,7 @@ if (is_array($n_buddies))
 				} else {
 					echo "&nbsp;";
 				}
-				echo "\n</td><td class=\"steel1\" width=\"5%\" align=center><a href=\"sms_send.php?sms_source_page=online.php&rec_uname=$tmp_online_uname\"><img src=\"pictures/nachricht1.gif\" ".tooltip(_("Nachricht an User verschicken"))." border=\"0\"></a></td><td class=\"steel1\" width=\"5%\" align=\"center\"><a href=\"$PHP_SELF?cmd=delete_user&delete_uname=$tmp_online_uname\"><img src=\"pictures/trash.gif\" ".tooltip(_("aus der Buddy-Liste entfernen"))." border=\"0\"></a></td></tr>";
+				echo "\n</td><td class=\"steel1\" width=\"5%\" align=center><a href=\"sms_send.php?sms_source_page=online.php&rec_uname=$tmp_online_uname\"><img src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" ".tooltip(_("Nachricht an User verschicken"))." border=\"0\"></a></td><td class=\"steel1\" width=\"5%\" align=\"center\"><a href=\"$PHP_SELF?cmd=delete_user&delete_uname=$tmp_online_uname\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" ".tooltip(_("aus der Buddy-Liste entfernen"))." border=\"0\"></a></td></tr>";
 			}
 		}
 		echo "\n<tr><td class=\"blank\" width=\"50%\" align=\"center\" colspan=6><font size=-1><br>Zum Adressbuch (".GetSizeofBook()." Eintr&auml;ge) klicken Sie <a href=\"contact.php\">hier</a></font></td>";
@@ -217,29 +226,72 @@ ob_end_flush();
 ob_start();
 
 	//Spalte anderer Benutzer
-	if (!$my_messaging_settings["show_only_buddys"]) {	
+	if (!$my_messaging_settings["show_only_buddys"]) {
 		echo "\n<td width=\"50%\" valign=\"top\">";
 		echo "\n<table width=\"100%\" cellspacing=0 cellpadding=1 border=0><tr>\n";
-	
+
 		if (is_array($n_buddies)) {
 			echo "\n<td class=\"steelgraudunkel\"  colspan=2><font size=-1 color=\"white\"><b>&nbsp;" . _("Name") . "</b></font></td><td class=\"steelgraudunkel\" colspan=3 ><font size=-1 color=\"white\"><b>" . _("letztes Lebenszeichen") . "</b></font></td></tr>\n";
 			reset($n_buddies);
 			while (list($index)=each($n_buddies)) {
 				list($fullname,$zeit,$tmp_online_uname,$tmp_user_id)=$n_buddies[$index];
-				printf("\n<tr><td class=\"".$cssSw->getClass()."\" width=\"1%%\"><a href=\"$PHP_SELF?cmd=add_user&add_uname=$tmp_online_uname\"><img src=\"pictures/add_buddy.gif\" ".tooltip(_("zu den Buddies hinzufügen"))." border=\"0\"></a></td><td class=\"".$cssSw->getClass()."\" width=\"67%%\" align=\"left\"><a href=\"about.php?username=%s\"><font size=-1>&nbsp; %s </font></a></td><td class=\"".$cssSw->getClass()."\" width=\"20%%\"><font size=-1> %s:%s</font></td>", $tmp_online_uname, htmlReady($fullname), date("i",$zeit), date("s",$zeit));
+				printf("\n<tr><td class=\"".$cssSw->getClass()."\" width=\"1%%\"><a href=\"$PHP_SELF?cmd=add_user&add_uname=$tmp_online_uname\"><img src=\"".$GLOBALS['ASSETS_URL']."images/add_buddy.gif\" ".tooltip(_("zu den Buddies hinzufügen"))." border=\"0\"></a></td><td class=\"".$cssSw->getClass()."\" width=\"67%%\" align=\"left\"><a href=\"about.php?username=%s\"><font size=-1>&nbsp; %s </font></a></td><td class=\"".$cssSw->getClass()."\" width=\"20%%\"><font size=-1> %s:%s</font></td>", $tmp_online_uname, htmlReady($fullname), date("i",$zeit), date("s",$zeit));
 				echo "\n<td class=\"".$cssSw->getClass()."\" width=\"6%\"align=center>";
 				if ($CHAT_ENABLE) {
 					echo chat_get_online_icon($tmp_user_id,$tmp_online_uname);
 				} else {
 					echo "&nbsp;";
 				}
-				echo "\n</td><td class=\"".$cssSw->getClass()."\" align=center width=\"6%\"><a href=\"sms_send.php?sms_source_page=online.php&rec_uname=$tmp_online_uname\"><img src=\"pictures/nachricht1.gif\" ".tooltip(_("Nachricht an User verschicken"))." border=\"0\"></a></td></tr>";
-				$cssSw->switchClass();					
+			?>
+			</td>
+			<td class="<?=$cssSw->getClass()?>" align=center width="6%">
+				<a href="sms_send.php?sms_source_page=online.php&rec_uname=<?=$tmp_online_uname?>">
+					<img src="<?=$GLOBALS['ASSETS_URL']?>images/nachricht1.gif" <?=tooltip(_("Nachricht an User verschicken"))?> border="0">
+				</a>
+			</td>
+		</tr>
+			<?
+				$cssSw->switchClass();
 			}
-			
+			if ($weitere > 0) {
+		?>
+			<tr>
+				<td colspan="5" align="center">
+					<br/>
+					<font size="-1"><?=sprintf(_("+ %s unsichtbare NutzerInnen"), $weitere)?></font>
+				</td>
+			</tr>
+		<?
+			}
 		} else {
-			echo "\n<td class=\"steelgraudunkel\" width=\"50%\" align=\"center\" colspan=4><font size=-1 color=\"white\"><b>" . _("Kein anderer Nutzer ist online.") . "</b></font></td>";
-			echo "\n</tr></table></td>";
+			// if we previously found unvisible users who are online
+			if ($weitere > 0) {
+			?>
+				<td class="steelgraudunkel" colspan="5" align="center">
+					<font size="-1" color="white">
+						<b>&nbsp;<?=_("Keine sichtbaren Nutzer online.")?></b>
+					</font>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="5" align="center">
+					<br/>
+					<font size="-1"><?=sprintf(_("+ %s unsichtbare NutzerInnen"), $weitere)?></font>
+				</td>
+			</tr>
+			<?
+			} else {
+			?>
+			<td class="steelgraudunkel" width="50%" align="center" colspan="4">
+				<font size="-1" color="white">
+					<b><?=_("Kein anderer Nutzer ist online.")?></b>
+				</font>
+			</td>
+			</tr>
+			</table>
+			</td>
+			<?
+			}
 		}
 	}
 	echo "\n</tr></table>";

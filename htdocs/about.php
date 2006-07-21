@@ -43,6 +43,7 @@ require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/guestbook.class.php");
 require_once("$ABSOLUTE_PATH_STUDIP/object.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/score.class.php");
 require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/SemesterData.class.php");
+require_once("$ABSOLUTE_PATH_STUDIP/user_visible.inc.php");
 require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'] . "/lib/classes/StudipLitList.class.php");
 
 
@@ -65,11 +66,22 @@ if (get_config('NEWS_RSS_EXPORT_ENABLE')){
 	}
 }
 
+// Help
+$HELP_KEYWORD="Basis.Homepage";
+
 // Start  of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");
 
 if ($rssusername) $username = $rssusername;
+
+if (isset($username) && $username != $auth->auth["uname"] && !get_visibility_by_username($username)) {
+	parse_window ("error§" . _("Diese Homepage ist nicht verf&uuml;gbar.") . " <br /><font size=-1 color=black>" . _("Die angeforderte Homepage ist leider nicht verf&uuml;gbar.")."</font>","§",
+	_("Homepage nicht verf&uuml;gbar"),
+	sprintf(_("%sHier%s geht es wieder zur Anmeldung beziehungsweise Startseite."), "<a href=\"index.php\"><b>&nbsp;", "</b></a>") . "<br />&nbsp;");
+	die;
+
+}
 ?>
 <script language="Javascript">
 function open_im()
@@ -126,7 +138,7 @@ else
 $db->next_record();
 
 if ($perm->have_perm("root") && $db->f("locked")==1)
-        $user_gesperrt = TRUE;
+	$user_gesperrt = TRUE;
 
 if (!$db->nf()) {
 	parse_window ("error§"._("Es wurde kein Nutzer unter dem angegebenen Nutzernamen gefunden!")."<br />"._(" Wenn Sie auf einen Link geklickt haben, kann es sein, dass sich der Username des gesuchten Nutzers ge&auml;ndert hat, oder der Nutzer gel&ouml;scht wurde.")."§", "§", _("Benutzer nicht gefunden"));
@@ -188,7 +200,7 @@ if ($msg)
 }
 ?>
 
-<tr><td class="steel1" align="center" valign="center"><img src="pictures/blank.gif" width=205 height=5><br />
+<tr><td class="steel1" align="center" valign="center"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" width=205 height=5><br />
 <?
 
 // hier wird das Bild ausgegeben
@@ -202,8 +214,12 @@ if(!file_exists("./user/".$user_id.".jpg")) {
 // Hier der Teil fuer die Ausgabe der normalen Daten
 ?>
 <td class="steel1"  width="99%" valign ="top" rowspan=2><br><blockquote>
-<? echo "<b><font size=7>".htmlReady($db->f("fullname"))."</font></b><br><br>";?>
-<? echo "<b>&nbsp;" . _("E-mail:") . " </b><a href=\"mailto:". $db->f("Email")."\">".htmlReady($db->f("Email"))."</a><br>";
+<? echo "<b><font size=7>".htmlReady($db->f("fullname"))."</font></b><br>";
+if ($db->f('motto')) echo '<b><font size="5">'.htmlReady($db->f('motto')).'</font></b><br>';
+if (!get_visibility_by_state($db->f("visible"))) {
+		echo "<p><font color=red>"._("(Sie sind unsichtbar. Deshalb können nur Sie diese Seite sehen.)")."</font></p>";
+}
+echo "<br><b>&nbsp;" . _("E-mail:") . " </b><a href=\"mailto:". $db->f("Email")."\">".htmlReady($db->f("Email"))."</a><br>";
 IF ($db->f("privatnr")!="") echo "<b>&nbsp;" . _("Telefon (privat):") . " </b>". htmlReady($db->f("privatnr"))."<br>";
 IF ($db->f("privatcell")!="") echo "<b>&nbsp;" . _("Mobiltelefon:") . " </b>". htmlReady($db->f("privatcell"))."<br>";
 IF ($db->f("privadr")!="") echo "<b>&nbsp;" . _("Adresse (privat):") . " </b>". htmlReady($db->f("privadr"))."<br>";
@@ -286,12 +302,12 @@ if ($username==$auth->auth["uname"]) {
 } else {
 	if (CheckBuddy($username)==FALSE)
 		echo "<br /><font size=\"-1\">&nbsp;<a href=\"$PHP_SELF?cmd=add_user&add_uname=$username&username=$username\">" . _("zu Buddies hinzuf&uuml;gen") . "</a></font>";
-	echo "<br /><font size=\"-1\"> <a href=\"sms_send.php?sms_source_page=about.php&rec_uname=", $db->f("username"),"\">&nbsp;" . _("Nachricht an Nutzer") . "&nbsp;<img style=\"vertical-align:middle\" src=\"pictures/nachricht1.gif\" " . tooltip(_("Nachricht an Nutzer verschicken")) . " border=0 align=texttop></a></font>";
+	echo "<br /><font size=\"-1\"> <a href=\"sms_send.php?sms_source_page=about.php&rec_uname=", $db->f("username"),"\">&nbsp;" . _("Nachricht an Nutzer") . "&nbsp;<img style=\"vertical-align:middle\" src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" " . tooltip(_("Nachricht an Nutzer verschicken")) . " border=0 align=texttop></a></font>";
 
 }
 
 // Export dieses Users als Vcard
-echo "<br /><font size=\"-1\"><a href=\"contact_export.php?username=$username\">&nbsp;"._("vCard herunterladen")."&nbsp;<img style=\"vertical-align:middle\" src=\"pictures/vcardexport.gif\" border=\"0\" ".tooltip(_("als vCard exportieren"))."></a></font>";
+echo "<br /><font size=\"-1\"><a href=\"contact_export.php?username=$username\">&nbsp;"._("vCard herunterladen")."&nbsp;<img style=\"vertical-align:middle\" src=\"".$GLOBALS['ASSETS_URL']."images/vcardexport.gif\" border=\"0\" ".tooltip(_("als vCard exportieren"))."></a></font>";
 
 echo "<br>&nbsp; ";
 echo "</td>";
@@ -319,7 +335,7 @@ if ($GLOBALS['CALENDAR_ENABLE']) {
 
 // include and show friend-of-a-friend list
 // (direct/indirect connection via buddy list)
-if ($GLOBALS['FOAF_ENABLE'] 
+if ($GLOBALS['FOAF_ENABLE']
 	&& ($auth->auth['uid']!=$user_id)
 	&& $user->cfg->getValue($user_id, 'FOAF_SHOW_IDENTITY')) {
         include("lib/classes/FoafDisplay.class.php");
@@ -358,7 +374,7 @@ if ( ($lit_list = StudipLitList::GetFormattedListsByRange($user_id)) ) {
 	echo "<table class=\"blank\" width=\"100%%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><b>&nbsp;" . _("Literaturlisten") . " </b></td>";
 	$cs = 1;
 	if ($user_id == $auth->auth['uid']){
-		echo '<td align="right" class="topic">&nbsp;<a href="admin_lit_list.php?_range_id=self"><img src="pictures/pfeillink.gif" border="0" ' . tooltip(_("Literaturlisten bearbeiten")) . '>&nbsp;</td>';
+		echo '<td align="right" class="topic">&nbsp;<a href="admin_lit_list.php?_range_id=self"><img src="'.$GLOBALS['ASSETS_URL'].'images/pfeillink.gif" border="0" ' . tooltip(_("Literaturlisten bearbeiten")) . '>&nbsp;</td>';
 		$cs = 2;
 	}
 	printf ("</tr><tr><td colspan=\"$cs\" class=\"steel1\">&nbsp;</td></tr><tr><td colspan=\"$cs\" class=\"steel1\"><blockquote>%s</blockquote></td></tr><tr><td colspan=\"$cs\" class=\"steel1\">&nbsp;</td></tr></table><br>\n",$lit_list);
@@ -403,7 +419,36 @@ foreach ($localFields as $val) {
 		}
 	}
 }
-
+if ($GLOBALS["PLUGINS_ENABLE"]){
+	// PluginEngine aktiviert. 
+	// Prüfen, ob HomepagePlugins vorhanden sind.
+	$homepagepluginpersistence = PluginEngine::getPluginPersistence("Homepage");	
+	$activatedhomepageplugins = $homepagepluginpersistence->getAllActivatedPlugins();
+	if (!is_array($activatedhomepageplugins)){
+		$activatedhomepageplugins = array();
+	}
+	$requser = new StudIPUser();
+	$requser->setUserid($user_id);
+	//$requser->setUsername($username);
+	
+	foreach ($activatedhomepageplugins as $activatedhomepageplugin){
+		$activatedhomepageplugin->setRequestedUser($requser);
+		// hier nun die HomepagePlugins anzeigen
+		if ($activatedhomepageplugin->hasNavigation()){		
+			if ($requser->isSameUser($activatedhomepageplugin->getUser())){
+				echo "<table class=\"blank\" width=\"100%%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><img src=\"" . $activatedhomepageplugin->getPluginiconname() . "\" border=0 /><b>&nbsp;" . $activatedhomepageplugin->getDisplaytitle() . 
+					 " </b></td><td align = \"right\" width=\"1%\" class=\"topic\" nowrap>&nbsp;<a href=\"". PluginEngine::getLink($activatedhomepageplugin,array(),"showAdministrationPage") ."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/pfeillink.gif\" border=\"0\" alt=\"bearbeiten\" title=\"" . _("Administration") .  "\" ></a>&nbsp;</tr>";
+			}
+			else {
+				echo "<table class=\"blank\" width=\"100%%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><img src=\"" . $activatedhomepageplugin->getPluginiconname() . "\" border=0 /><b>&nbsp;" . $activatedhomepageplugin->getDisplaytitle() . 
+					 " </b></td><td align = \"right\" width=\"1%\" class=\"topic\" nowrap>&nbsp;&nbsp;</tr>";
+			}
+			echo ("<tr><td class=\"steel1\" colspan=\"2\">&nbsp;</td></tr><tr><td class=\"steel1\" colspan=\"2\"><blockquote>");
+			$activatedhomepageplugin->showOverview();
+			echo ("</blockquote></td></tr><tr><td class=\"steel1\" colspan=\"2\">&nbsp;</td></tr></table><br>\n");	
+		}
+	}
+}
 //add the own categories - this ones are self created by the user
 $db2->query("SELECT * FROM kategorien WHERE range_id = '$user_id' ORDER BY priority");
 while ($db2->next_record())  {
@@ -455,3 +500,4 @@ page_close();
 ?>
 </body>
 </html>
+

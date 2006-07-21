@@ -1,8 +1,8 @@
 <?
 /**
 * year.inc.php
-* 
-* 
+*
+*
 *
 * @author		Peter Thienel <pthienel@web.de>
 * @version		$Id$
@@ -22,7 +22,7 @@ define("PHPDOC_DUMMY",true);
 // This file is part of Stud.IP
 // year.inc.php
 //
-// Copyright (c) 2003 Peter Tienel <pthienel@web.de> 
+// Copyright (c) 2003 Peter Tienel <pthienel@web.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -50,22 +50,22 @@ echo "<tr><td class=\"blank\">\n";
 echo "<table class=\"steelgroup0\" width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n";
 echo "<tr><td align=\"center\" width=\"10%\">\n";
 echo "<a href=\"$PHP_SELF?cmd=showyear&atime=" . ($ayear->getStart() - 1) . "\">";
-echo "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calendar_previous.gif\"";
+echo "<img border=\"0\" src=\"".$GLOBALS['ASSETS_URL']."images/calendar_previous.gif\"";
 echo tooltip(_("zurück")) . ">&nbsp;</a></td>\n";
 echo "<td class=\"calhead\" align=\"center\" width=\"80%\">\n";
 echo "<font size=\"+2\"><b>" . $ayear->getYear() . "</b></font></td>\n";
 echo "<td align=\"center\" width=\"10%\"><a href=\"$PHP_SELF?cmd=showyear&atime=";
 echo ($ayear->getEnd() + 1) . "\">\n";
-echo "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calendar_next.gif\"";
+echo "<img border=\"0\" src=\"".$GLOBALS['ASSETS_URL']."images/calendar_next.gif\"";
 echo tooltip(_("vor")) . ">&nbsp;</a></td>\n";
 echo "</tr></table>\n</td></tr>\n";
 echo "<tr><td class=\"blank\">";
 echo "<table class=\"steelgroup0\" width=\"100%\" border=\"0\" cellpadding=\"2\" cellspacing=\"1\">\n";
-	
-$days_per_month = array(31, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);											
+
+$days_per_month = array(31, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
 if (date("L", $ayear->getStart()))
 	$days_per_month[2] = 29;
-	
+
 echo "<tr>";
 for ($i = 1; $i < 13; $i++) {
 	$ts_month += ($days_per_month[$i] - 1) * 86400;
@@ -83,7 +83,7 @@ for ($i = 1; $i < 32; $i++) {
 	echo "<tr>";
 	for ($month = 1; $month < 13; $month++) {
 		$aday = mktime(12, 0, 0, $month, $i, $ayear->getYear());
-				
+
 				if($i <= $days_per_month[$month]){
 					$wday = date('w', $aday);
 					// emphesize current day
@@ -93,23 +93,23 @@ for ($i = 1; $i < 32; $i++) {
 						$day_class = ' class="weekend"';
 					else
 						$day_class = ' class="weekday"';
-						
+
 					if ($month == 1)
 						echo "<td$day_class height=\"25\">";
 					else
 						echo "<td$day_class>";
-					
+
 					if($apps = $ayear->numberOfEvents($aday)) {
 						echo "<table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\"><tr>";
 						echo "<td$day_class>";
 					}
-					
+
 					$weekday = "<font size=\"2\">" . wday($aday, "SHORT") . "</font>";
-						
+
 					// noch wird nicht nach Wichtigkeit bestimmter Feiertage unterschieden
 					$hday = holiday($aday);
 					switch ($hday["col"]) {
-					
+
 						case "1":
 							if (date("w", $aday) == "0") {
 								$style_day = 'sday';
@@ -134,17 +134,17 @@ for ($i = 1; $i < 32; $i++) {
 					}
 					echo "<a class=\"$style_day\" href=\"$PHP_SELF?cmd=showday&atime=$aday\" ";
 					echo tooltip($hday['name']) . "><b>$i</b></a> " . $weekday;
-					
+
 					if	($apps) {
 						if	($apps > 1) {
 							echo "</td><td$day_class align=\"right\">";
-							echo "<img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/icon-uhr.gif\" ";
+							echo "<img src=\"".$GLOBALS['ASSETS_URL']."images/icon-uhr.gif\" ";
 							echo tooltip(sprintf(_("%s Termine"), $apps)) . " border=\"0\">";
 							echo "</td></tr></table>\n";
 						}
 						else {
 							echo "</td><td$day_class align=\"right\">";
-							echo "<img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/icon-uhr.gif\" ";
+							echo "<img src=\"".$GLOBALS['ASSETS_URL']."images/icon-uhr.gif\" ";
 							echo tooltip(_("1 Termin")) . " border=\"0\">";
 							echo "</td></tr></table>";
 						}
@@ -155,11 +155,11 @@ for ($i = 1; $i < 32; $i++) {
 					echo "<td class=\"weekday\">&nbsp;</td>";
 			}
 			echo "</tr>\n";
-			
+
 		}
 		echo "<tr>";
 		$ts_month = 0;
-		for ($i = 1; $i < 13; $i++){ 
+		for ($i = 1; $i < 13; $i++){
 			$ts_month += ($days_per_month[$i] - 1) * 86400;
 			echo "<td align=\"center\" width=\"8%%\">";
 			echo "<a class=\"calhead\" href=\"" . $PHP_SELF;

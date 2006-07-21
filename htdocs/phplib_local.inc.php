@@ -29,7 +29,6 @@ if (!defined('PHPLIB_SESSIONDATA_TABLE')){
 	define('PHPLIB_SESSIONDATA_TABLE', 'active_sessions');
 	define('PHPLIB_USERDATA_TABLE', 'active_sessions');
 }
-//end compat
 
 //
 $_never_globalize_request_params = array('msg','_msg','errormsg','meldung','sms_msg','_html_head_title','_include_stylesheet',
@@ -70,9 +69,9 @@ $GLOBALS['_fullname_sql']['full_rev'] = "TRIM(CONCAT(Nachname,', ',Vorname,IF(ti
 $GLOBALS['_fullname_sql']['no_title'] = "CONCAT(Vorname ,' ', Nachname)";
 $GLOBALS['_fullname_sql']['no_title_rev'] = "CONCAT(Nachname ,', ', Vorname)";
 $GLOBALS['_fullname_sql']['no_title_short'] = "CONCAT(Nachname,', ',UCASE(LEFT(TRIM(Vorname),1)),'.')";
-
+$GLOBALS['_fullname_sql']['no_title_motto'] = "CONCAT(Vorname ,' ', Nachname,IF(motto!='',CONCAT(', ',motto),''))";
 //software version - please leave it as it is!
-$SOFTWARE_VERSION="1.4 beta cvs";
+$SOFTWARE_VERSION="1.4.0 alpha cvs-unstable";
 
 /*classes for database access
 ----------------------------------------------------------------
@@ -103,6 +102,7 @@ class DB_Ilias extends DB_Sql {
 		}
 	}
 }
+
 
 
 /*class for config; load config in globals (should be deprecated in future)
@@ -374,7 +374,7 @@ class Seminar_Auth extends Auth {
 		if ($this->auth['uid'] && !in_array($this->auth['uid'], array('form','nobody'))){
 			$this->db->query(sprintf("select username,perms,locked from %s where user_id = '%s'", $this->database_table, $this->auth['uid']));
 			$this->db->next_record();
-                        if (!$this->db->f('username') || $this->db->f('locked')){
+			if (!$this->db->f('username') || $this->db->f('locked')){
 				$this->unauth();
 			} else {
 				$actual_perms = $this->db->f('perms');
@@ -416,7 +416,7 @@ class Seminar_Auth extends Auth {
 				return $uid;
 			}
 		}
-		// end of single sign on
+		// end of single sign on		
 		if (!$auto_user OR !$auto_response OR !$auto_id){
 			return false;
 		}
@@ -735,12 +735,13 @@ class Seminar_Perm extends Perm {
 	}
 	
 	function get_perm($user_id = false){
-		global $auth;
-		if (!$user_id || $user_id == $auth->auth['uid']){
+		global $auth,$user;
+		if (!$user_id) $user_id = $user->id;
+		if ($user_id && $user_id == $auth->auth['uid']){
 			return $auth->auth['perm'];
-		} else if ($this->studip_perms['studip'][$user_id]){
+		} else if ($user_id && $this->studip_perms['studip'][$user_id]){
 			return $this->studip_perms['studip'][$user_id];
-		} else {
+		} else if ($user_id) {
 			$db = new DB_Seminar("SELECT perms FROM auth_user_md5 WHERE user_id = '$user_id'");
 			if (!$db->next_record()){
 				return false;
@@ -767,11 +768,11 @@ class Seminar_Perm extends Perm {
 	}
 	
 	function get_studip_perm($range_id, $user_id = false) {
-		global $auth;
+		global $auth, $user;
+		if (!$user_id) $user_id = $user->id;
 		$db = new DB_Seminar;
 		$status = false;
-		if (!$user_id || $user_id == $auth->auth['uid']){
-			$user_id = $auth->auth["uid"];
+		if ($user_id && $user_id == $auth->auth['uid']){
 			$user_perm = $auth->auth["perm"];
 		} else {
 			$user_perm = $this->get_perm($user_id);
@@ -840,10 +841,8 @@ class Seminar_Perm extends Perm {
 	}
 	
 	function is_fak_admin($user_id = false){
-		global $auth;
-		if (!$user_id || $user_id == $auth->auth['uid']){
-			$user_id = $auth->auth['uid'];
-		}
+		global $user;
+		if (!$user_id) $user_id = $user->id;
 		$user_perm = $this->get_perm($user_id);
 		if ($user_perm == "root") {
 			return true;
@@ -868,6 +867,7 @@ class Seminar_Perm extends Perm {
 }
 
 if ($GLOBALS['PLUGINS_ENABLE']){
-	require_once("plugins/plugins.inc.php");
+	include_once("plugins/plugins.inc.php");
 }
+
 ?>

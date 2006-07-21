@@ -107,12 +107,50 @@ class StandardPluginIntegratorEnginePersistence extends AbstractPluginIntegrator
     		$id = trim(str_replace("inst","",$id));
     		
     	}
-	
+		$user = $this->getUser();
+		$userid = $user->getUserid();
+    	// $this->connection->debug=true;	
+    	/*
+    	$query = "select p.* from plugins p inner join plugins_activated pat using (pluginid) where p.pluginid in (select rp.pluginid from roles_plugins rp where rp.roleid in (SELECT r.roleid FROM roles_user r where r.userid=? union select rp.roleid from roles_studipperms rp,auth_user_md5 a where rp.permname = a.perms and a.user_id=?)) and pat.poiid=? and pat.state='on' "
+					   . "union "
+				       . "select distinct p.* from seminar_inst s, plugins p join Institute i on i.Institut_id=s.institut_id join plugins_default_activations pa on i.fakultaets_id=pa.institutid or i.Institut_id=pa.institutid left join plugins_activated pad on p.pluginid=pad.pluginid and (pad.poiid=concat('sem',s.seminar_id) or pad.poiid=concat('inst',s.seminar_id))where s.seminar_id=? and pa.pluginid=p.pluginid and ((pad.poiid=? and (pad.state <> 'off')) or pad.pluginid is null)";
+				       */
     	
+    	//$query = "select p.* from plugins p inner join plugins_activated pat using (pluginid) where p.pluginid in (select rp.pluginid from roles_plugins rp where rp.roleid in (SELECT r.roleid FROM roles_user r where r.userid=? union select rp.roleid from roles_studipperms rp,auth_user_md5 a where rp.permname = a.perms and a.user_id=?)) and pat.poiid=? and pat.state='on' "
+    	$query = "select p.* from plugins p inner join plugins_activated pat using (pluginid)
+						join roles_plugins rp on p.pluginid=rp.pluginid
+						join roles_user r on r.roleid=rp.roleid
+						where r.userid=? and pat.poiid=? and pat.state='on'
+						union
+						select p.* from auth_user_md5 au, plugins p inner join plugins_activated pat using (pluginid)
+						join roles_plugins rp on p.pluginid=rp.pluginid
+						join roles_studipperms rps on rps.roleid=rp.roleid
+						where rps.permname = au.perms and au.user_id=? and pat.poiid=? and pat.state='on'
+						"
+			.  "UNION 
+				SELECT DISTINCT p.*
+				FROM seminar_inst s  
+				INNER JOIN Institute i ON (i.Institut_id = s.institut_id)
+				INNER JOIN plugins_default_activations pa ON (i.fakultaets_id = pa.institutid
+				OR i.Institut_id = pa.institutid)
+				INNER JOIN plugins p ON (p.pluginid = pa.pluginid AND p.enabled='yes')
+				LEFT JOIN plugins_activated pad ON (pad.poiid = ? AND pad.pluginid = p.pluginid )
+				WHERE s.seminar_id = ?
+				AND (pad.state != 'off' OR pad.state IS NULL)";
+    	
+    	if ($GLOBALS["PLUGINS_CACHING"]){
+    		$result =& $this->connection->CacheExecute($GLOBALS['PLUGINS_CACHE_TIME'],$query,array($userid,$this->poiid,$userid,$this->poiid,$id,$this->poiid));    		
+    	}
+    	else {    	
+    		$result =& $this->connection->execute($query,array($userid,$this->poiid,$userid,$this->poiid,$id,$this->poiid));
+    	}
+		
+    	/*
 		$result =& $this->connection->execute("select p.* from plugins_activated pat inner join plugins p using (pluginid) where pat.poiid=? and pat.state='on' "
 					   . "union "
 				       . "select distinct p.* from seminar_inst s, plugins p join Institute i on i.Institut_id=s.institut_id join plugins_default_activations pa on i.fakultaets_id=pa.institutid or i.Institut_id=pa.institutid left join plugins_activated pad on p.pluginid=pad.pluginid and (pad.poiid=concat('sem',s.seminar_id) or pad.poiid=concat('inst',s.seminar_id))where s.seminar_id=? and pa.pluginid=p.pluginid and ((pad.poiid=? and (pad.state <> 'off')) or pad.pluginid is null)",array($this->poiid,$id,$this->poiid));
-					   
+				       */
+		//$this->connection->debug=false;					   
 // etwas ¸bersichtlicher ab MySQL 4.1 
 // where s.seminar_id=? and p.pluginid not in (select pluginid from plugins_activated pad where pad.poiid=? and state='off'
 
@@ -149,8 +187,10 @@ class StandardPluginIntegratorEnginePersistence extends AbstractPluginIntegrator
      */
     function getAllDeActivatedPlugins(){
     	$plugins = array();
+    	$user = $this->getUser();
+    	$userid = $user->getUserid();
 		// plugins default activations is not useful, just search in plugins_activated    	    	
-    	$result = &$this->connection->execute("SELECT p.* FROM plugins p left join plugins_activated a on p.pluginid=a.pluginid where p.plugintype='Standard' and (a.pluginid is null or a.poiid<>?) and a.state='off'", array($this->poiid));
+    	$result = &$this->connection->execute("SELECT p.* FROM plugins p left join plugins_activated a on p.pluginid=a.pluginid where p.pluginid in (select rp.pluginid from roles_plugins rp where rp.roleid in (SELECT r.roleid FROM roles_user r where r.userid=? union select rp.roleid from roles_studipperms rp,auth_user_md5 a where rp.permname = a.perms and a.user_id=?)) and p.plugintype='Standard' and (a.pluginid is null or a.poiid<>?) and a.state='off'", array($userid,$userid,$this->poiid));
     	if (!$result){
     		// TODO: Fehlermeldung ausgeben
     		return array();
@@ -202,8 +242,10 @@ class StandardPluginIntegratorEnginePersistence extends AbstractPluginIntegrator
     }
     
     function getPlugin($id){
+    	$user = $this->getUser();
+    	$userid = $user->getUserid();
     	//TODO: Wieso hier ein Join? Wird das so noch benˆtigt?
-    	$result = &$this->connection->execute("Select p.* from plugins p left join plugins_activated a on p.pluginid=a.pluginid where p.pluginid=? and p.plugintype='Standard' and (a.poiid=? or (a.pluginid is null))",array($id, $this->poiid));
+    	$result = &$this->connection->execute("Select p.* from plugins p left join plugins_activated a on p.pluginid=a.pluginid where p.pluginid in (select rp.pluginid from roles_plugins rp where rp.roleid in (SELECT r.roleid FROM roles_user r where r.userid=? union select rp.roleid from roles_studipperms rp,auth_user_md5 a where rp.permname = a.perms and a.user_id=?)) and p.pluginid=? and p.plugintype='Standard' and (a.poiid=? or (a.pluginid is null))",array($userid,$userid,$id, $this->poiid));
     	if (!$result){
     		// TODO: Fehlermeldung ausgeben
     		return null;
@@ -301,7 +343,9 @@ class StandardPluginIntegratorEnginePersistence extends AbstractPluginIntegrator
     * @return the plugins, which are activated for this poi
     */
     function getDefaultActivationsForPOI($poiid){
-    	$result =& $this->connection->execute("select p.* from seminar_inst s inner join Institute i on i.Institut_id=s.institut_id inner join plugins_default_activations pa on i.fakultaets_id=pa.institutid or i.Institut_id=pa.institutid inner join plugins p on pa.pluginid=p.pluginid where s.seminar_id=?", array($poiid));
+    	$user = $this->getUser();
+    	$userid = $user->getUserid();
+    	$result =& $this->connection->execute("select p.* from seminar_inst s inner join Institute i on i.Institut_id=s.institut_id inner join plugins_default_activations pa on i.fakultaets_id=pa.institutid or i.Institut_id=pa.institutid inner join plugins p on pa.pluginid=p.pluginid where p.pluginid in (select rp.pluginid from roles_plugins rp where rp.roleid in (SELECT r.roleid FROM roles_user r where r.userid=? union select rp.roleid from roles_studipperms rp,auth_user_md5 a where rp.permname = a.perms and a.user_id=?)) and s.seminar_id=?", array($userid,$userid,$poiid));
     	if (!$result){
     		// TODO: Fehlermeldung ausgeben
     		// echo ("keine standardm‰ﬂig aktivierten Plugins<br>");

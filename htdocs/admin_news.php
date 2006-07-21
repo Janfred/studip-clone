@@ -32,6 +32,7 @@ include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Sessio
 
 // -- here you have to put initialisations for the current page
 
+$HELP_KEYWORD="Basis.News";
 
 // Start of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
@@ -108,10 +109,10 @@ if ($cmd=="news_submit") {
 		$cmd = "edit";
 		$news->msg .= "error§"._("Leere News k&ouml;nnen nicht gespeichert werden! Geben Sie immer &Uuml;berschrift oder Inhalt an!")."§";
 	}
-} 
+}
 if ($cmd=="new_entry" &&
-	isset($_REQUEST['change_rss_x']) && 
-	get_config('NEWS_RSS_EXPORT_ENABLE') && 
+	isset($_REQUEST['change_rss_x']) &&
+	get_config('NEWS_RSS_EXPORT_ENABLE') &&
 	$news->get_news_range_perm($news_range_id) > 1){
 		if (StudipNews::GetRssIdFromRangeId($news_range_id)){
 			StudipNews::UnSetRssId($news_range_id);
@@ -143,7 +144,7 @@ if ($cmd=="edit") {
 	}
 	if ($auth->auth["perm"]=="dozent" OR $auth->auth["perm"]=="tutor")
 		$news->search_range();
-	
+
 	$news->edit_news($edit_news);
 }
 
@@ -162,7 +163,7 @@ $news->msg="";
 if ($cmd=="new_entry") {
 	if ($auth->auth["perm"]=="dozent" OR $auth->auth["perm"]=="tutor") $news->search_range();
 	$news->edit_news();
-	
+
 }
 
 if (!$cmd OR $cmd=="show") {
@@ -233,9 +234,9 @@ if (!$cmd OR $cmd=="show") {
 	echo "<form action=\"".$news->p_self("cmd=new_entry&range_id=$news_range_id&view_mode=$view_mode")."\" method=\"POST\">";
 	echo "<hr width=\"100%\"><br /><b>" . _("gew&auml;hlter Bereich:") . " </b>".htmlReady($news_range_name). "<br /><br />";
 	if (get_config('NEWS_RSS_EXPORT_ENABLE') && $news->get_news_range_perm($news_range_id) > 1){
-		echo "<img src=\"pictures/rss.gif\" border=\"0\" align=\"absmiddle\">&nbsp;";
+		echo "<img src=\"".$GLOBALS['ASSETS_URL']."images/rss.gif\" border=\"0\" align=\"absmiddle\">&nbsp;";
 		echo "\n<font size=\"-1\" style=\"vertical-align:middle;\">" . _("Die News des gew&auml;hlten Bereiches als RSS-feed zur Verf&uuml;gung stellen") . "</font>&nbsp;";
-		vprintf("\n<input type=\"image\" src=\"pictures/%s\" %s border=\"0\" name=\"change_rss\" align=\"absmiddle\"/>",
+		vprintf("\n<input type=\"image\" src=\"".$GLOBALS['ASSETS_URL']."images/%s\" %s border=\"0\" name=\"change_rss\" align=\"absmiddle\"/>",
 				(StudipNews::GetRssIdFromRangeId($news_range_id) ? array('haken.gif',tooltip(_("RSS Export ist eingeschaltet"))) : array('x2.gif',tooltip(_("RSS Export ist ausgeschaltet")))));
 		echo "\n<br><br>";
 	}

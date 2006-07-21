@@ -1,9 +1,9 @@
 <?
 /**
 * admin_extern.inc.php
-* 
-* 
-* 
+*
+*
+*
 *
 * @author		Peter Thienel <pthienel@web.de>, Suchi & Berg GmbH <info@data-quest.de>
 * @version	$Id$
@@ -16,7 +16,7 @@
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // admin_extern.inc.php
-// 
+//
 // Copyright (C) 2003 Peter Thienel <pthienel@web.de>,
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
@@ -79,7 +79,7 @@ echo "<tr><td class=\"blank\" width=\"100%\" valign=\"top\">\n";
 
 if ($com == "delete_sec") {
 	$config = get_configuration($range_id, $config_id);
-	
+
 	$message = sprintf(_("Wollen Sie die Konfiguration <b>&quot;%s&quot;</b> des Moduls <b>%s</b> wirklich l&ouml;schen?"),
 							$config["name"], $GLOBALS["EXTERN_MODULE_TYPES"][$config["type"]]["name"]);
 	$message .= "<br><br><a href=\"$PHP_SELF?com=delete&config_id=$config_id\">";
@@ -103,12 +103,14 @@ if ($com == "info") {
 
 $element_command = FALSE;
 if ($edit) {
-	$element_commands = array("show", "hide", "move_left", "move_right", "show_group", "hide_group");
+	$element_commands = array('show', 'hide', 'move_left', 'move_right', 'show_group', 'hide_group', 'do_search_x');
 	foreach ($element_commands as $element_command) {
 		$element_command_form = $edit . "_" . $element_command;
 		if ($HTTP_POST_VARS[$element_command_form]) {
-			$pos_tmp = array_keys($HTTP_POST_VARS[$element_command_form]);
-			$pos = $pos_tmp[0];
+			if (is_array($HTTP_POST_VARS[$element_command_form])) {
+				$pos_tmp = array_keys($HTTP_POST_VARS[$element_command_form]);
+				$pos = $pos_tmp[0];
+			}
 			$execute_command = $element_command;
 			$com = "store";
 		}
@@ -117,11 +119,11 @@ if ($edit) {
 
 if ($com == "new" || $com == "edit" || $com == "open" ||
 		$com == "close" || $com == "store") {
-	
+
 	require_once($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_EXTERN . "/views/extern_edit_module.inc.php");
 	print_footer();
 	page_close();
-	exit;	
+	exit;
 }
 
 // Some browsers don't reload the site by clicking the same link twice again.
@@ -221,7 +223,7 @@ else {
 	echo "<tr><td" . $css_switcher->getFullClass();
 	echo ">&nbsp;&nbsp;&nbsp;&nbsp;</td>\n";
 	echo "<td" . $css_switcher->getFullClass() . ">\n";
-	
+
 	$css_switcher_2 =& new CssClassSwitcher("", "topic");
 
 	foreach ($EXTERN_MODULE_TYPES as $module_type) {
@@ -230,19 +232,19 @@ else {
 			echo "<table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\n";
 			echo "<tr>\n<td class=\"" . $css_switcher_2->getHeaderClass() . "\">";
 			echo "<font size=\"2\"><b>&nbsp; ";
-		
+
 			if ($configurations[$module_type["module"]][$config_id])
 				echo "<a name=\"anker\">\n";
 			echo $module_type["name"];
 			if ($configurations[$module_type["module"]][$config_id])
 				echo "</a>\n";;
-			
+
 			echo "</b></font>\n</td></tr>\n";
 			echo "<tr><td width=\"100%\" style=\"border-style:solid; border-width:1px; border-color:#000000;\">\n";
-			
+
 			echo "<table width=\"100%\" cellspacing=\"0\" cellpadding=\"2\" border=\"0\">\n";
 			$css_switcher_2->resetClass();
-			
+
 			foreach ($configurations[$module_type["module"]] as $configuration) {
 				$css_switcher_2->switchClass();
 				echo "<tr><td" . $css_switcher_2->getFullClass() . " width=\"65%\"><font size=\"2\">";
@@ -250,33 +252,32 @@ else {
 				echo "<td" . $css_switcher_2->getFullClass() . " width=\"5%\">";
 				$tooltip = _("weitere Informationen anzeigen");
 				echo "<a href=\"$PHP_SELF?com=info&config_id=" . $configuration["id"];
-				echo "\"><img src=\"" . $CANONICAL_RELATIVE_PATH_STUDIP;
-				echo "pictures/i.gif\" border=\"0\"" . tooltip($tooltip) . "></a>\n</td>\n";
+				echo '"><img src="';
+				echo $GLOBALS['ASSETS_URL']."images/i.gif\" border=\"0\"" . tooltip($tooltip) . "></a>\n</td>\n";
 				echo "<td" . $css_switcher_2->getFullClass() . " width=\"5%\">";
-				
+
 				// Switching for the is_default option. Read the comment above.
 				if ($configuration["is_default"]) {
 					echo "<a href=\"$PHP_SELF?list=TRUE&view=extern_inst&com=unset_default&config_id=";
 					echo $configuration["id"] . "#anker\">";
 					$tooltip = _("Standard entziehen");
-					echo "<img src=\"" . $CANONICAL_RELATIVE_PATH_STUDIP;
-					echo "pictures/on_small.gif\" border=\"0\"" . tooltip($tooltip) . ">\n";
+					echo '<img src="';
+					echo $GLOBALS['ASSETS_URL']."images/on_small.gif\" border=\"0\"" . tooltip($tooltip) . ">\n";
 				}
 				else {
 					echo "<a href=\"$PHP_SELF?list=TRUE&view=extern_inst&com=set_default&config_id=";
 					echo $configuration["id"] . "#anker\">";
 					$tooltip = _("Standard zuweisen");
-					echo "<img src=\"" . $CANONICAL_RELATIVE_PATH_STUDIP;
-					echo "pictures/off_small_blank.gif\" border=\"0\"" . tooltip($tooltip) . ">";
+					echo '<img src="'.$GLOBALS['ASSETS_URL']."images/off_small_blank.gif\" border=\"0\"" . tooltip($tooltip) . ">";
 				}
-				
+
 				echo "</a>\n</td>\n";
 				echo "<td" . $css_switcher_2->getFullClass() . " align=\"center\" width=\"5%\">\n";
 				echo "<a href=\"$PHP_SELF?com=delete_sec&config_id=" . $configuration["id"];
-				echo "#anker\"><img src=\"" . $CANONICAL_RELATIVE_PATH_STUDIP;
+				echo '#anker"><img src="';
 				$tooltip = _("Konfiguration löschen");
-				echo "pictures/trash.gif\" border=\"0\"" . tooltip($tooltip) . "></a>\n</td>\n";
-				echo "<td" . $css_switcher_2->getFullClass() . " align=\"right\" width=\"20%\" ";
+				echo $GLOBALS['ASSETS_URL']."images/trash.gif\" border=\"0\"" . tooltip($tooltip) . "></a>\n</td>\n";
+				echo '<td' . $css_switcher_2->getFullClass() . " align=\"right\" width=\"20%\" ";
 				echo ">\n";
 				echo "<a href=\"$PHP_SELF?com=edit&mod=" . $module_type["module"];
 				echo "&config_id=" . $configuration["id"] . "\"><img ";
@@ -284,7 +285,7 @@ else {
 				$tooltip = _("Konfiguration bearbeiten");
 				echo tooltip($tooltip) . "></a>&nbsp;\n</td></tr>\n";
 			}
-			
+
 			$css_switcher_2->resetClass();
 			echo "</table>\n";
 			echo "</td></tr>\n";
@@ -292,7 +293,7 @@ else {
 			echo "<tr><td" . $css_switcher_2->getFullClass() . ">&nbsp;</td></tr>";
 			echo "</table>\n";
 		}
-		
+
 	}
 	echo "</td></tr>\n";
 	echo "</table>\n";
@@ -311,40 +312,40 @@ if ($configurations) {
 	$info_no_default = _("Wenn Sie keine Konfiguration als Standard ausgew&auml;hlt haben, wird die Stud.IP-Konfiguration verwendet.");
 	$info_is_default = _("Dieses Symbol kennzeichnet die Standard-Konfiguration, die zur Formatierung herangezogen wird, wenn sie beim Aufruf dieses Moduls keine Konfiguration angeben.");
 	$info_further_info = _("Klicken Sie auf diesen Button um weitere Informationen über diese Konfiguration zu erhalten. Hier finden Sie auch die Links, über die Sie die Module in Ihrer Website einbinden können.");
-	$info_content = array(	
+	$info_content = array(
 									array("kategorie" => "Information:",
-												"eintrag" => array(	
-													array("icon" => "pictures/ausruf_small.gif",
+												"eintrag" => array(
+													array("icon" => "ausruf_small.gif",
 																"text" => $info_max_configs
 													),
-													array("icon" => "pictures/on_small.gif",
+													array("icon" => "on_small.gif",
 																"text" => $info_is_default
 													),
-													array("icon" => "pictures/ausruf_small.gif",
+													array("icon" => "ausruf_small.gif",
 																"text" => $info_no_default
 													)
 									)),
 									array("kategorie" => "Aktion:",
-		   									"eintrag" => array(	
-													array("icon" => "pictures/i.gif",
+		   									"eintrag" => array(
+													array("icon" => "i.gif",
 																"text" => $info_further_info,
 													),
-													array("icon" => "pictures/off_small_blank.gif",
+													array("icon" => "off_small_blank.gif",
 																"text" => $info_set_default
 													))
 									));
 }
 else {
-	$info_content = array(	
+	$info_content = array(
 									array("kategorie" => "Information:",
-												"eintrag" => array(	
-													array("icon" => "pictures/ausruf_small.gif",
+												"eintrag" => array(
+													array("icon" => "ausruf_small.gif",
 																"text" => $info_max_configs
 													)
 									)));
 }
 
-print_infobox($info_content, "pictures/einrichtungen.jpg");
+print_infobox($info_content, "einrichtungen.jpg");
 print_footer();
 
 ?>

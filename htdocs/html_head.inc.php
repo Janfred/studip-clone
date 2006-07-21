@@ -1,7 +1,7 @@
 <?php
 /**
 * html_head.inc.php
-* 
+*
 * output of html-head for all Stud.IP pages<br>
 * parameter <b>$_include_stylesheet</b>
 * <ul><li>if not set, use default stylesheet</li>
@@ -73,10 +73,10 @@ if (!isset($_include_stylesheet))  // if not set, use default stylesheet
 	$_include_stylesheet = 'style.css';
 
 if ($_include_stylesheet != '')  // if empty, use no stylesheet
-	echo "\t\t".'<link rel="stylesheet" href="'.$_include_stylesheet.'" type="text/css">'."\n";
+	echo "\t\t".'<link rel="stylesheet" href="'.$GLOBALS['ASSETS_URL'].'stylesheets/'.$_include_stylesheet.'" type="text/css">'."\n";
 
 if (isset ($_include_extra_stylesheet))
-	echo "\t\t".'<link rel="stylesheet" href="'.$_include_extra_stylesheet.'" type="text/css">'."\n";
+	echo "\t\t".'<link rel="stylesheet" href="'.$GLOBALS['ASSETS_URL'].'stylesheets/'.$_include_extra_stylesheet.'" type="text/css">'."\n";
 if (isset ($_include_additional_header)){
 	echo "\t\t" . $_include_additional_header . "\n";
 }

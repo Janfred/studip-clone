@@ -1,9 +1,9 @@
 <?
 /**
 * admin_datafields.php
-* 
+*
 * administrate the generic datafields
-* 
+*
 *
 * @author		Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
 * @version		$Id$
@@ -66,12 +66,12 @@ if ($create_new) {
 	$admin_datafields_data["create_datafield"] = $create_new;
 	$admin_datafields_data["change_datafield"] = FALSE;
 }
-	
+
 if ($cancel) {
 	$admin_datafields_data["create_datafield"] = FALSE;
 	$admin_datafields_data["change_datafield"] = FALSE;
 }
-	
+
 if (($send) && (($admin_datafields_data["change_datafield"]) || ($admin_datafields_data["create_datafield"]))) {
 
 	function datafield_check_array($datafield) {	// we do not want duplicated code. Used for datafield_class & datafield_view_perms
@@ -118,7 +118,7 @@ if ($kill_datafield) {
 		<?
 		print _("generische Datenfelder konfigurieren");
 		?>
-		</td>		
+		</td>
 	</tr>
  	<tr>
 		<td class="blank" valign="top">
@@ -140,7 +140,7 @@ if ($kill_datafield) {
 		<table width = "99%" border="0" cellpadding="2" cellspacing="0" align="center">
 			<tr>
 				<td class="steel" width="20%" align="left" valign="bottom">
-					<img src="pictures/blank.gif" width="1" height="18" border="0" />
+					<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" width="1" height="18" border="0" />
 					<font size="-1">
 					<b><?=_("Name")?></b>
 					</font>
@@ -224,7 +224,7 @@ if ($kill_datafield) {
 						print $val["edit_perms"]
 					?>
 					</font>
-				</td>				
+				</td>
 				<td class="<?=$cssSw->getClass()?>" align="center">
 					<font size="-1">
 					<?
@@ -265,18 +265,18 @@ if ($kill_datafield) {
 				<td class="<?=$cssSw->getClass()?>" align="center">
 					<?
 					if ($admin_datafields_data["change_datafield"] == $val["datafield_id"])
-						printf ("&nbsp;&nbsp;<input type=\"IMAGE\" name=\"send_datafield\" src=\"pictures/haken_transparent.gif\" border=\"0\" %s />", tooltip(_("Änderungen übernehmen")));
+						printf ("&nbsp;&nbsp;<input type=\"IMAGE\" name=\"send_datafield\" src=\"".$GLOBALS['ASSETS_URL']."images/haken_transparent.gif\" border=\"0\" %s />", tooltip(_("Änderungen übernehmen")));
 					else
-						printf ("&nbsp;&nbsp;<a href=\"%s?change_datafield=%s#a\"><img src=\"pictures/edit_transparent.gif\" border=\"0\" %s /></a>", $PHP_SELF, $val["datafield_id"], tooltip(_("Datenfeld verändern")));
+						printf ("&nbsp;&nbsp;<a href=\"%s?change_datafield=%s#a\"><img src=\"".$GLOBALS['ASSETS_URL']."images/edit_transparent.gif\" border=\"0\" %s /></a>", $PHP_SELF, $val["datafield_id"], tooltip(_("Datenfeld verändern")));
 					if (!$val["used_entries"])
-						printf ("&nbsp;&nbsp;<a href=\"%s?kill_datafield=%s\"><img src=\"pictures/trash.gif\" border=\"0\" %s /></a>", $PHP_SELF, $val["datafield_id"], tooltip(_("Diese Kategorie löschen (wird von keiner Veranstaltung verwendet)")));
+						printf ("&nbsp;&nbsp;<a href=\"%s?kill_datafield=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" border=\"0\" %s /></a>", $PHP_SELF, $val["datafield_id"], tooltip(_("Diese Kategorie löschen (wird von keiner Veranstaltung verwendet)")));
 					?>
 				</td>
 			</tr>
 			<?
 			}
 			if ($admin_datafields_data["create_datafield"] == "sem") {
-				$cssSw->switchClass()				
+				$cssSw->switchClass()
 			?>
 			<tr>
 				<td class="<?=$cssSw->getClass()?>" align="left">
@@ -289,7 +289,7 @@ if ($kill_datafield) {
 					<font size="-1">
 						<select name="datafield_class" style="{font-size:8 pt;}">";
 						<option value="FALSE"><?=_("alle")?></option>
-						<?										
+						<?
 						foreach ($SEM_CLASS as $key=>$val) {
 							printf ("<option value=\"%s\">%s</option>", $key, $val["name"]);
 						}
@@ -319,7 +319,7 @@ if ($kill_datafield) {
 						<option value="tutor">tutor</option>
 						<option value="dozent">dozent</option>
 						<option value="admin">admin</option>
-						<option value="root">root</option>						
+						<option value="root">root</option>
 						</select>
 					</font>
 				</td>
@@ -332,9 +332,9 @@ if ($kill_datafield) {
 					&nbsp;
 				</td>
 				<td class="<?=$cssSw->getClass()?>" align="center" nowrap>
-					&nbsp;&nbsp;<input type="IMAGE" name="send" src="pictures/haken_transparent.gif" border="0" <?=tooltip(_("Datenfeld speichern"))?> />
-					&nbsp;<a href="<?=$PHP_SELF?>?cancel=TRUE"><img src="pictures/x_transparent.gif" border="0" <?=tooltip(_("Anlegen abbrechen"))?> />
-				</td>			
+					&nbsp;&nbsp;<input type="IMAGE" name="send" src="<?= $GLOBALS['ASSETS_URL'] ?>images/haken_transparent.gif" border="0" <?=tooltip(_("Datenfeld speichern"))?> />
+					&nbsp;<a href="<?=$PHP_SELF?>?cancel=TRUE"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/x_transparent.gif" border="0" <?=tooltip(_("Anlegen abbrechen"))?> />
+				</td>
 			</tr>
 			<?
 			}
@@ -342,7 +342,7 @@ if ($kill_datafield) {
 		</table>
 		<?
 		if ($admin_datafields_data["create_datafield"] != "sem") {
-			?>&nbsp;<a href="<?=$PHP_SELF?>?create_new=sem#a"><img src="pictures/add_right.gif" border="0" <?=tooltip(_("Neues Datenfeld für Veranstaltungen anlegen"))?> /></a><?
+			?>&nbsp;<a href="<?=$PHP_SELF?>?create_new=sem#a"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/add_right.gif" border="0" <?=tooltip(_("Neues Datenfeld für Veranstaltungen anlegen"))?> /></a><?
 		}
 		?>
 		<br />&nbsp;
@@ -354,7 +354,7 @@ if ($kill_datafield) {
 		<table width = "99%" border="0" cellpadding="2" cellspacing="0" align="center">
 			<tr>
 				<td class="steel" width="20%" align="left" valign="bottom">
-					<img src="pictures/blank.gif" width="1" height="18" border="0" />
+					<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" width="1" height="18" border="0" />
 					<font size="-1">
 					<b><?=_("Name")?></b>
 					</font>
@@ -401,7 +401,7 @@ if ($kill_datafield) {
 					<font size="-1">
 					<?
 					if ($admin_datafields_data["change_datafield"] == $val["datafield_id"]) {
-						print "<a name=\"a\"></a>";					
+						print "<a name=\"a\"></a>";
 						printf ("<input type=\"TEXT\" maxlength=\"255\" size=\"30\" style=\"{font-size:8 pt; width: 90%%;}\" value=\"%s\" name=\"datafield_name\" />", $val["name"]);
 					} else
 						print $val["name"]
@@ -481,18 +481,18 @@ if ($kill_datafield) {
 				<td class="<?=$cssSw->getClass()?>" align="center">
 					<?
 					if ($admin_datafields_data["change_datafield"] == $val["datafield_id"])
-						printf ("&nbsp;&nbsp;<input type=\"IMAGE\" name=\"send_datafield\" src=\"pictures/haken_transparent.gif\" border=\"0\" %s />", tooltip(_("Änderungen übernehmen")));
+						printf ("&nbsp;&nbsp;<input type=\"IMAGE\" name=\"send_datafield\" src=\"".$GLOBALS['ASSETS_URL']."images/haken_transparent.gif\" border=\"0\" %s />", tooltip(_("Änderungen übernehmen")));
 					else
-						printf ("&nbsp;&nbsp;<a href=\"%s?change_datafield=%s#a\"><img src=\"pictures/edit_transparent.gif\" border=\"0\" %s /></a>", $PHP_SELF, $val["datafield_id"], tooltip(_("Datenfeld verändern")));
+						printf ("&nbsp;&nbsp;<a href=\"%s?change_datafield=%s#a\"><img src=\"".$GLOBALS['ASSETS_URL']."images/edit_transparent.gif\" border=\"0\" %s /></a>", $PHP_SELF, $val["datafield_id"], tooltip(_("Datenfeld verändern")));
 					if (!$val["used_entries"])
-						printf ("&nbsp;&nbsp;<a href=\"%s?kill_datafield=%s\"><img src=\"pictures/trash.gif\" border=\"0\" %s /></a>", $PHP_SELF, $val["datafield_id"], tooltip(_("Diese Kategorie löschen (wird von keiner Veranstaltung verwendet)")));
+						printf ("&nbsp;&nbsp;<a href=\"%s?kill_datafield=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" border=\"0\" %s /></a>", $PHP_SELF, $val["datafield_id"], tooltip(_("Diese Kategorie löschen (wird von keiner Veranstaltung verwendet)")));
 					?>
 				</td>
-			</tr>	
+			</tr>
 				<?
 			}
 			if ($admin_datafields_data["create_datafield"] == "inst") {
-				$cssSw->switchClass()				
+				$cssSw->switchClass()
 			?>
 			<tr>
 				<td class="<?=$cssSw->getClass()?>" align="left">
@@ -505,7 +505,7 @@ if ($kill_datafield) {
 					<font size="-1">
 						<select name="datafield_class" style="{font-size:8 pt;}">";
 						<option value="FALSE"><?=_("alle")?></option>
-						<?										
+						<?
 						foreach ($INST_TYPE as $key=>$val) {
 							printf ("<option value=\"%s\">%s</option>", $key, $val["name"]);
 						}
@@ -547,9 +547,9 @@ if ($kill_datafield) {
 					&nbsp;
 				</td>
 				<td class="<?=$cssSw->getClass()?>" align="center" nowrap>
-					&nbsp;&nbsp;<input type="IMAGE" name="send" src="pictures/haken_transparent.gif" border="0" <?=tooltip(_("Datenfeld speichern"))?> />
-					&nbsp;<a href="<?=$PHP_SELF?>?cancel=TRUE"><img src="pictures/x_transparent.gif" border="0" <?=tooltip(_("Anlegen abbrechen"))?> />
-				</td>			
+					&nbsp;&nbsp;<input type="IMAGE" name="send" src="<?= $GLOBALS['ASSETS_URL'] ?>images/haken_transparent.gif" border="0" <?=tooltip(_("Datenfeld speichern"))?> />
+					&nbsp;<a href="<?=$PHP_SELF?>?cancel=TRUE"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/x_transparent.gif" border="0" <?=tooltip(_("Anlegen abbrechen"))?> />
+				</td>
 			</tr>
 			<?
 			}
@@ -557,10 +557,10 @@ if ($kill_datafield) {
 		</table>
 		<?
 		if ($admin_datafields_data["create_datafield"] != "inst") {
-			?>&nbsp;<a href="<?=$PHP_SELF?>?create_new=inst#a"><img src="pictures/add_right.gif" border="0" <?=tooltip(_("Neues Datenfeld für Einrichtungen anlegen"))?> /></a><?
+			?>&nbsp;<a href="<?=$PHP_SELF?>?create_new=inst#a"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/add_right.gif" border="0" <?=tooltip(_("Neues Datenfeld für Einrichtungen anlegen"))?> /></a><?
 		}
 		?>
-		<br />&nbsp;		
+		<br />&nbsp;
 		</td>
 	</tr>
 	<tr>
@@ -569,7 +569,7 @@ if ($kill_datafield) {
 		<table width = "99%" border="0" cellpadding="2" cellspacing="0" align="center">
 			<tr>
 				<td class="steel" width="20%" align="left" valign="bottom">
-					<img src="pictures/blank.gif" width="1" height="18" border="0" />				
+					<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" width="1" height="18" border="0" />
 					<font size="-1">
 					<b><?=_("Name")?></b>
 					</font>
@@ -616,7 +616,7 @@ if ($kill_datafield) {
 					<font size="-1">
 					<?
 					if ($admin_datafields_data["change_datafield"] == $val["datafield_id"]) {
-						print "<a name=\"a\"></a>";					
+						print "<a name=\"a\"></a>";
 						printf ("<input type=\"TEXT\" maxlength=\"255\" size=\"30\" style=\"{font-size:8 pt; width: 90%%;}\" value=\"%s\" name=\"datafield_name\" />", $val["name"]);
 					} else
 						print $val["name"]
@@ -700,18 +700,18 @@ if ($kill_datafield) {
 				<td class="<?=$cssSw->getClass()?>" align="center">
 					<?
 					if ($admin_datafields_data["change_datafield"] == $val["datafield_id"])
-						printf ("&nbsp;&nbsp;<input type=\"IMAGE\" name=\"send_datafield\" src=\"pictures/haken_transparent.gif\" border=\"0\" %s />", tooltip(_("Änderungen übernehmen")));
+						printf ("&nbsp;&nbsp;<input type=\"IMAGE\" name=\"send_datafield\" src=\"".$GLOBALS['ASSETS_URL']."images/haken_transparent.gif\" border=\"0\" %s />", tooltip(_("Änderungen übernehmen")));
 					else
-						printf ("&nbsp;&nbsp;<a href=\"%s?change_datafield=%s#a\"><img src=\"pictures/edit_transparent.gif\" border=\"0\" %s /></a>", $PHP_SELF, $val["datafield_id"], tooltip(_("Datenfeld verändern")));
+						printf ("&nbsp;&nbsp;<a href=\"%s?change_datafield=%s#a\"><img src=\"".$GLOBALS['ASSETS_URL']."images/edit_transparent.gif\" border=\"0\" %s /></a>", $PHP_SELF, $val["datafield_id"], tooltip(_("Datenfeld verändern")));
 					if (!$val["used_entries"])
-						printf ("&nbsp;&nbsp;<a href=\"%s?kill_datafield=%s\"><img src=\"pictures/trash.gif\" border=\"0\" %s /></a>", $PHP_SELF, $val["datafield_id"], tooltip(_("Diese Kategorie löschen (wird von keiner Veranstaltung verwendet)")));
+						printf ("&nbsp;&nbsp;<a href=\"%s?kill_datafield=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" border=\"0\" %s /></a>", $PHP_SELF, $val["datafield_id"], tooltip(_("Diese Kategorie löschen (wird von keiner Veranstaltung verwendet)")));
 					?>
 				</td>
-			</tr>	
+			</tr>
 				<?
 			}
 			if ($admin_datafields_data["create_datafield"] == "user") {
-				$cssSw->switchClass()				
+				$cssSw->switchClass()
 			?>
 			<tr>
 				<td class="<?=$cssSw->getClass()?>" align="left">
@@ -767,9 +767,9 @@ if ($kill_datafield) {
 					&nbsp;
 				</td>
 				<td class="<?=$cssSw->getClass()?>" align="center" nowrap>
-					&nbsp;&nbsp;<input type="IMAGE" name="send" src="pictures/haken_transparent.gif" border="0" <?=tooltip(_("Datenfeld speichern"))?> />
-					&nbsp;<a href="<?=$PHP_SELF?>?cancel=TRUE"><img src="pictures/x_transparent.gif" border="0" <?=tooltip(_("Anlegen abbrechen"))?> />
-				</td>			
+					&nbsp;&nbsp;<input type="IMAGE" name="send" src="<?= $GLOBALS['ASSETS_URL'] ?>images/haken_transparent.gif" border="0" <?=tooltip(_("Datenfeld speichern"))?> />
+					&nbsp;<a href="<?=$PHP_SELF?>?cancel=TRUE"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/x_transparent.gif" border="0" <?=tooltip(_("Anlegen abbrechen"))?> />
+				</td>
 			</tr>
 			<?
 			}
@@ -777,10 +777,10 @@ if ($kill_datafield) {
 		</table>
 		<?
 		if ($admin_datafields_data["create_datafield"] != "user") {
-			?>&nbsp;<a href="<?=$PHP_SELF?>?create_new=user#a"><img src="pictures/add_right.gif" border="0" <?=tooltip(_("Neues Datenfeld für Nutzer anlegen"))?> /></a><?
+			?>&nbsp;<a href="<?=$PHP_SELF?>?create_new=user#a"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/add_right.gif" border="0" <?=tooltip(_("Neues Datenfeld für Nutzer anlegen"))?> /></a><?
 		}
 		?>
-		<br />&nbsp;		
+		<br />&nbsp;
 		</td>
 	</tr>
 	</form>

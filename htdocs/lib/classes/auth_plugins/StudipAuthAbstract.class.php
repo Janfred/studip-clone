@@ -191,10 +191,15 @@ class StudipAuthAbstract {
                         }
                 }
 
+
 		$plugins =& StudipAuthAbstract::GetInstance();
 		$error = false;
 		$uid = false;
 		foreach($plugins as $object){
+			// the cas class can't be used
+			if ($object->plugin_name == "cas"){
+				continue;
+			}
 			if ($uid = $object->authenticateUser($username,$password,$jscript)){
 				return array('uid' => $uid,'error' => $error, 'is_new_user' => $object->is_new_user);
 			} else {
@@ -288,6 +293,7 @@ class StudipAuthAbstract {
 	* @return	string	if authentication succeeds the Stud.IP user id, else false
 	*/
 	function authenticateUser($username, $password, $jscript = false){
+		$username = $this->verifyUsername($username);
 		if ($this->isAuthenticated($username, $password, $jscript)){
 			if ($uid = $this->getStudipUserid($username)){
 				$this->doDataMapping($uid);
@@ -396,6 +402,22 @@ class StudipAuthAbstract {
 	*/
 	function isMappedField($name){
 		return isset($this->user_data_mapping[$name]);
+	}
+	
+	/**
+	* method to eliminate bad characters in the given username
+	*
+	* 
+	* @access	private
+	* @param	string	the username
+	* @return	string	the username
+	*/
+	function verifyUsername($username){
+		if ($this->bad_char_regex){
+			return preg_replace($this->bad_char_regex, '', $username);
+		} else {
+			return trim($username);
+		}
 	}
 	
 	/**

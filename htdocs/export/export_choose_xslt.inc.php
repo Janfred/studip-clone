@@ -1,8 +1,8 @@
 <?
 /**
 * Export-subfile. Choses which XSL-Script to use.
-* 
-* In this file there are several forms which help choosing the proper XSL-Script 
+*
+* In this file there are several forms which help choosing the proper XSL-Script
 * to transform the export-data into a specific file-format.
 *
 * @author		Arne Schroeder <schroeder@data.quest.de>
@@ -16,8 +16,8 @@
 // This file is part of Stud.IP
 // export_choose_xslt.inc.php
 // pages for choosing an xslt-script
-// 
-// Copyright (c) 2002 Arne Schroeder <schroeder@data-quest.de> 
+//
+// Copyright (c) 2002 Arne Schroeder <schroeder@data-quest.de>
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -46,10 +46,10 @@ $cssSw->enableHover();
 /**
 * Checks given parameters
 *
-* This function checks the given parameters. If some are missing or refer to a XSL-file that 
+* This function checks the given parameters. If some are missing or refer to a XSL-file that
 * doesn't exist it returns false and adds a warning to export_error.
 *
-* @access	public        
+* @access	public
 * @return		boolean
 */
 function CheckParamXSLT()
@@ -62,7 +62,7 @@ global $ex_type, $xml_file_id, $page, $o_mode, $format, $choose, $xslt_files, $e
 			if ($val[$ex_type] AND $val[$format])
 				$mod_counter++;
 		if (($mod_counter == 0) AND ($format != "xml"))
-		{	
+		{
 			$export_error .= _("Für dieses Format sind keine Ausgabemodule installiert.<br>Bitte wählen Sie ein anderes Ausgabeformat.") . "<br>";
 			$page = 0;
 		}
@@ -84,13 +84,13 @@ global $ex_type, $xml_file_id, $page, $o_mode, $format, $choose, $xslt_files, $e
 
 $export_pagename = _("Konvertierung der Daten: ");
 
-if (!CheckParamXSLT()) 
+if (!CheckParamXSLT())
 {
 	$export_pagename .= _("Es ist ein Fehler aufgetreten ");
-	$infobox = array(			
+	$infobox = array(
 	array ("kategorie"  => _("Information:"),
-		"eintrag" => array	(	
-						array (	"icon" => "pictures/ausruf_small.gif",
+		"eintrag" => array	(
+						array (	"icon" => "ausruf_small.gif",
 								"text"  => _("Die Parameter, mit denen diese Seite aufgerufen wurde, sind fehlerhaft oder unvollständig.")
 							 )
 						)
@@ -107,22 +107,22 @@ if (($format == "xml") AND ($page == 1))
 }
 
 elseif (!isset($page) or ($page == 0)) // Seite 1 : Auswahl des Dateiformats
-{ 
+{
 	$export_pagename .= _("Auswahl des Dateiformats");
-	
+
 	unset($export_msg);
 	unset($xml_printimage);
 	unset($xml_printlink);
 	unset($xml_printdesc);
 	unset($xml_printcontent);
-	
+
 	$count = 0;
 	if (!isset($ex_sem_class))
-		foreach ($SEM_CLASS as $key=>$val) 
+		foreach ($SEM_CLASS as $key=>$val)
 		{
-			if (isset($GLOBALS["ex_class_" . $count])) 
+			if (isset($GLOBALS["ex_class_" . $count]))
 				$ex_sem_class .= "1";
-			else 
+			else
 				$ex_sem_class .= "0";
 			$count ++;
 		}
@@ -130,7 +130,7 @@ elseif (!isset($page) or ($page == 0)) // Seite 1 : Auswahl des Dateiformats
 	$export_info = _("Bitte wählen Sie, in welchem Format die Daten ausgegeben werden sollen!") . "<br>";
 
 	$export_pagecontent .= "<form method=\"POST\" action=\"" . $PHP_SELF . "\">";
-	
+
 	$export_pagecontent .= "";
 	$export_pagecontent .= "<b><font size=\"-1\">"._("Ausgabeformat:") .  "</font></b><br /><select name=\"format\">";
 
@@ -141,7 +141,7 @@ elseif (!isset($page) or ($page == 0)) // Seite 1 : Auswahl des Dateiformats
 		$export_pagecontent .= ">" . $val;
 	}
 	$export_pagecontent .= "</select><br>	<br><br>";
-	
+
 	$export_pagecontent .= "<b><font size=\"-1\">"._("Name der Datei (z.B. &raquo;Test&laquo;):")."</font></b><br />";
 	$export_pagecontent .= "<input type=\"text\" name=\"xslt_filename\" value=\"" . $xslt_filename . "\">";
 	$export_pagecontent .= "<input type=\"hidden\" name=\"page\" value=\"1\"><br><br><br>";
@@ -158,10 +158,10 @@ elseif (!isset($page) or ($page == 0)) // Seite 1 : Auswahl des Dateiformats
 
 	$export_weiter_button .= "</center></form>";
 
-	$infobox = array	(			
+	$infobox = array	(
 	array ("kategorie"  => _("Information:"),
-		"eintrag" => array	(	
-						array (	"icon" => "pictures/ausruf_small.gif",
+		"eintrag" => array	(
+						array (	"icon" => "ausruf_small.gif",
 								"text"  => sprintf(_("Diese Seite bereitet die Datenausgabe vor. %s Schritt 1/3 %s"), "<br><i>", "</i>")
 							 )
 						)
@@ -169,7 +169,7 @@ elseif (!isset($page) or ($page == 0)) // Seite 1 : Auswahl des Dateiformats
 	);
 	$link = "<a href=\"./test.xml"."\">";
 	$infobox[1]["kategorie"] = _("Aktionen:");
-		$infobox[1]["eintrag"][] = array (	"icon" => "pictures/forumrot.gif" ,
+		$infobox[1]["eintrag"][] = array (	"icon" => "forumrot.gif" ,
 									"text"  => _("Bitte w&auml;hlen Sie das Dateiformat, in dem Ihre Daten ausgegeben werden sollen. Klicken Sie anschließend auf 'weiter'.")
 								);
 }
@@ -191,7 +191,7 @@ elseif ($page == 1) // Seite 2 : Auswahl des XSLT-Scripts
 	$export_pagecontent .= "<th width=\"15%\" align=\"left\">" . _("Ausgabemodul") . "</th>";
 	$export_pagecontent .= "<th width=\"80%\"><b>" . _("Beschreibung") . "</b></th>";
 	$export_pagecontent .= "</tr>";
-	
+
 	$opt_num = 0;
 	while (list($key, $val) = each($xslt_files))
 	{
@@ -208,7 +208,7 @@ elseif ($page == 1) // Seite 2 : Auswahl des XSLT-Scripts
 			$opt_num++;
 		}
 	}
-	
+
 	$export_pagecontent .= "<br>";
 	$export_pagecontent .= "</table>";
 	$export_pagecontent .= "<input type=\"hidden\" name=\"page\" value=\"2\">";
@@ -220,18 +220,18 @@ elseif ($page == 1) // Seite 2 : Auswahl des XSLT-Scripts
 	$export_pagecontent .= "<input type=\"hidden\" name=\"range_id\" value=\"" . $range_id . "\">";
 	$export_pagecontent .= "<input type=\"hidden\" name=\"xml_file_id\" value=\"" . $xml_file_id . "\">";
 	$export_pagecontent .= "<input type=\"hidden\" name=\"xslt_filename\" value=\"" . $xslt_filename . "\">";
-	
+
 	$export_weiter_button = "<center><input type=\"IMAGE\" " . makeButton("zurueck", "src") . " value=\"" . _("Zur&uuml;ck") . "\" name=\"back\">&nbsp;";
 	$export_weiter_button .= "<input type=\"IMAGE\" " . makeButton("weiter", "src") . " name=\"next\"";
 	if ($skip_page_3 AND $XSLT_ENABLE)
 		$export_weiter_button .=  " onClick=\"return export_start();\"";
 	$export_weiter_button .=  "></center></form>";
 
-	
-	$infobox = array	(			
+
+	$infobox = array	(
 	array ("kategorie"  => _("Information:"),
-		"eintrag" => array	(	
-						array (	"icon" => "pictures/ausruf_small.gif",
+		"eintrag" => array	(
+						array (	"icon" => "ausruf_small.gif",
 								"text"  => sprintf(_("Diese Seite bereitet die Datenausgabe vor. %s Schritt 2/3 %s"), "<br><i>", "</i>")
 							 )
 						)
@@ -239,7 +239,7 @@ elseif ($page == 1) // Seite 2 : Auswahl des XSLT-Scripts
 	);
 	$link = "<a href=\"./test.xml"."\">";
 	$infobox[1]["kategorie"] = _("Aktionen:");
-		$infobox[1]["eintrag"][] = array (	"icon" => "pictures/forumrot.gif" ,
+		$infobox[1]["eintrag"][] = array (	"icon" => "forumrot.gif" ,
 									"text"  => _("W&auml;hlen Sie bitte eines der zur Verf&uuml;gung stehenden Ausgabemodule. Klicken Sie dann auf 'weiter'.")
 								);
 }
@@ -252,15 +252,15 @@ elseif ($page == 2)  // Seite 3 : Download der Dateien
 	$export_info = _("Die ben&ouml;tigten Dateien liegen nun zum Download bereit.");
 	$export_pagecontent .= "<form method=\"POST\" action=\"" . $PHP_SELF . "\">";
 
-	$xml_printimage = '<a href="'. GetDownloadLink($xml_file_id, $xml_filename, 2) . '"><img src="pictures/' . $export_icon['xml'] . '" border=0></a>';
+	$xml_printimage = '<a href="'. GetDownloadLink($xml_file_id, $xml_filename, 2) . '"><img src="'.$GLOBALS['ASSETS_URL'].'images/' . $export_icon['xml'] . '" border=0></a>';
 	$xml_printlink = '<a href="' . GetDownloadLink($xml_file_id, $xml_filename, 2) . '">' . $xml_filename . '</a>';
 	$xml_printdesc = _("XML-Daten");
-	$xml_printcontent = _("In dieser Datei sind die Daten als XML-Tags gespeichert. Diese Tags können mit einem XSLT-Script verarbeitet werden.") . "<br>";	
+	$xml_printcontent = _("In dieser Datei sind die Daten als XML-Tags gespeichert. Diese Tags können mit einem XSLT-Script verarbeitet werden.") . "<br>";
 
-	$xslt_printimage = '<a href="' . GetDownloadLink( $xslt_files[$choose]['file'], $xslt_files[$choose]['name'] . '.xsl', 3). '"><img src="pictures/' . $export_icon['xslt'] . '" border=0></a>';
+	$xslt_printimage = '<a href="' . GetDownloadLink( $xslt_files[$choose]['file'], $xslt_files[$choose]['name'] . '.xsl', 3). '"><img src="'.$GLOBALS['ASSETS_URL'].'images/' . $export_icon['xslt'] . '" border=0></a>';
 	$xslt_printlink = '<a href="'.GetDownloadLink( $xslt_files[$choose]['file'], $xslt_files[$choose]['name'] . '.xsl', 3).'">' . $xslt_files[$choose]['name'] . '.xsl</a>';
 	$xslt_printdesc = _("XSLT-Datei");
-	$xslt_printcontent = _("Dies ist das XSLT-Script zur Konvertierung der Daten. Klicken Sie auf den Dateinamen, um die Datei zu &ouml;ffnen.") . "<br>";	
+	$xslt_printcontent = _("Dies ist das XSLT-Script zur Konvertierung der Daten. Klicken Sie auf den Dateinamen, um die Datei zu &ouml;ffnen.") . "<br>";
 
 	$export_pagecontent .= "";
 	$export_pagecontent .= "<input type=\"hidden\" name=\"page\" value=\"3\">";
@@ -275,20 +275,20 @@ elseif ($page == 2)  // Seite 3 : Download der Dateien
 	$export_pagecontent .= "<input type=\"hidden\" name=\"xslt_filename\" value=\"" . $xslt_filename . "\">";
 
 	$export_weiter_button = "<center><input type=\"IMAGE\" " . makeButton("zurueck", "src") . " value=\"" . _("Zur&uuml;ck") . "\" name=\"back\">&nbsp;";
-	if ($XSLT_ENABLE) 
+	if ($XSLT_ENABLE)
 	{
 		$export_pagecontent .= _("Um die Daten mit dem installierten XSLT-Prozessor in das gew&uuml;nschte Format zu bringen, klicken Sie bitte auf 'weiter'") . "<br><br>";
 		$export_weiter_button .= "<input type=\"IMAGE\" " . makeButton("weiter", "src") . " onClick=\"return export_start();\" name=\"next\">";
 	}
 	else
 		$export_pagecontent .= "<br><br><br>";
-		
+
 	$export_weiter_button .= "</center></form>";
 
-	$infobox = array	(			
+	$infobox = array	(
 	array ("kategorie"  => _("Information:"),
-		"eintrag" => array	(	
-						array (	"icon" => "pictures/ausruf_small.gif",
+		"eintrag" => array	(
+						array (	"icon" => "ausruf_small.gif",
 								"text"  => sprintf(_("Diese Seite bereitet die Datenausgabe vor. %s Schritt 3/3 %s"), "<br><i>", "</i>")
 							 )
 						)
@@ -296,12 +296,12 @@ elseif ($page == 2)  // Seite 3 : Download der Dateien
 	);
 	$link = "<a href=\"./test.xml"."\">";
 	$infobox[1]["kategorie"] = _("Aktionen:");
-		$infobox[1]["eintrag"][] = array (	"icon" => "pictures/icon-disc.gif" ,
+		$infobox[1]["eintrag"][] = array (	"icon" => "icon-disc.gif" ,
 									"text"  => _("Sie können sich die XML-Daten und das XSLT-Skript herunterladen.")
 								);
-	if ($XSLT_ENABLE) 
+	if ($XSLT_ENABLE)
 	{
-		$infobox[1]["eintrag"][] = array (	"icon" => "pictures/forumrot.gif" ,
+		$infobox[1]["eintrag"][] = array (	"icon" => "forumrot.gif" ,
 									"text"  => _("Wenn Sie auf 'weiter' klicken, wird mit dem installierten XSLT-Prozessor die Ausgabedatei erzeugt.")
 								);
 	}

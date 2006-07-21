@@ -214,6 +214,7 @@ class UserConfig {
 	 * @param	string	key
 	 * @return	void
 	 */    
+
     function _retrieve($user_id, $key) {
     	$sql="SELECT value FROM user_config WHERE user_id='$user_id' AND field='$key' ORDER BY field";
     	$this->db->query($sql);

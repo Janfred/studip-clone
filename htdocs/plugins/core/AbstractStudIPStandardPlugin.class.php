@@ -21,7 +21,7 @@ class AbstractStudIPStandardPlugin extends AbstractStudIPPlugin{
     	AbstractStudIPPlugin::AbstractStudIPPlugin();
     	$this->pluginiconname = "";
     	$this->changeindicatoriconname = "";
-    	$this->id = -1;
+    	$this->id = UNKNOWN_ID;
     	$this->overview = false;
     	$this->pluginengine = PluginEngine::getPluginPersistence("Standard");
     	// create the standard AdminInfo
@@ -34,6 +34,12 @@ class AbstractStudIPStandardPlugin extends AbstractStudIPPlugin{
     }
     
     function getId(){
+    	if ($this->id == UNKNOWN_ID){
+    		$this->id = $GLOBALS['SessSemName'][1];
+    	}
+    	else {
+    		$this->id = trim(str_replace($GLOBALS["SessSemName"]["class"],"",$this->id));
+    	}
 	    return $this->id;
     }
     
@@ -69,7 +75,7 @@ class AbstractStudIPStandardPlugin extends AbstractStudIPPlugin{
     
     
     function getChangeindicatoriconname(){
-    	return $this->getPluginpath() . "/" . $this->changeindicatoriconname;
+    	return $this->changeindicatoriconname;
     }
     
     function setChangeindicatoriconname($newicon){

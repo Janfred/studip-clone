@@ -36,6 +36,7 @@ page_open (array ("sess" => "Seminar_Session", "auth" => "Seminar_Auth",
 $perm->check ("autor");
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php");
 include ("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/user_visible.inc.php");
 /* **END*of*initialise*Stud.IP-Session*********************************** */
 
 /* ************************************************************************** *
@@ -79,10 +80,10 @@ else
 /* ************************************************************************* */
 if ($mode == "select_group"){
 	// creats the content for the infobox
-	$infobox = array (	
+	$infobox = array (
 		array ("kategorie"  => "Information:",
-			"eintrag" => array	(	
-				array (	"icon" => "pictures/ausruf_small.gif",
+			"eintrag" => array	(
+				array (	"icon" => "ausruf_small.gif",
 					"text"  => _("Bitte wählen sie eine bestimme Gruppe ihres Adressbuches oder ihr vollständiges Adressbuch und drücken anschließend auf 'Export'.")
 				),
 			)
@@ -113,10 +114,10 @@ if ($mode == "select_group"){
 
 	printSiteTitle();
 	printSelectGroup($infobox,$groups);
-	
+
 } elseif (($mode == "export_vcard")
 	|| ($mode == "ext_export")
-	|| ($mode == "ext_export_username") 
+	|| ($mode == "ext_export_username")
 	|| ($mode == "ext_export_group") ){
 
 	exportVCard($contacts);
@@ -146,7 +147,7 @@ function printSiteTitle(){
    	$html = "<table border=0 class=blank align=center cellspacing=0 cellpadding=0 width=\"100%\">\n"
     	  . "	<tr valign=top align=center>\n"
     	  . "    <td class=topic align=left colspan=\"2\">\n"
-		  . "	  &nbsp;<img src=\"pictures/vcardexport.gif\" alt=\"export\" align=\"texttop\">&nbsp;<b>\n"
+		  . "	  &nbsp;<img src=\"".$GLOBALS['ASSETS_URL']."images/vcardexport.gif\" alt=\"export\" align=\"texttop\">&nbsp;<b>\n"
 		  . _("Adressbuch exportieren")."\n"
 		  . "	  </b>\n"
     	  . "    </td>\n"
@@ -171,7 +172,7 @@ function printSelectGroup($infobox, $groups){
 		. "	 <tr>"
 		. "	  <td align=\"left\" valign=\"top\"><font size=\"-1\">\n"
 		. _("Bitte wählen sie ein Gruppe aus, deren Daten sie in eine vCard-Datei exportieren möchten:")."\n"
-		. "	   <form action=\"".$_SERVER['PHP_SELF']."\" method=post>\n"
+		. "	   <form action=\"$PHP_SELF\" method=post>\n"
 		. "       &nbsp;<select name=\"groupid\" style=\"vertical-align:middle;\">\n";
 	// the groups
 	for ($i=0;$i<=sizeof($groups)-1;$i++){
@@ -183,7 +184,7 @@ function printSelectGroup($infobox, $groups){
 		. "	  </font></td>\n"
 		. "	  <td align=\"right\" width=\"250\" valign=\"top\">\n";
 	echo $html;
-	print_infobox($infobox,"pictures/export.jpg");
+	print_infobox($infobox,"export.jpg");
 	$html = "	  </td>\n"
 		. "	 </tr>\n"
 		. "	</table>\n"
@@ -216,7 +217,7 @@ function createButton($button, $title, $name = NULL, $value = NULL){
 /* ************************************************************************* */
 
 /**
- * collects the contactgroups from user	
+ * collects the contactgroups from user
  *
  * @access  private
  * @returns array the contact groups
@@ -260,10 +261,10 @@ function getContactGroups(){
  */
 function getContactGroupData($exportID,$mode = "group"){
 	global $user, $_fullname_sql;
-	
+
 	$db = new DB_Seminar;
 	$db2 = new DB_Seminar;
-	
+
 	// the users from one group
 	if (($mode == "group") && ($exportID != "all")){
 		$query = "SELECT statusgruppe_user.user_id, statusgruppe_user.statusgruppe_id, "
@@ -273,9 +274,9 @@ function getContactGroupData($exportID,$mode = "group"){
 			. "LEFT JOIN auth_user_md5 USING(user_id) "
 			. "LEFT JOIN user_info USING (user_id) "
 			. "WHERE statusgruppe_id = '$exportID'";
-	
+
 	// all contacts from this user
-	} elseif ($mode == "group") { 
+	} elseif ($mode == "group") {
 		$query = "SELECT contact.user_id, "
 			. $_fullname_sql['full'] . " AS fullname , auth_user_md5.username, auth_user_md5.Email, auth_user_md5.Vorname, auth_user_md5.Nachname, "
 			. "user_info.Home, user_info.privatnr, user_info.privadr, user_info.title_front, user_info.title_rear "
@@ -284,7 +285,7 @@ function getContactGroupData($exportID,$mode = "group"){
 			. "LEFT JOIN user_info USING (user_id) "
 			. "WHERE owner_id = '".$user->id."'";
 	// contact by username
-	} elseif ($mode == "username") { 
+	} elseif ($mode == "username") {
 		$query = "SELECT auth_user_md5.user_id, "
 			. $_fullname_sql['full'] . " AS fullname , auth_user_md5.Email, auth_user_md5.username, auth_user_md5.Vorname, auth_user_md5.Nachname, "
 			. "user_info.Home, user_info.privatnr, user_info.privadr, user_info.title_front, user_info.title_rear "
@@ -300,24 +301,25 @@ function getContactGroupData($exportID,$mode = "group"){
 			. "LEFT JOIN user_info USING (user_id) "
 			. "WHERE contact_id = '".$exportID."'";
 	}
-			
+
 	$db->query($query);
-	
+
 	$i = 0;
 	while ($db->next_record()){
-		$contacts[$i] = array(
-			"id" => $db->f("user_id"),
-			"FN" => $db->f("fullname"),
-			"NICKNAME" => $db->f("username"),
-			"URL" => $db->f("Home"),
-			"TEL" => $db->f("privatnr"),
-			"ADR" => $db->f("privadr"),
-			"EMAIL" => $db->f("Email"),
-			"gname" => $db->f("Vorname"),
-			"fname" => $db->f("Nachname"),
-			"prefix" => $db->f("title_front"),
-			"suffix" => $db->f("title_rear")
-			);
+		if (get_visibility_by_id($db->f("user_id"))) {
+			$contacts[$i] = array(
+					"id" => $db->f("user_id"),
+					"FN" => $db->f("fullname"),
+					"NICKNAME" => $db->f("username"),
+					"URL" => $db->f("Home"),
+					"TEL" => $db->f("privatnr"),
+					"ADR" => $db->f("privadr"),
+					"EMAIL" => $db->f("Email"),
+					"gname" => $db->f("Vorname"),
+					"fname" => $db->f("Nachname"),
+					"prefix" => $db->f("title_front"),
+					"suffix" => $db->f("title_rear")
+					);
 
 			// collecting the office data
 			$query = "SELECT a.*, "
@@ -325,9 +327,11 @@ function getContactGroupData($exportID,$mode = "group"){
 				. "b.url as fak_url, b.telefon as fak_TEL, b.email as fak_mail, b.fax as fak_FAX "
 				. "FROM user_inst a "
 				. "LEFT JOIN Institute b USING (Institut_id) "
-				. "WHERE user_id = '".$contacts[$i]["id"]."' AND inst_perms != 'user' "
-				. "AND externdefault = 1 AND visible = 1";
+				. "WHERE user_id = '".$contacts[$i]["id"]."' AND inst_perms != 'user'"
+				. "AND externdefault = 1 "
+				. "AND visible = 1";
 			$db2->query($query);
+
 			// if externdefault isn't set
 			if ($db2->num_rows() == 0) {
 				$query = "SELECT a.*, "
@@ -339,6 +343,7 @@ function getContactGroupData($exportID,$mode = "group"){
 				. "AND visible = 1 ORDER BY priority ASC";
 				$db2->query($query);
 			}
+
 			$j = 0;
 
 			while ($db2->next_record()){
@@ -354,27 +359,28 @@ function getContactGroupData($exportID,$mode = "group"){
 					$positions = NULL;
 
 				$contacts[$i]["fak"][$j] = array(
-					"fak_name" => $db2->f("fak_name"),
-					"consultation_hours" => $db2->f("sprechzeiten"),
-					"room" => $db2->f("raum"),
-					"TEL" => $db2->f("Telefon"),
-					"FAX" => $db2->f("Fax"),
-					"fak_strasse" => $db2->f("fak_strasse"),
-					"fak_plz" => $db2->f("fak_plz"),
-					"fak_url" => $db2->f("fak_url"),
-					"fak_TEL" => $db2->f("fak_TEL"),
-					"fak_mail" => $db2->f("fak_mail"),
-					"fak_FAX" => $db2->f("fak_FAX"),
-					"fak_position" => $positions
-				);
-//				print "TEL: ".$contacts[$i]["fak"][$j]["TEL"]."<br>";
+						"fak_name" => $db2->f("fak_name"),
+						"consultation_hours" => $db2->f("sprechzeiten"),
+						"room" => $db2->f("raum"),
+						"TEL" => $db2->f("Telefon"),
+						"FAX" => $db2->f("Fax"),
+						"fak_strasse" => $db2->f("fak_strasse"),
+						"fak_plz" => $db2->f("fak_plz"),
+						"fak_url" => $db2->f("fak_url"),
+						"fak_TEL" => $db2->f("fak_TEL"),
+						"fak_mail" => $db2->f("fak_mail"),
+						"fak_FAX" => $db2->f("fak_FAX"),
+						"fak_position" => $positions
+						);
+				//				print "TEL: ".$contacts[$i]["fak"][$j]["TEL"]."<br>";
 				$j++;
 			}
-		$statusgruppe_id = $db->f("statusgruppe_id");	
-		$i++;
+			$statusgruppe_id = $db->f("statusgruppe_id");
+			$i++;
+		}
 	}
 
-	//geting the groupname	
+	//geting the groupname
 	if ($exportID != "all"){
 		$query = "SELECT name FROM statusgruppen WHERE statusgruppe_id = '".$statusgruppe_id."'";
 		$db->query($query);
@@ -405,8 +411,8 @@ function exportVCard($contacts){
 	header("Content-type: text/x-vCard"); //application/octet-stream MIME
 	header("Content-disposition: attachment; filename=".$filename.".vcf");
 
-	$br = "=0D=0A"; 
-	
+	$br = "=0D=0A";
+
 	for ($i=0;$i<=sizeof($contacts)-2;$i++){
 
 		$vcard .= "BEGIN:VCARD\r\n"
@@ -433,9 +439,9 @@ function exportVCard($contacts){
 			$vcard .= ";";
 			//closing this entry
 			$vcard .= "\r\n";
-		
+
 		// the nick-name: 'NICKNAME:'
-		
+
 		// the private adress
 		$vcard .= "ADR;HOME:;;";
 		$vcard .= $contacts[$i]["ADR"];
@@ -445,19 +451,19 @@ function exportVCard($contacts){
 		$vcard .= "TEL;HOME:";
 		$vcard .= $contacts[$i]["TEL"];
 		$vcard .= "\r\n";
-		
+
 		// the e-mail
 		$vcard .= "EMAIL;INTERNET:";
 		$vcard .= $contacts[$i]["EMAIL"];
 		$vcard .= "\r\n";
-		
+
 		// the private url
 		$vcard .= "URL:";
 		$vcard .= $contacts[$i]["URL"];
 		$vcard .= "\r\n";
 
 		// work data
-		
+
 		// if there is any workplace
 		if (sizeof($contacts[$i]["fak"]) > 0){
 			// the work adress
@@ -482,14 +488,14 @@ function exportVCard($contacts){
 //			if ($contacts[$i]["fak"][0]["consultation_hours"])
 //				$vcard .= $contacts[$i]["fak"][0]["consultation_hours"];
 			$vcard .= "\r\n";
-			
+
 			// the position
 			if ($contacts[$i]["fak"][0]["fak_position"]){
 				$vcard .= "TITLE:"
 					. $contacts[$i]["fak"][0]["fak_position"]
 					. "\r\n";
 			}
-						
+
 			// the work org
 			$vcard .= "ORG;WORK:";
 			if ($contacts[$i]["fak"][0]["fak_name"]){
@@ -508,17 +514,17 @@ function exportVCard($contacts){
 			$vcard .= "TEL;WORK:";
 			$vcard .= $contacts[$i]["fak"][0]["TEL"];
 			$vcard .= "\r\n";
-			
+
 			// the work fax
 			$vcard .= "TEL;WORK;FAX:";
 			$vcard .= $contacts[$i]["fak"][0]["FAX"];
 			$vcard .= "\r\n";
-			
+
 			// the work url
 			$vcard .= "URL;WORK:";
 			$vcard .= $contacts[$i]["fak"][0]["fak_url"];
 			$vcard .= "\r\n";
-			
+
 			// the consulting hours
 			$vcard .= "LABEL;WORK;ENCODING=QUOTED-PRINTABLE:";
 			$vcard .= _("Sprechstunde: ");
@@ -534,7 +540,7 @@ function exportVCard($contacts){
 				// the work adress
 				$vcard .= $contacts[$i]["fak"][$j]["fak_name"];
 				$vcard .= $br;
-				
+
 				if ($contacts[$i]["fak"][$j]["fak_position"]){
 					$vcard .= _("Position").": ";
 					$vcard .= $contacts[$i]["fak"][$j]["fak_position"];
@@ -558,7 +564,7 @@ function exportVCard($contacts){
 					$vcard .= $contacts[$i]["fak"][$j]["TEL"];
 					$vcard .= $br;
 				}
-			
+
 				// the work fax
 				if ($contacts[$i]["fak"][$j]["FAX"]){
 					$vcard .= "Fax: ";
@@ -572,12 +578,12 @@ function exportVCard($contacts){
 			}
 			$vcard .= "\r\n";
 		}
-		
-	
+
+
 		// the revisions and closing this entry
 		$vcard .= "REV:".date("Y-m-d")."T".date("H:i:s")."Z\r\n"
 			. "END:VCARD\r\n";
-			
+
 	}
 	echo $vcard;
 /*	global $TMP_PATH;

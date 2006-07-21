@@ -33,6 +33,7 @@ require_once ($ABSOLUTE_PATH_STUDIP."/language.inc.php");
 require_once ($ABSOLUTE_PATH_STUDIP."/config.inc.php");
 require_once ($ABSOLUTE_PATH_STUDIP."/functions.php");
 require_once ($ABSOLUTE_PATH_STUDIP."/visual.inc.php");
+require_once ($ABSOLUTE_PATH_STUDIP."/user_visible.inc.php");
 require_once ($ABSOLUTE_PATH_STUDIP."/messaging.inc.php");
 require_once ($ABSOLUTE_PATH_STUDIP."/contact.inc.php");
 require_once ($ABSOLUTE_PATH_STUDIP."/lib/classes/UserConfig.class.php");
@@ -47,7 +48,7 @@ $db3=new DB_Seminar;
 ## ACTION ##
 
 // add forward_receiver
-if ($add_smsforward_rec_x) { 
+if ($add_smsforward_rec_x) {
 	$query = "UPDATE user_info SET smsforward_rec='".get_userid($smsforward_rec)."', smsforward_copy='1' WHERE user_id='".$user->id."'";
 	$db3->query($query);
 }
@@ -83,7 +84,7 @@ if($messaging_cmd=="change_view_insert"){
 if ($messaging_cmd=="change_view_insert" && !$set_msg_default_x && $newmsgset_x) {
 		$db2->query("UPDATE user_info SET email_forward = '".$send_as_email."' WHERE user_id = '".$user->id."'");
 		$email_forward = $send_as_email;
- 
+
 	// write to user config table
 	$user_cfg->setValue((int)isset($foaf_show_identity), $user->id, "FOAF_SHOW_IDENTITY");
 
@@ -115,11 +116,11 @@ if ($messaging_cmd=="change_view_insert" && !$set_msg_default_x && $newmsgset_x)
 	if ($smsforward['rec']) {
 		if ($smsforward_copy && !$smsforward['copy'])  {
 			$query = "UPDATE user_info SET smsforward_copy='1'  WHERE user_id='".$user->id."'";
-			$db3->query($query);		
+			$db3->query($query);
 		}
 		if (!$smsforward_copy && $smsforward['copy'])  {
 			$query = "UPDATE user_info SET smsforward_copy=''  WHERE user_id='".$user->id."'";
-			$db3->query($query);		
+			$db3->query($query);
 		}
 	}
 } else if ($messaging_cmd=="change_view_insert" && $set_msg_default_x) {
@@ -144,22 +145,22 @@ function change_messaging_view() {
 	$msging=new messaging;
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
-	$db3=new DB_Seminar;	
-	$cssSw=new cssClassSwitcher;	
+	$db3=new DB_Seminar;
+	$cssSw=new cssClassSwitcher;
 	?>
 	<table width="100%" border="0" cellpadding="0" cellspacing="0" align="center">
 		<tr>
-			<td class="topic" colspan=2><img src="pictures/einst.gif" border="0" align="texttop"><b>&nbsp;<?print _("Einstellungen des Messagings anpassen");?></b></td>
+			<td class="topic" colspan=2><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/einst.gif" border="0" align="texttop"><b>&nbsp;<?print _("Einstellungen des Messagings anpassen");?></b></td>
 		</tr>
 		<tr>
 			<td class="blank" colspan=2>&nbsp;</td>
 		</tr>
 		<tr>
-			
+
 			<td class="blank" width="100%" colspan="2" align="center">
 			<blockquote>
 				<font size="-1"><b><?print _("Auf dieser Seite k&ouml;nnen Sie die Eigenschaften des Stud.IP-Messagingsystems an Ihre Bed&uuml;rfnisse anpassen.");?>
-			</blockquote>			
+			</blockquote>
 			<form action="<?=$PHP_SELF?>?messaging_cmd=change_view_insert" method="post">
 			<? if ($reset_txt) {
 				?><table width="70%" align="center" cellpadding=8 cellspacing=0 border=0><tr><td align="left" class="steel1"><?
@@ -186,7 +187,7 @@ function change_messaging_view() {
 						<input type="checkbox" value="1" name="opennew"<? if ($my_messaging_settings["opennew"] == "1") echo " checked"; ?>>
 					</td>
 				</tr>
-			
+
 				<tr  <? $cssSw->switchClass() ?>>
 					<td  align="right" class="blank" style="border-bottom:1px dotted black;">
 						<font size="-1"><?print _("Alle Nachrichten immer aufgeklappt");?></font>
@@ -204,7 +205,7 @@ function change_messaging_view() {
 						<input type="checkbox" value="1" name="save_snd"<? if ($my_messaging_settings["save_snd"] == "1") echo " checked"; ?>>
 					</td>
 				</tr>
-				
+
 				<tr  <? $cssSw->switchClass() ?>>
 					<td  align="right" class="blank" style="border-bottom:1px dotted black;">
 						<font size="-1"><?print _("Beim Logout alle Nachrichten löschen");?></font>
@@ -222,7 +223,7 @@ function change_messaging_view() {
 					<td <?=$cssSw->getFullClass()?>>
 						<input type="checkbox" value="1" name="logout_markreaded"<? if ($my_messaging_settings["logout_markreaded"] == "1") echo " checked"; ?>>
 					</td>
-				</tr>	
+				</tr>
 
 				<? if ($GLOBALS["MESSAGING_FORWARD_AS_EMAIL"]) { ?>
 				<tr  <? $cssSw->switchClass() ?>>
@@ -267,35 +268,35 @@ function change_messaging_view() {
 							$smsforward['rec'] = $db2->f("smsforward_rec");
 						}
 						if ($smsforward['rec']) { // empfaenger ausgewaehlt
-							printf("&nbsp;<font size=\"-1\">"._("Empfänger: %s%s%s")."</font>&nbsp;&nbsp;<input type=\"image\" name=\"del_forwardrec\" src=\"./pictures/trash.gif\" border=\"0\" ".tooltip(_("Empfänger und Weiterleitung löschen.")).">&nbsp;<input type=\"image\" name=\"del_forwardrec\" src=\"./pictures/suche2.gif\" border=\"0\" ".tooltip(_("Neuen Empfänger suchen."))."><br>", "<a href=\"about.php?username=".get_username($smsforward['rec'])."\">", get_fullname($smsforward['rec'],'full',true), "</a>");
+							printf("&nbsp;<font size=\"-1\">"._("Empfänger: %s%s%s")."</font>&nbsp;&nbsp;<input type=\"image\" name=\"del_forwardrec\" src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" border=\"0\" ".tooltip(_("Empfänger und Weiterleitung löschen.")).">&nbsp;<input type=\"image\" name=\"del_forwardrec\" src=\"".$GLOBALS['ASSETS_URL']."images/suche2.gif\" border=\"0\" ".tooltip(_("Neuen Empfänger suchen."))."><br>", "<a href=\"about.php?username=".get_username($smsforward['rec'])."\">", get_fullname($smsforward['rec'],'full',true), "</a>");
 							echo "<input type=\"checkbox\" value=\"1\" name=\"smsforward_copy\"";
 							if ($smsforward['copy'] == "1") echo " checked";
 							echo ">&nbsp;<font size=\"-1\">".("Kopie im persönlichen Posteingang speichern.")."</font>";
 						} else { // kein empfaenger ausgewaehlt
 							if ($search_exp == "") { ?>
 								<input type="text" name="search_exp" size="30" value="">
-								<input type="image" name="gosearch" src="./pictures/suche2.gif" border="0"><?
+								<input type="image" name="gosearch" src="<?= $GLOBALS['ASSETS_URL'] ?>images/suche2.gif" border="0"><?
 							} else {
-								$db->query("SELECT username, ".$_fullname_sql['full_rev']." AS fullname, perms FROM auth_user_md5 LEFT JOIN user_info USING(user_id) WHERE (username LIKE '%$search_exp%' OR Vorname LIKE '%$search_exp%' OR Nachname LIKE '%$search_exp%') ORDER BY Nachname ASC"); 
+								$db->query("SELECT username, ".$_fullname_sql['full_rev']." AS fullname, perms FROM auth_user_md5 LEFT JOIN user_info USING(user_id) WHERE (username LIKE '%$search_exp%' OR Vorname LIKE '%$search_exp%' OR Nachname LIKE '%$search_exp%') AND ".get_vis_query('auth_user_md5')." ORDER BY Nachname ASC");
 								if (!$db->num_rows()) { // wenn keine treffer
-									echo "&nbsp;<input type=\"image\" name=\"reset_freesearch\" src=\"./pictures/rewind.gif\" border=\"0\" value=\""._("Suche zur&uuml;cksetzen")."\" ".tooltip(_("setzt die Suche zurück")).">";
+									echo "&nbsp;<input type=\"image\" name=\"reset_freesearch\" src=\"".$GLOBALS['ASSETS_URL']."images/rewind.gif\" border=\"0\" value=\""._("Suche zur&uuml;cksetzen")."\" ".tooltip(_("setzt die Suche zurück")).">";
 									echo "<font size=\"-1\">&nbsp;"._("keine Treffer")."</font>";
 								} else { // treffer auswählen
-									echo "<input type=\"image\" name=\"add_smsforward_rec\" ".tooltip(_("als Empfänger weitergeleiteter Nachrichten eintragen"))." value=\""._("als Empfänger auswählen")."\" src=\"./pictures/vote_answer_correct.gif\" border=\"0\">&nbsp;&nbsp;";
+									echo "<input type=\"image\" name=\"add_smsforward_rec\" ".tooltip(_("als Empfänger weitergeleiteter Nachrichten eintragen"))." value=\""._("als Empfänger auswählen")."\" src=\"".$GLOBALS['ASSETS_URL']."images/vote_answer_correct.gif\" border=\"0\">&nbsp;&nbsp;";
 									echo "<select size=\"1\" name=\"smsforward_rec\">";
 									while ($db->next_record()) {
 										if (get_username($user->id) != $db->f("username")) {
 											echo "<option value=\"".$db->f("username")."\">".htmlReady(my_substr($db->f("fullname"),0,35))." (".$db->f("username").") - ".$db->f("perms")."</option>";
-										}							
+										}
 									} ?>
 									</select>
-									<input type="image" name="reset_serach" src="./pictures/rewind.gif" border="0" value="<?=_("Suche zur&uuml;cksetzen")?>" <?=tooltip(_("setzt die Suche zurück"))?>> <?
-								}								
+									<input type="image" name="reset_serach" src="<?= $GLOBALS['ASSETS_URL'] ?>images/rewind.gif" border="0" value="<?=_("Suche zur&uuml;cksetzen")?>" <?=tooltip(_("setzt die Suche zurück"))?>> <?
+								}
 							}
 						}
 						?>
 					</td>
-				</tr>	
+				</tr>
 				<tr <? $cssSw->switchClass() ?>>
 					<td align="right" class="blank" style="border-bottom:1px dotted black;">
 						<font size=-1><?echo _("Zeitfilter der Anzeige in Postein- bzw. ausgang");?></font>
@@ -310,7 +311,7 @@ function change_messaging_view() {
 						printf("<option value=\"%s\" %s>%s</option>", "older", CheckSelected($my_messaging_settings["timefilter"], "older"), _("&auml;lter als 30 Tage")); ?>
 						</select>
 					</td>
-				</tr>	
+				</tr>
 
 				<tr <? $cssSw->switchClass() ?>>
 					<td align="right" class="blank" style="border-bottom:1px dotted black;">
@@ -321,7 +322,7 @@ function change_messaging_view() {
 						&nbsp;<textarea name="sms_sig" rows=3 cols=30><? echo htmlready($my_messaging_settings["sms_sig"]); ?></textarea>
 					</td>
 				</tr>
-				
+
 				<tr  <? $cssSw->switchClass() ?>>
 					<td  align="right" class="blank">
 						<font size="-1"><?print _("Bild des Absenders in Nachricht anzeigen");?></font>
@@ -329,8 +330,8 @@ function change_messaging_view() {
 					<td <?=$cssSw->getFullClass()?>>
 						<input type="checkbox" value="1" name="show_sndpicture"<? if ($my_messaging_settings["show_sndpicture"] == "1") echo " checked"; ?>>
 					</td>
-				</tr>				
-				
+				</tr>
+
 				<tr <? $cssSw->resetClass() ?>>
 					<td colspan="2" align="center" class="steelgraulight" style="border-bottom:1px dotted black;border-top:1px dotted black;"><font size="-1"><b><?=_("Stud.IP-Messenger")?></b></font></td>
 				</tr>
@@ -362,7 +363,7 @@ function change_messaging_view() {
 				<tr <? $cssSw->switchClass() ?>>
 					<td colspan="2" align="center" class="steelgraulight" style="border-bottom:1px dotted black;border-top:1px dotted black;"><font size="-1"><b><?=_("Buddies/ Wer ist online?")?></b></font></td>
 				</tr>
-				<? if (GetNumberOfBuddies()) { ?>                      
+				<? if (GetNumberOfBuddies()) { ?>
 				<tr <? $cssSw->switchClass() ?>>
 					<td  align="right" class="blank" style="border-bottom:1px dotted black;">
 						<font size=-1><?=_("Nur Buddies in der &Uuml;bersicht der aktiven Benutzer anzeigen")?></font>
@@ -387,13 +388,13 @@ function change_messaging_view() {
 						<font size=-1><?=_("Dauer bis inaktiv:")?></font>
 					</td>
 					<td <?=$cssSw->getFullClass()?>>
-						<select name="active_time"> <? 
+						<select name="active_time"> <?
 						for ($i=0; $i<=15; $i=$i+5) {
 							if ($i) {
 								if ($my_messaging_settings["active_time"] == $i) {
 									echo "<option selected>$i</option>";
 								} else {
-									echo "<option>$i</option>"; 
+									echo "<option>$i</option>";
 								}
 							}
 						} ?>
@@ -406,16 +407,16 @@ function change_messaging_view() {
 						<font size=-1>
 						<input type="image" <?=makeButton("uebernehmen", "src") ?> border=0 value="<?_("Änderungen übernehmen")?>" name="newmsgset"></font>&nbsp;
 						<input type="image" name="set_msg_default" <?=makeButton("zuruecksetzen", "src") ?> border=0 value="<?_("Einstellungen zurücksetzen")?>"></font>
-						</form>	
+						</form>
 					</td>
 				</tr>
-				</form>	
+				</form>
 			</table>
 			<br />
 			<br />
 			</td>
 		</tr>
-	</table> 
+	</table>
 <?
-} 
+}
 ?>

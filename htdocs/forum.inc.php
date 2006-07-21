@@ -35,7 +35,7 @@
 * deletes the edit-string from content
 *
 * @param	string	description
-* 
+*
 * @return	string	description
 *
 **/
@@ -50,7 +50,7 @@ function forum_kill_edit ($description) {
 * adds the edit-string to a content
 *
 * @param	string	description
-* 
+*
 * @return	string	description
 *
 **/
@@ -64,7 +64,7 @@ function forum_append_edit ($description) {
 * parses content for output with added edit-string
 *
 * @param	string	description
-* 
+*
 * @return	string	description
 *
 **/
@@ -81,36 +81,36 @@ function forum_parse_edit ($description) {
 * Builds the edit-Area for created postings or postings being re-editet
 *
 * @param	array	forumposting contains several data of the actual posting
-* 
+*
 * @return	string	description contains the complete html-data of the edit-area
 *
 **/
 function editarea($forumposting) {
 	global $forum, $view, $user, $PHP_SELF, $auth;
-	
+
 	if ($auth->auth["jscript"]) {
 		$max_col = round($auth->auth["xres"] / 12 );
 	}
-	else 
+	else
 		$max_col =  64 ; //default für 640x480
 
 	$cols = round($max_col*0.45);
 	if ($cols < 28) $cols = 28;
-	
+
 	if ($forumposting["writestatus"] == "new") // Abbrechen Button unterscheidet ob Anlegen abgebrochen oder Bearbeiten abgebrochen
 		$zusatz = "<a href=\"".$PHP_SELF."?really_kill=".$forumposting["id"]."&nurneu=1#anker\">" . makeButton("abbrechen", "img") . "</a>";
 	else
 		$zusatz = "<a href=\"".$PHP_SELF."?open=".$forumposting["rootid"]."#anker\">" . makeButton("abbrechen", "img") . "</a>";
-	
+
 	$zusatz .= "&nbsp;&nbsp;<a href=\"show_smiley.php\" target=\"new\"><font size=\"-1\">"._("Smileys")."</a>&nbsp;&nbsp;"."<a href=\"help/index.php?help_page=ix_forum6.htm\" target=\"new\"><font size=\"-1\">"._("Formatierungshilfen")."</a>";
 	if ($forumposting["writestatus"] == "new") { // es ist ein neuer Beitrag, der Autor sieht dann:
 		$description = _("Ihr Beitrag");
 	} else {
-		$description = $forumposting["description"];  // bereits bestehender Text 
+		$description = $forumposting["description"];  // bereits bestehender Text
 	}
-		
+
 	$description = forum_kill_edit($description);
-	
+
 	if ($forum["zitat"]!="") {
 		$zitat = quote($forum["zitat"]);
 		$description="";
@@ -128,9 +128,9 @@ function editarea($forumposting) {
 				.htmlReady($zitat)
 				."</textarea>";
 		}
-	$description .= "<br><br><img src=\"pictures/blank.gif\" width=\"160\" height=\"1\"><input type=image name=create value=\"abschicken\" " . makeButton("abschicken", "src") . " align=\"absmiddle\" border=0>&nbsp;"
+	$description .= "<br><br><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" width=\"160\" height=\"1\"><input type=image name=create value=\"abschicken\" " . makeButton("abschicken", "src") . " align=\"absmiddle\" border=0>&nbsp;"
 		.$zusatz
-		."</div>";	
+		."</div>";
 	return $description;
 }
 
@@ -147,8 +147,8 @@ function MakeUniqueID ()
 	$db=new DB_Seminar;
 	$tmp_id=md5(uniqid($hash_secret));
 
-	$db->query ("SELECT topic_id FROM px_topics WHERE topic_id = '$tmp_id'");	
-	if ($db->next_record()) 	
+	$db->query ("SELECT topic_id FROM px_topics WHERE topic_id = '$tmp_id'");
+	if ($db->next_record())
 		$tmp_id = MakeUniqueID(); //ID gibt es schon, also noch mal
 	return $tmp_id;
 }
@@ -157,8 +157,8 @@ function MakeUniqueID ()
 * Moves postings into a different lecture
 *
 * @param	string topic_id posting to be moved (inc. childs)
-* @param	string sem_id id of the target 
-* @param	string root 
+* @param	string sem_id id of the target
+* @param	string root
 * @param	string verschoben count of moved postings
 *
 * @return	string	verschoben count of moved postings
@@ -189,9 +189,9 @@ function move_topic($topic_id, $sem_id, $root, &$verschoben)  //rekursives Versc
 * Moves postings into a different folder
 *
 * @param	string topic_id posting to be moved (inc. childs)
-* @param	string root 
+* @param	string root
 * @param	string verschoben count of moved postings
-* @param	string thema id of the target 
+* @param	string thema id of the target
 *
 * @return	string	verschoben count of moved postings
 *
@@ -279,7 +279,7 @@ function ForumOpenClose ($forumposting) {
 	if (strstr($forum["openlist"],$forumposting["id"])!=TRUE
 	AND !($openall == "TRUE" && $forumposting["rootid"] == $folderopen)
 	AND !(($forum["view"]=="flat" || $forum["view"]=="neue" || $forum["view"]=="flat" || $forum["view"]=="flatfolder" || $forum["view"]=="search") && $forum["flatallopen"]=="TRUE")
-	AND !($forumposting["newold"]=="new" && $forum["neuauf"]==1) 
+	AND !($forumposting["newold"]=="new" && $forum["neuauf"]==1)
 	AND !$delete_id
 	AND ($forumposting["writestatus"]=="none")) {
 		$forumposting["openclose"] = "close";
@@ -305,7 +305,7 @@ function ForumNewPosting ($forumposting) {
 	} else {
 		$forumposting["newold"] = "old";  //Beitrag alt
 	}
-	return $forumposting;	
+	return $forumposting;
 }
 
 /**
@@ -317,7 +317,7 @@ function ForumNewPosting ($forumposting) {
 *
 **/
 function forum_lonely($forumposting) {  //Sieht nach ob das Posting kinderlos ist
-	
+
 	$topic_id = $forumposting["id"];
 	$db=new DB_Seminar;
 	$db->query("SELECT topic_id FROM px_topics WHERE parent_id='$topic_id'");
@@ -337,7 +337,7 @@ function forum_lonely($forumposting) {  //Sieht nach ob das Posting kinderlos is
 *
 **/
 function ForumGetRoot($id) {  //Holt die ID des Root-Postings
-	
+
 	$db=new DB_Seminar;
 	$db->query("SELECT root_id FROM px_topics WHERE topic_id='$id'");
 	if ($db->next_record())
@@ -354,7 +354,7 @@ function ForumGetRoot($id) {  //Holt die ID des Root-Postings
 *
 **/
 function ForumGetParent($id) {  //Holt die ID des Parent-Postings (wird für Schreibanzeige gebraucht)
-	
+
 	$db=new DB_Seminar;
 	$db->query("SELECT parent_id FROM px_topics WHERE topic_id='$id'");
 	if ($db->next_record())
@@ -395,7 +395,7 @@ function ForumFolderOrPosting ($forumposting) {
 	} else {
 		$forumposting["type"] = "posting";  //Beitrag alt
 	}
-	return $forumposting;	
+	return $forumposting;
 }
 
 /**
@@ -410,14 +410,14 @@ function ForumGetWriteStatus($forumposting) {
 	global $forum;
 	if ($forumposting["id"] == $forum["update"]) {  			// das Posting ist im Schreibmodus
 		if ($forumposting["chdate"] < $forumposting["mkdate"]) { 	// das Posting ist frisch angelegt und noch nicht geschrieben
-			$forumposting["writestatus"] = "new";		
+			$forumposting["writestatus"] = "new";
 		} else { 					// das Posting wird editiert
-			$forumposting["writestatus"] = "update";	
+			$forumposting["writestatus"] = "update";
 		}
 	} else {						// das Posting ist nicht im Schreibmodus
-		$forumposting["writestatus"] = "none";	
+		$forumposting["writestatus"] = "none";
 	}
-	return $forumposting;	
+	return $forumposting;
 }
 
 /**
@@ -449,18 +449,18 @@ function ForumIcon ($forumposting) {
 	global $cmd, $rechte, $topic_id, $PHP_SELF, $forum, $auth;
 	if ($forumposting["type"]=="folder") {
 		if ($forumposting["lonely"]==FALSE)
-			$bild = "pictures/cont_folder.gif";
+			$bild = $GLOBALS['ASSETS_URL']."images/cont_folder.gif";
 		else
-			$bild = "pictures/cont_folder2.gif";
+			$bild = $GLOBALS['ASSETS_URL']."images/cont_folder2.gif";
 	} else {
 		if ($forumposting["shrink"] == TRUE && $forumposting["lonely"]==FALSE) {
-			$bild = "pictures/forum_shrink.gif";
+			$bild = $GLOBALS['ASSETS_URL']."images/forum_shrink.gif";
 			$addon = tooltip(sprintf(_("komprimierter Thread mit %s Postings"), $forumposting["shrinkcount"]));
 		} else
-			$bild = "pictures/cont_blatt.gif";
+			$bild = $GLOBALS['ASSETS_URL']."images/cont_blatt.gif";
 	}
-	
-	if ($forum["jshover"]==1 AND $auth->auth["jscript"] AND $forumposting["description"]!="" && $forumposting["openclose"]=="close") {      
+
+	if ($forum["jshover"]==1 AND $auth->auth["jscript"] AND $forumposting["description"]!="" && $forumposting["openclose"]=="close") {
 		if ($forum["view"]=="tree" && $forumposting["type"]=="folder") { // wir kommen aus der Themenansicht
 			$hoverlink = "<a href=\"".$PHP_SELF."?open=".$forumposting["id"]."&openall=TRUE#anker\" ";
 			$txt = "<i>" . _("Hier klicken um alle Postings im Thema zu öffnen") . "</i>";
@@ -479,12 +479,12 @@ function ForumIcon ($forumposting) {
 		if ($forum["view"]=="tree" && $forumposting["type"]=="folder")
 			$forumposting["icon"] = "<a href=\"".$PHP_SELF."?open=".$forumposting["id"]."&folderopen=".$forumposting["id"]."&openall=TRUE#anker\"><img src=\"".$bild."\" border=0 " . tooltip(_("Alle Postings im Thema öffnen")) . "></a>";
 		else
-			$forumposting["icon"] =	"<img src=\"".$bild."\" $addon>";	
+			$forumposting["icon"] =	"<img src=\"".$bild."\" $addon>";
 	}
-	
+
 	if ($cmd=="move" && $rechte && $topic_id != $forumposting["id"] )  // ein Beitrag wird verschoben, gelbe Pfeile davor
 		$forumposting["icon"] =	 "<a href=\"".$PHP_SELF."?target=Thema&move_id=".$topic_id."&parent_id=".$forumposting["id"]."\">"
-					."<img src=\"pictures/move.gif\" border=0 " . tooltip(_("Postings in dieses Thema verschieben")) . "></a>"
+					."<img src=\"".$GLOBALS['ASSETS_URL']."images/move.gif\" border=0 " . tooltip(_("Postings in dieses Thema verschieben")) . "></a>"
 					.$forumposting["icon"];
 	return $forumposting;
 }
@@ -536,9 +536,9 @@ function ForumGetName($id)  {
 *
 **/
 function forum_get_buttons ($forumposting) {
-	global $rechte, $forum, $PHP_SELF, $user, $SessionSeminar, $view;	
+	global $rechte, $forum, $PHP_SELF, $user, $SessionSeminar, $view;
 
-	{ if (!(have_sem_write_perm())) { // nur mit Rechten...	
+	{ if (!(have_sem_write_perm())) { // nur mit Rechten...
 		if ($view=="search") $tmp = "&view=tree";
 		if ($view=="mixed") $tmp = "&open=".$forumposting["id"]."&view=flatfolder";
 		$edit = "<a href=\"".$PHP_SELF."?answer_id=".$forumposting["id"]."&flatviewstartposting=0&sort=age".$tmp."#anker\">&nbsp;" . makeButton("antworten", "img") . "</a>";
@@ -561,7 +561,7 @@ function forum_get_buttons ($forumposting) {
 		} else
 			$edit=""; // war kein nobody Seminar
 	} else 	// nix mit Rechten
-		$edit = ""; 
+		$edit = "";
 	}
 	return $edit;
 }
@@ -576,10 +576,10 @@ function forum_get_buttons ($forumposting) {
 **/
 function DebugForum ($debugvar) {
 	global $HTTP_POST_VARS;
-	while(list($key,$value) = each($debugvar)) 
+	while(list($key,$value) = each($debugvar))
 		$debug .= "$key: $value<br>";
 	$debug .= "<hr>";
-	while(list($key,$value) = each($HTTP_POST_VARS)) 
+	while(list($key,$value) = each($HTTP_POST_VARS))
 		$debug .= "$key: $value<br>";
 	return $debug;
 }
@@ -602,7 +602,7 @@ function ForumEmpty () {
 	}
 	$empty = parse_msg('info§'.$text);
 	return $empty;
-} 
+}
 
 /**
 * builds the output of an empty site (empty search for example)
@@ -618,7 +618,7 @@ function ForumNoPostings () {
 		$text = _("Zu Ihrem Suchbegriff gibt es keine Treffer.") . "<br><a href=\"".$PHP_SELF."?view=search&reset=1\">" . _("Neue Suche") . "</a>";
 	$empty .= parse_msg("info§$text");
 	return $empty;
-} 
+}
 
 // Berechnung und Ausgabe der Blätternavigation
 
@@ -654,7 +654,7 @@ function forum_print_navi ($forum) {
 		} else {
 			$space = 1;
 		}
-		$i++;	
+		$i++;
 	}
 	if ($ipage != $maxpages)
 		$navi .= "<a href=\"$PHP_SELF?flatviewstartposting=".($ipage)*$forum["postingsperside"]."\"><font size=-1> " . _("weiter") . "</a></font>";
@@ -673,23 +673,23 @@ function forum_print_navi ($forum) {
 * @param	string root_id of the posting
 * @param	string tmpSessionSeminar
 * @param	string user_id of the author
-* @param	boolean writeextern 
+* @param	boolean writeextern
 *
 * @return	string topic_id of the new posting
 *
 **/
 function CreateTopic ($name="[no name]", $author="[no author]", $description="", $parent_id="0", $root_id="0", $tmpSessionSeminar=0, $user_id=FALSE, $writeextern=TRUE)
-{	
+{
 	static $count;
-	
+
 	global $SessionSeminar,$auth, $PHP_SELF, $user, $perm;
 	if (!$tmpSessionSeminar)
 		$tmpSessionSeminar=$SessionSeminar;
 	$db=new DB_Seminar;
 	$mkdate = time();
-	
+
 	$mkdate += $count++; //übler Hack,um Sortierreihenfolge für den DateAssi zu bekommen :)
-	
+
 	if ($writeextern == FALSE) {
 		$chdate = $mkdate-1;   	// der Beitrag wird für alle ausser dem Author "versteckt"
 	}
@@ -701,19 +701,19 @@ function CreateTopic ($name="[no name]", $author="[no author]", $description="",
 		while ($db->next_record())
 			$user_id = $db->f("user_id");
 	}
-	
+
 	if ($root_id != "0")	{
 		$db->query ("SELECT seminar_id FROM px_topics WHERE topic_id = '$root_id'");
 		while ($db->next_record())
 			if ($db->f("seminar_id") != $tmpSessionSeminar)
 				$tmpSessionSeminar = $db->f("seminar_id");
 	}
-	
+
 	$topic_id = MakeUniqueID();
 	if ($root_id == "0")	{
 		$root_id = $topic_id;
 		}
-	
+
 	$query = 'INSERT INTO px_topics (topic_id,name,description, parent_id, root_id , author, author_host, Seminar_id, user_id, mkdate, chdate) ';
 	$query .= "values ('$topic_id', '$name', '$description', '$parent_id', '$root_id', '".mysql_escape_string($author)."', '".getenv("REMOTE_ADDR")."', '$tmpSessionSeminar', '$user_id', '$mkdate', '$chdate') ";
 	$db=new DB_Seminar;
@@ -724,10 +724,10 @@ function CreateTopic ($name="[no name]", $author="[no author]", $description="",
 			echo parse_msg("error§" . _("Ihnen fehlen die Rechte in dieser Veranstaltung zu Schreiben."));
 			die;
 		}
-        else
+		else
       		$db->query ($query);
 	}
-	
+
 	if ($perm->have_perm("autor"))
 		$db->query ($query);
 	if  ($db->affected_rows() == 0) {
@@ -753,8 +753,7 @@ function UpdateTopic ($name="[no name]", $topic_id, $description)
 			$query = "UPDATE px_topics SET name = '$name', description = '$description', chdate= '$chdate', author='$nobodysname' WHERE topic_id = '$topic_id'";
 		ELSE
 			$query = "UPDATE px_topics SET name = '$name', description = '$description', chdate= '$chdate' WHERE topic_id = '$topic_id'";
-
-        $db->query ($query);
+		$db->query ($query);
 		IF  ($db->affected_rows() == 0) {
 			echo '<p>' . _("Aktualisieren des Postings fehlgeschlagen") . "</p>\n";
 		}
@@ -772,8 +771,8 @@ function UpdateTopic ($name="[no name]", $topic_id, $description)
 *
 **/
 function ForumParseZusatz($forumhead) {
-	
-	while(list($key,$value) = each($forumhead)) 
+
+	while(list($key,$value) = each($forumhead))
 		$zusatz .= $value;
 	return $zusatz;
 }
@@ -787,17 +786,17 @@ function ForumParseZusatz($forumhead) {
 *
 **/
 function ForumStriche($forumposting) {
-	$striche = "<td class=\"blank\" nowrap background='pictures/forumleer.gif'><img src='pictures/forumleer.gif'><img src='pictures/forumleer.gif'></td>";
+	$striche = "<td class=\"blank\" nowrap background='".$GLOBALS['ASSETS_URL']."images/forumleer.gif'><img src='".$GLOBALS['ASSETS_URL']."images/forumleer.gif'><img src='".$GLOBALS['ASSETS_URL']."images/forumleer.gif'></td>";
 	for ($i=0;$i<$forumposting["level"];$i++) {
-		if ($forumposting["lines"][$i+1]==0) 
-			$striche .= "<td class=\"blank\" nowrap background='pictures/forumleer.gif'><img src='pictures/forumleer.gif'></td>";
-		else 
-			$striche .= "<td class=\"blank\" nowrap background='pictures/forumstrich.gif'><img src='pictures/forumleer2.gif'></td>";
+		if ($forumposting["lines"][$i+1]==0)
+			$striche .= "<td class=\"blank\" nowrap background='".$GLOBALS['ASSETS_URL']."images/forumleer.gif'><img src='".$GLOBALS['ASSETS_URL']."images/forumleer.gif'></td>";
+		else
+			$striche .= "<td class=\"blank\" nowrap background='".$GLOBALS['ASSETS_URL']."images/forumstrich.gif'><img src='".$GLOBALS['ASSETS_URL']."images/forumleer2.gif'></td>";
 	}
 	if ($forumposting["lonely"]==FALSE)
-		$striche.= "<td class=\"blank\" nowrap background=\"pictures/forumstrichgrau.gif\"><img src=\"pictures/forumleer.gif\"></td>";
-	else 
-		$striche.= "<td class=\"blank\" nowrap background=\"pictures/steel1.jpg\"><img src=\"pictures/forumleer.gif\"></td>";
+		$striche.= "<td class=\"blank\" nowrap background=\"".$GLOBALS['ASSETS_URL']."images/forumstrichgrau.gif\"><img src=\"".$GLOBALS['ASSETS_URL']."images/forumleer.gif\"></td>";
+	else
+		$striche.= "<td class=\"blank\" nowrap background=\"".$GLOBALS['ASSETS_URL']."images/steel1.jpg\"><img src=\"".$GLOBALS['ASSETS_URL']."images/forumleer.gif\"></td>";
 	return $striche;
 }
 
@@ -816,26 +815,26 @@ function forum_print_toolbar ($id="") {
 			if ($forum["view"] != "tree" && $forum["view"] != "mixed")
 				$print .= "<form name=\"sortierung\" method=\"post\" action=\"".$PHP_SELF."#anker\">";
 			$print .= "<table class=\"blank\" width=\"100%\" border=0 cellpadding=0 cellspacing=0><tr><td class=\"blank\">&nbsp;</td></tr><tr>";
-			$print .= "<td class=\"steelkante2\" valign=\"middle\"><img src=\"pictures/blank.gif\" height=\"22\" width=\"5\"></td>";
+			$print .= "<td class=\"steelkante2\" valign=\"middle\"><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" height=\"22\" width=\"5\"></td>";
 			$print .= "<td class=\"steelkante2\" valign=\"middle\"><font size=\"-1\">"._("Indikator:")."&nbsp;</font>";
-			
+
 			if ($forum["indikator"] == "age")
-				$print .=  "</td><td nowrap class=\"steelgraulight_shadow\" valign=\"middle\">&nbsp;<img src=\"pictures/forumrot_indikator.gif\" align=\"absmiddle\"><font size=\"-1\">".$indexvars["age"]["name"]." </font>&nbsp;";
+				$print .=  "</td><td nowrap class=\"steelgraulight_shadow\" valign=\"middle\">&nbsp;<img src=\"".$GLOBALS['ASSETS_URL']."images/forumrot_indikator.gif\" align=\"absmiddle\"><font size=\"-1\">".$indexvars["age"]["name"]." </font>&nbsp;";
 			else
-				$print .=  "</td><td nowrap class=\"steelkante2\" valign=\"middle\">&nbsp;<a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&open=$open&indikator=age\"><img src=\"pictures/forum_indikator_grau.gif\" border=\"0\" align=\"absmiddle\"><font size=\"-1\" color=\"#555555\">".$indexvars["age"]["name"]."</font></a> &nbsp;";
+				$print .=  "</td><td nowrap class=\"steelkante2\" valign=\"middle\">&nbsp;<a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&open=$open&indikator=age\"><img src=\"".$GLOBALS['ASSETS_URL']."images/forum_indikator_grau.gif\" border=\"0\" align=\"absmiddle\"><font size=\"-1\" color=\"#555555\">".$indexvars["age"]["name"]."</font></a> &nbsp;";
 			if ($forum["indikator"] == "viewcount")
-				$print .=  "</td><td nowrap class=\"steelgraulight_shadow\" valign=\"middle\">&nbsp;<img src=\"pictures/forum_indikator_gruen.gif\" align=\"absmiddle\"><font size=\"-1\">".$indexvars["viewcount"]["name"]." </font>&nbsp;";
+				$print .=  "</td><td nowrap class=\"steelgraulight_shadow\" valign=\"middle\">&nbsp;<img src=\"".$GLOBALS['ASSETS_URL']."images/forum_indikator_gruen.gif\" align=\"absmiddle\"><font size=\"-1\">".$indexvars["viewcount"]["name"]." </font>&nbsp;";
 			else
-				$print .=  "</td><td nowrap class=\"steelkante2\" valign=\"middle\">&nbsp;<a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&open=$open&indikator=viewcount\"><img src=\"pictures/forum_indikator_grau.gif\" border=\"0\" align=\"absmiddle\"><font size=\"-1\" color=\"#555555\">".$indexvars["viewcount"]["name"]."</font></a> &nbsp;";
+				$print .=  "</td><td nowrap class=\"steelkante2\" valign=\"middle\">&nbsp;<a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&open=$open&indikator=viewcount\"><img src=\"".$GLOBALS['ASSETS_URL']."images/forum_indikator_grau.gif\" border=\"0\" align=\"absmiddle\"><font size=\"-1\" color=\"#555555\">".$indexvars["viewcount"]["name"]."</font></a> &nbsp;";
 			if ($forum["indikator"] == "rating")
-				$print .=  "</td><td nowrap class=\"steelgraulight_shadow\" valign=\"middle\">&nbsp;<img src=\"pictures/forum_indikator_gelb.gif\" align=\"absmiddle\"><font size=\"-1\">".$indexvars["rating"]["name"]." </font>&nbsp;";
+				$print .=  "</td><td nowrap class=\"steelgraulight_shadow\" valign=\"middle\">&nbsp;<img src=\"".$GLOBALS['ASSETS_URL']."images/forum_indikator_gelb.gif\" align=\"absmiddle\"><font size=\"-1\">".$indexvars["rating"]["name"]." </font>&nbsp;";
 			else
-				$print .=  "</td><td nowrap class=\"steelkante2\" valign=\"middle\">&nbsp;<a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&open=$open&indikator=rating\"><img src=\"pictures/forum_indikator_grau.gif\" border=\"0\" align=\"absmiddle\"><font size=\"-1\" color=\"#555555\">".$indexvars["rating"]["name"]."</font></a> &nbsp;";
+				$print .=  "</td><td nowrap class=\"steelkante2\" valign=\"middle\">&nbsp;<a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&open=$open&indikator=rating\"><img src=\"".$GLOBALS['ASSETS_URL']."images/forum_indikator_grau.gif\" border=\"0\" align=\"absmiddle\"><font size=\"-1\" color=\"#555555\">".$indexvars["rating"]["name"]."</font></a> &nbsp;";
 			if ($forum["indikator"] == "score")
-				$print .=  "</td><td nowrap class=\"steelgraulight_shadow\" valign=\"middle\">&nbsp;<img src=\"pictures/forum_indikator_blau.gif\" align=\"absmiddle\"><font size=\"-1\">".$indexvars["score"]["name"]." </font>&nbsp;";
+				$print .=  "</td><td nowrap class=\"steelgraulight_shadow\" valign=\"middle\">&nbsp;<img src=\"".$GLOBALS['ASSETS_URL']."images/forum_indikator_blau.gif\" align=\"absmiddle\"><font size=\"-1\">".$indexvars["score"]["name"]." </font>&nbsp;";
 			else
-				$print .=  "</td><td nowrap class=\"steelkante2\" valign=\"middle\">&nbsp;<a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&open=$open&indikator=score\"><img src=\"pictures/forum_indikator_grau.gif\" border=\"0\" align=\"absmiddle\"><font size=\"-1\" color=\"#555555\">".$indexvars["score"]["name"]."</font></a> &nbsp;";
-			
+				$print .=  "</td><td nowrap class=\"steelkante2\" valign=\"middle\">&nbsp;<a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&open=$open&indikator=score\"><img src=\"".$GLOBALS['ASSETS_URL']."images/forum_indikator_grau.gif\" border=\"0\" align=\"absmiddle\"><font size=\"-1\" color=\"#555555\">".$indexvars["score"]["name"]."</font></a> &nbsp;";
+
 			if ($forum["view"] != "tree" && $forum["view"] != "mixed") { // Anzeige der Sortierung nicht in der Themenansicht
 				$print .= "</td><td nowrap class=\"steelkante2\" valign=\"middle\">&nbsp;|&nbsp;&nbsp;<font size=\"-1\">Sortierung:&nbsp;&nbsp;</font>";
 				$print .= "</td><td nowrap class=\"steelkante2\" valign=\"middle\"><select name=\"sort\" size=\"1\">";
@@ -855,26 +854,26 @@ function forum_print_toolbar ($id="") {
 				$print .= "</select>&nbsp;&nbsp;";
 				$print .= "<input type=hidden name=flatviewstartposting value='".$flatviewstartposting."'>";
 				$print .= "<input type=hidden name=view value='".$forum["view"]."'>";
-				$print .= "<input type=image name=create value=\"abschicken\" src=\"pictures/haken_transparent.gif\" border=\"0\"".tooltip(_("Sortierung durchführen")).">";
+				$print .= "<input type=image name=create value=\"abschicken\" src=\"".$GLOBALS['ASSETS_URL']."images/haken_transparent.gif\" border=\"0\"".tooltip(_("Sortierung durchführen")).">";
 			}
-			$print .= "&nbsp;&nbsp;</td><td class=\"blank\"><a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&toolbar=close&open=$open\" ".tooltip(_("Toolbar einfahren"))."><img src=\"pictures/griff.jpg\" align=\"middle\" border=\"0\"></a>";
-			
+			$print .= "&nbsp;&nbsp;</td><td class=\"blank\"><a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&toolbar=close&open=$open\" ".tooltip(_("Toolbar einfahren"))."><img src=\"".$GLOBALS['ASSETS_URL']."images/griff.jpg\" align=\"middle\" border=\"0\"></a>";
+
 			$print .= "</td><td class=\"blank\" width=\"99%\"></td></tr>";
 			if ($forum["view"] != "tree" && $forum["view"] != "mixed")
 				$print .= "</form>";
 			$print .= "<tr><td class=\"blank\" colspan=\"9\">&nbsp;</td></tr></table>";
 
 		} else {
-			$print .= "<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" class=\"blank\"><tr><td class=\"blank\"><img src=\"pictures/blank.gif\" height=\"22\" width=\"1\"></td>";
-			$print .= "<td class=\"blank\"><font size=\"-1\"><a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&toolbar=open&open=$open\"><img src=\"pictures/griff2.jpg\" align=\"middle\" border=\"0\"".tooltip(_("Toolbar ausfahren"))."></a>";
+			$print .= "<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" class=\"blank\"><tr><td class=\"blank\"><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" height=\"22\" width=\"1\"></td>";
+			$print .= "<td class=\"blank\"><font size=\"-1\"><a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&toolbar=open&open=$open\"><img src=\"".$GLOBALS['ASSETS_URL']."images/griff2.jpg\" align=\"middle\" border=\"0\"".tooltip(_("Toolbar ausfahren"))."></a>";
 			$print .= "</td></tr></table>";
 		}
 		if ($id) {  // Schreibmodus, also form einbauen
 			//$print .= "<form name=forumwrite method=post action=\"".$PHP_SELF."?test=s#anker\">";
 			$print .= "<form name=forumwrite method=post action=\"".$PHP_SELF."#anker\">";
 		}
-		
-		$print .= "</td></tr></table>\n";	
+
+		$print .= "</td></tr></table>\n";
 		return $print;
 }
 
@@ -895,7 +894,7 @@ function forum_get_index ($forumposting) {
   	} else {
   		$color = $indexvars[$forum["indikator"]]["color"];
   		$name = $indexvars[$forum["indikator"]]["name"];
-  		
+
   	}
 	$tmp = "<font size=\"-1\" color =\"$color\">$name</font>";
 	if ($forum["indikator"] == "age" && $i != 1) $tmp = "";
@@ -948,10 +947,10 @@ function forum_check_edit($forumposting) {
 function forum_draw_topicline() {
 	global $user, $SessSemName, $view;
 	echo "\n<table width=\"100%\" class=\"blank\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n";
-	echo "<tr><td class=\"topic\" width=\"99%\"><b>&nbsp;<img src='pictures/icon-posting.gif' align=absmiddle>&nbsp; ". $SessSemName["header_line"] ." - " . _("Forum") . "</b></td><td class=\"topic\" width=\"1%\" align=\"right\" nowrap>";
+	echo "<tr><td class=\"topic\" width=\"99%\"><b>&nbsp;<img src='".$GLOBALS['ASSETS_URL']."images/icon-posting.gif' align=absmiddle>&nbsp; ". $SessSemName["header_line"] ." - " . _("Forum") . "</b></td><td class=\"topic\" width=\"1%\" align=\"right\" nowrap>";
 	if ($user->id != "nobody")
-		echo "<a href='forum.php?forumsend=anpassen&view=$view'><img src='pictures/pfeillink.gif' border=0 " . tooltip(_("Look & Feel anpassen")) . ">&nbsp;</a>";
-	echo "</td></tr>";	
+		echo "<a href='forum.php?forumsend=anpassen&view=$view'><img src='".$GLOBALS['ASSETS_URL']."images/pfeillink.gif' border=0 " . tooltip(_("Look & Feel anpassen")) . ">&nbsp;</a>";
+	echo "</td></tr>";
 }
 
 /**
@@ -959,9 +958,9 @@ function forum_draw_topicline() {
 *
 **/
 function print_rating($rate, $id, $username) {
-	global $openorig, $forum, $user, $auth;	 
+	global $openorig, $forum, $user, $auth;
 	if ($rate == "?"){
-	 	$bar = "<img src=\"pictures/rate_leer.gif\" width=\"50\" border=\"0\" height=\"11\">";
+	 	$bar = "<img src=\"".$GLOBALS['ASSETS_URL']."images/rate_leer.gif\" width=\"50\" border=\"0\" height=\"11\">";
 	} else {
 		$ratecount = object_return_ratecount ($id);
 		if ($ratecount > 10)
@@ -971,13 +970,13 @@ function print_rating($rate, $id, $username) {
 		if ($rate > 3) {
 			$grau = (5-$rate)*10;
 			$rot = 25 - $grau;
-			$bar = "<img src=\"pictures/rate_leer.gif\" width=25 height=11 border=\"0\"><img src=\"pictures/rate_rot$ratecount.gif\" width=\"$rot\" border=\"0\" height=\"11\"><img src=\"pictures/rate_leer.gif\" width=\"$grau\" border=\"0\" height=11>";
+			$bar = "<img src=\"".$GLOBALS['ASSETS_URL']."images/rate_leer.gif\" width=25 height=11 border=\"0\"><img src=\"".$GLOBALS['ASSETS_URL']."images/rate_rot$ratecount.gif\" width=\"$rot\" border=\"0\" height=\"11\"><img src=\"".$GLOBALS['ASSETS_URL']."images/rate_leer.gif\" width=\"$grau\" border=\"0\" height=11>";
 		} elseif ($rate < 3) {
 			$grau = ($rate-1)*10;
 			$gruen = 25 - $grau;
-			$bar = "<img src=\"pictures/rate_leer.gif\" width=\"$grau\" height=\"11\" border=\"0\"><img src=\"pictures/rate_gruen$ratecount.gif\" border=\"0\" width=\"$gruen\" height=11><img src=\"pictures/rate_leer.gif\" border=\"0\" width=25 height=11>";
+			$bar = "<img src=\"".$GLOBALS['ASSETS_URL']."images/rate_leer.gif\" width=\"$grau\" height=\"11\" border=\"0\"><img src=\"".$GLOBALS['ASSETS_URL']."images/rate_gruen$ratecount.gif\" border=\"0\" width=\"$gruen\" height=11><img src=\"".$GLOBALS['ASSETS_URL']."images/rate_leer.gif\" border=\"0\" width=25 height=11>";
 		} else {
-			$bar = "<img src=\"pictures/rate_neutral$ratecount.gif\" width=\"50\" height=\"11\" border=\"0\">"; 
+			$bar = "<img src=\"".$GLOBALS['ASSETS_URL']."images/rate_neutral$ratecount.gif\" width=\"50\" height=\"11\" border=\"0\">";
 		}
 	}
 	if ($auth->auth["jscript"]) { //Java Script activated?
@@ -1034,18 +1033,18 @@ function printposting ($forumposting) {
 	$forumposting = ForumFolderOrPosting($forumposting);
 	$forumposting = forum_lonely($forumposting);
 	$forumposting = ForumIcon($forumposting);
-					
+
  // Kopfzeile zusammenbauen
-  		
+
   	// Link zusammenbauen
-  		
+
   		if ($forum["view"] == "mixed") {		// etwas umständlich: Weg von der Themenansicht zum Folderflatview
   			$viewlink = "flatfolder";
   			$forum["flatviewstartposting"] = 0;
   		} else {
   	 		$viewlink = 0;
   	 	}
- 		
+
  		if ($forumposting["openclose"] == "close" || $forum["view"] == "mixed") {
   			$link =	$PHP_SELF."?open=".$forumposting["id"]."&flatviewstartposting=".$forum["flatviewstartposting"]."&view=".$viewlink;
   			if ($forumposting["shrink"] == TRUE && $forumposting["lonely"]==FALSE)
@@ -1054,41 +1053,41 @@ function printposting ($forumposting) {
   				$link .= "#anker";
   		} else {
   			if ($forum["view"] == "tree" && $forumposting["type"] == "posting")
-  				$link = $PHP_SELF."?open=".$forumposting["rootid"]."#anker"; 
+  				$link = $PHP_SELF."?open=".$forumposting["rootid"]."#anker";
   			else
-  				$link = $PHP_SELF."?&flatviewstartposting=".$forum["flatviewstartposting"]."#anker"; 
+  				$link = $PHP_SELF."?&flatviewstartposting=".$forum["flatviewstartposting"]."#anker";
 			if ($forum["neuauf"]==1 AND $forumposting["newold"]=="new")
-				$link = ""; // zuklappen nur m&ouml;glich wenn neueimmerauf nicht gesetzt	
+				$link = ""; // zuklappen nur m&ouml;glich wenn neueimmerauf nicht gesetzt
   		}
-  		
-  		  				  		
+
+
   	// Views hochzählen
-  	
+
   		if ($forumposting["openclose"] == "open" && $user->id != $forumposting["userid"])  // eigene Postings werden beim view nicht gezählt
   			$objectviews = object_add_view($forumposting["id"]); // Anzahl der Views erhöhen
-  		
+
   	// Indexe
-  		
+
   		if (!$objectviews)
   			$objectviews = $forumposting["viewcount"];
   		if (($forumposting["rating"] == 99))
   			$forumposting["rating"] = "?";
-  		
+
   		$forumposting["score"] = round($forumposting["score"],1);
-  		
+
   	// Anzahl der Postings in Ordnern
-  		
+
   		if ($forumposting["foldercount"] && $forumposting["type"] == "folder" && $forumposting["openclose"] == "close")
   			$forumhead[] = "<b>".($forumposting["foldercount"]-1)."</b> / ";
-  		
-  		
+
+
   		if (!$auth->is_authenticated() || $user->id == "nobody" || $forumposting["author"]=="unbekannt" || $forumposting["username"]=="") // Nobody darf nicht auf die about...
 			$forumhead[] = htmlReady($forumposting["author"]);
 		else
 			$forumhead[] = "<a class=\"printhead\" href=\"about.php?username=".$forumposting["username"]."\">". htmlReady($forumposting["author"]) ."&nbsp;</a>";
-    		
+
   	// Alter ausgeben
-  		
+
   		if ($forumposting["type"] == "folder" && ($view=="tree" || $view=="mixed") && !$delete_id && $forumposting["openclose"] == "close") {
   			$forumhead[] = 	"&nbsp;".date("d.m.Y - H:i", $forumposting["folderlast"])."&nbsp;";
   			$age_tmp = $forumposting["folderlast"];
@@ -1096,9 +1095,9 @@ function printposting ($forumposting) {
   			$forumhead[] = 	"&nbsp;".date("d.m.Y - H:i", $forumposting["chdate"])."&nbsp;";
   			$age_tmp = $forumposting["chdate"];
   		}
-  		
+
   	// Themennamen ausgeben (ausser Flatview)
-    		
+
   		if ($forum["view"] != "flatfolder")
   			$forumhead[] =	"<a href=\"".$PHP_SELF."?open=".$forumposting["id"]
 					."&folderopen=".$forumposting["rootid"]
@@ -1106,7 +1105,7 @@ function printposting ($forumposting) {
 					."#anker\" class=\"printhead\">".htmlReady(mila($forumposting["rootname"],20))
 					."</a>"
 					."&nbsp; ";
-  		
+
   		if ($forum["sort"] == "viewcount" || $forum["sort"] == "rating" || $forum["sort"] == "score") {
   			$color = $indexvars[$forum["sort"]]["color"];
   			$printindex = $forumposting[$forum["sort"]];
@@ -1116,34 +1115,34 @@ function printposting ($forumposting) {
   		}
   		if ($printindex=="" && ($forum["sort"]=="score" || $forum["indikator"]=="score")) $printindex="0";
   		if ($printindex!= "") $forumhead[] = "| <font color=\"$color\">$printindex</font> | ";
-		
-		
+
+
 	// Die Bewertungsanzeige
 
 		$forumhead[] = print_rating($forumposting["rating"],$forumposting["id"],$forumposting["username"]);
-		
-		
-		
+
+
+
 	// die Favoritenanzeige
-		
+
 		if ($forumposting["fav"]!="0") {
-			$favicon = "pictures/forum_fav.gif";
+			$favicon = $GLOBALS['ASSETS_URL']."images/forum_fav.gif";
 			$favtxt = _("aus den Favoriten entfernen");
 		} else {
-			$favicon = "pictures/forum_fav2.gif";
+			$favicon = $GLOBALS['ASSETS_URL']."images/forum_fav2.gif";
 			$favtxt = _("zu den Favoriten hinzufügen");
 		}
 		$rand = "&random=".rand();
 		if ($user->id != "nobody" && !$delete_id) // Nobody kriegt keine Favoriten, auch nicht in der Löschen-Ansicht
 			$forumhead[] = "<a href=\"$PHP_SELF?fav=".$forumposting["id"]."&open=$openorig".$rand."&flatviewstartposting=".$forum["flatviewstartposting"]."#anker\"><img src=\"".$favicon."\" border=\"0\" ".tooltip($favtxt).">&nbsp;</a>";
-		
+
 	// Antwort-Pfeil
-		
-		if (!(have_sem_write_perm()) && !$delete_id) 
-			$forumhead[] = "<a href=\"write_topic.php?write=1&root_id=".$forumposting["rootid"]."&topic_id=".$forumposting["id"]."\" target=\"_new\"><img src=\"pictures/antwortnew.gif\" border=0 " . tooltip(_("Hier klicken um in einem neuen Fenster zu antworten")) . "></a>";
-  		
+
+		if (!(have_sem_write_perm()) && !$delete_id)
+			$forumhead[] = "<a href=\"write_topic.php?write=1&root_id=".$forumposting["rootid"]."&topic_id=".$forumposting["id"]."\" target=\"_new\"><img src=\"".$GLOBALS['ASSETS_URL']."images/antwortnew.gif\" border=0 " . tooltip(_("Hier klicken um in einem neuen Fenster zu antworten")) . "></a>";
+
   		$zusatz = ForumParseZusatz($forumhead);
-  		
+
   		if ($forumposting["writestatus"]!="none") {    //wir sind im Schreibmodus
 			echo "<input type=hidden name=topic_id value=$topic_id>";
 			$name = "<input type=text size=50 style='font-size:8 pt;font-weight:normal;' name=titel value='".htmlReady($forumposting["name"])."'>";
@@ -1151,27 +1150,27 @@ function printposting ($forumposting) {
 		} else {
   			$name = "<a href=\"$link\" class=\"tree\" >".htmlReady(mila($forumposting["name"]))."</a>";
   		}
-  		
+
   		if ($forumposting["newold"] == "new")
   			$new = TRUE;
-  		  		
+
   		if (($forum["view"]=="tree" || $forum["view"]=="mixed") && $forumposting["type"] == "folder") {
   			if (object_get_visit($SessSemName[1], "forum") < $forumposting["folderlast"])
-			 	$new = TRUE;		
+			 	$new = TRUE;
 			$forumposting["mkdate"] = $forumposting["folderlast"];
   		}
-  		
+
   	// welcher Index liegt auf den Pfeilen?
-  		
+
   		if ($forum["indikator"] == "viewcount")
   			$index = $objectviews;
   		elseif ($forum["indikator"] == "rating")
   			$index = $forumposting["rating"];
   		elseif ($forum["indikator"] == "score")
   			$index = $forumposting["score"];
-  		  	
-  // Kopfzeile ausgeben 		
-  		
+
+  // Kopfzeile ausgeben
+
   		if ($forumposting["intree"]!=TRUE)
   			echo "<table width=\"100%\" border=0 cellpadding=0 cellspacing=0 align=center><tr>";
   		if ($forum["anchor"] == $forumposting["id"])
@@ -1181,8 +1180,8 @@ function printposting ($forumposting) {
 			echo "<td class=\"blank\">&nbsp;&nbsp;&nbsp;</td>";
 		echo "</tr></table>\n";
 
-// Kontentzeile	zusammenbauen	
-	
+// Kontentzeile	zusammenbauen
+
 	if ($forumposting["openclose"] == "open") {
 		$forumposting = ForumGetRights($forumposting);
 		if ($forumposting["writestatus"] != "none") { // Posting wird geschrieben
@@ -1205,11 +1204,11 @@ function printposting ($forumposting) {
 			$description = quotes_decode($description);
 
 	// Anzeigen der Sidebar /////////////
-		
-		if (($sidebar==$forumposting["id"] || $forum["rateallopen"]==TRUE) && !$delete_id) {  
-			
-			$addon = "<img src=\"pictures/blank.gif\" width=\"140\" height=\"5\">";
-			
+
+		if (($sidebar==$forumposting["id"] || $forum["rateallopen"]==TRUE) && !$delete_id) {
+
+			$addon = "<img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" width=\"140\" height=\"5\">";
+
 			if ($forum["showimages"]==TRUE) { // es werden Porträts angezeigt
 				if(!file_exists("./user/".$forumposting["userid"].".jpg")) {
 					$addon .= "<br><div align=\"center\"><img border=1 src=\"./user/nobody.jpg\" width=\"80\" " .tooltip(_("kein persönliches Bild vorhanden"))."></div>";
@@ -1217,17 +1216,17 @@ function printposting ($forumposting) {
 					$addon .= "<br><div align=\"center\"><img src=\"./user/".$forumposting["userid"].".jpg\" width=\"80\" border=\"1\" ".tooltip($forumposting["author"])."></div>";
 				}
 			}
-						
+
 			$addon .= "<font size=\"-1\" color=\"555555\"><br>&nbsp;&nbsp;Views: $objectviews<br>&nbsp;&nbsp;Relevanz: ".$forumposting["score"]."<br>&nbsp;&nbsp;";
 			if ($forumposting["rating"] != "?") {
 				$addon .=_("Bewertung: ").$forumposting["rating"]."<br>";
 				$rate = object_print_rates_detail($forumposting["id"]);
-				while(list($key,$value) = each($rate)) 
+				while(list($key,$value) = each($rate))
 					$addon .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$key: $value<br>";
 			} else {
 				$addon .= _("Noch nicht bewertet")."<br><br>";
 			}
-					
+
 			if (get_username($user->id) == $forumposting["username"]) {
 				$addon .= "<font size=\"-1\">&nbsp;&nbsp;Sie können sich&nbsp;<br>&nbsp;&nbsp;nicht selbst bewerten.&nbsp;";
 			} else {
@@ -1248,18 +1247,18 @@ function printposting ($forumposting) {
 				}
 			}
 		} elseif ($user->id != "nobody" && !$delete_id)  // nur Aufklapppfeil
-			$addon = "open:$PHP_SELF?open=".$forumposting["id"]."&flatviewstartposting=".$forum["flatviewstartposting"]."&sidebar=".$forumposting["id"]."#anker";		
-  
+			$addon = "open:$PHP_SELF?open=".$forumposting["id"]."&flatviewstartposting=".$forum["flatviewstartposting"]."&sidebar=".$forumposting["id"]."#anker";
+
   // Kontentzeile ausgeben
-		
+
 		echo "<table width=\"100%\" border=0 cellpadding=0 cellspacing=0 align=center><tr>";
-		
+
 		if ($forumposting["intree"]==TRUE) // etwas Schmuckwerk für die Strichlogik
 			echo ForumStriche($forumposting);
 		printcontent ("100%",$formposting,$description,$edit,TRUE,$addon);
 		if ($forumposting["intree"]==TRUE)
 			echo "<td class=\"blank\">&nbsp;&nbsp;&nbsp;</td>";
-		echo "</tr></table>\n";	
+		echo "</tr></table>\n";
 	}
 	return $forumposting;
 }
@@ -1359,13 +1358,13 @@ $db->query($query);
 
 /////////////////////////////////////// HTML und Navigation
 
-?>	
+?>
 <table border=0 width="100%" cellspacing="0" cellpadding="0" align="center"><tr>
 <td class="steelgraudunkel" align="left" width="45%">
 <?
 
 if ($forum["view"]=="flatfolder")
-	echo "<img src=\"pictures/cont_folder.gif\" align=\"baseline\"><font size=\"-1\"><b> Thema:</b> ".mila(ForumGetName($forum["flatfolder"]),40)." / ";
+	echo "<img src=\"".$GLOBALS['ASSETS_URL']."images/cont_folder.gif\" align=\"baseline\"><font size=\"-1\"><b> Thema:</b> ".mila(ForumGetName($forum["flatfolder"]),40)." / ";
 if ($forum["search"]!="" && $forum["view"]=="search") {
 	$searchname = explode("%",$forum["search"]);
 	echo "<font size=\"-1\">&nbsp;Suchbegriff: '".$searchname["1"]."' / Treffer: ".$forum["forumsum"]."</font>";
@@ -1374,10 +1373,10 @@ if ($forum["search"]!="" && $forum["view"]=="search") {
 echo "</td><td class=\"steelgraudunkel\" align=\"center\" width=\"10%\">";
 if ($forum["flatallopen"]=="TRUE")
 	echo "<a href=\"".$PHP_SELF
-		."?flatviewstartposting=".$forum["flatviewstartposting"]."&flatallopen=FALSE\"><img src='pictures/forumleer.gif' border=0 height='10' align=middle><img src='pictures/close_all.gif' border=0 " . tooltip(_("Alle zuklappen")) . " align=middle><img src='pictures/forumleer.gif' border=0></a>";
+		."?flatviewstartposting=".$forum["flatviewstartposting"]."&flatallopen=FALSE\"><img src='".$GLOBALS['ASSETS_URL']."images/forumleer.gif' border=0 height='10' align=middle><img src='".$GLOBALS['ASSETS_URL']."images/close_all.gif' border=0 " . tooltip(_("Alle zuklappen")) . " align=middle><img src='".$GLOBALS['ASSETS_URL']."images/forumleer.gif' border=0></a>";
 else
 	echo "<a href=\"".$PHP_SELF
-		."?flatviewstartposting=".$forum["flatviewstartposting"]."&flatallopen=TRUE\"><img src='pictures/forumleer.gif' border=0 height='10' align=middle><img src='pictures/open_all.gif' border=0 " . tooltip(_("Alle aufklappen")) . " align=middle><img src='pictures/forumleer.gif' border=0></a>";
+		."?flatviewstartposting=".$forum["flatviewstartposting"]."&flatallopen=TRUE\"><img src='".$GLOBALS['ASSETS_URL']."images/forumleer.gif' border=0 height='10' align=middle><img src='".$GLOBALS['ASSETS_URL']."images/open_all.gif' border=0 " . tooltip(_("Alle aufklappen")) . " align=middle><img src='".$GLOBALS['ASSETS_URL']."images/forumleer.gif' border=0></a>";
 
 echo "</td><td class=\"steelgraudunkel\" align=\"right\" width=\"45%\">";
 echo forum_print_navi($forum)."&nbsp;&nbsp;&nbsp;".forum_get_index($forumposting)."&nbsp;&nbsp;&nbsp;";
@@ -1400,7 +1399,7 @@ while($db->next_record()){
 	$forumposting["rating"] = $db->f("rating");
 	$forumposting["score"] = $db->f("score");
 	$forumposting["fav"] = $db->f("fav");
-		
+
 	$forumposting = printposting($forumposting);
 }
 
@@ -1408,11 +1407,11 @@ while($db->next_record()){
 
 echo "<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" align=\"center\">";
 echo "	<tr>";
-echo "		<td class=\"blank\" valign=\"top\"><img src=\"pictures/forumleer.gif\" border=\"0\" height=\"4\">";
+echo "		<td class=\"blank\" valign=\"top\"><img src=\"".$GLOBALS['ASSETS_URL']."images/forumleer.gif\" border=\"0\" height=\"4\">";
 echo "</td>";
 echo "	</tr>";
 echo "	<tr>";
-echo "		<td class=\"steelgraudunkel\" align=\"right\" ><img src=\"pictures/forumleer.gif\" border=\"0\" height=\"10\" align=\"middle\">";
+echo "		<td class=\"steelgraudunkel\" align=\"right\" ><img src=\"".$GLOBALS['ASSETS_URL']."images/forumleer.gif\" border=\"0\" height=\"10\" align=\"middle\">";
 echo forum_print_navi($forum)."&nbsp;&nbsp;&nbsp;".forum_get_index($forumposting);
 echo "		&nbsp;&nbsp;</td>";
 echo "	</tr>";
@@ -1455,23 +1454,23 @@ function DisplayFolders ($open=0, $update="", $zitat="") {
 	$forum["update"] = $update;
 	$forum["zitat"] = $zitat;
 	$forum["sort"] = "age";
-		
+
 	$fields = array("topic_id", "parent_id", "root_id", "name"
 		, "description", "author", "author_host", "mkdate"
 		, "chdate", "user_id");
 	$query = "select distinct ";
 	$comma = "";
-	
+
 	if ($forum["sortthemes"] == "last")
 		$order = "last DESC";
 	else
 		$order = "t.mkdate ".$forum["sortthemes"];
-	
+
 	while (list($key,$val)=each($fields)) {
 		$query .= $comma."t.".$val;
 		$comma = ", ";
 	}
-	
+
 	$query .= ", count(distinct s.topic_id) as count, max(s.chdate) as last "
 	.", IFNULL(views,0) as viewcount, IFNULL(ROUND(AVG(rate),1),99) as rating "
 	.", ((6-(IFNULL(AVG(rate),3))-3)*5)+(IFNULL(views,0)/(((UNIX_TIMESTAMP()-t.mkdate)/604800)+1)) as score "
@@ -1489,9 +1488,9 @@ function DisplayFolders ($open=0, $update="", $zitat="") {
 		page_close(); //Niemals vergessen, wenn Session oder Uservariablen benutzt werden !!!
 		die;
 	} else {
-		
+
 		// Berechnung was geöffnet ist
-		
+
 		$forum["openlist"] = "";
 		$root_id = ForumGetRoot($open);
 		if ($open != $root_id && !$update)
@@ -1499,13 +1498,13 @@ function DisplayFolders ($open=0, $update="", $zitat="") {
 		if ($update && ForumFreshPosting($update)==TRUE)
 			$forum["openlist"] .= ForumGetParent($update);
 		$forum["openlist"] .= ";".$open.";".$root_id;
-		
+
 		if ($shrinkopen) {
 			$forum["shrinkopenlist"] = suche_kinder($shrinkopen);
 			$forum["shrinkopenlist"] .= ";".$shrinkopen;
 		}
-		
-		
+
+
 		// HTML
 
 		echo "<table class=\"blank\" width=\"100%\" border=0 cellpadding=0 cellspacing=0><tr>";
@@ -1513,11 +1512,11 @@ function DisplayFolders ($open=0, $update="", $zitat="") {
 		echo "<td class=\"steelgraudunkel\" width=\"33%\" align=\"center\"><font size=\"-1\">&nbsp;&nbsp;";
 		if ($user->id != "nobody") { // Nobody kriegt nur treeview
 			if ($forum["view"] == "tree")
-				echo "<a href=\"".$PHP_SELF."?view=mixed&themeview=mixed\"><img src=\"pictures/forumtree.gif\" border=\"0\" align=\"top\"></a>";
+				echo "<a href=\"".$PHP_SELF."?view=mixed&themeview=mixed\"><img src=\"".$GLOBALS['ASSETS_URL']."images/forumtree.gif\" border=\"0\" align=\"top\"></a>";
 			else
-				echo "<a href=\"".$PHP_SELF."?view=tree&themeview=tree\"><img src=\"pictures/forumflat.gif\" border=\"0\" align=\"top\"></a>";
+				echo "<a href=\"".$PHP_SELF."?view=tree&themeview=tree\"><img src=\"".$GLOBALS['ASSETS_URL']."images/forumflat.gif\" border=\"0\" align=\"top\"></a>";
 		}
-		echo "</font><img src=\"pictures/forumleer.gif\" border=0 height=\"20\" align=\"middle\"></td>";
+		echo "</font><img src=\"".$GLOBALS['ASSETS_URL']."images/forumleer.gif\" border=0 height=\"20\" align=\"middle\"></td>";
 		echo "<td class=\"steelgraudunkel\" width=\"33%\"align=\"right\"><font size=\"-1\">" . _("<b>Postings</b> / letzter Eintrag") . "&nbsp;&nbsp;".forum_get_index($forumposting)."&nbsp;&nbsp;</font></td></tr></table>\n";
 		while ($db->next_record()) {
 			$forumposting["id"] = $db->f("topic_id");
@@ -1536,27 +1535,27 @@ function DisplayFolders ($open=0, $update="", $zitat="") {
 			$forumposting["rating"] = $db->f("rating");
 			$forumposting["score"] = $db->f("score");
 			$forumposting["fav"] = $db->f("fav");
-	
+
 			$forumposting = printposting($forumposting);
-		
+
 			if ($forum["view"] == "tree" && $forumposting["openclose"]=="open" && $cmd != "move") {
 				DisplayKids ($forumposting);
 			}
 		}
 	}
-	echo "<table class=blank border=0 cellpadding=0 cellspacing=0 width=\"100%\"><tr><td class='blank'><img src='pictures/forumleer.gif' border=0 height='4'></td></tr><tr>";
-	echo "<td align=center class=steelgraudunkel><img src='pictures/forumleer.gif' border=0 height='20' align=middle>";
+	echo "<table class=blank border=0 cellpadding=0 cellspacing=0 width=\"100%\"><tr><td class='blank'><img src='".$GLOBALS['ASSETS_URL']."images/forumleer.gif' border=0 height='4'></td></tr><tr>";
+	echo "<td align=center class=steelgraudunkel><img src='".$GLOBALS['ASSETS_URL']."images/forumleer.gif' border=0 height='20' align=middle>";
 	if (($perm->have_perm("autor")) && (($rechte) || ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["topic_create_autor"])))
-		echo "<a href='".$PHP_SELF."?neuesthema=TRUE#anker'><img src='pictures/forumgraurunt.gif' border=0 align=middle " . tooltip(_("Neues Thema anlegen")) . "><img src='pictures/cont_folder2.gif' " . tooltip(_("Neues Thema anlegen")) . " border=0 align=middle></a>";
+		echo "<a href='".$PHP_SELF."?neuesthema=TRUE#anker'><img src='".$GLOBALS['ASSETS_URL']."images/forumgraurunt.gif' border=0 align=middle " . tooltip(_("Neues Thema anlegen")) . "><img src='".$GLOBALS['ASSETS_URL']."images/cont_folder2.gif' " . tooltip(_("Neues Thema anlegen")) . " border=0 align=middle></a>";
 	echo "</td></tr><tr><td class=blank>&nbsp; <br>&nbsp; <br></td></tr></table>\n";
 
 
-/*	
+/*
 	echo DebugForum($forum);
 	echo "<hr>";
 	echo DebugForum($forumposting);
-*/	
-	
+*/
+
 	if ($update)
 		echo "</form>\n";
 }
@@ -1593,7 +1592,7 @@ function DisplayKids ($forumposting, $level=0) {
 	$db->query($query);
 	$forumposting["lines"][$level] = $db->num_rows();
 	while ($db->next_record()) {
-		
+
 		$forumposting["id"] = $db->f("topic_id");
 		$forumposting["name"] = $db->f("name");
 		$forumposting["description"] = $db->f("description");
@@ -1609,38 +1608,38 @@ function DisplayKids ($forumposting, $level=0) {
 		$forumposting["rating"] = $db->f("rating");
 		$forumposting["score"] = $db->f("score");
 		$forumposting["fav"] = $db->f("fav");
-		
-		echo "<table class=\"blank\" border=0 cellpadding=0 cellspacing=0 width=\"100%\"><tr><td class=\"blank\" nowrap valign=\"top\" ><img src='pictures/forumleer.gif'><img src='pictures/forumleer.gif'>";
+
+		echo "<table class=\"blank\" border=0 cellpadding=0 cellspacing=0 width=\"100%\"><tr><td class=\"blank\" nowrap valign=\"top\" ><img src='".$GLOBALS['ASSETS_URL']."images/forumleer.gif'><img src='".$GLOBALS['ASSETS_URL']."images/forumleer.gif'>";
 
 	//Hier eine bezaubernde Routine um die Striche exakt wiederzugeben - keine Bange ich verstehe sie auch nicht mehr
-		IF ($level){ 
+		IF ($level){
 			$striche = "";
 			for ($i=0;$i<$level;$i++) {
 				if ($i==($level-1)) {
-					if ($forumposting["lines"][$i+1]>1) $striche.= "<img src='pictures/forumstrich3.gif' border=0>"; 		//Kreuzung
-					else $striche.= "<img src='pictures/forumstrich2.gif' border=0>"; 				//abknickend
+					if ($forumposting["lines"][$i+1]>1) $striche.= "<img src='".$GLOBALS['ASSETS_URL']."images/forumstrich3.gif' border=0>"; 		//Kreuzung
+					else $striche.= "<img src='".$GLOBALS['ASSETS_URL']."images/forumstrich2.gif' border=0>"; 				//abknickend
 					$forumposting["lines"][$i+1] -= 1;
 				} else {
-					if ($forumposting["lines"][$i+1]==0) $striche .= "<img src='pictures/forumleer.gif' border=0>";		//Leerzelle
-					else $striche .= "<img src='pictures/forumstrich.gif' border=0>";				//Strich
+					if ($forumposting["lines"][$i+1]==0) $striche .= "<img src='".$GLOBALS['ASSETS_URL']."images/forumleer.gif' border=0>";		//Leerzelle
+					else $striche .= "<img src='".$GLOBALS['ASSETS_URL']."images/forumstrich.gif' border=0>";				//Strich
 				}
 			}
 			echo $striche;
 		}
 		echo "</td>";
-		
+
 		$age = "";
 		$forumposting["newold"] = "";
-		
+
 		// wird geshrinkt?
-		
+
 		if ($forum["shrink"]!=0 && $forum["neuauf"] ==1) {
 			$forumposting = ForumNewPosting($forumposting);
 			//echo $forumposting["newold"];
 		}
-		
-		if (strstr($forum["shrinkopenlist"],$forumposting["id"])!=TRUE 
-			&& strstr($forum["openlist"],$forumposting["id"])!=TRUE 
+
+		if (strstr($forum["shrinkopenlist"],$forumposting["id"])!=TRUE
+			&& strstr($forum["openlist"],$forumposting["id"])!=TRUE
 			&& $forum["shrink"]!=0 && $openall != TRUE
 			&& !($forum["neuauf"] == 1 && $forumposting["newold"] == "new")) {
 				$age = ForumCheckShrink($forumposting["id"]);
@@ -1650,8 +1649,8 @@ function DisplayKids ($forumposting, $level=0) {
 		} else {
 			$age[]=time();
 		}
-			
-		
+
+
 		if ($age[0] >= time()-$forum["shrink"]) {
 			$forumposting["shrink"]=FALSE;
 			$forumposting = printposting($forumposting);
@@ -1662,15 +1661,15 @@ function DisplayKids ($forumposting, $level=0) {
 			$forumposting = printposting($forumposting);
 		}
 		$age = "";
-		
-		
+
+
 	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
-* Builds the search-fields 
+* Builds the search-fields
 *
 * @return	string searchfield contains the complete HTML of the search-page
 *
@@ -1720,7 +1719,7 @@ $searchfield = "
 		     	<td class=\"steel1\">
 		     		<input type=\"CHECKBOX\" name=\"check_cont\" value=\"on\" checked><font size=\"-1\"> "._("Inhalt")."
 		     	</td>
-		</tr> 
+		</tr>
 		<tr>
 			<td class=\"steelgraulight\" colspan=\"2\" align=\"center\">
 				<input type=\"hidden\" name=\"view\" value=\"search\">
@@ -1730,7 +1729,7 @@ $searchfield = "
 	</form>
    </table>
 </td>
-<td class=\"suche\"><img src=\"pictures/blank.gif\" height=\"10\" width=\"285\">
+<td class=\"suche\"><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" height=\"10\" width=\"285\">
 <tr>
 </tr></table><br></td></tr></table>";
 return $searchfield;
@@ -1743,16 +1742,16 @@ return $searchfield;
 *
 * @param	string	topic_id the id of the original posting to be moved
 *
-**/	
+**/
 function forum_move_navi ($topic_id) {
 	global $perm, $user, $forum, $view, $PHP_SELF;
-	
+
 	$mutter = suche_kinder($topic_id);
 	$mutter = explode (";",$mutter);
 	$count = sizeof($mutter)-2;
-	
+
 	// wohin darf ich schieben? Abfragen je nach Rechten
-	
+
 	if ($perm->have_perm("tutor") OR $perm->have_perm("dozent"))
 		$query = "SELECT DISTINCT seminare.Seminar_id, seminare.Name FROM seminar_user LEFT JOIN seminare USING(Seminar_id) WHERE user_id ='$user->id ' AND (seminar_user.status = 'tutor' OR seminar_user.status = 'dozent') ORDER BY Name";
 	if ($perm->have_perm("admin"))
@@ -1763,7 +1762,7 @@ function forum_move_navi ($topic_id) {
 	$db->query($query);
 
 	if ($perm->have_perm("tutor") OR $perm->have_perm("dozent") OR $perm->have_perm("admin")) {
-		$query2 = "SELECT Institute.Institut_id, Name FROM user_inst LEFT JOIN Institute USING(Institut_id) WHERE user_id = '$user->id' AND (inst_perms = 'tutor' OR inst_perms = 'dozent' OR inst_perms = 'admin') ORDER BY Name";	
+		$query2 = "SELECT Institute.Institut_id, Name FROM user_inst LEFT JOIN Institute USING(Institut_id) WHERE user_id = '$user->id' AND (inst_perms = 'tutor' OR inst_perms = 'dozent' OR inst_perms = 'admin') ORDER BY Name";
 		$db2=new DB_Seminar;
 		$db2->query($query2);
 	}
@@ -1773,17 +1772,17 @@ function forum_move_navi ($topic_id) {
 		$db2->query($query2);
 	}
 
-?>	
+?>
 			<tr><td class="blank" colspan="2"><br>
 			<table border="0" cellpadding="0" cellspacing="0" width="100%">
 			<tr>
 				<td class="steel2" colspan="2">
-					&nbsp; <img src="pictures/move.gif" border="0">&nbsp;<b><font size="-1"><?=sprintf(_("Als Thema verschieben (zusammen mit %s Antworten):"), $count)?></font></b>
+					&nbsp; <img src="<?= $GLOBALS['ASSETS_URL'] ?>images/move.gif" border="0">&nbsp;<b><font size="-1"><?=sprintf(_("Als Thema verschieben (zusammen mit %s Antworten):"), $count)?></font></b>
 				</td>
 			</tr>
 			<tr>
 				<td class="steel1" colspan="2">
-					&nbsp; 
+					&nbsp;
 				</td>
 			</tr>
 			<tr>
@@ -1792,7 +1791,7 @@ function forum_move_navi ($topic_id) {
 				</td>
 				<td class="steel1" width="80%">
 			<? 		echo "<form action=\"".$PHP_SELF."\" method=\"POST\">"; ?>
-					<input type="image" name="SUBMIT" value="Verschieben" src="pictures/move.gif" border="0" <?=tooltip(_("dahin verschieben"))?>>&nbsp;
+					<input type="image" name="SUBMIT" value="Verschieben" src="<?= $GLOBALS['ASSETS_URL'] ?>images/move.gif" border="0" <?=tooltip(_("dahin verschieben"))?>>&nbsp;
 					<select Name="sem_id" size="1">
 			<?		while ($db->next_record()) {
 						$sem_name=htmlReady(substr($db->f("Name"), 0, 50));
@@ -1814,7 +1813,7 @@ function forum_move_navi ($topic_id) {
 			  	</td>
 				<td class="steel1" width="80%">
 			<? 		echo "<form action=\"".$PHP_SELF."\" method=\"POST\">"; ?>
-					<input type=image name="SUBMIT" value="Verschieben" src="pictures/move.gif" border=0 <?=tooltip(_("dahin verschieben"))?>>&nbsp;
+					<input type=image name="SUBMIT" value="Verschieben" src="<?= $GLOBALS['ASSETS_URL'] ?>images/move.gif" border=0 <?=tooltip(_("dahin verschieben"))?>>&nbsp;
 			  	<select Name="inst_id" size="1">
 			<?		while ($db2->next_record()) {
 						$inst_name=htmlReady(substr($db2->f("Name"), 0, 50));
@@ -1832,15 +1831,14 @@ function forum_move_navi ($topic_id) {
 		?>
 			<tr valign="middle">
 				<td class="steel1" align="right" nowrap width="20%">
-					&nbsp; 
+					&nbsp;
 				</td>
-				<td class="steel1" width="80%">	
+				<td class="steel1" width="80%">
 				<br>
 			  	<? echo "<a href=\"".$PHP_SELF."?view=$view\">".makeButton("abbrechen", "img")."</a>";?>
 		  		</td>
   			</tr>
   		</table></td></tr>
-<?		
+<?
 }
-
 ?>

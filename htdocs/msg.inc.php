@@ -37,7 +37,7 @@ function my_error($msg, $class="blank", $colspan=2, $add_row=TRUE, $small = fals
 		<td class="<? echo $class?>" colspan=<? echo $colspan?>>
 			<table border=0 cellspacing=0 cellpadding=2>
 				<tr>
-					<td class="<? echo $class?>" align="center" width="<?=$width?>"><img src="<? echo $CANONICAL_RELATIVE_PATH_STUDIP."pictures/$pic" ?>"></td>
+					<td class="<? echo $class?>" align="center" width="<?=$width?>"><img src="<?= $GLOBALS['ASSETS_URL']."images/$pic" ?>"></td>
 					<td class="<? echo $class?>" align="left"><font color="#FF2020" <?=($small ? 'size="-1"' : '')?>><?php print $msg ?></font></td>
 				</tr>
 			</table>
@@ -62,7 +62,7 @@ function my_msg($msg, $class="blank", $colspan=2, $add_row=TRUE, $small = false)
 		<td class="<? echo $class?>" colspan=<? echo $colspan?>>
 			<table border=0 cellspacing=0 cellpadding=2>
 				<tr>
-					<td class="<? echo $class?>" align="center" width="<?=$width?>"><img src="<? echo $CANONICAL_RELATIVE_PATH_STUDIP."pictures/$pic" ?>"></td>
+					<td class="<? echo $class?>" align="center" width="<?=$width?>"><img src="<?= $GLOBALS['ASSETS_URL']."images/$pic" ?>"></td>
 					<td class="<? echo $class?>" align="left"><font color="#008000" <?=($small ? 'size="-1"' : '')?>><?php print $msg ?></font></td>
 				</tr>
 			</table>
@@ -86,7 +86,7 @@ function my_info($msg, $class="blank", $colspan=2, $add_row=TRUE, $small = false
 		<td class="<? echo $class?>" colspan=<? echo $colspan?>>
 			<table border=0 cellspacing=0 cellpadding=2>
 				<tr>
-					<td class="<? echo $class?>" align="center" width="<?=$width?>"><img src="<? echo $CANONICAL_RELATIVE_PATH_STUDIP."pictures/$pic" ?>"></td>
+					<td class="<? echo $class?>" align="center" width="<?=$width?>"><img src="<?= $GLOBALS['ASSETS_URL']."images/$pic" ?>"></td>
 					<td class="<? echo $class?>" align="left"><font color="#000000" <?=($small ? 'size="-1"' : '')?>><?php print $msg ?></font></td>
 				</tr>
 			</table>
@@ -163,7 +163,7 @@ if ($add_msg == "")
 	if ($add_msg) {
 ?>
 	<tr><td class="blank"><font size=-1><? echo $add_msg ?></font>
-	
+
 	</td></tr>
 <?
 	}

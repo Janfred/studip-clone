@@ -1,9 +1,9 @@
 <?
 /**
 * Presentation of a set of learning-modules.
-* 
+*
 * This file contains several functions to show a set of learning-modules.
-* 
+*
 * @author		Arne Schroeder <schroeder@data.quest.de>
 * @version		$Id$
 * @access		public
@@ -17,7 +17,7 @@
 *
 * Shows a set of learning-modules specified by $mod_array using the printhead/printcontent functions of Stud.IP.
 *
-* @access	public        
+* @access	public
 * @param		array		$mod_array	Array of learning-module-data
 * @return		boolean	returns false if array is empty
 */
@@ -35,11 +35,11 @@ function show_these_modules($mod_array)
 			echo "<br><b>" . _("Es wurde ein Lernmodul gefunden:") . "</b><br /><br /><br />";
 		else
 			echo "<br><b>" . sprintf(_("%s Lernmodule wurden gefunden:"), sizeof($mod_array)) . "</b><br /><br /><br />";
-		
-		for ($i=0; $i<sizeof($mod_array); $i++) 
-		{	
+
+		for ($i=0; $i<sizeof($mod_array); $i++)
+		{
 			$out_str = get_module_linkdata($mod_array[$i]);
-			
+
 			if ($print_open_search[$out_str["key"]] == true)
 				$do_str = "do_close";
 			else
@@ -48,7 +48,7 @@ function show_these_modules($mod_array)
 			$printimage = $out_str["image"];
 			$printcontent = $out_str["content"] . $out_str["button"];
 			$printdesc = $out_str["desc"];
-				
+
 				?>
 				<table cellspacing="0" cellpadding="0" border="0" width="100%">
 					<tr>
@@ -60,7 +60,7 @@ function show_these_modules($mod_array)
 						?>
 					</tr>
 				</table>
-				<? if ($print_open_search[$out_str["key"]] == true) 
+				<? if ($print_open_search[$out_str["key"]] == true)
 				{ ?>
 				<table cellspacing="0" cellpadding="0" border="0" width="100%">
 					<tr>
@@ -80,7 +80,7 @@ function show_these_modules($mod_array)
 *
 * Shows a set of learning-modules that belong to the given username using the printhead/printcontent functions of Stud.IP.
 *
-* @access	public        
+* @access	public
 * @param		string	$benutzername	Username
 */
 function show_user_modules($benutzername)
@@ -89,7 +89,7 @@ function show_user_modules($benutzername)
 	$module_count = 0;
 	$mod_array = get_user_modules($benutzername);
 	if ($mod_array != false)
-	{	
+	{
 		echo "<b>" . _("Sie haben Zugriff auf folgende Lernmodule:") . "</b><br><br>";
 		while ($module_count < sizeof($mod_array))
 		{
@@ -104,7 +104,7 @@ function show_user_modules($benutzername)
 			else
 				$do_str = "do_open";
 			$printlink = "<a href=\"".$PHP_SELF . "?$do_str=" . $ph_key . "&view=edit&seminar_id=$seminar_id\" class=\"tree\">" . $module_info["title"] . "</a>";
-			$printimage = "<img src=\"pictures/icon-lern.gif\">";
+			$printimage = "<img src=\"".$GLOBALS['ASSETS_URL']."images/icon-lern.gif\">";
 			$printcontent = $module_info["description"] . "<br><br><center><a href=\"$edit_link\" target=\"_blank\">" . makeButton("bearbeiten", "img") . "</a>&nbsp;<a href=\"$delete_link\" target=\"_blank\">" . makeButton("loeschen", "img") . "</a></center>";
 			$mod_author = get_module_author($mod_array[$module_count]["inst"], $mod_array[$module_count]["id"]);
 			$mod_desc = "";
@@ -125,7 +125,7 @@ function show_user_modules($benutzername)
 					?>
 				</tr>
 			</table>
-			<? if ($print_open_admin[$ph_key] == true) 
+			<? if ($print_open_admin[$ph_key] == true)
 			{ ?>
 			<table cellspacing="0" cellpadding="0" border="0" width="100%">
 				<tr>
@@ -145,10 +145,10 @@ function show_user_modules($benutzername)
 /**
 * Shows array of learning-modules with administration buttons
 *
-* Shows all learning-modules for the administraion screen using the printhead/printcontent functions of Stud.IP. 
+* Shows all learning-modules for the administraion screen using the printhead/printcontent functions of Stud.IP.
 * Depending on if the user has acces to the shown modules there are also administration options to the learning-modules.
 *
-* @access	public        
+* @access	public
 */
 function show_admin_modules()
 {
@@ -156,7 +156,7 @@ function show_admin_modules()
 	$module_count = 0;
 	$mod_array = get_all_modules();
 	if ($mod_array != false)
-	{	
+	{
 		echo "<b>" . _("Sie haben Zugriff auf folgende Lernmodule:") . "</b><br><br>";
 		while ($module_count < sizeof($mod_array))
 		{
@@ -171,7 +171,7 @@ function show_admin_modules()
 			else
 				$do_str = "do_open";
 			$printlink = "<a href=\"".$PHP_SELF . "?$do_str=" . $ph_key . "&view=edit&seminar_id=$seminar_id\" class=\"tree\">" . $module_info["title"] . "</a>";
-			$printimage = "<img src=\"pictures/icon-lern.gif\">";
+			$printimage = "<img src=\"".$GLOBALS['ASSETS_URL']."images/icon-lern.gif\">";
 			$printcontent = $module_info["description"] . "<br><br><center><a href=\"$edit_link\" target=\"_blank\">" . makeButton("bearbeiten", "img") . "</a>&nbsp;".
 				"<a href=\"$delete_link\" target=\"_blank\">" . makeButton("loeschen", "img") . "</a></center>";
 			$mod_author = get_module_author($mod_array[$module_count]["inst"], $mod_array[$module_count]["id"]);
@@ -193,7 +193,7 @@ function show_admin_modules()
 					?>
 				</tr>
 			</table>
-			<? if ($print_open_admin[$ph_key] == true) 
+			<? if ($print_open_admin[$ph_key] == true)
 			{ ?>
 			<table cellspacing="0" cellpadding="0" border="0" width="100%">
 				<tr>
@@ -216,7 +216,7 @@ function show_admin_modules()
 * Shows a set of learning-modules belonging to $seminar_id using the printhead/printcontent functions of Stud.IP.
 * $status defines if the modules are all to be shown (status=0) or only those modules that are rated official (1) or those rated inofficial (2).
 *
-* @access	public        
+* @access	public
 * @param		string	$seminar_id	id of the lecture / institute
 * @param		integer	$status	all learning-modules or officials or inofficials?
 * @return		boolean	returns false if array is empty
@@ -228,19 +228,19 @@ function show_seminar_modules($seminar_id, $status = 0)
 	$module_count = 0;
 	$mod_array = get_seminar_modules($seminar_id);
 	if ($mod_array != false)
-	{	
+	{
 		if ($status == 1)
 		{
-			if ($SessSemName["class"]=="inst") 
+			if ($SessSemName["class"]=="inst")
 				$msg = _("Offizielle Lernmodule dieser Einrichtung:");
-			else	
+			else
 				$msg = _("Offizielle Lernmodule dieser Veranstaltung:");
 		}
 		elseif ($status == 2)
 		{
-			if ($SessSemName["class"]=="inst") 
+			if ($SessSemName["class"]=="inst")
 				$msg = _("Inoffizielle Lernmodule zu dieser Einrichtung:");
-			else	
+			else
 				$msg = _("Inoffizielle Lernmodule zu dieser Veranstaltung:");
 		}
 
@@ -251,14 +251,14 @@ function show_seminar_modules($seminar_id, $status = 0)
 				if (!isset($module_info))
 					echo "<b>" . $msg . "</b><br><br>";
 
-				$link_del = $PHP_SELF . "?view=edit&seminar_id=" . $seminar_id . "&do_op=clear&op_co_inst=" . $mod_array[$module_count]["inst"] . "&op_co_id=". $mod_array[$module_count]["id"] . "&op_status=" . $mod_array[$module_count]["status"];	
+				$link_del = $PHP_SELF . "?view=edit&seminar_id=" . $seminar_id . "&do_op=clear&op_co_inst=" . $mod_array[$module_count]["inst"] . "&op_co_id=". $mod_array[$module_count]["id"] . "&op_status=" . $mod_array[$module_count]["status"];
 				if ($mod_array[$module_count]["status"] == 1)
 					$op_status = 2;
 				elseif ($mod_array[$module_count]["status"] == 2)
 					$op_status = 1;
 				if ($perm->have_studip_perm("tutor", $seminar_id))
 					$link_change = $PHP_SELF . "?view=edit&seminar_id=" . $seminar_id . "&do_op=change&op_co_inst=" . $mod_array[$module_count]["inst"] . "&op_co_id=". $mod_array[$module_count]["id"] . "&op_status=". $op_status;
-	
+
 				$module_info = get_module_info($mod_array[$module_count]["inst"], $mod_array[$module_count]["id"]);
 				$ph_key = $mod_array[$module_count]["id"] . "@" . $mod_array[$module_count]["inst"] . "@" . "sem";
 				if ($print_open[$ph_key] == true)
@@ -266,7 +266,7 @@ function show_seminar_modules($seminar_id, $status = 0)
 				else
 					$do_str = "do_open";
 				$printlink = "<a href=\"".$PHP_SELF . "?$do_str=" . $ph_key . "&view=edit&seminar_id=$seminar_id\" class=\"tree\">" . $module_info["title"] . "</a>";
-				$printimage = "<img src=\"pictures/icon-lern.gif\">";
+				$printimage = "<img src=\"".$GLOBALS['ASSETS_URL']."images/icon-lern.gif\">";
 				$printcontent = $module_info["description"] . "<br><br><center><a href=\"$link_change\">" . makeButton("verschieben", "img") . "</a>&nbsp;<a href=\"$link_del\">" . makeButton("entfernen", "img") . "</a></center>";
 				$mod_author = get_module_author($mod_array[$module_count]["inst"], $mod_array[$module_count]["id"]);
 				$mod_desc = "";
@@ -287,7 +287,7 @@ function show_seminar_modules($seminar_id, $status = 0)
 						?>
 					</tr>
 				</table>
-				<? if ($print_open[$ph_key] == true) 
+				<? if ($print_open[$ph_key] == true)
 				{ ?>
 				<table cellspacing="0" cellpadding="0" border="0" width="100%">
 					<tr>
@@ -308,13 +308,13 @@ function show_seminar_modules($seminar_id, $status = 0)
 	echo "<br>";
 	return true;
 }
-	
+
 /**
 * Shows all learning-modules
 *
 * Shows all learning modules. This function is used to connect a specific learning-module to a lecture.
 *
-* @access	public        
+* @access	public
 * @param		string	$seminar_id	id of the lecture
 */
 function show_all_modules($seminar_id)
@@ -325,7 +325,7 @@ function show_all_modules($seminar_id)
 	$hide_mod = get_seminar_modules($seminar_id);
 	$mod_array = get_all_modules($hide_mod);
 	if ($mod_array != false)
-	{	
+	{
 		echo "<b>" . _("Folgende Lernmodule können eingebunden werden:") . "</b><br><br>";
 
 		while ($module_count < sizeof($mod_array))
@@ -342,7 +342,7 @@ function show_all_modules($seminar_id)
 			else
 				$do_str = "do_open";
 			$printlink = "<a href=\"".$PHP_SELF . "?$do_str=" . $ph_key . "&view=edit&seminar_id=$seminar_id\" class=\"tree\">" . $module_info["title"] . "</a>";
-			$printimage = "<img src=\"pictures/icon-lern.gif\">";
+			$printimage = "<img src=\"".$GLOBALS['ASSETS_URL']."images/icon-lern.gif\">";
 			$printcontent = $module_info["description"] . "<br><br><center><a href=\"$link_con\">" . makeButton("hinzufuegen", "img") . "</a></center>";
 			$mod_author = get_module_author($mod_array[$module_count]["inst"], $mod_array[$module_count]["id"]);
 			$mod_desc = "";
@@ -363,7 +363,7 @@ function show_all_modules($seminar_id)
 					?>
 				</tr>
 			</table>
-			<? if ($print_open[$ph_key] == true) 
+			<? if ($print_open[$ph_key] == true)
 			{ ?>
 			<table cellspacing="0" cellpadding="0" border="0" width="100%">
 				<tr>
@@ -377,23 +377,23 @@ function show_all_modules($seminar_id)
 		}
 	}
 	elseif ($hide_mod != "")
-	{	
-		if ($SessSemName["class"]=="inst") 
+	{
+		if ($SessSemName["class"]=="inst")
 			$msg = _("Alle verf&uuml;gbaren Lernmodule sind der Einrichtung zugeordnet.");
-		else	
+		else
 			$msg = _("Alle verf&uuml;gbaren Lernmodule sind der Veranstaltung zugeordnet.");
 		echo "<b>" . $msg . "</b><br><br>";
 	}
 	else
 		echo "<b>" . _("Es sind keine Lernmodule vorhanden.") . "</b><br><br>";
 }
-	
+
 /**
 * Shows linked learning-modules that belong to a lecture / institute
 *
 * Shows a set of learning-modules belonging to $seminar_id using the printhead/printcontent functions of Stud.IP.
 *
-* @access	public        
+* @access	public
 * @param		string	$seminar_id	id of the lecture / institute
 * @return		boolean	returns false if no learning-modules were found
 */
@@ -409,29 +409,29 @@ function show_seminar_modules_links($seminar_id)
  	{
 		if (sizeof($out_str)<2)
 		{
-			if ($SessSemName["class"]=="inst") 
+			if ($SessSemName["class"]=="inst")
 				$msg = _("Diese Einrichtung ist mit einem Lernmodul verbunden:");
-			else	
+			else
 				$msg = _("Diese Veranstaltung ist mit einem Lernmodul verbunden:");
 			echo "<br><b>" . $msg . "</b><br /><br /><br />";
 		}
 		else
-		{	
-			if ($SessSemName["class"]=="inst") 
+		{
+			if ($SessSemName["class"]=="inst")
 				$msg = _("Diese Einrichtung ist mit den folgenden Lernmodulen verbunden:");
-			else	
+			else
 				$msg = _("Diese Veranstaltung ist mit den folgenden Lernmodulen verbunden:");
 			echo "<br><b>" . $msg . "</b><br /><br />";
 		}
-		
-		for ($status=1; $status<=2; $status++) 
+
+		for ($status=1; $status<=2; $status++)
 		{
 			unset($printlink);
 			if ($status == 1)
 				$msg = _("Offizielle Lernmodule:");
 			else
 				$msg = _("Inoffizielle Lernmodule:");
-			for ($i=0; $i<sizeof($out_str); $i++) 
+			for ($i=0; $i<sizeof($out_str); $i++)
 				if ($out_str[$i]["status"] == $status)
 				{
 					if (!isset($printlink))
@@ -445,7 +445,7 @@ function show_seminar_modules_links($seminar_id)
 					$printimage = $out_str[$i]["image"];
 					$printcontent = $out_str[$i]["content"] . $out_str[$i]["button"];
 					$printdesc = $out_str[$i]["desc"];
-					
+
 					?>
 					<table cellspacing="0" cellpadding="0" border="0" width="100%">
 						<tr>
@@ -457,7 +457,7 @@ function show_seminar_modules_links($seminar_id)
 							?>
 						</tr>
 					</table>
-					<? if ($print_open[$out_str[$i]["key"]] == true) 
+					<? if ($print_open[$out_str[$i]["key"]] == true)
 					{ ?>
 					<table cellspacing="0" cellpadding="0" border="0" width="100%">
 						<tr>

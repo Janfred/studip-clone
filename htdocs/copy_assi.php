@@ -32,11 +32,11 @@ include "$ABSOLUTE_PATH_STUDIP/header.php";   // Output of Stud.IP head
 include "$ABSOLUTE_PATH_STUDIP/links_admin.inc.php"; //Output the nav
 
 require_once"$ABSOLUTE_PATH_STUDIP/visual.inc.php";
-	
+
 if ($SessSemName[1]) {
 	?>
 	<table cellspacing="0" cellpadding="0" border="0" width="100%">
-	<tr><td class="topic" colspan=2><img src="pictures/blank.gif" width="5" height="5" border="0"><b><?=_("Veranstaltung vorgew&auml;hlt")?></b></td></tr>
+	<tr><td class="topic" colspan=2><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" width="5" height="5" border="0"><b><?=_("Veranstaltung vorgew&auml;hlt")?></b></td></tr>
 	<tr><td class="blank" colspan=2>&nbsp;</td></tr>
 	<tr><td class="blank" colspan=2>
 	<blockquote>
@@ -45,7 +45,7 @@ if ($SessSemName[1]) {
 	<br />
 	</td></tr>
 	</table>
-<?		
+<?
 }
 page_close();
 ?>

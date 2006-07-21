@@ -2,9 +2,9 @@
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // institut_browse.php
-// 
-// 
-// Copyright (c) 2002 André Noack <noack@data-quest.de> 
+//
+//
+// Copyright (c) 2002 André Noack <noack@data-quest.de>
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -27,6 +27,8 @@ include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Sessio
 
 require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipRangeTreeView.class.php");
+
+$HELP_KEYWORD="Basis.SuchenEinrichtungen";
 
 // Start of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
@@ -70,7 +72,7 @@ if ($_REQUEST['cmd']=="suche"){
 <body>
 <table width="100%" border="0" cellpadding="2" cellspacing="0">
 	<tr>
-		<td class="topic" colspan="2"><img src="pictures/suchen.gif" border="0" align="absbottom"><b>&nbsp;<?=_("Suche nach Einrichtungen")?></b></td>
+		<td class="topic" colspan="2"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/suchen.gif" border="0" align="absbottom"><b>&nbsp;<?=_("Suche nach Einrichtungen")?></b></td>
 	</tr>
 	<tr>
 	<td class="blank" width="100%" align="left" valign="top">
@@ -88,7 +90,7 @@ $the_tree->showTree();
 	<td class="blank" align = right valign=top>
 	<?
 $infobox = array(array("kategorie"  => _("Information:"),
-						"eintrag" => array(array("icon" => "pictures/ausruf_small.gif",
+						"eintrag" => array(array("icon" => "ausruf_small.gif",
 												"text"  => _("Sie k&ouml;nnen sich durch den Einrichtungsbaum klicken oder das Suchformular benutzen"))
 										)
 						)
@@ -103,10 +105,10 @@ $such_form = "<form action=\"$PHP_SELF?cmd=suche\" method=\"post\">" . _("Bitte 
 			. "<div align=\"right\" style=\"width:95%;\"><input type=\"image\" border=\"0\" " . makeButton("suchestarten","src") . tooltip(_("Suche starten")) . " vspace=\"3\" >"
 			. "</div></form>";
 $infobox[1]["kategorie"] = _("Suchen:");
-$infobox[1]["eintrag"][] = array (	"icon" => "pictures/suchen.gif" ,
+$infobox[1]["eintrag"][] = array (	"icon" => "suchen.gif" ,
 									"text" => $such_form
 								);
-print_infobox ($infobox,"pictures/einrichtungen.jpg");
+print_infobox ($infobox,"einrichtungen.jpg");
 ?>
 </td></tr>
 </table>

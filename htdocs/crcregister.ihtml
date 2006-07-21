@@ -10,8 +10,8 @@ $validator = new email_validation_class;
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 	<meta name="copyright" content="Stud.IP-Crew (crew@studip.de)">
   <title>Stud.IP</title>
-	<link rel="stylesheet" href="style.css" type="text/css">
-<script type="text/javascript" language="javascript" src="md5.js"></script>
+	<link rel="stylesheet" href="<?= $GLOBALS['ASSETS_URL'] ?>stylesheets/style.css" type="text/css">
+<script type="text/javascript" language="javascript" src="<?= $GLOBALS['ASSETS_URL'] ?>javascripts/md5.js"></script>
 
 <script type="text/javascript" language="javaScript">
 <!--
@@ -93,7 +93,7 @@ function checkdata(){
  if (!checkpassword())
   checked = false;
  if (!checkpassword2())
-  checked = false;  
+  checked = false;
  if (!checkVorname())
   checked = false;
  if (!checkNachname())
@@ -106,7 +106,7 @@ function checkdata(){
    document.login.response.value = MD5(document.login.password.value);
    document.login.response2.value = MD5(document.login.password2.value);
    document.login.password.value = "";
-   document.login.password2.value = "";   
+   document.login.password2.value = "";
  }
  return checked;
 }
@@ -121,12 +121,12 @@ function checkdata(){
 <tr><td class="blank">&nbsp;</td></tr>
 <tr><td class="blank">
 
-	<? 
+	<?
 	global $HTTP_COOKIE_VARS, $username, $Vorname, $Nachname, $Email, $title_front, $title_rear, $ABSOLUTE_PATH_STUDIP;
 
 	require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
 	include("$ABSOLUTE_PATH_STUDIP/config.inc.php");
-	
+
 	if (!$HTTP_COOKIE_VARS[$sess->name] || !$HTTP_COOKIE_VARS[$sess->cookiename]) {
   		?>
 		<table>
@@ -135,12 +135,12 @@ function checkdata(){
 		</tr>
 		<tr>
 			<td class="blank" colspan=2>
-			
+
 			<b>&nbsp; <?=_("Was sind Cookies?")?></b><br /><br />
 			<blockquote>
 			<font size =-1><?=_("Cookies werden normalerweise benutzt, damit der Browser BenutzerInnen der Seiten beim wiederholten Aufrufen dieser Seiten wiedererkennen kann <br>Innerhalb von Stud.IP werden Cookies benutzt, um den Namen und die Daten der Nutzenden auf jeder Seite neu verf&uuml;gbar zu machen.<br>Ohne Cookies m&uuml;ssten Sie sich beim Betreten jeder Seite neu anmelden!")?>
 			<br></font></blockquote>
-			
+
 			<b>&nbsp; <?=_("Sind Cookies gef&auml;hrlich?")?></b><br /><br />
 			<blockquote>
 			<font size =-1><?=_("Das Zulassen von Cookies stellt - leider - ein geringf&uuml;giges Sicherheitsrisiko dar. Jedoch sollten Sie Ihr Augenmerk darauf richten, dass in den meisten Browsern Techniken integriert sind, die ein deutlich gr&ouml;&szlig;eres Sicherheitsrisiko darstellen (etwa AktiveX-Elemente).<br>Au&szlig;erdem gibt es zwei verschiedene Arten von Cookies: Jene, die auf der Festplatte gespeichert werden und auf dem Rechner verbleiben, und solche, die nur solange aktiv sind, wie Sie die entsprechenden Seiten benutzen.<br>Das Stud.IP-System nutzt nur die ungef&auml;hrlicheren Cookies, die sich nur f&uuml;r die Dauer der Sitzung im Speicher des Browser befinden und danach automatisch verschwinden.<br>Sie brauchen sich also keine Sorgen zu machen!")?>
@@ -156,7 +156,7 @@ function checkdata(){
 				<li><?=_("Stellen Sie den Regler auf die Einstellung \"Alle Cookies annehmen\"")?>
 			</ol>
 			</font></blockquote>
-			
+
 			<b>&nbsp; <?=_("Hinweise f&uuml;r BenutzerInnen des Netscape Navigator 4.x")?></b><br /><br />
 			<blockquote>
 			<font size =-1><?=_("Wenn Sie den Netscape Navigator 4.x benutzen, k&ouml;nnen Sie das Annehmen von Cookies auf folgende Weise einschalten:")?>
@@ -177,7 +177,7 @@ function checkdata(){
 		</table>
 		</td></tr></table>
 		<?
-		die;         
+		die;
 		}
 
 
@@ -209,7 +209,7 @@ function checkdata(){
   <td colspan="2"><?=_("Passwort:")?></td>
   <td><input type="password" name="password" onchange="checkpassword()" size=32 maxlength=31></td>
  </tr>
- 
+
  <tr valign=top align=left>
   <td colspan="2"><?=_("Passwortbest&auml;tigung:")?></td>
   <td><input type="password" name="password2" onchange="checkpassword2()" size=32 maxlength=31></td>
@@ -243,7 +243,7 @@ function checkdata(){
   <td><input type="text" name="title_rear" value="<?php print (isset($title_rear) ? $title_rear : "" ) ?>" size=32 maxlength=63></td>
  </tr>
 
- 
+
  <tr valign=top align=left>
   <td colspan="2"><?=_("Vorname:")?></td>
   <td><input type="text" name="Vorname" onchange="checkVorname()"  value="<?php print (isset($Vorname) ? $Vorname : "" ) ?>"size=32 maxlength=63></td>

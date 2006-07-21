@@ -51,6 +51,7 @@ class StudipAuthLdap extends StudipAuthAbstract {
 	var $base_dn;
 	var $protocol_version;
 	var $username_attribute;
+	var $bad_char_regex =  '/[^0-9_a-zA-Z]/';
 	
 	var $conn = null;
 	var $user_data = null;

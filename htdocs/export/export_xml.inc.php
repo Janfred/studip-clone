@@ -1,8 +1,8 @@
 <?
 /**
 * Export-subfile that calls export-functions to create a xml-file.
-* 
-* This file call export_range to get a xml-strem with the wanted data. 
+*
+* This file call export_range to get a xml-strem with the wanted data.
 * Depending on $o_mode it passes the xml-stream into a file or to the screen.
 *
 * @author		Arne Schroeder <schroeder@data.quest.de>
@@ -16,8 +16,8 @@
 // This file is part of Stud.IP
 // export_xml.inc.php
 // XML-functions for the Stud.IP database
-// 
-// Copyright (c) 2002 Arne Schroeder <schroeder@data-quest.de> 
+//
+// Copyright (c) 2002 Arne Schroeder <schroeder@data-quest.de>
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -34,7 +34,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-if (($o_mode != "direct") AND ($o_mode != "passthrough")) 
+if (($o_mode != "direct") AND ($o_mode != "passthrough"))
 	$perm->check("tutor");
 
 $export_pagename = _("Datenexport");
@@ -51,7 +51,7 @@ require_once ("$ABSOLUTE_PATH_STUDIP/dates.inc.php");   // Datumsfunktionen
 * This function checks the given parameters. If some are missing
 * it returns false and adds a warning to $export_error.
 *
-* @access	public        
+* @access	public
 * @return		boolean
 */
 function CheckParamXML()
@@ -66,12 +66,12 @@ global $range_id, $ex_type, $xml_file_id, $o_mode, $export_error, $export_error_
 }
 
 
-if (!CheckParamXML()) 
+if (!CheckParamXML())
 {
-	$infobox = array(			
+	$infobox = array(
 	array ("kategorie"  => _("Information:"),
-		"eintrag" => array	(	
-						array (	"icon" => "pictures/ausruf_small.gif",
+		"eintrag" => array	(
+						array (	'icon' => "ausruf_small.gif",
 								"text"  => _("Die Parametern, mit denen diese Seite aufgerufen wurde, sind fehlerhaft.")
 							 )
 						)
@@ -82,7 +82,7 @@ if (!CheckParamXML())
 
 $count = 0;
 if (isset($ex_sem_class))
-	foreach ($SEM_CLASS as $key=>$val) 
+	foreach ($SEM_CLASS as $key=>$val)
 	{
 		if ($ex_sem_class[$count] == "1")
 			$ex_class_array[$key] = true;
@@ -137,7 +137,7 @@ if (($o_mode == "file") OR ($o_mode == "choose"))
 //		$export_info = _("Die Daten wurden in eine XML-Datei exportiert. <br>Wenn Sie die Datei in ein anderes Format konvertieren wollen, klicken Sie auf weiter.<br>Um die Datei herunterzuladen, klicken Sie auf den Dateinamen.");
 
 //		$export_weiter_button = "<br><br><center><a href=\"" . $PHP_SELF . "?xml_file_id=" . $xml_file_id . "&ex_type=" . $ex_type . "&o_mode=choose\">" . makeButton("weiter") . "</a></center>";
-	
+
 		$export_pagecontent .= "<form method=\"POST\" action=\"" . $PHP_SELF . "\">";
 		$export_pagecontent .= "<input type=\"hidden\" name=\"page\" value=\"2\">";
 		$export_pagecontent .= "<input type=\"hidden\" name=\"format\" value=\"" . $format . "\">";
@@ -147,18 +147,18 @@ if (($o_mode == "file") OR ($o_mode == "choose"))
 		$export_pagecontent .= "<input type=\"hidden\" name=\"ex_sem_class\" value=\"" . $ex_sem_class . "\">";
 		$export_pagecontent .= "<input type=\"hidden\" name=\"range_id\" value=\"" . $range_id . "\">";
 		$export_pagecontent .= "<input type=\"hidden\" name=\"xslt_filename\" value=\"" . $xslt_filename . "\">";
-	
+
 		$export_weiter_button = "<br><br><center><input type=\"IMAGE\" " . makeButton("zurueck", "src") . " value=\"" . _("Zur&uuml;ck") . "\" name=\"back\">&nbsp;</center></form>";
-		$xml_printimage = '<a href="'. GetDownloadLink($xml_file_id, $xml_filename, 2) .  '"><img src="pictures/' . $export_icon['xml'] . '" border=0></a>';
+		$xml_printimage = '<a href="'. GetDownloadLink($xml_file_id, $xml_filename, 2) .  '"><img src="'.$GLOBALS['ASSETS_URL'].'images/' . $export_icon['xml'] . '" border=0></a>';
 		$xml_printlink = '<a href="'. GetDownloadLink($xml_file_id, $xml_filename, 2). '" class="tree">' . $xml_filename . '</a>';
 		$xml_printdesc = _("XML-Daten");
-		$xml_printcontent = _("In dieser Datei sind die Daten als XML-Tags gespeichert. Diese Tags können mit einem XSLT-Script verarbeitet werden.") . "<br>";	
+		$xml_printcontent = _("In dieser Datei sind die Daten als XML-Tags gespeichert. Diese Tags können mit einem XSLT-Script verarbeitet werden.") . "<br>";
 	}
-	
-	$infobox = array	(			
+
+	$infobox = array	(
 	array ("kategorie"  => _("Information:"),
-		"eintrag" => array	(	
-						array (	"icon" => "pictures/ausruf_small.gif",
+		"eintrag" => array	(
+						array (	'icon' => "ausruf_small.gif",
 								"text"  => $xml_export_text
 							 )
 						)
@@ -168,13 +168,13 @@ if (($o_mode == "file") OR ($o_mode == "choose"))
 	{
 		$link = '<a href="'. GetDownloadLink($xml_file_id, $xml_filename, 2) .' ">';
 		$infobox[1]["kategorie"] = _("Aktionen:");
-			$infobox[1]["eintrag"][] = array (	"icon" => "pictures/icon-disc.gif" ,
+			$infobox[1]["eintrag"][] = array (	'icon' => "icon-disc.gif" ,
 										"text"  => sprintf(_("Um die XML-Datei jetzt herunterzuladen klicken Sie %s hier %s."), $link, "</a>")
 									);
-//			$infobox[1]["eintrag"][] = array (	"icon" => "pictures/forumgrau.gif" ,
+//			$infobox[1]["eintrag"][] = array (	'icon' => "forumgrau.gif" ,
 //										"text"  => _("Wenn Sie die Daten in ein anderes Format konvertieren wollen, klicken Sie auf 'weiter'.")
 //									);
 	}
-	
+
 }
 ?>

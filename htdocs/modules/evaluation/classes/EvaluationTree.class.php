@@ -143,9 +143,9 @@ class EvaluationTree extends TreeAbstract {
 
   }
   
-  function &getGroupObject($item_id, $renew = false){
+   function &getGroupObject($item_id, $renew = false){
 	  if (is_object($this->tree_data[$item_id]['object'])){
-		  if ($renew) $this->recursiveInit(new EvaluationGroup($item_id,null,$this->load_mode));
+	  	  if ($renew) $this->recursiveInit(new EvaluationGroup($item_id,null,$this->load_mode));
 		  return $this->tree_data[$item_id]['object'];
 	  } else {
 		  return new EvaluationGroup($item_id,null,$this->load_mode);

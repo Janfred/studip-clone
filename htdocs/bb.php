@@ -34,9 +34,9 @@ include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");  //Linkleiste fuer admins
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
 	 ?>
-  
+
 	<table cellspacing="0" cellpadding="0" border="0" width="100%">
-	<tr><td class="topic" colspan=2><img src="pictures/blank.gif" width="5" height="5" border="0"><b><?=_("Der geheime Bilderbrowser")?></b></td></tr>
+	<tr><td class="topic" colspan=2><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" width="5" height="5" border="0"><b><?=_("Der geheime Bilderbrowser")?></b></td></tr>
 	<tr><td class="blank" colspan=2><br><br><?=_("Unsch&ouml;n dass wir uns hier sehen... diese Seite ist das geheime Easteregg von Stud.IP. Wenn es jemand hierher geschafft hat, der nicht zum Team geh&ouml;rt, dann k&uuml;ndige ich.")?><br><br>
 	<i>Cornelis</i><br><br>
 	<?
@@ -62,10 +62,10 @@ include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");  //Linkleiste fuer admins
 		if ((($i % 4) ==0)  && (!$i==0))  echo"</tr><tr>";
 		}
 	echo "</tr></table>";
-  
-?>	
+
+?>
 		</td></tr></table>
- 
+
 <?
 	 page_close();
  ?>

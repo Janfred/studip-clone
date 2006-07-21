@@ -80,7 +80,7 @@ if (isset($auswahl) && $auswahl!="") {
 		header("Location: $new_query");
 		die;
 	}
-	
+
 if (get_config('NEWS_RSS_EXPORT_ENABLE') && $SessSemName[1]){
 	$rss_id = StudipNews::GetRssIdFromRangeId($SessSemName[1]);
 	if($rss_id){
@@ -88,6 +88,10 @@ if (get_config('NEWS_RSS_EXPORT_ENABLE') && $SessSemName[1]){
 									.'title="RSS" href="' . $GLOBALS['ABSOLUTE_URI_STUDIP'] . 'rss.php?id='.$rss_id.'"/>';
 	}
 }
+
+
+$HELP_KEYWORD="Basis.Einrichtungen";
+
 // Start of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
@@ -162,9 +166,9 @@ process_news_commands($institut_main_data);
 			</blockquote>
 		</td>
 		<td class="blank" align="right" valign="top">
-			<img src="pictures/blank.gif" height="10" width="5" /><br />
-			<img src="pictures/einrichtungen.jpg" border="0"><img src="pictures/blank.gif" height="10" width="10" /><br />
-			<img src="pictures/blank.gif" height="10" width="5" />
+			<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" height="10" width="5" /><br />
+			<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/einrichtungen.jpg" border="0"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" height="10" width="10" /><br />
+			<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" height="10" width="5" />
 		</td>
 		</tr>
 	</table>

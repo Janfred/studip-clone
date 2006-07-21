@@ -34,6 +34,8 @@ require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/UserManagement.class.php");
 $magic     = "dsdfjhgretha";  // Challenge seed.
 // MUSS IDENTISCH ZU DEM IN SEMINAR_REGISTER_AUTH IN LOCAL.INC SEIN!
 
+$HELP_KEYWORD="Basis.AnmeldungMail";
+
 // Start of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head

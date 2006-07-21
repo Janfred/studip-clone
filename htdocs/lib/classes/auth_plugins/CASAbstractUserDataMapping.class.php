@@ -9,7 +9,6 @@ class CASAbstractUserDataMapping {
 	
 	function getUserData($key,$username){
 		// has to be implemented in derived class	
-		return "";
 	}
 }
 ?>

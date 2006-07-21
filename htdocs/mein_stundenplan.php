@@ -1,9 +1,9 @@
 <?
 /**
 * mein_stundenplan.php
-* 
+*
 * view of personal timetable
-* 
+*
 *
 * @author		Cornelis Kater <ckater@gwdg.de> Suchi & Berg GmbH <info@data-quest.de>
 * @version		$Id$
@@ -47,17 +47,23 @@ if (isset($print_view))
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 
 require_once "$ABSOLUTE_PATH_STUDIP/config.inc.php"; //Daten laden
-require_once "$ABSOLUTE_PATH_STUDIP/config_tools_semester.inc.php"; 
+require_once "$ABSOLUTE_PATH_STUDIP/config_tools_semester.inc.php";
 require_once "$ABSOLUTE_PATH_STUDIP/ms_stundenplan.inc.php";
 require_once "$ABSOLUTE_PATH_STUDIP/visual.inc.php";
 require_once "$ABSOLUTE_PATH_STUDIP/lib/classes/SemesterData.class.php";
 
-if ($RESOURCES_ENABLE)	
+if ($RESOURCES_ENABLE)
  	require_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
-	
+
 
 //eingebundene Daten auf Konsitenz testen (Semesterwechsel? nicht mehr Admin im gespeicherten Institut?)
 check_schedule_settings();
+
+if ($change_view) {
+	$HELP_KEYWORD="Basis.MyStudIPStundenplan";
+} else {
+	$HELP_KEYWORD="Basis.TerminkalenderStundenplan";
+}
 
 if (!$print_view) {
 	include "$ABSOLUTE_PATH_STUDIP/header.php";   //hier wird der "Kopf" nachgeladen
@@ -183,7 +189,7 @@ if (!isset($tmp_sem_nr)) {
 	} else {
 		$tmp_sem_beginn=$SEM_BEGINN_NEXT;
 		$tmp_sem_ende=$SEM_ENDE_NEXT;
-		$tmp_sem_nr=$SEM_ID_NEXT;		
+		$tmp_sem_nr=$SEM_ID_NEXT;
 	}
 } else {
 	$tmp_sem_beginn=$all_semester[$tmp_sem_nr]["beginn"];
@@ -199,14 +205,14 @@ if ($view=="inst") {
 	$global_end_time=$my_schedule_settings["glb_end_time"];
 }
 
-//Array der Seminare erzeugen 
+//Array der Seminare erzeugen
 while ($db->next_record())
 	{
 	//Bestimmen, ob die Veranstaltung in dem Semester liegt, was angezeigt werden soll
 	$use_this=FALSE;
 	$term_data=unserialize($db->f("metadata_dates"));
 	if (($db->f("start_time") <=$tmp_sem_beginn) && ($tmp_sem_beginn <= ($db->f("start_time") + $db->f("duration_time")))) {
-		$use_this=TRUE; 
+		$use_this=TRUE;
 	}
 	if (($use_this) && (!$term_data["art"]) && (is_array($term_data["turnus_data"])))
 		{
@@ -216,7 +222,7 @@ while ($db->next_record())
 		$i=1;
 		while ($db2->next_record())
 			{
-			if ($i>1) 
+			if ($i>1)
 				$dozenten.=", ";
 			if (!$print_view)
 				$dozenten.="<a href =\"about.php?username=".$db2->f("username")."\">".$db2->f("Nachname")."</a>";
@@ -224,29 +230,29 @@ while ($db->next_record())
 				$dozenten.=$db2->f("Nachname");
 			$i++;
 			}
-		
+
 		$i=0;
 		foreach 	($term_data["turnus_data"] as $data)
 			if ($data["end_stunde"] >= $global_start_time) {
 				//generate the room
 				if (($RESOURCES_ENABLE) && ($data["resource_id"]))
 					$tmp_room = getResourceObjectName($data["resource_id"]);
-				elseif (!$data["room"]) 
+				elseif (!$data["room"])
 					$tmp_room =_("n. A.");
 				else
 					$tmp_room =$data["room"];
-			
+
 				//Patch fuer Problem mit alten Versionwn <=0.7 (Typ war falsch gesetzt), wird nur fuer rueckwaerts-Kompatibilitaet benoetigt
 				settype ($data["start_stunde"], "integer");
 				settype ($data["end_stunde"], "integer");
 				settype ($data["start_minute"], "integer");
 				settype ($data["end_minute"], "integer");
-					
+
 				//Check, ob die Endzeit ueber den sichtbaren Bereich des Stundenplans hinauslaeuft, wenn ja wird row_span entsprechend angepasst
 				if ($data["end_stunde"] >$global_end_time) {
 					$tmp_row_span = ((($global_end_time - $data["start_stunde"])+1) *4);
 					$tmp_row_span = $tmp_row_span - (int)($data["start_minute"] / 15);
-				} else 
+				} else
 					$tmp_row_span = ceil((($data["end_stunde"] - $data["start_stunde"]) * 4) + (($data["end_minute"] - $data['start_minute'] ) / 15));
 
 				//Check, ob die Startzeit ueber den Sichtbaren Bereich hinauslaeuft, wenn ja wird row_span und der index entsprechend frisiert
@@ -259,18 +265,18 @@ while ($db->next_record())
 					$idx_corr_h = 0;
 					$idx_corr_m = 0;
 				}
-				
+
 				//Dummy-Timestamps erzeugen. Der 5.8.2001 (ein Sonntag) wird als Grundlage verwendet.
 				$start_time=mktime($data["start_stunde"], $data["start_minute"], 0, 8, (5+$data["day"]), 2001);
-				$end_time=mktime($data["end_stunde"], $data["end_minute"], 0, 8, (5+$data["day"]), 2001);			
+				$end_time=mktime($data["end_stunde"], $data["end_minute"], 0, 8, (5+$data["day"]), 2001);
 
 				$i++; //<pfusch>$i (fuer alle einzelnen Objekte eines Seminars) wird hier zur Kennzeichnung der einzelen Termine eines Seminars untereinander verwendet. Unten wird die letzte Stelle jeweils weggelassen. </pfusch>
-				
+
 				$my_sems[$db->f("Seminar_id").$i]=array("start_time_idx"=>$data["start_stunde"]+$idx_corr_h.(int)(($data["start_minute"]+$idx_corr_m) / 15).$data["day"], "start_time"=>$start_time, "end_time"=>$end_time, "name"=>$db->f("Name"), "nummer"=>$db->f("VeranstaltungsNummer"), "seminar_id"=>$db->f("Seminar_id").$i,  "ort"=>$tmp_room, "row_span"=>$tmp_row_span, "dozenten"=>$dozenten, "personal_sem"=>FALSE,'desc'=>$data['desc']);
 			}
 		}
 	}
-	
+
 //Daten aus der Sessionvariable hinzufuegen
 if ((is_array($my_personal_sems)) && (!$inst_id))
 	foreach ($my_personal_sems as $mps)
@@ -279,9 +285,9 @@ if ((is_array($my_personal_sems)) && (!$inst_id))
 			if (date("G", $mps["ende_time"]) > $global_end_time) {
 				$tmp_end_time = mktime($global_end_time+1, 00, 00, date ("n", $mps["start_time"]), date ("j", $mps["start_time"]), date ("Y", $mps["start_time"]));
 				$tmp_row_span = (int)(($tmp_end_time - $mps["start_time"]) /15/60);
-			} else 
+			} else
 				$tmp_row_span = (int)(($mps["ende_time"] - $mps["start_time"])/15/60);
-		
+
 			//und der andere
 			if (date("G", $mps["start_time"]) < $global_start_time) {
 				$tmp_start_time = mktime($global_start_time, 00, 00, date ("n", $mps["start_time"]), date ("j", $mps["start_time"]), date ("Y", $mps["start_time"]));
@@ -296,25 +302,25 @@ if ((is_array($my_personal_sems)) && (!$inst_id))
 			//aus Sonntag=0 wird Sonntag=7, damit laesst's sich besser arbeiten *g
 			$tmp_day=date("w", $mps["start_time"]);
 			if ($tmp_day==0) $tmp_day=7;
-		
+
 			$my_sems[$mps["seminar_id"]]=array("start_time_idx"=>date("G", $mps["start_time"])+$idx_corr_h.(int)((date("i", $mps["start_time"])+$idx_corr_m) / 15).$tmp_day, "start_time"=>$mps["start_time"], "end_time"=>$mps["ende_time"], "name"=>$mps["beschreibung"], "seminar_id"=>$mps["seminar_id"],  "ort"=>$mps["room"], "row_span"=>$tmp_row_span, "dozenten"=>$mps["doz"], "personal_sem"=>TRUE);
 		}
 
 //Array der Zellenbelegungen erzeugen
-if (is_array($my_sems)) 
-foreach ($my_sems as $ms) 
+if (is_array($my_sems))
+foreach ($my_sems as $ms)
 	{
 	$m=1;
 	$idx_tmp=$ms["start_time_idx"];
 	if ($ms["row_span"]>0)
-		for ($m; $m<=$ms["row_span"]; $m++) 
+		for ($m; $m<=$ms["row_span"]; $m++)
 			{
 			if ($m==1)  $start_cell=TRUE; else $start_cell=FALSE;
 			$cell_sem[$idx_tmp][$ms["seminar_id"]] = $start_cell;
 			if (($idx_tmp % 100) -date("w",$ms["start_time"]) == 30)
 				$idx_tmp=$idx_tmp+70;
 			else
-				$idx_tmp=$idx_tmp+10;	
+				$idx_tmp=$idx_tmp+10;
 			}
 	else
 		$cell_sem[$idx_tmp][$ms["seminar_id"]] = TRUE;
@@ -331,7 +337,7 @@ for ($i; $i<7; $i++)
 		for ($l; $l<4; $l++)
 			{
 			$idx=($n*100)+($l*10)+$i;
-			if ($cell_sem[$idx]) 
+			if ($cell_sem[$idx])
 				if (sizeof($cell_sem[$idx])>0)
 					{
 					$rows=0;
@@ -340,7 +346,7 @@ for ($i; $i<7; $i++)
 						if ($cs[1])
 							if ($my_sems[$cs[0]]["row_span"]>$rows) $rows=$my_sems[$cs[0]]["row_span"];
 					reset ($cell_sem[$idx]);
-					if ($rows>1) 
+					if ($rows>1)
 						{
 						$s=2;
 						for ($s; $s<=$rows; $s++)
@@ -378,9 +384,9 @@ if (!$print_view)
 if ($perm->have_perm("admin") && $view != "inst") {
 ?>
 <tr>
-	<td class="topic" width = "99%"colspan=<? echo $glb_colspan?>><img src="pictures/meinesem.gif" border="0" align="texttop"><b>&nbsp;<? if ($view=="user")  echo _("Mein Stundenplan"); else echo _("Veranstaltungs-Timetable") ?></b>
+	<td class="topic" width = "99%"colspan=<? echo $glb_colspan?>><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/meinesem.gif" border="0" align="texttop"><b>&nbsp;<? if ($view=="user")  echo _("Mein Stundenplan"); else echo _("Veranstaltungs-Timetable") ?></b>
 	</td>
-	<td nowrap class="topic" align="right"><?=_("Ansicht anpassen")?>&nbsp; <a href="<? echo $PHP_SELF ?>?change_view=TRUE"><img src="pictures/pfeillink.gif" border=0></a>
+	<td nowrap class="topic" align="right"><?=_("Ansicht anpassen")?>&nbsp; <a href="<? echo $PHP_SELF ?>?change_view=TRUE"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/pfeillink.gif" border=0></a>
 	</td>
 </tr>
 <?
@@ -389,7 +395,7 @@ else
 	{
 ?>
 <tr>
-	<td class="topic" width = "99%"colspan=<? echo $glb_colspan+1?>><img src="pictures/meinesem.gif" border="0" align="texttop"><b>&nbsp;<? if ($view=="user")  echo _("Mein Stundenplan"); else echo _("Veranstaltungs-Timetable") ?></b>
+	<td class="topic" width = "99%"colspan=<? echo $glb_colspan+1?>><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/meinesem.gif" border="0" align="texttop"><b>&nbsp;<? if ($view=="user")  echo _("Mein Stundenplan"); else echo _("Veranstaltungs-Timetable") ?></b>
 	</td>
 </tr>
 <?
@@ -402,7 +408,7 @@ if (!$print_view) {
 		<form action="<? echo $PHP_SELF ?>" method="POST">
 		<blockquote>
 		<?
-		if ($view=="user")  { 
+		if ($view=="user")  {
 			echo _("Der Stundenplan zeigt Ihnen alle regelm&auml;&szlig;igen Veranstaltungen eines Semesters. Um den Stundenplan auszudrucken, nutzen Sie bitte die Druckfunktion ihres Browsers.") . "<br /><br />";
 			echo "<font size=-1>";
 			printf(_("Wenn Sie weitere Veranstaltungen aus Stud.IP in ihren Stundenplan aufnehmen m&ouml;chten, nutzen Sie bitte die %sVeranstaltungssuche%s."), "<a href = \"sem_portal.php\">", "</a>");
@@ -412,20 +418,20 @@ if (!$print_view) {
 			echo "</font>";
 		} elseif ($view == "inst") { ?>
 		<?=_("Im Veranstaltungs-Timetable sehen Sie alle Veranstaltungen eines Semesters an der gew&auml;hlten Einrichtung.")?><br />
-		<br /><font size=-1><?=_("Angezeigtes Semester:")?>&nbsp; 
+		<br /><font size=-1><?=_("Angezeigtes Semester:")?>&nbsp;
 			<select name="instview_sem" style="vertical-align:middle">
 			<?
 				foreach ($all_semester as $key=>$val) {
 					printf ("<option %s value=\"%s\">%s</option>\n", ($tmp_sem_nr == $key) ? "selected" : "", $key, $val["name"]);
 				}
 			?>
-			</select>&nbsp; 
-			<input type="IMAGE" value="change_instview_sem" <? echo makeButton("uebernehmen", "src") ?> border=0 align="absmiddle" value="<?=_("&uuml;bernehmen")?>" />&nbsp; 
+			</select>&nbsp;
+			<input type="IMAGE" value="change_instview_sem" <? echo makeButton("uebernehmen", "src") ?> border=0 align="absmiddle" value="<?=_("&uuml;bernehmen")?>" />&nbsp;
 			<input type="HIDDEN" name="inst_id" value="<? echo $inst_id ?>" /><br>
 		<? } else { ?>
 		<?=_("Im Veranstaltungs-Timetable sehen Sie alle Veranstaltungen eines Semesters an der gew&auml;hlten Einrichtung.")." <br /> "._("Sie k&ouml;nnen zus&auml;tzlich eigene Eintr&auml;ge anlegen.")?><br />
 		<br />
-			<? 
+			<?
 		}
 		if ($view !="user")
 			printf ("<br><font size=-1><a target=\"_new\" href=\"%s?print_view=TRUE%s\">"._("Druckansicht dieser Seite (wird in einem neuen Browserfenster ge&ouml;ffnet).")."</a></font>", $PHP_SELF, ($inst_id) ? "&inst_id=$inst_id&instview_sem=$instview_sem" : "");
@@ -433,12 +439,12 @@ if (!$print_view) {
 		<br>
 		</blockquote>
 		</form>
-		
+
 	</td>
-</tr>	
+</tr>
 <tr>
 <td class="steel1" colspan=<? echo $glb_colspan+1?>>
-<? } 
+<? }
 
 ob_end_flush(); //Clear buffer for ouput the headers
 ob_start();
@@ -482,9 +488,9 @@ for ($i; $i<$global_end_time+1; $i++)
 	$k=0;
 	for ($k; $k<4; $k++)
 		{
-		if ($k==0) 
+		if ($k==0)
 			{
-			echo "<tr><td align=\"center\" class=\"rahmen_steelgraulight\" rowspan=4>"; 
+			echo "<tr><td align=\"center\" class=\"rahmen_steelgraulight\" rowspan=4>";
 			if ($i<10) echo "0";
 			echo $i, ":00 "._("Uhr")."</td>";
 			}
@@ -521,13 +527,13 @@ for ($i; $i<$global_end_time+1; $i++)
 					} else
 						echo "</td></tr><tr><td class=\"topic\">";
 					if (($print_view) && ($r!=0))
-						echo "<hr src=\"pictures/border.jpg\" width=\"100%\">";
+						echo "<hr src=\"".$GLOBALS['ASSETS_URL']."images/border.jpg\" width=\"100%\">";
 					$r++;
 					echo "<font size=-1 ";
 					if (!$print_view)
 						echo "color=\"#FFFFFF\"";
 					echo ">", date ("H:i",  $my_sems[$cc["seminar_id"]]["start_time"]);
-					if  ($my_sems[$cc["seminar_id"]]["start_time"] <> $my_sems[$cc["seminar_id"]]["end_time"]) 
+					if  ($my_sems[$cc["seminar_id"]]["start_time"] <> $my_sems[$cc["seminar_id"]]["end_time"])
 						echo " - ",  date ("H:i",  $my_sems[$cc["seminar_id"]]["end_time"]);
 					if ($my_sems[$cc["seminar_id"]]['desc']) echo ' ('.htmlReady($my_sems[$cc["seminar_id"]]['desc']).')';
 					if ($my_sems[$cc["seminar_id"]]["ort"]) echo ",  ", htmlReady($my_sems[$cc["seminar_id"]]["ort"]);
@@ -535,7 +541,7 @@ for ($i; $i<$global_end_time+1; $i++)
 					if ((!$my_sems[$cc["seminar_id"]]["personal_sem"]) && (!$print_view))
 						{
 						if ($view=="inst")
-							echo  "<a href=\"details.php?sem_id=";						
+							echo  "<a href=\"details.php?sem_id=";
 						else
 							echo  "<a href=\"seminar_main.php?auswahl=";
 						echo substr($my_sems[$cc["seminar_id"]]["seminar_id"], 0, 32), "\"><font size=-1>";
@@ -544,12 +550,12 @@ for ($i; $i<$global_end_time+1; $i++)
 						}
 						echo htmlReady(substr($my_sems[$cc["seminar_id"]]["name"], 0,50));
 						if (strlen($my_sems[$cc["seminar_id"]]["name"])>50)
-							echo "..."; 
+							echo "...";
 						echo"</font></a>";
 						}
 					else
 						{
-						echo "<font size=-1>";					
+						echo "<font size=-1>";
 						if ($my_sems[$cc["seminar_id"]]["nummer"]) {
 							echo htmlReady($my_sems[$cc["seminar_id"]]["nummer"]) . "&nbsp;";
 						}
@@ -558,14 +564,14 @@ for ($i; $i<$global_end_time+1; $i++)
 							echo "...";
 						echo "</font>";
 						}
-					if ($my_sems[$cc["seminar_id"]]["dozenten"]) 
+					if ($my_sems[$cc["seminar_id"]]["dozenten"])
 						echo "<br><div align=\"right\"><font size=-1>", $my_sems[$cc["seminar_id"]]["dozenten"], "</font></div>";
 					if (($my_sems[$cc["seminar_id"]]["personal_sem"]) && (!$print_view))
-						echo "<div align=\"right\"><a href=\"",$PHP_SELF, "?cmd=delete&d_sem_id=",$my_sems[$cc["seminar_id"]]["seminar_id"], "\"><img border=0 src=\"./pictures/trash.gif\" ".tooltip(_("Diesen Termin löschen")).">&nbsp;</a></div>";
+						echo "<div align=\"right\"><a href=\"",$PHP_SELF, "?cmd=delete&d_sem_id=",$my_sems[$cc["seminar_id"]]["seminar_id"], "\"><img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" ".tooltip(_("Diesen Termin löschen")).">&nbsp;</a></div>";
 					}
 				echo "</td></tr></table></td>";
 				}
-			if (!$cell_sem[$idx])  echo "class=\"steel1\"></td>"; 
+			if (!$cell_sem[$idx])  echo "class=\"steel1\"></td>";
 			}
 			}
 			echo "</tr>\n";
@@ -573,7 +579,7 @@ for ($i; $i<$global_end_time+1; $i++)
 	}
 
 	if ($print_view) {
-		printf  ("<tr><td colspan=%s><i><font size=-1>&nbsp; "._("Erstellt am %s um %s  Uhr.")."</font></i></td><td align=\"right\"><font size=-2><img src=\"pictures/logo2b.gif\"><br />&copy; %s v.%s&nbsp; &nbsp; </font></td></tr></tr>", $glb_colspan, date("d.m.y", time()), date("G:i", time()), date("Y", time()), $SOFTWARE_VERSION);
+		printf  ("<tr><td colspan=%s><i><font size=-1>&nbsp; "._("Erstellt am %s um %s  Uhr.")."</font></i></td><td align=\"right\"><font size=-2><img src=\"".$GLOBALS['ASSETS_URL']."images/logo2b.gif\"><br />&copy; %s v.%s&nbsp; &nbsp; </font></td></tr></tr>", $glb_colspan, date("d.m.y", time()), date("G:i", time()), date("Y", time()), $SOFTWARE_VERSION);
 		}
 	else {
 		}
@@ -582,7 +588,7 @@ echo "</table></td></tr>";
 ?>
 <tr>
 	<td colspan=<? echo $glb_colspan+1?> class="blank">
-		&nbsp; 
+		&nbsp;
 	</td>
 </tr>
 <?
@@ -590,7 +596,7 @@ if ((!$print_view) && (!$inst_id)) {
 ?>
 <tr>
 	<td colspan=<? echo $glb_colspan+1?> class="blank">
-		&nbsp; 
+		&nbsp;
 	</td>
 </tr>
 <tr>
@@ -606,10 +612,10 @@ if ((!$print_view) && (!$inst_id)) {
 				<option value="4"><?=_("Donnerstag")?></option>
 				<option value="5"><?=_("Freitag")?></option>
 				<option value="6"><?=_("Samstag")?></option>
-				<option value="7"><?=_("Sonntag")?></option>				
-			</select>&nbsp; &nbsp; 
-			<?=_("Beginn:")?> 
-			<?	    
+				<option value="7"><?=_("Sonntag")?></option>
+			</select>&nbsp; &nbsp;
+			<?=_("Beginn:")?>
+			<?
 			echo"<select name=\"start_stunde\">";
 			for ($i=$global_start_time; $i<=$global_end_time; $i++)
 				{
@@ -626,7 +632,7 @@ if ((!$print_view) && (!$inst_id)) {
 				echo"</select> "._("Uhr")."&nbsp; &nbsp; ";
 				?>
 			<?=_("Ende:")?>
-			<?	    
+			<?
 			echo"<select name=\"ende_stunde\">";
 			for ($i=$global_start_time; $i<=$global_end_time; $i++)
 				{
@@ -644,24 +650,24 @@ if ((!$print_view) && (!$inst_id)) {
 				echo"</select> "._("Uhr");
 				echo "<br />&nbsp; "._("Beschreibung:");
 				?>
-				<input name="beschreibung" type="text" size=40 maxlength=255>&nbsp; &nbsp; 
+				<input name="beschreibung" type="text" size=40 maxlength=255>&nbsp; &nbsp;
 				<?=_("Raum:")?>
-				<input name="room" type="text" size=20 maxlength=255>&nbsp; &nbsp; 
+				<input name="room" type="text" size=20 maxlength=255>&nbsp; &nbsp;
 				<?=_("DozentIn:")?>
-				<input name="dozent" type="text" size=20 maxlength=255><br />&nbsp; 
+				<input name="dozent" type="text" size=20 maxlength=255><br />&nbsp;
 				<input name="send" type="IMAGE" <?=makeButton("eintragen", "src")?> value="<?=("Eintragen")?>">
 		</form>
 	</td>
 </tr>
 <tr>
 	<td colspan=<? echo $glb_colspan+1?> class="blank">
-		&nbsp; 
+		&nbsp;
 	</td>
 </tr>
 
 <?
 }
-ob_end_flush(); //end outputbuffering 
+ob_end_flush(); //end outputbuffering
 // Save data back to database.
 page_close();
 if (!$print_view) {

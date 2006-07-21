@@ -44,7 +44,9 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 		// $this->init();
 		$plugins = $pluginengine->getAllInstalledPlugins();
 		$installableplugins = PluginEngine::getInstallablePlugins();
-		$this->pluginvis->showPluginAdministrationList($plugins,$msg,$installableplugins);
+		
+		$roleplugin = $pluginengine->getPlugin($pluginengine->getPluginid("de_studip_core_RoleManagementPlugin"));		
+		$this->pluginvis->showPluginAdministrationList($plugins,$msg,$installableplugins,$roleplugin);
 	}
 	
 	function installPlugin(){
@@ -138,6 +140,7 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
     		  	 	}
     		   	   $adminpluginengine->savePlugin($plugin);
     		    }
+    		    /*
     		    else if ($type == "Standard") {
     			  // keine spezielle Behandlung nötig
     			  $pluginengine->savePlugin($plugin);
@@ -145,10 +148,14 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
     		    else if ($type == "System"){
     			  // keine spezielle Behandlung nötig
     			  $pluginengine->savePlugin($plugin);
-    		    }		  	 	
+    		    }	
+    		    else if ($type == "Homepage"){
+    			  // keine spezielle Behandlung nötig
+    			  $pluginengine->savePlugin($plugin);
+    		    }*/	  	 	
     			else {
-    				 // new Types 
-    				 echo ("unknown plugin type");
+    			  // keine spezielle Behandlung nötig
+    			  $pluginengine->savePlugin($plugin); 
     			}
     		}
     		 

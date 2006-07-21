@@ -1,7 +1,7 @@
 <?
 /**
 * Chat Functions
-* 
+*
 *
 * @author		André Noack <noack@data-quest.de>
 * @version		$Id$
@@ -13,7 +13,7 @@
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // chat_func_inc.php
-// 
+//
 // Copyright (c) 2003 André Noack <noack@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -39,7 +39,7 @@ require_once $ABSOLUTE_PATH_STUDIP."contact.inc.php";
 
 function chat_kill_chat($chatid){
 	if ($GLOBALS['CHAT_ENABLE']){
-		if (chat_get_entry_level($chatid) == "admin"){ 
+		if (chat_get_entry_level($chatid) == "admin"){
 			$chatServer =& ChatServer::GetInstance($GLOBALS['CHAT_SERVER_NAME']);
 			$chatServer->caching = false;
 			$chatServer->removeChat($chatid);
@@ -51,12 +51,12 @@ function chat_kill_chat($chatid){
 function chat_get_chat_icon($chatter,$chatinv,$is_active,$as_icon = false){
 	if ($GLOBALS['CHAT_ENABLE']){
 			$pic_prefix = ($as_icon) ? "icon-" : "";
-			$pic_path = $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'] . "pictures/";
+			$pic_path = $GLOBALS['ASSETS_URL']."images/";
 			$image = "<img border=\"0\" src=\"" . $pic_path . $pic_prefix;
 			if (!$chatter){
 				$image .= "chat1.gif\"" . tooltip(_("Dieser Chatraum ist leer"));
 			} elseif ($chatinv){
-				$image .= "chateinladung.gif\"" . tooltip(_("Sie haben eine gültige Einladung für diesen Chatraum") 
+				$image .= "chateinladung.gif\"" . tooltip(_("Sie haben eine gültige Einladung für diesen Chatraum")
 					. " " . (($chatter == 1) ? _("Es ist eine Person in diesem Chatraum.") : sprintf(_("Es sind %s Personen in diesem Chatraum"),$chatter)));
 			} elseif ($chatter == 1 && $is_active) {
 				$image .= "chat3.gif\"" . tooltip(_("Sie sind alleine in diesem Chatraum"));
@@ -83,7 +83,7 @@ function chat_get_entry_level($chatid){
 				$chat_entry_level = "user";
 			}
 			break;
-			
+
 			case "sem" :
 			if ($perm->have_studip_perm("tutor",$chatid)){
 				$chat_entry_level = "admin";
@@ -91,7 +91,7 @@ function chat_get_entry_level($chatid){
 				$chat_entry_level = "user";
 			}
 			break;
-			
+
 			case "inst" :
 			case "fak" :
 			if ($perm->have_studip_perm("admin",$chatid)){
@@ -100,7 +100,7 @@ function chat_get_entry_level($chatid){
 				$chat_entry_level = "user";
 			}
 			break;
-			
+
 			default:
 			if ($chatid == "studip"){
 				$chat_entry_level = "user";
@@ -154,7 +154,7 @@ function chat_show_info($chatid){
 }
 
 function chat_get_content($chatid,$chatter,$chatinv,$password,$is_active,$chat_user){
-	$pic_path = $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'] . "pictures/";
+	$pic_path = $GLOBALS['ASSETS_URL']."images/";
 	$ret = "\n<tr><td class=\"steel1\" colspan=\"2\" width=\"100%\">&nbsp;</td></tr>";
 	$ret .= "\n<tr><td class=\"steel1\" width=\"50%\" valign=\"center\"><blockquote><font size=\"-1\">";
 	if (($entry_level = chat_get_entry_level($chatid)) || $chatinv){
@@ -215,13 +215,13 @@ function chat_get_online_icon($user_id = false, $username = false, $pref_chat_id
 		if (!$user_id && !$username){
 			return false;
 		}
-		$pic_path = $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'] . "pictures/";
+		$pic_path = $GLOBALS['ASSETS_URL']."images/";
 		$stud_path = $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'];
 		$chatServer =& ChatServer::GetInstance($GLOBALS['CHAT_SERVER_NAME']);
 		$admin_chats = $chatServer->getAdminChats($GLOBALS['auth']->auth['uid']);
 		if ($tmp_num_chats = $chatServer->chatUser[$user_id]) {
 			$ret = "<a href=\"{$stud_path}chat_online.php?search_user={$user_id}\"><img src=\"{$pic_path}chat2.gif\""
-			.tooltip(($tmp_num_chats == 1) ? _("Dieser User befindet sich in einem Chatraum.") : sprintf(_("Dieser User befindet sich in %s Chaträumen"),$tmp_num_chats)) 
+			.tooltip(($tmp_num_chats == 1) ? _("Dieser User befindet sich in einem Chatraum.") : sprintf(_("Dieser User befindet sich in %s Chaträumen"),$tmp_num_chats))
 			." border=\"0\"></a>";
 		} elseif (is_array($admin_chats)) {
 			$ret = "<a href=\"{$stud_path}sms_send.php?sms_source_page=$i_page&cmd=write_chatinv&rec_uname=$username";

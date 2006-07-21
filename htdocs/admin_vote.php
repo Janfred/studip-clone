@@ -35,6 +35,9 @@ ob_start(); // start output buffering
 page_open (array ("sess" => "Seminar_Session", "auth" => "Seminar_Auth",
 		  "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check ("autor");
+
+$HELP_KEYWORD="Basis.Votings";
+
 include_once($ABSOLUTE_PATH_STUDIP . "seminar_open.php");
 include_once($ABSOLUTE_PATH_STUDIP . "html_head.inc.php");
 include_once($ABSOLUTE_PATH_STUDIP . "header.php");

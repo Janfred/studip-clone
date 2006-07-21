@@ -1,7 +1,7 @@
 <?
 /**
 * Export xml-functions.
-* 
+*
 * In this file there are several functions to generate xml-tags.
 *
 * @author		Arne Schroeder <schroeder@data.quest.de>
@@ -15,7 +15,7 @@
 // This file is part of Stud.IP
 // export_xml_func.inc.php
 //
-// Copyright (c) 2002 Arne Schroeder <schroeder@data-quest.de> 
+// Copyright (c) 2002 Arne Schroeder <schroeder@data-quest.de>
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -37,10 +37,10 @@ require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/SemesterData.class.php");
 /**
 * create xml_header
 *
-* This function creates a xml-header for output. 
+* This function creates a xml-header for output.
 * Its contents are Name of University, Stud.IP-Version, Range of Export (e.g. "root"), and temporal range.
 *
-* @access	public        
+* @access	public
 * @return		string	xml-header
 */
 function xml_header()
@@ -51,11 +51,11 @@ global $UNI_NAME_CLEAN, $SEM_ID, $SOFTWARE_VERSION, $ABSOLUTE_PATH_STUDIP, $ex_t
 	$xml_tag_string = "<" . "?xml version=\"1.0\"?>\n";
 	//encoding=\"ISO-8859-1\" encoding=\"UTF-8\";
 //	$xml_tag_string .= "<!DOCTYPE StudIP SYSTEM \"http://goettingen.studip.de/studip.dtd\">\n";
-	$xml_tag_string .= "<studip version=\"" . htmlspecialchars ($SOFTWARE_VERSION) . "\" logo=\"". htmlspecialchars ($ABSOLUTE_PATH_STUDIP . "pictures/logo2b.gif") . "\"";
+	$xml_tag_string .= "<studip version=\"" . htmlspecialchars ($SOFTWARE_VERSION) . "\" logo=\"". htmlspecialchars ($GLOBALS['ASSETS_URL']."images/logo2b.gif") . "\"";
 	if ($range_id == "root") $xml_tag_string .= " range=\"" . _("Alle Einrichtungen") . "\"";
 	elseif ($range_name != "") $xml_tag_string .= " range=\"" . htmlspecialchars ($range_name) . "\"";
 	if ($UNI_NAME_CLEAN != "") $xml_tag_string .= " uni=\"" . htmlspecialchars ($UNI_NAME_CLEAN) . "\"";
-	if ($ex_type !="veranstaltung") 
+	if ($ex_type !="veranstaltung")
 		$xml_tag_string .= " zeitraum=\"" . htmlspecialchars ($all_semester[$SEM_ID]["name"]) . "\"";
 	elseif ($all_semester[$ex_sem]["name"] != "") $xml_tag_string .= " zeitraum=\"" . htmlspecialchars ($all_semester[$ex_sem]["name"]) . "\"";
 	$xml_tag_string .= ">\n";
@@ -65,18 +65,18 @@ global $UNI_NAME_CLEAN, $SEM_ID, $SOFTWARE_VERSION, $ABSOLUTE_PATH_STUDIP, $ex_t
 /**
 * create opening xml-tag
 *
-* This function creates an open xml-tag. 
+* This function creates an open xml-tag.
 * The tag-name is defined by the given parameter $tag_name.
 * An optional parameter allows to set an attribute named "key".
 *
-* @access	public        
+* @access	public
 * @param		string	tag name
 * @param		string	value for optional attribute "key"
 * @return		string	xml open tag
 */
 function xml_open_tag($tag_name, $tag_key = "")
 {
-	if ($tag_key != "")  
+	if ($tag_key != "")
 		$xml_tag_string .= " key=\"" . htmlspecialchars ($tag_key ) ."\"" ;
 	$xml_tag_string = "<" . $tag_name . $xml_tag_string .  ">\n";
 	return $xml_tag_string;
@@ -85,10 +85,10 @@ function xml_open_tag($tag_name, $tag_key = "")
 /**
 * create closing xml-tag
 *
-* This function creates a closed xml-tag. 
+* This function creates a closed xml-tag.
 * The tag-name is defined by the given parameter $tag_name.
 *
-* @access	public        
+* @access	public
 * @param		string	tag name
 * @return		string	xml close tag
 */
@@ -101,18 +101,18 @@ function xml_close_tag($tag_name)
 /**
 * create xml-tag
 *
-* This function creates a xml-tag. 
+* This function creates a xml-tag.
 * The tag-name is defined by the given parameter $tag_name.
 * The given parameter tag_content is put between open tag and close tag.
 *
-* @access	public        
+* @access	public
 * @param		string	tag name
 * @param		string	content for xml-tag
 * @return		string	xml tag
 */
 function xml_tag($tag_name, $tag_content)
 {
-	$xml_tag_string = "<" . $tag_name . $xml_tag_string .  ">" 
+	$xml_tag_string = "<" . $tag_name . $xml_tag_string .  ">"
 		. htmlspecialchars ( $tag_content )
 		. "</" . $tag_name .  ">\n";
 	return $xml_tag_string;
@@ -121,10 +121,10 @@ function xml_tag($tag_name, $tag_content)
 /**
 * create xml-footer
 *
-* This function creates the footer for xml output, 
+* This function creates the footer for xml output,
 * which is a closing "studip"-tag.
 *
-* @access	public        
+* @access	public
 * @return		string	xml footer
 */
 function xml_footer()

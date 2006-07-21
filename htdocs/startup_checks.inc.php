@@ -1,9 +1,9 @@
 <?
 /**
 * startup_checks.php
-* 
+*
 * checks if all requirements to create Veranstaltungen are set up. If evreything is fine, no output will be generated.
-* 
+*
 *
 * @author		Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
 * @version		$Id$
@@ -54,7 +54,7 @@ if ($problems_found) {
 	<tr>
 		<td class="topic" colspan=2>&nbsp; <b>
 			Startup Checks
-		</td>		
+		</td>
 	</tr>
  	<tr>
 		<td class="blank" valign="top">
@@ -64,15 +64,15 @@ if ($problems_found) {
 			<?($problems_found > 1) ? print"<font size=\"-1\">"._("(Beachten Sie bitte die angegebene Reihenfolge!)")."</font><br />" : "" ?>
 			</blockqoute>
 		</td>
-		<td class="blank" align="right" valign="top"><img src="pictures/blank.gif" height="10" width="5" /><br />
-			<img src="pictures/warning.jpg" border="0"><img src="pictures/blank.gif" height="10" width="10" />
-		</td>		
+		<td class="blank" align="right" valign="top"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" height="10" width="5" /><br />
+			<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/warning.jpg" border="0"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" height="10" width="10" />
+		</td>
 	</tr>
 	<tr>
 	<td class="blank" colspan=2>
 		<table width="99%" border=0 cellpadding=2 cellspacing=0 align="center">
 		<tr <? $cssSw->switchClass() ?>>
-			<td class="<? echo $cssSw->getClass() ?>" align="center" colspan="4">		
+			<td class="<? echo $cssSw->getClass() ?>" align="center" colspan="4">
 				<a href="<?=$PHP_SELF?>"><?=makeButton("aktualisieren")?></a>
 			</td>
 		</tr>
@@ -88,7 +88,7 @@ if ($problems_found) {
 					&nbsp;
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>"  width="3%" align="left">
-					<img src="pictures/ausruf_small2.gif" alt="pictures/ausruf_small2.gif" width="22" height="20" border="0">
+					<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/ausruf_small2.gif" alt="<?= $GLOBALS['ASSETS_URL'] ?>images/ausruf_small2.gif" width="22" height="20" border="0">
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>"  width="2%" align="center" valign="top">
 					<font size="-1"><b><?=($i) ? $i."." : ""?></b></font>
@@ -103,11 +103,11 @@ if ($problems_found) {
 				</td>
 			</tr>
 			<? }
-			
+
 		}
 		?>
 		<tr>
-			<td class="blank" colspan=3>&nbsp; 
+			<td class="blank" colspan=3>&nbsp;
 			</td>
 		</tr>
 	</table>

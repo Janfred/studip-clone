@@ -1,9 +1,9 @@
 <?php
 /**
 * ShowSemSchedules.class.php
-* 
+*
 * view schedule/assigns for a ressource-object
-* 
+*
 *
 * @author		André Noack <noack@data-quest.de>, Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
 * @version		$Id$
@@ -43,10 +43,10 @@ ShowSchedules - schedule view
 /*****************************************************************************/
 
 class ShowSemSchedules extends ShowSchedules {
-	
+
 	var $semester = null;
 	var $only_course_time = true;
-	
+
 	//Konstruktor
 	function ShowSemSchedules ($resource_id, $semester_id = null, $timespan = 'sem_time') {
 		$sem =& new SemesterData();
@@ -66,7 +66,7 @@ class ShowSemSchedules extends ShowSchedules {
 		}
 		parent::ShowSchedules($resource_id);
 	}
-	
+
 	function navigator ($print_view = false) {
 		global $cssSw, $view_mode, $PHP_SELF;
 		$semester = SemesterData::GetSemesterArray();
@@ -126,30 +126,30 @@ class ShowSemSchedules extends ShowSchedules {
 	<?
 		}
 	}
-	
+
 	function showScheduleGraphical($print_view = false) {
 		global $RELATIVE_PATH_RESOURCES, $PHP_SELF, $cssSw, $view_mode, $resources_data, $ActualObjectPerms;
-	 	
+
 	 	$categories["na"] = 4;
 	 	$categories["sd"] = 4;
 	 	$categories["y"] = 0;
 	 	$categories["m"] = 0;
 	 	$categories["w"] = 0;
 	 	$categories["d"] = 0;
-	 	
+
 	 	//an assign for a date corresponding to a (seminar-)metadate
 	 	$categories["meta"] = 1;
-	 	
-	 	
+
+
 		 //select view to jump from the schedule
 		 if ($this->used_view == "openobject_schedule")
 		 	$view = "openobject_assign";
 		 else
 			$view = "edit_object_assign";
-		 
+
  		$start_time = $this->start_time;
 		$end_time = $this->end_time;
-		
+
  		if ($resources_data["schedule_time_range"] == -1) {
  			$start_hour = 0;
  			$end_hour = 12;
@@ -173,7 +173,7 @@ class ShowSemSchedules extends ShowSchedules {
 				$add_info = ($event['sem_doz_names'] ? '('.$event['sem_doz_names'].') ' : '');
 				$add_info .= ($event['repeat_interval'] == 2 ? '('._("zweiwöchentlich").')' : '');
 				$name = $event['name'];
-				$schedule->addEvent($name, $event['begin'], $event['end'], 
+				$schedule->addEvent($name, $event['begin'], $event['end'],
 							"$PHP_SELF?cancel_edit_assign=1&quick_view=$view&quick_view_mode=".$view_mode."&edit_assign_object=".$event['assign_id'], $add_info, $categories[$repeat_mode]);
 			}
 			$num_rep_events = count($events);
@@ -188,7 +188,7 @@ class ShowSemSchedules extends ShowSchedules {
 			$assign_events = new AssignEventList ($a_start_time, $a_end_time, $this->resource_id, '', '', TRUE, 'single');
 			$num = 1;
 			while ($event = $assign_events->nextEvent()) {
-				$schedule->addEvent('EB'.$num++.':' . $event->getName(get_config('RESOURCES_SCHEDULE_EXPLAIN_USER_NAME')), $event->getBegin(), $event->getEnd(), 
+				$schedule->addEvent('EB'.$num++.':' . $event->getName(get_config('RESOURCES_SCHEDULE_EXPLAIN_USER_NAME')), $event->getBegin(), $event->getEnd(),
 						"$PHP_SELF?cancel_edit_assign=1&quick_view=$view&quick_view_mode=".$view_mode."&edit_assign_object=".$event->getAssignId(), FALSE, $categories[$event->repeat_mode]);
 			}
 			$num_single_events = $assign_events->numberOfEvents();
@@ -198,29 +198,29 @@ class ShowSemSchedules extends ShowSchedules {
 		<table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
 			<tr>
 				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">
-					<img src="pictures/blank.gif" height="35" border="0"/>					
+					<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" height="35" border="0"/>
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>"  width="10%" align="left">&nbsp;
-					<a href="<? echo $PHP_SELF ?>?quick_view=<?=$this->used_view?>&quick_view_mode=<?=$view_mode?>&previous_sem=1"><img src="pictures/calendar_previous.gif" <? echo tooltip (_("Vorheriges Semester anzeigen")) ?>border="0" /></a>
+					<a href="<? echo $PHP_SELF ?>?quick_view=<?=$this->used_view?>&quick_view_mode=<?=$view_mode?>&previous_sem=1"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/calendar_previous.gif" <? echo tooltip (_("Vorheriges Semester anzeigen")) ?>border="0" /></a>
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="76%" align="center">
-				<b>	
+				<b>
 				<? printf(_("Anzeige des Semesters: %s"), htmlReady($this->semester['name']));
-				
+
 				echo '<br>' . date ("d.m.Y", $start_time), " - ", date ("d.m.Y", $end_time);
 				?>
-				</b>	
+				</b>
 				<br />
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="10%" align="center">&nbsp;
-					<a href="<? echo $PHP_SELF ?>?quick_view=<?=$this->used_view?>&quick_view_mode=<?=$view_mode?>&next_sem=1"><img  valign="middle"  src="pictures/calendar_next.gif" <? echo tooltip (_("Nächstes Semester anzeigen")) ?>border="0" /></a>
+					<a href="<? echo $PHP_SELF ?>?quick_view=<?=$this->used_view?>&quick_view_mode=<?=$view_mode?>&next_sem=1"><img  valign="middle"  src="<?= $GLOBALS['ASSETS_URL'] ?>images/calendar_next.gif" <? echo tooltip (_("Nächstes Semester anzeigen")) ?>border="0" /></a>
 				</td>
 			</tr>
 			<tr>
 				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%" align="center" valign="bottom">&nbsp;
 					<?
 					if ((!$resources_data["schedule_time_range"]) || ($resources_data["schedule_time_range"] == 1))
-						printf ("<a href=\"%s?quick_view=%s&quick_view_mode=%s&time_range=%s\"><img src=\"pictures/calendar_up.gif\" %sborder=\"0\" /></a>", $PHP_SELF, $this->used_view, $view_mode, ($resources_data["schedule_time_range"]) ? "FALSE" : -1, tooltip (_("Frühere Belegungen anzeigen")));
+						printf ("<a href=\"%s?quick_view=%s&quick_view_mode=%s&time_range=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/calendar_up.gif\" %sborder=\"0\" /></a>", $PHP_SELF, $this->used_view, $view_mode, ($resources_data["schedule_time_range"]) ? "FALSE" : -1, tooltip (_("Frühere Belegungen anzeigen")));
 					?>
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="76%" colspan="2">
@@ -241,7 +241,7 @@ class ShowSemSchedules extends ShowSchedules {
 					printf ("<option %s style=\"font-size:10px;\" value=\"single\">"._("nur Einzeltermine")."</option>", ($resources_data["show_repeat_mode"] == "single") ? "selected" : "");
 					printf ("<option %s style=\"font-size:10px;\" value=\"repeated\">"._("nur Wiederholungstermine")."</option>", ($resources_data["show_repeat_mode"] == "repeated") ? "selected" : "");
 					print "</select>";
-					print "&nbsp;<input type=\"IMAGE\" name=\"send_schedule_repeat_mode\" src=\"pictures/haken_transparent.gif\" border=\"0\" ".tooltip(_("Ansicht umschalten"))." />";
+					print "&nbsp;<input type=\"IMAGE\" name=\"send_schedule_repeat_mode\" src=\"".$GLOBALS['ASSETS_URL']."images/haken_transparent.gif\" border=\"0\" ".tooltip(_("Ansicht umschalten"))." />";
 					?>
 				</td>
 			</tr>
@@ -249,7 +249,7 @@ class ShowSemSchedules extends ShowSchedules {
 				<td class="<? echo $cssSw->getClass() ?>" width="4%">&nbsp;
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="96%" colspan="3">
-					<?					
+					<?
 					$schedule->showSchedule("html");
 					?>
 				</td>
@@ -258,7 +258,7 @@ class ShowSemSchedules extends ShowSchedules {
 				<td class="<? echo $cssSw->getClass() ?>" width="4%" align="center" valign="bottom">&nbsp;
 					<?
 					if ((!$resources_data["schedule_time_range"]) || ($resources_data["schedule_time_range"] == -1))
-						printf ("<a href=\"%s?quick_view=%s&quick_view_mode=%s&time_range=%s\"><img src=\"pictures/calendar_down.gif\" %sborder=\"0\" /></a>", $PHP_SELF, $this->used_view, $view_mode, ($resources_data["schedule_time_range"]) ? "FALSE" : 1, tooltip (_("Spätere Belegungen anzeigen")));
+						printf ("<a href=\"%s?quick_view=%s&quick_view_mode=%s&time_range=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/calendar_down.gif\" %sborder=\"0\" /></a>", $PHP_SELF, $this->used_view, $view_mode, ($resources_data["schedule_time_range"]) ? "FALSE" : 1, tooltip (_("Spätere Belegungen anzeigen")));
 					?>
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="20%" nowrap colspan="3">
@@ -305,7 +305,7 @@ class ShowSemSchedules extends ShowSchedules {
 			</tr>
 			<tr>
 				<td>
-				<?					
+				<?
 				$schedule->showSchedule("html", true);
 				?>
 				</td>
@@ -334,7 +334,7 @@ class ShowSemSchedules extends ShowSchedules {
 			<?
 		}
 	}
-	
+
 	function getNextMonday($start_time = null){
 		$start_time = ($start_time ? $start_time : time());
 		$this_monday = date("j", $start_time)  - (date("w", $start_time) - 1);
@@ -343,6 +343,6 @@ class ShowSemSchedules extends ShowSchedules {
 		}
 		return mktime(2, 0, 1, date("n", $start_time), $this_monday ,  date("Y", $start_time));
 	}
-	
+
 }
 ?>

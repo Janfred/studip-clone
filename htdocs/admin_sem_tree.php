@@ -2,9 +2,9 @@
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // admin_sem_tree.php
-// 
-// 
-// Copyright (c) 2003 André Noack <noack@data-quest.de> 
+//
+//
+// Copyright (c) 2003 André Noack <noack@data-quest.de>
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -106,14 +106,14 @@ if ($the_tree->mode == "MoveItem" || $the_tree->mode == "CopyItem"){
 		$text = _("Der Kopiermodus ist aktiviert. Bitte w&auml;hlen Sie ein Einfügesymbol %s aus, um das Element <b>%s</b> an diese Stelle zu kopieren.%s");
 	}
 	$_msg .= "info§" . sprintf($text ,
-								"<img src=\"pictures/move.gif\" border=\"0\" " .tooltip(_("Einfügesymbol")) . ">",
+								"<img src=\"".$GLOBALS['ASSETS_URL']."images/move.gif\" border=\"0\" " .tooltip(_("Einfügesymbol")) . ">",
 								htmlReady($the_tree->tree->tree_data[$the_tree->move_item_id]['name']),
 								"<div align=\"right\"><a href=\"" . $the_tree->getSelf("cmd=Cancel&item_id=$the_tree->move_item_id") . "\">"
 								. "<img " .makeButton("abbrechen","src") . tooltip(_("Verschieben / Kopieren abbrechen"))
 								. " border=\"0\" align=\"top\"></a></div>");
 }
-		
-	
+
+
 ?>
 <body>
 <table width="100%" border="0" cellpadding="2" cellspacing="0">
@@ -211,7 +211,7 @@ $the_tree->showSemTree();
 	if (is_array($_open_items) && count($_open_items) && !(count($_open_items) == 1 && $_open_items['root'])){
 		echo "\n<option  value=\"insert_all\">" . _("In alle ge&ouml;ffneten Bereiche eintragen") . "</option>";
 		foreach ($_open_items as $item_id => $value){
-			echo "\n<option value=\"insert_{$item_id}\">" 
+			echo "\n<option value=\"insert_{$item_id}\">"
 				. sprintf(_("In \"%s\" eintragen"),htmlReady(my_substr($the_tree->tree->tree_data[$item_id]['name'],0,floor($cols * .8)))) . "</option>";
 		}
 	}

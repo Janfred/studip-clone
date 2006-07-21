@@ -27,7 +27,7 @@ $sem_browse_switch_headers=FALSE;
 
 //includes
 require_once "$ABSOLUTE_PATH_STUDIP/config.inc.php";
-require_once "$ABSOLUTE_PATH_STUDIP/config_tools_semester.inc.php"; 
+require_once "$ABSOLUTE_PATH_STUDIP/config_tools_semester.inc.php";
 require_once "$ABSOLUTE_PATH_STUDIP/dates.inc.php";
 require_once "$ABSOLUTE_PATH_STUDIP/visual.inc.php";
 require_once "$ABSOLUTE_PATH_STUDIP/functions.php";
@@ -92,18 +92,18 @@ if ($search_obj->new_search_button_clicked){
 	unset($level);
 	$reset_all = true;
 }
-	
+
 if ($reset_all){
-	$tmp_cmd = $sem_browse_data["cmd"];	
+	$tmp_cmd = $sem_browse_data["cmd"];
 	$sem_browse_data = array();
-	$sem_browse_data["cmd"] = $tmp_cmd;	
+	$sem_browse_data["cmd"] = $tmp_cmd;
 	$sem_browse_data["default_sem"] = get_sem_num_sem_browse();
 	$_marked_sem = array();
 }
 
 if($sem_browse_data["default_sem"] != 'all'){
 	$default_sems[0] = $sem_browse_data["default_sem"];
-} 
+}
 if ($sem_browse_data['cmd'] != 'xts'){
 	unset($default_sems);
 }
@@ -182,14 +182,14 @@ if ($_REQUEST['cmd'] == "show_class"){
 	$sem_ids = $snap->getRows("Seminar_id");
 	if (is_array($sem_ids)){
 		$_marked_sem = array_flip($sem_ids);
-	} 
+	}
 	$sem_browse_data['sset'] = true;
 	$sem_browse_data['cmd'] = "qs";
 }
 
 //We want to show the search forms only in non-browsing mode
 if ((!$sem_browse_data["extern"]) ) {
-	
+
 	//Quicksort Formular... fuer die eiligen oder die DAUs....
 	if (($sem_browse_data["cmd"]=="qs") || ($sem_browse_data["cmd"]=="") || (!isset($sem_browse_data["cmd"]))) {
 		$search_obj->search_fields['qs_choose']['content'] = array('title' => _("Titel"), 'lecturer' => _("DozentIn"), 'comment' => _("Kommentar"));
@@ -200,7 +200,7 @@ if ((!$sem_browse_data["extern"]) ) {
 		echo _("Schnellsuche:") . "&nbsp;";
 		echo $search_obj->getSearchField("qs_choose",array('style' => 'vertical-align:middle;font-size:9pt;'));
 		if ($sem_browse_data['level'] == "vv"){
-			$search_obj->sem_tree =& $sem_tree->tree; 
+			$search_obj->sem_tree =& $sem_tree->tree;
 			if ($sem_tree->start_item_id != 'root'){
 				$search_obj->search_scopes[] = $sem_tree->start_item_id;
 			}
@@ -208,7 +208,7 @@ if ((!$sem_browse_data["extern"]) ) {
 			echo "\n<input type=\"hidden\" name=\"level\" value=\"vv\">";
 		}
 		if ($sem_browse_data['level'] == "ev"){
-			$search_obj->range_tree =& $range_tree->tree; 
+			$search_obj->range_tree =& $range_tree->tree;
 			if ($range_tree->start_item_id != 'root'){
 				$search_obj->search_ranges[] = $range_tree->start_item_id;
 			}
@@ -216,18 +216,18 @@ if ((!$sem_browse_data["extern"]) ) {
 			echo "\n<input type=\"hidden\" name=\"level\" value=\"ev\">";
 		}
 		echo "&nbsp;";
-		
+
 		echo $search_obj->getSearchField("quick_search",array( 'style' => 'vertical-align:middle;font-size:9pt;','size' => 20));
 		echo $search_obj->getSearchButton(array('style' => 'vertical-align:middle'));
 		//echo $search_obj->getNewSearchButton(array('style' => 'vertical-align:middle'), _("Suchergebnis löschen und neue Suche starten"));
 		//echo "&nbsp;<a href=\"$PHP_SELF?cmd=xts";
 		//echo "\"><img align=\"middle\" " . makeButton("erweitertesuche","src") . tooltip(_("Erweitertes Suchformular aufrufen")) ." border=\"0\"></a>";
-		
+
 		echo "</td></tr>";
 		echo $search_obj->getFormEnd();
 		echo "</table>\n";
 	}
-	
+
 	//Extended Sortformular, fuer Leute mit mehr GRiPS...
 	if (($sem_browse_data["cmd"]=="xts"))
 	{
@@ -278,7 +278,7 @@ if ((!$sem_browse_data["extern"]) ) {
 		echo $search_obj->getFormEnd();
 		echo "</table>\n";
 	}
-	
+
 	//header to reset (start a new) search
 }
 /*if (!$sem_browse_data["extern"]) {
@@ -318,7 +318,7 @@ switch ($sem_browse_data["group_by"]) {
 //calculate colspans
 $rows = ($sem_browse_data["extend"] == "yes") ? 8 : 5;
 $rightspan = ($sem_browse_data["extend"] == "yes") ? 3 : 2;
-$leftspan = $rows-$rightspan; 
+$leftspan = $rows-$rightspan;
 if (($sem_browse_data["group_by"] == "einrichtung" || $sem_browse_data["group_by"] == "semester" || $sem_browse_data["group_by"] == "dozent")
 || ($sem_browse_data["group_by"] == "einrichtung" && $sem_browse_data["extend"] == "yes")) {
 	$leftspan--;
@@ -345,16 +345,16 @@ if ($sem_browse_data['level'] != 'f' && ($sem_browse_data["level"]=="s" || $sem_
 	$sem_browse_data["level"] = "s";
 	echo "<form action=\"$PHP_SELF\" method=\"POST\">\n<table border=0 align=\"center\" cellspacing=0 cellpadding=2 width = \"99%\">\n";
 	if (is_array($_marked_sem) && count($_marked_sem)) {
-		$query = ("SELECT seminare.Seminar_id, seminare.status, seminare.Name, 
+		$query = ("SELECT seminare.Seminar_id, seminare.status, seminare.Name,
 			seminare.Schreibzugriff, seminare.Lesezugriff , Institute.Name AS Institut,Institute.Institut_id,
 			seminar_sem_tree.sem_tree_id AS bereich, " . $_fullname_sql['full_rev'] ." AS fullname, auth_user_md5.username,
-			" . $_views['sem_number_sql'] . " AS sem_number FROM seminare 
-			LEFT JOIN seminar_user ON (seminare.Seminar_id=seminar_user.Seminar_id AND seminar_user.status='dozent') 
-			LEFT JOIN auth_user_md5 USING (user_id) 
-			LEFT JOIN user_info USING (user_id) 
+			" . $_views['sem_number_sql'] . " AS sem_number FROM seminare
+			LEFT JOIN seminar_user ON (seminare.Seminar_id=seminar_user.Seminar_id AND seminar_user.status='dozent')
+			LEFT JOIN auth_user_md5 USING (user_id)
+			LEFT JOIN user_info USING (user_id)
 			LEFT JOIN seminar_sem_tree ON (seminare.Seminar_id = seminar_sem_tree.seminar_id)
-			LEFT JOIN seminar_inst ON (seminare.Seminar_id = seminar_inst.Seminar_id) 
-			LEFT JOIN Institute USING (Institut_id) 
+			LEFT JOIN seminar_inst ON (seminare.Seminar_id = seminar_inst.Seminar_id)
+			LEFT JOIN Institute USING (Institut_id)
 			WHERE seminare.visible='1' AND seminare.Seminar_id IN('" . join("','", array_keys($_marked_sem)) . "') ORDER BY $order_by_exp, seminare.Name "); // OK_VISIBLE
 
 		$db->query($query);
@@ -382,17 +382,17 @@ if ($sem_browse_data['level'] != 'f' && ($sem_browse_data["level"]=="s" || $sem_
 			//Show how many items were found
 			printf ("<td class=\"steel1\" nowrap align=\"right\" colspan=%s>", $rightspan);
 			echo"<a href=\"" . $PHP_SELF;
-			if ($sem_browse_data["extend"] != "yes") { 
-				echo "?extend=yes\"><img align=\"middle\" " . makeButton("erweiterteansicht","src") . tooltip(_("Zur erweiterten Ansicht umschalten")) ." border=0>"; 
+			if ($sem_browse_data["extend"] != "yes") {
+				echo "?extend=yes\"><img align=\"middle\" " . makeButton("erweiterteansicht","src") . tooltip(_("Zur erweiterten Ansicht umschalten")) ." border=0>";
 			} else {
-				echo "?extend=no\"><img align=\"middle\" " . makeButton("normaleansicht", "src") . tooltip(_("Zur normalen Ansicht umschalten")) ."  border=0>"; 
-			} 
+				echo "?extend=no\"><img align=\"middle\" " . makeButton("normaleansicht", "src") . tooltip(_("Zur normalen Ansicht umschalten")) ."  border=0>";
+			}
 			echo "</a></font></td></tr>";
 		}
-		
+
 		ob_end_flush();
 		ob_start();
-		
+
 		//init the cols
 		if ($sem_browse_data["extend"]=="yes") {
 			?>
@@ -415,16 +415,16 @@ if ($sem_browse_data['level'] != 'f' && ($sem_browse_data["level"]=="s" || $sem_
 			<col width="15%">
 			<?
 			if ($sem_browse_data["group_by"] != "einrichtung") print "<col width=\"20%\">";
-			if ($sem_browse_data["group_by"] != "dozent") print "<col width=\"20%\">";				
+			if ($sem_browse_data["group_by"] != "dozent") print "<col width=\"20%\">";
 			if ($sem_browse_data["group_by"] != "semester") print "<col width=\"5%\">";
 			?>
 			</colgroup>
 			<?
 		}
-		?> 
+		?>
 		<tr align="center">
 		<td class="steel" align="left"><font size="-1">
-		<img src="pictures/blank.gif" width="1" height="20" valign="top">
+		<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" width="1" height="20" valign="top">
 		<b><?=_("Name")?></b></font>
 		</td>
 		<td class="steel" valign="bottom">
@@ -454,7 +454,7 @@ if ($sem_browse_data['level'] != 'f' && ($sem_browse_data["level"]=="s" || $sem_
 		}
 		if ($sem_browse_data["extend"]=="yes") {
 			if ($sem_browse_data["group_by"] != "typ") {
-				?>		
+				?>
 				<td class="steel" valign="bottom">
 				<font size=-1><b><?=_("Typ")?></b></font>
 				</td>
@@ -470,7 +470,7 @@ if ($sem_browse_data['level'] != 'f' && ($sem_browse_data["level"]=="s" || $sem_
 			<?
 		}
 		echo "</tr>";
-	
+
 	$group=1;
 	$data = $snap->getGroupedResult("Seminar_id");
 	if ($sem_browse_data["group_by"] == "bereich"){
@@ -482,7 +482,7 @@ if ($sem_browse_data['level'] != 'f' && ($sem_browse_data["level"]=="s" || $sem_
 			$cssSw->switchClass();
 			if ($group==8)
 			$group=1;
-			
+
 			//Create the group headers
 			switch ($sem_browse_data["group_by"]) {
 				case "semester":
@@ -561,43 +561,43 @@ if ($sem_browse_data['level'] != 'f' && ($sem_browse_data["level"]=="s" || $sem_
 					} else {
 						$print_header_name = false;
 						next($value['Institut']);
-						
+
 					}
 				}
 				break;
 			}
-			
+
 			$repeat = ($repeat === true) ? false : $repeat-1;
-			
+
 			//Put group_by headers
 			if ($print_header_name)
 			printf ("<tr> <td class=\"steelgroup%s\" colspan=%s><font size=-1><b>&nbsp;%s</b></font></td></tr>", ($sem_browse_switch_headers) ? $group_header_class : "1", $rows, htmlReady($group_header_name));
-			//create name-field	
+			//create name-field
 			echo"<tr ".$cssSw->getHover()."><font size=-1>";
-			
+
 			//----------------------
-			
+
 			//create Turnus field
 			$temp_turnus_string=view_turnus($seminar_id, TRUE);
-			
+
 			//Shorten, if string too long (add link for details.php)
 			if (strlen($temp_turnus_string) >70) {
 				$temp_turnus_string=substr($temp_turnus_string, 0, strpos(substr($temp_turnus_string, 70, strlen($temp_turnus_string)), ",") +71);
 				$temp_turnus_string.="...&nbsp;<a href=\"".$target_url."?".$target_id."=".$seminar_id."&send_from_search=true&send_from_search_page=$PHP_SELF\">(mehr) </a>";
 			}
 			echo"<td class=\"".$cssSw->getClass()."\" align=center><font size=-1>".$temp_turnus_string."</font></td>";
-			
+
 			//----------------------
-			
+
 			//create the Einrichtungen Colummn
-			if ($sem_browse_data["group_by"] != "einrichtung") {			
+			if ($sem_browse_data["group_by"] != "einrichtung") {
 				$inst_ids = $value["Institut_id"];
 				$inst_names = $value["Institut"];
 				$einrichtungen ="";
 				$i=0;
 				while ( $i < 3 ) {
 					if ($i < count($inst_ids)){
-						if ($i) 
+						if ($i)
 						$einrichtungen .= ", ";
 						$einrichtungen .= "<a href=\"institut_main.php?auswahl=".key($inst_ids)."\">".htmlReady(key($inst_names))."</a>";
 						//more than 2 Einrichtungen are two much, link to the details.php for more info
@@ -608,13 +608,13 @@ if ($sem_browse_data['level'] != 'f' && ($sem_browse_data["level"]=="s" || $sem_
 					}
 					$i++;
 				}
-				if ($einrichtungen == "") 
+				if ($einrichtungen == "")
 				$einrichtungen = "- - -";
 				echo"<td class=\"".$cssSw->getClass()."\" align=center><font size=-1>". $einrichtungen . "&nbsp;</font></td>";
 			}
-			
+
 			//----------------------
-			
+
 			//create the Dozenten Colummn
 			if ($sem_browse_data["group_by"] != "dozent") {
 				$doz_uname = $value["username"];
@@ -623,7 +623,7 @@ if ($sem_browse_data['level'] != 'f' && ($sem_browse_data["level"]=="s" || $sem_
 				$i=0;
 				while ($i < 4) {
 					if ($i < count($doz_uname)){
-						if ($i) 
+						if ($i)
 						$dozname .= ", ";
 						$dozname .= "<a href=\"about.php?username=".key($doz_uname)."\">".htmlReady(key($doz_fullname))."</a>";
 						//more than 3 Dozenten are two much, link to the details.php for more info
@@ -634,79 +634,79 @@ if ($sem_browse_data['level'] != 'f' && ($sem_browse_data["level"]=="s" || $sem_
 					}
 					$i++;
 				}
-				if ($dozname == "") 
+				if ($dozname == "")
 				$dozname = "- - -";
 				echo"<td class=\"".$cssSw->getClass()."\" align=center><font size=-1>" . $dozname . "&nbsp;</font></td>";
 			}
-			
+
 			//----------------------
-			
+
 			//create the Semester colummn
 			if ($sem_browse_data["group_by"] != "semester")
 			echo "<td class=\"".$cssSw->getClass()."\" align=center><font size=-1>".$search_obj->sem_dates[key($value["sem_number"])]['name']."</font></td>";
-			
+
 			//----------------------
-			
+
 			//create extended fields
 			if ($sem_browse_data["extend"]=="yes") {
 				//Typ
 				if ($sem_browse_data["group_by"] != "typ")
 				echo "<td class=\"".$cssSw->getClass()."\" align=center><font size=-1>", $SEM_TYPE[key($value["status"])]["name"]." <br>(Kategorie ", $SEM_CLASS[$SEM_TYPE[key($value["status"])]["class"]]["name"],")</font></td>";
-				
+
 				$mein_status = $my_status[$seminar_id];
-				
+
 				//Ampel-Schaltung
 				if ($mein_status) { // wenn ich im Seminar schon drin bin, darf ich auf jeden Fall lesen
-					echo"<td class=\"".$cssSw->getClass()."\" align=center><img border=\"0\" src=\"pictures/ampel_gruen.gif\" width=\"11\" height=\"16\">&nbsp; ";
+					echo"<td class=\"".$cssSw->getClass()."\" align=center><img border=\"0\" src=\"".$GLOBALS['ASSETS_URL']."images/ampel_gruen.gif\" width=\"11\" height=\"16\">&nbsp; ";
 				} else {
 					switch(key($value["Lesezugriff"])){
-						case 0 : 
-						echo"<td class=\"".$cssSw->getClass()."\" align=center><img border=\"0\" src=\"pictures/ampel_gruen.gif\" width=\"11\" height=\"16\">&nbsp; ";
+						case 0 :
+						echo"<td class=\"".$cssSw->getClass()."\" align=center><img border=\"0\" src=\"".$GLOBALS['ASSETS_URL']."images/ampel_gruen.gif\" width=\"11\" height=\"16\">&nbsp; ";
 						break;
 						case 1 :
 						if ($perm->have_perm("autor"))
-						echo"<td class=\"".$cssSw->getClass()."\" align=center><img border=\"0\" src=\"pictures/ampel_gruen.gif\" width=\"11\" height=\"16\">&nbsp; ";
+						echo"<td class=\"".$cssSw->getClass()."\" align=center><img border=\"0\" src=\"".$GLOBALS['ASSETS_URL']."images/ampel_gruen.gif\" width=\"11\" height=\"16\">&nbsp; ";
 						else
-						echo"<td class=\"".$cssSw->getClass()."\" align=center><img border=\"0\" src=\"pictures/ampel_rot.gif\" width=\"11\" height=\"16\">&nbsp; ";
+						echo"<td class=\"".$cssSw->getClass()."\" align=center><img border=\"0\" src=\"".$GLOBALS['ASSETS_URL']."images/ampel_rot.gif\" width=\"11\" height=\"16\">&nbsp; ";
 						break;
 						case 2 :
 						if ($perm->have_perm("autor"))
-						echo"<td class=\"".$cssSw->getClass()."\" align=center><img border=\"0\" src=\"pictures/ampel_gelb.gif\" width=\"11\" height=\"16\">&nbsp; ";
+						echo"<td class=\"".$cssSw->getClass()."\" align=center><img border=\"0\" src=\"".$GLOBALS['ASSETS_URL']."images/ampel_gelb.gif\" width=\"11\" height=\"16\">&nbsp; ";
 						else
-						echo"<td class=\"".$cssSw->getClass()."\" align=center><img border=\"0\" src=\"pictures/ampel_rot.gif\" width=\"11\" height=\"16\">&nbsp; ";
+						echo"<td class=\"".$cssSw->getClass()."\" align=center><img border=\"0\" src=\"".$GLOBALS['ASSETS_URL']."images/ampel_rot.gif\" width=\"11\" height=\"16\">&nbsp; ";
 						break;
 						case 3:
 						if ($perm->have_perm("autor"))
-						echo"<td class=\"".$cssSw->getClass()."\" align=center><img border=\"0\" src=\"pictures/ampel_gelb.gif\" width=\"11\" height=\"16\">&nbsp; ";
+						echo"<td class=\"".$cssSw->getClass()."\" align=center><img border=\"0\" src=\"".$GLOBALS['ASSETS_URL']."images/ampel_gelb.gif\" width=\"11\" height=\"16\">&nbsp; ";
 						else
-						echo"<td class=\"".$cssSw->getClass()."\" align=center><img border=\"0\" src=\"pictures/ampel_rot.gif\" width=\"11\" height=\"16\">&nbsp; ";
+						echo"<td class=\"".$cssSw->getClass()."\" align=center><img border=\"0\" src=\"".$GLOBALS['ASSETS_URL']."images/ampel_rot.gif\" width=\"11\" height=\"16\">&nbsp; ";
 					}
 				}
-				
+
 				if ($mein_status == "dozent" || $mein_status == "tutor" || $mein_status == "autor") { // in den Fällen darf ich auf jeden Fall schreiben
-					echo"<img border=\"0\" src=\"pictures/ampel_gruen.gif\" width=\"11\" height=\"16\"></td>";
+					echo"<img border=\"0\" src=\"".$GLOBALS['ASSETS_URL']."images/ampel_gruen.gif\" width=\"11\" height=\"16\"></td>";
 				} else {
 					switch(key($value["Schreibzugriff"])){
-						case 0 : 
-						echo"<img border=\"0\" src=\"pictures/ampel_gruen.gif\" width=\"11\" height=\"16\"></td>";
+						case 0 :
+						echo"<img border=\"0\" src=\"".$GLOBALS['ASSETS_URL']."images/ampel_gruen.gif\" width=\"11\" height=\"16\"></td>";
 						break;
 						case 1 :
 						if ($perm->have_perm("autor"))
-						echo"<img border=\"0\" src=\"pictures/ampel_gruen.gif\" width=\"11\" height=\"16\"></td>";
+						echo"<img border=\"0\" src=\"".$GLOBALS['ASSETS_URL']."images/ampel_gruen.gif\" width=\"11\" height=\"16\"></td>";
 						else
-						echo"<img border=\"0\" src=\"pictures/ampel_rot.gif\" width=\"11\" height=\"16\"></td>";
+						echo"<img border=\"0\" src=\"".$GLOBALS['ASSETS_URL']."images/ampel_rot.gif\" width=\"11\" height=\"16\"></td>";
 						break;
 						case 2 :
 						if ($perm->have_perm("autor"))
-						echo"<img border=\"0\" src=\"pictures/ampel_gelb.gif\" width=\"11\" height=\"16\"></td>";
+						echo"<img border=\"0\" src=\"".$GLOBALS['ASSETS_URL']."images/ampel_gelb.gif\" width=\"11\" height=\"16\"></td>";
 						else
-						echo"<img border=\"0\" src=\"pictures/ampel_rot.gif\" width=\"11\" height=\"16\"></td>";
+						echo"<img border=\"0\" src=\"".$GLOBALS['ASSETS_URL']."images/ampel_rot.gif\" width=\"11\" height=\"16\"></td>";
 						break;
 						case 3:
 						if ($perm->have_perm("autor"))
-						echo"<img border=\"0\" src=\"pictures/ampel_gelb.gif\" width=\"11\" height=\"16\"></td>";
+						echo"<img border=\"0\" src=\"".$GLOBALS['ASSETS_URL']."images/ampel_gelb.gif\" width=\"11\" height=\"16\"></td>";
 						else
-						echo"<img border=\"0\" src=\"pictures/ampel_rot.gif\" width=\"11\" height=\"16\"></td>";
+						echo"<img border=\"0\" src=\"".$GLOBALS['ASSETS_URL']."images/ampel_rot.gif\" width=\"11\" height=\"16\"></td>";
 					}
 				}
 				echo "<td class=\"".$cssSw->getClass()."\" align=\"center\"><font size=-1>";
@@ -724,11 +724,11 @@ if ($sem_browse_data['level'] != 'f' && ($sem_browse_data["level"]=="s" || $sem_
 	echo"</font></td></tr><tr><td class=\"blank\">&nbsp;<br></td></tr>";
 	ob_end_flush();
 	} elseif ($search_obj->search_button_clicked) {
-		echo "<tr><td class=\"blank\" colspan=2><font size=-1><b>" . _("Es wurden keine Veranstaltungen gefunden."); 
+		echo "<tr><td class=\"blank\" colspan=2><font size=-1><b>" . _("Es wurden keine Veranstaltungen gefunden.");
 		if ($search_obj->found_rows === false){
 			echo "<br>" . _("(Der Suchbegriff fehlt oder ist zu kurz)");
 		}
-		echo "</b></font></td></tr>";		
+		echo "</b></font></td></tr>";
 	}
 echo "</form></table>";
 } elseif ($sem_browse_data['level'] == "f"){
@@ -746,7 +746,7 @@ if ($sem_browse_data['level'] == "vv"){
 	$sem_tree->showSemTree();
 	echo "</td></tr>";
 	echo "\n</table>";
-}	
+}
 if ($sem_browse_data['level'] == "ev"){
 	echo "\n<table border=0 align=\"center\" cellspacing=0 cellpadding=0 width = \"99%\">\n";
 	echo "\n<tr><td align=\"center\">";

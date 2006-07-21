@@ -415,5 +415,9 @@ class TreeAbstract {
 		}
 		return (!$in_recursion) ? $num_entries : null;
 	}
+	
+	function getValue($item_id, $field) {
+		return (isset($this->tree_data[$item_id][$field]) ? $this->tree_data[$item_id][$field] : null);
+	}
 }
 ?>

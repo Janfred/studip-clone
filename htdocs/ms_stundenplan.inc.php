@@ -1,9 +1,9 @@
 <?
 /**
 * ms_stundenplan.php
-* 
+*
 * edit the settings for the personal schedule
-* 
+*
 *
 * @author		Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
 * @version		$Id$
@@ -37,18 +37,18 @@
 //$user->register("my_schedule_settings");
 
 require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/config_tools_semester.inc.php"); 
+require_once ("$ABSOLUTE_PATH_STUDIP/config_tools_semester.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/language.inc.php");
 
 //Funktion zum ueberpruefen der Einstellungen
 function check_schedule_settings() {
 	global $my_schedule_settings,$_my_admin_inst_id, $perm,$auth, $user, $SEM_NAME_NEXT, $SEM_NAME, $VORLES_ENDE;
-	
+
 	$db=new DB_Seminar;
 	$semester = new SemesterData;
 	$all_semester = $semester->getAllSemesterData();
-	
+
 	//Check, ob Semster, das ich gespeichert habe, inzwischen abgelaufen ist. Dann das naechste (Semesterferien) oder aktuelle Semester setzen.
 	$k=0;
 	foreach ($all_semester as $a) {
@@ -56,13 +56,13 @@ function check_schedule_settings() {
 			$tmp_sem_nr=$k;
 		$k++;
 	}
-	
+
 	if (time() >$all_semester[$tmp_sem_nr]["vorles_ende"])
 		if (time() >$VORLES_ENDE)
 			$my_schedule_settings["glb_sem"]=$SEM_NAME_NEXT;
 		else
 			$my_schedule_settings["glb_sem"]=$SEM_NAME;
-	
+
 	//Check, ob aktuelles Semester gespeichert ist. F&uuml;r einfacheres und eindeutiges Handling wird dieses Setting dann geloescht (dh. es wird IMMER das aktuelle Semester gewaehlt!)
 	if ($my_schedule_settings["glb_sem"]==$SEM_NAME)
 		$my_schedule_settings["glb_sem"]='';
@@ -84,18 +84,18 @@ function check_schedule_settings() {
 			}
 		}
 	*/
-	
+
 	//Admins bekommen das Institut, dass sie auf meine_seminare ausgewählt haben
 	if ($auth->auth['perm'] == 'admin'){
 		$my_schedule_settings["glb_inst_id"] = $_my_admin_inst_id;
 	}
-	
+
 	}
 
 //vorgenommene Anpassungen der Ansicht in Uservariablen schreiben
 if ($schedule_cmd=="change_view_insert") {
 	$my_schedule_settings=array(
-		"glb_start_time"=>$beginn_zeit, 
+		"glb_start_time"=>$beginn_zeit,
 		"glb_end_time"=>$ende_zeit,
 		"glb_days"=>array(
 			"mo"=>$mo,
@@ -116,27 +116,27 @@ if ($schedule_cmd=="change_view_insert") {
 //Anpassen der Ansicht
 function change_schedule_view() {
 	global $my_schedule_settings, $PHP_SELF, $SEM_NAME, $SEM_NAME_NEXT, $VORLES_ENDE, $perm,$auth, $user;
-		
+
 	$db=new DB_Seminar;
-	$cssSw=new cssClassSwitcher;		
+	$cssSw=new cssClassSwitcher;
 	$semester = new SemesterData;
 	$all_semester = $semester->getAllSemesterData();
 
 	?>
 	<table width="100%" border="0" cellpadding="0" cellspacing="0" align="center">
 		<tr>
-			<td class="topic" colspan=2><img src="pictures/einst.gif" border="0" align="texttop"><b>&nbsp;<?print _("Einstellungen f&uuml;r meinen Stundenplan anpassen");?></b></td>
+			<td class="topic" colspan=2><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/einst.gif" border="0" align="texttop"><b>&nbsp;<?print _("Einstellungen f&uuml;r meinen Stundenplan anpassen");?></b></td>
 		</tr>
 		<tr>
 			<td class="blank" colspan=2>&nbsp;
 			</td>
 		</tr>
 		<tr>
-			
+
 			<td class="blank" width="100%" colspan="2" align="center">
 			<blockquote>
 				<font size="-1"><b><?print _("Hier k&ouml;nnen Sie sie Ansicht ihres pers&ouml;nlichen Stundenplans nach Ihren Vorstellungen anpassen.")."<br>"._("Sie k&ouml;nnen den Zeitraum, den der Stundenplan umfasst, und die Tage, die der Stundenplan anzeigt, bestimmen.");?>
-			</blockquote>			
+			</blockquote>
 			<form method="POST" action="<? echo $PHP_SELF ?>?schedule_cmd=change_view_insert">
 			<table width="70%" align="center"cellpadding=8 cellspacing=0 border=0>
 				<tr>
@@ -149,18 +149,18 @@ function change_schedule_view() {
 					</td>
 					<td <?=$cssSw->getFullClass()?>>
 						<font size="-1">&nbsp;<?=_("Anfangszeit:");?>&nbsp; </font>
-						<?	    
+						<?
 				   		echo"<select name=\"beginn_zeit\">";
 		   					for ($i=0; $i<=23; $i++)
 			  					{
-						  		if ($i==$my_schedule_settings["glb_start_time"]) 
+						  		if ($i==$my_schedule_settings["glb_start_time"])
 						  			{
 						  			echo "<option selected value=".$i.">";
 						  			if ($i<10)  echo "0".$i.":00";
 						  			else echo $i.":00";
 						  			echo "</option>";
 						  			}
-			       					else 
+			       					else
 			       						{
 						  			echo "<option value=".$i.">";
 						  			if ($i<10)  echo "0".$i.":00";
@@ -171,18 +171,18 @@ function change_schedule_view() {
 				    		echo"</select>";
 						?>
 						<font size="-1">&nbsp;<?=_("Uhr"). "<br /><br />&nbsp;"._("Endzeit:")?>&nbsp;</font>
-						<?	    
+						<?
 				   		echo"<select name=\"ende_zeit\">";
 		   					for ($i=0; $i<=23; $i++)
 			  					{
-						  		if ($i==$my_schedule_settings["glb_end_time"]) 
+						  		if ($i==$my_schedule_settings["glb_end_time"])
 						  			{
 						  			echo "<option selected value=".$i.">";
 						  			if ($i<10)  echo "0".$i.":00";
 						  			else echo $i.":00";
 						  			echo "</option>";
 						  			}
-			       					else 
+			       					else
 			       						{
 						  			echo "<option value=".$i.">";
 						  			if ($i<10)  echo "0".$i.":00";
@@ -227,7 +227,7 @@ function change_schedule_view() {
 								$tmp_name=$SEM_NAME;
 								}
 							}
-						
+
 						foreach ($all_semester as $a) {
 							if ((time() <$a["vorles_ende"]) && ($a["name"] != $tmp_name)){
 								if ($my_schedule_settings ["glb_sem"] == $a["name"])
@@ -268,17 +268,17 @@ function change_schedule_view() {
 					?>
 				<tr <? $cssSw->switchClass() ?>>
 					<td  <?=$cssSw->getFullClass()?> colspan=2 align="middle">
-					<input type="IMAGE" <?=makeButton("uebernehmen", "src") ?> border=0 value="<?=_("&Auml;nderungen &uuml;bernehmen")?>"></font>&nbsp; 
-					<input type="HIDDEN" name="view" value="Stundenplan">					
+					<input type="IMAGE" <?=makeButton("uebernehmen", "src") ?> border=0 value="<?=_("&Auml;nderungen &uuml;bernehmen")?>"></font>&nbsp;
+					<input type="HIDDEN" name="view" value="Stundenplan">
 					</td>
 				</tr>
-				</form>	
+				</form>
 			</table>
 			<br />
 			<br />
 			</td>
 		</tr>
-	</table> 
+	</table>
 	<?
 	}
 

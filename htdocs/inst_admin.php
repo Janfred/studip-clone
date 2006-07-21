@@ -30,7 +30,7 @@ include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Sessio
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");  //Linkleiste fuer admins
-		
+
 require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php"); //Ausgaberoutinen an den User
 require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php"); //Grunddaten laden
 require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php"); //htmlReady
@@ -39,12 +39,12 @@ require_once ("$ABSOLUTE_PATH_STUDIP/log_events.inc.php");	// Logging
 	
 $db=new DB_Seminar;
 $db2=new DB_Seminar;
-$db3=new DB_Seminar;	
+$db3=new DB_Seminar;
 
 //get ID from a open Institut
 if ($SessSemName[1])
 	$inst_id=$SessSemName[1];
-	
+
 function perm_select($name,$global_perm,$default) {
 	$possible_perms=array("user","autor","tutor","dozent");
 	$counter=0;
@@ -111,16 +111,16 @@ if (isset($details)) {
 			<tr <?$cssSw->switchClass() ?>>
 				<td class="<? echo $cssSw->getClass() ?>" ><b>&nbsp;<?=_("Gruppe/Funktion in der Einrichtung:")?>&nbsp;</b></td>
 				<td class="<? echo $cssSw->getClass() ?>" >
-			<?	
+			<?
 			$user_id = $db->f("user_id")	;
-			
+
 			if ($gruppen = GetStatusgruppen($inst_id, $user_id)) {
 					echo "<a href=\"admin_statusgruppe.php?list=TRUE&view=statusgruppe_inst\">";
 					echo htmlReady(join(", ", array_values($gruppen)));
 					echo "</a>";
-			} else 
+			} else
 					echo "<a href=\"admin_statusgruppe.php?list=TRUE&view=statusgruppe_inst\">" . _("bisher keiner zugeordnet") . "</a>";
-			?>	
+			?>
 			</td>
 			</tr>
 			<tr <?$cssSw->switchClass() ?>>
@@ -155,11 +155,11 @@ if (isset($details)) {
 			</tr>
 			<tr>
 				<td class="blank"  colspan=2 class="blank">&nbsp;</td></tr>
-			
+
 			<? // links to everywhere
 			print "<tr><td  class=\"steel1\" colspan=2 align=\"center\">";
-				printf("&nbsp;" . _("pers&ouml;nliche Homepage") . " <a href=\"about.php?username=%s\"><img src=\"pictures/einst.gif\" border=0 alt=\"Zur pers&ouml;nlichen Homepage des Benutzers\" align=\"texttop\"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp", $db->f("username"));
-				printf("&nbsp;" . _("Nachricht an BenutzerIn") . " <a href=\"sms_send.php?rec_uname=%s\"><img src=\"pictures/nachricht1.gif\" alt=\"Nachricht an den Benutzer verschicken\" border=0 align=\"texttop\"></a>", $db->f("username"));
+				printf("&nbsp;" . _("pers&ouml;nliche Homepage") . " <a href=\"about.php?username=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/einst.gif\" border=0 alt=\"Zur pers&ouml;nlichen Homepage des Benutzers\" align=\"texttop\"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp", $db->f("username"));
+				printf("&nbsp;" . _("Nachricht an BenutzerIn") . " <a href=\"sms_send.php?rec_uname=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" alt=\"Nachricht an den Benutzer verschicken\" border=0 align=\"texttop\"></a>", $db->f("username"));
 			print "</td></tr>";
 			?>
 			</form>
@@ -168,7 +168,7 @@ if (isset($details)) {
 		<?
 	} // end while ($db->next_record())
 } // end if (isset($details))
-	
+
 else {
 
 	// haben wir was uebergeben bekommen?
@@ -236,8 +236,8 @@ else {
 	if (isset($berufen_x) && $ins_id != "") {
 		if ($u_id == "0") {
 			my_error("<b>" . _("Bitte eine Person ausw&auml;hlen!") . "</b>");
-		} else {		
-	 	
+		} else {
+
 			$db->query("SELECT *  FROM user_inst WHERE Institut_id = '$ins_id' AND user_id = '$u_id'");
 			if (($db->next_record()) && ($db->f("inst_perms") != "user")) {
 				// der Admin hat Tomaten auf den Augen, der Mitarbeiter sitzt schon im Institut
@@ -257,7 +257,7 @@ else {
 					    my_error("<b>" . _("Sie haben keine Berechtigung einen Admin zu berufen!") . "</b>");
 					}
 				} else {
-					$insert_perms = $db3->f("perms");				
+					$insert_perms = $db3->f("perms");
 					//ok, aber nur hochstufen auf Maximal-Status (hat sich selbst schonmal gemeldet als Student an dem Inst)
 					if ($db->f("inst_perms") == "user") {
 						$db2->query("UPDATE user_inst SET inst_perms='$insert_perms' WHERE user_id='$u_id' AND Institut_id = '$ins_id' ");
@@ -283,7 +283,7 @@ else {
 		<td class="blank" colspan=2>
 <?
 
-		
+
 //Abschnitt zur Auswahl und Suche von neuen Personen
 if ($inst_id != "" && $inst_id !="0") {
 
@@ -291,11 +291,11 @@ if ($inst_id != "" && $inst_id !="0") {
 	if (isset($search_exp) && strlen($search_exp) > 2) {
 		$search_exp = trim($search_exp);
 		// Der Admin will neue Sklaven ins Institut berufen...
-		$db->query ("SELECT DISTINCT auth_user_md5.user_id, " . $_fullname_sql['full_rev'] . " AS fullname, username, perms  FROM auth_user_md5 LEFT JOIN user_info USING(user_id)LEFT JOIN user_inst ON user_inst.user_id=auth_user_md5.user_id AND Institut_id = '$inst_id' WHERE perms !='root' AND (user_inst.inst_perms = 'user' OR user_inst.inst_perms IS NULL) AND (Vorname LIKE '%$search_exp%' OR Nachname LIKE '%$search_exp%' OR username LIKE '%$search_exp%') ORDER BY Nachname ");		
+		$db->query ("SELECT DISTINCT auth_user_md5.user_id, " . $_fullname_sql['full_rev'] . " AS fullname, username, perms  FROM auth_user_md5 LEFT JOIN user_info USING(user_id)LEFT JOIN user_inst ON user_inst.user_id=auth_user_md5.user_id AND Institut_id = '$inst_id' WHERE perms !='root' AND (user_inst.inst_perms = 'user' OR user_inst.inst_perms IS NULL) AND (Vorname LIKE '%$search_exp%' OR Nachname LIKE '%$search_exp%' OR username LIKE '%$search_exp%') ORDER BY Nachname ");
 		printf("<blockquote>" . _("Auf dieser Seite k&ouml;nnen Sie Personen der Einrichtung %s zuordnen, Daten ver&auml;ndern und Berechtigungen vergeben."), "<b>" . htmlReady($inst_name) . "</b>");
 		echo "<br /><br /></blockquote>";
 		?>
-		<table width="100%" border="0" bgcolor="#C0C0C0" bordercolor="#FFFFFF" cellpadding="2" cellspacing="0">			
+		<table width="100%" border="0" bgcolor="#C0C0C0" bordercolor="#FFFFFF" cellpadding="2" cellspacing="0">
 			<form action="<? echo $PHP_SELF, "?inst_id=", $inst_id ?>" method="POST">
 			<tr>
 				<td class="blank" colspan=2>
@@ -313,7 +313,7 @@ if ($inst_id != "" && $inst_id !="0") {
 					<tr>
 						<td class="steel1"><select name="u_id" size="1">
 						<?
-						//Alle User auswaehlen, auf die der Suchausdruck passt und die im Institut nicht schon was sind. Selected werden hierdurch 
+						//Alle User auswaehlen, auf die der Suchausdruck passt und die im Institut nicht schon was sind. Selected werden hierdurch
 //						printf ("<option value=\"0\">-- bitte ausw&auml;hlen --\n");
 						while ($db->next_record())
 							printf ("<option value=\"%s\">%s (%s) - %s\n", $db->f("user_id"), htmlReady($db->f("fullname")), $db->f("username"), $db->f("perms"));
@@ -370,11 +370,11 @@ if ($inst_id != "" && $inst_id !="0") {
 		}
 
 	//nachsehen, ob wir ein Sortierkriterium haben, sonst nach username
-	if (!isset($sortby) || $sortby=="") 
+	if (!isset($sortby) || $sortby=="")
 		$sortby = "Nachname";
 
 	//entweder wir gehoeren auch zum Institut oder sind global root und es ist ein Institut ausgewählt
-	if ($perm->have_studip_perm("admin",$inst_id)) {  
+	if ($perm->have_studip_perm("admin",$inst_id)) {
 		$query = "SELECT user_inst.*, " . $_fullname_sql['full_rev'] . " AS fullname,Email,username FROM user_inst LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE Institut_id ='$inst_id' AND inst_perms !='user' ORDER BY $sortby";
 		$db->query($query);
 
@@ -402,7 +402,7 @@ if ($inst_id != "" && $inst_id !="0") {
 				$mail_list[] = $db->f("Email");
 				$cssSw->switchClass();
 				echo "<tr valign=middle align=left>";
-				
+
 				if ((!$SessSemName["is_fak"] && $perm->have_studip_perm("admin",$SessSemName["fak"])) || $perm->have_perm("root") || $db->f("inst_perms") != "admin" || $db->f("username") == $auth->auth["uname"])
 					printf ("<td class=\"%s\"><a href=\"%s?details=%s&inst_id=%s\">%s</a></td>", $cssSw->getClass(), $PHP_SELF, $db->f("username"), $db->f("Institut_id"), htmlReady($db->f("fullname")));
 				else
@@ -410,14 +410,14 @@ if ($inst_id != "" && $inst_id !="0") {
 
 				<td class="<? echo $cssSw->getClass() ?>" >&nbsp;<?php echo $db->f("inst_perms"); ?></td>
 				<td class="<? echo $cssSw->getClass() ?>"  align="left"><?
-				
+
 				if ($gruppen = GetStatusgruppen($inst_id, $db->f("user_id"))){
 					echo htmlReady(join(", ", array_values($gruppen)));
-				} else 
+				} else
 					echo "&nbsp;";
 				?>
-				
-				
+
+
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" >&nbsp;<?php echo htmlReady($db->f("raum")); ?></td>
 				<td class="<? echo $cssSw->getClass() ?>" >&nbsp;<?php echo htmlReady($db->f("sprechzeiten")); ?></td>
@@ -430,7 +430,7 @@ if ($inst_id != "" && $inst_id !="0") {
 			}
 
 			//Link fuer tolle Rundmailfunktion wird hier gebastelt
-	
+
 			echo "</table><br><b>" . _("Rundmail an alle MitarbeiterInnen verschicken") . "</b><br><br>&nbsp;";
 			printf(_("Bitte hier %sklicken%s"), "<a href=\"mailto:" . join(",",$mail_list) . "?subject=" . urlencode(_("MitarbeiterInnen-Rundmail")) .  "\">", "</a>");
 			echo "<br /><br /></blockquote>";
@@ -441,7 +441,7 @@ if ($inst_id != "" && $inst_id !="0") {
 		} else { // wir haben kein Ergebnis
 			print("</table>" . _("Es wurde niemand gefunden! Bevor Sie die MitarbeiterInnenliste dieser Einrichtung bearbeiten k&ouml;nnen, m&uuml;ssen Sie der Einrichtung zuerst MitarbeiterInnen zuordnen.") . "<br /><br />");
 		}
-	}	
+	}
 }
 }
 ?>

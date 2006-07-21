@@ -1,9 +1,9 @@
 <?
 /**
 * ExternModuleDownload.class.php
-* 
-* 
-* 
+*
+*
+*
 *
 * @author		Peter Thienel <pthienel@web.de>, Suchi & Berg GmbH <info@data-quest.de>
 * @version	$Id$
@@ -16,7 +16,7 @@
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // ExternModuleDownload.class.php
-// 
+//
 // Copyright (C) 2003 Peter Thienel <pthienel@web.de>,
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
@@ -63,15 +63,15 @@ class ExternModuleDownload extends ExternModule {
 				_("Gr&ouml;&szlig;e"),
 				_("Upload durch")
 		);
-		
+
 	}
-	
+
 	function setup () {
 		$this->elements["LinkIntern"]->link_module_type = 2;
 		$this->elements["LinkIntern"]->real_name = _("Link zum Modul MitarbeiterInnendetails");
 		$this->elements["Link"]->real_name = _("Link zum Dateidownload");
 	}
-	
+
 	function checkRangeId ($range_id) {
 		$range = get_object_type($range_id);
 		
@@ -80,37 +80,37 @@ class ExternModuleDownload extends ExternModule {
 			
 		return FALSE;
 	}
-	
+
 	function printout ($args) {
-		if ($this->config->getValue("Main", "wholesite"))		
+		if ($this->config->getValue("Main", "wholesite"))
 			echo html_header($this->config);
-		
+
 		if (!$language = $this->config->getValue("Main", "language"))
 			$language = "de_DE";
 		init_i18n($language);
-		
+
 		echo $this->toString($args);
-		
+
 		if ($this->config->getValue("Main", "wholesite"))
 			echo html_footer();
 	}
-	
+
 	function printoutPreview () {
 		echo html_header($this->config);
-		
+
 		if (!$language = $this->config->getValue("Main", "language"))
 			$language = "de_DE";
 		init_i18n($language);
-		
+
 		echo $this->toStringPreview();
-		
+
 		echo html_footer();
 	}
-	
+
 	function toString ($args = NULL) {
 		$db = new DB_Seminar();
 		$error_message = "";
-		
+
 		// check for valid range_id
 		if(!$this->checkRangeId($this->config->range_id))
 			$error_message = $GLOBALS["EXTERN_ERROR_MESSAGE"];
@@ -126,7 +126,7 @@ class ExternModuleDownload extends ExternModule {
 		}
 		else
 			$seminar_id = $this->config->range_id;
-		
+
 		$sort = $this->config->getValue("Main", "sort");
 		$query_order = "";
 		foreach ($sort as $key => $position) {
@@ -137,7 +137,7 @@ class ExternModuleDownload extends ExternModule {
 			ksort($query_order, SORT_NUMERIC);
 			$query_order = " ORDER BY " . implode(",", $query_order) . " DESC";
 		}
-		
+
 		if (!$nameformat = $this->config->getValue("Main", "nameformat"))
 			$nameformat = "no_title_short";
 		$query = "SELECT dokument_id, description, filename, d.mkdate, d.chdate, filesize, ";
@@ -145,16 +145,16 @@ class ExternModuleDownload extends ExternModule {
 		$query .= "AS fullname, username, aum.user_id FROM dokumente d LEFT JOIN user_info USING (user_id) ";
 		$query .= "LEFT JOIN auth_user_md5 aum USING (user_id) WHERE ";
 		$query .= "seminar_id='$seminar_id'$query_order";
-		
+
 		$db->query($query);
-		
+
 		if (!$db->num_rows())
 			$error_message = $this->config->getValue("Main", "nodatatext");
-		
+
 		$out = $this->elements["TableHeadrow"]->toString();
-		
+
 		if ($error_message) {
-			// use one column and set it visible to display error_message 
+			// use one column and set it visible to display error_message
 			$this->config->setValue('Main', 'order', array('0'));
 			$this->config->setValue('Main', 'visible', array('1'));
 			$this->config->setValue('Main', 'width', array('100%'));
@@ -163,9 +163,9 @@ class ExternModuleDownload extends ExternModule {
 		else {
 			$table_row_data["data_fields"] = $this->data_fields;
 			while($db->next_record()){
-			
+
 				preg_match("/^.+\.([a-z1-9_-]+)$/i", $db->f("filename"), $file_suffix);
-				
+
 				$icon = "";
 				switch ($file_suffix[1]) {
 					case "txt" :
@@ -206,14 +206,14 @@ class ExternModuleDownload extends ExternModule {
 						if (!$picture_file = $this->config->getValue("Main", "icondefault"))
 							$icon = "txt-icon.gif";
 				}
-				
+
 				if ($icon)
-					$picture_file = "http://{$GLOBALS['EXTERN_SERVER_NAME']}pictures/$icon";
-						
+					$picture_file = $GLOBALS['ASSETS_URL']."images/$icon";
+
 				$download_link = "http://{$GLOBALS['EXTERN_SERVER_NAME']}";
 				$download_link .= sprintf("sendfile.php?type=0&file_id=%s&file_name=%s\"",
 						$db->f("dokument_id"), $db->f("filename"));
-			
+
 				// Aufbereiten der Daten
 				$table_row_data["content"] = array(
 					"icon"        => sprintf("<a href=\"%s\"><img border=\"0\" src=\"%s\"></a>"
@@ -243,10 +243,10 @@ class ExternModuleDownload extends ExternModule {
 				$out .= $this->elements["TableRow"]->toString($table_row_data);
 			}
 		}
-		
+
 		return $this->elements["TableHeader"]->toString(array("content" => $out));
 	}
-	
+
 	function toStringPreview () {
 		$time = time();
 		// preview data
@@ -283,14 +283,14 @@ class ExternModuleDownload extends ExternModule {
 		$data[] = array("dokument_id" => 11, "description" => _("Eine anderes Format."),
 			"filename" => "good_music.mp3", "mkdate" => ($time - 1150000), "chdate" => ($time - 653900),
 			"filesize" => 934651, "Vorname" => "Augustus", "Nachname" => "Barnard");
-		
+
 		$table_row_data["data_fields"] = $this->data_fields;
 		$out = $this->elements["TableHeadrow"]->toString();
-		
+
 		foreach ($data as $db) {
-			
+
 			preg_match("/^.+\.([a-z1-9_-]+)$/i", $db["filename"], $file_suffix);
-			
+
 			// choose the icon for the given file format
 			$icon = "";
 			switch ($file_suffix[1]) {
@@ -332,37 +332,37 @@ class ExternModuleDownload extends ExternModule {
 					if (!$picture_file = $this->config->getValue("Main", "icondefault"))
 						$icon = "txt-icon.gif";
 			}
-			
+
 			if ($icon)
-				$picture_file = $CANONICAL_RELATIVE_PATH_STUDIP ."pictures/$icon";
-		
+				$picture_file = $GLOBALS['ASSETS_URL']."images/$icon";
+
 			// Aufbereiten der Daten
 			$table_row_data["content"] = array(
 				"icon"        => $this->elements["Link"]->toString(array("content" =>
 													"<img border=\"0\" src=\"$picture_file\">", "link" => "")),
-													 
+
 				"filename"    => $this->elements["Link"]->toString(array("content" =>
 													htmlReady($db["filename"]), "link" => "")),
-													 
+
 				"description" => htmlReady(mila_extern($db["description"],
 													$this->config->getValue("Main", "lengthdesc"))),
-				
+
 				"mkdate"      => strftime($this->config->getValue("Main", "dateformat"), $db["mkdate"]),
-				
+
 				"filesize"    => $db["filesize"] > 1048576 ? round($db["filesize"] / 1048576, 1) . " MB"
 													: round($db["filesize"] / 1024, 1) . " kB",
-														
+
 				"fullname"    => $this->elements["LinkIntern"]->toString(
 													array("content" => htmlReady($db["Vorname"]." ".$db["Nachname"])))
-				
+
 			);
 			$out .= $this->elements["TableRow"]->toString($table_row_data);
 		}
-		
+
 		return $this->elements["TableHeader"]->toString(array("content" => $out));
 	}
 
-	
+
 }
 
 ?>

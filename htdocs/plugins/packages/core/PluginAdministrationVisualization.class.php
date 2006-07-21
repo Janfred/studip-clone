@@ -19,7 +19,7 @@ class PluginAdministrationVisualization extends AbstractStudIPPluginVisualizatio
 		}
 		?>
 		<tr>
-			<td valign="top"><img src="/pictures/ausruf.gif"></td>
+			<td valign="top"><img src="/ausruf.gif"></td>
 			<td valign="top">
 			<?= sprintf(_("Wollen Sie wirklich <b>%s</b> deinstallieren? <br>"), htmlReady($plugin->getPluginname()))?>
 			<?= sprintf("<a href=\"%s\">" . makeButton("ja2") . "</a>&nbsp; \n",PluginEngine::getLink($this->pluginref,array("deinstall" => $plugin->getPluginid(),"forcedeinstall" => true)))?>
@@ -88,7 +88,7 @@ class PluginAdministrationVisualization extends AbstractStudIPPluginVisualizatio
 		}		
 	}
 	
-	function showPluginAdministrationList($plugins,$msg="",$installableplugins=array()){
+	function showPluginAdministrationList($plugins,$msg="",$installableplugins=array(),$roleplugin=null){
 		$cssSw = new cssClassSwitcher();									// Klasse für Zebra-Design
 		$cssSw->enableHover();
 		echo "\n" . $cssSw->GetHoverJSFunction() . "\n";
@@ -107,7 +107,8 @@ class PluginAdministrationVisualization extends AbstractStudIPPluginVisualizatio
 				<th align="left"><?= _("Name")?></th>
 				<th align="left"><?= _("Typ") ?></th>
 				<th align="center"><?= _("Verfügbarkeit") ?></th>				
-				<th align="right"><?= _("Position") ?></th>
+				<th align="right"><?= _("Position&nbsp;") ?></th>
+				<th alogn="center"><?= _("&nbsp;Zugriffsrechte") ?></th>
 				<th align="right"><?= _("Package") ?></th>
 			</tr>
 			
@@ -115,6 +116,7 @@ class PluginAdministrationVisualization extends AbstractStudIPPluginVisualizatio
 		
 		$absenden = makeButton("speichern","input",_("Einstellungen speichern"));
 		$lasttype = "";
+		
 		foreach($plugins as $plugin){
 			$cssSw->switchClass();
 			if (is_a($plugin,"PluginAdministrationPlugin") || is_subclass_of($plugin,"PluginAdministrationPlugin")){
@@ -133,7 +135,15 @@ class PluginAdministrationVisualization extends AbstractStudIPPluginVisualizatio
 			$pluginid = $plugin->getPluginid();
 		?>
 			<tr <?=$cssSw->getHover()?>>
-				<td align="left" class="<?=$cssSw->getClass()?>"><a href="<?= PluginEngine::getLink($this->pluginref,array("deinstall" => $pluginid)) ?>"><img src="<?= $relativepath?>/img/trash.gif" border="0" alt="<?= _("Deinstallieren") ?>"/></a>&nbsp;</td>
+				<td align="left" class="<?=$cssSw->getClass()?>">
+				<? 
+				 if (!$plugin->isDependentOnOtherPlugin()){
+				 	?>
+				 	<a href="<?= PluginEngine::getLink($this->pluginref,array("deinstall" => $pluginid)) ?>"><img src="<?= $relativepath?>/img/trash.gif" border="0" alt="<?= _("Deinstallieren") ?>"/></a>&nbsp;
+				 	<?
+				 }
+				?>
+				</td>					
 				<td width="35%" align="left"class="<?=$cssSw->getClass()?>"><a href="<?= PluginEngine::getLink($plugin,array(),"showDescriptionalPage") ?>"><?= $plugin->getPluginname() ?></a>&nbsp;
 				<?php
 				if (PluginEngine::getTypeOfPlugin($plugin) == "Standard"){
@@ -150,24 +160,25 @@ class PluginAdministrationVisualization extends AbstractStudIPPluginVisualizatio
 					</select>
 				</td>				
 				<td align="right" width="5%" class="<?=$cssSw->getClass()?>"><input name="navposition_<?= $pluginid?>" type="text" size="2" value="<?= $plugin->getNavigationPosition()?>"></td>
+				<td class="<?=$cssSw->getClass()?>">&nbsp;<a href="<?= PluginEngine::getLink($roleplugin,array("pluginid"=>$pluginid),"doPluginRoleAssignment")?>"><?= makeButton("bearbeiten","img",_("Rollenberechtigungen bearbeiten")) ?></a></td>
 				<td align="right" class="<?=$cssSw->getClass()?>"><a href="<?= PluginEngine::getLink($this->pluginref,array("zip" => $pluginid)) ?>"><img src="<?= $relativepath?>/img/icon-disc.gif" border="0" alt="<?= _("Plugin zippen")?>"/></a></td>
 			</tr>
 		<?php
 		}
 		?>
 		  	 <tr>
-		  	 	 <td colspan="7" height="5"></td>
+		  	 	 <td colspan="8" height="5"></td>
 		  	 </tr>
 		  	 <tr>
-		  	 	 <td colspan="7" align="center"><?= $absenden ?></td>
+		  	 	 <td colspan="8" align="center"><?= $absenden ?></td>
 		  	 </tr>
 		  	 <tr>		  	 	
-		  	 	 <td colspan="7" height="10"></td>
+		  	 	 <td colspan="8" height="10"></td>
 		  	 </tr>		  	 
 			 </form>
 			 <tr>
 			 	
-			 	<td colspan="7">
+			 	<td colspan="8">
 			 		<?= $this->showInstallationForm($installableplugins);?>
 			 		
 			 	</td>
@@ -179,13 +190,13 @@ class PluginAdministrationVisualization extends AbstractStudIPPluginVisualizatio
 		$infobox = array	(	
 						array  ("kategorie"  => _("Hinweise:"),
 								"eintrag" => array	(	
-									array (	"icon" => "pictures/ausruf_small.gif",
+									array (	"icon" => "ausruf_small.gif",
 													"text"  => _("Verfügbarkeit bedeutet bei Standard-Plugins, dass sie vom Dozenten in Veranstaltungen und Einrichtungen aktiviert werden können. Bei System- und Administrationsplugins wird zwischen Aktivierung und Verfügbarkeit nicht unterschieden.")
 									),
-									array (	"icon" => "pictures/ausruf_small.gif",
+									array (	"icon" => "ausruf_small.gif",
 													"text"  => _("Per Default-Aktivierung lassen sich Standard-Plugins automatisch in allen Veranstaltungen einer Einrichtung aktivieren.")
 									),
-									array (	"icon" => "pictures/ausruf_small.gif",
+									array (	"icon" => "ausruf_small.gif",
 													"text"  => _("Position gibt die Reihenfolge des Plugins in der Navigation an. <b>Erlaubt sind nur Werte größer 0.</b>")
 									)
 								)

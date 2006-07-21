@@ -1,9 +1,9 @@
 <?
 /**
 * EditResourceData.class.php
-* 
+*
 * shows the forms to edit the object
-* 
+*
 *
 * @author		Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
 * @version		$Id$
@@ -42,7 +42,7 @@ require_once ($RELATIVE_PATH_SUPPORT."/lib/ContractObject.class.php");
 class Overview extends ShowTreeRow {
 	var $db;
 	var $db2;
-	
+
 	function Overview() {
 		$this->db = new DB_Seminar;
 		$this->db2 = new DB_Seminar;
@@ -60,16 +60,16 @@ class Overview extends ShowTreeRow {
 	//private
 	function showListObject ($contract_id) {
 		global $supportdb_data, $edit_con_object, $RELATIVE_PATH_SUPPORT, $PHP_SELF, $supporter, $perm, $user;
-	
+
 		//Object erstellen
 		$conObject=new ContractObject($contract_id);
 
 		//Daten vorbereiten
-		$icon="<img src=\"pictures/cont_folder2.gif\" />";
-		
+		$icon="<img src=\"".$GLOBALS['ASSETS_URL']."images/cont_folder2.gif\" />";
+
 		if ((!$supportdb_data["con_opens"]) && (!$supportdb_data["user_action_con"]) && ($conObject->isOldestActive()) && ($conObject->getRemainingPoints() > 0)) {
 			$supportdb_data["con_opens"][$conObject->getId()] = TRUE;
-			$supportdb_data["actual_con"] = $conObject->getId();			
+			$supportdb_data["actual_con"] = $conObject->getId();
 		}
 
 		if ($supportdb_data["con_opens"][$conObject->getId()]) {
@@ -98,7 +98,7 @@ class Overview extends ShowTreeRow {
 		//create a link on the titel, too
 		if (($link) && ($edit_con_object != $conObject->id))
 			$titel = "<a href=\"$link\" class=\"tree\" >$titel</a>";
-		
+
 		//contract partner (an institute)
 		if ($edit_con_object == $conObject->id) {
 			$zusatz =  "<select name=\"con_institut_id\" style=\"{font-size:8 pt;};\">\n";
@@ -108,7 +108,7 @@ class Overview extends ShowTreeRow {
 				$query = "SELECT Name,a.Institut_id,IF(a.Institut_id=fakultaets_id,1,0) AS is_fak,inst_perms FROM user_inst  a LEFT JOIN Institute USING (institut_id) WHERE (user_id = '$user->id' AND inst_perms = 'admin') ORDER BY is_fak,Name";
 			else
 				$query = "SELECT Name,a.Institut_id,IF(a.Institut_id=fakultaets_id,1,0) AS is_fak,inst_perms FROM user_inst  a LEFT JOIN Institute USING (institut_id) WHERE (user_id = '$user->id' AND inst_perms = 'dozent') ORDER BY is_fak,Name";
-			
+
 			$this->db->query($query);
 
 			while ($this->db->next_record()) {
@@ -128,20 +128,20 @@ class Overview extends ShowTreeRow {
 			$query = sprintf ("SELECT Name FROM Institute WHERE Institut_id = '%s'", $conObject->getInstitutId());
 			$this->db->query($query);
 			$this->db->next_record();
-		
+
 			$zusatz = sprintf("<a href=\"institut_main.php?auswahl=%s\"><font color=\"#333399\">%s</font></a>", $conObject->getInstitutId(), htmlReady($this->db->f("Name")));
 			$zusatz .= sprintf("&nbsp;(%s / %s)", $conObject->getRemainingPoints(), $conObject->getGivenPoints());
 		}
-		
+
 		$new=TRUE;
 		if ($open == "open") {
 			$content = "<table border=\"0\" cellspacing=\"2\" cellpadding=\"0\" width=\"100%\">\n";
-			$content .= sprintf ("<tr><td width=\"20%%\"><b><font size=\"-1\">"._("Punkte in diesem Vertrag:")."</font></b></td><td width=\"10%%\" align=\"center\" valign=\"top\"><font size=\"-1\">%s</font></td><td width=\"20%%\">&nbsp;</td>\n",  
+			$content .= sprintf ("<tr><td width=\"20%%\"><b><font size=\"-1\">"._("Punkte in diesem Vertrag:")."</font></b></td><td width=\"10%%\" align=\"center\" valign=\"top\"><font size=\"-1\">%s</font></td><td width=\"20%%\">&nbsp;</td>\n",
 				(($edit_con_object == $conObject->id) && ($supporter)) ? "<input style=\"{font-size:8pt;}\" type=\"TEXT\" name=\"con_given_points\" size=\"4\" maxlength=\"4\" value=\"".$conObject->getGivenPoints()."\" />" : $conObject->getGivenPoints());
 			$content .= sprintf ("<td width=\"20%%\"><b><font size=\"-1\">"._("Anfragen:")."</font></b></td><td width=\"10%%\" align=\"center\"><font size=\"-1\">%s</font></td><td width=\"20%%\">&nbsp;</td></tr>\n",  $conObject->getRequests());
 			$content .= sprintf ("<tr><td><b><font size=\"-1\">"._("verbrauchte Punkte:")."</font></b></td><td align=\"center\"><font size=\"-1\">%s</font></td><td>&nbsp;</td>\n",  $conObject->getUsedPoints());
 			$content .= sprintf ("<td width=\"20%%\"><b><font size=\"-1\">"._("Bearbeitungen:")."</font></b></td><td width=\"10%%\" align=\"center\"><font size=\"-1\">%s</font></td><td width=\"20%%\">&nbsp;</td></tr>\n",  $conObject->getEvents());
-			$content .= "<tr><td colspan=\"2\" style=\"{background-image: url('pictures/line.gif')};\"><img src=\"pictures/blank.gif\" width =\"10\" height=\"1\"  /><td><td><img src=\"pictures/blank.gif\" width =\"10\" height=\"1\"  /></td></tr>\n";
+			$content .= "<tr><td colspan=\"2\" style=\"{background-image: url('".$GLOBALS['ASSETS_URL']."images/line.gif')};\"><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" width =\"10\" height=\"1\"  /><td><td><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" width =\"10\" height=\"1\"  /></td></tr>\n";
 			$content .= sprintf ("<tr><td><b><font size=\"-1\">"._("verbleibende Punkte:")."</font></b></td><td align=\"center\"><font size=\"-1\">%s</font></td><td colspan=\"3\">&nbsp;</td></tr>\n",  $conObject->getRemainingPoints());
 			$content .= "</table>";
 			$content .= sprintf ("<input type=\"HIDDEN\" name=\"sent_con_id\" value=\"%s\" />", $conObject->id);
@@ -155,10 +155,10 @@ class Overview extends ShowTreeRow {
 				$edit .= "<a href=\"$PHP_SELF?kill_con=$conObject->id\">".makeButton("loeschen")."</a>";
 			}
 			if ($edit_con_object != $conObject->id)
-				$edit .= "&nbsp;<a href=\"$PHP_SELF?edit_con=$conObject->id\">".makeButton("bearbeiten")."</a>";				
+				$edit .= "&nbsp;<a href=\"$PHP_SELF?edit_con=$conObject->id\">".makeButton("bearbeiten")."</a>";
 			$edit.= "&nbsp;<a href=\"$PHP_SELF?create_req=$conObject->id&view=requests\">".makeButton("neueanfrage")."</a>";
-		} 
-		
+		}
+
 		$edit.= "&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"$PHP_SELF?show_con_req=$conObject->id&view=requests\">".makeButton("anfragen")."</a>&nbsp;";
 
 

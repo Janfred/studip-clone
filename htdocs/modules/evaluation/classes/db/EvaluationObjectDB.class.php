@@ -243,7 +243,6 @@ class EvaluationObjectDB extends DatabaseObject {
     * @return   integer            Number of ranges with no permission
     */
    function getEvalUserRangesWithNoPermission (&$eval, $return_ids = false) {
-   	  global $user;
       $no_permisson = 0;
       $rangeIDs     = $eval->getRangeIDs();
 
@@ -343,9 +342,7 @@ class EvaluationObjectDB extends DatabaseObject {
     if ( get_userid($rangeID) != NULL && $rangeID != NULL)
       $rangeID = get_userid($rangeID);
 
-    /* ------------------------------------------------------ end: checking */
-
-
+    /* ------------------------------------------------------ end: checking */	
     /* ask database ------------------------------------------------------- */
     if (!empty ($rangeID)) {
     $sql =
@@ -359,7 +356,7 @@ class EvaluationObjectDB extends DatabaseObject {
       " a.range_id = '".$rangeID."'";      
       if ($protected){
       	$sql = $sql . " and b.protected=1";
-      }   
+      }      
     } else {
       // Krampf!!! Jetzt klappt's....seufz
       $sql =
@@ -401,7 +398,6 @@ class EvaluationObjectDB extends DatabaseObject {
       "     )";
 
     $sql .= " ORDER BY chdate DESC";
-
     if ($db->Debug)
        $sql .= " #eval->getEvaluationIDs ()";
     $db->query ($sql);

@@ -1,9 +1,9 @@
 <?
 /**
 * admin_log.php
-* 
+*
 * backend for administration of logging mechanism
-* 
+*
 *
 * @author		Tobias Thelen <tthelen@uni-osnabrueck.de>
 * @version		$Id$
@@ -16,7 +16,7 @@
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // admin_log.php
-// 
+//
 // Copyright (C) 2006 Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -94,7 +94,7 @@ function change_action() {
 	// names can't be changed
 	//if (!$_REQUEST['name']) {
 	//	$msg.="error§"._("Kein Name angegeben.")."§";
-	//} 
+	//}
 	if (!$_REQUEST['description']) {
 		$msg.="error§"._("Keine Beschreibung angegeben.")."§";
 	}
@@ -151,7 +151,7 @@ function show_list() {
 			print $listtable->cell("<input type=\"checkbox\" name=\"active\" ".($a->active ? "checked" : "").">");
 			// Ablaufzeit noch nicht implementiert
 			//print $listtable->cell("<input name=\"expires\" size=2 value=\"$a->expires\"><select name=\"expires_unit\"><option value=m>"._("Minuten")."</option><option value=h>"._("Stunden")."</option><option value=d>"._("Tage")."</option></select>");
-			print $listtable->cell("<input type=image src=\"pictures/haken_transparent.gif\" alt="._("Ändern").">");
+			print $listtable->cell("<input type=image src=\"".$GLOBALS['ASSETS_URL']."images/haken_transparent.gif\" alt="._("Ändern").">");
 			print $listtable->closeRow();
 		} else {
 			print $listtable->openRow();
@@ -160,19 +160,19 @@ function show_list() {
 			print $listtable->cell("<font size=-1>".$a->info_template."</font>");
 			print $listtable->cell("<font size=-1>".$a->count()."</font>");
 			if ($a->active) {
-				print $listtable->cell("<img src=\"pictures/haken_transparent.gif\">");
+				print $listtable->cell("<img src=\"".$GLOBALS['ASSETS_URL']."images/haken_transparent.gif\">");
 			} else {
-				print $listtable->cell("<img src=\"pictures/x_transparent.gif\">");
+				print $listtable->cell("<img src=\"".$GLOBALS['ASSETS_URL']."images/x_transparent.gif\">");
 			}
 			/*
 			// Ablaufzeit noch nicht implementiert
 			if ($a->expires) {
 				print $listtable->cell("<font size=-1>".$a->expires." s"."</font>");
 			} else {
-				print $listtable->cell("<img src=\"pictures/x_transparent.gif\">");
+				print $listtable->cell("<img src=\"".$GLOBALS['ASSETS_URL']."images/x_transparent.gif\">");
 			}
 			*/
-			print $listtable->cell("<a href=\"$PHP_SELF?action=edit&action_id=".$a->action_id."#edit\"><img src=\"pictures/edit_transparent.gif\" border=0></a>");
+			print $listtable->cell("<a href=\"$PHP_SELF?action=edit&action_id=".$a->action_id."#edit\"><img src=\"".$GLOBALS['ASSETS_URL']."images/edit_transparent.gif\" border=0></a>");
 			print $listtable->closeRow();
 		}
 	}
@@ -194,7 +194,7 @@ if ($_REQUEST['action']=="change") {
 		<td class="topic" colspan=2>&nbsp; <b>
 		<?=_("Konfiguration der Logging-Funktionen");
 		?>
-		</td>		
+		</td>
 	</tr>
  	<tr>
 		<td class="blank" valign="top">
@@ -212,9 +212,9 @@ if ($_REQUEST['action']=="change") {
 			<?=_("Sie k&ouml;nnen hier einen Teil der Logging-Funktionen direkt ver&auml;ndern.")?> <br />
 			</blockqoute>
 		</td>
-		<td class="blank" align="right" valign="top"><img src="pictures/blank.gif" height="10" width="5" /><br />
-			<img src="pictures/modules.jpg" border="0"><img src="pictures/blank.gif" height="10" width="10" />
-		</td>		
+		<td class="blank" align="right" valign="top"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" height="10" width="5" /><br />
+			<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/modules.jpg" border="0"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" height="10" width="10" />
+		</td>
 	</tr>
 	<tr>
 		<td class="blank" colspan=2>

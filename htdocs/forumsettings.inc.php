@@ -20,7 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 //Standard herstellen
 
-$cssSw=new cssClassSwitcher;	
+$cssSw=new cssClassSwitcher;
 
 if ($forumsend=="bla"){
 	if ($presetview == "theme")
@@ -33,7 +33,7 @@ if ($forumsend=="bla"){
 	$forum["sortthemes"] = $sortthemes;
 	$forum["themeview"] = $themeview;
 	$forum["presetview"] = $presetview;
-		
+
 	$forum["shrink"] = $shrink*604800; // Anzahl der Sekunden pro Woche
 	$forum["changed"] = "TRUE";
 }
@@ -41,7 +41,7 @@ if ($forumsend=="bla"){
 ?>
 <table width="100%" border="0" cellpadding="0" cellspacing="0" align="center">
 	<tr>
-		<td class="topic" colspan=2><img src="pictures/einst.gif" border="0" align="texttop"><b>&nbsp;<?print _("Einstellungen des Forums anpassen");?></b></td>
+		<td class="topic" colspan=2><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/einst.gif" border="0" align="texttop"><b>&nbsp;<?print _("Einstellungen des Forums anpassen");?></b></td>
 	</tr>
 	<tr>
 		<td class="blank" colspan=2>&nbsp;
@@ -52,7 +52,7 @@ if ($forumsend=="bla"){
 		<blockquote>
 			<font size="-1"><b><?print _("Auf dieser Seite k&ouml;nnen Sie die Bedienung des Stud.IP-Forensystems an Ihre Bed&uuml;rfnisse anpassen.");?>
 		</blockquote>
-		
+
 		<?
 		echo "<form action=\"$PHP_SELF?view=$view\" method=\"POST\">";
 		?>
@@ -70,7 +70,7 @@ if ($forumsend=="bla"){
 					<input type="CHECKBOX" name="neuauf" value="1"<?IF($forum["neuauf"]==1) echo " checked";?>>
 				</td>
 			</tr>
-		
+
 			<tr  <? $cssSw->switchClass() ?>>
 				<td  align="right" class="blank" style="border-bottom:1px dotted black;">
 					<font size="-1">
@@ -88,7 +88,7 @@ if ($forumsend=="bla"){
 				<td <?=$cssSw->getFullClass()?>>
 					<input type="CHECKBOX" name="rateallopen" value=TRUE<?if($forum["rateallopen"]==TRUE) echo " checked";?>>
 			</td>
-			</tr>	
+			</tr>
 			<tr  <? $cssSw->switchClass() ?>>
 				<td  align="right" class="blank" style="border-bottom:1px dotted black;">
 					<font size="-1">
@@ -97,7 +97,7 @@ if ($forumsend=="bla"){
 				<td <?=$cssSw->getFullClass()?>>
 					<input type="CHECKBOX" name="showimages" value=TRUE<?if($forum["showimages"]==TRUE) echo " checked";?>>
 			</td>
-			</tr>	
+			</tr>
 			<tr <? $cssSw->switchClass() ?>>
 				<td align="right" class="blank" style="border-bottom:1px dotted black;">
 					<font size=-1><?echo _("Anzahl der Postings pro Seite im Flatview");?></font>
@@ -114,7 +114,7 @@ if ($forumsend=="bla"){
 					?>
 					</select>
 				</td>
-			</tr>	
+			</tr>
 			<tr <? $cssSw->switchClass() ?>>
 				<td align="right" class="blank" style="border-bottom:1px dotted black;">
 					<font size=-1><?echo _("Sortierung der Themenanzeige");?></font>
@@ -172,10 +172,10 @@ if ($forumsend=="bla"){
 				<td  <?=$cssSw->getFullClass()?> colspan=2 align="middle">
 					<font size=-1><input type="IMAGE" <?=makeButton("uebernehmen", "src") ?> border=0 value="<?_("Änderungen übernehmen")?>"></font>&nbsp;
 				</td>
-			</tr>		
-			</form>	
+			</tr>
+			</form>
 		</table>
-	</form>  
+	</form>
 	<br><br>
 </td>
 </tr>

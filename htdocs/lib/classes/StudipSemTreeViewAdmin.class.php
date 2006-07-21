@@ -3,8 +3,8 @@
 // This file is part of Stud.IP
 // StudipSemTreeViewAdmin.class.php
 // Class to print out the seminar tree in administration mode
-// 
-// Copyright (c) 2003 André Noack <noack@data-quest.de> 
+//
+// Copyright (c) 2003 André Noack <noack@data-quest.de>
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -34,12 +34,12 @@ require_once($ABSOLUTE_PATH_STUDIP . "config.inc.php");
 * @access	public
 * @author	André Noack <noack@data-quest.de>
 * @version	$Id$
-* @package	
+* @package
 */
 class StudipSemTreeViewAdmin extends TreeView {
-	
+
 	var $admin_ranges = array();
-	
+
 	/**
 	* constructor
 	*
@@ -49,7 +49,7 @@ class StudipSemTreeViewAdmin extends TreeView {
 		global $sess,$_marked_item,$_marked_sem;
 		$this->start_item_id = ($start_item_id) ? $start_item_id : "root";
 		$this->root_content = $GLOBALS['UNI_INFO'];
-		parent::TreeView("StudipSemTree"); //calling the baseclass constructor 
+		parent::TreeView("StudipSemTree"); //calling the baseclass constructor
 		if (is_object($sess)){
 			if (!$sess->is_registered("_marked_item"))
 				$sess->register("_marked_item");
@@ -61,7 +61,7 @@ class StudipSemTreeViewAdmin extends TreeView {
 		$this->parseCommand();
 
 	}
-	
+
 	/**
 	* manages the session variables used for the open/close thing
 	*
@@ -69,9 +69,9 @@ class StudipSemTreeViewAdmin extends TreeView {
 	*/
 	function handleOpenRanges(){
 		global $_REQUEST;
-		
+
 		$this->open_ranges[$this->start_item_id] = true;
-		
+
 		if ($_REQUEST['close_item'] || $_REQUEST['open_item']){
 			$toggle_item = ($_REQUEST['close_item']) ? $_REQUEST['close_item'] : $_REQUEST['open_item'];
 			if (!$this->open_items[$toggle_item]){
@@ -80,12 +80,12 @@ class StudipSemTreeViewAdmin extends TreeView {
 				unset($this->open_items[$toggle_item]);
 			}
 		}
-		
+
 		if ($_REQUEST['item_id'])
 			$this->anchor = $_REQUEST['item_id'];
-		
+
 	}
-	
+
 	function openItem($item_id){
 		if ($this->tree->hasKids($item_id)){
 			$this->start_item_id = $item_id;
@@ -104,7 +104,7 @@ class StudipSemTreeViewAdmin extends TreeView {
 		}
 		$this->anchor = $item_id;
 	}
-	
+
 	function parseCommand(){
 		global $_REQUEST;
 		if ($_REQUEST['mode'])
@@ -120,7 +120,7 @@ class StudipSemTreeViewAdmin extends TreeView {
 		if ($this->mode == "MoveItem" || $this->mode == "CopyItem")
 			$this->move_item_id = $this->marked_item;
 	}
-	
+
 	function execCommandOrderItem(){
 		global $_REQUEST;
 		$direction = $_REQUEST['direction'];
@@ -148,7 +148,7 @@ class StudipSemTreeViewAdmin extends TreeView {
 		$this->msg[$item_id] = "msg§" . (($direction == "up") ? _("Element wurde eine Position nach oben verschoben.") : _("Element wurde eine Position nach unten verschoben."));
 		return true;
 	}
-	
+
 	function execCommandNewItem(){
 		global $_REQUEST;
 		$item_id = $_REQUEST['item_id'];
@@ -170,7 +170,7 @@ class StudipSemTreeViewAdmin extends TreeView {
 		}
 		return false;
 	}
-	
+
 	function execCommandEditItem(){
 		global $_REQUEST;
 		$item_id = $_REQUEST['item_id'];
@@ -186,7 +186,7 @@ class StudipSemTreeViewAdmin extends TreeView {
 		}
 		return false;
 	}
-	
+
 	function execCommandInsertItem(){
 		global $_REQUEST;
 		$item_id = $_REQUEST['item_id'];
@@ -218,7 +218,7 @@ class StudipSemTreeViewAdmin extends TreeView {
 		}
 		return false;
 	}
-	
+
 	function execCommandAssertDeleteItem(){
 		global $_REQUEST;
 		$item_id = $_REQUEST['item_id'];
@@ -237,7 +237,7 @@ class StudipSemTreeViewAdmin extends TreeView {
 		}
 		return false;
 	}
-	
+
 	function execCommandDeleteItem(){
 		global $_REQUEST;
 		$item_id = $_REQUEST['item_id'];
@@ -259,7 +259,7 @@ class StudipSemTreeViewAdmin extends TreeView {
 			}
 		return true;
 	}
-	
+
 	function execCommandMoveItem(){
 		global $_REQUEST;
 		$item_id = $_REQUEST['item_id'];
@@ -268,7 +268,7 @@ class StudipSemTreeViewAdmin extends TreeView {
 		$this->mode = "MoveItem";
 		return false;
 	}
-	
+
 	function execCommandCopyItem(){
 		global $_REQUEST;
 		$item_id = $_REQUEST['item_id'];
@@ -277,7 +277,7 @@ class StudipSemTreeViewAdmin extends TreeView {
 		$this->mode = "CopyItem";
 		return false;
 	}
-	
+
 	function execCommandDoMoveItem(){
 		global $_REQUEST;
 		$item_id = $_REQUEST['item_id'];
@@ -299,7 +299,7 @@ class StudipSemTreeViewAdmin extends TreeView {
 		$this->mode = "";
 		return false;
 	}
-	
+
 	function execCommandDoCopyItem(){
 		global $_REQUEST;
 		$item_id = $_REQUEST['item_id'];
@@ -337,7 +337,7 @@ class StudipSemTreeViewAdmin extends TreeView {
 					}
 				}
 			}
-			
+
 			if ($num_copy){
 				$this->msg[$new_item_id] = "msg§" . sprintf(_("%s Bereich(e) wurde(n) kopiert."), $num_copy) . "<br>"
 										. sprintf(_("%s Veranstaltungszuordnungen wurden kopiert"), $num_entries);
@@ -350,7 +350,7 @@ class StudipSemTreeViewAdmin extends TreeView {
 	$this->mode = "";
 	return false;
 	}
-	
+
 	function execCommandInsertFak(){
 		global $_REQUEST;
 		if($this->isItemAdmin("root") && $_REQUEST['insert_fak']){
@@ -367,7 +367,7 @@ class StudipSemTreeViewAdmin extends TreeView {
 		}
 		return false;
 	}
-	
+
 	function execCommandMarkSem(){
 		global $_REQUEST;
 		$item_id = $_REQUEST['item_id'];
@@ -401,7 +401,7 @@ class StudipSemTreeViewAdmin extends TreeView {
 		}
 		return false;
 	}
-	
+
 	function execCommandCancel(){
 		global $_REQUEST;
 		$item_id = $_REQUEST['item_id'];
@@ -433,28 +433,28 @@ class StudipSemTreeViewAdmin extends TreeView {
 		<?
 		echo "\n<table width=\"99%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">";
 		if ($this->start_item_id != 'root'){
-			echo "\n<tr><td class=\"steelgraulight\" align=\"left\" valign=\"top\"><div style=\"font-size:10pt;margin-left:10px\"><b>" 
-				. _("Studienbereiche:") . "</b><br>" .  $this->getSemPath() 
+			echo "\n<tr><td class=\"steelgraulight\" align=\"left\" valign=\"top\"><div style=\"font-size:10pt;margin-left:10px\"><b>"
+				. _("Studienbereiche:") . "</b><br>" .  $this->getSemPath()
 				. "</div></td></tr>";
 		}
 		echo "\n<tr><td class=\"blank\"  align=\"left\" valign=\"top\">";
 		$this->showTree($this->start_item_id);
 		echo "\n</td></tr></table>";
 	}
-	
+
 	function getSemPath(){
 		//$ret = "<a href=\"" . parent::getSelf("start_item_id=root") . "\">" .htmlReady($this->tree->root_name) . "</a>";
 		if ($parents = $this->tree->getParents($this->start_item_id)){
 			for($i = count($parents)-1; $i >= 0; --$i){
-				$ret .= " &gt; <a class=\"tree\" href=\"" . $this->getSelf("start_item_id={$parents[$i]}&open_item={$parents[$i]}",false) 
+				$ret .= " &gt; <a class=\"tree\" href=\"" . $this->getSelf("start_item_id={$parents[$i]}&open_item={$parents[$i]}",false)
 					. "\">" .htmlReady($this->tree->tree_data[$parents[$i]]["name"]) . "</a>";
 			}
 		}
 		return $ret;
 	}
-			
+
 	/**
-	* returns html for the icons in front of the name of the item 
+	* returns html for the icons in front of the name of the item
 	*
 	* @access	private
 	* @param	string	$item_id
@@ -464,24 +464,24 @@ class StudipSemTreeViewAdmin extends TreeView {
 		$head = $this->getItemHeadFrontPic($item_id);
 		$head .= "\n<td  class=\"printhead\" nowrap  align=\"left\" valign=\"bottom\">";
 		if ($this->tree->hasKids($item_id)){
-			$head .= "<img border=\"0\"  src=\"pictures/";
+			$head .= "<img border=\"0\"  src=\"".$GLOBALS['ASSETS_URL']."images/";
 			$head .= ($this->open_ranges[$item_id]) ? "cont_folder3.gif" : "cont_folder.gif";
 			$head .= "\" ";
 			$head .= (!$this->open_ranges[$item_id])? tooltip(_("Alle Unterelement öffnen")) : tooltip(_("Alle Unterelemente schliessen"));
 			$head .= ">";
-		} else { 
-			$head .= "<img src=\"pictures/";
+		} else {
+			$head .= "<img src=\"".$GLOBALS['ASSETS_URL']."images/";
 			$head .= ($this->open_items[$item_id]) ? "cont_folder4.gif" : "cont_folder2.gif";
 			$head .= "\" " . tooltip(_("Dieses Element hat keine Unterelemente")) . "border=\"0\">";
 		}
 	return $head . "</td>";
 	}
-	
+
 	function getItemContent($item_id){
 		if ($item_id == $this->edit_item_id )
 			return $this->getEditItemContent();
 		if ($item_id == $this->move_item_id){
-			$this->msg[$item_id] = "info§" . sprintf(_("Dieses Element wurde zum Verschieben / Kopieren markiert. Bitte w&auml;hlen sie ein Einfügesymbol %s aus, um das Element zu verschieben / kopieren."), "<img src=\"pictures/move.gif\" border=\"0\" " .tooltip(_("Einfügesymbol")) . ">");
+			$this->msg[$item_id] = "info§" . sprintf(_("Dieses Element wurde zum Verschieben / Kopieren markiert. Bitte w&auml;hlen sie ein Einfügesymbol %s aus, um das Element zu verschieben / kopieren."), "<img src=\"".$GLOBALS['ASSETS_URL']."images/move.gif\" border=\"0\" " .tooltip(_("Einfügesymbol")) . ">");
 			}
 		$content = "\n<table width=\"90%\" cellpadding=\"2\" cellspacing=\"2\" align=\"center\" style=\"font-size:10pt;\">";
 		$content .= $this->getItemMessage($item_id);
@@ -495,7 +495,7 @@ class StudipSemTreeViewAdmin extends TreeView {
 			$content .= "<a href=\"" . $this->getSelf("cmd=EditItem&item_id=$item_id") . "\">"
 			. "<img " .makeButton("bearbeiten","src") . tooltip(_("Dieses Element bearbeiten"))
 			. " border=\"0\"></a>&nbsp;";
-		
+
 			$content .= "<a href=\"" . $this->getSelf("cmd=AssertDeleteItem&item_id=$item_id") . "\">"
 			. "<img " .makeButton("loeschen","src") . tooltip(_("Dieses Element löschen"))
 			. " border=\"0\"></a>&nbsp;";
@@ -553,7 +553,7 @@ class StudipSemTreeViewAdmin extends TreeView {
 		$content .= "</table>";
 		return $content;
 	}
-	
+
 	function getSemDetails($snap, $item_id, $lonely_sem = false){
 		$form_name = DbView::get_uniqid();
 		$content = "<form name=\"$form_name\" action=\"" . $this->getSelf("cmd=MarkSem") ."\" method=\"post\">
@@ -586,7 +586,7 @@ class StudipSemTreeViewAdmin extends TreeView {
 				$group_by_data[$start_sem] = $detail;
 			}
 		}
-		
+
 		foreach ($group_by_data as $group_field => $sem_ids){
 				foreach ($sem_ids['seminar_id'] as $seminar_id => $foo){
 					$name = strtolower(key($sem_data[$seminar_id]["Name"]));
@@ -597,9 +597,9 @@ class StudipSemTreeViewAdmin extends TreeView {
 				}
 				uasort($group_by_data[$group_field]['seminar_id'], 'strnatcmp');
 			}
-		
+
 		krsort($group_by_data, SORT_NUMERIC);
-		
+
 		foreach ($group_by_data as $sem_number => $sem_ids){
 			$content .= "\n<tr><td class=\"steelkante\" colspan=\"3\" style=\"font-size:10pt;\" >" . $this->tree->sem_dates[$sem_number]['name'] . "</td></tr>";
 			if (is_array($sem_ids['seminar_id'])){
@@ -612,7 +612,7 @@ class StudipSemTreeViewAdmin extends TreeView {
 						$sem_name .= (($sem_number_end == -1) ? _("unbegrenzt") : $this->tree->sem_dates[$sem_number_end]['name']) . ")";
 					}
 					$content .= "<tr><td class=\"steel1\" width=\"1%\"><input type=\"checkbox\" name=\"marked_sem[]\" value=\"$seminar_id\" style=\"vertical-align:middle\">
-								</td><td class=\"steel1\" style=\"font-size:10pt;\"><a href=\"details.php?sem_id=". $seminar_id 
+								</td><td class=\"steel1\" style=\"font-size:10pt;\"><a href=\"details.php?sem_id=". $seminar_id
 								."&send_from_search=true&send_from_search_page=" . rawurlencode($this->getSelf()) . "\">" . htmlReady($sem_name) . "</a>
 								</td><td class=\"steel1\" align=\"right\" style=\"font-size:10pt;\">(";
 					$doz_name = array_keys($sem_data[$seminar_id]['doz_name']);
@@ -626,7 +626,7 @@ class StudipSemTreeViewAdmin extends TreeView {
 								$content .= ", ";
 							}
 							if ($i == 3){
-								$content .= "...&nbsp;<a href=\"details.php?sem_id=". $seminar_id 
+								$content .= "...&nbsp;<a href=\"details.php?sem_id=". $seminar_id
 										."&send_from_search=true&send_from_search_page=" . rawurlencode($this->getSelf()) . "\">(mehr) </a>";
 								break;
 							}
@@ -650,7 +650,7 @@ class StudipSemTreeViewAdmin extends TreeView {
 					</td></tr> </form>";
 		return $content;
 	}
-	
+
 	function getEditItemContent(){
 		$content = "\n<form name=\"item_form\" action=\"" . $this->getSelf("cmd=InsertItem&item_id={$this->edit_item_id}") . "\" method=\"POST\">";
 		$content .= "\n<input type=\"HIDDEN\" name=\"parent_id\" value=\"{$this->tree->tree_data[$this->edit_item_id]['parent_id']}\">";
@@ -667,16 +667,16 @@ class StudipSemTreeViewAdmin extends TreeView {
 				. "<textarea style=\"width:100%\" rows=\"5\" name=\"edit_info\" wrap=\"virtual\">" .htmlReady($this->tree->tree_data[$this->edit_item_id]['info']) . "</textarea>"
 				. "</td></tr><tr><td class=\"steel1\" align=\"right\" valign=\"top\" colspan=\"2\"><input type=\"image\" "
 				. makeButton("absenden","src") . tooltip("Einstellungen übernehmen") . " border=\"0\">"
-				. "&nbsp;<a href=\"" . $this->getSelf("cmd=Cancel&item_id="  
+				. "&nbsp;<a href=\"" . $this->getSelf("cmd=Cancel&item_id="
 				. (($this->mode == "NewItem") ? $this->tree->tree_data[$this->edit_item_id]['parent_id'] : $this->edit_item_id) ) . "\">"
 				. "<img " .makeButton("abbrechen","src") . tooltip(_("Aktion abbrechen"))
 				. " border=\"0\"></a></td></tr>";
-		
+
 		$content .= "\n</table></form>";
-		
+
 		return $content;
 	}
-	
+
 
 	function isItemAdmin($item_id){
 		global $auth;
@@ -699,18 +699,18 @@ class StudipSemTreeViewAdmin extends TreeView {
 			return false;
 		}
 	}
-	
+
 	function isParentAdmin($item_id){
 		return $this->isItemAdmin($this->tree->tree_data[$item_id]['parent_id']);
 	}
-	
+
 	function getItemHead($item_id){
 		$head = "";
 		if (($this->mode == "MoveItem" || $this->mode == "CopyItem") && ($this->isItemAdmin($item_id) || $this->isParentAdmin($item_id))
 			&& ($this->move_item_id != $item_id) && ($this->tree->tree_data[$this->move_item_id]['parent_id'] != $item_id)
 			&& !$this->tree->isChildOf($this->move_item_id,$item_id)){
 			$head .= "<a href=\"" . $this->getSelf("cmd=Do" . $this->mode . "&item_id=$item_id") . "\">"
-			. "<img src=\"pictures/move.gif\" border=\"0\" " .tooltip(_("An dieser Stelle einfügen")) . "></a>&nbsp;";
+			. "<img src=\"".$GLOBALS['ASSETS_URL']."images/move.gif\" border=\"0\" " .tooltip(_("An dieser Stelle einfügen")) . "></a>&nbsp;";
 		}
 		$head .= parent::getItemHead($item_id);
 		if ($item_id != "root"){
@@ -720,32 +720,32 @@ class StudipSemTreeViewAdmin extends TreeView {
 			$head .= "</td><td align=\"rigth\" valign=\"bottom\" class=\"printhead\">";
 			if (!$this->tree->isFirstKid($item_id)){
 				$head .= "<a href=\"". $this->getSelf("cmd=OrderItem&direction=up&item_id=$item_id") .
-				"\"><img src=\"pictures/move_up.gif\" hspace=\"4\" width=\"13\" height=\"11\" border=\"0\" " . 
+				"\"><img src=\"".$GLOBALS['ASSETS_URL']."images/move_up.gif\" hspace=\"4\" width=\"13\" height=\"11\" border=\"0\" " .
 				tooltip(_("Element nach oben")) ."></a>";
 			}
 			if (!$this->tree->isLastKid($item_id)){
-				$head .= "<a href=\"". $this->getSelf("cmd=OrderItem&direction=down&item_id=$item_id") . 
-				"\"><img src=\"pictures/move_down.gif\" hspace=\"4\" width=\"13\" height=\"11\" border=\"0\" " . 
+				$head .= "<a href=\"". $this->getSelf("cmd=OrderItem&direction=down&item_id=$item_id") .
+				"\"><img src=\"".$GLOBALS['ASSETS_URL']."images/move_down.gif\" hspace=\"4\" width=\"13\" height=\"11\" border=\"0\" " .
 				tooltip(_("Element nach unten")) . "></a>";
 			}
 			$head .= "&nbsp;";
 		}
 		return $head;
 	}
-	
+
 	function getItemMessage($item_id,$colspan = 1){
 		$content = "";
 		if ($this->msg[$item_id]){
 			$msg = split("§",$this->msg[$item_id]);
 			$pics = array('error' => 'x.gif', 'info' => 'ausruf.gif', 'msg' => 'ok.gif');
 			$content = "\n<tr><td colspan=\"{$colspan}\"><table border=\"0\" cellspacing=\"0\" cellpadding=\"2\" width=\"100%\" style=\"font-size:10pt\">
-						<tr><td class=\"blank\" align=\"center\" width=\"25\"><img width=\"16\" height=\"16\" src=\"pictures/" . $pics[$msg[0]] . "\" ></td>
+						<tr><td class=\"blank\" align=\"center\" width=\"25\"><img width=\"16\" height=\"16\" src=\"".$GLOBALS['ASSETS_URL']."images/" . $pics[$msg[0]] . "\" ></td>
 						<td class=\"blank\" align=\"left\">" . $msg[1] . "</td></tr>
 						</table></td></tr><tr>";
 		}
 		return $content;
 	}
-	
+
 	function getSelf($param = "", $with_start_item = true){
 		$url = $GLOBALS['PHP_SELF'] . "?" . "foo=" . DbView::get_uniqid();
 		if ($this->mode)

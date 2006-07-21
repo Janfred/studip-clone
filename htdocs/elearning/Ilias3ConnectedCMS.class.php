@@ -23,7 +23,7 @@ class Ilias3ConnectedCMS extends ConnectedCMS
 	var $user_style;
 	var $crs_roles;
 	var $global_roles;
-	
+
 	var $db_class_object;
 	var $db_class_tree;
 	var $db_class_course;
@@ -35,7 +35,7 @@ class Ilias3ConnectedCMS extends ConnectedCMS
 	* init class.
 	* @access public
 	* @param string $cms system-type
-	*/ 
+	*/
 	function Ilias3ConnectedCMS($cms)
 	{
 		global $ELEARNING_INTERFACE_MODULES, $RELATIVE_PATH_ELEARNING_INTERFACE, $ABSOLUTE_PATH_STUDIP, $RELATIVE_PATH_SOAP;
@@ -43,12 +43,12 @@ class Ilias3ConnectedCMS extends ConnectedCMS
 		parent::ConnectedCMS($cms);
 
 		require_once($this->CLASS_PREFIX . "Soap.class.php");
-		$classname = $this->CLASS_PREFIX . "Soap"; 
+		$classname = $this->CLASS_PREFIX . "Soap";
 		$this->soap_client = new $classname($this->cms_type);
 		$this->soap_client->setCachingStatus(true);
 /*
 		if (($ELEARNING_INTERFACE_MODULES[$cms]["RELATIVE_PATH_DB_CLASSES"] != false) AND ($cms != ""))
-		{	
+		{
 			require_once($RELATIVE_PATH_ELEARNING_INTERFACE . "/" . $ELEARNING_INTERFACE_MODULES[$cms]["RELATIVE_PATH_DB_CLASSES"] . "/" . $ELEARNING_INTERFACE_MODULES[$cms]["db_classes"]["content"]["file"] );
 			$classname = $ELEARNING_INTERFACE_MODULES[$cms]["db_classes"]["content"]["classname"];
 			$this->db_class = new $classname();
@@ -73,6 +73,7 @@ class Ilias3ConnectedCMS extends ConnectedCMS
 		$this->user_role_template_id = ELearningUtils::getConfigValue("user_role_template_id", $cms);
 		$this->user_skin = ELearningUtils::getConfigValue("user_skin", $cms);
 		$this->user_style = ELearningUtils::getConfigValue("user_style", $cms);
+		$this->encrypt_passwords = ELearningUtils::getConfigValue("encrypt_passwords", $cms);
 
 		$this->crs_roles = $ELEARNING_INTERFACE_MODULES[$cms]["crs_roles"];
 		$this->client_id = $ELEARNING_INTERFACE_MODULES[$cms]["soap_data"]["client"];
@@ -84,15 +85,15 @@ class Ilias3ConnectedCMS extends ConnectedCMS
 	/**
 	* get preferences
 	*
-	* shows additional settings. 
+	* shows additional settings.
 	* @access public
 	*/
 	function getPreferences()
 	{
-		global $connected_cms, $submit, $role_template_name, $cat_name, $style_setting;
+		global $connected_cms, $submit, $role_template_name, $cat_name, $style_setting, $encrypt_passwords;
 	
 		$this->soap_client->setCachingStatus(false);
-		
+
 		if ($cat_name != "")
 		{
 			$cat = $this->soap_client->getReferenceByTitle( trim( $cat_name ), "cat");
@@ -122,14 +123,19 @@ class Ilias3ConnectedCMS extends ConnectedCMS
 		{
 			ELearningUtils::setConfigValue("user_style", $style_setting, $this->cms_type);
 			ELearningUtils::setConfigValue("user_skin", $style_setting, $this->cms_type);
+			ELearningUtils::setConfigValue("encrypt_passwords", $encrypt_passwords, $this->cms_type);
 		}
 		else
+		{
 			if (ELearningUtils::getConfigValue("user_style", $this->cms_type) != "")
 				$style_setting = ELearningUtils::getConfigValue("user_style", $this->cms_type);
+			if (ELearningUtils::getConfigValue("encrypt_passwords", $this->cms_type) != "")
+				$encrypt_passwords = ELearningUtils::getConfigValue("encrypt_passwords", $this->cms_type);
+		}
 
 /**/
 		if ($messages["error"] != "")
-			echo "<b><img src=\"pictures/x_small2.gif\" alt=\"Fehler\">&nbsp;" . $messages["error"] . "</b><br><br>";
+			echo "<b><img src=\"".$GLOBALS['ASSETS_URL']."images/x_small2.gif\" alt=\"Fehler\">&nbsp;" . $messages["error"] . "</b><br><br>";
 
 		echo "<table>";
 		echo "<tr valign=\"top\"><td width=30% align=\"left\"><font size=\"-1\">";
@@ -148,7 +154,7 @@ class Ilias3ConnectedCMS extends ConnectedCMS
 		echo "<b>" . _("Kategorie: ") . "</b>";
 		echo "</td><td>";
 		echo "<input type=\"text\" size=\"20\" border=0 value=\"" . $cat["title"] . "\" name=\"cat_name\">&nbsp;";
-		echo "<img  src=\"./pictures/info.gif\" " . tooltip(_("Geben Sie hier den Namen einer bestehenden ILIAS 3 - Kategorie ein, in der die Lernmodule und User-Kategorien abgelegt werden sollen."), TRUE, TRUE) . ">";
+		echo "<img  src=\"".$GLOBALS['ASSETS_URL']."images/info.gif\" " . tooltip(_("Geben Sie hier den Namen einer bestehenden ILIAS 3 - Kategorie ein, in der die Lernmodule und User-Kategorien abgelegt werden sollen."), TRUE, TRUE) . ">";
 		echo "</td></tr><tr><td></td><td><font size=\"-1\">";
 		echo " (ID " . $this->main_category_node_id;
 		if ($cat["description"] != "")
@@ -162,10 +168,22 @@ class Ilias3ConnectedCMS extends ConnectedCMS
 		echo "<b>" . _("Rollen-Template f&uuml;r die per&ouml;nliche Kategorie: ") . "</b>";
 		echo "</td><td>";
 		echo "<input type=\"text\" size=\"20\" border=0 value=\"" . ELearningUtils::getConfigValue("user_role_template_name", $this->cms_type) . "\" name=\"role_template_name\">&nbsp;";
-		echo "<img  src=\"./pictures/info.gif\" " . tooltip(_("Geben Sie den Namen des Rollen-Templates ein, das für die persönliche Kategorie von DozentInnen verwendet werden soll (z.B. \"Author\")."), TRUE, TRUE) . ">"	;
+		echo "<img  src=\"".$GLOBALS['ASSETS_URL']."images/info.gif\" " . tooltip(_("Geben Sie den Namen des Rollen-Templates ein, das für die persönliche Kategorie von DozentInnen verwendet werden soll (z.B. \"Author\")."), TRUE, TRUE) . ">"	;
 		echo "</td></tr><tr><td></td><td><font size=\"-1\">";
 		echo " (ID " . $this->user_role_template_id;
 		echo ")";
+		echo "<br>\n";
+		echo "<br>\n";
+		echo "</td></tr><tr><td  width=30% align=\"left\"><font size=\"-1\">";
+
+		echo "<b>" . _("Passw&ouml;rter: ") . "</b>";
+		echo "</td><td><font size=\"-1\">";
+		echo "<input type=\"checkbox\" border=0 value=\"md5\" name=\"encrypt_passwords\"";
+		if ($encrypt_passwords == "md5")
+			echo " checked";
+		echo ">&nbsp;" . _("ILIAS-Passw&ouml;rter verschl&uuml;sselt speichern.");
+		echo "<img  src=\"".$GLOBALS['ASSETS_URL']."images/info.gif\" " . tooltip(_("Wählen Sie diese Option, wenn die ILIAS-Passw&ouml;rter der zugeordneten Accounts verschl&uuml;sselt in der Stud.IP-Datenbank abgelegt werden sollen."), TRUE, TRUE) . ">"	;
+		echo "</td></tr><tr><td></td><td><font size=\"-1\">";
 		echo "<br>\n";
 		echo "<br>\n";
 		echo "</td></tr><tr><td  width=30% align=\"left\"><font size=\"-1\">";
@@ -176,7 +194,7 @@ class Ilias3ConnectedCMS extends ConnectedCMS
 		if ($style_setting == "studip")
 			echo " checked";
 		echo ">&nbsp;" . _("Stud.IP-Style f&uuml;r neue Nutzer-Accounts voreinstellen.");
-		echo "<img  src=\"./pictures/info.gif\" " . tooltip(_("Wählen Sie diese Option, wenn für alle von Stud.IP angelegten ILIAS-Accounts das Stud.IP-Layout als System-Style eingetragen werden soll. ILIAS-seitig angelegte Accounts erhalten weiterhin den Standard-Style."), TRUE, TRUE) . ">";
+		echo "<img  src=\"".$GLOBALS['ASSETS_URL']."images/info.gif\" " . tooltip(_("Wählen Sie diese Option, wenn für alle von Stud.IP angelegten ILIAS-Accounts das Stud.IP-Layout als System-Style eingetragen werden soll. ILIAS-seitig angelegte Accounts erhalten weiterhin den Standard-Style."), TRUE, TRUE) . ">";
 		echo "</td></tr><tr><td></td><td><font size=\"-1\">";
 		echo "<br>\n";
 		echo "<br>\n";
@@ -188,16 +206,16 @@ class Ilias3ConnectedCMS extends ConnectedCMS
 		echo "</table>";
 		echo "<center><input type=\"IMAGE\" " . makeButton("uebernehmen", "src") . " border=0 value=\"" . _("Abschicken") . "\" name=\"submit\"></center><br>";
 		echo "<br>\n";
-			
+
 		parent::getPreferences();
-		
-		echo "<br>\n";		
+
+		echo "<br>\n";
 	}
 
 	function setContentModule($data, $is_connected = false)
 	{
 		parent::setContentModule($data, $is_connected);
-		
+
 		if ($data["owner"] != "")
 		{
 			$user_data = $this->soap_client->getUser($data["owner"]);
@@ -206,7 +224,7 @@ class Ilias3ConnectedCMS extends ConnectedCMS
 		}
 		$this->content_module[$data["ref_id"]]->setPermissions($data["accessInfo"], $data["operations"]);
 	}
-	
+
 	/**
 	* create new instance of subclass content-module
 	*
@@ -219,12 +237,12 @@ class Ilias3ConnectedCMS extends ConnectedCMS
 	function newContentModule($module_id, $module_type, $is_connected = false)
 	{
 		global $seminar_id, $current_module, $caching_active;
-		
+
 		$current_module = $module_id;
 //		echo "call module $module_id";
 
 		if ($this->is_first_call /*is_array($this->content_module)/**/ AND ($seminar_id != "") AND ($is_connected == true)/**/)
-		{			
+		{
 			$id = ObjectConnections::getConnectionModuleId( $seminar_id, "crs", $this->cms_type );
 			if ($id != false)
 			{
@@ -248,7 +266,7 @@ class Ilias3ConnectedCMS extends ConnectedCMS
 	function getUserContentModules()
 	{
 		global $connected_cms;
-		
+
 		$types = array();
 		foreach ($this->types as $type => $name)
 		{
@@ -260,7 +278,7 @@ class Ilias3ConnectedCMS extends ConnectedCMS
 		$obj_ids = array();
 		if (is_array($result))
 			foreach($result as $key => $object_data)
-				if (((! in_array($object_data["obj_id"], $obj_ids)) AND in_array(OPERATION_READ, $object_data["operations"])) 
+				if (((! in_array($object_data["obj_id"], $obj_ids)) AND in_array(OPERATION_READ, $object_data["operations"]))
 					OR in_array(OPERATION_WRITE, $object_data["operations"]))
 				{
 					if (is_array($user_modules[$object_data["obj_id"]]["operations"]))
@@ -285,13 +303,13 @@ class Ilias3ConnectedCMS extends ConnectedCMS
 	function searchContentModules($key)
 	{
 		global $connected_cms;
-		
+
 		$types = array();
 		foreach ($this->types as $type => $name)
 		{
 			$types[] = $type;
 		}
-		
+
 		$result = $this->soap_client->searchObjects($types, $key,"and", $connected_cms[$this->cms_type]->user->getId());
 		/*
 		if (is_array($result))
@@ -303,7 +321,7 @@ class Ilias3ConnectedCMS extends ConnectedCMS
 		*/
 		return $result;
 	}
-	
+
 
 	/**
 	* get client-id
@@ -316,7 +334,7 @@ class Ilias3ConnectedCMS extends ConnectedCMS
 	{
 		return $this->client_id;
 	}
-	
+
 	/**
 	* get session-id
 	*
@@ -328,7 +346,7 @@ class Ilias3ConnectedCMS extends ConnectedCMS
 	{
 		return $this->root_user_sid;
 	}
-	
+
 	/**
 	* terminate
 	*

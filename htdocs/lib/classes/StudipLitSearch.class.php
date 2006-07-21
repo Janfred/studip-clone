@@ -65,19 +65,19 @@ class StudipLitSearch {
 		$search_plugins = $this->getAvailablePlugins();
 		$preferred_plugin = $this->getPreferredPlugin();
 		$i = 0;
-		if ($preferred_plugin && in_array($preferred_plugin, $search_plugins)){
-			$search_plugin_options[] = array('name' => $preferred_plugin, 'value' => $i++);
+		if ($preferred_plugin && isset($search_plugins[$preferred_plugin])){
+			$search_plugin_options[] = array('name' => $search_plugins[$preferred_plugin], 'value' => $preferred_plugin);
 		}
-		foreach ($search_plugins as $plugin_name){
+		foreach ($search_plugins as $plugin_name => $plugin_displayname){
 			if ($preferred_plugin != $plugin_name){
-				$search_plugin_options[] = array('name' => $plugin_name, 'value' => $i++);
+				$search_plugin_options[] = array('name' => $plugin_displayname , 'value' => $plugin_name);
 			} else {
-				array_splice($search_plugins, $i-1,1);
-				array_unshift($search_plugins,$plugin_name);
+				unset($search_plugins[$plugin_name]);
+				$search_plugins[$plugin_name] = $plugin_displayname;
 			}
 		}
 		$outer_form_fields = array('search_plugin' => array('type' => 'select', 'caption' => _("Welchen Katalog durchsuchen ?"),
-															'options' => $search_plugin_options, 'default_value' => 0),
+															'options' => $search_plugin_options, 'default_value' => $search_plugin_options[0]['value']),
 									'search_term_count' => array('type' => 'hidden', 'default_value' => 1)
 									);
 		$outer_form_buttons = array('search' => array('type' => 'suchen', 'info' => _("Suche starten")),
@@ -94,11 +94,11 @@ class StudipLitSearch {
 		if ($this->outer_form->isClicked("search_sub") && $this->outer_form->getFormFieldValue('search_term_count') > 1){
 			$this->outer_form->form_values['search_term_count']--;
 		}
-		$plugin_number = false;
+		$plugin_name = false;
 		if ($this->outer_form->isClicked("reset") ||  $this->outer_form->isChanged("search_plugin")){
-			$plugin_number = $this->outer_form->getFormFieldValue("search_plugin");
+			$plugin_name = $this->outer_form->getFormFieldValue("search_plugin");
 			$this->outer_form->doFormReset();
-			$this->outer_form->form_values["search_plugin"] = $plugin_number;
+			$this->outer_form->form_values["search_plugin"] = $plugin_name;
 		}
 		
 		$this->term_count = $this->outer_form->getFormFieldValue('search_term_count');
@@ -108,16 +108,16 @@ class StudipLitSearch {
 			}
 		}
 		$this->inner_form =& new StudipForm($inner_form_fields, null, "lit_search");
-		if ($plugin_number !== false){
+		if ($plugin_name !== false){
 			$this->inner_form->doFormReset();
-			$this->outer_form->form_values["search_plugin"] = $plugin_number;
+			$this->outer_form->form_values["search_plugin"] = $plugin_name;
 		}
-		if ( ($plugin_name = $search_plugins[$this->outer_form->getFormFieldValue("search_plugin")]) ){
-			$plugin_name = "StudipLitSearchPlugin" . $plugin_name;
-			include_once $GLOBALS['ABSOLUTE_PATH_STUDIP']. "lib/classes/lit_search_plugins/" . $plugin_name .".class.php";
-			$this->search_plugin =& new $plugin_name();
+		if ( ($init_plugin_name = $this->outer_form->getFormFieldValue("search_plugin")) ){
+			$init_plugin_name = "StudipLitSearchPlugin" . $init_plugin_name;
+			include_once $GLOBALS['ABSOLUTE_PATH_STUDIP']. "lib/classes/lit_search_plugins/" . $init_plugin_name .".class.php";
+			$this->search_plugin =& new $init_plugin_name();
 		}
-		if ($plugin_number !== false){
+		if ($plugin_name !== false){
 			$this->search_plugin->doResetSearch();
 			$this->start_result = 1;
 		}
@@ -161,20 +161,34 @@ class StudipLitSearch {
 	
 	function GetAvailablePlugins(){
 		global $_lit_search_plugins;
-		for ($i = 0; $i < count($_lit_search_plugins); ++$i){
-			$ret[] = $_lit_search_plugins[$i]['name'];
+		static $available_plugins;
+		if (!is_array($available_plugins)){
+			for ($i = 0; $i < count($_lit_search_plugins); ++$i){
+				$available_plugins[$_lit_search_plugins[$i]['name']] = ($_lit_search_plugins[$i]['display_name'] ? $_lit_search_plugins[$i]['display_name'] : $_lit_search_plugins[$i]['name']);
+			}
 		}
-		return $ret;
+		return $available_plugins;
 	}
 	
 	function GetExternalLink($plugin_name){
 		global $_lit_search_plugins;
-		$ret = "";
-		for ($i = 0; $i < count($_lit_search_plugins); ++$i){
-			if ($_lit_search_plugins[$i]['name'] == $plugin_name){
-				$ret = $_lit_search_plugins[$i]['link'];
-				break;
+		static $available_plugins_links;
+		if (!is_array($available_plugins_links)){
+			for ($i = 0; $i < count($_lit_search_plugins); ++$i){
+				$available_plugins_links[$_lit_search_plugins[$i]['name']] = $_lit_search_plugins[$i]['link'];
 			}
+		}
+		return $available_plugins_links[$plugin_name];
+	}
+	
+	function GetPluginDisplayName($plugin_name){
+		$plugins = StudipLitSearch::GetAvailablePlugins();
+		return $plugins[$plugin_name];
+	}
+	
+	function GetAvailablePluginsOptions(){
+		foreach(StudipLitSearch::GetAvailablePlugins() as $value => $name){
+			$ret[] = array('name' => $name, 'value' => $value);
 		}
 		return $ret;
 	}

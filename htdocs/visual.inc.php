@@ -42,7 +42,7 @@ function get_ampel_write ($mein_status, $admission_status, $write_level, $print=
 		$ampel_state = get_ampel_state($ampel_state,0,"");
 		//echo $ampel_state["access"]."<br/>";
 		//echo $ampel_state["text"]."<br/>";
-	} else {	  
+	} else {
 		if ($temporaly != 0) {
 			$ampel_state = get_ampel_state($ampel_state,1,_("(Vorl. Eintragung)"));
 		}
@@ -54,7 +54,7 @@ function get_ampel_write ($mein_status, $admission_status, $write_level, $print=
 		if (($ende != -1) && ($ende < time())) {
 			$ampel_state = get_ampel_state($ampel_state,2,_("(Beendet)"));
 		}
-		
+
 		switch($write_level) {
 			case 0 : //Schreiben darf jeder
 				$ampel_state = get_ampel_state($ampel_state,0,"");
@@ -82,7 +82,7 @@ function get_ampel_write ($mein_status, $admission_status, $write_level, $print=
 			break;
 		}
 	}
-	
+
 	switch ($ampel_state["access"]) {
 		case 0 :
 			$color = "gruen";
@@ -94,9 +94,9 @@ function get_ampel_write ($mein_status, $admission_status, $write_level, $print=
 			$color = "rot";
 			break;
 	}
-	
-	$ampel_status="<img border=\"0\" src=\"pictures/ampel_$color.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>". $ampel_state["text"] ."</font>";
-	
+
+	$ampel_status="<img border=\"0\" src=\"".$GLOBALS['ASSETS_URL']."images/ampel_$color.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>". $ampel_state["text"] ."</font>";
+
 	if ($print==TRUE) {
 		echo $ampel_status;
 	}
@@ -104,7 +104,7 @@ function get_ampel_write ($mein_status, $admission_status, $write_level, $print=
 }
 
 /*****************************************************************************
-get_ampel_read, waehlt die geeignete Grafik in der Ampel Ansicht 
+get_ampel_read, waehlt die geeignete Grafik in der Ampel Ansicht
 (fuer Berechtigungen) aus. Benoetigt den Status in der Veranstaltung
 und auf der Anmeldeliste und den read_level der Veranstaltung
 /*****************************************************************************/
@@ -126,11 +126,11 @@ function get_ampel_read ($mein_status, $admission_status, $read_level, $print="T
 			if ($temporaly != 0) {
 				$ampel_state = get_ampel_state($ampel_state,1,_("(Vorl. Eintragung)"));
 			}
-			
+
 			if (($start != -1) && ($start > time())) {
 				$ampel_state = get_ampel_state($ampel_state,1,_("(Starttermin)"));
 			}
-	
+
 			if (($ende != -1) && ($ende < time())) {
 				$ampel_state = get_ampel_state($ampel_state,2,_("(Beendet)"));
 			}
@@ -162,7 +162,7 @@ function get_ampel_read ($mein_status, $admission_status, $read_level, $print="T
 			break;
 		}
 	}
-	
+
 	switch ($ampel_state["access"]) {
 		case 0 :
 			$color = "gruen";
@@ -174,9 +174,9 @@ function get_ampel_read ($mein_status, $admission_status, $read_level, $print="T
 			$color = "rot";
 			break;
 	}
-		
-	$ampel_status="<img border=\"0\" src=\"pictures/ampel_$color.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>". $ampel_state["text"] ."</font>";
-	
+
+	$ampel_status="<img border=\"0\" src=\"".$GLOBALS['ASSETS_URL']."images/ampel_$color.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>". $ampel_state["text"] ."</font>";
+
 	if ($print==TRUE) {
 		echo $ampel_status;
 	}
@@ -287,7 +287,7 @@ function quotes_decode ($description) {
 					}
 				else ++$curr_pos;
 				}
-			else ++$curr_pos;        
+			else ++$curr_pos;
 			}
 		}
 	return $description;
@@ -426,7 +426,7 @@ function format_wiki_comment($comment, $metainfo, $show_comment) {
 		$comment = decodehtml($comment);
 		$comment = preg_replace("/<.*>/U","",$comment);
 		$metainfo = decodeHTML($metainfo);
-		return '<nowikilink><a href="javascript:void(0);" '.tooltip(sprintf("%s %s:\n%s",_("Kommentar von"),$metainfo,$comment),TRUE,TRUE) . "><img src=\"pictures/icon-comment.gif\" border=0></a></nowikilink>";
+		return '<nowikilink><a href="javascript:void(0);" '.tooltip(sprintf("%s %s:\n%s",_("Kommentar von"),$metainfo,$comment),TRUE,TRUE) . "><img src=\"".$GLOBALS['ASSETS_URL']."images/icon-comment.gif\" border=0></a></nowikilink>";
 	} else {
 		echo "<p>Error: unknown show_comment value in format_wiki_comment: ".$show_comment."</p>";
 		die();
@@ -441,7 +441,7 @@ function latex($text, $extern = FALSE) {
 	global $ABSOLUTE_PATH_STUDIP,$CANONICAL_RELATIVE_PATH_STUDIP,$TEXCACHE_PATH,$LATEXRENDER_ENABLE;
 	global $LATEX_PATH,$DVIPS_PATH,$CONVERT_PATH,$IDENTIFY_PATH,$TMP_PATH, $LATEX_FORMATS;
 	global $EXTERN_SERVER_NAME;
-	
+
 	if ($LATEXRENDER_ENABLE && isset($LATEX_FORMATS)) {
 		include_once($ABSOLUTE_PATH_STUDIP."/lib/classes/latexrender.class.php");
 		if ($extern) {
@@ -456,7 +456,7 @@ function latex($text, $extern = FALSE) {
 		$latex->_convert_path = $CONVERT_PATH;
 		$latex->_identify_path = $IDENTIFY_PATH;
 		$latex->_tmp_dir = $TMP_PATH;
-		
+
 		// There can be many formatting tags that are
 		// handled by the latex renderer
 		// The tags and their LaTex templates are set in the
@@ -466,13 +466,13 @@ function latex($text, $extern = FALSE) {
 			$latex->setFormat($formatname, $format["template"]);
 			$to_match=sprintf("#\[%s\](.*?)\[/%s\]#si", $format["tag"], $format["tag"]);
 			preg_match_all($to_match,$text,$tex_matches);
-		
+
 			for ($i=0; $i < count($tex_matches[0]); $i++) {
 				$pos = strpos($text, $tex_matches[0][$i]);
 				$latex_formula = decodeHTML($tex_matches[1][$i]);
-			
+
 				$url = $latex->getFormulaURL($latex_formula);
-			
+
 				if ($url != false) {
 					$text = substr_replace($text, "<img src=\"".$url."\">",$pos,strlen($tex_matches[0][$i]));
 				}
@@ -482,7 +482,7 @@ function latex($text, $extern = FALSE) {
 					else
 						$text = substr_replace($text, "[unparseable or potentially dangerous latex formula]",$pos,strlen($tex_matches[0][$i]));
 				}
-			}	
+			}
 		}
 	}
 	return $text;
@@ -601,7 +601,7 @@ function preg_call_format_text($ctxt, $content){
 * @param	string	string containing a list in quick-format-syntax
 * @return	string
 */
-function preg_call_format_list ($content) {	
+function preg_call_format_list ($content) {
 	$items = array();
 	$lines = explode("\n", $content);
 	$level = 0;
@@ -609,28 +609,28 @@ function preg_call_format_list ($content) {
 	for ($i = 0; $i < sizeof($lines); $i++) {
 		$line = $lines[$i];
 		if (preg_match("'^([-=]+) (.*)$'", $line, $matches)) {
-			
+
 			$matched_level = strlen($matches[1]);
 			if ($matched_level > $current_level)
 				$level++;
 			else if ($matched_level < $current_level)
 				$level = $matched_level;
-				
+
 			if ($matches[1]{0} == "-")
 				$list_tags[] = "ul";
 			else
 				$list_tags[] = "ol";
-			
+
 			$items[$i]["level"] = $level;
 			$items[$i]["content"] = $matches[2];
-			
+
 			$current_level = $level;
 		}
 	}
-	
+
 	for ($i = 0;$i < sizeof($items); $i++) {
 		$level_diff = $items[$i]["level"] - $items[$i + 1]["level"];
-		
+
 		if ($i == 0) {
 			$ret .= "<{$list_tags[$i]}>";
 			$stack[] = $list_tags[$i];
@@ -647,12 +647,12 @@ function preg_call_format_list ($content) {
 		}
 		else
 			$ret .= "<li>{$items[$i]['content']}";
-		
+
 		if ($level_diff >= 0 && $i < sizeof($items) - 1)
 			$ret .= "</li>";
 		$level = $items[$i]["level"];
 	}
-		
+
 	return $ret;
 }
 
@@ -740,10 +740,10 @@ function kill_format ($text) {
 		$all = '';
 		foreach ($text as $w)
 			$all .= $w . $matches[1][$i++];
-		
+
 		return $all;
 	}
-	
+
 	return preg_replace($pattern, $replace, $text);
 }
 
@@ -773,10 +773,10 @@ function FixLinks ($data = "", $fix_nl = TRUE, $nl_to_br = TRUE, $img = FALSE, $
 	$pattern = array("/([ \t\]\n=]|^)www\./i", "/([ \t\]\n]|^)ftp\./i");
 	$replace = array("\\1http://www.", "\\1ftp://ftp.");
 	$fixed_text = preg_replace($pattern, $replace, $data);
-	
+
 	//transform the domain names of links within Stud.IP
 	$fixed_text = TransformInternalLinks($fixed_text);
-	
+
 	$pattern = array(
 					'#((\[(img)(\=([^\n\f:]+?))?(:(\d{1,3}%?))?(:(center|right))?(:([^\]]+))?\]|\[(?!img)([^\n\f\[]+)\])?(((https?://|ftp://)(['.$chars.':]+@)?)['.$chars.']+(\.['.$chars.':]+)*/?([^<\s]*[^\.\s\]<])*))#ie',
 					'#(?<=\s|^|\>)(\[([^\n\f]+?)\])?(['.$chars.']+(\.['.$chars.']+)*@(['.$chars.']+(\.['.$chars.']+)+))#ie'
@@ -805,7 +805,7 @@ function FixLinks ($data = "", $fix_nl = TRUE, $nl_to_br = TRUE, $img = FALSE, $
 function preg_call_link ($params, $mod, $img, $extern = FALSE, $wiki = FALSE) {
 	global $auth, $STUDIP_DOMAINS;
 	$chars= '&;_a-z0-9-';
-	
+
 	$pu = @parse_url($params[4]);
 	if (($pu['scheme'] == 'http' || $pu['scheme'] == 'https')
 	&& ($pu['host'] == $_SERVER['HTTP_HOST'] || $pu['host'].':'.$pu['port'] == $_SERVER['HTTP_HOST'])
@@ -815,9 +815,9 @@ function preg_call_link ($params, $mod, $img, $extern = FALSE, $wiki = FALSE) {
 	if ($extern)
 		$link_pic = '';
 	elseif ($intern)
-		$link_pic = "<img src=\"{$GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']}pictures/link_intern.gif\" border=\"0\" hspace=\"2\" />";
+		$link_pic = "<img src=\"".$GLOBALS['ASSETS_URL']."images/link_intern.gif\" border=\"0\" hspace=\"2\" />";
 	else
-		$link_pic = "<img src=\"{$GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']}pictures/link_extern.gif\" border=\"0\" />";
+		$link_pic = "<img src=\"".$GLOBALS['ASSETS_URL']."images/link_extern.gif\" border=\"0\" />";
 
 	if ($mod == 'LINK') {
 		if ($params[5] != 'img') {
@@ -827,7 +827,7 @@ function preg_call_link ($params, $mod, $img, $extern = FALSE, $wiki = FALSE) {
 			$params[4] = str_replace('&amp;', '&', $params[4]);
 			$tbr = '<a href="'.idna_link($params[4]).'"'.($intern ? '' : ' target="_blank"').">$link_pic{$params[3]}</a>";
 		}
-		elseif ($img) { 
+		elseif ($img) {
 			// Don't execute scripts
 			if ((basename($pu['path']) != 'sendfile.php') && $intern && $pu['query'])
 				return $params[0];
@@ -887,7 +887,7 @@ function preg_call_link ($params, $mod, $img, $extern = FALSE, $wiki = FALSE) {
 * @return	string  link in punycode
 */
 function idna_link($link, $mail = false){
-	if (!$GLOBALS['CONVERT_IDNA_URL']) return $link; 
+	if (!$GLOBALS['CONVERT_IDNA_URL']) return $link;
 	if (preg_match('/&\w+;/i',$link)) { //umlaute?  (html-coded)
 		$IDN = new idna_convert();
 		$out = false;
@@ -922,10 +922,10 @@ function idna_link($link, $mail = false){
 function smile ($text = "", $extern = FALSE) {
 	global $SMILE_SHORT, $SMILE_PATH, $CANONICAL_RELATIVE_PATH_STUDIP;
 	global $EXTERN_SERVER_NAME;
-	
+
 	if(empty($text))
 		return $text;
-	
+
 	//smileys in the ":name:" notation
 	$pattern = "'(\>|^|\s):([_a-zA-Z][_a-z0-9A-Z-]*):(?=$|\<|\s)'m";
 	$replace = "\\1";
@@ -942,7 +942,7 @@ function smile ($text = "", $extern = FALSE) {
 		$replace .= "$path$SMILE_PATH/\\2.gif\">\\3";
 	}
 	$text = preg_replace($pattern, $replace, $text);
-	
+
 	//smileys in short notation
 	$patterns = array();
 	$replaces = array();
@@ -969,10 +969,10 @@ function smile ($text = "", $extern = FALSE) {
 * This functions converts the short, locatet in the config.inc
 * into the assigned pictures. It uses a different directory
 * as the smile-function, becauso symbols should not be shown in
-* the smiley and so, no link is given onto the picture. A tooltip which 
+* the smiley and so, no link is given onto the picture. A tooltip which
 * shows the symbol code is given, too.
 *
-* @access	public        
+* @access	public
 * @param		string	the text to convert
 * @param		boolean	TRUE if function is called from external pages
 * @return		string	convertet text
@@ -980,7 +980,7 @@ function smile ($text = "", $extern = FALSE) {
 function symbol ($text = "", $extern = FALSE) {
 	global $SYMBOL_SHORT, $SYMBOL_PATH, $CANONICAL_RELATIVE_PATH_STUDIP;
 	global $EXTERN_SERVER_NAME;
-	
+
 	if(empty($text))
 		return $text;
 	
@@ -988,7 +988,7 @@ function symbol ($text = "", $extern = FALSE) {
 		$path = (($_SERVER["SERVER_PORT"] == 443 || $_SERVER["HTTPS"] == "on") ? "https://" : "http://") . $EXTERN_SERVER_NAME;
 	else
 		$path = $CANONICAL_RELATIVE_PATH_STUDIP;
-	
+
 	$patterns = array();
 	$replaces = array();
 	//symbols in short notation
@@ -998,7 +998,7 @@ function symbol ($text = "", $extern = FALSE) {
 		$replaces[] = "<img " . tooltip($key)
 				. " border=\"0\" src=\"$path$SYMBOL_PATH/$value.gif\">";
 	}
-	
+
 	return preg_replace($patterns, $replaces, $text);
 }
 
@@ -1012,7 +1012,7 @@ function mila ($titel, $size = 60) {
 			$titel=substr($titel, 0, $auth->auth["xres"] / 13)."... ";
 	}
 	else {
-		if (strlen ($titel) >$size) 
+		if (strlen ($titel) >$size)
 			$titel=substr($titel, 0, $size)."... ";
 	}
 	return $titel;
@@ -1022,7 +1022,7 @@ function mila ($titel, $size = 60) {
 function printhead ($breite, $left, $link, $open, $new, $icon,
 		$titel, $zusatz, $timestmp = 0, $printout = TRUE, $index = "", $indikator = "age") {
 		// Verzweigung was der PFeil anzeigen soll
-		
+
 	if ($indikator == "viewcount") {
 		if ($index == "0") {
 			$timecolor = "#BBBBBB";
@@ -1086,7 +1086,7 @@ function printhead ($breite, $left, $link, $open, $new, $icon,
 
 	if ($link)
 		$print .= "<a href=\"".$link."\">";
-	
+
 	$print .= "&nbsp;<img src=\"";
 	if ($open == "open")
 		$titel = "<b>" . $titel . "</b>";
@@ -1095,20 +1095,20 @@ function printhead ($breite, $left, $link, $open, $new, $icon,
 		$addon = '';
 		if ($index) $addon =  " ($indikator: $index)";
 		if ($open == "close")
-			$print .= "pictures/forumgrau2.gif\"" . tooltip(_("Objekt aufklappen") . $addon);
-	
+			$print .= $GLOBALS['ASSETS_URL']."images/forumgrau2.gif\"" . tooltip(_("Objekt aufklappen") . $addon);
+
 		if ($open == "open")
-			$print .= "pictures/forumgraurunt2.gif\"" . tooltip(_("Objekt zuklappen") . $addon);
+			$print .= $GLOBALS['ASSETS_URL']."images/forumgraurunt2.gif\"" . tooltip(_("Objekt zuklappen") . $addon);
 	}
 	else {
 		if ($open == "close") {
-			$print .= "pictures/forumgrau2.gif\"";
+			$print .= $GLOBALS['ASSETS_URL']."images/forumgrau2.gif\"";
 		}
 		else {
-			$print .= "pictures/forumgraurunt2.gif\"";
+			$print .= $GLOBALS['ASSETS_URL']."images/forumgraurunt2.gif\"";
 		}
 	}
-	
+
 	$print .= " border=0>";
 	if ($link) {
 		$print .= "</a>";
@@ -1117,7 +1117,7 @@ function printhead ($breite, $left, $link, $open, $new, $icon,
 	$print .= "<td class=\"printhead\" align=\"left\" width=\"20%\" nowrap valign=\"bottom\">&nbsp;";
 	$print .= $titel."</td>"."<td align=\"right\" nowrap class=\"printhead\" width=\"99%\" valign='bottom'>";
 	$print .= $zusatz."&nbsp;</td>";
-	
+
 	if ($printout)
 		echo $print;
 	else
@@ -1130,21 +1130,21 @@ function printcontent ($breite, $write = FALSE, $inhalt, $edit, $printout = TRUE
 	$print = "<td class=\"printcontent\" width=\"22\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 	$print .= "</td><td class=\"printcontent\" width=\"$breite\" valign=\"bottom\"><br>";
 	$print .= $inhalt;
-	
+
 	if ($edit) {
-		$print .= "<br><br><div align=\"center\">$edit</div><img src=\"pictures/blank.gif\" height=\"6\" border=\"0\">";
+		$print .= "<br><br><div align=\"center\">$edit</div><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" height=\"6\" border=\"0\">";
 		if ($addon!="")
 			if (substr($addon,0,5)=="open:") // es wird der öffnen-Pfeil mit Link ausgegeben
-				$print .= "</td><td valign=\"middle\" class=\"steel1\" nowrap><a href=\"".substr($addon,5)."\"><img src=\"pictures/forumgrau4.gif\" align=\"middle\" border=\"0\"".tooltip(_("Bewertungsbereich öffnen"))."></a>&nbsp;";
+				$print .= "</td><td valign=\"middle\" class=\"steel1\" nowrap><a href=\"".substr($addon,5)."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/forumgrau4.gif\" align=\"middle\" border=\"0\"".tooltip(_("Bewertungsbereich öffnen"))."></a>&nbsp;";
 			else { 				// es wird erweiterter Inhalt ausgegeben
 				$print .= "</td><td class=\"steelblau_schatten\" nowrap>";
 				$print .= "<font size=\"-2\" color=\"#444444\">$addon";
 	}		}
 	else
 		$print .= "<br>";
-	
+
 	$print .= "</td>";
-	
+
 	if ($printout)
 		echo $print;
 	else
@@ -1157,20 +1157,20 @@ print_infobox, baut einen Info-Kasten aus folgenden Elementen zusammen: Bild (se
 Der Aufruf des Bildes ist optional.
 Beispielaufbau f&uuml;r das Array:
 
-$infobox = array	(	
+$infobox = array	(
 array  ("kategorie"  => "Information:",
 		"eintrag" => array	(
-						array	 (	"icon" => "pictures/suchen.gif",
+						array	 (	"icon" => "suchen.gif",
 								"text"  => "Um weitere Veranstaltungen bitte Blabla"
 								),
-						array	 (	"icon" => "pictures/admin.gif",
+						array	 (	"icon" => "admin.gif",
 								"text"  => "um Verwaltung  Veranstaltungen bitte Blabla"
 								)
 		)
 	),
 array  ("kategorie" => "Aktionen:",
-		   "eintrag" => array	(	
-						array (	"icon" => "pictures/ausruf_small.gif",
+		   "eintrag" => array	(
+						array (	"icon" => "ausruf_small.gif",
 								"text"  => "es sind noch 19 Veranstaltungen vorhanden."
 								)
 		)
@@ -1180,23 +1180,23 @@ array  ("kategorie" => "Aktionen:",
 
 function print_infobox ($content, $picture="", $html = FALSE) {
 	global $CANONICAL_RELATIVE_PATH_STUDIP;
-	
+
 	$print = "<table align=\"center\" width=\"250\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">";
-	
+
 	if ($picture) {
 		$print .= "<tr>
 					<td class=\"blank\" width=\"100%\" align=\"right\">
-						<img src=\"".$CANONICAL_RELATIVE_PATH_STUDIP . $picture."\">
+						<img src=\"".$GLOBALS['ASSETS_URL']."images/". $picture."\">
 					</td>
 				</tr>";
 	}
-	
+
 	$print .= "<tr>
 					<td class=\"angemeldet\" width=\"100%\">
-						<table background=\"".$CANONICAL_RELATIVE_PATH_STUDIP."pictures/white.gif\" align=\"center\" width=\"99%\" border=\"0\" cellpadding=\"4\" cellspacing=\"0\">";
-						
+						<table background=\"".$GLOBALS['ASSETS_URL']."images/white.gif\" align=\"center\" width=\"99%\" border=\"0\" cellpadding=\"4\" cellspacing=\"0\">";
+
 	for ($i = 0; $i < count($content); $i++)
-		if ($content[$i]) { 
+		if ($content[$i]) {
 			$print .= "
 							<tr>
 								<td class=\"blank\" width=\"100%\" colspan=\"2\">
@@ -1208,7 +1208,7 @@ function print_infobox ($content, $picture="", $html = FALSE) {
 				$print .= "
 							<tr>
 								<td class=\"blank\" width=\"1%\" align=\"center\" valign=\"top\">
-									<img src=\"".$CANONICAL_RELATIVE_PATH_STUDIP . $content[$i]["eintrag"][$j]["icon"]."\">
+									<img src=\"".$GLOBALS['ASSETS_URL']."images/".$content[$i]["eintrag"][$j]["icon"]."\">
 								</td>
 								<td class=\"blank\" width=\"99%\">
 									<font size=\"-1\">".$content[$i]["eintrag"][$j]["text"]."</font><br>
@@ -1216,13 +1216,13 @@ function print_infobox ($content, $picture="", $html = FALSE) {
 							</tr>";
 			}
 		}
-	
+
 	$print .= "
 						</table>
 					</td>
 				</tr>
 			</table>";
-	
+
 	if ($html)
 		return $print;
 	else
@@ -1233,8 +1233,8 @@ function print_infobox ($content, $picture="", $html = FALSE) {
 * Returns a given text as html tooltip
 *
 * title and alt attribute is default, with_popup means a JS alert box activated on click
-* @access        public        
-* @param        string $text        
+* @access        public
+* @param        string $text
 * @param        boolean        $with_alt        return text with alt attribute
 * @param        boolean $with_popup        return text with JS alert box on click
 * @return        string
@@ -1255,15 +1255,15 @@ function tooltip ($text, $with_alt = TRUE, $with_popup = FALSE) {
 /**
 * Returns a an entry in the top navigation bar
 *
-* 
-* @access       public        
+*
+* @access       public
 * @param        string $icon       	Path to the icon
 * @param        string $URL		URL on button
 * @param        string $text		Hovertext under the Button
 * @param        string $tooltip		for Tooltip Window
 * @param        integer $size		Width of the Element
 * @param        string $target		same or new window...
-* @param        string $align		
+* @param        string $align
 * @param        string $toolwindow	For a special Toolwindow
 * @accesskey	string			key used for the shortcut
 * @return       string
@@ -1281,11 +1281,11 @@ function MakeToolbar ($icon,$URL,$text,$tooltip,$size,$target="_top",$align="cen
 	}
 	$toolbar = '<td class="toolbar" align="'.$align.'">';
 
-	$toolbar .= '<img border="0" src="'. $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'] . 'pictures/blank.gif" height="1" width="45"><br>'
+	$toolbar .= '<img border="0" src="'. $GLOBALS['ASSETS_URL'] . 'images/blank.gif" height="1" width="45"><br>'
 			  .'<a class="toolbar" href="'.$URL.'" target="'.$target.'" '.(($accesskey !== FALSE) ? "accesskey=\"$accesskey\"" : '').'><img border="0" src="'.$icon.'" '.$tool.'><br>'
-			  .'<img border="0" src="'. $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'] .'pictures/blank.gif" height="6" width="'.$size.'"><br>'
+			  .'<img border="0" src="'. $GLOBALS['ASSETS_URL'] .'images/blank.gif" height="6" width="'.$size.'"><br>'
 			  .'<b><font size="2">'.$text.'</font></b></a><br>'
-			  .'<img border="0" src="'. $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'] . 'pictures/blank.gif" height="4" width="30">';
+			  .'<img border="0" src="'. $GLOBALS['ASSETS_URL'] . 'images/blank.gif" height="4" width="30">';
 	$toolbar .= "</td>\n";
 	return $toolbar;
 }
@@ -1300,7 +1300,7 @@ function MakeToolbar ($icon,$URL,$text,$tooltip,$size,$target="_top",$align="cen
 function TransformInternalLinks($str){
 	static $domain_data = null;
 	if (is_array($GLOBALS['STUDIP_DOMAINS']) && count($GLOBALS['STUDIP_DOMAINS']) > 1) {
-		if (is_null($domain_data)){	
+		if (is_null($domain_data)){
 			$domain_data['domains'] = '';
 			foreach ($GLOBALS['STUDIP_DOMAINS'] as $studip_domain) $domain_data['domains'] .= '|' . preg_quote($studip_domain);
 			$domain_data['domains'] = preg_replace("'(\|.+?)((/.*?)|\|)'", "\\1[^/]*?\\2", $domain_data['domains']);

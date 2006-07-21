@@ -21,7 +21,7 @@ class Permission {
 	}    
 	
 	function hasAdminPermission(){
-    	$perm = $GLOBALS["perm"];
+    	$perm = $GLOBALS["perm"];    	
     	return $perm->have_perm("admin");
 	}   
 	

@@ -30,7 +30,7 @@ define ("INSTANCEOF_VOTEDB", "VoteDB");
 define ("VOTE_FILE_ADMIN", "admin_vote.php");
 define ("VOTE_FILE_SHOW", "show_vote.php");
 
-define ("VOTE_PATH_PICTURES", "pictures/");
+define ("VOTE_PATH_PICTURES", $GLOBALS['ASSETS_URL']."images/");
 
 define ("VOTE_ICON_BIG",     VOTE_PATH_PICTURES."vote.gif");
 define ("VOTE_ICON_VOTE",    VOTE_PATH_PICTURES."vote-icon.gif");

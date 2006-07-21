@@ -22,7 +22,7 @@ class ELearningUtils
 	function loadClass($cms)
 	{
 		global $connected_cms, $ABSOLUTE_PATH_STUDIP, $RELATIVE_PATH_ELEARNING_INTERFACE, $ELEARNING_INTERFACE_MODULES;
-		
+
 		if (! is_object($connected_cms[$cms]))
 		{
 			require_once ($ABSOLUTE_PATH_STUDIP."" . $RELATIVE_PATH_ELEARNING_INTERFACE . "/" . $ELEARNING_INTERFACE_MODULES[$cms]["CLASS_PREFIX"] . "ConnectedCMS.class.php");
@@ -31,7 +31,7 @@ class ELearningUtils
 			$connected_cms[$cms]->initSubclasses();
 		}
 	}
-	
+
 	/**
 	* get config-value
 	*
@@ -48,7 +48,7 @@ class ELearningUtils
 		else
 			return false;
 	}
-	
+
 	/**
 	* set config-value
 	*
@@ -63,7 +63,7 @@ class ELearningUtils
 		if ($cms != "")
 			write_config("ELEARNING_INTERFACE_" . $cms . "_" . $name, $value);
 	}
-	
+
 	/**
 	* check cms-status
 	*
@@ -76,7 +76,7 @@ class ELearningUtils
 		if ($cms != "")
 			return $GLOBALS["ELEARNING_INTERFACE_" . $cms . "_ACTIVE"];
 	}
-	
+
 	/**
 	* get cms-selectbox
 	*
@@ -128,7 +128,7 @@ class ELearningUtils
 		$output .=  "</form>";
 		return $output;
 	}
-	
+
 	/**
 	* get moduletype-selectbox
 	*
@@ -163,7 +163,7 @@ class ELearningUtils
 		}
 		return $output;
 	}
-	
+
 	/**
 	* get searchfield
 	*
@@ -217,7 +217,7 @@ class ELearningUtils
 		$link = $connected_cms[$cms]->link->getNewModuleLink();
 		if ($link == false)
 			return false;
-		$output .= ELearningUtils::getHeader(sprintf(_("Neues Lernmodul erstellen")));	
+		$output .= ELearningUtils::getHeader(sprintf(_("Neues Lernmodul erstellen")));
 		$output .=  "<form method=\"POST\" action=\"" . $PHP_SELF . "#anker\">\n";
 		$output .= "<table border=\"0\" cellspacing=\"0\" cellpadding=\"6\" width=\"100%\">";
 		$output .= "<tr><td>";
@@ -283,31 +283,31 @@ class ELearningUtils
 		global $PHP_SELF, $connected_cms, $cms_select, $search_key, $view, $new_account_step, $current_module,
 			$start, $next, $go_back, $assign, $ext_username, $ext_password, $ext_password_2, $messages, $ref_id, $module_type, $assign,
 			$ABSOLUTE_PATH_STUDIP, $RELATIVE_PATH_ELEARNING_INTERFACE, $ELEARNING_INTERFACE_MODULES, $HTTP_POST_VARS;
-		
+
 		ELearningUtils::loadClass($new_account_cms);
-		
+
 //		echo "nas:$new_account_step.cm:$current_module.n:$next.gb:$go_back.a:$assign.<br>";
 //		print_r($HTTP_POST_VARS);
-		
+
 		//Password was sent, but is to short
 		if (isset($ext_password_2) AND ! ($go_back != "") AND ($next != "") AND (strlen($ext_password_2) < 6))
 		{
 			$messages["error"] .= _("Das Passwort muss mindestens 6 Zeichen lang sein!");
 			$new_account_step--;
-		}		
+		}
 		elseif (isset($ext_password_2) AND ! ($go_back != "") AND ($next != "") AND ($ext_password != $ext_password_2))
 		{
 			$messages["error"] .= _("Das Passwort entspricht nicht der Passwort-Wiederholung!");
 			$new_account_step--;
-		}		
-		
+		}
+
 		// Username was sent
 		if (($ext_username != "") AND ! ($go_back != "") AND ($assign != ""))
 		{
 			$caching_status = $connected_cms[$new_account_cms]->soap_client->getCachingStatus();
 			$connected_cms[$new_account_cms]->soap_client->setCachingStatus(false);
 			if ($connected_cms[$new_account_cms]->user->verifyLogin($ext_username, $ext_password))
-			{	
+			{
 				$ready = true;
 				$messages["info"] .= _("Der Account wurde zugeordnet.");
 				$connected_cms[$new_account_cms]->user->setCategory("");
@@ -315,7 +315,7 @@ class ELearningUtils
 				$connected_cms[$new_account_cms]->user->setPassword($ext_password);
 				$connected_cms[$new_account_cms]->user->setConnection(USER_TYPE_ORIGINAL);
 				if ($ref_id != "")
-				{	
+				{
 					$connected_cms[$new_account_cms]->newContentModule($ref_id, $module_type, true);
 					$output .= sprintf( _("Hier gelangen Sie zum gew&auml;hlten Lernmodul \"%s\":"), $connected_cms[$new_account_cms]->content_module[$current_module]->getTitle() ) . "<br>\n<br>\n";
 					$output .= $connected_cms[$new_account_cms]->link->getUserModuleLinks();
@@ -391,7 +391,7 @@ class ELearningUtils
 			$output .= "</td></tr>";
 			$output .=  "</table>\n";
 			$output .=  "</form>\n";
-			
+
 //			getLoginForm();
 		}
 		elseif (($new_account_step == 2) AND ($next != ""))
@@ -438,7 +438,7 @@ class ELearningUtils
 			$output .= "</td></tr>";
 			$output .=  "</table>\n";
 			$output .=  "</form>\n";
-			
+
 		}
 		elseif (($new_account_step == 3) AND ($next != ""))
 		{
@@ -449,7 +449,7 @@ class ELearningUtils
 			{
 				$messages["info"] .= sprintf(_("Der Account wurde erzeugt und zugeordnet. Ihr Loginname ist %s."), "<b>" . $connected_cms[$new_account_cms]->user->getUsername() . "</b>");
 				if ($ref_id != "")
-				{	
+				{
 					$connected_cms[$new_account_cms]->newContentModule($ref_id, $module_type, true);
 					$output .= "<font size=\"-1\">";
 					$output .= sprintf( _("Hier gelangen Sie zum gew&auml;hlten Lernmodul \"%s\":"), $connected_cms[$new_account_cms]->content_module[$current_module]->getTitle() ) . "<br>\n<br>\n";
@@ -460,7 +460,7 @@ class ELearningUtils
 				}
 			}
 			$new_account_cms = "";
-			
+
 		}
 		else
 		{
@@ -472,7 +472,7 @@ class ELearningUtils
 			if ($start != "")
 				$messages["info"] = sprintf(_("Sie versuchen zum erstem Mal ein Lernmodul des angebundenen Systems %s zu starten. Bevor Sie das Modul nutzen k&ouml;nnen, muss Ihrem Stud.IP-Benutzeraccount ein Account im angebundenen System zugeordnet werden."), $connected_cms[$new_account_cms]->getName()) . "<br><br>\n\n";
 			if ($connected_cms[$new_account_cms]->user->isConnected())
-			{	
+			{
 				$output .= sprintf(_("Ihr Stud.IP-Account wurde bereits mit einem %s-Account verkn&uuml;pft. Wenn Sie den verkn&uuml;pften Account durch einen anderen, bereits existierenden Account ersetzen wollen, klicken Sie auf \"zuordnen\"."),  $connected_cms[$new_account_cms]->getName(),  $connected_cms[$new_account_cms]->getName());
 //				$output .= "&nbsp;" . sprintf(_("Wenn Sie den verkn&uuml;pften Account durch einen neuen, automatisch erstellten Account ersetzen wollen, klicken Sie auf \"weiter\"."));
 				$output .= "<br>\n<br>\n";
@@ -486,7 +486,7 @@ class ELearningUtils
 			$output .= "<input type=\"HIDDEN\" name=\"new_account_cms\" value=\"" . $new_account_cms . "\">\n";
 			$output .= "<input type=\"HIDDEN\" name=\"cms_select\" value=\"" . $cms_select . "\">\n";
 			$output .= "<input type=\"HIDDEN\" name=\"search_key\" value=\"" . $search_key . "\">\n";
-	
+
 			$output .=  "<center>";
 			$output .=  "<input type=\"IMAGE\"" . makeButton("zurueck", "src") . " name=\"go_back\" value=\"" . _("Zur&uuml;ck") . "\">";
 			$output .=  "&nbsp;<input type=\"IMAGE\"" . makeButton("zuordnen", "src") . " name=\"assign\" value=\"" . _("Bestehenden Account zuordnen") . "\">";
@@ -519,7 +519,7 @@ class ELearningUtils
 		$output .= $title;
 		$output .= "</b>";
 //		$output .= "</font>";
-		$output .= "<img src=\"pictures/blank.gif\" height=\"25\"></td></tr><tr><td class=\"steel1\" width=\"1%\">&nbsp</td><td class=\"steel1\"  align=\"left\"  valign=\"top\" colspan=\"1\">";
+		$output .= "<img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" height=\"25\"></td></tr><tr><td class=\"steel1\" width=\"1%\">&nbsp</td><td class=\"steel1\"  align=\"left\"  valign=\"top\" colspan=\"1\">";
 		return $output;
 	}
 
@@ -561,9 +561,9 @@ class ELearningUtils
 		$output .= "</b></font>";
 		$output .= "</td><td class=\"steelgraulight\" align=\"left\" width=\"40%\">";
 		if ($elearning_open_close["all open"] != "")
-			$output .= "<a href=\"" . $PHP_SELF . "?close_all=1&view=$view&cms_select=$cms_select&search_key=$search_key\"><img src=\"pictures/close_all.gif\" alt=\"" . _("Alle Module schlie&szlig;en") . "\" title=\"" . _("Alle Module schlie&szlig;en") . "\"  border=\"0\">";
+			$output .= "<a href=\"" . $PHP_SELF . "?close_all=1&view=$view&cms_select=$cms_select&search_key=$search_key\"><img src=\"".$GLOBALS['ASSETS_URL']."images/close_all.gif\" alt=\"" . _("Alle Module schlie&szlig;en") . "\" title=\"" . _("Alle Module schlie&szlig;en") . "\"  border=\"0\">";
 		else
-			$output .= "<a href=\"" . $PHP_SELF . "?open_all=1&view=$view&cms_select=$cms_select&search_key=$search_key\"><img src=\"pictures/open_all.gif\" alt=\"" . _("Alle Module &ouml;ffnen") . "\" title=\"" . _("Alle Module &ouml;ffnen") . "\"  border=\"0\">";
+			$output .= "<a href=\"" . $PHP_SELF . "?open_all=1&view=$view&cms_select=$cms_select&search_key=$search_key\"><img src=\"".$GLOBALS['ASSETS_URL']."images/open_all.gif\" alt=\"" . _("Alle Module &ouml;ffnen") . "\" title=\"" . _("Alle Module &ouml;ffnen") . "\"  border=\"0\">";
 		$output .= "</a></td></tr>";
 		$output .= "</table>";
 		return $output;
@@ -599,7 +599,7 @@ class ELearningUtils
 	function bench($stri)
 	{
 		global $timearray;
-		
+
 		list($usec, $sec) = explode(" ", microtime());
 		$t = ((float)$usec + (float)$sec);
 		$nr = sizeof($timearray);

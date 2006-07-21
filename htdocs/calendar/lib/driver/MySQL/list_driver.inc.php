@@ -37,40 +37,38 @@ function list_restore(&$this){
 		switch ($rep["rtype"]) {
 			// Einzeltermin (die hat die Datenbank schon gefiltert)
 			case "SINGLE" :
-				new_event($this, $db, $rep['ts']);
+				new_event($this, $db, $rep["ts"]);
 				break;
 			
-			// taegliche Wiederholung
+			// tägliche Wiederholung
 			case "DAILY" :
-				if ($rep['ts'] < $start) {
+				if ($rep["ts"] < $start) {
 					// brauche den ersten Tag nach $start an dem dieser Termin wiederholt wird
-					$adate = $this->ts + (($rep['linterval'] - (($start - $rep['ts'])
-							 / 86400) % $rep['linterval'] - 1) * 86400);
+					$adate = $this->ts + (($rep["linterval"] - (($start - $rep["ts"])
+							 / 86400) % $rep["linterval"] - 1) * 86400);
 				}
 				else
 					$adate = $rep['ts'];
 				
 				while ($adate <= $expire && $adate <= $end) {
 					new_event($this, $db, $adate);
-					$adate += 86400 * $rep['linterval'];
+					$adate += 86400 * $rep["linterval"];
 				}
 				break;
 			
-			// woechentliche Wiederholung
+			// wöchentliche Wiederholung
 			case "WEEKLY" :
-				if ($db->f('end') >= $start) {
-					$adate = mktime(12, 0, 0, date('n',$db->f('start')), date('j',$db->f('start')),
-							date('Y',$db->f('start')), 0);
-					if ($rep['ts'] != $adate) {
+				if ($db->f("start") >= $start) {
+					$adate = mktime(12, 0, 0, date("n",$db->f("start")), date("j",$db->f("start")), date("Y",$db->f("start")), 0);
+					if ($rep["ts"] != $adate)
 						new_event($this, $db, $adate);
-					}
-						
 					$aday = strftime("%u", $adate) - 1;
 					for ($i = 0; $i < strlen($rep["wdays"]); $i++) {
 						$awday = (int) substr($rep["wdays"], $i, 1) - 1;
 						if ($awday > $aday) {
 							$wdate = $adate + ($awday - $aday) * 86400;
-							if ($wdate > $expire) break 2;
+							if ($wdate > $expire)
+								break 2;
 							new_event($this, $db, $wdate);
 						}
 					}
@@ -88,13 +86,12 @@ function list_restore(&$this){
 					// Termin kann innerhalb der Woche an verschiedenen Wochentagen wiederholt werden
 					for ($i = 0; $i < strlen($rep["wdays"]); $i++) {
 						$awday = (int) substr($rep["wdays"], $i, 1) - 1;
-						$wdate = $adate - 43200 + $awday * 86400;
-						if ($wdate > $end || $wdate > $expire) {
+						$wdate = $adate + $awday * 86400;
+						if ($wdate > $end || $wdate > $expire)
 							break 2;
 						if ($wdate + $time_offset < $start)
 							continue;
-						}
-						new_event($this, $db, $wdate + 1);
+						new_event($this, $db, $wdate);
 					}
 					$adate += 604800 * $rep["linterval"];
 				}
@@ -144,7 +141,7 @@ function list_restore(&$this){
 				}
 				
 				while ($adate <= $expire && $adate <= $end  && $adate + $time_offset >= $start) {
-					// verhindert die Anzeige an Tagen, die auï¿½rhalb des Monats liegen (am 29. bis 31.)
+					// verhindert die Anzeige an Tagen, die außerhalb des Monats liegen (am 29. bis 31.)
 					if (!$rep["wdays"] ? date("j", $adate) == $rep["day"] : TRUE)
 						new_event($this, $db, $adate);
 					
@@ -170,7 +167,7 @@ function list_restore(&$this){
 				}
 				break;
 			
-			// jaehrliche Wiederholung
+			// jährliche Wiederholung
 			case "YEARLY" :
 				if ($db->f("start") > $start) {
 					$wdate = mktime(12, 0, 0, date("n", $db->f("start")), date("j", $db->f("start")),
@@ -231,12 +228,6 @@ function list_restore(&$this){
 				break;
 		}
 	}
-}
-
-function day_time_seconds ($time_stamp) {
-	$seconds = date('G', $time_stamp) * 3600 + intval(date('i', $time_stamp)) * 60
-			+ intval(date('s', $time_stamp));
-	return $seconds;
 }
 
 function new_event (&$this, $db, $date) {

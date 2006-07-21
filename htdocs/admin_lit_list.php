@@ -2,9 +2,9 @@
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // admin_lit_list.php
-// 
-// 
-// Copyright (c) 2003 André Noack <noack@data-quest.de> 
+//
+//
+// Copyright (c) 2003 André Noack <noack@data-quest.de>
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -33,6 +33,8 @@ include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Sessio
 
 //Literaturlisten-Import
 do_lit_import();
+
+$HELP_KEYWORD="Basis.LiteraturListen";
 
 // Start of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
@@ -99,7 +101,7 @@ if ($_the_clip_form->isClicked("clip_ok")){
 				$_the_treeview->open_ranges[$clip_cmd[1]] = true;
 				$_msg .= "msg§" . sprintf(_("%s Eintr&auml;ge aus ihrer Merkliste wurden in <b>%s</b> eingetragen."),
 				$inserted, htmlReady($_the_tree->tree_data[$clip_cmd[1]]['name'])) . "§";
-			} 
+			}
 		} else {
 			$_msg .= "info§" . _("Sie haben keinen Eintrag in ihrer Merkliste ausgew&auml;hlt!") . "§";
 		}
@@ -109,7 +111,7 @@ if ($_the_clip_form->isClicked("clip_ok")){
 
 if ( ($lists = $_the_tree->getListIds()) && $_the_clipboard->getNumElements()){
 	for ($i = 0; $i < count($lists); ++$i){
-		$_the_clip_form->form_fields['clip_cmd']['options'][] 
+		$_the_clip_form->form_fields['clip_cmd']['options'][]
 		= array('name' => my_substr(sprintf(_("In \"%s\" eintragen"), $_the_tree->tree_data[$lists[$i]]['name']),0,50),
 		'value' => 'ins_' . $lists[$i]);
 	}
@@ -163,13 +165,13 @@ echo "</TR>\n";
 <td class="blank" width="270" align="right" valign="top">
 <?
 $infobox[0] = array ("kategorie" => _("Information:"),
-					"eintrag" =>	array(	
-									array("icon" => "pictures/blank.gif","text"  =>	_("Hier können Sie Literaturlisten erstellen / bearbeiten.")),
+					"eintrag" =>	array(
+									array('icon' => "blank.gif","text"  =>	_("Hier können Sie Literaturlisten erstellen / bearbeiten.")),
 									)
 					);
-					
+
 if (!$_the_tree->getNumKids('root')){
-	$infobox[0]["eintrag"][] = array("icon" => "pictures/ausruf_small.gif","text"  => _("Sie haben noch keine Listen angelegt!") );
+	$infobox[0]["eintrag"][] = array('icon' => "ausruf_small.gif","text"  => _("Sie haben noch keine Listen angelegt!") );
 } else {
 	$lists = $_the_tree->getKids('root');
 	$list_count['visible'] = 0;
@@ -185,17 +187,17 @@ if (!$_the_tree->getNumKids('root')){
 			$list_count['invisible_entries'] += $_the_tree->getNumKids($lists[$i]);
 		}
 	}
-	$infobox[0]["eintrag"][] = array("icon" => "pictures/vote-icon-visible.gif",
+	$infobox[0]["eintrag"][] = array('icon' => "vote-icon-visible.gif",
 									"text"  => sprintf(_("%s öffentlich sichtbare Listen, insgesamt %s Eintr&auml;ge"),$list_count['visible'],$list_count['visible_entries']));
-	$infobox[0]["eintrag"][] = array("icon" => "pictures/vote-icon-invisible.gif",
+	$infobox[0]["eintrag"][] = array('icon' => "vote-icon-invisible.gif",
 									"text" => sprintf(_("%s unsichtbare Listen, insgesamt %s Eintr&auml;ge"),$list_count['invisible'],$list_count['invisible_entries']) );
 }
 
 $infobox[1] = array ("kategorie" => _("Aktionen:"));
-$infobox[1]["eintrag"][] = array("icon" => "pictures/link_intern.gif","text"  => "<a href=\"lit_search.php\">" . _("Literatur suchen") . "</a>" );
-$infobox[1]["eintrag"][] = array("icon" => "pictures/link_intern.gif","text"  => "<a href=\"admin_lit_element.php?_range_id=new_entry\">" . _("Neue Literatur anlegen") . "</a>" );
+$infobox[1]["eintrag"][] = array('icon' => "link_intern.gif","text"  => "<a href=\"lit_search.php\">" . _("Literatur suchen") . "</a>" );
+$infobox[1]["eintrag"][] = array('icon' => "link_intern.gif","text"  => "<a href=\"admin_lit_element.php?_range_id=new_entry\">" . _("Neue Literatur anlegen") . "</a>" );
 
-print_infobox ($infobox,"pictures/literaturelist.jpg");
+print_infobox ($infobox, "literaturelist.jpg");
 ?>
 </td>
 </tr>
@@ -205,7 +207,7 @@ print_infobox ($infobox,"pictures/literaturelist.jpg");
 	<b><?=_("Merkliste:")?></b>
 	<br>
 	<?=$_the_clip_form->getFormField("clip_content", array_merge(array('size' => $_the_clipboard->getNumElements()), $_attributes['lit_select']))?>
-	<div align="center" style="background-image:url(pictures/border.jpg);background-repeat:repeat-y;margin:3px;"><img src="pictures/blank.gif" height="2" border="0"></div>
+	<div align="center" style="background-image:url(<?= $GLOBALS['ASSETS_URL'] ?>images/border.jpg);background-repeat:repeat-y;margin:3px;"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" height="2" border="0"></div>
 	<?=$_the_clip_form->getFormField("clip_cmd", $_attributes['lit_select'])?>
 	<div align="center">
 	<?=$_the_clip_form->getFormButton("clip_ok",array('style'=>'vertical-align:middle;margin:3px;'))?>

@@ -57,6 +57,7 @@ if ($view=="wikiprint") {
 	die();
 }
 
+$HELP_KEYWORD="Basis.Wiki"; // Hilfeseite im Hilfewiki
 
 // Start of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head

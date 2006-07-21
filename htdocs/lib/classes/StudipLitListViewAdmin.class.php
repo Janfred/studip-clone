@@ -2,9 +2,9 @@
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // StudipLitListAdmin.class.php
-// 
-// 
-// Copyright (c) 2003 André Noack <noack@data-quest.de> 
+//
+//
+// Copyright (c) 2003 André Noack <noack@data-quest.de>
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -27,29 +27,29 @@ require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'lib/classes/StudipLitClipBoard.
 require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'datei.inc.php');
 
 /**
-* 
 *
-* 
+*
+*
 * @access	public
 * @author	André Noack <noack@data-quest.de>
 * @version	$Id$
-* @package	
+* @package
 */
 class StudipLitListViewAdmin extends TreeView{
 
-	
-	
+
+
 	var $mode;
-	
+
 	var $edit_item_id;
-	
+
 	var $msg;
-	
+
 	var $clip_board;
-	
+
 	var $format_info;
-	
-	
+
+
 	/**
 	* constructor
 	*
@@ -66,16 +66,16 @@ class StudipLitListViewAdmin extends TreeView{
 							. _("Thema und Stichwörter - dc_subject\n")
 							. _("Inhaltliche Beschreibung - dc_description\n")
 							. _("Verleger, Herausgeber - dc_publisher\n")
-							. _("Weitere beteiligten Personen und Körperschaften - dc_contributor\n") 
-							. _("Datum - dc_date\n") 
-							. _("Ressourcenart - dc_type\n") 
+							. _("Weitere beteiligten Personen und Körperschaften - dc_contributor\n")
+							. _("Datum - dc_date\n")
+							. _("Ressourcenart - dc_type\n")
 							. _("Format - dc_format\n")
 							. _("Ressourcen-Identifikation - dc_identifier\n")
 							. _("Quelle - dc_source\n")
 							. _("Sprache - dc_language\n")
 							. _("Beziehung zu anderen Ressourcen - dc_relation\n")
 							. _("Räumliche und zeitliche Maßangaben - dc_coverage\n")
-							. _("Rechtliche Bedingungen - dc_rights\n") 
+							. _("Rechtliche Bedingungen - dc_rights\n")
 							. _("Zugriffsnummer - accession_number\n")
 							. _("Jahr - year\n")
 							. _("alle Autoren - authors\n")
@@ -83,7 +83,7 @@ class StudipLitListViewAdmin extends TreeView{
 							. _("Anmerkung - note\n")
 							. _("link in externes Bibliothekssystem - external_link\n");
 
-		parent::TreeView("StudipLitList", $range_id); //calling the baseclass constructor 
+		parent::TreeView("StudipLitList", $range_id); //calling the baseclass constructor
 		$this->clip_board =& StudipLitClipBoard::GetInstance();
 	}
 
@@ -100,8 +100,8 @@ class StudipLitListViewAdmin extends TreeView{
 			}
 		}
 	}
-	
-	
+
+
 	function execCommandEditItem(){
 		global $_REQUEST;
 		$item_id = $_REQUEST['item_id'];
@@ -110,7 +110,7 @@ class StudipLitListViewAdmin extends TreeView{
 		$this->edit_item_id = $item_id;
 		return false;
 	}
-	
+
 	function execCommandInClipboard(){
 		global $_REQUEST;
 		$item_id = $_REQUEST['item_id'];
@@ -131,7 +131,7 @@ class StudipLitListViewAdmin extends TreeView{
 		}
 		return false;
 	}
-	
+
 	function execCommandInsertItem(){
 		global $_REQUEST;
 		$item_id = $_REQUEST['item_id'];
@@ -168,7 +168,7 @@ class StudipLitListViewAdmin extends TreeView{
 		$this->open_items[$item_id] = true;
 		return true;
 	}
-	
+
 	function execCommandCopyList(){
 		global $_REQUEST;
 		$item_id = $_REQUEST['item_id'];
@@ -183,7 +183,7 @@ class StudipLitListViewAdmin extends TreeView{
 		}
 		return true;
 	}
-		
+
 	function execCommandCopyUserList(){
 		global $_REQUEST;
 		$list_id = $_REQUEST['user_list'];
@@ -198,7 +198,7 @@ class StudipLitListViewAdmin extends TreeView{
 		}
 		return true;
 	}
-	
+
 	function execCommandToggleVisibility(){
 		global $_REQUEST;
 		$item_id = $_REQUEST['item_id'];
@@ -212,7 +212,7 @@ class StudipLitListViewAdmin extends TreeView{
 		$this->anchor = $item_id;
 		return true;
 	}
-	
+
 	function execCommandOrderItem(){
 		global $_REQUEST;
 		$direction = $_REQUEST['direction'];
@@ -243,7 +243,7 @@ class StudipLitListViewAdmin extends TreeView{
 		$this->msg[$item_id] = "msg§" . (($direction == "up") ? _("Element wurde um eine Position nach oben verschoben.") : _("Element wurde um eine Position nach unten verschoben."));
 		return true;
 	}
-	
+
 	function execCommandAssertDeleteItem(){
 		global $_REQUEST;
 		$item_id = $_REQUEST['item_id'];
@@ -259,7 +259,7 @@ class StudipLitListViewAdmin extends TreeView{
 						. " border=\"0\"></a>";
 		return false;
 	}
-	
+
 	function execCommandDeleteItem(){
 		global $_REQUEST;
 		$item_id = $_REQUEST['item_id'];
@@ -285,7 +285,7 @@ class StudipLitListViewAdmin extends TreeView{
 		$this->open_items[$this->anchor] = true;
 		return true;
 	}
-	
+
 	function execCommandNewItem(){
 		global $_REQUEST;
 		$item_id = $_REQUEST['item_id'];
@@ -298,7 +298,7 @@ class StudipLitListViewAdmin extends TreeView{
 		}
 		$this->tree->tree_childs[$item_id] = $level_items;
 		$this->tree->tree_data[$new_item_id] = array(
-			'parent_id' => $item_id, 
+			'parent_id' => $item_id,
 			'name' => _("Neue Liste"),
 			'priority' => ($this->tree->getMaxPriority($item_id) + 1),
 			'chdate' => time(),
@@ -316,7 +316,7 @@ class StudipLitListViewAdmin extends TreeView{
 		$this->mode = "NewItem";
 		return false;
 	}
-	
+
 	function execCommandCancel(){
 		global $_REQUEST;
 		$item_id = $_REQUEST['item_id'];
@@ -324,7 +324,7 @@ class StudipLitListViewAdmin extends TreeView{
 		$this->anchor = $item_id;
 		return false;
 	}
-	
+
 	function getItemContent($item_id){
 		$edit_content = false;
 		if ($item_id == $this->edit_item_id){
@@ -343,7 +343,7 @@ class StudipLitListViewAdmin extends TreeView{
 						$content .= "\n<option value=\"$list_id\">" . htmlReady($list_name) . "</option>";
 					}
 				}
-				$content .= "\n</select>&nbsp;&nbsp;<input type=\"image\" " . makeButton("kopieerstellen","src") 
+				$content .= "\n</select>&nbsp;&nbsp;<input type=\"image\" " . makeButton("kopieerstellen","src")
 				. tooltip(_("Eine Kopie der ausgewählten Liste erstellen")) . " style=\"vertical-align:middle;\" border=\"0\"></td></tr></form>";
 			}
 			if ($this->tree->isElement($item_id)) {
@@ -356,15 +356,15 @@ class StudipLitListViewAdmin extends TreeView{
 				$content .= "\n<tr><td class=\"steel1\" align=\"left\" style=\"font-size:10pt;border-left: 1px solid black;border-right: 1px solid black;\">" . htmlReady($this->tree->tree_data[$item_id]['format'],false,true) ." &nbsp;</td></tr>";
 				$content .= "\n<tr><td class=\"steelgraulight\" align=\"left\" style=\"font-size:10pt;border-left: 1px solid black;border-right: 1px solid black;\">" . _("Sichtbarkeit:") . "</td></tr>";
 				$content .= "\n<tr><td class=\"steel1\" align=\"left\" style=\"font-size:10pt;border-left: 1px solid black;border-right: 1px solid black;\">"
-				. ($this->tree->tree_data[$item_id]['visibility'] 
-				? "<img src=\"pictures/vote-icon-visible.gif\" border=\"0\" style=\"vertical-align:bottom;\">&nbsp;" . _("Sichtbar") 
-				: "<img src=\"pictures/vote-icon-invisible.gif\" border=\"0\" style=\"vertical-align:bottom;\">&nbsp;" . _("Unsichtbar")) . " </td></tr>";
+				. ($this->tree->tree_data[$item_id]['visibility']
+				? "<img src=\"".$GLOBALS['ASSETS_URL']."images/vote-icon-visible.gif\" border=\"0\" style=\"vertical-align:bottom;\">&nbsp;" . _("Sichtbar")
+				: "<img src=\"".$GLOBALS['ASSETS_URL']."images/vote-icon-invisible.gif\" border=\"0\" style=\"vertical-align:bottom;\">&nbsp;" . _("Unsichtbar")) . " </td></tr>";
 			}
 		} else {
 			$content .= "\n<tr><td class=\"steel1\" align=\"left\">$edit_content</td></tr>";
 		}
 		if (!$edit_content && $item_id != 'root'){
-			$content .= "\n<tr><td class=\"steelgraulight\" align=\"right\" style=\"font-size:10pt;border-bottom: 1px solid black;border-left: 1px solid black;border-right: 1px solid black;\">" . _("Letzte &Auml;nderung:") . strftime(" %d.%m.%Y ", $this->tree->tree_data[$item_id]['chdate']) 
+			$content .= "\n<tr><td class=\"steelgraulight\" align=\"right\" style=\"font-size:10pt;border-bottom: 1px solid black;border-left: 1px solid black;border-right: 1px solid black;\">" . _("Letzte &Auml;nderung:") . strftime(" %d.%m.%Y ", $this->tree->tree_data[$item_id]['chdate'])
 							. "(<a href=\"about.php?username=" . $this->tree->tree_data[$item_id]['username'] . "\">" . htmlReady($this->tree->tree_data[$item_id]['fullname']) . "</a>) </td></tr>";
 		}
 		$content .= "</table>";
@@ -402,7 +402,7 @@ class StudipLitListViewAdmin extends TreeView{
 					if ($this->tree->isElement($item_id)){
 						if (!$this->clip_board->isInClipboard($this->tree->tree_data[$item_id]["catalog_id"])){
 							$content .= "<a href=\"". $this->getSelf("cmd=InClipboard&item_id=$item_id") . "\">"
-										. "<img " . makeButton("merkliste","src") . " border=\"0\" " . 
+										. "<img " . makeButton("merkliste","src") . " border=\"0\" " .
 										tooltip(_("Eintrag in Merkliste aufnehmen")) . "></a>";
 						}
 					}
@@ -412,7 +412,7 @@ class StudipLitListViewAdmin extends TreeView{
 		}
 		return $content;
 	}
-	
+
 	function getItemHead($item_id){
 		$head = "";
 		$head .= parent::getItemHead($item_id);
@@ -424,60 +424,60 @@ class StudipLitListViewAdmin extends TreeView{
 			$head .= "</td><td align=\"rigth\" valign=\"bottom\" class=\"printhead\">";
 			if (!$this->tree->isFirstKid($item_id)){
 				$head .= "<a href=\"". $this->getSelf("cmd=OrderItem&direction=up&item_id=$item_id") .
-				"\"><img src=\"pictures/move_up.gif\" hspace=\"4\" width=\"13\" height=\"11\" border=\"0\" " . 
+				"\"><img src=\"".$GLOBALS['ASSETS_URL']."images/move_up.gif\" hspace=\"4\" width=\"13\" height=\"11\" border=\"0\" " .
 				tooltip(_("Element nach oben verschieben")) ."></a>";
 			}
 			if (!$this->tree->isLastKid($item_id)){
-				$head .= "<a href=\"". $this->getSelf("cmd=OrderItem&direction=down&item_id=$item_id") . 
-				"\"><img src=\"pictures/move_down.gif\" hspace=\"4\" width=\"13\" height=\"11\" border=\"0\" " . 
+				$head .= "<a href=\"". $this->getSelf("cmd=OrderItem&direction=down&item_id=$item_id") .
+				"\"><img src=\"".$GLOBALS['ASSETS_URL']."images/move_down.gif\" hspace=\"4\" width=\"13\" height=\"11\" border=\"0\" " .
 				tooltip(_("Element nach unten verschieben")) . "></a>";
 			}
 			if ($this->tree->isElement($item_id)){
-				$head .= ($this->clip_board->isInClipboard($this->tree->tree_data[$item_id]["catalog_id"])) 
-						? "<img src=\"pictures/forum_fav.gif\" hspace=\"4\" width=\"12\" height=\"11\" border=\"0\" " . 
-						tooltip(_("Dieser Eintrag ist bereits in ihrer Merkliste")) . ">" 
-						:"<a href=\"". $this->getSelf("cmd=InClipboard&item_id=$item_id") . 
-						"\"><img src=\"pictures/forum_fav2.gif\" hspace=\"4\" width=\"12\" height=\"11\" border=\"0\" " . 
+				$head .= ($this->clip_board->isInClipboard($this->tree->tree_data[$item_id]["catalog_id"]))
+						? "<img src=\"".$GLOBALS['ASSETS_URL']."images/forum_fav.gif\" hspace=\"4\" width=\"12\" height=\"11\" border=\"0\" " .
+						tooltip(_("Dieser Eintrag ist bereits in ihrer Merkliste")) . ">"
+						:"<a href=\"". $this->getSelf("cmd=InClipboard&item_id=$item_id") .
+						"\"><img src=\"".$GLOBALS['ASSETS_URL']."images/forum_fav2.gif\" hspace=\"4\" width=\"12\" height=\"11\" border=\"0\" " .
 						tooltip(_("Eintrag in Merkliste aufnehmen")) . "></a>";
 			} else {
-				$head .= "<a href=\"". $this->getSelf("cmd=InClipboard&item_id=$item_id") . 
-				"\"><img src=\"pictures/forum_fav2.gif\" hspace=\"4\" width=\"12\" height=\"11\" border=\"0\" " . 
+				$head .= "<a href=\"". $this->getSelf("cmd=InClipboard&item_id=$item_id") .
+				"\"><img src=\"".$GLOBALS['ASSETS_URL']."images/forum_fav2.gif\" hspace=\"4\" width=\"12\" height=\"11\" border=\"0\" " .
 				tooltip(_("Komplette Liste in Merkliste aufnehmen")) . "></a>";
 			}
 			$head .= "&nbsp;";
 		}
 		return $head;
 	}
-	
+
 	function getItemHeadPics($item_id){
 		$head = $this->getItemHeadFrontPic($item_id);
 		$head .= "\n<td  class=\"printhead\" nowrap  align=\"left\" valign=\"bottom\">";
 		if (!$this->tree->isElement($item_id)){
 			if ($this->tree->hasKids($item_id)){
 				$head .= "<a href=\"";
-				$head .= ($this->open_ranges[$item_id]) ? $this->getSelf("close_range={$item_id}") : $this->getSelf("open_range={$item_id}"); 
-				$head .= "\"><img border=\"0\"  src=\"pictures/";
+				$head .= ($this->open_ranges[$item_id]) ? $this->getSelf("close_range={$item_id}") : $this->getSelf("open_range={$item_id}");
+				$head .= "\"><img border=\"0\"  src=\"".$GLOBALS['ASSETS_URL']."images/";
 				$head .= ($this->open_ranges[$item_id]) ? "cont_folder3.gif" : "cont_folder.gif";
 				$head .= "\" ";
 				$head .= (!$this->open_ranges[$item_id])? tooltip(_("Alle Unterelemente öffnen")) : tooltip(_("Alle Unterelemente schließen"));
 				$head .= "></a>";
-			} else { 
-				$head .= "<img src=\"pictures/";
+			} else {
+				$head .= "<img src=\"".$GLOBALS['ASSETS_URL']."images/";
 				$head .= ($this->open_items[$item_id]) ? "cont_folder4.gif" : "cont_folder2.gif";
 				$head .= "\" " . tooltip(_("Dieses Element hat keine Unterelemente")) . "border=\"0\">";
 			}
 			if ($item_id != "root"){
-				$head .= "<a href=\"" . $this->getSelf("cmd=ToggleVisibility&item_id={$item_id}") . "\"><img src=\"pictures/";
+				$head .= "<a href=\"" . $this->getSelf("cmd=ToggleVisibility&item_id={$item_id}") . "\"><img src=\"".$GLOBALS['ASSETS_URL']."images/";
 				$head .= ($this->tree->tree_data[$item_id]['visibility']) ? "vote-icon-visible.gif" : "vote-icon-invisible.gif";
 				$head .= "\" border=\"0\" " . tooltip(_("Sichtbarkeit ändern")) . "></a>";
 			}
 		} else {
-			$head .= "<img src=\"pictures/cont_lit.gif";
+			$head .= "<img src=\"".$GLOBALS['ASSETS_URL']."images/cont_lit.gif";
 			$head .= "\" border=\"0\">";
 		}
 	return $head . "</td>";
 	}
-	
+
 	function getEditItemContent(){
 		$content .= "\n<form name=\"item_form\" action=\"" . $this->getSelf("cmd=InsertItem&item_id={$this->edit_item_id}") . "\" method=\"POST\">";
 		$content .= "\n<input type=\"HIDDEN\" name=\"parent_id\" value=\"{$this->tree->tree_data[$this->edit_item_id]['parent_id']}\">";
@@ -491,46 +491,46 @@ class StudipLitListViewAdmin extends TreeView{
 			$content .= "\n<tr><td class=\"steelgraulight\" style=\"font-size:10pt;border-top: 1px solid black;border-left: 1px solid black;border-right: 1px solid black;\" ><b>". _("Name der Liste bearbeiten:") . "</b></td></tr>";
 			$content .= "<tr><td class=\"steel1\" align=\"center\" style=\"font-size:10pt;border-left: 1px solid black;border-right: 1px solid black;\"><input type=\"text\" name=\"edit_name\" style=\"width:100%\" value=\"" . $this->tree->tree_data[$this->edit_item_id]['name']
 				. "\"></td></tr>";
-			
+
 			$edit_name = "format";
 			$rows = 2;
 			$content .= "\n<tr><td class=\"steelgraulight\" style=\"font-size:10pt;border-left: 1px solid black;border-right: 1px solid black;\" ><b>". _("Formatierung der Liste bearbeiten:") . "</b>"
-					. "&nbsp;<img src=\"" . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . "pictures/info.gif\""
+					. "&nbsp;<img src=\"".$GLOBALS['ASSETS_URL']."images/info.gif\""
 					. tooltip($this->format_info, TRUE, TRUE) . " align=\"absmiddle\"></td></tr>";
 			$content .= "<tr><td class=\"steel1\" align=\"center\" style=\"font-size:10pt;border-left: 1px solid black;border-right: 1px solid black;\"><textarea name=\"edit_{$edit_name}\" style=\"width:100%\" rows=\"$rows\">" . $this->tree->tree_data[$this->edit_item_id][$edit_name]
 				. "</textarea></td></tr>";
 			$content .= "\n<tr><td class=\"steelgraulight\" style=\"font-size:10pt;border-bottom: 1px solid black;;border-left: 1px solid black;border-right: 1px solid black;\" >
 			<b>". _("Sichtbarkeit der Liste:") . "</b>&nbsp;&nbsp;&nbsp;
-			<input type=\"radio\" name=\"edit_visibility\" value=\"1\" style=\"vertical-align:bottom\" " 
-			. (($this->tree->tree_data[$this->edit_item_id]['visibility']) ? "checked" : "") . ">" . _("Ja") 
+			<input type=\"radio\" name=\"edit_visibility\" value=\"1\" style=\"vertical-align:bottom\" "
+			. (($this->tree->tree_data[$this->edit_item_id]['visibility']) ? "checked" : "") . ">" . _("Ja")
 			. "&nbsp;<input type=\"radio\" name=\"edit_visibility\" value=\"0\" style=\"vertical-align:bottom\" "
 			. ((!$this->tree->tree_data[$this->edit_item_id]['visibility']) ? "checked" : "") . ">" . _("Nein") . "</td></tr>";
-			
+
 		}
 		$content .= "<tr><td class=\"steel1\">&nbsp;</td></tr><tr><td class=\"steel1\" align=\"center\"><input type=\"image\" "
 				. makeButton("speichern","src") . tooltip("Einstellungen speichern") . " border=\"0\">"
-				. "&nbsp;<a href=\"" . $this->getSelf("cmd=Cancel&item_id="  
+				. "&nbsp;<a href=\"" . $this->getSelf("cmd=Cancel&item_id="
 				. $this->edit_item_id) . "\">"
 				. "<img " .makeButton("abbrechen","src") . tooltip(_("Aktion abbrechen"))
 				. " border=\"0\"></a></td></tr>";
 		$content .= "\n</form>";
-		
+
 		return $content;
 	}
-	
+
 	function getItemMessage($item_id,$colspan = 1){
 		$content = "";
 		if ($this->msg[$item_id]){
 			$msg = split("§",$this->msg[$item_id]);
 			$pics = array('error' => 'x_small2.gif', 'info' => 'ausruf_small2.gif', 'msg' => 'ok_small2.gif');
 			$content = "\n<tr><td colspan=\"{$colspan}\"><table border=\"0\" cellspacing=\"0\" cellpadding=\"2\" width=\"100%\" style=\"font-size:10pt\">
-						<tr><td align=\"center\" width=\"25\"><img width=\"22\" height=\"20\" src=\"pictures/" . $pics[$msg[0]] . "\" ></td>
+						<tr><td align=\"center\" width=\"25\"><img width=\"22\" height=\"20\" src=\"".$GLOBALS['ASSETS_URL']."images/" . $pics[$msg[0]] . "\" ></td>
 						<td align=\"left\">" . $msg[1] . "</td></tr>
 						</table></td></tr><tr>";
 		}
 		return $content;
 	}
-		
+
 	function getSelf($param = false){
 		$url = $GLOBALS['PHP_SELF'] . "?" . "foo=" . DbView::get_uniqid();
 		if ($this->mode)

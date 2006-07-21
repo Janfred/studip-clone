@@ -1,9 +1,9 @@
 <?
 /**
 * ExternEditHtml.class.php
-* 
+*
 * Form templates to edit values of html-tag attributes.
-* 
+*
 *
 * @author		Peter Thienel <pthienel@web.de>, Suchi & Berg GmbH <info@data-quest.de>
 * @version	$Id$
@@ -38,12 +38,12 @@
 require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."/views/ExternEditGeneric.class.php");
 
 class ExternEditHtml extends ExternEditGeneric {
-	
+
 	function ExternEditHtml (&$config, $form_values = "", $faulty_values = "",
 			 $edit_element = "") {
 		parent::ExternEdit(&$config, $form_values, $faulty_values, $edit_element);
 	}
-	
+
 	/**
 	* Prints out a form for entering the height of a html-element (e.g. &lt;tr&gt;, &lt;th&gt;)
 	*
@@ -55,12 +55,12 @@ class ExternEditHtml extends ExternEditGeneric {
 		$info = _("Geben Sie die Höhe der Tabellenzeile in Pixeln an.");
 		$form_name = $this->element_name . "_" . $attribute;
 		$value = $this->getValue($attribute);
-		
+
 		if ($this->faulty_values[$form_name][0])
 			$error_sign = $this->error_sign;
 		else
 			$error_sign = "";
-		
+
 		$out = "<tr><td><table width=\"100%\" border=\"0\" cellpadding=\"4\" cellspacing=\"0\">\n";
 		$out .= "<tr" . $this->css->getFullClass() . "><td{$this->width_1}>";
 		$out .= "<font size=\"2\">";
@@ -68,13 +68,13 @@ class ExternEditHtml extends ExternEditGeneric {
 		$out .= "</font></td>\n";
 		$out .= "<td{$this->width_2} nowrap=\"nowrap\"><input type=\"text\" name=\"$form_name\" size=\"3\"";
 		$out .= " maxlength=\"3\" value=\"$value\" /><font size=\"2\">&nbsp;Pixel&nbsp; \n";
-		$out .= "</font><img src=\"" . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . "pictures/info.gif\"";
+		$out .= "</font><img src=\"".$GLOBALS['ASSETS_URL']."images/info.gif\"";
 		$out .= tooltip($info, TRUE, TRUE) . ">$error_sign</td></tr>\n</table>\n</td></tr>\n";
 		$this->css->switchClass();
-		
+
 		return $out;
 	}
-	
+
 	/**
 	* Prints out a form for entering the border-width of a table.
 	*
@@ -86,12 +86,12 @@ class ExternEditHtml extends ExternEditGeneric {
 		$info = _("Geben Sie die Breite des äußeren Tabellenrahmens in Pixeln an.");
 		$form_name = $this->element_name . "_" . $attribute;
 		$value = $this->getValue($attribute);
-		
+
 		if ($this->faulty_values[$form_name][0])
 			$error_sign = $this->error_sign;
 		else
 			$error_sign = "";
-			
+
 		$out = "<tr><td><table width=\"100%\" border=\"0\" cellpadding=\"4\" cellspacing=\"0\">\n";
 		$out .= "<tr" . $this->css->getFullClass() . "><td{$this->width_1}>";
 		$out .= "<font size=\"2\">";
@@ -99,13 +99,13 @@ class ExternEditHtml extends ExternEditGeneric {
 		$out .= "</font></td>\n";
 		$out .= "<td{$this->width_2} nowrap=\"nowrap\"><input type=\"text\" name=\"$form_name\" size=\"2\"";
 		$out .= " maxlength=\"2\" value=\"$value\" /><font size=\"2\">&nbsp;Pixel&nbsp; \n";
-		$out .= "</font><img src=\"" . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . "pictures/info.gif\"";
+		$out .= "</font><img src=\"".$GLOBALS['ASSETS_URL']."images/info.gif\"";
 		$out .= tooltip($info, TRUE, TRUE) . ">$error_sign</td></tr>\n</table>\n</td></tr>\n";
 		$this->css->switchClass();
-		
+
 		return $out;
 	}
-	
+
 	/**
 	* Prints out a form for entering the font-color.
 	*
@@ -116,10 +116,10 @@ class ExternEditHtml extends ExternEditGeneric {
 	function editColor ($attribute) {
 		$info = _("Geben Sie einen HTML-Farbnamen oder eine Farbe im Hex-Format (#RRGGBB) in das Textfeld ein, oder wählen Sie eine Farbe aus der Auswahlliste.");
 		$titel = _("Schriftfarbe");
-		
+
 		return $this->editColorGeneric($attribute, $titel, $info);
 	}
-	
+
 	/**
 	* Prints out a form for entering the backgroung-color of a table- or td-tag
 	*
@@ -130,10 +130,10 @@ class ExternEditHtml extends ExternEditGeneric {
 	function editBgcolor ($attribute) {
 		$info = _("Geben Sie einen HTML-Farbnamen oder eine Farbe im Hex-Format (#RRGGBB) in das Textfeld ein, oder wählen Sie eine Farbe aus der Auswahlliste.");
 		$title = _("Hintergrundfarbe:");
-		
+
 		return $this->editColorGeneric($attribute, $title, $info);
 	}
-	
+
 	/**
 	* Prints out a form for entering the bordercolor of a table.
 	*
@@ -144,10 +144,10 @@ class ExternEditHtml extends ExternEditGeneric {
 	function editBordercolor ($attribute) {
 		$info = _("Geben Sie einen HTML-Farbnamen oder eine Farbe im Hex-Format (#RRGGBB) in das Textfeld ein, oder wählen Sie eine Farbe aus der Auswahlliste.");
 		$title = _("Rahmenfarbe");
-		
+
 		return $this->editColorGeneric($attribute, $title, $info);
 	}
-	
+
 	/**
 	* Prints out a form for entering the second backgroung-color of a td- or th-tag (only for
 	* zebra-effect.
@@ -155,75 +155,75 @@ class ExternEditHtml extends ExternEditGeneric {
 	* @param string name The name of the text field.
 	* @param string value The value for the text pre-emption.
 	*/
-	
+
 	function editBgcolor2 ($attribute) {
 		$info = _("Geben Sie einen HTML-Farbnamen oder eine Farbe im Hex-Format (#RRGGBB) in das Textfeld ein, oder wählen Sie eine Farbe aus der Auswahlliste. ");
 		$info .= _("Diese Farbe wird als zweite Farbe bei aktiviertem Zebra-Effekt ausgegeben.");
 		$title = _("2. Hintergrundf.:");
-		
+
 		return $this->editColorGeneric($attribute, $title, $info);
 	}
-	
+
 	/**
 	* Prints out a form for entering the link color in the body tag
 	*
 	* @param string name The name of the text field.
 	* @param string value The value for the text pre-emption.
 	*/
-	
+
 	function editText ($attribute) {
 		$info = _("Geben Sie einen HTML-Farbnamen oder eine Farbe im Hex-Format (#RRGGBB) in das Textfeld ein, oder wählen Sie eine Farbe aus der Auswahlliste. ");
 		$info .= _("Diese Farbe wird seitenweit als Schriftfarbe benutzt.");
 		$title = _("Schriftfarbe:");
-		
+
 		return $this->editColorGeneric($attribute, $title, $info);
 	}
-	
+
 	/**
 	* Prints out a form for entering the link color in the body tag
 	*
 	* @param string name The name of the text field.
 	* @param string value The value for the text pre-emption.
 	*/
-	
+
 	function editLink ($attribute) {
 		$info = _("Geben Sie einen HTML-Farbnamen oder eine Farbe im Hex-Format (#RRGGBB) in das Textfeld ein, oder wählen Sie eine Farbe aus der Auswahlliste. ");
 		$info .= _("Diese Farbe wird seitenweit für Verweise zu noch nicht besuchten Zielen benutzt.");
 		$title = _("Linkfarbe (nicht besucht):");
-		
+
 		return $this->editColorGeneric($attribute, $title, $info);
 	}
-	
+
 	/**
 	* Prints out a form for entering the link color in the body tag
 	*
 	* @param string name The name of the text field.
 	* @param string value The value for the text pre-emption.
 	*/
-	
+
 	function editVlink ($attribute) {
 		$info = _("Geben Sie einen HTML-Farbnamen oder eine Farbe im Hex-Format (#RRGGBB) in das Textfeld ein, oder wählen Sie eine Farbe aus der Auswahlliste. ");
 		$info .= _("Diese Farbe wird seitenweit für Verweise zu bereits besuchten Zielen benutzt.");
 		$title = _("Linkfarbe (besucht):");
-		
+
 		return $this->editColorGeneric($attribute, $title, $info);
 	}
-	
+
 	/**
 	* Prints out a form for entering the link color in the body tag
 	*
 	* @param string name The name of the text field.
 	* @param string value The value for the text pre-emption.
 	*/
-	
+
 	function editAlink ($attribute) {
 		$info = _("Geben Sie einen HTML-Farbnamen oder eine Farbe im Hex-Format (#RRGGBB) in das Textfeld ein, oder wählen Sie eine Farbe aus der Auswahlliste. ");
 		$info .= _("Diese Farbe wird seitenweit für aktivierte Verweise benutzt.");
 		$title = _("Linkfarbe (aktiviert):");
-		
+
 		return $this->editColorGeneric($attribute, $title, $info);
 	}
-	
+
 	/**
 	* Prints out a text field and a selection list for entering the color of
 	* a table border.
@@ -231,15 +231,15 @@ class ExternEditHtml extends ExternEditGeneric {
 	* The name of the text field is given by $name. The name of the selection list
 	* is $name . "_list".
 	*
-	* @param string title the 
+	* @param string title the
 	* @param string name the name of the text field and selection list
-	* @param string value 
+	* @param string value
 	*/
-	
+
 	function editColorGeneric ($attribute, $title, $info) {
 		$form_name = $this->element_name . "_" . $attribute;
 		$value = $this->getValue($attribute);
-		
+
 		$colors = array(_("keine Auswahl") => "", "aliceblue" => "#F0F8FF", "antiquewhite" => "#FAEBD7",
 		          "aquamarine" => "#7FFFD4", "azure" => "#F0FFFF", "beige" => "#F5F5DC",
 							"blueviolet" => "#8A2BE2", "brown" => "#A52A2A", "burlywood" => "#DEB887",
@@ -291,19 +291,19 @@ class ExternEditHtml extends ExternEditGeneric {
 							"steelblue" => "#4682B4", "tan" => "#D2B48C", "thistle" => "#D8BFD8",
 							"tomato" => "#FF6347", "turquoise" => "#40E0D0", "violet" => "#EE82EE",
 							"wheat" => "#F5DEB3", "whitesmoke" => "#F5F5F5", "yellowgreen" => "#9ACD32");
-		
+
 		if ($this->faulty_values[$form_name][0])
 			$error_sign = $this->error_sign;
 		else
 			$error_sign = "";
-			
+
 		$out = "<tr><td><table width=\"100%\" border=\"0\" cellpadding=\"4\" cellspacing=\"0\">\n";
 		$out .= "<tr" . $this->css->getFullClass() . "><td{$this->width_1}>";
 		$out .= "<font size=\"2\">$title</font></td>\n";
 		$out .= "<td{$this->width_2} nowrap=\"nowrap\">\n";
 		$out .= "<input type=\"text\" name=\"$form_name\" size=\"20\"";
 		$out .= " maxlength=\"20\" value=\"$value\" />&nbsp; &nbsp;\n";
-		
+
 		$out .= "<select name=\"_{$form_name}\" ";
 		$out .= "onChange=\"document.edit_form.{$form_name}.value=document.edit_form._{$form_name}.";
 		$out .= "options[document.edit_form._{$form_name}.selectedIndex].value;\" ";
@@ -317,14 +317,14 @@ class ExternEditHtml extends ExternEditGeneric {
 			$out .= $color_name . "</option>";
 		}
 		$out .= "</select>\n";
-		
-		$out .= "<img src=\"" . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . "pictures/info.gif\"";
+
+		$out .= "<img src=\"".$GLOBALS['ASSETS_URL']."images/info.gif\"";
 		$out .= tooltip($info, TRUE, TRUE) . ">$error_sign</td></tr>\n</table>\n</td></tr>\n";
 		$this->css->switchClass();
-		
+
 		return $out;
 	}
-	
+
 	/**
 	* Prints out a form for entering the cellpadding of a table.
 	*
@@ -336,12 +336,12 @@ class ExternEditHtml extends ExternEditGeneric {
 		$info = _("Geben Sie den Abstand zwischen Zelleninhalt und Zellenrand in Pixeln an.");
 		$form_name = $this->element_name . "_" . $attribute;
 		$value = $this->getValue($attribute);
-		
+
 		if ($this->faulty_values[$form_name][0])
 			$error_sign = $this->error_sign;
 		else
 			$error_sign = "";
-			
+
 		$out = "<tr><td><table width=\"100%\" border=\"0\" cellpadding=\"4\" cellspacing=\"0\">\n";
 		$out .= "<tr" . $this->css->getFullClass() . "><td{$this->width_1}>";
 		$out .= "<font size=\"2\">";
@@ -349,13 +349,13 @@ class ExternEditHtml extends ExternEditGeneric {
 		$out .= "</font></td>\n";
 		$out .= "<td{$this->width_2} nowrap=\"nowrap\"><input type=\"text\" name=\"$form_name\" size=\"2\"";
 		$out .= " maxlength=\"2\" value=\"$value\" /><font size=\"2\">&nbsp;Pixel&nbsp; \n";
-		$out .= "</font><img src=\"" . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . "pictures/info.gif\"";
+		$out .= "</font><img src=\"".$GLOBALS['ASSETS_URL']."images/info.gif\"";
 		$out .= tooltip($info, TRUE, TRUE) . ">$error_sign</td></tr>\n</table>\n</td></tr>\n";
 		$this->css->switchClass();
-		
+
 		return $out;
 	}
-	
+
 	/**
 	* Prints out a form for entering the cellspacing of a table.
 	*
@@ -367,12 +367,12 @@ class ExternEditHtml extends ExternEditGeneric {
 		$info = _("Geben Sie den Abstand zwischen benachbarten Zellen in Pixeln an.");
 		$form_name = $this->element_name . "_" . $attribute;
 		$value = $this->getValue($attribute);
-		
+
 		if ($this->faulty_values[$form_name][0])
 			$error_sign = $this->error_sign;
 		else
 			$error_sign = "";
-		
+
 		$out = "<tr><td><table width=\"100%\" border=\"0\" cellpadding=\"4\" cellspacing=\"0\">\n";
 		$out .= "<tr" . $this->css->getFullClass() . "><td{$this->width_1}>";
 		$out .= "<font size=\"2\">";
@@ -380,13 +380,13 @@ class ExternEditHtml extends ExternEditGeneric {
 		$out .= "</font></td>\n";
 		$out .= "<td{$this->width_2} nowrap=\"nowrap\"><input type=\"text\" name=\"$form_name\" size=\"2\"";
 		$out .= " maxlength=\"2\" value=\"$value\" /><font size=\"2\">&nbsp;Pixel&nbsp; \n";
-		$out .= "</font><img src=\"" . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . "pictures/info.gif\"";
+		$out .= "</font><img src=\"".$GLOBALS['ASSETS_URL']."images/info.gif\"";
 		$out .= tooltip($info, TRUE, TRUE) . ">$error_sign</td></tr>\n</table>\n</td></tr>\n";
 		$this->css->switchClass();
-		
+
 		return $out;
 	}
-	
+
 	/**
 	* Prints out a form for entering the width of a html-element (e.g. &lt;td&gt;, &lt;table&gt;).
 	*
@@ -399,24 +399,24 @@ class ExternEditHtml extends ExternEditGeneric {
 		$form_name = $this->element_name . "_" . $attribute;
 		$value = $this->getValue($attribute);
 		$value_pp = "";
-		
+
 		if (substr($value, -1) == "%") {
 			$value_pp = "%";
 			$value = substr($value, 0, -1);
 		}
-		
+
 		if ($this->faulty_values[$form_name][0])
 			$error_sign = $this->error_sign;
 		else
 			$error_sign = "";
-		
+
 		$out = "<tr><td><table width=\"100%\" border=\"0\" cellpadding=\"4\" cellspacing=\"0\">\n";
 		$out .= "<tr" . $this->css->getFullClass() . "><td{$this->width_1}><font size=\"2\">";
 		$out .= _("Breite:");
 		$out .= "</font></td>\n";
 		$out .= "<td{$this->width_2} nowrap=\"nowrap\"><input type=\"text\" name=\"$form_name\" size=\"3\"";
 		$out .= " maxlength=\"3\" value=\"$value\" />&nbsp; &nbsp;\n";
-		
+
 		$out .= "<input type=\"radio\" name=\"{$form_name}pp\" value=\"%\"";
 		if ($value_pp == "%")
 			$out .= " checked=\"checked\"";
@@ -429,13 +429,13 @@ class ExternEditHtml extends ExternEditGeneric {
 		$out .= " /><font size=\"2\">";
 		$out .= _("Pixel");
 		$out .= "&nbsp; &nbsp;</font>\n";
-		$out .= "<img src=\"" . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . "pictures/info.gif\"";
+		$out .= "<img src=\" ".$GLOBALS['ASSETS_URL']."images/info.gif\"";
 		$out .= tooltip($info, TRUE, TRUE) . ">$error_sign</td></tr>\n</table>\n</td></tr>\n";
 		$this->css->switchClass();
-		
+
 		return $out;
 	}
-	
+
 	/**
 	* Prints out a form for entering the horizontal alignment of a html-element (e.g. &lt;td&gt;, &lt;table&gt;).
 	*
@@ -447,7 +447,7 @@ class ExternEditHtml extends ExternEditGeneric {
 		$info = _("Wählen Sie aus der Auswahlliste die Art der horizontalen Ausrichtung.");
 		$form_name = $this->element_name . "_" . $attribute;
 		$value = $this->getValue($attribute);
-		
+
 		$align_types = array(
 			"" => _("keine Auswahl"),
 			"left" => _("linksbündig"),
@@ -458,7 +458,7 @@ class ExternEditHtml extends ExternEditGeneric {
 			$error_sign = $this->error_sign;
 		else
 			$error_sign = "";
-		
+
 		$out = "<tr><td><table width=\"100%\" border=\"0\" cellpadding=\"4\" cellspacing=\"0\">\n";
 		$out .= "<tr" . $this->css->getFullClass() . "><td{$this->width_1}><font size=\"2\">";
 		$out .= _("horizontale Ausrichtung:");
@@ -473,13 +473,13 @@ class ExternEditHtml extends ExternEditGeneric {
 			$out .= $align_name . "</option>";
 		}
 		$out .= "</select>\n";
-		$out .= "<img src=\"" . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . "pictures/info.gif\"";
+		$out .= "<img src=\" ".$GLOBALS['ASSETS_URL']."images/info.gif\"";
 		$out .= tooltip($info, TRUE, TRUE) . ">$error_sign</td></tr>\n</table>\n</td></tr>\n";
 		$this->css->switchClass();
-		
+
 		return $out;
 	}
-	
+
 	/**
 	* Prints out a form for entering the vertikal alignment of a html-element (e.g. &lt;td&gt;, &lt;table&gt;).
 	*
@@ -491,7 +491,7 @@ class ExternEditHtml extends ExternEditGeneric {
 		$info = _("Wählen Sie aus der Auswahlliste die Art der vertikalen Ausrichtung.");
 		$form_name = $this->element_name . "_" . $attribute;
 		$value = $this->getValue($attribute);
-		
+
 		$valign_types = array(
 			"" => _("keine Auswahl"),
 			"top" => _("obenbündig"),
@@ -502,7 +502,7 @@ class ExternEditHtml extends ExternEditGeneric {
 			$error_sign = $this->error_sign;
 		else
 			$error_sign = "";
-		
+
 		$out = "<tr><td><table width=\"100%\" border=\"0\" cellpadding=\"4\" cellspacing=\"0\">\n";
 		$out .= "<tr" . $this->css->getFullClass() . "><td{$this->width_1}><font size=\"2\">";
 		$out .= _("vertikale Ausrichtung:");
@@ -517,13 +517,13 @@ class ExternEditHtml extends ExternEditGeneric {
 			$out .= $valign_name . "</option>";
 		}
 		$out .= "</select>\n";
-		$out .= "<img src=\"" . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . "pictures/info.gif\"";
+		$out .= "<img src=\" ".$GLOBALS['ASSETS_URL']."images/info.gif\"";
 		$out .= tooltip($info, TRUE, TRUE) . ">$error_sign</td></tr>\n</table>\n</td></tr>\n";
 		$this->css->switchClass();
-		
+
 		return $out;
 	}
-	
+
 	/**
 	* Prints out a form for entering the font-size.
 	*
@@ -536,10 +536,10 @@ class ExternEditHtml extends ExternEditGeneric {
 		$title = _("Schriftgröße:");
 		$values = array("", "1", "2", "3", "4", "5", "6", "7");
 		$names = array(_("keine Auswahl"), "1", "2", "3", "4", "5", "6", "7");
-		
+
 		return $this->editOptionGeneric($attribute, $title, $info, $values, $names, 1, FALSE);
 	}
-	
+
 	/**
 	* Prints out a form for entering the font-face.
 	*
@@ -550,10 +550,10 @@ class ExternEditHtml extends ExternEditGeneric {
 	function editFace ($attribute) {
 		$title = _("Schriftart:");
 		$info = _("Wählen Sie eine Schriftart aus.");
-		
+
 		return $this->editFaceGeneric($attribute, $title, $info);
-	} 
-	
+	}
+
 	/**
 	* Prints out a form for entering the css-classname of a html-element.
 	*
@@ -564,10 +564,10 @@ class ExternEditHtml extends ExternEditGeneric {
 	function editClass ($attribute) {
 		$info = _("Geben Sie einen CSS-Klassennamen aus Ihrer Stylesheet-Definition an.");
 		$title = _("CSS-Klasse:");
-		
+
 		return $this->editTextfieldGeneric($attribute, $title, $info, 30, 128);
 	}
-	
+
 	/**
 	* Prints out a form for entering css-styles of a html-element
 	*
@@ -578,10 +578,10 @@ class ExternEditHtml extends ExternEditGeneric {
 	function editStyle ($attribute) {
 		$info = _("Geben Sie Style-Sheet-Angaben ein.");
 		$title = _("Style:");
-		
+
 		return $this->editTextfieldGeneric($attribute, $title, $info, 35, 250);
 	}
-	
+
 	/**
 	* Prints out a form for entering the title of a html-page.
 	*
@@ -592,10 +592,10 @@ class ExternEditHtml extends ExternEditGeneric {
 	function editTitle ($attribute) {
 		$info = _("Geben Sie einen Seitentitel an.");
 		$title = _("Seiten-Titel:");
-		
+
 		return $this->editTextfieldGeneric($attribute, $title, $info, 35, 128);
 	}
-	
+
 	/**
 	* Prints out a form for choosing between a horizontal or vertikal zebra-effect
 	* on table rows/columns.
@@ -610,10 +610,10 @@ class ExternEditHtml extends ExternEditGeneric {
 		$title = _("Zebra-Effekt:");
 		$names = array(_("aus"), _("horizontal"), _("vertikal"));
 		$values = array("", "HORIZONTAL", "VERTICAL");
-		
+
 		return $this->editRadioGeneric($attribute, $title, $info, $values, $names);
 	}
-	
+
 	/**
 	* Prints out a form for activating a zebra-effect on th-tags.
 	*
@@ -627,10 +627,10 @@ class ExternEditHtml extends ExternEditGeneric {
 		$title = _("Zebra-Effekt:");
 		$names = array(_("aus"), _("an"));
 		$values = array("", "1");
-		
+
 		return $this->editRadioGeneric($attribute, $title, $info, $values, $names);
 	}
-	
+
 	/**
 	* Prints out a form for entering the URL of a background picture for the hole document.
 	*
@@ -641,10 +641,10 @@ class ExternEditHtml extends ExternEditGeneric {
 	function editBackground ($attribute) {
 		$info = _("Geben Sie die URL eines Bildes an, das als Hintergrundbild für die gesamte Seite dienen soll.");
 		$title = _("Hintergrundbild:");
-		
+
 		return $this->editTextfieldGeneric($attribute, $title, $info, 35, 150);
 	}
-	
+
 }
-	
+
 ?>

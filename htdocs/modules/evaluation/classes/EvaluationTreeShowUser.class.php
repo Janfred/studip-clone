@@ -86,6 +86,7 @@ class EvaluationTreeShowUser {
 																	'load_mode' => EVAL_LOAD_ALL_CHILDREN));
 
     }
+
 	
 
     /**
@@ -95,26 +96,27 @@ class EvaluationTreeShowUser {
      * @param	string	ID of the start item, shouldnt be needed.
      */
     function showTree( $item_id = "root" ) {
-	$items = array();
-
-	if( ! is_array($item_id) ) {
-	    $items[0] = $item_id;
-	    $this->start_item_id = $item_id;
-	} else {
-	    $items = $item_id;
-	}
-
-	$num_items = count($items);
-	for( $j = 0; $j < $num_items; ++$j ) {
-	    
-	    $this->printLevelOutput( $items[$j] );
-	    $this->printItemOutput( $items[$j] );
-
-	    if( $this->tree->hasKids( $items[$j] ) ) {
-		$this->showTree( $this->tree->tree_childs[$items[$j]] );
-	    }
-	}
-	return;
+		$items = array();
+		$js = EvalCommon::createEvalShowJS( YES );
+		echo $js->createContent();
+		if( ! is_array($item_id) ) {
+		    $items[0] = $item_id;
+		    $this->start_item_id = $item_id;
+		} else {
+		    $items = $item_id;
+		}
+	
+		$num_items = count($items);
+		for( $j = 0; $j < $num_items; ++$j ) {
+		    
+		    $this->printLevelOutput( $items[$j] );
+		    $this->printItemOutput( $items[$j] );
+	
+		    if( $this->tree->hasKids( $items[$j] ) ) {
+			$this->showTree( $this->tree->tree_childs[$items[$j]] );
+		    }
+		}
+	   return;
     }
 	
 
@@ -141,7 +143,7 @@ class EvaluationTreeShowUser {
 	    /* a little space to indent subgroups */
 	    $level_output .=
 		"<td valign=\"top\" width=\"".INDENT_PIXELS."\" height=\"1\" nowrap>".
-		"<img src=\"pictures/forumleer.gif\" width=\"".INDENT_PIXELS."\" height=\"1\" border=\"0\" alt=\"\" />".
+		"<img src=\"".$GLOBALS['ASSETS_URL']."images/forumleer.gif\" width=\"".INDENT_PIXELS."\" height=\"1\" border=\"0\" alt=\"\" />".
 		"</td>";
 	}
 	
@@ -165,7 +167,7 @@ class EvaluationTreeShowUser {
 
 #	$group = new EvaluationGroup( $group_id, NULL, EVAL_LOAD_ALL_CHILDREN );
 	$group = &$this->tree->getGroupObject($group_id);
-
+	
 #	echo "<td>";
 #	echo ">";
 #	echo "</td>\n";
@@ -178,6 +180,7 @@ class EvaluationTreeShowUser {
 	echo "</td>\n";
 
 	/* show group headline, if it's not a question group */
+	
 	if( ($group->getChildType() != "EvaluationQuestion") && ($group->getChildType() != "EvaluationText") && ($group->getChildType() != "EvaluationLink") ) {
 
 	    /* add space after a top-level group */
@@ -218,8 +221,9 @@ class EvaluationTreeShowUser {
 	    echo "</td>";
 
 	    echo "<td width=\"1\">\n";
-	    echo "<img src=\"pictures/forumleer.gif\" width=\"2\" height=\"1\" border=\"0\" alt=\"\"></td>";
+	    echo "<img src=\"".$GLOBALS['ASSETS_URL']."images/forumleer.gif\" width=\"2\" height=\"1\" border=\"0\" alt=\"\"></td>";
 	    echo "</td>\n";
+		
 	}  elseif ($group->getChildType() == "EvaluationLink") {
 		/* add space after a top-level group */
 	    $parent = $group->getParentObject();
@@ -240,7 +244,7 @@ class EvaluationTreeShowUser {
 	    echo "<td width=\"1\">\n";
 	    echo "<img src=\"".$GLOBALS['ASSETS_URL']."images/forumleer.gif\" width=\"2\" height=\"1\" border=\"0\" alt=\"\"></td>";
 	    echo "</td>\n";
-
+		
 	} else {
 	    echo "<td width=\"100%\"></td>";
 	}
@@ -270,7 +274,7 @@ class EvaluationTreeShowUser {
 	    
 	    /* a little space to indent subgroups */
 	    $level_output = "<td width=\"".INDENT_PIXELS."\">".
-		"<img src=\"pictures/forumleer.gif\" width=\"".INDENT_PIXELS."\" height=\"1\" border=\"0\" alt=\"\"></td>".
+		"<img src=\"".$GLOBALS['ASSETS_URL']."images/forumleer.gif\" width=\"".INDENT_PIXELS."\" height=\"1\" border=\"0\" alt=\"\"></td>".
 		$level_output;
 	}
 
@@ -294,6 +298,7 @@ class EvaluationTreeShowUser {
 		echo "</td></tr>\n";
 	}
 	echo "</table>\n";
+	
 	return;
     }
 
@@ -309,7 +314,7 @@ class EvaluationTreeShowUser {
 	$closeTable = NO;
 	$html = "";
 	$content = "";
-
+	
 	/* get title */
 	$content .= $group->getChildType() == "EvaluationQuestion" && $group->getTitle()
 	    ? "<b>".formatReady( $group->getTitle() )."</b><br />\n"

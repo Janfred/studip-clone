@@ -126,7 +126,7 @@ switch ($element_switch){  // Auswahl der Zielparameter
 		$zeiten = false;
 		$kalender = true;
 		break;
-	case 8:  // resources.php&view=edit_object_assign 
+	case 8:  // resources.php&view=edit_object_assign
 		$txt_day   = 'change_schedule_day';
 		$txt_month = 'change_schedule_month';
 		$txt_year  = 'change_schedule_year';
@@ -180,7 +180,7 @@ echo <<<EOT
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head>
 <title>$title</title>
-<link rel="stylesheet" type="text/css" href="{$CANONICAL_RELATIVE_PATH_STUDIP}style.css">
+<link rel="stylesheet" type="text/css" href="{$GLOBALS['ASSETS_URL']}stylesheets/style.css">
 <script type="text/javascript">
 <!--
 window.setTimeout("window.close()", 120000); // Fenster automatisch wieder schließen :-)
@@ -210,7 +210,7 @@ function insert_date (m, d, y) {
    if (document.forms['TimeForm']) {
       insert_time();
    } else {
-      window.close(); 
+      window.close();
    }
 }
 -->
@@ -278,15 +278,15 @@ if ($mcount > 3) {
 		echo '<tr>';
 		$zeiten_buttons = '<a href="javascript:insert_time();">'. makeButton('uebernehmen', 'img') . '</a> &nbsp; <a href="javascript:window.close();">' . makeButton('abbrechen', 'img').'</a>';
 		if ($kalender) {
-			echo '<td class="blank">&nbsp;<a href="',$PHP_SELF,'?atime=',mktime(0,0,0,$atimex['mon'] - $mcount,10,$atimex['year']),'&mcount=',$mcount,'&element_switch=',$element_switch,'&c=',$c,$q,'"><img border="0" src="',$CANONICAL_RELATIVE_PATH_STUDIP,'pictures/calendar_previous_double_small.gif"', tooltip($mcount . ' ' . _("Monate zurück")),' border="0"></a>';
-			echo '&nbsp;<a href="',$PHP_SELF,'?atime=',mktime(0,0,0,$atimex['mon'] - $mcounth,10,$atimex['year']),'&mcount=',$mcount,'&element_switch=',$element_switch,'&c=',$c,$q,'"><img border="0" src="',$CANONICAL_RELATIVE_PATH_STUDIP,'pictures/calendar_previous_small.gif"', tooltip($mcounth .' ' . _("Monate zurück")),' border="0"></a></td>', "\n";
+			echo '<td class="blank">&nbsp;<a href="',$PHP_SELF,'?atime=',mktime(0,0,0,$atimex['mon'] - $mcount,10,$atimex['year']),'&mcount=',$mcount,'&element_switch=',$element_switch,'&c=',$c,$q,'"><img border="0" src="'.$GLOBALS['ASSETS_URL'].'images/calendar_previous_double_small.gif"', tooltip($mcount . ' ' . _("Monate zurück")),' border="0"></a>';
+			echo '&nbsp;<a href="',$PHP_SELF,'?atime=',mktime(0,0,0,$atimex['mon'] - $mcounth,10,$atimex['year']),'&mcount=',$mcount,'&element_switch=',$element_switch,'&c=',$c,$q,'"><img border="0" src="'.$GLOBALS['ASSETS_URL'].'images/calendar_previous_small.gif"', tooltip($mcounth .' ' . _("Monate zurück")),' border="0"></a></td>', "\n";
 			if ($mcounth - 2 > 0) {
 				echo '<td class="blank" colspan="' , ($mcounth - 2) , '" align=center>';
 				if ($zeiten) echo $zeiten_buttons;
 				echo '&nbsp;</td>';
 			}
-			echo '<td class="blank" align="right"><a href="',$PHP_SELF,'?atime=',mktime(0,0,0,$atimex['mon'] + $mcounth,10,$atimex['year']),'&mcount=',$mcount,'&element_switch=',$element_switch,'&c=',$c,$q,'"><img border="0" src="',$CANONICAL_RELATIVE_PATH_STUDIP,'pictures/calendar_next_small.gif"', tooltip($mcounth . ' ' . _("Monate vor")),' border="0"></a>&nbsp;', "\n";
-			echo '<a href="',$PHP_SELF,'?atime=',mktime(0,0,0,$atimex['mon'] + $mcount,10,$atimex['year']),'&mcount=',$mcount,'&element_switch=',$element_switch,'&c=',$c,$q,'"><img border="0" src="',$CANONICAL_RELATIVE_PATH_STUDIP,'pictures/calendar_next_double_small.gif"', tooltip($mcount .' ' . _("Monate vor")),' border="0"></a>&nbsp;</td>';
+			echo '<td class="blank" align="right"><a href="',$PHP_SELF,'?atime=',mktime(0,0,0,$atimex['mon'] + $mcounth,10,$atimex['year']),'&mcount=',$mcount,'&element_switch=',$element_switch,'&c=',$c,$q,'"><img border="0" src="'.$GLOBALS['ASSETS_URL'].'images/calendar_next_small.gif"', tooltip($mcounth . ' ' . _("Monate vor")),' border="0"></a>&nbsp;', "\n";
+			echo '<a href="',$PHP_SELF,'?atime=',mktime(0,0,0,$atimex['mon'] + $mcount,10,$atimex['year']),'&mcount=',$mcount,'&element_switch=',$element_switch,'&c=',$c,$q,'"><img border="0" src="'.$GLOBALS['ASSETS_URL'].'images/calendar_next_double_small.gif"', tooltip($mcount .' ' . _("Monate vor")),' border="0"></a>&nbsp;</td>';
 		} elseif ($zeiten) {
 			echo '<td class="blank" colspan="',$mcounth,'" align="center">', $zeiten_buttons, "</td>\n";
 		}

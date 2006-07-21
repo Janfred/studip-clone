@@ -30,7 +30,7 @@ require_once($ABSOLUTE_PATH_STUDIP."html_head.inc.php");
 require_once($ABSOLUTE_PATH_STUDIP."statusgruppe.inc.php");
 require_once($ABSOLUTE_PATH_STUDIP."functions.php");
 if ($GLOBALS['CHAT_ENABLE']){
-	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php"; 
+	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php";
 }
 $css_switcher = new CssClassSwitcher();
 echo $css_switcher->GetHoverJSFunction();
@@ -66,10 +66,10 @@ if ($perm->have_perm("admin"))
 	$accepted_columns = array("Nachname", "inst_perms");
 else
 	$accepted_columns = array("Nachname");
-	
+
 if(!in_array($institut_members_data["sortby"], $accepted_columns))
 	$institut_members_data["sortby"] = "Nachname";
-	
+
 if($institut_members_data["direction"] == "ASC")
 	$new_direction = "DESC";
 else if($institut_members_data["direction"] == "DESC")
@@ -308,15 +308,15 @@ else
 echo "<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">";
 printf("\n<tr><td class=\"topic\" colspan=\"2\"><b>&nbsp; %s</b></td></tr>",
 	$SessSemName["header_line"]." - " . _("MitarbeiterInnen der Einrichtung"));
-	
+
 if ($sms_msg) {
 	echo "<tr><td class=\"blank\">";
-	echo "<img src=\"pictures/blank.gif\" width=\"1\" height=\"5\"></td></tr>\n";
+	echo "<img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" width=\"1\" height=\"5\"></td></tr>\n";
 	parse_msg($sms_msg, "§", "blank", 1, FALSE);
 	$sms_msg = '';
 	$sess->unregister('sms_msg');
 }
-	
+
 echo "\n<tr><td class=\"blank\"><br /><blockquote>\n";
 
 if ($count > 0)
@@ -329,10 +329,10 @@ else {
 	page_close();
 	die;
 }
-	
+
 echo "\n</blockquote>\n";
 echo "</td></tr>\n<tr><td class=\"blank\">";
-echo "<img src=\"pictures/blank.gif\" width=\"1\" height=\"5\"></td></tr>\n";
+echo "<img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" width=\"1\" height=\"5\"></td></tr>\n";
 echo "<tr><td class=\"blank\">\n";
 
 if ($perm->have_perm("admin")) {
@@ -411,7 +411,7 @@ if ($institut_members_data["show"] == "funktion") {
 								WHERE Institut_id = '%s' AND statusgruppe_id = '%s'
 								AND inst_perms != 'user' ORDER BY %s %s", $auswahl, $statusgruppe_id,
 								$institut_members_data["sortby"], $institut_members_data["direction"]);
-								
+
 			$db_institut_members->query($query);
 			if ($db_institut_members->num_rows() > 0) {
 				echo "<tr><td class=\"steelkante\" colspan=\"$colspan\" height=\"20\">";
@@ -429,7 +429,7 @@ if ($institut_members_data["show"] == "funktion") {
 			$query = sprintf("SELECT ". $_fullname_sql['full_rev'] ." AS fullname, ui.inst_perms, ui.raum,
 								ui.sprechzeiten, ui.Telefon, aum.Email, aum.user_id,
 								aum.username
-								FROM user_inst ui LEFT JOIN	auth_user_md5 aum USING(user_id) LEFT JOIN user_info USING(user_id) 
+								FROM user_inst ui LEFT JOIN	auth_user_md5 aum USING(user_id) LEFT JOIN user_info USING(user_id)
 								WHERE ui.Institut_id = '%s' AND ui.inst_perms != 'user'
 								AND ui.user_id NOT IN('%s') ORDER BY %s %s",
 								$auswahl, $assigned, $institut_members_data["sortby"],
@@ -437,12 +437,12 @@ if ($institut_members_data["show"] == "funktion") {
 		else
 			$query = sprintf("SELECT ". $_fullname_sql['full_rev'] ." AS fullname, ui.inst_perms, ui.raum,
 								ui.Telefon, aum.user_id, aum.username
-								FROM user_inst ui LEFT JOIN	auth_user_md5 aum USING(user_id) LEFT JOIN user_info USING(user_id) 
+								FROM user_inst ui LEFT JOIN	auth_user_md5 aum USING(user_id) LEFT JOIN user_info USING(user_id)
 								WHERE ui.Institut_id = '%s' AND ui.inst_perms != 'user'
 								AND ui.user_id NOT IN('%s')ORDER BY %s %s", $auswahl,
 								$assigned,
 								$institut_members_data["sortby"], $institut_members_data["direction"]);
-										
+
 		$db_residual->query($query);
 		if ($db_residual->num_rows() > 0) {
 			echo "<tr><td class=\"steelkante\" colspan=\"$colspan\" height=\"20\">";
@@ -458,7 +458,7 @@ elseif ($institut_members_data["show"] == "status") {
 	foreach ($inst_permissions as $key => $permission) {
 		$query = sprintf("SELECT ". $_fullname_sql['full_rev'] ." AS fullname, ui.raum, ui.sprechzeiten, ui.Telefon,
 											inst_perms, Email, auth_user_md5.user_id,
-											username FROM user_inst ui LEFT JOIN	auth_user_md5 USING(user_id) 
+											username FROM user_inst ui LEFT JOIN	auth_user_md5 USING(user_id)
 											LEFT JOIN user_info USING(user_id)
 											WHERE ui.Institut_id = '%s' AND inst_perms = '%s'
 											ORDER BY %s %s", $auswahl, $key,
@@ -483,7 +483,7 @@ else {
 							$institut_members_data["direction"]);
 		else
 			$query = sprintf("SELECT ui.raum, ui.sprechzeiten, ui.Telefon,
-							aum.user_id, info.Home, 
+							aum.user_id, info.Home,
 							". $_fullname_sql['full_rev'] ." AS fullname, aum.Email, aum.username, Institut_id
 							FROM statusgruppen LEFT JOIN statusgruppe_user USING(statusgruppe_id)
 							LEFT JOIN user_inst ui USING(user_id) LEFT JOIN auth_user_md5 aum USING(user_id)
@@ -530,21 +530,21 @@ function table_head ($structure, $css_switcher) {
 	foreach ($structure as $field)
 		printf("<col width=\"%s\">", $field["width"]);
 	echo "\n</colgroup>\n";
-		
+
 	echo "<tr>\n";
-	
+
 	$begin = TRUE;
 	foreach ($structure as $field) {
 		if ($begin) {
 			printf ("<td class=\"%s\" width=\"%s\" valign=\"baseline\">",
 				$css_switcher->getHeaderClass(), $field["width"]);
-			echo "<img src=\"pictures/blank.gif\" width=\"1\" height=\"25\" align=\"bottom\">&nbsp;";
+			echo "<img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" width=\"1\" height=\"25\" align=\"bottom\">&nbsp;";
 			$begin = FALSE;
 		}
 		else
 			printf ("<td class=\"%s\" width=\"%s\" align=\"center\" valign=\"bottom\">",
 				$css_switcher->getHeaderClass(), $field["width"]);
-				
+
 		if ($field["link"]) {
 			printf("<a href=\"%s\">", $field["link"]);
 			printf("<font size=\"-1\"><b>%s</b></font>\n", $field["name"]);
@@ -557,24 +557,24 @@ function table_head ($structure, $css_switcher) {
 	echo "</tr>\n";
 }
 
-		
+
 
 function table_body ($db, $range_id, $structure, $css_switcher) {
 	$css_switcher->enableHover();
-	
+
 	while ($db->next_record()) {
-		
+
 		$css_switcher->switchClass();
 		printf("<tr%s>\n", $css_switcher->getHover());
 		if($db->f("fullname")) {
 			printf("<td%s>", $css_switcher->getFullClass());
-			echo "<img src=\"pictures/blank.gif\" width=\"2\" height=\"1\">";
+			echo "<img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" width=\"2\" height=\"1\">";
 			printf("<a href=\"about.php?username=%s\"><font size=\"-1\">%s</font></a></td>\n",
 				$db->f("username"), htmlReady($db->f("fullname")));
 		}
 		else
 			printf("<td%s>&nbsp;</td>", $css_switcher->getFullClass());
-	
+
 		if ($structure["statusgruppe"]) {
 			$statusgruppen = GetStatusgruppen($range_id, $db->f("user_id"));
 			if ($statusgruppen)
@@ -584,7 +584,7 @@ function table_body ($db, $range_id, $structure, $css_switcher) {
 				printf("<td%salign=\"center\"><font size=\"-1\">%s</font></td>\n",
 					$css_switcher->getFullClass(), _("keine"));
 		}
-		
+
 		if ($structure["status"]) {
 			if ($db->f("inst_perms"))
 				printf("<td%salign=\"center\"><font size=\"-1\">%s</font></td>\n",
@@ -593,7 +593,7 @@ function table_body ($db, $range_id, $structure, $css_switcher) {
 				printf("<td%salign=\"center\"><font size=\"-1\">&nbsp;</font></td>\n",
 					$css_switcher->getFullClass());
 		}
-		
+
 		if ($structure["raum"]) {
 			if ($db->f("raum"))
 				printf("<td%salign=\"center\"><font size=\"-1\">%s</font></td>\n",
@@ -602,7 +602,7 @@ function table_body ($db, $range_id, $structure, $css_switcher) {
 				printf("<td%salign=\"center\"><font size=\"-1\">&nbsp;</font></td>\n",
 					$css_switcher->getFullClass());
 		}
-		
+
 		if ($structure["sprechzeiten"]) {
 			if ($db->f("sprechzeiten"))
 				printf("<td%salign=\"center\"><font size=\"-1\">%s</font></td>\n",
@@ -611,7 +611,7 @@ function table_body ($db, $range_id, $structure, $css_switcher) {
 				printf("<td%salign=\"center\"><font size=\"-1\">&nbsp;</font></td>\n",
 					$css_switcher->getFullClass());
 		}
-		
+
 		if ($structure["telefon"]) {
 			if ($db->f("Telefon"))
 				printf("<td%salign=\"center\"><font size=\"-1\">%s</font></td>\n",
@@ -620,7 +620,7 @@ function table_body ($db, $range_id, $structure, $css_switcher) {
 				printf("<td%salign=\"center\"><font size=\"-1\">&nbsp;</font></td>\n",
 					$css_switcher->getFullClass());
 		}
-		
+
 		if ($structure["email"]) {
 			if ($db->f("Email"))
 				printf("<td%salign=\"center\"><font size=\"-1\"><a href=\"mailto:%s\">%s</a></font></td>\n",
@@ -629,7 +629,7 @@ function table_body ($db, $range_id, $structure, $css_switcher) {
 				printf("<td%salign=\"center\"><font size=\"-1\">&nbsp;</font></td>\n",
 					$css_switcher->getFullClass());
 		}
-		
+
 		if ($structure["home"]) {
 			if ($db->f("Home")) {
 				$home = mila($db->f("Home"), 20);
@@ -640,7 +640,7 @@ function table_body ($db, $range_id, $structure, $css_switcher) {
 				printf("<td%salign=\"center\"><font size=\"-1\">&nbsp;</font></td>\n",
 					$css_switcher->getFullClass());
 		}
-		
+
 		if ($structure["nachricht"]) {
 			printf("<td%salign=\"center\">\n",$css_switcher->getFullClass());
 			if ($GLOBALS['CHAT_ENABLE']){
@@ -648,12 +648,12 @@ function table_body ($db, $range_id, $structure, $css_switcher) {
 			}
 			printf("<a href=\"sms_send.php?sms_source_page=institut_members.php&rec_uname=%s\">",
 				$db->f("username"));
-			printf("<img src=\"pictures/nachricht1.gif\" alt=\"%s\" ", _("Nachricht an User verschicken"));
+			printf("<img src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" alt=\"%s\" ", _("Nachricht an User verschicken"));
 			printf("title=\"%s\" border=\"0\" valign=\"baseline\"></a>", _("Nachricht an User verschicken"));
 			echo "\n</td>\n";
 		}
-		
-		echo "</tr>\n";	
+
+		echo "</tr>\n";
 	}
 }
 

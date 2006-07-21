@@ -24,15 +24,17 @@ include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Sessio
 
 // -- here you have to put initialisations for the current page
 
+$HELP_KEYWORD="Basis.Suchen";
+
 // Start of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
-	
+
 ?>
 <table width="70%" border=0 cellpadding=0 cellspacing=0 align="center">
 
 <tr>
-	<td class="topic" colspan=2><img src="pictures/suchen.gif" border="0" align="texttop"><b>&nbsp;<?=_("Suchen in Stud.IP")?></b></td>
+	<td class="topic" colspan=2><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/suchen.gif" border="0" align="texttop"><b>&nbsp;<?=_("Suchen in Stud.IP")?></b></td>
 </tr>
 <tr>
 <td class="blank" width="100%">
@@ -64,16 +66,23 @@ include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 	<br>
 	<?
 	}
+	if ($ELEARNING_INTERFACE_ENABLE) {
+	?>
+	<br><a href="browse_elearning.php"><b><?=_("Suchen nach Lernmodulen")?></b></a></br>
+	<font size=-1><?=_("Hier finden Sie Lernmodule in angebundenen Systemen.")?></font>
+	<br>
+	<?
+	}
 	?>
 	<br><a href="archiv.php"><b><?=_("Suchen im Archiv")?></b></a></br>
 	<font size=-1><?=_("Hier finden Sie alle archivierten Veranstaltungen vergangener Semester.")?></font>
 	<br>
-	<br><a href="lit_search.php"><b><?=_("Suchen nach Literatur")?></b></a></br> 
-	<font size=-1><?=_("Hier k&ouml;nnen Sie in verschiedenen Katalogen nach Literatur suchen.")?></font> 
-	<br> 
+	<br><a href="lit_search.php"><b><?=_("Suchen nach Literatur")?></b></a></br>
+	<font size=-1><?=_("Hier k&ouml;nnen Sie in verschiedenen Katalogen nach Literatur suchen.")?></font>
+	<br>
 	<br>
 </td>
-<td class="blank" align="right" valign="top"><img src="pictures/suche.jpg" border="0"></td>
+<td class="blank" align="right" valign="top"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/suche.jpg" border="0"></td>
 </tr>
 
 <?  // Save data back to database.

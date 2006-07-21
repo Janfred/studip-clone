@@ -143,7 +143,7 @@ class PluginAdministration {
 						else {
 							// forced update
 							// only delete the plugin directory
-							// registration info will be updated automatically
+							// registration info will be updated automatically							
 							$this->deletePlugindir($newpluginpath);
 						}						
     				}
@@ -174,11 +174,23 @@ class PluginAdministration {
 					 $methods = get_class_methods($plugin);
 					 if (array_search('show',$methods)){
 					 	// now register the plugin in the database					 	
-					 	$persistence->registerPlugin($plugin,$pluginclassname,$pluginrelativepath);
+					 	$newpluginid = $persistence->registerPlugin($plugin,$pluginclassname,$pluginrelativepath);					 	
+					 	if ($newpluginid > 0){
+					 		$plugin->setPluginid($newpluginid);
+					 	}
 					 	// create database if needed					 	
 					 	if ($plugininfos["dbscheme"] != ""){
 					 		$this->createDBSchemeForPlugin($newpluginpath . "/" . $plugininfos["dbscheme"]);
-					 	}					 	
+					 	}		
+					 	// do we have additional plugin classes in this package?
+					 	$additionalclasses = $plugininfos["additionalclasses"];
+					 	if (is_array($additionalclasses)){					 		
+					 		foreach ($additionalclasses as $additionalclass){					 		
+					 			require_once($newpluginpath . '/' . $additionalclass . ".class.php");
+					 			$additionalplugin = new $additionalclass();					 	
+					 			$persistence->registerPlugin($additionalplugin,$additionalclass,$pluginrelativepath,$plugin);
+					 		}
+					 	}
 					 }
 					 else {
 						$this->deletePlugindir($newpluginpath);	 	

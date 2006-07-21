@@ -29,39 +29,39 @@ class reiter {
 	var $classInfo = "linksinfo";				//Klasse fuer Zellen in der zweiten Reiterebene
 	var $classDisabled="linksdisabled";				//Klasse fuer Zellen, die Disabled (=nicht klickbar) sind
 	//Pics
-	var $infoPic="pictures/info.gif";			//Bild das als Info Click/Alt-Text verwendet wird
-	var $toActiveTopkatPic="pictures/reiter1.jpg";		//Trenner fuer Reiter
-	var $toInactiveTopkatPic="pictures/reiter2.jpg";	//Trenner auf Inactive fuer Reiter
-	var $closerTopkatPic="pictures/reiter4.jpg";		//Closer fuer Reiter
-	var $closerInfo="";					//generic Closer for Info
-	var $activeBottomkatPic="pictures/forumrot3.gif";	//Aktiver Pfeil
-	var $inactiveBottomkatPic="pictures/pfeilweiss2.gif";	//Inaktiver Pfeil
-	var $bottomPic="pictures/reiter3.jpg";			//Unterer Abschluss
+	var $infoPic              = "info.gif";        //Bild das als Info Click/Alt-Text verwendet wird
+	var $toActiveTopkatPic    = "reiter1.jpg";     //Trenner fuer Reiter
+	var $toInactiveTopkatPic  = "reiter2.jpg";     //Trenner auf Inactive fuer Reiter
+	var $closerTopkatPic      = "reiter4.jpg";     //Closer fuer Reiter
+	var $closerInfo           = "";                //generic Closer for Info
+	var $activeBottomkatPic   = "forumrot3.gif";   //Aktiver Pfeil
+	var $inactiveBottomkatPic = "pfeilweiss2.gif"; //Inaktiver Pfeil
+	var $bottomPic            = "reiter3.jpg";     //Unterer Abschluss
 	//Width's
 	var $infoWidth="";					//Width of the Infoarea
 	var $tableWidth="";					//Width of the whole table
 	//Settings
-	var $noAktiveBottomkat=FALSE;				//Wenn trotz bestimmtem View kein Unterktagorie markiert sein soll (wird durch "(view)" erreicht) 
+	var $noAktiveBottomkat=FALSE;				//Wenn trotz bestimmtem View kein Unterktagorie markiert sein soll (wird durch "(view)" erreicht)
 	var $spacerInfoTopkat=FALSE;				//Should a spacer be used between Info and Topkat?
 	var $textAdd="&nbsp; &nbsp; ";				//a addition, which will be added before and after every text
 	var $katsAlign="left";					//how to align every kat
 	var $topkatBreakLineLimit="auto";			//more than x topkats = arrange topkats in two lines, or auto for automatic arrangement
-	
+
 	function topkatStart() {
 		printf ("<table %s cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n<tr>", ($this->tableWidth) ? "width=\"$this->tableWidth\"" : "");
 		return;
 	}
-	
+
 	function info($tooltip,$addText,$closeToActive=FALSE) {
 		printf ("<td class=\"%s\" %s nowrap>&nbsp; ", $this->classInfo, ($this->infoWidth) ? "width=\"$this->infoWidth\"" : "");
 		if ($tooltip)
-			printf ("<img align=\"absmiddle\" src=\"%s\" %s border=\"0\">&nbsp;", $this->infoPic, tooltip($tooltip, TRUE, TRUE));
+			printf ("<img align=\"absmiddle\" src=\"".$GLOBALS['ASSETS_URL']."images/%s\" %s border=\"0\">&nbsp;", $this->infoPic, tooltip($tooltip, TRUE, TRUE));
 		if ($addText)
 			printf ("<font class=\"%s\">%s</font>", $this->classInfo, $addText);
 		if (($closeToActive) && ($this->toActiveTopkatPic))
-			printf ("&nbsp; <img src=\"%s\" align=absmiddle>", $this->toActiveTopkatPic);
+			printf ("&nbsp; <img src=\"".$GLOBALS['ASSETS_URL']."images/%s\" align=absmiddle>", $this->toActiveTopkatPic);
 		elseif ($this->toInactiveTopkatPic)
-			printf ("&nbsp; <img src=\"%s\" align=absmiddle>", $this->toInactiveTopkatPic);
+			printf ("&nbsp; <img src=\"".$GLOBALS['ASSETS_URL']."images/%s\" align=absmiddle>", $this->toInactiveTopkatPic);
 		printf ("</td>\n");
 		if ($this->spacerInfoTopkat)
 			print ("<td> &nbsp; </td>");
@@ -69,47 +69,47 @@ class reiter {
 			printf ("<td><img src=\"%s\" align=absmiddle></td>", $this->closerInfo);
 		return;
 	}
-	
+
 	function topkat($text,$link,$width,$active=FALSE, $target="", $close=FALSE, $disabled=FALSE) {
 		if ($disabled) {
 			if ($close) {
 				printf("<td class=\"%s\" %s align=\"%s\" nowrap><font class=\"%s\">%s%s%s</font>%s</td>\n",
-					$this->classInactive, ($width) ? "width=\"$width\"" : "", $this->katsAlign, $this->classDisabled, $this->textAdd, $text, $this->textAdd, 
-					($this->closerTopkatPic) ? "<img src=\"$this->closerTopkatPic\" align=absmiddle>" : "");
+					$this->classInactive, ($width) ? "width=\"$width\"" : "", $this->katsAlign, $this->classDisabled, $this->textAdd, $text, $this->textAdd,
+					($this->closerTopkatPic) ? "<img src=\"".$GLOBALS['ASSETS_URL']."images/$this->closerTopkatPic\" align=absmiddle>" : "");
 			} else {
 				printf("<td class=\"%s\" %s align=\"%s\" nowrap><font class=\"%s\">%s%s%s</font>%s</td>\n",
-					$this->classInactive, ($width) ? "width=\"$width\"" : "", $this->katsAlign, $this->classDisabled, $this->textAdd, $text, $this->textAdd, 
-					($this->toInactiveTopkatPic) ? "<img src=\"$this->toActiveTopkatPic\" align=absmiddle>" : "");
+					$this->classInactive, ($width) ? "width=\"$width\"" : "", $this->katsAlign, $this->classDisabled, $this->textAdd, $text, $this->textAdd,
+					($this->toInactiveTopkatPic) ? "<img src=\"".$GLOBALS['ASSETS_URL']."images/$this->toActiveTopkatPic\" align=absmiddle>" : "");
 			}
 		} else {
 			if (($active) && (!$close))
 				printf("<td class=\"%s\" %s align=\"%s\" nowrap><a class=\"%s\" target=\"%s\" href=\"%s\">%s%s%s</a>%s</td>\n",
-					$this->classActive, ($width) ? "width=\"$width\"" : "", $this->katsAlign, $this->classActive, $target, $link, $this->textAdd, $text, $this->textAdd,  
-					($this->toInactiveTopkatPic) ? "<img src=\"$this->toInactiveTopkatPic\" align=absmiddle>" : "");
+					$this->classActive, ($width) ? "width=\"$width\"" : "", $this->katsAlign, $this->classActive, $target, $link, $this->textAdd, $text, $this->textAdd,
+					($this->toInactiveTopkatPic) ? "<img src=\"".$GLOBALS['ASSETS_URL']."images/$this->toInactiveTopkatPic\" align=absmiddle>" : "");
 			if ((!$active) && (!$close))
 				printf("<td class=\"%s\" %s align=\"%s\" nowrap><a class=\"%s\" target=\"%s\" href=\"%s\">%s%s%s</a>%s</td>\n",
-					$this->classInactive, ($width) ? "width=\"$width\"" : "", $this->katsAlign, $this->classInactive, $target, $link, $this->textAdd, $text, $this->textAdd, 
-					($this->toActiveTopkatPic) ? "<img src=\"$this->toActiveTopkatPic\" align=absmiddle>" : "");
+					$this->classInactive, ($width) ? "width=\"$width\"" : "", $this->katsAlign, $this->classInactive, $target, $link, $this->textAdd, $text, $this->textAdd,
+					($this->toActiveTopkatPic) ? "<img src=\"".$GLOBALS['ASSETS_URL']."images/$this->toActiveTopkatPic\" align=absmiddle>" : "");
 			if (($active) && ($close))
 				printf("<td class=\"%s\" %s align=\"%s\" nowrap><a class=\"%s\" target=\"%s\" href=\"%s\">%s%s%s</a>%s</td>\n",
-					$this->classActive, ($width) ? "width=\"$width\"" : "", $this->katsAlign, $this->classActive, $target, $link, $this->textAdd, $text, $this->textAdd, 
-					($this->closerTopkatPic) ? "<img src=\"$this->closerTopkatPic\" align=absmiddle>" : "");
+					$this->classActive, ($width) ? "width=\"$width\"" : "", $this->katsAlign, $this->classActive, $target, $link, $this->textAdd, $text, $this->textAdd,
+					($this->closerTopkatPic) ? "<img src=\"".$GLOBALS['ASSETS_URL']."images/$this->closerTopkatPic\" align=absmiddle>" : "");
 			if ((!$active) && ($close))
 				printf("<td class=\"%s\" %s align=\"%s\" nowrap><a class=\"%s\" target=\"%s\" href=\"%s\">%s%s%s</a>%s</td>\n",
-					$this->classInactive, ($width) ? "width=\"$width\"" : "", $this->katsAlign, $this->classInactive, $target, $link, $this->textAdd, $text, $this->textAdd, 
-					($this->closerTopkatPic) ? "<img src=\"$this->closerTopkatPic\" align=absmiddle>" : "");
+					$this->classInactive, ($width) ? "width=\"$width\"" : "", $this->katsAlign, $this->classInactive, $target, $link, $this->textAdd, $text, $this->textAdd,
+					($this->closerTopkatPic) ? "<img src=\"".$GLOBALS['ASSETS_URL']."images/$this->closerTopkatPic\" align=absmiddle>" : "");
 			return;
 		}
 	}
 
 	function topkatCloseRow($addLine = FALSE, $cols = '') {
 		if ($addLine) {
-			printf ("</tr><td colspan=\"%s\" style=\"background-image: url('pictures/line.gif')\"><img src=\"pictures/blank.gif\" width=\"10\" height=\"1\" /></td>", $cols);
+			printf ("</tr><td colspan=\"%s\" style=\"background-image: url('".$GLOBALS['ASSETS_URL']."images/line.gif')\"><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" width=\"10\" height=\"1\" /></td>", $cols);
 		}
 		printf ("</tr></table>\n");
 		return;
 	}
-	
+
 	function bottomkatStart() {
 		printf ("<table width=\"100%%\" cellspacing=0 cellpadding=4 border=0>\n<tr><td class=\"%s\" width=\"2%%\">&nbsp; </td><td class=\"%s\">",  $this->class2nd, $this->class2nd);
 		return;
@@ -117,27 +117,27 @@ class reiter {
 
 	function bottomkat($text,$link,$active=FALSE, $target="", $disabled=FALSE) {
 		if ($disabled) {
-			printf("<span style=\"white-space:nowrap;\"><img src=\"%s\" border=\"0\"><font class=\"%s\">%s</font><img src=\"pictures/blank.gif\" width=\"15\"></span>\n",
+			printf("<span style=\"white-space:nowrap;\"><img src=\"".$GLOBALS['ASSETS_URL']."images/%s\" border=\"0\"><font class=\"%s\">%s</font><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" width=\"15\"></span>\n",
 				$this->inactiveBottomkatPic, $this->classDisabled, $text);
 		} else {
 			if (($active) && (!$this->noAktiveBottomkat))
-				printf("<span style=\"white-space:nowrap;\"><img src=\"%s\" border=\"0\"><a class=\"%s\" target=\"%s\" href=\"%s\">%s</a><img src=\"pictures/blank.gif\" width=\"15\"></span>\n",
+				printf("<span style=\"white-space:nowrap;\"><img src=\"".$GLOBALS['ASSETS_URL']."images/%s\" border=\"0\"><a class=\"%s\" target=\"%s\" href=\"%s\">%s</a><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" width=\"15\"></span>\n",
 					$this->activeBottomkatPic, $this->class2nd, $target, $link, $text);
 			else
-				printf("<span style=\"white-space:nowrap;\"><img src=\"%s\" border=\"0\"><a class=\"%s\" target=\"%s\" href=\"%s\">%s</a><img src=\"pictures/blank.gif\" width=\"15\"></span>\n",
+				printf("<span style=\"white-space:nowrap;\"><img src=\"".$GLOBALS['ASSETS_URL']."images/%s\" border=\"0\"><a class=\"%s\" target=\"%s\" href=\"%s\">%s</a><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" width=\"15\"></span>\n",
 					$this->inactiveBottomkatPic, $this->class2nd, $target, $link, $text);
 		}
 	}
 
 	function bottomkatIsolator () {
-		print "<span style=\"white-space:nowrap;\"><img valign=\"bottom\" src=\"pictures/isolator.gif\" border=\"0\">&nbsp;&nbsp;&nbsp;</span>\n";
+		print "<span style=\"white-space:nowrap;\"><img valign=\"bottom\" src=\"".$GLOBALS['ASSETS_URL']."images/isolator.gif\" border=\"0\">&nbsp;&nbsp;&nbsp;</span>\n";
 	}
 
 	function bottomkatCloseRow() {
-		printf ("</td></tr><tr><td colspan=\"2\" background=\"%s\">&nbsp;</td></tr></table>\n", $this->bottomPic);
+		printf ("</td></tr><tr><td colspan=\"2\" background=\"".$GLOBALS['ASSETS_URL']."images/%s\">&nbsp;</td></tr></table>\n", $this->bottomPic);
 		return;
 	}
-	
+
 	function activateStructure ($structure, $view) {
 		if (!$view) {
 			reset ($structure);
@@ -161,20 +161,20 @@ class reiter {
 
 	function segmentTopKats(&$structure) {
 		global $auth;
-		
+
 		$segment = 1;
 		$counter = 0;
 		$lettercounter = 0;
-		
+
 		//for nobodys, they dont have xres (or if we use this class in a non phpLib context)
 		if (!$auth->auth["xres"])
 			$xres = 800;
 		else
 			$xres = $auth->auth["xres"];
-			
+
 		if (strtolower($this->topkatBreakLineLimit) == "auto")
 			$topkatLetterBreakLineLimit = round($xres / 7.1);
-		
+
 		foreach ($structure as $key=>$val) {
 			if (!$val["topKat"]) {
 				$i++;
@@ -191,7 +191,7 @@ class reiter {
 						$counter=1;
 					}
 				}
-				
+
 				$structure[$key]["topKatSegment"] = $segment;
 			}
 		}
@@ -216,16 +216,16 @@ class reiter {
 			}
 		}
 		$bottomKats=sizeof($structure)-$topKats;
-		
+
 		$tooltipCreated=FALSE;
 		$rows=0;
-		
+
 		for ($s=1; $s<=$segments; $s++) {
 			reset($structure);
 			$a=current($structure);
 				$cols=0;
 			$topkatOpened = FALSE;
-			
+
 			for ($i=0; $i<$topKats; $i++) {
 				$b=next($structure);
 				$close=FALSE;
@@ -246,14 +246,14 @@ class reiter {
 					$this->topkat($a["name"], $a["link"], $a["width"],$a["active"], $a["target"], $close, $a["disabled"]);
 					$cols++;
 					}
-				
+
 				$a=$b;
 				}
 			if ($topkatOpened) {
 				$this->topkatCloseRow(($rows < $segments) ? TRUE : FALSE, $cols);
 			}
 		}
-		
+
 		if ($activeSegment != $segments) {
 			$this->topkatStart();
 			reset($structure);
@@ -262,7 +262,7 @@ class reiter {
 
 			for ($i=0; $i<$topKats; $i++) {
 				$b=next($structure);
-				$close=FALSE;		
+				$close=FALSE;
 				if ($a["topKatSegment"] == $activeSegment) {
 					if ((($tooltip) || ($addText)) && (!$tooltipCreated)) {
 						$this->info($tooltip, $addText, $a["active"]);
@@ -295,7 +295,7 @@ class reiter {
 			$this->bottomkatCloseRow();
 		}
 	}
-	
+
 	function setNoAktiveBottomkat($view) {
 		if ((substr ($view, 0, 1) == "(") && (substr ($view,strlen($view)-1, strlen($view)) == ")")) {
 			$this->noAktiveBottomkat=TRUE;
@@ -303,7 +303,7 @@ class reiter {
 		}
 		return $view;
 	}
-	
+
 	function create($structure, $view, $tooltip='', $addText='') {
 		$view=$this->setNoAktiveBottomkat($view);
 		$structure=$this->activateStructure ($structure, $view);

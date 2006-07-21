@@ -1,9 +1,9 @@
 <?php
 /**
 * my_archiv.php
-* 
+*
 * overview for achived Veranstaltungen
-* 
+*
 *
 * @author		Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
 * @version		$Id$
@@ -60,12 +60,12 @@ echo "\n" . $cssSw->GetHoverJSFunction() . "\n";
 
 if (!$perm->have_perm('root'))
 	include ($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'links_seminare.inc.php');	   //hier wird die Navigation nachgeladen
-	 
+
 if (!isset($sortby))
 	$sortby="name";
 if ($sortby == "count")
 	$sortby = "count DESC";
-	
+
 $db->query ("SELECT archiv.name, archiv.seminar_id, archiv_user.status, archiv.semester, archiv.archiv_file_id, archiv.forumdump FROM archiv_user LEFT JOIN archiv  USING (seminar_id) WHERE archiv_user.user_id = '$user->id' GROUP BY seminar_id ORDER BY start_time DESC, $sortby");
 $num_my_sem=$db->num_rows();
 if (!$num_my_sem)
@@ -75,7 +75,7 @@ if (!$num_my_sem)
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
 	<tr>
 		<td class="topic" colspan="2">
-			<img src="pictures/meinesem.gif" border="0" align="texttop">&nbsp;<b><? echo(_("Meine archivierten Veranstaltungen")) ?></b>
+			<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/meinesem.gif" border="0" align="texttop">&nbsp;<b><? echo(_("Meine archivierten Veranstaltungen")) ?></b>
 		</td>
 	</tr>
 <?
@@ -113,15 +113,15 @@ if ($num_my_sem) {
 		echo "<td class=\"".$cssSw->getClass()."\" align=\"left\" nowrap>";
 		// postings-field
 		if ($db->f("forumdump"))
-			echo "<a href=\"archiv.php?forum_dump_id=".$db->f('seminar_id')."\" target=\"blank\">&nbsp; <img src=\"pictures/icon-posting.gif\"border=0 ".tooltip(_("Beiträge des Forums der Veranstaltung"))."></a>";
+			echo "<a href=\"archiv.php?forum_dump_id=".$db->f('seminar_id')."\" target=\"blank\">&nbsp; <img src=\"".$GLOBALS['ASSETS_URL']."images/icon-posting.gif\"border=0 ".tooltip(_("Beiträge des Forums der Veranstaltung"))."></a>";
 		else
-			echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
+			echo "&nbsp; <img src='".$GLOBALS['ASSETS_URL']."images/icon-leer.gif' border=0>";
 		 //documents-field
  		$file_name = _("Dateisammlung") . '-' . substr($db->f('name'),0,200) . '.zip';
 		if ($db->f('archiv_file_id')) {
-			echo '<a href="'. GetDownloadLink($db->f('archiv_file_id'), $file_name, 1) . '">&nbsp; <img src="pictures/icon-disc.gif" border=0 '.tooltip(_("Dateisammlung der Veranstaltung herunterladen")).'></a>';
+			echo '<a href="'. GetDownloadLink($db->f('archiv_file_id'), $file_name, 1) . '">&nbsp; <img src="'.$GLOBALS['ASSETS_URL'].'images/icon-disc.gif" border=0 '.tooltip(_("Dateisammlung der Veranstaltung herunterladen")).'></a>';
 		} else {
-			echo '&nbsp; <img src="pictures/icon-leer.gif" border=0>';
+			echo '&nbsp; <img src="'.$GLOBALS['ASSETS_URL'].'images/icon-leer.gif" border=0>';
 		}
 		echo '</td>';
 		//status-field
@@ -131,11 +131,11 @@ if ($num_my_sem) {
 	echo "</table><br><br>";
 
 } else {  // es sind keine Veranstaltungen abboniert
- 
+
  ?>
  <tr>
  <tr>
- 	<td class="blank" colspan="2">&nbsp; 
+ 	<td class="blank" colspan="2">&nbsp;
  	</td>
  </tr>
 	 <td valign="top" class="blank">
@@ -145,7 +145,7 @@ if ($num_my_sem) {
 		parse_msg($meldung);
 	}?>
 		</table>
-<?			
+<?
 }
 
 //Info-field on the right side
@@ -158,22 +158,22 @@ if ($num_my_sem) {
 // Berechnung der uebrigen Seminare
 
 $db->query("SELECT count(*) as count  FROM archiv");
-$db->next_record(); 
+$db->next_record();
 $anzahltext = sprintf(_("Es befinden sich zur Zeit %s Veranstaltungen im Archiv."), ($db->f("count")));
 
 
 // View for Teachers
-$infobox = array	(	
+$infobox = array	(
 	array  ("kategorie"  => _("Information:"),
-		"eintrag" => array	(	
-			array (	"icon" => "pictures/ausruf_small.gif",
+		"eintrag" => array	(
+			array (	'icon' => "ausruf_small.gif",
 							"text"  => $anzahltext
 			)
 		)
 	),
 	array  ("kategorie" => _("Aktionen:"),
-		"eintrag" => array	(	
-			array	 (	"icon" => "pictures/suchen.gif",
+		"eintrag" => array	(
+			array	 (	'icon' => "suchen.gif",
 								"text"  => sprintf(_("Um Informationen &uuml;ber andere archivierte Veranstaltungen anzuzeigen nutzen Sie die <br />%sSuche im Archiv%s"), '<a href="archiv.php">', '</a>')
 			)
 		)
@@ -182,14 +182,14 @@ $infobox = array	(
 
 // print the info_box
 
-print_infobox ($infobox,"pictures/folders.jpg");
+print_infobox ($infobox, "folders.jpg");
 
 ?>
 
      	</td>
     </tr>
     <tr>
-    	<td class="blank" colspan="2">&nbsp; 
+    	<td class="blank" colspan="2">&nbsp;
     	</td>
     </tr>
 </table>

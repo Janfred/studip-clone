@@ -24,6 +24,8 @@ include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Sessio
 
 // -- here you have to put initialisations for the current page
 
+$HELP_KEYWORD="Basis.InVeranstaltungDetails";
+
 // Start of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");	 // Output of Stud.IP head
@@ -73,7 +75,7 @@ if ($sem_id) {
 	if ($perm->have_studip_perm("admin",$sem_id)) {
 		$skip_verify=TRUE;
 	} elseif ($perm->have_perm("user") && !$perm->have_perm("admin")) { //Add lecture only if logged in
-		$db->query("SELECT status FROM seminar_user WHERE user_id ='$user->id' AND Seminar_id = '$sem_id'");		
+		$db->query("SELECT status FROM seminar_user WHERE user_id ='$user->id' AND Seminar_id = '$sem_id'");
 		$db->next_record();
 		if (($db2->f("admission_starttime") > time()) && (($db2->f("admission_endtime_sem") == "-1"))) {
 			$abo_msg = sprintf ("</A>"._("Tragen Sie sich hier ab %s um %s ein.")."<A>",date("d.m. Y",$db2->f("admission_starttime")),date("G:i",$db2->f("admission_starttime")));
@@ -128,7 +130,7 @@ else
 		&nbsp; <br />
 		<table align="center" width="99%" border="0" cellpadding="2" cellspacing="0">
 		<tr>
-			<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; <img src="./pictures/blank.gif" width="25" height="10" border="0">
+			<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; <img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" width="25" height="10" border="0">
 			</td>
 			<td class="<? echo $cssSw->getClass() ?>" valign="top" colspan=2 valign="top" width="70%">
 				<?
@@ -157,9 +159,9 @@ else
 			}
 
 			if (($mein_status) || ($admission_status)) {
-				$picture_tmp = "./pictures/haken.gif";
+				$picture_tmp = "haken.gif";
 			} else {
-				$picture_tmp = "./pictures/x2.gif";
+				$picture_tmp = "x2.gif";
 			}
 
 			if (($mein_status) || ($admission_status)) {
@@ -183,7 +185,7 @@ else
 			if ((!$mein_status) && (!$admission_status)) {
 				$tmp_text = "<font color = red>".$tmp_text."<font>";
 			}
-			
+
 
 	$db4->query("SELECT admission_prelim FROM seminare WHERE Seminar_id = '$sem_id'");
 	$db4->next_record();
@@ -198,10 +200,10 @@ else
 		),
 		array	("kategorie" => _("Berechtigungen:"),
 			"eintrag" => array	(
-				array	(	"icon" => "pictures/blank.gif",
+				array	(	"icon" => "blank.gif",
 					"text"	=> _("Lesen:") . "&nbsp; ".get_ampel_read($mein_status, $admission_status, $db2->f("Lesezugriff"), FALSE, $db2->f("admission_starttime"), $db2->f("admission_endtime_sem"), $db2->f("admission_prelim"))
 				),
-				array	(	"icon" => "pictures/blank.gif",
+				array	(	"icon" => "blank.gif",
 					"text"	=> _("Schreiben:") . "&nbsp; ".get_ampel_write($mein_status, $admission_status, $db2->f("Schreibzugriff"), FALSE, $db2->f("admission_starttime"), $db2->f("admission_endtime_sem"), $db2->f("admission_prelim"))
 				)
 			)
@@ -211,26 +213,26 @@ else
 if ($abo_msg || $back_msg || $delete_msg || $info_msg || $mein_status || $perm->have_studip_perm("admin",$sem_id) ) {
 	$infobox[2]["kategorie"] = _("Aktionen:");
 	if (($abo_msg) && (!$skip_verify)) {
-		$infobox[2]["eintrag"][] = array (	"icon" => "./pictures/link_intern.gif" ,
+		$infobox[2]["eintrag"][] = array (	"icon" => "link_intern.gif" ,
 									"text"	=> "<a href=\"sem_verify.php?id=".$sem_id."&send_from_search=$send_from_search&send_from_search_page=$send_from_search_page\">".$abo_msg. "</a>"
 								);
 	} elseif ($sem_id != $SessSemName[1] && ($perm->have_studip_perm("admin",$sem_id) || ($mein_status && !$admission_status)) ) {
-		$infobox[2]["eintrag"][] = array (	"icon" => "./pictures/link_intern.gif" ,
+		$infobox[2]["eintrag"][] = array (	"icon" => "link_intern.gif" ,
 									"text"	=> "<a href=\"seminar_main.php?auswahl=".$sem_id."\">"._("direkt zur Veranstaltung"). "</a>"
 								);
 	}
 	if ($delete_msg) {
-		$infobox[2]["eintrag"][] = array (	"icon" => "./pictures/link_intern.gif" ,
+		$infobox[2]["eintrag"][] = array (	"icon" => "link_intern.gif" ,
 									"text"	=> "<a href=\"meine_seminare.php?auswahl=".$sem_id."&cmd=suppose_to_kill\">".$delete_msg."</a>"
 								);
 	}
 	if ($back_msg) {
-		$infobox[2]["eintrag"][] = array (	"icon" => "./pictures/link_intern.gif" ,
+		$infobox[2]["eintrag"][] = array (	"icon" => "link_intern.gif" ,
 									"text"	=> "<a href=\"$send_from_search_page\">".$back_msg. "</a>"
 								);
 	}
 	if ($info_msg) {
-		$infobox[2]["eintrag"][] = array (	"icon" => "./pictures/ausruf_small.gif" ,
+		$infobox[2]["eintrag"][] = array (	"icon" => "ausruf_small.gif" ,
 									"text"	=> $info_msg
 								);
 	}
@@ -239,14 +241,14 @@ if ($abo_msg || $back_msg || $delete_msg || $info_msg || $mein_status || $perm->
 
 if ($db2->f("admission_binding")) {
 	$infobox[count($infobox)]["kategorie"] = _("Information:");
-	$infobox[count($infobox)-1]["eintrag"][] = array (	"icon" => "./pictures/info.gif" ,
+	$infobox[count($infobox)-1]["eintrag"][] = array (	"icon" => "info.gif" ,
 								"text"	=> _("Das Abonnement dieser Veranstaltung ist <u>bindend</u>!")
 							);
 }
 
 // print the info_box
 
-print_infobox ($infobox,"pictures/details.jpg");
+print_infobox ($infobox,"details.jpg");
 
 // ende Infobox
 
@@ -343,7 +345,7 @@ print_infobox ($infobox,"pictures/details.jpg");
 		</table>
 		<table align="center" width="99%" border=0 cellpadding=2 cellspacing=0>
 			<tr>
-				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="1%">&nbsp; <img src="./pictures/blank.gif" width="25" height="10" border="0">
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="1%">&nbsp; <img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" width="25" height="10" border="0">
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" colspan=2 width="51%" valign="top">
 				<?
@@ -424,10 +426,10 @@ print_infobox ($infobox,"pictures/details.jpg");
 
 				foreach ($localFields as $val) {
 				if ($DataFields->checkPermission($perm, $val["view_perms"])) {
-					if ($val["content"]) { 
+					if ($val["content"]) {
 				 ?>
 				 <tr>
-					 <td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="1%">&nbsp; 
+					 <td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="1%">&nbsp;
 					 </td>
 					 <td class="<? echo $cssSw->getClass() ?>" colspan=4 width="99%" valign="top">
 					 <?
@@ -579,7 +581,7 @@ print_infobox ($infobox,"pictures/details.jpg");
 					echo "<font size=-1>" . _("Weitere Pl&auml;tze k&ouml;nnen noch &uuml;ber Wartelisten vergeben werden.") . "</font>";
 				}
 				echo "<br/>";
-			}	
+			}
 		} else {
 			if ($db2->f("admission_type") == 1)
 				printf ("<font size=-1>" . _("Die Auswahl der Teilnehmenden erfolgt nach dem Losverfahren am %s Uhr.") . "</font><br/>", date("d.m.Y, G:i", $db2->f("admission_endtime")));
@@ -594,7 +596,7 @@ print_infobox ($infobox,"pictures/details.jpg");
 				}
 			}
 		}
-			
+
 			$query = "SELECT Seminar_id,admission_group FROM seminare WHERE Seminar_id='$sem_id'";
 			$db4->query($query);
 			if ($db4->next_record() && ($a_group = $db4->f("admission_group"))) {
@@ -613,10 +615,10 @@ print_infobox ($infobox,"pictures/details.jpg");
 			<td class="<? echo $cssSw->getClass() ?>" colspan=2 width="48%" valign="top">
 			<?
 				$all_cont_user = false;
-				$db3->query("SELECT a.studiengang_id, name, quota, count(distinct(b.user_id)) AS sem_user_count, count(distinct(c.user_id)) AS accepted_user_count FROM admission_seminar_studiengang a 
-							LEFT JOIN studiengaenge USING (studiengang_id) 
-							LEFT JOIN seminar_user b ON (a.seminar_id = b.Seminar_id AND a.studiengang_id = b.admission_studiengang_id) 
-							LEFT JOIN admission_seminar_user c ON (a.seminar_id=c.seminar_id AND a.studiengang_id = c.studiengang_id AND c.status='accepted') 
+				$db3->query("SELECT a.studiengang_id, name, quota, count(distinct(b.user_id)) AS sem_user_count, count(distinct(c.user_id)) AS accepted_user_count FROM admission_seminar_studiengang a
+							LEFT JOIN studiengaenge USING (studiengang_id)
+							LEFT JOIN seminar_user b ON (a.seminar_id = b.Seminar_id AND a.studiengang_id = b.admission_studiengang_id)
+							LEFT JOIN admission_seminar_user c ON (a.seminar_id=c.seminar_id AND a.studiengang_id = c.studiengang_id AND c.status='accepted')
 							WHERE a.seminar_id = '$sem_id' GROUP BY a.studiengang_id"); //Alle	moeglichen Studiengaenge anziegen
 				$c = $db3->num_rows();
 				while ($db3->next_record()) {
@@ -641,7 +643,7 @@ print_infobox ($infobox,"pictures/details.jpg");
 		} elseif (($db2->f("admission_starttime") > time()) || ($db2->f("admission_prelim") == 1) || ($db2->f("admission_endtime_sem") != -1)) {
 			echo "<td class=\"".$cssSw->getClass()."\" colspan=2 width=\"48%\" valign=\"top\"><td>";
 		}
-		?>		
+		?>
 		<tr>
 			<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="1%">&nbsp;
 			</td>
@@ -650,7 +652,7 @@ print_infobox ($infobox,"pictures/details.jpg");
 				//Statistikfunktionen
 				$db3->query("SELECT COUNT(Seminar_id) AS anzahl, COUNT(IF(status='dozent',Seminar_id,NULL)) AS anz_dozent
 						, COUNT(IF(status='tutor',Seminar_id,NULL)) AS anz_tutor, COUNT(IF(status='autor',Seminar_id,NULL)) AS anz_autor
-						, COUNT(IF(status='user',Seminar_id,NULL)) AS anz_user FROM seminar_user 
+						, COUNT(IF(status='user',Seminar_id,NULL)) AS anz_user FROM seminar_user
 						WHERE Seminar_id = '$sem_id' GROUP BY Seminar_id");
 				$db3->next_record();
 				$db4->query("SELECT count(*) as anzahl FROM admission_seminar_user WHERE seminar_id = '$sem_id' AND status = 'accepted'");

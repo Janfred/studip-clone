@@ -39,6 +39,8 @@ page_open (array ("sess" => "Seminar_Session",
                   "user" => "Seminar_User"));
 $perm->check ("autor");
 
+$HELP_KEYWORD="Basis.Evaluationen";
+
 require_once ($ABSOLUTE_PATH_STUDIP."modules/evaluation/evaluation.config.php");
 
 include_once($ABSOLUTE_PATH_STUDIP . "seminar_open.php");
@@ -77,12 +79,8 @@ if ($the_range != $auth->auth['uname'] && $the_range != 'studip' && !$isUserrang
 	}
 } 
 
-if (array_key_exists ("page", $_REQUEST) && $_REQUEST["page"] == "edit"){
+if (array_key_exists ("page", $_REQUEST) && $_REQUEST["page"] == "edit")
 	include (EVAL_PATH.EVAL_FILE_EDIT);
-}
-elseif (array_key_exists ("page", $_REQUEST) && $_REQUEST["page"] == "link"){
-	include("modules/evaluation/evaluation_admin_link.inc.php");
-}
 else
 	include (EVAL_PATH.EVAL_FILE_OVERVIEW);
 

@@ -54,6 +54,20 @@ include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Sessio
 
 // -- here you have to put initialisations for the current page
 
+switch ($cmd) {
+	case 'edit':
+		$HELP_KEYWORD="Basis.TerminkalenderBearbeiten";
+		break;
+	case 'bind':
+		$HELP_KEYWORD="Basis.TerminkalenderEinbinden";
+		break;
+	case 'changeview':
+		$HELP_KEYWORD="Basis.TerminkalenderEinstellungen";
+		break;
+	default:
+		$HELP_KEYWORD="Basis.Terminkalender";
+}
+	
 if ($CALENDAR_ENABLE)
 	//Kalenderfrontend einbinden
 	include($RELATIVE_PATH_CALENDAR."/calendar.inc.php");

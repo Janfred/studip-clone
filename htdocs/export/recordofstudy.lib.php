@@ -29,7 +29,7 @@ function printSiteTitle($semester = NULL){
    	$html = "<table border=0 class=blank align=center cellspacing=0 cellpadding=0 width=\"100%\">\n"
     	  . "	<tr valign=top align=center>\n"
     	  . "    <td class=topic align=left colspan=\"2\">\n"
-		  . "	  <img src=\"pictures/meinesem.gif\" alt=\""._("Veranstaltungsübersicht erstellen")."\" align=\"texttop\">\n"
+		  . "	  <img src=\"".$GLOBALS['ASSETS_URL']."images/meinesem.gif\" alt=\""._("Veranstaltungsübersicht erstellen")."\" align=\"texttop\">\n"
 		  . "	  &nbsp;<b>"._("Veranstaltungsübersicht erstellen:")."</b>\n"
 		  . "	  <font size=\"-1\">$semester</font>\n"
     	  . "    </td>\n"
@@ -80,7 +80,7 @@ function printSelectSemester($infobox,$semestersAR){
 		  . "	  </font></td>\n"
 		  . "	  <td align=\"right\" width=\"250\" valign=\"top\">\n";
 	echo $html;
-	print_infobox($infobox,"pictures/folders.jpg");
+	print_infobox($infobox, "folders.jpg");
 	$html = "	  </td>\n"
 		  . "	 </tr>\n"
 		  . "	</table>\n"
@@ -111,7 +111,7 @@ function printRecordOfStudies($infobox, $basicdata, $seminare, $notice = NULL){
 		  . "	 <tr>"
 		  . "	  <td valign=\"top\">"
 		  . "	   <table align=\"center\" width=\"100%\" class=\"blank\" border=\"0\" cellpadding=\"0\" cellspacing=0>\n";
-	
+
 	// displays some infos for the user
 	if ($notice){
 		$html .="		<tr>\n"
@@ -119,7 +119,7 @@ function printRecordOfStudies($infobox, $basicdata, $seminare, $notice = NULL){
 			  . "		   <table border=0 cellspacing=0 cellpadding=2>\n"
 			  . "			<tr>\n"
 			  . "			 <td align=\"center\" width=50 valign=\"middle\">"
-			  . "			  <img src=\"".$ABSOLUTE_PATH_STUDIP."pictures/ausruf.gif\" alt=\"ausruf\" style=\"vertical-align:middle;\">\n"
+			  . "			  <img src=\"".$GLOBALS['ASSETS_URL']."images/ausruf.gif\" alt=\"ausruf\" style=\"vertical-align:middle;\">\n"
 			  . "			 </td>\n"
 			  . "			 <td align=\"left\" valign=\"middle\">\n";
 		if ($notice == "empty")
@@ -134,7 +134,7 @@ function printRecordOfStudies($infobox, $basicdata, $seminare, $notice = NULL){
 			  . "		</tr>\n";
 	}
 
-		  
+
 	$html .=createInputBox(_("Hochschule: "), $basicdata["university"],	"university", "steelgraulight", 	"60")
 		  . createInputBox(_("Studienfach: "), $basicdata["fieldofstudy"],	 "fieldofstudy",  "steelgraulight", 	"60")
 		  . createInputBox(_("Name (Vor- und Zuname): "), $basicdata["studentname"],	 "studentname",	  "steelgraulight", 	"60")
@@ -146,14 +146,14 @@ function printRecordOfStudies($infobox, $basicdata, $seminare, $notice = NULL){
 		  . _("Veranstaltungen:")."\n"
 		  . "		 </b></font></td>\n"
 		  . "		</tr>\n"
-		  . "		<tr>\n"		  
+		  . "		<tr>\n"
 		  . createSeminarHeadTD(_("Kenn.-Nr"))
 		  . createSeminarHeadTD(_("Name des Dozenten"))
 		  . createSeminarHeadTD(_("Wochenstundenzahl"), "center")
 		  . createSeminarHeadTD(_("löschen"), "center")
-		  . "		</tr>\n";	 
+		  . "		</tr>\n";
 
-  if (!empty($seminare)){	
+  if (!empty($seminare)){
 	for($i=0;$i+1<=sizeof($seminare);$i++){
 	  	if (($i % 2) == 0)	$displayclass = "steel1";
 	  	else				$displayclass = "steelgraulight";
@@ -181,9 +181,9 @@ function printRecordOfStudies($infobox, $basicdata, $seminare, $notice = NULL){
 	// delivers the seminar_max
 	$seminare_max = $i;
 	$html.="		 <input type=\"hidden\" name=\"seminare_max\" value=\"".$seminare_max."\">\n";
-	
+
 	}
-		  
+
 	$html .="		<tr>\n"
 		  . "		 <td colspan=\"4\"><font size=\"-1\"><br><table width=\"100%\"><tr><td align=\"left\">\n"
 		  . createButton("hinzufuegen",_("Neue Veranstaltung hinzufügen."),"add_seminars")
@@ -193,7 +193,7 @@ function printRecordOfStudies($infobox, $basicdata, $seminare, $notice = NULL){
 	$html .="		  </select>\n"
 		  . "		 </font></td>\n"
 		  . "		 <td align=right><font size=\"-1\" style=\"vertical-align:middle;\">\n";
-	
+
 	// only show delete-button if there are any seminars
 	if(!empty($seminare))
 		$html .= _("Markierte Veranstaltung(en) löschen")."\n" . createButton("loeschen",_("Markierte Veranstaltung(en) löschen."),"delete_seminars");
@@ -201,11 +201,11 @@ function printRecordOfStudies($infobox, $basicdata, $seminare, $notice = NULL){
 		  . "	    </tr>\n"
 		  . "	   </table>\n"
 		  . "	  </td>\n";
-		  
+
 	// the right site of the page
 	$html .="	  <td class=\"blank\" width=\"256\" valign=\"top\" align=\"center\"><font size=\"-1\">\n";
 	echo $html;
-	print_infobox($infobox,"pictures/folders.jpg");
+	print_infobox($infobox, "folders.jpg");
 	$html = "	   <br>\n"
 		  . createButton("zurueck",_("Abbrechen und ein anderes Semester auswählen."),"select_new_semester")
 		  . createButton("weiter",_("Weiter zum Download ihrer Veranstaltungsübersicht."),"create_pdf")
@@ -216,7 +216,7 @@ function printRecordOfStudies($infobox, $basicdata, $seminare, $notice = NULL){
 		  . " </tr>\n"
 		  . " </form>\n"
 		  . "</table>\n";
-	echo $html;		  
+	echo $html;
 }
 
 /**
@@ -268,7 +268,7 @@ function printPdfAssortment($infobox,$seminars){
 	$html .="	  </font></td>\n"
 		  . "	  <td align=\"right\" width=\"250\" valign=\"top\">\n";
 	echo $html;
-	print_infobox($infobox,"pictures/folders.jpg");
+	print_infobox($infobox, "folders.jpg");
 //	$html = "	  <form action=\"$PHP_SELF\" method=post>"
 //		  . "	  <center>\n"
 //		  . "		<a href=\"recordofstudy.php\">\n"

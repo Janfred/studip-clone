@@ -46,6 +46,8 @@ class StudipAuthStandardExtern extends StudipAuthStandard {
 	*/
 	var $md5_challenge_response = true;
 	
+	var $bad_char_regex =  '/[^a-zA-Z0-9_@-]/';
+
 	var $db_host;
 	var $db_name;
 	var $db_username;

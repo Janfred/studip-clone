@@ -130,7 +130,7 @@ class StudipLitCatElement {
 												'info'	=> _("Der Name des externen Bibliothekssystems, in das über einen Weblink verzweigt werden kann."),
 												'len'	=> 100,
 												'type'	=> 'select',
-												'options'=> StudipLitSearch::GetAvailablePlugins()),
+												'options'=> StudipLitSearch::GetAvailablePluginsOptions()),
 						'catalog_id' =>	array(	'type'	=> 'text'),
 						'user_id'	=>	array(	'type'	=>	'text'),
 						'mkdate'	=>	array(	'type'	=>	'int'),
@@ -162,6 +162,7 @@ class StudipLitCatElement {
 			$this->fields['mkdate']['value'] = time();
 			$this->fields['chdate']['value'] = time();
 			$this->fields['user_id']['value'] = $GLOBALS['auth']->auth['uid'];
+			$this->fields['lit_plugin']['value'] = 'Studip';
 		}
 		if ($this->init_form){
 			$this->setFormObject();
@@ -358,6 +359,10 @@ class StudipLitCatElement {
 						$ret = "";
 					}
 				}
+				break;
+				case "lit_plugin_display_name":
+				$plugin_name = $this->getValue("lit_plugin");
+				$ret = StudipLitSearch::GetPluginDisplayName($plugin_name);
 				break;
 				default:
 				$ret = "unknown tag: $name";

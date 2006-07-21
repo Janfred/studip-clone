@@ -154,7 +154,7 @@ $db3=new DB_Seminar;
 		}
 
 		if ((($institut_id == "all") || (!$institut_id)) && ($perm->have_perm("root")))
-		$query = "SELECT * FROM seminare WHERE admission_type > 0 OR admission_starttime > ". time() ."  OR admission_endtime_sem > -1 OR (admission_starttime <= ". time(). " AND admission_starttime > 0) OR (admission_prelim = 1) ORDER BY admission_group DESC, start_time DESC, Name";  
+		$query = "SELECT * FROM seminare WHERE admission_type > 0 OR admission_starttime > ". time() ."  OR admission_endtime_sem > -1 OR (admission_starttime <= ". time(). " AND admission_starttime > 0) OR (admission_prelim = 1) ORDER BY admission_group DESC, start_time DESC, Name";
       else
 	$query = "SELECT * FROM seminare LEFT JOIN seminar_inst USING (Institut_id) WHERE (admission_type > 0 OR admission_starttime > ".time()." OR admission_endtime_sem > -1 OR (admission_starttime <= ".time()." AND admission_starttime > 1) OR (admission_prelim = 1)) AND seminar_inst.institut_id = '$institut_id' GROUP BY seminare.Seminar_id ORDER BY admission_group DESC, start_time DESC, Name";
 
@@ -195,7 +195,7 @@ $db3=new DB_Seminar;
 			$db2->query($query2);
 			if ($db2->next_record()) {
 				$count2 = $db2->f("count2");
-			} 
+			}
 			$query2 = "SELECT status, count(*) AS count3 FROM admission_seminar_user WHERE seminar_id='$seminar_id' AND status='awaiting' GROUP BY status";
 			$db2->query($query2);
 			if ($db2->next_record()) {
@@ -217,7 +217,7 @@ $db3=new DB_Seminar;
 					}
 						if (!isset($last_group)) { //Wenn erstes "Mitglied" einer Gruppe, dann Muelleimer ausgeben
 						$last_group = $db->f("admission_group");
-						printf("<a href=\"show_admission.php?seminarid=%s&institut_id=%s&group=ungroup\"><img src=\"pictures/trash.gif\" border=\"0\"></a>",$db->f("admission_group"),$institut_id);
+						printf("<a href=\"show_admission.php?seminarid=%s&institut_id=%s&group=ungroup\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" border=\"0\"></a>",$db->f("admission_group"),$institut_id);
 					}
 				}
 				print("</td>");

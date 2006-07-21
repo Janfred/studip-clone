@@ -1,7 +1,7 @@
 <?
 /**
 * Status Window for the Chat
-* 
+*
 * This script prints a status bar for the chat
 *
 * @author		André Noack <andre.noack@gmx.net>
@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // chat_status.php
-// 
+//
 // Copyright (c) 2003 André Noack <noack@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -61,33 +61,33 @@ $chatServer->caching = true;
 	<?php include $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_style.inc.php";?>
 <script type="text/javascript">
 /**
-* JavaScript 
+* JavaScript
 */
 	function printhelp(){
 		parent.frames['frm_input'].document.inputform.chatInput.value="/help";
 		parent.frames['frm_input'].document.inputform.submit();
 	}
-	
+
 	function doLock(){
 		parent.frames['frm_input'].document.inputform.chatInput.value="/lock";
 		parent.frames['frm_input'].document.inputform.submit();
 	}
-	
+
 	function doUnlock(){
 		parent.frames['frm_input'].document.inputform.chatInput.value="/unlock";
 		parent.frames['frm_input'].document.inputform.submit();
 	}
-	
+
 	function doLogStart(){
 		parent.frames['frm_input'].document.inputform.chatInput.value="/log start";
 		parent.frames['frm_input'].document.inputform.submit();
 	}
-	
+
 	function doLogStop(){
 		parent.frames['frm_input'].document.inputform.chatInput.value="/log stop";
 		parent.frames['frm_input'].document.inputform.submit();
 	}
-	
+
 	function doLogSend(){
 		parent.frames['frm_input'].document.inputform.chatInput.value="/log send";
 		parent.frames['frm_input'].document.inputform.submit();
@@ -116,21 +116,21 @@ if (!$chatServer->isActiveUser($user->id,$chatid)) {
 			if ($chatServer->getPerm($user->id,$chatid)){
 				?>
 				<a href="javascript:<?=(($chatServer->chatDetail[$chatid]['password']) ? "doUnlock();" : "doLock();")?>">
-				<img src="<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/<?=(($chatServer->chatDetail[$chatid]['password']) ? "closelock.gif" : "openlock.gif")?>"
-					border="0" align="absmiddle" 
+				<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/<?=(($chatServer->chatDetail[$chatid]['password']) ? "closelock.gif" : "openlock.gif")?>"
+					border="0" align="absmiddle"
 					<?=tooltip(($chatServer->chatDetail[$chatid]['password']) ? _("Zugangsschutz für diesen Chat aufheben") : _("Diesen Chat absichern"))?>>
 				</a>
 				<?
 			} else {
 				?>
-				<img src="<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/<?=(($chatServer->chatDetail[$chatid]['password']) ? "closelock.gif" : "openlock.gif")?>"
-					border="0" align="absmiddle" 
+				<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/<?=(($chatServer->chatDetail[$chatid]['password']) ? "closelock.gif" : "openlock.gif")?>"
+					border="0" align="absmiddle"
 					<?=tooltip(($chatServer->chatDetail[$chatid]['password']) ? _("Dieser Chat ist zugangsbeschränkt.") : _("Dieser Chat ist nicht zugangsbeschränkt."))?>>
 				<?
 			}
 			if (count($chatServer->chatDetail[$chatid]['log'])){
 				?>
-				<img src="<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/logging.gif" border="0" align="absmiddle" 
+				<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/logging.gif" border="0" align="absmiddle"
 					<?=tooltip(_("Dieser Chat wird aufgezeichnet."))?>>
 				<?
 			}
@@ -143,26 +143,26 @@ if (!$chatServer->isActiveUser($user->id,$chatid)) {
 				if ($chatServer->chatDetail[$chatid]['users'][$user->id]['log']){
 					?>
 					<a href="javascript:doLogSend();">
-					<img src="<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/file.gif"
-						border="0" hspace="5" align="absmiddle" 
+					<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/file.gif"
+						border="0" hspace="5" align="absmiddle"
 						<?=tooltip(_("Download des letzten Chatlogs"))?>>
 					</a>
 					<?
 				}
 				?>
 				<a href="javascript:<?=(($chatServer->chatDetail[$chatid]['log'][$user->id]) ? "doLogStop();" : "doLogStart();")?>">
-				<img src="<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/<?=(($chatServer->chatDetail[$chatid]['log'][$user->id]) ? "stop_log.gif" : "start_log.gif")?>"
-					border="0" hspace="5" align="absmiddle" 
+				<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/<?=(($chatServer->chatDetail[$chatid]['log'][$user->id]) ? "stop_log.gif" : "start_log.gif")?>"
+					border="0" hspace="5" align="absmiddle"
 					<?=tooltip(($chatServer->chatDetail[$chatid]['log'][$user->id]) ? _("Die Aufzeichnung für diesen Chat beenden.") : _("Eine Aufzeichnung für diesen Chat starten."))?>>
 				</a>
 				<?
 			}
 			?>
 			<a href="javascript:printhelp();">
-			<img src="<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/hilfe.gif" border=0 hspace="5" align="texttop" <?=tooltip(_("Chat Kommandos einblenden"))?>>
-			</a> 
+			<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/hilfe.gif" border=0 hspace="5" align="texttop" <?=tooltip(_("Chat Kommandos einblenden"))?>>
+			</a>
 			<a href="<?=$CANONICAL_RELATIVE_PATH_STUDIP?>show_smiley.php" target=new>
-			<img src="<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/smile/smile.gif" hspace="5" border=0 align="absmiddle" <?=tooltip(_("Alle verfügbaren Smileys anzeigen"))?>>
+			<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/smile/smile.gif" hspace="5" border=0 align="absmiddle" <?=tooltip(_("Alle verfügbaren Smileys anzeigen"))?>>
 			</a></td>
 		</tr>
 	</table>

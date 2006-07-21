@@ -235,7 +235,13 @@ class Ilias3ConnectedUser extends ConnectedUser
 	function setConnection($user_type)
 	{
 		global $connected_cms;
-
+		
+		if ($connected_cms[$this->cms_type]->encrypt_passwords == "md5")
+		{
+//			echo "PASSWORD-ENCRYPTION";
+			$this->external_password = $this->getCryptedPassword( $this->external_password );
+		}
+			
 		$connected_cms[$this->cms_type]->soap_client->setCachingStatus(false);
 		parent::setConnection($user_type);
 	}

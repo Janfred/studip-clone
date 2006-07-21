@@ -25,6 +25,7 @@ include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); 		// initialise Stud.IP-Sess
 require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php"); 		// Funktionen fuer Nachrichtenmeldungen
 require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php"); 		// Wir brauchen den Namen der Uni
 require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/user_visible.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/UserManagement.class.php");
 
 $cssSw=new cssClassSwitcher;
@@ -33,7 +34,7 @@ $cssSw=new cssClassSwitcher;
 
 // Start of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-include ("$ABSOLUTE_PATH_STUDIP/header.php");	 //hier wird der "Kopf" nachgeladen 
+include ("$ABSOLUTE_PATH_STUDIP/header.php");	 //hier wird der "Kopf" nachgeladen
 
 include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");	//Linkleiste fuer admins
 
@@ -44,20 +45,20 @@ $db2 = new DB_Seminar;
 
 // Check if there was a submission
 if (check_ticket($studipticket)){
-	while ( is_array($HTTP_POST_VARS) 
+	while ( is_array($HTTP_POST_VARS)
 			 && list($key, $val) = each($HTTP_POST_VARS)) {
 		switch ($key) {
-	
+
 		// Create a new user
 		case "create_x":
-	
+
 			$UserManagement = new UserManagement;
-			
+
 			if (!$title_front)
 				$title_front = $title_front_chooser;
 			if (!$title_rear)
 				$title_rear = $title_rear_chooser;
-	
+
 			$newuser = array(	'auth_user_md5.username' => stripslashes(trim($username)),
 												'auth_user_md5.Vorname' => stripslashes(trim($Vorname)),
 												'auth_user_md5.Nachname' => stripslashes(trim($Nachname)),
@@ -67,17 +68,17 @@ if (check_ticket($studipticket)){
 												'user_info.title_rear' => stripslashes(trim($title_rear)),
 												'user_info.geschlecht' => stripslashes(trim($geschlecht)),
 											);
-			
+
 			$UserManagement->createNewUser($newuser);
-			
+
 			break;
-	
-	
+
+
 		// Change user parameters
 		case "u_edit_x":
-	
+
 			$UserManagement = new UserManagement($u_id);
-	
+
 			$newuser = array();
 			if (isset($username))
 				$newuser['auth_user_md5.username'] = stripslashes(trim($username));
@@ -89,6 +90,13 @@ if (check_ticket($studipticket)){
 				$newuser['auth_user_md5.Email'] = stripslashes(trim($Email));
 			if (isset($perms))
 				$newuser['auth_user_md5.perms'] = implode($perms,",");
+
+			$newuser['auth_user_md5.locked']     = (isset($locked) ? $locked : 0);
+			$newuser['auth_user_md5.lock_comment']    = (isset($lock_comment) ? stripslashes(trim($lock_comment)) : "");
+			$newuser['auth_user_md5.locked_by'] = ($locked==1 ? $auth->auth["uid"] : "");
+
+		if (isset($visible))
+			$newuser['auth_user_md5.visible'] = $visible;
 			if (isset($title_front) || isset($title_front_chooser)) {
 				if (!$title_front)
 					$title_front = $title_front_chooser;
@@ -101,36 +109,32 @@ if (check_ticket($studipticket)){
 			}
 			if (isset($geschlecht))
 				$newuser['user_info.geschlecht'] = stripslashes(trim($geschlecht));
-		
-			$newuser['auth_user_md5.locked']     = (isset($locked) ? $locked : 0);
-                        $newuser['auth_user_md5.lock_comment']    = (isset($lock_comment) ? stripslashes(trim($lock_comment)) : "");
-                        $newuser['auth_user_md5.locked_by'] = ($locked==1 ? $auth->auth["uid"] : "");
-		
+
 			$UserManagement->changeUser($newuser);
-			
+
 			break;
-	
-	
+
+
 		// Change user password
 		case "u_pass_x":
-		
+
 			$UserManagement = new UserManagement($u_id);
-	
+
 			$UserManagement->setPassword();
-	
+
 			break;
-	
-	
+
+
 		// Delete the user
 		case "u_kill_x":
-		
+
 			$UserManagement = new UserManagement($u_id);
-	
+
 			$UserManagement->deleteUser();
-	
+
 			break;
-	
-		
+
+
 		default:
 			break;
 		}
@@ -157,6 +161,10 @@ if (isset($_GET['details'])) {
 				<tr>
 					<td colspan="2"><b>&nbsp;<?=_("globaler Status:")?>&nbsp;</b></td>
 					<td>&nbsp;<? print $perm->perm_sel("perms", $db->f("perms")) ?></td>
+				</tr>
+				<tr>
+					<td colspan="2"><b>&nbsp;<?=_("Sichtbarkeit")?>&nbsp;</b></td>
+					<td>&nbsp;&nbsp;<?=vis_chooser($db->f("visible")) ?></td>
 				</tr>
 				<tr>
 					<td colspan="2"><b>&nbsp;<?=_("Vorname:")?></b></td>
@@ -203,14 +211,14 @@ if (isset($_GET['details'])) {
 				<input type="hidden" name="studipticket" value="<?=get_ticket();?>">
 				&nbsp;</td></tr>
 			</form></table>
-			
+
 		</td></tr>
 		<tr><td class="blank" colspan=2>&nbsp;</td></tr>
 		</table>
 		<?
 
 	} else { // alten Benutzer bearbeiten
-	
+
 		$db->query("SELECT auth_user_md5.*, (changed + 0) as changed_compat, mkdate, title_rear, title_front, geschlecht FROM auth_user_md5 LEFT JOIN ".$GLOBALS['user']->that->database_table." ON auth_user_md5.user_id = sid LEFT JOIN user_info ON (auth_user_md5.user_id = user_info.user_id) WHERE username ='$details'");
 		while ($db->next_record()) {
 			if ($db->f("changed_compat") != "") {
@@ -220,14 +228,14 @@ if (isset($_GET['details'])) {
 				$inactive = _("nie benutzt");
 			}
 			?>
-			
+
 			<table border=0 bgcolor="#000000" align="center" cellspacing=0 cellpadding=0 width=100%>
 			<tr valign=top align=middle>
 				<td class="topic" colspan=2 align="left"><b>&nbsp;<?=_("Ver&auml;ndern eines bestehenden Benutzer-Accounts")?></b></td>
 			</tr>
 			<tr><td class="blank" colspan=2>&nbsp;</td></tr>
 			<tr><td class="blank" colspan=2>
-			
+
 			<table border=0 bgcolor="#eeeeee" align="center" cellspacing=0 cellpadding=2>
 			<form name="edit" method="post" action="<?php echo $PHP_SELF ?>">
 				<tr>
@@ -253,6 +261,10 @@ if (isset($_GET['details'])) {
 					}
 					?>
 					</td>
+				</tr>
+				<tr>
+					<td colspan="2" class="steel1"><b>&nbsp;<?=_("Sichtbarkeit:")?>&nbsp;</b></td>
+					<td class="steel1">&nbsp;&nbsp;<?=vis_chooser($db->f("visible"))?></td>
 				</tr>
 				<tr>
 					<td colspan="2" class="steel1"><b>&nbsp;<?=_("Vorname:")?></b></td>
@@ -284,7 +296,7 @@ if (isset($_GET['details'])) {
 				if (StudipAuthAbstract::CheckField("user_info.title_front", $db->f('auth_plugin'))) {
 						echo "&nbsp;</td><td class=\"steel1\">&nbsp;" . $db->f("title_front");
 				} else {
-				?>	
+				?>
 				<select name="title_front_chooser" onChange="document.edit.title_front.value=document.edit.title_front_chooser.options[document.edit.title_front_chooser.selectedIndex].text;">
 				<?
 				 for($i = 0; $i < count($TITLE_FRONT_TEMPLATE); ++$i){
@@ -308,7 +320,7 @@ if (isset($_GET['details'])) {
 				if (StudipAuthAbstract::CheckField("user_info.title_rear", $db->f('auth_plugin'))) {
 						echo "&nbsp;</td><td class=\"steel1\">&nbsp;" . $db->f("title_rear");
 				} else {
-				?>	
+				?>
 				<select name="title_rear_chooser" onChange="document.edit.title_rear.value=document.edit.title_rear_chooser.options[document.edit.title_rear_chooser.selectedIndex].text;">
 				<?
 				 for($i = 0; $i < count($TITLE_REAR_TEMPLATE); ++$i){
@@ -365,37 +377,36 @@ if (isset($_GET['details'])) {
 					<td colspan="2" class="steel1"><b>&nbsp;<?=_("Authentifizierung:")?></b></td>
 					<td class="steel1">&nbsp;<?=($db->f("auth_plugin") ? $db->f("auth_plugin") : "Standard")?></td>
 				</tr>
-			
+
 				<?
-                                if ($perm->have_perm("root") || ($db->f("perms") != "admin" && $db->f("perms") != "root") || $db2->f("admin_ok")) {
+				if ($perm->have_perm("root") || ($db->f("perms") != "admin" && $db->f("perms") != "root") || $db2->f("admin_ok")) {
 
-                                        echo "<tr>\n";
-                                        echo "  <td class=\"steel1\"><b>&nbsp;"._("Benutzer sperren:")."</b></td>\n";
-                                        echo "  <td class=\"steel1\">\n";
-                                        echo "    <INPUT TYPE=\"checkbox\" NAME=\"locked\" VALUE=\"1\" ".($db->f("locked")==1 ? "CHECKED" : "").">"._("sperren")."\n";
-                                        echo "  </td>\n";
-                                        echo "  <td class=\"steel1\">\n";
-                                        echo "    &nbsp;"._("Kommentar:")."&nbsp;\n";
-                                        echo "    <INPUT TYPE=\"text\" NAME=\"lock_comment\" VALUE=\"".$db->f("lock_comment")."\" SIZE=\"24\" MAXLENGTH=\"255\">\n";
-                                        echo "  </td>\n";
-                                        echo "</tr>\n";
-                                        if ($db->f("locked")==1)
-                                                echo "<TR><TD CLASS=\"steel1\" COLSPAN=\"3\" ALIGN=\"center\"><FONT SIZE=\"-2\">"._("Gesperrt von:")." ".get_fullname($db->f("locked_by"))." (<A HREF=\"about.php?username=".get_username($db->f("locked_by"))."\">".get_username($db->f("locked_by"))."</A>)</FONT></TD></TR>\n";
-                                }
-                                ?>
+					echo "<tr>\n";
+                                	echo "  <td class=\"steel1\"><b>&nbsp;"._("Benutzer sperren:")."</b></td>\n";
+                                	echo "  <td class=\"steel1\">\n";
+                                	echo "    <INPUT TYPE=\"checkbox\" NAME=\"locked\" VALUE=\"1\" ".($db->f("locked")==1 ? "CHECKED" : "").">"._("sperren")."\n";
+                                	echo "  </td>\n";
+                                	echo "  <td class=\"steel1\">\n";
+                                	echo "    &nbsp;"._("Kommentar:")."&nbsp;\n";
+                                	echo "    <INPUT TYPE=\"text\" NAME=\"lock_comment\" VALUE=\"".$db->f("lock_comment")."\" SIZE=\"24\" MAXLENGTH=\"255\">\n";
+                                	echo "  </td>\n";
+                               		echo "</tr>\n";
+					if ($db->f("locked")==1) 
+                                        	echo "<TR><TD CLASS=\"steel1\" COLSPAN=\"3\" ALIGN=\"center\"><FONT SIZE=\"-2\">"._("Gesperrt von:")." ".get_fullname($db->f("locked_by"))." (<A HREF=\"about.php?username=".get_username($db->f("locked_by"))."\">".get_username($db->f("locked_by"))."</A>)</FONT></TD></TR>\n";
+				}
+				?>
 
-	
 				<td class="steel1" colspan=3 align=center>&nbsp;
 				<input type="hidden" name="u_id"	 value="<?= $db->f("user_id") ?>">
 				<?
 				if ($perm->is_fak_admin() && $db->f("perms") == "admin"){
-					$db2->query("SELECT IF(count(a.Institut_id) - count(c.inst_perms),0,1) AS admin_ok FROM user_inst AS a 
-							LEFT JOIN Institute b ON (a.Institut_id=b.Institut_id AND b.Institut_id!=b.fakultaets_id) 
-							LEFT JOIN user_inst AS c ON(b.fakultaets_id=c.Institut_id AND c.user_id = '$user->id' AND c.inst_perms='admin') 
+					$db2->query("SELECT IF(count(a.Institut_id) - count(c.inst_perms),0,1) AS admin_ok FROM user_inst AS a
+							LEFT JOIN Institute b ON (a.Institut_id=b.Institut_id AND b.Institut_id!=b.fakultaets_id)
+							LEFT JOIN user_inst AS c ON(b.fakultaets_id=c.Institut_id AND c.user_id = '$user->id' AND c.inst_perms='admin')
 							WHERE a.user_id ='".$db->f("user_id")."' AND a.inst_perms = 'admin'");
 					$db2->next_record();
 				}
-			
+
 				if ($perm->have_perm("root") ||
 					($db->f("perms") != "admin" && $db->f("perms") != "root") ||
 					$db2->f("admin_ok")) {
@@ -416,24 +427,24 @@ if (isset($_GET['details'])) {
 				&nbsp;</td></tr>
 			<input type="hidden" name="studipticket" value="<?=get_ticket();?>">
 			</form>
-			
+
 			<tr><td colspan=3 class="blank">&nbsp;</td></tr>
-			
+
 			<? // links to everywhere
 			print "<tr><td class=\"steelgraulight\" colspan=3 align=\"center\">";
-				printf("&nbsp;" . _("pers&ouml;nliche Homepage") . " <a href=\"about.php?username=%s\"><img src=\"pictures/einst.gif\" border=0 alt=\"Zur pers&ouml;nlichen Homepage des Benutzers\" align=\"texttop\"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp", $db->f("username"));
-				printf("&nbsp;" . _("Nachricht an BenutzerIn") . " <a href=\"sms_send.php?rec_uname=%s\"><img src=\"pictures/nachricht1.gif\" alt=\"Nachricht an den Benutzer verschicken\" border=0 align=\"texttop\"></a>", $db->f("username"));
+				printf("&nbsp;" . _("pers&ouml;nliche Homepage") . " <a href=\"about.php?username=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/einst.gif\" border=0 alt=\"Zur pers&ouml;nlichen Homepage des Benutzers\" align=\"texttop\"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp", $db->f("username"));
+				printf("&nbsp;" . _("Nachricht an BenutzerIn") . " <a href=\"sms_send.php?rec_uname=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" alt=\"Nachricht an den Benutzer verschicken\" border=0 align=\"texttop\"></a>", $db->f("username"));
 			print "</td></tr>";
-			
+
 			$temp_user_id = $db->f("user_id");
 			if ($perm->have_perm("root"))
 				$db2->query("SELECT Institute.Institut_id, Name FROM user_inst LEFT JOIN Institute USING (Institut_id) WHERE user_id ='$temp_user_id' AND inst_perms != 'user'");
 			elseif ($perm->is_fak_admin())
-				$db2->query("SELECT a.Institut_id,b.Name FROM user_inst AS a 
-							LEFT JOIN Institute b ON (a.Institut_id=b.Institut_id AND b.Institut_id!=b.fakultaets_id) 
-							LEFT JOIN user_inst AS c ON(b.fakultaets_id=c.Institut_id ) 
+				$db2->query("SELECT a.Institut_id,b.Name FROM user_inst AS a
+							LEFT JOIN Institute b ON (a.Institut_id=b.Institut_id AND b.Institut_id!=b.fakultaets_id)
+							LEFT JOIN user_inst AS c ON(b.fakultaets_id=c.Institut_id )
 							WHERE a.user_id ='".$db->f("user_id")."' AND a.inst_perms = 'admin' AND c.user_id = '$user->id' AND c.inst_perms='admin'");
-			else	
+			else
 				$db2->query("SELECT Institute.Institut_id, Name FROM user_inst AS x LEFT JOIN user_inst AS y USING (Institut_id) LEFT JOIN Institute USING (Institut_id) WHERE x.user_id ='$temp_user_id' AND x.inst_perms != 'user' AND y.user_id = '$user->id' AND y.inst_perms = 'admin'");
 			if ($db2->num_rows()) {
 				print "<tr><td class=\"steel2\" colspan=3 align=\"center\">";
@@ -442,11 +453,11 @@ if (isset($_GET['details'])) {
 			}
 			while ($db2->next_record()) {
 				print "<tr><td class=\"steel2\" colspan=3 align=\"center\">";
-				printf ("&nbsp;%s <a href=\"inst_admin.php?details=%s&admin_inst_id=%s\"><img src=\"pictures/admin.gif\" border=0 align=\"texttop\" alt=\"&Auml;ndern der Eintr&auml;ge des Benutzers in der jeweiligen Einrichtung\"></a>&nbsp;", htmlReady($db2->f("Name")), $db->f("username"), $db2->f("Institut_id"));
+				printf ("&nbsp;%s <a href=\"inst_admin.php?details=%s&admin_inst_id=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/admin.gif\" border=0 align=\"texttop\" alt=\"&Auml;ndern der Eintr&auml;ge des Benutzers in der jeweiligen Einrichtung\"></a>&nbsp;", htmlReady($db2->f("Name")), $db->f("username"), $db2->f("Institut_id"));
 				print "</td></tr>\n";
-			}	
+			}
 			?>
-			
+
 			</table>
 
 			</td></tr>
@@ -458,7 +469,7 @@ if (isset($_GET['details'])) {
 	}
 
 } else {
-	
+
 	// Gesamtliste anzeigen
 
 	?>
@@ -484,7 +495,7 @@ if (isset($_GET['details'])) {
 	include ("pers_browse.inc.php");
 	print "<br>\n";
 	parse_msg($msg);
-	
+
 
 	if (isset($pers_browse_search_string)) { // Es wurde eine Suche initiert
 
@@ -538,7 +549,7 @@ if (isset($_GET['details'])) {
 				<th><a href="new_user_md5.php?sortby=mkdate"><?=_("registriert seit")?></a></th>
 				<th><a href="new_user_md5.php?sortby=auth_plugin"><?=_("Authentifizierung")?></a></th>
 			 </tr>
-			<?	
+			<?
 
 			while ($db->next_record()):
 				if ($db->f("changed_compat") != "") {
@@ -551,7 +562,7 @@ if (isset($_GET['details'])) {
 				<tr valign=middle align=left>
 					<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>"><a href="<?php echo $PHP_SELF . "?details=" . $db->f("username") ?>"><?php $db->p("username") ?></a>
 					<? if ($db->f("locked")=="1") echo "<FONT SIZE=\"-1\" COLOR=\"RED\">&nbsp;<B>"._("gesperrt!")."</B></FONT>"; ?>
-					</td>
+					</TD>
 					<td class="<? echo $cssSw->getClass() ?>"><?=$db->f("perms") ?></td>
 					<td class="<? echo $cssSw->getClass() ?>"><?=htmlReady($db->f("Vorname")) ?>&nbsp;</td>
 					<td class="<? echo $cssSw->getClass() ?>"><?=htmlReady($db->f("Nachname")) ?>&nbsp;</td>
@@ -566,7 +577,7 @@ if (isset($_GET['details'])) {
 		}
 	}
 	print ("</td></tr></table>");
-	
+
 
 }
 

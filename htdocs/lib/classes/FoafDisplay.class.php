@@ -21,9 +21,9 @@
 
 require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/UserConfig.class.php");
 require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
-		
+
 /**
-* Calculate and display "Friend of a friend lists" 
+* Calculate and display "Friend of a friend lists"
 *
 * for a given user the current user can see how many "steps"
 * (in terms of buddy list entry hops) are neccessary to connect himself with
@@ -41,7 +41,7 @@ class FoafDisplay {
 	var $depth = 5; //max number of hops, 5 is max
 	var $dont_show_anonymous = false;
 	var $ucfg; //UserConfig object
-	
+
 	/**
 	* Initialise FoafDisplay object and calculate list.
 	*
@@ -62,24 +62,24 @@ class FoafDisplay {
 	/**
 	* Calculate foaf list.
 	*
-	* Uses smart DB joins to find connections. Thanks to 
+	* Uses smart DB joins to find connections. Thanks to
 	* Manuel Wortmann (post@manuel-wortmann.de) for the code!
 	*
 	* @access	private
 	*/
 	function calculate() {
-		
+
 		$sql="SELECT count(*) FROM contact WHERE owner_id='".$this->user_id."' AND buddy=1 AND user_id='".$this->target_id."'";
 		$this->db->query($sql);
 		$this->db->next_record();
 		$this->foaf_list=array();
-		
+
 		// check for direct connection
 		if ($this->db->f(0)) {
 			$this->foaf_list=array($this->user_id,$this->target_id);
 			return;
 		}
-		
+
 		for($i = 2; $i <= $this->depth; ++$i){
 			if ($ret = $this->doCalculate($i)){
 				$this->foaf_list = $ret;
@@ -88,7 +88,7 @@ class FoafDisplay {
 		}
 		return;
 	}
-	
+
 	function doCalculate($depth = 0){
 		$ret = null;
 		if ($depth){
@@ -102,7 +102,7 @@ class FoafDisplay {
 					$from .= " INNER JOIN user_config uc{$i} ON(t{$i}.owner_id = uc{$i}.user_id AND uc{$i}.field='FOAF_SHOW_IDENTITY' AND uc{$i}.value='1') ";
 				}
 			}
-			$sql = "SELECT $values FROM $from WHERE t1.owner_id='".$this->user_id."' 
+			$sql = "SELECT $values FROM $from WHERE t1.owner_id='".$this->user_id."'
 					AND t1.buddy=1 LIMIT 1";
 			$this->db->query($sql);
 			if ($this->db->next_record()) {
@@ -115,7 +115,7 @@ class FoafDisplay {
 		}
 		return $ret;
 	}
-	
+
 	/**
 	* Show Topic bar and header/content for foaf display.
 	*
@@ -132,12 +132,11 @@ class FoafDisplay {
 		}
 		if ($open=="open") {
 			echo "<a name=\"foaf\">";
-		} 
+		}
 
 		echo "\n<table border=\"0\" cellpadding=\"2\" cellspacing=\"0\"
 	width=\"100%\" align=\"center\">";
-		echo "\n<tr valign=\"baseline\"><td class=\"topic\"><img src=\".
-	/pictures/guestbook.gif\" border=\"0\" align=\"texttop\"><b>&nbsp;&nbsp;";
+		echo "\n<tr valign=\"baseline\"><td class=\"topic\"><img src=\"".$GLOBALS['ASSETS_URL']."images/guestbook.gif\" border=\"0\" align=\"texttop\"><b>&nbsp;&nbsp;";
 		echo sprintf(_("Verbindung zu %s"),htmlReady(get_fullname($this->target_id)));
 		print("</b></td></tr>");
 
@@ -162,7 +161,7 @@ class FoafDisplay {
 				$msg.="</td>";
 			}
 			$msg.="</tr></table>";
-		} 
+		}
 		if ($open=="open") {
 			$msg.=$this->info_text();
 		}
@@ -175,7 +174,7 @@ class FoafDisplay {
 		}
 		$link="about.php?username=".$this->target_username."&foaf_open=".($open=="open" ? "close":"open")."#foaf";
 		$titel="<a href=\"$link\" class=\"tree\">$titel</a>";
-		printhead("100%","0",$link,$open,0,"<img src='pictures/icon-guest.gif'>",$titel,"");
+		printhead("100%","0",$link,$open,0,"<img src='".$GLOBALS['ASSETS_URL']."images/icon-guest.gif'>",$titel,"");
 		if ($open=="open") {
 			print $msg;
 		}
@@ -187,7 +186,7 @@ class FoafDisplay {
 	*
 	* @param	user_id	A user's id
 	* @param	bool	Should user data be created even if user doesn't want to appear in foaf lists? (true if head or tail of list)
-	* @return 	array	"uname"=>username, "fullname"=>Full name, 
+	* @return 	array	"uname"=>username, "fullname"=>Full name,
 	*			"link"=>(clickable) Name, "pic"=>HTMl code for picture
 	*/
 	function user_info($user_id, $ignore_ok) {

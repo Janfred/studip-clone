@@ -9,7 +9,7 @@ class StudipSoapClient
 		global $ABSOLUTE_PATH_STUDIP, $RELATIVE_PATH_SOAP, $SOAP_ENABLE;
 		require_once($ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_SOAP."/lib/nusoap.php");
 
-		$this->soap_client = new soapclient($path, true);
+		$this->soap_client = new soap_client($path, true);
 
 		$err = $this->soap_client->getError();
 		if ($err)

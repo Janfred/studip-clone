@@ -417,7 +417,7 @@ class UserManagement {
 		// active dozent?
 		$this->db->query("SELECT count(*) AS count FROM seminar_user WHERE user_id = '" . $this->user_data['auth_user_md5.user_id'] . "' AND status = 'dozent' GROUP BY user_id");
 		$this->db->next_record();
-		if ($this->db->f("count") && $newuser['auth_user_md5.perms'] != "dozent") {
+		if ($this->db->f("count") &&  isset($newuser['auth_user_md5.perms']) && $newuser['auth_user_md5.perms'] != "dozent") {
 			$this->msg .= sprintf("error§" . "Der Benutzer <b>%s</b> ist Dozent in %s aktiven Veranstaltungen und kann daher nicht in einen anderen Status versetzt werden." . "§", $this->user_data['auth_user_md5.username'], $this->db->f("count"));
 			return FALSE;
 		}

@@ -3,7 +3,7 @@
 // This file is part of Stud.IP
 // seminar_lernmodul.php
 //
-// Copyright (c) 2005 Arne Schroeder <schroeder@data-quest.de> 
+// Copyright (c) 2005 Arne Schroeder <schroeder@data-quest.de>
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -31,6 +31,8 @@ require_once ($ABSOLUTE_PATH_STUDIP."/config.inc.php");
 require_once ($ABSOLUTE_PATH_STUDIP."/elearning/ELearningUtils.class.php");
 require_once ($ABSOLUTE_PATH_STUDIP."/elearning/ConnectedCMS.class.php");
 
+$HELP_KEYWORD="Basis.Ilias";
+
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 
@@ -41,7 +43,7 @@ if ($ELEARNING_INTERFACE_ENABLE)
 	$GLOBALS['ALWAYS_SELECT_DB'] = true;
 
 	if ($cms_select != "")
-	{	
+	{
 		$connected_cms[$cms_select] = new ConnectedCMS();
 		$connection_status = $connected_cms[$cms_select]->getConnectionStatus($cms_select);
 		if (isset($activate_x))
@@ -59,12 +61,12 @@ if ($ELEARNING_INTERFACE_ENABLE)
 			$classname = $ELEARNING_INTERFACE_MODULES[$cms_select]["CLASS_PREFIX"] . "ConnectedCMS";
 			$connected_cms[$cms_select] = new $classname($cms_select);
 			$connected_cms[$cms_select]->initSubclasses();
-		}			
+		}
 	}
-		
+
 	?><table cellspacing="0" cellpadding="0" border="0" width="100%">
 	<tr>
-		<td class="topic" colspan="3">&nbsp;<img src="./pictures/icon-lern.gif" align="texttop">&nbsp;
+		<td class="topic" colspan="3">&nbsp;<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/icon-lern.gif" align="texttop">&nbsp;
 		<b>
 	<? 
 			echo _("Administration der Lernmodul-Schnittstelle"); 
@@ -73,17 +75,17 @@ if ($ELEARNING_INTERFACE_ENABLE)
 		</td>
 	</tr>
 	<tr>
-		<td class="blank" colspan="3">&nbsp; 
+		<td class="blank" colspan="3">&nbsp;
 		</td>
 	</tr>
 	<tr valign="top">
                 <td width="1%" class="blank">
-                	&nbsp; 
+                	&nbsp;
                 </td>
 		<td width="90%" class="blank">
 
 
-	<?     				
+	<?
 	if ($messages["error"] != "")
 	{
 		echo "<table>";
@@ -96,7 +98,7 @@ if ($ELEARNING_INTERFACE_ENABLE)
 		my_info($messages["info"]);
 		echo "</table>";
 	}
-	
+
 	echo "<font size=\"-1\">";
 	if ($cms_select == "")
 		echo ELearningUtils::getCMSSelectbox("<b>" . _("Bitte w&auml;hlen Sie ein angebundenes System f&uuml;r die Schnittstelle: ") . "</b>", false) . "\n\n<br><br>";
@@ -112,17 +114,17 @@ if ($ELEARNING_INTERFACE_ENABLE)
 		{
 			if ($msg["error"] != "")
 			{
-				echo "<tr><td valign=\"middle\"><img src=\"pictures/x2.gif\" alt=\"Fehler\"></td><td valign=\"middle\">" . $msg["error"] . "</td></tr>";
+				echo "<tr><td valign=\"middle\"><img src=\"".$GLOBALS['ASSETS_URL']."images/x2.gif\" alt=\"Fehler\"></td><td valign=\"middle\">" . $msg["error"] . "</td></tr>";
 				$error_count++;
 			}
 			else
-				echo "<tr><td valign=\"middle\"><img src=\"pictures/haken.gif\" alt=\"OK\"></td><td valign=\"middle\">" . $msg["info"] . "</td></tr>";
+				echo "<tr><td valign=\"middle\"><img src=\"".$GLOBALS['ASSETS_URL']."images/haken.gif\" alt=\"OK\"></td><td valign=\"middle\">" . $msg["info"] . "</td></tr>";
 		}
 		echo "<tr><td><br></td></tr>";
 		if ($error_count > 0)
 		{
 			$status_info = "error";
-			echo "<tr><td valign=\"middle\"><img src=\"pictures/x2.gif\" alt=\"OK\"></td><td valign=\"middle\"><b>";
+			echo "<tr><td valign=\"middle\"><img src=\"".$GLOBALS['ASSETS_URL']."images/x2.gif\" alt=\"OK\"></td><td valign=\"middle\"><b>";
 			echo _("Beim Laden der Schnittstelle sind Fehler aufgetreten. ");
 			if (ELearningUtils::isCMSActive($cms_select))
 			{
@@ -132,7 +134,7 @@ if ($ELEARNING_INTERFACE_ENABLE)
 			echo "</b></td></tr>";
 		}
 		else
-			echo "<tr><td valign=\"middle\"><img src=\"pictures/haken.gif\" alt=\"OK\"></td><td valign=\"middle\"><b>" .sprintf( _("Die Schnittstelle zum %s-System ist korrekt konfiguriert."), $connected_cms[$cms_select]->getName()) . "</b></td></tr>";
+			echo "<tr><td valign=\"middle\"><img src=\"".$GLOBALS['ASSETS_URL']."images/haken.gif\" alt=\"OK\"></td><td valign=\"middle\"><b>" .sprintf( _("Die Schnittstelle zum %s-System ist korrekt konfiguriert."), $connected_cms[$cms_select]->getName()) . "</b></td></tr>";
 		echo "</table>";
 		echo "<br>\n";
 		echo ELearningUtils::getCMSHeader($connected_cms[$cms_select]->getName());
@@ -168,7 +170,7 @@ if ($ELEARNING_INTERFACE_ENABLE)
 		echo "</font>";
 		echo "</form>";
 		echo "<br>\n";
-		
+
 		echo "<form method=\"POST\" action=\"" . $PHP_SELF . "\">\n";
 		echo "<font size=\"-1\">";
 		if ($error_count == 0)
@@ -184,35 +186,35 @@ if ($ELEARNING_INTERFACE_ENABLE)
 		echo ELearningUtils::getCMSFooter($connected_cms[$cms_select]->getLogo());
 	}
 
-	// Anzeige, wenn noch keine Account-Zuordnung besteht	
-		$infobox = array	(			
+	// Anzeige, wenn noch keine Account-Zuordnung besteht
+		$infobox = array	(
 		array ("kategorie"  => _("Information:"),
-			"eintrag" => array	(	
-							array (	"icon" => "pictures/ausruf_small.gif",
+			"eintrag" => array	(
+							array (	'icon' => "ausruf_small.gif",
 									"text"  => _("Hier k&ouml;nnen Sie an angebundene Systeme verwalten.")
 								 )
 							)
 			)
 		);
 		$infobox[1]["kategorie"] = _("Aktionen:");
-			$infobox[1]["eintrag"][] = array (	"icon" => "pictures/forumgrau.gif" ,
+			$infobox[1]["eintrag"][] = array (	'icon' => "forumgrau.gif" ,
 										"text"  => _("Nachdem Sie ein angebundenes System ausgew&auml;hlt haben, wird die Verbindung zum System gepr&uuml;ft.")
 									);
 
 		switch($status_info)
 		{
 			case "active":
-			$infobox[1]["eintrag"][] = array (	"icon" => "pictures/forumgrau.gif" ,
+			$infobox[1]["eintrag"][] = array (	'icon' => "forumgrau.gif" ,
 										"text"  => sprintf(_("Die Verbindung zum System \"%s\" ist <b>aktiv</b>. Sie k&ouml;nnen die Einbindung des Systems in Stud.IP jederzeit deaktivieren."), $connected_cms[$cms_select]->getName())
 									);
 			break;
 			case "not active":
-			$infobox[1]["eintrag"][] = array (	"icon" => "pictures/forumgrau.gif" ,
+			$infobox[1]["eintrag"][] = array (	'icon' => "forumgrau.gif" ,
 										"text"  => sprintf(_("Die Verbindung zum System \"%s\" steht, das System ist jedoch nicht aktiviert. Sie k&ouml;nnen die Einbindung des Systems in Stud.IP jederzeit aktivieren. Solange die Verbindung nicht aktiviert wurde, werden die Module des Systems \"%s\" in Stud.IP nicht angezeigt."), $connected_cms[$cms_select]->getName(), $connected_cms[$cms_select]->getName())
 									);
 			break;
 			case "error":
-			$infobox[1]["eintrag"][] = array (	"icon" => "pictures/forumgrau.gif" ,
+			$infobox[1]["eintrag"][] = array (	'icon' => "forumgrau.gif" ,
 										"text"  => sprintf(_("Bei der Pr&uuml;fung der Verbindung sind Fehler aufgetreten. Sie m&uuml;ssen zun&auml;chst die Eintr&auml;ge in der Konfigurationsdatei korrigieren, bevor das System angebunden werden kann."), $connected_cms[$cms_select]->getName())
 									);
 			break;
@@ -223,13 +225,13 @@ if ($ELEARNING_INTERFACE_ENABLE)
 	<br>
 	</td>
 	<td width="270" NOWRAP class="blank" align="center" valign="top">
-	<? 
-		print_infobox ($infobox,"pictures/lernmodule.jpg");
-	?>		
-	</td>		
+	<?
+		print_infobox ($infobox, "lernmodule.jpg");
+	?>
+	</td>
 </tr>
 <tr>
-	<td class="blank" colspan="3">&nbsp; 
+	<td class="blank" colspan="3">&nbsp;
 	</td>
 </tr>
 </table><?
@@ -237,10 +239,10 @@ if ($ELEARNING_INTERFACE_ENABLE)
 // terminate objects
 	if (is_array($connected_cms))
 		foreach($connected_cms as $system)
-			$system->terminate();		
+			$system->terminate();
 
 }
-else 
+else
 {
 	// Start of Output
 	parse_window ("error§" . _("Die Schnittstelle für die Integration von Lernmodulen ist nicht aktiviert. Damit Lernmodule verwendet werden können, muss die Verbindung zu einem LCM-System in der Konfigurationsdatei von Stud.IP hergestellt werden. Wenden Sie sich bitte an den/die AdministratorIn."), "§",

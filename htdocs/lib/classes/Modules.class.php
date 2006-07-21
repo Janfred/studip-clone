@@ -51,13 +51,15 @@ class Modules {
 				"vips" => array("id" => 10, "const" => "VIPS_ENABLE", "sem" => TRUE, "inst" => FALSE),
 				"impuls_ec" => array("id" => 11, "const" => "IMPULS_EC_ENABLE", "sem" => TRUE, "inst" => FALSE),
 				"scm" => array("id" => 12, "const" => "SCM_ENABLE", "sem" => TRUE, "inst" => TRUE),
-				"elearning_interface" => array("id" => 13, "const" => "ELEARNING_INTERFACE_ENABLE", "sem" => TRUE, "inst" => TRUE)
+				"elearning_interface" => array("id" => 13, "const" => "ELEARNING_INTERFACE_ENABLE", "sem" => TRUE, "inst" => TRUE),
+				"documents_folder_permissions" => array("id" => 14, "const" => "", "sem" => TRUE, "inst" => TRUE)
 				);
 	var $db;
 	var $pluginengine; // the pluginengine for integrating plugins into courses / institutions
 	
 	function Modules() {
 		$this->db = new DB_Seminar;
+		
 		// create a new instance of the pluginengine
 		if ($GLOBALS["PLUGINS_ENABLE"]){
 			$id = $GLOBALS["SessSemName"]["class"] . $GLOBALS["SessSemName"][1];
@@ -335,4 +337,5 @@ class Modules {
 		// Ist die x-te Stelle eine 1? 
 		return (($bitField & (0x01 << ($n)))); 
 	}
+	
 }

@@ -1,9 +1,9 @@
 <?
 /**
 * support.inc.php
-* 
+*
 * the controlling body of the resource-management
-* 
+*
 *
 * @author		Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
 * @version		$Id$
@@ -36,7 +36,7 @@
 
 
 /*****************************************************************************
-Startups... 
+Startups...
 /*****************************************************************************/
 require_once ($ABSOLUTE_PATH_STUDIP."msg.inc.php");
 require_once ($ABSOLUTE_PATH_STUDIP."visual.inc.php");
@@ -76,7 +76,7 @@ include ("$RELATIVE_PATH_SUPPORT/views/page_intros.inc.php");
 ?>
 <table width="100%" cellspacing="0" cellpadding="0" border="0">
 	<tr>
-		<td class="topic" >&nbsp;<img src="pictures/meinetermine.gif" border="0" align="absmiddle" alt="Ressourcen"><b>&nbsp;<? echo $title; ?></b></td>
+		<td class="topic" >&nbsp;<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/meinetermine.gif" border="0" align="absmiddle" alt="Ressourcen"><b>&nbsp;<? echo $title; ?></b></td>
 	</tr>
 	<?
 	if ($infobox) {
@@ -95,7 +95,7 @@ include ("$RELATIVE_PATH_SUPPORT/views/page_intros.inc.php");
 				<td valign ="top">
 					<table width="100%" cellspacing="0" cellpadding="0" border="0">
 						<?
-						if ($msg->checkMsgs()) {	
+						if ($msg->checkMsgs()) {
 							$msg->displayAllMsg($view_mode = "line");
 							print "<tr><td class=\"blank\">&nbsp; </td></tr>";						}
 						if ($page_intro) {
@@ -104,18 +104,18 @@ include ("$RELATIVE_PATH_SUPPORT/views/page_intros.inc.php");
 							<td class="blank"><? (!$infobox) ? print "<br />":"" ?>
 								<table width="99%" align="center" border="0" cellpadding="2" cellspacing ="0">
 									<tr><td>
-										<font size="-1"><? echo $page_intro ?></font><br />&nbsp; 
+										<font size="-1"><? echo $page_intro ?></font><br />&nbsp;
 									</td></tr>
 								</table>
 							</td>
-						</tr>	
+						</tr>
 						<?
 						}
 						?>
 						<tr>
 							<td class="blank" valign ="top">
-	
-	<?	
+
+	<?
 
 /*****************************************************************************
 overview, the contracts the customer has concluded
@@ -124,10 +124,10 @@ if ($supportdb_data["view"] == "overview"){
 	if ($edit_con_object) {
 		echo"<form method=\"POST\" action=\"$PHP_SELF\">";
 	}
-	
+
 	$overview = new Overview;
 	$overview->ShowOverview($SessSemName[1]);
-	
+
 	if ($edit_con_object) {
 		echo"</form>";
 	}
@@ -146,7 +146,7 @@ if ($supportdb_data["view"] == "requests") {
 	if ($request->getRequestsCount ($supportdb_data["actual_con"]) > 10)
 		$request->showSearchForm($supportdb_data["req_search_exp"]);
 	$request->showRequests($supportdb_data["actual_con"], $supportdb_data["req_search_exp"], $show_all);
-	
+
 	if (($edit_req_object) || ($supportdb_data["evt_edits"])) {
 		echo"</form>";
 	}
@@ -175,13 +175,13 @@ Seite abschliessen und Infofenster aufbauen
 					</td>
 					<?
 				}
-			?>				
+			?>
 				</tr>
 			</table>
 		</td>
 	</tr>
 	<tr>
-		<td class="blank">&nbsp; 
+		<td class="blank">&nbsp;
 		</td>
 	</tr>
 </table>

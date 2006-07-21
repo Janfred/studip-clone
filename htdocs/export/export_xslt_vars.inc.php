@@ -112,7 +112,10 @@ $xslt_files["rtf-gruppen"]["desc"] = _("Modul zur Ausgabe von Personendaten als 
 $xslt_files["rtf-gruppen"]["file"] = "rtf-t-2.xsl";
 $xslt_files["rtf-gruppen"]["rtf"] = true;
 
-
+$xslt_files["rtf-warteliste"]["name"] = _("Warteliste");
+$xslt_files["rtf-warteliste"]["desc"] = _("Modul zur Ausgabe von Personendaten als RTF-Datei. Es werden die Grunddaten der Personen auf der Warteliste einer einzelnen Veranstaltung in eine Tabelle geschrieben. Es werden auch die Kontingente und Studieng&auml;nge ausgegeben. Die Ausgabe-Datei kann in einer Textverarbeitung bearbeitet werden.");
+$xslt_files["rtf-warteliste"]["file"] = "rtf-t-3.xsl";
+$xslt_files["rtf-warteliste"]["rtf"] = true;
 
 $xslt_files["pdf-standard"]["name"] = _("Standardmodul");
 $xslt_files["pdf-standard"]["desc"] = _("Standardmodul zur Ausgabe von Veranstaltungs- und Personendaten als Vorlesungskommentar bzw. MitarbeiterInnenlisten mit Seitenzahlen im Adobe PDF-Format. Die Datei kann mit dem Acrobat PDF-Reader gelesen werden.");

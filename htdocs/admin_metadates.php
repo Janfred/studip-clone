@@ -1,7 +1,7 @@
 <?php
 /**
 * admin_metadates.php
-* 
+*
 * edit the settings for generic dates from a Veranstaltung
 *
 *
@@ -35,10 +35,12 @@
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check("tutor");
-	
+
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
+
+$HELP_KEYWORD="Basis.VeranstaltungenVerwaltenZeiten";
 
 // Start of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
@@ -92,7 +94,7 @@ function get_snapshot() {
 
 //get ID
 if ($SessSemName[1])
-	$seminar_id=$SessSemName[1]; 
+	$seminar_id=$SessSemName[1];
 
 //wenn wir frisch reinkommen, werden die alten Metadaten eingelesen
 if (($seminar_id) && (!$uebernehmen_x) && (!$add_turnus_field_x) &&(!$delete_turnus_field) && !($open_ureg_x) && !($open_reg_x) && !($enter_start_termin_x) && !($nenter_start_termin_x)) {
@@ -103,8 +105,8 @@ if (($seminar_id) && (!$uebernehmen_x) && (!$add_turnus_field_x) &&(!$delete_tur
 	$db->next_record();
 	$term_metadata=unserialize($db->f("metadata_dates"));
 	$term_metadata["sem_status"]=$db->f("status");
-	$term_metadata["sem_name"]=$db->f("Name");	
-	$term_metadata["sem_start_time"]=$db->f("start_time");	
+	$term_metadata["sem_name"]=$db->f("Name");
+	$term_metadata["sem_start_time"]=$db->f("start_time");
 	$term_metadata["sem_duration_time"]=$db->f("duration_time");
 	$term_metadata["sem_id"] = $seminar_id;
 	$term_metadata["request_id"] = $db->f("request_id");
@@ -157,7 +159,7 @@ if (($turnus_refresh) || ($term_refresh))
 	if (($sem_duration_time == 0) || ($sem_duration_time == -1))
 		$term_metadata["sem_duration_time"]=$sem_duration_time;
 	else
-		$term_metadata["sem_duration_time"]=$sem_duration_time - $sem_start_time;	
+		$term_metadata["sem_duration_time"]=$sem_duration_time - $sem_start_time;
 	$term_metadata["sem_start_time"]=$sem_start_time;
 	}
 
@@ -188,8 +190,8 @@ if ($turnus_refresh)
 			$term_metadata["turnus_data"][$i]["resource_id"] = FALSE;
 		} else
 			$term_metadata["turnus_data"][$i]["resource_id"] = $temp_turnus_data[$i]["resource_id"];
-		
-		
+
+
 		//if we have a resource_id, we take the room name from resource_id (deprecated at the moment)
 		/*if ($RESOURCES_ENABLE && $term_metadata["turnus_data"][$i]["resource_id"]) {
 			$resObject =& ResourceObject::Factory($term_metadata["turnus_data"][$i]["resource_id"]);
@@ -206,12 +208,12 @@ if (($turnus_refresh) || ($term_metadates["start_woche"] ==-1))
 
 	if ($monat == _("mm")) $monat=0;
 	if ($tag == _("tt")) $tag=0;
-	if ($jahr == _("jjjj")) $jahr=0;	
+	if ($jahr == _("jjjj")) $jahr=0;
 
 	if (!checkdate((int)$monat, (int)$tag, (int)$jahr) && ($monat) && ($tag) && ($jahr))
 		{
 		$errormsg=$errormsg."error§"._("Bitte geben Sie ein g&uuml;ltiges Datum ein!")."§";
-		$check=FALSE;			
+		$check=FALSE;
 		}
 	else
 		$check=TRUE;
@@ -236,17 +238,17 @@ if ($delete_turnus_field)
 		}
 	$term_metadata["turnus_data"]=$tmp_term_turnus_data;
 	$term_metadata["original_resource_id"]=$tmp_term_turnus_original_resource_id;
-	
+
 	$term_metadata["turnus_count"]--;
 	}
 
 
 //Checks performen
 if (($term_metadata["sem_duration_time"]<0) && ($term_metadata["sem_duration_time"] != -1))
-	{ 
+	{
 	$errormsg=$errormsg."error§"._("Das Endsemester darf nicht vor dem Startsemester liegen. Bitte &auml;ndern Sie die entsprechenden Angaben!")."§";
 	}
-	
+
 if ($term_metadata["art"]==0)
 	{
 	for ($i=0; $i<$term_metadata["turnus_count"]; $i++)
@@ -261,13 +263,13 @@ if ($term_metadata["art"]==0)
 			if ((($term_metadata["turnus_data"][$i]["start_stunde"]>23) || ($term_metadata["turnus_data"][$i]["start_stunde"]<0))  ||  (($term_metadata["turnus_data"][$i]["start_minute"]>59) || ($term_metadata["turnus_data"][$i]["start_minute"]<0))  ||  (($term_metadata["turnus_data"][$i]["end_stunde"]>23) ||($term_metadata["turnus_data"][$i]["end_stunde"]<0))  || (($term_metadata["turnus_data"][$i]["end_minute"]>59) || ($term_metadata["turnus_data"][$i]["end_minute"]<0)))
 					{
 					if (!$just_informed3)
-						$errormsg=$errormsg."error§"._("Sie haben eine ung&uuml;ltige Zeit eingegeben. Bitte &auml;ndern Sie die entsprechenden Angaben!")."§";	
+						$errormsg=$errormsg."error§"._("Sie haben eine ung&uuml;ltige Zeit eingegeben. Bitte &auml;ndern Sie die entsprechenden Angaben!")."§";
 					$just_informed3=TRUE;
 					}
 			if (mktime($term_metadata["turnus_data"][$i]["start_stunde"], $term_metadata["turnus_data"][$i]["start_minute"], 0, 1, 1, 2001) >= mktime($term_metadata["turnus_data"][$i]["end_stunde"], $term_metadata["turnus_data"][$i]["end_minute"], 0, 1, 1, 2001)) 
 				if ((!$just_informed5) && (!$just_informed)) {
 					$errormsg=$errormsg."error§"._("Der Endzeitpunkt der regul&auml;ren Termine muss nach dem jeweiligen Startzeitpunkt liegen!")."§";
-					$just_informed5=TRUE;				
+					$just_informed5=TRUE;
 				}
 			}
 			elseif(!$just_informed4) 
@@ -298,9 +300,9 @@ if (($uebernehmen_x) && (!$errormsg)) {
 	$metadates_deleted = $metadates_new = $metadates_unchanged = array();
 
 	//check if change of mode
-	if ($RESOURCES_ENABLE){ 
+	if ($RESOURCES_ENABLE){
 		//check for changes by deleted entries, changes to semesterdata an start termin
-		//$count_meta_changed	= (sizeof($tmp_metadata_termin["turnus_data"]) <  sizeof($term_metadata["original_turnus_data"])); 
+		//$count_meta_changed	= (sizeof($tmp_metadata_termin["turnus_data"]) <  sizeof($term_metadata["original_turnus_data"]));
 		$start_termin_changed =	($term_metadata["original_start_woche"] != $term_metadata["start_woche"]) || ($term_metadata["original_start_termin"] != $term_metadata["start_termin"]);
 		$sem_changed = ($term_metadata["original_start_time"] != $term_metadata["sem_start_time"]) ||($term_metadata["original_duration_time"] != $term_metadata["sem_duration_time"]);
 		$art_changed = ($term_metadata["original_art"] != $term_metadata["art"]);
@@ -316,21 +318,21 @@ if (($uebernehmen_x) && (!$errormsg)) {
 			}
 		}
 	}
-	
+
 	//indiziertes (=sortierbares) temporaeres Array erzeugen
 	if ($term_metadata["art"] == 0) {
 		for ($i=0; $i<$term_metadata["turnus_count"]; $i++)
 			if (($term_metadata["turnus_data"][$i]["start_stunde"] !== '')  && ($term_metadata["turnus_data"][$i]["end_stunde"] !== ''))
 				$tmp_metadata_termin["turnus_data"][]=array("idx"=>$term_metadata["turnus_data"][$i]["day"].(($term_metadata["turnus_data"][$i]["start_stunde"] <10) ?  "0" : "").$term_metadata["turnus_data"][$i]["start_stunde"].(($term_metadata["turnus_data"][$i]["start_minute"]< 10) ?  "0" : "").$term_metadata["turnus_data"][$i]["start_minute"],
-															"day" => $term_metadata["turnus_data"][$i]["day"], 
-															"start_stunde" => $term_metadata["turnus_data"][$i]["start_stunde"], 
-															"start_minute" => $term_metadata["turnus_data"][$i]["start_minute"], 
-															"end_stunde" => $term_metadata["turnus_data"][$i]["end_stunde"], 
-															"end_minute" => $term_metadata["turnus_data"][$i]["end_minute"], 
-															"room" => $term_metadata["turnus_data"][$i]["room"], 
+															"day" => $term_metadata["turnus_data"][$i]["day"],
+															"start_stunde" => $term_metadata["turnus_data"][$i]["start_stunde"],
+															"start_minute" => $term_metadata["turnus_data"][$i]["start_minute"],
+															"end_stunde" => $term_metadata["turnus_data"][$i]["end_stunde"],
+															"end_minute" => $term_metadata["turnus_data"][$i]["end_minute"],
+															"room" => $term_metadata["turnus_data"][$i]["room"],
 															"resource_id" => $term_metadata["turnus_data"][$i]["resource_id"],
 															"desc" => $term_metadata["turnus_data"][$i]["desc"]);
-	
+
 		//check for dublettes
 		if ($tmp_metadata_termin["turnus_data"]) {
 			$tmp_array_assi = $tmp_metadata_termin["turnus_data"];
@@ -347,7 +349,7 @@ if (($uebernehmen_x) && (!$errormsg)) {
 						unset ($tmp_metadata_termin["turnus_data"][$key1]);
 				}
 			}
-		}	
+		}
 
 		//check for changes to the old (saved) metadates (for each metadate)
 		if (is_array($tmp_metadata_termin["turnus_data"])) {
@@ -403,7 +405,7 @@ if (($uebernehmen_x) && (!$errormsg)) {
 			$update_dates_kill_resources = TRUE;
 			$create_request = TRUE;
 
-			if ($art_changed) 
+			if ($art_changed)
 				$errormsg.="info§"._("Sie haben die Art der Veranstaltungszeiten ge&auml;ndert.")." ";
 			elseif ($turnus_changed)
 				$errormsg.="info§"._("Sie haben den Turnus der Veranstaltung ge&auml;ndert.")." ";
@@ -435,13 +437,13 @@ if (($uebernehmen_x) && (!$errormsg)) {
 
 	//Termin-Metadaten-Array zusammenmatschen zum beseren speichern in der Datenbank
 	$serialized_metadata=mysql_escape_string(serialize ($metadata_termin));
-	
+
 	//speichern
 	$db->query ("UPDATE seminare SET metadata_dates='$serialized_metadata', start_time='".$term_metadata["sem_start_time"]."', duration_time='".$term_metadata["sem_duration_time"]."' WHERE Seminar_id ='".$term_metadata["sem_id"]."'");
 	if ($db->affected_rows()) {
 		$errormsg.="msg§"._("Die allgemeinen Termindaten wurden aktualisiert.")."§";
 		$db->query ("UPDATE seminare SET chdate='".time()."' WHERE Seminar_id ='".$term_metadata["sem_id"]."'");
-		
+
 		//update the dates in the assi.... (we update if user wants to or the changes to times/rooms/request-system causes killing all the date-assigns)
 		if (($term_metadata["update_dates"]) || (($term_metadata["update_dates"]) && ($update_dates_kill_resources))) {
 			$multisem = isDatesMultiSem($term_metadata["sem_id"]);
@@ -461,7 +463,7 @@ if (($uebernehmen_x) && (!$errormsg)) {
 			//produce the messages from result
 			$errormsg.=getFormattedResult($updateResult, "booth");
 		}
- 		
+
  		//reopen a request or send user to admin_room_requests, if no request exists
  		if (($RESOURCES_ENABLE) && ($RESOURCES_ALLOW_ROOM_REQUESTS) && ($change_metadates_open_request)) {
  			//kill the assigns
@@ -473,7 +475,7 @@ if (($uebernehmen_x) && (!$errormsg)) {
 					$veranstAssign->killDateAssign($termin_id);
 				}
 			}
- 			
+
  			//no request... user should create self an request
  			if (!$term_metadata["request_id"]) {
 				$errormsg.= sprintf ("info§"._("Um R&auml;ume f&uuml;r Ihre Veranstaltung zu bekommen, m&uuml;ssen Sie eine %sRaumanfrage%s erstellen.")."§", "<a href=\"admin_room_requests.php?seminar_id=\"".$term_metadata["sem_id"]."\">", "</a>");
@@ -489,7 +491,7 @@ if (($uebernehmen_x) && (!$errormsg)) {
 	$sem_obj =& Seminar::GetInstance($term_metadata["sem_id"], true);
 	$term_metadata['turnus_data'] = $sem_obj->metadata['turnus_data'];
 
-	
+
 	//Save the current state as snapshot to compare with current data and other original data for comparisons
 	$term_metadata["original"] = get_snapshot();
 	$term_metadata["original_turnus_data"] = $term_metadata["turnus_data"];
@@ -503,13 +505,13 @@ if (($uebernehmen_x) && (!$errormsg)) {
 	if (is_array($term_metadata["original_turnus_data"]))
 		foreach ($term_metadata["original_turnus_data"] as $val)
 			$term_metadata["original_resource_id"][] = $val["resource_id"];
-	
+
 	$metadata_saved=TRUE;
 }
- 
+
  if (($errormsg) && (($open_reg_x) || ($open_ureg_x) || ($enter_start_termin_x) || ($nenter_start_termin_x) || ($add_turnus_field_x) || ($delete_turnus_field)))
- 	$errormsg='';	
- 
+ 	$errormsg='';
+
  if ((!$metadata_saved) || (!$term_metadata["source_page"])) {
 	?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
@@ -523,7 +525,7 @@ if (($uebernehmen_x) && (!$errormsg)) {
 	<?
 	if (isset($errormsg)) {
 	?>
-	<tr> 
+	<tr>
 		<td class="blank" colspan=2><br />
 		<?parse_msg($errormsg);?>
 		</td>
@@ -542,7 +544,7 @@ if (($uebernehmen_x) && (!$errormsg)) {
 			</blockqoute>
 		</td>
 		<td class="blank" align="right">
-			<img src="pictures/board2.jpg" border="0">
+			<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/board2.jpg" border="0">
 		</td>
 	</tr>
 	<tr>
@@ -550,14 +552,14 @@ if (($uebernehmen_x) && (!$errormsg)) {
 	<form method="POST" name="Formular" action="<? echo $PHP_SELF ?>">
 		<table width="99%" border=0 cellpadding=2 cellspacing=0 align="center">
 		<tr <? $cssSw->switchClass() ?>>
-			<td class="<? echo $cssSw->getClass() ?>" align="center" colspan=3>		
+			<td class="<? echo $cssSw->getClass() ?>" align="center" colspan=3>
 				<input type="IMAGE" name="uebernehmen" <? echo makeButton ("uebernehmen", "src") ?> border=0 value="uebernehmen">
 				<? if ($term_metadata["source_page"]) {
 					?> &nbsp; <input type="IMAGE" name="abbrechen" <? echo makeButton ("abbrechen", "src") ?> border=0 value="abbrechen"> <?
 					}
 				?>
 				<? if ($term_metadata["original"] != get_snapshot()) {
-					?> <br /><img src="pictures/ausruf_small2.gif" align="absmiddle" />&nbsp;<font size=-1><? print _("Diese Daten sind noch nicht gespeichert.") ?></font><br /> <?
+					?> <br /><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/ausruf_small2.gif" align="absmiddle" />&nbsp;<font size=-1><? print _("Diese Daten sind noch nicht gespeichert.") ?></font><br /> <?
 					}
 				?>
 			</td>
@@ -570,7 +572,7 @@ if (($uebernehmen_x) && (!$errormsg)) {
 				<font size=-1><b>&nbsp;<?= _("Allgemeine Zeiten:") ?></b><br /></font>
 				<font size=-1>&nbsp;<?= _("Sie k&ouml;nnen hier angeben, ob die Veranstaltung regelm&auml;&szlig;ig stattfindet oder ob die Termine unregelm&auml;&szlig;ig sind (etwa bei einer Blockveranstaltung).");
 				?><br /></font>
-				<br />&nbsp;<input type="IMAGE" name="open_reg" <? if (!$term_metadata["art"]) print makeButton ("regelmaessig2", "src");  else print makeButton ("regelmaessig", "src") ?> border=0 value="regelmaessig">&nbsp; 
+				<br />&nbsp;<input type="IMAGE" name="open_reg" <? if (!$term_metadata["art"]) print makeButton ("regelmaessig2", "src");  else print makeButton ("regelmaessig", "src") ?> border=0 value="regelmaessig">&nbsp;
 				<input type="IMAGE" name="open_ureg"  <? if (!$term_metadata["art"]) print makeButton ("unregelmaessig", "src");  else print makeButton ("unregelmaessig2", "src") ?> border=0 value="unregelmaessig">
 			</td>
 		</tr>
@@ -603,7 +605,7 @@ if (($uebernehmen_x) && (!$errormsg)) {
 							<?
 							if (!$term_metadata["turnus_count"])
 								{
-								if (sizeof($term_metadata["turnus_data"])>0) 
+								if (sizeof($term_metadata["turnus_data"])>0)
 									{
 									$term_metadata["turnus_count"]=sizeof($term_metadata["turnus_data"]);
 									}
@@ -653,7 +655,7 @@ if (($uebernehmen_x) && (!$errormsg)) {
 								echo '<input type="text" name="turnus_end_minute[',$i,']" size=2 maxlength=2 value="', $em, '">', _("Uhr"), "\n";
 
 								if ($term_metadata["turnus_count"]>1)  {
-									echo '&nbsp; <a href="', $PHP_SELF, '?delete_turnus_field=', $i+1,'"><img border=0 src="./pictures/trash.gif" ', tooltip(_("Dieses Feld aus der Auswahl löschen")), '></a>', "\n";
+									echo '&nbsp; <a href="', $PHP_SELF, '?delete_turnus_field=', $i+1,'"><img border=0 src="'.$GLOBALS['ASSETS_URL'].'images/trash.gif" ', tooltip(_("Dieses Feld aus der Auswahl löschen")), '></a>', "\n";
 								}
 								echo Termin_Eingabe_javascript(3,$i,0,$ss,$sm,$es,$em);
 								//Beschreibung
@@ -672,7 +674,7 @@ if (($uebernehmen_x) && (!$errormsg)) {
 								echo "\n</select>";
 								echo "&nbsp;";
 								echo "\n<input type=\"text\" name=\"turnus_desc[$i]\" size=\"30\" value=\"{$term_metadata['turnus_data'][$i]['desc']}\">";
-								
+
 								echo '<br />&nbsp;', _("Raum:"), '&nbsp; ';
 
 								if ($RESOURCES_ENABLE) {
@@ -687,7 +689,7 @@ if (($uebernehmen_x) && (!$errormsg)) {
 											printf ("<option value=\"%s\">%s</option>", $res["resource_id"], htmlReady($res["name"]));
 										}
 										print "</select></font>";
-									} 
+									}
 								}
 
 								echo '&nbsp; <font size=-1><input type="text" name="turnus_room[',$i,']" size="30" maxlength="255" value="', htmlReady($term_metadata["turnus_data"][$i]["room"]), '"/></font>&nbsp;', "\n";
@@ -712,7 +714,7 @@ if (($uebernehmen_x) && (!$errormsg)) {
 					</tr>
 		<?
 			}
-		else 
+		else
 			{
 		?>
 					<tr >
@@ -723,7 +725,7 @@ if (($uebernehmen_x) && (!$errormsg)) {
 					</tr>
 		<?
 			}
-	
+
 		if (!$term_metadata["art"])
 			{
 		?>
@@ -734,8 +736,8 @@ if (($uebernehmen_x) && (!$errormsg)) {
 						<td class="<? echo $cssSw->getClass() ?>"  colspan=2 align="left">
 							&nbsp;<font size=-1><b><?=_("Veranstaltungsbeginn")?></b></font><br /><br />
 							<font size=-1>&nbsp;<?=_("Bei einer regelm&auml;&szlig;igen Veranstaltung k&ouml;nnen Sie den ersten Termin entweder selbst eingeben oder automatisch berechnen lassen.") ?></font><br />
-							<br />&nbsp;<input type="IMAGE" name="nenter_start_termin" <? if ($term_metadata["start_woche"] != -1) print makeButton ("automatisch2", "src");  else print makeButton ("automatisch", "src") ?> border=0 value="automatisch">&nbsp; 
-							<input type="IMAGE" name="enter_start_termin" <? if ($term_metadata["start_woche"] != -1) print makeButton ("eingeben", "src");  else print makeButton ("eingeben2", "src") ?> border=0 value="eingeben"> 
+							<br />&nbsp;<input type="IMAGE" name="nenter_start_termin" <? if ($term_metadata["start_woche"] != -1) print makeButton ("automatisch2", "src");  else print makeButton ("automatisch", "src") ?> border=0 value="automatisch">&nbsp;
+							<input type="IMAGE" name="enter_start_termin" <? if ($term_metadata["start_woche"] != -1) print makeButton ("eingeben", "src");  else print makeButton ("eingeben2", "src") ?> border=0 value="eingeben">
 						</td>
 					</tr>
 		<?
@@ -753,7 +755,7 @@ if (($uebernehmen_x) && (!$errormsg)) {
 							if ($term_metadata["start_woche"]==1)
 								echo "<option selected value=1>"._("2. Semesterwoche")."</option>";
 							else
-								echo "<option value=1>"._("2. Semesterwoche")."</option>";								
+								echo "<option value=1>"._("2. Semesterwoche")."</option>";
 							?>
 							</select></font>
 						</td>
@@ -832,7 +834,7 @@ if (($uebernehmen_x) && (!$errormsg)) {
 		</td>
 	</tr>
 	<tr <? $cssSw->switchClass() ?>>
-		<td class="<? echo $cssSw->getClass() ?>" align="center" colspan=3>		
+		<td class="<? echo $cssSw->getClass() ?>" align="center" colspan=3>
 			<input type="IMAGE" name="uebernehmen" <?=makeButton("uebernehmen", "src") ?> border=0 value="uebernehmen">
 		</td>
 	</tr>

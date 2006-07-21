@@ -1,8 +1,8 @@
 <?
 /**
 * calendar_visual.inc.php
-* 
-* 
+*
+*
 *
 * @author		Peter Thienel <pthienel@web.de>
 * @version		$Id$
@@ -15,7 +15,7 @@
 // This file is part of Stud.IP
 // calendar_visual.inc.php
 //
-// Copyright (c) 2003 Peter Tienel <pthienel@web.de> 
+// Copyright (c) 2003 Peter Tienel <pthienel@web.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -38,7 +38,7 @@ require_once($ABSOLUTE_PATH_STUDIP . 'calendar_functions.inc.php');
 function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol = TRUE,
 			$compact = TRUE, $link_edit = FALSE, $title_length = 70,
 			$height = 20, $padding = 6, $spacing = 1, $bg_image = 'big') {
-	
+
 	global $atime, $PHP_SELF, $CANONICAL_RELATIVE_PATH_STUDIP;
 	$term = array();    // Array mit eingeordneten Terminen und Platzhaltern (mixed[])
 	$colsp = array();   // Breite der Spalten in den einzelnen Zeilen (int[])
@@ -58,7 +58,7 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 		$link_edit_column = 1;
 	else
 		$link_edit_column = 0;
-	
+
 	if ($precol) {
 		if ($step >= 3600) {
 			$height_precol_1 = ' height="' . ($step / 3600) * $height . '"';
@@ -75,17 +75,17 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 			$width_precol_2_txt = " width=\"$width_precol_2%\" nowrap ";
 		}
 	}
-	
+
 	$start *= 3600;
 	$end *= 3600;
-	
+
 	// Die Generierung der Tabellenansicht erfolgt mit Hilfe geklonter Termine,
 	// da die Anfangs- und Endzeiten zur korrekten Darstellung evtl. angepasst
 	// werden muessen
 	for ($i = 0; $i < sizeof($day_obj->events); $i++) {
 		if (($day_obj->events[$i]->getEnd() >= $day_obj->getStart() + $start)
 				&& ($day_obj->events[$i]->getStart() < $day_obj->getStart() + $end + 3600)) {
-			
+
 			if ($day_obj->events[$i]->isDayEvent()
 					|| ($day_obj->events[$i]->getStart() <= $day_obj->getStart()
 					&& $day_obj->events[$i]->getEnd() >= $day_obj->getEnd())) {
@@ -106,13 +106,13 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 					$cloned_event->setStart($day_obj->getStart() + $start);
 				if ($cloned_event->getEnd() > ($day_obj->getStart() + $end + 3600))
 					$cloned_event->setEnd($day_obj->getStart() + $end + 3600);
-				
+
 				$tmp_event[] = $cloned_event;
 				$map_events[] = $i;
 			}
 		}
 	}
-	
+
 	// calculate maximum number of columns
 	$w = 0;
 	for ($i = $start / $step;$i < $end / $step + 3600 / $step;$i++) {
@@ -123,13 +123,13 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 			$rows = ceil($tmp_event[$w]->getDuration() / $step);
 			if ($rows < 1)
 				$rows = 1;
-			
+
 			while ($term[$zeile][$spalte] != "" && $term[$zeile][$spalte] != "#")
 				$spalte++;
-		
+
 			$term[$zeile][$spalte] = $tmp_event[$w];
 			$mapping[$zeile][$spalte] = $map_events[$w];
-			
+
 			$count = $rows - 1;
 			for ($x = $zeile + 1; $x < $zeile + $rows; $x++) {
 				for ($y = 0; $y <= $spalte; $y++) {
@@ -142,30 +142,30 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 			if ($max_spalte < sizeof($term[$zeile]))
 				$max_spalte = sizeof($term[$zeile]);
 			$w++;
-			
+
 		}
 	}
-	
+
 	$zeile_min = 0;
-		
+
 	for ($i = $start / $step; $i < $end / $step + 3600 / $step; $i++) {
 		$zeile = $i - $start / $step;
 		$zeile_min = $zeile;
-		
+
 		while (maxValue($term[$zeile], $step) > 1)
 			$zeile += maxValue($term[$zeile], $step) - 1;
-		
+
 		$size = 0;
 		for ($j = $zeile_min; $j <= $zeile; $j++)
 			if (sizeof($term[$j]) > $size)
 					$size = sizeof($term[$j]);
-					
+
 		for ($j = $zeile_min; $j <= $zeile; $j++)
 			$colsp[$j] = $size;
-			
+
 		$i = $zeile + $start / $step;
 	}
-	
+
 	// Zeile fuer Tagestermine
 	if ($precol) {
 		if ($step >= 3600) {
@@ -182,10 +182,10 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 		$day_event_row[0] = "<td class=\"$style_cell\"";
 
 	if ($tmp_day_event) {
-	
+
 		if ($max_spalte > 0)
 			$day_event_row[0] .= " colspan=\"" . ($max_spalte + $link_edit_column) . "\"";
-			
+
 		$day_event_row[0] .= " valign=\"bottom\"><table width=\"100%\" border=\"0\" cellpadding=\"";
 		//$day_event_row[0] .= ($padding / 2) . "\" cellspacing=\"1\">\n";
 		$day_event_row[0] .= "0\" cellspacing=\"0\">";
@@ -211,43 +211,43 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 			$day_event_row[0] .= "<td class=\"$style_cell\" align=\"right\" valign=\"bottom\" rowspan=\"";
 			$day_event_row[0] .= sizeof($tmp_day_event) . "\"><a href=\"$PHP_SELF?cmd=edit&atime=";
 			$day_event_row[0] .= $day_obj->getTs() . "&devent=1\">";
-			$day_event_row[0] .= "<img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calplus.gif\" ";
+			$day_event_row[0] .= "<img src=\"".$GLOBALS['ASSETS_URL']."images/calplus.gif\" ";
 			$day_event_row[0] .= "border=\"0\" $tooltip></a></td>\n";
 		}
-		
+
 		$day_event_row[0] .= "</table></td>";
 	}
 	else {
 		if ($max_spalte > 0)
 			$day_event_row[0] .= " colspan=\"" . ($max_spalte + $link_edit_column) . "\"";
-			
+
 		if ($link_edit) {
 			$tooltip = tooltip(_("neuer Tagestermin"));
 			$day_event_row[0] .= " align=\"right\" valign=\"bottom\"><a href=\"$PHP_SELF?cmd=edit&atime=";
 			$day_event_row[0] .= $day_obj->getTs() . "&devent=1\">";
-			$day_event_row[0] .= "<img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calplus.gif\" ";
+			$day_event_row[0] .= "<img src=\"".$GLOBALS['ASSETS_URL']."images/calplus.gif\" ";
 			$day_event_row[0] .= "border=\"0\" $tooltip></a></td>\n";
 		}
 		else
 			$day_event_row[0] .= ">&nbsp;</td>\n";
 	}
-	
+
 	if ($compact)
 		$day_event_row[0] = "<tr>{$day_event_row[0]}</tr>\n";
-	
+
 	for ($i = $start / $step;$i < $end / $step + 3600 / $step;$i++) {
 		$cspan_str = "";
 		$zeile = $i - $start / $step;
-		
+
 		if ($link_edit){
 			$link_edit_time = $zeile * $step + $start - 3600;
 			$link_edit_alt = strftime(_("neuer Termin um %R Uhr"), $link_edit_time);
 			$link_edit_tooltip = tooltip($link_edit_alt);
 		}
-		
+
 		if ($compact)
 			$tab[$zeile] .= "<tr>\n";
-		
+
 		// Vorspalte mit Uhrzeiten zusammenbauen
 		if ($precol) {
 			if (($i * $step) % 3600 == 0) {
@@ -270,7 +270,7 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 				$width_precol_2_txt = "";
 			}
 		}
-		
+
 		$link_notset = TRUE;
 		if (!$term[$zeile]) {
 			if ($link_edit) {
@@ -278,14 +278,14 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 					$tab[$zeile] .= "<td class=\"$style_cell\" align=\"right\"  valign=\"bottom\" colspan=\"";
 					$tab[$zeile] .= ($max_spalte + 1) . "\"><a href=\"$PHP_SELF?cmd=edit&atime=";
 					$tab[$zeile] .= ($day_obj->getStart() + $i * $step);
-					$tab[$zeile] .= "\"><img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calplus.gif\" ";
+					$tab[$zeile] .= "\"><img src=\"".$GLOBALS['ASSETS_URL']."images/calplus.gif\" ";
 					$tab[$zeile] .= "border=\"0\" $link_edit_tooltip></a></td>\n";
 				}
 				else {
 					$tab[$zeile] .= "<td class=\"$style_cell\" align=\"right\" valign=\"bottom\">";
 					$tab[$zeile] .= "<a href=\"$PHP_SELF?cmd=edit&atime=";
 					$tab[$zeile] .=	($day_obj->getStart() + $i * $step);
-					$tab[$zeile] .= "\"><img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calplus.gif\"";
+					$tab[$zeile] .= "\"><img src=\"".$GLOBALS['ASSETS_URL']."images/calplus.gif\"";
 					$tab[$zeile] .= "border=\"0\" $link_edit_tooltip></a></td>\n";
 				}
 			}
@@ -297,7 +297,7 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 				else
 					$tab[$zeile] .= "<td class=\"$style_cell\"><font class=\"inday\">&nbsp;</font></td>\n";
 			}
-			
+
 			$height = "";
 			// Wenn bereits hier ein Link eingefuegt wurde braucht weiter unten keine
 			// zusaetliche Spalte ausgegeben werden
@@ -308,15 +308,15 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 				$cspan = (int) ($max_spalte / $colsp[$zeile]);
 			else
 				$cspan = 0;
-				
+
 			for ($j = 0;$j < $colsp[$zeile];$j++) {
 				$sp = 0;
 				$n = 0;
 				if ($j + 1 == $colsp[$zeile])
 					$cspan += $max_spalte % $colsp[$zeile];
-					
+
 				if (is_object($term[$zeile][$j])) {
-					
+
 					// Wieviele Termine sind zum aktuellen Termin zeitgleich?
 					$p = 0;
 					$count = 0;
@@ -327,7 +327,7 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 						}
 						$p++;
 					}
-					
+
 					if ($count == 0) {
 						for ($n = $j + 1;$n < $colsp[$zeile];$n++) {
 							if (!is_int($term[$zeile][$n])) {
@@ -338,34 +338,34 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 						}
 						$cspan += $sp;
 					}
-					
+
 					$rows = ceil($term[$zeile][$j]->getDuration() / $step);
 					$tab[$zeile] .= '<td';
-					
+
 					if ($cspan > 1)
 						$tab[$zeile] .= ' colspan="'.$cspan.'"';
 					if ($rows > 1)
 						$tab[$zeile] .= ' rowspan="'.$rows.'"';
 					else
 						$rows = 1;
-					
+
 					$category_style = $term[$zeile][$j]->getCategoryStyle($bg_image);
 					$tab[$zeile] .= " style=\"vertical-align:top; font-size:10px; color:#FFFFFF;";
 					$tab[$zeile] .= " background-image:url(";
 					$tab[$zeile] .= $category_style['image'];
 					$tab[$zeile] .= "); border-style:solid; border-width:1px; border-color:";
 					$tab[$zeile] .= $category_style['color'] . ";\">";
-						
+
 					if (get_class($term[$zeile][$j]) == 'seminarevent'
 							&& $term[$zeile][$j]->getTitle() == "Kein Titel") {
 						$title_out = $term[$zeile][$j]->getSemName();
 					}
 					else
 						$title_out = $term[$zeile][$j]->getTitle();
-					
+
 					if ($rows == 1) {
 						$title = fit_title($title_out, $colsp[$zeile], $rows, $title_length - 6);
-						
+
 						$tab[$zeile] .= sprintf("<a style=\"color: #FFFFFF;\" href=\"$PHP_SELF?cmd=edit&termin_id=%s&atime=%d%s\" %s>"
 													, $term[$zeile][$j]->getId()
 													, ($day_obj->getStart() + $term[$zeile][$j]->getStart() % 86400)
@@ -388,7 +388,7 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 					}
 					$tab[$zeile] .= info_icons($term[$zeile][$j]);
 					$tab[$zeile] .= "</td>\n";
-					
+
 					if ($sp > 0) {
 						for ($m = $zeile;$m < $rows + $zeile;$m++) {
 							$colsp[$m] = $colsp[$m] - $sp + 1;
@@ -399,7 +399,7 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 						$j = $n;
 					}
 				}
-				
+
 				elseif ($term[$zeile][$j] == "#") {
 					$csp = $link_edit_column;
 					if ($link_edit)
@@ -412,25 +412,25 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 						$colspan_attr = " colspan=\"$csp\"";
 					else
 						$colspan_attr = "";
-						
+
 						$tab[$zeile] .= "<td class=\"$style_cell\"$colspan_attr>";
 						$tab[$zeile] .= "<font class=\"inday\">&nbsp;</font></td>\n";
-						
+
 					$height = "";
 				}
-				
+
 				elseif ($term[$zeile][$j] == "") {
 					$csp = $max_spalte - $j + $link_edit_column;
 					if ($csp > 1)
 						$colspan_attr = " colspan=\"$csp\"";
 					else
 						$colspan_attr = "";
-					
+
 					if ($link_edit) {
 						$tab[$zeile] .= "<td class=\"$style_cell\"$colspan_attr align=\"right\" valign=\"bottom\">";
 						$tab[$zeile] .= sprintf("<a href=\"$PHP_SELF?cmd=edit&atime=%s\">"
 															, $day_obj->getStart() + $i * $step);
-						$tab[$zeile] .= "<img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calplus.gif\" ";
+						$tab[$zeile] .= "<img src=\"".$GLOBALS['ASSETS_URL']."images/calplus.gif\" ";
 						$tab[$zeile] .= "border=\"0\" $link_edit_tooltip>";
 						$tab[$zeile] .= "</a></td>\n";
 					}
@@ -438,53 +438,53 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 						$tab[$zeile] .= "<td class=\"$style_cell\"$colspan_attr>";
 						$tab[$zeile] .= "<font class=\"inday\">&nbsp;</font></td>\n";
 					}
-					
+
 					$link_notset = FALSE;
 					$height = "";
 					break;
 				}
-				
+
 			}
-	
+
 		}
-		
+
 		if ($link_edit && $link_notset) {
 			$tab[$zeile] .= "<td class=\"$style_cell\" align=\"right\" valign=\"bottom\">";
 			$tab[$zeile] .= "<a href=\"$PHP_SELF?cmd=edit&atime=" . ($day_obj->getStart() + $i * $step);
-			$tab[$zeile] .= "\"><img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calplus.gif\" ";
+			$tab[$zeile] .= "\"><img src=\"".$GLOBALS['ASSETS_URL']."images/calplus.gif\" ";
 			$tab[$zeile] .= "border=\"0\" $link_edit_tooltip>";
 			$tab[$zeile] .= "</a></td>\n";
 		}
-		
+
 		if ($compact)
 			$tab[$zeile] .= "</tr>\n";
-		
+
 		// sonst zerlegt array_merge (siehe unten) die Tabelle
 		if (!isset($tab[$zeile]))
 			$tab[$zeile] = "";
-	
+
 	}
-		
+
 	if ($max_spalte == 0)
 		$max_spalte = 1;
-		
+
 	if ($link_edit && sizeof($tmp_event))
 		$max_spalte++;
-		
+
 	if ($precol) {
 		if ($step >= 3600)
 			$max_spalte++;
 		else
 			$max_spalte += 2;
 	}
-	
+
 	$tab = array_merge($day_event_row, $tab);
-	
+
 	if ($compact)
 		$tab = implode("", $tab);
-	
+
 	return array("table" => $tab, "max_columns" => $max_spalte);
-	
+
 }
 
 function maxValue ($term, $st) {
@@ -499,7 +499,7 @@ function maxValue ($term, $st) {
 		if ($max > $max_value)
 			$max_value = $max;
 	}
-	
+
 	return $max_value;
 }
 
@@ -513,11 +513,11 @@ function createWeekTable ($week_obj, $start = 6, $end = 21, $step = 3600,
 	$rows = ($end - $start + 1) * 3600 / $step;
 	// calculating the maximum title length
 	$length = ceil(125 / $week_obj->getType());
-	
+
 	for ($i = 0; $i < $week_obj->getType(); $i++)
 		$tab_arr[$i] = createDayTable($week_obj->wdays[$i], $start, $end, $step, FALSE,
 												FALSE, $link_edit, $length, 20, 4, 1, 'small');
-		
+
 	// weekday and date as title for each column
 	for ($i = 0; $i < $week_obj->getType(); $i++) {
 		// add up all colums of each day
@@ -527,7 +527,7 @@ function createWeekTable ($week_obj, $start = 6, $end = 21, $step = 3600,
 			$tab[0] .= "<td class=\"steelgroup0\" align=\"center\" width=\"19%\"";
 		else
 			$tab[0] .= "<td class=\"steelgroup0\" align=\"center\" width=\"13%\"";
-			
+
 		if ($tab_arr[$i]["max_columns"] > 1)
 			$tab[0] .= " colspan=\"{$tab_arr[$i]["max_columns"]}\"";
 		$tab[0] .= "><a class=\"calhead\" href=\"$PHP_SELF?cmd=showday&atime=$dtime\"><b>";
@@ -535,7 +535,7 @@ function createWeekTable ($week_obj, $start = 6, $end = 21, $step = 3600,
 	}
 	if ($compact)
 		$tab[0] = "<tr>{$tab[0]}</tr>\n";
-		
+
 	// put the table together
 	for ($i = 1;$i < $rows + 2;$i++){
 		if ($compact)
@@ -546,10 +546,10 @@ function createWeekTable ($week_obj, $start = 6, $end = 21, $step = 3600,
 		if ($compact)
 			$tab[$i] .= "</tr>\n";
 	}
-	
+
 	if ($compact)
 		$tab = implode("", $tab);
-			
+
 	return array("table" => $tab, "max_columns" => $max_columns);
 
 }
@@ -583,13 +583,13 @@ function includeMonth ($ptime, $href, $mod = "", $js_include = "") {
 	global $ABSOLUTE_PATH_STUDIP, $RELATIVE_PATH_CALENDAR, $CANONICAL_RELATIVE_PATH_STUDIP;
 	require_once($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/lib/CalendarMonth.class.php");
 	global $imt, $atime;
-	
+
 	if ($imt)
 		$xtime = $imt;
 	else
 		$xtime = $ptime;
-	
-	//$js_include = " " . $js_include;		
+
+	//$js_include = " " . $js_include;
 
 	$amonth = new CalendarMonth($xtime);
 	$now = mktime(12, 0, 0, date("n", time()), date("j", time()), date("Y", time()), 0);
@@ -600,7 +600,7 @@ function includeMonth ($ptime, $href, $mod = "", $js_include = "") {
 	$ret .= "<tr><td class=\"steelgroup0\" align=\"center\">\n";
 	$ret .= "<table border=\"0\" cellspacing=\"1\" cellpadding=\"1\">\n";
 	$ret .= "<tr>\n";
-	
+
 	// navigation arrows left
 	$ret .= "<td align=\"center\" class=\"steelgroup0\" valign=\"top\">\n";
 	if ($mod == 'NONAV') {
@@ -608,10 +608,10 @@ function includeMonth ($ptime, $href, $mod = "", $js_include = "") {
 	} else {
 		$ret .= "<a href=\"$href$ptime&imt=";
 		$ret .= mktime(0, 0, -1, $amonth->mon, 15, $amonth->year - 1) . "\">";
-		$ret .= "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calendar_previous_double_small.gif\"";
+		$ret .= "<img border=\"0\" src=\"".$GLOBALS['ASSETS_URL']."images/calendar_previous_double_small.gif\"";
 		$ret .= tooltip(_("ein Jahr zurück")) . "></a>";
 		$ret .= "<a href=\"$href$ptime&imt=" . ($amonth->getStart() - 1) . "\">";
-		$ret .= "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calendar_previous_small.gif\"";
+		$ret .= "<img border=\"0\" src=\"".$GLOBALS['ASSETS_URL']."images/calendar_previous_small.gif\"";
 		$ret .= tooltip(_("einen Monat zurück")) . "></a>\n";
 	}
 	$ret .= "</td>\n";
@@ -627,11 +627,11 @@ function includeMonth ($ptime, $href, $mod = "", $js_include = "") {
 		$ret .= '&nbsp;';
 	} else {
 		$ret .=	"<a href=\"$href$ptime&imt=" . ($amonth->getEnd() + 1) . "\">";
-		$ret .= "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calendar_next_small.gif\"";
+		$ret .= "<img border=\"0\" src=\"".$GLOBALS['ASSETS_URL']."images/calendar_next_small.gif\"";
 		$ret .= tooltip(_("einen Monat vor")) . "></a>";
 		$ret .= "<a href=\"$href$ptime&imt=";
 		$ret .= (mktime(0, 0, 1, $amonth->mon, 1, $amonth->year + 1)) . "\">";
-		$ret .= "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calendar_next_double_small.gif\"";
+		$ret .= "<img border=\"0\" src=\"".$GLOBALS['ASSETS_URL']."images/calendar_next_double_small.gif\"";
 		$ret .= tooltip(_("ein Jahr vor")) . "></a>\n";
 	}
 	$ret .= "</td></tr>\n";
@@ -660,10 +660,10 @@ function includeMonth ($ptime, $href, $mod = "", $js_include = "") {
 	$cor = 0;
 	if ($amonth->mon == 3)
 		$cor = 1;
-		
+
 	$last_day = ((42 - ($adow + date("t", $amonth->getStart()))) % 7 + $cor) * 86400
 	 	        + $amonth->getEnd() - 43199;
-						
+
 	for ($i = $first_day, $j = 0; $i <= $last_day; $i += 86400, $j++) {
 		$aday = date("j", $i);
 		// Tage des vorangehenden und des nachfolgenden Monats erhalten andere
@@ -671,22 +671,22 @@ function includeMonth ($ptime, $href, $mod = "", $js_include = "") {
 		$style = "";
 		if (($aday - $j - 1 > 0) || ($j - $aday  > 6))
 			$style = "light";
-		
+
 		// Feiertagsueberpruefung
 		$hday = holiday($i);
-		
+
 		if ($j % 7 == 0)
 			$ret .= "<tr>";
-		
+
 		if (abs($now - $i) < 43199 && !($mod == 'NONAV' && $style == 'light'))
 			$ret .= "<td class=\"celltoday\" ";
 		elseif (date('m', $i) != $amonth->mon)
 			$ret .= "<td class=\"lightmonth\"";
 		else
 			$ret .= "<td class=\"month\"";
-			
+
 		$ret .= "align=\"center\" width=\"$width\" height=\"$height\">";
-		
+
 		$js_inc = '';
 		if (is_array($js_include)) {
 			$js_inc = " onClick=\"{$js_include['function']}(";
@@ -747,35 +747,34 @@ function includeMonth ($ptime, $href, $mod = "", $js_include = "") {
 
 function fit_title ($title, $cols, $rows, $max_length, $end_str = "...", $pad = TRUE) {
 	global $auth;
-	
 	if ($auth->auth["jscript"])
 		$max_length = $max_length * ($auth->auth["xres"] / 1024);
-	
+
 	$title_length = strlen($title);
 	$length = ceil($max_length / $cols);
 	$new_title = substr($title, 0, $length * $rows);
-	
+
 	if (strlen($new_title) < $title_length)
 		$new_title = substr($new_title, 0, - (strlen($end_str))) . $end_str;
-	
+
 	$new_title = htmlentities(wordwrap($new_title, $length, "\n", TRUE), ENT_QUOTES);
 	$new_title = str_replace("\n", "<br>", $new_title);
-	
+
 	if ($pad && $title_length < $length)
 		$new_title .= str_repeat("&nbsp;", $length - $title_length);
-		
+
 	return $new_title;
 }
 
 function js_hover ($aterm) {
 	global $forum, $auth;
-	
+
 	if ($forum["jshover"] == 1 AND $auth->auth["jscript"]) { // Hovern
 		$jscript_text = array();
-		
+
 		$jscript_text = '<b>' . _("Zusammenfassung:") . ' </b>'
 				. htmlReady($aterm->getTitle()) . '<hr>';
-		
+
 		if (get_class($aterm) == 'seminarevent') {
 			$jscript_text .= '<b>' . _("Veranstaltung:") . ' </b> '
 					. htmlReady($aterm->getSemName()) . '<br>';
@@ -800,46 +799,46 @@ function js_hover ($aterm) {
 			$jscript_text .= '<b>' . _("Wiederholung:") . ' </b>'
 					. htmlReady($aterm->toStringRecurrence()) . '<br>';
 		}
-		
+
 		$jscript_text = "'" . JSReady($jscript_text, 'contact')
 								. "',CAPTION,'"
 								. JSReady($aterm->toStringDate('SHORT_DAY'))
 							//	. "&nbsp; &nbsp; ". $jscript_title
 								. "',NOCLOSE,CSSOFF";
-		
+
 		return " onmouseover=\"return overlib($jscript_text);\" onmouseout=\"return nd();\"";
 	}
-	
+
 	return "";
 }
 
 function info_icons (&$event) {
 	global $CANONICAL_RELATIVE_PATH_STUDIP;
-	
+
 	$ret = '';
 	$div = FALSE;
 	$tooltip = _("Öffentlicher Termin");
-	
+
 	if ($event->getType() == 'PUBLIC') {
 		$ret .= "<div align=\"right\">";
 		$div = TRUE;
-		$ret .= "<img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calendar_public.gif\" ";
+		$ret .= "<img src=\"".$GLOBALS['ASSETS_URL']."images/calendar_public.gif\" ";
 		$ret .= "border=\"0\"" . tooltip($tooltip) . " valign>";
 	}
-	
+
 	if ($event->getRepeat('rtype') != 'SINGLE') {
 		if (!$div)
 			$ret .= "<div align=\"right\">";
-		$ret .= "<img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/recur.gif\" ";
+		$ret .= "<img src=\"".$GLOBALS['ASSETS_URL']."images/recur.gif\" ";
 		$ret .= "border=\"0\"" . tooltip($event->toStringRecurrence()) . ">";
 	}
-	
+
 	$ret .= "</div>";
-	
+
 	return $ret;
 }
 
 function date_insert_popup () {}
-	
+
 
 ?>

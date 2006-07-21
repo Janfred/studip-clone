@@ -74,19 +74,20 @@ function export_form($range_id, $ex_type = "", $filename = "", $format = "", $fi
 * @param		string	$filter	grouping-category for export
 * @return		string
 */
-function export_link($range_id, $ex_type = "", $filename = "", $format = "", $choose = "", $filter = "")
+function export_link($range_id, $ex_type = "", $filename = "", $format = "", $choose = "", $filter = "", $content = "")
 {
 	global $ABSOLUTE_PATH_STUDIP, $PATH_EXPORT, $xslt_filename, $i_page;
 
 	$filename = $xslt_filename;
-	$export_string .= "";
+	$export_string = "";
 	if ($choose != "")
 		$export_string .= "<a href=\"" . "export.php?range_id=$range_id&ex_type=$ex_type&xslt_filename=$filename&format=$format&choose=$choose&o_mode=processor&filter=$filter&jump=$i_page\">";
 	elseif ($ex_type != "")
 		$export_string .= "<a href=\"" . "export.php?range_id=$range_id&ex_type=$ex_type&xslt_filename=$filename&o_mode=choose&filter=$filter\">";
 	else
 		$export_string .= "<a href=\"" . "export.php?range_id=$range_id&o_mode=start\">";
-	$export_string .= _("Diese Daten exportieren");
+	$export_string .= '<img src="'. $GLOBALS['ASSETS_URL'] .'images/link_intern.gif" border="0" hspace="5" align="absmiddle">';
+	$export_string .= ($content ? $content : _("Diese Daten exportieren"));
 	$export_string .= "</a>";
 	return $export_string;
 }

@@ -43,6 +43,32 @@ if ($username == $auth->auth["uname"]) {
 // if (!$perm->have_perm("admin"))
 	$structure['mystudip'] = array('topKat' => "", 'name' => _("My Stud.IP"), 'link' => "edit_about.php?view=allgemein&username=$username", 'active' => FALSE);
 }
+if ($GLOBALS["PLUGINS_ENABLE"]){
+	// PluginEngine aktiviert. 
+	// Prüfen, ob HomepagePlugins vorhanden sind.
+	$homepagepluginpersistence = PluginEngine::getPluginPersistence("Homepage");	
+	$activatedhomepageplugins = $homepagepluginpersistence->getAllActivatedPlugins();
+	if (!is_array($activatedhomepageplugins)){
+		$activatedhomepageplugins = array();
+	}
+	foreach ($activatedhomepageplugins as $activatedhomepageplugin){
+		// hier nun die HomepagePlugins anzeigen
+		if ($activatedhomepageplugin->hasNavigation()){			
+			$hppluginnav = $activatedhomepageplugin->getNavigation();
+			$structure["hpplugin_" . $activatedhomepageplugin->getPluginid()] = array('topKat' => '', 'name' => $hppluginnav->getDisplayname(), 'link' => PluginEngine::getLink($activatedhomepageplugin,array("requesteduser" => $username)), 'active' => FALSE);
+			$pluginsubmenu["_hpplugin_" . $activatedhomepageplugin->getPluginId()] = array(topKat=>"hpplugin_" . $activatedhomepageplugin->getPluginId(), name=>$hppluginnav->getDisplayname(),link=>PluginEngine::getLink($activatedhomepageplugin,array("requesteduser" => $username)),active=>false);
+			$submenu = $hppluginnav->getSubMenu();
+			// create bottomkats for activated plugins
+			foreach ($submenu as $submenuitem){
+				$submenuitem->addLinkParam("requesteduser",$username);
+				// create entries in a temporary structure and add it to structure later
+				$pluginsubmenu["hpplugin_" . $activatedhomepageplugin->getPluginId() . "_" . $submenuitem->getDisplayname()] = array (topKat=>"hpplugin_" . $activatedhomepageplugin->getPluginId(), name=>$submenuitem->getDisplayname(), link=>PluginEngine::getLink($activatedhomepageplugin,$submenuitem->getLinkParams()), active=>false); 
+			}
+		}
+	}
+	// now insert the bottomkats
+	$structure = array_merge($structure,$pluginsubmenu);
+}
 //Bottomkats
 $structure["_alle"] = array('topKat' => "alle", 'name' => _("Pers&ouml;nliche Homepage"), 'link' => "about.php?username=$username", 'active' => FALSE);
 $structure["_bild"] = array('topKat' => "bild", 'name' => _("Hochladen des pers&ouml;nlichen Bildes"), 'link' => "edit_about.php?view=Bild&username=$username", 'active' => FALSE);
@@ -84,7 +110,44 @@ if ($perm->have_perm("autor") AND $ELEARNING_INTERFACE_ENABLE) {
 if (!$perm->have_perm("admin")) {
 	$structure["login"] = array('topKat' => 'mystudip', 'name' => _("Login"), 'link' => "edit_about.php?view=Login&username=$username", 'active' => FALSE);
 }
+// check if view is maintained by a plugin
+$found = false;
+if ($PLUGINS_ENABLE){
+	if (is_array($activatedhomepageplugins)){
+		$pluginid = $_GET["id"];
+		// Namen der aufgerufenen Datei aus der URL herausschneiden
+		if (strlen($i_page) <= 0){
+			$i_page = basename($PHP_SELF);
+		} 
+		if ($i_page == "plugins.php"){
+			foreach ($activatedhomepageplugins as $activatedhomepageplugin){
+				if ($activatedhomepageplugin->hasNavigation() && ($activatedhomepageplugin->getPluginId() == $pluginid)){
+					// Hauptmenü gefunden
+					$reiter_view="hpplugin_" . $activatedhomepageplugin->getPluginId();
+					$navi = $activatedhomepageplugin->getNavigation();
+					$submenu = $navi->getSubMenu();
+					
+					if (submenu != null){
+    					foreach ($submenu as $submenuitem){
+    						$params = $submenuitem->getLinkParams();
+    						    						
+    						foreach ($params as $key => $val){
+        						if (isset($_GET["$key"]) && $_GET["$key"] == $val){
+        						   $reiter_view="hpplugin_" . $activatedhomepageplugin->getPluginId() . "_" . $submenuitem->getDisplayname();
+        						   break;
+        						}
+        					}
+    					}
+    				}
+					$found= true;
+					break;
+				}
+			}
+		}
+	}
+}
 
+if (!$found){
 //View festlegen
 switch ($i_page) {
 	case "about.php" : 
@@ -155,10 +218,13 @@ switch ($i_page) {
    case "admin_evaluation.php":
 		$reiter_view = "eval";
 	break;
+   case "eval_summary.php":
+                $reiter_view = "eval";
+        break;
 	default :
 		$reiter_view="alle";
 	break;
 }
-
+}
 $reiter->create($structure, $reiter_view, $alt, $js);
 ?>

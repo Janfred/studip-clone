@@ -30,15 +30,15 @@
 
 require_once $GLOBALS['ABSOLUTE_PATH_STUDIP'] . "lib/classes/RSSFeed.class.php";
 
-function print_rss($username) {	
-	
+function print_rss($username) {
+
 	global $view,$PHP_SELF,$auth, $ABSOLUTE_PATH_STUDIP;
-	
+
 	$db=new DB_Seminar;
 	$cssSw=new cssClassSwitcher;
 
 	$cssSw->switchClass();
-	
+
 	$db->query(sprintf("SELECT * FROM auth_user_md5 a, rss_feeds r WHERE a.username='%s' AND a.user_id=r.user_id ORDER BY r.priority",$username));
 	echo "<tr><td align=\"left\" valign=\"top\" class=\"blank\"><blockquote><br>";
 	echo _("Hier können Sie beliebige eigene RSS Feeds einbinden. Diese RSS Feeds erscheinen auf Ihrer pers&ouml;nlichen Startseite. Mit den Pfeilsymbolen k&ouml;nnen sie die Reihenfolge, in der die RSS Feeds angezeigt werden, ver&auml;ndern.");
@@ -53,7 +53,7 @@ function print_rss($username) {
 	echo "<tr><td class=\"".$cssSw->getClass()."\"><blockquote>" . _("RSS Feed") . "&nbsp; <a href='$PHP_SELF?rss=create_rss&view=$view&username=$username&show_rss_bsp=$show_rss_bsp'>" . makeButton("neuanlegen") . "</a></blockquote></td></tr>";
 	$count = 0;
 	while ($db->next_record() ){
-		
+
 			$cssSw->switchClass();
 			$id = $db->f("feed_id");
 			echo "<tr><td class=\"".$cssSw->getClass()."\">";
@@ -66,12 +66,12 @@ function print_rss($username) {
             echo ">" . _("Name des Feeds holen") . "&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;";
 			if ($count){
 				echo "\n<a href=\"$PHP_SELF?rss=order_rss&direction=up&username=$username&view=$view&cat_id=" . $db->f("feed_id")
-				. "&show_rss_bsp=$show_rss_bsp\"><img src=\"pictures/move_up.gif\" hspace=\"4\" width=\"13\" height=\"11\" border=\"0\" " 
+				. "&show_rss_bsp=$show_rss_bsp\"><img src=\"".$GLOBALS['ASSETS_URL']."images/move_up.gif\" hspace=\"4\" width=\"13\" height=\"11\" border=\"0\" "
 				. tooltip(_("RSS Feed nach oben verschieben")) ."></a>";
 			}
 			if ($count != ($db->num_rows()-1) ){
 				echo "\n<a href=\"$PHP_SELF?rss=order_rss&direction=down&username=$username&view=$view&cat_id=" . $db->f("feed_id")
-				. "&show_rss_bsp=$show_rss_bsp\"><img src=\"pictures/move_down.gif\" hspace=\"4\" width=\"13\" height=\"11\" border=\"0\" " 
+				. "&show_rss_bsp=$show_rss_bsp\"><img src=\"". $GLOBALS['ASSETS_URL'] . "images/move_down.gif\" hspace=\"4\" width=\"13\" height=\"11\" border=\"0\" "
 				. tooltip(_("RSS Feed nach unten verschieben")) ."></a>";
 			}
 			echo "<br>&nbsp;</td></tr>";
@@ -106,7 +106,7 @@ function create_rss() {
 
 function delete_rss($rss_id) {
 	global $username;
-	
+
 	$db=new DB_Seminar;
 	$db->query ("SELECT * FROM rss_feeds LEFT JOIN auth_user_md5 USING (user_id) WHERE username = '$username' and feed_id='$rss_id'");
 	if (!$db->next_record()) { //hier wollte jemand schummeln

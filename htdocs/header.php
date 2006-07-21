@@ -1,9 +1,9 @@
 <?php
 /**
 * header
-* 
+*
 * head line of Stud.IP
-* 
+*
 *
 * @author		Stefan Suchi <suchi@data-quest.de>
 * @version		$Id$
@@ -36,11 +36,16 @@
 
 if ($SHOW_TERMS_ON_FIRST_LOGIN){
 	require_once ("$ABSOLUTE_PATH_STUDIP/terms.inc.php");
-	check_terms($user->id, $_language_path);	
-} 
+	check_terms($user->id, $_language_path);
+}
 
 if ($GLOBALS["PLUGINS_ENABLE"]){
 	$pluginengine = PluginEngine::getPluginPersistence("System");
+}
+
+if ($USER_VISIBILITY_CHECK) {
+	require_once("user_visible.inc.php");
+	first_decision($user->id);
 }
 
 ob_start();
@@ -53,7 +58,7 @@ require_once ($ABSOLUTE_PATH_STUDIP . "functions.php");
 require_once ($ABSOLUTE_PATH_STUDIP . "sms_functions.inc.php");
 
 if ($GLOBALS['CHAT_ENABLE']){
-	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php"; 
+	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php";
 	$chatServer =& ChatServer::GetInstance($GLOBALS['CHAT_SERVER_NAME']);
 	$chatServer->caching = true;
 	$sms = new messaging();
@@ -68,11 +73,28 @@ if ($GLOBALS['CHAT_ENABLE']){
 }
 
 // Initialisierung der Hilfe
-$help_query = "?referrer_page=" . $i_page;
-if (isset($i_query[0]) && $i_query[0] != "") {
-	for ($i = 0; $i < count($i_query); $i++) { // alle Parameter durchwandern
-		$help_query .= '&';
-		$help_query .= $i_query[$i];
+if (get_config("EXTERNAL_HELP")) {
+	if (!isset($HELP_KEYWORD)) {
+		$HELP_KEYWORD="Basis.Allgemeines"; //default value
+	}
+	$helppage=$HELP_KEYWORD;
+	// encode current user's global perms for help wiki
+	$helppage.="?setstudipview=".$auth->auth["perm"];
+	// encode locationid for help wiki if set
+	$locationid=get_config("EXTERNAL_HELP_LOCATIONID");
+	if ($locationid) {
+		$helppage.="&setlocationid=".$locationid;
+	}
+	// insert into URL-Template from config
+	$help_query=sprintf(get_config("EXTERNAL_HELP_URL"),$helppage);
+
+} else { // old (internal) help system
+	$help_query = "./help/index.php?referrer_page=" . $i_page;
+	if (isset($i_query[0]) && $i_query[0] != "") {
+		for ($i = 0; $i < count($i_query); $i++) { // alle Parameter durchwandern
+			$help_query .= '&';
+			$help_query .= $i_query[$i];
+		}
 	}
 }
 
@@ -85,26 +107,26 @@ if ($auth->auth["uid"] == "nobody") { ?>
 				<tr>
 
 <?
-				echo MakeToolbar("pictures/home.gif","index.php",_("Start"),_("Zur Startseite"),40,"_top","center", "FALSE", "1");
-				echo MakeToolbar("pictures/meinesem.gif","freie.php",_("Freie"),_("Freie Veranstaltungen"),40, "_top","left", "FALSE", "2");
-				
-?>				
-				</td></tr></table></td>
-			<td class="toolbar" align="center" width=100%">											
-				<table class="toolbar" border="0" width="100%" cellspacing="0" cellpadding="0" height="25">
-				<tr>
+				echo MakeToolbar($GLOBALS['ASSETS_URL']."images/home.gif","index.php",_("Start"),_("Zur Startseite"),40,"_top","center", "FALSE", "1");
+				echo MakeToolbar($GLOBALS['ASSETS_URL']."images/meinesem.gif","freie.php",_("Freie"),_("Freie Veranstaltungen"),40, "_top","left", "FALSE", "2");
 
-
-<?				echo MakeToolbar("pictures/logo2.gif","impressum.php",_("Impressum"),$UNI_NAME_CLEAN." - "._("Informationen über das System"),40,"_top", "center", "FALSE");
 ?>
 				</td></tr></table></td>
-			<td class="toolbar" align="right">											
+			<td class="toolbar" align="center" width=100%">
 				<table class="toolbar" border="0" width="100%" cellspacing="0" cellpadding="0" height="25">
 				<tr>
 
 
-<?				echo MakeToolbar("pictures/hilfe.gif","./help/index.php$help_query",_("Hilfe"),_("Hilfe zu dieser Seite"),40, "_new","right", "FALSE", "9");
-				echo MakeToolbar("pictures/login.gif","index.php?again=yes",_("Login"),_("Am System anmelden"),40,"_top","right", "FALSE", "0");
+<?				echo MakeToolbar($GLOBALS['ASSETS_URL']."images/logo2.gif","impressum.php",_("Impressum"),$UNI_NAME_CLEAN." - "._("Informationen über das System"),40,"_top", "center", "FALSE");
+?>
+				</td></tr></table></td>
+			<td class="toolbar" align="right">
+				<table class="toolbar" border="0" width="100%" cellspacing="0" cellpadding="0" height="25">
+				<tr>
+
+
+<?				echo MakeToolbar($GLOBALS['ASSETS_URL']."images/hilfe.gif",$help_query,_("Hilfe"),_("Hilfe zu dieser Seite"),40, "_new","right", "FALSE", "9");
+				echo MakeToolbar($GLOBALS['ASSETS_URL']."images/login.gif","index.php?again=yes",_("Login"),_("Am System anmelden"),40,"_top","right", "FALSE", "0");
 
 ?>
 			</td></tr></table></td>
@@ -117,7 +139,7 @@ if ($auth->auth["uid"] == "nobody") { ?>
 		$db=new DB_Seminar;
 
 		$myuname=$auth->auth["uname"]; //checken, ob noch gebraucht!
-		
+
 		$tmp_last_visit = ($my_messaging_settings["last_visit"]) ?  $my_messaging_settings["last_visit"] : time();
 		$db->query("SELECT STRAIGHT_JOIN count(*) FROM message LEFT JOIN message_user USING (message_id) WHERE message_user.user_id = '{$user->id}' AND snd_rec = 'rec' AND chat_id IS NOT NULL");
 		$db->next_record();
@@ -125,12 +147,12 @@ if ($auth->auth["uid"] == "nobody") { ?>
 		$neum = count_messages_from_user('in', " AND message_user.readed = 0 ");
 		$altm = count_messages_from_user('in', " AND message_user.readed = 1 ");
 		$neux = count_x_messages_from_user('in', 'all', "AND mkdate > ".(int)$my_messaging_settings["last_box_visit"]." AND message_user.readed = 0 ");
-		
+
 		//globale Objekte zählen
 		$db->query("SELECT  COUNT(nw.news_id) as count,
 					COUNT(IF((chdate > IFNULL(b.visitdate,0) AND nw.user_id !='{$user->id}'),
-					nw.news_id, NULL)) AS neue 
-					FROM   news_range a  LEFT JOIN news nw ON(a.news_id=nw.news_id AND UNIX_TIMESTAMP() BETWEEN date AND (date+expire)) 
+					nw.news_id, NULL)) AS neue
+					FROM   news_range a  LEFT JOIN news nw ON(a.news_id=nw.news_id AND UNIX_TIMESTAMP() BETWEEN date AND (date+expire))
 					LEFT JOIN object_user_visits b ON (b.object_id = nw.news_id AND b.user_id = '{$user->id}' AND b.type ='news')
 					WHERE a.range_id='studip' GROUP BY a.range_id");
 		if ($db->next_record()){
@@ -138,9 +160,9 @@ if ($auth->auth["uid"] == "nobody") { ?>
 			$global_obj['news']['gesamt'] = $db->f('count');
 		}
 		if ($GLOBALS['VOTE_ENABLE']) {
-			$db->query("SELECT  COUNT(vote_id) as count, 
-						COUNT(IF((chdate > IFNULL(b.visitdate,0) AND a.author_id !='{$user->id}' AND a.state != 'stopvis'), vote_id, NULL)) AS neue 
-						FROM  vote a LEFT JOIN object_user_visits b ON (b.object_id = vote_id AND b.user_id = '{$user->id}' AND b.type='vote') 
+			$db->query("SELECT  COUNT(vote_id) as count,
+						COUNT(IF((chdate > IFNULL(b.visitdate,0) AND a.author_id !='{$user->id}' AND a.state != 'stopvis'), vote_id, NULL)) AS neue
+						FROM  vote a LEFT JOIN object_user_visits b ON (b.object_id = vote_id AND b.user_id = '{$user->id}' AND b.type='vote')
 						WHERE a.range_id='studip'  AND a.state IN('active','stopvis')
 						GROUP BY a.range_id");
 			if ($db->next_record()){
@@ -150,7 +172,7 @@ if ($auth->auth["uid"] == "nobody") { ?>
 		$db->query("SELECT  COUNT(a.eval_id) as count,
 					COUNT(IF((chdate > IFNULL(b.visitdate,0) AND d.author_id !='{$user->id}' ), a.eval_id, NULL)) as neue
 					FROM eval_range a INNER JOIN eval d ON ( a.eval_id = d.eval_id AND d.startdate < UNIX_TIMESTAMP( ) AND (d.stopdate > UNIX_TIMESTAMP( ) OR d.startdate + d.timespan > UNIX_TIMESTAMP( ) OR (d.stopdate IS NULL AND d.timespan IS NULL)))
-					LEFT JOIN object_user_visits b ON (b.object_id = d.eval_id AND b.user_id = '{$user->id}' AND b.type='eval') 
+					LEFT JOIN object_user_visits b ON (b.object_id = d.eval_id AND b.user_id = '{$user->id}' AND b.type='eval')
 					WHERE a.range_id='studip' GROUP BY a.range_id");
 			if ($db->next_record()){
 				$global_obj['eval']['neue'] = $db->f('neue');
@@ -164,19 +186,19 @@ if ($auth->auth["uid"] == "nobody") { ?>
 			<table class="toolbar" border="0" width="100%" cellspacing="0" cellpadding="0">
 			<tr>
 <?
-	$home_icon = ($global_obj['eval']['neue'] || $global_obj['vote']['neue'] || $global_obj['news']['neue'] ? "pictures/home_red.gif" : "pictures/home.gif");
+	$home_icon = ($global_obj['eval']['neue'] || $global_obj['vote']['neue'] || $global_obj['news']['neue'] ? $GLOBALS['ASSETS_URL']."images/home_red.gif" : $GLOBALS['ASSETS_URL']."images/home.gif");
 	$home_info .= ($global_obj['news']['neue'] ? " - " . sprintf(_(" %s neue News"), $global_obj['news']['neue']) : "");
 	$home_info .= (($global_obj['vote']['neue'] + $global_obj['eval']['neue']) ? " - " . sprintf(_(" %s neue Umfrage(n)"), ($global_obj['vote']['neue'] + $global_obj['eval']['neue'])) : "");
 	echo MakeToolbar($home_icon  ,"index.php",_("Start"),_("Zur Startseite") . $home_info,40,"_top", "center", "FALSE", "1");
-	echo MakeToolbar("pictures/meinesem.gif",($perm->have_perm("root")) ? "sem_portal.php" : "meine_seminare.php",_("Veranstaltungen"),_("Meine Veranstaltungen & Einrichtungen"),90, "_top","left", "FALSE", "2");
+	echo MakeToolbar($GLOBALS['ASSETS_URL']."images/meinesem.gif",($perm->have_perm("root")) ? "sem_portal.php" : "meine_seminare.php",_("Veranstaltungen"),_("Meine Veranstaltungen & Einrichtungen"),90, "_top","left", "FALSE", "2");
 
 //Nachrichten anzeigen
 	$text = _("Post");
 	$link = "sms_box.php";
 	if ($neum) {
-		$icon = "pictures/nachricht2.gif";
+		$icon = $GLOBALS['ASSETS_URL']."images/nachricht2.gif";
 	} else if (!$neum) {
-		$icon = "pictures/nachricht1.gif";
+		$icon = $GLOBALS['ASSETS_URL']."images/nachricht1.gif";
 	}
 	$link .= "?sms_inout=in";
 	if ($neux >= "1") {
@@ -201,10 +223,10 @@ if ($auth->auth["uid"] == "nobody") { ?>
 
 		if (!($perm->have_perm("admin") || $perm->have_perm("root"))) {
 			if ($GLOBALS['CALENDAR_ENABLE'])
-				echo MakeToolbar("pictures/meinetermine.gif","./calendar.php?caluserid=self",_("Planer"),_("Termine und Kontakte"),40, "_top", "center", "FALSE", "4");
+				echo MakeToolbar($GLOBALS['ASSETS_URL']."images/meinetermine.gif","./calendar.php?caluserid=self",_("Planer"),_("Termine und Kontakte"),40, "_top", "center", "FALSE", "4");
 			else
-				echo MakeToolbar("pictures/meinetermine.gif","./mein_stundenplan.php",_("Planer"),_("Stundenplan und Kontakte"),40, "_top", "center", "FALSE", "4");
-		}		
+				echo MakeToolbar($GLOBALS['ASSETS_URL']."images/meinetermine.gif","./mein_stundenplan.php",_("Planer"),_("Stundenplan und Kontakte"),40, "_top", "center", "FALSE", "4");
+		}
 
 		if ($GLOBALS['CHAT_ENABLE']) {
 			$chatter = $chatServer->getAllChatUsers();
@@ -224,13 +246,13 @@ if ($auth->auth["uid"] == "nobody") { ?>
 				$chat_tip .= ", " . sprintf(_("%s aktive Chaträume"), $active_chats);
 			}
 			if ($chatm){
-				echo MakeToolbar("pictures/chateinladung.gif","chat_online.php",_("Chat"),(($chatm == 1) ? _("Sie haben eine Chateinladung") : sprintf(_("Sie haben %s Chateinladungen"),$chatm)) . ", " . $chat_tip,30,"_top","left");
+				echo MakeToolbar($GLOBALS['ASSETS_URL']."images/chateinladung.gif","chat_online.php",_("Chat"),(($chatm == 1) ? _("Sie haben eine Chateinladung") : sprintf(_("Sie haben %s Chateinladungen"),$chatm)) . ", " . $chat_tip,30,"_top","left");
 			} elseif ($chatter == 1 && $chatServer->chatUser[$user->id]){
-				echo MakeToolbar("pictures/chat3.gif","chat_online.php",_("Chat"),$chat_tip,40,"_top","left");
+				echo MakeToolbar($GLOBALS['ASSETS_URL']."images/chat3.gif","chat_online.php",_("Chat"),$chat_tip,40,"_top","left");
 			} elseif ($chatter) {
-				echo MakeToolbar("pictures/chat2.gif","chat_online.php",_("Chat"),$chat_tip,40,"_top","left");
+				echo MakeToolbar($GLOBALS['ASSETS_URL']."images/chat2.gif","chat_online.php",_("Chat"),$chat_tip,40,"_top","left");
 			} else {
-				echo MakeToolbar("pictures/chat1.gif","chat_online.php",_("Chat"),$chat_tip,40,"_top","left");
+				echo MakeToolbar($GLOBALS['ASSETS_URL']."images/chat1.gif","chat_online.php",_("Chat"),$chat_tip,40,"_top","left");
 			}
 			unset($chatter);
 			unset($active_chats);
@@ -239,15 +261,15 @@ if ($auth->auth["uid"] == "nobody") { ?>
 		// Ist sonst noch wer da?
 		$user_count = get_users_online_count($my_messaging_settings["active_time"]);
 		if (!$user_count)
-			echo MakeToolbar("pictures/nutzer.gif","online.php",_("Online"),_("Nur Sie sind online"),55, "_top","left", "FALSE", "5");
+			echo MakeToolbar($GLOBALS['ASSETS_URL']."images/nutzer.gif","online.php",_("Online"),_("Nur Sie sind online"),55, "_top","left", "FALSE", "5");
 		else {
 			if ($user_count == 1) {
-				echo MakeToolbar("pictures/nutzeronline.gif","online.php",_("Online"),_("Außer Ihnen ist eine Person online"),55, "_top","left", "FALSE", "5");
+				echo MakeToolbar($GLOBALS['ASSETS_URL']."images/nutzeronline.gif","online.php",_("Online"),_("Außer Ihnen ist eine Person online"),55, "_top","left", "FALSE", "5");
 			} else {
-				echo MakeToolbar("pictures/nutzeronline.gif","online.php",_("Online"),sprintf(_("Es sind außer Ihnen %s Personen online"), $user_count),55, "_top","left", "FALSE", "5");
+				echo MakeToolbar($GLOBALS['ASSETS_URL']."images/nutzeronline.gif","online.php",_("Online"),sprintf(_("Es sind außer Ihnen %s Personen online"), $user_count),55, "_top","left", "FALSE", "5");
 			}
 		}
-		
+
 		if ($GLOBALS["PLUGINS_ENABLE"]){
 			$plugins = $pluginengine->getAllActivatedPlugins(); 
 			
@@ -269,11 +291,9 @@ if ($auth->auth["uid"] == "nobody") { ?>
 		 		}
 			}
 		 }
-		 
-		
 ?>
 		<td class="toolbar" width="99%">
-		&nbsp; 
+		&nbsp;
 		</td>
 	</tr>
 	</table>
@@ -284,7 +304,7 @@ if ($auth->auth["uid"] == "nobody") { ?>
 		<table class="toolbar" border="0" width="100%" cellspacing="0" cellpadding="0">
 		<tr align="center">
 <? //create (javascript) info tooltip/window
-				echo MakeToolbar("pictures/logo2.gif","impressum.php",_("Impressum"),$UNI_NAME_CLEAN." - "._("Informationen über das System"),112, "_top", "center", "FALSE");
+				echo MakeToolbar($GLOBALS['ASSETS_URL']."images/logo2.gif","impressum.php",_("Impressum"),$UNI_NAME_CLEAN." - "._("Informationen über das System"),112, "_top", "center", "FALSE");
 ?>
 	</tr>
 	</table>
@@ -293,63 +313,63 @@ if ($auth->auth["uid"] == "nobody") { ?>
 		<table class="toolbar" border="0" width="100%" cellspacing="0" cellpadding="0">
 		<tr>
 			<td class="toolbar" width="99%">
-			&nbsp; 
+			&nbsp;
 			</td>
-			
-<?			
+
+<?
 		if ($perm->have_perm("autor")) {
 			if ($homepage_cache_own)
 				$time = $homepage_cache_own;
 			else
 				$time = $LastLogin;
-			
-			$picture = "pictures/einst.gif";
+
+			$picture = $GLOBALS['ASSETS_URL']."images/einst.gif";
 			$hp_txt = _("Zu Ihrer Einstellungsseite");
 			$hp_link = "about.php";
-			
+
 			$db->query("SELECT COUNT(post_id) AS count
-				FROM guestbook 
-				WHERE range_id='".$user->id."' 
-				AND user_id!='".$user->id."' 
+				FROM guestbook
+				WHERE range_id='".$user->id."'
+				AND user_id!='".$user->id."'
 				AND mkdate > '".$time."'");
-					
+
 			if ($db->next_record()) {
 				if ($db->f("count") == 1) {
 					$hp_txt .= sprintf(_(", Sie haben %s neuen Eintrag im Gästebuch."), $db->f("count"));
-					$picture = "pictures/einst2.gif";
+					$picture = $GLOBALS['ASSETS_URL']."images/einst2.gif";
 					$hp_link .= "?guestbook=open#guest";
 				}
 				if ($db->f("count") > 1) {
 					$hp_txt .= sprintf(_(", Sie haben %s neue Einträge im Gästebuch."), $db->f("count"));
-					$picture = "pictures/einst2.gif";
+					$picture = $GLOBALS['ASSETS_URL']."images/einst2.gif";
 					$hp_link .= "?guestbook=open#guest";
 				}
 			}
 			echo MakeToolbar($picture,$hp_link,_("Homepage"),$hp_txt,40, "_top","right", "FALSE", "6");
 
-			echo MakeToolbar("pictures/suchen.gif","auswahl_suche.php",_("Suche"),_("Im System suchen"),40, "_top", "center", "FALSE", "7");
+			echo MakeToolbar($GLOBALS['ASSETS_URL']."images/suchen.gif","auswahl_suche.php",_("Suche"),_("Im System suchen"),40, "_top", "center", "FALSE", "7");
 		}
 
 		if ($perm->have_perm("tutor")) {
-			echo MakeToolbar("pictures/admin.gif","adminarea_start.php?list=TRUE",_("Admin"),_("Zu Ihrer Administrationsseite"),40, "_top", "center", "FALSE", "8");
+			echo MakeToolbar($GLOBALS['ASSETS_URL']."images/admin.gif","adminarea_start.php?list=TRUE",_("Admin"),_("Zu Ihrer Administrationsseite"),40, "_top", "center", "FALSE", "8");
 		} else {
 			?>
 			<td class="toolbar">
-				<img border="0" src="pictures/blank.gif" heigth="5" width="12"> 
+				<img border="0" src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" heigth="5" width="12">
 			</td>
 			<?
 		}
-		
+
 		$infotext = sprintf (_("Sie sind angemeldet als: %s mit der Berechtigung: %s. Beginn der Session: %s,  letztes Login: %s, %s,  Auflösung: %sx%s, eingestellte Sprache: %s"),
 				$auth->auth["uname"], $auth->auth["perm"], date ("d. M Y, H:i:s", $SessionStart), date ("d. M Y, H:i:s", $LastLogin),
 				($auth->auth["jscript"]) ? _("JavaScript eingeschaltet") : _("JavaScript ausgeschaltet"), $auth->auth["xres"], $auth->auth["yres"], $INSTALLED_LANGUAGES[$_language]["name"]);
-		
 
-		echo MakeToolbar("pictures/info_header.gif","#",trim(mila($auth->auth["uname"],7)),$infotext,68, "","left","TRUE");
+
+		echo MakeToolbar($GLOBALS['ASSETS_URL']."images/info_header.gif","#",trim(mila($auth->auth["uname"],7)),$infotext,68, "","left","TRUE");
 ?>
-<?		
-		echo MakeToolbar("pictures/hilfe.gif","./help/index.php$help_query",_("Hilfe"),_("Hilfe zu dieser Seite"),40, "_new","right","FALSE", "9");
-		echo MakeToolbar("pictures/logout.gif","logout.php",_("Logout"),_("Aus dem System abmelden"),40, "_top", "center", "FALSE", "0");
+<?
+		echo MakeToolbar($GLOBALS['ASSETS_URL']."images/hilfe.gif",$help_query,_("Hilfe"),_("Hilfe zu dieser Seite"),40, "_new","right","FALSE", "9");
+		echo MakeToolbar($GLOBALS['ASSETS_URL']."images/logout.gif","logout.php",_("Logout"),_("Aus dem System abmelden"),40, "_top", "center", "FALSE", "0");
 
 ?>
 	</tr>
@@ -361,7 +381,7 @@ if ($auth->auth["uid"] == "nobody") { ?>
 <?
 
 }
-	
+
 ob_end_flush();
 
 include "check_sem_entry.inc.php"; //hier wird der Zugang zum Seminar ueberprueft

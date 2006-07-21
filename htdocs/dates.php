@@ -1,9 +1,9 @@
 <?php
 /**
 * dates.php
-* 
+*
 * basic script for viewing dates (module schedule)
-* 
+*
 *
 * @author		André Noack <noack@data-quest.de>, Cornelis Kater <kater@data-quest.de>, Stefan Suchi <suchi@data-quest.de>, data-quest GmbH <info@data-quest.de>
 * @version		$Id$
@@ -39,10 +39,13 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "
 $auth->login_if($again && ($auth->auth["uid"] == "nobody"));
 
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+
+$HELP_KEYWORD="Basis.InVeranstaltungAblauf";
+
 // Start of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
-	
+
 require_once("$ABSOLUTE_PATH_STUDIP/show_dates.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
@@ -54,17 +57,17 @@ object_set_visit_module("schedule");
 include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
 
 $sess->register("dates_data");
-	
+
 if ($dopen)
 	$dates_data["open"]=$dopen;
-	
+
 if ($dclose)
 	$dates_data["open"]='';
 
 ?>
 <table width="100%" cellspacing="0" cellpadding="0" border="0">
 	<tr>
-		<td class="topic" >&nbsp;<img src="pictures/icon-uhr.gif" border="0" align="absmiddle" alt="<?_("Ablaufplan")?>"><b>&nbsp;<? echo $SessSemName["header_line"]; ?> - <?=_("Ablaufplan")?></b></td>
+		<td class="topic" >&nbsp;<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/icon-uhr.gif" border="0" align="absmiddle" alt="<?_("Ablaufplan")?>"><b>&nbsp;<? echo $SessSemName["header_line"]; ?> - <?=_("Ablaufplan")?></b></td>
 	</tr>
 	<tr>
 		<td class="blank">&nbsp;
@@ -80,7 +83,7 @@ if ($dclose)
 								<td class="blank" valign ="top">
 									<?
 									$name = rawurlencode($SessSemName[0]);
-									if ($rechte) 
+									if ($rechte)
 										$show_admin=TRUE;
 									else
 										$show_admin=FALSE;
@@ -95,23 +98,23 @@ if ($dclose)
 						<?
 						//Build an infobox
 						$infobox[0]["kategorie"] = _("Informationen:");
-						$infobox[0]["eintrag"][] = array ("icon" => "pictures/ausruf_small.gif",
+						$infobox[0]["eintrag"][] = array ('icon' => "ausruf_small.gif",
 							"text"  =>_("Hier finden Sie alle Termine der Veranstaltung."));
 						if ($rechte) {
-							$infobox[1]["kategorie"] = _("Aktionen:"); 
-							$infobox[1]["eintrag"][] = array ("icon" => "pictures/link_intern.gif",
+							$infobox[1]["kategorie"] = _("Aktionen:");
+							$infobox[1]["eintrag"][] = array ('icon' => "link_intern.gif",
 								"text"  =>"<a href=\"admin_dates.php?insert_new=TRUE#anchor\">"._("Einen neuen Termin anlegen")."</a>");
-							$infobox[1]["eintrag"][] = array ("icon" => "pictures/link_intern.gif",
+							$infobox[1]["eintrag"][] = array ('icon' => "link_intern.gif",
 								"text"  =>"<a href=\"admin_dates.php\">"._("Zur Ablaufplanverwaltung")."</a>");
 						}
-						print_infobox ($infobox, "pictures/schedules.jpg");
+						print_infobox ($infobox, "schedules.jpg");
 						?>
 						<br />
-					</td>				
+					</td>
 				</tr>
 			</table>
 		</td>
-	</tr>								
+	</tr>
 </body>
 </html>
 

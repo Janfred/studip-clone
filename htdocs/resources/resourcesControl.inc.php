@@ -1,9 +1,9 @@
 <?
 /**
 * resourcesControl.php
-* 
+*
 * the controlling body of the resource-management
-* 
+*
 *
 * @author		Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
 * @version		$Id$
@@ -118,7 +118,7 @@ function check_opener(obj){
 	if (!isset($_REQUEST['print_view'])){
 	?>
 	<tr>
-		<td class="topic" >&nbsp;<img src="pictures/meinetermine.gif" border="0" align="absmiddle" alt="Ressourcen"><b>&nbsp;<? echo $title; ?></b></td>
+		<td class="topic" >&nbsp;<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/meinetermine.gif" border="0" align="absmiddle" alt="Ressourcen"><b>&nbsp;<? echo $title; ?></b></td>
 	</tr>
 	<?
 	if ($infobox) {
@@ -139,7 +139,7 @@ function check_opener(obj){
 						<?
 						if ($msg->checkMsgs()) {
 							if (!$infobox)
-									print "<tr><td class=\"blank\">&nbsp; </td></tr>";							
+									print "<tr><td class=\"blank\">&nbsp; </td></tr>";
 							$msg->displayAllMsg("line");
 							print "<tr><td class=\"blank\">&nbsp; </td></tr>";
 						}
@@ -149,19 +149,19 @@ function check_opener(obj){
 							<td class="blank"><? (!$infobox) ? print "<br />":"" ?>
 								<table width="99%" align="center" border="0" cellpadding="2" cellspacing ="0">
 									<tr><td>
-										<font size="-1"><? echo $page_intro ?></font><br />&nbsp; 
+										<font size="-1"><? echo $page_intro ?></font><br />&nbsp;
 									</td></tr>
 								</table>
 							</td>
-						</tr>	
+						</tr>
 						<?
 						}
 	}
 	?>
 	<tr>
 		<td class="blank" valign ="top">
-	
-	<?	
+
+	<?
 
 /*****************************************************************************
 Treeview, die Strukturdarstellung, views: resources, _resources, make_hierarchie
@@ -179,13 +179,13 @@ if ($view == "resources" || $view == "_resources"){
 
 	$resUser=new ResourcesUserRoots($range_id);
 	$thread=new ShowThread();
-	
+
 	$roots=$resUser->getRoots();
 	if (is_array($roots)) {
 		foreach ($roots as $a) {
 			$thread->showThreadLevel($a);
 		}
-		echo "<br />&nbsp;";			
+		echo "<br />&nbsp;";
 	} else {
 		echo "</td></tr>";
 		$msg->displayMsg(12);
@@ -194,7 +194,7 @@ if ($view == "resources" || $view == "_resources"){
 	if ($edit_structure_object) {
 		echo "</form>";
 	}
-	
+
 }
 
 /*****************************************************************************
@@ -209,14 +209,14 @@ if ($view == "lists" || $view == "_lists" || $view == "openobject_main") {
 		$list->setRecurseLevels(-1);
 	else
 		$list->setRecurseLevels(0);
-		
+
 	if ($view != "openobject_main")
 		$list->setAdminButtons(TRUE);
-	
+
 	if ($edit_structure_object) {
 		echo"<form method=\"POST\" action=\"$PHP_SELF\">";
 	}
-	
+
 	if ($view == "openobject_main") {
 		if (!$list->showRangeList($SessSemName[1])) {
 			echo "</td></tr>";
@@ -228,7 +228,7 @@ if ($view == "lists" || $view == "_lists" || $view == "openobject_main") {
 			$msg->displayMsg(14);
 		}
 	}
-	
+
 	if ($edit_structure_object) {
 		echo "</form>";
 	}
@@ -256,10 +256,10 @@ Objecteigenschaften anzeigen, views: openobject_details
 if (($view == "openobject_details")  || ($view == "view_details")) {
 	require_once ($RELATIVE_PATH_RESOURCES."/views/ShowObject.class.php");
 	require_once ($RELATIVE_PATH_RESOURCES."/lib/ResourceObjectPerms.class.php");
-	
+
 	//$perms = new ResourceObjectPerms($resources_data["actual_object"]);
 	//echo $perms->getUserPerm();
-	
+
 	if ($resources_data["actual_object"]) {
 		$viewObject = new ShowObject($resources_data["actual_object"]);
 		$viewObject->showProperties();
@@ -289,7 +289,7 @@ Objectbelegung bearbeiten, views: edit_object_assign, openobject_assign
 /*****************************************************************************/
 if ($view == "edit_object_assign" || $view == "openobject_assign") {
 	require_once ($RELATIVE_PATH_RESOURCES."/views/EditResourceData.class.php");
-	
+
 	if ($view == "edit_object_assign") {
 		$suppress_infobox = TRUE;
 		?>						</td>
@@ -304,7 +304,7 @@ if ($view == "edit_object_assign" || $view == "openobject_assign") {
 					</td>
 					<?
 				}
-			?>				
+			?>
 				</tr>
 			</table>
 		</td>
@@ -316,7 +316,7 @@ if ($view == "edit_object_assign" || $view == "openobject_assign") {
 				<td valign ="top">
 			<?
 		}
-	
+
 	if ($resources_data["actual_object"]) {
 		$editObject=new EditResourceData($resources_data["actual_object"]);
 		$editObject->setUsedView($view);
@@ -335,7 +335,7 @@ Typen verwalten, views: edit_types
 /*****************************************************************************/
 if ($view == "edit_types") {
 	require_once ($RELATIVE_PATH_RESOURCES."/views/EditSettings.class.php");
-	
+
 	$editSettings=new EditSettings;
 	$editSettings->showTypesForms();
 }
@@ -345,7 +345,7 @@ Eigenschaften verwalten, views: edit_properties
 /*****************************************************************************/
 if ($view == "edit_properties") {
 	require_once ($RELATIVE_PATH_RESOURCES."/views/EditSettings.class.php");
-	
+
 	$editSettings=new EditSettings;
 	$editSettings->showPropertiesForms();
 }
@@ -355,7 +355,7 @@ Berechtigungen verwalten, views: edit_perms
 /*****************************************************************************/
 if ($view == "edit_perms") {
 	require_once ($RELATIVE_PATH_RESOURCES."/views/EditSettings.class.php");
-	
+
 	$editSettings=new EditSettings;
 	$editSettings->showPermsForms();
 }
@@ -370,10 +370,10 @@ if ($view == "view_schedule" || $view == "openobject_schedule") {
 		$ViewSchedules->setStartTime($resources_data["schedule_start_time"]);
 		$ViewSchedules->setEndTime($resources_data["schedule_end_time"]);
 		$ViewSchedules->setLengthFactor($resources_data["schedule_length_factor"]);
-		$ViewSchedules->setLengthUnit($resources_data["schedule_length_unit"]);	
-		$ViewSchedules->setWeekOffset($resources_data["schedule_week_offset"]);	
-		$ViewSchedules->setUsedView($view);	
-		
+		$ViewSchedules->setLengthUnit($resources_data["schedule_length_unit"]);
+		$ViewSchedules->setWeekOffset($resources_data["schedule_week_offset"]);
+		$ViewSchedules->setUsedView($view);
+
 		$ViewSchedules->navigator();
 		$suppress_infobox = TRUE;
 		?>						</td>
@@ -388,7 +388,7 @@ if ($view == "view_schedule" || $view == "openobject_schedule") {
 					</td>
 					<?
 				}
-			?>				
+			?>
 				</tr>
 			</table>
 		</td>
@@ -417,7 +417,7 @@ if ($view == "view_sem_schedule") {
 	require_once ($RELATIVE_PATH_RESOURCES."/views/ShowSemSchedules.class.php");
 	if ($resources_data["actual_object"]) {
 		$ViewSchedules =& new ShowSemSchedules($resources_data["actual_object"], $resources_data['sem_schedule_semester_id'],$resources_data['sem_schedule_timespan']);
-		$ViewSchedules->setUsedView($view);	
+		$ViewSchedules->setUsedView($view);
 		$ViewSchedules->navigator($_REQUEST['print_view']);
 		$suppress_infobox = TRUE;
 		?>						</td>
@@ -432,7 +432,7 @@ if ($view == "view_sem_schedule") {
 					</td>
 					<?
 				}
-			?>				
+			?>
 				</tr>
 			</table>
 		</td>
@@ -459,7 +459,7 @@ if ($view == "view_group_schedule") {
 	$room_group = RoomGroups::GetInstance();
 	if (isset($room_group->room_groups[$resources_data["actual_room_group"]]['rooms'])) {
 		$ViewSchedules =& new ShowGroupSchedules($resources_data['actual_room_group'], $resources_data['sem_schedule_semester_id'],$resources_data['sem_schedule_timespan'], $resources_data['group_schedule_dow']);
-		$ViewSchedules->setUsedView($view);	
+		$ViewSchedules->setUsedView($view);
 		$ViewSchedules->navigator($_REQUEST['print_view']);
 		$suppress_infobox = TRUE;
 		?>						</td>
@@ -474,7 +474,7 @@ if ($view == "view_group_schedule") {
 					</td>
 					<?
 				}
-			?>				
+			?>
 				</tr>
 			</table>
 		</td>
@@ -499,7 +499,7 @@ persoenliche Einstellungen verwalten, views: edit_personal_settings
 /*****************************************************************************/
 if ($view == "edit_settings") {
 	require_once ($RELATIVE_PATH_RESOURCES."/views/EditSettings.class.php");
-	
+
 	$editSettings=new EditSettings;
 	$editSettings->showSettingsForms();
 }
@@ -509,14 +509,14 @@ Search
 /*****************************************************************************/
 if ($view == "search") {
 	require_once ($RELATIVE_PATH_RESOURCES."/views/ResourcesBrowse.class.php");
-	
+
 	$search=new ResourcesBrowse;
 	$search->setStartLevel('');
 	$search->setMode($resources_data["search_mode"]);
 	$search->setCheckAssigns($resources_data["check_assigns"]);
 	$search->setSearchOnlyRooms($resources_data["search_only_rooms"]);
 	$search->setSearchArray($resources_data["search_array"]);
-	
+
 	if ($resources_data["browse_open_level"])
 		$search->setOpenLevel($resources_data["browse_open_level"]);
 	$search->showSearch();
@@ -527,14 +527,14 @@ Roomplanning
 /*****************************************************************************/
 if ($view == "requests_start") {
 	require_once ($RELATIVE_PATH_RESOURCES."/views/ShowToolsRequests.class.php");
-	
+
 	$toolReq=new ShowToolsRequests;
 	$toolReq->showToolStart();
 }
 
 if ($view == "edit_request") {
 	require_once ($RELATIVE_PATH_RESOURCES."/views/ShowToolsRequests.class.php");
-	
+
 	$toolReq=new ShowToolsRequests;
 	$toolReq->showRequest($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["request_id"]);
 }
@@ -562,30 +562,30 @@ if (!$suppress_infobox) {
 						$formObj = $clipObj->getFormObject();
 						$clip_form_action = ($quick_view) ? $PHP_SELF . "?quick_view=$quick_view&quick_view_mode=$quick_view_mode" : $PHP_SELF;
 						print $formObj->getFormStart($clip_form_action);
-					} 
+					}
 					?>
 					<td class="blank" width="270" align="center" valign="top">
-						<? 
+						<?
 						print_infobox ($infobox, $infopic);
-						if (is_object($clipObj)) 
+						if (is_object($clipObj))
 							$clipObj->showClip();
 						?>
-						
+
 					</td>
 					<?
 					if (is_object($clipObj))  {
 						print $formObj->getFormEnd();
 					}
 				}
-			?>				
+			?>
 				</tr>
 			</table>
 		</td>
 	</tr>
 <?
-}	
+}
 ?>	<tr>
-		<td class="blank">&nbsp; 
+		<td class="blank">&nbsp;
 		</td>
 	</tr>
 </table>

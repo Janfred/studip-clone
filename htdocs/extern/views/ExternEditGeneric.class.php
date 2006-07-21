@@ -1,9 +1,9 @@
 <?
 /**
 * ExternEditGeneric.class.php
-* 
-* 
-* 
+*
+*
+*
 *
 * @author		Peter Thienel <pthienel@web.de>, Suchi & Berg GmbH <info@data-quest.de>
 * @version	$Id$
@@ -16,7 +16,7 @@
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // ExternEditGeneric.class.php
-// 
+//
 // Copyright (C) 2003 Peter Thienel <pthienel@web.de>,
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
@@ -38,12 +38,12 @@
 require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."/lib/ExternEdit.class.php");
 
 class ExternEditGeneric extends ExternEdit {
-	
+
 	function ExternEditGeneric (&$config, $form_values = "", $faulty_values = "",
 			 $edit_element = "") {
 		parent::ExternEdit(&$config, $form_values, $faulty_values, $edit_element);
 	}
-	
+
 	/**
 	* Prints out a form with a pull-down field for different font-faces.
 	*
@@ -60,12 +60,12 @@ class ExternEditGeneric extends ExternEdit {
 		);
 		$form_name = $this->element_name . "_" . $attribute;
 		$value = $this->getValue($attribute);
-		
+
 		if ($this->faulty_values[$form_name][0])
 			$error_sign = $this->error_sign;
 		else
 			$error_sign = "";
-		
+
 		$out = "<tr><td><table width=\"100%\" border=\"0\" cellpadding=\"4\" cellspacing=\"0\">\n";
 		$out .= "<tr" . $this->css->getFullClass() . "><td{$this->width_1} nowrap=\"nowrap\"><font size=\"2\">";
 		$out .= "$title</font></td>\n";
@@ -79,13 +79,13 @@ class ExternEditGeneric extends ExternEdit {
 			$out .= $face_name . "</option>";
 		}
 		$out .= "</select>\n";
-		$out .= "<img src=\"" . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . "pictures/info.gif\"";
+		$out .= "<img src=\"".$GLOBALS['ASSETS_URL']."images/info.gif\"";
 		$out .= tooltip($info, TRUE, TRUE) . ">$error_sign</td></tr>\n</table>\n</td></tr>\n";
 		$this->css->switchClass();
-		
+
 		return $out;
 	}
-	
+
 	/**
 	* Prints out a form with a text field.
 	*
@@ -98,7 +98,7 @@ class ExternEditGeneric extends ExternEdit {
 	function editTextfieldGeneric ($attribute, $title, $info, $size, $maxlength) {
 		$form_name = $this->element_name . "_" . $attribute;
 		$value = $this->getValue($attribute);
-		
+
 		if ($title == "") {
 			$title = "&nbsp;";
 			$width_1 = " width=\"1%\"";
@@ -108,22 +108,22 @@ class ExternEditGeneric extends ExternEdit {
 			$width_1 = $this->width_1;
 			$width_2 = $this->width_2;
 		}
-		
+
 		if (is_array($title)) {
 			$out = "";
 			for($i = 0; $i < sizeof($title); $i++) {
-		
+
 				if ($this->faulty_values[$form_name][$i])
 					$error_sign = $this->error_sign;
 				else
 					$error_sign = "";
-		
+
 				$out .= "<tr><td><table width=\"100%\" border=\"0\" cellpadding=\"4\" cellspacing=\"0\">\n";
 				$out .= "<tr" . $this->css->getFullClass() . "><td$width_1 nowrap=\"nowrap\"><font size=\"2\">";
 				$out .= "{$title[$i]}</font></td>\n";
 				$out .= "<td$width_2 nowrap=\"nowrap\"><input type=\"text\" name=\"{$form_name}[]\" size=\"$size\"";
 				$out .= " maxlength=\"$maxlength\" value=\"{$value[$i]}\" />&nbsp; \n";
-				$out .= "<img src=\"" . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . "pictures/info.gif\"";
+				$out .= "<img src=\"".$GLOBALS['ASSETS_URL']."images/info.gif\"";
 				if (is_array($info))
 					$out .= tooltip($info[$i], TRUE, TRUE) . ">$error_sign</td></tr>\n</table>\n</td></tr>\n";
 				else
@@ -132,24 +132,24 @@ class ExternEditGeneric extends ExternEdit {
 			}
 			return $out;
 		}
-		
+
 		if ($this->faulty_values[$form_name][0])
 			$error_sign = $this->error_sign;
 		else
 			$error_sign = "";
-			
+
 		$out .= "<tr><td><table width=\"100%\" border=\"0\" cellpadding=\"4\" cellspacing=\"0\">\n";
 		$out .= "<tr" . $this->css->getFullClass() . "><td$width_1 nowrap=\"nowrap\"><font size=\"2\">";
 		$out .= "$title</font></td>\n";
 		$out .= "<td$width_2 nowrap=\"nowrap\"><input type=\"text\" name=\"$form_name\" size=\"$size\"";
 		$out .= " maxlength=\"$maxlength\" value=\"$value\" />&nbsp; \n";
-		$out .= "<img src=\"" . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . "pictures/info.gif\"";
+		$out .= "<img src=\"".$GLOBALS['ASSETS_URL']."images/info.gif\"";
 		$out .= tooltip($info, TRUE, TRUE) . ">$error_sign</td></tr>\n</table>\n</td></tr>\n";
 		$this->css->switchClass();
-		
+
 		return $out;
 	}
-	
+
 	/**
 	* Prints out a Form with a textarea.
 	*
@@ -162,7 +162,7 @@ class ExternEditGeneric extends ExternEdit {
 	function editTextareaGeneric ($attribute, $title, $info, $rows, $cols) {
 		$form_name = $this->element_name . "_" . $attribute;
 		$value = $this->getValue($attribute);
-		
+
 		if ($title == "") {
 			$title = "&nbsp;";
 			$width_1 = " width=\"1%\"";
@@ -172,12 +172,12 @@ class ExternEditGeneric extends ExternEdit {
 			$width_1 = $this->width_1;
 			$width_2 = $this->width_2;
 		}
-		
+
 		if ($this->faulty_values[$form_name][0])
 			$error_sign = $this->error_sign;
 		else
 			$error_sign = "";
-		
+
 		$out = "<tr><td><table width=\"100%\" border=\"0\" cellpadding=\"4\" cellspacing=\"0\">\n";
 		$out .= "<tr" . $this->css->getFullClass() . "><td$width_1 nowrap=\"nowrap\"><font size=\"2\">";
 		$out .= "$title</font></td>\n";
@@ -185,13 +185,13 @@ class ExternEditGeneric extends ExternEdit {
 		$out .= "<textarea name=\"$form_name\" cols=\"$cols\" rows=\"$rows\" wrap=\"virtual\">";
 		$out .= $value;
 		$out .= "</textarea>&nbsp; \n";
-		$out .= "<img src=\"" . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . "pictures/info.gif\"";
+		$out .= "<img src=\"".$GLOBALS['ASSETS_URL']."images/info.gif\"";
 		$out .= tooltip($info, TRUE, TRUE) . ">$error_sign</td></tr>\n</table>\n</td></tr>\n";
 		$this->css->switchClass();
-		
+
 		return $out;
 	}
-	
+
 	/**
 	* Prints out a Form with checkboxes.
 	*
@@ -199,12 +199,12 @@ class ExternEditGeneric extends ExternEdit {
 	* @param string title The title of this form with checkboxes.
 	* @param string info The info text.
 	* @param array check_values The values of the checkboxes.
-	* @param array check_names The names of the checkboxes. 
+	* @param array check_names The names of the checkboxes.
 	*/
 	function editCheckboxGeneric ($attribute, $title, $info, $check_values, $check_names) {
 		$form_name = $this->element_name . "_" . $attribute;
 		$value = $this->getValue($attribute);
-		
+
 		if ($title == "") {
 			$title = "&nbsp;";
 			$width_1 = " width=\"1%\"";
@@ -214,10 +214,10 @@ class ExternEditGeneric extends ExternEdit {
 			$width_1 = $this->width_1;
 			$width_2 = $this->width_2;
 		}
-		
+
 		$size = sizeof($check_values);
 		$out .= "<tr><td><table width=\"100%\" border=\"0\" cellpadding=\"4\" cellspacing=\"0\">\n";
-		
+
 		if ($size > 1) {
 			$form_name .= "[]";
 			if (is_array($title)) {
@@ -226,7 +226,7 @@ class ExternEditGeneric extends ExternEdit {
 						$error_sign = $this->error_sign;
 					else
 						$error_sign = "";
-					
+
 					$out .= "<tr" . $this->css->getFullClass() . "><td$width_1 nowrap=\"nowrap\"><font size=\"2\">";
 					$out .= "$title[$i]</font></td>\n";
 					$out .= "<td$width_2 nowrap=\"nowrap\">";
@@ -237,7 +237,7 @@ class ExternEditGeneric extends ExternEdit {
 						$out .= "></td></tr>\n";
 					else
 						$out .= "><font size=\"2\">{$check_names[$i]}&nbsp; &nbsp;</font>";
-					$out .= "<img src=\"" . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . "pictures/info.gif\"";
+					$out .= "<img src=\"".$GLOBALS['ASSETS_URL']."images/info.gif\"";
 					$out .= tooltip($info, TRUE, TRUE) . ">$error_sign</td></tr>\n";
 					$this->css->switchClass();
 				}
@@ -247,7 +247,7 @@ class ExternEditGeneric extends ExternEdit {
 					$error_sign = $this->error_sign;
 				else
 					$error_sign = "";
-				
+
 				$out .= "<tr" . $this->css->getFullClass() . "><td$width_1 nowrap=\"nowrap\"><font size=\"2\">";
 				$out .= "$title</font></td>\n";
 				$out .= "<td$width_2 nowrap=\"nowrap\">";
@@ -260,7 +260,7 @@ class ExternEditGeneric extends ExternEdit {
 					else
 						$out .= "><font size=\"2\">{$check_names[$i]}&nbsp; &nbsp;</font>\n";
 				}
-				$out .= "<img src=\"" . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . "pictures/info.gif\"";
+				$out .= "<img src=\"".$GLOBALS['ASSETS_URL']."images/info.gif\"";
 				$out .= tooltip($info, TRUE, TRUE) . ">$error_sign</td></tr>\n";
 			}
 		}
@@ -269,7 +269,7 @@ class ExternEditGeneric extends ExternEdit {
 				$error_sign = $this->error_sign;
 			else
 				$error_sign = "";
-			
+
 			$out .= "<tr" . $this->css->getFullClass() . "><td$width_1 nowrap=\"nowrap\"><font size=\"2\">";
 			$out .= "$title</font></td>\n";
 			$out .= "<td$width_2 nowrap=\"nowrap\">";
@@ -277,18 +277,18 @@ class ExternEditGeneric extends ExternEdit {
 			if ($value == $check_values)
 				$out .= " checked";
 			$out .= "> &nbsp;\n";
-			$out .= "<img src=\"" . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . "pictures/info.gif\"";
+			$out .= "<img src=\" ".$GLOBALS['ASSETS_URL']."images/info.gif\"";
 			$out .= tooltip($info, TRUE, TRUE) . ">$error_sign</td></tr>\n";
 		}
-		
-	//	$out .= "<img src=\"" . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . "pictures/info.gif\"";
+
+	//	$out .= "<img src=\" ".$GLOBALS['ASSETS_URL']."images/info.gif\"";
 	//	$out .= tooltip($info, TRUE, TRUE) . ">$error_sign</td></tr>\n</table>\n</td></tr>\n";
 		$out .= "</table>\n</td></tr>\n";
 		$this->css->switchClass();
-		
+
 		return $out;
 	}
-	
+
 	/**
 	* Prints out a Form with radio-buttons.
 	*
@@ -301,7 +301,7 @@ class ExternEditGeneric extends ExternEdit {
 	function editRadioGeneric ($attribute, $title, $info, $radio_values, $radio_names) {
 		$form_name = $this->element_name . "_" . $attribute;
 		$value = $this->getValue($attribute);
-		
+
 		if ($title == "") {
 			$title = "&nbsp;";
 			$width_1 = " width=\"1%\"";
@@ -311,31 +311,31 @@ class ExternEditGeneric extends ExternEdit {
 			$width_1 = $this->width_1;
 			$width_2 = $this->width_2;
 		}
-		
+
 		if ($this->faulty_values[$form_name][0])
 			$error_sign = $this->error_sign;
 		else
 			$error_sign = "";
-		
+
 		$out = "<tr><td><table width=\"100%\" border=\"0\" cellpadding=\"4\" cellspacing=\"0\">\n";
 		$out .= "<tr" . $this->css->getFullClass() . "><td$width_1 nowrap=\"nowrap\"><font size=\"2\">";
 		$out .= "$title</font></td>\n";
 		$out .= "<td$width_2 nowrap=\"nowrap\">";
-		
+
 		for ($i = 0; $i < sizeof($radio_values); $i++) {
 			$out .= "<input type=\"radio\" name=\"$form_name\" value=\"{$radio_values[$i]}\"";
 			if ($value == $radio_values[$i])
 				$out .= " checked";
 			$out .= " /><font size=\"2\">{$radio_names[$i]}&nbsp; &nbsp;</font>\n";
 		}
-		
-		$out .= "<img src=\"" . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . "pictures/info.gif\"";
+
+		$out .= "<img src=\" ".$GLOBALS['ASSETS_URL']."images/info.gif\"";
 		$out .= tooltip($info, TRUE, TRUE) . ">$error_sign</td></tr>\n</table>\n</td></tr>\n";
 		$this->css->switchClass();
-		
+
 		return $out;
 	}
-	
+
 	/**
 	* Prints out a Form with an option-list.
 	*
@@ -349,10 +349,10 @@ class ExternEditGeneric extends ExternEdit {
 	*/
 	function editOptionGeneric ($attribute, $title, $info, $option_values, $option_names,
 			$size = 1, $multiple = FALSE) {
-			
+
 		$form_name = $this->element_name . "_" . $attribute;
 		$value = $this->getValue($attribute);
-		
+
 		if ($title == "") {
 			$title = "&nbsp;";
 			$width_1 = " width=\"1%\"";
@@ -362,12 +362,12 @@ class ExternEditGeneric extends ExternEdit {
 			$width_1 = $this->width_1;
 			$width_2 = $this->width_2;
 		}
-		
+
 		if ($this->faulty_values[$form_name][0])
 			$error_sign = $this->error_sign;
 		else
 			$error_sign = "";
-		
+
 		$out = "<tr><td><table width=\"100%\" border=\"0\" cellpadding=\"4\" cellspacing=\"0\">\n";
 		$out .= "<tr" . $this->css->getFullClass() . "><td$width_1 nowrap=\"nowrap\"><font size=\"2\">";
 		$out .= "$title</font></td>\n";
@@ -376,22 +376,22 @@ class ExternEditGeneric extends ExternEdit {
 			$out .= "<select name=\"$form_name\" size=\"$size\" multiple>";
 		else
 			$out .= "<select name=\"$form_name\" size=\"$size\">";
-			
+
 		for ($i = 0; $i < sizeof($option_values); $i++) {
 			$out .= "<option value=\"{$option_values[$i]}\"";
 			if ($value == $option_values[$i])
 				$out .= " selected";
 			$out .= " />{$option_names[$i]}</option>\n";
 		}
-		
+
 		$out .= "</select>\n";
-		$out .= "<img src=\"" . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . "pictures/info.gif\"";
+		$out .= "<img src=\" ".$GLOBALS['ASSETS_URL']."images/info.gif\"";
 		$out .= tooltip($info, TRUE, TRUE) . ">$error_sign</td></tr>\n</table>\n</td></tr>\n";
 		$this->css->switchClass();
-		
+
 		return $out;
 	}
-	
+
 }
 
 ?>

@@ -53,13 +53,13 @@ class ChatServer {
 	
 	function restore(){
 		if ($this->caching) return;
-		$this->that->restore(&$this->chatDetail,CHAT_DETAIL_KEY);
+		$this->that->restore($this->chatDetail,CHAT_DETAIL_KEY);
 		if (!is_array($this->chatDetail))
 			$this->chatDetail=array();
 	}
 	
 	function store(){
-		$this->that->store(&$this->chatDetail,CHAT_DETAIL_KEY);
+		$this->that->store($this->chatDetail,CHAT_DETAIL_KEY);
 	}
 	
 	function addChat($rangeid, $chatname = "Stud.IP Global Chat",$password = false){
@@ -100,7 +100,8 @@ class ChatServer {
 		$anzahl = 0;
 		foreach ($chat_users as $userid => $detail){
 			if ((!$detail["perm"] && ($a_time-$detail["action"]) > CHAT_IDLE_TIMEOUT) ||
-				($detail["perm"] && ($a_time-$detail["action"]) > CHAT_ADMIN_IDLE_TIMEOUT)){
+				($detail["perm"] && ($a_time-$detail["action"]) > CHAT_ADMIN_IDLE_TIMEOUT) ||
+				( ($a_time - $detail['heartbeat']) > 5)){
 				$this->removeUser($userid,$rangeid); 
 			}
 			else 
@@ -128,6 +129,7 @@ class ChatServer {
 		if ($this->isActiveUser($userid,$rangeid))
 			return false;
 		$this->chatDetail[$rangeid]["users"][$userid]["action"] = time();
+		$this->chatDetail[$rangeid]["users"][$userid]["heartbeat"] = time();
 		$this->chatDetail[$rangeid]["users"][$userid]["nick"] = $nick;
 		$this->chatDetail[$rangeid]["users"][$userid]["fullname"] = $fullname;
 		$this->chatDetail[$rangeid]["users"][$userid]["perm"] = $chatperm;
@@ -155,6 +157,17 @@ class ChatServer {
 		return $this->chatDetail[$rangeid]["users"][$userid]["action"];
 	}
 	
+	function getHeartbeat($userid,$rangeid){
+		return $this->chatDetail[$rangeid]["users"][$userid]["heartbeat"];
+	}
+	
+	function setHeartbeat($userid,$rangeid){
+		if (isset($this->chatDetail[$rangeid]["users"][$userid])){
+			$this->chatDetail[$rangeid]["users"][$userid]["heartbeat"] = time();
+			$this->store();
+		}
+	}
+	
 	function removeUser($userid,$rangeid){
 		if (!$this->isActiveUser($userid,$rangeid))
 			return false;
@@ -168,7 +181,7 @@ class ChatServer {
 
 	function isActiveUser($userid,$rangeid){
 		$this->restore();
-		return $this->getAction($userid,$rangeid);
+		return $this->getHeartbeat($userid,$rangeid);
 	}
 
 	function addMsg($userid,$rangeid,$msg){

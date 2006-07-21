@@ -1,9 +1,9 @@
 <?
 /**
 * Linking-functions to conect Stud.IP-Pages to ILIAS-learning-modules.
-* 
+*
 * This file contains several functions to create links and forms that refer to ILIAS-learning-modules.
-* 
+*
 * @author		Arne Schroeder <schroeder@data.quest.de>
 * @version		$Id$
 * @access		public
@@ -17,7 +17,7 @@
 *
 * Returns a link to ILIAS to create a new learning-module
 *
-* @access	public        
+* @access	public
 * @return		string	returns link-string
 */
 function link_new_module()
@@ -31,7 +31,7 @@ function link_new_module()
 *
 * Returns an array of links to ILIAS to start, edit or delete learning-modules
 *
-* @access	public        
+* @access	public
 * @param		array		$this_array	Array of learning-module-IDs
 * @param		string	$perm_area	Permission-Range
 * @return		array		Array of learning-module-data
@@ -41,24 +41,24 @@ function get_module_linkdata($this_array, $perm_area = 0)
 	global $auth, $perm;
 
 	$mod_info = get_module_info($this_array["inst"], $this_array["id"]);
-	$data_str["image"] .= "<img src=\"./pictures/icon-lern.gif\" border=0>";
+	$data_str["image"] .= "<img src=\"".$GLOBALS['ASSETS_URL']."images/icon-lern.gif\" border=0>";
 	$data_str["link"] .= $mod_info["title"];
-	if ($mod_info["pages"] != 1) 
+	if ($mod_info["pages"] != 1)
 		$data_str["link"] .= sprintf(_(" (%s Seiten)"), $mod_info["pages"]);
 	else
 		$data_str["link"] .= _(" (1 Seite)");
 	$data_str["content"] .= $mod_info["description"] . "<br>";
-	if ($mod_info["pages"] != 1) 
+	if ($mod_info["pages"] != 1)
 		$data_str["content"] .= sprintf(_("Diese Lerneinheit enth&auml;lt %s Seiten. "), $mod_info["pages"]);
 	else
 		$data_str["content"] .= _("Diese Lerneinheit enth&auml;lt eine Seite. ");
-	if ($mod_info["questions"] == 1) 
+	if ($mod_info["questions"] == 1)
 		$data_str["content"] .= _("Es gibt eine Testfrage zu der Lerneinheit.");
-	elseif ($mod_info["questions"] > 1) 
+	elseif ($mod_info["questions"] > 1)
 		$data_str["content"] .= sprintf(_("Es gibt %s Testfragen zu der Lerneinheit."), $mod_info["questions"]);
 	$data_str["content"] .= "<br>";
 	$data_str["key"] .= $this_array["id"] . "@" . $this_array["inst"];
-	
+
 	$data_str["button"] = "<br><center><a href=\"" . link_use_module($this_array["inst"], $this_array["id"]) . "\" class=\"tree\" target=\"_blank\">"
 		. makeButton("starten", "img")."</a>&nbsp";
 
@@ -90,7 +90,7 @@ function get_module_linkdata($this_array, $perm_area = 0)
 *
 * Returns an array of links to ILIAS to start, edit or delete learning-modules that belong to the given seminar
 *
-* @access	public        
+* @access	public
 * @param		string	$seminar_id	Seminar-ID
 * @return		string	Link-String or false
 */
@@ -115,7 +115,7 @@ function link_seminar_modules($seminar_id)
 *
 * Returns a link to ILIAS to start the learning-module specified by the given IDs
 *
-* @access	public        
+* @access	public
 * @param		integer	$co_inst	Ilias Inst ID
 * @param		integer	$co_id	Ilias learning module ID
 * @return		string	Link-String
@@ -131,7 +131,7 @@ function link_use_module($co_inst, $co_id)
 *
 * Returns a link to ILIAS to edit the learning-module specified by the given IDs
 *
-* @access	public        
+* @access	public
 * @param		integer	$co_inst	Ilias Inst ID
 * @param		integer	$co_id	Ilias learning module ID
 * @return		string	Link-String
@@ -147,7 +147,7 @@ function link_edit_module($co_inst, $co_id)
 *
 * Returns a link to ILIAS to delete the learning-module specified by the given IDs
 *
-* @access	public        
+* @access	public
 * @param		integer	$co_inst	Ilias Inst ID
 * @param		integer	$co_id	Ilias learning module ID
 * @return		string	Link-String

@@ -77,12 +77,12 @@ function getRoom ($range_id, $link=TRUE, $start_time = 0, $range_typ = false) {
 								else
 									$ret .= htmlReady($resObj->getName());
 							else
-								$ret .= htmlReady($data["room"]);
+								$ret .= htmlReady($data["room"]) . '&nbsp;' . _("(nicht gebucht)");
 						}
 						elseif ((!$data["room"]) && (sizeof($term_data["turnus_data"]) >1))
 							$ret .=_("n. A.");
 						else
-							$ret .= htmlReady($data["room"]);
+							$ret .= htmlReady($data["room"]) . ($RESOURCES_ENABLE ? '&nbsp;' . _("(nicht gebucht)") : '');
 						$i++;
 					}
 					if ($ret)
@@ -128,7 +128,7 @@ function getRoom ($range_id, $link=TRUE, $start_time = 0, $range_typ = false) {
 						if ($tmp_room)
 							$ret .= date ("d.m", $db2->f("date")).": ".$tmp_room;
 						elseif ($db2->f("raum"))
-							$ret .= date ("d.m", $db2->f("date")).": ".htmlReady($db2->f("raum"));
+							$ret .= date ("d.m", $db2->f("date")).": ".htmlReady($db2->f("raum")).($RESOURCES_ENABLE ? '&nbsp;' . _("(nicht gebucht)") : '');
 					}
 					if ($ret)
 						return $ret;
@@ -157,8 +157,8 @@ function getRoom ($range_id, $link=TRUE, $start_time = 0, $range_typ = false) {
 			}
 			if ($tmp_room)
 				$ret .= $tmp_room;
-			else
-				$ret .= htmlReady($db->f("raum"));
+			elseif ($db->f("raum"))
+				$ret .= htmlReady($db->f("raum")) . ($RESOURCES_ENABLE ? '&nbsp;' . _("(nicht gebucht)") : '');
 			return $ret;
 		break;
 	}
@@ -677,7 +677,10 @@ function edit_dates($stunde,$minute,$monat,$tag,$jahr,$end_stunde, $end_minute, 
 	$db4=new DB_Seminar;
 	$semester = new SemesterData;
 	$semObj =& Seminar::GetInstance($range_id);
-
+	
+	//workaround anoack: hope this helps - örgs
+	if ($resource_id == "FALSE") $resource_id = false;
+	
 	if ($RESOURCES_ENABLE) {
 		include_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
 		include_once ($RELATIVE_PATH_RESOURCES."/lib/RoomRequest.class.php");
@@ -691,7 +694,7 @@ function edit_dates($stunde,$minute,$monat,$tag,$jahr,$end_stunde, $end_minute, 
 	}
 
 	if ($do)		
-		if ((!$stunde) && (!end_stunde)) {
+		if ((!$stunde) && (!$end_stunde)) {
 			$do=FALSE;	
 			$result .= "error§" . _("Bitte geben Sie eine g&uuml;ltige Start- und Endzeit an!"). "§";
 		}
@@ -1464,7 +1467,7 @@ function Termin_Eingabe_javascript ($t = 0, $n = 0, $atime=0, $ss = '', $sm = ''
 	$q = ($ss !== '')? "&ss={$ss}&sm={$sm}&es={$es}&em={$em}":'';
 	$txt .= "<a href=\"javascript:window.open('".$CANONICAL_RELATIVE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR;
 	$txt .= "/views/insert_date_popup.php?mcount={$km}&element_switch={$t}&c={$n}{$at}{$q}', 'kalender', 'dependent=yes $sb, width=$kx, height=$ky');void(0);";
-	$txt .= '"><img src="pictures/popupkalender.gif" width="17" height="18" border="0" style="vertical-align:bottom" ';
+	$txt .= '"><img src="'.$GLOBALS['ASSETS_URL'].'images/popupkalender.gif" width="17" height="18" border="0" style="vertical-align:bottom" ';
 	$txt .= tooltip(_("Für eine Eingabehilfe zur einfacheren Terminwahl bitte hier klicken."),TRUE,FALSE);
 	$txt .= '></a>';
 

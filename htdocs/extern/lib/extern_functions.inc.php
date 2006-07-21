@@ -119,7 +119,7 @@ function get_statusgruppen_by_id ($range_id, $ids, $hidden = FALSE) {
 }
 
 /**
-* Do the same as get_configuration for all configurations of
+* Do the same as get_configurations for all configurations of
 * a given range_id.
 *
 * @access	public
@@ -493,24 +493,23 @@ function array_condense ($array) {
 
 function update_generic_datafields (&$config, &$data_fields, &$field_names, $object_type) {
 	// setup the generic data fields if they exist or if there are any changes
-	$generic_datafields = get_generic_datafields($object_type);
-	$config_datafields = $config->getValue('Main', 'genericdatafields');
-	if (is_array($generic_datafields)) {
+	if ($generic_datafields = get_generic_datafields($object_type)) {
+		$config_datafields = $config->getValue("Main", "genericdatafields");
 		if (!is_array($config_datafields))
 			$config_datafields = array();
 		
-		$visible = $config->getValue('Main', 'visible');
-		$order = $config->getValue('Main', 'order');
-		$aliases = $config->getValue('Main', 'aliases');
+		$visible = $config->getValue("Main", "visible");
+		$order = $config->getValue("Main", "order");
+		$aliases = $config->getValue("Main", "aliases");
 		$store = FALSE;
 		
 		// data fields deleted
 		if ($diff_generic_datafields = array_diff($config_datafields,
-				$generic_datafields['ids'])) {
+				$generic_datafields["ids"])) {
 			$swapped_datafields = array_flip($config_datafields);
 			$swapped_order = array_flip($order);
 			$offset = sizeof($data_fields) - sizeof($config_datafields);
-			$deleted = array();
+			$deletet = array();
 			foreach ($diff_generic_datafields as $datafield) {
 				$deleted[] = $offset + $swapped_datafields[$datafield];
 				unset($visible[$offset + $swapped_datafields[$datafield]]);
@@ -532,41 +531,32 @@ function update_generic_datafields (&$config, &$data_fields, &$field_names, $obj
 			$store = TRUE;
 		}
 		
-		if (!sizeof($config_generic_datafields)) {
+		if (!$config_generic_datafields)
 			$config_generic_datafields = $config_datafields;
-		}
 		// data fields added
-		$diff_generic_datafields = array_diff($generic_datafields["ids"],
-				$config_generic_datafields);
-		if (sizeof($diff_generic_datafields)) {
+		if ($diff_generic_datafields = array_diff($generic_datafields["ids"],
+				$config_generic_datafields)) {
 			$config_generic_datafields = array_merge($config_generic_datafields,
 					$diff_generic_datafields);
 			foreach ($diff_generic_datafields as $datafield) {
-				$visible[] = '0';
+				$visible[] = "0";
 				$order[] = sizeof($order);
-				$aliases[] = $generic_datafields['ids_names'][$datafield];
+				$aliases[] = $generic_datafields["ids_names"][$datafield];
 			}
 			$store = TRUE;
 		}
 		
-		// to repair config-files before fixed BIEST00150
-		if (sizeof($visible) != sizeof($aliases)) {
-			$visible = array_slice($visible, 0, sizeof($aliases));
-			$order = array_slice($order, 0, sizeof($aliases));
-			$store = TRUE;
-		}
-		
 		if ($store) {
-			$config->setValue('Main', 'visible', $visible);
-			$config->setValue('Main', 'order', $order);
-			$config->setValue('Main', 'aliases', $aliases);
-			$config->setValue('Main', 'genericdatafields', $config_generic_datafields);
+			$config->setValue("Main", "visible", $visible);
+			$config->setValue("Main", "order", $order);
+			$config->setValue("Main", "aliases", $aliases);
+			$config->setValue("Main", "genericdatafields", $config_generic_datafields);
 			$config->store();
 		}
 		
-		$config_generic_datafields = $config->getValue('Main', 'genericdatafields');
+		$config_generic_datafields = $config->getValue("Main", "genericdatafields");
 		foreach ($config_generic_datafields as $datafield) {
-			$field_names[] = $generic_datafields['ids_names'][$datafield];
+			$field_names[] = $generic_datafields["ids_names"][$datafield];
 		}
 		
 		if ($store)

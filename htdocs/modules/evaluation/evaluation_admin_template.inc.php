@@ -388,7 +388,7 @@ if( !$command || $command == "back" ) {
    /*Root kennzeichnung hier entfernen!!*/
    //if($questionload->getParentID()==0)
    //  $text="<b>".$text."</b>"; 
-   if($questionload->getParentID()=='0') {  
+   if($questionload->getParentID()==0) {  
       $text=$questionload->getText()." ".EVAL_ROOT_TAG;
    }
    if (($answer = $questionload->getChild()) == NULL)

@@ -31,6 +31,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 require_once ("$ABSOLUTE_PATH_STUDIP/language.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/user_visible.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/contact.inc.php");
 if ($GLOBALS['CHAT_ENABLE']){
 	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/ChatServer.class.php"; //wird für Nachrichten im chat benötigt
@@ -421,6 +422,7 @@ class messaging {
 			foreach ($rec_uname as $one_rec){
 				$one_rec_id = get_userid($one_rec);
 				if (!$one_rec_id) break;	//no user found
+				if (!get_visibility_by_id($one_rec_id)) break; // only invite visible users
 				setTempLanguage($one_rec_id);
 				$subject = sprintf(_("Chateinladung von %s"), $fullname);
 				$message = sprintf(_("Sie wurden von %s in den Chatraum %s eingeladen!"),$fullname ." (".$username.")",$chatServer->chatDetail[$chat_id]['name']) . "\n - - - \n" . stripslashes($msg);

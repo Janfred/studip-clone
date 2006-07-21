@@ -42,9 +42,9 @@ require_once($ABSOLUTE_PATH_STUDIP."lib/classes/SemesterData.class.php");
 
 class ExternElementMainLecturestable extends ExternElementMain {
 
-	var $attributes = array("name", "order", "visible", "aliases", "genericdatafields",
-			"width", "widthpp",	"grouping", "semstart", "semrange", "semswitch", "allseminars",
-			"rangepathlevel",	"addinfo", "time", "lecturer", "repeatheadrow", "semclasses", "textlectures",
+	var $attributes = array("name", "order", "visible", "aliases", "width", "widthpp",
+			"grouping", "semstart", "semrange", "semswitch", "allseminars", "rangepathlevel",
+			"addinfo", "time", "lecturer", "repeatheadrow", "semclasses", "textlectures",
 			"textgrouping", "textnogroups", "aliasesgrouping", "wholesite", "nameformat",
 			"language", "urlcss", "title", "copyright", "author");
 	var $edit_function = "editMainSettings";

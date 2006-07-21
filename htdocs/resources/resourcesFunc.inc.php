@@ -1,9 +1,9 @@
 <?php
 /**
 * resourcesFunc.php
-* 
+*
 * functions for resources
-* 
+*
 *
 * @author		Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
 * @version		$Id$
@@ -42,15 +42,15 @@ require_once $GLOBALS['ABSOLUTE_PATH_STUDIP'] . $GLOBALS['RELATIVE_PATH_RESOURCE
 * gets the status, if an user is allowed to create new rooms(objects)
 *
 * @param	string	the user_id, if not set, the actual user's id is used
-* @return	boolean	
+* @return	boolean
 *
 **/
 function allowCreateRooms($user_id='') {
 	global $user, $perm;
-	
+
 	if (!$user_id)
 		$user_id = $user->id;
-	
+
 	switch ($GLOBALS["RESOURCES_ALLOW_CREATE_ROOMS"]) {
 		case 1:
 			if ($perm->have_perm("tutor"))
@@ -89,23 +89,23 @@ function getLockPeriod($type, $timestamp1='', $timestamp2='') {
 	if ($cache[$type][$timestamp1 / 60][$timestamp2 / 60]) {
 		return $cache[$type][$timestamp1 / 60][$timestamp2 / 60];
 	}
-	
+
 	$db = new DB_Seminar;
-	
+
 	if (!$timestamp1)
 		$timestamp1 = time();
 	if (!$timestamp2)
 		$timestamp2 = time();
-	
+
 	if (((!$GLOBALS['RESOURCES_LOCKING_ACTIVE']) && ($type == "edit")) || ((!$GLOBALS['RESOURCES_ASSIGN_LOCKING_ACTIVE']) && ($type == "assign"))) {
-		$cache[$type][$timestamp1 / 60][$timestamp2 / 60] = FALSE;	
+		$cache[$type][$timestamp1 / 60][$timestamp2 / 60] = FALSE;
 		return FALSE;
 	} else {
 		if (($timestamp1) && ($timestamp2))
 			$query = sprintf ("SELECT lock_id, lock_begin, lock_end FROM resources_locks WHERE type = '%s' AND  lock_begin <= '%s' AND lock_end >= '%s' ", $type, $timestamp1, $timestamp1);
 		else
 			$query = sprintf ("SELECT lock_id, lock_begin, lock_end FROM resources_locks WHERE type = '%s' AND "
-					 ."((lock_begin <= %s AND lock_end > %s) OR (lock_begin >=%s AND lock_end <= %s) OR (lock_begin <= %s AND lock_end >= %s) OR (lock_begin < %s AND lock_end >= %s)) ", 
+					 ."((lock_begin <= %s AND lock_end > %s) OR (lock_begin >=%s AND lock_end <= %s) OR (lock_begin <= %s AND lock_end >= %s) OR (lock_begin < %s AND lock_end >= %s)) ",
 					 $type, $timestamp1, $timestamp1, $timestamp1, $timestamp2, $timestamp1, $timestamp2, $timestamp2, $timestamp2);
 		$db->query($query);
 		$db->next_record();
@@ -113,10 +113,10 @@ function getLockPeriod($type, $timestamp1='', $timestamp2='') {
 			$arr[0] = $db->f("lock_begin");
 			$arr[1] = $db->f("lock_end");
 			$arr[2] = $db->f("lock_id");
-			$cache[$type][timestamp1 / 60][$timestamp2 / 60] = $arr;			
+			$cache[$type][timestamp1 / 60][$timestamp2 / 60] = $arr;
 			return $arr;
 		} else {
-			$cache[$type][timestamp1 / 60][$timestamp2 / 60] = FALSE;			
+			$cache[$type][timestamp1 / 60][$timestamp2 / 60] = FALSE;
 			return FALSE;
 		}
 	}
@@ -133,16 +133,16 @@ function getLockPeriod($type, $timestamp1='', $timestamp2='') {
 **/
 function isLockPeriod($type, $timestamp='') {
 	static $cache;
-	
+
 	if ($cache[$type][$timestamp / 60]) {
 		return $cache[$type][$timestamp / 60];
 	}
-	
+
 	$db = new DB_Seminar;
-	
+
 	if (!$timestamp)
 		$timestamp = time();
-	
+
 	if (((!$GLOBALS['RESOURCES_LOCKING_ACTIVE']) && ($type == "edit")) || ((!$GLOBALS['RESOURCES_ASSIGN_LOCKING_ACTIVE']) && ($type == "assign"))) {
 		$cache[$type][$timestamp % 60] = FALSE;
 		return FALSE;
@@ -186,30 +186,30 @@ function changeLockableRecursiv ($resource_id, $state) {
 /*
 * getGlobalPerms
 *
-* this Funktion get the globals perms, the given user has in the 
+* this Funktion get the globals perms, the given user has in the
 * resources-management
 *
 * @param	string	the user_id
-* @return	string	the perms-string	
+* @return	string	the perms-string
 *
 **/
 function getGlobalPerms($user_id) {
 	static $cache;
 	global $perm;
-	
-	
+
+
 	if (!$user_id){
 		$user_id = $GLOBALS['user']->id;
 	}
-	
+
 	if ($cache[$user_id])
 		return $cache[$user_id];
-	
+
 	$db = new DB_Seminar;
-	
+
 	if (!$perm->have_perm("root")) {
 		$db->query("SELECT user_id, perms FROM resources_user_resources WHERE user_id='$user_id' AND resource_id = 'all' ");
-		if ($db->next_record() && $db->f("perms")) 
+		if ($db->next_record() && $db->f("perms"))
 			$res_perm = $db->f("perms");
 		else
 			$res_perm = "autor";
@@ -226,8 +226,8 @@ function getGlobalPerms($user_id) {
 * this Funktion creates an fully formatted output after changing/updating assigns
 *
 * @param	array	the result array, contains all informations about the last operation(s)
-* @param	string	the mode of returning: "good" (all booked resources), "bad" (all not booked resources) or "both"	
-* @return	string	the formatted message, ready for using it in msg.inc.php	
+* @param	string	the mode of returning: "good" (all booked resources), "bad" (all not booked resources) or "both"
+* @return	string	the formatted message, ready for using it in msg.inc.php
 *
 **/
 function getFormattedResult($result, $mode="bad", $bad_message_text = '', $good_message_text = '') {
@@ -237,7 +237,7 @@ function getFormattedResult($result, $mode="bad", $bad_message_text = '', $good_
 		foreach ($result as $key=>$val)
 			if ($val["overlap_assigns"] == TRUE) {
 				$overlaps[] = array("resource_id"=>$val["resource_id"], "overlap_assigns"=>$val["overlap_assigns"]);
-				foreach ($val["overlap_assigns"] as $val2) 
+				foreach ($val["overlap_assigns"] as $val2)
 					if ($val2["lock_id"])
 						$locks[$val2["lock_id"]] = array ("begin" => $val2["lock_begin"], "end" => $val2["lock_end"]);
 			}
@@ -245,12 +245,12 @@ function getFormattedResult($result, $mode="bad", $bad_message_text = '', $good_
 			sort ($locks);
 	} else
 		return FALSE;
-	
+
 	//extract the succesfully booked roomes
 	foreach ($result as $key=>$val)
 		if (!is_array($val["overlap_assigns"]))
 			$rooms_id[$val["resource_id"]]=TRUE;
-	
+
 	//create bad message
 	if ((is_array($overlaps)) && (($mode == "bad") || ($mode == "booth"))) {
 		$i=0;
@@ -278,22 +278,22 @@ function getFormattedResult($result, $mode="bad", $bad_message_text = '', $good_
 		}
 		$bad_message.="§";
 	}
-	
-	
+
+
 	//create good message
 	if ((is_array($rooms_id)) && (($mode == "good") || ($mode == "booth"))) {
 		$i=0;
 		foreach ($rooms_id as $key=>$val) {
-			if ($key) {	
-				$resObj =& ResourceObject::Factory($key);			
+			if ($key) {
+				$resObj =& ResourceObject::Factory($key);
 				if ($i)
 					$rooms_booked.=", ";
 				$rooms_booked.= $resObj->getFormattedLink();
 				$i++;
 			}
 		}
-		
-	if ($rooms_booked) 
+
+	if ($rooms_booked)
 		if ($i == 1)
 			$good_message.= sprintf ("msg§"._("Die Belegung des Raumes %s wurde in die Ressourcenverwaltung &uuml;bernommen.")."§", $rooms_booked);
 		elseif ($i)
@@ -359,7 +359,7 @@ function getDateRoomRequest($termin_id) {
 	else
 		return FALSE;
 }
-	
+
 function getSeminarRoomRequest($seminar_id) {
 	$db=new DB_Seminar;
 	$query = sprintf("SELECT request_id FROM resources_requests WHERE seminar_id = '%s' ",$seminar_id);
@@ -375,19 +375,19 @@ function getMyRoomRequests($user_id = '') {
 	global $user, $perm, $RELATIVE_PATH_RESOURCES;
 
 	require_once ($RELATIVE_PATH_RESOURCES."/lib/ResourcesUserRoomsList.class.php");
-	
+
 	$db = new DB_Seminar;
 	$db2 = new DB_Seminar;
 
 	if (!$user_id)
 		$user_id = $user->id;
-		
+
 	if ((getGlobalPerms($user_id) == "admin") || ($perm->have_perm("root"))) {
 		$query = sprintf("SELECT request_id, closed, LOCATE('s:11:\"turnus_data\";',metadata_dates) AS metatime,
 						(LOCATE('s:3:\"art\";s:1:\"1\";',metadata_dates) OR LOCATE('s:3:\"art\";i:1;',metadata_dates)) AS irregular,
 							rr.termin_id, COUNT(IF(date_typ IN ".getPresenceTypeClause(). ",t.termin_id,NULL)) as anzahl_termine
-							FROM resources_requests rr 
-							LEFT JOIN seminare s USING(seminar_id) 
+							FROM resources_requests rr
+							LEFT JOIN seminare s USING(seminar_id)
 							LEFT JOIN termine t ON(s.Seminar_id = t.range_id) GROUP BY request_id");
 		$db->query($query);
 		while ($db->next_record()) {
@@ -398,10 +398,10 @@ function getMyRoomRequests($user_id = '') {
 		//load all my resources
 		$resList = new ResourcesUserRoomsList($user_id, FALSE, FALSE);
 		$my_res = $resList->getRooms();
-		
+
 		//load all my seminars
 		$my_sems = search_administrable_seminars();
-		
+
 		if (sizeof($my_res)) {
 			foreach ($my_res as $res_id => $dummy){
 				$object_perms =& ResourceObjectPerms::Factory($res_id, $user_id);
@@ -415,7 +415,7 @@ function getMyRoomRequests($user_id = '') {
 			$query_res = sprintf("SELECT request_id, closed, LOCATE('s:11:\"turnus_data\";',metadata_dates) AS metatime,
 								(LOCATE('s:3:\"art\";s:1:\"1\";',metadata_dates) OR LOCATE('s:3:\"art\";i:1;',metadata_dates)) AS irregular,
 								rr.termin_id, COUNT(IF(date_typ IN ".getPresenceTypeClause(). ",t.termin_id,NULL)) as anzahl_termine
-								FROM resources_requests rr 
+								FROM resources_requests rr
 								INNER JOIN seminare s USING(seminar_id)
 								LEFT JOIN termine t ON(s.Seminar_id = t.range_id)  WHERE rr.resource_id IN %s GROUP BY request_id", $in_resource_id);
 			$db2->query($query_res);
@@ -430,7 +430,7 @@ function getMyRoomRequests($user_id = '') {
 			$query_sem = sprintf("SELECT request_id, closed, LOCATE('s:11:\"turnus_data\";',metadata_dates) AS metatime,
 								(LOCATE('s:3:\"art\";s:1:\"1\";',metadata_dates) OR LOCATE('s:3:\"art\";i:1;',metadata_dates)) AS irregular,
 								rr.termin_id, COUNT(IF(date_typ IN ".getPresenceTypeClause(). ",t.termin_id,NULL)) as anzahl_termine
-								FROM resources_requests rr 
+								FROM resources_requests rr
 								INNER JOIN seminare s USING(seminar_id)
 								LEFT JOIN termine t ON(s.Seminar_id = t.range_id)  WHERE rr.seminar_id IN %s GROUP BY request_id", $in_seminar_id);
 			$db->query($query_sem);
@@ -441,7 +441,7 @@ function getMyRoomRequests($user_id = '') {
 			}
 		}
 	}
-	
+
 	return $requests;
 }
 
@@ -476,26 +476,26 @@ function cmp_resources($a, $b){
 /*
 * checkAvailableResources
 *
-* This Funktion searches for available resources for studip-objects (and users, too), 
-* but it only work's properly with studip-objects, because it didn't pay attention for 
+* This Funktion searches for available resources for studip-objects (and users, too),
+* but it only work's properly with studip-objects, because it didn't pay attention for
 * inheritance of perms for a studip-user.
 *
 * @param	string	the obejct id
 * @return 	boolean true, if resources are found, otherwise false
 *
 **/
-function checkAvailableResources($id) { 
+function checkAvailableResources($id) {
 	$db = new DB_Seminar;
-	
+
 	//check if owner
 	$db->query("SELECT resource_id FROM resources_objects WHERE owner_id='$id' LIMIT 1");
 	if ($db->next_record()) return TRUE;
-	
+
 	//or additional perms avaiable
 	$db->query("SELECT perms FROM resources_user_resources  WHERE user_id='$id' ");
 	if ($db->next_record()) return TRUE;
-	
-	return FALSE;	
+
+	return FALSE;
 }
 
 /*****************************************************************************
@@ -508,18 +508,18 @@ function checkObjektAdministrablePerms ($resource_object_owner_id, $user_id='') 
 
 	if (!$user_id)
 		$user_id = $user->id;
-	
+
 	//for root, it's quick!
 	if ($perm->have_perm("root"))
 		return TRUE;
-	
+
 	//for the resources admin too
 	if (getGlobalPerms($user_id) == "admin")
 		return TRUE;
-	
+
 	//load all my administrable objects
 	$my_objects=search_administrable_objects ();
-	
+
 	//ok, we as a user aren't interesting...
 	unset ($my_objects[$user_id]);
 	if (sizeof ($my_objects)) {
@@ -547,24 +547,24 @@ function search_administrable_seminars ($search_string='', $user_id='') {
 	$db = new DB_Seminar;
 	$db2 = new DB_Seminar;
 	$db3 = new DB_Seminar;
-	
+
 	if (!$user_id)
 		$user_id = $user->id;
-		
+
 	if (!$search_string)
 		$search_sql = "1";
-	else 
+	else
 		$search_sql = " Name LIKE '%$search_string%' OR Untertitel = '%$search_string%' OR Seminar_id = '$search_string' ";
 
 	$user_global_perm = $perm->get_perm($user_id);
 	switch ($user_global_perm) {
-		case "root": 
+		case "root":
 			//Alle Seminare...
 			$db->query("SELECT Seminar_id, Name FROM seminare WHERE $search_sql ORDER BY Name");
 			while ($db->next_record())
 				$my_objects[$db->f("Seminar_id")]=array("name"=>$db->f("Name"), "art"=>_("Veranstaltungen"), "perms" => "admin");
 		break;
-		case "admin": 
+		case "admin":
 			//Alle meine Institute (unabhaengig von Suche fuer Rechte)...
 			if ($perm->is_fak_admin($user_id)){
 				$db->query("SELECT DISTINCT (ifnull( b.Institut_id, a.Institut_id )) AS Institut_id
@@ -582,7 +582,7 @@ function search_administrable_seminars ($search_string='', $user_id='') {
 				}
 			}
 		break;
-		case "dozent": 
+		case "dozent":
 		case "tutor":
 			//Alle meine Seminare
 			$db->query("SELECT seminare.Seminar_id, Name FROM seminar_user LEFT JOIN seminare USING (seminar_id) WHERE ($search_sql) AND seminar_user.status IN ('tutor', 'dozent')  AND seminar_user.user_id='$user_id' ORDER BY Name");
@@ -597,7 +597,7 @@ function search_administrable_seminars ($search_string='', $user_id='') {
 /*
 * search_administrable_objects
 *
-* this Funktion searches all my aministrable objects (the object i've got tutor 
+* this Funktion searches all my aministrable objects (the object i've got tutor
 * or better perms, so I'am able to administrate most of the things).
 *
 * @param	string	a search string, that could be used
@@ -609,16 +609,16 @@ function search_administrable_seminars ($search_string='', $user_id='') {
 function search_administrable_objects($search_string='', $user_id='', $sem=TRUE) {
 	static $my_object_cache;
 	global $user, $perm, $auth, $_fullname_sql;
-	
+
 	$db = new DB_Seminar;
 	$db2 = new DB_Seminar;
 	$db3 = new DB_Seminar;
-	
+
 	if (!$user_id)
 		$user_id = $user->id;
-	
+
 	$user_global_perm = $perm->get_perm($user_id);
-		
+
 	if (!$search_string){
 		$caching = true;
 		$search_sql['user'] = '1';
@@ -639,18 +639,18 @@ function search_administrable_objects($search_string='', $user_id='', $sem=TRUE)
 			}
 		}
 	}
-	
+
 	if ($caching && isset($my_object_cache[$user_id][$sem])){
 		return $my_object_cache[$user_id][$sem];
 	}
-	
-	if (getGlobalPerms($user_id) == "admin") 
+
+	if (getGlobalPerms($user_id) == "admin")
 		$my_objects["global"]=array("name"=>_("Global"), "perms" => "admin");
-		
+
 	$username = get_username($user_id);
-	
+
 	switch ($user_global_perm) {
-		case "root": 
+		case "root":
 			//Alle Personen...
 			$db->query("SELECT auth_user_md5.user_id,". $_fullname_sql['full_rev'] ." AS fullname , username FROM auth_user_md5  LEFT JOIN user_info USING (user_id) WHERE {$search_sql['user']} ORDER BY Nachname");
 			while ($db->next_record())
@@ -666,7 +666,7 @@ function search_administrable_objects($search_string='', $user_id='', $sem=TRUE)
 			while ($db->next_record())
 				$my_objects[$db->f("Institut_id")]=array("name"=>$db->f("Name"), "art"=>_("Einrichtungen"), "perms" => "admin");
 		break;
-		case "admin": 
+		case "admin":
 			//Alle meine Institute (Suche)...
 			$db->query("SELECT Institute.Institut_id, Name, inst_perms FROM user_inst LEFT JOIN Institute USING (institut_id) WHERE ({$search_sql['institut']}) AND inst_perms = 'admin' AND user_inst.user_id='$user_id' ORDER BY Name");
 			while ($db->next_record()) {
@@ -686,9 +686,9 @@ function search_administrable_objects($search_string='', $user_id='', $sem=TRUE)
 				$inst_in = "('" . join("','" , array_keys($my_inst_ids)) ."')";
 				$inst_perms_in = "('" . join("','" , $allowed_inst_perms) ."')";
 				$db2->query("SELECT a.user_id, ". $_fullname_sql['full_rev'] ." AS fullname, username , a.Institut_id, inst_perms
-							FROM user_inst a 
-							LEFT JOIN auth_user_md5 USING (user_id) 
-							LEFT JOIN user_info USING (user_id) 
+							FROM user_inst a
+							LEFT JOIN auth_user_md5 USING (user_id)
+							LEFT JOIN user_info USING (user_id)
 							WHERE (({$search_sql['user']}))
 							AND a.inst_perms  IN $inst_perms_in AND  a.Institut_id IN $inst_in  ORDER BY Nachname");
 				while ($db2->next_record()) {
@@ -697,7 +697,7 @@ function search_administrable_objects($search_string='', $user_id='', $sem=TRUE)
 				}
 				if ($sem) {
 					$db2->query("SELECT a.seminar_id, Name FROM  seminar_inst a
-								LEFT JOIN seminare USING (seminar_id) 
+								LEFT JOIN seminare USING (seminar_id)
 								WHERE ({$search_sql['seminar']})
 								AND  a.Institut_id IN $inst_in  GROUP BY a.seminar_id ORDER BY Name");
 					while ($db2->next_record()) {
@@ -705,10 +705,10 @@ function search_administrable_objects($search_string='', $user_id='', $sem=TRUE)
 					}
 				}
 			}
-			
+
 		break;
-		case "dozent": 
-		case "tutor": 
+		case "dozent":
+		case "tutor":
 			$user_status = ($user_global_perm == 'tutor' ? "'tutor'" : "'tutor','dozent'");
 			//Alle meine Seminare
 			if ($sem) {
@@ -721,10 +721,10 @@ function search_administrable_objects($search_string='', $user_id='', $sem=TRUE)
 			while ($db->next_record())
 				$my_objects[$db->f("Institut_id")]=array("name"=>$db->f("Name"), "art"=>_("Einrichtungen"), "perms" => $db->f("inst_perms"));
 		break;
-		case "autor": 
+		case "autor":
 	}
 	$my_objects[$user_id]=array("name"=>"aktueller Account"." (".$username.")", "art"=>_("Personen"),  "perms" => "admin");
-	
+
 	if ($caching){
 		$my_object_cache[$user_id][$sem] = $my_objects;
 	}
@@ -748,13 +748,13 @@ function search_my_objects ($search_string='', $user_id='', $sem=TRUE) {
 	global $user, $perm, $auth, $_fullname_sql;
 
 	$db = new DB_Seminar;
-	
+
 	if (!$user_id)
 		$user_id = $user->id;
-		
+
 	if (!$search_string)
 		$search_string = "_";
-	
+
 	if ($perm->have_perm('admin')){
 		return array();
 	}
@@ -765,7 +765,7 @@ function search_my_objects ($search_string='', $user_id='', $sem=TRUE) {
 		while ($db->next_record())
 			$my_objects[$db->f("Seminar_id")]=array("name"=>$db->f("Name"), "art"=>_("Veranstaltungen"), "perms" => "autor");
 	}
-	
+
 	//Alle meine Institute...
 	$db->query("SELECT Institute.Institut_id, Name FROM user_inst LEFT JOIN Institute USING (institut_id) WHERE (Name LIKE '%$search_string%' OR Institute.Institut_id = '$search_string') AND inst_perms = 'autor' AND user_inst.user_id='$user_id' ORDER BY Name");
 	while ($db->next_record())
@@ -787,7 +787,7 @@ function search_admin_user ($search_string='') {
 	$db->query("SELECT a.user_id, ". $_fullname_sql['full_rev'] ." AS fullname, username FROM auth_user_md5  a LEFT JOIN user_info USING (user_id) WHERE username LIKE '%$search_string%' OR Vorname LIKE '%$search_string%' OR Nachname LIKE '%$search_string%' OR a.user_id = '$search_string' ORDER BY Nachname");
 	while ($db->next_record())
 			$my_objects[$db->f("user_id")]=array("name"=>$db->f("fullname")." (".$db->f("username").")", "art"=>_("Personen"));
-	
+
 	return $my_objects;
 }
 
@@ -802,10 +802,10 @@ function search_objects ($search_string='', $user_id='', $sem=TRUE) {
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
 	$db3=new DB_Seminar;
-	
+
 	if (!$user_id)
 		$user_id=$user->id;
-		
+
 	//Alle Personen...
 	$db->query("SELECT a.user_id, ". $_fullname_sql['full_rev'] ." AS fullname, username FROM auth_user_md5 a LEFT JOIN user_info USING (user_id) WHERE username LIKE '%$search_string%' OR Vorname LIKE '%$search_string%' OR Nachname LIKE '%$search_string%' OR a.user_id = '$search_string' ORDER BY Nachname");
 	while ($db->next_record())
@@ -842,10 +842,10 @@ function showSearchForm($name, $search_string='', $user_only=FALSE, $administrab
 			$my_objects=search_administrable_objects($search_string, FALSE, $sem);
 		else //komplett in allen Objekten suchen
 			$my_objects=search_objects($search_string, FALSE, $sem);
-			
+
 		?>
 		<input type="HIDDEN" name="<? echo "search_string_".$name ?>" value="<? echo $search_string ?>" />
-		<font size=-1><input type="IMAGE" align="absmiddle"  name="<? echo "send_".$name ?>" src="./pictures/move_<?=$img_dir.".gif\" ".tooltip (_("diesen Eintrag übernehmen")) ?> border="0" value="<?=_("&uuml;bernehmen")?>"  /></font>
+		<font size=-1><input type="IMAGE" align="absmiddle"  name="<? echo "send_".$name ?>" src="<?= $GLOBALS['ASSETS_URL'] ?>images/move_<?=$img_dir.".gif\" ".tooltip (_("diesen Eintrag übernehmen")) ?> border="0" value="<?=_("&uuml;bernehmen")?>"  /></font>
 		<select align="absmiddle" name="<? echo "submit_".$name ?>">
 		<?
 		if ($allow_all)
@@ -853,7 +853,7 @@ function showSearchForm($name, $search_string='', $user_only=FALSE, $administrab
 
 		foreach ($my_objects as $key=>$val) {
 			if ($val["art"] != $old_art) {
-				?>			
+				?>
 			<font size=-1><option value="FALSE"><? echo "-- ".$val["art"]." --"; ?></option></font>
 				<?
 			}
@@ -864,12 +864,12 @@ function showSearchForm($name, $search_string='', $user_only=FALSE, $administrab
 			$old_art=$val["art"];
 		}
 		?></select>
-		<font size=-1><input type="IMAGE" align="absmiddle" name="<? echo "reset_".$name ?>" src="./pictures/rewind.gif" <?=tooltip (_("Suche zurücksetzen")) ?> border="0" value="<?=_("neue Suche")?>" /></font>
+		<font size=-1><input type="IMAGE" align="absmiddle" name="<? echo "reset_".$name ?>" src="<?= $GLOBALS['ASSETS_URL'] ?>images/rewind.gif" <?=tooltip (_("Suche zurücksetzen")) ?> border="0" value="<?=_("neue Suche")?>" /></font>
 		<?
 	} else {
 		?>
 		<font size=-1><input type="TEXT" align="absmiddle" name=" <? echo "search_string_".$name ?>" size=30 maxlength=255 /></font>
-		<font size=-1><input type="IMAGE" align="absmiddle" name=" <? echo "do_".$name ?>" src="./pictures/suchen.gif" <?=tooltip (_("Starten Sie hier Ihre Suche")) ?> border=0 value="<?=_("suchen")?>" /></font>
+		<font size=-1><input type="IMAGE" align="absmiddle" name=" <? echo "do_".$name ?>" src="<?= $GLOBALS['ASSETS_URL'] ?>images/suchen.gif" <?=tooltip (_("Starten Sie hier Ihre Suche")) ?> border=0 value="<?=_("suchen")?>" /></font>
 		<?
 	}
 }

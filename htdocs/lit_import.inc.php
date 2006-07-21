@@ -78,7 +78,7 @@ function print_lit_import_dlg() {
 	if ($plugin_name) {
 		echo "    <TR><TD COLSPAN=\"2\">&nbsp;</TD></TR>\n";
 		echo "    <TR>\n";
-		echo "      <TD COLSPAN=\"2\"><FONT SIZE=\"\">".(strlen($plugin["description"])>0 ? "<IMG SRC=\"pictures/ausruf_small3.gif\">" : "").formatReady($plugin["description"])."</FONT></TD>\n";
+		echo "      <TD COLSPAN=\"2\"><FONT SIZE=\"\">".(strlen($plugin["description"])>0 ? "<IMG SRC=\"".$GLOBALS['ASSETS_URL']."images/ausruf_small3.gif\">" : "").formatReady($plugin["description"])."</FONT></TD>\n";
 		echo "    </TR>\n";
 		echo "    <TR><TD COLSPAN=\"2\">&nbsp;</TD></TR>\n";
 		echo "    <TR>\n";

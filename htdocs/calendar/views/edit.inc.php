@@ -1,8 +1,8 @@
 <?
 /**
 * edit.inc.php
-* 
-* 
+*
+*
 *
 * @author		Peter Thienel <pthienel@web.de>
 * @version		$Id$
@@ -22,7 +22,7 @@ define("PHPDOC_DUMMY",true);
 // This file is part of Stud.IP
 // edit.inc.php
 //
-// Copyright (c) 2003 Peter Tienel <pthienel@web.de> 
+// Copyright (c) 2003 Peter Tienel <pthienel@web.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -46,7 +46,7 @@ function to_string_popupcalendar ($element, $disabled) {
 	// if javascript enabled display icon for popup calendar
 	if ($GLOBALS['auth']->auth['jscript'] && !$disabled) {
 		return "&nbsp;"
-			. "<img align=\"absmiddle\" src=\"{$GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']}pictures/popupkalender.gif\" border=\"0\" "
+			. "<img align=\"absmiddle\" src=\"".$GLOBALS['ASSETS_URL']."images/popupkalender.gif\" border=\"0\" "
 			. "onClick=\"window.open('" . $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'] . $GLOBALS['RELATIVE_PATH_CALENDAR']
 			. "/views/insert_date_popup.php?element_switch=$element&atime={$GLOBALS['atime']}', 'InsertDate', "
 			. "'dependent=yes, width=210, height=210, left=500, top=150')\">";
@@ -86,7 +86,7 @@ $css_switcher->switchClass();
 ########################################################################################
 
 if (!$set_recur_x) {
-	
+
 	if (isset($atermin) && get_class($atermin) == "seminarevent") {
 		echo "<tr>\n<td class=\"" . $css_switcher->getClass() . "\" width=\"100%\">\n";
 		echo "<font size=\"-1\">" . _("Veranstaltung") . ":&nbsp; ";
@@ -109,7 +109,7 @@ if (!$set_recur_x) {
 	echo "&nbsp; &nbsp;";
 	echo _("Uhrzeit");
 	echo " <select name=\"start_h\" size=\"1\"$disabled>\n";
-	
+
 	for ($i = 0;$i < 24;$i++) {
 		echo "<option";
 		if ($i == $start_h)
@@ -119,9 +119,9 @@ if (!$set_recur_x) {
 		else
 			echo ">$i";
 	}
-			
+
 	echo "</select> : <select name=\"start_m\" size=\"1\"$disabled>\n";
-	
+
 	for ($i = 0;$i < 60;$i += 5) {
 		echo "<option";
 		if ($i == $start_m)
@@ -131,14 +131,14 @@ if (!$set_recur_x) {
 		else
 			echo ">$i";
 	}
-	
+
 	echo "</select>";
 	echo ($err["start_time"] ? $error_sign : "");
-	echo "&nbsp; &nbsp; <input type=\"checkbox\" name=\"wholeday\" value=\"1\"";
+	echo "&nbsp; &nbsp; <input type=\"checkbox\" name=\"wholeday\"";
 	echo ($wholeday ? ' checked="checked"' : '') . "$disabled> &nbsp;";
 	echo _("ganzt&auml;gig");
 	$info = _("Als ganztägig markierte Termine beginnen um 00:00 Uhr am angegebenen Starttag und enden um 23.59 am angegeben Endtag.");
-	echo "&nbsp;&nbsp;&nbsp;<img src=\"" . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . "pictures/info.gif\"";
+	echo "&nbsp;&nbsp;&nbsp;<img src=\"".$GLOBALS['ASSETS_URL']."images/info.gif\"";
 	echo tooltip($info, TRUE, TRUE) . ">\n";
 	echo "</font></td>\n</tr>\n";
 	echo "<tr><td colspan=\"2\"><font size=\"-1\">&nbsp;</font></td></tr>\n";
@@ -154,7 +154,7 @@ if (!$set_recur_x) {
 	echo "&nbsp; &nbsp;";
 	echo _("Uhrzeit");
 	echo " <select name=\"end_h\" size=\"1\"$disabled>\n";
-	
+
 	for ($i = 0;$i < 24;$i++) {
 		echo "<option";
 		if ($i == $end_h)
@@ -164,9 +164,9 @@ if (!$set_recur_x) {
 		else
 			echo ">$i";
 	}
-	
+
 	echo "</select>&nbsp;:&nbsp;<select name=\"end_m\" size=\"1\"$disabled>\n";
-	
+
 	for ($i = 0;$i < 60;$i += 5) {
 		echo "<option";
 		if ($i == $end_m)
@@ -176,11 +176,11 @@ if (!$set_recur_x) {
 		else
 			echo ">$i";
 	}
-	
+
 	echo "</select>";
 	echo ($err["end_time"] ? $error_sign : "");
 	echo "</font></td>\n</tr>\n</table>\n</td>\n</tr>\n";
-	
+
 	$css_switcher->switchClass();
 	echo "<tr><td class=\"" . $css_switcher->getClass() . "\">\n";
 	echo "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\">";
@@ -197,13 +197,13 @@ if (!$set_recur_x) {
 	echo $content;
 	echo "</textarea></td>\n";
 	echo "</tr>\n</table>\n</td>\n</tr>\n";
-	
+
 	$css_switcher->switchClass();
 	echo "<tr><td class=\"" . $css_switcher->getClass() . "\">\n";
 	echo "<font size=\"-1\">";
 	echo _("Kategorie:") . "&nbsp;&nbsp;</font>";
 	echo "<select name=\"cat\" size=\"1\"$disabled>\n";
-	
+
 	if (isset($atermin) && get_class($atermin) == "seminarevent") {
 		if (!isset($cat))
 			$cat = 1;
@@ -226,18 +226,18 @@ if (!$set_recur_x) {
 		echo "</select>\n&nbsp; &nbsp;";
 		echo "<input type=\"text\" name=\"cat_text\" size=\"30\" maxlength=\"255\" value=\"$cat_text\">\n";
 		$info = _("Sie können beliebige Kategorien in das Freitextfeld eingeben. Trennen Sie einzelne Kategorien bitte durch ein Komma.");
-		echo "&nbsp;&nbsp;&nbsp;<img src=\"" . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . "pictures/info.gif\"";
+		echo "&nbsp;&nbsp;&nbsp;<img src=\"".$GLOBALS['ASSETS_URL']."images/info.gif\"";
 		echo tooltip($info, TRUE, TRUE) . ">\n";
-	}	
+	}
 	echo "</td>\n</tr>\n";
-	
+
 	$css_switcher->switchClass();
 	echo "<tr><td class=\"" . $css_switcher->getClass() . "\">\n";
 	echo "<font size=\"-1\">";
 	echo _("Raum:") . "&nbsp;&nbsp;";
 	echo "<input type=\"text\" name=\"loc\" size=\"30\" maxlength=\"255\" value=\"$loc\"$disabled>";
 	echo "</td>\n</tr>\n";
-	
+
 	if (get_class($atermin) != "seminarevent") {
 		$css_switcher->switchClass();
 		echo "<tr><td class=\"" . $css_switcher->getClass() . "\">\n";
@@ -256,9 +256,9 @@ if (!$set_recur_x) {
 			echo " />$via_name\n";
 		}
 		echo "</select>&nbsp;&nbsp;&nbsp;";
-		echo "<img src=\"" . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . "pictures/info.gif\"";
+		echo "<img src=\"".$GLOBALS['ASSETS_URL']."images/info.gif\"";
 		echo tooltip($info, TRUE, TRUE) . ">\n";
-		
+
 		echo "&nbsp;&nbsp;&nbsp;" . _("Priorit&auml;t:");
 		echo "&nbsp;&nbsp;<select name=\"priority\" size=\"1\">\n";
 		$priority_names = array(
@@ -273,7 +273,7 @@ if (!$set_recur_x) {
 			echo " />{$priority_names[$i]}\n";
 		}
 		echo "</select></font></td>\n</tr>\n";
-	
+
 		$css_switcher->switchClass();
 		echo "<tr><td class=\"" . $css_switcher->getClass() . "\">";
 		echo "<font size=\"-1\">";
@@ -319,10 +319,10 @@ else{
 			echo "<input type=\"image\" name=\"mod_y\" " . makeButton("jaehrlich2", "src") . " border=\"0\">\n";
 		else
 			echo "<input type=\"image\" name=\"mod_y\" " . makeButton("jaehrlich", "src") . " border=\"0\">\n";
-		
+
 		echo "</font></td></tr>\n";
 	}
-	
+
 	if ($mod == "MONTHLY" || $mod == "YEARLY") {
 		$form_week_arr = array(
 				"1" => _("ersten"),
@@ -331,7 +331,7 @@ else{
 				"4" => _("vierten"),
 				"5" => _("letzten")
 		);
-		
+
 		$form_day_arr = array(
 				"1" => _("Montag"),
 				"2" => _("Dienstag"),
@@ -341,7 +341,7 @@ else{
 				"6" => _("Samstag"),
 				"7" => _("Sonntag")
 		);
-		
+
 		$form_month_arr = array(
 				"1" => _("Januar"),
 				"2" => _("Februar"),
@@ -357,7 +357,7 @@ else{
 				"12" => _("Dezember")
 		);
 	}
-	
+
 	switch ($mod) {
 		case "DAILY":
 			$css_switcher->switchClass();
@@ -377,11 +377,11 @@ else{
 			echo ">&nbsp;" . _("Jeden Werktag") ."</font></td>";
 			echo "</td></tr>\n";
 			break;
-			
+
 		case "WEEKLY":
 			if (!is_array($wdays))
 				$wdays = array(strftime('%u', mktime(0, 0, 0, $start_month, $start_day, $start_year)));
-			
+
 			$css_switcher->switchClass();
 			echo "<tr><td nowrap=\"nowrap\" class=\"" . $css_switcher->getClass() . "\">\n";
 			echo "<font size=\"-1\">&nbsp; ";
@@ -415,7 +415,7 @@ else{
 			echo "><font size=\"-1\">&nbsp;" . _("Sonntag") . "</font></td>\n";
 			echo "</tr>\n</table></td></tr>\n";
 			break;
-			
+
 		case "MONTHLY":
 			$css_switcher->switchClass();
 			echo "<tr><td nowrap=\"nowrap\" class=\"" . $css_switcher->getClass() . "\">\n";
@@ -435,24 +435,24 @@ else{
 			if ($type_m == "wday") echo " checked";
 			echo ">&nbsp;" . _("Jeden") . "&nbsp;";
 			echo "<select name=\"sinterval_m\" size=\"1\">\n";
-			
+
 			foreach ($form_week_arr as $key => $value) {
 				echo "<option value=\"$key\"";
 				if($sinterval_m == $key)
 					echo " selected";
 				echo ">$value\n";
 			}
-			
+
 			echo "</select>\n";
 			echo "<select name=\"wday_m\" size=\"1\">\n";
-			
+
 			foreach ($form_day_arr as $key => $value) {
 				echo "<option value=\"$key\"";
 				if($wday_m == $key)
 					echo " selected";
 				echo ">$value\n";
 			}
-			
+
 			echo "</select>\n";
 			echo "&nbsp;" . _("alle");
 			echo " &nbsp;<input type=\"text\" name=\"linterval_m2\" size=\"3\" maxlength=\"3\" value=\"";
@@ -460,13 +460,13 @@ else{
 			echo "\">" . ($err["linterval_m2"] ? $error_sign : "");
 			echo "&nbsp;" . _("Monate") . "</font></td></tr>\n";
 			break;
-			
+
 		case "YEARLY":
 			if(!$month_y1)
 				$month_y1 = $start_month;
 			if(!$month_y2)
 				$month_y2 = $start_month;
-				
+
 			$css_switcher->switchClass();
 			echo "<tr><td nowrap=\"nowrap\" class=\"" . $css_switcher->getClass() . "\">\n";
 			echo "<font size=\"-1\">&nbsp; <input type=\"radio\" name=\"type_y\" value=\"day\"";
@@ -477,41 +477,41 @@ else{
 			echo "\">" . ($err["day_y"] ? $error_sign : "");
 			echo "&nbsp;.&nbsp;\n";
 			echo "<select name=\"month_y1\" size=\"1\">\n";
-			
+
 			foreach ($form_month_arr as $key => $value) {
 				echo "<option value=\"$key\"";
 				if($month_y1 == $key)
 					echo " selected";
 				echo ">$value\n";
 			}
-			
+
 			echo "</select>\n";
 			echo "<br><br>&nbsp; <input type=\"radio\" name=\"type_y\" value=\"wday\"";
 			if ($type_y == "wday") echo " checked";
 			echo ">&nbsp;";
 			$out_1 = "&nbsp; ";
 			$out_1 .= "<select name=\"sinterval_y\" size=\"1\">\n";
-			
+
 			foreach ($form_week_arr as $key => $value) {
 				$out_1 .= "<option value=\"$key\"";
 				if($sinterval_y == $key)
 					$out_1 .= " selected";
 				$out_1 .= ">$value\n";
 			}
-			
+
 			$out_1 .= "</select>\n<select name=\"wday_y\" size=\"1\">\n";
-			
+
 			foreach ($form_day_arr as $key => $value) {
 				$out_1 .= "<option value=\"$key\"";
 				if ($wday_y == $key)
 					$out_1 .= " selected";
 				$out_1 .= ">$value\n";
 			}
-			
+
 			$out_1 .= "</select>&nbsp;";
 			printf(_("Jeden %s im"), $out_1);
 			echo "&nbsp;<select name=\"month_y2\" size=\"1\">\n";
-			
+
 			foreach ($form_month_arr as $key => $value) {
 				echo "<option value=\"$key\"";
 				if ($month_y2 == $key)
@@ -520,11 +520,11 @@ else{
 			}
 			echo "</select></font></td></tr>\n";
 			break;
-	}	
-	
+	}
+
 	$css_switcher->switchClass();
 	echo "<tr><td class=\"" . $css_switcher->getClass() . "\">";
-	
+
 	if ($mod != 'SINGLE') {
 		// end of recurrence
 		echo '<table border="0" cellspacing="0" cellpadding="0">';
@@ -555,7 +555,7 @@ else{
 				. ($err['exp_count'] ? $error_sign : '') . ' &nbsp;');
 		echo "</font></td></tr>\n</table>\n";
 		echo "</td>\n</tr>\n";
-		
+
 		// exceptions
 		$css_switcher->switchClass();
 		echo "<tr><td class=\"" . $css_switcher->getClass() . "\">";
@@ -571,7 +571,7 @@ else{
 		echo ($err["exc_time"] ? $error_sign : "");
 		echo to_string_popupcalendar(12, $disabled);
 		echo '&nbsp;&nbsp;';
-		echo "<input align=\"absmiddle\" type=\"image\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/add_right.gif\"";
+		echo "<input align=\"absmiddle\" type=\"image\" src=\"".$GLOBALS['ASSETS_URL']."images/add_right.gif\"";
 		echo " name=\"add_exc\"" . tooltip(_("Ausnahme hinzufügen")) . ">";
 		echo "&nbsp; &nbsp;</font></td><td><font size=\"-1\">\n";
 		echo "<select name=\"exc_delete[]\" size=\"4\" multiple=\"multiple\" style=\"width:170px; vertical-align:middle;\">\n";
@@ -581,11 +581,11 @@ else{
 		}
 		echo "</select>\n</font></td></tr>\n";
 		echo "<tr><td>&nbsp;</td>\n<td><input style=\"vertical-align:middle;\" type=\"image\" ";
-		echo " src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/trash.gif\" name=\"del_exc\"";
+		echo " src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" name=\"del_exc\"";
 		echo tooltip(_("ausgewählte Ausnahme löschen")) . ">\n";
 		echo '<font size="-1">' . _("ausgew&auml;hlte l&ouml;schen") . '</font>';
 		echo "</td></tr></table>\n</td>\n</tr>\n";
-		
+
 	}
 	else {
 		echo "<font size=\"-1\">&nbsp; ";
@@ -601,11 +601,11 @@ if ($termin_id) {
 	$info_box['export_link'] .= $atermin->getId();
 	if (get_class($atermin) == "seminarevent")
 		$info_box['export_link'] .= '&evtype=sem';
-	$info_box['export'] = array('icon' => 'pictures/vcardexport.gif',
+	$info_box['export'] = array('icon' => 'vcardexport.gif',
 			'text' => sprintf(_("Sie k&ouml;nnen diesen Termin einzeln %sexportieren%s."),
 			"<a href=\"{$info_box['export_link']}\">", "</a>"));
 }
-	
+
 if (isset($atermin) && get_class($atermin) == "seminarevent") {
 	$db = new DB_Seminar();
 	$query = "SELECT name FROM seminare WHERE Seminar_id='".$atermin->getSeminarId()."'";
@@ -615,7 +615,7 @@ if (isset($atermin) && get_class($atermin) == "seminarevent") {
 										. "seminar_main.php?auswahl=" . $atermin->getSeminarId()
 										. "\">" . htmlReady($db->f("name")) . "</a>";
 	$permission = get_perm($atermin->getSeminarId());
-	
+
 	// create infobox entries
 	$info_box['sem1'] = sprintf(_("Dieser Termin geh&ouml;rt zur Veranstaltung:%sVeranstaltungstermine k&ouml;nnen nicht im pers&ouml;nlichen Terminkalender bearbeitet werden.")
 			, '<p>'.$link_to_seminar.'</p>');
@@ -626,22 +626,22 @@ if (isset($atermin) && get_class($atermin) == "seminarevent") {
 				, $CANONICAL_RELATIVE_PATH_STUDIP, $atermin->getSeminarId(), $atermin->getId());
 		$info_box['sem3'] = sprintf(_("Um diesen Termin zu bearbeiten, wechseln Sie bitte in die %sTerminverwaltung%s.")
 				, $link_to_seminar, '</a>');
-		
+
 		$info_box['all'][0]['kategorie'] = _("Information:");
-		$info_box['all'][0]['eintrag'][] = array("icon" => "pictures/ausruf_small.gif",
+		$info_box['all'][0]['eintrag'][] = array('icon' => "ausruf_small.gif",
 				"text" => $info_box['sem1']);
 		$info_box['all'][1]['kategorie'] = _("Aktion:");
-		$info_box['all'][1]['eintrag'][] = array("icon" => "pictures/meinesem.gif",
+		$info_box['all'][1]['eintrag'][] = array('icon' => "meinesem.gif",
 				"text" => $info_box['sem2']);
-		$info_box['all'][1]['eintrag'][] = array("icon" => "pictures/admin.gif",
+		$info_box['all'][1]['eintrag'][] = array('icon' => "admin.gif",
 				"text" => $info_box['sem3']);
 	}
 	else {
 		$info_box['all'][0]['kategorie'] = _("Information:");
-		$info_box['all'][0]['eintrag'][] = array("icon" => "pictures/ausruf_small.gif",
+		$info_box['all'][0]['eintrag'][] = array('icon' => "ausruf_small.gif",
 				"text" => $info_box['sem1']);
 		$info_box['all'][1]['kategorie'] = _("Aktion:");
-		$info_box['all'][1]['eintrag'][] = array("icon" => "pictures/meinesem.gif",
+		$info_box['all'][1]['eintrag'][] = array('icon' => "meinesem.gif",
 				"text" => $info_box['sem2']);
 	}
 	$info_box['all'][1]['eintrag'][] = $info_box['export'];
@@ -694,7 +694,7 @@ else {
 				"</a>");
 	}
 	$info_box['all'][0]['kategorie'] = _("Information:");
-	$info_box['all'][0]['eintrag'][] = array("icon" => "pictures/ausruf_small.gif",
+	$info_box['all'][0]['eintrag'][] = array('icon' => "ausruf_small.gif",
 			"text" => $info_box['count']);
 	if ($termin_id) {
 		$info_box['all'][1]['kategorie'] = _("Aktion:");
@@ -705,7 +705,7 @@ else {
 
 echo "</td></tr></table></form>\n</td>\n";
 echo "<td class=\"blank\" align=\"center\" valign=\"top\" width=\"1%\">\n";
-print_infobox($info_box['all'], "pictures/dates.jpg");
+print_infobox($info_box['all'], "dates.jpg");
 echo "</td></tr>\n";
 echo "<tr><td class=\"blank\" colspan=\"2\">&nbsp;</td></tr>\n";
 

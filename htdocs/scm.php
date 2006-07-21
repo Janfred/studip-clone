@@ -35,7 +35,7 @@ checkObject(); // do we have an open object?
 checkObjectModule("scm");
 object_set_visit_module("scm");
 
-$msg=""; // Message to display 
+$msg=""; // Message to display
 
 
 switch ($i_view) {
@@ -53,7 +53,7 @@ switch ($i_view) {
 }
 
 
-function scm_max_cols() 
+function scm_max_cols()
 {
 	global $auth;
 	//maximale spaltenzahl berechnen
@@ -64,7 +64,7 @@ function scm_max_cols()
 	}
 }
 
-function scm_seminar_header($range_id, $site_name) 
+function scm_seminar_header($range_id, $site_name)
 {
 	$t=new Table();
 	$t->setTableWidth("100%");
@@ -72,7 +72,7 @@ function scm_seminar_header($range_id, $site_name)
 	echo $t->openRow();
 	echo $t->openCell(array("class"=>"topic", "width"=>"100%"));
 	echo "<b>&nbsp;";
-	echo "<img src=\"pictures/icon-cont.gif\" align=absmiddle>&nbsp; ";
+	echo "<img src=\"".$GLOBALS['ASSETS_URL']."images/icon-cont.gif\" align=absmiddle>&nbsp; ";
 	echo getHeaderLine($range_id) . " - $site_name</b>";
 	echo $t->closeCell();
 	echo $t->closeRow();
@@ -91,7 +91,7 @@ function scm_change_header($table, $titel, $user_id, $chdate) {
 	$titel;
 	$zusatz = "<font size=-1>";
 	$zusatz .= sprintf(_("Zuletzt ge&auml;ndert von %s am %s"), "</font><a href=\"about.php?username=".get_username($user_id)."\"><font size=-1 color=\"#333399\">".get_fullname ($user_id,'full',true)."</font></a><font size=-1>", date("d.m.Y, H:i",$chdate)."<font size=-1>&nbsp;"."</font>");
-	$icon="&nbsp;<img src=\"pictures/cont_cont.gif\">";
+	$icon="&nbsp;<img src=\"".$GLOBALS['ASSETS_URL']."images/cont_cont.gif\">";
 
 	echo $table->openRow();
 	echo $table->openCell(array("colspan"=>"2"));
@@ -119,7 +119,7 @@ function scm_get_content($range_id) {
 function scm_show_content($range_id, $msg) {
 	global $rechte, $PHP_SELF;
 	$result=scm_get_content($range_id);
-	
+
 	$header_table=scm_seminar_header($range_id, $result["tab_name"]);
 
 	$frame_table=new Table();
@@ -147,7 +147,7 @@ function scm_show_content($range_id, $msg) {
 		} else {
 			$edit = "";
 		}
-		printcontent(0,0, formatReady($result["content"]), $edit);	
+		printcontent(0,0, formatReady($result["content"]), $edit);
 		echo $printcontent_table->close();
 		echo $content_table->closeRow();
 	} else {
@@ -163,16 +163,16 @@ function scm_edit_content($range_id) {
 	global $perm, $PHP_SELF, $SCM_PRESET;
 	$result=scm_get_content($range_id);
 	$max_col=scm_max_cols();
-	
+
 	$header_table=scm_seminar_header($range_id, $result["tab_name"]);
-	
+
 	print("<form action=\"$PHP_SELF\" method=\"POST\">");
 
 	$frame_table=new Table();
 	$frame_table->setTableWidth("100%");
 	$frame_table->setCellClass("blank");
 	echo $frame_table->openCell();
-	
+
 	print("<blockquote>");
 	print(_("Hier k&ouml;nnen Sie eine Seite mit Zusatzinformationen zu Ihrer Veranstaltung gestalten. Sie können Links normal eingeben, diese werden anschlie&szlig;end automatisch als Hyperlinks dargestellt."));
 	print("</blockquote>");
@@ -189,36 +189,36 @@ function scm_edit_content($range_id) {
 	$titel.="</font size=\"-1\">&nbsp;"._("oder w&auml;hlen Sie hier einen Namen aus:")."&nbsp;\n";
 	$titel.="<select style=\"font-size:8 pt;\" name=\"scm_preset\">";
 	$titel.="<option value=\"0\">- "._("Vorlagen")." -</option>\n";
-	foreach ($SCM_PRESET as $key=>$val) 
+	foreach ($SCM_PRESET as $key=>$val)
 		$titel.=sprintf("<option value=\"%s\">%s</option>\n", $key, $val["name"]);
 	$titel.="</select>";
 
 	scm_change_header($content_table, $titel, $result["user_id"], $result["chdate"]);
-	
+
 	$content="<textarea name=\"content\" style=\"width: 90%\" cols=$max_col rows=10 wrap=virtual >".htmlReady($result["content"])."</textarea>\n";
 	if (!$result)
 		$content.="<input type=\"HIDDEN\" name=\"new_entry\" value=\"1\"><b>\n";
 	$content.= "<input type=\"HIDDEN\" name=\"scm_id\" value=\"$scm_id\">";
 	$content.= "<input type=\"HIDDEN\" name=\"i_view\" value=\"change\">";
-	
+
 	$edit="<input style=\"vertical-align: middle;\" type=\"IMAGE\" name=\"send_scm\" value=\"&auml;nderungen vornehmen\" border=0 " . makeButton("uebernehmen", "src") . ">";
 	$edit.="&nbsp;<a href=\"$PHP_SELF\">". makeButton("abbrechen") . "</a>";
 	$edit .= "<font size=\"-1\">&nbsp;&nbsp;<a href=\"show_smiley.php\" target=\"new\">";
 	$edit .= "Smileys</a>&nbsp;&nbsp;<a href=\"help/index.php?help_page=ix_forum6.htm\" ";
 	$edit .= "target=\"new\">Formatierungshilfen</a></font>\n";
-	
+
 	echo $content_table->openRow();
 	echo $content_table->openCell();
 	$printcontent_table=new Table(array("width"=>"100%"));
 	echo $printcontent_table->open();
-	printcontent(0,0, $content, $edit);	
+	printcontent(0,0, $content, $edit);
 	echo $printcontent_table->close();
 	echo $content_table->closeRow();
 	echo $content_table->close();
 	echo $frame_table->row(array("&nbsp;"));
 	echo $frame_table->close();
 	echo $header_table->close();
-	
+
 	print("</form>");
 }
 
@@ -229,12 +229,12 @@ function scm_change_content($scm_id, $range_id, $name, $preset, $content, $new_e
 		echo "</tr></td></table>";
 		return;
 	}
-	
+
 	if ($preset)
 		$tab_name = $SCM_PRESET[$preset]["name"];
 	else
 		$tab_name = $name;
-	
+
 	if ($new_entry) {
 		$scm_id=md5(uniqid("simplecontent"));
 		$db->query("INSERT INTO scm SET scm_id = '$scm_id', range_id='$range_id', user_id='$user->id', tab_name='$tab_name', content='$content', mkdate='".time()."', chdate='".time()."'");

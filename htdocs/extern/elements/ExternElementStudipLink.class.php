@@ -1,9 +1,9 @@
 <?
 /**
 * ExternElementStudipLink.class.php
-* 
-* 
-* 
+*
+*
+*
 *
 * @author		Peter Thienel <pthienel@web.de>, Suchi & Berg GmbH <info@data-quest.de>
 * @version	$Id$
@@ -16,7 +16,7 @@
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // ExternElementStudipLink.class.php
-// 
+//
 // Copyright (C) 2003 Peter Thienel <pthienel@web.de>,
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
@@ -50,72 +50,72 @@ class ExternElementStudipLink extends ExternElement {
 	function ExternElementStudipLink ($config = "") {
 		if ($config)
 			$this->config = $config;
-		
+
 		$this->name = "StudipLink";
 		$this->real_name = _("Link zum Stud.IP Administrationsbereich");
 		$this->description = _("Link zum direkten Einsprung in den Stud.IP Administrationsbereich.");
 	}
-	
+
 	/**
-	* 
+	*
 	*/
 	function getDefaultConfig () {
-		
+
 		$config = array(
 			"linktext" => _("Daten &auml;ndern"),
 			"imageurl" => "",
 			"image" => "1",
 			"align" => "left"
 		);
-		
+
 		return $config;
 	}
-	
+
 	function toStringEdit ($post_vars = "", $faulty_values = "",
 			$edit_form = "", $anker = "") {
-			
+
 		if ($faulty_values == '')
-			$faulty_values = array();	
+			$faulty_values = array();
 		$out = '';
 		$tag_headline = '';
 		$table = '';
 		if ($edit_form == '')
 			$edit_form =& new ExternEditHtml($this->config, $post_vars, $faulty_values, $anker);
-		
+
 		$edit_form->setElementName($this->getName());
 		$element_headline = $this->getEditFormHeadline($edit_form);
-		
+
 		$content_table = $edit_form->getEditFormContent($this->attributes);
 		$content_table .= $edit_form->editBlankContent();
-		
+
 		$headline = $edit_form->editHeadline(_("Weitere Angaben"));
-		
+
 		$content = $edit_form->editAlign("align");
-		
+
 		$title = _("Linktext:");
 		$info = _("Geben Sie den Text für den Link ein.");
 		$content .= $edit_form->editTextfieldGeneric("linktext", $title, $info, 40, 150);
-		
+
 		$title = _("Bild anzeigen:");
 		$info = _("Anwählen, wenn ein Bild als Link angezeigt werden soll.");
 		$value = "1";
 		$content .= $edit_form->editCheckboxGeneric("image", $title, $info, $value, "");
-		
+
 		$title = _("Bild-URL:");
 		$info = _("Geben Sie die URL eines Bildes ein, dass als Link dienen soll. Wenn sie keine URL angeben, wird ein Standard-Bild (Pfeile) ausgegeben.");
 		$content .= $edit_form->editTextfieldGeneric("imageurl", $title, $info, 40, 150);
-		
+
 		$content_table .= $edit_form->editContentTable($headline, $content);
 		$content_table .= $edit_form->editBlankContent();
-				
+
 		$submit = $edit_form->editSubmit($this->config->getName(),
 				$this->config->getId(), $this->getName());
 		$out = $edit_form->editContent($content_table, $submit);
 		$out .= $edit_form->editBlank();
-		
+
 		return  $element_headline . $out;
 	}
-	
+
 	function toString ($args) {
 		$out = "<table width=\"{$args['width']}\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n";
 		$out .= "<tr>";
@@ -130,16 +130,16 @@ class ExternElementStudipLink extends ExternElement {
 				$img = "<img border=\"0\" align=\"absmiddle\" src=\"$image_url\">";
 			else {
 				$img = "<img border=\"0\" src=\"{$GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']}";
-				$img .= "pictures/login.gif\" align=\"absmiddle\">";
+				$img .= $GLOBALS['ASSETS_URL']."images/login.gif\" align=\"absmiddle\">";
 			}
 			$out .= sprintf("&nbsp;<a href=\"%s\"%s target=\"_blank\">%s</a>", $args['link'],
 					$this->config->getAttributes($this->name, "a"), $img);
 		}
 		$out .= "\n</td></tr></table>\n";
-		
+
 		return $out;
 	}
-	
+
 	function checkValue ($attribute, $value) {
 		if ($attribute == "image") {
 			// This is especially for checkbox-values. If there is no checkbox
@@ -151,10 +151,10 @@ class ExternElementStudipLink extends ExternElement {
 			}
 			return !($value == "1" || $value == "0");
 		}
-		
+
 		return FALSE;
 	}
-	
+
 }
 
 ?>

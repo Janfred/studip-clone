@@ -22,7 +22,7 @@ require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 
 if (!isset($druck)) {  // Kopfzeile anzeigen
 	?>
-	
+
 	<table class="header" border="0" width="100%" cellspacing="0" cellpadding="0" bordercolor="#999999" height="25">
 		<tr>
 			<td class="header" width="33%" align="center">
@@ -32,13 +32,13 @@ if (!isset($druck)) {  // Kopfzeile anzeigen
 				<a href="index.php?druck=1<?if(isset($help_page)) echo "&help_page=".$help_page?>" target="_top"><font color="#FFFFFF" size="4"><b><?=_("Druckansicht")?></b></font></a>
 			</td>
 			<td class="header" width="33%" align="center" valign="middle">
-				<a href="../impressum.php"><img border="0" src="../pictures/blank.gif" height="1" width="45"><br><img border="0" src="../pictures/logo2.gif" alt="<?=_("Impressum")?>" valign="middle"></a>
+				<a href="../impressum.php"><img border="0" src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" height="1" width="45"><br><img border="0" src="<?= $GLOBALS['ASSETS_URL'] ?>images/logo2.gif" alt="<?=_("Impressum")?>" valign="middle"></a>
 			</td>
 		</tr>
 	</table><br>
 	<?
 }
-	
+
 
 
 if (isset($help_page) && !isset($druck)) {  // wir zeigen das Kartei-System
@@ -58,10 +58,10 @@ if (isset($help_page) && !isset($druck)) {  // wir zeigen das Kartei-System
 
 	// Reiter ausgeben
 	$tooltip = "Dieser Abschnitt der Hilfe erklärt: " . $pages[$topkat]["text"];
-	printf("<td class=\"links1b\">&nbsp; <img align=\"absmiddle\" src=\"../pictures/info.gif\" %s ", tooltip($tooltip, TRUE, $auth->auth["jscript"]));
-	printf("border=\"0\"></b>&nbsp; <img src=\"../pictures/reiter1.jpg\" align=\"absmiddle\"></td>");
-	
-	printf("<td class=\"links1b\" align=\"right\" nowrap><a class=\"links1b\" href=\"$PHP_SELF?help_page=%s\">&nbsp; &nbsp; %s&nbsp; &nbsp; </a><img src=\"../pictures/reiter4.jpg\" align=absmiddle></td>\n",
+	printf("<td class=\"links1b\">&nbsp; <img align=\"absmiddle\" src=\"".$GLOBALS['ASSETS_URL']."images/info.gif\" %s ", tooltip($tooltip, TRUE, $auth->auth["jscript"]));
+	printf("border=\"0\"></b>&nbsp; <img src=\"".$GLOBALS['ASSETS_URL']."images/reiter1.jpg\" align=\"absmiddle\"></td>");
+
+	printf("<td class=\"links1b\" align=\"right\" nowrap><a class=\"links1b\" href=\"$PHP_SELF?help_page=%s\">&nbsp; &nbsp; %s&nbsp; &nbsp; </a><img src=\"".$GLOBALS['ASSETS_URL']."images/reiter4.jpg\" align=absmiddle></td>\n",
 			$pages[$topkat]["kategorien"][0]["page"],
 			htmlReady($pages[$topkat]["name"]));
 
@@ -73,10 +73,10 @@ if (isset($help_page) && !isset($druck)) {  // wir zeigen das Kartei-System
 	for ($i = 0; $i < count($pages[$topkat]["kategorien"]); $i++) {
 
 		if ($pages[$topkat]["kategorien"][$i]["page"] == $help_page)
-			$picture = "../pictures/forumrot.gif";
+			$picture = $GLOBALS['ASSETS_URL']."images/forumrot.gif";
 		else
-			$picture = "../pictures/forumgrau.gif";
-		
+			$picture = $GLOBALS['ASSETS_URL']."images/forumgrau.gif";
+
 
 		// Unterpunkte ausgeben, wenn ich die Rechte habe oder auf der Seite stehe
 		if ($pages[$topkat]["perm"] == "" || $perm->have_perm($pages[$topkat]["perm"]) || $pages[$topkat]["kategorien"][$i]["page"] == $help_page) {
@@ -85,10 +85,10 @@ if (isset($help_page) && !isset($druck)) {  // wir zeigen das Kartei-System
 					$pages[$topkat]["kategorien"][$i]["page"],
 					htmlReady($pages[$topkat]["kategorien"][$i]["name"]));
 		}
-				
+
 	}
-	print("<br></td></tr><tr><td background=\"../pictures/reiter3.jpg\">&nbsp;</td></tr></table>");
-	
+	print("<br></td></tr><tr><td background=\"".$GLOBALS['ASSETS_URL']."images/reiter3.jpg\">&nbsp;</td></tr></table>");
+
 }  // Ende Kartei-System
 
 

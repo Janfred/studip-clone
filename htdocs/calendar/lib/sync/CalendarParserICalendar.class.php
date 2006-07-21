@@ -292,10 +292,8 @@ class CalendarParserICalendar extends CalendarParser {
 					$properties['DTEND'] = $properties['DTSTART'];
 				
 				// day events starts at 00:00:00 and ends at 23:59:59
-				if ($check['DAY_EVENT']) {
+				if ($check['DAY_EVENT'])
 					$properties['DTEND']--;
-					$properties['RRULE']['duration']--;
-				}
 				
 				$this->components[] = $properties;
 			}

@@ -1,9 +1,9 @@
 <?
 /**
 * EditResourceData.class.php
-* 
+*
 * shows the forms to edit the object
-* 
+*
 *
 * @author		Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
 * @version		$Id$
@@ -46,24 +46,24 @@ $cssSw = new cssClassSwitcher;
 
 
 /*****************************************************************************
-EditResourceData, Darstellung der unterschiedlichen Forms zur 
+EditResourceData, Darstellung der unterschiedlichen Forms zur
 Bearbeitung eines Objects
 /*****************************************************************************/
 class EditResourceData {
 	var $resObject;		//Das Oject an dem gearbeitet wird
 	var $used_view;		//the used view
-	
+
 	//Konstruktor
 	function EditResourceData ($resource_id) {
 		$this->db=new DB_Seminar;
 		$this->db2=new DB_Seminar;
 		$this->resObject =& ResourceObject::Factory($resource_id);
 	}
-	
+
 	function setUsedView ($value) {
 		$this->used_view = $value;
 	}
-	
+
 	//private
 	function selectCategories($select_rooms = TRUE) {
 		if (!$select_rooms)
@@ -89,7 +89,7 @@ class EditResourceData {
 		else
 			return TRUE;
 	}
-	
+
 	//private
 	function selectInstitutes($fak_id) {
 		$this->db2->query ( "SELECT Name, Institut_id FROM Institute WHERE fakultaets_id = '$fak_id' AND  fakultaets_id != Institut_id ORDER BY name");
@@ -98,7 +98,7 @@ class EditResourceData {
 		else
 			return TRUE;
 	}
-	
+
 
 	//private
 	function selectPerms() {
@@ -113,7 +113,7 @@ class EditResourceData {
 		global $PHP_SELF, $perm, $user, $resources_data, $new_assign_object, $search_user, $search_string_search_user,
 			$CANONICAl_RELATIVE_PATH_STUDIP, $RELATIVE_PATH_RESOURCES, $cssSw, $view_mode,$quick_view, $add_ts,
 			$search_exp_room, $search_room_x, $search_properties_x;
-		
+
 		$resReq = new RoomRequest();
 
 		$killButton = TRUE;
@@ -121,7 +121,7 @@ class EditResourceData {
 			$resAssign = unserialize($new_assign_object);
 		else
 			$resAssign =& AssignObject::Factory($assign_id);
-		
+
 		//workaround anoack: AssignObject::resource_id  must match the actual resource object
 		if($resAssign->getResourceId() != $resources_data['actual_object']) {
 			$resAssign =& AssignObject::Factory(false);
@@ -130,14 +130,14 @@ class EditResourceData {
 		if ($resAssign->isNew()){
 			$resAssign->setResourceId($resources_data['actual_object']);
 		}
-		
+
 		if (($add_ts) && ($resAssign->isNew())) {
 			$resAssign->setBegin($add_ts);
 			$resAssign->setEnd($add_ts + (2 * 60 * 60));
 		}
-		
+
 		$owner_type = $resAssign->getOwnerType();
-		
+
 		//it is not allowed to edit or kill assigns for rooms here
 		if (($owner_type == "sem") || ($owner_type == "date")) {
 			$resObject =& ResourceObject::Factory($resAssign->getResourceId());
@@ -147,10 +147,10 @@ class EditResourceData {
 			}
 		}
 
-			
+
 		//load the object perms
 		$ResourceObjectPerms =& ResourceObjectPerms::Factory($resAssign->getResourceId());
-		
+
 		//in some case, we load the perms from the assign object, if it has an owner
 		if (($ResourceObjectPerms->getUserPerm() != "admin") && (!$resAssign->isNew()) && (!$new_assign_object)) {
 			//load the assign-object perms of a saved object
@@ -163,28 +163,28 @@ class EditResourceData {
 		if (!isset($ObjectPerms)){
 			$ObjectPerms =& $ResourceObjectPerms;
 		}
-		
+
 		if ((!$ObjectPerms->havePerm("autor"))){ // && (!$resAssign->isNew()) && (!$new_assign_object)) {
 			$killButton = FALSE;
 			$lockedAssign = TRUE;
 		}
-	
+
 		if ($resAssign->isNew())
 			$killButton = FALSE;
-			
+
 		if ($resAssign->isNew() && $lockedAssign){
-			echo "<div align=\"center\"><img src=\"pictures/ausruf_small2.gif\" align=\"absmiddle\" />&nbsp;<font size=-1>";
+			echo "<div align=\"center\"><img src=\"".$GLOBALS['ASSETS_URL']."images/ausruf_small2.gif\" align=\"absmiddle\" />&nbsp;<font size=-1>";
 			echo (_("Sie haben nicht die Berechtigung, für diese Resource eine Belegung zu erstellen."));
 			echo "</div>";
 			return;
 		}
-		
+
 		?>
 		<table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
 		<form name="Formular" method="POST" action="<?echo $PHP_SELF ?>?change_object_schedules=<? printf ("%s", (!$resAssign->isNew()) ?  $resAssign->getId() : "NEW"); ?>">
 			<input type="HIDDEN" name="quick_view" value="<?=$this->used_view ?>" />
 			<input type="HIDDEN" name="quick_view_mode" value="<?=$view_mode ?>" />
-			<input type="HIDDEN" name="change_schedule_resource_id" value="<? printf ("%s", (!$resAssign->isNew()) ? $resAssign->getResourceId() : $resources_data["actual_object"]); ?>" />			
+			<input type="HIDDEN" name="change_schedule_resource_id" value="<? printf ("%s", (!$resAssign->isNew()) ? $resAssign->getResourceId() : $resources_data["actual_object"]); ?>" />
 			<input type="HIDDEN" name="change_schedule_repeat_month_of_year" value="<? echo $resAssign->getRepeatMonthOfYear() ?>" />
 			<input type="HIDDEN" name="change_schedule_repeat_day_of_month" value="<? echo $resAssign->getRepeatDayOfMonth() ?>" />
 			<input type="HIDDEN" name="change_schedule_repeat_week_of_month" value="<? echo $resAssign->getRepeatWeekOfMonth() ?>" />
@@ -192,9 +192,9 @@ class EditResourceData {
 			<input type="HIDDEN" name="change_schedule_repeat_interval" value="<? echo $resAssign->getRepeatInterval() ?>" />
 			<input type="HIDDEN" name="change_schedule_repeat_quantity" value="<? echo $resAssign->getRepeatQuantity() ?>" />
 			<tr>
-				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp;
 				</td>
-				<td class="<? echo $cssSw->getClass() ?>" colspan=2 align="center"> 				
+				<td class="<? echo $cssSw->getClass() ?>" colspan=2 align="center">
 				<?
 				if (!$lockedAssign) {
 				?>
@@ -206,8 +206,8 @@ class EditResourceData {
 				if ($killButton) {
 					?>&nbsp;<input type="IMAGE" align="absmiddle" <?=makeButton("loeschen", "src") ?> border=0 name="kill_assign" value="<?=_("l&ouml;schen")?>"><?
 				}
-				if  ($resAssign->isNew()) 
-					print "<br /><img src=\"pictures/ausruf_small2.gif\" align=\"absmiddle\" />&nbsp;<font size=-1>"._("Sie erstellen eine neue Belegung")."</font>";
+				if  ($resAssign->isNew())
+					print "<br /><img src=\"".$GLOBALS['ASSETS_URL']."images/ausruf_small2.gif\" align=\"absmiddle\" />&nbsp;<font size=-1>"._("Sie erstellen eine neue Belegung")."</font>";
 				elseif (!$lockedAssign)
 					print "<br />&nbsp;";
 				if ($lockedAssign) {
@@ -216,30 +216,30 @@ class EditResourceData {
 						$this->db->query($query);
 						$this->db->next_record();
 					} elseif ($owner_type == "date") {
-						$query = sprintf("SELECT Name, Seminar_id FROM termine LEFT JOIN seminare ON (termine.range_id = seminare.Seminar_id) WHERE termin_id='%s' ",$resAssign->getAssignUserId());									
+						$query = sprintf("SELECT Name, Seminar_id FROM termine LEFT JOIN seminare ON (termine.range_id = seminare.Seminar_id) WHERE termin_id='%s' ",$resAssign->getAssignUserId());
 						$this->db->query($query);
 						$this->db->next_record();
 					}
 					if ($owner_type == "sem") {
-						print "<img src=\"pictures/ausruf_small2.gif\" align=\"absmiddle\" />&nbsp;<font size=-1>";
-						printf (_("Diese Belegung ist ein regelm&auml;&szlig;iger Termin der Veranstaltung %s, die in diesem Raum stattfindet."), 
-							($perm->have_studip_perm("user", $this->db->f("Seminar_id"))) ? 
-								"<a href=\"seminar_main.php?auswahl=".$this->db->f("Seminar_id")."\" onClick=\"return check_opener(this)\">".htmlReady($this->db->f("Name"))."</a>" : 
+						print "<img src=\"".$GLOBALS['ASSETS_URL']."images/ausruf_small2.gif\" align=\"absmiddle\" />&nbsp;<font size=-1>";
+						printf (_("Diese Belegung ist ein regelm&auml;&szlig;iger Termin der Veranstaltung %s, die in diesem Raum stattfindet."),
+							($perm->have_studip_perm("user", $this->db->f("Seminar_id"))) ?
+								"<a href=\"seminar_main.php?auswahl=".$this->db->f("Seminar_id")."\" onClick=\"return check_opener(this)\">".htmlReady($this->db->f("Name"))."</a>" :
 								"<a href=\"details.php?&sem_id=".$this->db->f("Seminar_id")."\" onClick=\"return check_opener(this)\">".htmlReady($this->db->f("Name"))."</a>");
 						if ($perm->have_studip_perm("tutor", $this->db->f("Seminar_id")))
-							printf ("<br />"._("Um die Belegung zu ver&auml;ndern, &auml;ndern Sie die %sZeiten%s der Veranstaltung"), "<img src=\"pictures/link_intern.gif\" border=\"0\"/>&nbsp;<a href=\"admin_metadates.php?select_sem_id=".$this->db->f("Seminar_id")."\" onClick=\"return check_opener(this)\">", "</a>");
+							printf ("<br />"._("Um die Belegung zu ver&auml;ndern, &auml;ndern Sie die %sZeiten%s der Veranstaltung"), "<img src=\"".$GLOBALS['ASSETS_URL']."images/link_intern.gif\" border=\"0\"/>&nbsp;<a href=\"admin_metadates.php?select_sem_id=".$this->db->f("Seminar_id")."\" onClick=\"return check_opener(this)\">", "</a>");
 						print "</font>";
 					} elseif ($owner_type == "date") {
-						print "<img src=\"pictures/ausruf_small2.gif\" align=\"absmiddle\" />&nbsp;<font size=-1>";
-						printf (_("Diese Belegung ist ein Einzeltermin der Veranstaltung %s, die in diesem Raum stattfindet."), 
-							($perm->have_studip_perm("user", $this->db->f("Seminar_id"))) ? 
-								"<a href=\"seminar_main.php?auswahl=".$this->db->f("Seminar_id")."\" onClick=\"return check_opener(this)\">".htmlReady($this->db->f("Name"))."</a>" : 
+						print "<img src=\"".$GLOBALS['ASSETS_URL']."images/ausruf_small2.gif\" align=\"absmiddle\" />&nbsp;<font size=-1>";
+						printf (_("Diese Belegung ist ein Einzeltermin der Veranstaltung %s, die in diesem Raum stattfindet."),
+							($perm->have_studip_perm("user", $this->db->f("Seminar_id"))) ?
+								"<a href=\"seminar_main.php?auswahl=".$this->db->f("Seminar_id")."\" onClick=\"return check_opener(this)\">".htmlReady($this->db->f("Name"))."</a>" :
 								"<a href=\"details.php?&sem_id=".$this->db->f("Seminar_id")."\" onClick=\"return check_opener(this)\">".htmlReady($this->db->f("Name"))."</a>");
 						if ($perm->have_studip_perm("tutor", $this->db->f("Seminar_id")))
-							printf ("<br />"._("Um die Belegung zu ver&auml;ndern, &auml;ndern Sie bitte den Termin im %sAblaufplan%s der Veranstaltung"), "<img src=\"pictures/link_intern.gif\" border=\"0\"/>&nbsp;<a href=\"admin_dates.php?select_sem_id=".$this->db->f("Seminar_id")."\" onClick=\"return check_opener(this)\">", "</a>");
+							printf ("<br />"._("Um die Belegung zu ver&auml;ndern, &auml;ndern Sie bitte den Termin im %sAblaufplan%s der Veranstaltung"), "<img src=\"".$GLOBALS['ASSETS_URL']."images/link_intern.gif\" border=\"0\"/>&nbsp;<a href=\"admin_dates.php?select_sem_id=".$this->db->f("Seminar_id")."\" onClick=\"return check_opener(this)\">", "</a>");
 						print "</font>";
 					} else {
-						print "<br /><img src=\"pictures/ausruf_small2.gif\" align=\"absmiddle\" />&nbsp;<font size=-1>";
+						print "<br /><img src=\"".$GLOBALS['ASSETS_URL']."images/ausruf_small2.gif\" align=\"absmiddle\" />&nbsp;<font size=-1>";
 						printf (_("Sie haben nicht die Berechtigung, diese Belegung zu bearbeiten."));
 					}
 				}
@@ -247,7 +247,7 @@ class EditResourceData {
 				</td>
 			</tr>
 			<tr>
-				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp;
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" valign="top"><font size=-1><?=_("Datum/erster Termin:")?></font><br />
 				<font size=-1>
@@ -281,7 +281,7 @@ class EditResourceData {
 							echo "<b>"._("keine Wiederholung (Einzeltermin)")."</b>";
 					}
 				} else {
-				?>				
+				?>
 					<input type="IMAGE" name="change_schedule_repeat_none" <?=makeButton("keine".(($resAssign->getRepeatMode()=="na") ? "2" :""), "src") ?> border=0 />&nbsp;&nbsp;
 					&nbsp;<input type="IMAGE" name="change_schedule_repeat_day" <?=makeButton("taeglich".(($resAssign->getRepeatMode()=="d") ? "2" :""), "src") ?> border=0 />
 					&nbsp;<input type="IMAGE" name="change_schedule_repeat_week" <?=makeButton("woechentlich".(($resAssign->getRepeatMode()=="w") ? "2" :""), "src") ?> border=0 /><br />
@@ -295,7 +295,7 @@ class EditResourceData {
 				</td>
 			</tr>
 			<tr>
-				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp;
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" valign="top"><font size=-1><?=_("Beginn/Ende:")?></font><br />
 				<font size=-1>
@@ -315,7 +315,7 @@ class EditResourceData {
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="40%" valign="top">
 				<? if ($resAssign->getRepeatMode() != "na") { ?>
-				<font size=-1><?if ($resAssign->getRepeatMode() != "sd") print _("Wiederholung bis sp&auml;testens:"); else print _("Letzter Termin:"); ?></font><br />				
+				<font size=-1><?if ($resAssign->getRepeatMode() != "sd") print _("Wiederholung bis sp&auml;testens:"); else print _("Letzter Termin:"); ?></font><br />
 				<font size=-1>
 				<?
 				if ($lockedAssign) {
@@ -331,29 +331,29 @@ class EditResourceData {
 				}
 				?>
 				</font>
-				<? 
-				} else { 
-				?> &nbsp;  
+				<?
+				} else {
+				?> &nbsp;
 				<? } ?>
 				</td>
 			</tr>
 			<tr>
-				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp;
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" valign="top"><font size=-1><?=_("eingetragen f&uuml;r die Belegung:")?></font><br />
 				<font size=-1>
-					<? 
+					<?
 					$user_name=$resAssign->getUsername(FALSE);
 					if ($user_name)
 						echo "<b>$user_name&nbsp;</b></font>";
 					else
 						echo "<b>-- "._("keinE Stud.IP NutzerIn eingetragen")." -- &nbsp;</b></font>";
 					if (!$lockedAssign) {
-						?><br /><br /><font size=-1><? 
-						 if ($user_name) 
+						?><br /><br /><font size=-1><?
+						 if ($user_name)
 						 	print _("einen anderen User (NutzerIn oder Einrichtung) eintragen:");
 						 else
-							print _("einen Nutzer (Person oder Einrichtung) eintragen:");						 
+							print _("einen Nutzer (Person oder Einrichtung) eintragen:");
 						?><br /></font><font size=-1>
 						<? showSearchForm("search_user", $search_string_search_user, FALSE, TRUE, FALSE, FALSE, FALSE, "up") ?> <br/>
 						<?=_("freie Eingabe zur Belegung:")?><br /></font>
@@ -368,16 +368,16 @@ class EditResourceData {
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" valign="top">
 				<? if (($resAssign->getRepeatMode() != "na") && ($resAssign->getRepeatMode() != "sd") && ($owner_type != "sem") && ($owner_type != "date")) {?>
-				<font size=-1><?=_("Wiederholungsturnus:")?></font><br />				
+				<font size=-1><?=_("Wiederholungsturnus:")?></font><br />
 				<font size=-1>
 					<?
 					if (!$lockedAssign) {
-					?>				
+					?>
 					<select name="change_schedule_repeat_interval"> value="<? echo $resAssign->getRepeatInterval(); ?>" size=2 maxlength="2" />
 					<?
 					}
 					switch ($resAssign->getRepeatMode()) {
-						case "d": 
+						case "d":
 							$str[1]= _("jeden Tag");
 							$str[2]= _("jeden zweiten Tag");
 							$str[3]= _("jeden dritten Tag");
@@ -386,14 +386,14 @@ class EditResourceData {
 							$str[6]= _("jeden sechsten Tag");
 							$max=6;
 						break;
-						case "w": 
+						case "w":
 							$str[1]= _("jede Woche");
 							$str[2]= _("jede zweite Woche");
 							$str[3]= _("jede dritte Woche");
 							$str[4]= _("jede vierte Woche");
 							$max=4;
 						break;
-						case "m": 
+						case "m":
 							$str[1]= _("jeden Monat");
 							$str[2]= _("jeden zweiten Monat");
 							$str[3]= _("jeden dritten Monat");
@@ -407,7 +407,7 @@ class EditResourceData {
 							$str[11]= _("jeden elften Monat");
 							$max=11;
 						break;
-						case "y": 
+						case "y":
 							$str[1]= _("jedes Jahr");
 							$str[2]= _("jedes zweite Jahr");
 							$str[3]= _("jedes dritte Jahr");
@@ -434,18 +434,18 @@ class EditResourceData {
 					<?
 					if (!$lockedAssign) {
 						printf (_("max. %s Mal wiederholen"), "&nbsp;<input name=\"change_schedule_repeat_quantity\" value=\"".(($resAssign->getRepeatQuantity() != -1) ? $resAssign->getRepeatQuantity() : "")."\" size=\"2\" maxlength=\"2\" />&nbsp;");
-						if ($resAssign->getRepeatQuantity() == -1) 
+						if ($resAssign->getRepeatQuantity() == -1)
 							{ ?> <input type="HIDDEN" name="change_schedule_repeat_quantity_infinity" value="TRUE" /> <? }
-					} elseif ($resAssign->getRepeatQuantity() != -1) 
+					} elseif ($resAssign->getRepeatQuantity() != -1)
 						printf ("<b>"._("max. %s Mal wiederholen")." </b>",$resAssign->getRepeatQuantity());
 					else
 						print ("<b>"._("unbegrenzt")."</b>");
 					?>
 					</font>
 				</font>
-				<? 
-				} else { 
-				?> &nbsp;  
+				<?
+				} else {
+				?> &nbsp;
 				<? } ?>
 				</td>
 			</tr>
@@ -453,9 +453,9 @@ class EditResourceData {
 			if (!$lockedAssign) {
 			?>
 			<tr>
-				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp;
 				</td>
-				<td class="<? echo $cssSw->getClass() ?>" colspan=2 align="center"><br />&nbsp; 
+				<td class="<? echo $cssSw->getClass() ?>" colspan=2 align="center"><br />&nbsp;
 					<input type="IMAGE" align="absmiddle" <?=makeButton("uebernehmen", "src") ?> border=0 name="submit" value="<?=_("&Uuml;bernehmen")?>">
 					&nbsp;<a href="<?=$PHP_SELF."?cancel_edit_assign=1&quick_view_mode=".$view_mode?>"><?=makeButton("abbrechen", "img") ?></a>
 				<?
@@ -463,7 +463,7 @@ class EditResourceData {
 					?>&nbsp;<input type="IMAGE" align="absmiddle" <?=makeButton("loeschen", "src") ?> border=0 name="kill_assign" value="<?=_("l&ouml;schen")?>"><?
 				}
 				?>
-				<br />&nbsp; 
+				<br />&nbsp;
 				</td>
 			</tr>
 			<?
@@ -471,18 +471,18 @@ class EditResourceData {
 			if (($ResourceObjectPerms->havePerm("tutor")) && (!$resAssign->isNew())) {
 			?>
 			<tr>
-				<td class="blank" colspan="3" width="100%">&nbsp; 
+				<td class="blank" colspan="3" width="100%">&nbsp;
 				</td>
 			</tr>
 			<tr>
-				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp;
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" colspan="2">
 					<font size=-1><b><?=_("weitere Aktionen:")?></b></font>
 				</td>
 			</tr>
 			<tr>
-				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp;
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" valign="top">
 					<font size=-1>
@@ -493,7 +493,7 @@ class EditResourceData {
 					if ((($search_exp_room) && ($search_room_x)) || ($search_properties_x)) {
 						if (getGlobalPerms($user->id) != "admin")
 							$resList = new ResourcesUserRoomsList ($user->id, FALSE, FALSE);
-							
+
 						$result = $resReq->searchRooms($search_exp_room, ($search_properties_x) ? TRUE : FALSE, 0, 10, FALSE, (is_object($resList)) ? array_keys($resList->getRooms()) : FALSE);
 						if ($result) {
 							printf ("<br /><font size=-1><b>%s</b> ".((!$search_properties_x) ? _("Ressourcen gefunden:") : _("passende R&auml;ume gefunden"))."<br />", sizeof($result));
@@ -502,7 +502,7 @@ class EditResourceData {
 								printf ("<option value=\"%s\">%s </option>", $key, htmlReady(my_substr($val, 0, 30)));
 							}
 							print "</select></font>";
-							print "&nbsp;&nbsp;<input type=\"IMAGE\" src=\"./pictures/rewind.gif\" ".tooltip(_("neue Suche starten"))." border=\"0\" name=\"reset_room_search\" />";
+							print "&nbsp;&nbsp;<input type=\"IMAGE\" src=\"".$GLOBALS['ASSETS_URL']."images/rewind.gif\" ".tooltip(_("neue Suche starten"))." border=\"0\" name=\"reset_room_search\" />";
 							print "<br><input type=\"IMAGE\" ".makeButton("verschieben", "src")." ".tooltip(_("Die Belegung ist den ausgew&auml;hlten Raum verschieben"))." border=\"0\" name=\"send_change_resource\" />";
 							if ($search_properties_x)
 								print "<br /><br />"._("(Diese Resourcen/R&auml;ume erf&uuml;llen die Wunschkriterien einer Raumanfrage.)");
@@ -515,10 +515,10 @@ class EditResourceData {
 						<? print ((($search_exp_room) || ($search_properties_x)) && (!$result)) ? _("<b>Keine</b> Ressource gefunden.") : "";?>
 						</font><br />
 						<font size=-1><?=_("Geben Sie zur Suche den Namen der Ressource ganz oder teilweise ein:"); ?></font>
-						<input type="TEXT" size="30" maxlength="255" name="search_exp_room" />&nbsp; 
-						<input type="IMAGE" src="./pictures/suchen.gif" <? echo tooltip(_("Suche starten")) ?> border="0" name="search_room" /><br />
+						<input type="TEXT" size="30" maxlength="255" name="search_exp_room" />&nbsp;
+						<input type="IMAGE" src="<?= $GLOBALS['ASSETS_URL'] ?>images/suchen.gif" <? echo tooltip(_("Suche starten")) ?> border="0" name="search_room" /><br />
 						<?
-					}										
+					}
 					?>
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" valign="top">
@@ -549,20 +549,20 @@ class EditResourceData {
 			</form>
 		</table>
 		<?
-	}	
+	}
 
 
 	function showPropertiesForms() {
 		global $PHP_SELF, $cssSw;
-		
+
 		$ObjectPerms =& ResourceObjectPerms::Factory($this->resObject->getId());
-			
+
 		?>
 		<table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
 		<form method="POST" action="<?echo $PHP_SELF ?>?change_object_properties=<? echo $this->resObject->getId() ?>">
 			<input type="HIDDEN" name="view" value="edit_object_properties" />
 			<tr>
-				<td class="<? echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? echo $cssSw->getClass() ?>" width="4%">&nbsp;
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>"><font size=-1><?=_("Name:")?></font><br />
 				<font size=-1><input name="change_name" value="<? echo htmlReady($this->resObject->getName()) ?>" size=60 maxlength="255" />
@@ -584,7 +584,7 @@ class EditResourceData {
 								echo "<option value=\"".$this->db->f("category_id")."\">".htmlReady($this->db->f("name"))."</option>";
 						}
 						?>
-						</select><img src="./pictures/pfeiltransparent.gif" border=0><input type="IMAGE" name="assign" <?=makeButton("zuweisen", "src")?> value="<?=_("Zuweisen")?>" border=0>
+						</select><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/pfeiltransparent.gif" border=0><input type="IMAGE" name="assign" <?=makeButton("zuweisen", "src")?> value="<?=_("Zuweisen")?>" border=0>
 					<?
 					} else {
 						print "<b>".htmlReady($this->resObject->getCategoryName())."</b>";
@@ -594,10 +594,10 @@ class EditResourceData {
 				</td>
 			</tr>
 			<tr>
-				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp;
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>"><font size=-1><?=_("Beschreibung:")?></font><br />
-			
+
 				<font size=-1><textarea name="change_description" rows=3 cols=60><? echo htmlReady($this->resObject->getDescription()) ?></textarea>
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="40%" valign="top"><font size=-1><?=_("verantwortlich:")?></font><br />
@@ -605,7 +605,7 @@ class EditResourceData {
 				</td>
 			</tr>
 			<tr>
-				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp;
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" colspan=2><font size=-1><b><?=_("Eigenschaften")?></b></font><br />
 				</td>
@@ -614,7 +614,7 @@ class EditResourceData {
 			if (($this->resObject->isRoom()) && (get_config("RESOURCES_ENABLE_ORGA_CLASSIFY"))) {
 			?>
 			<tr>
-				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp;
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" ><font size=-1><?=_("organisatorische Einordnung:")?></font><br />
 				<font size=-1><?echo ($this->resObject->getInstitutId()) ? "<a href=\"".$this->resObject->getOrgaLink()."\">" : ""; echo ($this->resObject->getInstitutId()) ? $this->resObject->getOrgaName(TRUE)."</a>" : _("keine Zuordnung") ?></font>
@@ -640,17 +640,17 @@ class EditResourceData {
 					</select>
 				<?
 				} else
-					print "<img src=\"pictures/ausruf_small2.gif\" align=\"absmiddle\" />&nbsp;<font size=-1><font size=\"-1\"> "._("Sie k&ouml;nnen die Einordnung in die Orga-Struktur nicht &auml;ndern.")."</font>";
+					print "<img src=\"".$GLOBALS['ASSETS_URL']."images/ausruf_small2.gif\" align=\"absmiddle\" />&nbsp;<font size=-1><font size=\"-1\"> "._("Sie k&ouml;nnen die Einordnung in die Orga-Struktur nicht &auml;ndern.")."</font>";
 				?>
 				</td>
-			</tr>			
+			</tr>
 			<?
 			}
 			/*
 			<tr>
-				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp;
 				</td>
-				<td class="<? echo $cssSw->getClass() ?>">&nbsp; 
+				<td class="<? echo $cssSw->getClass() ?>">&nbsp;
 				<td class="<? echo $cssSw->getClass() ?>" width="40%" valign="top"><font size=-1><?=_("Vererbte Belegung:")?></font><br />
 				<font size=-1><input type="CHECKBOX" name="change_parent_bind" <? if ($this->resObject->getParentBind()) echo "checked" ?> >
 				<?=_("Objekt &uuml;bernimmt Belegung von &uuml;bergeordnetem Objekt")?></font>
@@ -660,7 +660,7 @@ class EditResourceData {
 			?>
 			<? if ($this->resObject->getCategoryId()) {?>
 			<tr>
-				<td class="<? echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? echo $cssSw->getClass() ?>" width="4%">&nbsp;
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" colspan=2 align="center">
 				</td>
@@ -670,7 +670,7 @@ class EditResourceData {
 				while ($this->db->next_record()) {
 					?>
 			<tr>
-				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp;
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>">
 					<font size=-1><? echo htmlReady($this->db->f("name")); ?></font>
@@ -708,17 +708,17 @@ class EditResourceData {
 				}
 			} else { ?>
 			<tr>
-				<td class="<? echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? echo $cssSw->getClass() ?>" width="4%">&nbsp;
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" colspan=2>
 				<font size=-1 color="red"><?=_("Das Objekt wurde noch keinem Typ zugewiesen. Um Eigenschaften bearbeiten zu k&ouml;nnen, m&uuml;ssen Sie vorher einen Typ festlegen!")?></font>
 				</td>
 			</tr>
-			<? } 
+			<? }
 			if ((getGlobalPerms($user->id) == "admin") && ($this->resObject->getCategoryId())) {
 			?>
 			<tr>
-				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp;
 				<td class="<? echo $cssSw->getClass() ?>" >
 					<font size=-1><b><?=_("gleichzeitige Belegung")?></b><br><br />
 					<?=_("Die Ressource darf mehrfach zur gleichen Zeit belegt werden - <br />&Uuml;berschneidungschecks finden <u>nicht</u> statt!")?>
@@ -731,28 +731,28 @@ class EditResourceData {
 			}
 			?>
 			<tr>
-				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp;
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" colspan=2 align="center"><br />&nbsp; <input type="IMAGE" align="absmiddle" <?=makeButton("uebernehmen", "src")?> border=0 name="submit" value="<?=_("Zuweisen")?>">
 			 	<?
 				if ($this->resObject->isUnchanged())
 					print "&nbsp;<a href=\"$PHP_SELF?cancel_edit=".$this->resObject->id."\">".makeButton("abbrechen", "img")."</a>";
 			 	?>
-				<br />&nbsp; 
+				<br />&nbsp;
 				</td>
 			</tr>
 			</form>
 		</table>
 		<br /><br />
 		<?
-	}	
+	}
 
 	function showPermsForms() {
 		global $PHP_SELF, $search_owner, $search_perm_user, $search_string_search_perm_user, $search_string_search_owner,
 			$cssSw;
-		
+
 		$ObjectPerms =& ResourceObjectPerms::Factory($this->resObject->getId());
-		
+
 		$owner_perms = checkObjektAdministrablePerms ($this->resObject->getOwnerId());
 
 		if ($owner_perms)
@@ -763,7 +763,7 @@ class EditResourceData {
 		<table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
 		<form method="POST" action="<?echo $PHP_SELF ?>?change_object_perms=<? echo $this->resObject->getId() ?>">
 			<tr>
-				<td class="<? echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? echo $cssSw->getClass() ?>" width="4%">&nbsp;
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" colspan=2><font size=-1><?=_("verantwortlich:")?></font><br />
 				<font size=-1><a href="<? echo $this->resObject->getOwnerLink()?>"><? echo $this->resObject->getOwnerName(TRUE) ?></a></font>
@@ -775,13 +775,13 @@ class EditResourceData {
 					<font size=-1><?=_("verantworlicheN NutzerIn &auml;ndern:") ?></font><font size=-1 color="red"></font><br />
 					<? showSearchForm("search_owner", $search_string_search_owner, FALSE,TRUE);
 				} else
-					print "<img src=\"pictures/ausruf_small2.gif\" align=\"absmiddle\" />&nbsp;<font size=-1><font size=\"-1\"> "._("Sie k&ouml;nnen den/die verantwortlicheN NutzerIn nicht &auml;ndern.")."</font>";
+					print "<img src=\"".$GLOBALS['ASSETS_URL']."images/ausruf_small2.gif\" align=\"absmiddle\" />&nbsp;<font size=-1><font size=\"-1\"> "._("Sie k&ouml;nnen den/die verantwortlicheN NutzerIn nicht &auml;ndern.")."</font>";
 				?>
 				</td>
 			</tr>
 			<tr>
 
-				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp;
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" colspan=2 valign="top"><font size=-1><?=_("Berechtigungen:")?></font><br />
 				<td class="<? echo $cssSw->getClass() ?>" width="50%" valign="top"><font size=-1<?=_("Berechtigung hinzuf&uuml;gen")?></font><br />
@@ -801,7 +801,7 @@ class EditResourceData {
 					<font size=-1><a href="<? echo $this->resObject->getOwnerLink($this->db->f("user_id"))?>"><? echo $this->resObject->getOwnerName(TRUE, $this->db->f("user_id")) ?></a></font>
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="*" >
-					<font size=-1>&nbsp; 
+					<font size=-1>&nbsp;
 					<?
 					//admin-perms
 					if (($this->resObject->getOwnerType($this->db->f("user_id")) == "user") && ($owner_perms))
@@ -820,13 +820,13 @@ class EditResourceData {
 						printf ("<input type=\"RADIO\" name=\"change_user_perms[%s]\" value=\"autor\" %s />autor", $i, ($this->db->f("perms") == "autor") ? "checked" : "");
 					else
 						printf ("<input type=\"RADIO\" disabled name=\"FALSE\" %s /><font color=\"#888888\">autor</font>", ($this->db->f("perms") == "autor") ? "checked" : "");
-					
+
 					//trash
 					if (($owner_perms) || (($admin_perms) && ($this->db->f("perms") == "autor")))
-						printf ("&nbsp; <a href=\"%s?change_object_perms=%s&delete_user_perms=%s\"><img src=\"pictures/trash.gif\" ".tooltip(_("Berechtigung löschen"))." border=0></a>", $PHP_SELF, $this->resObject->getId(), $this->db->f("user_id"));
+						printf ("&nbsp; <a href=\"%s?change_object_perms=%s&delete_user_perms=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" ".tooltip(_("Berechtigung löschen"))." border=0></a>", $PHP_SELF, $this->resObject->getId(), $this->db->f("user_id"));
 					else
-						print "&nbsp; <img src=\"pictures/lighttrash.gif\" ".tooltip(_("Sie d&uuml;rfen diese Berechtigung leider nicht löschen"))." border=0>";
-						
+						print "&nbsp; <img src=\"".$GLOBALS['ASSETS_URL']."images/lighttrash.gif\" ".tooltip(_("Sie d&uuml;rfen diese Berechtigung leider nicht löschen"))." border=0>";
+
 					?>
 					</font>
 				</td>
@@ -844,28 +844,28 @@ class EditResourceData {
 						case "autor":
 							print _("Nutzer ist <b>Autor</b> und kann nur eigene Belegungen &auml;ndern.");
 						break;
-					}					
+					}
 					?>
 					</font>
 				</td>
 			</tr>
 				<?
-				$i++;  
+				$i++;
 				}
 			else {
 				?>
 			<tr>
-				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp;
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" colspan=3>
-					<font size=-1><img src="pictures/ausruf_small2.gif" align="absmiddle" />&nbsp;<font size=-1><font size="-1"><?=_("Es sind keine weiteren Berechtigungen eingetragen")?></font>
+					<font size=-1><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/ausruf_small2.gif" align="absmiddle" />&nbsp;<font size=-1><font size="-1"><?=_("Es sind keine weiteren Berechtigungen eingetragen")?></font>
 				</td>
 			</tr>
-			<? } 
+			<? }
 			if ((getGlobalPerms($user->id) == "admin") && ($this->resObject->isRoom())) {
 			?>
 			<tr>
-				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp;
 				<td class="<? echo $cssSw->getClass() ?>" colspan="3">
 					<font size=-1><?=_("Blockierung:")?><br>
 					<?=_("Diesen Raum bei globaler Blockierung gegen eine Bearbeitung durch lokale Administratoren und andere Personen sperren:")?>
@@ -877,14 +877,14 @@ class EditResourceData {
 			}
 			?>
 			<tr>
-				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp;
 				</td>
-				<td class="<? echo $cssSw->getClass() ?>" colspan=3 align="center"><br />&nbsp; <input type="IMAGE" <?=makeButton("uebernehmen", "src")?> border=0 name="submit" value="<?=_("Zuweisen")?>"><br />&nbsp; 
+				<td class="<? echo $cssSw->getClass() ?>" colspan=3 align="center"><br />&nbsp; <input type="IMAGE" <?=makeButton("uebernehmen", "src")?> border=0 name="submit" value="<?=_("Zuweisen")?>"><br />&nbsp;
 				</td>
 			</tr>
 			</form>
 		</table>
 		<?
-	}	
+	}
 }
 ?>

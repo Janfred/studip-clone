@@ -54,6 +54,7 @@ require_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/ChatServer.class.php";
 require_once $ABSOLUTE_PATH_STUDIP."msg.inc.php";
 require_once $ABSOLUTE_PATH_STUDIP."visual.inc.php";
 require_once $ABSOLUTE_PATH_STUDIP."messaging.inc.php";
+require_once $ABSOLUTE_PATH_STUDIP."user_visible.inc.php";
 
 
 //Hilfsfunktion, druckt script tags
@@ -192,7 +193,7 @@ function chatCommand_sms($msgStr){
 	}
 	$msging = new messaging();
 	if ($recUserName != get_username($user->id)) {
-		if ($msging->insert_message(addslashes($smsMsgStr), $recUserName))
+		if (get_visibility_by_username($recUserName) && $msging->insert_message(addslashes($smsMsgStr), $recUserName))
 			$chatServer->addMsg("system:$user->id",$chatid,sprintf(_("Ihre Nachricht an %s wurde verschickt."),'<b>'.$recUserName.'</b>'));
 		else
 			$chatServer->addMsg("system:$user->id",$chatid,_("Fehler: Ihre Nachricht konnte nicht verschickt werden!"));
@@ -395,6 +396,8 @@ function outputLoop($chatid){
 			flush();
 			break;
 		}
+		
+		$chatServer->setHeartbeat($user->id, $chatid);
 
 		usleep(CHAT_SLEEP_TIME);
 	}

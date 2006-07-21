@@ -1,9 +1,9 @@
 <?php
 /**
 * freie.php
-* 
+*
 * Show all courses readable by everyone
-* 
+*
 *
 * @author		Stefan Suchi <suchi@data-quest.de>, Ralf Stockmann <rstockm@gwdg.de>
 * @version		$Id$
@@ -16,7 +16,7 @@
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // freie.php
-// Show all courses readable by everyone 
+// Show all courses readable by everyone
 // Copyright (C) 2000 Stefan Suchi <suchi@data-quest.de>, Ralf Stockmann <rstockm@gwdg.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -78,54 +78,54 @@ function get_my_sem_values(&$my_sem) {
 		}
 	 }
 	 return;
-	 
+
 }  // Ende function get_my_sem_values
 
 
 function print_seminar_content($semid,$my_sem_values) {
   // Postings
   if ($my_sem_values["postings"])
-		printf ("<a href=\"seminar_main.php?auswahl=$semid&redirect_to=forum.php\">&nbsp; <img src='pictures/icon-posting.gif' border=0 %s></a>", tooltip($my_sem_values["postings"]." "._("Postings")));
+		printf ("<a href=\"seminar_main.php?auswahl=$semid&redirect_to=forum.php\">&nbsp; <img src='".$GLOBALS['ASSETS_URL']."images/icon-posting.gif' border=0 %s></a>", tooltip($my_sem_values["postings"]." "._("Postings")));
   else
-		echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
+		echo "&nbsp; <img src='".$GLOBALS['ASSETS_URL']."images/icon-leer.gif' border=0>";
   //Dokumente
   if ($my_sem_values["dokumente"])
-		printf ("&nbsp; <a href=\"seminar_main.php?auswahl=$semid&redirect_to=folder.php&cmd=tree\"><img src='pictures/icon-disc.gif' border=0 %s></a>", tooltip($my_sem_values["dokumente"]." "._("Dokumente")));
+		printf ("&nbsp; <a href=\"seminar_main.php?auswahl=$semid&redirect_to=folder.php&cmd=tree\"><img src='".$GLOBALS['ASSETS_URL']."images/icon-disc.gif' border=0 %s></a>", tooltip($my_sem_values["dokumente"]." "._("Dokumente")));
   else
-		echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
+		echo "&nbsp; <img src='".$GLOBALS['ASSETS_URL']."images/icon-leer.gif' border=0>";
   //News
   if ($my_sem_values["news"])
-		printf ("&nbsp; <a href=\"seminar_main.php?auswahl=$semid\"><img src='pictures/icon-news.gif' border=0 %s></a>", tooltip($my_sem_values["news"]." "._("News")));
+		printf ("&nbsp; <a href=\"seminar_main.php?auswahl=$semid\"><img src='".$GLOBALS['ASSETS_URL']."images/icon-news.gif' border=0 %s></a>", tooltip($my_sem_values["news"]." "._("News")));
   else
-		echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
+		echo "&nbsp; <img src='".$GLOBALS['ASSETS_URL']."images/icon-leer.gif' border=0>";
   //Literatur
   if ($my_sem_values["literatur"]) {
     echo "&nbsp; <a href=\"seminar_main.php?auswahl=$semid&redirect_to=literatur.php\">";
-		printf ("<img src=\"pictures/icon-lit.gif\" border=0 %s></a>", tooltip(sprintf(_("%s Literaturlisten"), $my_sem_values["literatur"])));
+		printf ("<img src=\"".$GLOBALS['ASSETS_URL']."images/icon-lit.gif\" border=0 %s></a>", tooltip(sprintf(_("%s Literaturlisten"), $my_sem_values["literatur"])));
   }
-  else echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
+  else echo "&nbsp; <img src='".$GLOBALS['ASSETS_URL']."images/icon-leer.gif' border=0>";
   // Termine
   if ($my_sem_values["termine"])
-		printf ("&nbsp; <a href=\"seminar_main.php?auswahl=$semid&redirect_to=dates.php\"><img src='pictures/icon-uhr.gif' border=0 %s></a>", tooltip($my_sem_values["termine"]." "._("Termine")));
+		printf ("&nbsp; <a href=\"seminar_main.php?auswahl=$semid&redirect_to=dates.php\"><img src='".$GLOBALS['ASSETS_URL']."images/icon-uhr.gif' border=0 %s></a>", tooltip($my_sem_values["termine"]." "._("Termine")));
   else
-		echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
+		echo "&nbsp; <img src='".$GLOBALS['ASSETS_URL']."images/icon-leer.gif' border=0>";
 
-  if ($GLOBALS['WIKI_ENABLE']) {  
+  if ($GLOBALS['WIKI_ENABLE']) {
 	  if ($my_sem_values["wiki"])
-			echo "&nbsp; <a href=\"seminar_main.php?auswahl=$semid&redirect_to=wiki.php\"><img src='pictures/icon-wiki.gif' border=0 ".tooltip(sprintf(_("%s WikiSeiten"), $my_sem_values["wiki"]))."></a>";
+			echo "&nbsp; <a href=\"seminar_main.php?auswahl=$semid&redirect_to=wiki.php\"><img src='".$GLOBALS['ASSETS_URL']."images/icon-wiki.gif' border=0 ".tooltip(sprintf(_("%s WikiSeiten"), $my_sem_values["wiki"]))."></a>";
 	  else
-			echo "&nbsp; <img src='pictures/icon-leer.gif' width=\"20\" height=\"17\" border=\"0\">";
+			echo "&nbsp; <img src='".$GLOBALS['ASSETS_URL']."images/icon-leer.gif' width=\"20\" height=\"17\" border=\"0\">";
   }
 
   //votes
   if ($GLOBALS['VOTE_ENABLE']) {
 	  if ($my_sem_values["votes"])
-			echo "&nbsp; <a href=\"seminar_main.php?auswahl=$semid#vote\"><img src='pictures/icon-vote.gif' border=0 ".tooltip(sprintf(_("%s Votes"), $my_sem_values["votes"]))."></a>";
+			echo "&nbsp; <a href=\"seminar_main.php?auswahl=$semid#vote\"><img src='".$GLOBALS['ASSETS_URL']."images/icon-vote.gif' border=0 ".tooltip(sprintf(_("%s Votes"), $my_sem_values["votes"]))."></a>";
 	  else
-			echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
+			echo "&nbsp; <img src='".$GLOBALS['ASSETS_URL']."images/icon-leer.gif' border=0>";
   }
-  
-  
+
+
   echo "&nbsp;&nbsp;";
 
 } // Ende function print_seminar_content
@@ -133,6 +133,8 @@ function print_seminar_content($semid,$my_sem_values) {
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
+
+$HELP_KEYWORD="Basis.SymboleFreieVeranstaltungen";
 
 // Start of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
@@ -172,7 +174,7 @@ $db2=new DB_Seminar;
 	print("</blockquote>");
 ?>
 	</td>
-	<td class="blank"  width="1%" align="right" valign="top"><img src="pictures/board1.jpg" border="0"></td>
+	<td class="blank"  width="1%" align="right" valign="top"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/board1.jpg" border="0"></td>
 </tr>
 
 <tr>
@@ -209,7 +211,7 @@ if ($num_my_sem){
 	  if ($c % 2)
 			$class="steel1";
 		else
-			$class="steelgraulight"; 
+			$class="steelgraulight";
 		$c++;
 		print "<tr>";
 		if ($values["Schreibzugriff"])

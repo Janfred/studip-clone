@@ -78,8 +78,7 @@ $debug = "<pre class=\"steelgroup6\" style=\"font-size:10pt\">"
 global $user;
 
 if ($_REQUEST["newButton_x"]){
-	$debug .= "neue Eval!<br>";
-	
+	$debug .= "neue Eval!<br>";	
 	// create the first group
 	$group = &new EvaluationGroup();
 	$group->setTitle(FIRST_ARRANGMENT_BLOCK_TITLE, QUOTED);
@@ -107,8 +106,7 @@ if ($_REQUEST["newButton_x"]){
 	$groupID = $group->getObjectID();
 	$evalID = $eval->getObjectID();
 
-} elseif (isset($_REQUEST["evalID"]) && ($_REQUEST["evalID"] != NULL)) {
-
+} elseif (isset($_REQUEST["evalID"]) && ($_REQUEST["evalID"] != NULL)) {	
 	$debug .= "isset _REQUTEST[evalID]!<br>";
 	$evalID = $_REQUEST["evalID"];
 	$eval = new Evaluation ($evalID, NULL, EVAL_LOAD_NO_CHILDREN);
@@ -285,7 +283,8 @@ echo EvalEdit::createSite ($editSite, $templateSite );
 
 
 // debug-infos
-/*$debug .= "\n<b><font color=\"##3366FF\">postVars</font></b>";
+/*
+$debug .= "\n<b><font color=\"##3366FF\">postVars</font></b>";
 foreach ($_POST as $key=>$item ) {
 	if (is_array($item)){
 		$debug .= "\n->$key [Array]:";
@@ -324,7 +323,7 @@ foreach ($HTTP_GET_VARS as $key=>$item ) {
 
 
 $debug .= "</pre>";
-echo $debug;
+#echo $debug;
 */
 # PHP-LIB: close session ==================================================== #
 require_once ($ABSOLUTE_PATH_STUDIP . "html_end.inc.php");

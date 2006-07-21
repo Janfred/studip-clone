@@ -40,6 +40,7 @@ require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."
 class ExternElementReplaceTextSemType extends ExternElement {
 
 	var $attributes = array();
+	var $isset_visibilities = FALSE;
 
 	/**
 	* Constructor
@@ -47,15 +48,17 @@ class ExternElementReplaceTextSemType extends ExternElement {
 	* @param array config
 	*/
 	function ExternElementReplaceTextSemType ($config = "") {
-		if ($config)
+		if ($config) {
 			$this->config = $config;
+		}
 		
 		$this->name = "ReplaceTextSemType";
 		$this->real_name = _("Textersetzungen f&uuml;r Veranstaltungstypen");
 		$this->description = _("Ersetzt die Bezeichnung der Veranstaltungstypen.");
-		for ($i = 1; $i <= sizeof($GLOBALS["SEM_CLASS"]); $i++)
+		$this->attributes = array('order', 'visibility');
+		for ($i = 1; $i <= sizeof($GLOBALS["SEM_CLASS"]); $i++) {
 			$this->attributes[] = "class_" . $i;
-		$this->attributes[] = "order";
+		}
 	}
 	
 	/**
@@ -73,8 +76,10 @@ class ExternElementReplaceTextSemType extends ExternElement {
 			}
 		}
 		
-		foreach ($SEM_TYPE as $type_index => $foo)
-			$config["order"] .= "|$type_index";
+		foreach ($SEM_TYPE as $type_index => $foo) {
+			$config['order'] .= "|$type_index";
+			$config['visibility'] .= "|1";
+		}
 		
 		return $config;
 	}
@@ -111,6 +116,25 @@ class ExternElementReplaceTextSemType extends ExternElement {
 		$out .= $edit_form->editBlank();
 		
 		return  $element_headline . $out;
+	}
+	
+	function checkValue ($attribute, $value) {
+		if ($this->isset_visibilities) {
+			return FALSE;
+		}
+		if ($attribute == 'visibility') {
+			$this->isset_visibilities = TRUE;
+			$count_semtypes = intval($GLOBALS['HTTP_POST_VARS']['count_semtypes']);
+			if ($count_semtypes < 100) {
+				for ($i = 0; $i < $count_semtypes; $i++) {
+					if ($GLOBALS['HTTP_POST_VARS'][$this->name . '_visibility'][$i] != '1') {
+						$GLOBALS['HTTP_POST_VARS'][$this->name . '_visibility'][$i] = '0';
+					}
+				}
+			}
+			return FALSE;
+		}
+		return FALSE;
 	}
 	
 }

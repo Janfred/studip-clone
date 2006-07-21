@@ -142,7 +142,7 @@ function wiki_newstep($template_name) {
 		$forum_text = sprintf(_("Die aktuellste Fassung dieses StEPs finden Sie immer im %sWiki%s"),'[',']'.$GLOBALS['ABSOLUTE_URI_STUDIP'].'wiki.php?keyword='.$pagename) . " \n--\n". $step_beschreibung;
 		if($tt = CreateTopic($pagename . ': ' . $step_zusammenfassung, get_fullname($userid), $forum_text, 0, 0, $SessSemName[1],$userid)) {
 			$wiki_plugin_messages[]='msg§'._("Ein neues Thema im Forum wurde angelegt.");
-			$wiki_text = '['._("Link zum zugehörigen Foreneintrag").']' . $GLOBALS['ABSOLUTE_URI_STUDIP'] . 'forum.php?open=' . $tt . '#anker ' . "\n--\n" . $wiki_text;
+			$wiki_text = '['._("Link zum Forumsbeitrag").']' . $GLOBALS['ABSOLUTE_URI_STUDIP'] . 'forum.php?open=' . $tt . '#anker ' . "\n--\n" . $wiki_text;
 		}
 	}
 	$query="INSERT INTO wiki SET range_id='$SessSemName[1]', keyword='$pagename', body='".$wiki_text."', user_id='$userid', chdate='".time()."', version='1'";

@@ -53,7 +53,7 @@ function temporaly_accepted($sem_name, $user_id, $sem_id, $ask = "TRUE", $studie
 		$db->query("SELECT admission_prelim_txt FROM seminare WHERE Seminar_id = '$sem_id'");
 		$db->next_record();
 		echo "<tr><td class=\"blank\">&nbsp;&nbsp;</td><td class=\"blank\">";
-		printf (_("Um endg&uuml;ltig in die Veranstaltung %s aufgenommen zu werden, m&uuml;ssen Sie noch weitere Voraussetzungen erf&uuml;llen."),'<b>'.htmlReady($sem_name).'</b>');
+		printf (_("Um endg&uuml;ltig in die Veranstaltung %s aufgenommen zu werden, m&uuml;ssen Sie noch weitere Voraussetzungen erf&uuml;llen."),'<b>'.$sem_name.'</b>');
 		if ($db->f("admission_prelim_txt")) {
 			print " "._("Lesen Sie bitte folgenden Hinweistext:")."<br />";
 			echo "<br/><table width=90%><tr><td>\n";
@@ -62,12 +62,16 @@ function temporaly_accepted($sem_name, $user_id, $sem_id, $ask = "TRUE", $studie
 		} else {
 			print " "._("Bitte erkundigen Sie sich bei dem Dozenten oder der Dozentin der Veranstaltung nach weiteren Teilnahmevoraussetzungen.");
 		}
-		printf (_("Wenn Sie auf \"eintragen\" klicken, werden Sie vorl&auml;ufig f&uuml;r diese Veranstaltung eingetragen. Erf&uuml;llen Sie die Anforderungen, um von der DozentIn fest in die Veranstaltung %s eingetragen zu werden."), '<b>'.htmlReady($sem_name).'</b>');
+		printf (_("Wenn Sie auf \"eintragen\" klicken, werden Sie vorl&auml;ufig f&uuml;r diese Veranstaltung eingetragen. Erf&uuml;llen Sie die Anforderungen, um von der DozentIn fest in die Veranstaltung %s eingetragen zu werden."), '<b>'.$sem_name.'</b>');
 		echo "<br/><br/>\n";
 
 		printf("<form action=\"%s\" method=\"post\">\n",$url);
 		printf("<input type=\"hidden\" name=\"pass\" value=\"$pass\">");
 		printf("<input type=\"hidden\" name=\"hashpass\" value=\"$hashpass\">");
+		if (get_config('ADMISSION_PRELIM_COMMENT_ENABLE')){
+			echo _("Bemerkungen zu Teilnahmevoraussetzungen:");
+			echo '<br><textarea name="comment" cols="50" rows="5"></textarea><br><br>';
+		}
 		printf("<input %s %s type=\"image\" border=\"0\" style=\"vertical-align:middle;\">\n", makeButton("eintragen","src"),tooltip(_("In diese Veranstaltung eintragen")));
 		print("<input type=\"hidden\" name=\"ask\" value=\"FALSE\">\n");
 		printf ("<input type=\"HIDDEN\" name=\"sem_verify_suggest_studg\" value=\"%s\">\n", $studiengang_id);
@@ -78,8 +82,13 @@ function temporaly_accepted($sem_name, $user_id, $sem_id, $ask = "TRUE", $studie
 		die;
 
 	} else {
-		$db->query("INSERT INTO admission_seminar_user SET user_id = '$user_id', seminar_id = '$sem_id', studiengang_id = '$studiengang_id', status = 'accepted', mkdate = '".time()."', position = NULL");
-		parse_msg (sprintf("msg§"._("Sie wurden mit dem Status <b>vorl&auml;ufig akzeptiert</b> in die Veranstaltung %s eingetragen. Damit haben Sie einen Platz sicher. F&uuml;r weitere Informationen lesen Sie den Abschnitt 'Anmeldeverfahren' in der &Uuml;bersichtsseite zu dieser Veranstaltung."), '<b>'.htmlReady($sem_name).'</b>'));
+		if (get_config('ADMISSION_PRELIM_COMMENT_ENABLE')){
+			$comment = mysql_escape_string(get_fullname() . ': ' . stripslashes($_POST['comment']));
+		} else {
+			$comment = '';
+		}
+		$db->query("INSERT INTO admission_seminar_user SET user_id = '$user_id', seminar_id = '$sem_id', studiengang_id = '$studiengang_id', status = 'accepted', mkdate = '".time()."', position = NULL, comment='".$comment."'");
+		parse_msg (sprintf("msg§"._("Sie wurden mit dem Status <b>vorl&auml;ufig akzeptiert</b> in die Veranstaltung %s eingetragen. Damit haben Sie einen Platz sicher. F&uuml;r weitere Informationen lesen Sie den Abschnitt 'Anmeldeverfahren' in der &Uuml;bersichtsseite zu dieser Veranstaltung."), '<b>'.$sem_name.'</b>'));
 		echo "<tr><td class=\"blank\" colspan=2>";
 	}
 }
@@ -120,7 +129,7 @@ include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 require_once ("$ABSOLUTE_PATH_STUDIP/dates.inc.php");
 ?>
-<script type="text/javascript" language="javascript" src="md5.js"></script>
+<script type="text/javascript" language="javascript" src="<?= $GLOBALS['ASSETS_URL'] ?>javascripts/md5.js"></script>
 <script type="text/javascript" language="javascript">
   <!--
   function verifySeminar() {
@@ -710,13 +719,13 @@ $db6=new DB_Seminar;
 					print "</td><td width=\"4%\" class=\"blank\">&nbsp;";
 					print "</td><td width=\"48%\" class=\"blank\" >";
 					print _("Sie k&ouml;nnen auch ohne Eingabe eines Passwortes an der Veranstaltung teilnehmen. Sie haben in diesem Fall jedoch nur Leseberechtigung.");
-					print "</td></tr>";	
+					print "</td></tr>";
 					print "<tr><td width=\"48%\" class=\"blank\" valign=\"top\">";
 					print "<br /><input type=\"RADIO\" name=\"EntryMode\" checked value=\"pass\">&nbsp;"._("Ich kenne das Passwort dieser Veranstaltung");
 					print "</td><td width=\"4%\" class=\"blank\">&nbsp;";
 					print "</td><td width=\"48%\" class=\"blank\" valign=\"top\">";
 					print "<br /><input type=\"RADIO\" name=\"EntryMode\" value=\"read_only\">&nbsp;"._("Ich m&ouml;chte an der Veranstaltung nur mit Leseberechtigung teilnehmen.");
-					print "<br />&nbsp;</td></tr>";	
+					print "<br />&nbsp;</td></tr>";
 					?>
 					<tr><td class="blank">
 					<font size="-1"><?=_("Bitte geben Sie hier das Passwort ein:")?></font><br />

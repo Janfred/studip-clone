@@ -2,9 +2,9 @@
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // lit_search.php
-// 
-// 
-// Copyright (c) 2003 André Noack <noack@data-quest.de> 
+//
+//
+// Copyright (c) 2003 André Noack <noack@data-quest.de>
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -53,8 +53,8 @@ if ($_the_clip_form->isClicked("clip_ok")){
 	$_the_clipboard->doClipCmd();
 }
 
-if ($_the_search->outer_form->isClicked("search") 
-	|| ($_the_search->outer_form->isSended() 
+if ($_the_search->outer_form->isClicked("search")
+	|| ($_the_search->outer_form->isSended()
 	&& !$_the_search->outer_form->isClicked("reset")
 	&& !$_the_search->outer_form->isClicked("change")
 	&& !$_the_search->outer_form->isClicked("search_add")
@@ -96,7 +96,7 @@ $_msg .= $_the_search->search_plugin->getError("msg");
 <body>
 <table width="100%" border="0" cellpadding="2" cellspacing="0">
 	<tr>
-		<td class="topic" colspan="2"><img src="./pictures/icon-lit.gif" border="0" /><b>&nbsp;<?=_("Literatur suchen")?></b></td>
+		<td class="topic" colspan="2"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/icon-lit.gif" border="0" /><b>&nbsp;<?=_("Literatur suchen")?></b></td>
 	</tr>
 	<tr>
 	<td class="blank" width="99%" align="left" valign="top">
@@ -132,7 +132,7 @@ $_attributes['search_plugin']['onChange'] = 'document.' . $_the_search->outer_fo
 </tr>
 <?
 $class_changer->switchClass();
-echo "<tr><td " . $class_changer->getFullClass() ." colspan=\"3\" align=\"center\"><img src=\"pictures/border.jpg\" width=\"99%\" border=\"0\"></td></tr>";
+echo "<tr><td " . $class_changer->getFullClass() ." colspan=\"3\" align=\"center\"><img src=\"".$GLOBALS['ASSETS_URL']."images/border.jpg\" width=\"99%\" border=\"0\"></td></tr>";
 for ($i = 0 ; $i < $_the_search->term_count; ++$i){
 	if ($i > 0){
 		echo "<tr><td " . $class_changer->getFullClass() ." width=\"30%\">";
@@ -172,7 +172,7 @@ for ($i = 0 ; $i < $_the_search->term_count; ++$i){
 	}
 	echo "</td></tr>";
 }
-echo "<tr><td " . $class_changer->getFullClass() ." colspan=\"3\" align=\"center\"><img src=\"pictures/border.jpg\" width=\"99%\" border=\"0\"></td></tr>";
+echo "<tr><td " . $class_changer->getFullClass() ." colspan=\"3\" align=\"center\"><img src=\"".$GLOBALS['ASSETS_URL']."images/border.jpg\" width=\"99%\" border=\"0\"></td></tr>";
 
 ?>
 
@@ -200,15 +200,15 @@ if (($num_hits = $_the_search->getNumHits())){
 <?
 echo _("Anzeige: ");
 if ($_the_search->start_result > 1) {
-	echo "<a href=\"$PHP_SELF?change_start_result=" . ($_the_search->start_result - 5) . "\"><img src=\"pictures/move_left.gif\" hspace=\"3\" border=\"0\"></a>";
+	echo "<a href=\"$PHP_SELF?change_start_result=" . ($_the_search->start_result - 5) . "\"><img src=\"".$GLOBALS['ASSETS_URL']."images/move_left.gif\" hspace=\"3\" border=\"0\"></a>";
 } else {
-	echo "<img src=\"pictures/forumleer.gif\" width=\"17\" height=\"18\" border=\"0\">";
+	echo "<img src=\"".$GLOBALS['ASSETS_URL']."images/forumleer.gif\" width=\"17\" height=\"18\" border=\"0\">";
 }
 echo $_the_search->start_result . " - " . $end_result;
 if ($_the_search->start_result + 4 < $num_hits) {
-	echo "<a href=\"$PHP_SELF?change_start_result=" . ($_the_search->start_result + 5) . "\"><img src=\"pictures/move_right.gif\" hspace=\"3\" border=\"0\"></a>";
+	echo "<a href=\"$PHP_SELF?change_start_result=" . ($_the_search->start_result + 5) . "\"><img src=\"".$GLOBALS['ASSETS_URL']."images/move_right.gif\" hspace=\"3\" border=\"0\"></a>";
 } else {
-	echo "<img src=\"pictures/forumleer.gif\" width=\"17\" height=\"18\" border=\"0\">";
+	echo "<img src=\"".$GLOBALS['ASSETS_URL']."images/forumleer.gif\" width=\"17\" height=\"18\" border=\"0\">";
 }
 ?>
 </td></tr>
@@ -218,11 +218,11 @@ for ($i = $_the_search->start_result; $i <= $end_result; ++$i){
 	$element = $_the_search->getSearchResult($i);
 	if ($element){
 		echo "\n<table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr>";
-		$addon = ($_the_clipboard->isInClipboard($element->getValue("catalog_id"))) ? "<img src=\"pictures/forum_fav.gif\" hspace=\"4\"  border=\"0\" " . 
-				tooltip(_("Dieser Eintrag ist bereits in ihrer Merkliste")) . ">" : "<a href=\"". $PHP_SELF . "?cmd=add_to_clipboard&catalog_id=" . $element->getValue("catalog_id") . 
-				"\"><img src=\"pictures/forum_fav2.gif\" hspace=\"4\"  border=\"0\" " . 
+		$addon = ($_the_clipboard->isInClipboard($element->getValue("catalog_id"))) ? "<img src=\"".$GLOBALS['ASSETS_URL']."images/forum_fav.gif\" hspace=\"4\"  border=\"0\" " .
+				tooltip(_("Dieser Eintrag ist bereits in ihrer Merkliste")) . ">" : "<a href=\"". $PHP_SELF . "?cmd=add_to_clipboard&catalog_id=" . $element->getValue("catalog_id") .
+				"\"><img src=\"".$GLOBALS['ASSETS_URL']."images/forum_fav2.gif\" hspace=\"4\"  border=\"0\" " .
 				tooltip(_("Eintrag in Merkliste aufnehmen")) . "></a>";
-		printhead(0,0,false,"open",true,"<img src=\"pictures/cont_lit.gif\" border=\"0\" align=\"bottom\">",htmlReady(my_substr($element->getShortName(),0,85)),$addon);
+		printhead(0,0,false,"open",true,"<img src=\"".$GLOBALS['ASSETS_URL']."images/cont_lit.gif\" border=\"0\" align=\"bottom\">",htmlReady(my_substr($element->getShortName(),0,85)),$addon);
 		echo "\n</tr></table>";
 		$content = "";
 		$edit = "<a href=\"admin_lit_element.php?_catalog_id=" . $element->getValue("catalog_id") . "\">"
@@ -230,7 +230,7 @@ for ($i = $_the_search->start_result; $i <= $end_result; ++$i){
 				. " border=\"0\"></a>&nbsp;";
 		if (!$_the_clipboard->isInClipboard($element->getValue("catalog_id"))){
 			$edit .= "&nbsp;<a href=\"". $PHP_SELF . "?cmd=add_to_clipboard&catalog_id=" . $element->getValue("catalog_id")
-				. "\"><img " . makeButton("merkliste","src") . " border=\"0\" " . 
+				. "\"><img " . makeButton("merkliste","src") . " border=\"0\" " .
 				tooltip(_("Eintrag in Merkliste aufnehmen")) . "></a>";
 		}
 		echo "\n<table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\">";
@@ -242,7 +242,7 @@ for ($i = $_the_search->start_result; $i <= $end_result; ++$i){
 		if ($element->getValue("lit_plugin") != "Studip"){
 			$content .= "<b>" . _("Externer Link:") ."</b>&nbsp;&nbsp;";
 			if (($link = $element->getValue("external_link"))){
-				$content.= formatReady(" [" . $element->getValue("lit_plugin"). "]" . $link);
+				$content.= formatReady(" [" . $element->getValue("lit_plugin_display_name"). "]" . $link);
 			} else {
 				$content .= _("(Kein Link zum Katalog vorhanden.)");
 			}
@@ -261,15 +261,15 @@ for ($i = $_the_search->start_result; $i <= $end_result; ++$i){
 <?
 echo _("Anzeige: ");
 if ($_the_search->start_result > 1) {
-	echo "<a href=\"$PHP_SELF?change_start_result=" . ($_the_search->start_result - 5) . "\"><img src=\"pictures/move_left.gif\" hspace=\"3\" border=\"0\"></a>";
+	echo "<a href=\"$PHP_SELF?change_start_result=" . ($_the_search->start_result - 5) . "\"><img src=\"".$GLOBALS['ASSETS_URL']."images/move_left.gif\" hspace=\"3\" border=\"0\"></a>";
 } else {
-	echo "<img src=\"pictures/forumleer.gif\" width=\"17\" height=\"18\" border=\"0\">";
+	echo "<img src=\"".$GLOBALS['ASSETS_URL']."images/forumleer.gif\" width=\"17\" height=\"18\" border=\"0\">";
 }
 echo $_the_search->start_result . " - " . $end_result;
 if ($_the_search->start_result + 4 < $num_hits) {
-	echo "<a href=\"$PHP_SELF?change_start_result=" . ($_the_search->start_result + 5) . "\"><img src=\"pictures/move_right.gif\" hspace=\"3\" border=\"0\"></a>";
+	echo "<a href=\"$PHP_SELF?change_start_result=" . ($_the_search->start_result + 5) . "\"><img src=\"".$GLOBALS['ASSETS_URL']."images/move_right.gif\" hspace=\"3\" border=\"0\"></a>";
 } else {
-	echo "<img src=\"pictures/forumleer.gif\" width=\"17\" height=\"18\" border=\"0\">";
+	echo "<img src=\"".$GLOBALS['ASSETS_URL']."images/forumleer.gif\" width=\"17\" height=\"18\" border=\"0\">";
 }
 ?>
 </td></tr>
@@ -287,22 +287,22 @@ if ($_the_search->start_result + 4 < $num_hits) {
 <td class="blank" width="270" align="right" valign="top">
 <?
 $infobox[0] = array ("kategorie" => _("Information:"),
-					"eintrag" =>	array(	
-									array("icon" => "pictures/blank.gif","text"  =>	_("Hier können Sie in verschiedenen Katalogen nach Literatur suchen.")),
-									array("icon" => "pictures/blank.gif","text"  =>	"<b>" . _("Ausgew&auml;hlter Katalog:") . "</b><br>" . $_the_search->search_plugin->description),
+					"eintrag" =>	array(
+									array("icon" => "blank.gif","text"  =>	_("Hier können Sie in verschiedenen Katalogen nach Literatur suchen.")),
+									array("icon" => "blank.gif","text"  =>	"<b>" . _("Ausgew&auml;hlter Katalog:") . "</b><br>" . $_the_search->search_plugin->description),
 									)
 					);
 if ($num_hits){
-	$infobox[0]["eintrag"][] = array("icon" => "pictures/ausruf_small.gif","text"  => sprintf(_("Suchergebnis: %s Treffer"),$num_hits) );
+	$infobox[0]["eintrag"][] = array("icon" => "ausruf_small.gif","text"  => sprintf(_("Suchergebnis: %s Treffer"),$num_hits) );
 } else {
-	$infobox[0]["eintrag"][] = array("icon" => "pictures/ausruf_small.gif","text"  => _("Es liegt kein Suchergebnis vor.") );
+	$infobox[0]["eintrag"][] = array("icon" => "ausruf_small.gif","text"  => _("Es liegt kein Suchergebnis vor.") );
 }
 
 $infobox[1] = array ("kategorie" => _("Aktionen:"));
-$infobox[1]["eintrag"][] = array("icon" => "pictures/link_intern.gif","text"  => "<a href=\"admin_lit_list.php\">" . _("Literaturlisten bearbeiten") . "</a>" );
-$infobox[1]["eintrag"][] = array("icon" => "pictures/link_intern.gif","text"  => "<a href=\"admin_lit_element.php?_range_id=new_entry\">" . _("Neue Literatur anlegen") . "</a>" );
+$infobox[1]["eintrag"][] = array("icon" => "link_intern.gif","text"  => "<a href=\"admin_lit_list.php\">" . _("Literaturlisten bearbeiten") . "</a>" );
+$infobox[1]["eintrag"][] = array("icon" => "link_intern.gif","text"  => "<a href=\"admin_lit_element.php?_range_id=new_entry\">" . _("Neue Literatur anlegen") . "</a>" );
 
-print_infobox ($infobox,"pictures/browse.jpg");
+print_infobox ($infobox,"browse.jpg");
 
 ?>
 </td>
@@ -313,7 +313,7 @@ print_infobox ($infobox,"pictures/browse.jpg");
 	<b><?=_("Merkliste:")?></b>
 	<br>
 	<?=$_the_clip_form->getFormField("clip_content", array_merge(array('size' => $_the_clipboard->getNumElements()), $_attributes['lit_select']))?>
-	<div align="center" style="background-image:url(pictures/border.jpg);background-repeat:repeat-y;margin:3px;"><img src="pictures/blank.gif" height="2" border="0"></div>
+	<div align="center" style="background-image:url(<?= $GLOBALS['ASSETS_URL'] ?>images/border.jpg);background-repeat:repeat-y;margin:3px;"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" height="2" border="0"></div>
 	<?=$_the_clip_form->getFormField("clip_cmd", $_attributes['lit_select'])?>
 	<div align="center">
 	<?=$_the_clip_form->getFormButton("clip_ok",array('style'=>'vertical-align:middle;margin:3px;'))?>

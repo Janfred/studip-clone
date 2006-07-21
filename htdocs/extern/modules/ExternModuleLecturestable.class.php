@@ -47,6 +47,7 @@ class ExternModuleLecturestable extends ExternModule {
 			"art", "zeiten", "dozent");
 	var $registered_elements = array(
 			"ReplaceTextSemType",
+			"SelectSubjectAreas",
 			"Body",
 			"TableHeader",
 			"InfoCountSem" => "TableGroup",

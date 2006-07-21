@@ -34,11 +34,11 @@ $_include_stylesheet = "style_print.css"; // use special stylesheet for printing
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 
 require_once("$ABSOLUTE_PATH_STUDIP/archiv.inc.php");
-	
+
 print (dump_sem($SessSemName[1]));
 
 echo "<table width=100% border=0 cellpadding=2 cellspacing=0>";
-echo "<tr><td><i><font size=-1>" . _("Stand:") . " ".date("d.m.y",time()).", ".date("G:i", time())." Uhr.</font></i></td><td align=\"right\"><font size=-2><img src=\"pictures/logo2b.gif\"><br />&copy; ".date("Y", time())." v.$SOFTWARE_VERSION&nbsp; &nbsp; </font></td></tr>";
+echo "<tr><td><i><font size=-1>" . _("Stand:") . " ".date("d.m.y",time()).", ".date("G:i", time())." Uhr.</font></i></td><td align=\"right\"><font size=-2><img src=\"".$GLOBALS['ASSETS_URL']."images/logo2b.gif\"><br />&copy; ".date("Y", time())." v.$SOFTWARE_VERSION&nbsp; &nbsp; </font></td></tr>";
 echo "</table>\n";
 
 

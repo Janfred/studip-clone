@@ -37,25 +37,26 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" =>
 
 	if ($auth->auth["uid"]!="nobody"){
 		($cmd=="write") ? $refresh=0 : $refresh=30;
-		
+
 		$db = new DB_Seminar;
 		$sess->register("messenger_data");
 		$sms= new messaging;
-		
+
 		$online = get_users_online($my_messaging_settings["active_time"]);
-		
+
 		//Count new and old msg's
 		$old_msg = count_messages_from_user('in', " AND message_user.readed = 1 ");
 		$new_msg = count_messages_from_user('in', " AND message_user.readed = 0 ");
 		$new_msgs = array();
+
 		if ($new_msg){
 			//load the data from new messages
-			$query =  "SELECT message.message_id, message.mkdate, autor_id, message, subject 
+			$query =  "SELECT message.message_id, message.mkdate, autor_id, message, subject
 			FROM message_user LEFT JOIN message USING (message_id)
-			WHERE deleted = 0 AND message_user.readed = 0 AND snd_rec = 'rec' AND message_user.user_id ='".$user->id."' 
+			WHERE deleted = 0 AND message_user.readed = 0 AND snd_rec = 'rec' AND message_user.user_id ='".$user->id."'
 			ORDER BY message.mkdate";
 			$db->query($query);
-			
+
 			while ($db->next_record()){
 				if ($cmd=="read" && $msg_id==$db->f("message_id")){
 					// "open" the message (display it in the messenger)
@@ -63,7 +64,7 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" =>
 					$msg_snd = get_username($db->f("autor_id"));
 					$msg_autor_id = $db->f("autor_id");
 					$msg_subject = $db->f("subject");
-				} 
+				}
 				if ($db->f("autor_id") == "____%system%____"){
 					$new_msgs[]=date("H:i",$db->f("mkdate")) . sprintf(_(" <b>Systemnachricht</b> %s[lesen]%s"),"<a href='$PHP_SELF?cmd=read&msg_id=".$db->f("message_id")."'>","</a>");
 				} else {
@@ -78,7 +79,7 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" =>
 			$db->query($query);
 		}
 	}
-	
+
 
 // Start of Output
 $_html_head_title = "Stud.IP IM (" . $auth->auth["uname"] . ")";
@@ -120,7 +121,7 @@ if ($new_msgs[0] OR $cmd)  print ("self.focus();\n");
 
 <table width="100%" border=0 cellpadding=2 cellspacing=0>
 <tr>
-	<td class="topic" colspan=2><img src="pictures/nutzer.gif" border="0" align="texttop"><b>&nbsp;Stud.IP-Messenger (<?=$auth->auth["uname"]?>)</b></td>
+	<td class="topic" colspan=2><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/nutzer.gif" border="0" align="texttop"><b>&nbsp;Stud.IP-Messenger (<?=$auth->auth["uname"]?>)</b></td>
 </tr>
 <tr><td class="blank" width="50%" valign="top"><br /><table width="100%" border=0 cellpadding=1 cellspacing=0 valign="top">
 <?php
@@ -134,7 +135,7 @@ if (is_array($online)) {
 				echo "<tr><td class=\"blank\" colspan=2 align=\"left\" ><font size=-1><b>" . _("Buddies:") . "</b></td></tr>";
 			}
 			echo "<tr><td class='blank' width='90%' align='left'><font size=-1><a " . tooltip(sprintf(_("letztes Lebenszeichen: %s"),date("i:s",$detail['last_action'])),false) . " href=\"javascript:coming_home('about.php?username=$tmp_uname');\">".htmlReady($detail['name'])."</a></font></td>\n";
-			echo "<td  class='blank' width='10%' align='middle'><font size=-1><a href='$PHP_SELF?cmd=write&msg_rec=$tmp_uname'><img src=\"pictures/nachricht1.gif\" ".tooltip(_("Nachricht an User verschicken"))." border=\"0\" width=\"24\" height=\"21\"></a></font></td></tr>";
+			echo "<td  class='blank' width='10%' align='middle'><font size=-1><a href='$PHP_SELF?cmd=write&msg_rec=$tmp_uname'><img src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" ".tooltip(_("Nachricht an User verschicken"))." border=\"0\" width=\"24\" height=\"21\"></a></font></td></tr>";
 			$c++;
 		}
 	}
@@ -145,17 +146,17 @@ if (is_array($online)) {
 if (!$my_messaging_settings["show_only_buddys"]) {
 	if ((sizeof($online)-$c) == 1) {
 		echo "<tr><td class=\"blank\" colspan=2 align=\"left\"><font size=-1>" . _("Es ist ein anderer Nutzer online.");
-		printf ("&nbsp;<a href=\"javascript:coming_home('online.php')\"><font size=-1>" . _("Wer?") . "</font></a>");		
+		printf ("&nbsp;<a href=\"javascript:coming_home('online.php')\"><font size=-1>" . _("Wer?") . "</font></a>");
 	}
 	elseif((sizeof($online)-$c) > 1) {
 		printf ("<tr><td class=\"blank\" colspan=2 align=\"left\"><font size=-1>" . _("Es sind %s andere Nutzer online.") , sizeof($online)-$c);
-		printf ("&nbsp;<a href=\"javascript:coming_home('online.php')\"><font size=-1>" . _("Wer?") . "</font></a>");		
+		printf ("&nbsp;<a href=\"javascript:coming_home('online.php')\"><font size=-1>" . _("Wer?") . "</font></a>");
 	}
 }
 ?>
 </td></tr></table></td><td class="blank" width="50%" valign="top"><br><font size=-1>
 <?
-if ($old_msg) 
+if ($old_msg)
 	printf(_("%s alte Nachricht(en)&nbsp;%s[lesen]%s"),$old_msg,"<a href=\"javascript:coming_home('sms_box.php?sms_inout=in')\">","</a><br>");
 elseif (!$new_msg)
 	print (_("Keine Nachrichten") . "<br>");
@@ -182,7 +183,7 @@ if ($cmd=="send_msg" AND $nu_msg AND $msg_rec) {
 	if ($sms->insert_message ($nu_msg, $msg_rec, FALSE, FALSE, FALSE, FALSE, FALSE, $msg_subject))
 		echo"\n<tr><td class='blank' colspan='2' valign='middle'><font size=-1>"
 			. sprintf(_("Ihre Nachricht an <b>%s</b> wurde verschickt!"),get_fullname_from_uname($msg_rec,'full',true)) . "</font></td></tr>";
-	else 
+	else
 		echo"\n<tr><td class='blank' colspan='2' valign='middle'><font size=-1 color='red'><b>"
 			. _("Ihre Nachricht konnte nicht verschickt werden!") . "</b></font></td></tr>";
 }
@@ -216,7 +217,7 @@ if ($cmd=="write" AND $msg_rec){
 	echo "<INPUT TYPE='IMAGE' name='none' "
 		. makeButton("absenden","src") . tooltip(_("Nachricht versenden")) . " border=0 value='senden'>&nbsp;<a href=\"$PHP_SELF?cmd=cancel\"><img "
 		. makeButton("abbrechen","src") . tooltip(_("Vorgang abbrechen")) . " border=0 /></a></FORM></font></td></tr>";
-	
+
 	echo "\n<script language=\"JavaScript\">\n<!--\ndocument.eingabe.nu_msg.focus();\n//-->\n</script>";
 
 }

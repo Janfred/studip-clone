@@ -1,9 +1,9 @@
 <?
 /**
 * ExternEditModule.class.php
-* 
+*
 * basic functions for the extern interfaces
-* 
+*
 *
 * @author		Peter Thienel <pthienel@web.de>, Suchi & Berg GmbH <info@data-quest.de>
 * @version	$Id$
@@ -16,7 +16,7 @@
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // ExternEditModule.class.php
-// 
+//
 // Copyright (C) 2003 Peter Thienel <pthienel@web.de>,
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
@@ -38,12 +38,12 @@
 require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."/views/ExternEditHtml.class.php");
 
 class ExternEditModule extends ExternEditHtml {
-	
+
 	function ExternEditModule (&$config, $form_values = "", $faulty_values = "",
 			 $edit_element = "") {
 		ExternEdit::ExternEdit(&$config, $form_values, $faulty_values, $edit_element);
 	}
-	
+
 	function editMainSettings ($field_names, $hide_fields = "", $hide = "") {
 		// these two values are always necessary, even there is an error in the users inputs, so
 		// there arent transfered via HTTP_POST_VARS
@@ -51,7 +51,7 @@ class ExternEditModule extends ExternEditHtml {
 				= $this->config->getValue($this->element_name, "order");
 		$this->form_values[$this->element_name . "_visible"]
 				= $this->config->getValue($this->element_name, "visible");
-		
+
 		$order = $this->getValue("order");
 		$aliases = $this->getValue("aliases");
 		$visible = $this->getValue("visible");
@@ -63,10 +63,10 @@ class ExternEditModule extends ExternEditHtml {
 			$hide_fields["aliases"] = array();
 		if (!is_array($hide))
 			$hide = array();
-		
+
 		$this->css->resetClass();
 		$this->css->switchClass();
-		
+
 		$out = "<tr><td><table width=\"100%\" border=\"0\" cellpadding=\"2\" cellspacing=\"0\">\n";
 		$out .= "<tr" . $this->css->getFullClass() . ">\n";
 		$out .= "<td><font size=\"2\"><b>" . _("Datenfeld") . "</b></font></td>\n";
@@ -79,13 +79,13 @@ class ExternEditModule extends ExternEditHtml {
 			$out .= "<td><font size=\"2\"><b>" . _("Reihenfolge/<br>Sichtbarkeit") . "</b></font></td>\n";
 		$out .= "</tr>\n";
 		$this->css->switchClass();
-		
+
 		for ($i = 0; $i < sizeof($field_names); $i++) {
-			
+
 			// name of column
 			$out .= "<tr" . $this->css->getFullClass() . ">\n";
 			$out .= "<td><font size=\"2\">&nbsp;{$field_names[$order[$i]]}</font></td>";
-			
+
 			// column headline
 			if (!in_array($order[$i], $hide_fields["aliases"])) {
 				$out .= "<td><input type=\"text\" name=\"{$this->element_name}_aliases[$order[$i]]\"";
@@ -100,7 +100,7 @@ class ExternEditModule extends ExternEditHtml {
 				$out .= "<input type=\"hidden\" name=\"{$this->element_name}_aliases[$order[$i]]\" ";
 				$out .= "value=\"\">";
 			}
-			
+
 			// width
 			if (!in_array("width", $hide)) {
 				$width = str_replace("%", "", $widths[$order[$i]]);
@@ -110,7 +110,7 @@ class ExternEditModule extends ExternEditHtml {
 					$out .= $this->error_sign;
 				$out .= "</td>\n";
 			}
-			
+
 			// sort
 			if (!in_array("sort", $hide)) {
 				if (!in_array($order[$i], $hide_fields["sort"])) {
@@ -133,40 +133,40 @@ class ExternEditModule extends ExternEditHtml {
 					$out .= "value=\"0\">\n";
 				}
 			}
-			
+
 			if (!in_array("visible", $hide)) {
 				// move left
 				$out .= "<td valign=\"top\" nowrap=\"nowrap\">";
 				$out .= "<input type=\"image\" name=\"{$this->element_name}_move_left[$i]\" ";
-				$out .= "img src=\"" . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . "pictures/move_up.gif\"";
+				$out .= "img src=\"".$GLOBALS['ASSETS_URL']."images/move_up.gif\"";
 				$out .= tooltip(_("Datenfeld verschieben"));
 				$out .= "border=\"0\" align=\"bottom\">\n";
-				
+
 				// move right
 				$out .= "<input type=\"image\" name=\"{$this->element_name}_move_right[$i]\" ";
-				$out .= "img src=\"" . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . "pictures/move_down.gif\"";
+				$out .= "img src=\"".$GLOBALS['ASSETS_URL']."images/move_down.gif\"";
 				$out .= tooltip(_("Datenfeld verschieben"));
 				$out .= "border=\"0\" align=\"bottom\">\n&nbsp;";
-				
+
 				// visible
 				if ($visible[$order[$i]]) {
 					$out .= "<input type=\"image\" name=\"{$this->element_name}_hide[{$order[$i]}]\" ";
-					$out .= "img src=\"" . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . "pictures/on_small.gif\"";
+					$out .= "img src=\" ".$GLOBALS['ASSETS_URL']."images/on_small.gif\"";
 					$out .= tooltip(_("Datenfeld ausblenden"));
 					$out .= "border=\"0\" align=\"middle\">\n";
 				}
 				else {
 					$out .= "<input type=\"image\" name=\"{$this->element_name}_show[{$order[$i]}]\" ";
-					$out .= "img src=\"" . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . "pictures/off_small_blank.gif\"";
+					$out .= "img src=\" ".$GLOBALS['ASSETS_URL']."images/off_small_blank.gif\"";
 					$out .= tooltip(_("Datenfeld anzeigen"));
 					$out .= "border=\"0\" align=\"middle\">\n</td>\n";
 				}
 			}
-			
+
 			$out .= "</tr>\n";
 			$this->css->switchClass();
 		}
-		
+
 		// width in pixels or percent
 		if (!in_array("widthpp", $hide)) {
 			$colspan = 4 - sizeof($hide);
@@ -184,45 +184,45 @@ class ExternEditModule extends ExternEditHtml {
 			if (substr($widths[0], -1) != "%")
 				$out .= " checked=\"checked\"";
 			$out .= " /><font size=\"2\">" . _("Pixel") . "&nbsp; &nbsp;</font>\n";
-			$out .= "<img src=\"" . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . "pictures/info.gif\"";
+			$out .= "<img src=\" ".$GLOBALS['ASSETS_URL']."images/info.gif\"";
 			$out .= tooltip($info, TRUE, TRUE) . ">$error_sign</td></tr>\n";
 		}
-		
+
 		$out .= "</table>\n</td></tr>\n";
-		
+
 		return $out;
 	}
-	
+
 	function editName ($attribute) {
 		$info = _("Geben Sie den Namen der Konfiguration an.");
-		
+
 		return $this->editTextfieldGeneric($attribute, "", $info, 40, 40);
 	}
-	
+
 	function editGroups () {
 		$groups_db = get_statusgruppen_by_name($this->config->range_id, "''", TRUE);
-		
+
 		if (!$groups_db)
 			return FALSE;
-		
+
 		$title = _("Gruppen auswählen:");
 		$info = _("Wählen sie die Statusgruppen aus, die ausgegeben werden sollen.");
 		$groups_config = $this->getValue("groups");
-		
+
 		// this value is always necessary, even there is an error in the users inputs, so
 		// it isn't transfered via HTTP_POST_VARS
 		$this->form_values[$this->element_name . "_groupsvisible"]
 				= $this->config->getValue($this->element_name, "groupsvisible");
-		
+
 		// initialize groups if this value isn't set in the config file
 		if (!$groups_config)
 			$groups_config = array_keys($groups_db);
-			
+
 		$groups_aliases = $this->getValue("groupsalias");
 		$groups_visible = $this->getValue("groupsvisible");
 		if (!$groups_visible)
 			$groups_visible = array();
-		
+
 		for ($i = 0; $i < sizeof($groups_config); $i++)
 			$groups[$groups_config[$i]] = $groups_aliases[$i];
 
@@ -238,13 +238,13 @@ class ExternEditModule extends ExternEditHtml {
 		$this->css->switchClass();
 		$i = 0;
 		foreach ($groups_db as $id => $name) {
-		
+
 			// name of group
 			if (strlen($name) > 30)
 				$name = substr($name, 0, 14) . "[...]" . substr($name, -10);
 			$out .= "<tr" . $this->css->getFullClass() . ">\n";
 			$out .= "<td nowrap=\"nowrap\"><font size=\"2\">&nbsp;" . htmlReady($name) . "</font></td>";
-			
+
 			// column headline
 			$out .= "<td nowrap=\"nowrap\"><input type=\"text\" name=\"{$this->element_name}_groupsalias[]\"";
 			$out .= "\" size=\"25\" maxlength=\"150\" value=\"";
@@ -252,17 +252,17 @@ class ExternEditModule extends ExternEditHtml {
 			if ($this->faulty_values[$this->element_name . "_groupsalias"][$i])
 					$out .= $this->error_sign;
 			$out .= "</td>\n";
-			
+
 			// visible
 			if (in_array($id, $groups_visible)) {
 				$out .= "<td align=\"center\"><input type=\"image\" name=\"{$this->element_name}_hide_group[$id]\" ";
-				$out .= "img src=\"" . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . "pictures/on_small.gif\"";
+				$out .= "img src=\" ".$GLOBALS['ASSETS_URL']."images/on_small.gif\"";
 				$out .= tooltip(_("Spalte ausblenden"));
 				$out .= "border=\"0\" align=\"middle\">\n</td>\n";
 			}
 			else {
 				$out .= "<td align=\"center\"><input type=\"image\" name=\"{$this->element_name}_show_group[$id]\" ";
-				$out .= "img src=\"" . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . "pictures/off_small_blank.gif\"";
+				$out .= "img src=\" ".$GLOBALS['ASSETS_URL']."images/off_small_blank.gif\"";
 				$out .= tooltip(_("Spalte einblenden"));
 				$out .= "border=\"0\" align=\"middle\">\n</td>\n";
 			}
@@ -270,35 +270,44 @@ class ExternEditModule extends ExternEditHtml {
 			$this->css->switchClass();
 			$i++;
 		}
-			
+
 		$out .= "</table>\n</td></tr>\n";
-		
+
 		return $out;
 	}
-	
+
 	function editSemTypes () {
 		global $SEM_TYPE, $SEM_CLASS;
 		// these two values are always necessary, even there is an error in the users inputs, so
-		// there arent transfered via HTTP_POST_VARS
+		// there aren't transfered via HTTP_POST_VARS
 		$this->form_values[$this->element_name . "_order"]
 				= $this->config->getValue($this->element_name, "order");
-		
 		$order = $this->getValue("order");
+		
+		$this->form_values[$this->element_name . '_visibility']
+				= $this->config->getValue($this->element_name, 'visibility');
+		$visibility = $this->getValue('visibility');
+		
+		// compat <1.3: new attribute visibility (all SemTypes are visible)
+		if (!is_array($visibility) || !count($visibility)) {
+			$visibility = array_fill(0, sizeof($order), 1);
+		}
 		
 		if (!is_array($order))
 			$order = array_keys($SEM_TYPE);
-			
+
 		$this->css->resetClass();
 		$this->css->switchClass();
-		
+
 		$out = "<tr><td><table width=\"100%\" border=\"0\" cellpadding=\"2\" cellspacing=\"0\">\n";
 		$out .= "<tr" . $this->css->getFullClass() . ">\n";
 		$out .= "<td><font size=\"2\"><b>" . _("Datenfeld") . "</b></font></td>\n";
 		$out .= "<td><font size=\"2\"><b>" . _("&Uuml;berschrift") . "</b></font></td>\n";
-		$out .= "<td><font size=\"2\"><b>" . _("Reihenfolge") . "</b></font></td>\n";
+		$out .= "<td align=\"center\"><font size=\"2\"><b>" . _("Reihenfolge") . "</b></font></td>\n";
+		$out .= "<td align=\"center\"><font size=\"2\"><b>" . _("Sichtbarkeit") . "</b></font></td>\n";
 		$out .= "</tr>\n";
 		$this->css->switchClass();
-			
+
 		foreach ($SEM_CLASS as $class_index => $foo) {
 			$i = 0;
 			foreach ($SEM_TYPE as $type_index => $type) {
@@ -307,7 +316,7 @@ class ExternEditModule extends ExternEditHtml {
 			}
 			$classes[$class_index] = $this->getValue("class_$class_index");
 		}
-		
+
 		for ($i = 0; $i < sizeof($order); $i++) {
 			// name of column
 			$out .= "<tr" . $this->css->getFullClass() . ">\n";
@@ -321,7 +330,7 @@ class ExternEditModule extends ExternEditHtml {
 						. " ({$SEM_CLASS[$SEM_TYPE[$order[$i]]['class']]['name']})");
 			}
 			$out .= "</font></td>";
-			
+
 			// column headline
 			$out .= "<td><input type=\"text\" name=\"{$this->element_name}_class_";
 			$out .= $SEM_TYPE[$order[$i]]['class'] . "[{$mapping[$order[$i]]}]\"";
@@ -338,27 +347,92 @@ class ExternEditModule extends ExternEditHtml {
 			}
 			$out .= "</td>\n";
 						
-				// move left
+				// move up
 			$out .= "<td valign=\"top\" align=\"center\" nowrap=\"nowrap\">";
 			$out .= "<input type=\"image\" name=\"{$this->element_name}_move_left[$i]\" ";
-			$out .= "img src=\"" . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . "pictures/move_up.gif\"";
+			$out .= "img src=\" ".$GLOBALS['ASSETS_URL']."images/move_up.gif\"";
 			$out .= tooltip(_("Datenfeld verschieben"));
 			$out .= "border=\"0\" align=\"bottom\">\n";
 			
-			// move right
+			// move down
 			$out .= "<input type=\"image\" name=\"{$this->element_name}_move_right[$i]\" ";
-			$out .= "img src=\"" . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . "pictures/move_down.gif\"";
+			$out .= "img src=\" ".$GLOBALS['ASSETS_URL']."images/move_down.gif\"";
 			$out .= tooltip(_("Datenfeld verschieben"));
 			$out .= "border=\"0\" align=\"bottom\">\n&nbsp;";
+			$out .= "</td>\n";
 			
-			$out .= "</tr>\n";
+			// visibility
+			$out .= "<td valign=\"top\" align=\"center\" nowrap=\"nowrap\">";
+			$out .= "<input type=\"checkbox\" name=\"{$this->element_name}_visibility";
+			$out .= '[' . ($order[$i] - 1) . "]\" value=\"1\"";
+			if ($visibility[$order[$i] - 1] == 1) {
+				$out .= ' checked="checked"';
+			}
+			$out .= '>';
+			
+			$out .= "</td>\n</tr>\n";
 			$this->css->switchClass();
 		}
-		
+
 		$out .= "</table>\n</td></tr>\n";
+		$out .= "<input type=\"hidden\" name=\"count_semtypes\" value=\"$i\">\n";
 		
 		return $out;
 	}
-}
 	
+	function editSelectSubjectAreas ($selector) {
+		$info = _("Wählen Sie die Studienbereiche aus, deren Veranstaltungen angezeigt werden sollen.");
+		$info2 = _("Zum Ausw&auml;hlen mehrerer Bereiche oder zum Abw&auml;hlen einzelner Bereiche halten Sie die 'Strg'-Taste oder 'Ctrl'-Taste' gedr&uuml;ckt, w&auml;hrend Sie auf den entsprechenden Bereich klicken.");
+		$info3 = _("(&Uuml;berschriften k&ouml;nnen nicht ausgew&auml;hlt werden!)");
+		$this->css->resetClass();
+		$this->css->switchClass();
+		$form_name = $this->element_name . "_" . 'subjectareasselected';
+		
+		if ($this->faulty_values[$form_name][0]) {
+			$error_sign = $this->error_sign;
+		} else {
+			$error_sign = '';
+		}
+		
+		$selected = $this->config->getValue($this->element_name, 'subjectareasselected');
+		$selector->selected = array();
+		$selector->sem_tree_ranges = array();
+		$selector->sem_tree_ids = array();
+		if (is_array($selected) && count($selected)) {
+			foreach ($selected as $selected_id) {
+				$selector->selected[$selected_id] = TRUE;
+				$selector->sem_tree_ranges[$selector->tree->tree_data[$selected_id]['parent_id']][] = $selected_id;
+				$selector->sem_tree_ids[] = $selected_id;
+			}
+		}
+		
+		$form_name_tmp = $selector->form_name;
+		$selector->form_name = 'SelectSubjectAreas';
+		$selector->doSearch();
+		$out = '<tr' . $this->css->getFullClass() . '><td>';
+		$out .= "<table width=\"100%\" border=\"0\" cellpadding=\"4\" cellspacing=\"0\">\n";
+		$out .= '<tr><td align="left" width="100%" colspan="2" nowrap="nowrap">';
+		$out .= $selector->getSearchField(array('size' => 30 ,'style' => 'vertical-align:middle;'));
+		$out .= $selector->getSearchButton(array('style' => 'vertical-align:middle;'));
+		if ($selector->num_search_result !== false){
+			$out .= "<br><span style=\"font-size:smaller;\"><a name=\"anker\">&nbsp;&nbsp;</a>"
+					. sprintf(_("Ihre Suche ergab %s Treffer."),$selector->num_search_result)
+					. (($selector->num_search_result) ? _(" (Suchergebnisse werden blau angezeigt)") : '')
+					. '</span>';
+		}
+		$out .= '</td></tr>';
+		$selector->form_name = $form_name_tmp;
+		$out .= '<td nowrap="nowrap" width="100%">';
+		$out .= $selector->getChooserField(array('style' => 'width:80%;','size' => 15),
+				70, 'subjectareasselected');
+		$out .= ' <img align="top" src="' . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . 'pictures/info.gif"';
+		$out .= tooltip($info, TRUE, TRUE) . "><span style=\"vertical-align:top;\">$error_sign</span>";
+		$out .= "</td></tr><tr><td width=\"100%\" style=\"font-size:smaller;\">$info2<br />";
+		$out .= "<span style=\"color:red;\">$info3</span></td></tr></table>\n</td></tr>\n";
+		
+		return $out;
+	}
+	
+}
+
 ?>

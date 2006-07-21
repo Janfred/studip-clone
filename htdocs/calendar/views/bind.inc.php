@@ -1,8 +1,8 @@
 <?
 /**
 * bind.inc.php
-* 
-* 
+*
+*
 *
 * @author		Peter Thienel <pthienel@web.de>
 * @version		$Id$
@@ -22,7 +22,7 @@ define("PHPDOC_DUMMY",true);
 // This file is part of Stud.IP
 // bind.inc.php
 //
-// Copyright (c) 2003 Peter Tienel <pthienel@web.de> 
+// Copyright (c) 2003 Peter Tienel <pthienel@web.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -68,7 +68,7 @@ echo "\n<tr>\n";
 echo "<th width=\"2%\" nowrap colspan=\"2\" align=\"center\">";
 echo "&nbsp;<a href=\"gruppe.php\">";
 $tooltip = tooltip(_("Gruppe ändern"));
-echo "<img src=\"pictures/gruppe.gif\"{$tooltip}border=\"0\">";
+echo "<img src=\"".$GLOBALS['ASSETS_URL']."images/gruppe.gif\"{$tooltip}border=\"0\">";
 echo "</a></th>\n";
 echo "<th width=\"64%\" align=\"left\">";
 echo "<a href=\"$PHP_SELF?cmd=bind&sortby=Name&order=$order\">" . _("Name") . "</a></th>\n";
@@ -87,7 +87,7 @@ $css_switcher->switchClass();
 while($db->next_record()){
 	$style = $css_switcher->getFullClass();
 	echo "<tr" . $css_switcher->getHover() . "><td width=\"1%\" class=\"gruppe" . $db->f("gruppe") . "\">";
-	echo "<img src=\"pictures/blank.gif\" alt=\"Gruppe\" border=\"0\" width=\"7\" height=\"12\"></td>\n";
+	echo "<img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" alt=\"Gruppe\" border=\"0\" width=\"7\" height=\"12\"></td>\n";
 	echo "<td$style>&nbsp; </td>";
 	echo "<td$style><font size=\"-1\">";
 	echo "<a href=\"" . $CANONICAL_RELATIVE_PATH_STUDIP;
@@ -131,12 +131,12 @@ echo "</table>";
 echo "\n</td>\n";
 echo "<td class=\"blank\" width=\"10%\" valign=\"top\">\n";
 $info_content = array(array("kategorie" => _("Information:"),
-											"eintrag" => array(	
-												array("icon" => "pictures/ausruf_small.gif",
+											"eintrag" => array(
+												array('icon' => "ausruf_small.gif",
 															"text" => _("Termine aus den ausgew&auml;hlten Veranstaltungen werden in Ihren Terminkalender &uuml;bernommen.")
 											))));
-										
-print_infobox($info_content, "pictures/dates.jpg");
+
+print_infobox($info_content, "dates.jpg");
 echo "</td></tr></table>\n";
 
 echo "</tr><tr><td class=\"blank\">&nbsp;";

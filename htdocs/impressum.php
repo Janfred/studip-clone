@@ -17,7 +17,6 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
-// $Id$ 
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $auth->login_if($again && ($auth->auth["uid"] == "nobody"));
@@ -29,14 +28,14 @@ include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Sessio
 // Start of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
-	
+
 require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 require_once "$ABSOLUTE_PATH_STUDIP/reiter.inc.php";
 
 function write_toplist($rubrik,$query) {
 	global $PHP_SELF;
-	
+
 	$db=new DB_Seminar;
 	$db->query($query);
 	$tmp_link="$PHP_SELF?view=statistik";
@@ -54,11 +53,11 @@ function write_toplist($rubrik,$query) {
 		}
 		echo "</ol><br></td></tr>\n";
 	}
-} 
+}
 
 function write_toplist_person($rubrik,$query) {
 	global $PHP_SELF;
-	
+
 	$db=new DB_Seminar;
 	$db->query($query);
 	$tmp_link="$PHP_SELF?view=statistik";
@@ -76,7 +75,7 @@ function write_toplist_person($rubrik,$query) {
 		}
 		echo "</ol><br></td></tr>\n";
 	}
-} 
+}
 
 //Create Reitersystem
 $reiter=new reiter;
@@ -101,7 +100,7 @@ $reiter->create($structure, $view);
 
 
 <? if ($view=="main") {?>
-	
+
 	<tr>
 		<td valign="top" class="blank">
 			<blockquote><br />
@@ -113,31 +112,32 @@ $reiter->create($structure, $view);
 ?>
 		</td>
 		<td class="blank" align="left" valign="top">
-			<a target="_new" href="http://www.studip.de"><img src="pictures/studipanim.gif" border="0"></a>
+			<a target="_new" href="http://www.studip.de"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/studipanim.gif" border="0"></a>
 		</td>
 	</tr>
 	<tr>
 		<td valign="top" align="right" class="blank">
-			&nbsp; 
+			&nbsp;
  		</td>
 		<td class="blank" align="left" valign="top">
-			&nbsp; &nbsp;<b><?=_("Version:")?> </b><? echo $SOFTWARE_VERSION?>		
+			&nbsp; &nbsp;<b><?=_("Version:")?> </b><? echo $SOFTWARE_VERSION?>
 		</td>
 	</tr>
-	
+
 	<tr>
 		<td class="steel1"colspan=2>
 			<br>&nbsp; &nbsp; <?=_("<b>Die folgenden Entwickler</b> sind mit der st&auml;ndigen Pflege und Weiterentwicklung des Systems befasst:")?><br>
 			<blockquote>
 			<font size=-1><b>Marco Bohnsack</b>, E-Mail: <a href="mailto:bohnsack@data-quest.de">bohnsack@data-quest.de</a> <?=_("(Projektmanagement, Hilfe)")?></font>
-			<br><font size=-1><b>Cornelius Hempel</b>, E-Mail: <a href="mailto:cornelius.hempel@studip.uni-halle.de">cornelius.hempel@studip.uni-halle.de</a> <?=_("(Fehlersuche)")?></font>
+			<br><font size=-1><b>Cornelius Hempel</b>, E-Mail: <a href="mailto:cornelius.hempel@studip.uni-halle.de">cornelius.hempel@studip.uni-halle.de</a> <?=_("(Qualit&auml;tssicherung)")?></font>
+			<br><font size=-1><b>Philipp H&uuml;gelmeyer</b>, E-Mail: <a href="mailto:phuegelm@uos.de">phuegelm@uos.de</a> <?=_("(Distribution)")?></font>
 			<br><font size=-1><b>Cornelis Kater</b>, E-Mail: <a href="mailto:kater@data-quest.de">kater@data-quest.de</a> <?=_("(Ressourcenverwaltung, Terminverwaltung, Adminbereich, Design)")?></font>
 			<br><font size=-1><b>Hartje Kriete</b>, E-Mail: <a href="mailto:kriete@math.uni-goettingen.de">kriete@math.uni-goettingen.de</a> <?=_("(&Uuml;bersetzung)")?></font>
 			<br><font size=-1><b>Jan Kulmann</b>, E-Mail: <a href="mailto:jankul@tzi.de">jankul@tzi.de</a> <?=_("(Evaluationen)")?></font>
 			<br><font size=-1><b>André Noack</b>, E-Mail: <a href="mailto:noack@data-quest.de">noack@data-quest.de</a> <?=_("(Newsverwaltung, Chat, Einrichtungsverzeichnis, Vorlesungsverzeichnis)")?></font>
 			<br><font size=-1><b>Frank Ollermann</b>, E-Mail: <a href="mailto:follerma@uni-osnabrueck.de">follerma@uni-osnabrueck.de</a> <?=_("(Usability)")?></font>
 			<br><font size=-1><b>Dennis Reil</b>, E-Mail: <a href="mailto:Dennis.Reil@offis.de">Dennis.Reil@offis.de</a> <?=_("(PlugIn-Schnittstelle)")?></font>
-			<br><font size=-1><b>Jens Schmelzer</b>, E-Mail: <a href="mailto:jens.schmelzer@fh-jena.de">jens.schmelzer@fh-jena.de</a> <?=_("(Security, Distribution)")?></font>
+			<br><font size=-1><b>Jens Schmelzer</b>, E-Mail: <a href="mailto:jens.schmelzer@fh-jena.de">jens.schmelzer@fh-jena.de</a> <?=_("(Security)")?></font>
 			<br><font size=-1><b>Ralf Stockmann</b>, E-Mail: <a href="mailto:rstockm@uni-goettingen.de">rstockm@uni-goettingen.de</a> <?=_("(Forensystem, pers&ouml;nliche Seiten, Adressbuch, Design)")?></font>
 			<br><font size=-1><b>Stefan Suchi</b>, E-Mail: <a href="mailto:suchi@data-quest.de">suchi@data-quest.de</a> <?=_("(Datenbankstruktur, Rechtesystem, Adminbereich, Internationalisierung)")?></font>
 			<br><font size=-1><b>Tobias Thelen</b>, E-Mail: <a href="mailto:tthelen@uni-osnabrueck.de">tthelen@uni-osnabrueck.de</a> <?=_("(WikiWeb)")?></font>
@@ -157,32 +157,32 @@ $reiter->create($structure, $view);
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
 	<tr>
 		<td class="blank" colspan=4>
-			 <br />&nbsp; &nbsp; <font size=-1><b><?=_("Entwicklung und Support:")?> </b></font><br />&nbsp; 
+			 <br />&nbsp; &nbsp; <font size=-1><b><?=_("Entwicklung und Support:")?> </b></font><br />&nbsp;
 		</td>
 		<td class="blank" colspan=3>
-			 <br /><font size=-1><b><?=_("gef&ouml;rdert von:")?> </b></font><br />&nbsp; 
+			 <br /><font size=-1><b><?=_("gef&ouml;rdert von:")?> </b></font><br />&nbsp;
 		</td>
 	</tr>
 	<tr>
-		<td class="blank" width="4%">&nbsp; 
+		<td class="blank" width="4%">&nbsp;
 		</td>
 		<td align="left" class="blank" width="15%" align="center">
-			<a target="_new" href="http://zim.uni-goettingen.de/"><img src="pictures/zim.gif" border="0" /></a>
+			<a target="_new" href="http://zim.uni-goettingen.de/"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/zim.gif" border="0" /></a>
 		</td>
 		<td align="left" class="blank" width="15%" align="center">
-			<a target="_new" href="http://www.data-quest.de/"><img src="pictures/dataquest.gif" border="0" /></a>
+			<a target="_new" href="http://www.data-quest.de/"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/dataquest.gif" border="0" /></a>
 		</td>
 		<td align="left" class="blank" width="15%" align="center">
-			&nbsp; 
+			&nbsp;
 		</td>
 		<td align="left" class="blank" width="15%" align="center">
-			<a target="_new" href="http://www.bmbf.de/"><img src="pictures/bmbf.gif" border="0" /></a>
+			<a target="_new" href="http://www.bmbf.de/"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/bmbf.gif" border="0" /></a>
 		</td>
 		<td align="left" class="blank" width="15%" align="center">
-			<a target="_new" href="http://www.campussource.de/"><img src="pictures/cslogotransparent.jpg" border="0" /></a>
+			<a target="_new" href="http://www.campussource.de/"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/cslogotransparent.jpg" border="0" /></a>
 		</td>
 		<td align="center" class="blank" width="25%">
-			&nbsp; 
+			&nbsp;
 		</td>
 	</tr>
 	<tr>
@@ -191,14 +191,14 @@ $reiter->create($structure, $view);
 		</td>
 	</tr>
 	<?}
-	
+
 if ($view=="statistik") {?>
-	
+
 	<tr>
 		<td width="70%"  valign="top" class="blank">
 		<blockquote>
 			<b><?=_("Top-Listen aller Veranstaltungen")?></b><br /><br />
-			<table  cellpadding=0 cellspacing=0 class=blank>	
+			<table  cellpadding=0 cellspacing=0 class=blank>
 			<?
 			//Toplists
 			$count = 10;
@@ -208,7 +208,7 @@ if ($view=="statistik") {?>
 			$week = time()-1209600;
 			write_toplist(_("die aktivsten Veranstaltungen (Postings der letzten zwei Wochen)"),"SELECT a.seminar_id, b.name, count(a.seminar_id) as count FROM px_topics a INNER JOIN seminare b USING(seminar_id) WHERE b.visible=1 AND a.mkdate > $week GROUP BY a.seminar_id  ORDER BY count DESC LIMIT $count");
 			write_toplist_person(_("die beliebtesten Homepages (Besucher)"),"SELECT auth_user_md5.user_id, username, views as count, " . $_fullname_sql['full'] . " AS full_name FROM object_views LEFT JOIN auth_user_md5 ON(object_id=auth_user_md5.user_id) LEFT JOIN user_info USING (user_id) WHERE auth_user_md5.user_id IS NOT NULL  ORDER BY count DESC LIMIT $count");
-			?>	
+			?>
 			</table>
 		</blockquote>
 		</td>
@@ -219,32 +219,32 @@ if ($view=="statistik") {?>
 			//Statistics
 			$db=new DB_Seminar;
 			$cssSw=new cssClassSwitcher;
-	
+
 			$db->query("SELECT count(*) from seminare");
 			$db->next_record();
 			$anzahl = $db->f(0);
-			echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("Aktive Veranstaltungen:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 
+			echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("Aktive Veranstaltungen:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>";
 
 			$cssSw->switchClass();
 			$db->query("SELECT count(*) from archiv");
 			$db->next_record();
 			$anzahl = $db->f(0);
-			echo "<tr><td class=\"".$cssSw->getClass() ."\" nowrap>" . _("Archivierte Veranstaltungen:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 
+			echo "<tr><td class=\"".$cssSw->getClass() ."\" nowrap>" . _("Archivierte Veranstaltungen:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>";
 
 			$cssSw->switchClass();
 			echo "<tr><td class=\"".$cssSw->getClass() ."\" colspan=2>&nbsp; </td></tr>";
 
-			$cssSw->switchClass();	
+			$cssSw->switchClass();
 			$db->query("SELECT count(*) FROM Institute WHERE Institut_id != fakultaets_id");
 			$db->next_record();
 			$anzahl = $db->f(0);
-			echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("beteiligte Einrichtungen:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 
+			echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("beteiligte Einrichtungen:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>";
 
 			$cssSw->switchClass();
 			$db->query("SELECT count(*) FROM Institute WHERE Institut_id = fakultaets_id");
 			$db->next_record();
 			$anzahl = $db->f(0);
-			echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("beteiligte Fakult&auml;ten:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 
+			echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("beteiligte Fakult&auml;ten:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>";
 
 			$cssSw->switchClass();
 			echo "<tr><td class=\"".$cssSw->getClass() ."\" colspan=2>&nbsp; </td></tr>";
@@ -253,114 +253,114 @@ if ($view=="statistik") {?>
 			$db->query("SELECT count(*) from auth_user_md5 WHERE perms='admin'");
 			$db->next_record();
 			$anzahl = $db->f(0);
-			echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("registrierte Administratoren:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 
-	
-			$cssSw->switchClass();	
+			echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("registrierte Administratoren:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>";
+
+			$cssSw->switchClass();
 			$db->query("SELECT count(*) from auth_user_md5 WHERE perms='dozent'");
 			$db->next_record();
 			$anzahl = $db->f(0);
-			echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("registrierte Dozenten:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 
-	
+			echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("registrierte Dozenten:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>";
+
 			$cssSw->switchClass();
 			$db->query("SELECT count(*) from auth_user_md5 WHERE perms='tutor'");
 			$db->next_record();
 			$anzahl = $db->f(0);
-			echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("registrierte Tutoren:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 
-	
+			echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("registrierte Tutoren:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>";
+
 			$cssSw->switchClass();
 			$db->query("SELECT count(*) from auth_user_md5 WHERE perms='autor'");
 			$db->next_record();
 			$anzahl = $db->f(0);
-			echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("registrierte Studierende:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 
-	
+			echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("registrierte Studierende:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>";
+
 			$cssSw->switchClass();
 			echo "<tr><td class=\"".$cssSw->getClass() ."\" colspan=2>&nbsp; </td></tr>";
-	
+
 			$cssSw->switchClass();
 			$db->query("SELECT count(*) from px_topics");
 			$db->next_record();
 			$anzahl = $db->f(0);
-			echo "<tr><td class=\"".$cssSw->getClass() ."\" >" . _("Postings:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 	
-	
+			echo "<tr><td class=\"".$cssSw->getClass() ."\" >" . _("Postings:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>";
+
 			$cssSw->switchClass();
 			$db->query("SELECT count(*) from dokumente WHERE url = ''");
 			$db->next_record();
 			$anzahl = $db->f(0);
-			echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("Dateien:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 	
-			
+			echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("Dateien:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>";
+
 			$cssSw->switchClass();
 			$db->query("SELECT count(*) from dokumente WHERE url != ''");
 			$db->next_record();
 			$anzahl = $db->f(0);
-			echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("verlinkte Dateien:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 	
+			echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("verlinkte Dateien:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>";
 
 			$cssSw->switchClass();
 			$db->query("SELECT count(*) from lit_list");
 			$db->next_record();
 			$anzahl = $db->f(0);
-			echo "<tr><td class=\"".$cssSw->getClass() ."\" >" . _("Literaturlisten:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 	
-	
+			echo "<tr><td class=\"".$cssSw->getClass() ."\" >" . _("Literaturlisten:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>";
+
 			$cssSw->switchClass();
 			$db->query("SELECT count(*) from termine");
 			$db->next_record();
 			$anzahl = $db->f(0);
-			echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("Termine:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 	
-	
+			echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("Termine:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>";
+
 			$cssSw->switchClass();
 			$db->query("SELECT count(*) from news");
 			$db->next_record();
 			$anzahl = $db->f(0);
-			echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("News:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 	
-			
+			echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("News:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>";
+
 			$cssSw->switchClass();
 			$db->query("SELECT count(*) from user_info WHERE guestbook='1'");
 			$db->next_record();
 			$anzahl = $db->f(0);
-			echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("Gästebücher:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 	
-			
+			echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("Gästebücher:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>";
+
 			if ($GLOBALS['VOTE_ENABLE']) {
 				$cssSw->switchClass();
 				$db->query("SELECT count(*) from vote WHERE type='vote'");
 				$db->next_record();
 				$anzahl = $db->f(0);
-				echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("Umfragen:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 	
-			
+				echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("Umfragen:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>";
+
 				$cssSw->switchClass();
 				$db->query("SELECT count(*) from vote WHERE type='test'");
 				$db->next_record();
 				$anzahl = $db->f(0);
 				echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("Tests:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>";
-				
+
 				$cssSw->switchClass();
 				$db->query("SELECT count(*) from eval");
 				$db->next_record();
 				$anzahl = $db->f(0);
 				echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("Evaluationen:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>";
 			}
-			
+
 			if ($GLOBALS['WIKI_ENABLE']) {
 				$cssSw->switchClass();
 				$db->query("SELECT COUNT(DISTINCT keyword) as count from wiki");
 				$db->next_record();
 				$anzahl = $db->f(0);
-				echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("WikiWeb Seiten:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 	
+				echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("WikiWeb Seiten:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>";
 			}
-			
+
 			if ($GLOBALS['ILIAS_CONNECT_ENABLE']){
 				$cssSw->switchClass();
 				$db->query("SELECT COUNT(DISTINCT co_id) as count from seminar_lernmodul");
 				$db->next_record();
 				$anzahl = $db->f(0);
-				echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("ILIAS-Lernmodule:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 	
+				echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("ILIAS-Lernmodule:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>";
 			}
 			if ($RESOURCES_ENABLE) {
 				$cssSw->switchClass();
 				$db->query("SELECT COUNT(*) from resources_objects");
 				$db->next_record();
 				$anzahl = $db->f(0);
-				echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("Ressourcen-Objekte:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 	
+				echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("Ressourcen-Objekte:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>";
 			}
-			
+
 			echo "</blockquote></table></td></tr>";
 	}
 	
@@ -378,10 +378,10 @@ if ($view == 'history') {?>
 		</td>
 	</tr>
 	<?}
-	
-if ($view=="ansprechpartner") {?>	
-	
-	
+
+if ($view=="ansprechpartner") {?>
+
+
 	<tr>
 		<td class="blank" valign="top">
 		<blockquote><b>
@@ -390,14 +390,14 @@ if ($view=="ansprechpartner") {?>
 
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
-	
+
 	$db->query("SELECT " . $_fullname_sql['full'] ." AS fullname, Email, username FROM auth_user_md5 LEFT JOIN user_info USING (user_id) WHERE perms='root' ORDER BY Nachname");
 	if ($db->affected_rows() ==0) { echo _("keine. Na sowas. Das kann ja eigentlich gar nicht sein..."); }
 	while ($db->next_record())
 		{
 		echo "<font size=\"-1\"><a href=\"about.php?username=".$db->f("username")."\">".htmlReady($db->f("fullname"))."</a>, E-Mail: <a href=\"mailto:".$db->f("Email")."\">".$db->f("Email")."</a></font ><br>";
 		}
-	
+
 ?>
 		<br><font size="-1">
 		<?=_("<b>allgemeine Anfragen</b> wie Passwort-Anforderungen u.a. richten Sie bitte an:")?><br>
@@ -405,8 +405,8 @@ if ($view=="ansprechpartner") {?>
 		<font size="-1"><a href="mailto:<?=$UNI_CONTACT?>"><?=$UNI_CONTACT?>	</a></font ><br /><br /></blockquote>
 		</td>
 		<td class="blank" align="center" valign="middle">
-			<a target="_new" href="http://www.studip.de"><img src="pictures/studipanim.gif" border="0"></a>
-			<div align="left"><br>&nbsp; &nbsp;<b><?=_("Version:")?> </b><? echo $SOFTWARE_VERSION?></div>		
+			<a target="_new" href="http://www.studip.de"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/studipanim.gif" border="0"></a>
+			<div align="left"><br>&nbsp; &nbsp;<b><?=_("Version:")?> </b><? echo $SOFTWARE_VERSION?></div>
 		</td>
 	</tr>
 	<tr>
@@ -423,7 +423,7 @@ if ($view=="ansprechpartner") {?>
 	<tr>
 		<td class="steel1" valign="top" width="55%">
 		<blockquote>
-		
+
 <?
 
 	$db->query("SELECT " . $_fullname_sql['full'] ." AS fullname,auth_user_md5.Email,username, Institute.Institut_id, Institute.Name FROM user_inst LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) LEFT JOIN Institute ON (user_inst.institut_id = Institute.Institut_id) WHERE user_inst.inst_perms='admin' AND Institute.Name NOT LIKE '%- - -%' ORDER BY Institute.Name, Nachname");
@@ -477,25 +477,25 @@ printf(_("Das System wird ständig weiterentwickelt und an die Wünsche unserer Nu
 	</blockquote></blockquote><br><br></td></tr>
 	<tr>
 		<td align="center" class="blank" width="15%">
-			<a href="http://www.suse.de" target="_new"><img src="./pictures/penguin.gif" border=0></a>
+			<a href="http://www.suse.de" target="_new"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/penguin.gif" border=0></a>
 		</td>
 		<td align="center" class="blank" width="15%">
-			<a href="http://www.apache.org" target="_new"><img src="./pictures/apache.gif" border=0></a>
+			<a href="http://www.apache.org" target="_new"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/apache.gif" border=0></a>
 		</td>
 		<td align="center" class="blank" width="15%">
-			<a href="http://www.mysql.org" target="_new"><img src="./pictures/powered-by-mysql-transparent1.gif" border=0></a>
+			<a href="http://www.mysql.org" target="_new"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/powered-by-mysql-transparent1.gif" border=0></a>
 		</td>
 		<td align="center" class="blank" width="15%">
-			<a href="http://www.php.net" target="_new"><img src="./pictures/php4.gif" border=0></a>
+			<a href="http://www.php.net" target="_new"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/php4.gif" border=0></a>
 		</td>
 		<td align="center" class="blank" width="15%">
-			<a href="http://sourceforge.net/projects/phplib" target="_new"><img src="./pictures/phplib_sm.gif" border=0></a>
+			<a href="http://sourceforge.net/projects/phplib" target="_new"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/phplib_sm.gif" border=0></a>
 		</td>
 		<td align="center" class="blank" width="15%">
 			<a href="http://sourceforge.net" target="_new"> <img src="http://sourceforge.net/sflogo.php?group_id=16662" width="88" height="31" border="0" alt="SourceForge Logo"></a>
 		</td>
 	</tr>
-	
+
 <?}
 
 ?>
@@ -506,3 +506,4 @@ printf(_("Das System wird ständig weiterentwickelt und an die Wünsche unserer Nu
 // Save data back to database.
 page_close();
  ?>
+<!-- $Id$ -->

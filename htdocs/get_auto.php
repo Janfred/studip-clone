@@ -11,14 +11,14 @@ if (!$_POST["pass"])
 		<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
     <html><head><title><?=_("Autologin Datei erzeugen")?></title>
 		<meta name="copyright" content="Stud.IP-Crew (crew@studip.de)">
-		<script type="text/javascript" src="md5.js"></script>
+		<script type="text/javascript" src="<?= $GLOBALS['ASSETS_URL'] ?>javascripts/md5.js"></script>
     <script type="text/javascript">
     function doSubmit(){
 	    if (document.forms[0].pass.value!="") document.forms[0].submit();
 	    else document.forms[0].pass.focus();
     }
     </script></head>
-    <body style="background-image: url('pictures/steel1.jpg');font-family: Arial, Helvetica, sans-serif;">
+    <body style="background-image: url('<?= $GLOBALS['ASSETS_URL'] ?>images/steel1.jpg');font-family: Arial, Helvetica, sans-serif;">
     <?
     echo "<div align=\"center\"><form action=\"$PHP_SELF\" method=\"post\" >";
     printf(_("Bitte Passwort eingeben für User: <b>%s</b>"), $auth->auth["uname"]);
@@ -52,11 +52,11 @@ function convert(x, n, m, d)
       }
       return (r.length%2) ? "0" + r : r;
    }
-   
+
 function toHexString(x){
 	return convert(x, 4, 15, "0123456789abcdef");
 	}
-	
+
 function one_time_pad(text,key)
 {
 var geheim=""

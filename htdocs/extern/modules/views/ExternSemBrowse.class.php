@@ -1,4 +1,40 @@
 <?
+/**
+* ExternSemBrowse.class.php
+* 
+* 
+* 
+*
+* @author		Peter Thienel <pthienel@web.de>, Suchi & Berg GmbH <info@data-quest.de>
+* @version	$Id$
+* @access		public
+* @modulegroup	extern
+* @module		ExternSemBrowse
+* @package	studip_extern
+*/
+
+// +---------------------------------------------------------------------------+
+// This file is part of Stud.IP
+// ExternSemBrowse.class.php
+// 
+// Copyright (C) 2003 Peter Thienel <pthienel@web.de>,
+// Suchi & Berg GmbH <info@data-quest.de>
+// +---------------------------------------------------------------------------+
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or any later version.
+// +---------------------------------------------------------------------------+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+// +---------------------------------------------------------------------------+
+
+
 global $ABSOLUTE_PATH_STUDIP, $RELATIVE_PATH_CALENDAR;
 require_once($ABSOLUTE_PATH_STUDIP . "lib/classes/SemBrowse.class.php");
 require_once($ABSOLUTE_PATH_STUDIP . "dates.inc.php");
@@ -13,6 +49,8 @@ class ExternSemBrowse extends SemBrowse {
 	function ExternSemBrowse (&$module, $start_item_id) {
 		
 		global $SEM_TYPE,$SEM_CLASS;
+		// prevent warnings if snapshot of database is empty
+		ob_start();
 		$semester = new SemesterData;
 		$all_semester = $semester->getAllSemesterData();
 		array_unshift($all_semester,0);
@@ -76,13 +114,36 @@ class ExternSemBrowse extends SemBrowse {
 				$this->sem_browse_data['sem_status'][] = $key;
 		}
 		
-		$this->get_sem_range_tree($start_item_id, true);
+		$this->get_sem_range_tree($start_item_id, true);		
 	}
 	
 	function print_result ($args) {
 		global $_fullname_sql,$_views,$PHP_SELF,$SEM_TYPE,$SEM_CLASS;
 		
 		if (is_array($this->sem_browse_data['search_result']) && count($this->sem_browse_data['search_result'])) {
+			
+			// show only selected subject areas
+			$selected_ranges = $this->config->getValue('SelectSubjectAreas', 'subjectareasselected');
+			if (!$this->config->getValue('SelectSubjectAreas', 'selectallsubjectareas')
+					&& count($selected_ranges)) {
+				$sem_range_query =  "AND seminar_sem_tree.sem_tree_id IN ('".implode("','", $selected_ranges)."')";
+			} else {
+				$sem_range_query = '';
+			}
+			
+			// show only selected SemTypes
+			$selected_semtypes = $this->config->getValue('ReplaceTextSemType', 'visibility');
+			$sem_types_array = array();
+			if (count($selected_semtypes)) {
+				for ($i = 0; $i < count($selected_semtypes); $i++) {
+					if ($selected_semtypes[$i] == '1') {
+						$sem_types_array[] = $i + 1;
+					}
+				}
+				$sem_types_query = "AND seminare.status IN ('" . implode("','", $sem_types_array) . "')";
+			} else {
+				$sem_types_query = '';
+			}
 			
 			if ($this->sem_browse_data['group_by'] == 1){
 				if (!is_object($this->sem_tree)){
@@ -111,8 +172,8 @@ class ExternSemBrowse extends SemBrowse {
 				LEFT JOIN seminar_inst ON (seminare.Seminar_id = seminar_inst.Seminar_id) 
 				LEFT JOIN Institute USING (Institut_id) 
 				WHERE seminare.Seminar_id IN('" . join("','", array_keys($this->sem_browse_data['search_result']))
-				 . "')$sem_inst_query";
-				 
+				 . "')$sem_inst_query $sem_range_query $sem_types_query";
+			
 			$db = new DB_Seminar($query);
 			$snap = new DbSnapShot($db);
 			if (isset($args['group']) && $args['group'] >= 0 && $args['group'] < 5) {
@@ -185,6 +246,7 @@ class ExternSemBrowse extends SemBrowse {
 							'$the_tree =& TreeAbstract::GetInstance("StudipSemTree");
 							return (int)($the_tree->tree_data[$a]["index"] - $the_tree->tree_data[$b]["index"]);
 							'));
+							
 					break;
 					
 					case 3:
@@ -228,7 +290,8 @@ class ExternSemBrowse extends SemBrowse {
 				$td_lecturer .= "\" valign=\"" . $this->config->getValue("LecturesInnerTable", "td2_valign");
 				$td_lecturer .= " width=\"100%\"";
 			}
-			
+			// erase output buffer with warnings and start unbuffered output
+			ob_end_clean();
 			echo "\n<table" . $this->config->getAttributes("TableHeader", "table") . ">\n";
 			if ($this->config->getValue("Main", "addinfo")) {
 				echo "\n<tr" . $this->config->getAttributes("InfoCountSem", "tr") . ">";
@@ -241,126 +304,127 @@ class ExternSemBrowse extends SemBrowse {
 				echo $group_by_name[$this->sem_browse_data['group_by']];
 				echo "</font></td></tr>";
 			}
-			
-			foreach ($group_by_data as $group_field => $sem_ids) {
-				echo "\n<tr" . $this->config->getAttributes("Grouping", "tr") . ">";
-				echo "<td" . $this->config->getAttributes("Grouping", "td") . ">";
-				echo "<font" . $this->config->getAttributes("Grouping", "font") . ">";
-				switch ($this->sem_browse_data["group_by"]){
-					case 0:
-					echo $this->sem_dates[$group_field]['name'];
-					break;
-					
-					case 1:
-					$range_path_level = $this->config->getValue("Main", "rangepathlevel");
-					if ($the_tree->tree_data[$group_field]) {
-						echo htmlReady($the_tree->getShortPath($group_field,$range_path_level));
-					} else {
-						echo $this->config->getValue("Main", "textnogroups");
-					}
-					/*
-					$range_path_new = NULL;
-					if ($the_tree->tree_data[$group_field]) {
-						$range_path = explode(" ^ ", $the_tree->getShortPath($group_field, "^"));
+			if (count($group_by_data)) {
+				foreach ($group_by_data as $group_field => $sem_ids) {
+					echo "\n<tr" . $this->config->getAttributes("Grouping", "tr") . ">";
+					echo "<td" . $this->config->getAttributes("Grouping", "td") . ">";
+					echo "<font" . $this->config->getAttributes("Grouping", "font") . ">";
+					switch ($this->sem_browse_data["group_by"]){
+						case 0:
+						echo $this->sem_dates[$group_field]['name'];
+						break;
+						
+						case 1:
 						$range_path_level = $this->config->getValue("Main", "rangepathlevel");
-						if ($range_path_level > sizeof($range_path))
-							$range_path_level = sizeof($range_path);
-						for ($i = $range_path_level - 1; $i < sizeof($range_path); $i++)
-							$range_path_new[] = $range_path[$i];
-						echo htmlReady(implode(" > ", $range_path_new));
-					}
-					else
-						echo $this->config->getValue("Main", "textnogroups");
-					*/
-					break;
-					
-					case 2:
-					echo htmlReady($group_field);
-					break;
-					
-					case 3:
-					$aliases_sem_type = $this->config->getValue("ReplaceTextSemType",
-							"class_{$SEM_TYPE[$group_field]['class']}");
-					if ($aliases_sem_type[$this->sem_types_position[$group_field] - 1])
-						echo $aliases_sem_type[$this->sem_types_position[$group_field] - 1];
-					else {
-						echo htmlReady($SEM_TYPE[$group_field]["name"]
-								." (". $SEM_CLASS[$SEM_TYPE[$group_field]["class"]]["name"].")");
-					}
-					break;
-					
-					case 4:
-					echo htmlReady($group_field);
-					break;
-					
-				}
-				echo "</font></td></tr>";
-				if (is_array($sem_ids['Seminar_id'])) {
-					$zebra = 0;
-					while (list($seminar_id,) = each($sem_ids['Seminar_id'])) {
-						$sem_name = key($sem_data[$seminar_id]["Name"]);
-						$sem_number_start = key($sem_data[$seminar_id]["sem_number"]);
-						$sem_number_end = key($sem_data[$seminar_id]["sem_number_end"]);
-						if ($sem_number_start != $sem_number_end){
-							$sem_name .= " (" . $this->sem_dates[$sem_number_start]['name'] . " - ";
-							$sem_name .= (($sem_number_end == -1) ? _("unbegrenzt") : $this->sem_dates[$sem_number_end]['name']) . ")";
+						if ($the_tree->tree_data[$group_field]) {
+							echo htmlReady($the_tree->getShortPath($group_field,$range_path_level));
+						} else {
+							echo $this->config->getValue("Main", "textnogroups");
 						}
-						echo "\n<tr" . $this->config->getAttributes("LecturesInnerTable", "tr").">";
-						if ($zebra % 2 && $this->config->getValue("LecturesInnerTable", "td_bgcolor2_"))
-							echo "<td width=\"100%\"".$this->config->getAttributes("LecturesInnerTable", "td", TRUE)."\">\n";
+						/*
+						$range_path_new = NULL;
+						if ($the_tree->tree_data[$group_field]) {
+							$range_path = explode(" ^ ", $the_tree->getShortPath($group_field, "^"));
+							$range_path_level = $this->config->getValue("Main", "rangepathlevel");
+							if ($range_path_level > sizeof($range_path))
+								$range_path_level = sizeof($range_path);
+							for ($i = $range_path_level - 1; $i < sizeof($range_path); $i++)
+								$range_path_new[] = $range_path[$i];
+							echo htmlReady(implode(" > ", $range_path_new));
+						}
 						else
-							echo "<td width=\"100%\"".$this->config->getAttributes("LecturesInnerTable", "td")."\">\n";
-						$zebra++;
-						echo "<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n";
-						echo "<tr" . $this->config->getAttributes("LecturesInnerTable", "tr1") . ">";
-						echo "<td$colspan" . $this->config->getAttributes("LecturesInnerTable", "td1") . ">";
-						echo "<font" . $this->config->getAttributes("LecturesInnerTable", "font1") . ">";
-						$sem_link["module"] = "Lecturedetails";
-						$sem_link["link_args"] = "seminar_id=$seminar_id";
-						$sem_link["content"] = htmlReady($sem_name);
-						$this->module->elements["SemLink"]->printout($sem_link);
-						echo "</font></td></tr>\n";
-						//create Turnus field
-						$temp_turnus_string = view_turnus($seminar_id, TRUE ,key($sem_data[$seminar_id]["metadata_dates"]));
-						//Shorten, if string too long (add link for details.php)
-						if (strlen($temp_turnus_string) >70) {
-							$temp_turnus_string = substr($temp_turnus_string, 0, strpos(substr($temp_turnus_string, 70, strlen($temp_turnus_string)), ",") +71);
-							$temp_turnus_string .= "...";
+							echo $this->config->getValue("Main", "textnogroups");
+						*/
+						break;
+						
+						case 2:
+						echo htmlReady($group_field);
+						break;
+						
+						case 3:
+						$aliases_sem_type = $this->config->getValue("ReplaceTextSemType",
+								"class_{$SEM_TYPE[$group_field]['class']}");
+						if ($aliases_sem_type[$this->sem_types_position[$group_field] - 1])
+							echo $aliases_sem_type[$this->sem_types_position[$group_field] - 1];
+						else {
+							echo htmlReady($SEM_TYPE[$group_field]["name"]
+									." (". $SEM_CLASS[$SEM_TYPE[$group_field]["class"]]["name"].")");
 						}
-						if ($show_time || $show_lecturer) {
-							echo "\n<tr" . $this->config->getAttributes("LecturesInnerTable", "tr2") . ">";
-							if ($show_time) {
-								echo "<td$td_time>";
-								echo "<font" . $this->config->getAttributes("LecturesInnerTable", "font2") . ">";
-								echo htmlReady($temp_turnus_string) . "</font></td>\n";
+						break;
+						
+						case 4:
+						echo htmlReady($group_field);
+						break;
+						
+					}
+					echo "</font></td></tr>";
+					if (is_array($sem_ids['Seminar_id'])) {
+						$zebra = 0;
+						while (list($seminar_id,) = each($sem_ids['Seminar_id'])) {
+							$sem_name = key($sem_data[$seminar_id]["Name"]);
+							$sem_number_start = key($sem_data[$seminar_id]["sem_number"]);
+							$sem_number_end = key($sem_data[$seminar_id]["sem_number_end"]);
+							if ($sem_number_start != $sem_number_end){
+								$sem_name .= " (" . $this->sem_dates[$sem_number_start]['name'] . " - ";
+								$sem_name .= (($sem_number_end == -1) ? _("unbegrenzt") : $this->sem_dates[$sem_number_end]['name']) . ")";
 							}
-							if ($show_lecturer) {
-								echo "<td$td_lecturer>";
-								echo "<font" . $this->config->getAttributes("LecturesInnerTable", "font2") . ">(";
-								$doz_name = array_keys($sem_data[$seminar_id]['fullname']);
-								$doz_uname = array_keys($sem_data[$seminar_id]['username']);
-								if (is_array($doz_name)){
-									$lecturer_link["module"] = "Persondetails";
-									uasort($doz_name, 'strnatcasecmp');
-									$i = 0;
-									foreach ($doz_name as $index => $value) {
-										$lecturer_link["link_args"] = "username={$doz_uname[$index]}&seminar_id=$seminar_id";
-										$lecturer_link["content"] = htmlReady($value);
-										$this->module->elements["LecturerLink"]->printout($lecturer_link);
-										if ($i != count($doz_name) - 1) {
-											echo ", ";
-										}
-										if ($i == 3) {
-											echo "...";
-											break;
-										}
-										++$i;
-									}
-									echo ") ";
+							echo "\n<tr" . $this->config->getAttributes("LecturesInnerTable", "tr").">";
+							if ($zebra % 2 && $this->config->getValue("LecturesInnerTable", "td_bgcolor2_"))
+								echo "<td width=\"100%\"".$this->config->getAttributes("LecturesInnerTable", "td", TRUE)."\">\n";
+							else
+								echo "<td width=\"100%\"".$this->config->getAttributes("LecturesInnerTable", "td")."\">\n";
+							$zebra++;
+							echo "<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n";
+							echo "<tr" . $this->config->getAttributes("LecturesInnerTable", "tr1") . ">";
+							echo "<td$colspan" . $this->config->getAttributes("LecturesInnerTable", "td1") . ">";
+							echo "<font" . $this->config->getAttributes("LecturesInnerTable", "font1") . ">";
+							$sem_link["module"] = "Lecturedetails";
+							$sem_link["link_args"] = "seminar_id=$seminar_id";
+							$sem_link["content"] = htmlReady($sem_name);
+							$this->module->elements["SemLink"]->printout($sem_link);
+							echo "</font></td></tr>\n";
+							//create Turnus field
+							$temp_turnus_string = view_turnus($seminar_id, TRUE ,key($sem_data[$seminar_id]["metadata_dates"]));
+							//Shorten, if string too long (add link for details.php)
+							if (strlen($temp_turnus_string) >70) {
+								$temp_turnus_string = substr($temp_turnus_string, 0, strpos(substr($temp_turnus_string, 70, strlen($temp_turnus_string)), ",") +71);
+								$temp_turnus_string .= "...";
+							}
+							if ($show_time || $show_lecturer) {
+								echo "\n<tr" . $this->config->getAttributes("LecturesInnerTable", "tr2") . ">";
+								if ($show_time) {
+									echo "<td$td_time>";
+									echo "<font" . $this->config->getAttributes("LecturesInnerTable", "font2") . ">";
+									echo $temp_turnus_string . "</font></td>\n";
 								}
-								echo "</font></td>";
+								if ($show_lecturer) {
+									echo "<td$td_lecturer>";
+									echo "<font" . $this->config->getAttributes("LecturesInnerTable", "font2") . ">(";
+									$doz_name = array_keys($sem_data[$seminar_id]['fullname']);
+									$doz_uname = array_keys($sem_data[$seminar_id]['username']);
+									if (is_array($doz_name)){
+										$lecturer_link["module"] = "Persondetails";
+										uasort($doz_name, 'strnatcasecmp');
+										$i = 0;
+										foreach ($doz_name as $index => $value) {
+											$lecturer_link["link_args"] = "username={$doz_uname[$index]}&seminar_id=$seminar_id";
+											$lecturer_link["content"] = htmlReady($value);
+											$this->module->elements["LecturerLink"]->printout($lecturer_link);
+											if ($i != count($doz_name) - 1) {
+												echo ", ";
+											}
+											if ($i == 3) {
+												echo "...";
+												break;
+											}
+											++$i;
+										}
+										echo ") ";
+									}
+									echo "</font></td>";
+								}
+								echo "</tr>";
 							}
-							echo "</tr>";
 						}
 						echo "</table></td></tr>\n";
 					}

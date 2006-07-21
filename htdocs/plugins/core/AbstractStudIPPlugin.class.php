@@ -28,6 +28,7 @@ class AbstractStudIPPlugin {
 	var $environment;
 	var $enabled; // plugin available in system
 	var $navposition; // the position in the navigation menü
+	var $dependentonplugin; // this plugin depends on another plugin
 
 	
 	/**
@@ -47,11 +48,12 @@ class AbstractStudIPPlugin {
 		$this->basepluginpath = "";
 		$this->enabled = false;
 		$this->navposition = 99999; // a high value to put it at the end of the list
+		$this->dependentonplugin = false;
 	}
 	
 	function getPluginclassname(){
 		return get_class($this);
-	}
+	}	
 	
 	/**
 	 * This function is called by the plugin engine directly before uninstallation.
@@ -132,20 +134,36 @@ class AbstractStudIPPlugin {
 	}
 	
 	function showAdministrationPage(){
-		echo ("AdministrationPage not implemented yet.");
+		echo (_("Eine Administrationsseite ist für dieses Plugin nicht vorhanden"));
 	}
 	
+	/**
+	 * set the current user
+	 *
+	 * @param StudIPUser $newuser
+	 */
 	function setUser($newuser){
 		if (is_a($newuser,'StudIPUser') || is_subclass_of($newuser,'StudIPUser')){
 			$this->user = $newuser;
 		}
 	}
 	
+	/**
+	 * Returns the current user
+	 *
+	 * @return StudIPUser
+	 */
 	function getUser(){
 		return $this->user;
 	}
 	
-	function setActivated($value=false){
+	/**
+	 * Sets the state of the plugin.
+	 *
+	 * @param boolean $value
+	 * @param boolean $requestedbyuser - true if the user requested to change the status
+	 */
+	function setActivated($value=false,$requestedbyuser=false){
 		$this->activated = $value;		
 	}
 	
@@ -287,7 +305,7 @@ class AbstractStudIPPlugin {
 		$this->setPluginPath($newenv->getRelativepackagepath());
 	}
 	
-	function getEnvironment(){
+	function getEnvironment(){		
 		return $this->environment;
 	}
 	
@@ -321,6 +339,36 @@ class AbstractStudIPPlugin {
 		$this->navposition = $newpos;
 	}
 
+	/**
+	 * Which text should be shown in certain titles
+	 * @return string title
+	 */
+	function getDisplaytitle(){	
+		if ($this->hasNavigation()){
+			return $this->navigation->getDisplayname();
+		}
+		else {
+			return $this->getPluginname();
+		}
+	}
+	
+	/**
+	 * Sets, if the plugin is main oder dependent on other plugins
+	 * @param boolean $dependentplugin
+	 */
+	function setDependentOnOtherPlugin($dependentplugin=true){
+		if (is_bool($dependentplugin)){
+			$this->dependentonplugin = $dependentplugin;
+		}
+	}
+	
+	/**
+	 * returns true, if this plugin depends on another plugin
+	 *
+	 */
+	function isDependentOnOtherPlugin(){
+		return $this->dependentonplugin;
+	}
 }
  
 ?>

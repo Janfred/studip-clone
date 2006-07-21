@@ -1,7 +1,7 @@
 <?php
 /**
  * Overview of all existing votes ... vote_overview.lib.php
- * 
+ *
  * @author      Christian Bauer <alfredhitchcock@gmx.net>
  * @version     $Id$
  * @copyright   2003 Stud.IP-Project
@@ -97,7 +97,7 @@ function printSearchResults($rangeAR,$searchString){
 $cssSw = new cssClassSwitcher;									// Klasse für Zebra-Design
 $cssSw->enableHover();
 $html = "\n" . $cssSw->GetHoverJSFunction() . "\n";
-	
+
 	$html.= "<table class=\"blank\" cellspacing=0 cellpadding=0 border=0 width=\"100%\">\n"
 		  . " <tr>\n"
 		  . "  <td class=blank>\n"
@@ -106,7 +106,7 @@ $html = "\n" . $cssSw->GetHoverJSFunction() . "\n";
 		  . "	 <td colspan=\"9\" align=\"left\" valign=\"top\" class=\"blank\">\n"
 		  . "	  <br><font size=\"2\"><b>".$label["searchresults_title"]." <".$searchString.">:</b>\n"
 		  . "	 </td>\n";
-				
+
 	if ((empty($rangeAR)) || ($searchString == NULL	)){
 		$html .="	</tr>\n"
 			  . "	<tr ".$cssSw->getHover().">\n";
@@ -130,7 +130,7 @@ $html = "\n" . $cssSw->GetHoverJSFunction() . "\n";
 		echo $html;
 		return;
 	}
-	
+
 	foreach ($rangeAR as $k => $v) {
 		while (list($typen_key,$typen_value)=each ($typen)) {
         	if ($v["type"]==$typen_key){
@@ -153,8 +153,8 @@ $html = "\n" . $cssSw->GetHoverJSFunction() . "\n";
 				$html .="	<tr ".$cssSw->getHover().">"
 					  . "<td class=\"".$cssSw->getClass()."\"><font size=\"-1\">".$range["name"]."</td>"
 					  . "<td class=\"".$cssSw->getClass()."\"><font size=\"-1\"><a href=\"".VOTE_FILE_ADMIN."?page=edit&rangeID=".$range["id"]."&type=vote&showrangeID=".$range["id"]."\" alt=\"Voting erstellen.\">Voting erstellen</a></font></td>"
-					  . "<td class=\"".$cssSw->getClass()."\"><font size=\"-1\"><a href=\"".VOTE_FILE_ADMIN."?page=edit&rangeID=".$range["id"]."&type=test&showrangeID=".$range["id"]."\" alt=\"Voting erstellen.\">Test erstellen</a></font></td>"					  
-					  . "<td class=\"".$cssSw->getClass()."\"><font size=\"-1\"><a href=\"".VOTE_FILE_ADMIN."?page=overview&showrangeID=".$range["id"]."\" alt=\"Diesen Bereich anzeigen.\">Bereich Anzeigen</a></font></td>"					  
+					  . "<td class=\"".$cssSw->getClass()."\"><font size=\"-1\"><a href=\"".VOTE_FILE_ADMIN."?page=edit&rangeID=".$range["id"]."&type=test&showrangeID=".$range["id"]."\" alt=\"Voting erstellen.\">Test erstellen</a></font></td>"
+					  . "<td class=\"".$cssSw->getClass()."\"><font size=\"-1\"><a href=\"".VOTE_FILE_ADMIN."?page=overview&showrangeID=".$range["id"]."\" alt=\"Diesen Bereich anzeigen.\">Bereich Anzeigen</a></font></td>"
 					  . "	</tr>\n";
 			$counter++;
 			$cssSw->switchClass();
@@ -167,7 +167,7 @@ $html = "\n" . $cssSw->GetHoverJSFunction() . "\n";
 		}
 		reset($ranges);
 	}
-	  
+
 	$html .="	 </td>\n"
 		  . "	</tr>\n"
 		  . "   </table>\n"
@@ -190,14 +190,14 @@ function printSelections($range,$sarchRange = "",$safeguard = NULL){
 	$bgimage = "	 <td class=\"blank\" width=\"270\" rowspan=\"4\" align=\"center\" valign=\"top\" style=\"vertical-align:top;\">"
 	 	 . "	  <img src=\"".VOTE_PATH_PICTURES."/voting.jpg\" alt=\"".$label["sitetitle_title"]."\" align=\"middle\" border=\"0\">\n"
 		 . "	 </td>\n";
-	
+
 	$html = "<table border=\"0\" class=\"blank\" cellspacing=\"0\" cellpadding=\"0\" width=\"100%\">\n"
 		  . " <tr valign=\"top\">\n"
 		  . "  <td width=\"99%\" NOWRAP class=\"blank\"><br>"
 	  	  . "   <table align=\"center\" width=\"99%\" class=\"blank\" border=\"0\" cellpadding=\"0\" cellspacing=0>\n"
 		  . "	  "
 		  . "	<tr><td>".$safeguard."</td>".$bgimage."</tr><tr>\n";
-	
+
 	// create new vote/test
 $html .= makeNewVoteSelectForm(VOTE_FILE_ADMIN."?page=edit");
 
@@ -225,12 +225,12 @@ $html .= makeNewVoteSelectForm(VOTE_FILE_ADMIN."?page=edit");
  *
  * @access private
  * @param mode                  string        could be 'new', 'active', 'stopped' or 'start_table', 'end_table'
- * @param votes                 array        an array with all the data (optional) 
- * @param openID                string        display the results of this voteID (optional) 
+ * @param votes                 array        an array with all the data (optional)
+ * @param openID                string        display the results of this voteID (optional)
  */
 function printVoteTable($mode, $votes = NULL, $openID = NULL){
 	global $rangemode, $label, $showrangeID;
-	
+
 	$fontstart 	= "<font size=\"-1\">";
 	$fontend	= "</font>";
 	// label variables depending on mode
@@ -283,7 +283,7 @@ function printVoteTable($mode, $votes = NULL, $openID = NULL){
 	  	   . " </tr>\n";
 	   echo $html;
 	  return;
-	  break;        
+	  break;
 	 default:
 	  break;
 	}
@@ -312,7 +312,7 @@ function printVoteTable($mode, $votes = NULL, $openID = NULL){
 		   	$html .= makeTableHeaderCell($label["user"],"150");
 		  else
 		  	$html .= makeTableHeaderCell($label["range"],"150");
-		  
+
 	$html .=makeTableHeaderCell($specific_status,"93")
 		  . makeTableHeaderCell($label["status"],"93")
 		  . makeTableHeaderCell("blindgif","93");
@@ -342,7 +342,7 @@ function printVoteTable($mode, $votes = NULL, $openID = NULL){
 	  $html.="	<tr>\n";
 	//	   . "	 <td class=$displayclass width=\"10\" align=\"center\">\n";
 // displays arrow (a opened one)
-	 if(($openID == $votes[$counter]["voteID"]) || 
+	 if(($openID == $votes[$counter]["voteID"]) ||
 	 	(($mode == "active") && ($openID == "openallactive")) ||
 		(($mode == "stopped") && ($openID == "openallstopped"))
 		){
@@ -351,7 +351,7 @@ function printVoteTable($mode, $votes = NULL, $openID = NULL){
 		$html.=  makeArrow ($votes[$counter]["changedate"],"open",$displayclass,$mode);
 	  }
 // displays arrow (a closed one)
-	  else { 
+	  else {
 		$html.=  makeArrow ($votes[$counter]["changedate"],"closed",$displayclass,$mode,$votes[$counter]["voteID"]);
 	  }
 
@@ -360,16 +360,16 @@ function printVoteTable($mode, $votes = NULL, $openID = NULL){
 		   . "	 <td class=$displayclass width=\"18\" align=\"center\">\n"
 		   . "	  <img src=\"";
 	  ($votes[$counter]["type"] == INSTANCEOF_VOTE) ? $html.= VOTE_ICON_VOTE : $html.= VOTE_ICON_TEST;
-	  $html.="\" align=\"middle\" width=\"18\" alt=\"".INSTANCEOF_VOTE."\">\n"//style=\"vertical-align:middle;\" 
-		   . "	 </td>\n";        
+	  $html.="\" align=\"middle\" width=\"18\" alt=\"".INSTANCEOF_VOTE."\">\n"//style=\"vertical-align:middle;\"
+		   . "	 </td>\n";
 
 	  $html.="	 <td class=$displayclass width=\"\" align=\"left\">\n";
 // displays titel (a closed one)
 	  if($openID == $votes[$counter]["voteID"])
 		$html.="	  <a href=\"".VOTE_FILE_ADMIN."?page=overview&showrangeID=".$showrangeID."\" alt=\"Zuklappen\" title=\"Zuklappen\" name=\"open\">";
 // displays titel (a opened one)
-	  else 
-		$html.="	  <a href=\"".VOTE_FILE_ADMIN."?page=overview&openID=".$votes[$counter]["voteID"]."&showrangeID=".$showrangeID."#openvote\" alt=\"Aufklappen\" title=\"Aufklappen\">";        
+	  else
+		$html.="	  <a href=\"".VOTE_FILE_ADMIN."?page=overview&openID=".$votes[$counter]["voteID"]."&showrangeID=".$showrangeID."#openvote\" alt=\"Aufklappen\" title=\"Aufklappen\">";
 	  $html.="	  ".$fontstart.$votes[$counter]["title"].$fontend."</a>\n"
 		   . "	 </td>\n";
 
@@ -413,7 +413,7 @@ function printVoteTable($mode, $votes = NULL, $openID = NULL){
 			"showrangeID", $showrangeID);
 	 else
 	    $html.= makeTableDataCell("blindgif",$displayclass,"center","93");
-	 
+
 // insert 'edit'-button
 	 if($mode == VOTE_STATE_NEW or $mode == VOTE_STATE_ACTIVE)
 	 	$html.= makeTableDataCellForm($displayclass, "edit",
@@ -422,7 +422,7 @@ function printVoteTable($mode, $votes = NULL, $openID = NULL){
 			"showrangeID", $showrangeID,
 			"type", $votes[$counter]["type"]);
 // insert 'makecopy'-button
-	 else	
+	 else
 	 	$html.= makeTableDataCellForm($displayclass, "edit",
 			$label["makecopy_button"], $label["makecopy_tooltip"],
 			"voteID", $votes[$counter]["voteID"],
@@ -441,7 +441,7 @@ function printVoteTable($mode, $votes = NULL, $openID = NULL){
 //** displays the data-cells with the vote/test-result**
 
 	 // a new row, if there is a vote/test-result to display
-	 if(($openID == $votes[$counter]["voteID"]) || 
+	 if(($openID == $votes[$counter]["voteID"]) ||
 	 	(($mode == "active") && ($openID == "openallactive")) ||
 		(($mode == "stopped") && ($openID == "openallstopped"))
 		){
@@ -470,14 +470,14 @@ reset($votes);
 	    else						$html .="	 <td class=\"steelkante\" colspan=\"9\">\n";
 	    $html .="	 <center>\n";
 		if (($mode == VOTE_STATE_ACTIVE) && ($openID == ("openallactive")))
-			$html .="	  <a href=\"".$GLOBALS["PHP_SELF"]."?showrangeID=$showrangeID\"><img src=\"".VOTE_PATH_PICTURES."forumgraurauf.gif\" alt=\"".$label["arrow_close_all"]."\" title=\"".$label["arrow_close_all"]."\" border=0></a> \n";   
+			$html .="	  <a href=\"".$GLOBALS["PHP_SELF"]."?showrangeID=$showrangeID\"><img src=\"".VOTE_PATH_PICTURES."forumgraurauf.gif\" alt=\"".$label["arrow_close_all"]."\" title=\"".$label["arrow_close_all"]."\" border=0></a> \n";
 		elseif (($mode == VOTE_STATE_STOPPED) && ($openID == ("openallstopped")))
 			$html .="	  <a href=\"".$GLOBALS["PHP_SELF"]."?showrangeID=$showrangeID\"><img src=\"".VOTE_PATH_PICTURES."forumgraurauf.gif\" alt=\"".$label["arrow_close_all"]."\" title=\"".$label["arrow_close_all"]."\" border=0></a> \n";
 		else
 			$html .="	  <a href=\"".$GLOBALS["PHP_SELF"]."?showrangeID=$showrangeID&openID=openall".$mode."#openvote\"><img src=\"".VOTE_PATH_PICTURES."forumgraurunt.gif\" alt=\"".$label["arrow_open_all"]."\" title=\"".$label["arrow_open_all"]."\" border=0></a> \n";
 		$html .="	 </center></td>\n"
 	    	  . "	</tr>\n";
-	}	 
+	}
 
       $html.="   </table>\n"
 	 . "  </td>\n"
@@ -517,14 +517,14 @@ reset($votes);
  *
  * @access private
  * @param text          string        The Text to display or 'blindgif' (optional)
- * @param width         string        witdth (optional) 
+ * @param width         string        witdth (optional)
  * @param align         string        align (optional)
  * @param $colspan      string        colspan (optional)
  * @return string       a string with a table-head
  */
 
 function makeTableHeaderCell($text = "&nbsp;", $width = "5%", $align = "center", $colspan = "1"){
-   if ($text == "blindgif") $text = "<img width=\"$width\" align=\"middle\" height=\"1\" src=\"pictures/blank.gif\" alt=\"\">";
+   if ($text == "blindgif") $text = "<img width=\"$width\" align=\"middle\" height=\"1\" src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" alt=\"\">";
    $html = "	 <td class=\"steel\" style=\"vertical-align:bottom;\" colspan=\"$colspan\" align=\"$align\" width=\"$width\" height=\"26\">\n"
       . "	  <font size=-1><b>$text</b></font>\n"
       . "	 </td>\n";
@@ -538,7 +538,7 @@ function makeTableHeaderCell($text = "&nbsp;", $width = "5%", $align = "center",
  * @param align         string        align (optional)
  * @param width         string        width (optional)
  * @return string a string with a table-head
-*/ 
+*/
 function makeTableDataCell($text = "&nbsp;", $class = "steel1", $align = "center", $width = "5%", $colspan = "1"){
 	if ($text == "blindgif") $text = "<img width=\"$width\" height=\"1\" src=\"".VOTE_PATH_PICTURES."blank.gif\" alt=\"\">";
 	$html = "	 <td class=\"$class\" align=\"$align\" width=\"$width\" colspan=\"$colspan\">\n"
@@ -555,9 +555,9 @@ function makeTableDataCell($text = "&nbsp;", $class = "steel1", $align = "center
  * @param align         string        align (optional)
  * @param width         string        width (optional)
  * @return string a string with a table-head
-*/ 
-function makeTableDataCellLink ($username, $text = "&nbsp;", 
-				$class = "steel1", $align = "center", 
+*/
+function makeTableDataCellLink ($username, $text = "&nbsp;",
+				$class = "steel1", $align = "center",
 				$width = "5%", $colspan = "1") {
    $link = "{$CANONICAL_RELATIVE_PATH_STUDIP}about.php?username=".$username;
    $html = "	 <td class=\"$class\" align=\"$align\" width=\"$width\" colspan=\"$colspan\">\n"
@@ -567,11 +567,11 @@ function makeTableDataCellLink ($username, $text = "&nbsp;",
 }
 
 /**
- * 
+ *
  * makes a <td>...</td>  with a form
  *
  * @access private
- * 
+ *
  * @param class                         string        class (optional)
  * @param align                         string        align (optional)
  * @param style                         string        style (optional)
@@ -610,10 +610,10 @@ function makeTableDataCellForm( $displayclass = "steel1",
 		$imgwidth = "93";
 	}
 	else{
-		$src = "pictures/vote-icon-".$button_name.".gif";
+		$src = $GLOBALS['ASSETS_URL']."images/vote-icon-".$button_name.".gif";
 		$imgwidth = "18";
 	}
-	
+
 	$html.="	 <td class=$displayclass width=\"93\" align=\"center\" style=\"vertical-align:middle;\">\n"
 		 . "	  <font size=\"-1\"><a href=\"$link\" alt=\"".$button_name."\"><img src=\"$src\" width=\"$imgwidth\" alt=\"".$button_name."\" title=\"".$button_tooltip."\" border=\"0\" align=\"middle\"></a></font>\n"
 		 . "	 </td>\n";
@@ -627,18 +627,18 @@ function makeTableDataCellForm( $displayclass = "steel1",
 /**
  * makes a makeSelectForm
  * @access private
- * @param 
- * @param 
- * @param 
- * @param 
- * @return 
+ * @param
+ * @param
+ * @param
+ * @param
+ * @return
 */
 function makeNewVoteSelectForm($action){
 	global $rangemode, $label,$range, $showrangeID;
 	$arraysize = count($range);
 	$html = "	 <td class=\"steel1\" style=\"vertical-align:middle;\" nowrap>\n"
 		  . "	  <form action=\"$action\" method=post><br>&nbsp;\n"
-		  
+
 		  // vote/test selection
 		  . "	  <select name=\"type\" style=\"vertical-align:middle;\">"
 		  . "	   <option value=\"".INSTANCEOF_VOTE."\" selected>".$label["selections_text_vote"]."</option>\n"
@@ -651,7 +651,7 @@ function makeNewVoteSelectForm($action){
 		$html .="	   <select name=\"rangeID\" style=\"vertical-align:middle;\">\n";
 		if($hidden1_name == "all_ranges")
 			$html .="	   <option value=\"$hidden1_name\" selected>$hidden1_value</option>\n";
-		// create select entries 
+		// create select entries
 		$counter = 0;
 		while($counter < $arraysize){
 			$html .="	   <option value=\"".$range[$counter][0]."\" ";
@@ -679,11 +679,11 @@ function makeNewVoteSelectForm($action){
 /**
  * makes a makeSelectForm
  * @access private
- * @param 
- * @param 
- * @param 
- * @param 
- * @return 
+ * @param
+ * @param
+ * @param
+ * @param
+ * @return
 */
 function makeDisplaySelectForm($action){
 	global $rangemode, $label,  $range, $showrangeID;
@@ -695,7 +695,7 @@ function makeDisplaySelectForm($action){
 		  . "	   <select name=\"showrangeID\" style=\"vertical-align:middle;\">\n";
 //	if($hidden1_name == "all_ranges")
 //		$html .="	   <option value=\"$hidden1_name\" selected>$hidden1_value</option>\n";
-		// create select entries 
+		// create select entries
 	$counter = 0;
 	while($counter < $arraysize){
 		$html .="	   <option value=\"".$range[$counter][0]."\" ";
@@ -708,7 +708,7 @@ function makeDisplaySelectForm($action){
 		$counter++;
 	}
 	$html .="	   </select>\n";
-	
+
 	$html .="	   <input type=image name=new style=\"vertical-align:middle;\" border=\"0\" "
 		  . 	    makeButton($label["selections_selectrange_button"],"src") . " title=\"".$label["selections_selectrange_tooltip"]."\" alt=\"".$label["selections_selectrange_tooltip"]."\">\n"
 		  . "	   <br></font></form>\n"
@@ -720,7 +720,7 @@ function makeDisplaySelectForm($action){
 /**
  * makes a makeSelectForm
  * @access private
- * @return 
+ * @return
 */
 function makeSearchForm(){
 	global $label, $searchRange;
@@ -739,11 +739,11 @@ function makeSearchForm(){
 /**
  * makes a makeSelectForm
  * @access private
- * @return 
+ * @return
 */
 function makeArrow($timestmp,$open,$displayclass,$mode,$voteID = NULL){
 	global $label, $showrangeID;
-	
+
 	switch ($mode){
 	 case "new":
 			$icon = "gelb";
@@ -766,9 +766,9 @@ function makeArrow($timestmp,$open,$displayclass,$mode,$voteID = NULL){
 			 .  "\" title=\"".$label["arrow_openthis"]."\">\n";
 	else
 		$html.= "\" title=\"".$label["arrow_closethis"]."\">\n";
-	
 
-	$html.= "	  <img src=\"pictures/forum".$icon.".gif\" border=\"0\" align=\"middle\" alt=\"";//style=\"vertical-align:middle;\" 
+
+	$html.= "	  <img src=\"".$GLOBALS['ASSETS_URL']."images/forum".$icon.".gif\" border=\"0\" align=\"middle\" alt=\"";//style=\"vertical-align:middle;\"
 	if ($open == "closed")
 		$html.= $label["arrow_openthis"];
 	else

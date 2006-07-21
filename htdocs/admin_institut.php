@@ -27,7 +27,7 @@ include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Sessio
 
 ## Set this to something, just something different...
   $hash_secret = "hgeisgczwgebt";
-  
+
 ## If is set 'cancel', we leave the adminstration form...
 if (isset($cancel)) unset ($i_view);
 
@@ -53,7 +53,7 @@ if ($RESOURCES_ENABLE) {
 if ($EXTERN_ENABLE) {
 	require_once($RELATIVE_PATH_EXTERN . "/lib/extern_functions.inc.php");
 }
-	
+
 
 // Get a database connection
 $db = new DB_Seminar;
@@ -63,11 +63,11 @@ $Modules = new Modules;
 $DataFields = new DataFields();
 
 // Check if there was a submission
-while ( is_array($HTTP_POST_VARS) 
+while ( is_array($HTTP_POST_VARS)
      && list($key, $val) = each($HTTP_POST_VARS)) {
 
   switch ($key) {
- 	
+
 	// Create a new Institut
 	case "create_x":
 	if (!$perm->is_fak_admin()) {
@@ -80,7 +80,7 @@ while ( is_array($HTTP_POST_VARS)
 			$i_view="new";
 			break;
 		}
-    
+
 		// Does the Institut already exist?
 		// NOTE: This should be a transaction, but it is not...
 		$db->query("select * from Institute where Name='$Name'");
@@ -99,7 +99,7 @@ while ( is_array($HTTP_POST_VARS)
 				break;
 			}
 		}
-	
+
 	  $query = "insert into Institute (Institut_id,Name,fakultaets_id,Strasse,Plz,url,telefon,email,fax,type,lit_plugin_name,mkdate,chdate) values('$i_id','$Name','$Fakultaet','$strasse','$plz', '$home', '$telefon', '$email', '$fax', '$type','$lit_plugin_name', '".time()."', '".time()."')";
 	  $db->query($query);
 	  if ($db->affected_rows() == 0) {
@@ -110,13 +110,13 @@ while ( is_array($HTTP_POST_VARS)
 
 		// Set the default list of modules
 		$Modules->writeDefaultStatus($i_id);
-		
+
 		// Create default folder and discussion
 		CreateTopic(_("Allgemeine Diskussionen"), " ", _("Hier ist Raum für allgemeine Diskussionen"), 0, 0, $i_id, 0);
 		$db->query("INSERT INTO folder SET folder_id='".md5(uniqid(rand()))."', range_id='".$i_id."', name='" . _("Allgemeiner Dateiordner") . "', description='" . _("Ablage für allgemeine Ordner und Dokumente der Einrichtung") . "', mkdate='".time()."', chdate='".time()."'");
- 
+
 		$msg="msg§<b>" . sprintf(_("Die Einrichtung \"%s\" wurde angelegt."), htmlReady(stripslashes($Name))) . "</b>";
-   
+
 		$i_view = $i_id;
 
 		//This will select the new institute later for navigation (=>links_admin.inc.php)
@@ -131,7 +131,7 @@ while ( is_array($HTTP_POST_VARS)
 			$msg = "error§<b>" . _("Sie haben nicht die Berechtigung diese Einrichtungen zu ver&auml;ndern!") . "</b>";
 			break;
 		}
-	  
+
 		//do we have all necessary data?
 		if (empty($Name)) {
 			$msg="error§<b>" . _("Bitte geben Sie eine Bezeichnung f&uuml;r die Einrichtung ein!") . "</b>";
@@ -145,7 +145,7 @@ while ( is_array($HTTP_POST_VARS)
 			$msg="error§<b>" . _("Datenbankoperation gescheitert:") . " " . $query . "</b>";
 			break;
 		}
-		
+
 		//Update the additional data-fields
 		if (StudipForm::IsSended('edit')) {
 			$DataFields->storeContentFromForm('edit', $i_id, 'inst');
@@ -162,47 +162,47 @@ while ( is_array($HTTP_POST_VARS)
 			$msg="error§<b>" . _("Diese Einrichtung kann nicht gel&ouml;scht werden, da noch Veranstaltungen an dieser Einrichtung existieren!") . "</b>";
 			break;
 		}
-		
+
 		$db->query("SELECT a.Institut_id,a.Name, IF(a.Institut_id=a.fakultaets_id,1,0) AS is_fak, count(b.Institut_id) as num_inst FROM Institute a LEFT JOIN Institute b ON (a.Institut_id=b.fakultaets_id) WHERE a.Institut_id ='$i_id' AND b.Institut_id!='$i_id' AND a.Institut_id=a.fakultaets_id GROUP BY a.Institut_id ");
 		$db->next_record();
 		if($db->f("num_inst")) {
 			$msg="error§<b>" . _("Diese Einrichtung kann nicht gel&ouml;scht werden, da sie den Status Fakult&auml;t hat, und noch andere Einrichtungen zugeordnet sind!") . "</b>";
 			break;
 		}
-		
+
 		if ($db->f("is_fak") && !$perm->have_perm("root")){
 			$msg="error§<b>" . _("Sie haben nicht die Berechtigung Fakult&auml;ten zu l&ouml;schen!") . "</b>";
 			break;
 		}
-	
+
 		// delete users in user_inst
 		$query = "DELETE FROM user_inst WHERE Institut_id='$i_id'";
 		$db->query($query);
 		if (($db_ar = $db->affected_rows()) > 0) {
 			$msg.="msg§" . sprintf(_("%s Mitarbeiter gel&ouml;scht."), $db_ar) . "§";
 		}
-	
+
 		// delete participations in seminar_inst
 		$query = "DELETE FROM seminar_inst WHERE Institut_id='$i_id'";
 		$db->query($query);
 		if (($db_ar = $db->affected_rows()) > 0) {
 			$msg.="msg§" . sprintf(_("%s Beteiligungen an Veranstaltungen gel&ouml;scht"), $db_ar) . "§";
 		}
-	
-		
-		// delete literatur 
+
+
+		// delete literatur
 		$del_lit = StudipLitList::DeleteListsByRange($i_id);
 		if ($del_lit) {
 			$msg.="msg§" . sprintf(_("%s Literaturlisten gel&ouml;scht."),$del_lit['list'])  . "§";
 		}
-		
+
 		// SCM löschen
 		$query = "DELETE FROM scm where range_id='$i_id'";
 		$db->query($query);
 		if (($db_ar = $db->affected_rows()) > 0) {
 			$msg .= "msg§" . _("Freie Seite der Einrichtung gel&ouml;scht") . "§";
 		}
-		
+
 		// delete news-links
 		StudipNews::DeleteNewsRanges($i_id);
 		
@@ -215,15 +215,15 @@ while ( is_array($HTTP_POST_VARS)
 		if (($db_ar = $db->affected_rows()) > 0) {
 			$msg.="msg§" . sprintf(_("%s Bereiche im Einrichtungsbaum angepasst."), $db_ar) . "§";
 		}
-		
+
 		// Statusgruppen entfernen
 		if ($db_ar = DeleteAllStatusgruppen($i_id) > 0) {
 			$msg .= "msg§" . sprintf(_("%s Funktionen/Gruppen gel&ouml;scht"), $db_ar) . ".§";
 		}
-		
+
 		//kill the datafields
 		$DataFields->killAllEntries($i_id);
-		
+
 		//kill all wiki-pages
 		$query = sprintf ("DELETE FROM wiki WHERE range_id='%s'", $i_id);
 		$db->query($query);
@@ -233,14 +233,14 @@ while ( is_array($HTTP_POST_VARS)
 
 		$query = sprintf ("DELETE FROM wiki_locks WHERE range_id='%s'", $i_id);
 		$db->query($query);
-	
-		
+
+
 		// kill all the ressources that are assigned to the Veranstaltung (and all the linked or subordinated stuff!)
 		if ($RESOURCES_ENABLE) {
 			$killAssign = new DeleteResourcesUser($i_id);
 			$killAssign->delete();
 		}
-  
+
 		// delete all configuration files for the "extern modules"
 		if ($EXTERN_ENABLE) {
 			$counts = delete_all_configs($i_id);
@@ -249,20 +249,20 @@ while ( is_array($HTTP_POST_VARS)
 				$msg .= "§";
 			}
 		}
-		
+
 		// delete folders and discussions
 		$query = "DELETE from px_topics where Seminar_id='$i_id'";
 		$db->query($query);
 		if (($db_ar = $db->affected_rows()) > 0) {
 			$msg.="msg§" . sprintf(_("%s Postings aus dem Forum der Einrichtung gel&ouml;scht."), $db_ar) . "§";
     		}
-    		
+
 		$db_ar = delete_all_documents($i_id);
 		if ($db_ar > 0)
 			$msg.="msg§" . sprintf(_("%s Dokumente gel&ouml;scht."), $db_ar) . "§";
-		
+
 		//kill the object_user_vists for this institut
-		
+
 		object_kill_visits(null, $i_id);
 
 		// Delete that Institut.
@@ -276,11 +276,11 @@ while ( is_array($HTTP_POST_VARS)
 			$i_view="delete";
 			log_event("INST_DEL",$i_id,NULL,$Name); // logging - put institute's name in info - it's no longer derivable from id afterwards
 		}
-    
-		// We deleted that intitute, so we have to unset the selection 
+
+		// We deleted that intitute, so we have to unset the selection
 		closeObject();
 		break;
-	
+
 	default:
 	break;
 	}
@@ -289,11 +289,11 @@ while ( is_array($HTTP_POST_VARS)
 //workaround
 if ($i_view == "new")
 	closeObject();
-	
+
 //Output starts here
 
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-include ("$ABSOLUTE_PATH_STUDIP/header.php");   //hier wird der "Kopf" nachgeladen 
+include ("$ABSOLUTE_PATH_STUDIP/header.php");   //hier wird der "Kopf" nachgeladen
 include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");  //Linkleiste fuer admins
 
 //get ID from a open Institut
@@ -317,7 +317,7 @@ if ($SessSemName[1])
 <?
 if (isset($msg)) {
 ?>
-<tr> 
+<tr>
 	<td class="blank" colspan=2><br />
 		<?parse_msg($msg);?>
 	</td>
@@ -333,12 +333,12 @@ if (isset($msg)) {
 if ($i_view=="delete") {
 	echo "<tr><td class=\"blank\" colspan=\"2\"><table width=\"70%\" align=\"center\" class=\"steelgraulight\" >";
 	echo "<tr><td><br>" . _("Die ausgewählte Einrichtung wurde gel&ouml;scht.") . "<br>";
-	printf(_("Bitte wählen Sie über das Schlüsselsymbol %s eine andere Einrichtung aus."), "<a href=\"admin_institut.php?list=TRUE\"><img " . tooltip(_("Neue Auswahl")) . " align=\"absmiddle\" src=\"pictures/admin.gif\" border=\"0\"></a>");
+	printf(_("Bitte wählen Sie über das Schlüsselsymbol %s eine andere Einrichtung aus."), "<a href=\"admin_institut.php?list=TRUE\"><img " . tooltip(_("Neue Auswahl")) . " align=\"absmiddle\" src=\"".$GLOBALS['ASSETS_URL']."images/admin.gif\" border=\"0\"></a>");
 	echo "<br><br></td></tr></table><br><br></td></tr></table></html>";
 	page_close();
 	die;
 }
-	
+
 
 if ($perm->have_studip_perm("admin",$i_view) || $i_view == "new") {
 
@@ -379,18 +379,18 @@ if ($perm->have_studip_perm("admin",$i_view) || $i_view == "new") {
 		} else {
 			echo htmlReady($db->f("fak_name")) . "\n<input type=\"hidden\" name=\"Fakultaet\" value=\"" . $db->f("fakultaets_id") . "\">";
 		}
-			
+
 		?>
 	</td>
 	<tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" ><?=_("Bezeichnung:")?> </td><td class="<? echo $cssSw->getClass() ?>" ><select style="width:98%" name="type">
-	<? 
+	<?
 	$i=0;
 	foreach ($INST_TYPE as $a) {
 		$i++;
 		if ($i==$db->f("type"))
 			echo "<option selected value=\"$i\">".$INST_TYPE[$i]["name"]."</option>";
 		else
-			echo "<option value=\"$i\">".$INST_TYPE[$i]["name"]."</option>";		
+			echo "<option value=\"$i\">".$INST_TYPE[$i]["name"]."</option>";
 	}
 	?></select></td></tr>
 	<tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" ><?=_("Strasse:")?> </td><td class="<? echo $cssSw->getClass() ?>" ><input style="width:98%" type="text" name="strasse" size=32 maxlength=254 value="<?php echo htmlReady($db->f("Strasse")) ?>"></td></tr>
@@ -406,22 +406,22 @@ if ($perm->have_studip_perm("admin",$i_view) || $i_view == "new") {
 		<td class="<? echo $cssSw->getClass() ?>" >
 		<select name="lit_plugin_name" style="width:98%">
 		<?
-		foreach (StudipLitSearch::GetAvailablePlugins() as $plugin_name){
-			echo '<option ' . ($db->f('lit_plugin_name') == $plugin_name ? 'selected' : '') .' >' . htmlReady($plugin_name) . '</option>';
+		foreach (StudipLitSearch::GetAvailablePlugins() as $plugin_name => $plugin_display_name){
+			echo '<option value="'.$plugin_name.'" ' . ($db->f('lit_plugin_name') == $plugin_name ? 'selected' : '') .' >' . htmlReady($plugin_display_name) . '</option>';
 		}
 		?>
 		</select>
 		</td></tr>
 		<?
 	}
-	
+
 	//add the free adminstrable datafields
 			$datafield_form =& $DataFields->getLocalFieldsFormObject('edit', $i_id, "inst");
 			$datafield_form->field_attributes_default = array('style' => 'width:98%');
 			echo $datafield_form->getHiddenField(md5("is_sended"),1);
 			foreach ($datafield_form->getFormFieldsByName() as $field_id) {
 				$cssSw->switchClass();
-			
+
 			?>
 			<tr>
 				<td class="<? echo $cssSw->getClass() ?>">
@@ -435,8 +435,8 @@ if ($perm->have_studip_perm("admin",$i_view) || $i_view == "new") {
 			}
 	?>
 	<tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" colspan=2 align="center">
-	
-	<? 
+
+	<?
 	if ($i_view != "new") {
 		?>
 		<input type="hidden" name="i_id"   value="<?php $db->p("Institut_id") ?>">

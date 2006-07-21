@@ -20,9 +20,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check("tutor");
-	
+
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
-require_once("$ABSOLUTE_PATH_STUDIP/dates.inc.php"); 
+require_once("$ABSOLUTE_PATH_STUDIP/dates.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
 require_once("$ABSOLUTE_PATH_STUDIP/forum.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
@@ -31,10 +31,10 @@ require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/Modules.class.php");
 
 $db=new DB_Seminar;
 $db2=new DB_Seminar;
-$db3=new DB_Seminar;	
+$db3=new DB_Seminar;
 $db4=new DB_Seminar;
 $Modules=new Modules;
-$semester=new SemesterData; 
+$semester=new SemesterData;
 
 //Defaults, die fuer DAUS (<admin) gesetzt werden
 $default_description= _("Bitte geben Sie hier nur weiterführende Angaben (genauere Terminbeschreibung, Referatsthemen usw.) ein.");
@@ -74,6 +74,8 @@ if ($RESOURCES_ENABLE) {
 }
 
 
+$HELP_KEYWORD="Basis.VeranstaltungenVerwaltenAblaufplan";
+
 // Start of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
@@ -82,9 +84,9 @@ include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");
 checkObjectModule("schedule");
 
 if ($SessSemName[1])
-	$admin_dates_data["range_id"]=$SessSemName[1]; 
+	$admin_dates_data["range_id"]=$SessSemName[1];
 elseif ($range_id)
-	$admin_dates_data["range_id"]=$range_id; 
+	$admin_dates_data["range_id"]=$range_id;
 
 if (!$admin_dates_data["range_id"]) {
 	echo "</tr></td></table>";
@@ -95,18 +97,18 @@ if (!$admin_dates_data["range_id"]) {
 $modules = $Modules->getLocalModules($admin_dates_data["range_id"]);
 
 //Einpflegen neu angekommender Daten/Schalter
-if ($assi) 
+if ($assi)
 	$admin_dates_data["assi"]=$assi;
 if ($list) //note: we re-use the $list switch here, because it indicates that we are defenitely not coming from the assi.
 	$admin_dates_data["assi"]=FALSE;
-	
-if ($show_id) 
+
+if ($show_id)
 	$admin_dates_data["show_id"]=$show_id;
-if ($show_all) 
+if ($show_all)
 	$admin_dates_data["show_all"]=TRUE;
-if ($show_nall) 
+if ($show_nall)
 	$admin_dates_data["show_all"]=FALSE;
-	
+
 if (($edit_x) && (!$admin_dates_data["show_all"]))
 	$admin_dates_data["show_id"]='';
 
@@ -178,8 +180,8 @@ if ($make_dates_x) {
  	if ($RESOURCES_ENABLE) {
 		$insertAssign = new VeranstaltungResourcesAssign($admin_dates_data["range_id"]);
 		$insertAssign->deleteAssignedRooms();
-	}	
-	
+	}
+
 	$resultAssi = dateAssi ($admin_dates_data["range_id"], "insert", $pfad, $folder, $full, FALSE, FALSE);
 	$result="msg§" . sprintf(_("Der Ablaufplan wurde erstellt. Es wurden %s Termine erstellt."), $resultAssi["changed"]) . "§";
 	$resources_result = $resultAssi["resources_result"];
@@ -187,28 +189,28 @@ if ($make_dates_x) {
 
 if ($new) {
 	$do=TRUE;
-	
+
 	if ($resource_id == "FALSE")
 		$resource_id = FALSE;
-	
+
 	if (!checkdate((int)$monat,(int)$tag,(int)$jahr)) {
 		$do=FALSE;
 		$result="error§" . _("Bitte geben Sie ein g&uuml;ltiges Datum ein!") . "§";
 	}
 
 	if (($stunde == "") || ($stunde == $temp_default[4]) || ($end_stunde == "") || ($end_stunde == $temp_default[6])) {
-		$do=FALSE;	
+		$do=FALSE;
 		$result.="error§" . _("Bitte geben Sie eine g&uuml;ltige Start- und Endzeit an!") . "§";
 	}
-		
+
 	$start_time = mktime($stunde,$minute,0,$monat,$tag,$jahr);
 	$end_time = mktime($end_stunde,$end_minute,0,$monat,$tag,$jahr);
-	
+
 	if ($do && $start_time > $end_time) {
-		$do=FALSE;	
+		$do=FALSE;
 		$result.="error§" . _("Der Endzeitpunkt muss nach dem Startzeitpunkt liegen!") . "§";
 	}
-	
+
 	//check, if a single date should be created when it is forbidden (no single dates corresponding to metadates are allowed when using resources, only a whole schedule creating with date-assi is fine...!)
 	if ($GLOBALS["RESOURCES_ENABLE"] && $do) {
 		if ((isMetadateCorrespondingDate($termin_id, $start_time, $end_time, $admin_dates_data["range_id"])) && (!$term_data["art"]) && (!isSchedule($admin_dates_data["range_id"]))) {
@@ -223,11 +225,11 @@ if ($new) {
 			if (!$resObjPrm->havePerm("autor"))
 				$result .= "info§" . sprintf(_("Sie haben einen neuen Termin angelegt. Um f&uuml;r diesen Termin einen Raum zu buchen, m&uuml;ssen Sie f&uuml;r diesen Termin eine %sRaumanfrage%s an den zust&auml;ndigen Raumadministrator stellen."), "<a href=\"admin_room_requests.php?seminar_id=".$admin_dates_data["range_id"]."&termin_id=".$termin_id."\">", "</a>") . "§";
 		}
-	}		
-	
+	}
+
 	//Check auf Konsistenz mt Metadaten, Semestercheck
 	if (($do) && ($art == 1) && (is_array($term_data ["turnus_data"]))) {
-		$all_semester = $semester->getAllSemesterData();		
+		$all_semester = $semester->getAllSemesterData();
 		foreach ($all_semester as $a) {
 			if (($term_data["start_time"] >= $a["beginn"]) && ($term_data["start_time"] <= $a["ende"])) {
 				$sem_beginn=$a["beginn"];
@@ -236,22 +238,22 @@ if ($new) {
 			if (($term_data["duration_time"] > 0) && ((($term_data["start_time"] + $term_data["duration_time"]) >= $a["beginn"]) && (($term_data["start_time"] + $term_data["duration_time"]) < $a["ende"])))
 				$sem_ende=$a["ende"];
 		}
-			
+
 		if (($start_time < $sem_beginn) || ($start_time > $sem_ende))
 			$result.="info§" . _("Der eingegebene Termine liegt au&szlig;erhalb des Semesters, in dem die Veranstaltung stattfindet. Es wird empfohlen, den Termin anzupassen.") . "§";
-		
+
 		//Und dann noch auf regelmaessige Termine checken, wenn dieser Typ gewaehlt ist
 		if ((!$term_data["art"]) && (!isMetadateCorrespondingDate($t_id, $start_time, $end_time, $admin_dates_data["range_id"]))) {
 			$add_result .= "info§" . _("Sie haben einen oder mehrere Termine eingegeben, der nicht zu den allgemeinen Veranstaltungszeiten stattfindet. Es wird empfohlen, Sitzungstermine von regelm&auml;&szlig;igen Veranstaltungen nur zu den allgemeinen Zeiten stattfinden zu lassen.") . "§";
 		}
 	}
 
-	
-	
+
+
 	if ($do) {
 		$hash_secret = "blubbelsupp";
 		$t_id=$termin_id;
-		$f_id=md5(uniqid($hash_secret));   //folder_id erzeugen		
+		$f_id=md5(uniqid($hash_secret));   //folder_id erzeugen
 		$aktuell=time();
 
 		$tmp = $auth->auth["uname"];
@@ -261,10 +263,10 @@ if ($new) {
 			$tmp_titel=_("Kein Titel");
 		else
 			$tmp_titel=$titel;
-		
+
 		if ($description==$default_description)
 			$description='';
-			
+
 		//if we have a resource_id, we take the room name from resource_id (deprecated at the moment)
 		/*if (($resource_id) && ($RESOURCES_ENABLE))
 			$raum=getResourceObjectName($resource_id);*/
@@ -275,20 +277,20 @@ if ($new) {
 		if ($folder) { //Dateiordner erzeugen
 			$titel_f=$TERMIN_TYP[$art]["name"].": $tmp_titel";
 			$titel_f.=" " . _("am") . " ".date("d.m.Y ", $start_time);
-			$description_f=_("Ablage für Ordner und Dokumente zu diesem Termin");		
+			$description_f=_("Ablage für Ordner und Dokumente zu diesem Termin");
 			$db3->query("INSERT INTO folder SET folder_id='$f_id', range_id='$t_id', description='$description_f', user_id='$user->id', name='$titel_f', mkdate='$aktuell', chdate='$aktuell'");
 		} else
 			$f_id='';
-	
+
 		$db->query("REPLACE INTO termine SET termin_id='$t_id', range_id='".$admin_dates_data["range_id"]."', autor_id='$user->id', content='$tmp_titel', date='$start_time', mkdate='$aktuell', chdate='$aktuell', date_typ='$art', topic_id='$topic_id', end_time='$end_time', raum='$raum', description='$description'");
 		if ($db->affected_rows()) {
 			//insert a entry for the linked resource, if resource management activ
 			if (($RESOURCES_ENABLE) && ($resource_id)){
 				$insertAssign = new VeranstaltungResourcesAssign($admin_dates_data["range_id"]);
 				$resources_result = $insertAssign->insertDateAssign($t_id, $resource_id);
-				$insertAssign->updateAssign(false); 
+				$insertAssign->updateAssign(false);
 			}
-		
+
 			$result.="msg§" . _("Ihr Termin wurde eingef&uuml;gt!") . "§";
 			$admin_dates_data["termin_id"]=FALSE;
 		}
@@ -322,7 +324,7 @@ if ((($edit_x) || ($save_changes_with_request)) && (!$admin_dates_data["termin_i
 		for ($i=0; $i < sizeof($termin_id); $i++) {
 		 	$t_id=$termin_id[$i];
 			$f_id=md5(uniqid($hash_secret));
-			
+
 			$tmp_result=edit_dates($stunde[$i],$minute[$i],$monat[$i], $tag[$i], $jahr[$i], $end_stunde[$i], $end_minute[$i], $t_id, $art[$i], $titel[$i],$description[$i], $topic_id[$i],$raum[$i], $resource_id[$i], $admin_dates_data["range_id"], $save_changes_with_request);
 		 	$result.=$tmp_result["msg"];
 
@@ -332,12 +334,12 @@ if ((($edit_x) || ($save_changes_with_request)) && (!$admin_dates_data["termin_i
 
 			$tmp = $auth->auth["uname"];
 			$author=get_fullname();
-			
+
 			if (strlen($tag[$i]) == 1) $tag[$i] = "0" . $tag[$i];
 			if (strlen($monat[$i]) == 1) $monat[$i] = "0" . $monat[$i];
 			$tmp_datum = $tag[$i] . "." . $monat[$i] . "." . $jahr[$i];
 
-			
+
  			if ($titel[$i]==$default_titel)
 				$tmp_titel= _("Kein Titel");
 			else
@@ -350,16 +352,17 @@ if ((($edit_x) || ($save_changes_with_request)) && (!$admin_dates_data["termin_i
 					$db3->query ("UPDATE termine SET topic_id = '$tmp_topic_id' WHERE termin_id = '$t_id'");
 				} else
 					$tmp_topic_id='';
-				if ($insert_folder[$i]) { 
+				if ($insert_folder[$i]) {
 					$titel_f=$TERMIN_TYP[$art[$i]]["name"].": $tmp_titel";
 					$titel_f.=" " . _("am") . " $tmp_datum";
-					$description_f= _("Ablage für Ordner und Dokumente zu diesem Termin");		
+					$description_f= _("Ablage für Ordner und Dokumente zu diesem Termin");
 					$db3->query("INSERT INTO folder SET folder_id='$f_id', range_id='$t_id', description='$description_f', user_id='$user->id', name='$titel_f', mkdate='$aktuell', chdate='$aktuell'");
 				}
 			}
+
 		 	if (!$add_result) //Hinweisnachrichten nur einmal anzeigen
 		 		$add_result=$tmp_result["add_msg"];
-		 	
+
 		 	//delete the temporary data (actual data will be loaded from db while showing the date)
 		 	if ($tmp_result["changed"]) {
 		 		$admin_dates_data["form_data"][$t_id] = '';
@@ -379,7 +382,7 @@ if ($kill_date)
 	$kill_termin = $kill_date;
 if ((($kill_x) || ($delete_confirm)) && ($admin_dates_data["range_id"])) {
 	if (is_array($kill_date)) {
-		for ($i=0; $i < count($kill_date); $i++) {		
+		for ($i=0; $i < count($kill_date); $i++) {
 			$do_delete = TRUE;
 			if (($RESOURCES_ENABLE) && (!$delete_confirm)){
 				if ($assigned_room = getDateAssigenedRoom($kill_date[$i])) {
@@ -391,7 +394,7 @@ if ((($kill_x) || ($delete_confirm)) && ($admin_dates_data["range_id"])) {
 						}
 						$do_delete = FALSE;
 						$just_informed = TRUE;
-					} 				
+					}
 				}
 			}
 			if ($do_delete) {
@@ -420,7 +423,7 @@ if ((($kill_x) || ($delete_confirm)) && ($admin_dates_data["range_id"])) {
  			}
 		}
 	}
-	
+
 	if ($del_count)
 		if ($del_count == 1)
 			$result.="msg§" . _("1 Termin wurde gel&ouml;scht!"). "§";
@@ -435,19 +438,19 @@ if ((($kill_x) || ($delete_confirm)) && ($admin_dates_data["range_id"])) {
 if (($RESOURCES_ENABLE) && ($resources_result)) {
 	$result.=getFormattedResult($resources_result, "booth");
 	}
-	
+
 //Bereich wurde ausgewaehlt (aus linksadmin) oder wir kommen aus dem Seminar Assistenten
 $db->query("SELECT metadata_dates, Name, start_time, duration_time, status, Seminar_id FROM seminare WHERE Seminar_id = '".$admin_dates_data["range_id"]."'");
 $db->next_record();
-if ($SEM_TYPE[$db->f("status")]["name"] == $SEM_TYPE_MISC_NAME) 	
-	$tmp_typ = _("Veranstaltung"); 
+if ($SEM_TYPE[$db->f("status")]["name"] == $SEM_TYPE_MISC_NAME)
+	$tmp_typ = _("Veranstaltung");
 else
 	$tmp_typ = $SEM_TYPE[$db->f("status")]["name"];
-	
+
 $term_data=unserialize($db->f("metadata_dates"));
 $term_data["start_time"]=$db->f("start_time");
 $term_data["duration_time"]=$db->f("duration_time");
-						
+
 
 $db2->query("SELECT count(*) AS anzahl FROM termine WHERE range_id='".$admin_dates_data["range_id"]."' AND date_typ IN $typ_clause");
 $db2->next_record();
@@ -464,7 +467,7 @@ if ($admin_dates_data["assi"]) {
 if (!sizeof($term_data["turnus_data"])) {
 	$result.= "info§"._("Sie haben bislang noch keine <b>allgemeinen</b> (regelm&auml;&szlig;ige) Veranstaltungszeiten eingegeben. Sie k&ouml;nnen an dieser Stelle den Ablaufplan-Assisten benutzen, wenn Sie f&uuml;r die Veranstaltung einen regelm&auml;&szlig;igen Turnus festlegen.")."§";
 }
-						
+
 
 
 //Ab hier Ausgaben....
@@ -483,7 +486,7 @@ if (!sizeof($term_data["turnus_data"])) {
 		</b></td>
 	</tr>
 	<tr>
-		<td class="blank" colspan="2">&nbsp; 
+		<td class="blank" colspan="2">&nbsp;
  		</td>
  	</tr>
  	<tr>
@@ -499,8 +502,8 @@ if (!sizeof($term_data["turnus_data"])) {
 							print "<a name=\"anchor\">&nbsp;</a>";
 					}
 					?>
-					</table>				
-				
+					</table>
+
 					<?
 
 					print("<form method=\"POST\" action=\"$PHP_SELF\">");
@@ -518,17 +521,17 @@ if (!sizeof($term_data["turnus_data"])) {
 									<font size="-1"><?=_("generieren Sie Sitzungstermine zu den Veranstaltungszeiten mit folgenden Einstellungen:")?><br /></font>
 									<?
 									//only, if the forum is active
-									if ($modules["forum"]) { 
+									if ($modules["forum"]) {
 										?>
 										&nbsp; &nbsp; <font size="-1"><input type="checkbox" name="pfad"> <?=_("Zu jedem Termin einen Themenordner im Forum der Veranstaltung anlegen.")?></font><br>
-										<? 
-									} 
+										<?
+									}
 									//only, if the documents-folder is active
-									if ($modules["documents"]) { 
+									if ($modules["documents"]) {
 										?>
 										&nbsp; &nbsp; <font size="-1"><input type="checkbox" name="folder"> <?=_("Zu jedem Termin einen Dateiordner f&uuml;r Dokumente anlegen.")?> </font>
 										<?
-									} 
+									}
 									if ($db->f("duration_time") != 0) {
 										?>
 										<br />&nbsp; &nbsp; <font size="-1"><input type="checkbox" name="full"> <?=_("Ablaufplan f&uuml;r alle Semester anlegen (wenn nicht gesetzt: nur f&uuml;r das erste Semester)")?> </font>
@@ -539,7 +542,7 @@ if (!sizeof($term_data["turnus_data"])) {
 								printf(_("Assistent %s"), "<input type=\"IMAGE\" align=\"absmiddle\" name=\"make_dates\" " . makeButton("starten", "src") . " border=\"0\" value=\"" . _("Ablaufplan-Assistenten ausf&uuml;hren") . "\">");
 								?>
 								</font>
-								&nbsp; <img  src="./pictures/info.gif"
+								&nbsp; <img  src="<?= $GLOBALS['ASSETS_URL'] ?>images/info.gif"
 									<?=tooltip(_("Der Ablaufplan-Assistent erstellt automatisch die zu den Veranstaltungszeiten passenden Termine für ein oder mehrere Semester. Dabei werden - soweit wie möglich - Feiertage und Ferienzeiten übersprungen. Anschließend können Sie jedem Termin einen Titel und eine Beschreibung geben."), TRUE, TRUE)?>>
 								<br /><br />
 								</td>
@@ -547,7 +550,7 @@ if (!sizeof($term_data["turnus_data"])) {
 						</table>
 						<?
 						}
-					} 
+					}
 					?>
 					</form>
 					<?
@@ -558,23 +561,23 @@ if (!sizeof($term_data["turnus_data"])) {
 						<table border="0" cellpadding="2" cellspacing="0" width="99%" align="center">
 						<tr align="left" height="22">
 							<td width="5%" class="steelgraulight" align="left">
-								<a href="admin_dates.php?insert_new=TRUE#anchor"><img src="pictures/add_sheet.gif" <?=tooltip(_("Einen neuen Termin anlegen"))?> border=0></a>
+								<a href="admin_dates.php?insert_new=TRUE#anchor"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/add_sheet.gif" <?=tooltip(_("Einen neuen Termin anlegen"))?> border=0></a>
 							</td>
 							<td width="80%" class="steelgraulight" align="center">
 							<?
 							if (!$show_all) {
 								?>
-								<a href="<? echo $PHP_SELF, "?range_id=".$admin_dates_data["range_id"]."&show_all=TRUE"; ?>"><img src="pictures/open_all.gif" <?=tooltip(_("Alle Termine aufklappen"))?> border=0></a>
+								<a href="<? echo $PHP_SELF, "?range_id=".$admin_dates_data["range_id"]."&show_all=TRUE"; ?>"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/open_all.gif" <?=tooltip(_("Alle Termine aufklappen"))?> border=0></a>
 								<?
 							} else {
 								?>
-								<a href="<? echo $PHP_SELF, "?range_id=".$admin_dates_data["range_id"]."&show_nall=TRUE"; ?>"><img src="pictures/close_all.gif" <?=tooltip(_("Alle Termine zuklappen"))?> border=0></a>
+								<a href="<? echo $PHP_SELF, "?range_id=".$admin_dates_data["range_id"]."&show_nall=TRUE"; ?>"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/close_all.gif" <?=tooltip(_("Alle Termine zuklappen"))?> border=0></a>
 								<?
 							}
 								?>
 							</td>
 							<form method="POST" name="Formular" action="<? echo $PHP_SELF; ?>#anchor">
-					
+
 							<?
 							if (!$admin_dates_data["insert_id"]) {
 							?>
@@ -583,13 +586,13 @@ if (!sizeof($term_data["turnus_data"])) {
 								if (!$show_all) {
 								?>
 								<input type="IMAGE" name="mark_all" border=0 <?=makeButton("alleauswaehlen", "src")?> value="auswählen">&nbsp;
-								<input type="IMAGE" name="kill" border=0 <?=makeButton("loeschen", "src")?> value="löschen">&nbsp; 
+								<input type="IMAGE" name="kill" border=0 <?=makeButton("loeschen", "src")?> value="löschen">&nbsp;
 								<?
 								}
 							}
 							if ($show_all) {
 							?>
-							<input type="IMAGE" name="edit" border=0 <?=makeButton("allesuebernehmen", "src")?> value="verändern">&nbsp; &nbsp; 
+							<input type="IMAGE" name="edit" border=0 <?=makeButton("allesuebernehmen", "src")?> value="verändern">&nbsp; &nbsp;
 							<?
 							}
 							?>
@@ -599,12 +602,12 @@ if (!sizeof($term_data["turnus_data"])) {
 							</td>
 						</tr>
 						</table>
-						<?	
-			
+						<?
+
 						//Wenn insert gesetzt, neuen Anlegen...
 						if ($admin_dates_data["insert_id"]) {
 							$kill_date = '';
-									
+
 							//Titel erstellen
 							$titel = '';
 						 	$titel .= "<a name=\"anchor\">&nbsp;</a>";
@@ -617,16 +620,16 @@ if (!sizeof($term_data["turnus_data"])) {
 							$titel .= "<input type=\"TEXT\" style=\"font-size:8 pt;vertical-align:bottom\" name=\"end_minute\" maxlength=2 size=2 value=\"".$temp_default[7]."\"><font style=\"font-size:10 pt;vertical-align:bottom\"> " . _("Uhr") . ".</font>";
 							$titel .= "<input type=\"HIDDEN\" name=\"termin_id\" value=\"".$admin_dates_data["insert_id"]."\">";
 							$titel .= Termin_Eingabe_javascript(1,0,0);
-							$icon = "&nbsp;<img src=\"./pictures/termin-icon.gif\" border=0>";
+							$icon = "&nbsp;<img src=\"".$GLOBALS['ASSETS_URL']."images/termin-icon.gif\" border=0>";
 							$link = $PHP_SELF."?cancel=TRUE";
-						
+
 							echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"99%\" align=\"center\"><tr>";
 							printhead(0, 0, $link, "open", TRUE, $icon, $titel, $zusatz);
 							echo "</tr></table>";
-							
+
 							//Contentbereich
 							$content='';
-						
+
 							$content.="<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" align=\"left\" width=\"100%\"><tr>\n";
 							$content.="<td class=\"steel1\" width=\"70%\" valign=\"top\" colspan=\"2\">\n";
 						    	$content.="<input type=\"HIDDEN\" name=\"new\" value=\"TRUE\">";
@@ -639,7 +642,7 @@ if (!sizeof($term_data["turnus_data"])) {
 								$content.=$default_description;
 							$content.="</textarea>";
 							$content.="</td>\n";
-							
+
 							//room
 							$content.="<td class=\"steel1\" width=\"30%\" valign=\"top\" rowspan=\"2\">\n";
 							$content.="<font size=-1><b>" . _("Raum:") . "</b></font>";
@@ -660,47 +663,47 @@ if (!sizeof($term_data["turnus_data"])) {
 							}
 							$content.="<br /><input type=\"TEXT\" name=\"raum\" style=\"width:98%\" maxlength=255 size=30 value=\"".htmlReady($new_date_room)."\"><br>\n";
 							$content.="</td></tr>";
-							
-							
+
+
 							//select type
-							$content.="<tr><td class=\"steel1\" width=\"20%\" valign=\"top\" nowrap>\n";							
+							$content.="<tr><td class=\"steel1\" width=\"20%\" valign=\"top\" nowrap>\n";
 							$content.="<font size=-1><b>" . _("Art:") . "</b></font><br><select name=\"art\">\n";
 							for ($i=1; $i<=sizeof($TERMIN_TYP); $i++)
 								if ($db->f("date_typ") == $i)
 									$content.= "<option value=$i selected>".$TERMIN_TYP[$i]["name"]."</option>";
 								else
 									$content.= "<option value=$i>".$TERMIN_TYP[$i]["name"]."</option>";
-							$content.="</select>&nbsp;&nbsp;&nbsp;<br><br></td>\n";							
-							
-							
+							$content.="</select>&nbsp;&nbsp;&nbsp;<br><br></td>\n";
+
+
 							//linked forum and folder
-							$content.="<td class=\"steel1\" width=\"50%\" valign=\"top\" align=\"left\">\n";							
+							$content.="<td class=\"steel1\" width=\"50%\" valign=\"top\" align=\"left\">\n";
 							if (($modules["forum"]) || ($modules["documents"]))
 								$content.="<font size=-1><b>" . _("Verkn&uuml;pfungen mit diesem Termin:") . "</b></font><br />";
-						
+
 							//only, if the forum is active
 							if ($modules["forum"])
 								$content.="<input type=\"CHECKBOX\" name=\"topic\"/><font size=-1>" . _("Thema im Forum anlegen") . "</font><br />\n";
 							//only, if the docuements-folder is active
 							if ($modules["documents"])
 								$content.="<input type=\"CHECKBOX\" name=\"folder\"/><font size=-1>" . _("Dateiordner anlegen") . "</font>\n";
-						
+
 							$content.="<br>&nbsp;</td>\n";
-						
+
 							$content.="</tr></td></table></td></tr>\n<tr><td class=\"steel1\" align=\"center\" colspan=2>";
 							$content.="<input type=\"IMAGE\" name=\"send\" border=0 " . makeButton("uebernehmen", "src") . " align=\"absmiddle\" value=\"speichern\">&nbsp;";
 							$content.="<a href=\"$PHP_SELF?cancel=TRUE\">" . makeButton("abbrechen", "img") . "</a><br />";
-						
-						
+
+
 							echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"99%\" align=\"center\"><tr>";
 							printcontent(0,1, $content, '');
 							echo "</tr></table>";
-						
+
 							?>
 							</form>
 							<?
 						}
-						
+
 						//..und alte Bearbeiten
 						$c=0;
 						$resource_id = FALSE;
@@ -742,32 +745,32 @@ if (!sizeof($term_data["turnus_data"])) {
 								$raum = $db->f("raum");
 								$kill_selected = FALSE;
 							}
-						
+
 							//Ermitteln, ob Ordner an diesem Termin haengt
 							$db2->query("SELECT folder_id FROM folder WHERE range_id='".$db->f("termin_id")."'");
 							if ($db2->num_rows())
 								$folder=TRUE;
 							else
 								$folder=FALSE;
-						
+
 							if (($show_id  == $db->f("termin_id")) || ($show_all)) {
 								print "<a name=\"#anchor\"></a>";
 								$edit=TRUE;
 							} else
 								$edit=FALSE;
-						
+
 							//Zusatz erstellen
 							if ((!$admin_dates_data["insert_id"]) && ($show_id  != $db->f("termin_id")) && (!$show_all))
-								$zusatz="<input type=\"CHECKBOX\" ".((($mark_all_x) || ($kill_selected)) ? "checked" : "")." name=\"kill_date[]\" value=\"". $db->f("termin_id")."\"><a href=\"$PHP_SELF?kill_single_date=".$db->f("termin_id")."\"><img src=\"pictures/trash.gif\" border=\"0\" style=\"style=\"vertical-align:bottom\"\"/></a>";
+								$zusatz="<input type=\"CHECKBOX\" ".((($mark_all_x) || ($kill_selected)) ? "checked" : "")." name=\"kill_date[]\" value=\"". $db->f("termin_id")."\"><a href=\"$PHP_SELF?kill_single_date=".$db->f("termin_id")."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" border=\"0\" style=\"style=\"vertical-align:bottom\"\"/></a>";
 							else
 								$zusatz='';
-						
+
 							//Link erstellen
 							if (($show_id  == $db->f("termin_id")) || ($show_all))
 								$link=$PHP_SELF."?range_id=".$admin_dates_data["range_id"]."&show_id=";
 							else
 								$link=$PHP_SELF."?range_id=".$admin_dates_data["range_id"]."&show_id=".$db->f("termin_id")."#anchor";
-						
+
 							//Titel erstellen
 							$titel='';
 							if ($edit) {
@@ -793,18 +796,18 @@ if (!sizeof($term_data["turnus_data"])) {
 							}
 							if (($show_id  == $db->f("termin_id")) && (!$result))
 							 	$titel.= "<a name=\"anchor\"></a>";
-						
+
 							//Icon erstellen
-							$icon="&nbsp;<img src=\"./pictures/termin-icon.gif\" border=0>";
-						
+							$icon="&nbsp;<img src=\"".$GLOBALS['ASSETS_URL']."images/termin-icon.gif\" border=0>";
+
 							if ($db->f("chdate") > object_get_visit($SessSemName[1], "schedule"))
 								$neuer_termin=TRUE;
 							else
 								$neuer_termin=FALSE;
-						
-						
+
+
 							echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"99%\" align=\"center\"><tr>";
-						
+
 							if (($show_id  == $db->f("termin_id")) || ($show_all)) {
 								if ($edit) {
 									$at = mktime(0,0,0,$monat,$tag,$jahr);
@@ -821,19 +824,19 @@ if (!sizeof($term_data["turnus_data"])) {
 								if ($edit) {
 									$content .= '<table border="0" cellpadding="0" cellspacing="0" align="left"width="100%"><tr>' . "\n";
 									$content .= '<td class="steel1" width="70%" valign="top" colspan="2">' . "\n";
-						
+
 									if (!$show_all) {
 										$content.="<input type=\"HIDDEN\" name=\"show_id\" value=\"". $db->f("termin_id")."\">";
 									}
-						
+
 									$content.="<font size=-1><b>" . _("Titel:") . "</b><br /><input type=\"TEXT\" name=\"titel[$c]\" style=\"width:98%\" maxlength=255 size=".round($max_col*0.45)." value=\"".htmlReady($t_titel)."\"><br />";
 									$content.="<b>"._("Beschreibung:") . "</b><br><textarea style=\"width:98%\" cols=\"". round($max_col*0.45)."\" rows=3 name=\"description[$c]\"  wrap=\"virtual\">".htmlReady($description)."</textarea></font>\n";
 									$content.="</td>";
-									
+
 									//room
 									$content.="<td class=\"steel1\" width=\"30%\" valign=\"top\" rowspan=\"2\">\n";
 									$content.="<font size=-1><b>" . _("Raum:")."</b><br />";
-						
+
 									//show list of rooms, the user has perms on
 									if ($RESOURCES_ENABLE) {
 										$resList -> reset();
@@ -848,10 +851,10 @@ if (!sizeof($term_data["turnus_data"])) {
 										} else
 											$content.="<input type=\"HIDDEN\" name=\"resource_id[$c]\" value=\"NULL\">";
 									}
-						
+
 									//the free field for room-information
 									$content.="<br /><input type=\"TEXT\" style=\"width:98%\" name=\"raum[$c]\" maxlength=255 size=30 value=\"". htmlReady($raum)."\">\n";
-						
+
 									//show the booked room
 									if ($RESOURCES_ENABLE) {
 										$content.= "<br /><br /><b>"._("gebuchter Raum:")."</b><br /> ";
@@ -861,18 +864,18 @@ if (!sizeof($term_data["turnus_data"])) {
 										} else
 											$content.= _("kein gebuchter Raum")."\n";
 									}
-						
+
 									//link to admin_room_requests.php
 									if ($RESOURCES_ENABLE && $RESOURCES_ALLOW_ROOM_REQUESTS) {
 										if (getDateRoomRequest($db->f("termin_id")))
-											$content.="<br /><br /><img src=\"pictures/link_intern.gif\" border=\"0\" />&nbsp;<a href=\"admin_room_requests.php?seminar_id=".$admin_dates_data["range_id"]."&termin_id=".$db->f("termin_id")."\">"._("Raumanfrage <b>bearbeiten</b>")."</a><br>\n";
+											$content.="<br /><br /><img src=\"".$GLOBALS['ASSETS_URL']."images/link_intern.gif\" border=\"0\" />&nbsp;<a href=\"admin_room_requests.php?seminar_id=".$admin_dates_data["range_id"]."&termin_id=".$db->f("termin_id")."\">"._("Raumanfrage <b>bearbeiten</b>")."</a><br>\n";
 										else
-											$content.="<br /><br /><img src=\"pictures/link_intern.gif\" border=\"0\" />&nbsp;<a href=\"admin_room_requests.php?seminar_id=".$admin_dates_data["range_id"]."&termin_id=".$db->f("termin_id")."\">"._("Raumanfrage <b>erstellen</b>")."</a><br>\n";
+											$content.="<br /><br /><img src=\"".$GLOBALS['ASSETS_URL']."images/link_intern.gif\" border=\"0\" />&nbsp;<a href=\"admin_room_requests.php?seminar_id=".$admin_dates_data["range_id"]."&termin_id=".$db->f("termin_id")."\">"._("Raumanfrage <b>erstellen</b>")."</a><br>\n";
 									}
-						
-									$content.="</font></td></tr>";									
-									
-									
+
+									$content.="</font></td></tr>";
+
+
 									//type of date
 									$content .= "<tr><td class=\"steel1\" width=\"20%\" align\"left\" valign=\"top\" nowrap>" . "\n";
 									$content.="<font size=-1><b>" . _("Art:") . "</b><br><select name=\"art[$c]\">\n";
@@ -881,14 +884,14 @@ if (!sizeof($term_data["turnus_data"])) {
 											$content.= "<option value=$i selected>".$TERMIN_TYP[$i]["name"]."</option>";
 										else
 											$content.= "<option value=$i>".$TERMIN_TYP[$i]["name"]."</option>";
-									$content.="</select>&nbsp;&nbsp;&nbsp;<br><br></td>\n";									
-									
-									
+									$content.="</select>&nbsp;&nbsp;&nbsp;<br><br></td>\n";
+
+
 									//Liked Forum and Folder
 									$content .= '<td class="steel1" width="50%" valign="top">' . "\n";
 									if (($modules["forum"]) || ($modules["documents"]))
 										$content.="<font size=-1><b>" . _("Verkn&uuml;pfungen mit diesem Termin:") . "</b><br />";
-						
+
 									//only, if the forum is active
 									if ($modules["forum"]) {
 										if ($topic_id)
@@ -896,7 +899,7 @@ if (!sizeof($term_data["turnus_data"])) {
 										else
 											$content.= sprintf ("<input type=\"CHECKBOX\" name=\"insert_topic[$c] %s \"/>" . _("Thema im Forum anlegen") . "<br />\n", ($insert_topic) ? TRUE : FALSE);
 									}
-						
+
 									//only, if the documents-folder is active
 									if ($modules["documents"]) {
 										if ($folder)
@@ -904,14 +907,14 @@ if (!sizeof($term_data["turnus_data"])) {
 										else
 											$content.= sprintf ("<input type=\"CHECKBOX\" name=\"insert_folder[$c] %s \"/>" . _("Dateiordner anlegen") . "\n", ($insert_folder) ? TRUE : FALSE);
 									}
-						
+
 									$content.="<br />&nbsp;</font></td>\n";
-															
+
 									//end content
 									$content.="</td></tr></table></td></tr>\n<tr><td class=\"steel1\" align=\"center\" colspan=2>";
-						
+
 									echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"99%\" align=\"center\"><tr>";
-						
+
 									if (!$show_all)
 										$content.="<input type=\"IMAGE\" name=\"edit\" border=0 " . makeButton("uebernehmen", "src") . " align=\"absmiddle\" value=\"verändern\">&nbsp;";
 									$content.="<a href=\"$PHP_SELF?kill_single_date=$show_id\">".makeButton("loeschen")."</a><br />";
@@ -933,7 +936,7 @@ if (!sizeof($term_data["turnus_data"])) {
 					if (!$show_all) {
 						?>
 						<input type="IMAGE" name="mark_all" border=0 <?=makeButton("alleauswaehlen", "src")?> value="auswählen">&nbsp;
-						<input type="IMAGE" name="kill" border=0 <?=makeButton("loeschen", "src")?> value="löschen">&nbsp; 
+						<input type="IMAGE" name="kill" border=0 <?=makeButton("loeschen", "src")?> value="löschen">&nbsp;
 						<?
 					} else {
 						?>
@@ -966,24 +969,31 @@ if (!sizeof($term_data["turnus_data"])) {
 				$times_inf .= "<br><b>" . _("Erster Termin:") . "</b> ". htmlReady(veranstaltung_beginn($admin_dates_data["range_id"]));
 			if (get_semester($admin_dates_data["range_id"]))
 				$times_inf .= "<br /><b>" . _("Semester:") . "</b> ". get_semester($admin_dates_data["range_id"]);
+			if ($RESOURCES_ENABLE){
+				$db->query("SELECT COUNT(*) FROM termine LEFT JOIN resources_assign ON (assign_user_id=termin_id) WHERE assign_id IS NULL AND range_id='{$admin_dates_data['range_id']}'");
+				$db->next_record();
+				if ($not_booked_rooms = $db->f(0)){
+					$times_inf .= "<hr><b>" ._("Fehlende Raumbuchungen:")."</b><br>" .  sprintf(_("%s ihrer Termine haben keinen gebuchten Raum!"), $not_booked_rooms);
+				}
+			}
 		}
 
 		//the box
 		$infobox[0]["kategorie"] = _("Informationen:");
 		$infobox[1]["kategorie"] = _("Aktionen:");
 
-		$infobox[0]["eintrag"][] = array ("icon" => "pictures/ausruf_small.gif",
+		$infobox[0]["eintrag"][] = array ("icon" => "ausruf_small.gif",
 			"text"  => ($admin_dates_data["assi"]) ? _("Sie k&ouml;nnen nun den Ablaufplan und weitere Termine f&uuml;r die neu angelegte Veranstaltung eingeben.") : _("Hier k&ouml;nnen Sie den Ablaufplan und weitere Termine der Veranstaltung ver&auml;ndern."));
-		$infobox[0]["eintrag"][] = array ("icon" => "pictures/blank.gif",
+		$infobox[0]["eintrag"][] = array ("icon" => "blank.gif",
 			"text"  => $times_inf);
-		$infobox[1]["eintrag"][] = array ("icon" => "pictures/link_intern.gif",
+		$infobox[1]["eintrag"][] = array ("icon" => "link_intern.gif",
 			"text"  =>"<a href=\"admin_dates.php?insert_new=TRUE#anchor\">"._("Einen neuen Termin anlegen")."</a>");
-		$infobox[1]["eintrag"][] = array ("icon" => "pictures/link_intern.gif",
+		$infobox[1]["eintrag"][] = array ("icon" => "link_intern.gif",
 			"text"  => sprintf(_("Um die allgemeinen Zeiten der Veranstaltung zu &auml;ndern, nutzen Sie bitte den Men&uuml;punkt %s Zeiten %s"), "<a href=\"admin_metadates.php?seminar_id=".$admin_dates_data["range_id"]."\">", "</a>"));
 		?>
 		<td class="blank" width="1%" valign="top">
-							<? print_infobox ($infobox, ($admin_dates_data["assi"]) ? "./locale/$_language_path/LC_PICTURES/hands08.jpg" : "pictures/schedules.jpg"); ?>
-			<img src="pictures/blank.gif" width="270" height="1"/>
+							<? print_infobox ($infobox, ($admin_dates_data["assi"]) ? "locale/$_language_path/LC_PICTURES/hands08.jpg" : "schedules.jpg"); ?>
+			<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" width="270" height="1"/>
 		</td>
 	</tr>
 	<tr>
@@ -992,7 +1002,7 @@ if (!sizeof($term_data["turnus_data"])) {
 	</tr>
 </table>
 </form>
-<?	
+<?
 page_close();
 ?>
 </td></tr></table>

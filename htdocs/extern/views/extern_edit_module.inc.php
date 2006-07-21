@@ -1,9 +1,9 @@
 <?
 /**
 * extern_edit_module.inc.php
-* 
-* 
-* 
+*
+*
+*
 *
 * @author		Peter Thienel <pthienel@web.de>, Suchi & Berg GmbH <info@data-quest.de>
 * @version	$Id$
@@ -86,11 +86,11 @@ if ($execute_command)
 	$module->executeCommand($edit, $execute_command, $pos);
 
 $elements = $module->getAllElements();
-	
+
 // the first parameter of printOutEdit() has to be an array, because it is
 // possible to open more than one element form
 $edit_open = "";
-$l=0;
+
 foreach ($elements as $element) {
 	if ($edit == $element->getName())
 		$edit_open = array("$edit" => ($com != "close"));
@@ -117,7 +117,7 @@ if ($com == "store") {
 		}
 	}
 	if (!$fault) {
-		// This is the right place to trigger some functions by special 
+		// This is the right place to trigger some functions by special
 		// POST_VARS-values. At the moment there is only one: If the name of the
 		// configuration was changed, setup the extern_config table.
 		if ($edit == "Main" && $HTTP_POST_VARS["Main_name"] != $module->config->config_name) {
@@ -172,31 +172,31 @@ if ($module->getType() != 0) {
 	$info_preview .= _("Die Vorschau wird in einem neuen Fenster ge&ouml;ffnet.") . "<br>";
 	$info_preview .= _("Es werden eventuell nicht alle Einstellungen in der Vorschau angezeigt.");
 
-	$info_content = array(	
+	$info_content = array(
 									array("kategorie" => "Information:",
-												"eintrag" => array(	
-													array("icon" => "pictures/ausruf_small.gif",
+												"eintrag" => array(
+													array("icon" => "ausruf_small.gif",
 																"text" => $info_edit_element
 													)
 									)),
 									array("kategorie" => "Aktion:",
-	   										"eintrag" => array(	
-													array("icon" => "pictures/ausruf_small.gif",
+	   										"eintrag" => array(
+													array("icon" => "ausruf_small.gif",
 																"text" => $info_preview,
 													)
 									)));
 }
 // the type is Global -> no preview
 else {
-	$info_content = array(	
+	$info_content = array(
 									array("kategorie" => "Information:",
-												"eintrag" => array(	
-													array("icon" => "pictures/ausruf_small.gif",
+												"eintrag" => array(
+													array("icon" => "ausruf_small.gif",
 																"text" => $info_edit_element
 													)
 									)));
 }
 
-print_infobox($info_content, "pictures/einrichtungen.jpg");
+print_infobox($info_content, "einrichtungen.jpg");
 
 ?>

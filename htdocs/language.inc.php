@@ -78,7 +78,7 @@ function init_i18n($_language) {
 
 	if (isset($_language_domain) && isset($_language)) {
 		$_language_path = $INSTALLED_LANGUAGES[$_language]["path"];
-		putenv("LANG=$_language");
+		putenv("LC_ALL=$_language");
 		setlocale(LC_ALL, "");
 		if ($_language != "de_DE") { // German is the original language, so we need no I18N
 			bindtextdomain($_language_domain, "$ABSOLUTE_PATH_STUDIP/locale");
@@ -184,7 +184,7 @@ function setTempLanguage ($uid = FALSE, $temp_language = "") {
 		$temp_language = $DEFAULT_LANGUAGE;
 	}
 
-	putenv("LANG=$temp_language");
+	putenv("LC_ALL=$temp_language");
 	setlocale(LC_ALL, "");
 	bindtextdomain($_language_domain, "$ABSOLUTE_PATH_STUDIP/locale");
 	textdomain($_language_domain);
@@ -202,7 +202,7 @@ function setTempLanguage ($uid = FALSE, $temp_language = "") {
 function restoreLanguage() {
 	global $_language_domain, $_language, $ABSOLUTE_PATH_STUDIP;
 
-	putenv("LANG=$_language");
+	putenv("LC_ALL=$_language");
 	setlocale(LC_ALL, "");
 	bindtextdomain($_language_domain, "$ABSOLUTE_PATH_STUDIP/locale");
 	textdomain($_language_domain);

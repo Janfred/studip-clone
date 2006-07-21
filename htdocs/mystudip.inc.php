@@ -1,9 +1,9 @@
 <?
 /**
 * personal settings
-* 
+*
 * helper functions for handling personal settings
-* 
+*
 *
 * @author		Stefan Suchi <suchi@data-quest.de>
 * @version		$Id$
@@ -39,12 +39,12 @@
 * This function generates a drop-down box for language selection.
 * Language could be given as selected default.
 *
-* @access	public        
+* @access	public
 * @param		string	pre-selected language (in "de_DE" style)
 */
-function select_language($selected_language = "") {  
+function select_language($selected_language = "") {
 	global $INSTALLED_LANGUAGES, $DEFAULT_LANGUAGE;
-	
+
 	if (!isset($selected_language)) {
 		$selected_language = $DEFAULT_LANGUAGE;
 	}
@@ -69,28 +69,35 @@ function select_language($selected_language = "") {
 *
 * This function generates the first page of personal settings.
 *
-* @access	public        
+* @access	public
 */
 function change_general_view() {
 	global $PHP_SELF, $_language, $auth, $perm, $forum, $user, $my_studip_settings;
-		
+
 	$db = new DB_Seminar;
+
+	// get visibility status
+	$q="SELECT * FROM auth_user_md5 WHERE user_id='$user->id'";
+	$db->query($q);
+	$db->next_record();
+	$visi=$db->f("visible");
+
 	$cssSw = new cssClassSwitcher;
 	?>
 	<table width="100%" border="0" cellpadding="0" cellspacing="0" align="center">
 		<tr>
-			<td class="topic" colspan=2><img src="pictures/einst.gif" border="0" align="texttop"><b>&nbsp;<?print _("Allgemeine Einstellungen anpassen");?></b></td>
+			<td class="topic" colspan=2><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/einst.gif" border="0" align="texttop"><b>&nbsp;<?print _("Allgemeine Einstellungen anpassen");?></b></td>
 		</tr>
 		<tr>
 			<td class="blank" colspan=2>&nbsp;
 			</td>
 		</tr>
 		<tr>
-			
+
 			<td class="blank" width="100%" colspan="2" align="center">
 			<blockquote>
 				<font size="-1"><b><?print _("Hier k&ouml;nnen Sie die Ansicht von Stud.IP nach Ihren Vorstellungen anpassen.");?>
-			</blockquote>			
+			</blockquote>
 			<form method="POST" action="<? echo $PHP_SELF ?>?cmd=change_general&studipticket=<?=get_ticket()?>">
 			<table width="70%" align="center"cellpadding=8 cellspacing=0 border=0>
 				<tr>
@@ -105,6 +112,31 @@ function change_general_view() {
 						<? select_language($_language); ?>
 					</td>
 				</tr>
+
+				<?
+				if ($visi=='yes' || $visi=='no' || $visi=='unknown') {
+					// only show dialog if yes/unknown/no
+				?>
+				<tr  <? $cssSw->switchClass() ?>>
+					<td  align="right" class="blank" style="border-bottom:1px dotted black;">
+						<font size="-1"><?print _("Sichtbarkeit");?></font><br />
+						<br><div align="left"><font size="-1">
+						<?print _("Sie können wählen, ob Sie für andere NutzerInnen sichtbar sein und alle Kommunikationsfunktionen von Stud.IP nutzen können wollen, oder ob Sie unsichtbar sein möchten und dann nur eingeschränkte Kommunikationsfunktionen nutzen können.");?>
+						</font></div>
+					</td>
+					<td <?=$cssSw->getFullClass()?>>
+						<select name="change_visibility">
+						<?
+							printf ("<option %s value=\"yes\">"._("sichtbar")."</option>", ($visi=='yes' || ($visi=="unknown" && $USER_VISIBILITY_UNKNOWN)) ? "selected" : "");
+							printf ("<option %s value=\"no\">"._("unsichtbar")."</option>", ($visi=='no' || ($visi=='unknown' && !$USER_VISIBILITY_UNKNOWN)) ? "selected" : "");
+						?>
+						</select>
+					</td>
+				</tr>
+				<?
+				} // end of visibilty check
+				?>
+
 				<tr  <? $cssSw->switchClass() ?>>
 					<td  align="right" class="blank" style="border-bottom:1px dotted black;">
 						<font size="-1"><?print _("Java-Script Hovereffekte");?></font><br />
@@ -116,7 +148,7 @@ function change_general_view() {
 						<?
 						IF ($auth->auth["jscript"]) {
 							echo "<input type=CHECKBOX name='jshover' value=1";
-						IF($forum["jshover"]==1) 
+						IF($forum["jshover"]==1)
 							echo " checked";
 						echo ">";
 						} else
@@ -133,11 +165,11 @@ function change_general_view() {
 						<font size="-1"><?print _("pers&ouml;nliche Startseite");?></font><br />
 						<br><div align="left"><font size="-1">
 						<?print _("Sie k&ouml;nnen hier einstellen, welcher Systembereich automatisch nach dem Login oder Autologin aufgerufen wird. Wenn Sie zum Beispiel regelm&auml;&szlig;ig die Seite &raquo;Meine Veranstaltungen&laquo;. nach dem Login aufrufen, so k&ouml;nnen Sie dies hier direkt einstellen.");?></font><br><br>
-						</font></div>						
+						</font></div>
 					</td>
 					<td <?=$cssSw->getFullClass()?>>
 						<select name="personal_startpage">
-							<?	    
+							<?
 							printf ("<option %s value=\"\">"._("keine")."</option>", (!$my_studip_settings["startpage_redirect"]) ? "selected" : "");
 							printf ("<option %s value=\"1\">"._("Meine Veranstaltungen")."</option>", ($my_studip_settings["startpage_redirect"] ==  1) ? "selected" : "");
 							printf ("<option %s value=\"3\">"._("Mein Stundenplan")."</option>", ($my_studip_settings["startpage_redirect"] == 3) ? "selected" : "");
@@ -185,20 +217,40 @@ function change_general_view() {
 						?>
 						</font><br><br>
 					</td>
-				</tr>	
+				</tr>
+				<tr  <? $cssSw->switchClass() ?>>
+					<td  align="right" class="blank" style="border-bottom:1px dotted black;">
+						<font size="-1"><?print _("Formatierung der Namen auf &raquo;Wer ist Online?&laquo;");?></font><br />
+						<br><div align="left"><font size="-1">
+						<?print _("Mit dieser Einstellung k&ouml;nnen Sie auf der Seite &raquo;wer ist Online?&laquo; das Format der Anzeige der Namen ändern.");?>
+						</font></div>
+					</td>
+					<td <?=$cssSw->getFullClass()?>>
+						<select name="online_format">
+						<?
+						foreach($GLOBALS['NAME_FORMAT_DESC'] as $key => $value){
+							echo "\n<option value=\"$key\"";
+							if($user->cfg->getValue($user->id, "ONLINE_NAME_FORMAT") == $key) echo " selected ";
+							echo ">$value</option>";
+						}
+						?>
+						</select>
+						</font><br><br>
+					</td>
+				</tr>
 				<tr <? $cssSw->switchClass() ?>>
 					<td  <?=$cssSw->getFullClass()?> colspan=2 align="middle">
-						<font size=-1><input type="IMAGE" <?=makeButton("uebernehmen", "src") ?> border=0 value="<?_("&Auml;nderungen &uuml;bernehmen")?>"></font>&nbsp;	
+						<font size=-1><input type="IMAGE" <?=makeButton("uebernehmen", "src") ?> border=0 value="<?_("&Auml;nderungen &uuml;bernehmen")?>"></font>&nbsp;
 						<input type="HIDDEN" name="view" value="allgemein">
 					</td>
 				</tr>
-				</form>									
+				</form>
 			</table>
 			<br />
 			<br />
 			</td>
 		</tr>
-	</table> 
+	</table>
 <?
 }
 ?>

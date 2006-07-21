@@ -78,21 +78,21 @@ switch($referrer_page) {
 		$help_page = "ii_bestaetigungsmail.htm";
 		break;
 	
+	case "about.php" :
+		$help_page = "iii_homepage.htm";
+		break;
+
 	case "admin_evaluation.php" :
                 $help_page = "iii_homeeval.htm";
                 break;
 
-        case "eval_summary.php" :
+	case "eval_summary.php" :
                 $help_page = "iii_homeeval.htm";
                 break;
 
         case "eval_config.php" :
                 $help_page = "iii_homeeval.htm";
                 break;
-
-	case "about.php" :
-		$help_page = "iii_homepage.htm";
-		break;
 	
 	case "suchen.php":
 		$help_page = "auswahl_suche.html";
@@ -308,15 +308,7 @@ switch($referrer_page) {
 	case "lit_search.php": 
 		$help_page = "iii_homelit.htm";
 		break;
-
-	case "admin_lit_element.php": 
-		$help_page = "iii_homelit.htm";
-		break;
-		
-	case "lit_search.php": 
-		$help_page = "iii_homelit.htm";
-		break;
-
+	
 	case "adminvote.php": 
 		$help_page = "iii_homevote.htm";
 		break;

@@ -34,7 +34,7 @@ include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 if (($SessSemName[1]) && ($SessSemName["class"] == "inst")) {
 	include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
 }
-		
+
 	$sess->register ("show_bereich_data");
 	$db=new DB_Seminar;
 
@@ -42,7 +42,7 @@ if (($SessSemName[1]) && ($SessSemName["class"] == "inst")) {
 		$show_bereich_data["id"]=$id;
 		$show_bereich_data['level'] = $level;
 	}
-	
+
 	if (!$_REQUEST['group_by']){
 		$_REQUEST['group_by'] = 0;
 	}
@@ -56,7 +56,7 @@ if (($SessSemName[1]) && ($SessSemName["class"] == "inst")) {
 	$sem_browse_obj->target_id="sem_id"; 		//teilt der nachfolgenden Include mit, wie die id die &uuml;bergeben wird, bezeichnet werden soll
 	$sem_browse_obj->sem_browse_data['level'] = $show_bereich_data['level'];
 	switch ($show_bereich_data['level']) {
-		case "sbb": 
+		case "sbb":
 			$the_tree =& TreeAbstract::GetInstance("StudipSemTree", array('visible_only' => !$GLOBALS['perm']->have_perm('root')));
 			$bereich_typ = _("Studienbereich");
 			$head_text = "&nbsp; " . _("&Uuml;bersicht aller Veranstaltungen eines Studienbereichs");
@@ -78,8 +78,8 @@ if (($SessSemName[1]) && ($SessSemName["class"] == "inst")) {
 			$db->next_record();
 			$head_text = "&nbsp;" . _("&Uuml;bersicht aller Veranstaltungen einer Einrichtung");
 			$intro_text = sprintf(_("Alle Veranstaltungen der Einrichtung <b>%s</b>"),$db->f("Name"));
-			$db->query("SELECT seminar_inst.seminar_id FROM seminar_inst 
-			LEFT JOIN seminare ON (seminar_inst.seminar_id=seminare.Seminar_id) 
+			$db->query("SELECT seminar_inst.seminar_id FROM seminar_inst
+			LEFT JOIN seminare ON (seminar_inst.seminar_id=seminare.Seminar_id)
 			WHERE seminar_inst.Institut_id='".$show_bereich_data["id"]."'" . (!$GLOBALS['perm']->have_perm('root') ? " AND seminare.visible='1'" : ""));
 
 			$sem_browse_obj->sem_browse_data['search_result'] = array();
@@ -106,9 +106,9 @@ $sem_browse_obj->print_result();
 $goup_by_links = "";
 for ($i = 0; $i < count($sem_browse_obj->group_by_fields); ++$i){
 	if($sem_browse_data['group_by'] != $i){
-		$group_by_links .= "<a href=\"$PHP_SELF?group_by=$i\"><img src=\"pictures/blank.gif\" width=\"10\" height=\"20\" border=\"0\">";
+		$group_by_links .= "<a href=\"$PHP_SELF?group_by=$i\"><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" width=\"10\" height=\"20\" border=\"0\">";
 	} else {
-		$group_by_links .= "<img src=\"pictures/forumrot.gif\" border=\"0\" align=\"bottom\">";
+		$group_by_links .= "<img src=\"".$GLOBALS['ASSETS_URL']."images/forumrot.gif\" border=\"0\" align=\"bottom\">";
 	}
 	$group_by_links .= "&nbsp;" . $sem_browse_obj->group_by_fields[$i]['name'];
 	if($sem_browse_data['group_by'] != $i){
@@ -117,18 +117,18 @@ for ($i = 0; $i < count($sem_browse_obj->group_by_fields); ++$i){
 	$group_by_links .= "<br>";
 }
 $infobox[] = 	array(	"kategorie" => _("Anzeige gruppieren:"),
-						"eintrag" => array(array(	"icon" => "pictures/blank.gif",
+						"eintrag" => array(array(	"icon" => "blank.gif",
 													"text" => $group_by_links))
 				);
 if (($EXPORT_ENABLE) AND ($show_bereich_data['level'] == "s") AND ($perm->have_perm("tutor")))
 {
 	include_once($ABSOLUTE_PATH_STUDIP . $PATH_EXPORT . "/export_linking_func.inc.php");
 	$infobox[] = 	array(	"kategorie" => _("Daten ausgeben:"),
-							"eintrag" => array(array(	"icon" => "pictures/blank.gif",
+							"eintrag" => array(array(	"icon" => "blank.gif",
 														"text" => export_link($SessSemName[1], "veranstaltung", $SessSemName[0])))
 					);
 }
-print_infobox ($infobox,"pictures/browse.jpg");
+print_infobox ($infobox,"browse.jpg");
 ?>
 </tr>
 <tr>

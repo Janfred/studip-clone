@@ -3,7 +3,7 @@
 // This file is part of Stud.IP
 // elearning_interface.php
 //
-// Copyright (c) 2005 Arne Schroeder <schroeder@data-quest.de> 
+// Copyright (c) 2005 Arne Schroeder <schroeder@data-quest.de>
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -27,6 +27,8 @@ include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Sessio
 
 require_once ($ABSOLUTE_PATH_STUDIP."/config.inc.php");
 require_once ($ABSOLUTE_PATH_STUDIP."/visual.inc.php");
+
+$HELP_KEYWORD="Basis.Ilias";
 
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
@@ -55,7 +57,7 @@ if ($ELEARNING_INTERFACE_ENABLE AND (($view == "edit") OR ($view == "show")))
 //	echo "wp: " . $write_permission . "<br>";
 	$seminar_id = $SessSemName[1];
 	if ($seminar_id != $elearning_open_close["id"])
-	{	
+	{
 		$sess->unregister("cache_data");
 		unset($cache_data);
 		$sess->unregister("elearning_open_close");
@@ -84,14 +86,14 @@ if ($ELEARNING_INTERFACE_ENABLE AND (($view == "edit") OR ($view == "show")))
 	if (($view=="show") AND (isset($new_account_cms)))
 	{
 		$page_content = ELearningUtils::getNewAccountForm($new_account_cms);
-		
+
 		//Dummy-Instanz der Zuordnungs-Klasse ohne Verbindung zur Veranstaltung
 		$object_connections = new ObjectConnections();
 	}
 	if ($new_account_cms == "")
 	{
-	
-		if ($view == "edit") 
+
+		if ($view == "edit")
 		{
 
 			if ($module_system_type != "")
@@ -100,7 +102,7 @@ if ($ELEARNING_INTERFACE_ENABLE AND (($view == "edit") OR ($view == "show")))
 				ELearningUtils::loadClass($module_system_type);
 			}
 			if (isset($remove) AND $rechte AND ($user_crs_role != "admin"))
-			{	
+			{
 				$connected_cms[$module_system_type]->newContentModule($module_id, $module_type, true);
 				if ($connected_cms[$module_system_type]->content_module[$module_id]->unsetConnection($seminar_id, $module_id, $module_type, $module_system_type))
 					$messages["info"] .= _("Die Zuordnung wurde entfernt.");
@@ -133,35 +135,35 @@ if ($ELEARNING_INTERFACE_ENABLE AND (($view == "edit") OR ($view == "show")))
 
 	?><table cellspacing="0" cellpadding="0" border="0" width="100%">
 	<tr>
-		<td class="topic" colspan="3">&nbsp;<img src="./pictures/icon-lern.gif" align="texttop">&nbsp;
+		<td class="topic" colspan="3">&nbsp;<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/icon-lern.gif" align="texttop">&nbsp;
 		<b>
-		<?   if ($view=="edit") 
-			{	
-				if ($SessSemName["class"]=="inst") 
-					echo _("Verbindung von Einrichtungen und Lernmodulen"); 
-				else	
-					echo _("Verbindung von Veranstaltungen und Lernmodulen"); 
+		<?   if ($view=="edit")
+			{
+				if ($SessSemName["class"]=="inst")
+					echo _("Verbindung von Einrichtungen und Lernmodulen");
+				else
+					echo _("Verbindung von Veranstaltungen und Lernmodulen");
 			}
 			else
 			{
-				if ($SessSemName["class"]=="inst") 
-					echo sprintf(_("Lernmodule der Einrichtung \"%s\""), $SessSemName[0]); 
-				else	
-					echo sprintf(_("Lernmodule der Veranstaltung \"%s\""), $SessSemName[0]); 
+				if ($SessSemName["class"]=="inst")
+					echo sprintf(_("Lernmodule der Einrichtung \"%s\""), $SessSemName[0]);
+				else
+					echo sprintf(_("Lernmodule der Veranstaltung \"%s\""), $SessSemName[0]);
 			}
 		?></b>
 		</td>
 	</tr>
 	<tr>
-		<td class="blank" colspan="3">&nbsp; 
+		<td class="blank" colspan="3">&nbsp;
 		</td>
 	</tr>
 	<tr valign="top">
                 <td width="1%" class="blank">
-                	&nbsp; 
+                	&nbsp;
                 </td>
 		<td width="90%" class="blank">
-	<?     				
+	<?
 	if ($messages["info"] != "")
 	{
 		echo "<table>";
@@ -225,7 +227,7 @@ if ($ELEARNING_INTERFACE_ENABLE AND (($view == "edit") OR ($view == "show")))
 	
 	if (($module_count == 0) AND ($new_account_cms == ""))
 	{
-		if ($SessSemName["class"]=="inst") 
+		if ($SessSemName["class"]=="inst")
 			echo "<b>" . _("Momentan sind dieser Einrichtung keine Lernmodule zugeordnet.") . "</b><br>\n<br>\n<br>\n";
 		else
 			echo "<b>" . _("Momentan sind dieser Veranstaltung keine Lernmodule zugeordnet.") . "</b><br>\n<br>\n<br>\n";
@@ -234,13 +236,13 @@ if ($ELEARNING_INTERFACE_ENABLE AND (($view == "edit") OR ($view == "show")))
 	$caching_active = false;
 	if ($view == "edit")
 	{
-	
+
 //		echo "<br>\n";
 
 		if (isset($ELEARNING_INTERFACE_MODULES[$cms_select]["name"]))
 		{
 			ELearningUtils::loadClass($cms_select);
-			
+
 			$user_content_modules = $connected_cms[$cms_select]->getUserContentModules();
 			echo ELearningUtils::getCMSHeader($connected_cms[$cms_select]->getName());
 			echo "<br>\n";
@@ -297,14 +299,14 @@ if ($ELEARNING_INTERFACE_ENABLE AND (($view == "edit") OR ($view == "show")))
 			echo ELearningUtils::getCMSSelectbox(_("Um Lernmodule hinzuzuf&uuml;gen, w&auml;hlen Sie ein angebundenes System aus:"));
 		ELearningUtils::bench("search");
 	}
-	 
+
 
 // Cachen der SOAP-Daten
 	if (is_array($connected_cms))
 		foreach($connected_cms as $system)
-			$system->terminate();		
+			$system->terminate();
 
-/**/	
+/**/
 	if ($debug != "")
 	{
 		ELearningUtils::showbench();
@@ -323,24 +325,24 @@ if ($ELEARNING_INTERFACE_ENABLE AND (($view == "edit") OR ($view == "show")))
 		}
 /**/
 	}
-	// Anzeige, wenn noch keine Account-Zuordnung besteht	
+	// Anzeige, wenn noch keine Account-Zuordnung besteht
 	if ($view=="edit")
 	{
-		$infobox = array	(			
+		$infobox = array	(
 		array ("kategorie"  => _("Information:"),
-			"eintrag" => array	(	
-							array (	"icon" => "pictures/ausruf_small.gif",
+			"eintrag" => array	(
+							array (	"icon" => "ausruf_small.gif",
 									"text"  => _("Hier k&ouml;nnen Sie Lernmodule f&uuml;r die Veranstaltung einh&auml;ngen und aush&auml;ngen. Das Laden dieser Seite kann etwas l&auml;nger dauern, da Daten zwischen Stud.IP und den angebundenen Systemen ausgetauscht werden.")
 								 )
 							)
 			)
 		);
 		$infobox[1]["kategorie"] = _("Aktionen:");
-			$infobox[1]["eintrag"][] = array (	"icon" => "pictures/forumgrau.gif" ,
+			$infobox[1]["eintrag"][] = array (	"icon" => "forumgrau.gif" ,
 										"text"  => _("W&auml;hlen Sie das System, aus dem Sie ein Modul einh&auml;ngen wollen. Anschlie&szlig;end k&ouml;nnen Sie nach Modulen suchen. Gefundene Module k&ouml;nnen Sie mit dem Button \"hinzuf&uuml;gen\" der Veranstaltung zuordnen.")
 									);
 
-			$infobox[1]["eintrag"][] = array (	"icon" => "pictures/icon-lern.gif" ,
+			$infobox[1]["eintrag"][] = array (	"icon" => "icon-lern.gif" ,
 										"text"  => sprintf(_("Um neue Lernmodule zu erstellen, wechseln Sie auf die Seite %s, auf der sie Ihre Lernmodule und externen Nutzer-Accounts verwalten k&ouml;nnen."), "<a href=\"my_elearning.php\">\"" . _("Meine Lernmodule") . "\"</a>")
 									);
 
@@ -348,45 +350,45 @@ if ($ELEARNING_INTERFACE_ENABLE AND (($view == "edit") OR ($view == "show")))
 	}
 	else
 	{
-		$infobox = array	(			
+		$infobox = array	(
 		array ("kategorie"  => _("Information:"),
-			"eintrag" => array	(	
-							array (	"icon" => "pictures/ausruf_small.gif",
+			"eintrag" => array	(
+							array (	"icon" => "ausruf_small.gif",
 									"text"  => _("Hier sehen sie die Lernmodule, die an diese Veranstaltung angeh&auml;ngt wurden.")
 								 )
 							)
 			)
 		);
 		$infobox[1]["kategorie"] = _("Aktionen:");
-			$infobox[1]["eintrag"][] = array (	"icon" => "pictures/forumgrau.gif" ,
+			$infobox[1]["eintrag"][] = array (	"icon" => "forumgrau.gif" ,
 										"text"  => _("Wenn Sie in einem Lernmodul auf 'Starten' klicken, &ouml;ffnet sich ein neues Fenster mit dem Lernmodul.")
 									);
 
-			$infobox[1]["eintrag"][] = array (	"icon" => "pictures/icon-lern.gif" ,
+			$infobox[1]["eintrag"][] = array (	"icon" => "icon-lern.gif" ,
 										"text"  => sprintf(_("Um neue Lernmodule zu erstellen, wechseln Sie auf die Seite %s, auf der sie Ihre Lernmodule und externen Nutzer-Accounts verwalten k&ouml;nnen."), "<a href=\"my_elearning.php\">\"" . _("Meine Lernmodule") . "\"</a>")
 									);
 
 		$cssSw = new cssClassSwitcher;									// Klasse für Zebra-Design
 	}
 
-	
+
 		?>
 		<br>
 		</td>
 		<td width="270" NOWRAP class="blank" align="center" valign="top">
-		<? 
-			print_infobox ($infobox,"pictures/lernmodule.jpg");
-		?>		
-		</td>		
+		<?
+			print_infobox ($infobox,"lernmodule.jpg");
+		?>
+		</td>
 	</tr>
 	<tr>
-		<td class="blank" colspan="3">&nbsp; 
+		<td class="blank" colspan="3">&nbsp;
 		</td>
 	</tr>
 	</table>
 	<?
 }
-else 
+else
 {
 	// Start of Output
 	parse_window ("error§" . _("Die Schnittstelle für die Integration von Lernmodulen ist nicht aktiviert. Damit Lernmodule verwendet werden können, muss die Verbindung zu einem LCM-System in der Konfigurationsdatei von Stud.IP hergestellt werden. Wenden Sie sich bitte an den/die AdministratorIn."), "§",

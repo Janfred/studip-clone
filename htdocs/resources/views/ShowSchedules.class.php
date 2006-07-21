@@ -1,9 +1,9 @@
 <?php
 /**
 * ShowSchedules.class.php
-* 
+*
 * view schedule/assigns for a ressource-object
-* 
+*
 *
 * @author		Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
 * @version		$Id$
@@ -53,8 +53,8 @@ class ShowSchedules {
 	var $length_unit;		//the used length unit for calculations, only used for viewing
 	var $week_offset;		//offset for the week view
 	var $used_view;			//the used view, submitted to the sub classes
-	
-		
+
+
 	//Konstruktor
 	function ShowSchedules ($resource_id='', $user_id='', $range_id='') {
 		$this->db=new DB_Seminar;
@@ -63,44 +63,44 @@ class ShowSchedules {
 		$this->user_id=$user_id;
 		$this->range_id=$range_id;
 	}
-	
+
 	function setLengthFactor ($value) {
 		$this->length_factor = $value;
-	}	
-	
+	}
+
 	function setLengthUnit ($value) {
 		$this->length_unit = $value;
 	}
-	
+
 	function setStartTime ($value) {
 		$this->start_time = $value;
 	}
-	
+
 	function setEndTime ($value) {
 		$this->end_time = $value;
 	}
-	
+
 	function setWeekOffset ($value) {
 		$this->week_offset = $value;
 	}
-	
+
 	function setUsedView($value) {
 		$this->used_view = $value;
 	}
-	
+
 	function navigator () {
 		global $cssSw, $view_mode, $PHP_SELF;
-		
+
 	 	//match start_time & end_time for a whole week
 	 	$dow = date ("w", $this->start_time);
 	 	if (date ("w", $this->start_time) >1)
 	 		$offset = 1 - date ("w", $this->start_time);
 	 	if (date ("w", $this->start_time) <1)
 		 	$offset = -6;
-	 
+
  		$start_time = mktime (0, 0, 0, date("n",$this->start_time), date("j", $this->start_time)+$offset+($this->week_offset*7), date("Y", $this->start_time));
  		$end_time = mktime (23, 59, 0, date("n",$start_time), date("j", $start_time)+6, date("Y", $start_time));
-	
+
 		?>
 		<table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
 		<form method="POST" action="<?echo $PHP_SELF ?>?navigate=TRUE&quick_view=view_schedule&quick_view_mode=<?=$view_mode?>">
@@ -114,10 +114,10 @@ class ShowSchedules {
 				<td class="<? echo $cssSw->getClass() ?>" width="4%" rowspan="2">&nbsp;
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="30%" rowspan="2" valign="top"><font size=-1>
-					<font size=-1>Beginn:&nbsp; 
+					<font size=-1>Beginn:&nbsp;
 					<input type="text" name="schedule_begin_day" size=2 maxlength=2 value="<? if (!$start_time) echo date("d",time()); else echo date("d",$start_time); ?>">.
 					<input type="text" name="schedule_begin_month" size=2 maxlength=2 value="<? if (!$start_time) echo date("m",time()); else echo date("m",$start_time); ?>">.
-					<input type="text" name="schedule_begin_year" size=4 maxlength=4 value="<? if (!$start_time) echo date("Y",time()); else echo date("Y",$start_time); ?>"><br /> 
+					<input type="text" name="schedule_begin_year" size=4 maxlength=4 value="<? if (!$start_time) echo date("Y",time()); else echo date("Y",$start_time); ?>"><br />
 					&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; <input type="IMAGE" name="jump" border="0"<? echo makeButton("auswaehlen", "src") ?> /><br />
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="66%" valign="top"><font size=-1>
@@ -135,7 +135,7 @@ class ShowSchedules {
 			<tr>
 					<td class="<? echo $cssSw->getClass() ?>" width="66%" valign="top"><font size=-1>
 					<?=_("<i>oder</i> eine Woche grafisch ausgeben")?>
-					&nbsp; <input type="IMAGE" name="start_graphical" <?=makeButton("ausgeben", "src") ?> border=0 vallue="<?=_("ausgeben")?>" /><br />&nbsp; 
+					&nbsp; <input type="IMAGE" name="start_graphical" <?=makeButton("ausgeben", "src") ?> border=0 vallue="<?=_("ausgeben")?>" /><br />&nbsp;
 				</td>
 			</tr>
 		</table>
@@ -157,8 +157,8 @@ class ShowSchedules {
 				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp;
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="96%" align="center">
-				<b>	
-				<? 
+				<b>
+				<?
 				if ($print_view){
 					$room =& ResourceObject::Factory($this->resource_id);
 					echo htmlReady($room->getName().' - ' .$this->semester['name']);
@@ -178,7 +178,7 @@ class ShowSchedules {
 				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp;
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="96%">
-					<?				
+					<?
 					$assign_events=new AssignEventList ($this->start_time, $this->end_time, $this->resource_id, '', '', TRUE);
 					echo "<br /><font size=-1>"._("Anzahl der Belegungen in diesem Zeitraum:")." ", $assign_events->numberOfEvents()."</font>";
 					echo "<br /><br />";
@@ -217,20 +217,20 @@ class ShowSchedules {
 		<br /><br />
 	<?
 	}
-	
+
 	function showScheduleGraphical() {
 		global $RELATIVE_PATH_RESOURCES, $PHP_SELF, $cssSw, $view_mode, $resources_data, $ActualObjectPerms;
-	 	
+
 	 	$categories["na"] = 4;
 	 	$categories["sd"] = 4;
 	 	$categories["y"] = 0;
 	 	$categories["m"] = 0;
 	 	$categories["w"] = 0;
 	 	$categories["d"] = 0;
-	 	
+
 	 	//an assign for a date corresponding to a (seminar-)metadate
 	 	$categories["meta"] = 1;
-	 	
+
 	 	//match start_time & end_time for a whole week
 	 	$dow = date ("w", $this->start_time);
 	 	if (date ("w", $this->start_time) >1)
@@ -243,10 +243,10 @@ class ShowSchedules {
 		 	$view = "openobject_assign";
 		 else
 			$view = "edit_object_assign";
-		 
+
  		$start_time = mktime (0, 0, 0, date("n",$this->start_time), date("j", $this->start_time)+$offset+($this->week_offset*7), date("Y", $this->start_time));
  		$end_time = mktime (23, 59, 59, date("n",$start_time), date("j", $start_time)+6, date("Y", $start_time));
- 		
+
  		if ($resources_data["schedule_time_range"] == -1) {
  			$start_hour = 0;
  			$end_hour = 12;
@@ -262,7 +262,7 @@ class ShowSchedules {
 
 	 	if ($ActualObjectPerms->havePerm("autor"))
 		 	$schedule->add_link = "resources.php?cancel_edit_assign=1&quick_view=$view&quick_view_mode=".$view_mode."&add_ts=";
-	 	
+
 		//fill the schedule
 		$assign_events=new AssignEventList ($start_time, $end_time, $this->resource_id, '', '', TRUE, $resources_data["show_repeat_mode"]);
 		while ($event=$assign_events->nextEvent()) {
@@ -281,35 +281,35 @@ class ShowSchedules {
 				}
 				$add_info = '(' . join(', ' , $sem_doz_names) . ')';
 			}
-			$schedule->addEvent($event->getName(get_config('RESOURCES_SCHEDULE_EXPLAIN_USER_NAME')), $event->getBegin(), $event->getEnd(), 
+			$schedule->addEvent($event->getName(get_config('RESOURCES_SCHEDULE_EXPLAIN_USER_NAME')), $event->getBegin(), $event->getEnd(),
 						"$PHP_SELF?cancel_edit_assign=1&quick_view=$view&quick_view_mode=".$view_mode."&edit_assign_object=".$event->getAssignId(), $add_info, $categories[$repeat_mode]);
 		}
 		?>
 		<table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
 			<tr>
 				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">
-					<img src="pictures/blank.gif" height="35" border="0"/>					
+					<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" height="35" border="0"/>
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>"  width="10%" align="left">&nbsp;
-					<a href="<? echo $PHP_SELF ?>?quick_view=<?=$this->used_view?>&quick_view_mode=<?=$view_mode?>&previous_week=TRUE"><img src="pictures/calendar_previous.gif" <? echo tooltip (_("Vorherige Woche anzeigen")) ?>border="0" /></a>
+					<a href="<? echo $PHP_SELF ?>?quick_view=<?=$this->used_view?>&quick_view_mode=<?=$view_mode?>&previous_week=TRUE"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/calendar_previous.gif" <? echo tooltip (_("Vorherige Woche anzeigen")) ?>border="0" /></a>
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="76%" align="center">
 					<? echo "<b>Anzeige der Woche vom ", date ("d.m.Y", $start_time), " bis ", date ("d.m.Y", $end_time)."</b> (".strftime("%V", $start_time).". "._("Woche").")";?>
 					<br />
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="10%" align="center">&nbsp;
-					<a href="<? echo $PHP_SELF ?>?quick_view=<?=$this->used_view?>&quick_view_mode=<?=$view_mode?>&next_week=TRUE"><img  valign="middle"  src="pictures/calendar_next.gif" <? echo tooltip (_("Nächste Woche anzeigen")) ?>border="0" /></a>
+					<a href="<? echo $PHP_SELF ?>?quick_view=<?=$this->used_view?>&quick_view_mode=<?=$view_mode?>&next_week=TRUE"><img  valign="middle"  src="<?= $GLOBALS['ASSETS_URL'] ?>images/calendar_next.gif" <? echo tooltip (_("Nächste Woche anzeigen")) ?>border="0" /></a>
 				</td>
 			</tr>
 			<tr>
 				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%" align="center" valign="bottom">&nbsp;
 					<?
 					if ((!$resources_data["schedule_time_range"]) || ($resources_data["schedule_time_range"] == 1))
-						printf ("<a href=\"%s?quick_view=%s&quick_view_mode=%s&time_range=%s\"><img src=\"pictures/calendar_up.gif\" %sborder=\"0\" /></a>", $PHP_SELF, $this->used_view, $view_mode, ($resources_data["schedule_time_range"]) ? "FALSE" : -1, tooltip (_("Frühere Belegungen anzeigen")));
+						printf ("<a href=\"%s?quick_view=%s&quick_view_mode=%s&time_range=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/calendar_up.gif\" %sborder=\"0\" /></a>", $PHP_SELF, $this->used_view, $view_mode, ($resources_data["schedule_time_range"]) ? "FALSE" : -1, tooltip (_("Frühere Belegungen anzeigen")));
 					?>
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="76%" colspan="2">
-					<?						
+					<?
 					echo "&nbsp;<font size=-1>"._("Anzahl der Belegungen in diesem Zeitraum:")." ", $assign_events->numberOfEvents()."</font><br />&nbsp;";
 					?>
 				</td>
@@ -320,7 +320,7 @@ class ShowSchedules {
 					printf ("<option %s style=\"font-size:10px;\" value=\"single\">"._("nur Einzeltermine")."</option>", ($resources_data["show_repeat_mode"] == "single") ? "selected" : "");
 					printf ("<option %s style=\"font-size:10px;\" value=\"repeated\">"._("nur Wiederholungstermine")."</option>", ($resources_data["show_repeat_mode"] == "repeated") ? "selected" : "");
 					print "</select>";
-					print "&nbsp;<input type=\"IMAGE\" name=\"send_schedule_repeat_mode\" src=\"pictures/haken_transparent.gif\" border=\"0\" ".tooltip(_("Ansicht umschalten"))." />";
+					print "&nbsp;<input type=\"IMAGE\" name=\"send_schedule_repeat_mode\" src=\"".$GLOBALS['ASSETS_URL']."images/haken_transparent.gif\" border=\"0\" ".tooltip(_("Ansicht umschalten"))." />";
 					?>
 				</td>
 			</tr>
@@ -328,7 +328,7 @@ class ShowSchedules {
 				<td class="<? echo $cssSw->getClass() ?>" width="4%">&nbsp;
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="96%" colspan="3">
-					<?					
+					<?
 					$schedule->showSchedule("html", $print_view);
 					?>
 				</td>
@@ -337,14 +337,14 @@ class ShowSchedules {
 				<td class="<? echo $cssSw->getClass() ?>" width="4%" align="center" valign="bottom">&nbsp;
 					<?
 					if ((!$resources_data["schedule_time_range"]) || ($resources_data["schedule_time_range"] == -1))
-						printf ("<a href=\"%s?quick_view=%s&quick_view_mode=%s&time_range=%s\"><img src=\"pictures/calendar_down.gif\" %sborder=\"0\" /></a>", $PHP_SELF, $this->used_view, $view_mode, ($resources_data["schedule_time_range"]) ? "FALSE" : 1, tooltip (_("Spätere Belegungen anzeigen")));
+						printf ("<a href=\"%s?quick_view=%s&quick_view_mode=%s&time_range=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/calendar_down.gif\" %sborder=\"0\" /></a>", $PHP_SELF, $this->used_view, $view_mode, ($resources_data["schedule_time_range"]) ? "FALSE" : 1, tooltip (_("Spätere Belegungen anzeigen")));
 					?>
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="20%" nowrap colspan="3">
 				&nbsp;
 				</td>
 			</tr>
-			
+
 		</table>
 		</form>
 	<?

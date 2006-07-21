@@ -1,4 +1,4 @@
-<?php 
+<?php
 /*
 register1.php - Benutzerregistrierung in Stud.IP, Part I
 Copyright (C) 2000 Stefan Suchi <suchi@gmx.de>, Oliver Brakel <obrakel@gwdg.de>
@@ -24,6 +24,8 @@ include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Sessio
 
 // -- here you have to put initialisations for the current page
 
+$HELP_KEYWORD="Basis.AnmeldungRegistrierung";
+
 // Start of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
@@ -32,21 +34,21 @@ require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
 
 if (!$GLOBALS['ENABLE_SELF_REGISTRATION']){
 	parse_window ("error§" . _("In dieser Installation ist die M&ouml;glichkeit zur Registrierung ausgeschaltet."), "§",
-				_("Registrierung ausgeschaltet"), 
+				_("Registrierung ausgeschaltet"),
 				"<a href=\"index.php\"><b>&nbsp;" . sprintf(_("Hier%s geht es zur Startseite."), "</b></a>") . "<br />&nbsp;");
 page_close();
 die;
 }
 if ($auth->is_authenticated() && $user->id != "nobody") {
 	parse_window ("error§" . _("Sie sind schon als BenutzerIn am System angemeldet!"), "§",
-				_("Bereits angemeldet"), 
+				_("Bereits angemeldet"),
 				"<a href=\"index.php\"><b>&nbsp;" . sprintf(_("Hier%s geht es zur Startseite."), "</b></a>") . "<br />&nbsp;");
-} else { 
+} else {
 	$auth->logout();
 ?>
 
 <table width="80%" align="center" border=0 cellpadding=0 cellspacing=0>
-<tr><td class="topic"><img src="pictures/login.gif" border="0"><b>&nbsp;<?=_("Nutzungsbedingungen")?></b></td></tr>
+<tr><td class="topic"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/login.gif" border="0"><b>&nbsp;<?=_("Nutzungsbedingungen")?></b></td></tr>
 <tr><td class="blank">
 <blockquote><br><br>
 <?=_("Stud.IP ist ein Open Source Projekt und steht unter der Gnu General Public License (GPL). Das System befindet sich in der st&auml;ndigen Weiterentwicklung.")?>

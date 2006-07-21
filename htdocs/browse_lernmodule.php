@@ -1,9 +1,9 @@
 <?
 /**
 * Browse learning-modules in the connected ILIAS-Installation.
-* 
+*
 * This file allows to search for ILIAS-learning modules. The search-results are shown in a result-table.
-* 
+*
 * @author		Arne Schroeder <schroeder@data.quest.de>
 * @version		$Id$
 * @access		public
@@ -15,7 +15,7 @@
 // This file is part of Stud.IP
 // browse_lernmodule.php
 //
-// Copyright (c) 2002 Arne Schroeder <schroeder@data-quest.de> 
+// Copyright (c) 2002 Arne Schroeder <schroeder@data-quest.de>
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -37,7 +37,7 @@ $perm->check("user");
 
 
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
-	
+
 require_once ($ABSOLUTE_PATH_STUDIP."/config.inc.php");
 include_once ($ABSOLUTE_PATH_STUDIP."/visual.inc.php");
 include_once ($ABSOLUTE_PATH_STUDIP."/functions.php");
@@ -63,27 +63,27 @@ if ($ILIAS_CONNECT_ENABLE)
 	checkObjectModule("ilias_connect");
 
 	$infobox = array	(array ("kategorie"  => _("Information:"),
-			"eintrag" => array	(array (	"icon" => "pictures/ausruf_small.gif",
+			"eintrag" => array	(array (	"icon" => "ausruf_small.gif",
 									"text"  => sprintf(_("Auf dieser Seite k&ouml;nnen Sie nach Lernmodulen im angebundenen ILIAS-System suchen.")) ) ) ) );
-	
+
 	$infobox[1]["kategorie"] = _("Aktionen:");
-	$infobox[1]["eintrag"][] = array (	"icon" => "pictures/icon-lern.gif" ,
+	$infobox[1]["eintrag"][] = array (	"icon" => "icon-lern.gif" ,
 									"text"  => sprintf(_("Geben Sie einen Suchbegriff ein und klicken Sie auf 'Suche starten'. Die Suche bezieht sich auf den ausgew&auml;hlten Suchbereich.")));
-//	$infobox[1]["eintrag"][] = array (	"icon" => "pictures/forumgrau.gif" ,
+//	$infobox[1]["eintrag"][] = array (	"icon" => "forumgrau.gif" ,
 //									"text"  => sprintf(_("Gefundene Lernmodule k&ouml;nnen von hier aus gestartet werden. ")));
 
 ?>
 	<table cellspacing="0" cellpadding="0" border="0" width="100%">
 		<tr>
-			<td class="topic" colspan="3">&nbsp;<img src="./pictures/suchen.gif" border="0" align="texttop">&nbsp;<b><? echo _("Suche nach Lernmodulen");?></b></td>
+			<td class="topic" colspan="3">&nbsp;<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/suchen.gif" border="0" align="texttop">&nbsp;<b><? echo _("Suche nach Lernmodulen");?></b></td>
 		</tr>
 		<tr>
-			<td class="blank" colspan="3">&nbsp; 
+			<td class="blank" colspan="3">&nbsp;
 			</td>
 		</tr>
 		<tr valign="top">
                 <td width="1%" class="blank">
-                &nbsp; 
+                &nbsp;
                 </td>
      			<td width="90%" class="blank">
 	<form method="POST" action="<? echo $PHP_SELF; ?>">
@@ -121,21 +121,21 @@ if ($ILIAS_CONNECT_ENABLE)
 	}
 	?>
 	</td></tr></table>
-	
+
 	</form>
 		</td>
 		<td width="270" NOWRAP class="blank" align="center" valign="top">
-		<? print_infobox ($infobox,"pictures/lernmodule.jpg");?>
-		</td>		
+		<? print_infobox ($infobox,"lernmodule.jpg");?>
+		</td>
 	</tr>
        <tr>
-                <td class="blank" colspan="3">&nbsp; 
+                <td class="blank" colspan="3">&nbsp;
                 </td>
         </tr>
 	</table>
 <?
 }
-else 
+else
 {
 	// Start of Output
 	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head

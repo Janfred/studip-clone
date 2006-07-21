@@ -1,9 +1,9 @@
 <?
 /**
 * admin_config.php
-* 
+*
 * backend for administration of new db-based config values for studip
-* 
+*
 *
 * @author		Cornelis Kater <info@ckater.de>
 * @version		$Id$
@@ -92,7 +92,7 @@ if ($_REQUEST["change_config"]) {
 		<td class="topic" colspan=2>&nbsp; <b>
 		<?=_("Zugriff auf Konfigurationsvariablen");
 		?>
-		</td>		
+		</td>
 	</tr>
  	<tr>
 		<td class="blank" valign="top">
@@ -111,25 +111,25 @@ if ($_REQUEST["change_config"]) {
 			<?=_("Beachten Sie: Bisher ist nur ein kleiner Teil der Werte hier verf&uuml;gbar. Zuk&uuml;nftige Stud.IP-Versionen werden einen umfangreichen Zugriff auf s&auml;mtliche Systemeinstellungen zulassen. ")?> <br /><br />
 			</blockqoute>
 		</td>
-		<td class="blank" align="right" valign="top"><img src="pictures/blank.gif" height="10" width="5" /><br />
-			<img src="pictures/modules.jpg" border="0"><img src="pictures/blank.gif" height="10" width="10" />
-		</td>		
+		<td class="blank" align="right" valign="top"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" height="10" width="5" /><br />
+			<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/modules.jpg" border="0"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" height="10" width="10" />
+		</td>
 	</tr>
 	<tr>
 		<td class="blank" colspan=2>
 			<?
 			$out[] = '<form action="'.$PHP_SELF.'">';
 			$out[] = '<table width="95%" border=0 cellpadding=0 cellspacing=0 align="center">';
-			$out[] = '<tr><td width="50%"style="border: dotted 1px black; background: url(\'./pictures/steel1.jpg\')" valign="top">';
+			$out[] = '<tr><td width="50%"style="border: dotted 1px black; background: url(\''.$GLOBALS['ASSETS_URL'].'images/steel1.jpg\')" valign="top">';
 			$out[] = '<font size="-1">&nbsp;'._("Gew&auml;hlter Konfigurations-Bereich:").'&nbsp;<br>';
 			if (!$admin_config_data["range_id"]) {
 				$out[] = '&nbsp;<b>'._("Systemkonfiguration und -defaults").'</b>';
 			} else {
 				$out[] = '&nbsp;<b>'.htmlReady(get_fullname($admin_config_data["range_id"])).'</b>';
-				$out[] = '&nbsp;<a href="'.$PHP_SELF.'?reset_range=1"><img src="./pictures/rewind.gif" '.tooltip(_("Gew&auml;hlten Bereich l&ouml;schen und zur&uuml;ck zu Systemkonfiguration")).' border="0"></a>';
+				$out[] = '&nbsp;<a href="'.$PHP_SELF.'?reset_range=1"><img src="'.$GLOBALS['ASSETS_URL'].'images/rewind.gif" '.tooltip(_("Gew&auml;hlten Bereich l&ouml;schen und zur&uuml;ck zu Systemkonfiguration")).' border="0"></a>';
 			}
 			$out[] = '</font></td>';
-			$out[] = '<td width="50%"style="border: dotted 1px black; background: url(\'./pictures/steel1.jpg\')">';
+			$out[] = '<td width="50%"style="border: dotted 1px black; background: url(\''.$GLOBALS['ASSETS_URL'].'images/steel1.jpg\')">';
 			$out[] = '<font size="-1">&nbsp;'._("einen anderen Bereich (Nutzer) w&auml;hlen:").'&nbsp;';
 			if (($_REQUEST["search_exp"]) && ($search_user_x)) {
 				$db->query ("SELECT username, ". $_fullname_sql['full_rev'] ." AS fullname FROM auth_user_md5 LEFT JOIN user_info USING(user_id) WHERE (username LIKE '%".$_REQUEST["search_exp"]."%' OR Vorname LIKE '%".$_REQUEST["search_exp"]."%' OR Nachname LIKE '%".$_REQUEST["search_exp"]."%') ORDER BY Nachname");
@@ -141,22 +141,22 @@ if ($_REQUEST["change_config"]) {
 						$out[].= sprintf ('<option value="%s">%s </option>', $db->f("username"), htmlReady(my_substr($db->f("fullname").' ('.$db->f("username").')', 0, 30)));
 					}
 					$out[].= '</select></font>';
-					$out[] = '&nbsp;<input type="IMAGE" src="./pictures/haken_transparent.gif" '.tooltip(_("Den/die BenutzerIn hinzufügen")).' border="0" name="send_user_id" />';
-					$out[] = '&nbsp;<input type="IMAGE" src="./pictures/rewind.gif" '.tooltip(_("neue Suche starten")).' border="0" name="reset_search" />';
+					$out[] = '&nbsp;<input type="IMAGE" src="'.$GLOBALS['ASSETS_URL'].'images/haken_transparent.gif" '.tooltip(_("Den/die BenutzerIn hinzufügen")).' border="0" name="send_user_id" />';
+					$out[] = '&nbsp;<input type="IMAGE" src="'.$GLOBALS['ASSETS_URL'].'images/rewind.gif" '.tooltip(_("neue Suche starten")).' border="0" name="reset_search" />';
 				}
 			}
 			if ((!$_REQUEST["search_exp"]) || (($_REQUEST["search_exp"]) && (!$db->num_rows()))) {
 				$out[] = '<font size=-1>';
-				if (($_REQUEST["search_exp"]) && (!$db->num_rows())) 
+				if (($_REQUEST["search_exp"]) && (!$db->num_rows()))
 					$out[] = _("KeineN NutzerIn gefunden.").'<a name="a"></a>';
 				$out[] = '</font><br />';
 				$out[] = '&nbsp;<input type="TEXT" size="30" maxlength="255" name="search_exp" />&nbsp;';
-				$out[] = '<input type="IMAGE" src="./pictures/suchen.gif"'.tooltip(_("Suche starten")).' border="0" name="search_user" /><br />';
+				$out[] = '<input type="IMAGE" src="'.$GLOBALS['ASSETS_URL'].'images/suchen.gif"'.tooltip(_("Suche starten")).' border="0" name="search_user" /><br />';
 				$out[] = '&nbsp;<font size=-1>'._("Geben Sie zur Suche den Vor-, Nach- oder Usernamen ein.").'</font>';
 			}
 			$out[] = '</td></tr></table>';
 			$out[] = '</form>';
-			print implode("\n", $out); 
+			print implode("\n", $out);
 			$out ='';
 			?>
 		</td>
@@ -174,15 +174,15 @@ if ($_REQUEST["change_config"]) {
 				$out[] = '<form action="'.$PHP_SELF.'">';
 				foreach ($config_values as $key => $val) {
 					$out[] = '<tr><td width="5%">&nbsp;</td>';
-					$out[] = '<td width="95%" style="border: solid 1px black; background: url(\'./pictures/steel1.jpg\')" align="right">';
+					$out[] = '<td width="95%" style="border: solid 1px black; background: url(\''.$GLOBALS['ASSETS_URL'].'images/steel1.jpg\')" align="right">';
 					$out[] = '<table width="100%" border=0 cellpadding=0 cellspacing=0>';
 					$out[] = '<tr><td><b><font size="-1">&nbsp;'.$key.'</font></b></td>';
 					$out[] = '<td width="3%" class="steelgraulight" nowrap valign="top">';
 					if ($_REQUEST["edit_config"] == $key) {
-						$out[].= '<input type="IMAGE" src="./pictures/haken_transparent.gif" border=0>';
+						$out[].= '<input type="IMAGE" src="'.$GLOBALS['ASSETS_URL'].'images/haken_transparent.gif" border=0>';
 					} else {
 						$out[].= '<a href="'.$PHP_SELF.'?edit_config='.$key.'">';
-						$out[].= '&nbsp;<img src="./pictures/edit_transparent.gif" border=0>';
+						$out[].= '&nbsp;<img src="'.$GLOBALS['ASSETS_URL'].'images/edit_transparent.gif" border=0>';
 					}
 					$out[] = '<td width="20%" class="steelgraulight" align="center"><font size="-1">';
 					if ($_REQUEST["edit_config"] == $key) {
@@ -197,17 +197,17 @@ if ($_REQUEST["change_config"]) {
 							$out[].= '<textarea style="font-size: 8pt" cols=20 cols=4 name="change_config['.$key.']">'.$val["value"].'</textarea>';
 						}
 						$out[].= '<br><font size="-1">'. _("Kommentar:") .'</font><br>';
-						$out[].= '<textarea style="font-size: 8pt" cols=20 cols=4 name="change_comment['.$key.']">'.$val["comment"].'</textarea>';	
+						$out[].= '<textarea style="font-size: 8pt" cols=20 cols=4 name="change_comment['.$key.']">'.$val["comment"].'</textarea>';
 					} elseif ($val["type"] == "boolean") {
 						if ($val["value"]) {
-							$out[].= '<img src="./pictures/haken_transparent.gif">';
+							$out[].= '<img src="'.$GLOBALS['ASSETS_URL'].'images/haken_transparent.gif">';
 						} else {
-							$out[].= '<img src="./pictures/x_transparent.gif">';
+							$out[].= '<img src="'.$GLOBALS['ASSETS_URL'].'images/x_transparent.gif">';
 						}
 					} else {
 						$out[].= '<i>'.$val["value"].'</i>';
 					}
-					
+
 					$out[].= '</font></td>';
 					$out[] = '<td width="10%"><font size="-1">&nbsp;'.$val["type"].'</font></td>';
 					$out[] = '<td width="30%" class="steelgraulight"><font size="-1">&nbsp;'.($val["description"] ? $val["description"] : _("Keine Beschreibung vorhanden")).'</font></td>';
@@ -216,7 +216,7 @@ if ($_REQUEST["change_config"]) {
 				}
 				$out[] = '<input type="HIDDEN" name="range_id" value="'.$admin_config_data["range_id"].'">';
 				$out[] = '</form>';
-			print implode("\n", $out); 
+			print implode("\n", $out);
 			$out ='';
 			?>
 			</table>

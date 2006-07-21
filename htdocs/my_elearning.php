@@ -3,7 +3,7 @@
 // This file is part of Stud.IP
 // my_elearning.php
 //
-// Copyright (c) 2005 Arne Schroeder <schroeder@data-quest.de> 
+// Copyright (c) 2005 Arne Schroeder <schroeder@data-quest.de>
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -42,10 +42,10 @@ if ($ELEARNING_INTERFACE_ENABLE)
 	include ("$ABSOLUTE_PATH_STUDIP/links_about.inc.php");
 
 	if ($elearning_open_close["type"] != "user")
-	{	
+	{
 		$sess->unregister("elearning_open_close");
 		unset($elearning_open_close);
-	}
+	}/**/
 	$elearning_open_close["type"] = "user";
 	$elearning_open_close["id"] = $auth->auth["uid"];
 	if (isset($do_open))
@@ -57,23 +57,23 @@ if ($ELEARNING_INTERFACE_ENABLE)
 
 	?><table cellspacing="0" cellpadding="0" border="0" width="100%">
 	<tr>
-		<td class="topic" colspan="3">&nbsp;<img src="./pictures/icon-lern.gif" align="texttop">&nbsp;
+		<td class="topic" colspan="3">&nbsp;<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/icon-lern.gif" align="texttop">&nbsp;
 		<b>
 		<?
-			echo _("Meine Lernmodule und Benutzer-Accounts"); 
+			echo _("Meine Lernmodule und Benutzer-Accounts");
 		?></b>
 		</td>
 	</tr>
 	<tr>
-		<td class="blank" colspan="3">&nbsp; 
+		<td class="blank" colspan="3">&nbsp;
 		</td>
 	</tr>
 	<tr valign="top">
                 <td width="1%" class="blank">
-                	&nbsp; 
+                	&nbsp;
                 </td>
 		<td width="90%" class="blank">
-	<?     				
+	<?
 
 	if ($new_account_cms != "")
 		$new_account_form = ELearningUtils::getNewAccountForm($new_account_cms);
@@ -84,7 +84,7 @@ if ($ELEARNING_INTERFACE_ENABLE)
 			ELearningUtils::bench("load cms $cms");
 			$new_module_form[$cms] = ELearningUtils::getNewModuleForm($cms);
 		}
-		
+
 	if ($messages["info"] != "")
 	{
 		echo "<table>";
@@ -136,12 +136,12 @@ if ($ELEARNING_INTERFACE_ENABLE)
 
 					if ($connected_cms[$cms]->user->isConnected())
 					{
-						echo ELearningUtils::getHeader(sprintf(_("Meine Lernmodule")));	
-	
+						echo ELearningUtils::getHeader(sprintf(_("Meine Lernmodule")));
+
 						$connected_cms[$cms]->soap_client->setCachingStatus(false);
 						$user_content_modules = $connected_cms[$cms]->getUserContentModules();
 						$connected_cms[$cms]->soap_client->setCachingStatus(true);
-					
+
 						if (! ($user_content_modules == false))
 						{
 							foreach ($user_content_modules as $key => $connection)
@@ -152,10 +152,10 @@ if ($ELEARNING_INTERFACE_ENABLE)
 						}
 						else
 							echo "<table border=\"0\" cellspacing=\"0\" cellpadding=\"6\"><tr><td><font size=\"-1\">" . sprintf(_("Sie haben im System %s keine eigenen Lernmodule."), $connected_cms[$cms]->getName()) . "<br>\n<br>\n</font></td></tr></table>";
-							
+
 						echo "<br>\n";
 						echo $new_module_form[$cms];
-						
+
 					}
 				}
 				else
@@ -171,49 +171,49 @@ if ($ELEARNING_INTERFACE_ENABLE)
 			}
 		}
 	 }
-	 
+
 // Cachen der SOAP-Daten
 	if (is_array($connected_cms))
 		foreach($connected_cms as $system)
-			$system->terminate();		
+			$system->terminate();
 
 //	ELearningUtils::bench("fetch data");
 	if ($debug != "")
 		ELearningUtils::showbench();
 
-	// Anzeige, wenn noch keine Account-Zuordnung besteht	
-		$infobox = array	(			
+	// Anzeige, wenn noch keine Account-Zuordnung besteht
+		$infobox = array	(
 		array ("kategorie"  => _("Information:"),
-			"eintrag" => array	(	
-							array (	"icon" => "pictures/ausruf_small.gif",
+			"eintrag" => array	(
+							array (	"icon" => "ausruf_small.gif",
 									"text"  => _("Auf dieser Seite sehen Sie Ihre Benutzer-Accounts und Lernmodule in angebundenen Systemen.")
 								 )
 							)
 			)
 		);
 		$infobox[1]["kategorie"] = _("Aktionen:");
-			$infobox[1]["eintrag"][] = array (	"icon" => "pictures/forumgrau.gif" ,
+			$infobox[1]["eintrag"][] = array (	"icon" => "forumgrau.gif" ,
 										"text"  => _("Sie k&ouml;nnen f&uuml;r jedes externe System einen eigenen Benutzer-Account erstellen oder zuordnen.")
 									);
 
-			$infobox[1]["eintrag"][] = array (	"icon" => "pictures/icon-lern.gif" ,
+			$infobox[1]["eintrag"][] = array (	"icon" => "icon-lern.gif" ,
 										"text"  => sprintf(_("Wenn Sie &uuml;ber die entsprechenden Rechte verf&uuml;gen, k&ouml;nnen Sie eigene Lernmodule erstellen."))
 									);
 
 		$cssSw = new cssClassSwitcher;									// Klasse für Zebra-Design
 
-	
+
 		?>
 		<br>
 		</td>
 		<td width="270" NOWRAP class="blank" align="center" valign="top">
-		<? 
-			print_infobox ($infobox,"pictures/lernmodule.jpg");
-		?>		
-		</td>		
+		<?
+			print_infobox ($infobox,"lernmodule.jpg");
+		?>
+		</td>
 	</tr>
 	<tr>
-		<td class="blank" colspan="3">&nbsp; 
+		<td class="blank" colspan="3">&nbsp;
 		</td>
 	</tr>
 	</table>
@@ -222,10 +222,10 @@ if ($ELEARNING_INTERFACE_ENABLE)
 // terminate objects
 	if (is_array($connected_cms))
 		foreach($connected_cms as $system)
-			$system->terminate();		
+			$system->terminate();
 
 }
-else 
+else
 {
 	// Start of Output
 	parse_window ("error§" . _("Die Schnittstelle für die Integration von Lernmodulen ist nicht aktiviert. Damit Lernmodule verwendet werden können, muss die Verbindung zu einem LCM-System in der Konfigurationsdatei von Stud.IP hergestellt werden. Wenden Sie sich bitte an den/die AdministratorIn."), "§",

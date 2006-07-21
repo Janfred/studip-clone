@@ -1,8 +1,8 @@
 <?
 /**
 * navigation.inc.php
-* 
-* 
+*
+*
 *
 * @author		Peter Thienel <pthienel@web.de>
 * @version		$Id$
@@ -22,7 +22,7 @@ define("PHPDOC_DUMMY",true);
 // This file is part of Stud.IP
 // navigation.inc.php
 //
-// Copyright (c) 2003 Peter Tienel <pthienel@web.de> 
+// Copyright (c) 2003 Peter Tienel <pthienel@web.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -43,7 +43,7 @@ require("$ABSOLUTE_PATH_STUDIP/links_sms.inc.php");
 if ($cmd != "changeview") {
 	echo "<table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\n";
 	echo "<tr>\n";
-	echo "<td class=\"topic\">&nbsp;<img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/meinetermine.gif\" ";
+	echo "<td class=\"topic\">&nbsp;<img src=\"".$GLOBALS['ASSETS_URL']."images/meinetermine.gif\" ";
 	$tooltip = tooltip(_("Termine"));
 	echo "border=\"0\" align=\"absmiddle\" $tooltip><b>&nbsp;";
 	echo $title . "</b></td></tr>\n";

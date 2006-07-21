@@ -1,9 +1,9 @@
 <?
 /**
 * admin_modules.php
-* 
+*
 * switch the modules (defines in Modules.class.php) on/off for Institutes or Veranstaltungen
-* 
+*
 *
 * @author		Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
 * @version		$Id$
@@ -60,12 +60,12 @@ if ($perm->have_studip_perm("tutor", $admin_modules_data["range_id"])) {
 	if ($default_x) {
 		$admin_modules_data["changed_bin"] = $amodules->getDefaultBinValue($admin_modules_data["range_id"]);
 	}
-	
+
 	//consistency: kill objects
 	foreach ($amodules->registered_modules as $key => $val) {
 		$moduleXxDeactivate = "module".$key."Deactivate";
 		$delete_xx = "delete_".$key;
-	
+
 		if (($$delete_xx) && (method_exists($amodules,$moduleXxDeactivate))) {
 			$amodules->$moduleXxDeactivate($admin_modules_data["range_id"]);
 			$amodules->clearBit($admin_modules_data["changed_bin"], $amodules->registered_modules[$key]["id"]);
@@ -77,14 +77,14 @@ if ($perm->have_studip_perm("tutor", $admin_modules_data["range_id"])) {
 	//consitency: cancel kill objects
 	foreach ($amodules->registered_modules as $key => $val) {
 		$cancel_xx = "cancel_".$key;
-		
+
 		if (($$cancel_xx) && (method_exists($amodules,$moduleXxDeactivate))) {
 			$amodules->setBit($admin_modules_data["changed_bin"], $amodules->registered_modules[$key]["id"]);
 			unset($admin_modules_data["conflicts"][$key]);
 			$resolve_comflicts = TRUE;
 		}
 	}
-	
+
 	if (($uebernehmen_x) || ($retry)) {
 		$msg='';
 
@@ -92,7 +92,7 @@ if ($perm->have_studip_perm("tutor", $admin_modules_data["range_id"])) {
 			foreach ($amodules->registered_modules as $key => $val) {
 				//after sending, set all "conflicts" to TRUE (we check them later)
 				$admin_modules_data["conflicts"][$key] = TRUE;
-				
+
 				$tmp_key = $key."_value";
 				if ($$tmp_key == "TRUE")
 					$$tmp_key = TRUE;
@@ -105,7 +105,7 @@ if ($perm->have_studip_perm("tutor", $admin_modules_data["range_id"])) {
 					$amodules->clearBit($admin_modules_data["changed_bin"], $amodules->registered_modules[$key]["id"]);
 				}
 			}
-			if ($PLUGINS_ENABLE){
+			if ($PLUGINS_ENABLE && is_array($plugins)){
 				foreach ($plugins as $plugin){
 					$key = "plugin_".$plugin->getPluginId();
 					if ($$key == "TRUE"){
@@ -113,26 +113,26 @@ if ($perm->have_studip_perm("tutor", $admin_modules_data["range_id"])) {
 					}
 					else {
 						$plugin->setActivated(false);
-					}				
+					}
 					$amodules->pluginengine->savePlugin($plugin);
 				}
 				$plugins = $amodules->pluginengine->getAllEnabledPlugins();
 			}
-			
+
 		//consistency checks
 		foreach ($amodules->registered_modules as $key => $val) {
 			$delete_xx = "delete_".$key;
 			$cancel_xx = "cancel_".$key;
-			
+
 			//checks for deactivating a module
 			$getModuleXxExistingItems = "getModule".$key."ExistingItems";
-	
+
 			if (method_exists($amodules,$getModuleXxExistingItems)) {
 				if (($amodules->isBit($admin_modules_data["orig_bin"],  $amodules->registered_modules[$key]["id"])) &&
 					(!$amodules->isBit($admin_modules_data["changed_bin"],  $amodules->registered_modules[$key]["id"])) &&
 					($amodules->$getModuleXxExistingItems($admin_modules_data["range_id"])) &&
 					($admin_modules_data["conflicts"][$key])) {
-					
+
 					$msg.="info§".$amodules->registered_modules[$key]["msg_warning"];
 					$msg.="<br /><a href=\"".$PHP_SELF."?delete_$key=TRUE&retry=TRUE\">" . makeButton("ja2", "img") . "</a>&nbsp; \n";
 					$msg.="<a href=\"".$PHP_SELF."?cancel_$key=TRUE&retry=TRUE\">" . makeButton("nein", "img") . "</a>\n§";
@@ -140,20 +140,21 @@ if ($perm->have_studip_perm("tutor", $admin_modules_data["range_id"])) {
 					unset($admin_modules_data["conflicts"][$key]);
 			} else
 				unset($admin_modules_data["conflicts"][$key]);
-				
+
 			//checks for activating a module
 			$moduleXxActivate = "module".$key."Activate";
-	
+
 			if (method_exists($amodules,$moduleXxActivate)) {
 				if ((!$amodules->isBit($admin_modules_data["orig_bin"],  $amodules->registered_modules[$key]["id"])) &&
 					($amodules->isBit($admin_modules_data["changed_bin"],  $amodules->registered_modules[$key]["id"]))) {
-					
+
 					$amodules->$moduleXxActivate($admin_modules_data["range_id"]);
 				}
 			}
 		}
+
 	}
-	
+
 	if ((!count($admin_modules_data["conflicts"])) && ($admin_modules_data["orig_bin"] != $admin_modules_data["changed_bin"])) {
 		$amodules->writeBin($admin_modules_data["range_id"], $admin_modules_data["changed_bin"]);
 		$admin_modules_data["orig_bin"] = $admin_modules_data["changed_bin"];
@@ -162,6 +163,8 @@ if ($perm->have_studip_perm("tutor", $admin_modules_data["range_id"])) {
 	}
 }
 
+$HELP_KEYWORD="Basis.VeranstaltungenVerwaltenModule";
+
 // Start of Output
 include ($ABSOLUTE_PATH_STUDIP."html_head.inc.php"); // Output of html head
 include ($ABSOLUTE_PATH_STUDIP."header.php");   // Output of Stud.IP head
@@ -169,11 +172,11 @@ include ($ABSOLUTE_PATH_STUDIP."links_admin.inc.php");	//hier wird das Reiter- u
 
 //get ID
 if ($SessSemName[1])
-	$range_id=$SessSemName[1]; 
+	$range_id=$SessSemName[1];
 
 if (!$admin_modules_data["conflicts"])
 	$admin_modules_data["conflicts"] = array();
-	
+
 //wenn wir frisch reinkommen, werden benoetigte Daten eingelesen
 if (($range_id) && (!$uebernehmen_x) && (!$delete_forum) && (!$delete_documents) && ((!count($admin_modules_data["conflicts"]) && (is_array($admin_modules_data["conflicts"]))))) {
 	$admin_modules_data["modules_list"] = $amodules->getLocalModules($range_id);
@@ -197,7 +200,7 @@ if ($admin_modules_data["range_id"]) {
 		<?
 		echo getHeaderLine($admin_modules_data["range_id"])." -  "._("Module konfigurieren");
 		?>
-		</td>		
+		</td>
 	</tr>
  	<tr>
 		<td class="blank" valign="top">
@@ -216,27 +219,34 @@ if ($admin_modules_data["range_id"]) {
 			<?=_("Mit &raquo;zur&uuml;cksetzten&laquo; k&ouml;nnen Sie die Ausgangs-Modulkonfiguration wieder herstellen.")?> <br /><br />
 			</blockqoute>
 		</td>
-		<td class="blank" align="right" valign="top"><img src="pictures/blank.gif" height="10" width="5" /><br />
-			<img src="pictures/modules.jpg" border="0"><img src="pictures/blank.gif" height="10" width="10" />
-		</td>		
+		<td class="blank" align="right" valign="top"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" height="10" width="5" /><br />
+			<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/modules.jpg" border="0"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" height="10" width="10" />
+		</td>
 	</tr>
 	<tr>
 	<td class="blank" colspan=2>
 	<form method="POST" name="modules" action="<? echo $PHP_SELF ?>">
 		<table width="99%" border=0 cellpadding=2 cellspacing=0 align="center">
 		<tr <? $cssSw->switchClass() ?>>
-			<td class="<? echo $cssSw->getClass() ?>" align="center" colspan="4">		
+			<td class="<? echo $cssSw->getClass() ?>" align="center" colspan="4">
 				<input type="IMAGE" name="uebernehmen" <?=makeButton("uebernehmen", "src")?> border=0 value="uebernehmen">
 				&nbsp;<input type="IMAGE" name="default" <?=makeButton("zuruecksetzen", "src")?> border=0 value="uebernehmen">
 				<? if ($admin_modules_data["orig_bin"] != $admin_modules_data["changed_bin"]) {
-					?> <br /><img src="pictures/ausruf_small2.gif" align="absmiddle" />&nbsp;<font size=-1><?=_("Diese Daten sind noch nicht gespeichert.")?></font><br /> <?
+					?> <br /><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/ausruf_small2.gif" align="absmiddle" />&nbsp;<font size=-1><?=_("Diese Daten sind noch nicht gespeichert.")?></font><br /> <?
 					}
 				?>
 			</td>
 		</tr>
-		<? 
+		<?
 		foreach ($amodules->registered_modules as $key => $val) {
-			if ($amodules->isEnableable($key, $admin_modules_data["range_id"])) { ?>
+			if ($amodules->isEnableable($key, $admin_modules_data["range_id"])) {
+				$pre_check = null;
+				if (isset($val['preconditions'])){
+					$method = 'module' . $key . 'Preconditions';
+					if(method_exists($amodules, $method)) $pre_check = $amodules->$method($admin_modules_data["range_id"],$val['preconditions']);
+				}
+				
+				?>
 			<tr <? $cssSw->switchClass() ?> rowspan=2>
 				<td class="<? echo $cssSw->getClass() ?>" width="4%" align="right">
 					&nbsp;
@@ -245,35 +255,46 @@ if ($admin_modules_data["range_id"]) {
 					<font size=-1><b><?=$val["name"]?></b><br /></font>
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="16%">
-					<input type="RADIO" name="<?=$key?>_value" value="TRUE" <?=($amodules->isBit($admin_modules_data["changed_bin"], $val["id"])) ? "checked" : "" ?>>
+					<input type="RADIO" <?=($pre_check ? 'disabled' : '')?> name="<?=$key?>_value" value="TRUE" <?=($amodules->isBit($admin_modules_data["changed_bin"], $val["id"])) ? "checked" : "" ?>>
 					<font size=-1><?=_("an")?></font>
-					<input type="RADIO" name="<?=$key?>_value" value="FALSE" <?=($amodules->isBit($admin_modules_data["changed_bin"], $val["id"])) ? "" : "checked" ?>>
+					<input type="RADIO" <?=($pre_check ? 'disabled' : '')?> name="<?=$key?>_value" value="FALSE" <?=($amodules->isBit($admin_modules_data["changed_bin"], $val["id"])) ? "" : "checked" ?>>
 					<font size=-1><?=_("aus")?><br /></font>
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="70%">
 					<font size=-1><?
 					$getModuleXxExistingItems = "getModule".$key."ExistingItems";
-					
+
 					if (method_exists($amodules,$getModuleXxExistingItems)) {
 						if (($amodules->$getModuleXxExistingItems($admin_modules_data["range_id"])) && ($admin_modules_data["modules_list"][$key]))
 							printf ("<font color=\"red\">".$amodules->registered_modules[$key]["msg_pre_warning"]."</font>", $amodules->$getModuleXxExistingItems($admin_modules_data["range_id"]));
 						else
-							print ($admin_modules_data["modules_list"][$key]) ? $amodules->registered_modules[$key]["msg_deactivate"] : $amodules->registered_modules[$key]["msg_activate"];
+							print ($admin_modules_data["modules_list"][$key]) ? $amodules->registered_modules[$key]["msg_deactivate"] : ($pre_check ? $pre_check : $amodules->registered_modules[$key]["msg_activate"]);
 					} else
-						print ($admin_modules_data["modules_list"][$key]) ? $amodules->registered_modules[$key]["msg_deactivate"] : $amodules->registered_modules[$key]["msg_activate"];
+						print ($admin_modules_data["modules_list"][$key]) ? $amodules->registered_modules[$key]["msg_deactivate"] : ($pre_check ? $pre_check : $amodules->registered_modules[$key]["msg_activate"]);
 					?></font>
 				</td>
 			</tr>
 			<? }
-			
+
 		}
 		if ($PLUGINS_ENABLE){
 			$plugins = $amodules->pluginengine->getAllEnabledPlugins();
-					
+
+		 	// $defactplugins = $amodules->pluginengine->getDefaultActivationsForPOI($GLOBALS["SessSemName"][1]);
+
 			if ($plugins == null){
 				$plugins = array();
 			}
-			foreach ($plugins as $plugin){			
+			foreach ($plugins as $plugin){
+				/*
+				$globalactivated = false;
+				foreach ($defactplugins as $actplugin) {
+					if (get_class($actplugin) == get_class($plugin)){
+						$globalactivated = true;
+						break;
+					}
+				}
+				*/
 				?>
 				<tr <? $cssSw->switchClass() ?> rowspan=2>
 				<td class="<? echo $cssSw->getClass() ?>" width="4%" align="right">
@@ -296,19 +317,19 @@ if ($admin_modules_data["range_id"]) {
 							if ($plugin->isActivated() || $globalactivated){
 								// TODO: Fallunterscheidung, welches AdminInfo angezeigt werden muss.
 								if ($globalactivated){
-									print ("(per Voreinstellung aktiviert) <font color=\"red\">".$admininfo->getWarningBeforeDeactivation()."</font>");
+									print ("(per Voreinstellung aktiviert) <font color=\"red\">".$admininfo->getMsg_pre_warning()."</font>");
 								}
 								else {
-									print ("<font color=\"red\">".$admininfo->getWarningBeforeDeactivation()."</font>");
+									print ("<font color=\"red\">".$admininfo->getMsg_pre_warning()."</font>");
 								}
 							}
 							else {
-								print ($admininfo->getWarningBeforeActivation());
+								print ($admininfo->getMsg_activate());
 							}
 						}
 						else {
 							// kein AdminInfo vorhanden, also nichts ausgeben
-							print (_("Dieses Plugin hat keinen Hilfetext bereitgestellt."));
+							print ("Dieses Plugin hat keinen Hilfetext bereitgestellt.");
 						}
 						?></font>
 					</td>
@@ -318,11 +339,11 @@ if ($admin_modules_data["range_id"]) {
 		}
 		?>
 		<tr>
-			<td class="blank" colspan=3>&nbsp; 
+			<td class="blank" colspan=3>&nbsp;
 			</td>
 		</tr>
 		<?
-	page_close();		
+	page_close();
 	}
 else
 	die;

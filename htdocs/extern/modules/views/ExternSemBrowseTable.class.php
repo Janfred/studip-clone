@@ -1,6 +1,41 @@
 <?
-global $ABSOLUTE_PATH_STUDIP;
-global $RELATIVE_PATH_CALENDAR;
+/**
+* ExternSemBrowseTable.class.php
+* 
+* 
+* 
+*
+* @author		Peter Thienel <pthienel@web.de>, Suchi & Berg GmbH <info@data-quest.de>
+* @version	$Id$
+* @access		public
+* @modulegroup	extern
+* @module		ExternSemBrowseTable
+* @package	studip_extern
+*/
+
+// +---------------------------------------------------------------------------+
+// This file is part of Stud.IP
+// ExternSemBrowseTable.class.php
+// 
+// Copyright (C) 2003 Peter Thienel <pthienel@web.de>,
+// Suchi & Berg GmbH <info@data-quest.de>
+// +---------------------------------------------------------------------------+
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or any later version.
+// +---------------------------------------------------------------------------+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+// +---------------------------------------------------------------------------+
+
+
+global $ABSOLUTE_PATH_STUDIP, $RELATIVE_PATH_CALENDAR;
 require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/SemBrowse.class.php");
 require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/DataFields.class.php");
 require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/SemesterData.class.php");
@@ -15,6 +50,7 @@ class ExternSemBrowseTable extends SemBrowse {
 	function ExternSemBrowseTable (&$module, $start_item_id) {
 		
 		global $SEM_TYPE,$SEM_CLASS;
+		ob_start();
 		$semester = new SemesterData();
 		$all_semester = $semester->getAllSemesterData();
 		array_unshift($all_semester, 0);
@@ -93,6 +129,29 @@ class ExternSemBrowseTable extends SemBrowse {
 		
 		if (is_array($this->sem_browse_data['search_result']) && count($this->sem_browse_data['search_result'])) {
 			
+			// show only selected subject areas
+			$selected_ranges = $this->module->config->getValue('SelectSubjectAreas', 'subjectareasselected');
+			if (!$this->module->config->getValue('SelectSubjectAreas', 'selectallsubjectareas')
+					&& count($selected_ranges)) {
+				$sem_range_query =  "AND seminar_sem_tree.sem_tree_id IN ('".implode("','", $selected_ranges)."')";
+			} else {
+				$sem_range_query = '';
+			}
+			
+			// show only selected SemTypes
+			$selected_semtypes = $this->module->config->getValue('ReplaceTextSemType', 'visibility');
+			$sem_types_array = array();
+			if (count($selected_semtypes)) {
+				for ($i = 0; $i < count($selected_semtypes); $i++) {
+					if ($selected_semtypes[$i] == '1') {
+						$sem_types_array[] = $i + 1;
+					}
+				}
+				$sem_types_query = "AND seminare.status IN ('" . implode("','", $sem_types_array) . "')";
+			} else {
+				$sem_types_query = '';
+			}
+			
 			// number of visible columns
 			$group_colspan = array_count_values($this->module->config->getValue("Main", "visible"));
 			
@@ -122,7 +181,7 @@ class ExternSemBrowseTable extends SemBrowse {
 				LEFT JOIN seminar_inst ON (seminare.Seminar_id = seminar_inst.Seminar_id) 
 				LEFT JOIN Institute USING (Institut_id) 
 				WHERE seminare.Seminar_id IN('" . join("','", array_keys($this->sem_browse_data['search_result']))
-				 . "') $sem_inst_query";
+				 . "') $sem_inst_query $sem_range_query $sem_types_query";
 			
 			$db =& new DB_Seminar($query);
 			$snap =& new DbSnapShot($db);
@@ -336,6 +395,7 @@ class ExternSemBrowseTable extends SemBrowse {
 					}
 				}
 			}
+			ob_end_clean();
 			$this->module->elements["TableHeader"]->printout(array("content" => $out));
 		}
 	}

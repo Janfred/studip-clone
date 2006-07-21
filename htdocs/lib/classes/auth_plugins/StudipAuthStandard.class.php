@@ -48,6 +48,8 @@ class StudipAuthStandard extends StudipAuthAbstract {
 	
 	var $dbv_auth;
 	
+	var $bad_char_regex =  '/[^a-zA-Z0-9_@-]/';
+
 	/**
 	* Constructor
 	*

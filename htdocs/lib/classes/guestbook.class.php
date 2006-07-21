@@ -32,7 +32,7 @@ class Guestbook {
 	var $pages_total; // count of guestbook pages of the user
 
 	// Konstruktor
-	
+
 	function Guestbook ($user_id,$rights, $guestpage) {
 		$this->user_id = $user_id;
 		$this->username = get_username($user_id);
@@ -47,7 +47,7 @@ class Guestbook {
 		$this->guestpage = $guestpage;
 		$this->pages_total = ceil($this->number / $this->perpage);
 	}
-	
+
 	function checkGuestbook () {
 		$db=new DB_Seminar;
 		$db->query("SELECT * FROM user_info WHERE user_id = '$this->user_id' AND guestbook = '1'");
@@ -56,16 +56,16 @@ class Guestbook {
 		else
 			$this->active = FALSE;
 	}
-	
+
 	function numGuestbook () {
 		$db=new DB_Seminar;
 		$db->query("SELECT count(*) as count FROM guestbook WHERE range_id = '$this->user_id'");
-		if ($db->next_record())  
+		if ($db->next_record())
 			$this->number = $db->f("count");
 		else
 			$this->number = 0;
 		}
-	
+
 	function getRightsGuestbook () {
 		global	$user;
 		if ($this->user_id == $user->id || $this->rights == TRUE)
@@ -73,7 +73,7 @@ class Guestbook {
 		else
 			$this->rights = FALSE;
 	}
-	
+
 	function showGuestbook () {
 		global $perm, $PHP_SELF;
 		if ($this->rights == TRUE)
@@ -85,19 +85,19 @@ class Guestbook {
 			$link = $PHP_SELF."?guestbook=open&username=$this->username#guest";
 		else
 			$link = $PHP_SELF."?guestbook=close&username=$this->username#guest";
-		
+
 		// set Anchor
 		if ($this->anchor == TRUE)
 			echo "<a name=\"guest\">";
-			
+
 		echo "\n<table border=\"0\" cellpadding=\"2\" cellspacing=\"0\" width=\"100%\" align=\"center\">";
-		echo "\n<tr valign=\"baseline\"><td class=\"topic\"><img src=\"./pictures/guestbook.gif\" border=\"0\" align=\"texttop\"><b>&nbsp;&nbsp;";
+		echo "\n<tr valign=\"baseline\"><td class=\"topic\"><img src=\"".$GLOBALS['ASSETS_URL']."images/guestbook.gif\" border=\"0\" align=\"texttop\"><b>&nbsp;&nbsp;";
 		echo _("Gästebuch").$active;
 				print("</b></td></tr>");
-				
+
 		echo "\n<tr><td class=\"blank\" colspan=$colspan>";
 		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" align=\"center\"><tr><td class=\"blank\">";
-		
+
 		// Info Messages
 		if ($this->msg_guest != "") {
 			echo "<table width=\"100%%\" class=\"blank\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">";
@@ -109,8 +109,8 @@ class Guestbook {
 		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr>";
 		if ($this->active == TRUE && $this->pages_total>1)
 			$zusatz .= $this->guest_navi();
-		printhead ("100%","0",$link,$this->openclose,$new,"<img src=\"pictures/icon-guest.gif\">",$titel,$zusatz,$forumposting["chdate"],"TRUE",$index,$forum["indikator"]);	
-			
+		printhead ("100%","0",$link,$this->openclose,$new,"<img src=\"".$GLOBALS['ASSETS_URL']."images/icon-guest.gif\">",$titel,$zusatz,$forumposting["chdate"],"TRUE",$index,$forum["indikator"]);
+
 		echo "</tr></table>";
 		if ($this->openclose == "open") {
 			echo "<table width=\"100%\" border=0 cellpadding=0 cellspacing=0 align=center><tr><td>";
@@ -119,7 +119,7 @@ class Guestbook {
 				if ($perm->have_perm("autor"))
 					$content .= $this->formGuestbook();
 			}
-			
+
 			printcontent ("100%",$formposting,$content,$buttons,TRUE,"");
 			echo "</td></tr></table>";
 			echo "<table width=\"100%\" border=0 cellpadding=3 cellspacing=0 align=center><tr><td class=\"steel2\">";
@@ -128,12 +128,12 @@ class Guestbook {
 			else
 				$buttons = "";
 			echo "$buttons</td><td class= \"steel2\" align=\"right\">$zusatz&nbsp;</td></tr></table>";
-			
+
 		}
 		echo "</td></tr></table></td></tr></table>";
 	}
-	
-	
+
+
 // Berechnung und Ausgabe der Blätternavigation
 
 /**
@@ -169,23 +169,23 @@ function guest_navi () {
 		} else {
 			$space = 1;
 		}
-		$i++;	
+		$i++;
 	}
 	if ($ipage != $maxpages)
 		$navi .= "<a href=\"$PHP_SELF?guestpage=".($ipage)*$this->perpage."&guestbook=open&username=$this->username#guest\"><font size=-1> " . _("weiter") . "</a></font>";
 	return $navi;
 }
-	
-	
-	
-	
+
+
+
+
 	function showPostsGuestbook () {
 		global $PHP_SELF;
 		$i = 0;
 		$db=new DB_Seminar;
 		$output = "<table class=\"blank\" width=\"98%%\" border=\"0\" cellpadding=\"5\" cellspacing=\"0\">";
 		$db->query("SELECT * FROM guestbook WHERE range_id = '$this->user_id' ORDER BY mkdate DESC LIMIT $this->guestpage, $this->perpage");
-		while ($db->next_record()) {  
+		while ($db->next_record()) {
 			$position = $this->number - ($this->guestpage+$i);
 			$output .= "<tr><td class=\"steel2\"><b><font size=\"-1\">#$position - <a href=\"$PHP_SELF?username=".get_username($db->f("user_id"))."\">";
 			$output .= sprintf(_("%s hat am %s geschrieben:"), get_fullname($db->f("user_id"),'full',true)."</a>", date("d.m.Y - H:i", $db->f("mkdate")));
@@ -195,26 +195,26 @@ function guest_navi () {
 				$addon = "<a href=\"".$PHP_SELF."?guestbook=delete&guestpage=$this->guestpage&deletepost=".$db->f("post_id")."&username=$this->username&studipticket=".get_ticket()."#guest\">" . makeButton("loeschen", "img") . "</a>";
 			else
 				$addon = "&nbsp;";
-			
+
 			$output .= $addon
 				."</p></td></tr>"
 				. "<tr><td class=\"steel1\">&nbsp;</td></tr>";
 			$i++;
 		}
 		$output .= "</table>";
-		return $output;	
+		return $output;
 	}
-		
+
 	function formGuestbook () {
 		global $auth, $PHP_SELF;
 		if ($auth->auth["jscript"]) {
 			$max_col = round($auth->auth["xres"] / 12 );
-		} else 
+		} else
 			$max_col =  64 ; //default für 640x480
 		$cols = round($max_col*0.45);
 		if ($cols < 28) $cols = 28;
 		$text = "<p align=\"center\">"._("Geben Sie hier Ihren Gästebuchbeitrag ein!")."</p>";
-	
+
 			$form =	"<form name=\"guestbook\" method=\"post\" action=\"".$PHP_SELF."?studipticket=".get_ticket()."#guest\">"
 			."<input type=hidden name=guestbook value='$this->user_id'>"
 			."<input type=hidden name=username value='$this->username'>"
@@ -225,7 +225,7 @@ function guest_navi () {
 			."&nbsp;&nbsp;<a href=\"show_smiley.php\" target=\"new\"><font size=\"-1\">"._("Smileys")."</a>&nbsp;&nbsp;"."<a href=\"help/index.php?help_page=ix_forum6.htm\" target=\"new\"><font size=\"-1\">"._("Formatierungshilfen")."</a><br>";
 		return $form;
 	}
-		
+
 	function buttonsGuestbook () {
 		global $PHP_SELF;
 		$buttons = "";
@@ -235,7 +235,7 @@ function guest_navi () {
 			$buttons .= "<a href=\"".$PHP_SELF."?guestbook=switch&username=$this->username&studipticket=".get_ticket()."#guest\">" . makeButton("aktivieren", "img") . "</a>";
 		}
 		$buttons .= "&nbsp;&nbsp;<a href=\"".$PHP_SELF."?guestbook=erase&username=$this->username&studipticket=".get_ticket()."#guest\">" . makeButton("alleloeschen", "img") . "</a>";
-		return $buttons;	
+		return $buttons;
 	}
 
 	function actionsGuestbook ($guestbook,$post="",$deletepost="", $studipticket) {
@@ -248,7 +248,7 @@ function guest_navi () {
 				if ($guestbook=="delete")
 					$this->msg_guest = $this->deleteGuestbook($deletepost);
 			}
-			
+
 			if ($post) {
 				$msg = $this->addPostGuestbook($this->user_id,$post);
 			}
@@ -259,66 +259,66 @@ function guest_navi () {
 		$this->numGuestbook();
 		$this->anchor = TRUE;
 	}
-	
+
 	function switchGuestbook () {
 		$db=new DB_Seminar;
 		if ($this->active == "TRUE") { // Guestbook is activated
 			$db->query("UPDATE user_info SET guestbook='0' WHERE user_id='$this->user_id'");
 			$tmp = _("Sie haben das Gästebuch deaktiviert. Es ist nun nicht mehr sichtbar.");
-		} else { 
+		} else {
 			$db->query("UPDATE user_info SET guestbook='1' WHERE user_id='$this->user_id'");
 			$tmp = _("Sie haben das Gästebuch aktiviert: Besucher können nun schreiben!");
 		}
 		return $tmp;
 	}
-	
+
 	function eraseGuestbook () {
 		$db=new DB_Seminar;
-		$db->query("DELETE FROM guestbook WHERE range_id = '$this->user_id'");	
-		$tmp = _("Sie haben alle Beiträge des Gästebuchs gelöscht!");	
+		$db->query("DELETE FROM guestbook WHERE range_id = '$this->user_id'");
+		$tmp = _("Sie haben alle Beiträge des Gästebuchs gelöscht!");
 		return $tmp;
 	}
-	
+
 	function deleteGuestbook ($deletepost) {
 		if ($this->getRangeGuestbook($deletepost)==TRUE) {
 			$db=new DB_Seminar;
-			$db->query("DELETE FROM guestbook WHERE post_id = '$deletepost'");	
-			$tmp = _("Sie haben einen Beitrag im Gästebuch gelöscht!");	
+			$db->query("DELETE FROM guestbook WHERE post_id = '$deletepost'");
+			$tmp = _("Sie haben einen Beitrag im Gästebuch gelöscht!");
 		} else {
-			$tmp = _("Netter Versuch!");	
+			$tmp = _("Netter Versuch!");
 		}
 		return $tmp;
 	}
-	
+
 	function getRangeGuestbook ($post_id) {
 		$db=new DB_Seminar;
 		$db->query("SELECT range_id FROM guestbook WHERE post_id = '$post_id'");
-		if ($db->next_record())  
+		if ($db->next_record())
 			if ($db->f("range_id")==$this->user_id)
 				return TRUE;
 			else
 				return FALSE;
 	}
-		
+
 	function makeuniqueGuestbook () {
 		// baut eine ID die es noch nicht gibt
 
 		$hash_secret = "kershfshsshdfgz";
 		$db=new DB_Seminar;
 		$tmp_id=md5(uniqid($hash_secret));
-		$db->query ("SELECT post_id FROM guestbook WHERE post_id = '$tmp_id'");	
-		if ($db->next_record()) 	
+		$db->query ("SELECT post_id FROM guestbook WHERE post_id = '$tmp_id'");
+		if ($db->next_record())
 			$tmp_id = $this->makeuniqueGuestbook(); //ID gibt es schon, also noch mal
 		return $tmp_id;
 	}
-	
+
 	function addPostGuestbook($range_id,$content) {
 		global $user;
 		$now = time();
 		$post_id = $this->makeuniqueGuestbook();
 		$user_id = $user->id;
 		$db=new DB_Seminar;
-		$db->query("INSERT INTO guestbook (post_id,range_id,user_id,mkdate,content) values ('$post_id', '$range_id', '$user_id', '$now', '$content')");	
+		$db->query("INSERT INTO guestbook (post_id,range_id,user_id,mkdate,content) values ('$post_id', '$range_id', '$user_id', '$now', '$content')");
 		return $post_id;
 	}
 }

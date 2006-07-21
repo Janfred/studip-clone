@@ -3,8 +3,8 @@
 // This file is part of Stud.IP
 // ClipBoard.class.php
 // a generic clipboard-class to use in Stud.IP
-// 
-// Copyright (c) 2004 André Noack <noack@data-quest.de>, Cornelis Kater <kater@data-quest.de>, 
+//
+// Copyright (c) 2004 André Noack <noack@data-quest.de>, Cornelis Kater <kater@data-quest.de>,
 // data-quest GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -26,16 +26,16 @@ require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/StudipForm.class.php");
 /**
 *
 * ClipBoard
-* 
+*
 * a generic clipboard class to use in Stud.IP
 *
-* @access	public	
-* @author	André Noack <noack@data-quest.de>, Cornelis Kater <kater@data-quest.de>, 
+* @access	public
+* @author	André Noack <noack@data-quest.de>, Cornelis Kater <kater@data-quest.de>,
 * @version	$Id$
 * @package	core
 **/
 class ClipBoard {
-	
+
 	var $db;
 	var $elements = null;
 	var $form_obj = null;
@@ -43,7 +43,7 @@ class ClipBoard {
 	var $form_name = "clipboard_form";
 	var $elements_query;
 	var $msg;
-	//querys for different object_types	
+	//querys for different object_types
 	var $elements_query = array (
 				"sem" => "SELECT Seminar_id, Name  FROM Seminare WHERE Seminar_id  IN %s ORDER BY Name",
 				"user" => "SELECT user_id, CONCAT(Nachname, ', ', Vorname) AS name FROM auth_user_md5 WHERE user_id  IN %s ORDER BY name",
@@ -59,8 +59,8 @@ class ClipBoard {
 				"res" => "R"
 				);
 
-	
-	
+
+
 	function &GetInstance($name){
 		static $instance;
 		if (!is_object($instance[$name])){
@@ -68,7 +68,7 @@ class ClipBoard {
 		}
 		return $instance[$name];
 	}
-	
+
 	function ClipBoard($name){
 		$this->form_name = $name."_clipboard_form";
 		$this->db = new DB_Seminar();
@@ -77,7 +77,7 @@ class ClipBoard {
 			}
 		$this->elements =& $GLOBALS["_".$this->form_name];
 	}
-	
+
 	function insertElement($id_to_insert, $object_type){
 		if (!is_array($id_to_insert)){
 			$id_to_insert = array($id_to_insert);
@@ -97,7 +97,7 @@ class ClipBoard {
 		$this->setDefaultValue();
 		return $inserted;
 	}
-	
+
 	function deleteElement($id_to_delete){
 		if (!is_array($id_to_delete)){
 			$id_to_delete = array($id_to_delete);
@@ -117,15 +117,15 @@ class ClipBoard {
 		$this->setDefaultValue();
 		return $deleted;
 	}
-	
+
 	function getNumElements(){
 		return (is_array($this->elements)) ? count($this->elements) : 0;
 	}
-	
+
 	function isInClipboard($id_to_check){
 		return isset($this->elements[$id_to_check]);
 	}
-	
+
 	function getElements(){
 		$returned_elements = null;
 		if (is_array($this->elements)){
@@ -146,7 +146,7 @@ class ClipBoard {
 		}
 		return $returned_elements;
 	}
-	
+
 	function &getFormObject(){
 		if (!is_object($this->form_obj)){
 			$this->setFormObject();
@@ -154,7 +154,7 @@ class ClipBoard {
 		$this->setDefaultValue();
 		return $this->form_obj;
 	}
-	
+
 	function setDefaultValue(){
 		if ($this->getNumElements() == 1 && is_object($this->form_obj)){
 			reset($this->elements);
@@ -163,7 +163,7 @@ class ClipBoard {
 		}
 		return false;
 	}
-		
+
 	function setFormObject(){
 		$form_name = $this->form_name;
 		$form_fields['clip_content'] = array('type' => 'select', 'multiple' => true, 'options_callback' => array(&$this, "getClipOptions"));
@@ -176,7 +176,7 @@ class ClipBoard {
 		}
 		return true;
 	}
-	
+
 	function getClipOptions(&$caller, $name){
 		$options = array();
 		$cols = 40;
@@ -190,7 +190,7 @@ class ClipBoard {
 		}
 		return $options;
 	}
-	
+
 	function showClip() {
 		$this->getFormObject();
 		?>
@@ -200,8 +200,8 @@ class ClipBoard {
 		<?
 		print $this->form_obj->getFormField("clip_content", array_merge(array('size' => $this->getNumElements()), array('style' => 'font-size:8pt;width:250px')))
 		?>
-		<div align="center" style="background-image:url(pictures/border.jpg);background-repeat:repeat-y;margin:3px;"><img src="pictures/blank.gif" height="2" border="0"></div>
-		<? 
+		<div align="center" style="background-image:url(<?= $GLOBALS['ASSETS_URL'] ?>images/border.jpg);background-repeat:repeat-y;margin:3px;"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" height="2" border="0"></div>
+		<?
 		print $this->form_obj->getFormField("clip_cmd", array('style' => 'font-size:8pt;width:250px'))
 		?>
 		<div align="center">
@@ -213,7 +213,7 @@ class ClipBoard {
 		</div>
 		<?
 		}
-	
+
 	function doClipCmd(){
 		$this->getFormObject();
 		switch ($this->form_obj->getFormFieldValue("clip_cmd")){

@@ -2,9 +2,9 @@
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // admin_lit_element.php
-// 
-// 
-// Copyright (c) 2003 André Noack <noack@data-quest.de> 
+//
+//
+// Copyright (c) 2003 André Noack <noack@data-quest.de>
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -77,7 +77,7 @@ if ($_REQUEST['cmd'] == 'clone_entry'){
 		$_msg = "error§" . _("Der Eintrag konnte nicht kopiert werden!.") . "§";
 	}
 }
-	
+
 
 $_the_element =& new StudipLitCatElement($_catalog_id, true);
 $_the_form =& $_the_element->getFormObject();
@@ -123,12 +123,12 @@ if ($_REQUEST['cmd'] == "check_entry"){
 	$lit_plugin_value = $_the_element->getValue('lit_plugin');
 	$content = "<div style=\"font-size:70%\"<b>" ._("Verf&uuml;gbarkeit in externen Katalogen:") . "</b><br>";
 	foreach (StudipLitSearch::CheckZ3950($_the_element->getValue('accession_number')) as $plugin_name => $ret){
-		$content .= "<b>&nbsp;{$plugin_name}&nbsp;</b>";
+		$content .= "<b>&nbsp;" . htmlReady(StudipLitSearch::GetPluginDisplayName($plugin_name))."&nbsp;</b>";
 		if ($ret['found']){
 			$content .= _("gefunden") . "&nbsp;";
 			$_the_element->setValue('lit_plugin', $plugin_name);
 			if (($link = $_the_element->getValue("external_link"))){
-				$content.= formatReady(" [" . $_the_element->getValue("lit_plugin"). "]" . $link);
+				$content.= formatReady(" [" . $_the_element->getValue("lit_plugin_display_name"). "]" . $link);
 			} else {
 				$content .= _("(Kein Link zum Katalog vorhanden.)");
 			}
@@ -143,7 +143,7 @@ if ($_REQUEST['cmd'] == "check_entry"){
 	$_the_element->setValue('lit_plugin', $lit_plugin_value);
 	$_msg = "info§" . $content . "§";
 }
-		
+
 if ($_the_form->IsClicked("send")){
 	$_the_element->setValuesFromForm();
 	if ($_the_element->checkValues()){
@@ -168,7 +168,7 @@ $_catalog_id = $_the_element->getValue("catalog_id");
 
 $_msg .= $_the_element->msg;
 $_msg .= $_the_clipboard->msg;
-	
+
 ?>
 <body>
 <table width="100%" border="0" cellpadding="2" cellspacing="0">
@@ -200,17 +200,17 @@ if ($_the_element->isChangeable()){
 	echo "<a href=\"$PHP_SELF?cmd=clone_entry&_catalog_id=$_catalog_id\"><img border=\"0\" "
 	. makeButton('kopieerstellen','src') . tooltip(_("Eine Kopie dieses Eintrages anlegen")) ."></a>";
 }
-echo "<img src=\"pictures/blank.gif\"  height=\"28\" width=\"15\" border=\"0\">";
+echo "<img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\"  height=\"28\" width=\"15\" border=\"0\">";
 echo "<a href=\"$PHP_SELF?cmd=new_entry\"><img border=\"0\" "
 	. makeButton('neuanlegen','src') . tooltip(_("Neuen Eintrag anlegen")) ."></a>";
 if ($_catalog_id != "new_entry"){
-	echo "<img src=\"pictures/blank.gif\"  height=\"28\" width=\"15\" border=\"0\">";
+	echo "<img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\"  height=\"28\" width=\"15\" border=\"0\">";
 	echo "<a href=\"$PHP_SELF?cmd=check_entry&_catalog_id=$_catalog_id\">"
 	. "<img " .makeButton("verfuegbarkeit","src") . tooltip(_("Verfügbarkeit überprüfen"))
 	. " border=\"0\"></a>";
 }
 if ($_catalog_id != "new_entry" && !$_the_clipboard->isInClipboard($_catalog_id)){
-	echo "<img src=\"pictures/blank.gif\"  height=\"28\" width=\"15\" border=\"0\">";
+	echo "<img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\"  height=\"28\" width=\"15\" border=\"0\">";
 	echo "<a href=\"$PHP_SELF?cmd=in_clipboard&_catalog_id=$_catalog_id\"><img border=\"0\" "
 		. makeButton('merkliste','src') . tooltip(_("Eintrag in Merkliste aufnehmen")) ."></a>";
 }
@@ -251,17 +251,17 @@ if ($_the_element->isChangeable()){
 	echo "<a href=\"$PHP_SELF?cmd=clone_entry&_catalog_id=$_catalog_id\"><img border=\"0\" "
 	. makeButton('kopieerstellen','src') . tooltip(_("Eine Kopie dieses Eintrages anlegen")) ."></a>";
 }
-echo "<img src=\"pictures/blank.gif\"  height=\"28\" width=\"15\" border=\"0\">";
+echo "<img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\"  height=\"28\" width=\"15\" border=\"0\">";
 echo "<a href=\"$PHP_SELF?cmd=new_entry\"><img border=\"0\" "
 	. makeButton('neuanlegen','src') . tooltip(_("Neuen Eintrag anlegen")) ."></a>";
 if ($_catalog_id != "new_entry"){
-	echo "<img src=\"pictures/blank.gif\"  height=\"28\" width=\"15\" border=\"0\">";
+	echo "<img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\"  height=\"28\" width=\"15\" border=\"0\">";
 	echo "<a href=\"$PHP_SELF?cmd=check_entry&_catalog_id=$_catalog_id\">"
 	. "<img " .makeButton("verfuegbarkeit","src") . tooltip(_("Verfügbarkeit überprüfen"))
 	. " border=\"0\"></a>";
 }
 if ($_catalog_id != "new_entry" && !$_the_clipboard->isInClipboard($_catalog_id)){
-	echo "<img src=\"pictures/blank.gif\"  height=\"28\" width=\"15\" border=\"0\">";
+	echo "<img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\"  height=\"28\" width=\"15\" border=\"0\">";
 	echo "<a href=\"$PHP_SELF?cmd=in_clipboard&_catalog_id=$_catalog_id\"><img border=\"0\" "
 		. makeButton('merkliste','src') . tooltip(_("Eintrag in Merkliste aufnehmen")) ."></a>";
 }
@@ -275,23 +275,23 @@ echo "</td></tr>";
 <td class="blank" width="270" align="right" valign="top">
 <?
 $infobox[0] = array ("kategorie" => _("Information:"),
-					"eintrag" =>	array(	
-									array("icon" => "pictures/blank.gif","text"  =>	_("Hier können Sie Literatur / Quellen erfassen, oder von Ihnen erfasste Einträge ändern.")),
-									array("icon" => "pictures/blank.gif","text"  =>	($_the_element->getValue("user_id") == "studip" ? "<b>" . _("Systemeintrag:") . "</b><br>" . _("Dies ist ein vom System generierter Eintrag.") : "<b>" . _("Eingetragen von:") . "</b><br>" . get_fullname($_the_element->getValue("user_id"),'full',true))),
-									array("icon" => "pictures/blank.gif","text"  =>	"<b>" . _("Letzte Änderung am:") . "</b><br>" . strftime("%d.%m.%Y",$_the_element->getValue("chdate")))
+					"eintrag" =>	array(
+									array("icon" => "blank.gif","text"  =>	_("Hier können Sie Literatur / Quellen erfassen, oder von Ihnen erfasste Einträge ändern.")),
+									array("icon" => "blank.gif","text"  =>	($_the_element->getValue("user_id") == "studip" ? "<b>" . _("Systemeintrag:") . "</b><br>" . _("Dies ist ein vom System generierter Eintrag.") : "<b>" . _("Eingetragen von:") . "</b><br>" . get_fullname($_the_element->getValue("user_id"),'full',true))),
+									array("icon" => "blank.gif","text"  =>	"<b>" . _("Letzte Änderung am:") . "</b><br>" . strftime("%d.%m.%Y",$_the_element->getValue("chdate")))
 									)
 					);
 if ($_the_element->isNewEntry()){
-	$infobox[0]["eintrag"][] = array("icon" => "pictures/ausruf_small.gif","text"  => _("Dies ist ein neuer Eintrag, der noch nicht gespeichert wurde!") );
+	$infobox[0]["eintrag"][] = array("icon" => "ausruf_small.gif","text"  => _("Dies ist ein neuer Eintrag, der noch nicht gespeichert wurde!") );
 }
 if (!$_the_element->isChangeable()){
-	$infobox[0]["eintrag"][] = array("icon" => "pictures/ausruf_small.gif","text"  => _("Sie haben diesen Eintrag nicht selbst vorgenommen, und dürfen ihn daher nicht verändern! Wenn Sie mit diesem Eintrag arbeiten wollen, können Sie sich eine persönliche Kopie erstellen.") );
-}						
+	$infobox[0]["eintrag"][] = array("icon" => "ausruf_small.gif","text"  => _("Sie haben diesen Eintrag nicht selbst vorgenommen, und dürfen ihn daher nicht verändern! Wenn Sie mit diesem Eintrag arbeiten wollen, können Sie sich eine persönliche Kopie erstellen.") );
+}
 $infobox[1] = array ("kategorie" => _("Aktionen:"));
-$infobox[1]["eintrag"][] = array("icon" => "pictures/link_intern.gif","text"  => "<a href=\"admin_lit_list.php\">" . _("Literaturlisten bearbeiten") . "</a>" );
-$infobox[1]["eintrag"][] = array("icon" => "pictures/link_intern.gif","text"  => "<a href=\"lit_search.php\">" . _("Literatur suchen") . "</a>" );
+$infobox[1]["eintrag"][] = array("icon" => "link_intern.gif","text"  => "<a href=\"admin_lit_list.php\">" . _("Literaturlisten bearbeiten") . "</a>" );
+$infobox[1]["eintrag"][] = array("icon" => "link_intern.gif","text"  => "<a href=\"lit_search.php\">" . _("Literatur suchen") . "</a>" );
 
-print_infobox ($infobox,"pictures/literaturelist.jpg");
+print_infobox ($infobox, "literaturelist.jpg");
 
 ?>
 </td>
@@ -301,7 +301,7 @@ print_infobox ($infobox,"pictures/literaturelist.jpg");
 	<b><?=_("Merkliste:")?></b>
 	<br>
 	<?=$_the_clip_form->getFormField("clip_content", array_merge(array('size' => $_the_clipboard->getNumElements()), $_attributes['lit_select']))?>
-	<div align="center" style="background-image:url(pictures/border.jpg);background-repeat:repeat-y;margin:3px;"><img src="pictures/blank.gif" height="2" border="0"></div>
+	<div align="center" style="background-image:url(<?= $GLOBALS['ASSETS_URL'] ?>images/border.jpg);background-repeat:repeat-y;margin:3px;"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" height="2" border="0"></div>
 	<?=$_the_clip_form->getFormField("clip_cmd", $_attributes['lit_select'])?>
 	<div align="center">
 	<?=$_the_clip_form->getFormButton("clip_ok",array('style'=>'vertical-align:middle;margin:3px;'))?>

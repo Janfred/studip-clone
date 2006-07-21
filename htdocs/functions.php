@@ -1,7 +1,7 @@
 <?php
 /**
 * functions.php
-* 
+*
 * The Stud.IP-Core functions. Look to the descriptions to get further details
 *
 *
@@ -17,7 +17,7 @@
 // This file is part of Stud.IP
 // functions.php
 // Stud.IP Kernfunktionen
-// Copyright (C) 2002 Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>, 
+// Copyright (C) 2002 Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>,
 // Ralf Stockmann <rstockm@gwdg.de>, André Noack André Noack <andre.noack@gmx.net>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -41,6 +41,7 @@ require_once ($ABSOLUTE_PATH_STUDIP."lib/classes/SemesterData.class.php");
 require_once ($ABSOLUTE_PATH_STUDIP."lib/classes/HolidayData.class.php");
 require_once ($ABSOLUTE_PATH_STUDIP."visual.inc.php");
 require_once ($ABSOLUTE_PATH_STUDIP."object.inc.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/user_visible.inc.php");
 
 /**
 * This function creates the header line for studip-objects
@@ -57,13 +58,13 @@ function getHeaderLine($id) {
 	$header_line = $object_name['type'] . ": ". htmlReady(substr($object_name['name'], 0, 60));
 	if (strlen($object_name['name']) > 60)
 			$header_line.= "... ";
-	return $header_line; 
+	return $header_line;
 }
 
 function get_object_name($range_id, $object_type){
-	
+
 	global $SEM_TYPE,$INST_TYPE, $SEM_TYPE_MISC_NAME;
-	
+
 	$db = new DB_Seminar();
 	if ($object_type == "sem") {
 		$query = sprintf ("SELECT status, Name FROM seminare WHERE Seminar_id = '%s' ", $range_id);
@@ -81,14 +82,14 @@ function get_object_name($range_id, $object_type){
 	} else if ($object_type == "inst" || $object_type == "fak") {
 		$query = sprintf ("SELECT type, Name FROM Institute WHERE Institut_id = '%s' ", $range_id);
 		$db->query($query);
-		$db->next_record();		
+		$db->next_record();
 		$type = $INST_TYPE[$db->f("type")]["name"];
 		if (!$type){
 			$type = _("Einrichtung");
 		}
 		$name = $db->f("Name");
 	}
-		
+
 	return array('name' => $name, 'type' => $type);
 }
 
@@ -179,7 +180,7 @@ function openInst ($inst_id) {
 		$SessSemName["is_fak"] = $db->f("is_fak");
 		$SessSemName["art_num"]=$db->f("type");
 		$SessSemName["fak"] = $db->f("fakultaets_id");
-		$SessSemName["header_line"] = getHeaderLine ($inst_id);		
+		$SessSemName["header_line"] = getHeaderLine ($inst_id);
 		$nr = $db->f("Institut_id");
 		object_set_visit($inst_id, "inst");
 	}
@@ -192,7 +193,7 @@ function checkObject() {
 	global $SessSemName, $AUTH_LIFETIME;
 	if ($SessSemName[1] =="") {
 		parse_window ("error§" . _("Sie haben kein Objekt gew&auml;hlt.") . " <br /><font size=-1 color=black>" . _("Dieser Teil des Systems kann nur genutzt werden, wenn Sie vorher ein Objekt (Veranstaltung oder Einrichtung) gew&auml;hlt haben.") . "<br /><br /> " . sprintf(_("Dieser Fehler tritt auch auf, wenn Ihre Session abgelaufen ist. Wenn sie sich länger als %s Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurück zur Anmeldung zu gelangen."), $AUTH_LIFETIME) . " </font>", "§",
-				_("Kein Objekt gew&auml;hlt"), 
+				_("Kein Objekt gew&auml;hlt"),
 				sprintf(_("%sHier%s geht es wieder zur Anmeldung beziehungsweise Startseite."), "<a href=\"index.php\"><b>&nbsp;", "</b></a>") . "<br />&nbsp;");
 		die;
 	}
@@ -204,15 +205,15 @@ function checkObject() {
 */
 function checkObjectModule($modul) {
 	global $SessSemName, $AUTH_LIFETIME;
-	
+
 	if ($SessSemName[1]) {
 		$Modules=new Modules;
-		
+
 		$name = strtoupper($modul{0}).substr($modul, 1, strlen($modul));
-		
+
 		if (!$Modules->checkLocal($modul, $SessSemName[1])) {
 			parse_window ("error§" . sprintf(_("Das Modul &raquo;%s&laquo; ist f&uuml;r dieses Objekt leider nicht verf&uuml;gbar."), $name), "§",
-					_("Modul nicht verf&uuml;gbar"), 
+					_("Modul nicht verf&uuml;gbar"),
 					sprintf(_("%sHier%s geht es wieder zur Anmeldung beziehungsweise Startseite."), "<a href=\"index.php\"><b>&nbsp;", "</b></a>") . "<br />&nbsp;");
 			die;
 		}
@@ -224,7 +225,7 @@ function checkObjectModule($modul) {
 */
 function closeObject() {
 	global $SessionSeminar, $SessSemName;
-	
+
 	$SessionSeminar='';
 	$SessSemName='';
 }
@@ -238,15 +239,15 @@ function closeObject() {
 */
 function lastActivity ($sem_id) {
 	$db=new DB_Seminar;
-	
+
 	//Veranstaltungs-data
 	$db->query("SELECT chdate FROM seminare WHERE Seminar_id = '$sem_id'");
 	$db->next_record();
 	$timestamp = $db->f("chdate");
-	
+
 	//Postings
 	$db->query("SELECT chdate FROM px_topics WHERE Seminar_id = '$sem_id'  ORDER BY chdate DESC LIMIT 1");
-	
+
 	$db->next_record();
 	if ($db->f("chdate") > $timestamp)
 		$timestamp = $db->f("chdate");
@@ -280,13 +281,13 @@ function lastActivity ($sem_id) {
 	$db->next_record();
 	if ($db->f("date") > $timestamp)
 		$timestamp = $db->f("date");
-	
+
 	//Literature
 	$db->query("SELECT MAX(chdate) as chdate FROM lit_list WHERE range_id='$sem_id' GROUP BY range_id");
 	$db->next_record();
 	if ($db->f("chdate") > $timestamp)
 			$timestamp = $db->f("chdate");
-	
+
 	//Votes
 	if ($GLOBALS['VOTE_ENABLE']) {
 		$db->query("SELECT chdate FROM vote WHERE range_id = '$sem_id' ORDER BY chdate DESC LIMIT 1");
@@ -306,7 +307,7 @@ function lastActivity ($sem_id) {
 	//correct the timestamp, if date in the future (news can be in the future!)
 	if ($timestamp > time())
 		$timestamp = time();
-		
+
 	return $timestamp;
 }
 
@@ -316,7 +317,7 @@ function lastActivity ($sem_id) {
 *
 * The function recognizes the following types at this moment:
 * Einrichtungen, Veranstaltungen, Statusgruppen and Fakultaeten
-* 
+*
 * @param		string	id	the id of the object
 * @return		string	return "inst" (Einrichtung), "sem" (Veranstaltung), "fak" (Fakultaeten), "group" (Statusgruppe), "dokument" (Dateien)
 *
@@ -332,27 +333,27 @@ function get_object_type($id) {
 			$db->query("SELECT Seminar_id FROM seminare WHERE Seminar_id = '$id' ");
 			if ($db->next_record())
 				return $object_type_cache[$id] = "sem";
-	
+
 			$db->query("SELECT Institut_id,IF(Institut_id=fakultaets_id,1,0) AS is_fak FROM Institute WHERE Institut_id = '$id' ");
 			if ($db->next_record())
 				return $object_type_cache[$id] = ($db->f("is_fak")) ? "fak" : "inst";
-		
+
 			$db->query("SELECT termin_id FROM termine WHERE termin_id = '$id' ");
 			if ($db->next_record())
 				return $object_type_cache[$id] = "date";
-			
+
 			$db->query("SELECT user_id FROM auth_user_md5 WHERE user_id = '$id' ");
 			if ($db->next_record())
 				return $object_type_cache[$id] = "user";
-			
+
 			$db->query("SELECT statusgruppe_id FROM statusgruppen WHERE statusgruppe_id = '$id' ");
 			if ($db->next_record())
 				return $object_type_cache[$id] = "group";
-		
+
 			$db->query("SELECT dokument_id FROM dokumente WHERE dokument_id = '$id' ");
-			if ($db->next_record())	
+			if ($db->next_record())
 				return $object_type_cache[$id] = "dokument";
-		
+
 			$db->query("SELECT item_id FROM range_tree WHERE item_id = '$id' ");
 			if ($db->next_record())
 				return $object_type_cache[$id] = "range_tree";
@@ -367,9 +368,9 @@ function get_object_type($id) {
 * The function calculate one of the group colors unique for the Semester of the Veranstaltung
 *
 * It calculate a unique color number to create the initial entry for a new user in a Veranstaltung.
-* It will create a unique number for every Semester and will start over, if the the max. numer 
+* It will create a unique number for every Semester and will start over, if the the max. numer
 * (7) is reached.
-* 
+*
 * @param		integer	the timestamp of the start time from the Semester
 * @param		string	this field is no more necessary but only for compatibilty reasons here
 * @return		integer	the color number
@@ -391,7 +392,7 @@ function select_group($sem_start_time, $user_id='') {
 *
 * The parts will be divided by a "[...]". The functions is to use like php's
 * substr function.
-* 
+*
 * @param		string	the original string
 * @param		integer	start pos, 0 is the first pos
 * @param		integer	end pos
@@ -402,7 +403,7 @@ function select_group($sem_start_time, $user_id='') {
 function my_substr($what, $start, $end) {
 	$length=$end-$start;
 	if (strlen($what) > $length) {
-		$what=substr($what, $start, (($length / 3) * 2))."[...]".substr($what, strlen($what) -($length / 3), strlen($what)); 
+		$what=substr($what, $start, (($length / 3) * 2))."[...]".substr($what, strlen($what) -($length / 3), strlen($what));
 		}
 	return $what;
 }
@@ -413,7 +414,7 @@ function my_substr($what, $start, $end) {
 *
 * It uses the Variables $SemSecLevelWrite, $SemUserStatus and $rechte, which are created in the
 * modul check_sem_entry.inc.php and $perm from PHP-lib
-* 
+*
 * @return		string	the error msg. If no msg is returned, the user has write permission
 *
 */
@@ -427,7 +428,7 @@ if (!($perm->have_perm("root"))) {
 		//Auch eigentlich uberfluessig...
 		//$error_msg = "<br><b>Sie haben nicht die Berechtigung in dieser Veranstaltung zu schreiben!</b><br><br>";
 		switch ($SemSecLevelWrite) {
-			case 2 : 
+			case 2 :
 				$error_msg=$error_msg."error§" . _("In dieser Veranstaltung ist ein Passwort f&uuml;r den Schreibzugriff n&ouml;tig.") . "<br>" . sprintf(_("Zur %sPassworteingabe%s"), "<a href=\"sem_verify.php\">", "</a>") . "§";
 				break;
 			case 1 :
@@ -441,7 +442,7 @@ if (!($perm->have_perm("root"))) {
 			default :
 				//Wenn Schreiben fuer Nobody jemals wieder komplett verboten werden soll, diesen Teil bitte wieder einkommentieren (man wei&szlig; ja nie...)
 				//$error_msg=$error_msg."Bitte melden Sie sich an.<br><br><a href=\"register1.php\"><b>Registrierung</b></a> wenn Sie noch keinen Account im System haben.<br><a href=\"index.php?again=yes\"><b>Login</b></a> f&uuml;r registrierte Benutzer.<br><br>";
-				break; 
+				break;
 			}
 		$error_msg=$error_msg."info§" . _("Dieser Fehler kann auch auftreten, wenn Sie zu lange inaktiv gewesen sind.") . " <br />" . sprintf(_("Wenn sie l&auml;nger als %s Minuten keine Aktion mehr ausgef&uuml;hrt haben, m&uuml;ssen sie sich neu anmelden."), $AUTH_LIFETIME) . "§";
 		}
@@ -455,7 +456,7 @@ return $error_msg;
 * It ist recommended to use $auth->auth["perm"] for this query,
 * but the function is useful, if you want to query an user_id from another user
 * (which ist not the current user)
-* 
+*
 * @deprecated	use $GLOBALS['perm']->get_perm($user_id)
 * @param		string	if omitted, current user_id is used
 * @return		string	the perm level or an error msg
@@ -472,7 +473,7 @@ function get_global_perm($user_id="") {
 *
 * Function works for Veranstaltungen, Einrichtungen, Fakultaeten.
 * admins get status 'admin' if range_id is a seminar
-* 
+*
 * @deprecated	use $GLOBALS['perm']->get_studip_perm($range_id, $user_id)
 * @param		string	an id a Veranstaltung, Einrichtung or Fakultaet
 * @param		string	if omitted,current user_id is used
@@ -489,10 +490,10 @@ function get_perm($range_id,$user_id="") {
 /**
 * Retrieves the fullname for a given user_id
 *
-* 
+*
 * @param		string	if omitted, current user_id is used
 * @param		string	output format
-* @return		string	
+* @return		string
 *
 */
 function get_fullname($user_id = "", $format = "full" , $htmlready = false){
@@ -538,12 +539,12 @@ function get_fullname_from_uname($uname = "", $format = "full", $htmlready = fal
 		return ($htmlready ? htmlReady($cache[md5($uname . $format)]) : $cache[md5($uname . $format)]);
 	}
  }
- 
+
 /**
 * Retrieves the Vorname for a given user_id
 *
 * @param		string	if omitted, current user_id is used
-* @return		string	
+* @return		string
 *
 */
  function get_vorname($user_id="")
@@ -561,9 +562,9 @@ function get_fullname_from_uname($uname = "", $format = "full", $htmlready = fal
 
 /**
 * Retrieves the Nachname for a given user_id
-* 
+*
 * @param		string	if omitted, current user_id is used
-* @return		string	
+* @return		string
 *
 */
 function get_nachname($user_id="")
@@ -582,9 +583,9 @@ function get_nachname($user_id="")
 /**
 * Retrieves the username for a given user_id
 *
-* 
+*
 * @param		string	if omitted, current username will be returned
-* @return		string	
+* @return		string
 *
 */
 function get_username($user_id="") {
@@ -609,9 +610,9 @@ function get_username($user_id="") {
 * Retrieves the userid for a given username
 *
 * uses global $online array if user is online
-* 
+*
 * @param		string	if omitted, current user_id will be returned
-* @return		string	
+* @return		string
 *
 */
 function get_userid($username="") {
@@ -704,21 +705,21 @@ function check_and_set_date($tag, $monat, $jahr, $stunde, $minute, &$arr, $field
 
 	if ($monat == _("mm")) $monat=0;
 	if ($tag == _("tt")) $tag=0;
-	if ($jahr == _("jjjj")) $jahr=0;	
+	if ($jahr == _("jjjj")) $jahr=0;
 	if ($stunde == _("ss")) $stunde=0;
 	if ($minute == _("mm")) $minute=0;
 
 	if (($monat) && ($tag) && ($jahr)) {
 		if ($stunde==_("hh")) {
 			$check=FALSE;
-		} 
+		}
 
 		if ((!checkdate((int)$monat, (int)$tag, (int)$jahr) && ((int)$monat) && ((int)$tag) && ((int)$jahr))) {
 			$check=FALSE;
 		}
 
 		if (($stunde > 24) || ($minute > 59)) {
-			$check=FALSE;			
+			$check=FALSE;
 		}
 
 		if ($arr) {
@@ -746,7 +747,7 @@ function check_and_set_date($tag, $monat, $jahr, $stunde, $minute, &$arr, $field
  **/
 function write_config ($key='', $val='', $arr='') {
 	$db = new DB_Seminar;
-	
+
 	if (func_num_args() == 2) {
 		$arr[$key] = $val;
 	}
@@ -755,7 +756,7 @@ function write_config ($key='', $val='', $arr='') {
 			$GLOBALS[$key] = $val;
 			$query = sprintf ("SELECT * FROM config WHERE `field` = '%s' AND `is_default` != '1' ", $key);
 			$db->query($query);
-		
+
 			if ($db->nf()) {
 				$query = sprintf ("UPDATE config SET `field` = '%s', value = '%s', chdate = '%s' WHERE `field` = '%s' AND `is_default` != '1' ", $key, $val, time(), $key);
 			} else {
@@ -843,24 +844,24 @@ function get_seminars_user($user_id) {
 			"LEFT JOIN seminar_user ON seminare.Seminar_id=seminar_user.Seminar_id ".
 			"WHERE user_id = '".$user_id."'";
 	$db->query($sql);
-	
+
 	$seminars = array();
 	$i = 0;
-	
+
 	while ($db->next_record()) {
 		$i++;
 		$seminars[$i]["name"] = $db->f("name");
 		$seminars[$i]["id"] = $db->f("Seminar_id");
 		$seminars[$i]["mkdate"] = $db->f("mkdate");
 		$seminars[$i]["va_nummer"] = $db->f("va_nummer");
-	}	
+	}
 	return $seminars;
 }
 
 /**
 * converts a string to a float, depending on the locale
-* 
-* @param		string	
+*
+* @param		string
 * @return		float
 *
 */
@@ -874,7 +875,7 @@ function StringToFloat($str){
 		$conv_str = str_replace($from, $to, $str);
 		$my_float = (float)$conv_str;
 		if ($conv_str === (string)$my_float) return $my_float;
-	} 
+	}
 	return (float)$str;
 }
 
@@ -904,32 +905,41 @@ function archiv_check_perm($seminar_id){
 			}
 		}
 	}
-	return $archiv_perms[$seminar_id]; 
+	return $archiv_perms[$seminar_id];
 }
 
-function get_users_online($active_time = 5){
+function get_users_online($active_time = 5, $name_format = 'full_rev'){
 	global $user, $_fullname_sql;
 	$online = null;
 	$db = new DB_Seminar();
 	$user_table = $user->that->database_table;
+	if (!isset($_fullname_sql[$name_format])) {
+		reset($_fullname_sql);
+		$name_format = key($_fullname_sql);
+	}
 	$now = time(); // nach eingestellter Zeit (default = 5 Minuten ohne Aktion) zaehlt man als offline
-	$query = "SELECT " . $_fullname_sql['full'] . " AS full_name,UNIX_TIMESTAMP()-UNIX_TIMESTAMP(changed) AS lastaction,a.username,a.user_id,contact_id 
-		FROM $user_table LEFT JOIN auth_user_md5 a ON (a.user_id=sid) LEFT JOIN user_info USING(user_id) 
+	$query = "SELECT " . $_fullname_sql[$name_format] . " AS full_name,UNIX_TIMESTAMP()-UNIX_TIMESTAMP(changed) AS lastaction,
+		a.username,a.user_id,contact_id, " . get_vis_query('a') . " AS is_visible 
+		FROM $user_table LEFT JOIN auth_user_md5 a ON (a.user_id=sid) LEFT JOIN user_info USING(user_id)
 		LEFT JOIN contact ON (owner_id='".$user->id."' AND contact.user_id=a.user_id AND buddy=1)
-		WHERE changed > '" . date("YmdHis", ($now - ($active_time * 60)))."' 
+		WHERE changed > '" . date("YmdHis", ($now - ($active_time * 60)))."'
 		AND sid != '".$user->id."' AND sid !='nobody'
 		" . $GLOBALS['user']->that->get_where_clause($GLOBALS['user']->name) . "
 		ORDER BY changed DESC";
 	$db->query($query);
 	while ($db->next_record()){
-		$online[$db->f("username")] = array("name"=>$db->f("full_name"),"last_action"=>$db->f("lastaction"),"userid"=>$db->f("user_id"),"is_buddy" => $db->f("contact_id"));      
+		$online[$db->f("username")] = array("name"=>$db->f("full_name"),
+												"last_action"=>$db->f("lastaction"),
+												"userid"=>$db->f("user_id"),
+												"is_buddy" => $db->f("contact_id"),
+												"is_visible" => $db->f("is_visible"));
 	}
 	return $online;
 }
 
 function get_users_online_count($active_time = 5){
 	$db = new DB_Seminar();
-	$db->query("SELECT COUNT(*) FROM " . $GLOBALS['user']->that->database_table . " WHERE 
+	$db->query("SELECT COUNT(*) FROM " . $GLOBALS['user']->that->database_table . " WHERE
 				changed > '".date("YmdHis", (time() - ($active_time * 60))) . "' AND sid !='nobody'
  				 AND sid != '".$GLOBALS['user']->id."' " . $GLOBALS['user']->that->get_where_clause($GLOBALS['user']->name));
 	$db->next_record();
@@ -945,19 +955,19 @@ function check_ticket($studipticket){
 }
 
 function search_range($search_str = false, $search_user = false, $show_sem = true) {
-	
+
 	global $perm, $user, $_fullname_sql;
-	
+
 	$db = new DB_Seminar();
-	
+
 	$search_result = null;
 	$show_sem_sql1 = ",sd1.name AS startsem,IF(s.duration_time=-1, '"._("unbegrenzt")."', sd2.name) AS endsem ";
 	$show_sem_sql2 = "LEFT JOIN semester_data sd1 ON ( start_time BETWEEN sd1.beginn AND sd1.ende)
 					LEFT JOIN semester_data sd2 ON ((start_time + duration_time) BETWEEN sd2.beginn AND sd2.ende)";
-	
-	
+
+
 	if ($search_str && $perm->have_perm("root")) {
-		
+
 		if ($search_user){
 			$query = "SELECT a.user_id,". $_fullname_sql['full'] . " AS full_name,username FROM auth_user_md5 a LEFT JOIN user_info USING(user_id) WHERE CONCAT(Vorname,' ',Nachname,' ',username) LIKE '%$search_str%'";
 			$db->query($query);
@@ -965,8 +975,8 @@ function search_range($search_str = false, $search_user = false, $show_sem = tru
 				$search_result[$db->f("user_id")]=array("type"=>"user","name"=>$db->f("full_name")."(".$db->f("username").")");
 			}
 		}
-		
-		$query = "SELECT Seminar_id,IF(visible=0,CONCAT(s.Name, ' "._("(versteckt)")."'), s.Name) AS Name "
+
+		$query = "SELECT Seminar_id,IF(s.visible=0,CONCAT(s.Name, ' "._("(versteckt)")."'), s.Name) AS Name "
 				. ($show_sem ? $show_sem_sql1 : "")
 				." FROM seminare s "
 				. ($show_sem ? $show_sem_sql2 : "")
@@ -1008,7 +1018,7 @@ function search_range($search_str = false, $search_user = false, $show_sem = tru
 		if ($perm->is_fak_admin()) {
 			$query = "SELECT s.Seminar_id,IF(s.visible=0,CONCAT(s.Name, ' "._("(versteckt)")."'), s.Name) AS Name"
 				. ($show_sem ? $show_sem_sql1 : "")
-				. " FROM user_inst a LEFT JOIN Institute b ON(a.Institut_id=b.Institut_id AND b.Institut_id=b.fakultaets_id)  
+				. " FROM user_inst a LEFT JOIN Institute b ON(a.Institut_id=b.Institut_id AND b.Institut_id=b.fakultaets_id)
 				LEFT JOIN Institute c ON(c.fakultaets_id = b.institut_id AND c.fakultaets_id!=c.institut_id)
 				LEFT JOIN seminare s USING(Institut_id) "
 				. ($show_sem ? $show_sem_sql2 : "")
@@ -1022,23 +1032,23 @@ function search_range($search_str = false, $search_user = false, $show_sem = tru
 				$search_result[$db->f("Seminar_id")]=array("type"=>"sem",
 														"name"=>$name);
 			}
-			$query = "SELECT c.Institut_id,c.Name FROM user_inst a LEFT JOIN Institute b ON(a.Institut_id=b.Institut_id AND b.Institut_id=b.fakultaets_id)  
-			LEFT JOIN Institute c ON(c.fakultaets_id = b.institut_id AND c.fakultaets_id!=c.institut_id) 
+			$query = "SELECT c.Institut_id,c.Name FROM user_inst a LEFT JOIN Institute b ON(a.Institut_id=b.Institut_id AND b.Institut_id=b.fakultaets_id)
+			LEFT JOIN Institute c ON(c.fakultaets_id = b.institut_id AND c.fakultaets_id!=c.institut_id)
 			WHERE a.user_id='$user->id' AND a.inst_perms='admin' AND NOT ISNULL(b.Institut_id) AND c.Name LIKE '%$search_str%'";
 			$db->query($query);
 			while($db->next_record()){
 				$search_result[$db->f("Institut_id")]=array("type"=>"inst","name"=>$db->f("Name"));
 			}
-			$query = "SELECT b.Institut_id,b.Name FROM user_inst a LEFT JOIN Institute b ON(a.Institut_id=b.Institut_id AND b.Institut_id=b.fakultaets_id)  
+			$query = "SELECT b.Institut_id,b.Name FROM user_inst a LEFT JOIN Institute b ON(a.Institut_id=b.Institut_id AND b.Institut_id=b.fakultaets_id)
 			WHERE a.user_id='$user->id' AND a.inst_perms='admin' AND NOT ISNULL(b.Institut_id) AND b.Name LIKE '%$search_str%'";
 			$db->query($query);
 			while($db->next_record()){
 				$search_result[$db->f("Institut_id")]=array("type"=>"fak","name"=>$db->f("Name"));
 			}
 		}
-		
+
 	} elseif ($perm->have_perm("tutor")) {
-		$query="SELECT s.Seminar_id,IF(visible=0,CONCAT(s.Name, ' "._("(versteckt)")."'), s.Name) AS Name"
+		$query="SELECT s.Seminar_id,IF(s.visible=0,CONCAT(s.Name, ' "._("(versteckt)")."'), s.Name) AS Name"
 				. ($show_sem ? $show_sem_sql1 : "")
 				. "	FROM seminar_user AS a LEFT JOIN seminare AS s USING (Seminar_id)"
 				. ($show_sem ? $show_sem_sql2 : "")

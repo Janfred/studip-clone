@@ -2,8 +2,8 @@
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // kategorien.inc.php
-// 
-// Copyright (C) 2000 
+//
+// Copyright (C) 2000
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -20,14 +20,14 @@
 // +---------------------------------------------------------------------------+
 // $Id$
 
-function print_freie($username) {	
-	
+function print_freie($username) {
+
 	global $view,$PHP_SELF,$auth;
 	$db=new DB_Seminar;
 	$cssSw=new cssClassSwitcher;
 
 	$cssSw->switchClass();
-	
+
 	$db->query("SELECT * FROM auth_user_md5 LEFT JOIN kategorien ON(range_id=user_id) WHERE username='$username' AND NOT ISNULL(range_id) ORDER BY priority ");
 
 	echo '<tr><td align="left" valign="top" class="blank"><blockquote><br />'. "\n";
@@ -43,7 +43,7 @@ function print_freie($username) {
 	$count = 0;
 	$hidden_count = 0;
 	while ($db->next_record() ){
-		
+
 		IF ((($auth->auth["perm"] == "root") OR ($auth->auth["perm"] == "admin")) AND $db->f("hidden") == '1' AND $username != $auth->auth["uname"]) {
 			$hidden_count++;
 			}
@@ -56,17 +56,17 @@ function print_freie($username) {
 			echo '<input type="hidden" name="freie_id[]" value="'.$db->f("kategorie_id")."\">\n";
 			echo '<blockquote><input type="text" name="freie_name[]" style="width: 50%" value="' . htmlReady($db->f("name")).'" size="40">';
 			echo '&nbsp; &nbsp; &nbsp; <input type=checkbox name="freie_secret['.$count.']" value="1"';
-			IF ($db->f("hidden") == '1') 
+			IF ($db->f("hidden") == '1')
 				echo " checked";
 			echo ">" . _("f&uuml;r andere unsichtbar") . "&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;";
 			if ($count){
 				echo "\n".'<a href="'.$PHP_SELF.'?freie=order_freie&direction=up&username='.$username.'&view='.$view.'&cat_id=' . $db->f('kategorie_id')
-				. '"><img src="pictures/move_up.gif" hspace="4" width="13" height="11" border="0" ' 
+				. '"><img src="'. $GLOBALS['ASSETS_URL'] . 'images/move_up.gif" hspace="4" width="13" height="11" border="0" '
 				. tooltip(_("Kategorie nach oben verschieben")) .'></a>';
 			}
 			if (($count+$hidden_count) != ($db->num_rows()-1) ){
 				echo "\n".'<a href="'.$PHP_SELF.'?freie=order_freie&direction=down&username='.$username.'&view='.$view.'&cat_id=' . $db->f("kategorie_id")
-				. '"><img src="pictures/move_down.gif" hspace="4" width="13" height="11" border="0" ' 
+				. '"><img src="'. $GLOBALS['ASSETS_URL'] . 'images/move_down.gif" hspace="4" width="13" height="11" border="0" '
 				. tooltip(_("Kategorie nach unten verschieben")) .'></a>';
 			}
 			echo "<br />\n&nbsp;</blockquote></td></tr>\n";
@@ -85,7 +85,7 @@ function print_freie($username) {
 			printf(_("Es existiereren zus&auml;tzlich %s Kategorien, die Sie nicht einsehen und bearbeiten k&ouml;nnen."), $hidden_count);
 		} else {
 			print(_("Es existiert zus&auml;tzlich eine Kategorie, die Sie nicht einsehen und bearbeiten k&ouml;nnen."));
-			
+
 	 	}
 	 	echo '</blockquote></b></font></td></tr>'."\n";
 	}
@@ -111,7 +111,7 @@ function create_freie() {
 
 function delete_freie($kategorie_id) {
 	global $username;
-	
+
 	$db=new DB_Seminar;
 	$db->query ("SELECT * FROM kategorien LEFT JOIN auth_user_md5 ON(range_id=user_id) WHERE username = '$username' and kategorie_id='$kategorie_id'");
 	if (!$db->next_record()) { //hier wollte jemand schummeln

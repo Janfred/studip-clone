@@ -27,6 +27,8 @@ include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Sessio
 require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'] . "/lib/classes/StudipLitList.class.php");
 // -- here you have to put initialisations for the current page
 
+$HELP_KEYWORD="Basis.Literatur";
+
 // Start of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
@@ -40,7 +42,7 @@ include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
 <body>
 <table width="100%" border="0" cellpadding="2" cellspacing="0">
 	<tr>
-		<td class="topic" colspan="2"><b><img src="./pictures/icon-lit.gif" border="0" />&nbsp;<?=getHeaderLine($SessSemName[1])." - "._("Literatur")?></b></td>
+		<td class="topic" colspan="2"><b><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/icon-lit.gif" border="0" />&nbsp;<?=getHeaderLine($SessSemName[1])." - "._("Literatur")?></b></td>
 	</tr>
 	<tr>
 	<td class="blank" width="99%" align="left" valign="top">
@@ -62,14 +64,14 @@ if ( ($list = StudipLitList::GetFormattedListsByRange($SessSemName[1], object_ge
 <td class="blank" width="270" align="right" valign="top">
 <?
 $infobox[0] = array ("kategorie" => _("Information:"),
-					"eintrag" =>	array(	
-									array("icon" => "pictures/ausruf_small.gif","text"  =>	_("Hier sehen sie Literaturlisten.")),
+					"eintrag" =>	array(
+									array("icon" => "ausruf_small.gif","text"  =>	_("Hier sehen sie Literaturlisten.")),
 									)
 					);
 $infobox[1] = array ("kategorie" => _("Aktionen:"));
-$infobox[1]["eintrag"][] = array("icon" => "pictures/blank.gif","text"  =>  _("Sie k&ouml;nnen jede dieser Listen in ihren pers&ouml;nlichen Literaturbereich kopieren, um erweiterte Informationen über die Eintr&auml;ge zu erhalten.") );
+$infobox[1]["eintrag"][] = array("icon" => "blank.gif","text"  =>  _("Sie k&ouml;nnen jede dieser Listen in ihren pers&ouml;nlichen Literaturbereich kopieren, um erweiterte Informationen über die Eintr&auml;ge zu erhalten.") );
 
-print_infobox ($infobox,"pictures/literaturelist.jpg");
+print_infobox ($infobox,"literaturelist.jpg");
 ?>
 </td>
 </tr>

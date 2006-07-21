@@ -42,7 +42,6 @@ class StudipLitSearchPluginStudip extends StudipLitSearchPluginAbstract{
 		$rs = $this->dbv->get_query("view:LIT_GET_CATALOG_COUNT");
 		$rs->next_record();
 		$this->description = sprintf(_("Stud.IP Literaturkatalog. Inhalt des Kataloges: %s Einträge."), $rs->f(0));
-		
 	}
 	
 	function doSearch($search_values){
@@ -60,33 +59,28 @@ class StudipLitSearchPluginStudip extends StudipLitSearchPluginAbstract{
 	}
 	
 	function parseSearchValues(){
-		$sql = false;
+		$sql = '1';
 		$search_values = $this->search_values;
 		if (is_array($search_values)){
 			for ($i = 0 ; $i < count($search_values); ++$i){
 				$term = mysql_escape_string($search_values[$i]['search_term']);
 				if (strlen($term)){
 					if ($search_values[$i]['search_truncate'] == "left"){
-						$term = $term . "%";
+						$term = $term . "";
 					} else if ($search_values[$i]['search_truncate'] == "right"){
-						$term = "%" . $term;
+						$term = '' . $term . '*';
 					} else {
-						$term = "%" . $term . "%";
+						$term = '' . $term . '';
 					}
 					$field = $search_values[$i]['search_field'];
-					if (strpos($field, ",") !== false){
-						$field = "CONCAT_WS(' ',$field)";
-					}
-					$comparator = "LIKE";
+					$operator = 'AND';
 					if ($i > 0){
 						$operator = $search_values[$i]['search_operator'];
 						if ($operator == "NOT"){
-							$comparator = "NOT LIKE";
-							$operator = "AND";
+							$operator = "AND NOT";
 						}
-						$sql .= " " . $operator . " ";
-					}
-					$sql .= " " . $field . " " . $comparator . " '" . $term . "' ";
+					} 
+					$sql .= " $operator MATCH(" . $field . ") AGAINST ('" . $term . "' IN BOOLEAN MODE)  ";
 				} else if ($i == 0) {
 					$this->addError("error", _("Der erste Suchbegriff fehlt."));
 					return false;
@@ -101,6 +95,8 @@ class StudipLitSearchPluginStudip extends StudipLitSearchPluginAbstract{
 					array('name' => _("Titel"), 'value' => "dc_title"),
 					array('name' => _("Autor"), 'value' => "dc_creator,dc_contributor"),
 					array('name' => _("Schlagwort"), 'value' => "dc_subject"),
+					array('name' => _("Inhalt"), 'value' => "dc_description"),
+					array('name' => _("Verlagsort, Verlag"), 'value' => "dc_publisher"),
 					array('name' => _("Identifikation"), 'value' => "dc_identifier")
 				);
 		

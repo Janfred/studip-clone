@@ -33,7 +33,7 @@ if (!isset($htmlversion))
 
 // Start of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-	
+
 echo "<body bgcolor=\"white\">";
 
 require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
@@ -48,7 +48,7 @@ echo "<h1>" . _("Forum:") . "&nbsp; ".$SessSemName[0]."</h1>";
 echo Export_Topic($SessSemName[1]);
 
 echo "<table width=100% border=0 cellpadding=2 cellspacing=0>";
-echo "<tr><td><i><font size=-1>" . _("Stand:") . " ".date("d.m.y, G:i",time())."</font></i></td><td align=\"right\"><font size=-2><img src=\"pictures/logo2b.gif\"><br />&copy; ".date("Y", time())." v.$SOFTWARE_VERSION&nbsp; &nbsp; </font></td></tr>";
+echo "<tr><td><i><font size=-1>" . _("Stand:") . " ".date("d.m.y, G:i",time())."</font></i></td><td align=\"right\"><font size=-2><img src=\"".$GLOBALS['ASSETS_URL']."images/logo2b.gif\"><br />&copy; ".date("Y", time())." v.$SOFTWARE_VERSION&nbsp; &nbsp; </font></td></tr>";
 echo "</table>\n";
 
   // Save data back to database.

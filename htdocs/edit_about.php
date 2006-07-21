@@ -3,7 +3,7 @@
 // This file is part of Stud.IP
 // edit_about.php
 // administration of personal home page
-// 
+//
 // Copyright (C) 2000 Ralf Stockmann <rstockm@gwdg.de>, Stefan Suchi <suchi@gmx.de>,
 // Niklas Nohlen <nnohlen@gwdg.de>, Miro Freitag <mfreita@goe.net>, André Noack <andre.noack@gmx.net>
 // +---------------------------------------------------------------------------+
@@ -36,9 +36,9 @@ require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'].'visual.inc.php');
 require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'].'functions.php');
 require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'].'statusgruppe.inc.php');
 require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'].'language.inc.php');
-require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'].'lib/classes/DataFields.class.php'); 
-require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'].'lib/classes/UserConfig.class.php'); 
-require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'].'log_events.inc.php'); 
+require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'].'lib/classes/DataFields.class.php');
+require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'].'lib/classes/UserConfig.class.php');
+require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'].'log_events.inc.php');
 
 include ($GLOBALS['ABSOLUTE_PATH_STUDIP'].'seminar_open.php'); // initialise Stud.IP-Session
 
@@ -70,21 +70,21 @@ function about($username,$msg) {  // Konstruktor, prüft die Rechte
 
 	$this->db = new DB_Seminar;
 	$this->get_auth_user($username);
-	$this->DataFields = new DataFields($this->auth_user["user_id"]);	
+	$this->DataFields = new DataFields($this->auth_user["user_id"]);
 	$this->msg = $msg; //Meldungen restaurieren
-	
+
 	// der user selbst natürlich auch
 	if ($auth->auth["uname"] == $username AND $perm->have_perm("autor"))
 		$this->check="user";
 	//bei admins schauen wir mal
 	elseif ($auth->auth["perm"]=="admin") {
 		$this->db->query("SELECT a.user_id FROM user_inst AS a LEFT JOIN user_inst AS b USING (Institut_id) WHERE (b.inst_perms='admin' AND b.user_id='$user->id') AND (a.user_id='".$this->auth_user["user_id"]."' AND a.inst_perms IN ('dozent','tutor','autor'))");
-		if ($this->db->num_rows()) 
+		if ($this->db->num_rows())
 			$this->check="admin";
 
 		if ($perm->is_fak_admin()){
 			$this->db->query("SELECT c.user_id FROM user_inst a LEFT JOIN Institute b ON(a.Institut_id=b.fakultaets_id)  LEFT JOIN user_inst c USING(Institut_id) WHERE a.user_id='$user->id' AND a.inst_perms='admin' AND c.user_id='".$this->auth_user["user_id"]."'");
-			if ($this->db->next_record()) 
+			if ($this->db->next_record())
 				$this->check="admin";
 		}
 	}
@@ -161,12 +161,12 @@ function imaging($img,$img_size,$img_name) {
 		$this->msg = "error§" . sprintf(_("Die hochgeladene Bilddatei ist %s KB groß.<br>Die maximale Dateigröße beträgt %s KB!"), round($img_size/1024), $this->max_file_size);
 		return;
 	}
-	
+
 	if (!$img_name) { //keine Datei ausgewählt!
 		$this->msg = "error§" . _("Sie haben keine Datei zum Hochladen ausgewählt!");
 		return;
 	}
-	
+
 	//Dateiendung bestimmen
 	$dot = strrpos($img_name,".");
 	if ($dot) {
@@ -350,7 +350,7 @@ function special_edit ($raum, $sprech, $tel, $fax, $name, $default_inst, $visibl
 }
 
 function edit_leben($lebenslauf,$schwerp,$publi) {
-	
+
 	//check ob die blobs verändert wurden...
 	$this->db->query("SELECT  lebenslauf, schwerp, publi FROM user_info WHERE user_id='".$this->auth_user["user_id"]."'");
 	$this->db->next_record();
@@ -364,10 +364,10 @@ function edit_leben($lebenslauf,$schwerp,$publi) {
 }
 
 
-function edit_pers($password, $check_pass, $response, $new_username, $vorname, $nachname, $email, $telefon, $cell, $anschrift, $home, $hobby, $geschlecht, $title_front, $title_front_chooser, $title_rear, $title_rear_chooser, $view) {
-	global $UNI_NAME_CLEAN, $_language_path, $auth, $perm; 
-	global $ALLOW_CHANGE_USERNAME, $ALLOW_CHANGE_EMAIL, $ALLOW_CHANGE_NAME;
-  
+function edit_pers($password, $check_pass, $response, $new_username, $vorname, $nachname, $email, $telefon, $cell, $anschrift, $home, $motto, $hobby, $geschlecht, $title_front, $title_front_chooser, $title_rear, $title_rear_chooser, $view) {
+	global $UNI_NAME_CLEAN, $_language_path, $auth, $perm;
+	global $ALLOW_CHANGE_USERNAME, $ALLOW_CHANGE_EMAIL, $ALLOW_CHANGE_NAME, $ALLOW_CHANGE_TITLE;
+
 	//erstmal die "unwichtigen" Daten
 	if ($home == $this->default_url)
 	$home='';
@@ -390,16 +390,19 @@ function edit_pers($password, $check_pass, $response, $new_username, $vorname, $
 	if (!StudipAuthAbstract::CheckField("user_info.Home", $this->auth_user['auth_plugin'])){
 		$query .= "Home='$home',";
 	}
+	if (!StudipAuthAbstract::CheckField("user_info.motto", $this->auth_user['auth_plugin'])){
+		$query .= "motto='$motto',";
+	}
 	if (!StudipAuthAbstract::CheckField("user_info.hobby", $this->auth_user['auth_plugin'])){
 		$query .= "hobby='$hobby',";
 	}
 	if (!StudipAuthAbstract::CheckField("user_info.geschlecht", $this->auth_user['auth_plugin'])){
 		$query .= "geschlecht='$geschlecht',";
 	}
-	if (!StudipAuthAbstract::CheckField("user_info.title_front", $this->auth_user['auth_plugin'])){
+	if ($ALLOW_CHANGE_TITLE && !StudipAuthAbstract::CheckField("user_info.title_front", $this->auth_user['auth_plugin'])){
 		$query .= "title_front='$title_front',";
 	}
-	if (!StudipAuthAbstract::CheckField("user_info.title_rear", $this->auth_user['auth_plugin'])){
+	if ($ALLOW_CHANGE_TITLE && !StudipAuthAbstract::CheckField("user_info.title_rear", $this->auth_user['auth_plugin'])){
 		$query .= "title_rear='$title_rear',";
 	}
 	if ($query != "") {
@@ -412,18 +415,18 @@ function edit_pers($password, $check_pass, $response, $new_username, $vorname, $
 			restoreLanguage();
 		}
 	}
-	
+
 	$new_username = trim($new_username);
 	$vorname = trim($vorname);
 	$nachname = trim($nachname);
 	$email = trim($email);
-	
+
 	//nur nötig wenn der user selbst seine daten ändert
 	if ($this->check == "user") {
 		//erstmal die Syntax checken $validator wird in der local.inc.php benutzt, sollte also funzen
 		$validator=new email_validation_class; ## Klasse zum Ueberpruefen der Eingaben
 		$validator->timeout=10;
-		
+
 		if (!StudipAuthAbstract::CheckField("auth_user_md5.password", $this->auth_user['auth_plugin']) && (($response && $response!=md5("*****")) || $password!="*****")) {      //Passwort verändert ?
 			// auf doppelte Vergabe wird weiter unten getestet.
 			if (!isset($response) || $response=="") { // wir haben kein verschluesseltes Passwort
@@ -438,11 +441,11 @@ function edit_pers($password, $check_pass, $response, $new_username, $vorname, $
 				$newpass=md5($password);             // also können wir das unverschluesselte Passwort testen
 			} else
 			$newpass=$response;
-			
+
 			$this->db->query("UPDATE auth_user_md5 SET password='$newpass' WHERE user_id='".$this->auth_user["user_id"]."'");
 			$this->msg=$this->msg . "msg§" . _("Ihr Passwort wurde ge&auml;ndert!") . "§";
 		}
-		
+
 		if (!StudipAuthAbstract::CheckField('auth_user_md5.Vorname', $this->auth_user['auth_plugin']) && $vorname != $this->auth_user['Vorname']) { //Vornamen verändert ?
 			if ($ALLOW_CHANGE_NAME) {
 				if (!$validator->ValidateName($vorname)) {
@@ -453,7 +456,7 @@ function edit_pers($password, $check_pass, $response, $new_username, $vorname, $
 				$this->msg=$this->msg . "msg§" . _("Ihr Vorname wurde ge&auml;ndert!") . "§";
 			} else $vorname = $this->auth_user['Vorname'];
 		}
-		
+
 		if (!StudipAuthAbstract::CheckField('auth_user_md5.Nachname', $this->auth_user['auth_plugin']) && $nachname != $this->auth_user['Nachname']) { //Namen verändert ?
 			if ($ALLOW_CHANGE_NAME) {
 				if (!$validator->ValidateName($nachname)) {
@@ -464,7 +467,7 @@ function edit_pers($password, $check_pass, $response, $new_username, $vorname, $
 				$this->msg=$this->msg . "msg§" . _("Ihr Nachname wurde ge&auml;ndert!") . "§";
 			} else $nachname = $this->auth_user['Nachname'];
 		}
-		
+
 
 		if (!StudipAuthAbstract::CheckField('auth_user_md5.username', $this->auth_user['auth_plugin']) && $this->auth_user['username'] != $new_username) {
 			if ($ALLOW_CHANGE_USERNAME) {
@@ -491,12 +494,12 @@ function edit_pers($password, $check_pass, $response, $new_username, $vorname, $
 				$smtp=new studip_smtp_class;       ## Einstellungen fuer das Verschicken der Mails
 				$REMOTE_ADDR=$_SERVER["REMOTE_ADDR"];
 				$Zeit=date("H:i:s, d.m.Y",time());
-				
+
 				if (!$validator->ValidateEmailAddress($email)) {
 					$this->msg=$this->msg . "error§" . _("Die E-Mail-Adresse fehlt oder ist falsch geschrieben!") . "§";
 					return false;        // E-Mail syntaktisch nicht korrekt oder fehlend
 				}
-				
+
 				if (!$validator->ValidateEmailHost($email)) {     // Mailserver nicht erreichbar, ablehnen
 					$this->msg=$this->msg . "error§" . _("Der Mailserver ist nicht erreichbar. Bitte &uuml;berpr&uuml;fen Sie, ob Sie E-Mails mit der angegebenen Adresse verschicken k&ouml;nnen!") . "§";
 					return false;
@@ -512,13 +515,13 @@ function edit_pers($password, $check_pass, $response, $new_username, $vorname, $
 						return false;
 					}
 				}
-				
+
 				$this->db->query("SELECT Email,Vorname,Nachname FROM auth_user_md5 WHERE Email='$email'") ;
 				if ($this->db->next_record()) {
 					$this->msg=$this->msg . "error§" . sprintf(_("Die angegebene E-Mail-Adresse wird bereits von einem anderen User (%s %s) verwendet. Bitte geben Sie eine andere E-Mail-Adresse an."), htmlReady($this->db->f("Vorname")), htmlReady($this->db->f("Nachname"))) . "§";
 					return false;
 				}
-				
+
 				if (!StudipAuthAbstract::CheckField("auth_user_md5.password", $this->auth_user['auth_plugin'])){
 						//email ist ok, user bekommt neues Passwort an diese Addresse, falls Passwort in Stud.IP DB
 						$newpass=$this->generate_password(6);
@@ -526,10 +529,10 @@ function edit_pers($password, $check_pass, $response, $new_username, $vorname, $
 						// Mail abschicken...
 						$to=$email;
 						$url = $smtp->url;
-					
+
 						// include language-specific subject and mailbody
 						include_once($GLOBALS['ABSOLUTE_PATH_STUDIP']."locale/$_language_path/LC_MAILS/change_self_mail.inc.php");
-					
+
 						$smtp->SendMessage(
 						$smtp->env_from, array($to),
 						array("From: $smtp->from", "Reply-To: $smtp->abuse", "To: $to", "Subject: $subject"),
@@ -537,7 +540,7 @@ function edit_pers($password, $check_pass, $response, $new_username, $vorname, $
 						$this->logout_user = TRUE;
 						$this->msg = $this->msg . "msg§" . _("Ihre E-Mail-Adresse wurde ge&auml;ndert!") . "§info§" . _("ACHTUNG!<br>Aus Sicherheitsgr&uuml;nden wurde auch ihr Passwort ge&auml;ndert. Es wurde an die neue E-Mail-Adresse geschickt!") . "§";
 						$this->db->query("UPDATE auth_user_md5 SET Email='$email', password='$hashpass' WHERE user_id='".$this->auth_user["user_id"]."'");
-						log_event("USER_NEWPWD",$this->auth_user["user_id"]); // logging    
+						log_event("USER_NEWPWD",$this->auth_user["user_id"]); // logging
 					} else {
 						$this->msg = $this->msg . "msg§" . _("Ihre E-Mail-Adresse wurde ge&auml;ndert!") . "§";
 						$this->db->query("UPDATE auth_user_md5 SET Email='$email' WHERE user_id='".$this->auth_user["user_id"]."'");
@@ -601,7 +604,7 @@ function my_error($msg) {
 	<td class="blank" colspan=2>
 	 <table border="0" align="left" cellspacing="0" cellpadding="2">
 	<tr>
-	 <td class="blank" align="center" width="50"><img src="pictures/x.gif"></td>
+	 <td class="blank" align="center" width="50"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/x.gif"></td>
 	 <td class="blank" align="left" width="*"><font color="#FF2020"><?php print $msg ?></font></td>
 	</tr>
 	 </table>
@@ -622,7 +625,7 @@ function my_msg($msg) {
 	<td class="blank" colspan=2>
 	 <table border="0" align="left" cellspacing="0" cellpadding="2">
 	<tr>
-	 <td class="blank" align="center" width=50><img src="pictures/ok.gif"></td>
+	 <td class="blank" align="center" width=50><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/ok.gif"></td>
 	 <td class="blank" align="left" width="*"><font color="#008000"><?php print $msg ?></font></td>
 	</tr>
 	 </table>
@@ -642,7 +645,7 @@ function my_info($msg) {
 	<td class="blank" colspan="2">
 	 <table border="0" align="left" cellspacing="0" cellpadding="2">
 	<tr>
-	 <td class="blank" align="center" width="50"><img src="pictures/ausruf.gif"></td>
+	 <td class="blank" align="center" width="50"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/ausruf.gif"></td>
 	 <td class="blank" align="left" width="*"><font color="#008000"><?php print $msg ?></font></td>
 	</tr>
 	 </table>
@@ -698,8 +701,8 @@ function move ($inst_id, $direction) {
 		}
 	}
 }
-			
-		
+
+
 } // ende Klassendefinition
 
 
@@ -722,11 +725,11 @@ $DataFields = new DataFields($my_about->auth_user["user_id"]);
 
 if ($logout && $auth->auth["uid"] == "nobody")  // wir wurden gerade ausgeloggt...
 	{
-	
+
 	// Start of Output
 	include ($GLOBALS['ABSOLUTE_PATH_STUDIP'] .'html_head.inc.php'); // Output of html head
 	include ($GLOBALS['ABSOLUTE_PATH_STUDIP'] .'header.php');   // Output of Stud.IP head
-	
+
 	echo '<table cellspacing="0" cellpadding="0" border="0" width="100%">';
 	echo '<tr><td class="topic" colspan="2"><b>&nbsp;'. _("Daten ge&auml;ndert!") .'</b></td></tr>';
 
@@ -750,77 +753,90 @@ if (!$my_about->check)
 	include ($GLOBALS['ABSOLUTE_PATH_STUDIP'].'html_head.inc.php'); // Output of html head
 	include ($GLOBALS['ABSOLUTE_PATH_STUDIP'].'header.php');   // Output of Stud.IP head
 	parse_window ('error§' . _("Zugriff verweigert.")."<br />\n<font size=-1 color=black>". sprintf(_("Wahrscheinlich ist Ihre Session abgelaufen. Wenn sie sich länger als %s Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurück zur Anmeldung zu gelangen.<br /> <br /> Eine andere Ursache kann der Versuch des Zugriffs auf Userdaten, die Sie nicht bearbeiten d&uuml;rfen, sein. Nutzen Sie den untenstehenden Link, um zurück auf die Startseite zu gelangen."), $AUTH_LIFETIME).'</font>', '§',
-	_("Zugriff auf Userdaten verweigert"), 
+	_("Zugriff auf Userdaten verweigert"),
 	sprintf(_("%s Hier%s geht es wieder zur Anmeldung beziehungsweise Startseite."),'<a href="index.php"><b>&nbsp;','</b></a>')."<br />\n&nbsp;");
-	
+
 	?>
 	</body>
-	</html>  
+	</html>
 	<?
 	page_close();
 	die;
 	}
-	
+
 if(check_ticket($studipticket)){
 	//ein Bild wurde hochgeladen
 	if ($cmd == "copy")
 	 {
 		$my_about->imaging($imgfile,$imgfile_size,$imgfile_name);
 		}
-	
+
 	//Veränderungen an Studiengängen
 	if ($cmd == "studiengang_edit" && (!StudipAuthAbstract::CheckField("studiengang_id", $my_about->auth_user['auth_plugin'])) && ($ALLOW_SELFASSIGN_STUDYCOURSE || $perm->have_perm('admin')))
 	 {
 		$my_about->studiengang_edit($studiengang_delete,$new_studiengang);
 		}
-	
+
 	//Veränderungen an Instituten für Studies
 	if ($cmd == "inst_edit" && ($ALLOW_SELFASSIGN_STUDYCOURSE || $perm->have_perm('admin')))
 	 {
 		$my_about->inst_edit($inst_delete,$new_inst);
 		}
-	
+
 	//Veränderungen an Raum, Sprechzeit, etc
 	if ($cmd == "special_edit")
 	 {
 		$my_about->special_edit($raum, $sprech, $tel, $fax, $name, $default_inst, $visible);
 		}
-	
+
 	// change order of institutes
 	if ($cmd == 'move') {
 		$my_about->move($move_inst, $direction);
 	}
-	
+
 	//Veränderungen der pers. Daten
 	if ($cmd == "edit_pers") {
 		//email und passwort können nicht sinnvoll gleichzeitig geändert werden, da bei Änderung der email automatisch das passwort neu gesetzt wird
 		if (($email && $my_about->auth_user["Email"] != $email)
 			&& (($response && $response != md5("*****")) || ($password && $password != "*****"))) {
 			$my_about->msg = $my_about->msg . "error§" . _("Bitte ändern Sie erst ihre E-Mail-Adresse und dann ihr Passwort!") . "§";
-			
+
 		} else {
-		$my_about->edit_pers($password, $check_pass, $response, $new_username, $vorname, $nachname, $email, $telefon, $cell, $anschrift, $home, $hobby, $geschlecht, $title_front, $title_front_chooser, $title_rear, $title_rear_chooser, $view);
+		$my_about->edit_pers($password, $check_pass, $response, $new_username, $vorname, $nachname, $email, $telefon, $cell, $anschrift, $home,$motto, $hobby, $geschlecht, $title_front, $title_front_chooser, $title_rear, $title_rear_chooser, $view);
 			if (($my_about->auth_user["username"] != $new_username) && $my_about->logout_user == TRUE) $my_about->get_auth_user($new_username);   //username wurde geändert!
 			else $my_about->get_auth_user($username);
 			$username = $my_about->auth_user["username"];
 		}
 	}
-	
+
 	if ($cmd=="edit_leben")  {
 		$my_about->edit_leben($lebenslauf,$schwerp,$publi);
 		$DataFields->storeContentFromForm('pers');
 	}
-	
+
 	// general settings from mystudip: language, jshover, accesskey
 	if ($cmd=="change_general") {
 		$my_about->db->query("UPDATE user_info SET preferred_language = '$forced_language' WHERE user_id='" . $my_about->auth_user["user_id"] ."'");
 		$_language = $forced_language;
-		$forum["jshover"]=$jshover; 
+		$forum["jshover"]=$jshover;
 		$my_studip_settings["startpage_redirect"] = $personal_startpage;
 		$user->cfg->setValue((int)$_REQUEST['accesskey_enable'], $user->id, "ACCESSKEY_ENABLE");
 		$user->cfg->setValue((int)$_REQUEST['showsem_enable'], $user->id, "SHOWSEM_ENABLE");
+		$user->cfg->setValue($_REQUEST['online_format'], $user->id, "ONLINE_NAME_FORMAT");
+
+		// change visibility
+		$q="SELECT visible FROM auth_user_md5 WHERE user_id='$user->id'";
+		$my_about->db->query($q);
+		$my_about->db->next_record();
+		$visi=$my_about->db->f("visible");
+		if (($visi=='yes' ||$visi=='no' ||$visi=='unknown') && ($change_visibility=='yes' || $change_visibility=='no')) {
+			if ($visi!=$change_visibility) {
+				$my_about->db->query("UPDATE auth_user_md5 SET visible='$change_visibility' WHERE user_id='$user->id'");
+				$my_about->msg .= "ok§" . _("Ihre Sichtbarkeit wurde geändert.") . "§";
+			}
+		}
 	}
-	
+
 	if ($my_about->logout_user)
 	 {
 		$sess->delete();  // User logout vorbereiten
@@ -832,16 +848,16 @@ if(check_ticket($studipticket)){
 		header("Location: $PHP_SELF?username=$username&nobodymsg=$nobodymsg&logout=1&view=$view"); //Seite neu aufrufen, damit user nobody wird...
 		die;
 		}
-	
+
 	if ($cmd) {
 		if ($view=="Bild" && $cmd=="bild_loeschen" && $_SERVER["REQUEST_METHOD"]=="POST") {
-                        if ($user_id==$auth->auth["uid"] || $perm->have_perm("admin")) {
-                                if (file_exists("./user/".$user_id.".jpg")) {
-                                        unlink("./user/".$user_id.".jpg");
-                                        $my_about->msg.="msg§"._("Das Bild wurde gel&ouml;scht");
-                                }
-                        }
-                }
+			if ($user_id==$auth->auth["uid"] || $perm->have_perm("admin")) {
+        	        	if (file_exists("./user/".$user_id.".jpg")) {
+	                       		unlink("./user/".$user_id.".jpg");
+					$my_about->msg.="msg§"._("Das Bild wurde gel&ouml;scht");
+				}
+                	}
+        	}
 
 		if (($my_about->check != "user") && ($my_about->priv_msg != "")) {
 			$m_id=md5(uniqid("smswahn"));
@@ -856,7 +872,7 @@ if(check_ticket($studipticket)){
 		page_close();
 		die;
 	}
-	
+
 } else {
 	unset($cmd);
 }
@@ -864,7 +880,7 @@ if(check_ticket($studipticket)){
 // Start of Output
 include ($GLOBALS['ABSOLUTE_PATH_STUDIP'].'html_head.inc.php'); // Output of html head
 
-if ($auth->auth["jscript"]) { // nur wenn JS aktiv 
+if ($auth->auth["jscript"]) { // nur wenn JS aktiv
 if ($view == 'Daten') {
 	$validator=new email_validation_class;
 ?>
@@ -982,6 +998,46 @@ function oeffne()
 } // end if view == Login
 } // Ende nur wenn JS aktiv
 
+switch($view) {
+	case "Bild": 
+		$HELP_KEYWORD="Basis.HomepageBild"; 
+		break;
+	case "Daten": 
+		$HELP_KEYWORD="Basis.HomepagePersönlicheDaten"; 
+		break;
+	case "Karriere": 
+		$HELP_KEYWORD="Basis.HomepageUniversitäreDaten"; 
+		break;
+	case "Lebenslauf": 
+		$HELP_KEYWORD="Basis.HomepageLebenslauf"; 
+		break;
+	case "Sonstiges": 
+		$HELP_KEYWORD="Basis.HomepageSonstiges"; 
+		break;
+	case "Login": 
+		$HELP_KEYWORD="Basis.MyStudIPAutoLogin"; 
+		break;
+	case "Forum": 
+		$HELP_KEYWORD="Basis.MyStudIPForum"; 
+		break;
+	case "Terminkalender": 
+		$HELP_KEYWORD="Basis.MyStudIPTerminkalender"; 
+		break;
+	case "Tools": 
+		$HELP_KEYWORD="Basis.HomepageTools"; 
+		break;
+	case "Stundenplan": 
+		$HELP_KEYWORD="Basis.MyStudIPStundenplan"; 
+		break;
+	case "Messaging": 
+		$HELP_KEYWORD="Basis.MyStudIPMessaging"; 
+		break;
+	case "allgemein":
+	default: 
+		$HELP_KEYWORD="Basis.MyStudIP"; 
+		break;
+}
+
 include ($GLOBALS['ABSOLUTE_PATH_STUDIP']. 'header.php');   // Output of Stud.IP head
 
 
@@ -996,7 +1052,7 @@ if (!$cmd)
 	 else $max_col =  64 ; //default für 640x480
 
 // Reitersystem
-include ($GLOBALS['ABSOLUTE_PATH_STUDIP'].'links_about.inc.php');  
+include ($GLOBALS['ABSOLUTE_PATH_STUDIP'].'links_about.inc.php');
 
 //Kopfzeile bei allen eigenen Modulen ausgeben
 $table_open = FALSE;
@@ -1008,8 +1064,8 @@ if ($view != 'Forum'
 		&& $view != 'notification') {
 	echo '<table class="blank" cellspacing=0 cellpadding=0 border=0 width="100%">'."\n";
 
-	echo '<tr><td class="'.(($username != $auth->auth["uname"])? 'topicwrite':'topic').'" colspan=2><img src="pictures/einst.gif" border="0" align="texttop"><b>&nbsp;';
-	
+	echo '<tr><td class="'.(($username != $auth->auth["uname"])? 'topicwrite':'topic').'" colspan=2><img src="'. $GLOBALS['ASSETS_URL'] . 'images/einst.gif" border="0" align="texttop"><b>&nbsp;';
+
 	switch ($view) {
 		case ("Bild") :
 			echo _("Hochladen eines pers&ouml;nlichen Bildes");
@@ -1039,8 +1095,8 @@ if ($view != 'Forum'
 			echo _("Auto-Login einrichten");
 		break;
 	}
-	
-	if ($username != $auth->auth['uname']) { 
+
+	if ($username != $auth->auth['uname']) {
 		echo '&nbsp; &nbsp; <font size="-1">';
 		printf(_("Daten von: %s %s (%s), Status: %s"), htmlReady($my_about->auth_user['Vorname']), htmlReady($my_about->auth_user['Nachname']), $username, $my_about->auth_user['perms']);
 		echo '</font>';
@@ -1062,7 +1118,7 @@ if ($view == 'Bild') {
 	echo '<tr><td colspan=2 class="blank"><blockquote><br />' . _("Auf dieser Seite k&ouml;nnen Sie ein pers&ouml;nliches Bild f&uuml;r Ihre Homepage hochladen.") . "<br /><br /><br /></td></tr>\n";
 	echo '<tr><td width="30%" class="'.$cssSw->getClass().'" align="center">';
 	echo '<font size="-1"><b>' . _("Aktuell angezeigtes Bild:") . '<br /><br /></b></font>';
-	
+
 	if (!file_exists('./user/'.$my_about->auth_user["user_id"].'.jpg')) {
 		echo '<img src="./user/nobody.jpg" width="200" height="250" alt="' . _("Kein pers&ouml;nliches Bild vorhanden") . '" ><br />&nbsp; ';
 	} else {
@@ -1076,8 +1132,9 @@ if ($view == 'Bild') {
                         echo "  <FONT SIZE=\"-1\"><B>"._("Aktuelles Bild")."</B></FONT><BR><INPUT TYPE=\"image\" ".makeButton("loeschen","src")." BORDER=\"0\">\n";
                         echo "</FORM>\n";
                 }
+
 	}
-			
+
 	echo '</td><td class="'.$cssSw->getClass().'" width="70%" align="left" valign="top"><blockquote>';
 	echo '<form enctype="multipart/form-data" action="' . $_SERVER['PHP_SELF'] . '?cmd=copy&username=' . $username . '&view=Bild&studipticket='.get_ticket().'" method="POST">';
 	echo "<br />\n" . _("Hochladen eines Bildes:") . "<br /><br />\n" . _("1. Wählen sie mit <b>Durchsuchen</b> eine Bilddatei von ihrer Festplatte aus.") . "<br /><br />\n";
@@ -1098,13 +1155,13 @@ if ($view == 'Daten') {
 		echo '<font size="-1">' . sprintf(_("Ihre Authentifizierung (%s) benutzt nicht die Stud.IP Datenbank, daher k&ouml;nnen sie einige Felder nicht ver&auml;ndern!"),$my_about->auth_user['auth_plugin']) . "</font>";
 	}
 	echo "<br /><br /></blockquote></td></tr>\n".'<tr><td class=blank>';
-	
+
 	echo '<form action="'. $PHP_SELF. '?cmd=edit_pers&username='. $username. '&view='. $view. '&studipticket=' . get_ticket(). '" method="POST" name="pers"';
 	//Keine JavaScript überprüfung bei adminzugriff
 	if ($my_about->check == 'user' && $auth->auth['jscript'] ) {
 		echo ' onsubmit="return checkdata()" ';
 	}
-	echo '><table align="center" width="99%" class="blank" border="0" cellpadding="2" cellspacing="0">'; 
+	echo '><table align="center" width="99%" class="blank" border="0" cellpadding="2" cellspacing="0">';
 	if ($my_about->check == 'user') {
 		echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"25%\" align=\"left\"><blockquote><b>" . _("Username:") . " </b></blockquote></td><td class=\"".$cssSw->getClass()."\" colspan=2 width=\"75%\" align=\"left\">&nbsp;";
 		if (($ALLOW_CHANGE_USERNAME && !StudipAuthAbstract::CheckField("auth_user_md5.username",$my_about->auth_user['auth_plugin'])) ) {
@@ -1158,7 +1215,7 @@ if ($view == 'Daten') {
 	}
 	$cssSw->switchClass();
 	echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><blockquote><b>" . _("Titel:") . " </b></blockquote></td>";
-	if (StudipAuthAbstract::CheckField("user_info.title_front", $my_about->auth_user['auth_plugin'])) {
+	if (!$ALLOW_CHANGE_TITLE || StudipAuthAbstract::CheckField("user_info.title_front", $my_about->auth_user['auth_plugin'])) {
 		echo "<td class=\"".$cssSw->getClass()."\" colspan=\"2\" align=\"left\">&nbsp;" .  htmlReady($my_about->user_info['title_front']) . "</td></tr>";
 	} else {
 		echo "<td class=\"".$cssSw->getClass()."\" align=\"left\">&nbsp;";
@@ -1169,13 +1226,13 @@ if ($view == 'Daten') {
 				echo " selected ";
 			}
 			echo '>'.$TITLE_FRONT_TEMPLATE[$i].'</option>';
-		}	
+		}
 		echo "</select></td><td class=\"".$cssSw->getClass()."\" align=\"left\">&nbsp;&nbsp;";
 		echo "<input type=\"text\" size=\"".round($max_col*0.25)."\" name=\"title_front\" value=\"".htmlReady($my_about->user_info['title_front'])."\"></td></tr>\n";
 	}
 	$cssSw->switchClass();
 	echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\" nowrap><blockquote><b>" . _("Titel nachgest.:") . " </b></blockquote></td>";
-	if (StudipAuthAbstract::CheckField("user_info.title_rear", $my_about->auth_user['auth_plugin'])) {
+	if (!$ALLOW_CHANGE_TITLE || StudipAuthAbstract::CheckField("user_info.title_rear", $my_about->auth_user['auth_plugin'])) {
 		echo "<td class=\"".$cssSw->getClass()."\" colspan=\"2\" align=\"left\">&nbsp;" .  htmlReady($my_about->user_info['title_rear']) . "</td></tr>";
 	} else {
 		echo "<td class=\"".$cssSw->getClass()."\" align=\"left\">&nbsp;";
@@ -1186,7 +1243,7 @@ if ($view == 'Daten') {
 				echo " selected ";
 			}
 			echo '>'.$TITLE_REAR_TEMPLATE[$i].'</option>';
-		}	
+		}
 		echo "</select></td><td class=\"".$cssSw->getClass()."\" align=\"left\">&nbsp;&nbsp;";
 		echo "<input type=\"text\" size=\"".round($max_col*0.25)."\" name=\"title_rear\" value=\"".htmlReady($my_about->user_info['title_rear'])."\"></td></tr>\n";
 	}
@@ -1220,23 +1277,31 @@ if ($view == 'Daten') {
 		echo '&nbsp;' . htmlReady($my_about->user_info['privatcell']);
 	} else {
 		echo '&nbsp; <input type="text" size="' .round($max_col*0.25). '" name="cell" value="' .htmlReady($my_about->user_info['privatcell']).'">';
-	}	
+	}
 	echo "</td></tr>\n";
 	 $cssSw->switchClass();
 	echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><blockquote><b>" . _("Adresse (privat):") . " </b></blockquote></td><td class=\"".$cssSw->getClass()."\" colspan=2 align=\"left\">";
 	if (StudipAuthAbstract::CheckField("user_info.privadr", $my_about->auth_user['auth_plugin'])) {
 		echo "&nbsp;" . htmlReady($my_about->user_info["privadr"]);
 	} else {
-		echo "&nbsp; <input type=\"text\" size=\"".round($max_col*0.5)."\" name=\"anschrift\" value=\"".htmlReady($my_about->user_info["privadr"])."\">";
+		echo "&nbsp; <input type=\"text\" size=\"".round($max_col*0.6)."\" name=\"anschrift\" value=\"".htmlReady($my_about->user_info["privadr"])."\">";
 	}
 	echo "</td></tr>\n";
+	$cssSw->switchClass();
+	echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><blockquote><b>" . _("Motto:") . " </b></blockquote></td><td class=\"".$cssSw->getClass()."\" colspan=2 align=\"left\">";
+	if (StudipAuthAbstract::CheckField("user_info.motto", $my_about->auth_user['auth_plugin'])) {
+		echo "&nbsp;" . htmlReady($my_about->user_info["motto"]);
+	} else {
+		echo "&nbsp; <input type=\"text\" size=\"".round($max_col*0.6)."\" name=\"motto\" value=\"".htmlReady($my_about->user_info["motto"])."\">";
+
+	}
 	$cssSw->switchClass();
 	echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><blockquote><b>" . _("Homepage:") . " </b></blockquote></td><td class=\"".$cssSw->getClass()."\" colspan=2 align=\"left\">";
 	if (StudipAuthAbstract::CheckField("user_info.Home", $my_about->auth_user['auth_plugin'])) {
 		echo "&nbsp;" . htmlReady($my_about->user_info["Home"]);
 	} else {
-		echo "&nbsp; <input type=\"text\" size=\"".round($max_col*0.5)."\" name=\"home\" value=\"".htmlReady($my_about->user_info["Home"])."\">";
-	
+		echo "&nbsp; <input type=\"text\" size=\"".round($max_col*0.6)."\" name=\"home\" value=\"".htmlReady($my_about->user_info["Home"])."\">";
+
 	}
 	echo "</td></tr>\n";
 	$cssSw->switchClass();
@@ -1251,17 +1316,17 @@ if ($view == 'Daten') {
 	echo "<tr><td class=\"".$cssSw->getClass()."\">&nbsp; </td><td class=\"".$cssSw->getClass()."\" colspan=2>&nbsp; <input type=\"IMAGE\" " . makeButton("uebernehmen", "src") . " border=0 value=\"" . _("Änderungen übernehmen") . "\"></td></tr>\n</table></form>\n</td></tr>";
 }
 
-	
+
 if ($view == 'Karriere') {
-	
+
 	if ($perm->have_perm('root') AND $username == $auth->auth["uname"]) {
 		echo '<tr><td align="left" valign="top" class="blank"><blockquote>'."<br /><br />\n" . _("Als Root haben Sie bereits genug Karriere gemacht ;-)") . "<br /><br />\n";
-	} else { 
+	} else {
 		echo '<tr><td align="left" valign="top" class="blank"><blockquote><br />'."\n";
 		if (($perm->have_perm("tutor")) && (!$perm->have_perm("dozent"))) {
 			 echo _("Hier können Sie Angaben &uuml;ber ihre Studienkarriere und Daten an Einrichtungen, an denen Sie arbeiten, machen.");
 		} elseif ($perm->have_perm("dozent")) {
-			echo _("Hier können Sie Angaben &uuml;ber Daten an Einrichtungen, in den Sie arbeiten, machen.");	
+			echo _("Hier können Sie Angaben &uuml;ber Daten an Einrichtungen, in den Sie arbeiten, machen.");
 		} else {
 			echo _("Hier können Sie Angaben &uuml;ber ihre Studienkarriere machen.");
 		}
@@ -1275,7 +1340,7 @@ if ($view == 'Karriere') {
 	 		echo '<b>&nbsp; ' . _("Ich arbeite an folgenden Einrichtungen:") . '</b>';
 	 		echo '<form action="'.$PHP_SELF.'?cmd=special_edit&username='. $username.'&view='.$view.'&studipticket=' .get_ticket(). '" method="POST">'."\n";
 	 		echo '<table cellspacing="0" cellpadding="2" border="0" align="center" width="99%">';
-			
+
 			$i = 1;
 	 		while (list($inst_id, $details) = each($my_about->user_inst)) {
 				$cssSw->resetClass();
@@ -1288,26 +1353,26 @@ if ($view == 'Karriere') {
 					echo _("Standard-Adresse:") . '&nbsp;<input type="radio" name="default_inst" ';
 					echo "value=\"$inst_id\"";
 					echo ($details['externdefault'] ? ' checked="checked"' : '') . ">&nbsp;";
-					echo '<img src="' . $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'] . 'pictures/info.gif"';
+					echo '<img src="'. $GLOBALS['ASSETS_URL'] . 'images/info.gif"';
 					$info = _("Angaben, die im Adressbuch und auf den externen Seiten als Standard benutzt werden.");
 					echo tooltip($info, TRUE, TRUE) . ">&nbsp; &nbsp;";
 					echo _("Diese Einrichtung ausblenden:");
 					echo "<input type=\"checkbox\" name=\"visible[$inst_id]\" value=\"1\" ";
 					echo ($details['visible'] == '1' ? '' : ' checked="checked"') . ">&nbsp;";
-					echo '<img src="'. $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'].'pictures/info.gif"';
+					echo '<img src="'. $GLOBALS['ASSETS_URL'] . 'images/info.gif"';
 					$info = _("Die Angaben zu dieser Einrichtung werden nicht auf Ihrer Homepage und in Adressbüchern ausgegeben.");
 					echo tooltip($info, TRUE, TRUE) . ">&nbsp; &nbsp;</td>\n";
 					echo "<td class=\"" . $cssSw->getClass() . "\" align=\"left\">";
 					if ($i != 1) {
 						echo "<a href=\"$PHP_SELF?view=Karriere&username=$username&cmd=move";
 						echo "&direction=up&move_inst=$inst_id&studipticket=".get_ticket().'">';
-						echo '<img src="'. $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'] . 'pictures/move_up.gif" ';
+						echo '<img src="'. $GLOBALS['ASSETS_URL'] . 'images/move_up.gif" ';
 						echo 'border="0"' . tooltip(_("nach oben")) . '></a>';
 					}
 					if ($i != sizeof($my_about->user_inst)) {
 						echo "<a href=\"$PHP_SELF?view=Karriere&username=$username&cmd=move";
 						echo "&direction=down&move_inst=$inst_id&studipticket=".get_ticket().'">';
-						echo '<img src="' . $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'].'pictures/move_down.gif" ';
+						echo '<img src="' . $GLOBALS['ASSETS_URL'] . 'images/move_down.gif" ';
 						echo 'border="0"' . tooltip(_("nach unten")) . '></a>';
 					}
 					$i++;
@@ -1359,7 +1424,7 @@ if ($view == 'Karriere') {
 	//Studiengänge die ich belegt habe
 	if (($my_about->auth_user['perms'] == 'autor' || $my_about->auth_user['perms'] == 'tutor')) { // nur für Autoren und Tutoren
 		$allow_change_sg = (!StudipAuthAbstract::CheckField("studiengang_id", $my_about->auth_user['auth_plugin']) && ($GLOBALS['ALLOW_SELFASSIGN_STUDYCOURSE'] || $perm->have_perm('admin')))? TRUE : FALSE;
-		
+
 		$cssSw->resetClass();
 		$cssSw->switchClass();
 		echo '<tr><td class="blank">';
@@ -1384,7 +1449,7 @@ if ($view == 'Karriere') {
 			if ($allow_change_sg){
 				echo '<input type="CHECKBOX" name="studiengang_delete[]" value="'.$studiengang_id.'">';
 			} else {
-				echo '<img src="pictures/haken_transparent.gif" border="0">';
+				echo '<img src="'. $GLOBALS['ASSETS_URL'] . 'images/haken_transparent.gif" border="0">';
 			}
 			echo "</td><tr>\n";
 			$i++;
@@ -1439,7 +1504,7 @@ if ($view == 'Karriere') {
 				if ($allow_change_in) {
 					echo '<input type="CHECKBOX" name="inst_delete[]" value="'.$inst_id.'">';
 				} else {
-					echo '<img src="pictures/haken_transparent.gif" border="0">';
+					echo '<img src="'. $GLOBALS['ASSETS_URL'] . 'images/haken_transparent.gif" border="0">';
 				}
 				echo "</td></tr>\n";
 	 			$i++;
@@ -1454,7 +1519,7 @@ if ($view == 'Karriere') {
 		echo '</table></td><td class="' . $cssSw->getClass() . '" width="70%" align="left" valign="top"><blockquote><br />'."\n" ;
 		if ($allow_change_in){
 			echo _("Um sich als Student einer Einrichtung zuzuordnen, wählen Sie die entsprechende Einrichtung aus der folgenden Liste aus:") . "<br />\n";
-			echo "<br />\n".'<div align="center"><a name="einrichtungen"></a>'; 
+			echo "<br />\n".'<div align="center"><a name="einrichtungen"></a>';
 			$my_about->select_inst();
 			echo "</div><br />" . _("Wenn sie aus Einrichtungen wieder ausgetragen werden möchten, markieren Sie die entsprechenden Felder in der linken Tabelle.") . "<br />\n";
 			echo _("Mit einem Klick auf <b>&Uuml;bernehmen</b> werden die gewählten Änderungen durchgeführt.") . "<br /><br /> \n";
@@ -1475,7 +1540,7 @@ if ($view == 'Lebenslauf') {
 		 echo _("Hier k&ouml;nnen Sie Lebenslauf, Publikationen und Arbeitschwerpunkte bearbeiten.");
 	} else {
 		echo  _("Hier k&ouml;nnen Sie Ihren Lebenslauf bearbeiten.");
-	}  
+	}
 	echo "<br>&nbsp; </blockquote></td></tr>\n<tr><td class=blank>";
 	echo '<form action="' . $_SERVER['PHP_SELF'] . '?cmd=edit_leben&username=' . $username . '&view=' . $view . '&studipticket=' . get_ticket() . '" method="POST" name="pers">';
 	echo '<table align="center" width="99%" align="center" border="0" cellpadding="2" cellspacing="0">' . "\n";
@@ -1489,7 +1554,7 @@ if ($view == 'Lebenslauf') {
 		echo $datafield_form->getFormFieldCaption($field_id) .':</b><br />'."\n";
 		echo $datafield_form->getFormField($field_id);
 		echo "</blockquote></td></tr>\n";
-	
+
 	}
 	echo '<tr><td class="'.$cssSw->getClass().'" colspan="2" align="left" valign="top"><blockquote><b>' . _("Lebenslauf:") . "</b><br />\n";
 	echo '<textarea  name="lebenslauf" style=" width: 80%" cols="'.round($max_col/1.3).'" rows="7" wrap="virtual">' . htmlReady($my_about->user_info['lebenslauf']).'</textarea><a name="lebenslauf"></a></blockquote></td></tr>'."\n";
@@ -1501,7 +1566,7 @@ if ($view == 'Lebenslauf') {
 		echo "<tr><td class=\"".$cssSw->getClass(). '" colspan="2" align="left" valign="top"><blockquote><b>' . _("Publikationen:") . "</b><br />\n";
 		echo '<textarea  name="publi" style=" width: 80%" cols="'.round($max_col/1.3) . '" rows="7" wrap="virtual">'.htmlReady($my_about->user_info['publi']).'</textarea><a name="publikationen"></a></blockquote></td></tr>'."\n";
 	}
-	
+
 	$cssSw->switchClass();
 	echo '<tr><td class="'.$cssSw->getClass().'" colspan="2"><blockquote><br><input type="IMAGE" ' . makeButton('uebernehmen', 'src') . ' border="0" value="' . _("Änderungen übernehmen") . "\"><br></blockquote></td></tr>\n</table>\n</form>\n</td></tr>";
 }
@@ -1539,7 +1604,7 @@ if ($view == "Stundenplan") {
 	check_schedule_default();
 	change_schedule_view();
 }
-	
+
 if($view == 'calendar' && $GLOBALS['CALENDAR_ENABLE']) {
 	require_once($GLOBALS['RELATIVE_PATH_CALENDAR'].'/calendar_settings.inc.php');
 }
@@ -1553,7 +1618,7 @@ if ($view == "Messaging") {
 if ($view == 'notification') {
 	echo '<table class="blank" cellspacing="0" cellpadding="2" border="0" width="100%">';
 	echo '<tr><td class="topic" width="100%">';
-	echo '<img src="pictures/einst.gif" border="0" align="texttop"><b>&nbsp;';
+	echo '<img src="'. $GLOBALS['ASSETS_URL'] . 'images/einst.gif" border="0" align="texttop"><b>&nbsp;';
 	echo _("Benachrichtigung anpassen") . "</b></td></tr>\n";
 	echo "<tr><td class=\"blank\" width=\"100%\">\n";
 	require_once('sem_notification.php');
@@ -1574,7 +1639,7 @@ if ($view == 'Login') {
 		echo _("Er f&uuml;hrt Sie direkt zum Login-Bildschirm von Stud.IP mit Ihrem schon eingetragenen Benutzernamen. Sie m&uuml;ssen nur noch Ihr Passwort eingeben.");
 	} else {
 		echo _("Als Administrator d&uuml;rfen Sie dieses Feature nicht nutzen - Sie tragen Verantwortung!");
-		
+
 	}
 	echo "</blockquote><br />\n</td></tr>\n";
 }

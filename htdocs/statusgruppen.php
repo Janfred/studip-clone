@@ -28,6 +28,7 @@ require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
 
+$HELP_KEYWORD="Basis.InVeranstaltungGruppen";
 // Start of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
@@ -42,7 +43,7 @@ $cssSw=new cssClassSwitcher;
 // Hilfsfunktionen
 
 // groupmail:
-// create mailto:-Link fpr 
+// create mailto:-Link fpr
 // - groups (filter-argument ignored)
 // - seminars (filter=empty or =all: Mail to all accepted participants)
 //            (filter=prelim: Mail to all preliminarily accepted partic.)
@@ -92,7 +93,7 @@ function PrintAktualStatusgruppen () {
 		$size = $db->f("size");
 		$groupmails = groupmail($statusgruppe_id);
 		echo "<table width=\"99%\" cellpadding=\"0\" cellspacing=\"0\" align=\"center\" border=\"0\"><tr>";
-		printf ("<td width=\"90%%\" class=\"topic\"><font size=\"-1\"><b>&nbsp;%s &nbsp;%s</b></font>",CheckAssignRights($statusgruppe_id,$user->id)?"<a href=\"$PHP_SELF?assign=$statusgruppe_id\"><img src=\"pictures/move.gif\" border=\"0\"". tooltip(_("In diese Gruppe eintragen"))."></a>":"", htmlReady($db->f("name")));
+		printf ("<td width=\"90%%\" class=\"topic\"><font size=\"-1\"><b>&nbsp;%s &nbsp;%s</b></font>",CheckAssignRights($statusgruppe_id,$user->id)?"<a href=\"$PHP_SELF?assign=$statusgruppe_id\"><img src=\"".$GLOBALS['ASSETS_URL']."images/move.gif\" border=\"0\"". tooltip(_("In diese Gruppe eintragen"))."></a>":"", htmlReady($db->f("name")));
 
 		$limit = GetStatusgruppeLimit($statusgruppe_id);
 		if ($limit!=FALSE && $db->f("selfassign")=="1") {
@@ -107,15 +108,26 @@ function PrintAktualStatusgruppen () {
 		}
 		printf ("</td><td width=\"10%%\"class=\"topic\" valign=\"middle\" align=\"right\" nowrap>");
 
-		
+
 		if ($rechte || CheckUserStatusgruppe($statusgruppe_id, $user->id)) {  // nicht alle duerfen Gruppenmails/Gruppensms verschicken
-			printf ("&nbsp;<a href=\"sms_send.php?sms_source_page=statusgruppen.php&group_id=%s&emailrequest=1&subject=%s\"><img src=\"pictures/mailnachricht.gif\" " . tooltip(_("Systemnachricht mit Emailweiterleitung an alle Gruppenmitglieder verschicken")) . " border=\"0\"></a>&nbsp;", $statusgruppe_id, rawurlencode($SessSemName[0]));
-			printf ("&nbsp;<a href=\"sms_send.php?sms_source_page=statusgruppen.php&group_id=%s&subject=%s\"><img src=\"pictures/nachricht1.gif\" " . tooltip(_("Systemnachricht an alle Gruppenmitglieder verschicken")) . " border=\"0\"></a>&nbsp;", $statusgruppe_id, rawurlencode($SessSemName[0])); 
+			printf ("&nbsp;<a href=\"sms_send.php?sms_source_page=statusgruppen.php&group_id=%s&emailrequest=1&subject=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/mailnachricht.gif\" " . tooltip(_("Systemnachricht mit Emailweiterleitung an alle Gruppenmitglieder verschicken")) . " border=\"0\"></a>&nbsp;", $statusgruppe_id, rawurlencode($SessSemName[0]));
+			printf ("&nbsp;<a href=\"sms_send.php?sms_source_page=statusgruppen.php&group_id=%s&subject=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" " . tooltip(_("Systemnachricht an alle Gruppenmitglieder verschicken")) . " border=\"0\"></a>&nbsp;", $statusgruppe_id, rawurlencode($SessSemName[0]));
 		} else {
 			echo "&nbsp;";
 		}
 		printf ("</td>");
 		echo 	"</tr>";
+
+		if (!$rechte) {
+			$db2->query("SELECT user_id, visible FROM seminar_user WHERE Seminar_id = '".$SessSemName[1]."'");
+			while ($db2->next_record()) {
+				$visio[$db2->f('user_id')] = ($db2->f('visible') == 'yes') ? true : false;
+			}
+			$db2->query("SELECT user_id, visible FROM admission_seminar_user WHERE seminar_id = '".$SessSemName[1]."'");
+			while ($db2->next_record()) {
+				$visio[$db2->f('user_id')] = ($db2->f('visible') == 'yes') ? true : false;
+			}
+		}
 
 		$db2->query ("SELECT statusgruppe_user.user_id, " . $_fullname_sql['full'] ." AS fullname, username FROM statusgruppe_user LEFT JOIN auth_user_md5 USING(user_id) LEFT JOIN user_info USING (user_id) WHERE statusgruppe_id = '$statusgruppe_id' ORDER BY position ASC");
 		$k = 1;
@@ -123,14 +135,26 @@ function PrintAktualStatusgruppen () {
 			if ($k % 2) {
 				$class="steel1";
 			} else {
-				$class="steelgraulight"; 
+				$class="steelgraulight";
 			}
-			printf ("<tr>");
-			printf ("<td width=\"90%%\" class=\"%s\"><font size=\"-1\"><a href = about.php?username=%s>&nbsp;%s</a></font></td>",$class, $db2->f("username"), htmlReady($db2->f("fullname")));
+			echo '<tr>';
+			echo '<td width="90%" class="'.$class.'">';
+			if ($visio[$db2->f('user_id')] || ($db2->f('user_id') == $user->id) || $rechte) {
+				printf("<font size=\"-1\"><a href = \"about.php?username=%s\">&nbsp;%s</a>", $db2->f("username"), htmlReady($db2->f("fullname")));
+				if  (($db2->f('user_id') == $user->id) && !($visio[$db2->f('user_id')]) && !$rechte) {
+					echo ' (unsichtbar)';
+				}
+				echo '</font>';
+			} else {
+				echo '<font color="#666666">'. _("(unsichtbareR NutzerIn)"). '</font>';
+			}
+
+			echo '</td>';
 			printf ("<td width=\"10%%\"class=\"$class\" align=\"right\">");
 			if (CheckSelfAssign($statusgruppe_id) && $user->id == $db2->f("user_id"))
-				printf ("<a href=\"$PHP_SELF?delete_id=%s\"><img src=\"pictures/trash.gif\" " . tooltip(_("Aus dieser Gruppe austragen")) . " border=\"0\"></a>&nbsp; ", $statusgruppe_id); 
-			printf ("<a href=\"sms_send.php?sms_source_page=teilnehmer.php&rec_uname=%s\"><img src=\"pictures/nachricht1.gif\" " . tooltip(_("Systemnachricht an User verschicken")) . " border=\"0\"></a>", $db2->f("username")); 
+				printf ("<a href=\"$PHP_SELF?delete_id=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" " . tooltip(_("Aus dieser Gruppe austragen")) . " border=\"0\"></a>&nbsp; ", $statusgruppe_id);
+			if (($visio[$db2->f('user_id')] || $rechte) && ($db2->f('user_id') != $user->id))
+				printf ("<a href=\"sms_send.php?sms_source_page=teilnehmer.php&rec_uname=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" " . tooltip(_("Systemnachricht an User verschicken")) . " border=\"0\"></a>", $db2->f("username"));
 			printf ("&nbsp;</td>");
 			echo "</tr>";
 			$k++;
@@ -141,7 +165,7 @@ function PrintAktualStatusgruppen () {
 }
 
 function PrintNonMembers ($range_id)
-{	
+{
 	global $_fullname_sql, $PHP_SELF;
 	$bereitszugeordnet = GetAllSelected($range_id);
 	$db=new DB_Seminar;
@@ -149,7 +173,7 @@ function PrintNonMembers ($range_id)
 	$db->query ($query);
 	if ($db->num_rows() >sizeof($bereitszugeordnet)-1) { // there are non-grouped members
 		echo "<table width=\"99%\" cellpadding=\"0\" cellspacing=\"0\" align=\"center\" border=\"0\"><tr>";
-		print ("<td width=\"100%%\" colspan=\"2\" class=\"steel\"><font size=\"-1\"><b>&nbsp;" . _("keiner Funktion oder Gruppe zugeordnet") . "</b></font> <img src=\"pictures/blank.gif\" height=\"25\"></td>");
+		print ("<td width=\"100%%\" colspan=\"2\" class=\"steel\"><font size=\"-1\"><b>&nbsp;" . _("keiner Funktion oder Gruppe zugeordnet") . "</b></font> <img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" height=\"25\"></td>");
 		echo 	"</tr>";
 		$k = 1;
 		while ($db->next_record()) {
@@ -157,12 +181,12 @@ function PrintNonMembers ($range_id)
 				if ($k % 2) {
 					$class="steel1";
 				} else {
-					$class="steelgraulight"; 
+					$class="steelgraulight";
 				}
 				printf ("<tr>");
 				printf ("<td width=\"90%%\" class=\"%s\"><font size=\"-1\"><a href = about.php?username=%s>&nbsp;%s</a></font></td>",$class, $db->f("username"), htmlReady($db->f("fullname")));
 				printf ("<td width=\"10%%\"class=\"$class\" align=\"right\">");
-				printf ("<a href=\"sms_send.php?sms_source_page=teilnehmer.php&rec_uname=%s\"><img src=\"pictures/nachricht1.gif\" " . tooltip(_("Systemnachricht an User verschicken")) . " border=\"0\"></a>", $db->f("username")); 
+				printf ("<a href=\"sms_send.php?sms_source_page=teilnehmer.php&rec_uname=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" " . tooltip(_("Systemnachricht an User verschicken")) . " border=\"0\"></a>", $db->f("username"));
 				printf ("&nbsp;</td>");
 				echo "	</tr>";
 				$k++;
@@ -201,7 +225,7 @@ if ($delete_id)
 		</td>
 	</tr>
 	<tr>
-		<td class="blank" colspan="2">&nbsp; 
+		<td class="blank" colspan="2">&nbsp;
 		</td>
 	</tr>
 	<tr>
@@ -213,13 +237,13 @@ if ($delete_id)
 		$sms_msg = '';
 		$sess->unregister('sms_msg');
 	}
-	?>	
+	?>
 	<tr valign="top">
      <td width="90%" NOWRAP class="blank">
 			<?
 			PrintAktualStatusgruppen();
-			$anzahltext = PrintNonMembers($SessSemName[1]); 
-			
+			$anzahltext = PrintNonMembers($SessSemName[1]);
+
 			if ($anzahltext == 1) {
 				$Memberstatus = _("Nicht alle Personen sind einer Funktion / Gruppe zugeordnet.");
 			}
@@ -241,27 +265,27 @@ if ($delete_id)
 	</table>
 	</td>
 	<td width="270" NOWRAP class="blank" align="center" valign="top">
-	
+
 	<?
-	$infobox = array	(			
+	$infobox = array	(
 		array  ("kategorie"  => _("Information:"),
-			"eintrag" => array	(	
-				array (	"icon" => "pictures/ausruf_small.gif",
+			"eintrag" => array	(
+				array (	"icon" => "ausruf_small.gif",
 											"text"  => $Memberstatus
 				)
 			)
 		)
 	);
 	$infobox[1]["kategorie"] = _("Aktionen:");
-		$infobox[1]["eintrag"][] = array (	"icon" => "./pictures/nachricht1.gif" ,
+		$infobox[1]["eintrag"][] = array (	"icon" => "nachricht1.gif" ,
 									"text"  => _("Um Personen eine systeminterne Kurznachricht zu senden, benutzen Sie bitte das normale Briefsymbol.")
 								);
-		$infobox[1]["eintrag"][] = array (	"icon" => "./pictures/move.gif" ,
+		$infobox[1]["eintrag"][] = array (	"icon" => "move.gif" ,
 									"text"  => _("In Gruppen mit diesem Symbol können Sie sich selbst eintragen. Klicken Sie auf das jeweilige Symbol um sich einzutragen.")
-								);	
-		$infobox[1]["eintrag"][] = array (	"icon" => "./pictures/trash.gif" ,
+								);
+		$infobox[1]["eintrag"][] = array (	"icon" => "trash.gif" ,
 									"text"  => _("Aus diesen Gruppen können Sie sich selbst austragen.")
-								);						
+								);
 	if ($rechte) {
 		$adr_all=groupmail($SessSemName[1], "all");
 		$adr_prelim=groupmail($SessSemName[1], "prelim");
@@ -272,38 +296,38 @@ if ($delete_id)
 		#$link_mail_all = $adr_all ? "<a href=\"mailto:".$adr_all."?subject=".rawurlencode($SessSemName[0])."\">" : NULL;
 		#$link_mail_prelim = $adr_prelim ?  "<a href=\"mailto:".$adr_prelim."?subject=".rawurlencode($SessSemName[0])."\">" : NULL;
 		#$link_mail_waiting = $adr_waiting ? "<a href=\"mailto:".$adr_waiting."?subject=".rawurlencode($SessSemName[0])."\">" : NULL;
-		$infobox[1]["eintrag"][] = array (	"icon" => "pictures/einst.gif",
+		$infobox[1]["eintrag"][] = array (	"icon" => "einst.gif",
 								"text"  => sprintf(_("Um Gruppen anzulegen und ihnen Personen zuzuordnen nutzen Sie %sFunktionen / Gruppen verwalten%s."), "<a href=\"admin_statusgruppe.php?view=statusgruppe_sem&new_sem=TRUE&range_id=$SessSemName[1]\">", "</a>")
 								);
 		if ($anzahltext > 0) {
-			$infobox[1]["eintrag"][] = array (	"icon" => "./pictures/mailnachricht.gif" ,
+			$infobox[1]["eintrag"][] = array (	"icon" => "mailnachricht.gif" ,
 									"text"  => _("Mit dem erweiterten Briefsymbol können Sie eine E-Mail an alle Gruppenmitglieder verschicken.")
 								);
 		}
 		if ($link_mail_all) {
-			$infobox[1]["eintrag"][] = array (	"icon" => "./pictures/ausruf_small.gif" ,
+			$infobox[1]["eintrag"][] = array (	"icon" => "ausruf_small.gif" ,
 									"text"  => sprintf(_("Um eine E-Mail an alle TeilnehmerInnen der Veranstaltung zu versenden, klicken Sie %shier%s."), $link_mail_all, "</a>")
 								);
 		}
 		if ($link_mail_waiting) {
-			$infobox[1]["eintrag"][] = array (	"icon" => "./pictures/ausruf_small.gif" ,
+			$infobox[1]["eintrag"][] = array (	"icon" => "ausruf_small.gif" ,
 									"text"  => sprintf(_("Um eine E-Mail an alle TeilnehmerInnen auf der Warteliste zu versenden, klicken Sie %shier%s."), $link_mail_waiting, "</a>")
 								);
 		}
 		if ($link_mail_prelim) {
-			$infobox[1]["eintrag"][] = array (	"icon" => "./pictures/ausruf_small.gif" ,
+			$infobox[1]["eintrag"][] = array (	"icon" => "ausruf_small.gif" ,
 									"text"  => sprintf(_("Um eine E-Mail an alle vorläufig akzeptierten TeilnehmerInnen zu versenden, klicken Sie %shier%s."), $link_mail_prelim, "</a>")
 								);
 		}
 	}
 
-	print_infobox ($infobox,"pictures/groups.jpg");
+	print_infobox ($infobox,"groups.jpg");
 
 	?>
-	</td>		
+	</td>
 	</tr>
 	<tr>
-		<td class="blank" colspan="2">&nbsp; 
+		<td class="blank" colspan="2">&nbsp;
 		</td>
 	</tr>
 </table>

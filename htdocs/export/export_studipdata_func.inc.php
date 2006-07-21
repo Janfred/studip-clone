@@ -400,17 +400,26 @@ function export_teilis($inst_id, $ex_sem_id = "no")
 		{
 			$studiengang[$db->f("studiengang_id")] = $db->f("name");
 		}
-		$studiengang["all"] = _("Alle Studieng&auml;nge");
-		if (!$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"])
-			$gruppe = array ("dozent" => _("DozentInnen"),
+		$studiengang["all"] = _("Alle Studiengänge");
+		if ($filter != 'awaiting'){
+			if (!$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]){
+				$gruppe = array ("dozent" => _("DozentInnen"),
 				  "tutor" => _("TutorInnen"),
 				  "autor" => _("AutorInnen"),
-				  "user" => _("LeserInnen"));
-		else
-			$gruppe = array ("dozent" => _("LeiterInnen"),
+				  "user" => _("LeserInnen"),
+				  "accepted" => _("Vorläufig akzeptierte TeilnehmerInnen"));
+
+			} else {
+				$gruppe = array ("dozent" => _("LeiterInnen"),
 				  "tutor" => _("Mitglieder"),
 				  "autor" => _("AutorInnen"),
-				  "user" => _("LeserInnen"));
+				  "user" => _("LeserInnen"),
+				  "accepted" => _("Vorläufig akzeptierte TeilnehmerInnen"));
+			}
+		} else {
+			$gruppe['awaiting'] = _("Anmeldeliste");
+		}
+
 	}
 
 	$data_object .= xml_open_tag( $xml_groupnames_person["group"] );
@@ -426,16 +435,31 @@ function export_teilis($inst_id, $ex_sem_id = "no")
 					WHERE seminar_id = '$ex_sem_id' ORDER BY Nachname");
 			else	
 				$db->query ("SELECT DISTINCT * FROM statusgruppe_user  
+					LEFT JOIN seminar_user USING ( user_id ) 
 					LEFT JOIN user_info USING ( user_id ) 
 					LEFT JOIN auth_user_md5 USING ( user_id ) 
-					WHERE statusgruppe_id = '" . $key1 . "'  ORDER BY Nachname");
-//					LEFT JOIN seminar_user USING ( user_id ) 
+					WHERE statusgruppe_id = '$key1' AND seminar_id = '$ex_sem_id' ORDER BY Nachname");
+//					
 		}
 		else // Gruppierung nach Status in der Veranstaltung / Einrichtung
+		if ($key1 == 'accepted'){
+			$db->query ("SELECT *, studiengang_id as admission_studiengang_id FROM admission_seminar_user  
+				LEFT JOIN user_info USING(user_id) 
+				LEFT JOIN auth_user_md5 USING(user_id) 
+				WHERE seminar_id = '$ex_sem_id' AND admission_seminar_user.status = 'accepted'  ORDER BY Nachname");
+		} elseif ($key1 == 'awaiting') {
+			$db->query("SELECT *, studiengang_id as admission_studiengang_id FROM admission_seminar_user 
+						LEFT JOIN auth_user_md5 USING (user_id) 
+						LEFT JOIN user_info USING (user_id) 
+						WHERE admission_seminar_user.seminar_id = '$ex_sem_id' AND admission_seminar_user.status != 'accepted'
+						ORDER BY position");
+		} else {
 			$db->query ("SELECT * FROM seminar_user  
 				LEFT JOIN user_info USING(user_id) 
 				LEFT JOIN auth_user_md5 USING(user_id) 
 				WHERE seminar_id = '$ex_sem_id' AND seminar_user.status = '" . $key1 . "'  ORDER BY Nachname");
+		}
+		
 		$data_object_tmp = '';
 		$object_counter_tmp = $object_counter;
 		if ($db->num_rows())

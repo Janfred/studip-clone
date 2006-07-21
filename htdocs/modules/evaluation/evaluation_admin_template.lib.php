@@ -47,7 +47,7 @@ class EvalTemplateGUI {
               $normalTemplates, $freeTemplates, $myuserid) {
 
      $form = new HTM( "form" );
-     $form->attr( "action", $GLOBALS['PHP_SELF']."?page=edit" );
+     $form->attr( "action", $GLOBALSR['PHP_SELF']."?page=edit" );
      $form->attr( "method", "post" );
 
      $table = new HTML("table");

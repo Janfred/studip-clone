@@ -225,15 +225,21 @@ if ($disposition)
 	$content_disposition=$disposition;
 
 //determine the type of the object we want to download a file from (only in type=0 mode!)
-$db->query("SELECT seminar_id AS object_id, filesize FROM dokumente WHERE dokument_id = '".$file_id."' ");
+$db->query("SELECT seminar_id AS object_id, filesize, range_id FROM dokumente WHERE dokument_id = '".$file_id."' ");
 $db->next_record();
 $object_id = $db->f('object_id');
 
 $skip_check=FALSE;
 if ($type == 0 || $type == 6) {
 	$object_type = get_object_type($object_id);
-	if ($object_type == "inst" || $object_type == "fak")
-		$skip_check=TRUE;
+	if ($object_type == "inst" || $object_type == "fak"){
+		$skip_check = TRUE;
+	}
+	$folder_tree =& TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $object_id));
+	if (!$folder_tree->isDownloadFolder($db->f('range_id'), $GLOBALS['user']->id)) {
+		$no_access = true;
+		$skip_check = TRUE;
+	}
 }
 
 // Rechtecheck
@@ -250,7 +256,7 @@ if ($type == 5){
 //permcheck
 if (($type != 2) && ($type != 3) && ($type != 4) && (!$skip_check)) { //if type 2, 3 or 4 we download from some tmp directory and skip permchecks
 	if (!$perm->have_perm("user")) {
-		if (!$type) {
+		if ($type == 0 || $type == 6) {
 			$db->query("SELECT Lesezugriff FROM seminare LEFT JOIN dokumente USING (seminar_id) WHERE dokument_id = '".$file_id."' ");
 			$db->next_record();
 			if ($db->f("Lesezugriff") != 0)

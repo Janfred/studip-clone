@@ -3,8 +3,8 @@
 // This file is part of Stud.IP
 // TreeView.class.php
 // Class to print out html represantation of a tree object based on TreeAbstract.class.php
-// 
-// Copyright (c) 2002 André Noack <noack@data-quest.de> 
+//
+// Copyright (c) 2002 André Noack <noack@data-quest.de>
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -29,27 +29,27 @@ require_once($ABSOLUTE_PATH_STUDIP . "visual.inc.php");
 * @access	public
 * @author	André Noack <noack@data-quest.de>
 * @version	$Id$
-* @package	
+* @package
 */
 class TreeView {
 
 	/**
 	* Reference to the tree structure
-	* 
+	*
 	* @access	private
 	* @var	object StudipRangeTree $tree
 	*/
 	var $tree;
 	/**
 	* name of used tree class
-	* 
+	*
 	* @access	private
 	* @var	string $tree_class_name
 	*/
 	var $tree_class_name;
 	/**
 	* contains the item with the current html anchor
-	* 
+	*
 	* @access	public
 	* @var	string	$anchor
 	*/
@@ -84,7 +84,7 @@ class TreeView {
 	* @var	string	$root_content
 	*/
 	var $root_content;
-	
+
 	/**
 	* the maximum amount of columns in a title
 	*
@@ -92,7 +92,7 @@ class TreeView {
 	* @var	string	$max_cols
 	*/
 	var	$max_cols = 80;
-	
+
 	/**
 	* draw red icons
 	*
@@ -100,7 +100,7 @@ class TreeView {
 	* @var	boolean	$use_aging
 	*/
 	var $use_aging = false;
-	
+
 	/**
 	* constructor
 	*
@@ -123,9 +123,9 @@ class TreeView {
 			$this->open_items =& $GLOBALS["_open_items_" . $this->class_name];
 			$this->handleOpenRanges();
 		}
-		
+
 	}
-	
+
 	/**
 	* manages the session variables used for the open/close thing
 	*
@@ -152,7 +152,7 @@ class TreeView {
 			}
 		$this->anchor = $_REQUEST['close_range'];
 		}
-		
+
 		if ($_REQUEST['open_range']){
 			$kidskids = $this->tree->getKidsKids($_REQUEST['open_range']);
 			$kidskids[] = $_REQUEST['open_range'];
@@ -164,7 +164,7 @@ class TreeView {
 			}
 		$this->anchor = $_REQUEST['open_range'];
 		}
-		
+
 		if ($_REQUEST['close_item'] || $_REQUEST['open_item']){
 			$toggle_item = ($_REQUEST['close_item']) ? $_REQUEST['close_item'] : $_REQUEST['open_item'];
 			if (!$this->open_items[$toggle_item]){
@@ -178,12 +178,12 @@ class TreeView {
 		if ($_REQUEST['item_id'])
 			$this->anchor = $_REQUEST['item_id'];
 	}
-	
+
 	function openItem($item_id){
 		$this->open_items[$item_id] = true;
 		$this->openRange($this->tree->tree_data[$item_id]['parent_id']);
 	}
-	
+
 	function openRange($item_id){
 		$this->open_ranges[$item_id] = true;
 		$parents = $this->tree->getParents($item_id);
@@ -192,7 +192,7 @@ class TreeView {
 			$this->open_ranges[$parents[$i]] = true;
 		}
 	}
-	
+
 	/**
 	* prints out the tree beginning with a given item
 	*
@@ -217,7 +217,7 @@ class TreeView {
 	}
 	return;
 }
-	
+
 	/**
 	* prints out the lines before an item ("Strichlogik" (c) rstockm)
 	*
@@ -227,24 +227,24 @@ class TreeView {
 	function printLevelOutput($item_id){
 		$level_output = "";
 		if ($item_id != $this->start_item_id){
-			if ($this->tree->isLastKid($item_id)) 
-				$level_output = "<td class=\"blank\" valign=\"top\"  heigth=\"21\" nowrap><img src=\"pictures/forumstrich2.gif\"  border=\"0\" ></td>"; //last
-			else 
-				$level_output = "<td class=\"blank\" valign=\"top\"  heigth=\"21\" nowrap><img src=\"pictures/forumstrich3.gif\"  border=\"0\" ></td>"; //crossing
+			if ($this->tree->isLastKid($item_id))
+				$level_output = "<td class=\"blank\" valign=\"top\"  heigth=\"21\" nowrap><img src=\"".$GLOBALS['ASSETS_URL']."images/forumstrich2.gif\"  border=\"0\" ></td>"; //last
+			else
+				$level_output = "<td class=\"blank\" valign=\"top\"  heigth=\"21\" nowrap><img src=\"".$GLOBALS['ASSETS_URL']."images/forumstrich3.gif\"  border=\"0\" ></td>"; //crossing
 			$parent_id = $item_id;
 			while($this->tree->tree_data[$parent_id]['parent_id'] != $this->start_item_id){
 				$parent_id = $this->tree->tree_data[$parent_id]['parent_id'];
 				if ($this->tree->isLastKid($parent_id))
-					$level_output = "<td class=\"blank\" valign=\"top\" width=\"10\" heigth=\"21\" nowrap><img src=\"pictures/forumleer.gif\" width=\"10\" height=\"20\" border=\"0\" ></td>" . $level_output; //nothing
+					$level_output = "<td class=\"blank\" valign=\"top\" width=\"10\" heigth=\"21\" nowrap><img src=\"".$GLOBALS['ASSETS_URL']."images/forumleer.gif\" width=\"10\" height=\"20\" border=\"0\" ></td>" . $level_output; //nothing
 				else
-					$level_output = "<td class=\"blank\" valign=\"top\"  heigth=\"21\" nowrap><img src=\"pictures/forumstrich.gif\"  border=\"0\" ></td>" . $level_output; //vertical line
+					$level_output = "<td class=\"blank\" valign=\"top\"  heigth=\"21\" nowrap><img src=\"".$GLOBALS['ASSETS_URL']."images/forumstrich.gif\"  border=\"0\" ></td>" . $level_output; //vertical line
 			}
 		}
-		//$level_output = "<td class=\"blank\" valign=\"top\" width=\"20\" heigth=\"21\" nowrap><img src=\"pictures/forumleer.gif\" width=\"20\" height=\"20\" border=\"0\" ></td>" . $level_output;
+		//$level_output = "<td class=\"blank\" valign=\"top\" width=\"20\" heigth=\"21\" nowrap><img src=\"".$GLOBALS['ASSETS_URL']."images/forumleer.gif\" width=\"20\" height=\"20\" border=\"0\" ></td>" . $level_output;
 		echo "\n<table border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\"><tr>$level_output";
 		return;
 	}
-	
+
 	/**
 	* prints out one item
 	*
@@ -256,7 +256,7 @@ class TreeView {
 		echo "\n<td class=\"printhead\" nowrap width=\"1\" valign=\"middle\">";
 		if ($this->anchor == $item_id)
 			echo "<a name=\"anchor\">";
-		echo "<img src=\"pictures/forumleer.gif\"  border=\"0\" height=\"20\" width=\"1\">";
+		echo "<img src=\"".$GLOBALS['ASSETS_URL']."images/forumleer.gif\"  border=\"0\" height=\"20\" width=\"1\">";
 		if ($this->anchor == $item_id)
 			echo "</a>";
 		echo "\n</td><td class=\"printhead\" align=\"left\" width=\"99%\" nowrap valign=\"bottom\">";
@@ -266,7 +266,7 @@ class TreeView {
 			$this->printItemDetails($item_id);
 		return;
 	}
-	
+
 	/**
 	* prints out the details for an item, if item is open
 	*
@@ -274,36 +274,36 @@ class TreeView {
 	* @param	string	$item_id
 	*/
 	function printItemDetails($item_id){
-		if (!$this->tree->hasKids($item_id) || !$this->open_ranges[$item_id] || $item_id == $this->start_item_id) 
-			$level_output = "<td class=\"blank\" background=\"pictures/forumleer.gif\" ><img src=\"pictures/forumleer.gif\" width=\"10\" height=\"20\" border=\"0\" ></td>" . $level_output;
-		else 
-			$level_output = "<td class=\"blank\" background=\"pictures/forumstrich.gif\" ><img src=\"pictures/forumleer.gif\" width=\"10\" height=\"20\" border=\"0\" ></td>" . $level_output;
-		
-		if (($this->tree->isLastKid($item_id) && !($item_id == $this->start_item_id)) || (!$this->open_ranges[$item_id] && $item_id == $this->start_item_id) || ($item_id == $this->start_item_id && !$this->tree->hasKids($item_id))) 
-			$level_output = "<td class=\"blank\" background=\"pictures/forumleer.gif\" ><img src=\"pictures/forumleer.gif\" width=\"10\" height=\"20\" border=\"0\" ></td>" . $level_output;
-		else 
-			$level_output = "<td class=\"blank\" background=\"pictures/forumstrich.gif\" ><img src=\"pictures/forumleer.gif\" width=\"10\" height=\"20\" border=\"0\" ></td>" . $level_output;
-		if ($item_id != $this->start_item_id){			
+		if (!$this->tree->hasKids($item_id) || !$this->open_ranges[$item_id] || $item_id == $this->start_item_id)
+			$level_output = "<td class=\"blank\" background=\"".$GLOBALS['ASSETS_URL']."images/forumleer.gif\" ><img src=\"".$GLOBALS['ASSETS_URL']."images/forumleer.gif\" width=\"10\" height=\"20\" border=\"0\" ></td>" . $level_output;
+		else
+			$level_output = "<td class=\"blank\" background=\"".$GLOBALS['ASSETS_URL']."images/forumstrich.gif\" ><img src=\"".$GLOBALS['ASSETS_URL']."images/forumleer.gif\" width=\"10\" height=\"20\" border=\"0\" ></td>" . $level_output;
+
+		if (($this->tree->isLastKid($item_id) && !($item_id == $this->start_item_id)) || (!$this->open_ranges[$item_id] && $item_id == $this->start_item_id) || ($item_id == $this->start_item_id && !$this->tree->hasKids($item_id)))
+			$level_output = "<td class=\"blank\" background=\"".$GLOBALS['ASSETS_URL']."images/forumleer.gif\" ><img src=\"".$GLOBALS['ASSETS_URL']."images/forumleer.gif\" width=\"10\" height=\"20\" border=\"0\" ></td>" . $level_output;
+		else
+			$level_output = "<td class=\"blank\" background=\"".$GLOBALS['ASSETS_URL']."images/forumstrich.gif\" ><img src=\"".$GLOBALS['ASSETS_URL']."images/forumleer.gif\" width=\"10\" height=\"20\" border=\"0\" ></td>" . $level_output;
+		if ($item_id != $this->start_item_id){
 			$parent_id = $item_id;
 			while($this->tree->tree_data[$parent_id]['parent_id'] != $this->start_item_id){
 				$parent_id = $this->tree->tree_data[$parent_id]['parent_id'];
 				if ($this->tree->isLastKid($parent_id))
-					$level_output = "<td class=\"blank\" background=\"pictures/forumleer.gif\" ><img src=\"pictures/forumleer.gif\" width=\"10\" height=\"20\" border=\"0\" ></td>" . $level_output; //nothing
+					$level_output = "<td class=\"blank\" background=\"".$GLOBALS['ASSETS_URL']."images/forumleer.gif\" ><img src=\"".$GLOBALS['ASSETS_URL']."images/forumleer.gif\" width=\"10\" height=\"20\" border=\"0\" ></td>" . $level_output; //nothing
 				else
-					$level_output = "<td class=\"blank\" background=\"pictures/forumstrich.gif\" ><img src=\"pictures/forumleer.gif\" width=\"10\" height=\"20\" border=\"0\" ></td>" . $level_output; //vertical line
+					$level_output = "<td class=\"blank\" background=\"".$GLOBALS['ASSETS_URL']."images/forumstrich.gif\" ><img src=\"".$GLOBALS['ASSETS_URL']."images/forumleer.gif\" width=\"10\" height=\"20\" border=\"0\" ></td>" . $level_output; //vertical line
 			}
 		}
-		//$level_output = "<td class=\"blank\" background=\"pictures/forumleer.gif\" ><img src=\"pictures/forumleer.gif\" width=\"20\" height=\"20\" border=\"0\" ></td>" . $level_output;
-	
+		//$level_output = "<td class=\"blank\" background=\"".$GLOBALS['ASSETS_URL']."images/forumleer.gif\" ><img src=\"".$GLOBALS['ASSETS_URL']."images/forumleer.gif\" width=\"20\" height=\"20\" border=\"0\" ></td>" . $level_output;
+
 		echo "<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" width=\"100%\"><tr>$level_output";
 		echo "<td class=\"printcontent\" width=\"100%\"><br>";
 		echo $this->getItemContent($item_id);
 		echo "<br></td></tr></table>";
 		return;
 	}
-	
+
 	/**
-	* returns html for the icons in front of the name of the item 
+	* returns html for the icons in front of the name of the item
 	*
 	* @access	private
 	* @param	string	$item_id
@@ -314,20 +314,20 @@ class TreeView {
 		$head .= "\n<td  class=\"printhead\" nowrap  align=\"left\" valign=\"bottom\">";
 		if ($this->tree->hasKids($item_id)){
 			$head .= "<a href=\"";
-			$head .= ($this->open_ranges[$item_id]) ? $this->getSelf("close_range={$item_id}") : $this->getSelf("open_range={$item_id}"); 
-			$head .= "\"><img border=\"0\"  src=\"pictures/";
+			$head .= ($this->open_ranges[$item_id]) ? $this->getSelf("close_range={$item_id}") : $this->getSelf("open_range={$item_id}");
+			$head .= "\"><img border=\"0\"  src=\"".$GLOBALS['ASSETS_URL']."images/";
 			$head .= ($this->open_ranges[$item_id]) ? "cont_folder3.gif" : "cont_folder.gif";
 			$head .= "\" ";
 			$head .= (!$this->open_ranges[$item_id])? tooltip(_("Alle Unterelemente öffnen")) : tooltip(_("Alle Unterelemente schließen"));
 			$head .= "></a>";
-		} else { 
-			$head .= "<img src=\"pictures/";
+		} else {
+			$head .= "<img src=\"".$GLOBALS['ASSETS_URL']."images/";
 			$head .= ($this->open_items[$item_id]) ? "cont_folder4.gif" : "cont_folder2.gif";
 			$head .= "\" " . tooltip(_("Dieses Element hat keine Unterelemente")) . "border=\"0\">";
 		}
 	return $head . "</td>";
 	}
-	
+
 	function getItemHeadFrontPic($item_id){
 		if ($this->use_aging){
 			$head = "<td bgcolor=\"" . $this->getAgingColor($item_id) . "\" class=\""
@@ -339,15 +339,15 @@ class TreeView {
 		$head .= "<a href=\"";
 		$head .= ($this->open_items[$item_id])? $this->getSelf("close_item={$item_id}") . "\"" . tooltip(_("Dieses Element schließen"),true) . ">"
 											: $this->getSelf("open_item={$item_id}") . "\"" . tooltip(_("Dieses Element öffnen"),true) . ">";
-		$head .= "<img src=\"pictures/";
+		$head .= "<img src=\"".$GLOBALS['ASSETS_URL']."images/";
 		$head .= ($this->open_items[$item_id]) ? $this->pic_open : $this->pic_close;
 		$head .= "\" border=\"0\" align=\"baseline\" hspace=\"4\">";
-		$head .= (!$this->open_items[$item_id]) ? "<img  src=\"pictures/forumleer.gif\" width=\"5\" border=\"0\">" : ""; 
+		$head .= (!$this->open_items[$item_id]) ? "<img  src=\"".$GLOBALS['ASSETS_URL']."images/forumleer.gif\" width=\"5\" border=\"0\">" : "";
 		$head .= "</a>";
 		$head .= '</td>';
 		return $head;
 	}
-	
+
 	/**
 	* returns html for the name of the item
 	*
@@ -364,7 +364,7 @@ class TreeView {
 		$head .= ($this->open_items[$item_id]) ? "</b></a>" : "</a>";
 		return $head;
 	}
-	
+
 	/**
 	* returns html for the content body of the item
 	*
@@ -384,7 +384,7 @@ class TreeView {
 		$content .= "</table>";
 		return $content;
 	}
-	
+
 	function getAgingColor($item_id){
 		$the_time = time();
 		$chdate = $this->tree->tree_data[$item_id]['chdate'];
@@ -405,12 +405,12 @@ class TreeView {
 		}
 		return $timecolor;
 	}
-	
+
 	/**
 	* returns script name
 	*
 	* @access	private
-	* @param	string	$param	
+	* @param	string	$param
 	* @return	string
 	*/
 	function getSelf($param = ""){

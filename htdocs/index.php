@@ -74,6 +74,7 @@ if (get_config('NEWS_RSS_EXPORT_ENABLE') && ($auth->is_authenticated() && $user-
 	}
 }
 
+$HELP_KEYWORD="Basis.Startseite"; // set keyword for new help
 
 // Start of Output
 
@@ -133,7 +134,7 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 		$menue_auswahl[] = array(32, array());
 		$menue_auswahl[] = array(41, array());
 		$menue_auswahl[] = array(9, array(10, 11));
-		
+
 		//insert plugin menus
 		if ($GLOBALS["PLUGINS_ENABLE"]){
 			if (!is_array($pluginmenue)){
@@ -151,6 +152,7 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 		$menue_auswahl[] = array(32, array());
 		$menue_auswahl[] = array( 9, array(10, 11));
 		$menue_auswahl[] = array(33, array());
+
 		//insert plugin menus
 		if ($GLOBALS["PLUGINS_ENABLE"]){
 			foreach($pluginmenue as $item){
@@ -186,7 +188,7 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 	?>
 		<div align="center">
 		<table width="70%" border=0 cellpadding=0 cellspacing=0 >
-		<tr><td class="topicwrite" colspan=3><img src="pictures/nachricht1.gif" border="0" align="texttop"><b>&nbsp;<?=_("Bestätigungsgsmail beachten!")?></b></td></tr>
+		<tr><td class="topicwrite" colspan=3><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/nachricht1.gif" border="0" align="texttop"><b>&nbsp;<?=_("Bestätigungsgsmail beachten!")?></b></td></tr>
 		<tr>
 			<td width="5%" class="blank" valign="middle">&nbsp;</td>
 			<td width="90%" class="blank" valign="top">
@@ -196,7 +198,7 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 					</td></tr>
 				</table>
 			</td>
-			<td class="blank" align="right" valign="top" background="pictures/sms3.jpg"><img src="pictures/blank.gif" width="235" height="1"></td>
+			<td class="blank" align="right" valign="top" background="<?= $GLOBALS['ASSETS_URL'] ?>images/sms3.jpg"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" width="235" height="1"></td>
 		</tr>
 		</table>
 		<br><br>
@@ -211,7 +213,7 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 
 	// display menue
 	echo	'<div align="center">', "\n", '<table width="70%" border=0 cellpadding=0 cellspacing=0 >', "\n",
-		'<tr><td class="topic" colspan=3><img src="pictures/home.gif" border="0" align="texttop"><b>&nbsp;', $ueberschrift,'</b></td>',"\n",
+		'<tr><td class="topic" colspan=3><img src="'.$GLOBALS['ASSETS_URL'].'images/home.gif" border="0" align="texttop"><b>&nbsp;', $ueberschrift,'</b></td>',"\n",
 		'</tr>', "\n";
 	echo	'<tr>', "\n", '<td width="5%" class="blank" valign="middle">&nbsp;</td>', "\n",
 		'<td width="90%" class="blank" valign="top">', "\n", '<table cellpadding=4>', "\n";
@@ -219,7 +221,7 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 		for ($i=0; $i < count($menue_auswahl); $i++) { // mainmenue
 			echo	'<tr><td class="blank"><a href="',$menue[$menue_auswahl[$i][0]][1], '"',
 				(($menue[$menue_auswahl[$i][0]][2])? ' target="'.$menue[$menue_auswahl[$i][0]][2].'"':''),
-				'><img src="pictures/forumrot.gif" border=0>&nbsp;', $menue[$menue_auswahl[$i][0]][0], '</a>';
+				'><img src="'.$GLOBALS['ASSETS_URL'].'images/forumrot.gif" border=0>&nbsp;', $menue[$menue_auswahl[$i][0]][0], '</a>';
 
 			for ($k = 0; $k < count($menue_auswahl[$i][1]); $k++) { // submenue
 				echo	(($k == 0)? '<br />&nbsp; &nbsp; ':'&nbsp;/&nbsp;');
@@ -230,7 +232,7 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 			echo	'</td></tr>', "\n";
 		}
 	echo	'</table>', "\n", '</td>', "\n",
-		'<td class="blank" align="right" valign="top" background="pictures/indexbild.jpg"><img src="pictures/blank.gif" width="235"></td>', "\n",
+		'<td class="blank" align="right" valign="top" background="'.$GLOBALS['ASSETS_URL'].'images/indexbild.jpg"><img src="'.$GLOBALS['ASSETS_URL'].'images/blank.gif" width="235"></td>', "\n",
 		'</tr>',"\n", '</table> <br>', "\n";
 
 	// display news
@@ -253,45 +255,63 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 		show_votes ('studip', $auth->auth['uid'], $perm);
 	}
 
+	if ($GLOBALS["PLUGINS_ENABLE"]){
+		// PluginEngine aktiviert. 
+		// Prüfen, ob PortalPlugins vorhanden sind.
+		$portalpluginpersistence = PluginEngine::getPluginPersistence("Portal");	
+		$activatedportalplugins = $portalpluginpersistence->getAllActivatedPlugins();
+		if (!is_array($activatedportalplugins)){
+			$activatedportalplugins = array();
+		}
+		
+		foreach ($activatedportalplugins as $activatedportalplugin){
+			// hier nun die PortalPlugins anzeigen				
+			echo "<table class=\"blank\" width=\"70%%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><img src=\"" . $activatedportalplugin->getPluginiconname() . "\" border=0 /><b>&nbsp;" . $activatedportalplugin->getDisplaytitle() . 
+				 " </b></td><td align = \"right\" width=\"1%\" class=\"topic\" nowrap>&nbsp;<a href=\"". PluginEngine::getLink($activatedportalplugin,array(),"showAdministrationPage") ."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/pfeillink.gif\" border=\"0\" alt=\"bearbeiten\" title=\"" . _("Administration") .  "\" ></a>&nbsp;</tr>";				
+			echo ("<tr><td class=\"steel1\" colspan=\"2\">&nbsp;</td></tr><tr><td class=\"steel1\" colspan=\"2\"><blockquote>");
+			$activatedportalplugin->showOverview();
+			echo ("</blockquote></td></tr><tr><td class=\"steel1\" colspan=\"2\">&nbsp;</td></tr></table><br>\n");				
+		}
+	}
+	
 	$db->query(sprintf("SELECT * FROM rss_feeds WHERE user_id='%s' AND hidden=0 ORDER BY priority",$auth->auth["uid"]));
-        while ($db->next_record()) {
-                if ($db->f("name")!="" && $db->f("url")!="") {
-                        $feed = new RSSFeed($db->f("url"));
-                        if($db->f('fetch_title') && $feed->ausgabe->channel['title']) $feedtitle = $feed->ausgabe->channel['title'];
-                        else $feedtitle = $db->f("name");
-                        echo "<table class=\"blank\" width=\"70%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">";
-                        echo "<tr><td class=\"topic\"><b>&nbsp;<FONT COLOR=\"white\">" . htmlReady($feedtitle) . "</FONT></b></td></tr>";
-                        echo "<tr><td class=\"steel1\">&nbsp;</td></tr><tr><td class=\"steel1\"><blockquote>";
+	while ($db->next_record()) {
+		if ($db->f("name")!="" && $db->f("url")!="") {
+			$feed = new RSSFeed($db->f("url"));
+			if($db->f('fetch_title') && $feed->ausgabe->channel['title']) $feedtitle = $feed->ausgabe->channel['title'];
+			else $feedtitle = $db->f("name");
+			echo "<table class=\"blank\" width=\"70%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">";
+			echo "<tr><td class=\"topic\"><b>&nbsp;<FONT COLOR=\"white\">" . htmlReady($feedtitle) . "</FONT></b></td></tr>";
+			echo "<tr><td class=\"steel1\">&nbsp;</td></tr><tr><td class=\"steel1\"><blockquote>";
 
-                        $feed->rssfeed_start();
+			$feed->rssfeed_start();
 
-                        echo "</blockquote></td></tr>";
-                        echo "<tr><td class=\"steel1\">&nbsp;</td></tr>";
-                        echo "</table><br>\n";
-                }
-        }
+			echo "</blockquote></td></tr>";
+			echo "<tr><td class=\"steel1\">&nbsp;</td></tr>";
+			echo "</table><br>\n";
+		}
+	}
 
 
 
 } else { //displaymodul for nobody
-	$mtxt  = '<img src="pictures/blank.gif" width="13" height="50" border="0" align="left"><br>'. "\n";
+	$mtxt  = '<img src="'.$GLOBALS['ASSETS_URL'].'images/blank.gif" width="13" height="50" border="0" align="left"><br>'. "\n";
 	$mtxt .= '<table cellspacing="0" cellpadding="0" border="0"><tr>'. "\n";
 	$mtxt .= '<td class="steel1" width="280" valign="middle"><a class="index" href="%s">'. "\n";
-	$mtxt .= '<img src="./pictures/indexpfeil.gif" align=left border="0"><font size="4"><b>%s</b></font><br><font color="#555555" size="1">%s</font></a>&nbsp; </td>'. "\n";
-	$mtxt .= '<td class="shadowver" width="3"><img src="pictures/blank.gif" width="3" border="0"></td>'. "\n";
-	$mtxt .= '</tr><tr><td class="shadowhor" width="280"><img src="pictures/blank.gif" width="10" height="3" border="0"></td>'. "\n";
-	$mtxt .= '<td class="shadowcor" width="3"><img src="pictures/blank.gif" width="3" border="0"></td>'. "\n";
+	$mtxt .= '<img src="'.$GLOBALS['ASSETS_URL'].'images/indexpfeil.gif" align=left border="0"><font size="4"><b>%s</b></font><br><font color="#555555" size="1">%s</font></a>&nbsp; </td>'. "\n";
+	$mtxt .= '<td class="shadowver" width="3"><img src="'.$GLOBALS['ASSETS_URL'].'images/blank.gif" width="3" border="0"></td>'. "\n";
+	$mtxt .= '</tr><tr><td class="shadowhor" width="280"><img src="'.$GLOBALS['ASSETS_URL'].'images/blank.gif" width="10" height="3" border="0"></td>'. "\n";
+	$mtxt .= '<td class="shadowcor" width="3"><img src="'.$GLOBALS['ASSETS_URL'].'images/blank.gif" width="3" border="0"></td>'. "\n";
 	$mtxt .= '</tr></table>';
 
 	?>
 
 	<table class="blank" width="600"  border="0" cellpadding="0" cellspacing="0" align="center">
-	<tr><td colspan=3 class="topic" valign="middle">&nbsp;<b><? echo $UNI_NAME;?></b><img src="pictures/blank.gif" height="16" width="5" border="0"></td></tr>
+	<tr><td colspan=3 class="topic" valign="middle">&nbsp;<b><? echo $UNI_NAME;?></b><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" height="16" width="5" border="0"></td></tr>
 	<tr>
-		<td valign="middle" height="260" colspan=3 background="./pictures/startseite.jpg" alt="Stud.IP - <?=$UNI_NAME?>"">
+		<td valign="middle" height="260" colspan=3 background="<?= $GLOBALS['ASSETS_URL'] ?>images/startseite.jpg" alt="Stud.IP - <?=$UNI_NAME?>"">
 			<?
 			echo sprintf($mtxt, 'index.php?again=yes', _("Login"), _("f&uuml;r registrierte NutzerInnen"));
-			// show a button for single sign on
 			if (array_search("CAS",$GLOBALS["STUDIP_AUTH_PLUGIN"])){
 				echo sprintf($mtxt, 'index.php?again=yes&sso=true', _("Single Sign On"), _("f&uuml;r NutzerInnen des Central Authentication Services"));
 			}
@@ -314,9 +334,9 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 	?>
 	<tr>
 	<td class="blank" align="left" valign="middle">
-		<img src="pictures/blank.gif" height="85" width="38" border="0">
+		<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" height="85" width="38" border="0">
 	</td>
-	<td class="blank" valign="middle" align="left"><a href="http://www.studip.de"><img src="pictures/logoklein.gif" border="0" <?=tooltip(_("Zur Portalseite"))?>></a></td>
+	<td class="blank" valign="middle" align="left"><a href="http://www.studip.de"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/logoklein.gif" border="0" <?=tooltip(_("Zur Portalseite"))?>></a></td>
 	<td class="blank" align=right nowrap valign="middle">
 	<?
 
@@ -337,7 +357,7 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 	echo "<tr><td height=\"30\" class=\"blank\" valign=\"middle\">";
 	// choose language
 	foreach ($INSTALLED_LANGUAGES as $temp_language_key => $temp_language) {
-		printf ("&nbsp;&nbsp;<a href=\"%s?set_language=%s\"><img src=\"pictures/languages/%s\" %s border=\"0\"></a>", $PHP_SELF, $temp_language_key, $temp_language["picture"], tooltip($temp_language["name"]));
+		printf ("&nbsp;&nbsp;<a href=\"%s?set_language=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/languages/%s\" %s border=\"0\"></a>", $PHP_SELF, $temp_language_key, $temp_language["picture"], tooltip($temp_language["name"]));
 	}
 	echo "</td><td align= right valign=\"top\" class=\"blank\"><a href=\"./impressum.php?view=statistik\"><font size=\"2\" color=#888888>"._("mehr")."... </font></a></td><td class=\"blank\">&nbsp; &nbsp; </td></tr>";
 	echo "</table>";

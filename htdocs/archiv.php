@@ -26,7 +26,7 @@ include($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'seminar_open.php'); // initialise St
 // -- here you have to put initialisations for the current page
 
 if ($druck)
-	$_include_stylesheet = 'style_print.css'; 
+	$_include_stylesheet = 'style_print.css';
 elseif (($dump_id) || ($forum_dump_id) || ($wiki_dump_id))
 	$_include_stylesheet = 'style_dump.css';
 
@@ -74,11 +74,11 @@ if ($open) {
 if (($close) || ($suche)){
 	$archiv_data["open"]=FALSE;
 	}
-	
+
 if ($sortby)
 	$archiv_data["sortby"]=$sortby;
 
-$u_id = $user->id;	
+$u_id = $user->id;
 
 //Sicherheitsabfrage
 if ($delete_id) {
@@ -87,7 +87,7 @@ if ($delete_id) {
 	$msg="info§" . sprintf(_("Wollen Sie die Veranstaltung <b>%s</b> wirklich l&ouml;schen? S&auml;mtliche Daten und die mit der Veranstaltung archivierte Dateisammlung werden unwiderruflich gel&ouml;scht!"), htmlReady($db->f("name"))) . " <br />";
 	$msg.="<a href=\"".$PHP_SELF."?delete_really=TRUE&delete_id=$delete_id\">" . makeButton("ja2", "img") . "</a>&nbsp; \n";
 	$msg.="<a href=\"".$PHP_SELF."?back=TRUE\">" . makeButton("nein", "img") . "</a>\n";
-	
+
 }
 
 //Loeschen aus dem Archiv
@@ -127,7 +127,7 @@ if ($delete_user) {
 		$msg="error§" . _("Netter Versuch");
 	}
 }
-	
+
 //Eintragen von Archiv_Usern
 if ($do_add_user) {
 	if (archiv_check_perm($a_sem_id) == "admin" || archiv_check_perm($a_sem_id) == "dozent") {
@@ -146,7 +146,7 @@ if ($do_add_user) {
 
 if (!empty($dump_id)) {
 	if (archiv_check_perm($dump_id)){
-		$query = "SELECT dump FROM archiv WHERE archiv.seminar_id = '$dump_id'"; 
+		$query = "SELECT dump FROM archiv WHERE archiv.seminar_id = '$dump_id'";
 		$db->query ($query);
 		if ($db->next_record()) {
 			if (!isset($druck)) {
@@ -163,7 +163,7 @@ if (!empty($dump_id)) {
 
 elseif (!empty($forum_dump_id)) {
 	if (archiv_check_perm($forum_dump_id)){
-		$query = "SELECT forumdump FROM archiv WHERE archiv.seminar_id = '$forum_dump_id'"; 
+		$query = "SELECT forumdump FROM archiv WHERE archiv.seminar_id = '$forum_dump_id'";
 		$db->query ($query);
 		if ($db->next_record()) {
 			if (!isset($druck)) {
@@ -180,7 +180,7 @@ elseif (!empty($forum_dump_id)) {
 
 elseif (!empty($wiki_dump_id)) {
 	if (archiv_check_perm($wiki_dump_id)){
-		$query = "SELECT wikidump FROM archiv WHERE archiv.seminar_id = '$wiki_dump_id'"; 
+		$query = "SELECT wikidump FROM archiv WHERE archiv.seminar_id = '$wiki_dump_id'";
 		$db->query ($query);
 		if ($db->next_record()) {
 			if (!isset($druck)) {
@@ -195,15 +195,17 @@ elseif (!empty($wiki_dump_id)) {
 	}
 }
 
-else {	
+else {
+
+$HELP_KEYWORD="Basis.SuchenArchiv";
 
 // dann eben den Rest...
 
-include($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'header.php');   //hier wird der "Kopf" nachgeladen 
+include($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'header.php');   //hier wird der "Kopf" nachgeladen
 ?>
 <table width="100%" border=0 cellpadding=0 cellspacing=0 border=0>
 	<tr>
-		<td class="topic" colspan=2><img valign="top" src="pictures/suchen.gif" border="0" align="texttop"><b>&nbsp;<?=_("Suche im Archiv")?></>
+		<td class="topic" colspan=2><img valign="top" src="<?= $GLOBALS['ASSETS_URL'] ?>images/suchen.gif" border="0" align="texttop"><b>&nbsp;<?=_("Suche im Archiv")?></>
 		</td>
 	</tr>
 	<?
@@ -252,17 +254,17 @@ include($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'header.php');   //hier wird der "Kop
 								<option selected value=0><?=_("alle")?></option>
 								<?
 								$db->query("SELECT DISTINCT semester FROM archiv");
-								while ($db->next_record()) 
+								while ($db->next_record())
 									if  ($db->f("semester"))
 										if ($db->f("semester") == $archiv_data["sem"])
 											echo "<option selected value=\"", $db->f("semester"), "\">", $db->f("semester"), "</option>";
 										else
-											echo "<option value=\"", $db->f("semester"), "\">", $db->f("semester"), "</option>";											
+											echo "<option value=\"", $db->f("semester"), "\">", $db->f("semester"), "</option>";
 								?>
 								</select>
 								</font>
 							</td>
-						</tr>						
+						</tr>
 						<tr <? $cssSw->switchClass() ?>>
 							<td class="<? echo $cssSw->getClass() ?>" width="10%">
 								<font size=-1><?=_("Heimat-Einrichtung")?> </font>
@@ -273,14 +275,14 @@ include($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'header.php');   //hier wird der "Kop
 								<option selected value=0><?=_("alle")?></option>
 								<?
 								$db->query("SELECT DISTINCT heimat_inst_id, Institute.Name FROM archiv LEFT JOIN Institute ON (Institut_id=heimat_inst_id)  ORDER BY Name");
-								while ($db->next_record()) 
+								while ($db->next_record())
 									{
 									if  (($db->f("Name")) && ($db->f("Name")) !="- - -")
 										if ($db->f("heimat_inst_id") == $archiv_data["inst"])
 											echo "<option selected value=", $db->f("heimat_inst_id"), ">", my_substr($db->f("Name"),0, 40), "</option>";
 										else
 											echo "<option value=", $db->f("heimat_inst_id"), ">", my_substr($db->f("Name"),0, 40), "</option>";
-										
+
 									}
 								?>
 								</select>
@@ -305,7 +307,7 @@ include($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'header.php');   //hier wird der "Kop
 						</tr>
 						<tr <? $cssSw->switchClass() ?>>
 							<td class="<? echo $cssSw->getClass() ?>" width="10%">
-								&nbsp; 
+								&nbsp;
 							</td>
 							<td class="<? echo $cssSw->getClass() ?>" width="90%">
 								<input  type="checkbox" name="pers" <? if ($archiv_data["pers"]) echo "checked" ?>>
@@ -314,7 +316,7 @@ include($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'header.php');   //hier wird der "Kop
 						</tr>
 					   	<tr <? $cssSw->switchClass() ?>>
 					   		<td class="<? echo $cssSw->getClass() ?>" width="10%">
-					   			&nbsp; 
+					   			&nbsp;
 					   		</td>
 					   		<td class="<? echo $cssSw->getClass() ?>" width="90%">
 					   			<center>
@@ -328,11 +330,11 @@ include($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'header.php');   //hier wird der "Kop
 				</form>
 			</blockquote>
 		</td>
-		<td class="blank" align = right valign=top><img src="pictures/archiv.jpg" border="0">
+		<td class="blank" align = right valign=top><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/archiv.jpg" border="0">
 		</td>
 	</tr>
 
-<? 
+<?
 
 // wollen wir was Suchen?
 
@@ -346,7 +348,7 @@ if ($archiv_data["perform_search"]) {
 		$string_too_short = TRUE;
 	if ((!$archiv_data["all"]) && (!$archiv_data["name"]) && (!$archiv_data["desc"]) && (!$archiv_data["doz"]) && (!$archiv_data["pers"]) && (!$archiv_data["inst"]))
 		$string_too_short = TRUE;
-		
+
 	if (!$archiv_data["sortby"])
 		$archiv_data["sortby"]="Name";
 	if ($archiv_data["pers"])
@@ -371,7 +373,7 @@ if ($archiv_data["perform_search"]) {
 		if ($archiv_data["desc"])
 			$query .= " AND beschreibung LIKE '%".trim($archiv_data["desc"])."%'";
 		else
-			$query .= " AND beschreibung LIKE '%%'";		
+			$query .= " AND beschreibung LIKE '%%'";
 		if ($archiv_data["sem"])
 			$query .= " AND semester LIKE '%".trim($archiv_data["sem"])."%'";
 		else
@@ -383,27 +385,27 @@ if ($archiv_data["perform_search"]) {
 		if ($archiv_data["doz"])
 			$query .= " AND dozenten LIKE '%".trim($archiv_data["doz"])."%'";
 		else
-			$query .= " AND dozenten LIKE '%%'";		
+			$query .= " AND dozenten LIKE '%%'";
 	}
 	$query .= " ORDER BY ".$archiv_data["sortby"];
-	
-	$db->query($query);	
+
+	$db->query($query);
 
 	if ((!$db->affected_rows() == 0) && (!$string_too_short)) {
 		$hits = $db->affected_rows();
-		
+
 	?>
 	<tr>
 		<td class="blank" colspan=2>
 		<?
-		
+
 		echo "<blockquote><b><font size=-1>";
 		printf(_("Es wurden %s Veranstaltungen gefunden."), $hits);
 		echo "</font></b></blockquote>";
 
-	
+
 	 	echo "<br /><br /><TABLE class=\"blank\"  WIDTH=99% align=center cellspacing=0 border=0>\n";
-   	echo "<tr height=28><td  width=\"1%\" class=\"steel\"><img src=\"pictures/blank.gif\" width=1 height=20>&nbsp; </td>\n";
+   	echo "<tr height=28><td  width=\"1%\" class=\"steel\"><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" width=1 height=20>&nbsp; </td>\n";
 		echo "<td  width=\"29%\" class=\"steel\" align=center valign=bottom><b><a href=\"$PHP_SELF?sortby=Name\">" . _("Name") . "</a></b></td>\n";
 		echo "<td  width=\"20%\" class=\"steel\" align=center valign=bottom><b><a href=\"$PHP_SELF?sortby=dozenten\">" . _("DozentIn") . "</a></b></td>\n";
 		echo "<td  width=\"20%\" class=\"steel\" align=center valign=bottom><b><a href=\"$PHP_SELF?sortby=institute\">" . _("Einrichtungen") . "</a></b></td>\n";
@@ -423,39 +425,39 @@ if ($archiv_data["perform_search"]) {
 	 	  	if ($c % 2)
   				$class="steelgraulight";
 				else
-					$class="steel1"; 
+					$class="steel1";
 				$c++;
 			}
 
 			echo "<tr><td class=\"$class\" WIDTH=\"1%\" nowrap>&nbsp;";
-      		
+
       		// schon aufgeklappt?
-			if ($archiv_data["open"]==$db->f('seminar_id')) { 
-				echo "<a name=\"anker\"></a><a href=\"$PHP_SELF?close=yes\"><img src=\"pictures/forumgraurunt.gif\" " . tooltip(_("Zuklappen")) . " border=\"0\" valign=\"top\"></a></td>";
+			if ($archiv_data["open"]==$db->f('seminar_id')) {
+				echo "<a name=\"anker\"></a><a href=\"$PHP_SELF?close=yes\"><img src=\"".$GLOBALS['ASSETS_URL']."images/forumgraurunt.gif\" " . tooltip(_("Zuklappen")) . " border=\"0\" valign=\"top\"></a></td>";
 				echo "<td class=\"$class\" width=\"29%\"><font size=\"-1\"><b><a href=\"$PHP_SELF?close=yes\">".htmlReady($db->f("name"))."</a></b></font></td>";
-			} else { 
-	      echo "<a href=\"$PHP_SELF?open=" . $db->f('seminar_id') . "#anker\"><img src=\"pictures/forumgrau.gif\" " . tooltip(_("Aufklappen")) . " border=\"0\" valign=\"top\"></a></td>";
+			} else {
+	      echo "<a href=\"$PHP_SELF?open=" . $db->f('seminar_id') . "#anker\"><img src=\"".$GLOBALS['ASSETS_URL']."imagesimages/forumgrau.gif\" " . tooltip(_("Aufklappen")) . " border=\"0\" valign=\"top\"></a></td>";
 				echo "<td class=\"$class\" width=\"29%\"><font size=\"-1\"><a href=\"$PHP_SELF?open=" . $db->f('seminar_id') . "#anker\">".htmlReady($db->f("name"))."</a></font></td>";
 			}
 	    echo "<td align=center class=\"$class\">&nbsp;<font size=-1>".htmlReady($db->f("dozenten"))."</font></td>";
 	 		echo "<td align=center class=\"$class\">&nbsp;<font size=-1>".htmlReady($db->f("institute"))."</font></td>";
 	 		echo "<td align=center class=\"$class\">&nbsp;<font size=-1>".htmlReady($db->f("semester"))."</font></td>";
-			
+
 			if (archiv_check_perm($db->f("seminar_id")))
 				$view = 1;
 			if ($view == 1) {
-				echo "<td class=\"$class\" width=\"3%\">&nbsp;<a href=\"$PHP_SELF?dump_id=".$db->f('seminar_id')."\" target=_blank><img src=\"pictures/i.gif\" " . tooltip(_("Komplettansicht")) . " border=\"0\"></a></td>";
+				echo "<td class=\"$class\" width=\"3%\">&nbsp;<a href=\"$PHP_SELF?dump_id=".$db->f('seminar_id')."\" target=_blank><img src=\"".$GLOBALS['ASSETS_URL']."images/i.gif\" " . tooltip(_("Komplettansicht")) . " border=\"0\"></a></td>";
 				echo "<td class=\"$class\" width=\"3%\">&nbsp;";
 				if (!$db->f('archiv_file_id')=='') {
-					echo '<a href="' . GetDownloadLink($db->f('archiv_file_id'), $file_name, 1) .'"><img src="pictures/files.gif" ' . tooltip(_("Dateisammlung")) . ' border="0"></a>';
+					echo '<a href="' . GetDownloadLink($db->f('archiv_file_id'), $file_name, 1) .'"><img src="'.$GLOBALS['ASSETS_URL'].'images/files.gif" ' . tooltip(_("Dateisammlung")) . ' border="0"></a>';
 				}
 				echo "</td><td class=\"$class\" width=\"3%\">&nbsp;";
 				if (archiv_check_perm($db->f("seminar_id")) == "admin")
-					echo "<a href=\"$PHP_SELF?delete_id=".$db->f('seminar_id')."\">&nbsp;<img border=0 src=\"./pictures/trash.gif\" " . tooltip(_("Diese Veranstaltung aus dem Archiv entfernen")) . "></a>";
+					echo "<a href=\"$PHP_SELF?delete_id=".$db->f('seminar_id')."\">&nbsp;<img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" " . tooltip(_("Diese Veranstaltung aus dem Archiv entfernen")) . "></a>";
 				echo "</td>";
 			} else
 				echo "<td class=\"$class\" width=\"9%\" colspan=\"3\">&nbsp;</td>";
-	      		
+
 			if ($archiv_data["open"] == $db->f('seminar_id')) {
 				echo "</tr><tr><td class=\"steelgraulight\" colspan=8><blockquote>";
 				if (!$db->f('untertitel')=='')
@@ -482,9 +484,9 @@ if ($archiv_data["perform_search"]) {
 						echo "<li><a href=\"$PHP_SELF?delete_id=".$db->f('seminar_id')."\"><font size=\"-1\">" . _("Diese Veranstaltung unwiderruflich aus dem Archiv entfernen") . "</font></a></li>";
 					if (archiv_check_perm($db->f("seminar_id")) == "admin") {
 						if (!$archiv_data["edit_grants"])
-							echo "<li><font size=\"-1\"><a href=\"$PHP_SELF?show_grants=yes#anker\">" . _("Zugriffsberechtigungen einblenden") . "</a></font></li>";	      		 		
+							echo "<li><font size=\"-1\"><a href=\"$PHP_SELF?show_grants=yes#anker\">" . _("Zugriffsberechtigungen einblenden") . "</a></font></li>";
 						else
-							echo "<li><font size=\"-1\"><a href=\"$PHP_SELF?hide_grants=yes#anker\">" . _("Zugriffsberechtigungen ausblenden") . "</a></font></li>";	      		 		
+							echo "<li><font size=\"-1\"><a href=\"$PHP_SELF?hide_grants=yes#anker\">" . _("Zugriffsberechtigungen ausblenden") . "</a></font></li>";
 					}
 				} else
 					echo "<br><br><li><font size=\"-1\">" . _("Die Veranstaltungsinhalte, Beitr&auml;ge im Forum und das Dateiarchiv sind nicht zug&auml;ngig, da Sie an dieser Veranstaltung nicht teilgenommen haben.") . "</font></li>";
@@ -495,9 +497,9 @@ if ($archiv_data["perform_search"]) {
 					while ($db2->next_record()) {
 						echo "<font size=\"-1\">".htmlReady($db2->f("fullname")). " (" . _("Status:") . " ". $db2->f("status"). ")</font>";
 						if ($db2->f("status") != "dozent")
-							echo "<a href=\"$PHP_SELF?delete_user=".$db2->f("user_id")."&d_sem_id=".$db->f("seminar_id"),"#anker\"><font size=\"-1\">&nbsp;" . _("Zugriffsberechtigung entfernen") . "</font> <img border=0 src=\"./pictures/trash.gif\" " . tooltip(_("Dieser Person die Zugriffsberechtigung entziehen")) . "></a>";
-						echo "<br />";	
-					}		
+							echo "<a href=\"$PHP_SELF?delete_user=".$db2->f("user_id")."&d_sem_id=".$db->f("seminar_id"),"#anker\"><font size=\"-1\">&nbsp;" . _("Zugriffsberechtigung entfernen") . "</font> <img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" " . tooltip(_("Dieser Person die Zugriffsberechtigung entziehen")) . "></a>";
+						echo "<br />";
+					}
 					if (($add_user) && (!$new_search)) {
 						$db2->query("SELECT " . $_fullname_sql['full'] . " AS fullname, username, auth_user_md5.user_id FROM auth_user_md5 LEFT JOIN user_info USING (user_id) WHERE Vorname LIKE '%$search_exp%' OR Nachname LIKE '%$search_exp%' OR username LIKE '%".trim($search_exp)."%' ORDER BY Nachname");
 						if ($db2->affected_rows()) {
@@ -522,8 +524,8 @@ if ($archiv_data["perform_search"]) {
 							echo "<br /><b><font size=\"-1\">" . _("Es wurde keine Person zu dem eingegebenem Suchbegriff gefunden!") . "</font></b><br />";
 						echo "<font size=\"-1\">" . _("Bitte Namen, Vornamen oder Usernamen eingeben:") . "</font>&nbsp; ";
 						echo "<br /><input type=\"TEXT\" size=20 maxlength=255 name=\"search_exp\" />";
-						echo "&nbsp;<font size=\"-1\"><br /><input type=\"SUBMIT\"  name=\"add_user\" value=\"" . _("Suche starten") . "\" /></font>";	
-						echo "</form>";						
+						echo "&nbsp;<font size=\"-1\"><br /><input type=\"SUBMIT\"  name=\"add_user\" value=\"" . _("Suche starten") . "\" /></font>";
+						echo "</form>";
 					}
 				}
 				echo "</blockquote></td>";

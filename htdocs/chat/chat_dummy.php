@@ -50,21 +50,26 @@ require_once $ABSOLUTE_PATH_STUDIP."/visual.inc.php";
 
 $chatServer =& ChatServer::GetInstance($CHAT_SERVER_NAME);
 $chatServer->caching = true;
-if (!is_array($chatServer->chatDetail[$chatid]['users'][$user->id]['log'])){
+if ($user->cfg->getValue($user->id, "CHAT_USE_AJAX_CLIENT") ){
+	$chat_log = $chat_logs[$chatid];
+} else {
+	$chat_log = $chatServer->chatDetail[$chatid]['users'][$user->id]['log'];
+}
+if (!is_array($chat_log)){
 	echo "chat-dummy";
 	page_close();
 	die;
 }
-$log_count = count($chatServer->chatDetail[$chatid]['users'][$user->id]['log']);
-$end_time = $chatServer->chatDetail[$chatid]['users'][$user->id]['log'][$log_count-1];
-$start_time = $chatServer->chatDetail[$chatid]['users'][$user->id]['log'][$log_count-2];
+$log_count = count($chat_log);
+$end_time = $chat_log[$log_count-1];
+$start_time = $chat_log[$log_count-2];
 $output = _("Chat: ") . $chatServer->chatDetail[$chatid]['name'] . "\r\n";
 $output .= _("Beginn der Aufzeichnung: ") . strftime("%A, %c",$start_time) . "\r\n";
 $output .= _("Ende der Aufzeichnung: ") . strftime("%A, %c",$end_time) . "\r\n";
 $output .= _("Aufgezeichnet von: ") . $chatServer->chatDetail[$chatid]['users'][$user->id]['fullname'] . "\r\n";
 $output .= str_repeat("-",80) . "\r\n";
 for ($i = 0; $i < $log_count-2; ++$i){
-	$output .= decodeHTML(preg_replace ("'<[\/\!]*?[^<>]*?>'si", "", $chatServer->chatDetail[$chatid]['users'][$user->id]['log'][$i])) . "\r\n";
+	$output .= decodeHTML(preg_replace ("'<[\/\!]*?[^<>]*?>'si", "", $chat_log[$i])) . "\r\n";
 }
 header("Content-type: text/plain");
 header("Content-Disposition: attachment; filename=\"studip_chatlog_".date("d-m-Y_H-i").".log\"");

@@ -1,4 +1,4 @@
-<?php 
+<?php
 /*
 logout.php - Ausloggen aus Stud.IP und aufräumen
 Copyright (C) 2000 Stefan Suchi <suchi@gmx.de>, André Noack <andre.noack@gmx.net>,
@@ -35,7 +35,7 @@ if ($auth->auth["uid"]!="nobody") {   //nur wenn wir angemeldet sind sollten wir
 		$chatServer =& ChatServer::GetInstance($CHAT_SERVER_NAME);
 		$chatServer->logoutUser($user->id);
 	}
-	
+
 	//Wenn Option dafuer gewaehlt, vorliegende Nachrichen loeschen
 	if ($my_messaging_settings["delete_messages_after_logout"]) {
 		$sms->delete_all_messages();
@@ -45,19 +45,19 @@ if ($auth->auth["uid"]!="nobody") {   //nur wenn wir angemeldet sind sollten wir
 	if ($my_messaging_settings["logout_markreaded"]) {
 		$sms->set_read_all_messages();
 	}
-	
+
 	$logout_user=$user->id;
 	$logout_language = $_language;
 	//Logout aus dem Sessionmanagement
 	$auth->logout();
 	$sess->delete();
-	
+
 	page_close();
 
 	//Session changed zuruecksetzen
 	$timeout=(time()-(15 * 60));
 	$user->set_last_action($timeout);
-	
+
 	header("Location:$PHP_SELF?_language=$logout_language"); //Seite neu aufrufen um eine nobody Session zu erzeugen
 
 } else {        //wir sind nobody, also wahrscheinlich gerade ausgeloggt
@@ -68,13 +68,15 @@ if ($auth->auth["uid"]!="nobody") {   //nur wenn wir angemeldet sind sollten wir
 	include("$ABSOLUTE_PATH_STUDIP/config.inc.php");
 	require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
 
+	$HELP_KEYWORD="Basis.Logout";
+
 	// Start of Output
 	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 
 	?>
 	<table width="80%" align="center" border="0" cellpadding="0" cellspacing="0">
-		<tr><td colspan="2" class="topic" valign="middle"><img src="pictures/logout.gif" border="0" align="texttop"><b>&nbsp;<? print _("Stud.IP - Logout");?></b></td></tr>
+		<tr><td colspan="2" class="topic" valign="middle"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/logout.gif" border="0" align="texttop"><b>&nbsp;<? print _("Stud.IP - Logout");?></b></td></tr>
 		<tr>
 			<td width="99%"  class="blank" valign="middle">
 				<table class="blank" width="100%" border="0" cellpadding="0" cellspacing="0">
@@ -86,7 +88,7 @@ if ($auth->auth["uid"]!="nobody") {   //nur wenn wir angemeldet sind sollten wir
 					<tr>
 					<td class="blank"><blockquote><font size=-1><a href="index.php"><b>&nbsp;<? print _("Hier</b></a> geht es wieder zur Startseite.");?>
 					</font></blockquote></td></tr>
-					
+
 				<? if ($UNI_LOGOUT_ADD) {
 					echo "<tr><td class=\"blank\"><blockquote><font size=-1>&nbsp;$UNI_LOGOUT_ADD</font></blockquote></td></tr>";
 					}
@@ -94,7 +96,7 @@ if ($auth->auth["uid"]!="nobody") {   //nur wenn wir angemeldet sind sollten wir
 				</table>
 			</td>
 			<td class="blank">
-			<img src="pictures/maus.jpg" align="top"  border="0">
+			<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/maus.jpg" align="top"  border="0">
 			</td>
 		</tr>
 	</table>

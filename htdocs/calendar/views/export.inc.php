@@ -1,8 +1,8 @@
 <?
 /**
 * export.inc.php
-* 
-* 
+*
+*
 *
 * @author		Peter Thienel <pthienel@web.de>
 * @version		$Id$
@@ -22,7 +22,7 @@ define("PHPDOC_DUMMY",true);
 // This file is part of Stud.IP
 // export.inc.php
 //
-// Copyright (c) 2003 Peter Tienel <pthienel@web.de> 
+// Copyright (c) 2003 Peter Tienel <pthienel@web.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -61,15 +61,15 @@ if (!isset($calendar_sess_export))
 // direct "one-button-export(tm)" of an event-object
 if ($expmod == 'exp_direct' && $termin_id) {
 	$export =& new CalendarExportFile(new CalendarWriterICalendar());
-	
+
 	if ($evtype == 'sem')
 		$exp_event = array(new SeminarEvent($termin_id));
 	else
 		$exp_event = array(new DbCalendarEvent($termin_id));
-	
+
 	$export->exportFromObjects($exp_event);
 	$export->sendFile();
-	
+
 	page_close();
 	exit;
 }
@@ -86,9 +86,9 @@ if ($experiod == 'period') {
 
 if (($expmod != 'exp' && $expmod != 'imp' && $expmod != 'sync') || ($expmod == 'exp' && !empty($err))) {
 	require("$ABSOLUTE_PATH_STUDIP/html_head.inc.php");
-	
+
 	print_js_import();
-	echo "\n<body onUnLoad=\"upload_end()\">"; 
+	echo "\n<body onUnLoad=\"upload_end()\">";
 
 	require("$ABSOLUTE_PATH_STUDIP/header.php");
 	require($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/views/navigation.inc.php");
@@ -97,26 +97,26 @@ if (($expmod != 'exp' && $expmod != 'imp' && $expmod != 'sync') || ($expmod == '
 if (($expmod != 'exp' && $expmod != 'imp' && $expmod != 'sync') || ($expmod == 'exp' && !empty($err))) {
 
 	echo "<table border=\"0\" class=\"blank\" cellspacing=\"0\" cellpadding=\"5\" width=\"100%\">\n";
-	
+
 	if (!empty($err)) {
 		$error_sign = "<font color=\"#FF0000\" size=\"+2\"><b>&nbsp;*&nbsp;</b></font>";
 		$error_message = sprintf(_("Bitte korrigieren Sie die mit %s gekennzeichneten Felder.%s"),
 			$error_sign, $err_message);
 		my_info($error_message, "blank", 2);
 	}
-	
+
 	// print messages
 	if ($calendar_sess_export['msg'] != '') {
 		parse_msg($calendar_sess_export['msg']);
 		unset($calendar_sess_export['msg']);
 	}
-	
+
 	echo "<tr valign=\"top\">\n";
 	echo "<td width=\"99%\" nowrap class=\"blank\">\n";
 	echo "<table align=\"center\" width=\"100%\" class=\"blank\" border=\"0\" cellpadding=\"5\" cellspacing=0>\n";
-	
+
 	if ($expmod == 'syncrec') {
-	
+
 		$info = array();
 		if ($calendar_sess_export['count_synchronized']) {
 			$info['sync'] = sprintf(_("Stud.IP hat %s Termine synchronisiert."),
@@ -125,7 +125,7 @@ if (($expmod != 'exp' && $expmod != 'imp' && $expmod != 'sync') || ($expmod == '
 		else {
 			$info['sync'] = _("Ihr iCalendar-Datei enthielt keine Termine, die synchronisiert werden konnten.");
 		}
-		
+
 		if ($calendar_sess_export['count_export']) {
 			$info['export'] = sprintf(_("Die zum Download zur Verf&uuml;gung stehende Datei enthält %s Termine."),
 								$calendar_sess_export['count_export']);
@@ -133,13 +133,13 @@ if (($expmod != 'exp' && $expmod != 'imp' && $expmod != 'sync') || ($expmod == '
 		else {
 			$info['export'] = _("Ihr Stud.IP-Kalender enthält keine neueren Termine als die hochgeladene iCalendar-Datei. Es wurde keine Ausgabedatei erzeugt.");
 		}
-		
+
 		$info['all'][0]['kategorie'] = _("Information:");
-		$info['all'][0]['eintrag'][] = array('icon' => 'pictures/ausruf_small.gif',
+		$info['all'][0]['eintrag'][] = array('icon' => 'ausruf_small.gif',
 				'text' => $info['sync']);
-		$info['all'][0]['eintrag'][] = array('icon' => 'pictures/blank.gif',
+		$info['all'][0]['eintrag'][] = array('icon' => 'blank.gif',
 				'text' => $info['export']);
-		
+
 		if ($calendar_sess_export['count_export']) {
 			$send_sync = GetDownloadLink($tmpfile, $file, 2, 'force');
 			$params['content'] = _("Klicken Sie auf den Button, um die Datei mit den synchronisierten Kalenderdaten herunterzuladen.")
@@ -153,26 +153,26 @@ if (($expmod != 'exp' && $expmod != 'imp' && $expmod != 'sync') || ($expmod == '
 		}
 		$params['form'] = "<form action=\"$send_sync\" method=\"post\">\n";
 		$send_file = "";
-		
+
 		echo "<tr><th align=\"left\" width=\"100%\">\n<font size=\"-1\">";
 		echo _("Herunterladen der synchronisierten Kalenderdaten")."</font>\n</th></tr>\n";
 		print_cell($params);
 		echo "</table\n</td>\n";
-		
+
 		echo "<td class=\"blank\" align=\"right\" valign=\"top\" width=\"1%\" valign=\"top\">\n";
-		print_infobox($info['all'], "pictures/dates.jpg");
+		print_infobox($info['all'], "dates.jpg");
 	}
 	else {
-		
+
 		// if javascript enabled display icon for popup calendar
 		if ($auth->auth["jscript"]) {
 			$insert_date_start = "&nbsp;"
-				. "<img align=\"absmiddle\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/popupkalender.gif\" border=\"0\" "
+				. "<img align=\"absmiddle\" src=\"".$GLOBALS['ASSETS_URL']."images/popupkalender.gif\" border=\"0\" "
 				. "onClick=\"window.open('" . $CANONICAL_RELATIVE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR
 				. "/views/insert_date_popup.php?element_switch=9', 'InsertDate', "
 				. "'dependent=yes, width=210, height=210, left=500, top=150')\">";
 			$insert_date_end = "&nbsp;"
-				. "<img align=\"absmiddle\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/popupkalender.gif\" border=\"0\" "
+				. "<img align=\"absmiddle\" src=\"".$GLOBALS['ASSETS_URL']."images/popupkalender.gif\" border=\"0\" "
 				. "onClick=\"window.open('" . $CANONICAL_RELATIVE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR
 				. "/views/insert_date_popup.php?element_switch=10', 'InsertDate', "
 				. "'dependent=yes, width=210, height=210, left=500, top=150')\">";
@@ -181,10 +181,10 @@ if (($expmod != 'exp' && $expmod != 'imp' && $expmod != 'sync') || ($expmod == '
 			$insert_date_start = '';
 			$insert_date_end = '';
 		}
-		
+
 		echo "<tr><th align=\"left\" width=\"100%\">\n<font size=\"-1\">";
 		echo _("Exportieren Ihrer Kalenderdaten")."</font>\n</th></tr>\n";
-		
+
 		$tooltip = _("Es werden nur Termine von Veranstaltungen exportiert, die zuvor im Menüpunkt \"Veranstaltungstermine\" ausgewählt wurden.");
 		$params['form'] = "<form name=\"Formular\" action=\"$PHP_SELF?cmd=export&atime=$atime\" method=\"post\">\n";
 		$params['content'] = _("Bitte w&auml;hlen Sie, welche Termine exportiert werden sollen:") . "</font></div>\n"
@@ -196,7 +196,7 @@ if (($expmod != 'exp' && $expmod != 'imp' && $expmod != 'sync') || ($expmod == '
 				. "<option value=\"ALL\"" . ($extype == 'ALL' ? 'selected="selected"' : '')
 				. ">" . _("Alle Termine") . "</option>\n</select>"
 				. "&nbsp;&nbsp;&nbsp;<img src=\"" . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"]
-				. "pictures/info.gif\"" . tooltip($tooltip, TRUE, TRUE) . ">\n"
+				. $GLOBALS['ASSETS_URL']."images/info.gif\"" . tooltip($tooltip, TRUE, TRUE) . ">\n"
 				. "<br>&nbsp;\n<div><font size=\"-1\">"
 				. _("Geben Sie an, aus welchem Zeitbereich Termine exportiert werden sollen:")
 				. "</div><br>\n&nbsp; &nbsp; <input type=\"radio\" name=\"experiod\" value=\"all\" ";
@@ -209,7 +209,7 @@ if (($expmod != 'exp' && $expmod != 'imp' && $expmod != 'sync') || ($expmod == '
 			$params['content'] .= "checked=\"checked\"";
 		$params['content'] .= ">\n"
 				. "&nbsp;"
-				. sprintf(_("Nur Termine vom:%sbis zum:"), 
+				. sprintf(_("Nur Termine vom:%sbis zum:"),
 							" &nbsp <input type=\"text\" name=\"exstartday\" size=\"2\" maxlength=\"2\" value=\""
 						. ($exstartday ? $exstartday : date("d", time())) . "\">.&nbsp;\n"
 						. "<input type=\"text\" name=\"exstartmonth\" size=\"2\" maxlength=\"2\" value=\""
@@ -229,10 +229,10 @@ if (($expmod != 'exp' && $expmod != 'imp' && $expmod != 'sync') || ($expmod == '
 		$params['button'] = "<input type=\"image\" " . makeButton("export", "src"). " border=\"0\">";
 		$params['expmod'] = "exp";
 		print_cell($params);
-		
+
 		echo "<tr><th colspan=\"2\" align=\"left\" width=\"100%\">\n<font size=\"-1\">";
 		echo _("Importieren Ihrer Kalenderdaten")."</font>\n</th></tr>\n";
-		
+
 		$params['form'] = "<form action=\"$PHP_SELF?cmd=export&atime=$atime\" method=\"post\" "
 				. "enctype=\"multipart/form-data\" name=\"import_form\">\n";
 		$params['content'] = _("Sie k&ouml;nnen Termine importieren, die sich in einer iCalendar-Datei befinden.")
@@ -242,10 +242,10 @@ if (($expmod != 'exp' && $expmod != 'imp' && $expmod != 'sync') || ($expmod == '
 				. "name=\"create\" border=\"0\">\n";
 		$params['expmod'] = 'imp';
 		print_cell($params);
-		
+
 		echo "<tr><th colspan=\"2\" align=\"left\" width=\"100%\">\n<font size=\"-1\">";
 		echo _("Synchronisieren Ihrer Kalenderdaten")."</font>\n</th></tr>\n";
-		
+
 		$params['form'] = "<form action=\"$PHP_SELF?cmd=export&atime=$atime\" method=\"post\" "
 				. "enctype=\"multipart/form-data\" name=\"sync_form\">\n";
 		$params['content'] = _("Sie k&ouml;nnen Termine synchronisieren, die sich in einer iCalendar-Datei befinden.")
@@ -255,7 +255,7 @@ if (($expmod != 'exp' && $expmod != 'imp' && $expmod != 'sync') || ($expmod == '
 				. "name=\"create\" border=\"0\">\n";
 		$params['expmod'] = 'sync';
 		print_cell($params);
-		
+
 		if ($expmod == 'impdone') {
 			if ($calendar_sess_export['count_import']) {
 				$info['import'] = sprintf(_("Es wurden %s Termine importiert."),
@@ -265,22 +265,22 @@ if (($expmod != 'exp' && $expmod != 'imp' && $expmod != 'sync') || ($expmod == '
 			else {
 				$info['import'] = _("Es wurden keine Termine importiert.");
 			}
-		
+
 			$info['all'][0]['kategorie'] = _("Information:");
-			$info['all'][0]['eintrag'][] = array('icon' => 'pictures/ausruf_small.gif',
+			$info['all'][0]['eintrag'][] = array('icon' => 'ausruf_small.gif',
 					'text' => $info['import']);
 		}
 		else {
 			$info['all'][0]['kategorie'] = _("Information:");
-			$info['all'][0]['eintrag'][] = array('icon' => 'pictures/ausruf_small.gif',
+			$info['all'][0]['eintrag'][] = array('icon' => 'ausruf_small.gif',
 					'text' => _("Sie k&ouml;nnen Termindaten importieren, exportieren und synchronisieren."));
 		}
 		echo "</table\n</td>\n";
-		
+
 		echo "<td class=\"blank\" align=\"right\" valign=\"top\" width=\"1%\" valign=\"top\">\n";
-		print_infobox($info['all'], "pictures/dates.jpg");
+		print_infobox($info['all'], "dates.jpg");
 	}
-	
+
 	echo "</td>\n";
 	echo "</tr>\n";
 	echo "<tr><td class=\"blank\" colspan=\"2\">&nbsp;</td></tr>\n";
@@ -291,7 +291,7 @@ if (($expmod != 'exp' && $expmod != 'imp' && $expmod != 'sync') || ($expmod == '
 	echo "</td></tr></table>\n";
 }
 elseif ($expmod == 'exp' && empty($err)) {
-	
+
 	switch ($extype) {
 		case 'ALL':
 			$extype = 'ALL_EVENTS';
@@ -302,25 +302,25 @@ elseif ($expmod == 'exp' && empty($err)) {
 		default:
 			$extype = 'CALENDAR_EVENTS';
 	}
-	
+
 	$export = new CalendarExportFile(new CalendarWriterICalendar());
 	if ($experiod != 'period')
 		$export->exportFromDatabase($user->id, 0, 2114377200, $extype, $bind_seminare);
 	else
 		$export->exportFromDatabase($user->id, $exstart, $exend, $extype, $bind_seminare);
-	
+
 	if ($_calendar_error->getMaxStatus(ERROR_CRITICAL)) {
 		$calendar_sess_export['msg'] = 'error§' . _("Der Export konnte nicht durchgef&uuml;hrt werden!");
 		while ($error = $_calendar_error->nextError(ERROR_CRITICAL))
 			$calendar_sess_export['msg'] .= '<br>' . $error->getMessage();
 		while ($error = $_calendar_error->nextError(ERROR_FATAL))
 			$calendar_sess_export['msg'] .= '<br>' . $error->getMessage();
-		
+
 		page_close();
 		header("Location: $PHP_SELF?cmd=export&atime=$atime&");
 		exit;
 	}
-	
+
 	$export->sendFile();
 
 }
@@ -328,11 +328,11 @@ elseif ($expmod == 'imp') {
 
 	$import =& new CalendarImportFile(new CalendarParserICalendar(),
 			$HTTP_POST_FILES["importfile"]);
-	
+
 	$import_count = $import->getCount();
-	
+
 	if ($import_count < ($CALENDAR_MAX_EVENTS - $count_events)) {
-	
+
 		$import->importIntoDatabase();
 
 		if ($_calendar_error->getMaxStatus(ERROR_CRITICAL)) {
@@ -352,23 +352,23 @@ elseif ($expmod == 'imp') {
 		$calendar_sess_export['msg'] = 'error§' . _("Der Import konnte nicht durchgef&uuml;hrt werden!");
 		$calendar_sess_export['msg'] .= '<br>' . _("Die zu importierende Datei enth&auml;lt zuviele Termine.");
 	}
-	
+
 	page_close();
 	header("Location: $PHP_SELF?cmd=export&expmod=impdone&atime=$atime");
 	exit;
-	
+
 }
 elseif ($expmod == 'sync') {
-	
+
 	$import =& new CalendarImportFile(new CalendarParserICalendar(),
 			$HTTP_POST_FILES["importfile"]);
-		
+
 	$export =& new CalendarExportFile(new CalendarWriterICalendar());
-	
+
 	$synchronizer =& new CalendarSynchronizer($import, $export,
 			$CALENDAR_MAX_EVENTS - $count_events);
 	$synchronizer->synchronize();
-	
+
 	if ($_calendar_error->getMaxStatus(ERROR_CRITICAL)) {
 		unset($calendar_sess_export['count_import']);
 		unset($calendar_sess_export['count_export']);
@@ -388,7 +388,7 @@ elseif ($expmod == 'sync') {
 		$location = "Location: $PHP_SELF?cmd=export&expmod=syncrec&tmpfile="
 			. $export->getTempFileName() . "&file=" . $export->getFileName() . "&atime=$atime";
 	}
-	
+
 	page_close();
 	header($location);
 	exit;
@@ -396,7 +396,7 @@ elseif ($expmod == 'sync') {
 }
 
 function print_cell ($params) {
-	
+
 	echo "<tr><td width=\"100%\" class=\"steel1\">\n";
 	echo $params['form'];
 	echo "<div><font size=\"-1\">";
@@ -407,7 +407,7 @@ function print_cell ($params) {
 	echo $params['button'];
 	echo "<input type=\"hidden\" name=\"expmod\" value=\"{$params['expmod']}\">\n";
 	echo "</div>\n</form>\n</td></tr>\n";
-	
+
 }
 
 ?>

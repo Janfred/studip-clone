@@ -28,7 +28,7 @@ $perm->check("user");
 		echo "var ol_textfont = \"Arial\"";
 		echo "</script>";
 		echo "<DIV ID=\"overDiv\" STYLE=\"position:absolute; visibility:hidden; z-index:1000;\"></DIV>";
-		echo "<SCRIPT LANGUAGE=\"JavaScript\" SRC=\"overlib.js\"></SCRIPT>";
+		echo "<SCRIPT LANGUAGE=\"JavaScript\" SRC=\"".$GLOBALS['ASSETS_URL']."javascripts/overlib.js\"></SCRIPT>";
 	}
 
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
@@ -37,6 +37,7 @@ include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Sessio
 
 require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/user_visible.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/contact.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 
@@ -123,16 +124,16 @@ if ($existingowninfolabel) {
 
 ?>
 <table width = "100%" cellspacing="0" border="0" cellpadding="0"><tr>
-	<td class="topic" colspan="2" width = "100%"><img src="pictures/nutzer.gif" border="0" align="texttop"><b>&nbsp; <?echo _("Mein Adressbuch");?> <font size="2">(<?=(($size_of_book = GetSizeofBook()) == 1) ? _("1 Eintrag") : sprintf(_("%d Eintr&auml;ge"),$size_of_book);?>)</font></b>
+	<td class="topic" colspan="2" width = "100%"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/nutzer.gif" border="0" align="texttop"><b>&nbsp; <?echo _("Mein Adressbuch");?> <font size="2">(<?=(($size_of_book = GetSizeofBook()) == 1) ? _("1 Eintrag") : sprintf(_("%d Eintr&auml;ge"),$size_of_book);?>)</font></b>
 	</td>
 </tr><tr><td class="blank" align="left" valign="absmiddle">
 
 	<form action="<? echo $PHP_SELF ?>?cmd=search#anker" method="POST"><?
 
 if ($open != "all" && $size_of_book>0) {
-	echo "&nbsp; <a href=\"$PHP_SELF?view=$view&open=all&filter=$filter\"><img src=\"pictures/forumgraurunt.gif\" border=\"0\">&nbsp; <font size=\"2\">"._("Alle aufklappen")."</font></a></td>";
+	echo "&nbsp; <a href=\"$PHP_SELF?view=$view&open=all&filter=$filter\"><img src=\"".$GLOBALS['ASSETS_URL']."images/forumgraurunt.gif\" border=\"0\">&nbsp; <font size=\"2\">"._("Alle aufklappen")."</font></a></td>";
 } elseif ($size_of_book>0) {
-	echo "&nbsp; <a href=\"$PHP_SELF?filter=$filter\"><img src=\"pictures/forumgraurauf.gif\" border=\"0\">&nbsp; <font size=\"2\">"._("Alle zuklappen")."</font></a></td>";
+	echo "&nbsp; <a href=\"$PHP_SELF?filter=$filter\"><img src=\"".$GLOBALS['ASSETS_URL']."images/forumgraurauf.gif\" border=\"0\">&nbsp; <font size=\"2\">"._("Alle zuklappen")."</font></a></td>";
 }
 
 echo "<td class=\"blank\" align=\"right\">";
@@ -142,21 +143,21 @@ if ($search_exp) {
 	$search_exp = str_replace("_","\_",$search_exp);
 	if (strlen(trim($search_exp))<3) {
 		echo "&nbsp; <font size=\"-1\">"._("Ihr Suchbegriff muss mindestens 3 Zeichen umfassen! ");
-		printf ("<a href=\"$PHP_SELF\"><img src= \"./pictures/rewind.gif\" border=\"0\" value=\"" . _("neue Suche") . "\" %s>", tooltip(_("neue Suche")));
+		printf ("<a href=\"$PHP_SELF\"><img src= \"".$GLOBALS['ASSETS_URL']."images/rewind.gif\" border=\"0\" value=\"" . _("neue Suche") . "\" %s>", tooltip(_("neue Suche")));
 	} else {
 		$search_exp = trim($search_exp);
 		if (SearchResults($search_exp)) {
-			printf ("<input type=\"IMAGE\" name=\"addsearch\" src=\"pictures/move_down.gif\" border=\"0\" value=\"" . _("In Adressbuch eintragen") . "\" %s>&nbsp;  ", tooltip(_("In Adressbuch eintragen")));
+			printf ("<input type=\"IMAGE\" name=\"addsearch\" src=\"".$GLOBALS['ASSETS_URL']."images/move_down.gif\" border=\"0\" value=\"" . _("In Adressbuch eintragen") . "\" %s>&nbsp;  ", tooltip(_("In Adressbuch eintragen")));
 			echo SearchResults($search_exp);
 		} else {
 			echo "&nbsp; <font size=\"2\">"._("keine Treffer zum Suchbegriff:")."</font><b>&nbsp; $search_exp&nbsp; </b>";
 		}
-		printf ("<a href=\"$PHP_SELF\"><img src= \"./pictures/rewind.gif\" border=\"0\" value=\"" . _("neue Suche") . "\" %s>", tooltip(_("neue Suche")));
+		printf ("<a href=\"$PHP_SELF\"><img src= \"".$GLOBALS['ASSETS_URL']."images/rewind.gif\" border=\"0\" value=\"" . _("neue Suche") . "\" %s>", tooltip(_("neue Suche")));
 	}
 } else {
 	echo "<font size=\"2\" color=\"#555555\">". _("Person zum Eintrag in das Adressbuch suchen:")."</font>&nbsp; <input type=\"text\" name=\"search_exp\" value=\"\">";
-	printf ("<input type=\"IMAGE\" name=\"search\" src= \"./pictures/suchen.gif\" border=\"0\" value=\"" . _("Personen suchen") . "\" %s>&nbsp;  ", tooltip(_("Person suchen")));
-} 
+	printf ("<input type=\"IMAGE\" name=\"search\" src= \"".$GLOBALS['ASSETS_URL']."images/suchen.gif\" border=\"0\" value=\"" . _("Personen suchen") . "\" %s>&nbsp;  ", tooltip(_("Person suchen")));
+}
 echo "</form></td></tr>";
 
 if ($sms_msg)	{
@@ -180,7 +181,7 @@ if (($contact["view"])=="alpha") {
 	echo "<td width=\"8%\" align=\"center\" valign=\"center\" ".$cssSw->getHover()." class=\"".$cssSw->getClass()."\" "
 		. tooltip(($size_of_book == 1) ? _("1 Eintrag") : sprintf(_("%d Einträge"),$size_of_book),false)
 		."><a href=\"$PHP_SELF?filter=all\">a-z</a>"
-		."&nbsp; <a href=\"contact_export.php?groupid=all\"><img style=\"vertical-align:middle;\" src=\"pictures/vcardexport.gif\" border=\"0\" ".tooltip(_("Alle Einträge als vCard exportieren"))."></a></td>";
+		."&nbsp; <a href=\"contact_export.php?groupid=all\"><img style=\"vertical-align:middle;\" src=\"".$GLOBALS['ASSETS_URL']."images/vcardexport.gif\" border=\"0\" ".tooltip(_("Alle Einträge als vCard exportieren"))."></a></td>";
 	if (!$filter) {
 		$cssSw->switchClass();
 	}
@@ -215,19 +216,19 @@ if (($contact["view"])=="gruppen") {
 	}
 	echo "<td nowrap ".$cssSw->getHover()." class=\"".$cssSw->getClass()."\">&nbsp; "
 		."<a href=\"$PHP_SELF?filter=all\"><font size=\"2\">" . _("Alle Gruppen") . "</font></a>"
-		."&nbsp; <a href=\"contact_export.php?groupid=all\"><img style=\"vertical-align:middle;\" src=\"pictures/vcardexport.gif\" border=\"0\" ".tooltip(_("Alle Einträge als vCard exportieren"))."></a>&nbsp; </td>";
+		."&nbsp; <a href=\"contact_export.php?groupid=all\"><img style=\"vertical-align:middle;\" src=\"".$GLOBALS['ASSETS_URL']."images/vcardexport.gif\" border=\"0\" ".tooltip(_("Alle Einträge als vCard exportieren"))."></a>&nbsp; </td>";
 	if (!$filter) {
 		$cssSw->switchClass();
 	}
 	$owner_id = $user->id;
 	$db=new DB_Seminar;
-	$db->query ("SELECT name, statusgruppe_id FROM statusgruppen WHERE range_id = '$owner_id' ORDER BY position ASC");	
+	$db->query ("SELECT name, statusgruppe_id FROM statusgruppen WHERE range_id = '$owner_id' ORDER BY position ASC");
 	while ($db->next_record()) {
 		if ($filter==$db->f("statusgruppe_id")) {
 			$cssSw->switchClass();
 			$color = "color=\"#FF0000\"";
-			$maillink = "&nbsp; <a href=\"sms_send.php?sms_source_page=contact.php&group_id=$filter\"><img style=\"vertical-align:middle;\" src=\"pictures/nachrichtsmall.gif\" valign=\"bottom\" border=\"0\"".tooltip(_("Nachricht an alle Personen dieser Gruppe schicken"))."></a>";
-			$maillink .= "&nbsp; <a href=\"contact_export.php?groupid=".$db->f("statusgruppe_id")."\"><img style=\"vertical-align:middle;\" src=\"pictures/vcardexport.gif\" border=\"0\" ".tooltip(_("Diese Gruppe als vCard exportieren"))."></a>";			
+			$maillink = "&nbsp; <a href=\"sms_send.php?sms_source_page=contact.php&group_id=$filter\"><img style=\"vertical-align:middle;\" src=\"".$GLOBALS['ASSETS_URL']."images/nachrichtsmall.gif\" valign=\"bottom\" border=\"0\"".tooltip(_("Nachricht an alle Personen dieser Gruppe schicken"))."></a>";
+			$maillink .= "&nbsp; <a href=\"contact_export.php?groupid=".$db->f("statusgruppe_id")."\"><img style=\"vertical-align:middle;\" src=\"".$GLOBALS['ASSETS_URL']."images/vcardexport.gif\" border=\"0\" ".tooltip(_("Diese Gruppe als vCard exportieren"))."></a>";
 		} else {
 			$color = "";
 			$maillink ="";
@@ -253,23 +254,23 @@ if ($edit_id) {
 
 
 
-		
-		
+
+
 if (!$edit_id) {
 
 	if ($size_of_book>0)
-		$hints .= "&nbsp; |&nbsp; <img src= \"./pictures/nachrichtsmall.gif\">&nbsp; "._("Nachricht an Kontakt");
+		$hints .= "&nbsp; |&nbsp; <img src= \"".$GLOBALS['ASSETS_URL']."images/nachrichtsmall.gif\">&nbsp; "._("Nachricht an Kontakt");
 	if ($open && $size_of_book>0)
-		$hints .= "&nbsp; |&nbsp; <img src= \"./pictures/forumgraurauf.gif\">&nbsp; "._("Kontakt zuklappen");
+		$hints .= "&nbsp; |&nbsp; <img src= \"".$GLOBALS['ASSETS_URL']."images/forumgraurauf.gif\">&nbsp; "._("Kontakt zuklappen");
 	if ((!$open) && $size_of_book>0)
-		$hints .= "&nbsp; |&nbsp; <img src= \"./pictures/forumgraurunt.gif\">&nbsp; "._("Kontakt aufklappen");
+		$hints .= "&nbsp; |&nbsp; <img src= \"".$GLOBALS['ASSETS_URL']."images/forumgraurunt.gif\">&nbsp; "._("Kontakt aufklappen");
 	if ($open && $size_of_book>0) {
-		$hints .= "&nbsp; |&nbsp; <img src= \"./pictures/nutzer.gif\">&nbsp; "._("Buddystatus");
-		$hints .= "&nbsp; |&nbsp; <img src= \"./pictures/einst.gif\">&nbsp; "._("Eigene Rubriken");
-		$hints .= "&nbsp; |&nbsp; <img src= \"./pictures/trash.gif\">&nbsp; "._("Kontakt löschen");
+		$hints .= "&nbsp; |&nbsp; <img src= \"".$GLOBALS['ASSETS_URL']."images/nutzer.gif\">&nbsp; "._("Buddystatus");
+		$hints .= "&nbsp; |&nbsp; <img src= \"".$GLOBALS['ASSETS_URL']."images/einst.gif\">&nbsp; "._("Eigene Rubriken");
+		$hints .= "&nbsp; |&nbsp; <img src= \"".$GLOBALS['ASSETS_URL']."images/trash.gif\">&nbsp; "._("Kontakt löschen");
 	}
 	if (($open || $contact["view"]=="gruppen") && $size_of_book>0) {
-		$hints .= "&nbsp; |&nbsp; <img style=\"vertical-align:middle;\" src= \"./pictures/vcardexport.gif\">&nbsp; "._("als vCard exportieren");
+		$hints .= "&nbsp; |&nbsp; <img style=\"vertical-align:middle;\" src= \"".$GLOBALS['ASSETS_URL']."images/vcardexport.gif\">&nbsp; "._("als vCard exportieren");
 	}
 	echo 	"<br><font size=\"2\" color=\"#555555\">"._("Bedienung:").$hints;
 }

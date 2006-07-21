@@ -34,5 +34,12 @@ $GLOBALS["_views"]["AUTH_USER_INSERT"] = array("query" => "INSERT INTO auth_user
 $GLOBALS["_views"]["USER_INFO_INSERT"] = array("query" => "INSERT INTO user_info (user_id, mkdate, chdate, preferred_language) VALUES (?,?,?,?)");
 
 $GLOBALS["_views"]["SEM_USER_INSERT"] = array("query" => "INSERT INTO seminar_user (Seminar_id, user_id, status, gruppe, mkdate) VALUES (?, ?, ?, §, UNIX_TIMESTAMP())");
-					
+
+$GLOBALS["_views"]["FOLDER_GET_DATA_BY_RANGE"] = array("pk"=>"folder_id","temp_table_type"=>"HEAP",
+							"query"=>"SELECT * FROM folder WHERE range_id=? ORDER BY mkdate");
+$GLOBALS["_views"]["FOLDER_GET_DATA_BY_TERMIN"] = array("pk"=>"folder_id","temp_table_type"=>"HEAP",
+							"query"=>"SELECT folder.* FROM termine INNER JOIN folder ON(termin_id=folder.range_id) WHERE termine.range_id=? ORDER BY date");					
+$GLOBALS["_views"]["FOLDER_UPDATE_PERMISSION"] = array("query" => "UPDATE folder SET permission=? WHERE folder_id=?");
+$GLOBALS["_views"]["FOLDER_UPDATE_CHDATE"] = array("query" => "UPDATE folder SET chdate=UNIX_TIMESTAMP() WHERE folder_id=?");
+
 ?>

@@ -1,11 +1,11 @@
 <?php
 /**
 * chat_online.php
-* 
-* overview of studip chatrooms
-* 
 *
-* @author		André Noack <noack@data-quest.de>, Suchi & Berg GmbH <info@data-quest.de>
+* overview of studip chatrooms
+*
+*
+* @author		Till Glöggler <tgloeggl@uos.de>, André Noack <noack@data-quest.de>, Suchi & Berg GmbH <info@data-quest.de>
 * @version		$Id$
 * @access		public
 * @modulegroup	views
@@ -16,7 +16,7 @@
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // chat_online.php
-// 
+//
 // Copyright (C) 2003 André Noack <noack@data-quest.de>, Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -40,9 +40,10 @@ $perm->check("user");
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
-require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");		
+require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/user_visible.inc.php");
 if ($GLOBALS['CHAT_ENABLE']){
-	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php"; 
+	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php";
 	$chatServer =& ChatServer::GetInstance($GLOBALS['CHAT_SERVER_NAME']);
 	$chatServer->caching = true;
 	if ($_REQUEST['kill_chat']){
@@ -77,6 +78,8 @@ function print_chat_info($chatids){
 		}
 	}
 }
+
+$HELP_KEYWORD="Basis.InteraktionChat";
 
 // Start of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
@@ -115,7 +118,7 @@ if ($active_chats){
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
 	<tr>
 		<td class="topic" colspan="2">
-			<img src="pictures/chat1.gif" border="0" align="texttop">&nbsp;<b><? echo(_("Chat-Online")) ?></b>
+			<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/chat1.gif" border="0" align="texttop">&nbsp;<b><? echo(_("Chat-Online")) ?></b>
 		</td>
 	</tr>
 	<tr valign="top">
@@ -236,26 +239,26 @@ if ($active_chats == 1){
 	$chat_tip .= ", " . sprintf(_("%s aktive Chaträume"), $active_chats);
 }
 
-$infobox = array	(	
+$infobox = array	(
 	array  ("kategorie"  => _("Information:"),
-		"eintrag" => array	(	
-			array (	"icon" => "pictures/ausruf_small.gif",
+		"eintrag" => array	(
+			array (	"icon" => "ausruf_small.gif",
 							"text"  => $chat_tip
 			)
 		)
 	),
 	array  ("kategorie" => _("Symbole:"),
-		"eintrag" => array	(	
-			array	 (	"icon" => "pictures/chat1.gif",
+		"eintrag" => array	(
+			array	 (	"icon" => "chat1.gif",
 								"text"  => _("Dieser Chatraum ist leer")
 			),
-			array	 (	"icon" => "pictures/chat3.gif",
+			array	 (	"icon" => "chat3.gif",
 								"text"  => _("Sie sind allein in diesem Chatraum")
 			),
-			array	 (	"icon" => "pictures/chat2.gif",
+			array	 (	"icon" => "chat2.gif",
 								"text"  => _("Eine oder mehrere Personen befinden sich in diesem Chatraum")
 			),
-			array	 (	"icon" => "pictures/chateinladung.gif",
+			array	 (	"icon" => "chateinladung.gif",
 								"text"  => _("Sie haben eine Einladung f&uuml;r diesen Chatraum")
 			)
 		)
@@ -264,14 +267,14 @@ $infobox = array	(
 
 // print the info_box
 
-print_infobox ($infobox,"pictures/seminare.jpg");
+print_infobox ($infobox,"seminare.jpg");
 
 ?>
 
 </td>
 </tr>
 <tr>
-<td class="blank" colspan="2">&nbsp; 
+<td class="blank" colspan="2">&nbsp;
 </td>
 </tr>
 </table>

@@ -1,8 +1,8 @@
 <?
 /**
 * Export-Subfile that calls the FOP.
-* 
-* This file calls the Formatting-Objects-Processor to generate PDF-Files. 
+*
+* This file calls the Formatting-Objects-Processor to generate PDF-Files.
 *
 * @author		Arne Schroeder <schroeder@data.quest.de>
 * @version		$Id$
@@ -15,8 +15,8 @@
 // This file is part of Stud.IP
 // export_run_fop.inc.php
 // pages for choosing an xslt-script
-// 
-// Copyright (c) 2002 Arne Schroeder <schroeder@data-quest.de> 
+//
+// Copyright (c) 2002 Arne Schroeder <schroeder@data-quest.de>
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -35,43 +35,43 @@
 
 $FOP_ENABLE = true;
 
-if (($o_mode != "direct") AND ($o_mode != "passthrough")) 
+if (($o_mode != "direct") AND ($o_mode != "passthrough"))
 	$perm->check("tutor");
 
 require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'datei.inc.php');
-	
-	
+
+
 /**
 * Checks given parameters
 *
 * This function checks the given parameters. If some are missing
 * it returns false and adds a warning to $export_error.
 *
-* @access	public        
+* @access	public
 * @return		boolean
 */
 function CheckParamRUN_FOP()
 {
 global $XSLT_ENABLE, $ex_type, $o_mode, $xml_file_id, $page, $format, $output_formats, $choose, $xslt_files, $export_error, $export_error_num, $export_o_modes, $export_ex_types, $result_file;
 
-	if ($result_file == "") 
+	if ($result_file == "")
 	{
 		$export_error .= "<b>" . _("Fehlende Parameter!") . "</b><br>";
 		$export_error_num++;
 		return false;
 	}
-	
-		
+
+
 	return true;
 }
 
 
-if (!CheckParamRUN_FOP()) 
+if (!CheckParamRUN_FOP())
 {
-	$infobox = array(			
+	$infobox = array(
 	array ("kategorie"  => _("Information:"),
-		"eintrag" => array	(	
-						array (	"icon" => "pictures/ausruf_small.gif",
+		"eintrag" => array	(
+						array (	'icon' => "ausruf_small.gif",
 								"text"  => _("Die Parametern, mit denen diese Seite aufgerufen wurde, sind fehlerhaft.")
 							 )
 						)
@@ -80,7 +80,7 @@ if (!CheckParamRUN_FOP())
 }
 elseif ($FOP_ENABLE != true)
 {
-	$infobox[1]["eintrag"][] = array (	"icon" => "pictures/einst.gif",
+	$infobox[1]["eintrag"][] = array (	'icon' => "einst.gif",
 								"text"  => sprintf(_("Die Erweiterung zum Erzeugen von PDF-Dateien ist nicht aktiviert, es konnten daher nur Formatting Objects erzeugt werden."))
 							);
 }
@@ -92,13 +92,13 @@ else
 	escapeshellcmd ( $result_file );
 	escapeshellcmd ( $TMP_PATH );
 	$pdf_file = md5(uniqid(rand())) .".pdf";
-	
+
 	$str = "$FOP_SH_CALL $TMP_PATH/export/$result_file $TMP_PATH/export/$pdf_file ";
-	
+
 	if ($JAVA_ENV_CALL){
 		$str = ". $JAVA_ENV_CALL && " . $str;
 	}
-	
+
 	$out = exec( $str );
 	if ($out == '')
 		$out = $str;
@@ -112,14 +112,14 @@ else
 //			$export_pagecontent .= "&nbsp;&nbsp;&nbsp;&nbsp; - &nbsp;&nbsp;" . $link1 . _("Datei &ouml;ffnen") . "</a></td></tr><tr><td colspan=\"2\">";
 //			$export_pagecontent .= "&nbsp;&nbsp;&nbsp;&nbsp; - &nbsp;&nbsp;" . $link2 . _("Datei herunterladen") . "</a></td></tr>";
 			$export_pagecontent .= '</td></tr></table><br>';
-	
-			$result_printimage = '<a href="' . GetDownloadLink($pdf_file, $xslt_filename . '.pdf', 2). '"><img src="pictures/' . $export_icon['pdf'] . '" border=0></a>';
+
+			$result_printimage = '<a href="' . GetDownloadLink($pdf_file, $xslt_filename . '.pdf', 2). '"><img src="'.$GLOBALS['ASSETS_URL'].'images/' . $export_icon['pdf'] . '" border=0></a>';
 			$result_printlink = '<a href="'. GetDownloadLink($pdf_file, $xslt_filename . '.pdf', 2).   '" class="tree">' . $xslt_filename . '.pdf</a>';
 			$result_printdesc = _("PDF-Datei");
-			$result_printcontent = _("Dies ist die fertige PDF-Datei.") . '<br>';	
-		}	
+			$result_printcontent = _("Dies ist die fertige PDF-Datei.") . '<br>';
+		}
 		else
-		{	
+		{
 			unset($result_printimage);
 			unset($result_printlink);
 			unset($result_printdesc);
@@ -130,22 +130,22 @@ else
 			$export_error = "<b>" . sprintf(_("Bei der Erzeugung der PDF-Datei ist ein Fehler aufgetreten. <br>Fehlermeldung: %s <br>Datei: %s"), $out, $pdf_file) . "</b><br>";
 			$export_error_num ++;
 		}
-	
-		$xml_printimage = '<a href="'. GetDownloadLink($xml_file_id, $xml_filename, 2). '"><img src="pictures/' . $export_icon['xml'] . '" border=0></a>';
+
+		$xml_printimage = '<a href="'. GetDownloadLink($xml_file_id, $xml_filename, 2). '"><img src="'.$GLOBALS['ASSETS_URL'].'images/' . $export_icon['xml'] . '" border=0></a>';
 		$xml_printlink = '<a href="'. GetDownloadLink($xml_file_id, $xml_filename, 2) .  '" class="tree">' . $xml_filename . '</a>';
 		$xml_printdesc = _("XML-Daten");
-		$xml_printcontent = _("In dieser Datei sind die Daten als XML-Tags gespeichert. Diese Tags k&ouml;nnen mit einem XSLT-Script verarbeitet werden.") . "<br>";	
-	
-		$xslt_printimage = '<a href="'. GetDownloadLink($result_file,$xslt_filename .'.'. $format,2) . '"><img src="pictures/' . $export_icon[$format] . '" border=0></a>';
+		$xml_printcontent = _("In dieser Datei sind die Daten als XML-Tags gespeichert. Diese Tags k&ouml;nnen mit einem XSLT-Script verarbeitet werden.") . "<br>";
+
+		$xslt_printimage = '<a href="'. GetDownloadLink($result_file,$xslt_filename .'.'. $format,2) . '"><img src="'.$GLOBALS['ASSETS_URL'].'images/' . $export_icon[$format] . '" border=0></a>';
 		$xslt_printlink = '<a href="'. GetDownloadLink($result_file,$xslt_filename .'.'. $format,2) . '" class="tree">' . $xslt_filename .'.'. $format . '</a>';
 		$xslt_printdesc = _("Formatting-Objects-Datei");
-		$xslt_printcontent = _("In dieser Datei sind die Formatting Objects zur Erzeugung der PDF-Datei gespeichert.") . "<br>";	
-	
+		$xslt_printcontent = _("In dieser Datei sind die Formatting Objects zur Erzeugung der PDF-Datei gespeichert.") . "<br>";
 
-		$infobox = array	(			
+
+		$infobox = array	(
 		array ("kategorie"  => _("Information:"),
-			"eintrag" => array	(	
-							array (	"icon" => "pictures/ausruf_small.gif",
+			"eintrag" => array	(
+							array (	'icon' => "ausruf_small.gif",
 									"text"  => $xslt_info
 								 )
 							)
@@ -153,11 +153,11 @@ else
 		);
 		{
 			$infobox[1]["kategorie"] = _("Aktionen:");
-				$infobox[1]["eintrag"][] = array (	"icon" => "pictures/nachricht1.gif" ,
+				$infobox[1]["eintrag"][] = array (	'icon' => "nachricht1.gif" ,
 											"text"  => sprintf(_("Um die Ausgabe-Datei herunterzuladen, klicken Sie %s hier %s."), $link2, "</a>")
 										);
 		}
-	
+
 
 }
 ?>

@@ -49,7 +49,7 @@ $css_switcher->switchClass();
 ?>
 <table width="100%" cellspacing="0" cellpadding="0" border="0" align="center">
 	<tr>
-		<td class="topic">&nbsp;<img src="pictures/meinetermine.gif" border="0" align="absmiddle" alt="">
+		<td class="topic">&nbsp;<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/meinetermine.gif" border="0" align="absmiddle" alt="">
 			<b>&nbsp;<? echo _("Einstellungen des Terminkalenders anpassen"); ?></b>
 		</td>
 	</tr>
@@ -76,7 +76,7 @@ $css_switcher->switchClass();
 						<select name="cal_view" size="1">
 							<option value="showweek"<?
 								if($calendar_user_control_data["view"] == "showweek")
-									echo " selected"; 
+									echo " selected";
 								echo ">" . _("Wochenansicht") . "</option>"; ?>
 							<option value="showday"<?
 								if($calendar_user_control_data["view"] == "showday")
@@ -99,18 +99,18 @@ $css_switcher->switchClass();
 				</td>
 				<td class="<? echo $css_switcher->getClass(); ?>">
 					<font size="-1">
-					<?	    
+					<?
 			   		echo "<select name=\"cal_start\">";
 	   					for ($i=0; $i<=23; $i++)
 		  					{
-					  		if ($i==$calendar_user_control_data["start"]) 
+					  		if ($i==$calendar_user_control_data["start"])
 					  			{
 					  			echo "<option selected value=".$i.">";
 					  			if ($i<10)  echo "0".$i.":00";
 					  			else echo $i.":00";
 					  			echo "</option>";
 					  			}
-		       					else 
+		       					else
 		       						{
 					  			echo "<option value=".$i.">";
 					  			if ($i<10)  echo "0".$i.":00";
@@ -121,18 +121,18 @@ $css_switcher->switchClass();
 			    		echo"</select>";
 					?>
 					&nbsp;<? echo _("Uhr bis"); ?>
-					<?	    
+					<?
 			   		echo"<select name=\"cal_end\">";
 	   					for ($i=0; $i<=23; $i++)
 		  					{
-					  		if ($i==$calendar_user_control_data["end"]) 
+					  		if ($i==$calendar_user_control_data["end"])
 					  			{
 					  			echo "<option selected value=".$i.">";
 					  			if ($i<10)  echo "0".$i.":00";
 					  			else echo $i.":00";
 					  			echo "</option>";
 					  			}
-		       					else 
+		       					else
 		       						{
 					  			echo "<option value=".$i.">";
 					  			if ($i<10)  echo "0".$i.":00";
@@ -238,7 +238,7 @@ $css_switcher->switchClass();
 					</td>
 					<td class="<? echo $css_switcher->getClass(); ?>">
 						<font size="-1">
-						<input type="checkbox" name="cal_link_edit" value="TRUE"<? 
+						<input type="checkbox" name="cal_link_edit" value="TRUE"<?
 							if($calendar_user_control_data["link_edit"])
 								echo " checked";
 							echo ">&nbsp;" . _("Bearbeiten-Link in Wochenansicht"); ?>

@@ -1,9 +1,9 @@
 <?
 /**
 * persons.inc.php
-* 
-* 
-* 
+*
+*
+*
 *
 * @author		Peter Thienel <pthienel@web.de>, Suchi & Berg GmbH <info@data-quest.de>
 * @version	$Id$
@@ -16,7 +16,7 @@
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // persons.inc.php
-// 
+//
 // Copyright (C) 2003 Peter Thienel <pthienel@web.de>,
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
@@ -35,6 +35,7 @@
 // +---------------------------------------------------------------------------+
 
 require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"]."visual.inc.php");
+require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"]."user_visible.inc.php");
 require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."/lib/extern_functions.inc.php");
 global $_fullname_sql;
 
@@ -77,7 +78,7 @@ if (!$nameformat = $this->config->getValue("Main", "nameformat"))
 	$nameformat = "full_rev";
 if(!$grouping) {
 	$groups_ids = implode("','", $this->config->getValue("Main", "groupsvisible"));
-	
+
 	$query = "SELECT DISTINCT ui.raum, ui.sprechzeiten, ui.Telefon, inst_perms,	Email, aum.user_id, username, ";
 	$query .= $_fullname_sql[$nameformat] . " AS fullname, aum.Nachname ";
 	if ($query_order) {
@@ -89,10 +90,10 @@ if(!$grouping) {
 		$query .= "FROM statusgruppen s LEFT JOIN statusgruppe_user su USING(statusgruppe_id) ";
 		$query .= "LEFT JOIN auth_user_md5 aum USING(user_id) ";
 		$query .= "LEFT JOIN user_info USING(user_id) LEFT JOIN user_inst ui USING(user_id) ";
-		$query .= "WHERE su.statusgruppe_id IN ('$groups_ids') AND Institut_id = '$range_id' ORDER BY ";
+		$query .= "WHERE su.statusgruppe_id IN ('$groups_ids') AND Institut_id = '$range_id' AND ".get_ext_vis_query()." ORDER BY ";
 		$query .= "s.position ASC, su.position ASC";
 	}
-	
+
 	$db->query($query);
 	$visible_groups = array("");
 }
@@ -131,36 +132,36 @@ foreach ($visible_groups as $group_id => $group) {
 			$query .= $_fullname_sql[$nameformat] . " AS fullname, aum.Nachname ";
 			$query .= "FROM statusgruppe_user su LEFT JOIN auth_user_md5 aum USING(user_id) ";
 			$query .= "LEFT JOIN user_info USING(user_id) LEFT JOIN user_inst ui USING(user_id) ";
-			$query .= "WHERE su.statusgruppe_id='$group_id' AND Institut_id = '$range_id'$query_order";
+			$query .= "WHERE su.statusgruppe_id='$group_id' AND ".get_ext_vis_query()." AND Institut_id = '$range_id'$query_order";
 		}
-		
+
 		$db->query($query);
-		
+
 		$position = array_search($group_id, $all_groups);
 		if($aliases_groups[$position])
 			$group = $aliases_groups[$position];
 	}
 
 	if ($db->num_rows()) {
-		
+
 		if ($grouping && $repeat_headrow == "beneath")
 			$out .= $this->elements["TableGroup"]->toString(array("content" => htmlReady($group)));
-		
+
 		if($repeat_headrow || $first_loop)
 			$out .= $this->elements["TableHeadrow"]->toString();
-		
-		
+
+
 		if ($grouping && $repeat_headrow != "beneath")
 			$out .= $this->elements["TableGroup"]->toString(array("content" => htmlReady($group)));
 
 		while ($db->next_record()) {
-			
+
 			if ($defaultadr) {
 				$query = "SELECT ui.raum, ui.sprechzeiten, ui.Telefon, inst_perms,	Email, ";
 				$query .= "aum.user_id, username, " . $_fullname_sql[$nameformat];
 				$query .= " AS fullname, aum.Nachname FROM auth_user_md5 aum LEFT JOIN ";
 				$query .= "user_inst ui USING(user_id) WHERE aum.user_id = '" . $db->f('user_id');
-				$query .= "' AND externdefault = 1";
+				$query .= "' AND ".get_ext_vis_query()." AND externdefault = 1";
 				$db_defaultadr->query($query);
 				// no default
 				if (!$db_defaultadr->next_record()) {
@@ -168,28 +169,28 @@ foreach ($visible_groups as $group_id => $group) {
 					$query .= "aum.user_id, username, " . $_fullname_sql[$nameformat];
 					$query .= " AS fullname, aum.Nachname FROM auth_user_md5 aum LEFT JOIN ";
 					$query .= "user_inst ui USING(user_id) WHERE aum.user_id = '" . $db->f('user_id');
-					$query .= "' AND Institut_id = '$range_id'";
+					$query .= "' AND ".get_ext_vis_query()." AND Institut_id = '$range_id'";
 					$db_defaultadr->query($query);
 					$db_defaultadr->next_record();
 				}
 			}
-			
+
 			$data["content"] = array(
 				"Nachname"			=> $this->elements["LinkIntern"]->toString(array("content" =>
 														htmlReady($$db_out->f("fullname")), "module" => "Persondetails",
 														"link_args" => "username=" . $$db_out->f("username"))),
-												
+
 				"Telefon"				=> htmlReady($$db_out->f("Telefon")),
-			
+
 				"sprechzeiten"	=> htmlReady($$db_out->f("sprechzeiten")),
-			
+
 				"raum"					=> htmlReady($$db_out->f("raum")),
-			
+
 				"Email"					=> $this->elements["Link"]->toString(array("content" =>
 														htmlReady($$db_out->f("Email")),
 														"link" => "mailto:" . htmlReady($$db_out->f("Email"))))
 			);
-			
+
 			// generic data fields
 			if ($generic_datafields) {
 				$datafields = $datafields_obj->getLocalFields($$db_out->f("user_id"));
@@ -197,13 +198,13 @@ foreach ($visible_groups as $group_id => $group) {
 					$data["content"][$datafield] = $datafields[$datafield]["content"];
 				}
 			}
-			
+
 			$out .= $this->elements["TableRow"]->toString($data);
 		}
 		$first_loop = FALSE;
 	}
 }
-	
+
 $this->elements["TableHeader"]->printout(array("content" => $out));
 
 ?>
