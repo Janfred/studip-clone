@@ -161,7 +161,15 @@ class PluginAdministrationVisualization extends AbstractStudIPPluginVisualizatio
 				</td>				
 				<td align="right" width="5%" class="<?=$cssSw->getClass()?>"><input name="navposition_<?= $pluginid?>" type="text" size="2" value="<?= $plugin->getNavigationPosition()?>"></td>
 				<td class="<?=$cssSw->getClass()?>">&nbsp;<a href="<?= PluginEngine::getLink($roleplugin,array("pluginid"=>$pluginid),"doPluginRoleAssignment")?>"><?= makeButton("bearbeiten","img",_("Rollenberechtigungen bearbeiten")) ?></a></td>
-				<td align="right" class="<?=$cssSw->getClass()?>"><a href="<?= PluginEngine::getLink($this->pluginref,array("zip" => $pluginid)) ?>"><img src="<?= $relativepath?>/img/icon-disc.gif" border="0" alt="<?= _("Plugin zippen")?>"/></a></td>
+				<td align="right" class="<?=$cssSw->getClass()?>">
+				<?
+					if (!$plugin->isDependentOnOtherPlugin()){
+						?>
+						<a href="<?= PluginEngine::getLink($this->pluginref,array("zip" => $pluginid)) ?>"><img src="<?= $relativepath?>/img/icon-disc.gif" border="0" alt="<?= _("Plugin zippen")?>"/></a>
+						<?
+					}
+				?>
+				</td>				
 			</tr>
 		<?php
 		}
