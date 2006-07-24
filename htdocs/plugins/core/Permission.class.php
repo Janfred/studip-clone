@@ -10,54 +10,50 @@
 
 class Permission {
 	var $permissionid;
-
-    function Permission() {
+	var $userid;
+	var $perm;
+	
+	
+    function Permission($userid="") {
 	    $this->permissionid = "guest";
+		$this->userid = $userid;    
+		$this->perm = new Seminar_Perm();	
     }
     
     function hasRootPermission(){
-    	$perm = $GLOBALS["perm"];
-    	return $perm->have_perm("root");
+    	return $this->perm->have_perm("root",$this->userid);
 	}    
 	
-	function hasAdminPermission(){
-    	$perm = $GLOBALS["perm"];    	
-    	return $perm->have_perm("admin");
+	function hasAdminPermission(){  	
+    	return $this->perm->have_perm("admin",$this->userid);
 	}   
 	
-	function hasTutorPermission(){
-		$perm = $GLOBALS["perm"];
-    	return $perm->have_perm("tutor");	 
+	function hasTutorPermission(){	
+    	return $this->perm->have_perm("tutor",$this->userid);	 
 	}
 	
-	function hasTeacherPermission(){
-		$perm = $GLOBALS["perm"];
-    	return $perm->have_perm("dozent");	 
+	function hasTeacherPermission(){			
+    	return $this->perm->have_perm("dozent",$this->userid);	 
 	}	
 	
-	function hasStudentPermission(){
-		$perm = $GLOBALS["perm"];
-    	return $perm->have_perm("autor");	 
+	function hasStudentPermission(){		
+    	return $this->perm->have_perm("autor",$this->userid);	 
 	}
 	
-	function isStudent(){
-		$perm = $GLOBALS["perm"];
-    	return $perm->have_perm("autor") && !$perm->have_perm("dozent");	 
+	function isStudent(){		
+    	return $this->perm->have_perm("autor",$this->userid) && !$this->perm->have_perm("dozent",$this->userid);	 
 	}
 	
-	function hasTeacherPermissionInPOI(){
-		$perm = $GLOBALS["perm"];
-		return $perm->have_studip_perm("dozent",$GLOBALS["SessSemName"][1]);
+	function hasTeacherPermissionInPOI(){		
+		return $this->perm->have_studip_perm("dozent",$GLOBALS["SessSemName"][1],$this->userid);
 	}
 	
-	function hasTutorPermissionInPOI(){
-		$perm = $GLOBALS["perm"];
-		return $perm->have_studip_perm("tutor",$GLOBALS["SessSemName"][1]);
+	function hasTutorPermissionInPOI(){		
+		return $this->perm->have_studip_perm("tutor",$GLOBALS["SessSemName"][1],$this->userid);
 	}
 	
-	function hasStudentPermissionInPOI(){
-		$perm = $GLOBALS["perm"];
-		return $perm->have_studip_perm("autor",$GLOBALS["SessSemName"][1]);
+	function hasStudentPermissionInPOI(){		
+		return $this->perm->have_studip_perm("autor",$GLOBALS["SessSemName"][1],$this->userid);
 	}
 }
 ?>

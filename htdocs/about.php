@@ -429,7 +429,6 @@ if ($GLOBALS["PLUGINS_ENABLE"]){
 	}
 	$requser = new StudIPUser();
 	$requser->setUserid($user_id);
-	//$requser->setUsername($username);
 	
 	foreach ($activatedhomepageplugins as $activatedhomepageplugin){
 		$activatedhomepageplugin->setRequestedUser($requser);

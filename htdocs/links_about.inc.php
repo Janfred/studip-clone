@@ -52,6 +52,7 @@ if ($GLOBALS["PLUGINS_ENABLE"]){
 		$activatedhomepageplugins = array();
 	}
 	foreach ($activatedhomepageplugins as $activatedhomepageplugin){
+		$activatedhomepageplugin->setRequestedUser($activatedhomepageplugin->getUser());
 		// hier nun die HomepagePlugins anzeigen
 		if ($activatedhomepageplugin->hasNavigation()){			
 			$hppluginnav = $activatedhomepageplugin->getNavigation();

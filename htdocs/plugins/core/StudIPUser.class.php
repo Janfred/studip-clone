@@ -23,9 +23,8 @@ class StudIPUser {
 	*/
     function StudIPUser() {
     	$auth = $GLOBALS["auth"];
-	    $this->setUserid($auth->auth['uid']);
-	  //   $this->username=$auth->auth['uname'];
-	    $this->permission = new Permission();   	    	   	  
+	    $this->setUserid($auth->auth['uid']);	  
+	    $this->permission = new Permission($this->userid);   	    	   	  
     }
     
     function getSurname(){
@@ -41,7 +40,8 @@ class StudIPUser {
 	    $usermgmt = new UserManagement($this->userid);
 	    $this->givenname = $usermgmt->user_data["auth_user_md5.Vorname"];
 	    $this->surname = $usermgmt->user_data["auth_user_md5.Nachname"];
-	    $this->username = $usermgmt->user_data["auth_user_md5.username"];	    
+	    $this->username = $usermgmt->user_data["auth_user_md5.username"];	 
+	   	$this->permission = new Permission($this->userid);      
     }
     
     function getUserid(){
