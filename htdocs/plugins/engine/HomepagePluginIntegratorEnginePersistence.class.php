@@ -27,7 +27,7 @@ class HomepagePluginIntegratorEnginePersistence extends AbstractPluginIntegrator
      */
     function getAllActivatedPlugins(){
     	// return all activated system plugins
-    	$plugins = parent::executePluginQuery("where plugintype='Homepage' and enabled='yes' order by navigationpos");
+    	$plugins = parent::executePluginQuery("where plugintype='Homepage' and enabled='yes'");
     	return $plugins;
     }
     
