@@ -78,7 +78,7 @@ define ("EVAL_FILE_EXPORTMANAGERCSV", EVAL_PATH_CLASSES."EvaluationExportManager
 define ("EVAL_FILE_EVALTREE", EVAL_PATH_CLASSES."EvaluationTree.class.php");
 define ("EVAL_FILE_EDIT_TREEVIEW", EVAL_PATH_CLASSES."EvaluationTreeEditView.class.php");
 define ("EVAL_FILE_SHOW_TREEVIEW", EVAL_PATH_CLASSES."EvaluationTreeShowUser.class.php");
-define ("EVAL_FILE_CSS", "modules/evaluation/evaluation.css");
+define ("EVAL_FILE_CSS", "evaluation.css");
 
 define ("HTML", EVAL_PATH_CLASSES."HTML.class.php");
 define ("HTMLempty", EVAL_PATH_CLASSES."HTMLempty.class.php");
