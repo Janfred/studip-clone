@@ -17,5 +17,20 @@ class AbstractStudIPPortalPlugin extends AbstractStudIPPlugin {
 	function showOverview(){		
 		// has to be implemented
 	}
+	
+	/**
+	 * Does this plugin have an administration page, which should be shown?
+	 * This default implementation only shows it for admin or root user.
+	 */
+	function hasAdministration(){
+		$currentuser = $this->getUser();
+		$currentperms = $currentuser->getPermission();
+		if ($currentperms->hasAdminPermission()){
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
 }
 ?>
