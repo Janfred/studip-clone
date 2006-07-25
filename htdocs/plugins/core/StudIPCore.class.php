@@ -13,7 +13,12 @@ class StudIPCore{
 	function getInstitutes(){
 		$dbconn =& PluginEngine::getPluginDatabaseConnection();
 		// Cache the query for 300 seconds
-    	$result =& $dbconn->CacheExecute(300,"select LPAD(Institut_id,32,'0') as inst_id,Institut_id, Name, fakultaets_id from Institute order by fakultaets_id,inst_id,Name");    	
+		if ($GLOBALS["PLUGINS_CACHING"]){
+		   	$result =& $dbconn->CacheExecute($GLOBALS['PLUGINS_CACHE_TIME'],"select LPAD(Institut_id,32,'0') as inst_id,Institut_id, Name, fakultaets_id from Institute order by fakultaets_id,inst_id,Name");    	
+		}
+		else {
+			$result =& $dbconn->Execute("select LPAD(Institut_id,32,'0') as inst_id,Institut_id, Name, fakultaets_id from Institute order by fakultaets_id,inst_id,Name");    	
+		}
     	$institutes = array();
     	while (!$result->EOF){
     		$instid = $result->fields("Institut_id");
@@ -55,8 +60,12 @@ class StudIPCore{
 	function getInstituteByFacultyId($facultyid){
 		$dbconn =& PluginEngine::getPluginDatabaseConnection();
 		// Cache the query for 300 seconds
-		
-    	$result =& $dbconn->CacheExecute(300,"select Institut_id, Name, fakultaets_id from Institute where fakultaets_id=? and Institut_id <> fakultaets_id",array($facultyid));    	
+		if ($GLOBALS['PLUGINS_CACHING']){
+    		$result =& $dbconn->CacheExecute($GLOBALS['PLUGINS_CACHE_TIME'],"select Institut_id, Name, fakultaets_id from Institute where fakultaets_id=? and Institut_id <> fakultaets_id",array($facultyid));    	
+		}
+		else {
+			$result =& $dbconn->Execute("select Institut_id, Name, fakultaets_id from Institute where fakultaets_id=? and Institut_id <> fakultaets_id",array($facultyid));    	
+		}
     	
     	$institutes = array();
     	while (!$result->EOF){
@@ -76,7 +85,12 @@ class StudIPCore{
 	function getInstitute($instituteid){
 		$dbconn =& PluginEngine::getPluginDatabaseConnection();
 		// Cache the query for 300 seconds
-    	$result =& $dbconn->CacheExecute(300,"select Institut_id, Name, fakultaets_id from Institute where Institut_id=?",array($instituteid));    	
+		if ($GLOBALS['PLUGINS_CACHING']){
+    		$result =& $dbconn->CacheExecute($GLOBALS['PLUGINS_CACHE_TIME'],"select Institut_id, Name, fakultaets_id from Institute where Institut_id=?",array($instituteid));    	
+		}
+		else {
+			$result =& $dbconn->Execute("select Institut_id, Name, fakultaets_id from Institute where Institut_id=?",array($instituteid));    	
+		}
     	
     	if (!$result->EOF){
     		$instid = $result->fields("Institut_id");
@@ -97,10 +111,21 @@ class StudIPCore{
     	return $institute;
 	}
 	
+	
+	/**
+	 * Returns all semester registered in the stud.ip database
+	 *
+	 * @return unknown
+	 */
 	function getSemester(){
 		$dbconn =& PluginEngine::getPluginDatabaseConnection();
 		// Cache the query for 300 seconds
-    	$result =& $dbconn->CacheExecute(300,"select * from semester_data order by beginn desc");    	
+		if ($GLOBALS['PLUGINS_CACHING']){
+    		$result =& $dbconn->CacheExecute($GLOBALS['PLUGINS_CACHE_TIME'],"select * from semester_data order by beginn desc");    	
+		}
+		else {
+			$result =& $dbconn->Execute("select * from semester_data order by beginn desc");    	
+		}
     	
     	$semester = array();
     	$current = time();
@@ -121,8 +146,12 @@ class StudIPCore{
 	function getSeminarsForInstitute($instituteid,$semesterid){
 		$dbconn =& PluginEngine::getPluginDatabaseConnection();
 		// Cache the query for 300 seconds
-
-    	$result =& $dbconn->CacheExecute(300,"SELECT se.* FROM seminar_inst s join seminare se on (s.seminar_id=se.seminar_id) where s.institut_id=? and se.start_time = (select beginn from semester_data where semester_id=?) union select * from seminare sem where sem.institut_id=? and sem.start_time=(select beginn from semester_data where semester_id=?)",array($instituteid,$semesterid,$instituteid,$semesterid));    	
+		if ($GLOBALS['PLUGINS_CACHING']){
+    		$result =& $dbconn->CacheExecute($GLOBALS['PLUGINS_CACHE_TIME'],"SELECT se.* FROM seminar_inst s join seminare se on (s.seminar_id=se.seminar_id) where s.institut_id=? and se.start_time = (select beginn from semester_data where semester_id=?) union select * from seminare sem where sem.institut_id=? and sem.start_time=(select beginn from semester_data where semester_id=?)",array($instituteid,$semesterid,$instituteid,$semesterid));    	
+		}
+		else {
+			$result =& $dbconn->Execute("SELECT se.* FROM seminar_inst s join seminare se on (s.seminar_id=se.seminar_id) where s.institut_id=? and se.start_time = (select beginn from semester_data where semester_id=?) union select * from seminare sem where sem.institut_id=? and sem.start_time=(select beginn from semester_data where semester_id=?)",array($instituteid,$semesterid,$instituteid,$semesterid));    	
+		}
     	$courses = array();    	    	
     	while (!$result->EOF){  
     		//if (empty($courses) || (!array_search($result->fields("Seminar_id"),$courses))){
