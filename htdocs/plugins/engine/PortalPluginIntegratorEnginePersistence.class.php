@@ -27,7 +27,7 @@ class PortalPluginIntegratorEnginePersistence extends AbstractPluginIntegratorEn
      */
     function getAllActivatedPlugins(){
     	// return all activated system plugins
-    	$plugins = parent::executePluginQuery("where plugintype='Portal' and enabled='yes' order by navigationpos");
+    	$plugins = parent::executePluginQuery("where plugintype='Portal' and enabled='yes'");
     	return $plugins;
     }
     
