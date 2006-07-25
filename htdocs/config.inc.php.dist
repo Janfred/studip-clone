@@ -215,7 +215,7 @@ $INST_MODULES["default"] = array(
 			"personal"=>TRUE,			//personal, this module is stud_ip core; always available 
 			"literature"=>TRUE,			//literature, this module is stud_ip core; always available 
 			"scm"=>FALSE,				//simple content module, this modul is stud_ip core; always available 
-			"ilias_connect"=>TRUE,			//Ilias-connect, only, if the modul is global activated; see local.inc
+			"ilias_connect"=>FALSE,			//Ilias-connect, only, if the modul is global activated; see local.inc
 			"chat"=>TRUE,				//chat, only, if the module is global activated; see local.inc
 			"support"=>FALSE,			//support, only, if the module is global activated; see local.inc (this modul is not part of the main distribution)
 			"wiki"=>FALSE,				//wikiwiki-web, this module is stud_ip core; always available 
@@ -278,6 +278,12 @@ $TITLE_REAR_TEMPLATE = array("","M.A.","B.A.","M.S.","MBA","Ph.D.","Dipl.-Biol."
 							"Dipl.-Geol.","Dipl.-Geophys.","Dipl.-Ing. agr.","Dipl.-Kfm.","Dipl.-Math.","Dipl.-Phys.",
 							"Dipl.-Psych.","M. Sc","B. Sc");
 
+$NAME_FORMAT_DESC['full'] = _("Titel1 Vorname Nachname Titel2");
+$NAME_FORMAT_DESC['full_rev'] = _("Nachname, Vorname, Titel1, Titel2");
+$NAME_FORMAT_DESC['no_title'] = _("Vorname Nachname");
+$NAME_FORMAT_DESC['no_title_rev'] = _("Nachname, Vorname");
+$NAME_FORMAT_DESC['no_title_short'] = _("Nachname, V.");
+$NAME_FORMAT_DESC['no_title_motto'] = _("Vorname Nachname, Motto");
 
 //preset names for scm (simple content module)
 $SCM_PRESET[1] = array("name"=>_("Informationen"));		//the first entry is the default label for scms, it'll be used if the user give no information for another label
