@@ -38,6 +38,10 @@ INSERT INTO `config` (`config_id`, `parent_id`, `field`, `value`, `is_default`, 
 INSERT INTO `config` (`config_id`, `parent_id`, `field`, `value`, `is_default`, `type`, `range`, `section`, `position`, `mkdate`, `chdate`, `description`, `comment`, `message_template`) VALUES ('4c52bfa598daa03944a401b66c53d828', '', 'NEWS_DISABLE_GARBAGE_COLLECT', '0', 1, 'boolean', 'global', '', 0, 1123751948, 1123751948, 'Schaltet den Garbage-Collect für News ein oder aus', '', '');
 INSERT INTO `config` (`config_id`, `parent_id`, `field`, `value`, `is_default`, `type`, `range`, `section`, `position`, `mkdate`, `chdate`, `description`, `comment`, `message_template`) VALUES ('9e0579653e585a688665a6ea2e2d7c90', '', 'EVAL_AUSWERTUNG_CONFIG_ENABLE', '1', 1, 'boolean', 'global', '', 0, 1141225624, 1141225624, 'Ermöglicht es dem Nutzer, die grafische Darstellung der Evaluationsauswertung zu konfigurieren', '', '');
 INSERT INTO `config` (`config_id`, `parent_id`, `field`, `value`, `is_default`, `type`, `range`, `section`, `position`, `mkdate`, `chdate`, `description`, `comment`, `message_template`) VALUES ('0ad11a4cafa548d3c72a3dc1776568d8', '', 'EVAL_AUSWERTUNG_GRAPH_FORMAT', 'jpg', 1, 'string', 'global', '', 0, 1141225624, 1141225624, 'Das Format, in dem die Diagramme der grafischen Evaluationsauswertung erstellt werden (jpg, png, gif).', '', '');
+INSERT INTO `config` (`config_id`, `parent_id`, `field`, `value`, `is_default`, `type`, `range`, `section`, `position`, `mkdate`, `chdate`, `description`, `comment`, `message_template`) VALUES ('781e0998a1b5c998ebbc02a4f0d907ac', '', 'USER_VISIBILITY_UNKNOWN', '1', 1, 'boolean', 'global', '', 0, 1153815901, 1153815901, 'Sollen Nutzer mit Sichtbarkeit "unknown" wie sichtbare behandelt werden?', '', '');
+INSERT INTO `config` (`config_id`, `parent_id`, `field`, `value`, `is_default`, `type`, `range`, `section`, `position`, `mkdate`, `chdate`, `description`, `comment`, `message_template`) VALUES ('3ca9d678f11a73917420161180838205', '', 'CHAT_USE_AJAX_CLIENT', '0', 1, 'boolean', 'user', '', 0, 1153815830, 1153815830, 'Einstellung für Nutzer, ob der AJAX chatclient benutzt werden soll (experimental); Systemdefault', '', '');
+INSERT INTO `config` (`config_id`, `parent_id`, `field`, `value`, `is_default`, `type`, `range`, `section`, `position`, `mkdate`, `chdate`, `description`, `comment`, `message_template`) VALUES ('54ad03142e6704434976c9a0df8329c8', '', 'ONLINE_NAME_FORMAT', 'full_rev', 1, 'string', 'user', '', 0, 1153814980, 1153814980, 'Default-Wert für wer-ist-online Namensformatierung', '', '');
+INSERT INTO `config` (`config_id`, `parent_id`, `field`, `value`, `is_default`, `type`, `range`, `section`, `position`, `mkdate`, `chdate`, `description`, `comment`, `message_template`) VALUES ('8a147b2d487d7ae91264f03cab5d8c07', '', 'ADMISSION_PRELIM_COMMENT_ENABLE', '0', 1, 'boolean', 'global', '', 0, 1153814966, 1153814966, 'Schaltet ein oder aus, ob ein Nutzer im Modus "Vorläufiger Eintrag" eine Bemerkung hinterlegen kann', '', '');
 
 
 -- 
@@ -130,10 +134,60 @@ INSERT INTO `log_actions` (`action_id`, `name`, `description`, `info_template`, 
 -- 
 
 INSERT INTO `plugins` (`pluginid`, `pluginclassname`, `pluginpath`, `pluginname`, `plugindesc`, `plugintype`, `enabled`, `navigationpos`) VALUES (1, 'PluginAdministrationPlugin', 'core', 'Plugin-Administration', 'Administrationsoberfläche für Plugins', 'Administration', 'yes', 0);
+INSERT INTO `plugins` (`pluginid`, `pluginclassname`, `pluginpath`, `pluginname`, `plugindesc`, `plugintype`, `enabled`, `navigationpos`, `dependentonid`) VALUES (2, 'de_studip_core_UserManagementPlugin', 'core', 'UserManagement', '', 'Core', 'yes', 1, 1);
+INSERT INTO `plugins` (`pluginid`, `pluginclassname`, `pluginpath`, `pluginname`, `plugindesc`, `plugintype`, `enabled`, `navigationpos`, `dependentonid`) VALUES (3, 'de_studip_core_RoleManagementPlugin', 'core', 'RollenManagement', 'Administration der Rollen', 'Administration', 'yes', 2, 1);
 
 -- 
 -- Daten für Tabelle `plugins_activated`
 -- 
 
 INSERT INTO `plugins_activated` (`pluginid`, `poiid`, `state`) VALUES (1, 'admin', 'on');
+INSERT INTO `plugins_activated` (`pluginid`, `poiid`, `state`) VALUES (3, 'admin', 'on');
+
+-- 
+-- Daten für Tabelle `roles`
+-- 
+
+INSERT INTO `roles` (`roleid`, `rolename`, `system`) VALUES (1, 'Root-Administrator(in)', 'y');
+INSERT INTO `roles` (`roleid`, `rolename`, `system`) VALUES (2, 'Administrator(in)', 'y');
+INSERT INTO `roles` (`roleid`, `rolename`, `system`) VALUES (3, 'Mitarbeiter(in)', 'y');
+INSERT INTO `roles` (`roleid`, `rolename`, `system`) VALUES (4, 'Lehrende(r)', 'y');
+INSERT INTO `roles` (`roleid`, `rolename`, `system`) VALUES (5, 'Studierende(r)', 'y');
+INSERT INTO `roles` (`roleid`, `rolename`, `system`) VALUES (6, 'Tutor(in)', 'y');
+
+-- 
+-- Daten für Tabelle `roles_studipperms`
+-- 
+
+INSERT INTO `roles_studipperms` (`roleid`, `permname`) VALUES (1, 'root');
+INSERT INTO `roles_studipperms` (`roleid`, `permname`) VALUES (2, 'admin');
+INSERT INTO `roles_studipperms` (`roleid`, `permname`) VALUES (3, 'admin');
+INSERT INTO `roles_studipperms` (`roleid`, `permname`) VALUES (3, 'root');
+INSERT INTO `roles_studipperms` (`roleid`, `permname`) VALUES (4, 'dozent');
+INSERT INTO `roles_studipperms` (`roleid`, `permname`) VALUES (5, 'autor');
+INSERT INTO `roles_studipperms` (`roleid`, `permname`) VALUES (5, 'tutor');
+INSERT INTO `roles_studipperms` (`roleid`, `permname`) VALUES (6, 'tutor');
+
+-- 
+-- Daten für Tabelle `roles_plugins`
+-- 
+
+INSERT INTO `roles_plugins` (`roleid`, `pluginid`) VALUES (1, 1);
+INSERT INTO `roles_plugins` (`roleid`, `pluginid`) VALUES (1, 2);
+INSERT INTO `roles_plugins` (`roleid`, `pluginid`) VALUES (1, 3);
+INSERT INTO `roles_plugins` (`roleid`, `pluginid`) VALUES (2, 1);
+INSERT INTO `roles_plugins` (`roleid`, `pluginid`) VALUES (2, 2);
+INSERT INTO `roles_plugins` (`roleid`, `pluginid`) VALUES (2, 3);
+INSERT INTO `roles_plugins` (`roleid`, `pluginid`) VALUES (3, 1);
+INSERT INTO `roles_plugins` (`roleid`, `pluginid`) VALUES (3, 2);
+INSERT INTO `roles_plugins` (`roleid`, `pluginid`) VALUES (3, 3);
+INSERT INTO `roles_plugins` (`roleid`, `pluginid`) VALUES (4, 1);
+INSERT INTO `roles_plugins` (`roleid`, `pluginid`) VALUES (4, 2);
+INSERT INTO `roles_plugins` (`roleid`, `pluginid`) VALUES (4, 3);
+INSERT INTO `roles_plugins` (`roleid`, `pluginid`) VALUES (5, 1);
+INSERT INTO `roles_plugins` (`roleid`, `pluginid`) VALUES (5, 2);
+INSERT INTO `roles_plugins` (`roleid`, `pluginid`) VALUES (5, 3);
+INSERT INTO `roles_plugins` (`roleid`, `pluginid`) VALUES (6, 1);
+INSERT INTO `roles_plugins` (`roleid`, `pluginid`) VALUES (6, 2);
+INSERT INTO `roles_plugins` (`roleid`, `pluginid`) VALUES (6, 3);
 

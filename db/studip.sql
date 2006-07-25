@@ -3,11 +3,11 @@
 -- http://www.phpmyadmin.net
 -- 
 -- Host: localhost
--- Erstellungszeit: 01. März 2006 um 12:24
+-- Erstellungszeit: 25. Juli 2006 um 10:17
 -- Server Version: 4.0.18
 -- PHP-Version: 4.4.2
 -- 
--- Datenbank: `studip13`
+-- Datenbank: `studip14`
 -- 
 
 -- --------------------------------------------------------
@@ -35,8 +35,7 @@ CREATE TABLE `Institute` (
   `srienabled` tinyint(4) NOT NULL default '0',
   PRIMARY KEY  (`Institut_id`),
   KEY `fakultaets_id` (`fakultaets_id`)
-) TYPE=MyISAM;
-
+) TYPE=MyISAM PACK_KEYS=1;
 -- --------------------------------------------------------
 
 -- 
@@ -66,6 +65,7 @@ CREATE TABLE `admission_seminar_user` (
   `mkdate` int(20) NOT NULL default '0',
   `position` int(5) default NULL,
   `comment` tinytext,
+  `visible` enum('yes','no','unknown') NOT NULL default 'unknown',
   PRIMARY KEY  (`user_id`,`seminar_id`,`studiengang_id`)
 ) TYPE=MyISAM;
 
@@ -147,6 +147,10 @@ CREATE TABLE `auth_user_md5` (
   `Nachname` varchar(64) default NULL,
   `Email` varchar(64) default NULL,
   `auth_plugin` varchar(64) default NULL,
+  `locked` tinyint(1) unsigned NOT NULL default '0',
+  `lock_comment` varchar(255) default NULL,
+  `locked_by` varchar(32) default NULL,
+  `visible` enum('always','yes','unknown','no','never') NOT NULL default 'unknown',
   PRIMARY KEY  (`user_id`),
   UNIQUE KEY `k_username` (`username`)
 ) TYPE=MyISAM PACK_KEYS=1;
@@ -395,6 +399,7 @@ CREATE TABLE `eval` (
   `anonymous` tinyint(1) NOT NULL default '1',
   `visible` tinyint(1) NOT NULL default '1',
   `shared` tinyint(1) NOT NULL default '0',
+  `protected` tinyint(1) unsigned NOT NULL default '0',
   PRIMARY KEY  (`eval_id`)
 ) TYPE=MyISAM PACK_KEYS=1;
 
@@ -410,6 +415,19 @@ CREATE TABLE `eval_group_template` (
   `user_id` varchar(32) NOT NULL default '',
   `group_type` varchar(250) NOT NULL default 'normal',
   PRIMARY KEY  (`evalgroup_id`,`user_id`)
+) TYPE=MyISAM;
+
+-- --------------------------------------------------------
+
+-- 
+-- Tabellenstruktur für Tabelle `eval_link`
+-- 
+
+DROP TABLE IF EXISTS `eval_link`;
+CREATE TABLE `eval_link` (
+  `eval_id` varchar(32) NOT NULL default '',
+  `linked_eval_id` varchar(32) NOT NULL default '',
+  PRIMARY KEY  (`eval_id`,`linked_eval_id`)
 ) TYPE=MyISAM;
 
 -- --------------------------------------------------------
@@ -537,7 +555,7 @@ CREATE TABLE `evalgroup` (
   `title` varchar(255) NOT NULL default '',
   `text` text NOT NULL,
   `position` int(11) NOT NULL default '0',
-  `child_type` enum('EvaluationGroup','EvaluationQuestion') NOT NULL default 'EvaluationGroup',
+  `child_type` enum('EvaluationGroup','EvaluationQuestion','EvaluationText','EvaluationLink') NOT NULL default 'EvaluationGroup',
   `mandatory` tinyint(1) NOT NULL default '0',
   `template_id` varchar(32) NOT NULL default '',
   PRIMARY KEY  (`evalgroup_id`),
@@ -593,6 +611,7 @@ CREATE TABLE `folder` (
   `user_id` varchar(32) NOT NULL default '',
   `name` varchar(255) NOT NULL default '',
   `description` text,
+  `permission` tinyint(3) unsigned NOT NULL default '7',
   `mkdate` int(20) NOT NULL default '0',
   `chdate` int(20) NOT NULL default '0',
   PRIMARY KEY  (`folder_id`),
@@ -941,11 +960,12 @@ CREATE TABLE `plugins` (
   `pluginpath` varchar(255) NOT NULL default '',
   `pluginname` varchar(45) NOT NULL default '',
   `plugindesc` varchar(45) NOT NULL default '',
-  `plugintype` enum('Standard','Administration','System') NOT NULL default 'Standard',
+  `plugintype` enum('Standard','Administration','System','Homepage','Portal','Core') NOT NULL default 'Standard',
   `enabled` enum('yes','no') NOT NULL default 'no',
   `navigationpos` int(10) unsigned NOT NULL default '4294967295',
+  `dependentonid` int(10) unsigned default NULL,
   PRIMARY KEY  (`pluginid`)
-) TYPE=MyISAM;
+) TYPE=MyISAM AUTO_INCREMENT=4 ;
 
 -- --------------------------------------------------------
 
@@ -1242,6 +1262,59 @@ CREATE TABLE `resources_user_resources` (
 -- --------------------------------------------------------
 
 -- 
+-- Tabellenstruktur für Tabelle `roles`
+-- 
+
+DROP TABLE IF EXISTS `roles`;
+CREATE TABLE `roles` (
+  `roleid` int(10) unsigned NOT NULL auto_increment,
+  `rolename` varchar(80) NOT NULL default '',
+  `system` enum('y','n') NOT NULL default 'n',
+  PRIMARY KEY  (`roleid`)
+) TYPE=MyISAM AUTO_INCREMENT=7 ;
+
+-- --------------------------------------------------------
+
+-- 
+-- Tabellenstruktur für Tabelle `roles_plugins`
+-- 
+
+DROP TABLE IF EXISTS `roles_plugins`;
+CREATE TABLE `roles_plugins` (
+  `roleid` int(10) unsigned NOT NULL default '0',
+  `pluginid` int(10) unsigned NOT NULL default '0',
+  PRIMARY KEY  (`roleid`,`pluginid`)
+) TYPE=MyISAM;
+
+-- --------------------------------------------------------
+
+-- 
+-- Tabellenstruktur für Tabelle `roles_studipperms`
+-- 
+
+DROP TABLE IF EXISTS `roles_studipperms`;
+CREATE TABLE `roles_studipperms` (
+  `roleid` int(10) unsigned NOT NULL default '0',
+  `permname` varchar(255) NOT NULL default '',
+  PRIMARY KEY  (`roleid`,`permname`)
+) TYPE=MyISAM;
+
+-- --------------------------------------------------------
+
+-- 
+-- Tabellenstruktur für Tabelle `roles_user`
+-- 
+
+DROP TABLE IF EXISTS `roles_user`;
+CREATE TABLE `roles_user` (
+  `roleid` int(10) unsigned NOT NULL default '0',
+  `userid` char(32) NOT NULL default '',
+  PRIMARY KEY  (`roleid`,`userid`)
+) TYPE=MyISAM;
+
+-- --------------------------------------------------------
+
+-- 
 -- Tabellenstruktur für Tabelle `rss_feeds`
 -- 
 
@@ -1395,6 +1468,7 @@ CREATE TABLE `seminar_user` (
   `notification` int(10) NOT NULL default '0',
   `mkdate` int(20) NOT NULL default '0',
   `comment` varchar(255) NOT NULL default '',
+  `visible` enum('yes','no','unknown') NOT NULL default 'unknown',
   PRIMARY KEY  (`Seminar_id`,`user_id`),
   KEY `status` (`status`,`Seminar_id`),
   KEY `user_id` (`user_id`,`status`)
@@ -1486,7 +1560,7 @@ CREATE TABLE `smiley` (
   PRIMARY KEY  (`smiley_id`),
   UNIQUE KEY `name` (`smiley_name`),
   KEY `short` (`short_name`)
-) TYPE=MyISAM;
+) TYPE=MyISAM AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1706,6 +1780,7 @@ CREATE TABLE `user_info` (
   `email_forward` tinyint(4) NOT NULL default '0',
   `smiley_favorite` varchar(255) NOT NULL default '',
   `smiley_favorite_publish` tinyint(1) NOT NULL default '0',
+  `motto` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`user_id`),
   KEY `score` (`score`),
   KEY `guestbook` (`guestbook`,`user_id`)
