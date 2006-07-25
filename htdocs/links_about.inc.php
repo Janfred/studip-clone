@@ -122,6 +122,7 @@ if ($PLUGINS_ENABLE){
 		} 
 		if ($i_page == "plugins.php"){
 			foreach ($activatedhomepageplugins as $activatedhomepageplugin){
+				$activatedhomepageplugin->setRequestedUser($activatedhomepageplugin->getUser());
 				if ($activatedhomepageplugin->hasNavigation() && ($activatedhomepageplugin->getPluginId() == $pluginid)){
 					// Hauptmenü gefunden
 					$reiter_view="hpplugin_" . $activatedhomepageplugin->getPluginId();

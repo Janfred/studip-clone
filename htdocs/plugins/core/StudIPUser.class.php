@@ -23,8 +23,7 @@ class StudIPUser {
 	*/
     function StudIPUser() {
     	$auth = $GLOBALS["auth"];
-	    $this->setUserid($auth->auth['uid']);	  
-	    $this->permission = new Permission($this->userid);   	    	   	  
+	    $this->setUserid($auth->auth['uid']);	      	   	  
     }
     
     function getSurname(){
