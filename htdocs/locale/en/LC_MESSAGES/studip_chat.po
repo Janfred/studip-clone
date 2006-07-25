@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: studip_chat\n"
-"POT-Creation-Date: 2006-04-07 16:52+0200\n"
+"POT-Creation-Date: 2006-07-25 21:18+0200\n"
 "PO-Revision-Date: 2005-06-29 23:05+0200\n"
 "Last-Translator: Jens Schmelzer <jens.schmelzer@fh-jena.de>\n"
 "Language-Team:  <de@li.org>\n"
@@ -15,21 +15,34 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.10\n"
 
-#: chat/chat_client.php:89
+#: chat/chat_client_ajax.php:185 chat/chat_client.php:430
+#, c-format
+msgid "Hallo %s,<br> willkommen im Raum: %s"
+msgstr "Hello %s,<br>welcome to room: %s"
+
+#: chat/chat_client_ajax.php:210 chat/chat_input.php:177
+msgid "Nachricht senden"
+msgstr "Send message"
+
+#: chat/chat_client_ajax.php:213 chat/chat_input.php:180
+msgid "Chat verlassen"
+msgstr "Leave chat"
+
+#: chat/chat_client.php:90 chat/sajax_chat_functions.php:315
 #, c-format
 msgid "Ihre %sSchriftfarbe%s wurde ge&auml;ndert!"
 msgstr "Your %sfont colour%s has been changed!"
 
-#: chat/chat_client.php:99
+#: chat/chat_client.php:100 chat/sajax_chat_functions.php:325
 #, c-format
 msgid "%s verl&auml;sst den Chat und sagt: %s"
 msgstr "%s is leaving the chat and says :%s"
 
-#: chat/chat_client.php:100
+#: chat/chat_client.php:101 chat/sajax_chat_functions.php:326
 msgid "Sie haben den Chat verlassen!"
 msgstr "You have left the chat!"
 
-#: chat/chat_client.php:102
+#: chat/chat_client.php:103
 msgid ""
 "Ihre letzte Aufzeichnung wird noch einmal zum Download angeboten.<br>Nachdem "
 "sie dieses Fenster schließen wird diese Aufzeichnung gel&ouml;scht."
@@ -37,166 +50,165 @@ msgstr ""
 "Your last recording is offered for downloading once more. <br>Once you "
 "delete this window the recording will be deleted. "
 
-#: chat/chat_client.php:107
+#: chat/chat_client.php:108 chat/sajax_chat_functions.php:330
 msgid "Das Chatfenster wird in 3 Sekunden geschlossen!"
 msgstr "The chat window will close in 3 seconds!"
 
-#: chat/chat_client.php:123
+#: chat/chat_client.php:124
 msgid "Mögliche Chat-Kommandos:"
 msgstr "Possible chat commands:"
 
-#: chat/chat_client.php:135
+#: chat/chat_client.php:136 chat/sajax_chat_functions.php:355
 #, c-format
 msgid "Ihre Botschaft an %s wurde verschickt."
 msgstr "Your message to has been sent %s."
 
-#: chat/chat_client.php:138
+#: chat/chat_client.php:139 chat/sajax_chat_functions.php:358
 #, c-format
 msgid "Eine geheime Botschaft von %s"
 msgstr "A secret message from %s"
 
-#: chat/chat_client.php:142
+#: chat/chat_client.php:143 chat/sajax_chat_functions.php:362
 #, c-format
 msgid "%s ist in diesem Chat nicht bekannt."
 msgstr "%s is not known in this chat."
 
-#: chat/chat_client.php:144 chat/chat_client.php:179 chat/chat_client.php:190
-#: chat/chat_client.php:210 chat/chat_client.php:302
+#: chat/chat_client.php:145 chat/chat_client.php:180 chat/chat_client.php:191
+#: chat/chat_client.php:211 chat/chat_client.php:303
+#: chat/sajax_chat_functions.php:364 chat/sajax_chat_functions.php:399
+#: chat/sajax_chat_functions.php:410 chat/sajax_chat_functions.php:430
+#: chat/sajax_chat_functions.php:521
 msgid "Fehler: Falsche Kommandosyntax!"
 msgstr "Error: False command syntax!"
 
-#: chat/chat_client.php:172
+#: chat/chat_client.php:173 chat/sajax_chat_functions.php:392
 #, c-format
 msgid "%s wurde von %s aus dem Chat geworfen!"
 msgstr "%s has been thrown out of the chat by %s!"
 
-#: chat/chat_client.php:176
+#: chat/chat_client.php:177 chat/sajax_chat_functions.php:396
 msgid "Kein(e) Nutzer(in) zum entfernen gefunden."
 msgstr "No user(s) found to remove."
 
-#: chat/chat_client.php:181
+#: chat/chat_client.php:182 chat/sajax_chat_functions.php:401
 msgid "Sie d&uuml;rfen hier niemanden rauswerfen!"
 msgstr "You are not allowed to throw anyone out of here!"
 
-#: chat/chat_client.php:196
+#: chat/chat_client.php:197 chat/sajax_chat_functions.php:416
 #, c-format
 msgid "Ihre Nachricht an %s wurde verschickt."
 msgstr "Your message has been sent to %s."
 
-#: chat/chat_client.php:198
+#: chat/chat_client.php:199 chat/sajax_chat_functions.php:418
 msgid "Fehler: Ihre Nachricht konnte nicht verschickt werden!"
 msgstr "Error: Your message could not be sent!"
 
-#: chat/chat_client.php:200
+#: chat/chat_client.php:201 chat/sajax_chat_functions.php:420
 msgid "Fehler: Es macht keinen Sinn, sich selbst Nachrichten zu schicken!"
 msgstr "Error: It doesn't make sense to send yourself messages!"
 
-#: chat/chat_client.php:216
+#: chat/chat_client.php:217 chat/sajax_chat_functions.php:436
 #, c-format
 msgid "Ihre Einladung an %s wurde verschickt."
 msgstr "Your invitation has been sent to %s."
 
-#: chat/chat_client.php:218
+#: chat/chat_client.php:219 chat/sajax_chat_functions.php:438
 msgid "Fehler: Ihre Einladung konnte nicht verschickt werden!"
 msgstr "Error: Your invitation could not be sent! "
 
-#: chat/chat_client.php:221
+#: chat/chat_client.php:222 chat/sajax_chat_functions.php:441
 msgid "Fehler: Es macht keinen Sinn, sich selbst in den Chat einzuladen!"
 msgstr "Error: It doesn't make any sense to invite yourself to the chat!"
 
-#: chat/chat_client.php:224
+#: chat/chat_client.php:225 chat/sajax_chat_functions.php:444
 msgid "Sie d&uuml;rfen f&uuml;r diesen Chat keine Einladungen verschicken!"
 msgstr "You are not allowed to send any invitations for this chat!"
 
-#: chat/chat_client.php:233
+#: chat/chat_client.php:234 chat/sajax_chat_functions.php:453
 #, c-format
 msgid "Dieser Chat wurde soeben von %s mit einem Passwort gesichert."
 msgstr "This chat has just been secured with a password by %s."
 
-#: chat/chat_client.php:237
+#: chat/chat_client.php:238 chat/sajax_chat_functions.php:457
 #, c-format
 msgid "Der Passwortschutz f&uuml;r diesen Chat wurde soeben von %s aufgehoben."
 msgstr "The password security for this chat has just been removed by %s. "
 
-#: chat/chat_client.php:241
+#: chat/chat_client.php:242 chat/sajax_chat_functions.php:461
 msgid "Dieser Chat ist nicht mit einem Passwort gesichert."
 msgstr "This chat is not secured with a password."
 
-#: chat/chat_client.php:244
+#: chat/chat_client.php:245 chat/sajax_chat_functions.php:464
 msgid "Sie d&uuml;rfen hier kein Passwort setzen!"
 msgstr "You are not allowed to set any password here!"
 
-#: chat/chat_client.php:255
+#: chat/chat_client.php:256 chat/sajax_chat_functions.php:475
 msgid "Sie d&uuml;rfen diesen Chat nicht absichern!"
 msgstr "You are not allowed to secure this chat!"
 
-#: chat/chat_client.php:264
+#: chat/chat_client.php:265 chat/sajax_chat_functions.php:484
 msgid "Sie d&uuml;rfen diesen Chat nicht entsichern!"
 msgstr "You are not allowed to unlock this chat!"
 
-#: chat/chat_client.php:274
+#: chat/chat_client.php:275 chat/sajax_chat_functions.php:495
 #, c-format
 msgid "Sie lassen bereits seit %s eine Aufzeichnung laufen."
 msgstr "You have let a recording run since %s."
 
-#: chat/chat_client.php:276
+#: chat/chat_client.php:277 chat/sajax_chat_functions.php:497
 #, c-format
 msgid "Es wurde soeben von %s eine Aufzeichnung gestartet."
 msgstr "A recording has just been started by %s."
 
-#: chat/chat_client.php:283
+#: chat/chat_client.php:284 chat/sajax_chat_functions.php:504
 #, c-format
 msgid "Die Aufzeichnung von %s wurde beendet."
 msgstr "The recording was ended by %s."
 
-#: chat/chat_client.php:284
+#: chat/chat_client.php:285 chat/sajax_chat_functions.php:505
 msgid "Ihre Aufzeichnug wurde beendet und wird zu Ihrem Browser geschickt."
 msgstr "Your recording has been ended and will be sent to your browser."
 
-#: chat/chat_client.php:292
+#: chat/chat_client.php:293 chat/sajax_chat_functions.php:512
 msgid "Sie haben keine Aufzeichnung gestartet."
 msgstr "You have not started any recording."
 
-#: chat/chat_client.php:296
+#: chat/chat_client.php:297 chat/sajax_chat_functions.php:516
 msgid "Ihre Aufzeichnung wird zu Ihrem Browser geschickt."
 msgstr "Your recording will be sent to your browser."
 
-#: chat/chat_client.php:299
+#: chat/chat_client.php:300 chat/sajax_chat_functions.php:518
 msgid "Sie haben keine gespeicherte Aufzeichnung."
 msgstr "You do not have any saved recordings."
 
-#: chat/chat_client.php:305
+#: chat/chat_client.php:306 chat/sajax_chat_functions.php:524
 msgid "Sie d&uuml;rfen hier keine Aufzeichnung starten!"
 msgstr "You are not allowed to start a recording here!"
 
-#: chat/chat_client.php:316
+#: chat/chat_client.php:317 chat/sajax_chat_functions.php:535
 #, c-format
 msgid "Unbekanntes Kommando: %s"
 msgstr "Unknown command: %s"
 
-#: chat/chat_client.php:382
+#: chat/chat_client.php:383 chat/sajax_chat_functions.php:271
 msgid "Sie mussten den Chat verlassen..."
 msgstr "You must leave the chat..."
 
-#: chat/chat_client.php:383 chat/chat_client.php:393
+#: chat/chat_client.php:384 chat/chat_client.php:394
+#: chat/sajax_chat_functions.php:272 chat/sajax_chat_functions.php:277
 #, c-format
 msgid "%sHier%s k&ouml;nnen Sie versuchen wieder einzusteigen."
 msgstr "%sHere%s you can try to enter the chat again."
 
-#: chat/chat_client.php:391
+#: chat/chat_client.php:392 chat/sajax_chat_functions.php:275
 #, c-format
 msgid "%sIDLE TIMEOUT%s - Sie wurden aus dem Chat entfernt!"
 msgstr "%sIDLE TIMEOUT%s - You have been removed from the chat!"
 
-#: chat/chat_client.php:421 chat/chat_input.php:121 chat/chat_nicklist.php:77
+#: chat/chat_client.php:424 chat/chat_input.php:121 chat/chat_nicklist.php:77
 #: chat/chat_status.php:104
 msgid "Sie sind nicht in diesem Chat angemeldet!"
 msgstr "You are not registered in this chat!"
-
-#: chat/chat_client.php:427
-#, c-format
-msgid "Hallo %s,<br> willkommen im Raum: %s"
-msgstr "Hello %s,<br>welcome to room: %s"
 
 #: chat/chat_config.php:131
 msgid " [msg] - Sie verlassen den Chat mit der Botschaft [msg]"
@@ -273,19 +285,19 @@ msgid ""
 msgstr ""
 " [start | stop | send] - start, end or send a recording if you are chat-admin"
 
-#: chat/chat_dummy.php:61
+#: chat/chat_dummy.php:66
 msgid "Chat: "
 msgstr "Chat:"
 
-#: chat/chat_dummy.php:62
+#: chat/chat_dummy.php:67
 msgid "Beginn der Aufzeichnung: "
 msgstr "Begin the recording:"
 
-#: chat/chat_dummy.php:63
+#: chat/chat_dummy.php:68
 msgid "Ende der Aufzeichnung: "
 msgstr "End the recording:"
 
-#: chat/chat_dummy.php:64
+#: chat/chat_dummy.php:69
 msgid "Aufgezeichnet von: "
 msgstr "Recorded by:"
 
@@ -376,43 +388,35 @@ msgstr ""
 "You do not have the authorisation to invite other users into any active chat "
 "room!"
 
-#: chat/chat_input.php:177
-msgid "Nachricht senden"
-msgstr "Send message"
-
-#: chat/chat_input.php:180
-msgid "Chat verlassen"
-msgstr "Leave chat"
-
-#: chat/chat_login.php:68
+#: chat/chat_login.php:73
 msgid "Das eingegebene Passwort ist falsch!"
 msgstr "The entered password is false!"
 
-#: chat/chat_login.php:74
+#: chat/chat_login.php:79
 msgid "Es wurde keine g&uuml;ltige Einladung f&uuml;r diesen Chat gefunden!"
 msgstr "No valid invitation was found for this chat!"
 
-#: chat/chat_login.php:78
+#: chat/chat_login.php:83
 msgid "Passwort erforderlich"
 msgstr "Password necessary"
 
-#: chat/chat_login.php:79
+#: chat/chat_login.php:84
 msgid ""
 "Um an diesem Chat teilnehmen zu k&ouml;nnen, m&uuml;ssen sie das Passwort "
 "eingeben."
 msgstr "In order to take part in this chat, you must enter the password."
 
-#: chat/chat_login.php:85 chat/chat_login.php:93
+#: chat/chat_login.php:90 chat/chat_login.php:98
 msgid "Chatlogin nicht m&ouml;glich"
 msgstr "Chat login not possible"
 
-#: chat/chat_login.php:86
+#: chat/chat_login.php:91
 msgid ""
 "Sie k&ouml;nnen ohne eine g&uuml;ltige Einladung nicht an diesem Chat "
 "teilnehmen."
 msgstr "You can not take part in this chat without a valid invitation."
 
-#: chat/chat_login.php:94
+#: chat/chat_login.php:99
 msgid ""
 "Vermutlich sind sie noch aus einer fr&uuml;heren Chat-Session angemeldet. Es "
 "dauert ca. 3-5 Sekunden bis sie automatisch aus dem Chat entfernt werden. "
@@ -421,77 +425,91 @@ msgstr ""
 "You are probably still entered in an earlier chat session. It takes ca. 3-5 "
 "seconds until you are automatically removed from a chat. Try again later."
 
-#: chat/chat_login.php:122
+#: chat/chat_login.php:127
 msgid "Zugriff verweigert"
 msgstr "Access denied"
 
-#: chat/chat_login.php:128
+#: chat/chat_login.php:133
 msgid "Fenster schließen"
 msgstr "Close window"
 
-#: chat/chat_nicklist.php:98
+#: chat/chat_nicklist.php:98 chat/sajax_chat_functions.php:157
 msgid "Homepage aufrufen"
 msgstr "Call up homepage"
 
-#: chat/chat_nicklist.php:103
+#: chat/chat_nicklist.php:103 chat/sajax_chat_functions.php:162
 msgid "diesen Nutzer / diese Nutzerin aus dem Chat werfen"
 msgstr "Throw this user out of the chat"
 
-#: chat/chat_nicklist.php:107
+#: chat/chat_nicklist.php:107 chat/sajax_chat_functions.php:166
 msgid "diesem Nutzer / dieser Nutzerin eine private Botschaft senden"
 msgstr "Send this user a private message"
 
-#: chat/ChatServer.class.php:137
+#: chat/ChatServer.class.php:139
 #, c-format
 msgid "%s hat den Chat betreten!"
 msgstr "%s has entered the chat!"
 
-#: chat/ChatServer.class.php:162
+#: chat/ChatServer.class.php:175
 #, c-format
 msgid "%s hat den Chat verlassen!"
 msgstr "%s has left the chat!"
 
-#: chat/ChatServer.class.php:227
+#: chat/ChatServer.class.php:240
 #, c-format
 msgid "%s hat sich aus Stud.IP ausgeloggt!"
 msgstr "%s has logged out of Stud.IP!"
 
-#: chat/chat_status.php:121
+#: chat/chat_status.php:121 chat/sajax_chat_functions.php:86
 msgid "Zugangsschutz für diesen Chat aufheben"
 msgstr "Remove access protection for this chat"
 
-#: chat/chat_status.php:121
+#: chat/chat_status.php:121 chat/sajax_chat_functions.php:86
 msgid "Diesen Chat absichern"
 msgstr "Secure this chat"
 
-#: chat/chat_status.php:128
+#: chat/chat_status.php:128 chat/sajax_chat_functions.php:93
 msgid "Dieser Chat ist zugangsbeschränkt."
 msgstr "This chat is access restricted."
 
-#: chat/chat_status.php:128
+#: chat/chat_status.php:128 chat/sajax_chat_functions.php:93
 msgid "Dieser Chat ist nicht zugangsbeschränkt."
 msgstr "This chat is not access restricted."
 
-#: chat/chat_status.php:134
+#: chat/chat_status.php:134 chat/sajax_chat_functions.php:99
 msgid "Dieser Chat wird aufgezeichnet."
 msgstr "This chat will be recorded."
 
-#: chat/chat_status.php:148
+#: chat/chat_status.php:148 chat/sajax_chat_functions.php:113
 msgid "Download des letzten Chatlogs"
 msgstr "Download the last chat log"
 
-#: chat/chat_status.php:156
+#: chat/chat_status.php:156 chat/sajax_chat_functions.php:121
 msgid "Die Aufzeichnung für diesen Chat beenden."
 msgstr "End the recording for this chat"
 
-#: chat/chat_status.php:156
+#: chat/chat_status.php:156 chat/sajax_chat_functions.php:121
 msgid "Eine Aufzeichnung für diesen Chat starten."
 msgstr "Start a recording for this chat"
 
-#: chat/chat_status.php:162
+#: chat/chat_status.php:162 chat/sajax_chat_functions.php:127
 msgid "Chat Kommandos einblenden"
 msgstr "Show chat commands"
 
-#: chat/chat_status.php:165
+#: chat/chat_status.php:165 chat/sajax_chat_functions.php:130
 msgid "Alle verfügbaren Smileys anzeigen"
 msgstr "Show all available smileys"
+
+#: chat/sajax_chat_functions.php:328
+#, fuzzy
+msgid ""
+"Ihre letzte Aufzeichnung wird noch einmal zum Download angeboten.<br>Nachdem "
+"sie dieses Fenster schlie&szlig;en wird diese Aufzeichnung gel&ouml;scht."
+msgstr ""
+"Your last recording is offered for downloading once more. <br>Once you "
+"delete this window the recording will be deleted. "
+
+#: chat/sajax_chat_functions.php:343
+#, fuzzy
+msgid "M&ouml;gliche Chat-Kommandos:"
+msgstr "Possible chat commands:"

@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2006-04-07 16:52+0200\n"
+"POT-Creation-Date: 2006-07-25 21:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1854,16 +1854,16 @@ msgstr ""
 msgid "Es wurden keine Eintr&auml;ge zu Ihren Suchkriterien gefunden."
 msgstr ""
 
-#: resources/views/ScheduleView.class.php:208
+#: resources/views/ScheduleView.class.php:214
 msgid "Zeit"
 msgstr ""
 
-#: resources/views/ScheduleView.class.php:299
+#: resources/views/ScheduleView.class.php:305
 msgid "Erstellt am"
 msgstr ""
 
-#: resources/views/ScheduleView.class.php:314
-#: resources/views/SemGroupScheduleDayOfWeek.class.php:85
+#: resources/views/ScheduleView.class.php:320
+#: resources/views/SemGroupScheduleDayOfWeek.class.php:88
 #, c-format
 msgid "Eine neue Belegung von %s bis %s Uhr anlegen"
 msgstr ""

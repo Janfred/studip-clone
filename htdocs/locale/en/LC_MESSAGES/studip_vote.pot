@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2006-04-07 16:52+0200\n"
+"POT-Creation-Date: 2006-07-25 21:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -732,47 +732,89 @@ msgstr ""
 msgid "Keine gestoppten Votings oder Tests vorhanden."
 msgstr ""
 
-#: vote/vote_show.inc.php:49
+#: vote/vote_show.inc.php:48
 msgid "Vote-Datenbankfehler"
 msgstr ""
 
-#: vote/vote_show.inc.php:54
+#: vote/vote_show.inc.php:53
 msgid "Evaluation-Datenbankfehler"
 msgstr ""
 
-#: vote/vote_show.inc.php:71
+#: vote/vote_show.inc.php:70
 msgid "Datenbankfehler bei Voteaktivierung"
 msgstr ""
 
-#: vote/vote_show.inc.php:87 vote/vote_show.inc.php:95
+#: vote/vote_show.inc.php:86 vote/vote_show.inc.php:94
 msgid "Datenbankfehler beim Auslesen der EvaluationsIDs."
 msgstr ""
 
-#: vote/vote_show.inc.php:118 vote/vote_show.inc.php:127
-msgid "Umfragen"
+#: vote/vote_show.inc.php:148 vote/vote_show.inc.php:158
+msgid "Lehrveranstaltungsevaluationen zu meinen Veranstaltungen"
 msgstr ""
 
-#: vote/vote_show.inc.php:120 vote/vote_show.inc.php:129
-msgid "Umfragen und mehr..."
+#: vote/vote_show.inc.php:150 vote/vote_show.inc.php:160
+#: vote/vote_show.inc.php:326 vote/vote_show.inc.php:335
+msgid "Evaluationen..."
 msgstr ""
 
-#: vote/vote_show.inc.php:125
+#: vote/vote_show.inc.php:155 vote/vote_show.inc.php:331
+#: vote/vote_show.inc.php:505
 msgid "Umfragen bearbeiten"
 msgstr ""
 
-#: vote/vote_show.inc.php:152
+#: vote/vote_show.inc.php:179 vote/vote_show.inc.php:360
 msgid "Fehler beim Einlesen der Evaluation"
 msgstr ""
 
-#: vote/vote_show.inc.php:256
+#: vote/vote_show.inc.php:254
+msgid ""
+"Die Evaluation ist geschützt und darf nur durch einen Administrator "
+"verändert werden."
+msgstr ""
+
+#: vote/vote_show.inc.php:264
+msgid ""
+"Dieser Evaluation kann keine Verknüpfung mehr zu einem anderen Fragebogen "
+"hinzugefügt werden, da bereits Antworten vorliegen."
+msgstr ""
+
+#: vote/vote_show.inc.php:270 vote/vote_show.inc.php:448
+msgid "Evaluation mit anderer Evaluation verknüpfen"
+msgstr ""
+
+#: vote/vote_show.inc.php:324 vote/vote_show.inc.php:333
+msgid "Evaluationen"
+msgstr ""
+
+#: vote/vote_show.inc.php:431
+msgid ""
+"Die Evaluation ist geschützt und darf nur durch den Administrator verändert "
+"werden."
+msgstr ""
+
+#: vote/vote_show.inc.php:442
+msgid ""
+"Dieser Evaluation darf keine Verknüpfung mehr zu einem anderen Fragebogen "
+"hinzugefügt werden."
+msgstr ""
+
+#: vote/vote_show.inc.php:498 vote/vote_show.inc.php:507
+msgid "Umfragen"
+msgstr ""
+
+#: vote/vote_show.inc.php:500 vote/vote_show.inc.php:509
+msgid "Umfragen und mehr..."
+msgstr ""
+
+#: vote/vote_show.inc.php:522
 msgid "Fehler beim Einlesen des Votes"
 msgstr ""
 
-#: vote/vote_show.inc.php:287
+#: vote/vote_show.inc.php:553
 msgid "Die &Auml;nderungen wurden gespeichert"
 msgstr ""
 
-#: vote/vote_show.inc.php:308
+#: vote/vote_show.inc.php:574
 msgid "Fehler bei der Abstimmung"
 msgstr ""
 
