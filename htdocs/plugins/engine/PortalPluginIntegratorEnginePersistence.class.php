@@ -29,7 +29,7 @@ class PortalPluginIntegratorEnginePersistence extends AbstractPluginIntegratorEn
     	// return all activated system plugins
     	$plugins = parent::executePluginQuery("where plugintype='Portal' and enabled='yes'");
     	return $plugins;
-    }
+    }     
     
     /**
      * Returns all deactivated system plugins

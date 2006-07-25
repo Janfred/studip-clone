@@ -14,9 +14,13 @@ class de_studip_RolePersistence {
 
 	function getAllRoles(){
 		$conn =& PluginEngine::getPluginDatabaseConnection();		
-		$conn->CacheFlush();
-//		$conn->debug=true;
-		$result = $conn->CacheExecute($GLOBALS["PLUGINS_CACHE_TIME"],"select * from roles order by rolename");
+
+		if ($GLOBALS["PLUGINS_CACHING"]){
+			$result = $conn->CacheExecute($GLOBALS["PLUGINS_CACHE_TIME"],"select * from roles order by rolename");
+		}
+		else {
+			$result = $conn->execute("select * from roles order by rolename");
+		}
 		$roles = array();
 		if (!$result == null){
 			while (!$result->EOF){
@@ -24,13 +28,10 @@ class de_studip_RolePersistence {
 				$role->setRoleid($result->fields("roleid"));
 				$role->setRolename($result->fields("rolename"));
 				$roles[$result->fields("roleid")] = $role;
-//				echo("DEBUG: ROLE <br>");
-//				print_r($role);
 				$result->moveNext();
 			}
 			$result->Close();
 		}
-//		$conn->debug=false;
 		return $roles;
 	}
 	
@@ -99,10 +100,22 @@ class de_studip_RolePersistence {
 		$conn =& PluginEngine::getPluginDatabaseConnection();
 		$roles = $this->getAllRoles();
 		if ($implicit){
-			$result = $conn->CacheExecute($GLOBALS["PLUGINS_CACHE_TIME"],"SELECT r.roleid FROM roles_user r where r.userid=? union select rp.roleid from roles_studipperms rp,auth_user_md5 a where rp.permname = a.perms and a.user_id=?",array($userid,$userid));		
+			$sqlstr = "SELECT r.roleid FROM roles_user r where r.userid=? union select rp.roleid from roles_studipperms rp,auth_user_md5 a where rp.permname = a.perms and a.user_id=?";
+			if ($GLOBALS["PLUGINS_CACHING"]){
+				$result = $conn->CacheExecute($GLOBALS["PLUGINS_CACHE_TIME"],$sqlstr,array($userid,$userid));	
+			}
+			else {	
+				$result = $conn->execute($sqlstr,array($userid,$userid));		
+			}
 		}
 		else {
-			$result = $conn->CacheExecute($GLOBALS["PLUGINS_CACHE_TIME"],"SELECT r.roleid FROM roles_user r where r.userid=?",array($userid));		
+			$sqlstr = "SELECT r.roleid FROM roles_user r where r.userid=?";
+			if ($GLOBALS["PLUGINS_CACHING"]){
+				$result = $conn->CacheExecute($GLOBALS["PLUGINS_CACHE_TIME"],$sqlstr,array($userid));		
+			}
+			else {
+				$result = $conn->execute($sqlstr,array($userid));		
+			}
 		}
 		$assignedroles=array();
 		if (!$result == null){
@@ -138,11 +151,24 @@ class de_studip_RolePersistence {
 	function getAllRoleAssignments($user=null){
 		$conn =& PluginEngine::getPluginDatabaseConnection();
 		if ($user == null){
-			$result = $conn->CacheExecute($GLOBALS["PLUGINS_CACHE_TIME"],"select * from roles_user");
+			$sqlstr = "select * from roles_user";
+			if ($GLOBALS["PLUGINS_CACHING"]){
+				$result = $conn->CacheExecute($GLOBALS["PLUGINS_CACHE_TIME"],$sqlstr);
+			}
+			else {
+				$result = $conn->execute($sqlstr);
+			}
 		}
 		else {
-			$result = $conn->CacheExecute($GLOBALS["PLUGINS_CACHE_TIME"],"select * from roles_user where userid=?",array($user->getUserid()));			
+			$sqlstr = "select * from roles_user where userid=?";
+			if ($GLOBALS["PLUGINS_CACHING"]){
+				$result = $conn->CacheExecute($GLOBALS["PLUGINS_CACHE_TIME"],$sqlstr,array($user->getUserid()));			
+			}
+			else {
+				$result = $conn->execute($sqlstr,array($user->getUserid()));			
+			}
 		}
+		
 		$roles_user = array();
 		if (!$result == null){
 			while (!$result->EOF){				
@@ -173,8 +199,13 @@ class de_studip_RolePersistence {
 	function getAssignedPluginRoles($pluginid=-1){		
 		$roles = $this->getAllRoles();		
 		$conn =& PluginEngine::getPluginDatabaseConnection();
-		$conn->CacheFlush();
-		$result = $conn->CacheExecute($GLOBALS["PLUGINS_CACHE_TIME"],"select * from roles_plugins where pluginid=?",array($pluginid));
+		$sqlstr = "select * from roles_plugins where pluginid=?";
+		if ($GLOBALS["PLUGINS_CACHING"]){
+			$result = $conn->CacheExecute($GLOBALS["PLUGINS_CACHE_TIME"],$sqlstr,array($pluginid));
+		}
+		else {
+			$result = $conn->execute($sqlstr,array($pluginid));
+		}
 		$assignedroles = array();
 		if (!$result == null){			
 			while (!$result->EOF){						
@@ -193,8 +224,13 @@ class de_studip_RolePersistence {
 		$roles = $this->getAllRoles();		
 		$studipperms = $GLOBALS["perm"]->permissions;	
 		$conn =& PluginEngine::getPluginDatabaseConnection();
-		$conn->CacheFlush();
-		$result = $conn->CacheExecute($GLOBALS["PLUGINS_CACHE_TIME"],"select * from roles_studipperms");
+		$sqlstr = "select * from roles_studipperms";
+		if ($GLOBALS["PLUGINS_CACHING"]){
+			$result = $conn->CacheExecute($GLOBALS["PLUGINS_CACHE_TIME"],$sqlstr);
+		}
+		else {
+			$result = $conn->execute($sqlstr);
+		}
 		$assignedrolesperms = array();
 		if (!$result == null){			
 			while (!$result->EOF){				

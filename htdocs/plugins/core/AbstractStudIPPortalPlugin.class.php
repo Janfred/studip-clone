@@ -12,9 +12,9 @@ class AbstractStudIPPortalPlugin extends AbstractStudIPPlugin {
 	
 	/**
 	 * Used to show an overview on the start page or portal page
-	 *
+	 * @param is the user already logged in?
 	 */
-	function showOverview(){		
+	function showOverview($unauthorizedview=true){		
 		// has to be implemented
 	}
 	
@@ -31,6 +31,14 @@ class AbstractStudIPPortalPlugin extends AbstractStudIPPlugin {
 		else {
 			return false;
 		}
+	}
+	
+	/**
+	 * Does the plugin have a view for a user not currently logged in.
+	 *
+	 */
+	function hasUnauthorizedView(){
+		return false;
 	}
 }
 ?>

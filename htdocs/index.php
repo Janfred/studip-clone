@@ -375,7 +375,37 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 	echo "</table>";
 }
 ?>
-</td></tr></table>
+</td></tr>
+<tr>
+	<td colspan="3" align="center" height="30"></td>
+</tr>
+<?
+if ($GLOBALS["PLUGINS_ENABLE"]){	
+	$portalpluginpersistence = PluginEngine::getPluginPersistence("Portal");	
+	$activatedportalplugins = $portalpluginpersistence->getAllActivatedPlugins();
+	// we already should have the activatedportalplugins here
+	if (!empty($activatedportalplugins)){
+		foreach ($activatedportalplugins as $activatedplugin){
+			
+			if ($activatedplugin->hasUnauthorizedView()){			
+?>
+				<tr>
+					<td colspan="3"class="topic">&nbsp;<b><?= $activatedplugin->getDisplaytitle() ?></b></td>
+				</tr>
+				<tr>
+					<td colspan="3" class="steel1"><blockquote><?= $activatedplugin->showOverview(false) ?><blockquote></td>				
+				</tr>
+
+				<td colspan="3" align="center" height="30"></td>
+				
+				</tr>
+<?
+			}
+		}
+	}
+}
+?>
+</table>
 </body>
 </html>
 <!-- $Id$ -->
