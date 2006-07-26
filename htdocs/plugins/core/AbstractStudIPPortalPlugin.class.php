@@ -40,5 +40,14 @@ class AbstractStudIPPortalPlugin extends AbstractStudIPPlugin {
 	function hasUnauthorizedView(){
 		return false;
 	}
+	
+	/**
+	 *	Does the plugin have a view for a currently logged in user.
+	 *
+	 * @return unknown
+	 */
+	function hasAuthorizedView(){
+		return true;
+	}
 }
 ?>

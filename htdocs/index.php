@@ -265,6 +265,10 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 		}
 		
 		foreach ($activatedportalplugins as $activatedportalplugin){
+			if (!$activatedportalplugin->hasAuthorizedView()){
+				// skip this plugin
+				continue;
+			}
 			// set the gettext-domain
 			$domain = "gtdomain_" . get_class($activatedportalplugin);
 			bindtextdomain($domain,$plugindbenv->getBasepath() . $activatedportalplugin->getPluginpath() . "/locale");

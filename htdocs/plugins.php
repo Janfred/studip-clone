@@ -191,15 +191,13 @@ else if ($type == "Homepage"){
 		include("links_about.inc.php");	
 	}	
 	$pluginnav = $plugin->getNavigation();
-	StudIPTemplateEngine::makeHeadline($pluginnav->getDisplayname(),true,$plugin->getPluginiconname());
+	StudIPTemplateEngine::makeHeadline($plugin->getDisplaytitle(),true,$plugin->getPluginiconname());
 	StudIPTemplateEngine::startContentTable();
 	// let the plugin show its view	 
 	$plugin->$cmd($pluginparams);
 	StudIPTemplateEngine::endContentTable();
 } else if ($type == "Portal"){
-	$pluginnav = $plugin->getNavigation();
-	
-	StudIPTemplateEngine::makeHeadline($pluginnav->getDisplayname(),true,$plugin->getPluginiconname());
+	StudIPTemplateEngine::makeHeadline($plugin->getDisplaytitle(),true,$plugin->getPluginiconname());
 	StudIPTemplateEngine::startContentTable();
 	// let the plugin show its view	 
 	$plugin->$cmd($pluginparams);
