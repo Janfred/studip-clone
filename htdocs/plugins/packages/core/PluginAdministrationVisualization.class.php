@@ -19,7 +19,7 @@ class PluginAdministrationVisualization extends AbstractStudIPPluginVisualizatio
 		}
 		?>
 		<tr>
-			<td valign="top"><img src="/ausruf.gif"></td>
+			<td valign="top"><img src="<?=$GLOBALS['ASSETS_URL']?>/images/ausruf.gif"></td>
 			<td valign="top">
 			<?= sprintf(_("Wollen Sie wirklich <b>%s</b> deinstallieren? <br>"), htmlReady($plugin->getPluginname()))?>
 			<?= sprintf("<a href=\"%s\">" . makeButton("ja2") . "</a>&nbsp; \n",PluginEngine::getLink($this->pluginref,array("deinstall" => $plugin->getPluginid(),"forcedeinstall" => true)))?>
@@ -210,7 +210,7 @@ class PluginAdministrationVisualization extends AbstractStudIPPluginVisualizatio
 								)
 						)
 				);
-		print_infobox ($infobox,$relativepath . "/img/modules.jpg");
+		print_infobox ($infobox,"modules.jpg");
 		StudIPTemplateEngine::endInfoBoxTableCell();		
 	}
 	

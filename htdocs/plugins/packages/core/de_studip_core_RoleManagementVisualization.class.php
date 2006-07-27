@@ -94,7 +94,7 @@ class de_studip_core_RoleManagementVisualization extends AbstractStudIPPluginVis
 					}
 					?>
 					</select>
-					<input type="image" src="pictures/move_down.gif" name="seluserbtn">
+					<input type="image" src="<?=$GLOBALS['ASSETS_URL']?>images/move_down.gif" name="seluserbtn">
 					<br><br>
 					<?
 				}		
@@ -124,8 +124,8 @@ class de_studip_core_RoleManagementVisualization extends AbstractStudIPPluginVis
 						</select>
 					</td>
 					<td valign="=middle">
-					<input type="image" src="pictures/move_left.gif" name="assignrolebtn" alt="<?= _("Markierte Rollen dem Benutzer zuweisen.") ?>"><br><br>
-					<input type="image" src="pictures/move_right.gif" name="deleteroleassignmentbtn" alt="<?= _("Markierte Rollen entfernen.") ?>">			
+					<input type="image" src="<?=$GLOBALS['ASSETS_URL']?>images/move_left.gif" name="assignrolebtn" alt="<?= _("Markierte Rollen dem Benutzer zuweisen.") ?>"><br><br>
+					<input type="image" src="<?=$GLOBALS['ASSETS_URL']?>images/move_right.gif" name="deleteroleassignmentbtn" alt="<?= _("Markierte Rollen entfernen.") ?>">			
 					</td>
 					<td valign="top">
 						<select size="10" name="rolesel[]" multiple>
@@ -193,8 +193,8 @@ class de_studip_core_RoleManagementVisualization extends AbstractStudIPPluginVis
 				</select>
 			</td>
 			<td valign="middle">
-			<input type="image" src="pictures/move_left.gif" name="assignrolebtn" alt="<?= _("Markierte Rollen dem Plugin zuweisen.") ?>"><br><br>
-			<input type="image" src="pictures/move_right.gif" name="deleteroleassignmentbtn" alt="<?= _("Markierte Rollen entfernen.") ?>">			
+			<input type="image" src="<?=$GLOBALS['ASSETS_URL']?>images/move_left.gif" name="assignrolebtn" alt="<?= _("Markierte Rollen dem Plugin zuweisen.") ?>"><br><br>
+			<input type="image" src="<?=$GLOBALS['ASSETS_URL']?>images/move_right.gif" name="deleteroleassignmentbtn" alt="<?= _("Markierte Rollen entfernen.") ?>">			
 			</td>
 			<td valign="top">
 				<select multiple name="rolesel[]" size="10">				
@@ -215,10 +215,10 @@ class de_studip_core_RoleManagementVisualization extends AbstractStudIPPluginVis
 		$infobox = array	(	
 						array  ("kategorie"  => _("Hinweise:"),
 								"eintrag" => array	(	
-									array (	"icon" => "pictures/ausruf_small.gif",
+									array (	"icon" => "ausruf_small.gif",
 													"text"  => _("Sie können in diesem Dialog den Zugriff auf das Plugin durch die Auswahl von Rollen beschränken.")
 									),
-									array (	"icon" => "pictures/ausruf_small.gif",
+									array (	"icon" => "ausruf_small.gif",
 													"text"  =>_("Wählen Sie bspw. Evaluationsbeauftragte(r), so können alle Nutzer, die sich in der Rolle Evaluationsbeauftragte(r) befinden, dieses Plugin sehen und nutzen, unabhängig vom Stud.IP-Status")
 									)
 								)
