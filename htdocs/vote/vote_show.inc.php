@@ -306,15 +306,19 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
 		      }
 		      /* ------------------------------------------------------------------- */
 		      
-		      echo createBoxLineFooter ();
-		      echo ("</td></tr></table>");
-		      echo ("<br>");
+		      
 		   }
+		   
 		  }
-		 }
-
-	     //echo "<tr><td height=10><p></td></tr>";
-	     //echo("<br>");
+		  if (count ($activecourseEvals) > 1){
+    	  	echo createOpeningOrClosingArrow ();
+      		echo ("</td></tr></table>");
+   	  		echo ("<br>");
+   		  }	   		  
+   		  echo createBoxLineFooter ();
+	      echo ("</td></tr></table>");
+	      echo ("<br>");		  
+		 }	     
    }
    // ende Übersicht über Evaluationen in meinen Veranstaltungen
     
@@ -483,15 +487,20 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
       //echo createFormFooter ($eval, $userID, $perm, $rangeID);
       echo createBoxContentFooter ();
       }
-      /* ------------------------------------------------------------------- */
-      
-      echo createBoxLineFooter ();
-      echo ("</td></tr></table>");
-	  echo ("<br>");
+      /* ------------------------------------------------------------------- */      
+      echo createBoxLineFooter ();      
    }
+   
    /* ---------------------------------------------------------------------- */
-   if (count ($activeEvals) + count ($stoppedEvals) > 1)
+   if (count ($activeEvals) + count ($stoppedEvals) > 1){
       echo createOpeningOrClosingArrow ();
+      echo ("</td></tr></table>");
+   	  echo ("<br>");
+   }
+   else {
+   	  echo ("</td></tr></table>");
+   	  echo ("<br>");
+   }
    // echo "<tr><td height=10><p></td></tr>";
    if ($perm->have_studip_perm ("tutor", $rangeID) OR
        get_username($userID) == $rangeID)
@@ -595,8 +604,7 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
       /* ------------------------------------------------------------------- */
       echo createBoxLineFooter ();           
    }
-   /* ---------------------------------------------------------------------- */
-
+   /* ---------------------------------------------------------------------- */   
    
 
    /* Show all stopped Votes ----------------------------------------------- */
@@ -662,7 +670,7 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
       echo createBoxLineFooter ();      
    }
    /* ---------------------------------------------------------------------- */
-   
+    
    /* Show text if no vote is available ------------------------------------ */
      if (empty ($activeVotes) AND empty ($stoppedVotes) AND
        empty ($activeEvals) AND (empty ($stoppedEvals) && $haveFullPerm)
@@ -671,9 +679,10 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
    }
    /* ---------------------------------------------------------------------- */
 
-     if ((count ($activeVotes) +
-	  count ($stoppedVotes)) > 1)
+  if ((count ($activeVotes) +
+	  count ($stoppedVotes)) > 1){	  	
        echo createOpeningOrClosingArrow ();
+	  }
      
    echo createBoxFooter ();
    $voteDB->finalize ();
