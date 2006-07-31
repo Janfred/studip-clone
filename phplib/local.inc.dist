@@ -129,6 +129,7 @@ $PLUGINS_PATH = $ABSOLUTE_PATH_STUDIP . "plugins/packages";
 //where ro store documents and the archive
 $UPLOAD_PATH = "/var/lib/studip/upload_doc";			//path to uploaded documents (wwwrun needs write-perm there)
 $ARCHIV_PATH = "/var/lib/studip/archiv";				//path to Stud.IP archive (wwwrun needs write-perm there)
+$ASSETS_URL="assets/";                                  //path to constant assets
 
 //path to smileys and symbols
 $SMILE_PATH = "pictures/smile";							//smileys
