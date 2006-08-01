@@ -56,8 +56,17 @@ require_once ("$ABSOLUTE_PATH_STUDIP/dates.inc.php");   // Datumsfunktionen
 */
 function CheckParamXML()
 {
-global $range_id, $ex_type, $xml_file_id, $o_mode, $export_error, $export_error_num, $export_o_modes, $export_ex_types;
+global $range_id, $ex_type, $xml_file_id, $o_mode, $export_error, $export_error_num, $export_o_modes, $export_ex_types,$ex_person_details,$ex_tstamp,$ex_hash,$perm;
+	
+	if ($ex_person_details && $ex_tstamp && !$perm->have_perm('admin')){
+		list($y,$M,$d,$h,$m) = explode('-', $ex_tstamp);
+		$tstamp = mktime($h,$m,0,$M,$d,$y);
+		$hash = md5(get_config('UNIZENSUSPLUGIN_SHARED_SECRET1') . $ex_tstamp . get_config('UNIZENSUSPLUGIN_SHARED_SECRET2'));
+				die( $ex_tstamp .':'.date('Y-m-d-H-i',$tstamp).':'. $hash);
 
+		if ($ex_hash != $hash || $tstamp < (time() - 60)) $ex_person_details = null;
+	}
+	
 	if ((($range_id != "") OR ($xml_file_id != "")) AND (in_array($o_mode, $export_o_modes) AND (in_array($ex_type, $export_ex_types))))
 		return true;
 	$export_error .= "<b>" . _("Unzulässiger Seitenaufruf!") . "</b><br>";
@@ -82,12 +91,15 @@ if (!CheckParamXML())
 
 $count = 0;
 if (isset($ex_sem_class))
-	foreach ($SEM_CLASS as $key=>$val)
+	foreach ($SEM_CLASS as $key=>$val) 
 	{
 		if ($ex_sem_class[$count] == "1")
 			$ex_class_array[$key] = true;
 		$count ++;
 	}
+if ($ex_sem == 'current'){
+	$ex_sem = get_sem_num(time());
+}
 
 if ($o_mode != "direct")
 {
@@ -100,7 +112,14 @@ if ($o_mode != "direct")
 	$xml_file = fopen($TMP_PATH."/export/" . $xml_file_id, "w");
 }
 
-
+if ($o_mode == 'direct'){
+	header("Content-type: text/xml; charset=us-ascii");
+	if ($export_error_num){
+		echo '<?xml version="1.0"?>' . chr(10);
+		echo xml_tag('studip_export_error_msg', strip_tags($export_error));
+		exit();
+	}
+}
 
 export_range( $range_id );
 

@@ -85,7 +85,7 @@ function output_data($object_data, $output_mode = "file")
 */
 function export_range($range_id)
 {
-	global $db, $o_mode, $range_name;
+	global $db, $o_mode, $range_name,$ex_person_details,$persons;
 
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
@@ -125,7 +125,6 @@ function export_range($range_id)
 //    Ist die Range-ID ein Range-Tree-Item?
 	$tree_object = new RangeTreeObject($range_id);
 	$range_name = $tree_object->item_data["name"];
-
 //    Tree-Item ist ein Institut:
 	if ($tree_object->item_data['studip_object'] == 'inst')
 	{
@@ -136,6 +135,7 @@ function export_range($range_id)
 	}
 //    Tree-Item hat Institute als Kinder:
 	$inst_array = $tree_object->GetInstKids();
+
 	if (sizeof($inst_array) > 0)
 	{
 		if (!$output_startet) 
@@ -145,6 +145,9 @@ function export_range($range_id)
 		{
 			export_inst($inst_ids);
 		}
+	}
+	if ($ex_person_details && is_array($persons)){
+		export_persons(array_keys($persons));
 	}
 	output_data ( xml_footer(), $o_mode);
 }
@@ -168,7 +171,7 @@ function export_inst($inst_id, $ex_sem_id = "all")
 
 	$db->query('SELECT * FROM Institute WHERE Institut_id = "' . $inst_id . '"');
 	$db->next_record();
-	$data_object .= xml_open_tag($xml_groupnames_inst["object"], $db->f("Name"));
+	$data_object .= xml_open_tag($xml_groupnames_inst["object"], $db->f("Institut_id"));
 	while ( list($key, $val) = each($xml_names_inst))
 	{
 		if ($val == "") $val = $key;
@@ -227,7 +230,7 @@ function export_inst($inst_id, $ex_sem_id = "all")
 */
 function export_sem($inst_id, $ex_sem_id = "all")
 {
-	global $db, $db2, $range_id, $xml_file, $o_mode, $xml_names_lecture, $xml_groupnames_lecture, $object_counter, $SEM_TYPE, $SEM_CLASS, $filter, $ex_sem, $ex_class_array;
+	global $db, $db2, $range_id, $xml_file, $o_mode, $xml_names_lecture, $xml_groupnames_lecture, $object_counter, $SEM_TYPE, $SEM_CLASS, $filter, $ex_sem, $ex_class_array,$ex_person_details,$persons;
 
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
@@ -297,18 +300,18 @@ function export_sem($inst_id, $ex_sem_id = "all")
 			}
 			$data_object .= $group_string;
 			$object_counter++;
-			$data_object .= xml_open_tag($xml_groupnames_lecture["object"], $db->f("Name"));
+			$data_object .= xml_open_tag($xml_groupnames_lecture["object"], $db->f("seminar_id"));
 			while ( list($key, $val) = each($xml_names_lecture))
 			{
 				if ($val == "") $val = $key;
 				if ($key == "status") 
 					$data_object .= xml_tag($val, $SEM_TYPE[$db->f($key)]["name"]);
 				elseif ($key == "ort") 
-					$data_object .= xml_tag($val, decodeHTML( getRoom($db->f("Seminar_id"), false) ) );
+					$data_object .= xml_tag($val, decodeHTML( getRoom($db->f("seminar_id"), false) ) );
 				elseif (($key == "bereich") AND (($SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["bereiche"])))
 				{
 					$data_object .= xml_open_tag($xml_groupnames_lecture["childgroup3"]);
-					$pathes = get_sem_tree_path($db->f("Seminar_id"));
+					$pathes = get_sem_tree_path($db->f("seminar_id"));
 					if (is_array($pathes)){
 						foreach ($pathes as $sem_tree_id => $path_name)
 							$data_object .= xml_tag($val, $path_name);
@@ -325,33 +328,34 @@ function export_sem($inst_id, $ex_sem_id = "all")
 				elseif ($key == "metadata_dates") 
 				{
 					$data_object .= xml_open_tag( $xml_groupnames_lecture["childgroup1"] );
-					$vorb = vorbesprechung($db->f("Seminar_id"));
+					$vorb = vorbesprechung($db->f("seminar_id"));
 					if ($vorb != false) 
 						$data_object .= xml_tag($val[0], $vorb);
-					$data_object .= xml_tag($val[1], veranstaltung_beginn($db->f("Seminar_id")));
-					$data_object .= xml_tag($val[2], view_turnus($db->f("Seminar_id")));
+					$data_object .= xml_tag($val[1], veranstaltung_beginn($db->f("seminar_id")));
+					$data_object .= xml_tag($val[2], view_turnus($db->f("seminar_id")));
 					$data_object .= xml_close_tag( $xml_groupnames_lecture["childgroup1"] );
 				}
 				elseif ($db->f($key) != "") 
 					$data_object .= xml_tag($val, $db->f($key));
 			}
-			$db2->query('SELECT auth_user_md5.Vorname, auth_user_md5.Nachname, user_info.title_front, user_info.title_rear FROM seminar_user 
+			$db2->query('SELECT auth_user_md5.user_id,auth_user_md5.username, auth_user_md5.Vorname, auth_user_md5.Nachname, user_info.title_front, user_info.title_rear FROM seminar_user 
 						LEFT JOIN user_info USING(user_id) 
 						LEFT JOIN auth_user_md5 USING(user_id) 
-						WHERE (seminar_user.status = "dozent") AND (seminar_user.Seminar_id = "' . $db->f("Seminar_id") . '")');
+						WHERE (seminar_user.status = "dozent") AND (seminar_user.Seminar_id = "' . $db->f("seminar_id") . '")');
 			$data_object .= "<" . $xml_groupnames_lecture["childgroup2"] . ">\n";
 			while ($db2->next_record()) 
 				{
+					if ($ex_person_details) $persons[$db2->f('user_id')] = true;
 					$content_string = $db2->f("Vorname") . " " . $db2->f("Nachname");
 					if ($db2->f("title_front") != "") 
 						$content_string = $db2->f("title_front") . " " . $content_string;
 					if ($db2->f("title_rear") != "") 
 						$content_string = $content_string . ", " . $db2->f("title_rear");
-					$data_object .= xml_tag($xml_groupnames_lecture["childobject2"], $content_string);
+					$data_object .= xml_tag($xml_groupnames_lecture["childobject2"], $content_string, array('key' => $db2->f('username')));
 				}
 			$data_object .= xml_close_tag( $xml_groupnames_lecture["childgroup2"] );
 		// freie Datenfelder ausgeben
-			$data_object .= export_datafields($db->f("Seminar_id"), $xml_groupnames_lecture["childgroup4"], $xml_groupnames_lecture["childobject4"]);
+			$data_object .= export_datafields($db->f("seminar_id"), $xml_groupnames_lecture["childgroup4"], $xml_groupnames_lecture["childobject4"]);
 			$data_object .= xml_close_tag( $xml_groupnames_lecture["object"] );
 			reset($xml_names_lecture);
 			output_data($data_object, $o_mode);
@@ -561,8 +565,8 @@ function export_pers($inst_id)
 		aum.username, info.Home, info.geschlecht, info.title_front, info.title_rear FROM statusgruppen
 		LEFT JOIN statusgruppe_user sgu USING(statusgruppe_id)
 		LEFT JOIN user_inst ui ON (ui.user_id = sgu.user_id AND ui.Institut_id = range_id AND ui.inst_perms!="user")
-		LEFT JOIN auth_user_md5 aum USING(user_id) 
-		LEFT JOIN user_info info USING(user_id) 
+		LEFT JOIN auth_user_md5 aum ON (ui.user_id = aum.user_id)
+		LEFT JOIN user_info info ON (ui.user_id = info.user_id)
 		WHERE range_id = "' . $inst_id . ' "
 		ORDER BY ' . $order);
 
@@ -601,6 +605,44 @@ function export_pers($inst_id)
 
 	$data_object .= xml_close_tag( $xml_groupnames_person["group"]);
 	output_data($data_object, $o_mode);
+	$data_object = "";
+}
+
+/**
+* Exports list of persons.
+*
+*
+* @access	public        
+* @param		array	$persons	Stud.IP-user_ids for export
+*/
+function export_persons($persons)
+{
+	global $xml_names_person, $xml_groupnames_person, $object_counter, $o_mode, $ex_person_details;
+
+	$db = new DB_Seminar;
+	
+	if (is_array($persons)){
+		$db->query("SELECT * FROM auth_user_md5
+				LEFT JOIN user_info info USING(user_id) 
+				WHERE auth_user_md5.user_id IN('".join("','", $persons)."')");
+
+
+		while ($db->next_record()) {
+			$object_counter++;
+			$data_object = xml_open_tag($xml_groupnames_person["object"], $db->f("username"));
+			if ($ex_person_details) $data_object .= xml_tag('id', $db->f('user_id'));
+			while ( list($key, $val) = each($xml_names_person)){
+				if ($val == "") $val = $key;
+				if ($db->f($key) != "") $data_object .= xml_tag($val, $db->f($key));
+			}
+			// freie Datenfelder ausgeben
+			$data_object .= export_datafields($db->f("user_id"), $xml_groupnames_person["childgroup1"], $xml_groupnames_person["childobject1"]);
+			$data_object .= xml_close_tag( $xml_groupnames_person["object"] );
+			reset($xml_names_person);
+			output_data($data_object, $o_mode);
+			$data_object = "";
+		}
+	}
 	$data_object = "";
 }
 

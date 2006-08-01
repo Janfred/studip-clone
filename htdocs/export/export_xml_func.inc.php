@@ -101,18 +101,24 @@ function xml_close_tag($tag_name)
 /**
 * create xml-tag
 *
-* This function creates a xml-tag.
+* This function creates a xml-tag. 
 * The tag-name is defined by the given parameter $tag_name.
 * The given parameter tag_content is put between open tag and close tag.
 *
-* @access	public
+* @access	public        
 * @param		string	tag name
 * @param		string	content for xml-tag
+* @param		array	array of tag attributes
 * @return		string	xml tag
 */
-function xml_tag($tag_name, $tag_content)
+function xml_tag($tag_name, $tag_content, $tag_attributes = null)
 {
-	$xml_tag_string = "<" . $tag_name . $xml_tag_string .  ">"
+	if (is_array($tag_attributes)){
+		foreach($tag_attributes as $key => $value){
+			$xml_tag_string .= " $key=\"".htmlspecialchars($value)."\" ";
+		}
+	}
+	$xml_tag_string = "<" . $tag_name . $xml_tag_string .  ">" 
 		. htmlspecialchars ( $tag_content )
 		. "</" . $tag_name .  ">\n";
 	return $xml_tag_string;
