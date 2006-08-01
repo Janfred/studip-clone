@@ -706,7 +706,7 @@ function check_and_set_date($tag, $monat, $jahr, $stunde, $minute, &$arr, $field
 	if ($monat == _("mm")) $monat=0;
 	if ($tag == _("tt")) $tag=0;
 	if ($jahr == _("jjjj")) $jahr=0;
-	if ($stunde == _("ss")) $stunde=0;
+	//if ($stunde == _("hh")) $stunde=0;
 	if ($minute == _("mm")) $minute=0;
 
 	if (($monat) && ($tag) && ($jahr)) {
@@ -718,8 +718,14 @@ function check_and_set_date($tag, $monat, $jahr, $stunde, $minute, &$arr, $field
 			$check=FALSE;
 		}
 
-		if (($stunde > 24) || ($minute > 59)) {
+		if (($stunde > 24) || ($minute > 59)
+			|| ($stunde == 24 && $minute > 0) ) {
 			$check=FALSE;
+		}
+		
+		if ($stunde == 24) {
+			$stunde = 23;
+			$minute = 59;
 		}
 
 		if ($arr) {

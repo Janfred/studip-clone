@@ -197,16 +197,18 @@ if ($new) {
 		$do=FALSE;
 		$result="error§" . _("Bitte geben Sie ein g&uuml;ltiges Datum ein!") . "§";
 	}
-
-	if (($stunde == "") || ($stunde == $temp_default[4]) || ($end_stunde == "") || ($end_stunde == $temp_default[6])) {
+	
+	$times = array(0,0);
+	
+	if (!check_and_set_date($tag,$monat,$jahr,$stunde,$minute,$times,0) 
+	|| !check_and_set_date($tag,$monat,$jahr,$end_stunde,$end_minute,$times,1)) {
 		$do=FALSE;
 		$result.="error§" . _("Bitte geben Sie eine g&uuml;ltige Start- und Endzeit an!") . "§";
 	}
 
-	$start_time = mktime($stunde,$minute,0,$monat,$tag,$jahr);
-	$end_time = mktime($end_stunde,$end_minute,0,$monat,$tag,$jahr);
+	list($start_time, $end_time) = $times;
 
-	if ($do && $start_time > $end_time) {
+	if ($do && $start_time >= $end_time) {
 		$do=FALSE;
 		$result.="error§" . _("Der Endzeitpunkt muss nach dem Startzeitpunkt liegen!") . "§";
 	}

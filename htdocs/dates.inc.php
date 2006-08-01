@@ -690,24 +690,24 @@ function edit_dates($stunde,$minute,$monat,$tag,$jahr,$end_stunde, $end_minute, 
 	$do=TRUE;
 	if (!checkdate((int)$monat,(int)$tag,(int)$jahr)) {
 		$do=FALSE;
-		$result= "error§" . _("Bitte geben Sie ein g&uuml;ltiges Datum ein!"). "§";
+		$result="error§" . _("Bitte geben Sie ein g&uuml;ltiges Datum ein!") . "§";
+	}
+	
+	$times = array(0,0);
+	
+	if (!check_and_set_date($tag,$monat,$jahr,$stunde,$minute,$times,0) 
+	|| !check_and_set_date($tag,$monat,$jahr,$end_stunde,$end_minute,$times,1)) {
+		$do=FALSE;
+		$result.="error§" . _("Bitte geben Sie eine g&uuml;ltige Start- und Endzeit an!") . "§";
 	}
 
-	if ($do)		
-		if ((!$stunde) && (!$end_stunde)) {
-			$do=FALSE;	
-			$result .= "error§" . _("Bitte geben Sie eine g&uuml;ltige Start- und Endzeit an!"). "§";
-		}
+	list($start_time, $end_time) = $times;
+
+	if ($do && $start_time >= $end_time) {
+		$do=FALSE;
+		$result.="error§" . _("Der Endzeitpunkt muss nach dem Startzeitpunkt liegen!") . "§";
+	}
 	
-	$start_time = mktime($stunde,$minute,0,$monat,$tag,$jahr);
-	$end_time = mktime($end_stunde,$end_minute,0,$monat,$tag,$jahr);
-	
-	if ($do)		
-		if ($start_time > $end_time) {
-			$do=FALSE;	
-			$result .= "error§" . _("Der Endzeitpunkt muss nach dem Startzeitpunkt liegen!"). "§";
-		}
-		
 	//check, if a single date should be created when it is forbidden (no single dates corresponding to metadates are allowed when using resources, only a whole schedule creating with date-assi is fine...!)
 	if ($GLOBALS["RESOURCES_ENABLE"]) {
 		if ((isMetadateCorrespondingDate($termin_id, $start_time, $end_time, $range_id)) && (!$semObj->getMetaDateType()) && (!isSchedule($range_id))) {
