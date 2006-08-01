@@ -954,7 +954,7 @@ if ($send_view) {
 		$smsinfos,
 		$emailforwardinfo,
 		array("kategorie" => _("Smilies & Textformatierung:"),"eintrag" => array(
-			array("icon" => "smile/asmile.gif", "text" => sprintf(_("%s Liste mit allen Smilies %s Hilfe zu Smilies %s Hilfe zur Textformatierung %s"), "<a href=\"show_smiley.php\" target=\"_blank\">", "</a><br><a href=\"help/index.php?help_page=ix_forum7.htm\" target=\"_blank\">", "</a><br><a href=\"help/index.php?help_page=ix_forum6.htm\" target=\"_blank\">", "</a>"))
+			array("icon" => "asmile.gif", "text" => sprintf(_("%s Liste mit allen Smilies %s Hilfe zu Smilies %s Hilfe zur Textformatierung %s"), "<a href=\"show_smiley.php\" target=\"_blank\">", "</a><br><a href=\"help/index.php?help_page=ix_forum7.htm\" target=\"_blank\">", "</a><br><a href=\"help/index.php?help_page=ix_forum6.htm\" target=\"_blank\">", "</a>"))
 		))
 	);
 
