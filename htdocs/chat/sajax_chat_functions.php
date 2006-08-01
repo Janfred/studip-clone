@@ -127,7 +127,7 @@ function get_chat_status($chatid){
 			<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/hilfe.gif" border=0 hspace="5" align="texttop" <?=tooltip(_("Chat Kommandos einblenden"))?>>
 			</a>
 			<a href="<?=$CANONICAL_RELATIVE_PATH_STUDIP?>show_smiley.php" target=new>
-			<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/smile/smile.gif" hspace="5" border=0 align="absmiddle" <?=tooltip(_("Alle verfügbaren Smileys anzeigen"))?>>
+			<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/asmile.gif" hspace="5" border=0 align="absmiddle" <?=tooltip(_("Alle verfügbaren Smileys anzeigen"))?>>
 			</a></td>
 		</tr>
 	</table>
