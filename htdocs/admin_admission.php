@@ -566,7 +566,7 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 	</tr>
 	<tr>
 	<td class="blank" colspan=2>
-	<form method="POST" name="admission" action="<? echo $PHP_SELF ?>"
+	<form method="POST" name="Formular" action="<? echo $PHP_SELF ?>"
 	<? if (!$admin_admission_data["admission_type"]) echo " onSubmit=\"return doCrypt();\" "; ?>
 	>
 		<table width="99%" border=0 cellpadding=2 cellspacing=0 align="center">
@@ -626,8 +626,9 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 						<font size=-1>&nbsp; <input type="text" name="adm_s_tag" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_start_date"]<>-1) echo date("d",$admin_admission_data["sem_admission_start_date"]); else echo _("tt") ?>">.
 						<input type="text" name="adm_s_monat" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_start_date"]<>-1) echo date("m",$admin_admission_data["sem_admission_start_date"]); else echo _("mm") ?>">.
 						<input type="text" name="adm_s_jahr" size=4 maxlength=4 value="<? if ($admin_admission_data["sem_admission_start_date"]<>-1) echo date("Y",$admin_admission_data["sem_admission_start_date"]); else echo _("jjjj") ?>"><?=_("um");?>&nbsp;</font><br />
-						<font size=-1>&nbsp; <input type="text" name="adm_s_stunde" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_start_date"]<>-1) echo date("H",$admin_admission_data["sem_admission_start_date"]); else echo _("hh") ?>">:
-						<input type="text" name="adm_s_minute" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_start_date"]<>-1) echo date("i",$admin_admission_data["sem_admission_start_date"]); else  echo _("mm") ?>">&nbsp;<?=_("Uhr");?></font>
+						<font size=-1>&nbsp; <input type="text" name="adm_s_stunde" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_start_date"]<>-1) echo date("H",$admin_admission_data["sem_admission_start_date"]); else echo "00" ?>">:
+						<input type="text" name="adm_s_minute" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_start_date"]<>-1) echo date("i",$admin_admission_data["sem_admission_start_date"]); else  echo "00" ?>">&nbsp;<?=_("Uhr");?></font>
+					<?=Termin_Eingabe_javascript(20,0,($admin_admission_data["sem_admission_start_date"] != -1 ? $admin_admission_data["sem_admission_start_date"] : 0));?>
 					</td>
 					<td class="<? echo $cssSw->getClass() ?>" valign="top" align="right" width="10%">
 						<font size=-1><? echo _("Enddatum f&uuml;r Anmeldungen");?>:</font>
@@ -638,6 +639,7 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 						<input type="text" name="adm_e_jahr" size=4 maxlength=4 value="<? if ($admin_admission_data["sem_admission_end_date"]<>-1) echo date("Y",$admin_admission_data["sem_admission_end_date"]); else echo _("jjjj") ?>"><?=_("um");?>&nbsp;</font><br />
 						<font size=-1>&nbsp; <input type="text" name="adm_e_stunde" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_end_date"]<>-1) echo date("H",$admin_admission_data["sem_admission_end_date"]); else echo "23" ?>">:
 						<input type="text" name="adm_e_minute" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_end_date"]<>-1) echo date("i",$admin_admission_data["sem_admission_end_date"]); else echo "59" ?>">&nbsp;<?=_("Uhr");?></font>
+					<?=Termin_Eingabe_javascript(21,0,($admin_admission_data["sem_admission_end_date"] != -1 ? $admin_admission_data["sem_admission_end_date"] : 0));?>
 					</td>
 				</tr>
 				</table>
@@ -887,6 +889,7 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 					<input type="text" name="adm_jahr" size=4 maxlength=4 value="<? if ($admin_admission_data["admission_endtime"]<>-1) echo date("Y",$admin_admission_data["admission_endtime"]); else echo _("jjjj") ?>"><?=_("um")?>&nbsp;
 					<font size=-1><input type="text" name="adm_stunde" size=2 maxlength=2 value="<? if ($admin_admission_data["admission_endtime"]<>-1) echo date("H",$admin_admission_data["admission_endtime"]); else echo"23" ?>">:
 					<input type="text" name="adm_minute" size=2 maxlength=2 value="<? if ($admin_admission_data["admission_endtime"]<>-1) echo date("i",$admin_admission_data["admission_endtime"]); else echo"59" ?>">&nbsp;<?=_("Uhr")?></font>&nbsp;
+					<?=Termin_Eingabe_javascript(22,0,($admin_admission_data["admission_endtime"] != -1 ? $admin_admission_data["admission_endtime"] : 0));?>
 					<? } ?>
 					</td>
 			</tr>

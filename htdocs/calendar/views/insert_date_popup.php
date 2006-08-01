@@ -151,6 +151,27 @@ switch ($element_switch){  // Auswahl der Zielparameter
 		$zeiten = false;
 		$kalender = true;
 		break;
+	case 20:  // admin_admission
+		$txt_day   = 'adm_s_tag';
+		$txt_month = 'adm_s_monat';
+		$txt_year  = 'adm_s_jahr';
+		$zeiten = false;
+		$kalender = true;
+		break;
+	case 21:  // admin_admission
+		$txt_day   = 'adm_e_tag';
+		$txt_month = 'adm_e_monat';
+		$txt_year  = 'adm_e_jahr';
+		$zeiten = false;
+		$kalender = true;
+		break;
+	case 22:  // admin_admission
+		$txt_day   = 'adm_tag';
+		$txt_month = 'adm_monat';
+		$txt_year  = 'adm_jahr';
+		$zeiten = false;
+		$kalender = true;
+		break;
 	case 51: // calendar.php (edit.inc.php) Enddate
 		$txt_month = 'end_month';
 		$txt_day   = 'end_day';
