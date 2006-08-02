@@ -69,7 +69,7 @@ TD.suche {background-image: url('../images/suche2.jpg');}
 
 BODY { background-color: #91A2B6; background : url('../images/bathtile.jpg'); font-family: Arial, Helvetica, sans-serif}
 
-// the Body-Background color should be similar to A:link.toolbar and A:visited.toolbarfor best effect!!
+/* the Body-Background color should be similar to A:link.toolbar and A:visited.toolbar for best effect!! */
 
 TABLE.blank {	background-color: white;}
 
