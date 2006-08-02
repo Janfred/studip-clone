@@ -87,6 +87,9 @@ if ($messaging_cmd=="change_view_insert" && !$set_msg_default_x && $newmsgset_x)
 
 	// write to user config table
 	$user_cfg->setValue((int)isset($foaf_show_identity), $user->id, "FOAF_SHOW_IDENTITY");
+	$user_cfg->setValue($_REQUEST['online_format'], $user->id, "ONLINE_NAME_FORMAT");
+	$user_cfg->setValue((int)($_REQUEST['chat_client_version'] == 'ajax'),$user->id, "CHAT_USE_AJAX_CLIENT");
+
 
 	$my_messaging_settings["changed"] = TRUE;
 	$my_messaging_settings["show_only_buddys"] = $show_only_buddys;
@@ -360,6 +363,21 @@ function change_messaging_view() {
 				<?php
 				}
 				?>
+				<tr <? $cssSw->resetClass() ?>>
+					<td colspan="2" align="center" class="steelgraulight" style="border-bottom:1px dotted black;border-top:1px dotted black;"><font size="-1"><b><?=_("Stud.IP-Chat")?></b></font></td>
+				</tr>
+				<tr <? $cssSw->switchClass() ?>>
+					<td align="right" class="blank">
+						<font size=-1><?=_("Version des Stud.IP-Chatfensters")?></font>
+					</td>
+					<td <?=$cssSw->getFullClass()?>>
+						<input style="vertical-align:middle" type="radio" name="chat_client_version" value="stream" <? if (!$user_cfg->getValue($user->id,"CHAT_USE_AJAX_CLIENT")) echo " checked"; ?> >
+						&nbsp;<font size=-1><?=_("Version für ältere Browser (Netscape 4, Internet Explorer 5)")?></font>
+						<br>
+						<input style="vertical-align:middle" type="radio" name="chat_client_version" value="ajax" <? if ($user_cfg->getValue($user->id,"CHAT_USE_AJAX_CLIENT")) echo " checked"; ?> >
+						&nbsp;<font size=-1><?=_("Version für neuere Browser (Firefox, Safari, Opera 9)")?></font>
+					</td>
+				</tr>
 				<tr <? $cssSw->switchClass() ?>>
 					<td colspan="2" align="center" class="steelgraulight" style="border-bottom:1px dotted black;border-top:1px dotted black;"><font size="-1"><b><?=_("Buddies/ Wer ist online?")?></b></font></td>
 				</tr>
@@ -399,6 +417,23 @@ function change_messaging_view() {
 							}
 						} ?>
                         			</select>
+					</td>
+				</tr>
+				<tr  <? $cssSw->switchClass() ?>>
+					<td  align="right" class="blank" style="border-bottom:1px dotted black;">
+						<font size="-1"><?print _("Formatierung der Namen auf &raquo;Wer ist Online?&laquo;");?></font>
+					</td>
+					<td <?=$cssSw->getFullClass()?>>
+						<select name="online_format">
+						<?
+						foreach($GLOBALS['NAME_FORMAT_DESC'] as $key => $value){
+							echo "\n<option value=\"$key\"";
+							if($user_cfg->getValue($user->id, "ONLINE_NAME_FORMAT") == $key) echo " selected ";
+							echo ">$value</option>";
+						}
+						?>
+						</select>
+						
 					</td>
 				</tr>
 				<tr <? $cssSw->switchClass() ?>>
