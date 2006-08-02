@@ -822,7 +822,6 @@ if(check_ticket($studipticket)){
 		$my_studip_settings["startpage_redirect"] = $personal_startpage;
 		$user->cfg->setValue((int)$_REQUEST['accesskey_enable'], $user->id, "ACCESSKEY_ENABLE");
 		$user->cfg->setValue((int)$_REQUEST['showsem_enable'], $user->id, "SHOWSEM_ENABLE");
-		$user->cfg->setValue($_REQUEST['online_format'], $user->id, "ONLINE_NAME_FORMAT");
 
 		// change visibility
 		$q="SELECT visible FROM auth_user_md5 WHERE user_id='$user->id'";
