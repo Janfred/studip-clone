@@ -343,11 +343,12 @@ if (Seminar_Session::check_ticket($studipticket)){
 			$userchange=$db->f("user_id");
 			$fullname = $db->f("fullname");
 	
-			$status = (!$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["only_inst_user"] && (($db->f("perms") == "tutor" || $db->f("perms") == "dozent")) && ($perm->have_studip_perm("dozent", $id))) ? "tutor" : "autor";
-	
-			if ($cmd == "add_user") $status="autor"; // otherwise, students with GLOBAL status tutor immediately have the status of a tutor in this seminar. Makes no sense!
-			//But: perhaps a better solution?
-	
+			if ($cmd == "add_user" && !$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["only_inst_user"] && (($db->f("perms") == "tutor" || $db->f("perms") == "dozent")) && ($perm->have_studip_perm("dozent", $id))){
+				$status = 'tutor';
+			} else {
+				$status = 'autor';
+			}
+			
 			$admission_user = insert_seminar_user($id, $userchange, $status, ($accepted) ? TRUE : FALSE);
 			//Only if user was on the waiting list
 			if ($admission_user) {
@@ -1219,7 +1220,14 @@ if ($rechte) {
 			printf("<option value=\"%s\">%s - %s\n", $db->f("username"), htmlReady(my_substr($db->f("fullname")." (".$db->f("username"),0,35)).")", $db->f("perms"));
 		?>
 		</select></td>
-		<td class="steel1" width="20%" align="center"><font size=-1><? if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["only_inst_user"]) print _("als AutorIn") ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><br />
+		<td class="steel1" width="20%" align="center"><font size=-1>
+		<?
+		if (!$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["only_inst_user"] && $perm->have_studip_perm("dozent",$SessSemName[1])){
+			 echo (!$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"] ? _("als TutorIn") . " / " . _("als AutorIn") : _("als Mitglied"));
+		} else {
+			echo _("als AutorIn");
+		}
+		?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><br />
 		<input type="image" name="add_user" <?=makeButton("eintragen", "src")?> align="absmiddle" border=0 value=" <?=_("Als AutorIn berufen")?> ">&nbsp;<a href="<? echo $PHP_SELF ?>"><?=makeButton("neuesuche")?></a></td>
 
 	</tr></form></table>
