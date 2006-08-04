@@ -320,7 +320,7 @@ function chatCommand_quit($msgStr, $chatid){
 	global $user,$chatServer,$userQuit,$chat_logs;
 	$full_nick = fullNick($user->id, $chatid);
 	if ($chatServer->chatDetail[$chatid]['log'][$user->id]){
-			chatCommand_log("stop");
+			chatCommand_log("stop", $chatid);
 	}
 	$chatServer->addMsg("system",$chatid,sprintf(_("%s verl&auml;sst den Chat und sagt: %s"),htmlReady($full_nick),formatReady($msgStr)));
 	echo '<!--<logout>-->' . _("Sie haben den Chat verlassen!") . "<br>";
