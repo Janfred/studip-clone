@@ -127,8 +127,8 @@ function change_general_view() {
 					<td <?=$cssSw->getFullClass()?>>
 						<select name="change_visibility">
 						<?
-							printf ("<option %s value=\"yes\">"._("sichtbar")."</option>", ($visi=='yes' || ($visi=="unknown" && $USER_VISIBILITY_UNKNOWN)) ? "selected" : "");
-							printf ("<option %s value=\"no\">"._("unsichtbar")."</option>", ($visi=='no' || ($visi=='unknown' && !$USER_VISIBILITY_UNKNOWN)) ? "selected" : "");
+							printf ("<option %s value=\"yes\">"._("sichtbar")."</option>", ($visi=='yes' || ($visi=="unknown" && get_config('USER_VISIBILITY_UNKNOWN'))) ? "selected" : "");
+							printf ("<option %s value=\"no\">"._("unsichtbar")."</option>", ($visi=='no' || ($visi=='unknown' && !get_config('USER_VISIBILITY_UNKNOWN'))) ? "selected" : "");
 						?>
 						</select>
 					</td>
