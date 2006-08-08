@@ -323,7 +323,7 @@ class Seminar_User extends User {
 		return $this->that->ac_get_changed($this->id, $this->name);
 	}
 	
-	function set_last_action($timestamp){
+	function set_last_action($timestamp = 0){
 		if ($timestamp <= 0){
 			$timestamp = time();
 		}
