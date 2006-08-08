@@ -47,7 +47,7 @@ td, th, input, select  { font-size: 0.8em; }
 }
 
 .eval_highlight {
-  background-image:url('../../assets/images/steelgraulight_hover.gif');
+  background-image:url('../images/steelgraulight_hover.gif');
 }
 
 .eval_gray {
@@ -55,21 +55,21 @@ td, th, input, select  { font-size: 0.8em; }
 }
 
 .steel_with_graulight_bg {
-  background-image: url('../../assets/images/steel_with_graulight_bg.jpg');
+  background-image: url('../images/steel_with_graulight_bg.jpg');
   font-family: Arial, Helvetica, sans-serif;
 }
 
 .steel_with_steel1_bg {
-  background-image: url('../../assets/images/steel_with_steel1_bg.jpg');
+  background-image: url('../images/steel_with_steel1_bg.jpg');
   font-family: Arial, Helvetica, sans-serif;
 }
 
 .steel3 {
-  background-image: url('../../assets/images/steel3.jpg');
+  background-image: url('../images/steel3.jpg');
 }
 
 .steelblau4 {
-  background-image: url('../../assets/images/steelblau4.jpg');
+  background-image: url('../images/steelblau4.jpg');
 }
 
 h3 {
