@@ -205,6 +205,7 @@ if (isset($_GET['details'])) {
 					<td colspan="2"><b>&nbsp;<?=_("E-Mail:")?></b></td>
 					<td>&nbsp;<input type="text" name="Email" size=48 maxlength=63 value="">&nbsp;</td>
 				</tr>
+				<tr>
 				<td colspan=3 align=center>&nbsp;
 				<input type="IMAGE" name="create" <?=makeButton("anlegen", "src")?> value=" <?=_("Benutzer anlegen")?> ">&nbsp;
 				<input type="IMAGE" name="nothing" <?=makeButton("abbrechen", "src")?> value=" <?=_("Abbrechen")?> ">
@@ -290,6 +291,7 @@ if (isset($_GET['details'])) {
 					?>
 					</td>
 				</tr>
+				<tr>
 				<td class="steel1"><b>&nbsp;<?=_("Titel:")?></b>
 				</td><td class="steel1" align="right">
 				<?
