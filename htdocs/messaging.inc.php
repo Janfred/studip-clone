@@ -260,13 +260,23 @@ class messaging {
 
 	function insert_message($message, $rec_uname, $user_id='', $time='', $tmp_message_id='', $set_deleted='', $signature='', $subject='', $force_email='') {
 
-		global $_fullname_sql, $user, $my_messaging_settings, $sms_data;
+		global $_fullname_sql, $user, $my_messaging_settings;
 
 		$db = new DB_Seminar;
 		$db2 = new DB_Seminar;
 		$db3 = new DB_Seminar;
 		$db4 = new DB_Seminar;
 		$db5 = new DB_Seminar;
+		
+		//ja ich weiss, das ist übel. Aber die zentrale Methode eines überall
+		//benutzten Objektes über globale Variablen die nur auf einer
+		//Seite sicher zur Verfügung stehen zu steuern ist ein echter php-no-brainer
+		if (basename($GLOBALS['PHP_SELF']) == 'sms_send.php'){
+			$sms_data = $GLOBALS['sms_data'];
+		} else {
+			$sms_data["tmpsavesnd"] = $my_messaging_settings["save_snd"];
+			$sms_data["sig"] = $my_messaging_settings["addsignature"];
+		}
 		
 		// wenn kein subject uebergeben
 		if(!$subject) $subject = _("Ohne Betreff");
@@ -308,13 +318,14 @@ class messaging {
 
 			} else { // system-message
 
+				$set_deleted = "1";
 				// system-signatur
 				$snd_user_id = "____%system%____";		
 				setTempLanguage();
 				$message .= $this->sig_string. _("Diese Nachricht wurde automatisch vom Stud.IP-System generiert. Sie können darauf nicht antworten.");
 				restoreLanguage();
 
-			}	
+			}
 
 			
 			// insert message
