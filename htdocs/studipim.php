@@ -213,7 +213,7 @@ if ($auth->auth["uid"] != "nobody"){
 				if($quote){
 					if (strpos($db->f("message"),$sms->sig_string)) $msg_text = substr($db->f("message"), 0, strpos($db->f("message"),$sms->sig_string));
 					else $msg_text = $db->f('message');
-					$msg_text = quotes_encode($db->f('message'),get_fullname($msg_autor_id));
+					$msg_text = quotes_encode($msg_text,get_fullname($msg_autor_id));
 				}
 				$msg_rec = get_username($msg_autor_id);
 			}
