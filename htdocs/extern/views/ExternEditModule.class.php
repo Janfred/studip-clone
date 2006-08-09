@@ -83,7 +83,7 @@ class ExternEditModule extends ExternEditHtml {
 		for ($i = 0; $i < sizeof($field_names); $i++) {
 
 			// name of column
-			$out .= "<tr" . $this->css->getFullClass() . ">\n";
+			$out .= "<tr" . $this->css->getFullClass() . " valign=\"middle\">\n";
 			$out .= "<td><font size=\"2\">&nbsp;{$field_names[$order[$i]]}</font></td>";
 
 			// column headline
@@ -136,28 +136,28 @@ class ExternEditModule extends ExternEditHtml {
 
 			if (!in_array("visible", $hide)) {
 				// move left
-				$out .= "<td valign=\"top\" nowrap=\"nowrap\">";
+				$out .= "<td valign=\"middle\" nowrap=\"nowrap\">";
 				$out .= "<input type=\"image\" name=\"{$this->element_name}_move_left[$i]\" ";
-				$out .= "img src=\"".$GLOBALS['ASSETS_URL']."images/move_up.gif\"";
+				$out .= "src=\"{$GLOBALS['ASSETS_URL']}images/move_up.gif\"";
 				$out .= tooltip(_("Datenfeld verschieben"));
-				$out .= "border=\"0\" align=\"bottom\">\n";
+				$out .= "border=\"0\" align=\"middle\">\n";
 
 				// move right
 				$out .= "<input type=\"image\" name=\"{$this->element_name}_move_right[$i]\" ";
-				$out .= "img src=\"".$GLOBALS['ASSETS_URL']."images/move_down.gif\"";
+				$out .= "src=\"{$GLOBALS['ASSETS_URL']}images/move_down.gif\"";
 				$out .= tooltip(_("Datenfeld verschieben"));
-				$out .= "border=\"0\" align=\"bottom\">\n&nbsp;";
+				$out .= "border=\"0\" align=\"middle\">\n&nbsp;";
 
 				// visible
 				if ($visible[$order[$i]]) {
 					$out .= "<input type=\"image\" name=\"{$this->element_name}_hide[{$order[$i]}]\" ";
-					$out .= "img src=\" ".$GLOBALS['ASSETS_URL']."images/on_small.gif\"";
+					$out .= "src=\"{$GLOBALS['ASSETS_URL']}images/on_small.gif\"";
 					$out .= tooltip(_("Datenfeld ausblenden"));
 					$out .= "border=\"0\" align=\"middle\">\n";
 				}
 				else {
 					$out .= "<input type=\"image\" name=\"{$this->element_name}_show[{$order[$i]}]\" ";
-					$out .= "img src=\" ".$GLOBALS['ASSETS_URL']."images/off_small_blank.gif\"";
+					$out .= "src=\"{$GLOBALS['ASSETS_URL']}images/off_small_blank.gif\"";
 					$out .= tooltip(_("Datenfeld anzeigen"));
 					$out .= "border=\"0\" align=\"middle\">\n</td>\n";
 				}
@@ -184,7 +184,7 @@ class ExternEditModule extends ExternEditHtml {
 			if (substr($widths[0], -1) != "%")
 				$out .= " checked=\"checked\"";
 			$out .= " /><font size=\"2\">" . _("Pixel") . "&nbsp; &nbsp;</font>\n";
-			$out .= "<img src=\" ".$GLOBALS['ASSETS_URL']."images/info.gif\"";
+			$out .= "<img src=\"{$GLOBALS['ASSETS_URL']}images/info.gif\"";
 			$out .= tooltip($info, TRUE, TRUE) . ">$error_sign</td></tr>\n";
 		}
 
@@ -256,13 +256,13 @@ class ExternEditModule extends ExternEditHtml {
 			// visible
 			if (in_array($id, $groups_visible)) {
 				$out .= "<td align=\"center\"><input type=\"image\" name=\"{$this->element_name}_hide_group[$id]\" ";
-				$out .= "img src=\" ".$GLOBALS['ASSETS_URL']."images/on_small.gif\"";
+				$out .= "src=\"{$GLOBALS['ASSETS_URL']}images/on_small.gif\"";
 				$out .= tooltip(_("Spalte ausblenden"));
 				$out .= "border=\"0\" align=\"middle\">\n</td>\n";
 			}
 			else {
 				$out .= "<td align=\"center\"><input type=\"image\" name=\"{$this->element_name}_show_group[$id]\" ";
-				$out .= "img src=\" ".$GLOBALS['ASSETS_URL']."images/off_small_blank.gif\"";
+				$out .= "src=\"{$GLOBALS['ASSETS_URL']}images/off_small_blank.gif\"";
 				$out .= tooltip(_("Spalte einblenden"));
 				$out .= "border=\"0\" align=\"middle\">\n</td>\n";
 			}
@@ -350,15 +350,15 @@ class ExternEditModule extends ExternEditHtml {
 				// move up
 			$out .= "<td valign=\"top\" align=\"center\" nowrap=\"nowrap\">";
 			$out .= "<input type=\"image\" name=\"{$this->element_name}_move_left[$i]\" ";
-			$out .= "img src=\" ".$GLOBALS['ASSETS_URL']."images/move_up.gif\"";
+			$out .= "img src=\"{$GLOBALS['ASSETS_URL']}images/move_up.gif\"";
 			$out .= tooltip(_("Datenfeld verschieben"));
-			$out .= "border=\"0\" align=\"bottom\">\n";
+			$out .= "border=\"0\" align=\"middle\">\n";
 			
 			// move down
 			$out .= "<input type=\"image\" name=\"{$this->element_name}_move_right[$i]\" ";
-			$out .= "img src=\" ".$GLOBALS['ASSETS_URL']."images/move_down.gif\"";
+			$out .= "src=\"{$GLOBALS['ASSETS_URL']}images/move_down.gif\"";
 			$out .= tooltip(_("Datenfeld verschieben"));
-			$out .= "border=\"0\" align=\"bottom\">\n&nbsp;";
+			$out .= "border=\"0\" align=\"middle\">\n&nbsp;";
 			$out .= "</td>\n";
 			
 			// visibility
@@ -425,7 +425,7 @@ class ExternEditModule extends ExternEditHtml {
 		$out .= '<td nowrap="nowrap" width="100%">';
 		$out .= $selector->getChooserField(array('style' => 'width:80%;','size' => 15),
 				70, 'subjectareasselected');
-		$out .= ' <img align="top" src="' . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . 'pictures/info.gif"';
+		$out .= ' <img align="top" src="' . $GLOBALS['ASSETS_URL'] . 'images/info.gif"';
 		$out .= tooltip($info, TRUE, TRUE) . "><span style=\"vertical-align:top;\">$error_sign</span>";
 		$out .= "</td></tr><tr><td width=\"100%\" style=\"font-size:smaller;\">$info2<br />";
 		$out .= "<span style=\"color:red;\">$info3</span></td></tr></table>\n</td></tr>\n";
