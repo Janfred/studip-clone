@@ -217,7 +217,8 @@ if(!file_exists("./user/".$user_id.".jpg")) {
 <? echo "<b><font size=7>".htmlReady($db->f("fullname"))."</font></b><br>";
 if ($db->f('motto')) echo '<b><font size="5">'.htmlReady($db->f('motto')).'</font></b><br>';
 if (!get_visibility_by_state($db->f("visible"))) {
-		echo "<p><font color=red>"._("(Sie sind unsichtbar. Deshalb können nur Sie diese Seite sehen.)")."</font></p>";
+		if ($perm->have_perm('root') && $user_id != $user->id) echo "<p><font color=red>"._("(Dieser Nutzer ist unsichtbar.)")."</font></p>";
+		else echo "<p><font color=red>"._("(Sie sind unsichtbar. Deshalb können nur Sie diese Seite sehen.)")."</font></p>";
 }
 echo "<br><b>&nbsp;" . _("E-mail:") . " </b><a href=\"mailto:". $db->f("Email")."\">".htmlReady($db->f("Email"))."</a><br>";
 IF ($db->f("privatnr")!="") echo "<b>&nbsp;" . _("Telefon (privat):") . " </b>". htmlReady($db->f("privatnr"))."<br>";
