@@ -425,8 +425,8 @@ class ExternSemBrowse extends SemBrowse {
 								}
 								echo "</tr>";
 							}
+							echo "</table></td></tr>\n";
 						}
-						echo "</table></td></tr>\n";
 					}
 				}
 			}
