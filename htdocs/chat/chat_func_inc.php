@@ -140,17 +140,18 @@ function chat_show_info($chatid){
 			$chatinv = $sms->check_chatinv($chatid);
 			$is_active = $chatServer->isActiveUser($auth->auth['uid'],$chatid);
 			$chatname = ($chatter) ? $chatServer->chatDetail[$chatid]['name'] : chat_get_name($chatid);
-			//Ausgabe der Kopfzeile
-			echo "\n<table border=\"0\" bgcolor=\"#FFFFFF\" cellspacing=\"0\" cellpadding=\"0\" align=\"center\" width=\"100%\" >";
-			echo "\n<tr><td class=\"topic\" colspan=\"2\" width=\"100%\">";
-			echo "\n" . chat_get_chat_icon($chatter,$chatinv,$is_active);
-			echo "\n<b>&nbsp;" . _("Chatraum:") . "&nbsp;" . htmlReady($chatname) . "</b></td></tr>";
-			echo chat_get_content($chatid,$chatter,$chatinv,$chatServer->chatDetail[$chatid]['password'],$is_active,$chatServer->getUsers($chatid));
-			echo "\n</table>";
-			return true;
-		} else {
-			return false;
+			if (chat_get_entry_level($chatid) || $is_active || $chatinv){
+				//Ausgabe der Kopfzeile
+				echo "\n<table border=\"0\" bgcolor=\"#FFFFFF\" cellspacing=\"0\" cellpadding=\"0\" align=\"center\" width=\"100%\" >";
+				echo "\n<tr><td class=\"topic\" colspan=\"2\" width=\"100%\">";
+				echo "\n" . chat_get_chat_icon($chatter,$chatinv,$is_active);
+				echo "\n<b>&nbsp;" . _("Chatraum:") . "&nbsp;" . htmlReady($chatname) . "</b></td></tr>";
+				echo chat_get_content($chatid,$chatter,$chatinv,$chatServer->chatDetail[$chatid]['password'],$is_active,$chatServer->getUsers($chatid));
+				echo "\n</table>";
+				return true;
+			}
 		}
+		return false;
 }
 
 function chat_get_content($chatid,$chatter,$chatinv,$password,$is_active,$chat_user){
