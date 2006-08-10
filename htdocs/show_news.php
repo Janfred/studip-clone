@@ -305,15 +305,19 @@ function show_rss_news($range_id, $type){
 		break;
 
 	}
+	$title = htmlspecialchars($title);
+	$RssChannelDesc = htmlspecialchars($RssChannelDesc);
+	
 	foreach(StudipNews::GetNewsByRange($range_id, true) as  $news_id => $details) {
 		list ($body,$admin_msg) = explode("<admin_msg>",$details["body"]);
 		$items .= "<item>
-		<title>".utf8_encode($details["topic"])."</title>
+		<title>".utf8_encode(htmlspecialchars($details["topic"]))."</title>
 		<link>".utf8_encode($studip_url . "&#38;nopen=$news_id&#35;anker")."</link>";
 		$items .= "<description>"."<![CDATA[".utf8_encode(formatready($body,1,1))."]]>"."</description>
 		<dc:contributor>"."<![CDATA[".utf8_encode(htmlready($details['author']))."]]>"."</dc:contributor>
 		<dc:date>".gmstrftime($RssTimeFmt,($details['date'] > $details['chdate'] ? $details['date'] : $details['chdate']))."</dc:date>
-		</item>";
+		<pubDate>".date("r",($details['date'] > $details['chdate'] ? $details['date'] : $details['chdate']))."</pubDate>
+		</item>\n";
 		if ($last_changed < $details['chdate']) $last_changed = $details['chdate'];
 	}
 	header("Content-type: text/xml; charset=utf-8");
@@ -329,9 +333,9 @@ function show_rss_news($range_id, $type){
 	</image>
 	<description>".utf8_encode($RssChannelDesc)."</description>
 	<lastBuildDate>".date("r",$last_changed)."</lastBuildDate>
-	<generator>". utf8_encode('Stud.IP - ' . $GLOBALS['SOFTWARE_VERSION']) . "</generator>";
+	<generator>". utf8_encode('Stud.IP - ' . htmlspecialchars($GLOBALS['SOFTWARE_VERSION'])) . "</generator>";
 	echo chr(10).$items;
     echo "</channel>\n</rss>";
-	return TRUE;
+	return true;
 }
 ?>
