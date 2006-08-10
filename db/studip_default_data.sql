@@ -154,6 +154,7 @@ INSERT INTO `roles` (`roleid`, `rolename`, `system`) VALUES (3, 'Mitarbeiter(in)
 INSERT INTO `roles` (`roleid`, `rolename`, `system`) VALUES (4, 'Lehrende(r)', 'y');
 INSERT INTO `roles` (`roleid`, `rolename`, `system`) VALUES (5, 'Studierende(r)', 'y');
 INSERT INTO `roles` (`roleid`, `rolename`, `system`) VALUES (6, 'Tutor(in)', 'y');
+INSERT INTO `roles` (`roleid`, `rolename`, `system`) VALUES (7, 'Nobody', 'y');
 
 -- 
 -- Daten für Tabelle `roles_studipperms`
@@ -191,3 +192,8 @@ INSERT INTO `roles_plugins` (`roleid`, `pluginid`) VALUES (6, 1);
 INSERT INTO `roles_plugins` (`roleid`, `pluginid`) VALUES (6, 2);
 INSERT INTO `roles_plugins` (`roleid`, `pluginid`) VALUES (6, 3);
 
+-- 
+-- Daten für Tabelle `roles_user`
+-- 
+
+INSERT INTO `roles_user` (`roleid`, `userid`) VALUES (7, 'nobody');
