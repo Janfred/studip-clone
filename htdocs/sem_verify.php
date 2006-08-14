@@ -557,7 +557,7 @@ $db6=new DB_Seminar;
 								while ($db->next_record()) {
 									$db3->query("SELECT studiengang_id FROM user_studiengang WHERE studiengang_id = '".$db->f("studiengang_id")."' AND user_id = '$user->id' "); // Darf ich diesen auswaehlen?
 									$db3->next_record();
-									if ($db3->f("studiengang_id") == "all")
+									if ($db->f("studiengang_id") == "all")
 										$tmp_sem_verify_quota=get_all_quota($id);
 									else
 										$tmp_sem_verify_quota=round ($db2->f("admission_turnout") * ($db->f("quota") / 100));
