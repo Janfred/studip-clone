@@ -119,11 +119,8 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
    if ($rangeID == "studip") {
    
 	   $db = new DB_Seminar();
-	   $db->query ("SELECT sem_tree_id,seminare.Name, seminare.Seminar_id, seminare.status as sem_status, seminar_user.status, seminar_user.gruppe,
-					seminare.chdate, seminare.visible, admission_binding,modules,IFNULL(visitdate,0) as visitdate
+	   $db->query ("SELECT seminare.Name, seminare.Seminar_id
 					FROM seminar_user LEFT JOIN seminare  USING (Seminar_id) 
-					LEFT JOIN object_user_visits ouv ON (ouv.object_id=seminar_user.Seminar_id AND ouv.user_id='$user->id' AND ouv.type='sem')
-					LEFT JOIN seminar_sem_tree sst ON (sst.seminar_id=seminar_user.seminar_id)
 					WHERE seminar_user.user_id = '". $userID . "'");
 	   $currentid = 0;
 	   $activecourseEvals = array();
