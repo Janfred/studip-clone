@@ -296,8 +296,6 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 	//
 	if ($EXPORT_ENABLE)
 		$structure["export"]=array ('topKat'=>"modules", 'name'=>_("Export"), 'link'=>"export.php", 'active'=>FALSE);
-	if ($ELEARNING_INTERFACE_ENABLE)
-		$structure["elearning_interface"]=array ('topKat'=>"modules", 'name'=>_("Lernmodul-Schnittstelle"), 'link'=>"admin_elearning_interface.php", 'active'=>FALSE);
 	if ($ILIAS_CONNECT_ENABLE)
 		$structure["lernmodule"]=array ('topKat'=>"modules", 'name'=>_("Lernmodule"), 'link'=>"admin_lernmodule.php", 'active'=>FALSE);
 	if ($RESOURCES_ENABLE)
@@ -314,6 +312,9 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 		}
 	}
 	if ($perm->have_perm("root")) {
+		if ($ELEARNING_INTERFACE_ENABLE){
+			$structure["elearning_interface"]=array ('topKat'=>"modules", 'name'=>_("Lernmodul-Schnittstelle"), 'link'=>"admin_elearning_interface.php", 'active'=>FALSE);
+		}
 		$structure["studiengang"]=array ('topKat'=>"global", 'name'=>_("Studieng&auml;nge"), 'link'=>"admin_studiengang.php", 'active'=>FALSE);
 		$structure["datafields"]=array ('topKat'=>"global", 'name'=>_("Datenfelder"), 'link'=>"admin_datafields.php", 'active'=>FALSE);
 		$structure["config"]=array ('topKat'=>"global", 'name'=>_("Konfiguration"), 'link'=>"admin_config.php", 'active'=>FALSE);

@@ -1,7 +1,7 @@
 <?
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
-// seminar_lernmodul.php
+// admin_elearning_interface.php
 //
 // Copyright (c) 2005 Arne Schroeder <schroeder@data-quest.de>
 // Suchi & Berg GmbH <info@data-quest.de>
@@ -21,7 +21,7 @@
 // +---------------------------------------------------------------------------+
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
-$perm->check("dozent");
+$perm->check("root");
 
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 // -- here you have to put initialisations for the current page
