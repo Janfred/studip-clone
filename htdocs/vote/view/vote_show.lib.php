@@ -88,7 +88,9 @@ function createFormFooter (&$vote, $userID, $perm, $rangeID) {
 
    $link  = $GLOBALS["PHP_SELF"];
    $link .= "?voteopenID=".$vote->getObjectID();
+  
    $link .= ($_GET["openAllVotes"]) ? "&openAllVotes=".YES : "";
+
    $link .= ($_GET["openStoppedVotes"]) ? "&openStoppedVotes=".YES : "";
    $link .= ($_GET["showrangeID"]) ? "&showrangeID=".$_GET["showrangeID"] : "";
    $link .= ($isPreview) ? "&previewResults=".YES : "";
@@ -320,7 +322,7 @@ function createVoteForm (&$vote, $userID) {
  *
  * @returns  string    the HTML-text
  */
-function createOpeningOrClosingArrow () {
+function createOpeningOrClosingArrow ($eval=FALSE) {
    $html .= "<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\"".
       " width=\"100%\">\n";
    $html .= " <tr>\n";
@@ -334,6 +336,27 @@ function createOpeningOrClosingArrow () {
    }
    /* ---------------------------------------------------------------------- */
 
+// if called from evaluation
+if($eval) {
+	/* Show openAll-button -------------------------------------------------- */
+   if (empty ($GLOBALS["openAllEvals"])) {
+      $html .= ($isHomepage) ? "&" : "?";
+      $html .= "openAllEvals=1&openStoppedEvals=1#votetop\">\n";
+
+      $html .= "    <img src=\"".VOTE_PATH_PICTURES."forumgraurunt.gif\"".
+	 tooltip(_("Alle Evaluationen öffnen!"))." border=\"0\">\n";
+   }
+   /* ---------------------------------------------------------------------- */
+
+   /* Show closeAll-buton -------------------------------------------------- */
+   else {
+      $html .= "\">\n";
+
+      $html .= "    <img src=\"".VOTE_PATH_PICTURES."forumgraurauf.gif\""
+	 . tooltip(_("Alle Evaluationen schließen!"))." border=\"0\">\n";
+   }
+	
+} else {
    /* Show openAll-button -------------------------------------------------- */
    if (empty ($GLOBALS["openAllVotes"])) {
       $html .= ($isHomepage) ? "&" : "?";
@@ -352,7 +375,7 @@ function createOpeningOrClosingArrow () {
 	 . tooltip(_("Alle Votings und Tests schließen!"))." border=\"0\">\n";
    }
    /* ---------------------------------------------------------------------- */
-
+}
    $html .= "   </a>\n";
    $html .= "  </td>\n";
    $html .= " </tr>\n";
