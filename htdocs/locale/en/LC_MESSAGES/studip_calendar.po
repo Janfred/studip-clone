@@ -8,7 +8,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: studip_calendar\n"
-"POT-Creation-Date: 2006-07-25 21:18+0200\n"
+"POT-Creation-Date: 2006-08-21 23:17+0200\n"
 "PO-Revision-Date: 2006-04-07 16:22+GMT\n"
 "Last-Translator: Stefan Suchi <suchi@data-quest.de>\n"
 "Language-Team:  <de@li.org>\n"
@@ -896,30 +896,30 @@ msgstr "The synchronization was successfully carried out!"
 msgid "Ihr Systemverwalter hat leider keine Standardzeiten vorgegeben."
 msgstr "Unfortunately, your system administrator hasn't set any default times."
 
-#: calendar/views/insert_date_popup.php:172
+#: calendar/views/insert_date_popup.php:193
 msgid "Kalender"
 msgstr "Calendar"
 
-#: calendar/views/insert_date_popup.php:262
-#: calendar/views/insert_date_popup.php:267
+#: calendar/views/insert_date_popup.php:283
+#: calendar/views/insert_date_popup.php:288
 msgid "Uhr"
 msgstr "o'clock "
 
-#: calendar/views/insert_date_popup.php:262
+#: calendar/views/insert_date_popup.php:283
 msgid "eintragen"
 msgstr "enter"
 
-#: calendar/views/insert_date_popup.php:267
+#: calendar/views/insert_date_popup.php:288
 msgid "zurücksetzen auf"
 msgstr "set back to"
 
-#: calendar/views/insert_date_popup.php:281
-#: calendar/views/insert_date_popup.php:282
+#: calendar/views/insert_date_popup.php:302
+#: calendar/views/insert_date_popup.php:303
 msgid "Monate zurück"
 msgstr "months back"
 
-#: calendar/views/insert_date_popup.php:288
-#: calendar/views/insert_date_popup.php:289
+#: calendar/views/insert_date_popup.php:309
+#: calendar/views/insert_date_popup.php:310
 msgid "Monate vor"
 msgstr "months before"
 

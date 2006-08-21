@@ -1,4 +1,3 @@
-# translation of studip_extern.po to 
 # translation of studip_extern.po to
 # This file is distributed under the same license as the PACKAGE package.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER, 2003,2004.
@@ -8,14 +7,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: studip_extern\n"
-"POT-Creation-Date: 2006-07-25 21:18+0200\n"
-"PO-Revision-Date: 2006-04-07 16:38+GMT\n"
-"Last-Translator: Stefan Suchi <suchi@data-quest.de>\n"
-"Language-Team:  <de@li.org>\n"
+"POT-Creation-Date: 2006-08-21 23:17+0200\n"
+"PO-Revision-Date: 2006-08-21 16:23+0200\n"
+"Last-Translator: \n"
+"Language-Team:  <en@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.0.2\n"
+"X-Generator: KBabel 1.11.1\n"
 
 #: extern/admin_extern.inc.php:63
 msgid "Verwaltung der externen Anzeigemodule"
@@ -649,12 +648,10 @@ msgid "Reihenfolge"
 msgstr "Order"
 
 #: extern/views/ExternEditModule.class.php:384
-#, fuzzy
 msgid ""
 "Wählen Sie die Studienbereiche aus, deren Veranstaltungen angezeigt werden "
 "sollen."
-msgstr ""
-"Choose this option if the names of the course lecturers should be displayed."
+msgstr "Choose the subject areas whose courses should be displayed."
 
 #: extern/views/ExternEditModule.class.php:385
 msgid ""
@@ -662,19 +659,22 @@ msgid ""
 "Bereiche halten Sie die 'Strg'-Taste oder 'Ctrl'-Taste' gedr&uuml;ckt, "
 "w&auml;hrend Sie auf den entsprechenden Bereich klicken."
 msgstr ""
+"For selecting more than one subject area or for deselecting single subject "
+"areas keep pressed the 'Strg'-buttom or the 'Crtl'-buttom while clicking on "
+"the respective subject areas. "
 
 #: extern/views/ExternEditModule.class.php:386
 msgid "(&Uuml;berschriften k&ouml;nnen nicht ausgew&auml;hlt werden!)"
-msgstr ""
+msgstr "(Superscriptions cannot be selected!)"
 
 #: extern/views/ExternEditModule.class.php:419
 #, c-format
 msgid "Ihre Suche ergab %s Treffer."
-msgstr ""
+msgstr "Your query yielded to %2 hits."
 
 #: extern/views/ExternEditModule.class.php:420
 msgid " (Suchergebnisse werden blau angezeigt)"
-msgstr ""
+msgstr "(Search results are shown blue)"
 
 #: extern/views/extern_edit_module.inc.php:57
 #, c-format
@@ -2253,6 +2253,33 @@ msgstr "Text replacement for course types"
 #: extern/elements/ExternElementReplaceTextSemType.class.php:57
 msgid "Ersetzt die Bezeichnung der Veranstaltungstypen."
 msgstr "Replace the description of the course types."
+
+#: extern/elements/ExternElementSelectSubjectAreas.class.php:57
+#, fuzzy
+msgid "Auswahl der anzuzeigenden Studienbereiche"
+msgstr "Number of semesters to be shown:"
+
+#: extern/elements/ExternElementSelectSubjectAreas.class.php:58
+#, fuzzy
+msgid ""
+"Sie k&ouml;nnen hier die Studienbereiche ausw&auml;hlen, die auf der "
+"externen Seite ausgegeben werden sollen."
+msgstr "Choose the subject areas whose courses should be displayed."
+
+#: extern/elements/ExternElementSelectSubjectAreas.class.php:95
+#, fuzzy
+msgid "Alle Studienbereiche anzeigen:"
+msgstr "No subject area entered"
+
+#: extern/elements/ExternElementSelectSubjectAreas.class.php:96
+#, fuzzy
+msgid ""
+"Wählen Sie diese Option, wenn alle Veranstaltungen aus allen "
+"Studienbereichen angezeigt werden sollen. Unabhängig von unten vorgenommener "
+"Auswahl."
+msgstr ""
+"Choose this option, if the number of courses and the selected grouping style "
+"should be displayed."
 
 #: extern/elements/ExternElementStudipInfo.class.php:56
 msgid "Informationen aus Stud.IP"

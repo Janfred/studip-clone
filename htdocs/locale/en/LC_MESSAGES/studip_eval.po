@@ -1,4 +1,4 @@
-# translation of studip_eval.po to 
+# translation of studip_eval.po to
 # translation of studip_eval.po to
 # This file is distributed under the same license as the PACKAGE package.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER, 2004.
@@ -8,14 +8,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: studip_eval\n"
-"POT-Creation-Date: 2006-07-25 21:18+0200\n"
-"PO-Revision-Date: 2006-04-07 16:36+GMT\n"
+"POT-Creation-Date: 2006-08-21 23:17+0200\n"
+"PO-Revision-Date: 2006-08-21 21:17+GMT\n"
 "Last-Translator: Stefan Suchi <suchi@data-quest.de>\n"
 "Language-Team:  <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.0.2\n"
+"X-Generator: KBabel 1.10\n"
 
 #: modules/evaluation/evaluation_admin_edit.inc.php:60
 #: modules/evaluation/evaluation_admin_link.lib.php:1502
@@ -696,7 +696,7 @@ msgstr "Please, enter a search string."
 #: modules/evaluation/evaluation_admin_overview.lib.php:1612
 #, c-format
 msgid "Es wurde kein Bereich gefunden, der den Suchbegriff <b>%s</b> enthält."
-msgstr "No area containing the search string <b>%s</b has been found."
+msgstr "No area containing the search string <b>%s</b> has been found."
 
 #: modules/evaluation/evaluation_admin_link.lib.php:1494
 #: modules/evaluation/evaluation_admin_overview.lib.php:1614
@@ -1962,14 +1962,12 @@ msgid "Ein neuer Gruppierungsblock wurde angelegt."
 msgstr "A new content block has been created."
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:1556
-#, fuzzy
 msgid "Fehler beim Anlegen eines neuen Textblocks."
-msgstr "Error while creating a new block."
+msgstr "Error while creating a new text block."
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:1558
-#, fuzzy
 msgid "Ein neuer Textblock wurde angelegt."
-msgstr "A new question block has been created."
+msgstr "A new text block has been created."
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:1611
 msgid "Ein neuer Fragenblock wurde angelegt."
@@ -2167,9 +2165,8 @@ msgstr ""
 "you may create further content blocks of question blocks."
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:2222
-#, fuzzy
 msgid "Einen neuen Textblock erstellen."
-msgstr "Create a new block of questions."
+msgstr "Create a new block of text."
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:2225
 #, fuzzy
@@ -2231,14 +2228,12 @@ msgid "Einen neuen Gruppierungsblock erstellen"
 msgstr "Create a new content block"
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:2393
-#, fuzzy
 msgid "Textblock"
-msgstr "Question block"
+msgstr "Text block"
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:2397
-#, fuzzy
 msgid "Einen neuen Textblock erstellen"
-msgstr "Create a new block of questions."
+msgstr "Create a new block of text."
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:2400
 msgid "Fragenblock mit"
@@ -2264,9 +2259,8 @@ msgid "Titel des Gruppierungsblocks"
 msgstr "Title of content block"
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:2496
-#, fuzzy
 msgid "Titel des Textblocks"
-msgstr "Title of question block"
+msgstr "Title of text block"
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:2504
 msgid "Titel des Fragenblocks"

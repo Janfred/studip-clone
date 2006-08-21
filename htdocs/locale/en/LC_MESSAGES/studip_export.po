@@ -1,18 +1,18 @@
-# translation of studip_export.po to 
+# translation of studip_export.po to
 # This file is distributed under the same license as the PACKAGE package.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER, 2004
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: studip_export\n"
-"POT-Creation-Date: 2006-07-25 21:18+0200\n"
-"PO-Revision-Date: 2004-02-15 14:22+GMT\n"
+"POT-Creation-Date: 2006-08-21 23:17+0200\n"
+"PO-Revision-Date: 2006-08-21 16:10+0200\n"
 "Last-Translator: \n"
-"Language-Team:  <de@li.org>\n"
+"Language-Team:  <en@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.0.1\n"
+"X-Generator: KBabel 1.11.1\n"
 
 #: export/export_choose_xslt.inc.php:66
 msgid ""
@@ -23,7 +23,7 @@ msgstr ""
 "another export format."
 
 #: export/export_choose_xslt.inc.php:80 export/export_run_xslt.inc.php:68
-#: export/export_xml.inc.php:63
+#: export/export_xml.inc.php:72
 msgid "Unzulässiger Seitenaufruf!"
 msgstr "Illegal page loading!"
 
@@ -39,8 +39,8 @@ msgstr "An error has occurred"
 #: export/export_choose_xslt.inc.php:232 export/export_choose_xslt.inc.php:289
 #: export/export_run_fop.inc.php:72 export/export_run_fop.inc.php:146
 #: export/export_run_xslt.inc.php:83 export/export_run_xslt.inc.php:180
-#: export/export_start.inc.php:159 export/export_xml.inc.php:72
-#: export/export_xml.inc.php:159
+#: export/export_start.inc.php:159 export/export_xml.inc.php:81
+#: export/export_xml.inc.php:178
 msgid "Information:"
 msgstr "Information:"
 
@@ -70,7 +70,7 @@ msgstr "File name (e.g &raquo;Test&laquo;)"
 
 #: export/export_choose_xslt.inc.php:156 export/export_choose_xslt.inc.php:224
 #: export/export_choose_xslt.inc.php:277 export/export_run_xslt.inc.php:145
-#: export/export_xml.inc.php:151
+#: export/export_xml.inc.php:170
 msgid "Zur&uuml;ck"
 msgstr "Back"
 
@@ -82,7 +82,7 @@ msgstr "This page prepares the data for export. %s Step 1/3 %s"
 #: export/export_choose_xslt.inc.php:171 export/export_choose_xslt.inc.php:241
 #: export/export_choose_xslt.inc.php:298 export/export_run_fop.inc.php:155
 #: export/export_run_xslt.inc.php:190 export/export_start.inc.php:168
-#: export/export_xml.inc.php:170
+#: export/export_xml.inc.php:189
 msgid "Aktionen:"
 msgstr "Actions:"
 
@@ -135,12 +135,12 @@ msgid "Die ben&ouml;tigten Dateien liegen nun zum Download bereit."
 msgstr "The required files are ready to download."
 
 #: export/export_choose_xslt.inc.php:257 export/export_run_fop.inc.php:136
-#: export/export_run_xslt.inc.php:162 export/export_xml.inc.php:154
+#: export/export_run_xslt.inc.php:162 export/export_xml.inc.php:173
 msgid "XML-Daten"
 msgstr "XML data"
 
 #: export/export_choose_xslt.inc.php:258 export/export_run_xslt.inc.php:163
-#: export/export_xml.inc.php:155
+#: export/export_xml.inc.php:174
 msgid ""
 "In dieser Datei sind die Daten als XML-Tags gespeichert. Diese Tags können "
 "mit einem XSLT-Script verarbeitet werden."
@@ -201,7 +201,7 @@ msgstr "Export these data"
 msgid "Fehlende Parameter!"
 msgstr "Defective parameter!"
 
-#: export/export_run_fop.inc.php:75 export/export_xml.inc.php:75
+#: export/export_run_fop.inc.php:75 export/export_xml.inc.php:84
 msgid ""
 "Die Parametern, mit denen diese Seite aufgerufen wurde, sind fehlerhaft."
 msgstr "The parameters, with which this page has been loaded are defective."
@@ -375,65 +375,64 @@ msgstr ""
 "Choose the type of data that you would like to export and the institute from "
 "which the data should be read. Then click on 'continue'."
 
-#: export/export_studipdata_func.inc.php:203
+#: export/export_studipdata_func.inc.php:206
 msgid "KEINE BERECHTIGUNG!"
 msgstr "NO AUTHORISATION!"
 
-#: export/export_studipdata_func.inc.php:207
+#: export/export_studipdata_func.inc.php:210
 msgid "Der gewählte Exportmodus wird nicht unterstützt."
 msgstr "The chosen export module is not supported."
 
-#: export/export_studipdata_func.inc.php:323
+#: export/export_studipdata_func.inc.php:326
 msgid "max."
 msgstr "max."
 
-#: export/export_studipdata_func.inc.php:323
+#: export/export_studipdata_func.inc.php:326
 msgid "erw."
 msgstr "exp."
 
-#: export/export_studipdata_func.inc.php:394
+#: export/export_studipdata_func.inc.php:398
 msgid "keiner Funktion oder Gruppe zugeordnet"
 msgstr "Not allocated to a function or group"
 
-#: export/export_studipdata_func.inc.php:403
-#, fuzzy
+#: export/export_studipdata_func.inc.php:407
 msgid "Alle Studiengänge"
 msgstr "All programs of study"
 
-#: export/export_studipdata_func.inc.php:406
+#: export/export_studipdata_func.inc.php:410
 msgid "DozentInnen"
 msgstr "Lecturers"
 
-#: export/export_studipdata_func.inc.php:407
+#: export/export_studipdata_func.inc.php:411
 msgid "TutorInnen"
 msgstr "Tutors"
 
-#: export/export_studipdata_func.inc.php:408
-#: export/export_studipdata_func.inc.php:415
+#: export/export_studipdata_func.inc.php:412
+#: export/export_studipdata_func.inc.php:419
 msgid "AutorInnen"
 msgstr "Authors"
 
-#: export/export_studipdata_func.inc.php:409
-#: export/export_studipdata_func.inc.php:416
+#: export/export_studipdata_func.inc.php:413
+#: export/export_studipdata_func.inc.php:420
 msgid "LeserInnen"
 msgstr "Readers"
 
-#: export/export_studipdata_func.inc.php:410
-#: export/export_studipdata_func.inc.php:417
+#: export/export_studipdata_func.inc.php:414
+#: export/export_studipdata_func.inc.php:421
 msgid "Vorläufig akzeptierte TeilnehmerInnen"
-msgstr ""
+msgstr "Provisionally accepted participants"
 
-#: export/export_studipdata_func.inc.php:413
+#: export/export_studipdata_func.inc.php:417
 msgid "LeiterInnen"
 msgstr "Co-ordinators"
 
-#: export/export_studipdata_func.inc.php:414
+#: export/export_studipdata_func.inc.php:418
 msgid "Mitglieder"
 msgstr "Members"
 
-#: export/export_studipdata_func.inc.php:420
+#: export/export_studipdata_func.inc.php:424
 msgid "Anmeldeliste"
-msgstr ""
+msgstr "List of registrations"
 
 #: export/export_xml_func.inc.php:55
 msgid "Alle Einrichtungen"
@@ -443,32 +442,32 @@ msgstr "All institutes"
 msgid "Datenexport"
 msgstr "Data export"
 
-#: export/export_xml.inc.php:120
+#: export/export_xml.inc.php:139
 msgid "Es wurden keine Daten gefunden!"
 msgstr "No data was found!"
 
-#: export/export_xml.inc.php:121
+#: export/export_xml.inc.php:140
 msgid ""
 "Es wurden keine Daten gefunden! Die &uuml;bergebene ID ist mit keinen "
 "Veranstaltungs- / Personendaten verbunden."
 msgstr ""
 "No data was found! The given ID is not connected to any course or user data."
 
-#: export/export_xml.inc.php:131
+#: export/export_xml.inc.php:150
 msgid "Die Daten wurden erfolgreich exportiert."
 msgstr "The data was successfully exported."
 
-#: export/export_xml.inc.php:133
+#: export/export_xml.inc.php:152
 #, c-format
 msgid "%s Objekt wurde verarbeitet."
 msgstr "%s object was processed."
 
-#: export/export_xml.inc.php:135
+#: export/export_xml.inc.php:154
 #, c-format
 msgid "%s Objekte wurden verarbeitet."
 msgstr "%s objects were processed."
 
-#: export/export_xml.inc.php:172
+#: export/export_xml.inc.php:191
 #, c-format
 msgid "Um die XML-Datei jetzt herunterzuladen klicken Sie %s hier %s."
 msgstr "To download the XML file click %shere%s."
@@ -656,10 +655,9 @@ msgstr ""
 
 #: export/export_xslt_vars.inc.php:115
 msgid "Warteliste"
-msgstr ""
+msgstr "waiting list"
 
 #: export/export_xslt_vars.inc.php:116
-#, fuzzy
 msgid ""
 "Modul zur Ausgabe von Personendaten als RTF-Datei. Es werden die Grunddaten "
 "der Personen auf der Warteliste einer einzelnen Veranstaltung in eine "
@@ -667,10 +665,10 @@ msgid ""
 "ausgegeben. Die Ausgabe-Datei kann in einer Textverarbeitung bearbeitet "
 "werden."
 msgstr ""
-"Module for the output of user data as RTF file. The basic data of course "
-"participants of a single course will be written in a table. The contingent "
-"and program of study will also be exported. The output data can be edited in "
-"a word processing program."
+"Module for the output of user data as RTF file. The basic data of "
+"participants entered on the waiting list of a single course will be written "
+"in a table. Contingents and programs of study will also be exported, too. "
+"The output data can be edited using a word processing program."
 
 #: export/export_xslt_vars.inc.php:121
 msgid ""
