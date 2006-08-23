@@ -95,9 +95,9 @@ if ($db->next_record()) $can_change = TRUE; // Person darf etwas aendern....
  */
 function createInfoBox ($imgLogo) {
         /* Define infobox text ------------------------------------------------ */
-        $info1 =  array ("icon" => "pictures/eval-icon.gif",
+        $info1 =  array ("icon" => "eval-icon.gif",
         		"text" => _("Auf dieser Seite k&ouml;nnen Sie die Auswertung Ihrer Evaluation konfigurieren.")); 
-	$info2 = array ("icon" => "pictures/i.gif",
+	$info2 = array ("icon" => "i.gif",
 			"text" => _("W&auml;hlen Sie Ihre Einstellungen und dr&uuml;cken Sie auf \"Template speichern\". Anschlie&szlig;end kommen Sie mit dem Button unten links zur&uuml;ck zu Ihrer Evaluation."));
 	
 	$infobox = array (array ("kategorie" => _("Information:"),
@@ -136,7 +136,7 @@ if (isset($eval_id) && $can_change) {
 	$db_template->next_record();
 
 	echo "<TABLE BORDER=\"0\" WIDTH=\"100%\" CELLSPACING=\"0\" CELLPADDING=\"0\">";
-	echo "<tr><td class=\"topic\" COLSPAN=\"4\" align=\"left\"><IMG SRC=\"pictures/eval-icon.gif\" BORDER=\"0\"><FONT SIZE=\"-1\"><B>"._("Auswertungskonfiguration")."</B></FONT></td></tr>\n";
+	echo "<tr><td class=\"topic\" COLSPAN=\"4\" align=\"left\"><IMG SRC=\"{$GLOBALS['ASSETS_URL']}images/eval-icon.gif\" BORDER=\"0\"><FONT SIZE=\"-1\"><B>"._("Auswertungskonfiguration")."</B></FONT></td></tr>\n";
 	echo "  <TR>";
 	echo "    <TD COLSPAN=\"4\" CLASS=\"blank\">&nbsp;</TD>\n";
 	echo "  </TR>";
@@ -266,7 +266,7 @@ if (isset($eval_id) && $can_change) {
 	echo "</TABLE>\n";
 	echo "</FORM>\n";
 	echo "    </TD>\n";
-	echo "    <TD CLASS=\"blank\" WIDTH=\"2%\" ALIGN=\"CENTER\" VALIGN=\"TOP\">".createInfoBox("pictures/evaluation.jpg")."</TD>";
+	echo "    <TD CLASS=\"blank\" WIDTH=\"2%\" ALIGN=\"CENTER\" VALIGN=\"TOP\">".createInfoBox("evaluation.jpg")."</TD>";
 	echo "    <TD CLASS=\"blank\" WIDTH=\"1%\">&nbsp;</TD>\n";
 	echo "  </TR>\n";
 	echo "  <TR>";
