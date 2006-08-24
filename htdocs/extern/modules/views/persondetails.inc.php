@@ -86,7 +86,7 @@ else {
 
 echo "<table" . $this->config->getAttributes("TableHeader", "table") . ">\n";
 
-$studip_link = "http://{$GLOBALS['EXTERN_SERVER_NAME']}edit_about.php";
+$studip_link = $GLOBALS['ABSOLUTE_URI_STUDIP'] . 'edit_about.php';
 $studip_link .= "?login=yes&view=Daten&usr_name=$username";
 if ($this->config->getValue("Main", "studiplink") == "top") {
 	$args = array("width" => "100%", "height" => "40", "link" => $studip_link);
@@ -380,12 +380,11 @@ function lehre (&$this, $db, $alias_content, $text_div, $text_div_end) {
 				$out .= $text_div;
 				$j = 0;
 				while ($db1->next_record()) {
-					if ($j) $out .= "<br><br>";
-					$lnk = $lnk_sdet . $db1->f("Seminar_id");
-					$out .= "<font" . $this->config->getAttributes("LinkIntern", "font") . ">";
-					$out .= "<a href=\"$lnk\"" . $this->config->getAttributes("LinkIntern", "a") . ">";
-					$out .= htmlReady($db1->f("Name"), TRUE) . "</a></font>\n";
-					if($db1->f("Untertitel") != "") {
+					if ($j) $out .= "<br>";
+					$out .= $this->elements['LinkIntern']->toString(array('module' => 'Lecturedetails',
+							'link_args' => 'seminar_id=' . $db1->f('Seminar_id'),
+							'content' => htmlReady($db1->f('Name'), TRUE)));
+					if($db1->f('Untertitel') != '') {
 						$out .= "<font" . $this->config->getAttributes("TableParagraphText", "font") . ">";
 						$out .= "<br>" . htmlReady($db1->f("Untertitel"), TRUE) . "</font>\n";
 					}
@@ -472,7 +471,7 @@ function head (&$this, $db, $a) {
 		if ($this->config->getValue("Main", "showimage")) {
 			echo "<td" . $this->config->getAttributes("PersondetailsHeader", "picturetd") . ">";
 			if (file_exists("{$GLOBALS['ABSOLUTE_PATH_STUDIP']}/user/" . $db->f("user_id").".jpg")) {
-				echo "<img src=\"http://{$GLOBALS['EXTERN_SERVER_NAME']}user/";
+				echo "<img src=\"{$GLOBALS['ABSOLUTE_URI_STUDIP']}user/";
 				echo $db->f("user_id") . ".jpg\" alt=\"Foto " . htmlReady(trim($db->f("fullname"))) . "\"";
 				echo $this->config->getAttributes("PersondetailsHeader", "img") . "></td>";
 			}
