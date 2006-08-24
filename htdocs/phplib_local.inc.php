@@ -49,14 +49,6 @@ require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipNews.class.php");
 if (strpos( PHP_OS,"WIN") !== false && $CHAT_ENABLE == true && $CHAT_SERVER_NAME == "ChatShmServer")	//Attention: file based chat for windows installations (slow)
 	$CHAT_SERVER_NAME = "ChatFileServer";
 
-// path generation for SRI-interface (external pages)
-if ($EXTERN_ENABLE) {
-	if ($EXTERN_SERVER_NAME && preg_match('#^(http://)?(.+?)(/)?$#', $EXTERN_SERVER_NAME, $matches))
-		$EXTERN_SERVER_NAME  = $matches[2] . '/';
-	else
-	$EXTERN_SERVER_NAME = $_SERVER["HTTP_HOST"] . $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'];
-}
-
 if (!$GLOBALS['ABSOLUTE_URI_STUDIP']){
 	$GLOBALS['ABSOLUTE_URI_STUDIP'] = ( ($_SERVER["SERVER_PORT"] == 443 || $_SERVER["HTTPS"] == "on") ? "https://" : "http://") 
 									. $_SERVER["SERVER_NAME"] . (($_SERVER["SERVER_PORT"] != 443 && $_SERVER["SERVER_PORT"] != 80) ? ":" . $_SERVER["SERVER_PORT"] : "") 

@@ -45,12 +45,8 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth",
 $perm->check("admin");
 
 if ($EXTERN_ENABLE) {
-	// check the name of the server
-	if (preg_match('#^(http://)?(.+?)(/)?$#', $EXTERN_SERVER_NAME, $matches))
-		$EXTERN_SERVER_NAME  = $matches[2] . '/';
 	include($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_EXTERN . "/admin_extern.inc.php");
-}
-else {
+} else {
 	// Start of Output
 	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head

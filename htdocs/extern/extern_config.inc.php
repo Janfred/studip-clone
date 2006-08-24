@@ -90,10 +90,19 @@ $EXTERN_LOG_FILE = "";
 // don't edit below this line
 //==============================================================================
 
-if (substr($EXTERN_SERVER_NAME, -1) != "/")
-	$EXTERN_SERVER_NAME .= "/";
-
 if (substr($EXTERN_CONFIG_FILE_PATH, -1) != "/")
 	$EXTERN_CONFIG_FILE_PATH .= "/";
+
+// path generation for SRI-interface (external pages)
+if (preg_match('#^(http://|https://)?(.+?)(/)?$#', $GLOBALS['EXTERN_SERVER_NAME'], $matches)) {
+	if ($matches[1]) {
+		$GLOBALS['EXTERN_SERVER_NAME']  = $matches[1];
+	} else {
+		$GLOBALS['EXTERN_SERVER_NAME']  = 'http://';
+	}
+	$GLOBALS['EXTERN_SERVER_NAME']  .= $matches[2] . '/';
+} else {
+	$GLOBALS['EXTERN_SERVER_NAME'] = $GLOBALS['ABSOLUTE_URI_STUDIP'];
+} 
 
 ?>
