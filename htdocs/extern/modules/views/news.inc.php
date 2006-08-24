@@ -39,7 +39,7 @@ if ($this->config->getValue("Main", "studiplink")) {
 	echo "width=\"" . $this->config->getValue("TableHeader", "table_width");
 	echo "\" align=\"" . $this->config->getValue("TableHeader", "table_align") . "\">\n";
 
-	$studip_link = "http://{$GLOBALS['EXTERN_SERVER_NAME']}institut_main.php?auswahl=" . $this->config->range_id;
+	$studip_link = $GLOBALS['ABSOLUTE_URI_STUDIP'] . 'institut_main.php?auswahl=' . $this->config->range_id;
 	$studip_link .= "&redirect_to=admin_news.php&cmd=new_entry&view=inst&new_inst=TRUE&range_id=";
 	$studip_link .= $this->config->range_id;
 	if ($this->config->getValue("Main", "studiplink") == "top") {

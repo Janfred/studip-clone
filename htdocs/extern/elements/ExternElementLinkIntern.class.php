@@ -131,18 +131,16 @@ class ExternElementLinkIntern extends ExternElement {
 				else
 					$link .= "?" . $args["link_args"];
 			}
-		}
-		else {
+		} else {
 			if ($sri_link) {
-				$link = "http://{$GLOBALS['EXTERN_SERVER_NAME']}extern.php";
+				$link = $GLOBALS['EXTERN_SERVER_NAME'] . 'extern.php';
 				if ($args["link_args"])
 					$link .= "?" . $args["link_args"] . "&";
 				else
 					$link .= "?";
 				$link .= "page_url=" . $sri_link;
-			}
-			else {
-				$link = "http://{$GLOBALS['EXTERN_SERVER_NAME']}extern.php?module={$args['module']}";
+			} else {
+				$link = $GLOBALS['EXTERN_SERVER_NAME'] . "extern.php?module={$args['module']}";
 				if ($config = $this->config->getValue($this->name, "config"))
 					$link .= "&config_id=" . $config;
 				$link .= "&range_id={$this->config->range_id}";

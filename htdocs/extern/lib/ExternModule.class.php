@@ -303,11 +303,10 @@ class ExternModule {
 			$link = $sri_link;
 		else {
 			if ($sri_link) {
-				$link = "http://{$GLOBALS['EXTERN_SERVER_NAME']}extern.php";
-				$link .= "?page_url=$sri_link";
+				$link = $GLOBALS['EXTERN_SERVER_NAME'] . "extern.php?page_url=$sri_link";
 			}
 			else {
-				$link = "http://{$GLOBALS['EXTERN_SERVER_NAME']}extern.php?module=$module";
+				$link = $GLOBALS['EXTERN_SERVER_NAME'] . "extern.php?module=$module";
 				if ($config)
 					$link .= "&config_id=$config";
 				$link .= "&range_id={$this->config->range_id}";

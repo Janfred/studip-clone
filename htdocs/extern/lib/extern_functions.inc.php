@@ -327,11 +327,10 @@ function get_config_info ($range_id, $config_id) {
 			$sri .= "&lt;global id=\"$global_config\" /&gt;\n\t";
 		$sri .= "&lt;range id=\"$range_id\" /&gt;";
 		$sri .= "\n&lt;/studip_remote_include&gt;";
-		$link_sri = "http://" . $GLOBALS["EXTERN_SERVER_NAME"];
-		$link_sri .= "extern.php?page_url=" . _("URL_DER_INCLUDE_SEITE");
+		$link_sri = $GLOBALS["EXTERN_SERVER_NAME"] . 'extern.php?page_url=' . _("URL_DER_INCLUDE_SEITE");
 		
 		if ($level) {
-			$link = "http://" . $GLOBALS["EXTERN_SERVER_NAME"] . "extern.php?module=$module";
+			$link = $GLOBALS["EXTERN_SERVER_NAME"] . "extern.php?module=$module";
 			if ($global_config)
 				$link .= "&config_id=$config_id&global_id=$global_config&range_id=$range_id";
 			else
@@ -343,7 +342,7 @@ function get_config_info ($range_id, $config_id) {
 				$sri_structure .= "global_id = $global_config\n\t";
 			$sri_structure .= "range_id=$range_id";
 			$sri_structure .= "\n\tview = tree\n&lt;/studip_remote_include&gt;";
-			$link_br = "http://" . $GLOBALS["EXTERN_SERVER_NAME"] . "extern.php?module=$module<br>";
+			$link_br = $GLOBALS["EXTERN_SERVER_NAME"] . "extern.php?module=$module<br>";
 			if ($global_config)
 				$link_br .= "&config_id=$config_id<br>&global_id=$global_config<br>&range_id=$range_id";
 			else

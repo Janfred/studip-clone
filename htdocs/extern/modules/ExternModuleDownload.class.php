@@ -210,7 +210,7 @@ class ExternModuleDownload extends ExternModule {
 				if ($icon)
 					$picture_file = $GLOBALS['ASSETS_URL']."images/$icon";
 
-				$download_link = "http://{$GLOBALS['EXTERN_SERVER_NAME']}";
+				$download_link = $GLOBALS['ABSOLUTE_URI_STUDIP'];
 				$download_link .= sprintf("sendfile.php?type=0&file_id=%s&file_name=%s\"",
 						$db->f("dokument_id"), $db->f("filename"));
 

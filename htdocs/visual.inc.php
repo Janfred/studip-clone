@@ -440,15 +440,12 @@ function format_wiki_comment($comment, $metainfo, $show_comment) {
 function latex($text, $extern = FALSE) {
 	global $ABSOLUTE_PATH_STUDIP,$CANONICAL_RELATIVE_PATH_STUDIP,$TEXCACHE_PATH,$LATEXRENDER_ENABLE;
 	global $LATEX_PATH,$DVIPS_PATH,$CONVERT_PATH,$IDENTIFY_PATH,$TMP_PATH, $LATEX_FORMATS;
-	global $EXTERN_SERVER_NAME;
 
 	if ($LATEXRENDER_ENABLE && isset($LATEX_FORMATS)) {
 		include_once($ABSOLUTE_PATH_STUDIP."/lib/classes/latexrender.class.php");
 		if ($extern) {
-			$extern_path = 'http://' . $EXTERN_SERVER_NAME;
-			$latex = new LatexRender($ABSOLUTE_PATH_STUDIP.$TEXCACHE_PATH, $extern_path . $TEXCACHE_PATH);
-		}
-		else {
+			$latex = new LatexRender($ABSOLUTE_PATH_STUDIP.$TEXCACHE_PATH, $GLOBALS['ABSOLUTE_URI_STUDIP'] . $TEXCACHE_PATH);
+		} else {
 			$latex = new LatexRender($ABSOLUTE_PATH_STUDIP.$TEXCACHE_PATH,$CANONICAL_RELATIVE_PATH_STUDIP.$TEXCACHE_PATH);
 		}
 		$latex->_latex_path = $LATEX_PATH;
@@ -475,12 +472,12 @@ function latex($text, $extern = FALSE) {
 
 				if ($url != false) {
 					$text = substr_replace($text, "<img src=\"".$url."\">",$pos,strlen($tex_matches[0][$i]));
-				}
-				else {
-					if ($extern)
+				} else {
+					if ($extern) {
 						$text = '';
-					else
+					} else {
 						$text = substr_replace($text, "[unparseable or potentially dangerous latex formula]",$pos,strlen($tex_matches[0][$i]));
+					}
 				}
 			}
 		}
@@ -921,7 +918,6 @@ function idna_link($link, $mail = false){
 */
 function smile ($text = "", $extern = FALSE) {
 	global $SMILE_SHORT, $SMILE_PATH, $CANONICAL_RELATIVE_PATH_STUDIP;
-	global $EXTERN_SERVER_NAME;
 
 	if(empty($text))
 		return $text;
@@ -934,10 +930,8 @@ function smile ($text = "", $extern = FALSE) {
 		$replace .= "<a href=\"{$CANONICAL_RELATIVE_PATH_STUDIP}show_smiley.php\" target=\"_blank\">";
 		$replace .= "<img alt=\"\\2\" title=\"\\2\" border=\"0\" src=\"";
 		$replace .= "$path$SMILE_PATH/\\2.gif\"></a>\\3";
-	}
-	else {
-		if ($EXTERN_SERVER_NAME) $path = (($_SERVER["SERVER_PORT"] == 443 || $_SERVER["HTTPS"] == "on") ? "https://" : "http://") . $EXTERN_SERVER_NAME;
-		else $path = $CANONICAL_RELATIVE_PATH_STUDIP;
+	} else {
+		$path = $GLOBALS['ABSOLUTE_URI_STUDIP'];
 		$replace .= "<img alt=\"\\2\" title=\"\\2\" border=\"0\" src=\"";
 		$replace .= "$path$SMILE_PATH/\\2.gif\">\\3";
 	}
@@ -953,8 +947,7 @@ function smile ($text = "", $extern = FALSE) {
 			$replaces[] = "\\1<a href=\"{$CANONICAL_RELATIVE_PATH_STUDIP}show_smiley.php\" target=\"_blank\">"
 					. "<img alt=\"$value\" title=\"$value\" border=\"0\" src=\""
 					. "$path$SMILE_PATH/$value.gif\"></a>\\2";
-		}
-		else {
+		} else {
 			$replaces[] = "\\1<img alt=\"$value\" title=\"$value\" border=\"0\" src=\""
 					. "$path$SMILE_PATH/$value.gif\">\\2";
 		}
@@ -979,13 +972,12 @@ function smile ($text = "", $extern = FALSE) {
 */
 function symbol ($text = "", $extern = FALSE) {
 	global $SYMBOL_SHORT, $SYMBOL_PATH, $CANONICAL_RELATIVE_PATH_STUDIP;
-	global $EXTERN_SERVER_NAME;
 
 	if(empty($text))
 		return $text;
 	
-	if ($extern && $EXTERN_SERVER_NAME)
-		$path = (($_SERVER["SERVER_PORT"] == 443 || $_SERVER["HTTPS"] == "on") ? "https://" : "http://") . $EXTERN_SERVER_NAME;
+	if ($extern)
+		$path = $GLOBALS['ABSOLUTE_URI_STUDIP'];
 	else
 		$path = $CANONICAL_RELATIVE_PATH_STUDIP;
 
