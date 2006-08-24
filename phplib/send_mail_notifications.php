@@ -49,6 +49,7 @@ $db = new DB_Seminar();
 $notification = new ModulesNotification();
 $smtp =& $notification->smtp;
 $user = new FakeUser();
+$perm = new Seminar_Perm();
 
 $db->query("SELECT aum.user_id,aum.username,{$GLOBALS['_fullname_sql']['full']} as fullname,Email FROM seminar_user su INNER JOIN auth_user_md5 aum USING(user_id) LEFT JOIN user_info ui USING(user_id) WHERE notification != 0 GROUP BY su.user_id");
 while($db->next_record()){
