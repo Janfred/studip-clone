@@ -77,6 +77,4 @@ Zwischen erstem und dritten Wert sollte auch bei Vollast ein ausreichender Siche
 bestehen bleiben.
 
 
-- The Stud.IP Crew <crew@studip.de> 2005
-
-$Id$
+- The Stud.IP Core Group <info@studip.de> 2006

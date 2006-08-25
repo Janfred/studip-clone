@@ -140,4 +140,11 @@ extension = yaz.so
 
 Neuladen des Apache-Webservers nicht vergessen!
 
-- The Stud.IP Crew <crew@studip.de> 2005
+Q: Ich möchte Grafiken, CSS und Javascrips gerne auslagern. Wie gehe ich dabei vor?
+
+Bitte passen Sie den Wert $ASSETS_URL in der local.inc an. Achten Sie bitte unbedingt darauf, dass Sie den absoluten Pfad zu dem Assets-Verzeichnis
+angeben, da die Bildarstellung ansonsten nicht korrekt funktioniert.
+In der E-Learning-Schnittstelle müssen ggf. die Pfade zu den verwendeten Grafiken anpassen, wenn diese nach dem Verschieben des Assets-
+Verzeichnisses nicht korrekt dargestellt werden. Sie finden diese Einstellungen in der local.inc.
+
+- The Stud.IP Core Group <info@studip.de> 2006

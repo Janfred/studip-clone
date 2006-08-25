@@ -1,5 +1,5 @@
 Stud.IP Installation Guide
-Version 1.3
+Version 1.4
 
 Inhalt:
 
@@ -105,8 +105,8 @@ der php.ini überprüft werden (siehe dazu im Abschnitt 1.3).
 1.1.1 Konfigration des Systems für große Nutzerzahlen
 -----------------------------------------------------
 
-Grundsätzlich ist Stud.IP in der Standard-Konfiguration der im letzten Abschnitt angegebenen
-Komponenten lauffähig. 
+Grundsätzlich ist Stud.IP in der Standard-Konfiguration der im letzten Abschnitt 
+angegebenen Komponenten lauffähig. 
 Weitere Einstellungen, die den Server für den Einsatz mit großen Nutzerzahlen
 "tunen", können in der httpd.conf (Apache), in der my.cnf (MySQL) und 
 in den Systemeinstellungen vorgenommen werden. Einzelheiten finden Sie in der 
@@ -122,16 +122,16 @@ nach erfolgreicher Installation gelöscht oder als Referenz aufbewahrt werden.
 
 Kurzübersicht der im Paket vorhandenen Verzeichnisse:
 
-- studip-db			SQL-Dumps für mysql-Datenbankeinrichtung und 
-					Dumps mit Demo-Daten.
+- studip-db		SQL-Dumps für mysql-Datenbankeinrichtung und 
+			Dumps mit Demo-Daten.
 - studip-doc		Dokumentationen zur Installation
 - studip-config		Default-Konfigurationsdateien (local.inc, config.inc.php)
 - studip-htdocs		Das Stud.IP-Kernsystem (später im Document-Root des Webservers)
 - studip-phplib		Angepasste phplib-Version für Stud.IP
 - studip-update		Migrationsskripte für ältere Stud.IP-Versionen
-					(Für Versionsupgrade bitte README lesen!)
+			(Für Versionsupgrade bitte README lesen!)
 - studip-varlib		Default-Struktur für Datenverzeichnisse ausserhalb
-					des Apache-Document-Root-Verzeichnisses.
+			des Apache-Document-Root-Verzeichnisses.
 
 
 1.3 Einrichten der phplib
@@ -226,7 +226,6 @@ Wichtig sind nur folgende Optionen:
   dateien abgelegt werden.
   ACHTUNG: Für dieses Verzeichnis benötigt der Webserver Schreibrechte!
 
-
 1.3.3 weitere optionale Paramter in der local.inc
 -------------------------------------------------
 Neben den oben beschrieben Optionen gibt es noch weitere Parameter, die in der 
@@ -246,8 +245,7 @@ local.inc optional festgelegt werden können:
   
 Weitere Parameter können seit der Version 1.2 direkt im Konfigurationseditor im Breich 
 "globale Einstellungen" durch root-Benutzer im Webfrontend eingegeben bzw. umgestellt 
-werden. Diese Konfigurationsmöglichkeit befindet sich jedoch noch im Aufbau und erfasst
-bisher nur einige wenige Parameter.
+werden.
 
 1.3.4 Zusätzliche LaTeX-Formate definieren
 ------------------------------------------
@@ -578,6 +576,8 @@ Eine weitere Möglichkeit ist die Speicherung in einer Tabelle der Datenbank,
 in diesem Fall sollte $CHAT_SERVER_NAME auf "ChatMysqlServer" umgestellt werden.
 
 Ilias-Connect-Modul (Ilias 2):
+ACHTUNG: Dieses Modul wird nicht mehr unterstützt. Bitte benutzen Sie die 
+E-Learning-Schnittstelle zur Anbindung von Ilias3 (siehe unten).
 Für das Modul "Ilias Connect", dass die Verbindung zu Ilias Lernmodulen
 ermöglicht, wird eine laufende Ilias Installation der Version 2.3.3 oder besser
 (nicht 3.x !) benötigt. Die Datei studip-htdocs/lernmodule/studip2ilias.php muss
@@ -590,27 +590,28 @@ werden.
 Elearning Schnittstelle (Ilias 3):
 Hier eine gekürzte Anleitung für Ungeduldige:
 - Installieren sie Ilias in einer Version ab 3.6.0 nach Anleitung (Die
-Installation kann auch auf einem anderen Server liegen)
+  Installation kann auch auf einem anderen Server liegen). Von der Benutzung der
+  Version 3.7.0 raten wir gegenwärtig noch deutlich ab (August 2006).
 - Wenn sie Ilias 3.6.0 benutzen, kopieren sie die Datei
-studip-htdocs/elearning/studip_referrer.php in das Ilias Verzeichnis (dort
-befindet sich bereits eine ältere Version)
-- aktivieren sie in Ilias 3 unter Administration/Einstellungen den Punkt
-"Externe Benutzerverwaltung (SOAP)"
+  studip-htdocs/elearning/studip_referrer.php in das Ilias Verzeichnis (dort
+  befindet sich bereits eine ältere Version)
+- aktivieren sie in Ilias3 unter Administration/Einstellungen den Punkt
+  "Externe Benutzerverwaltung (SOAP)"
 - Legen sie in Ilias einen Administrationsaccount an, der zur Kommunikation
-benutzt werden soll. Melden sie sich einmal mit diesem Account in Ilias an
-(wichtig!)
+  benutzt werden soll. Melden sie sich einmal mit diesem Account in Ilias an
+  (wichtig!)
 - Legen sie im "Magazin" eine Kategorie an, unter der die Daten von Stud.IP
-Nutzern gespeichert werden sollen.
+  Nutzern gespeichert werden sollen.
 - in der Konfiguration von Stud.IP (local.inc) setzen sie $SOAP_ENABLE und
-$ELEARNING_INTERFACE_ENABLE auf true.
+  $ELEARNING_INTERFACE_ENABLE auf TRUE.
 - in der Variable $ELEARNING_INTERFACE_MODULES['ilias3'] tragen sie die Daten
-ihrer Ilias Installation ein (name, ABSOLUTE_PATH_ELEARNINGMODULES,
-ABSOLUTE_PATH_SOAP , soap_data (username und password für den gerade angelegten
-Administratoraccount, client_id der Ilias Installation))
+  ihrer Ilias Installation ein (name, ABSOLUTE_PATH_ELEARNINGMODULES,
+  ABSOLUTE_PATH_SOAP , soap_data (username und password für den gerade angelegten
+  Administratoraccount, client_id der Ilias Installation))
 - Rufen sie in Stud.IP als "root" in den Administrationsbereich unter
-Tools/Lernmodul-Schnittstelle und wählen sie ihre Ilias Installation aus. Geben
-sie weiter unten auf der Seite unter "Kategorie" den Namen der Kategorie ein,
-die sie im Ilias Magazin erstellt haben, und klicken sie auf "aktivieren"
+  Tools/Lernmodul-Schnittstelle und wählen sie ihre Ilias Installation aus. Geben
+  sie weiter unten auf der Seite unter "Kategorie" den Namen der Kategorie ein,
+  die sie im Ilias Magazin erstellt haben, und klicken sie auf "aktivieren"
 
 Eine ausführlichere Anleitung finden sie in der Datei 
 verbindung_studip_ilias3.rtf oder verbindung_studip_ilias3.pdf
@@ -699,7 +700,7 @@ Variante entfernt werden.
 Plugin Schnittstelle:
 Die PluginEngine lässt sich über verschiedene Konfigurationsvariablen in der
 local.inc anpassen. Zur Aktivierung der PluginEngine muss die Variable
-$PLUGINS_ENABLE auf true gesetzt werden. Danach erscheint auf der Startseite des
+$PLUGINS_ENABLE auf TRUE gesetzt werden. Danach erscheint auf der Startseite des
 root-Administrators der Menüeintrag Verwaltung von Plugins.
 In der Standardkonfiguration können hier nur Pluginpakete aus einem definierten
 Verzeichnis auf dem Webserver in Stud.IP importiert werden. Dieses Verzeichnis
@@ -739,6 +740,5 @@ Neue Nutzeraccounts können entwender über die globale Nutzerverwaltung (Schlüsse
 Symbol in der Kopfzeile des Systems) oder über die Selbstregistrierung (wenn diese
 in der local.inc aktiviert wurde) erstellt werden.
 
-- The Stud.IP Crew <crew@studip.de> 2006
 
-$Id$
+- The Stud.IP Core Group <info@studip.de> 2006
