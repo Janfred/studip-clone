@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2006-08-21 23:17+0200\n"
+"POT-Creation-Date: 2006-08-28 12:29+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1064,9 +1064,8 @@ msgstr ""
 #: institut_members.php:148 institut_members.php:168 institut_members.php:188
 #: institut_members.php:212 institut_members.php:230 institut_members.php:248
 #: institut_members.php:264 institut_members.php:280 links_admin.inc.php:860
-#: meine_seminare.php:406 meine_seminare.php:968 meine_seminare.php.bck:406
-#: meine_seminare.php.bck:968 my_archiv.php:94 online.php:177 online.php:234
-#: sem_browse.inc.php:428
+#: meine_seminare.php:406 meine_seminare.php:968 my_archiv.php:94
+#: online.php:177 online.php:234 sem_browse.inc.php:428
 msgid "Name"
 msgstr ""
 
@@ -1484,10 +1483,10 @@ msgstr ""
 #: admin_lit_list.php:196 browse_elearning.php:80 browse_lernmodule.php:69
 #: dates.php:104 details.php:214 elearning_interface.php:340
 #: elearning_interface.php:362 literatur.php:71 lit_search.php:301
-#: meine_seminare.php:800 meine_seminare.php.bck:800 migration2studip.php:209
-#: migration2studip.php:295 my_archiv.php:174 my_elearning.php:194
-#: seminar_lernmodule.php:193 seminar_lernmodule.php:237
-#: seminar_lernmodule.php:306 sem_portal.php:257 statusgruppen.php:279
+#: meine_seminare.php:800 migration2studip.php:209 migration2studip.php:295
+#: my_archiv.php:174 my_elearning.php:194 seminar_lernmodule.php:193
+#: seminar_lernmodule.php:237 seminar_lernmodule.php:306 sem_portal.php:257
+#: statusgruppen.php:279
 msgid "Aktionen:"
 msgstr ""
 
@@ -1606,9 +1605,7 @@ msgstr ""
 #: inst_admin.php:390 institut_members.php:109 institut_members.php:171
 #: institut_members.php:217 institut_members.php:267 institut_members.php:352
 #: links_admin.inc.php:866 meine_seminare.php:412 meine_seminare.php:662
-#: meine_seminare.php:969 meine_seminare.php.bck:412
-#: meine_seminare.php.bck:662 meine_seminare.php.bck:969 my_archiv.php:96
-#: new_user_md5.php:546
+#: meine_seminare.php:969 my_archiv.php:96 new_user_md5.php:546
 msgid "Status"
 msgstr ""
 
@@ -1646,8 +1643,7 @@ msgstr ""
 #: details.php:243 elearning_interface.php:332 elearning_interface.php:354
 #: eval_config.php:103 evaluation_export.php:173 export.php:153
 #: institut_browse.php:92 literatur.php:66 lit_search.php:289
-#: meine_seminare.php:763 meine_seminare.php:793 meine_seminare.php.bck:763
-#: meine_seminare.php.bck:793 migration2studip.php:206
+#: meine_seminare.php:763 meine_seminare.php:793 migration2studip.php:206
 #: migration2studip.php:239 my_archiv.php:167 my_elearning.php:186
 #: seminar_lernmodule.php:185 seminar_lernmodule.php:221
 #: seminar_lernmodule.php:294 sem_portal.php:266 sms_box.php:558
@@ -1702,14 +1698,14 @@ msgstr ""
 msgid "E-Learning-Schnittstelle nicht eingebunden"
 msgstr ""
 
-#: admin_extern.php:58
+#: admin_extern.php:54
 msgid ""
 "Die Verwaltung externer Seiten ist nicht eingebunden. Bitte aktivieren Sie "
 "diese in den Systemeinstellungen, oder wenden Sie sich an den oder die "
 "SystemadministratorIn."
 msgstr ""
 
-#: admin_extern.php:59
+#: admin_extern.php:55
 msgid "Modul \"externe Seiten\" nicht eingebunden"
 msgstr ""
 
@@ -2210,7 +2206,7 @@ msgid "(Kein externer Link vorhanden.)"
 msgstr ""
 
 #: admin_literatur_overview.php:414 lit_overview_print_view.php:102
-#: meine_seminare.php:770 meine_seminare.php.bck:770
+#: meine_seminare.php:770
 msgid "Veranstaltungen:"
 msgstr ""
 
@@ -3269,8 +3265,7 @@ msgid " (Suchergebnisse werden blau angezeigt)"
 msgstr ""
 
 #: admin_seminare1.php:735 links_openobject.inc.php:107
-#: links_openobject.inc.php:213 meine_seminare.php:972
-#: meine_seminare.php.bck:972 teilnehmer.php:546
+#: links_openobject.inc.php:213 meine_seminare.php:972 teilnehmer.php:546
 #: lib/classes/ModulesNotification.class.php:64
 msgid "TeilnehmerInnen"
 msgstr ""
@@ -4757,7 +4752,6 @@ msgid "keine Treffer"
 msgstr ""
 
 #: admin_statusgruppe.php:260 meine_seminare.php:413
-#: meine_seminare.php.bck:413
 msgid "TeilnehmerInnen der Veranstaltung"
 msgstr ""
 
@@ -5446,8 +5440,8 @@ msgid "Es wurden %s Veranstaltungen gefunden."
 msgstr ""
 
 #: archiv.php:410 details.php:313 institut_members.php:456
-#: links_admin.inc.php:863 meine_seminare.php:970 meine_seminare.php.bck:970
-#: sem_browse.inc.php:195 sem_browse.inc.php:375 seminar_main.php:141
+#: links_admin.inc.php:863 meine_seminare.php:970 sem_browse.inc.php:195
+#: sem_browse.inc.php:375 seminar_main.php:141
 #: lib/classes/SemBrowse.class.php:28 lib/classes/SemBrowse.class.php:44
 msgid "DozentIn"
 msgstr ""
@@ -6246,9 +6240,7 @@ msgstr ""
 
 #: contact.inc.php:427 contact.php:113 forum.inc.php:1720 freie.php:200
 #: meine_seminare.php:407 meine_seminare.php:657 meine_seminare.php:971
-#: meine_seminare.php.bck:407 meine_seminare.php.bck:657
-#: meine_seminare.php.bck:971 my_archiv.php:95
-#: lib/classes/AdminNewsController.class.php:172
+#: my_archiv.php:95 lib/classes/AdminNewsController.class.php:172
 #: lib/classes/AdminNewsController.class.php:236
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginStudip.class.php:98
 msgid "Inhalt"
@@ -7516,7 +7508,7 @@ msgstr ""
 msgid "Ihr Passwort wurde ge&auml;ndert!"
 msgstr ""
 
-#: edit_about.php:452 phplib_local.inc.php:617
+#: edit_about.php:452 phplib_local.inc.php:612
 msgid "Der Vorname fehlt oder ist unsinnig!"
 msgstr ""
 
@@ -7524,7 +7516,7 @@ msgstr ""
 msgid "Ihr Vorname wurde ge&auml;ndert!"
 msgstr ""
 
-#: edit_about.php:463 phplib_local.inc.php:622
+#: edit_about.php:463 phplib_local.inc.php:617
 msgid "Der Nachname fehlt oder ist unsinnig!"
 msgstr ""
 
@@ -7546,7 +7538,7 @@ msgstr ""
 msgid "Ihr Username wurde ge&auml;ndert!"
 msgstr ""
 
-#: edit_about.php:499 phplib_local.inc.php:627
+#: edit_about.php:499 phplib_local.inc.php:622
 msgid "Die E-Mail-Adresse fehlt oder ist falsch geschrieben!"
 msgstr ""
 
@@ -8846,7 +8838,7 @@ msgstr ""
 msgid "News"
 msgstr ""
 
-#: freie.php:104 meine_seminare.php:69 meine_seminare.php.bck:69
+#: freie.php:104 meine_seminare.php:69
 #, c-format
 msgid "%s Literaturlisten"
 msgstr ""
@@ -8857,7 +8849,7 @@ msgstr ""
 msgid "Termine"
 msgstr ""
 
-#: freie.php:115 meine_seminare.php:87 meine_seminare.php.bck:87
+#: freie.php:115 meine_seminare.php:87
 #, c-format
 msgid "%s WikiSeiten"
 msgstr ""
@@ -8990,8 +8982,7 @@ msgstr ""
 
 #: functions.php:985 functions.php:1005 functions.php:1025 functions.php:1057
 #: gruppe.php:142 links_admin.inc.php:935 meine_seminare.php:495
-#: meine_seminare.php:1019 meine_seminare.php.bck:495
-#: meine_seminare.php.bck:1019 sem_notification.php:248
+#: meine_seminare.php:1019 sem_notification.php:248
 #: lib/classes/SemBrowse.class.php:354 lib/dbviews/sem_tree.view.php:47
 #: lib/dbviews/sem_tree.view.php:53 lib/dbviews/sem_tree.view.php:82
 msgid "(versteckt)"
@@ -9051,13 +9042,11 @@ msgstr ""
 msgid "Farbgruppen"
 msgstr ""
 
-#: gruppe.php:116 meine_seminare.php:431 meine_seminare.php.bck:431
-#: sem_notification.php:219
+#: gruppe.php:116 meine_seminare.php:431 sem_notification.php:219
 msgid "Gruppierung schließen"
 msgstr ""
 
 #: gruppe.php:119 meine_seminare.php:438 meine_seminare.php:457
-#: meine_seminare.php.bck:438 meine_seminare.php.bck:457
 #: sem_notification.php:224
 msgid "Gruppierung öffnen"
 msgstr ""
@@ -9589,8 +9578,8 @@ msgid ""
 "angepasst - %ssagen Sie uns Ihre Meinung!%s"
 msgstr ""
 
-#: index.php:87 meine_seminare.php:387 meine_seminare.php.bck:387
-#: mystudip.inc.php:174 help/structure.inc.php:197
+#: index.php:87 meine_seminare.php:387 mystudip.inc.php:174
+#: help/structure.inc.php:197
 msgid "Meine Veranstaltungen"
 msgstr ""
 
@@ -9648,7 +9637,7 @@ msgstr ""
 msgid "neue Veranstaltung anlegen"
 msgstr ""
 
-#: index.php:104 meine_seminare.php:913 meine_seminare.php.bck:913
+#: index.php:104 meine_seminare.php:913
 msgid "Veranstaltungen an meinen Einrichtungen"
 msgstr ""
 
@@ -10784,88 +10773,86 @@ msgstr ""
 msgid "keine Gruppierung"
 msgstr ""
 
-#: meine_seminare.php:32 meine_seminare.php.bck:32
+#: meine_seminare.php:32
 #, c-format
 msgid "%s Postings, %s neue"
 msgstr ""
 
-#: meine_seminare.php:34 meine_seminare.php.bck:34
+#: meine_seminare.php:34
 #, c-format
 msgid "%s Postings"
 msgstr ""
 
-#: meine_seminare.php:40 meine_seminare.php.bck:40
+#: meine_seminare.php:40
 #, c-format
 msgid "%s Dokumente, %s neue"
 msgstr ""
 
-#: meine_seminare.php:42 meine_seminare.php.bck:42
+#: meine_seminare.php:42
 #, c-format
 msgid "%s Dokumente"
 msgstr ""
 
-#: meine_seminare.php:48 meine_seminare.php.bck:48
+#: meine_seminare.php:48
 #, c-format
 msgid "%s News, %s neue"
 msgstr ""
 
-#: meine_seminare.php:50 meine_seminare.php.bck:50
+#: meine_seminare.php:50
 #, c-format
 msgid "%s News"
 msgstr ""
 
-#: meine_seminare.php:58 meine_seminare.php.bck:58
+#: meine_seminare.php:58
 msgid " (geändert)"
 msgstr ""
 
-#: meine_seminare.php:67 meine_seminare.php.bck:67
+#: meine_seminare.php:67
 #, c-format
 msgid "%s Literaturlisten, %s neue"
 msgstr ""
 
-#: meine_seminare.php:75 meine_seminare.php.bck:75
+#: meine_seminare.php:75
 #, c-format
 msgid "%s Termine, %s neue"
 msgstr ""
 
-#: meine_seminare.php:77 meine_seminare.php.bck:77
+#: meine_seminare.php:77
 #, c-format
 msgid "%s Termine"
 msgstr ""
 
-#: meine_seminare.php:85 meine_seminare.php.bck:85
+#: meine_seminare.php:85
 #, c-format
 msgid "%s WikiSeiten, %s Änderungen"
 msgstr ""
 
-#: meine_seminare.php:95 meine_seminare.php.bck:95
+#: meine_seminare.php:95
 #, c-format
 msgid "%s Content-Modul(e), %s neue"
 msgstr ""
 
-#: meine_seminare.php:97 meine_seminare.php.bck:97
+#: meine_seminare.php:97
 #, c-format
 msgid "%s Content-Modul(e)"
 msgstr ""
 
-#: meine_seminare.php:105 meine_seminare.php.bck:105
+#: meine_seminare.php:105
 #, c-format
 msgid "%s Umfrage(n), %s neue"
 msgstr ""
 
-#: meine_seminare.php:107 meine_seminare.php.bck:107
+#: meine_seminare.php:107
 #, c-format
 msgid "%s Umfrage(n)"
 msgstr ""
 
-#: meine_seminare.php:120 meine_seminare.php:124 meine_seminare.php.bck:120
-#: meine_seminare.php.bck:124
+#: meine_seminare.php:120 meine_seminare.php:124
 #, c-format
 msgid "%s Plugins, %s neue"
 msgstr ""
 
-#: meine_seminare.php:185 meine_seminare.php:221 meine_seminare.php.bck:185
-#: meine_seminare.php.bck:221
+#: meine_seminare.php:185 meine_seminare.php:221
 #, c-format
 msgid ""
 "Die Veranstaltung <b>%s</b> ist als <b>bindend</b> angelegt. Wenn Sie sich "
@@ -10873,7 +10860,7 @@ msgid ""
 "Veranstaltung wenden."
 msgstr ""
 
-#: meine_seminare.php:193 meine_seminare.php.bck:193
+#: meine_seminare.php:193
 #, c-format
 msgid ""
 "Wollen Sie das Abonnement der teilnahmebeschr&auml;nkten Veranstaltung <b>%"
@@ -10881,20 +10868,20 @@ msgid ""
 "Veranstaltung und m&uuml;ssen sich ggf. neu anmelden!"
 msgstr ""
 
-#: meine_seminare.php:197 meine_seminare.php.bck:197
+#: meine_seminare.php:197
 #, c-format
 msgid ""
 "Wollen Sie das Abonnement der Veranstaltung <b>%s</b> wirklich aufheben? Der "
 "Anmeldzeitraum ist abgelaufen und Sie k&ouml;nnen sich nicht wieder anmelden!"
 msgstr ""
 
-#: meine_seminare.php:201 meine_seminare.php.bck:201
+#: meine_seminare.php:201
 #, c-format
 msgid ""
 "Wollen Sie das Abonnement der Veranstaltung <b>%s</b> wirklich aufheben?"
 msgstr ""
 
-#: meine_seminare.php:211 meine_seminare.php.bck:211
+#: meine_seminare.php:211
 #, c-format
 msgid ""
 "Wollen Sie den Eintrag auf der Warteliste der Veranstaltung <b>%s</b> "
@@ -10903,19 +10890,17 @@ msgid ""
 msgstr ""
 
 #: meine_seminare.php:225 meine_seminare.php:243 meine_seminare.php:258
-#: meine_seminare.php.bck:225 meine_seminare.php.bck:243
-#: meine_seminare.php.bck:258
 msgid "Datenbankfehler!"
 msgstr ""
 
-#: meine_seminare.php:235 meine_seminare.php.bck:235
+#: meine_seminare.php:235
 #, c-format
 msgid ""
 "Das Abonnement der Veranstaltung <b>%s</b> wurde aufgehoben. Sie sind nun "
 "nicht mehr als TeilnehmerIn dieser Veranstaltung im System registriert."
 msgstr ""
 
-#: meine_seminare.php:250 meine_seminare.php.bck:250
+#: meine_seminare.php:250
 #, c-format
 msgid ""
 "Der Eintrag in der Anmelde- bzw. Warteliste der Veranstaltung <b>%s</b> "
@@ -10923,12 +10908,12 @@ msgid ""
 "ssen Sie sich erneut bewerben."
 msgstr ""
 
-#: meine_seminare.php:263 meine_seminare.php.bck:263
+#: meine_seminare.php:263
 #, c-format
 msgid "Die Zuordnung zur Einrichtung %s wurde aufgehoben."
 msgstr ""
 
-#: meine_seminare.php:324 meine_seminare.php.bck:324 sem_notification.php:131
+#: meine_seminare.php:324 sem_notification.php:131
 #, c-format
 msgid ""
 "Sie haben zur Zeit keine Veranstaltungen abonniert, an denen Sie teilnehmen "
@@ -10936,90 +10921,85 @@ msgid ""
 "%s um neue Veranstaltungen aufzunehmen."
 msgstr ""
 
-#: meine_seminare.php:405 meine_seminare.php:483 meine_seminare.php.bck:405
-#: meine_seminare.php.bck:483
+#: meine_seminare.php:405 meine_seminare.php:483
 msgid "Gruppe ändern"
 msgstr ""
 
-#: meine_seminare.php:410 meine_seminare.php:661 meine_seminare.php.bck:410
-#: meine_seminare.php.bck:661
+#: meine_seminare.php:410 meine_seminare.php:661
 msgid "besucht"
 msgstr ""
 
-#: meine_seminare.php:495 meine_seminare.php.bck:495
+#: meine_seminare.php:495
 msgid ""
 "Versteckte Veranstaltungen können über die Suchfunktionen nicht gefunden "
 "werden. Um die Veranstaltung sichtbar zu machen, wenden Sie sich an eineN "
 "der zuständigen AdministratorInnen."
 msgstr ""
 
-#: meine_seminare.php:514 meine_seminare.php.bck:514
+#: meine_seminare.php:514
 #, c-format
 msgid "Die Veranstaltung ist mit %s ILIAS-Lernmodul verbunden."
 msgstr ""
 
-#: meine_seminare.php:516 meine_seminare.php.bck:516
+#: meine_seminare.php:516
 #, c-format
 msgid "Die Veranstaltung ist mit %s ILIAS-Lernmodulen verbunden."
 msgstr ""
 
-#: meine_seminare.php:530 meine_seminare.php.bck:530
+#: meine_seminare.php:530
 msgid "n.b."
 msgstr ""
 
-#: meine_seminare.php:549 meine_seminare.php.bck:549
+#: meine_seminare.php:549
 msgid ""
 "Das Abonnement ist bindend. Bitte wenden Sie sich an die Dozentin oder den "
 "Dozenten."
 msgstr ""
 
-#: meine_seminare.php:551 meine_seminare.php:629 meine_seminare.php.bck:551
-#: meine_seminare.php.bck:629
+#: meine_seminare.php:551 meine_seminare.php:629
 msgid "aus der Veranstaltung abmelden"
 msgstr ""
 
-#: meine_seminare.php:586 meine_seminare.php.bck:586
+#: meine_seminare.php:586
 msgid "Anmelde- und Wartelisteneintr&auml;ge"
 msgstr ""
 
-#: meine_seminare.php:587 meine_seminare.php.bck:587
-#: lib/classes/StudipLitCatElement.class.php:85
+#: meine_seminare.php:587 lib/classes/StudipLitCatElement.class.php:85
 msgid "Datum"
 msgstr ""
 
-#: meine_seminare.php:588 meine_seminare.php.bck:588
+#: meine_seminare.php:588
 msgid "Position/Chance"
 msgstr ""
 
-#: meine_seminare.php:589 meine_seminare.php.bck:589
+#: meine_seminare.php:589
 msgid "Art"
 msgstr ""
 
-#: meine_seminare.php:622 meine_seminare.php.bck:622
+#: meine_seminare.php:622
 msgid "Position oder Wahrscheinlichkeit"
 msgstr ""
 
-#: meine_seminare.php:628 meine_seminare.php.bck:628
+#: meine_seminare.php:628
 msgid "Los"
 msgstr ""
 
-#: meine_seminare.php:628 meine_seminare.php.bck:628
+#: meine_seminare.php:628
 msgid "Vorl."
 msgstr ""
 
-#: meine_seminare.php:628 meine_seminare.php.bck:628
+#: meine_seminare.php:628
 msgid "Wartel."
 msgstr ""
 
-#: meine_seminare.php:646 meine_seminare.php:879 meine_seminare.php.bck:646
-#: meine_seminare.php.bck:879
+#: meine_seminare.php:646 meine_seminare.php:879
 #, c-format
 msgid ""
 "Sie wurden noch keinen Einrichtungen zugeordnet. Bitte wenden Sie sich an "
 "einen der zust&auml;ndigen %sAdministratoren%s."
 msgstr ""
 
-#: meine_seminare.php:648 meine_seminare.php.bck:648
+#: meine_seminare.php:648
 #, c-format
 msgid ""
 "Sie haben sich noch keinen Einrichtungen zugeordnet. Um sich Einrichtungen "
@@ -11027,104 +11007,101 @@ msgid ""
 "\"universit&auml;re Daten\" auf Ihrer pers&ouml;nlichen Einstellungsseite."
 msgstr ""
 
-#: meine_seminare.php:656 meine_seminare.php.bck:656
-#: help/structure.inc.php:175
+#: meine_seminare.php:656 help/structure.inc.php:175
 msgid "Meine Einrichtungen"
 msgstr ""
 
-#: meine_seminare.php:694 meine_seminare.php.bck:694
+#: meine_seminare.php:694
 #, c-format
 msgid "Die Einrichtung ist mit %s ILIAS-Lernmodul verbunden."
 msgstr ""
 
-#: meine_seminare.php:696 meine_seminare.php.bck:696
+#: meine_seminare.php:696
 #, c-format
 msgid "Die Einrichtung ist mit %s ILIAS-Lernmodulen verbunden."
 msgstr ""
 
-#: meine_seminare.php:721 meine_seminare.php.bck:721
+#: meine_seminare.php:721
 msgid "aus der Einrichtung austragen"
 msgstr ""
 
-#: meine_seminare.php:756 meine_seminare.php.bck:756
+#: meine_seminare.php:756
 #, c-format
 msgid ""
 "Es sind noch %s weitere Veranstaltungen sowie %s weitere Einrichtungen "
 "vorhanden."
 msgstr ""
 
-#: meine_seminare.php:773 meine_seminare.php:803 meine_seminare.php.bck:773
-#: meine_seminare.php.bck:803
+#: meine_seminare.php:773 meine_seminare.php:803
 #, c-format
 msgid ""
 "Um weitere Veranstaltungen in Ihre pers&ouml;nliche Auswahl aufzunehmen, "
 "nutzen Sie bitte die %sSuchfunktion%s"
 msgstr ""
 
-#: meine_seminare.php:776 meine_seminare.php.bck:776
+#: meine_seminare.php:776
 #, c-format
 msgid ""
 "Um Veranstaltungen anzulegen, nutzen Sie bitte den %sVeranstaltungs-"
 "Assistenten%s"
 msgstr ""
 
-#: meine_seminare.php:780 meine_seminare.php.bck:780
+#: meine_seminare.php:780
 #: lib/classes/StudipSemRangeTreeViewSimple.class.php:68
 msgid "Einrichtungen:"
 msgstr ""
 
-#: meine_seminare.php:783 meine_seminare.php:806 meine_seminare.php.bck:783
-#: meine_seminare.php.bck:806
+#: meine_seminare.php:783 meine_seminare.php:806
 #, c-format
 msgid ""
 "Um Einrichtungen zu suchen und sich Informationen anzeigen zu lassen, nutzen "
 "Sie die %sEinrichtungssuche%s."
 msgstr ""
 
-#: meine_seminare.php:809 meine_seminare.php.bck:809
+#: meine_seminare.php:809
 #, c-format
 msgid ""
 "Wenn Sie weitere Einrichtungen in ihre pers&ouml;nliche Auswahl aufnehmen "
 "m&ouml;chten, k&ouml;nnen sie sich hier %szuordnen%s."
 msgstr ""
 
-#: meine_seminare.php:816 meine_seminare.php.bck:816
+#: meine_seminare.php:816
 msgid "Einstellungen:"
 msgstr ""
 
-#: meine_seminare.php:819 meine_seminare.php.bck:819
+#: meine_seminare.php:819
 #, c-format
 msgid "Gruppierung der angezeigten Veranstaltungen %s&auml;ndern%s."
 msgstr ""
 
-#: meine_seminare.php:824 meine_seminare.php.bck:824
+#: meine_seminare.php:824
 #, c-format
 msgid "Benachrichtigung über neue Inhalte %sanpassen%s."
 msgstr ""
 
-#: meine_seminare.php:905 meine_seminare.php.bck:905
+#: meine_seminare.php:905
 #, c-format
 msgid ""
 "An der Einrichtung: <b>%s</b> sind zur Zeit keine Veranstaltungen angelegt."
 msgstr ""
 
-#: meine_seminare.php:930 meine_seminare.php.bck:930 show_admission.php:58
+#: meine_seminare.php:930 show_admission.php:58
 msgid "Bitte w&auml;hlen Sie eine Einrichtung aus:"
 msgstr ""
 
-#: meine_seminare.php:953 meine_seminare.php.bck:953
+#: meine_seminare.php:953
 msgid "Einrichtung auswählen"
 msgstr ""
 
-#: meine_seminare.php:1039 meine_seminare.php.bck:1039
+#: meine_seminare.php:1039
 msgid "Veranstaltungsdaten bearbeiten"
 msgstr ""
 
-#: meine_seminare.php:1064 meine_seminare.php.bck:1064
+#: meine_seminare.php:1064
 msgid "&Uuml;bersicht &uuml;ber Veranstaltungen"
 msgstr ""
 
-#: meine_seminare.php:1068 meine_seminare.php.bck:1068
+#: meine_seminare.php:1068
 msgid ""
 "Um eine Veranstaltung zu bearbeiten, w&auml;hlen Sie sie &uuml;ber die "
 "Suchfunktion aus."
@@ -12146,49 +12123,49 @@ msgstr ""
 msgid "Formular zurücksetzen"
 msgstr ""
 
-#: phplib_local.inc.php:392
+#: phplib_local.inc.php:387
 msgid ""
 "Das System befindet sich im Wartungsmodus. Zur Zeit ist kein Zugriff möglich."
 msgstr ""
 
-#: phplib_local.inc.php:392
+#: phplib_local.inc.php:387
 msgid "Wartungsmodus"
 msgstr ""
 
-#: phplib_local.inc.php:439
+#: phplib_local.inc.php:434
 msgid "Fehler beim Auto-Login!"
 msgstr ""
 
-#: phplib_local.inc.php:455
+#: phplib_local.inc.php:450
 #, c-format
 msgid "Autologin ist mit dem Status: %s nicht möglich!"
 msgstr ""
 
-#: phplib_local.inc.php:602
+#: phplib_local.inc.php:597
 msgid "Der gewählte Username ist zu kurz!"
 msgstr ""
 
-#: phplib_local.inc.php:610
+#: phplib_local.inc.php:605
 msgid "Das Passwort ist zu kurz!"
 msgstr ""
 
-#: phplib_local.inc.php:636
+#: phplib_local.inc.php:631
 msgid ""
 "Der Mailserver ist nicht erreichbar, bitte überprüfen Sie, ob Sie E-Mails "
 "mit der angegebenen Adresse verschicken und empfangen können!"
 msgstr ""
 
-#: phplib_local.inc.php:646
+#: phplib_local.inc.php:641
 msgid ""
 "Die angegebene E-Mail-Adresse ist nicht erreichbar, bitte überprüfen Sie "
 "Ihre Angaben!"
 msgstr ""
 
-#: phplib_local.inc.php:657
+#: phplib_local.inc.php:652
 msgid "Der gewählte Username ist bereits vorhanden!"
 msgstr ""
 
-#: phplib_local.inc.php:668
+#: phplib_local.inc.php:663
 msgid ""
 "Die angegebene E-Mail-Adresse wird bereits von einem anderen User verwendet. "
 "Sie müssen eine andere E-Mail-Adresse angeben!"
@@ -14775,15 +14752,15 @@ msgstr ""
 msgid "Kommentar von"
 msgstr ""
 
-#: visual.inc.php:1098
+#: visual.inc.php:1090
 msgid "Objekt aufklappen"
 msgstr ""
 
-#: visual.inc.php:1101
+#: visual.inc.php:1093
 msgid "Objekt zuklappen"
 msgstr ""
 
-#: visual.inc.php:1138
+#: visual.inc.php:1130
 msgid "Bewertungsbereich öffnen"
 msgstr ""
 
@@ -17776,7 +17753,6 @@ msgstr ""
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Jena.class.php:41
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Nordhausen.class.php:41
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Schmalkalden.class.php:41
-#: lib/classes/lit_search_plugins/StudipLitSearchPluginGvk.class.php:47
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginHAAB_Weimar.class.php:41
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginHSfMFL_Weimar.class.php:41
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginLeopoldina.class.php:49
@@ -17793,7 +17769,6 @@ msgid "Basisindex [ALL]"
 msgstr ""
 
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginFBTechnik.class.php:46
-#: lib/classes/lit_search_plugins/StudipLitSearchPluginGvk.class.php:47
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginLeopoldina.class.php:50
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginRkgoe.class.php:42
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginUlb.class.php:49
@@ -17801,7 +17776,6 @@ msgid "Körperschaftsname [KOS]"
 msgstr ""
 
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginFBTechnik.class.php:47
-#: lib/classes/lit_search_plugins/StudipLitSearchPluginGvk.class.php:48
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginLeopoldina.class.php:51
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginRkgoe.class.php:43
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginUlb.class.php:50
@@ -17815,6 +17789,7 @@ msgstr ""
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginPhiloFak.class.php:42
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginRkgoe.class.php:43
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginSUBGoeOpac.class.php:42
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginTIBUBOpac.class.php:49
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginUlb.class.php:50
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginWisoFak.class.php:42
 msgid "Titelstichwörter [TIT]"
@@ -17822,7 +17797,6 @@ msgstr ""
 
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginFBTechnik.class.php:48
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginFHHIOpac.class.php:43
-#: lib/classes/lit_search_plugins/StudipLitSearchPluginGvk.class.php:49
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginLeopoldina.class.php:53
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginPhiloFak.class.php:43
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginRkgoe.class.php:44
@@ -17833,7 +17807,6 @@ msgid "Serienstichwörter [SER]"
 msgstr ""
 
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginFBTechnik.class.php:48
-#: lib/classes/lit_search_plugins/StudipLitSearchPluginGvk.class.php:50
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginLeopoldina.class.php:56
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginRkgoe.class.php:45
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginUlb.class.php:52
@@ -17846,7 +17819,6 @@ msgstr ""
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Jena.class.php:44
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Nordhausen.class.php:44
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Schmalkalden.class.php:44
-#: lib/classes/lit_search_plugins/StudipLitSearchPluginGvk.class.php:51
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginHAAB_Weimar.class.php:44
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginHSfMFL_Weimar.class.php:44
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginLeopoldina.class.php:57
@@ -17868,7 +17840,6 @@ msgstr ""
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Jena.class.php:46
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Nordhausen.class.php:46
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Schmalkalden.class.php:46
-#: lib/classes/lit_search_plugins/StudipLitSearchPluginGvk.class.php:51
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginHAAB_Weimar.class.php:46
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginHSfMFL_Weimar.class.php:46
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginLeopoldina.class.php:58
@@ -17886,7 +17857,6 @@ msgstr ""
 
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginFBTechnik.class.php:50
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginFHHIOpac.class.php:44
-#: lib/classes/lit_search_plugins/StudipLitSearchPluginGvk.class.php:52
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginLeopoldina.class.php:59
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginPhiloFak.class.php:44
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginRkgoe.class.php:47
@@ -17902,7 +17872,6 @@ msgstr ""
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Jena.class.php:48
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Nordhausen.class.php:48
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Schmalkalden.class.php:48
-#: lib/classes/lit_search_plugins/StudipLitSearchPluginGvk.class.php:52
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginHAAB_Weimar.class.php:48
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginHSfMFL_Weimar.class.php:48
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginLeopoldina.class.php:60
@@ -17924,7 +17893,6 @@ msgstr ""
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Jena.class.php:49
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Nordhausen.class.php:49
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginFH_Schmalkalden.class.php:49
-#: lib/classes/lit_search_plugins/StudipLitSearchPluginGvk.class.php:53
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginHAAB_Weimar.class.php:49
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginHSfMFL_Weimar.class.php:49
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginLeopoldina.class.php:61
@@ -17976,6 +17944,7 @@ msgstr ""
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginPhiloFak.class.php:47
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginSUBGoeOpac.class.php:47
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginThULB_Jena.class.php:46
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginTIBUBOpac.class.php:53
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginUB_Erfurt.class.php:45
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginUB_Ilmenau.class.php:45
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginUB_Weimar.class.php:45
@@ -18041,7 +18010,10 @@ msgid "Verlagsort, Verlag [PUB]"
 msgstr ""
 
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginFHHIOpac.class.php:46
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginGvk.class.php:49
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginGvkPlus.class.php:49
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginPhiloFak.class.php:46
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginRkhan.class.php:49
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginSUBGoeOpac.class.php:46
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginWisoFak.class.php:46
 msgid "Schlagwörter [SLW]"
@@ -18055,17 +18027,95 @@ msgid "alle Titelanfänge [TAF]"
 msgstr ""
 
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginGvk.class.php:47
-msgid "Personennamen [PRS]"
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginGvkPlus.class.php:47
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginRkhan.class.php:47
+msgid "Alle Wörter [ALL]"
 msgstr ""
 
-#: lib/classes/lit_search_plugins/StudipLitSearchPluginGvk.class.php:49
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginGvk.class.php:50
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginGvkPlus.class.php:50
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginRkhan.class.php:50
+msgid "Serie, Zeitschrift (Phrase) [GTI]"
+msgstr ""
+
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginGvk.class.php:51
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginGvkPlus.class.php:51
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginRkhan.class.php:51
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginTIBUBOpac.class.php:48
+msgid "Person, Autor [PER]"
+msgstr ""
+
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginGvk.class.php:52
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginGvkPlus.class.php:52
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginLeopoldina.class.php:54
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginRkgoe.class.php:44
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginRkhan.class.php:52
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginUlb.class.php:51
 msgid "ISBN [ISB]"
 msgstr ""
 
-#: lib/classes/lit_search_plugins/StudipLitSearchPluginGvk.class.php:50
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginGvk.class.php:53
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginGvkPlus.class.php:53
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginRkhan.class.php:53
+msgid "ISSN [ISN]"
+msgstr ""
+
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginGvk.class.php:54
+msgid "alle Nummern (ISBN, ISSN, ...) [NUM]"
+msgstr ""
+
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginGvk.class.php:55
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginGvkPlus.class.php:55
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginRkhan.class.php:55
+msgid "Körperschaftsname (Phrase) [KOS]"
+msgstr ""
+
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginGvk.class.php:56
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginGvkPlus.class.php:56
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginRkhan.class.php:56
+msgid "Körperschaft (Stichwort) [KOR]"
+msgstr ""
+
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginGvk.class.php:57
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginGvkPlus.class.php:57
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginRkhan.class.php:57
+msgid "Kongress (Phrase) [KNS]"
+msgstr ""
+
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginGvk.class.php:58
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginGvkPlus.class.php:58
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginRkhan.class.php:58
+msgid "Kongress (Stichwort) [KON]"
+msgstr ""
+
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginGvk.class.php:59
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginGvkPlus.class.php:59
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginRkhan.class.php:59
+msgid "Ort,Verlag (Stichwort) [PUB]"
+msgstr ""
+
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginGvk.class.php:60
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginGvkPlus.class.php:60
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginRkhan.class.php:60
+msgid "Basisklassifikation [BKL]"
+msgstr ""
+
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginGvk.class.php:61
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginGvkPlus.class.php:61
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginRkhan.class.php:61
+msgid "PICA Prod.-Nr. [PPN]"
+msgstr ""
+
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginGvkPlus.class.php:48
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginRkhan.class.php:48
+msgid "Titel (Stichwort) [TIT]"
+msgstr ""
+
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginGvkPlus.class.php:54
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginRkhan.class.php:54
+msgid "Nummern (allgemein) [NUM]"
+msgstr ""
+
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginLeopoldina.class.php:55
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginRkgoe.class.php:45
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginUlb.class.php:52
@@ -18095,6 +18145,26 @@ msgstr ""
 
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginStudip.class.php:107
 msgid "Suchergebnis existiert nicht."
+msgstr ""
+
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginTIBUBOpac.class.php:47
+msgid "alle Wörter [ALL]"
+msgstr ""
+
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginTIBUBOpac.class.php:50
+msgid "Stichwörter Serie/Zeitschrift [SER]"
+msgstr ""
+
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginTIBUBOpac.class.php:51
+msgid "Stichwörter Körperschaft [KOR]"
+msgstr ""
+
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginTIBUBOpac.class.php:52
+msgid "Schlagwörter [SWW]"
+msgstr ""
+
+#: lib/classes/lit_search_plugins/StudipLitSearchPluginTIBUBOpac.class.php:54
+msgid "alle Nummern (ISBN, ISSN ...) [NUM]"
 msgstr ""
 
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginZ3950Abstract.class.php:121

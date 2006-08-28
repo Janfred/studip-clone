@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: studip_extern\n"
-"POT-Creation-Date: 2006-08-21 23:17+0200\n"
+"POT-Creation-Date: 2006-08-28 12:29+0200\n"
 "PO-Revision-Date: 2006-08-21 16:23+0200\n"
 "Last-Translator: \n"
 "Language-Team:  <en@li.org>\n"
@@ -817,7 +817,7 @@ msgstr ""
 "output. This page must include the above code snippet."
 
 #: extern/views/extern_info_module.inc.php:98
-#: extern/lib/extern_functions.inc.php:331
+#: extern/lib/extern_functions.inc.php:330
 msgid "URL_DER_INCLUDE_SEITE"
 msgstr "URL_OF_THE_INCLUDED_PAGE"
 

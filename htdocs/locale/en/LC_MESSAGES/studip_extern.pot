@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2006-08-21 23:17+0200\n"
+"POT-Creation-Date: 2006-08-28 12:29+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -758,7 +758,7 @@ msgid ""
 msgstr ""
 
 #: extern/views/extern_info_module.inc.php:98
-#: extern/lib/extern_functions.inc.php:331
+#: extern/lib/extern_functions.inc.php:330
 msgid "URL_DER_INCLUDE_SEITE"
 msgstr ""
 
