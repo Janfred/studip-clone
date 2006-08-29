@@ -336,7 +336,7 @@ function createSeminarHeadTD($text, $align = "left"){
  * @returns string         	the button
  */
 function createButton($button, $title, $name = NULL, $value = NULL){
-	$html = "      <input type=\"image\" action=\"http://selfaktuell.teamone.de/\" name=\"".$name."\" value=\"".$value."\" style=\"vertical-align:middle;\""
+	$html = "      <input type=\"image\" name=\"".$name."\" value=\"".$value."\" style=\"vertical-align:middle;\""
 		  . 	   makeButton($button,"src") ." alt=\"".$title."\" title=\"".$title."\" border=0>\n";
 	return $html;
 }
