@@ -227,11 +227,11 @@ function termine (&$this, $db, $alias_content, $text_div, $text_div_end) {
 				echo "<td" . $this->config->getAttributes("TableParagraphSubHeadline", "td") . ">";
 				echo $subheadline_div;
 				echo "<font" . $this->config->getAttributes("TableParagraphSubHeadline", "font") . ">";
-				echo strftime($this->config->getValue("Main", "dateformat") . " %H.%m", $event->getStart());
+				echo strftime($this->config->getValue("Main", "dateformat") . " %H:%M", $event->getStart());
 				if (date("dmY", $event->getStart()) == date("dmY", $event->getEnd()))
-					echo strftime(" - %H.%m", $event->getEnd());
+					echo strftime(" - %H:%M", $event->getEnd());
 				else
-					echo strftime(" - " . $this->config->getValue("Main", "dateformat") . " %H.%m", $event->getEnd());
+					echo strftime(" - " . $this->config->getValue("Main", "dateformat") . " %H:%M", $event->getEnd());
 				echo " &nbsp;" . htmlReady($event->getTitle());
 				echo "</font>$subheadline_div_end</td></tr>\n";
 				if ($event->getDescription()) {
