@@ -62,8 +62,6 @@ global $range_id, $ex_type, $xml_file_id, $o_mode, $export_error, $export_error_
 		list($y,$M,$d,$h,$m) = explode('-', $ex_tstamp);
 		$tstamp = mktime($h,$m,0,$M,$d,$y);
 		$hash = md5(get_config('UNIZENSUSPLUGIN_SHARED_SECRET1') . $ex_tstamp . get_config('UNIZENSUSPLUGIN_SHARED_SECRET2'));
-				die( $ex_tstamp .':'.date('Y-m-d-H-i',$tstamp).':'. $hash);
-
 		if ($ex_hash != $hash || $tstamp < (time() - 60)) $ex_person_details = null;
 	}
 	
