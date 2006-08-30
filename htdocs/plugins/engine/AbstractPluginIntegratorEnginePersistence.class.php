@@ -140,7 +140,7 @@ class AbstractPluginIntegratorEnginePersistence {
 	    	// $filter = "where p.pluginid in (select rp.pluginid from roles_plugins rp where rp.roleid in (SELECT r.roleid FROM roles_user r where r.userid=? union select rp.roleid from roles_studipperms rp,auth_user_md5 a where rp.permname = a.perms and a.user_id=?)) " . $filter;    	    		    	
 	    		    	
 	    	$newfilter = "join roles_plugins rp on p.pluginid=rp.pluginid join roles_user r on rp.roleid=r.roleid where r.userid=? " . $filter 
-	    			. " union select p.* from plugins p, auth_user_md5 au join roles_plugins rp on p.pluginid=rp.pluginid join roles_studipperms rps on rp.roleid=rps.roleid where rps.permname=au.perms and au.user_id=? " . $filter;	    	 	    		    	
+	    			. " union select p.* from plugins p join roles_plugins rp on p.pluginid=rp.pluginid join roles_studipperms rps on rp.roleid=rps.roleid join auth_user_md5 au on  rps.permname=au.perms where au.user_id=? " . $filter;	    	 	    		    	
 	    	$filter = $newfilter;
     	}    	    	
     	// cache results for cache_time seconds
