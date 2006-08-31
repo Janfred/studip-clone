@@ -38,7 +38,7 @@ class AbstractStudIPPlugin {
 		$this->pluginname = "";
 		$this->pluginid = "-1";
 		$this->pluginadmininfo = null;
-		$this->pluginiconname = "/pictures/leer.gif";
+		$this->pluginiconname = $GLOBALS['ASSETS_URL'].'images/leer.gif';
 		$this->helpinfo = null;
 		$this->navigation = null;
 		$this->activated = false;

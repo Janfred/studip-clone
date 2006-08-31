@@ -994,7 +994,14 @@ if (!sizeof($term_data["turnus_data"])) {
 			"text"  => sprintf(_("Um die allgemeinen Zeiten der Veranstaltung zu &auml;ndern, nutzen Sie bitte den Men&uuml;punkt %s Zeiten %s"), "<a href=\"admin_metadates.php?seminar_id=".$admin_dates_data["range_id"]."\">", "</a>"));
 		?>
 		<td class="blank" width="1%" valign="top">
-							<? print_infobox ($infobox, ($admin_dates_data["assi"]) ? "locale/$_language_path/LC_PICTURES/hands08.jpg" : "schedules.jpg"); ?>
+		<?
+		if ($admin_dates_data["assi"]) {
+			print_infobox_absolute($infobox, "locale/$_language_path/LC_PICTURES/hands08.jpg");
+		}
+		else {
+			print_infobox($infobox, "schedules.jpg");
+		}
+		?>
 			<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" width="270" height="1"/>
 		</td>
 	</tr>

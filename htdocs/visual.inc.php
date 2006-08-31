@@ -1170,55 +1170,82 @@ array  ("kategorie" => "Aktionen:",
 );
 /*****************************************************************************/
 
-function print_infobox ($content, $picture="", $html = FALSE) {
-	global $CANONICAL_RELATIVE_PATH_STUDIP;
+function print_infobox($content, $picture = '', $html = FALSE) {
 
-	$print = "<table align=\"center\" width=\"250\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">";
+  # prefix picture if necessary
+  if ($picture !== '')
+    $picture = sprintf('%simages/%s', $GLOBALS['ASSETS_URL'], $picture);
+    
+  # prefix icons
+  foreach ($content as $i => $value) {
+    foreach ($content[$i]['eintrag'] as $j => $eintrag) {
+      $content[$i]['eintrag'][$j]['icon'] =
+        sprintf('%simages/%s',
+                $GLOBALS['ASSETS_URL'],
+                $content[$i]['eintrag'][$j]['icon']);
+    }  
+  }
 
-	if ($picture) {
-		$print .= "<tr>
-					<td class=\"blank\" width=\"100%\" align=\"right\">
-						<img src=\"".$GLOBALS['ASSETS_URL']."images/". $picture."\">
-					</td>
-				</tr>";
-	}
+  return print_infobox_absolute($content, $picture, $html);
+}
 
-	$print .= "<tr>
-					<td class=\"angemeldet\" width=\"100%\">
-						<table background=\"".$GLOBALS['ASSETS_URL']."images/white.gif\" align=\"center\" width=\"99%\" border=\"0\" cellpadding=\"4\" cellspacing=\"0\">";
+function print_infobox_absolute($content, $picture = '', $html = FALSE) {
 
-	for ($i = 0; $i < count($content); $i++)
-		if ($content[$i]) {
-			$print .= "
-							<tr>
-								<td class=\"blank\" width=\"100%\" colspan=\"2\">
-									<font size=\"-1\"><b>".$content[$i]["kategorie"]."</b></font>
-									<br>
-								</td>
-							</tr>";
-			for ($j = 0; $j < count($content[$i]["eintrag"]); $j++)  {
-				$print .= "
-							<tr>
-								<td class=\"blank\" width=\"1%\" align=\"center\" valign=\"top\">
-									<img src=\"".$GLOBALS['ASSETS_URL']."images/".$content[$i]["eintrag"][$j]["icon"]."\">
-								</td>
-								<td class=\"blank\" width=\"99%\">
-									<font size=\"-1\">".$content[$i]["eintrag"][$j]["text"]."</font><br>
-								</td>
-							</tr>";
-			}
-		}
+  ob_start();
 
-	$print .= "
-						</table>
-					</td>
-				</tr>
-			</table>";
+  ?>
+  <table align="center" width="250" border="0" cellpadding="0" cellspacing="0">
 
-	if ($html)
-		return $print;
-	else
-		echo $print;
+    <? if ($picture !== '') : ?>
+
+      <tr>
+        <td class="blank" width="100%" align="right">
+          <img src="<?=$picture?>">
+        </td>
+      </tr>
+
+    <? endif ?>
+
+    <tr>
+      <td class="angemeldet" width="100%">
+        <table background="<?=$GLOBALS['ASSETS_URL']?>"images/white.gif" align="center" width="99%" border="0" cellpadding="4" cellspacing="0">
+
+          <? for ($i = 0; $i < count($content); $i++) : ?>
+            <? if ($content[$i]) : ?>
+
+              <tr>
+                <td class="blank" width="100%" colspan="2">
+                  <font size="-1"><b><?=$content[$i]["kategorie"]?></b></font>
+                  <br>
+                </td>
+              </tr>
+
+              <? for ($j = 0; $j < count($content[$i]["eintrag"]); $j++) : ?>
+
+                <tr>
+                  <td class="blank" width="1%" align="center" valign="top">
+                    <img src="<?=$content[$i]["eintrag"][$j]["icon"]?>">
+                  </td>
+                  <td class="blank" width="99%">
+                    <font size="-1"><?=$content[$i]["eintrag"][$j]["text"]?></font>
+                    <br>
+                  </td>
+                </tr>
+
+              <? endfor ?>
+
+            <? endif ?>
+          <? endfor ?>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+  <?
+  if ($html)
+    return ob_get_clean();
+  else
+    ob_end_flush();
 }
 
 /**
