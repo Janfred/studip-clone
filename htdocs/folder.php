@@ -135,6 +135,7 @@ if (($rechte) || ($owner)) {
 				}
 		}
 		$change = create_folder(addslashes($titel), $description, $open_id);
+		$folder_system_data["open"][$change] = TRUE;
 		$folder_system_data['open']['anker'] = $change;
 		}
 
