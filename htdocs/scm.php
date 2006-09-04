@@ -204,7 +204,13 @@ function scm_edit_content($range_id) {
 	$edit="<input style=\"vertical-align: middle;\" type=\"IMAGE\" name=\"send_scm\" value=\"&auml;nderungen vornehmen\" border=0 " . makeButton("uebernehmen", "src") . ">";
 	$edit.="&nbsp;<a href=\"$PHP_SELF\">". makeButton("abbrechen") . "</a>";
 	$edit .= "<font size=\"-1\">&nbsp;&nbsp;<a href=\"show_smiley.php\" target=\"new\">";
-	$edit .= "Smileys</a>&nbsp;&nbsp;<a href=\"help/index.php?help_page=ix_forum6.htm\" ";
+
+	if (get_config("EXTERNAL_HELP")) {
+		$help_url=format_help_url("Basis.VerschiedenesFormat");
+	} else {
+		$help_url="help/index.php?help_page=ix_forum6.htm";
+	}
+	$edit .= "Smileys</a>&nbsp;&nbsp;<a href=\"".$help_url."\" ";
 	$edit .= "target=\"new\">Formatierungshilfen</a></font>\n";
 
 	echo $content_table->openRow();

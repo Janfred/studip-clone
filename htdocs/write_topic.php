@@ -130,7 +130,12 @@ if (!(have_sem_write_perm()) OR $pass==TRUE) {
 		}
 		echo "</textarea><br><br>";
 		echo "<input type=\"IMAGE\" " . makeButton("abschicken", "src") . " border=\"0\" align=\"middle\">";
-		echo "&nbsp;&nbsp;<a href=\"show_smiley.php\" target=\"new\"><font size=\"-1\">"._("Smileys")."</a>&nbsp;&nbsp;"."<a href=\"help/index.php?help_page=ix_forum6.htm\" target=\"new\"><font size=\"-1\">"._("Formatierungshilfen")."</a>";
+		if (get_config("EXTERNAL_HELP")) {
+			$help_url=format_help_url("Basis.VerschiedenesFormat");
+		} else {
+			$help_url="help/index.php?help_page=ix_forum6.htm";
+		}
+		echo "&nbsp;&nbsp;<a href=\"show_smiley.php\" target=\"new\"><font size=\"-1\">"._("Smileys")."</a>&nbsp;&nbsp;"."<a href=\"".$help_url."\" target=\"new\"><font size=\"-1\">"._("Formatierungshilfen")."</a>";
 		echo "</form>";
 		
 	} else {

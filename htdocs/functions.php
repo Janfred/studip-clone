@@ -1076,4 +1076,28 @@ function search_range($search_str = false, $search_user = false, $show_sem = tru
 	}
 	return $search_result;
 }
+
+/*
+ * format_help_url($keyword)
+ * returns URL for given help keyword
+ */
+
+function format_help_url($keyword) {
+	global $auth;
+	if (!$keyword) {
+		$keyword="Basis.Allgemeines"; //default value
+	}
+	$helppage=$keyword;
+	// encode current user's global perms for help wiki
+	$helppage.="?setstudipview=".$auth->auth["perm"];
+	// encode locationid for help wiki if set
+	$locationid=get_config("EXTERNAL_HELP_LOCATIONID");
+	if ($locationid) {
+		$helppage.="&setlocationid=".$locationid;
+	}
+	// insert into URL-Template from config
+	$help_query=sprintf(get_config("EXTERNAL_HELP_URL"),$helppage);
+	return $help_query;
+}
+
 ?>

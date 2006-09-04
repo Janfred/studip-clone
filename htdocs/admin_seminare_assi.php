@@ -3761,7 +3761,13 @@ if ($level == 8)
 						<td class="<? echo $cssSw->getClass() ?>" width="40%" valign="top">
 							<?
 							print "<br><font size=\"-1\">"._("Sie k&ouml;nnen auf dieser Seite s&auml;mtliche Stud.IP Formatierungen verwenden. Sie k&ouml;nnen Links normal einegeben, diesen werden automatisch sp&auml;ter als Hyperlinks dargestellt.");
-							print "<br /><br /><a target=\"new\" href=\"help/index.php?help_page=ix_forum6.htm\">"._("Hilfe zur Formatierung von Texten")."</a>";
+
+							if (get_config("EXTERNAL_HELP")) {
+								$help_url=format_help_url("Basis.VerschiedenesFormat");
+							} else {
+								$help_url="help/index.php?help_page=ix_forum6.htm";
+							}
+							print "<br /><br /><a target=\"new\" href=\"".$help_url."\">"._("Hilfe zur Formatierung von Texten")."</a>";
 							print "<br /><br />"._("Um eine geordnete Literaturliste zu erstellen, benutzen Sie bitte die Literaturverwaltung.")."</a></font>";
 							?>
 							<br />

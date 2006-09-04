@@ -254,7 +254,13 @@ function show_news($range_id, $show_admin=FALSE,$limit="", $open, $width="100%",
 						$formular.="<textarea name=\"comment_content\" style=\"width:70%\" rows=8 cols=38 wrap=virtual></textarea>";
 						$formular.="<br><br>";
 						$formular.="<input type=\"image\" ".makeButton("absenden","src").">";
-						$formular.="&nbsp;&nbsp;&nbsp;<a href=\"show_smiley.php\" target=\"new\"><font size=\"-1\">"._("Smileys")."</a>&nbsp;&nbsp;<a href=\"help/index.php?help_page=ix_forum6.htm\" target=\"new\"><font size=\"-1\">"._("Formatierungshilfen")."</a><br><br>";
+
+						if (get_config("EXTERNAL_HELP")) {
+							$help_url=format_help_url("Basis.VerschiedenesFormat");
+						} else {
+							$help_url="help/index.php?help_page=ix_forum6.htm";
+						}
+						$formular.="&nbsp;&nbsp;&nbsp;<a href=\"show_smiley.php\" target=\"new\"><font size=\"-1\">"._("Smileys")."</a>&nbsp;&nbsp;<a href=\"".$help_url."\" target=\"new\"><font size=\"-1\">"._("Formatierungshilfen")."</a><br><br>";
 						$formular.="</div></form><p>&nbsp;</p>";
 						$content.=$formular;
 					} else {

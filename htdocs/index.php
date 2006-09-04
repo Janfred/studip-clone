@@ -95,8 +95,19 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 	$menue[ 9] = array( _("Suchen"), 'auswahl_suche.php', false);
 	$menue[10] = array( _("Personensuche"), 'browse.php', false);
 	$menue[11] = array( _("Veranstaltungssuche"), 'sem_portal.php', false);
-	$menue[12] = array( _("Hilfe"), 'help/index.php', '_new');
-	$menue[13] = array( _("Schnelleinstieg"), 'help/index.php?help_page=schnelleinstieg.htm', '_new');
+
+	if (get_config("EXTERNAL_HELP")) {
+		$help_url=format_help_url("Basis.Allgemeines");
+	} else {
+		$help_url="help/index.php";
+	}
+	$menue[12] = array( _("Hilfe"), $help_url, '_new');
+	if (get_config("EXTERNAL_HELP")) {
+		$help_url=format_help_url("Basis.SchnellEinstiegKomplett");
+	} else {
+		$help_url="help/index.php?help_page=schnelleinstieg.htm";
+	}
+	$menue[13] = array( _("Schnelleinstieg"), $help_url, '_new');
 	// dozent
 	$menue[20] = array( _("Verwaltung von Veranstaltungen"), 'adminarea_start.php?list=TRUE', false);
 	$menue[21] = array( _("neue Veranstaltung anlegen"), 'admin_seminare_assi.php?new_session=TRUE', false);
@@ -194,7 +205,13 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 			<td width="90%" class="blank" valign="top">
 				<table cellpadding="2">
 					<tr><td class="blank" colspan="2">
-					<? my_info('<font size=-1>' . sprintf(_("Sie haben noch nicht auf Ihre %s Bestätigungsmail %s geantwortet.<br>Bitte holen Sie dies nach, um Stud.IP Funktionen wie das Belegen von Veranstaltungen nutzen zu können.<br>Bei Problemen wenden Sie Sich an: %s"),'<a href="help/index.php?help_page=ii_bestaetigungsmail.htm" target="new">','</a>', '<a href="mailto:'.$GLOBALS['UNI_CONTACT'].'">'.$GLOBALS['UNI_CONTACT'].'</a></font>')); ?>
+					<? 
+						if (get_config("EXTERNAL_HELP")) {
+							$help_url=format_help_url("Basis.AnmeldungMail");
+						} else {
+							$help_url="help/index.php?help_page=ii_bestaetigungsmail.htm";
+						}
+						my_info('<font size=-1>' . sprintf(_("Sie haben noch nicht auf Ihre %s Bestätigungsmail %s geantwortet.<br>Bitte holen Sie dies nach, um Stud.IP Funktionen wie das Belegen von Veranstaltungen nutzen zu können.<br>Bei Problemen wenden Sie Sich an: %s"),'<a href="'.$help_url.'" target="new">','</a>', '<a href="mailto:'.$GLOBALS['UNI_CONTACT'].'">'.$GLOBALS['UNI_CONTACT'].'</a></font>')); ?>
 					</td></tr>
 				</table>
 			</td>
@@ -334,7 +351,13 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 			if ($GLOBALS['ENABLE_SELF_REGISTRATION'])
 				echo sprintf($mtxt, 'register1.php', _("Registrieren"), _("um NutzerIn zu werden"));
 			echo sprintf($mtxt, 'freie.php', _("Freier Zugang"), _("ohne Registrierung"));
-			echo sprintf($mtxt, 'help/index.php', _("Hilfe"), _("zu Bedienung und Funktionsumfang")), '<br>';
+
+			if (get_config("EXTERNAL_HELP")) {
+				$help_url=format_help_url("Basis.Allgemeines");
+			} else {
+				$help_url="help/index.php";
+			}
+			echo sprintf($mtxt, $help_url, _("Hilfe"), _("zu Bedienung und Funktionsumfang")), '<br>';
 
 			if(isset($UNI_LOGIN_ADD) && ($UNI_LOGIN_ADD != '')) {
 				echo '</td></tr>';

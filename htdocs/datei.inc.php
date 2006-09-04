@@ -751,14 +751,16 @@ function validate_upload($the_file) {
 						$emsg.= "error§" . sprintf(_("Die Datei konnte nicht &uuml;bertragen werden: Sie d&uuml;rfen den Dateityp %s nicht hochladen!"), trim($exts)) . "§";
 					else
 						$emsg.= "error§" . sprintf(_("Die Datei konnte nicht &uuml;bertragen werden: Sie d&uuml;rfen die Dateitypen %s nicht hochladen!"), trim($exts)) . "§";
-					if ($doc)
-						if (!$auth->auth["jscript"])
-							$emsg.= "info§" . sprintf(_("%sHier%s bekommen Sie Hilfe zum Upload von Word-Dokumenten."), "<a target=\"_new\" href=\"help/index.php?referrer_page=datei.inc.php&doc=TRUE\">", "</a>") . "§";
-						else
-							$emsg.= "info§<script language=\"Javascript\">{fenster=window.open(\"help/index.php?referrer_page=datei.inc.php&doc=TRUE\",\"help\",\"scrollbars=yes,width=620,height=400\");} </script>" . _("Hilfe zum Upload von Word-Dokumenten bekommen Sie in dem soeben ge&ouml;ffneten Hilfefenster!") . "§";
+					if ($doc) {
+						if (get_config("EXTERNAL_HELP")) {
+							$help_url=format_help_url("Basis.DateienUpload");
+						} else {
+							$help_url="help/index.php?referrer_page=datei.inc.php&doc=TRUE";
+						}
+						$emsg.= "info§" . sprintf(_("%sHier%s bekommen Sie Hilfe zum Upload von Word-Dokumenten."), "<a target=\"_new\" href=\"".$help_url."\">", "</a>") . "§";
 					}
 				}
-			else {
+			} else {
 				$t=FALSE;
 				$i=1;
 				foreach ($UPLOAD_TYPES[$SessSemName["art_num"]]["file_types"] as $ft) {
@@ -774,11 +776,14 @@ function validate_upload($the_file) {
 						$emsg.= "error§" . sprintf(_("Die Datei konnte nicht &uuml;bertragen werden: Sie d&uuml;rfen nur den Dateityp %s hochladen!"), trim($exts)) . "§";
 					else
 						$emsg.= "error§" . sprintf(_("Die Datei konnte nicht &uuml;bertragen werden: Sie d&uuml;rfen nur die Dateitypen %s hochladen!"), trim($exts)) . "§";
-					if ($doc)
-						if (!$auth->auth["jscript"])
-							$emsg.= "info§" . sprintf(_("%sHier%s bekommen Sie Hilfe zum Upload von Word-Dokumenten."), "<a target=\"_new\" href=\"help/index.php?referrer_page=datei.inc.php&doc=TRUE\">", "</a>") . "§";
-						else
-							$emsg.= "info§<script language=\"Javascript\">{fenster=window.open(\"help/index.php?referrer_page=datei.inc.php&doc=TRUE\",\"help\",\"scrollbars=yes,width=620,height=400\");} </script>" . _("Hilfe zum Upload von Word-Dokumenten bekommen Sie in dem soeben ge&ouml;ffneten Hilfefenster!") . "§";
+					if ($doc) {
+						if (get_config("EXTERNAL_HELP")) {
+							$help_url=format_help_url("Basis.DateienUpload");
+						} else {
+							$help_url="help/index.php?referrer_page=datei.inc.php&doc=TRUE";
+						}
+						$emsg.= "info§" . sprintf(_("%sHier%s bekommen Sie Hilfe zum Upload von Word-Dokumenten."), "<a target=\"_new\" href=\"".$help_url."\">", "</a>") . "§";
+					}
 					}
 				}
 			}
@@ -799,11 +804,14 @@ function validate_upload($the_file) {
 						$emsg.= "error§" . sprintf(_("Die Datei konnte nicht &uuml;bertragen werden: Sie d&uuml;rfen den Dateityp %s nicht hochladen!"), trim($exts)) . "§";
 					else
 						$emsg.= "error§" . sprintf(_("Die Datei konnte nicht &uuml;bertragen werden: Sie d&uuml;rfen die Dateitypen %s nicht hochladen!"), trim($exts)) . "§";
-					if ($doc)
-						if (!$auth->auth["jscript"])
-							$emsg.= "info§" . sprintf(_("%sHier%s bekommen Sie Hilfe zum Upload von Word-Dokumenten."), "<a target=\"_new\" href=\"help/index.php?referrer_page=datei.inc.php&doc=TRUE\">", "</a>") . "§";
-						else
-							$emsg.= "info§<script language=\"Javascript\">{fenster=window.open(\"help/index.php?referrer_page=datei.inc.php&doc=TRUE\",\"help\",\"scrollbars=yes,width=620,height=400\");} </script>" . _("Hilfe zum Upload von Word-Dokumenten bekommen Sie in dem soeben ge&ouml;ffneten Hilfefenster!") . "§";
+					if ($doc) {
+						if (get_config("EXTERNAL_HELP")) {
+							$help_url=format_help_url("Basis.DateienUpload");
+						} else {
+							$help_url="help/index.php?referrer_page=datei.inc.php&doc=TRUE";
+						}
+						$emsg.= "info§" . sprintf(_("%sHier%s bekommen Sie Hilfe zum Upload von Word-Dokumenten."), "<a target=\"_new\" href=\"".$help_url."\">", "</a>") . "§";
+					}
 					}
 				}
 			else {
@@ -822,11 +830,14 @@ function validate_upload($the_file) {
 						$emsg.= "error§" . sprintf(_("Die Datei konnte nicht &uuml;bertragen werden: Sie d&uuml;rfen nur den Dateityp %s hochladen!"), trim($exts)) . "§";
 					else
 						$emsg.= "error§" . sprintf(_("Die Datei konnte nicht &uuml;bertragen werden: Sie d&uuml;rfen nur die Dateitypen %s hochladen!"), trim($exts)) . "§";
-					if ($doc)
-						if (!$auth->auth["jscript"])
-							$emsg.= "info§" . sprintf(_("%sHier%s bekommen Sie Hilfe zum Upload von Word-Dokumenten."), "<a target=\"_new\" href=\"help/index.php?referrer_page=datei.inc.php&doc=TRUE\">", "</a>") . "§";
-						else
-							$emsg.= "info§" . sprintf(_("%sHier%s bekommen Sie Hilfe zum Upload von Word-Dokumenten."), "<a target=\"_new\" href=\"help/index.php?referrer_page=datei.inc.php&doc=TRUE\">", "</a>") . "§";
+					if ($doc) {
+						if (get_config("EXTERNAL_HELP")) {
+							$help_url=format_help_url("Basis.DateienUpload");
+						} else {
+							$help_url="help/index.php?referrer_page=datei.inc.php&doc=TRUE";
+						}
+						$emsg.= "info§" . sprintf(_("%sHier%s bekommen Sie Hilfe zum Upload von Word-Dokumenten."), "<a target=\"_new\" href=\"".$help_url."\">", "</a>") . "§";
+					}
 					}
 				}
 			}
@@ -923,10 +934,6 @@ function JS_for_upload() {
 	 <SCRIPT LANGUAGE="JavaScript">
 	<!-- Begin
 
-	function open_helptext() {
-		fenster=window.open("help/index.php?referrer_page=datei.inc.php&doc=TRUE","help","scrollbars=yes,width=620,height=400");
-	}
-
 	var upload=false;
 
 	function upload_end()
@@ -1016,11 +1023,6 @@ function JS_for_upload() {
 		 {
 		 alert("<?=_("Dieser Dateityp ist nicht zugelassen!")?>");
 		 document.upload_form.the_file.focus();
-		 <? if ($deny_doc) { ?>
-		if (ext == "doc")
-			open_helptext();
-		 <? } ?>
-
 		 return false;
 		 }
 

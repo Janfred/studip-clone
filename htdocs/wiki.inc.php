@@ -798,7 +798,12 @@ function wikiEdit($keyword, $wikiData, $user_id, $backpage=NULL) {
 	$cont .= "</form>\n";
 	printcontent(0,0,$cont,"");
 	$infobox = array ();
-	$infobox[] = array("kategorie" => _("Information"), "eintrag" => array(array('icon' => "ausruf_small.gif", "text"=> sprintf(_("Sie k&ouml;nnen beliebigen Text einf&uuml;gen und vorhandenen Text &auml;ndern. Beachten Sie dabei die %sFormatierungsm&ouml;glichkeiten%s. Links entstehen automatisch aus W&ouml;rtern, die mit Gro&szlig;buchstaben beginnen und einen Gro&szlig;buchstaben in der Wortmitte enthalten."),'<a href="help/index.php?help_page=ix_forum6.htm" target="_new">','</a>'))));
+	if (get_config("EXTERNAL_HELP")) {
+		$help_url=format_help_url("Basis.VerschiedenesFormat");
+	} else {
+		$help_url="help/index.php?help_page=ix_forum6.htm";
+	}
+	$infobox[] = array("kategorie" => _("Information"), "eintrag" => array(array('icon' => "ausruf_small.gif", "text"=> sprintf(_("Sie k&ouml;nnen beliebigen Text einf&uuml;gen und vorhandenen Text &auml;ndern. Beachten Sie dabei die %sFormatierungsm&ouml;glichkeiten%s. Links entstehen automatisch aus W&ouml;rtern, die mit Gro&szlig;buchstaben beginnen und einen Gro&szlig;buchstaben in der Wortmitte enthalten."),'<a href="'.$help_url.'" target="_new">','</a>'))));
 	end_blank_table();
 	echo "</td>"; // end of content area
 	showPageFrameEnd($infobox);

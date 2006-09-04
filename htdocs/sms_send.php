@@ -948,6 +948,13 @@ if ($send_view) {
 	echo"</form>\n";
 	print "</td><td class=\"blank\" width=\"270\" align=\"right\" valign=\"top\">";
 
+	if (get_config("EXTERNAL_HELP")) {
+		$help_url_smil=format_help_url("Basis.VerschiedenesSmileys");
+		$help_url_format=format_help_url("Basis.VerschiedenesFormat");
+	} else {
+		$help_url_smil="help/index.php?help_page=ix_forum7.htm";
+		$help_url_format="help/index.php?help_page=ix_forum6.htm";
+	}
 	$infobox = array(
 		array("kategorie" => _("Ansicht:"),"eintrag" => array(
 			array("icon" => "admin.gif", "text" => $switch_sendview)
@@ -955,7 +962,7 @@ if ($send_view) {
 		$smsinfos,
 		$emailforwardinfo,
 		array("kategorie" => _("Smilies & Textformatierung:"),"eintrag" => array(
-			array("icon" => "asmile.gif", "text" => sprintf(_("%s Liste mit allen Smilies %s Hilfe zu Smilies %s Hilfe zur Textformatierung %s"), "<a href=\"show_smiley.php\" target=\"_blank\">", "</a><br><a href=\"help/index.php?help_page=ix_forum7.htm\" target=\"_blank\">", "</a><br><a href=\"help/index.php?help_page=ix_forum6.htm\" target=\"_blank\">", "</a>"))
+			array("icon" => "asmile.gif", "text" => sprintf(_("%s Liste mit allen Smilies %s Hilfe zu Smilies %s Hilfe zur Textformatierung %s"), "<a href=\"show_smiley.php\" target=\"_blank\">", "</a><br><a href=\"".$help_url_smil."\" target=\"_blank\">", "</a><br><a href=\"".$help_url_format."\" target=\"_blank\">", "</a>"))
 		))
 	);
 
