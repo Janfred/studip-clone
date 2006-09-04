@@ -37,6 +37,7 @@
 if (!$MAIL_NOTIFICATION_ENABLE) {
 	if ($_REQUEST['view'] != 'notification') {
 		page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
+		$auth->login_if($auth->auth["uid"] == "nobody");
 		include("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 		include("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 	} else {
@@ -51,6 +52,7 @@ if (!$MAIL_NOTIFICATION_ENABLE) {
 
 if ($_REQUEST['view'] != 'notification') {
 	page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
+	$auth->login_if($auth->auth["uid"] == "nobody");
 	include("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 	// Start of Output
 	include("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
