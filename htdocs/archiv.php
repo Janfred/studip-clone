@@ -436,7 +436,7 @@ if ($archiv_data["perform_search"]) {
 				echo "<a name=\"anker\"></a><a href=\"$PHP_SELF?close=yes\"><img src=\"".$GLOBALS['ASSETS_URL']."images/forumgraurunt.gif\" " . tooltip(_("Zuklappen")) . " border=\"0\" valign=\"top\"></a></td>";
 				echo "<td class=\"$class\" width=\"29%\"><font size=\"-1\"><b><a href=\"$PHP_SELF?close=yes\">".htmlReady($db->f("name"))."</a></b></font></td>";
 			} else {
-	      echo "<a href=\"$PHP_SELF?open=" . $db->f('seminar_id') . "#anker\"><img src=\"".$GLOBALS['ASSETS_URL']."imagesimages/forumgrau.gif\" " . tooltip(_("Aufklappen")) . " border=\"0\" valign=\"top\"></a></td>";
+	      echo "<a href=\"$PHP_SELF?open=" . $db->f('seminar_id') . "#anker\"><img src=\"".$GLOBALS['ASSETS_URL']."images/forumgrau.gif\" " . tooltip(_("Aufklappen")) . " border=\"0\" valign=\"top\"></a></td>";
 				echo "<td class=\"$class\" width=\"29%\"><font size=\"-1\"><a href=\"$PHP_SELF?open=" . $db->f('seminar_id') . "#anker\">".htmlReady($db->f("name"))."</a></font></td>";
 			}
 	    echo "<td align=center class=\"$class\">&nbsp;<font size=-1>".htmlReady($db->f("dozenten"))."</font></td>";
