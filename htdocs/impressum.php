@@ -131,16 +131,16 @@ $reiter->create($structure, $view);
 			<blockquote>
 			<font size=-1><b>Marco Bohnsack</b>, E-Mail: <a href="mailto:bohnsack@data-quest.de">bohnsack@data-quest.de</a> <?=_("(Projektmanagement, Hilfe)")?></font>
 			<br><font size=-1><b>Cornelius Hempel</b>, E-Mail: <a href="mailto:cornelius.hempel@studip.uni-halle.de">cornelius.hempel@studip.uni-halle.de</a> <?=_("(Fehlersuche)")?></font>
-			<br><font size=-1><b>Cornelis Kater</b>, E-Mail: <a href="mailto:kater@data-quest.de">kater@data-quest.de</a> <?=_("(Ressourcenverwaltung, Terminverwaltung, Adminbereich, Design)")?></font>
+			<br><font size=-1><b>Cornelis Kater</b>, E-Mail: <a href="mailto:info@ckater.de">info@ckater.de</a> <?=_("(Ressourcenverwaltung, Terminverwaltung, Adminbereich, Design)")?></font>
 			<br><font size=-1><b>Hartje Kriete</b>, E-Mail: <a href="mailto:kriete@math.uni-goettingen.de">kriete@math.uni-goettingen.de</a> <?=_("(&Uuml;bersetzung)")?></font>
 			<br><font size=-1><b>Jan Kulmann</b>, E-Mail: <a href="mailto:jankul@tzi.de">jankul@tzi.de</a> <?=_("(Evaluationen)")?></font>
-			<br><font size=-1><b>André Noack</b>, E-Mail: <a href="mailto:noack@data-quest.de">noack@data-quest.de</a> <?=_("(Newsverwaltung, Chat, Einrichtungsverzeichnis, Vorlesungsverzeichnis)")?></font>
+			<br><font size=-1><b>André Noack</b>, E-Mail: <a href="mailto:noack@data-quest.de">noack@data-quest.de</a> <?=_("(Chat, Literaturverwaltung, Authentifizierung, Verzeichnisse)")?></font>
 			<br><font size=-1><b>Frank Ollermann</b>, E-Mail: <a href="mailto:follerma@uni-osnabrueck.de">follerma@uni-osnabrueck.de</a> <?=_("(Usability)")?></font>
 			<br><font size=-1><b>Dennis Reil</b>, E-Mail: <a href="mailto:Dennis.Reil@offis.de">Dennis.Reil@offis.de</a> <?=_("(PlugIn-Schnittstelle)")?></font>
 			<br><font size=-1><b>Jens Schmelzer</b>, E-Mail: <a href="mailto:jens.schmelzer@fh-jena.de">jens.schmelzer@fh-jena.de</a> <?=_("(Security, Distribution)")?></font>
-			<br><font size=-1><b>Ralf Stockmann</b>, E-Mail: <a href="mailto:rstockm@uni-goettingen.de">rstockm@uni-goettingen.de</a> <?=_("(Forensystem, pers&ouml;nliche Seiten, Adressbuch, Design)")?></font>
-			<br><font size=-1><b>Stefan Suchi</b>, E-Mail: <a href="mailto:suchi@data-quest.de">suchi@data-quest.de</a> <?=_("(Datenbankstruktur, Rechtesystem, Adminbereich, Internationalisierung)")?></font>
-			<br><font size=-1><b>Tobias Thelen</b>, E-Mail: <a href="mailto:tthelen@uni-osnabrueck.de">tthelen@uni-osnabrueck.de</a> <?=_("(WikiWeb)")?></font>
+			<br><font size=-1><b>Ralf Stockmann</b>, E-Mail: <a href="mailto:rstockm@uni-goettingen.de">rstockm@uni-goettingen.de</a> <?=_("(Forensystem, Adressbuch, Design)")?></font>
+			<br><font size=-1><b>Stefan Suchi</b>, E-Mail: <a href="mailto:suchi@data-quest.de">suchi@data-quest.de</a> <?=_("(Projektmanagement, Datenbankstruktur, Rechtesystem, Internationalisierung)")?></font>
+			<br><font size=-1><b>Tobias Thelen</b>, E-Mail: <a href="mailto:tthelen@uni-osnabrueck.de">tthelen@uni-osnabrueck.de</a> <?=_("(WikiWeb, Hilfe)")?></font>
 			<br><font size=-1><b>Peter Thienel</b>, E-Mail: <a href="mailto:thienel@data-quest.de">thienel@data-quest.de</a> <?=_("(Externe Seiten, Terminkalender)")?></font>
 			<br><font size=-1><b>Nils Kolja Windisch</b>, E-Mail: <a href="mailto:info@nkwindisch.de">info@nkwindisch.de</a> <?=_("(Systeminterne Nachrichten)")?></font>
 			<br></blockquote><br>
