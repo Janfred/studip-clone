@@ -66,7 +66,7 @@ $GLOBALS['_fullname_sql']['no_title_rev'] = "CONCAT(Nachname ,', ', Vorname)";
 $GLOBALS['_fullname_sql']['no_title_short'] = "CONCAT(Nachname,', ',UCASE(LEFT(TRIM(Vorname),1)),'.')";
 $GLOBALS['_fullname_sql']['no_title_motto'] = "CONCAT(Vorname ,' ', Nachname,IF(motto!='',CONCAT(', ',motto),''))";
 //software version - please leave it as it is!
-$SOFTWARE_VERSION="1.4.0 alpha cvs-stable";
+$SOFTWARE_VERSION="1.5.0 alpha cvs";
 
 /*classes for database access
 ----------------------------------------------------------------
