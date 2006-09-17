@@ -1,3 +1,20 @@
+__25.08.2006 v 1.4.0__
+- Sichtbarkeit von NutzerInnen
+- Neues Hilfe-System basierend auf einer zentralen Wiki-Seite
+- Ordnerberechtigungssystemim für den Dateibereich 
+- alternativer Chatclient (AJAX)
+- Literaturlistenimport über Plugins 
+- Externe Seiten: Sichtbarkeit von Veranstaltungstypen, Einschränkung der Veranstaltungsübersichten auf ausgewählte Studienbereiche
+- Anzeige des Namens auf der wer-ist-online konfigurierbar, "Motto" 
+- Nutzerkommentare bei vorläufiger Anmeldung und Anpassung Teilnehmerexport
+- Erweiterungen für Single Sign On 
+- Erweiterung der Plugin-Schnittstelle 
+- Alphabetische Sortierung für Statusgruppen 
+- Löschen des eigenen Homepagebildes nun möglich
+- Konfigurierbare Sperre für den Nutzertitel
+- Root-Funktion zum Sperren einzelner Benutzer
+- weitere Detailverbesserungen und Bugfixes
+
 __22.02.2006 v 1.3.0__
 - RSS-Reader für Nutzer
 - RSS-Feeds für alle News (neu: Veranstaltungen, Einrichtungen und Systemnews)
