@@ -971,7 +971,7 @@ if (!sizeof($term_data["turnus_data"])) {
 				$times_inf .= "<br><b>" . _("Erster Termin:") . "</b> ". htmlReady(veranstaltung_beginn($admin_dates_data["range_id"]));
 			if (get_semester($admin_dates_data["range_id"]))
 				$times_inf .= "<br /><b>" . _("Semester:") . "</b> ". get_semester($admin_dates_data["range_id"]);
-			if ($RESOURCES_ENABLE){
+			if ($RESOURCES_ENABLE && get_config('RESOURCES_SHOW_ROOM_NOT_BOOKED_HINT')){
 				$db->query("SELECT COUNT(*) FROM termine LEFT JOIN resources_assign ON (assign_user_id=termin_id) WHERE assign_id IS NULL AND range_id='{$admin_dates_data['range_id']}'");
 				$db->next_record();
 				if ($not_booked_rooms = $db->f(0)){

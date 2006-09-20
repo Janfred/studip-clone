@@ -41,7 +41,7 @@ function getRoom ($range_id, $link=TRUE, $start_time = 0, $range_typ = false) {
 	 	include_once ($ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_RESOURCES."/lib/ResourceObject.class.php");
 	 	include_once ($ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
 	 }
-	
+	$not_booked_hint = get_config('RESOURCES_SHOW_ROOM_NOT_BOOKED_HINT');
 	$db = new DB_Seminar;
 	$db2 = new DB_Seminar;
 	if (!$range_typ){
@@ -77,12 +77,12 @@ function getRoom ($range_id, $link=TRUE, $start_time = 0, $range_typ = false) {
 								else
 									$ret .= htmlReady($resObj->getName());
 							else
-								$ret .= htmlReady($data["room"]) . '&nbsp;' . _("(nicht gebucht)");
+								$ret .= htmlReady($data["room"]) . ($not_booked_hint ? '&nbsp;' . _("(nicht gebucht)") : '');
 						}
 						elseif ((!$data["room"]) && (sizeof($term_data["turnus_data"]) >1))
 							$ret .=_("n. A.");
 						else
-							$ret .= htmlReady($data["room"]) . ($RESOURCES_ENABLE ? '&nbsp;' . _("(nicht gebucht)") : '');
+							$ret .= htmlReady($data["room"]) . ($RESOURCES_ENABLE && $not_booked_hint ? '&nbsp;' . _("(nicht gebucht)") : '');
 						$i++;
 					}
 					if ($ret)
@@ -128,7 +128,7 @@ function getRoom ($range_id, $link=TRUE, $start_time = 0, $range_typ = false) {
 						if ($tmp_room)
 							$ret .= date ("d.m", $db2->f("date")).": ".$tmp_room;
 						elseif ($db2->f("raum"))
-							$ret .= date ("d.m", $db2->f("date")).": ".htmlReady($db2->f("raum")).($RESOURCES_ENABLE ? '&nbsp;' . _("(nicht gebucht)") : '');
+							$ret .= date ("d.m", $db2->f("date")).": ".htmlReady($db2->f("raum")).($RESOURCES_ENABLE && $not_booked_hint ? '&nbsp;' . _("(nicht gebucht)") : '');
 					}
 					if ($ret)
 						return $ret;
@@ -158,7 +158,7 @@ function getRoom ($range_id, $link=TRUE, $start_time = 0, $range_typ = false) {
 			if ($tmp_room)
 				$ret .= $tmp_room;
 			elseif ($db->f("raum"))
-				$ret .= htmlReady($db->f("raum")) . ($RESOURCES_ENABLE ? '&nbsp;' . _("(nicht gebucht)") : '');
+				$ret .= htmlReady($db->f("raum")) . ($RESOURCES_ENABLE && $not_booked_hint ? '&nbsp;' . _("(nicht gebucht)") : '');
 			return $ret;
 		break;
 	}
