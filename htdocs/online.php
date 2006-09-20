@@ -155,7 +155,7 @@ if (is_array($n_buddies))
 	if ($my_messaging_settings["show_only_buddys"])
 		echo "\n<tr><td class=\"".$cssSw->getHeaderClass()."\" width=\"50%\" align=\"center\"><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" width=1 height=20><font size=-1><b>" . _("Buddies") . "</b></font></td></tr>\n";
 	else
-		echo "\n<tr><td class=\"".$cssSw->getHeaderClass()."\" width=\"50%\" align=\"center\"><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" width=1 height=20><font size=-1><b>" . _("Buddies") . "</b></font></td><td class=\"".$cssSw->getHeaderClass()."\" width=\"50%\" align=\"center\"><img src=\"".$GLOBALS['ASSETS_URL']."/blank.gif\" width=1 height=20><font size=-1><b>" . _("andere Nutzer") . "</b></font></td></tr>\n";
+		echo "\n<tr><td class=\"".$cssSw->getHeaderClass()."\" width=\"50%\" align=\"center\"><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" width=1 height=20><font size=-1><b>" . _("Buddies") . "</b></font></td><td class=\"".$cssSw->getHeaderClass()."\" width=\"50%\" align=\"center\"><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" width=1 height=20><font size=-1><b>" . _("andere Nutzer") . "</b></font></td></tr>\n";
 	echo "<tr>";
 
 	//Buddiespalte
