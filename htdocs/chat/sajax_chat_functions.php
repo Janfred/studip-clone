@@ -45,6 +45,7 @@ if (!is_object($chatServer)){
 	$perm->check("user");
 	require_once $GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'visual.inc.php';
 	require_once $GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'functions.php';
+	require_once $GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'messaging.inc.php';
 	require_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/ChatServer.class.php";
 
 	include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session

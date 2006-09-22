@@ -46,6 +46,7 @@ include 'sajax_chat_functions.php';
 	//
 	var chatuniqid = '<?=$chatServer->chatDetail[$chatid]["id"]?>';
 	var chat_id = '<?=$chatid?>';
+	var check_interval = <?=floor(CHAT_SLEEP_TIME * 2 / 1000)?>;
 	
 	<?=sajax_show_javascript();?>
 
@@ -136,10 +137,6 @@ include 'sajax_chat_functions.php';
 		return false;
 	}
 	
-	function output_loop(){
-		x_check_and_get_messages(chat_id, add_messages_cb);
-	}
-	
 	function set_chat_status_cb(status_html){
 		document.getElementById('chat_status').innerHTML = status_html;
 	}
@@ -171,6 +168,7 @@ include 'sajax_chat_functions.php';
 		if (messages_html.match(/<close>/)){
 			setTimeout('window.close()', 3000);
 		}
+		setTimeout('x_check_and_get_messages("' + chat_id + '", add_messages_cb)', check_interval);
 	}
 	
 	function dummy_cb(dummy){
@@ -179,7 +177,7 @@ include 'sajax_chat_functions.php';
 	
 	</script>
 </head>
-<body onunload="window.clearInterval(oloop);x_do_logout('<?=$chatid?>', dummy_cb);">
+<body>
 <div id="chat_msg" style="margin-left:2px;font-size:10pt;position:absolute;top:0px;left:0px;width:440px;height:418px;overflow:auto">
 <?
 echo "\n<b>" . sprintf(_("Hallo %s,<br> willkommen im Raum: %s"),htmlReady($chatServer->getNick($user->id,$chatid)),
@@ -223,7 +221,7 @@ document.inputform.chatInput.focus();
 x_get_chat_status(chat_id, set_chat_status_cb);
 x_get_chat_nicklist(chat_id, set_chat_nicklist_cb);
 x_get_chat_color_chooser(chat_id, set_chat_color_chooser_cb);
-var oloop = window.setInterval("output_loop()", 1000);
+setTimeout('x_check_and_get_messages("' + chat_id + '", add_messages_cb)', check_interval);
 </script>
 </div>
 
