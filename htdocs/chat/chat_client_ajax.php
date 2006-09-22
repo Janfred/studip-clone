@@ -158,15 +158,16 @@ include 'sajax_chat_functions.php';
 		if (messages_html.match(/<colorchange>/)){
 			x_get_chat_color_chooser(chat_id, set_chat_color_chooser_cb);
 		}
-		if (messages_html.match(/<logout>/)){
-			window.clearInterval(oloop);
-		}
 		if (messages_html.match(/<sendlog>/)){
 			download = window.open('chat_dummy.php?chatid=' + chat_id, 'chat_dummy', 'scrollbars=no,width=100,height=100,resizable=no');
-			setTimeout('download.close()', 3000);
+			download.setTimeout('window.close()', 5000);
 		}
 		if (messages_html.match(/<close>/)){
 			setTimeout('window.close()', 3000);
+			return;
+		}
+		if (messages_html.match(/<logout>/)){
+			return;
 		}
 		setTimeout('x_check_and_get_messages("' + chat_id + '", add_messages_cb)', check_interval);
 	}
