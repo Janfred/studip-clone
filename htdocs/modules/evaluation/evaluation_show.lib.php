@@ -112,7 +112,7 @@ class EvalShow {
       $infobox = array( array( "kategorie" => _("Information:"),
 			       "eintrag"   => $infos ) );
 
-      return print_infobox ($infobox, NULL, YES);
+      return print_infobox ($infobox, "", YES);
   }
 
 
