@@ -1173,7 +1173,7 @@ array  ("kategorie" => "Aktionen:",
 function print_infobox($content, $picture = '', $html = FALSE) {
 
   # prefix picture if necessary
-  if ($picture !== '')
+  if ($picture)
     $picture = sprintf('%simages/%s', $GLOBALS['ASSETS_URL'], $picture);
     
   # prefix icons
@@ -1197,7 +1197,7 @@ function print_infobox_absolute($content, $picture = '', $html = FALSE) {
   ?>
   <table align="center" width="250" border="0" cellpadding="0" cellspacing="0">
 
-    <? if ($picture !== '') : ?>
+    <? if ($picture) : ?>
 
       <tr>
         <td class="blank" width="100%" align="right">
