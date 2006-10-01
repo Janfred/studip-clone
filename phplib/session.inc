@@ -86,7 +86,7 @@ class Session {
   ## one may provide the new session id as a parameter (not recommended).
 
   function get_id($id = "") {
-    global $HTTP_COOKIE_VARS, $HTTP_GET_VARS, $HTTP_POST_VARS, $QUERY_STRING;
+    global $QUERY_STRING;
     $newid=true;
  
     $this->name = $this->cookiename==""?$this->classname:$this->cookiename;
@@ -95,11 +95,11 @@ class Session {
       $newid=false;
       switch ($this->mode) {
         case "get":
-          if ("" == ($id = isset($HTTP_GET_VARS[$this->name]) ? $HTTP_GET_VARS[$this->name] : ""))
-            $id = isset($HTTP_POST_VARS[$this->name]) ? $HTTP_POST_VARS[$this->name] : "";
+          if ("" == ($id = isset($_GET[$this->name]) ? $_GET[$this->name] : ""))
+            $id = isset($_POST[$this->name]) ? $_POST[$this->name] : "";
         break;
         case "cookie":
-          $id = isset($HTTP_COOKIE_VARS[$this->name]) ? $HTTP_COOKIE_VARS[$this->name] : "";
+          $id = isset($_COOKIE[$this->name]) ? $_COOKIE[$this->name] : "";
         break;
         default:
           die("This has not been coded yet.");
@@ -148,7 +148,6 @@ class Session {
   ## Stop using the current session id (unset cookie, ...) and
   ## abandon a session.
   function put_id() {
-    global $HTTP_COOKIE_VARS;
  
     $this->name = $this->cookiename==""?$this->classname:$this->cookiename;
  
@@ -163,7 +162,7 @@ class Session {
  
       default:
             SetCookie($this->name, "", 0, $this->cookie_path, $this->cookie_domain);
-            $HTTP_COOKIE_VARS[$this->name] = "";
+            $_COOKIE[$this->name] = "";
       break;
     }
   }
@@ -381,12 +380,12 @@ class Session {
   }
 
   function release_token(){ 
-    global $HTTP_COOKIE_VARS, $HTTP_GET_VARS, $HTTP_HOST, $HTTPS;
+    global $HTTP_HOST, $HTTPS;
     if (   isset($this->fallback_mode)
     && ( "get" == $this->fallback_mode ) 
     && ( "cookie" == $this->mode )
-    && ( ! isset($HTTP_COOKIE_VARS[$this->name]) ) ) {
-      if ( isset($HTTP_GET_VARS[$this->name]) ) {
+    && ( ! isset($_COOKIE[$this->name]) ) ) {
+      if ( isset($_GET[$this->name]) ) {
         $this->mode = $this->fallback_mode;
       } else {
         header("Status: 302 Moved Temporarily");

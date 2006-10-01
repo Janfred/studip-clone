@@ -325,7 +325,7 @@ class Session {
   *
   * @deprec $Id$
   * @access public  
-  * @global $HTTP_COOKIE_VARS
+  * @global $_COOKIE
   */
   function put_id() {
     if (ini_get('session.use_cookies')){
