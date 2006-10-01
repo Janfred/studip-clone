@@ -79,8 +79,8 @@ function GetPresetGroups ($view, $veranstaltung_class)
 }
 
 function MovePersonStatusgruppe ($range_id, $AktualMembers="", $InstitutMembers="", $Freesearch="", $workgroup_mode=FALSE)
-{ global $HTTP_POST_VARS,$_range_type,$perm;
-		while (list($key, $val) = each ($HTTP_POST_VARS)) {
+{ global $_range_type,$perm;
+		while (list($key, $val) = each ($_POST)) {
 			$statusgruppe_id = substr($key, 0, -2);
 		}
 		$db=new DB_Seminar;
@@ -350,10 +350,10 @@ function PrintInstitutMembers ($range_id)
 	// zuordnen von Personen zu einer Statusgruppe
 	if ($cmd=="move_person" && ($AktualMembers !="" || $InstitutMembers !="---" || $Freesearch !=""))  {
 
-		while (list($key, $val) = each ($HTTP_POST_VARS)) {
+		while (list($key, $val) = each ($_POST)) {
 			$statusgruppe_id = substr($key, 0, -2);
 		}
-		reset ($HTTP_POST_VARS);
+		reset ($_POST);
 		if ($statusgruppe_id != "sear")
 			MovePersonStatusgruppe ($range_id, $AktualMembers, $InstitutMembers, $Freesearch, $workgroup_mode);
 	}

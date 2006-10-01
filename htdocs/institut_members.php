@@ -56,7 +56,7 @@ if (isset($extend))
 
 // The script remembers the users settings for the hole duration of the session,
 // remove the comments if you don't like this behavior.
-//if($i_query[0] == "" && sizeof($HTTP_POST_VARS) == 0) {
+//if($i_query[0] == "" && sizeof($_POST) == 0) {
 //	$sess->unregister($institut_members_data);
 //	unset($institut_members_data);
 //}

@@ -303,7 +303,7 @@ foreach ($_POST as $key=>$item ) {
 		$debug .= "\n->$key=>$item";
 }
 $debug .= "\n<b><font color=\"##3366FF\">getVars</font></b>";
-foreach ($HTTP_GET_VARS as $key=>$item ) {
+foreach ($_GET as $key=>$item ) {
 	if (is_array($item)){
 		$debug .= "\n->$key [Array]:";
 		foreach ($item as $key2 => $item2){

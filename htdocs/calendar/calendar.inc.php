@@ -179,17 +179,17 @@ $accepted_vars = array('start_m', 'start_h', 'start_day', 'start_month', 'start_
 if ($cmd == 'add' || $cmd == 'edit') {
 	if (!isset($calendar_sess_forms_data))
 		$sess->register('calendar_sess_forms_data');
-	if (!empty($HTTP_POST_VARS)){
+	if (!empty($_POST)){
 		// Formulardaten uebernehmen
 		foreach ($accepted_vars as $key) {
-			if (isset($HTTP_POST_VARS[$key]))
-				$calendar_sess_forms_data[$key] = $HTTP_POST_VARS[$key];
+			if (isset($_POST[$key]))
+				$calendar_sess_forms_data[$key] = $_POST[$key];
 		}
 	}
 	else
 		$calendar_sess_control_data['mod'] = '';
 	// checkbox-values
-	$calendar_sess_forms_data['wholeday'] = $HTTP_POST_VARS['wholeday'];
+	$calendar_sess_forms_data['wholeday'] = $_POST['wholeday'];
 }
 elseif ($cmd != 'export') {
 	unset($calendar_sess_forms_data);
@@ -336,7 +336,7 @@ switch ($cmd) {
 		else {
 			$title = _("Mein pers&ouml;nlicher Terminkalender - Termin anlegen/bearbeiten");
 			// call from dayview for new event -> set default values
-			if ($atime && empty($HTTP_POST_VARS)) {
+			if ($atime && empty($_POST)) {
 				if ($devent) {
 					$properties = array(
 							'DTSTART' => mktime(0, 0, 0, date('n', $atime), date('j', $atime),
@@ -369,7 +369,7 @@ switch ($cmd) {
 				$atermin =& new CalendarEvent($properties);
 			}
 		}
-		if (empty($HTTP_POST_VARS)) {
+		if (empty($_POST)) {
 			get_event_properties($calendar_sess_forms_data, $atermin);
 		}
 		else {

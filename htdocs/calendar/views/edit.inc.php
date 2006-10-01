@@ -657,7 +657,7 @@ else {
 		echo "<input type=\"image\" " . makeButton("zurueck", "src"). " name=\"back_recur\" border=\"0\">\n";
 		echo "&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ";
 		echo "<input type=\"hidden\" name=\"set_recur_x\" value=\"1\">\n";
-		echo "<input type=\"hidden\" name=\"wholeday\" value=\"{$HTTP_POST_VARS['wholeday']}\">\n";
+		echo "<input type=\"hidden\" name=\"wholeday\" value=\"{$_POST['wholeday']}\">\n";
 	}
 	if ($atime && get_class($atermin) == 'calendarevent') {
 		if ($count_events < $CALENDAR_MAX_EVENTS)

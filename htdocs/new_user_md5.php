@@ -45,8 +45,8 @@ $db2 = new DB_Seminar;
 
 // Check if there was a submission
 if (check_ticket($studipticket)){
-	while ( is_array($HTTP_POST_VARS)
-			 && list($key, $val) = each($HTTP_POST_VARS)) {
+	while ( is_array($_POST)
+			 && list($key, $val) = each($_POST)) {
 		switch ($key) {
 
 		// Create a new user

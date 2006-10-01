@@ -51,7 +51,7 @@ require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/HolidayData.class.php");
 
 <?php
 /*echo "<pre>";
-print_r($HTTP_POST_VARS);
+print_r($_POST);
 echo "</pre>";
 */
 $db = new DB_Seminar;
@@ -59,7 +59,7 @@ $semester = new SemesterData;
 $holiday = new HolidayData;
 //got data, now check, whether data is correct
 if ($create=="Anlegen") {
-        // print_r($HTTP_POST_VARS);
+        // print_r($_POST);
         $checkForm = semester_check_form_field($semesterdata); 
     if ($checkForm!=1) {	// Formular war falsch ausgefüllt
         $checkForm = "error§".$checkForm;
@@ -90,7 +90,7 @@ if ($create=="Anlegen") {
 
 // edit existing db-entry
 else if ($create=="Bearbeiten") {
-     //print_r($HTTP_POST_VARS);
+     //print_r($_POST);
     // is new Entry correct?
     $checkForm = semester_check_form_field($semesterdata); 
     if ($checkForm!=1) {	// neue Daten sind inkorrekt

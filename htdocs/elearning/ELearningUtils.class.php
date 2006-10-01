@@ -282,12 +282,12 @@ class ELearningUtils
 	{
 		global $PHP_SELF, $connected_cms, $cms_select, $search_key, $view, $new_account_step, $current_module,
 			$start, $next, $go_back, $assign, $ext_username, $ext_password, $ext_password_2, $messages, $ref_id, $module_type, $assign,
-			$ABSOLUTE_PATH_STUDIP, $RELATIVE_PATH_ELEARNING_INTERFACE, $ELEARNING_INTERFACE_MODULES, $HTTP_POST_VARS;
+			$ABSOLUTE_PATH_STUDIP, $RELATIVE_PATH_ELEARNING_INTERFACE, $ELEARNING_INTERFACE_MODULES;
 
 		ELearningUtils::loadClass($new_account_cms);
 
 //		echo "nas:$new_account_step.cm:$current_module.n:$next.gb:$go_back.a:$assign.<br>";
-//		print_r($HTTP_POST_VARS);
+//		print_r($_POST);
 
 		//Password was sent, but is to short
 		if (isset($ext_password_2) AND ! ($go_back != "") AND ($next != "") AND (strlen($ext_password_2) < 6))

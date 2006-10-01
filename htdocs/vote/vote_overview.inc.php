@@ -44,28 +44,28 @@ include_once($ABSOLUTE_PATH_STUDIP . "vote/view/vote_overview.lib.php");
 /* initialize post/get variables											  *
 /*																			  *
 /* ************************************************************************* */
-$voteaction     							= $HTTP_POST_VARS['voteaction'];
-	if (empty($voteaction)) 	$voteaction	= $HTTP_GET_VARS['voteaction'];
+$voteaction     							= $_POST['voteaction'];
+	if (empty($voteaction)) 	$voteaction	= $_GET['voteaction'];
 	if (empty($voteaction))		$voteaction	= NULL;
-$showrangeID								= $HTTP_POST_VARS['rangeID'];
-	if(empty($showrangeID))	$showrangeID	= $HTTP_GET_VARS['showrangeID'];
-	if(empty($showrangeID)) $showrangeID	= $HTTP_GET_VARS['rangeID'];
-	if(empty($showrangeID)) $showrangeID	= $HTTP_POST_VARS['showrangeID'];
+$showrangeID								= $_POST['rangeID'];
+	if(empty($showrangeID))	$showrangeID	= $_GET['showrangeID'];
+	if(empty($showrangeID)) $showrangeID	= $_GET['rangeID'];
+	if(empty($showrangeID)) $showrangeID	= $_POST['showrangeID'];
 	//<workaround author='anoack'>
 	if(	empty($showrangeID) 
 		&& isset($SessSemName[1])) 
 							$showrangeID	= $SessSemName[1];
 	//</workaround>
 	if(empty($showrangeID)) $showrangeID	= NULL;
-$voteID     								= $HTTP_POST_VARS['voteID'];
-	if(empty($voteID))      	$voteID 	= $HTTP_GET_VARS['voteID'];
+$voteID     								= $_POST['voteID'];
+	if(empty($voteID))      	$voteID 	= $_GET['voteID'];
 	if(empty($voteID)) 	    	$voteID 	= NULL;
-$openID										= $HTTP_GET_VARS['openID'];
-	if(empty($openID))			$openID 	= $HTTP_GET_VARS['voteopenID'];
+$openID										= $_GET['openID'];
+	if(empty($openID))			$openID 	= $_GET['voteopenID'];
 	if(empty($openID))			$openID 	= NULL;
-$searchRange 								= $HTTP_POST_VARS['searchRange'];
+$searchRange 								= $_POST['searchRange'];
 	if(empty($searchRange))		$searchRange= NULL;
-$referer									= $HTTP_GET_VARS['referer'];
+$referer									= $_GET['referer'];
 
 /* **END*of*initialize*post/get*variables*********************************** */
 

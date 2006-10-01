@@ -581,11 +581,11 @@ function forum_get_buttons ($forumposting) {
 *
 **/
 function DebugForum ($debugvar) {
-	global $HTTP_POST_VARS;
+
 	while(list($key,$value) = each($debugvar))
 		$debug .= "$key: $value<br>";
 	$debug .= "<hr>";
-	while(list($key,$value) = each($HTTP_POST_VARS))
+	while(list($key,$value) = each($_POST))
 		$debug .= "$key: $value<br>";
 	return $debug;
 }

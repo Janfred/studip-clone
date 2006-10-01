@@ -106,9 +106,9 @@ if ($edit) {
 	$element_commands = array('show', 'hide', 'move_left', 'move_right', 'show_group', 'hide_group', 'do_search_x');
 	foreach ($element_commands as $element_command) {
 		$element_command_form = $edit . "_" . $element_command;
-		if ($HTTP_POST_VARS[$element_command_form]) {
-			if (is_array($HTTP_POST_VARS[$element_command_form])) {
-				$pos_tmp = array_keys($HTTP_POST_VARS[$element_command_form]);
+		if ($_POST[$element_command_form]) {
+			if (is_array($_POST[$element_command_form])) {
+				$pos_tmp = array_keys($_POST[$element_command_form]);
 				$pos = $pos_tmp[0];
 			}
 			$execute_command = $element_command;

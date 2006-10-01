@@ -97,7 +97,7 @@ foreach ($elements as $element) {
 }
 if ($com == "new" || $com == "edit" || $com == "open" || $com == "close") {
 	echo "<tr><td class=\"blank\" width=\"100%\" valign=\"top\">\n";
-	$module->printoutEdit($edit_open, $HTTP_POST_VARS, "", $edit);
+	$module->printoutEdit($edit_open, $_POST, "", $edit);
 }
 
 if ($com == "store") {
@@ -110,7 +110,7 @@ if ($com == "store") {
 					"<font color=\"#ff0000\" size=\"+1\"><b>*</b></font>");
 			my_info($message);
 			echo "<tr><td class=\"blank\" width=\"100%\" valign=\"top\">\n";
-			$module->printoutEdit($edit_open, $HTTP_POST_VARS,
+			$module->printoutEdit($edit_open, $_POST,
 					$faulty_values, $edit);
 			$fault = TRUE;
 			break;
@@ -120,22 +120,22 @@ if ($com == "store") {
 		// This is the right place to trigger some functions by special
 		// POST_VARS-values. At the moment there is only one: If the name of the
 		// configuration was changed, setup the extern_config table.
-		if ($edit == "Main" && $HTTP_POST_VARS["Main_name"] != $module->config->config_name) {
+		if ($edit == "Main" && $_POST["Main_name"] != $module->config->config_name) {
 			if (!change_config_name($module->config->range_id, $module->getType(), $module->config->getId(),
-					$module->config->config_name, $HTTP_POST_VARS["Main_name"])) {
+					$module->config->config_name, $_POST["Main_name"])) {
 				$message = _("Der Konfigurationsname wurde bereits für eine Konfiguration dieses Moduls vergeben. Bitte geben Sie einen anderen Namen ein.");
 				my_error($message, "blank", 1);
 				echo "<tr><td class=\"blank\" width=\"100%\" valign=\"top\">\n";
-				$module->printoutEdit($edit_open, "$HTTP_POST_VARS", "", $edit);
+				$module->printoutEdit($edit_open, "$_POST", "", $edit);
 			}
-			$module->store($edit, $HTTP_POST_VARS);
+			$module->store($edit, $_POST);
 			$message = _("Die eingegebenen Werte wurden übernommen und der Name der Konfiguration geändert.");
 			my_msg($message, "blank", 1);
 			echo "<tr><td class=\"blank\" width=\"100%\" valign=\"top\">\n";
 			$module->printoutEdit($edit_open, "", "", $edit);
 		}
 		else {
-			$module->store($edit, $HTTP_POST_VARS);
+			$module->store($edit, $_POST);
 			$message = _("Die eingegebenen Werte wurden übernommen.");
 			my_msg($message, "blank", 1);
 			echo "<tr><td class=\"blank\" width=\"100%\" valign=\"top\">\n";

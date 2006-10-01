@@ -63,8 +63,8 @@ $Modules = new Modules;
 $DataFields = new DataFields();
 
 // Check if there was a submission
-while ( is_array($HTTP_POST_VARS)
-     && list($key, $val) = each($HTTP_POST_VARS)) {
+while ( is_array($_POST)
+     && list($key, $val) = each($_POST)) {
 
   switch ($key) {
 

@@ -111,11 +111,11 @@ class ExternElementSelectSubjectAreas extends ExternElement {
 	}
 	
 	function executeCommand ($command, $value = "") {
-		global $HTTP_POST_VARS;
+
 		if ($command == 'do_search_x') {
 			$GLOBALS['com'] = 'edit';
 			$this->config->setValue($this->name, 'subjectareasselected',
-					$HTTP_POST_VARS['SelectSubjectAreas_subjectareasselected']);
+					$_POST['SelectSubjectAreas_subjectareasselected']);
 		}
 		return TRUE;
 	}

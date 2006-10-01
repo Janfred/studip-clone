@@ -122,12 +122,12 @@ function checkdata(){
 <tr><td class="blank">
 
 	<?
-	global $HTTP_COOKIE_VARS, $username, $Vorname, $Nachname, $Email, $title_front, $title_rear, $ABSOLUTE_PATH_STUDIP;
+	global $username, $Vorname, $Nachname, $Email, $title_front, $title_rear, $ABSOLUTE_PATH_STUDIP;
 
 	require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
 	include("$ABSOLUTE_PATH_STUDIP/config.inc.php");
 
-	if (!$HTTP_COOKIE_VARS[$sess->name] || !$HTTP_COOKIE_VARS[$sess->cookiename]) {
+	if (!$_COOKIE[$sess->name] || !$_COOKIE[$sess->cookiename]) {
   		?>
 		<table>
 		<tr>

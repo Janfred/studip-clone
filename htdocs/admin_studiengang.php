@@ -57,11 +57,11 @@ $db2 = new DB_Seminar;
 
 // Check if there was a submission
 
-reset($HTTP_POST_VARS);
+reset($_POST);
 
 
-while ( is_array($HTTP_POST_VARS) 
-     && list($key, $val) = each($HTTP_POST_VARS)) {
+while ( is_array($_POST) 
+     && list($key, $val) = each($_POST)) {
   switch ($key) {
   
 

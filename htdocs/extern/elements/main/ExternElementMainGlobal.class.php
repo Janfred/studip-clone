@@ -197,11 +197,11 @@ class ExternElementMainGlobal extends ExternElementMain {
 	}
 	
 	function checkFormValues () {
-		global $HTTP_POST_VARS;
+
 				
 		if ($fault = parent::checkFormValues()) {
 		
-			if ($HTTP_POST_VARS["Main_nameformat"] == ""
+			if ($_POST["Main_nameformat"] == ""
 					&& $fault["Main_nameformat"][0] == TRUE) {
 				$fault["Main_nameformat"][0] = FALSE;
 			}

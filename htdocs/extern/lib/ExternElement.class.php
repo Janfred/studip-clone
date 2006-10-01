@@ -193,14 +193,14 @@ class ExternElement {
 	* 
 	*/
 	function executeCommand ($command, $value = "") {
-		global $HTTP_POST_VARS;
+
 		switch ($command) {
 			case "show" :
 				$visible = $this->config->getValue($this->name, "visible");
 				if ($value >= 0 || $value < sizeof($visible)) {
 					$visible[$value] = "1";
 					$this->config->setValue($this->name, "visible", $visible);
-					$HTTP_POST_VARS["{$this->name}_visible"] = $visible;
+					$_POST["{$this->name}_visible"] = $visible;
 				}
 				break;
 				
@@ -210,7 +210,7 @@ class ExternElement {
 				if ($value >= 0 || $value < sizeof($visible)) {
 					$visible[$value] = "0";
 					$this->config->setValue($this->name, "visible", $visible);
-					$HTTP_POST_VARS["{$this->name}_visible"] = $visible;
+					$_POST["{$this->name}_visible"] = $visible;
 				}
 				break;
 				
@@ -229,7 +229,7 @@ class ExternElement {
 						$order[$value] = $b;
 					}
 					$this->config->setValue($this->name, "order", $order);
-					$HTTP_POST_VARS["{$this->name}_order"] = $order;
+					$_POST["{$this->name}_order"] = $order;
 				}
 				break;
 				
@@ -248,7 +248,7 @@ class ExternElement {
 						$order[$value] = $b;
 					}
 					$this->config->setValue($this->name, "order", $order);
-					$HTTP_POST_VARS["{$this->name}_order"] = $order;
+					$_POST["{$this->name}_order"] = $order;
 				}
 				break;
 			
@@ -267,7 +267,7 @@ class ExternElement {
 					$visible[] = $value;
 					$visible = array_unique($visible);
 					$this->config->setValue($this->name, "groupsvisible", $visible);
-					$HTTP_POST_VARS["{$this->name}_groupsvisible"] = $visible;
+					$_POST["{$this->name}_groupsvisible"] = $visible;
 				}
 				break;
 			
@@ -285,7 +285,7 @@ class ExternElement {
 					$visible = array_keys(get_all_statusgruppen($this->config->range_id));
 				$visible = array_diff($visible, array($value));
 				$this->config->setValue($this->name, "groupsvisible", $visible);
-				$HTTP_POST_VARS["{$this->name}_groupsvisible"] = $visible;
+				$_POST["{$this->name}_groupsvisible"] = $visible;
 				break;
 			
 			default :
@@ -299,13 +299,13 @@ class ExternElement {
 	*
 	*/
 	function checkFormValues () {
-		global $HTTP_POST_VARS;
+
 		$fault = array();
 		
-		$HTTP_POST_VARS['Main_copyright'] = htmlentities(decodeHTML(
-				$HTTP_POST_VARS['Main_copyright'], ENT_QUOTES), ENT_QUOTES);
-		$HTTP_POST_VARS['Main_author'] = htmlentities(decodeHTML(
-				$HTTP_POST_VARS['Main_author'], ENT_QUOTES), ENT_QUOTES);
+		$_POST['Main_copyright'] = htmlentities(decodeHTML(
+				$_POST['Main_copyright'], ENT_QUOTES), ENT_QUOTES);
+		$_POST['Main_author'] = htmlentities(decodeHTML(
+				$_POST['Main_author'], ENT_QUOTES), ENT_QUOTES);
 		
 		foreach ($this->attributes as $attribute) {
 			$form_name = $this->name . "_" . $attribute;
@@ -313,16 +313,16 @@ class ExternElement {
 			// Check for an alternative input field. All names of alternative input
 			// fields begin with an underscore. The alternative input field overwrites
 			// the input field having the same name but without the leading underscore.
-			if (isset($HTTP_POST_VARS["_$form_name"])) {
-				if ($HTTP_POST_VARS[$form_name] == $this->config[$this->name][$attribute]
-						&& $HTTP_POST_VARS["_$form_name"] != "")
-					$HTTP_POST_VARS[$form_name] = $HTTP_POST_VARS["_$form_name"];
+			if (isset($_POST["_$form_name"])) {
+				if ($_POST[$form_name] == $this->config[$this->name][$attribute]
+						&& $_POST["_$form_name"] != "")
+					$_POST[$form_name] = $_POST["_$form_name"];
 			}
 			
-			if (is_array($HTTP_POST_VARS[$form_name]))
-				$value = $HTTP_POST_VARS[$form_name];
+			if (is_array($_POST[$form_name]))
+				$value = $_POST[$form_name];
 			else
-				$value = array($HTTP_POST_VARS[$form_name]);
+				$value = array($_POST[$form_name]);
 						
 			$splitted_attribute = explode("_", $attribute);
 			if (sizeof($splitted_attribute) == 1)
@@ -359,11 +359,11 @@ class ExternElement {
 					case "width" :
 						$fault[$form_name][$i] = (!preg_match("/^\d{0,4}$/", $value[$i])
 								|| $value[$i]> 2000 || $value[$i]< 0);
-						if ($HTTP_POST_VARS["{$form_name}pp"] == "%") {
-							if (is_array($HTTP_POST_VARS[$form_name]))
-								$HTTP_POST_VARS[$form_name][$i] = $HTTP_POST_VARS[$form_name][$i] . "%";
+						if ($_POST["{$form_name}pp"] == "%") {
+							if (is_array($_POST[$form_name]))
+								$_POST[$form_name][$i] = $_POST[$form_name][$i] . "%";
 							else
-								$HTTP_POST_VARS[$form_name] = $HTTP_POST_VARS[$form_name] . "%";
+								$_POST[$form_name] = $_POST[$form_name] . "%";
 						}
 						break;
 					case "valign" :
@@ -394,14 +394,14 @@ class ExternElement {
 						// This is especially for checkbox-values. If there is no checkbox
 						// checked, the variable is not declared and it is necessary to set the
 						// variable to "".
-						if (!isset($HTTP_POST_VARS[$form_name])) {
-							$HTTP_POST_VARS[$form_name] = "";
+						if (!isset($_POST[$form_name])) {
+							$_POST[$form_name] = "";
 							break;
 						}
 						$fault[$form_name][$i] = !($value[$i] == "1" || $value[$i] == "" || !isset($value[$i]));
 						break;
 					case "name" :
-						$HTTP_POST_VARS[$form_name] = trim($HTTP_POST_VARS[$form_name]);
+						$_POST[$form_name] = trim($_POST[$form_name]);
 						$fault[$form_name][$i] = (preg_match("/^.*(<script|<php).*$/i", $value[$i])
 								|| !preg_match("/^[0-9a-z\._\- ]+$/i", $value[$i]));
 						break;
