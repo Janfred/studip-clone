@@ -381,6 +381,7 @@ class Session {
 
   function release_token(){ 
     global $HTTP_HOST, $HTTPS;
+
     if (   isset($this->fallback_mode)
     && ( "get" == $this->fallback_mode ) 
     && ( "cookie" == $this->mode )
