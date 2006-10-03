@@ -164,7 +164,7 @@ class Object {
    * @access  public
    * @return  string The type of object. See INSTANCEOF_*
    */
-  function instanceof () {
+  function x_instanceof () {
     // Anmerkung: Es existiert bereits die Funktion "is_a" und 
     //            "is_subclass_of" in PHP !
     return $this->instanceof;
