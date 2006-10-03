@@ -65,9 +65,8 @@ class ResourceObject {
 	var $category_id;			//Die Kategorie des Objects
 	var $category_name;			//name of the assigned catgory
 	var $category_iconnr;			//iconnumber of the assigned catgory
-	var $category_id;			//Die Kategorie des Objects
 	var $is_room = null;
-	var	$is_parent = null;
+	var $is_parent = null;
 	var $my_state = null;
 	
 	//Konstruktor
