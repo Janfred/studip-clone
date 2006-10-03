@@ -51,7 +51,7 @@ class CalendarDriver extends MysqlDriver {
 		
 		parent::MysqlDriver();
 		$this->db['db_sem'] = NULL;
-		$this->$_sem_events;
+		$this->_sem_events = FALSE;
 		$this->_create_sem_object = FALSE;
 	}
 	
