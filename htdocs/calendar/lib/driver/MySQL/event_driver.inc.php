@@ -11,10 +11,10 @@ function event_get_description ($id) {
 	return FALSE;
 }
 
-function event_save (&$this) {
+function event_save (&$ttthis) {
 	// Natuerlich nur Speichern, wenn sich was geaendert hat
 	// und es sich um einen persoenlichen Termin handelt
-	if($this->isModified()){
+	if($ttthis->isModified()){
 		$db =& new DB_Seminar();
 		
 		$query = "REPLACE calendar_events (event_id,range_id,autor_id,uid,start,end,"
@@ -23,32 +23,32 @@ function event_save (&$this) {
 		
 		$query .= sprintf("('%s','%s','%s','%s',%s,%s,'%s','%s','%s','%s',%s,%s,'%s',%s,%s,%s,
 				'%s',%s,%s,'%s',%s,%s,%s,'%s',%s,%s)",
-				$this->getId(), $this->getUserId(), $this->getUserId(),
-				$this->properties['UID'],
-				$this->properties['DTSTART'],
-				$this->properties['DTEND'],
-				$this->properties['SUMMARY'],
-				$this->properties['DESCRIPTION'],
-				$this->properties['CLASS'],
-				$this->properties['CATEGORIES'],
-				$this->properties['STUDIP_CATEGORY'],
-				$this->properties['PRIORITY'],
-				$this->properties['LOCATION'],
-				$this->properties['RRULE']['ts'],
-				$this->properties['RRULE']['linterval'],
-				$this->properties['RRULE']['sinterval'],
-				$this->properties['RRULE']['wdays'],
-				$this->properties['RRULE']['month'],
-				$this->properties['RRULE']['day'],
-				$this->properties['RRULE']['rtype'],
-				$this->properties['RRULE']['duration'],
-				$this->properties['RRULE']['count'],
-				$this->properties['RRULE']['expire'],
-				$this->properties['EXDATE'],
-				$this->getMakeDate(), $this->getChangeDate());
+				$ttthis->getId(), $ttthis->getUserId(), $ttthis->getUserId(),
+				$ttthis->properties['UID'],
+				$ttthis->properties['DTSTART'],
+				$ttthis->properties['DTEND'],
+				$ttthis->properties['SUMMARY'],
+				$ttthis->properties['DESCRIPTION'],
+				$ttthis->properties['CLASS'],
+				$ttthis->properties['CATEGORIES'],
+				$ttthis->properties['STUDIP_CATEGORY'],
+				$ttthis->properties['PRIORITY'],
+				$ttthis->properties['LOCATION'],
+				$ttthis->properties['RRULE']['ts'],
+				$ttthis->properties['RRULE']['linterval'],
+				$ttthis->properties['RRULE']['sinterval'],
+				$ttthis->properties['RRULE']['wdays'],
+				$ttthis->properties['RRULE']['month'],
+				$ttthis->properties['RRULE']['day'],
+				$ttthis->properties['RRULE']['rtype'],
+				$ttthis->properties['RRULE']['duration'],
+				$ttthis->properties['RRULE']['count'],
+				$ttthis->properties['RRULE']['expire'],
+				$ttthis->properties['EXDATE'],
+				$ttthis->getMakeDate(), $ttthis->getChangeDate());
 		
 		if($db->query($query)){
-			$this->chng_flag = FALSE;
+			$ttthis->chng_flag = FALSE;
 			return TRUE;
 		}
 		return FALSE;
@@ -64,28 +64,28 @@ function event_delete ($event_id, $user_id) {
 	return FALSE;
 }
 
-function event_restore ($id, &$this) {
+function event_restore ($id, &$ttthis) {
 	$db =& new DB_Seminar();
 
 	$query = sprintf("SELECT * FROM calendar_events "
 									. "WHERE range_id='%s' AND event_id='%s'"
-									, $this->getUserId(), $id);
+									, $ttthis->getUserId(), $id);
 	$db->query($query);
 	
 	if ($db->next_record()) {
-		$this->setId($id);
-		$this->setProperty('UID',             $db->f('uid'));
-		$this->setProperty('SUMMARY',         $db->f('summary'));
-		$this->setProperty('DTSTART',         $db->f('start'));
-		$this->setProperty('CLASS',           $db->f('class'));
-		$this->setProperty('DTEND',           $db->f('end'));
-		$this->setProperty('CATEGORIES',      $db->f('categories'));
-		$this->setProperty('STUDIP_CATEGORY', $db->f('category_intern'));
-		$this->setProperty('DESCRIPTION',     $db->f('description'));
-		$this->setProperty('PRIORITY',        $db->f('priority'));
-		$this->setProperty('LOCATION',        $db->f('location'));
-		$this->setProperty('EXDATE',          $db->f('exceptions'));
-		$this->setProperty('RRULE', array(
+		$ttthis->setId($id);
+		$ttthis->setProperty('UID',             $db->f('uid'));
+		$ttthis->setProperty('SUMMARY',         $db->f('summary'));
+		$ttthis->setProperty('DTSTART',         $db->f('start'));
+		$ttthis->setProperty('CLASS',           $db->f('class'));
+		$ttthis->setProperty('DTEND',           $db->f('end'));
+		$ttthis->setProperty('CATEGORIES',      $db->f('categories'));
+		$ttthis->setProperty('STUDIP_CATEGORY', $db->f('category_intern'));
+		$ttthis->setProperty('DESCRIPTION',     $db->f('description'));
+		$ttthis->setProperty('PRIORITY',        $db->f('priority'));
+		$ttthis->setProperty('LOCATION',        $db->f('location'));
+		$ttthis->setProperty('EXDATE',          $db->f('exceptions'));
+		$ttthis->setProperty('RRULE', array(
 				'ts'        => $db->f('ts'),
 				'linterval' => $db->f('linterval'),
 				'sinterval' => $db->f('sinterval'),
@@ -96,9 +96,9 @@ function event_restore ($id, &$this) {
 				'duration'  => $db->f('duration'),
 				'count'     => $db->f('count'),
 				'expire'    => $db->f('expire')));
-		$this->setMakeDate($db->f('mkdate'));
-		$this->setChangeDate($db->f('chdate'));
-		$this->chng_flag = FALSE;
+		$ttthis->setMakeDate($db->f('mkdate'));
+		$ttthis->setChangeDate($db->f('chdate'));
+		$ttthis->chng_flag = FALSE;
 		
 		return TRUE;
 	}

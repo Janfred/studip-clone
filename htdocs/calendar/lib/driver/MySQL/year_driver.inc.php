@@ -1,18 +1,18 @@
 <?
 
-function year_restore (&$this) {
+function year_restore (&$ttthis) {
 	$db = new DB_Seminar();
-	$end = $this->getEnd();
-	$start = $this->getStart();
+	$end = $ttthis->getEnd();
+	$start = $ttthis->getStart();
 
 	$query = sprintf("SELECT * FROM calendar_events "
 				 . "WHERE range_id='%s' AND (start BETWEEN %s AND %s"
 				 . " OR (start <= %s AND expire > %s AND rtype != 'SINGLE') OR (%s BETWEEN start AND end))"
 				 . " ORDER BY start ASC"
-				 , $this->user_id, $start, $end, $end, $start, $start);
+				 , $ttthis->user_id, $start, $end, $end, $start, $start);
 	$db->query($query);
 	
-	$year = $this->year;
+	$year = $ttthis->year;
 	$month = 1;
 	
 	while ($db->next_record()) {
@@ -35,7 +35,7 @@ function year_restore (&$this) {
 			case 'SINGLE' :
 				$adate = $rep['ts'];
 				while($duration-- && $adate <= $end){
-					add_event($this, $db, $adate);
+					add_event($ttthis, $db, $adate);
 					$adate += 86400;
 				}
 				break;
@@ -44,14 +44,14 @@ function year_restore (&$this) {
 			case 'DAILY' :
 				if($rep['ts'] < $start){
 					// brauche den ersten Tag nach $start an dem dieser Termin wiederholt wird
-					$adate = $this->ts + ($rep['linterval'] - (($this->ts - $rep['ts']) / 86400) % $rep['linterval']) * 86400;
+					$adate = $ttthis->ts + ($rep['linterval'] - (($ttthis->ts - $rep['ts']) / 86400) % $rep['linterval']) * 86400;
 					// Wie oft muss ein mehrt‰giger Termin eingetragen werden, dessen
 					// Startzeit vor Jahresbeginn liegt?
 					if(($xdate = $adate - ($rep['linterval'] - $duration + 1) * 86400) > $start){
-						$duration_first = ($xdate - $this->ts) / 86400 + 1;
-						$md_date = $this->ts;
+						$duration_first = ($xdate - $ttthis->ts) / 86400 + 1;
+						$md_date = $ttthis->ts;
 						while($duration_first-- && $md_date <= $end && $md_date <= $db->f('expire')){
-							add_event($this, $db, $md_date);
+							add_event($ttthis, $db, $md_date);
 							$md_date += 86400;
 						}
 					}
@@ -62,7 +62,7 @@ function year_restore (&$this) {
 				while($duration--){
 					$md_date = $adate;
 					while($md_date <= $db->f('expire') && $md_date <= $end){
-						add_event($this, $db, $md_date);
+						add_event($ttthis, $db, $md_date);
 						$md_date += 86400 * $rep['linterval'];
 					}
 					$adate += 86400;
@@ -77,7 +77,7 @@ function year_restore (&$this) {
 						$md_date = $adate;
 						$count = $duration;
 						while($count-- && $md_date <= $end && $md_date <= $db->f('expire')){
-							add_event($this, $db, $md_date);
+							add_event($ttthis, $db, $md_date);
 							$md_date += 86400;
 						}
 					}
@@ -91,7 +91,7 @@ function year_restore (&$this) {
 							while($count--){
 								if($wdate > $end || $wdate > $db->f('expire'))
 									break 2;
-								add_event($this, $db, $wdate);
+								add_event($ttthis, $db, $wdate);
 								$wdate += 86400;
 							}
 						}
@@ -100,7 +100,7 @@ function year_restore (&$this) {
 				
 				if($rep['ts'] < $start){
 					// Brauche Montag der 'angefangenen' Woche
-					$adate = $this->ts - (strftime('%u',$start) - 1) * 86400;
+					$adate = $ttthis->ts - (strftime('%u',$start) - 1) * 86400;
 					$adate += (($rep['linterval'] - (($adate - $rep['ts']) / 604800) % $rep['linterval']) % $rep['linterval']) * 604800;
 				}
 				else
@@ -115,7 +115,7 @@ function year_restore (&$this) {
 						while($count--){
 							if($wdate > $end || $wdate > $db->f('expire'))
 								break 3;
-							add_event($this, $db, $wdate);
+							add_event($ttthis, $db, $wdate);
 							$wdate += 86400;
 						}
 					}
@@ -129,7 +129,7 @@ function year_restore (&$this) {
 					$adate = mktime(12,0,0,date('n',$db->f('start')),date('j',$db->f('start')),date('Y',$db->f('start')),0);
 					$count = $duration;
 					while($count-- && $adate <= $end && $adate <= $db->f('expire')){
-						add_event($this, $db, $adate);
+						add_event($ttthis, $db, $adate);
 						$adate += 86400;
 					}
 				}
@@ -169,7 +169,7 @@ function year_restore (&$this) {
 				}
 				
 				// Termine, die die Jahresgrenze ¸berbr¸cken
-				if($duration > 1 && $rep['ts'] < $this->ts){
+				if($duration > 1 && $rep['ts'] < $ttthis->ts){
 					if(!$rep['day']){
 						$xdate = mktime(12,0,0,$amonth - $rep['linterval'],1,$year,0) + ($rep['sinterval'] - $cor) * 604800;
 						$aday = strftime('%u',$xdate);
@@ -189,9 +189,9 @@ function year_restore (&$this) {
 						$xdate = mktime(12,0,0,date('n',$adate) - $rep['linterval'],date('j',$adate) + $duration,date('Y',$adate),0);
 					
 					$xdate++;
-					$md_date = $this->ts;
+					$md_date = $ttthis->ts;
 					while($md_date < $xdate && $md_date <= $db->f('expire')){
-						add_event($this, $db, $md_date);
+						add_event($ttthis, $db, $md_date);
 						$md_date += 86400;
 					}
 				}
@@ -203,7 +203,7 @@ function year_restore (&$this) {
 						// verhindert die Anzeige an Tagen, die auﬂerhalb des Monats liegen (am 29. bis 31.)
 						if(!$rep['wdays'] ? date('j', $adate) == $rep['day'] : TRUE
 							&& $md_date <= $db->f('expire') && $md_date <= $end)
-								add_event($this, $db, $md_date);
+								add_event($ttthis, $db, $md_date);
 						$md_date += 86400;
 					}
 					$amonth += $rep['linterval'];
@@ -234,7 +234,7 @@ function year_restore (&$this) {
 					if($rep['ts'] != $adate){
 						$count = $duration;
 						while($count-- && $adate <= $end && $adate <= $db->f('expire')){
-							add_event($this, $db, $adate);
+							add_event($ttthis, $db, $adate);
 							$adate += 86400;
 						}
 					}
@@ -244,7 +244,7 @@ function year_restore (&$this) {
 					$adate = $rep['ts'];
 					$count = $duration;
 					while($count-- && $adate <= $end && $adate <= $db->f('expire')){
-						add_event($this, $db, $adate);
+						add_event($ttthis, $db, $adate);
 						$adate += 86400;
 					}
 				}
@@ -276,7 +276,7 @@ function year_restore (&$this) {
 					$adate = $rep['ts'];
 								
 				// Termine, die die Jahresgrenze ¸berbr¸cken
-				if($duration > 1 && $rep['ts'] < $this->ts){
+				if($duration > 1 && $rep['ts'] < $ttthis->ts){
 					if(!$rep['day']){
 						$xdate = mktime(12,0,0,$rep['month'],1,$year - 1,0) + ($rep['sinterval'] - $cor) * 604800;
 						$aday = strftime('%u',$xdate);
@@ -296,16 +296,16 @@ function year_restore (&$this) {
 						$xdate = mktime(12,0,0,date('n',$adate),date('j',$adate) + $duration - 1,date('Y',$adate) - 1,0);
 					
 					$xdate++;
-					$md_date = $this->ts;
+					$md_date = $ttthis->ts;
 					while($md_date < $xdate && $md_date <= $db->f('expire')){
-						add_event($this, $db, $md_date);
+						add_event($ttthis, $db, $md_date);
 						$md_date += 86400;
 					}
 				}
 				
 				if($adate > $db->f('start'))
 					while($duration-- && $adate <= $db->f('expire') && $adate <= $end){
-						add_event($this, $db, $adate);
+						add_event($ttthis, $db, $adate);
 						$adate += 86400;
 					}
 				break;
@@ -314,12 +314,12 @@ function year_restore (&$this) {
 	}
 }
 
-function add_event (&$this, &$db, $date) {
+function add_event (&$ttthis, &$db, $date) {
 	// if this date is in the exceptions return FALSE
 	if (in_array($date, explode(',', $db->f('exceptions'))))
 		return FALSE;
 	
-	$this->appdays["$date"]++;
+	$ttthis->appdays["$date"]++;
 	
 	return TRUE;
 }

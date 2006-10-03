@@ -66,7 +66,7 @@ function day_save (&$events_save, &$events_delete) {
 	}
 }
 
-function day_restore (&$this) {
+function day_restore (&$ttthis) {
 	
 	$db = new DB_Seminar;
 	// die Abfrage grenzt das Trefferset weitgehend ein
@@ -75,15 +75,15 @@ function day_restore (&$this) {
 					. "AND (rtype = 'DAILY' OR (rtype = 'WEEKLY' AND wdays LIKE '%%%s%%') OR (rtype = 'MONTHLY' "
 					. "AND (wdays LIKE '%%%s%%' OR day = %s)) OR (rtype = 'YEARLY' AND (month = %s AND (day = %s "
 					. "OR wdays LIKE '%%%s%%'))) OR duration > 1)))",
-					$this->getUserId(), $this->getStart(), $this->getEnd(), $this->getStart(), $this->getEnd(),
-					$this->getStart(), $this->getEnd(), $this->getStart(), $this->dow, $this->dow, $this->dom,
-					$this->mon, $this->dom, $this->dow);
+					$ttthis->getUserId(), $ttthis->getStart(), $ttthis->getEnd(), $ttthis->getStart(), $ttthis->getEnd(),
+					$ttthis->getStart(), $ttthis->getEnd(), $ttthis->getStart(), $ttthis->dow, $ttthis->dow, $ttthis->dom,
+					$ttthis->mon, $ttthis->dom, $ttthis->dow);
 	
 	$db->query($query);
 	
 	while ($db->next_record()) {
 		// if the date of this day is in the exceptions take the next event
-		if (in_array($this->ts, explode(',', $db->f('exceptions'))))
+		if (in_array($ttthis->ts, explode(',', $db->f('exceptions'))))
 			continue;
 		
 		$rep = array(
@@ -97,17 +97,17 @@ function day_restore (&$this) {
 				"duration"  => $db->f("duration"));
 		
 		// der "Ursprungstermin"
-		if ($db->f("start") >= $this->getStart() && $db->f("end") <= $this->getEnd()) {
-			createEvent($this, $db, 0);
+		if ($db->f("start") >= $ttthis->getStart() && $db->f("end") <= $ttthis->getEnd()) {
+			createEvent($ttthis, $db, 0);
 		}
-		elseif ($db->f("start") >= $this->getStart() && $db->f("start") <= $this->getEnd()) {
-			createEvent($this, $db, 1);
+		elseif ($db->f("start") >= $ttthis->getStart() && $db->f("start") <= $ttthis->getEnd()) {
+			createEvent($ttthis, $db, 1);
 		}
-		elseif ($db->f("start") < $this->getStart() && $db->f("end") > $this->getEnd()) {
-			createEvent($this, $db, 2);
+		elseif ($db->f("start") < $ttthis->getStart() && $db->f("end") > $ttthis->getEnd()) {
+			createEvent($ttthis, $db, 2);
 		}
-		elseif ($db->f("end") >= $this->getStart() && $db->f("end") <= $this->getEnd()) {
-			createEvent($this, $db, 3);
+		elseif ($db->f("end") >= $ttthis->getStart() && $db->f("end") <= $ttthis->getEnd()) {
+			createEvent($ttthis, $db, 3);
 		}
 		else {
 			
@@ -116,51 +116,51 @@ function day_restore (&$this) {
 					
 		/*	
 					if($rep["linterval"] == 1){
-						createEvent($this, $db, 0);
+						createEvent($ttthis, $db, 0);
 						break;
 					}*/
 					
-					$pos = (($this->ts - $rep["ts"]) / 86400) % $rep["linterval"];
+					$pos = (($ttthis->ts - $rep["ts"]) / 86400) % $rep["linterval"];
 					
 					if ($pos == 0) {
 						if ($rep["duration"] > 1)
-							createEvent($this, $db, 1);
+							createEvent($ttthis, $db, 1);
 						else
-							createEvent($this, $db, 0);
+							createEvent($ttthis, $db, 0);
 						break;
 					}
 					
 					if ($pos < $rep["duration"]) {
 						if (($pos == $rep["duration"] - 1) || ($rep["duration"] - $rep["linterval"] - 1 == $pos))
-							createEvent($this, $db, 3);
+							createEvent($ttthis, $db, 3);
 						else
-							createEvent($this, $db, 2);
+							createEvent($ttthis, $db, 2);
 					}
 					break;
 					
 				case "WEEKLY":
 					if ($rep["duration"] == 1) {
 						// berechne den Montag in dieser Woche...
-						$adate = $this->ts - ($this->dow - 1) * 86400;
+						$adate = $ttthis->ts - ($ttthis->dow - 1) * 86400;
 						if(ceil(($adate - $rep["ts"]) / 604800) % $rep["linterval"] == 0){
-							createEvent($this, $db, 0);
+							createEvent($ttthis, $db, 0);
 							break;
 						}
 					}
 					else {
-						$adate = $this->ts - ($this->dow - 1) * 86400;
-						if ($adate + 1 > $rep["ts"] - ($this->dow) * 86400) {
+						$adate = $ttthis->ts - ($ttthis->dow - 1) * 86400;
+						if ($adate + 1 > $rep["ts"] - ($ttthis->dow) * 86400) {
 							for ($i = 0;$i < strlen($rep["wdays"]);$i++) {
-								$pos = (($adate - $rep["ts"]) / 86400 - $rep["wdays"][$i] + $this->dow) % ($rep["linterval"] * 7);
+								$pos = (($adate - $rep["ts"]) / 86400 - $rep["wdays"][$i] + $ttthis->dow) % ($rep["linterval"] * 7);
 								if ($pos == 0) {
-									createEvent($this, $db, 1);
+									createEvent($ttthis, $db, 1);
 									break;
 								}
 								if ($pos < $rep["duration"]) {
 									if($pos == $rep["duration"] - 1)
-										createEvent($this, $db, 3);
+										createEvent($ttthis, $db, 3);
 									else
-										createEvent($this, $db, 2);
+										createEvent($ttthis, $db, 2);
 								}
 							}
 						}
@@ -169,56 +169,56 @@ function day_restore (&$this) {
 				case "MONTHLY":
 					if ($rep["duration"] == 1) {
 						// liegt dieser Tag nach der ersten Wiederholung und gehört der Monat zur Wiederholungsreihe?
-						if ($rep["ts"] < $this->ts + 1 && abs(date("n", $rep["ts"]) - $this->mon) % $rep["linterval"] == 0) {
+						if ($rep["ts"] < $ttthis->ts + 1 && abs(date("n", $rep["ts"]) - $ttthis->mon) % $rep["linterval"] == 0) {
 							// es ist ein Termin am X. Tag des Monats, den hat die Datenbankabfrage schon richtig erkannt
 							if (!$rep["sinterval"]) {
-								createEvent($this, $db, 0);
+								createEvent($ttthis, $db, 0);
 								break;
 							}
 							// Termine an einem bestimmten Wochentag in der X. Woche
-							if (ceil($this->dom / 7) == $rep["sinterval"]) {
-								createEvent($this, $db, 0);
+							if (ceil($ttthis->dom / 7) == $rep["sinterval"]) {
+								createEvent($ttthis, $db, 0);
 								break;
 							}
-							if ($rep["sinterval"] == 5 && (($this->dom / 7) > 3))
-								createEvent($this, $db, 0);
+							if ($rep["sinterval"] == 5 && (($ttthis->dom / 7) > 3))
+								createEvent($ttthis, $db, 0);
 						}
 					}
 					else {
-						$amonth = ($rep["linterval"] - ((($this->year - date("Y",$rep["ts"])) * 12) - (date("n",$rep["ts"]))) % $rep["linterval"]) % $rep["linterval"];
+						$amonth = ($rep["linterval"] - ((($ttthis->year - date("Y",$rep["ts"])) * 12) - (date("n",$rep["ts"]))) % $rep["linterval"]) % $rep["linterval"];
 						if ($rep["day"]) {
-							$lwst = mktime(12, 0, 0, $amonth, $rep["day"], $this->year, 0);
+							$lwst = mktime(12, 0, 0, $amonth, $rep["day"], $ttthis->year, 0);
 							$hgst = $lwst + ($rep["duration"] - 1) * 86400;
-							if ($this->ts == $lwst) {
-								createEvent($this, $db, 1);
+							if ($ttthis->ts == $lwst) {
+								createEvent($ttthis, $db, 1);
 								break;
 							}
 					
-							if ($this->ts > $lwst && $this->ts < $hgst) {
-								createEvent($this, $db, 2);
+							if ($ttthis->ts > $lwst && $ttthis->ts < $hgst) {
+								createEvent($ttthis, $db, 2);
 								break;
 							}
 					
-							if ($this->ts == $hgst) {
-								createEvent($this, $db, 3);
+							if ($ttthis->ts == $hgst) {
+								createEvent($ttthis, $db, 3);
 								break;
 							}
 							
-							$lwst = mktime(12, 0, 0, $amonth - $rep["linterval"], $rep["day"], $this->year, 0);
+							$lwst = mktime(12, 0, 0, $amonth - $rep["linterval"], $rep["day"], $ttthis->year, 0);
 							$hgst = $lwst + $rep["duration"] * 86400;
 							
-							if ($this->ts == $lwst) {
-								createEvent($this, $db, 1);
+							if ($ttthis->ts == $lwst) {
+								createEvent($ttthis, $db, 1);
 								break;
 							}
 					
-							if ($this->ts > $lwst && $this->ts < $hgst) {
-								createEvent($this, $db, 2);
+							if ($ttthis->ts > $lwst && $ttthis->ts < $hgst) {
+								createEvent($ttthis, $db, 2);
 								break;
 							}
 					
-							if ($this->ts == $hgst) {
-								createEvent($this, $db, 3);
+							if ($ttthis->ts == $hgst) {
+								createEvent($ttthis, $db, 3);
 								break;
 							}
 							
@@ -230,7 +230,7 @@ function day_restore (&$this) {
 							else
 								$cor = 1;
 							
-							$lwst = mktime(12, 0 , 0, $amonth, 1, $this->year, 0) + ($rep["sinterval"] - $cor) * 604800;
+							$lwst = mktime(12, 0 , 0, $amonth, 1, $ttthis->year, 0) + ($rep["sinterval"] - $cor) * 604800;
 							$aday = strftime("%u", $lwst);
 							$lwst -= ($aday - $rep["wdays"]) * 86400;
 							if ($rep["sinterval"] == 5) {
@@ -246,22 +246,22 @@ function day_restore (&$this) {
 							
 							$hgst = $lwst + ($rep["duration"] - 1) * 86400;
 							
-							if ($this->ts == $lwst) {
-								createEvent($this, $db, 1);
+							if ($ttthis->ts == $lwst) {
+								createEvent($ttthis, $db, 1);
 								break;
 							}
 							
-							if ($this->ts > $lwst && $this->ts < $hgst) {
-								createEvent($this, $db, 2);
+							if ($ttthis->ts > $lwst && $ttthis->ts < $hgst) {
+								createEvent($ttthis, $db, 2);
 								break;
 							}
 							
-							if ($this->ts == $hgst) {
-								createEvent($this, $db, 3);
+							if ($ttthis->ts == $hgst) {
+								createEvent($ttthis, $db, 3);
 								break;
 							}
 							
-							$lwst = mktime(12, 0, 0, $amonth - $rep["linterval"], 1, $this->year, 0) + ($rep["sinterval"] - $cor) * 604800;;
+							$lwst = mktime(12, 0, 0, $amonth - $rep["linterval"], 1, $ttthis->year, 0) + ($rep["sinterval"] - $cor) * 604800;;
 							$aday = strftime("%u", $lwst);
 							$lwst -= ($aday - $rep["wdays"]) * 86400;
 							if ($rep["sinterval"] == 5) {
@@ -278,18 +278,18 @@ function day_restore (&$this) {
 							$hgst = $lwst + $rep["duration"] * 86400;
 							$lwst += 86400;
 							
-							if ($this->ts == $lwst) {
-								createEvent($this, $db, 1);
+							if ($ttthis->ts == $lwst) {
+								createEvent($ttthis, $db, 1);
 								break;
 							}
 							
-							if ($this->ts > $lwst && $this->ts < $hgst) {
-								createEvent($this, $db, 2);
+							if ($ttthis->ts > $lwst && $ttthis->ts < $hgst) {
+								createEvent($ttthis, $db, 2);
 								break;
 							}
 							
-							if($this->ts == $hgst){
-								createEvent($this, $db, 3);
+							if($ttthis->ts == $hgst){
+								createEvent($ttthis, $db, 3);
 								break;
 							}
 						}
@@ -300,24 +300,24 @@ function day_restore (&$this) {
 				case "YEARLY":
 				
 					if ($rep["duration"] == 1) {
-						if ($rep["ts"] > $this->getStart() && $rep["ts"] < $this->getEnd()) {
-							createEvent($this, $db, 0);
+						if ($rep["ts"] > $ttthis->getStart() && $rep["ts"] < $ttthis->getEnd()) {
+							createEvent($ttthis, $db, 0);
 							break;
 						}
 							
 						// liegt der Wiederholungstermin überhaupt in diesem Jahr?
-						if ($this->year == date("Y", $rep["ts"]) || ($this->year - date("Y", $rep["ts"])) % $rep["linterval"] == 0) {
+						if ($ttthis->year == date("Y", $rep["ts"]) || ($ttthis->year - date("Y", $rep["ts"])) % $rep["linterval"] == 0) {
 							// siehe "MONTHLY"
 							if (!$rep["sinterval"]) {
-								createEvent($this, $db, 0);
+								createEvent($ttthis, $db, 0);
 								break;
 							}
-							if (ceil($this->dom / 7) == $rep["sinterval"]) {
-								createEvent($this, $db, 0);
+							if (ceil($ttthis->dom / 7) == $rep["sinterval"]) {
+								createEvent($ttthis, $db, 0);
 								break;
 							}
-							if ($rep["sinterval"] == 5 && (($this->dom / 7) > 3)) {
-								createEvent($this, $db, 0);
+							if ($rep["sinterval"] == 5 && (($ttthis->dom / 7) > 3)) {
+								createEvent($ttthis, $db, 0);
 								break;
 							}
 						}
@@ -327,61 +327,61 @@ function day_restore (&$this) {
 						// der erste Wiederholungstermin
 						$lwst = $rep["ts"];
 						$hgst = $rep["ts"] + $rep["duration"] * 86400;
-						if ($lwst == $this->ts) {
-							createEvent($this, $db, 1);
+						if ($lwst == $ttthis->ts) {
+							createEvent($ttthis, $db, 1);
 							break;
 						}
 						
-						if ($this->ts > $lwst && $this->ts < $hgst) {
-							createEvent($this, $db, 2);
+						if ($ttthis->ts > $lwst && $ttthis->ts < $hgst) {
+							createEvent($ttthis, $db, 2);
 							break;
 						}
 					
-						if ($this->ts == $hgst) {
-							createEvent($this, $db, 3);
+						if ($ttthis->ts == $hgst) {
+							createEvent($ttthis, $db, 3);
 							break;
 						}
 						
 						if ($rep["day"]) {
-							$lwst = mktime(12,0,0,$rep["month"],$rep["day"],$this->year,0);
+							$lwst = mktime(12,0,0,$rep["month"],$rep["day"],$ttthis->year,0);
 							$hgst = $lwst + ($rep["duration"] - 1) * 86400;
-							if ($this->ts == $lwst) {
-								createEvent($this, $db, 1);
+							if ($ttthis->ts == $lwst) {
+								createEvent($ttthis, $db, 1);
 								break;
 							}
 					
-							if ($this->ts > $lwst && $this->ts < $hgst) {
-								createEvent($this, $db, 2);
+							if ($ttthis->ts > $lwst && $ttthis->ts < $hgst) {
+								createEvent($ttthis, $db, 2);
 								break;
 							}
 					
-							if ($this->ts == $hgst) {
-								createEvent($this, $db, 3);
+							if ($ttthis->ts == $hgst) {
+								createEvent($ttthis, $db, 3);
 								break;
 							}
 							
-							$lwst = mktime(12, 0, 0, $rep["month"], $rep["day"] - 1, $this->year - 1, 0);
+							$lwst = mktime(12, 0, 0, $rep["month"], $rep["day"] - 1, $ttthis->year - 1, 0);
 							$hgst = $lwst + $rep["duration"] * 86400;
 							
-							if ($this->ts == $lwst) {
-								createEvent($this, $db, 1);
+							if ($ttthis->ts == $lwst) {
+								createEvent($ttthis, $db, 1);
 								break;
 							}
 					
-							if ($this->ts > $lwst && $this->ts < $hgst) {
-								createEvent($this, $db, 2);
+							if ($ttthis->ts > $lwst && $ttthis->ts < $hgst) {
+								createEvent($ttthis, $db, 2);
 								break;
 							}
 					
-							if ($this->ts == $hgst) {
-								createEvent($this, $db, 3);
+							if ($ttthis->ts == $hgst) {
+								createEvent($ttthis, $db, 3);
 								break;
 							}
 							
 						}
 						
 						if ($rep["sinterval"]) {
-							$lwst = mktime(12, 0, 0, $rep["month"], 1, $this->year, 0) + ($rep["sinterval"] - $cor) * 604800;
+							$lwst = mktime(12, 0, 0, $rep["month"], 1, $ttthis->year, 0) + ($rep["sinterval"] - $cor) * 604800;
 							$aday = strftime("%u",$lwst);
 							$lwst -= ($aday - $rep["wdays"]) * 86400;
 							if ($rep["sinterval"] == 5) {
@@ -396,22 +396,22 @@ function day_restore (&$this) {
 					
 							$hgst = $lwst + ($rep["duration"] - 1) * 86400;
 					
-							if ($this->ts == $lwst) {
-								createEvent($this, $db, 1);
+							if ($ttthis->ts == $lwst) {
+								createEvent($ttthis, $db, 1);
 								break;
 							}
 							
-							if ($this->ts > $lwst && $this->ts < $hgst) {
-								createEvent($this, $db, 2);
+							if ($ttthis->ts > $lwst && $ttthis->ts < $hgst) {
+								createEvent($ttthis, $db, 2);
 								break;
 							}
 							
-							if ($this->ts == $hgst) {
-								createEvent($this, $db, 3);
+							if ($ttthis->ts == $hgst) {
+								createEvent($ttthis, $db, 3);
 								break;
 							}
 							
-							$lwst = mktime(12, 0, 0, $rep["$month"], 1, $this->year - 1, 0) + ($rep["sinterval"] - $cor) * 604800;
+							$lwst = mktime(12, 0, 0, $rep["$month"], 1, $ttthis->year - 1, 0) + ($rep["sinterval"] - $cor) * 604800;
 							$aday = strftime("%u", $lwst);
 							$lwst -= ($aday - $rep["wdays"]) * 86400;
 							if ($rep["sinterval"] == 5) {
@@ -428,18 +428,18 @@ function day_restore (&$this) {
 							$hgst = $lwst + $rep["duration"] * 86400;
 							$lwst += 86400;
 							
-							if ($this->ts == $lwst) {
-								createEvent($this, $db, 1);
+							if ($ttthis->ts == $lwst) {
+								createEvent($ttthis, $db, 1);
 								break;
 							}
 							
-							if ($this->ts > $lwst && $this->ts < $hgst) {
-								createEvent($this, $db, 2);
+							if ($ttthis->ts > $lwst && $ttthis->ts < $hgst) {
+								createEvent($ttthis, $db, 2);
 								break;
 							}
 							
-							if ($this->ts == $hgst) {
-								createEvent($this, $db, 3);
+							if ($ttthis->ts == $hgst) {
+								createEvent($ttthis, $db, 3);
 								break;
 							}
 							
@@ -450,26 +450,26 @@ function day_restore (&$this) {
 	}
 }
 	
-	function createEvent (&$this, &$db, $time_range) {
+	function createEvent (&$ttthis, &$db, $time_range) {
 		switch ($time_range) {
 			case 0: // Einzeltermin
 				$start = mktime(date('G', $db->f('start')), date('i', $db->f('start')),
-						date('s', $db->f('start')), $this->mon, $this->dom, $this->year);
+						date('s', $db->f('start')), $ttthis->mon, $ttthis->dom, $ttthis->year);
 				$end = mktime(date('G', $db->f('end')), date('i', $db->f('end')),
-						date('s', $db->f('end')), $this->mon, $this->dom, $this->year);
+						date('s', $db->f('end')), $ttthis->mon, $ttthis->dom, $ttthis->year);
 				break;
 			case 1: // Start
 				$start = mktime(date('G', $db->f('start')), date('i', $db->f('start')),
-						date('s', $db->f('start')), $this->mon, $this->dom, $this->year);
+						date('s', $db->f('start')), $ttthis->mon, $ttthis->dom, $ttthis->year);
 				$end = $start + $db->f('end') - $db->f('start');
 				break;
 			case 2: // Mitte
-				$start = $this->getStart() - $this->getStart() + $db->f('start');
+				$start = $ttthis->getStart() - $ttthis->getStart() + $db->f('start');
 				$end = $start + $db->f('end') - $db->f('start');
 				break;
 			case 3: // Ende
 				$end = mktime(date('G', $db->f('end')), date('i', $db->f('end')),
-						date('s', $db->f('end')), $this->mon, $this->dom, $this->year);
+						date('s', $db->f('end')), $ttthis->mon, $ttthis->dom, $ttthis->year);
 				$start = $end - $db->f('end') + $db->f('start');
 		}
 		$termin =& new CalendarEvent(array(
@@ -496,7 +496,7 @@ function day_restore (&$this) {
 						'count'       => $db->f('count'),
 						'expire'      => $db->f('expire'))),
 				$db->f('event_id'), $db->f('mkdate'), $db->f('chdate'));
-		$this->events[] = $termin;
+		$ttthis->events[] = $termin;
 	}
 	
 
