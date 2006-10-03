@@ -1,14 +1,14 @@
 <?
 // $Id$
 
-function list_restore(&$this){
+function list_restore(&$ttthis){
 	$db = new DB_Seminar();
-	$end = $this->getEnd();
-	$start = $this->getStart();
+	$end = $ttthis->getEnd();
+	$start = $ttthis->getStart();
 	$time_offset = (date('G') > 11)? 43200 : 0; // workaround BIEST00065
 	
-	$query = "SELECT * FROM calendar_events WHERE range_id='" . $this->range_id . "' AND ";
-	if (!$this->show_private)
+	$query = "SELECT * FROM calendar_events WHERE range_id='" . $ttthis->range_id . "' AND ";
+	if (!$ttthis->show_private)
 		$query .= "class = 'PUBLIC' AND ";
 	$query .= "(((start BETWEEN $start AND $end) OR (end BETWEEN $start AND $end)) "
 					. "OR (start <= $end AND expire > $start AND rtype != 'SINGLE')) "
@@ -37,21 +37,21 @@ function list_restore(&$this){
 		switch ($rep["rtype"]) {
 			// Einzeltermin (die hat die Datenbank schon gefiltert)
 			case "SINGLE" :
-				new_event($this, $db, $rep["ts"]);
+				new_event($ttthis, $db, $rep["ts"]);
 				break;
 			
 			// tägliche Wiederholung
 			case "DAILY" :
 				if ($rep["ts"] < $start) {
 					// brauche den ersten Tag nach $start an dem dieser Termin wiederholt wird
-					$adate = $this->ts + (($rep["linterval"] - (($start - $rep["ts"])
+					$adate = $ttthis->ts + (($rep["linterval"] - (($start - $rep["ts"])
 							 / 86400) % $rep["linterval"] - 1) * 86400);
 				}
 				else
 					$adate = $rep['ts'];
 				
 				while ($adate <= $expire && $adate <= $end) {
-					new_event($this, $db, $adate);
+					new_event($ttthis, $db, $adate);
 					$adate += 86400 * $rep["linterval"];
 				}
 				break;
@@ -61,7 +61,7 @@ function list_restore(&$this){
 				if ($db->f("start") >= $start) {
 					$adate = mktime(12, 0, 0, date("n",$db->f("start")), date("j",$db->f("start")), date("Y",$db->f("start")), 0);
 					if ($rep["ts"] != $adate)
-						new_event($this, $db, $adate);
+						new_event($ttthis, $db, $adate);
 					$aday = strftime("%u", $adate) - 1;
 					for ($i = 0; $i < strlen($rep["wdays"]); $i++) {
 						$awday = (int) substr($rep["wdays"], $i, 1) - 1;
@@ -69,13 +69,13 @@ function list_restore(&$this){
 							$wdate = $adate + ($awday - $aday) * 86400;
 							if ($wdate > $expire)
 								break 2;
-							new_event($this, $db, $wdate);
+							new_event($ttthis, $db, $wdate);
 						}
 					}
 				}
 				if ($rep["ts"] < $start) {
 					// Brauche den Montag der angefangenen Woche
-					$adate = $this->ts - (strftime("%u", $this->ts) - 1) * 86400;
+					$adate = $ttthis->ts - (strftime("%u", $ttthis->ts) - 1) * 86400;
 					$adate += (($rep["linterval"] - (($adate - $rep["ts"]) / 604800)
 							% $rep["linterval"]) % $rep["linterval"]) * 604800;
 				}
@@ -91,7 +91,7 @@ function list_restore(&$this){
 							break 2;
 						if ($wdate + $time_offset < $start)
 							continue;
-						new_event($this, $db, $wdate);
+						new_event($ttthis, $db, $wdate);
 					}
 					$adate += 604800 * $rep["linterval"];
 				}
@@ -103,7 +103,7 @@ function list_restore(&$this){
 					$adate = mktime(12, 0, 0, date("n", $db->f("start")), date("j", $db->f("start")),
 							date("Y", $db->f("start")), 0);
 					if ($rep["ts"] != $adate)
-						new_event($this, $db, $adate);
+						new_event($ttthis, $db, $adate);
 				}
 				
 				if ($rep["sinterval"] == 5)
@@ -143,7 +143,7 @@ function list_restore(&$this){
 				while ($adate <= $expire && $adate <= $end  && $adate + $time_offset >= $start) {
 					// verhindert die Anzeige an Tagen, die außerhalb des Monats liegen (am 29. bis 31.)
 					if (!$rep["wdays"] ? date("j", $adate) == $rep["day"] : TRUE)
-						new_event($this, $db, $adate);
+						new_event($ttthis, $db, $adate);
 					
 					$amonth += $rep["linterval"];
 					// wenn Termin am X. Wochentag des X. Monats, dann Berechnung hier wiederholen
@@ -173,7 +173,7 @@ function list_restore(&$this){
 					$wdate = mktime(12, 0, 0, date("n", $db->f("start")), date("j", $db->f("start")),
 							date("Y", $db->f("start")), 0);
 					if ($rep["ts"] != $wdate)
-						new_event($this, $db, $wdate);
+						new_event($ttthis, $db, $wdate);
 				}
 				
 				if ($rep["sinterval"] == 5)
@@ -220,17 +220,17 @@ function list_restore(&$this){
 										+ ($rep['duration'] - 1) * 86400;
 					}
 					if ($xdate <= $end && $xdate + $time_offset >= $start && $xdate <= $expire)
-						new_event($this, $db, $xdate);
+						new_event($ttthis, $db, $xdate);
 				}
 				
 				if ($adate <= $end && $adate + $time_offset >= $start && $adate <= $expire)
-					new_event($this, $db, $adate);
+					new_event($ttthis, $db, $adate);
 				break;
 		}
 	}
 }
 
-function new_event (&$this, $db, $date) {
+function new_event (&$ttthis, $db, $date) {
 	// if this date is in the exceptions return FALSE
 	if (in_array($date, explode(',', $db->f('exceptions'))))
 		return FALSE;
@@ -239,7 +239,7 @@ function new_event (&$this, $db, $date) {
 			date("n", $date), date("j", $date), date("Y", $date));
 	
 	// BIEST00065
-	if ($date < $this->start) {
+	if ($date < $ttthis->start) {
 		return FALSE;
 	}
 	
@@ -270,7 +270,7 @@ function new_event (&$this, $db, $date) {
 				 'expire'       => $db->f('expire'))),
 			$db->f('event_id'));
 	
-	$this->events[] = $event;
+	$ttthis->events[] = $event;
 	
 	return TRUE;
 }
