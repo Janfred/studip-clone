@@ -3500,7 +3500,7 @@ function swapPosition ( $parentID,
 	else $group =  &$this->tree->getGroupObject( $parentID);
 
 	$numberchildren = $group->getNumberChildren();
-	$instance = $group->instanceof();
+	$instance = $group->x_instanceof();
 
 	if ($direction == "up"){
 		if ($oldposition == 0)

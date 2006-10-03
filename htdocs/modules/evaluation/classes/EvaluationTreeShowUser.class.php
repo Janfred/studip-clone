@@ -185,7 +185,7 @@ class EvaluationTreeShowUser {
 
 	    /* add space after a top-level group */
 	    $parent = $group->getParentObject();
-	    if( $parent->instanceof() == "Evaluation" && $group->getPosition() != 0 )
+	    if( $parent->x_instanceof() == "Evaluation" && $group->getPosition() != 0 )
 		echo "<td colspan=\"2\" width=\"100%\"><br /></td><tr>";
 
 	    echo "<td align=\"left\" width=\"100%\" valign=\"bottom\" class=\"steelkante\" style=\"padding:1px;\">\n";
@@ -206,7 +206,7 @@ class EvaluationTreeShowUser {
 	} elseif ($group->getChildType() == "EvaluationText") {
 		/* add space after a top-level group */
 	    $parent = $group->getParentObject();
-	    if( $parent->instanceof() == "Evaluation" && $group->getPosition() != 0 )
+	    if( $parent->x_instanceof() == "Evaluation" && $group->getPosition() != 0 )
 		echo "<td colspan=\"2\" width=\"100%\"><br /></td><tr>";
 
 	    echo "<td align=\"left\" width=\"100%\" valign=\"bottom\" class=\"steelkante\" style=\"padding:1px;\">\n";
@@ -227,7 +227,7 @@ class EvaluationTreeShowUser {
 	}  elseif ($group->getChildType() == "EvaluationLink") {
 		/* add space after a top-level group */
 	    $parent = $group->getParentObject();
-	    if( $parent->instanceof() == "Evaluation" && $group->getPosition() != 0 )
+	    if( $parent->x_instanceof() == "Evaluation" && $group->getPosition() != 0 )
 		echo "<td colspan=\"2\" width=\"100%\"><br /></td><tr>";
 
 	    echo "<td align=\"left\" width=\"100%\" valign=\"bottom\" class=\"steelkante\" style=\"padding:1px;\">\n";
@@ -327,7 +327,7 @@ class EvaluationTreeShowUser {
 
 	/* get the content of questions under this group, if any */
 	foreach( $group->getChildren() as $question ) {
-	    if( $question->instanceof() == INSTANCEOF_EVALQUESTION ) {
+	    if( $question->x_instanceof() == INSTANCEOF_EVALQUESTION ) {
 
 		if( $question->getPosition() == 0 ) {
 		    $content .= "\n<table width=\"100%\" cellpadding=\"3\" cellspacing=\"0\" ".
@@ -417,7 +417,7 @@ class EvaluationTreeShowUser {
 		foreach( $answerArray as $answer ) {
 		    $noWrap = NO;
 
-		    if( $answer->instanceof() == INSTANCEOF_EVALANSWER ) {
+		    if( $answer->x_instanceof() == INSTANCEOF_EVALANSWER ) {
 			if( ! $answer->getText() ) {
 			    /* answer has NO text ------------ */
 			    if( $answer->getPosition() <= $lastTextAnswer/2 ) //&& $numAnswers > 4 )
@@ -476,7 +476,7 @@ class EvaluationTreeShowUser {
 	    foreach( $answerArray as $answer ) {
 		$number = $question->isMultipleChoice() ? "[".$answer->getPosition()."]" : "";
 
-		if( $answer->instanceof() == INSTANCEOF_EVALANSWER ) {
+		if( $answer->x_instanceof() == INSTANCEOF_EVALANSWER ) {
 		    $extraStyle = "";
 		    if( $answer->isResidual() ) {
 			$extraStyle = "border-left: $residualBorder;";
@@ -539,7 +539,7 @@ class EvaluationTreeShowUser {
 
 	    /* Answers ------------------------------------ */
 	    foreach( $answerArray as $answer ) {
-		if( $answer->instanceof() == INSTANCEOF_EVALANSWER ) {
+		if( $answer->x_instanceof() == INSTANCEOF_EVALANSWER ) {
 		    $number = $question->isMultipleChoice() ? "[".$answer->getPosition()."]" : "";
 
 		    /* if not a user's answer */

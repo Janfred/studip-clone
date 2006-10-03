@@ -126,7 +126,7 @@ class EvaluationTree extends TreeAbstract {
    */
   function recursiveInit( $group ) {
       // only groups are interesting here.
-      if( $group->instanceof() != INSTANCEOF_EVALGROUP )
+      if( $group->x_instanceof() != INSTANCEOF_EVALGROUP )
 	  return;
 
       if( $children = $group->getChildren() ) {

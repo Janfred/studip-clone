@@ -164,7 +164,7 @@ class TestVote extends Vote {
 				$this->getAnswers (),
 				$this->isChangeable (),
 				$this->getCo_Visibility(),
-				$this->instanceof ()
+				$this->x_instanceof ()
 				);
       if ($this->voteDB->isError ())
 	  $this->throwErrorFromClass ($this->voteDB);

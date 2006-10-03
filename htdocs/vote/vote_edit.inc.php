@@ -62,7 +62,7 @@ if ( ! ( $perm->have_studip_perm( "tutor", $rangeID ) || $auth->auth["uname"] ==
 		? _("Es macht wenig Sinn, die Editierseite aufzurufen, ohne den zu editierenden Vote anzugeben...")
 		: ( ! $vote->voteDB->isExistant($voteID)
 		    ? _("Angegebener Vote existiert nicht (mehr?) ...")
-		    : ($vote->instanceof() == INSTANCEOF_TEST
+		    : ($vote->x_instanceof() == INSTANCEOF_TEST
 		       ? sprintf(_("Sie haben keine Berechtigung den Test '%s' zu editieren."), $vote->getTitle())
 		       : sprintf(_("Sie haben keine Berechtigung das Voting '%s' zu editieren."), $vote->getTitle())
 		       )

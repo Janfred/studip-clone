@@ -212,7 +212,7 @@ echo $form->createContent();
 	 }
      }
 
-     if( $item->instanceof() == INSTANCEOF_EVALQUESTION ) {
+     if( $item->x_instanceof() == INSTANCEOF_EVALQUESTION ) {
 	 $group = $item->getParentObject();
 
 	 if( $group->isMandatory() && 

@@ -502,7 +502,7 @@ class EvaluationObject extends StudipObject {
          $specialchildobjects = array ();
       }
       
-      if ($object->instanceof () == $instanceof) {
+      if ($object->x_instanceof () == $instanceof) {
          array_push ($specialchildobjects, &$object);
       } else {
          while ($child = &$object->getNextChild ()) {
@@ -518,7 +518,7 @@ class EvaluationObject extends StudipObject {
     */
    function toString () {
      echo "<table border=1 cellpadding=5><tr><td>";
-     echo "Typ: ".$this->instanceOf ()."<br>";
+     echo "Typ: ".$this->x_instanceOf ()."<br>";
      echo "ObjectID: ".$this->getObjectID ()."<br>";
      echo "ParentID: ".$this->getParentID ()."<br>";
      echo "ParentObject: ".$this->getParentObject ()."<br>";

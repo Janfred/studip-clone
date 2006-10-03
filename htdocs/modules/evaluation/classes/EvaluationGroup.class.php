@@ -118,7 +118,7 @@ class EvaluationGroup extends EvaluationObject {
     */
    function addChild (&$child) {
         parent::addChild ($child);
-        $this->childType = $child->instanceof ();
+        $this->childType = $child->x_instanceof ();
    }
 
    /**

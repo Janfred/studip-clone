@@ -239,7 +239,7 @@ class EvalCommon {
       $ul = new HTML ("ul");
       foreach ($object->getErrors () as $error) {
 #$li = new HTML ("li");
-#$li->addContent (_("Objekttyp: ".$object->instanceOf ()));
+#$li->addContent (_("Objekttyp: ".$object->x_instanceOf ()));
 #$ul->addContent ($li);
 	$li = new HTML ("li");
 	$li->addContent ($error["string"]);

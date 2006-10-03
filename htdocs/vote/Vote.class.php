@@ -898,7 +898,7 @@ class Vote extends StudipObject {
 				$this->getAnswers (),
 				$this->isChangeable (),
 				NULL, # co_visibility
-				$this->instanceof ()
+				$this->x_instanceof ()
 				);
       if ($this->voteDB->isError ())
 	 $this->throwErrorFromClass ($this->voteDB);

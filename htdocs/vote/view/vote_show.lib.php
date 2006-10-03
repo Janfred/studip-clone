@@ -231,11 +231,11 @@ function createFormFooter (&$vote, $userID, $perm, $rangeID) {
 	 $html .= 
 	    "&nbsp;".
 	    "<a href=\"".VOTE_FILE_ADMIN."?page=edit&type=".
-	    $vote->instanceof().
+	    $vote->x_instanceof().
 	    "&voteID=".$vote->getObjectID ()."\">".
 	     "<img ".
 	    makeButton ("bearbeiten", "src"). 
-	    tooltip( $vote->instanceof() == INSTANCEOF_TEST
+	    tooltip( $vote->x_instanceof() == INSTANCEOF_TEST
 		     ? _("Diesen Test bearbeiten.")
 		     : _("Dieses Voting bearbeiten.") ).
 	    " border=\"0\"></a>";
@@ -247,7 +247,7 @@ function createFormFooter (&$vote, $userID, $perm, $rangeID) {
 	 "&voteaction=stop&referer=1&showrangeID=".$vote->getRangeID()."\">" .
 	 "<img  ".
 	 makeButton ("stop", "src"). 
-	 tooltip( $vote->instanceof() == INSTANCEOF_TEST
+	 tooltip( $vote->x_instanceof() == INSTANCEOF_TEST
 		  ? _("Diesen Test stoppen.")
 		  : _("Dieses Voting stoppen.") ).
 	 " border=\"0\"></a>";
@@ -259,7 +259,7 @@ function createFormFooter (&$vote, $userID, $perm, $rangeID) {
 	 "&voteaction=delete_request&referer=1&showrangeID=".$vote->getRangeID()."\">" .
 	 "<img  ".
 	 makeButton ("loeschen", "src"). 
-	 tooltip( $vote->instanceof() == INSTANCEOF_TEST
+	 tooltip( $vote->x_instanceof() == INSTANCEOF_TEST
 		  ? _("Diesen Test löschen.")
 		  : _("Dieses Voting löschen.") ).
 	 " border=\"0\"></a>";
@@ -407,10 +407,10 @@ function createVoteHeadline (&$vote, $open, $openID, $evalDB = "", $isHomepage =
      $number       = $evalDB->getNumberOfVotes ($vote->getObjectID ());
 
    $openStr = ($open) ? "open" : "close";
-   $isNew = (($date >= object_get_visit($vote->getObjectID(),($vote->instanceof() == INSTANCEOF_EVAL ? 'eval' : 'vote'),false,false)) && ($vote->getAuthorID() != $GLOBALS['auth']->auth["uid"]));
-   $icon = ($vote->instanceof () == INSTANCEOF_TEST) ? VOTE_ICON_TEST : 
+   $isNew = (($date >= object_get_visit($vote->getObjectID(),($vote->x_instanceof() == INSTANCEOF_EVAL ? 'eval' : 'vote'),false,false)) && ($vote->getAuthorID() != $GLOBALS['auth']->auth["uid"]));
+   $icon = ($vote->x_instanceof () == INSTANCEOF_TEST) ? VOTE_ICON_TEST : 
       VOTE_ICON_VOTE;
-   if ($vote->instanceof () == INSTANCEOF_EVAL)
+   if ($vote->x_instanceof () == INSTANCEOF_EVAL)
      $icon = EVAL_PIC_ICON;
    $icon = "&nbsp;<img src=\"".$icon."\" border=\"0\">";
    $voteInfo = $number." / <a href=\"about.php?username=".$authorUsername."\">\n"
@@ -552,7 +552,7 @@ function createSuccessReport (&$vote, $firstTime = YES, $changed = NO) {
 			  date ("H:i", $stopdate));
 	 $html .= "<br><br>\n";
       } else {
-	 $html .= ($vote->instanceof() == INSTANCEOF_TEST)
+	 $html .= ($vote->x_instanceof() == INSTANCEOF_TEST)
 	    ? _("Die Ergebnisse werden Ihnen angezeigt, sobald der Test vom Ersteller beendet worden ist.")
 	    : _("Die Ergebnisse werden Ihnen angezeigt, sobald das Voting vom Ersteller beendet worden ist.");
 	 $html .= "<br><br>\n";
@@ -576,7 +576,7 @@ function createSuccessReport (&$vote, $firstTime = YES, $changed = NO) {
 	 
 
    // show user-depending test-result message
-   if ($vote->instanceof() == INSTANCEOF_TEST AND ($firstTime OR $changed)) {
+   if ($vote->x_instanceof() == INSTANCEOF_TEST AND ($firstTime OR $changed)) {
       if ($vote->getCo_Visibility()) {
 	 $nrAll = count($_POST["answer"]);
 	 $nrCorrect = $vote->getNumberOfCorrectAnswers ($_POST["answer"]);
@@ -675,14 +675,14 @@ function createVoteResult ($vote, $preview = NO) {
    }
    
    $co_visibility =
-       ( $vote->instanceof() == INSTANCEOF_TEST ) &&
+       ( $vote->x_instanceof() == INSTANCEOF_TEST ) &&
        ( $vote->getCo_Visibility() || $vote->isStopped() ) &&
        ( ! $preview );
 
    /* Show results only if someone had already used the vote --------------- */
    if ($totalNumber <= 0 || $max <= 0)
       return createReportMessage
-	  ( ( $vote->instanceof() == INSTANCEOF_TEST
+	  ( ( $vote->x_instanceof() == INSTANCEOF_TEST
 	      ? _("An diesem Test hat noch niemand teilgenommen.")
 	      : _("Bei diesem Voting hat noch niemand abgestimmt.") ),
 	    VOTE_ICON_INFO, VOTE_COLOR_INFO).
@@ -842,7 +842,7 @@ function createVoteInfo (&$vote, $isAssociated = NO) {
    /* stopdate ------------------------------------------------------------- */
    if (!empty ($stopdate)) {
        if ($vote->isStopped()) {
-	   $html .= ($vote->instanceof() == INSTANCEOF_TEST)
+	   $html .= ($vote->x_instanceof() == INSTANCEOF_TEST)
 	       ? sprintf (_("Der Test wurde beendet am <b>%s</b> um <b>%s</b> Uhr."),
 			  date ("d.m.Y", $stopdate),
 			  date ("H:i", $stopdate))
@@ -858,7 +858,7 @@ function createVoteInfo (&$vote, $isAssociated = NO) {
 				     date ("H:i", $stopdate));
 	       }
 	       else {
-		   $html .= ($vote->instanceof() == INSTANCEOF_TEST)
+		   $html .= ($vote->x_instanceof() == INSTANCEOF_TEST)
 		       ? sprintf (_("Der Test wird voraussichtlich beendet am <b>%s</b> um <b>%s</b> Uhr."),
 				  date ("d.m.Y", $stopdate),
 				  date ("H:i", $stopdate))
@@ -875,7 +875,7 @@ function createVoteInfo (&$vote, $isAssociated = NO) {
        }
    }
    else {
-       $html .= ($vote->instanceof() == INSTANCEOF_TEST)
+       $html .= ($vote->x_instanceof() == INSTANCEOF_TEST)
 	   ? _("Der Endzeitpunkt dieses Tests steht noch nicht fest.")
 	   : _("Der Endzeitpunkt dieses Votings steht noch nicht fest.");
    }

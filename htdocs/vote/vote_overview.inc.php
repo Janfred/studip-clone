@@ -403,7 +403,7 @@ function callSafeguard($voteaction, $voteID = "", $showrangeID = NULL, $search =
 	    // --> send notification sms
 	    $sms = new messaging();
 			setTempLanguage($vote->getAuthorID());
-			$sms->insert_message(	mysql_escape_string( sprintf( _("An Ihrem %s \"%s\" wurden von dem Administrator oder der Administratorin %s Änderungen vorgenommen."), ($vote->instanceof() == INSTANCEOF_TEST
+			$sms->insert_message(	mysql_escape_string( sprintf( _("An Ihrem %s \"%s\" wurden von dem Administrator oder der Administratorin %s Änderungen vorgenommen."), ($vote->x_instanceof() == INSTANCEOF_TEST
 					? _("Test") : _("Voting")), $vote->getTitle(),
 					$vote->voteDB->getAuthorRealname($auth->auth["uid"]) ) ),
 					$vote->voteDB->getAuthorUsername($vote->getAuthorID()), "____%system%____", FALSE, FALSE, "1", FALSE, _("Systemnachricht:")." "._("Vote/Test geändert"));

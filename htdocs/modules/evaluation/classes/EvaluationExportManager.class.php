@@ -205,7 +205,7 @@ class EvaluationExportManager extends Object {
     * @param    EvaluationObject   &$object   An evaluationobject object
     */
    function getQuestionobjects (&$object) {
-      if ($object->instanceof () == INSTANCEOF_EVALQUESTION) {
+      if ($object->x_instanceof () == INSTANCEOF_EVALQUESTION) {
          array_push ($this->evalquestions, $object);
       } else {
          while ($child = $object->getNextChild ()) {
