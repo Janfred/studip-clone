@@ -87,7 +87,8 @@ class ObjectConnections
 	function isConnected($object_id = 0)
 	{
 		// functioncall as part of the object
-		if (isset($this->object_connections))
+		//if (isset($this->object_connections))
+		if (is_object($this))
 		{
 			if ($this->object_connections == false)
 				return false;
